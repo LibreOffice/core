@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Setup.xcs,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 14:28:18 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:32:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,8 +86,8 @@
 				<desc xml:lang="it">Describes an application module (a document factory, such as Writer).</desc>
 				<desc xml:lang="sv">Describes an application module (a document factory, such as Writer).</desc>
 				<desc xml:lang="pl">Describes an application module (a document factory, such as Writer).</desc>
-				<desc xml:lang="pt-BR">Describes an application module (a document factory, such as Writer).</desc>
-				<desc xml:lang="ja">Describes an application module (a document factory, such as Writer).</desc>
+				<desc xml:lang="pt-BR">Descreve um módulo da aplicação (uma fábrica de documentos, tal como o Writer). </desc>
+				<desc xml:lang="ja">アプリケーションモジュール (Writer などのドキュメントファクトリ) を記述します。</desc>
 				<desc xml:lang="ko">Describes an application module (a document factory, such as Writer).</desc>
 				<desc xml:lang="tr">Describes an application module (a document factory, such as Writer).</desc>
 				<desc xml:lang="th">Describes an application module (a document factory, such as Writer).</desc>
@@ -116,8 +116,8 @@
 					<desc xml:lang="it">Specifies the short name of the factory.</desc>
 					<desc xml:lang="sv">Specifies the short name of the factory.</desc>
 					<desc xml:lang="pl">Specifies the short name of the factory.</desc>
-					<desc xml:lang="pt-BR">Specifies the short name of the factory.</desc>
-					<desc xml:lang="ja">Specifies the short name of the factory.</desc>
+					<desc xml:lang="pt-BR">Especifica o nome abreviado da fábrica.</desc>
+					<desc xml:lang="ja">ファクトリの略称を指定します。</desc>
 					<desc xml:lang="ko">Specifies the short name of the factory.</desc>
 					<desc xml:lang="tr">Specifies the short name of the factory.</desc>
 					<desc xml:lang="th">Specifies the short name of the factory.</desc>
@@ -146,8 +146,8 @@
 					<desc xml:lang="it">Specifies the name of the standard template file for the factory.</desc>
 					<desc xml:lang="sv">Specifies the name of the standard template file for the factory.</desc>
 					<desc xml:lang="pl">Specifies the name of the standard template file for the factory.</desc>
-					<desc xml:lang="pt-BR">Specifies the name of the standard template file for the factory.</desc>
-					<desc xml:lang="ja">Specifies the name of the standard template file for the factory.</desc>
+					<desc xml:lang="pt-BR">Especifica o nome do arquivo de modelo padrão para a fábrica.</desc>
+					<desc xml:lang="ja">ファクトリの標準テンプレートファイルの名前を指定します。</desc>
 					<desc xml:lang="ko">Specifies the name of the standard template file for the factory.</desc>
 					<desc xml:lang="tr">Specifies the name of the standard template file for the factory.</desc>
 					<desc xml:lang="th">Specifies the name of the standard template file for the factory.</desc>
@@ -176,8 +176,8 @@
 					<desc xml:lang="it">Specifies the attributes of the factory window</desc>
 					<desc xml:lang="sv">Specifies the attributes of the factory window</desc>
 					<desc xml:lang="pl">Specifies the attributes of the factory window</desc>
-					<desc xml:lang="pt-BR">Specifies the attributes of the factory window</desc>
-					<desc xml:lang="ja">Specifies the attributes of the factory window</desc>
+					<desc xml:lang="pt-BR">Especifica os atributos da janela da fábrica.</desc>
+					<desc xml:lang="ja">ファクトリウィンドウの属性を指定します。</desc>
 					<desc xml:lang="ko">Specifies the attributes of the factory window</desc>
 					<desc xml:lang="tr">Specifies the attributes of the factory window</desc>
 					<desc xml:lang="th">Specifies the attributes of the factory window</desc>
@@ -206,8 +206,8 @@
 					<desc xml:lang="it">Specifies the URL for opening an empty document in the factory.</desc>
 					<desc xml:lang="sv">Specifies the URL for opening an empty document in the factory.</desc>
 					<desc xml:lang="pl">Specifies the URL for opening an empty document in the factory.</desc>
-					<desc xml:lang="pt-BR">Specifies the URL for opening an empty document in the factory.</desc>
-					<desc xml:lang="ja">Specifies the URL for opening an empty document in the factory.</desc>
+					<desc xml:lang="pt-BR">Especifica a URL para abrir um documento vazio na fábrica.</desc>
+					<desc xml:lang="ja">ファクトリ内の空のドキュメントを開くための URL を指定します。</desc>
 					<desc xml:lang="ko">Specifies the URL for opening an empty document in the factory.</desc>
 					<desc xml:lang="tr">Specifies the URL for opening an empty document in the factory.</desc>
 					<desc xml:lang="th">Specifies the URL for opening an empty document in the factory.</desc>
@@ -236,8 +236,8 @@
 					<desc xml:lang="it">Specifies the ID of the icon for the factory</desc>
 					<desc xml:lang="sv">Specifies the ID of the icon for the factory</desc>
 					<desc xml:lang="pl">Specifies the ID of the icon for the factory</desc>
-					<desc xml:lang="pt-BR">Specifies the ID of the icon for the factory</desc>
-					<desc xml:lang="ja">Specifies the ID of the icon for the factory</desc>
+					<desc xml:lang="pt-BR">Especifica o ID do ícone para a fábrica. </desc>
+					<desc xml:lang="ja">ファクトリのアイコンの ID を指定します。</desc>
 					<desc xml:lang="ko">Specifies the ID of the icon for the factory</desc>
 					<desc xml:lang="tr">Specifies the ID of the icon for the factory</desc>
 					<desc xml:lang="th">Specifies the ID of the icon for the factory</desc>
@@ -269,8 +269,8 @@
 				<desc xml:lang="it">Contains common product and version information</desc>
 				<desc xml:lang="sv">Contains common product and version information</desc>
 				<desc xml:lang="pl">Contains common product and version information</desc>
-				<desc xml:lang="pt-BR">Contains common product and version information</desc>
-				<desc xml:lang="ja">Contains common product and version information</desc>
+				<desc xml:lang="pt-BR">Contém informações e versão e produto comum.</desc>
+				<desc xml:lang="ja">共通の製品およびバージョンに関する情報が含まれます。</desc>
 				<desc xml:lang="ko">Contains common product and version information</desc>
 				<desc xml:lang="tr">Contains common product and version information</desc>
 				<desc xml:lang="th">Contains common product and version information</desc>
@@ -298,8 +298,8 @@
 					<desc xml:lang="it">Specifies the name of a product.</desc>
 					<desc xml:lang="sv">Specifies the name of a product.</desc>
 					<desc xml:lang="pl">Specifies the name of a product.</desc>
-					<desc xml:lang="pt-BR">Specifies the name of a product.</desc>
-					<desc xml:lang="ja">Specifies the name of a product.</desc>
+					<desc xml:lang="pt-BR">Especifica o nome do produto. </desc>
+					<desc xml:lang="ja">製品の名前を指定します。</desc>
 					<desc xml:lang="ko">Specifies the name of a product.</desc>
 					<desc xml:lang="tr">Specifies the name of a product.</desc>
 					<desc xml:lang="th">Specifies the name of a product.</desc>
@@ -329,8 +329,8 @@
 					<desc xml:lang="it">Specifies the version of the xml file format of our documents</desc>
 					<desc xml:lang="sv">Specifies the version of the xml file format of our documents</desc>
 					<desc xml:lang="pl">Specifies the version of the xml file format of our documents</desc>
-					<desc xml:lang="pt-BR">Specifies the version of the xml file format of our documents</desc>
-					<desc xml:lang="ja">Specifies the version of the xml file format of our documents</desc>
+					<desc xml:lang="pt-BR">Especifica a versão do formato do arquivo XML de nosso documento.</desc>
+					<desc xml:lang="ja">ドキュメントの xml ファイル形式のバージョンを指定します。</desc>
 					<desc xml:lang="ko">Specifies the version of the xml file format of our documents</desc>
 					<desc xml:lang="tr">Specifies the version of the xml file format of our documents</desc>
 					<desc xml:lang="th">Specifies the version of the xml file format of our documents</desc>
@@ -360,8 +360,8 @@
 					<desc xml:lang="it">Specifies the version number of the product that appears on the user interface.</desc>
 					<desc xml:lang="sv">Specifies the version number of the product that appears on the user interface.</desc>
 					<desc xml:lang="pl">Specifies the version number of the product that appears on the user interface.</desc>
-					<desc xml:lang="pt-BR">Specifies the version number of the product that appears on the user interface.</desc>
-					<desc xml:lang="ja">Specifies the version number of the product that appears on the user interface.</desc>
+					<desc xml:lang="pt-BR">Especifica o número da versão do produto que aparece na interface do usuário.</desc>
+					<desc xml:lang="ja">ユーザーインタフェースに表示する製品のバージョン番号を指定します。</desc>
 					<desc xml:lang="ko">Specifies the version number of the product that appears on the user interface.</desc>
 					<desc xml:lang="tr">Specifies the version number of the product that appears on the user interface.</desc>
 					<desc xml:lang="th">Specifies the version number of the product that appears on the user interface.</desc>
@@ -391,8 +391,8 @@
 					<desc xml:lang="it">Specifies the version number that appears on the user interface.</desc>
 					<desc xml:lang="sv">Specifies the version number that appears on the user interface.</desc>
 					<desc xml:lang="pl">Specifies the version number that appears on the user interface.</desc>
-					<desc xml:lang="pt-BR">Specifies the version number that appears on the user interface.</desc>
-					<desc xml:lang="ja">Specifies the version number that appears on the user interface.</desc>
+					<desc xml:lang="pt-BR">Especifica o número da versão que aparece na interface do usuário.</desc>
+					<desc xml:lang="ja">ユーザーインタフェースに表示するバージョン番号を指定します。</desc>
 					<desc xml:lang="ko">Specifies the version number that appears on the user interface.</desc>
 					<desc xml:lang="tr">Specifies the version number that appears on the user interface.</desc>
 					<desc xml:lang="th">Specifies the version number that appears on the user interface.</desc>
@@ -425,8 +425,8 @@
 				<desc xml:lang="it">Specifies the installation location, locales and the available factories for creating documents.</desc>
 				<desc xml:lang="sv">Specifies the installation location, locales and the available factories for creating documents.</desc>
 				<desc xml:lang="pl">Specifies the installation location, locales and the available factories for creating documents.</desc>
-				<desc xml:lang="pt-BR">Specifies the installation location, locales and the available factories for creating documents.</desc>
-				<desc xml:lang="ja">Specifies the installation location, locales and the available factories for creating documents.</desc>
+				<desc xml:lang="pt-BR">Especifica o local da instalação, locales, e as fábricas disponíveis para criar documentos.</desc>
+				<desc xml:lang="ja">インストールの場所、ロケール、およびドキュメント作成のために利用可能なファクトリを指定します。</desc>
 				<desc xml:lang="ko">Specifies the installation location, locales and the available factories for creating documents.</desc>
 				<desc xml:lang="tr">Specifies the installation location, locales and the available factories for creating documents.</desc>
 				<desc xml:lang="th">Specifies the installation location, locales and the available factories for creating documents.</desc>
@@ -457,8 +457,8 @@
 					<desc xml:lang="it">Specifies the path to where the user data is installed. User data can only be installed in a valid directory.</desc>
 					<desc xml:lang="sv">Specifies the path to where the user data is installed. User data can only be installed in a valid directory.</desc>
 					<desc xml:lang="pl">Specifies the path to where the user data is installed. User data can only be installed in a valid directory.</desc>
-					<desc xml:lang="pt-BR">Specifies the path to where the user data is installed. User data can only be installed in a valid directory.</desc>
-					<desc xml:lang="ja">Specifies the path to where the user data is installed. User data can only be installed in a valid directory.</desc>
+					<desc xml:lang="pt-BR">Especifica o caminho onde os dados do usuário estão instalados. Dados do usuário só podem ser instalados em um diretório vá?ido. </desc>
+					<desc xml:lang="ja">ユーザーデータをインストールする場所へのパスを指定します。ユーザーデータは、有効なディレクトリにのみインストールできます。</desc>
 					<desc xml:lang="ko">Specifies the path to where the user data is installed. User data can only be installed in a valid directory.</desc>
 					<desc xml:lang="tr">Specifies the path to where the user data is installed. User data can only be installed in a valid directory.</desc>
 					<desc xml:lang="th">Specifies the path to where the user data is installed. User data can only be installed in a valid directory.</desc>
@@ -492,8 +492,8 @@
 					<desc xml:lang="it">Specifies the user install path as a URL. The path must match the UCB configuration.</desc>
 					<desc xml:lang="sv">Specifies the user install path as a URL. The path must match the UCB configuration.</desc>
 					<desc xml:lang="pl">Specifies the user install path as a URL. The path must match the UCB configuration.</desc>
-					<desc xml:lang="pt-BR">Specifies the user install path as a URL. The path must match the UCB configuration.</desc>
-					<desc xml:lang="ja">Specifies the user install path as a URL. The path must match the UCB configuration.</desc>
+					<desc xml:lang="pt-BR">Especifica o caminho de instalação como um URL. O caminho deve casar com a configuração UCB. </desc>
+					<desc xml:lang="ja">ユーザーインストールパスを URL として指定します。このパスは UCB 設定と一致する必要があります。</desc>
 					<desc xml:lang="ko">Specifies the user install path as a URL. The path must match the UCB configuration.</desc>
 					<desc xml:lang="tr">Specifies the user install path as a URL. The path must match the UCB configuration.</desc>
 					<desc xml:lang="th">Specifies the user install path as a URL. The path must match the UCB configuration.</desc>
@@ -527,8 +527,8 @@
 					<desc xml:lang="it">Indicates if the user data is copied successfully.</desc>
 					<desc xml:lang="sv">Indicates if the user data is copied successfully.</desc>
 					<desc xml:lang="pl">Indicates if the user data is copied successfully.</desc>
-					<desc xml:lang="pt-BR">Indicates if the user data is copied successfully.</desc>
-					<desc xml:lang="ja">Indicates if the user data is copied successfully.</desc>
+					<desc xml:lang="pt-BR">Indica se os dados do usuário foram copiados com sucesso.</desc>
+					<desc xml:lang="ja">ユーザーデータが正常にコピーされたかどうかを示します。</desc>
 					<desc xml:lang="ko">Indicates if the user data is copied successfully.</desc>
 					<desc xml:lang="tr">Indicates if the user data is copied successfully.</desc>
 					<desc xml:lang="th">Indicates if the user data is copied successfully.</desc>
@@ -560,8 +560,8 @@
 					<desc xml:lang="it">Specifies the application language offered by the setup, if a multilingual version is used.</desc>
 					<desc xml:lang="sv">Specifies the application language offered by the setup, if a multilingual version is used.</desc>
 					<desc xml:lang="pl">Specifies the application language offered by the setup, if a multilingual version is used.</desc>
-					<desc xml:lang="pt-BR">Specifies the application language offered by the setup, if a multilingual version is used.</desc>
-					<desc xml:lang="ja">Specifies the application language offered by the setup, if a multilingual version is used.</desc>
+					<desc xml:lang="pt-BR">Especifica o idioma da aplicação oferecido pelo Setup, caso uma versão multi-idioma estiver sendo usada. </desc>
+					<desc xml:lang="ja">多言語バージョンを使用する場合に、セットアップで提供するアプリケーションの言語を指定します。</desc>
 					<desc xml:lang="ko">Specifies the application language offered by the setup, if a multilingual version is used.</desc>
 					<desc xml:lang="tr">Specifies the application language offered by the setup, if a multilingual version is used.</desc>
 					<desc xml:lang="th">Specifies the application language offered by the setup, if a multilingual version is used.</desc>
@@ -578,7 +578,7 @@
 							<desc xml:lang="fi">US locale</desc>
 							<desc xml:lang="cs">US locale</desc>
 							<desc xml:lang="da">US locale</desc>
-							<desc xml:lang="zh-CN">US locale</desc>
+							<desc xml:lang="zh-CN">英语环境(美国)</desc>
 							<desc xml:lang="zh-TW">US locale</desc>
 							<desc xml:lang="ar">US locale</desc>
 							<desc xml:lang="he">US locale</desc>
@@ -590,7 +590,7 @@
 							<desc xml:lang="sv">US locale</desc>
 							<desc xml:lang="pl">US locale</desc>
 							<desc xml:lang="pt-BR">US locale</desc>
-							<desc xml:lang="ja">US locale</desc>
+							<desc xml:lang="ja">英語 (米語) ロケール</desc>
 							<desc xml:lang="ko">US locale</desc>
 							<desc xml:lang="tr">US locale</desc>
 							<desc xml:lang="th">US locale</desc>
@@ -607,7 +607,7 @@
 							<desc xml:lang="fi">German locale</desc>
 							<desc xml:lang="cs">German locale</desc>
 							<desc xml:lang="da">German locale</desc>
-							<desc xml:lang="zh-CN">German locale</desc>
+							<desc xml:lang="zh-CN">德语环境</desc>
 							<desc xml:lang="zh-TW">German locale</desc>
 							<desc xml:lang="ar">German locale</desc>
 							<desc xml:lang="he">German locale</desc>
@@ -619,7 +619,7 @@
 							<desc xml:lang="sv">German locale</desc>
 							<desc xml:lang="pl">German locale</desc>
 							<desc xml:lang="pt-BR">German locale</desc>
-							<desc xml:lang="ja">German locale</desc>
+							<desc xml:lang="ja">ドイツ語ロケール</desc>
 							<desc xml:lang="ko">German locale</desc>
 							<desc xml:lang="tr">German locale</desc>
 							<desc xml:lang="th">German locale</desc>
@@ -654,8 +654,8 @@
 					<desc xml:lang="it">Specifies whether the splash screen is displayed during startup.</desc>
 					<desc xml:lang="sv">Specifies whether the splash screen is displayed during startup.</desc>
 					<desc xml:lang="pl">Specifies whether the splash screen is displayed during startup.</desc>
-					<desc xml:lang="pt-BR">Specifies whether the splash screen is displayed during startup.</desc>
-					<desc xml:lang="ja">Specifies whether the splash screen is displayed during startup.</desc>
+					<desc xml:lang="pt-BR">Especifica se a tela de splash será exibida na inicialização.</desc>
+					<desc xml:lang="ja">起動時にスプラッシュ画面を表示するかどうか指定します。</desc>
 					<desc xml:lang="ko">Specifies whether the splash screen is displayed during startup.</desc>
 					<desc xml:lang="tr">Specifies whether the splash screen is displayed during startup.</desc>
 					<desc xml:lang="th">Specifies whether the splash screen is displayed during startup.</desc>
@@ -686,8 +686,8 @@
 					<desc xml:lang="it">Specifies the URL for an UNO connection that can be used to script the office from outside.</desc>
 					<desc xml:lang="sv">Specifies the URL for an UNO connection that can be used to script the office from outside.</desc>
 					<desc xml:lang="pl">Specifies the URL for an UNO connection that can be used to script the office from outside.</desc>
-					<desc xml:lang="pt-BR">Specifies the URL for an UNO connection that can be used to script the office from outside.</desc>
-					<desc xml:lang="ja">Specifies the URL for an UNO connection that can be used to script the office from outside.</desc>
+					<desc xml:lang="pt-BR">Especifica o URL para uma conexão UNO que pode ser usado para scriptar o office de fora.</desc>
+					<desc xml:lang="ja">UNO 接続のための URL を指定します。これは、外部からオフィスを制御するスクリプトの作成に使用できる接続です。</desc>
 					<desc xml:lang="ko">Specifies the URL for an UNO connection that can be used to script the office from outside.</desc>
 					<desc xml:lang="tr">Specifies the URL for an UNO connection that can be used to script the office from outside.</desc>
 					<desc xml:lang="th">Specifies the URL for an UNO connection that can be used to script the office from outside.</desc>
@@ -718,8 +718,8 @@
 					<desc xml:lang="it">Contains all of the document factories that were installed during setup.</desc>
 					<desc xml:lang="sv">Contains all of the document factories that were installed during setup.</desc>
 					<desc xml:lang="pl">Contains all of the document factories that were installed during setup.</desc>
-					<desc xml:lang="pt-BR">Contains all of the document factories that were installed during setup.</desc>
-					<desc xml:lang="ja">Contains all of the document factories that were installed during setup.</desc>
+					<desc xml:lang="pt-BR">Contém todos as fábricas de documentos que foram instaladas pelo setup.</desc>
+					<desc xml:lang="ja">セットアップ中にインストールされたすべてのドキュメントファクトリが含まれます。</desc>
 					<desc xml:lang="ko">Contains all of the document factories that were installed during setup.</desc>
 					<desc xml:lang="tr">Contains all of the document factories that were installed during setup.</desc>
 					<desc xml:lang="th">Contains all of the document factories that were installed during setup.</desc>
@@ -749,8 +749,8 @@
 				<desc xml:lang="it">Specifies the installation locales.</desc>
 				<desc xml:lang="sv">Specifies the installation locales.</desc>
 				<desc xml:lang="pl">Specifies the installation locales.</desc>
-				<desc xml:lang="pt-BR">Specifies the installation locales.</desc>
-				<desc xml:lang="ja">Specifies the installation locales.</desc>
+				<desc xml:lang="pt-BR">Especifica a locales da instalação.</desc>
+				<desc xml:lang="ja">インストールロケールを指定します。</desc>
 				<desc xml:lang="ko">Specifies the installation locales.</desc>
 				<desc xml:lang="tr">Specifies the installation locales.</desc>
 				<desc xml:lang="th">Specifies the installation locales.</desc>
@@ -783,8 +783,8 @@
 						<desc xml:lang="it">Indicates the Office language selected by the user.</desc>
 						<desc xml:lang="sv">Indicates the Office language selected by the user.</desc>
 						<desc xml:lang="pl">Indicates the Office language selected by the user.</desc>
-						<desc xml:lang="pt-BR">Indicates the Office language selected by the user.</desc>
-						<desc xml:lang="ja">Indicates the Office language selected by the user.</desc>
+						<desc xml:lang="pt-BR">Indica o idioma do Office selecionado pelo usuário.</desc>
+						<desc xml:lang="ja">ユーザーによって選択された Office 言語を示します。</desc>
 						<desc xml:lang="ko">Indicates the Office language selected by the user.</desc>
 						<desc xml:lang="tr">Indicates the Office language selected by the user.</desc>
 						<desc xml:lang="th">Indicates the Office language selected by the user.</desc>
@@ -809,7 +809,7 @@
 					<label xml:lang="sv">Locale</label>
 					<label xml:lang="pl">Locale</label>
 					<label xml:lang="pt-BR">Locale</label>
-					<label xml:lang="ja">Locale</label>
+					<label xml:lang="ja">ロケール</label>
 					<label xml:lang="ko">Locale</label>
 					<label xml:lang="tr">Locale</label>
 					<label xml:lang="th">Locale</label>
@@ -841,8 +841,8 @@
 					<desc xml:lang="it">Indicates the locale setting defined by the user. By default, this label is empty and the system locale is used.</desc>
 					<desc xml:lang="sv">Indicates the locale setting defined by the user. By default, this label is empty and the system locale is used.</desc>
 					<desc xml:lang="pl">Indicates the locale setting defined by the user. By default, this label is empty and the system locale is used.</desc>
-					<desc xml:lang="pt-BR">Indicates the locale setting defined by the user. By default, this label is empty and the system locale is used.</desc>
-					<desc xml:lang="ja">Indicates the locale setting defined by the user. By default, this label is empty and the system locale is used.</desc>
+					<desc xml:lang="pt-BR">Indica a configuração da locale definida pelo usuário. No padrão, este rótulo é vazio e usa-se a locale do sistema.</desc>
+					<desc xml:lang="ja">ユーザーによって定義されたロケール設定を示します。標準では、このラベルは空白であり、システムロケールが使用されます。</desc>
 					<desc xml:lang="ko">Indicates the locale setting defined by the user. By default, this label is empty and the system locale is used.</desc>
 					<desc xml:lang="tr">Indicates the locale setting defined by the user. By default, this label is empty and the system locale is used.</desc>
 					<desc xml:lang="th">Indicates the locale setting defined by the user. By default, this label is empty and the system locale is used.</desc>
@@ -874,8 +874,8 @@
 					<desc xml:lang="it">Indicates the currency settings defined by the user. By default, this label is empty and the currency defined in the ooSetupSystemLocale is used.</desc>
 					<desc xml:lang="sv">Indicates the currency settings defined by the user. By default, this label is empty and the currency defined in the ooSetupSystemLocale is used.</desc>
 					<desc xml:lang="pl">Indicates the currency settings defined by the user. By default, this label is empty and the currency defined in the ooSetupSystemLocale is used.</desc>
-					<desc xml:lang="pt-BR">Indicates the currency settings defined by the user. By default, this label is empty and the currency defined in the ooSetupSystemLocale is used.</desc>
-					<desc xml:lang="ja">Indicates the currency settings defined by the user. By default, this label is empty and the currency defined in the ooSetupSystemLocale is used.</desc>
+					<desc xml:lang="pt-BR">Indica as configurações monetárias definidas pelo usuário. No padrão, este rótulo é vazio e usa-se a moeda definida no ooSetupSystemLocale.</desc>
+					<desc xml:lang="ja">ユーザーによって定義された通貨設定を示します。標準では、このラベルは空白であり、ooSetupSystemLocale 内で定義された通貨が使用されます。</desc>
 					<desc xml:lang="ko">Indicates the currency settings defined by the user. By default, this label is empty and the currency defined in the ooSetupSystemLocale is used.</desc>
 					<desc xml:lang="tr">Indicates the currency settings defined by the user. By default, this label is empty and the currency defined in the ooSetupSystemLocale is used.</desc>
 					<desc xml:lang="th">Indicates the currency settings defined by the user. By default, this label is empty and the currency defined in the ooSetupSystemLocale is used.</desc>
@@ -907,8 +907,8 @@
 				<desc xml:lang="it">Contains settings that control configuration data access.</desc>
 				<desc xml:lang="sv">Contains settings that control configuration data access.</desc>
 				<desc xml:lang="pl">Contains settings that control configuration data access.</desc>
-				<desc xml:lang="pt-BR">Contains settings that control configuration data access.</desc>
-				<desc xml:lang="ja">Contains settings that control configuration data access.</desc>
+				<desc xml:lang="pt-BR">Contém definições que controlam as configurações de acesso a dados.</desc>
+				<desc xml:lang="ja">設定データアクセスを制御する設定が含まれます。</desc>
 				<desc xml:lang="ko">Contains settings that control configuration data access.</desc>
 				<desc xml:lang="tr">Contains settings that control configuration data access.</desc>
 				<desc xml:lang="th">Contains settings that control configuration data access.</desc>
@@ -928,6 +928,7 @@
 		</group>
 	</component>
 </oor:component-schema>
+
 
 
 
