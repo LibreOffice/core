@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: kz $ $Date: 2003-10-15 09:55:35 $
+ *  last change: $Author: rt $ $Date: 2004-02-10 14:55:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,7 +350,6 @@ void SwTxtSizeInfo::CtorInit( SwTxtFrm *pFrame, SwFont *pNewFnt,
     else
     {
         //Zugriff ueber StarONE, es muss keine Shell existieren oder aktiv sein.
-        ASSERT( pVsh, "SwTxtSizeInfo::CtorInit(), pVsh = 0" )
         if ( pNd->GetDoc()->IsBrowseMode() ) //?!?!?!?
             //in Ermangelung eines Besseren kann hier ja wohl nur noch das
             //AppWin genommen werden?
