@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sectfrm.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 10:39:14 $
+ *  last change: $Author: vg $ $Date: 2005-02-22 08:20:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2733,3 +2733,14 @@ BOOL SwRootFrm::IsInDelList( SwSectionFrm* pSct ) const
 }
 
 #endif
+
+bool SwSectionFrm::IsBalancedSection() const
+{
+    bool bRet = false;
+    if ( GetSection() && Lower() && Lower()->IsColumnFrm() && Lower()->GetNext() )
+    {
+        bRet = !GetSection()->GetFmt()->GetBalancedColumns().GetValue();
+    }
+    return bRet;
+}
+
