@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdtext.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2001-08-24 13:20:44 $
+ *  last change: $Author: rt $ $Date: 2001-08-29 08:56:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ String SV_STDTEXT_SERVICENOTAVAILABLE
     Text[ korean ] = "êµ¬ì„±ìš”ì†Œ (%s)ì„(ë¥¼) ë¡œë“œí•˜ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.\nì…‹ì—…ì„ ì‹œì‘í•œ ë‹¤ìŒ ë³µêµ¬í•˜ì‹­ì‹œì˜¤.";
     Text[ turkish ] = "Bir bileşen (%s) yüklenemedi.\nSetup programını çalıştırıp onarınız.";
     Text[ language_user1 ] = " ";
-    Text[ finnish ] = "Komponenttia (%s) ei voitu ladata.\nKäynnistä asennusohjelma korjausasetuksella.";
+    Text[ finnish ] = "Komponenttia (%s) ei voitu ladata.\nK?ynnist? asennusohjelma korjausasetuksella.";
     Text[ catalan ] = "No se pudo cargar un componente (%s).\nInicie por favor el programa de instalación y ejecute una Reparación.";
 };
 
@@ -117,6 +117,7 @@ String SV_STDTEXT_DONTWARNAGAIN
     Text[ catalan ] = "Do not warn me again.";
     Text[ finnish ] = "Diesen Hinweis nicht mehr anzeigen.";
 };
+
 
 
 
