@@ -2,9 +2,9 @@
 #
 #   $RCSfile: ant.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: hr $ $Date: 2004-02-04 12:37:16 $
+#   last change: $Author: obo $ $Date: 2004-03-17 09:32:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,7 +65,7 @@
 .IF "$(USE_JDK_VERSION)" == "140"
 JDK_VERSION=140
 JAVA_HOME=$(JDK14PATH)
-BAR=FOO
+
 PATH!:=$(JDK14PATH)$/bin$(PATH_SEPERATOR)$(PATH)
 XCLASSPATH:=$(JDK14PATH)$/jre/lib/rt.jar
 CLASSPATH:=$(XCLASSPATH)
@@ -75,33 +75,22 @@ CLASSPATH:=$(XCLASSPATH)
 
 .INCLUDE : settings.mk
 
-.IF "$(J2EE_HOME)"==""
-J2EE_HOME=$(SOLARROOT)$/j2sdkee1.3
-.ENDIF
+SOLARCOMMONDOCDIR=$(SOLARVERSION)$/common$(PROEXT)$/doc$(EXT_UPDMINOR)
+SOLARCOMMONBINDIR=$(SOLARVERSION)$/common$(PROEXT)$/bin$(EXT_UPDMINOR)
 
 # --- ANT build environment  ---------------------------------------
 
-ANT_HOME*:=$(COMMON_BUILD_TOOLS)$/ant
-ANT_LIB*:=$(ANT_HOME)
-
-.IF "$(ANT_OPTIONAL)" ==""
-ANT_OPTIONAL=$(ANT_LIB)$/optional.jar
+.IF "$(ANT_HOME)" == ""
+ANT_HOME*:=$(COMMON_BUILD_TOOLS)$/apache-ant-1.6.1
 .ENDIF
+ANT_LIB*:=$(ANT_HOME)$/lib
 
-.IF "$(ANT_CLASSPATH)"==""
-.IF "$(WDK3RDPARTY)"==""
-ANT_CLASSPATH:=$(ANT_LIB)$/xercesImpl.jar$(PATH_SEPERATOR)$(ANT_LIB)$/xml-apis.jar$(PATH_SEPERATOR)$(ANT_LIB)$/ant.jar$(PATH_SEPERATOR)$(ANT_OPTIONAL)$(PATH_SEPERATOR)$(ANT_LIB)/junit.jar
-.ELSE
-ANT_CLASSPATH:=$(CLASSDIR)$/xercesImpl.jar$(PATH_SEPERATOR)$(CLASSDIR)$/xml-apis.jar$(PATH_SEPERATOR)$(CLASSDIR)$/ant.jar$(PATH_SEPERATOR)$(ANT_OPTIONAL)$(PATH_SEPERATOR)$(CLASSDIR)$/junit.jar
-.ENDIF
+ANT_CLASSPATH:=$(ANT_LIB)$/xercesImpl.jar$(PATH_SEPERATOR)$(ANT_LIB)$/xml-apis.jar$(PATH_SEPERATOR)$(ANT_LIB)$/ant.jar
+PATH!:=$(ANT_HOME)$/bin$(PATH_SEPERATOR)$(PATH)
 
-.IF "$(ANTPRJ_BOOTSTRAP)"==""
-ANT_CLASSPATH!:=$(ANT_CLASSPATH)$(PATH_SEPERATOR)$(SOLARBINDIR)$/antprj.jar
+.IF "$(ANT)" == ""
+ANT*:=$(ANT_HOME)$/bin$/ant
 .ENDIF
-.ENDIF
-
-ANT=$(WRAPCMD) java -classpath $(CLASSPATH) -Xmx128m org.apache.tools.ant.Main -Djava.home=$(JAVA_HOME) -Dant.home=$(ANT_HOME)
-#ANT=java -version
 
 .IF "$(ANT_BUILDFILE)"==""
 ANT_BUILDFILE=build.xml
@@ -123,11 +112,7 @@ ANT_OPT=on
 .ENDIF
 .ENDIF
 
-.IF "$(wdkbuild)"==""
-ANT_FLAGS!:=-Dprj=$(PRJ) -Dprjname=$(PRJNAME) -Ddebug=$(ANT_DEBUG) -Doptimize=$(ANT_OPT) -Dtarget=$(TARGET) -Dsolar.update=on -Dout=$(OUT) -Dinpath=$(INPATH) -Dproext=$(PROEXT) -Dsolar.bin=$(SOLARBINDIR) -Dsolar.jar=$(SOLARBINDIR) -Dsolar.doc=$(SOLARDOCDIR) -f $(ANT_BUILDFILE) $(ANT_FLAGS) -emacs
-.ELSE
-ANT_FLAGS!:=-f $(ANT_BUILDFILE) -Dwdk.build=$(wdkbuild) $(ANT_FLAGS) -emacs -v
-.ENDIF
+ANT_FLAGS!:=-Dprj=$(PRJ) -Dprjname=$(PRJNAME) -Ddebug=$(ANT_DEBUG) -Doptimize=$(ANT_OPT) -Dtarget=$(TARGET) -Dsolar.update=on -Dout=$(OUT) -Dinpath=$(INPATH) -Dproext=$(PROEXT) -Dsolar.bin=$(SOLARBINDIR) -Dsolar.jar=$(SOLARBINDIR) -Dsolar.doc=$(SOLARDOCDIR) -Dcommon.jar=$(SOLARCOMMONBINDIR) -Dcommon.doc=$(SOLARCOMMONDOCDIR) -f $(ANT_BUILDFILE) $(ANT_FLAGS) -emacs
 
 .INCLUDE : target.mk
 
@@ -160,36 +145,36 @@ $(CLASSDIR)$/solar.properties : $(SOLARENV)$/inc/minor.mk $(SOLARENV)$/inc/ant.p
     @+cat $(DMAKEROOT)$/../ant.properties >> $@
 
 ANTBUILD .PHONY:
-    $(ANT) $(ANT_FLAGS)
+    $(WRAPCMD) $(ANT) $(ANT_FLAGS)
 
 clean  .PHONY:
-    $(ANT) $(ANT_FLAGS) $@
+    $(WRAPCMD) $(ANT) $(ANT_FLAGS) $@
 
 prepare .PHONY:
-    $(ANT) $(ANT_FLAGS) $@
+    $(WRAPCMD) $(ANT) $(ANT_FLAGS) $@
 
-main:
-    $(ANT) $(ANT_FLAGS) $@
+main: .PHONY:
+    $(WRAPCMD) $(ANT) $(ANT_FLAGS) $@
 
-info:
-    $(ANT) $(ANT_FLAGS) $@
+info: .PHONY
+    $(WRAPCMD) $(ANT) $(ANT_FLAGS) $@
 
 jar .PHONY:
-    $(ANT) $(ANT_FLAGS) $@
+     $(WRAPCMD) $(ANT) $(ANT_FLAGS) $@
 
 compile .PHONY:
-    $(ANT) $(ANT_FLAGS) $@
+    $(WRAPCMD) $(ANT) $(ANT_FLAGS) $@
 
 depend .PHONY:
-    $(ANT) $(ANT_FLAGS) $@
+    $(WRAPCMD) $(ANT) $(ANT_FLAGS) $@
 
 javadoc .PHONY:
-    $(ANT) $(ANT_FLAGS) $@
+    $(WRAPCMD) $(ANT) $(ANT_FLAGS) $@
 
 config .PHONY:
-    $(ANT) $(ANT_FLAGS) $@
+    $(WRAPCMD) $(ANT) $(ANT_FLAGS) $@
 
-test:
-    $(ANT) $(ANT_FLAGS) $@
+test .PHONY:
+    $(WRAPCMD) $(ANT) $(ANT_FLAGS) $@
 
 
