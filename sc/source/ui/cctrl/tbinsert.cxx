@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbinsert.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-11 08:29:22 $
+ *  last change: $Author: nn $ $Date: 2002-05-29 18:10:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,9 @@ void __EXPORT ScTbxInsertCtrl::StateChanged( USHORT nSID, SfxItemState eState,
         {
             nLastSlotId = pItem->GetValue();
             USHORT nImageId = nLastSlotId ? nLastSlotId : GetId();
-            Image aImage = GetBindings().GetImageManager()->GetImage( nImageId, SC_MOD() );
+            Image aImage = GetBindings().GetImageManager()->GetImage( nImageId,
+                           GetToolBox().GetDisplayBackground().GetColor().IsDark(),
+                           SC_MOD() );
             GetToolBox().SetItemImage(GetId(), aImage);
         }
     }
