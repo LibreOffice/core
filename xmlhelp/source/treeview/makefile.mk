@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: abi $ $Date: 2001-07-10 18:56:35 $
+#   last change: $Author: abi $ $Date: 2001-07-11 15:35:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,6 +85,7 @@ SHL1IMPLIB=i$(TARGET)
 SHL1STDLIBS=\
     $(CPPUHELPERLIB) \
     $(CPPULIB) \
+    $(EXPATASCII3RDLIB)      \
     $(SALLIB)  \
     $(VOSLIB) \
     $(UCBHELPERLIB)

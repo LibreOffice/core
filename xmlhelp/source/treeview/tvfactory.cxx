@@ -141,7 +141,7 @@ TVFactory::createInstanceWithArguments(
 {
     if( ! m_xHDS.is() )
     {
-        cppu::OWeakObject* p = new TVRead( m_xMSF,Arguments );
+        cppu::OWeakObject* p = new TVChildTarget( m_xMSF,Arguments );
         m_xHDS = Reference< XInterface >( p );
     }
 
