@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mt $ $Date: 2001-01-30 16:56:52 $
+ *  last change: $Author: mt $ $Date: 2001-02-15 13:53:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1654,7 +1654,7 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, sal_Bool bSpel
         ueberplaetten )
     */
 
-    if ( !xSpeller.is() )
+     if ( !xSpeller.is() )
         return;
 
     EditPaM aCursorPos;
@@ -1690,8 +1690,6 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, sal_Bool bSpel
             pWrongList->SetValid();
 
             EditPaM aPaM( pNode, nInvStart );
-            if ( aPaM.GetIndex() )
-                aPaM = CursorLeft( aPaM );
             EditSelection aSel( aPaM, aPaM );
             while ( ( aSel.Max().GetNode() == pNode ) /* && !bStop */ )
             {
