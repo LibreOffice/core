@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 13:25:23 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 09:15:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -820,4 +820,36 @@ ToolBox RID_GRAPHIC_VIEWER_TOOLBOX
         };
     };
     Scroll = TRUE ;
+};
+
+ToolBox RID_DRAW_MEDIA_TOOLBOX
+{
+    HelpId = HID_SD_DRAW_MEDIA_TOOLBOX ;
+    LineSpacing = TRUE ;
+    Dockable = TRUE ;
+    Moveable = TRUE ;
+    Sizeable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    Scroll = TRUE ;
+    HideWhenDeactivate = TRUE ;
+    Border = TRUE ;
+    SVLook = TRUE ;
+    Customize = TRUE ;
+    MenuStrings = TRUE ;
+    Size = MAP_APPFONT ( 0 , 0 ) ;
+    Align = BOXALIGN_TOP ;
+    ItemList =
+    {
+        ToolBoxItem
+        {
+            Identifier = SID_AVMEDIA_TOOLBOX;
+            HelpID = SID_AVMEDIA_TOOLBOX;
+        };
+    };
+};
+String RID_DRAW_MEDIA_TOOLBOX
+{
+    TEXT [ de ] = "Medienwiedergabe" ;
+    Text [ en-us ] = "Media Playback" ;
 };
