@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contdlg.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-02 20:22:29 $
+ *  last change: $Author: kz $ $Date: 2001-04-03 19:24:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -773,7 +773,7 @@ String STR_CONTOURDLG_LINKED
     Text[ chinese_simplified ] = "ΥβΈφΝΌΠΞΚΗΊΝΞΔµµΑ΄½ΣµΔ΅£ΔϊÒªΘ΅ΟϋΥβΈφΑ΄½Σ£¬±ΰΌ­ΥβΈφΝΌΠΞΒπ£Ώ";
     Text[ russian ] = "έςξς πθρσνξκ ρρϋλΰεςρÿ νΰ δξκσμενς. Βϋ υξςθςε ρνÿςό ρρϋλκσ, χςξαϋ ξςπεδΰκςθπξβΰςό πθρσνξκ?";
     Text[ polish ] = "Grafika jest po³Ήczona z dokumentem. Czy chcesz usunΉζ ³Ήcze, aby edytowaζ grafikκ?";
-    Text[ japanese ] = "‚±‚ΜΈήΧΜ¨―Έ‚ΝΔή·­ÒέΔ‚ΙΨέΈ‚µ‚Δ‚Ά‚ά‚·BΈήΧΜ¨―Έ‚π•ÒW‚·‚ι‚½‚ί‚ΙΨέΈ‚π‰π‚µ‚ά‚·‚©H";
+    Text[ japanese ] = "‚±‚Μ}‚ΝΔή·­ÒέΔ‚ΙΨέΈ‚µ‚Δ‚Ά‚ά‚·B}‚π•ÒW‚·‚ι‚½‚ί‚ΙΨέΈ‚π‰π‚µ‚ά‚·‚©B";
     Text[ chinese_traditional ] = "³o­ΣΉΟ§Ξ¬O©M¤ε¥σ³sµ²ªΊ΅C±z­n¨ϊ®ψ³o­Σ³sµ²΅M½sΏθ³o­ΣΉΟ§Ξ΅H";
     Text[ arabic ] = "εΠε ΗαΡΣγΙ γΡΚΘΨΙ ΘΗαγΣΚδΟ. εα ΚΡνΟ ΕÒΗαΙ ΗαΗΡΚΘΗΨ αίν ΚΚγίδ γδ ΚΝΡνΡ ΗαΡΣγΙΏ";
     Text[ greek ] = "Το γραφικό αυτό είναι συνδεδεμένο με το έγγραφο. Θέλετε να καταργηθεί η σύνδεση για να επεξεργάσετε το γραφικό;";
