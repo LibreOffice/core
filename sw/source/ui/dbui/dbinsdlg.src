@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2001-12-04 18:47:21 $
+ *  last change: $Author: rt $ $Date: 2001-12-14 18:46:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ chinese_simplified ] = "æ’å…¥æ•°æ®çš„æ–¹å¼ï¼š";
         Text[ russian ] = "Âñòàâèòü äàííûå êàê:";
         Text[ polish ] = "Wstaw dane jako:";
-        Text[ japanese ] = "ï¾ƒï¾ï½°ï¾€ã®æŒ¿å…¥:";
+        Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ã®æŒ¿å…¥:";
         Text[ chinese_traditional ] = "æ’å…¥è³‡æ–™çš„æ–¹å¼ï¼š";
         Text[ arabic ] = "ÅÏÑÇÌ ÇáÈíÇäÇÊ ßÜ:";
         Text[ dutch ] = "Data invoegen als";
@@ -153,7 +153,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ chinese_simplified ] = "å­—æ®µ(~F)";
         Text[ russian ] = "Ïîëÿ";
         Text[ polish ] = "Pola";
-        Text[ japanese ] = "ï¾Œï½¨ï½°ï¾™ï¾„ï¾(~F)";
+        Text[ japanese ] = "ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰(~F)";
         Text[ chinese_traditional ] = "æ¬„ä½(~F)";
         Text[ arabic ] = "ÍŞæá";
         Text[ dutch ] = "~Velden";
@@ -183,7 +183,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ chinese_simplified ] = "æ–‡å­—(~T)";
         Text[ russian ] = "Òåêñò";
         Text[ polish ] = "Tekst";
-        Text[ japanese ] = "ï¾ƒï½·ï½½ï¾„(~T)";
+        Text[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆ(~T)";
         Text[ chinese_traditional ] = "æ–‡å­—(~T)";
         Text[ arabic ] = "äÕ";
         Text[ dutch ] = "~Tekst";
@@ -238,7 +238,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ chinese_simplified ] = "æ•°æ®åº“æ ä½(~C)";
         Text[ russian ] = "Êîëîíêè áàçû äàííûõ";
         Text[ polish ] = "Kolumny w bazie danych";
-        Text[ japanese ] = "ï¾ƒï¾ï½°ï¾€ï¾ï¾ï½°ï½½åˆ—(~C)";
+        Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹åˆ—(~C)";
         Text[ chinese_traditional ] = "è³‡æ–™åº«æ¬„ä½(~C)";
         Text[ arabic ] = "ÃÚãÏÉ ŞÇÚÏÉ ÇáÈíÇäÇÊ";
         Text[ dutch ] = "Database~kolommen";
@@ -298,7 +298,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ chinese_simplified ] = "ä»æ•°æ®åº“(~D)";
         Text[ russian ] = "Èç áàçû äàííûõ";
         Text[ polish ] = "Z bazy danych";
-        Text[ japanese ] = "ï¾ƒï¾ï½°ï¾€ï¾ï¾ï½°ï½½ã‹ã‚‰(~D)";
+        Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ã‹ã‚‰(~D)";
         Text[ chinese_traditional ] = "å¾è³‡æ–™åº«(~D)";
         Text[ arabic ] = "ãä ŞÇÚÏÉ ÇáÈíÇäÇÊ";
         Text[ dutch ] = "U~it databank";
@@ -386,7 +386,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         TEXT[ chinese_simplified ] = "æ®µè½æ ·å¼(~S)ï¼š";
         TEXT[ russian ] = "Ñòèëü àáçàöà:";
         TEXT[ polish ] = "Styl akapitu:";
-        TEXT[ japanese ] = "æ®µè½ï½½ï¾€ï½²ï¾™(~S):";
+        TEXT[ japanese ] = "æ®µè½ã‚¹ã‚¿ã‚¤ãƒ«(~S):";
         TEXT[ chinese_traditional ] = "æ®µè½æ¨£å¼(~S)";
         TEXT[ arabic ] = "äãØ İŞÑÉ:";
         TEXT[ dutch ] = "~Alinea-opmaakprofiel:";
@@ -552,7 +552,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ swedish ] = "Infoga tabellöverskrift";
         Text[ polish ] = "Wstaw tytu³ tabeli";
         Text[ portuguese_brazilian ] = "E~inschalten";
-        Text[ japanese ] = "è¡¨è¦‹å‡ºã—ã®æŒ¿å…¥(~O)";
+        Text[ japanese ] = "è¡¨è¦‹å‡ºã—ã®æŒ¿å…¥";
         Text[ korean ] = "í‘œ ì œëª© ì‚½ì…";
         Text[ chinese_simplified ] = "æ’å…¥è¡¨æ ¼å¤§æ ‡é¢˜";
         Text[ chinese_traditional ] = "æ’å…¥è¡¨æ ¼å¤§æ¨™é¡Œ";
@@ -637,7 +637,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ chinese_simplified ] = "å±æ€§(~O)...";
         Text[ russian ] = "Ñâîéñòâà...";
         Text[ polish ] = "W³aœciwoœci";
-        Text[ japanese ] = "ï¾Œï¾Ÿï¾›ï¾Šï¾Ÿï¾ƒï½¨(~O)...";
+        Text[ japanese ] = "ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£(~O)...";
         Text[ chinese_traditional ] = "å±¬æ€§(~O)...";
         Text[ arabic ] = "ÎÕÇÆÕ...";
         Text[ dutch ] = "~Eigenschappen...";
@@ -667,7 +667,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ chinese_simplified ] = "è‡ªåŠ¨æ ¼å¼(~O)...";
         Text[ russian ] = "Àâòîôîğìàò...";
         Text[ polish ] = "Autoformat";
-        Text[ japanese ] = "ï½µï½°ï¾„ï¾Œï½«ï½°ï¾ï½¯ï¾„(~O)...";
+        Text[ japanese ] = "ã‚ªãƒ¼ãƒˆãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆ(~O)...";
         Text[ chinese_traditional ] = "è‡ªå‹•æ ¼å¼(~O)...";
         Text[ arabic ] = "ÊäÓíŞ ÊáŞÇÆí...";
         Text[ dutch ] = "Aut~oOpmaak...";
@@ -717,7 +717,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
     Text[ chinese_simplified ] = "æ’å…¥æ•°æ®åº“æ ä½";
     Text[ russian ] = "Âñòàâêà êîëîíîê áàçû äàííûõ";
     Text[ polish ] = "Wstaw kolumny w bazie danych";
-    Text[ japanese ] = "ï¾ƒï¾ï½°ï¾€ï¾ï¾ï½°ï½½ã®åˆ—ã®æŒ¿å…¥";
+    Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ã®åˆ—ã®æŒ¿å…¥";
     Text[ chinese_traditional ] = "æ’å…¥è³‡æ–™åº«æ¬„";
     Text[ arabic ] = "ÅÏÑÇÌ ÃÚãÏÉ ŞÇÚÏÉ ÈíÇäÇÊ";
     Text[ dutch ] = "Database-kolommen invoegen";
@@ -728,6 +728,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
     Text[ catalan ] = "Insertar columnas de la base de datos";
     Text[ finnish ] = "Lisää tietokantasarakkeet";
 };
+
 
 
 
