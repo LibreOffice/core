@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framecontainer.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-07 12:10:39 $
+ *  last change: $Author: obo $ $Date: 2000-11-22 10:32:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,14 +64,13 @@
 //_________________________________________________________________________________________________________________
 
 
-#include <algorithm>
-#include <vector>
-#include <exception>
-
 #ifndef __FRAMEWORK_FRAMECONTAINER_HXX_
 #include <classes/framecontainer.hxx>
 #endif
 
+#include <vector>
+#include <stdexcept>
+#include <algorithm>
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
