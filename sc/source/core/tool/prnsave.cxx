@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prnsave.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:51:01 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:37:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 
 #include "prnsave.hxx"
 #include "global.hxx"
+#include "address.hxx"
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -125,10 +126,10 @@ BOOL ScPrintSaverTab::operator==( const ScPrintSaverTab& rCmp ) const
 //      Daten fuer das ganze Dokument
 //
 
-ScPrintRangeSaver::ScPrintRangeSaver( USHORT nCount ) :
+ScPrintRangeSaver::ScPrintRangeSaver( SCTAB nCount ) :
     nTabCount( nCount )
 {
-    if (nCount)
+    if (nCount > 0)
         pData = new ScPrintSaverTab[nCount];
     else
         pData = NULL;
@@ -139,13 +140,13 @@ ScPrintRangeSaver::~ScPrintRangeSaver()
     delete[] pData;
 }
 
-ScPrintSaverTab& ScPrintRangeSaver::GetTabData(USHORT nTab)
+ScPrintSaverTab& ScPrintRangeSaver::GetTabData(SCTAB nTab)
 {
     DBG_ASSERT(nTab<nTabCount,"ScPrintRangeSaver Tab zu gross");
     return pData[nTab];
 }
 
-const ScPrintSaverTab& ScPrintRangeSaver::GetTabData(USHORT nTab) const
+const ScPrintSaverTab& ScPrintRangeSaver::GetTabData(SCTAB nTab) const
 {
     DBG_ASSERT(nTab<nTabCount,"ScPrintRangeSaver Tab zu gross");
     return pData[nTab];
@@ -155,7 +156,7 @@ BOOL ScPrintRangeSaver::operator==( const ScPrintRangeSaver& rCmp ) const
 {
     BOOL bEqual = ( nTabCount == rCmp.nTabCount );
     if (bEqual)
-        for (USHORT i=0; i<nTabCount; i++)
+        for (SCTAB i=0; i<nTabCount; i++)
             if (!(pData[i]==rCmp.pData[i]))
             {
                 bEqual = FALSE;
