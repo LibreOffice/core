@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbwizres.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-22 20:18:07 $
+ *  last change: $Author: bc $ $Date: 2002-05-24 17:30:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3902,8 +3902,8 @@ String RID_DB_REPORT_WIZARD_START + 7
 
 String RID_DB_REPORT_WIZARD_START + 8
 {
-    Text = "(kein)";
-    Text [ english_us ] = "(none)";
+    Text = "-undefiniert-";
+    Text [ english_us ] = "-undefined-";
     Text[ portuguese ] = "(nenhum)";
     Text[ russian ] = "(αεη)";
     Text[ dutch ] = "(geen)";
@@ -3988,8 +3988,8 @@ String RID_DB_REPORT_WIZARD_START + 12
 
 String RID_DB_REPORT_WIZARD_START + 13
 {
-    Text = "Stilauswahl";
-    Text [ english_us ] = ": Style Selection";
+    Text = "Auswahl des Layouts";
+    Text [ english_us ] = "Style Selection";
     Text[ portuguese ] = ": Selecηγo de estilo";
     Text[ russian ] = ": Βϋαξπ ρςθλÿ";
     Text[ dutch ] = ": stijl selecteren";
@@ -4101,8 +4101,8 @@ String RID_DB_REPORT_WIZARD_START + 19
 
 String RID_DB_REPORT_WIZARD_START + 20
 {
-    Text = "Zusδtzliche Sortierkriterien:";
-    Text [ english_us ] = "~Sort order";
+    Text = "~Sortieren nach";
+    Text [ english_us ] = "~Sort by";
     Text[ portuguese ] = "~Ordenar";
     Text[ russian ] = "~Ρξπςθπξβκΰ";
     Text[ dutch ] = "~Sortering";
@@ -4127,9 +4127,39 @@ String RID_DB_REPORT_WIZARD_START + 20
     Text[ thai ] = "ΰΉ€~ΰΈ£ΰΈµΰΈΆΰΈ‡";
 };
 
+
 String RID_DB_REPORT_WIZARD_START + 21
 {
-    Text = "~Ausrichtung";
+    Text = "~Anschlieίend nach";
+    Text [ english_us ] = "~Afterwards by";
+    Text[ portuguese ] = "~Ordenar";
+    Text[ russian ] = "~Ρξπςθπξβκΰ";
+    Text[ dutch ] = "~Sortering";
+    Text[ french ] = "~Tri";
+    Text[ spanish ] = "~Ordenar";
+    Text[ italian ] = "~Ordine";
+    Text[ danish ] = "~Sortering";
+    Text[ swedish ] = "~Sortering";
+    Text[ polish ] = "~Sortowanie";
+    Text[ portuguese_brazilian ] = "~Sortierung";
+    Text[ japanese ] = "δΈ¦γΉζ›Ώγ(~S)";
+    Text[ chinese_simplified ] = "ζ’εΊ(~S)";
+    Text[ chinese_traditional ] = "ζ’εΊ(~S)";
+    Text[ arabic ] = "~ΗαέΡÒ";
+    Text[ dutch ] = "~Sortering";
+    Text[ chinese_simplified ] = "ζ’εΊ(~S)";
+    Text[ greek ] = "Ταξινόμη~ση";
+    Text[ korean ] = "μ •λ ¬(~S)";
+    Text[ turkish ] = "~Sύralama";
+    Text[ catalan ] = "~Sorting";
+    Text[ finnish ] = "~Lajitellaan";
+    Text[ thai ] = "ΰΉ€~ΰΈ£ΰΈµΰΈΆΰΈ‡";
+};
+
+
+String RID_DB_REPORT_WIZARD_START + 22
+{
+    Text = "~Dokumentausrichtung";
     Text [ english_us ] = "~Alignment";
     Text[ portuguese ] = "~Alinhamento";
     Text[ russian ] = "~Βϋπΰβνθβΰνθε";
@@ -4155,7 +4185,7 @@ String RID_DB_REPORT_WIZARD_START + 21
     Text[ thai ] = "~ΰΈΰΈ±ΰΈ”ΰΈ•ΰΈ³ΰΉΰΈ«ΰΈ™ΰΉΰΈ‡";
 };
 
-String RID_DB_REPORT_WIZARD_START + 22
+String RID_DB_REPORT_WIZARD_START + 23
 {
     Text = "~Hochformat";
     Text [ english_us ] = "~Portrait";
@@ -4183,7 +4213,7 @@ String RID_DB_REPORT_WIZARD_START + 22
     Text[ thai ] = "ΰΉΰΈ™ΰΈ§~ΰΈ•ΰΈ±ΰΉ‰ΰΈ‡";
 };
 
-String RID_DB_REPORT_WIZARD_START + 23
+String RID_DB_REPORT_WIZARD_START + 24
 {
     Text = "~Querformat";
     Text [ english_us ] = "~Landscape";
@@ -4211,10 +4241,10 @@ String RID_DB_REPORT_WIZARD_START + 23
     Text[ thai ] = "ΰΉΰΈ™ΰΈ§~ΰΈ™ΰΈ­ΰΈ™";
 };
 
-String RID_DB_REPORT_WIZARD_START + 24
+String RID_DB_REPORT_WIZARD_START + 25
 {
-    Text = "~Stil";
-    Text [ english_us ] = "~Style";
+    Text = "Bericht als Textdokumentvorlage ~speichern";
+    Text [ english_us ] = "save Report as Textdocument template";
     Text[ portuguese ] = "~Estilo";
     Text[ russian ] = "~Ρςθλό";
     Text[ dutch ] = "~Stijl";
@@ -4383,8 +4413,8 @@ String RID_DB_REPORT_WIZARD_START + 35
 
 String RID_DB_REPORT_WIZARD_START + 36
 {
-    Text = "A;Z";
-    Text [ english_us ] = "A;Z";
+    Text = "Aufsteigend";
+    Text [ english_us ] = "Ascending";
     Text[ portuguese ] = "A;Z";
     Text[ greek ] = "A;Ω";
     Text[ dutch ] = "A;Z";
@@ -4409,8 +4439,8 @@ String RID_DB_REPORT_WIZARD_START + 36
 
 String RID_DB_REPORT_WIZARD_START + 37
 {
-    Text = "Z;A";
-    Text [ english_us ] = "Report names cannot be longer than 32 characters.";
+    Text = "Absteigend";
+    Text [ english_us ] = "Descending";
     Text[ portuguese ] = "Os nomes de relatσrios sσ podem ter um mαximo de 32 caracteres.";
     Text[ greek ] = "Το μήκος των ονομάτων των αναφορών δεν πρέπει να υπερβαίνει τους 32 χαρακτήρες.";
     Text[ dutch ] = "Namen van berichten mogen maximaal 32 tekens lang zijn.";
