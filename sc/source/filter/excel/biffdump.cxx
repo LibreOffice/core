@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-21 07:55:31 $
+ *  last change: $Author: vg $ $Date: 2003-06-25 10:46:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1208,6 +1208,16 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 ADDTEXT( "   reserved: " );     ADDHEX( 1 );
                 ADDTEXT( "   " );
                 AddUNICODEString( t, rIn, FALSE );
+                PRINT();
+            }
+            break;
+            case 0x0042:        // CODEPAGE
+            {
+                LINESTART();
+                sal_uInt16 nCodePage = rIn.ReaduInt16();
+                ADDTEXT( "codepage=" );         __AddHex( t, nCodePage );
+                ADDTEXT( " (" );                __AddDec( t, nCodePage );
+                ADDTEXT( ")" );
                 PRINT();
             }
             break;
