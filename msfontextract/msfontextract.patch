@@ -1,16 +1,16 @@
-*** misc/libmspack/mspack/makefile.mk	2004-03-05 11:07:50.000000000 -0500
---- misc/build/libmspack/mspack/makefile.mk	2004-03-05 11:07:32.000000000 -0500
+*** misc/libmspack/mspack/makefile.mk	2004-04-15 09:16:23.000000000 -0400
+--- misc/build/libmspack/mspack/makefile.mk	2004-04-15 09:16:10.000000000 -0400
 ***************
 *** 1 ****
 ! dummy
---- 1,98 ----
+--- 1,100 ----
 ! #*************************************************************************
 ! #
 ! #   $RCSfile: msfontextract.patch,v $
 ! #
-! #   $Revision: 1.2 $
+! #   $Revision: 1.3 $
 ! #
-! #   last change: $Author: khendricks $ $Date: 2004-04-08 14:37:56 $
+! #   last change: $Author: svesik $ $Date: 2004-05-05 14:29:04 $
 ! #
 ! #   The Contents of this file are made available subject to the terms of
 ! #   either of the following licenses
@@ -73,6 +73,8 @@
 ! TARGETTYPE=CUI
 ! LIBTARGET=NO
 ! NO_DEFAULT_STL=TRUE
+! LIBSALCPPRT=
+! 
 ! # --- Settings -----------------------------------------------------
 ! 
 ! 
@@ -102,8 +104,8 @@
 ! # --- Targets ------------------------------------------------------
 ! 
 ! .INCLUDE :  target.mk
-*** misc/libmspack/mspack/ministub.c	2004-03-05 11:07:50.000000000 -0500
---- misc/build/libmspack/mspack/ministub.c	2004-03-05 11:06:11.000000000 -0500
+*** misc/libmspack/mspack/ministub.c	2004-04-15 09:16:23.000000000 -0400
+--- misc/build/libmspack/mspack/ministub.c	2004-04-15 09:15:24.000000000 -0400
 ***************
 *** 1 ****
 ! dummy
@@ -119,8 +121,8 @@
 ! int qtmd_decompress() {return MSPACK_ERR_DECRUNCH;}
 ! void qtmd_free() {}
 ! 
-*** misc/libmspack/mspack/msfontextract.c	2004-03-05 11:07:50.000000000 -0500
---- misc/build/libmspack/mspack/msfontextract.c	2004-03-05 11:06:11.000000000 -0500
+*** misc/libmspack/mspack/msfontextract.c	2004-04-15 09:16:23.000000000 -0400
+--- misc/build/libmspack/mspack/msfontextract.c	2004-04-15 09:15:24.000000000 -0400
 ***************
 *** 1 ****
 ! dummy
@@ -233,7 +235,7 @@
 ! }
 ! 
 *** misc/libmspack/mspack/mspack.h	2003-12-12 12:06:15.000000000 -0500
---- misc/build/libmspack/mspack/mspack.h	2004-03-05 11:06:11.000000000 -0500
+--- misc/build/libmspack/mspack/mspack.h	2004-04-15 09:15:24.000000000 -0400
 ***************
 *** 120,125 ****
 --- 120,130 ----
@@ -249,7 +251,7 @@
    * System self-test function, to ensure both library and calling program
    * can use one another.
 *** misc/libmspack/mspack/system.h	2003-09-11 10:06:52.000000000 -0400
---- misc/build/libmspack/mspack/system.h	2004-03-05 11:06:11.000000000 -0500
+--- misc/build/libmspack/mspack/system.h	2004-04-15 09:15:24.000000000 -0400
 ***************
 *** 18,23 ****
 --- 18,27 ----
@@ -263,3 +265,22 @@
   /* endian-neutral reading of little-endian data */
   #define __egi32(a,n) ( (((a)[n+3]) << 24) | (((a)[n+2]) << 16) | \
   		       (((a)[n+1]) <<  8) |  ((a)[n+0])        )
+***************
+*** 39,44 ****
+--- 43,49 ----
+  /* validates a system structure */
+  extern int mspack_valid_system(struct mspack_system *sys);
+  
++ #if 0
+  /* inline memcmp() */
+  static inline int memcmp(const void *s1, const void *s2, size_t n) {
+    unsigned char *c1 = (unsigned char *) s1;
+***************
+*** 54,58 ****
+--- 59,64 ----
+    while (*e) e++;
+    return e - s;
+  }
++ #endif
+  
+  #endif

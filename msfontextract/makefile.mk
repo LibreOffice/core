@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: khendricks $ $Date: 2004-04-08 14:37:56 $
+#   last change: $Author: svesik $ $Date: 2004-05-05 14:31:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,6 +65,7 @@ PRJ=.
 PRJNAME=msfontextract
 TARGET=libmspack
 NO_DEFAULT_STL=TRUE
+LIBSALCPPRT=
 
 # --- Settings -----------------------------------------------------
 
@@ -81,7 +82,7 @@ CONFIGURE_FLAGS=
 
 BUILD_DIR=mspack
 BUILD_FLAGS=
-BUILD_ACTION=dmake
+BUILD_ACTION=dmake subdmak=true $(MFLAGS) $(MAKEFILE) $(CALLMACROS)
 
 .INCLUDE : 	set_ext.mk
 .INCLUDE :	target.mk
