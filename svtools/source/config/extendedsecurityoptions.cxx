@@ -2,9 +2,9 @@
  *
  *  $RCSfile: extendedsecurityoptions.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pb $ $Date: 2002-08-13 12:43:49 $
+ *  last change: $Author: obo $ $Date: 2004-04-29 16:46:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,6 +222,7 @@ class SvtExtendedSecurityOptions_Impl : public ConfigItem
 
         SvtExtendedSecurityOptions::OpenHyperlinkMode   GetOpenHyperlinkMode();
         void                                            SetOpenHyperlinkMode( SvtExtendedSecurityOptions::OpenHyperlinkMode aMode );
+        sal_Bool                                        IsOpenHyperlinkModeReadOnly() const;
 
     //-------------------------------------------------------------------------------------------------------------
     //  private methods
@@ -267,6 +268,7 @@ class SvtExtendedSecurityOptions_Impl : public ConfigItem
         OUString                                        m_aExtensionPropName;
 
         SvtExtendedSecurityOptions::OpenHyperlinkMode   m_eOpenHyperlinkMode;
+        sal_Bool                                        m_bROOpenHyperlinkMode;
         ExtensionHashMap                                m_aExtensionHashMap;
 };
 
@@ -281,7 +283,8 @@ SvtExtendedSecurityOptions_Impl::SvtExtendedSecurityOptions_Impl()
     // Init baseclasses first
     :   ConfigItem          ( ROOTNODE_SECURITY         ),
     m_aSecureExtensionsSetName( SECURE_EXTENSIONS_SET ),
-    m_aExtensionPropName( EXTENSION_PROPNAME )
+    m_aExtensionPropName( EXTENSION_PROPNAME ),
+    m_bROOpenHyperlinkMode(sal_False)
     // Init member then.
 {
     // Fill the extension hash map with all secure extension strings
@@ -289,6 +292,7 @@ SvtExtendedSecurityOptions_Impl::SvtExtendedSecurityOptions_Impl()
 
     Sequence< OUString >    seqNames    = GetPropertyNames();
     Sequence< Any >         seqValues   = GetProperties( seqNames );
+    Sequence< sal_Bool >    seqRO       = GetReadOnlyStates ( seqNames  );
 
     sal_Int32 nPropertyCount = seqValues.getLength();
     for( sal_Int32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
@@ -307,6 +311,7 @@ SvtExtendedSecurityOptions_Impl::SvtExtendedSecurityOptions_Impl()
                     m_eOpenHyperlinkMode = (SvtExtendedSecurityOptions::OpenHyperlinkMode)nMode;
                 else
                     DBG_ERROR("Wrong type for Open mode!");
+                m_bROOpenHyperlinkMode = seqRO[nProperty];
             }
             break;
         }
@@ -403,6 +408,13 @@ Sequence< OUString > SvtExtendedSecurityOptions_Impl::GetSecureExtensionList() c
 SvtExtendedSecurityOptions::OpenHyperlinkMode SvtExtendedSecurityOptions_Impl::GetOpenHyperlinkMode()
 {
     return m_eOpenHyperlinkMode;
+}
+/* -----------------09.07.2003 11:26-----------------
+
+ --------------------------------------------------*/
+sal_Bool SvtExtendedSecurityOptions_Impl::IsOpenHyperlinkModeReadOnly() const
+{
+    return m_bROOpenHyperlinkMode;
 }
 
 //*****************************************************************************************************************
@@ -535,6 +547,13 @@ SvtExtendedSecurityOptions::OpenHyperlinkMode SvtExtendedSecurityOptions::GetOpe
 {
     MutexGuard aGuard( GetInitMutex() );
     return m_pDataContainer->GetOpenHyperlinkMode();
+}
+/* -----------------09.07.2003 11:26-----------------
+
+ --------------------------------------------------*/
+sal_Bool SvtExtendedSecurityOptions::IsOpenHyperlinkModeReadOnly() const
+{
+    return m_pDataContainer->IsOpenHyperlinkModeReadOnly();
 }
 
 //*****************************************************************************************************************
