@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sax_expat.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 16:04:29 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:58:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,11 @@
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
 
+#ifdef SYSTEM_EXPAT
+#include <expat.h>
+#else
 #include "expat/xmlparse.h"
+#endif
 
 using namespace ::rtl;
 using namespace ::std;
