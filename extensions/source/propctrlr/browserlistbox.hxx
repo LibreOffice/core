@@ -2,9 +2,9 @@
  *
  *  $RCSfile: browserlistbox.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 12:00:33 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:01:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,8 @@
 #include "modulepcr.hxx"
 #endif
 
+#include <set>
+
 //............................................................................
 namespace pcr
 {
@@ -97,6 +99,7 @@ namespace pcr
     class OBrowserListBox
                 :public Control
                 ,public IBrowserControlListener
+                ,public IButtonClickListener
                 ,public OModuleResourceClient
     {
     protected:
@@ -109,11 +112,12 @@ namespace pcr
         sal_uInt16                  m_nSelectedLine;
         sal_uInt16                  m_nTheNameSize;
         sal_uInt16                  m_nRowHeight;
+        ::std::set< sal_uInt16 >    m_aOutOfDateLines;
         sal_Bool                    m_bIsActive : 1;
         sal_Bool                    m_bUpdate : 1;
 
     protected:
-                void                        ShowLine(sal_uInt16 i);
+                void                        PositionLine( sal_uInt16 _nIndex );
                 void                        UpdatePosNSize();
                 void                        UpdatePlayGround();
                 void                        UpdateVScroll();
@@ -129,34 +133,35 @@ namespace pcr
 
                 void                        UpdateAll();
 
-                virtual void                Activate(sal_Bool _bActive = sal_True);
+                void                        Activate(sal_Bool _bActive = sal_True);
 
-                virtual sal_uInt16          CalcVisibleLines();
-                virtual void                EnableUpdate();
-                virtual void                DisableUpdate();
-                virtual long                Notify( NotifyEvent& _rNEvt );
+                sal_uInt16                  CalcVisibleLines();
+                void                        EnableUpdate();
+                void                        DisableUpdate();
+                long                        Notify( NotifyEvent& _rNEvt );
 
-                virtual void                setListener(IPropertyLineListener* _pPLL);
+                void                        setListener(IPropertyLineListener* _pPLL);
 
-                virtual void                Clear();
+                void                        Clear();
 
-                virtual sal_uInt16          InsertEntry(const OLineDescriptor&, sal_uInt16 nPos = EDITOR_LIST_APPEND);
-                virtual void                ChangeEntry( const OLineDescriptor&, sal_uInt16 nPos);
+                sal_uInt16                  InsertEntry( const OLineDescriptor&, sal_uInt16 nPos = EDITOR_LIST_APPEND );
+                sal_Bool                    RemoveEntry( const ::rtl::OUString& _rName );
+                void                        ChangeEntry( const OLineDescriptor&, sal_uInt16 nPos );
 
-                virtual void                SetPropertyValue( const ::rtl::OUString & rEntryName, const ::rtl::OUString & rValue );
-                virtual ::rtl::OUString     GetPropertyValue( const ::rtl::OUString & rEntryName ) const;
-                virtual sal_uInt16          GetPropertyPos( const ::rtl::OUString& rEntryName ) const;
-                virtual void                SetPropertyData( const ::rtl::OUString& rEntryName, void* pData );
-                virtual IBrowserControl*    GetPropertyControl( const ::rtl::OUString& rEntryName );
-                virtual IBrowserControl*    GetCurrentPropertyControl();
-                        void                EnablePropertyLine( const ::rtl::OUString& _rEntryName, bool _bEnable );
-                        void                EnablePropertyInput( const ::rtl::OUString& _rEntryName, bool _bEnableInput, bool _bEnableBrowseButton );
+                void                        SetPropertyValue( const ::rtl::OUString & rEntryName, const ::rtl::OUString & rValue );
+                ::rtl::OUString             GetPropertyValue( const ::rtl::OUString & rEntryName ) const;
+                sal_uInt16                  GetPropertyPos( const ::rtl::OUString& rEntryName ) const;
+                IBrowserControl*            GetPropertyControl( const ::rtl::OUString& rEntryName );
+                IBrowserControl*            GetCurrentPropertyControl();
+                void                        EnablePropertyControls( const ::rtl::OUString& _rEntryName, bool _bEnableInput, bool _bEnablePrimaryButton, bool _bEnableSecondaryButton = false );
+                void                        EnablePropertyLine( const ::rtl::OUString& _rEntryName, bool _bEnable );
+                sal_Bool                    IsPropertyInputEnabled( const ::rtl::OUString& _rEntryName ) const;
 
-                virtual void                SetFirstVisibleEntry(sal_uInt16 nPos);
-                virtual sal_uInt16          GetFirstVisibleEntry();
+                void                        SetFirstVisibleEntry(sal_uInt16 nPos);
+                sal_uInt16                  GetFirstVisibleEntry();
 
-                virtual void                SetSelectedEntry(sal_uInt16 nPos);
-                virtual sal_uInt16          GetSelectedEntry();
+                void                        SetSelectedEntry(sal_uInt16 nPos);
+                sal_uInt16                  GetSelectedEntry();
 
                 // #95343# --------------------------
                 sal_Int32                   GetMinimumWidth();
@@ -167,14 +172,16 @@ namespace pcr
 
     protected:
         DECL_LINK( ScrollHdl, ScrollBar* );
-        DECL_LINK( ClickHdl, PushButton* );
 
         // IBrowserControlListener
-        virtual void                    Modified    (IBrowserControl* _pControl);
-        virtual void                    GetFocus    (IBrowserControl* _pControl);
-        virtual void                    Commit      (IBrowserControl* _pControl);
-        virtual void                    KeyInput    (IBrowserControl* _pControl, const KeyCode& _rKey);
-        virtual void                    TravelLine  (IBrowserControl* _pControl);
+                void                    Modified    (IBrowserControl* _pControl);
+                void                    GetFocus    (IBrowserControl* _pControl);
+                void                    Commit      (IBrowserControl* _pControl);
+                void                    KeyInput    (IBrowserControl* _pControl, const KeyCode& _rKey);
+                void                    TravelLine  (IBrowserControl* _pControl);
+
+        // IButtonClickListener
+                void    buttonClicked( OBrowserLine* _pLine, bool _bPrimary );
     };
 
 //............................................................................
