@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxdrctl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2002-05-24 14:49:38 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:21:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
 #ifndef _SHL_HXX
 #include <tools/shl.hxx>
 #endif
-#ifndef _SFXENUMITEM_HXX
-#include <svtools/eitem.hxx>
+#ifndef _AEITEM_HXX
+#include <svtools/aeitem.hxx>
 #endif
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
@@ -74,7 +74,7 @@
 #ifndef _SFXVIEWSH_HXX
 #include <sfx2/viewsh.hxx>
 #endif
-
+#include <sfx2/imagemgr.hxx>
 #include <sfx2/viewfrm.hxx>
 
 #pragma hdrstop
@@ -86,7 +86,7 @@
 #include "tbxdraw.hxx"
 #include "tbxdraw.hrc"
 
-SFX_IMPL_TOOLBOX_CONTROL(SvxTbxCtlDraw, SfxEnumItem);
+SFX_IMPL_TOOLBOX_CONTROL(SvxTbxCtlDraw, SfxAllEnumItem);
 
 /*************************************************************************
 |*
@@ -94,13 +94,14 @@ SFX_IMPL_TOOLBOX_CONTROL(SvxTbxCtlDraw, SfxEnumItem);
 |*
 \************************************************************************/
 
-SvxTbxCtlDraw::SvxTbxCtlDraw( USHORT nId, ToolBox& rTbx, SfxBindings& rBindings ) :
+SvxTbxCtlDraw::SvxTbxCtlDraw( USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
 
-    SfxToolBoxControl( nId, rTbx, rBindings ),
-
+    SfxToolBoxControl( nSlotId, nId, rTbx ),
     nLastAction( 0 )
 
 {
+    rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
+    rTbx.Invalidate();
 }
 
 /*************************************************************************
@@ -112,24 +113,34 @@ SvxTbxCtlDraw::SvxTbxCtlDraw( USHORT nId, ToolBox& rTbx, SfxBindings& rBindings 
 void SvxTbxCtlDraw::StateChanged( USHORT nSID, SfxItemState eState,
                                   const SfxPoolItem* pState )
 {
-    GetToolBox().EnableItem( GetId(), ( eState != SFX_ITEM_DISABLED ) );
 
+    GetToolBox().EnableItem( GetId(), ( eState != SFX_ITEM_DISABLED ) );
     if ( SFX_ITEM_AVAILABLE == eState )
     {
         USHORT nTemp = ( (SfxEnumItem*)pState )->GetValue();
 
-        if( GetId() == SID_INSERT_DRAW && nTemp != USHRT_MAX )
+        if( GetSlotId() == SID_INSERT_DRAW && nTemp != USHRT_MAX )
         {
             // Check whether we are in high contrast mode or not!
             BOOL bHiContrast = GetToolBox().GetBackground().GetColor().IsDark();
 
             nLastAction = nTemp;
-            USHORT nImage = nLastAction ? nLastAction : GetId();
-            SfxViewFrame* pFrame = GetBindings().GetDispatcher()->GetFrame();
-            Image aImage = pFrame->GetImageManager()->GetImage( nImage, bHiContrast );
+
+            USHORT nImage = nLastAction ? nLastAction : GetSlotId();
+            rtl::OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
+            aSlotURL += rtl::OUString::valueOf( sal_Int32( nImage ));
+            Image aImage = GetImage( m_xFrame,
+                                     aSlotURL,
+                                     hasBigImages(),
+                                     GetToolBox().GetDisplayBackground().GetColor().IsDark() );
+
+//            SfxViewFrame* pFrame = GetBindings().GetDispatcher()->GetFrame();
+//            Image aImage = pFrame->GetImageManager()->GetImage( nImage, bHiContrast );
             GetToolBox().SetItemImage( GetId(), aImage );
         }
     }
+
+    SfxToolBoxControl::StateChanged( nSID, eState, pState );
 }
 
 /*************************************************************************
@@ -153,6 +164,10 @@ SfxPopupWindowType SvxTbxCtlDraw::GetPopupWindowType() const
 
 SfxPopupWindow* SvxTbxCtlDraw::CreatePopupWindow()
 {
+    rtl::OUString aSubTbxResName( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/drawbar" ));
+    createAndPositionSubToolBar( aSubTbxResName );
+
+/*
     if ( GetId() == SID_INSERT_DRAW )
     {
         SvxPopupWindowTbxMgr* pWin =
@@ -165,6 +180,7 @@ SfxPopupWindow* SvxTbxCtlDraw::CreatePopupWindow()
         pWin->Show();
         return pWin;
     }
+*/
     return NULL;
 }
 
@@ -174,9 +190,13 @@ void SvxTbxCtlDraw::Select( BOOL bMod1 )
 {
     if ( nLastAction )
     {
+        SfxDispatcher* pDisp = SfxViewFrame::Current() ? SfxViewFrame::Current()->GetDispatcher() : NULL;
+        if ( pDisp )
+            pDisp->Execute( nLastAction, SFX_CALLMODE_SLOT, NULL, ( bMod1 ? KEY_MOD1 : 0 ) );
+/*
         GetBindings().GetDispatcher()->Execute( nLastAction,
             SFX_CALLMODE_SLOT, NULL, ( bMod1 ? KEY_MOD1 : 0 ) );
-
+*/
         if ( bMod1 )
         {
             //  #99013# if selected with control key, return focus to current view
