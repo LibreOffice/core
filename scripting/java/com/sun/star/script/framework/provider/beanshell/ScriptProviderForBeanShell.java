@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptProviderForBeanShell.java,v $
 *
-*  $Revision: 1.5 $
+*  $Revision: 1.6 $
 *
-*  last change: $Author: hr $ $Date: 2004-07-23 14:03:24 $
+*  last change: $Author: hr $ $Date: 2004-10-11 13:30:39 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -191,26 +191,21 @@ public class ScriptProviderForBeanShell
      */
     public static boolean __writeRegistryServiceInfo( XRegistryKey regKey )
     {
-        String impl = "com.sun.star.scripting.runtime.beanshell." +
+        String impl = "com.sun.star.script.framework.provider.beanshell." +
             "ScriptProviderForBeanShell$_ScriptProviderForBeanShell";
 
-        String service = "drafts.com.sun.star.script.provider." +
+        String service1 = "drafts.com.sun.star.script.provider." +
+            "ScriptProvider";
+        String service2 = "drafts.com.sun.star.script.provider." +
+            "LanguageScriptProvider";
+        String service3 = "drafts.com.sun.star.script.provider." +
             "ScriptProviderForBeanShell";
 
-        if (FactoryHelper.writeRegistryServiceInfo(impl, service, regKey)) {
-            try {
-                // code below is commented out because we want this to happen
-                // as part of the install, this will have to be done
-                // programatically during the install as registration of java components
-                // is not fully supported in setup. It should work somewhat like c++ somewhat like c++ registration in install
-/*                XRegistryKey newKey = regKey.createKey(impl + "/UNO/SINGLETONS/drafts.com.sun.star.script.provider.theScriptProviderForBeanShell");
-                newKey.setStringValue(service); */
+        if ( FactoryHelper.writeRegistryServiceInfo(impl, service1, regKey) &&
+            FactoryHelper.writeRegistryServiceInfo(impl, service2, regKey) &&
+            FactoryHelper.writeRegistryServiceInfo(impl, service3, regKey) )
+        {
                 return true;
-            }
-            catch (Exception ex) {
-                System.err.println(
-                    "Error registering ScriptProviderForBeanShell: " + ex);
-            }
         }
         return false;
     }
