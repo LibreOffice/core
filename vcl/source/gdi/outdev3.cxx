@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.125 $
+ *  $Revision: 1.126 $
  *
- *  last change: $Author: ssa $ $Date: 2002-09-27 14:08:30 $
+ *  last change: $Author: pl $ $Date: 2002-09-30 18:35:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -968,7 +968,7 @@ Font OutputDevice::GetDefaultFont( USHORT nType, LanguageType eLang,
         case LANGUAGE_ARABIC_BAHRAIN:
         case LANGUAGE_ARABIC_QATAR:
         case LANGUAGE_HEBREW:
-            aSearch = String( RTL_CONSTASCII_USTRINGPARAM( "Tahoma;Traditional Arabic;Simplified Arabic;Lucida Sans;Supplement;Andale Sans UI;Arial Unicode MS;Interface User;Lucida Sans Unicode;WarpSans;Geneva;MS Sans Serif;Helv;Dialog;Albany;Lucida;Helvetica;Charcoal;Chicago;Arial;Helmet;Interface System;Sans Serif" ) );
+            aSearch = String( RTL_CONSTASCII_USTRINGPARAM( "Tahoma;Traditional Arabic;Simplified Arabic;Lucidasans;Lucida Sans;Supplement;Andale Sans UI;Arial Unicode MS;Interface User;Lucida Sans Unicode;WarpSans;Geneva;MS Sans Serif;Helv;Dialog;Albany;Lucida;Helvetica;Charcoal;Chicago;Arial;Helmet;Interface System;Sans Serif" ) );
             break;
 
         default:
@@ -1613,7 +1613,7 @@ ImplFontCache::~ImplFontCache()
 ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
                                    const Font& rFont, const Size& rSize )
 {
-    const XubString& rName      = rFont.GetName();
+    String aName                = rFont.GetName();
     const XubString& rStyleName = rFont.GetStyleName();
     long nWidth                 = rSize.Width();
     long nHeight                = rSize.Height();
@@ -1649,7 +1649,7 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
         if ( (nHeight       == pFontSelData->mnHeight)    &&
              (eWeight       == pFontSelData->meWeight)    &&
              (eItalic       == pFontSelData->meItalic)    &&
-             (rName         == pFontSelData->maName)      &&
+             (aName         == pFontSelData->maName)      &&
              (rStyleName    == pFontSelData->maStyleName) &&
              (eFamily       == pFontSelData->meFamily)    &&
              (ePitch        == pFontSelData->mePitch)     &&
@@ -1697,12 +1697,16 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
     do
     {
         nToken++;
-        aSearchName = GetFontToken( rName, 0, nIndex );
+        String aToken = GetFontToken( aName, 0, nIndex );
+        aSearchName = aToken;
         ImplGetEnglishSearchFontName( aSearchName );
         ImplFontSubstitute( aSearchName, nSubstFlags1, nSubstFlags2 );
         pFoundData = pFontList->ImplFind( aSearchName );
         if ( pFoundData )
+        {
+            aName = aToken;
             break;
+        }
     }
     while ( nIndex != STRING_NOTFOUND );
 
@@ -1719,7 +1723,7 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
         {
             if ( nToken > 1 )
             {
-                aSearchName = GetFontToken( rName, 0, nIndex );
+                aSearchName = GetFontToken( aName, 0, nIndex );
                 ImplGetEnglishSearchFontName( aSearchName );
             }
             else
@@ -1741,7 +1745,7 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
         if ( nToken > 1 )
         {
             nIndex = 0;
-            aSearchName = GetFontToken( rName, 0, nIndex );
+            aSearchName = GetFontToken( aName, 0, nIndex );
             ImplGetEnglishSearchFontName( aSearchName );
         }
 
@@ -1798,7 +1802,7 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
             while ( nIndex != STRING_NOTFOUND )
             {
                 const FontSubstConfigItem::FontNameAttr* pTempFontAttr;
-                String                  aTempName = GetFontToken( rName, 0, nIndex );
+                String                  aTempName = GetFontToken( aName, 0, nIndex );
                 String                  aTempShortName;
                 String                  aTempFamilyName;
                 ULONG                   nTempType = 0;
@@ -1884,7 +1888,7 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
                 nSearchType |= IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP;
             else
             {
-                if ( ImplIsCJKFont( rName ) )
+                if ( ImplIsCJKFont( aName ) )
                     nSearchType |= IMPL_FONT_ATTR_CJK;
             }
             if ( bSymbolEncoding )
@@ -2300,8 +2304,8 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
             nHeightMatch = 0;
             nWidthMatch = 0;
 
-            if ( (rName == pCurFontData->maName) ||
-                 rName.EqualsIgnoreCaseAscii( pCurFontData->maName ) )
+            if ( (aName == pCurFontData->maName) ||
+                 aName.EqualsIgnoreCaseAscii( pCurFontData->maName ) )
                 nMatch += 240000;
 
             if ( pCompareStyleName &&
@@ -2450,7 +2454,7 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
     // initialize font selection data
     ImplFontSelectData* pFontSelData = &(pEntry->maFontSelData);
     pFontSelData->mpFontData        = pFontData;
-    pFontSelData->maName            = rName;
+    pFontSelData->maName            = aName;
     pFontSelData->maStyleName       = rStyleName;
     pFontSelData->mnWidth           = nWidth;
     pFontSelData->mnHeight          = nHeight;
@@ -5965,7 +5969,7 @@ void OutputDevice::DrawText( const Rectangle& rRect,
                                                 nIndex, nLineLen);
                         long lc_x1 = pCaretXArray[2*(nIndex + nMnemonicPos)];
                         long lc_x2 = pCaretXArray[2*(nIndex + nMnemonicPos)+1];
-                        nMnemonicWidth = abs(lc_x1 - lc_x2);
+                        nMnemonicWidth = std::abs((int)(lc_x1 - lc_x2));
 
                         Point       aTempPos = LogicToPixel( aPos );
                         nMnemonicX = mnOutOffX + aTempPos.X() + ImplLogicWidthToDevicePixel( std::min( lc_x1, lc_x2 ) );
@@ -6035,7 +6039,7 @@ void OutputDevice::DrawText( const Rectangle& rRect,
             BOOL bRet = GetCaretPositions( aStr, pCaretXArray, 0, aStr.Len() );
             long lc_x1 = pCaretXArray[2*(nMnemonicPos)];
             long lc_x2 = pCaretXArray[2*(nMnemonicPos)+1];
-            nMnemonicWidth = abs(lc_x1 - lc_x2);
+            nMnemonicWidth = std::abs((int)(lc_x1 - lc_x2));
 
             Point aTempPos = LogicToPixel( aPos );
             nMnemonicX = mnOutOffX + aTempPos.X() + ImplLogicWidthToDevicePixel( std::min(lc_x1, lc_x2) );
@@ -6370,7 +6374,7 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const XubString& rStr,
                                       nIndex, nLen);
             long lc_x1 = pCaretXArray[2*(nIndex + nMnemonicPos)];
             long lc_x2 = pCaretXArray[2*(nIndex + nMnemonicPos)+1];
-            nMnemonicWidth = abs(lc_x1 - lc_x2);
+            nMnemonicWidth = std::abs((int)(lc_x1 - lc_x2));
 
             Point aTempPos = LogicToPixel( rPos );
             nMnemonicX = mnOutOffX + aTempPos.X() + ImplLogicWidthToDevicePixel( std::min(lc_x1,lc_x2) );
