@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inoncopyable.h,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2001-03-29 13:17:11 $
+ *  last change: $Author: as $ $Date: 2001-06-11 10:23:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,19 +93,18 @@ namespace framework{
                     all possiblities to copy or assign one object to another one!
                     We declare neccessary functions private to do so.
 *//*-*************************************************************************************************************/
-
-class INonCopyAble
+class INonCopyable
 {
     public:
 
-        INonCopyAble() {}
+        INonCopyable() {}
 
     private:
 
-        INonCopyAble            ( const INonCopyAble& rCopy );
-        INonCopyAble& operator= ( const INonCopyAble& rCopy );
+        INonCopyable            ( const INonCopyable& rCopy );
+        INonCopyable& operator= ( const INonCopyable& rCopy );
 
-};      //  class INonCopyAble
+};      //  class INonCopyable
 
 }       //  namespace framework
 
