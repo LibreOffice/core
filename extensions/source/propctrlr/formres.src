@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formres.src,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-08 08:46:38 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 10:46:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -491,7 +491,7 @@ String RID_STR_SHOW_NAVIGATION
 String RID_STR_SHOW_RECORDACTIONS
 {
     Text [ de ] = "Datensatzaktionen";
-    Text [ en-US ] = "Record actions";
+    Text [ en-US ] = "Acting on a record";
 };
 String RID_STR_SHOW_FILTERSORT
 {
@@ -1526,3 +1526,8 @@ String RID_STR_TEXTTYPE
     Text [ en-US ] = "Text type";
 };
 
+String RID_STR_SHOW_HIDE
+{
+    Text [ de ] = "Nicht anzeigen;Anzeigen" ;
+    Text [ en-US ] = "Hide;Show" ;
+};
