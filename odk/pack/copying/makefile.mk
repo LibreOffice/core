@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.56 $
+#   $Revision: 1.57 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-26 13:39:48 $
+#   last change: $Author: rt $ $Date: 2003-04-17 09:58:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -107,67 +107,10 @@ XMLLIST= \
     $(foreach,c,$(COMPONENTLIST) $(DESTDIRXML)$/$c.xml) \
     $(DESTDIRXML)$/module-description.dtd
 
-DIRLIST = \
-    $(DESTDIR) \
-    $(DESTDIRBIN) \
-    $(DESTDIRLIB) \
-    $(DESTDIRINC) \
-    $(DESTINCDIRLIST) \
-    $(DESTDIRINC)$/com$/sun$/star$/uno \
-    $(DESTDIRSETTINGS) \
-    $(DESTDIRJAR) \
-    $(DESTDIRXML) \
-    $(DESTDIRDOCU) \
-    $(DESTDIRCOMMONDOCU) \
-    $(DESTDIRCOMMONDOCU)$/spec$/xml_format \
-    $(DESTDIRDOCUIMAGES) \
-    $(DESTDIRDOCU)$/DevStudioWizards$/images \
-    $(DESTDIREXAMPLES)		 	\
-    $(DESTDIRCLASSES)		 	\
-    $(DESTDIRCPPEXAMPLES)		 	\
-    $(DESTDIRCPPEXAMPLES)$/counter 	\
-    $(DESTDIRCPPEXAMPLES)$/remoteclient 	\
-    $(DESTDIRCPPEXAMPLES)$/officeclient 	\
-    $(DESTDIRCPPEXAMPLES)$/DocumentLoader 	\
-    $(DESTDIRCPPEXAMPLES)$/GenericXMLFilter 	\
-    $(DESTDIRJAVAEXAMPLES)		 	\
-    $(DESTDIRJAVAEXAMPLES)$/draw		\
-    $(DESTDIRJAVAEXAMPLES)$/calc$/ChartTypeChange		\
-    $(DESTDIRJAVAEXAMPLES)$/writer		\
-    $(DESTDIRJAVAEXAMPLES)$/Car		\
-    $(DESTDIRJAVAEXAMPLES)$/CalcAddins	\
-    $(DESTDIRJAVAEXAMPLES)$/com$/sun$/star$/comp$/demo	\
-    $(DESTDIRJAVAEXAMPLES)$/ConverterServlet		\
-    $(DESTDIRJAVAEXAMPLES)$/DocumentConverter		\
-    $(DESTDIRJAVAEXAMPLES)$/DocumentConverter$/test		\
-    $(DESTDIRJAVAEXAMPLES)$/DocumentLoader	\
-    $(DESTDIRJAVAEXAMPLES)$/DocumentPrinter	\
-    $(DESTDIRJAVAEXAMPLES)$/DocumentSaver	\
-    $(DESTDIRJAVAEXAMPLES)$/GraphicsInserter	\
-    $(DESTDIRJAVAEXAMPLES)$/Inspector	\
-    $(DESTDIRJAVAEXAMPLES)$/NotesAccess	\
-    $(DESTDIRJAVAEXAMPLES)$/ToDo	\
-    $(DESTDIRJAVAEXAMPLES)$/MinimalComponent   \
-    $(DESTDIRJAVAEXAMPLES)$/PropertySet   \
-    $(DESTDIRJAVAEXAMPLES)$/WriterSelector   \
-    $(DESTDIRBASICEXAMPLES)		 	\
-    $(DESTDIRBASICEXAMPLES)$/drawing 	\
-    $(DESTDIRBASICEXAMPLES)$/forms_and_controls	 	\
-    $(DESTDIRBASICEXAMPLES)$/sheet	 			\
-    $(DESTDIRBASICEXAMPLES)$/stock_quotes_updater       \
-    $(DESTDIRBASICEXAMPLES)$/text	 			\
-    $(DESTDIRBASICEXAMPLES)$/text$/creating_an_index 	\
-    $(DESTDIRBASICEXAMPLES)$/text$/modifying_text_automatically 	\
-    $(DESTDIROLEEXAMPLES)		 	\
-    $(DESTDIROLEEXAMPLES)$/vbscript		 	\
-    $(DESTDIROLEEXAMPLES)$/delphi$/InsertTables		 	\
-    $(DESTDIROLEEXAMPLES)$/activex		 	\
-    {$(subst,$(IDLOUT),$(DESTDIRIDL) $(IDLDIRLIST))}
-
-
 EXELIST = \
     $(DESTDIRBIN)$/cppumaker$(EXEPOSTFIX) 	\
     $(DESTDIRBIN)$/regcomp$(EXEPOSTFIX) 	\
+    $(DESTDIRBIN)$/regcompare$(EXEPOSTFIX) 	\
     $(DESTDIRBIN)$/regmerge$(EXEPOSTFIX) 	\
     $(DESTDIRBIN)$/regview$(EXEPOSTFIX) 	\
     $(DESTDIRBIN)$/rdbmaker$(EXEPOSTFIX)	\
@@ -179,8 +122,7 @@ EXELIST = \
     $(DESTDIRBIN)$/autodoc$(EXEPOSTFIX)
 
 SDKDLLLIST = \
-    $(DESTDIRDLL)$/$(MY_DLLPREFIX)prot_uno_uno$(MY_DLLPOSTFIX)            		\
-    $(DESTDIRDLL)$/$(MY_DLLPREFIX)juh$(MY_DLLPOSTFIX)
+    $(DESTDIRDLL)$/$(MY_DLLPREFIX)prot_uno_uno$(MY_DLLPOSTFIX)
 
 .IF "$(GUI)"=="WNT"
 LIBLIST = \
@@ -207,7 +149,7 @@ SETTINGSLIST= \
 
 CPP_COUNTER= \
     $(DESTDIRCPPEXAMPLES)$/counter$/counter.cxx 		\
-    $(DESTDIRCPPEXAMPLES)$/counter$/counter.xml 		\
+    $(DESTDIRCPPEXAMPLES)$/counter$/counter.uno.xml 		\
     $(DESTDIRCPPEXAMPLES)$/counter$/countermain.cxx 		\
     $(DESTDIRCPPEXAMPLES)$/counter$/XCountable.idl	\
     $(DESTDIRCPPEXAMPLES)$/counter$/Makefile         		\
@@ -215,15 +157,9 @@ CPP_COUNTER= \
 
 CPP_REMOTECLIENT= \
     $(DESTDIRCPPEXAMPLES)$/remoteclient$/remoteclient.cxx 		\
-    $(DESTDIRCPPEXAMPLES)$/remoteclient$/remoteclientsample.xml	\
+    $(DESTDIRCPPEXAMPLES)$/remoteclient$/remoteclientsample.uno.xml	\
     $(DESTDIRCPPEXAMPLES)$/remoteclient$/Makefile         		\
     $(DESTDIRCPPEXAMPLES)$/remoteclient$/exports.dxp
-
-CPP_OFFICECLIENT= \
-    $(DESTDIRCPPEXAMPLES)$/officeclient$/officeclient.cxx 		\
-    $(DESTDIRCPPEXAMPLES)$/officeclient$/officeclientsample.xml	\
-    $(DESTDIRCPPEXAMPLES)$/officeclient$/Makefile         		\
-    $(DESTDIRCPPEXAMPLES)$/officeclient$/exports.dxp
 
 CPP_DOCUMENTLOADER= \
     $(DESTDIRCPPEXAMPLES)$/DocumentLoader$/DocumentLoader.cxx 		\
@@ -238,84 +174,52 @@ CPP_GENERICXMLFILTER= \
     $(DESTDIRCPPEXAMPLES)$/GenericXMLFilter$/GenericXMLImportFilter.hxx	\
     $(DESTDIRCPPEXAMPLES)$/GenericXMLFilter$/GenericXMLFilter.cxx	\
     $(DESTDIRCPPEXAMPLES)$/GenericXMLFilter$/GenericXMLFilter.hxx	\
-    $(DESTDIRCPPEXAMPLES)$/GenericXMLFilter$/genericxmlfilter.xml	\
+    $(DESTDIRCPPEXAMPLES)$/GenericXMLFilter$/genericxmlfilter.uno.xml	\
     $(DESTDIRCPPEXAMPLES)$/GenericXMLFilter$/README           		\
     $(DESTDIRCPPEXAMPLES)$/GenericXMLFilter$/TypeDetection.xml 		\
     $(DESTDIRCPPEXAMPLES)$/GenericXMLFilter$/TypeDetection.xcu 		\
     $(DESTDIRCPPEXAMPLES)$/GenericXMLFilter$/Makefile         		\
     $(DESTDIRCPPEXAMPLES)$/GenericXMLFilter$/exports.dxp
 
-JAVA_DRAW= \
-    $(DESTDIRJAVAEXAMPLES)$/draw$/SDraw.java	   		\
-    $(DESTDIRJAVAEXAMPLES)$/draw$/Makefile
+JAVA_DRAWING= \
+    $(DESTDIRJAVAEXAMPLES)$/Drawing$/SDraw.java \
+    $(DESTDIRJAVAEXAMPLES)$/Drawing$/Makefile
 
-JAVA_CALC= \
-    $(DESTDIRJAVAEXAMPLES)$/calc$/SCalc.java		   	\
-    $(DESTDIRJAVAEXAMPLES)$/calc$/EuroAdaption.java		\
-    $(DESTDIRJAVAEXAMPLES)$/calc$/Makefile
+JAVA_SPREADSHEET= \
+    $(DESTDIRJAVAEXAMPLES)$/Spreadsheet$/SCalc.java		   	\
+    $(DESTDIRJAVAEXAMPLES)$/Spreadsheet$/EuroAdaption.java		\
+    $(DESTDIRJAVAEXAMPLES)$/Spreadsheet$/ChartTypeChange.java   	\
+    $(DESTDIRJAVAEXAMPLES)$/Spreadsheet$/CalcAddins.java	   	\
+    $(DESTDIRJAVAEXAMPLES)$/Spreadsheet$/CalcAddins.sxc	   	\
+    $(DESTDIRJAVAEXAMPLES)$/Spreadsheet$/XCalcAddins.idl	   	\
+    $(DESTDIRJAVAEXAMPLES)$/Spreadsheet$/Makefile
 
-JAVA_CALC_CHARTTYPECHANGE= \
-    $(DESTDIRJAVAEXAMPLES)$/calc$/ChartTypeChange$/ChartTypeChange.java		   	\
-    $(DESTDIRJAVAEXAMPLES)$/calc$/ChartTypeChange$/Makefile	  	 		\
+JAVA_TEXT= \
+    $(DESTDIRJAVAEXAMPLES)$/Text$/SWriter.java	   		\
+    $(DESTDIRJAVAEXAMPLES)$/Text$/StyleInitialization.java 	\
+    $(DESTDIRJAVAEXAMPLES)$/Text$/TextDocumentStructure.java 	\
+    $(DESTDIRJAVAEXAMPLES)$/Text$/TextReplace.java 		\
+    $(DESTDIRJAVAEXAMPLES)$/Text$/BookmarkInsertion.java 	\
+    $(DESTDIRJAVAEXAMPLES)$/Text$/HardFormatting.java 	\
+    $(DESTDIRJAVAEXAMPLES)$/Text$/StyleCreation.java  	\
+    $(DESTDIRJAVAEXAMPLES)$/Text$/WriterSelector.java  	\
+    $(DESTDIRJAVAEXAMPLES)$/Text$/GraphicsInserter.java  	\
+    $(DESTDIRJAVAEXAMPLES)$/Text$/oo_smiley.gif  	\
+    $(DESTDIRJAVAEXAMPLES)$/Text$/Makefile
 
-JAVA_WRITER= \
-    $(DESTDIRJAVAEXAMPLES)$/writer$/SWriter.java	   		\
-    $(DESTDIRJAVAEXAMPLES)$/writer$/StyleInitialization.java 	\
-    $(DESTDIRJAVAEXAMPLES)$/writer$/TextDocumentStructure.java 	\
-    $(DESTDIRJAVAEXAMPLES)$/writer$/TextReplace.java 		\
-    $(DESTDIRJAVAEXAMPLES)$/writer$/BookmarkInsertion.java 	\
-    $(DESTDIRJAVAEXAMPLES)$/writer$/HardFormatting.java 	\
-    $(DESTDIRJAVAEXAMPLES)$/writer$/StyleCreation.java  	\
-    $(DESTDIRJAVAEXAMPLES)$/writer$/Makefile
-
-JAVA_CAR= \
-    $(DESTDIRJAVAEXAMPLES)$/Car$/Car.java \
-    $(DESTDIRJAVAEXAMPLES)$/Car$/Makefile \
-    $(DESTDIRJAVAEXAMPLES)$/Car$/Test.java \
-    $(DESTDIRJAVAEXAMPLES)$/Car$/Car.idl \
-    $(DESTDIRJAVAEXAMPLES)$/Car$/XAccelerationControl.idl \
-    $(DESTDIRJAVAEXAMPLES)$/Car$/XDrivingDirection.idl
-
-JAVA_CALCADDINS= \
-    $(DESTDIRJAVAEXAMPLES)$/CalcAddins$/CalcAddins.java		\
-    $(DESTDIRJAVAEXAMPLES)$/CalcAddins$/Makefile			\
-    $(DESTDIRJAVAEXAMPLES)$/CalcAddins$/XCalcAddins.idl
-
-JAVA_DEMOCOMP= \
-    $(DESTDIRJAVAEXAMPLES)$/com$/sun$/star$/comp$/demo$/DemoComponent.java	\
-    $(DESTDIRJAVAEXAMPLES)$/com$/sun$/star$/comp$/demo$/DemoComponent.sxw	\
-    $(DESTDIRJAVAEXAMPLES)$/com$/sun$/star$/comp$/demo$/Makefile		\
-    $(DESTDIRJAVAEXAMPLES)$/com$/sun$/star$/comp$/demo$/SCalcDemo.java	\
-    $(DESTDIRJAVAEXAMPLES)$/com$/sun$/star$/comp$/demo$/SDrawDemo.java	\
-    $(DESTDIRJAVAEXAMPLES)$/com$/sun$/star$/comp$/demo$/SWriterDemo.java
+JAVA_DOCUMENTHANDLING= \
+    $(DESTDIRJAVAEXAMPLES)$/DocumentHandling$/DocumentConverter.java	\
+    $(DESTDIRJAVAEXAMPLES)$/DocumentHandling$/DocumentLoader.java	\
+    $(DESTDIRJAVAEXAMPLES)$/DocumentHandling$/DocumentPrinter.java	\
+    $(DESTDIRJAVAEXAMPLES)$/DocumentHandling$/DocumentSaver.java	\
+    $(DESTDIRJAVAEXAMPLES)$/DocumentHandling$/Makefile \
+    $(DESTDIRJAVAEXAMPLES)$/DocumentHandling$/test$/test1.sxw
 
 JAVA_CONVERTERSERVLET= \
     $(DESTDIRJAVAEXAMPLES)$/ConverterServlet$/ConverterServlet.html	\
     $(DESTDIRJAVAEXAMPLES)$/ConverterServlet$/ConverterServlet.java	\
     $(DESTDIRJAVAEXAMPLES)$/ConverterServlet$/Makefile			\
     $(DESTDIRJAVAEXAMPLES)$/ConverterServlet$/README
-
-JAVA_DOCUMENTCONVERTER= \
-    $(DESTDIRJAVAEXAMPLES)$/DocumentConverter$/DocumentConverter.java	\
-    $(DESTDIRJAVAEXAMPLES)$/DocumentConverter$/Makefile \
-    $(DESTDIRJAVAEXAMPLES)$/DocumentConverter$/test$/test1.sxw
-
-JAVA_DOCUMENTLOADER= \
-    $(DESTDIRJAVAEXAMPLES)$/DocumentLoader$/DocumentLoader.java	\
-    $(DESTDIRJAVAEXAMPLES)$/DocumentLoader$/Makefile
-
-JAVA_DOCUMENTPRINTER= \
-    $(DESTDIRJAVAEXAMPLES)$/DocumentPrinter$/DocumentPrinter.java	\
-    $(DESTDIRJAVAEXAMPLES)$/DocumentPrinter$/Makefile
-
-JAVA_DOCUMENTSAVER= \
-    $(DESTDIRJAVAEXAMPLES)$/DocumentSaver$/DocumentSaver.java	\
-    $(DESTDIRJAVAEXAMPLES)$/DocumentSaver$/Makefile
-
-JAVA_GRAPHICSINSERTER= \
-    $(DESTDIRJAVAEXAMPLES)$/GraphicsInserter$/GraphicsInserter.java	\
-    $(DESTDIRJAVAEXAMPLES)$/GraphicsInserter$/Makefile	\
-    $(DESTDIRJAVAEXAMPLES)$/GraphicsInserter$/oo_smiley.gif
 
 JAVA_INSPECTOR= \
     $(DESTDIRJAVAEXAMPLES)$/Inspector$/Inspector.jpg \
@@ -334,18 +238,14 @@ JAVA_TODO= \
     $(DESTDIRJAVAEXAMPLES)$/ToDo$/ToDo.java \
     $(DESTDIRJAVAEXAMPLES)$/ToDo$/Test.java \
     $(DESTDIRJAVAEXAMPLES)$/ToDo$/ToDo.sxc  \
-    $(DESTDIRJAVAEXAMPLES)$/ToDo$/ToDo.xml  \
+    $(DESTDIRJAVAEXAMPLES)$/ToDo$/ToDo.uno.xml  \
     $(DESTDIRJAVAEXAMPLES)$/ToDo$/XToDo.idl  \
     $(DESTDIRJAVAEXAMPLES)$/ToDo$/Makefile
-
-JAVA_WRITERSELECTOR= \
-    $(DESTDIRJAVAEXAMPLES)$/WriterSelector$/WriterSelector.java \
-    $(DESTDIRJAVAEXAMPLES)$/WriterSelector$/Makefile
 
 JAVA_MINIMALCOMPONENT= \
     $(DESTDIRJAVAEXAMPLES)$/MinimalComponent$/MinimalComponent.idl \
     $(DESTDIRJAVAEXAMPLES)$/MinimalComponent$/MinimalComponent.java\
-    $(DESTDIRJAVAEXAMPLES)$/MinimalComponent$/MinimalComponent.xml \
+    $(DESTDIRJAVAEXAMPLES)$/MinimalComponent$/MinimalComponent.uno.xml \
     $(DESTDIRJAVAEXAMPLES)$/MinimalComponent$/TestMinimalComponent.java\
     $(DESTDIRJAVAEXAMPLES)$/MinimalComponent$/Makefile
 
@@ -408,26 +308,16 @@ OLE_EXAMPLES_ACTIVEX= \
 EXAMPLESLIST= \
     $(CPP_COUNTER) \
     $(CPP_REMOTECLIENT) \
-    $(CPP_OFFICECLIENT) \
     $(CPP_DOCUMENTLOADER) \
     $(CPP_GENERICXMLFILTER) \
-    $(JAVA_DRAW)        \
-    $(JAVA_CALC)        \
-    $(JAVA_CALC_CHARTTYPECHANGE)        \
-    $(JAVA_CAR)         \
-    $(JAVA_WRITER)      \
-    $(JAVA_CALCADDINS)  \
-    $(JAVA_DEMOCOMP)    \
+    $(JAVA_DRAWING)      \
+    $(JAVA_SPREADSHEET)       \
+    $(JAVA_TEXT)      \
+    $(JAVA_DOCUMENTHANDLING)      \
     $(JAVA_CONVERTERSERVLET)    \
-    $(JAVA_DOCUMENTCONVERTER)      \
-    $(JAVA_DOCUMENTLOADER)         \
-    $(JAVA_DOCUMENTPRINTER)        \
-    $(JAVA_DOCUMENTSAVER)          \
-    $(JAVA_GRAPHICSINSERTER)       \
     $(JAVA_INSPECTOR)              \
     $(JAVA_NOTESACCESS)            \
     $(JAVA_TODO)                   \
-    $(JAVA_WRITERSELECTOR)         \
     $(JAVA_MINIMALCOMPONENT) \
     $(JAVA_PROPERTYSET)  \
     $(BASIC_EXAMPLES)              \
@@ -498,7 +388,6 @@ DOCUSTUDIO4INTEGRATIONGRAPHICSFILES= \
     $(DESTDIRDOCU)$/DevStudioWizards$/images$/snapshot9.png
 
 DOCUHTMLFILES+= \
-    $(DOCUSTUDIO4INTEGRATIONHTMLFILES) \
     $(DESTDIR)$/index.html \
     $(DESTDIRDOCU)$/tools.html \
     $(DESTDIRDOCU)$/notsupported.html \
@@ -506,19 +395,19 @@ DOCUHTMLFILES+= \
     $(DESTDIRDOCU)$/install.html \
     $(DESTDIRDOCU)$/sdk_styles.css \
     $(DESTDIREXAMPLES)$/examples.html
-
-#	$(DESTDIREXAMPLES)$/DevelopersGuide$/examples.html
+#	$(DOCUSTUDIO4INTEGRATIONHTMLFILES) \
 
 DOCUFILES+= \
     $(DOCUHTMLFILES) \
-    $(DOCUSTUDIO4INTEGRATIONGRAPHICSFILES) \
     $(DESTDIRDOCUIMAGES)$/black_dot.gif \
     $(DESTDIRDOCUIMAGES)$/logo.gif \
     $(DESTDIRDOCUIMAGES)$/sdk_logo.gif
+#	$(DOCUSTUDIO4INTEGRATIONGRAPHICSFILES) \
 
 .IF "$(GUI)"=="UNX"
 INSTALLSCRIPT= \
     $(DESTDIR)$/configure \
+    $(DESTDIR)$/configure.pl \
     $(DESTDIR)$/setsdkenv_unix.in \
     $(DESTDIR)$/oo1.0.2_sdk_linkpatch
 .ELSE
@@ -531,7 +420,6 @@ INSTALLSCRIPT= \
 # TARGETS
 #--------------------------------------------------
 all : \
-    $(DIRLIST) \
     $(EXELIST) \
     $(XMLLIST) \
     $(SDKDLLLIST) \
@@ -542,288 +430,299 @@ all : \
     $(INSTALLSCRIPT) \
     $(DESTIDLLIST)  \
     $(DESTINCLUDELIST) \
-    $(DESTDIRCLASSES)$/oosupport.nbm \
     $(DEVGUIDE_DOCU_FLAG) \
     $(DEVGUIDE_SAMPLES_FLAG) \
     $(DESTDIRDOCU)$/DevelopersGuide$/DevelopersGuide.pdf \
     $(DESTDIRDOCU)$/common$/spec$/xml_format$/xml_specification.pdf \
     $(CONVERTTAGFLAG)
+#	$(DESTDIRCLASSES)$/oosupport.nbm \
 
-# moved into the office installation for easier use
-#	$(DESTDIRDLL)$/$(MY_DLLPREFIX)officebean$(MY_DLLPOSTFIX)  \
-#	$(DESTDIRCLASSES)$/officebean.jar \
-
-$(DIRLIST) :
-     -$(MKDIRHIER) 	$@
-
-$(DESTDIR)$/index.html : $(PRJ)$/index.html
+$(DESTDIR)$/index.html : $(PRJ)$/index.html 
+    +-$(MKDIRHIER) $(@:d)        
     +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $(PRJ)$/index.html $(MY_TEXTCOPY_TARGETPRE) $@
 
 $(DESTDIREXAMPLES)$/examples.html : $(PRJ)$/docs$/examples.html
+    +-$(MKDIRHIER) $(@:d)        
     +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $(PRJ)$/docs$/examples.html $(MY_TEXTCOPY_TARGETPRE) $@
 
-$(DESTDIRDOCU)$/tools.html : $(PRJ)$/docs$/tools.html
+$(DESTDIRDOCU)$/%.html : $(PRJ)$/docs$/%.html 
+    +-$(MKDIRHIER) $(@:d)        
     +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
-$(DESTDIRDOCU)$/notsupported.html : $(PRJ)$/docs$/notsupported.html
+$(DESTDIRDOCU)$/%.css : $(PRJ)$/docs$/%.css 
+    +-$(MKDIRHIER) $(@:d)        
     +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
-$(DESTDIRDOCU)$/DevelopersGuide_intro.html : $(PRJ)$/docs$/DevelopersGuide_intro.html
+$(DESTDIRDOCUIMAGES)$/% : $(PRJ)$/docs$/images$/% 
+    +-$(MKDIRHIER) $(@:d)        
     +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+    $(MY_COPY) $< $@
 
-$(DESTDIRDOCU)$/install.html : $(PRJ)$/docs$/install.html
+$(DESTDIRDOCU)$/DevStudioWizards$/images$/% : $(PRJ)$/docs$/DevStudioWizards$/images$/% 
+    +-$(MKDIRHIER) $(@:d)        
     +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
-
-$(DESTDIRDOCU)$/sdk_styles.css : $(PRJ)$/docs$/sdk_styles.css
-    +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
-
-$(DESTDIRDOCUIMAGES)$/% : $(PRJ)$/docs$/images$/%
-    +-rm -f $@ >& $(NULLDEV)
-    $(MY_COPY) $? $@
-
-$(DESTDIRDOCU)$/DevStudioWizards$/CalcAddinWizard.html : $(PRJ)$/docs$/DevStudioWizards$/CalcAddinWizard.html
-    +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
-
-$(DESTDIRDOCU)$/DevStudioWizards$/DeployingComponents.html : $(PRJ)$/docs$/DevStudioWizards$/DeployingComponents.html
-    +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
-
-$(DESTDIRDOCU)$/DevStudioWizards$/IDLWizard.html : $(PRJ)$/docs$/DevStudioWizards$/IDLWizard.html
-    +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
-
-$(DESTDIRDOCU)$/DevStudioWizards$/UNOComponentWizard.html : $(PRJ)$/docs$/DevStudioWizards$/UNOComponentWizard.html
-    +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
-
-$(DESTDIRDOCU)$/DevStudioWizards$/wizards.html : $(PRJ)$/docs$/DevStudioWizards$/wizards.html
-    +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
-
-$(DESTDIRDOCU)$/DevStudioWizards$/images$/% : $(PRJ)$/docs$/DevStudioWizards$/images$/%
-    +-rm -f $@ >& $(NULLDEV)
-    $(MY_COPY) $? $@
+    $(MY_COPY) $< $@
 
 $(DESTDIR)$/configure : $(PRJ)$/configure
+    +-$(MKDIRHIER) $(@:d)        
     +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $(PRJ)$/configure $(MY_TEXTCOPY_TARGETPRE) $@
+.IF "$(GUI)"=="UNX"
+    +-chmod 755 $@
+.ENDIF
+
+$(DESTDIR)$/configure.pl : $(PRJ)$/configure.pl
+    +-$(MKDIRHIER) $(@:d)        
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $(PRJ)$/configure.pl $(MY_TEXTCOPY_TARGETPRE) $@
 .IF "$(GUI)"=="UNX"
     +-chmod 755 $@
 .ENDIF
 
 $(DESTDIR)$/setsdkenv_unix.in : $(PRJ)$/setsdkenv_unix.in
+    +-$(MKDIRHIER) $(@:d)        
     +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $(PRJ)$/setsdkenv_unix.in $(MY_TEXTCOPY_TARGETPRE) $@
 .IF "$(GUI)"=="UNX"
     +-chmod 755 $@
 .ENDIF
 
 $(DESTDIR)$/oo1.0.2_sdk_linkpatch : oo1.0.2_sdk_linkpatch
+    +-$(MKDIRHIER) $(@:d)        
     +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) oo1.0.2_sdk_linkpatch $(MY_TEXTCOPY_TARGETPRE) $@
 .IF "$(GUI)"=="UNX"
     +-chmod 755 $@
 .ENDIF
 
 $(DESTDIR)$/configureWindowsNT.bat : $(PRJ)$/configureWindowsNT.bat
+    +-$(MKDIRHIER) $(@:d)        
     +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $(PRJ)$/configureWindowsNT.bat $(MY_TEXTCOPY_TARGETPRE) $@
 
 $(DESTDIR)$/setsdkenv_windows.bat : $(PRJ)$/setsdkenv_windows.bat
+    +-$(MKDIRHIER) $(@:d)        
     +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $(PRJ)$/setsdkenv_windows.bat $(MY_TEXTCOPY_TARGETPRE) $@
 
-$(DESTDIREXAMPLES)$/%.sxw : $(PRJ)$/examples$/%.sxw $(DIRLIST)
+$(DESTDIREXAMPLES)$/%.sxw : $(PRJ)$/examples$/%.sxw 
+    +-$(MKDIRHIER) $(@:d)        
     +-rm -f $@ >& $(NULLDEV)
-    $(MY_COPY) $? $@
+    $(MY_COPY) $< $@
 
-$(DESTDIREXAMPLES)$/%.sxc : $(PRJ)$/examples$/%.sxc $(DIRLIST)
+$(DESTDIREXAMPLES)$/%.sxc : $(PRJ)$/examples$/%.sxc 
+    +-$(MKDIRHIER) $(@:d)        
     +-rm -f $@ >& $(NULLDEV)
-    $(MY_COPY) $? $@
+    $(MY_COPY) $< $@
 
-$(DESTDIREXAMPLES)$/%.sxd : $(PRJ)$/examples$/%.sxd $(DIRLIST)
+$(DESTDIREXAMPLES)$/%.sxd : $(PRJ)$/examples$/%.sxd 
+    +-$(MKDIRHIER) $(@:d)        
     +-rm -f $@ >& $(NULLDEV)
-    $(MY_COPY) $? $@
+    $(MY_COPY) $< $@
 
-$(DESTDIREXAMPLES)$/%.xlb : $(PRJ)$/examples$/%.xlb $(DIRLIST)
+$(DESTDIREXAMPLES)$/%.xlb : $(PRJ)$/examples$/%.xlb 
+    +-$(MKDIRHIER) $(@:d)        
     +-rm -f $@ >& $(NULLDEV)
-    $(MY_COPY) $? $@
+    $(MY_COPY) $< $@
 
-$(DESTDIREXAMPLES)$/%.xdl : $(PRJ)$/examples$/%.xdl $(DIRLIST)
+$(DESTDIREXAMPLES)$/%.xdl : $(PRJ)$/examples$/%.xdl 
+    +-$(MKDIRHIER) $(@:d)        
     +-rm -f $@ >& $(NULLDEV)
-    $(MY_COPY) $? $@
+    $(MY_COPY) $< $@
 
-$(DESTDIREXAMPLES)$/%.gif : $(PRJ)$/examples$/%.gif $(DIRLIST)
+$(DESTDIREXAMPLES)$/%.gif : $(PRJ)$/examples$/%.gif 
+    +-$(MKDIRHIER) $(@:d)        
     +-rm -f $@ >& $(NULLDEV)
-    $(MY_COPY) $? $@
+    $(MY_COPY) $< $@
 
-$(DESTDIREXAMPLES)$/%.jpg : $(PRJ)$/examples$/%.jpg $(DIRLIST)
+$(DESTDIREXAMPLES)$/%.jpg : $(PRJ)$/examples$/%.jpg 
+    +-$(MKDIRHIER) $(@:d)        
     +-rm -f $@ >& $(NULLDEV)
-    $(MY_COPY) $? $@
+    $(MY_COPY) $< $@
 
-$(DESTDIREXAMPLES)$/%.wmf : $(PRJ)$/examples$/%.wmf $(DIRLIST)
+$(DESTDIREXAMPLES)$/%.wmf : $(PRJ)$/examples$/%.wmf 
+    +-$(MKDIRHIER) $(@:d)        
     +-rm -f $@ >& $(NULLDEV)
-    $(MY_COPY) $? $@
+    $(MY_COPY) $< $@
 
-$(DESTDIREXAMPLES)$/%.nsf : $(PRJ)$/examples$/%.nsf $(DIRLIST)
+$(DESTDIREXAMPLES)$/%.nsf : $(PRJ)$/examples$/%.nsf 
+    +-$(MKDIRHIER) $(@:d)        
     +-rm -f $@ >& $(NULLDEV)
-    $(MY_COPY) $? $@
+    $(MY_COPY) $< $@
 
-$(DESTDIREXAMPLES)$/%.pdf : $(PRJ)$/examples$/%.pdf $(DIRLIST)
+$(DESTDIREXAMPLES)$/%.pdf : $(PRJ)$/examples$/%.pdf 
+    +-$(MKDIRHIER) $(@:d)        
     +-rm -f $@ >& $(NULLDEV)
-    $(MY_COPY) $? $@
+    $(MY_COPY) $< $@
 
-$(DESTDIREXAMPLES)$/%.xba : $(PRJ)$/examples$/%.xba $(DIRLIST)
+$(DESTDIREXAMPLES)$/%.xba : $(PRJ)$/examples$/%.xba 
+    +-$(MKDIRHIER) $(@:d)        
     +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
-$(DESTDIREXAMPLES)$/%.cxx : $(PRJ)$/examples$/%.cxx $(DIRLIST)
+$(DESTDIREXAMPLES)$/%.cxx : $(PRJ)$/examples$/%.cxx 
+    +-$(MKDIRHIER) $(@:d)        
     +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
-$(DESTDIREXAMPLES)$/%.hxx : $(PRJ)$/examples$/%.hxx $(DIRLIST)
+$(DESTDIREXAMPLES)$/%.hxx : $(PRJ)$/examples$/%.hxx 
+    +-$(MKDIRHIER) $(@:d)        
     +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
-$(DESTDIREXAMPLES)$/%.java : $(PRJ)$/examples$/%.java $(DIRLIST)
+$(DESTDIREXAMPLES)$/%.java : $(PRJ)$/examples$/%.java 
+    +-$(MKDIRHIER) $(@:d)        
     +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
-$(DESTDIREXAMPLES)$/%.idl : $(PRJ)$/examples$/%.idl $(DIRLIST)
+$(DESTDIREXAMPLES)$/%.idl : $(PRJ)$/examples$/%.idl 
+    +-$(MKDIRHIER) $(@:d)        
     +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
-$(DESTDIREXAMPLES)$/%.dxp : $(PRJ)$/examples$/%.dxp $(DIRLIST)
+$(DESTDIREXAMPLES)$/%.dxp : $(PRJ)$/examples$/%.dxp 
+    +-$(MKDIRHIER) $(@:d)        
     +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
-$(DESTDIREXAMPLES)$/%.xml : $(PRJ)$/examples$/%.xml $(DIRLIST)
+$(DESTDIREXAMPLES)$/%.xml : $(PRJ)$/examples$/%.xml 
+    +-$(MKDIRHIER) $(@:d)        
     +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
-$(DESTDIREXAMPLES)$/%.xcu : $(PRJ)$/examples$/%.xcu $(DIRLIST)
+$(DESTDIREXAMPLES)$/%.xcu : $(PRJ)$/examples$/%.xcu 
+    +-$(MKDIRHIER) $(@:d)        
     +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
-$(DESTDIREXAMPLES)$/%.html : $(PRJ)$/examples$/%.html $(DIRLIST)
+$(DESTDIREXAMPLES)$/%.html : $(PRJ)$/examples$/%.html 
+    +-$(MKDIRHIER) $(@:d)        
     +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
-$(DESTDIREXAMPLES)$/%.txt : $(PRJ)$/examples$/%.txt $(DIRLIST)
+$(DESTDIREXAMPLES)$/%.txt : $(PRJ)$/examples$/%.txt 
+    +-$(MKDIRHIER) $(@:d)        
     +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
-$(DESTDIREXAMPLES)$/%$/Makefile : $(PRJ)$/examples$/%$/Makefile $(DIRLIST)
+$(DESTDIREXAMPLES)$/%$/Makefile : $(PRJ)$/examples$/%$/Makefile 
+    +-$(MKDIRHIER) $(@:d)        
     +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
-$(DESTDIREXAMPLES)$/%$/README : $(PRJ)$/examples$/%$/README $(DIRLIST)
+$(DESTDIREXAMPLES)$/%$/README : $(PRJ)$/examples$/%$/README 
+    +-$(MKDIRHIER) $(@:d)        
     +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
-$(DESTDIREXAMPLES)$/%.cpp : $(PRJ)$/examples$/%.cpp $(DIRLIST)
+$(DESTDIREXAMPLES)$/%.cpp : $(PRJ)$/examples$/%.cpp 
+    +-$(MKDIRHIER) $(@:d)        
     +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
-$(DESTDIREXAMPLES)$/%.h : $(PRJ)$/examples$/%.h $(DIRLIST)
+$(DESTDIREXAMPLES)$/%.h : $(PRJ)$/examples$/%.h 
+    +-$(MKDIRHIER) $(@:d)        
     +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
-$(DESTDIREXAMPLES)$/%.def : $(PRJ)$/examples$/%.def $(DIRLIST)
+$(DESTDIREXAMPLES)$/%.def : $(PRJ)$/examples$/%.def 
+    +-$(MKDIRHIER) $(@:d)        
     +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
-$(DESTDIREXAMPLES)$/%.rc : $(PRJ)$/examples$/%.rc $(DIRLIST)
+$(DESTDIREXAMPLES)$/%.rc : $(PRJ)$/examples$/%.rc 
+    +-$(MKDIRHIER) $(@:d)        
     +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
-$(DESTDIREXAMPLES)$/%.rgs : $(PRJ)$/examples$/%.rgs $(DIRLIST)
+$(DESTDIREXAMPLES)$/%.rgs : $(PRJ)$/examples$/%.rgs 
+    +-$(MKDIRHIER) $(@:d)        
     +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
-$(DESTDIREXAMPLES)$/%.dpr : $(PRJ)$/examples$/%.dpr $(DIRLIST)
+$(DESTDIREXAMPLES)$/%.dpr : $(PRJ)$/examples$/%.dpr 
+    +-$(MKDIRHIER) $(@:d)        
     +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
-$(DESTDIREXAMPLES)$/%.res : $(PRJ)$/examples$/%.res $(DIRLIST)
+$(DESTDIREXAMPLES)$/%.res : $(PRJ)$/examples$/%.res 
+    +-$(MKDIRHIER) $(@:d)        
     +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
-$(DESTDIREXAMPLES)$/%.pas : $(PRJ)$/examples$/%.pas $(DIRLIST)
+$(DESTDIREXAMPLES)$/%.pas : $(PRJ)$/examples$/%.pas 
+    +-$(MKDIRHIER) $(@:d)        
     +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
-$(DESTDIREXAMPLES)$/%.dfm : $(PRJ)$/examples$/%.dfm $(DIRLIST)
+$(DESTDIREXAMPLES)$/%.dfm : $(PRJ)$/examples$/%.dfm 
+    +-$(MKDIRHIER) $(@:d)        
     +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
-$(DESTDIREXAMPLES)$/%.vbs : $(PRJ)$/examples$/%.vbs $(DIRLIST)
+$(DESTDIREXAMPLES)$/%.vbs : $(PRJ)$/examples$/%.vbs 
+    +-$(MKDIRHIER) $(@:d)        
     +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
-
-$(DESTDIRCLASSES)$/officebean.jar : $(OUT)$/class$/officebean.jar 
-    $(GNUCOPY) -p $? $@
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
 $(DESTDIRCLASSES)$/oosupport.nbm : $(OUT)$/class$/oosupport.nbm
-    $(GNUCOPY) -p $? $@
+    +-$(MKDIRHIER) $(@:d)        
+    $(GNUCOPY) -p $(OUT)$/class$/oosupport.nbm $@
 
-$(DESTDIRDLL)$/$(MY_DLLPREFIX)officebean$(MY_DLLPOSTFIX) : $(MY_DLLOUT)$/$(MY_DLLPREFIX)officebean$(MY_DLLPOSTFIX)
-    $(GNUCOPY) -p $? $@
-
-$(DESTDIRSETTINGS)$/%.mk : $(PRJ)$/settings$/%.mk $(DIRLIST)
+$(DESTDIRSETTINGS)$/%.mk : $(PRJ)$/settings$/%.mk 
+    +-$(MKDIRHIER) $(@:d)        
     +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
 $(DESTDIRSETTINGS)$/dk.mk :
+    +-$(MKDIRHIER) $(@:d)        
     +-rm -f $@ >& $(NULLDEV)
     echo #$(PRODUCT_NAME) dependent settings > $@
     echo DKNAME=${PRODUCT_NAME} >> $@    
 .IF "$(GUI)"=="UNX"
-    echo 'DKREGISTRYNAME=$$(subst \\,\,"$$(OFFICE_PROGRAM_PATH)$$(PS)applicat.rdb")' >> $@
+    echo 'DKREGISTRYNAME=$$(subst \\,\,"$$(OFFICE_PROGRAM_PATH)$$(PS)types.rdb")' >> $@
 .ELSE
-    echo DKREGISTRYNAME=$$(subst \\,\,"$$(OFFICE_PROGRAM_PATH)$$(PS)applicat.rdb") >> $@
+    echo DKREGISTRYNAME=$$(subst \\,\,"$$(OFFICE_PROGRAM_PATH)$$(PS)types.rdb") >> $@
 .ENDIF
-
+      
 $(DESTDIRDOCU)$/DevelopersGuide$/DevelopersGuide.pdf : DevelopersGuide.pdf
-    $(GNUCOPY) -p DevelopersGuide.pdf $(DESTDIRDOCU)$/DevelopersGuide
+    +-$(MKDIRHIER) $(@:d)        
+    $(GNUCOPY) -p DevelopersGuide.pdf $@
     
 $(DEVGUIDE_DOCU_FLAG) : DevelopersGuide.zip
-    $(GNUCOPY) -p DevelopersGuide.zip $(DESTDIRDOCU)
-    unzip -quod $(DESTDIRDOCU) $(DESTDIRDOCU)$/DevelopersGuide.zip
-    +-rm -f $(DESTDIRDOCU)$/DevelopersGuide.zip >& $(NULLDEV)
+    unzip -quod $(DESTDIRDOCU) DevelopersGuide.zip
     +@echo "devguide docu unzipped" > $@       
 
 $(DEVGUIDE_SAMPLES_FLAG) : DevelopersGuideSamples.zip
-    $(GNUCOPY) -p DevelopersGuideSamples.zip $(DESTDIREXAMPLES)
-    unzip -quod $(DESTDIREXAMPLES) $(DESTDIREXAMPLES)$/DevelopersGuideSamples.zip
-    +-rm -f $(DESTDIREXAMPLES)$/DevelopersGuideSamples.zip >& $(NULLDEV)
+    unzip -quod $(DESTDIREXAMPLES) DevelopersGuideSamples.zip
     +@echo "devguide samples unzipped" > $@       
 
 $(DESTDIRCOMMONDOCU)$/spec$/xml_format$/xml_specification.pdf : xml_specification.pdf
-    $(GNUCOPY) -p $? $@
+    +-$(MKDIRHIER) $(@:d)        
+    $(GNUCOPY) -p xml_specification.pdf $@
         
-$(DESTDIRXML)$/module-description.dtd : $(XMLOUT)$/module-description.dtd $(DIRLIST)
+$(DESTDIRXML)$/module-description.dtd : $(XMLOUT)$/module-description.dtd
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $(XMLOUT)$/module-description.dtd $(MY_TEXTCOPY_TARGETPRE) $@  
 
-$(DESTDIRBIN)$/%$(EXEPOSTFIX) : $(BINOUT)$/%$(EXEPOSTFIX) $(DIRLIST)
+$(DESTDIRBIN)$/%$(EXEPOSTFIX) : $(BINOUT)$/%$(EXEPOSTFIX)
+    +-$(MKDIRHIER) $(@:d)        
     $(GNUCOPY) -p $(BINOUT)$/$(@:f) $@
 
-$(DESTDIRDLL)$/%$(MY_DLLPOSTFIX) : $(DLLOUT)$/%$(MY_DLLPOSTFIX) $(DIRLIST)
+$(DESTDIRDLL)$/%$(MY_DLLPOSTFIX) : $(DLLOUT)$/%$(MY_DLLPOSTFIX)
+    +-$(MKDIRHIER) $(@:d)        
     $(GNUCOPY) -p $(DLLOUT)$/$(@:f) $@
     
-$(DESTDIRIDL)$/% : $(IDLOUT)$/% $(DIRLIST)
+$(DESTDIRIDL)$/% : $(IDLOUT)$/%
+    +-$(MKDIRHIER) $(@:d)        
     +-rm -f $@
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
 $(DESTDIRINC)$/udkversion.mk :
+    +-$(MKDIRHIER) $(@:d)        
     +-rm -f $@ >& $(NULLDEV)
     echo #UDK version number > $@
     echo #major >> $@
@@ -833,15 +732,18 @@ $(DESTDIRINC)$/udkversion.mk :
     echo #micro >> $@
     echo UDK_MICRO=$(UDK_MICRO) >> $@
     
-$(DESTDIRINC)$/% : $(INCOUT)$/% $(DIRLIST)
+$(DESTDIRINC)$/% : $(INCOUT)$/%
+    +-$(MKDIRHIER) $(@:d)        
     +-rm -f $@
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
-$(DESTDIRLIB)$/%.lib : $(LIBOUT)$/%.lib $(DIRLIST)
+$(DESTDIRLIB)$/%.lib : $(LIBOUT)$/%.lib
+    +-$(MKDIRHIER) $(@:d)        
     $(GNUCOPY) -p $(LIBOUT)$/$(@:f) $@
     
-$(DESTDIRXML)$/%.xml : $(XMLOUT)$/%.xml $(DIRLIST)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+$(DESTDIRXML)$/%.xml : $(XMLOUT)$/%.xml
+    +-$(MKDIRHIER) $(@:d)        
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
     
 $(CONVERTTAGFLAG) : $(MISC)$/deltree.txt $(DOCUHTMLFILES)
     +$(PERL) $(CONVERTTAGSCRIPT) $(CONVMODE) $(TITLE) $(OFFICEPRODUCTNAME) $(DOCUHTMLFILES) $(DESTDIREXAMPLES)$/DevelopersGuide$/examples.html
