@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numberingtypelistbox.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-10 06:59:50 $
+ *  last change: $Author: kz $ $Date: 2001-05-12 07:25:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,7 +270,7 @@ Resource STRRES_NUMTYPES
         < "i, ii, iii, ..." ;           3/*SVX_NUM_ROMAN_LOWER         */; > ;
         < "없음" ;  9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
         < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
-        < "글 머리 기호" ;                  6/*SVX_NUM_CHAR_SPECIAL        */; > ;
+        < "글머리 기호" ;                   6/*SVX_NUM_CHAR_SPECIAL        */; > ;
         < "그래픽" ;                    8/*SVX_NUM_BITMAP              */; > ;
         < "없음" ;                      5/*SVX_NUM_NUMBER_NONE         */; > ;
     };
@@ -354,16 +354,16 @@ Resource STRRES_NUMTYPES
     };
     ItemList [ finnish ] =
     {
-            < "1, 2, 3, ..." ;                      5/*SVX_NUM_NUMBER_NONE         */; > ;
-        < "A, B, C, ..." ;                      5/*SVX_NUM_NUMBER_NONE         */; > ;
-        < "a, b, c, ..." ;                      5/*SVX_NUM_NUMBER_NONE         */; > ;
-        < "I, II, III, ..." ;                       5/*SVX_NUM_NUMBER_NONE         */; > ;
-        < "i, ii, iii, ..." ;                       5/*SVX_NUM_NUMBER_NONE         */; > ;
-        < "A, .., AA, .., AAA, ..." ;                       5/*SVX_NUM_NUMBER_NONE         */; > ;
-        < "a, .., aa, .., aaa, ..." ;                       5/*SVX_NUM_NUMBER_NONE         */; > ;
-        < "Bullet" ;                        5/*SVX_NUM_NUMBER_NONE         */; > ;
-        < "Grafik" ;                        5/*SVX_NUM_NUMBER_NONE         */; > ;
-        < "Keine" ;                     5/*SVX_NUM_NUMBER_NONE         */; > ;
+            < "1, 2, 3, ..." ;              4/*SVX_NUM_ARABIC              */; > ;
+        < "A, B, C, ..." ;              0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
+        < "a, b, c, ..." ;              1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
+        < "I, II, III, ..." ;           2/*SVX_NUM_ROMAN_UPPER         */; > ;
+        < "i, ii, iii, ..." ;           3/*SVX_NUM_ROMAN_LOWER         */; > ;
+        < "A, .., AA, .., AAA, ..." ;   9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
+        < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
+        < "Luettelomerkki" ;                    6/*SVX_NUM_CHAR_SPECIAL        */; > ;
+        < "Kuva" ;                  8/*SVX_NUM_BITMAP              */; > ;
+        < "Ei mit狎n" ;                     5/*SVX_NUM_NUMBER_NONE         */; > ;
     };
     };
 };
