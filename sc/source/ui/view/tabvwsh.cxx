@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:28:50 $
+ *  last change: $Author: nn $ $Date: 2000-10-19 18:36:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,7 +166,6 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
-#include <basctl/idetemp.hxx>
 #include <svx/imapdlg.hxx>
 #include <svx/srchitem.hxx>
 #include <offmgr/sbasltid.hrc>
