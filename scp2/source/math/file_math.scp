@@ -81,8 +81,10 @@ STD_RES_FILE( gid_File_Res_Sm, sm )
 // start binfilter #110743#
 //
 
+#ifndef WITHOUT_BINFILTER
 STD_LIB_FILE( gid_File_Lib_Bf_Sm, bf_sm)
 STD_RES_FILE( gid_File_Res_Bf_Sm, bf_sm)
+#endif
 
 //
 // end binfilter #110743#
