@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2002-08-27 14:32:34 $
+ *  last change: $Author: pl $ $Date: 2002-09-17 10:09:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -553,7 +553,7 @@ void EmitFontpathWarning( void )
 
 void SalXLib::XError( Display *pDisplay, XErrorEvent *pEvent )
 {
-    char msg[ 120 ];
+    char msg[ 120 ] = "";
 
     if( ! bIgnoreXErrors_ )
     {
@@ -574,7 +574,9 @@ void SalXLib::XError( Display *pDisplay, XErrorEvent *pEvent )
     if( ! bIgnoreXErrors_ )
     {
 #if defined DEBUG || defined DBG_UTIL || defined BUILD_SOSL
+#if ! ( defined LINUX && defined PPC )
         XGetErrorText( pDisplay, pEvent->error_code, msg, sizeof( msg ) );
+#endif
         fprintf( stderr, "X-Error: %s\n", msg );
         if( pEvent->request_code > capacityof( XRequest ) )
             fprintf( stderr, "\tMajor opcode: %d (Shm?)\n", pEvent->request_code );
