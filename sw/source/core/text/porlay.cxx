@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlay.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: fme $ $Date: 2002-06-20 09:42:40 $
+ *  last change: $Author: fme $ $Date: 2002-06-26 14:38:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,14 @@
 #endif
 #ifndef _DOC_HXX
 #include <doc.hxx>
+#endif
+#ifdef BIDI
+#ifndef _PARATR_HXX
+#include <paratr.hxx>
+#endif
+#ifndef _SVX_ADJITEM_HXX //autogen
+#include <svx/adjitem.hxx>
+#endif
 #endif
 #ifndef _SVX_SCRIPTTYPEITEM_HXX
 #include <svx/scripttypeitem.hxx>
@@ -557,27 +565,39 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, SwAttrHandler& rAH,
     // STRING_LEN means the data structure is up to date
     nInvalidityPos = STRING_LEN;
 
+    // counter for script info arrays
     USHORT nCnt = 0;
+    // counter for compression information arrays
     USHORT nCntComp = 0;
 #ifdef BIDI
+    // counter for direction information arrays
     USHORT nCntDir = 0;
+    // counter for kashida array
     USHORT nCntKash = 0;
-
-    BYTE nDir = 0;
 #endif
     BYTE nScript;
 
     const String& rTxt = rNode.GetTxt();
 
     // compression type
-    SwCharCompressType aCompEnum = rNode.GetDoc()->GetCharCompressType();
+    const SwCharCompressType aCompEnum = rNode.GetDoc()->GetCharCompressType();
 
-    // delete invalid data from arrays
-    // if change position = 0 we do not use any data from the arrays
-    // because by deleting all characters of the first group at the beginning
-    // of a paragraph nScript is set to a wrong value
+#ifdef BIDI
+    // justification type
+    const sal_Bool bAdjustBlock = SVX_ADJUST_BLOCK ==
+                                  rNode.GetSwAttrSet().GetAdjust().GetAdjust();
+#endif
+
+
+    //
+    // FIND INVALID RANGES IN SCRIPT INFO ARRAYS:
+    //
+
     if( nChg )
     {
+        // if change position = 0 we do not use any data from the arrays
+        // because by deleting all characters of the first group at the beginning
+        // of a paragraph nScript is set to a wrong value
         ASSERT( CountScriptChg(), "Where're my changes of script?" );
         while( nCnt < CountScriptChg() )
         {
@@ -600,71 +620,109 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, SwAttrHandler& rAH,
             }
         }
 #ifdef BIDI
-        while( nCntKash < CountKashida() )
+        if ( bAdjustBlock )
         {
-            if ( nChg <= GetKashida( nCntKash ) )
-                break;
-            else
-                nCntKash++;
+            while( nCntKash < CountKashida() )
+            {
+                if ( nChg <= GetKashida( nCntKash ) )
+                    break;
+                else
+                    nCntKash++;
+            }
         }
 #endif
     }
     else
         nScript = (BYTE)pBreakIt->xBreak->getScriptType( rTxt, 0 );
 
-    const USHORT nScriptRemove = aScriptChg.Count() - nCnt;
-    aScriptChg.Remove( nCnt, nScriptRemove );
-    aScriptType.Remove( nCnt, nScriptRemove );
 
-#ifdef BIDI
-    // check if default direction is != LTR
-    if ( TEXT_LAYOUT_COMPLEX_DISABLED != rOut.GetLayoutMode() )
-        nDir = 1;
-
-    const USHORT nDirRemove = aDirChg.Count(); // - nCntDir;
-    aDirChg.Remove( nCntDir, nDirRemove );
-    aDirType.Remove( nCntDir, nDirRemove );
-#endif
-
-    xub_StrLen nGrpStart;
-    if ( nCnt )
-        nGrpStart = GetScriptChg( nCnt - 1 );
-    else
-        nGrpStart = 0;
+    //
+    // ADJUST nChg VALUE:
+    //
 
     // by stepping back one position we know that we are inside a group
     // declared as an nScript group
     if ( nChg )
         --nChg;
 
-#ifdef BIDI
-    // this value is used later to determine direction changes
-    xub_StrLen nChgDir = 0; //nChg;
+    const xub_StrLen nGrpStart = nCnt ? GetScriptChg( nCnt - 1 ) : 0;
 
+#ifdef BIDI
     // we go back in our group until we reach the first character of
     // type nScript
     while ( nChg > nGrpStart &&
             nScript != pBreakIt->xBreak->getScriptType( rTxt, nChg ) )
         --nChg;
 #else
-
     // we go back in our group until we reach a non-weak character
     while ( nChg > nGrpStart &&
             WEAK == pBreakIt->xBreak->getScriptType( rTxt, nChg ) )
         --nChg;
 #endif
 
-    // the current group only contains weak characters
+
+    //
+    // INVALID DATA FROM THE SCRIPT INFO ARRAYS HAS TO BE DELETED:
+    //
+
+    // remove invalid entries from script information arrays
+    const USHORT nScriptRemove = aScriptChg.Count() - nCnt;
+    aScriptChg.Remove( nCnt, nScriptRemove );
+    aScriptType.Remove( nCnt, nScriptRemove );
+
+    // get the start of the last compression group
+    USHORT nLastCompression = nChg;
+    if( nCntComp )
+    {
+        --nCntComp;
+        nLastCompression = GetCompStart( nCntComp );
+        if( nChg >= nLastCompression + GetCompLen( nCntComp ) )
+        {
+            nLastCompression = nChg;
+            ++nCntComp;
+        }
+    }
+
+    // remove invalid entries from compression information arrays
+    const USHORT nCompRemove = aCompChg.Count() - nCntComp;
+    aCompChg.Remove( nCntComp, nCompRemove );
+    aCompLen.Remove( nCntComp, nCompRemove );
+    aCompType.Remove( nCntComp, nCompRemove );
+
+#ifdef BIDI
+    // remove invalid entries from direction information arrays
+    const USHORT nDirRemove = aDirChg.Count();
+    aDirChg.Remove( 0, nDirRemove );
+    aDirType.Remove( 0, nDirRemove );
+
+    // get the start of the last kashida group
+    USHORT nLastKashida = 0;
+    if( nCntKash )
+        nLastKashida = GetKashida( nCntKash - 1 );
+
+    // remove invalid entries from kashida array
+    aKashida.Remove( nCntKash, aKashida.Count() - nCntKash );
+#endif
+
+
+    //
+    // TAKE CARE OF WEAK CHARACTERS: WE MUST FIND AN APPROPRIATE
+    // SCRIPT FOR WAEK CHARACTERS AT THE BEGINNING OF A PARAGRAPH
+    //
+
     if( WEAK == pBreakIt->xBreak->getScriptType( rTxt, nChg ) )
     {
+        // If the beginning of the current group is weak, this means that
+        // all of the characters in this grounp are weak. We have to assign
+        // the scripts to these characters depending on the fonts which are
+        // set for these characters to display them.
         xub_StrLen nEnd =
                 (xub_StrLen)pBreakIt->xBreak->endOfScript( rTxt, nChg, WEAK );
 
         if( nEnd > rTxt.Len() )
             nEnd = rTxt.Len();
 
-//        if ( WEAK == nScript )
-            nScript = (BYTE)GetScriptTypeOfLanguage( (USHORT)GetAppLanguage() );
+        nScript = (BYTE)GetScriptTypeOfLanguage( (USHORT)GetAppLanguage() );
 
         ASSERT( LATIN == nScript || ASIAN == nScript || COMPLEX == nScript,
                 "Wrong default language" );
@@ -740,38 +798,13 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, SwAttrHandler& rAH,
                   (BYTE)WEAK;
     }
 
-    USHORT nLastChg;
-    if( nCntComp )
-    {
-        --nCntComp;
-        nLastChg = GetCompStart( nCntComp );
-        if( nChg >= nLastChg + GetCompLen( nCntComp ) )
-        {
-            nLastChg = nChg;
-            ++nCntComp;
-        }
-    }
-    else
-        nLastChg = nChg;
 
-    const USHORT nCompRemove = aCompChg.Count() - nCntComp;
-    aCompChg.Remove( nCntComp, nCompRemove );
-    aCompLen.Remove( nCntComp, nCompRemove );
-    aCompType.Remove( nCntComp, nCompRemove );
+    //
+    // UPDATE THE SCRIPT INFO ARRAYS:
+    //
 
-#ifdef BIDI
-    // remove entries from kashida array
-    USHORT nLastKashida;
-    if( nCntKash )
-        nLastKashida = GetKashida( nCntKash - 1 );
-    else
-        nLastKashida = 0;
-
-    aKashida.Remove( nCntKash, aKashida.Count() - nCntKash );
-#endif
-
+    // if there are only weak characters in paragraph we are finished
     if ( WEAK == nScript )
-        // only weak characters in paragraph
         return;
 
     ASSERT( WEAK != (BYTE)pBreakIt->xBreak->getScriptType( rTxt, nChg ),
@@ -813,11 +846,11 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, SwAttrHandler& rAH,
         {
             BYTE ePrevState = NONE;
             BYTE eState;
-            USHORT nPrevChg = nLastChg;
+            USHORT nPrevChg = nLastCompression;
 
-            while ( nLastChg < nChg )
+            while ( nLastCompression < nChg )
             {
-                xub_Unicode cChar = rTxt.GetChar( nLastChg );
+                xub_Unicode cChar = rTxt.GetChar( nLastCompression );
 
                 // examine current character
                 switch ( cChar )
@@ -853,15 +886,15 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, SwAttrHandler& rAH,
                             aCompChg.Insert( nPrevChg, nCntComp );
                             BYTE nTmpType = ePrevState;
                             aCompType.Insert( nTmpType, nCntComp );
-                            aCompLen.Insert( nLastChg - nPrevChg, nCntComp++ );
+                            aCompLen.Insert( nLastCompression - nPrevChg, nCntComp++ );
                         }
                     }
 
                     ePrevState = eState;
-                    nPrevChg = nLastChg;
+                    nPrevChg = nLastCompression;
                 }
 
-                nLastChg++;
+                nLastCompression++;
             }
 
             // we still have to examine last entry
@@ -874,13 +907,13 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, SwAttrHandler& rAH,
                     aCompChg.Insert( nPrevChg, nCntComp );
                     BYTE nTmpType = ePrevState;
                     aCompType.Insert( nTmpType, nCntComp );
-                    aCompLen.Insert( nLastChg - nPrevChg, nCntComp++ );
+                    aCompLen.Insert( nLastCompression - nPrevChg, nCntComp++ );
                 }
             }
         }
 #ifdef BIDI
         // we search for connecting opportunities (kashida)
-        else if ( i18n::ScriptType::COMPLEX == nScript )
+        else if ( bAdjustBlock && i18n::ScriptType::COMPLEX == nScript )
         {
             SwScanner aScanner( ((SwTxtNode*)&rNode), 0, nLastKashida,
                                 nChg, sal_False, sal_False );
@@ -989,7 +1022,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, SwAttrHandler& rAH,
             break;
 
         nScript = (BYTE)pBreakIt->xBreak->getScriptType( rTxt, nChg );
-        nLastChg = nChg;
+        nLastCompression = nChg;
 #ifdef BIDI
         nLastKashida = nChg;
 #endif
@@ -1023,8 +1056,8 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, SwAttrHandler& rAH,
     }
 
     // do not call the unicode bidi algorithm if not required
-    if ( ( ! nDir && ! bComplex ) ||
-         (  nDir && ! bLatin && ! bAsian ) )
+    if ( ( UBIDI_RTL && ! bComplex ) ||
+         ( UBIDI_LTR && ! bLatin && ! bAsian ) )
         return;
 
     //
@@ -1034,8 +1067,13 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, SwAttrHandler& rAH,
     UBiDi* pBidi = ubidi_openSized( rTxt.Len(), 0, &nError );
     nError = U_ZERO_ERROR;
 
+    // this is the default direction
+    const BYTE nDefaultDir = TEXT_LAYOUT_COMPLEX_DISABLED != rOut.GetLayoutMode() ?
+                             UBIDI_RTL :
+                             UBIDI_LTR;
+
     ubidi_setPara( pBidi, rTxt.GetBuffer(), rTxt.Len(),
-                   nDir ? UBIDI_RTL : UBIDI_LTR, NULL, &nError );
+                   nDefaultDir, NULL, &nError );
     nError = U_ZERO_ERROR;
     long nCount = ubidi_countRuns( pBidi, &nError );
     UTextOffset nStart = 0;
