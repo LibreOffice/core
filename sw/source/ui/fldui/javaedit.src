@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javaedit.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:47:49 $
+ *  last change: $Author: rt $ $Date: 2001-05-17 08:39:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,7 +203,7 @@ ModalDialog DLG_JAVAEDIT
         Text [ ENGLISH ] = "Contents" ;
         Text [ norwegian ] = "Innhold  " ;
         Text [ italian ] = "Contenuto" ;
-        Text [ portuguese_brazilian ] = "Conteúdo" ;
+        Text [ portuguese_brazilian ] = "Conte?o" ;
         Text [ portuguese ] = "Conteúdo" ;
         Text [ finnish ] = "Sisältö" ;
         Text [ danish ] = "Indhold" ;
@@ -214,7 +214,7 @@ ModalDialog DLG_JAVAEDIT
         Text [ english_us ] = "Contents" ;
         Text[ chinese_simplified ] = "ÄÚÈÝ";
         Text[ russian ] = "Ñîäåðæèìîå";
-        Text[ polish ] = "Zawartoœæ";
+        Text[ polish ] = "Zawarto?æ";
         Text[ japanese ] = "“à—e";
         Text[ chinese_traditional ] = "¤º®e";
         Text[ arabic ] = "ÇáãÍÊæíÇÊ";
@@ -286,7 +286,7 @@ ModalDialog DLG_JAVAEDIT
         Text [ English ] = "Insert script" ;
         Text [ portuguese ] = "Inserir Script" ;
         Text [ english_us ] = "Insert Script" ;
-        Text [ portuguese_brazilian ] = "Script einfügen" ;
+        Text [ portuguese_brazilian ] = "Script einf?en" ;
         Text [ swedish ] = "Infoga skript" ;
         Text [ danish ] = "Indsæt script" ;
         Text [ italian ] = "Inserisci script" ;
