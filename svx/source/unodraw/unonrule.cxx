@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonrule.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-29 12:17:00 $
+ *  last change: $Author: obo $ $Date: 2001-07-03 16:55:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -589,7 +589,7 @@ uno::Reference< container::XIndexReplace > SvxCreateNumRule( SdrModel* pModel ) 
 
 #include <cppuhelper/implbase1.hxx>
 
-class SvxUnoNumberingRulesCompare : public ::cppu::WeakAggImplHelper1< ucb::XAnyCompare >
+class SvxUnoNumberingRulesCompare : public ::cppu::WeakAggImplHelper1< com::sun::star::ucb::XAnyCompare >
 {
 public:
     virtual sal_Int16 SAL_CALL compare( const uno::Any& Any1, const uno::Any& Any2 ) throw(uno::RuntimeException);
@@ -631,7 +631,7 @@ sal_Int16 SAL_CALL SvxUnoNumberingRulesCompare::compare( const uno::Any& Any1, c
     return -1;
 }
 
-uno::Reference< ucb::XAnyCompare > SvxCreateNumRuleCompare() throw()
+uno::Reference< com::sun::star::ucb::XAnyCompare > SvxCreateNumRuleCompare() throw()
 {
     return new SvxUnoNumberingRulesCompare();
 }
