@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfunc.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-04 17:31:29 $
+ *  last change: $Author: nn $ $Date: 2001-08-20 17:00:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,7 +182,8 @@ public:
     BOOL            ApplyGraphicToObject( SdrObject* pObject, const Graphic& rGraphic );
 
     void            InsertBookmark( const String& rDescription, const String& rURL,
-                                    USHORT nPosX, USHORT nPosY, const String* pTarget = NULL );
+                                    USHORT nPosX, USHORT nPosY, const String* pTarget = NULL,
+                                    BOOL bTryReplace = FALSE );
     BOOL            HasBookmarkAtCursor( SvxHyperlinkItem* pContent );
 
     long            DropRequestHdl( Exchange* pExchange );
