@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: vg $ $Date: 2001-05-22 14:33:33 $
+ *  last change: $Author: fs $ $Date: 2001-05-29 10:23:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1820,7 +1820,6 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId)
                 catch(Exception&)
                 {
                 }
-                ;
             }
             if (errorOccured())
             {
@@ -1831,13 +1830,15 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId)
 
                 try
                 {
-                    Reference< ::com::sun::star::form::XLoadable >  xReload(xFormSet, UNO_QUERY);
-                    xReload->reload();
+                    Reference< ::com::sun::star::form::XLoadable > xReload(xFormSet, UNO_QUERY);
+                    if (xReload->isLoaded())
+                        xReload->reload();
+                    else
+                        xReload->load();
                 }
                 catch(Exception&)
                 {
                 }
-                ;
             }
             InvalidateFeature(ID_BROWSER_REMOVEFILTER);
         }
