@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedview.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tbe $ $Date: 2002-04-24 14:49:13 $
+ *  last change: $Author: vg $ $Date: 2003-03-26 12:51:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,15 +78,13 @@ class DlgEdView : public SdrView
 private:
     DlgEditor* pDlgEditor;
 
-protected:
-    virtual void MarkListHasChanged();
-
 public:
     TYPEINFO();
 
     DlgEdView( SdrModel* pModel, OutputDevice* pOut, DlgEditor* pEditor );
     virtual ~DlgEdView();
 
+    virtual void MarkListHasChanged();
     virtual void MakeVisible( const Rectangle& rRect, Window& rWin );
 };
 
