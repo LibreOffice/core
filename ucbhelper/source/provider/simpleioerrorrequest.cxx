@@ -2,9 +2,9 @@
  *
  *  $RCSfile: simpleioerrorrequest.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-18 09:20:36 $
+ *  last change: $Author: kso $ $Date: 2001-06-19 09:18:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,8 @@
  *
  ************************************************************************/
 
-#ifndef _COM_SUN_STAR_UCB_INTERACTIVEIOEXCEPTION_HPP_
-#include <com/sun/star/ucb/InteractiveIOException.hpp>
+#ifndef _COM_SUN_STAR_UCB_INTERACTIVEAUGMENTEDIOEXCEPTION_HPP_
+#include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 #endif
 
 #ifndef _UCBHELPER_SIMPLEIOERRORREQUEST_HXX
@@ -72,15 +72,18 @@ using namespace ucbhelper;
 
 //=========================================================================
 SimpleIOErrorRequest::SimpleIOErrorRequest(
-                const uno::Reference< ucb::XCommandProcessor > & xContext,
-                const com::sun::star::ucb::IOErrorCode eError )
+                const ucb::IOErrorCode eError,
+                const uno::Sequence< uno::Any > & rArgs,
+                const rtl::OUString & rMessage,
+                const uno::Reference< ucb::XCommandProcessor > & xContext )
 {
     // Fill request...
-    ucb::InteractiveIOException aRequest;
-//    aRequest.Message        = // OUString
+    ucb::InteractiveAugmentedIOException aRequest;
+    aRequest.Message         = rMessage;
     aRequest.Context         = xContext;
     aRequest.Classification  = task::InteractionClassification_ERROR;
     aRequest.Code            = eError;
+    aRequest.Arguments       = rArgs;
 
     setRequest( uno::makeAny( aRequest ) );
 

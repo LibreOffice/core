@@ -2,9 +2,9 @@
  *
  *  $RCSfile: simpleioerrorrequest.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-18 09:19:48 $
+ *  last change: $Author: kso $ $Date: 2001-06-19 09:16:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,11 +94,19 @@ public:
       * @param xContext contains the command processor that executes the
       *        command related to the request.
       *
-      * @param eError
+      * @param eError is the error code to pass along with the request.
+      *
+      * qparam rArgs are additional parameters according to the specification
+      *        of the error code. Refer to com/sun/star/ucb/IOErrorCode.idl
+      *        for details.
       */
-    SimpleIOErrorRequest( const com::sun::star::uno::Reference<
-                            com::sun::star::ucb::XCommandProcessor > & xContext,
-                          const com::sun::star::ucb::IOErrorCode eError );
+    SimpleIOErrorRequest( const com::sun::star::ucb::IOErrorCode eError,
+                          const com::sun::star::uno::Sequence<
+                            com::sun::star::uno::Any > & rArgs,
+                          const rtl::OUString & rMessage,
+                          const com::sun::star::uno::Reference<
+                            com::sun::star::ucb::XCommandProcessor > & xContext
+                         );
 };
 
 } // namespace ucbhelper

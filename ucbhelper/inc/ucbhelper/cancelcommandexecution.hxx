@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cancelcommandexecution.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-18 09:19:48 $
+ *  last change: $Author: kso $ $Date: 2001-06-19 09:16:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,10 +71,13 @@
 #ifndef _COM_SUN_STAR_UCB_IOERRORCODE_HPP_
 #include <com/sun/star/ucb/IOErrorCode.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UCB_XCOMMANDPROCESSOR_HPP_
+#include <com/sun/star/ucb/XCommandProcessor.hpp>
+#endif
 
 namespace com { namespace sun { namespace star {
     namespace uno { class Any; }
-    namespace ucb { class XCommandEnvironment; class XCommandProcessor; }
+    namespace ucb { class XCommandEnvironment; }
 } } }
 
 namespace ucbhelper
@@ -114,20 +117,73 @@ void cancelCommandExecution( const com::sun::star::uno::Any & rException,
 
     NOTE THAT THIS FUNCTION NEVER RETURNS! IT ALWAYS THROWS AN EXCEPTION!
 
-    @param xContext is the command processor executing the command to cancel.
-
     @param eError is an IO error code.
+
+    @param rArg is a string argument to pass along with the exception. Each
+           IO error code can be combined with one or more additional
+           arguments. Refer to com/sun/star/ucb/IOErroprCode.idl for details.
 
     @param xEnv is the command environment that may contain an Interaction
            Handler to use before throwing the appropriate exception.
+
+    @param rMessage is a text containing additional error information.
+           Used as debugging aid only. Passed to the member 'Message' of the
+           uno::Exception thrown by this function.
+
+    @param xContext is the command processor executing the command to cancel.
+           Used as debugging aid only. Passed to the member 'Context' of the
+           uno::Exception thrown by this function.
  */
-void cancelCommandExecution( const com::sun::star::uno::Reference<
-                                com::sun::star::ucb::XCommandProcessor > &
-                                    xContext,
-                             const com::sun::star::ucb::IOErrorCode eError,
+void cancelCommandExecution( const com::sun::star::ucb::IOErrorCode eError,
+                             const rtl::OUString & rArg,
                              const com::sun::star::uno::Reference<
                                 com::sun::star::ucb::XCommandEnvironment > &
-                                    xEnv )
+                                    xEnv,
+                             const rtl::OUString & rMessage = rtl::OUString(),
+                             const com::sun::star::uno::Reference<
+                                com::sun::star::ucb::XCommandProcessor > &
+                                    xContext = 0 )
+    throw( com::sun::star::uno::Exception );
+
+/** Cancel the execution of a command by throwing the appropriate exception.
+    If an Interaction Handler is given with the command environment and the
+    handler handles the exception by selecting the supplied continuation,
+    then this function will put the original exception supplied into a
+    com::sun::star::ucb::CommandFailedException and throw the
+    CommandFailedException. If no handler was given or the handler was not
+    able to handle the exception, then the given exception will be thrown
+    directly.
+
+    NOTE THAT THIS FUNCTION NEVER RETURNS! IT ALWAYS THROWS AN EXCEPTION!
+
+    @param eError is an IO error code.
+
+    @param rArgs is a sequeence containing the arguments to pass along with
+           the exception. Each IO error code can be combined with one or
+           more additional arguments. Refer to com/sun/star/ucb/IOErroprCode.idl
+           for details.
+
+    @param xEnv is the command environment that may contain an Interaction
+           Handler to use before throwing the appropriate exception.
+
+    @param rMessage is a text containing additional error information.
+           Used as debugging aid only. Passed to the member 'Message' of the
+           uno::Exception thrown by this function.
+
+    @param xContext is the command processor executing the command to cancel.
+           Used as debugging aid only. Passed to the member 'Context' of the
+           uno::Exception thrown by this function.
+ */
+void cancelCommandExecution( const com::sun::star::ucb::IOErrorCode eError,
+                             const com::sun::star::uno::Sequence<
+                                com::sun::star::uno::Any > & rArgs,
+                             const com::sun::star::uno::Reference<
+                                com::sun::star::ucb::XCommandEnvironment > &
+                                    xEnv,
+                             const rtl::OUString & rMessage = rtl::OUString(),
+                             const com::sun::star::uno::Reference<
+                                com::sun::star::ucb::XCommandProcessor > &
+                                    xContext = 0 )
     throw( com::sun::star::uno::Exception );
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cancelcommandexecution.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-18 09:20:36 $
+ *  last change: $Author: kso $ $Date: 2001-06-19 09:18:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,16 +134,59 @@ void cancelCommandExecution( const uno::Any & rException,
 }
 
 //=========================================================================
-void cancelCommandExecution( const uno::Reference<
-                                        ucb::XCommandProcessor > & xContext,
-                             const ucb::IOErrorCode eError,
+void cancelCommandExecution( const ucb::IOErrorCode eError,
+                             const rtl::OUString & rArg,
                              const uno::Reference<
-                                        ucb::XCommandEnvironment > & xEnv )
+                                ucb::XCommandEnvironment > & xEnv,
+                             const rtl::OUString & rMessage,
+                             const uno::Reference<
+                                    ucb::XCommandProcessor > & xContext )
+    throw( uno::Exception )
+{
+    uno::Sequence< uno::Any > aArgs( 1 );
+    aArgs[ 0 ] <<= rArg;
+
+    rtl::Reference< ucbhelper::SimpleIOErrorRequest > xRequest
+        = new ucbhelper::SimpleIOErrorRequest(
+                                    eError, aArgs, rMessage, xContext );
+    if ( xEnv.is() )
+    {
+        uno::Reference<
+            task::XInteractionHandler > xIH = xEnv->getInteractionHandler();
+        if ( xIH.is() )
+        {
+            xIH->handle( xRequest.get() );
+
+            rtl::Reference< ucbhelper::InteractionContinuation > xSelection
+                = xRequest->getSelection();
+
+            if ( xSelection.is() )
+                throw ucb::CommandFailedException(
+                                    rtl::OUString(),
+                                    xContext,
+                                    xRequest->getRequest() );
+        }
+    }
+
+    cppu::throwException( xRequest->getRequest() );
+
+    OSL_ENSURE( sal_False, "Return from cppu::throwException call!!!" );
+    throw uno::RuntimeException();
+}
+
+//=========================================================================
+void cancelCommandExecution( const ucb::IOErrorCode eError,
+                             const uno::Sequence< uno::Any > & rArgs,
+                             const uno::Reference<
+                                ucb::XCommandEnvironment > & xEnv,
+                             const rtl::OUString & rMessage,
+                             const uno::Reference<
+                                    ucb::XCommandProcessor > & xContext )
     throw( uno::Exception )
 {
     rtl::Reference< ucbhelper::SimpleIOErrorRequest > xRequest
-        = new ucbhelper::SimpleIOErrorRequest( xContext, eError );
-
+        = new ucbhelper::SimpleIOErrorRequest(
+                                    eError, rArgs, rMessage, xContext );
     if ( xEnv.is() )
     {
         uno::Reference<
