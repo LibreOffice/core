@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxbsdi2.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2004-09-09 11:15:27 $
+#   last change: $Author: rt $ $Date: 2004-09-20 08:36:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -106,6 +106,7 @@ CFLAGSEXCEPTIONS=-fexceptions -fno-enforce-eh-specs
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 
 CFLAGSCXX= -pipe -frtti
+CFLAGSCXX+= -Wno-ctor-dtor-privacy
 
 # Compiler flags for compiling static object in single threaded environment with graphical user interface
 CFLAGSOBJGUIST=
