@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCellBase.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2002-11-05 07:56:44 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:13:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,8 @@
 #include "global.hxx"
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEVALUE_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessibleValue.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEVALUE_HPP_
+#include <com/sun/star/accessibility/XAccessibleValue.hpp>
 #endif
 
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
@@ -80,7 +80,7 @@
 
 class ScTabViewShell;
 
-typedef cppu::ImplHelper1< ::drafts::com::sun::star::accessibility::XAccessibleValue>
+typedef cppu::ImplHelper1< ::com::sun::star::accessibility::XAccessibleValue>
                     ScAccessibleCellBaseImpl;
 
 class ScAccessibleCellBase
@@ -91,7 +91,7 @@ public:
     //=====  internal  ========================================================
     ScAccessibleCellBase(
         const ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessible>& rxParent,
+        ::com::sun::star::accessibility::XAccessible>& rxParent,
         ScDocument* pDoc,
         const ScAddress& rCellAddress,
         sal_Int32 nIndex);
@@ -188,7 +188,7 @@ protected:
 private:
     virtual sal_Bool IsEditable(
         const com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
+        ::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
 };
 
 
