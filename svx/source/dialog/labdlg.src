@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labdlg.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-05 21:21:14 $
+ *  last change: $Author: kz $ $Date: 2002-11-27 17:03:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ turkish ] = "~Uzakl˝k";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Espaiat";
-        Text[ finnish ] = "~Objektiv‰lit";
+        Text[ finnish ] = "~V‰lit";
         Text[ thai ] = "~‡∏£‡∏∞‡∏¢‡∏∞‡∏´‡πà‡∏≤‡∏á";
     };
     MetricField MF_ABSTAND
@@ -388,7 +388,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ turkish ] = "U~zatma";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Sortida";
-        Text[ finnish ] = "~Loppuliite";
+        Text[ finnish ] = "~Tunniste";
         Text[ thai ] = "~‡∏™‡πà‡∏ß‡∏ô‡∏Ç‡∏¢‡∏≤‡∏¢";
     };
     ListBox LB_ANSATZ
@@ -618,7 +618,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ turkish ] = "~Deer";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Per";
-        Text[ finnish ] = "~Laatija";
+        Text[ finnish ] = "~Tekij‰";
         Text[ thai ] = "‡πÇ~‡∏î‡∏¢";
     };
     MetricField MF_ANSATZ
@@ -661,7 +661,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ turkish ] = "~Konum";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~PosiciÛ";
-        Text[ finnish ] = "~Sijainti";
+        Text[ finnish ] = "S~ijainti";
         Text[ thai ] = "~‡∏ï‡∏≥‡πÅ‡∏´‡∏ô‡πà‡∏á";
     };
     ListBox LB_ANSATZ_REL
@@ -744,7 +744,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ turkish ] = "~Optimum";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "“~ptim";
-        Text[ finnish ] = "~Optimaalinen";
+        Text[ finnish ] = "O~ptimaalinen";
         Text[ thai ] = "‡πÄ~‡∏´‡∏°‡∏≤‡∏∞‡∏ó‡∏µ‡πà‡∏™‡∏∏‡∏î";
     };
     String STR_CAPTTYPE_1
@@ -825,7 +825,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ turkish ] = "Tek aÁ˝l˝ Áizgi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "LÌnia angular amb nomÈs un angle";
-        Text[ finnish ] = "Kulmikas liitinviiva";
+        Text[ finnish ] = "Kulmikas yhdysviiva";
         Text[ thai ] = "‡πÄ‡∏™‡πâ‡∏ô‡πÄ‡∏ä‡∏∑‡πà‡∏≠‡∏°‡∏ï‡πà‡∏≠‡πÄ‡∏õ‡πá‡∏ô‡πÄ‡∏´‡∏•‡∏µ‡πà‡∏¢‡∏°‡πÄ‡∏õ‡πá‡∏ô‡∏°‡∏∏‡∏°";
     };
     String STR_CAPTTYPE_4
@@ -879,7 +879,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ turkish ] = "‹st;Orta;Alt";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Part superior;Mig;Part inferior";
-        Text[ finnish ] = "Yl‰osa;Keskiosa;Alaosa";
+        Text[ finnish ] = "Yl‰reuna;Keskikohta;Alareuna";
         Text[ thai ] = "‡∏ö‡∏ô;‡∏Å‡∏•‡∏≤‡∏á;‡∏•‡πà‡∏≤‡∏á";
     };
     String STR_VERT_LIST
@@ -906,7 +906,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ turkish ] = "Sol;Orta;Sa";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Esquerra;Mig;Dreta";
-        Text[ finnish ] = "Vasen;Keskiosa;Oikea";
+        Text[ finnish ] = "Vasen;Keskikohta;Oikea";
         Text[ thai ] = "‡∏ã‡πâ‡∏≤‡∏¢;‡∏Å‡∏•‡∏≤‡∏á;‡∏Ç‡∏ß‡∏≤";
     };
     Bitmap BMP_CAPTTYPE_1
@@ -942,7 +942,7 @@ TabPage RID_SVXPAGE_CAPTION
         File = "legtyp4_hc.bmp" ;
     };
     Text[ chinese_simplified ] = "Âõæ‰æã";
-    Text[ russian ] = "ÀÂ„ÂÌ‰‡";
+    Text[ russian ] = "¬˚ÌÓÒÍ‡";
     Text[ polish ] = "Legenda";
     Text[ japanese ] = "Âá°‰æã";
     Text[ chinese_traditional ] = "Âúñ‰æã";
@@ -1026,7 +1026,7 @@ TabDialog RID_SVXDLG_CAPTION
                 Text [ portuguese_brazilian ] = "Legenda" ;
                 Text [ portuguese ] = "Legenda" ;
                 Text[ chinese_simplified ] = "Âõæ‰æã";
-                Text[ russian ] = "ÀÂ„ÂÌ‰‡";
+                Text[ russian ] = "¬˚ÌÓÒÍ‡";
                 Text[ polish ] = "Legenda";
                 Text[ japanese ] = "Âá°‰æã";
                 Text[ chinese_traditional ] = "Âúñ‰æã";
@@ -1042,7 +1042,7 @@ TabDialog RID_SVXDLG_CAPTION
         };
     };
     Text[ chinese_simplified ] = "Âõæ‰æã";
-    Text[ russian ] = "ÀÂ„ÂÌ‰‡";
+    Text[ russian ] = "¬˚ÌÓÒÍË";
     Text[ polish ] = "Legenda";
     Text[ japanese ] = "Âá°‰æã";
     Text[ chinese_traditional ] = "Âúñ‰æã";
