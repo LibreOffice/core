@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: cp $ $Date: 2001-04-06 08:28:11 $
+ *  last change: $Author: pl $ $Date: 2001-04-06 10:37:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1331,7 +1331,6 @@ SalGraphicsData::DrawStringMB ( int nX, int nY, const sal_Unicode* pStr, int nLe
 
     rtl_TextEncoding  nEnc;
     XFontStruct      *pFont;
-
     for ( int nChar = 0, nItem = 0; nChar < nLength; nChar++ )
     {
         if ( !(pFont = xFont_->GetFontStruct(pStr[nChar], &nEnc)) )
@@ -1698,11 +1697,12 @@ SalGraphics::GetDevFontList( ImplDevFontList *pList )
             psp::FastPrintFontInfo aInfo;
             if( rMgr.getFontFastInfo( *it, aInfo ) )
             {
+                if( aInfo.m_eType == psp::fonttype::Builtin )
+                    continue;
                 ImplFontData aFontData;
                 SetImplFontData( aInfo, aFontData );
                 aFontData.mnQuality += 4096;    // prefer to X11 fonts
-                ::rtl::OUString aTmpName( rMgr.getFontFileSysPath( aInfo.m_nID ) );
-                String aFontFileName( aTmpName.getStr(), aTmpName.getLength() );
+                ::rtl::OUString aFontFileName( rMgr.getFontFileSysPath( aInfo.m_nID ) );
                 int nFaceNum = rMgr.getFontFaceNumber( aInfo.m_nID );
                 if( nFaceNum < 0 )
                     nFaceNum = 0;
@@ -1776,7 +1776,6 @@ SalGraphics::GetFontMetric( ImplFontMetricData *pMetric )
             return;
         }
 #endif //USE_BUILTIN_RASTERIZER
-
 
     ExtendedFontStruct* pFont = maGraphicsData.xFont_;
 
