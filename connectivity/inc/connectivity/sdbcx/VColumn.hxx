@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VColumn.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-16 18:04:55 $
+ *  last change: $Author: oj $ $Date: 2002-07-04 06:30:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,8 @@ namespace connectivity
             using OColumnDescriptor_BASE::rBHelper;
             virtual ::cppu::IPropertyArrayHelper* createArrayHelper( sal_Int32 _nId) const;
             virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
+
+            virtual ~OColumn();
         public:
             virtual void    SAL_CALL acquire() throw();
             virtual void    SAL_CALL release() throw();
@@ -144,7 +146,16 @@ namespace connectivity
                                 sal_Bool        _IsCurrency,
                                 sal_Bool        _bCase);
 
-            virtual ~OColumn();
+
+
+            inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW( () )
+                { return ::rtl_allocateMemory( nSize ); }
+            inline static void * SAL_CALL operator new( size_t nSize,const void* _pHint ) SAL_THROW( () )
+                { return const_cast<void*>(_pHint); }
+            inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW( () )
+                { ::rtl_freeMemory( pMem ); }
+            inline static void SAL_CALL operator delete( void * pMem,const void* _pHint ) SAL_THROW( () )
+                {  }
 
             DECLARE_SERVICE_INFO();
             //XInterface

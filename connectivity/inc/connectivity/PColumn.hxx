@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PColumn.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-27 06:12:33 $
+ *  last change: $Author: oj $ $Date: 2002-07-04 06:30:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,8 @@ namespace connectivity
         protected:
             virtual ::cppu::IPropertyArrayHelper* createArrayHelper( sal_Int32 _nId) const;
             virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
+
+            virtual ~OParseColumn();
         public:
             OParseColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xColumn,sal_Bool _bCase);
             OParseColumn(const ::rtl::OUString& _Name,
@@ -97,7 +99,14 @@ namespace connectivity
                     sal_Bool        _IsCurrency,
                     sal_Bool        _bCase);
 
-            ~OParseColumn();
+            inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW( () )
+                { return ::rtl_allocateMemory( nSize ); }
+            inline static void * SAL_CALL operator new( size_t nSize,const void* _pHint ) SAL_THROW( () )
+                { return const_cast<void*>(_pHint); }
+            inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW( () )
+                { ::rtl_freeMemory( pMem ); }
+            inline static void SAL_CALL operator delete( void * pMem,const void* _pHint ) SAL_THROW( () )
+                {  }
 
             virtual void construct();
 
