@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: abi $ $Date: 2001-12-18 13:09:32 $
+ *  last change: $Author: abi $ $Date: 2002-02-27 12:25:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -953,8 +953,37 @@ shell::setv( sal_Int32 CommandId,
         }
         else
         {
+            // native properties
             // Setting of physical file properties
-            if( values[i].Name == IsReadOnly )
+            if( values[i].Name == Size )
+            {
+                sal_Int64 newSize;
+                if( values[i].Value >>= newSize )
+                {   // valid value for the size
+                    osl::File aFile(aUnqPath);
+                    bool err =
+                        aFile.open(OpenFlag_Write) == osl::FileBase::E_None &&
+                        aFile.setSize(sal_uInt64(newSize)) == osl::FileBase::E_None &&
+                        aFile.close() == osl::FileBase::E_None;
+
+                    if( err )
+                    {
+                        --propChanged; // unsuccessful setting
+                        uno::Sequence< uno::Any > names( 1 );
+                        ret[0] <<= aUnqPath;
+                        IOErrorCode ioError(IOErrorCode_GENERAL);
+                        ret[i] <<= InteractiveAugmentedIOException(
+                            rtl::OUString(),
+                            0,
+                            task::InteractionClassification_ERROR,
+                            ioError,
+                            names );
+                    }
+                }
+                else
+                    ret[i] <<= beans::IllegalTypeException();
+            }
+            else if( values[i].Name == IsReadOnly )
             {
                 sal_Bool readonly ;
                 if( values[i].Value >>= readonly )
