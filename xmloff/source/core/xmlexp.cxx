@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-18 15:08:13 $
+ *  last change: $Author: mib $ $Date: 2001-06-19 15:26:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -838,7 +838,7 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
             pRootService = sXML_document;
         }
 
-        if( (getExportFlags() && EXPORT_NODOCTYPE) == 0 &&
+        if( (getExportFlags() & EXPORT_NODOCTYPE) == 0 &&
             xExtHandler.is() )
         {
             OUStringBuffer aDocType(
@@ -1224,7 +1224,10 @@ OUString SvXMLExport::AddEmbeddedGraphicObject( const OUString& rGraphicObjectUR
                                           sGraphicObjectProtocol.getLength() ) &&
         xGraphicResolver.is() )
     {
-        sRet = xGraphicResolver->resolveGraphicObjectURL( rGraphicObjectURL );
+        if( (getExportFlags() & EXPORT_EMBEDDED) == 0 )
+            sRet = xGraphicResolver->resolveGraphicObjectURL( rGraphicObjectURL );
+        else
+            sRet = OUString();
     }
     else
         sRet = INetURLObject::AbsToRel( sRet );
@@ -1236,7 +1239,8 @@ sal_Bool SvXMLExport::AddEmbeddedGraphicObjectAsBase64( const OUString& rGraphic
 {
     sal_Bool bRet = sal_False;
 
-    if( 0 == rGraphicObjectURL.compareTo( sGraphicObjectProtocol,
+    if( (getExportFlags() & EXPORT_EMBEDDED) != 0 &&
+        0 == rGraphicObjectURL.compareTo( sGraphicObjectProtocol,
                                           sGraphicObjectProtocol.getLength() ) &&
         xGraphicResolver.is() )
     {
@@ -1249,7 +1253,7 @@ sal_Bool SvXMLExport::AddEmbeddedGraphicObjectAsBase64( const OUString& rGraphic
             if( xIn.is() )
             {
                 XMLBase64Export aBase64Exp( *this );
-                bRet = aBase64Exp.exportXML( xIn );
+                bRet = aBase64Exp.exportOfficeBinaryDataElement( xIn );
             }
         }
     }
@@ -1287,7 +1291,7 @@ sal_Bool SvXMLExport::AddEmbeddedObjectAsBase64( const OUString& rEmbeddedObject
             if( xIn.is() )
             {
                 XMLBase64Export aBase64Exp( *this );
-                bRet = aBase64Exp.exportXML( xIn );
+                bRet = aBase64Exp.exportOfficeBinaryDataElement( xIn );
             }
         }
     }
