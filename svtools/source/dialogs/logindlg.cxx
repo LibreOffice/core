@@ -2,9 +2,9 @@
  *
  *  $RCSfile: logindlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pluby $ $Date: 2000-10-19 22:47:11 $
+ *  last change: $Author: thb $ $Date: 2001-06-15 18:49:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,10 +217,7 @@ void LoginDialog::HideControls_Impl( USHORT nFlags )
         aTmpPnt1 = aSavePasswdBtn.GetPosPixel();
         aTmpPnt1.Y() -= nOffset;
         aSavePasswdBtn.SetPosPixel( aTmpPnt1 );
-        Size aNewSz = aLoginGB.GetSizePixel();
-        aNewSz.Height() -= nOffset;
-        aLoginGB.SetSizePixel( aNewSz );
-        aNewSz = GetSizePixel();
+        Size aNewSz = GetSizePixel();
         aNewSz.Height() -= nOffset;
         SetSizePixel( aNewSz );
     }
@@ -232,10 +229,7 @@ void LoginDialog::HideControls_Impl( USHORT nFlags )
         Point aTmpPnt = aSavePasswdBtn.GetPosPixel();
         aTmpPnt.Y() -= nOffset;
         aSavePasswdBtn.SetPosPixel( aTmpPnt );
-        Size aNewSz = aLoginGB.GetSizePixel();
-        aNewSz.Height() -= nOffset;
-        aLoginGB.SetSizePixel( aNewSz );
-        aNewSz = GetSizePixel();
+        Size aNewSz = GetSizePixel();
         aNewSz.Height() -= nOffset;
         SetSizePixel( aNewSz );
     }

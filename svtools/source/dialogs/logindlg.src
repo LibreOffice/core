@@ -2,9 +2,9 @@
  *
  *  $RCSfile: logindlg.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2001-06-08 21:43:52 $
+ *  last change: $Author: thb $ $Date: 2001-06-15 18:49:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,10 +83,10 @@ ModalDialog DLG_LOGIN
         Size = MAP_APPFONT ( 185 , 18 ) ;
         WordBreak = TRUE ;
     };
-    GroupBox GB_LOGIN_ERROR
+    FixedLine GB_LOGIN_ERROR
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 197 , 35 ) ;
+        Size = MAP_APPFONT ( 197 , 8 ) ;
         Text = "Meldung vom Server" ;
         Text [ English ] = "Report from server" ;
         Text [ english_us ] = "Message from server" ;
@@ -317,10 +317,10 @@ ModalDialog DLG_LOGIN
         Text[ catalan ] = "Guardar ~contraseña";
         Text[ finnish ] = "~Tallenna salasana";
     };
-    GroupBox GB_LOGIN_LOGIN
+    FixedLine GB_LOGIN_LOGIN
     {
         Pos = MAP_APPFONT ( 7 , 44 ) ;
-        Size = MAP_APPFONT ( 197 , 108 ) ;
+        Size = MAP_APPFONT ( 197 , 8 ) ;
         Text = "Anmelden" ;
         Text [ English ] = "Connect" ;
         Text [ english_us ] = "Login" ;
