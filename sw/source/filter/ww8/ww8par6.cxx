@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.146 $
+ *  $Revision: 1.147 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 17:15:04 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:37:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1796,7 +1796,6 @@ bool WW8FlyPara::operator==(const WW8FlyPara& rSrc) const
 // Read fuer normalen Text
 void WW8FlyPara::Read(const BYTE* pSprm29, WW8PLCFx_Cp_FKP* pPap)
 {
-    sal_uInt8 nOrigSp29 = nSp29;
     if (pSprm29)
         nOrigSp29 = *pSprm29;                           // PPC ( Bindung )
 
@@ -1914,7 +1913,6 @@ void WW8FlyPara::ReadFull(const BYTE* pSprm29, SwWW8ImplReader* pIo)
 // Read fuer Apo-Defs in Styledefs
 void WW8FlyPara::Read(const BYTE* pSprm29, WW8RStyle* pStyle)
 {
-    sal_uInt8 nOrigSp29 = 0;
     if (pSprm29)
         nOrigSp29 = *pSprm29;                           // PPC ( Bindung )
 
@@ -1984,6 +1982,8 @@ bool WW8FlyPara::IsEmpty() const
     return false;
 }
 
+// OD 14.10.2003 #i18732# - changes made on behalf of CMC
+//#define OLD_ANCHORING
 WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM, SwWW8ImplReader& rIo, WW8FlyPara& rWW,
     sal_uInt32 nPgLeft, sal_uInt32 nPgWidth, INT32 nIniFlyDx, INT32 nIniFlyDy )
 {
@@ -2058,8 +2058,10 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM, SwWW8ImplReader& rIo, WW8FlyPara& rWW,
 
     // Bindung
     nYBind = (( rWW.nSp29 & 0x30 ) >> 4);
+// OD 14.10.2003 #i18732#
+#ifdef OLD_ANCHORING
     switch ( nYBind )
-    {                                       // Y - Bindung bestimmt Sw-Bindung
+    {   // Y - Bindung bestimmt Sw-Bindung
         case 0:
             eAnchor = FLY_PAGE;             // Vert Margin
             eVRel = REL_PG_PRTAREA;
@@ -2075,7 +2077,25 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM, SwWW8ImplReader& rIo, WW8FlyPara& rWW,
                 nYPos = 0;                  // koennen wir nicht
             break;
     }
+// OD 14.10.2003 #i18732#
+#else
+    eAnchor = FLY_AUTO_CNTNT;
+    switch (nYBind)
+    {
+        case 0:     //relative to margin
+            eVRel = REL_PG_PRTAREA;
+            break;
+        case 1:     //relative to page
+            eVRel = REL_PG_FRAME;
+            break;
+        default:    //relative to text
+            eVRel = FRAME;
+            break;
+    }
+#endif
 
+// OD 14.10.2003 #i18732#
+#ifdef OLD_ANCHORING
     switch( rWW.nSp27 )             // besondere Y-Positionen ?
     {
         case -4:
@@ -2095,6 +2115,28 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM, SwWW8ImplReader& rIo, WW8FlyPara& rWW,
             nYPos = rWW.nSp27 + (short)nIniFlyDy;
             break;  // Korrekturen per Ini-Datei
     }
+// OD 14.10.2003 #i18732#
+#else
+    switch( rWW.nSp27 )             // besondere Y-Positionen ?
+    {
+        case -4:
+            eVAlign = VERT_TOP;
+            if (nYBind < 2)
+                nUpMgn = 0;
+            break;  // oben
+        case -8:
+            eVAlign = VERT_CENTER;
+            break;  // zentriert
+        case -12:
+            eVAlign = VERT_BOTTOM;
+            if (nYBind < 2)
+                nLoMgn = 0;
+            break;  // unten
+        default:
+            nYPos = rWW.nSp27 + (short)nIniFlyDy;
+            break;  // Korrekturen per Ini-Datei
+    }
+#endif
 
     switch( rWW.nSp26 )                 // besondere X-Positionen ?
     {
@@ -2123,6 +2165,8 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM, SwWW8ImplReader& rIo, WW8FlyPara& rWW,
     }
 
     nXBind = ( rWW.nSp29 & 0xc0 ) >> 6;
+// OD 14.10.2003 #i18732#
+#ifdef OLD_ANCHORING
     switch ( nXBind )           // X - Bindung -> Koordinatentransformation
     {
         case 0:
@@ -2153,6 +2197,21 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM, SwWW8ImplReader& rIo, WW8FlyPara& rWW,
             }
             break;
     }
+// OD 14.10.2003 #i18732#
+#else
+    switch (nXBind)           // X - Bindung -> Koordinatentransformation
+    {
+        case 0:     //relative to column
+            eHRel = FRAME;
+            break;
+        case 1:     //relative to margin
+            eHRel = REL_PG_PRTAREA;
+            break;
+        default:    //relative to page
+            eHRel = REL_PG_FRAME;
+            break;
+    }
+#endif
 
     if (rWW.bBorderLines)
     {
@@ -2177,6 +2236,8 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM, SwWW8ImplReader& rIo, WW8FlyPara& rWW,
     FlySecur1( nWidth, rWW.bBorderLines );          // passen Raender ?
     FlySecur1( nHeight, rWW.bBorderLines );
 
+// OD 14.10.2003 #i18732#
+#ifdef OLD_ANCHORING
     /*
         // eine Writer-Kuriositaet: auch wenn Abstaende vom Seitenrand
         // gezaehlt werden sollen, muessen die Positionen als Abstaende vom
@@ -2191,6 +2252,7 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM, SwWW8ImplReader& rIo, WW8FlyPara& rWW,
         if( rIo.nInTable )
             nXPos -= rIo.GetTableLeft();
     }
+#endif
 }
 
 // hat ein Fly in WW eine automatische Breite, dann muss das durch
@@ -2217,8 +2279,11 @@ WW8FlySet::WW8FlySet(SwWW8ImplReader& rReader, const WW8FlyPara* pFW,
 /*Below can all go when we have from left in rtl mode*/
     long nXPos = pFS->nXPos;
     SwRelationOrient eHRel = pFS->eHRel;
+// OD 14.10.2003 #i18732#
+#ifdef OLD_ANCHORING
     if ((pFS->eAnchor == FLY_PAGE) && (eHRel == FRAME))
         eHRel = REL_PG_FRAME;
+#endif
     rReader.MiserableRTLGraphicsHack(nXPos, pFS->nWidth, pFS->eHAlign, eHRel);
 /*Above can all go when we have from left in rtl mode*/
     Put( SwFmtHoriOrient(nXPos, pFS->eHAlign, pFS->eHRel, pFS->bToggelPos ));
