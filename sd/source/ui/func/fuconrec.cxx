@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconrec.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dl $ $Date: 2001-02-05 11:45:08 $
+ *  last change: $Author: dl $ $Date: 2001-03-14 10:49:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,6 +287,9 @@ BOOL FuConstRectangle::MouseButtonDown(const MouseEvent& rMEvt)
 
 //-/            pObj->NbcSetAttributes(aAttr, FALSE);
             pObj->SetItemSet(aAttr);
+
+            if( nSlotId == SID_DRAW_CAPTION_VERTICAL )
+                ( (SdrTextObj*) pObj)->SetVerticalWriting( TRUE );
         }
     }
 
@@ -566,7 +569,7 @@ void FuConstRectangle::SetAttributes(SfxItemSet& rAttr, SdrObject* pObj)
         **********************************************************************/
         rAttr.Put(SdrEdgeKindItem(SDREDGE_BEZIER));
     }
-    else if (nSlotId == SID_DRAW_CAPTION)
+    else if ( nSlotId == SID_DRAW_CAPTION || nSlotId == SID_DRAW_CAPTION_VERTICAL )
     {
         /**********************************************************************
         * Legendenobjekt
