@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-01 19:10:54 $
+ *  last change: $Author: cmc $ $Date: 2001-02-05 10:33:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -569,6 +569,7 @@ XML_CONSTASCII_ACTION( sXML_embed, "embed" );
 XML_CONSTASCII_ACTION( sXML_emissive_color, "emissive-color" );
 XML_CONSTASCII_ACTION( sXML_empty, "empty");
 XML_CONSTASCII_ACTION( sXML_enabled, "enabled" );
+XML_CONSTASCII_ACTION( sXML_encoding, "encoding" );
 XML_CONSTASCII_ACTION( sXML_end, "end" );
 XML_CONSTASCII_ACTION( sXML_end_angle, "end-angle" );
 XML_CONSTASCII_ACTION( sXML_end_cell_address, "end-cell-address" );
@@ -980,6 +981,7 @@ XML_CONSTASCII_ACTION( sXML_message_type, "message-type" );
 XML_CONSTASCII_ACTION( sXML_meta, "meta" );
 XML_CONSTASCII_ACTION( sXML_mfenced, "mfenced" );
 XML_CONSTASCII_ACTION( sXML_mfrac, "mfrac" );
+XML_CONSTASCII_ACTION( sXML_mi, "mi" ); //MathML Math Identifier
 XML_CONSTASCII_ACTION( sXML_middle, "middle" );
 XML_CONSTASCII_ACTION( sXML_min, "min" );
 XML_CONSTASCII_ACTION( sXML_min_denominator_digits, "min-denominator-digits" );
