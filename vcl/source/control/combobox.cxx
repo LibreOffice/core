@@ -2,9 +2,9 @@
  *
  *  $RCSfile: combobox.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:35 $
+ *  last change: $Author: mt $ $Date: 2001-04-09 11:45:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -389,13 +389,7 @@ IMPL_LINK( ComboBox, ImplAutocompleteHdl, Edit*, pEdit )
 IMPL_LINK( ComboBox, ImplSelectHdl, void*, EMPTYARG )
 {
     BOOL bPopup = IsInDropDown();
-    if ( bPopup && !mpImplLB->IsTravelSelect() &&
-            ( !IsMultiSelectionEnabled() || !mpImplLB->GetSelectModifier() ) )
-    {
-        mpFloatWin->EndPopupMode();
-        GrabFocus();
-    }
-
+    BOOL bCallSelect = FALSE;
     if ( mpImplLB->IsSelectionChanged() || bPopup )
     {
         XubString aText;
@@ -457,6 +451,20 @@ IMPL_LINK( ComboBox, ImplSelectHdl, void*, EMPTYARG )
             aNewSelection.Min() = aText.Len();
         mpSubEdit->SetSelection( aNewSelection );
 
+        bCallSelect = TRUE;
+    }
+
+    // #84652# Call GrabFocus and EndPopupMode before calling Select/Modify, but after changing the text
+
+    if ( bPopup && !mpImplLB->IsTravelSelect() &&
+        ( !IsMultiSelectionEnabled() || !mpImplLB->GetSelectModifier() ) )
+    {
+        mpFloatWin->EndPopupMode();
+        GrabFocus();
+    }
+
+    if ( bCallSelect )
+    {
         mpSubEdit->SetModifyFlag();
         mbSyntheticModify = TRUE;
         Modify();
@@ -914,7 +922,11 @@ BOOL ComboBox::IsInDropDown() const
 
 void ComboBox::EnableMultiSelection( BOOL bMulti )
 {
+#if SUPD > 627
+    mpImplLB->EnableMultiSelection( bMulti, FALSE );
+#else
     mpImplLB->EnableMultiSelection( bMulti );
+#endif
     mpImplLB->SetMultiSelectionSimpleMode( TRUE );
 }
 
@@ -1079,7 +1091,7 @@ void ComboBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, U
     // Inhalt
     if ( IsDropDownBox() )
     {
-        mpSubEdit->Draw( pDev, aPos, aSize, nFlags );
+        mpSubEdit->Draw( pDev, rPos, rSize, nFlags );
         // DD-Button ?
     }
     else
