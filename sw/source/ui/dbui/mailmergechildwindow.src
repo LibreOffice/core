@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmergechildwindow.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:13:11 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 15:26:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@ FloatingWindow DLG_MAILMERGECHILD
     };
 };
 //FloatingWindow DLG_MM_SENDMAILS
-ModalDialog DLG_MM_SENDMAILS
+ModelessDialog /*ModalDialog*/ DLG_MM_SENDMAILS
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
@@ -135,7 +135,7 @@ ModalDialog DLG_MM_SENDMAILS
         Text [ de ] = "Verbindungsstatus" ;
         Text[ en-US ] = "Connection status";
     };
-    FixedText  FT_STATUS
+    FixedText  FT_STATUS1
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 226 , 8 ) ;

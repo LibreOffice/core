@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmergechildwindow.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:13:01 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 15:26:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
 #define FL_SEPARATOR                7
 
 #define FL_STATUS                   60
-#define FT_STATUS                   61
+#define FT_STATUS1                  61
 #define FL_TRANSFERSTATUS           62
 #define FT_TRANSFERSTATUS           63
 #define PB_PROGRESS                 64
