@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wizardmachine.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 05:16:12 $
+ *  last change: $Author: kz $ $Date: 2001-05-12 05:49:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,13 +81,13 @@ String STR_WIZDLG_FINISH
     Text[ polish ] = "UtwÛrz";
     Text[ portuguese_brazilian ] = "~Finish";
     Text[ japanese ] = "äÆóπ(~R)";
-    Text[ korean ] = "Finish(~R)";
+    Text[ korean ] = "∏∂ƒß(~R)";
     Text[ chinese_simplified ] = "ÕÍ≥…(~R)";
     Text[ chinese_traditional ] = "ßπ¶®(~R)";
     Text[ turkish ] = "~Finish";
     Text[ arabic ] = "≈‰‘«¡";
     Text[ catalan ] = "~Crear";
-    Text[ finnish ] = "~Fertig stellen";
+    Text[ finnish ] = "~Luo";
 };
 
 String STR_WIZDLG_NEXT
@@ -108,13 +108,13 @@ String STR_WIZDLG_NEXT
     Text[ polish ] = "Dalej >>";
     Text[ portuguese_brazilian ] = "~Next >>";
     Text[ japanese ] = "éüÇ÷ (~N) >>";
-    Text[ korean ] = "~Next >>";
+    Text[ korean ] = "~¥Ÿ¿Ω >>";
     Text[ chinese_simplified ] = "ºÃ–¯ (~N) >>";
     Text[ chinese_traditional ] = "ƒ~ƒÚ >>";
     Text[ turkish ] = "~Next >>";
     Text[ arabic ] = "«· «·Ì <<";
     Text[ catalan ] = "~Siguiente >>";
-    Text[ finnish ] = "~Weiter >>";
+    Text[ finnish ] = "Seuraava >>";
 };
 
 String STR_WIZDLG_PREVIOUS
@@ -135,18 +135,21 @@ String STR_WIZDLG_PREVIOUS
     Text[ polish ] = "<< Wstecz";
     Text[ portuguese_brazilian ] = "<< ~Previous";
     Text[ japanese ] = "<< ñﬂÇÈ(~K)";
-    Text[ korean ] = "<< Previous(~K)";
+    Text[ korean ] = "<< µ⁄∑Œ(~K)";
     Text[ chinese_simplified ] = "<< ∑µªÿ(~K)";
     Text[ chinese_traditional ] = "<< ™¶^(~K)";
     Text[ turkish ] = "<< ~Previous";
     Text[ arabic ] = "<< ~Previous";
     Text[ catalan ] = "<< ~Anterior";
-    Text[ finnish ] = "<< ~Zur¸ck";
+    Text[ finnish ] = "<< Takaisin";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.10  2001/05/10 05:16:12  kz
+ *  Merge SRC631: 10.05.01 - 07:16:46 (NoBranch)
+ *
  *  Revision 1.9  2001/05/04 19:17:48  kz
  *  Merge SRC630: 04.05.01 - 21:18:22 (NoBranch)
  *
