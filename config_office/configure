@@ -7,6 +7,14 @@
 # This configure script is free software; the Free Software Foundation
 # gives unlimited permission to copy, distribute and modify it.
 
+# Since this script needs to run in the same directory as the script, cd to
+# the script directory. Also, this means we cannot run this script from a
+# softlink so we need.
+if test -h "$0"; then
+      { echo "configure: error: you cannot run $0 from a softlink" 1>&2; exit 1; }
+fi
+cd "`dirname $0`"
+
 # Defaults:
 ac_help=
 ac_default_prefix=/usr/local
