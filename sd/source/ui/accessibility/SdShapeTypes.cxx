@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdShapeTypes.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: af $ $Date: 2002-04-15 15:35:30 $
+ *  last change: $Author: af $ $Date: 2002-04-18 17:02:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ AccessibleShape*
             ::drafts::com::sun::star::accessibility::XAccessible>& rxParent,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::drawing::XShape>& rxShape,
-        AccessibleShapeTreeInfo& rShapeTreeInfo,
+        const AccessibleShapeTreeInfo& rShapeTreeInfo,
         ShapeTypeId nId)
 {
     switch (nId)

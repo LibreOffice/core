@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePageShape.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: af $ $Date: 2002-04-16 08:39:41 $
+ *  last change: $Author: af $ $Date: 2002-04-18 17:02:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ namespace accessibility {
 AccessiblePageShape::AccessiblePageShape (
     const uno::Reference<drawing::XDrawPage>& rxPage,
     const uno::Reference<XAccessible>& rxParent,
-    AccessibleShapeTreeInfo& rShapeTreeInfo,
+    const AccessibleShapeTreeInfo& rShapeTreeInfo,
     long nIndex)
     : AccessibleShape (NULL, rxParent, rShapeTreeInfo, nIndex),
       mxPage (rxPage)

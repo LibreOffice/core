@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePageShape.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: af $ $Date: 2002-04-15 15:18:15 $
+ *  last change: $Author: af $ $Date: 2002-04-18 17:00:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@ public:
             ::com::sun::star::drawing::XDrawPage>& rxPage,
         const ::com::sun::star::uno::Reference<
             ::drafts::com::sun::star::accessibility::XAccessible>& rxParent,
-        AccessibleShapeTreeInfo& rShapeTreeInfo,
+        const AccessibleShapeTreeInfo& rShapeTreeInfo,
         long nIndex = -1);
 
     virtual ~AccessiblePageShape (void);
