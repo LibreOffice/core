@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlstyle.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:51:38 $
+ *  last change: $Author: rt $ $Date: 2004-05-18 12:44:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,6 +159,9 @@ XclDefaultPalette::XclDefaultPalette( XclBiff eBiff ) :
     const StyleSettings& rSett = Application::GetSettings().GetStyleSettings();
     mnWindowText = rSett.GetWindowTextColor().GetColor();
     mnWindowBack = rSett.GetWindowColor().GetColor();
+    mnFaceColor = rSett.GetFaceColor().GetColor();
+    mnNoteText = rSett.GetHelpTextColor().GetColor();
+    mnNoteBack = rSett.GetHelpColor().GetColor();
 
     if( eBiff != xlBiffUnknown )
         SetDefaultColors( eBiff );
@@ -199,11 +202,19 @@ ColorData XclDefaultPalette::GetDefColorData( sal_uInt16 nXclIndex ) const
     else switch( nXclIndex )
     {
         case EXC_COLOR_WINDOWTEXT3:
-        case EXC_COLOR_WINDOWTEXT:  nColor = mnWindowText;  break;
+        case EXC_COLOR_WINDOWTEXT:
+        case EXC_COLOR_WINDOWTEXT_CH:   nColor = mnWindowText;  break;
         case EXC_COLOR_WINDOWBACK3:
-        case EXC_COLOR_WINDOWBACK:  nColor = mnWindowBack;  break;
-        case EXC_COLOR_FONTAUTO:    nColor = COL_AUTO;      break;
-        default:                    nColor = COL_AUTO;
+        case EXC_COLOR_WINDOWBACK:
+        case EXC_COLOR_WINDOWBACK_CH:   nColor = mnWindowBack;  break;
+        case EXC_COLOR_BUTTONBACK:      nColor = mnFaceColor;   break;
+        case EXC_COLOR_BORDERAUTO_CH:   nColor = COL_BLACK;     break;  // TODO: really always black?
+        case EXC_COLOR_NOTEBACK:        nColor = mnNoteBack;    break;
+        case EXC_COLOR_NOTETEXT:        nColor = mnNoteText;    break;
+        case EXC_COLOR_FONTAUTO:        nColor = COL_AUTO;      break;
+        default:
+            DBG_ERROR1( "XclDefaultPalette::GetDefColorData - unknown default color index: %d", nXclIndex );
+            nColor = COL_AUTO;
     }
     return nColor;
 }
