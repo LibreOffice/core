@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagedlg.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 20:38:24 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 15:45:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -773,7 +773,7 @@ TabPage RID_SCPAGE_TABLE
         Text [ portuguese ] = "~Objectos/Imagens" ;
         Text [ finnish ] = "~Objects/Images" ;
         Text [ danish ] = "Objekter/grafik" ;
-        Text [ french ] = "~Objets/images" ;
+        Text [ french ] = "~Objets/Images" ;
         Text [ swedish ] = "O~bjekt/grafik" ;
         Text [ dutch ] = "~Objecten/afbeeld." ;
         Text [ spanish ] = "~Objetos/Imágenes" ;
@@ -1153,7 +1153,7 @@ TabPage RID_SCPAGE_TABLE
         Text [ italian ] = "Scala" ;
         Text [ spanish ] = "Escala" ;
         Text [ french ] = "Redimensionnement (impression)" ;
-        Text [ swedish ] = "Skalering" ;
+        Text [ swedish ] = "Skalning" ;
         Text [ danish ] = "Skalering" ;
         Text [ portuguese ] = "Escala" ;
         Text [ portuguese_brazilian ] = "Skalierung" ;
