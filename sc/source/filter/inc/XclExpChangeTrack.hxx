@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XclExpChangeTrack.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:50:00 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:41:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ class ScBaseCell;
 class XclExpUserBView : public ExcRecord
 {
 private:
-    XclExpUniString             sUsername;
+    XclExpString                sUsername;
     sal_uInt8                   aGUID[ 16 ];
 
     virtual void                SaveCont( XclExpStream& rStrm );
@@ -253,7 +253,7 @@ public:
 class XclExpChTr0x0194 : public ExcRecord
 {
 private:
-    XclExpUniString             sUsername;
+    XclExpString                sUsername;
     DateTime                    aDateTime;
 
     virtual void                SaveCont( XclExpStream& rStrm );
@@ -300,7 +300,7 @@ public:
 class XclExpChTrInfo : public ExcRecord
 {
 private:
-    XclExpUniString             sUsername;
+    XclExpString                sUsername;
     DateTime                    aDateTime;
     sal_uInt8                   aGUID[ 16 ];
 
@@ -483,7 +483,7 @@ inline void XclExpChTrAction::WriteTabId( XclExpStream& rStrm, SCTAB nTab ) cons
 
 struct XclExpChTrData
 {
-    XclExpUniString*            pString;
+    XclExpString*               pString;
     ExcUPN*                     pUPN;
     XclExpRefLogVec             aRefLog;
     double                      fValue;
