@@ -2,9 +2,9 @@
  *
  *  $RCSfile: help.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ssa $ $Date: 2002-12-03 14:35:27 $
+ *  last change: $Author: cd $ $Date: 2002-12-10 13:43:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,11 @@
 #ifndef _SV_SVDATA_HXX
 #include <svdata.hxx>
 #endif
+#define private public
 #ifndef _SV_WINDOW_HXX
 #include <window.hxx>
 #endif
+#undef private
 #ifndef _SV_EVENT_HXX
 #include <event.hxx>
 #endif
@@ -353,6 +355,7 @@ HelpTextWindow::HelpTextWindow( Window* pParent, const XubString& rText, USHORT 
     FloatingWindow( pParent, WB_SYSTEMWINDOW ), // #105827# if we change the parent, mirroring will not work correctly when positioning this window
     maHelpText( rText )
 {
+    SetType( WINDOW_HELPTEXTWINDOW );
     ImplSetMouseTransparent( TRUE );
     mnHelpWinStyle = nHelpWinStyle;
     mnStyle = nStyle;
@@ -372,6 +375,7 @@ HelpTextWindow::HelpTextWindow( Window* pParent, const XubString& rText, USHORT 
     SetFillColor();
 
     SetHelpText( rText );
+    Window::SetHelpText( rText );
 
     const HelpSettings& rHelpSettings = pParent->GetSettings().GetHelpSettings();
     maShowTimer.SetTimeoutHdl( LINK( this, HelpTextWindow, TimerHdl ) );
@@ -557,9 +561,44 @@ void HelpTextWindow::RequestHelp( const HelpEvent& rHEvt )
 
 // -----------------------------------------------------------------------
 
+String HelpTextWindow::GetText() const
+{
+    return maHelpText;
+}
+
+// -----------------------------------------------------------------------
+
 ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > HelpTextWindow::CreateAccessible()
 {
-    return ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > ();
+    return FloatingWindow::CreateAccessible();
+}
+
+// -----------------------------------------------------------------------
+
+BOOL HelpTextWindow::RegisterAccessibleParent()
+{
+    // register frame and make sure our top-window listeners are notified,
+    // otherwise AT tools cannot register to the frame (they rely on an windowOpened
+    // after registration which is triggered by VCLEVENT_WINDOW_SHOW)
+    // we must register after the menu window is visible (StartPopupMode), otherwise it cannot
+    // answer important accessibility request
+    if( mpBorderWindow && mpBorderWindow->ImplRegisterAccessibleNativeFrame() )
+    {
+        ImplCallEventListeners( VCLEVENT_WINDOW_SHOW );
+        return TRUE;
+    }
+    else
+        return FALSE;
+}
+
+// -----------------------------------------------------------------------
+
+void HelpTextWindow::RevokeAccessibleParent()
+{
+    if( !mpBorderWindow )
+        return;
+    else
+        mpBorderWindow->ImplRevokeAccessibleNativeFrame();
 }
 
 // =======================================================================
@@ -627,6 +666,7 @@ void ImplShowHelpWindow( Window* pParent, USHORT nHelpWinStyle, USHORT nStyle,
         if ( !pSVData->maHelpData.mbRequestingHelp )
             nDelayMode = HELPDELAY_NONE;
         pHelpWin->ShowHelp( nDelayMode );
+        pHelpWin->RegisterAccessibleParent();
     }
 }
 
@@ -645,6 +685,7 @@ void ImplDestroyHelpWindow( BOOL bUpdate )
             pWindow->Invalidate( aInvRect );
         pSVData->maHelpData.mpHelpWin = NULL;
         pSVData->maHelpData.mbKeyboardHelp = FALSE;
+        pHelpWin->RevokeAccessibleParent();
         pHelpWin->Hide();
         delete pHelpWin;
     }
