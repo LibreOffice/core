@@ -4096,8 +4096,8 @@ SfxVoidItem InsertEndnote FN_INSERT_ENDNOTE
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem InsertEnvelop FN_ENVELOP
-()
+SfxVoidItem InsertEnvelope FN_ENVELOP
+( SwEnvItem Envelope FN_ENVELOP, SfxBoolItem NewDocument FN_PARAM_1 )
 [
     /* flags: */
     AutoUpdate = FALSE,

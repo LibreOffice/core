@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomid.h,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-17 14:57:55 $
+ *  last change: $Author: mba $ $Date: 2002-07-08 08:04:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,5 +163,20 @@
 #define MID_GRID_RUBY_BELOW     5
 #define MID_GRID_PRINT          6
 #define MID_GRID_DISPLAY        7
+
+//SwEnvItem
+#define MID_ENV_ADDR_TEXT       1
+#define MID_ENV_SEND            2
+#define MID_SEND_TEXT           3
+#define MID_ENV_ADDR_FROM_LEFT  4
+#define MID_ENV_ADDR_FROM_TOP   5
+#define MID_ENV_SEND_FROM_LEFT  6
+#define MID_ENV_SEND_FROM_TOP   7
+#define MID_ENV_WIDTH           8
+#define MID_ENV_HEIGHT          9
+#define MID_ENV_ALIGN           10
+#define MID_ENV_PRINT_FROM_ABOVE 11
+#define MID_ENV_SHIFT_RIGHT     12
+#define MID_ENV_SHIFT_DOWN      13
 
 #endif
