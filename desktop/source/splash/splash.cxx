@@ -2,9 +2,9 @@
  *
  *  $RCSfile: splash.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 10:31:03 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 13:44:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,8 @@ SplashScreen::SplashScreen(const Reference< XMultiServiceFactory >& rSMgr)
     }
     Application::AddEventListener(
         LINK( this, SplashScreen, AppEventListenerHdl ) );
+
+    SetBackgroundBitmap( _aIntroBmp );
 }
 
 SplashScreen::~SplashScreen()
