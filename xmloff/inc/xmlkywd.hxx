@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: bm $ $Date: 2000-11-29 09:06:46 $
+ *  last change: $Author: nn $ $Date: 2000-11-29 20:33:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -517,6 +517,7 @@ XML_CONSTASCII_ACTION( sXML_endnote_citation, "endnote-citation" );
 XML_CONSTASCII_ACTION( sXML_endnote_ref, "endnote-ref" );
 XML_CONSTASCII_ACTION( sXML_endnotes_configuration, "endnotes-configuration");
 XML_CONSTASCII_ACTION( sXML_eq, "eq");
+XML_CONSTASCII_ACTION( sXML_era, "era" );
 XML_CONSTASCII_ACTION( sXML_ergo_sum, "ergo-sum" );
 XML_CONSTASCII_ACTION( sXML_error_category, "error-category" );
 XML_CONSTASCII_ACTION( sXML_error_lower_indicator, "error-lower-indicator" );
