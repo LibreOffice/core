@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfld.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:50:26 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 16:34:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -535,7 +535,9 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
             "Was ist das fuer ein MessageItem?" );
 
     SwFieldType* pFldType;
-    for( USHORT i = 0; i < pFldTypes->Count(); ++i )
+    USHORT i;
+
+    for( i = 0; i < pFldTypes->Count(); ++i )
     {
         if( RES_TABLEFLD == ( pFldType = (*pFldTypes)[i] )->Which() )
         {
@@ -2492,16 +2494,18 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
         SwSectionNode* pSectNd;
         USHORT nArrStt = 0;
         ULONG nSttCntnt = rDoc.GetNodes().GetEndOfExtras().GetIndex();
-        for( USHORT n = rArr.Count(); n; )
+        USHORT n;
+
+        for( n = rArr.Count(); n; )
         {
             SwSection* pSect = rArr[ --n ]->GetSection();
             if( pSect->IsHidden() && pSect->GetCondition().Len() &&
                 0 != ( pSectNd = pSect->GetFmt()->GetSectionNode() ))
             {
                 ULONG nIdx = pSectNd->GetIndex();
-                for( USHORT i = 0;
-                    i < aTmpArr.Count() && aTmpArr[ i ] < nIdx;
-                    ++i )
+                USHORT i;
+
+                for( i = 0; i < aTmpArr.Count() && aTmpArr[ i ] < nIdx; ++i )
                     ;
                 aTmpArr.Insert( nIdx, i );
                 if( nIdx < nSttCntnt )
