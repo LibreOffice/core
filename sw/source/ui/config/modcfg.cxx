@@ -2,9 +2,9 @@
  *
  *  $RCSfile: modcfg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2001-01-24 10:15:53 $
+ *  last change: $Author: os $ $Date: 2001-01-24 16:21:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -842,6 +842,9 @@ void SwInsertConfig::Load()
                             nInsTblFlags|= SPLIT_LAYOUT;
                     }
                     break;//"Table/Split",
+                    case 4:
+                        bInsWithCaption = *(sal_Bool*)pValues[nProp].getValue();
+                    break;
                     case  5: case  6: case  7: case  8: case  9: case 10: case 11:
                         if(!pWriterTableOpt)
                         {
