@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosrch.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:45:15 $
+ *  last change: $Author: rt $ $Date: 2005-04-04 08:16:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,9 +207,8 @@ const Sequence< PropertyValue > SwSearchProperties_Impl::GetProperties() const
     {
         if(pValueArr[i])
         {
-            pProps[nPropCount] = *(pValueArr[i]);
+            pProps[nPropCount++] = *(pValueArr[i]);
         }
-        nPropCount++;
     }
     return aRet;
 }
