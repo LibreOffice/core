@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formres.src,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 18:19:45 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:02:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,21 +232,54 @@ ModalDialog RID_DLG_SELECTLABELCONTROL
     Text[ slovenian ] = "Izbor nalepk";
 };
 
+#define IMAGE_IDS \
+    IdList = \
+    { \
+        RID_SVXIMG_CONTROL; \
+        RID_SVXIMG_BUTTON; \
+        RID_SVXIMG_RADIOBUTTON; \
+        RID_SVXIMG_CHECKBOX; \
+        RID_SVXIMG_FIXEDTEXT; \
+        RID_SVXIMG_GROUPBOX; \
+        RID_SVXIMG_EDIT; \
+        RID_SVXIMG_LISTBOX; \
+        RID_SVXIMG_COMBOBOX; \
+        RID_SVXIMG_URLBUTTON; \
+        RID_SVXIMG_GRID; \
+        RID_SVXIMG_IMAGEBUTTON; \
+        RID_SVXIMG_FILECONTROL; \
+        RID_SVXIMG_DATEFIELD; \
+        RID_SVXIMG_TIMEFIELD; \
+        RID_SVXIMG_NUMERICFIELD; \
+        RID_SVXIMG_CURRENCYFIELD; \
+        RID_SVXIMG_PATTERNFIELD; \
+        RID_SVXIMG_IMAGECONTROL; \
+        RID_SVXIMG_HIDDEN; \
+        RID_SVXIMG_FORMATTEDFIELD; \
+        RID_SVXIMG_FILTER; \
+        RID_SVXIMG_FORMS; \
+        RID_SVXIMG_FORM; \
+        RID_SVXIMG_COLLAPSEDNODE; \
+        RID_SVXIMG_EXPANDEDNODE; \
+        RID_SVXIMG_SCROLLBAR; \
+        RID_SVXIMG_SPINBUTTON; \
+    }; \
+    IdCount = 28
+
 ImageList RID_IL_FORMEXPLORER
 {
     ImageBitmap = Bitmap { File = "sx_propbrw.bmp" ; };
     MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
-    IdList =
-    {
-        RID_SVXIMG_FIXEDTEXT ;
-        RID_SVXIMG_GROUPBOX ;
-        RID_SVXIMG_FORM ;
-        RID_SVXIMG_FORMS ;
-        RID_SVXIMG_COLLAPSEDNODE ;
-        RID_SVXIMG_EXPANDEDNODE ;
-    };
-    IdCount = 6 ;
+    IMAGE_IDS;
 };
+
+ImageList RID_IL_FORMEXPLORER_HC
+{
+    ImageBitmap = Bitmap { File = "sxh_form.bmp" ; };
+    MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
+    IMAGE_IDS;
+};
+
 String RID_STR_PROPTITLE_PUSHBUTTON
 {
     Text = "Schaltfl‰che" ;
@@ -1762,6 +1795,12 @@ String RID_STR_ALIGN
     Text[ hungarian ] = "Igaz√≠t√°s";
     Text[ slovenian ] = "Poravnava";
 };
+String RID_STR_IMAGE_ALIGN
+{
+    Text = "Grafik-Ausrichtung";
+    Text [ english ] = "Graphics alignment";
+    Text [ english_us ] = "Graphics alignment";
+};
 String RID_STR_FONT
 {
     Text = "Zeichensatz" ;
@@ -1927,6 +1966,12 @@ String RID_STR_VSCROLL
     Text[ hungarian ] = "F√ºgg≈ëleges g√∂rget≈ës√°v";
     Text[ slovenian ] = "Navpiƒçni drsni trak";
 };
+String RID_STR_WORDBREAK
+{
+    Text = "Wortumbruch" ;
+    Text [ english ] = "Word break";
+    Text [ english_us ] = "Word break";
+};
 String RID_STR_MULTILINE
 {
     Text = "Mehrzeilig" ;
@@ -2028,38 +2073,11 @@ String RID_STR_NAME
 };
 String RID_STR_TABINDEX
 {
-    Text = "Reihenfolge" ;
-    Text [ ENGLISH ] = "TabIndex" ;
-    Text [ portuguese ] = "SequÍncia" ;
-    Text [ english_us ] = "Order" ;
-    Text [ portuguese_brazilian ] = "Ordem" ;
-    Text [ swedish ] = "Ordningsfˆljd" ;
-    Text [ danish ] = "RÊkkef¯lge" ;
-    Text [ italian ] = "Sequenza" ;
-    Text [ spanish ] = "Orden" ;
-    Text [ french ] = "Ordre" ;
-    Text [ dutch ] = "Volgorde" ;
-    Text[ chinese_simplified ] = "È°∫Â∫è";
-    Text[ russian ] = "œÓˇ‰ÓÍ";
-    Text[ polish ] = "KolejnoúÊ";
-    Text[ japanese ] = "È†ÜÂ∫è";
-    Text[ chinese_traditional ] = "È†ÜÂ∫è";
-    Text[ greek ] = "ƒÈ‹Ù·ÓÁ";
-    Text[ korean ] = "ÏàúÏÑú";
-    Text[ arabic ] = "«· — Ì»";
-    Text[ turkish ] = "Dosya";
-    Text[ language_user1 ] = " ";
-    Text[ finnish ] = "J‰rjestys";
-    Text[ catalan ] = "Ordre";
-    Text[ thai ] = "‡∏•‡∏≥‡∏î‡∏±‡∏ö";
-    Text[ czech ] = "Po≈ôad√≠";
-    Text[ hebrew ] = "Reihenfolge";
-    Text[ hindi ] = "‡§ï‡•ç‡§∞‡§Æ";
-    Text[ slovak ] = "Poradie";
-    Text[ hungarian ] = "Sorrend";
-    Text[ slovenian ] = "Razvrsti";
+    Text = "Aktivierungsreihenfolge" ;
+    Text [ english ] = "Tab order" ;
+    Text [ english_us ] = "Tab order" ;
 };
-String RID_STR_FILTER_CRITERIA
+String RID_STR_FILTER
 {
     Text = "Filter" ;
     Text [ ENGLISH ] = "Filter" ;
@@ -3678,6 +3696,24 @@ String RID_STR_DEFAULTVALUE
     Text[ hungarian ] = "Alap√©rtelmezett √©rt√©k";
     Text[ slovenian ] = "Privzeta vrednost";
 };
+String RID_STR_DEFAULTTEXT
+{
+    Text = "Standardtext";
+    Text [ english ] = "Default text";
+    Text [ english_us ] = "Default text";
+};
+String RID_STR_DEFAULTDATE
+{
+    Text = "Standarddatum";
+    Text [ english ] = "Default date";
+    Text [ english_us ] = "Default date";
+};
+String RID_STR_DEFAULTTIME
+{
+    Text = "Standardzeit";
+    Text [ english ] = "Default time";
+    Text [ english_us ] = "Default time";
+};
 String RID_STR_SUBMIT_TARGET
 {
     Text = "Frame" ;
@@ -3743,38 +3779,6 @@ String RID_STR_BORDER_TYPE
     Text[ slovak ] = "Bez ohraniƒçenia;3D vzhƒæad;Ploch√Ω";
     Text[ hungarian ] = "Keret n√©lk√ºli;T√©rhat√°s√∫;Sima";
     Text[ slovenian ] = "Brez okvira;3D-izgled;Plosko";
-};
-String RID_STR_COMMAND_TYPE
-{
-    Text = "Tabelle;Abfrage;SQL-Befehl";
-    Text [ English ] = "Table;Query;SQL command";
-    Text [ english_us ] = "Table;Query;SQL command";
-    Text[ portuguese ] = "Tabela;Consulta;Comando SQL";
-    Text[ russian ] = "“‡·ÎËˆ‡;«‡ÔÓÒ; ÓÏ‡Ì‰‡ SQL";
-    Text[ greek ] = "–ﬂÌ·Í·Ú;≈Ò˛ÙÁÏ·;≈ÌÙÔÎﬁ SQL";
-    Text[ dutch ] = "Tabel;Query;SQL-opdracht";
-    Text[ french ] = "Table;RequÍte;Instruction SQL";
-    Text[ spanish ] = "Tabla;consulta;orden SQL";
-    Text[ italian ] = "Tabella;Ricerca;Comando SQL";
-    Text[ danish ] = "Tabel;Foresp¯rgsel;SQL-kommando";
-    Text[ swedish ] = "Tabell;Sˆkning;SQL-kommando";
-    Text[ polish ] = "Tabela;Kwerenda;Polecenie SQL";
-    Text[ portuguese_brazilian ] = "Tabela;Consulta;Comando SQL";
-    Text[ japanese ] = "„ÉÜ„Éº„Éñ„É´;„ÇØ„Ç®„É™„Éº;SQL „Ç≥„Éû„É≥„Éâ";
-    Text[ korean ] = "ÌÖåÏù¥Î∏î;ÏøºÎ¶¨;SQL Î™ÖÎ†π";
-    Text[ chinese_simplified ] = "Ë°®Ê†º;Êü•ËØ¢;SQL Êåá‰ª§";
-    Text[ chinese_traditional ] = "Ë°®Ê†º;Êü•Ë©¢;SQL Êåá‰ª§";
-    Text[ arabic ] = "ÃœÊ·;«” ›”«—;√„— SQL";
-    Text[ turkish ] = "Tablo;Sogrulama;SQL komutu";
-    Text[ finnish ] = "Taulukko;Kysely;SQL-lause";
-    Text[ catalan ] = "Taula;Consulta;Ordre SQL";
-    Text[ thai ] = "‡∏ï‡∏≤‡∏£‡∏≤‡∏á;‡πÅ‡∏ö‡∏ö‡∏™‡∏≠‡∏ö‡∏ñ‡∏≤‡∏°;‡∏Ñ‡∏≥‡∏™‡∏±‡πà‡∏á SQL ";
-    Text[ czech ] = "Tabulka;Dotaz;SQL p≈ô√≠kaz";
-    Text[ hebrew ] = "Tabelle;Abfrage;SQL-Befehl";
-    Text[ hindi ] = "‡§∏‡§æ‡§∞‡§£‡•Ä;‡§ú‡§æ‡§®‡§ï‡§æ‡§∞‡•Ä;SQL ‡§Ü‡§ú‡•ç‡§û‡§æ";
-    Text[ slovak ] = "Tabuƒæka;Dotaz;SQL pr√≠kaz";
-    Text[ hungarian ] = "T√°bla;Lek√©rdez√©s;SQL-parancs";
-    Text[ slovenian ] = "Tabela;Poizvedba;SQL ukaz";
 };
 String RID_STR_LISTSOURCE_TYPE
 {
@@ -6108,6 +6112,14 @@ String RID_STR_ENUM_CELL_EXCHANGE_TYPE
 {
     Text = "Der ausgew‰hlte Eintrag;Position des ausgew‰hlten Eintrags";
     Text [ english ] = "The selected entry;Position of the selected entry";
+    Text [ english_us ] = "The selected entry;Position of the selected entry";
+};
+
+String RID_STR_SHOW_SCROLLBARS
+{
+    Text = "Bildlaufleisten";
+    Text [ english ] = "Scrollbars";
+    Text [ english_us ] = "Scrollbars";
 };
 
 String RID_STR_SYMBOLCOLOR
@@ -6117,3 +6129,52 @@ String RID_STR_SYMBOLCOLOR
     Text [ english_us ] = "Symbol color" ;
 };
 
+Resource RID_RSC_ENUM_SCROLLBARS
+{
+    String 1
+    {
+        Text = "Keine";
+        Text [ english ] = "None";
+        Text [ english_us ] = "None";
+    };
+    String 2
+    {
+        Text = "Horizontal";
+        Text [ english ] = "Horizontal";
+        Text [ english_us ] = "Horizontal";
+    };
+    String 3
+    {
+        Text = "Vertikal";
+        Text [ english ] = "Vertical";
+        Text [ english_us ] = "Vertical";
+    };
+    String 4
+    {
+        Text = "Beide";
+        Text [ english ] = "Both";
+        Text [ english_us ] = "Both";
+    };
+};
+
+Resource RID_RSC_ENUM_COMMAND_TYPE
+{
+    String 1
+    {
+        Text = "Tabelle";
+        Text [ english ] = "Table";
+        Text [ english_us ] = "Table";
+    };
+    String 2
+    {
+        Text = "Abfrage";
+        Text [ english ] = "Query";
+        Text [ english_us ] = "Query";
+    };
+    String 3
+    {
+        Text = "SQL-Befehl";
+        Text [ english ] = "SQL command";
+        Text [ english_us ] = "SQL command";
+    };
+};
