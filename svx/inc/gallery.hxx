@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gallery.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 13:56:04 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 13:46:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
+#include <vector>
 
 // -----------
 // - Defines -
@@ -160,8 +161,12 @@ public:
 
     static BOOL                 FillThemeList( List& rThemeList );
 
+                                // FillObjList is filling rObjList with Strings of the internal Gallery Object URL
     static BOOL                 FillObjList( const String& rThemeName, List& rObjList );
     static BOOL                 FillObjList( ULONG nThemeId, List& rObjList );
+
+                                // FillObjTitleList is filling the rList with the title for each gallery object
+    static sal_Bool             FillObjListTitle( const sal_uInt32 nThemeId, std::vector< rtl::OUString >& rList );
 
     static BOOL                 InsertURL( const String& rThemeName, const String& rURL );
     static BOOL                 InsertURL( ULONG nThemeId, const String& rURL );
