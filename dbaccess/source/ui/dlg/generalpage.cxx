@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generalpage.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:49:03 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 13:04:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,29 +114,35 @@ namespace dbaui
 //.........................................................................
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::sdbc;
-
     //=========================================================================
     //= OGeneralPage
     //=========================================================================
     //-------------------------------------------------------------------------
-    OGeneralPage::OGeneralPage(Window* pParent, const SfxItemSet& _rItems)
+    OGeneralPage::OGeneralPage(Window* pParent, const SfxItemSet& _rItems, sal_Bool _bDBWizardMode)
         :OGenericAdministrationPage(pParent, ModuleRes(PAGE_GENERAL), _rItems)
-        ,m_aTypePreLabel        (this, ResId(FT_DATASOURCETYPE_PRE))
-        ,m_aDatasourceTypeLabel (this, ResId(FT_DATATYPE))
-        ,m_aDatasourceType      (this, ResId(LB_DATATYPE))
-        ,m_aTypePostLabel       (this, ResId(FT_DATASOURCETYPE_POST))
-        ,m_aSpecialMessage      (this, ResId(FT_SPECIAL_MESSAGE))
-        ,m_pCollection(NULL)
-        ,m_eCurrentSelection(DST_UNKNOWN)
-        ,m_eNotSupportedKnownType(DST_UNKNOWN)
-        ,m_bDisplayingInvalid(sal_False)
-        ,m_bUserGrabFocus(sal_True)
-        ,m_eLastMessage(smNone)
+        ,m_aTypePreLabel                (this, ResId(FT_DATASOURCETYPE_PRE))
+        ,m_aTypePostLabel               (this, ResId(FT_DATASOURCETYPE_POST))
+        ,m_aSpecialMessage              (this, ResId(FT_SPECIAL_MESSAGE))
+        ,m_aDatasourceTypeLabel         (this, ResId(FT_DATATYPE))
+        ,m_aDatasourceType              (this, ResId(LB_DATATYPE))
+        ,m_aFT_DatasourceTypeHeader     (this, ResId(FT_DATASOURCEHEADER))
+        ,m_aRB_CreateDatabase           (this, ResId(RB_CREATEDBDATABASE))
+        ,m_aRB_GetExistingDatabase      (this, ResId(RB_GETEXISTINGDATABASE))
+        ,m_aFTHeaderText                (this, ResId(FT_GENERALHEADERTEXT))
+        ,m_aFTHelpText                  (this, ResId(FT_GENERALHELPTEXT))
+        ,m_aFTDataSourceAppendix        (this, ResId(FT_DATATYPEAPPENDIX))
+        ,m_sMySQLEntry                  (ResId(STR_MYSQLENTRY))
+        ,m_pCollection                  (NULL)
+        ,m_eCurrentSelection            (DST_UNKNOWN)
+        ,m_eNotSupportedKnownType       (DST_UNKNOWN)
+        ,m_bDisplayingInvalid           (sal_False)
+        ,m_bUserGrabFocus               (sal_True)
+        ,m_eLastMessage                 (smNone)
+        ,m_DBWizardMode                 (_bDBWizardMode)
     {
         // fill the listbox with the UI descriptions for the possible types
         // and remember the respective DSN prefixes
         FreeResource();
-
         // extract the datasource type collection from the item set
         DbuTypeCollectionItem* pCollectionItem = PTR_CAST(DbuTypeCollectionItem, _rItems.GetItem(DSID_TYPECOLLECTION));
         if (pCollectionItem)
@@ -146,7 +152,12 @@ namespace dbaui
 
         // do some knittings
         m_aDatasourceType.SetSelectHdl(LINK(this, OGeneralPage, OnDatasourceTypeSelected));
+           m_aRB_CreateDatabase.SetClickHdl(LINK(this, OGeneralPage, OnSetupModeSelected));
+           m_aRB_GetExistingDatabase.SetClickHdl(LINK(this, OGeneralPage, OnSetupModeSelected));
+        m_aRB_CreateDatabase.Check();
     }
+
+
     //-------------------------------------------------------------------------
     void OGeneralPage::initializeTypeList()
     {
@@ -187,16 +198,18 @@ namespace dbaui
                         // -> omit it
                         continue;
                 }
-
                 String sDisplayName = aTypeLoop.getDisplayName();
                 if ( m_aDatasourceType.GetEntryPos( sDisplayName ) == LISTBOX_ENTRY_NOTFOUND )
                 {
-                    sal_Int32 nPos = m_aDatasourceType.InsertEntry(sDisplayName);
-                    m_aDatasourceType.SetEntryData((sal_uInt16)nPos, reinterpret_cast<void*>(eType));
+                    sDisplayName = VerifyDisplayName(eType, sDisplayName);
+                    if (sDisplayName.Len() > 0)
+                        insertDatasourceTypeEntryData(eType, sDisplayName);
                 }
             }
         }
     }
+
+
 
     //-------------------------------------------------------------------------
     void OGeneralPage::initializeHistory()
@@ -215,16 +228,34 @@ namespace dbaui
     //-------------------------------------------------------------------------
     void OGeneralPage::setParentTitle(DATASOURCE_TYPE _eSelectedType)
     {
-        String sName = m_pCollection->getTypeDisplayName(_eSelectedType);
-        Dialog* pDialog = reinterpret_cast<Dialog*>(m_pAdminDialog);
-        if ( m_pAdminDialog )
+        if (!m_DBWizardMode)
         {
-            OLocalResourceAccess aStringResAccess( PAGE_GENERAL, RSC_TABPAGE );
-            String sMessage = String(ResId(STR_PARENTTITLE));
-            sMessage.SearchAndReplaceAscii("#",sName);
-            m_pAdminDialog->setTitle(sMessage);
+            String sName = m_pCollection->getTypeDisplayName(_eSelectedType);
+            Dialog* pDialog = reinterpret_cast<Dialog*>(m_pAdminDialog);
+            if ( m_pAdminDialog )
+            {
+                OLocalResourceAccess aStringResAccess( PAGE_GENERAL, RSC_TABPAGE );
+                String sMessage = String(ResId(STR_PARENTTITLE));
+                sMessage.SearchAndReplaceAscii("#",sName);
+                m_pAdminDialog->setTitle(sMessage);
+            }
         }
     }
+
+
+    void OGeneralPage::SetToCreationMode(sal_Bool _bCreate){
+        if (_bCreate)
+            m_aRB_CreateDatabase.Check();
+        else
+            m_aRB_GetExistingDatabase.Check();
+    }
+
+
+    sal_Bool OGeneralPage::IsDatabaseToBeCreated(){
+        return m_aRB_CreateDatabase.IsChecked();
+    }
+
+
     //-------------------------------------------------------------------------
     void OGeneralPage::GetFocus()
     {
@@ -273,22 +304,46 @@ namespace dbaui
         if ( m_aTypeSelectHandler.IsSet() )
             m_aTypeSelectHandler.Call(this);
     }
+
+
     //-------------------------------------------------------------------------
     void OGeneralPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
     {
         initializeHistory();
+//        if (m_aDatasourceType.GetEntryCount() > 0)
+//            return;
         initializeTypeList();
 
         // first check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
         sal_Bool bValid, bReadonly;
         getFlags(_rSet, bValid, bReadonly);
-
+        if (m_DBWizardMode)
+        {
+            m_aTypePreLabel.Hide();
+            m_aTypePostLabel.Hide();
+            m_aSpecialMessage.Hide();
+            m_aDatasourceTypeLabel.SetPosPixel( MovePoint( m_aRB_GetExistingDatabase.GetPosPixel(), 10, 14 ) );
+            m_aDatasourceType.SetPosPixel( MovePoint( m_aRB_GetExistingDatabase.GetPosPixel(), 90, 12) );
+            m_aFTDataSourceAppendix.SetPosPixel( MovePoint(m_aRB_GetExistingDatabase.GetPosPixel(), 162, 14) );
+            SetControlFontWeight(&m_aFTHeaderText);
+            SetText(::rtl::OUString::createFromAscii(""));
+            m_aDatasourceTypeLabel.Enable(bValid && m_aRB_GetExistingDatabase.IsChecked());
+            m_aDatasourceType.Enable(bValid && m_aRB_GetExistingDatabase.IsChecked());
+            m_bEntryCreationMode = IsDatabaseToBeCreated();
+        }
+        else
+        {
+            m_aFT_DatasourceTypeHeader.Hide();
+            m_aRB_CreateDatabase.Hide();
+            m_aRB_GetExistingDatabase.Hide();
+            m_aFTHeaderText.Hide();
+            m_aFTHelpText.Hide();
+            m_aTypePreLabel.Enable(bValid);
+            m_aTypePostLabel.Enable(bValid);
+            m_aDatasourceTypeLabel.Enable(bValid);
+            m_aDatasourceType.Enable(bValid);
+        }
         // if the selection is invalid, disable evrything
-        m_aTypePreLabel.Enable(bValid);
-        m_aTypePostLabel.Enable(bValid);
-        m_aDatasourceTypeLabel.Enable(bValid);
-        m_aDatasourceType.Enable(bValid);
-
         String sName,sConnectURL;
         sal_Bool bDeleted = sal_False;
         m_bDisplayingInvalid = !bValid;
@@ -315,7 +370,7 @@ namespace dbaui
             implSetCurrentType( m_pCollection->getType(sConnectURL) );
             sDisplayName = m_pCollection->getTypeDisplayName(m_eCurrentSelection);
         }
-
+        sDisplayName = VerifyDisplayName(m_eCurrentSelection, sDisplayName);
         // select the correct datasource type
         if (LISTBOX_ENTRY_NOTFOUND == m_aDatasourceType.GetEntryPos(sDisplayName))
         {   // the type is not available on this platform (we omitted it in initializeTypeList)
@@ -323,16 +378,14 @@ namespace dbaui
             {   // this indicates it's really a type which is known in general, but not supported on the current platform
                 // show a message saying so
                 //  eSpecialMessage = smUnsupportedType;
-
-                // insert a (temporary) entry
-                sal_uInt16 nPos = m_aDatasourceType.InsertEntry(sDisplayName);
-                m_aDatasourceType.SetEntryData(nPos, reinterpret_cast<void*>(m_eCurrentSelection));
-
+                insertDatasourceTypeEntryData(m_eCurrentSelection, sDisplayName);
                 // remember this type so we can show the special message again if the user selects this
                 // type again (without changing the data source)
                 m_eNotSupportedKnownType = m_eCurrentSelection;
             }
         }
+        if (m_aRB_CreateDatabase.IsChecked() && m_DBWizardMode)
+            sDisplayName = m_pCollection->getTypeDisplayName(DST_DBASE);
         m_aDatasourceType.SelectEntry(sDisplayName);
 
         // notify our listener that our type selection has changed (if so)
@@ -344,8 +397,37 @@ namespace dbaui
 
         // a special message for the current page state
         switchMessage(bDeleted,m_eCurrentSelection);
+
         OGenericAdministrationPage::implInitControls(_rSet, _bSaveValue);
     }
+
+
+    // For the databaseWizard we only have one entry for the MySQL Database,
+    // because we have a seperate tabpage to retrieve the respective datasource type
+    //(DST_MYSQL_ODBC || DST_MYSQL_JDBC) Therefor we use DST_MYSQL_JDBC as a temporary
+    // representative for all MySQl databases)
+    String OGeneralPage::VerifyDisplayName(DATASOURCE_TYPE eType, String _sDisplayName)
+    {
+        String sLocDisplayName =  ::rtl::OUString::createFromAscii("");
+        if ((!m_DBWizardMode) || (eType != DST_MYSQL_ODBC))
+        {
+            if ((m_DBWizardMode) && (eType == DST_MYSQL_JDBC))
+                sLocDisplayName = m_sMySQLEntry;
+            else
+                sLocDisplayName = _sDisplayName;
+        }
+        return sLocDisplayName;
+    }
+
+
+    void OGeneralPage::insertDatasourceTypeEntryData(DATASOURCE_TYPE _eType, String sDisplayName)
+    {
+    // insert a (temporary) entry
+        sal_uInt16 nPos = m_aDatasourceType.InsertEntry(sDisplayName);
+        m_aDatasourceType.SetEntryData(nPos, reinterpret_cast<void*>(_eType));
+    }
+
+
     // -----------------------------------------------------------------------
     void OGeneralPage::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
     {
@@ -362,9 +444,9 @@ namespace dbaui
     }
 
     //-------------------------------------------------------------------------
-    SfxTabPage* OGeneralPage::Create(Window* _pParent, const SfxItemSet& _rAttrSet)
+    SfxTabPage* OGeneralPage::Create(Window* _pParent, const SfxItemSet& _rAttrSet, sal_Bool _bWizardMode)
     {
-        return ( new OGeneralPage( _pParent, _rAttrSet ) );
+           return ( new OGeneralPage( _pParent, _rAttrSet, _bWizardMode ) );
     }
 
     //-------------------------------------------------------------------------
@@ -392,15 +474,35 @@ namespace dbaui
     BOOL OGeneralPage::FillItemSet(SfxItemSet& _rCoreAttrs)
     {
         sal_Bool bChangedSomething = sal_False;
-
-        USHORT nEntry = m_aDatasourceType.GetSelectEntryPos();
-        if ( m_aDatasourceType.GetSavedValue() != nEntry )
+        if (m_aRB_CreateDatabase.IsChecked() && (m_DBWizardMode))
         {
-            DATASOURCE_TYPE eSelectedType = static_cast<DATASOURCE_TYPE>(reinterpret_cast<sal_Int32>(m_aDatasourceType.GetEntryData(nEntry)));
-            _rCoreAttrs.Put(SfxStringItem(DSID_CONNECTURL, m_pCollection->getDatasourcePrefix(eSelectedType)));
+            _rCoreAttrs.Put(SfxStringItem(DSID_CONNECTURL, m_pCollection->getDatasourcePrefix(DST_DBASE)));
             bChangedSomething = sal_True;
         }
-
+        else
+        {
+            USHORT nEntry = m_aDatasourceType.GetSelectEntryPos();
+            DATASOURCE_TYPE eSelectedType = static_cast<DATASOURCE_TYPE>(reinterpret_cast<sal_Int32>(m_aDatasourceType.GetEntryData(nEntry)));
+            if (m_DBWizardMode)
+            {
+                sal_Bool bCurCreationMode = IsDatabaseToBeCreated();
+                if (( m_aDatasourceType.GetSavedValue() != nEntry) || (bCurCreationMode != m_bEntryCreationMode))
+                {
+                    _rCoreAttrs.Put(SfxStringItem(DSID_CONNECTURL, m_pCollection->getDatasourcePrefix(eSelectedType)));
+                    bChangedSomething = sal_True;
+                }
+                else
+                    implSetCurrentType(eSelectedType);
+            }
+            else
+            {
+                if ( m_aDatasourceType.GetSavedValue() != nEntry)
+                {
+                    _rCoreAttrs.Put(SfxStringItem(DSID_CONNECTURL, m_pCollection->getDatasourcePrefix(eSelectedType)));
+                    bChangedSomething = sal_True;
+                }
+            }
+        }
         return bChangedSomething;
     }
 
@@ -419,6 +521,30 @@ namespace dbaui
         // outta here
         return 0L;
     }
+
+
+    IMPL_LINK(OGeneralPage, OnSetupModeSelected, RadioButton*, _pBox)
+    {
+        String sDisplayName;
+           sal_Bool bEnable = m_aRB_GetExistingDatabase.IsChecked();
+        m_aDatasourceTypeLabel.Enable(bEnable);
+        m_aDatasourceType.Enable(bEnable);
+        m_aFTDataSourceAppendix.Enable(bEnable);
+        if (!bEnable)
+            sDisplayName = m_pCollection->getTypeDisplayName(DST_DBASE);
+        else
+            sDisplayName = m_pCollection->getTypeDisplayName(m_eCurrentSelection);
+        USHORT n = m_aDatasourceType.GetEntryPos(sDisplayName);
+        if ((n < m_aDatasourceType.GetEntryCount()) && (n >= 0))
+            m_aDatasourceType.SelectEntry(sDisplayName);
+        else
+            m_aDatasourceType.SelectEntry(m_sMySQLEntry);
+        if ( m_aCreationModeHandler.IsSet() )
+            m_aCreationModeHandler.Call(this);
+        return true;
+    }
+
+
     // -----------------------------------------------------------------------
 //.........................................................................
 }   // namespace dbaui
