@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: bm $ $Date: 2001-06-18 16:13:35 $
+ *  last change: $Author: bm $ $Date: 2001-06-20 16:33:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -462,8 +462,7 @@ void SchXMLExportHelper::parseDocument( uno::Reference< chart::XChartDocument >&
                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "String" ))));
                 rtl::OUString aText;
                 aAny >>= aText;
-                SvXMLElementExport aTitle( mrExport, XML_NAMESPACE_TEXT, sXML_p, sal_True, sal_False );
-                mrExport.GetDocHandler()->characters( aText );
+                exportText( aText );
             }
         }
         else    // autostyles
@@ -507,8 +506,7 @@ void SchXMLExportHelper::parseDocument( uno::Reference< chart::XChartDocument >&
                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "String" ))));
                 rtl::OUString aText;
                 aAny >>= aText;
-                SvXMLElementExport aSubTitle( mrExport, XML_NAMESPACE_TEXT, sXML_p, sal_True, sal_False );
-                mrExport.GetDocHandler()->characters( aText );
+                exportText( aText );
             }
         }
         else    // autostyles
@@ -705,8 +703,7 @@ void SchXMLExportHelper::exportTable( uno::Reference< chart::XChartDataArray >& 
                 {
                     mrExport.AddAttributeASCII( XML_NAMESPACE_TABLE, sXML_value_type, sXML_string );
                     SvXMLElementExport aCell( mrExport, XML_NAMESPACE_TABLE, sXML_table_cell, sal_True, sal_True );
-                    SvXMLElementExport aP( mrExport, XML_NAMESPACE_TEXT, sXML_p, sal_True, sal_False );
-                    mrExport.GetDocHandler()->characters( xSeriesLabels[ nSeries ] );
+                    exportText( xSeriesLabels[ nSeries ] );
                 }
             }
 
@@ -723,9 +720,8 @@ void SchXMLExportHelper::exportTable( uno::Reference< chart::XChartDataArray >& 
                     // cells containing row descriptions (in the first column)
                     mrExport.AddAttributeASCII( XML_NAMESPACE_TABLE, sXML_value_type, sXML_string );
                     SvXMLElementExport aCell( mrExport, XML_NAMESPACE_TABLE, sXML_table_cell, sal_True, sal_True );
-                    SvXMLElementExport aP( mrExport, XML_NAMESPACE_TEXT, sXML_p, sal_True, sal_False );
                     if( nDataPoint < nCategoryLabelsLength )
-                        mrExport.GetDocHandler()->characters( xCategoryLabels[ nDataPoint ] );
+                        exportText( xCategoryLabels[ nDataPoint ] );
                 }
 
                 for( nSeries = 0; nSeries < nSeriesCount; nSeries++ )
@@ -747,8 +743,7 @@ void SchXMLExportHelper::exportTable( uno::Reference< chart::XChartDataArray >& 
                     SvXMLElementExport aCell( mrExport, XML_NAMESPACE_TABLE, sXML_table_cell, sal_True, sal_True );
 
                     // <text:p>
-                    SvXMLElementExport aP( mrExport, XML_NAMESPACE_TEXT, sXML_p, sal_True, sal_False );
-                    mrExport.GetDocHandler()->characters( msString );
+                    exportText( msString );
                 }
             }
         }
@@ -1424,8 +1419,7 @@ void SchXMLExportHelper::exportAxes( uno::Reference< chart::XDiagram > xDiagram,
                         SvXMLElementExport aTitle( mrExport, XML_NAMESPACE_CHART, sXML_title, sal_True, sal_True );
 
                         // paragraph containing title
-                        SvXMLElementExport aTitlePara( mrExport, XML_NAMESPACE_TEXT, sXML_p, sal_True, sal_False );
-                        mrExport.GetDocHandler()->characters( aText );
+                        exportText( aText );
                     }
                     else
                     {
@@ -1576,8 +1570,7 @@ void SchXMLExportHelper::exportAxes( uno::Reference< chart::XDiagram > xDiagram,
                         SvXMLElementExport aTitle( mrExport, XML_NAMESPACE_CHART, sXML_title, sal_True, sal_True );
 
                         // paragraph containing title
-                        SvXMLElementExport aTitlePara( mrExport, XML_NAMESPACE_TEXT, sXML_p, sal_True, sal_False );
-                        mrExport.GetDocHandler()->characters( aText );
+                        exportText( aText );
                     }
                     else
                     {
@@ -1724,8 +1717,7 @@ void SchXMLExportHelper::exportAxes( uno::Reference< chart::XDiagram > xDiagram,
                         SvXMLElementExport aTitle( mrExport, XML_NAMESPACE_CHART, sXML_title, sal_True, sal_True );
 
                         // paragraph containing title
-                        SvXMLElementExport aTitlePara( mrExport, XML_NAMESPACE_TEXT, sXML_p, sal_True, sal_False );
-                        mrExport.GetDocHandler()->characters( aText );
+                        exportText( aText );
                     }
                     else
                     {
@@ -1867,12 +1859,61 @@ void SchXMLExportHelper::AddAutoStyleAttribute( const std::vector< XMLPropertySt
     }
 }
 
+void SchXMLExportHelper::exportText( const ::rtl::OUString& rText )
+{
+    sal_Int32 nStartPos = 0;
+    sal_Int32 nEndPos = rText.getLength();
+    sal_Unicode cChar;
+
+    SvXMLElementExport aPara( mrExport, XML_NAMESPACE_TEXT,
+                              ::xmloff::token::GetXMLToken( ::xmloff::token::XML_P ),
+                              sal_True, sal_False );
+
+    for( sal_Int32 nPos = 0; nPos < nEndPos; nPos++ )
+    {
+        cChar = rText[ nPos ];
+        switch( cChar )
+        {
+            case 0x0009:        // tabulator
+                {
+                    if( nPos > nStartPos )
+                        mrExport.GetDocHandler()->characters( rText.copy( nStartPos, (nPos - nStartPos)) );
+                    nStartPos = nPos + 1;
+
+                    SvXMLElementExport aElem( mrExport, XML_NAMESPACE_TEXT,
+                                              ::xmloff::token::GetXMLToken( ::xmloff::token::XML_TAB_STOP ),
+                                              sal_False, sal_False );
+                }
+                break;
+
+            case 0x000A:        // linefeed
+                {
+                    if( nPos > nStartPos )
+                        mrExport.GetDocHandler()->characters( rText.copy( nStartPos, (nPos - nStartPos)) );
+                    nStartPos = nPos + 1;
+
+                    SvXMLElementExport aElem( mrExport, XML_NAMESPACE_TEXT,
+                                              ::xmloff::token::GetXMLToken( ::xmloff::token::XML_LINE_BREAK ),
+                                              sal_False, sal_False );
+                }
+                break;
+        }
+    }
+    if( nEndPos > nStartPos )
+    {
+        if( nStartPos == 0 )
+            mrExport.GetDocHandler()->characters( rText );
+        else
+            mrExport.GetDocHandler()->characters( rText.copy( nStartPos, (nEndPos - nStartPos)) );
+    }
+}
+
 // ========================================
 // class SchXMLExport
 // ========================================
 
 SchXMLExport::SchXMLExport( sal_uInt16 nExportFlags ) :
-        SvXMLExport( MAP_CM, ::xmloff::token::XML_CHART, nExportFlags ),
+        SvXMLExport( MAP_CM, sXML_chart, nExportFlags ),
         maAutoStylePool( *this ),
         maExportHelper( *this, maAutoStylePool )
 {
