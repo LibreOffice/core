@@ -1,0 +1,9 @@
+[ComponentDescriptor]
+ImplementationName=com.sun.star.comp.configuration.backend.GconfBackend
+ComponentName=gconfbe1.uno.so
+LoaderName=com.sun.star.loader.SharedLibrary
+[Data]
+SupportedComponents=org.openoffice.Inet;org.openoffice.Office.Common
+[SupportedServices]
+com.sun.star.configuration.backend.GconfBackend
+com.sun.star.configuration.backend.PlatformBackend
