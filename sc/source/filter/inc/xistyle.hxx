@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xistyle.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-21 08:04:23 $
+ *  last change: $Author: rt $ $Date: 2003-09-16 08:20:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,11 +99,6 @@ and a container for XF indexes for every used cell in a sheet.
     a PALETTE record. */
 class XclImpPalette : public XclDefaultPalette, protected XclImpRoot
 {
-private:
-    typedef ::std::vector< ColorData > ColorDataVec;
-
-    ColorDataVec                maColorTable;       /// Colors read from file.
-
 public:
     explicit                    XclImpPalette( const XclImpRoot& rRoot );
 
@@ -112,21 +107,21 @@ public:
 
     /** Returns the RGB color data for a (non-zero-based) Excel palette entry.
         @descr  First looks for a color read from file, then looks for a default color.
-        @param nDefault  Is returned, if nothing else could be found. */
-    ColorData                   GetColorData( sal_uInt16 nXclIndex, ColorData nDefault = COL_AUTO ) const;
+        @return  The color from current or default palette or COL_AUTO, if nothing else found. */
+    ColorData                   GetColorData( sal_uInt16 nXclIndex ) const;
     /** Returns the color for a (non-zero-based) Excel palette entry.
         @descr  First looks for a color read from file, then looks for a default color.
-        @param nDefault  Is returned, if nothing else could be found. */
-    inline Color                GetColor( sal_uInt16 nXclIndex, ColorData nDefault = COL_AUTO ) const;
+        @return  The color from current or default palette or COL_AUTO, if nothing else found. */
+    inline Color                GetColor( sal_uInt16 nXclIndex ) const
+                                    { return Color( GetColorData( nXclIndex ) ); }
 
     /** Reads a PALETTE record. */
     void                        ReadPalette( XclImpStream& rStrm );
-};
 
-inline Color XclImpPalette::GetColor( sal_uInt16 nXclIndex, ColorData nDefault ) const
-{
-    return Color( GetColorData( nXclIndex, nDefault ) );
-}
+private:
+    typedef ::std::vector< ColorData > ColorDataVec;
+    ColorDataVec                maColorTable;       /// Colors read from file.
+};
 
 
 // FONT record - font information =============================================
@@ -145,12 +140,6 @@ enum XclFontWhichIDMode
 /** Stores all data of an Excel font and provides import of FONT records. */
 class XclImpFont : protected XclImpRoot
 {
-private:
-    XclFontData                 maData;         /// All font attributes.
-    bool                        mbAscii;        /// true = font contains ASCII characters.
-    bool                        mbCjk;          /// true = font contains CJK characters.
-    bool                        mbCtl;          /// true = font contains CTL characters.
-
 public:
     explicit                    XclImpFont( const XclImpRoot& rRoot );
 
@@ -159,10 +148,13 @@ public:
         overwrites settings in rFontData. */
     explicit                    XclImpFont( const XclImpRoot& rRoot, const XclFontData& rFontData );
 
+    /** Sets all font attributes to used or unused. */
+    void                        SetAllUsedFlags( bool bUsed );
+
     /** Returns read-only access to font data. */
     inline const XclFontData&   GetFontData() const { return maData; }
     /** Returns true, if the font contains superscript or subscript. */
-    inline bool                 HasEscapement() const { return maData.meEscapem != xlEscNone; }
+    inline bool                 HasEscapement() const { return maData.mnEscapem != EXC_FONTESC_NONE; }
 
     /** Returns true, if this font contains ASCII characters. */
     inline bool                 HasAscii() const { return mbAscii; }
@@ -173,6 +165,8 @@ public:
 
     /** Reads a FONT record for all BIFF versions. */
     void                        ReadFont( XclImpStream& rStrm );
+    /** Reads the font block from a CF (conditional format) record. */
+    void                        ReadCFFontBlock( XclImpStream& rStrm );
 
     /** Fills all font properties to the item set.
         @param rItemSet  The destination item set.
@@ -182,9 +176,6 @@ public:
                                     SfxItemSet& rItemSet,
                                     XclFontWhichIDMode eMode,
                                     bool bSkipPoolDefs = false ) const;
-
-    /** Calculates the Calc font weight from the Excel weight. */
-    static FontWeight           GetScFontWeight( sal_uInt16 nXclWeight );
 
 private:
     /** Reads and sets height and flags. */
@@ -200,6 +191,22 @@ private:
     /** Tests whether the font contains CJK or CTL characters.
         @descr  This is only a weak guess using preselected characters. */
     void                        GuessScriptType();
+
+private:
+    XclFontData                 maData;         /// All font attributes.
+    bool                        mbAscii;        /// true = font contains ASCII characters.
+    bool                        mbCjk;          /// true = font contains CJK characters.
+    bool                        mbCtl;          /// true = font contains CTL characters.
+    bool                        mbFontNameUsed; /// true = Font name, family, charset used.
+    bool                        mbHeightUsed;   /// true = Font height used.
+    bool                        mbColorUsed;    /// true = Color used.
+    bool                        mbWeightUsed;   /// true = Weight used.
+    bool                        mbEscapemUsed;  /// true = Escapement type used.
+    bool                        mbUnderlUsed;   /// true = Underline style used.
+    bool                        mbItalicUsed;   /// true = Italic used.
+    bool                        mbStrikeUsed;   /// true = Strikeout used.
+    bool                        mbOutlineUsed;  /// true = Outlined used.
+    bool                        mbShadowUsed;   /// true = Shadowed used.
 };
 
 
@@ -208,10 +215,6 @@ private:
 /** Stores the data of all fonts occurred in an Excel file. */
 class XclImpFontBuffer : protected XclImpRoot, ScfNoCopy
 {
-private:
-    ScfDelList< XclImpFont >    maFontList;     /// List of all FONT records in the Excel file.
-    XclFontData                 maAppFont;      /// Application font (for column width).
-
 public:
     explicit                    XclImpFontBuffer( const XclImpRoot& rRoot );
 
@@ -234,6 +237,10 @@ public:
                                     XclFontWhichIDMode eMode,
                                     sal_uInt16 nFontIndex,
                                     bool bSkipPoolDefs = false ) const;
+
+private:
+    ScfDelList< XclImpFont >    maFontList;     /// List of all FONT records in the Excel file.
+    XclFontData                 maAppFont;      /// Application font (for column width).
 };
 
 
@@ -242,10 +249,6 @@ public:
 /** Stores all user defined number formats occured in the file. */
 class XclImpNumFmtBuffer : protected XclImpRoot, ScfNoCopy
 {
-private:
-    ScfUInt32Vec                maKeyVec;       /// Array of SvNumberFomatter format keys.
-    sal_uInt32                  mnStdFmt;       /// Key for standard number format.
-
 public:
     explicit                    XclImpNumFmtBuffer( const XclImpRoot& rRoot );
 
@@ -279,6 +282,10 @@ private:
     /** Inserts a format key exactly at the given position.
         @descr  The list will be extended, if it is too short, using the standard format key. */
     void                        InsertKey( sal_uInt32 nIndex, sal_uInt32 nFormatKey );
+
+private:
+    ScfUInt32Vec                maKeyVec;       /// Array of SvNumberFomatter format keys.
+    sal_uInt32                  mnStdFmt;       /// Key for standard number format.
 };
 
 
@@ -328,6 +335,16 @@ struct XclImpCellAlign : public XclCellAlign
     @descr  Provides functions to fill from Excel record data and to fill to item sets. */
 struct XclImpCellBorder : public XclCellBorder
 {
+    bool                        mbLeftUsed;     /// true = Left line style used.
+    bool                        mbRightUsed;    /// true = Right line style used.
+    bool                        mbTopUsed;      /// true = Top line style used.
+    bool                        mbBottomUsed;   /// true = Bottom line style used.
+
+    explicit                    XclImpCellBorder();
+
+    /** Sets all line states to used or unused. */
+    void                        SetAllUsedFlags( bool bUsed );
+
     /** Fills this struct with BIFF2 XF record data. */
     void                        FillFromXF2( sal_uInt8 nFlags );
     /** Fills this struct with BIFF3/BIFF4 XF record data. */
@@ -338,7 +355,7 @@ struct XclImpCellBorder : public XclCellBorder
     void                        FillFromXF8( sal_uInt32 nBorder1, sal_uInt32 nBorder2 );
 
     /** Fills this struct with BIFF8 CF (conditional format) record data. */
-    void                        FillFromCF8( sal_uInt16 nLine, sal_uInt32 nColor );
+    void                        FillFromCF8( sal_uInt16 nLineStyle, sal_uInt32 nLineColor, sal_uInt32 nFlags );
 
     /** Inserts a box item representing this border style into the item set.
         @param bSkipPoolDefs  true = Do not put items equal to pool default; false = Put all items. */
@@ -355,6 +372,15 @@ struct XclImpCellBorder : public XclCellBorder
     @descr  Provides functions to fill from Excel record data and to fill to item sets. */
 struct XclImpCellArea : public XclCellArea
 {
+    bool                        mbForeUsed;     /// true = Foreground color used.
+    bool                        mbBackUsed;     /// true = Background color used.
+    bool                        mbPattUsed;     /// true = Pattern used.
+
+    explicit                    XclImpCellArea();
+
+    /** Sets colors and pattern state to used or unused. */
+    void                        SetAllUsedFlags( bool bUsed );
+
     /** Fills this struct with BIFF2 XF record data. */
     void                        FillFromXF2( sal_uInt8 nFlags );
     /** Fills this struct with BIFF3/BIFF4 XF record data. */
@@ -365,7 +391,7 @@ struct XclImpCellArea : public XclCellArea
     void                        FillFromXF8( sal_uInt32 nBorder2, sal_uInt16 nArea );
 
     /** Fills this struct with BIFF8 CF (conditional format) record data. */
-    void                        FillFromCF8( sal_uInt16 nPattern, sal_uInt16 nColor );
+    void                        FillFromCF8( sal_uInt16 nPattern, sal_uInt16 nColor, sal_uInt32 nFlags );
 
     /** Inserts a brush item representing this area style into the item set.
         @param bSkipPoolDefs  true = Do not put items equal to pool default; false = Put all items. */
@@ -381,22 +407,6 @@ struct XclImpCellArea : public XclCellArea
 /** Contains all data of a XF record and a Calc item set. */
 class XclImpXF : public XclXFBase, protected XclImpRoot, ScfNoCopy
 {
-private:
-    typedef ::std::auto_ptr< ScPatternAttr >    ScPatternAttrPtr;
-
-    ScPatternAttrPtr            mpPattern;          /// Calc item set.
-    String                      maStyleName;        /// Name of the style sheet.
-    ScStyleSheet*               mpStyleSheet;       /// Calc cell style sheet.
-
-    XclImpCellProt              maProtection;       /// Cell protection flags.
-    XclImpCellAlign             maAlignment;        /// All alignment attributes.
-    XclImpCellBorder            maBorder;           /// Border line style.
-    XclImpCellArea              maArea;             /// Background area style.
-    sal_uInt16                  mnNumFmt;           /// Index to number format.
-    sal_uInt16                  mnFont;             /// Index to font record.
-
-    bool                        mbWasBuiltIn;       /// true = XF was an Excel built-in style.
-
 public:
     explicit                    XclImpXF( const XclImpRoot& rRoot );
                                 ~XclImpXF();
@@ -448,6 +458,22 @@ private:
         @descr  Creates a style sheet only for style XFs with a valid style name.
         @return  The pointer to the cell style sheet, or 0, if there is no style sheet. */
     ScStyleSheet*               CreateStyleSheet();
+
+private:
+    typedef ::std::auto_ptr< ScPatternAttr >    ScPatternAttrPtr;
+
+    ScPatternAttrPtr            mpPattern;          /// Calc item set.
+    String                      maStyleName;        /// Name of the style sheet.
+    ScStyleSheet*               mpStyleSheet;       /// Calc cell style sheet.
+
+    XclImpCellProt              maProtection;       /// Cell protection flags.
+    XclImpCellAlign             maAlignment;        /// All alignment attributes.
+    XclImpCellBorder            maBorder;           /// Border line style.
+    XclImpCellArea              maArea;             /// Background area style.
+    sal_uInt16                  mnNumFmt;           /// Index to number format.
+    sal_uInt16                  mnFont;             /// Index to font record.
+
+    bool                        mbWasBuiltIn;       /// true = XF was an Excel built-in style.
 };
 
 
@@ -457,9 +483,6 @@ private:
     @descr  This class is able to read XF records (BIFF2 - BIFF8) and STYLE records (BIFF8). */
 class XclImpXFBuffer : protected XclImpRoot, ScfNoCopy
 {
-private:
-    ScfDelList< XclImpXF >      maXFList;       /// List of contents of all XF record.
-
 public:
     explicit                    XclImpXFBuffer( const XclImpRoot& rRoot );
 
@@ -484,6 +507,9 @@ public:
                                     sal_uInt16 nLastCol, sal_uInt16 nLastRow,
                                     sal_uInt16 nTab, sal_uInt16 nXFIndex,
                                     sal_uInt32 nForcedNumFmt = NUMBERFORMAT_ENTRY_NOT_FOUND );
+
+private:
+    ScfDelList< XclImpXF >      maXFList;       /// List of contents of all XF record.
 };
 
 
@@ -536,9 +562,6 @@ inline bool XclImpXFIndex::Contains( sal_uInt16 nRow ) const
 /** Contains the XF indexes for every used cell in a column. */
 class XclImpXFIndexColumn : ScfNoCopy
 {
-private:
-    ScfDelList< XclImpXFIndex > maIndexList;    /// The list of cell range styles.
-
 public:
     inline explicit             XclImpXFIndexColumn() {}
 
@@ -563,6 +586,9 @@ private:
         @descr  The ranges must have the same XF index and must not have a gap.
         The resulting range has the index nIndex-1. */
     void                        TryConcatPrev( sal_uInt32 nIndex );
+
+private:
+    ScfDelList< XclImpXFIndex > maIndexList;    /// The list of cell range styles.
 };
 
 
@@ -571,23 +597,6 @@ private:
 /** Contains the XF indexes for every used cell in a single sheet. */
 class XclImpXFIndexBuffer : protected XclImpRoot, ScfNoCopy
 {
-private:
-    /** Insertion mode of an XF index. */
-    enum XclImpXFInsertMode
-    {
-        xlXFModeCell,               /// Filled cell.
-        xlXFModeBoolCell,           /// Cell with a single Boolean value.
-        xlXFModeBlank,              /// Blank cell.
-        xlXFModeRow                 /// Row default XF.
-    };
-
-    typedef ::std::auto_ptr< XclImpXFIndexColumn > XclImpXFIndexColumnPtr;
-
-    XclImpXFIndexColumnPtr*     mppColumns;     /// Array of pointers to column XF index buffers.
-    sal_uInt32                  mnUsedCount;    /// Column width of formatted columns (last used + 1).
-
-    ScRangeList                 maMergeList;    /// List of merged cell ranges.
-
 public:
     explicit                    XclImpXFIndexBuffer( const XclImpRoot& rRoot );
     virtual                     ~XclImpXFIndexBuffer();
@@ -612,6 +621,16 @@ public:
     void                        Apply();
 
 private:
+    /** Insertion mode of an XF index. */
+    enum XclImpXFInsertMode
+    {
+        xlXFModeCell,               /// Filled cell.
+        xlXFModeBoolCell,           /// Cell with a single Boolean value.
+        xlXFModeBlank,              /// Blank cell.
+        xlXFModeRow                 /// Row default XF.
+    };
+
+private:
     /** Clears all buffered data, used to set up for a new sheet. */
     void                        Clear();
 
@@ -631,6 +650,14 @@ private:
         BOX_LINE_RIGHT = copy most-right border of top row;
         BOX_LINE_BOTTOM = copy most-bottom border of first column. */
     void                        SetBorderLine( const ScRange& rRange, sal_uInt16 nTab, sal_uInt16 nLine );
+
+private:
+    typedef ::std::auto_ptr< XclImpXFIndexColumn > XclImpXFIndexColumnPtr;
+
+    XclImpXFIndexColumnPtr*     mppColumns;     /// Array of pointers to column XF index buffers.
+    sal_uInt32                  mnUsedCount;    /// Column width of formatted columns (last used + 1).
+
+    ScRangeList                 maMergeList;    /// List of merged cell ranges.
 };
 
 
