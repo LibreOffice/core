@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkmgr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-05 11:05:48 $
+ *  last change: $Author: jp $ $Date: 2001-07-30 09:30:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@
 #endif
 #include <sot/dtrans.hxx>
 #include <sot/formats.hxx>
-#ifndef _SV_EXCHANGE_HXX //autogen
-#include <vcl/exchange.hxx>
+#ifndef _SOT_EXCHANGE_HXX //autogen
+#include <sot/exchange.hxx>
 #endif
 #ifndef _SV_GRAPH_HXX
 #include <vcl/graph.hxx>
@@ -260,7 +260,7 @@ ULONG SvxLinkManager::RegisterStatusInfoId()
     {
 // wie sieht die neue Schnittstelle aus?
 //      nFormat = Exchange::RegisterFormatName( "StatusInfo vom SvxInternalLink" );
-        nFormat = Exchange::RegisterFormatName(
+        nFormat = SotExchange::RegisterFormatName(
                     String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM(
                                 "StatusInfo vom SvxInternalLink" )));
     }
