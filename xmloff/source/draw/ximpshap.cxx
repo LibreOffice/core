@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:03 $
+ *  last change: $Author: cl $ $Date: 2000-10-26 09:59:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1508,8 +1508,6 @@ SdXMLChartShapeContext::SdXMLChartShapeContext(
         awt::Size aSize(mnWidth, mnHeight);
         xShape->setPosition(aPoint);
         xShape->setSize(aSize);
-
-        SdXMLChartShapeContext::StartElement(xAttrList);
     }
 }
 
@@ -1538,7 +1536,15 @@ void SdXMLChartShapeContext::EndElement()
 void SdXMLChartShapeContext::Characters( const ::rtl::OUString& rChars )
 {
     if( mpChartContext )
-        mpChartContext->EndElement();
+        mpChartContext->Characters( rChars );
 }
 
+SvXMLImportContext * SdXMLChartShapeContext::CreateChildContext( USHORT nPrefix, const ::rtl::OUString& rLocalName,
+        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList )
+{
+    if( mpChartContext )
+        return mpChartContext->CreateChildContext( nPrefix, rLocalName, xAttrList );
+
+    return NULL;
+}
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:03 $
+ *  last change: $Author: cl $ $Date: 2000-10-26 09:59:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -389,7 +389,8 @@ public:
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual void EndElement();
     virtual void Characters( const ::rtl::OUString& rChars );
-
+    virtual SvXMLImportContext * CreateChildContext( USHORT nPrefix, const ::rtl::OUString& rLocalName,
+        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList );
 };
 
 #endif  //  _XIMPSHAPE_HXX
