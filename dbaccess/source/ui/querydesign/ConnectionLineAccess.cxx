@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConnectionLineAccess.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 12:46:00 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:12:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,10 +280,10 @@ namespace dbaui
     // -----------------------------------------------------------------------------
     OTableConnection::~OTableConnection()
     {
+        DBG_DTOR(OTableConnection,NULL);
         //////////////////////////////////////////////////////////////////////
         // clear vector
         clearLineData();
-        DBG_DTOR(OTableConnection,NULL);
     }
     // -----------------------------------------------------------------------------
     sal_Bool OConnectionLineAccess::isEditable() const
