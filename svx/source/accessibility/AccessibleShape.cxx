@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleShape.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: af $ $Date: 2002-04-15 15:08:09 $
+ *  last change: $Author: af $ $Date: 2002-04-16 08:50:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,8 +281,8 @@ awt::Rectangle SAL_CALL AccessibleShape::getBounds (void)
         {
             // Fallback when there is no BoundRect Property.
             OSL_TRACE ("unknown property BoundingBox");
-            ::awt::Point aPosition (mxShape->getPosition());
-            ::awt::Size aSize (mxShape->getSize());
+            awt::Point aPosition (mxShape->getPosition());
+            awt::Size aSize (mxShape->getSize());
             aBoundingBox = awt::Rectangle (
                 aPosition.X, aPosition.Y,
                 aSize.Width, aSize.Height);
