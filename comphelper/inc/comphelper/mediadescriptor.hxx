@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mediadescriptor.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 13:39:46 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:39:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,7 @@ class MediaDescriptor : public SequenceAsHashMap
         static const ::rtl::OUString& PROP_MINIMIZED();
         static const ::rtl::OUString& PROP_OPENNEWVIEW();
         static const ::rtl::OUString& PROP_OUTPUTSTREAM();
+        static const ::rtl::OUString& PROP_PASSWORD();
         static const ::rtl::OUString& PROP_PATTERN();
         static const ::rtl::OUString& PROP_POSSIZE();
         static const ::rtl::OUString& PROP_POSTDATA();
@@ -136,11 +137,13 @@ class MediaDescriptor : public SequenceAsHashMap
         static const ::rtl::OUString& PROP_PREVIEW();
         static const ::rtl::OUString& PROP_READONLY();
         static const ::rtl::OUString& PROP_REFERRER();
+        static const ::rtl::OUString& PROP_SALVAGEDFILE();
         static const ::rtl::OUString& PROP_SILENT();
         static const ::rtl::OUString& PROP_STATUSINDICATOR();
         static const ::rtl::OUString& PROP_STREAM();
         static const ::rtl::OUString& PROP_TEMPLATENAME();
         static const ::rtl::OUString& PROP_TEMPLATEREGIONNAME();
+        static const ::rtl::OUString& PROP_TITLE();
         static const ::rtl::OUString& PROP_TYPENAME();
         static const ::rtl::OUString& PROP_UCBCONTENT();
         static const ::rtl::OUString& PROP_UPDATEDOCMODE();
