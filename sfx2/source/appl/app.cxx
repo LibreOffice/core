@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-13 09:30:25 $
+ *  last change: $Author: mba $ $Date: 2000-12-15 15:50:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1349,10 +1349,7 @@ sal_uInt16 SfxApplication::Exception( sal_uInt16 nError )
 
     // save all modified documents and close all documents
     // Do it only, if it's allowed! Ask configuration for right flag.
-    if(
-        ( Application::IsInExecute()                                    ) &&
-        ( SvtSaveOptions().IsSaveWorkingSet() == sal_True   )
-    )
+    if( Application::IsInExecute() )
     {
         SfxObjectShell *pIter, *pNext;
         sal_uInt16 n = 0;
