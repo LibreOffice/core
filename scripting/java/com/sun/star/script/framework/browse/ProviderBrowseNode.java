@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ProviderBrowseNode.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-19 23:03:03 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 08:20:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,21 +122,18 @@ public class ProviderBrowseNode extends PropertySet
         {
             LogUtils.DEBUG("** ProviderBrowseNode.getChildNodes(), container is " + container );
             String[] parcels = container.getElementNames();
-            if ( browsenodes == null )
+            browsenodes = new ArrayList( parcels.length );
+            for ( int index = 0; index < parcels.length; index++ )
             {
-                browsenodes = new ArrayList( parcels.length );
-                for ( int index = 0; index < parcels.length; index++ )
+                try
                 {
-                    try
-                    {
-                        XBrowseNode node  = new ParcelBrowseNode( provider, container, parcels[ index ] );
-                        browsenodes.add( node );
-                    }
-                    catch ( Exception e )
-                    {
-                        LogUtils.DEBUG("*** Failed to create parcel node for " + parcels[ index ] );
-                        LogUtils.DEBUG( e.toString() );
-                    }
+                    XBrowseNode node  = new ParcelBrowseNode( provider, container, parcels[ index ] );
+                    browsenodes.add( node );
+                }
+                catch ( Exception e )
+                {
+                    LogUtils.DEBUG("*** Failed to create parcel node for " + parcels[ index ] );
+                    LogUtils.DEBUG( e.toString() );
                 }
             }
         }
@@ -247,7 +244,7 @@ public class ProviderBrowseNode extends PropertySet
             }
             catch (Exception e)
             {
-        System.err.print("create failed with: " + e );
+        //System.err.print("create failed with: " + e );
                 LogUtils.DEBUG( LogUtils.getTrace( e ) );
                 result = new Any(new Type(Boolean.class), Boolean.FALSE);
 
