@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itradj.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fme $ $Date: 2002-03-21 08:56:59 $
+ *  last change: $Author: fme $ $Date: 2002-09-18 07:51:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -624,17 +624,24 @@ void SwTxtAdjuster::CalcAdjLine( SwLineLayout *pCurr )
 SwFlyPortion *SwTxtAdjuster::CalcFlyPortion( const long nRealWidth,
                                              const SwRect &rCurrRect )
 {
-#ifdef VERTICAL_LAYOUT
     SwTxtFly aTxtFly( GetTxtFrm() );
-#else
-    SwTxtFly aTxtFly( (SwCntntFrm*)GetTxtFrm() );
-#endif
 
     const KSHORT nCurrWidth = pCurr->PrtWidth();
     SwFlyPortion *pFlyPortion = 0;
-    // aFlyRect ist dokumentglobal !
 
-    SwRect aFlyRect( aTxtFly.GetFrm( rCurrRect ) );
+    SwRect aLineVert( rCurrRect );
+    if ( GetTxtFrm()->IsRightToLeft() )
+        GetTxtFrm()->SwitchLTRtoRTL( aLineVert );
+    if ( GetTxtFrm()->IsVertical() )
+        GetTxtFrm()->SwitchHorizontalToVertical( aLineVert );
+
+    // aFlyRect ist dokumentglobal !
+    SwRect aFlyRect( aTxtFly.GetFrm( aLineVert ) );
+
+    if ( GetTxtFrm()->IsRightToLeft() )
+        GetTxtFrm()->SwitchRTLtoLTR( aFlyRect );
+    if ( GetTxtFrm()->IsVertical() )
+        GetTxtFrm()->SwitchVerticalToHorizontal( aFlyRect );
 
     // Wenn ein Frame ueberlappt, wird eine Portion eroeffnet.
     if( aFlyRect.HasArea() )
