@@ -19,8 +19,9 @@ public interface UIConsts {
     public static final int RID_FORM = 2200;
     public static final int RID_QUERY = 2300;
     public static final int RID_REPORT = 2400;
-
+    public static final int RID_TABLE = 2500;
     public static final Integer INVISIBLESTEP = new Integer(99);
+    public static final String  INFOIMAGEURL = "private:resource/dbu/image/19205";
     /**
      * The tabindex of the navigation buttons in a wizard must be assigned a very
      * high tabindex because on every step their taborder must appear at the end
