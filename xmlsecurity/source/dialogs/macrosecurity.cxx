@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrosecurity.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: gt $ $Date: 2004-07-16 10:25:38 $
+ *  last change: $Author: gt $ $Date: 2004-07-16 10:43:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,7 +183,7 @@ IMPL_LINK( MacroSecurityTrustedSourcesTP, ViewCertPBHdl, void*, EMTYARG )
 {
     if( maTrustCertLB.FirstSelected() )
     {
-        USHORT nSelected = (USHORT) maTrustCertLB.FirstSelected()->GetUserData();
+        USHORT nSelected = USHORT( sal_Int32( maTrustCertLB.FirstSelected()->GetUserData() ) );
         const SignatureInformation& rInfo = mpDlg->maCurrentSignatureInformations[ nSelected ];
         uno::Reference< dcss::security::XCertificate > xCert = mpDlg->maSignatureHelper.GetSecurityEnvironment()->getCertificate( rInfo.ouX509IssuerName, numericStringToBigInteger( rInfo.ouX509SerialNumber ) );
 
@@ -204,7 +204,7 @@ IMPL_LINK( MacroSecurityTrustedSourcesTP, RemoveCertPBHdl, void*, EMTYARG )
 {
     if( maTrustCertLB.FirstSelected() )
     {
-        USHORT nSelected = (USHORT) maTrustCertLB.FirstSelected()->GetUserData();
+        USHORT nSelected = USHORT( sal_Int32( maTrustCertLB.FirstSelected()->GetUserData() ) );
         mpDlg->maCurrentSignatureInformations.erase( mpDlg->maCurrentSignatureInformations.begin()+nSelected );
 
         FillCertLB();
@@ -302,7 +302,7 @@ void MacroSecurityTrustedSourcesTP::FillCertLB( void )
             SvLBoxEntry* pEntry = maTrustCertLB.InsertEntry( XmlSec::GetContentPart( xCert->getSubjectName(), aCN_Id ) );
             maTrustCertLB.SetEntryText( XmlSec::GetContentPart( rInfo.ouX509IssuerName, aCN_Id ), pEntry, 1 );
             maTrustCertLB.SetEntryText( XmlSec::GetDateTimeString( rInfo.ouDate, rInfo.ouTime ), pEntry, 2 );
-            pEntry->SetUserData( ( void* ) n );     // missuse user data as index
+            pEntry->SetUserData( ( void* ) sal_Int32( n ) );        // missuse user data as index
         }
     }
 
