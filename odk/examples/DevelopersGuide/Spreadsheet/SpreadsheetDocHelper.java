@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SpreadsheetDocHelper.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 20:03:51 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:55:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -60,10 +60,11 @@ public class SpreadsheetDocHelper
 
 // __  private members  ___________________________________________
 
-    private final String  msConnectString  = "socket,host=localhost,port=2083";
     private final String  msDataSheetName  = "Data";
 
-    private com.sun.star.lang.XMultiServiceFactory  mxMSFactory;
+    private com.sun.star.uno.XComponentContext  mxRemoteContext;
+    private com.sun.star.lang.XMultiComponentFactory  mxRemoteServiceManager;
+//    private com.sun.star.lang.XMultiServiceFactory  mxMSFactory;
     private com.sun.star.sheet.XSpreadsheetDocument mxDocument;
 
 // ________________________________________________________________
@@ -71,17 +72,7 @@ public class SpreadsheetDocHelper
     public SpreadsheetDocHelper( String[] args )
     {
         // Connect to a running office and get the service manager
-        try
-        {
-            mxMSFactory = connect();
-        }
-        catch (Exception ex)
-        {
-            System.out.println( "Error: Couldn't get ServiceManager:\nException Message = "
-                                + ex.getMessage());
-            ex.printStackTrace();
-            System.exit( 1 );
-        }
+        connect();
 
         // Create a new spreadsheet document
         try
@@ -90,8 +81,8 @@ public class SpreadsheetDocHelper
         }
         catch (Exception ex)
         {
-            System.out.println( "Couldn't create document: " + ex );
-            System.out.println( "Error: Couldn't create Document\nException Message = "
+            System.err.println( "Couldn't create document: " + ex );
+            System.err.println( "Error: Couldn't create Document\nException Message = "
                                 + ex.getMessage());
             ex.printStackTrace();
             System.exit( 1 );
@@ -100,11 +91,18 @@ public class SpreadsheetDocHelper
 
 // __  helper methods  ____________________________________________
 
-    /** Returns the service manager.
-        @return  XMultiServiceFactory interface of the service manager. */
-    public com.sun.star.lang.XMultiServiceFactory getServiceManager()
+    /** Returns the service manager of the connected office.
+        @return  XMultiComponentFactory interface of the service manager. */
+    public com.sun.star.lang.XMultiComponentFactory getServiceManager()
     {
-        return mxMSFactory;
+        return mxRemoteServiceManager;
+    }
+
+    /** Returns the component context of the connected office
+        @return  XComponentContext interface of the context. */
+    public com.sun.star.uno.XComponentContext getContext()
+    {
+        return mxRemoteContext;
     }
 
     /** Returns the whole spreadsheet document.
@@ -124,14 +122,15 @@ public class SpreadsheetDocHelper
         com.sun.star.sheet.XSpreadsheet xSheet = null;
         try
         {
-            com.sun.star.container.XIndexAccess xSheetsIA = (com.sun.star.container.XIndexAccess)
-                UnoRuntime.queryInterface( com.sun.star.container.XIndexAccess.class, xSheets );
+            com.sun.star.container.XIndexAccess xSheetsIA =
+                (com.sun.star.container.XIndexAccess)UnoRuntime.queryInterface(
+                    com.sun.star.container.XIndexAccess.class, xSheets );
             xSheet = (com.sun.star.sheet.XSpreadsheet) UnoRuntime.queryInterface(
-                com.sun.star.sheet.XSpreadsheet.class, xSheetsIA.getByIndex( nIndex ));
+               com.sun.star.sheet.XSpreadsheet.class, xSheetsIA.getByIndex(nIndex));
         }
         catch (Exception ex)
         {
-            System.out.println( "Error: caught exception in getSpreadsheet()!\nException Message = "
+            System.err.println( "Error: caught exception in getSpreadsheet()!\nException Message = "
                                 + ex.getMessage());
             ex.printStackTrace();
         }
@@ -142,7 +141,8 @@ public class SpreadsheetDocHelper
         @param aName  The name of the new sheet.
         @param nIndex  The insertion index.
         @return  The XSpreadsheet interface of the new sheet. */
-    public com.sun.star.sheet.XSpreadsheet insertSpreadsheet( String aName, short nIndex )
+    public com.sun.star.sheet.XSpreadsheet insertSpreadsheet(
+        String aName, short nIndex )
     {
         // Collection of sheets
         com.sun.star.sheet.XSpreadsheets xSheets = mxDocument.getSheets();
@@ -156,7 +156,7 @@ public class SpreadsheetDocHelper
         }
         catch (Exception ex)
         {
-            System.out.println( "Error: caught exception in insertSpreadsheet()!\nException Message = "
+            System.err.println( "Error: caught exception in insertSpreadsheet()!\nException Message = "
                                 + ex.getMessage());
             ex.printStackTrace();
         }
@@ -221,7 +221,8 @@ public class SpreadsheetDocHelper
         xPropSet.setPropertyValue( "NumberFormat", new Integer( nFormat ) );
     }
 
-    /** Draws a colored border around the range and writes the headline in the first cell.
+    /** Draws a colored border around the range and writes the headline in the
+        first cell.
         @param xSheet  The XSpreadsheet interface of the spreadsheet.
         @param aRange  The address of the cell range (or a named range).
         @param aHeadline  The headline text. */
@@ -368,27 +369,23 @@ public class SpreadsheetDocHelper
 
 // ________________________________________________________________
 
-    /** Connect to a running office that is accepting connections.
-        @return  The ServiceManager to instantiate office components. */
-    private XMultiServiceFactory connect()
-            throws RuntimeException, Exception
+    // Connect to a running office that is accepting connections.
+    private void connect()
     {
-        String sConnectString = "uno:" + msConnectString + ";urp;StarOffice.ServiceManager";
-        System.out.println( "\nConnecting: " + sConnectString );
-        XMultiServiceFactory xLocalServiceManager =
-            com.sun.star.comp.helper.Bootstrap.createSimpleServiceManager();
+        if (mxRemoteContext == null && mxRemoteServiceManager == null) {
+            try {
+                // First step: get the remote office component context
+                mxRemoteContext = com.sun.star.comp.helper.Bootstrap.bootstrap();
+                System.out.println("Connected to a running office ...");
 
-        XUnoUrlResolver xURLResolver = (XUnoUrlResolver)
-            UnoRuntime.queryInterface(
-                XUnoUrlResolver.class,
-                xLocalServiceManager.createInstance( "com.sun.star.bridge.UnoUrlResolver" ) );
-
-        XMultiServiceFactory xServiceManager = (XMultiServiceFactory)
-            UnoRuntime.queryInterface(
-                XMultiServiceFactory.class,
-                xURLResolver.resolve( sConnectString ) );
-
-        return xServiceManager;
+                mxRemoteServiceManager = mxRemoteContext.getServiceManager();
+            }
+            catch( Exception e) {
+                System.err.println("ERROR: can't get a component context from a running office ...");
+                e.printStackTrace();
+                System.exit(1);
+            }
+        }
     }
 
     /** Creates an empty spreadsheet document.
@@ -399,13 +396,15 @@ public class SpreadsheetDocHelper
         XComponentLoader aLoader = (XComponentLoader)
             UnoRuntime.queryInterface(
                 XComponentLoader.class,
-                mxMSFactory.createInstance( "com.sun.star.frame.Desktop" ) );
+                mxRemoteServiceManager.createInstanceWithContext(
+                    "com.sun.star.frame.Desktop", mxRemoteContext));
 
         XComponent xComponent = aLoader.loadComponentFromURL(
-            "private:factory/scalc", "_blank", 0, new com.sun.star.beans.PropertyValue[0] );
+            "private:factory/scalc", "_blank", 0,
+            new com.sun.star.beans.PropertyValue[0] );
 
-        return (com.sun.star.sheet.XSpreadsheetDocument)
-            UnoRuntime.queryInterface( com.sun.star.sheet.XSpreadsheetDocument.class, xComponent );
+        return (com.sun.star.sheet.XSpreadsheetDocument)UnoRuntime.queryInterface(
+            com.sun.star.sheet.XSpreadsheetDocument.class, xComponent );
     }
 
 // ________________________________________________________________
