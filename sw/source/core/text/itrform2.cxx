@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: fme $ $Date: 2002-05-03 11:48:41 $
+ *  last change: $Author: fme $ $Date: 2002-05-06 07:24:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2013,16 +2013,24 @@ long SwTxtFormatter::CalcOptRepaint( xub_StrLen nOldLineEnd,
         // limit for the repaint offset
         const long nFormatRepaint = GetInfo().GetPaintOfst();
 
-        if ( nReformat <= GetInfo().GetLineStart() )
+        if ( nReformat <= GetInfo().GetLineStart() + 1 )
             return 0;
+
+        // step back for smoother repaint
+        --nReformat;
+
+        // step back one more character for complex scripts
+        const SwScriptInfo& rSI = GetInfo().GetParaPortion()->GetScriptInfo();
+        if ( ScriptType::COMPLEX == rSI.ScriptType( nReformat ) )
+            --nReformat;
 
         // Weird situation: Our line used to end with a hole portion
         // and we delete some characters at the end of our line. We have
         // to take care for repainting the blanks which are not anymore
         // covered by the hole portion
-        while ( --nReformat > GetInfo().GetLineStart() &&
+        while ( nReformat > GetInfo().GetLineStart() &&
                 CH_BLANK == GetInfo().GetChar( nReformat ) )
-            ;
+            --nReformat;
 
         ASSERT( nReformat < GetInfo().GetIdx(), "Reformat too small for me!" );
         SwRect aRect;
