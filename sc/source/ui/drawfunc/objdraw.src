@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objdraw.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 19:57:28 $
+ *  last change: $Author: hjs $ $Date: 2001-05-04 20:19:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@
         Text[ korean ] = "±âº»°ª(~D)";\
         Text[ turkish ] = "Standar~t";\
         Text[ language_user1 ] = " ";\
+        Text[ catalan ] = "~Predeterminado";\
     };
 
  // Font (SID_ATTR_CHAR_FONT) und Groesse (SID_ATTR_CHAR_FONTHEIGHT) duerfen nicht im
@@ -172,6 +173,7 @@
                     Text[ korean ] = "À§ Ã·ÀÚ(~S)";\
                     Text[ turkish ] = "~Üst simge";\
                     Text[ language_user1 ] = " ";\
+                    Text[ catalan ] = "Superín~dice";\
                 };\
                 MenuItem\
                 {\
@@ -200,6 +202,7 @@
                     Text[ korean ] = "¾Æ·¡Ã·ÀÚ(~U)";\
                     Text[ turkish ] = "~Alt simge";\
                     Text[ language_user1 ] = " ";\
+                    Text[ catalan ] = "Su~bíndice";\
                 };\
             };\
         };\
@@ -213,6 +216,7 @@
         Text[ korean ] = "½ºÅ¸ÀÏ(~S)";\
         Text[ turkish ] = "Bi~çim";\
         Text[ language_user1 ] = " ";\
+        Text[ catalan ] = "Est~ilo";\
     };\
     MenuItem\
     {\
@@ -279,6 +283,7 @@
                     Text[ korean ] = "¾çÂÊ ¸ÂÃã(~J)";\
                     Text[ turkish ] = "~Ýki yana yasla";\
                     Text[ language_user1 ] = " ";\
+                    Text[ catalan ] = "~Justificado";\
                 };\
             };\
         };\
@@ -292,6 +297,7 @@
         Text[ korean ] = "¸ÂÃã(~A)";\
         Text[ turkish ] = "~Hizalama";\
         Text[ language_user1 ] = " ";\
+        Text[ catalan ] = "~Alineación";\
     };\
     MenuItem\
     {\
@@ -342,6 +348,7 @@
         Text[ korean ] = "Çà°£(~L)";\
         Text[ turkish ] = "~Satýr aralýðý";\
         Text[ language_user1 ] = " ";\
+        Text[ catalan ] = "Inter~lineado";\
     };
 
 #define MN_DRWTXT \
@@ -381,6 +388,7 @@
         Text[ korean ] = "ÅØ½ºÆ®£®(~X).";\
         Text[ turkish ] = "~Metin...";\
         Text[ language_user1 ] = " ";\
+        Text[ catalan ] = "Te~xto...";\
     };
 
 #define MN_ORIGINALSIZE \
@@ -412,6 +420,7 @@
         Text[ korean ] = "¿ø·¡ Å©±â(~O)";\
         Text[ turkish ] = "Gerçek ~boyut";\
         Text[ language_user1 ] = " ";\
+        Text[ catalan ] = "Ta~maño original";\
     };
 
 #define MN_MIRRORSUB \
@@ -463,6 +472,7 @@
                     Text[ korean ] = "¼öÁ÷(~V)";\
                     Text[ turkish ] = "~Dikey";\
                     Text[ language_user1 ] = " ";\
+                    Text[ catalan ] = "~Vertical";\
                 };\
                 MenuItem\
                 {\
@@ -491,6 +501,7 @@
                     Text[ korean ] = "¼öÆò(~H)";\
                     Text[ turkish ] = "~Yatay";\
                     Text[ language_user1 ] = " ";\
+                    Text[ catalan ] = "~Horizontal";\
                 };\
             };\
         };\
@@ -504,6 +515,7 @@
         Text[ korean ] = "´ëÄª(~F)";\
         Text[ turkish ] = "~Yansýt";\
         Text[ language_user1 ] = " ";\
+        Text[ catalan ] = "~Reflejar";\
     };
 
 #define MN_ARRANGESUB \
@@ -560,6 +572,7 @@
                     Text[ korean ] = "¾ÕÀ¸·Î °¡Á®¿À±â(~F)";\
                     Text[ turkish ] = "B~ir öne getir";\
                     Text[ language_user1 ] = " ";\
+                    Text[ catalan ] = "Traer más a~delante";\
                 };\
                 MenuItem\
                 {\
@@ -589,6 +602,7 @@
                     Text[ korean ] = "µÚ·Î º¸³»±â(~W)";\
                     Text[ turkish ] = "Bir  ~geri gönder";\
                     Text[ language_user1 ] = " ";\
+                    Text[ catalan ] = "Enviar hacia a~trás";\
                 };\
                 MenuItem\
                 {\
@@ -615,6 +629,7 @@
         Text[ korean ] = "Á¤·Ä(~A)";\
         Text[ turkish ] = "~Sýralama";\
         Text[ language_user1 ] = " ";\
+        Text[ catalan ] = "~Posición";\
     };
 
 #define MN_ANCHORSUB \
@@ -658,6 +673,7 @@
                     Text[ korean ] = "£®£®ÂÊ¿¡(~A)";\
                     Text[ turkish ] = "Sayfa~da";\
                     Text[ language_user1 ] = " ";\
+                    Text[ catalan ] = "A la ~página";\
                 };\
                 MenuItem\
                 {\
@@ -684,6 +700,7 @@
                     Text[ korean ] = "¼¿¿¡(~C)";\
                     Text[ turkish ] = "Hücre~de";\
                     Text[ language_user1 ] = " ";\
+                    Text[ catalan ] = "A la ~celda";\
                 };\
             };\
         };\
@@ -701,6 +718,7 @@
         Text[ korean ] = "°íÁ¤(~C)";\
         Text[ turkish ] = "Sa~bitleyici";\
         Text[ language_user1 ] = " ";\
+        Text[ catalan ] = "~Anclaje";\
     };
 
 #define MN_ALIGNSUB \
@@ -765,6 +783,7 @@
         Text[ korean ] = "¸ÂÃã(~L)";\
         Text[ turkish ] = "Hiz~alama";\
         Text[ language_user1 ] = " ";\
+        Text[ catalan ] = "Ali~neación";\
     };
 
  //
@@ -798,6 +817,7 @@ String RID_DRAW_OBJECTBAR
     Text[ korean ] = "±×¸®±â °³Ã¼ ¸ðÀ½";
     Text[ turkish ] = "Çizim nesne çubuðu";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Barra de objetos de dibujo";
 };
 ToolBox RID_DRAW_OBJECTBAR
 {
@@ -971,6 +991,7 @@ String RID_TEXT_TOOLBOX
     Text[ korean ] = "ÅØ½ºÆ® °³Ã¼ ¸ðÀ½";
     Text[ turkish ] = "Metin nesne çubuðu";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Barra de objetos de texto";
 };
 ToolBox RID_TEXT_TOOLBOX
 {
@@ -1158,6 +1179,7 @@ String RID_GRAPHIC_OBJECTBAR
     Text[ chinese_traditional ] = "¹Ï§Îª«¥ó¦C";
     Text[ turkish ] = "Toolbar for graphic objects";
     Text[ arabic ] = "ÔÑíØ ßÇÆäÇÊ ÕæÑÉ";
+    Text[ catalan ] = "Barra de objetos gráficos";
 };
 ToolBox RID_GRAPHIC_OBJECTBAR
 {
@@ -1418,6 +1440,7 @@ String RID_POPUP_DRAW
     Text[ korean ] = "±×¸®±â °³Ã¼ÀÇ ÆË¾÷ ¸Þ´º";
     Text[ turkish ] = "Çizim nesneleri için açýlan mönü";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Menú emergente para objetos de dibujo";
 };
  //
  //     Popup-Menue fuer (allgemeine) Zeichenobjekte
@@ -1571,6 +1594,7 @@ Menu RID_POPUP_CHART
             Text[ korean ] = "µ¥ÀÌÅÍ ¿µ¿ª ¼öÁ¤(~M)...";
             Text[ turkish ] = "~Veri alanýný deðiþtir...";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Modificar área de ~datos...";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -1607,6 +1631,7 @@ String RID_POPUP_DRAWTEXT
     Text[ korean ] = "ÅØ½ºÆ® °³Ã¼ÀÇ ÆË¾÷ ¸Þ´º";
     Text[ turkish ] = "Metin nesneleri için açýlan mönü";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Menú emergente para objetos de texto";
 };
 
 Menu RID_POPUP_DRAWTEXT
