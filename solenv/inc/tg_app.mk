@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_app.mk,v $
 #
-#   $Revision: 1.47 $
+#   $Revision: 1.48 $
 #
-#   last change: $Author: obo $ $Date: 2005-03-15 09:56:34 $
+#   last change: $Author: obo $ $Date: 2005-03-18 10:21:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -189,23 +189,17 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
     @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
 .IF "$(APP$(TNR)LINKRES)" != ""
     @+-$(RM) $(MISC)$/$(APP$(TNR)LINKRES:b).rc >& $(NULLDEV)
+.IF "$(APP$(TNR)ICON)" != ""
 .IF "$(USE_SHELL)"=="4nt"
-.IF "$(APP$(TNR)ICON)" != ""
     @-+echo 1 ICON "$(APP$(TNR)ICON:s/\/\\/)" >> $(MISC)$/$(APP$(TNR)LINKRES:b).rc
-.ENDIF
-.IF "$(APP$(TNR)VERINFO)" != ""
-    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP$(TNR)LINKRES:b).rc
-    @-+echo #include  "$(APP$(TNR)VERINFO)" >> $(MISC)$/$(APP$(TNR)LINKRES:b).rc
-.ENDIF
 .ELSE			# "$(USE_SHELL)"=="4nt"
-.IF "$(APP$(TNR)ICON)" != ""
-    @-+guw.pl echo 1 ICON \"$(APP$(TNR)ICON)\" | sed 'sX\\X\\\\Xg' >> $(MISC)$/$(APP$(TNR)LINKRES:b).rc
-.ENDIF
-.IF "$(APP$(TNR)VERINFO)" != ""
-    @-+echo \#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP$(TNR)LINKRES:b).rc
-    @-+echo \#include  \"$(APP$(TNR)VERINFO)\" >> $(MISC)$/$(APP$(TNR)LINKRES:b).rc
-.ENDIF
+    @-+$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP$(TNR)ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)$/$(APP$(TNR)LINKRES:b).rc
 .ENDIF			# "$(USE_SHELL)"=="4nt"
+.ENDIF		# "$(APP$(TNR)ICON)" != ""
+.IF "$(APP$(TNR)VERINFO)" != ""
+    @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP$(TNR)LINKRES:b).rc
+    @-+echo $(EMQ)#include  $(EMQ)"$(APP$(TNR)VERINFO)$(EMQ)" >> $(MISC)$/$(APP$(TNR)LINKRES:b).rc
+.ENDIF		# "$(APP$(TNR)VERINFO)" != ""
     $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP$(TNR)LINKRES:b).rc
 .ENDIF			# "$(APP$(TNR)LINKRES)" != ""
 .IF "$(linkinc)" == ""
@@ -240,8 +234,8 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
         $(APP$(TNR)LIBS) \
         $(APP$(TNR)STDLIBS) \
         $(APP$(TNR)STDLIB) $(STDLIB$(TNR)))
-        sed -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP$(TNR)TARGETN:b)_linkobj.lst >> $(MISC)\$(APP$(TNR)TARGET).lst
-        +if exist $(MISC)\$(APP$(TNR)TARGET).lst type $(MISC)\$(APP$(TNR)TARGET).lst  >> $(MISC)\$(APP$(TNR)TARGET).lnk
+        $(SED) -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP$(TNR)TARGETN:b)_linkobj.lst >> $(MISC)\$(APP$(TNR)TARGET).lst
+        +$(IFEXIST) $(MISC)\$(APP$(TNR)TARGET).lst $(THEN) type $(MISC)\$(APP$(TNR)TARGET).lst  >> $(MISC)\$(APP$(TNR)TARGET).lnk
         $(APP$(TNR)LINKER) @$(MISC)\$(APP$(TNR)TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
 .IF "$(APP$(TNR)TARGET)" == "loader"
