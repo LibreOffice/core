@@ -2,9 +2,9 @@
  *
  *  $RCSfile: read.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:33:57 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:45:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,51 +208,63 @@ FltError ImportExcel::Read( void )
             {
                 switch( nOpcode )
                 {
-                    case 0x09:                          // BOF          [ 2   ]
-                        Bof2();
-                        if( pExcRoot->eDateiTyp == Biff2 )
-                        {
-                            eAkt = Z_Biff2;
-                            NeueTabelle();
-                        }
-                        break;
-                    case 0x0209:                        // BOF          [  3  ]
-                        Bof3();
-                        if( pExcRoot->eDateiTyp == Biff3 )
-                        {
-                            eAkt = Z_Biff3;
-                            NeueTabelle();
-                        }
-                        break;
-                    case 0x0409:                        // BOF          [   4 ]
-                        Bof4();
-                        if( pExcRoot->eDateiTyp == Biff4 )
-                        {
-                            eAkt = Z_Biff4;
-                            NeueTabelle();
-                        }
-                        else if( pExcRoot->eDateiTyp == Biff4W )
-                        {
-                            eAkt = Z_Biff4W;
-                            bBiff4Workbook = TRUE;
-                        }
-                        break;
-                    case 0x0809:                        // BOF          [    5]
+                    case EXC_ID2_BOF:
+                    case EXC_ID3_BOF:
+                    case EXC_ID4_BOF:
+                    case EXC_ID5_BOF:
                     {
-                        Bof5();
-                        if( pExcRoot->eDateiTyp == Biff5W )
+                        // #i23425# don't rely on the record ID, but on the detected BIFF version
+                        switch( GetBiff() )
                         {
-                            eAkt = Z_Biff5WPre;
+                            case xlBiff2:
+                                Bof2();
+                                if( pExcRoot->eDateiTyp == Biff2 )
+                                {
+                                    eAkt = Z_Biff2;
+                                    NeueTabelle();
+                                }
+                            break;
+                            case xlBiff3:
+                                Bof3();
+                                if( pExcRoot->eDateiTyp == Biff3 )
+                                {
+                                    eAkt = Z_Biff3;
+                                    NeueTabelle();
+                                }
+                            break;
+                            case xlBiff4:
+                                Bof4();
+                                if( pExcRoot->eDateiTyp == Biff4 )
+                                {
+                                    eAkt = Z_Biff4;
+                                    NeueTabelle();
+                                }
+                                else if( pExcRoot->eDateiTyp == Biff4W )
+                                {
+                                    eAkt = Z_Biff4W;
+                                    bBiff4Workbook = TRUE;
+                                }
+                            break;
+                            case xlBiff5:
+                            case xlBiff7:
+                                Bof5();
+                                if( pExcRoot->eDateiTyp == Biff5W )
+                                {
+                                    eAkt = Z_Biff5WPre;
 
-                            nBdshtTab = 0;
+                                    nBdshtTab = 0;
 
-                            aIn.StoreGlobalPosition(); // und Position merken
+                                    aIn.StoreGlobalPosition(); // und Position merken
+                                }
+
+                                DBG_ASSERT( pExcRoot->eDateiTyp != Biff5,
+                                    "+ImportExcel::Read(): Tabelle ohne Workbook!" );
+                            break;
+                            default:
+                                DBG_ERROR_BIFF();
                         }
-
-                        DBG_ASSERT( pExcRoot->eDateiTyp != Biff5,
-                            "+ImportExcel::Read(): Tabelle ohne Workbook!" );
                     }
-                        break;
+                    break;
                 }
             }
                 break;
