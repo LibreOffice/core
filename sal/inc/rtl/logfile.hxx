@@ -2,9 +2,9 @@
  *
  *  $RCSfile: logfile.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jbu $ $Date: 2001-07-06 09:36:09 $
+ *  last change: $Author: cd $ $Date: 2001-07-06 10:41:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,10 +77,41 @@
 
 namespace rtl
 {
-    /** wrapper class to keep a logging context.
+/**
+@descr  The intended use for class Logfile is to write time stamp information
+        for profiling purposes. The class calls rtl_logfile_trace which uses the traditional
+        C fopen/fprintf family instead of the new C++ ofstream class because of a (hopefully)
+        lower time penalty: Logging should not distort the logged data.
 
-        Should not be used directly, instead use the RTL_LOGFILE_CONTEXT -macros.
-    */
+        Profiling output should only be generated for a special product version of OpenOffice
+        which is compiled with a defined preprocessor symbol 'PROFILE'.
+        Therefore we have provided a set of macros that uses the class Logfile only if
+        this symbol is defined.  If the macros are not sufficient, i.e. you need more
+        then three arguments for a printf style message, then you have to insert an
+        #ifdef PROFILE/#endif brace yourself.
+        Additionally the environment variable RTL_LOGFILE has to be defined in order to generate
+        profiling data.  It can be used as a run time switch for enabling or disabling the logging.
+        Note that this variable is evaluated only once at the first attempt to write a message.
+
+        The class LogFile collects runtime data within its constructor and destructor. It can be
+        used for timing whole functions.
+        If you want to write timing data without context you can use the RTL_LOGFILE_TRACE-macros
+        which are defined inside <rtl/logfile.h>.
+
+        The class LogFile should not be used directly, instead use the RTL_LOGFILE_CONTEXT/
+        RTL_LOGFILE_TRACE-macros.
+
+        The lines written to the log file consist of the following space separated elements:
+        1.  The time relative to the start of the global timer in milliseconds.  The times is
+            started typically for the first logged line.
+        2.  Thread id.  It's absolut value is probably of less interest than providing a way to
+            distinguish different threads.
+        3.  a.  An opening or closing curly brace indicating the start or end of a scope.
+                4a. Function name or general scope identifier.
+            b.  A vertical line indicating an arbitrary message.
+                4b optional function name or general scope identifier.
+                5b A colon followed by a space and a free form message terminated by a newline.
+*/
     class Logfile
     {
     public:
