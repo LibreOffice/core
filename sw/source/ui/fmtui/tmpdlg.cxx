@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tmpdlg.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:40:39 $
+ *  last change: $Author: hr $ $Date: 2004-03-09 09:31:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -637,6 +637,13 @@ void SwTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
         case  TP_FOOTER_PAGE:
             if(0 == (nHtmlMode & HTMLMODE_ON ))
                 ((SvxFooterPage&)rPage).EnableDynamicSpacing();
+        break;
+        case TP_BORDER :
+            if( SFX_STYLE_FAMILY_PARA == nType )
+                ((SvxBorderTabPage&)rPage).SetSWMode(SW_BORDER_MODE_PARA);
+            else if( SFX_STYLE_FAMILY_FRAME == nType )
+                ((SvxBorderTabPage&)rPage).SetSWMode(SW_BORDER_MODE_FRAME);
+
         break;
     }
 }
