@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormComponent.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-12 06:02:47 $
+ *  last change: $Author: fs $ $Date: 2001-08-07 14:58:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1320,14 +1320,24 @@ sal_Bool OBoundControlModel::_approve(sal_Int32 _nColumnType)
 void SAL_CALL OBoundControlModel::loaded(const com::sun::star::lang::EventObject& _rEvent) throw(RuntimeException)
 {
     osl::MutexGuard aGuard(m_aMutex);
-        Reference<XRowSet> xForm(_rEvent.Source, UNO_QUERY);
+    Reference<XRowSet> xForm(_rEvent.Source, UNO_QUERY);
     connectToField(xForm);
 
     m_bLoaded = sal_True;
     _loaded(_rEvent);
 
     if (m_xField.is())
-        _onValueChanged();
+    {
+        // initially call _onValueChanged
+        // but only if the rowset if posisitioned on a valid record
+        Reference< XRowSet > xRowset( _rEvent.Source, UNO_QUERY );
+        OSL_ENSURE( xRowset.is(), "OBoundControlModel::loaded: invalid event source (no rowset)!" );
+        if ( xRowset.is() )
+        {
+            if ( !xRowset->isBeforeFirst() && !xRowset->isAfterLast() )
+                _onValueChanged();
+        }
+    }
 }
 
 
