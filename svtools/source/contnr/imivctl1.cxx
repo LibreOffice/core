@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imivctl1.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2001-05-08 04:27:46 $
+ *  last change: $Author: pb $ $Date: 2001-07-04 08:41:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1864,14 +1864,16 @@ void SvxIconChoiceCtrl_Impl::PaintItem( const Rectangle& rRect,
 
         Color aBkgColor ( pOut->GetBackground().GetColor() );
         Color aFontColor;
-        if ( ( float( aBkgColor.GetRed() )    +
-               float( aBkgColor.GetGreen() )  +
-               float( aBkgColor.GetBlue() ) ) / 3.0 < 128.0 )
+
+        float nColor = ( float( aBkgColor.GetRed() ) +
+                         float( aBkgColor.GetGreen() ) +
+                         float( aBkgColor.GetBlue() ) ) / 3;
+        if ( nColor < 128.0 || nColor == 255.0 )
             aFontColor.SetColor ( COL_BLACK );
         else
             aFontColor.SetColor( COL_WHITE );
         if ( pView->AutoFontColor() )
-            pOut->SetTextColor ( aFontColor );
+            pOut->SetTextColor( aFontColor );
 
         pOut->DrawText( rRect, aText, nCurTextDrawFlags );
 
@@ -3821,9 +3823,10 @@ void SvxIconChoiceCtrl_Impl::ShowFocus ( Rectangle& rRect )
 {
     Color aBkgColor ( pView->GetBackground().GetColor() );
     Color aPenColor;
-    if ( ( float( aBkgColor.GetRed() )    +
-           float( aBkgColor.GetGreen() )  +
-           float( aBkgColor.GetBlue() ) ) / 3.0 < 128.0 )
+    float nColor = ( float( aBkgColor.GetRed() ) +
+                     float( aBkgColor.GetGreen() ) +
+                     float( aBkgColor.GetBlue() ) ) / 3;
+    if ( nColor < 128.0 || nColor == 255.0 )
         aPenColor.SetColor ( COL_BLACK );
     else
         aPenColor.SetColor( COL_WHITE );
