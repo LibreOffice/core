@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 09:30:41 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 15:07:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -480,7 +480,6 @@ SmXMLImport::SmXMLImport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
     sal_uInt16 nImportFlags)
 :   SvXMLImport( xServiceFactory, nImportFlags ),
-    pMathElemTokenMap(0),
     pPresLayoutElemTokenMap(0),
     pPresElemTokenMap(0),
     pPresScriptEmptyElemTokenMap(0),
@@ -499,7 +498,6 @@ SmXMLImport::SmXMLImport(
     com::sun::star::uno::Reference<com::sun::star::frame::XModel> &rModel,
     const rtl::OUString &rFileName)
 :   SvXMLImport( xServiceFactory, rModel ) ,
-    pMathElemTokenMap(0),
     pPresLayoutElemTokenMap(0),
     pPresElemTokenMap(0),
     pPresScriptEmptyElemTokenMap(0),
@@ -2127,13 +2125,6 @@ void SmXMLOperatorContext_Impl::StartElement(const uno::Reference<
 }
 
 
-
-static __FAR_DATA SvXMLTokenMapEntry aMathElemTokenMap[] =
-{
-    { XML_NAMESPACE_MATH,   XML_MATH,              XML_TOK_MATH   },
-    XML_TOKEN_MAP_END
-};
-
 class SmXMLSpaceContext_Impl : public SmXMLImportContext
 {
 public:
@@ -2605,13 +2596,6 @@ static __FAR_DATA SvXMLTokenMapEntry aColorTokenMap[] =
     XML_TOKEN_MAP_END
 };
 
-
-const SvXMLTokenMap& SmXMLImport::GetMathElemTokenMap()
-{
-    if(!pMathElemTokenMap)
-        pMathElemTokenMap = new SvXMLTokenMap(aMathElemTokenMap);
-    return *pMathElemTokenMap;
-}
 
 const SvXMLTokenMap& SmXMLImport::GetPresLayoutElemTokenMap()
 {
@@ -3513,7 +3497,6 @@ SvXMLImportContext *SmXMLImport::CreateActionContext(sal_uInt16 nPrefix,
 
 SmXMLImport::~SmXMLImport() throw ()
 {
-    delete pMathElemTokenMap;
     delete pPresLayoutElemTokenMap;
     delete pPresElemTokenMap;
     delete pPresScriptEmptyElemTokenMap;
