@@ -2,9 +2,9 @@
  *
  *  $RCSfile: root.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-06 15:06:03 $
+ *  last change: $Author: dr $ $Date: 2001-11-09 09:55:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,6 @@ struct RootData     // -> Inkarnation jeweils im ImportExcel-Objekt!
     String              aStandard;              // Schluessel fuer Exc-Standard-Format
     BiffTyp             eDateiTyp;              // feine Differenzierung
     BiffTyp             eHauptDateiTyp;         // grobe Klassifizierung
-    BiffTyp             eGlobalDateiTyp;        // was war's ganz am Anfang?
     ExtSheetBuffer*     pExtSheetBuff;
     NameBuffer*         pTabNameBuff;
     RangeNameBuffer*    pRNameBuff;

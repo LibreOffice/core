@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-06 15:02:33 $
+ *  last change: $Author: dr $ $Date: 2001-11-09 09:51:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1631,6 +1631,9 @@ void ImportExcel8::PostDocLoad( void )
 
     rOldDocInfo = aNewDocInfo;
     pD->GetDocumentShell()->Broadcast( SfxDocumentInfoHint( &rOldDocInfo ) );
+
+    // building pivot tables
+    aPivotTabList.Apply();
 }
 
 

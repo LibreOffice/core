@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-06 15:00:51 $
+ *  last change: $Author: dr $ $Date: 2001-11-09 09:51:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,7 +209,7 @@ ImportExcel::ImportExcel( SvStream& aStream, ScDocument* pDoc ):
     pExcRoot->pFontBuffer = new FontBuffer( pExcRoot );
     pExcRoot->eDefLanguage = ScGlobal::eLnge;   //LANGUAGE_SYSTEM;
     pExcRoot->aStandard.AssignAscii( "General" );
-    pExcRoot->eDateiTyp = pExcRoot->eHauptDateiTyp = pExcRoot->eGlobalDateiTyp = BiffX;
+    pExcRoot->eDateiTyp = pExcRoot->eHauptDateiTyp = BiffX;
     pExcRoot->pExtSheetBuff = new ExtSheetBuffer( pExcRoot );   //&aExtSheetBuff;
     pExcRoot->pTabNameBuff = new NameBuffer( pExcRoot );        //&aTabNameBuff;
     pExcRoot->pRNameBuff = new RangeNameBuffer( pExcRoot );     //&aRangeNameBuff;
@@ -2039,7 +2039,7 @@ void ImportExcel::Bof5( void )
             return;
     }
 
-    if( nVers == 0x0600 && pExcRoot->eGlobalDateiTyp != Biff5W )
+    if( nVers == 0x0600 && pExcRoot->eHauptDateiTyp != Biff5 )
     {// Biff8
         eHaupt = ( BiffTyp ) ( eHaupt - Biff5 + Biff8 );
         eDatei = ( BiffTyp ) ( eDatei - Biff5 + Biff8 );

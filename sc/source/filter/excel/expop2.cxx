@@ -2,9 +2,9 @@
  *
  *  $RCSfile: expop2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dr $ $Date: 2001-07-30 11:28:24 $
+ *  last change: $Author: dr $ $Date: 2001-11-09 09:51:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,6 @@ ExportBiff5::ExportBiff5( SvStorage& rRootStorage, SvStream& aStream, ScDocument
     pExcRoot->pFontRecs = NULL;
     pExcRoot->pSstRecs = NULL;
     pExcRoot->pEdEng = NULL;
-    pExcRoot->eGlobalDateiTyp = Biff5;
     pExcRoot->eHauptDateiTyp = Biff5;
     pExcRoot->eDateiTyp = Biff5;
     pExcRoot->nColMax = XCL_COLMAX;
@@ -169,7 +168,7 @@ FltError ExportBiff5::Write()
     OfaFilterOptions*       pFiltOpt = NULL;
     SvStorage*              pRootStorage = pExcRoot->pRootStorage;
 
-    if( pExcRoot->eGlobalDateiTyp >= Biff8 )
+    if( pExcRoot->eHauptDateiTyp >= Biff8 )
     {
         pFiltOpt = OFF_APP()->GetFilterOptions();
 
@@ -215,7 +214,6 @@ FltError ExportBiff5::Write()
 ExportBiff8::ExportBiff8( SvStorage& rRootStorage, SvStream& aStream, ScDocument* pDoc, CharSet eZ, BOOL bStoreRel ) :
     ExportBiff5( rRootStorage, aStream, pDoc, eZ )
 {
-    pExcRoot->eGlobalDateiTyp = Biff8;
     pExcRoot->eHauptDateiTyp = Biff8;
     pExcRoot->eDateiTyp = Biff8;
     pExcRoot->nRowMax = XCL8_ROWMAX;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: read.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-01 10:20:31 $
+ *  last change: $Author: dr $ $Date: 2001-11-09 09:51:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,7 @@ FltError ImportExcel::Read( void )
     FltError            eLastErr = eERR_OK;
     UINT16              nOpcode;
     UINT16              nBofLevel;
+    BOOL                bBiff4Workbook = FALSE;
 
     DBG_ASSERT( &aIn != NULL, "-ImportExcel::Read(): Kein Stream - wie dass?!" );
 
@@ -187,7 +188,6 @@ FltError ImportExcel::Read( void )
                         if( pExcRoot->eDateiTyp == Biff2 )
                         {
                             eAkt = Z_Biff2;
-                            pExcRoot->eGlobalDateiTyp = Biff2;
                             ResetBof();
                             NeueTabelle();
                         }
@@ -198,7 +198,6 @@ FltError ImportExcel::Read( void )
                         if( pExcRoot->eDateiTyp == Biff3 )
                         {
                             eAkt = Z_Biff3;
-                            pExcRoot->eGlobalDateiTyp = Biff3;
                             ResetBof();
                             NeueTabelle();
                         }
@@ -209,14 +208,13 @@ FltError ImportExcel::Read( void )
                         if( pExcRoot->eDateiTyp == Biff4 )
                         {
                             eAkt = Z_Biff4;
-                            pExcRoot->eGlobalDateiTyp = Biff4;
                             ResetBof();
                             NeueTabelle();
                         }
                         else if( pExcRoot->eDateiTyp == Biff4W )
                         {
                             eAkt = Z_Biff4W;
-                            pExcRoot->eGlobalDateiTyp = Biff4W;
+                            bBiff4Workbook = TRUE;
                         }
                         break;
                     case 0x0809:                        // BOF          [    5]
@@ -225,7 +223,6 @@ FltError ImportExcel::Read( void )
                         pExcRoot->pColor->SetDefaults();
                         if( pExcRoot->eDateiTyp == Biff5W )
                         {
-                            pExcRoot->eGlobalDateiTyp = Biff5W;
                             eAkt = Z_Biff5WPre;
 
                             nBdshtTab = 0;
@@ -996,7 +993,7 @@ FltError ImportExcel::Read( void )
     ScStyleSheetPool*       pPool = pD->GetStyleSheetPool();
 
     UINT16                  nTabLast;// = pExcRoot->pTabNameBuff->GetLastIndex();
-    if( pExcRoot->eGlobalDateiTyp == Biff3 || pExcRoot->eGlobalDateiTyp == Biff4 )
+    if( pExcRoot->eHauptDateiTyp == Biff3 || (pExcRoot->eHauptDateiTyp == Biff4 && !bBiff4Workbook) )
         nTabLast = 1;
     else
         nTabLast = pExcRoot->pTabNameBuff->GetLastIndex();
@@ -1022,11 +1019,8 @@ FltError ImportExcel::Read( void )
 FltError ImportExcel8::Read( void )
 {
 #ifdef DEBUGGING
-    BOOL bDebugging = TRUE;
-    if( bDebugging )
     {
         Biff8RecDumper  aDumper( *pExcRoot, TRUE );
-
         if( aDumper.Dump( aIn ) )
             return eERR_OK;
     }
@@ -1059,8 +1053,12 @@ FltError ImportExcel8::Read( void )
     DBG_ASSERT( &aIn != NULL,
         "-ImportExcel8::Read(): Kein Stream - wie dass?!" );
 
-    FilterProgressBar*  pPrgrsBar = new FilterProgressBar( aIn );
-    pExcRoot->pProgress = pPrgrsBar;
+    ScfProgressBar* pProgress = new ScfProgressBar( STR_LOAD_DOC );
+    sal_uInt32 nStreamSeg = pProgress->AddSegment( aIn.GetStreamLen() );
+    pProgress->ActivateSegment( nStreamSeg );
+
+//    FilterProgressBar*  pPrgrsBar = new FilterProgressBar( aIn );
+//    pExcRoot->pProgress = pPrgrsBar;
     bObjSection = FALSE;
 
     while( eAkt != Z_Ende )
@@ -1074,7 +1072,7 @@ FltError ImportExcel8::Read( void )
         }
 
         if( eAkt != Z_Biff8Pre && eAkt != Z_Biff8WPre )
-            pPrgrsBar->Progress();
+            pProgress->Progress( aIn.GetStreamPos() );
 
         if( nOpcode != EXC_CONT )
         {
@@ -1100,7 +1098,6 @@ FltError ImportExcel8::Read( void )
                         pExcRoot->pColor->SetDefaults();
                         if( pExcRoot->eHauptDateiTyp == Biff8 )
                         {
-                            pExcRoot->eGlobalDateiTyp = Biff8W;
                             eAkt = Z_Biff8WPre;
 
                             nBdshtTab = 0;
@@ -1216,7 +1213,7 @@ FltError ImportExcel8::Read( void )
                             if( pExcRoot->eDateiTyp == Biff8C )
                             {
                                 if( bWithDrawLayer && aObjManager.IsCurrObjChart() )
-                                    ReadChart8( *pPrgrsBar, FALSE );    // zunaechst Return vergessen
+                                    ReadChart8( *pProgress, FALSE );    // zunaechst Return vergessen
                                 else
                                 {// Stream-Teil mit Chart ueberlesen
                                     ePrev = eAkt;
@@ -1314,7 +1311,7 @@ FltError ImportExcel8::Read( void )
                             Bof5();
                             if( pExcRoot->eDateiTyp == Biff8C && bWithDrawLayer &&
                                 aObjManager.IsCurrObjChart() )
-                                ReadChart8( *pPrgrsBar, FALSE );    // zunaechst Return vergessen
+                                ReadChart8( *pProgress, FALSE );    // zunaechst Return vergessen
                             else
                             {
                                 ePrev = eAkt;
@@ -1362,6 +1359,14 @@ FltError ImportExcel8::Read( void )
                 switch( nOpcode )
                 {
                     case 0x0809:                        // BOF          [    5   ]
+                    {
+                        if( nTab > MAXTAB )    // ignore tables >255
+                        {
+                            ePrev = eAkt;
+                            eAkt = Z_Biffn0;
+                            break;
+                        }
+
                         Bof5();
                         NeueTabelle();
 
@@ -1380,7 +1385,7 @@ FltError ImportExcel8::Read( void )
                             case Biff8C:
                                 aObjManager.SetNewCurrObjChart();
                                 pExcRoot->bChartTab = TRUE;
-                                ReadChart8( *pPrgrsBar, TRUE );
+                                ReadChart8( *pProgress, TRUE );
                                 pExcRoot->bChartTab = FALSE;
                                 EndSheet();
                                 nTab++;
@@ -1393,8 +1398,8 @@ FltError ImportExcel8::Read( void )
                         }
                         DBG_ASSERT( pExcRoot->eDateiTyp != Biff8W,
                             "+ImportExcel8::Read(): Doppel-Whopper-Workbook!" );
-
-                        break;
+                    }
+                    break;
                 }
 
             }
@@ -1454,12 +1459,19 @@ FltError ImportExcel8::Read( void )
             {
                 switch( nOpcode )
                 {
-                    case 0x0A:                          // EOF          [ 2345   ]
-                        eAkt = ePrev;
-                        nTab++;
-                        break;
+                    case 0x0809:    nBofLevel++;            break;
+                    case 0x000A:
+                    {
+                        if( nBofLevel )
+                            nBofLevel--;
+                        else
+                        {
+                            eAkt = ePrev;
+                            nTab++;
+                        }
+                    }
+                    break;
                 }
-
             }
                 break;
             // ----------------------------------------------------------------
@@ -1482,17 +1494,15 @@ FltError ImportExcel8::Read( void )
             pD->SetPageStyle( nTabCount, GetPageStyleName( nTabCount ) );
     }
 
-    if( pPrgrsBar )
-    {
-        delete pPrgrsBar;
-        pPrgrsBar = pExcRoot->pProgress = NULL;
-    }
+    DELETEZ( pProgress );
+//    if( pPrgrsBar )
+//    {
+//        delete pPrgrsBar;
+//        pPrgrsBar = pExcRoot->pProgress = NULL;
+//    }
 
     AdjustRowHeight();
     PostDocLoad();
-
-    // building pivot tables
-    aPivotTabList.Apply();
 
     // import change tracking data
     XclImpChangeTrack aImpChTr( pExcRoot );
@@ -1507,7 +1517,7 @@ FltError ImportExcel8::Read( void )
 
 //___________________________________________________________________
 
-FltError ImportExcel8::ReadChart8( FilterProgressBar& rPrgrs, const BOOL bOwnTab )
+FltError ImportExcel8::ReadChart8( ScfProgressBar& rProgress, const BOOL bOwnTab )
 {
     bFirstScl   = TRUE;
 
@@ -1525,7 +1535,7 @@ FltError ImportExcel8::ReadChart8( FilterProgressBar& rPrgrs, const BOOL bOwnTab
             if( bLoop )
                 bLoop = (aIn.GetRecNum() != 0x000A);
         }
-        rPrgrs.Progress();
+        rProgress.Progress( aIn.GetStreamPos() );
 
         return eERR_OK;
     }
@@ -1536,7 +1546,7 @@ FltError ImportExcel8::ReadChart8( FilterProgressBar& rPrgrs, const BOOL bOwnTab
         bLoop = aIn.StartNextRecord();
         nOpcode = aIn.GetRecNum();
 
-        rPrgrs.Progress();
+        rProgress.Progress( aIn.GetStreamPos() );
 
         switch( nOpcode )
         {

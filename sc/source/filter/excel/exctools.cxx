@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exctools.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: dr $ $Date: 2001-10-23 15:01:39 $
+ *  last change: $Author: dr $ $Date: 2001-11-09 09:51:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,7 +184,7 @@ RootData::RootData( void )
     pXFBuffer = NULL;
     pFontBuffer = NULL;
     eDefLanguage = ScGlobal::eLnge;
-    eDateiTyp = eHauptDateiTyp = eGlobalDateiTyp = BiffX;
+    eDateiTyp = eHauptDateiTyp = BiffX;
     pExtSheetBuff = NULL;
     pTabNameBuff = NULL;
     pRNameBuff = NULL;

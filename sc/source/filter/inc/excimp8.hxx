@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.hxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-06 15:06:03 $
+ *  last change: $Author: dr $ $Date: 2001-11-09 09:55:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,7 +270,7 @@ class ImportExcel8 : public ImportExcel
         virtual void            EndAllChartObjects( void );     // -> excobj.cxx
         virtual void            PostDocLoad( void );
 
-        virtual FltError        ReadChart8( FilterProgressBar&, const BOOL bOwnTab );
+        virtual FltError        ReadChart8( ScfProgressBar&, const BOOL bOwnTab );
                                 // -> read.cxx
         void                    InsertHyperlink( const UINT16 nCol, const UINT16 nRow,
                                                     const String& rURL );
