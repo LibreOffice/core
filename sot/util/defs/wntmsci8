@@ -1480,3 +1480,5 @@ _TI3?AVNotConnectedException@io@star@sun@com@@
 ?getArray@?$Sequence@UPropertyValue@beans@star@sun@com@@@uno@star@sun@com@@QAAPAUPropertyValue@beans@345@XZ
 ?getArray@?$Sequence@V?$Sequence@UPropertyValue@beans@star@sun@com@@@uno@star@sun@com@@@uno@star@sun@com@@QAAPAV?$Sequence@UPropertyValue@beans@star@sun@com@@@2345@XZ
 _TI2?AVbad_alloc@std@@
+?IsChart@SotExchange@@SAGABVSvGlobalName@@@Z
+?IsMath@SotExchange@@SAGABVSvGlobalName@@@Z
