@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.43 $
+#*  $Revision: 1.44 $
 #*
-#*  last change: $Author: vg $ $Date: 2003-04-01 13:38:20 $
+#*  last change: $Author: vg $ $Date: 2003-04-15 13:41:33 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -63,13 +63,13 @@ PRJ=..
 
 PRJNAME=svtools
 TARGET=svtool
-TARGETTYPE=GUI
 RESTARGET=svt
 RESTARGETSIMPLE=svs
 VERSION=$(UPD)
 GEN_HID=TRUE
 GEN_HID_OTHER=TRUE
 ENABLE_EXCEPTIONS=TRUE
+
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :	settings.mk
@@ -176,30 +176,32 @@ RESLIB2SRSFILES=\
 
 SHL1TARGET= svt$(VERSION)$(DLLPOSTFIX)
 SHL1IMPLIB= _svt
-SHL1STDLIBS=$(TOOLSLIB)			\
-            $(VOSLIB)			\
-            $(CPPULIB)			\
-            $(CPPUHELPERLIB)	\
-            $(RTLLIB)			\
-            $(SVLIB)			\
-            $(TKLIB)			\
-            $(SVLLIB)			\
-            $(SALLIB)			\
-            $(UNOTOOLSLIB)		\
-            $(COMPHELPERLIB)		\
-            $(UCBHELPERLIB)			\
-            $(ICUI18NLIB)
+
+# static libraries
+SHL1STDLIBS+= $(JPEG3RDLIB)
+
+# dynamic libraries
+SHL1STDLIBS+= \
+        $(TKLIB)			\
+        $(VCLLIB)			\
+        $(SVLLIB)			\
+        $(SOTLIB)			\
+        $(UNOTOOLSLIB)		\
+        $(TOOLSLIB)			\
+        $(UCBHELPERLIB)		\
+        $(COMPHELPERLIB)	\
+        $(CPPUHELPERLIB)	\
+        $(CPPULIB)			\
+        $(VOSLIB)			\
+        $(SALLIB)			\
+        $(ICUUCLIB)
 
 .IF "$(GUI)"=="WNT"
 SHL1STDLIBS+= \
         uwinapi.lib \
         $(LIBPRE) advapi32.lib	\
         $(LIBPRE) gdi32.lib
-.ENDIF
-
-SHL1STDLIBS+= \
-            $(SOTLIB) \
-            $(JPEG3RDLIB)
+.ENDIF # WNT
 
 SHL1LIBS= \
         $(SLB)$/svt.lib 	\
@@ -220,23 +222,23 @@ DEF1EXPORTFILE=	svt.dxp
 SHL2TARGET= svl$(VERSION)$(DLLPOSTFIX)
 SHL2IMPLIB= _isvl
 SHL1OBJS=$(SLO)$/svtdata.obj
-SHL2STDLIBS=$(TOOLSLIB) 	\
-        $(VOSLIB)			\
-        $(CPPULIB)			\
-        $(COMPHELPERLIB)		\
-        $(CPPUHELPERLIB)	\
-        $(RTLLIB)			\
-        $(SALLIB)			\
-        $(SALHELPERLIB) \
+
+SHL2STDLIBS= \
         $(UNOTOOLSLIB)		\
-        $(UCBHELPERLIB)
+        $(TOOLSLIB) 		\
+        $(UCBHELPERLIB)		\
+        $(COMPHELPERLIB)	\
+        $(CPPUHELPERLIB)	\
+        $(CPPULIB)			\
+        $(VOSLIB)			\
+        $(SALLIB)
 
 .IF "$(GUI)"=="WNT"
 SHL2STDLIBS+= \
-            uwinapi.lib \
-            $(LIBPRE) advapi32.lib	\
-            $(LIBPRE) gdi32.lib
-.ENDIF
+        uwinapi.lib \
+        $(LIBPRE) advapi32.lib	\
+        $(LIBPRE) gdi32.lib
+.ENDIF # WNT
 
 SHL2LIBS=	$(SLB)$/svl.lib
 
@@ -255,17 +257,18 @@ APP1DEPN	=   $(SHL1TARGETN) $(SHL2TARGETN)
 APP1OBJS	=   $(OBJ)$/bmpgui.obj	\
                 $(OBJ)$/bmpcore.obj
 
-APP1STDLIBS	=	$(SVLIB)		\
-                $(TOOLSLIB)		\
-                $(VOSLIB) 		\
-                $(SALLIB)
-
 .IF "$(GUI)"!="UNX"
 APP1STDLIBS+= svtool.lib
 .ELSE
 APP1STDLIBS+= -lsvt$(UPD)$(DLLSUFFIX)
 APP1STDLIBS+= -lsvl$(UPD)$(DLLSUFFIX)
-.ENDIF
+.ENDIF # UNX
+
+APP1STDLIBS+=	\
+                $(VCLLIB)		\
+                $(TOOLSLIB)		\
+                $(VOSLIB) 		\
+                $(SALLIB)
 
 # --- g2g application --------------------------------------------------
 
@@ -275,17 +278,17 @@ APP2DEPN	=   $(SHL1TARGETN) $(SHL2TARGETN)
 
 APP2OBJS	=   $(OBJ)$/g2g.obj
 
-APP2STDLIBS	=	$(SVLIB)		\
-                $(TOOLSLIB)		\
-                $(VOSLIB) 		\
-                $(SALLIB)
-
 .IF "$(GUI)"!="UNX"
 APP2STDLIBS+= svtool.lib
 .ELSE
 APP2STDLIBS+= -lsvt$(UPD)$(DLLSUFFIX)
 APP2STDLIBS+= -lsvl$(UPD)$(DLLSUFFIX)
 .ENDIF
+
+APP2STDLIBS+=	$(VCLLIB)		\
+                $(TOOLSLIB)		\
+                $(VOSLIB) 		\
+                $(SALLIB)
 
 # --- Targets ------------------------------------------------------
 
@@ -312,12 +315,12 @@ ALL: $(SLB)$/svl.lib \
 
 # --- Svtools-Control-Filter-Datei ---
 
-$(MISC)$/$(SHL1TARGET).flt: makefile.mk
+$(MISC)$/$(SHL1TARGET).flt: svt.flt
     @echo ------------------------------
     @echo Making: $@
     +$(TYPE) svt.flt >$@
 
-$(MISC)$/$(SHL2TARGET).flt: makefile.mk
+$(MISC)$/$(SHL2TARGET).flt: svl.flt
     @echo ------------------------------
     @echo Making: $@
     +$(TYPE) svl.flt >$@
