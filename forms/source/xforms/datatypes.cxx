@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datatypes.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:51:08 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:35:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@
 
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+#ifndef _DATETIME_HXX
+#include <tools/datetime.hxx>
 #endif
 #ifndef INCLUDED_RTL_MATH_HXX
 #include <rtl/math.hxx>
@@ -406,6 +409,175 @@ namespace xforms
     }
 
     //====================================================================
+    //= OValueLimitedType_Base
+    //====================================================================
+    OValueLimitedType_Base::OValueLimitedType_Base( const ::rtl::OUString& _rName, sal_Int16 _nTypeClass )
+        :OXSDDataType( _rName, _nTypeClass )
+        ,m_fCachedMaxInclusive( 0 )
+        ,m_fCachedMaxExclusive( 0 )
+        ,m_fCachedMinInclusive( 0 )
+        ,m_fCachedMinExclusive( 0 )
+    {
+    }
+
+    //--------------------------------------------------------------------
+    void OValueLimitedType_Base::initializeClone( const OXSDDataType& _rCloneSource )
+    {
+        OXSDDataType::initializeClone( _rCloneSource );
+        initializeTypedClone( static_cast< const OValueLimitedType_Base& >( _rCloneSource ) );
+    }
+
+    //--------------------------------------------------------------------
+    void OValueLimitedType_Base::initializeTypedClone( const OValueLimitedType_Base& _rCloneSource )
+    {
+        m_aMaxInclusive   = _rCloneSource.m_aMaxInclusive;
+        m_aMaxExclusive   = _rCloneSource.m_aMaxExclusive;
+        m_aMinInclusive   = _rCloneSource.m_aMinInclusive;
+        m_aMinExclusive   = _rCloneSource.m_aMinExclusive;
+        m_fCachedMaxInclusive   = _rCloneSource.m_fCachedMaxInclusive;
+        m_fCachedMaxExclusive   = _rCloneSource.m_fCachedMaxExclusive;
+        m_fCachedMinInclusive   = _rCloneSource.m_fCachedMinInclusive;
+        m_fCachedMinExclusive   = _rCloneSource.m_fCachedMinExclusive;
+    }
+
+    //--------------------------------------------------------------------
+    void SAL_CALL OValueLimitedType_Base::setFastPropertyValue_NoBroadcast(
+        sal_Int32 _nHandle, const ::com::sun::star::uno::Any& _rValue ) throw (::com::sun::star::uno::Exception)
+    {
+        OXSDDataType::setFastPropertyValue_NoBroadcast( _nHandle, _rValue );
+
+        // if one of our limit properties has been set, translate it into a double
+        // value, for later efficient validation
+        switch ( _nHandle )
+        {
+        case PROPERTY_ID_XSD_MAX_INCLUSIVE_INT:
+        case PROPERTY_ID_XSD_MAX_INCLUSIVE_DOUBLE:
+        case PROPERTY_ID_XSD_MAX_INCLUSIVE_DATE:
+        case PROPERTY_ID_XSD_MAX_INCLUSIVE_TIME:
+        case PROPERTY_ID_XSD_MAX_INCLUSIVE_DATE_TIME:
+            if ( m_aMaxInclusive.hasValue() )
+                normalizeValue( m_aMaxInclusive, m_fCachedMaxInclusive );
+            else
+                m_fCachedMaxInclusive = 0;
+            break;
+        case PROPERTY_ID_XSD_MAX_EXCLUSIVE_INT:
+        case PROPERTY_ID_XSD_MAX_EXCLUSIVE_DOUBLE:
+        case PROPERTY_ID_XSD_MAX_EXCLUSIVE_DATE:
+        case PROPERTY_ID_XSD_MAX_EXCLUSIVE_TIME:
+        case PROPERTY_ID_XSD_MAX_EXCLUSIVE_DATE_TIME:
+            if ( m_aMaxExclusive.hasValue() )
+                normalizeValue( m_aMaxExclusive, m_fCachedMaxExclusive );
+            else
+                m_fCachedMaxExclusive = 0;
+            break;
+        case PROPERTY_ID_XSD_MIN_INCLUSIVE_INT:
+        case PROPERTY_ID_XSD_MIN_INCLUSIVE_DOUBLE:
+        case PROPERTY_ID_XSD_MIN_INCLUSIVE_DATE:
+        case PROPERTY_ID_XSD_MIN_INCLUSIVE_TIME:
+        case PROPERTY_ID_XSD_MIN_INCLUSIVE_DATE_TIME:
+            if ( m_aMinInclusive.hasValue() )
+                normalizeValue( m_aMinInclusive, m_fCachedMinInclusive );
+            else
+                m_fCachedMinInclusive = 0;
+            break;
+        case PROPERTY_ID_XSD_MIN_EXCLUSIVE_INT:
+        case PROPERTY_ID_XSD_MIN_EXCLUSIVE_DOUBLE:
+        case PROPERTY_ID_XSD_MIN_EXCLUSIVE_DATE:
+        case PROPERTY_ID_XSD_MIN_EXCLUSIVE_TIME:
+        case PROPERTY_ID_XSD_MIN_EXCLUSIVE_DATE_TIME:
+            if ( m_aMinExclusive.hasValue() )
+                normalizeValue( m_aMinExclusive, m_fCachedMinExclusive );
+            else
+                m_fCachedMinExclusive = 0;
+            break;
+        }
+    }
+
+    //--------------------------------------------------------------------
+    bool OValueLimitedType_Base::_getValue( const ::rtl::OUString& rValue, double& fValue )
+    {
+        // convert to double
+        rtl_math_ConversionStatus eStatus;
+        sal_Int32 nEnd;
+        double f = ::rtl::math::stringToDouble(
+            rValue, sal_Unicode('.'), sal_Unicode(0), &eStatus, &nEnd );
+
+        // error checking...
+        bool bReturn = false;
+        if( eStatus == rtl_math_ConversionStatus_Ok
+            && nEnd == rValue.getLength() )
+        {
+            bReturn = true;
+            fValue = f;
+        }
+        return bReturn;
+    }
+
+    //--------------------------------------------------------------------
+    sal_uInt16 OValueLimitedType_Base::_validate( const ::rtl::OUString& rValue )
+    {
+        sal_uInt16 nReason = OXSDDataType::_validate( rValue );
+        if( nReason == 0 )
+        {
+
+            // convert value and check format
+            double nDoubleLimit = 0;
+            double f;
+            if( ! _getValue( rValue, f ) )
+                nReason = RID_STR_XFORMS_VALUE_IS_NOT_A;
+
+            // check range
+            else if( ( m_aMaxInclusive.hasValue() ) && f > m_fCachedMaxInclusive )
+                nReason = RID_STR_XFORMS_VALUE_MAX_INCL;
+            else if( ( m_aMaxExclusive.hasValue() ) && f >= m_fCachedMaxExclusive )
+                nReason = RID_STR_XFORMS_VALUE_MAX_EXCL;
+            else if( ( m_aMinInclusive.hasValue() ) && f < m_fCachedMinInclusive )
+                nReason = RID_STR_XFORMS_VALUE_MIN_INCL;
+            else if( ( m_aMinExclusive.hasValue() ) && f <= m_fCachedMinExclusive )
+                nReason = RID_STR_XFORMS_VALUE_MIN_EXCL;
+        }
+        return nReason;
+    }
+
+    //--------------------------------------------------------------------
+    ::rtl::OUString OValueLimitedType_Base::_explainInvalid( sal_uInt16 nReason )
+    {
+        ::rtl::OUStringBuffer sInfo;
+        switch( nReason )
+        {
+        case 0:
+            // nothing to do!
+            break;
+
+        case RID_STR_XFORMS_VALUE_IS_NOT_A:
+            sInfo.append( getName() );
+            break;
+
+        case RID_STR_XFORMS_VALUE_MAX_INCL:
+            sInfo.append( typedValueAsHumanReadableString( m_aMaxInclusive ) );
+            break;
+
+        case RID_STR_XFORMS_VALUE_MAX_EXCL:
+            sInfo.append( typedValueAsHumanReadableString( m_aMaxExclusive ) );
+            break;
+
+        case RID_STR_XFORMS_VALUE_MIN_INCL:
+            sInfo.append( typedValueAsHumanReadableString( m_aMinInclusive ) );
+            break;
+
+        case RID_STR_XFORMS_VALUE_MIN_EXCL:
+            sInfo.append( typedValueAsHumanReadableString( m_aMinExclusive ) );
+            break;
+
+        default:
+            OSL_ENSURE( false, "OValueLimitedType::_explainInvalid: unknown reason!" );
+            break;
+        }
+
+        return sInfo.makeStringAndClear();
+    }
+
+    //====================================================================
     //= OStringType
     //====================================================================
      //--------------------------------------------------------------------
@@ -649,11 +821,17 @@ namespace xforms
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString ODecimalType::typedValueAsString( const Any& _rValue ) const
+    ::rtl::OUString ODecimalType::typedValueAsHumanReadableString( const Any& _rValue ) const
     {
-        double nValue( 0 );
-        OSL_VERIFY( _rValue >>= nValue );
-        return ::rtl::OUString::valueOf( nValue );
+        double fValue( 0 );
+        normalizeValue( _rValue, fValue );
+        return ::rtl::OUString::valueOf( fValue );
+    }
+
+    //--------------------------------------------------------------------
+    void ODecimalType::normalizeValue( const Any& _rValue, double& _rDoubleValue ) const
+    {
+        OSL_VERIFY( _rValue >>= _rDoubleValue );
     }
 
     //====================================================================
@@ -687,25 +865,31 @@ namespace xforms
     //--------------------------------------------------------------------
     bool ODateType::_getValue( const ::rtl::OUString& value, double& fValue )
     {
-        // TODO/eforms
-        fValue = 0;
+        Any aTypeValue = Convert::get().toAny( value, getCppuType() );
+
+        Date aValue;
+        if ( !( aTypeValue >>= aValue ) )
+            return false;
+
+        ::Date aToolsDate( aValue.Day, aValue.Month, aValue.Year );
+        fValue = aToolsDate.GetDate();
         return true;
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString ODateType::typedValueAsString( const Any& _rValue ) const
+    ::rtl::OUString ODateType::typedValueAsHumanReadableString( const Any& _rValue ) const
     {
-        Date aDate;
-        OSL_VERIFY( _rValue >>= aDate );
+        OSL_PRECOND( _rValue.getValueType().equals( getCppuType() ), "ODateType::typedValueAsHumanReadableString: unexpected type" );
+        return Convert::get().toXSD( _rValue );
+    }
 
-        ::rtl::OUStringBuffer sInfo;
-        sInfo.append( (sal_Int32)aDate.Year );
-        sInfo.appendAscii( "-" );
-        sInfo.append( (sal_Int32)aDate.Month );
-        sInfo.appendAscii( "-" );
-        sInfo.append( (sal_Int32)aDate.Day );
-
-        return sInfo.makeStringAndClear();
+    //--------------------------------------------------------------------
+    void ODateType::normalizeValue( const Any& _rValue, double& _rDoubleValue ) const
+    {
+        Date aValue;
+        OSL_VERIFY( _rValue >>= aValue );
+        ::Date aToolsDate( aValue.Day, aValue.Month, aValue.Year );
+        _rDoubleValue = aToolsDate.GetDate();
     }
 
     //====================================================================
@@ -723,27 +907,31 @@ namespace xforms
     //--------------------------------------------------------------------
     bool OTimeType::_getValue( const ::rtl::OUString& value, double& fValue )
     {
-        // TODO/eforms
-        fValue = 0;
+        Any aTypedValue = Convert::get().toAny( value, getCppuType() );
+
+        Time aValue;
+        if ( !( aTypedValue >>= aValue ) )
+            return false;
+
+        ::Time aToolsTime( aValue.Hours, aValue.Minutes, aValue.Seconds, aValue.HundredthSeconds );
+        fValue = aToolsTime.GetTime();
         return true;
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString OTimeType::typedValueAsString( const Any& _rValue ) const
+    ::rtl::OUString OTimeType::typedValueAsHumanReadableString( const Any& _rValue ) const
     {
-        Time aTime;
-        OSL_VERIFY( _rValue >>= aTime );
+        OSL_PRECOND( _rValue.getValueType().equals( getCppuType() ), "OTimeType::typedValueAsHumanReadableString: unexpected type" );
+        return Convert::get().toXSD( _rValue );
+    }
 
-        ::rtl::OUStringBuffer sInfo;
-        sInfo.append( (sal_Int32)aTime.Hours );
-        sInfo.appendAscii( ":" );
-        sInfo.append( (sal_Int32)aTime.Minutes );
-        sInfo.appendAscii( ":" );
-        sInfo.append( (sal_Int32)aTime.Seconds );
-        sInfo.appendAscii( "." );
-        sInfo.append( (sal_Int32)aTime.HundredthSeconds );
-
-        return sInfo.makeStringAndClear();
+    //--------------------------------------------------------------------
+    void OTimeType::normalizeValue( const Any& _rValue, double& _rDoubleValue ) const
+    {
+        Time aValue;
+        OSL_VERIFY( _rValue >>= aValue );
+        ::Time aToolsTime( aValue.Hours, aValue.Minutes, aValue.Seconds, aValue.HundredthSeconds );
+        _rDoubleValue = aToolsTime.GetTime();
     }
 
     //====================================================================
@@ -759,22 +947,55 @@ namespace xforms
     }
 
     //--------------------------------------------------------------------
+    namespace
+    {
+        double lcl_normalizeDateTime( const DateTime& _rValue )
+        {
+            ::DateTime aToolsValue(
+                ::Date( _rValue.Day, _rValue.Month, _rValue.Year ),
+                ::Time( _rValue.Hours, _rValue.Minutes, _rValue.Seconds, _rValue.HundredthSeconds )
+            );
+
+            double fValue = 0;
+            // days since 1.1.1900 (which is relatively arbitrary but fixed date)
+            fValue += ::Date( aToolsValue ) - ::Date( 1, 1, 1900 );
+            // time
+            fValue += aToolsValue.GetTimeInDays();
+            return fValue;
+        }
+    }
+
+    //--------------------------------------------------------------------
     bool ODateTimeType::_getValue( const ::rtl::OUString& value, double& fValue )
     {
-        // TODO/eforms
-        fValue = 0;
+        Any aTypedValue = Convert::get().toAny( value, getCppuType() );
+
+        DateTime aValue;
+        if ( !( aTypedValue >>= aValue ) )
+            return false;
+
+        fValue = lcl_normalizeDateTime( aValue );
         return true;
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString ODateTimeType::typedValueAsString( const Any& _rValue ) const
+    ::rtl::OUString ODateTimeType::typedValueAsHumanReadableString( const Any& _rValue ) const
     {
-        DateTime aDateTime;
-        OSL_VERIFY( _rValue >>= aDateTime );
+        OSL_PRECOND( _rValue.getValueType().equals( getCppuType() ), "OTimeType::typedValueAsHumanReadableString: unexpected type" );
+        ::rtl::OUString sString = Convert::get().toXSD( _rValue );
 
-        // TODO/eforms
+        // ISO 8601 notation has a "T" to separate between date and time. Our only concession
+        // to the "human readable" in the method name is to replace this T with a whitespace.
+        OSL_ENSURE( sString.indexOf( 'T' ) != -1, "ODateTimeType::typedValueAsHumanReadableString: hmm - no ISO notation?" );
+        return sString.replace( 'T', ' ' );
+    }
 
-        return ::rtl::OUString();
+    //--------------------------------------------------------------------
+    void ODateTimeType::normalizeValue( const Any& _rValue, double& _rDoubleValue ) const
+    {
+        DateTime aValue;
+        OSL_VERIFY( _rValue >>= aValue );
+        _rDoubleValue = lcl_normalizeDateTime( aValue );
     }
 
     //====================================================================
@@ -811,54 +1032,20 @@ namespace xforms
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString OShortIntegerType::typedValueAsString( const Any& _rValue ) const
+    ::rtl::OUString OShortIntegerType::typedValueAsHumanReadableString( const Any& _rValue ) const
     {
         sal_Int16 nValue( 0 );
         OSL_VERIFY( _rValue >>= nValue );
         return ::rtl::OUString::valueOf( (sal_Int32)nValue );
     }
 
-    //====================================================================
-    //= OByteIntegerType
-    //====================================================================
     //--------------------------------------------------------------------
-    OByteIntegerType::OByteIntegerType( const ::rtl::OUString& _rName, sal_Int16 _nTypeClass )
-        :OByteIntegerType_Base( _rName, _nTypeClass )
+    void OShortIntegerType::normalizeValue( const Any& _rValue, double& _rDoubleValue ) const
     {
-    }
-
-    //--------------------------------------------------------------------
-    IMPLEMENT_DEFAULT_TYPED_CLONING( OByteIntegerType, OByteIntegerType_Base )
-
-    //--------------------------------------------------------------------
-    void OByteIntegerType::initializeTypedClone( const OByteIntegerType& _rCloneSource )
-    {
-    }
-
-    //--------------------------------------------------------------------
-    bool OByteIntegerType::_getValue( const ::rtl::OUString& value, double& fValue )
-    {
-        fValue = (double)(sal_Int8)value.toInt32();
-        // TODO/eforms
-        // this does not care for values which do not fit into a sal_Int8, but simply
-        // cuts them down. A better implementation here should probably return <FALSE/>
-        // for those values.
-        // Else, we may have a situation where the UI claims an input to be valid
-        // (say "12345678"), while internally, and at submission time, this is cut to
-        // some smaller value.
-        //
-        // Additionally, this of course does not care for strings which are no numers ...
-        return true;
-    }
-
-    //--------------------------------------------------------------------
-    ::rtl::OUString OByteIntegerType::typedValueAsString( const Any& _rValue ) const
-    {
-        sal_Int8 nValue( 0 );
+        sal_Int16 nValue( 0 );
         OSL_VERIFY( _rValue >>= nValue );
-        return ::rtl::OUString::valueOf( (sal_Int32)nValue );
+        _rDoubleValue = nValue;
     }
-
     //====================================================================
     //====================================================================
 
