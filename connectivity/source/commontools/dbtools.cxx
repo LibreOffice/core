@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-30 15:35:56 $
+ *  last change: $Author: oj $ $Date: 2001-02-05 10:32:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -992,13 +992,14 @@ Reference< XSQLQueryComposer> getCurrentSettingsComposer(
 
                         // the command used by the query
                         sStatement = getString(xQueryProps->getPropertyValue(PROPERTY_COMMAND));
+                        OSL_ENSURE(sStatement.getLength(),"Statement is empty!");
 
                         // use an additional composer to build a statement from the query filter/order props
                         Reference< XSQLQueryComposerFactory> xFactory(xConn, UNO_QUERY);
                         Reference< XSQLQueryComposer> xLocalComposer;
                         if (xFactory.is())
                             xLocalComposer = xFactory->createQueryComposer();
-                        if (!xLocalComposer.is())
+                        if (!xLocalComposer.is() || !sStatement.getLength())
                             break;
 
                         xLocalComposer->setQuery(sStatement);
@@ -1131,6 +1132,9 @@ sal_Int32 getSearchColumnFlag( const Reference< XConnection>& _rxConn,sal_Int32 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.13  2001/01/30 15:35:56  oj
+ *  check if qoute char is space
+ *
  *  Revision 1.12  2001/01/09 13:09:21  oj
  *  catch SQLException separated
  *
