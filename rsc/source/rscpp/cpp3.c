@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpp3.c,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nf $ $Date: 2001-04-18 10:31:56 $
+ *  last change: $Author: svesik $ $Date: 2001-07-13 22:07:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,11 @@ int AddInclude( char *pIncStr );  /* BP, 11.09.91, Forward-Deklaration */
 
 #if defined(DEBUG) && (HOST == SYS_VMS || HOST == SYS_UNIX)
 #include        <signal.h>
+#ifdef IRIX
 extern int      abort();                /* For debugging                */
+#else
+extern int      abort();                /* For debugging                */
+#endif
 #endif
 
 void InitCpp3()
