@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dndhelp.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2001-05-11 07:21:20 $
+ *  last change: $Author: mt $ $Date: 2001-11-23 12:38:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,7 @@ vcl::unohelper::DragAndDropWrapper::~DragAndDropWrapper()
 uno::Any vcl::unohelper::DragAndDropWrapper::queryInterface( const uno::Type & rType ) throw(uno::RuntimeException)
 {
     uno::Any aRet = ::cppu::queryInterface( rType,
+                            SAL_STATIC_CAST( ::com::sun::star::lang::XEventListener*, (::com::sun::star::datatransfer::dnd::XDragGestureListener*)this ),
                             SAL_STATIC_CAST( ::com::sun::star::datatransfer::dnd::XDragGestureListener*, this ),
                             SAL_STATIC_CAST( ::com::sun::star::datatransfer::dnd::XDragSourceListener*, this ),
                             SAL_STATIC_CAST( ::com::sun::star::datatransfer::dnd::XDropTargetListener*, this ) );
@@ -132,66 +133,80 @@ uno::Any vcl::unohelper::DragAndDropWrapper::queryInterface( const uno::Type & r
 }
 
 // ::com::sun::star::lang::XEventListener
-void vcl::unohelper::DragAndDropWrapper::disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException)
+void vcl::unohelper::DragAndDropWrapper::disposing( const ::com::sun::star::lang::EventObject& rEvent ) throw (::com::sun::star::uno::RuntimeException)
 {
+    // Empty Source means it's the client, because the client is not a XInterface
+    if ( !rEvent.Source.is() )
+        mpClient = NULL;
 }
 
 
 // ::com::sun::star::datatransfer::dnd::XDragGestureListener
 void vcl::unohelper::DragAndDropWrapper::dragGestureRecognized( const ::com::sun::star::datatransfer::dnd::DragGestureEvent& rDGE ) throw (::com::sun::star::uno::RuntimeException)
 {
-    mpClient->dragGestureRecognized( rDGE );
+    if ( mpClient )
+        mpClient->dragGestureRecognized( rDGE );
 }
 
 // ::com::sun::star::datatransfer::dnd::XDragSourceListener
 void vcl::unohelper::DragAndDropWrapper::dragDropEnd( const ::com::sun::star::datatransfer::dnd::DragSourceDropEvent& rDSDE ) throw (::com::sun::star::uno::RuntimeException)
 {
-    mpClient->dragDropEnd( rDSDE );
+    if ( mpClient )
+        mpClient->dragDropEnd( rDSDE );
 }
 
 void vcl::unohelper::DragAndDropWrapper::dragEnter( const ::com::sun::star::datatransfer::dnd::DragSourceDragEvent& dsde ) throw (::com::sun::star::uno::RuntimeException)
 {
-    mpClient->dragEnter( dsde );
+    if ( mpClient )
+        mpClient->dragEnter( dsde );
 }
 
 void vcl::unohelper::DragAndDropWrapper::dragExit( const ::com::sun::star::datatransfer::dnd::DragSourceEvent& dse ) throw (::com::sun::star::uno::RuntimeException)
 {
-    mpClient->dragExit( dse );
+    if ( mpClient )
+        mpClient->dragExit( dse );
 }
 
 void vcl::unohelper::DragAndDropWrapper::dragOver( const ::com::sun::star::datatransfer::dnd::DragSourceDragEvent& dsde ) throw (::com::sun::star::uno::RuntimeException)
 {
-    mpClient->dragOver( dsde );
+    if ( mpClient )
+        mpClient->dragOver( dsde );
 }
 
 void vcl::unohelper::DragAndDropWrapper::dropActionChanged( const ::com::sun::star::datatransfer::dnd::DragSourceDragEvent& dsde ) throw (::com::sun::star::uno::RuntimeException)
 {
-    mpClient->dropActionChanged( dsde );
+    if ( mpClient )
+        mpClient->dropActionChanged( dsde );
 }
 
 // ::com::sun::star::datatransfer::dnd::XDropTargetListener
 void vcl::unohelper::DragAndDropWrapper::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEvent& rDTDE ) throw (::com::sun::star::uno::RuntimeException)
 {
-    mpClient->drop( rDTDE );
+    if ( mpClient )
+        mpClient->drop( rDTDE );
 }
 
 void vcl::unohelper::DragAndDropWrapper::dragEnter( const ::com::sun::star::datatransfer::dnd::DropTargetDragEnterEvent& rDTDEE ) throw (::com::sun::star::uno::RuntimeException)
 {
-    mpClient->dragEnter( rDTDEE );
+    if ( mpClient )
+        mpClient->dragEnter( rDTDEE );
 }
 
 void vcl::unohelper::DragAndDropWrapper::dragExit( const ::com::sun::star::datatransfer::dnd::DropTargetEvent& dte ) throw (::com::sun::star::uno::RuntimeException)
 {
-    mpClient->dragExit( dte );
+    if ( mpClient )
+        mpClient->dragExit( dte );
 }
 
 void vcl::unohelper::DragAndDropWrapper::dragOver( const ::com::sun::star::datatransfer::dnd::DropTargetDragEvent& rDTDE ) throw (::com::sun::star::uno::RuntimeException)
 {
-    mpClient->dragOver( rDTDE );
+    if ( mpClient )
+        mpClient->dragOver( rDTDE );
 }
 
 void vcl::unohelper::DragAndDropWrapper::dropActionChanged( const ::com::sun::star::datatransfer::dnd::DropTargetDragEvent& rDTDE ) throw (::com::sun::star::uno::RuntimeException)
 {
-    mpClient->dropActionChanged( rDTDE );
+    if ( mpClient )
+        mpClient->dropActionChanged( rDTDE );
 }
 
