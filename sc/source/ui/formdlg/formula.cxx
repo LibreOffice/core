@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formula.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: er $ $Date: 2002-09-27 17:19:11 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 18:58:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -386,8 +386,6 @@ ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
         FuncSelHdl(NULL);
 
     }
-
-//? Application::GetAppWindow()->Invalidate();
 }
 
 __EXPORT ScFormulaDlg::~ScFormulaDlg()
