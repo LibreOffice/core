@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2001-08-24 10:55:11 $
+ *  last change: $Author: rt $ $Date: 2001-08-29 09:19:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,7 +243,7 @@ Menu RID_MAIN_MENU
             Text [ italian ] = "~Visualizza" ;
             Text [ portuguese_brazilian ] = "~Ver" ;
             Text [ portuguese ] = "~Ver" ;
-            Text [ finnish ] = "~Näytä" ;
+            Text [ finnish ] = "~N?yt?" ;
             Text [ danish ] = "~Vis" ;
             Text [ french ] = "~Affichage" ;
             Text [ swedish ] = "Vi~sa" ;
@@ -279,7 +279,7 @@ Menu RID_MAIN_MENU
         Text [ italian ] = "~Strumenti" ;
         Text [ portuguese_brazilian ] = "F~erramentas" ;
         Text [ portuguese ] = "~Ferramentas" ;
-        Text [ finnish ] = "~Työkalut" ;
+        Text [ finnish ] = "~Ty?alut" ;
         Text [ danish ] = "Fun~ktioner" ;
         Text [ french ] = "~Outils" ;
         Text [ swedish ] = "~Verktyg" ;
@@ -345,6 +345,7 @@ Menu RID_MAIN_MENU
     ITEM_HELP_MENU
     };
 };
+
 
 
 
