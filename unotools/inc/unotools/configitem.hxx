@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configitem.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: th $ $Date: 2001-05-10 11:34:01 $
+ *  last change: $Author: os $ $Date: 2001-06-05 09:28:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,11 @@ namespace utl
                                                             com::sun::star::uno::Sequence< com::sun::star::uno::Any >&  lOutValues  );
 
         protected:
+#if SUPD>633
+            ConfigItem(const rtl::OUString rSubTree, sal_Int16 nMode = CONFIG_MODE_DELAYED_UPDATE);
+#else
             ConfigItem(const rtl::OUString rSubTree, sal_Int16 nMode = CONFIG_MODE_IMMEDIATE_UPDATE);
+#endif
             ConfigItem(utl::ConfigManager&  rManager, const rtl::OUString rSubTree);
 
             void                    SetModified  (); // mark item as modified
