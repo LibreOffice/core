@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:34 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 21:19:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -358,7 +358,7 @@ ModalDialog MD_EDIT_REGION
         Text [ english_us ] = "~Undo" ;
         Text[ chinese_simplified ] = "ÒÆ³ı(~R)";
         Text[ russian ] = "Óáğàòü";
-        Text[ polish ] = "Anuluj";
+        Text[ polish ] = "Usuñ";
         Text[ japanese ] = "‰ğœ(~R)";
         Text[ chinese_traditional ] = "²¾°£(~R)";
         Text[ arabic ] = "ÅÒÇáÉ";
@@ -1260,7 +1260,7 @@ TabPage TP_SECTION_FTNENDNOTES
         Text[ spanish ] = "~recoger al final del texto";
         Text[ italian ] = "Raccogli a fine ~testo";
         Text[ danish ] = "saml ved tekstens slutning";
-        Text[ swedish ] = "samla vid ~textslut";
+        Text[ swedish ] = "samla vid te~xtslut";
         Text[ polish ] = "zbierz na koñcu tekstu";
         Text[ portuguese_brazilian ] = "Collect at end of text";
         Text[ japanese ] = "•¶‘––‚É‘}“ü(~T)";
@@ -1351,7 +1351,7 @@ TabPage TP_SECTION_FTNENDNOTES
         Text[ spanish ] = "for~mato propio";
         Text[ italian ] = "~Formato proprio";
         Text[ danish ] = "eget format";
-        Text[ swedish ] = "eget format";
+        Text[ swedish ] = "eget ~format";
         Text[ polish ] = "Format w³asny";
         Text[ portuguese_brazilian ] = "Own format";
         Text[ japanese ] = "”CˆÓ‚Ì‘®(~F)";
@@ -1431,7 +1431,7 @@ TabPage TP_SECTION_FTNENDNOTES
         Text [ finnish ] = "Jäljessä" ;
         Text [ danish ] = "Efter" ;
         Text [ french ] = "A~près" ;
-        Text [ swedish ] = "~Bakom" ;
+        Text [ swedish ] = "Ef~ter" ;
         Text [ dutch ] = "E~rachter" ;
         Text [ spanish ] = "D~etrás" ;
         Text [ english_us ] = "Aft~er" ;
@@ -1496,10 +1496,10 @@ TabPage TP_SECTION_FTNENDNOTES
         Text[ greek ] = "Óõãêİíôñùóç óôï ôİëïò ôïõ ~ôìŞìáôïò";
         Text[ dutch ] = "aan ~bereikseinde verzamelen";
         Text[ french ] = "Regrouper en fin de ~section";
-        Text[ spanish ] = "recoger al fi~nal del área";
+        Text[ spanish ] = "Recoger al fi~nal del área";
         Text[ italian ] = "Raccogli a fine sezione";
         Text[ danish ] = "saml ved områdets slutning";
-        Text[ swedish ] = "samla vid ~områdets slut";
+        Text[ swedish ] = "s~amla vid områdets slut";
         Text[ polish ] = "zbierz na koñcu obszaru";
         Text[ portuguese_brazilian ] = "Collect at end of section";
         Text[ japanese ] = "”ÍˆÍ––‚É‘}“ü(~O)";
@@ -1525,7 +1525,7 @@ TabPage TP_SECTION_FTNENDNOTES
         Text[ spanish ] = "rei~niciar numeración";
         Text[ italian ] = "Avvia nuovo numero";
         Text[ danish ] = "Uafhængig nummerering forfra";
-        Text[ swedish ] = "oberoende ~numrering";
+        Text[ swedish ] = "oberoende n~umrering";
         Text[ polish ] = "Uruchom ponownie numer";
         Text[ portuguese_brazilian ] = "own number sequence";
         Text[ japanese ] = "”Ô†‚ğV‚µ‚­n‚ß‚é(~R)";
@@ -1547,7 +1547,7 @@ TabPage TP_SECTION_FTNENDNOTES
         Text [ spanish ] = "Comen~zar en" ;
         Text [ french ] = "À partir ~de" ;
         Text [ dutch ] = "~Begin met" ;
-        Text [ swedish ] = "~Börja vid" ;
+        Text [ swedish ] = "Börj~a med" ;
         Text [ danish ] = "Begynd med" ;
         Text [ portuguese_brazilian ] = "Be~ginn bei" ;
         Text [ portuguese ] = "~Iniciar em" ;
@@ -1670,7 +1670,7 @@ TabPage TP_SECTION_FTNENDNOTES
         Text [ finnish ] = "Jäljessä" ;
         Text [ danish ] = "Efter" ;
         Text [ french ] = "A~près" ;
-        Text [ swedish ] = "~Bakom" ;
+        Text [ swedish ] = "Efte~r" ;
         Text [ dutch ] = "E~rachter" ;
         Text [ spanish ] = "D~etrás" ;
         Text [ english_us ] = "Aft~er" ;
