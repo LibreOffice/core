@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyperdlg.src,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 14:05:41 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 11:00:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,7 +154,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ portuguese_brazilian ] = "~Internet";
         Text[ japanese ] = "インターネット(~I)";
         Text[ korean ] = "인터넷(~I)";
-        Text[ chinese_simplified ] = "国际互联网(~I)";
+        Text[ chinese_simplified ] = "Web";
         Text[ chinese_traditional ] = "~Internet";
         Text[ arabic ] = "������";
         Text[ turkish ] = "~�nternet";
@@ -418,7 +418,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         QuickHelpText[ portuguese_brazilian ] = "Navegador Web";
         QuickHelpText[ japanese ] = "WWWブラウザ";
         QuickHelpText[ korean ] = "브라우저";
-        QuickHelpText[ chinese_simplified ] = "万维网浏览器";
+        QuickHelpText[ chinese_simplified ] = "WWW 浏览器";
         QuickHelpText[ chinese_traditional ] = "WWW 瀏覽器";
         QuickHelpText[ arabic ] = "����� ���";
         QuickHelpText[ turkish ] = "WWW Taray�c�";
@@ -431,7 +431,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ italian ] = "Browser Web";
         Text[ swedish ] = "Webbl�sare";
         Text[ japanese ] = "WWWブラウザ";
-        Text[ chinese_simplified ] = "万维网浏览器";
+        Text[ chinese_simplified ] = "WWW 浏览器";
         Text[ spanish ] = "Navegador Web";
         Text[ turkish ] = "WWW Taray�c�";
         Text[ czech ] = "Prohlížeč WWW";
@@ -485,7 +485,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         QuickHelpText[ portuguese_brazilian ] = "Destino no documento";
         QuickHelpText[ japanese ] = "ドキュメントにあるターゲット";
         QuickHelpText[ korean ] = "문서 내 대상";
-        QuickHelpText[ chinese_simplified ] = "文件中的目标";
+        QuickHelpText[ chinese_simplified ] = "文档中的目标";
         QuickHelpText[ chinese_traditional ] = "文件內的目標";
         QuickHelpText[ arabic ] = "����� �� �������";
         QuickHelpText[ turkish ] = "Belgedeki hedef";
@@ -1195,7 +1195,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         QuickHelpText[ portuguese_brazilian ] = "Fonte de dados...";
         QuickHelpText[ japanese ] = "データソース...";
         QuickHelpText[ korean ] = "데이터 원본...";
-        QuickHelpText[ chinese_simplified ] = "数据源";
+        QuickHelpText[ chinese_simplified ] = "数据源...";
         QuickHelpText[ chinese_traditional ] = "資料源...";
         QuickHelpText[ turkish ] = "Veri Kaynaklar�...";
         QuickHelpText[ arabic ] = "���� ��������";
