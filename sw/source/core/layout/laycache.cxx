@@ -2,9 +2,9 @@
  *
  *  $RCSfile: laycache.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:40:19 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:10:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,10 @@
 #endif
 #ifndef _FLYFRM_HXX //autogen
 #include <flyfrm.hxx>
+#endif
+// OD 2004-05-24 #i28701#
+#ifndef _SORTEDOBJS_HXX
+#include <sortedobjs.hxx>
 #endif
 
 #include <set>
@@ -382,20 +386,21 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
             }
             if( pPage->GetSortedObjs() )
             {
-                SwSortDrawObjs &rObjs = *pPage->GetSortedObjs();
+                SwSortedObjs &rObjs = *pPage->GetSortedObjs();
                 for ( USHORT i = 0; i < rObjs.Count(); ++i )
                 {
-                    SdrObject *pO = rObjs[i];
-                    if ( pO->ISA(SwVirtFlyDrawObj) )
+                    SwAnchoredObject* pAnchoredObj = rObjs[i];
+                    if ( pAnchoredObj->ISA(SwFlyFrm) )
                     {
-                        SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
+                        SwFlyFrm *pFly = static_cast<SwFlyFrm*>(pAnchoredObj);
                         if( pFly->Frm().Left() != WEIT_WECH &&
                             !pFly->GetAnchorFrm()->FindFooterOrHeader() )
                         {
-                            const SwContact *pC = (SwContact*)GetUserCall(pO);
+                            const SwContact *pC =
+                                    ::GetUserCall(pAnchoredObj->GetDrawObj());
                             if( pC )
                             {
-                                ULONG nOrdNum = pO->GetOrdNum();
+                                ULONG nOrdNum = pAnchoredObj->GetDrawObj()->GetOrdNum();
                                 USHORT nPageNum = pPage->GetPhyPageNum();
                                 /* Open Fly Record */
                                 aIo.OpenRec( SW_LAYCACHE_IO_REC_FLY );
@@ -1020,7 +1025,7 @@ void SwLayHelper::_CheckFlyCache( SwPageFrm* pPage )
     // Any text frames at the page, fly cache avaiable?
     if( pPage->GetSortedObjs() && nFlyIdx < nFlyCount )
     {
-        SwSortDrawObjs &rObjs = *pPage->GetSortedObjs();
+        SwSortedObjs &rObjs = *pPage->GetSortedObjs();
         USHORT nPgNum = pPage->GetPhyPageNum();
 
 /*
@@ -1101,17 +1106,17 @@ void SwLayHelper::_CheckFlyCache( SwPageFrm* pPage )
         std::set< const SdrObject*, SdrObjectCompare > aFlySet;
         for ( USHORT i = 0; i < rObjs.Count(); ++i )
         {
-            SdrObject* pO = rObjs[i];
-            if ( pO->ISA(SwVirtFlyDrawObj) )  // a text frame?
+            SwAnchoredObject* pAnchoredObj = rObjs[i];
+            if ( pAnchoredObj->ISA(SwFlyFrm) )  // a text frame?
             {
-                SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
+                SwFlyFrm *pFly = static_cast<SwFlyFrm*>(pAnchoredObj);
                 if( pFly->GetAnchorFrm() &&
                     !pFly->GetAnchorFrm()->FindFooterOrHeader() )
                 {
-                    const SwContact *pC = (SwContact*)GetUserCall(pO);
+                    const SwContact *pC = ::GetUserCall( pAnchoredObj->GetDrawObj() );
                     if( pC )
                     {
-                        aFlySet.insert( pO );
+                        aFlySet.insert( pAnchoredObj->GetDrawObj() );
                     }
                 }
             }
