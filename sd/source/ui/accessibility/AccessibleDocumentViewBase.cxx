@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocumentViewBase.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: af $ $Date: 2002-06-17 16:33:27 $
+ *  last change: $Author: af $ $Date: 2002-08-05 11:36:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -365,6 +365,49 @@ Reference<XAccessible> SAL_CALL
 
 //=====  XAccessibleComponent  ================================================
 
+/** Iterate over all children and test whether the specified point lies
+    within one of their bounding boxes.  Return the first child for which
+    this is true.
+*/
+uno::Reference<XAccessible > SAL_CALL
+    AccessibleDocumentViewBase::getAccessibleAt (
+        const awt::Point& aPoint)
+    throw (uno::RuntimeException)
+{
+    ::osl::MutexGuard aGuard (maMutex);
+    uno::Reference<XAccessible> xChildAtPosition;
+
+    sal_Int32 nChildCount = getAccessibleChildCount ();
+    for (sal_Int32 i=0; i<nChildCount; ++i)
+    {
+        Reference<XAccessible> xChild (getAccessibleChild (i));
+        if (xChild.is())
+        {
+            Reference<XAccessibleComponent> xChildComponent (
+                xChild->getAccessibleContext(), uno::UNO_QUERY);
+            if (xChildComponent.is())
+            {
+                awt::Rectangle aBBox (xChildComponent->getBounds());
+                if ( (aPoint.X >= aBBox.X)
+                    && (aPoint.Y >= aBBox.Y)
+                    && (aPoint.X < aBBox.X+aBBox.Width)
+                    && (aPoint.Y < aBBox.Y+aBBox.Height) )
+                {
+                    xChildAtPosition = xChild;
+                    break;
+                }
+            }
+        }
+    }
+
+    // Have not found a child under the given point.  Returning empty
+    // reference to indicate this.
+    return xChildAtPosition;
+}
+
+
+
+
 awt::Rectangle SAL_CALL
     AccessibleDocumentViewBase::getBounds (void)
     throw (::com::sun::star::uno::RuntimeException)
@@ -436,8 +479,18 @@ awt::Size SAL_CALL
     AccessibleDocumentViewBase::getSize (void)
     throw (uno::RuntimeException)
 {
-    awt::Rectangle aBBox (mxWindow->getPosSize());
-    return awt::Size (aBBox.Width, aBBox.Height);
+    // Transform visible area into screen coordinates.
+    ::Rectangle aVisibleArea (
+        maShapeTreeInfo.GetViewForwarder()->GetVisibleArea());
+    ::Point aPixelTopLeft (
+        maShapeTreeInfo.GetViewForwarder()->LogicToPixel (
+            aVisibleArea.TopLeft()));
+    ::Point aPixelSize (
+        maShapeTreeInfo.GetViewForwarder()->LogicToPixel (
+            aVisibleArea.BottomRight())
+        - aPixelTopLeft);
+
+    return awt::Size (aPixelSize.X(), aPixelSize.Y());
 }
 
 
