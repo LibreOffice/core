@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fetab.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:03:33 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:26:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -298,24 +298,6 @@ void SwFEShell::ParkCursorInTab()
             pSwCrsr->GoPrevCell();
         }
     }
-}
-
-/***********************************************************************
-#*  Class      :  SwFEShell
-#*  Methoden   :  GetStartEndCell
-#*  Datum      :  MA 03. May. 93
-#*  Update     :  MA 23. May. 95
-#***********************************************************************/
-void SwFEShell::GetStartEndCell( SwLayoutFrm *&prStart, SwLayoutFrm *&prEnd )
-{
-    SwPaM* pPam = IsTableMode() ? GetTblCrs() : GetCrsr();
-    SwShellCrsr *pICr = (SwShellCrsr*)*((SwCursor*)pPam);
-
-    ASSERT( pICr->GetCntntNode() && pICr->GetCntntNode( FALSE ),
-            "Tabselection nicht auf Cnt." );
-
-    prStart = pICr->GetCntntNode()->GetFrm( &pICr->GetPtPos() )->GetUpper(),
-    prEnd   = pICr->GetCntntNode(FALSE)->GetFrm( &pICr->GetMkPos() )->GetUpper();
 }
 
 /***********************************************************************
@@ -1173,14 +1155,6 @@ void SwFEShell::ProtectCells()
             ClearMark();
         ParkCursorInTab();
     }
-    EndAllActionAndCall();
-}
-
-void SwFEShell::UnProtectCells( const String& rTblName )
-{
-    SET_CURR_SHELL( this );
-    StartAllAction();
-    GetDoc()->UnProtectCells( rTblName );
     EndAllActionAndCall();
 }
 
