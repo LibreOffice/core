@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ab $ $Date: 2000-12-06 15:03:38 $
+ *  last change: $Author: ab $ $Date: 2000-12-11 09:32:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,6 +177,11 @@ Reference< XContentProviderManager > InitializeUCB( void )
         xIR->registerImplementation( OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
                                         OUString::createFromAscii(SAL_MODULENAME( "fileacc" )),
                                         Reference< XSimpleRegistry >() );
+
+        // i18n
+        xIR->registerImplementation( OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
+                                                OUString::createFromAscii(SVLIBRARY( "int" )),
+                                                Reference< XSimpleRegistry >() );
 
         //////////////////////////////////////////////////////////////////////
         // Bootstrap readonly service factory again
