@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.77 $
+#   $Revision: 1.78 $
 #
-#   last change: $Author: hjs $ $Date: 2001-10-19 15:27:08 $
+#   last change: $Author: hjs $ $Date: 2001-10-23 15:19:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1155,6 +1155,13 @@ LNT=$(DEVROOT)$/lint$/lint
 LNTFLAGS=+v -i$(DEVROOT)$/lint$/ -mL options.lnt -u
 LNTFLAGSOUTOBJ=-os
 
+.IF "$(USE_ENHANCED_COMID)"!=""
+COMCAT=$(uniq $(COM) $(CVER))
+COMID:=$(eq,$(COMCAT:s/ //),$(COMCAT) $(COM) $(COM)_$(CVER))
+.ELSE          # "$(USE_ENHANCED_COMID)"!=""
+COMID=$(COM)
+.ENDIF          # "$(USE_ENHANCED_COMID)"!=""
+
 # --- StandardLibraries --------------------------------------------
 
 SVLIBS=tools $(SVLIB) svtool
@@ -1193,11 +1200,6 @@ SVXLIBS=svxitems dialogs editeng svrtf svdraw outliner xout si basicide \
 
 # --- Neues Environment erweitern ----------------------------------
 CDEFS+= -DSUPD=$(UPD) -DBUILD=$(BUILD)
-
-.IF "$(SOLAR_PLUGIN)"!=""
-CDEFS+= -DSOLAR_PLUGIN
-RSCDEFS+= -DSOLAR_PLUGIN
-.ENDIF
 
 .IF "$(VCL)" != ""
 CDEFS+= -DVCL
