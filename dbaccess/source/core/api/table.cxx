@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-22 08:00:22 $
+ *  last change: $Author: fs $ $Date: 2001-04-06 08:59:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,9 @@
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
 #endif
+#ifndef _CONNECTIVITY_SDBCX_COLUMN_HXX_
+#include <connectivity/sdbcx/VColumn.hxx>
+#endif
 
 using namespace dbaccess;
 using namespace ::com::sun::star::uno;
@@ -165,7 +168,15 @@ ODBTable::ODBTable(const OConfigurationNode& _rTableConfig,
 
     // load the settings from the configuration
     if(m_aConfigurationNode.isValid())
+    {
+        // our own settings
         loadFrom(m_aConfigurationNode.openNode(CONFIGKEY_SETTINGS));
+
+        // our column's settings
+        OColumns* pColumns = static_cast<OColumns*>(m_pColumns);
+        if(pColumns)
+            pColumns->loadSettings(m_aConfigurationNode.openNode(CONFIGKEY_QRYDESCR_COLUMNS));
+    }
     // we don't collect the privileges here, this is potentially expensive. Instead we determine them on request.
     // (see getFastPropertyValue)
     m_nPrivileges = -1;
@@ -191,6 +202,63 @@ ODBTable::ODBTable( const ::com::sun::star::uno::Reference< ::com::sun::star::sd
 ODBTable::~ODBTable()
 {
     DBG_DTOR(ODBTable, NULL);
+}
+
+//--------------------------------------------------------------------------
+OColumn* ODBTable::createColumn(const ::rtl::OUString& _rName) const
+{
+    OColumn* pReturn = NULL;
+
+    Reference< XNamed > xRet = NULL;
+    if(m_xDriverColumns.is() && m_xDriverColumns->hasByName(_rName))
+    {
+        Reference<XPropertySet> xProp;
+        m_xDriverColumns->getByName(_rName) >>= xProp;
+
+        pReturn = new OTableColumnWrapper(xProp);
+    }
+    else
+    {
+        Any aCatalog;
+        aCatalog = const_cast<ODBTable*>(this)->getPropertyValue(PROPERTY_CATALOGNAME);
+
+        ::rtl::OUString aSchema, aTable;
+        const_cast<ODBTable*>(this)->getPropertyValue(PROPERTY_SCHEMANAME)  >>= aSchema;
+        const_cast<ODBTable*>(this)->getPropertyValue(PROPERTY_NAME)        >>= aTable;
+
+        Reference< XResultSet > xResult = m_xMetaData->getColumns(aCatalog, aSchema, aTable, _rName);
+
+        if(xResult.is())
+        {
+            Reference< XRow > xRow(xResult,UNO_QUERY);
+            while(xResult->next())
+            {
+                if(xRow->getString(4) == _rName)
+                {
+                    sal_Int32       nField5 = xRow->getInt(5);
+                    ::rtl::OUString aField6 = xRow->getString(6);
+                    sal_Int32       nField7 = xRow->getInt(7)
+                                ,   nField9 = xRow->getInt(9)
+                                ,   nField11= xRow->getInt(11);
+
+
+                    connectivity::sdbcx::OColumn* pRet = new connectivity::sdbcx::OColumn(_rName,
+                                                aField6,
+                                                xRow->getString(13),
+                                                nField11,
+                                                nField7,
+                                                nField9,
+                                                nField5,
+                                                sal_False,sal_False,sal_False,isCaseSensitive());
+
+                    Reference<XPropertySet> xProp = pRet;
+                    pReturn = new OTableColumnWrapper(xProp);
+                    break;
+                }
+            }
+        }
+    }
+    return pReturn;
 }
 
 //--------------------------------------------------------------------------
@@ -531,13 +599,12 @@ void ODBTable::refreshColumns()
 {
     ::std::vector< ::rtl::OUString> aVector;
 
-    Reference<XNameAccess> xNames;
     if(m_xTable.is())
     {
-        xNames = m_xTable->getColumns();
-        if(xNames.is())
+        m_xDriverColumns = m_xTable->getColumns();
+        if(m_xDriverColumns.is())
         {
-            Sequence< ::rtl::OUString> aNames = xNames->getElementNames();
+            Sequence< ::rtl::OUString> aNames = m_xDriverColumns->getElementNames();
             const ::rtl::OUString* pBegin   = aNames.getConstArray();
             const ::rtl::OUString* pEnd     = pBegin + aNames.getLength();
             for(;pBegin != pEnd;++pBegin)
@@ -561,7 +628,7 @@ void ODBTable::refreshColumns()
 
 
     }
-    OColumns* pCol = new OColumns(*this,m_aMutex,xNames,isCaseSensitive(),aVector,
+    OColumns* pCol = new OColumns(*this, m_aMutex, m_xDriverColumns, isCaseSensitive(), aVector, this,
                                 m_xMetaData->supportsAlterTableWithAddColumn(),
                                 m_xMetaData->supportsAlterTableWithDropColumn());
     pCol->setParent(this);
