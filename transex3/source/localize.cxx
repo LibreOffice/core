@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localize.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nf $ $Date: 2001-06-07 13:33:31 $
+ *  last change: $Author: nf $ $Date: 2001-06-07 13:38:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -534,14 +534,14 @@ BOOL SourceTreeLocalizer::MergeSingleFile(
             }
             else {
                 ByteString sLine;
-                aOutStream.SetLineDelimiter( LINEND_CRLF );
+                aOutStream.SetLineDelimiter( LINEEND_CRLF );
                 while ( !aInStream.IsEof()) {
                     aInStream.ReadLine( sLine );
                     sLine.EraseAllChars( '\r' );
                     aOutStream.WriteLine( sLine );
                 }
                 aInStream.Close();
-                aOutStream.CLose();
+                aOutStream.Close();
             }
         }
 
