@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicemanager.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jbu $ $Date: 2001-06-22 16:21:00 $
+ *  last change: $Author: jl $ $Date: 2001-07-09 13:30:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,7 @@
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/uno/XUnloadingPreference.hpp>
+
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -522,6 +523,14 @@ protected:
 
     Reference< XComponentContext >  m_xContext;
     sal_Int32 m_nUnloadingListenerId;
+
+    // Does clean up when the unloading mechanism has been set off. It is called from
+    // the listener function smgrUnloadingListener.
+    void onUnloadingNotify();
+    // factories which have been loaded and not inserted( by XSet::insert)
+    // are remembered by this set. Those factories
+    // are not released on a call to onUnloadingNotify
+    HashSet_Ref m_SetLoadedFactories;
 private:
 
     Reference<XEventListener >      getFactoryListener();
@@ -553,6 +562,102 @@ OServiceManager::~OServiceManager()
         rtl_removeUnloadingListener( m_nUnloadingListenerId );
 
     g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
+}
+
+// Removes entries in m_ServiceMap, m_ImplementationNameMap and m_ImplementationNameMap
+// if those entries have not been inserted through XSet::insert. Therefore the entries
+// are compared with the entries in m_SetLoadedFactories.
+void OServiceManager::onUnloadingNotify()
+{
+    MutexGuard aGuard( m_mutex);
+
+    typedef HashSet_Ref::const_iterator CIT_S;
+    typedef HashMultimap_OWString_Interface::iterator IT_MM;
+
+    CIT_S it_SetEnd= m_SetLoadedFactories.end();
+    IT_MM it_end1= m_ServiceMap.end();
+    list<IT_MM> listDeleteServiceMap;
+    typedef list<IT_MM>::const_iterator CIT_DMM;
+    // find occurences in m_ServiceMap
+    for(IT_MM it_i1= m_ServiceMap.begin(); it_i1 != it_end1; it_i1++)
+    {
+        if( m_SetLoadedFactories.find( it_i1->second) != it_SetEnd)
+        {
+            Reference<XUnloadingPreference> xunl( it_i1->second, UNO_QUERY);
+            if( xunl.is())
+            {
+                if( xunl->releaseOnNotification())
+                    listDeleteServiceMap.push_front( it_i1);
+            }
+            else
+                listDeleteServiceMap.push_front( it_i1);
+        }
+    }
+    // delete elements from m_ServiceMap
+    CIT_DMM it_end2= listDeleteServiceMap.end();
+    for( CIT_DMM it_i2= listDeleteServiceMap.begin(); it_i2 != it_end2; it_i2++)
+        m_ServiceMap.erase( *it_i2);
+
+    // find elements in m_ImplementationNameMap
+    typedef HashMap_OWString_Interface::iterator IT_M;
+    IT_M it_end3= m_ImplementationNameMap.end();
+    list<IT_M> listDeleteImplementationNameMap;
+    typedef list<IT_M>::const_iterator CIT_DM;
+    for( IT_M it_i3= m_ImplementationNameMap.begin();  it_i3 != it_end3; it_i3++)
+    {
+        if( m_SetLoadedFactories.find( it_i3->second) != it_SetEnd)
+        {
+            Reference<XUnloadingPreference> xunl( it_i3->second, UNO_QUERY);
+            if( xunl.is())
+            {
+                if( xunl->releaseOnNotification())
+                    listDeleteImplementationNameMap.push_front( it_i3);
+            }
+            else
+                listDeleteImplementationNameMap.push_front( it_i3);
+        }
+    }
+    // delete elements from m_ImplementationNameMap
+    CIT_DM it_end4= listDeleteImplementationNameMap.end();
+    for( CIT_DM it_i4= listDeleteImplementationNameMap.begin(); it_i4 != it_end4; it_i4++)
+        m_ImplementationNameMap.erase( *it_i4);
+
+    // find elements in m_ImplementationMap
+    typedef HashSet_Ref::iterator IT_S;
+    IT_S it_end5= m_ImplementationMap.end();
+    list<IT_S> listDeleteImplementationMap;
+    typedef list<IT_S>::const_iterator CIT_DS;
+    for( IT_S it_i5= m_ImplementationMap.begin(); it_i5 != it_end5; it_i5++)
+    {
+        if( m_SetLoadedFactories.find( *it_i5) != it_SetEnd)
+        {
+            Reference<XUnloadingPreference> xunl( *it_i5, UNO_QUERY);
+            if( xunl.is())
+            {
+                if( xunl->releaseOnNotification())
+                    listDeleteImplementationMap.push_front( it_i5);
+            }
+            else
+                listDeleteImplementationMap.push_front( it_i5);
+        }
+    }
+    // delete elements from m_ImplementationMap
+    CIT_DS it_end6= listDeleteImplementationMap.end();
+    for( CIT_DS it_i6= listDeleteImplementationMap.begin(); it_i6 != it_end6; it_i6++)
+        m_ImplementationMap.erase( *it_i6);
+
+    // remove Event listener before the factories are released.
+    IT_S it_end7= m_SetLoadedFactories.end();
+
+    Reference<XEventListener> xlistener= getFactoryListener();
+    for( IT_S it_i7= m_SetLoadedFactories.begin(); it_i7 != it_end7; it_i7++)
+    {
+        Reference<XComponent> xcomp( *it_i7, UNO_QUERY);
+        if( xcomp.is())
+            xcomp->removeEventListener( xlistener);
+    }
+    // release the factories in m_SetLoadedFactories
+    m_SetLoadedFactories.clear();
 }
 
 // OComponentHelper
@@ -590,6 +695,7 @@ void OServiceManager::dispose()
         aImplMap = m_ImplementationMap;
         m_ImplementationMap = HashSet_Ref();
         m_ImplementationNameMap = HashMap_OWString_Interface();
+        m_SetLoadedFactories= HashSet_Ref();
     }
 
     m_xContext.clear();
@@ -992,6 +1098,8 @@ void OServiceManager::remove( const Any & Element )
 
     // remove from the implementation map
     m_ImplementationMap.erase( aIt );
+
+    m_SetLoadedFactories.erase( *aIt);
     // remove from the implementation name hashmap
     Reference<XServiceInfo > xInfo( Reference<XServiceInfo >::query( xEle ) );
     if( xInfo.is() )
@@ -1221,6 +1329,10 @@ Reference<XInterface > ORegistryServiceManager::loadWithImplementationName(
         {
             ret = createSingleRegistryFactory( this, name, xImpKey );
             insert( makeAny( ret ) );
+            // Remember this factory as loaded in contrast to inserted ( XSet::insert)
+            // factories. Those loaded factories in this set are candidates for being
+            // released on an unloading notification.
+            m_SetLoadedFactories.insert( ret);
         }
     }
     catch (InvalidRegistryException &)
@@ -1494,51 +1606,17 @@ static Reference<XInterface > SAL_CALL ORegistryServiceManager_CreateInstance(
 {
     return Reference<XInterface >( SAL_STATIC_CAST( XInterface *, SAL_STATIC_CAST( OWeakObject *, new ORegistryServiceManager( xContext ) ) ) );
 }
+
 /* This is the listener function used by the service manager in order
 to implement the unloading mechanism, id is the this pointer of the
 service manager instances. On notification, that is the function is being called
 by rtl_unloadUnusedModules, the cached factroies are being removed from the
-service manager.
+service manager ( except manually inserted factories).
 */
 extern "C" void SAL_CALL smgrUnloadingListener(void* id)
 {
-      stoc_smgr::OServiceManager* pMgr= reinterpret_cast<stoc_smgr::OServiceManager*>( id);
-      Reference<XInterface> xInt( static_cast<OWeakObject*>(pMgr) );
-      Reference<XEnumerationAccess>xEnumAcc( xInt, UNO_QUERY);
-
-    Reference<XSet>xSet( xInt, UNO_QUERY);
-
-    if(xEnumAcc.is() && xSet.is())
-    {
-        Reference<XEnumeration> xEnum= xEnumAcc->createEnumeration();
-        if( xEnum.is())
-        {
-            try
-            {
-                while( xEnum->hasMoreElements())
-                {
-                    Any val= xEnum->nextElement();
-
-                    Reference<XInterface> xIntFactory;
-                    if( val >>= xIntFactory)
-                    {
-                        Reference<XUnloadingPreference>xUnload( xIntFactory, UNO_QUERY);
-                        if( xUnload.is())
-                            if( xUnload->releaseOnNotification())
-                                xSet->remove( val);
-                        else
-                            xSet->remove( val);
-                    }
-                }
-            }
-            catch( NoSuchElementException)
-            {
-            }
-            catch( WrappedTargetException)
-            {
-            }
-        }
-    }
+    stoc_smgr::OServiceManager* pMgr= reinterpret_cast<stoc_smgr::OServiceManager*>( id);
+      pMgr->onUnloadingNotify();
 }
 
 } // namespace
@@ -1593,4 +1671,4 @@ void * SAL_CALL component_getFactory(
 {
     return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey , g_entries );
 }
-}
+} //extern "C"
