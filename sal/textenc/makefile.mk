@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: sb $ $Date: 2001-10-17 14:35:30 $
+#   last change: $Author: kz $ $Date: 2001-10-18 14:21:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -95,7 +95,7 @@ OBJFILES = \
     $(OBJ)$/tencinfo.obj \
     $(OBJ)$/textcvt.obj \
     $(OBJ)$/textenc.obj \
-    $(OBJ)$/classification.obj
+    $(OBJ)$/unichars.obj
 
 .ENDIF # UPDATER
 
