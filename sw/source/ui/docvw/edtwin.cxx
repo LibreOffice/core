@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ama $ $Date: 2001-04-18 07:49:09 $
+ *  last change: $Author: jp $ $Date: 2001-05-08 19:13:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3044,9 +3044,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
 //                  if( !rSh.HasSelection() )
                     if( !bInSel )
                     {
-                        USHORT nFilter = KEY_SHIFT == rMEvt.GetModifier()
-                                        ? URLLOAD_DOWNLOADFILTER
-                                        : URLLOAD_NOFILTER;
+                        USHORT nFilter = URLLOAD_NOFILTER;
                         if( KEY_MOD1 == rMEvt.GetModifier() )
                             nFilter |= URLLOAD_NEWVIEW;
 
@@ -3900,6 +3898,9 @@ void QuickHelpData::FillStrArr( SwWrtShell& rSh, const String& rWord )
 /***********************************************************************
 
         $Log: not supported by cvs2svn $
+        Revision 1.8  2001/04/18 07:49:09  ama
+        Fix #78807#: Anchor dragging with page scrolling
+
         Revision 1.7  2001/03/23 15:55:45  jp
         use new Drag&Drop / Clipboard API
 
