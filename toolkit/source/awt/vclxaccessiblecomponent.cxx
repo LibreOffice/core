@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxaccessiblecomponent.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: tbe $ $Date: 2002-06-21 10:18:26 $
+ *  last change: $Author: ssa $ $Date: 2002-07-03 11:08:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -524,6 +524,7 @@ sal_Int32 VCLXAccessibleComponent::getAccessibleIndexInParent(  ) throw (uno::Ru
             Window* pParent = GetWindow()->GetAccessibleParentWindow();
             if ( pParent )
             {
+                /*
                 for ( USHORT n = pParent->GetAccessibleChildWindowCount(); n; )
                 {
                     Window* pChild = pParent->GetAccessibleChildWindow( --n );
@@ -531,6 +532,31 @@ sal_Int32 VCLXAccessibleComponent::getAccessibleIndexInParent(  ) throw (uno::Ru
                     {
                         nIndex = n;
                         break;
+                    }
+                }
+                */
+                //  Iterate over all the parent's children and search for this object.
+                // this should be compatible with the code in SVX
+                uno::Reference< accessibility::XAccessible > xParentAcc( pParent->GetAccessible() );
+                if ( xParentAcc.is() )
+                {
+                    uno::Reference< accessibility::XAccessibleContext > xParentContext ( xParentAcc->getAccessibleContext() );
+                    if ( xParentContext.is() )
+                    {
+                        sal_Int32 nChildCount = xParentContext->getAccessibleChildCount();
+                        for ( sal_Int32 i=0; i<nChildCount; i++ )
+                        {
+                            uno::Reference< accessibility::XAccessible > xChild( xParentContext->getAccessibleChild(i) );
+                            if ( xChild.is() )
+                            {
+                                uno::Reference< accessibility::XAccessibleContext > xChildContext = xChild->getAccessibleContext();
+                                if ( xChildContext == (accessibility::XAccessibleContext*) this )
+                                {
+                                    nIndex = i;
+                                    break;
+                                }
+                            }
+                        }
                     }
                 }
             }
