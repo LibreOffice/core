@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: os $ $Date: 2002-04-25 13:57:39 $
+ *  last change: $Author: os $ $Date: 2002-05-03 15:05:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1079,7 +1079,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
                     KS_AutoFmtByInput, KS_DontExpand,
                     KS_NextObject, KS_PrevObject,
                     KS_KeyToView,
-                    KS_LaunchOLEObject,
+                    KS_LaunchOLEObject, KS_GoIntoFly, KS_GoIntoDrawing,
                     KS_CheckDocReadOnlyKeys,
                     KS_CheckAutoCorrect, KS_EditFormula,
                     KS_ColLeftBig, KS_ColRightBig,
@@ -1345,6 +1345,12 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         const int nSelectionType = rSh.GetSelectionType();
                         if(nSelectionType & SwWrtShell::SEL_OLE)
                             eKeyState = KS_LaunchOLEObject;
+                        else if(nSelectionType & SwWrtShell::SEL_FRM)
+                            eKeyState = KS_GoIntoFly;
+                        else if((nSelectionType & SwWrtShell::SEL_DRW) &&
+                                0 == (nSelectionType & SwWrtShell::SEL_DRW_TXT) &&
+                                rSh.GetDrawView()->GetMarkList().GetMarkCount() == 1)
+                            eKeyState = KS_GoIntoDrawing;
                         else if( aTmpQHD.HasCntnt() && !rSh.HasSelection() &&
                             aTmpQHD.bIsAutoText )
                             eKeyState = KS_GlossaryExpand;
@@ -1517,20 +1523,31 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     }
                     break;
 
-                case KEY_TAB | KEY_MOD1 | KEY_SHIFT:
-                    if( aTmpQHD.HasCntnt() && !rSh.HasSelection() &&
-                        !rSh.HasReadonlySel() )
+                    case KEY_TAB | KEY_MOD1 | KEY_SHIFT:
+                        if( aTmpQHD.HasCntnt() && !rSh.HasSelection() &&
+                            !rSh.HasReadonlySel() )
+                        {
+                            // zum vorherigen Tip
+                            aTmpQHD.Dec( pACorr && pACorr->GetSwFlags().
+                                                        bAutoCmpltEndless );
+                            eKeyState = KS_NextPrevGlossary;
+                        }
+                    break;
+                    case KEY_F2 :
+                    if( !rSh.HasReadonlySel() )
                     {
-                        // zum vorherigen Tip
-                        aTmpQHD.Dec( pACorr && pACorr->GetSwFlags().
-                                                    bAutoCmpltEndless );
-                        eKeyState = KS_NextPrevGlossary;
+                        const int nSelectionType = rSh.GetSelectionType();
+                        if(nSelectionType & SwWrtShell::SEL_FRM)
+                            eKeyState = KS_GoIntoFly;
+                        else if((nSelectionType & SwWrtShell::SEL_DRW) &&
+                                0 == (nSelectionType & SwWrtShell::SEL_DRW_TXT) &&
+                                    rSh.GetDrawView()->GetMarkList().GetMarkCount() == 1)
+                            eKeyState = KS_GoIntoDrawing;
                     }
                     break;
                 }
             }
             break;
-
         case KS_CheckDocReadOnlyKeys:
             {
                 eKeyState = KS_KeyToView;
@@ -1592,6 +1609,24 @@ KEYINPUT_CHECKTABLE_INSDEL:
         case KS_LaunchOLEObject:
             rSh.LaunchOLEObj();
             eKeyState = KS_Ende;
+        break;
+        case KS_GoIntoFly :
+            rSh.UnSelectFrm();
+            rSh.LeaveSelFrmMode();
+            rView.AttrChangedNotify(&rSh);
+            eKeyState = KS_Ende;
+        break;
+        case KS_GoIntoDrawing :
+        {
+            SdrObject* pObj = rSh.GetDrawView()->GetMarkList().GetMark(0)->GetObj();
+            if(pObj)
+            {
+                EnterDrawTextMode(pObj->GetLogicRect().Center());
+                if ( rView.GetCurShell()->ISA(SwDrawTextShell) )
+                    ((SwDrawTextShell*)rView.GetCurShell())->Init();
+            }
+            eKeyState = KS_Ende;
+        }
         break;
         case KS_InsTab:
             if( rView.ISA( SwWebView ))     //Kein Tabulator fuer Web!
