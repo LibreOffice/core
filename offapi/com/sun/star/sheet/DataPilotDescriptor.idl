@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataPilotDescriptor.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 22:32:54 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 12:50:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,18 @@ published service DataPilotDescriptor
     /** specifies the orientation of the field.
      */
     [optional, property] boolean RowGrand;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies whether the filter button is shown.
+     */
+    [optional, property] boolean ShowFilterButton;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies whether to drill down to details or go into edit mode.
+     */
+    [optional, property] boolean DrillDownOnDoubleClick;
 
     //-------------------------------------------------------------------------
 };
