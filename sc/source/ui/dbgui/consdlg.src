@@ -2,9 +2,9 @@
  *
  *  $RCSfile: consdlg.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:17:36 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:10:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
     Text [ italian ] = "Consolida" ;
     Text [ portuguese_brazilian ] = "Consolidar" ;
     Text [ portuguese ] = "Consolidar" ;
-    Text [ finnish ] = "Kokoa" ;
+    Text [ finnish ] = "Yhdistä" ;
     Text [ danish ] = "Konsolider" ;
     Text [ french ] = "Consolider" ;
     Text [ swedish ] = "Konsolidera" ;
@@ -176,17 +176,17 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         };
         StringList [ finnish ] =
         {
-            < "Summe" ; Default ; > ;
-            < "Anzahl" ; Default ; > ;
-            < "Mittelwert" ; Default ; > ;
-            < "Max" ; Default ; > ;
-            < "Min" ; Default ; > ;
-            < "Produkt" ; Default ; > ;
-            < "Anzahl (nur Zahlen)" ; Default ; > ;
-            < "StAbw (Stichprobe)" ; Default ; > ;
-            < "StAbwN (Grundgesamtheit)" ; Default ; > ;
-            < "Varianz (Stichprobe)" ; Default ; > ;
-            < "Varianzen (Grundgesamtheit)" ; Default ; > ;
+            < "Summa" ; Default ; > ;
+            < "Laske" ; Default ; > ;
+            < "Keskiarvo" ; Default ; > ;
+            < "Enint" ; Default ; > ;
+            < "Väh" ; Default ; > ;
+            < "Tuote" ; Default ; > ;
+            < "Määrä (vain numerot)" ; Default ; > ;
+            < "StDev (otos)" ; Default ; > ;
+            < "StDevP (populaatio)" ; Default ; > ;
+            < "Var (otos)" ; Default ; > ;
+            < "VarP (Populaatio)" ; Default ; > ;
         };
         StringList [ danish ] =
         {
@@ -469,6 +469,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
         QuickHelpText[ catalan ] = "Reducir";
+        QuickHelpText[ finnish ] = "Pienennä!";
     };
     ImageButton RB_DEST_AREA
     {
@@ -498,6 +499,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
         QuickHelpText[ catalan ] = "Reducir";
+        QuickHelpText[ finnish ] = "Pienennä!";
     };
     ListBox LB_DATA_AREA
     {
@@ -533,7 +535,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text [ italian ] = "Fun~zione" ;
         Text [ portuguese_brazilian ] = "Fun~ção" ;
         Text [ portuguese ] = "U~sar função" ;
-        Text [ finnish ] = "~Funktio" ;
+        Text [ finnish ] = "~Toiminto" ;
         Text [ danish ] = "Beregningsfunktion" ;
         Text [ french ] = "~Fonction" ;
         Text [ swedish ] = "Be~räkningsregler" ;
@@ -562,7 +564,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text [ italian ] = "Aree di consolidamento" ;
         Text [ portuguese_brazilian ] = "Áreas de consoli~dação" ;
         Text [ portuguese ] = "Áreas de consoli~dação" ;
-        Text [ finnish ] = "~Kokoamisalueet" ;
+        Text [ finnish ] = "~Yhdistelyalueet" ;
         Text [ danish ] = "Konsolideringsområder" ;
         Text [ french ] = "Plages de ~consolidation" ;
         Text [ swedish ] = "~Konsolideringsområden" ;
@@ -591,7 +593,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text [ italian ] = "Area dati di sorgente" ;
         Text [ portuguese_brazilian ] = "~Área de origem dos dados" ;
         Text [ portuguese ] = "~Área dos dados fonte" ;
-        Text [ finnish ] = "Läh~detietoalue" ;
+        Text [ finnish ] = "~Lähdetietoalue" ;
         Text [ danish ] = "Kildedataområde" ;
         Text [ french ] = "~Plage de données source" ;
         Text [ swedish ] = "Källdata~område" ;
@@ -620,7 +622,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text [ italian ] = "Risultato a partire da" ;
         Text [ portuguese_brazilian ] = "Resultado a~t" ;
         Text [ portuguese ] = "~Resultado a partir de" ;
-        Text [ finnish ] = "Tulosten k~ohde" ;
+        Text [ finnish ] = "~Kopioi tulokset kohteeseen" ;
         Text [ danish ] = "Resultat-output fra" ;
         Text [ french ] = "~Résultat à partir de" ;
         Text [ swedish ] = "Resul~tat vid" ;
@@ -649,7 +651,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text [ italian ] = "Dicitura righe" ;
         Text [ portuguese_brazilian ] = "por fi~leiras" ;
         Text [ portuguese ] = "Legenda para ~linhas" ;
-        Text [ finnish ] = "~Riveittäin" ;
+        Text [ finnish ] = "~Rivinimiöt" ;
         Text [ danish ] = "Rækkeetiketter" ;
         Text [ french ] = "É~tiquette de ligne" ;
         Text [ swedish ] = "Ra~detikett" ;
@@ -680,7 +682,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text [ italian ] = "~Intestazioni colonne" ;
         Text [ portuguese_brazilian ] = "por colu~nas" ;
         Text [ portuguese ] = "~Cabeçalhos de colunas" ;
-        Text [ finnish ] = "~Sarakkeittain" ;
+        Text [ finnish ] = "~Sarakeotsikot" ;
         Text [ danish ] = "Kolonneoverskrifter" ;
         Text [ french ] = "En-têtes de ~colonnes" ;
         Text [ swedish ] = "Kolum~nhuvuden" ;
@@ -710,7 +712,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text [ italian ] = "Consolida per" ;
         Text [ portuguese_brazilian ] = "Consolidar por" ;
         Text [ portuguese ] = "Consolidar por" ;
-        Text [ finnish ] = "Kokoamistapa" ;
+        Text [ finnish ] = "Yhdistelyperuste" ;
         Text [ danish ] = "Konsolider efter" ;
         Text [ french ] = "Consolider par" ;
         Text [ swedish ] = "Konsolidera efter" ;
@@ -739,7 +741,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text [ italian ] = "Collega con dati origine" ;
         Text [ portuguese_brazilian ] = "Dados da fonte de re~ferência" ;
         Text [ portuguese ] = "~Ligar aos dados da fonte" ;
-        Text [ finnish ] = "~Viittaus lähdetietoihin" ;
+        Text [ finnish ] = "~Linkki lähdetietoihin" ;
         Text [ danish ] = "Opret kæde til kildedata" ;
         Text [ french ] = "~Lier aux données source" ;
         Text [ swedish ] = "R~eferensdata" ;
