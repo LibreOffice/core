@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyperdlg.src,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:34:06 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:13:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ czech ] = "Typ hypertextového odkazu";
         Text[ hebrew ] = "Art des Hyperlinks";
         Text[ hindi ] = "हाइपरलिंक वर्ग";
+        Text[ slovak ] = "Typ hypertextového odkazu";
     };
     RadioButton RB_LINKTYP_INTERNET
     {
@@ -163,6 +164,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ czech ] = "Internet";
         Text[ hebrew ] = "‮אינטרנט‬";
         Text[ hindi ] = "~इन्टरनेट्";
+        Text[ slovak ] = "~Internet";
     };
     RadioButton RB_LINKTYP_FTP
     {
@@ -194,6 +196,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ hebrew ] = "FT~P";
         Text[ thai ] = "~FTP";
         Text[ hindi ] = "~FTP";
+        Text[ slovak ] = "~FTP";
     };
     RadioButton RB_LINKTYP_TELNET
     {
@@ -225,6 +228,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ hebrew ] = "T~elnet";
         Text[ thai ] = "~Telnet";
         Text[ hindi ] = "~Telnet";
+        Text[ slovak ] = "~Telnet";
     };
     FixedText FT_TARGET_HTML
     {
@@ -256,6 +260,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ czech ] = "Cíl";
         Text[ hebrew ] = "Sprungzie~l";
         Text[ hindi ] = "~लक्ष्य";
+        Text[ slovak ] = "~Cieľ";
     };
     FixedText FT_LOGIN
     {
@@ -287,6 +292,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ czech ] = "Přihlašovací jméno";
         Text[ hebrew ] = "~Loginname";
         Text[ hindi ] = "लॉ~गइन नाम";
+        Text[ slovak ] = "Prihlasovacie ~meno";
     };
     Edit ED_LOGIN
     {
@@ -325,6 +331,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ czech ] = "Heslo";
         Text[ hebrew ] = "‮סיסמה‬";
         Text[ hindi ] = "~कूटशब्द";
+        Text[ slovak ] = "~Heslo";
     };
     Edit ED_PASSWD
     {
@@ -365,6 +372,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ czech ] = "Anonymní uživatel";
         Text[ hebrew ] = "Anonymer Ben~utzer";
         Text[ hindi ] = "अज्ञात ~उपभोक्ता";
+        Text[ slovak ] = "Anonymný ~užívateľ";
     };
     ImageButton BTN_BROWSE
     {
@@ -418,6 +426,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ thai ] = "WWW Browser";
         QuickHelpText[ thai ] = "WWW Browser";
         QuickHelpText[ hindi ] = "WWW ब्रउज़र";
+        QuickHelpText[ slovak ] = "Prehliadač WWW";
     };
     Image IMG_BROWSE_HC
     {
@@ -476,6 +485,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         QuickHelpText[ hebrew ] = "Sprungziel im Dokument";
         QuickHelpText[ thai ] = "Target in Document";
         QuickHelpText[ hindi ] = "लेखपत्र में लक्ष्य";
+        QuickHelpText[ slovak ] = "Cieľ v dokumente";
     };
     Image IMG_TARGET_HC
     {
@@ -512,6 +522,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ czech ] = "Další nastavení";
         Text[ hebrew ] = "Weitere Einstellungen";
         Text[ hindi ] = "अधिक निर्धारण";
+        Text[ slovak ] = "Ďalšie nastavenia";
     };
     FixedText FT_FRAME
     {
@@ -543,6 +554,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ czech ] = "Rámec";
         Text[ hebrew ] = "‮מסגרת‬";
         Text[ hindi ] = "फ्रे~म";
+        Text[ slovak ] = "~Rámec";
     };
     ComboBox CB_FRAME
     {
@@ -583,6 +595,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ czech ] = "Formulář";
         Text[ hebrew ] = "‮טופס‬";
         Text[ hindi ] = "~फ़ॉर्म";
+        Text[ slovak ] = "F~ormulár";
     };
     ListBox LB_FORM
     {
@@ -728,6 +741,11 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
          < "टेक्स्ट्" ; Default ; > ;
         < "बटन" ; Default ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "Text" ; Default ; > ;
+        < "Klávesa" ; Default ; > ;
+    };
     };
     FixedText FT_INDICATION
     {
@@ -759,6 +777,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ czech ] = "Text";
         Text[ hebrew ] = "‮טקסט‬";
         Text[ hindi ] = "टे~क्स्ट्";
+        Text[ slovak ] = "Te~xt";
     };
     Edit ED_INDICATION
     {
@@ -796,6 +815,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ czech ] = "Název";
         Text[ hebrew ] = "N~ame";
         Text[ hindi ] = "ना~म";
+        Text[ slovak ] = "~Názov";
     };
     Edit ED_TEXT
     {
@@ -857,6 +877,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         QuickHelpText[ hebrew ] = "Ereignisse";
         QuickHelpText[ thai ] = "Events";
         QuickHelpText[ hindi ] = "घटनें";
+        QuickHelpText[ slovak ] = "Udalosti";
     };
     Image IMG_SCRIPT_HC
     {
@@ -867,6 +888,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
     Text[ czech ] = "Hypertextový odkaz";
     Text[ hebrew ] = "Hyperlink";
     Text[ hindi ] = "हाइपरलिंक";
+    Text[ slovak ] = "Hypertextový odkaz";
 };
 
 /*************************************************************************
@@ -935,6 +957,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text[ czech ] = "Pošta a zprávy";
         Text[ hebrew ] = "Mail & news";
         Text[ hindi ] = "मेइल और समाचार";
+        Text[ slovak ] = "Pošta a správy";
     };
     RadioButton RB_LINKTYP_MAIL
     {
@@ -967,6 +990,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text[ czech ] = "E-mail";
         Text[ hebrew ] = "~E-mail";
         Text[ hindi ] = "~इ-मेइल";
+        Text[ slovak ] = "~E-mail";
     };
     RadioButton RB_LINKTYP_NEWS
     {
@@ -999,6 +1023,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text[ czech ] = "Zprávy";
         Text[ hebrew ] = "~News";
         Text[ hindi ] = "~समाचार";
+        Text[ slovak ] = "~Správy";
     };
     FixedText FT_RECEIVER
     {
@@ -1030,6 +1055,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text[ czech ] = "Příjemce";
         Text[ hebrew ] = "E~mpfänger";
         Text[ hindi ] = "प्रति~ग्राहक";
+        Text[ slovak ] = "Príjem~ca";
     };
     FixedText FT_SUBJECT
     {
@@ -1061,6 +1087,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text[ czech ] = "Předmět";
         Text[ hebrew ] = "‮נושא‬";
         Text[ hindi ] = "~विषय";
+        Text[ slovak ] = "~Predmet";
     };
     Edit ED_SUBJECT
     {
@@ -1121,6 +1148,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text[ thai ] = "Data Sources...";
         QuickHelpText[ thai ] = "Data Sources...";
         QuickHelpText[ hindi ] = "ड़ॉटा मूल...";
+        QuickHelpText[ slovak ] = "Zdroje dát...";
     };
     Image IMG_ADRESSBOOK_HC
     {
@@ -1158,6 +1186,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text[ czech ] = "Další nastavení";
         Text[ hebrew ] = "Weitere Einstellungen";
         Text[ hindi ] = "अधिक निर्धारण";
+        Text[ slovak ] = "Ďalšie nastavenia";
     };
     FixedText FT_FRAME
     {
@@ -1189,6 +1218,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text[ czech ] = "Rámec";
         Text[ hebrew ] = "‮מסגרת‬";
         Text[ hindi ] = "फ़्रे~म";
+        Text[ slovak ] = "~Rámec";
     };
     ComboBox CB_FRAME
     {
@@ -1229,6 +1259,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text[ czech ] = "Formulář";
         Text[ hebrew ] = "‮טופס‬";
         Text[ hindi ] = "~फ़ॉर्म";
+        Text[ slovak ] = "F~ormulár";
     };
     ListBox LB_FORM
     {
@@ -1374,6 +1405,11 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
          < "टेक्स्ट्" ; Default ; > ;
         < "बटन" ; Default ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "Text" ; Default ; > ;
+        < "Klávesa" ; Default ; > ;
+    };
     };
     FixedText FT_INDICATION
     {
@@ -1405,6 +1441,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text[ czech ] = "Text";
         Text[ hebrew ] = "‮טקסט‬";
         Text[ hindi ] = "टे~क्स्ट्";
+        Text[ slovak ] = "Te~xt";
     };
     Edit ED_INDICATION
     {
@@ -1442,6 +1479,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text[ czech ] = "Název";
         Text[ hebrew ] = "N~ame";
         Text[ hindi ] = "~नाम";
+        Text[ slovak ] = "~Názov";
     };
     Edit ED_TEXT
     {
@@ -1502,6 +1540,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         QuickHelpText[ hebrew ] = "Ereignisse";
         QuickHelpText[ thai ] = "Events";
         QuickHelpText[ hindi ] = "घटनें";
+        QuickHelpText[ slovak ] = "Udalosti";
     };
     Image IMG_SCRIPT_HC
     {
@@ -1512,6 +1551,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
     Text[ czech ] = "Hypertextový odkaz";
     Text[ hebrew ] = "Hyperlink";
     Text[ hindi ] = "हाइपरलिंक";
+    Text[ slovak ] = "Hypertextový odkaz";
 };
 
 /*************************************************************************
@@ -1581,6 +1621,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         Text[ czech ] = "Dokument";
         Text[ hebrew ] = "Dokument";
         Text[ hindi ] = "लेखपत्र";
+        Text[ slovak ] = "Dokument";
     };
     FixedText FT_PATH_DOC
     {
@@ -1612,6 +1653,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         Text[ czech ] = "Cesta";
         Text[ hebrew ] = "~Pfad";
         Text[ hindi ] = "~मार्ग";
+        Text[ slovak ] = "~Cesta";
     };
     ImageButton BTN_FILEOPEN
     {
@@ -1666,6 +1708,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         QuickHelpText[ hebrew ] = "‮פתיחת קובץ‬";
         QuickHelpText[ thai ] = "Open File";
         QuickHelpText[ hindi ] = "फाइल खोलो";
+        QuickHelpText[ slovak ] = "Otvoriť súbor";
     };
     Image IMG_FILEOPEN_HC
     {
@@ -1703,6 +1746,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         Text[ czech ] = "Cíl v dokumentu";
         Text[ hebrew ] = "Sprungziel im Dokument";
         Text[ hindi ] = "लेखपत्र में लक्ष्य";
+        Text[ slovak ] = "Cieľ v dokumente";
     };
     FixedText FT_TARGET_DOC
     {
@@ -1734,6 +1778,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         Text[ czech ] = "Cíl";
         Text[ hebrew ] = "Sprungzie~l";
         Text[ hindi ] = "~लक्ष्य";
+        Text[ slovak ] = "Ci~eľ";
     };
     Edit ED_TARGET_DOC
     {
@@ -1772,6 +1817,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         Text[ hebrew ] = "URL";
         Text[ thai ] = "URL";
         Text[ hindi ] = "URL";
+        Text[ slovak ] = "URL";
     };
     FixedText FT_FULL_URL
     {
@@ -1804,6 +1850,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         Text[ czech ] = "Testovací text";
         Text[ hebrew ] = "Testtext";
         Text[ hindi ] = "जाँच टेक्स्ट्";
+        Text[ slovak ] = "Testovací text";
     };
     ImageButton BTN_BROWSE
     {
@@ -1856,6 +1903,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         QuickHelpText[ hebrew ] = "Sprungziel im Dokument";
         QuickHelpText[ thai ] = "Target in Document";
         QuickHelpText[ hindi ] = "लेखपत्र में लक्ष्य";
+        QuickHelpText[ slovak ] = "Cieľ v dokumente";
     };
     Image IMG_BROWSE_HC
     {
@@ -1893,6 +1941,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         Text[ czech ] = "Další nastavení";
         Text[ hebrew ] = "Weitere Einstellungen";
         Text[ hindi ] = "और अधिक निर्धारण";
+        Text[ slovak ] = "Ďalšie nastavenia";
     };
     FixedText FT_FRAME
     {
@@ -1924,6 +1973,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         Text[ czech ] = "Rámec";
         Text[ hebrew ] = "‮מסגרת‬";
         Text[ hindi ] = "फ्रे~म";
+        Text[ slovak ] = "~Rámec";
     };
     ComboBox CB_FRAME
     {
@@ -1964,6 +2014,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         Text[ czech ] = "Formulář";
         Text[ hebrew ] = "‮טופס‬";
         Text[ hindi ] = "~फ़ॉर्म";
+        Text[ slovak ] = "F~ormulár";
     };
     ListBox LB_FORM
     {
@@ -2109,6 +2160,11 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
          < "टेक्स्ट्" ; Default ; > ;
         < "बटन" ; Default ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "Text" ; Default ; > ;
+        < "Klávesa" ; Default ; > ;
+    };
     };
     FixedText FT_INDICATION
     {
@@ -2140,6 +2196,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         Text[ czech ] = "Text";
         Text[ hebrew ] = "‮טקסט‬";
         Text[ hindi ] = "टे~क्स्ट्";
+        Text[ slovak ] = "Te~xt";
     };
     Edit ED_INDICATION
     {
@@ -2177,6 +2234,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         Text[ czech ] = "Název";
         Text[ hebrew ] = "N~ame";
         Text[ hindi ] = "ना~म";
+        Text[ slovak ] = "~Názov";
     };
     Edit ED_TEXT
     {
@@ -2237,6 +2295,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         QuickHelpText[ hebrew ] = "Ereignisse";
         QuickHelpText[ thai ] = "Events";
         QuickHelpText[ hindi ] = "घटनें";
+        QuickHelpText[ slovak ] = "Udalosti";
     };
     Image IMG_SCRIPT_HC
     {
@@ -2247,6 +2306,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
     Text[ czech ] = "Hypertextový odkaz";
     Text[ hebrew ] = "Hyperlink";
     Text[ hindi ] = "हाइपरलिंक";
+    Text[ slovak ] = "Hypertextový odkaz";
 };
 
 /*************************************************************************
@@ -2316,6 +2376,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Text[ czech ] = "Nový dokument";
         Text[ hebrew ] = "Neues Dokument";
         Text[ hindi ] = "नया लेखपत्र";
+        Text[ slovak ] = "Nový dokument";
     };
     RadioButton RB_EDITNOW
     {
@@ -2347,6 +2408,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Text[ czech ] = "Upravit nyní";
         Text[ hebrew ] = "Sofort ~bearbeiten";
         Text[ hindi ] = "~अभी संपादन करो";
+        Text[ slovak ] = "Upraviť ~teraz";
     };
     RadioButton RB_EDITLATER
     {
@@ -2378,6 +2440,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Text[ czech ] = "Upravit později";
         Text[ hebrew ] = "~Später bearbeiten";
         Text[ hindi ] = "~बाद में संपादन करो";
+        Text[ slovak ] = "Upraviť ~neskôr";
     };
     FixedText FT_PATH_NEWDOC
     {
@@ -2409,6 +2472,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Text[ czech ] = "Soubor";
         Text[ hebrew ] = "‮קובץ‬";
         Text[ hindi ] = "~फाइल";
+        Text[ slovak ] = "~Súbor";
     };
     Edit ED_PATH_NEWDOC
     {
@@ -2447,6 +2511,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Text[ czech ] = "Typ souboru";
         Text[ hebrew ] = "Dateit~yp";
         Text[ hindi ] = "फाइल ~वर्ग";
+        Text[ slovak ] = "~Typ súboru";
     };
     ListBox LB_DOCUMENT_TYPES
     {
@@ -2509,6 +2574,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         QuickHelpText[ hebrew ] = "Pfad auswählen";
         QuickHelpText[ thai ] = "Select Path";
         QuickHelpText[ hindi ] = "मार्ग चुनो";
+        QuickHelpText[ slovak ] = "Vybrať cestu";
     };
     Image IMG_CREATE_HC
     {
@@ -2546,6 +2612,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Text[ czech ] = "Další nastavení";
         Text[ hebrew ] = "Weitere Einstellungen";
         Text[ hindi ] = "अधिक निर्धारण";
+        Text[ slovak ] = "Ďalšie nastavenia";
     };
     FixedText FT_FRAME
     {
@@ -2577,6 +2644,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Text[ czech ] = "Rámec";
         Text[ hebrew ] = "‮מסגרת‬";
         Text[ hindi ] = "फ्रे~म";
+        Text[ slovak ] = "~Rámec";
     };
     ComboBox CB_FRAME
     {
@@ -2617,6 +2685,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Text[ czech ] = "Formulář";
         Text[ hebrew ] = "‮טופס‬";
         Text[ hindi ] = "~फ़ॉर्म";
+        Text[ slovak ] = "F~ormulár";
     };
     ListBox LB_FORM
     {
@@ -2762,6 +2831,11 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
          < "टेक्स्ट्" ; Default ; > ;
         < "बटन" ; Default ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "Text" ; Default ; > ;
+        < "Klávesa" ; Default ; > ;
+    };
     };
     FixedText FT_INDICATION
     {
@@ -2793,6 +2867,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Text[ czech ] = "Text";
         Text[ hebrew ] = "‮טקסט‬";
         Text[ hindi ] = "टे~क्स्ट्";
+        Text[ slovak ] = "Te~xt";
     };
     Edit ED_INDICATION
     {
@@ -2830,6 +2905,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Text[ czech ] = "Název";
         Text[ hebrew ] = "N~ame";
         Text[ hindi ] = "ना~म";
+        Text[ slovak ] = "~Názov";
     };
     Edit ED_TEXT
     {
@@ -2890,6 +2966,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         QuickHelpText[ hebrew ] = "Ereignisse";
         QuickHelpText[ thai ] = "Events";
         QuickHelpText[ hindi ] = "घटनें";
+        QuickHelpText[ slovak ] = "Udalosti";
     };
     Image IMG_SCRIPT_HC
     {
@@ -2900,6 +2977,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
     Text[ czech ] = "Hypertextový odkaz";
     Text[ hebrew ] = "Hyperlink";
     Text[ hindi ] = "हाइपरलिंक";
+    Text[ slovak ] = "Hypertextový odkaz";
 };
 
 /*************************************************************************
@@ -2940,6 +3018,7 @@ ModalDialog RID_SVXDLG_NEWHYPERLINK
     Text[ czech ] = "Hypertextový odkaz";
     Text[ hebrew ] = "Hyperlink";
     Text[ hindi ] = "हाइपरलिंक";
+    Text[ slovak ] = "Hypertextový odkaz";
 };
 
 /*************************************************************************
@@ -2977,6 +3056,7 @@ String RID_SVXSTR_HYPDLG_APPLYBUT
     Text[ czech ] = "Použít";
     Text[ hebrew ] = "‮יישום‬";
     Text[ hindi ] = "लागू करो";
+    Text[ slovak ] = "Použiť";
 };
 String RID_SVXSTR_HYPDLG_CLOSEBUT
 {
@@ -3007,6 +3087,7 @@ String RID_SVXSTR_HYPDLG_CLOSEBUT
     Text[ czech ] = "Zavřít";
     Text[ hebrew ] = "‮סגירה‬";
     Text[ hindi ] = "बन्द करो";
+    Text[ slovak ] = "Zavrieť";
 };
 String RID_SVXSTR_HYPDLG_MACROACT1
 {
@@ -3024,7 +3105,7 @@ String RID_SVXSTR_HYPDLG_MACROACT1
     Text[ swedish ] = "Mus �ver objekt";
     Text[ polish ] = "Mysz nad obiektem";
     Text[ portuguese_brazilian ] = "Mouse sobre o objeto";
-    Text[ japanese ] = "オブジェクト用マウス";
+    Text[ japanese ] = "マウスをオブジェクト上に移動";
     Text[ korean ] = "마우스를 개체 위에";
     Text[ chinese_simplified ] = "鼠标在对象之上";
     Text[ chinese_traditional ] = "鼠標在物件之上";
@@ -3036,6 +3117,7 @@ String RID_SVXSTR_HYPDLG_MACROACT1
     Text[ czech ] = "Myš nad objektem";
     Text[ hebrew ] = "Maus über Objekt";
     Text[ hindi ] = "मौस वस्तु के ऊपर";
+    Text[ slovak ] = "Myš na objekte";
 };
 String RID_SVXSTR_HYPDLG_MACROACT2
 {
@@ -3066,6 +3148,7 @@ String RID_SVXSTR_HYPDLG_MACROACT2
     Text[ czech ] = "Provést hypertextový odkaz";
     Text[ hebrew ] = "Hyperlink auslösen";
     Text[ hindi ] = "ट्रिगर हाइपरलिंक";
+    Text[ slovak ] = "Previesť hypertextový odkaz";
 };
 String RID_SVXSTR_HYPDLG_MACROACT3
 {
@@ -3095,6 +3178,7 @@ String RID_SVXSTR_HYPDLG_MACROACT3
     Text[ czech ] = "Myš opouští objekt";
     Text[ hebrew ] = "Maus verlässt Objekt";
     Text[ hindi ] = "मौस वस्तु से बाहर";
+    Text[ slovak ] = "Myš opúšťa objekt";
 };
 
 String RID_SVXSTR_HYPDLG_NOVALIDFILENAME
@@ -3126,6 +3210,7 @@ String RID_SVXSTR_HYPDLG_NOVALIDFILENAME
     Text[ czech ] = "Prosím zadejte platný název souboru.";
     Text[ hebrew ] = "Geben Sie bitte einen gültigen Dateinamen ein.";
     Text[ hindi ] = "कृपया एक मान्य फाइल का नाम प्रविष्ट कीजिए ।";
+    Text[ slovak ] = "Prosím zadajte platný názov súboru.";
 };
 
 String RID_SVXSTR_HYPERDLG_HLINETTP
@@ -3156,6 +3241,7 @@ String RID_SVXSTR_HYPERDLG_HLINETTP
     Text[ czech ] = "Internet";
     Text[ hebrew ] = "‮אינטרנט‬";
     Text[ hindi ] = "इन्टरनेट्";
+    Text[ slovak ] = "Internet";
 };
 String RID_SVXSTR_HYPERDLG_HLINETTP_HELP
 {
@@ -3184,6 +3270,7 @@ String RID_SVXSTR_HYPERDLG_HLINETTP_HELP
     Text[ portuguese_brazilian ] = "This is where you create a hyperlink to a Web page, FTP server or Telnet connection.";
     Text[ thai ] = "This is where you create a hyperlink to a Web page, FTP server or Telnet connection.";
     Text[ hindi ] = "This is where you create a hyperlink to a Web page, FTP server or Telnet connection.";
+    Text[ slovak ] = "Tu môžete vytvoriť odkaz na Webovú stránku, FTP server alebo Telnet spojenie.";
 };
 
 String RID_SVXSTR_HYPERDLG_HLMAILTP
@@ -3214,6 +3301,7 @@ String RID_SVXSTR_HYPERDLG_HLMAILTP
     Text[ czech ] = "Pošta a zprávy";
     Text[ hebrew ] = "Mail & News";
     Text[ hindi ] = "मेइल और समाचार";
+    Text[ slovak ] = "Pošta a správy";
 };
 String RID_SVXSTR_HYPERDLG_HLMAILTP_HELP
 {
@@ -3242,6 +3330,7 @@ String RID_SVXSTR_HYPERDLG_HLMAILTP_HELP
     Text[ portuguese_brazilian ] = "This is where you create a hyperlink to an e-mail address or newsgroup.";
     Text[ thai ] = "This is where you create a hyperlink to an e-mail address or newsgroup.";
     Text[ hindi ] = "This is where you create a hyperlink to an e-mail address or newsgroup.";
+    Text[ slovak ] = "Tu môžete vytvoriť odkaz na e-mailovú adresu alebo skupinu správ.";
 };
 
 String RID_SVXSTR_HYPERDLG_HLDOCTP
@@ -3272,6 +3361,7 @@ String RID_SVXSTR_HYPERDLG_HLDOCTP
     Text[ czech ] = "Dokument";
     Text[ hebrew ] = "Dokument";
     Text[ hindi ] = "लेखपत्र";
+    Text[ slovak ] = "Dokument";
 };
 String RID_SVXSTR_HYPERDLG_HLDOCTP_HELP
 {
@@ -3300,6 +3390,7 @@ String RID_SVXSTR_HYPERDLG_HLDOCTP_HELP
     Text[ portuguese_brazilian ] = "This is where you create a hyperlink to an exisitng document or a target within a document.";
     Text[ thai ] = "This is where you create a hyperlink to an exisitng document or a target within a document.";
     Text[ hindi ] = "This is where you create a hyperlink to an exisitng document or a target within a document.";
+    Text[ slovak ] = "Tu môžete vytvoriť odkaz na existujúci dokument alebo cieľ vo vnútri dokumentu.";
 };
 
 String RID_SVXSTR_HYPERDLG_HLDOCNTP
@@ -3330,6 +3421,7 @@ String RID_SVXSTR_HYPERDLG_HLDOCNTP
     Text[ czech ] = "Nový dokument";
     Text[ hebrew ] = "‮מסמך חדש‬";
     Text[ hindi ] = "नया लेखपत्र";
+    Text[ slovak ] = "Nový dokument";
 };
 String RID_SVXSTR_HYPERDLG_HLDOCNTP_HELP
 {
@@ -3358,6 +3450,7 @@ String RID_SVXSTR_HYPERDLG_HLDOCNTP_HELP
     Text[ portuguese_brazilian ] = "This is where you create a new document to which the new link points.";
     Text[ thai ] = "This is where you create a new document to which the new link points.";
     Text[ hindi ] = "This is where you create a new document to which the new link points.";
+    Text[ slovak ] = "Tu môžete vytvoriť nový dokument na ktorý ukazuje nový odkaz.";
 };
 
 String RID_SVXSTR_HYPERDLG_FORM_BUTTON
@@ -3389,6 +3482,7 @@ String RID_SVXSTR_HYPERDLG_FORM_BUTTON
     Text[ czech ] = "Tlačítko";
     Text[ hebrew ] = "Button";
     Text[ hindi ] = "बटन";
+    Text[ slovak ] = "Klávesa";
 };
 
 String RID_SVXSTR_HYPERDLG_FROM_TEXT
@@ -3420,6 +3514,7 @@ String RID_SVXSTR_HYPERDLG_FROM_TEXT
     Text[ czech ] = "Text";
     Text[ hebrew ] = "‮טקסט‬";
     Text[ hindi ] = "टेक्स्ट्";
+    Text[ slovak ] = "Text";
 };
 
 String RID_SVXSTR_HYPERDLG_QUERYOVERWRITE
@@ -3452,6 +3547,7 @@ String RID_SVXSTR_HYPERDLG_QUERYOVERWRITE
     Text[ czech ] = "Soubor již existuje. Přepsat?";
     Text[ hebrew ] = "Die Datei existiert bereits. Soll sie überschrieben werden?";
     Text[ hindi ] = "The file already exists. Overwrite?";
+    Text[ slovak ] = "Súbor už existuje. Prepísať?";
 };
 
 Image RID_SVXBMP_HLINETTP
@@ -3501,6 +3597,8 @@ Image RID_SVXBMP_HLDOCNTP_H
     ImageBitmap = Bitmap { File = "hldocntp_h.bmp" ; };
     MASKCOLOR
 };
+
+
 
 
 
