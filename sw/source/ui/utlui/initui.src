@@ -2,9 +2,9 @@
  *
  *  $RCSfile: initui.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-14 20:21:08 $
+ *  last change: $Author: os $ $Date: 2002-08-21 13:15:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2138,7 +2138,7 @@ String STR_AUTH_FIELD_ORGANIZATIONS
 };
 String STR_AUTH_FIELD_PAGES
 {
-    Text = "Seiten" ;
+    Text = "Seite(n)" ;
     Text [ ENGLISH ] = "Pages" ;
     Text[ english_us ] = "Pages";
     Text[ portuguese ] = "Páginas";
