@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:04:33 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:24:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,8 +186,6 @@ ImportExcel::ImportExcel( SvStream& rSvStrm, ScDocument* pDoc, const String& rBa
     XclImpRoot( static_cast< XclImpRootData& >( *this ) ),
     maStrm( rSvStrm, *this ),
     aIn( maStrm ),
-    aColOutlineBuff( MAXCOL + 1 ),
-    aRowOutlineBuff( MAXROW + 1 ),
     bFitToPage( sal_False ),
     bHasHeader( sal_False ),
     bHasFooter( sal_False )
@@ -224,13 +222,9 @@ ImportExcel::ImportExcel( SvStream& rSvStrm, ScDocument* pDoc, const String& rBa
     pExtNameBuff = new NameBuffer( pExcRoot );          //#94039# prevent empty rootdata
     pExtNameBuff->SetBase( 1 );
 
-    pColRowBuff = new ColRowSettings( *pExcRoot );      //#94039# prevent empty rootdata
-    pColRowBuff->SetDefWidth( STD_COL_WIDTH );
-    pColRowBuff->SetDefHeight( ( UINT16 ) STD_ROW_HEIGHT );
+    pOutlineListBuffer = new OutlineListBuffer( );
 
     // ab Biff8
-    pExcRoot->nCondRangeCnt = ( UINT32 ) -1;    // GetCondFormStyleName() starts with increment!
-
     pFormConv = new ExcelToSc( pExcRoot, aIn );
 
     bTabTruncated = FALSE;
@@ -266,7 +260,8 @@ ImportExcel::~ImportExcel( void )
     GetDoc().SetSrcCharSet( GetCharSet() );
 
     delete pExtNameBuff;
-    delete pColRowBuff;
+
+    delete pOutlineListBuffer;
 
     delete pFormConv;
 }
@@ -481,7 +476,7 @@ void ImportExcel::Row25( void )
             aIn.Ignore( 2 );    // reserved
             aIn >> nGrbit;
 
-            aRowOutlineBuff.SetLevel( nRow, EXC_ROW_GETLEVEL( nGrbit ),
+            pRowOutlineBuff->SetLevel( nRow, EXC_ROW_GETLEVEL( nGrbit ),
                 TRUEBOOL( nGrbit & EXC_ROW_COLLAPSED ), TRUEBOOL( nGrbit & EXC_ROW_ZEROHEIGHT ) );
 
             pColRowBuff->SetRowSettings( nRow, nRowHeight, nGrbit );
@@ -633,9 +628,7 @@ void ImportExcel::Name25( void )
 
 
         if( bBuildIn )
-        {// Build-in name
-            XclTools::GetBuiltInName( aName, cFirstNameChar, nSheet );
-        }
+            aName = XclTools::GetBuiltInName( cFirstNameChar, nSheet );
         else
             ScfTools::ConvertToScDefinedName( aName );
 
@@ -1042,7 +1035,7 @@ void ImportExcel::Colinfo( void )
     if( nColLast > MAXCOL )
         nColLast = MAXCOL;
 
-    aColOutlineBuff.SetLevelRange( nColFirst, nColLast, EXC_COL_GETLEVEL( nOpt ),
+    pColOutlineBuff->SetLevelRange( nColFirst, nColLast, EXC_COL_GETLEVEL( nOpt ),
         TRUEBOOL( nOpt & EXC_COL_COLLAPSED ), TRUEBOOL( nOpt & EXC_COL_HIDDEN ) );
 
     if( nOpt & EXC_COL_HIDDEN ) // Cols hidden?
@@ -1082,8 +1075,8 @@ void ImportExcel::Wsbool( void )
     UINT16 nFlags;
     aIn >> nFlags;
 
-    aRowOutlineBuff.SetButtonMode( HasFlag( nFlags, EXC_WSBOOL_ROWBELOW ) );
-    aColOutlineBuff.SetButtonMode( HasFlag( nFlags, EXC_WSBOOL_COLBELOW ) );
+    pRowOutlineBuff->SetButtonMode( HasFlag( nFlags, EXC_WSBOOL_ROWBELOW ) );
+    pColOutlineBuff->SetButtonMode( HasFlag( nFlags, EXC_WSBOOL_COLBELOW ) );
 
     bFitToPage = HasFlag( nFlags, EXC_WSBOOL_FITTOPAGE );
 }
@@ -1633,7 +1626,7 @@ void ImportExcel::Row34( void )
 
         aIn >> nGrbit >> nXF;
 
-        aRowOutlineBuff.SetLevel( nRow, EXC_ROW_GETLEVEL( nGrbit ),
+        pRowOutlineBuff->SetLevel( nRow, EXC_ROW_GETLEVEL( nGrbit ),
             TRUEBOOL( nGrbit & EXC_ROW_COLLAPSED ), TRUEBOOL( nGrbit & EXC_ROW_ZEROHEIGHT ) );
 
         pColRowBuff->SetRowSettings( nRow, nRowHeight, nGrbit );
@@ -1698,7 +1691,7 @@ void ImportExcel::Name34( void )
         bPrintTitles = ( cFirstNameChar == EXC_BUILTIN_PRINTTITLES );
         bBuildIn = TRUE;
 
-        aName.AssignAscii( XclTools::GetBuiltInName( cFirstNameChar ) );
+        aName = XclTools::GetBuiltInName( cFirstNameChar );
     }
     else
     {
@@ -1919,7 +1912,8 @@ void ImportExcel::Bof5( void )
     maStrm.UseDecryption( false );
 #endif
     maStrm >> nVers >> nSubType;
-    SetBiff( (nVers == 0x0600) ? xlBiff8 : xlBiff5 );
+    if( nSubType == 0x0005 )    // nVers may be wrong in Worksheet BOFs
+        SetBiff( (nVers == 0x0600) ? xlBiff8 : xlBiff5 );
 #if SC_XCL_USEDECR
     maStrm.UseDecryption( true );
 #endif
@@ -1961,25 +1955,8 @@ void ImportExcel::Bof5( void )
     pExcRoot->eDateiTyp = eDatei;
 }
 
-
-void ImportExcel::ResetBof( void )
-{   // setzt alle Einstellungen fuer neuen Tabellenbeginn zurueck
-    pColRowBuff->Reset();
-}
-
-
 void ImportExcel::EndSheet( void )
-{   // mach 'Gemarmel' am Ende eines Sheets
-    aColOutlineBuff.SetOutlineArray( pD->GetOutlineTable( GetScTab(), TRUE )->GetColArray() );
-    aColOutlineBuff.MakeScOutline();
-    aColOutlineBuff.Reset();
-
-    aRowOutlineBuff.SetOutlineArray( pD->GetOutlineTable( GetScTab(), TRUE )->GetRowArray() );
-    aRowOutlineBuff.MakeScOutline();
-    aRowOutlineBuff.Reset();
-
-    pColRowBuff->Apply( GetScTab() );
-
+{
     GetXFIndexBuffer().Apply();
 
     pExcRoot->pExtSheetBuff->Reset();
@@ -2023,6 +2000,12 @@ void ImportExcel::NeueTabelle( void )
     bFitToPage = sal_False;
     bHasHeader = sal_False;
     bHasFooter = sal_False;
+
+    pOutlineListBuffer->Append(new OutlineDataBuffer(*pExcRoot, nTab ));          //#94039# prevent empty rootdata
+
+    pColRowBuff = pOutlineListBuffer->Last()->GetColRowBuff();
+    pColOutlineBuff = pOutlineListBuffer->Last()->GetColOutline();
+    pRowOutlineBuff = pOutlineListBuffer->Last()->GetRowOutline();
 }
 
 
@@ -2107,7 +2090,7 @@ EditTextObject* ImportExcel::CreateFormText( BYTE nAnzFrms, const String& rS, co
     rEdEng.SetText( rS );
 
     SfxItemSet      aItemSet( rEdEng.GetEmptyItemSet() );
-    GetFontBuffer().FillToItemSet( GetXFBuffer().GetFontIndex( nXF ), aItemSet, xlFontEEIDs );
+    GetFontBuffer().FillToItemSet( aItemSet, xlFontEEIDs, GetXFBuffer().GetFontIndex( nXF ) );
 
     ESelection      aSel( 0, 0 );
 
@@ -2129,7 +2112,7 @@ EditTextObject* ImportExcel::CreateFormText( BYTE nAnzFrms, const String& rS, co
 
                 aItemSet.ClearItem( 0 );
 
-                GetFontBuffer().FillToItemSet( nFont, aItemSet, xlFontEEIDs );
+                GetFontBuffer().FillToItemSet( aItemSet, xlFontEEIDs, nFont );
                 if( nAnzFrms )
                 {
                     aIn >> nChar >> nFont;
@@ -2185,6 +2168,12 @@ void ImportExcel::AdjustRowHeight()
 
 void ImportExcel::PostDocLoad( void )
 {
+
+    // Apply any Outlines for each sheet
+    for(OutlineDataBuffer* pBuffer = pOutlineListBuffer->First(); pBuffer; pBuffer = pOutlineListBuffer->Next() )
+        pBuffer->Apply(pD);
+
+
     // visible area if embedded OLE
     ScModelObj* pDocObj = GetDocModelObj();
     if( pDocObj )
@@ -2326,3 +2315,24 @@ void ImportExcel::SetMarginItem( SfxItemSet& rItemSet, double fMarginInch, XclMa
     }
 }
 
+OutlineDataBuffer::OutlineDataBuffer(RootData& rRootData, UINT16 nTabNo) :
+    nTab (nTabNo)
+{
+    pColOutlineBuff = new OutlineBuffer (MAXCOL + 1);
+    pRowOutlineBuff = new OutlineBuffer (MAXROW + 1);
+    pColRowBuff = new ColRowSettings( rRootData );
+
+    pColRowBuff->SetDefWidth( STD_COL_WIDTH );
+    pColRowBuff->SetDefHeight( ( UINT16 ) STD_ROW_HEIGHT );
+}
+
+void OutlineDataBuffer::Apply(ScDocument* pD)
+{
+    pColOutlineBuff->SetOutlineArray( pD->GetOutlineTable( nTab, TRUE )->GetColArray() );
+    pColOutlineBuff->MakeScOutline();
+
+    pRowOutlineBuff->SetOutlineArray( pD->GetOutlineTable( nTab, TRUE )->GetRowArray() );
+    pRowOutlineBuff->MakeScOutline();
+
+    pColRowBuff->Apply(nTab);
+}
