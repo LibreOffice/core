@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprn.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pluby $ $Date: 2000-11-30 00:01:54 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 12:48:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,6 @@
  *
  *
  ************************************************************************/
-
-#define _SV_SALPRN_CXX
 
 #ifndef _SV_SALINST_H
 #include <salinst.hxx>
