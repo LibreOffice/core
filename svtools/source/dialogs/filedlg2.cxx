@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlg2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2001-09-14 05:14:59 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 15:23:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,7 +216,7 @@ void ImpPathDialog::InitControls()
 
     Size a3Siz = pDlg->LogicToPixel( Size( 3, 3 ), MAP_APPFONT );
     Size a6Siz = pDlg->LogicToPixel( Size( 6, 6 ), MAP_APPFONT );
-    Size aBtnSiz = pDlg->LogicToPixel( Size( 70, 14 ), MAP_APPFONT );
+    Size aBtnSiz = pDlg->LogicToPixel( Size( 50, 14 ), MAP_APPFONT );
     Size aFTSiz = pDlg->LogicToPixel( Size( 142, 10 ), MAP_APPFONT );
     Size aEDSiz = pDlg->LogicToPixel( Size( 142, 12 ), MAP_APPFONT );
     Point aPnt( a6Siz.Width(), a6Siz.Height() );
@@ -252,20 +252,42 @@ void ImpPathDialog::InitControls()
     pDriveList = NULL;
 #endif
 
+    long nExtraWidth = pDlg->GetTextWidth( String( RTL_CONSTASCII_USTRINGPARAM( "(W)" ) ) )+10;
+    String aOkStr = Button::GetStandardText( BUTTON_OK );
+    long nTextWidth = pDlg->GetTextWidth( aOkStr )+nExtraWidth;
+    if( nTextWidth > aBtnSiz.Width() )
+        aBtnSiz.Width() = nTextWidth;
+
+    String aCancelStr = Button::GetStandardText( BUTTON_CANCEL );
+    nTextWidth = pDlg->GetTextWidth( aCancelStr )+nExtraWidth;
+    if( nTextWidth > aBtnSiz.Width() )
+        aBtnSiz.Width() = nTextWidth;
+
+    String aNewDirStr( SvtResId( STR_FILEDLG_NEWDIR ) );
+    nTextWidth = pDlg->GetTextWidth( aNewDirStr )+nExtraWidth;
+    if( nTextWidth > aBtnSiz.Width() )
+        aBtnSiz.Width() = nTextWidth;
+#ifdef UNX
+    String aHomeDirStr( SvtResId( STR_FILEDLG_HOME ) );
+    nTextWidth = pDlg->GetTextWidth( aHomeDirStr )+nExtraWidth;
+    if( nTextWidth > aBtnSiz.Width() )
+        aBtnSiz.Width() = nTextWidth;
+#endif
+
     aPnt.X() = 2 * a6Siz.Width() + aEDSiz.Width();
     aPnt.Y() = a6Siz.Height();
     INITCONTROL( pOkBtn, PushButton, WB_DEFBUTTON,
-                 aPnt, aBtnSiz, Button::GetStandardText( BUTTON_OK ), 0 );
+                 aPnt, aBtnSiz, aOkStr, 0 );
     aPnt.Y() += aBtnSiz.Height() + a3Siz.Height();
     INITCONTROL( pCancelBtn, CancelButton, 0,
-                 aPnt, aBtnSiz, Button::GetStandardText( BUTTON_CANCEL ), 0 );
+                 aPnt, aBtnSiz, aCancelStr, 0 );
     aPnt.Y() += aBtnSiz.Height() + a3Siz.Height();
     INITCONTROL( pNewDirBtn, PushButton, WB_DEFBUTTON,
-                 aPnt, aBtnSiz, UniString( SvtResId( STR_FILEDLG_NEWDIR ) ), HID_FILEDLG_NEWDIR );
+                 aPnt, aBtnSiz, aNewDirStr, HID_FILEDLG_NEWDIR );
 #ifdef UNX
     aPnt.Y() += aBtnSiz.Height() + a3Siz.Height();
     INITCONTROL( pHomeBtn, PushButton, WB_DEFBUTTON,
-                 aPnt, aBtnSiz, UniString( SvtResId( STR_FILEDLG_HOME ) ), HID_FILEDLG_HOME );
+                 aPnt, aBtnSiz, aHomeDirStr, HID_FILEDLG_HOME );
 #else
     pHomeBtn = NULL;
 #endif
