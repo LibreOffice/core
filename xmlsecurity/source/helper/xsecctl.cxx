@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xsecctl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mt $ $Date: 2004-08-18 09:14:42 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:56:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,7 @@
 #include <com/sun/star/xml/crypto/sax/XMissionTaker.hpp>
 #include <com/sun/star/xml/crypto/sax/XReferenceCollector.hpp>
 #include <com/sun/star/xml/crypto/sax/XSAXEventKeeperStatusChangeBroadcaster.hpp>
-#include <com/sun/star/xml/crypto/sax/SignatureVerifyResult.hpp>
-#include <com/sun/star/xml/crypto/sax/SignatureCreationResult.hpp>
+#include <com/sun/star/xml/crypto/SecurityOperationStatus.hpp>
 
 #include <xmloff/attrlist.hxx>
 
@@ -1502,7 +1501,7 @@ void SAL_CALL XSecController::bufferStatusChanged( sal_Bool isBufferEmpty )
 /*
  * XSignatureCreationResultListener
  */
-void SAL_CALL XSecController::signatureCreated( sal_Int32 securityId, com::sun::star::xml::crypto::sax::SignatureCreationResult nResult )
+void SAL_CALL XSecController::signatureCreated( sal_Int32 securityId, com::sun::star::xml::crypto::SecurityOperationStatus nResult )
         throw (com::sun::star::uno::RuntimeException)
 {
     int index = findSignatureInfor(securityId);
@@ -1510,6 +1509,7 @@ void SAL_CALL XSecController::signatureCreated( sal_Int32 securityId, com::sun::
 
     SignatureInformation& signatureInfor = m_vInternalSignatureInformations[index].signatureInfor;
 
+    /*
     if (nResult == cssxc::sax::SignatureCreationResult_CREATIONSUCCEED)
     {
         signatureInfor.nStatus = STATUS_CREATION_SUCCEED;
@@ -1518,12 +1518,14 @@ void SAL_CALL XSecController::signatureCreated( sal_Int32 securityId, com::sun::
     {
         signatureInfor.nStatus = STATUS_CREATION_FAIL;
     }
+    */
+    signatureInfor.nStatus = nResult;
 }
 
 /*
  * XSignatureVerifyResultListener
  */
-void SAL_CALL XSecController::signatureVerified( sal_Int32 securityId, com::sun::star::xml::crypto::sax::SignatureVerifyResult nResult )
+void SAL_CALL XSecController::signatureVerified( sal_Int32 securityId, com::sun::star::xml::crypto::SecurityOperationStatus nResult )
         throw (com::sun::star::uno::RuntimeException)
 {
     int index = findSignatureInfor(securityId);
@@ -1531,6 +1533,7 @@ void SAL_CALL XSecController::signatureVerified( sal_Int32 securityId, com::sun:
 
     SignatureInformation& signatureInfor = m_vInternalSignatureInformations[index].signatureInfor;
 
+    /*
     if (nResult == cssxc::sax::SignatureVerifyResult_VERIFYSUCCEED)
     {
         signatureInfor.nStatus = STATUS_VERIFY_SUCCEED;
@@ -1539,4 +1542,6 @@ void SAL_CALL XSecController::signatureVerified( sal_Int32 securityId, com::sun:
     {
         signatureInfor.nStatus = STATUS_VERIFY_FAIL;
     }
+    */
+    signatureInfor.nStatus = nResult;
 }
