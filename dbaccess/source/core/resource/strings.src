@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2001-08-21 21:59:48 $
+ *  last change: $Author: vg $ $Date: 2001-08-24 20:39:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,7 @@ String RID_STR_TABLE_IS_FILTERED
     Text[ polish ] = "Tabela $name$ ju� istenieje. Zosta�a ona przefiltrowana!";
     Text[ portuguese_brazilian ] = "the table $name$ already exists. She is only filtered!";
     Text[ japanese ] = "ﾃｰﾌﾞﾙ $name$ はすでにあります。ﾌｨﾙﾀされているため、表示されません。";
-    Text[ korean ] = "테이블 $name$이(가) 이미 있습니다. 이 테이블이 필터링 되었습니다!";
+    Text[ korean ] = " $name$ 시트가 이미 존재합니다. 이 시트는 필터로 제거되었기 때문에 보이지 않습니다.!";
     Text[ chinese_simplified ] = "表格 $name$ 已经存在。因为已经筛选出这个表格，所以无法显示它。";
     Text[ chinese_traditional ] = "這個表格 $name$ 已經存在。因爲已經篩選它而無法顯示。";
     Text[ turkish ] = "the table $name$ already exists. She is only filtered!";
@@ -163,6 +163,7 @@ String RID_STR_NEED_CONFIG_WRITE_ACCESS
     Text[ arabic ] = "You have no write access to the configuration data the object is based on.";
     Text[ catalan ] = "You have no write access to the configuration data the object is based on.";
 };
+
 
 
 
