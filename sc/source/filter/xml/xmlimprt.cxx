@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 14:09:31 $
+ *  last change: $Author: rt $ $Date: 2004-07-05 09:12:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2057,6 +2057,7 @@ void ScXMLImport::SetType(uno::Reference <beans::XPropertySet>& rProperties,
         if ((nCellType != nCurrentCellType) && !(nCellType == util::NumberFormat::NUMBER &&
             ((nCurrentCellType == util::NumberFormat::SCIENTIFIC) ||
             (nCurrentCellType == util::NumberFormat::FRACTION) ||
+            (nCurrentCellType == util::NumberFormat::LOGICAL) ||
             (nCurrentCellType == 0)) || (nCurrentCellType == util::NumberFormat::TEXT)) && !((nCellType == util::NumberFormat::DATETIME) &&
             (nCurrentCellType == util::NumberFormat::DATE)))
         {
