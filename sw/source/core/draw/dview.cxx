@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dview.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:02:28 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:21:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -604,37 +604,6 @@ const SwFrm* SwDrawView::CalcAnchor()
     return pAnch;
 }
 
-
-Rectangle *SwDrawView::IsAnchorAtPos( const Point &rPt ) const
-{
-    SdrHdl* pHdl = aHdl.GetHdl(HDL_ANCHOR);
-    if ( ! pHdl )
-        pHdl = aHdl.GetHdl(HDL_ANCHOR_TR);
-
-    if(pHdl)
-    {
-        const ViewShell &rSh = *Imp().GetShell();
-        const OutputDevice *pOut = rSh.GetOut();
-
-        if(pHdl->IsHit(rPt, *pOut))
-        {
-            B2dIAObject* pIAO = pHdl->GetIAOGroup().GetIAObject(0);
-
-            // #i21114#
-            // B2dIAOBitmapExReference is no longer used, change to B2dIAOBitmapEx
-            if(pIAO && pIAO->ISA(B2dIAOBitmapEx))
-            {
-                Rectangle aRect(
-                    pIAO->GetBasePosition(),
-                    pOut->PixelToLogic(((B2dIAOBitmapEx*)pIAO)->GetBitmapEx().GetSizePixel()));
-                return new Rectangle(aRect);
-            }
-        }
-    }
-
-    return NULL;
-}
-
 /*************************************************************************
 |*
 |*  SwDrawView::ShowDragXor(), HideDragXor()
@@ -658,8 +627,6 @@ void SwDrawView::ShowDragAnchor()
         RefreshAllIAOManagers();
     }
 }
-
-
 
 /*************************************************************************
 |*
