@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-02-23 12:45:24 $
+ *  last change: $Author: fme $ $Date: 2001-05-03 10:14:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -754,6 +754,30 @@ void ViewShell::SetParaSpaceMax( BOOL bNew, BOOL bAtPages )
     {
         SwWait aWait( *GetDoc()->GetDocShell(), TRUE );
         GetDoc()->SetParaSpaceMax( bNew, bAtPages );
+        BOOL bCrsr = ISA(SwCrsrShell);
+        if ( bCrsr )
+            ((SwCrsrShell*)this)->StartAction();
+        else
+            StartAction();
+        GetLayout()->InvalidateAllCntnt( INV_PRTAREA | INV_TABLE | INV_SECTION );
+        if ( bCrsr )
+            ((SwCrsrShell*)this)->EndAction();
+        else
+            EndAction();
+    }
+}
+
+BOOL ViewShell::IsTabCompat() const
+{
+    return GetDoc()->IsTabCompat();
+}
+
+void ViewShell::SetTabCompat( BOOL bNew )
+{
+    if( GetDoc()->IsTabCompat() != bNew  )
+    {
+        SwWait aWait( *GetDoc()->GetDocShell(), TRUE );
+        GetDoc()->SetTabCompat( bNew );
         BOOL bCrsr = ISA(SwCrsrShell);
         if ( bCrsr )
             ((SwCrsrShell*)this)->StartAction();
@@ -2098,6 +2122,9 @@ BOOL ViewShell::IsNewLayout() const
 /************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2001/02/23 12:45:24  os
+      Complete use of DefaultNumbering component
+
       Revision 1.2  2000/10/17 09:25:09  os
       #79537# CareChildWin/GetCareWin need current shell as parameter
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: os $ $Date: 2001-05-02 12:31:18 $
+ *  last change: $Author: fme $ $Date: 2001-05-03 10:10:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,6 +260,7 @@ enum SwMoveFlags
 
 #define DUMMY_PARASPACEMAX          0x04
 #define DUMMY_PARASPACEMAX_AT_PAGES 0x20
+#define DUMMY_TAB_COMPAT            0x40
 
 
 #define SW_HYPH_ERROR       0
@@ -1799,6 +1800,12 @@ public:
     {
         if( bNew ) n8Dummy1 |= DUMMY_PARASPACEMAX; else n8Dummy1 &= ~DUMMY_PARASPACEMAX;
         if( bAtPages ) n8Dummy1 |= DUMMY_PARASPACEMAX_AT_PAGES; else n8Dummy1 &= ~DUMMY_PARASPACEMAX_AT_PAGES;
+    }
+
+    sal_Bool IsTabCompat() const { return n8Dummy1 & DUMMY_TAB_COMPAT; }
+    void SetTabCompat( sal_Bool bNew )
+    {
+        if( bNew ) n8Dummy1 |= DUMMY_TAB_COMPAT; else n8Dummy1 &= ~DUMMY_TAB_COMPAT;
     }
 
     void SetULongDummy1( sal_uInt32 n ) { n32Dummy1 = n; }
