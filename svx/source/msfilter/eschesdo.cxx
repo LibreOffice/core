@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eschesdo.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 14:08:14 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 13:00:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -587,12 +587,8 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             ::com::sun::star::awt::Rectangle aNewRect;
             aPropOpt.CreatePolygonProperties( rObj.mXPropSet, ESCHER_CREATEPOLYGON_LINE, sal_False, aNewRect, NULL );
             MapRect(rObj);
-            if( rObj.ImplHasText() )
-            {
-                aTextRefPoint = rObj.GetRect().TopLeft();
-                bAdditionalText = TRUE;
-                nGrpShapeID = ImplEnterAdditionalTextGroup( rObj.GetShapeRef(), &rObj.GetRect() );
-            }
+            //i27942: Poly/Lines/Bezier do not support text.
+
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
             const Rectangle& rRect = rObj.GetRect();
             UINT32 nFlags = 0xa00;          // Flags: Connector | HasSpt
@@ -623,11 +619,8 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
         }
         else if ( rObj.GetType().EqualsAscii( "drawing.PolyLine" ))
         {
-            if( rObj.ImplHasText() )
-            {
-                nGrpShapeID = ImplEnterAdditionalTextGroup( rObj.GetShapeRef(), &rObj.GetRect() );
-                bAdditionalText = TRUE;
-            }
+            //i27942: Poly/Lines/Bezier do not support text.
+
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
             ADD_SHAPE( ESCHER_ShpInst_NotPrimitive, 0xa00 );        // Flags: Connector | HasSpt
             ::com::sun::star::awt::Rectangle aNewRect;
@@ -638,11 +631,8 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
         }
         else if ( rObj.GetType().EqualsAscii( "drawing.OpenBezier" ) )
         {
-            if ( rObj.ImplHasText() )
-            {
-                nGrpShapeID = ImplEnterAdditionalTextGroup( rObj.GetShapeRef(), &rObj.GetRect() );
-                bAdditionalText = TRUE;
-            }
+            //i27942: Poly/Lines/Bezier do not support text.
+
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
             ADD_SHAPE( ESCHER_ShpInst_NotPrimitive, 0xa00 );        // Flags: Connector | HasSpt
             ::com::sun::star::awt::Rectangle aNewRect;
