@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportIterator.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-02 17:28:42 $
+ *  last change: $Author: sab $ $Date: 2001-04-10 08:43:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,7 +277,8 @@ void ScMyMergedRangesContainer::Sort()
         if (aItr2 != aItr2_old)
         {
             if ((aItr2->aCellRange.StartColumn == aItr2_old->aCellRange.StartColumn) &&
-                (aItr2->aCellRange.StartRow == aItr2_old->aCellRange.StartRow))
+                (aItr2->aCellRange.StartRow == aItr2_old->aCellRange.StartRow) &&
+                (aItr2->aCellRange.Sheet == aItr2_old->aCellRange.Sheet))
                 aItr2 = aRangeList.erase(aItr2);
             else
             {
