@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-19 17:08:00 $
+ *  last change: $Author: sab $ $Date: 2001-01-22 17:10:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,17 +252,18 @@ static __FAR_DATA SvXMLTokenMapEntry aLabelRangeAttrTokenMap[] =
 
 static __FAR_DATA SvXMLTokenMapEntry aTableTokenMap[] =
 {
-    { XML_NAMESPACE_TABLE, sXML_table_column_group,     XML_TOK_TABLE_COL_GROUP     },
-    { XML_NAMESPACE_TABLE, sXML_table_header_columns,   XML_TOK_TABLE_HEADER_COLS   },
-    { XML_NAMESPACE_TABLE, sXML_table_columns,          XML_TOK_TABLE_COLS          },
-    { XML_NAMESPACE_TABLE, sXML_table_column,           XML_TOK_TABLE_COL           },
-    { XML_NAMESPACE_TABLE, sXML_table_row_group,        XML_TOK_TABLE_ROW_GROUP     },
-    { XML_NAMESPACE_TABLE, sXML_table_header_rows,      XML_TOK_TABLE_HEADER_ROWS   },
-    { XML_NAMESPACE_TABLE, sXML_table_rows,             XML_TOK_TABLE_ROWS          },
-    { XML_NAMESPACE_TABLE, sXML_table_row,              XML_TOK_TABLE_ROW           },
-    { XML_NAMESPACE_TABLE, sXML_table_source,           XML_TOK_TABLE_SOURCE        },
-    { XML_NAMESPACE_TABLE, sXML_scenario,               XML_TOK_TABLE_SCENARIO      },
-    { XML_NAMESPACE_TABLE, sXML_shapes,                 XML_TOK_TABLE_SHAPES        },
+    { XML_NAMESPACE_TABLE,  sXML_table_column_group,        XML_TOK_TABLE_COL_GROUP     },
+    { XML_NAMESPACE_TABLE,  sXML_table_header_columns,      XML_TOK_TABLE_HEADER_COLS   },
+    { XML_NAMESPACE_TABLE,  sXML_table_columns,             XML_TOK_TABLE_COLS          },
+    { XML_NAMESPACE_TABLE,  sXML_table_column,              XML_TOK_TABLE_COL           },
+    { XML_NAMESPACE_TABLE,  sXML_table_row_group,           XML_TOK_TABLE_ROW_GROUP     },
+    { XML_NAMESPACE_TABLE,  sXML_table_header_rows,         XML_TOK_TABLE_HEADER_ROWS   },
+    { XML_NAMESPACE_TABLE,  sXML_table_rows,                XML_TOK_TABLE_ROWS          },
+    { XML_NAMESPACE_TABLE,  sXML_table_row,                 XML_TOK_TABLE_ROW           },
+    { XML_NAMESPACE_TABLE,  sXML_table_source,              XML_TOK_TABLE_SOURCE        },
+    { XML_NAMESPACE_TABLE,  sXML_scenario,                  XML_TOK_TABLE_SCENARIO      },
+    { XML_NAMESPACE_TABLE,  sXML_shapes,                    XML_TOK_TABLE_SHAPES        },
+    { XML_NAMESPACE_OFFICE, sXML_forms,                     XML_TOK_TABLE_FORMS         },
     XML_TOKEN_MAP_END
 };
 

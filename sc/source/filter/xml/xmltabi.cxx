@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltabi.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-19 09:46:12 $
+ *  last change: $Author: sab $ $Date: 2001-01-22 17:10:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,9 @@
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlkywd.hxx>
+#ifndef _XMLOFF_FORMSIMP_HXX
+#include <xmloff/formsimp.hxx>
+#endif
 
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheets.hpp>
@@ -216,6 +219,12 @@ SvXMLImportContext *ScXMLTableContext::CreateChildContext( USHORT nPrefix,
     case XML_TOK_TABLE_SHAPES:
         pContext = new ScXMLTableShapesContext( GetScImport(), nPrefix, rLName, xAttrList);
         break;
+    case XML_TOK_TABLE_FORMS:
+        {
+            GetScImport().GetFormImport()->startPage(GetScImport().GetTables().GetCurrentXDrawPage());
+            pContext = new XMLFormsContext( GetScImport(), nPrefix, rLName);
+        }
+        break;
     }
 
     if( !pContext )
@@ -279,7 +288,12 @@ void ScXMLTableContext::EndElement()
         }
     }
     if (GetScImport().GetTables().HasDrawPage())
-        GetScImport().GetShapeImport()->popGroupAndSort();
+    {
+        if (GetScImport().GetTables().HasXShapes())
+            GetScImport().GetShapeImport()->popGroupAndSort();
+        GetScImport().GetFormImport()->endPage();
+    }
+
     GetScImport().GetTables().DeleteTable();
 }
 

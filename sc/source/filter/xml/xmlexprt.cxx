@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-19 17:08:00 $
+ *  last change: $Author: sab $ $Date: 2001-01-22 17:10:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,6 +245,9 @@
 #ifndef _COM_SUN_STAR_SHEET_XSHEETLINKABLE_HPP_
 #include <com/sun/star/sheet/XSheetLinkable.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FORM_XFORMSUPPLIER_HPP_
+#include <com/sun/star/form/XFormsSupplier.hpp>
+#endif
 
 //! not found in unonames.hxx
 #define SC_STANDARDFORMAT "StandardFormat"
@@ -341,7 +344,8 @@ ScXMLExport::ScXMLExport() :
     nOldProgressValue(0),
     bShapeStyles (sal_False),
     pDetectiveObjContainer(NULL),
-    pChangeTrackingExportHelper(NULL)
+    pChangeTrackingExportHelper(NULL),
+    aDrawPages()
 {
     pGroupColumns = new ScMyOpenCloseColumnRowGroup(*this, sXML_table_column_group);
     pGroupRows = new ScMyOpenCloseColumnRowGroup(*this, sXML_table_row_group);
@@ -454,6 +458,7 @@ void ScXMLExport::_ExportMeta()
             nTableCount = xIndex->getCount();
             pCellStyles->AddNewTable(nTableCount - 1);
             aTableShapes.resize(nTableCount);
+            aDrawPages.resize(nTableCount);
             for (sal_Int32 nTable = 0; nTable < nTableCount; nTable++)
             {
                 uno::Any aTable = xIndex->getByIndex(nTable);
@@ -467,6 +472,21 @@ void ScXMLExport::_ExportMeta()
                         uno::Reference<container::XIndexAccess> xShapesIndex (xDrawPage, uno::UNO_QUERY);
                         if (xShapesIndex.is())
                         {
+                            aDrawPages[nTable].bHasForms = sal_False;
+                            if( xDrawPage.is() )
+                            {
+                                uno::Reference< form::XFormsSupplier > xFormsSupplier( xDrawPage, uno::UNO_QUERY );
+                                if( xFormsSupplier.is() )
+                                {
+                                    uno::Reference< container::XNameContainer > xForms( xFormsSupplier->getForms() );
+                                    if( xForms.is() && xForms->hasElements() )
+                                    {
+                                        GetFormExport()->examineForms(xDrawPage);
+                                        aDrawPages[nTable].bHasForms = sal_True;
+                                        aDrawPages[nTable].xDrawPage = xDrawPage;
+                                    }
+                                }
+                            }
                             sal_Int32 nShapes = xShapesIndex->getCount();
                             for (sal_Int32 nShape = 0; nShape < nShapes; nShape++)
                             {
@@ -1201,6 +1221,13 @@ void ScXMLExport::_ExportContent()
                         WriteViewSettings();
                         WriteTableSource();
                         WriteScenario();
+                        if (aDrawPages[nTable].bHasForms && aDrawPages[nTable].xDrawPage.is())
+                        {
+                            SvXMLElementExport aForms(*this, XML_NAMESPACE_OFFICE, sXML_forms, sal_True, sal_True);
+                            GetFormExport()->exportForms( aDrawPages[nTable].xDrawPage );
+                            sal_Bool bRet = GetFormExport()->seekPage( aDrawPages[nTable].xDrawPage );
+                            DBG_ASSERT( bRet, "OFormLayerXMLExport::seekPage failed!" );
+                        }
                         GetxCurrentShapes(xCurrentShapes);
                         WriteTableShapes();
                         table::CellRangeAddress aRange = GetEndAddress(xTable, nTable);
@@ -1615,6 +1642,7 @@ void ScXMLExport::_ExportAutoStyles()
                 GetChartExport()->exportAutoStyles();
             }
 
+            GetFormExport()->exportAutoStyles();
             GetPageExport()->exportAutoStyles();
 
             nProgressValue = nOldProgressValue + nProgressObjects;

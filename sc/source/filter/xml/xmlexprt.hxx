@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.hxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-19 17:08:00 $
+ *  last change: $Author: sab $ $Date: 2001-01-22 17:10:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,8 +93,15 @@ class ScMyDetectiveOpContainer;
 struct ScMyCell;
 class ScDocument;
 
+struct ScMyDrawPage
+{
+    com::sun::star::uno::Reference<com::sun::star::drawing::XDrawPage> xDrawPage;
+    sal_Bool bHasForms;
+};
+
 typedef std::vector<sal_Int32> ScMyTableShapeIndexes;
 typedef std::vector<ScMyTableShapeIndexes> ScMyTableShapes;
+typedef std::vector<ScMyDrawPage> ScMyDrawPages;
 
 class ScXMLExport : public SvXMLExport
 {
@@ -122,6 +129,7 @@ class ScXMLExport : public SvXMLExport
     ScMyOpenCloseColumnRowGroup*        pGroupColumns;
     ScMyOpenCloseColumnRowGroup*        pGroupRows;
     ScMyTableShapes                     aTableShapes;
+    ScMyDrawPages                       aDrawPages;
 
     sal_Bool                    bHasRowHeader;
     sal_Bool                    bRowHeaderOpen;

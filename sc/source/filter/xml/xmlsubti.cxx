@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsubti.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2001-01-04 14:18:30 $
+ *  last change: $Author: sab $ $Date: 2001-01-22 17:10:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,6 +209,7 @@ ScMyTables::ScMyTables(ScXMLImport& rTempImport)
     nTableCount( 0 ),
     nCurrentSheet( -1 ),
     nCurrentDrawPage( -1 ),
+    nCurrentXShapes( -1 ),
     aResizeShapes(rTempImport)
 {
     aTableVec.resize(nDefaultTabCount, NULL);
@@ -686,22 +687,25 @@ uno::Reference< drawing::XDrawPage > ScMyTables::GetCurrentXDrawPage()
 
 uno::Reference< drawing::XShapes > ScMyTables::GetCurrentXShapes()
 {
-    if( (nCurrentSheet != nCurrentDrawPage) || !xDrawPage.is() )
+    if( (nCurrentSheet != nCurrentXShapes) || !xShapes.is() )
     {
         uno::Reference <drawing::XShapes > xShapes ( GetCurrentXDrawPage(), uno::UNO_QUERY );
         rImport.GetShapeImport()->pushGroupForSorting ( xShapes );
         return xShapes;
+        nCurrentXShapes = nCurrentSheet;
     }
     else
-    {
-        uno::Reference <drawing::XShapes > xShapes ( GetCurrentXDrawPage(), uno::UNO_QUERY );
         return xShapes;
-    }
 }
 
 sal_Bool ScMyTables::HasDrawPage()
 {
     return !((nCurrentSheet != nCurrentDrawPage) || !xDrawPage.is());
+}
+
+sal_Bool ScMyTables::HasXShapes()
+{
+    return !((nCurrentSheet != nCurrentXShapes) || !xShapes.is());
 }
 
 void ScMyTables::AddShape(uno::Reference <drawing::XShape>& rShape,
