@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ilstbox.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: ssa $ $Date: 2002-04-18 08:11:16 $
+ *  last change: $Author: pl $ $Date: 2002-04-29 17:46:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,6 @@
 #ifndef _SV_HELP_HXX
 #include <help.hxx>
 #endif
-
 #ifndef _SV_LSTBOX_H
 #include <lstbox.h>
 #endif
@@ -93,8 +92,9 @@
 #ifndef _VCL_I18NHELP_HXX
 #include <i18nhelp.hxx>
 #endif
-
-
+#ifndef _VCL_CONTROLLAYOUT_HXX
+#include <controllayout.hxx>
+#endif
 #ifndef _VCL_UNOHELP_HXX
 #include <unohelp.hxx>
 #endif
@@ -595,12 +595,14 @@ void ImplListBoxWindow::Clear()
     mnTop           = 0;
     mnLeft          = 0;
     mbImgsDiffSz    = FALSE;
+    delete mpLayoutData, mpLayoutData = NULL;
 
     Invalidate();
 }
 
 void ImplListBoxWindow::SetUserItemSize( const Size& rSz )
 {
+    delete mpLayoutData, mpLayoutData = NULL;
     maUserItemSize = rSz;
     ImplCalcMetrics();
 }
@@ -710,6 +712,8 @@ void ImplListBoxWindow::ImplCallSelect()
                 nMRUCount--;
             }
 
+            delete mpLayoutData, mpLayoutData = NULL;
+
             ImplEntryType* pNewEntry = new ImplEntryType( aSelected );
             pNewEntry->mbIsSelected = bSelectNewEntry;
             GetEntryList()->InsertEntry( 0, pNewEntry, FALSE );
@@ -727,6 +731,7 @@ void ImplListBoxWindow::ImplCallSelect()
 
 USHORT ImplListBoxWindow::InsertEntry( USHORT nPos, ImplEntryType* pNewEntry )
 {
+    delete mpLayoutData, mpLayoutData = NULL;
     USHORT nNewPos = mpEntryList->InsertEntry( nPos, pNewEntry, mbSort );
 
     ImplCalcEntryMetrics( *pNewEntry, TRUE );
@@ -737,6 +742,7 @@ USHORT ImplListBoxWindow::InsertEntry( USHORT nPos, ImplEntryType* pNewEntry )
 
 void ImplListBoxWindow::RemoveEntry( USHORT nPos )
 {
+    delete mpLayoutData, mpLayoutData = NULL;
     mpEntryList->RemoveEntry( nPos );
     ImplCalcMetrics();
 }
@@ -915,6 +921,7 @@ void ImplListBoxWindow::SelectEntry( USHORT nPos, BOOL bSelect )
                 ImplPaint( nPos );
                 if ( !IsVisible( nPos ) )
                 {
+                    delete mpLayoutData, mpLayoutData = NULL;
                     if ( !mnMaxVisibleEntries || !IsReallyVisible() || ( nPos < GetTopEntry() ) )
                     {
                         SetTopEntry( nPos );
@@ -1079,6 +1086,7 @@ BOOL ImplListBoxWindow::SelectEntries( USHORT nSelect, LB_EVENT_TYPE eLET, BOOL 
             if( HasFocus() )
                 ImplShowFocusRect();
         }
+        delete mpLayoutData, mpLayoutData = NULL;
     }
     return bSelectionChanged;
 }
@@ -1515,7 +1523,7 @@ BOOL ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
 
 // -----------------------------------------------------------------------
 
-void ImplListBoxWindow::ImplPaint( USHORT nPos, BOOL bErase )
+void ImplListBoxWindow::ImplPaint( USHORT nPos, BOOL bErase, bool bLayout )
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
@@ -1523,28 +1531,31 @@ void ImplListBoxWindow::ImplPaint( USHORT nPos, BOOL bErase )
     long nY = ( nPos - mnTop ) * mnMaxHeight;
     Rectangle aRect( Point( 0, nY ), Size( nWidth, mnMaxHeight ) );
 
-    if( IsEnabled() )
+    if( ! bLayout )
     {
-        if( mpEntryList->IsEntryPosSelected( nPos ) )
+        if( IsEnabled() )
         {
-            SetTextColor( rStyleSettings.GetHighlightTextColor() );
-            SetFillColor( rStyleSettings.GetHighlightColor() );
-            DrawRect( aRect );
+            if( mpEntryList->IsEntryPosSelected( nPos ) )
+            {
+                SetTextColor( rStyleSettings.GetHighlightTextColor() );
+                SetFillColor( rStyleSettings.GetHighlightColor() );
+                DrawRect( aRect );
+            }
+            else
+            {
+                ImplInitSettings( FALSE, TRUE, FALSE );
+                if( bErase )
+                    Erase( aRect );
+            }
         }
-        else
+        else // Disabled
         {
-            ImplInitSettings( FALSE, TRUE, FALSE );
+            SetTextColor( rStyleSettings.GetDisableColor() );
+            //SetFillColor( rStyleSettings.Get???Color() );
+            //DrawRect( aRect );
             if( bErase )
                 Erase( aRect );
         }
-    }
-    else // Disabled
-    {
-        SetTextColor( rStyleSettings.GetDisableColor() );
-        //SetFillColor( rStyleSettings.Get???Color() );
-        //DrawRect( aRect );
-        if( bErase )
-            Erase( aRect );
     }
 
     if ( IsUserDrawEnabled() )
@@ -1561,13 +1572,13 @@ void ImplListBoxWindow::ImplPaint( USHORT nPos, BOOL bErase )
     }
     else
     {
-        DrawEntry( nPos, TRUE, TRUE );
+        DrawEntry( nPos, TRUE, TRUE, FALSE, bLayout );
     }
 }
 
 // -----------------------------------------------------------------------
 
-void ImplListBoxWindow::DrawEntry( USHORT nPos, BOOL bDrawImage, BOOL bDrawText, BOOL bDrawTextAtImagePos )
+void ImplListBoxWindow::DrawEntry( USHORT nPos, BOOL bDrawImage, BOOL bDrawText, BOOL bDrawTextAtImagePos, bool bLayout )
 {
     // Bei Aenderungen in dieser Methode ggf. auch ImplWin::DrawEntry() anpassen.
 
@@ -1576,7 +1587,7 @@ void ImplListBoxWindow::DrawEntry( USHORT nPos, BOOL bDrawImage, BOOL bDrawText,
 
     long nY = ( nPos - mnTop ) * mnMaxHeight;
 
-    if( bDrawImage && mpEntryList->HasImages() )
+    if( bDrawImage && mpEntryList->HasImages() && !bLayout )
     {
         Image aImage = mpEntryList->GetEntryImage( nPos );
         if( !!aImage )
@@ -1599,6 +1610,8 @@ void ImplListBoxWindow::DrawEntry( USHORT nPos, BOOL bDrawImage, BOOL bDrawText,
 
     if( bDrawText )
     {
+        MetricVector* pVector = bLayout ? &mpLayoutData->m_aUnicodeBoundRects : NULL;
+        String* pDisplayText = bLayout ? &mpLayoutData->m_aDisplayText : NULL;
         XubString aStr( mpEntryList->GetEntryText( nPos ) );
         if ( aStr.Len() )
         {
@@ -1608,33 +1621,47 @@ void ImplListBoxWindow::DrawEntry( USHORT nPos, BOOL bDrawImage, BOOL bDrawText,
                 USHORT nMaxWidth = Max( mnMaxImgWidth, (USHORT)maUserItemSize.Width() );
                 aPtTxt.X() += nMaxWidth + IMG_TXT_DISTANCE;
             }
-            DrawText( aPtTxt, aStr );
+            if( bLayout )
+                mpLayoutData->m_aLineIndices.push_back( mpLayoutData->m_aDisplayText.Len() );
+            DrawText( aPtTxt, aStr, 0, STRING_LEN, pVector, pDisplayText );
         }
     }
 
-    if ( ( mnSeparatorPos != LISTBOX_ENTRY_NOTFOUND ) &&
-         ( ( nPos == mnSeparatorPos ) || ( nPos == mnSeparatorPos+1 ) ) )
+    if( !bLayout )
     {
-        Color aOldLineColor( GetLineColor() );
-        SetLineColor( ( GetBackground().GetColor() != COL_LIGHTGRAY ) ? COL_LIGHTGRAY : COL_GRAY );
-        Point aStartPos( 0, nY );
-        if ( nPos == mnSeparatorPos )
-            aStartPos.Y() += mnMaxHeight-1;
-        Point aEndPos( aStartPos );
-        aEndPos.X() = GetOutputSizePixel().Width();
-        DrawLine( aStartPos, aEndPos );
-        SetLineColor( aOldLineColor );
+        if ( ( mnSeparatorPos != LISTBOX_ENTRY_NOTFOUND ) &&
+             ( ( nPos == mnSeparatorPos ) || ( nPos == mnSeparatorPos+1 ) ) )
+        {
+            Color aOldLineColor( GetLineColor() );
+            SetLineColor( ( GetBackground().GetColor() != COL_LIGHTGRAY ) ? COL_LIGHTGRAY : COL_GRAY );
+            Point aStartPos( 0, nY );
+            if ( nPos == mnSeparatorPos )
+                aStartPos.Y() += mnMaxHeight-1;
+            Point aEndPos( aStartPos );
+            aEndPos.X() = GetOutputSizePixel().Width();
+            DrawLine( aStartPos, aEndPos );
+            SetLineColor( aOldLineColor );
+        }
     }
 }
 
 // -----------------------------------------------------------------------
 
-void ImplListBoxWindow::Paint( const Rectangle& rRect )
+void ImplListBoxWindow::FillLayoutData() const
+{
+    mpLayoutData = new vcl::ControlLayoutData();
+    const_cast<ImplListBoxWindow*>(this)->
+        ImplDoPaint( Rectangle( Point( 0, 0 ), GetOutputSize() ), true );
+}
+
+// -----------------------------------------------------------------------
+
+void ImplListBoxWindow::ImplDoPaint( const Rectangle& rRect, bool bLayout )
 {
     USHORT nCount = mpEntryList->GetEntryCount();
 
     BOOL bShowFocusRect = mbHasFocusRect;
-    if ( mbHasFocusRect )
+    if ( mbHasFocusRect && ! bLayout )
         ImplHideFocusRect();
 
     long nY = 0; // + mnBorder;
@@ -1645,14 +1672,21 @@ void ImplListBoxWindow::Paint( const Rectangle& rRect )
         if( nY + mnMaxHeight >= rRect.Top() &&
             nY <= rRect.Bottom() + mnMaxHeight )
         {
-            ImplPaint( i );
+            ImplPaint( i, FALSE, bLayout );
         }
         nY += mnMaxHeight;
     }
 
     maFocusRect.SetPos( Point( 0, ( mnCurrentPos - mnTop ) * mnMaxHeight ) );
-    if( HasFocus() && bShowFocusRect )
+    if( HasFocus() && bShowFocusRect && !bLayout )
         ImplShowFocusRect();
+}
+
+// -----------------------------------------------------------------------
+
+void ImplListBoxWindow::Paint( const Rectangle& rRect )
+{
+    ImplDoPaint( rRect );
 }
 
 // -----------------------------------------------------------------------
@@ -1726,6 +1760,7 @@ void ImplListBoxWindow::SetTopEntry( USHORT nTop )
     nTop = Min( nTop, nMaxTop );
     if ( nTop != mnTop )
     {
+        delete mpLayoutData, mpLayoutData = NULL;
         long nDiff = ( mnTop - nTop ) * mnMaxHeight;
         Update();
         ImplHideFocusRect();
@@ -1769,6 +1804,7 @@ void ImplListBoxWindow::ScrollHorz( short n )
 
     if ( nDiff )
     {
+        delete mpLayoutData, mpLayoutData = NULL;
         mnLeft += nDiff;
         Update();
         ImplHideFocusRect();
@@ -1848,6 +1884,7 @@ void ImplListBoxWindow::DataChanged( const DataChangedEvent& rDCEvt )
          ((rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
           (rDCEvt.GetFlags() & SETTINGS_STYLE)) )
     {
+        delete mpLayoutData, mpLayoutData = NULL;
         ImplInitSettings( TRUE, TRUE, TRUE );
         ImplCalcMetrics();
         Invalidate();
@@ -2354,6 +2391,12 @@ void ImplWin::MouseButtonDown( const MouseEvent& rMEvt )
 //      Control::MouseButtonDown( rMEvt );
         MBDown();
     }
+}
+
+// -----------------------------------------------------------------------
+
+void ImplWin::FillLayoutData() const
+{
 }
 
 // -----------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: pl $ $Date: 2002-04-23 15:59:36 $
+ *  last change: $Author: pl $ $Date: 2002-04-29 17:46:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,9 @@
 #endif
 #ifndef _SV_MENU_HXX
 #include <menu.hxx>
+#endif
+#ifndef _SV_WALL_HXX
+#include <wall.hxx>
 #endif
 
 #define SYSDATA_ONLY_BASETYPE
@@ -6813,11 +6816,39 @@ void Window::SetText( const XubString& rStr )
 
 // -----------------------------------------------------------------------
 
-XubString Window::GetText() const
+String Window::GetText() const
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     return maText;
+}
+
+// -----------------------------------------------------------------------
+
+String Window::GetDisplayText() const
+{
+    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
+
+    return GetText();
+}
+
+// -----------------------------------------------------------------------
+
+const Wallpaper& Window::GetDisplayBackground() const
+{
+    if( !IsBackground() )
+    {
+        if( mpParent )
+            return mpParent->GetDisplayBackground();
+    }
+
+    const Wallpaper& rBack = GetBackground();
+    if( ! rBack.IsBitmap() &&
+        ! rBack.IsGradient() &&
+        rBack.GetColor().GetColor() == COL_TRANSPARENT &&
+        mpParent )
+            return mpParent->GetDisplayBackground();
+    return rBack;
 }
 
 // -----------------------------------------------------------------------

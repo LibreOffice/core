@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: cdt $ $Date: 2002-04-29 11:18:12 $
+ *  last change: $Author: pl $ $Date: 2002-04-29 17:46:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,9 +94,11 @@
 #ifndef _SV_EDIT_HXX
 #include <edit.hxx>
 #endif
-
 #ifndef _SV_SVAPP_HXX
 #include <svapp.hxx>
+#endif
+#ifndef _VCL_CONTROLLAYOUT_HXX
+#include <controllayout.hxx>
 #endif
 
 #include <vos/mutex.hxx>
@@ -446,6 +448,7 @@ void Edit::ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground )
         if ( IsControlFont() )
             aFont.Merge( GetControlFont() );
         SetZoomedPointFont( aFont );
+        delete mpLayoutData, mpLayoutData = NULL;
     }
 
     if ( bFont || bForeground )
@@ -492,7 +495,7 @@ XubString Edit::ImplGetText() const
 
 // -----------------------------------------------------------------------
 
-void Edit::ImplRepaint( xub_StrLen nStart, xub_StrLen nEnd )
+void Edit::ImplRepaint( xub_StrLen nStart, xub_StrLen nEnd, bool bLayout )
 {
     if ( !IsReallyVisible() )
         return;
@@ -504,9 +507,12 @@ void Edit::ImplRepaint( xub_StrLen nStart, xub_StrLen nEnd )
     if ( nEnd > aText.Len() )
         nEnd = aText.Len();
 
+    MetricVector* pVector = bLayout ? &mpLayoutData->m_aUnicodeBoundRects : NULL;
+    String* pDisplayText = bLayout ? &mpLayoutData->m_aDisplayText : NULL;
+
     Cursor* pCursor = GetCursor();
     BOOL bVisCursor = pCursor ? pCursor->IsVisible() : FALSE;
-    if ( pCursor )
+    if ( pCursor && !pVector )
         pCursor->Hide();
 
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
@@ -527,7 +533,7 @@ void Edit::ImplRepaint( xub_StrLen nStart, xub_StrLen nEnd )
     if ( !bDrawSelection && !mpIMEInfos )
     {
         aPos.X() = GetTextWidth( aText, 0, nStart ) + mnXOffset + EXTRAOFFSET_X;
-        DrawText( aPos, aText, nStart, nEnd - nStart );
+        DrawText( aPos, aText, nStart, nEnd - nStart, pVector, pDisplayText );
     }
     else
     {
@@ -603,12 +609,12 @@ void Edit::ImplRepaint( xub_StrLen nStart, xub_StrLen nEnd )
                     SetTextColor( Color( COL_LIGHTGRAY ) );
             }
             aPos.X() = GetTextWidth( aText, 0, nIndex ) + mnXOffset + EXTRAOFFSET_X;
-            DrawText( aPos, aText, nIndex, nTmpEnd - nIndex );
+            DrawText( aPos, aText, nIndex, nTmpEnd - nIndex, pVector, pDisplayText );
             nIndex = nTmpEnd;
         }
     }
 
-    if ( bVisCursor && ( !mpIMEInfos || mpIMEInfos->bCursor ) )
+    if ( bVisCursor && ( !mpIMEInfos || mpIMEInfos->bCursor ) && !pVector )
         pCursor->Show();
 }
 
@@ -623,6 +629,8 @@ void Edit::ImplDelete( const Selection& rSelection, BYTE nDirection, BYTE nMode 
          (((rSelection.Min() == 0) && (nDirection == EDIT_DEL_LEFT)) ||
           ((rSelection.Max() == aText.Len()) && (nDirection == EDIT_DEL_RIGHT))) )
         return;
+
+    delete mpLayoutData, mpLayoutData = NULL;
 
     long nOldWidth = GetTextWidth( aText );
     Selection aSelection( rSelection );
@@ -699,6 +707,8 @@ void Edit::ImplInsertText( const XubString& rStr, const Selection* pNewSel )
     if ( (maText.Len() + aNewText.Len() - aSelection.Len()) > mnMaxTextLen )
         return;
 
+    delete mpLayoutData, mpLayoutData = NULL;
+
     long nOldWidth = GetTextWidth( ImplGetText() );
 
     if ( aSelection.Len() )
@@ -735,6 +745,7 @@ void Edit::ImplSetText( const XubString& rText, const Selection* pNewSelection )
     // wird, dann InsertText, damit flackerfrei.
     if ( (rText != maText) || (pNewSelection && (*pNewSelection != maSelection)) )
     {
+        delete mpLayoutData, mpLayoutData = NULL;
         maSelection.Min() = 0;
         maSelection.Max() = maText.Len();
         if ( mnXOffset || HasPaintEvent() )
@@ -1131,6 +1142,7 @@ BOOL Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
             {
                 if ( !rKEvt.GetKeyCode().IsMod2() )
                 {
+                    delete mpLayoutData, mpLayoutData = NULL;
                     uno::Reference < i18n::XBreakIterator > xBI = ImplGetBreakIterator();
 
                     Selection aSel( maSelection );
@@ -1303,6 +1315,14 @@ void Edit::KeyInput( const KeyEvent& rKEvt )
 {
     if ( mpSubEdit || !ImplHandleKeyEvent( rKEvt ) )
         Control::KeyInput( rKEvt );
+}
+
+// -----------------------------------------------------------------------
+
+void Edit::FillLayoutData() const
+{
+    mpLayoutData = new vcl::ControlLayoutData();
+    const_cast<Edit*>(this)->ImplRepaint( true );
 }
 
 // -----------------------------------------------------------------------
@@ -1988,6 +2008,7 @@ void Edit::ImplSetSelection( const Selection& rSelection, BOOL bPaint )
 
             if ( aNew != maSelection )
             {
+                delete mpLayoutData, mpLayoutData = NULL;
                 maSelection = aNew;
 
                 if ( bPaint && ( aOld.Len() || aNew.Len() ) )

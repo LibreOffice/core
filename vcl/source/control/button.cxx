@@ -2,9 +2,9 @@
  *
  *  $RCSfile: button.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ssa $ $Date: 2002-04-18 08:11:16 $
+ *  last change: $Author: pl $ $Date: 2002-04-29 17:46:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,9 @@
 #endif
 #ifndef _SV_BUTTON_HXX
 #include <button.hxx>
+#endif
+#ifndef _VCL_CONTROLLAYOUT_HXX
+#include <controllayout.hxx>
 #endif
 
 #ifndef _SV_RC_H
@@ -495,7 +498,8 @@ static void ImplDrawBtnDropDownArrow( OutputDevice* pDev,
 // -----------------------------------------------------------------------
 
 void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, ULONG nDrawFlags,
-                                            const Rectangle& rRect, Rectangle& rTextRect )
+                                            const Rectangle& rRect, Rectangle& rTextRect,
+                                            bool bLayout )
 {
     const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
     Rectangle               aInRect = rRect;
@@ -504,6 +508,8 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, ULONG nDrawFlags
     USHORT                  nTextStyle = 0;
     USHORT                  nStyle;
     BOOL                    bInvalidTextRect = FALSE;
+    MetricVector*           pMetricVector = bLayout ? &mpLayoutData->m_aUnicodeBoundRects : NULL;
+    String*                 pDisplayText = bLayout ? &mpLayoutData->m_aDisplayText : NULL;
 
     if( aInRect.nRight < aInRect.nLeft || aInRect.nBottom < aInRect.nTop )
         aInRect.SetEmpty();
@@ -549,7 +555,7 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, ULONG nDrawFlags
             nTextStyle |= TEXT_DRAW_LEFT;
             rTextRect = pDev->GetTextRect( rTextRect, aText, nTextStyle );
             pDev->SetTextColor( aColor );
-            pDev->DrawText( rTextRect, aText, nTextStyle );
+            pDev->DrawText( rTextRect, aText, nTextStyle, pMetricVector, pDisplayText );
         }
         else
             ImplCalcSymbolRect( aInRect );
@@ -561,15 +567,18 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, ULONG nDrawFlags
                 nStyle |= SYMBOL_DRAW_DISABLE;
         }
 
-        DecorationView aDecoView( pDev );
-        aDecoView.DrawSymbol( aInRect, SYMBOL_SPIN_DOWN, aColor, nStyle );
+        if( ! bLayout )
+        {
+            DecorationView aDecoView( pDev );
+            aDecoView.DrawSymbol( aInRect, SYMBOL_SPIN_DOWN, aColor, nStyle );
+        }
     }
     else
     {
         Rectangle aInRectText  = aInRect;
         Point aImagePos;
 
-        if ( IsImage() )
+        if ( IsImage() && !pMetricVector )
         {
             nStyle = 0;
 
@@ -739,8 +748,11 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, ULONG nDrawFlags
                 pDev->IntersectClipRegion( aSymbolClipRect );
             }
 
-            DecorationView aDecoView( pDev );
-            aDecoView.DrawSymbol( aInRectSymbol, meSymbol, aColor, nStyle );
+            if( ! pMetricVector )
+            {
+                DecorationView aDecoView( pDev );
+                aDecoView.DrawSymbol( aInRectSymbol, meSymbol, aColor, nStyle );
+            }
 
             if( bClipSymbol )
                 pDev->Pop();
@@ -752,10 +764,10 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, ULONG nDrawFlags
         if ( aText.Len() )
         {
             pDev->SetTextColor( aColor );
-            pDev->DrawText( rTextRect, aText, nTextStyle );
+            pDev->DrawText( rTextRect, aText, nTextStyle, pMetricVector, pDisplayText );
         }
 
-        if ( mnDDStyle == PUSHBUTTON_DROPDOWN_TOOLBOX )
+        if ( mnDDStyle == PUSHBUTTON_DROPDOWN_TOOLBOX && !pMetricVector )
         {
             BOOL    bBlack = FALSE;
             Color   aArrowColor( COL_BLACK );
@@ -789,9 +801,10 @@ void PushButton::UserDraw( const UserDrawEvent& )
 
 // -----------------------------------------------------------------------
 
-void PushButton::ImplDrawPushButton()
+void PushButton::ImplDrawPushButton( bool bLayout )
 {
-    HideFocus();
+    if( !bLayout )
+        HideFocus();
 
     const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
     USHORT                  nButtonStyle = mnButtonState;
@@ -806,21 +819,25 @@ void PushButton::ImplDrawPushButton()
         nButtonStyle |= BUTTON_DRAW_PRESSED;
 
     // draw PushButtonFrame, aInRect has content size afterwards
-    ImplDrawPushButtonFrame( this, aInRect, nButtonStyle );
+    if( ! bLayout )
+        ImplDrawPushButtonFrame( this, aInRect, nButtonStyle );
 
     // draw content
-    ImplDrawPushButtonContent( this, 0, aInRect, aTextRect );
+    ImplDrawPushButtonContent( this, 0, aInRect, aTextRect, bLayout );
 
-    maFocusRect = aTextRect;
-    if( !maFocusRect.IsEmpty() )
+    if( ! bLayout )
     {
-        maFocusRect.Left()--;
-        maFocusRect.Top()--;
-        maFocusRect.Right()++;
-        maFocusRect.Bottom()++;
-        if ( HasFocus() )
+        maFocusRect = aTextRect;
+        if( !maFocusRect.IsEmpty() )
         {
-            ShowFocus( maFocusRect );
+            maFocusRect.Left()--;
+            maFocusRect.Top()--;
+            maFocusRect.Right()++;
+            maFocusRect.Bottom()++;
+            if ( HasFocus() )
+            {
+                ShowFocus( maFocusRect );
+            }
         }
     }
 }
@@ -1000,6 +1017,14 @@ void PushButton::KeyUp( const KeyEvent& rKEvt )
 
 // -----------------------------------------------------------------------
 
+void PushButton::FillLayoutData() const
+{
+    mpLayoutData = new vcl::ControlLayoutData();
+    const_cast<PushButton*>(this)->ImplDrawPushButton( true );
+}
+
+// -----------------------------------------------------------------------
+
 void PushButton::Paint( const Rectangle& rRect )
 {
     ImplDrawPushButton();
@@ -1033,7 +1058,7 @@ void PushButton::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
         nButtonStyle |= BUTTON_DRAW_CHECKED;
     aRect = aDecoView.DrawButton( aRect, nButtonStyle );
 
-    ImplDrawPushButtonContent( pDev, nFlags, aRect, aTextRect );
+    ImplDrawPushButtonContent( pDev, nFlags, aRect, aTextRect, false );
     pDev->Pop();
 }
 
@@ -1700,12 +1725,15 @@ void RadioButton::ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
                             const Size& rImageSize, long nImageSep,
                             Rectangle& rStateRect,
                             Rectangle& rMouseRect,
-                            Rectangle& rFocusRect )
+                            Rectangle& rFocusRect,
+                            bool bLayout )
 {
     const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
     WinBits                 nWinStyle = GetStyle();
     XubString               aText( GetText() );
     Rectangle               aRect( rPos, rSize );
+    MetricVector*           pVector = bLayout ? &mpLayoutData->m_aUnicodeBoundRects : NULL;
+    String*                 pDisplayText = bLayout ? &mpLayoutData->m_aDisplayText : NULL;
 
     // kein Image-RadioButton
     if ( !maImage )
@@ -1735,7 +1763,7 @@ void RadioButton::ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
             aRect.Right()--;
             rMouseRect = pDev->GetTextRect( aRect, aText, nTextStyle );
 
-            pDev->DrawText( aRect, aText, nTextStyle );
+            pDev->DrawText( aRect, aText, nTextStyle, pVector, pDisplayText );
             rFocusRect = rMouseRect;
             rFocusRect.Left()--;
             rFocusRect.Right()++;
@@ -1817,7 +1845,7 @@ da im Writer ansonsten die Images noch weiter oben haengen
                 aTxtPos.X() += aImageRect.Right()+8;
                 aTxtPos.Y() += (rSize.Height()-nTextHeight)/2;
             }
-            pDev->DrawCtrlText( aTxtPos, aText );
+            pDev->DrawCtrlText( aTxtPos, aText, 0, STRING_LEN, TEXT_DRAW_MNEMONIC, pVector, pDisplayText );
         }
 
         rMouseRect = aImageRect;
@@ -1827,9 +1855,10 @@ da im Writer ansonsten die Images noch weiter oben haengen
 
 // -----------------------------------------------------------------------
 
-void RadioButton::ImplDrawRadioButton()
+void RadioButton::ImplDrawRadioButton( bool bLayout )
 {
-    HideFocus();
+    if( !bLayout )
+        HideFocus();
 
     Size aImageSize;
     if ( !maImage )
@@ -1840,14 +1869,17 @@ void RadioButton::ImplDrawRadioButton()
     aImageSize.Height() = CalcZoom( aImageSize.Height() );
 
     ImplDraw( this, 0, Point(), GetOutputSizePixel(),
-              aImageSize, IMPL_SEP_BUTTON_IMAGE, maStateRect, maMouseRect, maFocusRect );
+              aImageSize, IMPL_SEP_BUTTON_IMAGE, maStateRect, maMouseRect, maFocusRect, bLayout );
 
-    if ( !maImage )
+    if( !bLayout )
     {
-        if ( HasFocus() && !maFocusRect.IsEmpty() )
-            ShowFocus( maFocusRect );
+        if ( !maImage )
+        {
+            if ( HasFocus() && !maFocusRect.IsEmpty() )
+                ShowFocus( maFocusRect );
+        }
+        ImplDrawRadioButtonState();
     }
-    ImplDrawRadioButtonState();
 }
 
 // -----------------------------------------------------------------------
@@ -2080,6 +2112,14 @@ void RadioButton::KeyUp( const KeyEvent& rKEvt )
     }
     else
         Button::KeyUp( rKEvt );
+}
+
+// -----------------------------------------------------------------------
+
+void RadioButton::FillLayoutData() const
+{
+    mpLayoutData = new vcl::ControlLayoutData();
+    const_cast<RadioButton*>(this)->ImplDrawRadioButton( true );
 }
 
 // -----------------------------------------------------------------------
@@ -2589,12 +2629,15 @@ void CheckBox::ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
                          const Size& rImageSize, long nImageSep,
                          Rectangle& rStateRect,
                          Rectangle& rMouseRect,
-                         Rectangle& rFocusRect )
+                         Rectangle& rFocusRect,
+                         bool bLayout )
 {
     const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
     WinBits                 nWinStyle = GetStyle();
     XubString               aText( GetText() );
     Rectangle               aRect( rPos, rSize );
+    MetricVector*           pVector = bLayout ? &mpLayoutData->m_aUnicodeBoundRects : NULL;
+    String*                 pDisplayText = bLayout ? &mpLayoutData->m_aDisplayText : NULL;
 
     if ( aText.Len() )
     {
@@ -2621,7 +2664,7 @@ void CheckBox::ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
         aRect.Right()--;
         rMouseRect = pDev->GetTextRect( aRect, aText, nTextStyle );
 
-        pDev->DrawText( aRect, aText, nTextStyle );
+        pDev->DrawText( aRect, aText, nTextStyle, pVector, pDisplayText );
         rFocusRect = rMouseRect;
         rFocusRect.Left()--;
         rFocusRect.Right()++;
@@ -2668,18 +2711,23 @@ da im Writer ansonsten die Images noch weiter oben haengen
 
 // -----------------------------------------------------------------------
 
-void CheckBox::ImplDrawCheckBox()
+void CheckBox::ImplDrawCheckBox( bool bLayout )
 {
     Size aImageSize = GetCheckImage( GetSettings(), 0 ).GetSizePixel();
     aImageSize.Width()  = CalcZoom( aImageSize.Width() );
     aImageSize.Height() = CalcZoom( aImageSize.Height() );
 
-    HideFocus();
+    if( !bLayout )
+        HideFocus();
     ImplDraw( this, 0, Point(), GetOutputSizePixel(),
-              aImageSize, IMPL_SEP_BUTTON_IMAGE, maStateRect, maMouseRect, maFocusRect );
-    if ( HasFocus() && !maFocusRect.IsEmpty() )
-        ShowFocus( maFocusRect );
-    ImplDrawCheckBoxState();
+              aImageSize, IMPL_SEP_BUTTON_IMAGE, maStateRect, maMouseRect, maFocusRect,
+              bLayout );
+    if( !bLayout )
+    {
+        if ( HasFocus() && !maFocusRect.IsEmpty() )
+            ShowFocus( maFocusRect );
+        ImplDrawCheckBoxState();
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -2821,6 +2869,14 @@ void CheckBox::KeyUp( const KeyEvent& rKEvt )
 
 // -----------------------------------------------------------------------
 
+void CheckBox::FillLayoutData() const
+{
+    mpLayoutData = new vcl::ControlLayoutData();
+    const_cast<CheckBox*>(this)->ImplDrawCheckBox( true );
+}
+
+// -----------------------------------------------------------------------
+
 void CheckBox::Paint( const Rectangle& rRect )
 {
     ImplDrawCheckBox();
@@ -2872,7 +2928,7 @@ void CheckBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
 
     ImplDraw( pDev, nFlags, aPos, aSize,
               aImageSize, GetDrawPixel( pDev, IMPL_SEP_BUTTON_IMAGE ),
-              aStateRect, aMouseRect, aFocusRect );
+              aStateRect, aMouseRect, aFocusRect, false );
 
     pDev->SetLineColor();
     pDev->SetFillColor( Color( COL_BLACK ) );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: hdu $ $Date: 2002-04-24 17:03:38 $
+ *  last change: $Author: pl $ $Date: 2002-04-29 17:46:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5390,15 +5390,48 @@ void OutputDevice::DrawWaveLine( const Point& rStartPos, const Point& rEndPos,
 // -----------------------------------------------------------------------
 
 void OutputDevice::DrawText( const Point& rStartPt, const String& rOrigStr,
-                             xub_StrLen nIndex, xub_StrLen nLen )
+                             xub_StrLen nIndex, xub_StrLen nLen,
+                             MetricVector* pVector, String* pDisplayText
+                             )
 {
     DBG_TRACE( "OutputDevice::DrawText()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaTextAction( rStartPt, rOrigStr, nIndex, nLen ) );
+    if( pVector )
+    {
+        Region aClip( GetClipRegion() );
+        if( meOutDevType == OUTDEV_WINDOW )
+            aClip.Intersect( Rectangle( Point(), GetOutputSize() ) );
+        if( ! aClip.IsNull() )
+        {
+            MetricVector aTmp;
+            GetGlyphBoundRects( rStartPt, rOrigStr, nIndex, nLen, nIndex, aTmp );
 
-    if ( !IsDeviceOutputNecessary() )
+            nLen = aTmp.size();
+            MetricVector::const_iterator it = aTmp.begin();
+            while( nLen-- )
+            {
+                if( aClip.IsOver( *it ) )
+                {
+                    pVector->push_back( *it );
+                    if( pDisplayText )
+                        pDisplayText->Append( rOrigStr.GetChar( nIndex ) );
+
+                }
+                nIndex++;
+            }
+        }
+        else
+        {
+            GetGlyphBoundRects( rStartPt, rOrigStr, nIndex, nLen, nIndex, *pVector );
+            if( pDisplayText )
+                pDisplayText->Append( rOrigStr.Copy( nIndex, nLen ) );
+        }
+    }
+
+    if ( !IsDeviceOutputNecessary() || pVector )
         return;
 
     SalLayout* pSalLayout = ImplLayout( rOrigStr, nIndex, nLen, rStartPt );
@@ -5746,7 +5779,8 @@ void OutputDevice::GetCharWidth( sal_Unicode nFirstChar, sal_Unicode nLastChar,
 // -----------------------------------------------------------------------
 
 void OutputDevice::DrawText( const Rectangle& rRect,
-                             const String& rOrigStr, USHORT nStyle )
+                             const String& rOrigStr, USHORT nStyle,
+                             MetricVector* pVector, String* pDisplayText )
 {
     DBG_TRACE( "OutputDevice::DrawText( const Rectangle& )" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
@@ -5754,7 +5788,7 @@ void OutputDevice::DrawText( const Rectangle& rRect,
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaTextRectAction( rRect, rOrigStr, nStyle ) );
 
-    if ( !IsDeviceOutputNecessary() || !rOrigStr.Len() || rRect.IsEmpty() )
+    if ( ( !IsDeviceOutputNecessary() && ! pVector ) || !rOrigStr.Len() || rRect.IsEmpty() )
         return;
 
     // better call it here because ImplDrawMnemonicLine() won't
@@ -5775,7 +5809,7 @@ void OutputDevice::DrawText( const Rectangle& rRect,
     Color aOldTextColor;
     Color aOldTextFillColor;
     BOOL  bRestoreFillColor;
-    if ( nStyle & TEXT_DRAW_DISABLE )
+    if ( (nStyle & TEXT_DRAW_DISABLE) && ! pVector )
     {
         BOOL  bHighContrastBlack = FALSE;
         BOOL  bHighContrastWhite = FALSE;
@@ -5912,8 +5946,8 @@ void OutputDevice::DrawText( const Rectangle& rRect,
                     aPos.X() += (nWidth-pLineInfo->GetWidth())/2;
                 xub_StrLen nIndex   = pLineInfo->GetIndex();
                 xub_StrLen nLineLen = pLineInfo->GetLen();
-                DrawText( aPos, aStr, nIndex, nLineLen );
-                if ( !(GetSettings().GetStyleSettings().GetOptions() & STYLE_OPTION_NOMNEMONICS) )
+                DrawText( aPos, aStr, nIndex, nLineLen, pVector, pDisplayText );
+                if ( !(GetSettings().GetStyleSettings().GetOptions() & STYLE_OPTION_NOMNEMONICS) && !pVector )
                 {
                     if ( (nMnemonicPos >= nIndex) && (nMnemonicPos < nIndex+nLineLen) )
                     {
@@ -5937,7 +5971,7 @@ void OutputDevice::DrawText( const Rectangle& rRect,
             // Gibt es noch eine letzte Zeile, dann diese linksbuendig ausgeben,
             // da die Zeile gekuerzt wurde
             if ( aLastLine.Len() )
-                DrawText( aPos, aLastLine );
+                DrawText( aPos, aLastLine, 0, STRING_LEN, pVector, pDisplayText );
 
             // Clipping zuruecksetzen
             if ( nStyle & TEXT_DRAW_CLIP )
@@ -5999,8 +6033,8 @@ void OutputDevice::DrawText( const Rectangle& rRect,
         {
             Push( PUSH_CLIPREGION );
             IntersectClipRegion( rRect );
-            DrawText( aPos, aStr );
-            if ( !(GetSettings().GetStyleSettings().GetOptions() & STYLE_OPTION_NOMNEMONICS) )
+            DrawText( aPos, aStr, 0, STRING_LEN, pVector, pDisplayText );
+            if ( !(GetSettings().GetStyleSettings().GetOptions() & STYLE_OPTION_NOMNEMONICS) && !pVector )
             {
                 if ( nMnemonicPos != STRING_NOTFOUND )
                     ImplDrawMnemonicLine( nMnemonicX, nMnemonicY, cMnemonic );
@@ -6009,8 +6043,8 @@ void OutputDevice::DrawText( const Rectangle& rRect,
         }
         else
         {
-            DrawText( aPos, aStr );
-            if ( !(GetSettings().GetStyleSettings().GetOptions() & STYLE_OPTION_NOMNEMONICS) )
+            DrawText( aPos, aStr, 0, STRING_LEN, pVector, pDisplayText );
+            if ( !(GetSettings().GetStyleSettings().GetOptions() & STYLE_OPTION_NOMNEMONICS) && !pVector )
             {
                 if ( nMnemonicPos != STRING_NOTFOUND )
                     ImplDrawMnemonicLine( nMnemonicX, nMnemonicY, cMnemonic );
@@ -6018,7 +6052,7 @@ void OutputDevice::DrawText( const Rectangle& rRect,
         }
     }
 
-    if ( nStyle & TEXT_DRAW_DISABLE )
+    if ( nStyle & TEXT_DRAW_DISABLE && !pVector )
     {
         SetTextColor( aOldTextColor );
         if ( bRestoreFillColor )
@@ -6278,7 +6312,7 @@ String OutputDevice::GetEllipsisString( const String& rOrigStr, long nMaxWidth,
 
 void OutputDevice::DrawCtrlText( const Point& rPos, const XubString& rStr,
                                  xub_StrLen nIndex, xub_StrLen nLen,
-                                 USHORT nStyle )
+                                 USHORT nStyle, MetricVector* pVector, String* pDisplayText )
 {
     DBG_TRACE( "OutputDevice::DrawCtrlText()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
@@ -6328,7 +6362,7 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const XubString& rStr,
         }
     }
 
-    if ( nStyle & TEXT_DRAW_DISABLE )
+    if ( nStyle & TEXT_DRAW_DISABLE && ! pVector )
     {
         Color aOldTextColor;
         Color aOldTextFillColor;
@@ -6368,8 +6402,8 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const XubString& rStr,
             SetTextColor( GetSettings().GetStyleSettings().GetShadowColor() );
         }
 
-        DrawText( rPos, aStr, nIndex, nLen );
-        if ( !(GetSettings().GetStyleSettings().GetOptions() & STYLE_OPTION_NOMNEMONICS) )
+        DrawText( rPos, aStr, nIndex, nLen, pVector, pDisplayText );
+        if ( !(GetSettings().GetStyleSettings().GetOptions() & STYLE_OPTION_NOMNEMONICS) && !pVector )
         {
             if ( nMnemonicPos != STRING_NOTFOUND )
                 ImplDrawMnemonicLine( nMnemonicX, nMnemonicY, cMnemonic );
@@ -6380,8 +6414,8 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const XubString& rStr,
     }
     else
     {
-        DrawText( rPos, aStr, nIndex, nLen );
-        if ( !(GetSettings().GetStyleSettings().GetOptions() & STYLE_OPTION_NOMNEMONICS) )
+        DrawText( rPos, aStr, nIndex, nLen, pVector, pDisplayText );
+        if ( !(GetSettings().GetStyleSettings().GetOptions() & STYLE_OPTION_NOMNEMONICS) && !pVector )
         {
             if ( nMnemonicPos != STRING_NOTFOUND )
                 ImplDrawMnemonicLine( nMnemonicX, nMnemonicY, cMnemonic );
@@ -6979,6 +7013,29 @@ if(1) {//###
     if ( !bRet )
         rRect.SetEmpty();
 
+    return bRet;
+}
+
+// -----------------------------------------------------------------------
+
+BOOL OutputDevice::GetGlyphBoundRects( const Point& rOrigin, const String& rStr, int nIndex, int nLen,  int nBase, MetricVector& rVector )
+{
+    DBG_TRACE( "OutputDevice::GetGlyphBoundRect_CTL()" );
+    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
+
+    BOOL bRet = TRUE;
+    if( nLen == STRING_LEN )
+        nLen = rStr.Len() - nIndex;
+    for( int i = 0; i < nLen && bRet; i++ )
+    {
+        Rectangle aRect;
+        bRet = GetGlyphBoundRect( rStr, nIndex+i, nBase, aRect );
+        if( bRet )
+        {
+            aRect.Move( rOrigin.X(), rOrigin.Y() );
+            rVector.push_back( aRect );
+        }
+    }
     return bRet;
 }
 

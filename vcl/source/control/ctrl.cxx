@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-27 09:54:45 $
+ *  last change: $Author: pl $ $Date: 2002-04-29 17:46:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,14 +76,20 @@
 #ifndef _SV_CTRL_HXX
 #include <ctrl.hxx>
 #endif
+#ifndef _VCL_CONTROLLAYOUT_HXX
+#include <controllayout.hxx>
+#endif
 
 #pragma hdrstop
+
+using namespace vcl;
 
 // =======================================================================
 
 void Control::ImplInitData()
 {
-    mbHasFocus = FALSE;
+    mbHasFocus      = FALSE;
+    mpLayoutData    = NULL;
 }
 
 // -----------------------------------------------------------------------
@@ -120,6 +126,13 @@ Control::Control( Window* pParent, const ResId& rResId ) :
 
 // -----------------------------------------------------------------------
 
+Control::~Control()
+{
+    delete mpLayoutData;
+}
+
+// -----------------------------------------------------------------------
+
 void Control::GetFocus()
 {
     Window::GetFocus();
@@ -130,6 +143,104 @@ void Control::GetFocus()
 void Control::LoseFocus()
 {
     Window::LoseFocus();
+}
+
+// -----------------------------------------------------------------------
+
+void Control::FillLayoutData() const
+{
+}
+
+// -----------------------------------------------------------------------
+
+void Control::SetText( const String& rStr )
+{
+    delete mpLayoutData;
+    mpLayoutData = NULL;
+    Window::SetText( rStr );
+}
+
+// -----------------------------------------------------------------------
+
+Rectangle Control::GetCharacterBounds( long nIndex ) const
+{
+    Rectangle aBoundRect;
+    if( ! mpLayoutData )
+        FillLayoutData();
+    if( mpLayoutData && nIndex >= 0 && nIndex < mpLayoutData->m_aUnicodeBoundRects.size() )
+        aBoundRect = mpLayoutData->m_aUnicodeBoundRects[ nIndex ];
+    return aBoundRect;
+}
+
+// -----------------------------------------------------------------------
+
+long Control::GetIndexForPoint( const Point& rPoint ) const
+{
+    long nIndex = -1;
+    if( ! mpLayoutData )
+        FillLayoutData();
+    if( mpLayoutData )
+    {
+        for( long i = mpLayoutData->m_aUnicodeBoundRects.size()-1; i >= 0; i-- )
+        {
+            if( mpLayoutData->m_aUnicodeBoundRects[ i ].IsInside( rPoint ) )
+            {
+                nIndex = i;
+                break;
+            }
+        }
+    }
+    return nIndex;
+}
+
+// -----------------------------------------------------------------------
+
+long Control::GetLineCount() const
+{
+    long nLines = 0;
+    if( ! mpLayoutData )
+        FillLayoutData();
+    if( mpLayoutData )
+        nLines = mpLayoutData->m_aLineIndices.size();
+    return nLines;
+}
+
+// -----------------------------------------------------------------------
+
+Pair Control::GetLineStartEnd( long nLine ) const
+{
+    Pair aPair( -1, -1 );
+    if( ! mpLayoutData )
+        FillLayoutData();
+    if( mpLayoutData )
+    {
+        int nDisplayLines = mpLayoutData->m_aLineIndices.size();
+        if( nLine >= 0 && nLine < nDisplayLines )
+        {
+            aPair.A() = mpLayoutData->m_aLineIndices[nLine];
+            if( nLine+1 < mpLayoutData->m_aLineIndices.size() )
+                aPair.B() = mpLayoutData->m_aLineIndices[nLine+1]-1;
+            else
+                aPair.B() = GetText().Len()-1;
+        }
+        else if( nLine == 0 && nDisplayLines == 0 && mpLayoutData->m_aDisplayText.Len() )
+        {
+            // special case for single line controls so the implementations
+            // in that case do not have to fill in the line indices
+            aPair.A() = 0;
+            aPair.B() = mpLayoutData->m_aDisplayText.Len()-1;
+        }
+    }
+    return aPair;
+}
+
+// -----------------------------------------------------------------------
+
+String Control::GetDisplayText() const
+{
+    if( ! mpLayoutData )
+        FillLayoutData();
+    return mpLayoutData ? mpLayoutData->m_aDisplayText : GetText();
 }
 
 // -----------------------------------------------------------------------
@@ -174,4 +285,22 @@ long Control::Notify( NotifyEvent& rNEvt )
     }
 
     return Window::Notify( rNEvt );
+}
+
+// -----------------------------------------------------------------------
+
+void Control::StateChanged( StateChangedType nStateChange )
+{
+    if( nStateChange == STATE_CHANGE_INITSHOW   ||
+        nStateChange == STATE_CHANGE_VISIBLE    ||
+        nStateChange == STATE_CHANGE_FORMAT     ||
+        nStateChange == STATE_CHANGE_ZOOM       ||
+        nStateChange == STATE_CHANGE_BORDER     ||
+        nStateChange == STATE_CHANGE_CONTROLFONT
+        )
+    {
+        delete mpLayoutData;
+        mpLayoutData = NULL;
+    }
+    Window::StateChanged( nStateChange );
 }

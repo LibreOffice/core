@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fixed.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ssa $ $Date: 2002-04-18 08:11:16 $
+ *  last change: $Author: pl $ $Date: 2002-04-29 17:46:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 #endif
 #ifndef _SV_FIXED_HXX
 #include <fixed.hxx>
+#endif
+#ifndef _VCL_CONTROLLAYOUT_HXX
+#include <controllayout.hxx>
 #endif
 
 #include <rc.h>
@@ -256,7 +259,9 @@ USHORT FixedText::ImplGetTextStyle( WinBits nWinStyle )
 // -----------------------------------------------------------------------
 
 void FixedText::ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
-                          const Point& rPos, const Size& rSize )
+                          const Point& rPos, const Size& rSize,
+                          bool bFillLayout
+                          ) const
 {
     const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
     WinBits                 nWinStyle = GetStyle();
@@ -285,7 +290,18 @@ void FixedText::ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
          (rStyleSettings.GetOptions() & STYLE_OPTION_MONO) )
         nTextStyle |= TEXT_DRAW_MONO;
 
-    pDev->DrawText( Rectangle( rPos, rSize ), aText, nTextStyle );
+    if( bFillLayout )
+    {
+        mpLayoutData->m_aDisplayText = String();
+        pDev->DrawText( Rectangle( rPos, rSize ),
+                        aText,
+                        nTextStyle,
+                        &mpLayoutData->m_aUnicodeBoundRects,
+                        &mpLayoutData->m_aDisplayText
+                        );
+    }
+    else
+        pDev->DrawText( Rectangle( rPos, rSize ), aText, nTextStyle );
 }
 
 // -----------------------------------------------------------------------
@@ -411,6 +427,14 @@ Size FixedText::CalcMinimumSize( long nMaxWidth ) const
     return CalcWindowSize( aSize );
 }
 
+// -----------------------------------------------------------------------
+
+void  FixedText::FillLayoutData() const
+{
+    mpLayoutData = new vcl::ControlLayoutData();
+    ImplDraw( const_cast<FixedText*>(this), 0, Point(), GetOutputSizePixel(), true );
+}
+
 
 // =======================================================================
 
@@ -482,6 +506,78 @@ void FixedLine::ImplInitSettings( BOOL bFont,
 
 // -----------------------------------------------------------------------
 
+void FixedLine::ImplDraw( bool bLayout )
+{
+    Size                    aOutSize = GetOutputSizePixel();
+    String                  aText = GetText();
+    const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
+    WinBits                 nWinStyle = GetStyle();
+    MetricVector*           pVector = bLayout ? &mpLayoutData->m_aUnicodeBoundRects : NULL;
+    String*                 pDisplayText = bLayout ? &mpLayoutData->m_aDisplayText : NULL;
+
+    if ( rStyleSettings.GetOptions() & STYLE_OPTION_MONO )
+        SetLineColor( Color( COL_BLACK ) );
+    else
+        SetLineColor( rStyleSettings.GetShadowColor() );
+
+    if ( !aText.Len() || (nWinStyle & WB_VERT) )
+    {
+        if( !pVector )
+        {
+            long nX;
+            long nY;
+
+            if ( nWinStyle & WB_VERT )
+            {
+                nX = (aOutSize.Width()-1)/2;
+                DrawLine( Point( nX, 0 ), Point( nX, aOutSize.Height()-1 ) );
+            }
+            else
+            {
+                nY = (aOutSize.Height()-1)/2;
+                DrawLine( Point( 0, nY ), Point( aOutSize.Width()-1, nY ) );
+            }
+
+            if ( !(rStyleSettings.GetOptions() & STYLE_OPTION_MONO) )
+            {
+                SetLineColor( rStyleSettings.GetLightColor() );
+                if ( nWinStyle & WB_VERT )
+                    DrawLine( Point( nX+1, 0 ), Point( nX+1, aOutSize.Height()-1 ) );
+                else
+                    DrawLine( Point( 0, nY+1 ), Point( aOutSize.Width()-1, nY+1 ) );
+            }
+        }
+    }
+    else
+    {
+        USHORT      nStyle = TEXT_DRAW_MNEMONIC | TEXT_DRAW_LEFT | TEXT_DRAW_VCENTER | TEXT_DRAW_ENDELLIPSIS;
+        Rectangle   aRect( 0, 0, aOutSize.Width(), aOutSize.Height() );
+
+        if ( !IsEnabled() )
+            nStyle |= TEXT_DRAW_DISABLE;
+        if ( GetStyle() & WB_NOLABEL )
+            nStyle &= ~TEXT_DRAW_MNEMONIC;
+        if ( rStyleSettings.GetOptions() & STYLE_OPTION_MONO )
+            nStyle |= TEXT_DRAW_MONO;
+
+        aRect = GetTextRect( aRect, aText, nStyle );
+        DrawText( aRect, aText, nStyle, pVector, pDisplayText );
+
+        if( !pVector )
+        {
+            long nTop = aRect.Top() + ((aRect.GetHeight()-1)/2);
+            DrawLine( Point( aRect.Right()+FIXEDLINE_TEXT_BORDER, nTop ), Point( aOutSize.Width()-1, nTop ) );
+            if ( !(rStyleSettings.GetOptions() & STYLE_OPTION_MONO) )
+            {
+                SetLineColor( rStyleSettings.GetLightColor() );
+                DrawLine( Point( aRect.Right()+FIXEDLINE_TEXT_BORDER, nTop+1 ), Point( aOutSize.Width()-1, nTop+1 ) );
+            }
+        }
+    }
+}
+
+// -----------------------------------------------------------------------
+
 FixedLine::FixedLine( Window* pParent, WinBits nStyle ) :
     Control( WINDOW_FIXEDLINE )
 {
@@ -505,66 +601,18 @@ FixedLine::FixedLine( Window* pParent, const ResId& rResId ) :
 
 // -----------------------------------------------------------------------
 
+void  FixedLine::FillLayoutData() const
+{
+    mpLayoutData = new vcl::ControlLayoutData();
+    const_cast<FixedLine*>(this)->ImplDraw( true );
+}
+
+
+// -----------------------------------------------------------------------
+
 void FixedLine::Paint( const Rectangle& rRect )
 {
-    Size                    aOutSize = GetOutputSizePixel();
-    String                  aText = GetText();
-    const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
-    WinBits                 nWinStyle = GetStyle();
-
-    if ( rStyleSettings.GetOptions() & STYLE_OPTION_MONO )
-        SetLineColor( Color( COL_BLACK ) );
-    else
-        SetLineColor( rStyleSettings.GetShadowColor() );
-
-    if ( !aText.Len() || (nWinStyle & WB_VERT) )
-    {
-        long nX;
-        long nY;
-
-        if ( nWinStyle & WB_VERT )
-        {
-            nX = (aOutSize.Width()-1)/2;
-            DrawLine( Point( nX, 0 ), Point( nX, aOutSize.Height()-1 ) );
-        }
-        else
-        {
-            nY = (aOutSize.Height()-1)/2;
-            DrawLine( Point( 0, nY ), Point( aOutSize.Width()-1, nY ) );
-        }
-
-        if ( !(rStyleSettings.GetOptions() & STYLE_OPTION_MONO) )
-        {
-            SetLineColor( rStyleSettings.GetLightColor() );
-            if ( nWinStyle & WB_VERT )
-                DrawLine( Point( nX+1, 0 ), Point( nX+1, aOutSize.Height()-1 ) );
-            else
-                DrawLine( Point( 0, nY+1 ), Point( aOutSize.Width()-1, nY+1 ) );
-        }
-    }
-    else
-    {
-        USHORT      nStyle = TEXT_DRAW_MNEMONIC | TEXT_DRAW_LEFT | TEXT_DRAW_VCENTER | TEXT_DRAW_ENDELLIPSIS;
-        Rectangle   aRect( 0, 0, aOutSize.Width(), aOutSize.Height() );
-
-        if ( !IsEnabled() )
-            nStyle |= TEXT_DRAW_DISABLE;
-        if ( GetStyle() & WB_NOLABEL )
-            nStyle &= ~TEXT_DRAW_MNEMONIC;
-        if ( rStyleSettings.GetOptions() & STYLE_OPTION_MONO )
-            nStyle |= TEXT_DRAW_MONO;
-
-        aRect = GetTextRect( aRect, aText, nStyle );
-        DrawText( aRect, aText, nStyle );
-
-        long nTop = aRect.Top() + ((aRect.GetHeight()-1)/2);
-        DrawLine( Point( aRect.Right()+FIXEDLINE_TEXT_BORDER, nTop ), Point( aOutSize.Width()-1, nTop ) );
-        if ( !(rStyleSettings.GetOptions() & STYLE_OPTION_MONO) )
-        {
-            SetLineColor( rStyleSettings.GetLightColor() );
-            DrawLine( Point( aRect.Right()+FIXEDLINE_TEXT_BORDER, nTop+1 ), Point( aOutSize.Width()-1, nTop+1 ) );
-        }
-    }
+    ImplDraw();
 }
 
 // -----------------------------------------------------------------------
