@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: hr $ $Date: 2004-09-09 11:23:33 $
+#   last change: $Author: kz $ $Date: 2004-10-04 20:05:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -154,13 +154,16 @@ NOOPTFILES= \
 .ENDIF
 
 EXCEPTIONSFILES= \
+    $(SLO)$/documen5.obj \
     $(SLO)$/documen6.obj \
+    $(SLO)$/documen9.obj \
     $(SLO)$/dpsdbtab.obj \
     $(SLO)$/dpobject.obj \
     $(SLO)$/dpoutput.obj \
     $(SLO)$/dpsave.obj	\
     $(SLO)$/dbdocutl.obj \
-        $(SLO)$/dptabsrc.obj \
+    $(SLO)$/dptabsrc.obj \
+    $(SLO)$/drwlayer.obj \
     $(SLO)$/globalx.obj
 
 # --- Tagets -------------------------------------------------------
