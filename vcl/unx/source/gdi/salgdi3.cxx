@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hdu $ $Date: 2001-04-24 17:47:51 $
+ *  last change: $Author: hdu $ $Date: 2001-04-25 13:00:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -983,7 +983,7 @@ void SalGraphicsData::DrawServerAAFontString( int nX, int nY,
     }
 
     Display* pDisplay = GetXDisplay();
-    Visual* pVisual = DefaultVisual( pDisplay, 0 );
+    Visual* pVisual = GetDisplay()->GetVisual()->GetVisual();
     XRenderPictFormat* pVisualFormat = (*aX11GlyphPeer.pXRenderFindVisualFormat)( pDisplay, pVisual );
 
     static Pixmap aPixmap = NULL;
@@ -1491,8 +1491,6 @@ void SalGraphicsData::DrawText( long nX, long nY,
         aPolygon.SetPoint( aCharPos, 0 );
         aPolygon.Rotate( aOrigin, nFontOrientation_ );
         aCharPos = aPolygon.GetPoint( 0 );
-                                                  // when the display's visuals are
-
         DrawText( aCharPos.X(), aCharPos.Y(), pStr+i, 1 );
     }
 
@@ -1562,8 +1560,7 @@ void
 SalGraphics::SetTextColor( SalColor nSalColor )
 {
     #if defined(USE_PSPRINT)
-    if (maGraphicsData.m_pPrinterGfx != NULL)   // when the display's visuals are
-
+    if (maGraphicsData.m_pPrinterGfx != NULL)
     {
         psp::PrinterColor aColor (SALCOLOR_RED   (nSalColor),
                                   SALCOLOR_GREEN (nSalColor),
