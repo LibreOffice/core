@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zcodec.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:25:51 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 13:13:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #endif
 #ifndef _RTL_CRC_H_
 #include <rtl/crc.h>
+#endif
+#ifndef _OSL_ENDIAN_H_
+#include <osl/endian.h>
 #endif
 
 // -----------
@@ -505,7 +508,7 @@ void ZCodec::ImplInitBuf ( BOOL nIOFlag )
 ULONG ZCodec::UpdateCRC ( ULONG nLatestCRC, ULONG nNumber )
 {
 
-#ifdef __LITTLEENDIAN
+#ifdef OSL_LITENDIAN
     nNumber = SWAPLONG( nNumber );
 #endif
     return rtl_crc32( nLatestCRC, &nNumber, 4 );
