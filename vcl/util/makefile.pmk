@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.pmk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: hdu $ $Date: 2002-04-23 07:42:52 $
+#   last change: $Author: hdu $ $Date: 2002-06-18 09:52:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,11 +78,11 @@ USE_BUILTIN_RASTERIZER=true
 .ENDIF
 
 .IF "$(USE_BUILTIN_RASTERIZER)" != ""
-ENVCFLAGS += -DUSE_BUILTIN_RASTERIZER
+ENVCDEFS += -DUSE_BUILTIN_RASTERIZER
 .ENDIF
 
 ENABLE_CTL=true
 .IF "$(ENABLE_CTL)" != ""
-ENVCFLAGS += -DENABLE_CTL
+ENVCDEFS += -DENABLE_CTL
 .ENDIF
 
