@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfdialog.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2002-10-24 16:24:26 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 11:16:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,7 +141,7 @@ SWFDialog::SWFDialog( const Reference< XMultiServiceFactory > &rxMSF ) :
     ByteString aResMgrName( "flash" );
 
     aResMgrName.Append( ByteString::CreateFromInt32( SOLARUPD ) );
-    mpResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILanguage() );
+    mpResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
 }
 
 // -----------------------------------------------------------------------------
