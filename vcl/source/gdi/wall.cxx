@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wall.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 13:57:32 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:20:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 #endif
 #ifndef _SV_WALL2_HXX
 #include <wall2.hxx>
+#endif
+#ifndef _SV_SVAPP_HXX
+#include <svapp.hxx>
 #endif
 
 
@@ -339,7 +342,7 @@ void Wallpaper::SetColor( const Color& rColor )
     ImplMakeUnique();
     mpImplWallpaper->maColor = rColor;
 
-    if( WALLPAPER_NULL == mpImplWallpaper->meStyle )
+    if( WALLPAPER_NULL == mpImplWallpaper->meStyle || WALLPAPER_APPLICATIONGRADIENT == mpImplWallpaper->meStyle )
         mpImplWallpaper->meStyle = WALLPAPER_TILE;
 }
 
@@ -359,6 +362,12 @@ void Wallpaper::SetStyle( WallpaperStyle eStyle )
     DBG_CHKTHIS( Wallpaper, NULL );
 
     ImplMakeUnique( FALSE );
+
+    if( eStyle == WALLPAPER_APPLICATIONGRADIENT )
+        // set a dummy gradient, the correct gradient
+        // will be created dynamically in GetGradient()
+        SetGradient( ImplGetApplicationGradient() );
+
     mpImplWallpaper->meStyle = eStyle;
 }
 
@@ -395,7 +404,7 @@ void Wallpaper::SetBitmap( const BitmapEx& rBitmap )
             mpImplWallpaper->mpBitmap = new BitmapEx( rBitmap );
     }
 
-    if( WALLPAPER_NULL == mpImplWallpaper->meStyle )
+    if( WALLPAPER_NULL == mpImplWallpaper->meStyle || WALLPAPER_APPLICATIONGRADIENT == mpImplWallpaper->meStyle)
         mpImplWallpaper->meStyle = WALLPAPER_TILE;
 }
 
@@ -451,7 +460,7 @@ void Wallpaper::SetGradient( const Gradient& rGradient )
     else
         mpImplWallpaper->mpGradient = new Gradient( rGradient );
 
-    if( WALLPAPER_NULL == mpImplWallpaper->meStyle )
+    if( WALLPAPER_NULL == mpImplWallpaper->meStyle || WALLPAPER_APPLICATIONGRADIENT == mpImplWallpaper->meStyle )
         mpImplWallpaper->meStyle = WALLPAPER_TILE;
 }
 
@@ -475,7 +484,9 @@ Gradient Wallpaper::GetGradient() const
 {
     DBG_CHKTHIS( Wallpaper, NULL );
 
-    if ( mpImplWallpaper->mpGradient )
+    if( WALLPAPER_APPLICATIONGRADIENT == mpImplWallpaper->meStyle )
+        return ImplGetApplicationGradient();
+    else if ( mpImplWallpaper->mpGradient )
         return *(mpImplWallpaper->mpGradient);
     else
     {
@@ -493,6 +504,18 @@ BOOL Wallpaper::IsGradient() const
     return (mpImplWallpaper->mpGradient != 0);
 }
 
+
+// -----------------------------------------------------------------------
+
+Gradient Wallpaper::ImplGetApplicationGradient() const
+{
+    Gradient g;
+    g.SetAngle( 900 );
+    g.SetStyle( GRADIENT_LINEAR );
+    g.SetStartColor( Application::GetSettings().GetStyleSettings().GetFaceColor() );
+    g.SetEndColor( Application::GetSettings().GetStyleSettings().GetFaceGradientColor() );
+    return g;
+}
 
 // -----------------------------------------------------------------------
 
