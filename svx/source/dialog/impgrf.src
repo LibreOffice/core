@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impgrf.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2000-11-24 17:01:49 $
+ *  last change: $Author: kz $ $Date: 2000-11-29 10:15:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -414,7 +414,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text[ chinese_traditional ] = "ΌΠ·Η(~O)";
         Text[ arabic ] = "ήνΗΣν";
         Text[ greek ] = "Προεπιλογή";
-        Text[ korean ] = "Θ¨(~O)";
+        Text[ korean ] = "Η₯ΑΨ(~O)";
         Text[ turkish ] = "~Standart";
         Text[ language_user1 ] = " ";
     };
