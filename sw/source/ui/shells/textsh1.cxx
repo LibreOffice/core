@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh1.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: os $ $Date: 2002-11-06 10:17:22 $
+ *  last change: $Author: os $ $Date: 2002-11-27 08:58:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1138,6 +1138,19 @@ void SwTextShell::Execute(SfxRequest &rReq)
             rWrtSh.ShowCrsr();
         }
     break;
+    case SID_OPEN_HYPERLINK:
+    {
+        SfxItemSet aSet(GetPool(),
+                        RES_TXTATR_INETFMT,
+                        RES_TXTATR_INETFMT);
+        rWrtSh.GetAttr(aSet);
+        if(SFX_ITEM_SET <= aSet.GetItemState( RES_TXTATR_INETFMT, TRUE ))
+        {
+            const SfxPoolItem& rItem = aSet.Get(RES_TXTATR_INETFMT, TRUE);
+            rWrtSh.ClickToINetAttr((const SwFmtINetFmt&)rItem, URLLOAD_NOFILTER);
+        }
+    }
+    break;
     default:
         ASSERT(!this, falscher Dispatcher);
         return;
@@ -1352,6 +1365,16 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 {
                     rSet.Put(SfxBoolItem(nWhich, rSh.GetViewOptions()->IsSelectionInReadonly()));
                 }
+            break;
+            case  SID_OPEN_HYPERLINK:
+            {
+                SfxItemSet aSet(GetPool(),
+                                RES_TXTATR_INETFMT,
+                                RES_TXTATR_INETFMT);
+                rSh.GetAttr(aSet);
+                if(SFX_ITEM_SET > aSet.GetItemState( RES_TXTATR_INETFMT, FALSE ))
+                    rSet.DisableItem(nWhich);
+            }
             break;
         }
         nWhich = aIter.NextWhich();
