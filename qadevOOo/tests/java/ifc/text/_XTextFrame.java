@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XTextFrame.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:13:09 $
+ *  last change:$Date: 2003-09-08 11:20:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,10 @@
 
 package ifc.text;
 
+import lib.MultiMethodTest;
+
 import com.sun.star.text.XText;
 import com.sun.star.text.XTextFrame;
-import lib.MultiMethodTest;
 
 
 /**
@@ -93,7 +94,6 @@ public class _XTextFrame extends MultiMethodTest {
         log.println("Testing getText ...");
         XText oFrameText = oObj.getText();
         String Content = oFrameText.getString();
-        boolean ging = Content.equals("The FrameText");
         tRes.tested( "getText()",Content.equals("The FrameText") );
     }
 
