@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 11:40:41 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 14:06:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -895,8 +895,11 @@ void SwEditWin::ChangeFly( BYTE nDir, BOOL bWeb )
             SwFmtVertOrient aVert( (SwFmtVertOrient&)aSet.Get(RES_VERT_ORIENT) );
             const bool bFollowTextFlow =
                     static_cast<const SwFmtFollowTextFlow&>(aSet.Get(RES_FOLLOW_TEXT_FLOW)).GetValue();
-            rSh.CalcBoundRect( aBoundRect, eAnchorId, FRAME,
-                               aVert.GetRelationOrient(), bFollowTextFlow,
+            // OD 12.11.2003 #i22341# - additional provide content position
+            const SwPosition* pToCharCntntPos = ((SwFmtAnchor&)aSet.Get(RES_ANCHOR)).GetCntntAnchor();
+            rSh.CalcBoundRect( aBoundRect, eAnchorId,
+                               FRAME, aVert.GetRelationOrient(),
+                               pToCharCntntPos, bFollowTextFlow,
                                false, &aRefPoint );
         }
         long nLeft = Min( aTmp.Left() - aBoundRect.Left(), aSnap.Width() );
