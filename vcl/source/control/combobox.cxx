@@ -2,9 +2,9 @@
  *
  *  $RCSfile: combobox.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 17:47:00 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 12:12:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -569,16 +569,14 @@ void ComboBox::ToggleDropDown()
 
 void ComboBox::Select()
 {
-    ImplCallEventListeners( VCLEVENT_COMBOBOX_SELECT );
-    maSelectHdl.Call( this );
+    ImplCallEventListenersAndHandler( VCLEVENT_COMBOBOX_SELECT, maSelectHdl, this );
 }
 
 // -----------------------------------------------------------------------
 
 void ComboBox::DoubleClick()
 {
-    ImplCallEventListeners( VCLEVENT_COMBOBOX_DOUBLECLICK );
-    maDoubleClickHdl.Call( this );
+    ImplCallEventListenersAndHandler( VCLEVENT_COMBOBOX_DOUBLECLICK, maDoubleClickHdl, this );
 }
 
 // -----------------------------------------------------------------------
