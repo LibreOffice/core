@@ -2,9 +2,9 @@
  *
  *  $RCSfile: signal.c,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:21 $
+ *  last change: $Author: kr $ $Date: 2000-10-23 13:44:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,7 @@ static sal_Bool               bInitSignal = sal_False;
 static oslMutex               SignalListMutex;
 static oslSignalHandlerImpl*  SignalList;
 static sal_Bool               bDoHardKill = sal_False;
-static sal_Bool               bDoNotUseSEGV = sal_False;
+static sal_Bool               bSetSEGVHandler = sal_False;
 
 static void SignalHandlerFunction(int);
 extern oslProcessError SAL_CALL osl_psz_getExecutableFile(sal_Char* pszBuffer, sal_uInt32 Max);
@@ -161,12 +161,16 @@ static sal_Bool InitSignal()
         if ((osl_getCommandArgs(CmdLine, sizeof(CmdLine)) ==  osl_Process_E_None) &&
              (strstr(CmdLine, "-bean") != NULL))
             bDoHardKill = sal_True;
-    }
 
-    if ((osl_psz_getExecutableFile(ProgFile, sizeof(ProgFile)) ==  osl_Process_E_None) &&
-        (strstr(ProgFile, "stomcatd") != NULL))
-    {
-        bDoNotUseSEGV = sal_True;
+        // WORKAROUND FOR SEGV HANDLER CONFLICT
+        //
+        // the java jit needs SIGSEGV for proper work
+        // and we need SIGSEGV for the office crashguard
+        //
+        // TEMPORARY SOLUTION:
+        //   the office sets the signal handler during startup
+        //   java can than overwrite it, if needed
+        bSetSEGVHandler = sal_True;
     }
 
     /* Portal Demo HACK !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
@@ -183,7 +187,7 @@ static sal_Bool InitSignal()
     for (i = 0; i < NoSignals; i++)
     {
         /* hack: stomcatd is attaching JavaVM wich dont work with an sigaction(SEGV) */
-        if (!bDoNotUseSEGV || (Signals[i].Signal != SIGSEGV))
+        if (bSetSEGVHandler || (Signals[i].Signal != SIGSEGV))
         {
             if (Signals[i].Action != ACT_SYSTEM)
             {
