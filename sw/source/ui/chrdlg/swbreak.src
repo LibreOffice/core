@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swbreak.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-30 16:28:21 $
+ *  last change: $Author: rt $ $Date: 2001-06-08 22:49:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -421,3 +421,4 @@ ModalDialog DLG_BREAK
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Insertar salto";
 };
+
