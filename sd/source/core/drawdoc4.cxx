@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc4.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: cl $ $Date: 2001-07-24 14:44:53 $
+ *  last change: $Author: aw $ $Date: 2001-08-27 15:30:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1016,7 +1016,9 @@ IMPL_LINK(SdDrawDocument, OnlineSpellCallback, SpellCallbackInfo*, pInfo)
 
     USHORT nCommand = pInfo->nCommand;
 
-    if (nCommand == SPELLCMD_IGNOREWORD)
+    if (nCommand == SPELLCMD_IGNOREWORD
+        // #91457# restart when add to dictionary takes place, too.
+        || nCommand == SPELLCMD_ADDTODICTIONARY)
     {
         pOnlineSearchItem = new SvxSearchItem();
         pOnlineSearchItem->SetSearchString(pInfo->aWord);
