@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLMetaImporter.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:17:41 $
+ *  last change:$Date: 2003-05-27 13:28:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@ public class XMLMetaImporter extends TestCase {
     */
     protected void initialize( TestParameters tParam, PrintWriter log ) {
 
-        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
         try {
             xMathDoc = SOF.openDoc("smath","_blank");
         } catch (com.sun.star.uno.Exception ex) {
@@ -149,7 +149,7 @@ public class XMLMetaImporter extends TestCase {
             ( TestParameters Param, PrintWriter log )
             throws StatusException {
 
-        XMultiServiceFactory xMSF = Param.getMSF();
+        XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF();
         XInterface oObj = null;
         final String impName = "XMLMetaImporter" ;
         final String impValue = "XMLMetaImporter_Value" ;

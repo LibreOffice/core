@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLMetaExporter.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:17:42 $
+ *  last change:$Date: 2003-05-27 13:27:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@ public class XMLMetaExporter extends TestCase {
      * New math document created.
      */
     protected void initialize( TestParameters tParam, PrintWriter log ) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
 
         try {
             log.println( "creating a math document" );
@@ -151,7 +151,7 @@ public class XMLMetaExporter extends TestCase {
     */
     protected TestEnvironment createTestEnvironment
             (TestParameters tParam, PrintWriter log) {
-        XMultiServiceFactory xMSF = tParam.getMSF() ;
+        XMultiServiceFactory xMSF = (XMultiServiceFactory)tParam.getMSF() ;
         XInterface oObj = null;
         final String expName = "XMLMetaExporterName" ;
         final String expValue = "XMLMetaExporterValue" ;

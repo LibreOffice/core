@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLImporter.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:17:42 $
+ *  last change:$Date: 2003-05-27 13:27:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@ public class XMLImporter extends TestCase {
     */
     protected void initialize( TestParameters tParam, PrintWriter log ) {
 
-        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
         try {
             xMathDoc = SOF.openDoc("smath","_blank");
         } catch (com.sun.star.uno.Exception ex) {
@@ -147,7 +147,7 @@ public class XMLImporter extends TestCase {
             ( TestParameters Param, PrintWriter log )
             throws StatusException {
 
-        XMultiServiceFactory xMSF = Param.getMSF();
+        XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF();
         XInterface oObj = null;
         final String impFormula = "a - b" ;
 
