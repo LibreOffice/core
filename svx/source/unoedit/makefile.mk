@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: cl $ $Date: 2001-04-04 15:53:10 $
+#   last change: $Author: thb $ $Date: 2002-02-11 12:33:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,6 +78,7 @@ ENABLE_EXCEPTIONS=TRUE
 CXXFILES =				\
         UnoForbiddenCharsTable.cxx \
         unoedsrc.cxx	\
+        unoedacc.cxx	\
         unofored.cxx	\
         unoforou.cxx	\
         unotext.cxx		\
@@ -87,6 +88,7 @@ CXXFILES =				\
 SVXLIGHTOBJFILES=\
         $(OBJ)$/UnoForbiddenCharsTable.obj \
         $(OBJ)$/unoedsrc.obj	\
+        $(OBJ)$/unoedacc.obj	\
         $(OBJ)$/unofored.obj	\
         $(OBJ)$/unoforou.obj	\
         $(OBJ)$/unotext.obj		\
@@ -96,6 +98,7 @@ SVXLIGHTOBJFILES=\
 SLOFILES =	\
         $(SLO)$/UnoForbiddenCharsTable.obj \
         $(SLO)$/unoedsrc.obj	\
+        $(SLO)$/unoedacc.obj	\
         $(SLO)$/unofored.obj	\
         $(SLO)$/unoforou.obj	\
         $(SLO)$/unotext.obj		\

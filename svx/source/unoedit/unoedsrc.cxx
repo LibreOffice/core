@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoedsrc.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:27 $
+ *  last change: $Author: thb $ $Date: 2002-02-11 12:33:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,5 +85,43 @@ SvxEditSource::~SvxEditSource()
 
 //------------------------------------------------------------------------
 
+SvxEditSourceHint::SvxEditSourceHint( ULONG nId ) : TextHint( nId )
+{
+}
 
+SvxEditSourceHint::SvxEditSourceHint( ULONG nId, ULONG nValue, ULONG nStart, ULONG nEnd ) :
+    TextHint( nId, nValue ),
+    mnStart( nStart),
+    mnEnd( nEnd )
+{
+}
 
+ULONG SvxEditSourceHint::GetValue() const
+{
+    return TextHint::GetValue();
+}
+
+ULONG SvxEditSourceHint::GetStartValue() const
+{
+    return mnStart;
+}
+
+ULONG SvxEditSourceHint::GetEndValue() const
+{
+    return mnEnd;
+}
+
+void SvxEditSourceHint::SetValue( ULONG n )
+{
+    TextHint::SetValue( n );
+}
+
+void SvxEditSourceHint::SetStartValue( ULONG n )
+{
+    mnStart = n;
+}
+
+void SvxEditSourceHint::SetEndValue( ULONG n )
+{
+    mnEnd = n;
+}

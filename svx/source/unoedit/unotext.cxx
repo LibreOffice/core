@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: cl $ $Date: 2001-12-04 16:00:19 $
+ *  last change: $Author: thb $ $Date: 2002-02-11 12:33:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2150,6 +2150,11 @@ void SvxDummyTextSource::UpdateData()
 {
 }
 
+SfxBroadcaster& SvxDummyTextSource::GetBroadcaster() const
+{
+    return *(const_cast< SvxDummyTextSource* > (this));
+}
+
 sal_uInt16 SvxDummyTextSource::GetParagraphCount() const
 {
     return 0;
@@ -2225,3 +2230,82 @@ sal_Bool SvxDummyTextSource::IsValid() const
 {
     return sal_False;
 }
+
+void SvxDummyTextSource::SetNotifyHdl( const Link& )
+{
+}
+
+LanguageType SvxDummyTextSource::GetLanguage( USHORT nPara, USHORT nIndex ) const
+{
+    return LANGUAGE_DONTKNOW;
+}
+
+sal_Bool SvxDummyTextSource::IsPointInPara( USHORT, const awt::Point& ) const
+{
+    return sal_False;
+}
+
+sal_Bool SvxDummyTextSource::GetSelection( ESelection& rSelection ) const
+{
+    return sal_False;
+}
+
+awt::Rectangle SvxDummyTextSource::GetTextBounds( const ESelection& ) const
+{
+    return awt::Rectangle();
+}
+
+sal_Bool SvxDummyTextSource::GetIndexAtPoint( const awt::Point&, USHORT& nPara, USHORT& nIndex ) const
+{
+    return sal_False;
+}
+
+sal_Bool SvxDummyTextSource::GetWordIndices( USHORT nPara, USHORT nIndex, USHORT& nStart, USHORT& nEnd ) const
+{
+    return sal_False;
+}
+
+USHORT SvxDummyTextSource::GetLineCount( USHORT nPara ) const
+{
+    return 0;
+}
+
+USHORT SvxDummyTextSource::GetLineLen( USHORT nPara, USHORT nLine ) const
+{
+    return 0;
+}
+
+sal_Bool SvxDummyTextSource::SetSelection( const ESelection& rSelection )
+{
+    return sal_False;
+}
+
+sal_Bool SvxDummyTextSource::Copy()
+{
+    return sal_False;
+}
+
+sal_Bool SvxDummyTextSource::Cut()
+{
+    return sal_False;
+}
+
+sal_Bool SvxDummyTextSource::Paste()
+{
+    return sal_False;
+}
+
+sal_Bool SvxDummyTextSource::Delete( const ESelection& rSelection )
+{
+    return sal_False;
+}
+
+sal_Bool SvxDummyTextSource::InsertText( String sStr, const ESelection& rSelection )
+{
+    return sal_False;
+}
+
+void SvxDummyTextSource::SetText( USHORT, String )
+{
+}
+
