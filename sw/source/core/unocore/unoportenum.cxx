@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoportenum.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-12-19 15:58:30 $
+ *  last change: $Author: dvo $ $Date: 2001-01-02 14:48:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -687,15 +687,17 @@ void lcl_ExportRedline(
             (!pPtr->bStart && nIndex == pPtr->pRedline->End()->nContent.GetIndex())))
     {
         SwXTextPortion* pPortion;
-        if(pPtr->bStart )
-        {
+
+// ?????
+//      if(pPtr->bStart )
+//      {
             rPortionArr.Insert(
                 new Reference< XTextRange >(pPortion = new SwXRedlinePortion(
                             pPtr->pRedline, *pUnoCrsr, xParent,
-                            pPtr->bStart ? PORTION_REDLINE_START : PORTION_REDLINE_END)),
+                            pPtr->bStart)),
                 rPortionArr.Count());
 
-        }
+//      }
         rRedlineArr.Remove((USHORT)0);
         delete pPtr;
     }
