@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.149 $
+#   $Revision: 1.150 $
 #
-#   last change: $Author: rt $ $Date: 2004-12-16 12:58:14 $
+#   last change: $Author: obo $ $Date: 2005-03-15 13:00:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -2225,6 +2225,13 @@ $(COMMONPRJHIDOTHERTARGET) : $(PRJHIDOTHERTARGET)
 # -------
 
 .INCLUDE : tg_hxx.mk
+
+
+# -------
+# - processing config -
+# -------
+
+.INCLUDE : tg_config.mk
 
 
 # ------------------
