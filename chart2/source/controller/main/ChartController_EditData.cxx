@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartController_EditData.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2004-01-22 10:31:48 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 17:17:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,14 +101,14 @@ void ChartController::executeDispatch_EditData()
         {
             try
             {
-                xEmbObj->changeState( embed::EmbedStates::EMBED_ACTIVE );
+                xEmbObj->setContainerName( C2U( "Chart Data" ));
+                xEmbObj->changeState( embed::EmbedStates::ACTIVE );
 
                 Reference< embed::XVisualObject > xVisObj( xEmbObj, uno::UNO_QUERY );
                 if( xVisObj.is())
                 {
-                    xVisObj->setVisAreaSize( embed::Aspects::MSASPECT_CONTENT,
-                                             awt::Size( 5000, 3000 ));
-                    xVisObj->setContainerName( C2U( "Chart Data" ));
+                    xVisObj->setVisualAreaSize( embed::Aspects::MSOLE_CONTENT,
+                                                awt::Size( 5000, 3000 ));
                 }
 
                 // just a test
