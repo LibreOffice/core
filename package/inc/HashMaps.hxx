@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HashMaps.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-26 21:41:28 $
+ *  last change: $Author: mtg $ $Date: 2001-10-30 13:52:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,17 +61,13 @@
 #ifndef _HASHMAPS_HXX
 #define _HASHMAPS_HXX
 
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
-#include <com/sun/star/container/XNameContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEl_HPP_
-#include <com/sun/star/lang/XUnoTunnel.hpp>
-#endif
 #ifndef _ZIP_ENTRY_HXX_
 #include <ZipEntry.hxx>
 #endif
+#ifndef _VOS_REF_HXX_
+#include <vos/ref.hxx>
+#endif
 #include <hash_map>
-#include <memory>
 
 struct eqFunc
 {
@@ -83,7 +79,7 @@ struct eqFunc
 };
 
 class ZipPackageFolder;
-struct ContentInfo;
+class ContentInfo;
 
 typedef std::hash_map < rtl::OUString,
                         ZipPackageFolder *,
@@ -91,7 +87,7 @@ typedef std::hash_map < rtl::OUString,
                         eqFunc > FolderHash;
 
 typedef std::hash_map < rtl::OUString,
-                        std::auto_ptr < ContentInfo >,
+                        vos::ORef < ContentInfo >,
                         ::rtl::OUStringHash,
                         eqFunc > ContentHash;
 
