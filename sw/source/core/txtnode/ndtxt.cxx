@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:06:45 $
+ *  last change: $Author: hr $ $Date: 2004-04-07 12:44:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2261,6 +2261,7 @@ const SwNodeNum* SwTxtNode::UpdateNum( const SwNodeNum& rNum )
     return pNdNum;
 }
 
+// #i23726#
 SwNumRule* SwTxtNode::GetNumRule() const
 {
     SwNumRule* pRet = 0;
