@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-29 08:07:40 $
+ *  last change: $Author: fs $ $Date: 2002-05-24 12:28:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,10 +99,16 @@ namespace com { namespace sun { namespace star {
 
 }}}
 
+namespace svt
+{
+    class EditBrowseBox;
+}
+
 class Window;
 class ToolBox;
 class Font;
 class SvNumberFormatter;
+
 // .........................................................................
 namespace dbaui
 {
@@ -252,6 +258,8 @@ namespace dbaui
             <TRUE/> if so, otherwise <FALSE/>
     */
     sal_Bool isHiContrast(Window* _pWindow);
+
+    void adjustBrowseBoxColumnWidth( ::svt::EditBrowseBox* _pBox, sal_uInt16 _nColId );
 
 // .........................................................................
 }
