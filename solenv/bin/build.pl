@@ -5,9 +5,9 @@
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.122 $
+#   $Revision: 1.123 $
 #
-#   last change: $Author: vg $ $Date: 2004-10-22 15:18:32 $
+#   last change: $Author: vg $ $Date: 2004-10-26 10:35:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -98,7 +98,7 @@
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.122 $ ';
+    $id_str = ' $Revision: 1.123 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -1734,6 +1734,7 @@ sub prepare_incompatible_build {
         if ($prepare) {
             ensure_clear_module($prj);
         } else {
+            next if ($show);
             my $message;
             if ($modules_types{$prj} ne 'mod') {
                 $message = "$prj is not a complete module!";
