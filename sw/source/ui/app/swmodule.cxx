@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodule.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2001-02-21 12:27:32 $
+ *  last change: $Author: tl $ $Date: 2001-02-27 14:50:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -425,8 +425,8 @@ SwModule::SwModule( SvFactory* pFact,
     }
     StartListening( *pOffApp );
 
-    xDicListEvtListener = uno::Reference< XDictionaryListEventListener > (
-            new SwDicListEvtListener( ::GetDictionaryList() ) );
+    xLngSvcEvtListener = Reference< XLinguServiceEventListener > (
+            (XLinguServiceEventListener *) new SwLinguServiceEventListener, UNO_QUERY );
 
     Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
     if( xMgr.is() )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodule.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-02-21 12:07:20 $
+ *  last change: $Author: tl $ $Date: 2001-02-27 14:47:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,8 +79,8 @@
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
 #endif
-#ifndef _COM_SUN_STAR_LINGUISTIC2_XDICTIONARYLISTEVENTLISTENER_HPP_
-#include <com/sun/star/linguistic2/XDictionaryListEventListener.hpp>
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XLINGUSERVICEEVENTLISTENER_HPP_
+#include <com/sun/star/linguistic2/XLinguServiceEventListener.hpp>
 #endif
 #ifndef _VCL_FLDUNIT_HXX
 #include <vcl/fldunit.hxx>
@@ -150,7 +150,7 @@ class SwModule: public SwModuleDummy , public SfxListener
 
     // DictionaryList listener to trigger spellchecking or hyphenation
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XDictionaryListEventListener >   xDicListEvtListener;
+        ::com::sun::star::linguistic2::XLinguServiceEventListener >     xLngSvcEvtListener;
     ::com::sun::star::uno::Reference<
         ::com::sun::star::scanner::XScannerManager >                    m_xScannerManager;
 
@@ -286,11 +286,11 @@ public:
                     sal_Bool bIsSpellWrongAgain, sal_Bool bIsSpellAllAgain );
 
     inline ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XDictionaryListEventListener >
-            GetDicListEvtListener();
-    inline void SetDicListEvtListener(
+        ::com::sun::star::linguistic2::XLinguServiceEventListener >
+            GetLngSvcEvtListener();
+    inline void SetLngSvcEvtListener(
             ::com::sun::star::uno::Reference<
-                ::com::sun::star::linguistic2::XDictionaryListEventListener > & xLstnr);
+                ::com::sun::star::linguistic2::XLinguServiceEventListener > & xLstnr);
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::scanner::XScannerManager >
@@ -300,17 +300,17 @@ public:
 
 
 inline ::com::sun::star::uno::Reference<
-    ::com::sun::star::linguistic2::XDictionaryListEventListener >
-        SwModule::GetDicListEvtListener()
+    ::com::sun::star::linguistic2::XLinguServiceEventListener >
+        SwModule::GetLngSvcEvtListener()
 {
-    return xDicListEvtListener;
+    return xLngSvcEvtListener;
 }
 
-inline void SwModule::SetDicListEvtListener(
+inline void SwModule::SetLngSvcEvtListener(
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XDictionaryListEventListener > & xLstnr)
+        ::com::sun::star::linguistic2::XLinguServiceEventListener > & xLstnr)
 {
-    xDicListEvtListener = xLstnr;
+    xLngSvcEvtListener = xLstnr;
 }
 
 
