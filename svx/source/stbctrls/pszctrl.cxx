@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pszctrl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 17:26:20 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:05:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,14 +133,11 @@
     <SvxPosSizeStatusBarControl::Paint(const UserDrawEvent&)>
 */
 
-String GetMetricStr_Impl( long nVal, SfxMapUnit eUnit )
+String GetMetricStr_Impl( long nVal )
 {
     // Applikations-Metrik besorgen und setzen
     FieldUnit eOutUnit = GetModuleFieldUnit( NULL );
-    FieldUnit eInUnit = FUNIT_TWIP;
-
-    if ( SFX_MAPUNIT_100TH_MM == eUnit )
-        eInUnit = FUNIT_100TH_MM;
+    FieldUnit eInUnit = FUNIT_100TH_MM;
 
     String sMetric;
     const sal_Unicode cSep = Application::GetSettings().GetLocaleDataWrapper().getNumDecimalSep().GetChar(0);
@@ -430,12 +427,6 @@ void SvxPosSizeStatusBarControl::Paint( const UserDrawEvent& rUsrEvt )
         // Position fuer Size-Anzeige berechnen
         long nSizePosX =
             rRect.Left() + rRect.GetWidth() / 2 + PAINT_OFFSET;
-        // Metric besorgen
-        SfxMapUnit eUnit = SFX_MAPUNIT_TWIP;
-        SfxObjectShell* pSh = SfxObjectShell::Current();
-        if ( pSh )
-            eUnit = pSh->GetPool().GetMetric( SID_ATTR_SIZE );
-
         // Position zeichnen
         Point aPnt = rRect.TopLeft();
         aPnt.Y() = aItemPos.Y();
@@ -443,9 +434,9 @@ void SvxPosSizeStatusBarControl::Paint( const UserDrawEvent& rUsrEvt )
         pDev->DrawImage( aPnt, pImp->aPosImage );
         aPnt.X() += pImp->aPosImage.GetSizePixel().Width();
         aPnt.X() += PAINT_OFFSET;
-        String aStr = GetMetricStr_Impl( pImp->aPos.X(), eUnit );
+        String aStr = GetMetricStr_Impl( pImp->aPos.X());
         aStr.AppendAscii(" / ");
-        aStr += GetMetricStr_Impl( pImp->aPos.Y(), eUnit );
+        aStr += GetMetricStr_Impl( pImp->aPos.Y());
         pDev->DrawRect(
             Rectangle( aPnt, Point( nSizePosX, rRect.Bottom() ) ) );
         pDev->DrawText( aPnt, aStr );
@@ -459,9 +450,9 @@ void SvxPosSizeStatusBarControl::Paint( const UserDrawEvent& rUsrEvt )
             aPnt.X() += pImp->aSizeImage.GetSizePixel().Width();
             Point aDrwPnt = aPnt;
             aPnt.X() += PAINT_OFFSET;
-            aStr = GetMetricStr_Impl( pImp->aSize.Width(), eUnit );
+            aStr = GetMetricStr_Impl( pImp->aSize.Width() );
             aStr.AppendAscii(" x ");
-            aStr += GetMetricStr_Impl( pImp->aSize.Height(), eUnit );
+            aStr += GetMetricStr_Impl( pImp->aSize.Height() );
             pDev->DrawRect( Rectangle( aDrwPnt, rRect.BottomRight() ) );
             pDev->DrawText( aPnt, aStr );
         }
