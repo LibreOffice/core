@@ -15,6 +15,7 @@
 <LC_FORMAT ref="sv_SE" replaceTo="[$mk-81D]"/>
 <LC_COLLATION ref="en_US"/>
 <LC_SEARCH ref="en_US"/>
+<LC_INDEX ref="sv_SE"/>
 <LC_CALENDAR>
 <Calendar unoid="gregorian" default="true">
 <DaysOfWeek ref="sv_SE_gregorian"/>
