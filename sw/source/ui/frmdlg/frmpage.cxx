@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 15:31:00 $
+ *  last change: $Author: vg $ $Date: 2005-03-11 10:49:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1104,12 +1104,7 @@ BOOL SwFrmPage::FillItemSet(SfxItemSet &rSet)
         BOOL bSame = FALSE;
         if ((bNew == bFormat) && pOldItem)
         {
-             bSame = bFormat ?
-                aHoriOrient.GetHoriOrient() == ((SwFmtHoriOrient*)pOldItem)->GetHoriOrient() &&
-                aHoriOrient.GetRelationOrient() == ((SwFmtHoriOrient*)pOldItem)->GetRelationOrient() &&
-                aHoriOrient.GetPos() == ((SwFmtHoriOrient*)pOldItem)->GetPos()
-
-                    : aHoriOrient == (SwFmtHoriOrient&)*pOldItem;
+             bSame = aHoriOrient == (SwFmtHoriOrient&)*pOldItem;
         }
         if ((bNew && !bFormat) || ((bAtHorzPosModified || bMod) && !bSame))
         {
