@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh6.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2001-11-12 12:42:29 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 13:23:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,7 +304,7 @@ void ScDocShell::SetVisAreaOrSize( const Rectangle& rVisArea, BOOL bModifyStart 
 
 BOOL ScDocShell::IsOle()
 {
-    return (eShellMode == SFX_CREATE_MODE_EMBEDDED);
+    return (GetCreateMode() == SFX_CREATE_MODE_EMBEDDED);
 }
 
 void ScDocShell::UpdateOle( const ScViewData* pViewData, BOOL bSnapSize )
@@ -312,7 +312,7 @@ void ScDocShell::UpdateOle( const ScViewData* pViewData, BOOL bSnapSize )
     //  wenn's gar nicht Ole ist, kann man sich die Berechnungen sparen
     //  (VisArea wird dann beim Save wieder zurueckgesetzt)
 
-    if (eShellMode == SFX_CREATE_MODE_STANDARD)
+    if (GetCreateMode() == SFX_CREATE_MODE_STANDARD)
         return;
 
     DBG_ASSERT(pViewData,"pViewData==0 bei ScDocShell::UpdateOle");
