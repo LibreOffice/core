@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:10:04 $
+ *  last change: $Author: rt $ $Date: 2004-05-25 15:12:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1331,7 +1331,8 @@ int SwTransferable::PasteData( TransferableDataHelper& rData,
         }
 
         if( bDelSel )
-            pAction = new SwTrnsfrActionAndUndo( &rSh, UNDO_INSERT, TRUE );
+            pAction = new SwTrnsfrActionAndUndo( &rSh, UNDO_INSERT, NULL,
+                                                 TRUE );
     }
 
     SwTransferable* pTrans;
