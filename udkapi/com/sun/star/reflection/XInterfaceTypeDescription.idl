@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XInterfaceTypeDescription.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:36:22 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 13:19:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@
 
 /** Reflects an interface type.
 
+    <p>This type is superseded by <type>XInterfaceTypeDescription2</type>, which
+    supports multiple inheritance.</p>
+
     @see XInterfaceMemberTypeDescription
 */
 interface XInterfaceTypeDescription: com::sun::star::reflection::XTypeDescription
@@ -89,8 +92,13 @@ interface XInterfaceTypeDescription: com::sun::star::reflection::XTypeDescriptio
     /** Returns the base interface or null, if the reflected interface is not
         inherited from another.
 
+        <p>This method is deprecated, as it only supports single inheritance.
+        See <type>XInterfaceTypeDescription2</type> for a replacement that
+        supports multiple inheritance.</p>
+
         @return
                 base interface or null
+        @deprecated
     */
     com::sun::star::reflection::XTypeDescription getBaseType();
 
