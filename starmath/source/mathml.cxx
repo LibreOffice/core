@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:38:15 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 15:12:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2586,13 +2586,16 @@ void SmXMLFracContext_Impl::EndElement()
     SmStructureNode *pSNode = new SmBinVerNode(aToken);
     SmNode *pOper = new SmRectangleNode(aToken);
     SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
-    DBG_ASSERT(GetSmImport().GetNodeStack().Count() - nElementCount == 2,
+    DBG_ASSERT(rNodeStack.Count() - nElementCount == 2,
         "Fraction (mfrac) tag is missing component");
 
-    SmNode *pSecond = rNodeStack.Pop();
-    SmNode *pFirst = rNodeStack.Pop();
-    pSNode->SetSubNodes(pFirst,pOper,pSecond);
-    rNodeStack.Push(pSNode);
+    if (rNodeStack.Count() - nElementCount == 2)
+    {
+        SmNode *pSecond = rNodeStack.Pop();
+        SmNode *pFirst = rNodeStack.Pop();
+        pSNode->SetSubNodes(pFirst,pOper,pSecond);
+        rNodeStack.Push(pSNode);
+    }
 }
 
 void SmXMLRootContext_Impl::EndElement()
