@@ -1,0 +1,193 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XInplaceObject.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2003-09-11 10:26:20 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_embed_XInplaceObject_idl__
+#define __com_sun_star_embed_XInplaceObject_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_awt_Rectangle_idl__
+#include <com/sun/star/awt/Rectangle.idl>
+#endif
+
+#ifndef __com_sun_star_awt_KeyEvent_idl__
+#include <com/sun/star/awt/KeyEvent.idl>
+#endif
+
+#ifndef __com_sun_star_embed_XInplaceUIWindow_idl__
+#include <com/sun/star/embed/XInplaceUIWindow.idl>
+#endif
+
+#ifndef __com_sun_star_embed_WrongStateException_idl__
+#include <com/sun/star/embed/WrongStateException.idl>
+#endif
+
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module embed {
+
+//=============================================================================
+/** represents common functionality for inplace embedded objects
+ */
+interface XInplaceObject: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+    /** Sets the visible part of the inplace object.
+
+        <p> Both rectangles are provided in object's parent window
+        coordinates in pixels. The intersection of rectangles specifies the
+        visible part of the object.
+        In case the position window has a size that is bigger than
+        object's size, the object should either scale or deactivate.
+        </p>
+
+        @param aPosRect
+            specifies a new position rectangle
+
+        @param aClipRect
+            specifies a new clip rectangle
+
+        @throws com::sun::star::embed::WrongStateException
+            the object is in invalid state
+
+        @throws com::sun::star::uno::Exception
+            in case of other problems
+     */
+    void setObjectRects( [in] ::com::sun::star::awt::Rectangle aPosRect,
+                         [in] ::com::sun::star::awt::Rectangle aClipRect )
+        raises( ::com::sun::star::embed::WrongStateException,
+                ::com::sun::star::uno::Exception );
+
+    //-------------------------------------------------------------------------
+    /** Notifies UIActive object that the parent window was resized.
+
+        <p> This notification is done to let the object to resize it's bars
+        </p>
+
+        @param aBordRect
+            specifies a new outer rectangle for border space
+
+        @param xUIWin
+            specifies the window that was resized ( document or top one )
+            mainly should be used for MDI case, since usually the document window is a top one
+
+        @param bFromFrame
+            <TRUE/> in case top one window was resized
+            <FALSE/> in case document window was resized
+
+        @throws com::sun::star::embed::WrongStateException
+            the specified state can not be reached
+
+        @throws com::sun::star::uno::Exception
+            in case of other problems
+     */
+    void resizeBorder(  [in] ::com::sun::star::awt::Rectangle aPosRect,
+                        [in] ::com::sun::star::embed::XInplaceUIWindow xUIWin,
+                        [in] boolean bFromFrame )
+        raises( ::com::sun::star::embed::WrongStateException,
+                ::com::sun::star::uno::Exception );
+
+    //-------------------------------------------------------------------------
+    /** Enables or disables modeless dialogs of the object
+
+        <p> In case contaner whants to show a modal dialog it should disable
+        modeless of embedded object dialogs with this call. Later the same call
+        can be used to enable it.
+        </p>
+
+        @param bEnable
+            <TRUE/> to enable object modeless
+            <FALSE/> to disable it
+
+        @throws com::sun::star::embed::UnreachableStateException
+            the specified state can not be reached
+
+        @throws com::sun::star::uno::Exception
+            in case of other problems
+     */
+    void enableModeless( [in] boolean bEnable )
+        raises( ::com::sun::star::embed::WrongStateException,
+                ::com::sun::star::uno::Exception );
+
+    //-------------------------------------------------------------------------
+    /** Provides accelerator table the container whants to use during inplace editing.
+
+        @return
+            an accelerator table from container
+
+        @throws com::sun::star::embed::WrongStateException
+            the object is in unexpected state
+     */
+    void translateAccelerators( [in] sequence< ::com::sun::star::awt::KeyEvent > aKeys )
+        raises( ::com::sun::star::embed::WrongStateException );
+
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

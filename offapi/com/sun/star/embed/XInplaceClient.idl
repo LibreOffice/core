@@ -1,0 +1,261 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XInplaceClient.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2003-09-11 10:26:06 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_embed_XInplaceClient_idl__
+#define __com_sun_star_embed_XInplaceClient_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_awt_Rectangle_idl__
+#include <com/sun/star/awt/Rectangle.idl>
+#endif
+
+#ifndef __com_sun_star_awt_Size_idl__
+#include <com/sun/star/awt/Size.idl>
+#endif
+
+#ifndef __com_sun_star_awt_KeyEvent_idl__
+#include <com/sun/star/awt/KeyEvent.idl>
+#endif
+
+#ifndef __com_sun_star_embed_WrongStateException_idl__
+#include <com/sun/star/embed/WrongStateException.idl>
+#endif
+
+#ifndef __com_sun_star_embed_XInplaceUIWindow_idl__
+#include <com/sun/star/embed/XInplaceUIWindow.idl>
+#endif
+
+#ifndef __com_sun_star_embed_XIPMainContainerWindow_idl__
+#include <com/sun/star/embed/XIPMainContainerWindow.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module embed {
+
+//=============================================================================
+/** represents common functionality for inplace clients
+ */
+interface XInplaceClient: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+    /** Checks if the container can activate the object inplace.
+
+        @return
+            <TRUE/> the container can activate the object inplace.
+            <FALSE/> otherwise.
+     */
+    boolean canInPlaceActivate();
+
+    //-------------------------------------------------------------------------
+    /** Notifies container through the client that the object is to be activated.
+
+        @throws com::sun::star::embed::WrongStateException
+            the container is not ready for activation
+     */
+    void onInPlaceActivate()
+        raises( ::com::sun::star::embed::WrongStateException );
+
+    //-------------------------------------------------------------------------
+    /** Notifies container through the client that the object is to be UI-activated.
+
+        @throws com::sun::star::embed::WrongStateException
+            the container is not ready for activation
+     */
+    void onUIActivate()
+        raises( ::com::sun::star::embed::WrongStateException );
+
+    //-------------------------------------------------------------------------
+    /** Notifies container through the client that the object is to be deactivated.
+
+        @throws com::sun::star::embed::WrongStateException
+            the container is not ready for deactivation
+     */
+    void onInPlaceDeactivate()
+        raises( ::com::sun::star::embed::WrongStateException );
+
+    //-------------------------------------------------------------------------
+    /** Notifies container through the client that the object is to be UI-deactivated.
+
+        <p> After this notification the container can restore it's own UI and take focus.
+        </p>
+
+        @throws com::sun::star::embed::WrongStateException
+            the container is not ready for deactivation
+     */
+    void onUIDeactivate()
+        raises( ::com::sun::star::embed::WrongStateException );
+
+
+    //-------------------------------------------------------------------------
+    /** Allows to retrieve top window represented by reference to XIPMainContainerWindow
+
+        @return
+            reference to object representing the topmost container window
+
+        @throws com::sun::star::embed::WrongStateException
+            the object is in unexpected state to make such request
+     */
+    ::com::sun::star::embed::XIPMainContainerWindow getTopmostWindow()
+        raises( ::com::sun::star::embed::WrongStateException );
+
+    //-------------------------------------------------------------------------
+    /** Allows to retrieve document window represented by reference to XInPlaceUIWindow
+
+        <p> The object representing document window can be different from
+        the one representing top window.
+        </p>
+
+        @return
+            reference to object representing the container document window
+
+        @throws com::sun::star::embed::WrongStateException
+            the object is in unexpected state to make such request
+     */
+    ::com::sun::star::embed::XInplaceUIWindow getDocumentWindow()
+        raises( ::com::sun::star::embed::WrongStateException );
+
+    //-------------------------------------------------------------------------
+    /** Gets the inplace object position rectangle.
+
+        <p> The rectangle is provided in object's parent window
+        coordinates in pixels. The intersection of position and clip rectangles
+        specifies the visible part of the object.
+        In case the position window has a size that is bigger than
+        object's size, the object should either scale or deactivate.
+        </p>
+
+        @return
+            specifies a new position rectangle
+
+        @throws com::sun::star::embed::WrongStateException
+            the object is in unexpected state to make such request
+     */
+    ::com::sun::star::awt::Rectangle getPosRect()
+        raises( ::com::sun::star::embed::WrongStateException );
+
+    //-------------------------------------------------------------------------
+    /** Gets the inplace object clip rectangle.
+
+        <p> The rectangle is provided in object's parent window
+        coordinates in pixels. The intersection of position and clip rectangles
+        specifies the visible part of the object.
+        </p>
+
+        @return
+            specidies a new clip rectangle
+
+        @throws com::sun::star::embed::WrongStateException
+            the object is in unexpected state to make such request
+     */
+    ::com::sun::star::awt::Rectangle getClipRect()
+        raises( ::com::sun::star::embed::WrongStateException );
+
+    //-------------------------------------------------------------------------
+    /** Provides accelerator table the object whants to use while it is inplace active.
+
+        @param aKeys
+            an accelerator table from object
+
+        @throws com::sun::star::embed::WrongStateException
+            the object is in unexpected state
+     */
+    void translateAccelerators( [in] sequence< ::com::sun::star::awt::KeyEvent > aKeys )
+        raises( ::com::sun::star::embed::WrongStateException );
+
+    //-------------------------------------------------------------------------
+    /** Scrolls the object.
+
+        @param aOffset
+            scrolls the object to specified offset in pixels
+
+        @throws com::sun::star::embed::WrongStateException
+            the object is in unexpected state
+     */
+    void scrollObj( [in] ::com::sun::star::awt::Size aOffset )
+        raises( ::com::sun::star::embed::WrongStateException );
+
+    //-------------------------------------------------------------------------
+    /** Notifies the container that the position of the object is changed.
+
+        @param aPosRect
+            specifies a new position rectangle
+
+        @throws com::sun::star::embed::WrongStateException
+            the object state is not correct
+
+        @throws com::sun::star::uno::Exception
+            in case of other problems
+     */
+    void onPosRectChange( [in] ::com::sun::star::awt::Rectangle aPosRect )
+        raises( ::com::sun::star::embed::WrongStateException,
+                ::com::sun::star::uno::Exception );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+
