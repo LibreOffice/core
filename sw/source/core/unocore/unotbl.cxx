@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: tl $ $Date: 2002-09-02 12:30:00 $
+ *  last change: $Author: tl $ $Date: 2002-09-06 13:38:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,9 +273,9 @@ table::BorderLine lcl_SvxLineToLine(const SvxBorderLine* pLine)
     if(pLine)
     {
         aLine.Color          = pLine->GetColor().GetColor() ;
-        aLine.InnerLineWidth = pLine->GetInWidth()  ;
-        aLine.OuterLineWidth = pLine->GetOutWidth() ;
-        aLine.LineDistance   = pLine->GetDistance() ;
+        aLine.InnerLineWidth = TWIP_TO_MM100( pLine->GetInWidth() );
+        aLine.OuterLineWidth = TWIP_TO_MM100( pLine->GetOutWidth() );
+        aLine.LineDistance   = TWIP_TO_MM100( pLine->GetDistance() );
     }
     else
         aLine.Color          = aLine.InnerLineWidth = aLine.OuterLineWidth = aLine.LineDistance  = 0;
@@ -287,9 +287,9 @@ table::BorderLine lcl_SvxLineToLine(const SvxBorderLine* pLine)
 sal_Bool lcl_LineToSvxLine(const table::BorderLine& rLine, SvxBorderLine& rSvxLine)
 {
     rSvxLine.SetColor(   Color(rLine.Color));
-    rSvxLine.SetInWidth( rLine.InnerLineWidth  );
-    rSvxLine.SetOutWidth(rLine.OuterLineWidth  );
-    rSvxLine.SetDistance(rLine.LineDistance  );
+    rSvxLine.SetInWidth( MM100_TO_TWIP( rLine.InnerLineWidth ) );
+    rSvxLine.SetOutWidth(MM100_TO_TWIP( rLine.OuterLineWidth ) );
+    rSvxLine.SetDistance(MM100_TO_TWIP( rLine.LineDistance  ) );
     sal_Bool bRet = rLine.InnerLineWidth > 0 || rLine.OuterLineWidth > 0;
     return bRet;
 }
@@ -3441,7 +3441,7 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName) throw( be
                         aTableBorder.IsHorizontalLineValid  = rBoxInfoItem.IsValid(VALID_HORI);
                         aTableBorder.VerticalLine           = lcl_SvxLineToLine(rBoxInfoItem.GetVert());
                         aTableBorder.IsVerticalLineValid    = rBoxInfoItem.IsValid(VALID_VERT);
-                        aTableBorder.Distance               = rBox.GetDistance();
+                        aTableBorder.Distance               = TWIP_TO_MM100( rBox.GetDistance() );
                         aTableBorder.IsDistanceValid        = rBoxInfoItem.IsValid(VALID_DISTANCE);
                         aRet.setValue(&aTableBorder, ::getCppuType((const table::TableBorder*)0));
                         delete pUnoCrsr;
