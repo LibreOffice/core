@@ -18,6 +18,12 @@ F4_CHART = \
     StarChart_5_0 \
     StarOffice_XML__Chart_\
     chart8
+    
+# -----------------------------------------------
+# count = 2
+F4_UI_CHART = \
+    StarOffice_XML__Chart__ui \
+    chart8_ui
 
 # -----------------------------------------------
 # count = 0
@@ -29,15 +35,21 @@ L4_CHART = \
 C4_CHART =
 
 # -----------------------------------------------
-TYPES_4fcfg_chart           = $(foreach,i,$(T4_CHART) types$/$i.xcu          )
-FILTERS_4fcfg_chart         = $(foreach,i,$(F4_CHART) filters$/$i.xcu        )
-FRAMELOADERS_4fcfg_chart    = $(foreach,i,$(L4_CHART) frameloaders$/$i.xcu   )
-CONTENTHANDLERS_4fcfg_chart = $(foreach,i,$(C4_CHART) contenthandlers$/$i.xcu)
+TYPES_4fcfg_chart           = $(foreach,i,$(T4_CHART)    types$/$i.xcu                   )
+FILTERS_4fcfg_chart         = $(foreach,i,$(F4_CHART)    filters$/$i.xcu                 )
+UI_FILTERS_4fcfg_chart      = $(foreach,i,$(F4_UI_CHART) $(DIR_LOCFRAG)$/filters$/$i.xcu )
+FRAMELOADERS_4fcfg_chart    = $(foreach,i,$(L4_CHART)    frameloaders$/$i.xcu            )
+CONTENTHANDLERS_4fcfg_chart = $(foreach,i,$(C4_CHART)    contenthandlers$/$i.xcu         )
 
 # -----------------------------------------------
 # needed to get dependencies inside global makefile work!
 ALL_4fcfg_chart = \
     $(TYPES_4fcfg_chart) \
-    $(foreach,i,$(FILTERS_4fcfg_base) $(MISC)$/$i) \
+    $(FILTERS_4fcfg_chart) \
+    $(UI_FILTERS_4fcfg_chart) \
     $(FRAMELOADERS_4fcfg_chart) \
     $(CONTENTHANDLERS_4fcfg_chart)
+    
+ALL_UI_FILTERS+=$(UI_FILTERS_4fcfg_chart)
+
+ALL_PACKAGES+=chart
