@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msocximex.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cmc $ $Date: 2000-10-10 14:14:41 $
+ *  last change: $Author: hjs $ $Date: 2000-10-12 15:05:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -542,8 +542,8 @@ sal_Bool OCX_CommandButton::Export(SvStorageRef &rObj,
         nCaptionLen |= 0x80000000;
         *xContents << nCaptionLen;
         Align(xContents,4,TRUE);
-
-        ByteString sByte(String(*pStr),RTL_TEXTENCODING_ASCII_US);
+        String aTmpStr(*pStr);
+        ByteString sByte(aTmpStr,RTL_TEXTENCODING_ASCII_US);
         xContents->Write(sByte.GetBuffer(),sByte.Len());
     }
 
