@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlg_char.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:58:21 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:02:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,7 @@ TabDialog TAB_CHAR
                 Text[ czech ] = "Písmo";
                 Text[ hebrew ] = "‮גופן‬";
                 Text[ hindi ] = "फ़ॉन्ट";
+                Text[ slovak ] = "Písmo";
             };
             PageItem
             {
@@ -153,6 +154,7 @@ TabDialog TAB_CHAR
                 Text[ czech ] = "Efekty písma";
                 Text[ hebrew ] = "‮אפקטים לגופנים‬";
                 Text[ hindi ] = "फ़ॉन्ट प्रभाव";
+                Text[ slovak ] = "Efekty pre písmo";
             };
             PageItem
             {
@@ -184,6 +186,7 @@ TabDialog TAB_CHAR
                 Text[ czech ] = "Umístění";
                 Text[ hebrew ] = "‮מיקום‬";
                 Text[ hindi ] = "स्थान";
+                Text[ slovak ] = "Umiestnenie";
             };
         };
     };
@@ -239,6 +242,7 @@ TabDialog TAB_CHAR
         Text[ czech ] = "Návrat";
         Text[ hebrew ] = "Zurück";
         Text[ hindi ] = "लौटना";
+        Text[ slovak ] = "Návrat";
     };
     Text[ chinese_simplified ] = "字符";
     Text[ russian ] = "�����";
@@ -255,7 +259,10 @@ TabDialog TAB_CHAR
     Text[ czech ] = "Znak";
     Text[ hebrew ] = "Zeichen";
     Text[ hindi ] = "अक्षर";
+    Text[ slovak ] = "Znak";
 };
+
+
 
 
 
