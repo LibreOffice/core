@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: hr $ $Date: 2001-09-14 13:26:42 $
+#   last change: $Author: hr $ $Date: 2001-09-25 12:51:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ use File::Path;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.14 $ ';
+$id_str = ' $Revision: 1.15 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -506,17 +506,7 @@ sub copy_if_newer {
         if ( $rc) {
             utime($$from_stat_ref[9], $$from_stat_ref[9], $to);
             fix_file_permissions($$from_stat_ref[2], $to);
-<<<<<<< deliver.pl
             push_on_ziplist($to) if $opt_zip;
-=======
-            # handle special packaging of *.dylib files for Mac OS X
-            if ( $^O eq 'darwin' )
-            {
-                system("create-bundle", $to) if ( $to =~ /\.dylib/ );
-                system("create-bundle", "$to=$from.app") if ( -d "$from.app" );
-            }
-            push_on_ziplist($to) if $opt_zip;
->>>>>>> 1.11.6.3
             return 1;
         }
         else {
@@ -621,25 +611,10 @@ sub push_default_actions {
     foreach $subdir (@subdirs) {
         push(@action_data, ['mkdir', "%_DEST%/$subdir"]);
     }
-<<<<<<< deliver.pl
 
     # deliver build.lst to $dest/inc/$module
     push(@action_data, ['mkdir', "%_DEST%/inc/$module"]); # might be necessary
     push(@action_data, ['copy', "build.lst %_DEST%/inc%_EXT%/$module/build.lst"]);
-=======
-
-    # deliver build.lst to $dest/inc/$module
-    push(@action_data, ['mkdir', "%_DEST%/inc/$module"]); # might be necessary
-    push(@action_data, ['copy', "build.lst %_DEST%/inc%_EXT%/$module/build.lst"]);
-
-    # need to copy libstaticmxp.dylib for Mac OS X
-    if ( $^O eq 'darwin' )
-    {
-        push(@action_data, ['copy', "../%__SRC%/misc/*staticdatamembers.cxx %_DEST%/inc%_EXT%/*staticdatamembers.cxx"]);
-        push(@action_data, ['copy', "../%__SRC%/misc/*staticdatamembers.h* %_DEST%/inc%_EXT%/*staticdatamembers.H*"]);
-        push(@action_data, ['copy', "../%__SRC%/lib/lib*static*.dylib %_DEST%/lib%_EXT%/lib*static*.dylib"]);
-    }
->>>>>>> 1.11.6.3
 }
 
 sub walk_hedabu_list {
