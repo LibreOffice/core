@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.132 $
+ *  $Revision: 1.133 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 13:41:15 $
+ *  last change: $Author: hr $ $Date: 2004-03-09 11:07:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1248,8 +1248,14 @@ void Desktop::Main()
         if ( instErr != UserInstall::E_None )
         {
             // problems with user installation...
-            HandleBootstrapErrors( BE_USERINSTALL_FAILED );
-            return;
+            if (instErr == UserInstall::E_License) {
+                OSL_ENSURE(sal_False, "license was not accepted");
+                return;
+            } else {
+                OSL_ENSURE(sal_False, "userinstall failed");
+                HandleBootstrapErrors( BE_USERINSTALL_FAILED );
+                return;
+            }
         }
         // refresh path information
         utl::Bootstrap::reloadData();
@@ -1501,6 +1507,17 @@ void Desktop::Main()
     if ( !bTerminateRequested && !pCmdLineArgs->IsInvisible() )
         InitializeQuickstartMode( xSMgr );
 
+    // create service for loadin SFX (still needed in startup)
+    try
+    {
+        Reference < XInterface >( xSMgr->createInstance( DEFINE_CONST_UNICODE( "com.sun.star.frame.GlobalEventBroadcaster" ) ), UNO_QUERY );
+    }
+    catch ( com::sun::star::uno::Exception& e )
+    {
+        FatalError( MakeStartupErrorMessage(e.Message) );
+        return;
+    }
+
     // Create TypeDetection service to have filter informations for quickstart feature
     RTL_LOGFILE_CONTEXT( aLog2, "desktop (cd100003) createInstance com.sun.star.document.TypeDetection" );
     try
@@ -1550,9 +1567,6 @@ void Desktop::Main()
 
     // call Application::Execute to process messages in vcl message loop
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "call ::Application::Execute" );
-
-    // create service for loadin SFX (still needed in startup)
-    Reference < XInterface >( xSMgr->createInstance( DEFINE_CONST_UNICODE( "com.sun.star.frame.GlobalEventBroadcaster" ) ), UNO_QUERY );
 
     Execute();
 
@@ -1766,6 +1780,9 @@ IMPL_LINK( Desktop, OpenClients_Impl, void*, pvoid )
     CloseSplashScreen();
 
     CheckFirstRun( );
+
+    // allow ipc interaction
+    OfficeIPCThread::SetReady();
 
     EnableOleAutomation();
     return 0;
@@ -2112,8 +2129,27 @@ void Desktop::OpenDefault()
             ::comphelper::getProcessServiceFactory()->createInstance(
             OUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
             ::com::sun::star::uno::UNO_QUERY );
-    Reference<XComponent> aComp = xDesktop->loadComponentFromURL(
-        aName, ::rtl::OUString::createFromAscii( "_default" ), 0, aNoArgs );
+
+    Reference<XComponent> aComp;
+    try
+    {
+        aComp = Reference< XComponent >(xDesktop->loadComponentFromURL(
+            aName, ::rtl::OUString::createFromAscii( "_default" ), 0, aNoArgs ), UNO_QUERY);
+    }
+    catch ( ::com::sun::star::lang::IllegalArgumentException& iae)
+    {
+        OUString aMsg = OUString::createFromAscii(
+            "Desktop::OpenDefault() IllegalArgumentException while calling loadComponentFromURL: ")
+            + iae.Message;
+        OSL_ENSURE( sal_False, OUStringToOString(aMsg, RTL_TEXTENCODING_ASCII_US).getStr());
+    }
+    catch (com::sun::star::io::IOException& ioe)
+    {
+        OUString aMsg = OUString::createFromAscii(
+            "Desktop::OpenDefault() IOException while calling loadComponentFromURL: ")
+            + ioe.Message;
+        OSL_ENSURE( sal_False, OUStringToOString(aMsg, RTL_TEXTENCODING_ASCII_US).getStr());
+    }
 
     // shut down again if no component could be loaded
     OSL_ENSURE(aComp.is(), "Desktop::OpenDesfault(), no component was loaded.");
@@ -2255,7 +2291,25 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
                 INetURLObject aObj( aName );
                 if ( aObj.GetProtocol() == INET_PROT_PRIVATE )
                     aTarget = ::rtl::OUString( DEFINE_CONST_UNICODE("_blank") );
-                xDoc = Reference < XPrintable >( xDesktop->loadComponentFromURL( aName, aTarget, 0, aArgs ), UNO_QUERY );
+
+                try{
+                    xDoc = Reference < XPrintable >( xDesktop->loadComponentFromURL( aName, aTarget, 0, aArgs ), UNO_QUERY );
+                }
+                catch ( ::com::sun::star::lang::IllegalArgumentException& iae)
+                {
+                    OUString aMsg = OUString::createFromAscii(
+                        "handle app event IllegalArgumentException while calling loadComponentFromURL: ")
+                        + iae.Message;
+                    OSL_ENSURE( sal_False, OUStringToOString(aMsg, RTL_TEXTENCODING_ASCII_US).getStr());
+                }
+                catch (com::sun::star::io::IOException& ioe)
+                {
+                    OUString aMsg = OUString::createFromAscii(
+                        "handle app event IOException while calling loadComponentFromURL: ")
+                        + ioe.Message;
+                    OSL_ENSURE( sal_False, OUStringToOString(aMsg, RTL_TEXTENCODING_ASCII_US).getStr());
+                }
+
                 if ( !xDoc.is() )
                 {
                     // error case
