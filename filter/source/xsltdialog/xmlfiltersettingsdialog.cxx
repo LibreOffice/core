@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfiltersettingsdialog.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:35:04 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 13:17:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -645,7 +645,7 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
     // 5. prepare type information
     if( bOk )
     {
-        Sequence< PropertyValue > aValues(4);
+        Sequence< PropertyValue > aValues(5);
         int i=0;
 
         aValues[i  ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "UIName" ) );
@@ -665,14 +665,19 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
         {
             aDocType = pFilterEntry->maDocType;
         }
-
-        aValues[i++].Value <<= aDocType;
+        if (aDocType == sDocTypePrefix)
+            aValues[i++].Value <<= OUString();
+        else
+            aValues[i++].Value <<= aDocType;
 
         aValues[i  ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "DocumentIconID" ) );
         aValues[i++].Value <<= pFilterEntry->mnDocumentIconID;
 
         aValues[i  ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Extensions" ) );
         aValues[i++].Value <<= createExtensionsSequence( pFilterEntry->maExtension );
+
+        aValues[i  ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "DetectService" ) );
+            aValues[i++].Value <<= OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.filters.XMLFilterDetect" ) );
 
         // 6. insert new or replace existing type information
         if( mxTypeDetection.is() )
