@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: jsc $ $Date: 2001-05-04 13:28:07 $
+#   last change: $Author: mhu $ $Date: 2002-08-17 17:37:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,9 +69,13 @@ TARGETTYPE=CUI
 USE_LDUMP2=TRUE
 USE_DEFFILE=TRUE
 
+NO_BSYMBOLIC=TRUE
+NO_DEFAULT_STL=TRUE
+
 UNIXVERSIONNAMES=UDK
 
 # --- Settings ---
+
 .INCLUDE : settings.mk
 
 # --- Debug-Library ---
@@ -102,8 +106,7 @@ SHL1LIBS=	$(SLB)$/store.lib
 
 # --- Def-File ---
 
-DEF1NAME=		$(SHL1TARGET)
-#DEF1EXPORTFILE=	$(TARGET).dxp
+DEF1NAME=	$(SHL1TARGET)
 DEF1DES=Store
 
 # --- Targets ---
