@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javatype.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 03:14:00 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 14:46:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -900,6 +900,10 @@ sal_uInt16 TypeInfo::generateCode(
                         "(Ljava/lang/String;Ljava/lang/String;II)V")));
             return 5;
         }
+
+    default:
+        OSL_ASSERT(false);
+        return 0;
     }
 }
 
@@ -3185,27 +3189,11 @@ void handleService(
     if (superTypes == 0) {
         return;
     }
-    rtl::OString base(convertString(reader.getSuperTypeName(0)));
-    rtl::OString realJavaBaseName(base.replace('/', '.'));
-    dependencies->insert(base);
     rtl::OString unoName(convertString(reader.getTypeName()));
     rtl::OString className(
         translateUnoTypeToJavaFullyQualifiedName(
             unoName, rtl::OString(RTL_CONSTASCII_STRINGPARAM("service"))));
     unoName = unoName.replace('/', '.');
-    dependencies->insert(
-        rtl::OString(
-            RTL_CONSTASCII_STRINGPARAM(
-                "com/sun/star/lang/XMultiComponentFactory")));
-    dependencies->insert(
-        rtl::OString(
-            RTL_CONSTASCII_STRINGPARAM(
-                "com/sun/star/uno/DeploymentException")));
-    dependencies->insert(
-        rtl::OString(RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/TypeClass")));
-    dependencies->insert(
-        rtl::OString(
-            RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/XComponentContext")));
     std::auto_ptr< ClassFile > cf(
         new ClassFile(
             static_cast< ClassFile::AccessFlags >(
@@ -3214,171 +3202,195 @@ void handleService(
             className,
             rtl::OString(RTL_CONSTASCII_STRINGPARAM("java/lang/Object")),
             rtl::OString()));
-    if (methods == 0) {
-        addConstructor(
-            manager, realJavaBaseName, unoName, className, reader, 0,
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("create")), base, true,
-            dependencies, cf.get());
-    } else {
+    if (methods > 0) {
+        rtl::OString base(convertString(reader.getSuperTypeName(0)));
+        rtl::OString realJavaBaseName(base.replace('/', '.'));
+        dependencies->insert(base);
+        dependencies->insert(
+            rtl::OString(
+                RTL_CONSTASCII_STRINGPARAM(
+                    "com/sun/star/lang/XMultiComponentFactory")));
+        dependencies->insert(
+            rtl::OString(
+                RTL_CONSTASCII_STRINGPARAM(
+                    "com/sun/star/uno/DeploymentException")));
+        dependencies->insert(
+            rtl::OString(
+                RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/TypeClass")));
+        dependencies->insert(
+            rtl::OString(
+                RTL_CONSTASCII_STRINGPARAM(
+                    "com/sun/star/uno/XComponentContext")));
         for (sal_uInt16 i = 0; i < methods; ++i) {
+            rtl::OString name(convertString(reader.getMethodName(i)));
+            bool defaultCtor = name.getLength() == 0;
             if (reader.getMethodFlags(i) != RT_MODE_TWOWAY
-                || (reader.getMethodReturnTypeName(i)
-                    != rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("void"))))
+                || (!reader.getMethodReturnTypeName(i).equalsAsciiL(
+                        RTL_CONSTASCII_STRINGPARAM("void")))
+                || (defaultCtor
+                    && (methods != 1 || reader.getMethodParameterCount(i) != 0
+                        || reader.getMethodExceptionCount(i) != 0)))
             {
                 throw CannotDumpException(
                     rtl::OString(
                         RTL_CONSTASCII_STRINGPARAM("Bad type information")));
                     //TODO
             }
+            if (defaultCtor) {
+                name = rtl::OString(RTL_CONSTASCII_STRINGPARAM("create"));
+            } else {
+                name = translateUnoToJavaIdentifier(
+                    name, rtl::OString(RTL_CONSTASCII_STRINGPARAM("method")));
+            }
             addConstructor(
-                manager, realJavaBaseName, unoName, className, reader, i,
-                translateUnoToJavaIdentifier(
-                    convertString(reader.getMethodName(i)),
-                    rtl::OString(RTL_CONSTASCII_STRINGPARAM("method"))),
-                base, false, dependencies, cf.get());
+                manager, realJavaBaseName, unoName, className, reader, i, name,
+                base, defaultCtor, dependencies, cf.get());
         }
-    }
-    // Synthetic getFactory method:
-    {
-        std::auto_ptr< ClassFile::Code > code(cf->newCode());
-        code->loadLocalReference(0);
-        // stack: context
-        code->instrInvokeinterface(
-            rtl::OString(
+        // Synthetic getFactory method:
+        {
+            std::auto_ptr< ClassFile::Code > code(cf->newCode());
+            code->loadLocalReference(0);
+            // stack: context
+            code->instrInvokeinterface(
+                rtl::OString(
+                    RTL_CONSTASCII_STRINGPARAM(
+                        "com/sun/star/uno/XComponentContext")),
+                rtl::OString(RTL_CONSTASCII_STRINGPARAM("getServiceManager")),
+                rtl::OString(
+                    RTL_CONSTASCII_STRINGPARAM(
+                        "()Lcom/sun/star/lang/XMultiComponentFactory;")),
+                1);
+            // stack: factory
+            code->instrDup();
+            // stack: factory factory
+            ClassFile::Code::Branch branch = code->instrIfnull();
+            // stack: factory
+            code->instrAreturn();
+            code->branchHere(branch);
+            code->instrPop();
+            // stack: -
+            code->instrNew(
+                rtl::OString(
+                    RTL_CONSTASCII_STRINGPARAM(
+                        "com/sun/star/uno/DeploymentException")));
+            // stack: ex
+            code->instrDup();
+            // stack: ex ex
+            code->loadStringConstant(
+                rtl::OString(
+                    RTL_CONSTASCII_STRINGPARAM(
+                        "component context fails to supply service manager")));
+            // stack: ex ex "..."
+            code->loadLocalReference(0);
+            // stack: ex ex "..." context
+            code->instrInvokespecial(
+                rtl::OString(
+                    RTL_CONSTASCII_STRINGPARAM(
+                        "com/sun/star/uno/DeploymentException")),
+                rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
+                rtl::OString(
+                    RTL_CONSTASCII_STRINGPARAM(
+                        "(Ljava/lang/String;Ljava/lang/Object;)V")));
+            // stack: ex
+            code->instrAthrow();
+            code->setMaxStackAndLocals(4, 1);
+            cf->addMethod(
+                static_cast< ClassFile::AccessFlags >(
+                    ClassFile::ACC_PRIVATE | ClassFile::ACC_STATIC
+                    | ClassFile::ACC_SYNTHETIC),
+                rtl::OString(RTL_CONSTASCII_STRINGPARAM("$getFactory")),
+                rtl::OString(
+                    RTL_CONSTASCII_STRINGPARAM(
+                        "(Lcom/sun/star/uno/XComponentContext;)"
+                        "Lcom/sun/star/lang/XMultiComponentFactory;")),
+                code.get(), std::vector< rtl::OString >(), rtl::OString());
+        }
+        // Synthetic castInstance method:
+        {
+            std::auto_ptr< ClassFile::Code > code(cf->newCode());
+            code->instrNew(
+                rtl::OString(
+                    RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/Type")));
+            // stack: type
+            code->instrDup();
+            // stack: type type
+            code->loadStringConstant(realJavaBaseName);
+            // stack: type type "..."
+            code->instrGetstatic(
+                rtl::OString(
+                    RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/TypeClass")),
+                rtl::OString(RTL_CONSTASCII_STRINGPARAM("INTERFACE")),
+                rtl::OString(
+                    RTL_CONSTASCII_STRINGPARAM(
+                        "Lcom/sun/star/uno/TypeClass;")));
+            // stack: type type "..." INTERFACE
+            code->instrInvokespecial(
+                rtl::OString(
+                    RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/Type")),
+                rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
+                rtl::OString(
+                    RTL_CONSTASCII_STRINGPARAM(
+                        "(Ljava/lang/String;Lcom/sun/star/uno/TypeClass;)V")));
+            // stack: type
+            code->loadLocalReference(0);
+            // stack: type instance
+            code->instrInvokestatic(
+                rtl::OString(
+                    RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/UnoRuntime")),
+                rtl::OString(RTL_CONSTASCII_STRINGPARAM("queryInterface")),
+                rtl::OString(
+                    RTL_CONSTASCII_STRINGPARAM(
+                        "(Lcom/sun/star/uno/Type;Ljava/lang/Object;)"
+                        "Ljava/lang/Object;")));
+            // stack: instance
+            code->instrDup();
+            // stack: instance instance
+            ClassFile::Code::Branch branch = code->instrIfnull();
+            // stack: instance
+            code->instrAreturn();
+            code->branchHere(branch);
+            code->instrPop();
+            // stack: -
+            code->instrNew(
+                rtl::OString(
+                    RTL_CONSTASCII_STRINGPARAM(
+                        "com/sun/star/uno/DeploymentException")));
+            // stack: ex
+            code->instrDup();
+            // stack: ex ex
+            rtl::OStringBuffer msg;
+            msg.append(
                 RTL_CONSTASCII_STRINGPARAM(
-                    "com/sun/star/uno/XComponentContext")),
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("getServiceManager")),
-            rtl::OString(
-                RTL_CONSTASCII_STRINGPARAM(
-                    "()Lcom/sun/star/lang/XMultiComponentFactory;")),
-            1);
-        // stack: factory
-        code->instrDup();
-        // stack: factory factory
-        ClassFile::Code::Branch branch = code->instrIfnull();
-        // stack: factory
-        code->instrAreturn();
-        code->branchHere(branch);
-        code->instrPop();
-        // stack: -
-        code->instrNew(
-            rtl::OString(
-                RTL_CONSTASCII_STRINGPARAM(
-                    "com/sun/star/uno/DeploymentException")));
-        // stack: ex
-        code->instrDup();
-        // stack: ex ex
-        code->loadStringConstant(
-            rtl::OString(
-                RTL_CONSTASCII_STRINGPARAM(
-                    "component context fails to supply service manager")));
-        // stack: ex ex "..."
-        code->loadLocalReference(0);
-        // stack: ex ex "..." context
-        code->instrInvokespecial(
-            rtl::OString(
-                RTL_CONSTASCII_STRINGPARAM(
-                    "com/sun/star/uno/DeploymentException")),
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
-            rtl::OString(
-                RTL_CONSTASCII_STRINGPARAM(
-                    "(Ljava/lang/String;Ljava/lang/Object;)V")));
-        // stack: ex
-        code->instrAthrow();
-        code->setMaxStackAndLocals(4, 1);
-        cf->addMethod(
-            static_cast< ClassFile::AccessFlags >(
-                ClassFile::ACC_PRIVATE | ClassFile::ACC_STATIC
-                | ClassFile::ACC_SYNTHETIC),
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("$getFactory")),
-            rtl::OString(
-                RTL_CONSTASCII_STRINGPARAM(
-                    "(Lcom/sun/star/uno/XComponentContext;)"
-                    "Lcom/sun/star/lang/XMultiComponentFactory;")),
-            code.get(), std::vector< rtl::OString >(), rtl::OString());
-    }
-    // Synthetic castInstance method:
-    {
-        std::auto_ptr< ClassFile::Code > code(cf->newCode());
-        code->instrNew(
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/Type")));
-        // stack: type
-        code->instrDup();
-        // stack: type type
-        code->loadStringConstant(realJavaBaseName);
-        // stack: type type "..."
-        code->instrGetstatic(
-            rtl::OString(
-                RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/TypeClass")),
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("INTERFACE")),
-            rtl::OString(
-                RTL_CONSTASCII_STRINGPARAM("Lcom/sun/star/uno/TypeClass;")));
-        // stack: type type "..." INTERFACE
-        code->instrInvokespecial(
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/Type")),
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
-            rtl::OString(
-                RTL_CONSTASCII_STRINGPARAM(
-                    "(Ljava/lang/String;Lcom/sun/star/uno/TypeClass;)V")));
-        // stack: type
-        code->loadLocalReference(0);
-        // stack: type instance
-        code->instrInvokestatic(
-            rtl::OString(
-                RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/UnoRuntime")),
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("queryInterface")),
-            rtl::OString(
-                RTL_CONSTASCII_STRINGPARAM(
-                    "(Lcom/sun/star/uno/Type;Ljava/lang/Object;)"
-                    "Ljava/lang/Object;")));
-        // stack: instance
-        code->instrDup();
-        // stack: instance instance
-        ClassFile::Code::Branch branch = code->instrIfnull();
-        // stack: instance
-        code->instrAreturn();
-        code->branchHere(branch);
-        code->instrPop();
-        // stack: -
-        code->instrNew(
-            rtl::OString(
-                RTL_CONSTASCII_STRINGPARAM(
-                    "com/sun/star/uno/DeploymentException")));
-        // stack: ex
-        code->instrDup();
-        // stack: ex ex
-        rtl::OStringBuffer msg;
-        msg.append(
-            RTL_CONSTASCII_STRINGPARAM(
-                "component context fails to supply service "));
-        msg.append(unoName);
-        msg.append(RTL_CONSTASCII_STRINGPARAM(" of type "));
-        msg.append(realJavaBaseName);
-        code->loadStringConstant(msg.makeStringAndClear());
-        // stack: ex ex "..."
-        code->loadLocalReference(1);
-        // stack: ex ex "..." context
-        code->instrInvokespecial(
-            rtl::OString(
-                RTL_CONSTASCII_STRINGPARAM(
-                    "com/sun/star/uno/DeploymentException")),
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
-            rtl::OString(
-                RTL_CONSTASCII_STRINGPARAM(
-                    "(Ljava/lang/String;Ljava/lang/Object;)V")));
-        // stack: ex
-        code->instrAthrow();
-        code->setMaxStackAndLocals(4, 2);
-        cf->addMethod(
-            static_cast< ClassFile::AccessFlags >(
-                ClassFile::ACC_PRIVATE | ClassFile::ACC_STATIC
-                | ClassFile::ACC_SYNTHETIC),
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("$castInstance")),
-            rtl::OString(
-                RTL_CONSTASCII_STRINGPARAM(
-                    "(Ljava/lang/Object;Lcom/sun/star/uno/XComponentContext;)"
-                    "Ljava/lang/Object;")),
-            code.get(), std::vector< rtl::OString >(), rtl::OString());
+                    "component context fails to supply service "));
+            msg.append(unoName);
+            msg.append(RTL_CONSTASCII_STRINGPARAM(" of type "));
+            msg.append(realJavaBaseName);
+            code->loadStringConstant(msg.makeStringAndClear());
+            // stack: ex ex "..."
+            code->loadLocalReference(1);
+            // stack: ex ex "..." context
+            code->instrInvokespecial(
+                rtl::OString(
+                    RTL_CONSTASCII_STRINGPARAM(
+                        "com/sun/star/uno/DeploymentException")),
+                rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
+                rtl::OString(
+                    RTL_CONSTASCII_STRINGPARAM(
+                        "(Ljava/lang/String;Ljava/lang/Object;)V")));
+            // stack: ex
+            code->instrAthrow();
+            code->setMaxStackAndLocals(4, 2);
+            cf->addMethod(
+                static_cast< ClassFile::AccessFlags >(
+                    ClassFile::ACC_PRIVATE | ClassFile::ACC_STATIC
+                    | ClassFile::ACC_SYNTHETIC),
+                rtl::OString(RTL_CONSTASCII_STRINGPARAM("$castInstance")),
+                rtl::OString(
+                    RTL_CONSTASCII_STRINGPARAM(
+                        "(Ljava/lang/Object;Lcom/sun/star/uno/"
+                        "XComponentContext;)Ljava/lang/Object;")),
+                code.get(), std::vector< rtl::OString >(), rtl::OString());
+        }
     }
     writeClassFile(options, className, *cf.get());
 }
