@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output2.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:57:33 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 12:03:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -630,8 +630,8 @@ void ScOutputData::SetEditSyntaxColor( EditEngine& rEngine, ScBaseCell* pCell )
     }
 }
 
-BOOL ScOutputData::GetMergeOrigin( USHORT nX, USHORT nY, USHORT nArrY,
-                                    USHORT& rOverX, USHORT& rOverY,
+BOOL ScOutputData::GetMergeOrigin( SCCOL nX, SCROW nY, SCSIZE nArrY,
+                                    SCCOL& rOverX, SCROW& rOverY,
                                     BOOL bVisRowChanged )
 {
     BOOL bDoMerge = FALSE;
@@ -796,7 +796,7 @@ inline void lcl_CreateInterpretProgress( BOOL& bProgress, ScDocument* pDoc,
 }
 
 BOOL lcl_IsValueDataAtPos( BOOL& bProgress, ScDocument* pDoc,
-        USHORT nCol, USHORT nRow, USHORT nTab )
+        SCCOL nCol, SCROW nRow, SCTAB nTab )
 {
     ScBaseCell* pCell;
     pDoc->GetCell( nCol, nRow, nTab, pCell );
@@ -834,7 +834,7 @@ inline BOOL IsAmbiguousScript( BYTE nScript )
              nScript != SCRIPTTYPE_COMPLEX );
 }
 
-BOOL ScOutputData::IsEmptyCellText( RowInfo* pThisRowInfo, USHORT nX, USHORT nY )
+BOOL ScOutputData::IsEmptyCellText( RowInfo* pThisRowInfo, SCCOL nX, SCROW nY )
 {
     // pThisRowInfo may be NULL
 
@@ -873,14 +873,14 @@ BOOL ScOutputData::IsEmptyCellText( RowInfo* pThisRowInfo, USHORT nX, USHORT nY 
     return bEmpty;
 }
 
-void ScOutputData::GetVisibleCell( USHORT nCol, USHORT nRow, USHORT nTab, ScBaseCell*& rpCell )
+void ScOutputData::GetVisibleCell( SCCOL nCol, SCROW nRow, SCTAB nTab, ScBaseCell*& rpCell )
 {
     pDoc->GetCell( nCol, nRow, nTab, rpCell );
     if ( rpCell && IsEmptyCellText( NULL, nCol, nRow ) )
         rpCell = NULL;
 }
 
-BOOL ScOutputData::IsAvailable( USHORT nX, USHORT nY )
+BOOL ScOutputData::IsAvailable( SCCOL nX, SCROW nY )
 {
     //  apply the same logic here as in DrawStrings/DrawEdit:
     //  Stop at non-empty or merged or overlapped cell,
@@ -902,7 +902,7 @@ BOOL ScOutputData::IsAvailable( USHORT nX, USHORT nY )
     return TRUE;
 }
 
-long ScOutputData::GetAvailableWidth( USHORT nX, USHORT nY, long nNeeded )
+long ScOutputData::GetAvailableWidth( SCCOL nX, SCROW nY, long nNeeded )
 {
     //  get the pixel width that's available for the cell's text,
     //  including cells outside of the current screen area
@@ -913,8 +913,8 @@ long ScOutputData::GetAvailableWidth( USHORT nX, USHORT nY, long nNeeded )
     if ( pMerge->IsMerged() )
     {
         //  for merged cells, allow only the merged area
-        USHORT nCount = pMerge->GetColMerge();
-        for (USHORT nAdd=1; nAdd<nCount; nAdd++)
+        SCCOL nCount = pMerge->GetColMerge();
+        for (SCCOL nAdd=1; nAdd<nCount; nAdd++)
             nAvailable += (long) ( pDoc->GetColWidth( nX + nAdd, nTab ) * nPPTX );
     }
     else
@@ -948,8 +948,8 @@ long ScOutputData::GetAvailableWidth( USHORT nX, USHORT nY, long nNeeded )
 // rLeftClip:       output: need to clip at rClipRect left (visual) edge
 // rRightClip:      output: same for right
 
-void ScOutputData::GetOutputArea( USHORT nX, USHORT nArrY, long nPosX, long nPosY,
-                                    USHORT nCellX, USHORT nCellY, long nNeeded,
+void ScOutputData::GetOutputArea( SCCOL nX, SCSIZE nArrY, long nPosX, long nPosY,
+                                    SCCOL nCellX, SCROW nCellY, long nNeeded,
                                     const ScPatternAttr& rPattern,
                                     USHORT nHorJustify, BOOL bCellIsValue,
                                     BOOL bBreak, BOOL bOverwrite,
@@ -962,7 +962,7 @@ void ScOutputData::GetOutputArea( USHORT nX, USHORT nArrY, long nPosX, long nPos
     long nLayoutSign = bLayoutRTL ? -1 : 1;
 
     long nCellPosX = nPosX;         // find nCellX position, starting at nX/nPosX
-    USHORT nCompCol = nX;
+    SCCOL nCompCol = nX;
     while ( nCellX > nCompCol )
     {
         //! extra member function for width?
@@ -982,8 +982,8 @@ void ScOutputData::GetOutputArea( USHORT nX, USHORT nArrY, long nPosX, long nPos
     }
 
     long nCellPosY = nPosY;         // find nCellY position, starting at nArrY/nPosY
-    USHORT nCompArr = nArrY;
-    USHORT nCompRow = pRowInfo[nCompArr].nRowNo;
+    SCSIZE nCompArr = nArrY;
+    SCROW nCompRow = pRowInfo[nCompArr].nRowNo;
     while ( nCellY > nCompRow )
     {
         if ( nCompArr + 1 < nArrCount )
@@ -1017,7 +1017,7 @@ void ScOutputData::GetOutputArea( USHORT nX, USHORT nArrY, long nPosX, long nPos
     if ( nMergeRows == 0 )
         nMergeRows = 1;
 
-    short i;
+    long i;
     long nMergeSizeX = 0;
     for ( i=0; i<nMergeCols; i++ )
     {
@@ -1037,7 +1037,7 @@ void ScOutputData::GetOutputArea( USHORT nX, USHORT nArrY, long nPosX, long nPos
     for ( i=nDirect; i<nMergeRows; i++ )
     {
         // following rows always from document
-        nMergeSizeY += (long) ( pDoc->GetRowHeight( nCellY+i, nTab ) * nPPTY );
+        nMergeSizeY += (long) ( pDoc->GetRowHeight( nCellY+static_cast<SCROW>(i), nTab ) * nPPTY );
     }
 
     --nMergeSizeX;      // leave out the grid horizontally, also for alignment (align between grid lines)
@@ -1082,8 +1082,8 @@ void ScOutputData::GetOutputArea( USHORT nX, USHORT nArrY, long nPosX, long nPos
         if ( bLayoutRTL )
             ::std::swap( nLeftMissing, nRightMissing );
 
-        USHORT nRightX = nCellX;
-        USHORT nLeftX = nCellX;
+        SCCOL nRightX = nCellX;
+        SCCOL nLeftX = nCellX;
         if ( !bMerged && !bCellIsValue && !bBreak )
         {
             //  look for empty cells into which the text can be extended
@@ -1175,10 +1175,10 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
         nInitPosX += nMirrorW - 1;              // pixels
     long nLayoutSign = bLayoutRTL ? -1 : 1;
 
-    USHORT nLastContentCol = MAXCOL;
+    SCCOL nLastContentCol = MAXCOL;
     if ( nX2 < MAXCOL )
         nLastContentCol -= pDoc->GetEmptyLinesInBlock( nX2+1, nY1, nTab, MAXCOL, nY2, nTab, DIR_RIGHT );
-    USHORT nLoopStartX = nX1;
+    SCCOL nLoopStartX = nX1;
     if ( nX1 > 0 )
         --nLoopStartX;          // start before nX1 for rest of long text to the left
 
@@ -1194,24 +1194,24 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
     const SfxItemSet* pCondSet = NULL;
 
     long nPosY = nScrY;
-    for (USHORT nArrY=1; nArrY+1<nArrCount; nArrY++)
+    for (SCSIZE nArrY=1; nArrY+1<nArrCount; nArrY++)
     {
         RowInfo* pThisRowInfo = &pRowInfo[nArrY];
         if ( pThisRowInfo->bChanged )
         {
-            USHORT nY = pThisRowInfo->nRowNo;
+            SCROW nY = pThisRowInfo->nRowNo;
             long nCellHeight = (long) pThisRowInfo->nHeight;
             long nPosX = nInitPosX;
             if ( nLoopStartX < nX1 )
                 nPosX -= pRowInfo[0].pCellInfo[nLoopStartX+1].nWidth * nLayoutSign;
-            for (USHORT nX=nLoopStartX; nX<=nX2; nX++)
+            for (SCCOL nX=nLoopStartX; nX<=nX2; nX++)
             {
                 BOOL bMergeEmpty = FALSE;
                 CellInfo* pInfo = &pThisRowInfo->pCellInfo[nX+1];
                 BOOL bEmpty = nX < nX1 || pInfo->bEmptyCellText;
 
-                USHORT nCellX = nX;                 // position where the cell really starts
-                USHORT nCellY = nY;
+                SCCOL nCellX = nX;                  // position where the cell really starts
+                SCROW nCellY = nY;
                 BOOL bDoCell = FALSE;
                 BOOL bNeedEdit = FALSE;
 
@@ -1223,8 +1223,8 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
                 {
                     bEmpty = TRUE;
 
-                    USHORT nOverX;                  // start of the merged cells
-                    USHORT nOverY;
+                    SCCOL nOverX;                   // start of the merged cells
+                    SCROW nOverY;
                     BOOL bVisChanged = !pRowInfo[nArrY-1].bChanged;
                     if (GetMergeOrigin( nX,nY, nArrY, nOverX,nOverY, bVisChanged ))
                     {
@@ -1242,7 +1242,7 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
 
                 if ( bEmpty && !bMergeEmpty && nX < nX1 )
                 {
-                    USHORT nTempX=nX1;
+                    SCCOL nTempX=nX1;
                     while (nTempX > 0 && IsEmptyCellText( pThisRowInfo, nTempX, nY ))
                         --nTempX;
 
@@ -1263,7 +1263,7 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
                 {
                     //  don't have to look further than nLastContentCol
 
-                    USHORT nTempX=nX;
+                    SCCOL nTempX=nX;
                     while (nTempX < nLastContentCol && IsEmptyCellText( pThisRowInfo, nTempX, nY ))
                         ++nTempX;
 
@@ -1391,7 +1391,7 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
                     //  mark the cell in CellInfo to be drawn in DrawEdit:
                     //  Cells to the left are marked directly, cells to the
                     //  right are handled by the flag for nX2
-                    USHORT nMarkX = ( nCellX <= nX2 ) ? nCellX : nX2;
+                    SCCOL nMarkX = ( nCellX <= nX2 ) ? nCellX : nX2;
                     RowInfo* pMarkRowInfo = ( nCellY == nY ) ? pThisRowInfo : &pRowInfo[0];
                     pMarkRowInfo->pCellInfo[nMarkX+1].bEditEngine = TRUE;
                     bDoCell = FALSE;    // don't draw here
@@ -1602,7 +1602,7 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
 
 //  -------------------------------------------------------------------------------
 
-Size lcl_GetVertPaperSize( ScDocument* pDoc, USHORT nCol, USHORT nRow, USHORT nTab )
+Size lcl_GetVertPaperSize( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab )
 {
     const double nPPTY = HMM_PER_TWIPS;
 
@@ -1612,8 +1612,8 @@ Size lcl_GetVertPaperSize( ScDocument* pDoc, USHORT nCol, USHORT nRow, USHORT nT
     long nCellY = (long) ( pDoc->GetRowHeight(nRow,nTab) * nPPTY );
     if ( rMerge.GetRowMerge() > 1 )
     {
-        USHORT nCountY = rMerge.GetRowMerge();
-        for (USHORT i=1; i<nCountY; i++)
+        SCROW nCountY = rMerge.GetRowMerge();
+        for (SCROW i=1; i<nCountY; i++)
             nCellY += (long) ( pDoc->GetRowHeight(nRow+i,nTab) * nPPTY );
     }
 
@@ -1693,12 +1693,12 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
     long nLayoutSign = bLayoutRTL ? -1 : 1;
 
     //! store nLastContentCol as member!
-    USHORT nLastContentCol = MAXCOL;
+    SCCOL nLastContentCol = MAXCOL;
     if ( nX2 < MAXCOL )
         nLastContentCol -= pDoc->GetEmptyLinesInBlock( nX2+1, nY1, nTab, MAXCOL, nY2, nTab, DIR_RIGHT );
 
     long nRowPosY = nScrY;
-    for (USHORT nArrY=0; nArrY+1<nArrCount; nArrY++)            // 0 fuer Reste von zusammengefassten
+    for (SCSIZE nArrY=0; nArrY+1<nArrCount; nArrY++)            // 0 fuer Reste von zusammengefassten
     {
         RowInfo* pThisRowInfo = &pRowInfo[nArrY];
         long nCellHeight = (long) pThisRowInfo->nHeight;
@@ -1707,17 +1707,17 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
         if ( pThisRowInfo->bChanged || nArrY==0 )
         {
             long nPosX = 0;
-            for (USHORT nX=0; nX<=nX2; nX++)                    // wegen Ueberhaengen
+            for (SCCOL nX=0; nX<=nX2; nX++)                 // wegen Ueberhaengen
             {
                 if (nX==nX1) nPosX = nInitPosX;                 // positions before nX1 are calculated individually
 
                 CellInfo*   pInfo = &pThisRowInfo->pCellInfo[nX+1];
                 if (pInfo->bEditEngine)
                 {
-                    USHORT nY = pThisRowInfo->nRowNo;
+                    SCROW nY = pThisRowInfo->nRowNo;
 
-                    USHORT nCellX = nX;                 // position where the cell really starts
-                    USHORT nCellY = nY;
+                    SCCOL nCellX = nX;                  // position where the cell really starts
+                    SCROW nCellY = nY;
                     BOOL bDoCell = FALSE;
 
                     long nPosY = nRowPosY;
@@ -1725,8 +1725,8 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                     {
                         nPosY = nScrY;
                         nY = pRowInfo[1].nRowNo;
-                        USHORT nOverX;                  // start of the merged cells
-                        USHORT nOverY;
+                        SCCOL nOverX;                   // start of the merged cells
+                        SCROW nOverY;
                         if (GetMergeOrigin( nX,nY, 1, nOverX,nOverY, TRUE ))
                         {
                             nCellX = nOverX;
@@ -1738,7 +1738,7 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                     {
                         //  Rest of a long text further to the right?
 
-                        USHORT nTempX=nX;
+                        SCCOL nTempX=nX;
                         while (nTempX < nLastContentCol && IsEmptyCellText( pThisRowInfo, nTempX, nY ))
                             ++nTempX;
 
@@ -1878,13 +1878,13 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                             long nRightM = (long) ( pMargin->GetRightMargin() * nPPTX );
                             long nBottomM = (long) ( pMargin->GetBottomMargin() * nPPTY );
 
-                            USHORT nXForPos = nX;
+                            SCCOL nXForPos = nX;
                             if ( nXForPos < nX1 )
                             {
                                 nXForPos = nX1;
                                 nPosX = nInitPosX;
                             }
-                            USHORT nArrYForPos = nArrY;
+                            SCSIZE nArrYForPos = nArrY;
                             if ( nArrYForPos < 1 )
                             {
                                 nArrYForPos = 1;
@@ -2294,8 +2294,8 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                                         if ( bMerged )
                                         {
                                             //  anywhere in the merged area...
-                                            USHORT nClipX = ( nX < nX1 ) ? nX1 : nX;
-                                            pClipMarkCell = &pRowInfo[nArrY ? nArrY : 1].pCellInfo[nClipX+1];
+                                            SCCOL nClipX = ( nX < nX1 ) ? nX1 : nX;
+                                            pClipMarkCell = &pRowInfo[(nArrY != 0) ? nArrY : 1].pCellInfo[nClipX+1];
                                         }
                                         else
                                             pClipMarkCell = &pThisRowInfo->pCellInfo[nX+1];
@@ -2539,8 +2539,8 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
 void ScOutputData::DrawRotated(BOOL bPixelToLogic)
 {
     //! nRotMax speichern
-    USHORT nRotMax = nX2;
-    for (USHORT nRotY=0; nRotY<nArrCount; nRotY++)
+    SCCOL nRotMax = nX2;
+    for (SCSIZE nRotY=0; nRotY<nArrCount; nRotY++)
         if (pRowInfo[nRotY].nRotMaxCol != SC_ROTMAX_NONE && pRowInfo[nRotY].nRotMaxCol > nRotMax)
             nRotMax = pRowInfo[nRotY].nRotMaxCol;
 
@@ -2574,7 +2574,7 @@ void ScOutputData::DrawRotated(BOOL bPixelToLogic)
     long nLayoutSign = bLayoutRTL ? -1 : 1;
 
     long nRowPosY = nScrY;
-    for (USHORT nArrY=0; nArrY+1<nArrCount; nArrY++)            // 0 fuer Reste von zusammengefassten
+    for (SCSIZE nArrY=0; nArrY+1<nArrCount; nArrY++)            // 0 fuer Reste von zusammengefassten
     {
         RowInfo* pThisRowInfo = &pRowInfo[nArrY];
         long nCellHeight = (long) pThisRowInfo->nHeight;
@@ -2583,14 +2583,14 @@ void ScOutputData::DrawRotated(BOOL bPixelToLogic)
         if ( ( pThisRowInfo->bChanged || nArrY==0 ) && pThisRowInfo->nRotMaxCol != SC_ROTMAX_NONE )
         {
             long nPosX = 0;
-            for (USHORT nX=0; nX<=nRotMax; nX++)
+            for (SCCOL nX=0; nX<=nRotMax; nX++)
             {
                 if (nX==nX1) nPosX = nInitPosX;                 // positions before nX1 are calculated individually
 
                 CellInfo* pInfo = &pThisRowInfo->pCellInfo[nX+1];
                 if ( pInfo->nRotateDir != SC_ROTDIR_NONE )
                 {
-                    USHORT nY = pThisRowInfo->nRowNo;
+                    SCROW nY = pThisRowInfo->nRowNo;
 
                     BOOL bHidden = FALSE;
                     if (bEditMode)
@@ -2667,7 +2667,7 @@ void ScOutputData::DrawRotated(BOOL bPixelToLogic)
                             else
                             {
                                 nStartX = nInitPosX;
-                                USHORT nCol = nX1;
+                                SCCOL nCol = nX1;
                                 while (nCol > nX)
                                 {
                                     --nCol;
@@ -2690,15 +2690,14 @@ void ScOutputData::DrawRotated(BOOL bPixelToLogic)
 
                             if ( bMerged )                              // Zusammengefasst
                             {
-                                USHORT i;
                                 const ScMergeAttr* pMerge =
                                         (ScMergeAttr*)&pPattern->GetItem(ATTR_MERGE);
-                                USHORT nCountX = pMerge->GetColMerge();
-                                for (i=1; i<nCountX; i++)
+                                SCCOL nCountX = pMerge->GetColMerge();
+                                for (SCCOL i=1; i<nCountX; i++)
                                     nOutWidth += (long) ( pDoc->GetColWidth(nX+i,nTab) * nPPTX );
-                                USHORT nCountY = pMerge->GetRowMerge();
-                                for (i=1; i<nCountY; i++)
-                                    nOutHeight += (long) ( pDoc->GetRowHeight(nY+i,nTab) * nPPTY );
+                                SCROW nCountY = pMerge->GetRowMerge();
+                                for (SCROW j=1; j<nCountY; j++)
+                                    nOutHeight += (long) ( pDoc->GetRowHeight(nY+j,nTab) * nPPTY );
                             }
 
                             SvxCellVerJustify eVerJust = (SvxCellVerJustify)((const SvxVerJustifyItem&)
@@ -2959,8 +2958,8 @@ void ScOutputData::DrawRotated(BOOL bPixelToLogic)
                                 Rectangle aAlignRect;
                                 Rectangle aClipRect;
 
-                                USHORT nCellX = nX;
-                                USHORT nCellY = nY;
+                                SCCOL nCellX = nX;
+                                SCROW nCellY = nY;
                                 SvxCellHorJustify eOutHorJust = eHorJust;
                                 if ( eRotMode != SVX_ROTATE_MODE_STANDARD )
                                     eOutHorJust = bNegative ? SVX_HOR_JUSTIFY_RIGHT : SVX_HOR_JUSTIFY_LEFT;
