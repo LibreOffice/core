@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterPagesSelector.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-28 09:42:58 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 17:34:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -590,7 +590,7 @@ SdPage* MasterPagesSelector::AddMasterPage (
 
         // Adapt the size of the new master page to that of the pages in the
         // document.
-        Size aNewSize (pTargetDocument->GetSdPage(0, PK_STANDARD)->GetSize());
+        Size aNewSize (pTargetDocument->GetSdPage(0, pMasterPage->GetPageKind())->GetSize());
         Rectangle aBorders (
             pClonedMasterPage->GetLftBorder(),
             pClonedMasterPage->GetUppBorder(),
