@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: fs $ $Date: 2000-11-17 19:02:52 $
+#   last change: $Author: fs $ $Date: 2000-12-06 17:28:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,6 +77,11 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 
 CXXFILES = \
+        controlelement.cxx \
+        elementimport.cxx \
+        layerimport.cxx \
+        propertyimport.cxx \
+        formlayerimport.cxx \
         formlayerexport.cxx \
         layerexport.cxx \
         elementexport.cxx \
@@ -86,6 +91,11 @@ CXXFILES = \
         strings.cxx
 
 SLOFILES =	\
+        $(SLO)$/controlelement.obj \
+        $(SLO)$/elementimport.obj \
+        $(SLO)$/layerimport.obj \
+        $(SLO)$/propertyimport.obj \
+        $(SLO)$/formlayerimport.obj \
         $(SLO)$/formlayerexport.obj \
         $(SLO)$/layerexport.obj \
         $(SLO)$/elementexport.obj \

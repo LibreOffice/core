@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formattributes.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-19 15:41:32 $
+ *  last change: $Author: fs $ $Date: 2000-12-06 17:28:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,12 @@
 #endif
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
+#endif
+#ifndef _VOS_REFERNCE_HXX_
+#include <vos/refernce.hxx>
+#endif
+#ifndef _COMPHELPER_STLTYPES_HXX_
+#include <comphelper/stl_types.hxx>
 #endif
 
 class SvXMLExport;
@@ -157,7 +163,7 @@ namespace xmloff
     //=====================================================================
     //= OAttributeMetaData
     //=====================================================================
-    /** allows the translation of attribute ids into strings and vice versa.
+    /** allows the translation of attribute ids into strings.
 
         <p>This class does not allow to connect xml attributes to property names or
         something like that, it only deals with the xml side</p>
@@ -221,6 +227,122 @@ namespace xmloff
         static sal_uInt16 getSpecialAttributeNamespace(sal_Int32 _nId);
     };
 
+    //=====================================================================
+    //= OAttribute2Property
+    //=====================================================================
+    /** some kind of opposite to the OAttributeMetaData class. Able to translate
+        attrbutes into property names/types
+
+        <p>This class is ref-counted, 'cause it's construction is rather expensive, so instances should
+        be shared</p>
+    */
+    class OAttribute2Property : public ::vos::OReference
+    {
+    public:
+        // TODO: maybe the following struct should be used for exports, too. In this case we would not need to
+        // store it's instances in a map, but in a vector for faster access.
+        struct AttributeAssignment
+        {
+            ::rtl::OUString                 sAttributeName;         // the attribute name
+            ::rtl::OUString                 sPropertyName;          // the property name
+            ::com::sun::star::uno::Type     aPropertyType;          // the property type
+            ::rtl::OUString                 sAttributeDefault;      // the default if the attribute is not present
+
+            // entries which are special to some value types
+            const SvXMLEnumMapEntry*        pEnumMap;               // the enum map, if appliable
+            sal_Bool                        bInverseSemantics;      // for booleanss: attribute and property value have the same or an inverse semantics?
+
+            AttributeAssignment() : pEnumMap(NULL), bInverseSemantics(sal_False) { }
+        };
+
+    protected:
+        DECLARE_STL_USTRINGACCESS_MAP( AttributeAssignment, AttributeAssignments );
+        AttributeAssignments        m_aKnownProperties;
+
+    protected:
+        virtual ~OAttribute2Property();
+            // deletion not allowed from outside
+
+    public:
+        OAttribute2Property();
+
+        /** return the AttributeAssignment which corresponds to the given attribute
+
+            @param _rAttribName
+                the name of the attrribute
+            @return
+                a pointer to the <type>AttributeAssignment</type> structure as requested, NULL if the attribute
+                does not represent a property.
+        */
+        const AttributeAssignment* getAttributeTranslation(
+            const ::rtl::OUString& _rAttribName);
+
+        /** add a attribute assignment referring to a string property to the map
+            @param _pAttributeName
+                the name of the attrribute
+            @param _rPropertyName
+                the name of the property assigned to the attribute
+            @param _pAttributeDefault
+                the default value for the attribute, if any. May be NULL, in this case the default is assumed to be
+                an empty string.
+        */
+        void    addStringProperty(
+            const sal_Char* _pAttributeName, const ::rtl::OUString& _rPropertyName,
+            const sal_Char* _pAttributeDefault = NULL);
+
+        /** add a attribute assignment referring to a boolean property to the map
+
+            @param _pAttributeName
+                the name of the attrribute
+            @param _rPropertyName
+                the name of the property assigned to the attribute
+            @param _bAttributeDefault
+                the default value for the attribute.
+            @param _bInverseSemantics
+                if <TRUE/>, a attribute value of <TRUE/> means a property value of <FALSE/> and vice verse.<br/>
+                if <FALSE/>, the attribute value is used as property value directly
+        */
+        void    addBooleanProperty(
+            const sal_Char* _pAttributeName, const ::rtl::OUString& _rPropertyName,
+            const sal_Bool _bAttributeDefault, const sal_Bool _bInverseSemantics = sal_False);
+
+        /** add a attribute assignment referring to an int16 property to the map
+
+            @param _pAttributeName
+                the name of the attrribute
+            @param _rPropertyName
+                the name of the property assigned to the attribute
+            @param _nAttributeDefault
+                the default value for the attribute.
+        */
+        void    addInt16Property(
+            const sal_Char* _pAttributeName, const ::rtl::OUString& _rPropertyName,
+            const sal_Int16 _nAttributeDefault);
+
+        /** add a attribute assignment referring to an enum property to the map
+
+            @param _pAttributeName
+                the name of the attrribute
+            @param _rPropertyName
+                the name of the property assigned to the attribute
+            @param _nAttributeDefault
+                the default value for the attribute, as (32bit) integer
+            @param _pValueMap
+                the map to translate strings into enum values
+            @param _pType
+                the type of the property. May be NULL, in this case 32bit integer is assumed.
+        */
+        void    addEnumProperty(
+            const sal_Char* _pAttributeName, const ::rtl::OUString& _rPropertyName,
+            const sal_uInt16 _nAttributeDefault, const SvXMLEnumMapEntry* _pValueMap,
+            const ::com::sun::star::uno::Type* _pType = NULL);
+
+    protected:
+        /// some common code for the various add*Property methods
+        AttributeAssignment& implAdd(
+            const sal_Char* _pAttributeName, const ::rtl::OUString& _rPropertyName,
+            const ::com::sun::star::uno::Type& _rType, const ::rtl::OUString& _rDefaultString);
+    };
 //.........................................................................
 }   // namespace xmloff
 //.........................................................................
@@ -230,6 +352,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2000/11/19 15:41:32  fs
+ *  extended the export capabilities - generic controls / grid columns / generic properties / some missing form properties
+ *
  *  Revision 1.1  2000/11/17 19:01:46  fs
  *  initial checkin - export and/or import the applications form layer
  *

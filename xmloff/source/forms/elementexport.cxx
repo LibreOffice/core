@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementexport.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mh $ $Date: 2000-11-29 10:36:05 $
+ *  last change: $Author: fs $ $Date: 2000-12-06 17:28:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,36 +129,6 @@ namespace xmloff
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::container;
-
-    //=====================================================================
-    //= OControlElement
-    //=====================================================================
-    //---------------------------------------------------------------------
-    const sal_Char* OControlElement::getElementName(ElementType _eType)
-    {
-        switch (_eType)
-        {
-            case TEXT: return "text";
-            case TEXT_AREA: return "text-area";
-            case PASSWORD: return "password";
-            case FILE: return "file";
-            case FORMATTED_TEXT: return "formatted-text";
-            case FIXED_TEXT: return "fixed-text";
-            case COMBOBOX: return "combobox";
-            case LISTBOX: return "listbox";
-            case BUTTON: return "button";
-            case IMAGE: return "image";
-            case CHECKBOX: return "checkbox";
-            case RADIO: return "radio";
-            case FRAME: return "frame";
-            case IMAGE_FRAME: return "image-frame";
-            case HIDDEN: return "hidden";
-            case GRID: return "grid";
-            case COLUMN: return "column";
-
-            default: return "control";
-        }
-    }
 
     //=====================================================================
     //= OControlExport
@@ -810,8 +780,8 @@ namespace xmloff
         DBG_CHECK_PROPERTY((const sal_Char*)PROPERTY_STRING_ITEM_LIST, Sequence< ::rtl::OUString >);
         m_xProps->getPropertyValue(PROPERTY_STRING_ITEM_LIST) >>= aItems;
 
-        DBG_CHECK_PROPERTY((const sal_Char*)PROPERTY_VALUE_SEQ, Sequence< ::rtl::OUString >);
-        m_xProps->getPropertyValue(PROPERTY_VALUE_SEQ) >>= aValues;
+        DBG_CHECK_PROPERTY((const sal_Char*)PROPERTY_LISTSOURCE, Sequence< ::rtl::OUString >);
+        m_xProps->getPropertyValue(PROPERTY_LISTSOURCE) >>= aValues;
 
         // the selection lists
         Int16Set aSelection, aDefaultSelection;
@@ -1379,6 +1349,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2000/11/29 10:36:05  mh
+ *  add: stdio.h for Solaris8
+ *
  *  Revision 1.2  2000/11/19 15:41:32  fs
  *  extended the export capabilities - generic controls / grid columns / generic properties / some missing form properties
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyexport.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-21 13:38:45 $
+ *  last change: $Author: fs $ $Date: 2000-12-06 17:28:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,8 @@ namespace xmloff
         */
         void exportRemainingProperties();
 
-        /** indicates that a property has been by a derived class, without using the helper methods of this class.
+        /** indicates that a property has been handled by a derived class, without using the helper methods of this
+            class.
 
             <p>Calling this method is necessary in case you use the suggested mechanism for the generic export of
             properties. This means that you want to use <method>exportRemainingProperties</method>, which exports
@@ -388,6 +389,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2000/11/21 13:38:45  hr
+ *  #65293#: includes
+ *
  *  Revision 1.2  2000/11/19 15:41:32  fs
  *  extended the export capabilities - generic controls / grid columns / generic properties / some missing form properties
  *

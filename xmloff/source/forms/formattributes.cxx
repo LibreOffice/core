@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formattributes.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-19 15:41:32 $
+ *  last change: $Author: fs $ $Date: 2000-12-06 17:28:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,12 @@
 #endif
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
+#endif
+#ifndef _XMLOFF_XMLUCONV_HXX
+#include "xmluconv.hxx"
+#endif
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
 #endif
 
 //.........................................................................
@@ -220,6 +226,93 @@ namespace xmloff
         return XML_NAMESPACE_FORM;
     }
 
+    //=====================================================================
+    //= OAttribute2Property
+    //=====================================================================
+    //---------------------------------------------------------------------
+    OAttribute2Property::OAttribute2Property()
+    {
+    }
+
+    //---------------------------------------------------------------------
+    OAttribute2Property::~OAttribute2Property()
+    {
+    }
+
+    //---------------------------------------------------------------------
+    const OAttribute2Property::AttributeAssignment* OAttribute2Property::getAttributeTranslation(
+            const ::rtl::OUString& _rAttribName)
+    {
+        ConstAttributeAssignmentsIterator aPos = m_aKnownProperties.find(_rAttribName);
+        if (m_aKnownProperties.end() != aPos)
+            return &aPos->second;
+        return NULL;
+    }
+
+    //---------------------------------------------------------------------
+    void OAttribute2Property::addStringProperty(
+        const sal_Char* _pAttributeName, const ::rtl::OUString& _rPropertyName,
+        const sal_Char* _pAttributeDefault)
+    {
+        implAdd(_pAttributeName, _rPropertyName, ::getCppuType( static_cast< ::rtl::OUString* >(NULL) ),
+            _pAttributeDefault ? ::rtl::OUString::createFromAscii(_pAttributeDefault) : ::rtl::OUString());
+    }
+
+    //---------------------------------------------------------------------
+    void OAttribute2Property::addBooleanProperty(
+        const sal_Char* _pAttributeName, const ::rtl::OUString& _rPropertyName,
+        const sal_Bool _bAttributeDefault, const sal_Bool _bInverseSemantics)
+    {
+        ::rtl::OUStringBuffer aDefault;
+        SvXMLUnitConverter::convertBool(aDefault, _bAttributeDefault);
+        AttributeAssignment& aAssignment = implAdd(_pAttributeName, _rPropertyName, ::getBooleanCppuType(), aDefault.makeStringAndClear());
+        aAssignment.bInverseSemantics = _bInverseSemantics;
+    }
+
+    //---------------------------------------------------------------------
+    void OAttribute2Property::addInt16Property(
+        const sal_Char* _pAttributeName, const ::rtl::OUString& _rPropertyName,
+        const sal_Int16 _nAttributeDefault)
+    {
+        ::rtl::OUStringBuffer aDefault;
+        SvXMLUnitConverter::convertNumber(aDefault, (sal_Int32)_nAttributeDefault);
+        implAdd(_pAttributeName, _rPropertyName, ::getCppuType( static_cast< sal_Int16* >(NULL) ), aDefault.makeStringAndClear());
+    }
+
+    //---------------------------------------------------------------------
+    void OAttribute2Property::addEnumProperty(
+            const sal_Char* _pAttributeName, const ::rtl::OUString& _rPropertyName,
+            const sal_uInt16 _nAttributeDefault, const SvXMLEnumMapEntry* _pValueMap,
+            const ::com::sun::star::uno::Type* _pType)
+    {
+        ::rtl::OUStringBuffer aDefault;
+        SvXMLUnitConverter::convertEnum(aDefault, _nAttributeDefault, _pValueMap);
+        AttributeAssignment& aAssignment = implAdd(_pAttributeName, _rPropertyName,
+            _pType ? *_pType : ::getCppuType( static_cast< sal_Int32* >(NULL) ),
+                // this assumes that the setPropertyValue for enums can handle int32's ....
+            aDefault.makeStringAndClear());
+        aAssignment.pEnumMap = _pValueMap;
+    }
+
+    //---------------------------------------------------------------------
+    OAttribute2Property::AttributeAssignment& OAttribute2Property::implAdd(
+            const sal_Char* _pAttributeName, const ::rtl::OUString& _rPropertyName,
+            const ::com::sun::star::uno::Type& _rType, const ::rtl::OUString& _rDefaultString)
+    {
+        OSL_ENSURE(m_aKnownProperties.end() == m_aKnownProperties.find(::rtl::OUString::createFromAscii(_pAttributeName)),
+            "OAttribute2Property::implAdd: already have this attribute!");
+
+        ::rtl::OUString sAttributeName = ::rtl::OUString::createFromAscii(_pAttributeName);
+
+        AttributeAssignment aAssignment;
+        aAssignment.sAttributeName = sAttributeName;
+        aAssignment.sPropertyName = _rPropertyName;
+        aAssignment.aPropertyType = _rType;
+
+        // redundance, the accessor is stored in aAssignment.sAttributeName, too
+        return m_aKnownProperties[sAttributeName] = aAssignment;
+    }
+
 //.........................................................................
 }   // namespace xmloff
 //.........................................................................
@@ -227,6 +320,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2000/11/19 15:41:32  fs
+ *  extended the export capabilities - generic controls / grid columns / generic properties / some missing form properties
+ *
  *  Revision 1.1  2000/11/17 19:01:36  fs
  *  initial checkin - export and/or import the applications form layer
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementexport.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-19 15:41:32 $
+ *  last change: $Author: fs $ $Date: 2000-12-06 17:28:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #ifndef _XMLOFF_FORMS_CALLBACKS_HXX_
 #include "callbacks.hxx"
 #endif
+#ifndef _XMLOFF_FORMS_CONTROLELEMENT_HXX_
+#include "controlelement.hxx"
+#endif
 
 class SvXMLExport;
 class SvXMLElementExport;
@@ -81,54 +84,6 @@ class SvXMLElementExport;
 namespace xmloff
 {
 //.........................................................................
-
-    //=====================================================================
-    //= OControlElement
-    //=====================================================================
-    /** helper for translating between control types and XML tags
-    */
-    class OControlElement
-    {
-    public:
-        enum ElementType
-        {
-            TEXT,
-            TEXT_AREA,
-            PASSWORD,
-            FILE,
-            FORMATTED_TEXT,
-            FIXED_TEXT,
-            COMBOBOX,
-            LISTBOX,
-            BUTTON,
-            IMAGE,
-            CHECKBOX,
-            RADIO,
-            FRAME,
-            IMAGE_FRAME,
-            HIDDEN,
-            GRID,
-            COLUMN,
-            CONTROL
-        };
-
-    protected:
-        /** ctor.
-            <p>This default constructor is protected, 'cause this class is not intended to be instantiated
-            directly. Instead, the derived classes should be used.</p>
-        */
-        OControlElement() { }
-
-    public:
-        /** retrieves the tag name to be used to describe a control of the given type
-
-            <p>The retuned string is the pure element name, without any namespace.</p>
-
-            @param  _eType
-                the element type
-        */
-        const sal_Char* getElementName(ElementType _eType);
-    };
 
     //=====================================================================
     //= OControlExport
@@ -323,6 +278,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2000/11/19 15:41:32  fs
+ *  extended the export capabilities - generic controls / grid columns / generic properties / some missing form properties
+ *
  *  Revision 1.1  2000/11/17 19:01:28  fs
  *  initial checkin - export and/or import the applications form layer
  *

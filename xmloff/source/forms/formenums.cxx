@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formenums.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-17 19:01:56 $
+ *  last change: $Author: fs $ $Date: 2000-12-06 17:28:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,8 +100,10 @@ namespace xmloff
     using namespace ::com::sun::star::form;
     using namespace ::com::sun::star::sdb;
 
-    SvXMLEnumMapEntry*  OEnumMapper::s_pEnumMap[OEnumMapper::KNOWN_ENUM_PROPERTIES] =
+    const SvXMLEnumMapEntry*    OEnumMapper::s_pEnumMap[OEnumMapper::KNOWN_ENUM_PROPERTIES] =
     {
+        NULL,
+        NULL,
         NULL,
         NULL,
         NULL,
@@ -111,11 +113,11 @@ namespace xmloff
     };
 
     //---------------------------------------------------------------------
-    SvXMLEnumMapEntry*  OEnumMapper::getEnumMap(EnumProperties _eProperty)
+    const SvXMLEnumMapEntry*    OEnumMapper::getEnumMap(EnumProperties _eProperty)
     {
         OSL_ENSURE(_eProperty < KNOWN_ENUM_PROPERTIES, "OEnumMapper::getEnumMap: invalid index (this will crash)!");
 
-        SvXMLEnumMapEntry*& rReturn = s_pEnumMap[_eProperty];
+        const SvXMLEnumMapEntry*& rReturn = s_pEnumMap[_eProperty];
         if (!rReturn)
         {
             // the map for this property is not initialized yet
@@ -242,6 +244,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/11/17 19:01:56  fs
+ *  initial checkin - export and/or import the applications form layer
+ *
  *
  *  Revision 1.0 15.11.00 11:54:17  fs
  ************************************************************************/

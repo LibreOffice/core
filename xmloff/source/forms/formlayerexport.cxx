@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formlayerexport.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-03 10:57:06 $
+ *  last change: $Author: fs $ $Date: 2000-12-06 17:28:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,25 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    void OFormLayerXMLExport::examine(const Reference< XDrawPage >& _rxDrawPage)
+    sal_Bool OFormLayerXMLExport::seekPage(const Reference< XDrawPage >& _rxDrawPage)
+    {
+        return m_pImpl->seekPage(_rxDrawPage);
+    }
+
+    //---------------------------------------------------------------------
+    ::rtl::OUString OFormLayerXMLExport::getControlId(const Reference< XPropertySet > _rxControl)
+    {
+        return m_pImpl->getControlId(_rxControl);
+    }
+
+    //---------------------------------------------------------------------
+    void OFormLayerXMLExport::initialize()
+    {
+        m_pImpl->clear();
+    }
+
+    //---------------------------------------------------------------------
+    void OFormLayerXMLExport::examineForms(const Reference< XDrawPage >& _rxDrawPage)
     {
         try
         {
@@ -139,9 +157,9 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    void OFormLayerXMLExport::export(const Reference< XDrawPage >& _rxDrawPage)
+    void OFormLayerXMLExport::exportForms(const Reference< XDrawPage >& _rxDrawPage)
     {
-        m_pImpl->examineForms(_rxDrawPage);
+        m_pImpl->exportForms(_rxDrawPage);
     }
 
 //.........................................................................
@@ -151,6 +169,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2000/12/03 10:57:06  fs
+ *  some changes to support more than one page to be examined/exported
+ *
  *  Revision 1.2  2000/11/29 10:32:13  mh
  *  add: header for Solaris8
  *

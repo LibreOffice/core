@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerexport.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-03 10:57:06 $
+ *  last change: $Author: fs $ $Date: 2000-12-06 17:28:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,13 +89,14 @@ namespace xmloff
     //=====================================================================
     /** is stl-compliant structure for comparing Reference< XPropertySet > instances
     */
-    struct OPropertySetCompare
-        :public ::std::binary_function  <   ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-                                        ,   ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+    template < class IAFCE >
+    struct OInterfaceCompare
+        :public ::std::binary_function  <   ::com::sun::star::uno::Reference< IAFCE >
+                                        ,   ::com::sun::star::uno::Reference< IAFCE >
                                         ,   bool
                                         >
     {
-        bool operator() (const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& lhs, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rhs) const
+        bool operator() (const ::com::sun::star::uno::Reference< IAFCE >& lhs, const ::com::sun::star::uno::Reference< IAFCE >& rhs) const
         {
             return lhs.get() < rhs.get();
                 // this does not make any sense if you see the semantics of the pointer returned by get:
@@ -104,6 +105,9 @@ namespace xmloff
                 // sufficient ....
         }
     };
+
+    typedef OInterfaceCompare< ::com::sun::star::beans::XPropertySet >  OPropertySetCompare;
+    typedef OInterfaceCompare< ::com::sun::star::drawing::XDrawPage >   ODrawPageCompare;
 
     //=====================================================================
     //= OFormLayerXMLExport_Impl
@@ -119,12 +123,26 @@ namespace xmloff
         SvXMLExport&    m_rContext;
 
         DECLARE_STL_MAP( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >, ::rtl::OUString, OPropertySetCompare, MapPropertySet2String);
-        MapPropertySet2String   m_aControlIds;
-            // maps objects (property sets) to ids used for them in the XML stream. This ids may be used
-            // later when referring to the objects.
+            // maps objects (property sets) to strings, e.g. control ids.
+        DECLARE_STL_MAP( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >, MapPropertySet2String, ODrawPageCompare, MapPropertySet2Map);
+            // map pages to maps (of property sets to strings)
 
-        MapPropertySet2String   m_aReferringControls;
-            // maps objects (property sets) to comma-separated lists of ids of the controls refering the first one
+        MapPropertySet2Map  m_aControlIds;
+            // the control ids of all control on all pages we ever examined
+
+        MapPropertySet2Map  m_aReferringControls;
+            // for a given page (iter->first), and a given control (iter->second->first), this is the comma-separated
+            // lists of ids of the controls refering to the control given.
+
+        MapPropertySet2MapIterator
+                            m_aCurrentPageIds;
+            // the iterator for the control id map for the page beeing handled
+        MapPropertySet2MapIterator
+                            m_aCurrentPageReferring;
+            // the same for the map of referring controls
+
+        // TODO: To avoid this construct above, and to have a cleaner implementation, an class encapsulating the
+        // export of a single page should be introduced.
 
     public:
         OFormLayerXMLExport_Impl(SvXMLExport& _rContext);
@@ -132,12 +150,12 @@ namespace xmloff
     protected:
         /** exports one single grid column
         */
-        void exportGridColumn(
+        void    exportGridColumn(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxColumn);
 
         /** exports one single control
         */
-        void exportControl(
+        void    exportControl(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControl);
 
         /** exports one single form
@@ -145,9 +163,30 @@ namespace xmloff
         void    exportForm(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxProps)
             throw (::com::sun::star::uno::Exception);
 
+        /** seek to the page given.
+
+            <p>This must be called before you can retrieve any ids for controls on the page.</p>
+
+            @see
+                getControlId
+        */
+        sal_Bool    seekPage(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& _rxDrawPage);
+
+        /** get the id of the given control.
+
+            <p>You must have sought to the page of the control before calling this.</p>
+        */
+        ::rtl::OUString
+                getControlId(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControl);
+
         /** implements the export of a collection of forms/controls
         */
         void    exportCollectionElements(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& _rxCollection);
+
+        /** clear any structures which have been build in the recent <method>examine</method> calls.
+        */
+        void clear();
 
         /** examine a forms collection.
 
@@ -183,8 +222,15 @@ namespace xmloff
     protected:
         sal_Bool implCheckPage(
             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& _rxDrawPage,
-            ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& _rxForms,
-            ::rtl::OUString& _rPageName);
+            ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& _rxForms);
+
+        /** moves the m_aCurrentPage* members to the positions specifying the given page.
+
+            @return <TRUE/> if there already were structures for the given page
+        */
+        sal_Bool implMoveIterators(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& _rxDrawPage,
+            sal_Bool _bClear);
     };
 
 //.........................................................................
@@ -196,6 +242,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2000/12/03 10:57:06  fs
+ *  some changes to support more than one page to be examined/exported
+ *
  *  Revision 1.2  2000/11/19 15:41:32  fs
  *  extended the export capabilities - generic controls / grid columns / generic properties / some missing form properties
  *

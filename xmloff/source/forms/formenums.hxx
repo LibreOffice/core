@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formenums.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-17 19:02:06 $
+ *  last change: $Author: fs $ $Date: 2000-12-06 17:28:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,10 +92,10 @@ namespace xmloff
         };
 
     private:
-        static SvXMLEnumMapEntry*   s_pEnumMap[KNOWN_ENUM_PROPERTIES];
+        static const SvXMLEnumMapEntry* s_pEnumMap[KNOWN_ENUM_PROPERTIES];
 
     public:
-        static SvXMLEnumMapEntry*   getEnumMap(EnumProperties _eProperty);
+        static const SvXMLEnumMapEntry* getEnumMap(EnumProperties _eProperty);
     };
 
 //.........................................................................
@@ -107,6 +107,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/11/17 19:02:06  fs
+ *  initial checkin - export and/or import the applications form layer
+ *
  *
  *  Revision 1.0 15.11.00 11:49:51  fs
  ************************************************************************/

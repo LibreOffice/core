@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyexport.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mh $ $Date: 2000-11-29 10:36:05 $
+ *  last change: $Author: fs $ $Date: 2000-12-06 17:28:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -480,7 +480,7 @@ namespace xmloff
         ::rtl::OUString sTargetFrame = comphelper::getString(m_xProps->getPropertyValue(PROPERTY_TARGETFRAME));
         if (sTargetFrame.getLength() && (0 != sTargetFrame.compareToAscii("_blank")))
         {   // an empty string and "_blank" have the same meaning and don't have to be written
-            AddAttribute(XML_NAMESPACE_XLINK, "href", sTargetFrame);
+            AddAttribute(getCommonControlAttributeNamespace(CCA_TARGET_FRAME), getCommonControlAttributeName(CCA_TARGET_FRAME), sTargetFrame);
         }
         exportedProperty(PROPERTY_TARGETFRAME);
     }
@@ -600,7 +600,7 @@ namespace xmloff
         // unfortunately the OUString can't append single sal_Unicode characters ...
         const ::rtl::OUString sQuote(&_aQuoteCharacter, 1);
         const ::rtl::OUString sSeparator(&_aListSeparator, 1);
-        const sal_Bool bQuote = sQuote.getLength();
+        const sal_Bool bQuote = 0 != sQuote.getLength();
 
         // concatenate the string items
         const ::rtl::OUString* pItems = aItems.getConstArray();
@@ -722,7 +722,7 @@ namespace xmloff
         // into one of these types)
         static const ::rtl::OUString s_sTypeBoolean (RTL_CONSTASCII_USTRINGPARAM("boolean"));
         static const ::rtl::OUString s_sTypeShort   (RTL_CONSTASCII_USTRINGPARAM("short"));
-        static const ::rtl::OUString s_sTypeInteger (RTL_CONSTASCII_USTRINGPARAM("integer"));
+        static const ::rtl::OUString s_sTypeInteger (RTL_CONSTASCII_USTRINGPARAM("int"));
         static const ::rtl::OUString s_sTypeLong    (RTL_CONSTASCII_USTRINGPARAM("long"));
         static const ::rtl::OUString s_sTypeDouble  (RTL_CONSTASCII_USTRINGPARAM("double"));
         static const ::rtl::OUString s_sTypeString  (RTL_CONSTASCII_USTRINGPARAM("string"));
@@ -801,6 +801,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2000/11/29 10:36:05  mh
+ *  add: stdio.h for Solaris8
+ *
  *  Revision 1.2  2000/11/19 15:41:32  fs
  *  extended the export capabilities - generic controls / grid columns / generic properties / some missing form properties
  *

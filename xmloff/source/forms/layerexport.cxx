@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerexport.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-03 10:57:06 $
+ *  last change: $Author: fs $ $Date: 2000-12-06 17:28:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,9 @@
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
+#include <com/sun/star/container/XChild.hpp>
+#endif
 
 //.........................................................................
 namespace xmloff
@@ -115,10 +118,12 @@ namespace xmloff
     OFormLayerXMLExport_Impl::OFormLayerXMLExport_Impl(SvXMLExport& _rContext)
         :m_rContext(_rContext)
     {
+        m_aCurrentPageIds = m_aControlIds.end();
+        m_aCurrentPageReferring = m_aReferringControls.end();
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OFormLayerXMLExport_Impl::implCheckPage(const Reference< XDrawPage >& _rxDrawPage, Reference< XIndexAccess >& _rxForms, ::rtl::OUString& _rPageName)
+    sal_Bool OFormLayerXMLExport_Impl::implCheckPage(const Reference< XDrawPage >& _rxDrawPage, Reference< XIndexAccess >& _rxForms)
     {
         Reference< XFormsSupplier > xFormsSupp(_rxDrawPage, UNO_QUERY);
         OSL_ENSURE(xFormsSupp.is(), "OFormLayerXMLExport_Impl::implCheckPage: invalid draw page (no XFormsSupplier)! Doin' nothing!");
@@ -153,15 +158,15 @@ namespace xmloff
     {
         // the list of the referring controls
         ::rtl::OUString sReferringControls;
-        ConstMapPropertySet2StringIterator aReferring = m_aReferringControls.find(_rxControl);
-        if (aReferring != m_aReferringControls.end())
+        ConstMapPropertySet2StringIterator aReferring = m_aCurrentPageReferring->second.find(_rxControl);
+        if (aReferring != m_aCurrentPageReferring->second.end())
             sReferringControls = aReferring->second;
 
         // the control id (should already have been created in examineForms)
         ::rtl::OUString sControlId;
-        ConstMapPropertySet2StringIterator aControlId = m_aControlIds.find(_rxControl);
-        OSL_ENSHURE(aControlId != m_aControlIds.end(), "OFormLayerXMLExport_Impl::exportControl: could not find the control id!");
-        if (aControlId != m_aControlIds.end())
+        ConstMapPropertySet2StringIterator aControlId = m_aCurrentPageIds->second.find(_rxControl);
+        OSL_ENSHURE(aControlId != m_aCurrentPageIds->second.end(), "OFormLayerXMLExport_Impl::exportControl: could not find the control id!");
+        if (aControlId != m_aCurrentPageIds->second.end())
             sControlId = aControlId->second;
 
         // do the exporting
@@ -225,15 +230,95 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
+    void OFormLayerXMLExport_Impl::clear()
+    {
+        m_aControlIds.clear();
+        m_aReferringControls.clear();
+        m_aCurrentPageIds = m_aControlIds.end();
+        m_aCurrentPageReferring = m_aReferringControls.end();
+    }
+
+    //---------------------------------------------------------------------
     void OFormLayerXMLExport_Impl::exportForms(const Reference< XDrawPage >& _rxDrawPage)
     {
         // get the forms collection of the page
         Reference< XIndexAccess > xCollectionIndex;
-        ::rtl::OUString sPageName;
-        if (!implCheckPage(_rxDrawPage, xCollectionIndex, sPageName))
+        if (!implCheckPage(_rxDrawPage, xCollectionIndex))
             return;
 
+#ifdef DEBUG
+        sal_Bool bPageIsKnown =
+#endif
+            implMoveIterators(_rxDrawPage, sal_False);
+        OSL_ENSURE(bPageIsKnown, "OFormLayerXMLExport_Impl::exportForms: exporting a page which has not been examined!");
+
         exportCollectionElements(xCollectionIndex);
+    }
+
+    //---------------------------------------------------------------------
+    sal_Bool OFormLayerXMLExport_Impl::implMoveIterators(const Reference< XDrawPage >& _rxDrawPage, sal_Bool _bClear)
+    {
+        sal_Bool bKnownPage = sal_False;
+
+        // the one for the ids
+        m_aCurrentPageIds = m_aControlIds.find(_rxDrawPage);
+        if (m_aControlIds.end() == m_aCurrentPageIds)
+        {
+            m_aControlIds[_rxDrawPage] = MapPropertySet2String();
+            m_aCurrentPageIds = m_aControlIds.find(_rxDrawPage);
+        }
+        else
+        {
+            bKnownPage = sal_True;
+            if (_bClear && m_aCurrentPageIds->second.size())
+                m_aCurrentPageIds->second.clear();
+        }
+
+        // the one for the ids of the referring controls
+        m_aCurrentPageReferring = m_aReferringControls.find(_rxDrawPage);
+        if (m_aReferringControls.end() == m_aCurrentPageReferring)
+        {
+            m_aReferringControls[_rxDrawPage] = MapPropertySet2String();
+            m_aCurrentPageReferring = m_aReferringControls.find(_rxDrawPage);
+        }
+        else
+        {
+            bKnownPage = sal_True;
+            if (_bClear && m_aCurrentPageReferring->second.size())
+                m_aCurrentPageReferring->second.clear();
+        }
+        return bKnownPage;
+    }
+
+    //---------------------------------------------------------------------
+    sal_Bool OFormLayerXMLExport_Impl::seekPage(const Reference< XDrawPage >& _rxDrawPage)
+    {
+        return implMoveIterators(_rxDrawPage, sal_False);
+    }
+
+    //---------------------------------------------------------------------
+    ::rtl::OUString OFormLayerXMLExport_Impl::getControlId(const Reference< XPropertySet >& _rxControl)
+    {
+        OSL_ENSHURE(m_aCurrentPageIds->second.end() != m_aCurrentPageIds->second.find(_rxControl),
+            "OFormLayerXMLExport_Impl::getControlId: can not find the control!");
+#ifdef _DEBUG
+        // check if the control belongs to the current page (m_aCurrentPageIds, m_aCurrentPageReferring)
+        Reference< XInterface > xCheck = _rxControl.get();
+        Reference< XDrawPage > xPageSearch;
+        while (!xPageSearch.is() && xCheck.is())
+        {
+            Reference< XChild > xCheckAsChild(xCheck, UNO_QUERY);
+            if (xCheckAsChild.is())
+                xCheck = xCheckAsChild->getParent();
+            else
+                xCheck.clear();
+            xPageSearch = Reference< XDrawPage >(xCheck, UNO_QUERY);
+        }
+        OSL_ENSURE(m_aCurrentPageIds->first == xPageSearch,
+
+            "OFormLayerXMLExport_Impl::getControlId: the control is invalid or not part of the page you sought before!");
+#endif
+        return m_aCurrentPageIds->second[_rxControl];
     }
 
     //---------------------------------------------------------------------
@@ -241,12 +326,15 @@ namespace xmloff
     {
         // get the forms collection of the page
         Reference< XIndexAccess > xCollectionIndex;
-        ::rtl::OUString sPageName;
-        if (!implCheckPage(_rxDrawPage, xCollectionIndex, sPageName))
+        if (!implCheckPage(_rxDrawPage, xCollectionIndex))
             return;
 
-        m_aControlIds.clear();
-        m_aReferringControls.clear();
+        // move the iterator which specify the currently handled page
+#ifdef DEBUG
+        sal_Bool bPageIsKnown =
+#endif
+            implMoveIterators(_rxDrawPage, sal_True);
+        OSL_ENSURE(!bPageIsKnown, "OFormLayerXMLExport_Impl::examineForms: examining a page twice!");
 
         ::std::stack< Reference< XIndexAccess > >   aContainerHistory;
         ::std::stack< sal_Int32 >                   aIndexHistory;
@@ -278,20 +366,20 @@ namespace xmloff
 
                     // find a free id
                     ::rtl::OUString sCurrentId = sControlId;
-                    sCurrentId += ::rtl::OUString::valueOf((sal_Int32)(m_aControlIds.size() + 1));
+                    sCurrentId += ::rtl::OUString::valueOf((sal_Int32)(m_aCurrentPageIds->second.size() + 1));
                 #ifdef DBG_UTIL
                     // Check if the id is already used. It shouldn't, as we currently have no mechanism for removing entries
                     // from the map, so the approach used above (take the map size) should be sufficient. But if somebody
                     // changes this (e.g. allows removing entries from the map), this assertion here probably will fail.
-                    for (   ConstMapPropertySet2StringIterator aCheck = m_aControlIds.begin();
-                            aCheck != m_aControlIds.end();
+                    for (   ConstMapPropertySet2StringIterator aCheck = m_aCurrentPageIds->second.begin();
+                            aCheck != m_aCurrentPageIds->second.end();
                             ++aCheck
                         )
                         OSL_ENSURE(aCheck->second != sCurrentId,
                             "OFormLayerXMLExport_Impl::examineForms: auto-generated control ID is already used!");
                 #endif
                     // add it to the map
-                    m_aControlIds[xCurrent] = sCurrentId;
+                    m_aCurrentPageIds->second[xCurrent] = sCurrentId;
 
                     // check if this control has a "LabelControl" property referring another control
                     if (xCurrentInfo->hasPropertyByName(sReferenceCheck))
@@ -299,7 +387,7 @@ namespace xmloff
                         ::cppu::extractInterface(xCurrentReference, xCurrent->getPropertyValue(sReferenceCheck));
                         if (xCurrentReference.is())
                         {
-                            ::rtl::OUString& sReferencedBy = m_aReferringControls[xCurrentReference];
+                            ::rtl::OUString& sReferencedBy = m_aCurrentPageReferring->second[xCurrentReference];
                             if (sReferencedBy.getLength())
                                 // it's not the first xCurrent referring to the xCurrentReference
                                 // -> separate the id
@@ -343,6 +431,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2000/12/03 10:57:06  fs
+ *  some changes to support more than one page to be examined/exported
+ *
  *  Revision 1.3  2000/11/29 10:36:05  mh
  *  add: stdio.h for Solaris8
  *
