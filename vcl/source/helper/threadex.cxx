@@ -2,9 +2,9 @@
  *
  *  $RCSfile: threadex.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:39 $
+ *  last change: $Author: pl $ $Date: 2000-12-05 20:14:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,8 +123,11 @@ long SolarThreadExecutor::execute()
     else
     {
         osl_resetCondition( m_aFinish );
+        ULONG nSolarMutexCount = Application::ReleaseSolarMutex();
         Application::PostUserEvent( LINK( this, SolarThreadExecutor, worker ) );
         osl_waitCondition( m_aFinish, NULL );
+        if( nSolarMutexCount )
+            Application::AcquireSolarMutex( nSolarMutexCount );
     }
     return m_nReturn;
 }
