@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-27 16:48:16 $
+#   last change: $Author: vg $ $Date: 2003-12-17 15:02:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -115,9 +115,13 @@ JAVADOCLOG = $(MISC)$/javadoc_log.txt
 
 MY_AUTODOC=$(WRAPCMD) $(SOLARBINDIR)$/autodoc
 
+.IF "$(SOLAR_JAVA)"!=""
 all: \
     $(CPP_DOCU_INDEX_FILE) \
     $(JAVA_DOCU_INDEX_FILE)
+.ELSE
+all: $(CPP_DOCU_INDEX_FILE)
+.ENDIF
 
 $(CPP_DOCU_INDEX_FILE) : $(INCLUDELIST)
     +-$(MKDIRHIER) $(@:d)        
@@ -138,6 +142,8 @@ $(JAVA_SRC_DIR)$/%.zip : $(SOLARCOMMONBINDIR)$/%.zip
 #	+$(MY_COPY) $< $@
 
 #$(JAVA_DOCU_INDEX_FILE) : $(JAVA_SRC_FILES) $(JAVA_BEAN_SRC_FILES)
+.IF "$(SOLAR_JAVA)"!=""
 $(JAVA_DOCU_INDEX_FILE) : $(JAVA_SRC_FILES)
     +-$(MKDIRHIER) $(@:d)        
     +javadoc -J-Xmx120m $(JAVADOCPARAMS) > $(JAVADOCLOG)
+.ENDIF
