@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docredln.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: dvo $ $Date: 2002-11-11 15:27:26 $
+ *  last change: $Author: dvo $ $Date: 2002-11-28 17:45:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -648,7 +648,12 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
                     }
                     else
                     {
+                        // it may be necessary to split the existing redline in
+                        // two. In this case, pRedl will be changed to cover
+                        // only part of it's former range, and pNew will cover
+                        // the remainder.
                         SwRedline* pNew = 0;
+
                         switch( eCmpPos )
                         {
                         case POS_EQUAL:
@@ -761,10 +766,20 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
                             }
                             break;
                         }
+
+                        // insert the pNew part (if it exists)
                         if( pNew )
                         {
-                            AppendRedline( pNew, bCallDelete );
-                            n = (USHORT)-1;     // neu Aufsetzen
+                            // AppendRedline( pNew, bCallDelete );
+                            sal_Bool bRet = pRedlineTbl->Insert( pNew );
+
+                            // pNew must be deleted if Insert() wasn't
+                            // successful. But that can't happen, since pNew is
+                            // part of the original pRedl redline.
+                            ASSERT( bRet, "Can't insert existing redline?" );
+
+                            // restart (now with pRedl being split up)
+                            n = (USHORT)-1;
                         }
                     }
                     break;
