@@ -2,9 +2,9 @@
  *
  *  $RCSfile: polygn3d.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2001-07-10 10:09:51 $
+ *  last change: $Author: aw $ $Date: 2001-07-10 11:21:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -425,8 +425,11 @@ SdrObject *E3dPolygonObj::DoConvertToPolyObj(BOOL bBezier) const
 
 void E3dPolygonObj::GetLineGeometry(PolyPolygon3D& rLinePolyPolygon) const
 {
-    // call parent
-    E3dCompoundObject::GetLineGeometry(rLinePolyPolygon);
+    // add geometry describing polygons to rLinePolyPolygon
+    rLinePolyPolygon.Insert(aPolyPoly3D);
+
+    // don't call parent
+    // E3dCompoundObject::GetLineGeometry(rLinePolyPolygon);
 }
 
 /*************************************************************************

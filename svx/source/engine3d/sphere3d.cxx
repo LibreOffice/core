@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sphere3d.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2001-07-10 10:09:51 $
+ *  last change: $Author: aw $ $Date: 2001-07-10 11:21:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,8 +164,71 @@ void E3dSphereObj::SetDefaultAttributes(E3dDefaultAttributes& rDefault)
 
 void E3dSphereObj::GetLineGeometry(PolyPolygon3D& rLinePolyPolygon) const
 {
-    // call parent
-    E3dCompoundObject::GetLineGeometry(rLinePolyPolygon);
+    // add geometry describing polygons to rLinePolyPolygon
+    sal_uInt16 nCntHor = (sal_uInt16)GetHorizontalSegments();
+    sal_uInt16 nCntVer = (sal_uInt16)GetVerticalSegments();
+    const Vector3D aRadius = aSize / 2;
+    const double fHInc = (double)DEG2RAD(360) / nCntHor;
+    const double fVInc = (double)DEG2RAD(180) / nCntVer;
+    sal_uInt16 nCntHorPoly = nCntVer - 1;
+    sal_uInt16 nIndHorPoly = rLinePolyPolygon.Count();
+    sal_uInt16 a;
+    double fHAng = 0.0;
+
+    for(a = 0; a < nCntHorPoly; a++)
+    {
+        Polygon3D aNewHor(nCntHor);
+        aNewHor.SetClosed(TRUE);
+        rLinePolyPolygon.Insert(aNewHor);
+    }
+
+    for(sal_uInt16 nH(0); nH < nCntHor; nH++)
+    {
+        double fHSin = sin(fHAng);
+        double fHCos = cos(fHAng);
+        fHAng += fHInc;
+        double fVAng = DEG2RAD(90);
+        Polygon3D aNewVer(nCntVer + 1);
+
+        for(sal_uInt16 nV(0); nV <= nCntVer; nV++)
+        {
+            double fVSin = sin(fVAng);
+            double fVCos = cos(fVAng);
+            fVAng -= fVInc;
+
+            Vector3D aPos = aCenter;
+            double fRx = aRadius.X() * fVCos;
+            double fRz = aRadius.Z() * fVCos;
+            aPos.X() += fRx * fHCos;
+            aPos.Y() += aRadius.Y() * fVSin;
+            aPos.Z() += fRz * fHSin;
+
+            if(nV == 0)
+            {
+                // top position, only interesting for vertical line
+                aNewVer[0] = aPos;
+            }
+            else if(nV == nCntVer)
+            {
+                // bottom position, only interesting for vertical line
+                aNewVer[nCntVer] = aPos;
+            }
+            else
+            {
+                // normal position, insert vertical
+                aNewVer[nV] = aPos;
+
+                // insert horizontal
+                rLinePolyPolygon[nIndHorPoly + (nV - 1)][nH] = aPos;
+            }
+        }
+
+        /// insert new vertical poly
+        rLinePolyPolygon.Insert(aNewVer);
+    }
+
+    // don't call parent
+    // E3dCompoundObject::GetLineGeometry(rLinePolyPolygon);
 }
 
 /*************************************************************************

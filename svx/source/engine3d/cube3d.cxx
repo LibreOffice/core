@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cube3d.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2001-07-10 10:09:51 $
+ *  last change: $Author: aw $ $Date: 2001-07-10 11:21:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,8 +152,42 @@ SdrObject *E3dCubeObj::DoConvertToPolyObj(BOOL bBezier) const
 
 void E3dCubeObj::GetLineGeometry(PolyPolygon3D& rLinePolyPolygon) const
 {
-    // call parent
-    E3dCompoundObject::GetLineGeometry(rLinePolyPolygon);
+    // add geometry describing polygons to rLinePolyPolygon
+    Polygon3D aNewUpper(4);
+    aNewUpper[0] = Vector3D(aCubePos.X(), aCubePos.Y(), aCubePos.Z() + aCubeSize.Z());
+    aNewUpper[1] = Vector3D(aCubePos.X(), aCubePos.Y() + aCubeSize.Y(), aCubePos.Z() + aCubeSize.Z());
+    aNewUpper[2] = Vector3D(aCubePos.X() + aCubeSize.X(), aCubePos.Y() + aCubeSize.Y(), aCubePos.Z() + aCubeSize.Z());
+    aNewUpper[3] = Vector3D(aCubePos.X() + aCubeSize.X(), aCubePos.Y(), aCubePos.Z() + aCubeSize.Z());
+    aNewUpper.SetClosed(TRUE);
+    rLinePolyPolygon.Insert(aNewUpper);
+
+    Polygon3D aNewLower(4);
+    aNewLower[0] = Vector3D(aCubePos.X(), aCubePos.Y(), aCubePos.Z());
+    aNewLower[1] = Vector3D(aCubePos.X(), aCubePos.Y() + aCubeSize.Y(), aCubePos.Z());
+    aNewLower[2] = Vector3D(aCubePos.X() + aCubeSize.X(), aCubePos.Y() + aCubeSize.Y(), aCubePos.Z());
+    aNewLower[3] = Vector3D(aCubePos.X() + aCubeSize.X(), aCubePos.Y(), aCubePos.Z());
+    aNewLower.SetClosed(TRUE);
+    rLinePolyPolygon.Insert(aNewLower);
+
+    Polygon3D aNewVertical(2);
+    aNewVertical[0] = Vector3D(aCubePos.X(), aCubePos.Y(), aCubePos.Z());
+    aNewVertical[1] = Vector3D(aCubePos.X(), aCubePos.Y(), aCubePos.Z() + aCubeSize.Z());
+    rLinePolyPolygon.Insert(aNewVertical);
+
+    aNewVertical[0] = Vector3D(aCubePos.X(), aCubePos.Y() + aCubeSize.Y(), aCubePos.Z());
+    aNewVertical[1] = Vector3D(aCubePos.X(), aCubePos.Y() + aCubeSize.Y(), aCubePos.Z() + aCubeSize.Z());
+    rLinePolyPolygon.Insert(aNewVertical);
+
+    aNewVertical[0] = Vector3D(aCubePos.X() + aCubeSize.X(), aCubePos.Y() + aCubeSize.Y(), aCubePos.Z());
+    aNewVertical[1] = Vector3D(aCubePos.X() + aCubeSize.X(), aCubePos.Y() + aCubeSize.Y(), aCubePos.Z() + aCubeSize.Z());
+    rLinePolyPolygon.Insert(aNewVertical);
+
+    aNewVertical[0] = Vector3D(aCubePos.X() + aCubeSize.X(), aCubePos.Y(), aCubePos.Z());
+    aNewVertical[1] = Vector3D(aCubePos.X() + aCubeSize.X(), aCubePos.Y(), aCubePos.Z() + aCubeSize.Z());
+    rLinePolyPolygon.Insert(aNewVertical);
+
+    // don't call parent
+    // E3dCompoundObject::GetLineGeometry(rLinePolyPolygon);
 }
 
 /*************************************************************************
