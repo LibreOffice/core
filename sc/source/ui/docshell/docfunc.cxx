@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfunc.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: nn $ $Date: 2002-10-22 13:30:14 $
+ *  last change: $Author: sab $ $Date: 2002-11-13 07:29:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -837,7 +837,13 @@ BOOL ScDocFunc::PutCell( const ScAddress& rPos, ScBaseCell* pNewCell, BOOL bApi 
         ScViewData* pViewData = rDocShell.GetViewData();
         if (pViewData && pViewData->GetCurPos() == rPos)
         {
-            pViewData->UpdateInputHandler(FALSE, !SC_MOD()->GetInputHdl()->IsEditMode());
+            sal_Bool bIsEditMode(SC_MOD()->GetInputHdl()->IsEditMode());
+
+            // set modified if in editmode, because so the string is not set in the InputWindow like in the cell
+            // (the cell shows the same like the InputWindow)
+            if (bIsEditMode)
+                SC_MOD()->GetInputHdl()->SetModified();
+            pViewData->UpdateInputHandler(FALSE, !bIsEditMode);
         }
     }
 
