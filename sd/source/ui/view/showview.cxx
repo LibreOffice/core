@@ -2,9 +2,9 @@
  *
  *  $RCSfile: showview.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 15:56:34 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 14:37:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,9 @@ ShowView::ShowView (
       nAllowInvalidateSmph(0),
       bAllowMasterPageCaching(TRUE)
 {
+    // #114898#
+    SetBufferedOutputAllowed(sal_True);
+
     EnableExtendedKeyInputDispatcher(FALSE);
     EnableExtendedMouseEventDispatcher(FALSE);
     EnableExtendedCommandEventDispatcher(FALSE);
