@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iniman.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-01 07:54:22 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 19:12:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,7 @@ ErrorBox ERRBOX_CHECK_PLZ
     Message[ korean ] = "ÀÔ·ÂÇÑ ¿ìÆí¹øÈ£´Â À¯È¿ÇÏÁö ¾Ê½À´Ï´Ù.\n¿ìÆí¹øÈ£´Â ¼ıÀÚ³ª ¹®ÀÚ·Î ½ÃÀÛÇØ¾ß ÇÏ¸ç \n¼ıÀÚ, ¹®ÀÚ, °ø¹é ±×¸®°í  ´ë½Ã·Î¸¸ ÀÌ·ç¾îÁ®¾ß ÇÕ´Ï´Ù.";
     Message[ turkish ] = "Girilen posta kodu geçerli değil.\nPosta kodu bir rakam ya da harf ile başlamalı ve yalnızca\nrakam, harf, boşluk ve ayırma çizgileri içermeli.";
     Message[ language_user1 ] = " ";
+    Message[ catalan ] = "El código postal indicado no es válido.\nDebe comenzar con un número o una letra y\nsolo puede contener números, letras, espacios y guiones.";
 };
 
 
