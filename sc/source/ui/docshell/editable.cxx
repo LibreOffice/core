@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editable.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nn $ $Date: 2002-11-20 14:33:07 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:25:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,8 +83,8 @@ void ScEditableTester::Reset()
     bIsEditable = bOnlyMatrix = TRUE;
 }
 
-ScEditableTester::ScEditableTester( ScDocument* pDoc, USHORT nTab,
-                        USHORT nStartCol, USHORT nStartRow, USHORT nEndCol, USHORT nEndRow ) :
+ScEditableTester::ScEditableTester( ScDocument* pDoc, SCTAB nTab,
+                        SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow ) :
     bIsEditable( TRUE ),
     bOnlyMatrix( TRUE )
 {
@@ -92,7 +92,7 @@ ScEditableTester::ScEditableTester( ScDocument* pDoc, USHORT nTab,
 }
 
 ScEditableTester::ScEditableTester( ScDocument* pDoc,
-                        USHORT nStartCol, USHORT nStartRow, USHORT nEndCol, USHORT nEndRow,
+                        SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                         const ScMarkData& rMark ) :
     bIsEditable( TRUE ),
     bOnlyMatrix( TRUE )
@@ -123,8 +123,8 @@ ScEditableTester::ScEditableTester( ScViewFunc* pView ) :
 
 //------------------------------------------------------------------
 
-void ScEditableTester::TestBlock( ScDocument* pDoc, USHORT nTab,
-                        USHORT nStartCol, USHORT nStartRow, USHORT nEndCol, USHORT nEndRow )
+void ScEditableTester::TestBlock( ScDocument* pDoc, SCTAB nTab,
+                        SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow )
 {
     if ( bIsEditable || bOnlyMatrix )
     {
@@ -139,24 +139,24 @@ void ScEditableTester::TestBlock( ScDocument* pDoc, USHORT nTab,
 }
 
 void ScEditableTester::TestSelectedBlock( ScDocument* pDoc,
-                        USHORT nStartCol, USHORT nStartRow, USHORT nEndCol, USHORT nEndRow,
+                        SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                         const ScMarkData& rMark )
 {
-    USHORT nTabCount = pDoc->GetTableCount();
-    for (USHORT nTab=0; nTab<nTabCount; nTab++)
+    SCTAB nTabCount = pDoc->GetTableCount();
+    for (SCTAB nTab=0; nTab<nTabCount; nTab++)
         if (rMark.GetTableSelect(nTab))
             TestBlock( pDoc, nTab, nStartCol, nStartRow, nEndCol, nEndRow );
 }
 
 void ScEditableTester::TestRange( ScDocument* pDoc, const ScRange& rRange )
 {
-    USHORT nStartCol = rRange.aStart.Col();
-    USHORT nStartRow = rRange.aStart.Row();
-    USHORT nStartTab = rRange.aStart.Tab();
-    USHORT nEndCol = rRange.aEnd.Col();
-    USHORT nEndRow = rRange.aEnd.Row();
-    USHORT nEndTab = rRange.aEnd.Tab();
-    for (USHORT nTab=nStartTab; nTab<=nEndTab; nTab++)
+    SCCOL nStartCol = rRange.aStart.Col();
+    SCROW nStartRow = rRange.aStart.Row();
+    SCTAB nStartTab = rRange.aStart.Tab();
+    SCCOL nEndCol = rRange.aEnd.Col();
+    SCROW nEndRow = rRange.aEnd.Row();
+    SCTAB nEndTab = rRange.aEnd.Tab();
+    for (SCTAB nTab=nStartTab; nTab<=nEndTab; nTab++)
         TestBlock( pDoc, nTab, nStartCol, nStartRow, nEndCol, nEndRow );
 }
 
