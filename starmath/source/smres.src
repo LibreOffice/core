@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 08:57:48 $
+ *  last change: $Author: rt $ $Date: 2004-11-17 08:14:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3569,9 +3569,29 @@ FloatingWindow RID_TOOLBOXWINDOW
         Size = MAP_APPFONT ( 65 , 10 ) ;
 
     };
+};
+
+#define CMDBOXWINDOW_TEXT           \
+    Text [ de ] = "Kommandos" ;                            \
+    Text [ en-US ] = "Commands" ;              \
+    Text [ x-comment ] = " ";                   \
+
+DockingWindow RID_CMDBOXWINDOW
+{
+    HelpId = HID_SMA_COMMAND_WIN ;
+    Moveable = TRUE ;
+    Closeable = FALSE ;
+    Sizeable = TRUE ;
+    OutputSize = TRUE ;
+    HideWhenDeactivate = FALSE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 292 , 94 ) ;
+    Dockable = TRUE ;
+    CMDBOXWINDOW_TEXT
+};
 
 
-#define UNOP_IDLIST         \
+#define UNBINOPS_IDLIST         \
     IdList =                \
     {                       \
         RID_PLUSX ;         \
@@ -3593,20 +3613,20 @@ FloatingWindow RID_TOOLBOXWINDOW
     };                      \
     IdCount = { 16 ; };
 
-    ImageList IL_UNOP
+    ImageList RID_IL_UNBINOPS
     {
         Prefix = "un";
         MaskColor = IMAGE_STDBTN_COLOR ;
-        UNOP_IDLIST
+        UNBINOPS_IDLIST
     };
-    ImageList  ILH_UNOP
+    ImageList RID_ILH_UNBINOPS
     {
         Prefix = "unh";
         MaskColor = IMAGE_STDBTN_COLOR_HC ;
-        UNOP_IDLIST
+        UNBINOPS_IDLIST
     };
 
-#define BIOP_IDLIST         \
+#define RELATIONS_IDLIST         \
     IdList =                \
     {                       \
         RID_XEQY ;          \
@@ -3633,20 +3653,20 @@ FloatingWindow RID_TOOLBOXWINDOW
     };                      \
     IdCount ={ 21 ; };
 
-    ImageList IL_BIOP
+    ImageList RID_IL_RELATIONS
     {
         Prefix = "bi";
         MaskColor = IMAGE_STDBTN_COLOR ;
-        BIOP_IDLIST
+        RELATIONS_IDLIST
     };
-    ImageList  ILH_BIOP
+    ImageList RID_ILH_RELATIONS
     {
         Prefix = "bih";
         MaskColor = IMAGE_STDBTN_COLOR_HC ;
-        BIOP_IDLIST
+        RELATIONS_IDLIST
     };
 
-#define OPER_IDLIST             \
+#define SETOPERATIONS_IDLIST             \
     IdList =                    \
     {                           \
         RID_XINY ;              \
@@ -3674,20 +3694,20 @@ FloatingWindow RID_TOOLBOXWINDOW
     };                          \
     IdCount = { 22 ; };
 
-    ImageList IL_OPER
+    ImageList RID_IL_SETOPERATIONS
     {
         Prefix = "op";
         MaskColor = IMAGE_STDBTN_COLOR ;
-        OPER_IDLIST
+        SETOPERATIONS_IDLIST
     };
-    ImageList  ILH_OPER
+    ImageList RID_ILH_SETOPERATIONS
     {
         Prefix = "oph";
         MaskColor = IMAGE_STDBTN_COLOR_HC ;
-        OPER_IDLIST
+        SETOPERATIONS_IDLIST
     };
 
-#define FUNC_IDLIST         \
+#define FUNCTIONS_IDLIST         \
     IdList =                \
     {                       \
         RID_ABSX ;          \
@@ -3718,20 +3738,20 @@ FloatingWindow RID_TOOLBOXWINDOW
     };                      \
     IdCount = { 25 ; };
 
-    ImageList IL_FUNC
+    ImageList RID_IL_FUNCTIONS
     {
         Prefix = "fu";
         MaskColor = IMAGE_STDBTN_COLOR ;
-        FUNC_IDLIST
+        FUNCTIONS_IDLIST
     };
-    ImageList  ILH_FUNC
+    ImageList RID_ILH_FUNCTIONS
     {
         Prefix = "fuh";
         MaskColor = IMAGE_STDBTN_COLOR_HC ;
-        FUNC_IDLIST
+        FUNCTIONS_IDLIST
     };
 
-#define FORM_IDLIST         \
+#define OPERATORS_IDLIST         \
     IdList =                \
     {                       \
         RID_LIMX ;          \
@@ -3750,20 +3770,20 @@ FloatingWindow RID_TOOLBOXWINDOW
     };                      \
     IdCount = { 13 ; };
 
-    ImageList IL_FORM
+    ImageList RID_IL_OPERATORS
     {
         Prefix = "fo";
         MaskColor = IMAGE_STDBTN_COLOR ;
-        FORM_IDLIST
+        OPERATORS_IDLIST
     };
-    ImageList  ILH_FORM
+    ImageList RID_ILH_OPERATORS
     {
         Prefix = "foh";
         MaskColor = IMAGE_STDBTN_COLOR_HC ;
-        FORM_IDLIST
+        OPERATORS_IDLIST
     };
 
-#define ATTR_IDLIST             \
+#define ATTRIBUTES_IDLIST             \
     IdList =                    \
     {                           \
         RID_ACUTEX ;            \
@@ -3792,20 +3812,20 @@ FloatingWindow RID_TOOLBOXWINDOW
     };                          \
     IdCount = { 23 ; };
 
-    ImageList IL_ATTR
+    ImageList RID_IL_ATTRIBUTES
     {
         Prefix = "at";
         MaskColor = IMAGE_STDBTN_COLOR ;
-        ATTR_IDLIST
+        ATTRIBUTES_IDLIST
     };
-    ImageList  ILH_ATTR
+    ImageList RID_ILH_ATTRIBUTES
     {
         Prefix = "ath";
         MaskColor = IMAGE_STDBTN_COLOR_HC ;
-        ATTR_IDLIST
+        ATTRIBUTES_IDLIST
     };
 
-#define ALGN_IDLIST             \
+#define BRACKETS_IDLIST             \
     IdList =                    \
     {                           \
         RID_LRPARENTX ;         \
@@ -3830,20 +3850,20 @@ FloatingWindow RID_TOOLBOXWINDOW
     };                          \
     IdCount = { 19 ; };
 
-    ImageList IL_ALGN
+    ImageList RID_IL_BRACKETS
     {
         Prefix = "al";
         MaskColor = IMAGE_STDBTN_COLOR ;
-        ALGN_IDLIST
+        BRACKETS_IDLIST
     };
-    ImageList  ILH_ALGN
+    ImageList RID_ILH_BRACKETS
     {
         Prefix = "alh";
         MaskColor = IMAGE_STDBTN_COLOR_HC ;
-        ALGN_IDLIST
+        BRACKETS_IDLIST
     };
 
-#define COLR_IDLIST         \
+#define FORMAT_IDLIST         \
     IdList =                \
     {                       \
         RID_NEWLINE ;       \
@@ -3864,17 +3884,17 @@ FloatingWindow RID_TOOLBOXWINDOW
     };                      \
     IdCount = { 15 ; };
 
-    ImageList IL_COLR
+    ImageList RID_IL_FORMAT
     {
         Prefix = "co";
         MaskColor = IMAGE_STDBTN_COLOR ;
-        COLR_IDLIST
+        FORMAT_IDLIST
     };
-    ImageList  ILH_COLR
+    ImageList RID_ILH_FORMAT
     {
         Prefix = "coh";
         MaskColor = IMAGE_STDBTN_COLOR_HC ;
-        COLR_IDLIST
+        FORMAT_IDLIST
     };
 
 #define MISC_IDLIST         \
@@ -3902,20 +3922,20 @@ FloatingWindow RID_TOOLBOXWINDOW
     };                      \
     IdCount = { 19 ; };
 
-    ImageList IL_MISC
+    ImageList RID_IL_MISC
     {
         Prefix = "mi";
         MaskColor = IMAGE_STDBTN_COLOR ;
         MISC_IDLIST
     };
-    ImageList  ILH_MISC
+    ImageList RID_ILH_MISC
     {
         Prefix = "mih";
         MaskColor = IMAGE_STDBTN_COLOR_HC ;
         MISC_IDLIST
     };
 
-#define IMG_IDLIST                  \
+#define CATALOG_IDLIST                  \
     IdList =                        \
     {                               \
         RID_UNBINOPS_CAT ;          \
@@ -3930,38 +3950,20 @@ FloatingWindow RID_TOOLBOXWINDOW
     };                              \
     IdCount = { 9 ; };
 
-    ImageList IL_IMG
+    ImageList RID_IL_CATALOG
     {
         Prefix = "im";
         MaskColor = IMAGE_STDBTN_COLOR ;
-        IMG_IDLIST
+        CATALOG_IDLIST
     };
-    ImageList  ILH_IMG
+    ImageList RID_ILH_CATALOG
     {
         Prefix = "imh";
         MaskColor = IMAGE_STDBTN_COLOR_HC ;
-        IMG_IDLIST
+        CATALOG_IDLIST
     };
-};
 
-#define CMDBOXWINDOW_TEXT           \
-    Text [ de ] = "Kommandos" ;                            \
-    Text [ en-US ] = "Commands" ;              \
-    Text [ x-comment ] = " ";                   \
 
-DockingWindow RID_CMDBOXWINDOW
-{
-    HelpId = HID_SMA_COMMAND_WIN ;
-    Moveable = TRUE ;
-    Closeable = FALSE ;
-    Sizeable = TRUE ;
-    OutputSize = TRUE ;
-    HideWhenDeactivate = FALSE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 292 , 94 ) ;
-    Dockable = TRUE ;
-    CMDBOXWINDOW_TEXT
-};
 
 #define _ID_LIST \
     IdList =\
