@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptNameResolverImpl.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: dfoster $ $Date: 2003-03-04 18:34:53 $
+ *  last change: $Author: dfoster $ $Date: 2003-03-06 15:31:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,6 +332,12 @@ throw ( lang::IllegalArgumentException, script::CannotConvertException, RuntimeE
         }
 #endif
 
+    }
+    if ( !resolvedName.is() )
+    {
+        throw lang::IllegalArgumentException( OUSTR(
+            "ScriptNameResolverImpl::resolve: no script found for uri=" ).concat( scriptURI ),
+            Reference< XInterface > (), 0 );
     }
     return resolvedName;
 }
