@@ -2,9 +2,9 @@
  *
  *  $RCSfile: string.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:15 $
+ *  last change: $Author: pl $ $Date: 2000-11-14 11:12:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -819,6 +819,12 @@ public:
 #ifdef _USE_NAMESPACE
 }
 #endif
+
+struct OStringHash
+{
+     size_t operator()(const rtl::OString& rString) const
+         { return (size_t)rString.hashCode(); }
+};
 
 #endif /* __cplusplus */
 #endif /* _RTL_STRING_HXX_ */
