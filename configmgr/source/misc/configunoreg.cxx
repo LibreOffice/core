@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configunoreg.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: jb $ $Date: 2002-11-28 09:05:18 $
+ *  last change: $Author: jb $ $Date: 2002-11-28 09:28:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -339,7 +339,7 @@ extern "C" void* SAL_CALL component_getFactory(
         ||
         aReq.CreateService(
                 configmgr::localbe::getLocalHierarchyBrowserServiceInfo(),
-                configmgr::localbe::instantiateLocalDataImporter,
+                configmgr::localbe::instantiateLocalHierarchyBrowser,
                 cppu::createSingleFactory)
         ||
         // im/export
