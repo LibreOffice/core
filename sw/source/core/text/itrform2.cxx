@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-28 16:20:44 $
+ *  last change: $Author: fme $ $Date: 2001-06-08 13:16:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -540,15 +540,14 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
         if( rInf.IsRuby() && !rInf.GetRest() )
             bFull = sal_True;
 
-        // Vorsicht: ein Fly im Blocksatz, dann kann das Repaint nur komplett
-        // hinter ihm oder vom Zeilenbeginn sein.
-#ifdef DEBUG
-        SwTwips nWhere = rInf.X();
-        long nLeft = GetLeftMargin();
-        SwTwips nPaintOfs = rInf.GetPaintOfst();
-#endif
         if ( pPor->IsFlyPortion() )
             pCurr->SetFly( sal_True );
+        else if ( pPor->InTabGrp() &&
+                 !pPor->IsTabLeftPortion() &&
+                 !rInf.GetPaintOfst() )
+            // we store the beginning of the first right tab as our
+            // paint offset
+            rInf.SetPaintOfst( GetLeftMargin() + rInf.X() );
 
         if( pPor->IsFlyCntPortion() || ( pPor->IsMultiPortion() &&
             ((SwMultiPortion*)pPor)->HasFlyInCntnt() ) )
@@ -1167,7 +1166,6 @@ xub_StrLen SwTxtFormatter::FormatLine( const xub_StrLen nStart )
     SetFlyInCntBase( sal_False );
     GetInfo().SetLineHeight( 0 );
     GetInfo().SetLineNettoHeight( 0 );
-    GetInfo().SetPaintOfst( 0 );
 
     // Recycling muss bei geaenderter Zeilenhoehe unterdrueckt werden
     // und auch bei geaendertem Ascent (Absenken der Grundlinie).
@@ -1216,6 +1214,7 @@ xub_StrLen SwTxtFormatter::FormatLine( const xub_StrLen nStart )
         sal_Bool bOldArrowDone = GetInfo().IsArrowDone();
         GetInfo().SetFtnInside( sal_False );
 
+        // besides other things, this sets the repaint offset to 0
         FormatReset( GetInfo() );
 
         if( bOldNumDone )
@@ -1506,6 +1505,15 @@ sal_Bool SwTxtFormatter::AllowRepaintOpt( const SwTxtFormatInfo& rInf ) const
         }
     }
 
+    // Schon wieder ein Sonderfall: unsichtbare SoftHyphs
+    const xub_StrLen nReformat = rInf.GetReformatStart();
+    if( bOptimizeRepaint && STRING_LEN != nReformat )
+    {
+        const xub_Unicode cCh = rInf.GetTxt().GetChar( nReformat );
+        bOptimizeRepaint = ( CH_TXTATR_BREAKWORD != cCh && CH_TXTATR_INWORD != cCh )
+                            || !rInf.HasHint( nReformat );
+    }
+
     return bOptimizeRepaint;
 }
 
@@ -1524,20 +1532,28 @@ long SwTxtFormatter::CalcOptRepaint( SwTxtFormatInfo& rInf,
 
     if ( ! pFlyStart && ! pCurr->IsFly() )
     {
+        // this is the maximum repaint offset determined during formatting
+        // for example: the beginning of the first right tab stop
+        // if this value is 0, this means that we do not have an upper
+        // limit for the repaint offset
+        const long nFormatRepaint = rInf.GetPaintOfst();
+
         // in case we do not have any fly in our line, our repaint position
         // is the changed position - 1
         xub_StrLen nReformat = rInf.GetReformatStart();
 
-        // for different safety reasons (e.g., PostIts) we step back
-        if ( nReformat )
-            nReformat--;
+        if ( nReformat <= rInf.GetLineStart() )
+            return 0;
 
+        // for different safety reasons (e.g., PostIts) we step back
+        nReformat--;
         SwRect aRect;
 
         ASSERT( nReformat < rInf.GetIdx(), "Reformat too small for me!" );
         GetCharRect( &aRect, nReformat );
 
-        return aRect.Left();
+        return nFormatRepaint ? Min( aRect.Left(), nFormatRepaint ) :
+                                aRect.Left();
     }
     else
     {
