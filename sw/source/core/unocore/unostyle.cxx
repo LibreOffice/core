@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-24 19:59:24 $
+ *  last change: $Author: mtg $ $Date: 2001-10-04 12:35:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1054,6 +1054,8 @@ BOOL SwXStyle::supportsService(const OUString& rServiceName) throw( RuntimeExcep
     if(!bRet && SFX_STYLE_FAMILY_PARA == eFamily)
         bRet = (C2U("com.sun.star.style.ParagraphStyle") == rServiceName)||
             (C2U("com.sun.star.style.ParagraphProperties") == rServiceName);
+    if(!bRet && SFX_STYLE_FAMILY_PAGE == eFamily)
+        bRet = (C2U("com.sun.star.style.PageProperties") == rServiceName);
 
     return  bRet;
 }
@@ -1071,6 +1073,8 @@ Sequence< OUString > SwXStyle::getSupportedServiceNames(void) throw( RuntimeExce
     }
     else if(SFX_STYLE_FAMILY_CHAR == eFamily)
         nCount = 4;
+    else if(SFX_STYLE_FAMILY_PAGE == eFamily)
+        nCount = 2;
     Sequence< OUString > aRet(nCount);
     OUString* pArray = aRet.getArray();
     pArray[0] = C2U("com.sun.star.style.Style");
@@ -1080,6 +1084,9 @@ Sequence< OUString > SwXStyle::getSupportedServiceNames(void) throw( RuntimeExce
             pArray[1] = C2U("com.sun.star.style.CharacterProperties");
             pArray[2] = C2U("com.sun.star.style.CharacterPropertiesAsian");
             pArray[3] = C2U("com.sun.star.style.CharacterPropertiesComplex");
+        break;
+        case SFX_STYLE_FAMILY_PAGE:
+            pArray[1] = C2U("com.sun.star.style.PageProperties");
         break;
         case SFX_STYLE_FAMILY_PARA:
             pArray[1] = C2U("com.sun.star.style.ParagraphStyle");
