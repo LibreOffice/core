@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-27 14:47:03 $
+ *  last change: $Author: cmc $ $Date: 2002-06-27 16:04:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -468,14 +468,15 @@ sal_uInt8* WW8ListManager::GrpprlHasSprm(sal_uInt16 nId, sal_uInt8& rSprms,
     sal_uInt8 nLen)
 {
     sal_uInt8* pSprms = &rSprms;
-    for(USHORT i=0; i<nLen; )
+    USHORT i=0;
+    while (i < nLen)
     {
-        sal_uInt8 nDelta;
-        sal_uInt16 nAktId = WW8GetSprmId(rFib.nVersion, pSprms, &nDelta );
+        sal_uInt16 nAktId = maSprmParser.GetSprmId(pSprms);
         if( nAktId == nId ) // Sprm found
-            return pSprms + 1 + nDelta + WW8SprmDataOfs(rFib.nVersion, nId );
-                                                // gib Zeiger auf Daten
-        USHORT x = WW8GetSprmSize(rFib.nVersion, pSprms, &nAktId );
+            return pSprms + maSprmParser.DistanceToData(nId);
+
+        // gib Zeiger auf Daten
+        USHORT x = maSprmParser.GetSprmSize(nAktId, pSprms);
         i += x;
         pSprms += x;
     }
@@ -952,8 +953,9 @@ SwNumRule* WW8ListManager::CreateNextRule(BOOL bSimple)
 // oeffentliche Methoden /////////////////////////////////////////////////////
 //
 WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
-    : pLFOInfos( 0 ), nUniqueList(1), rSt( rSt_ ), rReader( rReader_ ),
-    rDoc( rReader.GetDoc() ), rFib( rReader.GetFib() )
+    : maSprmParser(rReader_.GetFib().nVersion), pLFOInfos( 0 ), nUniqueList(1),
+    rSt( rSt_ ), rReader( rReader_ ), rDoc( rReader.GetDoc() ),
+    rFib( rReader.GetFib() )
 {
     // LST und LFO gibts erst ab WW8
     if(    ( 8 > rFib.nVersion )
@@ -1798,10 +1800,8 @@ BOOL SwWW8ImplReader::ImportFormulaControl(WW8FormulaControl &aFormula,
             //only interested in sprms which would set nPicLocFc
             if ( (68 == aRes.nSprmId) || (0x6A03 == aRes.nSprmId) )
             {
-                Read_PicLoc( aRes.nSprmId, aRes.pMemPos+ 1+
-                (8 > pWwFib->nVersion ? 0 : 1) + WW8SprmDataOfs(
-                    pWwFib->nVersion, aRes.nSprmId),
-                4);
+                Read_PicLoc( aRes.nSprmId, aRes.pMemPos +
+                    mpSprmParser->DistanceToData(aRes.nSprmId), 4);
                 break;
             }
         }

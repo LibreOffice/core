@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-09 12:32:00 $
+ *  last change: $Author: cmc $ $Date: 2002-06-27 16:04:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,6 +230,7 @@ public:
 class WW8RStyle: public WW8Style
 {
 friend class SwWW8ImplReader;
+    wwSprmParser maSprmParser;
     SwWW8ImplReader* pIo;   // Parser-Klasse
     SvStream* pStStrm;      // Input-File
 
@@ -290,19 +291,7 @@ public:
 
 enum WW8LvlType {WW8_None, WW8_Outline, WW8_Numbering, WW8_Sequence, WW8_Pause};
 
-inline WW8LvlType GetNumType( BYTE nWwLevelNo )
-{
-    WW8LvlType nRet = WW8_None;
-    if( nWwLevelNo == 12 )
-        nRet = WW8_Pause;
-    else if( nWwLevelNo == 10 )
-        nRet = WW8_Numbering;
-    else if( nWwLevelNo == 11 )
-        nRet = WW8_Sequence;
-    else if( nWwLevelNo > 0 && nWwLevelNo <= 9 )
-        nRet = WW8_Outline;
-    return nRet;
-}
+WW8LvlType GetNumType(BYTE nWwLevelNo);
 
 #define STI_USER 0x0FFE
 

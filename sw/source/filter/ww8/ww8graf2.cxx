@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf2.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-22 13:04:56 $
+ *  last change: $Author: cmc $ $Date: 2002-06-27 16:04:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -609,16 +609,13 @@ BOOL SwWW8ImplReader::ImportURL(String &sURL,String &sMark,WW8_CP nStart)
     nStart = pPlcxMan->Where();
     while(nStart <= nEndCp)
     {
-        if ( pPlcxMan->Get(&aRes)
-            && aRes.pMemPos && aRes.nSprmId )
+        if (pPlcxMan->Get(&aRes) && aRes.pMemPos && aRes.nSprmId)
         {
             //only interested in sprms which would set nPicLocFc
             if ( (68 == aRes.nSprmId) || (0x6A03 == aRes.nSprmId) )
             {
-                Read_PicLoc( aRes.nSprmId, aRes.pMemPos+ 1+
-                    (8 > pWwFib->nVersion ? 0 : 1) +
-                    WW8SprmDataOfs(pWwFib->nVersion,aRes.nSprmId),
-                4);
+                Read_PicLoc(aRes.nSprmId, aRes.pMemPos +
+                    mpSprmParser->DistanceToData(aRes.nSprmId), 4);
                 break;
             }
         }

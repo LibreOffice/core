@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-13 14:19:05 $
+ *  last change: $Author: cmc $ $Date: 2002-06-27 16:04:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1912,15 +1912,18 @@ long SwWW8ImplReader::ReadTextAttr( long& rTxtPos, BOOL& rbStartLine )
     long nSkipChars = 0;
     WW8PLCFManResult aRes;
 
+    ASSERT(pPaM->GetNode()->GetTxtNode(), "Missing txtnode");
     BOOL bStartAttr = pPlcxMan->Get( &aRes ); // hole Attribut-Pos
     aRes.nAktCp = rTxtPos;              // Akt. Cp-Pos
 
     if (aRes.nFlags & MAN_MASK_NEW_SEP) // neue Section
     {
+        ASSERT(pPaM->GetNode()->GetTxtNode(), "Missing txtnode");
         CreateSep( rTxtPos, bPgSecBreak );  // PageDesc erzeugen und fuellen
                                             // -> 0xc war ein Sectionbreak, aber
                                             // kein Pagebreak;
         bPgSecBreak = FALSE;                // PageDesc erzeugen und fuellen
+        ASSERT(pPaM->GetNode()->GetTxtNode(), "Missing txtnode");
     }
 
     // neuer Absatz ueber Plcx.Fkp.papx
@@ -2100,6 +2103,7 @@ BOOL SwWW8ImplReader::ReadText( long nStartCp, long nTextLen, short nType )
     {
 
         ReadAttrs( nNext, l, bStartLine );// behandelt auch Section-Breaks
+        ASSERT(pPaM->GetNode()->GetTxtNode(), "Missing txtnode");
 
         if( l>= nStartCp + nTextLen )
             break;
@@ -2319,6 +2323,8 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
     }
     else
     {
+        mpSprmParser = new wwSprmParser(pWwFib->nVersion);
+
         // praktische Hilfsvariablen besetzen:
         bVer67 = (     (6 == pWwFib->nVersion)
                                 || (7 == pWwFib->nVersion) );   // z.B.: altes Sprm-Id-Format!
@@ -2745,6 +2751,7 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
             DELETEZ( pOleMap );
             DELETEZ( pTabNode );
             DELETEZ( pLastPgDeskIdx );
+            delete mpSprmParser;
             ::EndProgress( rDoc.GetDocShell() );
         }
         pDataStream = 0;
@@ -3064,6 +3071,7 @@ BOOL SwMSDffManager::GetOLEStorageName( long nOLEId, String& rStorageName,
             pChp->SeekPos( nStartCp );
 
             WW8_CP nStart = pChp->Where();
+            wwSprmParser aSprmParser(rReader.pWwFib->nVersion);
             while( nStart <= nEndCp && !nPictureId )
             {
                 WW8PLCFxDesc aDesc;
@@ -3078,20 +3086,16 @@ BOOL SwMSDffManager::GetOLEStorageName( long nOLEId, String& rStorageName,
 
                     while( nLen >= 2 && !nPictureId )
                     {
-                        BYTE   nDelta;
-                        USHORT nId = WW8GetSprmId( rReader.pWwFib->nVersion,
-                                                    pSprm, &nDelta );
-
-                        USHORT nSL = WW8GetSprmSize(rReader.pWwFib->nVersion,
-                            pSprm, &nId );
+                        USHORT nId = aSprmParser.GetSprmId(pSprm);
+                        USHORT nSL = aSprmParser.GetSprmSize(nId, pSprm);
 
                         if( nLen < nSL )
                             break;              // nicht mehr genug Bytes uebrig
 
                         if( 0x6A03 == nId && 0 < nLen )
                         {
-                            nPictureId = SVBT32ToLong( pSprm + 1 + nDelta +
-                                WW8SprmDataOfs(rReader.pWwFib->nVersion,nId) );
+                            nPictureId = SVBT32ToLong(pSprm +
+                                aSprmParser.DistanceToData(nId));
                             bRet = TRUE;
                         }
                         pSprm += nSL;

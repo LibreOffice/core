@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-21 15:50:56 $
+ *  last change: $Author: cmc $ $Date: 2002-06-27 16:04:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -726,10 +726,10 @@ void SwWW8ImplReader::InsertTxbxAttrs( long nStartCp, long nEndCp,
             {
                 if ( (68 == aRes.nSprmId) || (0x6A03 == aRes.nSprmId) )
                 {
-                    Read_PicLoc( aRes.nSprmId,
-                        aRes.pMemPos + 1 + (8 > pWwFib->nVersion ? 0 : 1)
-                        + WW8SprmDataOfs( pWwFib->nVersion, aRes.nSprmId ), 4 );
-                    // Ok, that's it.  Now let's get out of here!
+                    Read_PicLoc(aRes.nSprmId, aRes.pMemPos +
+                        mpSprmParser->DistanceToData(aRes.nSprmId), 4);
+                     // Ok, that's what we were looking for.  Now let's get
+                     // out of here!
                     break;
                 }
             }
@@ -1062,8 +1062,8 @@ SwFrmFmt* SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
                         WW8PLCFx_Cp_FKP* pChp = pPlcxMan->GetChpPLCF();
                         WW8PLCFxDesc aDesc;
                         pChp->GetSprms( &aDesc );
-                        WW8SprmIter aSprmIter( aDesc.pMemPos, aDesc.nSprmsLen,
-                            GetFib().nVersion );
+                        WW8SprmIter aSprmIter(aDesc.pMemPos, aDesc.nSprmsLen,
+                            *mpSprmParser);
 
                         const BYTE* pParams = aSprmIter.GetAktParams();
                         for( int nLoop = 0; nLoop < 2; ++nLoop )

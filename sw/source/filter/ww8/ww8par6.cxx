@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-27 10:02:30 $
+ *  last change: $Author: cmc $ $Date: 2002-06-27 16:04:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1394,8 +1394,8 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos,BOOL bMustHaveBreak)
 
             // zu ignorierende Attribute sammeln
             SvUShortsSort aIgnore(9, 1);
-            BOOL bEqual = FALSE;
-            if( bContinuousBreak )
+            bool bEqual = false;
+            if (bContinuousBreak)
             {
                 /*
                     zu 'sprmSBkc':
@@ -1434,7 +1434,7 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos,BOOL bMustHaveBreak)
                 else
                     aIgnore.Insert(aVer8Ids, sizeof(aVer8Ids)/sizeof(USHORT));
 
-                bEqual = TRUE;
+                bEqual = true;
             }
             else
             {
@@ -1557,7 +1557,6 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos,BOOL bMustHaveBreak)
 
     if (!mbNewDoc)
         return;
-
 
     // Seitennummernformat speichern
     {
@@ -5537,25 +5536,20 @@ void SwWW8ImplReader::EndSprm( USHORT nId )
 
 short SwWW8ImplReader::ImportSprm(const BYTE* pPos,USHORT nId)
 {
-    BYTE nDelta;
-    BYTE nV = pWwFib->nVersion;
-
-    if( nId )
-        nDelta = bVer67 ? 0 : 1;
-    else
-        nId = WW8GetSprmId( nV, pPos, &nDelta );
+    if (!nId)
+        nId = mpSprmParser->GetSprmId(pPos);
 
 #ifdef DEBUG
     ASSERT( nId != 0xff, "Sprm FF !!!!" );
 #endif //DEBUG
 
-    SprmReadInfo& rSprm = WW8GetSprmReadInfo( nId );
+    SprmReadInfo& rSprm = WW8GetSprmReadInfo(nId);
 
-    USHORT nFixedLen = 1 + nDelta + WW8SprmDataOfs(nV, nId );
-    USHORT nL = WW8GetSprmSize( nV, pPos, &nId );
+    USHORT nFixedLen = mpSprmParser->DistanceToData(nId);
+    USHORT nL = mpSprmParser->GetSprmSize(nId, pPos);
 
-    if( rSprm.pReadFnc )
-        (this->*rSprm.pReadFnc)( nId, pPos + nFixedLen, nL - nFixedLen );
+    if (rSprm.pReadFnc)
+        (this->*rSprm.pReadFnc)(nId, pPos + nFixedLen, nL - nFixedLen);
 
     return nL;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-13 14:19:05 $
+ *  last change: $Author: cmc $ $Date: 2002-06-27 16:04:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,6 +253,7 @@ class SwWW8ImplReader;
 struct WW8LSTInfo;
 class WW8ListManager
 {
+    wwSprmParser maSprmParser;
     SwWW8ImplReader& rReader;
     SwDoc&           rDoc;
     const WW8Fib&    rFib;
@@ -600,9 +601,14 @@ friend class WW8FormulaControl;
     For graphics anchors. Determines the graphics whose anchors are in the
     current paragraph, and works around the difficulty in inserting a graphic
     anchored to character before a character to be anchored to has been
-    inserted.
+    inserted. Is emptied at the end of each paragraph.
     */
     SwWW8FltAnchorStack* pAnchorStck;
+
+    /*
+    Knows how to split a series of bytes into sprms and their arguments
+    */
+    wwSprmParser *mpSprmParser;
 
     /*
     Creates unique names to give to graphics

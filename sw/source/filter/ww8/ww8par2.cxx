@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-26 14:45:16 $
+ *  last change: $Author: cmc $ $Date: 2002-06-27 16:04:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -882,6 +882,20 @@ void SwWW8ImplReader::Read_OLST( USHORT, const BYTE* pData, short nLen )
     *pNumOlst = *(WW8_OLST*)pData;
 }
 
+WW8LvlType GetNumType(BYTE nWwLevelNo)
+{
+    WW8LvlType nRet = WW8_None;
+    if( nWwLevelNo == 12 )
+       nRet = WW8_Pause;
+    else if( nWwLevelNo == 10 )
+       nRet = WW8_Numbering;
+    else if( nWwLevelNo == 11 )
+       nRet = WW8_Sequence;
+    else if( nWwLevelNo > 0 && nWwLevelNo <= 9 )
+       nRet = WW8_Outline;
+    return nRet;
+}
+
 // StartAnl wird am Anfang eines Zeilenbereichs gerufen,
 //  der Gliederung / Nummerierung / Aufzaehlung enthaelt
 #define MAX_ANLV_NUM 12
@@ -1370,12 +1384,12 @@ void WW8TabBandDesc::ProcessSpacing(const BYTE* pParams)
     BYTE nWhichCell = *pParams++;
     ASSERT(nWhichCell == 0, "Expected cell to be 0!");
     BYTE nUnknown1 = *pParams++;
-    ASSERT(nUnknown1 == 0x1, "Unexpected value for spacing1");
+//    ASSERT(nUnknown1 == 0x1, "Unexpected value for spacing1");
 
     BYTE nSideBits = *pParams++;
     ASSERT(nSideBits < 0x10, "Unexpected value for nSideBits");
     BYTE nUnknown2 = *pParams++;
-    ASSERT(nUnknown2 == 0x3, "Unexpected value for spacing2");
+//    ASSERT(nUnknown2 == 0x3, "Unexpected value for spacing2");
     USHORT nValue =  SVBT16ToShort( pParams );
     for (int i = wwTOP; i <= wwRIGHT; i++)
     {
@@ -1554,6 +1568,8 @@ WW8TabDesc::WW8TabDesc( SwWW8ImplReader* pIoClass, WW8_CP nStartCp )
 
        WW8TabBandDesc* pNewBand = new WW8TabBandDesc;
 
+    wwSprmParser aSprmParser(pIo->GetFib().nVersion);
+
     // process pPap until end of table found
     do
     {
@@ -1574,8 +1590,7 @@ WW8TabDesc::WW8TabDesc( SwWW8ImplReader* pIoClass, WW8_CP nStartCp )
         // first from PAP and then from PCD (of the Piece Table)
         WW8PLCFxDesc aDesc;
         pPap->GetSprms( &aDesc );
-        WW8SprmIter aSprmIter( aDesc.pMemPos, aDesc.nSprmsLen,
-            pIo->GetFib().nVersion );
+        WW8SprmIter aSprmIter(aDesc.pMemPos, aDesc.nSprmsLen, aSprmParser);
 
         const BYTE* pParams = aSprmIter.GetAktParams();
         for( int nLoop = 0; nLoop < 2; ++nLoop )
@@ -3141,17 +3156,16 @@ const BYTE* WW8RStyle::HasParaSprm( USHORT nId ) const
         return 0;
 
     const BYTE* pSprms = pParaSprms;
-    BYTE nDelta;
     USHORT i, x;
 
     for( i=0; i < nSprmsLen; )
     {
-        USHORT nAktId = WW8GetSprmId( rFib.nVersion, pSprms, &nDelta );
+        USHORT nAktId = maSprmParser.GetSprmId(pSprms);
         // Sprm found ?
         if( nAktId == nId )
-            return pSprms + 1 + nDelta + WW8SprmDataOfs(rFib.nVersion, nId );
+            return pSprms + maSprmParser.DistanceToData(nId);
 
-        x = WW8GetSprmSize( rFib.nVersion, pSprms, &nAktId );
+        x = maSprmParser.GetSprmSize(nAktId, pSprms);
         i += x;
         pSprms += x;
     }
@@ -3267,9 +3281,8 @@ void WW8RStyle::ImportGrupx( short nLen, BOOL bPara , BOOL bOdd)
 }
 
 WW8RStyle::WW8RStyle( WW8Fib& rFib, SwWW8ImplReader* pI )
-    : WW8Style( *pI->pTableStream, rFib ), pIo( pI ),
-    pStStrm( pI->pTableStream ),
-nWwNumLevel( 0 ), pStyRule( 0 )
+    : WW8Style( *pI->pTableStream, rFib ), maSprmParser(rFib.nVersion),
+    pIo( pI ), pStStrm( pI->pTableStream ), nWwNumLevel( 0 ), pStyRule( 0 )
 {
     pIo->pCollA = new SwWW8StyInf[ cstd ]; // Style-UEbersetzung WW->SW
     pIo->nColls = cstd;

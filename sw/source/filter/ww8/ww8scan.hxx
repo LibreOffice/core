@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-25 10:49:45 $
+ *  last change: $Author: cmc $ $Date: 2002-06-27 16:04:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,8 @@
 #define CREATE_CONST_ASC(s) String::CreateFromAscii( \
     RTL_CONSTASCII_STRINGPARAM(s))
 
+//--Line below which the code has meaningful comments
+
 //Commonly used string literals for stream and storage names in word docs
 namespace SL
 {
@@ -103,6 +105,49 @@ namespace SL
     DEFCONSTSTRINGARRAY(TextBox);
     DEFCONSTSTRINGARRAY(TextField);
 }
+
+//wwSprmParser knows how to take a sequence of bytes and split it up into
+//sprms and their arguments
+class SvUShortsSort;        //Remove these nasty old things
+class WW8PLCFx_SEPX;        //Yucky friend, remove this horror
+class wwSprmSearcher;       //pImpl that can lookup details of a single sprm
+
+struct SprmInfo
+{
+    sal_uInt16 nId;         //A ww8 sprm is hardcoded as 16bits
+    int nLen : 6;
+    int nVari : 2;
+
+    enum SprmType {L_FIX=0, L_VAR=1, L_VAR2=2};
+};
+
+class wwSprmParser
+{
+    friend class WW8PLCFx_SEPX;
+private:
+    int mnVersion;
+    BYTE mnDelta;
+    const wwSprmSearcher *mpKnownSprms;
+    static const wwSprmSearcher* GetWW8SprmSearcher();
+    static const wwSprmSearcher* GetWW6SprmSearcher();
+
+    SprmInfo GetSprmInfo(sal_uInt16 nId) const;
+    USHORT GetSprmSize0(sal_uInt16 nId, const sal_uInt8 * pSprm) const;
+
+    int CountSprms(const sal_uInt8 * pSp, long nSprmSiz,
+        const SvUShortsSort* pIgnoreSprms) const;
+public:
+    //7- ids are very different to 8+ ones
+    wwSprmParser(int nVersion);
+    //Return the SPRM id at the beginning of this byte sequence
+    sal_uInt16 GetSprmId(const sal_uInt8* pSp) const;
+
+    USHORT GetSprmSize(sal_uInt16 nId, const sal_uInt8* pSprm) const;
+    BYTE SprmDataOfs(sal_uInt16 nId) const;
+    USHORT DistanceToData(sal_uInt16 nId) const;
+};
+
+//--Line abovewhich the code has meaningful comments
 
 class  UShortStk;
 class  WW8Fib;
@@ -131,10 +176,6 @@ String WW8Read_xstz(SvStream& rStrm, USHORT nChars, BOOL bAtEndSeekRel1);
 void WW8ReadSTTBF( BOOL bVer8, SvStream& rStrm, UINT32 nStart, INT32 nLen,
     USHORT nExtraLen, rtl_TextEncoding eCS, SvStrings &rArray,
     SvStrings* pExtraArray = 0 );
-
-USHORT WW8GetSprmId( BYTE nVersion, const BYTE* pSp, BYTE* pDelta = 0 );
-USHORT WW8GetSprmSize( BYTE nVersion, const BYTE* pSprm, USHORT* pId );
-BYTE WW8SprmDataOfs(BYTE nVersion, USHORT nId );
 
 struct WW8FieldDesc
 {
@@ -205,21 +246,21 @@ public:
 class WW8SprmIter
 {
 private:
+    const wwSprmParser &mrSprmParser;
     // these members will be updated
     const BYTE* pSprms; // remaining part of the SPRMs ( == start of akt. SPRM)
     const BYTE* pAktParams; // start of akt. SPRM's parameters
     USHORT nAktId;
     USHORT nAktSize;
 
-    // these members will *not* be updated by UpdateMyMembers()
-    BYTE nVersion;
-    BYTE nDelta;
     long nRemLen;   // length of remaining SPRMs (including akt. SPRM)
 
     void UpdateMyMembers();
 public:
-    WW8SprmIter( const BYTE* pSprms_, long nLen_, BYTE nVersion_ );
+    explicit WW8SprmIter( const BYTE* pSprms_, long nLen_,
+        const wwSprmParser &rSprmParser);
     void  SetSprms( const BYTE* pSprms_, long nLen_ );
+    const BYTE* FindSprm(USHORT nId);
     const BYTE*  operator ++( int );
     const BYTE* GetSprms() const
         { return ( pSprms && (0 < nRemLen) ) ? pSprms : 0; }
@@ -445,7 +486,8 @@ private:
         short nIdx;         // Pos-Merker
         ePLCFT ePLCF;
         BYTE nIMax;         // Anzahl der Eintraege
-        BYTE nVersion;
+
+        wwSprmParser maSprmParser;
     public:
         WW8Fkp (BYTE nFibVer,SvStream* pFKPStrm,SvStream* pDataStrm,
             long _nFilePos,long nItemSiz,ePLCFT ePl,WW8_FC nStartFc = -1);
@@ -477,7 +519,7 @@ private:
 
         ULONG GetParaHeight() const;    // fuer Header/Footer bei Papx-Fkps
 
-        BYTE GetVersion() const { return nVersion; }
+        const wwSprmParser &GetSprmParser() const { return maSprmParser; }
     };
 
     SvStream* pFKPStrm;         // Input-File
@@ -546,6 +588,7 @@ public:
 class WW8PLCFx_SEPX : public WW8PLCFx
 {
 private:
+    wwSprmParser maSprmParser;
     SvStream* pStrm;
     WW8PLCF* pPLCF;
     BYTE* pSprms;
@@ -572,7 +615,7 @@ public:
         long nOtherSprmSiz ) const;
     BOOL Find4Sprms(USHORT nId1, USHORT nId2, USHORT nId3, USHORT nId4,
                     BYTE*& p1,   BYTE*& p2,   BYTE*& p3,   BYTE*& p4 ) const;
-    BOOL CompareSprms( const BYTE* pOtherSprms, long nOtherSprmSiz,
+    bool CompareSprms( const BYTE* pOtherSprms, long nOtherSprmSiz,
         const SvUShortsSort* pIgnoreSprms = 0 ) const;
 };
 
@@ -752,6 +795,7 @@ struct WW8PLCFxDesc
 class WW8PLCFMan
 {
 private:
+    wwSprmParser maSprmParser;
     long nCpO;                      // Origin Cp -- the basis for nNewCp
 
     long nLineEnd;                  // zeigt *hinter* das <CR>
@@ -781,6 +825,7 @@ private:
     void GetNoSprmEnd(short nIdx, WW8PLCFManResult* pRes) const;
     void AdvSprm(short nIdx, BOOL bStart);
     void AdvNoSprm(short nIdx, BOOL bStart);
+    USHORT GetId(const WW8PLCFxDesc* p ) const;
 public:
     WW8PLCFMan( WW8ScannerBase* pBase, short nType, long nStartCp );
     ~WW8PLCFMan();
