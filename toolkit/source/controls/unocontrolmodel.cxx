@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrolmodel.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 15:56:58 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:03:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -694,11 +694,8 @@ void UnoControlModel::write( const ::com::sun::star::uno::Reference< ::com::sun:
             }
             else if ( rType == ::getCppuType((const ::rtl::OUString*)0) )
             {
-                // #HACK 52041# Pfade relativ speichern
                 ::rtl::OUString aUString;
                 rValue >>= aUString;
-                if ( pProp->GetId() == BASEPROPERTY_IMAGEURL )
-                    aUString= INetURLObject::AbsToRel( aUString );
                 OutStream->writeUTF( aUString );
             }
             else if ( rType == ::getCppuType((const sal_uInt16*)0) )
@@ -888,9 +885,6 @@ void UnoControlModel::read( const ::com::sun::star::uno::Reference< ::com::sun::
                 else if ( *pType == ::getCppuType((const ::rtl::OUString*)0) )
                 {
                     ::rtl::OUString aUTF = InStream->readUTF();
-                    // #HACK 52041# Pfade relativ speichern
-                    if ( nPropId == BASEPROPERTY_IMAGEURL )
-                        aUTF = INetURLObject::RelToAbs( aUTF );
                     aValue <<= aUTF;
                 }
                 else if ( *pType == ::getCppuType((const sal_uInt16*)0) )
