@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stlpool.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-08-20 08:10:01 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:31:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,7 @@
 #include <unotools/charclass.hxx>
 #include <vcl/fontcvt.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/svapp.hxx>
 
 #include "sc.hrc"
 #include "attrib.hxx"
@@ -320,6 +321,19 @@ void ScStyleSheetPool::CreateStandardStyles()
     pSet = &pSheet->GetItemSet();
     LanguageType eLatin, eCjk, eCtl;
     pDoc->GetLanguage( eLatin, eCjk, eCtl );
+
+    //  #108374# / #107782#: If the UI language is Korean, the default Latin font has to
+    //  be queried for Korean, too (the Latin language from the document can't be Korean).
+    //  This is the same logic as in SwDocShell::InitNew.
+    LanguageType eUiLanguage = Application::GetSettings().GetUILanguage();
+    switch( eUiLanguage )
+    {
+        case LANGUAGE_KOREAN:
+        case LANGUAGE_KOREAN_JOHAB:
+            eLatin = eUiLanguage;
+        break;
+    }
+
     lcl_CheckFont( *pSet, eLatin, DEFAULTFONT_LATIN_SPREADSHEET, ATTR_FONT );
     lcl_CheckFont( *pSet, eCjk, DEFAULTFONT_CJK_SPREADSHEET, ATTR_CJK_FONT );
     lcl_CheckFont( *pSet, eCtl, DEFAULTFONT_CTL_SPREADSHEET, ATTR_CTL_FONT );
