@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.src,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:37:52 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 11:21:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -899,7 +899,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text[ catalan ] = "Conforme al registre";
         Text[ finnish ] = "Rivirekisteri";
         Text[ thai ] = "ลงทะเบียน-จริง";
-        Text[ czech ] = "Registr";
+        Text[ czech ] = "Dodržovat řádkový rejstřík";
         Text[ hebrew ] = "‮מיקום קבוע בדף‬";
         Text[ hindi ] = "रजिस्टर-सही";
         Text[ slovak ] = "Register";
@@ -1007,7 +1007,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text[ czech ] = "Vlevo";
         Text[ hebrew ] = "‮שמאל‬";
         Text[ hindi ] = "~बायाँ";
-        Text[ slovak ] = "Vľavo";
+        Text[ slovak ] = "Vľ~avo";
     };
     RadioButton BTN_RIGHTALIGN
     {
@@ -1041,7 +1041,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text[ czech ] = "Vpravo";
         Text[ hebrew ] = "‮לימין‬";
         Text[ hindi ] = "दाहि~ना";
-        Text[ slovak ] = "Vpravo";
+        Text[ slovak ] = "~Vpravo";
     };
     RadioButton BTN_CENTERALIGN
     {
@@ -1380,9 +1380,9 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
     StringList [ czech ] =
     {
          < "Vlevo" ; Default ; > ;
+        < "Vlevo" ; Default ; > ;
         < "Na střed" ; Default ; > ;
         < "Do bloku" ; Default ; > ;
-        < "Blocksatz" ; Default ; > ;
         };
     StringList [ hebrew ] =
     {
@@ -1396,13 +1396,14 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
          < "बायाँ" ; Default ; > ;
         < "केन्द्रित" ; Default ; > ;
         < "व्यवस्थित" ; Default ; > ;
-    };
+        < "Blocksatz" ; Default ; > ;
+        };
     StringList [ slovak ] =
     {
-         < "Vľavo" ; Default ; > ;
+         < "Východzie" ; Default ; > ;
+        < "Vľavo" ; Default ; > ;
         < "Na stred" ; Default ; > ;
         < "Do bloku" ; Default ; > ;
-        < "Blok" ; Default ; > ;
     };
     };
     CheckBox CB_EXPAND
@@ -1434,7 +1435,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text[ catalan ] = "~Expandeix una paraula";
         Text[ finnish ] = "~Laajenna yksitt�inen sana";
         Text[ thai ] = "คำ~ขยายเชิงเดี่ยว";
-        Text[ czech ] = "Rozšířit jedno slovo";
+        Text[ czech ] = "Rozpálit jedno slovo";
         Text[ hebrew ] = "‮הרחבת מילה בודדת‬";
         Text[ hindi ] = "अकेला शब्द को ~विस्तार करो";
         Text[ slovak ] = "~Rozšíriť jedno slovo";
@@ -3211,6 +3212,12 @@ TabPage RID_SVXPAGE_PARA_ASIAN
 };
 
 // ********************************************************************** EOF
+
+
+
+
+
+
 
 
 
