@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 17:58:29 $
+#   last change: $Author: vg $ $Date: 2004-01-06 14:22:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -91,9 +91,6 @@ APP1STDLIBS=	$(CPPULIB)			\
 APP1DEPN=		$(L)$/itools.lib	\
                 $(L)$/sot.lib
 
-.IF "$(remote)"!=""
-EXCEPTIONSFILES= $(OBJ)$/dndtest.obj
-.ENDIF
 
 # --- Targets ------------------------------------------------------
 
