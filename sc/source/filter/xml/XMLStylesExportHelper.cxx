@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesExportHelper.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:10:27 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 07:46:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,9 @@
 #endif
 #ifndef _XMLOFF_XMLEVENTEXPORT_HXX
 #include <xmloff/XMLEventExport.hxx>
+#endif
+#ifndef _XMLOFF_NMSPMAP_HXX
+#include <xmloff/nmspmap.hxx>
 #endif
 
 #ifndef _TOOLS_DEBUG_HXX
@@ -266,7 +269,7 @@ sal_Bool ScMyValidationsContainer::AddValidation(const uno::Any& aTempAny,
     return bAdded;
 }
 
-rtl::OUString ScMyValidationsContainer::GetCondition(const ScMyValidation& aValidation)
+rtl::OUString ScMyValidationsContainer::GetCondition(ScXMLExport& rExport, const ScMyValidation& aValidation)
 {
     rtl::OUString sCondition;
     if (aValidation.aValidationType != sheet::ValidationType_ANY)
@@ -359,6 +362,9 @@ rtl::OUString ScMyValidationsContainer::GetCondition(const ScMyValidation& aVali
             if (aValidation.aValidationType == sheet::ValidationType_TEXT_LEN)
                 sCondition = rtl::OUString();
     }
+    if (sCondition.getLength())
+        sCondition = rExport.GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_OOOC, sCondition );
+
     return sCondition;
 }
 
@@ -421,7 +427,7 @@ void ScMyValidationsContainer::WriteValidations(ScXMLExport& rExport)
         while (aItr != aValidationVec.end())
         {
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, aItr->sName);
-            rtl::OUString sCondition = GetCondition(*aItr);
+            rtl::OUString sCondition = GetCondition(rExport, *aItr);
             if (sCondition.getLength())
             {
                 rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CONDITION, sCondition);
@@ -477,12 +483,12 @@ void ScMyValidationsContainer::WriteValidations(ScXMLExport& rExport)
                     break;
                     case sheet::ValidationAlertStyle_MACRO :
                     {
-                        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, aItr->sErrorTitle);
+                        //rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, aItr->sErrorTitle);
                         if (aItr->bShowErrorMessage)
                             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_EXECUTE, XML_TRUE);
                         else
                             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_EXECUTE, XML_FALSE);
-                        SvXMLElementExport(rExport, XML_NAMESPACE_TABLE, XML_ERROR_MACRO, sal_True, sal_True);
+                        SvXMLElementExport aEMElem(rExport, XML_NAMESPACE_TABLE, XML_ERROR_MACRO, sal_True, sal_True);
                         {
                             uno::Sequence<beans::PropertyValue> aSeq(3);
                             beans::PropertyValue* pArr = aSeq.getArray();
