@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-21 07:56:13 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 13:31:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -568,7 +568,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, UINT32 nFormulaLen, 
                         DBG_ERROR(
                         "-ExcelToSc::Convert(): Ein wenig vergesslich, was?" );
                 }
-                aStack << aPool.Store( ( *pExcRoot->pRNameBuff )[ nUINT16 ] );
+                aStack << aPool.Store( nUINT16 );
                 break;
             case 0x44:
             case 0x64:
@@ -776,7 +776,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, UINT32 nFormulaLen, 
                     aPool >> aStack;
                 }
                 else
-                    aStack << aPool.Store( ( *pExcRoot->pRNameBuff )[ nUINT16 ] );
+                    aStack << aPool.Store( nUINT16 );
                 aIn.Ignore( 12 );
                 break;
             case 0x5A:
