@@ -6,5 +6,5 @@ dr	dtrans\source\win32\misc				nmake	-	w	dr_win32_misc NULL
 dr	dtrans\source\win32\dtobj				nmake	-	w	dr_win32_dtobj dr_win32_misc NULL
 dr	dtrans\source\win32\ftransl				nmake	-	w	dr_win32_ftransl dr_win32_misc NULL 
 dr	dtrans\source\win32						nmake	-	w	dr_win32 dr_win32_dtobj NULL
-dr	dtrans\source\win32\dnd					nmake	-	w	dr_win32_dnd dr_win32 NULL
+dr	dtrans\source\win32\dnd					nmake	-	w	dr_win32_dnd dr_win32_misc dr_win32_dtobj NULL
 dr	dtrans\source\X11						nmake	-	u	dr_X11 NULL
