@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iserver.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:02:59 $
+ *  last change: $Author: svesik $ $Date: 2001-05-04 17:00:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,8 @@ int _cdecl main( int argc, char *argv[] )
         if ( !bError ) {
             InformationParser aParser( REPLACE_VARIABLES );
             ByteString sStandList( sDataBase );
-            GenericInformationList *pList = aParser.Execute( String( sStandList, gsl_getSystemTextEncoding()));
+            String s = String( sStandList, gsl_getSystemTextEncoding());
+            GenericInformationList *pList = aParser.Execute( s );
             if ( !pList )
                 return 1;
 
