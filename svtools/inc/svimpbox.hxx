@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svimpbox.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:36:34 $
+ *  last change: $Author: vg $ $Date: 2003-05-27 11:21:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,8 +145,6 @@ private:
     ScrollBar           aVerSBar;
     ScrollBar           aHorSBar;
     ScrollBarBox        aScrBarBox;
-
-    VclEventListeners   maEventListeners;
 
     static Image        s_aDefCollapsed;
     static Image        s_aDefExpanded;
@@ -391,8 +389,6 @@ public:
     void                CancelPendingEdit();
 
     void                CallEventListeners( ULONG nEvent, void* pData = NULL );
-    void                AddEventListener( const Link& rEventListener );
-    void                RemoveEventListener( const Link& rEventListener );
 
     /** Enables, that one cell of a tablistbox entry can be focused */
     inline BOOL         IsCellFocusEnabled() const { return bIsCellFocusEnabled; }
