@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parasc.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-14 11:47:53 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-12-04 14:51:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -711,8 +711,8 @@ ULONG SwASCIIParser::CallParser()
                                                                 &pItem ) )
                     {
                         if( !pColl )
-                            pColl = pDoc->GetTxtCollFromPool(
-                                                    RES_POOLCOLL_STANDARD );
+                            pColl = pDoc->GetTxtCollFromPoolSimple
+                                ( RES_POOLCOLL_STANDARD, FALSE );
                         pColl->SetAttr( *pItem );
                         pItemSet->ClearItem( *pWhichIds );
                     }
