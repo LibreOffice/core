@@ -2,9 +2,9 @@
  *
  *  $RCSfile: security.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mfe $ $Date: 2001-02-26 16:17:49 $
+ *  last change: $Author: kz $ $Date: 2001-03-19 16:32:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,7 +182,7 @@ osl_PamConversation (int num_msg, const struct pam_message **msgm,
     }
 
     /* pseudo dialog */
-    error = False;
+    error = sal_False;
     for ( i = 0; i < num_msg ; i++ )
     {
         switch ( msgm[ i ]->msg_style )
@@ -203,7 +203,7 @@ osl_PamConversation (int num_msg, const struct pam_message **msgm,
                 p_reply[ i ].resp           = NULL;
                 break;
             default:
-                error = True;
+                error = sal_True;
                 break;
         }
     }
@@ -239,7 +239,7 @@ osl_PamConversation (int num_msg, const struct pam_message **msgm,
 static sal_PamModule* osl_getPAM()
 {
     static sal_PamModule *pam_module = NULL;
-    static sal_Bool load_once = False;
+    static sal_Bool load_once = sal_False;
 
     if ( !load_once )
     {
@@ -275,7 +275,7 @@ static sal_PamModule* osl_getPAM()
         }
 
         /* never try again */
-        load_once = True;
+        load_once = sal_True;
     }
 
     return pam_module;
@@ -288,7 +288,7 @@ static sal_PamModule* osl_getPAM()
 static sal_Bool
 osl_PamAuthentification( const sal_Char* name, const sal_Char* password )
 {
-    sal_Bool success = False;
+    sal_Bool success = sal_False;
 
     sal_PamModule* pam_module;
 
@@ -335,7 +335,7 @@ static void*  SAL_CALL
 osl_getCrypt()
 {
     static char* (*crypt_sym)(const char*, const char*) = NULL;
-    static sal_Bool load_once  = False;
+    static sal_Bool load_once  = sal_False;
 
     if ( !load_once )
     {
@@ -347,7 +347,7 @@ osl_getCrypt()
         if ( crypt_sym == NULL ) /* no libcrypt or libcrypt without crypt */
             crypt_sym = (char* (*)(const char *, const char *)) &osl_noCrypt;
 
-        load_once = True;
+        load_once = sal_True;
     }
 
     return (void*)crypt_sym;
