@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:58:23 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:30:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4728,6 +4728,11 @@ BOOL ToolBox::ImplActivateItem( KeyCode aKeyCode )
     if( mnHighItemId )
     {
         ImplToolItem *pItem = ImplGetItem( mnHighItemId );
+
+        // #107712#, activate can also be called for disabled entries
+        if( !pItem->mbEnabled )
+            return TRUE;
+
         if( pItem && pItem->mpWindow && HasFocus() )
         {
             ImplHideFocus();
@@ -4840,6 +4845,7 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
     USHORT nCode = aKeyCode.GetCode();
     BOOL bParentIsDialog = ( ( ImplGetParent()->GetStyle() & (WB_DIALOGCONTROL | WB_NODIALOGCONTROL) ) == WB_DIALOGCONTROL );
     BOOL bForwardKey = FALSE;
+    BOOL bGrabFocusToDocument = FALSE;
 
     // #107776# we might be destroyed in the keyhandler
     ImplDelData aDelData;
@@ -4988,7 +4994,19 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
         break;
         case KEY_RETURN:
         {
-            bForwardKey = !ImplActivateItem( aKeyCode );
+            // #107712#, disabled entries are selectable now
+            //  leave toolbox and move focus to document
+            if( mnHighItemId )
+            {
+                ImplToolItem *pItem = ImplGetItem( mnHighItemId );
+                if( !pItem->mbEnabled )
+                {
+                    Sound::Beep( SOUND_DISABLE, this );
+                    bGrabFocusToDocument = TRUE;
+                }
+            }
+            if( !bGrabFocusToDocument )
+                bForwardKey = !ImplActivateItem( aKeyCode );
         }
         break;
         default:
@@ -5016,6 +5034,13 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
     }
 
     mnKeyModifier = 0;
+
+    // #107712#, leave toolbox
+    if( bGrabFocusToDocument )
+    {
+        GrabFocusToDocument();
+        return;
+    }
 
     if( bForwardKey )
         DockingWindow::KeyInput( rKEvt );
@@ -5065,7 +5090,7 @@ ImplToolItem* ToolBox::ImplGetFirstValidItem( USHORT nLine )
         {
             // find first useful item
             while( it != mpData->m_aItems.end() && ((it->meType != TOOLBOXITEM_BUTTON) ||
-                !it->mbEnabled || !it->mbVisible || ImplIsFixedControl( &(*it) )) )
+                /*!it->mbEnabled ||*/ !it->mbVisible || ImplIsFixedControl( &(*it) )) )
             {
                 ++it;
                 if( it == mpData->m_aItems.end() || it->mbBreak )
@@ -5097,7 +5122,7 @@ ImplToolItem* ToolBox::ImplGetLastValidItem( USHORT nLine )
         {
             // find last useful item
             while( it != mpData->m_aItems.end() && ((it->meType == TOOLBOXITEM_BUTTON) &&
-                it->mbEnabled && it->mbVisible && !ImplIsFixedControl( &(*it) )) )
+                /*it->mbEnabled &&*/ it->mbVisible && !ImplIsFixedControl( &(*it) )) )
             {
                 pFound = &(*it);
                 ++it;
@@ -5209,7 +5234,7 @@ BOOL ToolBox::ImplChangeHighlightUpDn( BOOL bUp, BOOL bNoCycle )
             while( it != mpData->m_aItems.end() )
             {
                 if ( (it->meType == TOOLBOXITEM_BUTTON) &&
-                    it->mbEnabled && it->mbVisible && !ImplIsFixedControl( &(*it) ))
+                    /*it->mbEnabled &&*/ it->mbVisible && !ImplIsFixedControl( &(*it) ))
                     break;
                 ++it;
             }
@@ -5226,7 +5251,7 @@ BOOL ToolBox::ImplChangeHighlightUpDn( BOOL bUp, BOOL bNoCycle )
             {
                 --it;
                 if ( (it->meType == TOOLBOXITEM_BUTTON) &&
-                    it->mbEnabled && it->mbVisible && !ImplIsFixedControl( &(*it) ) )
+                    /*it->mbEnabled &&*/ it->mbVisible && !ImplIsFixedControl( &(*it) ) )
                 {
                     pItem = &(*it);
                     break;
@@ -5267,7 +5292,7 @@ BOOL ToolBox::ImplChangeHighlightUpDn( BOOL bUp, BOOL bNoCycle )
 
             pItem = &mpData->m_aItems[pos];
             if ( (pItem->meType == TOOLBOXITEM_BUTTON) &&
-                pItem->mbEnabled && pItem->mbVisible && !ImplIsFixedControl( pItem ) )
+                /*pItem->mbEnabled &&*/ pItem->mbVisible && !ImplIsFixedControl( pItem ) )  // #107712# make disabled entries selectable
                 break;
         } while( ++i < nCount);
 
