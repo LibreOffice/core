@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uicategorydescription.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 14:54:56 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:40:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,7 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
-using namespace drafts::com::sun::star::frame;
+using namespace ::com::sun::star::frame;
 
 //_________________________________________________________________________________________________________________
 //  Namespace
