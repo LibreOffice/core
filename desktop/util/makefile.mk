@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hro $ $Date: 2001-06-19 13:09:05 $
+#   last change: $Author: cd $ $Date: 2001-07-06 15:54:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -151,7 +151,8 @@ APP1DEPN= \
 
 APP1OBJS= \
                 $(OBJ)$/app.obj \
-                $(OBJ)$/wrapper.obj
+                $(OBJ)$/wrapper.obj \
+        $(OBJ)$/intro.obj
 
 #APP1STACK=64000
 

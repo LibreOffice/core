@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-27 16:31:30 $
+ *  last change: $Author: cd $ $Date: 2001-07-06 15:53:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 #include "app.hxx"
 #include "wrapper.hxx"
+#include "intro.hxx"
 
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
@@ -74,11 +75,15 @@
 
 #include <offmgr/app.hxx>
 #include <comphelper/processfactory.hxx>
+#include <sfx2/sfxuno.hxx>
 #ifndef _UTL_CONFIGMGR_HXX_
 #include <unotools/configmgr.hxx>
 #endif
 #ifndef _UTL_CONFIGITEM_HXX_
 #include <unotools/configitem.hxx>
+#endif
+#ifndef _VOS_PROCESS_HXX_
+#include <vos/process.hxx>
 #endif
 
 #include <setup2/installer.hxx>
@@ -86,6 +91,8 @@
 #include "svtools/cjkoptions.hxx"
 #include <unotools/configmgr.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/bitmap.hxx>
+#include <sfx2/sfx.hrc>
 
 #ifndef _COM_SUN_STAR_UNO_EXCEPTION_HPP_
 #include <com/sun/star/uno/Exception.hpp>
@@ -153,12 +160,15 @@ void ReplaceStringHookProc( UniString& rStr )
 
 Desktop aDesktop;
 
-Desktop::Desktop()
+Desktop::Desktop() : m_pLabelResMgr( 0 ), m_pIntro( 0 )
 {
 }
 
 void Desktop::Main()
 {
+    // ----  Startup screen ----
+    OpenStartupScreen( "iso" );
+
     ResMgr::SetReadStringHook( ReplaceStringHookProc );
     SetAppName( DEFINE_CONST_UNICODE("soffice") );
 
@@ -218,6 +228,9 @@ void Desktop::Main()
         RegisterServices();
         OfficeWrapper* pWrapper = new OfficeWrapper( ::comphelper::getProcessServiceFactory() );
 //      Reference < XComponent > xWrapper( ::utl::getProcessServiceFactory()->createInstance( DEFINE_CONST_UNICODE("com.sun.star.office.OfficeWrapper" ) ), UNO_QUERY );
+
+        // Post user event to startup first application component window
+        Application::PostUserEvent( LINK( this, Desktop, OpenClients ) );
         SfxApplicationClass::Main();
 //      xWrapper->dispose();
 
@@ -242,6 +255,102 @@ void Desktop::SystemSettingsChanging( AllSettings& rSettings, Window* pFrame )
     OFF_APP()->SystemSettingsChanging( rSettings, pFrame );
 }
 
+IMPL_LINK( Desktop, OpenClients, void*, pvoid )
+{
+    SFX_APP()->OpenClients();
+    CloseStartupScreen();
 
+    return 0;
+}
 
+void Desktop::OpenStartupScreen( const char* pLabelPrefix )
+{
+    if ( pLabelPrefix && !Application::IsRemoteServer() )
+    {
+        // versuchen, die Label-DLL zu erzeugen
+        String aMgrName = String::CreateFromAscii( pLabelPrefix );
+        aMgrName += String::CreateFromInt32(SOLARUPD); // aktuelle Versionsnummer
+        m_pLabelResMgr = ResMgr::CreateResMgr( U2S( aMgrName ));
 
+        // keine separate Label-DLL vorhanden?
+        if ( !m_pLabelResMgr )
+        {
+            // dann den ResMgr vom Executable verwenden
+            m_pLabelResMgr = new ResMgr;
+        }
+
+        // Intro nur anzeigen, wenn normaler Start (kein Print/Server etc.)
+        ParseCommandLine();
+        if ( !m_bInvisible && !m_bMinimized &&
+             m_nAppEvents != DISPATCH_PRINT && m_nAppEvents != DISPATCH_SERVER )
+        {
+            const USHORT nResId = RID_DEFAULTINTRO;
+            ResId aIntroBmpRes( nResId, m_pLabelResMgr );
+            m_pIntro = new IntroWindow_Impl( aIntroBmpRes );
+        }
+    }
+}
+
+void Desktop::CloseStartupScreen()
+{
+    delete m_pIntro;
+    m_pIntro = 0;
+}
+
+void Desktop::ParseCommandLine()
+{
+    m_nAppEvents = 0;
+    m_bMinimized = 0;
+    m_bInvisible = 0;
+
+    BOOL   bPrintEvent = FALSE;
+    BOOL   bOpenEvent  = TRUE;
+
+    ::vos::OExtCommandLine aCmdLine;
+    sal_uInt32 nCount = aCmdLine.getCommandArgCount();
+    for( sal_uInt32 i=0; i < nCount; i++ )
+    {
+        String aArg;
+        ::rtl::OUString aDummy;
+        aCmdLine.getCommandArg( i, aDummy );
+        aArg = aDummy;
+
+        if ( aArg.EqualsIgnoreCaseAscii("-minimized") == sal_True )
+            m_bMinimized = sal_True;
+        else if ( aArg.EqualsIgnoreCaseAscii("-invisible") == sal_True )
+            m_bInvisible = sal_True;
+        else if ( aArg.EqualsIgnoreCaseAscii("-embedding") == sal_True )
+            m_nAppEvents |= DISPATCH_SERVER;
+        else if ( aArg.EqualsIgnoreCaseAscii("-bean") == sal_True )
+            m_bInvisible = sal_True;
+        else if ( aArg.EqualsIgnoreCaseAscii("-plugin") == sal_True )
+            m_bInvisible  = sal_True;
+
+        const xub_Unicode* pArg = aArg.GetBuffer();
+        // Erstmal nur mit -, da unter Unix Dateinmane auch mit Slasch anfangen koennen
+        if ( (*pArg == '-') /* || (*pArg == '/') */ )
+        {
+            pArg++;
+
+            // Ein Schalter
+            if ( (*pArg == 'p') || (*pArg == 'P') )
+            {
+                bPrintEvent = TRUE;
+                bOpenEvent = FALSE;    // Ab hier keine OpenEvents mehr
+            }
+        }
+        else
+        {
+            if ( bOpenEvent )
+            {
+                // Dies wird als Dateiname interpretiert
+                m_nAppEvents |= DISPATCH_OPEN;
+            }
+            else if ( bPrintEvent )
+            {
+                // Print Event anhaengen
+                m_nAppEvents |= DISPATCH_PRINT;
+            }
+        }
+    }
+}

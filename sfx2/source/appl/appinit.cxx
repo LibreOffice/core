@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: as $ $Date: 2001-07-04 13:28:59 $
+ *  last change: $Author: cd $ $Date: 2001-07-06 15:58:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -384,7 +384,7 @@ FASTBOOL SfxApplication::Initialize_Impl()
 //(dv)  if ( !pAppData_Impl->bBean )
 //(mba)        doFirstTimeInit();
 
-    Application::PostUserEvent( LINK( this, SfxApplication, OpenClients_Impl ) );
+//    Application::PostUserEvent( LINK( this, SfxApplication, OpenClients_Impl ) );
 
 //  DELETEZ(pImp->pIntro);
 

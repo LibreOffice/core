@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:15:12 $
+ *  last change: $Author: cd $ $Date: 2001-07-06 15:51:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,12 +69,26 @@
 /*--------------------------------------------------------------------
     Beschreibung:   Applikations-Klasse
  --------------------------------------------------------------------*/
+class IntroWindow_Impl;
 class Desktop : public SfxApplicationClass
 {
 public:
                         Desktop();
     virtual void        Main();
     virtual void        SystemSettingsChanging( AllSettings& rSettings, Window* pFrame );
+
+    DECL_LINK(          OpenClients, void* );
+
+private:
+    void                ParseCommandLine();
+    void                OpenStartupScreen( const char* );
+    void                CloseStartupScreen();
+
+    sal_Bool            m_bMinimized;
+    sal_Bool            m_bInvisible;
+    USHORT              m_nAppEvents;
+    ResMgr*             m_pLabelResMgr;
+    IntroWindow_Impl*   m_pIntro;
 };
 
 #endif

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: mba $ $Date: 2001-04-09 14:59:15 $
+#   last change: $Author: cd $ $Date: 2001-07-06 15:53:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,7 +83,8 @@ RSCUPDVER=$(RSCREVISION)(SV$(UPD)$(UPDMINOR))
 
 OBJFILES = \
         $(OBJ)$/app.obj \
-        $(OBJ)$/wrapper.obj
+        $(OBJ)$/wrapper.obj \
+    $(OBJ)$/intro.obj
 
 #SLOFILES = \
 #        $(SLO)$/wrapper.obj
