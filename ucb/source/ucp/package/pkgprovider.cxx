@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgprovider.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kso $ $Date: 2001-07-12 15:05:15 $
+ *  last change: $Author: kso $ $Date: 2001-07-26 12:39:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,14 +67,12 @@
 
 #include <hash_map>
 
-#ifndef _OSL_DIAGNOSE_H_
-#include <osl/diagnose.h>
-#endif
-
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
 #endif
-
+#ifndef _VOS_DIAGNOSE_HXX_
+#include <vos/diagnose.hxx>
+#endif
 #ifndef _UCBHELPER_CONTENTIDENTIFIER_HXX
 #include <ucbhelper/contentidentifier.hxx>
 #endif
@@ -92,8 +90,11 @@
 #include "pkguri.hxx"
 #endif
 
-using namespace com::sun;
-using namespace com::sun::star;
+using namespace com::sun::star::container;
+using namespace com::sun::star::lang;
+using namespace com::sun::star::ucb;
+using namespace com::sun::star::uno;
+using namespace rtl;
 
 namespace package_ucp
 {
@@ -109,21 +110,21 @@ class Package : public cppu::OWeakObject,
 {
     friend class ContentProvider;
 
-    rtl::OUString                                        m_aName;
-    uno::Reference< container::XHierarchicalNameAccess > m_xNA;
-    ContentProvider*                                     m_pOwner;
+    OUString                             m_aName;
+    Reference< XHierarchicalNameAccess > m_xNA;
+    ContentProvider*                     m_pOwner;
 
 public:
-    Package( const rtl::OUString& rName,
-             const uno::Reference< container::XHierarchicalNameAccess > & xNA,
+    Package( const OUString& rName,
+             const Reference< XHierarchicalNameAccess > & xNA,
              ContentProvider* pOwner )
     : m_aName( rName ), m_xNA( xNA ), m_pOwner( pOwner ) {}
     virtual ~Package() { m_pOwner->removePackage( m_aName ); }
 
     // XInterface
-    virtual uno::Any SAL_CALL
-    queryInterface( const uno::Type& aType )
-        throw( uno::RuntimeException )
+    virtual ::com::sun::star::uno::Any SAL_CALL
+    queryInterface( const ::com::sun::star::uno::Type& aType )
+        throw( ::com::sun::star::uno::RuntimeException )
     { return m_xNA->queryInterface( aType ); }
     virtual void SAL_CALL
     acquire() throw()
@@ -133,13 +134,13 @@ public:
     { OWeakObject::release(); }
 
     // XHierarchicalNameAccess
-    virtual uno::Any SAL_CALL
-    getByHierarchicalName( const rtl::OUString& aName )
-        throw( container::NoSuchElementException, uno::RuntimeException )
+    virtual ::com::sun::star::uno::Any SAL_CALL
+    getByHierarchicalName( const ::rtl::OUString& aName )
+        throw( NoSuchElementException, RuntimeException )
     { return m_xNA->getByHierarchicalName( aName ); }
     virtual sal_Bool SAL_CALL
-    hasByHierarchicalName( const rtl::OUString& aName )
-        throw( uno::RuntimeException )
+    hasByHierarchicalName( const OUString& aName )
+        throw( RuntimeException )
     { return m_xNA->hasByHierarchicalName( aName ); }
 };
 
@@ -151,8 +152,7 @@ public:
 
 struct equalString
 {
-    bool operator()(
-        const rtl::OUString& rKey1, const rtl::OUString& rKey2 ) const
+    bool operator()( const OUString& rKey1, const OUString& rKey2 ) const
     {
         return !!( rKey1 == rKey2 );
     }
@@ -160,7 +160,7 @@ struct equalString
 
 struct hashString
 {
-    size_t operator()( const rtl::OUString & rName ) const
+    size_t operator()( const OUString & rName ) const
     {
         return rName.hashCode();
     }
@@ -168,7 +168,7 @@ struct hashString
 
 typedef std::hash_map
 <
-    rtl::OUString,
+    OUString,
     Package*,
     hashString,
     equalString
@@ -190,7 +190,7 @@ using namespace package_ucp;
 //=========================================================================
 
 ContentProvider::ContentProvider(
-            const uno::Reference< lang::XMultiServiceFactory >& rSMgr )
+                            const Reference< XMultiServiceFactory >& rSMgr )
 : ::ucb::ContentProviderImplHelper( rSMgr ),
   m_pPackages( 0 )
 {
@@ -209,10 +209,11 @@ ContentProvider::~ContentProvider()
 //
 //=========================================================================
 
+// @@@ Add own interfaces.
 XINTERFACE_IMPL_3( ContentProvider,
-                   lang::XTypeProvider,
-                   lang::XServiceInfo,
-                   star::ucb::XContentProvider );
+                   XTypeProvider,
+                   XServiceInfo,
+                   XContentProvider );
 
 //=========================================================================
 //
@@ -220,10 +221,11 @@ XINTERFACE_IMPL_3( ContentProvider,
 //
 //=========================================================================
 
+// @@@ Add own interfaces.
 XTYPEPROVIDER_IMPL_3( ContentProvider,
-                      lang::XTypeProvider,
-                      lang::XServiceInfo,
-                      star::ucb::XContentProvider );
+                      XTypeProvider,
+                      XServiceInfo,
+                      XContentProvider );
 
 //=========================================================================
 //
@@ -232,9 +234,9 @@ XTYPEPROVIDER_IMPL_3( ContentProvider,
 //=========================================================================
 
 XSERVICEINFO_IMPL_1( ContentProvider,
-                     rtl::OUString::createFromAscii(
+                     OUString::createFromAscii(
                         "com.sun.star.comp.ucb.PackageContentProvider" ),
-                     rtl::OUString::createFromAscii(
+                     OUString::createFromAscii(
                         PACKAGE_CONTENT_PROVIDER_SERVICE_NAME ) );
 
 //=========================================================================
@@ -252,27 +254,24 @@ ONE_INSTANCE_SERVICE_FACTORY_IMPL( ContentProvider );
 //=========================================================================
 
 // virtual
-uno::Reference< star::ucb::XContent > SAL_CALL ContentProvider::queryContent(
-            const uno::Reference< star::ucb::XContentIdentifier >& Identifier )
-    throw( star::ucb::IllegalIdentifierException, uno::RuntimeException )
+Reference< XContent > SAL_CALL ContentProvider::queryContent(
+                        const Reference< XContentIdentifier >& Identifier )
+    throw( IllegalIdentifierException, RuntimeException )
 {
-    if ( !Identifier.is() )
-        return uno::Reference< star::ucb::XContent >();
+    // Check URL scheme...
+    OUString aScheme( OUString::createFromAscii( PACKAGE_URL_SCHEME ) );
+    if ( !Identifier->getContentProviderScheme().equalsIgnoreAsciiCase( aScheme ) )
+        throw IllegalIdentifierException();
 
+    // Normalize URL...
     PackageUri aUri( Identifier->getContentIdentifier() );
-    if ( !aUri.isValid() )
-        throw star::ucb::IllegalIdentifierException();
-
-    // Create a new identifier for the mormalized URL returned by
-    // PackageUri::getUri().
-    uno::Reference< star::ucb::XContentIdentifier > xId
+    Reference< XContentIdentifier > xId
                 = new ::ucb::ContentIdentifier( m_xSMgr, aUri.getUri() );
 
     vos::OGuard aGuard( m_aMutex );
 
     // Check, if a content with given id already exists...
-    uno::Reference< star::ucb::XContent > xContent
-        = queryExistingContent( xId ).getBodyPtr();
+    Reference< XContent > xContent = queryExistingContent( xId ).getBodyPtr();
     if ( xContent.is() )
         return xContent;
 
@@ -282,7 +281,7 @@ uno::Reference< star::ucb::XContent > SAL_CALL ContentProvider::queryContent(
     xContent = Content::create( m_xSMgr, this, Identifier ); // not xId!!!
 
     if ( xContent.is() && !xContent->getIdentifier().is() )
-        throw star::ucb::IllegalIdentifierException();
+        throw IllegalIdentifierException();
 
     return xContent;
 }
@@ -293,16 +292,16 @@ uno::Reference< star::ucb::XContent > SAL_CALL ContentProvider::queryContent(
 //
 //=========================================================================
 
-uno::Reference< container::XHierarchicalNameAccess >
-ContentProvider::createPackage( const rtl::OUString & rName )
+Reference< XHierarchicalNameAccess > ContentProvider::createPackage(
+                                                const OUString & rName )
 {
     vos::OGuard aGuard( m_aMutex );
 
     if ( !rName.getLength() )
     {
-        OSL_ENSURE( sal_False,
+        VOS_ENSURE( sal_False,
                     "ContentProvider::createPackage - Invalid URL!" );
-        return uno::Reference< container::XHierarchicalNameAccess >();
+        return Reference< XHierarchicalNameAccess >();
     }
 
     if ( m_pPackages )
@@ -320,47 +319,46 @@ ContentProvider::createPackage( const rtl::OUString & rName )
     // Create new package...
     try
     {
-        uno::Sequence< uno::Any > aArguments( 1 );
+        Sequence< Any > aArguments( 1 );
         aArguments[ 0 ] <<= rName;
 
-        uno::Reference< uno::XInterface > xIfc
+        Reference< XInterface > xIfc
             = m_xSMgr->createInstanceWithArguments(
-                rtl::OUString::createFromAscii(
+                OUString::createFromAscii(
                                 "com.sun.star.packages.comp.ZipPackage" ),
                 aArguments );
 
         if ( xIfc.is() )
         {
-            uno::Reference<
-                container::XHierarchicalNameAccess > xNameAccess(
-                                                        xIfc, uno::UNO_QUERY );
+            Reference< XHierarchicalNameAccess > xNameAccess
+                = Reference< XHierarchicalNameAccess >( xIfc, UNO_QUERY );
 
-            OSL_ENSURE( xNameAccess.is(),
+            VOS_ENSURE( xNameAccess.is(),
                         "ContentProvider::createPackage - "
                         "Got no hierarchical name access!" );
 
-            rtl::Reference< Package> xPackage
+            vos::ORef< Package> xPackage
                 = new Package( rName, xNameAccess, this );
 
-            (*m_pPackages)[ rName ] = xPackage.get();
+            (*m_pPackages)[ rName ] = xPackage.getBodyPtr();
 
-            return xPackage.get();
+            return xPackage.getBodyPtr();
         }
     }
-    catch ( uno::RuntimeException const & )
+    catch ( RuntimeException & )
     {
         // createInstanceWithArguemts
     }
-    catch ( uno::Exception const & )
+    catch ( Exception & )
     {
         // createInstanceWithArguemts
     }
 
-    return uno::Reference< container::XHierarchicalNameAccess >();
+    return Reference< XHierarchicalNameAccess >();
 }
 
 //=========================================================================
-sal_Bool ContentProvider::removePackage( const rtl::OUString & rName )
+sal_Bool ContentProvider::removePackage( const OUString & rName )
 {
     vos::OGuard aGuard( m_aMutex );
 
