@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cmc $ $Date: 2001-02-06 17:28:21 $
+ *  last change: $Author: cmc $ $Date: 2001-02-07 11:12:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2546,14 +2546,6 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM,
             eHRel = eVRel = REL_PG_FRAME;
     }
 
-
-            // Sicherheitsabfragen, damit der der Writer nichts unverdauliches
-            // bekommt
-    if( nYPos < 0 )
-        nYPos = 0;
-
-    if( nXPos < 0 )
-        nXPos = 0;
     /*
         // eine Writer-Kuriositaet: auch wenn Abstaende vom Seitenrand
         // gezaehlt werden sollen, muessen die Positionen als Abstaende vom
@@ -4898,12 +4890,15 @@ short SwWW8ImplReader::ImportSprm( BYTE* pPos, short nSprmsLen, USHORT nId )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.9 2001-02-06 17:28:21 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.10 2001-02-07 11:12:31 cmc Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.9  2001/02/06 17:28:21  cmc
+      #83581# CJK Two Lines in One {Im|Ex}port for Word
+
       Revision 1.8  2001/02/06 13:13:07  cmc
       #83356# Support Explicit Page Start Number for WW6/7
 
