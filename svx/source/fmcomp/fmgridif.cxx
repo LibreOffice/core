@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridif.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-11 11:45:43 $
+ *  last change: $Author: fs $ $Date: 2001-06-15 08:42:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1877,10 +1877,17 @@ void FmXGridPeer::setProperty( const ::rtl::OUString& PropertyName, const ::com:
                 ::com::sun::star::awt::FontDescriptor aFont;
                 if (Value >>= aFont)
                 {
-                    if (::comphelper::operator==(aFont, ::comphelper::getDefaultFont()))    // ist das der Default
-                        pGrid->SetControlFont( Font() );
-                    else
-                        pGrid->SetControlFont( ImplCreateFont( aFont ) );
+                    Font aNewVclFont;
+                    if (::comphelper::operator!=(aFont, ::comphelper::getDefaultFont()))    // ist das der Default
+                        aNewVclFont = ImplCreateFont( aFont );
+
+                    // need to add relief and emphasis (they're stored in a VCL-Font, but not in a FontDescriptor
+                    Font aOldVclFont = pGrid->GetControlFont();
+                    aNewVclFont.SetRelief( aOldVclFont.GetRelief() );
+                    aNewVclFont.SetEmphasisMark( aOldVclFont.GetEmphasisMark() );
+
+                    // now set it ...
+                    pGrid->SetControlFont( aNewVclFont );
 
                     // if our row-height property is void (which means "calculate it font-dependent") we have
                     // to adjust the control's row height
