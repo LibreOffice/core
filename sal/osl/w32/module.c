@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.c,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hro $ $Date: 2001-09-03 09:19:56 $
+ *  last change: $Author: hro $ $Date: 2001-09-03 10:48:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,7 +305,7 @@ static sal_Bool SAL_CALL _osl_addressGetModuleURL_NT( void *pv, rtl_uString **pu
 /* Dispatcher for osl_osl_addressGetModuleURL */
 /*****************************************************************************/
 
-sal_Bool SAL_CALL osl_addressGetModuleURL( void *pv, rtl_uString **pustrURL )
+sal_Bool SAL_CALL osl_getModuleURLFromAddress( void *pv, rtl_uString **pustrURL )
 {
     if ( IS_NT )
         return _osl_addressGetModuleURL_NT( pv, pustrURL );

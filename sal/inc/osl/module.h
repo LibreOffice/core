@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kr $ $Date: 2001-05-14 09:24:20 $
+ *  last change: $Author: hro $ $Date: 2001-09-03 10:47:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,14 @@ void SAL_CALL osl_unloadModule(oslModule Module);
     @returns address of the symbol or 0 if lookup failed,
 */
 void* SAL_CALL osl_getSymbol(oslModule Module, rtl_uString *strSymbolName);
+
+/** Lookup URL of module which is mapped at the specified address
+    @param  pv specifies an address in the process memory space
+    @param  pustrURL receives the URL of the module that is mapped at pv
+    @return sal_True on success, sal_False if no module can be found at the specified address
+*/
+
+sal_Bool SAL_CALL osl_getModuleURLFromAddress( void *pv, rtl_uString **pustrURL );
 
 #ifdef __cplusplus
 }
