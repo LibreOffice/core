@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-15 14:13:55 $
+#   last change: $Author: hjs $ $Date: 2004-06-25 12:38:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,7 +82,7 @@ SLOFILES =	$(SLO)$/iras.obj
 
 SHL1TARGET= 	ira$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB= 	iras
-SHL1STDLIBS=	$(VCLLIB) $(TOOLSLIB)
+SHL1STDLIBS=	$(VCLLIB) $(TOOLSLIB) $(SALLIB)
 SHL1DEPN=		$(LB)$/iras.lib
 SHL1LIBS=		$(SLB)$/iras.lib
 
