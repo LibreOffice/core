@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stbctrls.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:32:18 $
+ *  last change: $Author: kz $ $Date: 2001-07-24 20:21:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,14 +296,14 @@ Menu RID_SVXMNU_ZOOM
             Text [ dutch ] = "Paginabreedte" ;
             Text [ spanish ] = "Ancho de página" ;
             Text [ english_us ] = "Page Width" ;
-            Text[ chinese_simplified ] = "Ò³¿í";
+            Text[ chinese_simplified ] = "Ò³Ãæ¿í¶È";
             Text[ russian ] = "Ïî øèğèíå ñòğàíèöû";
             Text[ polish ] = "Szerokoœæ strony";
             Text[ japanese ] = "Íß°¼Ş•";
-            Text[ chinese_traditional ] = "­¶¼e";
+            Text[ chinese_traditional ] = "­¶­±¼e«×";
             Text[ arabic ] = "ÚÑÖ ÇáÕİÍÉ";
             Text[ dutch ] = "Paginabreedte";
-            Text[ chinese_simplified ] = "Ò³¿í";
+            Text[ chinese_simplified ] = "Ò³Ãæ¿í¶È";
             Text[ greek ] = "ĞëÜôïò óåëßäáò";
             Text[ korean ] = "ÂÊ ³Êºñ";
             Text[ turkish ] = "Sayfa genişliği";
@@ -587,6 +587,7 @@ Image RID_SVXBMP_SIZE
         Blue = 0xC000 ;
     };
 };
+
 
 
 
