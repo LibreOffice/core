@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfld.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ama $ $Date: 2000-12-06 15:25:11 $
+ *  last change: $Author: ama $ $Date: 2001-02-14 15:55:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -482,22 +482,6 @@ sal_Bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
             SetAscent( rInf.GetAscent() );
     }
 
-    if( bFull && !nRest )
-    {
-        // 8788: BreakCut bei Feldern schleift
-        // vgl. BreakCut, Sonderfall Nr.2: Zeichen breiter als Zeile
-        // vgl. 5057 und 6721: Zeichen wird abgeschnitten.
-        if( 1 != GetLen() || Width() != rInf.RealWidth() )
-        {
-            aExpand.Erase();
-            SetLen(0);
-            // 7925: Wenn das Feld komplett auf die naechste Zeile muss
-            // dann wird in BreakUnderflow() ein FormatEOL() auf die
-            // TxtPortion gerufen. Der Text rInf.pTxt ist allerdings noch
-            // manipuliert, hier aber nicht.
-            bEOL = sal_True;
-        }
-    }
     if( bEOL && rInf.GetLast() )
         rInf.GetLast()->FormatEOL( rInf );
     return bFull;
