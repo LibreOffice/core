@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-22 10:51:12 $
+ *  last change: $Author: fs $ $Date: 2001-06-26 09:25:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@ namespace sdbc {
     class XDataSource;
     class SQLException;
     class XParameters;
+    class XRowUpdate;
 }
 namespace beans {
     class XPropertySet;
@@ -280,6 +281,26 @@ namespace dbtools
     void showError( const SQLExceptionInfo& _rInfo,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow>& _pParent,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
+
+    /** implements <method scope="com.sun.star.sdb">XRowUpdate::updateObject</method>
+        <p>The object which is to be set is analyzed, and in case it is a simlpe scalar type for which there
+        is another updateXXX method, this other method is used.</p>
+        @param _rxUpdatedObject
+            the interface to forward all updateXXX calls to (except updateObject)
+        @param _nColumnIndex
+            the column index to update
+        @param _rValue
+            the value to update
+        @return
+            <TRUE/> if the update request was successfully re-routed to one of the other updateXXX methods
+    */
+    sal_Bool    implUpdateObject(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowUpdate >& _rxUpdatedObject,
+        const sal_Int32 _nColumnIndex,
+        const ::com::sun::star::uno::Any& _rValue
+    )   SAL_THROW   (   (   ::com::sun::star::sdbc::SQLException
+                        ,   ::com::sun::star::uno::RuntimeException
+                    )   );
 
     /** ask the user for parameters if the prepared statement needs some and sets them in the prepared statement
         @param _xConnection     the connection must support the iterface @see com::sun::star::sdb::XSQLQueryComposerFactory

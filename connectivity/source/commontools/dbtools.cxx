@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-22 10:53:35 $
+ *  last change: $Author: fs $ $Date: 2001-06-26 09:27:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,12 @@
 #include <connectivity/conncleanup.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
+#include <com/sun/star/io/XInputStream.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_XROWUPDATE_HPP_
+#include <com/sun/star/sdbc/XRowUpdate.hpp>
+#endif
 #ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
 #include <com/sun/star/container/XChild.hpp>
 #endif
@@ -209,6 +215,7 @@
 
 using namespace ::comphelper;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::util;
@@ -298,12 +305,12 @@ sal_Int32 getDefaultNumberFormat(sal_Int32 _nDataType,
         {
             try
             {
-                nFormat = _xTypes->getStandardFormat(nNumberType, _rLocale);
+                nFormat = _xTypes->getStandardFormat((sal_Int16)nNumberType, _rLocale);
                 if(_nScale)
                 {
                     // generate a new format if necessary
                     Reference< XNumberFormats > xFormats(_xTypes, UNO_QUERY);
-                    ::rtl::OUString sNewFormat = xFormats->generateFormat( 0L, _rLocale, sal_False, sal_False, _nScale, sal_True);
+                    ::rtl::OUString sNewFormat = xFormats->generateFormat( 0L, _rLocale, sal_False, sal_False, (sal_Int16)_nScale, sal_True);
 
                     // and add it to the formatter if necessary
                     nFormat = xFormats->queryKey(sNewFormat, _rLocale, sal_False);
@@ -313,7 +320,7 @@ sal_Int32 getDefaultNumberFormat(sal_Int32 _nDataType,
             }
             catch (Exception&)
             {
-                nFormat = _xTypes->getStandardFormat(nNumberType, _rLocale);
+                nFormat = _xTypes->getStandardFormat((sal_Int16)nNumberType, _rLocale);
             }
         }   break;
         case DataType::CHAR:
@@ -1211,6 +1218,102 @@ void showError(const SQLExceptionInfo& _rInfo,
         }
     }
 }
+
+    // -------------------------------------------------------------------------
+    sal_Bool implUpdateObject(const Reference< XRowUpdate >& _rxUpdatedObject,
+        const sal_Int32 _nColumnIndex, const Any& _rValue) SAL_THROW ( ( SQLException, RuntimeException ) )
+    {
+        sal_Bool bSuccessfullyReRouted = sal_False;
+        switch (_rValue.getValueTypeClass())
+        {
+            case TypeClass_ANY:
+            {
+                Any aInnerValue;
+                _rValue >>= aInnerValue;
+                return implUpdateObject(_rxUpdatedObject, _nColumnIndex, aInnerValue);
+            }
+            break;
+
+            case TypeClass_VOID:
+                _rxUpdatedObject->updateNull(_nColumnIndex);
+                bSuccessfullyReRouted = sal_True;
+                break;
+
+            case TypeClass_STRING:
+                _rxUpdatedObject->updateString(_nColumnIndex, *(rtl::OUString*)_rValue.getValue());
+                bSuccessfullyReRouted = sal_True;
+                break;
+
+            case TypeClass_BOOLEAN:
+                _rxUpdatedObject->updateBoolean(_nColumnIndex, *(sal_Bool *)_rValue.getValue());
+                bSuccessfullyReRouted = sal_True;
+                break;
+
+            case TypeClass_BYTE:
+                _rxUpdatedObject->updateByte(_nColumnIndex, *(sal_Int8 *)_rValue.getValue());
+                bSuccessfullyReRouted = sal_True;
+                break;
+
+            case TypeClass_UNSIGNED_SHORT:
+            case TypeClass_SHORT:
+                _rxUpdatedObject->updateShort(_nColumnIndex, *(sal_Int16*)_rValue.getValue());
+                bSuccessfullyReRouted = sal_True;
+                break;
+
+            case TypeClass_CHAR:
+                _rxUpdatedObject->updateShort(_nColumnIndex, *(sal_Int16*)(sal_Unicode *)_rValue.getValue());//XXX
+                bSuccessfullyReRouted = sal_True;
+                break;
+
+            case TypeClass_UNSIGNED_LONG:
+            case TypeClass_LONG:
+                _rxUpdatedObject->updateInt(_nColumnIndex, *(sal_Int32*)_rValue.getValue());
+                bSuccessfullyReRouted = sal_True;
+                break;
+
+            case TypeClass_FLOAT:
+                _rxUpdatedObject->updateFloat(_nColumnIndex, *(float*)_rValue.getValue());
+                bSuccessfullyReRouted = sal_True;
+                break;
+
+            case TypeClass_DOUBLE:
+                _rxUpdatedObject->updateDouble(_nColumnIndex, *(double*)_rValue.getValue());
+                bSuccessfullyReRouted = sal_True;
+                break;
+
+            case TypeClass_SEQUENCE:
+                if (_rValue.getValueType() == ::getCppuType((const Sequence< sal_Int8 > *)0))
+                {
+                    _rxUpdatedObject->updateBytes(_nColumnIndex, *(Sequence<sal_Int8>*)_rValue.getValue());
+                    bSuccessfullyReRouted = sal_True;
+                }
+                break;
+            case TypeClass_STRUCT:
+                bSuccessfullyReRouted = sal_True;
+                if (_rValue.getValueType() == ::getCppuType((const DateTime*)0))
+                    _rxUpdatedObject->updateTimestamp(_nColumnIndex, *(DateTime*)_rValue.getValue());
+                else if (_rValue.getValueType() == ::getCppuType((const Date*)0))
+                    _rxUpdatedObject->updateDate(_nColumnIndex, *(Date*)_rValue.getValue());
+                else if (_rValue.getValueType() == ::getCppuType((const Time*)0))
+                    _rxUpdatedObject->updateTime(_nColumnIndex, *(Time*)_rValue.getValue());
+                else
+                    bSuccessfullyReRouted = sal_False;
+                break;
+
+            case TypeClass_INTERFACE:
+                if (_rValue.getValueType() == ::getCppuType(static_cast<Reference< XInputStream>*>(NULL)))
+                {
+                    Reference< XInputStream >  xStream;
+                    _rValue >>= xStream;
+                    _rxUpdatedObject->updateBinaryStream(_nColumnIndex, xStream, xStream->available());
+                    bSuccessfullyReRouted = sal_True;
+                }
+                break;
+        }
+
+        return bSuccessfullyReRouted;
+    }
+
 //==================================================================
 // OParameterContinuation
 //==================================================================
@@ -1413,8 +1516,12 @@ void setObjectWithInfo(const Reference<XParameters>& _xParams,
 //.........................................................................
 }   // namespace dbtools
 //.........................................................................
+
+//.........................................................................
 namespace connectivity
 {
+//.........................................................................
+
 void release(oslInterlockedCount& _refCount,
              ::cppu::OBroadcastHelper& rBHelper,
              ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface,
@@ -1494,110 +1601,20 @@ void checkDisposed(sal_Bool _bThrow) throw ( DisposedException )
     }
 
 // -----------------------------------------------------------------------------
-} //namespace connexctivity
+} //namespace connectivity
 // -----------------------------------------------------------------------------
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.34  2001/06/22 10:53:35  oj
+ *  #88455# new functions for parameters
+ *
  *  Revision 1.33  2001/06/21 11:08:16  oj
  *  #87925# start at 1
  *
  *  Revision 1.32  2001/06/15 09:55:48  fs
  *  #86986# moved css/ui/* to css/ui/dialogs/*
- *
- *  Revision 1.31  2001/06/05 16:08:20  fs
- *  #87688# getConnection_withFeedback
- *
- *  Revision 1.30  2001/05/30 11:48:15  fs
- *  #86671# createUniqueName: check if the base name is allowed, too
- *
- *  Revision 1.29  2001/05/25 13:09:29  oj
- *  #86839# flush scanner buffer
- *
- *  Revision 1.28  2001/05/23 09:15:42  oj
- *  #86528# disable exception in some files
- *
- *  Revision 1.27  2001/05/21 09:06:17  oj
- *  #87050# composeTableName corrected
- *
- *  Revision 1.26  2001/05/17 07:27:04  oj
- *  #86528# size changes
- *
- *  Revision 1.25  2001/05/14 11:53:31  oj
- *  #86528# lower size need
- *
- *  Revision 1.24  2001/05/11 17:25:49  pl
- *  rtl string api changes
- *
- *  Revision 1.23  2001/04/27 10:09:14  oj
- *  comment out the OSL_ESNURE in QualifiedNameComponents
- *
- *  Revision 1.22  2001/04/20 13:33:25  oj
- *  #85736# if catalogseparator is empty don't append catalog
- *
- *  Revision 1.21  2001/04/17 13:56:26  fs
- *  corrected getConnection
- *
- *  Revision 1.20  2001/04/12 09:49:49  fs
- *  #84852# calcConnection: use a OAutoConnectionDisposer when setting the rowsets connection
- *
- *  Revision 1.19  2001/04/12 06:28:34  fs
- *  #84694# allow calcConnection to throw an SQLexception when using getConnection
- *
- *  Revision 1.18  2001/03/19 09:35:26  oj
- *  new dir for unotypes
- *
- *  Revision 1.17  2001/03/15 08:45:56  fs
- *  cppuhelper/extract -> comphelper/extract
- *
- *  Revision 1.16  2001/02/16 16:01:29  oj
- *  some new functions
- *
- *  Revision 1.15  2001/02/14 10:31:47  oj
- *  neew method
- *
- *  Revision 1.14  2001/02/05 10:32:31  oj
- *  check statement length
- *
- *  Revision 1.13  2001/01/30 15:35:56  oj
- *  check if qoute char is space
- *
- *  Revision 1.12  2001/01/09 13:09:21  oj
- *  catch SQLException separated
- *
- *  Revision 1.11  2000/11/22 14:27:17  oj
- *  dispose old connection when new is set
- *
- *  Revision 1.10  2000/11/14 13:41:29  oj
- *  use of statis strings
- *
- *  Revision 1.9  2000/11/13 07:13:52  oj
- *  wrong use of replaceAt
- *
- *  Revision 1.8  2000/11/10 13:39:59  oj
- *  #80159# use of XInteractionHandler when no user nor password is given
- *
- *  Revision 1.7  2000/11/09 08:46:09  oj
- *  some new methods for db's
- *
- *  Revision 1.6  2000/11/08 15:34:01  fs
- *  composeTableName corrected
- *
- *  Revision 1.5  2000/11/03 13:30:31  oj
- *  use stream for any
- *
- *  Revision 1.4  2000/10/30 07:46:12  oj
- *  descriptors inserted
- *
- *  Revision 1.3  2000/10/27 15:56:00  fs
- *  modified some implementations, so that they work with the new sdb interfaces (DatabaseContext instead of DatabaseAccessContext, no DatabaseEnvironment anymore, ....)
- *
- *  Revision 1.2  2000/10/24 15:00:32  oj
- *  make strings unique for lib's
- *
- *  Revision 1.1  2000/10/05 08:50:51  fs
- *  moved the files from unotools to here
  *
  *  Revision 1.0 29.09.00 08:16:59  fs
  ************************************************************************/
