@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptNameResolverImpl.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-02-06 18:22:14 $
+ *  last change: $Author: npower $ $Date: 2003-02-19 16:06:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,8 +199,61 @@ throw ( lang::IllegalArgumentException, script::CannotConvertException, RuntimeE
 
 
     OSL_TRACE( "ScriptNameResolverImpl::resolve Starting..." );
-    ::std::vector< sal_Int32 >& m_vSearchIDs = *m_pSearchIDs;
+    OUString docString = OUString::createFromAscii( "location=document" );
+    OUString userString = OUString::createFromAscii( "location=user" );
+    OUString shareString = OUString::createFromAscii( "location=share" );
+
+    // initialise vector with doc, user and share
+
+    // m_pSearchIDs is initialised as follows,
+    // m_pSearchIDs [ 0 ] empty
+    // m_pSearchIDs [ 1 ] user storage id
+    // m_pSearchIDs [ 2 ] share "      "
+
+    ::std::vector< sal_Int32 > m_vSearchIDs = *m_pSearchIDs;
     m_vSearchIDs[ 0 ] = docSid;
+
+    if ( scriptURI.indexOf( docString ) != -1 )
+    {
+        OSL_TRACE("Full resolution available, search document");
+        // search in document
+        m_vSearchIDs.resize( 1 );
+    }
+    else if ( scriptURI.indexOf( userString ) != -1 )
+    {
+        OSL_TRACE("Full resolution available, search user");
+        // search in user
+        m_vSearchIDs[ 0 ] = ( *m_pSearchIDs )[ 1 ];
+        m_vSearchIDs.resize( 1 );
+    }
+    else if ( scriptURI.indexOf( shareString ) != -1 )
+    {
+        OSL_TRACE("Full resolution available, search share");
+        // search in share
+        m_vSearchIDs[ 0 ] = ( *m_pSearchIDs )[ 2 ];
+        m_vSearchIDs.resize( 1 );
+    }
+    else
+    {
+        OSL_TRACE("Only partial uri available, search doc, user & share");
+        // is this illegal or do we search in a default way
+        // if we get to here a uri has been passed in that has:
+        // a) not got a location specified
+        // b) an illegal location
+
+        // detect illegal location
+        if (  scriptURI.indexOf( OUString::createFromAscii( "location=" ) ) != -1 )
+        {
+            OSL_TRACE(
+                "ScriptNameResolver::resolve, throwing IllegalArgException" );
+            throw lang::IllegalArgumentException(
+                OUSTR( "invalid URI: " ).concat( scriptURI ),
+                Reference < XInterface > (), 1 );
+
+        }
+        // leave vSearchIDs take care of the search...
+    }
+
     ::std::vector< sal_Int32 >::const_iterator iter;
     ::std::vector< sal_Int32 >::const_iterator iterEnd = m_vSearchIDs.end();
 
@@ -214,64 +267,65 @@ throw ( lang::IllegalArgumentException, script::CannotConvertException, RuntimeE
             {
                 OSL_TRACE( "found match in uri from storage %d", *iter );
                 xPropSetScriptingContext->setPropertyValue(
-                    scriptingConstantsPool.RESOLVED_STORAGE_ID, makeAny(*iter) );
+                scriptingConstantsPool.RESOLVED_STORAGE_ID, makeAny(*iter) );
                 break;
             }
 
         }
-    catch ( beans::UnknownPropertyException & e )
+        catch ( beans::UnknownPropertyException & e )
         {
             OUString temp = OUSTR(
                 "ScriptNameResolverImpl::resolve : UnknownPropertyException" );
             throw RuntimeException( temp.concat( e.Message ),
-                                Reference< XInterface > () );
+                Reference< XInterface > () );
         }
     catch ( beans::PropertyVetoException  & e )
         {
             OUString temp = OUSTR(
                 "ScriptNameResolverImpl::resolve : PropertyVetoException " );
             throw RuntimeException( temp.concat( e.Message ),
-                                Reference< XInterface > () );
+                Reference< XInterface > () );
         }
-    catch ( lang::IllegalArgumentException  & e )
+        catch ( lang::IllegalArgumentException  & e )
         {
             OUString temp = OUSTR(
                 "ScriptNameResolverImpl::resolve : IllegalArgumentException " );
             throw RuntimeException( temp.concat( e.Message ),
-                                Reference< XInterface > () );
+                Reference< XInterface > () );
         }
     catch ( lang::WrappedTargetException & e )
         {
         OUString temp = OUSTR(
                 "ScriptNameResolverImpl::resolve : WrappedTargetException " );
             throw RuntimeException( temp.concat( e.Message ),
-                                Reference< XInterface > () );
+                Reference< XInterface > () );
         }
         catch ( Exception & e )
         {
-            OSL_TRACE( "Exception thrown by storage %d, failed to match uri: %s",
-                *iter,
-                ::rtl::OUStringToOString( e.Message,
-                    RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+            OSL_TRACE(
+                "Exception thrown by storage %d, failed to match uri: %s",
+                 *iter,
+                 ::rtl::OUStringToOString( e.Message,
+                 RTL_TEXTENCODING_ASCII_US ).pData->buffer );
         OUString temp = OUSTR(
                 "ScriptNameResolverImpl::resolve : unknown exception" );
             throw RuntimeException( temp.concat( e.Message ),
-                                Reference< XInterface > () );
+                Reference< XInterface > () );
         }
 #ifdef _DEBUG
         catch ( ... )
         {
-            OSL_TRACE( "unknown exception thrown by storage %d, failed to match uri",
+            OSL_TRACE(
+                "unknown exception thrown by storage %d, failed to match uri",
                 *iter );
         OUString temp = OUSTR(
                 "ScriptNameResolverImpl::resolve Unknown exception caught - RuntimeException rethrown" );
             throw RuntimeException( temp,
-                                Reference< XInterface > () );
+                Reference< XInterface > () );
         }
 #endif
 
     }
-
     return resolvedName;
 }
 
@@ -331,35 +385,10 @@ SAL_THROW ( ( lang::IllegalArgumentException, RuntimeException ) )
         }
 
         OSL_TRACE( "ScriptNameResolverImpl::resolve Got some results..." );
-        for ( sal_Int32 index = 0;index < length;index++ )
-        {
-            Reference< storage::XScriptInfo > scriptInfo = results[ index ];
-#ifdef _DEBUG
-
-            ::rtl::OString languageO( ::rtl::OUStringToOString( scriptInfo->getLanguage(),
-                RTL_TEXTENCODING_ASCII_US ) );
-            ::rtl::OString functionName( ::rtl::OUStringToOString( scriptInfo->getFunctionName(),
-                RTL_TEXTENCODING_ASCII_US ) );
-            ::rtl::OString logicalName( ::rtl::OUStringToOString( scriptInfo->getLogicalName(),
-                RTL_TEXTENCODING_ASCII_US ) );
-            OSL_TRACE(  "[%d] URI, {language = %s}, {funtionName = %s}, {logicalName = %s}\n",
-                     index, languageO.pData->buffer,
-                     functionName.pData->buffer, logicalName.pData->buffer );
-#endif
-
-            // just choose first one that has language=LANGUAGE_TO_RESOLVE_ON
-            ::rtl::OUString language( scriptInfo->getLanguage() );
-
-            for ( sal_Int32 i = (sizeof LANGUAGE_TO_RESOLVE_ON / sizeof *LANGUAGE_TO_RESOLVE_ON); i--; ) {
-                if ( rtl_str_compare(LANGUAGE_TO_RESOLVE_ON[i], "All") == 0 ||
-                     language.compareToAscii( LANGUAGE_TO_RESOLVE_ON[i] ) == 0 )
-                {
-                    OSL_TRACE( "Found desired language\n" );
-                    resolvedScriptInfo = scriptInfo;
-                    break;
-                }
-            }
-        }
+        // if we get results, just return first in list,
+        // storage has already matched language, function name etc. if
+        // that information was in the uri
+        resolvedScriptInfo = results[ 0 ];
     }
     catch ( lang::IllegalArgumentException & iae )
     {
