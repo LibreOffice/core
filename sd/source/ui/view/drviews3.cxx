@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews3.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 13:37:15 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 15:54:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,6 +172,12 @@
 #include "drawview.hxx"
 #endif
 #include "drawdoc.hxx"
+#include "DrawViewShell.hxx"
+#include "Ruler.hxx"
+#include "DrawDocShell.hxx"
+#include "PreviewWindow.hxx"
+#include "headerfooterdlg.hxx"
+#include "masterlayoutdlg.hxx"
 #include "Ruler.hxx"
 #include "DrawDocShell.hxx"
 #ifndef SD_PREVIEW_WINDOW_HXX
@@ -368,6 +374,65 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
             Invalidate();
             rReq.Done ();
 
+            break;
+        }
+
+        case SID_HEADER_AND_FOOTER:
+        case SID_INSERT_PAGE_NUMBER:
+        case SID_INSERT_DATE_TIME:
+        {
+            sd::HeaderFooterDialog::execute( this, pWindow, GetDoc(), pActualPage );
+
+            pWindow->Invalidate();
+            UpdatePreview( pActualPage );
+
+            Invalidate();
+            rReq.Done ();
+
+            break;
+        }
+
+        case SID_MASTER_LAYOUTS_SLIDE:
+        {
+            SdPage* pPage = pActualPage;
+            if( pPage->GetPageKind() == PK_NOTES )
+            {
+                pPage = (SdPage*)GetDoc()->GetPage( pPage->GetPageNum() - 1 );
+            }
+            else if( pPage->GetPageKind() == PK_HANDOUT )
+            {
+                pPage = GetDoc()->GetMasterSdPage(0,PK_STANDARD);
+            }
+
+            sd::MasterLayoutDialog::execute( pWindow, GetDoc(), pPage );
+            Invalidate();
+            rReq.Done ();
+            break;
+        }
+
+        case SID_MASTER_LAYOUTS_NOTES:
+        {
+            SdPage* pPage = pActualPage;
+            if( pPage->GetPageKind() == PK_STANDARD )
+            {
+                pPage = (SdPage*)GetDoc()->GetPage( pPage->GetPageNum() + 1 );
+            }
+            else if( pPage->GetPageKind() == PK_HANDOUT )
+            {
+                pPage = GetDoc()->GetMasterSdPage(0,PK_NOTES);
+            }
+
+            sd::MasterLayoutDialog::execute( pWindow, GetDoc(), pPage );
+            Invalidate();
+            rReq.Done ();
+            break;
+        }
+
+        case SID_MASTER_LAYOUTS_HANDOUTS:
+        {
+            sd::MasterLayoutDialog::execute( pWindow, GetDoc(), GetDoc()->GetMasterSdPage(0,PK_HANDOUT) );
+            Invalidate();
+            rReq.Done ();
             break;
         }
 
