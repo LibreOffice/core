@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flycnt.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ama $ $Date: 2002-01-21 09:49:29 $
+ *  last change: $Author: ama $ $Date: 2002-02-04 11:37:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1637,6 +1637,8 @@ void SwFlyAtCntFrm::MakeFlyPos()
         //Sie koennen jeweils Fix oder Variabel sein.
 #ifdef VERTICAL_LAYOUT
         SWRECTFN( pAutoOrient )
+        BOOL bFlyVert = IsVertical();
+
         //Zuerst die vertikale Position, damit feststeht auf welcher Seite
         //bzw. in welchen Upper sich der Fly befindet.
         if ( aVert.GetVertOrient() != VERT_NONE )
@@ -1676,7 +1678,11 @@ void SwFlyAtCntFrm::MakeFlyPos()
                                               rLR.GetLeft() : rUL.GetLower()));
                 }
                 else if( pAutoPos && aVert.GetVertOrient() == VERT_CHAR_BOTTOM )
+                {
                     nRelPosY = nHeight + nUpper;
+                    if( bVert && !bFlyVert )
+                        nRelPosY += aFrm.Width();
+                }
                 else
                     nRelPosY = nUpper;
             }
@@ -1844,7 +1850,6 @@ void SwFlyAtCntFrm::MakeFlyPos()
         //Damit das Teil ggf. auf die richtige Seite gestellt und in die
         //PrtArea des LayLeaf gezogen werden kann, muss hier seine
         //absolute Position berechnet werden.
-        BOOL bFlyVert = IsVertical();
         if( bVert )
         {
             aFrm.Pos().X() = GetAnchor()->Frm().Left() +
@@ -2830,7 +2835,9 @@ void SwFlyAtCntFrm::MakeFlyPos()
         {
             aFrm.Pos().X() = GetAnchor()->Frm().Left() +
                              GetAnchor()->Frm().Width() -
-                             aRelPos.X() - aFrm.Width();
+                             aRelPos.X();
+            if( bFlyVert )
+                aFrm.Pos().X() -= aFrm.Width();
             aFrm.Pos().Y() = GetAnchor()->Frm().Top() + aRelPos.Y();
         }
         else
