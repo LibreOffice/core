@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 16:28:29 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 15:05:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1174,6 +1174,8 @@ void SfxObjectShell::FinishedLoading( sal_uInt16 nFlags )
         if( !IsAbortingImport() )
             PositionView_Impl();
 
+        CheckMacrosOnLoading_Impl();
+
         // Salvage
         if ( pSalvageItem )
             bSetModifiedTRUE = sal_True;
@@ -1236,8 +1238,6 @@ void SfxObjectShell::FinishedLoading( sal_uInt16 nFlags )
 
     if ( (pImp->nLoadedFlags & SFX_LOADED_MAINDOCUMENT ) && (pImp->nLoadedFlags & SFX_LOADED_IMAGES ) )
     {
-        CheckMacrosOnLoading_Impl();
-
         // closing the streams on loading should be under control of SFX!
         DBG_ASSERT( pMedium->IsOpen(), "Don't close the medium when loading documents!" );
         if( !(pMedium->GetOpenMode() & STREAM_WRITE) )
