@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: pl $ $Date: 2001-07-09 12:47:24 $
+ *  last change: $Author: pl $ $Date: 2001-07-10 10:47:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2643,15 +2643,18 @@ void SelectionManager::dispatchEvent( int millisec )
         // with an empty socket here
         if( poll( &aPollFD, 1, 0 ) > 0 )
         {
-            int nPending = XPending( m_pDisplay );
+            int nPending = 1;
             aOuterGuard.clear();
             while( nPending )
             {
                 ClearableMutexGuard aLoopGuard(m_aMutex);
-                XNextEvent( m_pDisplay, &event );
                 nPending = XPending( m_pDisplay );
-                aLoopGuard.clear();
-                handleXEvent( event );
+                if( nPending )
+                {
+                    XNextEvent( m_pDisplay, &event );
+                    aLoopGuard.clear();
+                    handleXEvent( event );
+                }
             }
         }
     }
