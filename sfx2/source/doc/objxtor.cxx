@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ab $ $Date: 2001-06-25 11:16:51 $
+ *  last change: $Author: ab $ $Date: 2001-06-28 15:56:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -693,24 +693,17 @@ void SfxObjectShell::InitBasicManager_Impl
         pImp->pBasicMgr = pBasicManager = new BasicManager( pBas );
     }
 
-    // Standard lib name
-    rtl::OUString aStdLibName( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
-
     // Basic container
     SfxScriptLibraryContainer* pBasicCont = new SfxScriptLibraryContainer
         ( DEFINE_CONST_UNICODE( "StarBasic" ), pBasicManager, pStor );
     pBasicCont->acquire();  // Hold via UNO
     Reference< XLibraryContainer > xBasicCont = static_cast< XLibraryContainer* >( pBasicCont );
-    if ( xBasicCont.is() && !xBasicCont->hasByName( aStdLibName ) )
-        xBasicCont->createLibrary( aStdLibName );   // create Standard library
     pImp->pBasicLibContainer = pBasicCont;
 
     // Dialog container
     SfxDialogLibraryContainer* pDialogCont = new SfxDialogLibraryContainer( pStor );
     pDialogCont->acquire(); // Hold via UNO
     Reference< XLibraryContainer > xDialogCont = static_cast< XLibraryContainer* >( pDialogCont );
-    if ( xDialogCont.is() && !xDialogCont->hasByName( aStdLibName ) )
-        xDialogCont->createLibrary( aStdLibName );  // create Standard library
     pImp->pDialogLibContainer = pDialogCont;
 
     BasicManagerImpl* pBasMgrImpl = new BasicManagerImpl();
@@ -735,13 +728,20 @@ void SfxObjectShell::InitBasicManager_Impl
     xUnoObj->SetFlag( SBX_DONTSTORE );
     pBas->Insert( xUnoObj );
 
+    // Standard lib name
+    rtl::OUString aStdLibName( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
+
     // Basic container
+    if ( xBasicCont.is() && !xBasicCont->hasByName( aStdLibName ) )
+        xBasicCont->createLibrary( aStdLibName );   // create Standard library
     Any aBasicCont;
     aBasicCont <<= xBasicCont;
     xUnoObj = GetSbUnoObject( DEFINE_CONST_UNICODE("BasicLibraries"), aBasicCont );
     pBas->Insert( xUnoObj );
 
     // Dialog container
+    if ( xDialogCont.is() && !xDialogCont->hasByName( aStdLibName ) )
+        xDialogCont->createLibrary( aStdLibName );  // create Standard library
     Any aDialogCont;
     aDialogCont <<= xDialogCont;
     xUnoObj = GetSbUnoObject( DEFINE_CONST_UNICODE("DialogLibraries"), aDialogCont );
