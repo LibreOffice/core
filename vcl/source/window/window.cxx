@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.104 $
+ *  $Revision: 1.105 $
  *
- *  last change: $Author: mt $ $Date: 2002-06-14 08:53:51 $
+ *  last change: $Author: ssa $ $Date: 2002-06-14 10:21:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -7910,7 +7910,7 @@ BOOL Window::IsAccessibilityEventsSuppressed( BOOL bTraverseParentPath )
             if( pParent->mbSuppressAccessibilityEvents )
                 return TRUE;
             else
-                pParent = pParent->GetParent();
+                pParent = pParent->mpParent; // do not use GetParent() to find borderwindows that are frames
         }
         return FALSE;
     }
