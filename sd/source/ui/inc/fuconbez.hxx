@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconbez.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2002-02-15 17:02:42 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 11:56:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,39 +59,37 @@
  *
  ************************************************************************/
 
-#ifndef _SD_FUCONBEZ_HXX
-#define _SD_FUCONBEZ_HXX
+#ifndef SD_FU_CONSTRUCT_BEZIER_HXX
+#define SD_FU_CONSTRUCT_BEZIER_HXX
 
-#ifndef _SD_FUCONSTR_HXX
+#ifndef SD_FU_CONSTRUCT_HXX
 #include "fuconstr.hxx"
 #endif
 
-class SdDrawViewShell;
-class SdWindow;
-class SdDrawView;
 class SdDrawDocument;
 
+namespace sd {
+
+class DrawView;
+class DrawViewShell;
+class Window;
 
 
-/*************************************************************************
-|*
-|* Basisklasse fuer alle Funktionen
-|*
-\************************************************************************/
-
-class FuConstBezPoly : public FuConstruct
+class FuConstructBezierPolygon
+    : public FuConstruct
 {
- protected:
-    USHORT      nEditMode;
-
- public:
+public:
     TYPEINFO();
 
-    FuConstBezPoly(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
-                   SdDrawDocument* pDoc, SfxRequest& rReq);
+    FuConstructBezierPolygon (
+        ViewShell* pViewSh,
+        ::sd::Window* pWin,
+        ::sd::View* pView,
+        SdDrawDocument* pDoc,
+        SfxRequest& rReq);
+    virtual ~FuConstructBezierPolygon (void);
 
-    virtual ~FuConstBezPoly();
-                                       // Mouse- & Key-Events
+    // Mouse- & Key-Events
     virtual BOOL KeyInput(const KeyEvent& rKEvt);
     virtual BOOL MouseMove(const MouseEvent& rMEvt);
     virtual BOOL MouseButtonUp(const MouseEvent& rMEvt);
@@ -107,8 +105,12 @@ class FuConstBezPoly : public FuConstruct
 
     // #97016#
     virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle);
+
+protected:
+    USHORT      nEditMode;
 };
 
+} // end of namespace sd
 
-#endif      // _FUCONBEZ_HXX
+#endif
 
