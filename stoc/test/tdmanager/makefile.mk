@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: obo $ $Date: 2004-06-04 02:35:20 $
+#   last change: $Author: obo $ $Date: 2004-08-12 12:19:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,15 +88,27 @@ SHL1VERSIONMAP = testtdmanager.map
 
 ALLTAR: test
 
-$(MISC)$/$(TARGET)$/all.rdb: types.idl
+$(MISC)$/$(TARGET)$/%.rdb : %.idl
     - rm $@
     - $(MKDIR) $(MISC)$/$(TARGET)
     idlc -O$(MISC)$/$(TARGET) -I$(SOLARIDLDIR) -C -cid -we $<
-    regmerge $@ /UCR $(MISC)$/$(TARGET)$/types.urd
-    regmerge $@ / $(SOLARBINDIR)$/types.rdb
+    regmerge $@ /UCR $(subst,.rdb,.urd $@)
 
-$(SLOFILES): $(MISC)$/$(TARGET)$/all.rdb
+IDL_FILES = \
+    types.idl \
+    types2_incomp.idl \
+    types3_incomp.idl \
+    types4_incomp.idl \
+    types5_incomp.idl \
+    types5.idl \
+    types6_incomp.idl
 
-test .PHONY: $(SHL1TARGETN) $(MISC)$/$(TARGET)$/all.rdb
+RDB_FILES = $(foreach,i,$(subst,.idl,.rdb $(IDL_FILES)) $(MISC)$/$(TARGET)$/$i)
+
+$(SLOFILES): $(RDB_FILES)
+
+test .PHONY: $(SHL1TARGETN) $(RDB_FILES)
     uno -c test.tdmanager.impl -l $(subst,$/,/ $(SHL1TARGETN)) \
-        -ro $(subst,$/,/ $(MISC)$/$(TARGET)$/all.rdb)
+    -ro $(subst,$/,/ $(SOLARBINDIR)$/udkapi_doc.rdb) \
+        -- $(subst,$/,/ $(SOLARBINDIR)$/types_doc.rdb) \
+           $(subst,$/,/ $(RDB_FILES))
