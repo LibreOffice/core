@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Currency.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-23 06:25:31 $
+ *  last change: $Author: fs $ $Date: 2001-08-22 10:06:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
+#include <svtools/syslocale.hxx>
 #endif
 
 //.........................................................................
@@ -153,25 +156,26 @@ OCurrencyModel::OCurrencyModel(const Reference<XMultiServiceFactory>& _rxFactory
         try
         {
             // get the system international informations
-            LocaleDataWrapper aLocaleInfo(_rxFactory, Application::GetSettings().GetUILocale());
+            const LocaleDataWrapper& aLocaleInfo = SvtSysLocale().GetLocaleData();
+
             ::rtl::OUString sCurrencySymbol;
             sal_Bool bPrependCurrencySymbol;
-            switch (aLocaleInfo.getCurrPositiveFormat())
+            switch ( aLocaleInfo.getCurrPositiveFormat() )
             {
                 case 0: // $1
-                    sCurrencySymbol = UniString(aLocaleInfo.getCurrSymbol());
+                    sCurrencySymbol = String(aLocaleInfo.getCurrSymbol());
                     bPrependCurrencySymbol = sal_True;
                     break;
                 case 1: // 1$
-                    sCurrencySymbol = UniString(aLocaleInfo.getCurrSymbol());
+                    sCurrencySymbol = String(aLocaleInfo.getCurrSymbol());
                     bPrependCurrencySymbol = sal_False;
                     break;
                 case 2: // $ 1
-                    sCurrencySymbol = ::rtl::OUString(UniString(aLocaleInfo.getCurrSymbol())) + ::rtl::OUString::createFromAscii(" ");
+                    sCurrencySymbol = ::rtl::OUString(String(aLocaleInfo.getCurrSymbol())) + ::rtl::OUString::createFromAscii(" ");
                     bPrependCurrencySymbol = sal_True;
                     break;
                 case 3: // 1 $
-                    sCurrencySymbol = ::rtl::OUString::createFromAscii(" ") + ::rtl::OUString(UniString(aLocaleInfo.getCurrSymbol()));
+                    sCurrencySymbol = ::rtl::OUString::createFromAscii(" ") + ::rtl::OUString(String(aLocaleInfo.getCurrSymbol()));
                     bPrependCurrencySymbol = sal_False;
                     break;
             }
