@@ -12,13 +12,9 @@ ALLDEP .PHONY:
     @+-$(RM) $(MISC)$/$(TARGET).dp3 >& $(NULLDEV)
     @+-$(RM) $(MISC)$/$(TARGET).dpc >& $(NULLDEV)
     @+-$(RM) $(MISC)$/$(TARGET).dpz >& $(NULLDEV)
-    @+-$(RM) $(MISC)$/*.dpcc >& $(NULLDEV)
-.IF "$(PARFILES)"!=""
-    @+-$(RM) $(foreach,i,$(SCP_PRODUCT_TYPE) $(MISC)$/$i$/*.dpcc) >& $(NULLDEV)
-.ENDIF
-.IF "$(RCFILES)"!=""
-    @+-$(RM) $(foreach,i,$(alllangext) $(MISC)$/$i$/*.dprc) >& $(NULLDEV)
-.ENDIF
+.IF "$(DEPFILES)" != ""
+    @+-$(RM) $(DEPFILES) >& $(NULLDEV)
+.ENDIF			# "$(DEPFILES)" != ""
     +@echo ---
     +@echo      Old dependency files removed
     +@echo ---
