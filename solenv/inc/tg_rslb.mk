@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_rslb.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: hjs $ $Date: 2004-07-23 14:15:05 $
+#   last change: $Author: obo $ $Date: 2004-11-19 11:42:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -121,12 +121,11 @@ $(RSC_MULTI$(TNR)) : \
     $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB$(TNR)NAME)$(RESLIB$(TNR)VERSION)$i.res} \
-    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip={$j}$/$i \
+    $(foreach,j,$(subst,$(PRJ),$(SOLARSRC)$/$(RSCDEFIMG)$/$(PRJNAME) $(RESLIB1IMAGES)) -lip={$j}$/$i \
     -lip={$j} ) \
-    -lip=$(SOLARSRC)$/res$/$i -lip=$(SOLARSRC)$/res ) \
-    -subMODULE=$(PRJ)$/.. \
-    -subGLOBAL=$(SOLARSRC) \
-    -subCUSTOM=to_be_defined \
+    -lip=$(SOLARSRC)$/$(RSCDEFIMG)$/res$/$i -lip=$(SOLARSRC)$/$(RSCDEFIMG)$/res ) \
+    -subMODULE=$(SOLARSRC)$/$(RSCDEFIMG) \
+    -subGLOBALRES=$(SOLARSRC)$/$(RSCDEFIMG)$/res \
     -oil={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))} \
     -ft=$@ \
     -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
@@ -138,12 +137,11 @@ $(RSC_MULTI$(TNR)) : \
     $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs={$(BIN)$/$(RESLIB$(TNR)NAME)$(RESLIB$(TNR)VERSION)$i.res} \
-    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip={$j}$/$i \
+    $(foreach,j,$(subst,$(PRJ),$(SOLARSRC)$/$(RSCDEFIMG)$/$(PRJNAME) $(RESLIB1IMAGES)) -lip={$j}$/$i \
     -lip={$j} ) \
-    -lip=$(SOLARSRC)$/res$/$i -lip=$(SOLARSRC)$/res ) \
-    -subGLOBAL=$(SOLARSRC) \
-    -subMODULE=$(PRJ)$/.. \
-    -subCUSTOM=to_be_defined \
+    -lip=$(SOLARSRC)$/$(RSCDEFIMG)$/res$/$i -lip=$(SOLARSRC)$/$(RSCDEFIMG)$/res ) \
+    -subMODULE=$(SOLARSRC)$/$(RSCDEFIMG) \
+    -subGLOBALRES=$(SOLARSRC)$/$(RSCDEFIMG)$/res \
     -oil=$(BIN) \
     -ft=$@ \
     -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
