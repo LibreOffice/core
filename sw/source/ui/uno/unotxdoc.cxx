@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-13 11:41:22 $
+ *  last change: $Author: mtg $ $Date: 2001-06-25 16:28:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1817,7 +1817,8 @@ OUString SwXTextDocument::getImplementationName(void) throw( RuntimeException )
 sal_Bool SwXTextDocument::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
     sal_Bool bRet = sal_False;
-    if(rServiceName.equals(C2U("com.sun.star.text.TextDocument")))
+    if( rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "com.sun.star.text.TextDocument" ) ) ||
+        rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "com.sun.star.document.OfficeDocument" ) ) )
         bRet = sal_True;
     else
     {
