@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adminpages.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-23 13:47:00 $
+ *  last change: $Author: fs $ $Date: 2001-05-29 10:17:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,16 @@ namespace dbaui
     };
 
     //=========================================================================
+    //= OToolboxedPageViewSettings
+    //=========================================================================
+    struct OToolboxedPageViewSettings : public OPageSettings
+    {
+        sal_uInt16      nDelayedToolboxAction;
+
+        OToolboxedPageViewSettings() : nDelayedToolboxAction(0) { }
+    };
+
+    //=========================================================================
     //= OGenericAdministrationPage
     //=========================================================================
     class ODbAdminDialog;
@@ -206,6 +216,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.21  2001/05/23 13:47:00  fs
+ *  #86444# +prepareConnectionAction
+ *
  *  Revision 1.20  2001/05/10 13:34:29  fs
  *  #86223# +OPageSettings/createViewSettings/filleViewSettings/restoreViewSettings
  *
