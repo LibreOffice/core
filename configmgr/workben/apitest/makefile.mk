@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: dg $ $Date: 2000-11-17 08:30:26 $
+#   last change: $Author: lla $ $Date: 2001-04-05 12:40:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,6 +70,7 @@ TARGET2=cfgreg
 TARGET3=cfgadduser
 TARGET4=cfgadmin
 TARGET5=cfgupdate
+TARGET6=cfgapi_timetest
 TARGETTYPE=CUI
 LIBTARGET=NO
 
@@ -105,6 +106,20 @@ APP1OBJS=	\
     $(SLO)$/strimpl.obj \
     $(SLO)$/typeconverter.obj
 
+# ... cfgapi_timetest ..............................
+APP6STDLIBS = $(APPSTDLIBS)
+
+APP6STDLIBS+=$(STDLIBCPP)
+
+.IF "$(GUI)"=="WNT"
+APP6STDLIBS+=$(LIBCIMT)
+.ENDIF
+
+APP6TARGET= $(TARGET6)
+APP6OBJS=	\
+    $(SLO)$/cfgapi_timetest.obj	\
+    $(SLO)$/strimpl.obj \
+    $(SLO)$/typeconverter.obj
 # ... cfgreg ..............................
 APP2STDLIBS = $(APPSTDLIBS)
 
