@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hdu $ $Date: 2002-10-01 15:30:20 $
+ *  last change: $Author: hdu $ $Date: 2002-11-22 17:01:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #ifndef _SV_SV_H
 #include <sv.h>
 #endif
+#ifndef _SV_SALLAYOUT_HXX
+#include <sallayout.hxx>
+#endif
 
 struct ImplFontSelectData;
 
@@ -88,9 +91,9 @@ class SalGraphicsData
 public:
     HDC                     mhDC;               // HDC
     HWND                    mhWnd;              // Window-Handle, when Window-Graphics
+    HFONT                   mhFonts[ MAX_FALLBACK ]; // Font + Fallbacks
     HPEN                    mhPen;              // Pen
     HBRUSH                  mhBrush;            // Brush
-    HFONT                   mhFont;             // Font
     HRGN                    mhRegion;           // Region Handle
     HPEN                    mhDefPen;           // DefaultPen
     HBRUSH                  mhDefBrush;         // DefaultBrush
@@ -109,7 +112,6 @@ public:
     KERNINGPAIR*            mpFontKernPairs;    // Kerning Pairs of the current Font
     ULONG                   mnFontKernPairCount;// Number of Kerning Pairs of the current Font
     BOOL                    mbFontKernInit;     // FALSE: FontKerns must be queried
-    int                     mnFontOverhang;     // Font-Overhang
     int                     mnPenWidth;         // Linienbreite
     BOOL                    mbStockPen;         // is Pen a stockpen
     BOOL                    mbStockBrush;       // is Brush a stcokbrush
@@ -120,7 +122,6 @@ public:
     BOOL                    mbWindow;           // is Window
     BOOL                    mbScreen;           // is Screen compatible
     BOOL                    mbXORMode;          // _every_ output with RasterOp XOR
-    BOOL                    mbCalcOverhang;     // calc overhang
 };
 
 // Init/Deinit Graphics
