@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workctrl.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 13:10:59 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 16:23:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -439,8 +439,34 @@ IMPL_LINK(SwTbxAutoTextCtrl, PopupHdl, PopupMenu*, pMenu)
     if ( GetSlotId() == FN_INSERT_FIELD_CTRL)
     {
         Sequence< PropertyValue > aArgs;
-        Dispatch( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:InsertFieldCtrl" )),
-                  aArgs );
+        const char* pChar = 0;
+        switch(nId)
+        {
+            case FN_INSERT_FLD_DATE:
+                pChar = RTL_CONSTASCII_USTRINGPARAM( ".uno:InsertDateField" );
+            break;
+            case FN_INSERT_FLD_TIME:
+                pChar = RTL_CONSTASCII_USTRINGPARAM( ".uno:InsertTimeField" );
+            break;
+            case FN_INSERT_FLD_PGNUMBER:
+                pChar = RTL_CONSTASCII_USTRINGPARAM( ".uno:InsertPageNumberField" );
+            break;
+            case FN_INSERT_FLD_PGCOUNT:
+                pChar = RTL_CONSTASCII_USTRINGPARAM( ".uno:InsertPageCountField" );
+            break;
+            case FN_INSERT_FLD_TOPIC:
+                pChar = RTL_CONSTASCII_USTRINGPARAM( ".uno:InsertTopicField" );
+            break;
+            case FN_INSERT_FLD_TITLE:
+                pChar = RTL_CONSTASCII_USTRINGPARAM( ".uno:InsertTitleField" );
+            break;
+            case FN_INSERT_FLD_AUTHOR:
+                pChar = RTL_CONSTASCII_USTRINGPARAM( ".uno:InsertAuthorField" );
+            break;
+            default:
+                pChar = RTL_CONSTASCII_USTRINGPARAM( ".uno:InsertFieldCtrl" );
+        }
+        Dispatch( rtl::OUString::createFromAscii( pChar ),aArgs );
 //        GetBindings().Execute( nId );
     }
     else
@@ -515,6 +541,31 @@ static USHORT __READONLY_DATA aNavigationInsertIds[ NAVI_ENTRIES ] =
     NID_TABLE_FORMULA_ERROR,
     NID_NEXT
 };
+static USHORT __READONLY_DATA aNavigationHelpIds[ NAVI_ENTRIES ] =
+{
+    // -- first line
+    HID_NID_TBL,
+    HID_NID_FRM,
+    HID_NID_GRF,
+    HID_NID_OLE,
+    HID_NID_PGE,
+    HID_NID_OUTL,
+    HID_NID_MARK,
+    HID_NID_DRW,
+    HID_NID_CTRL,
+    HID_NID_PREV,
+    // -- second line
+    HID_NID_REG,
+    HID_NID_BKM,
+    HID_NID_SEL,
+    HID_NID_FTN,
+    HID_NID_POSTIT,
+    HID_NID_SRCH_REP,
+    HID_NID_INDEX_ENTRY,
+    HID_NID_TABLE_FORMULA,
+    HID_NID_TABLE_FORMULA_ERROR,
+    HID_NID_NEXT
+};
 
 SwScrollNaviPopup::SwScrollNaviPopup( USHORT nId, const Reference< XFrame >& rFrame )
     : SfxPopupWindow(nId, rFrame, SW_RES(RID_SCROLL_NAVIGATION_WIN) ),
@@ -544,6 +595,7 @@ SwScrollNaviPopup::SwScrollNaviPopup( USHORT nId, const Reference< XFrame >& rFr
             nTbxBits = TIB_CHECKABLE;
         }
         aToolBox.InsertItem(nId, sText, nTbxBits);
+        aToolBox.SetHelpId( nId, aNavigationHelpIds[i] );
     }
     ApplyImageList();
     aToolBox.InsertBreak(NID_COUNT/2);
