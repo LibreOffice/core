@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontwork.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:00:53 $
+ *  last change: $Author: rt $ $Date: 2003-10-27 13:25:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -759,14 +759,27 @@ void SvxFontWorkDialog::SetShadowXVal_Impl(const XFormTextShadowXValItem* pItem)
     // #104596# Use HasChildPathFocus() instead of HasFocus() at SpinFields
     if ( pItem && !aMtrFldShadowX.HasChildPathFocus() )
     {
-        INT32 nValue = pItem->GetValue();
+        // #i19251#
+        // INT32 nValue = pItem->GetValue();
 
-        // #104596# Only fo value correction for angle if TBI_SHADOW_SLANT is
-        // active.
+        // #i19251#
+        // The two involved fields/items are used double and contain/give different
+        // values regarding to the access method. Thus, here we need to separate the access
+        // methos regarding to the kind of value accessed.
         if(aTbxShadow.IsItemChecked(TBI_SHADOW_SLANT))
-            nValue = nValue - ( int( float( nValue ) / 360.0 ) * 360 );
-
-        SetMetricValue( aMtrFldShadowX, nValue/*pItem->GetValue()*/, SFX_MAPUNIT_100TH_MM );
+        {
+            // #i19251#
+            // There is no value correction necessary at all, i think this
+            // was only tried to be done without understanding that the two
+            // involved fields/items are used double and contain/give different
+            // values regarding to the access method.
+            // nValue = nValue - ( int( float( nValue ) / 360.0 ) * 360 );
+            aMtrFldShadowX.SetValue(pItem->GetValue());
+        }
+        else
+        {
+            SetMetricValue( aMtrFldShadowX, pItem->GetValue(), SFX_MAPUNIT_100TH_MM );
+        }
     }
 }
 
@@ -781,7 +794,18 @@ void SvxFontWorkDialog::SetShadowYVal_Impl(const XFormTextShadowYValItem* pItem)
     // #104596# Use HasChildPathFocus() instead of HasFocus() at SpinFields
     if ( pItem && !aMtrFldShadowY.HasChildPathFocus() )
     {
-        SetMetricValue( aMtrFldShadowY, pItem->GetValue(), SFX_MAPUNIT_100TH_MM );
+        // #i19251#
+        // The two involved fields/items are used double and contain/give different
+        // values regarding to the access method. Thus, here we need to separate the access
+        // methos regarding to the kind of value accessed.
+        if(aTbxShadow.IsItemChecked(TBI_SHADOW_SLANT))
+        {
+            aMtrFldShadowY.SetValue(pItem->GetValue());
+        }
+        else
+        {
+            SetMetricValue( aMtrFldShadowY, pItem->GetValue(), SFX_MAPUNIT_100TH_MM );
+        }
     }
 }
 
@@ -934,10 +958,26 @@ IMPL_LINK( SvxFontWorkDialog, InputTimoutHdl_Impl, void *, EMPTYARG )
     nValue = GetCoreValue( aMtrFldTextStart, SFX_MAPUNIT_100TH_MM );
     XFormTextStartItem aStartItem( nValue );
 
-    nValue = GetCoreValue( aMtrFldShadowX, SFX_MAPUNIT_100TH_MM );
-    XFormTextShadowXValItem aShadowXItem( nValue );
-    nValue = GetCoreValue( aMtrFldShadowY, SFX_MAPUNIT_100TH_MM );
-    XFormTextShadowYValItem aShadowYItem( nValue );
+    sal_Int32 nValueX(0L);
+    sal_Int32 nValueY(0L);
+
+    // #i19251#
+    // The two involved fields/items are used double and contain/give different
+    // values regarding to the access method. Thus, here we need to separate the access
+    // methos regarding to the kind of value accessed.
+    if(nLastShadowTbxId == TBI_SHADOW_NORMAL)
+    {
+        nValueX = GetCoreValue( aMtrFldShadowX, SFX_MAPUNIT_100TH_MM );
+        nValueY = GetCoreValue( aMtrFldShadowY, SFX_MAPUNIT_100TH_MM );
+    }
+    else if(nLastShadowTbxId == TBI_SHADOW_SLANT)
+    {
+        nValueX = aMtrFldShadowX.GetValue();
+        nValueY = aMtrFldShadowY.GetValue();
+    }
+
+    XFormTextShadowXValItem aShadowXItem( nValueX );
+    XFormTextShadowYValItem aShadowYItem( nValueY );
 
     // Slot-ID ist egal, die Exec-Methode wertet das gesamte ItemSet aus
     GetBindings().GetDispatcher()->Execute( SID_FORMTEXT_DISTANCE, SFX_CALLMODE_RECORD, &aDistItem,
