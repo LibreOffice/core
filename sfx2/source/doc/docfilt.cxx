@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfilt.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2002-11-14 14:18:38 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:00:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,8 @@ SfxFilter::SfxFilter(  const String &rName,
                        sal_uInt16 nIcon,
                        const String &rMimeType,
                        const SfxFilterContainer* pContainerP,
-                       const String &rUsrDat ):
+                       const String &rUsrDat,
+                       const String &rServiceName ):
     lFormat(lFmt),
     nFormatType(nType),
     aWildCard(rWildCard, ';'),
@@ -130,28 +131,25 @@ SfxFilter::SfxFilter(  const String &rName,
     aName( rName ),
     aMimeType( rMimeType ),
     aFilterName( rName ),
-    pContainer( pContainerP )
+    aServiceName( rServiceName )
+//  ,pContainer( pContainerP )
 {
     InitMembers_Impl();
-    pContainer = pContainerP;
-    aFilterName = rName;
-    aMimeType = rMimeType;
 }
 
-
+/*
 SfxFilter::SfxFilter(  const char* pName, const String &rWildCard,
                        SfxFilterFlags nType,
                        const SfxFilterContainer* pContainerP )
     : lFormat(0),
       nFormatType(nType),
       aWildCard(rWildCard, ';'),
-      nDocIcon(0),
-      pContainer( pContainerP )
+      nDocIcon(0)
+//    ,pContainer( pContainerP )
 {
     aName = String::CreateFromAscii( pName );
     aFilterName = String::CreateFromAscii( pName );
     InitMembers_Impl();
-    pContainer = pContainerP;
 }
 
 SfxFilter::SfxFilter(  const char* pName, const String &rWildCard,
@@ -161,15 +159,14 @@ SfxFilter::SfxFilter(  const char* pName, const String &rWildCard,
       nFormatType(nType),
       aWildCard(rWildCard, ';'),
       aTypeName( rTypeName ),
-      nDocIcon(0),
-      pContainer( pContainerP )
+      nDocIcon(0)
+//    ,pContainer( pContainerP )
 {
     aName = String::CreateFromAscii( pName );
     aFilterName = String::CreateFromAscii( pName );
     InitMembers_Impl();
-    pContainer = pContainerP;
 }
-
+*/
 void SfxFilter::InitMembers_Impl()
 {
     String aExts = GetWildcard()();
@@ -307,10 +304,55 @@ String SfxFilter::GetSuffixes() const
     return aRet;
 }
 
-String SfxFilter::GetFilterNameWithPrefix() const
+const SfxFilter* SfxFilter::GetDefaultFilter( const String& rName )
 {
-    String aName = pContainer->GetName();
-    aName += DEFINE_CONST_UNICODE( ": " );
-    aName += aFilterName;
-    return aName;
+    return SfxFilterContainer::GetDefaultFilter_Impl( rName );
+}
+
+const SfxFilter* SfxFilter::GetDefaultFilterFromFactory( const String& rFact )
+{
+    return GetDefaultFilter( SfxObjectShell::GetServiceNameFromFactory( rFact ) );
+}
+
+const SfxFilter* SfxFilter::GetFilterByName( const String& rName )
+{
+    SfxFilterMatcher aMatch;
+    return aMatch.GetFilter4FilterName( rName );
+}
+
+String SfxFilter::GetTypeFromStorage( const SotStorage& rStg )
+{
+    const char* pType=0;
+    if ( rStg.IsStream( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "WordDocument" ) ) ) )
+    {
+        if ( rStg.IsStream( String::CreateFromAscii("0Table" ) ) || rStg.IsStream( String::CreateFromAscii("1Table" ) ) )
+            pType = "MS Word 97";
+        else
+            pType = "MS Word 95";
+    }
+    else if ( rStg.IsStream( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "Book" ) ) ) )
+    {
+        pType = "calc_MS_Excel_95";
+    }
+    else if ( rStg.IsStream( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "Workbook" ) ) ) )
+    {
+        pType = "calc_MS_Excel_97";
+    }
+    else if ( rStg.IsStream( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "PowerPoint Document" ) ) ) )
+    {
+        pType = "impress_MS_PowerPoint_97";
+    }
+    else if ( rStg.IsStream( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "Equation Native" ) ) ) )
+    {
+        pType = "math_MathType_3x";
+    }
+    else
+    {
+        sal_Int32 nClipId = ((SotStorage&)rStg).GetFormat();
+        const SfxFilter* pFilter = SFX_APP()->GetFilterMatcher().GetFilter4ClipBoardId( nClipId );
+        if ( nClipId )
+            return pFilter->GetTypeName();
+    }
+
+    return pType ? String::CreateFromAscii(pType) : String();
 }
