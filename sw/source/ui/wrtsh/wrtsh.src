@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-22 16:52:24 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:23:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,8 @@ String STR_CANT_UNDO
     TEXT[ hebrew ] = "unmöglich";
     TEXT[ hindi ] = "संभव नहीं";
     TEXT[ slovak ] = "nie je možné";
+    TEXT[ hungarian ] = "nem lehetséges";
+    TEXT[ slovenian ] = "ni možno";
 };
 String STR_DELETE_UNDO
 {
@@ -128,6 +130,8 @@ String STR_DELETE_UNDO
     TEXT[ hebrew ] = "‮מחיקה‬";
     TEXT[ hindi ] = "मिटाओ";
     TEXT[ slovak ] = "Zmazať";
+    TEXT[ hungarian ] = "Törlés";
+    TEXT[ slovenian ] = "Izbriši";
 };
 String STR_INSERT_UNDO
 {
@@ -162,6 +166,8 @@ String STR_INSERT_UNDO
     TEXT[ hebrew ] = "‮הוספה‬";
     TEXT[ hindi ] = "जोड़ो";
     TEXT[ slovak ] = "Vložiť";
+    TEXT[ hungarian ] = "Beszúrás";
+    TEXT[ slovenian ] = "Vstavi";
 };
 String STR_OVR_UNDO
 {
@@ -196,6 +202,8 @@ String STR_OVR_UNDO
     TEXT[ hebrew ] = "Überschreiben";
     TEXT[ hindi ] = "ओवररइट्";
     TEXT[ slovak ] = "Prepísať";
+    TEXT[ hungarian ] = "Felülírás";
+    TEXT[ slovenian ] = "Prepiši";
 };
 String STR_SPLITNODE_UNDO
 {
@@ -230,6 +238,8 @@ String STR_SPLITNODE_UNDO
     TEXT[ hebrew ] = "neuer Absatz";
     TEXT[ hindi ] = "नया परिच्छेद";
     TEXT[ slovak ] = "Nový odstavec";
+    TEXT[ hungarian ] = "Új bekezdés";
+    TEXT[ slovenian ] = "Nov odstavek";
 };
 String STR_MOVE_UNDO
 {
@@ -264,6 +274,8 @@ String STR_MOVE_UNDO
     TEXT[ hebrew ] = "Verschieben";
     TEXT[ hindi ] = "स्थान परिवर्तन करो";
     TEXT[ slovak ] = "Presunúť";
+    TEXT[ hungarian ] = "Áthelyezés";
+    TEXT[ slovenian ] = "Premakni";
 };
 String STR_INSATTR_UNDO
 {
@@ -298,6 +310,8 @@ String STR_INSATTR_UNDO
     TEXT[ hebrew ] = "Attribute anwenden";
     TEXT[ hindi ] = "ऐट्रिब्यूट्स लागू करो";
     TEXT[ slovak ] = "Použiť atribúty";
+    TEXT[ hungarian ] = "Jellemzők alkalmazása";
+    TEXT[ slovenian ] = "Uporabi atribute";
 };
 String STR_SETFMTCOLL_UNDO
 {
@@ -308,7 +322,7 @@ String STR_SETFMTCOLL_UNDO
     TEXT [ portuguese_brazilian ] = "Aplicar Estilos" ;
     TEXT [ portuguese ] = "Aplicar estilos" ;
     TEXT [ finnish ] = "K�yt� tyylej�" ;
-    TEXT [ danish ] = "Anvend typografi" ;
+    TEXT [ danish ] = "Anvend typografier" ;
     TEXT [ french ] = "Appliquer les styles" ;
     TEXT [ swedish ] = "Anv�nd mallar" ;
     TEXT [ dutch ] = "Opmaakprofielen toepassen" ;
@@ -332,6 +346,8 @@ String STR_SETFMTCOLL_UNDO
     TEXT[ hebrew ] = "Vorlagen anwenden";
     TEXT[ hindi ] = "शैलियाँ लागू करो";
     TEXT[ slovak ] = "Použiť štýly";
+    TEXT[ hungarian ] = "Stílusok alkalmazása";
+    TEXT[ slovenian ] = "Uporabi sloge";
 };
 String STR_RESET_ATTR_UNDO
 {
@@ -366,6 +382,8 @@ String STR_RESET_ATTR_UNDO
     TEXT[ hebrew ] = "Attribute zurücksetzen";
     TEXT[ hindi ] = "ऐट्रिब्यूट्स रिसेट्ट करो";
     TEXT[ slovak ] = "Obnoviť atribúty";
+    TEXT[ hungarian ] = "Jellemzők alaphelyzetbe hozása";
+    TEXT[ slovenian ] = "Ponastavi atribute";
 };
 String STR_APPLY_ATTR_UNDO
 {
@@ -400,6 +418,8 @@ String STR_APPLY_ATTR_UNDO
     TEXT[ hebrew ] = "Attribute anwenden";
     TEXT[ hindi ] = "ऐट्रिब्यूट्स लगाओ";
     TEXT[ slovak ] = "Použiť atribúty";
+    TEXT[ hungarian ] = "Jellemzők alkalmazása";
+    TEXT[ slovenian ] = "Uporabi atribute";
 };
 String STR_INSERT_DOC_UNDO
 {
@@ -434,6 +454,8 @@ String STR_INSERT_DOC_UNDO
     TEXT[ hebrew ] = "‮הוספת מסמך‬";
     TEXT[ hindi ] = "लेखपत्र जोड़ो";
     TEXT[ slovak ] = "Vložiť dokument";
+    TEXT[ hungarian ] = "Dokumentum beszúrása";
+    TEXT[ slovenian ] = "Vstavi dokument";
 };
 String STR_INSERT_GLOSSARY
 {
@@ -468,6 +490,8 @@ String STR_INSERT_GLOSSARY
     TEXT[ hebrew ] = "AutoText einfügen";
     TEXT[ hindi ] = "स्वचालित टेक्स्ट् जोड़ो";
     TEXT[ slovak ] = "Vložiť automatický text";
+    TEXT[ hungarian ] = "Felvétel szöveg-o-matába";
+    TEXT[ slovenian ] = "Vstavi samobesedilo";
 };
 String STR_DELBOOKMARK
 {
@@ -478,7 +502,7 @@ String STR_DELBOOKMARK
     TEXT [ portuguese_brazilian ] = "Excluir marcador" ;
     TEXT [ portuguese ] = "Eliminar marcador de texto" ;
     TEXT [ finnish ] = "Poista kirjanmerkki" ;
-    TEXT [ danish ] = "Slet tekstmarkering" ;
+    TEXT [ danish ] = "Slet bogm�rke" ;
     TEXT [ french ] = "Supprimer le rep�re de texte" ;
     TEXT [ swedish ] = "Radera bokm�rke" ;
     TEXT [ dutch ] = "Tekstmarkering verwijderen" ;
@@ -502,6 +526,8 @@ String STR_DELBOOKMARK
     TEXT[ hebrew ] = "Textmarke löschen";
     TEXT[ hindi ] = "पृष्ठसंकेत मिटाओ ";
     TEXT[ slovak ] = "Zmazať záložku";
+    TEXT[ hungarian ] = "Könyvjelző törlése";
+    TEXT[ slovenian ] = "Izbriši zaznamek";
 };
 String STR_INSBOOKMARK
 {
@@ -512,7 +538,7 @@ String STR_INSBOOKMARK
     TEXT [ portuguese_brazilian ] = "Inserir marcador" ;
     TEXT [ portuguese ] = "Inserir marcador de texto" ;
     TEXT [ finnish ] = "Lis�� kirjanmerkki" ;
-    TEXT [ danish ] = "Inds�t tekstmarkering" ;
+    TEXT [ danish ] = "Inds�t bogm�rke" ;
     TEXT [ french ] = "Ins�rer un rep�re de texte" ;
     TEXT [ swedish ] = "Infoga bokm�rke" ;
     TEXT [ dutch ] = "Tekstmarkering invoegen" ;
@@ -536,6 +562,8 @@ String STR_INSBOOKMARK
     TEXT[ hebrew ] = "Textmarke einfügen";
     TEXT[ hindi ] = "पृष्ठसंकेत जोड़ो";
     TEXT[ slovak ] = "Vložiť záložku";
+    TEXT[ hungarian ] = "Könyvjelző beszúrása";
+    TEXT[ slovenian ] = "Vstavi zaznamek";
 };
 String STR_SORT_TBL
 {
@@ -570,6 +598,8 @@ String STR_SORT_TBL
     TEXT[ hebrew ] = "Tabelle sortieren";
     TEXT[ hindi ] = "सारणी सोर्ट करो";
     TEXT[ slovak ] = "Zoradiť tabuľku";
+    TEXT[ hungarian ] = "Táblázat rendezése";
+    TEXT[ slovenian ] = "Razvrsti tabelo";
 };
 String STR_SORT_TXT
 {
@@ -604,6 +634,8 @@ String STR_SORT_TXT
     TEXT[ hebrew ] = "Text sortieren";
     TEXT[ hindi ] = "टेक्स्ट् सोर्ट करो";
     TEXT[ slovak ] = "Radiť text";
+    TEXT[ hungarian ] = "Szöveg rendezése";
+    TEXT[ slovenian ] = "Razvrsti besedilo";
 };
 String STR_INSTABLE_UNDO
 {
@@ -638,6 +670,8 @@ String STR_INSTABLE_UNDO
     TEXT[ hebrew ] = "‮הוספת טבלה‬";
     TEXT[ hindi ] = "सारणी जोड़ो";
     TEXT[ slovak ] = "Vložiť tabuľku";
+    TEXT[ hungarian ] = "Táblázat beszúrása";
+    TEXT[ slovenian ] = "Vstavi tabelo";
 };
 String STR_TEXTTOTABLE_UNDO
 {
@@ -672,6 +706,8 @@ String STR_TEXTTOTABLE_UNDO
     TEXT[ hebrew ] = "Konvertierung Text -> Tabelle";
     TEXT[ hindi ] = "टेक्स्ट् बदलो -> सारणी";
     TEXT[ slovak ] = "Previesť text na tabuľku";
+    TEXT[ hungarian ] = "Szöveg átalakítása táblázattá";
+    TEXT[ slovenian ] = "Pretvori besedilo -> tabela";
 };
 String STR_TABLETOTEXT_UNDO
 {
@@ -706,6 +742,8 @@ String STR_TABLETOTEXT_UNDO
     TEXT[ hebrew ] = "Konvertierung Tabelle -> Text";
     TEXT[ hindi ] = "सारणी को टेक्स्ट् में बदलो";
     TEXT[ slovak ] = "Previesť tabuľku na text";
+    TEXT[ hungarian ] = "Táblázat átalakítása szöveggé";
+    TEXT[ slovenian ] = "Pretvori tabelo v besedilo";
 };
 String STR_COPY_UNDO
 {
@@ -740,6 +778,8 @@ String STR_COPY_UNDO
     TEXT[ hebrew ] = "‮העתקה‬";
     TEXT[ hindi ] = "प्रतिलिपि";
     TEXT[ slovak ] = "Kópia";
+    TEXT[ hungarian ] = "Másolás";
+    TEXT[ slovenian ] = "Kopiraj";
 };
 String STR_REPLACE_UNDO
 {
@@ -774,6 +814,8 @@ String STR_REPLACE_UNDO
     TEXT[ hebrew ] = "‮החלפה‬";
     TEXT[ hindi ] = "प्रतिस्थापन";
     TEXT[ slovak ] = "Nahradiť";
+    TEXT[ hungarian ] = "Csere";
+    TEXT[ slovenian ] = "Zamenjaj";
 };
 String STR_INSERT_PAGE_BREAK_UNDO
 {
@@ -808,6 +850,8 @@ String STR_INSERT_PAGE_BREAK_UNDO
     TEXT[ hebrew ] = "Harter Seitenumbruch";
     TEXT[ hindi ] = "सीधा पृष्ठ खण्डन";
     TEXT[ slovak ] = "Priame zalomenie strany";
+    TEXT[ hungarian ] = "Közvetlen oldaltörés";
+    TEXT[ slovenian ] = "Neposredni prelom strani";
 };
 String STR_INSERT_COLUMN_BREAK_UNDO
 {
@@ -818,7 +862,7 @@ String STR_INSERT_COLUMN_BREAK_UNDO
     TEXT [ portuguese_brazilian ] = "Quebra de coluna direta" ;
     TEXT [ portuguese ] = "Quebra de coluna fixa" ;
     TEXT [ finnish ] = "Suora sarakkeenvaihto" ;
-    TEXT [ danish ] = "H�rdt spalteskift" ;
+    TEXT [ danish ] = "H�rdt kolonneskift" ;
     TEXT [ french ] = "Saut de colonne direct" ;
     TEXT [ swedish ] = "H�rd kolumnbrytning" ;
     TEXT [ dutch ] = "Vast kolomeinde" ;
@@ -842,6 +886,8 @@ String STR_INSERT_COLUMN_BREAK_UNDO
     TEXT[ hebrew ] = "Harter Spaltenumbruch";
     TEXT[ hindi ] = "सीधा स्तंभ खण्डन";
     TEXT[ slovak ] = "Priame zalomenie stĺpca";
+    TEXT[ hungarian ] = "Közvetlen oszloptörés";
+    TEXT[ slovenian ] = "Neposredni prelom stolpca";
 };
 String STR_PLAY_MACRO_UNDO
 {
@@ -852,7 +898,7 @@ String STR_PLAY_MACRO_UNDO
     TEXT [ portuguese_brazilian ] = "Executar macro" ;
     TEXT [ portuguese ] = "Executar macro" ;
     TEXT [ finnish ] = "Suorita makro" ;
-    TEXT [ danish ] = "Spil makro" ;
+    TEXT [ danish ] = "Udf�r makro" ;
     TEXT [ french ] = "Ex�cuter la macro" ;
     TEXT [ swedish ] = "Spela upp makro" ;
     TEXT [ dutch ] = "Macro starten" ;
@@ -876,6 +922,8 @@ String STR_PLAY_MACRO_UNDO
     TEXT[ hebrew ] = "Makro abspielen";
     TEXT[ hindi ] = "मॉक्रो चलाओ";
     TEXT[ slovak ] = "Spustiť makro";
+    TEXT[ hungarian ] = "Makró futtatása";
+    TEXT[ slovenian ] = "Zaženi makro";
 };
 String STR_INSERT_ENV_UNDO
 {
@@ -910,6 +958,8 @@ String STR_INSERT_ENV_UNDO
     Text[ hebrew ] = "‮הוספת מעטפה‬";
     Text[ hindi ] = "लिफाफा जोड़ो";
     Text[ slovak ] = "Vložiť obálku";
+    Text[ hungarian ] = "Boríték beszúrása";
+    Text[ slovenian ] = "Vstavi ovojnico";
 };
 String STR_DRAG_AND_COPY
 {
@@ -943,6 +993,8 @@ String STR_DRAG_AND_COPY
     Text[ hebrew ] = "‮העתקה‬";
     Text[ hindi ] = "प्रतिलिपि";
     Text[ slovak ] = "Kópia";
+    Text[ hungarian ] = "Másolás";
+    Text[ slovenian ] = "Kopiraj";
 };
 String STR_DRAG_AND_MOVE
 {
@@ -976,6 +1028,8 @@ String STR_DRAG_AND_MOVE
     Text[ hebrew ] = "Verschieben";
     Text[ hindi ] = "स्थान परिवर्तन करो";
     Text[ slovak ] = "Presunúť";
+    Text[ hungarian ] = "Áthelyezés";
+    Text[ slovenian ] = "Premakni";
 };
 String STR_INSERT_RULER
 {
@@ -1009,6 +1063,8 @@ String STR_INSERT_RULER
     Text[ hebrew ] = "Ruler einfügen";
     Text[ hindi ] = "रूलर जोड़ो";
     Text[ slovak ] = "Vložiť pravítko";
+    Text[ hungarian ] = "Vonalzó beszúrása";
+    Text[ slovenian ] = "Vstavi ravnilo";
 };
 String STR_INSERT_CHART
 {
@@ -1018,7 +1074,7 @@ String STR_INSERT_CHART
     Text [ english_us ] = "Insert %PRODUCTNAME Chart" ;
     Text [ portuguese_brazilian ] = "Inserir gr�fico do %PRODUCTNAME Chart" ;
     Text [ swedish ] = "Infoga %PRODUCTNAME Chart" ;
-    Text [ danish ] = "Inds�t %PRODUCTNAME Chart" ;
+    Text [ danish ] = "Inds�t %PRODUCTNAME-diagram" ;
     Text [ italian ] = "Inserisci %PRODUCTNAME Chart" ;
     Text [ spanish ] = "Insertar un diagrama de %PRODUCTNAME Chart" ;
     Text [ french ] = "Ins�rer un diagramme %PRODUCTNAME Chart" ;
@@ -1042,6 +1098,8 @@ String STR_INSERT_CHART
     Text[ hebrew ] = "%PRODUCTNAME Chart einfügen";
     Text[ hindi ] = "%PRODUCTNAME चार्ट जोड़ो";
     Text[ slovak ] = "Vložiť graf %PRODUCTNAME";
+    Text[ hungarian ] = "%PRODUCTNAME-diagram beszúrása";
+    Text[ slovenian ] = "Vstavi %PRODUCTNAME grafikon";
 };
 String STR_INSERTFLY
 {
@@ -1076,6 +1134,8 @@ String STR_INSERTFLY
     TEXT[ hebrew ] = "Rahmen einfügen";
     TEXT[ hindi ] = "फ्रेम जोड़ो";
     TEXT[ slovak ] = "Vložiť rámec";
+    TEXT[ hungarian ] = "Keret beszúrása";
+    TEXT[ slovenian ] = "Vstavi okvir";
 };
 String STR_DELETEFLY
 {
@@ -1110,6 +1170,8 @@ String STR_DELETEFLY
     TEXT[ hebrew ] = "Rahmen löschen";
     TEXT[ hindi ] = "फ्रेम मिटाओ";
     TEXT[ slovak ] = "Odstrániť ohraničenie";
+    TEXT[ hungarian ] = "Keret törlése";
+    TEXT[ slovenian ] = "Izbriši okvir";
 };
 String STR_AUTOFORMAT
 {
@@ -1144,6 +1206,8 @@ String STR_AUTOFORMAT
     TEXT[ hebrew ] = "‮עיצוב אוטומטי‬";
     TEXT[ hindi ] = "स्वचालित रचना";
     TEXT[ slovak ] = "Automatický formát";
+    TEXT[ hungarian ] = "Automatikus formázás";
+    TEXT[ slovenian ] = "Samooblikovanje";
 };
 String STR_TABLEHEADLINE
 {
@@ -1178,6 +1242,8 @@ String STR_TABLEHEADLINE
     TEXT[ hebrew ] = "Tabellenüberschrift";
     TEXT[ hindi ] = "सारणी शीर्षक";
     TEXT[ slovak ] = "Nadpis tabuľky";
+    TEXT[ hungarian ] = "Táblázatfejléc";
+    TEXT[ slovenian ] = "Naslov tabele";
 };
 String STR_REPLACE
 {
@@ -1212,6 +1278,8 @@ String STR_REPLACE
     TEXT[ hebrew ] = "‮החלפה‬";
     TEXT[ hindi ] = "प्रतिस्थापन";
     TEXT[ slovak ] = "Nahradiť";
+    TEXT[ hungarian ] = "Csere";
+    TEXT[ slovenian ] = "Zamenjaj";
 };
 String STR_INSERTSECTION
 {
@@ -1222,7 +1290,7 @@ String STR_INSERTSECTION
     TEXT [ portuguese_brazilian ] = "Inserir se��o" ;
     TEXT [ portuguese ] = "Inserir sec��o" ;
     TEXT [ finnish ] = "Lis�� osa" ;
-    TEXT [ danish ] = "Inds�t omr�de" ;
+    TEXT [ danish ] = "Inds�t sektion" ;
     TEXT [ french ] = "Ins�rer une section" ;
     TEXT [ swedish ] = "Infoga omr�de" ;
     TEXT [ dutch ] = "Bereik invoegen" ;
@@ -1246,6 +1314,8 @@ String STR_INSERTSECTION
     TEXT[ hebrew ] = "Bereich einfügen";
     TEXT[ hindi ] = "विभाग जोड़ो";
     TEXT[ slovak ] = "Vložiť oblasť";
+    TEXT[ hungarian ] = "Szakasz beszúrása";
+    TEXT[ slovenian ] = "Vstavi odsek";
 };
 String STR_DELETESECTION
 {
@@ -1256,7 +1326,7 @@ String STR_DELETESECTION
     TEXT [ portuguese_brazilian ] = "Excluir se��o" ;
     TEXT [ portuguese ] = "Eliminar categoria" ;
     TEXT [ finnish ] = "Poista osa" ;
-    TEXT [ danish ] = "Slet omr�de" ;
+    TEXT [ danish ] = "Slet sektion" ;
     TEXT [ french ] = "Supprimer la section" ;
     TEXT [ swedish ] = "Radera kategori" ;
     TEXT [ dutch ] = "Bereik wissen" ;
@@ -1280,6 +1350,8 @@ String STR_DELETESECTION
     TEXT[ hebrew ] = "Bereich löschen";
     TEXT[ hindi ] = "विभाग मिटाओ";
     TEXT[ slovak ] = "Odstrániť sekciu";
+    TEXT[ hungarian ] = "Kijelölés törlése";
+    TEXT[ slovenian ] = "Izbriši odsek";
 };
 String STR_CHANGESECTION
 {
@@ -1290,7 +1362,7 @@ String STR_CHANGESECTION
     TEXT [ portuguese_brazilian ] = "Modificar se��o" ;
     TEXT [ portuguese ] = "Alterar sec��o" ;
     TEXT [ finnish ] = "Muokkaa osaa" ;
-    TEXT [ danish ] = "Modificer omr�de" ;
+    TEXT [ danish ] = "Modificer sektion" ;
     TEXT [ french ] = "�diter la section" ;
     TEXT [ swedish ] = "�ndra omr�de" ;
     TEXT [ dutch ] = "Bereik wijzigen" ;
@@ -1314,6 +1386,8 @@ String STR_CHANGESECTION
     TEXT[ hebrew ] = "Bereich ändern";
     TEXT[ hindi ] = "विभाग सुधारो";
     TEXT[ slovak ] = "Upraviť sekciu";
+    TEXT[ hungarian ] = "Szakasz módosítása";
+    TEXT[ slovenian ] = "Spremeni izbor";
 };
 String STR_CHANGESECTPASSWD
 {
@@ -1347,6 +1421,8 @@ String STR_CHANGESECTPASSWD
     Text[ hebrew ] = "Passwortschutz ändern";
     Text[ hindi ] = "कूटशब्द रक्षा बदलो";
     Text[ slovak ] = "Upraviť ochranu heslom";
+    Text[ hungarian ] = "Jelszóvédelem módosítása";
+    Text[ slovenian ] = "Spremeni zaščito z geslom";
 };
 String STR_CHANGEDEFATTR
 {
@@ -1381,6 +1457,8 @@ String STR_CHANGEDEFATTR
     TEXT[ hebrew ] = "Standardwerte ändern";
     TEXT[ hindi ] = "अनुपस्थिति मूल्यों को सुधारो";
     TEXT[ slovak ] = "Upraviť východzie hodnoty";
+    TEXT[ hungarian ] = "Alapértelmezett értékek módosítása";
+    TEXT[ slovenian ] = "Spremeni privzete vrednosti";
 };
 String STR_OUTLINE_LR
 {
@@ -1415,6 +1493,8 @@ String STR_OUTLINE_LR
     TEXT[ hebrew ] = "Gliederung stufen";
     TEXT[ hindi ] = "बाहरी रूपरेखा को उत्तेजित करो";
     TEXT[ slovak ] = "O úroveň vyššie";
+    TEXT[ hungarian ] = "Vázlat előléptetése";
+    TEXT[ slovenian ] = "Povišaj oris";
 };
 String STR_OUTLINE_UD
 {
@@ -1449,6 +1529,8 @@ String STR_OUTLINE_UD
     TEXT[ hebrew ] = "Gliederung verschieben";
     TEXT[ hindi ] = "बाहरी रूपरेखा का स्थान परिवर्तन करो";
     TEXT[ slovak ] = "Presunúť úroveň";
+    TEXT[ hungarian ] = "Keret áthelyezése";
+    TEXT[ slovenian ] = "Premakni oris";
 };
 String STR_INSNUM
 {
@@ -1483,6 +1565,8 @@ String STR_INSNUM
     TEXT[ hebrew ] = "Nummerierung einfügen";
     TEXT[ hindi ] = "संख्या देना जोड़ो";
     TEXT[ slovak ] = "Vložiť číslovanie";
+    TEXT[ hungarian ] = "Számozás beszúrása";
+    TEXT[ slovenian ] = "Vstavi oštevilčevanje";
 };
 String STR_NUMUPDOWN
 {
@@ -1517,6 +1601,8 @@ String STR_NUMUPDOWN
     TEXT[ hebrew ] = "Nummerierung stufen";
     TEXT[ hindi ] = "संख्या देना स्थानान्तर करो";
     TEXT[ slovak ] = "Posunúť číslovanie";
+    TEXT[ hungarian ] = "Számozás eltolása";
+    TEXT[ slovenian ] = "Zamenjaj oštevilčevanje";
 };
 String STR_MOVENUM
 {
@@ -1550,6 +1636,8 @@ String STR_MOVENUM
     Text[ hebrew ] = "Absätze verschieben";
     Text[ hindi ] = "परिच्छेदों का स्थान परिवर्तन करो";
     Text[ slovak ] = "Presunúť odstavce";
+    Text[ hungarian ] = "Bekezdés áthelyezése";
+    Text[ slovenian ] = "Premakni odstavke";
 };
 String STR_INSERTDRAW
 {
@@ -1583,6 +1671,8 @@ String STR_INSERTDRAW
     Text[ hebrew ] = "Zeichenobjekt einfügen";
     Text[ hindi ] = "रेखाचित्र वस्तु जोड़ो";
     Text[ slovak ] = "Vložiť kresby";
+    Text[ hungarian ] = "Rajzobjektum beszúrása";
+    Text[ slovenian ] = "Vstavi risani predmet";
 };
 String STR_NUMORNONUM
 {
@@ -1594,7 +1684,7 @@ String STR_NUMORNONUM
     Text [ french ] = "(D�s)activer le num�ro" ;
     Text [ dutch ] = "Nummer aan/uit" ;
     Text [ swedish ] = "Nummer p�/av" ;
-    Text [ danish ] = "Aktiver/deaktiver nummer" ;
+    Text [ danish ] = "Nummer til/fra" ;
     Text [ portuguese ] = "N�mero activado/des." ;
     Text [ portuguese_brazilian ] = "Ativar/Desativar N�mero" ;
     Text[ chinese_simplified ] = "显示/隐入编号";
@@ -1616,6 +1706,8 @@ String STR_NUMORNONUM
     Text[ hebrew ] = "Nummer an/aus";
     Text[ hindi ] = "संख्या शुरु/बंद";
     Text[ slovak ] = "Čísla zap/vyp";
+    Text[ hungarian ] = "Szám";
+    Text[ slovenian ] = "Število vključeno/izključeno";
 };
 String STR_INC_LEFTMARGIN
 {
@@ -1624,7 +1716,7 @@ String STR_INC_LEFTMARGIN
     Text [ dutch ] = "Inspringing vergroten" ;
     Text [ english_us ] = "Increase Indent" ;
     Text [ swedish ] = "�ka indrag" ;
-    Text [ danish ] = "Forst�r indrykning" ;
+    Text [ danish ] = "For�g indrykning" ;
     Text [ italian ] = "Aumenta rientro" ;
     Text [ spanish ] = "Aumentar sangr�a" ;
     Text [ french ] = "Augmenter le retrait" ;
@@ -1649,6 +1741,8 @@ String STR_INC_LEFTMARGIN
     Text[ hebrew ] = "‮הוספת שוליים‬";
     Text[ hindi ] = "इन्डेन्ट बढ़ाओ   ";
     Text[ slovak ] = "Zväčšiť odsadenie";
+    Text[ hungarian ] = "Behúzás növelése";
+    Text[ slovenian ] = "Povečaj zamik";
 };
 String STR_DEC_LEFTMARGIN
 {
@@ -1682,6 +1776,8 @@ String STR_DEC_LEFTMARGIN
     Text[ hebrew ] = "‮הפחתת שוליים‬";
     Text[ hindi ] = "इन्डेन्ट घटाओ";
     Text[ slovak ] = "Zmenšiť odsadenie";
+    Text[ hungarian ] = "Behúzás csökkentése";
+    Text[ slovenian ] = "Zmanjšaj zamik";
 };
 String STR_INSERTLABEL
 {
@@ -1715,6 +1811,8 @@ String STR_INSERTLABEL
     Text[ hebrew ] = "Beschriftung einfügen";
     Text[ hindi ] = "कॉप्शन् जोड़ो";
     Text[ slovak ] = "Vložiť popis";
+    Text[ hungarian ] = "Felirat beszúrása";
+    Text[ slovenian ] = "Vstavi napis";
 };
 String STR_SETNUMRULESTART
 {
@@ -1724,7 +1822,7 @@ String STR_SETNUMRULESTART
     Text [ english_us ] = "Restart numbering" ;
     Text [ portuguese_brazilian ] = "Reiniciar numera��o" ;
     Text [ swedish ] = "Starta numrering p� nytt" ;
-    Text [ danish ] = "Genstart nummerering" ;
+    Text [ danish ] = "Start nummerering forfra" ;
     Text [ italian ] = "Riavvia la numerazione" ;
     Text [ spanish ] = "Reiniciar numeraci�n" ;
     Text [ french ] = "Reprendre la num�rotation" ;
@@ -1748,6 +1846,8 @@ String STR_SETNUMRULESTART
     Text[ hebrew ] = "‮מיספור-ספירה חדשה‬";
     Text[ hindi ] = "संख्या देना पुनः प्रारंभ करो";
     Text[ slovak ] = "Reštartovať číslovanie";
+    Text[ hungarian ] = "Oldalszámozás újrakezdése";
+    Text[ slovenian ] = "Ponovno začni oštevilčevanje";
 };
 String STR_CHANGEFTN
 {
@@ -1781,6 +1881,8 @@ String STR_CHANGEFTN
     Text[ hebrew ] = "Fußnote ändern";
     Text[ hindi ] = "पृष्ठ के नीचे की टीका सुधारो";
     Text[ slovak ] = "Upraviť poznámku pod čiarou";
+    Text[ hungarian ] = "Lábjegyzet módosítása";
+    Text[ slovenian ] = "Spremeni sprotno opombo";
 };
 String STR_REDLINE
 {
@@ -1794,7 +1896,7 @@ String STR_ACCEPT_REDLINE
     Text [ english_us ] = "Accept changes" ;
     Text [ portuguese_brazilian ] = "Aceitar modifica��es" ;
     Text [ swedish ] = "Acceptera �ndring" ;
-    Text [ danish ] = "Accepter �ndring" ;
+    Text [ danish ] = "Accepter �ndringer" ;
     Text [ italian ] = "Accetta le modifiche" ;
     Text [ spanish ] = "Aceptar modificaciones" ;
     Text [ french ] = "Accepter la modification" ;
@@ -1819,6 +1921,8 @@ String STR_ACCEPT_REDLINE
     Text[ hebrew ] = "Änderung akzeptieren";
     Text[ hindi ] = "परिवर्तनों को स्वीकृत करो";
     Text[ slovak ] = "Prijať zmeny";
+    Text[ hungarian ] = "Változások elfogadása";
+    Text[ slovenian ] = "Sprejmi spremembe";
 };
 String STR_REJECT_REDLINE
 {
@@ -1828,7 +1932,7 @@ String STR_REJECT_REDLINE
     Text [ english_us ] = "Reject change" ;
     Text [ portuguese_brazilian ] = "Rejeitar modifica��es" ;
     Text [ swedish ] = "Ignorera �ndring" ;
-    Text [ danish ] = "Forkast �ndring" ;
+    Text [ danish ] = "Afvis �ndring" ;
     Text [ italian ] = "Rifiuta modifica" ;
     Text [ spanish ] = "Rechazar modificaci�n" ;
     Text [ french ] = "Rejeter la modification" ;
@@ -1852,6 +1956,8 @@ String STR_REJECT_REDLINE
     Text[ hebrew ] = "Änderung ablehnen";
     Text[ hindi ] = "परिवर्तन अस्वीकार करो";
     Text[ slovak ] = "Odmietnuť zmenu";
+    Text[ hungarian ] = "Változások elutasítása";
+    Text[ slovenian ] = "Zavrni spremembo";
 };
 String STR_SPLIT_TABLE
 {
@@ -1885,6 +1991,8 @@ String STR_SPLIT_TABLE
     Text[ hebrew ] = "‮פיצול טבלה‬";
     Text[ hindi ] = "सारणी अलगा करो";
     Text[ slovak ] = "Rozdeliť tabuľku";
+    Text[ hungarian ] = "Táblázat felosztása";
+    Text[ slovenian ] = "Razdeli tabelo";
 };
 String STR_DONTEXPAND
 {
@@ -1918,6 +2026,8 @@ String STR_DONTEXPAND
     Text[ hebrew ] = "Attribut stoppen";
     Text[ hindi ] = "ऐट्रिब्यूट रोको";
     Text[ slovak ] = "Atribút zastavenia";
+    Text[ hungarian ] = "Jellemzők kihagyása";
+    Text[ slovenian ] = "Atribut stop";
 };
 String STR_AUTOCORRECT
 {
@@ -1951,6 +2061,8 @@ String STR_AUTOCORRECT
     Text[ hebrew ] = "‮תיקון אוטומטי‬";
     Text[ hindi ] = "स्वचालित ढंग से ठीक करो";
     Text[ slovak ] = "Automatické opravy";
+    Text[ hungarian ] = "Automatikus javítás";
+    Text[ slovenian ] = "Samopopravki";
 };
 String STR_MERGE_TABLE
 {
@@ -1984,6 +2096,8 @@ String STR_MERGE_TABLE
     Text[ hebrew ] = "Tabelle verbinden";
     Text[ hindi ] = "सारणी को मिलाओ";
     Text[ slovak ] = "Zlúčiť tabuľku";
+    Text[ hungarian ] = "Táblázatok egyesítése";
+    Text[ slovenian ] = "Spoji tabelo";
 };
 
 String STR_TRANSLITERATE
@@ -1998,7 +2112,7 @@ String STR_TRANSLITERATE
     TEXT[ french ] = "Casse/Caract�res";
     TEXT[ spanish ] = "May�sculas/min�sculas";
     TEXT[ italian ] = "Maiuscole/minuscole";
-    TEXT[ danish ] = "Store og sm� bogstaver";
+    TEXT[ danish ] = "STORE/sm� og tegn";
     TEXT[ swedish ] = "Bokst�ver/tecken";
     TEXT[ polish ] = "Wielkie i ma�e litery";
     TEXT[ portuguese_brazilian ] = "Caixa/Caracteres";
@@ -2015,6 +2129,8 @@ String STR_TRANSLITERATE
     TEXT[ hebrew ] = "‮סיווג אותיות‬";
     TEXT[ hindi ] = "केस/अक्षरें";
     TEXT[ slovak ] = "Veľkosť/znaky";
+    TEXT[ hungarian ] = "Kis- és nagybetűk";
+    TEXT[ slovenian ] = "Črke/znaki";
 };
 
 String STR_DELNUM
@@ -2050,6 +2166,8 @@ String STR_DELNUM
     TEXT[ hebrew ] = "Nummerierung löschen";
     TEXT[ hindi ] = "संख्या देना मिटाओ";
     TEXT[ slovak ] = "Odstrániť číslovanie";
+    TEXT[ hungarian ] = "Számozás törlése";
+    TEXT[ slovenian ] = "Izbriši oštevilčevanje";
 };
 String STR_DRAWUNDO
 {
@@ -2083,6 +2201,8 @@ String STR_DRAWUNDO
     Text[ hebrew ] = "Zeichenobjekte";
     Text[ hindi ] = "रेखाचित्र वस्तु";
     Text[ slovak ] = "Kresby";
+    Text[ hungarian ] = "Rajzobjektumok";
+    Text[ slovenian ] = "Risani predmeti";
 };
 String STR_DRAWGROUP
 {
@@ -2116,6 +2236,8 @@ String STR_DRAWGROUP
     Text[ hebrew ] = "Zeichenobjekte gruppieren";
     Text[ hindi ] = "रेखाचित्र वस्तु समूह";
     Text[ slovak ] = "Zoskupiť kresby";
+    Text[ hungarian ] = "Rajzobjektumok csoportosítása";
+    Text[ slovenian ] = "Združi risane predmete";
 };
 String STR_DRAWUNGROUP
 {
@@ -2127,7 +2249,7 @@ String STR_DRAWUNGROUP
     Text [ french ] = "Dissocier les objets" ;
     Text [ dutch ] = "Groepsobject opheffen" ;
     Text [ swedish ] = "L�s upp gruppobjekt" ;
-    Text [ danish ] = "Oph�v gruppeobjekter" ;
+    Text [ danish ] = "Oph�v gruppering af objekter" ;
     Text [ portuguese ] = "Desagrupar objectos" ;
     Text [ portuguese_brazilian ] = "Desagrupar objetos de desenho" ;
     Text[ chinese_simplified ] = "取消分组对象";
@@ -2149,6 +2271,8 @@ String STR_DRAWUNGROUP
     Text[ hebrew ] = "Gruppenobjekt auflösen";
     Text[ hindi ] = "रेखाचित्र वस्तु को अलगाना";
     Text[ slovak ] = "Zrušiť zoskupenie kresieb";
+    Text[ hungarian ] = "Rajzobjektumcsoport szétbontása";
+    Text[ slovenian ] = "Razdruži risane predmete";
 };
 String STR_DRAWDELETE
 {
@@ -2182,6 +2306,8 @@ String STR_DRAWDELETE
     Text[ hebrew ] = "Zeichenobjekte löschen";
     Text[ hindi ] = "रेखाचित्र वस्तुओं को मिटाओ";
     Text[ slovak ] = "Zmazať kreslenie objektov";
+    Text[ hungarian ] = "Rajzobjektumok törlése";
+    Text[ slovenian ] = "Izbriši risane predmete";
 };
 String STR_REREAD
 {
@@ -2215,6 +2341,8 @@ String STR_REREAD
     Text[ hebrew ] = "Grafik ersetzen";
     Text[ hindi ] = "सुचित्र को प्रतिस्थापित करो";
     Text[ slovak ] = "Nahradiť obrázok";
+    Text[ hungarian ] = "Kép cseréje";
+    Text[ slovenian ] = "Zamenjaj grafiko";
 };
 String STR_DELGRF
 {
@@ -2248,6 +2376,8 @@ String STR_DELGRF
     Text[ hebrew ] = "Grafik löschen";
     Text[ hindi ] = "सुचित्र मिटाओ";
     Text[ slovak ] = "Odstrániť obrázok";
+    Text[ hungarian ] = "Kép törlése";
+    Text[ slovenian ] = "Izbriši grafiko";
 };
 String STR_DELOLE
 {
@@ -2281,6 +2411,8 @@ String STR_DELOLE
     Text[ hebrew ] = "Objekt löschen";
     Text[ hindi ] = "वस्तु मिटाओ";
     Text[ slovak ] = "Odstrániť objekt";
+    Text[ hungarian ] = "Objektum törlése";
+    Text[ slovenian ] = "Izbriši predmet";
 };
 String STR_TABLE_ATTR
 {
@@ -2314,6 +2446,8 @@ String STR_TABLE_ATTR
     Text[ hebrew ] = "Tabellenattribute anwenden";
     Text[ hindi ] = "टेबल ऐट्रिब्यूट्स लगाओ";
     Text[ slovak ] = "Použiť atribúty tabuľky";
+    Text[ hungarian ] = "Táblázatjellemzők alkalmazása";
+    Text[ slovenian ] = "Uporabi atribute tabele";
 };
 String STR_TABLE_AUTOFMT
 {
@@ -2347,6 +2481,8 @@ String STR_TABLE_AUTOFMT
     Text[ hebrew ] = "Autoformat Tabelle";
     Text[ hindi ] = "सारणी का स्वचालित रचना";
     Text[ slovak ] = "Automatický formát tabuľky";
+    Text[ hungarian ] = "Táblázat automatikus formázása";
+    Text[ slovenian ] = "Samooblikuj tabelo";
 };
 String STR_TABLE_INSCOL
 {
@@ -2381,6 +2517,8 @@ String STR_TABLE_INSCOL
     Text[ hebrew ] = "‮הכנסת טור‬";
     Text[ hindi ] = "स्तंभ जोड़ो";
     Text[ slovak ] = "Vložiť stĺpec";
+    Text[ hungarian ] = "Oszlop beszúrása";
+    Text[ slovenian ] = "Vstavi stolpec";
 };
 String STR_TABLE_INSROW
 {
@@ -2415,6 +2553,8 @@ String STR_TABLE_INSROW
     Text[ hebrew ] = "‮הכנסת שורה‬";
     Text[ hindi ] = "पंक्ति जोड़ो";
     Text[ slovak ] = "Vložiť riadok";
+    Text[ hungarian ] = "Sor beszúrása";
+    Text[ slovenian ] = "Vstavi vrstico";
 };
 String STR_TABLE_DELBOX
 {
@@ -2449,6 +2589,8 @@ String STR_TABLE_DELBOX
     Text[ hebrew ] = "Zeile/Spalte löschen";
     Text[ hindi ] = "पंक्ति/स्तंभ को मिटाओ";
     Text[ slovak ] = "Odstrániť riadok/stĺpec";
+    Text[ hungarian ] = "Sor/oszlop törlése";
+    Text[ slovenian ] = "Izbriši vrstico/stolpec";
 };
 String STR_TABLE_SPLIT
 {
@@ -2483,6 +2625,8 @@ String STR_TABLE_SPLIT
     Text[ hebrew ] = "‮פיצול תאים‬";
     Text[ hindi ] = "कोष्ठों को अलगाना";
     Text[ slovak ] = "Rozdeliť bunky";
+    Text[ hungarian ] = "Cellák felosztása";
+    Text[ slovenian ] = "Razdeli celice";
 };
 String STR_TABLE_MERGE
 {
@@ -2516,6 +2660,8 @@ String STR_TABLE_MERGE
     Text[ hebrew ] = "‮מיזוג תאים‬";
     Text[ hindi ] = "कोष्ठों को मिलाओ";
     Text[ slovak ] = "Zlúčiť bunky";
+    Text[ hungarian ] = "Cellák egyesítése";
+    Text[ slovenian ] = "Spoji celice";
 };
 String STR_TABLE_NUMFORMAT
 {
@@ -2525,7 +2671,7 @@ String STR_TABLE_NUMFORMAT
     Text [ english_us ] = "Format cell" ;
     Text [ portuguese_brazilian ] = "Formatar c�lula" ;
     Text [ swedish ] = "Formatera cell" ;
-    Text [ danish ] = "Formater celler" ;
+    Text [ danish ] = "Formater celle" ;
     Text [ italian ] = "Formatta cella" ;
     Text [ spanish ] = "Formatear celda" ;
     Text [ french ] = "Formater la cellule" ;
@@ -2549,6 +2695,8 @@ String STR_TABLE_NUMFORMAT
     Text[ hebrew ] = "Zelle formatieren";
     Text[ hindi ] = "कोष्ठ रचना";
     Text[ slovak ] = "Formátovať bunku";
+    Text[ hungarian ] = "Cella formázása";
+    Text[ slovenian ] = "Oblikuj celico";
 };
 String STR_INSERT_TOX
 {
@@ -2582,6 +2730,8 @@ String STR_INSERT_TOX
     Text[ hebrew ] = "Insert index";
     Text[ hindi ] = "अनुक्रमणिका जोड़ो";
     Text[ slovak ] = "Vložiť obsah";
+    Text[ hungarian ] = "Jegyzék beszúrása";
+    Text[ slovenian ] = "Vstavi kazalo";
 };
 String STR_CLEAR_TOX_RANGE
 {
@@ -2615,6 +2765,8 @@ String STR_CLEAR_TOX_RANGE
     Text[ hebrew ] = "Remove index";
     Text[ hindi ] = "अनुक्रमणिका हटाओ";
     Text[ slovak ] = "Odstrániť index";
+    Text[ hungarian ] = "Jegyzék törlése";
+    Text[ slovenian ] = "Odstrani kazalo";
 };
 String STR_TABLE_TBLCPYTBL
 {
@@ -2648,6 +2800,8 @@ String STR_TABLE_TBLCPYTBL
     Text[ hebrew ] = "Tabelle kopieren";
     Text[ hindi ] = "सारणी का प्रतिलिपि";
     Text[ slovak ] = "Kopírovať tabuľku";
+    Text[ hungarian ] = "Táblázat másolása";
+    Text[ slovenian ] = "Kopiraj tabelo";
 };
 String STR_TABLE_CPYTBL
 {
@@ -2681,6 +2835,8 @@ String STR_TABLE_CPYTBL
     Text[ hebrew ] = "Tabelle kopieren";
     Text[ hindi ] = "सारणी का प्रतिलिपि";
     Text[ slovak ] = "Kopírovať tabuľku";
+    Text[ hungarian ] = "Táblázat másolása";
+    Text[ slovenian ] = "Kopiraj tabelo";
 };
 String STR_INS_FROM_SHADOWCRSR
 {
@@ -2714,6 +2870,8 @@ String STR_INS_FROM_SHADOWCRSR
     Text[ hebrew ] = "Cursor setzen";
     Text[ hindi ] = "कर्सर सेट्ट करो";
     Text[ slovak ] = "Nastaviť kurzor";
+    Text[ hungarian ] = "Kurzor beállítása";
+    Text[ slovenian ] = "Nastavi kazalko";
 };
 String STR_UNDO_CHAIN
 {
@@ -2723,7 +2881,7 @@ String STR_UNDO_CHAIN
     Text [ english_us ] = "Link text frames" ;
     Text [ portuguese_brazilian ] = "Vincular molduras de texto" ;
     Text [ swedish ] = "L�nka textram" ;
-    Text [ danish ] = "K�d tekstbokse" ;
+    Text [ danish ] = "K�d tekstramme" ;
     Text [ italian ] = "Collega la cornice di testo." ;
     Text [ spanish ] = "Conectar marcos de texto" ;
     Text [ french ] = "Encha�ner les cadres texte" ;
@@ -2747,6 +2905,8 @@ String STR_UNDO_CHAIN
     Text[ hebrew ] = "Textrahmen verbinden";
     Text[ hindi ] = "टेक्स्ट् फ्रेम को लिंक करो";
     Text[ slovak ] = "Prepojiť textové rámce";
+    Text[ hungarian ] = "Hivatkozás szövegkeretekre";
+    Text[ slovenian ] = "Poveži okvire besedila";
 };
 String STR_UNDO_UNCHAIN
 {
@@ -2756,7 +2916,7 @@ String STR_UNDO_UNCHAIN
     Text [ english_us ] = "Unlink text frames" ;
     Text [ portuguese_brazilian ] = "Desvincular molduras de texto" ;
     Text [ swedish ] = "L�s upp l�nkning av textramar" ;
-    Text [ danish ] = "Oph�v tekstboksk�dning" ;
+    Text [ danish ] = "Oph�v tekstrammek�dning" ;
     Text [ italian ] = "Staccare il collegamento della cornice di testo" ;
     Text [ spanish ] = "Deshacer el v�nculo de los marcos de texto." ;
     Text [ french ] = "D�tacher les cadres texte" ;
@@ -2780,6 +2940,8 @@ String STR_UNDO_UNCHAIN
     Text[ hebrew ] = "Textrahmenverbindung lösen";
     Text[ hindi ] = "टेक्स्ट् फ्रेमों का लिंक हटाओ";
     Text[ slovak ] = "Rozpojiť textové rámce";
+    Text[ hungarian ] = "Szövegkeretek szétbontása";
+    Text[ slovenian ] = "Razveži okvire besedila";
 };
 String STR_UNDO_FTNINFO
 {
@@ -2813,6 +2975,8 @@ String STR_UNDO_FTNINFO
     Text[ hebrew ] = "Fußnoteneinstellungen ändern";
     Text[ hindi ] = "पृष्ठ के नीचे की टीका के विकल्पों को सुधारो";
     Text[ slovak ] = "Upraviť nastavenia poznámok pod čiarou";
+    Text[ hungarian ] = "Lábjegyzet beállításainak módosítása";
+    Text[ slovenian ] = "Spremeni možnosti sprotnih opomb";
 };
 String STR_UNDO_ENDNOTEINFO
 {
@@ -2846,6 +3010,8 @@ String STR_UNDO_ENDNOTEINFO
     Text[ hebrew ] = "Endnoteneinstellungen ändern";
     Text[ hindi ] = "अंतिम टीका निर्धारण को सुधारो";
     Text[ slovak ] = "Upraviť nastavenie vysvetliviek";
+    Text[ hungarian ] = "Végjegyzet-beállítások módosítása";
+    Text[ slovenian ] = "Spremeni nastavitve končnih opomb";
 };
 String STR_UNDO_COMPAREDOC
 {
@@ -2879,6 +3045,8 @@ String STR_UNDO_COMPAREDOC
     Text[ hebrew ] = "‮השווה מסמכים‬";
     Text[ hindi ] = "लेखपत्र को तुलना करो";
     Text[ slovak ] = "Porovnať dokument";
+    Text[ hungarian ] = "Dokumentumok összehasonlítása";
+    Text[ slovenian ] = "Primerjaj dokument";
 };
 String STR_UNDO_SETFLYFRMFMT
 {
@@ -2912,6 +3080,8 @@ String STR_UNDO_SETFLYFRMFMT
     Text[ hebrew ] = "Rahmenvorlage anwenden";
     Text[ hindi ] = "फ्रेम शैली लागू करो";
     Text[ slovak ] = "Použiť štýl ohraničenia";
+    Text[ hungarian ] = "Keretstílus alkalmazása";
+    Text[ slovenian ] = "Uporabi slog okvira";
 };
 String STR_UNDO_SETRUBYATTR
 {
@@ -2925,7 +3095,7 @@ String STR_UNDO_SETRUBYATTR
     Text[ french ] = "Attribut Ruby";
     Text[ spanish ] = "Aplicar s�mbolos fon�ticos";
     Text[ italian ] = "Applica testo Ruby";
-    Text[ danish ] = "S�t fonetiske symboler";
+    Text[ danish ] = "Indstilling for fonetisk tekst ";
     Text[ swedish ] = "S�tt fonetiska symboler";
     Text[ polish ] = "Ustawienia dopisk�w fonetycznych";
     Text[ portuguese_brazilian ] = "Configura��o Ruby";
@@ -2942,6 +3112,8 @@ String STR_UNDO_SETRUBYATTR
     Text[ hebrew ] = "Phonetische Symbole setzen";
     Text[ hindi ] = "रूबी निर्धारण";
     Text[ slovak ] = "Nastavenie Ruby";
+    Text[ hungarian ] = "Fonetikus átirat beállításai";
+    Text[ slovenian ] = "Nastavitve fonetičnega zapisa";
 };
 #102505#
 String STR_UNDO_TMPAUTOCORR
@@ -2976,6 +3148,8 @@ String STR_UNDO_TMPAUTOCORR
     Text[ hebrew ] = "‮תיקון אוטומטי‬";
     Text[ hindi ] = "स्वचालित ढंग से ठीक करो";
     Text[ slovak ] = "Automatické opravy";
+    Text[ hungarian ] = "Automatikus javítás";
+    Text[ slovenian ] = "Samopopravki";
 };
 String STR_INSERT_FOOTNOTE
 {
@@ -3009,6 +3183,8 @@ String STR_INSERT_FOOTNOTE
     Text[ hebrew ] = "Fußnote einfügen";
     Text[ hindi ] = "पृष्ठ के नीचे की टीका जोड़ो";
     Text[ slovak ] = "Vložiť poznámku pod čiarou";
+    Text[ hungarian ] = "Lábjegyzet beszúrása";
+    Text[ slovenian ] = "Vstavi sprotno opombo";
 };
 String STR_INSERT_URLBTN
 {
@@ -3042,6 +3218,8 @@ String STR_INSERT_URLBTN
     Text[ hebrew ] = "URL Button einfügen";
     Text[ hindi ] = "URL बटन जोड़ो";
     Text[ slovak ] = "Vložiť URL tlačítko";
+    Text[ hungarian ] = "URL-nyomógomb beillesztése";
+    Text[ slovenian ] = "vstavi URL gumb";
 };
 String STR_INSERT_URLTXT
 {
@@ -3075,6 +3253,8 @@ String STR_INSERT_URLTXT
     Text[ hebrew ] = "Hyperlink ‮הוספת‬";
     Text[ hindi ] = "हाइपरलिंक जोड़ो";
     Text[ slovak ] = "Vložiť hypertextový odkaz";
+    Text[ hungarian ] = "Hiperhivatkozás beszúrása";
+    Text[ slovenian ] = "Vstavi hiperpovezavo";
 };
 String STR_DELETE_INVISIBLECNTNT
 {
@@ -3106,6 +3286,8 @@ String STR_DELETE_INVISIBLECNTNT
     Text[ hebrew ] = "unischtbaren Inhalt enfernen";
     Text[ hindi ] = "अलक सन्तोष हटाओ";
     Text[ slovak ] = "odstrániť skrytý obsah";
+    Text[ hungarian ] = "Láthatatlan tartalom eltávolítása";
+    Text[ slovenian ] = "odstrani nevidno vsebino";
 };
 
 String STR_DDEERROR_APP1
@@ -3117,7 +3299,7 @@ String STR_DDEERROR_APP1
     TEXT [ portuguese_brazilian ] = "A aplica��o [" ;
     TEXT [ portuguese ] = "A aplica��o [" ;
     TEXT [ finnish ] = "Sovellus [" ;
-    TEXT [ danish ] = "Applikationen [" ;
+    TEXT [ danish ] = "Programmet [" ;
     TEXT [ french ] = "L'application [" ;
     TEXT [ swedish ] = "Programmet [" ;
     TEXT [ dutch ] = "Toepassing [" ;
@@ -3138,6 +3320,8 @@ String STR_DDEERROR_APP1
     TEXT[ hebrew ] = "‮פעולה [‬";
     TEXT[ hindi ] = "कार्यक्रम [";
     TEXT[ slovak ] = "Aplikácia [";
+    TEXT[ hungarian ] = "Az alkalmazás [";
+    TEXT[ slovenian ] = "Program [";
 };
 String STR_DDEERROR_APP2
 {
@@ -3172,6 +3356,8 @@ String STR_DDEERROR_APP2
     TEXT[ hebrew ] = "] kann nicht angesprochen werden";
     TEXT[ hindi ] = "] उत्तर नहीं दे रहा है ।";
     TEXT[ slovak ] = "] neodpovedá.";
+    TEXT[ hungarian ] = "] nem válaszol.";
+    TEXT[ slovenian ] = "] se ne odziva.";
 };
 String STR_DDEERROR_DATA1
 {
@@ -3203,6 +3389,8 @@ String STR_DDEERROR_DATA1
     TEXT[ hebrew ] = "Die Daten zu [";
     TEXT[ hindi ] = "केलिए ड़ॉटा  [";
     TEXT[ slovak ] = "Dáta pre [";
+    TEXT[ hungarian ] = "Ez az adat: [";
+    TEXT[ slovenian ] = "Podatkov za [";
 };
 String STR_DDEERROR_DATA2
 {
@@ -3237,6 +3425,8 @@ String STR_DDEERROR_DATA2
     TEXT[ hebrew ] = "] können nicht ermittelt werden";
     TEXT[ hindi ] = "] नहीं मिल सकता है";
     TEXT[ slovak ] = "] nemožno získať";
+    TEXT[ hungarian ] = "] nem érhető el.";
+    TEXT[ slovenian ] = "] ni mogoče dobiti";
 };
 String STR_DDEERROR_LINK1
 {
@@ -3247,7 +3437,7 @@ String STR_DDEERROR_LINK1
     TEXT [ portuguese_brazilian ] = "O vinculo para [" ;
     TEXT [ portuguese ] = "A liga��o a [" ;
     TEXT [ finnish ] = "Linkki [" ;
-    TEXT [ danish ] = "K�den til [" ;
+    TEXT [ danish ] = "K�de til [" ;
     TEXT [ french ] = "Le lien � [" ;
     TEXT [ swedish ] = "L�nk till [" ;
     TEXT [ dutch ] = "Koppeling naar [" ;
@@ -3268,6 +3458,8 @@ String STR_DDEERROR_LINK1
     TEXT[ hebrew ] = "Die Verknüpfung zu [";
     TEXT[ hindi ] = "Link to [";
     TEXT[ slovak ] = "Odkaz na [";
+    TEXT[ hungarian ] = "A kapcsolat [";
+    TEXT[ slovenian ] = "Povezave z [";
 };
 String STR_DDEERROR_LINK2
 {
@@ -3302,79 +3494,6 @@ String STR_DDEERROR_LINK2
     TEXT[ hebrew ] = "] kann nicht eingerichtet werden";
     TEXT[ hindi ] = "] स्थापित नहीं कर सकते है";
     TEXT[ slovak ] = "] nemožno vykonať";
+    TEXT[ hungarian ] = "] nem hozható létre";
+    TEXT[ slovenian ] = "] ni mogoče vzpostaviti";
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
