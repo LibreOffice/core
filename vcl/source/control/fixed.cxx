@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fixed.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:04:40 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 17:47:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,12 +332,20 @@ void FixedText::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
         pDev->SetTextColor( GetTextColor() );
     pDev->SetTextFillColor();
 
-    // Border
-    if ( !(nFlags & WINDOW_DRAW_NOBORDER) && (GetStyle() & WB_BORDER) )
+    BOOL bBorder = !(nFlags & WINDOW_DRAW_NOBORDER ) && (GetStyle() & WB_BORDER);
+    BOOL bBackground = !(nFlags & WINDOW_DRAW_NOBACKGROUND) && IsControlBackground();
+    if ( bBorder || bBackground )
     {
-        pDev->SetLineColor( Color( COL_BLACK ) );
-        pDev->SetFillColor();
-        pDev->DrawRect( Rectangle( aPos, aSize ) );
+        Rectangle aRect( aPos, aSize );
+        if ( bBorder )
+        {
+            ImplDrawFrame( pDev, aRect );
+        }
+        if ( bBackground )
+        {
+            pDev->SetFillColor( GetControlBackground() );
+            pDev->DrawRect( aRect );
+        }
     }
 
     ImplDraw( pDev, nFlags, aPos, aSize );
@@ -1090,8 +1098,7 @@ void FixedImage::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
     // Border
     if ( !(nFlags & WINDOW_DRAW_NOBORDER) && (GetStyle() & WB_BORDER) )
     {
-        DecorationView aDecoView( pDev );
-        aRect = aDecoView.DrawFrame( aRect, FRAME_DRAW_DOUBLEIN );
+        ImplDrawFrame( pDev, aRect );
     }
     pDev->IntersectClipRegion( aRect );
     ImplDraw( pDev, nFlags, aRect.TopLeft(), aRect.GetSize() );
