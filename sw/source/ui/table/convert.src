@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convert.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:01:51 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:14:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,7 +291,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         TEXT[ japanese ] = "γƒ†γ‚­γ‚Ήγƒε†…γ®εΊε‡γ‚θ¨ε·";
         TEXT[ chinese_traditional ] = "ε…§ζ–‡η„ε†ι”η¬¦";
         TEXT[ arabic ] = "ΪαΗγΗΚ ΗαέΥα έν ΗαδΥ";
-        TEXT[ greek ] = "Ενωτικό μέσα στο κείμενο";
+        TEXT[ greek ] = "Σημείο χωρισμού μέσα στο κείμενο";
         TEXT[ korean ] = "ν…μ¤νΈ κµ¬λ¶„ κΈ°νΈ";
         TEXT[ turkish ] = "Metini ayύr:";
         TEXT[ language_user1 ] = " ";
@@ -547,7 +547,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         Text[ japanese ] = "γ‚ªγƒΌγƒγƒ•γ‚©γƒΌγƒγƒƒγƒ(~F)...";
         Text[ chinese_traditional ] = "θ‡ªε‹•ζ ΌεΌ(~F)...";
         Text[ arabic ] = "ΚδΣνή ΚαήΗΖν...";
-        Text[ greek ] = "ΑυτοΜορ~φή...";
+        Text[ greek ] = "Αυτόματη μορ~φοποίηση...";
         Text[ korean ] = "μλ™ μ„μ‹(~F)...";
         Text[ turkish ] = "Otomatik ~formatlama...";
         Text[ language_user1 ] = " ";
@@ -575,6 +575,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
     TEXT[ hindi ] = "ΰ¤Έΰ¤Ύΰ¤°ΰ¤£ΰ¥€ ΰ¤•ΰ¥‹ ΰ¤ΰ¥‡ΰ¤•ΰ¥ΰ¤Έΰ¥ΰ¤ΰ¥ ΰ¤®ΰ¥‡ΰ¤‚ ΰ¤¬ΰ¤¦ΰ¤²ΰ¥‹";
     TEXT[ slovak ] = "PreviesΕ¥ tabuΔΎku na text";
 };
+
 
 
 
