@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MResultSet.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dkenny $ $Date: 2001-12-12 15:32:45 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 18:29:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,8 +82,20 @@
 #ifndef _COM_SUN_STAR_SDBC_XWARNINGSSUPPLIER_HPP_
 #include <com/sun/star/sdbc/XWarningsSupplier.hpp>
 #endif
-#ifndef _CPPUHELPER_COMPBASE8_HXX_
-#include <cppuhelper/compbase8.hxx>
+#ifndef _COM_SUN_STAR_SDBC_XRESULTSETUPDATE_HPP_
+#include <com/sun/star/sdbc/XResultSetUpdate.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBCX_XROWLOCATE_HPP_
+#include <com/sun/star/sdbcx/XRowLocate.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBCX_XDELETEROWS_HPP_
+#include <com/sun/star/sdbcx/XDeleteRows.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_XROWUPDATE_HPP_
+#include <com/sun/star/sdbc/XRowUpdate.hpp>
+#endif
+#ifndef _CPPUHELPER_COMPBASE12_HXX_
+#include <cppuhelper/compbase12.hxx>
 #endif
 #ifndef _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
 #include <comphelper/proparrhlp.hxx>
@@ -105,6 +117,7 @@
 #endif
 #include "mozillasrc/MQuery.hxx"
 
+
 namespace connectivity
 {
     namespace mozab
@@ -113,13 +126,17 @@ namespace connectivity
         /*
         **  java_sql_ResultSet
         */
-        typedef ::cppu::WeakComponentImplHelper8<      ::com::sun::star::sdbc::XResultSet,
+        typedef ::cppu::WeakComponentImplHelper12<      ::com::sun::star::sdbc::XResultSet,
                                                         ::com::sun::star::sdbc::XRow,
                                                         ::com::sun::star::sdbc::XResultSetMetaDataSupplier,
                                                         ::com::sun::star::util::XCancellable,
                                                         ::com::sun::star::sdbc::XWarningsSupplier,
                                                         ::com::sun::star::sdbc::XCloseable,
                                                         ::com::sun::star::sdbc::XColumnLocate,
+                                                        ::com::sun::star::sdbc::XResultSetUpdate,
+                                                        ::com::sun::star::sdbc::XRowUpdate,
+                                                        ::com::sun::star::sdbcx::XRowLocate,
+                                                        ::com::sun::star::sdbcx::XDeleteRows,
                                                         ::com::sun::star::lang::XServiceInfo> OResultSet_BASE;
 
 
@@ -137,6 +154,7 @@ namespace connectivity
             ::com::sun::star::uno::WeakReferenceHelper  m_aStatement;
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>        m_xMetaData;
             sal_uInt32                                  m_nRowPos;
+            sal_uInt32                                  m_nOldRowPos;
             sal_Bool                                    m_bWasNull;
             sal_Int32                                   m_nFetchSize;
             sal_Int32                                   m_nResultSetType;
@@ -243,10 +261,46 @@ namespace connectivity
             virtual void SAL_CALL clearWarnings(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             // XColumnLocate
             virtual sal_Int32 SAL_CALL findColumn( const ::rtl::OUString& columnName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+            // XResultSetUpdate
+            virtual void SAL_CALL insertRow(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL updateRow(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL deleteRow(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL cancelRowUpdates(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL moveToInsertRow(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL moveToCurrentRow(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            // XRowUpdate
+            virtual void SAL_CALL updateNull( sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL updateBoolean( sal_Int32 columnIndex, sal_Bool x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL updateByte( sal_Int32 columnIndex, sal_Int8 x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL updateShort( sal_Int32 columnIndex, sal_Int16 x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL updateInt( sal_Int32 columnIndex, sal_Int32 x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL updateLong( sal_Int32 columnIndex, sal_Int64 x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL updateFloat( sal_Int32 columnIndex, float x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL updateDouble( sal_Int32 columnIndex, double x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL updateString( sal_Int32 columnIndex, const ::rtl::OUString& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL updateBytes( sal_Int32 columnIndex, const ::com::sun::star::uno::Sequence< sal_Int8 >& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL updateDate( sal_Int32 columnIndex, const ::com::sun::star::util::Date& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL updateTime( sal_Int32 columnIndex, const ::com::sun::star::util::Time& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL updateTimestamp( sal_Int32 columnIndex, const ::com::sun::star::util::DateTime& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL updateBinaryStream( sal_Int32 columnIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL updateCharacterStream( sal_Int32 columnIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL updateObject( sal_Int32 columnIndex, const ::com::sun::star::uno::Any& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL updateNumericObject( sal_Int32 columnIndex, const ::com::sun::star::uno::Any& x, sal_Int32 scale ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            // XRowLocate
+            virtual ::com::sun::star::uno::Any SAL_CALL getBookmark(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual sal_Bool SAL_CALL moveToBookmark( const ::com::sun::star::uno::Any& bookmark ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual sal_Bool SAL_CALL moveRelativeToBookmark( const ::com::sun::star::uno::Any& bookmark, sal_Int32 rows ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual sal_Int32 SAL_CALL compareBookmarks( const ::com::sun::star::uno::Any& first, const ::com::sun::star::uno::Any& second ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual sal_Bool SAL_CALL hasOrderedBookmarks(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual sal_Int32 SAL_CALL hashBookmark( const ::com::sun::star::uno::Any& bookmark ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            // XDeleteRows
+            virtual ::com::sun::star::uno::Sequence< sal_Int32 > SAL_CALL deleteRows( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rows ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException){return 0;};
+
 protected:
             MQuery                   m_aQuery;
             OTable*                  m_pTable;
-
+            sal_Int32                   m_CurrentRowCount;
             ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
                                      m_xTableColumns;
 
@@ -262,8 +316,10 @@ protected:
             sal_Bool                 m_nIsAlwaysFalseQuery;
             ::vos::ORef<OKeySet>     m_pKeySet;
             OSortIndex*              m_pSortIndex;
-
-
+            sal_Int32                 m_nNewRow;        //inserted row
+            sal_Int32                     m_nUpdatedRow;    //updated row
+            sal_Int32                 m_RowStates;
+            sal_Int32                     m_bIsReadOnly;
             inline void resetParameters() { m_nParamIndex = 0; }
 
             ::vos::ORef<connectivity::OSQLColumns>  m_xColumns; // this are the select columns
@@ -287,14 +343,26 @@ protected:
 
             sal_uInt32  currentRowCount();
 
-            sal_Bool fetchRow(sal_uInt32 rowIndex) throw( ::com::sun::star::sdbc::SQLException,
+            sal_Bool fetchRow(sal_uInt32 rowIndex,sal_Bool bForceReload=sal_False) throw( ::com::sun::star::sdbc::SQLException,
+                                                          ::com::sun::star::uno::RuntimeException);
+            sal_Bool fetchCurrentRow() throw( ::com::sun::star::sdbc::SQLException,
+                                                          ::com::sun::star::uno::RuntimeException);
+            sal_Bool pushCard(sal_uInt32 rowIndex) throw( ::com::sun::star::sdbc::SQLException,
                                                           ::com::sun::star::uno::RuntimeException);
             sal_Bool validRow( sal_uInt32 nRow );
             sal_Bool seekRow( eRowPosition pos, sal_Int32 nOffset = 0 );
-
+            sal_Int32 deletedCount();
+            sal_Bool fillKeySet(sal_Int32 nMaxCardNumber);  //When we get new rows, fill the m_pKeySet items for them
+            sal_Int32 getRowForCardNumber(sal_Int32 nCardNum);
             const ORowSetValue& getValue(sal_uInt32 rowIndex, sal_Int32 columnIndex)
                 throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+            void updateValue(sal_Int32 columnIndex,const ORowSetValue& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            void checkPendingUpdate() throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            sal_Int32 getCurrentCardNumber();
+
 public:
+             sal_Bool determineReadOnly();
             // MozAddressbook Specific methods
             void SAL_CALL executeQuery() throw( ::com::sun::star::sdbc::SQLException,
                                                 ::com::sun::star::uno::RuntimeException);
