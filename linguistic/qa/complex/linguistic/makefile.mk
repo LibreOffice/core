@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Date: 2004-04-27 16:05:20 $
+#   last change: $Date: 2004-07-23 14:33:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,8 +71,8 @@ PACKAGE = complex$/linguistic
 
 #----- compile .java files -----------------------------------------
 
-JARFILES = mysql.jar sandbox.jar ridl.jar unoil.jar jurt.jar juh.jar jut.jar \
-                  java_uno.jar OOoRunner.jar mysql.jar
+JARFILES = mysql.jar ridl.jar unoil.jar jurt.jar juh.jar jut.jar java_uno.jar \
+                  OOoRunner.jar mysql.jar
 JAVAFILES       = HangulHanjaConversion.java
 JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 
