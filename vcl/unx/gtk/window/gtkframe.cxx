@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:57:24 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:35:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -337,6 +337,82 @@ void GtkSalFrame::InitCommon()
     }
 }
 
+/*  Sadly gtk_window_set_accept_focus exists only since gtk 2.4
+ *  for achieving the same effect we will remove the WM_TAKE_FOCUS
+ *  protocol from the window and set the input hint to false.
+ *  But gtk_window_set_accept_focus needs to be called before
+ *  window realization whereas the removal obviously can only happen
+ *  after realization.
+ */
+
+extern "C" {
+    static void(*p_gtk_window_set_accept_focus)( GtkWindow*, gboolean ) = NULL;
+    static bool bGetAcceptFocusFn = true;
+}
+
+static void lcl_set_accept_focus( GtkWindow* pWindow, gboolean bAccept, bool bBeforeRealize )
+{
+    if( bGetAcceptFocusFn )
+    {
+        bGetAcceptFocusFn = false;
+        OUString aSym( RTL_CONSTASCII_USTRINGPARAM( "gtk_window_set_accept_focus" ) );
+        p_gtk_window_set_accept_focus = (void(*)(GtkWindow*,gboolean))osl_getSymbol( GetSalData()->m_pPlugin, aSym.pData );
+#if OSL_DEBUG_LEVEL > 1
+        fprintf( stderr, "gtk_window_set_accept_focus %s\n", p_gtk_window_set_accept_focus ? "found" : "not found" );
+#endif
+    }
+    if( p_gtk_window_set_accept_focus && bBeforeRealize )
+        p_gtk_window_set_accept_focus( pWindow, bAccept );
+    else if( ! bBeforeRealize )
+    {
+        Display* pDisplay = GetSalData()->GetDisplay()->GetDisplay();
+        XLIB_Window aWindow = GDK_WINDOW_XWINDOW( GTK_WIDGET(pWindow)->window );
+        XWMHints* pHints = XGetWMHints( pDisplay, aWindow );
+        if( ! pHints )
+        {
+            pHints = XAllocWMHints();
+            pHints->flags = 0;
+        }
+        pHints->flags |= InputHint;
+        pHints->input = bAccept ? True : False;
+        XSetWMHints( pDisplay, aWindow, pHints );
+        XFree( pHints );
+
+        /*  remove WM_TAKE_FOCUS protocol; this would usually be the
+         *  right thing, but gtk handles it internally whereas we
+         *  want to handle it ourselves (as to sometimes not get
+         *  the focus)
+         */
+        Atom* pProtocols = NULL;
+        int nProtocols = 0;
+        XGetWMProtocols( pDisplay,
+                         aWindow,
+                         &pProtocols, &nProtocols );
+        if( pProtocols )
+        {
+            bool bSet = false;
+            Atom nTakeFocus = XInternAtom( pDisplay, "WM_TAKE_FOCUS", True );
+            if( nTakeFocus )
+            {
+                for( int i = 0; i < nProtocols; i++ )
+                {
+                    if( pProtocols[i] == nTakeFocus )
+                    {
+                        for( int n = i; n < nProtocols-1; n++ )
+                            pProtocols[n] = pProtocols[n+1];
+                        nProtocols--;
+                        i--;
+                        bSet = true;
+                    }
+                }
+            }
+            if( bSet )
+                XSetWMProtocols( pDisplay, aWindow, pProtocols, nProtocols );
+            XFree( pProtocols );
+        }
+    }
+}
+
 void GtkSalFrame::Init( SalFrame* pParent, ULONG nStyle )
 {
     if( nStyle & SAL_FRAME_STYLE_DEFAULT ) // ensure default style
@@ -345,7 +421,7 @@ void GtkSalFrame::Init( SalFrame* pParent, ULONG nStyle )
         nStyle &= ~SAL_FRAME_STYLE_FLOAT;
     }
 
-    m_pWindow = GTK_WINDOW( gtk_widget_new( GTK_TYPE_WINDOW, "type", (nStyle & SAL_FRAME_STYLE_FLOAT) ? GTK_WINDOW_POPUP : GTK_WINDOW_TOPLEVEL, "visible", FALSE, NULL ) );
+    m_pWindow = GTK_WINDOW( gtk_widget_new( GTK_TYPE_WINDOW, "type", ((nStyle & SAL_FRAME_STYLE_FLOAT) && ! (nStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION)) ? GTK_WINDOW_POPUP : GTK_WINDOW_TOPLEVEL, "visible", FALSE, NULL ) );
     m_pParent = static_cast<GtkSalFrame*>(pParent);
     m_pForeignParent = NULL;
     m_pForeignTopLevel = NULL;
@@ -354,21 +430,42 @@ void GtkSalFrame::Init( SalFrame* pParent, ULONG nStyle )
     if( m_pParent && m_pParent->m_pWindow && ! (m_pParent->m_nStyle & SAL_FRAME_STYLE_CHILD) )
         gtk_window_set_screen( m_pWindow, gtk_window_get_screen( m_pParent->m_pWindow ) );
 
-    InitCommon();
+    // set window type
+    bool bDecoHandling =
+        ! (nStyle & SAL_FRAME_STYLE_CHILD) &&
+        ( ! (nStyle & SAL_FRAME_STYLE_FLOAT) ||
+          (nStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION) );
 
-    if( ! (nStyle & (SAL_FRAME_STYLE_FLOAT|SAL_FRAME_STYLE_CHILD)) )
+    if( bDecoHandling )
     {
-        m_bResizeable = (nStyle & SAL_FRAME_STYLE_SIZEABLE) != 0;
-        gtk_window_set_resizable( m_pWindow, m_bResizeable ? TRUE : FALSE );
-        gtk_window_set_gravity( m_pWindow, GDK_GRAVITY_STATIC );
+        bool bNoDecor = ! (nStyle & (SAL_FRAME_STYLE_MOVEABLE | SAL_FRAME_STYLE_SIZEABLE | SAL_FRAME_STYLE_CLOSEABLE ) );
         if( (nStyle & SAL_FRAME_STYLE_INTRO) )
             gtk_window_set_type_hint( m_pWindow, GDK_WINDOW_TYPE_HINT_SPLASHSCREEN );
         else if( (nStyle & SAL_FRAME_STYLE_TOOLWINDOW ) )
             gtk_window_set_type_hint( m_pWindow, GDK_WINDOW_TYPE_HINT_UTILITY );
-        if( ! (nStyle & (SAL_FRAME_STYLE_MOVEABLE | SAL_FRAME_STYLE_SIZEABLE | SAL_FRAME_STYLE_CLOSEABLE ) ) )
+        else if( (nStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION) )
+        {
+            gtk_window_set_type_hint( m_pWindow, GDK_WINDOW_TYPE_HINT_TOOLBAR );
+            lcl_set_accept_focus( m_pWindow, FALSE, true );
+            bNoDecor = true;
+        }
+        if( bNoDecor )
             gtk_window_set_decorated( m_pWindow, FALSE );
+        gtk_window_set_gravity( m_pWindow, GDK_GRAVITY_STATIC );
         if( m_pParent && ! (m_pParent->m_nStyle & SAL_FRAME_STYLE_CHILD) )
             gtk_window_set_transient_for( m_pWindow, m_pParent->m_pWindow );
+    }
+
+    InitCommon();
+
+    if( bDecoHandling )
+    {
+        m_bResizeable = (nStyle & SAL_FRAME_STYLE_SIZEABLE) != 0;
+        if( (nStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION) )
+            m_bResizeable = true;
+        gtk_window_set_resizable( m_pWindow, m_bResizeable ? TRUE : FALSE );
+        if( (nStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION) )
+            lcl_set_accept_focus( m_pWindow, FALSE, false );
     }
 }
 
@@ -591,6 +688,7 @@ void GtkSalFrame::Show( BOOL bVisible, BOOL bNoActivate )
             if( m_bDefaultSize )
                 SetDefaultSize();
 
+            setMinMaxSize();
             gtk_widget_show( GTK_WIDGET(m_pWindow) );
             if( isFloatGrabWindow() )
             {
@@ -623,10 +721,66 @@ void GtkSalFrame::Enable( BOOL bEnable )
     // Not implemented by X11SalFrame either
 }
 
+void GtkSalFrame::setMinMaxSize()
+{
+/*  FIXME: for yet unknown reasons the reported size is a little smaller
+ *  than the max size hint; one would guess that this was due to the border
+ *  sizes of the widgets involved (GtkWindow and GtkFixed), but setting the
+ *  their border to 0 (which is the default anyway) does not change the
+ *  behaviour. Until the reason is known we'll add some pixels here.
+ */
+#define CONTAINER_ADJUSTMENT 6
+
+    if( m_pWindow )
+    {
+        GdkGeometry aGeo;
+        int aHints = 0;
+        if( m_bResizeable )
+        {
+            if( m_aMinSize.Width() && m_aMinSize.Height() )
+            {
+                aGeo.min_width  = m_aMinSize.Width()+CONTAINER_ADJUSTMENT;
+                aGeo.min_height = m_aMinSize.Height()+CONTAINER_ADJUSTMENT;
+                aHints |= GDK_HINT_MIN_SIZE;
+            }
+            if( m_aMaxSize.Width() && m_aMaxSize.Height() )
+            {
+                aGeo.max_width  = m_aMaxSize.Width()+CONTAINER_ADJUSTMENT;
+                aGeo.max_height = m_aMaxSize.Height()+CONTAINER_ADJUSTMENT;
+                aHints |= GDK_HINT_MAX_SIZE;
+            }
+        }
+        else
+        {
+            aGeo.min_width = aGeo.max_width = maGeometry.nWidth;
+            aGeo.min_height = aGeo.max_height = maGeometry.nHeight;
+            aHints = GDK_HINT_MAX_SIZE | GDK_HINT_MIN_SIZE;
+        }
+        if( aHints )
+            gtk_window_set_geometry_hints( m_pWindow,
+                                           NULL,
+                                           &aGeo,
+                                           GdkWindowHints( aHints ) );
+    }
+}
+
+void GtkSalFrame::SetMaxClientSize( long nWidth, long nHeight )
+{
+    m_aMaxSize = Size( nWidth, nHeight );
+    // Show does a setMinMaxSize
+    if( GTK_WIDGET_MAPPED( GTK_WIDGET(m_pWindow) ) )
+        setMinMaxSize();
+}
 void GtkSalFrame::SetMinClientSize( long nWidth, long nHeight )
 {
+    m_aMinSize = Size( nWidth, nHeight );
     if( m_pWindow )
+    {
         gtk_widget_set_size_request( GTK_WIDGET(m_pWindow), nWidth, nHeight );
+        // Show does a setMinMaxSize
+        if( GTK_WIDGET_MAPPED( GTK_WIDGET(m_pWindow) ) )
+            setMinMaxSize();
+    }
 }
 
 void GtkSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, USHORT nFlags )
@@ -634,25 +788,21 @@ void GtkSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, USHOR
     if( !m_pWindow || (m_nStyle & SAL_FRAME_STYLE_CHILD) )
         return;
 
+    bool bSized = false, bMoved = false;
+
     if( (nFlags & ( SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT )) &&
         (nWidth > 0 && nHeight > 0 ) // sometimes stupid things happen
             )
     {
         m_bDefaultSize = false;
-        gtk_window_resize( m_pWindow, nWidth, nHeight );
-        if( ! m_bResizeable )
-        {
-            GdkGeometry aGeo;
-            aGeo.min_width = aGeo.max_width = nWidth;
-            aGeo.min_height = aGeo.max_height = nHeight;
-            gtk_window_set_geometry_hints( m_pWindow,
-                                           NULL,
-                                           &aGeo,
-                                           (GdkWindowHints)( GDK_HINT_MIN_SIZE | GDK_HINT_MAX_SIZE ) );
-        }
 
+        if( (unsigned long)nWidth != maGeometry.nWidth || (unsigned long)nHeight != maGeometry.nHeight )
+            bSized = true;
         maGeometry.nWidth   = nWidth;
         maGeometry.nHeight  = nHeight;
+
+        gtk_window_resize( m_pWindow, nWidth, nHeight );
+        setMinMaxSize();
     }
     else if( m_bDefaultSize )
         SetDefaultSize();
@@ -668,25 +818,50 @@ void GtkSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, USHOR
         }
 
         // adjust position to avoid off screen windows
+        // but allow toolbars to be positioned partly off screen by the user
         Size aScreenSize = GetSalData()->GetDisplay()->GetScreenSize();
-        if( nX < (long)maGeometry.nLeftDecoration )
-            nX = maGeometry.nLeftDecoration;
-        if( nY < (long)maGeometry.nTopDecoration )
-            nY = maGeometry.nTopDecoration;
-        if( (nX + (long)maGeometry.nWidth + (long)maGeometry.nRightDecoration) > (long)aScreenSize.Width() )
-            nX = aScreenSize.Width() - maGeometry.nWidth - maGeometry.nRightDecoration;
-        if( (nY + (long)maGeometry.nHeight + (long)maGeometry.nBottomDecoration) > (long)aScreenSize.Height() )
-            nY = aScreenSize.Height() - maGeometry.nHeight - maGeometry.nBottomDecoration;
+        if( ! (m_nStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION) )
+        {
+            if( nX < (long)maGeometry.nLeftDecoration )
+                nX = maGeometry.nLeftDecoration;
+            if( nY < (long)maGeometry.nTopDecoration )
+                nY = maGeometry.nTopDecoration;
+            if( (nX + (long)maGeometry.nWidth + (long)maGeometry.nRightDecoration) > (long)aScreenSize.Width() )
+                nX = aScreenSize.Width() - maGeometry.nWidth - maGeometry.nRightDecoration;
+            if( (nY + (long)maGeometry.nHeight + (long)maGeometry.nBottomDecoration) > (long)aScreenSize.Height() )
+                nY = aScreenSize.Height() - maGeometry.nHeight - maGeometry.nBottomDecoration;
+        }
+        else
+        {
+            if( nX + (long)maGeometry.nWidth < 10 )
+                nX = 10 - (long)maGeometry.nWidth;
+            if( nY + (long)maGeometry.nHeight < 10 )
+                nY = 10 - (long)maGeometry.nHeight;
+            if( nX > (long)aScreenSize.Width() - 10 )
+                nX = (long)aScreenSize.Width() - 10;
+            if( nY > (long)aScreenSize.Height() - 10 )
+                nY = (long)aScreenSize.Height() - 10;
+        }
+
+        if( nX != maGeometry.nX || nY != maGeometry.nY )
+            bMoved = true;
+        maGeometry.nX = nX;
+        maGeometry.nY = nY;
 
         m_bDefaultPos = false;
         gtk_window_move( m_pWindow, nX, nY );
-        maGeometry.nX = nX;
-        maGeometry.nY = nY;
     }
     else if( m_bDefaultPos )
         Center();
 
     m_bDefaultPos = false;
+
+    if( bSized && ! bMoved )
+        CallCallback( SALEVENT_RESIZE, NULL );
+    else if( bMoved && ! bSized )
+        CallCallback( SALEVENT_MOVE, NULL );
+    else if( bMoved && bSized )
+        CallCallback( SALEVENT_MOVERESIZE, NULL );
 }
 
 void GtkSalFrame::GetClientSize( long& rWidth, long& rHeight )
@@ -875,6 +1050,13 @@ void GtkSalFrame::ToTop( USHORT nFlags )
                 gtk_window_present( m_pWindow );
             else
                 gdk_window_focus( GTK_WIDGET(m_pWindow)->window, GDK_CURRENT_TIME );
+            /*  need to do an XSetInputFocus here because
+             *  gdk_window_focus will ask a EWMH compliant WM to put the focus
+             *  to our window - which it of course won't since our input hint
+             *  is set to false.
+             */
+            if( (m_nStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION) )
+                XSetInputFocus( getDisplay()->GetDisplay(), GDK_WINDOW_XWINDOW( GTK_WIDGET(m_pWindow)->window), RevertToParent, CurrentTime );
         }
         else
         {
@@ -1343,12 +1525,14 @@ gboolean GtkSalFrame::signalButton( GtkWidget* pWidget, GdkEventButton* pEvent, 
         default: return FALSE;              break;
     }
     aEvent.mnTime   = pEvent->time;
-    aEvent.mnX      = (long)pEvent->x;
-    aEvent.mnY      = (long)pEvent->y;
+    aEvent.mnX      = (long)pEvent->x_root - pThis->maGeometry.nX;
+    aEvent.mnY      = (long)pEvent->y_root - pThis->maGeometry.nY;
     aEvent.mnCode   = GetModCode( pEvent->state );
 
     bool bClosePopups = false;
-    if( pEvent->type == GDK_BUTTON_PRESS )
+    if( pEvent->type == GDK_BUTTON_PRESS &&
+        (pThis->m_nStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION) == 0
+        )
     {
         if( m_nFloats > 0 )
         {
@@ -1423,14 +1607,17 @@ gboolean GtkSalFrame::signalScroll( GtkWidget* pWidget, GdkEvent* pEvent, gpoint
 gboolean GtkSalFrame::signalMotion( GtkWidget* pWidget, GdkEventMotion* pEvent, gpointer frame )
 {
     GtkSalFrame* pThis = (GtkSalFrame*)frame;
+
     SalMouseEvent aEvent;
     aEvent.mnTime   = pEvent->time;
-    aEvent.mnX      = (long)pEvent->x;
-    aEvent.mnY      = (long)pEvent->y;
+    aEvent.mnX      = (long)pEvent->x_root - pThis->maGeometry.nX;
+    aEvent.mnY      = (long)pEvent->y_root - pThis->maGeometry.nY;
     aEvent.mnCode   = GetModCode( pEvent->state );
     aEvent.mnButton = 0;
 
+
     GTK_YIELD_GRAB();
+
     pThis->CallCallback( SALEVENT_MOUSEMOVE, &aEvent );
 
     int frame_x = (int)(pEvent->x_root - pEvent->x);
@@ -1455,8 +1642,8 @@ gboolean GtkSalFrame::signalCrossing( GtkWidget* pWidget, GdkEventCrossing* pEve
     GtkSalFrame* pThis = (GtkSalFrame*)frame;
     SalMouseEvent aEvent;
     aEvent.mnTime   = pEvent->time;
-    aEvent.mnX      = (long)pEvent->x;
-    aEvent.mnY      = (long)pEvent->y;
+    aEvent.mnX      = (long)pEvent->x_root - pThis->maGeometry.nX;
+    aEvent.mnY      = (long)pEvent->y_root - pThis->maGeometry.nY;
     aEvent.mnCode   = GetModCode( pEvent->state );
     aEvent.mnButton = 0;
 
@@ -1552,8 +1739,33 @@ gboolean GtkSalFrame::signalConfigure( GtkWidget* pWidget, GdkEventConfigure* pE
     bool bMoved = false, bSized = false;
     int x = pEvent->x, y = pEvent->y;
 
+    /*  HACK: during sizing/moving a toolbar pThis->maGeometry is actually
+     *  already exact; even worse: due to the asynchronicity of configure
+     *  events the borderwindow which would evaluate this event
+     *  would size/move based on wrong data if we would actually evaluate
+     *  this event. So let's swallow it; this is also a performance
+     *  improvement as one can omit the synchronous XTranslateCoordinates
+     *  call below.
+     */
+    if( (pThis->m_nStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION) &&
+        pThis->getDisplay()->GetCaptureFrame() == pThis )
+        return FALSE;
+
+
     // in child case the coordinates are not root coordinates,
     // need to transform
+
+    /* #i31785# sadly one cannot really trust the x,y members of the event;
+     * they are e.g. not set correctly on maximize/demaximize; this rather
+     * sounds like a bug in gtk we have to workaround.
+     */
+    XLIB_Window aChild;
+    XTranslateCoordinates( pThis->getDisplay()->GetDisplay(),
+                           GDK_WINDOW_XWINDOW(GTK_WIDGET(pThis->m_pWindow)->window),
+                           pThis->getDisplay()->GetRootWindow(),
+                           0, 0,
+                           &x, &y,
+                           &aChild );
 
     /* #i31785# sadly one cannot really trust the x,y members of the event;
      * they are e.g. not set correctly on maximize/demaximize; this rather
