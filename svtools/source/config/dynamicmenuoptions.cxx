@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dynamicmenuoptions.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: as $ $Date: 2001-11-29 09:57:37 $
+ *  last change: $Author: mba $ $Date: 2002-03-06 12:16:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,12 +141,12 @@ using namespace ::com::sun::star::beans ;
 /*-****************************************************************************************************************
     @descr  struct to hold information about one menu entry.
 ****************************************************************************************************************-*/
-struct MenuEntry
+struct SvtDynMenuEntry
 {
     public:
-        MenuEntry() {};
+        SvtDynMenuEntry() {};
 
-        MenuEntry(  const OUString& sNewURL             ,
+        SvtDynMenuEntry(  const OUString& sNewURL             ,
                     const OUString& sNewTitle           ,
                     const OUString& sNewImageIdentifier ,
                     const OUString& sNewTargetName      )
@@ -168,14 +168,14 @@ struct MenuEntry
 /*-****************************************************************************************************************
     @descr  support simple menu structures and operations on it
 ****************************************************************************************************************-*/
-class Menu
+class SvtDynMenu
 {
     public:
         //---------------------------------------------------------------------------------------------------------
         // append setup written menu entry
         // Don't touch name of entry. It was defined by setup and must be the same everytime!
         // Look for double menu entries here too ... may be some seperator items are supeflous ...
-        void AppendSetupEntry( const MenuEntry& rEntry )
+        void AppendSetupEntry( const SvtDynMenuEntry& rEntry )
         {
             if(
                 ( lSetupEntries.size()         <  1           )  ||
@@ -191,7 +191,7 @@ class Menu
         // We must find unique name for it by using special prefix
         // and next count of user setted entries!
         // Look for double menu entries here too ... may be some seperator items are supeflous ...
-        void AppendUserEntry( MenuEntry& rEntry )
+        void AppendUserEntry( SvtDynMenuEntry& rEntry )
         {
             if(
                 ( lUserEntries.size()         <  1           )  ||
@@ -229,7 +229,7 @@ class Menu
             Sequence< Sequence< PropertyValue > > lResult     ( nSetupCount+nUserCount );
             OUString                              sSeperator  ( RTL_CONSTASCII_USTRINGPARAM("private:separator") );
             OUString                              sEmpty      ;
-            const vector< MenuEntry >*            pList       = &lSetupEntries;
+            const vector< SvtDynMenuEntry >*            pList       = &lSetupEntries;
 
             lProperties[OFFSET_URL            ].Name = PROPERTYNAME_URL             ;
             lProperties[OFFSET_TITLE          ].Name = PROPERTYNAME_TITLE           ;
@@ -238,7 +238,7 @@ class Menu
 
             while( pList != NULL )
             {
-                for( vector< MenuEntry >::const_iterator pItem =pList->begin();
+                for( vector< SvtDynMenuEntry >::const_iterator pItem =pList->begin();
                                                          pItem!=pList->end()  ;
                                                          ++pItem              )
                 {
@@ -274,7 +274,7 @@ class Menu
         sal_Int32 impl_getNextUserEntryNr() const
         {
             sal_Int32 nNr = 0;
-            for( vector< MenuEntry >::const_iterator pItem =lUserEntries.begin();
+            for( vector< SvtDynMenuEntry >::const_iterator pItem =lUserEntries.begin();
                                                      pItem!=lUserEntries.end()  ;
                                                      ++pItem                    )
             {
@@ -294,8 +294,8 @@ class Menu
         }
 
     private:
-        vector< MenuEntry > lSetupEntries;
-        vector< MenuEntry > lUserEntries ;
+        vector< SvtDynMenuEntry > lSetupEntries;
+        vector< SvtDynMenuEntry > lUserEntries ;
 };
 
 class SvtDynamicMenuOptions_Impl : public ConfigItem
@@ -444,9 +444,9 @@ class SvtDynamicMenuOptions_Impl : public ConfigItem
 
     private:
 
-        Menu  m_aNewMenu              ;
-        Menu  m_aWizardMenu           ;
-        Menu  m_aHelpBookmarksMenu    ;
+        SvtDynMenu  m_aNewMenu              ;
+        SvtDynMenu  m_aWizardMenu           ;
+        SvtDynMenu  m_aHelpBookmarksMenu    ;
 };
 
 //_________________________________________________________________________________________________________________
@@ -499,7 +499,7 @@ SvtDynamicMenuOptions_Impl::SvtDynamicMenuOptions_Impl()
     //
     //      ... and so on ...
 
-    MenuEntry   aItem         ;
+    SvtDynMenuEntry   aItem         ;
     sal_uInt32  nItem     = 0 ;
     sal_uInt32  nPosition = 0 ;
     OUString    sName         ;
@@ -737,7 +737,7 @@ void SvtDynamicMenuOptions_Impl::AppendItem(            EDynamicMenuType    eMen
                                                 const   OUString&           sImageIdentifier,
                                                 const   OUString&           sTargetName     )
 {
-    MenuEntry aItem( sURL, sTitle, sImageIdentifier, sTargetName );
+    SvtDynMenuEntry aItem( sURL, sTitle, sImageIdentifier, sTargetName );
 
     switch( eMenu )
     {
