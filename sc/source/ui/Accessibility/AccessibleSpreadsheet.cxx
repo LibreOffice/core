@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleSpreadsheet.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-22 16:31:13 $
+ *  last change: $Author: sab $ $Date: 2002-04-11 09:46:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -672,6 +672,7 @@ sal_Bool ScAccessibleSpreadsheet::IsCompleteSheetSelected()
     sal_Bool bResult(sal_False);
     if(mpViewShell)
     {
+        mpViewShell->GetViewData()->GetMarkData().MarkToMulti();
         if (mpViewShell->GetViewData()->GetMarkData().IsAllMarked(maRange))
             bResult = sal_True;
     }
