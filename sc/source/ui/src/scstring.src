@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scstring.src,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-25 12:50:20 $
+ *  last change: $Author: kz $ $Date: 2002-08-02 20:48:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ String SCSTR_APPLICATION
     Text[ french ] = "%PRODUCTNAME Calc 6.0";
     Text[ spanish ] = "%PRODUCTNAME Calc 6.0";
     Text[ italian ] = "%PRODUCTNAME Calc 6.0";
-    Text[ danish ] = "StarCalc 5.0";
+    Text[ danish ] = "%PRODUCTNAME Calc 6.0";
     Text[ swedish ] = "%PRODUCTNAME Calc 6.0";
     Text[ polish ] = "%PRODUCTNAME Calc 6.0";
     Text[ portuguese_brazilian ] = "%PRODUCTNAME Calc 4.0";
@@ -186,7 +186,7 @@ String SCSTR_LONG_SCDOC_NAME
     Text[ french ] = "%PRODUCTNAME 6.0 Classeur";
     Text[ spanish ] = "%PRODUCTNAME 6.0 Hoja de c�lculo";
     Text[ italian ] = "Tabella %PRODUCTNAME 6.0";
-    Text[ danish ] = "%PRODUCTNAME Calc 5.0 regneark";
+    Text[ danish ] = "%PRODUCTNAME 6.0-tabel";
     Text[ swedish ] = "%PRODUCTNAME 6.0 tabell";
     Text[ polish ] = "%PRODUCTNAME 6.0 - Arkusz kalkulacyjny";
     Text[ portuguese_brazilian ] = "%PRODUCTNAME 4.0 Tabelle";
@@ -196,7 +196,7 @@ String SCSTR_LONG_SCDOC_NAME
     Text[ chinese_traditional ] = "%PRODUCTNAME 6.0 工作表";
     Text[ turkish ] = "%PRODUCTNAME 5.0 tablosu";
     Text[ arabic ] = "���� %PRODUCTNAME 6.0";
-    Text[ catalan ] = "%PRODUCTNAME 6.0 Fulla de c�lcul";
+    Text[ catalan ] = "%PRODUCTNAME 6.0 Full de c�lcul";
     Text[ finnish ] = "%PRODUCTNAME 6,0 -laskentataulukko";
     Text[ language_user1 ] = " ";
     Text[ thai ] = "กระดาษคำนวณ %PRODUCTNAME 6.0 ";
@@ -208,7 +208,7 @@ String SCSTR_50_LONG_DOCNAME
     Text [ dutch ] = "%PRODUCTNAME 5.0 werkblad" ;
     Text [ english_us ] = "%PRODUCTNAME 5.0 Spreadsheet" ;
     Text [ swedish ] = "%PRODUCTNAME 5.0 tabell" ;
-    Text [ danish ] = "%PRODUCTNAME Calc 5.0 regneark" ;
+    Text [ danish ] = "%PRODUCTNAME 5.0-tabel" ;
     Text [ italian ] = "Tabella %PRODUCTNAME 5.0" ;
     Text [ spanish ] = "%PRODUCTNAME 5.0 Hoja de c�lculo" ;
     Text [ french ] = "%PRODUCTNAME 5.0 Classeur" ;
@@ -224,7 +224,7 @@ String SCSTR_50_LONG_DOCNAME
     Text[ korean ] = "%PRODUCTNAME Calc 5.0 스프레드 시트";
     Text[ turkish ] = "%PRODUCTNAME 5.0 tablosu";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "%PRODUCTNAME 5.0 Fulla de c�lcul";
+    Text[ catalan ] = "%PRODUCTNAME 5.0 Full de c�lcul";
     Text[ finnish ] = "%PRODUCTNAME 5.0 -laskentataulukko";
     Text[ thai ] = "กระดาษคำนวณ %PRODUCTNAME 5.0 ";
 };
@@ -251,7 +251,7 @@ String SCSTR_40_LONG_DOCNAME
     Text[ korean ] = "%PRODUCTNAME 4.0 스프레드시트";
     Text[ turkish ] = "StarCalc 4.0 tablosu";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "%PRODUCTNAME 4.0 Fulla de c�lcul";
+    Text[ catalan ] = "%PRODUCTNAME 4.0 Full de c�lcul";
     Text[ finnish ] = "%PRODUCTNAME 4,0 -laskentataulukko";
     Text[ thai ] = "กระดาษคำนวณ %PRODUCTNAME 4.0 ";
 };
@@ -393,7 +393,7 @@ String SCSTR_TABVIEWSHELL
     Text[ korean ] = "셀";
     Text[ turkish ] = "H�cre";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Cel�les";
+    Text[ catalan ] = "Cel.les";
     Text[ thai ] = "เซลล์";
 };
 
@@ -420,7 +420,7 @@ String SCSTR_CELLSHELL
     Text[ arabic ] = "���� �������";
     Text[ turkish ] = "H�cre i�levi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Funcions de cel�la";
+    Text[ catalan ] = "Funcions de cel.la";
     Text[ finnish ] = "Solujen funktiot";
     Text[ thai ] = "ฟังก์ชั่นสำหรับเซลล์";
 };
@@ -448,7 +448,7 @@ String SCSTR_FORMATSHELL
     Text[ arabic ] = "������� �������";
     Text[ turkish ] = "H�cre format�";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Formats de les cel�les";
+    Text[ catalan ] = "Formats de les cel.les";
     Text[ finnish ] = "Solujen muodot";
     Text[ thai ] = "รูปแบบสำหรับเซลล์";
 };
@@ -1269,7 +1269,7 @@ String SCSTR_COLUMN
     Text[ korean ] = "단";
     Text[ turkish ] = "S�tun";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Columna";
+    Text[ catalan ] = "COLUMN";
     Text[ thai ] = "คอลัมน์";
 };
 String SCSTR_ROW
@@ -1297,7 +1297,7 @@ String SCSTR_ROW
     Text[ korean ] = "행";
     Text[ turkish ] = "Sat�r";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Fila";
+    Text[ catalan ] = "fila";
     Text[ thai ] = "แถว";
 };
 String SCSTR_NEW
@@ -1411,7 +1411,7 @@ String SCSTR_CANCEL
     Text[ korean ] = "취소(~L)";
     Text[ turkish ] = "~�ptal";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "cance~l�la";
+    Text[ catalan ] = "cance~l.la";
     Text[ thai ] = "ยกเลิ~ก";
 };
 String SCSTR_MODIFY
@@ -1539,7 +1539,7 @@ String SCSTR_AREAS
     Text [ portuguese_brazilian ] = "?reas da tabela" ;
     Text [ portuguese ] = "�~reas" ;
     Text [ finnish ] = "Alueet" ;
-    Text [ danish ] = "Omr�der" ;
+    Text [ danish ] = "~Omr�der" ;
     Text [ french ] = "~Plages" ;
     Text [ swedish ] = "~Omr�den" ;
     Text [ dutch ] = "~Bereiken" ;
@@ -1712,7 +1712,7 @@ String SCSTR_RENAMEOBJECT
     Text[ spanish ] = "Nombrar objeto";
     Text[ finnish ] = "Name Object";
     Text[ italian ] = "Nome oggetto";
-    Text[ danish ] = "Name Object";
+    Text[ danish ] = "Navngiv objekt";
     Text[ swedish ] = "Namnge objekt";
     Text[ polish ] = "Name Object";
     Text[ portuguese_brazilian ] = "Name Object";
@@ -1722,8 +1722,8 @@ String SCSTR_RENAMEOBJECT
     Text[ chinese_traditional ] = "命名物件";
     Text[ turkish ] = "Name Object";
     Text[ arabic ] = "Name Object";
-    Text[ catalan ] = "Name Object";
-    Text[ thai ] = "Name object";
+    Text[ catalan ] = "Anomena l'objecte";
+    Text[ thai ] = "วัตถุชื่อ";
 };
 String STR_INSERTGRAPHIC
 {
@@ -2244,7 +2244,7 @@ String SCSTR_CHG_PROTECT
     Text [ spanish ] = "Proteger grabaci�n" ;
     Text [ french ] = "Prot�ger l'historique" ;
     Text [ swedish ] = "Skydda registrering" ;
-    Text [ danish ] = "Protect trace" ;
+    Text [ danish ] = "Beskyt registrering" ;
     Text [ portuguese ] = "Proteger hist�rico" ;
     Text [ portuguese_brazilian ] = "Protect trace" ;
     Text[ chinese_simplified ] = "保护记录";
@@ -2271,7 +2271,7 @@ String SCSTR_CHG_UNPROTECT
     Text [ spanish ] = "Desactivar protecci�n de la grabaci�n" ;
     Text [ french ] = "D�sactiver la protection de l'historique" ;
     Text [ swedish ] = "Upph�v registreringsskydd" ;
-    Text [ danish ] = "Unprotect trace" ;
+    Text [ danish ] = "Oph�v registreringsbeskyttelse" ;
     Text [ portuguese ] = "Desactivar protec��o do hist�rico" ;
     Text [ portuguese_brazilian ] = "Unprotect trace" ;
     Text[ chinese_simplified ] = "取消保护记录";
@@ -2811,7 +2811,7 @@ String SCSTR_CHARSET_USER
     Text [ french ] = "Syst�me" ;
     Text [ dutch ] = "Systeem" ;
     Text [ swedish ] = "System" ;
-    Text [ danish ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System" ;
+    Text [ danish ] = "System" ;
     Text [ portuguese ] = "Sistema" ;
     Text [ portuguese_brazilian ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System" ;
     Text[ chinese_simplified ] = "系统";
@@ -3099,7 +3099,7 @@ String SCSTR_GRFILTER_TOOBIG
     Text[ korean ] = "메모리가 부족하여 그래픽을 삽입할 수 없습니다.";
     Text[ turkish ] = "Grafi�in eklenmesi i�in yeterli bellek yok";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "No hi ha prou mem�ria per a insertar la imatge";
+    Text[ catalan ] = "No hi ha prou mem�ria per a inserir la imatge";
     Text[ thai ] = "หน่วยความจำไม่พอที่จะแทรกกราฟิค";
 };
 String SCSTR_UNDO_GRAFFILTER
@@ -3114,7 +3114,7 @@ String SCSTR_UNDO_GRAFFILTER
     Text[ french ] = "Filtre graphique";
     Text[ spanish ] = "Filtro de imagen";
     Text[ italian ] = "Filtro grafico";
-    Text[ danish ] = "Grafikfiltre";
+    Text[ danish ] = "Grafikfilter";
     Text[ swedish ] = "Grafikfilter";
     Text[ polish ] = "Filtr graficzny";
     Text[ portuguese_brazilian ] = "Graphic filter";
@@ -3221,5 +3221,22 @@ String STR_REPLCELLSWARN
     Text = "Die Zellen, in die Sie Daten einf�gen wollen, enthalten bereits Daten.\nWollen Sie die vorhandenen Daten wirklich �berschreiben?";
     Text[ english ] = "You are pasting data into cells that already contain data.\nDo you really want to overwrite the existing data?";
     Text[ english_us ] = "You are pasting data into cells that already contain data.\nDo you really want to overwrite the existing data?";
+    Text[ portuguese ] = "Do you want to replace the contents of the destination cells?";
+    Text[ russian ] = "Do you want to replace the contents of the destination cells?";
+    Text[ greek ] = "Do you want to replace the contents of the destination cells?";
+    Text[ dutch ] = "Do you want to replace the contents of the destination cells?";
+    Text[ french ] = "Do you want to replace the contents of the destination cells?";
+    Text[ spanish ] = "Do you want to replace the contents of the destination cells?";
+    Text[ finnish ] = "Do you want to replace the contents of the destination cells?";
+    Text[ italian ] = "Do you want to replace the contents of the destination cells?";
+    Text[ danish ] = "Do you want to replace the contents of the destination cells?";
+    Text[ swedish ] = "Do you want to replace the contents of the destination cells?";
+    Text[ polish ] = "Do you want to replace the contents of the destination cells?";
+    Text[ japanese ] = "Do you want to replace the contents of the destination cells?";
+    Text[ korean ] = "Do you want to replace the contents of the destination cells?";
+    Text[ chinese_simplified ] = "Do you want to replace the contents of the destination cells?";
+    Text[ chinese_traditional ] = "Do you want to replace the contents of the destination cells?";
+    Text[ turkish ] = "Do you want to replace the contents of the destination cells?";
+    Text[ arabic ] = "Do you want to replace the contents of the destination cells?";
 };
 
