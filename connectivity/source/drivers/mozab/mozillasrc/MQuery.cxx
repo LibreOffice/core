@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MQuery.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:39:04 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:42:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -377,7 +377,61 @@ static sal_Int32 generateExpression( MQuery* _aQuery, MQueryExpression*  _aExpr,
 
     return( NS_OK );
 }
+sal_uInt32 MQuery::InsertLoginInfo(OConnection* _pCon)
+{
+    nsresult rv;        // Store return values.
 
+    rtl::OUString nameAB    = _pCon->getHost().replace('.','_');
+    rtl::OUString bindDN    = _pCon->getBindDN();
+    rtl::OUString password  = _pCon->getPassword();
+    sal_Bool      useSSL    = _pCon->getUseSSL();
+
+    nsCOMPtr<nsIPref> prefs = do_GetService(NS_PREF_CONTRACTID, &rv);
+    NS_ENSURE_SUCCESS(rv, rv);
+
+    // create the ldap maxHits entry for the preferences file.
+    // Note: maxHits is applicable to LDAP only in mozilla.
+    nsCAutoString prefName(NS_LITERAL_CSTRING("ldap_2.servers."));
+    const char *pAddressBook = MTypeConverter::ouStringToCCharStringAscii(nameAB.getStr());
+    prefName.Append(pAddressBook);
+
+    nsCAutoString bindPrefName=prefName;
+    bindPrefName.Append(NS_LITERAL_CSTRING(".auth.dn"));
+    rv = prefs->SetCharPref (bindPrefName.get(),
+        MTypeConverter::ouStringToCCharStringAscii( bindDN.getStr() ) );
+    NS_ENSURE_SUCCESS(rv, rv);
+
+    nsCAutoString pwdPrefName=prefName;
+    pwdPrefName.Append(NS_LITERAL_CSTRING(".auth.pwd"));
+    rv = prefs->SetCharPref (pwdPrefName.get(),
+        MTypeConverter::ouStringToCCharStringAscii( password.getStr() ) );
+    NS_ENSURE_SUCCESS(rv, rv);
+
+    nsCAutoString sslPrefName=prefName;
+    sslPrefName.Append(NS_LITERAL_CSTRING(".UseSSL"));
+    rv = prefs->SetBoolPref (sslPrefName.get(),useSSL);
+    NS_ENSURE_SUCCESS(rv, rv);
+}
+// -------------------------------------------------------------------------
+sal_Bool CheckForceQueryProxyUse(const nsIAbDirectory*  directory)
+{
+    nsresult retCode;
+    nsCOMPtr<nsIRDFResource> rdfResource = do_QueryInterface((nsISupports *)directory, &retCode) ;
+    if (NS_FAILED(retCode)) { return sal_False; }
+    const char * uri;
+    retCode=rdfResource->GetValueConst(&uri);
+    if (NS_FAILED(retCode)) { return sal_False; }
+    const char *outlookUriPrefix="moz-aboutlookdirectory://";
+    if (strncmp(uri,outlookUriPrefix,strlen(outlookUriPrefix)) == 0)
+    {
+        return sal_True;
+    }
+    else
+    {
+        return sal_False;
+    }
+
+}
 // -------------------------------------------------------------------------
 sal_Int32 MQuery::executeQuery(OConnection* _pCon)
 {
@@ -399,12 +453,18 @@ sal_Int32 MQuery::executeQuery(OConnection* _pCon)
     if ( nmap->getDir( m_aAddressbook, getter_AddRefs( directory ) ) == sal_False )
         return( -1 );
 
-    SDBCAddress::sdbc_address_type eSDBCAddressType = _pCon->getSDBCAddressType();
 
+    //insert ldap bind info to mozilla profile(in memery,none saved),so we can use it in mozilla part codes
+    if (_pCon->isLDAP())
+    {
+          rv = InsertLoginInfo(_pCon);
+        NS_ENSURE_SUCCESS(rv, rv);
+
+    }
     // Since Outlook Express and Outlook in OCL mode support a very limited query capability,
     // we use the following bool to judge whether we need bypass any use of a DirectoryQuery
     // interface and instead force the use of the QueryProxy.
-    sal_Bool forceQueryProxyUse = (eSDBCAddressType == SDBCAddress::Outlook) || (eSDBCAddressType == SDBCAddress::OutlookExp);
+    sal_Bool forceQueryProxyUse = CheckForceQueryProxyUse(directory);
 
     // Initialize directory in cases of LDAP and Mozilla
     if (!forceQueryProxyUse) m_aQueryDirectory->directory = do_QueryInterface(directory, &rv);
@@ -417,6 +477,7 @@ sal_Int32 MQuery::executeQuery(OConnection* _pCon)
 
         // Need to turn this off for anything using the Query Proxy since it
         // treats Mailing Lists as directories!
+
         m_bQuerySubDirs = sal_False;
 
         rv = directoryQueryProxy->Initiate (directory);
