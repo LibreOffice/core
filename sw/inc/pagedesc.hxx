@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagedesc.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 13:58:12 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:37:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,10 @@
 #ifndef _STRING_HXX //autogen
 #include <tools/string.hxx>
 #endif
+
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
 #ifndef _SWTYPES_HXX
 #include <swtypes.hxx>  //fuer SwTwips
 #endif
@@ -94,7 +98,7 @@ enum SwFtnAdj
 };
 
 //footnote information
-class SwPageFtnInfo
+class SW_DLLPUBLIC SwPageFtnInfo
 {
     SwTwips     nMaxHeight;     //maximum height of the footnote area.
     ULONG       nLineWidth;     //width of separator line
@@ -103,6 +107,7 @@ class SwPageFtnInfo
     SwFtnAdj    eAdj;           //line adjustment.
     SwTwips     nTopDist;       //distance between body and separator.
     SwTwips     nBottomDist;    //distance between separator and first footnote
+
 public:
     SwTwips     GetHeight() const       { return nMaxHeight; }
     ULONG           GetLineWidth() const { return nLineWidth; }
@@ -173,7 +178,7 @@ enum UseOnPage
     PD_NOFOOTERSHARE  = 0x007F  //for internal use only
 };
 
-class SwPageDesc : public SwModify
+class SW_DLLPUBLIC SwPageDesc : public SwModify
 {
     friend class SwDoc;
     friend class SwUndoPageDescExt;
@@ -194,11 +199,12 @@ class SwPageDesc : public SwModify
 
     //Wird zum Spiegeln vom Chg (Doc) gerufen.
     //Kein Abgleich an anderer Stelle.
-    void Mirror();
+    SW_DLLPRIVATE void Mirror();
 
-    void ResetAllAttr( sal_Bool bLeft );
+    SW_DLLPRIVATE void ResetAllAttr( sal_Bool bLeft );
 
-    SwPageDesc(const String&, SwFrmFmt*, SwDoc *pDc );
+    SW_DLLPRIVATE SwPageDesc(const String&, SwFrmFmt*, SwDoc *pDc );
+
 public:
     const String &GetName() const { return aDescName; }
           void    SetName( const String& rNewName ) { aDescName = rNewName; }
