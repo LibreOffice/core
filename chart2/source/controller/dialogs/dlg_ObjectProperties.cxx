@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlg_ObjectProperties.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:36:55 $
+ *  last change: $Author: hr $ $Date: 2004-05-12 15:24:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,9 +116,6 @@
 #include <svx/svxgrahicitem.hxx>
 #endif
 
-#ifndef _SVX_CHARDLG_HXX
-#include <svx/chardlg.hxx>
-#endif
 #ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
 #endif
@@ -129,10 +126,7 @@
 #include <svx/tabline.hxx>
 #endif
 
-
-#ifndef _SVX_NUMFMT_HXX
-#include <svx/numfmt.hxx>
-#endif
+#include <svx/flagsdef.hxx>
 
 #define ITEMID_NUMBERINFO   SID_ATTR_NUMBERFORMAT_INFO
 #ifndef _SVX_NUMINF_HXX
