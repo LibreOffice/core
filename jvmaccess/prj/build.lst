@@ -1,3 +1,4 @@
-jvmaccess jvmaccess : sal salhelper NULL
-jvmaccess jvmaccess\source nmake - all jvmaccess_source NULL
-jvmaccess jvmaccess\util nmake - all jvmaccess_util jvmaccess_source NULL
+jv jvmaccess : sal salhelper NULL
+jv jvmaccess usr1 - all jv_mkout NULL
+jv jvmaccess\source nmake - all jv_source NULL
+jv jvmaccess\util nmake - all jv_util jv_source NULL
