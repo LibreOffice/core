@@ -2,9 +2,9 @@
  *
  *  $RCSfile: singledoccontroller.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 12:12:26 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:11:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,7 @@ namespace dbaui
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::sdbc;
+    using namespace ::com::sun::star::frame;
 
     //====================================================================
     //= OConnectionChangeBroadcaster
@@ -144,6 +145,7 @@ namespace dbaui
     //--------------------------------------------------------------------
     OConnectionChangeBroadcaster::~OConnectionChangeBroadcaster()
     {
+        DBG_DTOR(OConnectionChangeBroadcaster,NULL);
         if ( m_pController )
         {
             // has the connection change while we were constructed?
@@ -157,7 +159,6 @@ namespace dbaui
                 m_pController->fire( &mHandle, &aNewValue, &aOldValue, 1, sal_False );
             }
         }
-        DBG_DTOR(OConnectionChangeBroadcaster,NULL);
     }
 
     //====================================================================
@@ -243,48 +244,6 @@ namespace dbaui
         describeProperties(aProps);
         return new ::cppu::OPropertyArrayHelper(aProps);
     }
-
-    //--------------------------------------------------------------------
-    void OSingleDocumentController::initializeDataSourceName( const ::rtl::OUString& _rName )
-    {
-        DBG_ASSERT( _rName.getLength(), "OSingleDocumentController::initializeDataSourceName: invalid new name!" );
-        DBG_ASSERT( !m_sDataSourceName.getLength(), "OSingleDocumentController::initializeDataSourceName: already have a name!" );
-
-        m_sDataSourceName = _rName;
-
-        // referesh the UNO object
-        m_xDataSource.clear();
-        try
-        {
-            // get the context
-            Reference< XNameAccess > xContext( getORB()->createInstance( SERVICE_SDB_DATABASECONTEXT ), UNO_QUERY );
-
-            // the DS
-            Reference< XDataSource > xDS;
-            if ( xContext.is() )
-                xContext->getByName( m_sDataSourceName ) >>= xDS;
-
-            // (take the indirection through XDataSource to ensure we have a correct object ....)
-            m_xDataSource = Reference< XPropertySet >( xDS, UNO_QUERY);
-
-            DBG_ASSERT( m_xDataSource.is(), "OSingleDocumentController::initializeDataSourceName: could not retrieve the data source!" );
-#ifdef DBG_UTIL
-            if ( m_xConnection.is() )
-            {
-                Reference< XChild > xConnAsChild( m_xConnection, UNO_QUERY );
-                DBG_ASSERT( xConnAsChild->getParent() == m_xDataSource, "OSingleDocumentController::initializeDataSourceName: invalid connection/data source combination!" );
-                // this initialize method is intended to be used from the XInitialization::initialize of derived classes
-                // within this initialize, if both parameters (data source name and connection) are passed, they must
-                // be consistent
-            }
-#endif
-        }
-        catch( const Exception& )
-        {
-            DBG_ERROR( "OSingleDocumentController::initializeDataSourceName: caught an exception!" );
-        }
-    }
-
     //--------------------------------------------------------------------
     void OSingleDocumentController::initializeConnection( const Reference< XConnection >& _rxForeignConn )
     {
@@ -300,8 +259,6 @@ namespace dbaui
         startConnectionListening( m_xConnection );
 
         // get the data source the connection belongs to
-        OSL_ENSURE( (m_sDataSourceName.getLength() != 0) == (m_xDataSource.is() == sal_True),
-            "OSingleDocumentController::initializeConnection: inconsistence!" );
         if ( !m_xDataSource.is() )
         {
             try
@@ -312,7 +269,7 @@ namespace dbaui
                     xDS = Reference< XDataSource >( xConnAsChild->getParent(), UNO_QUERY );
 
                 // (take the indirection through XDataSource to ensure we have a correct object ....)
-                m_xDataSource = Reference< XPropertySet >( xDS, UNO_QUERY);
+                m_xDataSource.set(xDS,UNO_QUERY);
                 DBG_ASSERT( m_xDataSource.is(), "OSingleDocumentController::initializeConnection: could not retrieve the data source!" );
 
                 if ( m_xDataSource.is() )
@@ -358,7 +315,7 @@ namespace dbaui
         // now really reconnect ...
         if ( bReConnect )
         {
-            m_xConnection = connect( m_sDataSourceName, sal_True );
+            m_xConnection = connect( Reference<XDataSource>(m_xDataSource,UNO_QUERY), sal_True );
             m_bOwnConnection = m_xConnection.is();
         }
 
@@ -401,6 +358,13 @@ namespace dbaui
         m_aUndoManager.Clear();
 
         disconnect();
+        Reference<XModel> xModel(m_xDataSource,UNO_QUERY);
+        if ( xModel.is() )
+            xModel->disconnectController( this );
+
+        Reference < XFrame > xFrame;
+        attachFrame( xFrame );
+
 
         m_xDataSource.clear();
     }
@@ -580,6 +544,25 @@ namespace dbaui
         InvalidateFeature(ID_BROWSER_SAVEASDOC);
     }
     // -----------------------------------------------------------------------------
+    Reference< XModel >  SAL_CALL OSingleDocumentController::getModel(void) throw( RuntimeException )
+    {
+        return NULL;//Reference< XModel >(m_xDataSource,UNO_QUERY); // OJ: i31891
+    }
+    // -----------------------------------------------------------------------------
+    sal_Bool SAL_CALL OSingleDocumentController::attachModel(const Reference< XModel > & xModel) throw( RuntimeException )
+    {
+        ::osl::MutexGuard aGuard(m_aMutex);
+        m_xDataSource.set(xModel,UNO_QUERY);
+        return m_xDataSource.is();
+    }
+    // -----------------------------------------------------------------------------
+     ::rtl::OUString OSingleDocumentController::getDataSourceName() const
+     {
+         ::rtl::OUString sName;
+         if ( m_xDataSource.is() )
+             m_xDataSource->getPropertyValue(PROPERTY_NAME) >>= sName;
+         return sName;
+     }
 //........................................................................
 }   // namespace dbaui
 //........................................................................
