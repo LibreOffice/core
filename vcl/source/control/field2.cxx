@@ -2,9 +2,9 @@
  *
  *  $RCSfile: field2.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:11:59 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:18:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,14 +59,12 @@
  *
  ************************************************************************/
 
-#define _SV_FIELD2_CXX
-
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
 
 #ifndef _SV_RC_H
-#include <rc.h>
+#include <tools/rc.h>
 #endif
 #ifndef _SV_SVDATA_HXX
 #include <svdata.hxx>
@@ -76,9 +74,6 @@
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <svapp.hxx>
-#endif
-#ifndef _SV_SYSTEM_HXX
-#include <system.hxx>
 #endif
 #ifndef _SV_SOUND_HXX
 #include <sound.hxx>
@@ -1191,7 +1186,7 @@ static ExtDateFieldFormat ImplGetExtFormat( DateFormat eOld )
     {
         case DMY:   return XTDATEF_SHORT_DDMMYY;
         case MDY:   return XTDATEF_SHORT_MMDDYY;
-        case YMD:   return XTDATEF_SHORT_YYMMDD;
+        default:    return XTDATEF_SHORT_YYMMDD;
     }
 }
 
@@ -1428,11 +1423,6 @@ XubString DateFormatter::ImplGetDateAsText( const Date& rDate,
     BOOL bShowCentury = FALSE;
     switch ( GetExtDateFormat() )
     {
-        case XTDATEF_SYSTEM_SHORT:
-        {
-            bShowCentury = FALSE;   // ??? DEFAULT ???
-        }
-        break;
         case XTDATEF_SYSTEM_SHORT_YYYY:
         case XTDATEF_SYSTEM_LONG:
         case XTDATEF_SHORT_DDMMYYYY:
@@ -1443,6 +1433,10 @@ XubString DateFormatter::ImplGetDateAsText( const Date& rDate,
             bShowCentury = TRUE;
         }
         break;
+        default:
+        {
+            bShowCentury = FALSE;
+        }
     }
 
     if ( !bShowCentury )
@@ -1696,10 +1690,10 @@ void DateFormatter::ImplInit()
 // -----------------------------------------------------------------------
 
 DateFormatter::DateFormatter() :
-    maMin( 1, 1, 1900 ),
-    maMax( 31, 12, 2200 ),
     maFieldDate( 0 ),
-    maLastDate( 0 )
+    maLastDate( 0 ),
+    maMin( 1, 1, 1900 ),
+    maMax( 31, 12, 2200 )
 {
     ImplInit();
 }
@@ -1874,6 +1868,8 @@ void DateFormatter::SetShowDateCentury( BOOL bShowDateCentury )
                 SetExtDateFormat( XTDATEF_SHORT_YYYYMMDD );     break;
             case XTDATEF_SHORT_YYMMDD_DIN5008:
                 SetExtDateFormat( XTDATEF_SHORT_YYYYMMDD_DIN5008 ); break;
+            default:
+                ;
         }
     }
     else
@@ -1891,6 +1887,8 @@ void DateFormatter::SetShowDateCentury( BOOL bShowDateCentury )
                 SetExtDateFormat( XTDATEF_SHORT_YYMMDD );       break;
             case XTDATEF_SHORT_YYYYMMDD_DIN5008:
                 SetExtDateFormat( XTDATEF_SHORT_YYMMDD_DIN5008 );  break;
+            default:
+                ;
         }
     }
 
@@ -2797,10 +2795,10 @@ void TimeFormatter::ImplInit()
 // -----------------------------------------------------------------------
 
 TimeFormatter::TimeFormatter() :
+    maLastTime( 0, 0 ),
     maMin( 0, 0 ),
     maMax( 23, 59, 59, 99 ),
-    maFieldTime( 0, 0 ),
-    maLastTime( 0, 0 )
+    maFieldTime( 0, 0 )
 {
     ImplInit();
 }
