@@ -2,9 +2,9 @@
  *
  *  $RCSfile: service1_impl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:13:07 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:13:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -57,33 +57,15 @@ namespace my_sc_impl
 
 Sequence< OUString > SAL_CALL getSupportedServiceNames_MyService1Impl()
 {
-    static Sequence < OUString > *pNames = 0;
-    if( ! pNames )
-    {
-//      MutexGuard guard( Mutex::getGlobalMutex() );
-        if( !pNames )
-        {
-            static Sequence< OUString > seqNames(1);
-            seqNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("my_module.MyService1"));
-            pNames = &seqNames;
-        }
-    }
-    return *pNames;
+    Sequence< OUString > names(1);
+    names[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("my_module.MyService1"));
+    return names;
 }
 
 OUString SAL_CALL getImplementationName_MyService1Impl()
 {
-    static OUString *pImplName = 0;
-    if( ! pImplName )
-    {
-//      MutexGuard guard( Mutex::getGlobalMutex() );
-        if( ! pImplName )
-        {
-            static OUString implName( RTL_CONSTASCII_USTRINGPARAM("my_module.my_sc_implementation.MyService1") );
-            pImplName = &implName;
-        }
-    }
-    return *pImplName;
+    return OUString( RTL_CONSTASCII_USTRINGPARAM(
+                         "my_module.my_sc_implementation.MyService1") );
 }
 
 
@@ -93,6 +75,7 @@ class MyService1Impl
     , public lang::XTypeProvider
 {
     oslInterlockedCount m_refcount;
+    OUString m_sData;
 public:
     inline MyService1Impl() throw ()
         : m_refcount( 0 )
@@ -113,6 +96,8 @@ public:
     // XSomething
     virtual OUString SAL_CALL methodOne( OUString const & str )
         throw (RuntimeException);
+    virtual OUString SAL_CALL methodTwo( )
+        throw (RuntimeException);
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
         throw (RuntimeException);
@@ -128,37 +113,47 @@ Any MyService1Impl::queryInterface( Type const & type )
 {
     if (type.equals( ::getCppuType( (Reference< XInterface > const *)0 ) ))
     {
-        // return XInterface interface (resolve ambiguity by casting to lang::XTypeProvider)
-        Reference< XInterface > x( static_cast< lang::XTypeProvider * >( this ) );
+        // return XInterface interface
+        // (resolve ambiguity by casting to lang::XTypeProvider)
+        Reference< XInterface > x(
+            static_cast< lang::XTypeProvider * >( this ) );
         return makeAny( x );
     }
-    if (type.equals( ::getCppuType( (Reference< lang::XTypeProvider > const *)0 ) ))
+    if (type.equals(
+            ::getCppuType( (Reference< lang::XTypeProvider > const *)0 ) ))
     {
         // return XInterface interface
-        Reference< XInterface > x( static_cast< lang::XTypeProvider * >( this ) );
+        Reference< XInterface > x(
+            static_cast< lang::XTypeProvider * >( this ) );
         return makeAny( x );
     }
-    if (type.equals( ::getCppuType( (Reference< lang::XServiceInfo > const *)0 ) ))
+    if (type.equals(
+            ::getCppuType( (Reference< lang::XServiceInfo > const *)0 ) ))
     {
         // return XServiceInfo interface
-        Reference< lang::XServiceInfo > x( static_cast< lang::XServiceInfo * >( this ) );
+        Reference< lang::XServiceInfo > x(
+            static_cast< lang::XServiceInfo * >( this ) );
         return makeAny( x );
     }
-    if (type.equals( ::getCppuType( (Reference< ::my_module::XSomething > const *)0 ) ))
+    if (type.equals(
+            ::getCppuType( (Reference< ::my_module::XSomething > const *)0 ) ))
     {
         // return sample interface
-        Reference< ::my_module::XSomething > x( static_cast< ::my_module::XSomething * >( this ) );
+        Reference< ::my_module::XSomething > x(
+            static_cast< ::my_module::XSomething * >( this ) );
         return makeAny( x );
     }
     // querying for unsupported type
     return Any();
 }
+
 void MyService1Impl::acquire()
     throw ()
 {
     // thread-safe incrementation of reference count
     ::osl_incrementInterlockedCount( &m_refcount );
 }
+
 void MyService1Impl::release()
     throw ()
 {
@@ -203,8 +198,16 @@ Sequence< sal_Int8 > MyService1Impl::getImplementationId()
 OUString MyService1Impl::methodOne( OUString const & str )
     throw (RuntimeException)
 {
+    m_sData = str;
     return OUString( RTL_CONSTASCII_USTRINGPARAM(
-        "called methodOne() of MyService1 implementation: ") ) + str;
+        "called methodOne() of MyService1 implementation: ") ) + m_sData;
+}
+
+OUString MyService1Impl::methodTwo( )
+    throw (RuntimeException)
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM(
+        "called methodTwo() of MyService1 implementation: ") ) + m_sData;
 }
 
 // XServiceInfo implementation
@@ -212,13 +215,15 @@ OUString MyService1Impl::getImplementationName()
     throw (RuntimeException)
 {
     // unique implementation name
-    return OUString( RTL_CONSTASCII_USTRINGPARAM("my_module.my_sc_implementation.MyService1") );
+    return OUString( RTL_CONSTASCII_USTRINGPARAM(
+                         "my_module.my_sc_implementation.MyService1") );
 }
 sal_Bool MyService1Impl::supportsService( OUString const & serviceName )
     throw (RuntimeException)
 {
     // this object only supports one service, so the test is simple
-    return serviceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("my_module.MyService1") );
+    return serviceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
+                                         "my_module.MyService1") );
 }
 Sequence< OUString > MyService1Impl::getSupportedServiceNames()
     throw (RuntimeException)
@@ -234,6 +239,7 @@ Reference< XInterface > SAL_CALL create_MyService1Impl(
 {
     return static_cast< lang::XTypeProvider * >( new MyService1Impl() );
 }
+
 // forward decl: implemented in service2_impl.cxx
 Reference< XInterface > SAL_CALL create_MyService2Impl(
     Reference< XComponentContext > const & xContext ) SAL_THROW( () );
