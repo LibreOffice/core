@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testcppu.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-07 15:07:01 $
+ *  last change: $Author: dbo $ $Date: 2001-05-09 14:23:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,10 +84,11 @@
 #include <test/Base2.hpp>
 
 #include <uno/current_context.hxx>
-#include <cppuhelper/servicefactory.hxx>
+#include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/implbase1.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/uno/XCurrentContext.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <test/XSimpleInterface.hpp>
@@ -1074,8 +1075,9 @@ int SAL_CALL main(int argc, char **argv)
 {
     typelib_setCacheSize( 200 );
 #ifdef SAL_W32
-    Reference< XMultiServiceFactory > xMgr( cppu::createRegistryServiceFactory(
-        OUString( RTL_CONSTASCII_USTRINGPARAM("testcppu.rdb") ) ) );
+    Reference< registry::XSimpleRegistry > xRegistry( ::cppu::createSimpleRegistry() );
+    xRegistry->open( OUString( RTL_CONSTASCII_USTRINGPARAM("testcppu.rdb") ), sal_True, sal_False );
+    Reference< XComponentContext > xContext( ::cppu::bootstrap_InitialComponentContext( xRegistry ) );
 #endif
     testEnvironments();
     testMappingCallback();
@@ -1105,12 +1107,8 @@ int SAL_CALL main(int argc, char **argv)
       // shutdown
 #ifdef SAL_W32
     {
-    Reference< XComponent > xComp;
-    Reference< beans::XPropertySet > xProps( xMgr, UNO_QUERY );
-    OSL_ENSURE( xProps.is(), "### servicemanager has to implement XPropertySet!" );
-    xProps->getPropertyValue(
-        OUString( RTL_CONSTASCII_USTRINGPARAM("DefaultContext") ) ) >>= xComp;
-    OSL_ENSURE( xComp.is(), "### serivce manager's default (root) context has to implement XComponent!" );
+    Reference< XComponent > xComp( xContext, UNO_QUERY );
+    OSL_ENSURE( xComp.is(), "### root component context implement XComponent!" );
     xComp->dispose();
     }
 #endif

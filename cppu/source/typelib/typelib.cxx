@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typelib.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-30 13:39:19 $
+ *  last change: $Author: dbo $ $Date: 2001-05-09 14:23:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,14 +70,16 @@
 
 #include <stdarg.h>
 #include <stdlib.h>
+#ifndef SOLARIS
 #include <memory.h>
+#endif
 #ifdef MACOSX
 #include <sys/types.h>
 #include <sys/malloc.h>
 #else
 #include <malloc.h>
 #endif
-#if defined(SOLARIS)
+#ifdef SOLARIS
 #include <alloca.h>
 #endif
 #include <new.h>
