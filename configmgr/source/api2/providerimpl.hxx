@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jb $ $Date: 2002-06-12 16:28:27 $
+ *  last change: $Author: jb $ $Date: 2002-10-10 09:23:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,9 @@
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
 #endif
+#ifndef _OSL_MUTEX_HXX_
+#include <osl/mutex.hxx>
+#endif
 
 namespace com { namespace sun { namespace star {
     namespace uno
@@ -101,7 +104,11 @@ namespace com { namespace sun { namespace star {
     }
 }   }   }
 
-namespace rtl { class OUString; }
+namespace rtl
+{
+    class OUString;
+    template <class RCType> class Reference;
+}
 
 namespace configmgr
 {
@@ -114,7 +121,7 @@ namespace configmgr
 
     class ISubtree;
     class ITemplateManager;
-    class IDefaultProvider;
+    class IConfigDefaultProvider;
     class IConfigSession;
     class TreeManager;
     class ConnectionSettings;
@@ -196,9 +203,14 @@ namespace configmgr
         TypeConverterRef                    m_xTypeConverter;
         vos::ORef<OOptions>                 m_xDefaultOptions;
         configapi::ApiProviderInstances*    m_pNewProviders;    /// order depedency - this must be after the TreeManager
-        TreeManager*                        m_pTreeMgr;         /// the tree cache. Will hold a reference to us as long as it life
+        mutable osl::Mutex                  m_aTreeManagerMutex;
+        TreeManager*                        m_pTreeManager;     /// the tree cache. Will hold a reference to us as long as it life
         IConfigSession*                     m_pSession;
 
+        rtl::Reference< TreeManager > maybeGetTreeManager() const CFG_NOTHROW();
+        rtl::Reference< TreeManager > getTreeManager() const CFG_UNO_THROW_RTE();
+        void setTreeManager(TreeManager * pTreeManager) CFG_UNO_THROW_RTE();
+        void clearTreeManager() CFG_NOTHROW();
     protected:
         IConfigSession*   getSession() const;
     public:
@@ -227,10 +239,10 @@ namespace configmgr
         virtual void SAL_CALL release(  ) throw ();
 
         // DefaultProvider access
-        IDefaultProvider&  getDefaultProvider() const;
+        rtl::Reference< IConfigDefaultProvider >  getDefaultProvider() const CFG_UNO_THROW_RTE( );
 
         // TemplateManager access
-        ITemplateManager&  getTemplateProvider() const;
+        rtl::Reference< IConfigTemplateManager >  getTemplateProvider() const CFG_UNO_THROW_RTE( );
 
     protected:
         static OUString getErrorMessage(AbsolutePath const& _rAccessor, const vos::ORef < OOptions >& _xOptions);
@@ -240,7 +252,7 @@ namespace configmgr
         const OOptions&     getDefaultOptions() const {return *m_xDefaultOptions;}
         TypeConverterRef getTypeConverter() const {return m_xTypeConverter;}
         configapi::Factory& getWriterFactory();
-        IConfigBroadcaster* getNotifier();
+        IConfigBroadcaster* getNotifier() CFG_NOTHROW();
         uno::XInterface*    getProviderInstance();
 
         // actual factory methods

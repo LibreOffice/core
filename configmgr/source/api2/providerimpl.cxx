@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: jb $ $Date: 2002-07-11 16:55:23 $
+ *  last change: $Author: jb $ $Date: 2002-10-10 09:23:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,9 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
+#include <com/sun/star/lang/DisposedException.hpp>
+#endif
 
 #ifndef _RTL_LOGFILE_HXX_
 #include <rtl/logfile.hxx>
@@ -179,8 +182,9 @@ namespace configmgr
                   :m_xContext(_xContext)
                   ,m_pNewProviders(0)
                   ,m_pProvider(_pProvider)
+                  ,m_aTreeManagerMutex()
+                  ,m_pTreeManager(NULL)
                   ,m_pSession(NULL)
-                  ,m_pTreeMgr(NULL)
     {
         OSL_ENSURE(m_xContext.is(), "Module::Module : missing service factory !");
         m_xTypeConverter = m_xTypeConverter.query(
@@ -196,18 +200,60 @@ namespace configmgr
         return m_pSession;
     }
     //-----------------------------------------------------------------------------
+    rtl::Reference< TreeManager > OProviderImpl::maybeGetTreeManager() const CFG_NOTHROW()
+    {
+        osl::MutexGuard aGuard(m_aTreeManagerMutex);
+        rtl::Reference< TreeManager > xResult(m_pTreeManager);
+        return xResult;
+    }
+    //-----------------------------------------------------------------------------
+    rtl::Reference< TreeManager > OProviderImpl::getTreeManager() const CFG_UNO_THROW_RTE()
+    {
+        osl::MutexGuard aGuard(m_aTreeManagerMutex);
+        if (m_pTreeManager == NULL)
+        {
+            OUString sMsg = OUString::createFromAscii("OProviderImpl: No cache available - provider was already disposed.");
+            throw com::sun::star::lang::DisposedException(sMsg,static_cast<lang::XMultiServiceFactory*>(m_pProvider));
+        }
+        rtl::Reference< TreeManager > xResult(m_pTreeManager);
+        return xResult;
+    }
+    //-----------------------------------------------------------------------------
+    void OProviderImpl::setTreeManager(TreeManager * pTreeManager) CFG_UNO_THROW_RTE()
+    {
+        osl::MutexGuard aGuard(m_aTreeManagerMutex);
+
+        OSL_PRECOND(m_pTreeManager == NULL, "OProviderImpl: TreeManager is already set");
+        OSL_PRECOND(pTreeManager != NULL, "OProviderImpl: Trying to set a NULL TreeManager");
+
+        if (pTreeManager == NULL)
+        {
+            OUString sMsg = OUString::createFromAscii("OProviderImpl: No cache available - cache creation failed.");
+            throw com::sun::star::uno::RuntimeException(sMsg,NULL);
+        }
+
+        (m_pTreeManager = pTreeManager) -> acquire();
+    }
+    //-----------------------------------------------------------------------------
+    void OProviderImpl::clearTreeManager() CFG_NOTHROW()
+    {
+        osl::ClearableMutexGuard aGuard(m_aTreeManagerMutex);
+        if (TreeManager * pTM = m_pTreeManager)
+        {
+            m_pTreeManager = NULL;
+            pTM->release();
+        }
+    }
+    //-----------------------------------------------------------------------------
     bool OProviderImpl::initSession(const ConnectionSettings& _rSettings)
     {
         bool bNeedProfile = false;
+        rtl::Reference< TreeManager > xNewTreeManager;
         if (_rSettings.isUnoBackend())
         {
             this->implInitFromSettings(_rSettings,bNeedProfile);
 
-            rtl::Reference< TreeManager > xNewTreeManager =
-                CacheFactory::instance().createCacheManager(_rSettings, m_xContext);
-
-            m_pTreeMgr = xNewTreeManager.get();
-            m_pTreeMgr->acquire();
+            xNewTreeManager = CacheFactory::instance().createCacheManager(_rSettings, m_xContext);
         }
         else
         {
@@ -227,12 +273,11 @@ namespace configmgr
 
             this->implInitFromSettings(_rSettings,bNeedProfile);
 
-            rtl::Reference< TreeManager > xNewTreeManager =
-                CacheFactory::instance().createCacheManager(m_pSession, m_xTypeConverter);
-
-            m_pTreeMgr = xNewTreeManager.get();
-            m_pTreeMgr->acquire();
+            xNewTreeManager = CacheFactory::instance().createCacheManager(m_pSession, m_xTypeConverter);
         }
+
+        setTreeManager( xNewTreeManager.get() );
+        OSL_ASSERT( xNewTreeManager.get() );
 
         // put out of line to get rid of the order dependency (and to have a acquired configuration)
         m_pNewProviders   = new configapi::ApiProviderInstances(*this);
@@ -244,7 +289,7 @@ namespace configmgr
             static ::rtl::OUString ssUserProfile(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Setup"));
             AbsolutePath aProfileModule = AbsolutePath::makeModulePath(ssUserProfile, AbsolutePath::NoValidate());
 
-            data::NodeAccess aProfileTree = m_pTreeMgr->requestSubtree(aProfileModule, m_xDefaultOptions);
+            data::NodeAccess aProfileTree = xNewTreeManager->requestSubtree(aProfileModule, m_xDefaultOptions);
             if (aProfileTree.isValid())
                 implInitFromProfile(aProfileTree);
 
@@ -345,11 +390,8 @@ namespace configmgr
     //-----------------------------------------------------------------------------
     OProviderImpl::~OProviderImpl()
     {
-        if (m_pTreeMgr)
-        {
-            m_pTreeMgr->release();
-            m_pTreeMgr = NULL;
-        }
+        clearTreeManager();
+
         delete m_pNewProviders;
         delete m_pSession;
     }
@@ -359,15 +401,20 @@ namespace configmgr
     {
         try
         {
-            if (m_pTreeMgr)
-                m_pTreeMgr->dispose();
+            rtl::Reference< TreeManager > xTM = maybeGetTreeManager();
+
+            if (xTM.is())
+                xTM->dispose();
 
             if (m_pSession)
                 m_pSession->close();
+
+            clearTreeManager();
         }
         catch (uno::Exception& e)
         {
             CFG_TRACE_ERROR("Disposing the TreeManager or closing the session caused an exception: %s", OUSTRING2ASCII(e.Message));
+            clearTreeManager();
         }
     }
 
@@ -377,20 +424,24 @@ namespace configmgr
 
     //-----------------------------------------------------------------------------
     // access to the raw notifications
-    IConfigBroadcaster* OProviderImpl::getNotifier() { OSL_ASSERT(m_pTreeMgr); return m_pTreeMgr->getBroadcaster(); }
+    IConfigBroadcaster* OProviderImpl::getNotifier() CFG_NOTHROW()
+    {
+        rtl::Reference< TreeManager > xTM = maybeGetTreeManager();
+        return xTM.is() ? xTM->getBroadcaster() : NULL;
+    }
 
     // DefaultProvider access
     //-----------------------------------------------------------------------------
-    IDefaultProvider&  OProviderImpl::getDefaultProvider() const
+    rtl::Reference< IConfigDefaultProvider > OProviderImpl::getDefaultProvider() const CFG_UNO_THROW_RTE(  )
     {
-        return *m_pTreeMgr;
+        return getTreeManager().get();
     }
 
     // TemplateManager access
     //-----------------------------------------------------------------------------
-    ITemplateManager&  OProviderImpl::getTemplateProvider() const
+    rtl::Reference< IConfigTemplateManager >  OProviderImpl::getTemplateProvider() const CFG_UNO_THROW_RTE(  )
     {
-        return *m_pTreeMgr;
+        return getTreeManager().get();
     }
 
     // ITreeProvider /ITreeManager
@@ -398,10 +449,12 @@ namespace configmgr
     data::NodeAccess OProviderImpl::requestSubtree( AbsolutePath const& aSubtreePath, const vos::ORef < OOptions >& _xOptions,
                                                     sal_Int16 nMinLevels) CFG_UNO_THROW_ALL(  )
     {
+        rtl::Reference< TreeManager > xTreeManager = getTreeManager();
+
         data::NodeAccess aTree = data::NodeAccess::emptyNode();
         try
         {
-            aTree = m_pTreeMgr->requestSubtree(aSubtreePath, _xOptions, nMinLevels);
+            aTree = xTreeManager->requestSubtree(aSubtreePath, _xOptions, nMinLevels);
 
         }
         catch(uno::Exception&e)
@@ -429,37 +482,43 @@ namespace configmgr
     //-----------------------------------------------------------------------------
     void OProviderImpl::updateTree(memory::UpdateAccessor& _aAccessToken, TreeChangeList& aChanges) CFG_UNO_THROW_ALL(  )
     {
-        m_pTreeMgr->updateTree(_aAccessToken, aChanges);
+        getTreeManager()->updateTree(_aAccessToken, aChanges);
     }
 
     //-----------------------------------------------------------------------------
     void OProviderImpl::releaseSubtree( AbsolutePath const& aSubtreePath, const vos::ORef < OOptions >& _xOptions ) CFG_NOTHROW()
     {
-        m_pTreeMgr->releaseSubtree(aSubtreePath, _xOptions);
+        rtl::Reference< TreeManager > xTM = maybeGetTreeManager();
+        if (xTM.is())
+            xTM->releaseSubtree(aSubtreePath, _xOptions);
     }
 
     //-----------------------------------------------------------------------------
     void OProviderImpl::disposeData(const vos::ORef < OOptions >& _xOptions) CFG_NOTHROW()
     {
-        m_pTreeMgr->disposeData(_xOptions);
+        rtl::Reference< TreeManager > xTM = maybeGetTreeManager();
+        if (xTM.is())
+            xTM->disposeData(_xOptions);
     }
 
     //-----------------------------------------------------------------------------
     void OProviderImpl::saveAndNotifyUpdate(data::Accessor const& _aChangedDataAccessor, TreeChangeList const& aChanges) CFG_UNO_THROW_ALL(  )
     {
-        m_pTreeMgr->saveAndNotifyUpdate(_aChangedDataAccessor,aChanges);
+        getTreeManager()->saveAndNotifyUpdate(_aChangedDataAccessor,aChanges);
     }
 
     //-----------------------------------------------------------------------------
     void OProviderImpl::fetchSubtree(AbsolutePath const& aSubtreePath, const vos::ORef < OOptions >& _xOptions, sal_Int16 nMinLevels) CFG_NOTHROW()
     {
-        m_pTreeMgr->fetchSubtree(aSubtreePath, _xOptions, nMinLevels);
+        rtl::Reference< TreeManager > xTM = maybeGetTreeManager();
+        if (xTM.is())
+            xTM->fetchSubtree(aSubtreePath, _xOptions, nMinLevels);
     }
 
     //-----------------------------------------------------------------------------
     sal_Bool OProviderImpl::fetchDefaultData(memory::UpdateAccessor& _aAccessToken, AbsolutePath const& aSubtreePath, const vos::ORef < OOptions >& _xOptions, sal_Int16 nMinLevels) CFG_UNO_THROW_ALL(  )
     {
-        return m_pTreeMgr->fetchDefaultData(_aAccessToken, aSubtreePath, _xOptions, nMinLevels);
+        return getTreeManager()->fetchDefaultData(_aAccessToken, aSubtreePath, _xOptions, nMinLevels);
     }
 
     // IInterface
@@ -484,7 +543,7 @@ namespace configmgr
     //-----------------------------------------------------------------------------
     memory::Segment* OProviderImpl::getDataSegment(AbsolutePath const& _rAccessor, const vos::ORef < OOptions >& _xOptions)
     {
-        return m_pTreeMgr->getDataSegment(_rAccessor, _xOptions);
+        return getTreeManager()->getDataSegment(_rAccessor, _xOptions);
     }
 
     //-----------------------------------------------------------------------------------
