@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: kr $ $Date: 2001-05-21 09:14:56 $
+#   last change: $Author: obo $ $Date: 2005-01-25 15:24:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,6 +69,11 @@ PACKAGE = com$/sun$/star$/lib$/sandbox
 
 .INCLUDE :  settings.mk
 
+.IF "$(JDK)" == "gcj"
+all:
+    @echo This dir cannot be build with gcj because of sun.applet.AppletAudioClip
+.ELSE
+
 JARFILES=
 
 # --- Files --------------------------------------------------------
@@ -110,3 +115,4 @@ RC_SUBDIRSDEPS=$(JAVATARGET)
 
 .INCLUDE :  target.mk
 
+.ENDIF
