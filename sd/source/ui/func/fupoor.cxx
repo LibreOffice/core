@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupoor.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 15:17:09 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 15:15:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -585,48 +585,42 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
         {
             if(pViewShell->ISA(DrawViewShell) && !bSlideShow)
             {
-                // The page-up key works either with no or with the CTRL
-                // modifier.  The reaction in either case is the same.
-                if ( ! rKEvt.GetKeyCode().GetAllModifier()
-                    || rKEvt.GetKeyCode().IsMod1())
+                // The page-up key switches layers or pages depending on the
+                // modifier key.
+                if ( ! rKEvt.GetKeyCode().GetAllModifier())
                 {
-                    // The type of reaction depends on whether the layer
-                    // mode is active.
-                    if (static_cast<DrawViewShell*>(pViewShell)
-                        ->IsLayerModeActive())
+                    // With no modifier pressed we move to the previous
+                    // slide.
+
+                    pView->EndTextEdit();
+
+                    // Previous page.
+                    bReturn = TRUE;
+                    SdPage* pPage = static_cast<DrawViewShell*>(pViewShell)->GetActualPage();
+                    USHORT nSdPage = (pPage->GetPageNum() - 1) / 2;
+
+                    if (nSdPage > 0)
                     {
-                        // With the layer mode active pressing page-up
-                        // moves to the previous layer.
-                        SwitchLayer (-1);
-                    }
-                    else
-                    {
-                        // When not in layer mode the page-up key moves to
-                        // the previous slide.
-
-                        pView->EndTextEdit();
-
-                        // Previous page.
-                        bReturn = TRUE;
-                        SdPage* pPage = static_cast<DrawViewShell*>(pViewShell)
-                            ->GetActualPage();
-                        USHORT nSdPage = (pPage->GetPageNum() - 1) / 2;
-
-                        if (nSdPage > 0)
-                        {
-                            // Switch the page and send events
-                            // regarding deactivation the old page and
-                            // activating the new one.
-                            TabControl* pPageTabControl =
-                                static_cast<DrawViewShell*>(pViewShell)
-                                ->GetPageTabControl();
-                            if (pPageTabControl->IsReallyShown())
-                                pPageTabControl->SendDeactivatePageEvent ();
+                        // Switch the page and send events regarding
+                        // deactivation the old page and activating the new
+                        // one.
+                        TabControl* pPageTabControl =
                             static_cast<DrawViewShell*>(pViewShell)
-                                ->SwitchPage(nSdPage - 1);
-                            if (pPageTabControl->IsReallyShown())
-                                pPageTabControl->SendActivatePageEvent ();
-                        }
+                            ->GetPageTabControl();
+                        if (pPageTabControl->IsReallyShown())
+                            pPageTabControl->SendDeactivatePageEvent ();
+                        static_cast<DrawViewShell*>(pViewShell)->SwitchPage(nSdPage - 1);
+                        if (pPageTabControl->IsReallyShown())
+                            pPageTabControl->SendActivatePageEvent ();
+                    }
+                }
+                else if (rKEvt.GetKeyCode().IsMod1())
+                {
+                    // With the CONTROL modifier we switch layers.
+                    if (static_cast<DrawViewShell*>(pViewShell)->IsLayerModeActive())
+                    {
+                        // Moves to the previous layer.
+                        SwitchLayer (-1);
                     }
                 }
             }
@@ -637,48 +631,41 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
         {
             if(pViewShell->ISA(DrawViewShell) && !bSlideShow)
             {
-                // The page-down key works either with no or with the CTRL
-                // modifier.  The reaction in either case is the same.
-                if ( ! rKEvt.GetKeyCode().GetAllModifier()
-                    || rKEvt.GetKeyCode().IsMod1())
+                // The page-down key switches layers or pages depending on the
+                // modifier key.
+                if ( ! rKEvt.GetKeyCode().GetAllModifier())
                 {
-                    // The type of reaction depends on whether the layer
-                    // mode is active.
-                    if (static_cast<DrawViewShell*>(pViewShell)
-                        ->IsLayerModeActive())
+                    // With no modifier pressed we move to the next slide.
+
+                    pView->EndTextEdit();
+
+                    // Next page.
+                    bReturn = TRUE;
+                    SdPage* pPage = static_cast<DrawViewShell*>(pViewShell)->GetActualPage();
+                    USHORT nSdPage = (pPage->GetPageNum() - 1) / 2;
+
+                    if (nSdPage < pDoc->GetSdPageCount(pPage->GetPageKind()) - 1)
+                    {
+                        // Switch the page and send events regarding
+                        // deactivation the old page and activating the new
+                        // one.
+                        TabControl* pPageTabControl =
+                            static_cast<DrawViewShell*>(pViewShell)->GetPageTabControl();
+                        if (pPageTabControl->IsReallyShown())
+                            pPageTabControl->SendDeactivatePageEvent ();
+                        static_cast<DrawViewShell*>(pViewShell)->SwitchPage(nSdPage + 1);
+                        if (pPageTabControl->IsReallyShown())
+                            pPageTabControl->SendActivatePageEvent ();
+                    }
+                }
+                else if (rKEvt.GetKeyCode().IsMod1())
+                {
+                    // With the CONTROL modifier we switch layers.
+                    if (static_cast<DrawViewShell*>(pViewShell)->IsLayerModeActive())
                     {
                         // With the layer mode active pressing page-down
                         // moves to the next layer.
                         SwitchLayer (+1);
-                    }
-                    else
-                    {
-                        // When not in layer mode the page-down key moves to
-                        // the next slide.
-
-                        pView->EndTextEdit();
-
-                        // Next page.
-                        bReturn = TRUE;
-                        SdPage* pPage = static_cast<DrawViewShell*>(pViewShell)
-                            ->GetActualPage();
-                        USHORT nSdPage = (pPage->GetPageNum() - 1) / 2;
-
-                        if (nSdPage < pDoc->GetSdPageCount(pPage->GetPageKind()) - 1)
-                        {
-                            // Switch the page and send events
-                            // regarding deactivation the old page and
-                            // activating the new one.
-                            TabControl* pPageTabControl =
-                                static_cast<DrawViewShell*>(pViewShell)
-                                ->GetPageTabControl();
-                            if (pPageTabControl->IsReallyShown())
-                                pPageTabControl->SendDeactivatePageEvent ();
-                            static_cast<DrawViewShell*>(pViewShell)
-                                ->SwitchPage(nSdPage + 1);
-                            if (pPageTabControl->IsReallyShown())
-                                pPageTabControl->SendActivatePageEvent ();
-                        }
                     }
                 }
             }
