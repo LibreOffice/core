@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedxv.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: aw $ $Date: 2002-05-31 11:14:35 $
+ *  last change: $Author: thb $ $Date: 2002-06-12 14:26:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -799,6 +799,14 @@ BOOL SdrObjEditView::BegTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin
                 }
             }
 
+            // send HINT_BEGEDIT #99840#
+            if( GetModel() )
+            {
+                SdrHint aHint(*pTextEditObj);
+                aHint.SetKind(HINT_BEGEDIT);
+                GetModel()->Broadcast(aHint);
+            }
+
             return TRUE; // Gut gelaufen, TextEdit laeuft nun
         } else {
             bBrk=TRUE;
@@ -834,6 +842,14 @@ SdrEndTextEditKind SdrObjEditView::EndTextEdit(BOOL bDontDeleteReally)
     SdrOutliner*  pTEOutliner    =pTextEditOutliner;
     OutlinerView* pTEOutlinerView=pTextEditOutlinerView;
     Cursor*       pTECursorMerker=pTextEditCursorMerker;
+
+    // send HINT_ENDEDIT #99840#
+    if( GetModel() && pTextEditObj )
+    {
+        SdrHint aHint(*pTextEditObj);
+        aHint.SetKind(HINT_ENDEDIT);
+        GetModel()->Broadcast(aHint);
+    }
 
     pTextEditObj=NULL;
     pTextEditPV=NULL;
