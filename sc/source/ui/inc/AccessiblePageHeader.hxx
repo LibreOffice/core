@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePageHeader.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-01 12:44:05 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:14:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ class ScAccessiblePageHeader : public ScAccessibleContextBase
 {
 public:
     ScAccessiblePageHeader( const ::com::sun::star::uno::Reference<
-                                ::drafts::com::sun::star::accessibility::XAccessible>& rxParent,
+                                ::com::sun::star::accessibility::XAccessible>& rxParent,
                             ScPreviewShell* pViewShell, sal_Bool bHeader, sal_Int32 nIndex );
 
 protected:
@@ -95,20 +95,20 @@ public:
 
     //=====  XAccessibleComponent  ============================================
 
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > SAL_CALL
-                            getAccessibleAt( const ::com::sun::star::awt::Point& aPoint )
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL
+                            getAccessibleAtPoint( const ::com::sun::star::awt::Point& aPoint )
                                 throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   grabFocus() throw (::com::sun::star::uno::RuntimeException);
 
     //=====  XAccessibleContext  ==============================================
 
     virtual sal_Int32 SAL_CALL getAccessibleChildCount() throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > SAL_CALL
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL
                             getAccessibleChild( sal_Int32 i )
                                 throw (::com::sun::star::lang::IndexOutOfBoundsException,
                                     ::com::sun::star::uno::RuntimeException);
     virtual sal_Int32 SAL_CALL getAccessibleIndexInParent() throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleStateSet > SAL_CALL
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleStateSet > SAL_CALL
                             getAccessibleStateSet() throw (::com::sun::star::uno::RuntimeException);
 
     //=====  XServiceInfo  ====================================================
@@ -138,7 +138,7 @@ private:
 
     sal_Bool IsDefunc(
         const com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
+        ::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
 
     void AddChild(const EditTextObject* pArea, sal_uInt32 nIndex, SvxAdjust eAdjust);
 };
