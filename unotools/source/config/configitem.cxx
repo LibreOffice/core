@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configitem.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:54 $
+ *  last change: $Author: os $ $Date: 2000-09-21 12:46:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,8 +182,7 @@ ConfigItem::ConfigItem(const rtl::OUString rSubTree ) :
     bInPutValues(sal_False),
     bHasChangedProperties(sal_False)
 {
-    xMultPrSet = pManager->AddConfigItem(*this);
-    xHierarchyAccess = Reference<XHierarchicalNameAccess>(xMultPrSet, UNO_QUERY);
+    xHierarchyAccess = pManager->AddConfigItem(*this);
 }
 /* -----------------------------29.08.00 12:52--------------------------------
 
@@ -192,9 +191,9 @@ ConfigItem::~ConfigItem()
 {
     if(pManager)
     {
-        if(bHasChangedProperties && xMultPrSet.is())
+        if(bHasChangedProperties && xHierarchyAccess.is())
         {
-            Reference<XChangesBatch> xBatch(xMultPrSet, UNO_QUERY);
+            Reference<XChangesBatch> xBatch(xHierarchyAccess, UNO_QUERY);
             xBatch->commitChanges();
         }
         RemoveListener();
@@ -213,9 +212,9 @@ void    ConfigItem::Commit()
  ---------------------------------------------------------------------------*/
 void    ConfigItem::ReleaseConfigMgr()
 {
-    if(bHasChangedProperties && xMultPrSet.is())
+    if(bHasChangedProperties && xHierarchyAccess.is())
     {
-        Reference<XChangesBatch> xBatch(xMultPrSet, UNO_QUERY);
+        Reference<XChangesBatch> xBatch(xHierarchyAccess, UNO_QUERY);
         xBatch->commitChanges();
         bHasChangedProperties = FALSE;
     }
@@ -277,7 +276,7 @@ sal_Bool ConfigItem::PutProperties( const Sequence< OUString >& rNames,
                                                 const Sequence< Any>& rValues)
 {
     bInPutValues = sal_True;
-    Reference<XPropertySet> xPropSet(xMultPrSet, UNO_QUERY);
+    Reference<XPropertySet> xPropSet(xHierarchyAccess, UNO_QUERY);
     sal_Bool bRet = xHierarchyAccess.is() && xPropSet.is();
     if(bRet)
     {
@@ -321,7 +320,7 @@ sal_Bool ConfigItem::PutProperties( const Sequence< OUString >& rNames,
 #endif
         }
 #if SUPD<605
-    Reference<XChangesBatch> xBatch(xMultPrSet, UNO_QUERY);
+    Reference<XChangesBatch> xBatch(xHierarchyAccess, UNO_QUERY);
     xBatch->commitChanges();
 
 #else
@@ -337,7 +336,7 @@ sal_Bool ConfigItem::PutProperties( const Sequence< OUString >& rNames,
  ---------------------------------------------------------------------------*/
 sal_Bool    ConfigItem::EnableNotification(com::sun::star::uno::Sequence< rtl::OUString >& rNames)
 {
-    Reference<XChangesNotifier> xChgNot(xMultPrSet, UNO_QUERY);
+    Reference<XChangesNotifier> xChgNot(xHierarchyAccess, UNO_QUERY);
     if(!xChgNot.is())
         return FALSE;
     BOOL bRet = TRUE;
@@ -358,13 +357,13 @@ sal_Bool    ConfigItem::EnableNotification(com::sun::star::uno::Sequence< rtl::O
  ---------------------------------------------------------------------------*/
 void ConfigItem::RemoveListener()
 {
-    Reference<XChangesNotifier> xChgNot(xMultPrSet, UNO_QUERY);
+    Reference<XChangesNotifier> xChgNot(xHierarchyAccess, UNO_QUERY);
     if(xChgNot.is() && xChangeLstnr.is())
     {
         try
         {
             xChgNot->removeChangesListener( xChangeLstnr );
-            xMultPrSet = 0;
+            xHierarchyAccess = 0;
         }
         catch(Exception & )
         {
@@ -381,9 +380,14 @@ Sequence< OUString > ConfigItem::GetNodeNames(rtl::OUString& rNode)
     {
         try
         {
-            Any aNode = xHierarchyAccess->getByHierarchicalName(rNode);
             Reference<XNameContainer> xCont;
-            aNode >>= xCont;
+            if(rNode.getLength())
+            {
+                Any aNode = xHierarchyAccess->getByHierarchicalName(rNode);
+                aNode >>= xCont;
+            }
+            else
+                xCont = Reference<XNameContainer> (xHierarchyAccess, UNO_QUERY);
             if(xCont.is())
             {
                 aRet = xCont->getElementNames();
@@ -412,14 +416,19 @@ sal_Bool ConfigItem::ClearNodeSet(OUString& rNode)
     {
         try
         {
-            Any aNode = xHierarchyAccess->getByHierarchicalName(rNode);
             Reference<XNameContainer> xCont;
-            aNode >>= xCont;
+            if(rNode.getLength())
+            {
+                Any aNode = xHierarchyAccess->getByHierarchicalName(rNode);
+                aNode >>= xCont;
+            }
+            else
+                xCont = Reference<XNameContainer> (xHierarchyAccess, UNO_QUERY);
             if(!xCont.is())
                 return sal_False;
             Sequence< OUString > aNames = xCont->getElementNames();
             const OUString* pNames = aNames.getConstArray();
-            Reference<XChangesBatch> xBatch(xMultPrSet, UNO_QUERY);
+            Reference<XChangesBatch> xBatch(xHierarchyAccess, UNO_QUERY);
             for(sal_Int32 i = 0; i < aNames.getLength(); i++)
             {
                 xCont->removeByName(pNames[i]);
@@ -447,12 +456,17 @@ sal_Bool ConfigItem::SetSetProperties(
     sal_Bool bRet;
     if(xHierarchyAccess.is())
     {
-        Reference<XChangesBatch> xBatch(xMultPrSet, UNO_QUERY);
+        Reference<XChangesBatch> xBatch(xHierarchyAccess, UNO_QUERY);
         try
         {
-            Any aNode = xHierarchyAccess->getByHierarchicalName(rNode);
             Reference<XNameContainer> xCont;
-            aNode >>= xCont;
+            if(rNode.getLength())
+            {
+                Any aNode = xHierarchyAccess->getByHierarchicalName(rNode);
+                aNode >>= xCont;
+            }
+            else
+                xCont = Reference<XNameContainer> (xHierarchyAccess, UNO_QUERY);
             if(!xCont.is())
                 return sal_False;
             const PropertyValue* pProperties = rValues.getConstArray();
@@ -526,12 +540,17 @@ sal_Bool ConfigItem::ReplaceSetProperties(
     sal_Bool bRet;
     if(xHierarchyAccess.is())
     {
-        Reference<XChangesBatch> xBatch(xMultPrSet, UNO_QUERY);
+        Reference<XChangesBatch> xBatch(xHierarchyAccess, UNO_QUERY);
         try
         {
-            Any aNode = xHierarchyAccess->getByHierarchicalName(rNode);
             Reference<XNameContainer> xCont;
-            aNode >>= xCont;
+            if(rNode.getLength())
+            {
+                Any aNode = xHierarchyAccess->getByHierarchicalName(rNode);
+                aNode >>= xCont;
+            }
+            else
+                xCont = Reference<XNameContainer> (xHierarchyAccess, UNO_QUERY);
             if(!xCont.is())
                 return sal_False;
             const PropertyValue* pProperties = rValues.getConstArray();
