@@ -2,9 +2,9 @@
  *
  *  $RCSfile: longcurr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: th $ $Date: 2001-03-09 15:00:01 $
+ *  last change: $Author: mt $ $Date: 2001-04-18 12:28:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -487,6 +487,11 @@ void LongCurrencyFormatter::SetMax( BigInt nNewMax )
 
 void LongCurrencyFormatter::SetDecimalDigits( USHORT nDigits )
 {
+//  DBG_ASSERT( nDigits < 10, "LongCurrency duerfen nur maximal 9 Nachkommastellen haben" );
+
+    if ( nDigits > 9 )
+        nDigits = 9;
+
     International aInter( GetInternational() );
     aInter.SetCurrDigits( nDigits );
     SetInternational( aInter );
