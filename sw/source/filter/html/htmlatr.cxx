@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlatr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-01 19:23:14 $
+ *  last change: $Author: jp $ $Date: 2000-11-13 20:32:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,9 +219,6 @@
 #include <swtable.hxx>
 #endif
 
-#ifndef _WRTTXATR_HXX
-#include <wrttxatr.hxx>
-#endif
 #ifndef _HTMLNUM_HXX
 #include <htmlnum.hxx>
 #endif
@@ -231,7 +228,6 @@
 #ifndef _HTMLFLY_HXX
 #include <htmlfly.hxx>
 #endif
-
 
 /*
  * um nicht immer wieder nach einem Update festzustellen, das irgendwelche
@@ -3090,11 +3086,14 @@ SwAttrFnTab aHTMLAttrFnTab = {
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlatr.cxx,v 1.3 2000-11-01 19:23:14 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlatr.cxx,v 1.4 2000-11-13 20:32:39 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2000/11/01 19:23:14  jp
+      export of mail graphics removed
+
       Revision 1.2  2000/10/20 13:42:43  jp
       use correct INetURL-Decode enum
 
