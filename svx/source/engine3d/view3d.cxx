@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view3d.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:38:23 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 14:29:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -597,9 +597,17 @@ BOOL E3dView::ImpCloneAll3DObjectsToDestScene(E3dScene* pSrcScene, E3dScene* pDs
             if(pObj && pObj->ISA(E3dCompoundObject))
             {
                 // Kopieren
-                E3dObject* pNew = (E3dObject*)pObj->Clone(pDstScene->GetPage(), pDstScene->GetModel());
+                // E3dObject* pNew = (E3dObject*)pObj->Clone(pDstScene->GetPage(), pDstScene->GetModel());
+
+                // #116235#
+                E3dObject* pNew = (E3dObject*)pObj->Clone();
+
                 if(pNew)
                 {
+                    // #116235#
+                    pNew->SetModel(pDstScene->GetModel());
+                    pNew->SetPage(pDstScene->GetPage());
+
                     // Neues Objekt in Szene einfuegen
                     pNew->NbcSetLayer(pObj->GetLayer());
                     pNew->NbcSetStyleSheet(pObj->GetStyleSheet(), sal_True);
