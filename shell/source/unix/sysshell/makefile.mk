@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: tra $ $Date: 2002-07-19 13:29:18 $
+#   last change: $Author: hr $ $Date: 2003-09-29 14:54:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,6 +65,7 @@ PRJ=..$/..$/..
 PRJNAME=SHELL
 TARGET=sysshell
 LIBTARGET=NO
+ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
@@ -73,8 +74,18 @@ LIBTARGET=NO
 # --- Files --------------------------------------------------------
 
 LIB1OBJFILES=$(SLO)$/systemshell.obj
-LIB1TARGET= $(SLB)$/$(TARGET).lib
-LIB1ARCHIV= $(SLB)$/lib$(TARGET).a
+LIB1TARGET=$(SLB)$/$(TARGET).lib
+LIB1ARCHIV=$(SLB)$/lib$(TARGET).a
+
+SLOFILES=$(SLO)$/recently_used_file.obj \
+         $(SLO)$/recently_used_file_handler.obj
+
+SHL1TARGET=recentfile
+SHL1STDLIBS=$(EXPATASCII3RDLIB) $(SALLIB)
+
+SHL1LIBS=$(SLB)$/xmlparser.lib
+SHL1OBJS=$(SLOFILES)
+SHL1VERSIONMAP=recfile.map
 
 # --- Targets ------------------------------------------------------
 
