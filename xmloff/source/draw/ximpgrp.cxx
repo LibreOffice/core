@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpgrp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-02 11:24:54 $
+ *  last change: $Author: cl $ $Date: 2001-04-30 14:29:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,12 +61,24 @@
 
 #pragma hdrstop
 
+#ifndef _XMLOFF_XMLNMSPE_HXX
+#include"xmlnmspe.hxx"
+#endif
+
 #ifndef _XIMPGROUP_HXX
 #include "ximpgrp.hxx"
 #endif
 
+#ifndef _XMLOFF_XMLKYWD_HXX
+#include "xmlkywd.hxx"
+#endif
+
 #ifndef _XIMPSHAPE_HXX
 #include "ximpshap.hxx"
+#endif
+
+#ifndef _XMLOFF_EVENTIMP_HXX
+#include "eventimp.hxx"
 #endif
 
 using namespace ::rtl;
@@ -99,9 +111,16 @@ SvXMLImportContext* SdXMLGroupShapeContext::CreateChildContext( USHORT nPrefix,
 {
     SvXMLImportContext* pContext = 0L;
 
-    // call GroupChildContext function at common ShapeImport
-    pContext = GetImport().GetShapeImport()->CreateGroupChildContext(
-        GetImport(), nPrefix, rLocalName, xAttrList, mxChilds);
+    if( nPrefix == XML_NAMESPACE_OFFICE && rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_events ) ) )
+    {
+        pContext = new SdXMLEventsContext( GetImport(), nPrefix, rLocalName, xAttrList, mxShape );
+    }
+    else
+    {
+        // call GroupChildContext function at common ShapeImport
+        pContext = GetImport().GetShapeImport()->CreateGroupChildContext(
+            GetImport(), nPrefix, rLocalName, xAttrList, mxChilds);
+    }
 
     // call parent when no own context was created
     if(!pContext)
