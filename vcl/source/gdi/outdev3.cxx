@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: th $ $Date: 2001-07-09 22:06:13 $
+ *  last change: $Author: th $ $Date: 2001-07-25 12:53:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1038,17 +1038,18 @@ static void ImplGetMapName( const String& rOrgName,
 
 static char const aImplSubsSansUnicode[] = "andalesansui;arialunicodems;lucidaunicode";
 static char const aImplSubsSans[] = "albany;arial;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussansl;nimbussans";
-static char const aImplSubsSerif[] = "thorndale;timesnewroman;times;timesroman;newyork;timmons;serif;lucidaserif;lucidabright;roman;nimbusromanno9;nimbusromanno9l;bookman;garamond;garamondmt;palatino";
+static char const aImplSubsSerif[] = "thorndale;timesnewroman;times;timesroman;newyork;timmons;serif;lucidaserif;lucidabright;roman;nimbusromanno9;nimbusromanno9l;bookman;itcbookman;garamond;garamondmt;palatino";
 static char const aImplSubsFixed[] = "cumberland;couriernew;courier;lucidatypewriter;lucidasanstypewriter;monaco;monospaced;nimbusmono;nimbusmonol";
-static char const aImplSubsStarSymbol[] = "starsymbol;opensymbol;starbats;wingdings;zapfdingbats;monotypesorts;dingbats;lucidadingbats;lucidasansdingbats;webdings;symbol;standardsymbols;standardsymbolsl";
-static char const aImplSubsDingBats[] = "starsymbol;zapfdingbats;monotypesorts;dingbats;opensymbol";
+static char const aImplSubsStarSymbol[] = "starsymbol;opensymbol;starbats;wingdings;zapfdingbats;itczapfdingbats;monotypesorts;dingbats;lucidadingbats;lucidasansdingbats;webdings;symbol;standardsymbols;standardsymbolsl";
+static char const aImplSubsDingBats[] = "starsymbol;zapfdingbats;itczapfdingbats;monotypesorts;dingbats;opensymbol";
 static char const aImplSubsSymbol[] = "starsymbol;symbol;standardsymbols;standardsymbolsl;mtsymbol;opensymbol";
+static char const aImplSubsWingdings[] = "starsymbol;wingdings;morewingbats;opensymbol";
 
 static char const aImplSubsAndaleSans[] = "andalesans;verdana;trebuchetms";
 static char const aImplSubsSansNarrow[] = "arialnarrow;helveticanarrow;helmetcondensed;nimbussanslcondensed;nimbussanscondensed";
 static char const aImplSubsBroadway[] = "broadway;mtbroadway;broadwaymt";
 static char const aImplSubsComic[] = "comicsansms;kidprint;";
-static char const aImplSubsPalaceScript[] = "palacescript;palacescriptmt;arioso";
+static char const aImplSubsPalaceScript[] = "palacescript;palacescriptmt;arioso;shelley";
 static char const aImplSubsSheffield[] = "sheffield;conga;centurygothic;copperlategothic;felixtitling";
 
 static char const aImplSubsJPGothic[] = "msgothic;mspgothic;hggothic;hggothicb;hggothice;gothic;andalesansui";
@@ -1066,16 +1067,16 @@ static char const aImplSubsSTCKai[] = "kai;simkai;fzkai;zycjkkai;mkai"; // SC an
 static char const aImplSubsKRBatang[] = "hymyeongjolightk;myeongjo;batang;batangche;gungsuh;gungsuhche;myeomjo";
 static char const aImplSubsKRGulim[] = "gulim;gulimche;dotum;dotumche;roundgothic;kodig;andalesansui";
 
-static char const aImplSubsCenturyGothic[] = "centurygothic;avantgarde;gothic;sheffield;conga";
+static char const aImplSubsCenturyGothic[] = "centurygothic;avantgarde;itcavantgarde;gothic;sheffield;conga";
 static char const aImplSubsNewCenturySchoolbook[] = "newcenturyschlbk;newcenturyschoolbook;centuryschoolbook;centuryschoolbookl";
-static char const aImplSubsBookman[] = "bookman;bookmanl;bookmanoldstyle;";
+static char const aImplSubsBookman[] = "bookman;itcbookman;bookmanl;bookmanoldstyle;";
 static char const aImplSubsPalatino[] = "palatino;bookantiqua;palladio;palladiol";
 
 static char const aImplSubsImprintShadow[] = "imprintmtshadow;imprintshadow;imprint;chevaraoutline;chevara;gallia;colonnamt;algerian;castellar";
 static char const aImplSubsOutline[] = "monotypeoldstyleboldoutline;monotypeoldstyleoutline;chevaraoutline;imprintmtshadow;imprintshadow;imprint;colonnamt;castellar";
 static char const aImplSubsShadow[] = "imprintmtshadow;imprintshadow;imprint;chevara;gallia;algerian";
 static char const aImplSubsFalstaff[] = "falstaff;widelatin;latinwide;impact";
-static char const aImplSubsZapfChancery[] = "zapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting";
+static char const aImplSubsZapfChancery[] = "zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting";
 
 
 static char const aImplMSSubsArial[] = "Arial";
@@ -1109,6 +1110,9 @@ struct ImplFontNameAttr
     FontWidth               meWidth;
     ULONG                   mnType;
 };
+
+// Not classified
+// Cloisterblack - old english style - comes with Applixware
 
 // List is sorted alphabetic
 static ImplFontNameAttr const aImplFontNameList[] =
@@ -1241,6 +1245,8 @@ static ImplFontNameAttr const aImplFontNameList[] =
                             WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_BRUSHSCRIPT | IMPL_FONT_ATTR_ITALIC | IMPL_FONT_ATTR_SPECIAL },
 {   "frutiger",             aImplSubsSans, aImplSubsSansUnicode, NULL, NULL, NULL, NULL, NULL,
                             WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
+{   "fujiyama",             aImplSubsSansNarrow, aImplSubsSans, NULL, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_CONDENSED, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SANSSERIF },
 {   "fzhei",                aImplSubsSCHei, aImplSubsSCSun, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
                             WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_SC },
 {   "fzkai",                aImplSubsSCKai, aImplSubsSCFangSong, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
@@ -1293,6 +1299,8 @@ static ImplFontNameAttr const aImplFontNameList[] =
                             WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
 {   "hgmincholightj",       aImplSubsJPMincho, aImplSubsJPGothic, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
                             WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
+{   "holidaypi",            aImplSubsStarSymbol, aImplSubsSansUnicode, NULL, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
 {   "holidays",             aImplSubsStarSymbol, aImplSubsSansUnicode, NULL, NULL, NULL, NULL, NULL,
                             WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
 {   "hymyeongjolightk",     aImplSubsKRBatang, aImplSubsKRGulim, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
@@ -1329,6 +1337,8 @@ static ImplFontNameAttr const aImplFontNameList[] =
                             WEIGHT_NORMAL, WIDTH_CONDENSED, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_SPECIAL },
 {   "lucidabright",         aImplSubsSerif, NULL, NULL, NULL, NULL, aImplPSSubsTimes, aImplHTMLSubsSerif,
                             WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF },
+{   "lucidacalligraphic",   aImplSubsZapfChancery, aImplSubsPalaceScript, aImplSubsComic, NULL, NULL, NULL, aImplHTMLSubsCursive,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_CHANCERY | IMPL_FONT_ATTR_ITALIC },
 {   "lucidacalligraphy",    aImplSubsZapfChancery, aImplSubsPalaceScript, aImplSubsComic, NULL, NULL, NULL, aImplHTMLSubsCursive,
                             WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_CHANCERY | IMPL_FONT_ATTR_ITALIC },
 {   "lucidaconsole",        aImplSubsFixed, NULL, NULL, NULL, NULL, NULL, aImplHTMLSubsMonospace,
@@ -1377,6 +1387,8 @@ static ImplFontNameAttr const aImplFontNameList[] =
                             WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_FIXED },
 {   "monospaced",           aImplSubsFixed, NULL, NULL, NULL, NULL, NULL, aImplHTMLSubsMonospace,
                             WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_FIXED },
+{   "morewingbats",         aImplSubsWingdings, aImplSubsStarSymbol, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
 {   "msgothic",             aImplSubsJPGothic, aImplSubsJPMincho, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
                             WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
 {   "msmincho",             aImplSubsJPMincho, aImplSubsJPGothic, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
@@ -1473,6 +1485,8 @@ static ImplFontNameAttr const aImplFontNameList[] =
                             WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF },
 {   "sheffield",            aImplSubsSheffield, aImplSubsCenturyGothic, aImplSubsSans, NULL, NULL, NULL, NULL,
                             WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_DECORATIVE | IMPL_FONT_ATTR_CAPITALS | IMPL_FONT_ATTR_DEFAULT },
+{   "shelley",              aImplSubsPalaceScript, aImplSubsZapfChancery, aImplSubsComic, NULL, NULL, NULL, aImplHTMLSubsCursive,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_BRUSHSCRIPT | IMPL_FONT_ATTR_ITALIC },
 {   "shusong",              aImplSubsSCSong, aImplSubsSCSun, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
                             WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_SC },
 {   "simhei",               aImplSubsSCHei, aImplSubsSCSun, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
@@ -1483,6 +1497,8 @@ static ImplFontNameAttr const aImplFontNameList[] =
                             WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_SC },
 {   "simsun",               aImplSubsSCSun, aImplSubsSCSong, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
                             WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_SC },
+{   "snowcap",              aImplSubsImprintShadow, aImplSubsOutline, aImplSubsShadow, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_OUTLINE | IMPL_FONT_ATTR_SHADOW | IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_DECORATIVE },
 {   "song",                 aImplSubsSCSong, aImplSubsSCSun, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
                             WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_SC },
 {   "sorts",                aImplSubsDingBats, aImplSubsStarSymbol, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
@@ -1503,6 +1519,10 @@ static ImplFontNameAttr const aImplFontNameList[] =
                             WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
 {   "starsymbol",           "opensymbol", aImplSubsSansUnicode, aImplSubsStarSymbol, NULL, aImplMSSubsArialUnicodeMS, NULL, NULL,
                             WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "swiss",                aImplSubsSans, aImplSubsSansUnicode, NULL, NULL, NULL, NULL, aImplHTMLSubsSansSerif,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
+{   "swissnarrow",          aImplSubsSansNarrow, aImplSubsSans, NULL, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_CONDENSED, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
 {   "symbol",               aImplSubsSymbol, aImplSubsStarSymbol, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
                             WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
 {   "tahoma",               aImplSubsSansUnicode, aImplSubsSans, NULL, NULL, NULL, NULL, NULL,
@@ -1527,6 +1547,8 @@ static ImplFontNameAttr const aImplFontNameList[] =
                             WEIGHT_NORMAL, WIDTH_CONDENSED, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
 {   "utah",                 aImplSubsSans, aImplSubsSansUnicode, NULL, NULL, NULL, NULL, NULL,
                             WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
+{   "utopia",               aImplSubsNewCenturySchoolbook, aImplSubsSerif, NULL, NULL, NULL, NULL, aImplHTMLSubsSerif,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF },
 {   "vacation",             aImplSubsStarSymbol, aImplSubsSansUnicode, NULL, NULL, NULL, NULL, NULL,
                             WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
 {   "verdana",              aImplSubsSans, NULL, NULL, NULL, NULL, NULL, aImplHTMLSubsSansSerif,
@@ -1545,7 +1567,7 @@ static ImplFontNameAttr const aImplFontNameList[] =
                             WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
 {   "widelatin",            aImplSubsFalstaff, aImplSubsBroadway, NULL, NULL, NULL, NULL, NULL,
                             WEIGHT_BLACK, WIDTH_ULTRA_EXPANDED, IMPL_FONT_ATTR_SERIF | IMPL_FONT_ATTR_DECORATIVE | IMPL_FONT_ATTR_SPECIAL },
-{   "wingdings",            aImplSubsStarSymbol, aImplSubsSansUnicode, NULL, NULL, NULL, NULL, NULL,
+{   "wingdings",            aImplSubsWingdings, aImplSubsStarSymbol, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
                             WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
 {   "wingdings2",           aImplSubsStarSymbol, aImplSubsSansUnicode, NULL, NULL, NULL, NULL, NULL,
                             WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
@@ -1553,6 +1575,10 @@ static ImplFontNameAttr const aImplFontNameList[] =
                             WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
 {   "wingdings4",           aImplSubsStarSymbol, aImplSubsSansUnicode, NULL, NULL, NULL, NULL, NULL,
                             WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "zapfcalligraphic",     aImplSubsZapfChancery, aImplSubsPalaceScript, aImplSubsComic, NULL, NULL, NULL, aImplHTMLSubsCursive,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_CHANCERY | IMPL_FONT_ATTR_ITALIC },
+{   "zapfcalligraphy",      aImplSubsZapfChancery, aImplSubsPalaceScript, aImplSubsComic, NULL, NULL, NULL, aImplHTMLSubsCursive,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_CHANCERY | IMPL_FONT_ATTR_ITALIC },
 {   "zapfchancery",         aImplSubsZapfChancery, aImplSubsPalaceScript, aImplSubsComic, NULL, NULL, NULL, NULL,
                             WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_CHANCERY | IMPL_FONT_ATTR_ITALIC },
 {   "zapfdingbats",         aImplSubsDingBats, aImplSubsStarSymbol, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
