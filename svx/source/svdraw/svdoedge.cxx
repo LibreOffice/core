@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoedge.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2000-09-27 14:03:57 $
+ *  last change: $Author: cl $ $Date: 2000-10-27 10:48:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2535,3 +2535,67 @@ Point SdrEdgeObj::GetTailPoint( BOOL bTail ) const
 
 }
 
+/** this method is used by the api to set a glue point for a connection
+    nId == -1 :     The best default point is automaticly choosen
+    0 <= nId <= 3 : One of the default points is choosen
+    nId >= 4 :      A user defined glue point is choosen
+*/
+void SdrEdgeObj::setGluePointIndex( sal_Bool bTail, sal_Int32 nIndex /* = -1 */ )
+{
+    Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetBoundRect();
+    SendRepaintBroadcast();
+
+    SdrObjConnection& rConn1 = GetConnection( bTail );
+
+    rConn1.SetAutoVertex( nIndex >= 0 && nIndex <= 3 );
+    rConn1.SetBestConnection( nIndex < 0 );
+    rConn1.SetBestVertex( nIndex < 0 );
+
+    if( nIndex > 3 )
+    {
+        nIndex -= 4;
+
+        // for user defined glue points we have
+        // to get the id for this index first
+        const SdrGluePointList* pList = rConn1.GetObject() ? rConn1.GetObject()->GetGluePointList() : NULL;
+        if( pList == NULL || nIndex >= pList->GetCount() )
+            return;
+
+        nIndex = (*pList)[nIndex].GetId();
+    }
+    else if( nIndex < 0 )
+    {
+        nIndex = 0;
+    }
+
+    rConn1.SetConnectorId( (USHORT)nIndex );
+
+    SetChanged();
+    SetRectsDirty();
+    ImpRecalcEdgeTrack();
+    bEdgeTrackDirty=TRUE;
+}
+
+/** this method is used by the api to return a glue point id for a connection.
+    See setGluePointId for possible return values */
+sal_Int32 SdrEdgeObj::getGluePointIndex( sal_Bool bTail )
+{
+    SdrObjConnection& rConn1 = GetConnection( bTail );
+    sal_Int32 nId = -1;
+    if( !rConn1.IsBestConnection() )
+    {
+        nId = rConn1.GetConnectorId();
+        if( !rConn1.IsAutoVertex() )
+        {
+            // for user defined glue points we have
+            // to get the index for this id first
+            const SdrGluePointList* pList = rConn1.GetObject() ? rConn1.GetObject()->GetGluePointList() : NULL;
+            if( pList == NULL || nId >= pList->GetCount() )
+                return -1;
+
+            nId = pList->FindGluePoint(nId);
+            nId += 4;
+        }
+    }
+    return nId;
+}
