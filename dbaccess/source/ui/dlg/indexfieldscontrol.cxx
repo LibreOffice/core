@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexfieldscontrol.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-29 08:38:00 $
+ *  last change: $Author: fs $ $Date: 2001-08-06 07:44:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #endif
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
+#endif
+#ifndef _DBA_DBACCESS_HELPID_HRC_
+#include "dbaccess_helpid.hrc"
 #endif
 
 //......................................................................
@@ -156,6 +159,8 @@ namespace dbaui
         ,m_pFieldNameCell(NULL)
         ,m_nMaxColumnsInIndex(_nMaxColumnsInIndex)
     {
+        SetUniqueId( UID_DLGINDEX_INDEXDETAILS_BACK );
+        GetDataWindow().SetUniqueId( UID_DLGINDEX_INDEXDETAILS_MAIN );
     }
 
     //------------------------------------------------------------------
@@ -313,6 +318,9 @@ namespace dbaui
         m_pSortingCell = new ListBoxControl(&GetDataWindow());
         m_pSortingCell->InsertEntry(m_sAscendingText);
         m_pSortingCell->InsertEntry(m_sDescendingText);
+
+        m_pFieldNameCell->SetHelpId( HID_DLGINDEX_INDEXDETAILS_FIELD );
+        m_pSortingCell->SetHelpId( HID_DLGINDEX_INDEXDETAILS_SORTORDER );
     }
 
     //------------------------------------------------------------------
@@ -520,6 +528,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2001/06/29 08:38:00  fs
+ *  #86721# DbBrowseBox replaced by svt::EditBrowseBox
+ *
  *  Revision 1.5  2001/05/02 11:48:41  fs
  *  #86450# disable m_nMaxColumnsIndex for the moment - need more comprehensive handling for this
  *
