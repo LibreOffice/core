@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.5 $
+#  $Revision: 1.6 $
 #
-#  last change: $Author: rt $ $Date: 2005-01-31 16:23:34 $
+#  last change: $Author: rt $ $Date: 2005-03-29 12:09:50 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -140,20 +140,20 @@ DrawingExamples : $(APP1_JAR) $(APP2_JAR) $(APP3_JAR) $(APP4_JAR) $(APP5_JAR) $(
 	@echo --------------------------------------------------------------------------------
 	@echo Please use one of the following commands to execute the examples!
 	@echo -
-	@echo make $(APP1_NAME).run
-	@echo make $(APP2_NAME).run
-	@echo make $(APP3_NAME).run
-	@echo make $(APP4_NAME).run
-	@echo make $(APP5_NAME).run
-	@echo make $(APP6_NAME).run
-	@echo make $(APP7_NAME).run
-	@echo make $(APP8_NAME).run
-	@echo make $(APP9_NAME).run
-	@echo make $(APP10_NAME).run
-	@echo make $(APP11_NAME).run
-	@echo make $(APP12_NAME).run
-	@echo make $(APP13_NAME).run
-	@echo make $(APP14_NAME).run
+	@echo $(MAKE) $(APP1_NAME).run
+	@echo $(MAKE) $(APP2_NAME).run
+	@echo $(MAKE) $(APP3_NAME).run
+	@echo $(MAKE) $(APP4_NAME).run
+	@echo $(MAKE) $(APP5_NAME).run
+	@echo $(MAKE) $(APP6_NAME).run
+	@echo $(MAKE) $(APP7_NAME).run
+	@echo $(MAKE) $(APP8_NAME).run
+	@echo $(MAKE) $(APP9_NAME).run
+	@echo $(MAKE) $(APP10_NAME).run
+	@echo $(MAKE) $(APP11_NAME).run
+	@echo $(MAKE) $(APP12_NAME).run
+	@echo $(MAKE) $(APP13_NAME).run
+	@echo $(MAKE) $(APP14_NAME).run
 	@echo --------
 	@echo The $(APP5_NAME) and the $(APP8_NAME) needs parameters. Please use the
 	@echo following command to start the demo if you do not want the default parameters

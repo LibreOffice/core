@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.5 $
+#  $Revision: 1.6 $
 #
-#  last change: $Author: rt $ $Date: 2005-01-31 16:19:45 $
+#  last change: $Author: rt $ $Date: 2005-03-29 12:09:35 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -127,9 +127,9 @@ $(EXAMPLE_NAME) : $(APP1_JAR) $(APP2_JAR) $(APP3_JAR)
 	@echo have created such a database and have established a connection to it.
 	@echo Please use one of the following commands to execute the examples!
 	@echo -
-	@echo make CodeSamples.run
-	@echo make OpenQuery.run
-	@echo make RowSet.run
+	@echo $(MAKE) CodeSamples.run
+	@echo $(MAKE) OpenQuery.run
+	@echo $(MAKE) RowSet.run
 	@echo --------------------------------------------------------------------------------
 
 %.run: $(OUT_APP_CLASS)/%.jar
