@@ -2,9 +2,9 @@
  *
  *  $RCSfile: button.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 16:19:40 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 12:12:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,15 +207,7 @@ Button::~Button()
 
 void Button::Click()
 {
-    ImplDelData aDelData;
-    ImplAddDel( &aDelData );
-    ImplCallEventListeners( VCLEVENT_BUTTON_CLICK );
-    if ( !aDelData.IsDelete() )
-    {
-        maClickHdl.Call( this );
-        if ( !aDelData.IsDelete() )
-            ImplRemoveDel( &aDelData );
-    }
+    ImplCallEventListenersAndHandler( VCLEVENT_BUTTON_CLICK, maClickHdl, this );
 }
 
 // -----------------------------------------------------------------------
@@ -1804,8 +1796,7 @@ long PushButton::PreNotify( NotifyEvent& rNEvt )
 
 void PushButton::Toggle()
 {
-    ImplCallEventListeners( VCLEVENT_PUSHBUTTON_TOGGLE );
-    maToggleHdl.Call( this );
+    ImplCallEventListenersAndHandler( VCLEVENT_PUSHBUTTON_TOGGLE, maToggleHdl, this );
 }
 
 // -----------------------------------------------------------------------
@@ -2907,8 +2898,7 @@ long RadioButton::PreNotify( NotifyEvent& rNEvt )
 
 void RadioButton::Toggle()
 {
-    ImplCallEventListeners( VCLEVENT_RADIOBUTTON_TOGGLE );
-    maToggleHdl.Call( this );
+    ImplCallEventListenersAndHandler( VCLEVENT_RADIOBUTTON_TOGGLE, maToggleHdl, this );
 }
 
 // -----------------------------------------------------------------------
@@ -3751,8 +3741,7 @@ long CheckBox::PreNotify( NotifyEvent& rNEvt )
 
 void CheckBox::Toggle()
 {
-    ImplCallEventListeners( VCLEVENT_CHECKBOX_TOGGLE );
-    maToggleHdl.Call( this );
+    ImplCallEventListenersAndHandler( VCLEVENT_CHECKBOX_TOGGLE, maToggleHdl, this );
 }
 
 // -----------------------------------------------------------------------
