@@ -2,9 +2,9 @@
  *
  *  $RCSfile: embeddedobjectcontainer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 15:35:58 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 17:12:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,6 +205,27 @@ EmbeddedObjectContainer::~EmbeddedObjectContainer()
     delete pImpl;
 }
 
+void EmbeddedObjectContainer::CloseEmbeddedObjects()
+{
+    EmbeddedObjectContainerNameMap::iterator aIt = pImpl->maObjectContainer.begin();
+    while ( aIt != pImpl->maObjectContainer.end() )
+    {
+        uno::Reference < util::XCloseable > xClose( (*aIt).second, uno::UNO_QUERY );
+        if ( xClose.is() )
+        {
+            try
+            {
+                xClose->close( sal_True );
+            }
+            catch ( uno::Exception& )
+            {
+            }
+        }
+
+        aIt++;
+    }
+}
+
 ::rtl::OUString EmbeddedObjectContainer::CreateUniqueObjectName()
 {
     ::rtl::OUString aPersistName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Object ") );
@@ -319,10 +340,6 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::GetEmbeddedOb
             // insert object into my list
             AddEmbeddedObject( xObj, rName );
         }
-
-        // TODO/LATER: necessary optimization: running state should not be required
-        if ( xObj.is() && xObj->getCurrentState() == embed::EmbedStates::LOADED )
-            xObj->changeState( embed::EmbedStates::RUNNING );
     }
     catch ( uno::Exception& )
     {
@@ -351,7 +368,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CreateEmbedde
 
         AddEmbeddedObject( xObj, rNewName );
 
-        // TODO/LATER: necessary optimization: running state should not be required
+        // a freshly created object should be running always
         if ( xObj.is() && xObj->getCurrentState() == embed::EmbedStates::LOADED )
             xObj->changeState( embed::EmbedStates::RUNNING );
     }
@@ -512,9 +529,12 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbedde
     uno::Reference < embed::XEmbeddedObject > xRet = GetEmbeddedObject( rNewName );
     try
     {
-        // no object could be created, so withdraw insertion
-        if ( !xRet.is() )
+        if ( xRet.is() )
+            // no object could be created, so withdraw insertion
             pImpl->mxStorage->removeElement( rNewName );
+        else
+            // freshly created objects always should be running!
+            xRet->changeState( embed::EmbedStates::RUNNING );
     }
     catch ( uno::Exception& )
     {
@@ -536,6 +556,9 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbedde
         xObj = uno::Reference < embed::XEmbeddedObject >( xFactory->createInstanceInitFromMediaDescriptor(
                 pImpl->mxStorage, rNewName, aMedium, uno::Sequence < beans::PropertyValue >() ), uno::UNO_QUERY );
         uno::Reference < embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
+
+        // freshly created objects always should be running!
+        xObj->changeState( embed::EmbedStates::RUNNING );
 
         // possible optimization: store later!
         if ( xPersist.is())
@@ -563,7 +586,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbedde
         xObj = uno::Reference < embed::XEmbeddedObject >( xFactory->createInstanceLink(
                 pImpl->mxStorage, rNewName, aMedium, uno::Sequence < beans::PropertyValue >() ), uno::UNO_QUERY );
 
-        // TODO/LATER: necessary optimization: running state should not be required
+        // a freshly created object should be in running state
         if ( xObj.is() && xObj->getCurrentState() == embed::EmbedStates::LOADED )
         {
             uno::Sequence< sal_Int32 > aSupportedStates = xObj->getReachableStates();
@@ -584,16 +607,59 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbedde
     return xObj;
 }
 
-uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CopyEmbeddedObject( const uno::Reference < embed::XEmbeddedObject >& xObj, ::rtl::OUString& rName )
+sal_Bool EmbeddedObjectContainer::CopyEmbeddedObject( const uno::Reference < embed::XEmbeddedObject >& xObj, ::rtl::OUString& rName )
 {
-    uno::Reference < embed::XEmbeddedObject > xRet;
     if ( !rName.getLength() )
         rName = CreateUniqueObjectName();
 
-    if ( StoreEmbeddedObject( xObj, rName, sal_True ) )
-        // create an object from it
-        xRet = GetEmbeddedObject( rName );
-    return xRet;
+    return StoreEmbeddedObject( xObj, rName, sal_True );
+}
+
+sal_Bool EmbeddedObjectContainer::MoveEmbeddedObject( EmbeddedObjectContainer& rSrc, const uno::Reference < embed::XEmbeddedObject >& xObj, ::rtl::OUString& rName )
+{
+    // get the object name before(!) it is assigned to a new storage
+    uno::Reference < embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
+    ::rtl::OUString aName;
+    if ( xPersist.is() )
+        aName = xPersist->getEntryName();
+
+    // now move the object to the new container; the returned name is the new persist name in this container
+    sal_Bool bRet = InsertEmbeddedObject( xObj, rName );
+    if ( bRet )
+    {
+        // now remove the object from the former container
+        bRet = sal_False;
+        EmbeddedObjectContainerNameMap::iterator aIt = rSrc.pImpl->maObjectContainer.begin();
+        while ( aIt != rSrc.pImpl->maObjectContainer.end() )
+        {
+            if ( (*aIt).second == xObj )
+            {
+                rSrc.pImpl->maObjectContainer.erase( aIt );
+                bRet = sal_True;
+                break;
+            }
+
+            aIt++;
+        }
+
+        OSL_ENSURE( bRet, "Object not found for removal!" );
+        if ( xPersist.is() )
+        {
+            // now it's time to remove the storage from the container storage
+            try
+            {
+                if ( xPersist.is() )
+                    rSrc.pImpl->mxStorage->removeElement( aName );
+            }
+            catch ( uno::Exception& )
+            {
+                OSL_ENSURE( sal_False, "Failed to remove object from storage!" );
+                bRet = sal_False;
+            }
+        }
+    }
+
+    return bRet;
 }
 
 sal_Bool EmbeddedObjectContainer::RemoveEmbeddedObject( const ::rtl::OUString& rName, sal_Bool bClose )
@@ -637,8 +703,9 @@ sal_Bool EmbeddedObjectContainer::MoveEmbeddedObject( const ::rtl::OUString& rNa
                 uno::Reference < embed::XStorage > xOld = pImpl->mxStorage->openStorageElement( rName, embed::ElementModes::READ );
                 uno::Reference < embed::XStorage > xNew = rCnt.pImpl->mxStorage->openStorageElement( rName, embed::ElementModes::READWRITE );
                 xOld->copyToStorage( xNew );
-                return sal_True;
             }
+
+            return sal_True;
         }
         catch ( uno::Exception& )
         {
@@ -739,9 +806,6 @@ sal_Bool EmbeddedObjectContainer::RemoveEmbeddedObject( const uno::Reference < e
             else
                 // objects without persistence need to stay in running state if they shall not be closed
                 xObj->changeState( embed::EmbedStates::RUNNING );
-
-            // remove replacement image (if there is one)
-            RemoveGraphicStream( aName );
         }
         catch ( uno::Exception& )
         {
@@ -749,18 +813,6 @@ sal_Bool EmbeddedObjectContainer::RemoveEmbeddedObject( const uno::Reference < e
         }
     }
 
-    // now it's time to remove the storage from the container storage
-    try
-    {
-        if ( xPersist.is() )
-            pImpl->mxStorage->removeElement( aName );
-    }
-    catch ( uno::Exception& )
-    {
-        return sal_False;
-    }
-
-    // forget object
     sal_Bool bFound = sal_False;
     EmbeddedObjectContainerNameMap::iterator aIt = pImpl->maObjectContainer.begin();
     while ( aIt != pImpl->maObjectContainer.end() )
@@ -771,11 +823,28 @@ sal_Bool EmbeddedObjectContainer::RemoveEmbeddedObject( const uno::Reference < e
             bFound = sal_True;
             break;
         }
-        else
-            aIt++;
+
+        aIt++;
     }
 
-    OSL_ENSURE( bFound, "Removing unknown object!" );
+    OSL_ENSURE( bFound, "Object not found for removal!" );
+    if ( xPersist.is() )
+    {
+        // remove replacement image (if there is one)
+        RemoveGraphicStream( aName );
+
+        // now it's time to remove the storage from the container storage
+        try
+        {
+            if ( xPersist.is() )
+                pImpl->mxStorage->removeElement( aName );
+        }
+        catch ( uno::Exception& )
+        {
+            OSL_ENSURE( sal_False, "Failed to remove object from storage!" );
+            return sal_False;
+        }
+    }
 
     return sal_True;
 }
