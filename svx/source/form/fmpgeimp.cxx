@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmpgeimp.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-18 10:00:50 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 18:56:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,18 +179,18 @@ DBG_NAME(FmFormPageImpl);
 FmFormPageImpl::FmFormPageImpl(FmFormPage* _pPage)
                :pPage(_pPage)
                ,m_bFirstActivation( sal_True )
+               ,m_bAttemptedFormCreation( sal_False )
 {
     DBG_CTOR(FmFormPageImpl,NULL);
-    Init();
 }
 
 //------------------------------------------------------------------------------
 FmFormPageImpl::FmFormPageImpl(FmFormPage* _pPage, const FmFormPageImpl& rImpl)
                :pPage(_pPage)
                ,m_bFirstActivation( sal_True )
+               ,m_bAttemptedFormCreation( sal_False )
 {
     DBG_CTOR(FmFormPageImpl,NULL);
-    Init();
 
     // copy it by streaming
     // creating a pipe
@@ -232,27 +232,38 @@ FmFormPageImpl::FmFormPageImpl(FmFormPage* _pPage, const FmFormPageImpl& rImpl)
 }
 
 //------------------------------------------------------------------------------
-void FmFormPageImpl::Init()
+const Reference< XNameContainer >& FmFormPageImpl::getForms( bool _bForceCreate )
 {
-    if (pPage)
+    if ( m_xForms.is() || !_bForceCreate )
+        return m_xForms;
+
+    if ( !m_bAttemptedFormCreation )
     {
-        FmFormModel* pDrawModel = (FmFormModel*)pPage->GetModel();
-        SfxObjectShell* pObjShell = pDrawModel->GetObjectShell();
-        if( pObjShell )
-            xModel = pObjShell->GetModel();
+        m_bAttemptedFormCreation = sal_True;
+
+        const ::rtl::OUString sFormsCollectionServiceName = ::rtl::OUString::createFromAscii("com.sun.star.form.Forms");
+        m_xForms = Reference< XNameContainer > (
+            ::comphelper::getProcessServiceFactory()->createInstance( sFormsCollectionServiceName ),
+            UNO_QUERY
+        );
+        DBG_ASSERT( m_xForms.is(), "FmFormPageImpl::getForms: could not create a forms collection!" );
+
+        FmFormModel* pFormsModel = pPage ? PTR_CAST( FmFormModel, pPage->GetModel() ) : NULL;
+
+        // give the newly created collection a place in the universe
+        Reference< XChild > xAsChild( m_xForms, UNO_QUERY );
+        if ( xAsChild.is() )
+        {
+            SfxObjectShell* pObjShell = pFormsModel ? pFormsModel->GetObjectShell() : NULL;
+            if ( pObjShell )
+                xAsChild->setParent( pObjShell->GetModel() );
+        }
+
+        // tell the UNDO environment that we have a new forms collection
+        if ( pFormsModel )
+            pFormsModel->GetUndoEnv().AddForms( m_xForms );
     }
-
-    static const ::rtl::OUString sFormsCollectionServiceName = ::rtl::OUString::createFromAscii("com.sun.star.form.Forms");
-    xForms = Reference< ::com::sun::star::container::XNameContainer > (
-        ::comphelper::getProcessServiceFactory()->createInstance(
-        sFormsCollectionServiceName), ::com::sun::star::uno::UNO_QUERY);
-    DBG_ASSERT(xForms.is(), "FmFormPageImpl::Init : could not create a forms collection !");
-    if (!xForms.is())
-        ShowServiceNotAvailableError(NULL, sFormsCollectionServiceName, sal_True);
-
-    Reference< ::com::sun::star::container::XChild >  xAsChild(xForms, UNO_QUERY);
-    if (xAsChild.is())
-        xAsChild->setParent( xModel );
+    return m_xForms;
 }
 
 //------------------------------------------------------------------------------
@@ -260,7 +271,7 @@ FmFormPageImpl::~FmFormPageImpl()
 {
     xCurrentForm = NULL;
 
-    ::comphelper::disposeComponent(xForms);
+    ::comphelper::disposeComponent( m_xForms );
     DBG_DTOR(FmFormPageImpl,NULL);
 }
 
@@ -289,6 +300,8 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::getDefaultForm()
 
     try
     {
+        Reference< XNameContainer > xForms( getForms() );
+
         validateCurForm();
 
         // wenn noch kein TargetForm gefunden, dann aktuelle oder Default
@@ -397,7 +410,7 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::placeInFormComponent
         // erst in der aktuellen form suchen
         xForm = findFormForDataSource( xCurrentForm, rDatabase, rCursorSource, nCommandType );
 
-        Reference< ::com::sun::star::container::XIndexAccess >  xFormsByIndex(xForms, UNO_QUERY);
+        Reference< ::com::sun::star::container::XIndexAccess >  xFormsByIndex( getForms(), UNO_QUERY );
         DBG_ASSERT(xFormsByIndex.is(), "FmFormPageImpl::placeInFormComponentHierarchy : no index access for my forms collection !");
         sal_Int32 nCount = xFormsByIndex->getCount();
         for (sal_Int32 i = 0; !xForm.is() && i < nCount; i++)
@@ -433,7 +446,7 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::placeInFormComponent
             xSet->setPropertyValue(FM_PROP_COMMAND,makeAny(rCursorSource));
             xSet->setPropertyValue(FM_PROP_COMMANDTYPE, makeAny(nCommandType));
 
-            Reference< ::com::sun::star::container::XNameAccess >  xNamedSet(xForms, UNO_QUERY);
+            Reference< ::com::sun::star::container::XNameAccess >  xNamedSet( getForms(), UNO_QUERY );
             ::rtl::OUString aName;
 
             if ((CommandType::TABLE == nCommandType) || (CommandType::QUERY == nCommandType))
@@ -447,7 +460,7 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::placeInFormComponent
 
             xSet->setPropertyValue(FM_PROP_NAME, makeAny(aName));
 
-            Reference< ::com::sun::star::container::XIndexContainer >  xContainer(xForms, UNO_QUERY);
+            Reference< ::com::sun::star::container::XIndexContainer >  xContainer( getForms(), UNO_QUERY );
             pModel->AddUndo(new FmUndoContainerAction(*(FmFormModel*)pModel,
                                                      FmUndoContainerAction::Inserted,
                                                      xContainer,
@@ -455,7 +468,7 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::placeInFormComponent
                                                      xContainer->getCount()));
 
 
-            xForms->insertByName(aName, makeAny(xForm));
+            getForms()->insertByName(aName, makeAny(xForm));
             pModel->EndUndo();
         }
         xCurrentForm = xForm;
@@ -688,7 +701,7 @@ void FmFormPageImpl::write(const Reference< ::com::sun::star::io::XObjectOutputS
     fillList(aList, *pPage, sal_True);
 
     // schreiben aller forms
-    Reference< ::com::sun::star::io::XPersistObject >  xAsPersist(xForms, UNO_QUERY);
+    Reference< ::com::sun::star::io::XPersistObject >  xAsPersist( const_cast< FmFormPageImpl* >( this )->getForms(), UNO_QUERY);
     if (xAsPersist.is())
         xAsPersist->write(xOutStrm);
         // don't use the writeObject of the stream, as this wouldn't be compatible with older documents
@@ -725,7 +738,7 @@ void FmFormPageImpl::read(const Reference< ::com::sun::star::io::XObjectInputStr
     fillList(aList, *pPage, sal_False);
 
     // lesen aller forms
-    Reference< ::com::sun::star::io::XPersistObject >  xAsPersist(xForms, UNO_QUERY);
+    Reference< ::com::sun::star::io::XPersistObject >  xAsPersist( getForms(), UNO_QUERY );
     if (xAsPersist.is())
         xAsPersist->read(xInStrm);
         // don't use the readObject of the stream, as this wouldn't be compatible with older documents
