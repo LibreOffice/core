@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 09:30:19 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:15:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,12 +202,8 @@ void ScDrawView::AddCustomHdl()
             if(nCol > 0)
                 --nCol;
 
-            SCROW nRow;
-            INT32 nHeight = 0;
-
-            for(nRow=0; nRow<=MAXROW && nHeight<=nPosY; nRow++)
-                nHeight += pDoc->FastGetRowHeight(nRow,nTab);
-
+            SCROW nRow = nPosY <= 0 ? 0 : pDoc->FastGetRowForHeight( nTab,
+                    (ULONG) nPosY);
             if(nRow > 0)
                 --nRow;
 
