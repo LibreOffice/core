@@ -2,9 +2,9 @@
  *
  *  $RCSfile: property.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 15:57:53 $
+ *  last change: $Author: hr $ $Date: 2004-10-13 08:20:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,6 +229,7 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
             ImplPropertyInfo( ::rtl::OUString::createFromAscii( "MouseTransparent" ),   BASEPROPERTY_MOUSETRANSPARENT,  ::getBooleanCppuType(),         ::com::sun::star::beans::PropertyAttribute::BOUND ),
             ImplPropertyInfo( ::rtl::OUString::createFromAscii( "MultiLine" ),          BASEPROPERTY_MULTILINE,         ::getBooleanCppuType(),         ::com::sun::star::beans::PropertyAttribute::BOUND|::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT ),
             ImplPropertyInfo( ::rtl::OUString::createFromAscii( "MultiSelection" ),     BASEPROPERTY_MULTISELECTION,    ::getBooleanCppuType(),         ::com::sun::star::beans::PropertyAttribute::BOUND|::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT ),
+            ImplPropertyInfo( ::rtl::OUString::createFromAscii( "NativeWidgetLook" ),   BASEPROPERTY_NATIVE_WIDGET_LOOK,::getBooleanCppuType(),         ::com::sun::star::beans::PropertyAttribute::BOUND|::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT ),
             ImplPropertyInfo( ::rtl::OUString::createFromAscii( "Orientation" ),        BASEPROPERTY_ORIENTATION,       ::getCppuType((const sal_Int32*)0),     ::com::sun::star::beans::PropertyAttribute::BOUND|::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT ),
              ImplPropertyInfo( ::rtl::OUString::createFromAscii( "PluginParent" ),      BASEPROPERTY_PLUGINPARENT,  ::getCppuType((const sal_Int64*)0), ::com::sun::star::beans::PropertyAttribute::BOUND|::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT ),
             ImplPropertyInfo( ::rtl::OUString::createFromAscii( "PrependCurrencySymbol" ),  BASEPROPERTY_CURSYM_POSITION,   ::getBooleanCppuType(),     ::com::sun::star::beans::PropertyAttribute::BOUND|::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT ),
