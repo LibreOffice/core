@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdtreelb.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-04-04 16:37:40 $
+ *  last change: $Author: ka $ $Date: 2001-10-22 13:22:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@ class SdDrawDocument;
 class SfxMedium;
 class SfxViewFrame;
 class SdNavigatorWin;
+class SdrObject;
 
 /*************************************************************************
 |*
@@ -156,8 +157,11 @@ protected:
     virtual sal_Int8        ExecuteDrop( const ExecuteDropEvent& rEvt );
 
     virtual void            RequestingChilds( SvLBoxEntry* pParent );
+
     void                    DoDrag();
     void                    DragFinished( sal_uInt8 nDropAction );
+
+    String                  GetObjectName( const SdrObject* pObj ) const;
 
                             DECL_STATIC_LINK(SdPageObjsTLB, ExecDragHdl, void*);
 

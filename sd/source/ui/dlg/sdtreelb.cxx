@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdtreelb.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: thb $ $Date: 2001-10-18 14:42:07 $
+ *  last change: $Author: ka $ $Date: 2001-10-22 13:23:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@
 #endif
 #ifndef _SOT_FORMATS_HXX //autogen
 #include <sot/formats.hxx>
+#endif
+#ifndef _SVDOOLE2_HXX //autogen
+#include <svx/svdoole2.hxx>
 #endif
 
 #include "strmname.h"
@@ -168,6 +171,27 @@ SdPageObjsTLB::SdPageObjsTLB( Window* pParentWin, const SdResId& rSdResId,
 SdPageObjsTLB::~SdPageObjsTLB()
 {
     CloseBookmarkDoc();
+}
+
+/*************************************************************************
+|*
+|* return name of object
+|*
+\************************************************************************/
+
+String SdPageObjsTLB::GetObjectName( const SdrObject* pObj ) const
+{
+    String aRet;
+
+    if( pObj )
+    {
+        aRet = pObj->GetName();
+
+        if( !aRet.Len() && pObj->ISA( SdrOle2Obj ) )
+            aRet = static_cast< const SdrOle2Obj* >( pObj )->GetPersistName();
+    }
+
+    return aRet;
 }
 
 /*************************************************************************
@@ -287,7 +311,7 @@ void SdPageObjsTLB::Fill( const SdDrawDocument* pInDoc, BOOL bAllPages,
             while( aIter.IsMore() )
             {
                 pObj = aIter.Next();
-                String aStr( pObj->GetName() );
+                String aStr( GetObjectName( pObj ) );
                 if( aStr.Len() )
                 {
                     if( pObj->GetObjInventor() == SdrInventor &&
@@ -325,7 +349,7 @@ void SdPageObjsTLB::Fill( const SdDrawDocument* pInDoc, BOOL bAllPages,
             while( aIter.IsMore() )
             {
                 pObj = aIter.Next();
-                String aStr( pObj->GetName() );
+                String aStr( GetObjectName( pObj ) );
                 if( aStr.Len() )
                 {
                     if( pObj->GetObjInventor() == SdrInventor &&
@@ -423,13 +447,17 @@ BOOL SdPageObjsTLB::IsEqualToDoc( const SdDrawDocument* pInDoc )
             while( aIter.IsMore() )
             {
                 pObj = aIter.Next();
-                if( pObj->GetName().Len() )
+
+                const String aObjectName( GetObjectName( pObj ) );
+
+                if( aObjectName.Len() )
                 {
                     if( !pEntry )
                         return( FALSE );
+
                     aName = GetEntryText( pEntry );
 
-                    if( pObj->GetName() != aName )
+                    if( aObjectName != aName )
                         return( FALSE );
 
                     pEntry = Next( pEntry );
@@ -521,7 +549,7 @@ List* SdPageObjsTLB::GetBookmarkList( USHORT nType )
                 while( aIter.IsMore() )
                 {
                     SdrObject* pObj = aIter.Next();
-                    String aStr( pObj->GetName() );
+                    String aStr( GetObjectName( pObj ) );
                     if( aStr.Len() )
                     {
                         if( !pList )
@@ -544,7 +572,7 @@ List* SdPageObjsTLB::GetBookmarkList( USHORT nType )
 |*
 \************************************************************************/
 
-void __EXPORT SdPageObjsTLB::RequestingChilds( SvLBoxEntry* pFileEntry )
+void SdPageObjsTLB::RequestingChilds( SvLBoxEntry* pFileEntry )
 {
     if( !pFileEntry->HasChilds() )
     {
@@ -579,7 +607,7 @@ void __EXPORT SdPageObjsTLB::RequestingChilds( SvLBoxEntry* pFileEntry )
                     while( aIter.IsMore() )
                     {
                         pObj = aIter.Next();
-                        String aStr( pObj->GetName() );
+                        String aStr( GetObjectName( pObj ) );
                         if( aStr.Len() )
                         {
                             if( pObj->GetObjInventor() == SdrInventor &&
