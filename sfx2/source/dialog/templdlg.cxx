@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-10 08:32:26 $
+ *  last change: $Author: pb $ $Date: 2001-07-10 08:57:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -505,7 +505,7 @@ BOOL StyleTreeListBox_Impl::NotifyMoving(SvLBoxEntry*  pTarget,
     rpNewParent = pTarget;
     lPos=0;
     IntlWrapper aIntlWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
-    const CollatorWrapper* pCollator = aIntlWrapper.getCollator();
+    const CollatorWrapper* pCollator = aIntlWrapper.getCaseCollator();
     for(SvLBoxEntry *pTmpEntry=FirstChild(pTarget);
         pTmpEntry && COMPARE_LESS==pCollator->compareString(
             GetEntryText(pTmpEntry),GetEntryText(pEntry));
@@ -647,7 +647,7 @@ StyleTreeArr_Impl &MakeTree_Impl(StyleTreeArr_Impl &rArr)
                     // initial sortiert einfuegen
                     USHORT ii;
                     IntlWrapper aIntlWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
-                    const CollatorWrapper* pCollator = aIntlWrapper.getCollator();
+                    const CollatorWrapper* pCollator = aIntlWrapper.getCaseCollator();
                     for ( ii = 0;
                          ii < pCmp->Count() && COMPARE_LESS ==
                          pCollator->compareString( (*pCmp->pChilds)[ii]->aName,
