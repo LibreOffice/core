@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BTable.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-26 07:43:28 $
+ *  last change: $Author: oj $ $Date: 2002-03-21 13:40:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,7 +297,12 @@ void SAL_CALL OAdabasTable::rename( const ::rtl::OUString& newName ) throw(SQLEx
     OSL_ENSURE(xMeta.is(),"No Metadata!");
     if(!isNew())
     {
-        ::rtl::OUString sSql   = ::rtl::OUString::createFromAscii("RENAME TABLE ");
+        ::rtl::OUString sSql = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RENAME "));
+        if ( m_Type == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VIEW")) )
+            sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" VIEW "));
+        else
+            sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" TABLE "));
+
         ::rtl::OUString sQuote = xMeta->getIdentifierQuoteString(  );
         const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
 
