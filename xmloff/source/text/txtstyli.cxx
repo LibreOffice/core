@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtstyli.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 13:40:03 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:42:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,6 +172,10 @@ void XMLTextStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
             sMasterPageName = rValue;
             bHasMasterPageName = sal_True;
         }
+        else if( IsXMLToken( rLocalName, XML_DATA_STYLE_NAME ) )
+        {
+            sDataStyleName = rValue;
+        }
         else if( IsXMLToken( rLocalName, XML_CLASS ) )
         {
             sCategoryVal = rValue;
@@ -219,20 +223,30 @@ SvXMLImportContext *XMLTextStyleContext::CreateChildContext(
 {
     SvXMLImportContext *pContext = 0;
 
-    if( XML_NAMESPACE_STYLE == nPrefix &&
-        IsXMLToken( rLocalName, XML_PROPERTIES ) )
+    if( XML_NAMESPACE_STYLE == nPrefix )
     {
-        UniReference < SvXMLImportPropertyMapper > xImpPrMap =
-            GetStyles()->GetImportPropertyMapper( GetFamily() );
-        if( xImpPrMap.is() )
-            pContext = new XMLTextPropertySetContext( GetImport(), nPrefix,
-                                                    rLocalName, xAttrList,
-                                                    GetProperties(),
-                                                    xImpPrMap,
-                                                    sDropCapTextStyleName );
+        sal_uInt32 nFamily = 0;
+        if( IsXMLToken( rLocalName, XML_TEXT_PROPERTIES ) )
+            nFamily = XML_TYPE_PROP_TEXT;
+        else if( IsXMLToken( rLocalName, XML_PARAGRAPH_PROPERTIES ) )
+            nFamily = XML_TYPE_PROP_PARAGRAPH;
+        else if( IsXMLToken( rLocalName, XML_SECTION_PROPERTIES ) )
+            nFamily = XML_TYPE_PROP_SECTION;
+        if( nFamily )
+        {
+            UniReference < SvXMLImportPropertyMapper > xImpPrMap =
+                GetStyles()->GetImportPropertyMapper( GetFamily() );
+            if( xImpPrMap.is() )
+                pContext = new XMLTextPropertySetContext( GetImport(), nPrefix,
+                                                        rLocalName, xAttrList,
+                                                        nFamily,
+                                                        GetProperties(),
+                                                        xImpPrMap,
+                                                        sDropCapTextStyleName );
+        }
     }
     else if ( (XML_NAMESPACE_OFFICE == nPrefix) &&
-              IsXMLToken( rLocalName, XML_EVENTS ) )
+              IsXMLToken( rLocalName, XML_EVENT_LISTENERS ) )
     {
         // create and remember events import context
         // (for delayed processing of events)
@@ -320,45 +334,56 @@ void XMLTextStyleContext::Finish( sal_Bool bOverwrite )
 
     if( sListStyleName.getLength() )
     {
+        // change list style name to display name
+        OUString sDisplayListStyleName(
+            GetImport().GetStyleDisplayName( XML_STYLE_FAMILY_TEXT_LIST,
+                                          sListStyleName ) );
         // The families cointaner must exist
         const Reference < XNameContainer >& rNumStyles =
             GetImport().GetTextImport()->GetNumberingStyles();
-        if( rNumStyles.is() && rNumStyles->hasByName( sListStyleName ) &&
+        if( rNumStyles.is() && rNumStyles->hasByName( sDisplayListStyleName ) &&
             xPropSetInfo->hasPropertyByName( sNumberingStyleName ) )
         {
             Any aAny;
-            aAny <<= sListStyleName;
+            aAny <<= sDisplayListStyleName;
             xPropSet->setPropertyValue( sNumberingStyleName, aAny );
         }
     }
 
     if( sDropCapTextStyleName.getLength() )
     {
+        // change list style name to display name
+        OUString sDisplayDropCapTextStyleName(
+            GetImport().GetStyleDisplayName( XML_STYLE_FAMILY_TEXT_TEXT,
+                                          sDropCapTextStyleName ) );
         // The families cointaner must exist
         const Reference < XNameContainer >& rTextStyles =
             GetImport().GetTextImport()->GetTextStyles();
         if( rTextStyles.is() &&
-            rTextStyles->hasByName( sDropCapTextStyleName ) &&
+            rTextStyles->hasByName( sDisplayDropCapTextStyleName ) &&
             xPropSetInfo->hasPropertyByName( sDropCapCharStyleName ) )
         {
             Any aAny;
-            aAny <<= sDropCapTextStyleName;
+            aAny <<= sDisplayDropCapTextStyleName;
             xPropSet->setPropertyValue( sDropCapCharStyleName, aAny );
         }
     }
 
     if( bHasMasterPageName )
     {
+        OUString sDisplayName(
+            GetImport().GetStyleDisplayName(
+                            XML_STYLE_FAMILY_MASTER_PAGE, sMasterPageName ) );
         // The families cointaner must exist
         const Reference < XNameContainer >& rPageStyles =
             GetImport().GetTextImport()->GetPageStyles();
-        if( ( !sMasterPageName.getLength() ||
+        if( ( !sDisplayName.getLength() ||
               (rPageStyles.is() &&
-               rPageStyles->hasByName( sMasterPageName )) ) &&
+               rPageStyles->hasByName( sDisplayName )) ) &&
             xPropSetInfo->hasPropertyByName( sPageDescName ) )
         {
             Any aAny;
-            aAny <<= sMasterPageName;
+            aAny <<= sDisplayName;
             xPropSet->setPropertyValue( sPageDescName, aAny );
         }
     }
@@ -376,10 +401,6 @@ void XMLTextStyleContext::FillPropertySet(
     DBG_ASSERT( xImpPrMap.is(), "Where is the import prop mapper?" );
     if( xImpPrMap.is() )
     {
-
-        // get property set mapper
-        UniReference<XMLPropertySetMapper> rPropMapper =
-            xImpPrMap->getPropertySetMapper();
 
         // imitate SvXMLImportPropertyMapper::FillPropertySet(...)
 
@@ -403,27 +424,7 @@ void XMLTextStyleContext::FillPropertySet(
 #endif
             { -1, -1 }
         };
-
-        // get property set info
-        Reference< XPropertySetInfo > xInfo = rPropSet->getPropertySetInfo();
-
-        // check for multi-property set
-        Reference<XMultiPropertySet> xMultiPropSet( rPropSet, UNO_QUERY );
-        if ( xMultiPropSet.is() )
-        {
-            // Try XMultiPropertySet. If that fails, try the regular route.
-            sal_Bool bSet = SvXMLImportPropertyMapper::_FillMultiPropertySet(
-                GetProperties(), xMultiPropSet, xInfo, rPropMapper,
-                aContextIDs );
-            if ( !bSet )
-                SvXMLImportPropertyMapper::_FillPropertySet(
-                    GetProperties(), rPropSet, xInfo, rPropMapper,
-                    GetImport(), aContextIDs );
-        }
-        else
-            SvXMLImportPropertyMapper::_FillPropertySet(
-                    GetProperties(), rPropSet, xInfo, rPropMapper,
-                    GetImport(), aContextIDs );
+        xImpPrMap->FillPropertySet( GetProperties(), rPropSet, aContextIDs );
 
         // have we found a combined characters
         sal_Int32 nIndex = aContextIDs[0].nIndex;
@@ -433,6 +434,9 @@ void XMLTextStyleContext::FillPropertySet(
             sal_Bool bVal = *(sal_Bool*)rAny.getValue();
             bHasCombinedCharactersLetter = bVal;
         }
+
+        // get property set info
+        Reference< XPropertySetInfo > xInfo;
 
         // keep-together: the application default is different from
         // the file format default. Hence, if we always set this
@@ -444,7 +448,7 @@ void XMLTextStyleContext::FillPropertySet(
             OUString sIsSplitAllowed =
                 OUString( RTL_CONSTASCII_USTRINGPARAM( "IsSplitAllowed" ) );
 
-            DBG_ASSERT( xInfo->hasPropertyByName( sIsSplitAllowed ),
+            DBG_ASSERT( rPropSet->getPropertySetInfo()->hasPropertyByName( sIsSplitAllowed ),
                         "property missing?" );
             rPropSet->setPropertyValue( sIsSplitAllowed,
                 (aContextIDs[1].nIndex == -1)
@@ -466,7 +470,7 @@ void XMLTextStyleContext::FillPropertySet(
         // check for StarBats and StarMath fonts
 
         // iterate over aContextIDs entries 1..3
-        for ( sal_Int32 i = 1; i < 4; i++ )
+        for ( sal_Int32 i = 2; i < 5; i++ )
         {
             nIndex = aContextIDs[i].nIndex;
             if ( nIndex != -1 )
@@ -493,9 +497,15 @@ void XMLTextStyleContext::FillPropertySet(
                         Any aAny( rAny );
                         aAny <<= sFontName;
 
+                        // get property set mapper
+                        UniReference<XMLPropertySetMapper> rPropMapper =
+                            xImpPrMap->getPropertySetMapper();
+
                         // set property
                         OUString rPropertyName(
                             rPropMapper->GetEntryAPIName(nMapperIndex) );
+                        if( !xInfo.is() )
+                            xInfo = rPropSet->getPropertySetInfo();
                         if ( xInfo->hasPropertyByName( rPropertyName ) )
                         {
                             rPropSet->setPropertyValue( rPropertyName, aAny );
