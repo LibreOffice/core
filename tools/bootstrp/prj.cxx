@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prj.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:03:04 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 13:43:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1383,7 +1383,8 @@ void StarWriter::InsertTokenLine ( ByteString& rString )
     static  ByteString aDirName;
     BOOL bPrjDep = FALSE;
     BOOL bHardDep = FALSE;
-    int nCommandType, nOSType;
+    int nCommandType = 0;
+    int nOSType = 0;
     CommandData* pCmdData;
     SByteStringList *pDepList2 = NULL;
     Prj* pPrj;
