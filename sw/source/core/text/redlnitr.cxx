@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlnitr.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: fme $ $Date: 2002-11-19 10:14:13 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 09:58:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,19 +167,6 @@ void SwAttrIter::CtorInit( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf, SwTxtFrm*
     SwRootFrm *pRootFrm = rTxtNode.GetDoc()->GetRootFrm();
     pShell = pRootFrm ? pRootFrm->GetShell() : 0;
 
-    // get output device for later font checking for weak characters
-    OutputDevice* pOut = rTxtNode.GetDoc()->GetPrt();
-    if( !pOut || !((Printer*)pOut)->IsValid() )
-    {
-        if( pShell )
-        {
-            if( 0 == ( pOut = pShell->GetReferenzDevice() ) )
-                pOut = pShell->GetWin();
-        }
-        if( !pOut )
-            pOut = GetpApp()->GetDefaultDevice();
-    }
-
     pScriptInfo = &rScrInf;
     pAttrSet = &rTxtNode.GetSwAttrSet();
     pHints = rTxtNode.GetpSwpHints();
@@ -189,20 +176,17 @@ void SwAttrIter::CtorInit( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf, SwTxtFrm*
     delete pFnt;
     pFnt = new SwFont( *aFontAccess.Get()->GetFont() );
 
-#ifdef BIDI
-    // Set default layout mode ( LTR or RTL ). pOut should be the printer.
-    if ( pFrm )
-        pOut->SetLayoutMode( pFrm->IsRightToLeft() ?
-                             TEXT_LAYOUT_BIDI_STRONG | TEXT_LAYOUT_BIDI_RTL :
-                             TEXT_LAYOUT_BIDI_STRONG );
-#endif
-
     // set font to vertical if frame layout is vertical
     sal_Bool bVertLayout = sal_False;
-    if ( pFrm && pFrm->IsVertical() )
+    sal_Bool bRTL = sal_False;
+    if ( pFrm )
     {
-        bVertLayout = sal_True;
-        pFnt->SetVertical( pFnt->GetOrientation(), sal_True );
+        if ( pFrm->IsVertical() )
+        {
+            bVertLayout = sal_True;
+            pFnt->SetVertical( pFnt->GetOrientation(), sal_True );
+        }
+        bRTL = pFrm->IsRightToLeft();
     }
 
     // Initialize the default attribute of the attribute handler
@@ -219,7 +203,7 @@ void SwAttrIter::CtorInit( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf, SwTxtFrm*
     // determine script changes if not already done for current paragraph
     ASSERT( pScriptInfo, "No script info available");
     if ( pScriptInfo->GetInvalidity() != STRING_LEN )
-         pScriptInfo->InitScriptInfo( rTxtNode, aAttrHandler, *pOut );
+         pScriptInfo->InitScriptInfo( rTxtNode, bRTL );
 
     if ( pBreakIt->xBreak.is() )
     {
