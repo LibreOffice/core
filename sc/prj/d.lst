@@ -17,6 +17,7 @@ mkdir: %_DEST%\odk%_EXT%\pck
 ..\%__SRC%\bin\rot?????.dll %_DEST%\bin%_EXT%\rot?????.dll
 ..\%__SRC%\bin\addin.zip %_DEST%\bin%_EXT%\addin.zip
 ..\%__SRC%\misc\*.map %_DEST%\bin%_EXT%\*.map
+..\%__SRC%\misc\sc.csv %_DEST%\inc%_EXT%\sc.csv
 touch: ..\%__SRC%\misc\sc.hid %_DEST%\bin%_EXT%\sc.hid
 ..\%__SRC%\lib\sci.lib %_DEST%\lib%_EXT%\sci.lib
 ..\%__SRC%\lib\sclib.lib %_DEST%\lib%_EXT%\sclib.lib
