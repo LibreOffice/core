@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtpdsc.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 17:59:29 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:34:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,10 @@
 #ifndef _SFXPOOLITEM_HXX //autogen
 #include <svtools/poolitem.hxx>
 #endif
+
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
@@ -86,7 +90,7 @@ class IntlWrapper;
 #define IVER_FMTPAGEDESC_NOAUTO ((USHORT)0x0001)
 #define IVER_FMTPAGEDESC_LONGPAGE   ((USHORT)0x0002)
 
-class SwFmtPageDesc : public SfxPoolItem, public SwClient
+class SW_DLLPUBLIC SwFmtPageDesc : public SfxPoolItem, public SwClient
 {
     // diese "Doc"-Funktion ist friend, um nach dem kopieren das
     // Auto-Flag setzen zu koennen !!
