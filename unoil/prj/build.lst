@@ -10,7 +10,7 @@ ul	unoil\com\sun\star\configuration		nmake	-	all	ul_configuration ul_cssutil NUL
 ul	unoil\com\sun\star\datatransfer			nmake	-	all	ul_dattrans ul_genall NULL
 ul	unoil\com\sun\star\datatransfer\clipboard	nmake	-	all	ul_dattrans_clip ul_dattrans NULL
 ul	unoil\com\sun\star\datatransfer\dnd		nmake	-	all	ul_dattrans_dnd ul_dattrans NULL
-ul	unoil\com\sun\star\document			nmake	-	all	ul_document ul_genall NULL
+ul	unoil\com\sun\star\document			nmake	-	all	ul_document ul_frame NULL
 ul	unoil\com\sun\star\task				nmake	-	all	ul_task ul_genall NULL
 ul	unoil\com\sun\star\sdbc				nmake	-	all	ul_sdbc ul_cssutil ul_task NULL
 ul	unoil\com\sun\star\sdbcx			nmake	-	all	ul_sdbx ul_sdbc NULL
