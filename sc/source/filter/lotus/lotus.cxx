@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lotus.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-05 17:07:27 $
+ *  last change: $Author: nn $ $Date: 2000-11-06 09:52:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,13 +68,13 @@
 //------------------------------------------------------------------------
 
 #include <sfx2/docfile.hxx>
-#include <sfx2/inimgr.hxx>
 #include <tools/urlobj.hxx>
 
 #include "flttools.hxx"
 #include "scerrors.hxx"
 #include "lotimpop.hxx"
 #include "root.hxx"
+#include "filtopt.hxx"
 
 //------------------------------------------------------------------------
 
@@ -85,10 +85,8 @@ extern FltError ScImportLotus123old( SvStream&, ScDocument*, CharSet eSrc );
 
 FltError ScImportLotus123( SfxMedium& rMedium, ScDocument* pDocument, CharSet eSrc )
 {
-    SfxIniManager*      pIniManager = SFX_INIMANAGER();
-    BOOL                bWithWK3 = pIniManager->Get(
-                                    SFX_GROUP_COMMON, _STRINGCONST( "WK3" ) ).
-                                    EqualsAscii( "1" );
+    ScFilterOptions aFilterOpt;
+    BOOL bWithWK3 = aFilterOpt.GetWK3Flag();
 
     SvStream*           pStream = rMedium.GetInStream();
 
