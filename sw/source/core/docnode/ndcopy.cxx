@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndcopy.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-11-22 19:08:42 $
+ *  last change: $Author: jp $ $Date: 2002-03-14 16:59:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -831,6 +831,7 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
                         ( pDestNd && !pDestNd->GetTxt().Len() ) ||
                         ( !bOneNode && !rPos.nContent.GetIndex() ));
     BOOL bCopyBookmarks = TRUE;
+    BOOL bStartIsTxtNode = 0 != pSttNd;
 
     // Block, damit aus diesem gesprungen werden kann !!
     do {
@@ -929,7 +930,10 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
         else if( pDestNd )
         {
             if( rPos.nContent.GetIndex() == pDestNd->Len() )
+            {
                 aInsPos++;
+                bStartIsTxtNode = TRUE;
+            }
             else if( rPos.nContent.GetIndex() )
             {
                 // splitte den TextNode, bei dem Eingefuegt wird.
@@ -1052,7 +1056,7 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
 
     // falls Undo eingeschaltet ist, so speicher den eingefuegten Bereich
     if( pDoc->DoesUndo() )
-        pUndo->SetInsertRange( aCpyPam, TRUE, 0 != pSttNd );
+        pUndo->SetInsertRange( aCpyPam, TRUE, bStartIsTxtNode );
 
     if( pCpyRange )
     {
