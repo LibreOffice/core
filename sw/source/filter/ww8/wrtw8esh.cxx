@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 12:48:48 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:39:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -352,7 +352,7 @@ void SwWW8Writer::DoComboBox(const rtl::OUString &rName, const rtl::OUString &rS
     OutField(0, ww::eFORMDROPDOWN, FieldString(ww::eFORMDROPDOWN),
         WRITEFIELD_CLOSE);
 
-    static BYTE __READONLY_DATA aComboData1[] =
+    static const sal_uInt8 aComboData1[] =
     {
         0,0,0,0,        // len of struct
         0x44,0,         // the start of "next" data
@@ -364,7 +364,7 @@ void SwWW8Writer::DoComboBox(const rtl::OUString &rName, const rtl::OUString &rS
     };
     pDataStrm->Write( aComboData1, sizeof(aComboData1) );
 
-    static BYTE __READONLY_DATA aComboData2[] =
+    static const sal_uInt8 aComboData2[] =
     {
         0xFF, 0xFF, 0xFF, 0xFF
     };
@@ -391,7 +391,7 @@ void SwWW8Writer::DoComboBox(const rtl::OUString &rName, const rtl::OUString &rS
 
     *pDataStrm << nHeaderByte;
 
-    static BYTE __READONLY_DATA aComboData9[] =
+    static const sal_uInt8 aComboData9[] =
     {
         0x80, 0x00, 0x00, 0x00, 0x00
     };
@@ -401,7 +401,7 @@ void SwWW8Writer::DoComboBox(const rtl::OUString &rName, const rtl::OUString &rS
     *pDataStrm << nLen;
     WriteString16(*pDataStrm, rName, true);
 
-    static BYTE __READONLY_DATA aComboData3[] =
+    static const sal_uInt8 aComboData3[] =
     {
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -450,7 +450,8 @@ void SwWW8Writer::DoCheckBox(uno::Reference<beans::XPropertySet> xPropSet)
     pChpPlc->AppendFkpEntry(Strm().Tell(),
                 sizeof( aArr1 ), aArr1 );
 
-    static BYTE __READONLY_DATA aComboData1[] = {
+    static const sal_uInt8 aComboData1[] =
+    {
         0,0,0,0,        // len of struct
         0x44,0,         // the start of "next" data
         0,0,0,0,0,0,0,0,0,0,                // PIC-Structure!
@@ -461,7 +462,8 @@ void SwWW8Writer::DoCheckBox(uno::Reference<beans::XPropertySet> xPropSet)
     };
     pDataStrm->Write( aComboData1, sizeof(aComboData1) );
 
-    static BYTE __READONLY_DATA aComboData2[] = {
+    static const sal_uInt8 aComboData2[] =
+    {
         0xFF, 0xFF, 0xFF, 0xFF
     };
     pDataStrm->Write( aComboData2, sizeof(aComboData2) );
@@ -489,7 +491,8 @@ void SwWW8Writer::DoCheckBox(uno::Reference<beans::XPropertySet> xPropSet)
     }
     *pDataStrm << nHeaderByte;
 
-    static BYTE __READONLY_DATA aComboData5[] = {
+    static const sal_uInt8 aComboData5[] =
+    {
         0x00, 0x00, 0x00, 0x14, 0x00
     };
     pDataStrm->Write( aComboData5, sizeof(aComboData5) );
@@ -505,7 +508,8 @@ void SwWW8Writer::DoCheckBox(uno::Reference<beans::XPropertySet> xPropSet)
 
     *pDataStrm << nIsDefaultChecked;
 
-    static BYTE __READONLY_DATA aComboData3[] = {
+    static const sal_uInt8 aComboData3[] =
+    {
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x00, 0x00
@@ -927,7 +931,8 @@ void SwWW8Writer::AppendFlyInFlys(const sw::Frame& rFrmFmt,
 
     if (bSuccess)
     {
-        static BYTE __READONLY_DATA aSpec8[] = {
+        static const sal_uInt8 aSpec8[] =
+        {
             0x03, 0x6a, 0, 0, 0, 0, // sprmCObjLocation
             0x55, 0x08, 1           // sprmCFSpec
         };
@@ -1759,7 +1764,8 @@ INT32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrmFmt& rFmt,
     bool bFirstLine = true;
     if (SFX_ITEM_SET == rFmt.GetItemState(RES_BOX, true, &pItem))
     {
-        static UINT16 __READONLY_DATA aExhperProp[ 4 ] = {
+        static const UINT16 aExhperProp[4] =
+        {
             ESCHER_Prop_dyTextTop,  ESCHER_Prop_dyTextBottom,
             ESCHER_Prop_dxTextLeft, ESCHER_Prop_dxTextRight
         };
