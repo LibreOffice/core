@@ -1,0 +1,269 @@
+/*************************************************************************
+ *
+ *  $RCSfile: UserAdmin.src,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: oj $ $Date: 2001-06-20 07:00:35 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the License); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an AS IS basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef DBAUI_USERADMIN_HRC
+#include "UserAdmin.hrc"
+#endif
+#ifndef _DBU_RESOURCE_HRC_
+#include "dbu_resource.hrc"
+#endif
+#ifndef _DBA_DBACCESS_HELPID_HRC_
+#include "dbaccess_helpid.hrc"
+#endif
+
+#define WINDOW_SIZE_X 260
+#define WINDOW_SIZE_Y 185
+
+TabPage TAB_PAGE_USERADMIN
+{
+    SVLook      = TRUE ;
+    HelpId      = HID_TAB_PAGE_USERADMIN ;
+    Size        = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
+    Hide = TRUE;
+
+    FixedLine FL_USER
+    {
+        Pos                 = MAP_APPFONT ( 6 , 3  ) ;
+        Size                = MAP_APPFONT ( WINDOW_SIZE_X - 8, 8) ;
+        Text                = "Benutzerauswahl" ;
+        Text [ ENGLISH ]    = "User choise" ;
+        Text[english_us]    = "User selection";
+        Text[ portuguese ] = "Selecção do utilizador";
+        Text[ russian ] = "Âûáîğ ïîëüçîâàòåëÿ";
+        Text[ greek ] = "ÅğéëïãŞ ÷ñŞóôç";
+        Text[ dutch ] = "Gebruikerselectie";
+        Text[ french ] = "Sélection de l'utilisateur";
+        Text[ spanish ] = "Selección de usuario";
+        Text[ italian ] = "Selezione utente";
+        Text[ danish ] = "Brugerudvalg";
+        Text[ swedish ] = "Användarurval";
+        Text[ polish ] = "Wybór u¿ytkownika";
+        Text[ portuguese_brazilian ] = "User choise";
+        Text[ japanese ] = "Õ°»Ş°‘I‘ğ";
+        Text[ korean ] = "»ç¿ëÀÚ ¼±ÅÃ";
+        Text[ chinese_simplified ] = "Ê¹ÓÃÕßÑ¡Ôñ";
+        Text[ chinese_traditional ] = "¦Û­q¿ï¾Ü";
+        Text[ arabic ] = "ÇÎÊíÇÑ ÇáãÓÊÎÏã";
+        Text[ turkish ] = "Kullanıcı seçimi";
+    };
+
+    FixedText FT_USER
+    {
+        Pos                 = MAP_APPFONT ( 12 , 14 ) ;
+        Size                = MAP_APPFONT ( 90 , 10 ) ;
+        Text                = "B~enutzer:" ;
+        Text[ENGLISH]       = "Us~er:" ;
+        Text[english_us]    = "Us~er:";
+        Text[ portuguese ] = "~Utilizador:";
+        Text[ russian ] = "Ïîëüçîâàòåëü:";
+        Text[ greek ] = "×ñŞóôçò:";
+        Text[ dutch ] = "Gebr~uiker:";
+        Text[ french ] = "~Utilisateur :";
+        Text[ spanish ] = "Usuari~o:";
+        Text[ italian ] = "Ut~ente:";
+        Text[ danish ] = "Bruger:";
+        Text[ swedish ] = "Användare:";
+        Text[ polish ] = "U¿ytkownik:";
+        Text[ portuguese_brazilian ] = "Us~er:";
+        Text[ japanese ] = "Õ°»Ş°:(~E)";
+        Text[ korean ] = "»ç¿ëÀÚ:(~E)";
+        Text[ chinese_simplified ] = "Ê¹ÓÃÕß(~E)£º";
+        Text[ chinese_traditional ] = "¨Ï¥ÎªÌ(~E)";
+        Text[ arabic ] = "ÇáãÓÊÎÏã:";
+        Text[ turkish ] = "Kullanıcı:";
+    };
+
+    ListBox LB_USER
+    {
+        Border              = TRUE ;
+        Pos                 = MAP_APPFONT ( 108 , 13) ;
+        Size                = MAP_APPFONT ( 105 , 97 ) ;
+        TabStop             = TRUE ;
+        HScroll             = TRUE ;
+        Sort                = TRUE ;
+        DropDown            = TRUE ;
+        HelpId              = HID_TAB_PAGE_LBUSER ;
+    };
+
+
+    PushButton PB_NEWUSER
+    {
+        Pos                 = MAP_APPFONT ( 12 , 29 ) ;
+        Size                = MAP_APPFONT ( 70 , 14 ) ;
+        TabStop             = TRUE ;
+        DefButton           = TRUE ;
+        HelpId              = HID_TAB_PAGE_PBUSER ;
+        Text                = "~Neuer Benutzer...";
+        Text[ENGLISH]       = "~New user...";
+        Text[ english_us ] = "~New user...";
+        Text[ portuguese ] = "~Novo utilizador...";
+        Text[ russian ] = "Íîâûé ïîëüçîâàòåëü...";
+        Text[ greek ] = "Íİïò ÷ñŞóôçò...";
+        Text[ dutch ] = "~Nieuwe gebruiker...";
+        Text[ french ] = "~Nouvel utilisateur...";
+        Text[ spanish ] = "~Nuevo usuario...";
+        Text[ italian ] = "~Nuovo utente...";
+        Text[ danish ] = "Ny bruger...";
+        Text[ swedish ] = "~Ny användare...";
+        Text[ polish ] = "Nowy u¿ytkownik...";
+        Text[ portuguese_brazilian ] = "~New user...";
+        Text[ japanese ] = "V‚µ‚¢Õ°»Ş°(~N)...";
+        Text[ korean ] = "»õ »ç¿ëÀÚ(~N)...";
+        Text[ chinese_simplified ] = "ĞÂÔöÊ¹ÓÃÕß(~N)...";
+        Text[ chinese_traditional ] = "·s¼W¨Ï¥ÎªÌ(~N)...";
+        Text[ arabic ] = "ãÓÊÎÏã ÌÏíÏ...";
+        Text[ turkish ] = "Yeni kullanıcı...";
+    };
+
+    PushButton PB_CHANGEPWD
+    {
+        Pos                 = MAP_APPFONT ( 95 , 29 ) ;
+        Size                = MAP_APPFONT ( 70 , 14 ) ;
+        TabStop             = TRUE ;
+        DefButton           = TRUE ;
+        HelpId              = HID_TAB_PAGE_PBCHGPWD ;
+        Text                = "~Passwort ändern...";
+        Text[ENGLISH]       = "Change ~password...";
+        Text[ english_us ] = "Change ~password...";
+        Text[ portuguese ] = "~Mudar senha...";
+        Text[ russian ] = "Èçìåíèòü ïàğîëü...";
+        Text[ greek ] = "ÁëëáãŞ êùäéêïı ğñüóâáóçò...";
+        Text[ dutch ] = "~Wachtwoord wijzigen...";
+        Text[ french ] = "Modifier le mot de ~passe...";
+        Text[ spanish ] = "Cambiar ~contraseña...";
+        Text[ italian ] = "Cambia ~password...";
+        Text[ danish ] = "Modificer adgangskode...";
+        Text[ swedish ] = "Ändra ~lösenord...";
+        Text[ polish ] = "Zmieñ has³o...";
+        Text[ portuguese_brazilian ] = "Change ~password...";
+        Text[ japanese ] = "Êß½Ü°ÄŞ‚Ì•ÏX(~P)...";
+        Text[ korean ] = "ÆĞ½º¿öµå º¯°æ(~P)...";
+        Text[ chinese_simplified ] = "¸ü¸Ä¿ÚÁî(~P)...";
+        Text[ chinese_traditional ] = "ÅÜ§ó±K½X(~P)...";
+        Text[ arabic ] = "ÊÛííÑ ßáãÉ ÇáÓÑ...";
+        Text[ turkish ] = "Şifreyi değiştir...";
+    };
+
+    PushButton PB_DELETEUSER
+    {
+        Pos                 = MAP_APPFONT ( WINDOW_SIZE_X - 82 , 29 ) ;
+        Size                = MAP_APPFONT ( 70 , 14 ) ;
+        TabStop             = TRUE ;
+        DefButton           = TRUE ;
+        HelpId              = HID_TAB_PAGE_PBUSERDELETE ;
+        Text                = "Benut~zer löschen...";
+        Text[ENGLISH]       = "~Delete user...";
+        Text[ english_us ] = "~Delete user...";
+        Text[ portuguese ] = "~Eliminar utilizador...";
+        Text[ russian ] = "Óáğàòü ïîëüçîâàòåëÿ...";
+        Text[ greek ] = "ÄéáãñáöŞ ÷ñŞóôç...";
+        Text[ dutch ] = "~Gebruiker wissen...";
+        Text[ french ] = "~Supprimer l'utilisateur...";
+        Text[ spanish ] = "~Eliminar usuario...";
+        Text[ italian ] = "Cancella utente...";
+        Text[ danish ] = "Slet bruger...";
+        Text[ swedish ] = "Ra~dera användare...";
+        Text[ polish ] = "Usuñ u¿ytkownika...";
+        Text[ portuguese_brazilian ] = "~Delete user...";
+        Text[ japanese ] = "Õ°»Ş°‚Ìíœ(~D)...";
+        Text[ korean ] = "»ç¿ëÀÚ »èÁ¦(~D)...";
+        Text[ chinese_simplified ] = "É¾³ıÊ¹ÓÃÕß(~D)...";
+        Text[ chinese_traditional ] = "§R°£¨Ï¥ÎªÌ(~D)...";
+        Text[ arabic ] = "ÍĞİ ÇáãÓÊÎÏã...";
+        Text[ turkish ] = "Kullanıcısyı sil...";
+    };
+
+    FixedLine FL_TABLE_GRANTS
+    {
+        Pos                 = MAP_APPFONT ( 6 , 52  ) ;
+        Size                = MAP_APPFONT ( WINDOW_SIZE_X - 8, 8) ;
+        Text                = "Benutzerrechte für ausgewählten Benutzer" ;
+        Text [ ENGLISH ]    = "User rights for choosen user" ;
+        Text[ english_us ] = "Access rights for user selected";
+        Text[ portuguese ] = "Direitos de acesso para utilizador seleccionado";
+        Text[ russian ] = "Ïğàâà ïîëüçîâàòåëÿ äëÿ âûáğàííîãî ïîëüçîâàòåëÿ";
+        Text[ greek ] = "Äéêáéşìáôá ÷ñŞóôç ãéá ôïí åğéëåãìİíï ÷ñŞóôç";
+        Text[ dutch ] = "Gebruikersrechten voor geselecteerde gebruikers";
+        Text[ french ] = "Droits accordés à l'utilisateur sélectionné";
+        Text[ spanish ] = "Derechos de usuario para usuarios seleccionados";
+        Text[ italian ] = "Diritti utente per utente selezionato";
+        Text[ danish ] = "Den valgte brugers brugerrettigheder";
+        Text[ swedish ] = "Användarrättigheter för utvald användare";
+        Text[ polish ] = "Prawa dla wybranego u¿ytkownika";
+        Text[ portuguese_brazilian ] = "User rights for choosen user";
+        Text[ japanese ] = "‘I‘ğ‚µ‚½Õ°»Ş°—p‚Ì±¸¾½Œ ";
+        Text[ korean ] = "¼±ÅÃµÈ »ç¿ëÀÚÀÇ ¾×¼¼½º ±ÇÇÑ";
+        Text[ chinese_simplified ] = "Ñ¡ÖĞÊ¹ÓÃÕßµÄÊ¹ÓÃÈ¨ÏŞ";
+        Text[ chinese_traditional ] = "¿ï¤¤ªº¨Ï¥ÎªÌªº¨Ï¥ÎÅv­­";
+        Text[ arabic ] = "ÍŞæŞ ÇáÇÓÊÎÏÇã ááãÓÊÎÏã ÇáãõÎÊÇÑ";
+        Text[ turkish ] = "Seçilen kullanıcı için erişim hakları";
+    };
+
+    Control CTRL_TABLE_GRANTS
+    {
+        Pos                 = MAP_APPFONT ( 12 , 63  ) ;
+        Size                = MAP_APPFONT ( WINDOW_SIZE_X - 22, WINDOW_SIZE_Y - 75 );
+        Border              = TRUE ;
+        TabStop             = TRUE ;
+        HelpId              = HID_TAB_PAGE_TBLGRANTS ;
+    };
+};
+
