@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menubarmanager.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 17:15:39 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:30:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,14 +171,6 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
                        public ::cppu::OWeakObject
 {
     protected:
-        // #110897#
-        MenuBarManager(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
-            com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
-            BmkMenu*            pBmkMenu,
-            sal_Bool            bDelete,
-            sal_Bool            bDeleteChildren );
-
         // #110897#
         MenuBarManager(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
