@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTransliteration.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 20:47:12 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 09:00:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,7 @@ module com { module sun { module star { module i18n {
  * getAvailableModule.
  *
  * 4.
- * Implmentation name is the methods below is not the same as
+ * Implementation name in the methods below is not the same as
  * the true implemenation name registered.
  * In particular, for generic modules:"UPPERCASE_LOWERCASE",
  * "LOWERCASE_UPPERCASE", "IGNORE_CASE", there is no registered name.
@@ -317,7 +317,8 @@ published interface XTransliteration: com::sun::star::uno::XInterface
     sequence <string>   transliterateRange( [in] string aStr1, [in] string aStr2 );
 
     //------------------------------------------------------------------------
-    /** Compare 2 substrings.
+    /** Compare 2 substrings as per this transliteration. It translates both
+        substrings before comparing them.
 
         @param aStr1
             First string.
@@ -346,7 +347,8 @@ published interface XTransliteration: com::sun::star::uno::XInterface
                                 [in] string aStr2, [in] long nOff2, [in] long nLen2 );
 
     //------------------------------------------------------------------------
-    /** Compare 2 strings.
+    /** Compare 2 strings as per this transliteration. It translates both
+        strings before comparing them.
 
         @returns
             1 if the first string is greater than the second string <br/>
