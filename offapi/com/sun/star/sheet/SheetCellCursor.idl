@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SheetCellCursor.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:07:58 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 22:46:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ module com {  module sun {  module star {  module sheet {
     <p>A cursor is a cell range which provides additional methods to move
     through the table (i.e. to find specific cell ranges).</p>
  */
-service SheetCellCursor
+published service SheetCellCursor
 {
     //-------------------------------------------------------------------------
 
