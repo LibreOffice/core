@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryfilter.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-12 13:57:21 $
+ *  last change: $Author: fs $ $Date: 2001-08-17 09:22:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,8 +209,12 @@ DlgFilterCrit::DlgFilterCrit(Window * pParent,
         aLB_WHEREFIELD3.SelectEntryPos(0);
 
         // Jetzt die Felder mit den Kriterien des SQL-Strings fuellen
-        ::cppu::extractInterface(xColumn,m_xColumns->getByName(rFieldName));
-        m_xQueryComposer->appendFilterByColumn(xColumn);
+        if ( rFieldName.Len() )
+        {
+            ::rtl::OUString sFieldName( rFieldName );
+            if ( m_xColumns->hasByName( sFieldName ) && ::cppu::extractInterface( xColumn, m_xColumns->getByName( sFieldName ) ) )
+                m_xQueryComposer->appendFilterByColumn(xColumn);
+        }
 
         // insert the criteria into the dialog
         Sequence<Sequence<PropertyValue > > aValues = m_xQueryComposer->getStructuredFilter();
