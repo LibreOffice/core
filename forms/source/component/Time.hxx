@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Time.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2002-12-02 09:56:36 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 09:00:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,19 +82,15 @@ class OTimeModel
                 ,public OLimitedFormats
                 ,public ::comphelper::OAggregationArrayUsageHelper< OTimeModel >
 {
+private:
     ::com::sun::star::uno::Any      m_aSaveValue;
-    sal_Bool            m_bDateTimeField;
-    static sal_Int32    nTimeHandle;
+    sal_Bool                        m_bDateTimeField;
 
 protected:
-    virtual void _onValueChanged();
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> _getTypes();
 
 public:
     DECLARE_DEFAULT_LEAF_XTOR( OTimeModel );
-
-    // starform::XBoundComponent
-    virtual sal_Bool _commit();
 
     // stario::XPersistObject
     virtual ::rtl::OUString SAL_CALL getServiceName() throw ( ::com::sun::star::uno::RuntimeException);
@@ -114,18 +110,23 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException);
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
 
-    // starform::XReset
-    virtual void _reset( void );
-
-    // starform::XLoadListener
-    virtual void         _loaded(const ::com::sun::star::lang::EventObject& rEvent);
-
     // OAggregationArrayUsageHelper
     virtual void fillProperties(
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps,
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps
         ) const;
     IMPLEMENT_INFO_SERVICE()
+
+protected:
+    // OBoundControlModel overridables
+    virtual ::com::sun::star::uno::Any
+                            translateDbColumnToControlValue( );
+    virtual sal_Bool        commitControlValueToDbColumn( bool _bPostReset );
+
+    virtual ::com::sun::star::uno::Any
+                            getDefaultForReset() const;
+
+    virtual void            onConnectedDbColumn( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxForm );
 
 protected:
     DECLARE_XCLONEABLE();
