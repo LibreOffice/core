@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws2.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 15:25:37 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 19:13:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@
 #include "galmisc.hxx"
 #include "galdlg.hxx"
 #include "galbrws2.hxx"
+
+#include "svxdlg.hxx" //CHINA001
+//CHINA001 #include "dialogs.hrc" //CHINA001
 
 // -----------
 // - Defines -
@@ -1024,23 +1027,29 @@ void GalleryBrowser2::ImplExecute( USHORT nId )
                 if( pObj )
                 {
                     const String    aOldTitle( GetItemText( *mpCurTheme, *pObj, GALLERY_ITEM_TITLE ) );
-                    TitleDialog     aDlg( this, aOldTitle );
-
-                    if( aDlg.Execute() == RET_OK )
+                    //CHINA001 TitleDialog      aDlg( this, aOldTitle );
+                    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+                    if(pFact)
                     {
-                        String aNewTitle( aDlg.GetTitle() );
-
-                        if( ( !aNewTitle.Len() && pObj->GetTitle().Len() ) || ( aNewTitle != aOldTitle ) )
+                        AbstractTitleDialog* aDlg = pFact->CreateTitleDialog( this, aOldTitle, ResId(RID_SVXDLG_GALLERY_TITLE) );
+                        DBG_ASSERT(aDlg, "Dialogdiet fail!");//CHINA001
+                        if( aDlg->Execute() == RET_OK )//CHINA001 if( aDlg.Execute() == RET_OK )
                         {
-                            if( !aNewTitle.Len() )
-                                aNewTitle = String( RTL_CONSTASCII_USTRINGPARAM( "__<empty>__" ) );
+                            String aNewTitle( aDlg->GetTitle() );//CHINA001 String aNewTitle( aDlg.GetTitle() );
 
-                            pObj->SetTitle( aNewTitle );
-                            mpCurTheme->InsertObject( *pObj );
+                            if( ( !aNewTitle.Len() && pObj->GetTitle().Len() ) || ( aNewTitle != aOldTitle ) )
+                            {
+                                if( !aNewTitle.Len() )
+                                    aNewTitle = String( RTL_CONSTASCII_USTRINGPARAM( "__<empty>__" ) );
+
+                                pObj->SetTitle( aNewTitle );
+                                mpCurTheme->InsertObject( *pObj );
+                            }
                         }
-                    }
 
-                    mpCurTheme->ReleaseObject( pObj );
+                        mpCurTheme->ReleaseObject( pObj );
+                        delete aDlg; //add CHINA001
+                    }
                 }
             }
             break;
