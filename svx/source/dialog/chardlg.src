@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-07 16:02:34 $
+ *  last change: $Author: kz $ $Date: 2000-12-08 17:50:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,7 @@ TabPage RID_SVXPAGE_CHAR_STD
         Text[ portuguese ] = "Sem %s";
         Text[ russian ] = "Íåò %s";
         Text[ dutch ] = "Niet %s";
-        Text[ french ] = "Pas de %s";
+        Text[ french ] = "Sans %s";
         Text[ spanish ] = "No %s";
         Text[ italian ] = "Senza %s";
         Text[ danish ] = "Ikke %s";
@@ -1015,7 +1015,7 @@ TabPage RID_SVXPAGE_CHAR_EXT
         Text[ chinese_traditional ] = "¤p¼g(~L)";
         Text[ arabic ] = "ÃÍÑİ ÕÛíÑÉ";
         Text[ greek ] = "ĞåæÜ";
-        Text[ korean ] = "¾Æ·¡ ´ë/¼Ò¹®ÀÚ(~L)";
+        Text[ korean ] = "¼Ò¹®ÀÚ";
         Text[ turkish ] = "~Küçük harflerle";
         Text[ language_user1 ] = " ";
     };
@@ -2602,7 +2602,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ swedish ] = "Teckensnitt för asiatisk text";
         Text[ polish ] = "Czcionka alfabetu azjatyckiego";
         Text[ portuguese_brazilian ] = "Schriftart für asiatischen Text";
-        Text[ japanese ] = "±¼Ş±Œ¾Œê•¶‚Ég‚¤Ì«İÄ";
+        Text[ japanese ] = "˜a•¶‚Ég‚¤Ì«İÄ";
         Text[ korean ] = "¾Æ½Ã¾Æ ¹®ÀÚÀÇ ±Û²Ã";
         Text[ chinese_simplified ] = "ÊÊÓÃÓÚÑÇÖŞÎÄ×ÖµÄ×ÖÌå";
         Text[ chinese_traditional ] = "¨È¬w¤å¦r¦r«¬";
@@ -2817,6 +2817,23 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Size = MAP_APPFONT( 58, 10 );
         Text = "Schriftfar~be";
         Text [ english_us ] = "Font ~Color" ;
+        Text[ portuguese ] = "Font ~Color";
+        Text[ russian ] = "Öâåò øğèôòà";
+        Text[ greek ] = "Font ~Color";
+        Text[ dutch ] = "Font ~Color";
+        Text[ french ] = "~Couleur de police";
+        Text[ spanish ] = "Font ~Color";
+        Text[ italian ] = "Font ~Color";
+        Text[ danish ] = "Font ~Color";
+        Text[ swedish ] = "Font ~Color";
+        Text[ polish ] = "Kolor czcionki";
+        Text[ portuguese_brazilian ] = "Font ~Color";
+        Text[ japanese ] = "Ì«İÄ‚ÌF(~C)";
+        Text[ korean ] = "Font ~Color";
+        Text[ chinese_simplified ] = "×ÖÌåÑÕÉ«";
+        Text[ chinese_traditional ] = "¦r«¬ÃC¦â";
+        Text[ turkish ] = "Font ~Color";
+        Text[ arabic ] = "áæä ÇáÎØ";
     };
     ListBox LB_COLOR2
     {
@@ -2832,16 +2849,16 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text = "Nicht %s";
         Text[ english_us ] = "No %s";
         Text[ portuguese ] = "Sem %s";
-        Text[ russian ] = "Íåò %s";
+        Text[ russian ] = "Áåç %s";
         Text[ dutch ] = "Niet %s";
-        Text[ french ] = "Pas de %s";
+        Text[ french ] = "Sans %s";
         Text[ spanish ] = "No %s";
         Text[ italian ] = "Senza %s";
         Text[ danish ] = "Ikke %s";
         Text[ swedish ] = "Inte %s";
         Text[ polish ] = "Nie %s";
         Text[ portuguese_brazilian ] = "No %s";
-        Text[ japanese ] = "%s‚È‚µ";
+        Text[ japanese ] = "%s ‚È‚µ";
         Text[ chinese_simplified ] = "²»ÊÇ %s";
         Text[ chinese_traditional ] = "¤£¬O %s";
         Text[ arabic ] = "ÈÏæä %s";
@@ -3253,7 +3270,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text [ english_us ] = "~Blinking" ;
         Text[ portuguese ] = "Blinking";
         Text[ russian ] = "Ìèãàíèå";
-        Text[ greek ] = "Åöİ öëáò";
+        Text[ greek ] = "Åöİ ö~ëáò";
         Text[ dutch ] = "~Knipperend";
         Text[ french ] = "~Clignotant";
         Text[ spanish ] = "Intermitente";
@@ -3262,7 +3279,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ swedish ] = "~Blinkande";
         Text[ polish ] = "Miganie";
         Text[ portuguese_brazilian ] = "Blinking";
-        Text[ japanese ] = "“_–Å";
+        Text[ japanese ] = "“_–Å(~B)";
         Text[ korean ] = "Á¡¸ê";
         Text[ chinese_simplified ] = "ÉÁÒ«";
         Text[ chinese_traditional ] = "°{Ä£";
@@ -3300,6 +3317,23 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Size = MAP_APPFONT ( 248 , 23 ) ;
         Text = "Beispiel";
         Text [ english_us ] = "Example";
+        Text[ portuguese ] = "Example";
+        Text[ russian ] = "Ïğèìåğ";
+        Text[ greek ] = "Example";
+        Text[ dutch ] = "Example";
+        Text[ french ] = "Exemple";
+        Text[ spanish ] = "Example";
+        Text[ italian ] = "Example";
+        Text[ danish ] = "Example";
+        Text[ swedish ] = "Example";
+        Text[ polish ] = "Przyk³ad";
+        Text[ portuguese_brazilian ] = "Example";
+        Text[ japanese ] = "—á";
+        Text[ korean ] = "Example";
+        Text[ chinese_simplified ] = "Ê¾Àı";
+        Text[ chinese_traditional ] = "¥Ü¨Ò";
+        Text[ turkish ] = "Example";
+        Text[ arabic ] = "ãËÇá";
     };
     FixedText FT_EFFECTS_FONTTYPE
     {
@@ -3894,7 +3928,7 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
         TabStop = TRUE;
         Text[ portuguese ] = "Two lines each line";
         Text[ russian ] = "Ïîìåùàòü â îäíîé ñòğîêå äâå ñòğîêè";
-        Text[ greek ] = "Äßãñáììç åããñáöŞ áíÜ ãñáììŞ";
+        Text[ greek ] = "~Äßãñáììç åããñáöŞ";
         Text[ dutch ] = "T~wee regels per rij";
         Text[ french ] = "Doubles lignes";
         Text[ spanish ] = "Dos líneas por renglón";
@@ -3917,7 +3951,7 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
         Text = "Einschließende Zeichen";
         Text [ english_us ] = "Enclosing character" ;
         Text[ portuguese ] = "Enclose character";
-        Text[ russian ] = "Enclose character";
+        Text[ russian ] = "Îáâåäåííûå çíàêè";
         Text[ greek ] = "Ğåñéêëåéüìåíïé ÷áñáêôŞñåò";
         Text[ dutch ] = "Omhullend teken";
         Text[ french ] = "Caractères englobants";
@@ -3940,6 +3974,23 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
         Size = MAP_APPFONT( 90, 10 );
         Text = "A~nfangszeichen";
         Text [ english_us ] = "Beginning character" ;
+        Text[ portuguese ] = "Beginning character";
+        Text[ russian ] = "Íà÷àëüíûå çíàêè";
+        Text[ greek ] = "Beginning character";
+        Text[ dutch ] = "Beginning character";
+        Text[ french ] = "Caractère de ~début";
+        Text[ spanish ] = "Beginning character";
+        Text[ italian ] = "Beginning character";
+        Text[ danish ] = "Beginning character";
+        Text[ swedish ] = "Beginning character";
+        Text[ polish ] = "Znaki wiod¹ce";
+        Text[ portuguese_brazilian ] = "Beginning character";
+        Text[ japanese ] = "ŠJ‚­‹L†";
+        Text[ korean ] = "Beginning character";
+        Text[ chinese_simplified ] = "¿ªÊ¼×Ö·û";
+        Text[ chinese_traditional ] = "¶}©l¦r¤¸";
+        Text[ turkish ] = "Beginning character";
+        Text[ arabic ] = "ÃÍÑ İ ÈÏÇíÉ";
     };
     ListBox ED_STARTBRACKET
     {
@@ -3972,6 +4023,23 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
         Size = MAP_APPFONT( 90, 10 );
         Text = "~Endzeichen";
         Text [ english_us ] = "End character" ;
+        Text[ portuguese ] = "End character";
+        Text[ russian ] = "Êîíå÷íûå çíàêè";
+        Text[ greek ] = "End character";
+        Text[ dutch ] = "End character";
+        Text[ french ] = "Caractère de ~fin";
+        Text[ spanish ] = "End character";
+        Text[ italian ] = "End character";
+        Text[ danish ] = "End character";
+        Text[ swedish ] = "End character";
+        Text[ polish ] = "Znaki koñcowe";
+        Text[ portuguese_brazilian ] = "End character";
+        Text[ japanese ] = "•Â‚¶‚é‹L†";
+        Text[ korean ] = "End character";
+        Text[ chinese_simplified ] = "½áÎ²×Ö·û";
+        Text[ chinese_traditional ] = "µ²§À¦r¤¸";
+        Text[ turkish ] = "End character";
+        Text[ arabic ] = "ÃÍÑİ äåÇíÉ";
     };
     ListBox ED_ENDBRACKET
     {
