@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xfont.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:58:53 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:34:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,9 @@ ExtendedFontStruct::ExtendedFontStruct( Display* pDisplay, unsigned short nPixel
         mnPixelSize( nPixelSize ),
         mbVertical( bVertical ),
         mpXlfd( pXlfd ),
-        mnCachedEncoding( RTL_TEXTENCODING_DONTKNOW )
+        mnCachedEncoding( RTL_TEXTENCODING_DONTKNOW ),
+        mpRangeCodes(NULL),
+        mnRangeCount(-1)
 {
     mnAsciiEncoding = GetAsciiEncoding (NULL);
     mnDefaultWidth = GetDefaultWidth();
@@ -112,6 +114,8 @@ ExtendedFontStruct::ExtendedFontStruct( Display* pDisplay, unsigned short nPixel
 
 ExtendedFontStruct::~ExtendedFontStruct()
 {
+    delete[] mpRangeCodes;
+
     for ( int nIdx = 0; nIdx < mpXlfd->NumEncodings(); nIdx++ )
         if ( mpXFontStruct[nIdx] != NULL )
             XFreeFont( mpDisplay, mpXFontStruct[nIdx] );
@@ -584,68 +588,49 @@ ExtendedFontStruct::GetCharWidth( sal_Unicode nFrom, sal_Unicode nTo, long *pWid
     return nConverted;
 }
 
-ULONG ExtendedFontStruct::GetFontCodeRanges( sal_uInt32* pCodePairs ) const
+bool ExtendedFontStruct::HasUnicodeChar( sal_Unicode cChar ) const
 {
-    ULONG nRangeCount = 0;
-    // TODO: get better info
-    // problems are 1) the X Server will lie about monospaced fonts
-    // and 2) translation into unicode and query for every unicode char is very costly
-    if( RTL_TEXTENCODING_SYMBOL == mpXlfd->GetEncoding() )
+    // init unicode range cache if needed
+    if( mnRangeCount < 0 )
     {
-        // postscript symbol font
-        nRangeCount = 1;
-        if( pCodePairs )
-        {
-            pCodePairs[ 0 ] = 0xF020;
-            pCodePairs[ 1 ] = 0xF100;
-        }
+        mnRangeCount = mpXlfd->GetFontCodeRanges( NULL );
+        if( !mnRangeCount )
+            return NULL;
+        mpRangeCodes = new sal_uInt32[ 2*mnRangeCount ];
+        mpXlfd->GetFontCodeRanges( mpRangeCodes );
+        // TODO: make sure everything is sorted
     }
 
-    return nRangeCount;
+    // binary search in unicode ranges
+    int nLower = 0;
+    int nMid   = mnRangeCount;
+    int nUpper = 2 * mnRangeCount - 1;
+    while( nLower < nUpper )
+    {
+        if( cChar >= mpRangeCodes[ nMid ] )
+            nLower = nMid;
+        else
+            nUpper = nMid - 1;
+        nMid = (nLower + nUpper + 1) / 2;
+    }
+    if( (nMid == 0) && (cChar < mpRangeCodes[0]) )
+        return false;
+    return (nMid & 1) ? false: true;
 }
 
-static short
-GetVerticalClass( sal_Unicode nChar )
+int ExtendedFontStruct::GetFontCodeRanges( sal_uInt32* pCodePairs ) const
 {
-    if ( (nChar >= 0x1100 && nChar <= 0x11f9) ||    // Hangul Jamo
-         (nChar >= 0x3000 && nChar <= 0xfaff) )     // other CJK
-    {
-        if ( nChar == 0x2010 || nChar == 0x2015 ||
-             nChar == 0x2016 || nChar == 0x2026 ||
-             (nChar >= 0x3008 && nChar <= 0x3017) ||
-             nChar >= 0xFF00 )
-        {
-            return VCLASS_ROTATE;
-        }
-        else
-        if ( nChar == 0x3001 || nChar == 0x3002 )
-        {
-            return VCLASS_TRANSFORM1;
-        }
-        else
-        if ( nChar == 0x3041 || nChar == 0x3043 ||
-             nChar == 0x3045 || nChar == 0x3047 ||
-             nChar == 0x3049 || nChar == 0x3063 ||
-             nChar == 0x3083 || nChar == 0x3085 ||
-             nChar == 0x3087 || nChar == 0x308e ||
-             nChar == 0x30a1 || nChar == 0x30a3 ||
-             nChar == 0x30a5 || nChar == 0x30a7 ||
-             nChar == 0x30a9 || nChar == 0x30c3 ||
-             nChar == 0x30e3 || nChar == 0x30e5 ||
-             nChar == 0x30e7 || nChar == 0x30ee ||
-             nChar == 0x30f5 || nChar == 0x30f6 )
-        {
-            return VCLASS_TRANSFORM2;
-        }
-        else
-        if ( nChar == 0x30fc )
-        {
-            return VCLASS_ROTATE_REVERSE;
-        }
+    // make sure unicode range cache is initialized
+    HasUnicodeChar(0);
 
-        return VCLASS_CJK;
+    // transfer range pairs if requested
+    if( pCodePairs )
+    {
+        for( int i = 0; i < 2*mnRangeCount; ++i )
+            pCodePairs[i] = mpRangeCodes[i];
     }
-    return VCLASS_ROTATE;
+
+    return mnRangeCount;
 }
 
 // =======================================================================
@@ -658,8 +643,6 @@ X11FontLayout::X11FontLayout( ExtendedFontStruct& rFont )
 
 bool X11FontLayout::LayoutText( ImplLayoutArgs& rArgs )
 {
-    SetOrientation( 0 ); // X11 fonts are to be rotated in upper layers
-
     Point aNewPos( 0, 0 );
     int nGlyphCount = 0;
     for(;; ++nGlyphCount )
@@ -673,7 +656,7 @@ bool X11FontLayout::LayoutText( ImplLayoutArgs& rArgs )
             cChar = GetMirroredChar( cChar );
 
         // request fallback glyph if necessary
-        if( IsNotdefGlyph( cChar ) )
+        if( !mrFont.HasUnicodeChar( cChar ) )
             rArgs.NeedFallback( nCharPos, bRightToLeft );
 
         long nGlyphWidth;
@@ -689,6 +672,14 @@ bool X11FontLayout::LayoutText( ImplLayoutArgs& rArgs )
     }
 
     return (nGlyphCount > 0);
+}
+
+// -----------------------------------------------------------------------
+
+void X11FontLayout::AdjustLayout( ImplLayoutArgs& rArgs )
+{
+    GenericSalLayout::AdjustLayout( rArgs );
+    SetOrientation( 0 ); // X11 fonts are to be rotated in upper layers
 }
 
 // -----------------------------------------------------------------------
@@ -712,24 +703,6 @@ void X11FontLayout::DrawText( SalGraphics& rSalGraphics ) const
 
         rSalGraphics.maGraphicsData.DrawStringUCS2MB( mrFont, aPos, pStr, nGlyphCount );
     }
-}
-
-// -----------------------------------------------------------------------
-
-bool X11FontLayout::IsNotdefGlyph( long nGlyphIndex ) const
-{
-    // TODO: find less costly alternative, e.g. cache info
-    if( !(nGlyphIndex & GF_ISCHAR) )
-        return false;
-    XFontStruct* pXFontStruct = mrFont.GetFontStruct( RTL_TEXTENCODING_UNICODE );
-    if( !pXFontStruct )
-        return false;
-    sal_MultiByte nChar = nGlyphIndex & GF_IDXMASK;
-    XCharStruct* pCharStruct = ::GetCharinfo( pXFontStruct, nChar );
-    if( !pCharStruct )
-        return false;
-    Bool bRet = CharExists( pCharStruct );
-    return (bRet == 0);
 }
 
 // =======================================================================
