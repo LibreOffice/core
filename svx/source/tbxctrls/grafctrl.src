@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grafctrl.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 14:35:27 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 12:21:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,9 +71,8 @@ FloatingWindow RID_SVXTBX_GRFFILTER
     Closeable = TRUE ;
     Hide = TRUE ;
     SVLook = TRUE ;
-    Text = "Filter" ;
-    Text [ ENGLISH ] = "Filter" ;
-    Text [ english_us ] = "Filters" ;
+    Text [ de ] = "Filter" ;
+    Text [ en-US ] = "Filters" ;
     ToolBox TBX_GRFFILTER
     {
         SVLook = TRUE ;
@@ -147,33 +146,7 @@ FloatingWindow RID_SVXTBX_GRFFILTER
             };
         };
     };
-    Text[ portuguese ] = "Filtros";
-    Text[ russian ] = "Ôèëüòğû";
-    Text[ greek ] = "Ößëôñï";
-    Text[ dutch ] = "Filters";
-    Text[ french ] = "Filtres";
-    Text[ spanish ] = "Filtros";
-    Text[ italian ] = "Filtri";
-    Text[ danish ] = "Filtre";
-    Text[ swedish ] = "Filter";
-    Text[ polish ] = "Filtry";
-    Text[ portuguese_brazilian ] = "Filtros";
-    Text[ japanese ] = "ãƒ•ã‚£ãƒ«ã‚¿";
-    Text[ korean ] = "í•„í„°";
-    Text[ chinese_simplified ] = "ç­›é€‰";
-    Text[ chinese_traditional ] = "ç¯©é¸";
-    Text[ arabic ] = "İáÇÊÑ";
-    Text[ turkish ] = "Filtreler";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Filtres";
-    Text[ finnish ] = "Suodattimet";
-    Text[ thai ] = "à¸•à¸±à¸§à¸à¸£à¸­à¸‡";
-    Text[ czech ] = "Filtry";
-    Text[ hebrew ] = "â€®××¡× × ×™×â€¬";
-    Text[ hindi ] = "à¤«à¤¼à¤¿à¤²à¥à¤Ÿà¤°à¥‡à¤‚";
-    Text[ slovak ] = "Filtre";
-    Text[ hungarian ] = "SzÅ±rÅ‘k";
-    Text[ slovenian ] = "Filtri";
+    Text [ x-comment ] = " ";
 };
 
 // -----------
@@ -182,291 +155,48 @@ FloatingWindow RID_SVXTBX_GRFFILTER
 
 String RID_SVXSTR_UNDO_GRAFMODE
 {
-    Text = "Grafikmodus";
-    Text[ english ] = "Graphics mode";
-    Text[ english_us ] = "Graphics Mode";
-    Text[ portuguese ] = "Modo gráfico";
-    Text[ greek ] = "ÊáôÜóôáóç ãñáöéêşí";
-    Text[ dutch ] = "Afbeeldingenmodus";
-    Text[ french ] = "Mode Graphique";
-    Text[ spanish ] = "Modo gráfico";
-    Text[ swedish ] = "Grafikläge";
-    Text[ russian ] = "Ãğàôè÷åñêèé ğåæèì";
-    Text[ italian ] = "Modo grafico";
-    Text[ danish ] = "Grafiktilstand";
-    Text[ polish ] = "Tryb graficzny";
-    Text[ portuguese_brazilian ] = "Modo Figuras";
-    Text[ japanese ] = "å›³ãƒ¢ãƒ¼ãƒ‰";
-    Text[ korean ] = "ê·¸ë¦¼ ëª¨ë“œ";
-    Text[ chinese_simplified ] = "å›¾å½¢æ¨¡å¼";
-    Text[ chinese_traditional ] = "åœ–å½¢æ¨¡å¼";
-    Text[ arabic ] = "æÖÚ ÇáÕæÑ";
-    Text[ turkish ] = "Grafik Modu";
-    Text[ catalan ] = "Mode gràfic";
-    Text[ finnish ] = "Grafiikkatila";
-    Text[ thai ] = "à¹‚à¸«à¸¡à¸”à¸à¸£à¸²à¸Ÿà¸´à¸„";
-    Text[ czech ] = "GrafickÃ½ reÅ¾im";
-    Text[ hebrew ] = "â€®××¦×‘ ×’×¨×¤×™â€¬";
-    Text[ hindi ] = "à¤¸à¥à¤šà¤¿à¤¤à¥à¤° à¤ªà¥à¤°à¤•à¤¾à¤°";
-    Text[ slovak ] = "GrafickÃ½ reÅ¾im";
-    Text[ hungarian ] = "Grafikus mÃ³d";
-    Text[ slovenian ] = "GrafiÄni naÄin";
+    Text [ de ] = "Grafikmodus";
+    Text [ en-US ] = "Graphics Mode";
 };
 String RID_SVXSTR_UNDO_GRAFRED
 {
-    Text = "Rotanteil";
-    Text[ english ] = "Red portion";
-    Text[ english_us ] = "Red";
-    Text[ portuguese ] = "Proporção de vermelho";
-    Text[ greek ] = "Áíáëïãßá êüêêéíï";
-    Text[ dutch ] = "Rood";
-    Text[ french ] = "Proportion de rouge";
-    Text[ spanish ] = "Proporción de rojo";
-    Text[ swedish ] = "Andel rött";
-    Text[ russian ] = "Êîëè÷åñòâî êğàñíîãî";
-    Text[ italian ] = "Percentuale di rosso";
-    Text[ danish ] = "Rød";
-    Text[ polish ] = "Czerwony";
-    Text[ portuguese_brazilian ] = "Vermelho";
-    Text[ japanese ] = "èµ¤è‰²ã®å‰²åˆ";
-    Text[ korean ] = "ì ìƒ‰";
-    Text[ chinese_simplified ] = "çº¢è‰²æ¯”ä¾‹";
-    Text[ chinese_traditional ] = "ç´…è‰²æ¯”ä¾‹";
-    Text[ arabic ] = "äÓÈÉ ÇáÃÍãÑ";
-    Text[ turkish ] = "Kırmızı";
-    Text[ catalan ] = "Vermell";
-    Text[ finnish ] = "Punainen";
-    Text[ thai ] = "à¹à¸”à¸‡";
-    Text[ czech ] = "ÄŒervenÃ¡";
-    Text[ hebrew ] = "â€®××“×•×â€¬";
-    Text[ hindi ] = "à¤²à¤¾à¤²";
-    Text[ slovak ] = "ÄŒervenÃ¡";
-    Text[ hungarian ] = "VÃ¶rÃ¶s";
-    Text[ slovenian ] = "RdeÄa";
+    Text [ de ] = "Rotanteil";
+    Text [ en-US ] = "Red";
 };
 String RID_SVXSTR_UNDO_GRAFGREEN
 {
-    Text = "Grünanteil";
-    Text[ english ] = "Green portion";
-    Text[ english_us ] = "Green";
-    Text[ portuguese ] = "Proporção de verde";
-    Text[ greek ] = "Áíáëïãßá ğñÜóéíï";
-    Text[ dutch ] = "Groen";
-    Text[ french ] = "Proportion de vert";
-    Text[ spanish ] = "Proporción de verde";
-    Text[ swedish ] = "Andel grönt";
-    Text[ russian ] = "Êîëè÷åñòâî çåëåíîãî";
-    Text[ italian ] = "Percentuale di verde";
-    Text[ danish ] = "Grøn";
-    Text[ polish ] = "Zielony";
-    Text[ portuguese_brazilian ] = "Verde";
-    Text[ japanese ] = "ç·‘è‰²ã®å‰²åˆ";
-    Text[ korean ] = "ë…¹ìƒ‰";
-    Text[ chinese_simplified ] = "ç»¿è‰²æ¯”ä¾‹";
-    Text[ chinese_traditional ] = "ç¶ è‰²æ¯”ä¾‹";
-    Text[ arabic ] = "äÓÈÉ ÇáÃÎÖÑ";
-    Text[ turkish ] = "Yeşil";
-    Text[ catalan ] = "Verd";
-    Text[ finnish ] = "Vihreä";
-    Text[ thai ] = "à¹€à¸‚à¸µà¸¢à¸§";
-    Text[ czech ] = "ZelenÃ¡";
-    Text[ hebrew ] = "â€®×™×¨×•×§â€¬";
-    Text[ hindi ] = "à¤¹à¤°à¤¾";
-    Text[ slovak ] = "ZelenÃ¡";
-    Text[ hungarian ] = "ZÃ¶ld";
-    Text[ slovenian ] = "Zelena";
+    Text [ de ] = "Grünanteil";
+    Text [ en-US ] = "Green";
 };
 String RID_SVXSTR_UNDO_GRAFBLUE
 {
-    Text = "Blauanteil";
-    Text[ english ] = "Blue portion";
-    Text[ english_us ] = "Blue";
-    Text[ portuguese ] = "Proporção de azul";
-    Text[ greek ] = "Áíáëïãßá ìğëå";
-    Text[ dutch ] = "Blauw";
-    Text[ french ] = "Proportion de bleu";
-    Text[ spanish ] = "Proporción de azul";
-    Text[ swedish ] = "Andel blått";
-    Text[ russian ] = "Êîëè÷åñòâî ñèíåãî";
-    Text[ italian ] = "Percentuale di blu";
-    Text[ danish ] = "Blå";
-    Text[ polish ] = "Niebieski";
-    Text[ portuguese_brazilian ] = "Azul";
-    Text[ japanese ] = "é’è‰²ã®å‰²åˆ";
-    Text[ korean ] = "ì²­ìƒ‰";
-    Text[ chinese_simplified ] = "è“è‰²æ¯”ä¾‹";
-    Text[ chinese_traditional ] = "è—è‰²æ¯”ä¾‹";
-    Text[ arabic ] = "äÓÈÉ ÇáÃÒÑŞ";
-    Text[ turkish ] = "Mavi";
-    Text[ catalan ] = "Blau";
-    Text[ finnish ] = "Sininen";
-    Text[ thai ] = "à¸™à¹‰à¸³à¹€à¸‡à¸´à¸™";
-    Text[ czech ] = "ModrÃ¡";
-    Text[ hebrew ] = "â€®×›×—×•×œâ€¬";
-    Text[ hindi ] = "à¤¨à¥€à¤²à¤¾";
-    Text[ slovak ] = "ModrÃ¡";
-    Text[ hungarian ] = "KÃ©k";
-    Text[ slovenian ] = "Modra";
+    Text [ de ] = "Blauanteil";
+    Text [ en-US ] = "Blue";
 };
 String RID_SVXSTR_UNDO_GRAFLUMINANCE
 {
-    Text = "Helligkeit";
-    Text[ english ] = "Luminance";
-    Text[ english_us ] = "Brightness";
-    Text[ portuguese ] = "Brilho";
-    Text[ greek ] = "Öùôåéíüôçôá";
-    Text[ dutch ] = "Helderheid";
-    Text[ french ] = "Luminosité";
-    Text[ spanish ] = "Brillo";
-    Text[ swedish ] = "Ljusstyrka";
-    Text[ russian ] = "ßğêîñòü";
-    Text[ italian ] = "Luminosità";
-    Text[ danish ] = "Lysstyrke";
-    Text[ polish ] = "Jasnoœæ";
-    Text[ portuguese_brazilian ] = "Brilho";
-    Text[ japanese ] = "æ˜åº¦";
-    Text[ korean ] = "ë°ê¸°";
-    Text[ chinese_simplified ] = "äº®åº¦";
-    Text[ chinese_traditional ] = "äº®åº¦";
-    Text[ arabic ] = "ÇáÅÖÇÁÉ";
-    Text[ turkish ] = "Parlaklık";
-    Text[ catalan ] = "Brillantor";
-    Text[ finnish ] = "Kirkkaus";
-    Text[ thai ] = "à¸„à¸§à¸²à¸¡à¸ªà¸§à¹ˆà¸²à¸‡";
-    Text[ czech ] = "Jas";
-    Text[ hebrew ] = "â€®×‘×”×™×¨×•×ªâ€¬";
-    Text[ hindi ] = "à¤šà¤®à¤•à¥€à¤²à¤¾à¤ªà¤¨";
-    Text[ slovak ] = "Jas";
-    Text[ hungarian ] = "FÃ©nyerÅ‘";
-    Text[ slovenian ] = "Svetlost";
+    Text [ de ] = "Helligkeit";
+    Text [ en-US ] = "Brightness";
 };
 String RID_SVXSTR_UNDO_GRAFCONTRAST
 {
-    Text = "Kontrast";
-    Text[ english ] = "Contrast";
-    Text[ english_us ] = "Contrast";
-    Text[ portuguese ] = "Contraste";
-    Text[ greek ] = "ÊïíôñÜóô";
-    Text[ dutch ] = "Contrast";
-    Text[ french ] = "Contraste";
-    Text[ spanish ] = "Contraste";
-    Text[ swedish ] = "Kontrast";
-    Text[ russian ] = "Êîíòğàñò";
-    Text[ italian ] = "Contrasto";
-    Text[ danish ] = "Kontrast";
-    Text[ polish ] = "Kontrast";
-    Text[ portuguese_brazilian ] = "Contraste";
-    Text[ japanese ] = "ã‚³ãƒ³ãƒˆãƒ©ã‚¹ãƒˆ";
-    Text[ korean ] = "ëŒ€ë¹„";
-    Text[ chinese_simplified ] = "å¯¹æ¯”åº¦";
-    Text[ chinese_traditional ] = "å°æ¯”åº¦";
-    Text[ arabic ] = "ÇáÊÈÇíä";
-    Text[ turkish ] = "Karşıtlık";
-    Text[ catalan ] = "Contrast";
-    Text[ finnish ] = "Kontrasti";
-    Text[ thai ] = "à¸„à¸§à¸²à¸¡à¸„à¸¡à¸Šà¸±à¸”";
-    Text[ czech ] = "Kontrast";
-    Text[ hebrew ] = "â€®× ×™×’×•×“â€¬";
-    Text[ hindi ] = "à¤­à¥‡à¤¦ à¤¦à¤¿à¤–à¤²à¤¾à¤¨à¤¾";
-    Text[ slovak ] = "Kontrast";
-    Text[ hungarian ] = "Kontraszt";
-    Text[ slovenian ] = "Kontrast";
+    Text [ de ] = "Kontrast";
+    Text [ en-US ] = "Contrast";
 };
 String RID_SVXSTR_UNDO_GRAFGAMMA
 {
-    Text = "Gamma";
-    Text[ english ] = "Gamma";
-    Text[ english_us ] = "Gamma";
-    Text[ portuguese ] = "Gamma";
-    Text[ greek ] = "ÃÜììá";
-    Text[ dutch ] = "Gamma";
-    Text[ french ] = "Gamma";
-    Text[ spanish ] = "Gamma";
-    Text[ swedish ] = "Gamma";
-    Text[ russian ] = "Ãàììà";
-    Text[ italian ] = "Gamma";
-    Text[ danish ] = "Gamma";
-    Text[ polish ] = "Gamma";
-    Text[ portuguese_brazilian ] = "Gama";
-    Text[ japanese ] = "ã‚¬ãƒ³ãƒ";
-    Text[ korean ] = "ê°ë§ˆ";
-    Text[ chinese_simplified ] = "ç°è‰²ç³»æ•°";
-    Text[ chinese_traditional ] = "ç°è‰²ç³»æ•¸";
-    Text[ arabic ] = "ÛÇãÇ";
-    Text[ turkish ] = "Gama";
-    Text[ catalan ] = "Gamma";
-    Text[ finnish ] = "Gamma";
-    Text[ thai ] = "à¹à¸à¸¡à¸¡à¹ˆà¸²";
-    Text[ czech ] = "Gamma";
-    Text[ hebrew ] = "â€®×’××â€¬";
-    Text[ hindi ] = "à¤—à¤¾à¤®à¤¾";
-    Text[ slovak ] = "Gamma";
-    Text[ hungarian ] = "Gamma";
-    Text[ slovenian ] = "Gama";
+    Text [ de ] = "Gamma";
+    Text [ en-US ] = "Gamma";
 };
 String RID_SVXSTR_UNDO_GRAFTRANSPARENCY
 {
-    Text = "Transparenz";
-    Text[ english ] = "Transparency";
-    Text[ english_us ] = "Transparency";
-    Text[ portuguese ] = "Transparência";
-    Text[ greek ] = "ÄéáöÜíåéá";
-    Text[ dutch ] = "Transparantie";
-    Text[ french ] = "Transparence";
-    Text[ spanish ] = "Transparencia";
-    Text[ swedish ] = "Transparens";
-    Text[ russian ] = "Ïğîçğà÷íîñòü";
-    Text[ italian ] = "Trasparenza";
-    Text[ danish ] = "Transparens";
-    Text[ polish ] = "Przezroczystoœæ";
-    Text[ portuguese_brazilian ] = "Transparência";
-    Text[ japanese ] = "é€éæ€§";
-    Text[ korean ] = "íˆ¬ëª…ë„";
-    Text[ chinese_simplified ] = "é€æ˜";
-    Text[ chinese_traditional ] = "é€æ˜";
-    Text[ arabic ] = "ÔİÇİíÉ";
-    Text[ turkish ] = "Saydamlık";
-    Text[ catalan ] = "Transparència";
-    Text[ finnish ] = "Läpinäkyvyys";
-    Text[ thai ] = "à¸„à¸§à¸²à¸¡à¹‚à¸›à¸£à¹ˆà¸‡à¹à¸ªà¸‡";
-    Text[ czech ] = "PrÅ¯hlednost";
-    Text[ hebrew ] = "â€®×©×§×™×¤×•×ªâ€¬";
-    Text[ hindi ] = "à¤ªà¤¾à¤°à¤¦à¤°à¥à¤¶à¤•à¤¤à¤¾";
-    Text[ slovak ] = "PriehÄ¾adnosÅ¥";
-    Text[ hungarian ] = "ÃtlÃ¡tszÃ³sÃ¡g";
-    Text[ slovenian ] = "Prosojnost";
+    Text [ de ] = "Transparenz";
+    Text [ en-US ] = "Transparency";
 };
 String RID_SVXSTR_GRAFCROP
 {
-    Text = "Zuschneiden";
-    Text[ english ] = "Crop";
-    Text[ english_us ] = "Crop";
-    Text[ portuguese ] = "Recortar";
-    Text[ russian ] = "Êàäğèğîâàòü";
-    Text[ greek ] = "ĞåñéêïğŞ";
-    Text[ dutch ] = "Uitknippen";
-    Text[ french ] = "Rogner";
-    Text[ spanish ] = "Recortar";
-    Text[ italian ] = "Taglia";
-    Text[ danish ] = "Beskær";
-    Text[ swedish ] = "Beskär";
-    Text[ polish ] = "Przytnij";
-    Text[ portuguese_brazilian ] = "Recortar";
-    Text[ japanese ] = "ãƒˆãƒªãƒŸãƒ³ã‚°";
-    Text[ korean ] = "ë‹¤ë“¬ê¸°";
-    Text[ chinese_simplified ] = "è£å‰ª";
-    Text[ chinese_traditional ] = "è£å‰ª";
-    Text[ turkish ] = "Kırma";
-    Text[ arabic ] = "ÇŞÊÕÇÕ";
-    Text[ catalan ] = "Retalla";
-    Text[ finnish ] = "Rajaa";
-    Text[ thai ] = "à¸„à¸£à¸­à¸šà¸•à¸±à¸”";
-    Text[ czech ] = "OÅ™Ã­znout";
-    Text[ hebrew ] = "â€®×—×™×ª×•×šâ€¬";
-    Text[ hindi ] = "à¤•à¥à¤°à¥‹à¤ª";
-    Text[ slovak ] = "OrezaÅ¥";
-    Text[ hungarian ] = "LevÃ¡gÃ¡s";
-    Text[ slovenian ] = "ObreÅ¾i";
+    Text [ de ] = "Zuschneiden";
+    Text [ en-US ] = "Crop";
 };
 
 // ********************************************************************** EOF
