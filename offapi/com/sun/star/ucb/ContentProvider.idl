@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContentProvider.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2001-01-23 10:08:45 $
+ *  last change: $Author: kso $ $Date: 2001-01-31 08:57:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,10 +69,6 @@
 #include <com/sun/star/ucb/XContentIdentifierFactory.idl>
 #endif
 
-#ifndef __com_sun_star_ucb_XContentCreator_idl__
-#include <com/sun/star/ucb/XContentCreator.idl>
-#endif
-
 #ifndef __com_sun_star_ucb_XParameterizedContentProvider_idl__
 #include <com/sun/star/ucb/XParameterizedContentProvider.idl>
 #endif
@@ -91,7 +87,7 @@ module com { module sun { module star { module ucb {
 service ContentProvider
 {
     //-------------------------------------------------------------------------
-    /** gives access to all kind of contents provided by this provider.
+    /** gives access to all contents provided by this provider.
      */
     interface com::sun::star::ucb::XContentProvider;
 
@@ -99,48 +95,40 @@ service ContentProvider
     /** creates special <type>XContentIdentifier</type> implementation
         objects for the contents provided by this content provider.
 
-        This interface is optional. It can be implemented in case the
-        provider wants to provide some additional interfaces with
-        it's implementation of the identifier objects.
+        <p>This interface is optional. It can be implemented in case the
+        provider wants to provide some additional interfaces with its
+        implementation of the identifier objects.
      */
-    [optional] interface com::sun::star::ucb::XContentIdentifierFactory;
-
-    //-------------------------------------------------------------------------
-    /** creates new root contents (i.e. a new POP3-Account object). A content
-        is "new", if it does not physically exist before creating it using
-        this interface. A root object is an object which is no child of
-        another content.
-
-        This interface must be implemented only by providers which are able
-        to create new root objects.
-     */
-    // [optional]
-    interface com::sun::star::ucb::XContentCreator;
+    interface com::sun::star::ucb::XContentIdentifierFactory;
 
     //-------------------------------------------------------------------------
     /** allows a <type>ContentProvider</type> to adjust itself to special
-        needs.  Whenever a <type>ContentProvider</type> that supports this
+        needs.
+
+        <p>Whenever a <type>ContentProvider</type> that supports this
         interface is registered at a <type>XContentProviderManager</type>, the
-        method
-        <member>XParameterizedContentProvider::registerInstance</member>
-        should first be called, using the returned
-        <type>XContentProvider</type> to register at the
-        <type>XContentProviderManager</type>.
+        method <member>XParameterizedContentProvider::registerInstance</member>
+        should first be called, using the returned <type>XContentProvider</type>
+        to register at the <type>XContentProviderManager</type>.
+
+        <p>This interface is optional.
      */
-    // [optional]
     interface com::sun::star::ucb::XParameterizedContentProvider;
 
     //-------------------------------------------------------------------------
     /** allows the implementation of a proxy object for a content provider.
-        The content provider returned by the implementation of this interface
+
+        <p>The content provider returned by the implementation of this interface
         will be the original provider. Implementing a content provider proxy
         can be useful if the creation of the real content provider object
         shall be deferred for some reason until the first method gets called
         on it ( i.e. performance ).
 
+        <p>This interface is optional, but it is highly recommended to support
+        it.
+
         @see <type>ContentProviderProxy</type>
      */
-    // [optional]
     interface com::sun::star::ucb::XContentProviderSupplier;
 };
 
