@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShellImplementation.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-15 08:59:15 $
+ *  last change: $Author: rt $ $Date: 2004-08-04 09:00:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,10 +125,15 @@ ImpUndoDeleteWarning::ImpUndoDeleteWarning(Window* pParent)
 
 } // end of anonymous namespace
 
+
+
+
 namespace sd {
 
 ViewShell::Implementation::Implementation (ViewShell& rViewShell)
-    : mrViewShell (rViewShell)
+    : mbIsShowingUIControls(false),
+      mbIsMainViewShell(false),
+      mrViewShell (rViewShell)
 {
 }
 
@@ -235,8 +240,8 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
 
             delete pDlg;
 
-            // alles deselektieren, denn ein selektiertes Objekt
-            // koennte gleich verschwinden
+            // Clear the selection because the selectec object may be
+            // removed as a result of the ssignment of the layout.
             mrViewShell.GetDrawView()->UnmarkAll();
         }
         else
@@ -252,6 +257,7 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
             delete pDlg;
             rRequest.Ignore ();
             mrViewShell.Cancel ();
+            break;
         }
     }
     else if (pArgs->Count() == 4)
@@ -343,6 +349,10 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
         ModifyPageUndoAction* pAction = new ModifyPageUndoAction(
             pUndoManager, pDocument, pUndoPage, aNewName, aNewAutoLayout, bBVisible, bBObjsVisible);
         pUndoManager->AddUndoAction(pAction);
+
+        // Clear the selection because the selectec object may be removed as
+        // a result of the ssignment of the layout.
+        mrViewShell.GetDrawView()->UnmarkAll();
 
         SfxChildWindow* pPreviewChildWindow =
             mrViewShell.GetViewFrame()->GetChildWindow(
