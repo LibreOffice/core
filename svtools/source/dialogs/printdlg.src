@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printdlg.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:37:59 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:38:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     Text = "Drucken" ;
     Text [ ENGLISH ] = "Print" ;
     Text [ english_us ] = "Print" ;
-    Text [ portuguese_brazilian ] = "Drucken" ;
+    Text [ portuguese_brazilian ] = "Imprimir" ;
     Text [ swedish ] = "Skriv ut" ;
     Text [ danish ] = "Udskriv" ;
     Text [ italian ] = "Stampa" ;
@@ -87,7 +87,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text = "Drucker" ;
         Text [ ENGLISH ] = "Printer" ;
         Text [ english_us ] = "Printer" ;
-        Text [ portuguese_brazilian ] = "Drucker" ;
+        Text [ portuguese_brazilian ] = "Impressora" ;
         Text [ swedish ] = "Skrivare" ;
         Text [ danish ] = "Printer" ;
         Text [ italian ] = "Stampante" ;
@@ -108,6 +108,9 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ catalan ] = "Impressora";
         Text[ finnish ] = "Tulostin";
         Text[ thai ] = "เครื่องพิมพ์";
+        Text[ czech ] = "Tiskárna";
+        Text[ hebrew ] = "‮מדפסת‬";
+        Text[ hindi ] = "मुद्रक";
     };
     FixedText FT_NAME
     {
@@ -116,7 +119,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text = "~Name" ;
         Text [ ENGLISH ] = "~Name" ;
         Text [ english_us ] = "~Name" ;
-        Text [ portuguese_brazilian ] = "~Name" ;
+        Text [ portuguese_brazilian ] = "~Nome" ;
         Text [ swedish ] = "~Namn" ;
         Text [ danish ] = "Navn" ;
         Text [ italian ] = "Nome" ;
@@ -126,7 +129,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text [ portuguese ] = "~Nome" ;
         Text[ chinese_simplified ] = "名称(~N)";
         Text[ russian ] = "~���";
-        Text[ polish ] = "Nazwa";
+        Text[ polish ] = "~Nazwa";
         Text[ japanese ] = "名前(~N)";
         Text[ chinese_traditional ] = "名稱(~N)";
         Text[ arabic ] = "�����";
@@ -137,6 +140,9 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ catalan ] = "~Nom";
         Text[ finnish ] = "~Nimi";
         Text[ thai ] = "~ชื่อ";
+        Text[ czech ] = "Název";
+        Text[ hebrew ] = "‮שם מדפסת‬";
+        Text[ hindi ] = "~नाम";
     };
     ListBox LB_NAMES
     {
@@ -154,7 +160,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text [ ENGLISH ] = "~Properties..." ;
         Text [ portuguese ] = "~Propriedades..." ;
         Text [ english_us ] = "Propert~ies..." ;
-        Text [ portuguese_brazilian ] = "~Eigenschaften..." ;
+        Text [ portuguese_brazilian ] = "~Propriedades..." ;
         Text [ swedish ] = "~Egenskaper..." ;
         Text [ danish ] = "Egenskaber..." ;
         Text [ italian ] = "~Propriet�..." ;
@@ -174,6 +180,9 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ catalan ] = "Propietats...";
         Text[ finnish ] = "Ominaisuu~det...";
         Text[ thai ] = "คุณสม~บัติ...";
+        Text[ czech ] = "Vlastnosti...";
+        Text[ hebrew ] = "‮מאפינים...‬";
+        Text[ hindi ] = "Propert~ies...";
     };
     FixedText FT_STATUS
     {
@@ -203,6 +212,9 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ catalan ] = "Estat";
         Text[ finnish ] = "Tila";
         Text[ thai ] = "สถานะ";
+        Text[ czech ] = "Stav";
+        Text[ hebrew ] = "‮מצב‬";
+        Text[ hindi ] = "वस्तुस्थिति";
     };
     FixedText FI_STATUS
     {
@@ -216,7 +228,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text = "Typ" ;
         Text [ ENGLISH ] = "Type" ;
         Text [ english_us ] = "Type" ;
-        Text [ portuguese_brazilian ] = "Typ" ;
+        Text [ portuguese_brazilian ] = "Tipo" ;
         Text [ swedish ] = "Typ" ;
         Text [ danish ] = "Type" ;
         Text [ italian ] = "Tipo" ;
@@ -237,6 +249,9 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ catalan ] = "Tipus";
         Text[ finnish ] = "Tyyppi";
         Text[ thai ] = "ชนิด";
+        Text[ czech ] = "Typ";
+        Text[ hebrew ] = "‮סוג‬";
+        Text[ hindi ] = "वर्ग";
     };
     FixedText FI_TYPE
     {
@@ -250,7 +265,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text = "Ort" ;
         Text [ ENGLISH ] = "Location" ;
         Text [ english_us ] = "Location" ;
-        Text [ portuguese_brazilian ] = "Ort" ;
+        Text [ portuguese_brazilian ] = "Local" ;
         Text [ swedish ] = "Plats" ;
         Text [ danish ] = "Placering" ;
         Text [ italian ] = "Percorso" ;
@@ -265,12 +280,15 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ chinese_traditional ] = "位置";
         Text[ arabic ] = "������";
         Text[ greek ] = "����";
-        Text[ korean ] = "구/군/시";
+        Text[ korean ] = "위치";
         Text[ turkish ] = "Yer";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ubicaci�";
         Text[ finnish ] = "Sijainti";
         Text[ thai ] = "ที่ตั้ง";
+        Text[ czech ] = "Umístění";
+        Text[ hebrew ] = "‮מיקום‬";
+        Text[ hindi ] = "स्थान";
     };
     FixedText FI_LOCATION
     {
@@ -284,7 +302,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text = "Kommentar" ;
         Text [ ENGLISH ] = "Comment" ;
         Text [ english_us ] = "Comment" ;
-        Text [ portuguese_brazilian ] = "Kommentar" ;
+        Text [ portuguese_brazilian ] = "Coment�rio" ;
         Text [ swedish ] = "Kommentar" ;
         Text [ danish ] = "Kommentar" ;
         Text [ italian ] = "Commento" ;
@@ -305,6 +323,9 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ catalan ] = "Comentari";
         Text[ finnish ] = "Huomautus";
         Text[ thai ] = "ข้อคิดเห็น";
+        Text[ czech ] = "Komentář";
+        Text[ hebrew ] = "‮הערה‬";
+        Text[ hindi ] = "Comment";
     };
     FixedText FI_COMMENT
     {
@@ -328,16 +349,19 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ danish ] = "Faxnummer";
         Text[ swedish ] = "Faxnummer";
         Text[ polish ] = "Numer faksu";
-        Text[ portuguese_brazilian ] = "Fax number";
+        Text[ portuguese_brazilian ] = "N� de fax";
         Text[ japanese ] = "Fax 番号";
         Text[ korean ] = "팩스 번호";
         Text[ chinese_simplified ] = "传真号码";
         Text[ chinese_traditional ] = "傳真號碼";
-        Text[ turkish ] = "Fax number";
+        Text[ turkish ] = "Fax numaras�";
         Text[ arabic ] = "��� ������";
         Text[ catalan ] = "N�mero de fax";
         Text[ finnish ] = "Faksinumero";
         Text[ thai ] = "หมายเลขโทรสาร";
+        Text[ czech ] = "Faxové číslo";
+        Text[ hebrew ] = "‮מספר הפקס‬";
+        Text[ hindi ] = "Fax number";
     };
     Edit EDT_FAXNO
     {
@@ -352,7 +376,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text = "Ausdruck ~in Datei" ;
         Text [ ENGLISH ] = "Print to f~ile" ;
         Text [ english_us ] = "Print to file" ;
-        Text [ portuguese_brazilian ] = "Ausdruck ~in Datei" ;
+        Text [ portuguese_brazilian ] = "Imprimir num arquivo" ;
         Text [ swedish ] = "Skriv ut till ~fil" ;
         Text [ danish ] = "Udskrift til fil" ;
         Text [ italian ] = "Stampa su ~file" ;
@@ -373,6 +397,9 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ catalan ] = "Imprimeix a un fitxer";
         Text[ finnish ] = "Tulosta tiedostoon";
         Text[ thai ] = "พิมพ์ถึงแฟ้ม";
+        Text[ czech ] = "Tisk do souboru";
+        Text[ hebrew ] = "‮הדפסה לקובץ‬";
+        Text[ hindi ] = "Print to file";
     };
     FixedText FI_PRINTFILE
     {
@@ -392,7 +419,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text = "Druckbereich" ;
         Text [ ENGLISH ] = "Print range" ;
         Text [ english_us ] = "Print range" ;
-        Text [ portuguese_brazilian ] = "Druckbereich" ;
+        Text [ portuguese_brazilian ] = "Intervalo de impress�o" ;
         Text [ swedish ] = "Utskriftsomr�de" ;
         Text [ danish ] = "Udskriftsomr�de" ;
         Text [ italian ] = "Area di stampa" ;
@@ -408,11 +435,14 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ arabic ] = "���� �������";
         Text[ greek ] = "������� ���������";
         Text[ korean ] = "인쇄 범위";
-        Text[ turkish ] = "Yazd�rma aral���";
+        Text[ turkish ] = "Bask� aral���";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "�rea d'impressi�";
         Text[ finnish ] = "Tulostusalue";
         Text[ thai ] = "ช่วงการพิมพ์";
+        Text[ czech ] = "Rozsah tisku";
+        Text[ hebrew ] = "‮טווח הדפסה‬";
+        Text[ hindi ] = "Print range";
     };
     RadioButton RBT_ALL
     {
@@ -422,7 +452,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text [ ENGLISH ] = "~All" ;
         Text [ portuguese ] = "~Tudo" ;
         Text [ english_us ] = "All" ;
-        Text [ portuguese_brazilian ] = "~Alles" ;
+        Text [ portuguese_brazilian ] = "Tudo" ;
         Text [ swedish ] = "~Allt" ;
         Text [ danish ] = "Alt" ;
         Text [ italian ] = "~Tutto" ;
@@ -442,6 +472,9 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ catalan ] = "Tot";
         Text[ finnish ] = "Kaikki";
         Text[ thai ] = "ทั้งหมด";
+        Text[ czech ] = "Vše";
+        Text[ hebrew ] = "‮הכל‬";
+        Text[ hindi ] = "सब";
     };
     RadioButton RBT_PAGES
     {
@@ -451,7 +484,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text [ ENGLISH ] = "Pa~ges" ;
         Text [ portuguese ] = "~P�ginas" ;
         Text [ english_us ] = "Pages" ;
-        Text [ portuguese_brazilian ] = "~Seiten" ;
+        Text [ portuguese_brazilian ] = "P�ginas" ;
         Text [ swedish ] = "~Sidor" ;
         Text [ danish ] = "Sider" ;
         Text [ italian ] = "Pagine" ;
@@ -471,6 +504,9 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ catalan ] = "~P�gines";
         Text[ finnish ] = "Sivut";
         Text[ thai ] = "หน้า";
+        Text[ czech ] = "Stránky";
+        Text[ hebrew ] = "‮עמודים‬";
+        Text[ hindi ] = "पृष्ठें";
     };
     RadioButton RBT_SELECTION
     {
@@ -480,7 +516,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text [ ENGLISH ] = "~Selection" ;
         Text [ portuguese ] = "~Selec��o" ;
         Text [ english_us ] = "Selection" ;
-        Text [ portuguese_brazilian ] = "A~uswahl" ;
+        Text [ portuguese_brazilian ] = "Sele��o" ;
         Text [ swedish ] = "~Markering" ;
         Text [ danish ] = "Udvalg" ;
         Text [ italian ] = "Scelta" ;
@@ -489,7 +525,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text [ dutch ] = "~Selectie" ;
         Text[ chinese_simplified ] = "选择";
         Text[ russian ] = "���������";
-        Text[ polish ] = "Zaznaczony fragment";
+        Text[ polish ] = "Zaznaczenie";
         Text[ japanese ] = "選択した部分";
         Text[ chinese_traditional ] = "選擇";
         Text[ arabic ] = "�������";
@@ -500,6 +536,9 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ catalan ] = "~Selecci�";
         Text[ finnish ] = "Valinta";
         Text[ thai ] = "เลือก";
+        Text[ czech ] = "Výběr";
+        Text[ hebrew ] = "‮מבחר‬";
+        Text[ hindi ] = "Selection";
     };
     Edit EDT_PAGES
     {
@@ -525,7 +564,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text = "Kopien" ;
         Text [ ENGLISH ] = "Copies" ;
         Text [ english_us ] = "Copies" ;
-        Text [ portuguese_brazilian ] = "Kopien" ;
+        Text [ portuguese_brazilian ] = "C�pias" ;
         Text [ swedish ] = "Kopior" ;
         Text [ danish ] = "Kopier" ;
         Text [ italian ] = "Copia" ;
@@ -546,6 +585,9 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ catalan ] = "C�pies";
         Text[ finnish ] = "Kopioita";
         Text[ thai ] = "สำเนา";
+        Text[ czech ] = "Kopie";
+        Text[ hebrew ] = "‮עותקים‬";
+        Text[ hindi ] = "प्रतिलिपियाँ";
     };
     FixedText FT_COPIES
     {
@@ -554,7 +596,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text = "E~xemplare" ;
         Text [ ENGLISH ] = "Number of ~copies" ;
         Text [ english_us ] = "Number of copies" ;
-        Text [ portuguese_brazilian ] = "E~xemplare" ;
+        Text [ portuguese_brazilian ] = "N�mero de c�pias" ;
         Text [ swedish ] = "E~xemplar" ;
         Text [ danish ] = "Antal kopier" ;
         Text [ italian ] = "Numero di copie" ;
@@ -564,7 +606,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text [ portuguese ] = "E~xemplares" ;
         Text[ chinese_simplified ] = "打印份数";
         Text[ russian ] = "���������� �����";
-        Text[ polish ] = "Egzemplarze";
+        Text[ polish ] = "Liczba kopii";
         Text[ japanese ] = "部数";
         Text[ chinese_traditional ] = "列印件數";
         Text[ arabic ] = "��� �����";
@@ -575,6 +617,9 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ catalan ] = "~Nombre de c�pies";
         Text[ finnish ] = "Kopioiden m��r�";
         Text[ thai ] = "จำนวนสำเนา";
+        Text[ czech ] = "Počet kopií";
+        Text[ hebrew ] = "‮מספר עותקים‬";
+        Text[ hindi ] = "प्रतिलिपियों की संख्या";
     };
     NumericField NUM_COPIES
     {
@@ -596,7 +641,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text = "S~ortieren" ;
         Text [ ENGLISH ] = "C~ollate" ;
         Text [ english_us ] = "Co~llate" ;
-        Text [ portuguese_brazilian ] = "S~ortieren" ;
+        Text [ portuguese_brazilian ] = "~Agrupar" ;
         Text [ swedish ] = "S~ortera" ;
         Text [ danish ] = "Sorter" ;
         Text [ italian ] = "~Ordina" ;
@@ -606,7 +651,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text [ portuguese ] = "~Ordenar" ;
         Text[ chinese_simplified ] = "排序(~L)";
         Text[ russian ] = "�����������";
-        Text[ polish ] = "Sortuj";
+        Text[ polish ] = "~Sortuj";
         Text[ japanese ] = "部単位で印刷(~L)";
         Text[ chinese_traditional ] = "排序(~L)";
         Text[ arabic ] = "����� �����";
@@ -617,6 +662,9 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ catalan ] = "~Compara";
         Text[ finnish ] = "~Yhdist�";
         Text[ thai ] = "ตรวจเ~ทียบ";
+        Text[ czech ] = "Seřadit";
+        Text[ hebrew ] = "‮התאם‬";
+        Text[ hindi ] = "Co~llate";
     };
     FixedImage IMG_COLLATE
     {
@@ -641,7 +689,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text [ ENGLISH ] = "Op~tions..." ;
         Text [ portuguese ] = "Op��e~s..." ;
         Text [ english_us ] = "~Options..." ;
-        Text [ portuguese_brazilian ] = "Zus?tze..." ;
+        Text [ portuguese_brazilian ] = "Op��e~s..." ;
         Text [ swedish ] = "F~ler..." ;
         Text [ danish ] = "Flere..." ;
         Text [ italian ] = "E~xtra..." ;
@@ -650,7 +698,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text [ dutch ] = "O~verige..." ;
         Text[ chinese_simplified ] = "其他(~O)...";
         Text[ russian ] = "���������...";
-        Text[ polish ] = "Dodatki...";
+        Text[ polish ] = "~Opcje...";
         Text[ japanese ] = "オプション(~O)...";
         Text[ chinese_traditional ] = "其他(~O)...";
         Text[ arabic ] = "������...";
@@ -661,6 +709,9 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ catalan ] = "~Opcions";
         Text[ finnish ] = "~Asetukset...";
         Text[ thai ] = "~ตัวเลือก...";
+        Text[ czech ] = "Volby...";
+        Text[ hebrew ] = "‮אפשרויות...‬";
+        Text[ hindi ] = "~विकल्प...";
     };
     OKButton BTN_OK
     {
@@ -685,7 +736,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ english_us ] = "<All>";
         Text[ portuguese ] = "<Tudo>";
         Text[ russian ] = "<���>";
-        Text[ greek ] = "<All>";
+        Text[ greek ] = "<���>";
         Text[ dutch ] = "<Alle>";
         Text[ french ] = "<Tout>";
         Text[ spanish ] = "<Todos>";
@@ -694,15 +745,18 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ danish ] = "<Alle>";
         Text[ swedish ] = "<Alla>";
         Text[ polish ] = "<Wszystko>";
-        Text[ portuguese_brazilian ] = "<All>";
+        Text[ portuguese_brazilian ] = "<Tudo>";
         Text[ japanese ] = "<すべて>";
         Text[ korean ] = "<모두>";
         Text[ chinese_simplified ] = "<全部>";
         Text[ chinese_traditional ] = "<全部>";
-        Text[ turkish ] = "<All>";
-        Text[ arabic ] = "<All>";
+        Text[ turkish ] = "<Hepsi>";
+        Text[ arabic ] = "<����>";
         Text[ catalan ] = "<Tot>";
         Text[ thai ] = "<ทั้งหมด>";
+        Text[ czech ] = "<Vše>";
+        Text[ hebrew ] = "‮<הכל>‬";
+        Text[ hindi ] = "<सब>";
     };
     Text[ chinese_simplified ] = "打印";
     Text[ russian ] = "������";
@@ -717,6 +771,9 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     Text[ catalan ] = "Imprimeix";
     Text[ finnish ] = "Tulosta";
     Text[ thai ] = "พิมพ์";
+    Text[ czech ] = "Tisk";
+    Text[ hebrew ] = "‮הדפסה‬";
+    Text[ hindi ] = "छपाई";
 };
 
 Image RID_IMG_PRNDLG_COLLATE
@@ -742,6 +799,15 @@ Image RID_IMG_PRNDLG_NOCOLLATE_HC
     ImageBitmap = Bitmap { File = "ncollate_h.bmp" ; };
     MaskColor = IMAGE_MAGENTA_MASK ;
 };
+
+
+
+
+
+
+
+
+
 
 
 
