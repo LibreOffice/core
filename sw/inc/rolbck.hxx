@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rolbck.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:27 $
+ *  last change: $Author: rt $ $Date: 2004-05-17 16:11:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,7 @@ enum HISTORY_HINT {
     HSTRY_RESETATTRSET,
     HSTRY_CHGFLYANCHOR,
     HSTRY_CHGFLYCHAIN,
+    HSTRY_CHGCHARFMT, // #i27615#
     HSTRY_END
 };
 class SwHstryHint
@@ -343,6 +344,17 @@ public:
     virtual void SetInDoc( SwDoc* pDoc, BOOL bTmpSet );
 };
 
+// #i27615#
+class SwHstryChgCharFmt : public SwHstryHint
+{
+    SfxItemSet aOldSet;
+    String sFmt;
+public:
+    SwHstryChgCharFmt( const SfxItemSet& rSet, const String & sFmt);
+    virtual void SetInDoc( SwDoc* pDoc, BOOL bTmpSet );
+    OUT_HSTR_HINT(SetAttrSet)
+};
+
 
 #endif
 
@@ -376,6 +388,7 @@ public:
     void Add( const SwFrmFmt& rFmt );
     void Add( const SwFlyFrmFmt&, USHORT& rSetPos );
     void Add( const SwTxtFtn& );
+    void Add( const SfxItemSet & rSet, const SwCharFmt & rCharFmt); // #i27615#
 
     USHORT Count() const { return SwpHstry::Count(); }
     USHORT GetTmpEnd() const { return SwpHstry::Count() - nEndDiff; }
