@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlin2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mt $ $Date: 2001-05-14 15:28:15 $
+ *  last change: $Author: mt $ $Date: 2001-06-21 13:00:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -372,6 +372,18 @@ ULONG Outliner::GetControlWord() const
 {
     DBG_CHKTHIS(Outliner,0);
     return pEditEngine->GetControlWord();
+}
+
+void Outliner::SetAsianCompressionMode( EEAsianCompression n )
+{
+    DBG_CHKTHIS(Outliner,0);
+    pEditEngine->SetAsianCompressionMode( n );
+}
+
+EEAsianCompression Outliner::GetAsianCompressionMode() const
+{
+    DBG_CHKTHIS(Outliner,0);
+    return pEditEngine->GetAsianCompressionMode();
 }
 
 void Outliner::UndoActionStart( USHORT nId )
