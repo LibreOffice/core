@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parrtf.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 14:19:25 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:44:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -370,6 +370,13 @@ void SvRTFParser::ScanText( const sal_Unicode cBreak )
                 {
                 case '\'':
                     {
+
+#if 1
+                        // #i35653 patch from cmc
+                        ByteString aByteString(static_cast<char>(GetHexValue()));
+                        if (aByteString.Len())
+                            aStrBuffer.Append(String(aByteString, GetSrcEncoding()));
+#else
                         ByteString aByteString;
                         while (1)
                         {
@@ -410,6 +417,7 @@ void SvRTFParser::ScanText( const sal_Unicode cBreak )
 
                         if (aByteString.Len())
                             aStrBuffer.Append(String(aByteString, GetSrcEncoding()));
+#endif
                     }
                     break;
                 case '\\':
