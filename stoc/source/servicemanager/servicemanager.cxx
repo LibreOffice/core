@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicemanager.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:13:51 $
+ *  last change: $Author: vg $ $Date: 2003-07-11 10:39:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -685,6 +685,7 @@ public:
         throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
 protected:
+    inline bool is_disposed() const SAL_THROW( (lang::DisposedException) );
     inline void check_undisposed() const SAL_THROW( (lang::DisposedException) );
     virtual void SAL_CALL disposing();
 
@@ -715,11 +716,23 @@ private:
     HashSet_Ref                     m_ImplementationMap;
     HashMap_OWString_Interface      m_ImplementationNameMap;
     Reference<XEventListener >      xFactoryListener;
+    bool                            m_bInDisposing;
 };
-//__________________________________________________________________________________________________
-inline void OServiceManager::check_undisposed() const SAL_THROW( (lang::DisposedException) )
+
+
+//______________________________________________________________________________
+inline bool OServiceManager::is_disposed() const
+    SAL_THROW( (lang::DisposedException) )
 {
-    if (rBHelper.bDisposed)
+    // ought to be guarded by m_mutex:
+    return (m_bInDisposing || rBHelper.bDisposed);
+}
+
+//______________________________________________________________________________
+inline void OServiceManager::check_undisposed() const
+    SAL_THROW( (lang::DisposedException) )
+{
+    if (is_disposed())
     {
         throw lang::DisposedException(
             OUSTR("service manager instance has already been disposed!"),
@@ -963,6 +976,7 @@ sal_Int64 OServiceManager::getSomething( Sequence< sal_Int8 > const & id )
 OServiceManager::OServiceManager( Reference< XComponentContext > const & xContext )
     : t_OServiceManager_impl( m_mutex )
     , m_xContext( xContext )
+    , m_bInDisposing( false )
 {
     g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
     m_nUnloadingListenerId= rtl_addUnloadingListener( smgrUnloadingListener, this);
@@ -1090,6 +1104,7 @@ void OServiceManager::disposing()
     HashSet_Ref aImpls;
     {
         MutexGuard aGuard( m_mutex );
+        m_bInDisposing = true;
         aImpls = m_ImplementationMap;
     }
     HashSet_Ref::iterator aIt = aImpls.begin();
@@ -1628,7 +1643,9 @@ void OServiceManager::remove( const Any & Element )
            ::com::sun::star::container::NoSuchElementException,
            ::com::sun::star::uno::RuntimeException)
 {
-    check_undisposed();
+    if (is_disposed())
+        return;
+
     if( Element.getValueTypeClass() != TypeClass_INTERFACE )
     {
         throw IllegalArgumentException(
