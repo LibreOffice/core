@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basobj2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tbe $ $Date: 2001-06-28 15:26:41 $
+ *  last change: $Author: tbe $ $Date: 2001-07-04 08:58:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -355,14 +355,14 @@ Sequence< ::rtl::OUString > BasicIDE::GetMethodsFromModule( SfxObjectShell* pShe
     // get module
     ::rtl::OUString aOUSource = GetModule( pShell, rLibName, rModName );
 
-    SbModule aSbModule( rModName );
-    aSbModule.SetSource( String( aOUSource ) );
-    USHORT nCount = aSbModule.GetMethods()->Count();
+    SbModuleRef xModule = new SbModule( rModName );
+    xModule->SetSource( String( aOUSource ) );
+    USHORT nCount = xModule->GetMethods()->Count();
     Sequence< ::rtl::OUString > aSeqMethods( nCount );
 
     for ( USHORT i = 0; i < nCount; i++ )
     {
-        SbMethod* pMethod = (SbMethod*)aSbModule.GetMethods()->Get( i );
+        SbMethod* pMethod = (SbMethod*)xModule->GetMethods()->Get( i );
         DBG_ASSERT( pMethod, "Method not found! (NULL)" );
         aSeqMethods.getArray()[ i ] = pMethod->GetName();
     }
