@@ -7235,3 +7235,4 @@ FreeSpaceStr
 ?GetProperties@SvtLinguConfigItem@@QAE?AV?$Sequence@VAny@uno@star@sun@com@@@uno@star@sun@com@@ABV?$Sequence@VOUString@rtl@@@3456@@Z
 ?GetPropertyNames@SvtLinguConfigItem@@QAE?AV?$Sequence@VOUString@rtl@@@uno@star@sun@com@@XZ
 ?flush@SvtInetOptions@@QAEXXZ
+??3?$Reference@VXClipboard@clipboard@datatransfer@star@sun@com@@@uno@star@sun@com@@SAXPAX@Z
