@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfld.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fme $ $Date: 2001-08-01 10:57:07 $
+ *  last change: $Author: fme $ $Date: 2001-10-10 15:19:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -414,6 +414,10 @@ sal_Bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
                     rInf.GetIdx() + nOldFullLen, IsFollow() ) - rInf.GetIdx();
             if( nFullLen && CH_BREAK == aExpand.GetChar( nFullLen - 1 ) )
                 --nFullLen;
+
+            if ( STRING_LEN != rInf.GetUnderScorePos() &&
+                 rInf.GetUnderScorePos() > rInf.GetIdx() )
+                rInf.SetUnderScorePos( rInf.GetIdx() );
         }
         BYTE nScriptChg = ScriptChange( rInf, nFullLen );
         rInf.SetLen( nFullLen );

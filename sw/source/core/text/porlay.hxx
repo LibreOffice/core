@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlay.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-13 08:31:16 $
+ *  last change: $Author: fme $ $Date: 2001-10-10 15:19:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,7 @@ private:
     sal_Bool bRedline   : 1; // enthaelt Redlining
     sal_Bool bForcedLeftMargin : 1; // vom Fly verschobener linker Einzug
     sal_Bool bHanging : 1; // contents a hanging portion in the margin
+    sal_Bool bUnderscore : 1;
 
     SwTwips _GetHangingMargin() const;
 
@@ -189,6 +190,8 @@ public:
     inline sal_Bool HasForcedLeftMargin() const { return bForcedLeftMargin; }
     inline void SetHanging( const sal_Bool bNew = sal_True ) { bHanging = bNew; }
     inline sal_Bool IsHanging() const { return bHanging; }
+    inline void SetUnderscore( const sal_Bool bNew = sal_True ) { bUnderscore = bNew; }
+    inline sal_Bool HasUnderscore() const { return bUnderscore; }
 
     // Beruecksichtigung von Dummyleerzeilen
     // 4147, 8221:
@@ -364,7 +367,8 @@ inline void SwLineLayout::ResetFlags()
 }
 
 inline SwLineLayout::SwLineLayout()
-    : pNext( 0 ), nRealHeight( 0 ), pSpaceAdd( 0 ), pKanaComp( 0 )
+    : pNext( 0 ), nRealHeight( 0 ), pSpaceAdd( 0 ), pKanaComp( 0 ),
+      bUnderscore( sal_False )
 {
     ResetFlags();
     SetWhichPor( POR_LAY );

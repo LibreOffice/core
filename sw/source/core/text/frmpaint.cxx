@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpaint.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-27 17:16:50 $
+ *  last change: $Author: fme $ $Date: 2001-10-10 15:19:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -476,10 +476,7 @@ SwRect SwTxtFrm::Paint()
         l = pRepaint->GetRightOfst();
         if( l && ( pRepaint->GetOfst() || l > pRepaint->Right() ) )
              pRepaint->Right( l );
-        l = Frm().Bottom();
         pRepaint->SetOfst( 0 );
-        if ( pRepaint->Bottom() > l )
-            pRepaint->Bottom( l );
         aRet = *pRepaint;
     }
     ResetRepaint();

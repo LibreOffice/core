@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-02 13:48:52 $
+ *  last change: $Author: fme $ $Date: 2001-10-10 15:19:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,6 +182,7 @@ using namespace ::com::sun::star::beans;
 
 #define C2U(cChar) rtl::OUString::createFromAscii(cChar)
 #define DARK_COLOR 154
+#define CHAR_UNDERSCORE ((sal_Unicode)0x005F)
 
 // steht im number.cxx
 extern const sal_Char __FAR_DATA sBulletFntName[];
@@ -1158,6 +1159,7 @@ void SwTxtFormatInfo::Init()
     nWidth = nRealWidth;
     nForcedLeftMargin = 0;
     nSoftHyphPos = 0;
+    nUnderScorePos = STRING_LEN;
     cHookChar = 0;
     SetIdx(0);
     SetLen( GetTxt().Len() );
@@ -1185,6 +1187,7 @@ SwTxtFormatInfo::SwTxtFormatInfo( const SwTxtFormatInfo& rInf,
     pLastTab = NULL;
 
     nSoftHyphPos = 0;
+    nUnderScorePos = STRING_LEN;
     nHyphStart = 0;
     nHyphWrdStart = 0;
     nHyphWrdLen = 0;
@@ -1282,6 +1285,11 @@ xub_StrLen SwTxtFormatInfo::ScanPortionEnd( const xub_StrLen nStart,
         case CH_BREAK:
             cHookChar = cPos;
             return i;
+
+        case CHAR_UNDERSCORE:
+            if ( STRING_LEN == nUnderScorePos )
+                nUnderScorePos = i;
+            break;
 
         default:
             if( cTabDec == cPos )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-02 13:48:52 $
+ *  last change: $Author: fme $ $Date: 2001-10-10 15:19:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -438,10 +438,10 @@ class SwTxtPaintInfo : public SwTxtSizeInfo
 
 protected:
 #ifdef PRODUCT
-    SwTxtPaintInfo() { pFrm = 0; pWrongList = 0; pSpaceAdd = 0; pBrushItem = 0; }
+    SwTxtPaintInfo() { pFrm = 0; pWrongList = 0; pSpaceAdd = 0; pBrushItem = 0;}
 #else
     SwTxtPaintInfo() { pFrm = 0; pWrongList = 0; pSpaceAdd = 0;
-                       pBrushItem = ((SvxBrushItem*)-1); }
+                       pBrushItem = ((SvxBrushItem*)-1);}
 #endif
 public:
     SwTxtPaintInfo( const SwTxtPaintInfo &rInf );
@@ -533,6 +533,7 @@ class SwTxtFormatInfo : public SwTxtPaintInfo
     xub_StrLen nHyphWrdStart;   // gefundene Wort-Position
     xub_StrLen nHyphWrdLen;     // gefundene Wort-Laenge
     xub_StrLen nLineStart;      // aktueller Zeilenbeginn im rTxt
+    xub_StrLen nUnderScorePos;  // enlarge repaint if underscore has been found
     KSHORT nLeft;           // linker Rand
     KSHORT nRight;          // rechter Rand
     KSHORT nFirst;          // EZE
@@ -708,6 +709,8 @@ public:
     inline xub_StrLen GetHyphWrdStart() const { return nHyphWrdStart; }
     inline void SetHyphWrdLen( const xub_StrLen nNew ) { nHyphWrdLen = nNew; }
     inline xub_StrLen GetHyphWrdLen() const { return nHyphWrdLen; }
+    inline xub_StrLen GetUnderScorePos() const { return nUnderScorePos; }
+    inline void SetUnderScorePos( xub_StrLen nNew ) { nUnderScorePos = nNew; }
 
     // ruft HyphenateWord() des Hyphenators
     ::com::sun::star::uno::Reference<
@@ -821,8 +824,6 @@ class SwFtnSave
     SwTxtSizeInfo *pInf;
     SwFont       *pFnt;
     SwFont       *pOld;
-    short        nEsc;
-    sal_uInt8        nPropr;
 public:
     SwFtnSave( const SwTxtSizeInfo &rInf, const SwTxtFtn *pTxtFtn );
    ~SwFtnSave();
