@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vprint.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:15:13 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:06:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1330,6 +1330,15 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress,
 
             if ( rOptions.nPrintPostIts != POSTITS_ONLY )
             {
+                // --> FME 2005-01-05 #110536# This valiable is used to track
+                // the number of pages which actually have been printed.
+                // If nPagesPrinted is odd, we have to send an additional
+                // empty page to the printer if we are currently in collation
+                // and duplex mode and there are still some more copies of the
+                // document to print.
+                USHORT nPagesPrinted = 0;
+                // <--
+
                 while( pStPage && !bStop )
                 {
                     // Mag der Anwender noch ?
@@ -1466,98 +1475,14 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress,
                         {
                             if (pPrt)
                                 pPrt->StartPage();
+
                             pStPage->GetUpper()->Paint( pStPage->Frm() );
-//                          SFX_APP()->SpoilDemoOutput( *pShell->GetOut(),
-//                                                           pStPage->Frm().SVRect() );
+                            ++nPagesPrinted;
+
                             if (pPrt)
                                 pPrt->EndPage();
                         }
                         SwPaintQueue::Repaint();
-
-#ifdef LONG_TABLE_HACK
-
-                        // OD 03.03.2003 #103602# - printing contents of table,
-                        // which doesn't fit on the page on an extra page, doesn't
-                        // work as excepted for PDF export. Thus, do *not*
-                        // perform this code for PDF export.
-                        if ( !pPDFOut )
-                        {
-                        //Wenn eine Tabelle heraushaengt, so wird der Rest der
-                        //Tabelle auf zusaetzliche Seiten verteilt.
-                        const SwFrm *pFrm = pStPage->FindLastBodyCntnt();
-                        if ( pFrm && pFrm->IsInTab() )
-                        {
-                            pFrm = pFrm->FindTabFrm();
-                            const SwFrm *pBody = pStPage->FindBodyCont();
-                            long nBottom = pBody->Prt().Bottom();
-                            nBottom += pBody->Frm().Top();
-                            if ( nBottom < pFrm->Frm().Bottom() )
-                            {
-                                SwRootFrm *pRoot = (SwRootFrm*)pStPage->GetUpper();
-                                long nDiff = pFrm->Frm().Bottom() - nBottom;
-                                SwRect aNewVis( pBody->Prt() );
-                                aNewVis += pBody->Frm().Pos();
-                                SwRect aTmp( pShell->VisArea() );
-                                aTmp.SSize().Height() = LONG_MAX - aTmp.Top();
-                                aTmp.SSize().Width()  = LONG_MAX - aTmp.Left();
-                                ::SetSwVisArea( pShell, aTmp, 0 != pPDFOut );
-                                while ( nDiff > 0 )
-                                {
-                                    if (pPrt)
-                                        pPrt->StartPage();
-
-                                    //VisArea auf die Tabelle schummeln
-                                    aNewVis.Pos().Y() += aNewVis.Height()+1;
-
-                                    //Offset in den MapMode schummeln.
-                                    MapMode aMap( pPrtOrPDFOut->GetMapMode() );
-                                    Point aTmp( aMap.GetOrigin() );
-                                    aTmp.Y() -= aNewVis.Height()+1;
-                                    aMap.SetOrigin( aTmp );
-                                    pPrtOrPDFOut->SetMapMode( aMap );
-
-                                    /// OD 30.08.2002 #102450#
-                                    /// determine color of page the table is on
-                                    /// for <PaintLayer> method calls
-                                    const Color aPageBackgrdColor =
-                                            pStPage->GetDrawBackgrdColor();
-                                    pRoot->HackPrepareLongTblPaint( HACK_TABLEMODE_INIT );
-                                    SwTxtFrm::SetMinPrtLine( aNewVis.Pos().Y() );
-                                    pFrm->PaintBaBo( aNewVis, pStPage, TRUE );
-                                    if ( pShell->Imp()->HasDrawView() )
-                                    {
-                                        pRoot->HackPrepareLongTblPaint( HACK_TABLEMODE_LOCKLINES );
-                                        /// OD 30.08.2002 #102450# - add 3rd parameter
-                                        pShell->Imp()->PaintLayer( pShell->GetDoc()->GetHellId(),
-                                                        aNewVis, &aPageBackgrdColor );
-                                        pRoot->HackPrepareLongTblPaint( HACK_TABLEMODE_PAINTLINES );
-                                        pRoot->HackPrepareLongTblPaint( HACK_TABLEMODE_UNLOCKLINES );
-                                    }
-                                    pFrm->Paint( aNewVis );
-                                    if ( pShell->Imp()->HasDrawView() )
-                                    {
-                                        /// OD 30.08.2002 #102450# - add 3rd parameter
-                                        pShell->Imp()->PaintLayer( pShell->GetDoc()->GetHeavenId(),
-                                                    aNewVis, &aPageBackgrdColor );
-                                        pShell->Imp()->PaintLayer( pShell->GetDoc()->GetControlsId(),
-                                                                   aNewVis );
-                                        pRoot->HackPrepareLongTblPaint( HACK_TABLEMODE_PAINTLINES );
-                                    }
-                                    pRoot->HackPrepareLongTblPaint( HACK_TABLEMODE_EXIT );
-                                    SwTxtFrm::SetMinPrtLine( 0 );
-
-//                                  SFX_APP()->SpoilDemoOutput( *pShell->GetOut(),
-//                                                               aNewVis.SVRect() );
-                                    if (pPrt)
-                                        pPrt->EndPage();
-                                    SwPaintQueue::Repaint();
-                                    nDiff -= pBody->Prt().Height();
-                                }
-                            }
-                        }
-                        } // END OF If ( !pPDFOut ); OD 03.03.2003 #103602#
-
-#endif
 
                         // Wenn PostIts nach Seite gedruckt werden sollen ...
                         if( (!rOptions.bPrintReverse) &&
@@ -1574,7 +1499,21 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress,
                         pPrtOrPDFOut->SetMapMode( aOldMapMode );
 
                     if ( pStPage == pEndPage )
+                    {
+                        // --> FME 2005-01-05 #110536# Print emtpy page if
+                        // we are have an odd page count in collation/duplex
+                        // mode and there are still some copies to print:
+                        if ( pPrt && ( 1 == ( nPagesPrinted % 2 ) ) &&
+                             DUPLEX_ON == pPrt->GetDuplexMode() &&
+                             nCnt + 1 < nCopyCnt )
+                        {
+                            pPrt->StartPage();
+                            pPrt->EndPage();
+                        }
+                        // <--
+
                         pStPage = 0;
+                    }
                     else if ( rOptions.bPrintReverse )
                     {
                         --nPageNo;
