@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlnitr.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: fme $ $Date: 2002-08-14 09:06:36 $
+ *  last change: $Author: fme $ $Date: 2002-10-24 08:51:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -549,8 +549,7 @@ void SwExtend::ActualizeFont( SwFont &rFnt, MSHORT nAttr )
     {
         const StyleSettings& rStyleSettings = GetpApp()->GetSettings().GetStyleSettings();
         rFnt.SetColor( rStyleSettings.GetHighlightTextColor() );
-        rFnt.SetFillColor( rStyleSettings.GetHighlightColor() );
-        rFnt.SetTransparent( sal_False );
+        rFnt.SetBackColor( new Color( rStyleSettings.GetHighlightColor() ) );
     }
     if ( nAttr & EXTTEXTINPUT_ATTR_GRAYWAVELINE )
         rFnt.SetGreyWave( sal_True );
