@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2000-10-24 15:38:05 $
+ *  last change: $Author: os $ $Date: 2000-10-25 12:06:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,7 +200,45 @@ using namespace ::rtl;
 /******************************************************************************
  *
  ******************************************************************************/
+//convert FN_... to RES_ in header and footer itemset
+USHORT lcl_ConvertFNToRES(USHORT nFNId)
+{
+    USHORT nRes = USHRT_MAX;
+    switch(nFNId)
+    {
+        case FN_UNO_FOOTER_ON:
+        case FN_UNO_HEADER_ON:
+        break;
+        case FN_UNO_FOOTER_BACKGROUND:
+        case FN_UNO_HEADER_BACKGROUND:      nRes = RES_BACKGROUND;
+        break;
+        case FN_UNO_FOOTER_BOX:
+        case FN_UNO_HEADER_BOX:             nRes = RES_BOX;
+        break;
+        case FN_UNO_FOOTER_LR_SPACE:
+        case FN_UNO_HEADER_LR_SPACE:        nRes = RES_LR_SPACE;
+        break;
+        case FN_UNO_FOOTER_SHADOW:
+        case FN_UNO_HEADER_SHADOW:          nRes = RES_SHADOW;
+        break;
+        case FN_UNO_FOOTER_BODY_DISTANCE:
+        case FN_UNO_HEADER_BODY_DISTANCE:   nRes = RES_UL_SPACE;
+        break;
+        case FN_UNO_FOOTER_IS_DYNAMIC_DISTANCE:
+        case FN_UNO_HEADER_IS_DYNAMIC_DISTANCE: nRes = SID_ATTR_PAGE_DYNAMIC;
+        break;
+        case FN_UNO_FOOTER_SHARE_CONTENT:
+        case FN_UNO_HEADER_SHARE_CONTENT:   nRes = SID_ATTR_PAGE_SHARED;
+        break;
+        case FN_UNO_FOOTER_HEIGHT:
+        case FN_UNO_HEADER_HEIGHT:          nRes = SID_ATTR_PAGE_SIZE;
+        break;
+    }
+    return nRes;
 
+}
+
+//-----------------------------------------------------------------------------
 const unsigned short aStyleByIndex[] =
 {
     SFX_STYLE_FAMILY_CHAR,
@@ -1982,19 +2020,12 @@ Sequence< PropertyState > SwXStyle::getPropertyStates(
             {
                 case SFX_STYLE_FAMILY_PARA: nPropSetId = PROPERTY_SET_PARA_STYLE  ; break;
                 case SFX_STYLE_FAMILY_FRAME: nPropSetId = PROPERTY_SET_FRAME_STYLE ;break;
-                case SFX_STYLE_FAMILY_PAGE:
-                {
-//                  nPropSetId = PROPERTY_SET_PAGE_STYLE  ;
-                    //page styles do not support inheritance of properties
-                    for(sal_Int32 i = 0; i < rPropertyNames.getLength(); i++)
-                        pStates[i] = PropertyState_DIRECT_VALUE;
-                    return aRet;
-                }
-                break;
+                case SFX_STYLE_FAMILY_PAGE: nPropSetId = PROPERTY_SET_PAGE_STYLE;   break;
                 case SFX_STYLE_FAMILY_PSEUDO: nPropSetId = PROPERTY_SET_NUM_STYLE   ;break;
             }
 
             SfxItemSet aSet = aStyle.GetItemSet();
+            SfxItemPropertySet& rStylePropSet = aSwMapProvider.GetPropertySet(nPropSetId);
             for(sal_Int32 i = 0; i < rPropertyNames.getLength(); i++)
             {
                 String sPropName(pNames[i]);
@@ -2003,10 +2034,34 @@ Sequence< PropertyState > SwXStyle::getPropertyStates(
                 {
                     pStates[i] = PropertyState_DIRECT_VALUE;
                 }
+                else if(SFX_STYLE_FAMILY_PAGE == eFamily &&
+                        (sPropName.EqualsAscii("Header", 0, 6)
+                            || sPropName.EqualsAscii("Footer", 0, 6)))
+                {
+                    const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
+                                                    rStylePropSet.getPropertyMap(), sPropName);
+                    if(!pMap)
+                        throw UnknownPropertyException();
+                    USHORT nResId = lcl_ConvertFNToRES(pMap->nWID);
+                    BOOL bFooter = sPropName.EqualsAscii("Footer", 0, 6);
+                    const SvxSetItem* pSetItem;
+                    if(SFX_ITEM_SET == aSet.GetItemState(
+                            bFooter ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET,
+                            sal_False, (const SfxPoolItem**)&pSetItem))
+                    {
+                        const SfxItemSet& rSet = pSetItem->GetItemSet();
+                        SfxItemState eState = rSet.GetItemState(nResId, sal_False);
+                        if(SFX_ITEM_SET == eState)
+                            pStates[i] = PropertyState_DIRECT_VALUE;
+                        else
+                            pStates[i] = PropertyState_DEFAULT_VALUE;
+                    }
+                    else
+                        pStates[i] = PropertyState_AMBIGUOUS_VALUE;
+                }
                 else
                 {
-                    pStates[i] = aSwMapProvider.GetPropertySet(nPropSetId).
-                                        getPropertyState(sPropName, aSet);
+                    pStates[i] = rStylePropSet.getPropertyState(sPropName, aSet);
                 }
             }
         }
