@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.35 $
+#   $Revision: 1.36 $
 #
-#   last change: $Author: obo $ $Date: 2004-08-12 09:07:15 $
+#   last change: $Author: rt $ $Date: 2004-08-20 10:03:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -109,6 +109,12 @@ SHL4STDLIBS= \
             $(JVMFWKLIB) \
             $(ICUUCLIB)	\
             $(AVMEDIALIB)	
+
+.IF "$(GUI)"=="WNT"	
+SHL4STDLIBS+= \
+             Shlwapi.lib \
+             Advapi32.lib     
+.ENDIF       
 
 # --- Svx - DLL ----------
 
