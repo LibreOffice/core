@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mainwn.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 18:23:35 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:57:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ struct SwProgress
 
 static SvPtrarr *pProgressContainer = 0;
 
-SwProgress *lcl_SwFindProgress( SwDocShell *pDocShell )
+static SwProgress *lcl_SwFindProgress( SwDocShell *pDocShell )
 {
     for ( USHORT i = 0; i < pProgressContainer->Count(); ++i )
     {
