@@ -2,9 +2,9 @@
  *
  *  $RCSfile: selglos.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:43:02 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:15:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ ModalDialog DLG_SEL_GLOS
     Text [ ENGLISH ] = "Insert AutoText" ;
     Text [ norwegian ] = "Insert AutoText" ;
     Text [ italian ] = "Inserisci testo automatico" ;
-    Text [ portuguese_brazilian ] = "Inserir Texto Autom?tico" ;
+    Text [ portuguese_brazilian ] = "Inserir AutoTexto" ;
     Text [ portuguese ] = "Inserir AutoTexto" ;
     Text [ finnish ] = "Lis�� automaattinen teksti" ;
     Text [ danish ] = "Inds�t AutoTekst" ;
@@ -114,7 +114,7 @@ ModalDialog DLG_SEL_GLOS
         Text [ ENGLISH ] = "Entries for Short Name " ;
         Text [ norwegian ] = "Entries for Short Name " ;
         Text [ italian ] = "Testo automatico per la sigla " ;
-        Text [ portuguese_brazilian ] = "Entadas para Abrevia??s " ;
+        Text [ portuguese_brazilian ] = "AutoTextos para atalho" ;
         Text [ portuguese ] = "AutoTexto para abreviatura" ;
         Text [ finnish ] = "Pikavalikoiden automaattiset tekstit " ;
         Text [ danish ] = "AutoTekst til forkortelse " ;
@@ -131,10 +131,13 @@ ModalDialog DLG_SEL_GLOS
         Text[ arabic ] = "�� ������ �������� ";
         Text[ greek ] = "����������� ��� ������";
         Text[ korean ] = "자동 텍스트 바로 가기 ";
-        Text[ turkish ] = "Otomatik metin k�saltmas� ";
+        Text[ turkish ] = "K�sayollar i�in otomatik metinler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "AutoText per nom curt  ";
         Text[ thai ] = "ข้อความอัตโนมัติสำหรับเป็นทางลัด ";
+        Text[ czech ] = "Automatické texty pro zkratku ";
+        Text[ hebrew ] = "AutoTexte zum Kürzel";
+        Text[ hindi ] = "सरलविधि केलिए स्वचालित ढंग से टेक्स्ट् ";
     };
     ListBox LB_GLOS
     {
@@ -156,7 +159,19 @@ ModalDialog DLG_SEL_GLOS
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Insereix AutoText";
     Text[ thai ] = "แทรกข้อความอัตโนมัติ";
+    Text[ czech ] = "Vložit automatický text";
+    Text[ hebrew ] = "AutoText einfügen";
+    Text[ hindi ] = "स्वचालित ढंग से टेक्स्ट् जोड़ो";
 };
+
+
+
+
+
+
+
+
+
 
 
 
