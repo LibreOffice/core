@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: pl $ $Date: 2001-10-24 17:00:56 $
+#   last change: $Author: hr $ $Date: 2002-08-15 15:56:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -122,8 +122,17 @@ RESLIB1SRSFILES=$(RES1FILELIST)
 
 .IF "$(GUI)"=="UNX"
 
+# [ed] 6/19/02 Only add in libraries for X11 OS X builds
+
+.IF "$(OS)"=="MACOSX"
+.IF "$(GUIBASE)"=="unx"
+SHL1STDLIBS +=\
+        -lX11 -lXt -lXmu
+.ENDIF
+.ELSE
 SHL1STDLIBS +=\
     -lX11
+.ENDIF # OS == MACOSX
 
 .ENDIF
 
