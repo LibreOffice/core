@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventimport.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-16 14:36:39 $
+ *  last change: $Author: fs $ $Date: 2001-08-27 16:55:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,19 +112,32 @@ namespace xmloff
         {
             // the name of the event is built from ListenerType::EventMethod
             nSeparatorPos = aEvent->first.indexOf(EVENT_NAME_SEPARATOR);
-            OSL_ENSURE(-1 != nSeparatorPos, "OFormEventsImportContext::EndElement: invalid (unrecodnized) event name!");
+            OSL_ENSURE(-1 != nSeparatorPos, "OFormEventsImportContext::EndElement: invalid (unrecognized) event name!");
             pTranslated->ListenerType = aEvent->first.copy(0, nSeparatorPos);
-            pTranslated->EventMethod = aEvent->first.copy(nSeparatorPos + 2);
+            pTranslated->EventMethod = aEvent->first.copy(nSeparatorPos + EVENT_NAME_SEPARATOR.length);
+
+            ::rtl::OUString sLibrary;
 
             // the local macro name and the event type are specified as properties
-            pEventDescription = aEvent->second.getConstArray();
-            pEventDescriptionEnd = pEventDescription + aEvent->second.getLength();
+            pEventDescription       =                       aEvent->second.getConstArray();
+            pEventDescriptionEnd    =   pEventDescription + aEvent->second.getLength();
             for (;pEventDescription != pEventDescriptionEnd; ++pEventDescription)
             {
                 if (0 == pEventDescription->Name.compareToAscii(EVENT_LOCALMACRONAME))
                     pEventDescription->Value >>= pTranslated->ScriptCode;
-                if (0 == pEventDescription->Name.compareToAscii(EVENT_TYPE))
+                else if (0 == pEventDescription->Name.compareToAscii(EVENT_TYPE))
                     pEventDescription->Value >>= pTranslated->ScriptType;
+                else if ( 0 == pEventDescription->Name.compareToAscii( EVENT_LIBRARY ) )
+                    pEventDescription->Value >>= sLibrary;
+            }
+
+            if ( 0 == pTranslated->ScriptType.compareToAscii( "StarBasic" ) )
+            {
+                // for StarBasic, the library is prepended
+                sal_Unicode cLibSeparator = ':';
+                sLibrary += ::rtl::OUString( &cLibSeparator, 1 );
+                sLibrary += pTranslated->ScriptCode;
+                pTranslated->ScriptCode = sLibrary;
             }
         }
 
@@ -180,6 +193,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/03/16 14:36:39  sab
+ *  did the required change (move of extract.hxx form cppuhelper to comphelper)
+ *
  *  Revision 1.1  2001/01/02 15:55:58  fs
  *  initial checkin - helper for importing script events
  *
