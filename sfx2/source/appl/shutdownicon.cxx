@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shutdownicon.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: cd $ $Date: 2001-12-12 13:14:32 $
+ *  last change: $Author: mba $ $Date: 2002-03-18 13:14:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,9 @@
 #include <svtools/imagemgr.hxx>
 #include <cmdlineargs.hxx>
 
+#ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
+#include <com/sun/star/task/XInteractionHandler.hpp>
+#endif
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCHRESULTLISTENER_HPP_
 #include <com/sun/star/frame/XDispatchResultListener.hpp>
 #endif
@@ -258,14 +261,20 @@ void ShutdownIcon::FileOpen()
                     Reference < XFilePickerControlAccess > xPickerControls ( xPicker, UNO_QUERY );
                     Reference < XFilterManager > xFilterManager ( xPicker, UNO_QUERY );
 
-
                     Sequence< OUString >        sFiles = xPicker->getFiles();
                     int                         nFiles = sFiles.getLength();
 
-                    int                         nArgs = 0;
-                    Sequence< PropertyValue >   aArgs(0);
-                    OUString                    aFilterName;
+                    int                         nArgs=1;
+                    Sequence< PropertyValue >   aArgs(1);
 
+                    Reference < com::sun::star::task::XInteractionHandler > xInteraction(
+                        ::comphelper::getProcessServiceFactory()->createInstance( OUString::createFromAscii("com.sun.star.task.InteractionHandler") ),
+                        com::sun::star::uno::UNO_QUERY );
+
+                    aArgs[nArgs-1].Name = OUString::createFromAscii( "InteractionHandler" );
+                    aArgs[nArgs-1].Value <<= xInteraction;
+
+                    OUString                    aFilterName;
                     if ( xFilterManager.is() )
                         aFilterName = xFilterManager->getCurrentFilter();
 
