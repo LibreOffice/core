@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforlist.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: er $ $Date: 2002-07-18 16:28:28 $
+ *  last change: $Author: er $ $Date: 2002-10-29 18:20:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -952,6 +952,19 @@ void SvNumberFormatter::GetUsedLanguages( SvUShorts& rList )
         nOffset += SV_COUNTRY_LANGUAGE_OFFSET;
     }
 }
+
+
+void SvNumberFormatter::FillKeywordTable( NfKeywordTable& rKeywords,
+        LanguageType eLang )
+{
+    ChangeIntl( eLang );
+    const String* pTable = pFormatScanner->GetKeywords();
+    for ( USHORT i = 0; i < NF_KEYWORD_ENTRIES_COUNT; ++i )
+    {
+        rKeywords[i] = pTable[i];
+    }
+}
+
 
 String SvNumberFormatter::GetKeyword( LanguageType eLnge, USHORT nIndex )
 {
