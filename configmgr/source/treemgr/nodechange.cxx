@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodechange.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:35:59 $
+ *  last change: $Author: jb $ $Date: 2000-11-14 10:53:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,7 +177,7 @@ NodeRef NodeChange::getBaseNode() const
     OSL_ASSERT(aTree.isValid() && aTree->isValidNode(nOffset));
 
     if (aTree.isValid() && nOffset)
-        return TreeImplHelper::makeNode(aTree->node(nOffset),nOffset,aTree->getAvailableDepth());
+        return TreeImplHelper::makeNode(aTree.getBody(),nOffset);
 
     return NodeRef();
 }
@@ -204,7 +204,7 @@ NodeRef NodeChange::getAffectedNode() const
         OSL_ASSERT(aTree.isValid() && aTree->isValidNode(nOffset));
 
         if (aTree.isValid() && nOffset)
-            return TreeImplHelper::makeNode(aTree->node(nOffset),nOffset,aTree->getAvailableDepth() - aTree->depthTo(nOffset));
+            return TreeImplHelper::makeNode(aTree.getBody(),nOffset );
     }
     return NodeRef();
 }

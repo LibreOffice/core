@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-13 16:02:38 $
+ *  last change: $Author: jb $ $Date: 2000-11-14 10:53:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -303,10 +303,11 @@ namespace configmgr
             throw uno::Exception(sMessage, getProviderInstance());
         }
         using namespace configuration;
+        TreeDepth nDepth = (nMinLevels == ALL_LEVELS) ? C_TreeDepthAll : TreeDepth(nMinLevels);
 
         RootTree aRootTree( createReadOnlyTree(
                 AbsolutePath(getBasePath(_rAccessor), Path::NoValidate()),
-                *pTree, nMinLevels
+                *pTree, nDepth
             ));
 
         return m_pNewProviders->getReaderFactory().makeAccessRoot(aRootTree);
@@ -359,10 +360,11 @@ namespace configmgr
         //ConfigurationName aPathToUpdateRoot(getBasePath(_rAccessor), ConfigurationName::Absolute());
 
         using namespace configuration;
+        TreeDepth nDepth = (nMinLevels == ALL_LEVELS) ? C_TreeDepthAll : TreeDepth(nMinLevels);
 
         RootTree aRootTree( createUpdatableTree(
                                 AbsolutePath(getBasePath(_rAccessor),Path::NoValidate()),
-                                *pTree, nMinLevels
+                                *pTree, nDepth
                             ));
 
         #if defined(DEBUG) || defined(_DEBUG)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodeimpl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-13 11:54:51 $
+ *  last change: $Author: jb $ $Date: 2000-11-14 10:53:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,7 +241,7 @@ void SetNodeImpl::initElements(TreeImpl& rParentTree, NodeOffset nPos, TreeDepth
 
     OSL_ASSERT(doIsEmpty()); //doClearElements();
 
-    if (nDepth > 0) doInitElements(m_rOriginal, nDepth-1);
+    if (nDepth > 0) doInitElements(m_rOriginal, childDepth(nDepth));
 }
 
 //-----------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeimpl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-13 18:00:16 $
+ *  last change: $Author: jb $ $Date: 2000-11-14 10:53:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,12 +91,11 @@ namespace configmgr
 //-----------------------------------------------------------------------------
         typedef com::sun::star::uno::Any UnoAny;
 
-        typedef unsigned int NodeOffset;
-        typedef unsigned int TreeDepth;
-
+//-----------------------------------------------------------------------------
         struct NodeInfo;
         struct Attributes;
 
+//-----------------------------------------------------------------------------
         class Node;
         class NodeRef;
         class NodeID;
@@ -104,7 +103,41 @@ namespace configmgr
         class TreeImpl;
         struct NodeFactory;
 //-----------------------------------------------------------------------------
+        typedef unsigned int NodeOffset;
+        typedef unsigned int TreeDepth;
 
+        // WARNING: a similar item is in noderef.hxx
+        const TreeDepth c_TreeDepthAll = ~0u;
+
+//-----------------------------------------------------------------------------
+        inline
+        TreeDepth& incDepth(TreeDepth& rDepth)
+        { if (rDepth != c_TreeDepthAll) ++rDepth; return rDepth; }
+
+        inline
+        TreeDepth childDepth(TreeDepth nDepth)
+        { return incDepth(nDepth); }
+
+        inline
+        TreeDepth& decDepth(TreeDepth& rDepth)
+        { if (rDepth != c_TreeDepthAll && rDepth != 0) --rDepth; return rDepth; }
+
+        inline
+        TreeDepth parentDepth(TreeDepth nDepth)
+        { return decDepth(nDepth); }
+
+        inline
+        TreeDepth remainingDepth(TreeDepth nOuterDepth, TreeDepth nRelativeDepth)
+        {
+            OSL_ENSURE(nRelativeDepth != c_TreeDepthAll,"RelativeDepth can't be infinite");
+            OSL_ENSURE(nRelativeDepth <= nOuterDepth,"ERROR: RelativeDepth is larger than enclosing depth");
+
+            TreeDepth nInnerDepth = (nOuterDepth == c_TreeDepthAll) ? nOuterDepth :
+                                    (nRelativeDepth < nOuterDepth)  ? nOuterDepth-nRelativeDepth :
+                                                                      0;
+            return nInnerDepth;
+        }
+//-----------------------------------------------------------------------------
 
 // class Node Impl
 //-----------------------------------------------------------------------------
@@ -488,6 +521,9 @@ namespace configmgr
     public:
         static
         NodeRef makeNode(Node* pNode, NodeOffset nOffset, TreeDepth nDepth);
+
+        static
+        NodeRef makeNode(TreeImpl& rTree, NodeOffset nOffset);
 
         static
         bool isSet(NodeRef const& aNode);

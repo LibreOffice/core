@@ -2,9 +2,9 @@
  *
  *  $RCSfile: noderef.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-13 17:57:50 $
+ *  last change: $Author: jb $ $Date: 2000-11-14 10:53:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,8 @@
 #include "nodechange.hxx"
 #include "configexcept.hxx"
 
+#include "tracer.hxx"
+
 #include <algorithm> // for swap
 
 namespace configmgr
@@ -83,7 +85,20 @@ NodeRef TreeImplHelper::makeNode(Node* pNode, NodeOffset nOffset, TreeDepth nDep
 {
     return NodeRef(pNode,nOffset,nDepth);
 }
+//-----------------------------------------------------------------------------
 
+NodeRef TreeImplHelper::makeNode(TreeImpl& rTree, NodeOffset nOffset)
+{
+    if (nOffset)
+    {
+        OSL_ASSERT(rTree.isValidNode(nOffset));
+
+        TreeDepth nDepth = remainingDepth(rTree.getAvailableDepth(), rTree.depthTo(nOffset));
+        return NodeRef(rTree.node(nOffset),nOffset,nDepth);
+    }
+    else
+        return NodeRef();
+}
 //-----------------------------------------------------------------------------
 
 bool TreeImplHelper::isSet(NodeRef const& aNode)
@@ -230,7 +245,7 @@ bool NodeRef::isValid() const
 bool NodeRef::hasChildren() const
 {
     OSL_PRECOND( isValid(), "ERROR: Configuration: NodeRef operation requires valid node" );
-    OSL_ENSURE( m_nDepth > 0, "WARNING: Configuration: Querying node beyond available depth" );
+    if (m_nDepth == 0) CFG_TRACE_WARNING( "WARNING: Configuration: Querying node beyond available depth" );
 
     return m_pImpl && m_pImpl->isSetNode() &&
             !m_pImpl->setImpl().isEmpty();
@@ -240,7 +255,7 @@ bool NodeRef::hasChildren() const
 bool NodeRef::hasChild(Name const& aName) const
 {
     OSL_PRECOND( isValid(), "ERROR: Configuration: NodeRef operation requires valid node" );
-    OSL_ENSURE( m_nDepth > 0, "WARNING: Configuration: Querying node beyond available depth" );
+    if (m_nDepth == 0) CFG_TRACE_WARNING( "WARNING: Configuration: Querying node beyond available depth" );
 
     return  m_pImpl && m_pImpl->isSetNode() &&
             m_pImpl->setImpl().findElement(aName).isValid();
@@ -250,7 +265,7 @@ bool NodeRef::hasChild(Name const& aName) const
 NodeRef NodeRef::getChild(Name const& aName, Tree& rTree) const
 {
     OSL_PRECOND( isValid(), "ERROR: Configuration: NodeRef operation requires valid node" );
-    OSL_ENSURE( m_nDepth > 0, "WARNING: Configuration: Requesting node beyond available depth" );
+    if (m_nDepth == 0) CFG_TRACE_WARNING( "WARNING: Configuration: Requesting node beyond available depth" );
 
     if (m_pImpl && m_pImpl->isSetNode())
     {
@@ -385,7 +400,7 @@ bool Tree::hasChildren(NodeRef const& aNode) const
 {
     OSL_PRECOND( m_pImpl, "ERROR: Configuration: Tree operation requires a valid Tree");
     OSL_PRECOND( isValidNode(aNode), "ERROR: Configuration: NodeRef does not match Tree");
-    OSL_ENSURE(aNode.m_nDepth > 0, "WARNING: Configuration: Querying node beyond available depth" );
+    if (m_nDepth == 0) CFG_TRACE_WARNING( "WARNING: Configuration: Querying node beyond available depth" );
 
     if (this->isEmpty()) return false;
     if (!aNode.isValid()) return false;
@@ -398,7 +413,7 @@ bool Tree::hasChild(NodeRef const& aNode, Name const& aName) const
 {
     OSL_PRECOND( m_pImpl, "ERROR: Configuration: Tree operation requires a valid Tree");
     OSL_PRECOND( isValidNode(aNode), "ERROR: Configuration: NodeRef does not match Tree");
-    OSL_ENSURE(aNode.m_nDepth > 0, "WARNING: Configuration: Querying node beyond available depth" );
+    if (m_nDepth == 0) CFG_TRACE_WARNING( "WARNING: Configuration: Querying node beyond available depth" );
 
     if (this->isEmpty()) return false;
     if (!aNode.isValid()) return false;
@@ -412,13 +427,14 @@ NodeRef Tree::getChild(NodeRef const& aNode, Name const& aName) const
     OSL_PRECOND( !isEmpty(), "ERROR: Configuration: Tree operation requires a valid Tree");
     OSL_PRECOND( isValidNode(aNode), "ERROR: Configuration: NodeRef does not match Tree");
     // OSL_PRECOND(this->hasChild(aNode,aName),"ERROR: Configuration: Invalid node request.");
-    OSL_ENSURE(aNode.m_nDepth > 0, "WARNING: Configuration: Requesting node beyond available depth" );
+    if (m_nDepth == 0) CFG_TRACE_WARNING( "WARNING: Configuration: Requesting node beyond available depth" );
 
     NodeOffset nOffset  = m_pImpl ? m_pImpl->findChild(aNode.m_nPos, aName) : 0;
 
     Node* pFound    = nOffset ? m_pImpl->node(nOffset) : 0;
 
-    return NodeRef(pFound, nOffset, aNode.m_nDepth-1);
+
+    return NodeRef(pFound, nOffset, childDepth(aNode.m_nDepth));
 }
 //-----------------------------------------------------------------------------
 
@@ -434,7 +450,7 @@ NodeRef Tree::getParent(NodeRef const& aNode) const
 
     Node*  pParent = nParent ? m_pImpl->node(nParent) : 0;
 
-    return NodeRef(pParent, nParent, aNode.m_nDepth+1);
+    return NodeRef(pParent, nParent, parentDepth(aNode.m_nDepth));
 }
 //-----------------------------------------------------------------------------
 
@@ -527,7 +543,7 @@ NodeRef Tree::getContextNode() const
     OSL_ASSERT( pContext == 0 || nOffset != 0);
     if (pContext == 0) return NodeRef();
 
-    return NodeRef( pContext->node(nOffset), nOffset, pContext->getAvailableDepth() - pContext->depthTo(nOffset));
+    return TreeImplHelper::makeNode(*pContext, nOffset);
 }
 //-----------------------------------------------------------------------------
 
@@ -598,7 +614,7 @@ NodeVisitor::Result Tree::dispatchToChildren(NodeRef const& aNode, NodeVisitor& 
 {
     OSL_PRECOND( !isEmpty(), "ERROR: Configuration: Tree operation requires a valid Tree");
     OSL_PRECOND(  isValidNode(aNode), "ERROR: Configuration: NodeRef does not match Tree");
-    OSL_ENSURE(aNode.m_nDepth > 0, "WARNING: Configuration: Requesting node beyond available depth" );
+    if (aNode.m_nDepth == 0) CFG_TRACE_WARNING("WARNING: Configuration: Dispatching Visitor to node beyond available depth" );
 
     typedef NodeVisitor::Result Result;
     Result aRet = NodeVisitor::CONTINUE;
@@ -609,7 +625,7 @@ NodeVisitor::Result Tree::dispatchToChildren(NodeRef const& aNode, NodeVisitor& 
     else if (aNode.m_pImpl->isGroupNode())
     {
         NodeOffset const nParent = aNode.m_nPos;
-        TreeDepth const nDepth = aNode.m_nDepth-1;
+        TreeDepth const nDepth = childDepth(aNode.m_nDepth);
 
         for( NodeOffset nPos = m_pImpl->firstChild(nParent);
              nPos != 0 && aRet != NodeVisitor::DONE;
@@ -621,7 +637,7 @@ NodeVisitor::Result Tree::dispatchToChildren(NodeRef const& aNode, NodeVisitor& 
 
     else if (aNode.m_pImpl->isSetNode())
     {
-        SetVisitorAdapter aAdapter(aVisitor, aNode.m_nDepth-1);
+        SetVisitorAdapter aAdapter(aVisitor, childDepth(aNode.m_nDepth) );
 
         OSL_ASSERT( NodeVisitor::DONE == SetNodeVisitor::DONE );
         OSL_ASSERT( NodeVisitor::CONTINUE == SetNodeVisitor::CONTINUE );
@@ -640,8 +656,7 @@ NodeRef Tree::bind(NodeOffset nNode) const
 {
     if (m_pImpl && m_pImpl->isValidNode(nNode))
     {
-        TreeDepth nDepth = m_pImpl->getAvailableDepth() - m_pImpl->depthTo(nNode);
-        return NodeRef(m_pImpl->node(nNode), nNode, nDepth);
+        return TreeImplHelper::makeNode(*m_pImpl, nNode);
     }
     else
     {

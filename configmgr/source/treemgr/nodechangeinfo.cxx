@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodechangeinfo.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:35:59 $
+ *  last change: $Author: jb $ $Date: 2000-11-14 10:53:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,7 @@ NodeRef NodeChangeInfo::getNewElementNodeRef() const
     if ( newElement.isValid() &&  newElement->nodeCount() > 0)
     {
         NodeOffset n = newElement->root();
-        return TreeImplHelper::makeNode( newElement->node(n), n, newElement->getAvailableDepth() - newElement->depthTo(n));
+        return TreeImplHelper::makeNode( newElement.getBody(), n);
     }
     else
         return NodeRef();
@@ -141,7 +141,7 @@ NodeRef NodeChangeInfo::getOldElementNodeRef() const
     if ( oldElement.isValid() &&  oldElement->nodeCount() > 0)
     {
         NodeOffset n = oldElement->root();
-        return TreeImplHelper::makeNode( oldElement->node(n), n, oldElement->getAvailableDepth() - oldElement->depthTo(n));
+        return TreeImplHelper::makeNode( oldElement.getBody(), n);
     }
     else
         return NodeRef();

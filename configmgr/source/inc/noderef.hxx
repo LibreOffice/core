@@ -2,9 +2,9 @@
  *
  *  $RCSfile: noderef.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-13 13:26:30 $
+ *  last change: $Author: jb $ $Date: 2000-11-14 10:53:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@ namespace configmgr
 
         typedef unsigned int NodeOffset;
         typedef unsigned int TreeDepth;
-
+        const TreeDepth C_TreeDepthAll = ~0u;
     //-------------------------------------------------------------------------
 
         /// interface for a class that can be used to do some operation on a set of <type>NodeRef</type>s.

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeimpl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-13 18:00:16 $
+ *  last change: $Author: jb $ $Date: 2000-11-14 10:53:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,7 +172,7 @@ void TreeImplBuilder::addGroup(ISubtree& rTree)
         if (m_nDepthLeft > 0)
         {
             NodeOffset nSaveParent = m_nParent;
-            --m_nDepthLeft;
+            decDepth(m_nDepthLeft);
 
             m_nParent = m_rTree.m_aNodes.size() + m_rTree.root() - 1;
 
@@ -180,7 +180,7 @@ void TreeImplBuilder::addGroup(ISubtree& rTree)
             this->applyToChildren(rTree);
 
             OSL_ENSURE(m_nParent < m_rTree.m_aNodes.size(),"WARNING: Configuration: Group within requested depth has no members");
-            ++m_nDepthLeft;
+            incDepth(m_nDepthLeft);
             m_nParent = nSaveParent;
         }
     }
