@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyli.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 08:34:12 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:52:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1091,16 +1091,19 @@ void ScMasterPageContext::ClearContent(const rtl::OUString& rContent)
     if (!xPropSet.is())
         xPropSet = Reference < XPropertySet > ( GetStyle(), UNO_QUERY );
 
-    Any aAny;
-    aAny = xPropSet->getPropertyValue( rContent );
-    Reference < sheet::XHeaderFooterContent > xHeaderFooterContent;
-    if (aAny >>= xHeaderFooterContent)
+    if (xPropSet.is())
     {
-        xHeaderFooterContent->getLeftText()->setString(sEmpty);
-        xHeaderFooterContent->getCenterText()->setString(sEmpty);
-        xHeaderFooterContent->getRightText()->setString(sEmpty);
-        aAny <<= xHeaderFooterContent;
-        xPropSet->setPropertyValue( rContent, aAny );
+        Any aAny;
+        aAny = xPropSet->getPropertyValue( rContent );
+        Reference < sheet::XHeaderFooterContent > xHeaderFooterContent;
+        if (aAny >>= xHeaderFooterContent)
+        {
+            xHeaderFooterContent->getLeftText()->setString(sEmpty);
+            xHeaderFooterContent->getCenterText()->setString(sEmpty);
+            xHeaderFooterContent->getRightText()->setString(sEmpty);
+            aAny <<= xHeaderFooterContent;
+            xPropSet->setPropertyValue( rContent, aAny );
+        }
     }
 }
 
