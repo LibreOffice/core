@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: af $ $Date: 2002-02-05 10:35:08 $
+#   last change: $Author: af $ $Date: 2002-02-05 14:32:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,11 +70,8 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-CFLAGSOPT = -O0
-CFLAGSNOOPT = -O0
 .INCLUDE :  sv.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
-CFLAGS += -Wall -g -O0
 
 # --- Files --------------------------------------------------------
 
