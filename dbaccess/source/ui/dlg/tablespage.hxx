@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablespage.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:28 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:51:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,9 +68,6 @@
 #ifndef _COM_SUN_STAR_I18N_XCOLLATOR_HPP_
 #include <com/sun/star/i18n/XCollator.hpp>
 #endif
-#ifndef _SV_TOOLBOX_HXX
-#include <vcl/toolbox.hxx>
-#endif
 #ifndef _DBAUI_CONTAINERMULTIPLEXER_HXX_
 #include "containermultiplexer.hxx"
 #endif
@@ -80,9 +77,16 @@
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
 #endif
-#ifndef DBAUI_TOOLBOXHELPER_HXX
-#include "ToolBoxHelper.hxx"
+#ifndef _SV_FIXED_HXX
+#include <vcl/fixed.hxx>
 #endif
+#ifndef _DBAUI_TABLETREE_HXX_
+#include "tabletree.hxx"
+#endif
+#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
+#include <com/sun/star/sdbc/XConnection.hpp>
+#endif
+
 
 //.........................................................................
 namespace dbaui
@@ -92,60 +96,40 @@ namespace dbaui
     //========================================================================
     //= OTableSubscriptionPage
     //========================================================================
-    class ODbAdminDialog;
+    class OTableSubscriptionDialog;
     class OTableSubscriptionPage
             :public OGenericAdministrationPage
             ,public OContainerListener
-            ,public OToolBoxHelper
     {
-        friend class ODbAdminDialog;
-
     private:
         FixedLine               m_aTables;
-        ToolBox                 m_aActions;
         OTableTreeListBox       m_aTablesList;
         FixedText               m_aExplanation;
-        FixedLine               m_aColumnsLine;
-        CheckBox                m_aSuppressVersionColumns;
 
         ::rtl::OUString         m_sCatalogSeparator;
-        ODbAdminDialog*         m_pAdminDialog;     /** needed for translating an SfxItemSet into Sequence< PropertyValue >
-                                                        (for building an XConnection)
-                                                    */
         sal_Bool                m_bCheckedAll : 1;
         sal_Bool                m_bCatalogAtStart : 1;
-        sal_Bool                m_bConnectionWriteable : 1;
-        sal_Bool                m_bCanAddTables : 1;
-        sal_Bool                m_bCanDropTables : 1;
 
         DECLARE_STL_VECTOR( OContainerListenerAdapter*, AdapterArray );
         ::osl::Mutex            m_aNotifierMutex;
         AdapterArray            m_aNotifiers;
 
-        ::rtl::OUString         m_sDSName;
-
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
                                 m_xCurrentConnection;   /// valid as long as the page is active
         ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCollator >
                                 m_xCollator;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                                m_xORB;
+        OTableSubscriptionDialog* m_pTablesDlg;
 
     public:
-        static  SfxTabPage* Create( Window* _pParent, const SfxItemSet& _rAttrSet);
-        virtual BOOL        FillItemSet(SfxItemSet& _rCoreAttrs);
-        virtual void        ActivatePage(const SfxItemSet& _rSet);
-        virtual int         DeactivatePage(SfxItemSet* _pSet);
-
-        void setServiceFactory(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > _rxORB)
-            { m_aTablesList.setServiceFactory(m_xORB = _rxORB); }
+        virtual BOOL            FillItemSet(SfxItemSet& _rCoreAttrs);
+        virtual int             DeactivatePage(SfxItemSet* _pSet);
 
         virtual OPageSettings*  createViewSettings();
         virtual void            fillViewSettings(OPageSettings* _pSettings);
         virtual void            restoreViewSettings(const OPageSettings* _pSettings);
 
-        virtual void StateChanged( StateChangedType nStateChange );
-        virtual void DataChanged( const DataChangedEvent& rDCEvt );
+        virtual void            StateChanged( StateChangedType nStateChange );
+        virtual void            DataChanged( const DataChangedEvent& rDCEvt );
 
         /** will be called whenthe id of the image list is needed.
             @param  _eBitmapSet
@@ -153,23 +137,24 @@ namespace dbaui
             @param  _bHiContast
                 <TRUE/> when in high contrast mode.
         */
-        virtual sal_Int16 getImageListId(sal_Int16 _eBitmapSet,sal_Bool _bHiContast) const;
+        virtual sal_Int16       getImageListId(sal_Int16 _eBitmapSet,sal_Bool _bHiContast) const;
 
         /** will be called when the controls need to be resized.
         */
-        virtual void resizeControls(const Size& _rDiff);
+        virtual void            resizeControls(const Size& _rDiff);
+
+        OTableSubscriptionPage( Window* pParent, const SfxItemSet& _rCoreAttrs ,OTableSubscriptionDialog* _pTablesDlg);
+        virtual ~OTableSubscriptionPage();
 
     protected:
-        void SetAdminDialog(ODbAdminDialog* _pDialog) { m_pAdminDialog = _pDialog; }
+        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList);
+        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList);
 
         DECL_LINK( OnTreeEntryCompare, const SvSortData* );
-        DECL_LINK( OnToolboxClicked, void* );
-        DECL_LINK( OnTreeEntrySelected, void* );
         DECL_LINK( OnTreeEntryChecked, Control* );
 
     private:
-        OTableSubscriptionPage( Window* pParent, const SfxItemSet& _rCoreAttrs );
-        ~OTableSubscriptionPage();
+
 
         /** get the composed name of the entry given
             @param _pEntry
@@ -184,15 +169,12 @@ namespace dbaui
         /// returns the next sibling, if not available, the next sibling of the parent, a.s.o.
         SvLBoxEntry* implNextSibling(SvLBoxEntry* _pEntry) const;
 
-        /// updates the states of the toolbox buttons
-        void implUpdateToolbox();
-
         /** return the current selection in <member>m_aTablesList</member>
         */
         ::com::sun::star::uno::Sequence< ::rtl::OUString > collectDetailedSelection() const;
 
         // helper for remembering view settings
-        struct OTablePageViewSettings : public OToolboxedPageViewSettings
+        struct OTablePageViewSettings : public OPageSettings
         {
             StringArray     aExpandedEntries;
             StringArray     aSelectedEntries;
@@ -220,21 +202,12 @@ namespace dbaui
         /// helper for actOnEntryPaths
         void    doSelect(SvLBoxEntry*);
 
-        /// executes a toolbox slot
-        virtual void onToolBoxAction( sal_uInt16 _nClickedItemId );
-
-        /// deletes all selected tables
-        void dropSelection();
-
         /// (un)check all entries
         void CheckAll( BOOL bCheck = sal_True );
 
         virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
 
         void retireNotifiers();
-
-        // depending on the capabilities of the current connection, we slightly change the toolbox texts ....
-        void implAdjustToolBoxTexts();
 
         // checks the tables according to the filter given
         // in oppsofite to implCheckTables, this method handles the case of an empty sequence, too ...
