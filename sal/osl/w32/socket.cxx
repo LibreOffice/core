@@ -2,9 +2,9 @@
  *
  *  $RCSfile: socket.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jbu $ $Date: 2001-03-14 16:30:30 $
+ *  last change: $Author: jbu $ $Date: 2001-03-16 09:52:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,7 @@
 
 #include "system.h"
 
-#include <osl/socket.hxx>
+#include <osl/socket.h>
 #include <osl/diagnose.h>
 #include <rtl/alloc.h>
 
