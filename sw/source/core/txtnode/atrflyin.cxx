@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrflyin.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:44:59 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:54:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,11 @@
 #include "swfont.hxx"
 #include "txtfrm.hxx"
 #include "flyfrms.hxx"
+// --> OD 2004-11-09 #i26945#
+#ifndef _OBJECTFORMATTER_HXX
+#include <objectformatter.hxx>
+#endif
+// <--
 
 SwFmtFlyCnt::SwFmtFlyCnt( SwFrmFmt *pFrmFmt )
     : SfxPoolItem( RES_TXTATR_FLYCNT ),
@@ -311,12 +316,11 @@ SwFlyInCntFrm *SwTxtFlyCnt::_GetFlyFrm( const SwFrm *pCurrFrm )
 
     // 7922: Wir muessen dafuer sorgen, dass der Inhalt des FlyInCnt
     // nach seiner Konstruktion stramm durchformatiert wird.
-    SwCntntFrm *pFrm = pFly->ContainsCntnt();
-    while( pFrm )
-    {
-        pFrm->Calc();
-        pFrm = pFrm->GetNextCntntFrm();
-    }
+    // --> OD 2004-11-09 #i26945# - Use new object formatter to format Writer
+    // fly frame and its content.
+    SwObjectFormatter::FormatObj( *pFly, const_cast<SwFrm*>(pCurrFrm),
+                                  pCurrFrm->FindPageFrm() );
+    // <--
 
     return pFly;
 }
