@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mib $ $Date: 2001-02-01 14:30:13 $
+ *  last change: $Author: jp $ $Date: 2001-02-05 18:44:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1639,7 +1639,7 @@ ULONG SwDocShell::LoadStylesFromFile( const String& rURL,
     INetURLObject::SetBaseURL( sURL );
 
     SwRead pRead = 0;
-    SwReader* pReader;
+    SwReader* pReader = 0;
     SwPaM* pPam = 0;
 
     // Filter bestimmen:
@@ -1700,6 +1700,9 @@ ULONG SwDocShell::LoadStylesFromFile( const String& rURL,
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.11  2001/02/01 14:30:13  mib
+    XML files now can be loaded/saved as own format
+
     Revision 1.10  2001/01/15 18:47:06  jp
     use TempFile::GetURL instead of ::GetFileName
 
