@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChildrenManagerImpl.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: af $ $Date: 2002-06-03 15:18:44 $
+ *  last change: $Author: af $ $Date: 2002-06-07 08:11:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -511,15 +511,23 @@ void ChildrenManagerImpl::ClearAccessibleShapeList (void)
 
 
 
+/** If the broadcasters change at which this object is registered then
+    unregister at old and register at new broadcasters.
+*/
 void ChildrenManagerImpl::SetInfo (const AccessibleShapeTreeInfo& rShapeTreeInfo)
 {
-    uno::Reference<document::XEventBroadcaster> xCurrentBroadcaster;
+    // Remember the current broadcasters and exchange the shape tree info.
+    Reference<document::XEventBroadcaster> xCurrentBroadcaster;
+    Reference<view::XSelectionSupplier> xCurrentSelectionSupplier;
     {
         ::vos::OGuard aGuard (maMutex);
         xCurrentBroadcaster = maShapeTreeInfo.GetModelBroadcaster();
+        xCurrentSelectionSupplier = Reference<view::XSelectionSupplier> (
+            maShapeTreeInfo.GetController(), uno::UNO_QUERY);
         maShapeTreeInfo = rShapeTreeInfo;
     }
 
+    // Move registration to new model.
     if (maShapeTreeInfo.GetModelBroadcaster() != xCurrentBroadcaster)
     {
         // Register at new broadcaster.
@@ -531,6 +539,22 @@ void ChildrenManagerImpl::SetInfo (const AccessibleShapeTreeInfo& rShapeTreeInfo
         if (xCurrentBroadcaster.is())
             xCurrentBroadcaster->removeEventListener (
                 static_cast<document::XEventListener*>(this));
+    }
+
+    // Move registration to new selection supplier.
+    Reference<view::XSelectionSupplier> xNewSelectionSupplier (
+            maShapeTreeInfo.GetController(), uno::UNO_QUERY);
+    if (xNewSelectionSupplier != xCurrentSelectionSupplier)
+    {
+        // Register at new broadcaster.
+        if (xNewSelectionSupplier.is())
+            xNewSelectionSupplier->addSelectionChangeListener (
+                static_cast<view::XSelectionChangeListener*>(this));
+
+        // Unregister at old broadcaster.
+        if (xCurrentSelectionSupplier.is())
+            xCurrentSelectionSupplier->removeSelectionChangeListener (
+                static_cast<view::XSelectionChangeListener*>(this));
     }
 }
 
@@ -579,7 +603,8 @@ void SAL_CALL
 
 #ifdef DBG_UTIL
     OSL_TRACE ("ChildrenManagerImpl::notifyEvent %s",
-        ::rtl::OUStringToOString(rEventObject.EventName,RTL_TEXTENCODING_ASCII_US).getStr());
+        ::rtl::OUStringToOString(
+            rEventObject.EventName,RTL_TEXTENCODING_ASCII_US).getStr());
 #endif
 
     if (rEventObject.EventName.equals (sShapeInserted)
@@ -701,20 +726,29 @@ sal_Bool ChildrenManagerImpl::ReplaceChild (
 
     Iterate over all descriptors of visible accessible shapes and look them
     up in the selection.
+
+    If there is no valid controller then all shapes are deselected and
+    unfocused.  If the controller's frame is not active then all shapes are
+    unfocused.
 */
 void ChildrenManagerImpl::UpdateSelection (void)
 {
     OSL_TRACE ("ChildrenManagerImpl::UpdateSelection");
-    Reference<view::XSelectionSupplier> xSelectionSupplier (maShapeTreeInfo.GetController(), uno::UNO_QUERY);
-    if ( ! xSelectionSupplier.is())
-        return;
+    Reference<frame::XController> xController(maShapeTreeInfo.GetController());
+    Reference<view::XSelectionSupplier> xSelectionSupplier (
+        xController, uno::UNO_QUERY);
 
     // Try to cast the selection both to a multi selection and to a single
     // selection.
-    Reference<container::XIndexAccess> xSelectedShapeAccess (
-        xSelectionSupplier->getSelection(), uno::UNO_QUERY);
-    Reference<drawing::XShape> xSelectedShape (
-        xSelectionSupplier->getSelection(), uno::UNO_QUERY);
+    Reference<container::XIndexAccess> xSelectedShapeAccess;
+    Reference<drawing::XShape> xSelectedShape;
+    if (xSelectionSupplier.is())
+    {
+        xSelectedShapeAccess = Reference<container::XIndexAccess> (
+            xSelectionSupplier->getSelection(), uno::UNO_QUERY);
+        xSelectedShape = Reference<drawing::XShape> (
+            xSelectionSupplier->getSelection(), uno::UNO_QUERY);
+    }
 
     // Remember the current and new focused shape.
     AccessibleShape* pCurrentlyFocusedShape = NULL;
@@ -731,7 +765,7 @@ void ChildrenManagerImpl::UpdateSelection (void)
             bool bShapeIsSelected = false;
             OSL_TRACE ("  shape exists");
 
-            // Look up the shape in the selection.
+            // Look up the shape in the (single or multi-) selection.
             if (xSelectedShape.is())
             {
                 OSL_TRACE ("  comparing to single selected shape.");
@@ -767,7 +801,17 @@ void ChildrenManagerImpl::UpdateSelection (void)
         }
     }
 
-    // Now reset and then set the FOCUSED state.
+    // Check if the frame we are in is currently active.  If not then make
+    // sure to not send a FOCUSED state change.
+    if (xController.is())
+    {
+        Reference<frame::XFrame> xFrame (xController->getFrame());
+        if (xFrame.is())
+            if ( ! xFrame->isActive())
+                pNewFocusedShape = NULL;
+    }
+
+    // Move focus from current to newly focused shape.
     if (pCurrentlyFocusedShape != pNewFocusedShape)
     {
         if (pCurrentlyFocusedShape != NULL)
@@ -776,6 +820,7 @@ void ChildrenManagerImpl::UpdateSelection (void)
             pNewFocusedShape->SetState (AccessibleStateType::FOCUSED);
     }
 }
+
 
 
 
@@ -829,6 +874,10 @@ bool ChildDescriptor::operator == (const ChildDescriptor& aDescriptor)
 
 
 
+/** The ordering defined by this operator is only used in order to be able
+    to put child descriptors in some STL containers.  The ordering itself is
+    not so important, its 'features' are not used.
+*/
 bool ChildDescriptor::operator < (const ChildDescriptor& aDescriptor)
 {
     return mxShape < aDescriptor.mxShape;
