@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: th $ $Date: 2000-11-15 20:48:29 $
+ *  last change: $Author: th $ $Date: 2000-11-23 19:21:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3464,6 +3464,12 @@ static BOOL ImplHandleIMECompositionInput( SalFrame* pFrame,
 
             pFrame->maFrameData.mpProc( pFrame->maFrameData.mpInst, pFrame,
                                         SALEVENT_EXTTEXTINPUT, (void*)&aEvt );
+            // End the mode, if the last character is deleted
+            if ( !nTextLen )
+            {
+                pFrame->maFrameData.mpProc( pFrame->maFrameData.mpInst, pFrame,
+                                            SALEVENT_ENDEXTTEXTINPUT, (void*)NULL );
+            }
             ImplUpdateIMECursorPos( pFrame, hIMC );
         }
 
