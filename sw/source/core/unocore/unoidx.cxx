@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoidx.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: mtg $ $Date: 2001-08-16 12:20:22 $
+ *  last change: $Author: dvo $ $Date: 2001-08-23 09:38:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -443,6 +443,13 @@ void SwXDocumentIndex::setPropertyValue(const OUString& rPropertyName,
                 pTOXBase->SetTitle(sNewName);
             }
             break;
+            case WID_IDX_NAME:
+            {
+                OUString sNewName;
+                aValue >>= sNewName;
+                pTOXBase->SetTOXName(sNewName);
+            }
+            break;
             case WID_IDX_LOCALE:
             {
                 lang::Locale aLocale;
@@ -755,6 +762,10 @@ uno::Any SwXDocumentIndex::getPropertyValue(const OUString& rPropertyName)
                 aRet <<= uRet;
                 break;
             }
+            case WID_IDX_NAME:
+                bBOOL = sal_False;
+                aRet <<= OUString(pTOXBase->GetTOXName());
+            break;
             case WID_IDX_LOCALE:
                 bBOOL = sal_False;
                 aRet <<= SvxCreateLocale(pTOXBase->GetLanguage());

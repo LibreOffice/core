@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.106 $
+ *  $Revision: 1.107 $
  *
- *  last change: $Author: dvo $ $Date: 2001-08-02 18:37:24 $
+ *  last change: $Author: dvo $ $Date: 2001-08-23 09:38:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -398,6 +398,7 @@ void SwUnoPropertyMapProvider::Sort( sal_uInt16 nId )
 
 #define _BASE_INDEX_PROPERTIES_\
         { SW_PROP_NMID(UNO_NAME_TITLE), WID_IDX_TITLE,  CPPU_E2T(CPPUTYPE_OUSTRING)  , PROPERTY_NONE,     0},\
+        { SW_PROP_NMID(UNO_NAME_NAME),  WID_IDX_NAME,   CPPU_E2T(CPPUTYPE_OUSTRING)  , PROPERTY_NONE,     0},\
         { SW_PROP_NMID(UNO_NAME_CONTENT_SECTION), WID_IDX_CONTENT_SECTION,  CPPU_E2T(CPPUTYPE_REFTEXTSECTION)  , PropertyAttribute::READONLY,     0},\
         { SW_PROP_NMID(UNO_NAME_HEADER_SECTION), WID_IDX_HEADER_SECTION,  CPPU_E2T(CPPUTYPE_REFTEXTSECTION)  , PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,     0},\
 
