@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleControlShape.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: af $ $Date: 2002-05-17 11:55:01 $
+ *  last change: $Author: fs $ $Date: 2002-06-12 13:14:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,6 +175,7 @@ void AccessibleControlShape::Init()
             Reference< XAccessibleContext > xNativeControlContext;
             if ( xControlAccessible.is() )
                 xNativeControlContext = xControlAccessible->getAccessibleContext();
+            DBG_ASSERT( xNativeControlContext.is(), "AccessibleControlShape::Init: no AccessibleContext for the control!" );
 
             // get a proxy for this context
             // first a factory for the proxy
