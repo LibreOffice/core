@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: cd $ $Date: 2001-06-11 11:33:49 $
+#   last change: $Author: pb $ $Date: 2001-06-15 09:30:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -91,7 +91,8 @@ SLOFILES=			$(SLO)$/servicemanager.obj						\
                     $(SLO)$/xmlnamespaces.obj						\
                     $(SLO)$/fltdlg.obj								\
                     $(SLO)$/toolboxconfiguration.obj				\
-                    $(SLO)$/toolboxdocumenthandler.obj
+                    $(SLO)$/toolboxdocumenthandler.obj				\
+                    $(SLO)$/droptargetlistener.obj
 
 SRCFILES=			fltdlg.src
 
@@ -102,3 +103,4 @@ RESLIB1DEPN=		fltdlg.src
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :			target.mk
+
