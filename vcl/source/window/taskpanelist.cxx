@@ -2,9 +2,9 @@
  *
  *  $RCSfile: taskpanelist.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ssa $ $Date: 2002-04-15 12:46:05 $
+ *  last change: $Author: tbe $ $Date: 2002-04-25 11:02:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,7 +272,7 @@ Window* TaskPaneList::FindNextPane( Window *pWindow, BOOL bForward )
             {
                 if( ++p == mTaskPanes.end() )
                     p = mTaskPanes.begin();
-                if( (*p)->IsVisible() && !(*p)->IsDialog() )
+                if( (*p)->IsReallyVisible() && !(*p)->IsDialog() )
                 {
                     pWindow = *p;
                     break;
@@ -308,7 +308,7 @@ Window* TaskPaneList::FindNextFloat( Window *pWindow, BOOL bForward )
                     ++p;
                 if( p == mTaskPanes.end() )
                     break; // do not wrap, send focus back to document at end of list
-                if( (*p)->IsVisible() /*&& ( (*p)->GetType() == RSC_DOCKINGWINDOW || (*p)->IsDialog() )*/ )
+                if( (*p)->IsReallyVisible() /*&& ( (*p)->GetType() == RSC_DOCKINGWINDOW || (*p)->IsDialog() )*/ )
                 {
                     pWindow = *p;
                     break;
