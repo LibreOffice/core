@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.109 $
+ *  $Revision: 1.110 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-22 11:13:42 $
+ *  last change: $Author: cmc $ $Date: 2002-09-19 15:19:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3894,6 +3894,7 @@ void SwWW8ImplReader::Read_FontCode( USHORT nId, const BYTE* pData, short nLen )
         switch( nId )
         {
     //      case 0x4a51:    //font to bias towards all else being equal ?
+            case 113:
             case 0x4a5E:
                 nId = RES_CHRATR_CTL_FONT;
                 break;
@@ -3939,6 +3940,7 @@ void SwWW8ImplReader::Read_FontSize( USHORT nId, const BYTE* pData, short nLen )
         case 0x4a43:
             nId = RES_CHRATR_FONTSIZE;
             break;
+        case 116:
         case 0x4a61:
             nId = RES_CHRATR_CTL_FONTSIZE;
             break;
@@ -5299,10 +5301,10 @@ SprmReadInfo aSprmReadTab[] = {
  110, (FNReadRecord)0, // "sprmCCondHyhen", // chp.ysri ysri short
  111, (FNReadRecord)0, // "??111",
  112, (FNReadRecord)0, // "??112",
- 113, (FNReadRecord)0, // "??113",
+ 113, &SwWW8ImplReader::Read_FontCode, //ww7 rtl font
  114, (FNReadRecord)0, // "??114",
- 115, (FNReadRecord)0, // "??115",
- 116, (FNReadRecord)0, // "??116",
+ 115, &SwWW8ImplReader::Read_TxtColor, //ww7 rtl colour ?
+ 116, &SwWW8ImplReader::Read_FontSize,
  117, &SwWW8ImplReader::Read_Special, //  "sprmCFSpec", // chp.fSpec  1 or 0 bit
  118, &SwWW8ImplReader::Read_Obj,       //  "sprmCFObj", // chp.fObj 1 or 0 bit
  119, (FNReadRecord)0, // "sprmPicBrcl", // pic.brcl brcl (see PIC structure definition) byte

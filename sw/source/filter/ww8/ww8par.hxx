@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-29 11:21:48 $
+ *  last change: $Author: cmc $ $Date: 2002-09-19 15:19:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1324,6 +1324,7 @@ public:     // eigentlich private, geht aber leider nur public
 
     // Laden eines kompletten DocFiles
     ULONG LoadDoc( SwPaM&,WW8Glossary *pGloss=0);
+    CharSet SwWW8ImplReader::GetCurrentCharSet();
 };
 
 #endif

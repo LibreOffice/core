@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: cmc $ $Date: 2002-09-19 14:53:11 $
+ *  last change: $Author: cmc $ $Date: 2002-09-19 15:19:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,6 +276,7 @@ const wwSprmSearcher *wwSprmParser::GetWW6SprmSearcher()
         52, 0, L_FIX, // "?sprmPRuler 52", //???
 
 
+          64, 0, L_VAR, // rtl property ?
           65, 1, L_FIX, //  "sprmCFStrikeRM", // chp.fRMarkDel 1 or 0 bit
           66, 1, L_FIX, //  "sprmCFRMark", // chp.fRMark 1 or 0 bit
           67, 1, L_FIX, //  "sprmCFFldVanish", // chp.fFldVanish 1 or 0 bit
@@ -331,6 +332,8 @@ const wwSprmSearcher *wwSprmParser::GetWW6SprmSearcher()
          110, 2, L_FIX, // "sprmCCondHyhen", // chp.ysri ysri short
          111, 2, L_FIX, // unknown
          112, 2, L_FIX, // unknown
+         113, 0, L_VAR, // rtl property ?
+         115, 0, L_VAR, // rtl property ?
          116, 0, L_VAR, // unknown
          117, 1, L_FIX, //  "sprmCFSpec", // chp.fSpec  1 or 0 bit
          118, 1, L_FIX, //  "sprmCFObj", // chp.fObj 1 or 0 bit
@@ -386,7 +389,9 @@ const wwSprmSearcher *wwSprmParser::GetWW6SprmSearcher()
 
          170, 2, L_FIX, //  "sprmSDzaGutter", // sep.dzaGutter dza word
          171, 2, L_FIX, //  "sprmSDMPaperReq", // sep.dmPaperReq dm word
+         179, 0, L_VAR, // rtl property ?
 
+         181, 0, L_VAR, // rtl property ?
          182, 2, L_FIX, //  "sprmTJc", // tap.jc jc word (low order byte is significant)
          183, 2, L_FIX, //  "sprmTDxaLeft", // tap.rgdxaCenter (see below) dxa word
          184, 2, L_FIX, //  "sprmTDxaGapHalf", // tap.dxaGapHalf, tap.rgdxaCenter (see below) dxa word
@@ -742,7 +747,8 @@ SprmInfo wwSprmParser::GetSprmInfo(sal_uInt16 nId) const
 
         aSrch.nId = 0;
         aSrch.nLen = 0;
-        aSrch.nVari = 0;
+        //All the unknown ww7 sprms appear to be variable (which makes sense)
+        aSrch.nVari = L_VAR;
 
         if (mnVersion == 8) //We can recover perfectly in this case
         {

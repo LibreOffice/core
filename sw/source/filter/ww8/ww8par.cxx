@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-22 11:13:40 $
+ *  last change: $Author: cmc $ $Date: 2002-09-19 15:19:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1597,6 +1597,25 @@ static UCHAR ConvOs2( UCHAR ch, CharSet eDst )
 }
 #endif
 
+CharSet SwWW8ImplReader::GetCurrentCharSet()
+{
+    /*
+    #i2015
+    If the hard charset is set use it, if not see if there is an open
+    character run that has set the charset, if not then fallback to the
+    current underlying paragraph style.
+    */
+    CharSet eSrcCharSet = eHardCharSet;
+    if (eSrcCharSet == RTL_TEXTENCODING_DONTKNOW)
+    {
+        if (!maFontSrcCharSets.empty())
+            eSrcCharSet = maFontSrcCharSets.top();
+        if (eSrcCharSet == RTL_TEXTENCODING_DONTKNOW)
+            eSrcCharSet = pCollA[nAktColl].eFontSrcCharSet;
+    }
+    return eSrcCharSet;
+}
+
 // Returnwert: true for no Sonderzeichen
 bool SwWW8ImplReader::ReadPlainChars(long& rPos, long nEnd, long nCpOfs)
 {
@@ -1613,20 +1632,7 @@ bool SwWW8ImplReader::ReadPlainChars(long& rPos, long nEnd, long nCpOfs)
     if (!nLen)
         return true;
 
-    /*
-    #i2015
-    If the hard charset is set use it, if not see if there is an open
-    character run that has set the charset, if not then fallback to the
-    current underlying paragraph style.
-    */
-    CharSet eSrcCharSet = eHardCharSet;
-    if (eSrcCharSet == RTL_TEXTENCODING_DONTKNOW)
-    {
-        if (!maFontSrcCharSets.empty())
-            eSrcCharSet = maFontSrcCharSets.top();
-        if (eSrcCharSet == RTL_TEXTENCODING_DONTKNOW)
-            eSrcCharSet = pCollA[nAktColl].eFontSrcCharSet;
-    }
+    CharSet eSrcCharSet = GetCurrentCharSet();
 
     // (re)alloc UniString data
     String sPlainCharsBuf;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: cmc $ $Date: 2002-09-19 12:47:15 $
+ *  last change: $Author: cmc $ $Date: 2002-09-19 15:19:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -933,10 +933,8 @@ bool SwWW8ImplReader::GetTxbxText(String& rString, long nStartCp, long nEndCp)
     else if (nStartCp < nEndCp)
     {
         // den Text einlesen: kann sich ueber mehrere Pieces erstrecken!!!
-        USHORT nLen = pSBase->WW8ReadString( *pStrm, rString,
-                                            nStartCp + nDrawCpO,
-                                            nEndCp   - nStartCp,
-                                            eTextCharSet );
+        USHORT nLen = pSBase->WW8ReadString(*pStrm, rString,
+            nStartCp + nDrawCpO, nEndCp - nStartCp, GetCurrentCharSet());
         ASSERT(nLen, "+Wo ist der Grafik-Text (8) ?");
         if (nLen)
         {
