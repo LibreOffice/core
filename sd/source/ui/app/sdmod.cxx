@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2003-12-03 14:58:17 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:36:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,9 @@
 #include "sddll.hxx"
 #include "sdresid.hxx"
 #include "optsitem.hxx"
-#include "docshell.hxx"
+#ifndef SD_DRAW_DOC_SHELL_HXX
+#include "DrawDocShell.hxx"
+#endif
 #include "drawdoc.hxx"
 #include "app.hrc"
 #include "glob.hrc"
@@ -291,7 +293,7 @@ SdOptions* SdModule::GetSdOptions(DocumentType eDocType)
     {
         UINT16 nMetric = pOptions->GetMetric();
 
-        SdDrawDocShell* pDocSh = PTR_CAST( SdDrawDocShell, SfxObjectShell::Current() );
+        ::sd::DrawDocShell* pDocSh = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current() );
         SdDrawDocument* pDoc = NULL;
         if (pDocSh)
             pDoc = pDocSh->GetDoc();
@@ -314,7 +316,7 @@ SdOptions* SdModule::GetSdOptions(DocumentType eDocType)
 SvStorageStreamRef SdModule::GetOptionStream( const String& rOptionName,
                                               SdOptionStreamMode eMode )
 {
-    SdDrawDocShell*     pDocSh = PTR_CAST( SdDrawDocShell, SfxObjectShell::Current() );
+    ::sd::DrawDocShell*     pDocSh = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current() );
     SvStorageStreamRef  xStm;
 
     if( pDocSh )
@@ -372,7 +374,7 @@ OutputDevice* SdModule::GetVirtualRefDevice (void)
 /** This method is deprecated and only an alias to
     <member>GetVirtualRefDevice()</member>.  The given argument is ignored.
 */
-OutputDevice* SdModule::GetRefDevice (SdDrawDocShell& rDocShell)
+OutputDevice* SdModule::GetRefDevice (::sd::DrawDocShell& rDocShell)
 {
     return GetVirtualRefDevice();
 }
