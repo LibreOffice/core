@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-29 09:17:27 $
+ *  last change: $Author: dr $ $Date: 2000-12-18 14:24:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1248,8 +1248,8 @@ ImportExcel8::ImportExcel8( SvStorage* pStorage, SvStream& rStream, ScDocument* 
 {
     delete pFormConv;
 
-    pExcRoot->pXtiBuffer = new XtiBuffer;
-    pExcRoot->pSupbookBuffer = new SupbookBuffer;
+    pExcRoot->pXtiBuffer = new XclImpXtiBuffer;
+    pExcRoot->pSupbookBuffer = new XclImpSupbookBuffer;
     pExcRoot->pImpTabIdBuffer = new XclImpTabIdBuffer;
 
     pFormConv = new ExcelToSc8( pExcRoot, rStream, nTab );
@@ -1394,7 +1394,7 @@ void ImportExcel8::Externsheet( void )
     aIn >> nXtiCnt;
     nBytesLeft -= 2;
 
-    pExcRoot->pXtiBuffer->Read( aIn, nXtiCnt, nBytesLeft );
+    pExcRoot->pXtiBuffer->Read( aIn, nBytesLeft, nXtiCnt );
 }
 
 
@@ -1543,7 +1543,7 @@ void ImportExcel8::Crn( void )
 {
     if( pExcRoot->pCurrSupbook )
     {
-        SupbookE& rSB = *pExcRoot->pCurrSupbook;
+        XclImpSupbook& rSB = *pExcRoot->pCurrSupbook;
 
         if( rSB.HasValidScTab() )
         {
@@ -2260,86 +2260,11 @@ UINT32 ImportExcel8::Sst( void )
 SvMemoryStream* ImportExcel8::CreateContinueStream( const UINT16 n, UINT32& rSLen, UINT32& rNPR,
     const BOOL bForceSingle, UINT32List* pCutPosList )
 {
-    DBG_ASSERT( n, "-ImportExcel8::CreateContinueStream(): Base-Record muss zumindest Daten enthalten!" );
-
     bCond4EscherCont = FALSE;
-
-    const UINT32        nStartPos = aIn.Tell();
-    UINT16              nId;
-    SvMemoryStream*     pMemStr;
-    UINT32              nNextRecord = nStartPos;
-
-    aIn.SeekRel( n );
-    aIn >> nId;
-
-    aIn.Seek( nStartPos );
-
-    if( nId == 0x3C )
-    {// Struktur mit Folge-Records
-        UINT16          nBufferLen = n;
-        UINT16          nLen = n;
-        sal_Char*           pBuffer = new sal_Char[ nBufferLen ];
-
-        pMemStr = new SvMemoryStream;
-
-        aIn.Read( pBuffer, nLen );
-        pMemStr->Write( pBuffer, nLen );
-
-        aIn >> nId >> nLen;
-
-        do
-        {
-            if( nLen > nBufferLen )
-            {
-                delete[] pBuffer;
-                nBufferLen = nLen;
-                pBuffer = new sal_Char[ nBufferLen ];
-            }
-
-            aIn.Read( pBuffer, nLen );
-
-            if( pCutPosList )
-            {
-//              UINT32  n = pMemStr->Tell();
-                pCutPosList->Append( pMemStr->Tell() ); // Schnittstelle merken
-            }
-
-            pMemStr->Write( pBuffer, nLen );
-
-            aIn >> nId >> nLen;
-        }
-        while( nId == 0x3C );
-
-        rSLen = pMemStr->Tell();
-        pMemStr->Seek( STREAM_SEEK_TO_END );
-
-        rNPR = aIn.Tell() - 4;
-
-        delete[] pBuffer;
-
+    SvMemoryStream* pStrm = ImportTyp::CreateContinueStream( aIn, n, rSLen, rNPR, bForceSingle, pCutPosList );
+    if( pStrm )
         nBytesLeft = 0;
-    }
-    else
-    {// 'Pure' Record
-        rNPR = nStartPos + n;
-        if( bForceSingle )
-        {
-            pMemStr = new SvMemoryStream;
-            sal_Char*           pBuffer = new sal_Char[ n ];
-
-            aIn.Read( pBuffer, n );
-            pMemStr->Write( pBuffer, n );
-
-            delete[] pBuffer;
-
-            nBytesLeft = 0;
-        }
-        else
-            pMemStr = NULL;
-        rSLen = n;
-    }
-
-    return pMemStr;
+    return pStrm;
 }
 
 
@@ -2482,7 +2407,7 @@ void ImportExcel8::Tabid( void )
 
 void ImportExcel8::Supbook( void )
 {
-    pExcRoot->pCurrSupbook = new SupbookE( aIn, nBytesLeft, *pExcRoot );
+    pExcRoot->pCurrSupbook = new XclImpSupbook( aIn, nBytesLeft, *pExcRoot );
     pExcRoot->pSupbookBuffer->Append( pExcRoot->pCurrSupbook );
 }
 
@@ -3182,89 +3107,67 @@ void ImportExcel8::CreateTmpCtrlStorage( void )
 
 
 
+//___________________________________________________________________
 
-XtiBuffer::~XtiBuffer()
+XclImpXtiBuffer::~XclImpXtiBuffer()
 {
-    Xti*    p = ( Xti* ) List::First();
-    while( p )
-    {
-        delete p;
-        p = ( Xti* ) List::Next();
-    }
+    for( XclImpXti* pXti = (XclImpXti*) List::First(); pXti; pXti = (XclImpXti*) List::Next() )
+        delete pXti;
 }
 
-
-void XtiBuffer::Read( SvStream& r, UINT32 n, INT32& rBytesLeft )
+void XclImpXtiBuffer::Read( SvStream& rIn, INT32& rBytesLeft, UINT32 nNumOfEntries )
 {
-    Xti*    p;
+    XclImpXti* pXti;
 
-    rBytesLeft -= n * 6;
-
-    while( n )
+    while( nNumOfEntries )
     {
-        p = new Xti;
-
-        r >> p->nSupbook >> p->nFirst >> p->nLast;
-
-        List::Insert( p, LIST_APPEND );
-
-        n--;
+        pXti = new XclImpXti;
+        rIn >> pXti->nSupbook >> pXti->nFirst >> pXti->nLast;
+        List::Insert( pXti, LIST_APPEND );
+        nNumOfEntries--;
     }
+    rBytesLeft -= nNumOfEntries * 6;
 }
 
 
 
-
-struct SupbookTab
+XclImpSupbook::XclImpSupbook( SvStream& rIn, INT32& rBytesLeft, RootData& rExcRoot )
 {
-    String      aName;
-    UINT16      nScNum;
-};
-
-
-
-
-SupbookE::SupbookE( SvStream& rIn, INT32& rBytesLeft, RootData& rExcRoot )
-{
-    UINT16          nTabCnt;
-    SupbookTab*     pNewTab;
-
+    UINT16 nTabCnt;
     rIn >> nTabCnt;
     rBytesLeft -= 2;
 
     if( rBytesLeft < 2 + 2 * nTabCnt )
-    {// verkuerzter Record _ohne_ Strings
-        bSelf = TRUE;       // erste Naeherung...
+    {
+        // shortened record without strings
+        bSelf = TRUE;
 
         rIn.SeekRel( rBytesLeft );
         rBytesLeft = 0;
     }
     else
     {
-        bSelf = FALSE;      // erste Naeherung...
+        bSelf = FALSE;
 
-        String      aTabName;
+        String aTabName;
+        XclImpSupbookTab* pNewTab;
 
-        EncodeExternSheetUnicode( rIn, aFileName, aTabName, rBytesLeft, bSelf );
+        ReadDocName( rIn, rExcRoot, rBytesLeft, aFileName, bSelf );
+        String aURL( ScGlobal::GetAbsDocName( aFileName, rExcRoot.pDoc->GetDocumentShell() ) );
 
         if( nTabCnt )
         {
             while( nTabCnt )
             {
-                pNewTab = new SupbookTab;
-
-                String&     rTabName = pNewTab->aName;
-                rTabName = ::ReadUnicodeString( rIn, rBytesLeft, *rExcRoot.pCharset, 0 );
-                ExcelNameToScName( rTabName );
+                pNewTab = new XclImpSupbookTab;
+                ReadTabName( rIn, rExcRoot, rBytesLeft, pNewTab->aName );
 
                 if( rExcRoot.pExtDocOpt->nLinkCnt < 1 )
                 {
-                    UINT16      nNewTabNum;
-                    String      aURL( ScGlobal::GetAbsDocName( aFileName,
-                                        rExcRoot.pDoc->GetDocumentShell() ) );
-                    String      aTabName( ScGlobal::GetDocTabName( aURL, rTabName ) );
+                    UINT16 nNewTabNum;
+                    String aTabName( ScGlobal::GetDocTabName( aURL, pNewTab->aName ) );
 
-                    if( rExcRoot.pDoc->LinkEmptyTab( nNewTabNum, aTabName, aURL, rTabName ) )
+                    if( rExcRoot.pDoc->LinkEmptyTab( nNewTabNum, aTabName, aURL, pNewTab->aName ) )
                         pNewTab->nScNum = nNewTabNum;
                     else
                         pNewTab->nScNum = 0xFFFF;
@@ -3278,8 +3181,9 @@ SupbookE::SupbookE( SvStream& rIn, INT32& rBytesLeft, RootData& rExcRoot )
             }
         }
         else
-        {// einen Ersatzeintrag generieren
-            pNewTab = new SupbookTab;
+        {
+            // create dummy list entry
+            pNewTab = new XclImpSupbookTab;
             pNewTab->aName = aFileName;
             pNewTab->nScNum = 0xFFFF;
             List::Insert( pNewTab, LIST_APPEND );
@@ -3287,54 +3191,63 @@ SupbookE::SupbookE( SvStream& rIn, INT32& rBytesLeft, RootData& rExcRoot )
     }
 }
 
-
-SupbookE::~SupbookE()
+XclImpSupbook::~XclImpSupbook()
 {
-    SupbookTab* p = ( SupbookTab* ) List::First();
-    while( p )
+    for( XclImpSupbookTab* pTab = (XclImpSupbookTab*) List::First(); pTab; pTab = (XclImpSupbookTab*) List::Next() )
+        delete pTab;
+}
+
+//static
+void XclImpSupbook::ReadDocName( SvStream& rStrm, RootData& rExcRoot, INT32& rBytesLeft, String& rDocName, BOOL& rSelf )
+{
+    String sTabName;
+    ::EncodeExternSheetUnicode( rStrm, rDocName, sTabName, rBytesLeft, rSelf );
+}
+
+//static
+void XclImpSupbook::ReadTabName( SvStream& rStrm, RootData& rExcRoot, INT32& rBytesLeft, String& rTabName )
+{
+    rTabName = ::ReadUnicodeString( rStrm, rBytesLeft, *rExcRoot.pCharset, 0 );
+    ::ExcelNameToScName( rTabName );
+}
+
+UINT16 XclImpSupbook::GetScTabNum( UINT16 nTab ) const
+{
+    if( bSelf )
+        return nTab;
+    const XclImpSupbookTab* pTab = Get( nTab );
+    return pTab ? pTab->nScNum : 0xFFFF;
+}
+
+UINT16 XclImpSupbook::GetScTabNum( const String& rTabName ) const
+{
+    for( UINT32 nIndex = 0; nIndex < List::Count(); nIndex++ )
     {
-        delete p;
-        p = ( SupbookTab* ) List::Next();
+        const XclImpSupbookTab* pTab = Get( nIndex );
+        if( pTab && (pTab->aName == rTabName) )
+            return pTab->nScNum;
     }
-}
-
-
-BOOL SupbookE::IsValid( const UINT16 n ) const
-{
-    const SupbookTab*   p = ( const SupbookTab* ) List::GetObject( n );
-
-    if( p )
-        return p->nScNum != 0xFFFF;
-    else
-        return FALSE;
-}
-
-
-UINT16 SupbookE::GetScTabNum( const UINT16 n ) const
-{
-    const SupbookTab*   p = ( const SupbookTab* ) List::GetObject( n );
-
-    if( p )
-        return p->nScNum;
-    else
-        return 0xFFFF;
+    return 0xFFFF;
 }
 
 
 
-
-SupbookBuffer::~SupbookBuffer()
+XclImpSupbookBuffer::~XclImpSupbookBuffer()
 {
-    SupbookE*   p = ( SupbookE* ) List::First();
-    while( p )
+    for( XclImpSupbook* pSupbook = _First(); pSupbook; pSupbook = _Next() )
+        delete pSupbook;
+}
+
+const XclImpSupbook* XclImpSupbookBuffer::Get( const String& rDocName ) const
+{
+    for( UINT32 nIndex = 0; nIndex < List::Count(); nIndex++ )
     {
-        delete p;
-        p = ( SupbookE* ) List::Next();
+        const XclImpSupbook* pSupbook = Get( nIndex );
+        if( pSupbook && (pSupbook->GetName() == rDocName) )
+            return pSupbook;
     }
+    return NULL;
 }
-
-
-
 
 //___________________________________________________________________
 // classes AutoFilterRange, AutoFilterRangeBuffer
