@@ -2,9 +2,9 @@
  *
  *  $RCSfile: importwi.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 08:41:54 $
+ *  last change: $Author: bc $ $Date: 2001-05-21 14:41:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,19 +63,17 @@
 #define sBackButton 1002
 #define sNextButton 1003
 #define sBeginButton    1004
-#define sWelcometextLabel1  1005
-#define sWelcometextLabel2  1006
-#define sWelcometextLabel3  1007
-#define sMSTemplateCheckbox_1_    1008
-#define sMSTemplateCheckbox_2_    1009
-#define sMSTemplateCheckbox_3_    1010
+#define sCloseButton    1005
+#define sWelcometextLabel1  1006
+#define sWelcometextLabel2  1007
+#define sWelcometextLabel3  1008
+#define sMSTemplateCheckbox_1_    1009
+#define sMSTemplateCheckbox_2_    1010
+#define sMSTemplateCheckbox_3_    1011
 #define sMSDocumentCheckbox_1_    1012
 #define sMSDocumentCheckbox_2_    1013
 #define sMSDocumentCheckbox_3_    1014
 #define sSearchInSubDir 1022
-#define sSumInclusiveSubDir 1023
-#define sSumSaveDokumente   1024
-#define sSumDocuments 1025
 #define sMSContainerName 1030
 #define sSummaryHeader  1031
 #define sSummaryFrame   1032
@@ -124,6 +122,33 @@
 #define sXMLDocumentCheckbox_4_    2015
 #define sXMLHelperApplications_1    2016
 #define sXMLHelperApplications_2    2017
+
+#define sSourceDocuments         2030
+#define sTargetDocuments         2031
+#define sCreateLogfile          2032
+#define sLogfileHelpText        2033
+
+#define sSumInclusiveSubDir     3000
+#define sSumSaveDokumente       3001
+
+#define sSumSOTextDocuments       3100
+#define sSumSOTableDocuments      3101
+#define sSumSODrawDocuments       3102
+#define sSumSOMathDocuments       3103
+
+#define sSumSOTextTemplates       3110
+#define sSumSOTableTemplates      3111
+#define sSumSODrawTemplates       3112
+#define sSumSOGlobalDocuments     3113
+
+#define sSumMSTextDocuments       3200
+#define sSumMSTableDocuments      3201
+#define sSumMSDrawDocuments       3202
+
+#define sSumMSTextTemplates       3210
+#define sSumMSTableTemplates      3211
+#define sSumMSDrawTemplates       3212
+
 
 // --------------------------------------------------------------------
 String sHelpButton
@@ -264,6 +289,13 @@ String sBeginButton
     Text[ turkish ] = "~Al";
     Text[ catalan ] = "~Convert";
     Text[ finnish ] = "~Konvertieren";
+};
+
+String sCloseButton
+{
+    Text = "~Schließen";
+    Text[English] = "~Close";
+    Text[ English_us ] = "~Close";
 };
 
 String sWelcometextLabel1
@@ -548,89 +580,6 @@ String sSearchInSubDir
     Text[ finnish ] = "sisällytetään alikansiot";
 };
 
-String sSumInclusiveSubDir
-{
-    Text = "Es werden alle Unterverzeichnisse berücksichtigt";
-    Text[English] = "All directories will be considered";
-    Text[ English_us ] = "All subdirectories will be considered";
-    Text[ french ] = "Tous les sous-répertoires seront pris en compte.";
-    Text[ italian ] = "Si terrà conto di tutte le sottocartelle";
-    Text[ spanish ] = "Se tendrán en cuenta todos los subdirectorios";
-    Text[ portuguese ] = "Serão considerados todos os subdirectórios!";
-    Text[ dutch ] = "Er wordt rekening gehouden met alle subdirectory's";
-    Text[ swedish ] = "Det tas hänsyn till alla underordnade kataloger";
-    Text[ greek ] = "Èá åîåôáóôïıí üëïé ïé õğïêáôÜëïãïé";
-    Text[ dutch ] = "Er wordt rekening gehouden met alle subdirectory's";
-    Text[ swedish ] = "Det tas hänsyn till alla underordnade kataloger";
-    Text[ russian ] = "Âêëş÷åíû âñå ïîäïàïêè";
-    Text[ danish ] = "Der tages hensyn til alle underbiblioteker";
-    Text[ polish ] = "Uwzglêdnione zostan¹ wszystkie katalogi podrzêdne";
-    Text[ portuguese_brazilian ] = "All directories will be considered";
-    Text[ japanese ] = "‚·‚×‚Ä‚Ì‰ºˆÊÃŞ¨Ú¸ÄØ‚ª‘ÎÛ‚É‚È‚è‚Ü‚·B";
-    Text[ korean ] = "¸ğµç µğ·ºÅä¸®°¡ ÂüÀÛµË´Ï´Ù.";
-    Text[ chinese_simplified ] = "°üÀ¨ËùÓĞ×ÓÄ¿Â¼";
-    Text[ chinese_traditional ] = "¥]§t©Ò¦³¤l¥Ø¿ı";
-    Text[ arabic ] = "ÓíÊã ãÑÇÚÇÉ ßá ÇáÏáÇÆá ÇáİÑÚíÉ";
-    Text[ turkish ] = "Tüm alt dizinler dikkate alınacak";
-    Text[ catalan ] = "All directories will be considered";
-    Text[ finnish ] = "Kaikki hakemistot huomioidaan";
-};
-
-String sSumSaveDokumente
-{
-    Text = "Exportiert werden sie in das folgende Verzeichnis:";
-    Text[English] = "These will be exported in the following directory:";
-    Text[ English_us ] = "These will be exported to the following directory:";
-    Text[ french ] = "Ils seront exportés vers le répertoire suivant :";
-    Text[ italian ] = "L'esportazione avverà nella seguente cartella:";
-    Text[ spanish ] = "Se exportarán al siguiente directorio:";
-    Text[ portuguese ] = "Estes serão exportados para o seguinte directório:";
-    Text[ dutch ] = "Ze worden geëxporteerd naar de volgende  directory:";
-    Text[ swedish ] = "De exporteras till följande katalog:";
-    Text[ greek ] = "Èá ãßíåé åîáãùãŞ ôïõò óôïí åîŞò êáôÜëïãï:";
-    Text[ dutch ] = "Ze worden geëxporteerd naar de volgende  directory:";
-    Text[ swedish ] = "De exporteras till följande katalog:";
-    Text[ russian ] = "Îíè ıêñïîğòèğóşòñÿ â ñëåäóşùóş ïàïêó:";
-    Text[ danish ] = "De bliver eksporteret til følgende bibliotek:";
-    Text[ polish ] = "Eksportowane zostan¹ do nastêpuj¹cego katalogu:";
-    Text[ portuguese_brazilian ] = "These will be exported in the following directory:";
-    Text[ japanese ] = "Ÿ‚ÌÃŞ¨Ú¸ÄØ‚É´¸½Îß°Ä‚³‚ê‚Ü‚·¡";
-    Text[ korean ] = "´ÙÀ½°ú°°Àº µğ·ºÅä¸®·Î ³»º¸³»Áı´Ï´Ù:";
-    Text[ chinese_simplified ] = "Êä³öÖÁÏÂÁĞÄ¿Â¼£º";
-    Text[ chinese_traditional ] = "¶×¤J¨ì¥H¤U¥Ø¿ı¡G";
-    Text[ arabic ] = "Óæİ íÊã ÊÕÏíÑåÇ Åáì ÇáÏáíá ÇáÊÇáí:";
-    Text[ turkish ] = "Bu dosyaların aktarılacağı hedef dizin:";
-    Text[ catalan ] = "These will be exported to the following directory:";
-    Text[ finnish ] = "Kohteet viedään seuraavaan hakemistoon:";
-};
-
-String sSumDocuments
-{
-    Text = "%1 aus dem folgenden Verzeichnis werden importiert:";
-    Text[English] = "%1 will be imported in the following directory:";
-    Text[ English_us ] = "%1 contained in the following directory will be imported:";
-    Text[ french ] = "Les %1 contenus dans le répertoire suivant vont être importés :";
-    Text[ italian ] = "Vengono importati tutti %1 dalla cartella seguente:";
-    Text[ spanish ] = "Se importarán todas las %1 del siguiente directorio:";
-    Text[ portuguese ] = "Serão importados todos os %1 do seguinte directório:";
-    Text[ dutch ] = "Alle %1 uit de volgende directory worden geïmporteerd:";
-    Text[ swedish ] = "Alla %1 från följande katalog importeras:";
-    Text[ greek ] = "¼ëá ôá %1 áğü ôïí åîŞò êáôÜëïãï èá åéóá÷èïıí:";
-    Text[ dutch ] = "Alle %1 uit de volgende directory worden geïmporteerd:";
-    Text[ swedish ] = "Alla %1 från följande katalog importeras:";
-    Text[ russian ] = "Âñå ıòè %1 áóäóò èìïîğòèğîâàíû èç ñëåäóşùåãî êàòàëîãà:";
-    Text[ danish ] = "Alle Word-skabeloner fra følgende bibliotek bliver importeret:";
-    Text[ polish ] = "%1 zostanie importowane z nastêpuj¹cego katalogu:";
-    Text[ portuguese_brazilian ] = "All Word templates will be imported in the following directory:";
-    Text[ japanese ] = "Ÿ‚ÌÃŞ¨Ú¸ÄØ‚©‚ç %1 ‚ª²İÎß°Ä‚³‚ê‚Ü‚·B";
-    Text[ korean ] = "´ÙÀ½ µğ·ºÅä¸®¿¡¼­ ¸ğµç %1À»(¸¦) °¡Á®¿É´Ï´Ù:";
-    Text[ chinese_simplified ] = "´ÓÒÔÏÂµÄÄ¿Â¼ÖĞÊäÈë %1 £º";
-    Text[ chinese_traditional ] = "±q¤U¦C¥Ø¿ı¶×¤J  %1 ¡G";
-    Text[ arabic ] = "Óæİ íÊã ÇÓÊíÑÇÏ ßá %1 ãä ÇáÏáíá ÇáÊÇáí:";
-    Text[ turkish ] = "İçe aktarılacak tüm Word şablonlarını içeren dizin:";
-    Text[ catalan ] = "%1 contained in the following directory will be imported:";
-    Text[ finnish ] = "%1 aus dem folgenden Verzeichnis werden importiert:";
-};
 
 
 String sMSContainerName
@@ -1023,6 +972,7 @@ String sQueryfornewCreation
     Text[ arabic ] = "åá ÊÑíÏ ÅäÔÇÄå ÇáÂä¿";
     Text[ catalan ] = "Do you want to create it now?";
     Text[ finnish ] = "Soll es erstellt werden?";
+    Text[ language_user1 ] = "Das 'es' bezieht sich auf ein bestimmtes Verzeichnis";
 };
 
 
@@ -1680,6 +1630,500 @@ String sXMLHelperApplications_2
     Text[ turkish ] = "Formulas";
     Text[ arabic ] = "ÕíÛ";
     Text[ catalan ] = "Formulas";
+    Text[ finnish ] = "Formeln";
+};
+
+
+String sSourceDocuments
+{
+    Text = "Quelldokumente";
+    Text[English] = "Sourcedocuments";
+    Text[ English_us ] = "Sourcedocuments";
+};
+
+
+String sTargetDocuments
+{
+    Text = "Zieldokumente";
+    Text[English] = "Targetdocuments";
+    Text[ English_us ] = "Targetdocuments";
+};
+
+String sCreateLogfile
+{
+    Text = "Logdatei erstellen";
+    Text[English] = "Create Logfile";
+    Text[ English_us ] = "Creae Logfile";
+};
+
+String sLogfileHelpText
+{
+    Text = "In Ihrem Arbeitsverzeichnis wird eine Logdatei angelegt";
+    Text[English] = "A Logfile will be created within your Working Directory";
+    Text[ English_us ] = "A Logfile will be created within your Working Directory";
+};
+
+
+String sSumInclusiveSubDir
+{
+    Text = "Es werden alle Unterverzeichnisse berücksichtigt";
+    Text[English] = "All directories will be considered";
+    Text[ English_us ] = "All subdirectories will be considered";
+    Text[ french ] = "Tous les sous-répertoires seront pris en compte.";
+    Text[ italian ] = "Si terrà conto di tutte le sottocartelle";
+    Text[ spanish ] = "Se tendrán en cuenta todos los subdirectorios";
+    Text[ portuguese ] = "Serão considerados todos os subdirectórios!";
+    Text[ dutch ] = "Er wordt rekening gehouden met alle subdirectory's";
+    Text[ swedish ] = "Det tas hänsyn till alla underordnade kataloger";
+    Text[ greek ] = "Èá åîåôáóôïıí üëïé ïé õğïêáôÜëïãïé";
+    Text[ dutch ] = "Er wordt rekening gehouden met alle subdirectory's";
+    Text[ swedish ] = "Det tas hänsyn till alla underordnade kataloger";
+    Text[ russian ] = "Âêëş÷åíû âñå ïîäïàïêè";
+    Text[ danish ] = "Der tages hensyn til alle underbiblioteker";
+    Text[ polish ] = "Uwzglêdnione zostan¹ wszystkie katalogi podrzêdne";
+    Text[ portuguese_brazilian ] = "All directories will be considered";
+    Text[ japanese ] = "‚·‚×‚Ä‚Ì‰ºˆÊÃŞ¨Ú¸ÄØ‚ª‘ÎÛ‚É‚È‚è‚Ü‚·B";
+    Text[ korean ] = "¸ğµç µğ·ºÅä¸®°¡ ÂüÀÛµË´Ï´Ù.";
+    Text[ chinese_simplified ] = "°üÀ¨ËùÓĞ×ÓÄ¿Â¼";
+    Text[ chinese_traditional ] = "¥]§t©Ò¦³¤l¥Ø¿ı";
+    Text[ arabic ] = "ÓíÊã ãÑÇÚÇÉ ßá ÇáÏáÇÆá ÇáİÑÚíÉ";
+    Text[ turkish ] = "Tüm alt dizinler dikkate alınacak";
+    Text[ catalan ] = "All directories will be considered";
+    Text[ finnish ] = "Kaikki hakemistot huomioidaan";
+};
+
+String sSumSaveDokumente
+{
+    Text = "Exportiert werden sie in das folgende Verzeichnis:";
+    Text[English] = "These will be exported in the following directory:";
+    Text[ English_us ] = "These will be exported to the following directory:";
+    Text[ french ] = "Ils seront exportés vers le répertoire suivant :";
+    Text[ italian ] = "L'esportazione avverà nella seguente cartella:";
+    Text[ spanish ] = "Se exportarán al siguiente directorio:";
+    Text[ portuguese ] = "Estes serão exportados para o seguinte directório:";
+    Text[ dutch ] = "Ze worden geëxporteerd naar de volgende  directory:";
+    Text[ swedish ] = "De exporteras till följande katalog:";
+    Text[ greek ] = "Èá ãßíåé åîáãùãŞ ôïõò óôïí åîŞò êáôÜëïãï:";
+    Text[ dutch ] = "Ze worden geëxporteerd naar de volgende  directory:";
+    Text[ swedish ] = "De exporteras till följande katalog:";
+    Text[ russian ] = "Îíè ıêñïîğòèğóşòñÿ â ñëåäóşùóş ïàïêó:";
+    Text[ danish ] = "De bliver eksporteret til følgende bibliotek:";
+    Text[ polish ] = "Eksportowane zostan¹ do nastêpuj¹cego katalogu:";
+    Text[ portuguese_brazilian ] = "These will be exported in the following directory:";
+    Text[ japanese ] = "Ÿ‚ÌÃŞ¨Ú¸ÄØ‚É´¸½Îß°Ä‚³‚ê‚Ü‚·¡";
+    Text[ korean ] = "´ÙÀ½°ú°°Àº µğ·ºÅä¸®·Î ³»º¸³»Áı´Ï´Ù:";
+    Text[ chinese_simplified ] = "Êä³öÖÁÏÂÁĞÄ¿Â¼£º";
+    Text[ chinese_traditional ] = "¶×¤J¨ì¥H¤U¥Ø¿ı¡G";
+    Text[ arabic ] = "Óæİ íÊã ÊÕÏíÑåÇ Åáì ÇáÏáíá ÇáÊÇáí:";
+    Text[ turkish ] = "Bu dosyaların aktarılacağı hedef dizin:";
+    Text[ catalan ] = "These will be exported to the following directory:";
+    Text[ finnish ] = "Kohteet viedään seuraavaan hakemistoon:";
+};
+
+
+String sSumSOTextDocuments
+{
+    Text = "Alle %PRODUCTNAME Textdokumente aus dem folgenden Verzeichnis werden importiert:";
+    Text[English] = "All %PRODUCTNAME text documents in the following directory will be imported:";
+    Text[ English_us ] = "All %PRODUCTNAME text documents contained in the following directory will be imported:";
+    Text[ french ] = "Les %1 contenus dans le répertoire suivant vont être importés :";
+    Text[ italian ] = "Vengono importati tutti %1 dalla cartella seguente:";
+    Text[ spanish ] = "Se importarán todas las %1 del siguiente directorio:";
+    Text[ portuguese ] = "Serão importados todos os %1 do seguinte directório:";
+    Text[ dutch ] = "Alle %1 uit de volgende directory worden geïmporteerd:";
+    Text[ swedish ] = "Alla %1 från följande katalog importeras:";
+    Text[ greek ] = "¼ëá ôá %1 áğü ôïí åîŞò êáôÜëïãï èá åéóá÷èïıí:";
+    Text[ dutch ] = "Alle %1 uit de volgende directory worden geïmporteerd:";
+    Text[ swedish ] = "Alla %1 från följande katalog importeras:";
+    Text[ russian ] = "Âñå ıòè %1 áóäóò èìïîğòèğîâàíû èç ñëåäóşùåãî êàòàëîãà:";
+    Text[ danish ] = "Alle Word-skabeloner fra følgende bibliotek bliver importeret:";
+    Text[ polish ] = "%1 zostanie importowane z nastêpuj¹cego katalogu:";
+    Text[ portuguese_brazilian ] = "All Word templates will be imported in the following directory:";
+    Text[ japanese ] = "Ÿ‚ÌÃŞ¨Ú¸ÄØ‚©‚ç %1 ‚ª²İÎß°Ä‚³‚ê‚Ü‚·B";
+    Text[ korean ] = "´ÙÀ½ µğ·ºÅä¸®¿¡¼­ ¸ğµç %1À»(¸¦) °¡Á®¿É´Ï´Ù:";
+    Text[ chinese_simplified ] = "´ÓÒÔÏÂµÄÄ¿Â¼ÖĞÊäÈë %1 £º";
+    Text[ chinese_traditional ] = "±q¤U¦C¥Ø¿ı¶×¤J  %1 ¡G";
+    Text[ arabic ] = "Óæİ íÊã ÇÓÊíÑÇÏ ßá %1 ãä ÇáÏáíá ÇáÊÇáí:";
+    Text[ turkish ] = "İçe aktarılacak tüm Word şablonlarını içeren dizin:";
+    Text[ catalan ] = "%1 contained in the following directory will be imported:";
+    Text[ finnish ] = "%1 aus dem folgenden Verzeichnis werden importiert:";
+};
+
+
+String sSumSOTableDocuments
+{
+    Text = "Alle %PRODUCTNAME Tabellendokumente aus dem folgenden Verzeichnis werden importiert:";
+    Text[English] = "All %PRODUCTNAME table documents in the following directory will be imported:";
+    Text[ English_us ] = "All %PRODUCTNAME table documents contained in the following directory will be imported:";
+    Text[ french ] = "Les %1 contenus dans le répertoire suivant vont être importés :";
+    Text[ italian ] = "Vengono importati tutti %1 dalla cartella seguente:";
+    Text[ spanish ] = "Se importarán todas las %1 del siguiente directorio:";
+    Text[ portuguese ] = "Serão importados todos os %1 do seguinte directório:";
+    Text[ dutch ] = "Alle %1 uit de volgende directory worden geïmporteerd:";
+    Text[ swedish ] = "Alla %1 från följande katalog importeras:";
+    Text[ greek ] = "¼ëá ôá %1 áğü ôïí åîŞò êáôÜëïãï èá åéóá÷èïıí:";
+    Text[ dutch ] = "Alle %1 uit de volgende directory worden geïmporteerd:";
+    Text[ swedish ] = "Alla %1 från följande katalog importeras:";
+    Text[ russian ] = "Âñå ıòè %1 áóäóò èìïîğòèğîâàíû èç ñëåäóşùåãî êàòàëîãà:";
+    Text[ danish ] = "Alle Word-skabeloner fra følgende bibliotek bliver importeret:";
+    Text[ polish ] = "%1 zostanie importowane z nastêpuj¹cego katalogu:";
+    Text[ portuguese_brazilian ] = "All Word templates will be imported in the following directory:";
+    Text[ japanese ] = "Ÿ‚ÌÃŞ¨Ú¸ÄØ‚©‚ç %1 ‚ª²İÎß°Ä‚³‚ê‚Ü‚·B";
+    Text[ korean ] = "´ÙÀ½ µğ·ºÅä¸®¿¡¼­ ¸ğµç %1À»(¸¦) °¡Á®¿É´Ï´Ù:";
+    Text[ chinese_simplified ] = "´ÓÒÔÏÂµÄÄ¿Â¼ÖĞÊäÈë %1 £º";
+    Text[ chinese_traditional ] = "±q¤U¦C¥Ø¿ı¶×¤J  %1 ¡G";
+    Text[ arabic ] = "Óæİ íÊã ÇÓÊíÑÇÏ ßá %1 ãä ÇáÏáíá ÇáÊÇáí:";
+    Text[ turkish ] = "İçe aktarılacak tüm Word şablonlarını içeren dizin:";
+    Text[ catalan ] = "%1 contained in the following directory will be imported:";
+    Text[ finnish ] = "%1 aus dem folgenden Verzeichnis werden importiert:";
+};
+
+
+String sSumSODrawDocuments
+{
+    Text = "Alle %PRODUCTNAME Zeichnungs- und Präsentationsdokumente aus dem folgenden Verzeichnis werden importiert:";
+    Text[English] = "All %PRODUCTNAME drawing and impress documents in the following directory will be imported:";
+    Text[ English_us ] = "All %PRODUCTNAME drawing and impress documents contained in the following directory will be imported:";
+    Text[ french ] = "Les %1 contenus dans le répertoire suivant vont être importés :";
+    Text[ italian ] = "Vengono importati tutti %1 dalla cartella seguente:";
+    Text[ spanish ] = "Se importarán todas las %1 del siguiente directorio:";
+    Text[ portuguese ] = "Serão importados todos os %1 do seguinte directório:";
+    Text[ dutch ] = "Alle %1 uit de volgende directory worden geïmporteerd:";
+    Text[ swedish ] = "Alla %1 från följande katalog importeras:";
+    Text[ greek ] = "¼ëá ôá %1 áğü ôïí åîŞò êáôÜëïãï èá åéóá÷èïıí:";
+    Text[ dutch ] = "Alle %1 uit de volgende directory worden geïmporteerd:";
+    Text[ swedish ] = "Alla %1 från följande katalog importeras:";
+    Text[ russian ] = "Âñå ıòè %1 áóäóò èìïîğòèğîâàíû èç ñëåäóşùåãî êàòàëîãà:";
+    Text[ danish ] = "Alle Word-skabeloner fra følgende bibliotek bliver importeret:";
+    Text[ polish ] = "%1 zostanie importowane z nastêpuj¹cego katalogu:";
+    Text[ portuguese_brazilian ] = "All Word templates will be imported in the following directory:";
+    Text[ japanese ] = "Ÿ‚ÌÃŞ¨Ú¸ÄØ‚©‚ç %1 ‚ª²İÎß°Ä‚³‚ê‚Ü‚·B";
+    Text[ korean ] = "´ÙÀ½ µğ·ºÅä¸®¿¡¼­ ¸ğµç %1À»(¸¦) °¡Á®¿É´Ï´Ù:";
+    Text[ chinese_simplified ] = "´ÓÒÔÏÂµÄÄ¿Â¼ÖĞÊäÈë %1 £º";
+    Text[ chinese_traditional ] = "±q¤U¦C¥Ø¿ı¶×¤J  %1 ¡G";
+    Text[ arabic ] = "Óæİ íÊã ÇÓÊíÑÇÏ ßá %1 ãä ÇáÏáíá ÇáÊÇáí:";
+    Text[ turkish ] = "İçe aktarılacak tüm Word şablonlarını içeren dizin:";
+    Text[ catalan ] = "%1 contained in the following directory will be imported:";
+    Text[ finnish ] = "%1 aus dem folgenden Verzeichnis werden importiert:";
+};
+
+
+String sSumSOMathDocuments
+{
+    Text = "Alle %PRODUCTNAME Formeldokumente aus dem folgenden Verzeichnis werden importiert:";
+    Text[English] = "All %PRODUCTNAME formula documents in the following directory will be imported:";
+    Text[ English_us ] = "All %PRODUCTNAME formula documents contained in the following directory will be imported:";
+    Text[ french ] = "Les %1 contenus dans le répertoire suivant vont être importés :";
+    Text[ italian ] = "Vengono importati tutti %1 dalla cartella seguente:";
+    Text[ spanish ] = "Se importarán todas las %1 del siguiente directorio:";
+    Text[ portuguese ] = "Serão importados todos os %1 do seguinte directório:";
+    Text[ dutch ] = "Alle %1 uit de volgende directory worden geïmporteerd:";
+    Text[ swedish ] = "Alla %1 från följande katalog importeras:";
+    Text[ greek ] = "¼ëá ôá %1 áğü ôïí åîŞò êáôÜëïãï èá åéóá÷èïıí:";
+    Text[ dutch ] = "Alle %1 uit de volgende directory worden geïmporteerd:";
+    Text[ swedish ] = "Alla %1 från följande katalog importeras:";
+    Text[ russian ] = "Âñå ıòè %1 áóäóò èìïîğòèğîâàíû èç ñëåäóşùåãî êàòàëîãà:";
+    Text[ danish ] = "Alle Word-skabeloner fra følgende bibliotek bliver importeret:";
+    Text[ polish ] = "%1 zostanie importowane z nastêpuj¹cego katalogu:";
+    Text[ portuguese_brazilian ] = "All Word templates will be imported in the following directory:";
+    Text[ japanese ] = "Ÿ‚ÌÃŞ¨Ú¸ÄØ‚©‚ç %1 ‚ª²İÎß°Ä‚³‚ê‚Ü‚·B";
+    Text[ korean ] = "´ÙÀ½ µğ·ºÅä¸®¿¡¼­ ¸ğµç %1À»(¸¦) °¡Á®¿É´Ï´Ù:";
+    Text[ chinese_simplified ] = "´ÓÒÔÏÂµÄÄ¿Â¼ÖĞÊäÈë %1 £º";
+    Text[ chinese_traditional ] = "±q¤U¦C¥Ø¿ı¶×¤J  %1 ¡G";
+    Text[ arabic ] = "Óæİ íÊã ÇÓÊíÑÇÏ ßá %1 ãä ÇáÏáíá ÇáÊÇáí:";
+    Text[ turkish ] = "İçe aktarılacak tüm Word şablonlarını içeren dizin:";
+    Text[ catalan ] = "%1 contained in the following directory will be imported:";
+    Text[ finnish ] = "%1 aus dem folgenden Verzeichnis werden importiert:";
+};
+
+
+String sSumSOTextTemplates
+{
+    Text = "Alle %PRODUCTNAME Textvorlagen aus dem folgenden Verzeichnis werden importiert:";
+    Text[English] = "All %PRODUCTNAME text templates in the following directory will be imported:";
+    Text[ English_us ] = "All %PRODUCTNAME text templates contained in the following directory will be imported:";
+    Text[ french ] = "Les %1 contenus dans le répertoire suivant vont être importés :";
+    Text[ italian ] = "Vengono importati tutti %1 dalla cartella seguente:";
+    Text[ spanish ] = "Se importarán todas las %1 del siguiente directorio:";
+    Text[ portuguese ] = "Serão importados todos os %1 do seguinte directório:";
+    Text[ dutch ] = "Alle %1 uit de volgende directory worden geïmporteerd:";
+    Text[ swedish ] = "Alla %1 från följande katalog importeras:";
+    Text[ greek ] = "¼ëá ôá %1 áğü ôïí åîŞò êáôÜëïãï èá åéóá÷èïıí:";
+    Text[ dutch ] = "Alle %1 uit de volgende directory worden geïmporteerd:";
+    Text[ swedish ] = "Alla %1 från följande katalog importeras:";
+    Text[ russian ] = "Âñå ıòè %1 áóäóò èìïîğòèğîâàíû èç ñëåäóşùåãî êàòàëîãà:";
+    Text[ danish ] = "Alle Word-skabeloner fra følgende bibliotek bliver importeret:";
+    Text[ polish ] = "%1 zostanie importowane z nastêpuj¹cego katalogu:";
+    Text[ portuguese_brazilian ] = "All Word templates will be imported in the following directory:";
+    Text[ japanese ] = "Ÿ‚ÌÃŞ¨Ú¸ÄØ‚©‚ç %1 ‚ª²İÎß°Ä‚³‚ê‚Ü‚·B";
+    Text[ korean ] = "´ÙÀ½ µğ·ºÅä¸®¿¡¼­ ¸ğµç %1À»(¸¦) °¡Á®¿É´Ï´Ù:";
+    Text[ chinese_simplified ] = "´ÓÒÔÏÂµÄÄ¿Â¼ÖĞÊäÈë %1 £º";
+    Text[ chinese_traditional ] = "±q¤U¦C¥Ø¿ı¶×¤J  %1 ¡G";
+    Text[ arabic ] = "Óæİ íÊã ÇÓÊíÑÇÏ ßá %1 ãä ÇáÏáíá ÇáÊÇáí:";
+    Text[ turkish ] = "İçe aktarılacak tüm Word şablonlarını içeren dizin:";
+    Text[ catalan ] = "%1 contained in the following directory will be imported:";
+    Text[ finnish ] = "%1 aus dem folgenden Verzeichnis werden importiert:";
+};
+
+
+String sSumSOTableTemplates
+{
+    Text = "Alle %PRODUCTNAME Tabellenvorlagen aus dem folgenden Verzeichnis werden importiert:";
+    Text[English] = "All %PRODUCTNAME table templates in the following directory will be imported:";
+    Text[ English_us ] = "All %PRODUCTNAME table templates contained in the following directory will be imported:";
+    Text[ french ] = "Les %1 contenus dans le répertoire suivant vont être importés :";
+    Text[ italian ] = "Vengono importati tutti %1 dalla cartella seguente:";
+    Text[ spanish ] = "Se importarán todas las %1 del siguiente directorio:";
+    Text[ portuguese ] = "Serão importados todos os %1 do seguinte directório:";
+    Text[ dutch ] = "Alle %1 uit de volgende directory worden geïmporteerd:";
+    Text[ swedish ] = "Alla %1 från följande katalog importeras:";
+    Text[ greek ] = "¼ëá ôá %1 áğü ôïí åîŞò êáôÜëïãï èá åéóá÷èïıí:";
+    Text[ dutch ] = "Alle %1 uit de volgende directory worden geïmporteerd:";
+    Text[ swedish ] = "Alla %1 från följande katalog importeras:";
+    Text[ russian ] = "Âñå ıòè %1 áóäóò èìïîğòèğîâàíû èç ñëåäóşùåãî êàòàëîãà:";
+    Text[ danish ] = "Alle Word-skabeloner fra følgende bibliotek bliver importeret:";
+    Text[ polish ] = "%1 zostanie importowane z nastêpuj¹cego katalogu:";
+    Text[ portuguese_brazilian ] = "All Word templates will be imported in the following directory:";
+    Text[ japanese ] = "Ÿ‚ÌÃŞ¨Ú¸ÄØ‚©‚ç %1 ‚ª²İÎß°Ä‚³‚ê‚Ü‚·B";
+    Text[ korean ] = "´ÙÀ½ µğ·ºÅä¸®¿¡¼­ ¸ğµç %1À»(¸¦) °¡Á®¿É´Ï´Ù:";
+    Text[ chinese_simplified ] = "´ÓÒÔÏÂµÄÄ¿Â¼ÖĞÊäÈë %1 £º";
+    Text[ chinese_traditional ] = "±q¤U¦C¥Ø¿ı¶×¤J  %1 ¡G";
+    Text[ arabic ] = "Óæİ íÊã ÇÓÊíÑÇÏ ßá %1 ãä ÇáÏáíá ÇáÊÇáí:";
+    Text[ turkish ] = "İçe aktarılacak tüm Word şablonlarını içeren dizin:";
+    Text[ catalan ] = "%1 contained in the following directory will be imported:";
+    Text[ finnish ] = "%1 aus dem folgenden Verzeichnis werden importiert:";
+};
+
+
+String sSumSODrawTemplates
+{
+    Text = "Alle %PRODUCTNAME Zeichnungs- und Präsentationsvorlagen aus dem folgenden Verzeichnis werden importiert:";
+    Text[English] = "All %PRODUCTNAME drawing and impress templates in the following directory will be imported:";
+    Text[ English_us ] = "All %PRODUCTNAME drawing and impress templates contained in the following directory will be imported:";
+    Text[ french ] = "Les %1 contenus dans le répertoire suivant vont être importés :";
+    Text[ italian ] = "Vengono importati tutti %1 dalla cartella seguente:";
+    Text[ spanish ] = "Se importarán todas las %1 del siguiente directorio:";
+    Text[ portuguese ] = "Serão importados todos os %1 do seguinte directório:";
+    Text[ dutch ] = "Alle %1 uit de volgende directory worden geïmporteerd:";
+    Text[ swedish ] = "Alla %1 från följande katalog importeras:";
+    Text[ greek ] = "¼ëá ôá %1 áğü ôïí åîŞò êáôÜëïãï èá åéóá÷èïıí:";
+    Text[ dutch ] = "Alle %1 uit de volgende directory worden geïmporteerd:";
+    Text[ swedish ] = "Alla %1 från följande katalog importeras:";
+    Text[ russian ] = "Âñå ıòè %1 áóäóò èìïîğòèğîâàíû èç ñëåäóşùåãî êàòàëîãà:";
+    Text[ danish ] = "Alle Word-skabeloner fra følgende bibliotek bliver importeret:";
+    Text[ polish ] = "%1 zostanie importowane z nastêpuj¹cego katalogu:";
+    Text[ portuguese_brazilian ] = "All Word templates will be imported in the following directory:";
+    Text[ japanese ] = "Ÿ‚ÌÃŞ¨Ú¸ÄØ‚©‚ç %1 ‚ª²İÎß°Ä‚³‚ê‚Ü‚·B";
+    Text[ korean ] = "´ÙÀ½ µğ·ºÅä¸®¿¡¼­ ¸ğµç %1À»(¸¦) °¡Á®¿É´Ï´Ù:";
+    Text[ chinese_simplified ] = "´ÓÒÔÏÂµÄÄ¿Â¼ÖĞÊäÈë %1 £º";
+    Text[ chinese_traditional ] = "±q¤U¦C¥Ø¿ı¶×¤J  %1 ¡G";
+    Text[ arabic ] = "Óæİ íÊã ÇÓÊíÑÇÏ ßá %1 ãä ÇáÏáíá ÇáÊÇáí:";
+    Text[ turkish ] = "İçe aktarılacak tüm Word şablonlarını içeren dizin:";
+    Text[ catalan ] = "%1 contained in the following directory will be imported:";
+    Text[ finnish ] = "%1 aus dem folgenden Verzeichnis werden importiert:";
+};
+
+String sSumSOGlobalDocuments
+{
+    Text = "Alle %PRODUCTNAME Globaldokumente aus dem folgenden Verzeichnis werden importiert:";
+    Text[English] = "All %PRODUCTNAME global documents in the following directory will be imported:";
+    Text[ English_us ] = "All %PRODUCTNAME global documents contained in the following directory will be imported:";
+    Text[ french ] = "Les %1 contenus dans le répertoire suivant vont être importés :";
+    Text[ italian ] = "Vengono importati tutti %1 dalla cartella seguente:";
+    Text[ spanish ] = "Se importarán todas las %1 del siguiente directorio:";
+    Text[ portuguese ] = "Serão importados todos os %1 do seguinte directório:";
+    Text[ dutch ] = "Alle %1 uit de volgende directory worden geïmporteerd:";
+    Text[ swedish ] = "Alla %1 från följande katalog importeras:";
+    Text[ greek ] = "¼ëá ôá %1 áğü ôïí åîŞò êáôÜëïãï èá åéóá÷èïıí:";
+    Text[ dutch ] = "Alle %1 uit de volgende directory worden geïmporteerd:";
+    Text[ swedish ] = "Alla %1 från följande katalog importeras:";
+    Text[ russian ] = "Âñå ıòè %1 áóäóò èìïîğòèğîâàíû èç ñëåäóşùåãî êàòàëîãà:";
+    Text[ danish ] = "Alle Word-skabeloner fra følgende bibliotek bliver importeret:";
+    Text[ polish ] = "%1 zostanie importowane z nastêpuj¹cego katalogu:";
+    Text[ portuguese_brazilian ] = "All Word templates will be imported in the following directory:";
+    Text[ japanese ] = "Ÿ‚ÌÃŞ¨Ú¸ÄØ‚©‚ç %1 ‚ª²İÎß°Ä‚³‚ê‚Ü‚·B";
+    Text[ korean ] = "´ÙÀ½ µğ·ºÅä¸®¿¡¼­ ¸ğµç %1À»(¸¦) °¡Á®¿É´Ï´Ù:";
+    Text[ chinese_simplified ] = "´ÓÒÔÏÂµÄÄ¿Â¼ÖĞÊäÈë %1 £º";
+    Text[ chinese_traditional ] = "±q¤U¦C¥Ø¿ı¶×¤J  %1 ¡G";
+    Text[ arabic ] = "Óæİ íÊã ÇÓÊíÑÇÏ ßá %1 ãä ÇáÏáíá ÇáÊÇáí:";
+    Text[ turkish ] = "İçe aktarılacak tüm Word şablonlarını içeren dizin:";
+    Text[ catalan ] = "%1 contained in the following directory will be imported:";
+    Text[ finnish ] = "%1 aus dem folgenden Verzeichnis werden importiert:";
     Text[ finnish ] = "Kaavat";
 };
+
+
+String sSumMSTextDocuments
+{
+    Text = "Alle Word-Dokumente aus dem folgenden Verzeichnis werden importiert:";
+    Text[English] = "All Word documents in the following directory will be imported:";
+    Text[ English_us ] = "All Word documents contained in the following directory will be imported:";
+    Text[ french ] = "Les %1 contenus dans le répertoire suivant vont être importés :";
+    Text[ italian ] = "Vengono importati tutti %1 dalla cartella seguente:";
+    Text[ spanish ] = "Se importarán todas las %1 del siguiente directorio:";
+    Text[ portuguese ] = "Serão importados todos os %1 do seguinte directório:";
+    Text[ dutch ] = "Alle %1 uit de volgende directory worden geïmporteerd:";
+    Text[ swedish ] = "Alla %1 från följande katalog importeras:";
+    Text[ greek ] = "¼ëá ôá %1 áğü ôïí åîŞò êáôÜëïãï èá åéóá÷èïıí:";
+    Text[ dutch ] = "Alle %1 uit de volgende directory worden geïmporteerd:";
+    Text[ swedish ] = "Alla %1 från följande katalog importeras:";
+    Text[ russian ] = "Âñå ıòè %1 áóäóò èìïîğòèğîâàíû èç ñëåäóşùåãî êàòàëîãà:";
+    Text[ danish ] = "Alle Word-skabeloner fra følgende bibliotek bliver importeret:";
+    Text[ polish ] = "%1 zostanie importowane z nastêpuj¹cego katalogu:";
+    Text[ portuguese_brazilian ] = "All Word templates will be imported in the following directory:";
+    Text[ japanese ] = "Ÿ‚ÌÃŞ¨Ú¸ÄØ‚©‚ç %1 ‚ª²İÎß°Ä‚³‚ê‚Ü‚·B";
+    Text[ korean ] = "´ÙÀ½ µğ·ºÅä¸®¿¡¼­ ¸ğµç %1À»(¸¦) °¡Á®¿É´Ï´Ù:";
+    Text[ chinese_simplified ] = "´ÓÒÔÏÂµÄÄ¿Â¼ÖĞÊäÈë %1 £º";
+    Text[ chinese_traditional ] = "±q¤U¦C¥Ø¿ı¶×¤J  %1 ¡G";
+    Text[ arabic ] = "Óæİ íÊã ÇÓÊíÑÇÏ ßá %1 ãä ÇáÏáíá ÇáÊÇáí:";
+    Text[ turkish ] = "İçe aktarılacak tüm Word şablonlarını içeren dizin:";
+    Text[ catalan ] = "%1 contained in the following directory will be imported:";
+    Text[ finnish ] = "%1 aus dem folgenden Verzeichnis werden importiert:";
+};
+
+
+String sSumMSTableDocuments
+{
+    Text = "Alle Excel-Dokumente aus dem folgenden Verzeichnis werden importiert:";
+    Text[English] = "All Excel documents in the following directory will be imported:";
+    Text[ English_us ] = "All Excel documents contained in the following directory will be imported:";
+    Text[ french ] = "Les %1 contenus dans le répertoire suivant vont être importés :";
+    Text[ italian ] = "Vengono importati tutti %1 dalla cartella seguente:";
+    Text[ spanish ] = "Se importarán todas las %1 del siguiente directorio:";
+    Text[ portuguese ] = "Serão importados todos os %1 do seguinte directório:";
+    Text[ dutch ] = "Alle %1 uit de volgende directory worden geïmporteerd:";
+    Text[ swedish ] = "Alla %1 från följande katalog importeras:";
+    Text[ greek ] = "¼ëá ôá %1 áğü ôïí åîŞò êáôÜëïãï èá åéóá÷èïıí:";
+    Text[ dutch ] = "Alle %1 uit de volgende directory worden geïmporteerd:";
+    Text[ swedish ] = "Alla %1 från följande katalog importeras:";
+    Text[ russian ] = "Âñå ıòè %1 áóäóò èìïîğòèğîâàíû èç ñëåäóşùåãî êàòàëîãà:";
+    Text[ danish ] = "Alle Word-skabeloner fra følgende bibliotek bliver importeret:";
+    Text[ polish ] = "%1 zostanie importowane z nastêpuj¹cego katalogu:";
+    Text[ portuguese_brazilian ] = "All Word templates will be imported in the following directory:";
+    Text[ japanese ] = "Ÿ‚ÌÃŞ¨Ú¸ÄØ‚©‚ç %1 ‚ª²İÎß°Ä‚³‚ê‚Ü‚·B";
+    Text[ korean ] = "´ÙÀ½ µğ·ºÅä¸®¿¡¼­ ¸ğµç %1À»(¸¦) °¡Á®¿É´Ï´Ù:";
+    Text[ chinese_simplified ] = "´ÓÒÔÏÂµÄÄ¿Â¼ÖĞÊäÈë %1 £º";
+    Text[ chinese_traditional ] = "±q¤U¦C¥Ø¿ı¶×¤J  %1 ¡G";
+    Text[ arabic ] = "Óæİ íÊã ÇÓÊíÑÇÏ ßá %1 ãä ÇáÏáíá ÇáÊÇáí:";
+    Text[ turkish ] = "İçe aktarılacak tüm Word şablonlarını içeren dizin:";
+    Text[ catalan ] = "%1 contained in the following directory will be imported:";
+    Text[ finnish ] = "%1 aus dem folgenden Verzeichnis werden importiert:";
+};
+
+
+String sSumMSDrawDocuments
+{
+    Text = "Alle PowerPoint-Dokumente aus dem folgenden Verzeichnis werden importiert:";
+    Text[English] = "All PowerPoint documents in the following directory will be imported:";
+    Text[ English_us ] = "All PowerPoint documents contained in the following directory will be imported:";
+    Text[ french ] = "Les %1 contenus dans le répertoire suivant vont être importés :";
+    Text[ italian ] = "Vengono importati tutti %1 dalla cartella seguente:";
+    Text[ spanish ] = "Se importarán todas las %1 del siguiente directorio:";
+    Text[ portuguese ] = "Serão importados todos os %1 do seguinte directório:";
+    Text[ dutch ] = "Alle %1 uit de volgende directory worden geïmporteerd:";
+    Text[ swedish ] = "Alla %1 från följande katalog importeras:";
+    Text[ greek ] = "¼ëá ôá %1 áğü ôïí åîŞò êáôÜëïãï èá åéóá÷èïıí:";
+    Text[ dutch ] = "Alle %1 uit de volgende directory worden geïmporteerd:";
+    Text[ swedish ] = "Alla %1 från följande katalog importeras:";
+    Text[ russian ] = "Âñå ıòè %1 áóäóò èìïîğòèğîâàíû èç ñëåäóşùåãî êàòàëîãà:";
+    Text[ danish ] = "Alle Word-skabeloner fra følgende bibliotek bliver importeret:";
+    Text[ polish ] = "%1 zostanie importowane z nastêpuj¹cego katalogu:";
+    Text[ portuguese_brazilian ] = "All Word templates will be imported in the following directory:";
+    Text[ japanese ] = "Ÿ‚ÌÃŞ¨Ú¸ÄØ‚©‚ç %1 ‚ª²İÎß°Ä‚³‚ê‚Ü‚·B";
+    Text[ korean ] = "´ÙÀ½ µğ·ºÅä¸®¿¡¼­ ¸ğµç %1À»(¸¦) °¡Á®¿É´Ï´Ù:";
+    Text[ chinese_simplified ] = "´ÓÒÔÏÂµÄÄ¿Â¼ÖĞÊäÈë %1 £º";
+    Text[ chinese_traditional ] = "±q¤U¦C¥Ø¿ı¶×¤J  %1 ¡G";
+    Text[ arabic ] = "Óæİ íÊã ÇÓÊíÑÇÏ ßá %1 ãä ÇáÏáíá ÇáÊÇáí:";
+    Text[ turkish ] = "İçe aktarılacak tüm Word şablonlarını içeren dizin:";
+    Text[ catalan ] = "%1 contained in the following directory will be imported:";
+    Text[ finnish ] = "%1 aus dem folgenden Verzeichnis werden importiert:";
+};
+
+
+String sSumMSTextTemplates
+{
+    Text = "Alle Word-Vorlagen aus dem folgenden Verzeichnis werden importiert:";
+    Text[English] = "All Word templates in the following directory will be imported:";
+    Text[ English_us ] = "All Word templates contained in the following directory will be imported:";
+    Text[ french ] = "Les %1 contenus dans le répertoire suivant vont être importés :";
+    Text[ italian ] = "Vengono importati tutti %1 dalla cartella seguente:";
+    Text[ spanish ] = "Se importarán todas las %1 del siguiente directorio:";
+    Text[ portuguese ] = "Serão importados todos os %1 do seguinte directório:";
+    Text[ dutch ] = "Alle %1 uit de volgende directory worden geïmporteerd:";
+    Text[ swedish ] = "Alla %1 från följande katalog importeras:";
+    Text[ greek ] = "¼ëá ôá %1 áğü ôïí åîŞò êáôÜëïãï èá åéóá÷èïıí:";
+    Text[ dutch ] = "Alle %1 uit de volgende directory worden geïmporteerd:";
+    Text[ swedish ] = "Alla %1 från följande katalog importeras:";
+    Text[ russian ] = "Âñå ıòè %1 áóäóò èìïîğòèğîâàíû èç ñëåäóşùåãî êàòàëîãà:";
+    Text[ danish ] = "Alle Word-skabeloner fra følgende bibliotek bliver importeret:";
+    Text[ polish ] = "%1 zostanie importowane z nastêpuj¹cego katalogu:";
+    Text[ portuguese_brazilian ] = "All Word templates will be imported in the following directory:";
+    Text[ japanese ] = "Ÿ‚ÌÃŞ¨Ú¸ÄØ‚©‚ç %1 ‚ª²İÎß°Ä‚³‚ê‚Ü‚·B";
+    Text[ korean ] = "´ÙÀ½ µğ·ºÅä¸®¿¡¼­ ¸ğµç %1À»(¸¦) °¡Á®¿É´Ï´Ù:";
+    Text[ chinese_simplified ] = "´ÓÒÔÏÂµÄÄ¿Â¼ÖĞÊäÈë %1 £º";
+    Text[ chinese_traditional ] = "±q¤U¦C¥Ø¿ı¶×¤J  %1 ¡G";
+    Text[ arabic ] = "Óæİ íÊã ÇÓÊíÑÇÏ ßá %1 ãä ÇáÏáíá ÇáÊÇáí:";
+    Text[ turkish ] = "İçe aktarılacak tüm Word şablonlarını içeren dizin:";
+    Text[ catalan ] = "%1 contained in the following directory will be imported:";
+    Text[ finnish ] = "%1 aus dem folgenden Verzeichnis werden importiert:";
+};
+
+
+String sSumMSTableTemplates
+{
+    Text = "Alle Excel-Vorlagen aus dem folgenden Verzeichnis werden importiert:";
+    Text[English] = "All Excel templates in the following directory will be imported:";
+    Text[ English_us ] = "All Excel templates contained in the following directory will be imported:";
+    Text[ french ] = "Les %1 contenus dans le répertoire suivant vont être importés :";
+    Text[ italian ] = "Vengono importati tutti %1 dalla cartella seguente:";
+    Text[ spanish ] = "Se importarán todas las %1 del siguiente directorio:";
+    Text[ portuguese ] = "Serão importados todos os %1 do seguinte directório:";
+    Text[ dutch ] = "Alle %1 uit de volgende directory worden geïmporteerd:";
+    Text[ swedish ] = "Alla %1 från följande katalog importeras:";
+    Text[ greek ] = "¼ëá ôá %1 áğü ôïí åîŞò êáôÜëïãï èá åéóá÷èïıí:";
+    Text[ dutch ] = "Alle %1 uit de volgende directory worden geïmporteerd:";
+    Text[ swedish ] = "Alla %1 från följande katalog importeras:";
+    Text[ russian ] = "Âñå ıòè %1 áóäóò èìïîğòèğîâàíû èç ñëåäóşùåãî êàòàëîãà:";
+    Text[ danish ] = "Alle Word-skabeloner fra følgende bibliotek bliver importeret:";
+    Text[ polish ] = "%1 zostanie importowane z nastêpuj¹cego katalogu:";
+    Text[ portuguese_brazilian ] = "All Word templates will be imported in the following directory:";
+    Text[ japanese ] = "Ÿ‚ÌÃŞ¨Ú¸ÄØ‚©‚ç %1 ‚ª²İÎß°Ä‚³‚ê‚Ü‚·B";
+    Text[ korean ] = "´ÙÀ½ µğ·ºÅä¸®¿¡¼­ ¸ğµç %1À»(¸¦) °¡Á®¿É´Ï´Ù:";
+    Text[ chinese_simplified ] = "´ÓÒÔÏÂµÄÄ¿Â¼ÖĞÊäÈë %1 £º";
+    Text[ chinese_traditional ] = "±q¤U¦C¥Ø¿ı¶×¤J  %1 ¡G";
+    Text[ arabic ] = "Óæİ íÊã ÇÓÊíÑÇÏ ßá %1 ãä ÇáÏáíá ÇáÊÇáí:";
+    Text[ turkish ] = "İçe aktarılacak tüm Word şablonlarını içeren dizin:";
+    Text[ catalan ] = "%1 contained in the following directory will be imported:";
+    Text[ finnish ] = "%1 aus dem folgenden Verzeichnis werden importiert:";
+};
+
+
+String sSumMSDrawTemplates
+{
+    Text = "Alle PowerPoint-Vorlagen aus dem folgenden Verzeichnis werden importiert:";
+    Text[English] = "All PowerPoint templates in the following directory will be imported:";
+    Text[ English_us ] = "All PowerPoint templates contained in the following directory will be imported:";
+    Text[ french ] = "Les %1 contenus dans le répertoire suivant vont être importés :";
+    Text[ italian ] = "Vengono importati tutti %1 dalla cartella seguente:";
+    Text[ spanish ] = "Se importarán todas las %1 del siguiente directorio:";
+    Text[ portuguese ] = "Serão importados todos os %1 do seguinte directório:";
+    Text[ dutch ] = "Alle %1 uit de volgende directory worden geïmporteerd:";
+    Text[ swedish ] = "Alla %1 från följande katalog importeras:";
+    Text[ greek ] = "¼ëá ôá %1 áğü ôïí åîŞò êáôÜëïãï èá åéóá÷èïıí:";
+    Text[ dutch ] = "Alle %1 uit de volgende directory worden geïmporteerd:";
+    Text[ swedish ] = "Alla %1 från följande katalog importeras:";
+    Text[ russian ] = "Âñå ıòè %1 áóäóò èìïîğòèğîâàíû èç ñëåäóşùåãî êàòàëîãà:";
+    Text[ danish ] = "Alle Word-skabeloner fra følgende bibliotek bliver importeret:";
+    Text[ polish ] = "%1 zostanie importowane z nastêpuj¹cego katalogu:";
+    Text[ portuguese_brazilian ] = "All Word templates will be imported in the following directory:";
+    Text[ japanese ] = "Ÿ‚ÌÃŞ¨Ú¸ÄØ‚©‚ç %1 ‚ª²İÎß°Ä‚³‚ê‚Ü‚·B";
+    Text[ korean ] = "´ÙÀ½ µğ·ºÅä¸®¿¡¼­ ¸ğµç %1À»(¸¦) °¡Á®¿É´Ï´Ù:";
+    Text[ chinese_simplified ] = "´ÓÒÔÏÂµÄÄ¿Â¼ÖĞÊäÈë %1 £º";
+    Text[ chinese_traditional ] = "±q¤U¦C¥Ø¿ı¶×¤J  %1 ¡G";
+    Text[ arabic ] = "Óæİ íÊã ÇÓÊíÑÇÏ ßá %1 ãä ÇáÏáíá ÇáÊÇáí:";
+    Text[ turkish ] = "İçe aktarılacak tüm Word şablonlarını içeren dizin:";
+    Text[ catalan ] = "%1 contained in the following directory will be imported:";
+    Text[ finnish ] = "%1 aus dem folgenden Verzeichnis werden importiert:";
+};
+
 
