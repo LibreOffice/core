@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolfmt.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2002-06-05 12:24:54 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 15:10:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,5 +301,14 @@
 #define STR_POOLNUMRULE_BUL3                (RC_POOLNUMRULE_BEGIN+  7)
 #define STR_POOLNUMRULE_BUL4                (RC_POOLNUMRULE_BEGIN+  8)
 #define STR_POOLNUMRULE_BUL5                (RC_POOLNUMRULE_BEGIN+  9)
+
+//-----------------
+// Paragraph styles
+//-----------------
+#define STR_POOLPARSTYLE_HEAD1              (STR_POOLPARSTYLE_BEGIN+  0)
+#define STR_POOLPARSTYLE_HEAD2              (STR_POOLPARSTYLE_BEGIN+  1)
+#define STR_POOLPARSTYLE_HEAD3              (STR_POOLPARSTYLE_BEGIN+  2)
+#define STR_POOLPARSTYLE_DEFAULT            (STR_POOLPARSTYLE_BEGIN+  3)
+#define STR_POOLPARSTYLE_TEXTBODY           (STR_POOLPARSTYLE_BEGIN+  4)
 
 #endif
