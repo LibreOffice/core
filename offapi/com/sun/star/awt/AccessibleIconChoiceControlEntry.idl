@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleIconChoiceControlEntry.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-27 11:18:12 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 12:05:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,7 @@ module com { module sun { module star { module awt {
 
     @see com::sun::star::accessibility::XAccessibleComponent
     @see com::sun::star::accessibility::XAccessibleText
+
     @since #103639#
 */
 service AccessibleIconChoiceControlEntry
