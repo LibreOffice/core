@@ -2,9 +2,9 @@
  *
  *  $RCSfile: css1atr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 09:39:36 $
+ *  last change: $Author: mib $ $Date: 2000-12-12 09:39:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2158,7 +2158,7 @@ static BOOL OutCSS1_FrmFmtBrush( SwHTMLWriter& rWrt,
                                  const SvxBrushItem& rBrushItem )
 {
     BOOL bWritten = FALSE;
-    if( rBrushItem.GetColor().GetTransparency() ||
+    if( 0 == rBrushItem.GetColor().GetTransparency() ||
         0 != rBrushItem.GetGraphicLink() ||
         0 != rBrushItem.GetGraphicPos() )
     {
@@ -3494,6 +3494,9 @@ SwAttrFnTab aCSS1AttrFnTab = {
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.4  2000/11/20 09:39:36  jp
+      new para attributes - expand para range
+
       Revision 1.3  2000/11/01 19:23:14  jp
       export of mail graphics removed
 

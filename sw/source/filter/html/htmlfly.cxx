@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlfly.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-01 19:23:14 $
+ *  last change: $Author: mib $ $Date: 2000-12-12 09:39:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -366,6 +366,13 @@ USHORT SwHTMLWriter::GuessFrmType( const SwFrmFmt& rFrmFmt,
                                 break;
                         }
                     }
+                }
+                if( bEmpty )
+                {
+                    const SvxBrushItem& rBrush = rFrmFmt.GetBackground();
+                    if( GPOS_NONE != rBrush.GetGraphicPos() ||
+                        0 == rBrush.GetColor().GetTransparency() )
+                        bEmpty = FALSE;
                 }
                 if( bEmpty )
                 {
@@ -1954,11 +1961,14 @@ BOOL SwHTMLPosFlyFrm::operator<( const SwHTMLPosFlyFrm& rFrm ) const
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlfly.cxx,v 1.3 2000-11-01 19:23:14 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlfly.cxx,v 1.4 2000-12-12 09:39:59 mib Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2000/11/01 19:23:14  jp
+      export of mail graphics removed
+
       Revision 1.2  2000/10/20 13:42:52  jp
       use correct INetURL-Decode enum
 
