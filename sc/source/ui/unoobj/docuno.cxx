@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docuno.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:07 $
+ *  last change: $Author: nn $ $Date: 2000-10-12 10:20:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@
 #include "servuno.hxx"
 #include "targuno.hxx"
 #include "convuno.hxx"
+#include "optuno.hxx"
 #include "docsh.hxx"
 #include "hints.hxx"
 #include "docfunc.hxx"
@@ -203,25 +204,29 @@ ScModelObj::ScModelObj( ScDocShell* pDocSh ) :
     aPropSet( lcl_GetDocOptPropertyMap() ),
     pDocShell( pDocSh )
 {
-    pDocShell->GetDocument()->AddUnoObject(*this);      // SfxModel is derived from SfxListener
+    // pDocShell may be NULL if this is the base of a ScDocOptionsObj
+    if ( pDocShell )
+    {
+        pDocShell->GetDocument()->AddUnoObject(*this);      // SfxModel is derived from SfxListener
 
-    // setDelegator veraendert den RefCount, darum eine Referenz selber halten
-    // (direkt am m_refCount, um sich beim release nicht selbst zu loeschen)
-    utl::increment( m_refCount );
+        // setDelegator veraendert den RefCount, darum eine Referenz selber halten
+        // (direkt am m_refCount, um sich beim release nicht selbst zu loeschen)
+        utl::increment( m_refCount );
 
-    // waehrend des queryInterface braucht man ein Ref auf das
-    // SvNumberFormatsSupplierObj, sonst wird es geloescht.
-    uno::Reference<util::XNumberFormatsSupplier> xFormatter = new SvNumberFormatsSupplierObj(
-                                            pDocShell->GetDocument()->GetFormatTable() );
-    xNumberAgg = uno::Reference<uno::XAggregation>( xFormatter, uno::UNO_QUERY );
+        // waehrend des queryInterface braucht man ein Ref auf das
+        // SvNumberFormatsSupplierObj, sonst wird es geloescht.
+        uno::Reference<util::XNumberFormatsSupplier> xFormatter = new SvNumberFormatsSupplierObj(
+                                                pDocShell->GetDocument()->GetFormatTable() );
+        xNumberAgg = uno::Reference<uno::XAggregation>( xFormatter, uno::UNO_QUERY );
 
-    // beim setDelegator darf die zusaetzliche Ref nicht mehr existieren
-    xFormatter = NULL;
+        // beim setDelegator darf die zusaetzliche Ref nicht mehr existieren
+        xFormatter = NULL;
 
-    if (xNumberAgg.is())
-        xNumberAgg->setDelegator( (cppu::OWeakObject*)this );
+        if (xNumberAgg.is())
+            xNumberAgg->setDelegator( (cppu::OWeakObject*)this );
 
-    utl::decrement( m_refCount );
+        utl::decrement( m_refCount );
+    }
 }
 
 ScModelObj::~ScModelObj()
@@ -715,47 +720,10 @@ void SAL_CALL ScModelObj::setPropertyValue(
         const ScDocOptions& rOldOpt = pDoc->GetDocOptions();
         ScDocOptions aNewOpt = rOldOpt;
 
-        if ( aString.EqualsAscii( SC_UNO_CALCASSHOWN ) )
-            aNewOpt.SetCalcAsShown( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        else if ( aString.EqualsAscii( SC_UNO_IGNORECASE ) )
-            aNewOpt.SetIgnoreCase( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        else if ( aString.EqualsAscii( SC_UNO_ITERENABLED ) )
-            aNewOpt.SetIter( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        else if ( aString.EqualsAscii( SC_UNO_LOOKUPLABELS ) )
-            aNewOpt.SetLookUpColRowNames( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        else if ( aString.EqualsAscii( SC_UNO_MATCHWHOLE ) )
-            aNewOpt.SetMatchWholeCell( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        else if ( aString.EqualsAscii( SC_UNO_SPELLONLINE ) )
-            aNewOpt.SetAutoSpell( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        else if ( aString.EqualsAscii( SC_UNO_DEFTABSTOP ) )
+        BOOL bOpt = ScDocOptionsHelper::setPropertyValue( aNewOpt, aPropertyName, aValue );
+        if (bOpt)
         {
-            sal_Int16 nIntVal;
-            if ( aValue >>= nIntVal )
-                aNewOpt.SetTabDistance( nIntVal );
-        }
-        else if ( aString.EqualsAscii( SC_UNO_ITERCOUNT ) )
-        {
-            sal_Int32 nIntVal;
-            if ( aValue >>= nIntVal )
-                aNewOpt.SetIterCount( nIntVal );
-        }
-        else if ( aString.EqualsAscii( SC_UNO_STANDARDDEC ) )
-        {
-            sal_Int16 nIntVal;
-            if ( aValue >>= nIntVal )
-                aNewOpt.SetStdPrecision( nIntVal );
-        }
-        else if ( aString.EqualsAscii( SC_UNO_ITEREPSILON ) )
-        {
-            double fDoubleVal;
-            if ( aValue >>= fDoubleVal )
-                aNewOpt.SetIterEps( fDoubleVal );
-        }
-        else if ( aString.EqualsAscii( SC_UNO_NULLDATE ) )
-        {
-            util::Date aDate;
-            if ( aValue >>= aDate )
-                aNewOpt.SetDate( aDate.Day, aDate.Month, aDate.Year );
+            // done...
         }
         else if ( aString.EqualsAscii( SC_UNONAME_CLOCAL ) )
         {
@@ -784,23 +752,10 @@ uno::Any SAL_CALL ScModelObj::getPropertyValue( const rtl::OUString& aPropertyNa
     if (pDocShell)
     {
         const ScDocOptions& rOpt = pDocShell->GetDocument()->GetDocOptions();
-
-        if ( aString.EqualsAscii( SC_UNO_CALCASSHOWN ) )       ScUnoHelpFunctions::SetBoolInAny( aRet, rOpt.IsCalcAsShown() );
-        else if ( aString.EqualsAscii( SC_UNO_IGNORECASE ) )   ScUnoHelpFunctions::SetBoolInAny( aRet, rOpt.IsIgnoreCase() );
-        else if ( aString.EqualsAscii( SC_UNO_ITERENABLED ) )  ScUnoHelpFunctions::SetBoolInAny( aRet, rOpt.IsIter() );
-        else if ( aString.EqualsAscii( SC_UNO_LOOKUPLABELS ) ) ScUnoHelpFunctions::SetBoolInAny( aRet, rOpt.IsLookUpColRowNames() );
-        else if ( aString.EqualsAscii( SC_UNO_MATCHWHOLE ) )   ScUnoHelpFunctions::SetBoolInAny( aRet, rOpt.IsMatchWholeCell() );
-        else if ( aString.EqualsAscii( SC_UNO_SPELLONLINE ) )  ScUnoHelpFunctions::SetBoolInAny( aRet, rOpt.IsAutoSpell() );
-        else if ( aString.EqualsAscii( SC_UNO_DEFTABSTOP ) )   aRet <<= (sal_Int16)( rOpt.GetTabDistance() );
-        else if ( aString.EqualsAscii( SC_UNO_ITERCOUNT ) )    aRet <<= (sal_Int32)( rOpt.GetIterCount() );
-        else if ( aString.EqualsAscii( SC_UNO_STANDARDDEC ) )  aRet <<= (sal_Int16)( rOpt.GetStdPrecision() );
-        else if ( aString.EqualsAscii( SC_UNO_ITEREPSILON ) )  aRet <<= (double)( rOpt.GetIterEps() );
-        else if ( aString.EqualsAscii( SC_UNO_NULLDATE ) )
+        aRet = ScDocOptionsHelper::getPropertyValue( rOpt, aPropertyName );
+        if ( aRet.hasValue() )
         {
-            USHORT nD, nM, nY;
-            rOpt.GetDate( nD, nM, nY );
-            util::Date aDate( nD, nM, nY );
-            aRet <<= aDate;
+            // done...
         }
         else if ( aString.EqualsAscii( SC_UNONAME_CLOCAL ) )
         {
