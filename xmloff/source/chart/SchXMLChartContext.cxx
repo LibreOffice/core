@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLChartContext.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: bm $ $Date: 2002-08-29 09:07:55 $
+ *  last change: $Author: bm $ $Date: 2002-11-11 15:53:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -531,9 +531,16 @@ void SchXMLChartContext::EndElement()
     }
 
     // #102413# BuildChart to manifest legend position
-    SCH_BUILDCHART( xDoc );
+    if( xDoc->hasControllersLocked())
+        xDoc->unlockControllers();
 
-    //  No more BuildCharts until Initialize is called (by Draw or SaveAs).
+    // AF: No more BuildCharts until Initialize is called (by Draw or SaveAs).
+
+    // BM: There should be no further BuildCharts, and it is very dangerous to
+    // leave the lock status on hoping that it is changed in Draw or SaveAs
+    // (OLE-Clone?).  At least it isn't for the writer flat XML filter.  So,
+    // leave Controllers unlocked from now on, as this is the last line of code
+    // that the Chart XML import routine will call
 }
 
 SvXMLImportContext* SchXMLChartContext::CreateChildContext(
