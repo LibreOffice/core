@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh4.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: nn $ $Date: 2002-09-12 18:08:30 $
+ *  last change: $Author: sab $ $Date: 2002-09-25 09:59:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,10 @@
 #include "rangeseq.hxx"
 #include "chgtrack.hxx"
 #include "printopt.hxx"
+
+#ifndef _COM_SUN_STAR_DOCUMENT_UPDATEDOCMODE_HPP_
+#include <com/sun/star/document/UpdateDocMode.hpp>
+#endif
 
 //------------------------------------------------------------------
 
@@ -526,6 +530,14 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     nSet=aAppOptions.GetLinkMode();
                 }
 
+                if (nCanUpdate == com::sun::star::document::UpdateDocMode::NO_UPDATE)
+                    nSet = LM_NEVER;
+                else if (nCanUpdate == com::sun::star::document::UpdateDocMode::QUIET_UPDATE &&
+                    nSet == LM_ON_DEMAND)
+                    nSet = LM_NEVER;
+                else if (nCanUpdate == com::sun::star::document::UpdateDocMode::FULL_UPDATE)
+                    nSet = LM_ALWAYS;
+
                 if(nSet==LM_ON_DEMAND)
                 {
                     QueryBox aBox( GetDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
@@ -545,6 +557,8 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 }
                 else
                     rReq.Ignore();
+
+                nCanUpdate = com::sun::star::document::UpdateDocMode::ACCORDING_TO_CONFIG;
             }
             break;
 
