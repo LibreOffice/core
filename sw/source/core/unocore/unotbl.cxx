@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2001-01-11 12:40:02 $
+ *  last change: $Author: os $ $Date: 2001-01-30 10:40:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,7 +310,7 @@ void lcl_SetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertyMap* pMap, cons
                 sal_Int16 nSet;
                 aValue >>= nSet;
                 if(nSet && nSet <=100)
-                    aSz.SetWidthPercent( nSet );
+                    aSz.SetWidthPercent( (BYTE)nSet );
             }
             else if(FN_TABLE_IS_RELATIVE_WIDTH == pMap->nWID)
             {
@@ -484,7 +484,7 @@ void lcl_GetRowCol(const String& rCellName, sal_uInt16& rRow, sal_uInt16& rCol)
     }
     String sRow(rCellName.Copy(nFirstPart,nLen - nFirstPart));
     String sCol(rCellName.Copy(0, nFirstPart));
-    rRow = sRow.ToInt32();
+    rRow = (sal_uInt16)sRow.ToInt32();
     rRow -= 1;
 
     rCol = 0;
@@ -499,7 +499,7 @@ void lcl_GetRowCol(const String& rCellName, sal_uInt16& rRow, sal_uInt16& rCol)
         sal_uInt16 nBase = 1;
         do
         {
-            char cChar = sCol.GetChar(nLen-1);
+            sal_Unicode cChar = sCol.GetChar(nLen-1);
 
             if( cChar <= 'Z' )
                 rCol += nBase * (cChar - 'A' + nBase > 1 ? 1 : 0  );
@@ -636,8 +636,8 @@ void lcl_SetTblSeparators(const uno::Any& rVal, SwTable* pTable, SwTableBox* pBo
         SwTabCols aCols(aOldCols);
         sal_Bool bError = sal_False;
         const TableColumnSeparator* pArray = pSepSeq->getConstArray();
-        sal_uInt16 nLastValue = 0;
-        sal_uInt16 nTblWidth = aCols.GetRight() - aCols.GetLeft();
+        sal_Int32 nLastValue = 0;
+        sal_Int32 nTblWidth = aCols.GetRight() - aCols.GetLeft();
         for(sal_uInt16 i = 0; i < nOldCount; i++)
         {
             aCols[i] = pArray[i].Position;
@@ -2186,8 +2186,8 @@ void SwXTextTable::initialize(sal_Int32 nR, sal_Int32 nC) throw( uno::RuntimeExc
         throw uno::RuntimeException();
     else
     {
-        nRows = nR;
-        nColumns = nC;
+        nRows = (sal_uInt16)nR;
+        nColumns = (sal_uInt16)nC;
     }
 }
 /*-- 11.12.98 12:42:45---------------------------------------------------
@@ -2512,10 +2512,10 @@ uno::Reference< table::XCellRange >  SwXTextTable::getCellRangeByPosition(sal_In
         if(!pTable->IsTblComplex())
         {
             SwRangeDescriptor aDesc;
-            aDesc.nTop    = nTop;
-            aDesc.nBottom = nBottom;
-            aDesc.nLeft   = nLeft;
-            aDesc.nRight  = nRight;
+            aDesc.nTop    = (sal_uInt16)nTop;
+            aDesc.nBottom = (sal_uInt16)nBottom;
+            aDesc.nLeft   = (sal_uInt16)nLeft;
+            aDesc.nRight  = (sal_uInt16)nRight;
             String sTLName = lcl_GetCellName(aDesc.nLeft, aDesc.nTop);
             String sBRName = lcl_GetCellName(aDesc.nRight, aDesc.nBottom);
             aRef = GetRangeByName(pFmt, pTable, sTLName, sBRName, aDesc);
@@ -2564,34 +2564,34 @@ uno::Sequence< uno::Sequence< double > > SwXTextTable::getData(void)
     vos::OGuard aGuard(Application::GetSolarMutex());
     sal_Int16 nRowCount = getRowCount();
     sal_Int16 nColCount = getColumnCount();
-    //werden hier uno::Sequence<s fuer jede Zeile in einer Spaltenuno::Sequence< geliefert oder umgekehrt?
-    uno::Sequence< uno::Sequence< double > > aColSeq(bFirstColumnAsLabel ? nColCount - 1 : nColCount);
+    //
     SwFrmFmt* pFmt = GetFrmFmt();
+    uno::Sequence< uno::Sequence< double > > aRowSeq(bFirstRowAsLabel ? nRowCount - 1 : nRowCount);
     if(pFmt)
     {
-        uno::Sequence< double >* pColArray = aColSeq.getArray();
+        uno::Sequence< double >* pArray = aRowSeq.getArray();
 
-        sal_uInt16 nColStart = bFirstColumnAsLabel ? 1 : 0;
-        for(sal_uInt16 nCol = nColStart; nCol < nColCount; nCol++)
+        sal_uInt16 nRowStart = bFirstRowAsLabel ? 1 : 0;
+        for(sal_uInt16 nRow = nRowStart; nRow < nRowCount; nRow++)
         {
-            uno::Sequence< double > aRowSeq(bFirstRowAsLabel ? nRowCount - 1 : nRowCount);
-            double * pArray = aRowSeq.getArray();
-            sal_uInt16 nRowStart = bFirstRowAsLabel ? 1 : 0;
-            for(sal_uInt16 nRow = nRowStart; nRow < nRowCount; nRow++)
+            uno::Sequence< double >  aColSeq(bFirstColumnAsLabel ? nColCount - 1 : nColCount);
+            double* pColArray = aColSeq.getArray();
+            sal_uInt16 nColStart = bFirstColumnAsLabel ? 1 : 0;
+            for(sal_uInt16 nCol = nColStart; nCol < nColCount; nCol++)
             {
                 uno::Reference< table::XCell >  xCell = getCellByPosition(nCol, nRow);
                 if(!xCell.is())
                 {
                     throw uno::RuntimeException();
                 }
-                pArray[nRow - nRowStart] = xCell->getValue();
+                pColArray[nCol - nColStart] = xCell->getValue();
             }
-            pColArray[nCol - nColStart] = aRowSeq;
+            pArray[nRow - nRowStart] = aColSeq;
         }
     }
     else
         throw uno::RuntimeException();
-    return aColSeq;
+    return aRowSeq;
 }
 /*-- 11.12.98 12:42:47---------------------------------------------------
 
@@ -2605,29 +2605,29 @@ void SwXTextTable::setData(const uno::Sequence< uno::Sequence< double > >& rData
     SwFrmFmt* pFmt = GetFrmFmt();
     if(pFmt )
     {
-        sal_uInt16 nColStart = bFirstColumnAsLabel ? 1 : 0;
-        if(rData.getLength() < nColCount - nColStart)
+        sal_uInt16 nRowStart = bFirstRowAsLabel ? 1 : 0;
+        if(rData.getLength() < nRowCount - nRowStart)
         {
             throw uno::RuntimeException();
         }
-        const uno::Sequence< double >* pColArray = rData.getConstArray();
-        for(sal_uInt16 nCol = nColStart; nCol < nColCount; nCol++)
+        const uno::Sequence< double >* pRowArray = rData.getConstArray();
+        for(sal_uInt16 nRow = nRowStart; nRow < nRowCount; nRow++)
         {
-            const uno::Sequence< double >& rRowSeq = pColArray[nCol - nColStart];
-            sal_uInt16 nRowStart = bFirstRowAsLabel ? 1 : 0;
-            if(rRowSeq.getLength() < nRowCount - nRowStart)
+            const uno::Sequence< double >& rColSeq = pRowArray[nRow - nRowStart];
+            sal_uInt16 nColStart = bFirstColumnAsLabel ? 1 : 0;
+            if(rColSeq.getLength() < nColCount - nColStart)
             {
                 throw uno::RuntimeException();
             }
-            const double * pRowArray = rRowSeq.getConstArray();
-            for(sal_uInt16 nRow = nRowStart; nRow < nRowCount; nRow++)
+            const double * pColArray = rColSeq.getConstArray();
+            for(sal_uInt16 nCol = nColStart; nCol < nColCount; nCol++)
             {
                 uno::Reference< table::XCell >  xCell = getCellByPosition(nCol, nRow);
                 if(!xCell.is())
                 {
                     throw uno::RuntimeException();
                 }
-                xCell->setValue(pRowArray[nRow - nRowStart]);
+                xCell->setValue(pColArray[nCol - nColStart]);
             }
         }
     }
@@ -3007,7 +3007,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName,
                             aBoxInfo.SetLine(bSet ? &aLine : 0, BOXINFO_LINE_VERT);
                             aBoxInfo.SetValid(VALID_VERT, pBorder->IsVerticalLineValid);
 
-                            aBox.SetDistance(MM100_TO_TWIP(pBorder->Distance));
+                            aBox.SetDistance((sal_uInt16)MM100_TO_TWIP(pBorder->Distance));
                             aBoxInfo.SetValid(VALID_DISTANCE, pBorder->IsDistanceValid);
 
                             aSet.Put(aBox);
@@ -3517,7 +3517,7 @@ uno::Reference< table::XCell >  SwXCellRange::getCellByPosition(sal_Int32 nColum
              getColumnCount() > nColumn && getRowCount() > nRow )
         {
             SwXCell* pXCell = lcl_CreateXCell(pFmt,
-                    aRgDesc.nLeft + nColumn, aRgDesc.nTop + nRow);
+                    sal_Int16(aRgDesc.nLeft + nColumn), sal_Int16(aRgDesc.nTop + nRow));
             if(pXCell)
                 aRet = pXCell;
         }
@@ -3776,33 +3776,32 @@ uno::Sequence< uno::Sequence< double > > SwXCellRange::getData(void) throw( uno:
     vos::OGuard aGuard(Application::GetSolarMutex());
     sal_Int16 nRowCount = getRowCount();
     sal_Int16 nColCount = getColumnCount();
-    //werden hier uno::Sequence<s fuer jede Zeile in einer Spaltenuno::Sequence< geliefert oder umgekehrt?
-    uno::Sequence< uno::Sequence< double > > aColSeq(bFirstColumnAsLabel ? nColCount - 1 : nColCount);
+    //
+    uno::Sequence< uno::Sequence< double > > aRowSeq(bFirstRowAsLabel ? nRowCount - 1 : nRowCount);
     SwFrmFmt* pFmt = GetFrmFmt();
     if(pFmt)
     {
-        uno::Sequence< double >* pColArray = aColSeq.getArray();
+        uno::Sequence< double >* pRowArray = aRowSeq.getArray();
 
-        sal_uInt16 nColStart = bFirstColumnAsLabel ? 1 : 0;
-        for(sal_uInt16 nCol = nColStart; nCol < nColCount; nCol++)
+        sal_uInt16 nRowStart = bFirstRowAsLabel ? 1 : 0;
+        for(sal_uInt16 nRow = nRowStart; nRow < nRowCount; nRow++)
         {
-            uno::Sequence< double > aRowSeq(bFirstRowAsLabel ? nRowCount - 1 : nRowCount);
-            double * pArray = aRowSeq.getArray();
-            sal_uInt16 nRowStart = bFirstRowAsLabel ? 1 : 0;
-            for(sal_uInt16 nRow = nRowStart; nRow < nRowCount; nRow++)
+            uno::Sequence< double > aColSeq(bFirstColumnAsLabel ? nColCount - 1 : nColCount);
+            double * pArray = aColSeq.getArray();
+            sal_uInt16 nColStart = bFirstColumnAsLabel ? 1 : 0;
+            for(sal_uInt16 nCol = nColStart; nCol < nColCount; nCol++)
             {
                 uno::Reference< table::XCell >  xCell = getCellByPosition(nCol, nRow);
                 if(!xCell.is())
                 {
-                    //exception ...
-                    break;
+                    throw RuntimeException();
                 }
-                pArray[nRow - nRowStart] = xCell->getValue();
+                pArray[nCol - nColStart] = xCell->getValue();
             }
-            pColArray[nCol - nColStart] = aRowSeq;
+            pRowArray[nRow - nRowStart] = aColSeq;
         }
     }
-    return aColSeq;
+    return aRowSeq;
 }
 /*-- 11.12.98 14:27:37---------------------------------------------------
 
@@ -3816,32 +3815,30 @@ void SwXCellRange::setData(const uno::Sequence< uno::Sequence< double > >& rData
     SwFrmFmt* pFmt = GetFrmFmt();
     if(pFmt )
     {
-        sal_uInt16 nColStart = bFirstColumnAsLabel ? 1 : 0;
-        if(rData.getLength() < nColCount - nColStart)
+        sal_uInt16 nRowStart = bFirstRowAsLabel ? 1 : 0;
+        if(rData.getLength() < nRowCount - nRowStart)
         {
             throw uno::RuntimeException();
             return;
         }
-        const uno::Sequence< double >* pColArray = rData.getConstArray();
-        for(sal_uInt16 nCol = nColStart; nCol < nColCount; nCol++)
+        const uno::Sequence< double >* pRowArray = rData.getConstArray();
+        for(sal_uInt16 nRow = nRowStart; nRow < nRowCount; nRow++)
         {
-            const uno::Sequence< double >& rRowSeq = pColArray[nCol - nColStart];
-            sal_uInt16 nRowStart = bFirstRowAsLabel ? 1 : 0;
-            if(rRowSeq.getLength() < nRowCount - nRowStart)
+            const uno::Sequence< double >& rColSeq = pRowArray[nRow - nRowStart];
+            sal_uInt16 nColStart = bFirstColumnAsLabel ? 1 : 0;
+            if(rColSeq.getLength() < nColCount - nColStart)
             {
                 throw uno::RuntimeException();
-                return;
             }
-            const double * pRowArray = rRowSeq.getConstArray();
-            for(sal_uInt16 nRow = nRowStart; nRow < nRowCount; nRow++)
+            const double * pColArray = rColSeq.getConstArray();
+            for(sal_uInt16 nCol = nColStart; nCol < nColCount; nCol++)
             {
                 uno::Reference< table::XCell >  xCell = getCellByPosition(nCol, nRow);
                 if(!xCell.is())
                 {
                     throw uno::RuntimeException();
-                    break;
                 }
-                xCell->setValue(pRowArray[nRow - nRowStart]);
+                xCell->setValue(pColArray[nCol - nColStart]);
             }
         }
     }
@@ -4155,7 +4152,7 @@ uno::Any SwXTableRows::getByIndex(sal_Int32 nIndex)
         SwTable* pTable = SwTable::FindTable( pFrmFmt );
         if(pTable->GetTabLines().Count() > nIndex)
         {
-            SwTableLine* pLine = pTable->GetTabLines().GetObject(nIndex);
+            SwTableLine* pLine = pTable->GetTabLines().GetObject((sal_uInt16)nIndex);
             SwClientIter aIter( *pFrmFmt );
             SwXTextTableRow* pXRow = (SwXTextTableRow*)aIter.
                                     First( TYPE( SwXTextTableRow ));
@@ -4211,7 +4208,7 @@ void SwXTableRows::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( uno:
         SwTable* pTable = SwTable::FindTable( pFrmFmt );
         if(!pTable->IsTblComplex())
         {
-            String sTLName = lcl_GetCellName(0, nIndex);
+            String sTLName = lcl_GetCellName(0, (sal_Int16)nIndex);
             const SwTableBox* pTLBox = pTable->GetTblBox( sTLName );
             sal_Bool bAppend = sal_False;
             if(!pTLBox)
@@ -4231,7 +4228,7 @@ void SwXTableRows::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( uno:
                 UnoActionContext aAction(pFrmFmt->GetDoc());
                 SwUnoCrsr* pUnoCrsr = pFrmFmt->GetDoc()->CreateUnoCrsr(aPos, sal_True);
                 pUnoCrsr->Move( fnMoveForward, fnGoNode );
-                pFrmFmt->GetDoc()->InsertRow(*pUnoCrsr, nCount, bAppend);
+                pFrmFmt->GetDoc()->InsertRow(*pUnoCrsr, (sal_uInt16)nCount, bAppend);
                 delete pUnoCrsr;
             }
         }
@@ -4251,7 +4248,7 @@ void SwXTableRows::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( uno:
         SwTable* pTable = SwTable::FindTable( pFrmFmt );
         if(!pTable->IsTblComplex())
         {
-            String sTLName = lcl_GetCellName(0, nIndex);
+            String sTLName = lcl_GetCellName(0, (sal_Int16)nIndex);
             const SwTableBox* pTLBox = pTable->GetTblBox( sTLName );
             if(pTLBox)
             {
@@ -4401,7 +4398,7 @@ void SwXTableColumns::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( u
         SwTable* pTable = SwTable::FindTable( pFrmFmt );
         if(!pTable->IsTblComplex())
         {
-            String sTLName = lcl_GetCellName(nIndex, 0);
+            String sTLName = lcl_GetCellName((sal_Int16)nIndex, 0);
             const SwTableBox* pTLBox = pTable->GetTblBox( sTLName );
             sal_Bool bAppend = sal_False;
             if(!pTLBox)
@@ -4420,7 +4417,7 @@ void SwXTableColumns::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( u
                 UnoActionContext aAction(pFrmFmt->GetDoc());
                 SwUnoCrsr* pUnoCrsr = pFrmFmt->GetDoc()->CreateUnoCrsr(aPos, sal_True);
                 pUnoCrsr->Move( fnMoveForward, fnGoNode );
-                pFrmFmt->GetDoc()->InsertCol(*pUnoCrsr, nCount, bAppend);
+                pFrmFmt->GetDoc()->InsertCol(*pUnoCrsr, (sal_uInt16)nCount, bAppend);
                 delete pUnoCrsr;
             }
         }
@@ -4440,7 +4437,7 @@ void SwXTableColumns::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( u
         SwTable* pTable = SwTable::FindTable( pFrmFmt );
         if(!pTable->IsTblComplex())
         {
-            String sTLName = lcl_GetCellName(nIndex, 0);
+            String sTLName = lcl_GetCellName((sal_Int16)nIndex, 0);
             const SwTableBox* pTLBox = pTable->GetTblBox( sTLName );
             if(pTLBox)
             {
