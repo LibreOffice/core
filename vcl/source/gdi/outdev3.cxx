@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: hdu $ $Date: 2002-05-03 16:53:34 $
+ *  last change: $Author: hdu $ $Date: 2002-05-08 12:29:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5563,8 +5563,8 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
         if( !(const_cast<OutputDevice&>(*this).ImplGetGraphics()) )
             return NULL;
 #else
-    if( !(const_cast<OutputDevice&>(*this).ImplGetServerGraphics()) )
-        return NULL;
+    // due to clipping we may get NULL, so don't use return value
+    const_cast<OutputDevice&>(*this).ImplGetServerGraphics();
 #endif
 
     // initialize font if needed
@@ -5778,12 +5778,11 @@ void OutputDevice::DrawText( const Rectangle& rRect,
     if ( ( !IsDeviceOutputNecessary() && ! pVector ) || !rOrigStr.Len() || rRect.IsEmpty() )
         return;
 
-    // better call it here because ImplDrawMnemonicLine() won't
+    // better get graphics here because ImplDrawMnemonicLine() will not
 #ifndef REMOTE_APPSERVER
     // we need a graphics
     if( !mpGraphics && !ImplGetGraphics() )
         return;
-
     if( mbInitClipRegion )
         ImplInitClipRegion();
     if( mbOutputClipped )
@@ -6307,22 +6306,17 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const XubString& rStr,
     if ( !IsDeviceOutputNecessary() || (nIndex >= rStr.Len()) )
         return;
 
-    // Vorsichtshalber hier auch schon Aufrufen, da ImplDrawMnemonicLine()
-    // dies nicht macht
+    // better get graphics here because ImplDrawMnemonicLine() will not
 #ifndef REMOTE_APPSERVER
     // we need a graphics
-    if ( !mpGraphics )
-    {
-        if ( !ImplGetGraphics() )
-            return;
-    }
-
-    if ( mbInitClipRegion )
+    if( !mpGraphics && !ImplGetGraphics() )
+        return;
+    if( mbInitClipRegion )
         ImplInitClipRegion();
     if ( mbOutputClipped )
         return;
 #else
-    if ( !ImplGetServerGraphics() )
+    if( !ImplGetServerGraphics() )
         return;
 #endif
 
@@ -7012,10 +7006,18 @@ BOOL OutputDevice::GetGlyphBoundRects( const Point& rOrigin, const String& rStr,
     BOOL bRet = TRUE;
     if( nLen == STRING_LEN )
         nLen = rStr.Len() - nIndex;
+
+#ifdef DEBUG
+    fprintf( stderr, "GetGlyphBoundRects( (%d,%d), \"%s\", %d, %d, %d )\n",
+             rOrigin.X(), rOrigin.Y(),
+             OUStringToOString( rStr, RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
+             nIndex, nLen, nBase );
+#endif
+
     for( int i = 0; i < nLen && bRet; i++ )
     {
         Rectangle aRect;
-        bRet = GetTextBoundRect( aRect, rStr, nIndex+i, nBase );
+        bRet = GetTextBoundRect( aRect, rStr, nBase, nIndex+i, 1 );
         if( bRet )
         {
             aRect.Move( rOrigin.X(), rOrigin.Y() );
@@ -7077,7 +7079,7 @@ BOOL OutputDevice::GetTextBoundRect( Rectangle& rRect,
             }
 
             Rectangle aPixelRect = aPolyPoly.GetBoundRect();
-            aPixelRect += Point( mnTextOffX - nXOffset, mnTextOffY );
+            aPixelRect += Point( mnTextOffX + nXOffset, mnTextOffY );
             aPixelRect += aPos;
             rRect = ImplDevicePixelToLogic( aPixelRect );
         }
