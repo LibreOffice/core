@@ -2,9 +2,9 @@
  *
  *  $RCSfile: langbox.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 09:57:31 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 12:35:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,8 @@ static const LanguageType aForbiddenCharLang[] =
     LANGUAGE_CHINESE_TRADITIONAL,
     LANGUAGE_CHINESE_SIMPLIFIED,
     LANGUAGE_JAPANESE,
-    LANGUAGE_KOREAN
+    LANGUAGE_KOREAN,
+    LANGUAGE_USER_KOREAN_NORTH
 };
 
 static const int nForbiddenCharLang = sizeof( aForbiddenCharLang ) / sizeof( aForbiddenCharLang[0] );
