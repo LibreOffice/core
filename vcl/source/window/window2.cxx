@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:58:24 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 13:41:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,6 @@
 #ifndef _SV_SVSYS_HXX
 #include <svsys.h>
 #endif
-#ifndef REMOTE_APPSERVER
 #ifndef _SV_SALBMP_HXX
 #include <salbmp.hxx>
 #endif
@@ -74,9 +73,6 @@
 #endif
 #ifndef _SV_SALFRAME_HXX
 #include <salframe.hxx>
-#endif
-#else
-#include <rmoutdev.hxx>
 #endif
 
 #ifndef _DEBUG_HXX
@@ -129,7 +125,7 @@
 #include <scrwnd.hxx>
 #endif
 
-#pragma hdrstop
+
 
 // =======================================================================
 
@@ -398,7 +394,6 @@ Bitmap Window::SnapShot( BOOL bBorder ) const
         {
             ((Window*)this)->Update();
 
-#ifndef REMOTE_APPSERVER
             if ( bBorder && mbFrame )
             {
                 SalBitmap* pSalBmp = mpFrame->SnapShot();
@@ -411,7 +406,6 @@ Bitmap Window::SnapShot( BOOL bBorder ) const
                     return aBmp;
                 }
             }
-#endif
 
             mpFrameWindow->ImplGetFrameBitmap( Point( mnOutOffX, mnOutOffY ), Size( mnOutWidth, mnOutHeight ), aBmp );
         }
@@ -485,7 +479,6 @@ void Window::Invert( const Rectangle& rRect, USHORT nFlags )
         return;
     aRect.Justify();
 
-#ifndef REMOTE_APPSERVER
     // we need a graphics
     if ( !mpGraphics )
     {
@@ -505,11 +498,6 @@ void Window::Invert( const Rectangle& rRect, USHORT nFlags )
     if ( nFlags & INVERT_50 )
         nSalFlags |= SAL_INVERT_50;
     mpGraphics->Invert( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(), nSalFlags, this );
-#else
-    ImplServerGraphics* pGraphics = ImplGetServerGraphics();
-    if ( pGraphics )
-        pGraphics->Invert( aRect, nFlags );
-#endif
 }
 
 // -----------------------------------------------------------------------
@@ -528,7 +516,6 @@ void Window::Invert( const Polygon& rPoly, USHORT nFlags )
 
     Polygon aPoly( ImplLogicToDevicePixel( rPoly ) );
 
-#ifndef REMOTE_APPSERVER
     // we need a graphics
     if ( !mpGraphics )
     {
@@ -549,11 +536,6 @@ void Window::Invert( const Polygon& rPoly, USHORT nFlags )
         nSalFlags |= SAL_INVERT_50;
     const SalPoint* pPtAry = (const SalPoint*)aPoly.GetConstPointAry();
     mpGraphics->Invert( nPoints, pPtAry, nSalFlags, this );
-#else
-    ImplServerGraphics* pGraphics = ImplGetServerGraphics();
-    if ( pGraphics )
-        pGraphics->Invert( aPoly, nFlags );
-#endif
 }
 
 // -----------------------------------------------------------------------
@@ -613,7 +595,6 @@ void Window::InvertTracking( const Rectangle& rRect, USHORT nFlags )
         return;
     aRect.Justify();
 
-#ifndef REMOTE_APPSERVER
     SalGraphics* pGraphics;
 
     if ( nFlags & SHOWTRACK_WINDOW )
@@ -665,33 +646,6 @@ void Window::InvertTracking( const Rectangle& rRect, USHORT nFlags )
         pGraphics->Invert( aRect.Left(), aRect.Top()+nBorder, nBorder, aRect.GetHeight()-(nBorder*2), SAL_INVERT_50, this );
         pGraphics->Invert( aRect.Right()-nBorder+1, aRect.Top()+nBorder, nBorder, aRect.GetHeight()-(nBorder*2), SAL_INVERT_50, this );
     }
-#else
-    ImplServerGraphics* pGraphics;
-    if ( nFlags & SHOWTRACK_WINDOW )
-    {
-        if ( !IsDeviceOutputNecessary() )
-            return;
-
-        pGraphics = ImplGetServerGraphics();
-    }
-    else
-    {
-        pGraphics = ImplGetServerGraphics( TRUE );
-
-        if ( nFlags & SHOWTRACK_CLIP )
-        {
-            Point aTmpPoint( mnOutOffX, mnOutOffY );
-            Size aTmpSize( mnOutWidth, mnOutHeight );
-            Rectangle aTmpRect( aTmpPoint, aTmpSize );
-            Region aRegion( aTmpRect );
-            ImplClipBoundaries( aRegion, FALSE, FALSE );
-            pGraphics->SetClipRegion( aRegion );
-        }
-    }
-
-    if ( pGraphics )
-        pGraphics->InvertTracking( aRect, nFlags );
-#endif
 }
 
 // -----------------------------------------------------------------------
@@ -707,7 +661,6 @@ void Window::InvertTracking( const Polygon& rPoly, USHORT nFlags )
 
     Polygon aPoly( ImplLogicToDevicePixel( rPoly ) );
 
-#ifndef REMOTE_APPSERVER
     SalGraphics* pGraphics;
 
     if ( nFlags & SHOWTRACK_WINDOW )
@@ -746,33 +699,6 @@ void Window::InvertTracking( const Polygon& rPoly, USHORT nFlags )
 
     const SalPoint* pPtAry = (const SalPoint*)aPoly.GetConstPointAry();
     pGraphics->Invert( nPoints, pPtAry, SAL_INVERT_TRACKFRAME, this );
-#else
-    ImplServerGraphics* pGraphics;
-    if ( nFlags & SHOWTRACK_WINDOW )
-    {
-        if ( !IsDeviceOutputNecessary() )
-            return;
-
-        pGraphics = ImplGetServerGraphics();
-    }
-    else
-    {
-        pGraphics = ImplGetServerGraphics( TRUE );
-
-        if ( nFlags & SHOWTRACK_CLIP )
-        {
-            Point aTmpPoint( mnOutOffX, mnOutOffY );
-            Size aTmpSize( mnOutWidth, mnOutHeight );
-            Rectangle aTmpRect( aTmpPoint, aTmpSize );
-            Region aRegion( aTmpRect );
-            ImplClipBoundaries( aRegion, FALSE, FALSE );
-            pGraphics->SetClipRegion( aRegion );
-        }
-    }
-
-    if ( pGraphics )
-        pGraphics->InvertTracking( aPoly, nFlags );
-#endif
 }
 
 // -----------------------------------------------------------------------
@@ -787,13 +713,11 @@ IMPL_LINK( Window, ImplTrackTimerHdl, Timer*, pTimer )
 
     // Tracking-Event erzeugen
     Point           aMousePos( mpFrameData->mnLastMouseX, mpFrameData->mnLastMouseY );
-#ifndef REMOTE_APPSERVER
     if( ImplHasMirroredGraphics() && !IsRTLEnabled() )
     {
         // - RTL - re-mirror frame pos at pChild
         ImplReMirror( aMousePos );
     }
-#endif
     MouseEvent      aMEvt( ImplFrameToOutput( aMousePos ),
                            mpFrameData->mnClickCount, 0,
                            mpFrameData->mnMouseCode, mpFrameData->mnMouseCode );
