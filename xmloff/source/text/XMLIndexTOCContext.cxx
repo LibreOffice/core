@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexTOCContext.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dvo $ $Date: 2002-03-25 15:58:03 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:32:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -348,7 +348,7 @@ void XMLIndexTOCContext::StartElement(
                 {
                     XMLPropStyleContext* pStyle =
                         GetImport().GetTextImport()->FindSectionStyle(
-                            xAttrList->getValueByIndex(nAttr));
+                                xAttrList->getValueByIndex(nAttr));
                     if (pStyle != NULL)
                     {
                         pStyle->FillPropertySet( xTOCPropertySet );
