@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-14 17:25:36 $
+ *  last change: $Author: mba $ $Date: 2000-11-17 12:34:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,6 +290,7 @@ public:
 
 static SvtPathOptions_Impl* pOptions = NULL;
 static sal_Int32            nRefCount = 0;
+static ::osl::Mutex aMutex;
 
 // functions -------------------------------------------------------------
 
@@ -934,7 +935,7 @@ void SvtPathOptions_Impl::Notify( const Sequence<rtl::OUString>& aPropertyNames 
 SvtPathOptions::SvtPathOptions()
 {
     // Global access, must be guarded (multithreading)
-    ::osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() );
+    ::osl::MutexGuard aGuard( aMutex );
     if ( !pOptions )
         pOptions = new SvtPathOptions_Impl;
     ++nRefCount;
@@ -946,7 +947,7 @@ SvtPathOptions::SvtPathOptions()
 SvtPathOptions::~SvtPathOptions()
 {
     // Global access, must be guarded (multithreading)
-    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+    ::osl::MutexGuard aGuard( aMutex );
     if ( !--nRefCount )
     {
         if ( pOptions->IsModified() )
