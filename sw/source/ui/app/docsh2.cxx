@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: os $ $Date: 2002-10-25 10:16:57 $
+ *  last change: $Author: gt $ $Date: 2002-11-18 15:29:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1297,7 +1297,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     nHelpIds[7] = 0;
 
                     aDlgHelper.SetControlHelpIds( nControlIds, nHelpIds );
-                    aDlgHelper.SetDialogHelpId( bCreateHtml ? HID_SEND_HTML_DIALOG : HID_SEND_MASTER_DIALOG );
+//                    aDlgHelper.SetDialogHelpId( bCreateHtml ? HID_SEND_HTML_DIALOG : HID_SEND_MASTER_DIALOG );
 
                     Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
 
