@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsubti.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-27 10:38:10 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:53:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,9 +98,9 @@
 
 class ScXMLImport;
 
-const nDefaultRowCount = 20;
-const nDefaultColCount = 20;
-const nDefaultTabCount = 10;
+const int nDefaultRowCount = 20;
+const int nDefaultColCount = 20;
+const int nDefaultTabCount = 10;
 
 typedef std::vector<sal_Int32> ScMysalIntVec;
 typedef std::list<sal_Int32> ScMysalIntList;
