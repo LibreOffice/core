@@ -2,9 +2,9 @@
  *
  *  $RCSfile: plugcon.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2001-10-26 07:40:28 $
+ *  last change: $Author: hr $ $Date: 2001-11-02 12:10:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,6 +222,6 @@ enum CommandAtoms
 char* GetCommandName( CommandAtoms );
 void resizePlugin( NPP, UINT32, UINT32 );
 
-#define POST_STRING( x ) x ? x : "", x ? strlen(x) : 1
+#define POST_STRING( x ) x ? x : const_cast<char*>(""), x ? strlen(x) : 1
 
 #endif // _PLUGCON_HXX
