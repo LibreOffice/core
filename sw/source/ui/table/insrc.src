@@ -2,9 +2,9 @@
  *
  *  $RCSfile: insrc.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-07 16:35:51 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 03:41:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,19 +69,8 @@ ModalDialog DLG_INS_ROW_COL
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 136 , 84 ) ;
     /* ### ACHTUNG: Neuer Text in Resource? Einfügen : Einf³gen */
-    Text = "Einfügen" ;
-    Text [ ENGLISH ] = "Insert" ;
-    Text [ norwegian ] = "Sett inn" ;
-    Text [ italian ] = "Inserisci" ;
-    Text [ portuguese_brazilian ] = "Inserir" ;
-    Text [ portuguese ] = "Inserir" ;
-    Text [ finnish ] = "Lisää" ;
-    Text [ danish ] = "Indsæt" ;
-    Text [ french ] = "Insérer" ;
-    Text [ swedish ] = "Infoga" ;
-    Text [ dutch ] = "Invoegen" ;
-    Text [ spanish ] = "Insertar" ;
-    Text [ english_us ] = "Insert" ;
+    Text [ de ] = "Einfügen" ;
+    Text [ en-US ] = "Insert" ;
     Moveable = TRUE ;
     OKButton BT_OK
     {
@@ -106,76 +95,20 @@ ModalDialog DLG_INS_ROW_COL
     {
         Pos = MAP_APPFONT ( 12 , 49 ) ;
         Size = MAP_APPFONT ( 56 , 10 ) ;
-        Text = "da~vor" ;
-        Text [ ENGLISH ] = "~before" ;
-        Text [ norwegian ] = "~før" ;
-        Text [ italian ] = "Davanti" ;
-        Text [ portuguese_brazilian ] = "~Antes" ;
-        Text [ portuguese ] = "à ~frente" ;
-        Text [ finnish ] = "~Ennen" ;
-        Text [ danish ] = "~Foran" ;
-        Text [ french ] = "Avant" ;
-        Text [ swedish ] = "~framför" ;
-        Text [ dutch ] = "~ervoor" ;
-        Text [ spanish ] = "De~lante" ;
-        Text [ english_us ] = "~Before" ;
+        Text [ de ] = "da~vor" ;
+        Text [ en-US ] = "~Before" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "ä¹‹å‰(~B)";
-        Text[ russian ] = "äî";
-        Text[ polish ] = "~Przed";
-        Text[ japanese ] = "å‰(~B)";
-        Text[ chinese_traditional ] = "ä¹‹å‰(~B)";
-        Text[ arabic ] = "ŞÈá";
-        Text[ greek ] = "Ğñéí áğü";
-        Text[ korean ] = "ì•(~B)";
-        Text[ turkish ] = "~Önce";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "A~bans de";
-        Text[ thai ] = "~à¸à¹ˆà¸­à¸™";
-        Text[ czech ] = "pÅ™ed";
-        Text[ hebrew ] = "da~vor";
-        Text[ hindi ] = "~à¤ªà¤¹à¤¿à¤²à¥‡";
-        Text[ slovak ] = "p~red";
-        Text[ hungarian ] = "~ElÅ‘tte";
-        Text[ slovenian ] = "~Pred";
+        Text [ x-comment ] = " ";
     };
     RadioButton CB_POS_AFTER
     {
         Pos = MAP_APPFONT ( 12 , 62 ) ;
         Size = MAP_APPFONT ( 56 , 10 ) ;
-        Text = "da~hinter" ;
-        Text [ ENGLISH ] = "~behind" ;
-        Text [ norwegian ] = "~bak" ;
-        Text [ italian ] = "~Dietro" ;
-        Text [ portuguese_brazilian ] = "A~pós" ;
-        Text [ portuguese ] = "~atrás" ;
-        Text [ finnish ] = "~Jälkeen" ;
-        Text [ danish ] = "E~fter" ;
-        Text [ french ] = "Après" ;
-        Text [ swedish ] = "~bakom" ;
-        Text [ dutch ] = "e~rachter" ;
-        Text [ spanish ] = "De~trás" ;
-        Text [ english_us ] = "A~fter" ;
+        Text [ de ] = "da~hinter" ;
+        Text [ en-US ] = "A~fter" ;
         TabStop = TRUE ;
         Check = TRUE ;
-        Text[ chinese_simplified ] = "ä¹‹å(~F)";
-        Text[ russian ] = "ïîñëå";
-        Text[ polish ] = "~za";
-        Text[ japanese ] = "å¾Œ(~F)";
-        Text[ chinese_traditional ] = "ä¹‹å¾Œ(~F)";
-        Text[ arabic ] = "ÈÚÏ";
-        Text[ greek ] = "ÌåôÜ áğü";
-        Text[ korean ] = "ë’¤(~F)";
-        Text[ turkish ] = "~Sonra";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "da~rrera";
-        Text[ thai ] = "à¸«~à¸¥à¸±à¸‡à¸ˆà¸²à¸";
-        Text[ czech ] = "za";
-        Text[ hebrew ] = "da~hinter";
-        Text[ hindi ] = "à¤ªà¤¶à¥à¤šà¤¾~à¤¤";
-        Text[ slovak ] = "~za";
-        Text[ hungarian ] = "~UtÃ¡na";
-        Text[ slovenian ] = "Z~a";
+        Text [ x-comment ] = " ";
     };
     NumericField ED_COUNT
     {
@@ -196,195 +129,39 @@ ModalDialog DLG_INS_ROW_COL
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 68 , 8 ) ;
-        Text = "Einfügen" ;
-        Text [ ENGLISH ] = "Insert" ;
-        Text [ norwegian ] = "Sett inn" ;
-        Text [ italian ] = "Inserisci" ;
-        Text [ portuguese_brazilian ] = "Inserir" ;
-        Text [ portuguese ] = "Inserir" ;
-        Text [ finnish ] = "Lisää" ;
-        Text [ danish ] = "Indsæt" ;
-        Text [ french ] = "Insérer" ;
-        Text [ swedish ] = "Infoga" ;
-        Text [ dutch ] = "Invoegen" ;
-        Text [ spanish ] = "Insertar" ;
-        Text [ english_us ] = "Insert" ;
-        Text[ chinese_simplified ] = "æ’å…¥";
-        Text[ russian ] = "Âñòàâèòü";
-        Text[ polish ] = "Wstaw";
-        Text[ japanese ] = "æŒ¿å…¥";
-        Text[ chinese_traditional ] = "æ’å…¥";
-        Text[ arabic ] = "ÅÏÑÇÌ";
-        Text[ greek ] = "ÅéóáãùãŞ";
-        Text[ korean ] = "ì‚½ì…";
-        Text[ turkish ] = "Arasına Ekle";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Insereix";
-        Text[ thai ] = "à¹à¸—à¸£à¸";
-        Text[ czech ] = "VloÅ¾it";
-        Text[ hebrew ] = "â€®×”×•×¡×¤×”â€¬";
-        Text[ hindi ] = "à¤œà¥‹à¤¡à¤¼à¥‹";
-        Text[ slovak ] = "VloÅ¾iÅ¥";
-        Text[ hungarian ] = "BeszÃºrÃ¡s";
-        Text[ slovenian ] = "Vstavi";
+        Text [ de ] = "Einfügen" ;
+        Text [ en-US ] = "Insert" ;
+        Text [ x-comment ] = " ";
     };
     FixedLine FL_POS
     {
         Pos = MAP_APPFONT ( 6 , 38 ) ;
         Size = MAP_APPFONT ( 68 , 8 ) ;
-        Text = "Position" ;
-        Text[ ENGLISH ] = "Position" ;
-        Text[ english_us ] = "Position";
-        Text[ portuguese ] = "Posição";
-        Text[ russian ] = "Ïîëîæåíèå";
-        Text[ greek ] = "Èİóç";
-        Text[ dutch ] = "Positie";
-        Text[ french ] = "Position";
-        Text[ spanish ] = "Posición";
-        Text[ finnish ] = "Sijainti";
-        Text[ italian ] = "Posizione";
-        Text[ danish ] = "Placering";
-        Text[ swedish ] = "Position";
-        Text[ polish ] = "Pozycja";
-        Text[ portuguese_brazilian ] = "Posição";
-        Text[ japanese ] = "ä½ç½®";
-        Text[ korean ] = "ìœ„ì¹˜";
-        Text[ chinese_simplified ] = "ä½ç½®";
-        Text[ chinese_traditional ] = "ä½ç½®";
-        Text[ turkish ] = "Konum";
-        Text[ arabic ] = "Start_num";
-        Text[ catalan ] = "Posició";
-        Text[ thai ] = "à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡";
-        Text[ czech ] = "UmÃ­stÄ›nÃ­";
-        Text[ hebrew ] = "â€®××™×§×•×â€¬";
-        Text[ hindi ] = "à¤¸à¥à¤¥à¤¾à¤¨";
-        Text[ slovak ] = "Umiestnenie";
-        Text[ hungarian ] = "PozÃ­ciÃ³";
-        Text[ slovenian ] = "PoloÅ¾aj";
+        Text [ de ] = "Position" ;
+        Text [ en-US ] = "Position";
     };
     FixedText FT_COUNT
     {
         Pos = MAP_APPFONT ( 12 , 16 ) ;
         Size = MAP_APPFONT ( 30 , 8 ) ;
-        Text = "~Anzahl" ;
-        Text [ ENGLISH ] = "~Amount" ;
-        Text [ norwegian ] = "~Beløp" ;
-        Text [ italian ] = "Numero" ;
-        Text [ portuguese_brazilian ] = "~Quantidade" ;
-        Text [ portuguese ] = "~Quantidade" ;
-        Text [ finnish ] = "~Määrä" ;
-        Text [ danish ] = "~Beløb" ;
-        Text [ french ] = "~Nombre" ;
-        Text [ swedish ] = "~Antal" ;
-        Text [ dutch ] = "~Aantal" ;
-        Text [ spanish ] = "~Cantidad" ;
-        Text [ english_us ] = "~Amount" ;
+        Text [ de ] = "~Anzahl" ;
+        Text [ en-US ] = "~Amount" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "æ•°ç›®(~A)";
-        Text[ russian ] = "êîë-âî";
-        Text[ polish ] = "~Iloœæ";
-        Text[ japanese ] = "æ•°(~A)";
-        Text[ chinese_traditional ] = "æ•¸ç›®(~A)";
-        Text[ arabic ] = "ÇáÚÏÏ";
-        Text[ greek ] = "~Áñéèìüò";
-        Text[ korean ] = "ìˆ˜(~A)";
-        Text[ turkish ] = "~Adet";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Quantitat";
-        Text[ thai ] = "~à¸ˆà¸³à¸™à¸§à¸™";
-        Text[ czech ] = "MnoÅ¾stvÃ­";
-        Text[ hebrew ] = "~Anzahl";
-        Text[ hindi ] = "~à¤œà¥‹à¤¡à¤¼";
-        Text[ slovak ] = "~MnoÅ¾stvo";
-        Text[ hungarian ] = "~MennyisÃ©g";
-        Text[ slovenian ] = "K~oliÄina";
+        Text [ x-comment ] = " ";
     };
     String STR_ROW
     {
-        Text = " Zeilen" ;
-        Text [ ENGLISH ] = " rows" ;
-        Text [ norwegian ] = " rader" ;
-        Text [ italian ] = " righe" ;
-        Text [ portuguese_brazilian ] = " Linhas" ;
-        Text [ portuguese ] = " Linhas" ;
-        Text [ finnish ] = " Rivit" ;
-        Text [ danish ] = " Rækker" ;
-        Text [ french ] = " Lignes" ;
-        Text [ swedish ] = " rader" ;
-        Text [ dutch ] = " rijen" ;
-        Text [ spanish ] = "Filas" ;
-        Text [ english_us ] = " Rows" ;
-        Text[ chinese_simplified ] = "è¡Œ";
-        Text[ russian ] = " ñòğîêè";
-        Text[ polish ] = " Wiersze";
-        Text[ japanese ] = "è¡Œ";
-        Text[ chinese_traditional ] = "è¡Œ";
-        Text[ arabic ] = " Õİæİ";
-        Text[ greek ] = " Ãñáììİò";
-        Text[ korean ] = "í–‰";
-        Text[ turkish ] = "Satır";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = " Files";
-        Text[ thai ] = " à¹à¸–à¸§";
-        Text[ czech ] = " Å™Ã¡dky";
-        Text[ hebrew ] = " Zeilen";
-        Text[ hindi ] = " à¤ªà¤‚à¤•à¥à¤¤à¤¿à¤¯à¤¾à¤";
-        Text[ slovak ] = " riadky";
-        Text[ hungarian ] = " sor";
-        Text[ slovenian ] = " Vrstice";
+        Text [ de ] = " Zeilen" ;
+        Text [ en-US ] = " Rows" ;
+        Text [ x-comment ] = " ";
     };
     String STR_COL
     {
-        Text = " Spalten" ;
-        Text [ ENGLISH ] = " columns" ;
-        Text [ norwegian ] = " kolonner" ;
-        Text [ italian ] = " colonne" ;
-        Text [ portuguese_brazilian ] = " Colunas" ;
-        Text [ portuguese ] = " Colunas" ;
-        Text [ finnish ] = " Sarakkeet" ;
-        Text [ danish ] = " Kolonner" ;
-        Text [ french ] = " Colonnes" ;
-        Text [ swedish ] = " kolumner" ;
-        Text [ dutch ] = " kolommen" ;
-        Text [ spanish ] = "Columnas" ;
-        Text [ english_us ] = " Columns" ;
-        Text[ chinese_simplified ] = "æ ";
-        Text[ russian ] = " ñòîëáöû";
-        Text[ polish ] = "Kolumny";
-        Text[ japanese ] = "åˆ—";
-        Text[ chinese_traditional ] = "æ¬„";
-        Text[ arabic ] = " ÃÚãÏÉ";
-        Text[ greek ] = " ÓôŞëåò";
-        Text[ korean ] = " ë‹¨";
-        Text[ turkish ] = "Sütun";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = " Columnes";
-        Text[ thai ] = " à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œ";
-        Text[ czech ] = " sloupce";
-        Text[ hebrew ] = "â€®×˜×•×¨×™×â€¬";
-        Text[ hindi ] = " à¤¸à¥à¤¤à¤‚à¤­";
-        Text[ slovak ] = " stÄºpce";
-        Text[ hungarian ] = " oszlop";
-        Text[ slovenian ] = " Stolpci";
+        Text [ de ] = " Spalten" ;
+        Text [ en-US ] = " Columns" ;
+        Text [ x-comment ] = " ";
     };
-    Text[ chinese_simplified ] = "æ’å…¥";
-    Text[ russian ] = "Âñòàâêà";
-    Text[ polish ] = "Wstaw";
-    Text[ japanese ] = "æŒ¿å…¥";
-    Text[ chinese_traditional ] = "æ’å…¥";
-    Text[ arabic ] = "ÅÏÑÇÌ";
-    Text[ greek ] = "ÅéóáãùãŞ";
-    Text[ korean ] = "ì‚½ì…";
-    Text[ turkish ] = "Ekle";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Insereix";
-    Text[ thai ] = "à¹à¸—à¸£à¸";
-    Text[ czech ] = "VloÅ¾it";
-    Text[ hebrew ] = "â€®×”×•×¡×¤×”â€¬";
-    Text[ hindi ] = "à¤œà¥‹à¤¡à¤¼à¥‹";
-    Text[ slovak ] = "VloÅ¾iÅ¥";
-    Text[ hungarian ] = "BeszÃºrÃ¡s:";
-    Text[ slovenian ] = "Vstavi";
+    Text [ x-comment ] = " ";
 };
 
 
