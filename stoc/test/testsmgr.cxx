@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testsmgr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 17:30:39 $
+ *  last change: $Author: jl $ $Date: 2001-03-19 11:08:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,15 +59,9 @@
  *
  ************************************************************************/
 #include <stdio.h>
-//#ifndef _VOS_MODULE_HXX_
-//#include <vos/module.hxx>
-//#endif
 
-#ifndef _VOS_PROCESS_HXX_
-#include <vos/process.hxx>
-#endif
-#ifndef _VOS_DYNLOAD_HXX_
-#include <vos/dynload.hxx>
+#ifndef _OSL_PROCESS_H_
+#include <osl/process.h>
 #endif
 
 #ifndef _REGISTRY_REGISTRY_HXX_
@@ -100,15 +94,13 @@
 
 
 using namespace ::rtl;
-using namespace ::vos;
 OString userRegEnv("STAR_USER_REGISTRY=");
 
 OUString getExePath()
 {
-    OStartupInfo    startupInfo;
     OUString        exe;
 
-    OSL_VERIFY(startupInfo.getExecutableFile(exe) == OStartupInfo::E_None);
+    OSL_VERIFY( osl_getExecutableFile( &exe.pData) == osl_Process_E_None);
 
 #if defined(WIN32) || defined(__OS2__) || defined(WNT)
     exe = exe.copy(0, exe.getLength() - 16);

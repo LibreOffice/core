@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excomp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 17:19:50 $
+ *  last change: $Author: jl $ $Date: 2001-03-19 11:12:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
-#ifndef _VOS_PROCESS_HXX_
-#include <vos/process.hxx>
+#ifndef _OSL_PROCESS_H_
+#include <osl/process.h>
 #endif
 
 #include <example/XTest.hpp>
@@ -90,7 +90,6 @@ using namespace com::sun::star::registry;
 using namespace com::sun::star::lang;
 using namespace example;
 using namespace cppu;
-using namespace vos;
 using namespace rtl;
 
 #ifdef _DEBUG
@@ -101,10 +100,9 @@ using namespace rtl;
 
 OUString getExePath()
 {
-    OStartupInfo    startupInfo;
     OUString        exe;
 
-    OSL_VERIFY(startupInfo.getExecutableFile(exe) == OStartupInfo::E_None);
+    OSL_VERIFY(osl_getExecutableFile( &exe.pData) == osl_Process_E_None);
 
 #if defined(WIN32) || defined(__OS2__) || defined(WNT)
     exe = exe.copy(0, exe.getLength() - 10);
