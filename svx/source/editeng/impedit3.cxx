@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: mt $ $Date: 2001-10-17 17:09:54 $
+ *  last change: $Author: mt $ $Date: 2001-11-28 17:23:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1025,6 +1025,7 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
                 if( bScriptSpace && ( nTmpWidth < nXWidth ) && IsScriptChange( EditPaM( pNode, nTmpPos+pPortion->GetLen() ) ) )
                 {
                     long nExtraSpace = pPortion->GetSize().Height()/5;
+                    nExtraSpace = GetXValue( nExtraSpace );
                     pPortion->GetSize().Width() += nExtraSpace;
                     nTmpWidth += nExtraSpace;
                 }
