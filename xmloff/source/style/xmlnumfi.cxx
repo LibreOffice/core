@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfi.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-25 17:31:01 $
+ *  last change: $Author: nn $ $Date: 2001-11-05 14:42:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -442,6 +442,28 @@ sal_uInt32 SvXMLNumImpData::GetKeyForName( const rtl::OUString& rName )
 
 void SvXMLNumImpData::AddKey( sal_uInt32 nKey, const rtl::OUString& rName, sal_Bool bRemoveAfterUse )
 {
+    if ( bRemoveAfterUse )
+    {
+        //  if there is already an entry for this key without the bRemoveAfterUse flag,
+        //  clear the flag for this entry, too
+
+        USHORT nCount = aNameEntries.Count();
+        for (USHORT i=0; i<nCount; i++)
+        {
+            SvXMLNumFmtEntry* pObj = aNameEntries[i];
+            if ( pObj->nKey == nKey && !pObj->bRemoveAfterUse )
+            {
+                bRemoveAfterUse = sal_False;        // clear flag for new entry
+                break;
+            }
+        }
+    }
+    else
+    {
+        //  call SetUsed to clear the bRemoveAfterUse flag for other entries for this key
+        SetUsed( nKey );
+    }
+
     SvXMLNumFmtEntry* pObj = new SvXMLNumFmtEntry( rName, nKey, bRemoveAfterUse );
     aNameEntries.Insert( pObj, aNameEntries.Count() );
 }
@@ -455,7 +477,10 @@ void SvXMLNumImpData::SetUsed( sal_uInt32 nKey )
         if ( pObj->nKey == nKey )
         {
             pObj->bRemoveAfterUse = sal_False;      // used -> don't remove
-            break;
+
+            //  continue searching - there may be several entries for the same key
+            //  (with different names), the format must not be deleted if any one of
+            //  them is used
         }
     }
 }
@@ -633,6 +658,13 @@ sal_Bool lcl_ValidChar( sal_Unicode cChar, sal_uInt16 nFormatType )
 
     //  percent sign must be used without quotes for percentage styles only
     if ( nFormatType == XML_TOK_STYLES_PERCENTAGE_STYLE && cChar == '%' )
+        return sal_True;
+
+    //  don't put quotes around single parentheses (often used for negative numbers)
+    if ( ( nFormatType == XML_TOK_STYLES_NUMBER_STYLE ||
+           nFormatType == XML_TOK_STYLES_CURRENCY_STYLE ||
+           nFormatType == XML_TOK_STYLES_PERCENTAGE_STYLE ) &&
+         ( cChar == '(' || cChar == ')' ) )
         return sal_True;
 
     return sal_False;
@@ -1470,6 +1502,33 @@ void SvXMLNumFormatContext::AddCurrency( const rtl::OUString& rContent, Language
     {
         //  "CCC" is used for automatic long symbol
         bAutomatic = sal_True;
+    }
+
+    if ( bAutomatic )
+    {
+        //  remove unnecessary quotes before automatic symbol (formats like "-(0DM)")
+        //  otherwise the currency symbol isn't recognized (#94048#)
+
+        sal_Int32 nLength = aFormatCode.getLength();
+        if ( nLength > 1 && aFormatCode.charAt( nLength-1 ) == '"' )
+        {
+            //  find start of quoted string
+            //  When SvXMLNumFmtElementContext::EndElement creates escaped quotes,
+            //  they must be handled here, too.
+
+            sal_Int32 nFirst = nLength - 2;
+            while ( nFirst >= 0 && aFormatCode.charAt( nFirst ) != '"' )
+                --nFirst;
+            if ( nFirst >= 0 )
+            {
+                //  remove both quotes from aFormatCode
+                rtl::OUString aOld = aFormatCode.makeStringAndClear();
+                if ( nFirst > 0 )
+                    aFormatCode.append( aOld.copy( 0, nFirst ) );
+                if ( nLength > nFirst + 2 )
+                    aFormatCode.append( aOld.copy( nFirst + 1, nLength - nFirst - 2 ) );
+            }
+        }
     }
 
     if (!bAutomatic)
