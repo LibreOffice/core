@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-23 12:01:17 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 17:49:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1337,8 +1337,11 @@ USHORT ModulWindow::StartSearchAndReplace( const SvxSearchItem& rSearchItem, BOO
     else if ( ( rSearchItem.GetCommand() == SVX_SEARCHCMD_REPLACE ) ||
               ( rSearchItem.GetCommand() == SVX_SEARCHCMD_REPLACE_ALL ) )
     {
-        BOOL bAll = rSearchItem.GetCommand() == SVX_SEARCHCMD_REPLACE_ALL;
-        nFound = pView->Replace( rSearchItem.GetSearchOptions() , bAll , bForward );
+        if ( !IsReadOnly() )
+        {
+            BOOL bAll = rSearchItem.GetCommand() == SVX_SEARCHCMD_REPLACE_ALL;
+            nFound = pView->Replace( rSearchItem.GetSearchOptions() , bAll , bForward );
+        }
     }
 
     if ( bFromStart && !nFound )
@@ -1356,10 +1359,21 @@ SfxUndoManager* __EXPORT ModulWindow::GetUndoManager()
 
 USHORT __EXPORT ModulWindow::GetSearchOptions()
 {
-    return SEARCH_OPTIONS_SEARCH | SEARCH_OPTIONS_REPLACE |
-            SEARCH_OPTIONS_REPLACE_ALL | SEARCH_OPTIONS_WHOLE_WORDS |
-            SEARCH_OPTIONS_BACKWARDS | SEARCH_OPTIONS_REG_EXP |
-            SEARCH_OPTIONS_EXACT | SEARCH_OPTIONS_SELECTION | SEARCH_OPTIONS_SIMILARITY;
+    USHORT nOptions = SEARCH_OPTIONS_SEARCH |
+                      SEARCH_OPTIONS_WHOLE_WORDS |
+                      SEARCH_OPTIONS_BACKWARDS |
+                      SEARCH_OPTIONS_REG_EXP |
+                      SEARCH_OPTIONS_EXACT |
+                      SEARCH_OPTIONS_SELECTION |
+                      SEARCH_OPTIONS_SIMILARITY;
+
+    if ( !IsReadOnly() )
+    {
+        nOptions |= SEARCH_OPTIONS_REPLACE;
+        nOptions |= SEARCH_OPTIONS_REPLACE_ALL;
+    }
+
+    return nOptions;
 }
 
 void __EXPORT ModulWindow::BasicStarted()
