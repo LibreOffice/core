@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implbase.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 17:34:29 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 15:37:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,11 +262,11 @@ class SAL_NO_VTABLE ImplHelper##N \
     static ClassData##N s_aCD; \
 public: \
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw (::com::sun::star::uno::RuntimeException) \
-        { return getClassData( s_aCD ).query( rType, (ImplHelperBase##N< __IFC##N > *)this ); } \
+        { return this->getClassData( s_aCD ).query( rType, (ImplHelperBase##N< __IFC##N > *)this ); } \
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException) \
-        { return getClassData( s_aCD ).getTypes(); } \
+        { return this->getClassData( s_aCD ).getTypes(); } \
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException) \
-        { return getClassData( s_aCD ).getImplementationId(); } \
+        { return this->getClassData( s_aCD ).getImplementationId(); } \
 }; \
 template< __CLASS_IFC##N > \
 class SAL_NO_VTABLE WeakImplHelper##N \
@@ -277,7 +277,7 @@ class SAL_NO_VTABLE WeakImplHelper##N \
 public: \
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw (::com::sun::star::uno::RuntimeException) \
     { \
-        ::com::sun::star::uno::Any aRet( getClassData( s_aCD ).query( rType, (ImplHelperBase##N< __IFC##N > *)this ) ); \
+        ::com::sun::star::uno::Any aRet( this->getClassData( s_aCD ).query( rType, (ImplHelperBase##N< __IFC##N > *)this ) ); \
         return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType )); \
     } \
     virtual void SAL_CALL acquire() throw () \
@@ -285,9 +285,9 @@ public: \
     virtual void SAL_CALL release() throw () \
         { OWeakObject::release(); } \
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException) \
-        { return getClassData( s_aCD ).getTypes(); } \
+        { return this->getClassData( s_aCD ).getTypes(); } \
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException) \
-        { return getClassData( s_aCD ).getImplementationId(); } \
+        { return this->getClassData( s_aCD ).getImplementationId(); } \
 }; \
 template< __CLASS_IFC##N > \
 class SAL_NO_VTABLE WeakAggImplHelper##N \
@@ -300,7 +300,7 @@ public: \
         { return OWeakAggObject::queryInterface( rType ); } \
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw (::com::sun::star::uno::RuntimeException) \
     { \
-        ::com::sun::star::uno::Any aRet( getClassData( s_aCD ).query( rType, (ImplHelperBase##N< __IFC##N > *)this ) ); \
+        ::com::sun::star::uno::Any aRet( this->getClassData( s_aCD ).query( rType, (ImplHelperBase##N< __IFC##N > *)this ) ); \
         return (aRet.hasValue() ? aRet : OWeakAggObject::queryAggregation( rType )); \
     } \
     virtual void SAL_CALL acquire() throw () \
@@ -308,9 +308,9 @@ public: \
     virtual void SAL_CALL release() throw () \
         { OWeakAggObject::release(); } \
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException) \
-        { return getClassData( s_aCD ).getTypes(); } \
+        { return this->getClassData( s_aCD ).getTypes(); } \
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException) \
-        { return getClassData( s_aCD ).getImplementationId(); } \
+        { return this->getClassData( s_aCD ).getImplementationId(); } \
 };
 
 /** Implementation helper macro: have a look at __DEF_IMPLHELPER_PRE
