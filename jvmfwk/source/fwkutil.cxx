@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fwkutil.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: jl $ $Date: 2004-05-18 15:11:57 $
+ *  last change: $Author: jl $ $Date: 2004-05-19 09:38:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -980,10 +980,12 @@ javaFrameworkError makeClassPathOption(
         OSL_ASSERT(0);
 
     //add the path of the UNO components
+    sBufCP.appendAscii(szSep);
     rtl::OUString sComponents =
         jfw::retrieveClassPath(
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                               "${$PKG_SharedUnoFile:UNO_JAVA_CLASSPATH}")));
+    sBufCP.appendAscii(szSep);
     sBufCP.append(sComponents);
     sComponents = jfw::retrieveClassPath(
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
