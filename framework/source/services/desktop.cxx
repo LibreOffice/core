@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: as $ $Date: 2001-12-19 13:19:43 $
+ *  last change: $Author: as $ $Date: 2002-03-22 11:37:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -857,25 +857,29 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Desktop::loadComponentFrom
     // Set default return value, if method failed.
     css::uno::Reference< css::lang::XComponent > xComponent;
 
-    /*TODO:
-        To support creation of pluginframes too ... we must use queryDispatch() yet!
-        It's the only way to do so. If we found another way - we should implement this method better.
-     */
-
     // Attention: URL must be parsed full. Otherwise some detections on it will fail!
     // It doesnt matter, if parser isn't available. Because; We try loading of URL then ...
     css::util::URL aURL;
     aURL.Complete = sURL;
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    WriteGuard aWriteLock( m_aLock );
     css::uno::Reference< css::util::XURLTransformer > xParser( m_xFactory->createInstance( SERVICENAME_URLTRANSFORMER ), css::uno::UNO_QUERY );
+    aWriteLock.unlock();
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     if( xParser.is() == sal_True )
     {
         xParser->parseStrict( aURL );
     }
 
-    css::uno::Reference< css::frame::XDispatch > xDispatcher = queryDispatch( aURL, sTargetFrameName, nSearchFlags );
+    // special mode for plugged office: we can't guarantee synchronous functionality inside the webtop environment.
+    // So we create a system task every time!
+    // Of course for fat office it should work also.
+    css::uno::Reference< css::frame::XDispatch > xDispatcher;
+    css::uno::Reference< css::frame::XDispatchProvider > xSysTask( findFrame(sTargetFrameName,nSearchFlags), css::uno::UNO_QUERY );
+    if(xSysTask.is())
+        xDispatcher= xSysTask->queryDispatch(aURL,SPECIALTARGET_SELF,0);
+
     if( xDispatcher.is() == sal_True )
     {
         // ... dispatch URL at this dispatcher.
@@ -895,7 +899,7 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Desktop::loadComponentFrom
         // Reset loader state to default, because we must yield for a valid result! See next WHILE condition.
         // And we must do it before we call dispatch!
         /* SAFE AREA ------------------------------------------------------------------------------------------- */
-        WriteGuard aWriteLock( m_aLock );
+        aWriteLock.lock();
         m_eLoadState = E_NOTSET;
         aWriteLock.unlock();
         /* UNSAFE AREA ----------------------------------------------------------------------------------------- */
@@ -904,7 +908,20 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Desktop::loadComponentFrom
         if ( xNotifyer.is() )
             xNotifyer->dispatchWithNotification( aURL, lOwnArguments, this );
         else
-            xDispatcher->dispatch( aURL, lOwnArguments );
+        {
+            // We can't work without any notification!
+            // Don't forget to dispose possible new created system task.
+            // But do it for "_blank" created ones only. Otherwise we can't be shure
+            // that variable xSysTask doesn't mean any found task for other target names or flags!!!
+            // Case of "blubber" and CREATE flag can be detected here right and will produce ZOMBIE tasks
+            // ... but nothing is perfect here ... it's a hack currently and shouldn't occure in current
+            // implementation.
+            LOG_WARNING("Desktop::loadComponentFromURL()", "Missing interface XNotifyingDispatch. Return NULL!")
+            css::uno::Reference< css::frame::XTask > xClosable( xSysTask, css::uno::UNO_QUERY );
+            if(xClosable.is() && sTargetFrameName==SPECIALTARGET_BLANK)
+                xClosable->close();
+            return xComponent;
+        }
 
         // ... we must wait for asynchron result of this dispatch()-operation!
         // Attention: Don't use lock here ... dispatcher call us back!
