@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: os $ $Date: 2001-07-10 11:22:24 $
+ *  last change: $Author: os $ $Date: 2001-07-12 10:02:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -624,8 +624,6 @@ void SvxCharNamePage::ResetWestOrEast_Impl( const SfxItemSet& rSet, BOOL bWest )
     else
     {
         pNameBox->SetText( String() );
-        pNameBox->Disable( );
-        pNameLabel->Disable( );
     }
 
     FillStyleBox_Impl( pNameBox );
