@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:14:56 $
+#   last change: $Author: fs $ $Date: 2000-10-05 10:14:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,6 +63,7 @@
 PRJ=..
 PRJNAME=dbaccess
 TARGET=dba
+TARGET2=dbu
 USE_LDUMP2=TRUE
 
 USE_DEFFILE=TRUE
@@ -75,7 +76,7 @@ USE_DEFFILE=TRUE
 
 LDUMP=ldump2.exe
 
-# --- Library -----------------------------------
+# --- database core (dba) -----------------------------------
 
 LIB1TARGET=$(SLB)$/dbaccess.lib
 LIB1FILES=\
@@ -100,11 +101,19 @@ SHL1STDLIBS= \
         $(UNOTOOLSLIB) \
         $(VCLLIB) \
         $(SVLLIB) \
-        $(CONNECTIVITYLIB)
+        $(DBTOOLSLIB) \
 
+.IF "$(DBTOOLSLIB)" == ""
+SHL1STDLIBS+=idbt$(UPD)$(DLLPOSTFIX).lib
+.ENDIF
+
+.IF "$(COMPHELPERLIB)" == ""
+SHL1STDLIBS+= icomphelp2.lib
+.ENDIF
 
 SHL1LIBS=$(LIB1TARGET)
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
+DEF1NAME=$(SHL1TARGET)
 DEF1EXPORTFILE=$(TARGET).dxp 
 
 #SHL1DEPN=\
@@ -114,16 +123,67 @@ ALL: \
     $(LIB1TARGET)	\
     ALLTAR
 
-# === .res file ==========================================================
+# --- .res file ----------------------------------------------------------
 RES1FILELIST=\
     $(SRS)$/core_strings.srs \
 
 RESLIB1NAME=$(TARGET)
 RESLIB1SRSFILES=$(RES1FILELIST)
 
-DEF1NAME=	$(SHL1TARGET)
-DEF1EXPORTFILE=	exports.dxp
+# --- database ui (dbu) -----------------------------------
 
+LIB2TARGET=$(SLB)$/$(TARGET2).lib
+LIB2FILES=\
+        $(SLB)$/uimisc.lib	\
+        $(SLB)$/uidlg.lib	\
+        $(SLB)$/shared.lib	\
+        $(SLB)$/uicontrols.lib
+
+SHL2TARGET=$(TARGET2)$(UPD)$(DLLPOSTFIX)
+SHL2VERSIONMAP= $(TARGET2).map
+
+SHL2STDLIBS= \
+        $(SALLIB) \
+        $(OSLLIB) \
+        $(ONELIB) \
+        $(VOSLIB) \
+        $(CPPUHELPERLIB) \
+        $(CPPULIB) \
+        $(UNOTOOLSLIB) \
+        $(VCLLIB) \
+        $(TOOLSLIB)	\
+        $(SFXLIB)	\
+        $(SVLLIB)	\
+        $(SVTOOLLIB)	\
+        $(TKLIB)	\
+        $(COMPHELPERLIB)	\
+        $(DBTOOLSLIB) \
+
+.IF "$(DBTOOLSLIB)" == ""
+SHL2STDLIBS+=idbt$(UPD)$(DLLPOSTFIX).lib
+.ENDIF
+
+.IF "$(COMPHELPERLIB)" == ""
+SHL2STDLIBS+= icomphelp2.lib
+.ENDIF
+
+SHL2LIBS=$(LIB2TARGET)
+SHL2DEF=$(MISC)$/$(SHL2TARGET).def
+DEF2NAME=$(SHL2TARGET)
+DEF2EXPORTFILE=$(TARGET2).dxp 
+
+ALL: \
+    $(LIB2TARGET)	\
+    ALLTAR
+
+# --- .res file ----------------------------------------------------------
+RES2FILELIST=\
+    $(SRS)$/uidlg.srs	\
+    $(SRS)$/uicontrols.srs	\
+    $(SRS)$/uimisc.srs
+
+RESLIB2NAME=$(TARGET2)
+RESLIB2SRSFILES=$(RES2FILELIST)
 
 # --- Targets ----------------------------------
 
