@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:39:38 $
+ *  last change: $Author: rt $ $Date: 2001-05-12 07:16:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1285,7 +1285,7 @@ QueryBox DLG_CHANGE_AUTH_ENTRY
     MESSAGE[ polish ] = "Dokument zawiera ju¿ wpis bibliograficzny, ale z innymi danymi. Dopasowaæ zawarte wpisy?";
     MESSAGE[ portuguese_brazilian ] = "The bibliography entry is already contained in the document with different data.";
     MESSAGE[ japanese ] = "‚±‚ÌQl•¶Œ£‚Ì€–Ú‚Í‚±‚Ì•¶‘‚Ì•Ê‚Ì‰ÓŠ‚É‚·‚Å‚Éo‚Ä‚«‚Ä‚¢‚Ü‚·B‚±‚ÌŠù‘¶€–Ú‚É“K‡‚³‚¹‚Ü‚·‚©B";
-    MESSAGE[ korean ] = "Âü°í¹®Çå Ç×¸ñÀº ÀÌ¹Ì ´Ù¸¥ µ¥ÀÌÅÍ¿Í ÇÔ²² ¹®¼­¿¡ Æ÷ÇÔµÇ¾î ÀÖ½À´Ï´Ù. ";
+    MESSAGE[ korean ] = "Âü°í¹®Çå Ç×¸ñÀº ÀÌ¹Ì ´Ù¸¥ µ¥ÀÌÅÍ¿Í ÇÔ²² ¹®¼­¿¡ Æ÷ÇÔµÇ¾î ÀÖ½À´Ï´Ù. ÀÌ¹Ì Æ÷ÇÔµÈ ¿£Æ®¸®¸¦ Á¶Á¤ÇÏ½Ã°Ú½À´Ï±î?";
     MESSAGE[ chinese_simplified ] = "ÎÄµµÄÚÒÑ¾­º¬ÓĞ¸½´ø²»Í¬Êı¾İµÄÄ¿Â¼ÌõÄ¿¡£Òªµ÷ÕûÒÑ¾­´æÔÚµÄÌõÄ¿£¿";
     MESSAGE[ chinese_traditional ] = "¤å¥ó¤º¤w¸g§t¦³ªş±a¤£¦P¸ê®Æªº¥Ø¿ı±ø¥Ø¡C­n½Õ¾ã¤w¸g¦s¦bªº±ø¥Ø¡H";
     MESSAGE[ arabic ] = "ÅÏÎÇá ÇáãÑÌÚ ãæÌæÏ ÈÇáİÚá İí ÇáãÓÊäÏ ÈÈíÇäÇÊ ãÎÊáİÉ. åá ÊÑíÏ ãáÇÁãÉ ÇáÅÏÎÇáÇÊ ÇáãæÌæÏÉ¿";
