@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propres.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 18:20:04 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 11:26:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,140 +65,39 @@
 
 String RID_STR_STANDARD
 {
-    Text = "Standard" ;
-    Text [ ENGLISH ] = "Standard" ;
-    Text [ portuguese ] = "Padrão" ;
-    Text [ english_us ] = "Default" ;
-    Text [ portuguese_brazilian ] = "Padrão" ;
-    Text [ swedish ] = "Standard" ;
-    Text [ danish ] = "Standard" ;
-    Text [ italian ] = "Standard" ;
-    Text [ spanish ] = "Predeterminado" ;
-    Text [ french ] = "Par défaut" ;
-    Text [ dutch ] = "Standaard" ;
-    Text[ chinese_simplified ] = "æ ‡å‡†";
-    Text[ russian ] = "Ïî óìîë÷àíèş";
-    Text[ polish ] = "Domyœlnie";
-    Text[ japanese ] = "æ¨™æº–";
-    Text[ chinese_traditional ] = "æ¨™æº–";
-    Text[ greek ] = "ĞñïåğéëïãŞ";
-    Text[ korean ] = "ê¸°ë³¸ê°’";
-    Text[ arabic ] = "ŞíÇÓí";
-    Text[ turkish ] = "Öntanımlı";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Per defecte";
-    Text[ finnish ] = "Oletus";
-    Text[ thai ] = "à¸„à¹ˆà¸²à¹€à¸£à¸´à¹ˆà¸¡à¸•à¹‰à¸™";
-    Text[ czech ] = "VÃ½chozÃ­";
-    Text[ hebrew ] = "â€®×‘×¨×™×¨×ª ××—×“×œâ€¬";
-    Text[ hindi ] = "à¤…à¤¨à¥à¤ªà¤¸à¥à¤¥à¤¿à¤¤à¤¿";
-    Text[ slovak ] = "VÃ½chodzie";
-    Text[ hungarian ] = "AlapÃ©rtelmezett";
-    Text[ slovenian ] = "Privzeto";
+    Text [ de ] = "Standard" ;
+    Text [ en-US ] = "Default" ;
+    Text [ x-comment ] = " ";
 };
 String RID_STR_PROPPAGE_DEFAULT
 {
-    Text = "Allgemein" ;
-    Text [ English ] = "Common" ;
-    Text [ portuguese ] = "Geral" ;
-    Text [ english_us ] = "General" ;
-    Text [ portuguese_brazilian ] = "Geral" ;
-    Text [ swedish ] = "Allmänt" ;
-    Text [ danish ] = "Generelt" ;
-    Text [ italian ] = "Generale" ;
-    Text [ spanish ] = "General" ;
-    Text [ french ] = "Général" ;
-    Text [ dutch ] = "Algemeen" ;
-    Text[ chinese_simplified ] = "å¸¸è§„";
-    Text[ russian ] = "Îáùèå";
-    Text[ polish ] = "Ogólne";
-    Text[ japanese ] = "å…¨èˆ¬";
-    Text[ chinese_traditional ] = "ä¸€èˆ¬";
-    Text[ greek ] = "ÃåíéêÜ";
-    Text[ korean ] = "ì¼ë°˜";
-    Text[ arabic ] = "ÚÇã";
-    Text[ turkish ] = "Genel";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "General";
-    Text[ finnish ] = "Yleiset";
-    Text[ thai ] = "à¸—à¸±à¹ˆà¸§à¹„à¸›";
-    Text[ czech ] = "ObecnÃ©";
-    Text[ hebrew ] = "â€®×›×œ×œ×™â€¬";
-    Text[ hindi ] = "à¤¸à¤¾à¤®à¤¾à¤¨à¥à¤¯";
-    Text[ slovak ] = "VÅ¡eobecnÃ©";
-    Text[ hungarian ] = "ÃltalÃ¡nos";
-    Text[ slovenian ] = "SploÅ¡no";
+    Text [ de ] = "Allgemein" ;
+    Text [ en-US ] = "General" ;
+    Text [ x-comment ] = " ";
 };
 String RID_STR_PROPPAGE_DATA
 {
-    Text = "Daten" ;
-    Text [ English ] = "Data" ;
-    Text [ portuguese ] = "Dados" ;
-    Text [ english_us ] = "Data" ;
-    Text [ portuguese_brazilian ] = "Dados" ;
-    Text [ swedish ] = "Data" ;
-    Text [ danish ] = "Data" ;
-    Text [ italian ] = "Dati" ;
-    Text [ spanish ] = "Datos" ;
-    Text [ french ] = "Données" ;
-    Text [ dutch ] = "Gegevens" ;
-    Text[ chinese_simplified ] = "æ•°æ®";
-    Text[ russian ] = "Äàííûå";
-    Text[ polish ] = "Dane";
-    Text[ japanese ] = "é…åˆ—";
-    Text[ chinese_traditional ] = "è³‡æ–™";
-    Text[ greek ] = "Äåäïìİíá";
-    Text[ korean ] = "ë°ì´í„°";
-    Text[ arabic ] = "ÈíÇäÇÊ";
-    Text[ turkish ] = "Veri";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Dades";
-    Text[ finnish ] = "Tiedot";
-    Text[ thai ] = "à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
-    Text[ czech ] = "Data";
-    Text[ hebrew ] = "Daten";
-    Text[ hindi ] = "à¤¡à¤¼à¥‰à¤Ÿà¤¾";
-    Text[ slovak ] = "DÃ¡ta";
-    Text[ hungarian ] = "Adat";
-    Text[ slovenian ] = "Podatki";
+    Text [ de ] = "Daten" ;
+    Text [ en-US ] = "Data" ;
+    Text [ x-comment ] = " ";
 };
 String RID_STR_BOOL
 {
-    Text = "Nein;Ja" ;
-    Text [ English ] = "No;Yes" ;
-    Text [ portuguese ] = "Não;Sim" ;
-    Text [ english_us ] = "No;Yes" ;
-    Text [ portuguese_brazilian ] = "Não;Sim" ;
-    Text [ swedish ] = "Nej;Ja" ;
-    Text [ danish ] = "Nej;Ja" ;
-    Text [ italian ] = "No;Sì" ;
-    Text [ spanish ] = "No;Sí" ;
-    Text [ french ] = "Non;Oui" ;
-    Text [ dutch ] = "Nee;Ja" ;
-    Text[ chinese_simplified ] = "å¦;æ˜¯";
-    Text[ russian ] = "Íåò;Äà";
-    Text[ polish ] = "Nie;Tak";
-    Text[ japanese ] = "ã„ã„ãˆ;ã¯ã„";
-    Text[ chinese_traditional ] = "å¦;æ˜¯";
-    Text[ greek ] = "¼÷é;Íáé";
-    Text[ korean ] = "ì•„ë‹ˆì˜¤;ì˜ˆ";
-    Text[ arabic ] = "áÇ;äÚã";
-    Text[ turkish ] = "Hayır;Evet";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "No;Sí";
-    Text[ finnish ] = "Ei;Kyllä";
-    Text[ thai ] = "à¹„à¸¡à¹ˆà¹ƒà¸Šà¹ˆ;à¹ƒà¸Šà¹ˆ";
-    Text[ czech ] = "Ne;Ano";
-    Text[ hebrew ] = "Nein;Ja";
-    Text[ hindi ] = "à¤¨à¤¹à¥€à¤‚;à¤¹à¤¾à¤";
-    Text[ slovak ] = "Nie;Ãno";
-    Text[ hungarian ] = "Nem;Igen";
-    Text[ slovenian ] = "Ne;Da";
+    Text [ de ] = "Nein;Ja" ;
+    Text [ en-US ] = "No;Yes" ;
+    Text [ x-comment ] = " ";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.23.34.3  2004/04/20 18:54:35  hjs
+ *  RESYNC: (1.23-1.24); FILE MERGED
+ *
+ *  Revision 1.24  2003/12/17 18:20:04  vg
+ *  INTEGRATION: CWS geordi2q11 (1.23.90); FILE MERGED
+ *  2003/12/16 11:43:33 hr 1.23.90.1: #111934#: join CWS ooo111fix1
+ *
  *  Revision 1.23.90.1  2003/12/16 11:43:33  hr
  *  #111934#: join CWS ooo111fix1
  *
