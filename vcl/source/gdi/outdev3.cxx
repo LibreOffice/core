@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.114 $
+ *  $Revision: 1.115 $
  *
- *  last change: $Author: ssa $ $Date: 2002-08-29 15:35:25 $
+ *  last change: $Author: hdu $ $Date: 2002-09-04 17:17:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3723,15 +3723,16 @@ void OutputDevice::ImplDrawTextLine( long nBaseX,
         // if the text width is smaller than the strikeout text, then do not
         // strike out at all. This case requires user interaction, e.g. adding
         // a space to the text
-        if( aStrikeoutText.Len() > 0 )
+        if( (aStrikeoutText.Len() > 0)
+        && !(mpPDFWriter && mpPDFWriter->isBuiltinFont(mpFontEntry->maFontSelData.mpFontData) ) )
         {
             if( mpFontEntry->mnOrientation )
                 ImplRotatePos( nBaseX, nBaseY, nX, nY, mpFontEntry->mnOrientation );
             SalLayout* pSalLayout = ImplLayout( aStrikeoutText, 0, STRING_LEN, Point(nX,nY) );
-            if( pSalLayout && ! (mpPDFWriter && mpPDFWriter->isBuiltinFont(mpFontEntry->maFontSelData.mpFontData)) )
+            if( pSalLayout )
             {
-                pSalLayout->SetDrawPosition( Point(nX+mnTextOffX, nY+mnTextOffY) );
-                mpGraphics->DrawSalLayout( *pSalLayout, this );
+                pSalLayout->DrawBase() = Point( nX+mnTextOffX, nY+mnTextOffY );
+                pSalLayout->DrawText( *mpGraphics );
                 pSalLayout->Release();
             }
         }
@@ -4498,7 +4499,7 @@ bool OutputDevice::ImplDrawRotateText( SalLayout& rSalLayout )
     {
         Font    aFont( GetFont() );
         Bitmap  aBmp;
-/*###
+/*### TODO: implement rotation also for non-rotatable bitmap fonts
         long    nOff;
         nX -= mnTextOffX;
         nY -= mnTextOffY;
@@ -4577,7 +4578,16 @@ void OutputDevice::ImplDrawTextDirect( SalLayout& rSalLayout, BOOL bTextLines )
             return;
 
     if( ! (mpPDFWriter && mpPDFWriter->isBuiltinFont(mpFontEntry->maFontSelData.mpFontData) ) )
-        mpGraphics->DrawSalLayout( rSalLayout, this );
+    {
+        if( IsRTLEnabled() && ImplHasMirroredGraphics() )
+        {
+            long w = mpGraphics->GetGraphicsWidth();
+            long x = rSalLayout.DrawBase().X();
+               rSalLayout.DrawBase().X() = w - 1 - x;
+        }
+
+        rSalLayout.DrawText( *mpGraphics );
+    }
 
     if( bTextLines )
         ImplDrawTextLines( rSalLayout,
@@ -4597,7 +4607,7 @@ void OutputDevice::ImplDrawSpecialText( SalLayout& rSalLayout )
     Color       aOldTextLineColor   = GetTextLineColor();
     FontRelief  eRelief             = maFont.GetRelief();
 
-    Point aOrigPos = rSalLayout.GetDrawPosition();
+    Point aOrigPos = rSalLayout.DrawBase();
     if ( eRelief != RELIEF_NONE )
     {
         Color   aReliefColor( COL_LIGHTGRAY );
@@ -4626,9 +4636,9 @@ void OutputDevice::ImplDrawSpecialText( SalLayout& rSalLayout )
 
         if ( eRelief == RELIEF_ENGRAVED )
             nOff = -nOff;
-        rSalLayout.SetDrawPosition( aOrigPos + Point(nOff,nOff) );
+        rSalLayout.DrawOffset() += Point( nOff, nOff);
         ImplDrawTextDirect( rSalLayout, mbTextLines );
-        rSalLayout.SetDrawPosition( aOrigPos );
+        rSalLayout.DrawOffset() -= Point( nOff, nOff);
 
         SetTextLineColor( aTextLineColor );
         SetTextColor( aTextColor );
@@ -4651,16 +4661,15 @@ void OutputDevice::ImplDrawSpecialText( SalLayout& rSalLayout )
             if ( maFont.IsOutline() )
                 nOff++;
             SetTextLineColor();
-            if ( (GetTextColor().GetColor() == COL_BLACK) ||
-
-                 (GetTextColor().GetLuminance() < 8) )
+            if ( (GetTextColor().GetColor() == COL_BLACK)
+            ||   (GetTextColor().GetLuminance() < 8) )
                 SetTextColor( Color( COL_LIGHTGRAY ) );
             else
                 SetTextColor( Color( COL_BLACK ) );
             ImplInitTextColor();
-            rSalLayout.SetDrawPosition( aOrigPos + Point(nOff,nOff) );
+            rSalLayout.DrawBase() += Point( nOff, nOff );
             ImplDrawTextDirect( rSalLayout, mbTextLines );
-            rSalLayout.SetDrawPosition( aOrigPos );
+            rSalLayout.DrawBase() -= Point( nOff, nOff );
             SetTextColor( aOldColor );
             SetTextLineColor( aOldTextLineColor );
             ImplInitTextColor();
@@ -4671,23 +4680,23 @@ void OutputDevice::ImplDrawSpecialText( SalLayout& rSalLayout )
 
         if ( maFont.IsOutline() )
         {
-            rSalLayout.SetDrawPosition( aOrigPos + Point(-1,-1) );
+            rSalLayout.DrawBase() = aOrigPos + Point(-1,-1);
             ImplDrawTextDirect( rSalLayout, mbTextLines );
-            rSalLayout.SetDrawPosition( aOrigPos + Point(+1,+1) );
+            rSalLayout.DrawBase() = aOrigPos + Point(+1,+1);
             ImplDrawTextDirect( rSalLayout, mbTextLines );
-            rSalLayout.SetDrawPosition( aOrigPos + Point(-1,+0) );
+            rSalLayout.DrawBase() = aOrigPos + Point(-1,+0);
             ImplDrawTextDirect( rSalLayout, mbTextLines );
-            rSalLayout.SetDrawPosition( aOrigPos + Point(-1,+1) );
+            rSalLayout.DrawBase() = aOrigPos + Point(-1,+1);
             ImplDrawTextDirect( rSalLayout, mbTextLines );
-            rSalLayout.SetDrawPosition( aOrigPos + Point(+0,+1) );
+            rSalLayout.DrawBase() = aOrigPos + Point(+0,+1);
             ImplDrawTextDirect( rSalLayout, mbTextLines );
-            rSalLayout.SetDrawPosition( aOrigPos + Point(+0,-1) );
+            rSalLayout.DrawBase() = aOrigPos + Point(+0,-1);
             ImplDrawTextDirect( rSalLayout, mbTextLines );
-            rSalLayout.SetDrawPosition( aOrigPos + Point(+1,-1) );
+            rSalLayout.DrawBase() = aOrigPos + Point(+1,-1);
             ImplDrawTextDirect( rSalLayout, mbTextLines );
-            rSalLayout.SetDrawPosition( aOrigPos + Point(+1,+0) );
+            rSalLayout.DrawBase() = aOrigPos + Point(+1,+0);
             ImplDrawTextDirect( rSalLayout, mbTextLines );
-            rSalLayout.SetDrawPosition( aOrigPos );
+            rSalLayout.DrawBase() = aOrigPos;
 
             SetTextColor( Color( COL_WHITE ) );
             SetTextLineColor( Color( COL_WHITE ) );
@@ -4711,9 +4720,7 @@ void OutputDevice::ImplDrawText( SalLayout& rSalLayout )
     if( mbInitTextColor )
         ImplInitTextColor();
 
-    Point aPixelPos = rSalLayout.GetDrawPosition();
-    aPixelPos += Point( mnTextOffX, mnTextOffY );
-    rSalLayout.SetDrawPosition( aPixelPos );
+    rSalLayout.DrawBase() += Point( mnTextOffX, mnTextOffY );
 
     if( IsTextFillColor() )
         ImplDrawTextBackground( rSalLayout );
@@ -4905,14 +4912,14 @@ void OutputDevice::SetFont( const Font& rNewFont )
 
 // -----------------------------------------------------------------------
 
-void OutputDevice::SetLayoutMode( ULONG nLayoutMode )
+void OutputDevice::SetLayoutMode( ULONG nTextLayoutMode )
 {
-    DBG_TRACE( "OutputDevice::SetLayoutMode()" );
+    DBG_TRACE( "OutputDevice::SetTextLayoutMode()" );
 
     if( mpMetaFile )
-        mpMetaFile->AddAction( new MetaLayoutModeAction( nLayoutMode ) );
+        mpMetaFile->AddAction( new MetaLayoutModeAction( nTextLayoutMode ) );
 
-    mnLayoutMode = nLayoutMode;
+    mnTextLayoutMode = nTextLayoutMode;
 }
 
 // -----------------------------------------------------------------------
@@ -5395,29 +5402,49 @@ long OutputDevice::GetTextArray( const String& rOrigStr, long* pDXAry,
 
 // -----------------------------------------------------------------------
 
-void OutputDevice::GetCursorPositions( const XubString& rOrigStr, long* pCursorXArray,
-    xub_StrLen nIndex, xub_StrLen nLen, BOOL bCellBreaking ) const
+bool OutputDevice::GetCaretPositions( const XubString& rStr, long* pCaretXArray,
+    xub_StrLen nIndex, xub_StrLen nLen,
+    long* pDXAry, long nLayoutWidth,
+    BOOL bCellBreaking ) const
 {
-    DBG_TRACE( "OutputDevice::GetCursorPositions()" );
+    DBG_TRACE( "OutputDevice::GetCaretPositions()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
-    if( nIndex >= rOrigStr.Len() )
-        return;
-    if( (ULONG)nIndex+nLen >= rOrigStr.Len() )
-        nLen = rOrigStr.Len() - nIndex;
+    if( nIndex >= rStr.Len() )
+        return false;
+    if( (ULONG)nIndex+nLen >= rStr.Len() )
+        nLen = rStr.Len() - nIndex;
 
     // layout complex text
-    SalLayout* pSalLayout = ImplLayout( rOrigStr, nIndex, nLen, Point(0,0) );
-    if( pSalLayout )
+    SalLayout* pSalLayout = ImplLayout( rStr, nIndex, nLen,
+        Point(0,0), nLayoutWidth, pDXAry );
+    if( !pSalLayout )
+        return false;
+
+    int nWidthFactor = pSalLayout->GetUnitsPerPixel();
+    pSalLayout->GetCaretPositions( pCaretXArray );
+    pSalLayout->Release();
+
+    // convert from font units to logical units
+    if( mbMap )
     {
-        pSalLayout->GetCursorPositions( pCursorXArray );
-        pSalLayout->Release();
+        for( int i = 0; i < 2*nLen; ++i )
+            pCaretXArray[i] = ImplDevicePixelToLogicWidth( pCaretXArray[i] );
     }
 
+    if( nWidthFactor != 1 )
+    {
+        for( int i = 0; i < 2*nLen; ++i )
+            pCaretXArray[i] /= nWidthFactor;
+    }
+
+    // if requested move caret position to cell limits
     if( bCellBreaking )
     {
         ; // TODO
     }
+
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -5445,9 +5472,8 @@ void OutputDevice::DrawStretchText( const Point& rStartPt, ULONG nWidth,
 
 // -----------------------------------------------------------------------
 
-#ifdef ENABLE_CTL
 SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
-    xub_StrLen nFirstIndex, xub_StrLen nLen,
+    xub_StrLen nMinIndex, xub_StrLen nLen,
     const Point& rLogicalPos, long nLogicalWidth, const long* pDXArray ) const
 {
     SalLayout* pSalLayout = NULL;
@@ -5471,11 +5497,11 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
 
     // get string length for calculating extents
     xub_StrLen nEndIndex = rOrigStr.Len();
-    if( (ULONG)nFirstIndex + nLen < nEndIndex )
-        nEndIndex = nFirstIndex + nLen;
+    if( (ULONG)nMinIndex + nLen < nEndIndex )
+        nEndIndex = nMinIndex + nLen;
 
     // don't bother if there is nothing to do
-    if( nFirstIndex >= nEndIndex )
+    if( nMinIndex >= nEndIndex )
         return NULL;
 
     // recode string if needed
@@ -5484,18 +5510,18 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
         ImplRecodeString( mpFontEntry->mpConversion, aStr, 0, aStr.Len() );
 
     // set layout options
-    ImplLayoutArgs aLayoutArgs( aStr.GetBuffer(), aStr.Len(), nFirstIndex, nEndIndex );
+    ImplLayoutArgs aLayoutArgs( aStr.GetBuffer(), aStr.Len(), nMinIndex, nEndIndex );
 
     int nLayoutFlags = 0;
-    if( mnLayoutMode & TEXT_LAYOUT_BIDI_RTL )
+    if( mnTextLayoutMode & TEXT_LAYOUT_BIDI_RTL )
         nLayoutFlags |= SAL_LAYOUT_BIDI_RTL;
-    if( mnLayoutMode & TEXT_LAYOUT_BIDI_STRONG )
+    if( mnTextLayoutMode & TEXT_LAYOUT_BIDI_STRONG )
         nLayoutFlags |= SAL_LAYOUT_BIDI_STRONG;
-    else if( 0 == (mnLayoutMode & TEXT_LAYOUT_BIDI_RTL) )
+    else if( 0 == (mnTextLayoutMode & TEXT_LAYOUT_BIDI_RTL) )
     {
         // disable Bidi if no RTL hint and no RTL codes used
-        const xub_Unicode* pStr = aStr.GetBuffer() + nFirstIndex;
-        const xub_Unicode* pEnd = pStr + (nEndIndex - nFirstIndex);
+        const xub_Unicode* pStr = aStr.GetBuffer() + nMinIndex;
+        const xub_Unicode* pEnd = pStr + (nEndIndex - nMinIndex);
         for( ; pStr < pEnd; ++pStr )
             if( ((*pStr >= 0x0580) && (*pStr < 0x0800))   // middle eastern scripts
             ||  ((*pStr >= 0xFB18) && (*pStr < 0xFE00))   // hebrew + arabic A presentation forms
@@ -5511,18 +5537,18 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
         nLayoutFlags |= SAL_LAYOUT_KERNING_ASIAN;
     if( maFont.IsVertical() )
         nLayoutFlags |= SAL_LAYOUT_VERTICAL;
-    if( mnLayoutMode & TEXT_LAYOUT_SUBSTITUTE_DIGITS )
+    if( mnTextLayoutMode & TEXT_LAYOUT_SUBSTITUTE_DIGITS )
         nLayoutFlags |= SAL_LAYOUT_SUBSTITUTE_DIGITS;
 
-    if( mnLayoutMode & TEXT_LAYOUT_ENABLE_LIGATURES )
+    if( mnTextLayoutMode & TEXT_LAYOUT_ENABLE_LIGATURES )
         nLayoutFlags |= SAL_LAYOUT_ENABLE_LIGATURES;
-    else if( mnLayoutMode & TEXT_LAYOUT_COMPLEX_DISABLED )
+    else if( mnTextLayoutMode & TEXT_LAYOUT_COMPLEX_DISABLED )
         nLayoutFlags |= SAL_LAYOUT_COMPLEX_DISABLED;
     else
     {
         // disable CTL for non-CTL text
-        const xub_Unicode* pStr = aStr.GetBuffer() + nFirstIndex;
-        const xub_Unicode* pEnd = pStr + (nEndIndex-nFirstIndex);
+        const xub_Unicode* pStr = aStr.GetBuffer() + nMinIndex;
+        const xub_Unicode* pEnd = pStr + (nEndIndex-nMinIndex);
         for( ; pStr < pEnd; ++pStr )
             if( (*pStr >= 0x0590) && (*pStr < 0x1900) )
                 break;
@@ -5530,45 +5556,40 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
             nLayoutFlags |= SAL_LAYOUT_COMPLEX_DISABLED;
     }
 
-    aLayoutArgs.SetFlags( nLayoutFlags );
+    // right align for RTL text, DRAWPOS_REVERSED, RTL window style
+    bool bRightAlign = ((mnTextLayoutMode & TEXT_LAYOUT_BIDI_RTL) != 0);
+    bRightAlign     ^= ((mnTextLayoutMode & TEXT_LAYOUT_DRAWPOS_REVERSED) != 0);
+    // SSA: hack for western office, ie text get right aligned
+    //      for debugging purposes of mirrored UI
+    static const char* pEnv = getenv( "SAL_RTL_MIRRORTEXT" );
+    bool bRTLWindow = (pEnv && IsRTLEnabled());
+    bRightAlign ^= bRTLWindow;
+    if( bRightAlign )
+        nLayoutFlags |= SAL_LAYOUT_RIGHT_ALIGN;
 
-    Point aPixelPos = ImplLogicToDevicePixel( rLogicalPos );
-    aLayoutArgs.SetDrawPosition( aPixelPos );
+    aLayoutArgs.SetFlags( nLayoutFlags );
 
     int nOrientation = mpFontEntry ? mpFontEntry->mnOrientation : 0;
     aLayoutArgs.SetOrientation( nOrientation );
 
-    int nWidthFactor = 1; // assuming one unit per pixel
+    Point aPixelPos = ImplLogicToDevicePixel( rLogicalPos );
+
     long nPixelWidth = 0;
     if( nLogicalWidth )
     {
-        nPixelWidth = ImplLogicWidthToDevicePixel( nLogicalWidth * nWidthFactor );
+        nPixelWidth = ImplLogicWidthToDevicePixel( nLogicalWidth );
         aLayoutArgs.SetLayoutWidth( nPixelWidth );
     }
 
-    int nLength = nEndIndex - nFirstIndex;
-    if( pDXArray && (mbMap || (nWidthFactor != 1)) )
+    int nLength = nEndIndex - nMinIndex;
+    if( pDXArray && mbMap )
     {
         // convert from logical units to font units using a temporary array
         long* pTempDXAry = (long*)alloca( nLength * sizeof(long) );
 
-        if( nWidthFactor != 1 )
-        {
-            long nLogStartX = rLogicalPos.X();
-            long nPixStartX = aPixelPos.X();
-            nLogStartX *= nWidthFactor;
-            nPixStartX *= nWidthFactor;
-            for( int i = 0; i < nLength; ++i )
-                pTempDXAry[i] = pDXArray[i] * nWidthFactor;
-            pDXArray = pTempDXAry;
-        }
-
-        if( mbMap )
-        {
-            for( int i = 0; i < nLength; ++i )
-                pTempDXAry[i] = ImplLogicWidthToDevicePixel( pDXArray[i] );
-            pDXArray = pTempDXAry;
-        }
+        for( int i = 0; i < nLength; ++i )
+            pTempDXAry[i] = ImplLogicWidthToDevicePixel( pDXArray[i] );
+        pDXArray = pTempDXAry;
     }
     aLayoutArgs.SetDXArray( pDXArray );
 
@@ -5576,34 +5597,23 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
         pSalLayout = mpPDFWriter->createSalLayout( &mpFontEntry->maFontSelData, aLayoutArgs );
 
     if( ! pSalLayout )
-        pSalLayout = mpGraphics->LayoutText( aLayoutArgs, this );
+        pSalLayout = mpGraphics->LayoutText( aLayoutArgs );
 
+    // adjust to right alignment if necessary
     if( pSalLayout )
     {
-        // adjust assumption that draw position is left of text
-        // for 1. RTL text, 2. DRAWPOS_REVERSED, 3. RTL window style
-        bool bRightDrawPos = ((nLayoutFlags & SAL_LAYOUT_BIDI_RTL) != 0);
-
-        if( mnLayoutMode & TEXT_LAYOUT_DRAWPOS_REVERSED )
-            bRightDrawPos = !bRightDrawPos;
-
-        // SSA: hack for western office, ie the text will be moved by its length to the left
-        //      just for debugging purposes of mirrored UI
-        static const char* pEnv = getenv("SAL_RTL_MIRRORTEXT" );
-        bool bRTLWindow = (pEnv && IsRTLEnabled() );
-        bRightDrawPos ^= bRTLWindow;
-
-        if( bRightDrawPos )
+        pSalLayout->DrawBase() = aPixelPos;
+        if( bRightAlign )
         {
-            Point aRTLOffset;
-            if( nPixelWidth )
-                aRTLOffset = Point( -nPixelWidth, 0 );
-            else if( pDXArray )
-                aRTLOffset = Point( -pDXArray[ nLength-1 ], 0 );
+            long nRTLOffset;
+            if( pDXArray )
+                nRTLOffset = pDXArray[ nLength-1 ];
+            else if( nPixelWidth )
+                nRTLOffset = nPixelWidth;
             else
-                aRTLOffset = Point( -pSalLayout->GetTextWidth(), 0 );
-            Point aRTLPosition = pSalLayout->GetDrawPosition( aRTLOffset );
-            pSalLayout->SetDrawPosition( aRTLPosition );
+                nRTLOffset = pSalLayout->GetTextWidth();
+            nRTLOffset /= pSalLayout->GetUnitsPerPixel();
+            pSalLayout->DrawOffset().X() = -nRTLOffset;
         }
     }
 
@@ -5703,7 +5713,6 @@ xub_StrLen OutputDevice::GetTextBreak( const String& rOrigStr, long nTextWidth,
 
     return nRetVal;
 }
-#endif // ENABLE_CTL
 
 // -----------------------------------------------------------------------
 
@@ -6817,7 +6826,7 @@ BOOL OutputDevice::GetTextBoundRect( Rectangle& rRect,
     aVDev.ImplInitFont();
     aVDev.ImplInitTextColor();
 
-    pSalLayout->SetDrawPosition( aOffset - Point( mnTextOffX, mnTextOffY ) );
+    pSalLayout->DrawBase() = aOffset - Point( mnTextOffX, mnTextOffY );
     aVDev.ImplDrawText( *pSalLayout );
     pSalLayout->Release();
 
@@ -7059,8 +7068,8 @@ BOOL OutputDevice::GetTextOutlines( PolyPolyVector& rVector,
         bSuccess = xVDev->SetOutputSizePixel(aSize);
         if (bSuccess)
         {
-            pSalLayout->SetDrawPosition(aOffset);
             xVDev->Erase();
+            pSalLayout->DrawBase() += aOffset;
             xVDev->ImplDrawText(*pSalLayout);
         }
         pSalLayout->Release();
