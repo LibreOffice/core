@@ -2,9 +2,9 @@
  *
  *  $RCSfile: system.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: svesik $ $Date: 2000-12-04 16:33:49 $
+ *  last change: $Author: svesik $ $Date: 2000-12-06 11:53:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,29 +175,42 @@
 #   elif BYTE_ORDER == PDP_ENDIAN
 #       define _PDP_ENDIAN
 #   endif
-#   define  sched_yield()               pthread_yield()
+#   define  PTR_SIZE_T(s)               ((size_t *)&(s))
+#   define  IORESOURCE_TRANSFER_BSD
+#   define  IOCHANNEL_TRANSFER_BSD_RENO
 #   define  pthread_testcancel()
-#   define  NO_PTHREAD_RTL
 #   define  NO_PTHREAD_PRIORITY
-#   define  CMD_ARG_PRG                 __progname
-#   define  CMD_ARG_ENV                 environ
+#   define  NO_PTHREAD_RTL
+#   define  CMD_ARG_PROC_STREAM
+#   define  CMD_ARG_PROC_NAME           "/proc/%u/cmdline"
+#   define  PTHREAD_SIGACTION           pthread_sigaction
 #endif
 
 #ifdef FREEBSD
 #   define  ETIME ETIMEDOUT
 #   include <pthread.h>
 #   include <sys/sem.h>
+#   include <semaphore.h>
+#   include <dlfcn.h>
 #   include <sys/filio.h>
 #   include <sys/ioctl.h>
 #   include <sys/time.h>
+#   include <sys/uio.h>
 #   include <sys/un.h>
 #   include <netinet/tcp.h>
 #   define  IORESOURCE_TRANSFER_BSD
-#   define  sched_yield()               pthread_yield(0)
-#   define  pthread_testcancel          pthread_testintr
+#   include <machine/endian.h>
+#   if BYTE_ORDER == LITTLE_ENDIAN
+#       define _LITTLE_ENDIAN
+#   elif BYTE_ORDER == BIG_ENDIAN
+#       define _BIG_ENDIAN
+#   elif BYTE_ORDER == PDP_ENDIAN
+#       define _PDP_ENDIAN
+#   endif
+#   define  sched_yield()               pthread_yield()
+#   define  pthread_testcancel()
 #   define  NO_PTHREAD_RTL
 #   define  NO_PTHREAD_PRIORITY
-#   define  NO_DL_FUNCTIONS
 #   define  CMD_ARG_PRG                 __progname
 #   define  CMD_ARG_ENV                 environ
 #endif
@@ -391,7 +404,7 @@ extern char *strdup(const char *);
 #endif
 
 #if !defined(_WIN32)  && !defined(_WIN16) && !defined(OS2)  && \
-    !defined(LINUX)   && !defined(NETBSD) && !defined(SCO)  && \
+    !defined(LINUX)   && !defined(NETBSD) && !defined(FREEBSD) && !defined(SCO)  && \
     !defined(AIX)     && !defined(HPUX)   && !defined(S390) && \
     !defined(SOLARIS) && !defined(IRIX)   && !defined(MAC) && \
     !defined(MACOSX)
