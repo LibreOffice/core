@@ -2,9 +2,9 @@
  *
  *  $RCSfile: reflread.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 11:51:17 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 14:14:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -690,7 +690,7 @@ const sal_Char* FieldList::getFieldType(sal_uInt16 index)
 
 RTFieldAccess FieldList::getFieldAccess(sal_uInt16 index)
 {
-    RTFieldAccess aAccess;
+    RTFieldAccess aAccess = RT_ACCESS_INVALID;
 
     if ((m_numOfEntries > 0) && (index <= m_numOfEntries))
     {
@@ -844,7 +844,7 @@ const sal_Char* ReferenceList::getReferenceName(sal_uInt16 index)
 
 RTReferenceType ReferenceList::getReferenceType(sal_uInt16 index)
 {
-    RTReferenceType refType;
+    RTReferenceType refType = RT_REF_INVALID;
 
     if ((m_numOfEntries > 0) && (index <= m_numOfEntries))
     {
@@ -868,7 +868,7 @@ const sal_Char* ReferenceList::getReferenceDoku(sal_uInt16 index)
 
 RTFieldAccess ReferenceList::getReferenceAccess(sal_uInt16 index)
 {
-    RTFieldAccess aAccess;
+    RTFieldAccess aAccess = RT_ACCESS_INVALID;
 
     if ((m_numOfEntries > 0) && (index <= m_numOfEntries))
     {
