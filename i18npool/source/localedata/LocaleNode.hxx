@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LocaleNode.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-20 13:41:27 $
+ *  last change: $Author: obo $ $Date: 2004-05-28 16:40:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ class OFileWriter
 public:
 
 OFileWriter(const char *pcFile, const char *locale );
-~OFileWriter();
+virtual ~OFileWriter();
     virtual void  writeStringCharacters(const ::rtl::OUString& str) const;
     virtual void  writeAsciiString(const char *str)const ;
     virtual void  writeInt(sal_Int16 nb) const;
@@ -156,7 +156,7 @@ public:
     LocaleNode * findNode ( const sal_Char *name);
     void print () ;
     void printR () ;
-    ~LocaleNode();
+    virtual ~LocaleNode();
     void addChild (  LocaleNode * node);
     virtual void generateCode (const OFileWriter &of);
     static LocaleNode* createNode (const OUString& name,const Reference< XAttributeList > & attr);
@@ -189,6 +189,14 @@ public:
 class LCCollationNode : public LocaleNode {
 public:
     inline LCCollationNode (const OUString& name,
+                const Reference< XAttributeList > & attr) : LocaleNode (name, attr) { ; };
+
+    virtual void generateCode (const OFileWriter &of);
+};
+
+class LCIndexNode : public LocaleNode {
+public:
+    inline LCIndexNode (const OUString& name,
                 const Reference< XAttributeList > & attr) : LocaleNode (name, attr) { ; };
 
     virtual void generateCode (const OFileWriter &of);
