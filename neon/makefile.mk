@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kso $ $Date: 2002-08-15 09:53:39 $
+#   last change: $Author: kso $ $Date: 2002-08-15 12:59:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,7 +79,7 @@ PATCH_FILE_NAME=neon.patch
 ADDITIONAL_FILES=src$/makefile.mk src$/config.h
 
 BUILD_DIR=src
-BUILD_ACTION=dmake $(PROFULLSWITCH)
+BUILD_ACTION=dmake $(MFLAGS) $(CALLMACROS)
 
 OUT2INC= \
     $(BUILD_DIR)$/config.h \
