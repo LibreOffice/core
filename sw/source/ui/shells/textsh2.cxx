@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh2.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 12:29:04 $
+ *  last change: $Author: kz $ $Date: 2003-09-11 09:41:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,8 +351,11 @@ IMPL_STATIC_LINK( SwBaseShell, InsertDBTextHdl, DBTextStruct_Impl*, pDBStruct )
         sal_Bool bDispose = sal_False;
         Reference< sdbc::XConnection> xConnection = pDBStruct->xConnection;
         Reference<XDataSource> xSource = SwNewDBMgr::getDataSourceAsParent(xConnection,pDBStruct->aDBData.sDataSource);
+        // #111987# the connection is disposed an so no parent has been found
+        if(xConnection.is() && !xSource.is())
+            return 0;
 
-        if ( !xConnection.is() )
+        if ( !xConnection.is()  )
         {
             xConnection = SwNewDBMgr::GetConnection(pDBStruct->aDBData.sDataSource, xSource);
             bDispose = sal_True;
