@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-29 03:18:48 $
+ *  last change: $Author: mtg $ $Date: 2000-11-29 05:19:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,8 +152,7 @@ typedef std::hash_map < rtl::OUString, com::sun::star::uno::Reference < com::sun
 class ZipPackageFolder : public ZipPackageEntry,
                          public ::com::sun::star::container::XNameContainer,
                          public ::com::sun::star::container::XEnumerationAccess,
-                         public ::com::sun::star::beans::XPropertySet,
-                         public ::com::sun::star::lang::XUnoTunnel
+                         public ::com::sun::star::beans::XPropertySet
 {
 private:
     ::rtl::OUString sMediaType;

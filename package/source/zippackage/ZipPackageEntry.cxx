@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageEntry.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-21 10:43:06 $
+ *  last change: $Author: mtg $ $Date: 2000-11-29 05:19:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@
 
 using namespace com::sun::star;
 ZipPackageEntry::ZipPackageEntry (void)
+: bSetParent(sal_False)
 {
 }
 
@@ -77,6 +78,7 @@ uno::Any SAL_CALL ZipPackageEntry::queryInterface( const uno::Type& rType )
     // Ask for my own supported interfaces ...
     uno::Any aReturn    ( ::cppu::queryInterface    (   rType                                       ,
                                                 static_cast< container::XNamed*     > ( this )  ,
+                                                static_cast< lang::XUnoTunnel*      > ( this )  ,
                                                 static_cast< container::XChild*     > ( this )  ) );
 
     // If searched interface supported by this class ...
@@ -120,5 +122,18 @@ uno::Reference< uno::XInterface > SAL_CALL ZipPackageEntry::getParent(  )
 void SAL_CALL ZipPackageEntry::setParent( const uno::Reference< uno::XInterface >& Parent )
         throw(lang::NoSupportException, uno::RuntimeException)
 {
+    uno::Reference < container::XNameContainer > xOldParent (xParent, uno::UNO_QUERY);
+    uno::Reference < container::XNameContainer > xNewParent (Parent, uno::UNO_QUERY);
+
+    if ( !xNewParent.is())
+        throw (lang::NoSupportException());
+
+    if ( xOldParent.is() && xOldParent->hasByName(getName()))
+        xOldParent->removeByName(getName());
+    uno::Any aAny;
+    uno::Reference < lang::XUnoTunnel > xTunnel  = this;
+    aAny <<= xTunnel;
+    xNewParent->insertByName(getName(), aAny);
+    bSetParent = sal_True;
     xParent = Parent;
 }

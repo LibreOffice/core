@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-29 03:21:56 $
+ *  last change: $Author: mtg $ $Date: 2000-11-29 05:19:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,7 +297,7 @@ void ZipPackageFolder::saveContents(rtl::OUString &rPath, std::vector < Manifest
         {
             time_t nTime = time(NULL);
             ManifestEntry *pMan = new ManifestEntry;
-            pMan->sShortName = pFolder->getName();
+            pMan->sShortName = (*aCI).first;
             pFolder->aEntry.sName = rPath + pMan->sShortName + OUString::createFromAscii("/");
             pFolder->aEntry.nTime = ZipOutputStream::tmDateToDosDate ( *localtime(&nTime));
             pFolder->aEntry.nCrc = 0;
@@ -314,7 +314,7 @@ void ZipPackageFolder::saveContents(rtl::OUString &rPath, std::vector < Manifest
         else
         {
             ManifestEntry *pMan = new ManifestEntry;
-            pMan->sShortName = pStream->getName();
+            pMan->sShortName = (*aCI).first;
             pStream->aEntry.sName = rPath + pMan->sShortName;
 
             uno::Reference < io::XInputStream > xStream = pStream->getInputStream();

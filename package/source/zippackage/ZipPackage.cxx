@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-29 03:21:56 $
+ *  last change: $Author: mtg $ $Date: 2000-11-29 05:19:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,7 +187,7 @@ void ZipPackage::getZipFileContents()
                     pPkgFolder->setName(sTemp);
                     pPkgFolder->setParent( Reference < XInterface >(xCurrent, UNO_QUERY));
                     aAny <<= Reference < XUnoTunnel > (pPkgFolder);
-                    xCurrent->insertByName(sTemp, aAny);
+                    //xCurrent->insertByName(sTemp, aAny);
                     xCurrent = Reference < XNameContainer > (pPkgFolder);
                 }
                 else
@@ -214,7 +214,7 @@ void ZipPackage::getZipFileContents()
                     pPkgFolder->setName(sTemp);
                     pPkgFolder->setParent( Reference < XInterface >(xCurrent, UNO_QUERY));
                     aAny <<= Reference < XUnoTunnel > (pPkgFolder);
-                    xCurrent->insertByName(sTemp, aAny);
+                    //xCurrent->insertByName(sTemp, aAny);
                     xCurrent = Reference < XNameContainer > (pPkgFolder);
                 }
                 else
@@ -236,17 +236,17 @@ void ZipPackage::getZipFileContents()
                 pPkgFolder->setName(sStreamName);
                 pPkgFolder->setParent( Reference < XInterface >(xCurrent, UNO_QUERY));
                 aAny <<= Reference < XUnoTunnel > (pPkgFolder);
-                xCurrent->insertByName(sStreamName, aAny);
+                //xCurrent->insertByName(sStreamName, aAny);
             }
             else
             {
                 pPkgStream = new ZipPackageStream( pZipFile );
                 pPkgStream->bPackageMember = sal_True;
-                pPkgStream->setParent( Reference < XInterface > (xCurrent, UNO_QUERY));
                 pPkgStream->setZipEntry( aEntry );
                 pPkgStream->setName( sStreamName );
+                pPkgStream->setParent( Reference < XInterface > (xCurrent, UNO_QUERY));
                 aAny <<= Reference < XUnoTunnel > (pPkgStream);
-                xCurrent->insertByName(sStreamName, aAny);
+                //xCurrent->insertByName(sStreamName, aAny);
             }
         }
     }
