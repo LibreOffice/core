@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun3.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 14:38:08 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 13:06:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,8 +296,7 @@ void ScViewFunc::CutToClip( ScDocument* pClipDoc, BOOL bIncludeObjects )
         }
 
         USHORT nExtFlags = 0;
-        if ( pDoc->HasAttrib( aRange, HASATTR_PAINTEXT ) )
-            nExtFlags |= SC_PF_LINES;
+        pDocSh->UpdatePaintExt( nExtFlags, aRange );
 
         HideCursor();                           // Cursor aendert sich !
 
@@ -878,10 +877,9 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
         }
     }
 
-    //  waren vorher Linien da?
     USHORT nExtFlags = 0;
-    if (pDoc->HasAttrib( nStartCol,nStartRow,nStartTab, nEndCol,nEndRow,nEndTab, HASATTR_PAINTEXT ))
-        nExtFlags |= SC_PF_LINES;
+    pDocSh->UpdatePaintExt( nExtFlags, nStartCol, nStartRow, nStartTab,
+                                       nEndCol,   nEndRow,   nEndTab );     // content before the change
 
     if (GetViewData()->IsActive())
     {
@@ -964,10 +962,9 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
     //
     //
 
-    //  sind hinterher Linien da?
-    if (!nExtFlags & SC_PF_LINES)
-        if (pDoc->HasAttrib( nStartCol,nStartRow,nStartTab, nEndCol,nEndRow,nEndTab, HASATTR_PAINTEXT ))
-            nExtFlags |= SC_PF_LINES;
+    pDocSh->UpdatePaintExt( nExtFlags, nStartCol, nStartRow, nStartTab,
+                                       nEndCol,   nEndRow,   nEndTab );     // content after the change
+
 
         //  ggf. Autofilter-Koepfe loeschen
     if (bCutMode)
