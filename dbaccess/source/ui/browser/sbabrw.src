@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-24 20:25:41 $
+ *  last change: $Author: kz $ $Date: 2001-07-26 22:25:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -858,7 +858,7 @@ Menu MENU_BROWSER_QUERYCONTEXT
             Text[ japanese ] = "∏¥ÿ∞ÇÃë}ì¸...";
             Text[ korean ] = "~Insert Query...";
             Text[ chinese_simplified ] = "≤Â»Î≤È—Ø(~I)...";
-            Text[ chinese_traditional ] = "~Insert Query...";
+            Text[ chinese_traditional ] = "¥°§J¨d∏ﬂ...";
             Text[ turkish ] = "~Insert Query...";
             Text[ arabic ] = "~Insert Query...";
             Text[ catalan ] = "~Insert Query...";
@@ -1351,7 +1351,7 @@ String STR_DSBROWSER_TITLE
         Text[ japanese ] = "√ﬁ∞¿ø∞ΩÇÃï\\é¶";
         Text[ korean ] = "Data source browser";
         Text[ chinese_simplified ] = " ˝æ›‘¥ºÏ ”";
-        Text[ chinese_traditional ] = "Data source browser";
+        Text[ chinese_traditional ] = "∏ÍÆ∆∑Ω¿Àµ¯";
         Text[ turkish ] = "Data source browser";
         Text[ arabic ] = "Data source browser";
         Text[ catalan ] = "Data source browser";
@@ -1372,16 +1372,17 @@ String STR_NO_TABLE_FORMAT_INSIDE
         Text[ italian ] = "Il formato della tabella non Ë stato trovato";
         Text[ danish ] = "No table format found.";
         Text[ swedish ] = "Det gick inte att hitta nÂgot tabellformat.";
-        Text[ polish ] = "No table format found.";
+        Text[ polish ] = "Nie znaleziono øadnego formatu tabeli.";
         Text[ portuguese_brazilian ] = "No table format found.";
         Text[ japanese ] = "√∞ÃﬁŸèëéÆÇÕå©Ç¬Ç©ÇËÇ‹ÇπÇÒÇ≈ÇµÇΩÅB";
         Text[ korean ] = "No table format found.";
         Text[ chinese_simplified ] = "No table format found.";
-        Text[ chinese_traditional ] = "No table format found.";
+        Text[ chinese_traditional ] = "µL™kß‰®Ï™ÌÆÊÆÊ¶°°C";
         Text[ turkish ] = "No table format found.";
         Text[ arabic ] = "No table format found.";
         Text[ catalan ] = "No table format found.";
     };
+
 
 
 
