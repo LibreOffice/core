@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: lla $ $Date: 2001-01-17 15:02:32 $
+#   last change: $Author: kz $ $Date: 2001-02-13 09:52:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,7 +80,7 @@ EXCEPTIONSFILES = \
         $(SLO)$/oslstream.obj	\
         $(SLO)$/attributes.obj	\
         $(SLO)$/confname.obj	\
-        $(SLO)$/configunoreg.obj	\
+        $(SLO)$/configunoreg.obj
 
 SLOFILES=	\
         $(SLO)$/configmodule.obj	\
@@ -96,7 +96,7 @@ SLOFILES=	\
         $(SLO)$/strimpl.obj	\
         $(SLO)$/strconverter.obj	\
         $(SLO)$/treemap.obj	\
-        $(SLO)$/mergechange.obj	\
+        $(SLO)$/mergechange.obj
 
 # --- Targets ----------------------------------
 
