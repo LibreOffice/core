@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosect.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2001-01-12 16:12:45 $
+ *  last change: $Author: os $ $Date: 2001-02-12 12:54:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -466,210 +466,435 @@ uno::Reference< beans::XPropertySetInfo >  SwXTextSection::getPropertySetInfo(vo
     static uno::Reference< beans::XPropertySetInfo >  aRef = aPropSet.getPropertySetInfo();
     return aRef;
 }
-/*-- 10.12.98 14:47:11---------------------------------------------------
+/* -----------------------------12.02.01 10:29--------------------------------
 
-  -----------------------------------------------------------------------*/
-void SwXTextSection::setPropertyValue(
-    const OUString& rPropertyName, const uno::Any& aValue)
-    throw( beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException )
+ ---------------------------------------------------------------------------*/
+struct SwSectItemSet_Impl
+{
+
+    SfxItemSet* pItemSet;
+    SwSectItemSet_Impl() :
+        pItemSet(0){}
+    ~SwSectItemSet_Impl()
+        {delete pItemSet;}
+};
+/* -----------------------------12.02.01 10:45--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwXTextSection::setPropertyValues(
+    const Sequence< ::rtl::OUString >& rPropertyNames,
+    const Sequence< Any >& rValues )
+        throw(PropertyVetoException, lang::IllegalArgumentException,
+                        lang::WrappedTargetException, RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     SwSectionFmt*   pFmt = GetFmt();
+    if(rPropertyNames.getLength() != rValues.getLength())
+        throw IllegalArgumentException();
     if(pFmt || m_bIsDescriptor)
     {
         SwSection   aSection(CONTENT_SECTION, aEmptyStr);
         SwSection* pSect = pFmt ? pFmt->GetSection() : 0;
         if(pFmt)
             aSection = *pSect;
-        const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
-                                aPropSet.getPropertyMap(), rPropertyName);
-        if(pMap)
+        const OUString* pPropertyNames = rPropertyNames.getConstArray();
+        const Any* pValues = rValues.getConstArray();
+        SwSectItemSet_Impl aItemSet;
+
+        for(sal_Int32 nProperty = 0; nProperty < rPropertyNames.getLength(); nProperty++)
         {
-            SfxItemSet* pNewAttrSet = 0;
-            switch(pMap->nWID)
+            const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
+                                    aPropSet.getPropertyMap(), pPropertyNames[nProperty]);
+            if(pMap)
             {
-                case WID_SECT_CONDITION:
+                switch(pMap->nWID)
                 {
-                    OUString uTmp;
-                    aValue >>= uTmp;
-                    if(m_bIsDescriptor)
-                        pProps->sCondition = String(uTmp);
-                    else
-                        aSection.SetCondition(uTmp);
-                }
-                break;
-                case WID_SECT_DDE_TYPE      :
-                case WID_SECT_DDE_FILE      :
-                case WID_SECT_DDE_ELEMENT   :
-                {
-                    OUString uTmp;
-                    aValue >>= uTmp;
-                    String sTmp(uTmp);
-                    if(m_bIsDescriptor)
+                    case WID_SECT_CONDITION:
                     {
-                        if(!pProps->bDDE)
+                        OUString uTmp;
+                        pValues[nProperty] >>= uTmp;
+                        if(m_bIsDescriptor)
+                            pProps->sCondition = String(uTmp);
+                        else
+                            aSection.SetCondition(uTmp);
+                    }
+                    break;
+                    case WID_SECT_DDE_TYPE      :
+                    case WID_SECT_DDE_FILE      :
+                    case WID_SECT_DDE_ELEMENT   :
+                    {
+                        OUString uTmp;
+                        pValues[nProperty] >>= uTmp;
+                        String sTmp(uTmp);
+                        if(m_bIsDescriptor)
                         {
-                            pProps->sLinkFileName = cTokenSeperator;
-                            pProps->sLinkFileName += cTokenSeperator;
-                            pProps->bDDE = sal_True;
+                            if(!pProps->bDDE)
+                            {
+                                pProps->sLinkFileName = cTokenSeperator;
+                                pProps->sLinkFileName += cTokenSeperator;
+                                pProps->bDDE = sal_True;
+                            }
+                            pProps->sLinkFileName.SetToken(pMap->nWID - WID_SECT_DDE_TYPE,cTokenSeperator,sTmp);
                         }
-                        pProps->sLinkFileName.SetToken(pMap->nWID - WID_SECT_DDE_TYPE,cTokenSeperator,sTmp);
-                    }
-                    else
-                    {
-                        String sLinkFileName(aSection.GetLinkFileName());
-                        if(aSection.GetType() != DDE_LINK_SECTION)
+                        else
                         {
-                            sLinkFileName = cTokenSeperator;
-                            sLinkFileName += cTokenSeperator;
-                            aSection.SetType(DDE_LINK_SECTION);
+                            String sLinkFileName(aSection.GetLinkFileName());
+                            if(aSection.GetType() != DDE_LINK_SECTION)
+                            {
+                                sLinkFileName = cTokenSeperator;
+                                sLinkFileName += cTokenSeperator;
+                                aSection.SetType(DDE_LINK_SECTION);
+                            }
+                            sLinkFileName.SetToken(pMap->nWID - WID_SECT_DDE_TYPE,cTokenSeperator, sTmp);
+                            aSection.SetLinkFileName(sLinkFileName);
                         }
-                        sLinkFileName.SetToken(pMap->nWID - WID_SECT_DDE_TYPE,cTokenSeperator, sTmp);
-                        aSection.SetLinkFileName(sLinkFileName);
                     }
-                }
-                break;
-                case WID_SECT_DDE_AUTOUPDATE:
-                {
-                    sal_Bool bVal = *(sal_Bool*)aValue.getValue();
-                    if(m_bIsDescriptor)
+                    break;
+                    case WID_SECT_DDE_AUTOUPDATE:
                     {
-                        pProps->bUpdateType = bVal;
-                    }
-                    else
-                    {
-                        // set update type; needs an established link
-                        if (! pSect->IsConnected())
+                        sal_Bool bVal = *(sal_Bool*)pValues[nProperty].getValue();
+                        if(m_bIsDescriptor)
                         {
-                            pSect->CreateLink(CREATE_CONNECT);
+                            pProps->bUpdateType = bVal;
                         }
-                        pSect->SetUpdateType(bVal ? LINKUPDATE_ALWAYS
-                                             : LINKUPDATE_ONCALL);
+                        else
+                        {
+                            // set update type; needs an established link
+                            if (! pSect->IsConnected())
+                            {
+                                pSect->CreateLink(CREATE_CONNECT);
+                            }
+                            pSect->SetUpdateType(bVal ? LINKUPDATE_ALWAYS
+                                                 : LINKUPDATE_ONCALL);
+                        }
                     }
-                }
-                break;
-                case WID_SECT_LINK     :
-                {
-                    if(aValue.getValueType() == ::getCppuType((const text::SectionFileLink*)0))
+                    break;
+                    case WID_SECT_LINK     :
                     {
-                         text::SectionFileLink* pLink =  (text::SectionFileLink*)   aValue.getValue();
+                        if(pValues[nProperty].getValueType() == ::getCppuType((const text::SectionFileLink*)0))
+                        {
+                             text::SectionFileLink* pLink =  (text::SectionFileLink*)   pValues[nProperty].getValue();
+                            if(m_bIsDescriptor)
+                            {
+                                pProps->bDDE = sal_False;
+                                pProps->sLinkFileName = String(pLink->FileURL);
+                                pProps->sSectionFilter = String(pLink->FilterName);
+                            }
+                            else
+                            {
+                                if(aSection.GetType() != FILE_LINK_SECTION &&
+                                    pLink->FileURL.len())
+                                    aSection.SetType(FILE_LINK_SECTION);
+                                String sFileName(URIHelper::SmartRelToAbs( pLink->FileURL) );
+                                sFileName += cTokenSeperator;
+                                sFileName += String(pLink->FilterName);
+                                sFileName += cTokenSeperator;
+                                sFileName += aSection.GetLinkFileName().GetToken( 2, cTokenSeperator );
+                                aSection.SetLinkFileName(sFileName);
+                                if(sFileName.Len() < 3)
+                                    aSection.SetType(CONTENT_SECTION);
+                            }
+                        }
+                        else
+                            throw lang::IllegalArgumentException();
+                    }
+                    break;
+                    case WID_SECT_REGION :
+                    {
+                        OUString uTmp;
+                        pValues[nProperty] >>= uTmp;
+                        String sLink(uTmp);
                         if(m_bIsDescriptor)
                         {
                             pProps->bDDE = sal_False;
-                            pProps->sLinkFileName = String(pLink->FileURL);
-                            pProps->sSectionFilter = String(pLink->FilterName);
+                            pProps->sSectionRegion = sLink.GetToken(2, cTokenSeperator);
                         }
                         else
                         {
                             if(aSection.GetType() != FILE_LINK_SECTION &&
-                                pLink->FileURL.len())
-                                aSection.SetType(FILE_LINK_SECTION);
-                            String sFileName(URIHelper::SmartRelToAbs( pLink->FileURL) );
-                            sFileName += cTokenSeperator;
-                            sFileName += String(pLink->FilterName);
-                            sFileName += cTokenSeperator;
-                            sFileName += aSection.GetLinkFileName().GetToken( 2, cTokenSeperator );
-                            aSection.SetLinkFileName(sFileName);
-                            if(sFileName.Len() < 3)
-                                aSection.SetType(CONTENT_SECTION);
+                                    sLink.Len())
+                                    aSection.SetType(FILE_LINK_SECTION);
+                            String sSectLink(aSection.GetLinkFileName());
+                            while( 3 < sSectLink.GetTokenCount( cTokenSeperator ))
+                            {
+                                sSectLink += cTokenSeperator;
+                            }
+                            sSectLink.SetToken(2, cTokenSeperator, sLink);
+                            aSection.SetLinkFileName(sSectLink);
                         }
                     }
-                    else
-                        throw lang::IllegalArgumentException();
-                }
-                break;
-                case WID_SECT_REGION :
-                {
-                    OUString uTmp;
-                    aValue >>= uTmp;
-                    String sLink(uTmp);
-                    if(m_bIsDescriptor)
+                    break;
+                    case WID_SECT_VISIBLE   :
                     {
-                        pProps->bDDE = sal_False;
-                        pProps->sSectionRegion = sLink.GetToken(2, cTokenSeperator);
+                        sal_Bool bVal = *(sal_Bool*)pValues[nProperty].getValue();
+                        if(m_bIsDescriptor)
+                            pProps->bHidden = !bVal;
+                        else
+                            aSection.SetHidden(!bVal);
                     }
-                    else
+                    break;
+                    case WID_SECT_PROTECTED:
                     {
-                        if(aSection.GetType() != FILE_LINK_SECTION &&
-                                sLink.Len())
-                                aSection.SetType(FILE_LINK_SECTION);
-                        String sSectLink(aSection.GetLinkFileName());
-                        while( 3 < sSectLink.GetTokenCount( cTokenSeperator ))
+                        sal_Bool bVal = *(sal_Bool*)pValues[nProperty].getValue();
+                        if(m_bIsDescriptor)
+                            pProps->bProtect = bVal;
+                        else
+                            aSection.SetProtect(bVal);
+                    }
+                    break;
+                    default:
+                        if(pFmt)
                         {
-                            sSectLink += cTokenSeperator;
+                            const SfxItemSet& rOldAttrSet = pFmt->GetAttrSet();
+                            aItemSet.pItemSet = new SfxItemSet(*rOldAttrSet.GetPool(),
+                                                        pMap->nWID, pMap->nWID, 0);
+                            aItemSet.pItemSet->Put(rOldAttrSet);
+                            aPropSet.setPropertyValue(*pMap, pValues[nProperty], *aItemSet.pItemSet);
                         }
-                        sSectLink.SetToken(2, cTokenSeperator, sLink);
-                        aSection.SetLinkFileName(sSectLink);
-                    }
-                }
-                break;
-                case WID_SECT_VISIBLE   :
-                {
-                    sal_Bool bVal = *(sal_Bool*)aValue.getValue();
-                    if(m_bIsDescriptor)
-                        pProps->bHidden = !bVal;
-                    else
-                        aSection.SetHidden(!bVal);
-                }
-                break;
-                case WID_SECT_PROTECTED:
-                {
-                    sal_Bool bVal = *(sal_Bool*)aValue.getValue();
-                    if(m_bIsDescriptor)
-                        pProps->bProtect = bVal;
-                    else
-                        aSection.SetProtect(bVal);
-                }
-                break;
-                default:
-                    if(pFmt)
-                    {
-                        const SfxItemSet& rOldAttrSet = pFmt->GetAttrSet();
-                        pNewAttrSet = new SfxItemSet(*rOldAttrSet.GetPool(),
-                                                    pMap->nWID, pMap->nWID, 0);
-                        pNewAttrSet->Put(rOldAttrSet);
-                        aPropSet.setPropertyValue(*pMap, aValue, *pNewAttrSet);
-                    }
-                    else
-                    {
-                        SfxPoolItem* pPutItem = 0;
-                        if(RES_COL == pMap->nWID)
+                        else
                         {
-                            if(!pProps->pColItem)
-                                pProps->pColItem = new SwFmtCol;
-                                pPutItem = pProps->pColItem;
+                            SfxPoolItem* pPutItem = 0;
+                            if(RES_COL == pMap->nWID)
+                            {
+                                if(!pProps->pColItem)
+                                    pProps->pColItem = new SwFmtCol;
+                                    pPutItem = pProps->pColItem;
+                            }
+                            else //if(RES_BACKGROUND == pMap->nWID)
+                            {
+                                if(!pProps->pBrushItem)
+                                    pProps->pBrushItem = new SvxBrushItem;
+                                pPutItem = pProps->pBrushItem;
+                            }
+                            pPutItem->PutValue(pValues[nProperty], pMap->nMemberId);
                         }
-                        else //if(RES_BACKGROUND == pMap->nWID)
-                        {
-                            if(!pProps->pBrushItem)
-                                pProps->pBrushItem = new SvxBrushItem;
-                            pPutItem = pProps->pBrushItem;
-                        }
-                        pPutItem->PutValue(aValue, pMap->nMemberId);
-                    }
 
-            }
-            if(pFmt)
-            {
-                SwDoc* pDoc = pFmt->GetDoc();
-                const SwSectionFmts& rFmts = pDoc->GetSections();
-                UnoActionContext aContext(pDoc);
-                for( sal_uInt16 i = 0; i < rFmts.Count(); i++ )
-                {
-                    if(rFmts[i]->GetSection()->GetName() == pSect->GetName())
-                    {
-                        pDoc->ChgSection( i, aSection, pNewAttrSet, pDoc->IsInReading());
-                        break;
-                    }
                 }
-                delete pNewAttrSet;
+            }
+            else
+                throw beans::UnknownPropertyException();
+        }
+        if(pFmt)
+        {
+            SwDoc* pDoc = pFmt->GetDoc();
+            const SwSectionFmts& rFmts = pDoc->GetSections();
+            UnoActionContext aContext(pDoc);
+            for( sal_uInt16 i = 0; i < rFmts.Count(); i++ )
+            {
+                if(rFmts[i]->GetSection()->GetName() == pSect->GetName())
+                {
+                    pDoc->ChgSection( i, aSection, aItemSet.pItemSet, pDoc->IsInReading());
+                    break;
+                }
             }
         }
-        else
-            throw beans::UnknownPropertyException();
     }
     else
         throw uno::RuntimeException();
+
+}
+/*-- 10.12.98 14:47:11---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwXTextSection::setPropertyValue(
+    const OUString& rPropertyName, const uno::Any& aValue)
+    throw( beans::UnknownPropertyException, beans::PropertyVetoException,
+        lang::IllegalArgumentException,     lang::WrappedTargetException,
+        uno::RuntimeException )
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    Sequence< ::rtl::OUString > aPropertyNames(1);
+    aPropertyNames.getArray()[0] = rPropertyName;
+    Sequence< Any > aValues(1);
+    aValues.getArray()[0] = aValue;
+    setPropertyValues(aPropertyNames, aValues);
+}
+/* -----------------------------12.02.01 10:43--------------------------------
+
+ ---------------------------------------------------------------------------*/
+Sequence< Any > SwXTextSection::getPropertyValues(
+    const Sequence< ::rtl::OUString >& rPropertyNames )
+        throw(RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    Sequence< Any > aRet(rPropertyNames.getLength());
+    Any* pRet = aRet.getArray();
+    SwSectionFmt*   pFmt = GetFmt();
+    if(pFmt||m_bIsDescriptor)
+    {
+        SwSection* pSect = pFmt ? pFmt->GetSection() : 0;
+        const OUString* pPropertyNames = rPropertyNames.getConstArray();
+        for(sal_Int32 nProperty = 0; nProperty < rPropertyNames.getLength(); nProperty++)
+        {
+            const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
+                                                aPropSet.getPropertyMap(), pPropertyNames[nProperty]);
+            if(pMap)
+            {
+                switch(pMap->nWID)
+                {
+                    case WID_SECT_CONDITION:
+                    {
+                        OUString uTmp(
+                            m_bIsDescriptor ? pProps->sCondition : pSect->GetCondition());
+                        pRet[nProperty] <<= uTmp;
+                    }
+                    break;
+                    case WID_SECT_DDE_TYPE      :
+                    case WID_SECT_DDE_FILE      :
+                    case WID_SECT_DDE_ELEMENT   :
+                    {
+                        String sRet;
+                        if(m_bIsDescriptor)
+                        {
+                            if(pProps->bDDE)
+                                sRet = pProps->sLinkFileName;
+                        }
+                        else if( DDE_LINK_SECTION == pSect->GetType() )
+                        {
+                            sRet = pSect->GetLinkFileName();
+                        }
+                        sRet = sRet.GetToken(pMap->nWID - WID_SECT_DDE_TYPE, cTokenSeperator);
+                        pRet[nProperty] <<= OUString(sRet);
+                    }
+                    break;
+                    case WID_SECT_DDE_AUTOUPDATE:
+                    {
+                        // GetUpdateType() returns .._ALWAYS or .._ONCALL
+                        sal_Bool bTemp =
+                            (pSect->GetUpdateType() == LINKUPDATE_ALWAYS);
+                        pRet[nProperty].setValue( &bTemp, ::getCppuBooleanType());
+                    }
+                    break;
+                    case WID_SECT_LINK     :
+                    {
+                         text::SectionFileLink aLink;
+                        if(m_bIsDescriptor)
+                        {
+                            if(!pProps->bDDE)
+                            {
+                                aLink.FileURL = pProps->sLinkFileName;
+                                aLink.FilterName = pProps->sSectionFilter;
+                            }
+                        }
+                        else if( FILE_LINK_SECTION == pSect->GetType() )
+                        {
+                            String sRet( pSect->GetLinkFileName() );
+                            aLink.FileURL = sRet.GetToken(0, cTokenSeperator );
+                            aLink.FilterName = sRet.GetToken(1, cTokenSeperator );
+                        }
+                        pRet[nProperty].setValue(&aLink, ::getCppuType((text::SectionFileLink*)0));
+                    }
+                    break;
+                    case WID_SECT_REGION :
+                    {
+                        String sRet;
+                        if(m_bIsDescriptor)
+                        {
+                            sRet = pProps->sSectionRegion;
+                        }
+                        else if( FILE_LINK_SECTION == pSect->GetType() )
+                            sRet = pSect->GetLinkFileName().GetToken(2, cTokenSeperator);
+                        pRet[nProperty] <<= OUString(sRet);
+                    }
+                    break;
+                    case WID_SECT_VISIBLE   :
+                    {
+                        sal_Bool bTemp = m_bIsDescriptor ? !pProps->bHidden : !pSect->IsHidden();
+                        pRet[nProperty].setValue( &bTemp, ::getCppuBooleanType());
+                    }
+                    break;
+                    case WID_SECT_PROTECTED:
+                    {
+                        sal_Bool bTemp = m_bIsDescriptor ? pProps->bProtect : pSect->IsProtect();
+                        pRet[nProperty].setValue( &bTemp, ::getCppuBooleanType());
+                    }
+                    break;
+                    case  FN_PARAM_LINK_DISPLAY_NAME:
+                    {
+                        if(pFmt)
+                            pRet[nProperty] <<= OUString(pFmt->GetSection()->GetName());
+                    }
+                    break;
+                    case WID_SECT_DOCUMENT_INDEX:
+                    {
+                        // search enclosing index
+                        SwSection* pEnclosingSection = pSect;
+                        while ( (pEnclosingSection != NULL) &&
+                                (TOX_CONTENT_SECTION !=
+                                 pEnclosingSection->GetType()) )
+                        {
+                            pEnclosingSection = pEnclosingSection->GetParent();
+                        }
+                        if (pEnclosingSection)
+                        {
+                            // convert section to TOXBase and get SwXDocumentIndex
+                            SwTOXBaseSection* pTOXBaseSect =
+                                PTR_CAST(SwTOXBaseSection, pEnclosingSection);
+                            Reference<XDocumentIndex> xIndex =
+                                SwXDocumentIndexes::GetObject(pTOXBaseSect);
+                            pRet[nProperty] <<= xIndex;
+                        }
+                        // else: no enclosing index found -> empty return value
+                    }
+                    break;
+                    case  FN_UNO_ANCHOR_TYPES:
+                    case  FN_UNO_TEXT_WRAP:
+                    case  FN_UNO_ANCHOR_TYPE:
+                        SwXParagraph::getDefaultTextContentValue(pRet[nProperty], OUString(), pMap->nWID);
+                    break;
+                    case FN_UNO_REDLINE_NODE_START:
+                    case FN_UNO_REDLINE_NODE_END:
+                    {
+                        SwNode* pSectNode = pFmt->GetSectionNode();
+                        if(FN_UNO_REDLINE_NODE_END == pMap->nWID)
+                            pSectNode = pSectNode->EndOfSectionNode();
+                        const SwRedlineTbl& rRedTbl = pFmt->GetDoc()->GetRedlineTbl();
+                        for(USHORT nRed = 0; nRed < rRedTbl.Count(); nRed++)
+                        {
+                            const SwRedline* pRedline = rRedTbl[nRed];
+                            const SwNode* pRedPointNode = pRedline->GetNode(TRUE);
+                            const SwNode* pRedMarkNode = pRedline->GetNode(FALSE);
+                            if(pRedPointNode == pSectNode || pRedMarkNode == pSectNode)
+                            {
+                                pRet[nProperty] <<= SwXRedlinePortion::CreateRedlineProperties(*pRedline);
+                                break;
+                            }
+                        }
+                    }
+                    break;
+                    default:
+                        if(pFmt)
+                            pRet[nProperty] = aPropSet.getPropertyValue(*pMap, pFmt->GetAttrSet());
+                        else
+                        {
+                            const SfxPoolItem* pQueryItem = 0;
+                            if(RES_COL == pMap->nWID)
+                            {
+                                if(!pProps->pColItem)
+                                    pProps->pColItem = new SwFmtCol;
+                                    pQueryItem = pProps->pColItem;
+                            }
+                            else //if(RES_BACKGROUND == pMap->nWID)
+                            {
+                                if(!pProps->pBrushItem)
+                                    pProps->pBrushItem = new SvxBrushItem;
+                                pQueryItem = pProps->pBrushItem;
+                            }
+                            pQueryItem->QueryValue(pRet[nProperty], pMap->nMemberId);
+                        }
+                }
+            }
+            else
+            {
+                UnknownPropertyException aExcept;
+                aExcept.Message = pPropertyNames[nProperty];
+                throw aExcept;
+            }
+        }
+    }
+    else
+        throw uno::RuntimeException();
+    return aRet;
 }
 /*-- 10.12.98 14:47:12---------------------------------------------------
 
@@ -678,175 +903,37 @@ uno::Any SwXTextSection::getPropertyValue(const OUString& rPropertyName)
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    uno::Any aRet;
-    SwSectionFmt*   pFmt = GetFmt();
-    if(pFmt||m_bIsDescriptor)
-    {
-        SwSection* pSect = pFmt ? pFmt->GetSection() : 0;
-        const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
-                                            aPropSet.getPropertyMap(), rPropertyName);
-        if(pMap)
-        {
-            switch(pMap->nWID)
-            {
-                case WID_SECT_CONDITION:
-                {
-                    OUString uTmp(
-                        m_bIsDescriptor ? pProps->sCondition : pSect->GetCondition());
-                    aRet <<= uTmp;
-                }
-                break;
-                case WID_SECT_DDE_TYPE      :
-                case WID_SECT_DDE_FILE      :
-                case WID_SECT_DDE_ELEMENT   :
-                {
-                    String sRet;
-                    if(m_bIsDescriptor)
-                    {
-                        if(pProps->bDDE)
-                            sRet = pProps->sLinkFileName;
-                    }
-                    else if( DDE_LINK_SECTION == pSect->GetType() )
-                    {
-                        sRet = pSect->GetLinkFileName();
-                    }
-                    sRet = sRet.GetToken(pMap->nWID - WID_SECT_DDE_TYPE, cTokenSeperator);
-                    aRet <<= OUString(sRet);
-                }
-                break;
-                case WID_SECT_DDE_AUTOUPDATE:
-                {
-                    // GetUpdateType() returns .._ALWAYS or .._ONCALL
-                    sal_Bool bTemp =
-                        (pSect->GetUpdateType() == LINKUPDATE_ALWAYS);
-                    aRet.setValue( &bTemp, ::getCppuBooleanType());
-                }
-                break;
-                case WID_SECT_LINK     :
-                {
-                     text::SectionFileLink aLink;
-                    if(m_bIsDescriptor)
-                    {
-                        if(!pProps->bDDE)
-                        {
-                            aLink.FileURL = pProps->sLinkFileName;
-                            aLink.FilterName = pProps->sSectionFilter;
-                        }
-                    }
-                    else if( FILE_LINK_SECTION == pSect->GetType() )
-                    {
-                        String sRet( pSect->GetLinkFileName() );
-                        aLink.FileURL = sRet.GetToken(0, cTokenSeperator );
-                        aLink.FilterName = sRet.GetToken(1, cTokenSeperator );
-                    }
-                    aRet.setValue(&aLink, ::getCppuType((text::SectionFileLink*)0));
-                }
-                break;
-                case WID_SECT_REGION :
-                {
-                    String sRet;
-                    if(m_bIsDescriptor)
-                    {
-                        sRet = pProps->sSectionRegion;
-                    }
-                    else if( FILE_LINK_SECTION == pSect->GetType() )
-                        sRet = pSect->GetLinkFileName().GetToken(2, cTokenSeperator);
-                    aRet <<= OUString(sRet);
-                }
-                break;
-                case WID_SECT_VISIBLE   :
-                {
-                    sal_Bool bTemp = m_bIsDescriptor ? !pProps->bHidden : !pSect->IsHidden();
-                    aRet.setValue( &bTemp, ::getCppuBooleanType());
-                }
-                break;
-                case WID_SECT_PROTECTED:
-                {
-                    sal_Bool bTemp = m_bIsDescriptor ? pProps->bProtect : pSect->IsProtect();
-                    aRet.setValue( &bTemp, ::getCppuBooleanType());
-                }
-                break;
-                case  FN_PARAM_LINK_DISPLAY_NAME:
-                {
-                    if(pFmt)
-                        aRet <<= OUString(pFmt->GetSection()->GetName());
-                }
-                break;
-                case WID_SECT_DOCUMENT_INDEX:
-                {
-                    // search enclosing index
-                    SwSection* pEnclosingSection = pSect;
-                    while ( (pEnclosingSection != NULL) &&
-                            (TOX_CONTENT_SECTION !=
-                             pEnclosingSection->GetType()) )
-                    {
-                        pEnclosingSection = pEnclosingSection->GetParent();
-                    }
-                    if (pEnclosingSection)
-                    {
-                        // convert section to TOXBase and get SwXDocumentIndex
-                        SwTOXBaseSection* pTOXBaseSect =
-                            PTR_CAST(SwTOXBaseSection, pEnclosingSection);
-                        Reference<XDocumentIndex> xIndex =
-                            SwXDocumentIndexes::GetObject(pTOXBaseSect);
-                        aRet <<= xIndex;
-                    }
-                    // else: no enclosing index found -> empty return value
-                }
-                break;
-                case  FN_UNO_ANCHOR_TYPES:
-                case  FN_UNO_TEXT_WRAP:
-                case  FN_UNO_ANCHOR_TYPE:
-                    SwXParagraph::getDefaultTextContentValue(aRet, OUString(), pMap->nWID);
-                break;
-                case FN_UNO_REDLINE_NODE_START:
-                case FN_UNO_REDLINE_NODE_END:
-                {
-                    SwNode* pSectNode = pFmt->GetSectionNode();
-                    if(FN_UNO_REDLINE_NODE_END == pMap->nWID)
-                        pSectNode = pSectNode->EndOfSectionNode();
-                    const SwRedlineTbl& rRedTbl = pFmt->GetDoc()->GetRedlineTbl();
-                    for(USHORT nRed = 0; nRed < rRedTbl.Count(); nRed++)
-                    {
-                        const SwRedline* pRedline = rRedTbl[nRed];
-                        const SwNode* pRedPointNode = pRedline->GetNode(TRUE);
-                        const SwNode* pRedMarkNode = pRedline->GetNode(FALSE);
-                        if(pRedPointNode == pSectNode || pRedMarkNode == pSectNode)
-                        {
-                            aRet <<= SwXRedlinePortion::CreateRedlineProperties(*pRedline);
-                            break;
-                        }
-                    }
-                }
-                break;
-                default:
-                    if(pFmt)
-                        aRet = aPropSet.getPropertyValue(*pMap, pFmt->GetAttrSet());
-                    else
-                    {
-                        const SfxPoolItem* pQueryItem = 0;
-                        if(RES_COL == pMap->nWID)
-                        {
-                            if(!pProps->pColItem)
-                                pProps->pColItem = new SwFmtCol;
-                                pQueryItem = pProps->pColItem;
-                        }
-                        else //if(RES_BACKGROUND == pMap->nWID)
-                        {
-                            if(!pProps->pBrushItem)
-                                pProps->pBrushItem = new SvxBrushItem;
-                            pQueryItem = pProps->pBrushItem;
-                        }
-                        pQueryItem->QueryValue(aRet, pMap->nMemberId);
-                    }
-            }
-        }
-        else
-            throw beans::UnknownPropertyException();
-    }
-    else
-        throw uno::RuntimeException();
-    return aRet;
+    Sequence< ::rtl::OUString > aPropertyNames(1);
+    aPropertyNames.getArray()[0] = rPropertyName;
+    return getPropertyValues(aPropertyNames).getConstArray()[0];
+}
+/* -----------------------------12.02.01 10:30--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwXTextSection::addPropertiesChangeListener(
+    const Sequence< ::rtl::OUString >& aPropertyNames,
+    const Reference< XPropertiesChangeListener >& xListener ) throw(RuntimeException)
+{
+    DBG_WARNING("not implemented")
+}
+/* -----------------------------12.02.01 10:30--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwXTextSection::removePropertiesChangeListener(
+    const Reference< XPropertiesChangeListener >& xListener )
+        throw(RuntimeException)
+{
+    DBG_WARNING("not implemented")
+}
+/* -----------------------------12.02.01 10:30--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwXTextSection::firePropertiesChangeEvent(
+    const Sequence< ::rtl::OUString >& aPropertyNames,
+    const Reference< XPropertiesChangeListener >& xListener )
+        throw(RuntimeException)
+{
+    DBG_WARNING("not implemented")
 }
 /*-- 10.12.98 14:47:13---------------------------------------------------
 

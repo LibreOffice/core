@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2001-01-12 16:11:08 $
+ *  last change: $Author: os $ $Date: 2001-02-12 12:53:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,9 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_XMULTIPROPERTYSET_HPP_
+#include <com/sun/star/beans/XMultiPropertySet.hpp>
+#endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSTATE_HPP_
 #include <com/sun/star/beans/XPropertyState.hpp>
 #endif
@@ -174,6 +177,9 @@
 #endif
 #ifndef _CPPUHELPER_IMPLBASE6_HXX_
 #include <cppuhelper/implbase6.hxx> // helper for implementations
+#endif
+#ifndef _CPPUHELPER_IMPLBASE7_HXX_
+#include <cppuhelper/implbase7.hxx> // helper for implementations
 #endif
 #ifndef _CPPUHELPER_IMPLBASE8_HXX_
 #include <cppuhelper/implbase8.hxx> // helper for implementations
@@ -827,11 +833,12 @@ public:
 
 --------------------------------------------------*/
 struct SwTextSectionProperties_Impl;
-class SwXTextSection : public cppu::WeakImplHelper6
+class SwXTextSection : public cppu::WeakImplHelper7
 <
     ::com::sun::star::text::XTextSection,
     ::com::sun::star::beans::XPropertyState,
     ::com::sun::star::beans::XPropertySet,
+    ::com::sun::star::beans::XMultiPropertySet,
     ::com::sun::star::lang::XServiceInfo,
     ::com::sun::star::container::XNamed,
     ::com::sun::star::lang::XUnoTunnel
@@ -868,6 +875,14 @@ public:
     virtual void SAL_CALL dispose(void) throw( ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL addEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & aListener) throw( ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL removeEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & aListener) throw( ::com::sun::star::uno::RuntimeException );
+
+    //XMultiPropertySet
+//    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setPropertyValues( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aValues ) throw(::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL getPropertyValues( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addPropertiesChangeListener( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertiesChangeListener >& xListener ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removePropertiesChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertiesChangeListener >& xListener ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL firePropertiesChangeEvent( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertiesChangeListener >& xListener ) throw(::com::sun::star::uno::RuntimeException);
 
     //XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
