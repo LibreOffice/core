@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: fme $ $Date: 2002-04-10 06:41:20 $
+ *  last change: $Author: fme $ $Date: 2002-05-27 13:12:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -541,8 +541,13 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                 nPorHeight = pPor->Height();
                 nPorAscent = pPor->GetAscent();
             }
+#ifdef BIDI
+            while( pPor && !pPor->IsBreakPortion() && ( aInf.GetIdx() < nOfst ||
+                   ( bWidth && ( pPor->IsKernPortion() || pPor->IsMultiPortion() ) ) ) )
+#else
             while( pPor && !pPor->IsBreakPortion() && ( aInf.GetIdx() < nOfst ||
                    ( bWidth && pPor->IsMultiPortion() ) ) )
+#endif
             {
                 if( !pPor->IsMarginPortion() && !pPor->IsPostItsPortion() &&
                     (!pPor->InFldGrp() || pPor->GetAscent() ) )
@@ -790,7 +795,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                             if ( ((SwMultiPortion*)pPor)->IsBidi() )
                                 pOrig->Pos().X() = nX + pPor->Width() +
                                                    pPor->CalcSpacing( nSpaceAdd, aInf ) -
-                                                   pOrig->Pos().X();
+                                                   pOrig->Pos().X() - pOrig->Width();
                             else
                                 pOrig->Pos().X() += nX;
 #else
