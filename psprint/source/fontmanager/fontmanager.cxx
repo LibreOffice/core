@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 15:53:07 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 20:21:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,7 @@
 #include <stdio.h>
 #endif
 
-#ifdef SOLARIS
+#if defined(SOLARIS) || defined(IRIX)
 #include <alloca.h>
 #endif
 
