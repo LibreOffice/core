@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-17 10:18:12 $
+ *  last change: $Author: fs $ $Date: 2000-10-18 16:32:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -371,7 +371,7 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL ORowSetBase::getBinaryS
         throw FunctionSequenceException(*m_pMySelf);
 
     if(!m_bBeforeFirst && !m_bAfterLast && m_aCurrentRow != m_pCache->getEnd())
-        return new ::utl::SequenceInputStream((*(*m_aCurrentRow))[m_nLastColumnIndex = columnIndex].getSequence());
+        return new ::comphelper::SequenceInputStream((*(*m_aCurrentRow))[m_nLastColumnIndex = columnIndex].getSequence());
     return Reference< ::com::sun::star::io::XInputStream >();
 }
 // -------------------------------------------------------------------------
@@ -384,7 +384,7 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL ORowSetBase::getCharact
         throw FunctionSequenceException(*m_pMySelf);
 
     if(!m_bBeforeFirst && !m_bAfterLast && m_aCurrentRow != m_pCache->getEnd())
-        return new ::utl::SequenceInputStream((*(*m_aCurrentRow))[m_nLastColumnIndex = columnIndex].getSequence());
+        return new ::comphelper::SequenceInputStream((*(*m_aCurrentRow))[m_nLastColumnIndex = columnIndex].getSequence());
     return Reference< ::com::sun::star::io::XInputStream >();
 }
 // -------------------------------------------------------------------------
