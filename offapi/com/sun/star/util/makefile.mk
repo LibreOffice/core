@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-26 13:58:14 $
+#   last change: $Author: vg $ $Date: 2003-04-01 15:17:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -98,6 +98,7 @@ IDLFILES=\
     SearchDescriptor.idl\
         Sortable.idl\
     SortDescriptor.idl\
+        SortDescriptor2.idl\
     SortField.idl\
     SortFieldType.idl\
     TextSearch.idl\
