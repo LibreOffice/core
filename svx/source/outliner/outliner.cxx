@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outliner.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: mt $ $Date: 2002-02-25 16:10:51 $
+ *  last change: $Author: mt $ $Date: 2002-02-28 18:51:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1871,6 +1871,36 @@ void Outliner::OverwriteLevel0Bullet( const SvxNumberFormat& rNumberFormat )
 {
     delete pOverwriteLevel0Bullet;
     pOverwriteLevel0Bullet = new SvxNumberFormat( rNumberFormat );
+}
+
+EBulletInfo Outliner::GetBulletInfo( USHORT nPara )
+{
+    EBulletInfo aInfo;
+
+    aInfo.nParagraph = nPara;
+    aInfo.bVisible = ImplHasBullet( nPara );
+
+    const SvxNumberFormat* pFmt = ImplGetBullet( nPara );
+    aInfo.nType = pFmt ? pFmt->GetNumberingType() : 0;
+
+    if( pFmt->GetNumberingType() != SVX_NUM_BITMAP )
+    {
+        aInfo.aText = ImplGetBulletText( nPara );
+    }
+    else if ( pFmt && pFmt->GetBrush()->GetGraphicObject() )
+    {
+        aInfo.aGraphic = pFmt->GetBrush()->GetGraphicObject()->GetGraphic();
+    }
+
+    if ( aInfo.bVisible )
+    {
+        aInfo.aBounds = ImpCalcBulletArea( nPara, TRUE );
+        Point aParaXY = pEditEngine->GetDocPosTopLeft( nPara );
+        aInfo.aBounds.Top() += aParaXY.Y();
+        aInfo.aBounds.Bottom() += aParaXY.Y();
+    }
+
+    return aInfo;
 }
 
 XubString Outliner::GetText( Paragraph* pParagraph, ULONG nCount ) const
