@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-30 20:16:50 $
+ *  last change: $Author: vg $ $Date: 2001-06-08 23:01:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2789,3 +2789,4 @@ String STR_DDEERROR_LINK2
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "] no se puede establecer";
 };
+
