@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FileOpenDlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tra $ $Date: 2001-07-09 12:58:25 $
+ *  last change: $Author: tra $ $Date: 2001-08-10 12:12:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,7 +249,7 @@ void SAL_CALL CFileOpenDialog::setDisplayDirectory( const OUString& aDirectory )
 //
 //------------------------------------------------------------------------
 
-rtl::OUString SAL_CALL CFileOpenDialog::getDisplayDirectory( ) const
+rtl::OUString SAL_CALL CFileOpenDialog::getLastDisplayDirectory( ) const
 {
     return m_displayDirectory;
 }

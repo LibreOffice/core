@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FileOpenDlg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tra $ $Date: 2001-07-09 12:58:25 $
+ *  last change: $Author: tra $ $Date: 2001-08-10 12:12:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,7 +182,7 @@ public:
     virtual void SAL_CALL setDisplayDirectory( const rtl::OUString& aDirectory );
 
     // returns only the path of the selected file
-    virtual rtl::OUString SAL_CALL getDisplayDirectory( ) const;
+    virtual rtl::OUString SAL_CALL getLastDisplayDirectory( ) const;
 
     // returns the full file name including drive letter, path
     // file name and file extension
@@ -248,8 +248,6 @@ public:
     // returns the last dialog error that occured
     sal_uInt32 SAL_CALL getLastDialogError( ) const;
 
-protected:
-
     // retrievs the currently selected file
     // including path and drive information
     // can be called only if the dialog is
@@ -263,6 +261,7 @@ protected:
     // without drive and path
     rtl::OUString SAL_CALL getCurrentFileName( ) const;
 
+protected:
     // have to be overwritten when subclasses
     // want to do special pre- and post-modal
     // processing
