@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormattedField.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 08:58:05 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 18:27:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,8 +107,8 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
-#ifndef _TOOLS_VCLRSC_HXX
-#include <tools/vclrsc.hxx>
+#ifndef _SV_WINTYPES_HXX
+#include <vcl/wintypes.hxx>
 #endif
 #ifndef _ISOLANG_HXX
 #include <tools/isolang.hxx>
