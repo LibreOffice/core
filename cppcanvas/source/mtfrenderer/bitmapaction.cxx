@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bitmapaction.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2004-03-18 10:41:03 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:54:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,12 @@
  *
  ************************************************************************/
 
-#include "bitmapaction.hxx"
-#include "outdevstate.hxx"
+#include <bitmapaction.hxx>
+#include <outdevstate.hxx>
 
+#ifndef _RTL_LOGFILE_HXX_
+#include <rtl/logfile.hxx>
+#endif
 #ifndef _DRAFTS_COM_SUN_STAR_RENDERING_XBITMAP_HPP__
 #include <drafts/com/sun/star/rendering/XBitmap.hpp>
 #endif
@@ -87,7 +90,7 @@
 #include <basegfx/tools/canvastools.hxx>
 #endif
 
-#include "mtftools.hxx"
+#include <mtftools.hxx>
 
 
 using namespace ::com::sun::star;
@@ -196,7 +199,7 @@ namespace cppcanvas
         {
             tools::initRenderState(maState,rState);
 
-            // TODO: setup clipping/extract only part of the bitmap
+            // TODO(F2): setup clipping/extract only part of the bitmap
             implSetupTransform( maState, rSrcPoint, rSrcSize, rDstPoint, rDstSize );
         }
 
@@ -204,11 +207,17 @@ namespace cppcanvas
         {
         }
 
-        bool BitmapAction::render() const
+        bool BitmapAction::render( const ::basegfx::B2DHomMatrix& rTransformation ) const
         {
+            RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::BitmapAction::render()" );
+            RTL_LOGFILE_CONTEXT_TRACE1( aLog, "::cppcanvas::internal::BitmapAction: 0x%X", this );
+
+            rendering::RenderState aLocalState( maState );
+            ::canvas::tools::prependToRenderState(aLocalState, rTransformation);
+
             mpCanvas->getUNOCanvas()->drawBitmap( mxBitmap,
                                                   mpCanvas->getViewState(),
-                                                  maState );
+                                                  aLocalState );
 
             return true;
         }
