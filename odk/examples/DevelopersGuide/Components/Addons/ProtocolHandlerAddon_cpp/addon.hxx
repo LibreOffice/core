@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addon.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:12:00 $
+ *  last change: $Author: obo $ $Date: 2003-10-20 13:11:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -65,14 +65,14 @@ namespace com
             namespace frame
             {
                 class XFrame;
-            };
+            }
             namespace awt
             {
                 class XToolkit;
-            };
-        };
-    };
-};
+            }
+        }
+    }
+}
 
 class Addon : public cppu::WeakImplHelper4
 <
