@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paradlg.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:40:26 $
+ *  last change: $Author: rt $ $Date: 2001-05-10 06:32:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ TabDialog DLG_PARA
                 Text [ italian ] = "Paragrafo" ;
                 Text [ portuguese_brazilian ] = "Parágrafo" ;
                 Text [ portuguese ] = "Avanços e espaçamento" ;
-                Text [ finnish ] = "Kappale" ;
+                Text [ finnish ] = "Sisennys ja välit" ;
                 Text [ danish ] = "Indrykning og mellemrum" ;
                 Text [ french ] = "Retraits et écarts" ;
                 Text [ swedish ] = "Indrag och avstånd" ;
@@ -143,6 +143,7 @@ TabDialog DLG_PARA
                 Text[ turkish ] = "Hizalama";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Alineación";
+                Text[ finnish ] = "Tasaus";
             };
             PageItem
             {
@@ -198,6 +199,7 @@ TabDialog DLG_PARA
                 Text[ turkish ] = "Asian typography";
                 Text[ arabic ] = "ÃÓáæÈ ÇáØÈÇÚÉ ÇáÂÓíæíÉ";
                 Text[ catalan ] = "Tipografía asiática";
+                Text[ finnish ] = "Aasialaiset merkit";
             };
             PageItem
             {
@@ -224,6 +226,7 @@ TabDialog DLG_PARA
                 Text[ turkish ] = "Numaralama";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Numeración";
+                Text[ finnish ] = "Numerointi";
             };
             PageItem
             {
@@ -234,7 +237,7 @@ TabDialog DLG_PARA
                 Text [ italian ] = "Tabulazione" ;
                 Text [ portuguese_brazilian ] = "Tabulação" ;
                 Text [ portuguese ] = "Tabulação" ;
-                Text [ finnish ] = "Sarkain" ;
+                Text [ finnish ] = "Sarkaimet" ;
                 Text [ danish ] = "Tabulator" ;
                 Text [ french ] = "Tabulation" ;
                 Text [ swedish ] = "Tabulator" ;
@@ -292,7 +295,7 @@ TabDialog DLG_PARA
                 Text [ italian ] = "Bordo" ;
                 Text [ portuguese_brazilian ] = "Borda" ;
                 Text [ portuguese ] = "Contornos" ;
-                Text [ finnish ] = "Reunaviiva" ;
+                Text [ finnish ] = "Reunat" ;
                 Text [ danish ] = "Ramme" ;
                 Text [ french ] = "Bordure" ;
                 Text [ swedish ] = "Inramning" ;
@@ -388,7 +391,7 @@ TabDialog DLG_DRAWPARA
                 Text [ italian ] = "Rientri e spaziature" ;
                 Text [ portuguese_brazilian ] = "Parágrafo" ;
                 Text [ portuguese ] = "Avanços e espaçamento" ;
-                Text [ finnish ] = "Kappale" ;
+                Text [ finnish ] = "Sisennys ja välit" ;
                 Text [ danish ] = "Indrykning og mellemrum" ;
                 Text [ french ] = "Retraits et écarts" ;
                 Text [ swedish ] = "Indrag och avstånd" ;
@@ -435,6 +438,7 @@ TabDialog DLG_DRAWPARA
                 Text[ turkish ] = "Hizalama";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Alineación";
+                Text[ finnish ] = "Tasaus";
             };
 #endif
             PageItem
@@ -461,6 +465,7 @@ TabDialog DLG_DRAWPARA
                 Text[ turkish ] = "Asian typography";
                 Text[ arabic ] = "ÃÓáæÈ ÇáØÈÇÚÉ ÇáÂÓíæíÉ";
                 Text[ catalan ] = "Tipografía asiática";
+                Text[ finnish ] = "Aasialaiset merkit";
             };
             PageItem
             {
@@ -471,7 +476,7 @@ TabDialog DLG_DRAWPARA
                 Text [ italian ] = "Tabulazione" ;
                 Text [ portuguese_brazilian ] = "Tabulação" ;
                 Text [ portuguese ] = "Tabulação" ;
-                Text [ finnish ] = "Sarkain" ;
+                Text [ finnish ] = "Sarkaimet" ;
                 Text [ danish ] = "Tabulator" ;
                 Text [ french ] = "Tabulation" ;
                 Text [ swedish ] = "Tabulator" ;
