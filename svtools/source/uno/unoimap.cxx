@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoimap.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-29 11:59:58 $
+ *  last change: $Author: cl $ $Date: 2001-03-30 14:13:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -373,6 +373,7 @@ IMapObject* SvUnoImageMapObject::createIMapObject() const
                 aPoly.SetPoint( aPoint, nPoint );
             }
 
+            aPoly.Optimize( POLY_OPTIMIZE_CLOSE );
             pNewIMapObject = new IMapPolygonObject( aPoly, aURL, aDescription, aTarget, aName, mbIsActive, sal_False );
         }
         break;
