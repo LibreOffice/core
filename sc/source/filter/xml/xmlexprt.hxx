@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.hxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:39 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:57:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,7 +244,11 @@ protected:
     virtual XMLShapeExport* CreateShapeExport();
     virtual XMLFontAutoStylePool* CreateFontAutoStylePool();
 public:
-    ScXMLExport(const sal_uInt16 nExportFlag);
+    // #110680#
+    ScXMLExport(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+        const sal_uInt16 nExportFlag);
+
     virtual ~ScXMLExport();
 
     static sal_Int16 GetFieldUnit();
