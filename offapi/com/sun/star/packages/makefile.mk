@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: jsc $ $Date: 2002-11-27 09:46:11 $
+#   last change: $Author: jsc $ $Date: 2002-11-29 13:12:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,9 +77,6 @@ IDLFILES=\
         PackageFolder.idl\
         PackageFolderEnumeration.idl\
         PackageStream.idl\
-        ZipConstants.idl\
-        ZipEntry.idl\
-        ZipException.idl
 
 # ------------------------------------------------------------------
 
