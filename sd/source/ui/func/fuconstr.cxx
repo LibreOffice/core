@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconstr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:12:23 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:59:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,8 @@
  *
  ************************************************************************/
 
+#include "fuconstr.hxx"
+
 #include <svx/svxids.hrc>
 #ifndef _AEITEM_HXX //autogen
 #include <svtools/aeitem.hxx>
@@ -81,17 +83,28 @@
 
 #include "app.hrc"
 #include "glob.hrc"
+#ifndef SD_FU_DRAW_HXX
 #include "fudraw.hxx"
-#include "sdview.hxx"
-#include "sdwindow.hxx"
-#include "viewshel.hxx"
+#endif
+#ifndef SD_VIEW_HXX
+#include "View.hxx"
+#endif
+#ifndef SD_WINDOW_HXX
+#include "Window.hxx"
+#endif
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
+#endif
 #include "drawdoc.hxx"
-#include "fuconstr.hxx"
-#include "frmview.hxx"
+#ifndef SD_FRAME_VIEW_HXX
+#include "FrameView.hxx"
+#endif
 #include "sdpage.hxx"
 #include "sdresid.hxx"
 #include "stlpool.hxx"
 #include <svx/globl3d.hxx>
+
+namespace sd {
 
 TYPEINIT1( FuConstruct, FuDraw );
 
@@ -101,13 +114,14 @@ TYPEINIT1( FuConstruct, FuDraw );
 |*
 \************************************************************************/
 
-FuConstruct::FuConstruct(SdViewShell*       pViewSh,
-                         SdWindow*          pWin,
-                         SdView*            pView,
-                         SdDrawDocument*    pDoc,
-                         SfxRequest&        rReq) :
-    FuDraw(pViewSh, pWin, pView, pDoc, rReq),
-    bSelectionChanged(FALSE)
+FuConstruct::FuConstruct (
+    ViewShell*      pViewSh,
+    ::sd::Window*           pWin,
+    ::sd::View*         pView,
+    SdDrawDocument* pDoc,
+    SfxRequest&     rReq)
+    : FuDraw(pViewSh, pWin, pView, pDoc, rReq),
+      bSelectionChanged(FALSE)
 {
 }
 
@@ -484,6 +498,4 @@ void FuConstruct::SetStyleSheet(SfxItemSet& rAttr, SdrObject* pObj)
     }
 }
 
-
-
-
+} // end of namespace sd
