@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PluginVariable.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:06:19 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 21:21:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 /** Describes the possible parameters to XPluginContext::getValue.
     It describes what kind of object is requested.
 */
-enum PluginVariable
+published enum PluginVariable
 {
     /** XPluginContext::getValue will return the XWindow display pointer of
         a display connection (UNIX only)
