@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convert.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:47:14 $
+ *  last change: $Author: vg $ $Date: 2001-05-17 08:30:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         TEXT [ ENGLISH ] = "~Tab" ;
         TEXT [ norwegian ] = "~Tab" ;
         TEXT [ italian ] = "~Tabulazione" ;
-        TEXT [ portuguese_brazilian ] = "~Tabulação" ;
+        TEXT [ portuguese_brazilian ] = "~Tabula??o" ;
         TEXT [ portuguese ] = "~Tabulação" ;
         TEXT [ finnish ] = "~Sarkaimet" ;
         TEXT [ danish ] = "Tabulator" ;
@@ -123,7 +123,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         TEXT [ ENGLISH ] = "~Semicolon" ;
         TEXT [ norwegian ] = "~Semikolon" ;
         TEXT [ italian ] = "~Punto e virgola" ;
-        TEXT [ portuguese_brazilian ] = "~Ponto e vírgula" ;
+        TEXT [ portuguese_brazilian ] = "~Ponto e v?rgula" ;
         TEXT [ portuguese ] = "Ponto e vír~gula" ;
         TEXT [ finnish ] = "~Puolipisteet" ;
         TEXT [ danish ] = "Semikolon" ;
@@ -135,7 +135,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         TABSTOP = TRUE ;
         TEXT[ chinese_simplified ] = "·ÖºÅ(~S)";
         TEXT[ russian ] = "Òî÷êà ñ çàïÿòîé";
-        TEXT[ polish ] = "Œrednik";
+        TEXT[ polish ] = "?rednik";
         TEXT[ japanese ] = "¾ĞºÛİ(~S)";
         TEXT[ chinese_traditional ] = "¤À¸¹(~S)";
         TEXT[ arabic ] = "ÇáİÇÕáÉ ÇáãäŞæØÉ";
@@ -153,7 +153,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         TEXT [ ENGLISH ] = "~Paragraph" ;
         TEXT [ norwegian ] = "~Paragraf" ;
         TEXT [ italian ] = "~Paragrafo" ;
-        TEXT [ portuguese_brazilian ] = "~Parágrafo" ;
+        TEXT [ portuguese_brazilian ] = "~Par?grafo" ;
         TEXT [ portuguese ] = "~Parágrafo" ;
         TEXT [ finnish ] = "~Kappale" ;
         TEXT [ danish ] = "Afsnit" ;
@@ -230,7 +230,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         Text [ portuguese ] = "~Largura igual para todas as colunas" ;
         Text[ chinese_simplified ] = "ËùÓĞÁĞµÄ¿í¶ÈÏàÍ¬";
         Text[ russian ] = "Îäèíàêîâàÿ øèğèíà âñåõ êîëîíîê";
-        Text[ polish ] = "~Jednakowa szerokoœæ wszystk. kolumn";
+        Text[ polish ] = "~Jednakowa szeroko?æ wszystk. kolumn";
         Text[ japanese ] = "‚·‚×‚Ä‚Ì—ñ•‚ğ“¯‚¶‚É";
         Text[ chinese_traditional ] = "©Ò¦³Äæ¼e«×¬Û¦P";
         Text[ arabic ] = "äİÓ ÇáÚÑÖ áßá ÇáÃÚãÏÉ";
@@ -261,7 +261,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         Group = TRUE ;
         TEXT[ chinese_simplified ] = "ÕıÎÄÄÚµÄ·Ö¸ô·û";
         TEXT[ russian ] = "Ğàçäåëèòåëü òåêñòà";
-        TEXT[ polish ] = "Separator w tekœcie";
+        TEXT[ polish ] = "Separator w tek?cie";
         TEXT[ japanese ] = "Ã·½Ä“à‚Ì‹æØ‚è‹L†";
         TEXT[ chinese_traditional ] = "¤º¤åªº¤À¹j²Å";
         TEXT[ arabic ] = "ÚáÇãÇÊ ÇáİÕá İí ÇáäÕ";
@@ -471,7 +471,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         Text [ ENGLISH ] = "Autoformat..." ;
         Text [ norwegian ] = "Autoformat..." ;
         Text [ italian ] = "~Formattazione automatica..." ;
-        Text [ portuguese_brazilian ] = "Formatação Automática..." ;
+        Text [ portuguese_brazilian ] = "Formata??o Autom?tica..." ;
         Text [ portuguese ] = "Auto~Formato..." ;
         Text [ finnish ] = "~Automaattinen muotoilu" ;
         Text [ danish ] = "AutoFormat..." ;
