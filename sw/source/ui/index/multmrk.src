@@ -2,9 +2,9 @@
  *
  *  $RCSfile: multmrk.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:10:33 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 11:58:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,6 +239,8 @@ ModalDialog DLG_MULTMRK
     Text[ hindi ] = "अनुक्रमणिका चिह्न";
     Text[ slovak ] = "Značky obsahu";
 };
+
+
 
 
 
