@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: sb $ $Date: 2002-07-08 12:02:36 $
+#   last change: $Author: sb $ $Date: 2002-07-19 15:14:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,7 +76,7 @@ REGEXP = 's/^[\#].*$$//'
 
 SHL1TARGET = URIHelper
 SHL1OBJS = \
-    $(SLO)$/URIHelper.obj
+    $(SLO)$/test_URIHelper.obj
 SHL1STDLIBS = \
     $(CPPULIB) \
     $(CPPUHELPERLIB) \
