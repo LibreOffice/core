@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmstring.src,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:27:13 $
+ *  last change: $Author: nf $ $Date: 2003-08-05 10:18:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5000,20 +5000,20 @@ String RID_STR_SVT_SQL_INTERNATIONAL
     Text [ english_us ] = "LIKE;NOT;EMPTY;TRUE;FALSE;IS;BETWEEN;OR;AND;Average;Count;Maximum;Minimum;Sum" ;
     Text [ portuguese ] = "COMO;NÃO;VAZIO;VERDADEIRO;FALSO;É;ENTRE;OU;E;média;quantidade;máximo;mínimo;soma" ;
     Text [ portuguese_brazilian ] = "COMO;NÃO;VAZIO;VERDADEIRO;FALSO;É;ENTRE;OU;E;média;quantidade;máximo;mínimo;soma" ;
-    Text [ swedish ] = "SOM;INTE;TOM;SANN;FALSK;ÄR;MELLAN;ELLER;OCH;genomsnitt;antal;maximum;minimum;summa" ;
+    Text [ swedish ] = "SOM;INTE;TOM;SANN;FALSK;ÄR;MELLAN;ELLER;OCH;Genomsnitt;Antal;Maximum;Minimum;Summa" ;
     Text [ danish ] = "SOM;IKKE;TOM;SAND;FALSK;ER;MELLEM;ELLER;OG;Gennemsnit;Antal;Maksimum;Minimum;Sum" ;
-    Text [ italian ] = "COME;NON;VUOTO;VERO;FALSO;È;TRA;O;E;media;quantità;massimo;minimo;totale" ;
+    Text [ italian ] = "COME;NON;VUOTO;VERO;FALSO;È;TRA;O;E;Media;Quantità;Massimo;Minimo;Somma" ;
     Text [ spanish ] = "COMO;NO;VACIO;VERDADERO;FALSO;ES;ENTRE;O;Y;Promedio;Cantidad;Máximo;Mínimo;Suma" ;
     Text [ french ] = "COMME;PAS;VIDE;VRAI;FAUX;EST;ENTRE;OU;ET;Moyenne;Nombre;Maximum;Minimum;Somme" ;
     Text [ dutch ] = "ALS;NIET;LEEG;WAAR;ONWAAR;IS;TUSSEN;OF;EN;Gemiddelde;Aantal;Maximum;Minimum;Som" ;
     Text[ chinese_simplified ] = "LIKE;NOT;EMPTY;TRUE;FALSE;IS;BETWEEN;OR;AND;average;number;maximum;minimum;sum";
     Text[ russian ] = "ÊÀÊ;ÍÅ;ÏÓÑÒÎ;ÈÑÒÈÍÀ;ËÎÆÜ;ÅÑÒÜ;ÌÅÆÄÓ;ÈËÈ;È;ñğäíåå;êîëè÷åñòâî;ìàêñèìóì;ìèíèìóì;ñóììà";
     Text[ polish ] = "JAK;NIE;PUSTY;PRAWDA;FA£SZ;JEST;POMIÊDZY;LUB;I;Œrednia;Numer;Maksimum;Minimum;Suma";
-    Text[ japanese ] = "LIKE;NOT;EMPTY;TRUE;FALSE;IS;BETWEEN;OR;AND;average;number;maximum;minimum;sum";
-    Text[ chinese_traditional ] = "LIKE;NOT;EMPTY;TRUE;FALSE;IS;BETWEEN;OR;AND;average;number;maximum;minimum;sum";
+    Text[ japanese ] = "LIKE;NOT;EMPTY;TRUE;FALSE;IS;BETWEEN;OR;AND;å¹³å‡;æ•°;æœ€å¤§;æœ€å°;åˆè¨ˆ";
+    Text[ chinese_traditional ] = "LIKE;NOT;EMPTY;TRUE;FALSE;IS;BETWEEN;OR;AND;å¹³å‡å€¼;æ•¸ç›®;æœ€å¤§;æœ€å°;ç¸½æ•¸";
     Text[ arabic ] = "LIKE;NOT;EMPTY;TRUE;FALSE;IS;BETWEEN;OR;AND;Average;Count;Maximum;Minimum;Sum";
     Text[ dutch ] = "ALS;NIET;LEEG;WAAR;ONWAAR;IS;TUSSEN;OF;EN;Gemiddelde;Aantal;Maximum;Minimum;Som";
-    Text[ chinese_simplified ] = "LIKE;NOT;EMPTY;TRUE;FALSE;IS;BETWEEN;OR;AND;average;number;maximum;minimum;sum";
+    Text[ chinese_simplified ] = "LIKE;NOT;EMPTY;TRUE;FALSE;IS;BETWEEN;OR;AND;å¹³å‡å€¼;æ•°ç›®;æœ€å¤§;æœ€å°;æ€»æ•°";
     Text[ greek ] = "ÏĞÙÓ;Ï×É;ÊÅÍÏ;ÁËÇÈÇÓ;ËÁÈÏÓ;ÅÉÍÁÉ;ÌÅÔÁÎÕ;¹;ÊÁÉ;Ìİóïò üñïò;ĞëŞèïò;Ìİãéóôï;ÅëÜ÷éóôï;¢èñïéóìá";
     Text[ korean ] = "LIKE;NOT;EMPTY;TRUE;FALSE;IS;BETWEEN;OR;AND;í‰ê· ;ê°œìˆ˜;ìµœëŒ€;ìµœì†Œ;í•©ê³„";
     Text[ turkish ] = "LIKE;NOT;EMPTY;TRUE;FALSE;IS;BETWEEN;OR;AND;Average;Count;Maximum;Minimum;Sum";
