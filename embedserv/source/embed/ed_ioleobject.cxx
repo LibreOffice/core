@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ed_ioleobject.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mav $ $Date: 2003-03-05 15:50:09 $
+ *  last change: $Author: mav $ $Date: 2003-03-10 16:10:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,24 @@ STDMETHODIMP EmbedDocument_Impl::GetClipboardData( DWORD dwReserved, IDataObject
 STDMETHODIMP EmbedDocument_Impl::DoVerb( LONG iVerb, LPMSG lpmsg, IOleClientSite *pActiveSite, LONG lindex, HWND hwndParent, LPCRECT lprcPosRect )
 {
     if ( iVerb == OLEIVERB_PRIMARY || iVerb == OLEIVERB_OPEN || iVerb == OLEIVERB_SHOW )
+    {
+        if ( m_pClientSite )
+        {
+            m_pClientSite->OnShowWindow( TRUE );
+            m_pClientSite->OnShowWindow( FALSE );
+        }
+
+        for ( AdviseSinkHashMapIterator iAdvise = m_aAdviseHashMap.begin(); iAdvise != m_aAdviseHashMap.end(); iAdvise++ )
+        {
+            if ( iAdvise->second )
+                iAdvise->second->OnViewChange( DVASPECT_CONTENT, -1 );
+        }
+
+        if ( m_pDAdviseHolder )
+            m_pDAdviseHolder->SendOnDataChange( (IDataObject*)this, 0, 0 );
+
         return S_OK;
+    }
 
     return E_NOTIMPL;
 }
@@ -154,11 +171,27 @@ STDMETHODIMP EmbedDocument_Impl::GetExtent( DWORD dwDrawAspect, SIZEL *psizel )
 
 STDMETHODIMP EmbedDocument_Impl::Advise( IAdviseSink *pAdvSink, DWORD *pdwConnection )
 {
+    if ( m_nAdviseNum == 0xFFFFFFFF )
+        return E_OUTOFMEMORY;
+
+    pAdvSink->AddRef();
+    m_aAdviseHashMap.insert( ::std::pair< DWORD, IAdviseSink* >( m_nAdviseNum, pAdvSink ) );
+    *pdwConnection = m_nAdviseNum++;
+
     return S_OK;
 }
 
 STDMETHODIMP EmbedDocument_Impl::Unadvise( DWORD dwConnection )
 {
+    AdviseSinkHashMapIterator iAdvise = m_aAdviseHashMap.find( dwConnection );
+    if ( iAdvise != m_aAdviseHashMap.end() )
+    {
+        iAdvise->second->Release();
+        m_aAdviseHashMap.erase( iAdvise );
+    }
+    else
+        return OLE_E_NOCONNECTION;
+
     return S_OK;
 }
 
