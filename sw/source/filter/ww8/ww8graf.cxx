@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: cmc $ $Date: 2001-11-12 17:33:40 $
+ *  last change: $Author: cmc $ $Date: 2002-01-10 14:02:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -686,7 +686,7 @@ void SwWW8ImplReader::ReadPolyLine( WW8_DPHEAD* pHd, WW8_DO* pDo )
                   + (INT16)SVBT16ToShort( pHd->ya );
         aP[i] = aPt;
     }
-    delete[]( pP );
+    delete[] pP;
 
     SdrObject* pObj = new SdrPathObj(
                 ( SVBT16ToShort( aPoly.aBits1 ) & 0x1 ) ? OBJ_POLY : OBJ_PLIN,
@@ -815,7 +815,7 @@ void SwWW8ImplReader::InsertTxbxAttrs( long nStartCp, long nEndCp,
                 //Here place them onto our usual stack and we will pop them
                 //off and convert them later
                 if (bStartAttr)
-                    ImportSprm(aRes.pMemPos, (short)aRes.nMemLen, aRes.nSprmId);
+                    ImportSprm(aRes.pMemPos, aRes.nSprmId);
                 else
                     EndSprm( aRes.nSprmId );
             }
@@ -1365,7 +1365,7 @@ void SwWW8ImplReader::ReadTxtBox( WW8_DPHEAD* pHd, WW8_DO* pDo )
         if (nEndCpFly-nStartCpFly)
         {
             WW8AnchoringProperties aAnchoring;
-            aAnchoring.Remove(*pPaM->GetPoint(),*this,pCtrlStck);
+            aAnchoring.Remove(*this,pCtrlStck);
             WW8ReaderSave aSave( this );
 
             // set Pam into the FlyFrame
@@ -1424,7 +1424,7 @@ void SwWW8ImplReader::ReadCaptionBox( WW8_DPHEAD* pHd, WW8_DO* pDo )
                (INT16)SVBT16ToShort( pHd->ya )
                + (INT16)SVBT16ToShort( aCallB.dpheadPolyLine.ya )
                + nDrawYOfs2 + (INT16)SVBT16ToShort( pP[1] ) );
-    delete[]( pP );
+    delete[] pP;
 
     SdrCaptionObj* pObj = new SdrCaptionObj( Rectangle( aP0, aP1 ), aP2 );
     Size aSize( (INT16)SVBT16ToShort( aCallB.dpheadTxbx.dxa ),
@@ -1746,8 +1746,6 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
 
     const SfxItemSet& rOldSet = pSdrObj->GetItemSet();
 
-    BOOL bIsAAttrObj = pSdrObj->ISA(SdrAttrObj);
-
     // einige Items koennen direkt so uebernommen werden
     const USHORT nDirectMatch = 2;
     static RES_FRMATR __READONLY_DATA aDirectMatch[ nDirectMatch ] =
@@ -1877,8 +1875,8 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
             SdrShadowXDistItem);
         const INT32 nShdDistY = WW8ITEMVALUE(rOldSet, SDRATTR_SHADOWYDIST,
             SdrShadowYDistItem);
-        const USHORT nShdTrans= WW8ITEMVALUE(rOldSet,
-            SDRATTR_SHADOWTRANSPARENCE, SdrShadowTransparenceItem);
+        //const USHORT nShdTrans= WW8ITEMVALUE(rOldSet,
+        //   SDRATTR_SHADOWTRANSPARENCE, SdrShadowTransparenceItem);
 
         // diese gibt es im Writer nicht  :-(
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2135,8 +2133,8 @@ void SwWW8ImplReader::ProcessEscherAlign( SvxMSDffImportRec* pRecord,
         static const SwRelationOrient aRelOriTab[ nCntRelTo ] = {
             REL_PG_PRTAREA, // Page printable area, when bound to page. identical with PRTAREA
             REL_PG_FRAME,   // Page,                when bound to page. identical with FRAME
-//          FRAME,          // Paragraph Text area
-            PRTAREA,        // Paragraph area
+            FRAME,          // Paragraph Text area
+//          PRTAREA,        // Paragraph area
             REL_CHAR        // to a Character
 
 //          REL_PG_LEFT,    // in left page-border
@@ -2668,9 +2666,21 @@ SwFrmFmt * SwWW8ImplReader::ConvertDrawTextToFly(SdrObject* &rpObject,
 
         if( rpOurNewObject )
         {
+            /*
+            #96375#
+            We do not store our rpOutNewObject in the ShapeOrder because we
+            have a FrmFmt from which we can regenerate the contact object when
+            we need it. Because, we can have frames anchored to paragraphs in
+            header/footers and we can copy header/footers, if we do copy a
+            header/footer with a nonpage anchored frame in it then the contact
+            objects are invalidated. Under this condition the FrmFmt will be
+            updated to reflect this change and can be used to get a new
+            contact object, while a raw rpOutNewObject stored here becomes
+            deleted and useless.
+            */
             pMSDffManager->StoreShapeOrder( pF->nSpId,
                 (((ULONG)pRecord->aTextId.nTxBxS) << 16) +
-                pRecord->aTextId.nSequence, rpOurNewObject,
+                pRecord->aTextId.nSequence, 0,
                 (SwFlyFrmFmt*)pRetFrmFmt, nActSectionNo +
                 bIsHeader ? 1 : 0 + bIsFooter ? 2 : 0 );
 
@@ -2690,7 +2700,7 @@ SwFrmFmt * SwWW8ImplReader::ConvertDrawTextToFly(SdrObject* &rpObject,
         if( !pRecord->aTextId.nSequence )
         {
             WW8AnchoringProperties aAnchoring;
-            aAnchoring.Remove(*pPaM->GetPoint(),*this,pCtrlStck);
+            aAnchoring.Remove(*this,pCtrlStck);
             // rette Flags u.ae. und setze sie zurueck
             WW8ReaderSave aSave( this );
             // setze Pam in den FlyFrame

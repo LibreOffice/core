@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: cmc $ $Date: 2001-11-19 15:25:10 $
+ *  last change: $Author: cmc $ $Date: 2002-01-10 14:02:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #ifndef _WW8PAR_HXX
 #define _WW8PAR_HXX
 
+#ifndef __SGI_STL_VECTOR
+#include <vector>
+#endif
 #ifndef _STRING_HXX //autogen
 #include <tools/string.hxx>
 #endif
@@ -115,15 +118,12 @@ class SwAttrSet;
 class SwNumRule;
 class SwFrmFmt;
 
-//class WW8CtrlStack;
 class SwFltControlStack;
-//class WW8EndStack;
 class SwFltEndStack;
 class SwWW8StyInf;
 class WW8Fib;
 class WW8PLCFMan;
 struct WW8PLCFManResult;
-class WW8Fonts;
 class WW8RStyle;
 class WW8PLCF_HdFt;
 class Plcx_Fkp;
@@ -182,10 +182,7 @@ namespace com{namespace sun {namespace star{
     namespace lang{class XMultiServiceFactory;}
 }}}
 
-//#define WW8_CHARBUF_SIZE 1040 // Lese-Puffer fuer nackten Text
-
 // defines nur fuer die WW8-variable der INI-Datei
-
 #define WW8FL_NO_TEXT        1
 #define WW8FL_NO_STYLES      2
 #define WW8FL_NO_ZSTYLES     4  // keine Zeichenstyles importieren
@@ -242,12 +239,10 @@ typedef WW8AuthorInfo* WW8AuthorInfo_Ptr;
 struct WW8OleMap;
 typedef WW8OleMap* WW8OleMap_Ptr;
 
-SV_DECL_PTRARR_SORT_DEL(WW8LSTInfos,    WW8LSTInfo_Ptr,     16,16);
-SV_DECL_PTRARR_DEL(     WW8LFOInfos,    WW8LFOInfo_Ptr,     16,16);
-SV_DECL_PTRARR_SORT_DEL(WW8AuthorInfos, WW8AuthorInfo_Ptr,  16,16);
-SV_DECL_PTRARR_SORT_DEL(WW8OleMaps, WW8OleMap_Ptr,  16,16);
-SV_DECL_PTRARR(SwCharFmtPtrArray, SwCharFmt*,4,16);
-
+SV_DECL_PTRARR_SORT_DEL(WW8LSTInfos,WW8LSTInfo_Ptr,16,16)
+SV_DECL_PTRARR_DEL(WW8LFOInfos,WW8LFOInfo_Ptr,16,16)
+SV_DECL_PTRARR_SORT_DEL(WW8AuthorInfos, WW8AuthorInfo_Ptr,16,16)
+SV_DECL_PTRARR_SORT_DEL(WW8OleMaps, WW8OleMap_Ptr,16,16)
 
 struct WW8OleMap
 {
@@ -267,7 +262,6 @@ struct WW8OleMap
     }
 };
 
-
 class SwWW8ImplReader;
 class WW8ListManager
 {
@@ -283,18 +277,16 @@ class WW8ListManager
     BYTE* GrpprlHasSprm(USHORT nId, BYTE& rSprms, BYTE nLen);
     WW8LSTInfo* GetLSTByStreamPos( USHORT nStreamPos ) const;
     WW8LSTInfo* GetLSTByListId(    ULONG  nIdLst     ) const;
-    BOOL ReadLVL(   BYTE nLevel,
-                    SwNumFmt& rNumFmt,
-                    SfxItemSet*& rpItemSet,
-                    USHORT nLevelStyle,
-                    BOOL bSetStartNo );
-    void AdjustLVL( BYTE       nLevel,
-                    SwNumRule& rNumRule,
-                    WW8aISet&  rListItemSet,
-                    WW8aCFmt&  aCharFmt,
-                    BOOL&      bNewCharFmtCreated,  // Ausgabe-Parameter
-                    String     aPrefix = aEmptyStr );
+    BOOL ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet, USHORT nLevelStyle,
+        BOOL bSetStartNo );
+    void AdjustLVL(BYTE nLevel, SwNumRule& rNumRule, WW8aISet& rListItemSet,
+        WW8aCFmt& aCharFmt, BOOL& bNewCharFmtCreated,
+        String aPrefix = aEmptyStr );
     BOOL LFOequaltoLST(WW8LFOInfo& rLFOInfo);
+
+    //No copying
+    WW8ListManager(const WW8ListManager&);
+    WW8ListManager& operator=(const WW8ListManager&);
 public:
     WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_);
     ~WW8ListManager();
@@ -310,15 +302,19 @@ public:
 //-----------------------------------------
 class SwWW8FltControlStack : public SwFltControlStack
 {
+private:
     SwWW8ImplReader& rReader;
     USHORT nToggleAttrFlags;
+    //No copying
+    SwWW8FltControlStack(const SwWW8FltControlStack&);
+    SwWW8FltControlStack& operator=(const SwWW8FltControlStack&);
 protected:
-    virtual void SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry* pEntry);
+    virtual void SetAttrInDoc(const SwPosition& rTmpPos,
+        SwFltStackEntry* pEntry);
 
 public:
-    SwWW8FltControlStack( SwDoc* pDo, ULONG nFieldFl, SwWW8ImplReader& rReader_ ) :
-        SwFltControlStack( pDo, nFieldFl ),
-        rReader( rReader_ ),
+    SwWW8FltControlStack(SwDoc* pDo, ULONG nFieldFl, SwWW8ImplReader& rReader_ )
+        : SwFltControlStack( pDo, nFieldFl ), rReader( rReader_ ),
         nToggleAttrFlags( 0 )
     {}
 
@@ -335,8 +331,6 @@ public:
     }
     USHORT GetToggleAttrFlags() const { return nToggleAttrFlags; }
 };
-
-
 
 //-----------------------------------------
 //     Redlining Authors
@@ -393,16 +387,10 @@ public:
     void Restore( SwWW8ImplReader* pRdr );
 };
 
-
-
-enum eF_ResT{ F_OK, F_TEXT, F_TAGIGN, F_TAGTXT, F_READ_FSPA };
+enum eF_ResT{ FLD_OK, FLD_TEXT, FLD_TAGIGN, FLD_TAGTXT, FLD_READ_FSPA };
 
 struct SwWW8Shade{
     Color aColor;
-#if 0
-    //With auto colour, no longer need this.
-    BOOL  bWhiteText;
-#endif
     SwWW8Shade( BOOL bVer67, const WW8_SHD& rSHD );
 };
 
@@ -423,9 +411,7 @@ class WW8FormulaControl : public OCX_Control
 public:
     WW8FormulaControl(const UniString& sN,SwWW8ImplReader &rR)
         : OCX_Control(sN), rRdr(rR) {}
-    void WW8FormulaControl::SetOthersFromDoc(com::sun::star::uno::Reference <
-        com::sun::star::form::XFormComponent> &rFComp,
-        com::sun::star::awt::Size &rSz,
+    void WW8FormulaControl::SetOthersFromDoc(com::sun::star::awt::Size &rSz,
         com::sun::star::uno::Reference <
         com::sun::star::beans::XPropertySet> &rPropSet);
 
@@ -446,13 +432,21 @@ public:
     UniString sHelp;
     UniString sToolTip;
 
-    void Read(SwWw8ControlType nWhich,SvStream *pD);
+    void FormulaRead(SwWw8ControlType nWhich,SvStream *pD);
 private:
+    //No copying
+    WW8FormulaControl(const WW8FormulaControl&);
+    WW8FormulaControl& operator=(const WW8FormulaControl&);
+
     SwWW8ImplReader &rRdr;
 };
 
-class WW8FormulaCheckBox: public WW8FormulaControl
+class WW8FormulaCheckBox : public WW8FormulaControl
 {
+private:
+    //No copying
+    WW8FormulaCheckBox(const WW8FormulaCheckBox&);
+    WW8FormulaCheckBox& operator=(const WW8FormulaCheckBox&);
 public:
     WW8FormulaCheckBox(SwWW8ImplReader &rR)
         : WW8FormulaControl( WW8_ASCII2STR( "CheckBox" ), rR)
@@ -464,8 +458,12 @@ public:
         com::sun::star::awt::Size &rSz);
 };
 
-class WW8FormulaEditBox: public WW8FormulaControl
+class WW8FormulaEditBox : public WW8FormulaControl
 {
+private:
+    //No copying
+    WW8FormulaEditBox(const WW8FormulaEditBox&);
+    WW8FormulaEditBox& operator=(const WW8FormulaEditBox&);
 public:
     WW8FormulaEditBox(SwWW8ImplReader &rR)
         : WW8FormulaControl( WW8_ASCII2STR( "TextField" ) ,rR)
@@ -495,16 +493,17 @@ public:
 
 class SwMSDffManager : public SvxMSDffManager
 {
+private:
     SwWW8ImplReader& rReader;
     virtual BOOL GetOLEStorageName( long nOLEId, String& rStorageName,
-                                    SvStorageRef& rSrcStorage,
-                                    SvStorageRef& rDestStorage ) const;
+        SvStorageRef& rSrcStorage, SvStorageRef& rDestStorage ) const;
     virtual BOOL ShapeHasText( ULONG nShapeId, ULONG nFilePos ) const;
     virtual SdrObject* ImportOLE( long nOLEId, const Graphic& rGrf,
-                                    const Rectangle& rBoundRect ) const;
+        const Rectangle& rBoundRect ) const;
 
-//  virtual void ProcessClientAnchor2( SvStream& rStData, DffRecordHeader& rHd, void* pData, DffObjData& );
-
+    //No copying
+    SwMSDffManager(const SwMSDffManager&);
+    SwMSDffManager& operator=(const SwMSDffManager&);
 public:
     static UINT32 GetFilterFlags();
     static USHORT GetEscherLineMatch(MSO_LineStyle eStyle, MSO_SPT eShapeType,
@@ -513,7 +512,6 @@ public:
     SwFrmFmt *GetLastOCXShapeFrm() const;
     SvStream *DisableFallbackStream();
     void EnableFallbackStream(SvStream *pNew);
-
 private:
 // If we convert an OCX through this manager we will store the uno XShape
 // reference created through the conversion
@@ -521,12 +519,13 @@ private:
         com::sun::star::drawing::XShape > xShape;
 };
 
-
 //-----------------------------------------
 //            Storage-Reader
 //-----------------------------------------
 class SwWW8ImplReader
 {
+private:
+
 friend class WW8RStyle;
 friend class WW8TabDesc;
 friend class WW8ReaderSave;
@@ -556,7 +555,7 @@ friend class WW8FormulaControl;
     SwFlyFrmFmt* pFlyFmtOfJustInsertedGraphic;
     SwFrmFmt* pFmtOfJustInsertedGraphicOrOLE;
     //Keep track of generated Ruby character formats
-    SwCharFmtPtrArray aRubyCharFmts;
+    ::std::vector<const SwCharFmt*> aRubyCharFmts;
 
     WW8Fib* pWwFib;
     WW8Fonts* pFonts;
@@ -565,14 +564,14 @@ friend class WW8FormulaControl;
     WW8ScannerBase* pSBase;
     WW8PLCFMan* pPlcxMan;
 
-    WW8RStyle* pStyles;             // Pointer auf die Style-Einleseklasse
-    SwFmt* pAktColl;                // gerade zu erzeugende Collection
-                                    // ( ist ausserhalb einer Style-Def immer 0 )
-    SfxItemSet* pAktItemSet;        // gerade einzulesende Zeichenattribute
-                                    // ( ausserhalb des WW8ListManager Ctor's immer 0 )
-    SwWW8StyInf* pCollA;            // UEbersetzungs-Array der Styles
+    WW8RStyle* pStyles;     // Pointer auf die Style-Einleseklasse
+    SwFmt* pAktColl;        // gerade zu erzeugende Collection
+                            // ( ist ausserhalb einer Style-Def immer 0 )
+    SfxItemSet* pAktItemSet;// gerade einzulesende Zeichenattribute
+                            // (ausserhalb des WW8ListManager Ctor's immer 0)
+    SwWW8StyInf* pCollA;    // UEbersetzungs-Array der Styles
     const SwTxtFmtColl* pDfltTxtFmtColl;    // Default
-    SwFmt* pStandardFmtColl;        // "Standard"
+    SwFmt* pStandardFmtColl;// "Standard"
 
     SwPageDesc* pPageDesc;      // fuer uebernommene KF-Zeilen
     WW8PLCF_HdFt* pHdFt;        // Pointer auf Header / Footer - Scannerklasse
@@ -587,7 +586,7 @@ friend class WW8FormulaControl;
     SwNodeIndex* pBehindSection;// Node-Index zum Zuruecksetzen des PaM nach einem Bereich
     SwSection*   pNewSection;   // last Section that was inserted into the doc
 
-    SwNode*      pNode_FLY_AT_CNTNT; // set: WW8SwFlyPara()   read: CreateSwTable()
+    SwNode* pNode_FLY_AT_CNTNT; // set: WW8SwFlyPara()   read: CreateSwTable()
 
     SwDrawFrmFmt *pDrawFmt;     // wie FlyFrmFmt
     SdrModel* pDrawModel;
@@ -604,6 +603,15 @@ friend class WW8FormulaControl;
 
     WW8AuthorInfos* pAuthorInfos;
     WW8OleMaps* pOleMap;
+
+    /*
+    Tabstops on a paragraph need to be adjusted when the lrspace has been
+    changed. To safely collect all lrchanges we process them at the closing of
+    the lr attribute, and store the start pos for the newly modified tabstop
+    here.
+    */
+    SwNodeIndex *pTabNode;
+    xub_StrLen nTabCntnt;
 
     SwNodeIndex* pLastPgDeskIdx;// for inserting a section when Ft-/End-Note
                                 // with flag 'on end of section' set
@@ -625,10 +633,10 @@ friend class WW8FormulaControl;
     ULONG nFtTextHeight;        // Hoehe des eingelesenen Footers
 
     ULONG nDrawObjOfs;
-    long nDrawCpO;              // Anfang der Txbx-SubDocs
+    WW8_CP nDrawCpO;            // Anfang der Txbx-SubDocs
 
-    long nPicLocFc;             // Picture Location in File (FC)
-    long nObjLocFc;             // Object Location in File (FC)
+    ULONG nPicLocFc;            // Picture Location in File (FC)
+    ULONG nObjLocFc;            // Object Location in File (FC)
 
     INT32 nIniFlyDx;            // X-Verschiebung von Flys
     INT32 nIniFlyDy;            // Y-Verschiebung von Flys
@@ -722,7 +730,6 @@ friend class WW8FormulaControl;
 
     BOOL bPgChpLevel;       // ChapterLevel of Heading from PageNum
     BOOL bEmbeddObj;        // EmbeddField gelesen
-    BOOL bFloatingCtrl;     // Whether to anchor imported controls as char or para
 
     BOOL bAktAND_fNumberAcross; // current active Annotated List Deskriptor - ROW flag
 
@@ -745,8 +752,7 @@ friend class WW8FormulaControl;
     void SetPage1( SwPageDesc* pPageDesc, SwFrmFmt &rFmt,
                    const WW8PLCFx_SEPX* pSep, USHORT nLIdx,
                    BOOL bIgnoreCols );
-    void SetHdFt( SwPageDesc* pPageDesc0, SwPageDesc* pPageDesc1,
-                  const WW8PLCFx_SEPX* pSep, BYTE nIPara );
+    void SetHdFt(SwPageDesc* pPageDesc0, SwPageDesc* pPageDesc1, BYTE nIPara);
     void GetPageULData( const  WW8PLCFx_SEPX* pSep,
                         USHORT nLIdx,
                         BOOL   bFirst,
@@ -755,8 +761,7 @@ friend class WW8FormulaControl;
 
     void SetPageBorder( SwPageDesc* pPageDesc0, SwPageDesc* pPageDesc1,
                         const WW8PLCFx_SEPX* pSep, USHORT nLIdx );
-    void SetUseOn( SwPageDesc* pPageDesc0, SwPageDesc* pPageDesc1,
-                   const WW8PLCFx_SEPX* pSep, BYTE nHdFt );
+    void SetUseOn(SwPageDesc* pPageDesc0, SwPageDesc* pPageDesc1, BYTE nHdFt);
     void InsertSectionWithWithoutCols( SwPaM& rMyPaM, const SwFmtCol* pCol );
     void CreateSep( const long nTxtPos, BOOL bMustHaveBreak );
 
@@ -890,8 +895,6 @@ friend class WW8FormulaControl;
     short GetTableLeft();
     BOOL IsInvalidOrToBeMergedTabCell() const;
 
-//  Brush* Shade1( SwWW8Shade& rRet, WW8_SHD* pS );
-
     ColorData GetCol( BYTE nIco );
 
 // Nummerierungen / Aufzaehlungen ( Autonumbered List Data Descriptor )
@@ -905,7 +908,7 @@ friend class WW8FormulaControl;
 
     void SetAnlvStrings( SwNumFmt* pNum, WW8_ANLV* pAV, const BYTE* pTxt,
                             BOOL bOutline );
-    void SetAnld( SwNumRule* pNumR, WW8_ANLD* pAD, BYTE nSwLevel, BOOL bOutLine );
+    void SetAnld(SwNumRule* pNumR, WW8_ANLD* pAD, BYTE nSwLevel, BOOL bOutLine);
     void SetNumOlst( SwNumRule* pNumR, WW8_OLST* pO, BYTE nSwLevel );
     SwNumRule* GetStyRule();
 
@@ -974,7 +977,6 @@ friend class WW8FormulaControl;
     String GetFieldResult( WW8FieldDesc* pF );
     void MakeTagString( String& rStr, const String& rOrg );
     void UpdateFields();
-//  void ConvertFName( String& rName );
     void ConvertFFileName( String& rName, const String& rRaw );
     long Read_F_Tag( WW8FieldDesc* pF );
     void InsertTagField( const USHORT nId, const String& rTagText );
@@ -992,7 +994,7 @@ friend class WW8FormulaControl;
     void RegisterNumFmt(USHORT nActLFO, BYTE nActLevel);
 
     SwNumRule* SyncStyleIndentWithList(SwWW8StyInf &rStyleInfo,
-        SwNumRule* pNumRule, BYTE nLevel);
+        SwNumRule* pRule, BYTE nLevel);
 
 // spaeter zu ersetzen durch Aufruf in entsprechend erweiterten SvxMSDffManager
 
@@ -1009,20 +1011,22 @@ friend class WW8FormulaControl;
             _ChkToggleAttr( nOldStyle81Mask, nNewStyle81Mask );
     }
 
+    //No copying
+    SwWW8ImplReader(const SwWW8ImplReader &);
+    SwWW8ImplReader& operator=(const SwWW8ImplReader&);
 public:     // eigentlich private, geht aber leider nur public
     void ConvertUFName( String& rName );
 
-    long Read_Ftn( WW8PLCFManResult* pRes, BOOL );
-    long Read_Field( WW8PLCFManResult* pRes, BOOL );
-    long Read_Book( WW8PLCFManResult* pRes, BOOL bStartAttr );
-    long Read_Piece( WW8PLCFManResult* pRes, BOOL bStartAttr );
-    long Read_And( WW8PLCFManResult* pRes, BOOL bStartAttr );
+    long Read_Ftn(WW8PLCFManResult* pRes, BOOL);
+    long Read_Field(WW8PLCFManResult* pRes, BOOL);
+    long Read_Book(WW8PLCFManResult*, BOOL bStartAttr);
+    long Read_And(WW8PLCFManResult* pRes, BOOL bStartAttr);
 
                                         // Attribute
 
-    void Read_Special(          USHORT, const BYTE*, short nLen );
-    void Read_Obj(              USHORT, const BYTE*, short nLen );
-    void Read_PicLoc(           USHORT nId, const BYTE* pData, short nLen );
+    void Read_Special(USHORT, const BYTE*, short nLen);
+    void Read_Obj(USHORT, const BYTE*, short nLen);
+    void Read_PicLoc(USHORT, const BYTE* pData, short nLen );
     void Read_BoldUsw(          USHORT nId, const BYTE*, short nLen );
     void Read_SubSuper(         USHORT, const BYTE*, short nLen );
     BOOL ConvertSubToGraphicPlacement();
@@ -1031,12 +1035,12 @@ public:     // eigentlich private, geht aber leider nur public
     void Read_TxtColor(         USHORT, const BYTE*, short nLen );
     void Read_FontCode(         USHORT, const BYTE*, short nLen );
     void Read_FontSize(         USHORT, const BYTE*, short nLen );
-    void Read_CharSet(          USHORT nId, const BYTE* pData, short nLen );
+    void Read_CharSet(USHORT , const BYTE* pData, short nLen);
     void Read_Language(         USHORT, const BYTE*, short nLen );
     void Read_CColl(            USHORT, const BYTE*, short nLen );
     void Read_Kern(             USHORT, const BYTE* pData, short nLen );
     void Read_FontKern(         USHORT, const BYTE* pData, short nLen );
-    void Read_Invisible(        USHORT, const BYTE* pData, short nLen );
+    void Read_Invisible(USHORT, const BYTE*, short nLen);
     void Read_Emphasis(         USHORT, const BYTE* pData, short nLen );
     void Read_ScaleWidth(       USHORT, const BYTE* pData, short nLen );
     void Read_Relief(           USHORT, const BYTE* pData, short nLen);
@@ -1044,7 +1048,10 @@ public:     // eigentlich private, geht aber leider nur public
     void Read_NoLineNumb(       USHORT nId, const BYTE* pData, short nLen );
 
     void Read_LR(               USHORT nId, const BYTE*, short nLen );
-    void NeedAdjustTabStops( short nLeft, short nFirstLineOfst );
+    void NeedAdjustStyleTabStops(short nLeft, short nFirstLineOfst,
+        SwWW8StyInf *pSty);
+    void NeedAdjustTextTabStops(short nLeft, short nFirstLineOfst,
+        SwNodeIndex *pPos,xub_StrLen nIndex);
     void Read_UL(               USHORT nId, const BYTE*, short nLen );
     void Read_LineSpace(        USHORT, const BYTE*, short nLen );
     void Read_Justify(          USHORT, const BYTE*, short nLen );
@@ -1060,20 +1067,19 @@ public:     // eigentlich private, geht aber leider nur public
 
     void Read_Border(           USHORT nId, const BYTE* pData, short nLen );
     void Read_Tab(              USHORT nId, const BYTE* pData, short nLen );
-    void Read_Symbol(           USHORT nId, const BYTE* pData, short nLen );
+    void Read_Symbol(USHORT, const BYTE* pData, short nLen);
     void Read_FldVanish(        USHORT nId, const BYTE* pData, short nLen );
 
     // Revision Marks ( == Redlining )
 
     // insert or delete content (change char attributes resp.)
-    void Read_CRevisionMark(SwRedlineType eType, USHORT nId,
-        const BYTE* pData, short nLen );
+    void Read_CRevisionMark(SwRedlineType eType, const BYTE* pData, short nLen);
     // insert new content
-    void Read_CFRMark(          USHORT nId, const BYTE* pData, short nLen );
+    void Read_CFRMark(USHORT , const BYTE* pData, short nLen);
     // delete old content
-    void Read_CFRMarkDel(       USHORT nId, const BYTE* pData, short nLen );
+    void Read_CFRMarkDel(USHORT , const BYTE* pData, short nLen);
     // change properties of content (e.g. char formating)
-    void Read_CPropRMark(       USHORT nId, const BYTE* pData, short nLen ); // complex!
+    void Read_CPropRMark(USHORT , const BYTE* pData, short nLen); // complex!
 
 
     void Read_TabRowEnd(        USHORT, const BYTE* pData, short nLen );
@@ -1082,7 +1088,8 @@ public:     // eigentlich private, geht aber leider nur public
     void Read_ANLevelNo(        USHORT, const BYTE* pData, short nLen );
     void Read_ANLevelDesc(      USHORT, const BYTE* pData, short nLen );
 
-    void Read_POutLvl( USHORT nId, const BYTE* pData, short nLen ); // Gliederungsebene Ver8
+    // Gliederungsebene Ver8
+    void Read_POutLvl(USHORT, const BYTE* pData, short nLen);
 
     void Read_OLST(             USHORT, const BYTE* pData, short nLen );
 
@@ -1092,21 +1099,19 @@ public:     // eigentlich private, geht aber leider nur public
 
     void Read_ListLevel(        USHORT nId, const sal_uInt8* pData, short nLen);
     void Read_LFOPosition(      USHORT nId, const sal_uInt8* pData, short nLen);
-    BOOL SetTxtFmtCollAndListLevel( const SwPaM& rRg,
-                                    SwWW8StyInf& rStyleInfo,
-                                    BOOL         bReset = TRUE );
+    BOOL SetTxtFmtCollAndListLevel(const SwPaM& rRg, SwWW8StyInf& rStyleInfo);
 
                                         // FastSave-Attribute
 
-    void Read_StyleCode(        USHORT, const BYTE* pData, short nLen );
-    void Read_Majority(         USHORT, const BYTE* pData, short nLen );
+    void Read_StyleCode(USHORT, const BYTE* pData, short nLen);
+    void Read_Majority(USHORT, const BYTE* , short );
     void Read_DoubleLine_Rotate( USHORT, const BYTE* pDATA, short nLen);
 
                                         // Felder
 
-    eF_ResT Read_F_Nul( WW8FieldDesc*, String& rStr );
-    eF_ResT Read_F_Input( WW8FieldDesc*, String& rStr );
-    eF_ResT Read_F_InputVar( WW8FieldDesc*, String& rStr );
+    eF_ResT Read_F_Nul(WW8FieldDesc*, String& );
+    eF_ResT Read_F_Input(WW8FieldDesc*, String& rStr);
+    eF_ResT Read_F_InputVar(WW8FieldDesc*, String& rStr);
     eF_ResT Read_F_ANumber( WW8FieldDesc*, String& );
     eF_ResT Read_F_DocInfo( WW8FieldDesc* pF, String& rStr );
     eF_ResT Read_F_Author( WW8FieldDesc*, String& );
@@ -1124,9 +1129,9 @@ public:     // eigentlich private, geht aber leider nur public
     eF_ResT Read_F_Tox( WW8FieldDesc* pF, String& rStr );
     eF_ResT Read_F_Symbol( WW8FieldDesc*, String& rStr );
     eF_ResT Read_F_Embedd( WW8FieldDesc*, String& rStr );
-    eF_ResT Read_F_FormTextBox( WW8FieldDesc* pF, String& rStr );
+    eF_ResT Read_F_FormTextBox( WW8FieldDesc* pF, String& rStr);
     eF_ResT Read_F_FormCheckBox( WW8FieldDesc* pF, String& rStr );
-    eF_ResT Read_F_FormListBox( WW8FieldDesc* pF, String& rStr );
+    eF_ResT Read_F_FormListBox( WW8FieldDesc* pF, String& );
     eF_ResT Read_F_Macro( WW8FieldDesc*, String& rStr );
     eF_ResT Read_F_DBField( WW8FieldDesc*, String& rStr );
     eF_ResT Read_F_DBNext( WW8FieldDesc*, String& );
@@ -1138,42 +1143,33 @@ public:     // eigentlich private, geht aber leider nur public
     eF_ResT Read_F_IncludeText(    WW8FieldDesc*, String& rStr );
     eF_ResT Read_F_Seq( WW8FieldDesc*, String& rStr );
 
-    eF_ResT Read_F_OCX( WW8FieldDesc*, String& rStr );
+    eF_ResT Read_F_OCX( WW8FieldDesc*, String& );
     eF_ResT Read_F_Hyperlink( WW8FieldDesc*, String& rStr );
 
-    BOOL InsertControl(const com::sun::star::uno::Reference<
-        com::sun::star::form::XFormComponent>& rFComp,
-        const ::com::sun::star::awt::Size& rSize,
-        com::sun::star::uno::Reference<
-        com::sun::star::drawing::XShape> *pShape=NULL,
-        BOOL bFloatingCtrl = FALSE );
-
-    void BuildInputField( USHORT eType, const String& rParam );
+    void BuildInputField(USHORT eType);
     void DeleteFormImpl();
 
-                                // Ver8: Listen Manager
-    short ImportSprm( const BYTE* pPos, short nSprmsLen, USHORT nId = 0 );
+    short ImportSprm( const BYTE* pPos, USHORT nId = 0 );
 
     static BOOL SearchRowEnd(BOOL bVer67, BOOL bComplex, WW8PLCFx_Cp_FKP* pPap,
         WW8_CP &rStartCp );
 
     const WW8Fib& GetFib() const    { return *pWwFib; }
-    SwDoc& GetDoc() const           { return rDoc;          }
-    USHORT GetNAktColl()  const     { return nAktColl;  }
+    SwDoc& GetDoc() const           { return rDoc; }
+    USHORT GetNAktColl()  const     { return nAktColl; }
     void SetNAktColl( USHORT nColl ) { nAktColl = nColl;    }
-    //SfxItemSet* GetAktItemSet()   { return pAktItemSet;   }
-    void SetAktItemSet( SfxItemSet* pItemSet ) { pAktItemSet = pItemSet;    }
-    const USHORT StyleUsingLFO(      USHORT nLFOIndex ) const ;
-    const SwFmt* GetStyleWithOrgWWName( String& rName    ) const ;
+    void SetAktItemSet( SfxItemSet* pItemSet ) { pAktItemSet = pItemSet; }
+    const USHORT StyleUsingLFO( USHORT nLFOIndex ) const ;
+    const SwFmt* GetStyleWithOrgWWName( String& rName ) const ;
 
     static BOOL GetPictGrafFromStream( Graphic& rGraphic, SvStream& rSrc,
         ULONG nLen = ULONG_MAX );
     static void PicRead( SvStream *pDataStream, WW8_PIC *pPic, BOOL bVer67);
     static BOOL ImportOleWMF( SvStorageRef xSrc1, GDIMetaFile &rWMF,
-        INT16 &rX, INT16 &rY);
+        long &rX, long &rY);
 
-    SwWW8ImplReader( BYTE nVersionPara, SvStorage* pStorage,
-                     SvStream* pSt, SwDoc& rD, BOOL bNewDoc );
+    SwWW8ImplReader( BYTE nVersionPara, SvStorage* pStorage, SvStream* pSt,
+        SwDoc& rD, BOOL bNewDoc );
 
     const ULONG GetFieldFlags() const{ return nFieldFlags; }
     const ULONG GetIniFlags()   const{ return nIniFlags; }
@@ -1183,6 +1179,4 @@ public:     // eigentlich private, geht aber leider nur public
     ULONG LoadDoc( SwPaM&,WW8Glossary *pGloss=0);
 };
 
-
 #endif
-

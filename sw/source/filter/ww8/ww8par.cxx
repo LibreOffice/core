@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: cmc $ $Date: 2001-11-19 15:25:10 $
+ *  last change: $Author: cmc $ $Date: 2002-01-10 14:02:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -383,26 +383,9 @@ void SwWW8ImplReader::Read_StyleCode( USHORT, const BYTE* pData, short nLen )
 }
 
 // Read_Majority ist fuer Majority ( 103 ) und Majority50 ( 108 )
-void SwWW8ImplReader::Read_Majority( USHORT, const BYTE* pData, short nLen )
+void SwWW8ImplReader::Read_Majority( USHORT, const BYTE* , short )
 {
-    if( nLen < 0 ){
-        return;
-    }
 }
-
-//-----------------------------------------
-//           temp. Test
-//-----------------------------------------
-
-long SwWW8ImplReader::Read_Piece( WW8PLCFManResult* pRes, BOOL bStartAttr )
-{
-    if( !bStartAttr )
-        return 0;
-//  pStrm->Seek( WW8Cp2Fc( pRes->nCp2OrIdx, 0 ) );  // nAktCp   //!!!Mogel
-    return 0;
-}
-
-
 
 //-----------------------------------------
 //            Stack
@@ -589,20 +572,29 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEnt
 //-----------------------------------------
 #define DEF_TAB_ANZ 13          // So viele Default-Tabs
 
-void SwWW8ImplReader::Read_Tab( USHORT nId, const BYTE* pData, short nLen )
+
+/*
+ For styles we will do our tabstop arithmetic in word style and adjust them to
+ writer style after all the styles have been finished and the just settles as
+ to what affects what.  For explicit attributes we use the style underlying
+ margins and if there was an explicit margin change we handle the
+ adjustment on the close of the margina attribute, which gaurantees the
+ collection of all margin and tab begins.
+*/
+void SwWW8ImplReader::Read_Tab(USHORT , const BYTE* pData, short nLen)
 {
-    if( nLen < 0 ){
-        pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_PARATR_TABSTOP );
+    if( nLen < 0 )
+    {
+        if (!pTabNode) //Leave unclosed if the margins have not been finialized
+            pCtrlStck->SetAttr(*pPaM->GetPoint(), RES_PARATR_TABSTOP);
         return;
     }
 
     // Para L-Space
-    short nLeftPMgn    = ( pAktColl ) ? pCollA[nAktColl].nLeftParaMgn
-                                      : nLeftParaMgn;
+    short nLeftPMgn = pAktColl ? 0 : pCollA[nAktColl].nLeftParaMgn;
 
     // Para L-Space OR Left Margin of Para's first line respectively
-    short nLeftMostPos = ( pAktColl ) ? pCollA[nAktColl].nTxtFirstLineOfst
-                                      : nTxtFirstLineOfst;
+    short nLeftMostPos = pAktColl ? 0 : pCollA[nAktColl].nTxtFirstLineOfst;
     if( 0 < nLeftMostPos )
         nLeftMostPos = 0;
 
@@ -615,29 +607,34 @@ void SwWW8ImplReader::Read_Tab( USHORT nId, const BYTE* pData, short nLen )
 
     SvxTabStopItem aAttr( 0, 0, SVX_TAB_ADJUST_DEFAULT );
 
-    SwTxtFmtColl* pSty = 0;
+    const SwTxtFmtColl* pSty = 0;
     USHORT nTabBase;
-    if( pAktColl ){                             // StyleDef
+    if (pAktColl)               // StyleDef
+    {
         nTabBase = pCollA[nAktColl].nBase;
-        if( nTabBase < nColls ){                // Based On
-            pSty = (SwTxtFmtColl*)pCollA[nTabBase].pFmt;
-        }
-    }else{                                      // Text
+        if (nTabBase < nColls)              // Based On
+            pSty = (const SwTxtFmtColl*)pCollA[nTabBase].pFmt;
+    }
+    else
+    {                                       // Text
         nTabBase = nAktColl;
-        pSty = (SwTxtFmtColl*)pCollA[nAktColl].pFmt;
+        pSty = (const SwTxtFmtColl*)pCollA[nAktColl].pFmt;
     }
 
     BOOL bFound = FALSE;
-    while( pSty && !bFound ){
+    while( pSty && !bFound )
+    {
         const SfxPoolItem* pTabs;
-        bFound = pSty->GetAttrSet().GetItemState( RES_PARATR_TABSTOP, FALSE, &pTabs )
-                   == SFX_ITEM_SET;
-        if( bFound ){
+        bFound = pSty->GetAttrSet().GetItemState( RES_PARATR_TABSTOP, FALSE,
+            &pTabs ) == SFX_ITEM_SET;
+        if( bFound )
             aAttr = *((const SvxTabStopItem*)pTabs);
-        }else{
-            if( nTabBase < nColls                   // Based On
-                &&  (nTabBase = pCollA[nTabBase].nBase) < nColls )                  // Based On
-                pSty = (SwTxtFmtColl*)pCollA[nTabBase].pFmt;
+        else
+        {
+            // If based on another
+            if( nTabBase < nColls &&
+                (nTabBase = pCollA[nTabBase].nBase) < nColls )
+                pSty = (const SwTxtFmtColl*)pCollA[nTabBase].pFmt;
             else
                 pSty = 0;                           // gib die Suche auf
         }
@@ -645,31 +642,52 @@ void SwWW8ImplReader::Read_Tab( USHORT nId, const BYTE* pData, short nLen )
 
     SvxTabStop aTabStop;
 
-    for( i=0; i<nDel; i++ ){
+    for( i=0; i<nDel; i++ )
+    {
         USHORT nPos = aAttr.GetPos( SVBT16ToShort( pDel + i*2 ) - nLeftPMgn );
         if( nPos != SVX_TAB_NOTFOUND )
             aAttr.Remove( nPos, 1 );
     }
+
     for( i=0; i<nIns; i++ )
     {
         short nPos = SVBT16ToShort( pIns + i*2 ) - nLeftPMgn;
         if( nPos < nLeftMostPos )
             continue;
         aTabStop.GetTabPos() = nPos;
-        switch( SVBT8ToByte( pTyp[i].aBits1 ) & 0x7 ){      // pTyp[i].jc
-        case 0: aTabStop.GetAdjustment() = SVX_TAB_ADJUST_LEFT; break;
-        case 1: aTabStop.GetAdjustment() = SVX_TAB_ADJUST_CENTER; break;
-        case 2: aTabStop.GetAdjustment() = SVX_TAB_ADJUST_RIGHT; break;
-        case 3: aTabStop.GetAdjustment() = SVX_TAB_ADJUST_DECIMAL; break;
-        case 4: continue;                   // ignoriere Bar
+        switch( SVBT8ToByte( pTyp[i].aBits1 ) & 0x7 )       // pTyp[i].jc
+        {
+            case 0:
+                aTabStop.GetAdjustment() = SVX_TAB_ADJUST_LEFT;
+                break;
+            case 1:
+                aTabStop.GetAdjustment() = SVX_TAB_ADJUST_CENTER;
+                break;
+            case 2:
+                aTabStop.GetAdjustment() = SVX_TAB_ADJUST_RIGHT;
+                break;
+            case 3:
+                aTabStop.GetAdjustment() = SVX_TAB_ADJUST_DECIMAL;
+                break;
+            case 4:
+                continue;                   // ignoriere Bar
         }
 
-        switch( SVBT8ToByte( pTyp[i].aBits1 ) >> 3 & 0x7 ){ // pTyp[i].tlc
-        case 0: aTabStop.GetFill() = ' '; break;
-        case 1: aTabStop.GetFill() = '.'; break;
-        case 2: aTabStop.GetFill() = '-'; break;
-        case 3:
-        case 4: aTabStop.GetFill() = '_'; break;
+        switch( SVBT8ToByte( pTyp[i].aBits1 ) >> 3 & 0x7 )
+        {
+            case 0:
+                aTabStop.GetFill() = ' ';
+                break;
+            case 1:
+                aTabStop.GetFill() = '.';
+                break;
+            case 2:
+                aTabStop.GetFill() = '-';
+                break;
+            case 3:
+            case 4:
+                aTabStop.GetFill() = '_';
+                break;
         }
 
         USHORT nPos2 = aAttr.GetPos( nPos );
@@ -706,7 +724,7 @@ void SwWW8ImplReader::ImportDop( BOOL bNewDoc )
                     aPrinted.SetTime( aLastPrinted );
                 pNeuDocInf->SetPrinted( aPrinted );
                 rDoc.SetInfo( *pNeuDocInf );
-                delete( pNeuDocInf );
+                delete pNeuDocInf;
             }
         }
 
@@ -1195,10 +1213,11 @@ static BYTE ReadBSprm( const WW8PLCFx_SEPX* pSep, USHORT nId, BYTE nDefaultVal )
 }
 
 void SwWW8ImplReader::SetHdFt( SwPageDesc* pPageDesc0, SwPageDesc* pPageDesc1,
-                               const WW8PLCFx_SEPX* pSep, BYTE nIPara )
+    BYTE nIPara )
 {
-    if( !nCorrIhdt || ( pAktColl != 0 ) )   // Header / Footer nicht da
-                                            // oder StyleDef
+
+    // Header / Footer nicht da oder StyleDef
+    if( !nCorrIhdt || ( pAktColl != 0 ) )
         return;
 
     long nOldDoc = pStrm->Tell(     );      // WW-Scanner: alles retten
@@ -1326,7 +1345,7 @@ SwPageDesc* SwWW8ImplReader::CreatePageDesc( SwPageDesc* pFirstPageDesc,
 
 // UpdatePageDescs muss am Ende des Einlesevorganges aufgerufen werden, damit
 // der Writer den Inhalt der Pagedescs wirklich akzeptiert
-void SwWW8ImplReader::UpdatePageDescs( USHORT nPageDescOffset )
+void SwWW8ImplReader::UpdatePageDescs(USHORT nInPageDescOffset)
 {
     USHORT i;
 
@@ -1337,7 +1356,7 @@ void SwWW8ImplReader::UpdatePageDescs( USHORT nPageDescOffset )
     rDoc.ChgPageDesc( 0, rDoc.GetPageDesc( 0 ));
 
     // PageDescs "Konvert..."
-    for ( i=nPageDescOffset; i < rDoc.GetPageDescCnt(); i++ )
+    for ( i=nInPageDescOffset; i < rDoc.GetPageDescCnt(); i++ )
     {
         const SwPageDesc* pPD = &rDoc.GetPageDesc( i );
         rDoc.ChgPageDesc( i, *pPD );
@@ -1525,8 +1544,12 @@ BOOL SwWW8ImplReader::ReadPlainChars( long& rPos, long nEnd, long nCpOfs )
     WW8_FC nStreamPos = pSBase->WW8Cp2Fc(nCpOfs+rPos, &bIsUnicode);
     pStrm->Seek( nStreamPos );
 
-    // ammount of characters to read == length to next attribut
-    ULONG nLen = nEnd - rPos;
+    // amount of characters to read == length to next attribute
+    ASSERT(nEnd - rPos <= STRING_MAXLEN, "String too long for stringclass!");
+    xub_StrLen nLen = static_cast<xub_StrLen>(nEnd - rPos);
+    ASSERT(nLen, "String is 0");
+    if (!nLen)
+        return TRUE;
 
     /*
     #i2015
@@ -1551,7 +1574,7 @@ BOOL SwWW8ImplReader::ReadPlainChars( long& rPos, long nEnd, long nCpOfs )
     // read the stream data
     BYTE   nBCode;
     UINT16 nUCode;
-    for( ULONG nL2 = 0; nL2 < nLen; ++nL2, ++pWork )
+    for( xub_StrLen nL2 = 0; nL2 < nLen; ++nL2, ++pWork )
     {
         if( bIsUnicode )
             *pStrm >> nUCode;   // unicode  --> read 2 bytes
@@ -1639,29 +1662,37 @@ BOOL SwWW8ImplReader::ReadChar( long nPosCp, long nCpOfs )
     BOOL bRet = FALSE;
     switch( nWCharVal )
     {
-    case 0xe:  {
-                    SwTxtNode* pNd = pPaM->GetCntntNode()->GetTxtNode();
-                    if ( pNd )
-                    {
-                        const SfxItemSet* pSet = pNd->GetpSwAttrSet();
-                        if ( pSet && ( SFX_ITEM_ON == pSet->GetItemState(
-                                                    RES_PAGEDESC, FALSE ) ) )
-                        {
-                            rDoc.AppendTxtNode( *pPaM->GetPoint() );
-                        }
-                        else
-                        {
-                            const SwPosition* pPos  = pPaM->GetPoint();
-                            const SwTxtNode* pSttNd = rDoc.GetNodes()[ pPos->nNode ]->GetTxtNode();
-                            USHORT nCntPos          = pPos->nContent.GetIndex();
-                            if( nCntPos && pSttNd->GetTxt().Len() )
-                                rDoc.SplitNode( *pPos );
-                        }
-                    }
-                    rDoc.Insert( *pPaM,     // column break
-                        SvxFmtBreakItem( SVX_BREAK_COLUMN_BEFORE ) );
+    case 0xe:
+        /*
+        #i2451#, similarly to i1909 column breaks appear to be ignored if they
+        are inside tables. Appears impossible to create one from scratch with
+        winword.
+        */
+        if (!bTable)
+        {
+            SwTxtNode* pNd = pPaM->GetCntntNode()->GetTxtNode();
+            if ( pNd )
+            {
+                const SfxItemSet* pSet = pNd->GetpSwAttrSet();
+                if ( pSet &&
+                    (SFX_ITEM_ON == pSet->GetItemState(RES_PAGEDESC, FALSE)) )
+                {
+                    rDoc.AppendTxtNode( *pPaM->GetPoint() );
                 }
-                break;
+                else
+                {
+                    const SwPosition* pPos  = pPaM->GetPoint();
+                    const SwTxtNode* pSttNd =
+                        rDoc.GetNodes()[ pPos->nNode ]->GetTxtNode();
+                    USHORT nCntPos = pPos->nContent.GetIndex();
+                    if( nCntPos && pSttNd->GetTxt().Len() )
+                        rDoc.SplitNode( *pPos );
+                }
+            }
+            // column break
+            rDoc.Insert( *pPaM, SvxFmtBreakItem( SVX_BREAK_COLUMN_BEFORE ) );
+        }
+        break;
     case 0x7:   TabCellEnd();       // table cell end (Flags abfragen!)
                 if( bWasTabRowEnd )
                     pSBase->SetNoAttrScan( 0 );
@@ -1778,6 +1809,8 @@ void SwWW8ImplReader::ProcessAktCollChange( WW8PLCFManResult& rRes,
         || !pCollA[nAktColl].bColl )
     {
         nAktColl = 0;           // Unguelige Style-Id
+        nLeftParaMgn      = 0;
+        nTxtFirstLineOfst = 0;
     }
     else
     {
@@ -1838,7 +1871,7 @@ long SwWW8ImplReader::ReadTextAttr( long& rTxtPos, BOOL& rbStartLine )
             if( bStartAttr )                            // WW-Attribute
             {
                 if( aRes.nMemLen >= 0 )
-                    ImportSprm(aRes.pMemPos, (short)aRes.nMemLen, aRes.nSprmId);
+                    ImportSprm(aRes.pMemPos, aRes.nSprmId);
             }
             else
                 EndSprm( aRes.nSprmId );        // Attr ausschalten
@@ -2064,12 +2097,11 @@ void SwWW8ImplReader::ReadText( long nStartCp, long nTextLen, short nType )
 #           class SwWW8ImplReader
 #**************************************************************************/
 
-SwWW8ImplReader::SwWW8ImplReader( BYTE nVersionPara,
-                                    SvStorage* pStorage, SvStream* pSt,
-                                    SwDoc& rD, BOOL bNewDoc )
+SwWW8ImplReader::SwWW8ImplReader( BYTE nVersionPara, SvStorage* pStorage,
+    SvStream* pSt, SwDoc& rD, BOOL bNewDoc )
     : pStg( pStorage ), rDoc( rD ), pStrm( pSt ), bNew( 0 != bNewDoc ),
     pMSDffManager( 0 ), pAtnNames( 0 ), pAuthorInfos( 0 ), pOleMap(0),
-    pLastPgDeskIdx( 0 ), pDataStream( 0 ),   pTableStream( 0 )
+    pTabNode(0), pLastPgDeskIdx( 0 ), pDataStream( 0 ), pTableStream( 0 )
 {
     pStrm->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
     nWantedVersion = nVersionPara;
@@ -2097,7 +2129,7 @@ SwWW8ImplReader::SwWW8ImplReader( BYTE nVersionPara,
     bShdTxtCol = bCharShdTxtCol = bAnl = bHdFtFtnEdn = bFtnEdn
                = bIsHeader = bIsFooter = bSectionHasATitlePage
                = bIsUnicode = bCpxStyle = bStyNormal = bWWBugNormal  = FALSE;
-    bNoAttrImport = bPgChpLevel = bEmbeddObj = bFloatingCtrl = FALSE;
+    bNoAttrImport = bPgChpLevel = bEmbeddObj = FALSE;
     bAktAND_fNumberAcross = FALSE;
     bNoLnNumYet = TRUE;
     bRestartLnNumPerSection = FALSE;
@@ -2228,7 +2260,9 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
         // Nachdem wir nun den FIB eingelesen haben, wissen wir ja,
         // welcher Table-Stream gueltig ist.
         // Diesen oeffnen wir nun.
-        switch( pWwFib->nVersion )  // 6 steht fuer "6 ODER 7",  7 steht fuer "NUR 7"
+
+        // 6 stands for "6 OR 7",  7 stand for "ONLY 7"
+        switch( pWwFib->nVersion )
         {
         case 6:
         case 7: pTableStream = pStrm;
@@ -2236,58 +2270,52 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
                 break;
 
         case 8:
-                if( !pStg )
-                {
-                    ASSERT( pStg, "Version 8 muss immer einen Storage haben!" );
-                    nErrRet = ERR_SWG_READ_ERROR;
-                    break;
-                }
-                xTableStream = pStg->OpenStream(
-                        String(   (1 == pWwFib->fWhichTblStm)
-                                ? "1Table"
-                                : "0Table",
-                                RTL_TEXTENCODING_MS_1252 ),
-                        STREAM_STD_READ );
-                pTableStream = &xTableStream;
-                pTableStream->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
-
-                xDataStream = pStg->OpenStream(
-                                    String( "Data", RTL_TEXTENCODING_MS_1252 ),
-                                    STREAM_STD_READ | STREAM_NOCREATE );
-                if( xDataStream.Is() && SVSTREAM_OK == xDataStream->GetError() )
-                {
-                    pDataStream = &xDataStream;
-                    pDataStream->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
-                }
-                else
-                    pDataStream = pStrm;
-
-                if( pWwFib->lcbPlcfspaHdr || pWwFib->lcbPlcfspaMom )
-                {
-                    pMSDffManager = new SwMSDffManager( *this );
-                    //#79055# Now the dff manager always needs a controls
-                    //converter as well, but a control converter may still
-                    //exist without a dffmanager. cmc
-                    pFormImpl = new SwMSConvertControls(rDoc.GetDocShell(),
-                        pPaM);
-                }
+            if( !pStg )
+            {
+                ASSERT( pStg, "Version 8 muss immer einen Storage haben!" );
+                nErrRet = ERR_SWG_READ_ERROR;
                 break;
+            }
 
-        default:// Programm-Fehler!
-                        ASSERT( !this, "Es wurde vergessen, nVersion zu kodieren!" );
-                        nErrRet = ERR_SWG_READ_ERROR;
+            xTableStream = pStg->OpenStream(
+                String( (1 == pWwFib->fWhichTblStm) ? "1Table" : "0Table",
+                RTL_TEXTENCODING_MS_1252 ), STREAM_STD_READ );
+
+            pTableStream = &xTableStream;
+            pTableStream->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
+
+            xDataStream = pStg->OpenStream(
+                String( "Data", RTL_TEXTENCODING_MS_1252 ),
+                STREAM_STD_READ | STREAM_NOCREATE );
+
+            if( xDataStream.Is() && SVSTREAM_OK == xDataStream->GetError() )
+            {
+                pDataStream = &xDataStream;
+                pDataStream->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
+            }
+            else
+                pDataStream = pStrm;
+
+            if( pWwFib->lcbPlcfspaHdr || pWwFib->lcbPlcfspaMom )
+            {
+                pMSDffManager = new SwMSDffManager( *this );
+                //#79055# Now the dff manager always needs a controls
+                //converter as well, but a control converter may still exist
+                //without a dffmanager. cmc
+                pFormImpl = new SwMSConvertControls(rDoc.GetDocShell(), pPaM);
+            }
+            break;
+        default:
+            // Programm-Fehler!
+            ASSERT( !this, "Es wurde vergessen, nVersion zu kodieren!" );
+            nErrRet = ERR_SWG_READ_ERROR;
+            break;
         }
 
         if( ERR_SWG_READ_ERROR != nErrRet )
         {
-            if( 0x0100 == pWwFib->chse )
-                eTextCharSet   = RTL_TEXTENCODING_APPLE_ROMAN;
-            else
-                eTextCharSet   = rtl_getTextEncodingFromWindowsCharset( pWwFib->chse );
-            if( 0x0100 == pWwFib->chseTables )
-                eStructCharSet = RTL_TEXTENCODING_APPLE_ROMAN;
-            else
-                eStructCharSet = rtl_getTextEncodingFromWindowsCharset( pWwFib->chseTables );
+            eTextCharSet = WW8Fib::GetFIBCharset(pWwFib->chse);
+            eStructCharSet = WW8Fib::GetFIBCharset(pWwFib->chseTables);
 
             bWWBugNormal = pWwFib->nProduct == 0xc03d;
 
@@ -2296,24 +2324,22 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
 
             ::StartProgress( STR_STATSTR_W4WREAD, 0, 100, rDoc.GetDocShell() );
 
-
             if ( bNew )
             {
-                // Abstand zwischen zwei Absaetzen ist
-                // die SUMME von unterem Abst. des ersten und oberem Abst. des zweiten
+                // Abstand zwischen zwei Absaetzen ist die SUMME von unterem
+                // Abst. des ersten und oberem Abst. des zweiten
                 rDoc.SetParaSpaceMax( TRUE, TRUE );
                 // move tabs on alignment
                 rDoc.SetTabCompat( TRUE );
             }
 
-
             // read Font Table
             pFonts = new WW8Fonts( *pTableStream, *pWwFib );
 
-
-            pWDop = new WW8Dop( *pTableStream, pWwFib->nFib, pWwFib->fcDop, pWwFib->lcbDop  );      // Document Properties
+            // Document Properties
+            pWDop = new WW8Dop( *pTableStream, pWwFib->nFib, pWwFib->fcDop,
+                pWwFib->lcbDop );
             ImportDop( bNew != 0 );
-
 
             /*
                 Import revisioning data: author names
@@ -2342,29 +2368,33 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
             ::SetProgressState( nProgress, rDoc.GetDocShell() );    // Update
 
 
-
             /*
-                zu guter Letzt:                     (siehe ebenfalls WW8PAR3.CXX)
+                zu guter Letzt: (siehe ebenfalls WW8PAR3.CXX)
                 ===============
-                alle Styles durchgehen und ggfs. zugehoeriges Listen-Format anhaengen
-                    NACH dem Import der Styles und NACH dem Import der Listen !!
+                alle Styles durchgehen und ggfs. zugehoeriges Listen-Format
+                anhaengen NACH dem Import der Styles und NACH dem Import der
+                Listen !!
             */
-            pStyles->RegisterNumFmts();
+            pStyles->PostProcessStyles();
 
+            pSBase = new WW8ScannerBase(pStrm,pTableStream,pDataStream,pWwFib);
 
-            pSBase = new WW8ScannerBase( pStrm, pTableStream, pDataStream,
-                                         pWwFib );
-            static SvxExtNumType __READONLY_DATA eNumTA[16] = {
-                SVX_NUM_ARABIC, SVX_NUM_ROMAN_UPPER, SVX_NUM_ROMAN_LOWER, SVX_NUM_CHARS_UPPER_LETTER_N,
-                SVX_NUM_CHARS_LOWER_LETTER_N, SVX_NUM_ARABIC, SVX_NUM_ARABIC, SVX_NUM_ARABIC,
-                SVX_NUM_ARABIC, SVX_NUM_ARABIC,
-                SVX_NUM_ARABIC, SVX_NUM_ARABIC,
-                SVX_NUM_ARABIC, SVX_NUM_ARABIC,
-                SVX_NUM_ARABIC, SVX_NUM_ARABIC };
+            static SvxExtNumType __READONLY_DATA eNumTA[16] =
+            {
+                SVX_NUM_ARABIC, SVX_NUM_ROMAN_UPPER, SVX_NUM_ROMAN_LOWER,
+                SVX_NUM_CHARS_UPPER_LETTER_N, SVX_NUM_CHARS_LOWER_LETTER_N,
+                SVX_NUM_ARABIC, SVX_NUM_ARABIC, SVX_NUM_ARABIC,
+                SVX_NUM_ARABIC, SVX_NUM_ARABIC, SVX_NUM_ARABIC,
+                SVX_NUM_ARABIC, SVX_NUM_ARABIC, SVX_NUM_ARABIC,
+                SVX_NUM_ARABIC, SVX_NUM_ARABIC
+            };
 
-            if( pSBase->AreThereFootnotes() ){
-                static SwFtnNum __READONLY_DATA eNumA[4] = {
-                    FTNNUM_DOC, FTNNUM_CHAPTER, FTNNUM_PAGE, FTNNUM_DOC };
+            if (pSBase->AreThereFootnotes())
+            {
+                static SwFtnNum __READONLY_DATA eNumA[4] =
+                {
+                    FTNNUM_DOC, FTNNUM_CHAPTER, FTNNUM_PAGE, FTNNUM_DOC
+                };
 
                 SwFtnInfo aInfo;
                 aInfo = rDoc.GetFtnInfo();      // Copy-Ctor privat
@@ -2376,7 +2406,8 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
                     aInfo.nFtnOffset = pWDop->nFtn - 1;
                 rDoc.SetFtnInfo( aInfo );
             }
-            if( pSBase->AreThereEndnotes() ){
+            if( pSBase->AreThereEndnotes() )
+            {
                 SwEndNoteInfo aInfo;
                 aInfo = rDoc.GetEndNoteInfo();  // parallel zu Ftn
 
@@ -2391,14 +2422,20 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
             if( pWwFib->lcbPlcfhdd )
                 pHdFt = new WW8PLCF_HdFt( pTableStream, *pWwFib, *pWDop );
 
-            if( !bNew ){        // in ein Dokument einfuegen ?
-                                // Da immer ganze Zeile eingelesen werden, muessen
-                                // evtl. Zeilen eingefuegt / aufgebrochen werden
+            if( !bNew )
+            {
+                // in ein Dokument einfuegen ?
+                // Da immer ganze Zeile eingelesen werden, muessen
+                // evtl. Zeilen eingefuegt / aufgebrochen werden
+                //
                 const SwPosition* pPos = pPaM->GetPoint();
-                const SwTxtNode* pSttNd = rDoc.GetNodes()[ pPos->nNode ]->GetTxtNode();
+                const SwTxtNode* pSttNd =
+                    rDoc.GetNodes()[ pPos->nNode ]->GetTxtNode();
+
                 USHORT nCntPos = pPos->nContent.GetIndex();
 
-                if( nCntPos && pSttNd->GetTxt().Len() ) // EinfuegePos nicht in leerer Zeile
+                // EinfuegePos nicht in leerer Zeile
+                if( nCntPos && pSttNd->GetTxt().Len() )
                     rDoc.SplitNode( *pPos );            // neue Zeile erzeugen
 
                 if( pSttNd->GetTxt().Len() )
@@ -2410,14 +2447,16 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
                 // verhinder das Einlesen von Tabellen in Fussnoten / Tabellen
                 ULONG nNd = pPos->nNode.GetIndex();
                 bReadNoTbl = 0 != pSttNd->FindTableNode() ||
-                                        ( nNd < rDoc.GetNodes().GetEndOfInserts().GetIndex() &&
-                    rDoc.GetNodes().GetEndOfInserts().StartOfSectionIndex() < nNd );
+                    ( nNd < rDoc.GetNodes().GetEndOfInserts().GetIndex() &&
+                    rDoc.GetNodes().GetEndOfInserts().StartOfSectionIndex()
+                    < nNd );
 
             }
 
             ::SetProgressState( nProgress, rDoc.GetDocShell() );    // Update
 
-            if (pGloss) // loop for each glossary entry and add dummy section node
+            // loop for each glossary entry and add dummy section node
+            if (pGloss)
             {
                 WW8PLCF aPlc(&xTableStream,pWwFib->fcPlcfglsy,
                                 pWwFib->lcbPlcfglsy,0 );
@@ -2426,7 +2465,6 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
                 void* pDummy;
 
                 for (int i=0;i<pGloss->GetNoStrings();i++,aPlc++)
-                //for (int i=0;i<1;i++,aPlc++)
                 {
                     SwNodeIndex aIdx( rDoc.GetNodes().GetEndOfContent());
                     SwTxtFmtColl* pColl =
@@ -2438,7 +2476,6 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
                     pPaM->GetPoint()->nContent.Assign(pPaM->GetCntntNode(),0);
                     aPlc.Get( nStart, nEnd, pDummy );
                     ReadText(nStart,nEnd-nStart-1,MAN_MAINTEXT);
-                    //ReadText( 0, pWwFib->ccpText, MAN_MAINTEXT );
                 }
             }
             else //ordinary case
@@ -2540,6 +2577,17 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
                 {
                     SvxMSDffShapeOrder& rOrder = *(SvxMSDffShapeOrder*)
                         (pMSDffManager->GetShapeOrders()->GetObject( nShapeNum ));
+                    /*
+                    #96375#
+                    If we have a pFly we can use that to get the SdrObject
+                    instead of the stored one. This is useful for frames
+                    anchored as paragraphs in header/footers where the
+                    header/footer has been copied. Under that condition
+                    the contact object has become invalid. Working from
+                    the pFly avoid the use of an invalid contact object
+                    */
+                    if( rOrder.pFly )
+                        rOrder.pObj = CreateContactObject( rOrder.pFly );
                     if( rOrder.pObj )
                     {
                         ULONG nOldObjNum = rOrder.pObj->GetOrdNum();
@@ -2638,6 +2686,7 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
             DELETEZ( pAtnNames );
             DELETEZ( pAuthorInfos );
             DELETEZ( pOleMap );
+            DELETEZ( pTabNode );
             DELETEZ( pLastPgDeskIdx );
             ::EndProgress( rDoc.GetDocShell() );
         }
@@ -2894,16 +2943,20 @@ BOOL WW8Reader::HasGlossaries() const
 
 BOOL WW8Reader::ReadGlossaries( SwTextBlocks& rBlocks, BOOL bSaveRelFiles ) const
 {
+    BOOL bRet=FALSE;
     USHORT nOldBuffSize = 32768;
     SvStorageStreamRef refStrm;
 
     WW8Reader *pThis = (WW8Reader *)this;
     ULONG nRet = pThis->OpenMainStream( refStrm, nOldBuffSize );
 
-    WW8Glossary aGloss( refStrm, 8, pStg );
-    return aGloss.Load(rBlocks, bSaveRelFiles );
+    if( !nRet )
+    {
+        WW8Glossary aGloss( refStrm, 8, pStg );
+        bRet = aGloss.Load( rBlocks, bSaveRelFiles );
+    }
+    return bRet;
 }
-
 
 #pragma optimize( "", off )
 
@@ -2944,7 +2997,6 @@ BOOL SwMSDffManager::GetOLEStorageName( long nOLEId, String& rStorageName,
                 pChp->GetSprms( &aDesc );
                 (*pChp)++;
                 WW8_CP nNextEnd = pChp->Where();
-                WW8_CP nEnd = ( nNextEnd < nEndCp ) ? nNextEnd : nEndCp;
 
                 if( aDesc.nSprmsLen && aDesc.pMemPos )  // Attribut(e) vorhanden
                 {
@@ -2956,8 +3008,9 @@ BOOL SwMSDffManager::GetOLEStorageName( long nOLEId, String& rStorageName,
                         BYTE   nDelta;
                         USHORT nId = WW8GetSprmId( rReader.pWwFib->nVersion,
                                                     pSprm, &nDelta );
-                        short nSL = WW8GetSprmSizeBrutto(
-                                    rReader.pWwFib->nVersion, pSprm, &nId );
+
+                        USHORT nSL = WW8GetSprmSize(rReader.pWwFib->nVersion,
+                            pSprm, &nId );
 
                         if( nLen < nSL )
                             break;              // nicht mehr genug Bytes uebrig
@@ -2993,7 +3046,7 @@ BOOL SwMSDffManager::GetOLEStorageName( long nOLEId, String& rStorageName,
     return bRet;
 }
 
-BOOL SwMSDffManager::ShapeHasText( ULONG nShapeId, ULONG nFilePos ) const
+BOOL SwMSDffManager::ShapeHasText(ULONG, ULONG ) const
 {
     // Zur Zeit des Einlesens einer einzelnen Box, die womoeglich Teil einer
     // Gruppe ist, liegen noch nicht genuegend Informationen vor, um
@@ -3001,47 +3054,3 @@ BOOL SwMSDffManager::ShapeHasText( ULONG nShapeId, ULONG nFilePos ) const
     // Also vorsichtshalber mal alle umwandeln:
     return TRUE;
 }
-/*
-void SwMSDffManager::ProcessClientAnchor2( SvStream& rSt, DffRecordHeader& rHd, void* pData, DffObjData& rObj )
-{
-    if( rHd.nRecLen && rObj.nShapeId )
-    {
-        SvxMSDffImportData& rData = *(SvxMSDffImportData*)pData;
-
-        SvxMSDffImportRec* pImpRec = 0;
-        // find out if this shape did get a Record already
-        USHORT nRecCnt = rData.GetRecCount();
-        if( nRecCnt )
-        {
-            for(USHORT i = nRecCnt; i; )
-            {
-                i--;
-                SvxMSDffImportRec* pRec = rData.GetRecord( i );
-                if( pRec && (rObj.nShapeId == pRec->nShapeId) )
-                {
-                    // Nun hab ich Dich, Du Wicht!
-                    pImpRec = pRec;
-                    break;
-                }
-            }
-        }
-        if( !pImpRec )
-        {
-            SvxMSDffImportRec* pTmpRec = new SvxMSDffImportRec;
-            pTmpRec->nShapeId = rObj.nShapeId;
-            rData.aRecords.Insert( pTmpRec );
-            pImpRec = rData.GetRecord( nRecCnt );
-            if( !pImpRec )
-                delete pTmpRec;
-        }
-        if( pImpRec )
-        {
-            // new
-            pImpRec->pClientAnchorBuffer    =   new char[ rHd.nRecLen ];
-            pImpRec->nClientAnchorLen       =   rHd.nRecLen;
-            rSt.Read( pImpRec->pClientAnchorBuffer, rHd.nRecLen );
-        }
-    }
-}
-*/
-
