@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scriptdlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-13 10:30:09 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 17:48:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,7 @@
 
 #include <memory>
 
-#include <sfx2/ipfrm.hxx>
+#include <sfx2/objsh.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
 
@@ -73,6 +73,7 @@
 #include "scriptdlg.hxx"
 #include "dialmgr.hxx"
 
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/document/XDocumentInfoSupplier.hpp>
