@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-26 19:20:36 $
+ *  last change: $Author: cl $ $Date: 2000-12-01 17:09:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,9 @@
 #ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UCB_XANYCOMPAREFACTORY_HPP_
+#include <com/sun/star/ucb/XAnyCompareFactory.hpp>
+#endif
 
 #ifndef _SFXLSTNER_HXX //autogen
 #include <svtools/lstner.hxx>
@@ -144,7 +147,8 @@ class SdXImpressDocument : public SfxBaseModel, // implements SfxListener, OWEAK
                            public ::com::sun::star::beans::XPropertySet,
                            public ::com::sun::star::style::XStyleFamiliesSupplier,
                            public ::com::sun::star::lang::XServiceInfo,
-                           public ::com::sun::star::lang::XUnoTunnel
+                           public ::com::sun::star::lang::XUnoTunnel,
+                           public ::com::sun::star::ucb::XAnyCompareFactory
 {
     friend class SdDrawPagesAccess;
     friend class SdMasterPagesAccess;
@@ -238,6 +242,9 @@ public:
 
     // XStyleFamiliesSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getStyleFamilies(  ) throw(::com::sun::star::uno::RuntimeException);
+
+    // XAnyCompareFactory
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XAnyCompare > SAL_CALL createAnyCompareByName( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException);
 };
 
 /***********************************************************************

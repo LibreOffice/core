@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-26 19:23:32 $
+ *  last change: $Author: cl $ $Date: 2000-12-01 17:12:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,6 +240,7 @@ uno::Any SAL_CALL SdXImpressDocument::queryInterface( const uno::Type & rType ) 
     else QUERYINT(document::XLinkTargetSupplier);
     else QUERYINT(style::XStyleFamiliesSupplier);
     else QUERYINT(lang::XUnoTunnel);
+    else QUERYINT(ucb::XAnyCompareFactory);
     else if( mbImpressDoc && rType == ITYPE(presentation::XPresentationSupplier) )
             aAny <<= uno::Reference< presentation::XPresentationSupplier >(this);
     else if( mbImpressDoc && rType == ITYPE(presentation::XCustomPresentationSupplier) )
@@ -269,7 +270,7 @@ uno::Sequence< uno::Type > SAL_CALL SdXImpressDocument::getTypes(  ) throw(uno::
         const sal_Int32 nBaseTypes = aBaseTypes.getLength();
         const uno::Type* pBaseTypes = aBaseTypes.getConstArray();
 
-        const sal_Int32 nOwnTypes = mbImpressDoc ? 12 : 10;     // !DANGER! Keep this updated!
+        const sal_Int32 nOwnTypes = mbImpressDoc ? 13 : 11;     // !DANGER! Keep this updated!
 
         maTypeSequence.realloc(  nBaseTypes + nOwnTypes );
         uno::Type* pTypes = maTypeSequence.getArray();
@@ -284,6 +285,7 @@ uno::Sequence< uno::Type > SAL_CALL SdXImpressDocument::getTypes(  ) throw(uno::
         *pTypes++ = ITYPE(document::XLinkTargetSupplier);
         *pTypes++ = ITYPE(style::XStyleFamiliesSupplier);
         *pTypes++ = ITYPE(lang::XUnoTunnel);
+        *pTypes++ = ITYPE(ucb::XAnyCompareFactory);
         if( mbImpressDoc )
         {
             *pTypes++ = ITYPE(presentation::XPresentationSupplier);
@@ -581,7 +583,7 @@ uno::Reference< uno::XInterface > SAL_CALL SdXImpressDocument::createInstance( c
     }
     if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.NumberingRules" ) ) )
     {
-        return uno::Reference< uno::XInterface >( (uno::XWeak*)(new SvxUnoNumberingRules( pDoc )) );
+        return SvxCreateNumRule( pDoc );
     }
     if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Background" ) ) )
     {
@@ -840,6 +842,12 @@ uno::Reference< container::XNameAccess > SAL_CALL SdXImpressDocument::getStyleFa
     return xStyles;
 }
 
+// XAnyCompareFactory
+uno::Reference< ucb::XAnyCompare > SAL_CALL SdXImpressDocument::createAnyCompareByName( const OUString& PropertyName )
+    throw(uno::RuntimeException)
+{
+    return SvxCreateNumRuleCompare();
+}
 
 //=============================================================================
 // class SdDrawPagesAccess
