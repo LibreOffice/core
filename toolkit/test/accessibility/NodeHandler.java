@@ -87,7 +87,7 @@ abstract class NodeHandler
     //
 
     /** May this child be changed? */
-    public boolean isChildEditable(Object aObject, int nIndex)
+    public boolean isChildEditable (AccessibleTreeNode aNode, int nIndex)
     {
         return false;
     }
@@ -97,13 +97,13 @@ abstract class NodeHandler
 
 
     /** get names of suported actions */
-    public String[] getActions(Object aObject)
+    public String[] getActions (AccessibleTreeNode aNode)
     {
         return new String[] {};
     }
 
     /** perform action */
-    public void performAction(Object aObject, int nIndex)
+    public void performAction (AccessibleTreeNode aNode, int nIndex)
     {
     }
 }

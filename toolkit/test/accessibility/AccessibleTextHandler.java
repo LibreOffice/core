@@ -26,8 +26,6 @@ import javax.swing.text.JTextComponent;
 
 class AccessibleTextHandler extends NodeHandler
 {
-    private XAccessibleText mxText;
-
     public NodeHandler createHandler (XAccessibleContext xContext)
     {
         XAccessibleText xText = (XAccessibleText) UnoRuntime.queryInterface (
@@ -44,32 +42,16 @@ class AccessibleTextHandler extends NodeHandler
 
     public AccessibleTextHandler (XAccessibleText xText)
     {
-        mxText = xText;
-        if (mxText != null)
+        if (xText != null)
             maChildList.setSize (12);
     }
-
-    protected XAccessibleText getText( Object aObject )
-    {
-        return mxText;
-    }
-
-    protected XAccessibleEditableText getEditText( Object aObject )
-    {
-        XAccessibleEditableText xText =
-            (XAccessibleEditableText) UnoRuntime.queryInterface (
-                 XAccessibleEditableText.class, aObject);
-        return xText;
-    }
-
-
 
     public AccessibleTreeNode createChild (AccessibleTreeNode aParent, int nIndex)
     {
         AccessibleTreeNode aChild = null;
         XAccessibleText xText = null;
         if (aParent instanceof AccTreeNode)
-            xText = getText (((AccTreeNode)aParent).getContext());
+            xText = ((AccTreeNode)aParent).getText();
 
         try
         {
@@ -293,24 +275,29 @@ class AccessibleTextHandler extends NodeHandler
         new String[] { "select...", "copy...",
                        "cut...", "paste...", "edit..." };
 
-    public String[] getActions(Object aObject)
+    public String[] getActions (AccessibleTreeNode aNode)
     {
-        XAccessibleEditableText xEText = getEditText( aObject );
+        XAccessibleEditableText xEText = null;
+        if (aNode instanceof AccTreeNode)
+            xEText = ((AccTreeNode)aNode).getEditText ();
 
         return (xEText == null) ? aTextActions : aEditableTextActions;
     }
 
-    public void performAction(Object aObject, int nIndex)
+    public void performAction (AccessibleTreeNode aNode, int nIndex)
     {
+        if ( ! (aNode instanceof AccTreeNode))
+            return;
+
         TextActionDialog aDialog = null;
 
-        XAccessibleText xText = getText( aObject );
+        XAccessibleText xText = ((AccTreeNode)aNode).getText();
 
         // create proper dialog
         switch( nIndex )
         {
             case 0:
-                aDialog = new TextActionDialog( aObject,
+                aDialog = new TextActionDialog( aNode,
                                                 "Select range:",
                                                 xText.getText(),
                                                 "select" )
@@ -318,14 +305,14 @@ class AccessibleTextHandler extends NodeHandler
                         void action( JTextComponent aText, Object aObject )
                                 throws IndexOutOfBoundsException
                         {
-                            getText( aObject ).setSelection(
+                            ((AccTreeNode)aObject).getText().setSelection(
                                 aText.getSelectionStart(),
                                 aText.getSelectionEnd() );
                         }
                     };
                 break;
             case 1:
-                aDialog = new TextActionDialog( aObject,
+                aDialog = new TextActionDialog( aNode,
                                                 "Select range and copy:",
                                                 xText.getText(),
                                                 "copy" )
@@ -333,14 +320,14 @@ class AccessibleTextHandler extends NodeHandler
                         void action( JTextComponent aText, Object aObject )
                                 throws IndexOutOfBoundsException
                         {
-                            getText( aObject ).copyText(
+                            ((AccTreeNode)aObject).getText().copyText(
                                 aText.getSelectionStart(),
                                 aText.getSelectionEnd() );
                         }
                     };
                 break;
             case 2:
-                aDialog = new TextActionDialog( aObject,
+                aDialog = new TextActionDialog( aNode,
                                                 "Select range and cut:",
                                                 xText.getText(),
                                                 "cut" )
@@ -348,14 +335,14 @@ class AccessibleTextHandler extends NodeHandler
                         void action( JTextComponent aText, Object aObject )
                                 throws IndexOutOfBoundsException
                         {
-                            getEditText( aObject ).cutText(
+                            ((AccTreeNode)aObject).getEditText().cutText(
                                 aText.getSelectionStart(),
                                 aText.getSelectionEnd() );
                         }
                     };
                 break;
             case 3:
-                aDialog = new TextActionDialog( aObject,
+                aDialog = new TextActionDialog( aNode,
                                                 "Place Caret and paste:",
                                                 xText.getText(),
                                                 "paste" )
@@ -363,13 +350,13 @@ class AccessibleTextHandler extends NodeHandler
                         void action( JTextComponent aText, Object aObject )
                                 throws IndexOutOfBoundsException
                         {
-                            getEditText( aObject ).pasteText(
+                            ((AccTreeNode)aObject).getEditText().pasteText(
                                 aText.getCaretPosition() );
                         }
                     };
                 break;
             case 4:
-                aDialog = new TextEditDialog( aObject, "Edit text:",
+                aDialog = new TextEditDialog( aNode, "Edit text:",
                                               xText.getText(), "edit" );
                 break;
         }

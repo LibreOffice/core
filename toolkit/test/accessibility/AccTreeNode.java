@@ -1,6 +1,5 @@
 import com.sun.star.uno.UnoRuntime;
-import drafts.com.sun.star.accessibility.XAccessible;
-import drafts.com.sun.star.accessibility.XAccessibleContext;
+import drafts.com.sun.star.accessibility.*;
 import java.util.Vector;
 
 /**
@@ -28,6 +27,8 @@ class AccTreeNode
     // The accessible context of this node.
     private XAccessible mxAccessible;
     private XAccessibleContext mxContext;
+    private XAccessibleComponent mxComponent;
+    private XAccessibleText mxText;
 
     public AccTreeNode (XAccessibleContext xContext, AccessibleTreeNode aParent)
     {
@@ -59,9 +60,42 @@ class AccTreeNode
         }
     }
 
-    public XAccessibleContext getContext()
+    public XAccessibleContext getContext ()
     {
         return mxContext;
+    }
+
+    public XAccessibleComponent getComponent ()
+    {
+        if (mxComponent == null && mxContext != null)
+            mxComponent = (XAccessibleComponent)UnoRuntime.queryInterface(
+                XAccessibleComponent.class, mxContext);
+        return mxComponent;
+    }
+
+    public XAccessibleExtendedComponent getExtendedComponent ()
+    {
+        if (mxComponent == null)
+            getComponent();
+        if (mxComponent != null)
+            return (XAccessibleExtendedComponent)UnoRuntime.queryInterface(
+                XAccessibleExtendedComponent.class, mxComponent);
+        else
+            return null;
+    }
+
+    public XAccessibleText getText ()
+    {
+        if (mxText == null && mxContext != null)
+            mxText = (XAccessibleText)UnoRuntime.queryInterface(
+                XAccessibleText.class, mxContext);
+        return mxText;
+    }
+
+    public XAccessibleEditableText getEditText ()
+    {
+        return (XAccessibleEditableText)UnoRuntime.queryInterface(
+                XAccessibleEditableText.class, mxContext);
     }
 
     public XAccessible getAccessible()

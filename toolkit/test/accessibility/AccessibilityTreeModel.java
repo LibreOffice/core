@@ -206,10 +206,12 @@ public class AccessibilityTreeModel
                 System.out.println ("can't remove null node");
                 return;
             }
-            removeAccListener (aNode);
-            removeFromCanvas (aNode);
             if (aNode instanceof AccTreeNode)
+            {
+                removeAccListener ((AccTreeNode)aNode);
+                removeFromCanvas ((AccTreeNode)aNode);
                 maXAccessibleToNode.remove (((AccTreeNode)aNode).getAccessible());
+            }
             AccessibleTreeNode aParent = aNode.getParent();
             if (aParent != null)
             {
@@ -226,6 +228,7 @@ public class AccessibilityTreeModel
             System.out.println ("caught exception while removing node " + aNode + " : " + e);
         }
     }
+
 
     protected synchronized boolean addNode (AccTreeNode aParentNode, XAccessible xNewChild)
     {
@@ -473,7 +476,11 @@ public class AccessibilityTreeModel
         if (xAccessible != null)
             xContext = xAccessible.getAccessibleContext();
         if (xContext != null)
+        {
             sDisplay = xContext.getAccessibleName();
+            if (sDisplay.length()==0)
+                sDisplay = "<no name>";
+        }
         else
             sDisplay = new String ("not accessible");
 
@@ -595,7 +602,7 @@ public class AccessibilityTreeModel
                         if (addNode ((AccTreeNode)aParentNode, xNew))
                         {
                             ((AccTreeNode)aParentNode).update ();
-                            updateOnCanvas (xSource);
+                            updateOnCanvas ((AccTreeNode)aParentNode);
 
                             // A call to fireTreeNodesInserted for xNew
                             // should be sufficient but at least the
@@ -645,8 +652,10 @@ public class AccessibilityTreeModel
                 // Some child(s) of xSource have changed.  We do not know
                 // which so all we can do is send a structure change event
                 // to all listeners.
+                AccessibleTreeNode aNode = (AccessibleTreeNode)maXAccessibleToNode.get (xSource);
                 fireTreeStructureChanged (createEvent (xSource));
-                updateOnCanvas (xSource);
+                if (aNode instanceof AccTreeNode)
+                    updateOnCanvas ((AccTreeNode)aNode);
                 break;
 
 
@@ -679,25 +688,20 @@ public class AccessibilityTreeModel
 
     protected void addToCanvas (AccTreeNode aNode)
     {
-        XAccessibleContext xContext = aNode.getContext();
-        if ((maCanvas != null) && (xContext != null))
-            maCanvas.addContext (
-                xContext,
-                new TreePath (createPath (aNode)));
+        if (maCanvas != null)
+            maCanvas.addNode (aNode);
     }
 
-    protected void removeFromCanvas( Object aObject )
+    protected void removeFromCanvas (AccTreeNode aNode)
     {
-        XAccessibleContext xContext = getContext( aObject );
-        if( (maCanvas != null) && (xContext != null) )
-            maCanvas.removeContext( xContext );
+        if (maCanvas != null)
+            maCanvas.removeNode (aNode);
     }
 
-    protected void updateOnCanvas( Object aObject )
+    protected void updateOnCanvas (AccTreeNode aNode)
     {
-        XAccessibleContext xContext = getContext( aObject );
-        if( (maCanvas != null) && (xContext != null) )
-            maCanvas.updateContext( xContext );
+        if (maCanvas != null)
+            maCanvas.updateNode (aNode);
     }
 
 
