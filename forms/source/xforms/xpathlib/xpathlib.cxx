@@ -291,7 +291,7 @@ void xforms_nowFunction(xmlXPathParserContextPtr ctxt, int nargs)
     /*
     3.2.7.2 Canonical representation
     The canonical representation for dateTime is defined by prohibiting certain options
-    from the Lexical representation (§3.2.7.1). Specifically, either the time zone must
+    from the Lexical representation (par.3.2.7.1). Specifically, either the time zone must
     be omitted or, if present, the time zone must be Coordinated Universal Time (UTC)
     indicated by a "Z".
     */
