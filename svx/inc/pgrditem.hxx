@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pgrditem.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-13 08:03:25 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 15:07:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,10 @@
 #include <svtools/eitem.hxx>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 // class SvxParaGridItem -------------------------------------------------
 
 
@@ -75,7 +79,7 @@
     Paragraph snap to grid
 */
 
-class SvxParaGridItem : public SfxBoolItem
+class SVX_DLLPUBLIC SvxParaGridItem : public SfxBoolItem
 {
 public:
     TYPEINFO();
