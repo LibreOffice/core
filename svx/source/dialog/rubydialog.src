@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rubydialog.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-14 21:42:07 $
+ *  last change: $Author: rt $ $Date: 2001-06-19 06:57:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -475,108 +475,108 @@ ModelessDialog RID_SVXDLG_RUBY
         };
     StringList [ language_user1 ] =
     {
-            < "Oben" ;
-        < "Unten" ;
+        "Oben" ;
+        "Unten" ;
     };
     StringList [ english_us ] =
     {
-            < "Top" ;
-        < "Bottom" ;
+        "Top" ;
+        "Bottom" ;
     };
     StringList [ portuguese ] =
     {
-            < "para cima" ;
-        < "Base" ;
+        "para cima" ;
+        "Base" ;
     };
     StringList [ russian ] =
     {
-            < "Ñâåðõó" ;
-        < "Ñíèçó" ;
+        "Ñâåðõó" ;
+        "Ñíèçó" ;
     };
     StringList [ greek ] =
     {
-            < "ðÜíù" ;
-        < "êÜôù" ;
+        "ðÜíù" ;
+        "êÜôù" ;
     };
     StringList [ dutch ] =
     {
-            < "Boven" ;
-        < "onder" ;
+        "Boven" ;
+        "onder" ;
     };
     StringList [ french ] =
     {
-            < "En haut" ;
-        < "En bas" ;
+        "En haut" ;
+        "En bas" ;
     };
     StringList [ spanish ] =
     {
-            < "Arriba" ;
-        < "Abajo" ;
+        "Arriba" ;
+        "Abajo" ;
     };
     StringList [ finnish ] =
     {
-            < "Ylhäällä" ;
-        < "pohjalla" ;
+        "Ylhäällä" ;
+        "pohjalla" ;
     };
     StringList [ italian ] =
     {
-            < "In alto" ;
-        < "In basso" ;
+        "In alto" ;
+        "In basso" ;
     };
     StringList [ danish ] =
     {
-            < "Top" ;
-        < "Nede" ;
+        "Top" ;
+        "Nede" ;
     };
     StringList [ swedish ] =
     {
-            < "Uppe" ;
-        < "Nere" ;
+        "Uppe" ;
+        "Nere" ;
     };
     StringList [ polish ] =
     {
-            < "Na górze" ;
-        < "Na dole" ;
+        "Na górze" ;
+        "Na dole" ;
     };
     StringList [ portuguese_brazilian ] =
     {
-            < "Oben" ;
-        < "Unten" ;
+        "Oben" ;
+        "Unten" ;
     };
     StringList [ japanese ] =
     {
-            < "ã" ;
-        < "‰º" ;
+        "ã" ;
+        "‰º" ;
     };
     StringList [ korean ] =
     {
-            < "À§¿¡" ;
-        < "¾Æ·¡" ;
+        "À§¿¡" ;
+        "¾Æ·¡" ;
     };
     StringList [ chinese_simplified ] =
     {
-            < "ÏòÉÏ" ;
-        < "ÏòÏÂ" ;
+        "ÏòÉÏ" ;
+        "ÏòÏÂ" ;
     };
     StringList [ chinese_traditional ] =
     {
-            < "¦V¤W" ;
-        < "¦V¤U" ;
+        "¦V¤W" ;
+        "¦V¤U" ;
     };
     StringList [ turkish ] =
     {
-            < "Yukarý" ;
-        < "Aþaðý" ;
+        "Yukarý" ;
+        "Aþaðý" ;
     };
     StringList [ arabic ] =
     {
-            < "ÃÚáì" ;
-        < "ÃÓÝá" ;
+        "ÃÚáì" ;
+        "ÃÓÝá" ;
     };
     StringList [ catalan ] =
     {
-            < "Oben" ;
-        < "Unten" ;
+        "Oben" ;
+        "Unten" ;
     };
     };
     FixedText FT_CHAR_STYLE
