@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: vg $ $Date: 2002-05-08 09:21:54 $
+ *  last change: $Author: oj $ $Date: 2002-05-10 08:07:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,7 +185,8 @@ namespace dbaccess
                         sal_Bool _bCase,
                         ::cppu::OWeakObject& _rParent,
                         ::osl::Mutex& _rMutex,
-                        const ::std::vector< ::rtl::OUString> &_rVector
+                        const ::std::vector< ::rtl::OUString> &_rVector,
+                        sal_Bool _bUseAsIndex = sal_False
                     );
         virtual void SAL_CALL disposing(void);
     };
@@ -194,8 +195,9 @@ namespace dbaccess
                         sal_Bool _bCase,
                         ::cppu::OWeakObject& _rParent,
                         ::osl::Mutex& _rMutex,
-                        const ::std::vector< ::rtl::OUString> &_rVector
-                    ) : sdbcx::OCollection(_rParent,_bCase,_rMutex,_rVector)
+                        const ::std::vector< ::rtl::OUString> &_rVector,
+                        sal_Bool _bUseAsIndex
+                    ) : sdbcx::OCollection(_rParent,_bCase,_rMutex,_rVector,_bUseAsIndex)
                         ,m_aColumns(_rColumns)
     {
     }
@@ -1359,7 +1361,7 @@ Reference< XIndexAccess > SAL_CALL OQueryComposer::getParameters(  ) throw(Runti
         ::std::vector< ::rtl::OUString> aNames;
         for(OSQLColumns::const_iterator aIter = aCols->begin(); aIter != aCols->end();++aIter)
             aNames.push_back(getString((*aIter)->getPropertyValue(PROPERTY_NAME)));
-        m_pParameters = new OPrivateColumns(aCols,m_xMetaData->storesMixedCaseQuotedIdentifiers(),*this,m_aMutex,aNames);
+        m_pParameters = new OPrivateColumns(aCols,m_xMetaData->storesMixedCaseQuotedIdentifiers(),*this,m_aMutex,aNames,sal_True);
     }
 
     return m_pParameters;
