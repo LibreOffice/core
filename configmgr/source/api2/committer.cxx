@@ -2,9 +2,9 @@
  *
  *  $RCSfile: committer.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:53 $
+ *  last change: $Author: jb $ $Date: 2002-03-28 08:19:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,7 @@ void Committer::commit()
         data::Accessor aNotifyAccessor = aUpdateAccessor.downgrade(); // keep a read lock for notification
 
         NotifyDisabler  aDisableNotify(m_rTree);    // do not notify self
-        pUpdateProvider->notifyUpdate(aNotifyAccessor,aChangeList);
+        pUpdateProvider->saveAndNotifyUpdate(aNotifyAccessor,aChangeList);
     }
     catch(...)
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confproviderimpl2.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-15 11:48:12 $
+ *  last change: $Author: jb $ $Date: 2002-03-28 08:21:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,18 +61,29 @@
 
 #include <stdio.h>
 #include "confproviderimpl2.hxx"
-#include "roottree.hxx"
-#include "noderef.hxx"
-#include "apitreeaccess.hxx"
-#include "objectregistry.hxx"
-#include "configexcept.hxx"
 
+#ifndef CONFIGMGR_ROOTTREE_HXX_
+#include "roottree.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGNODE_HXX_
+#include "noderef.hxx"
+#endif
+#ifndef CONFIGMGR_API_TREEACCESS_HXX_
+#include "apitreeaccess.hxx"
+#endif
+#ifndef CONFIGMGR_API_OBJECTREGISTRY_HXX_
+#include "objectregistry.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGEXCEPT_HXX_
+#include "configexcept.hxx"
+#endif
 #ifndef CONFIGMGR_API_PROVIDER2_HXX_
 #include "confprovider2.hxx"
 #endif
-#ifndef _CONFIGMGR_TREECACHE_HXX_
-#include "treecache.hxx"
+#ifndef CONFIGMGR_TREEPROVIDER_HXX
+#include "treeprovider.hxx"
 #endif
+
 #ifndef _CONFIGMGR_TRACER_HXX_
 #include "tracer.hxx"
 #endif
