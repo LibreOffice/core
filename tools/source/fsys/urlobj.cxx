@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlobj.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: sb $ $Date: 2002-08-28 14:24:15 $
+ *  last change: $Author: sb $ $Date: 2002-09-06 13:29:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1014,7 +1014,19 @@ bool INetURLObject::setAbsURIRef(UniString const & rTheAbsURIRef,
                         }
                     }
 
-                    // 2nd Production (misscounted slashes):
+                    // 2nd Production (MS IE generated 1; FSYS_DOS only):
+                    //    "//" ALPHA ":" ["/" *path] ["#" *UCS4]
+                    //  becomes
+                    //    "file:///" ALPHA ":" ["/" *path] ["#" *UCS4]
+                    //  replacing "\" by "/" within <*path>
+                    //
+                    // 3rd Production (MS IE generated 2; FSYS_DOS only):
+                    //    "//" ALPHA ":" ["\" *path] ["#" *UCS4]
+                    //  becomes
+                    //    "file:///" ALPHA ":" ["/" *path] ["#" *UCS4]
+                    //  replacing "\" by "/" within <*path>
+                    //
+                    // 4th Production (misscounted slashes):
                     //    "//" *path ["#" *UCS4]
                     //  becomes
                     //    "file:///" *path ["#" *UCS4]
@@ -1024,10 +1036,17 @@ bool INetURLObject::setAbsURIRef(UniString const & rTheAbsURIRef,
                             AppendAscii(RTL_CONSTASCII_STRINGPARAM("//"));
                         pPos += 2;
                         bSkippedInitialSlash = true;
+                        if ((eStyle & FSYS_DOS) != 0
+                            && pEnd - pPos >= 2
+                            && INetMIME::isAlpha(pPos[0])
+                            && pPos[1] == ':'
+                            && (pEnd - pPos == 2
+                                || pPos[2] == '/' || pPos[2] == '\\'))
+                            nAltSegmentDelimiter = '\\';
                         break;
                     }
 
-                    // 3rd Production (Unix):
+                    // 5th Production (Unix):
                     //    "/" *path ["#" *UCS4]
                     //  becomes
                     //    "file:///" *path ["#" *UCS4]
@@ -1038,7 +1057,7 @@ bool INetURLObject::setAbsURIRef(UniString const & rTheAbsURIRef,
                         break;
                     }
 
-                    // 4th Production (UNC; FSYS_DOS only):
+                    // 6th Production (UNC; FSYS_DOS only):
                     //    "\\" domain ["\" *path] ["#" *UCS4]
                     //  becomes
                     //    "file://" domain "/" *path ["#" *UCS4]
@@ -1063,13 +1082,13 @@ bool INetURLObject::setAbsURIRef(UniString const & rTheAbsURIRef,
                         }
                     }
 
-                    // 5th Production (Unix-like DOS; FSYS_DOS only):
+                    // 7th Production (Unix-like DOS; FSYS_DOS only):
                     //    ALPHA ":" ["/" *path] ["#" *UCS4]
                     //  becomes
                     //    "file:///" ALPHA ":" ["/" *path] ["#" *UCS4]
                     //  replacing "\" by "/" within <*path>
                     //
-                    // 6th Production (DOS; FSYS_DOS only):
+                    // 8th Production (DOS; FSYS_DOS only):
                     //    ALPHA ":" ["\" *path] ["#" *UCS4]
                     //  becomes
                     //    "file:///" ALPHA ":" ["/" *path] ["#" *UCS4]
@@ -1089,7 +1108,7 @@ bool INetURLObject::setAbsURIRef(UniString const & rTheAbsURIRef,
                         break;
                     }
 
-                    // 7th Production (any):
+                    // 9th Production (any):
                     //    *path ["#" *UCS4]
                     //  becomes
                     //    "file:///" *path ["#" *UCS4]

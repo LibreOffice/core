@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urltest.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sb $ $Date: 2002-08-28 14:44:03 $
+ *  last change: $Author: sb $ $Date: 2002-09-06 13:31:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1139,12 +1139,43 @@ main()
                 { "file://xxx.yyy-zzz/abc", "file://xxx.yyy-zzz/abc" },
                 { "file://xxx_yyy/abc", "file://xxx_yyy/abc" },
                 { "file://!%23$%&'()-.@^_{}~/abc",
-                  "file://!%23$%25&'()-.@%5E_%7B%7D~/abc" } };
+                  "file://!%23$%25&'()-.@%5E_%7B%7D~/abc" },
+                { "file://d:\\dir1\\file1", 0 } };
         for (int i = 0; i < sizeof aTest / sizeof aTest[0]; ++i)
         {
             INetURLObject aUrl(aTest[i].m_pInput);
-            if (aUrl.HasError() != (aTest[i].m_pOutput == 0)
-                || aUrl.GetMainURL().CompareToAscii(aTest[i].m_pOutput) != 0)
+            if (aTest[i].m_pOutput == 0
+                ? !aUrl.HasError()
+                : (aUrl.HasError()
+                   || (aUrl.GetMainURL().CompareToAscii(aTest[i].m_pOutput)
+                       != 0)))
+                printf("BAD %s -> %s != %s\n",
+                       aTest[i].m_pInput,
+                       aUrl.HasError() ? "<none>"
+                       : ByteString(aUrl.GetMainURL(),
+                                    RTL_TEXTENCODING_ASCII_US).GetBuffer(),
+                       aTest[i].m_pOutput == 0 ? "<none>" : aTest[i].m_pOutput);
+        }
+    }
+
+    if (true)
+    {
+        struct Test
+        {
+            char const * m_pInput;
+            char const * m_pOutput;
+        };
+        static Test const aTest[]
+            = { { "file://d:\\dir1\\file1", "file:///d:/dir1/file1" } };
+        for (int i = 0; i < sizeof aTest / sizeof aTest[0]; ++i)
+        {
+            INetURLObject aUrl(String(aTest[i].m_pInput, RTL_TEXTENCODING_UTF8),
+                               INET_PROT_HTTP);
+            if (aTest[i].m_pOutput == 0
+                ? !aUrl.HasError()
+                : (aUrl.HasError()
+                   || (aUrl.GetMainURL().CompareToAscii(aTest[i].m_pOutput)
+                       != 0)))
                 printf("BAD %s -> %s != %s\n",
                        aTest[i].m_pInput,
                        aUrl.HasError() ? "<none>"
