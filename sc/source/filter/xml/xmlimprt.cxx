@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: sab $ $Date: 2001-11-15 10:19:19 $
+ *  last change: $Author: sab $ $Date: 2001-12-06 18:43:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1592,6 +1592,13 @@ ScXMLImport::~ScXMLImport() throw()
     }
     if (pScUnoGuard)
         delete pScUnoGuard;
+
+    if (pMyNamedExpressions)
+        delete pMyNamedExpressions;
+    if (pValidations)
+        delete pValidations;
+    if (pDetectiveOpArray)
+        delete pDetectiveOpArray;
 }
 
 // ---------------------------------------------------------------------
