@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshell.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 10:56:08 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:08:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -358,7 +358,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::form;
-using namespace ::drafts::com::sun::star::frame;
+using namespace ::com::sun::star::frame;
 using namespace ::svxform;
 
 //========================================================================
