@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawsh.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 13:28:21 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:53:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -440,6 +440,7 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
                     pView->SetAttrToMarked( *rReq.GetArgs(), FALSE );
                 else
                     pView->SetDefaultAttr( *rReq.GetArgs(), FALSE);
+                pView->StoreCaptionAttribs();
                 pView->InvalidateAttribs();
             }
             break;
@@ -494,6 +495,7 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
                                         rReq.Done(*(pDlg->GetOutputItemSet()));
                                         pView->SetAttributes(*pDlg->GetOutputItemSet());
                                         pView->SetGeoAttrToMarked(*pDlg->GetOutputItemSet());
+                                        pView->StoreCaptionDimensions();
                                     }
 
                                     delete pDlg;
@@ -570,6 +572,7 @@ void ScDrawShell::ExecuteLineDlg( SfxRequest& rReq, USHORT nTabPage )
         else
             pView->SetDefaultAttr( *pDlg->GetOutputItemSet(), FALSE );
 
+        pView->StoreCaptionAttribs();
         pView->InvalidateAttribs();
         rReq.Done();
     }
@@ -612,6 +615,7 @@ void ScDrawShell::ExecuteAreaDlg( SfxRequest& rReq, USHORT nTabPage )
         else
             pView->SetDefaultAttr( *pDlg->GetOutputItemSet(), FALSE );
 
+        pView->StoreCaptionAttribs();
         pView->InvalidateAttribs();
         rReq.Done();
     }
@@ -640,6 +644,8 @@ void ScDrawShell::ExecuteTextAttrDlg( SfxRequest& rReq, USHORT nTabPage )
         else
             pView->SetDefaultAttr( *pDlg->GetOutputItemSet(), FALSE );
 
+        pView->StoreCaptionAttribs();
+        pView->InvalidateAttribs();
         rReq.Done();
     }
     delete( pDlg );
