@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterPageContainer.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-04 08:59:23 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:59:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,7 @@ public:
     Token PutMasterPage (
         const String& sURL,
         const String& sPageName,
+        const String& sStyleName,
         SdPage* pMasterPage,
         Image aPreview);
 
@@ -123,10 +124,12 @@ public:
 
     Token GetTokenForURL (const String& sURL);
     Token GetTokenForPageName (const String& sPageName);
+    Token GetTokenForStyleName (const String& sStyleName);
     Token GetTokenForPageObject (const SdPage* pPage);
 
     String GetURLForToken (Token aToken);
     String GetPageNameForToken (Token aToken);
+    String GetStyleNameForToken (Token aToken);
     SdPage* GetSlideForToken (Token aToken, bool bLoad=true);
     SdPage* GetPageObjectForToken (Token aToken, bool bLoad=true);
 
@@ -173,6 +176,22 @@ public:
         int nWidth,
         const Link& rCallback,
         void* pUserData);
+
+    /** Create a preview of the given page with the requested width.  This
+        method exists to give the CurrentMasterPagesSelector the oportunity
+        to render previews for pages without either enforcing it to use the
+        actual master page container nor having to expose the preview
+        renderer.
+        @param pPage
+            Page for which to render a preview.  It may or may not be a
+            member of the master page container.
+        @param nWidth
+            With of the preview.  The height is calculated from the aspect
+            ratio of the page.
+    */
+    Image GetPreviewForPage (
+        SdPage* pPage,
+        int nWidth);
 
     /** The specified listener is not available anymore and must not
         be called back. All requests for preview creation for this
