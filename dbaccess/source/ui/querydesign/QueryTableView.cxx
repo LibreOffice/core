@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTableView.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-21 12:28:03 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:13:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,7 +185,7 @@ namespace
                     xProp->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
                     if(_nKeyType == nKeyType)
                     {
-                        xColumnsSupplier = Reference<XColumnsSupplier>(xProp,UNO_QUERY);
+                        xColumnsSupplier.set(xProp,UNO_QUERY);
                         if(xColumnsSupplier.is())
                         {
                             Reference<XNameAccess> xColumns = xColumnsSupplier->getColumns();
@@ -643,7 +643,7 @@ void OQueryTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const ::r
                             ::cppu::extractInterface(xProp,xKeyIndex->getByIndex(i));
                             sal_Int32 nKeyType = 0;
                             xProp->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
-                            xColumnsSupplier = Reference<XColumnsSupplier>(xProp,UNO_QUERY);
+                            xColumnsSupplier.set(xProp,UNO_QUERY);
                             OSL_ENSURE(xColumnsSupplier.is(),"Key isn't a column supplier");
                             xFKeyColumns = xColumnsSupplier->getColumns();
                             OSL_ENSURE(xFKeyColumns.is(),"No Key columns available!");
@@ -681,7 +681,7 @@ void OQueryTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const ::r
                                         Reference<XPropertySet> xFKKey = getKeyReferencedTo(Reference<XKeysSupplier>(pTabWinTmp->GetTable(),UNO_QUERY),pNewTabWin->GetComposedName());
                                         if(xFKKey.is())
                                         {
-                                            Reference<XColumnsSupplier> xFKColumnsSupplier = Reference<XColumnsSupplier>(xFKKey,UNO_QUERY);
+                                            Reference<XColumnsSupplier> xFKColumnsSupplier(xFKKey,UNO_QUERY);
                                             OSL_ENSURE(xFKColumnsSupplier.is(),"Key isn't a column supplier");
                                             Reference<XNameAccess> xTColumns = xFKColumnsSupplier->getColumns();
                                             OSL_ENSURE(xTColumns.is(),"No Key columns available!");
