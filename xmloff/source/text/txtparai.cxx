@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparai.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-16 16:37:44 $
+ *  last change: $Author: mib $ $Date: 2000-11-27 13:37:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1019,6 +1019,14 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
                                             rLocalName, xAttrList,
                                             TextContentAnchorType_AS_CHARACTER,
                                             XML_TEXT_FRAME_GRAPHIC );
+        break;
+
+    case XML_TOK_TEXT_OBJECT:
+    case XML_TOK_TEXT_FOREIGN_OBJECT:
+        pContext = new XMLTextFrameContext( rImport, nPrefix,
+                                            rLocalName, xAttrList,
+                                            TextContentAnchorType_AS_CHARACTER,
+                                            XML_TEXT_FRAME_OLE );
         break;
 
     case XML_TOK_DRAW_A:

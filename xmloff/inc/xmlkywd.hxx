@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-26 19:38:40 $
+ *  last change: $Author: mib $ $Date: 2000-11-27 13:32:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -617,6 +617,7 @@ XML_CONSTASCII_ACTION( sXML_footnotes_configuration, "footnotes-configuration");
 XML_CONSTASCII_ACTION( sXML_footnotes_position, "footnotes-position" );
 XML_CONSTASCII_ACTION( sXML_forall, "forall" );
 XML_CONSTASCII_ACTION( sXML_foreground, "foreground" );
+XML_CONSTASCII_ACTION( sXML_foreign_object, "foreign_object" );
 XML_CONSTASCII_ACTION( sXML_format_source, "format-source" );
 XML_CONSTASCII_ACTION( sXML_formula, "formula");
 XML_CONSTASCII_ACTION( sXML_formula_hidden, "formula-hidden");

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-09-26 08:10:55 $
+ *  last change: $Author: mib $ $Date: 2000-11-27 13:37:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,8 @@ namespace com { namespace sun { namespace star {
 
 #define XML_TEXT_FRAME_TEXTBOX 1
 #define XML_TEXT_FRAME_GRAPHIC 2
+#define XML_TEXT_FRAME_STAR 3
+#define XML_TEXT_FRAME_OLE 3
 
 class XMLTextFrameContext : public SvXMLImportContext
 {

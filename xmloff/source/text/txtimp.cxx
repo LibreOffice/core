@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-21 14:25:43 $
+ *  last change: $Author: mib $ $Date: 2000-11-27 13:37:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,7 +197,9 @@ static __FAR_DATA SvXMLTokenMapEntry aTextElemTokenMap[] =
     { XML_NAMESPACE_TEXT, sXML_ordered_list,    XML_TOK_TEXT_ORDERED_LIST   },
     { XML_NAMESPACE_TEXT, sXML_unordered_list,  XML_TOK_TEXT_UNORDERED_LIST },
     { XML_NAMESPACE_DRAW, sXML_text_box,        XML_TOK_TEXT_TEXTBOX_PAGE },
-    { XML_NAMESPACE_DRAW, sXML_image,       XML_TOK_TEXT_IMAGE_PAGE },
+    { XML_NAMESPACE_DRAW, sXML_image,           XML_TOK_TEXT_IMAGE_PAGE },
+    { XML_NAMESPACE_DRAW, sXML_object,          XML_TOK_TEXT_OBJECT_PAGE },
+    { XML_NAMESPACE_DRAW, sXML_foreign_object,  XML_TOK_TEXT_FOREIGN_OBJECT_PAGE },
     { XML_NAMESPACE_DRAW, sXML_a,               XML_TOK_DRAW_A_PAGE },
     { XML_NAMESPACE_TABLE,sXML_table,           XML_TOK_TABLE_TABLE         },
 //  { XML_NAMESPACE_TABLE,sXML_sub_table,       XML_TOK_TABLE_SUBTABLE      },
@@ -239,6 +241,8 @@ static __FAR_DATA SvXMLTokenMapEntry aTextPElemTokenMap[] =
 
     { XML_NAMESPACE_DRAW, sXML_text_box, XML_TOK_TEXT_TEXTBOX },
     { XML_NAMESPACE_DRAW, sXML_image, XML_TOK_TEXT_IMAGE },
+    { XML_NAMESPACE_DRAW, sXML_object, XML_TOK_TEXT_OBJECT },
+    { XML_NAMESPACE_DRAW, sXML_foreign_object, XML_TOK_TEXT_FOREIGN_OBJECT },
     { XML_NAMESPACE_DRAW, sXML_a,               XML_TOK_DRAW_A },
 
     // sender fields
@@ -1037,6 +1041,20 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
         }
         break;
 
+    case XML_TOK_TEXT_OBJECT_PAGE:
+    case XML_TOK_TEXT_FOREIGN_OBJECT_PAGE:
+        if( XML_TEXT_TYPE_BODY == eType || XML_TEXT_TYPE_TEXTBOX == eType )
+        {
+            TextContentAnchorType eAnchorType =
+                XML_TEXT_TYPE_TEXTBOX == eType ? TextContentAnchorType_AT_FRAME
+                                               : TextContentAnchorType_AT_PAGE;
+            pContext = new XMLTextFrameContext( rImport, nPrefix,
+                                                rLocalName, xAttrList,
+                                                eAnchorType,
+                                                XML_TEXT_FRAME_OLE );
+        }
+        break;
+
     case XML_TOK_DRAW_A_PAGE:
         if( XML_TEXT_TYPE_BODY == eType || XML_TEXT_TYPE_TEXTBOX == eType )
         {
@@ -1317,4 +1335,11 @@ sal_Bool XMLTextImportHelper::IsInFrame() const
 sal_Bool XMLTextImportHelper::IsInHeaderFooter() const
 {
     return sal_False;
+}
+
+Reference< XPropertySet> XMLTextImportHelper::createAndInsertOLEObject(
+                                        const OUString& rHRef )
+{
+    Reference< XPropertySet> xPropSet;
+    return xPropSet;
 }

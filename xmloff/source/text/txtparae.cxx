@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-22 19:51:07 $
+ *  last change: $Author: mib $ $Date: 2000-11-27 13:37:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,8 +149,14 @@
 #ifndef _COM_SUN_STAR_TEXT_XTEXTGRAPHICOBJECTSSUPPLIER_HPP_
 #include <com/sun/star/text/XTextGraphicObjectsSupplier.hpp>
 #endif
+#ifndef _COM_SUN_STAR_TEXT_XTEXTEMBEDDEDOBJECTSSUPPLIER_HPP_
+#include <com/sun/star/text/XTextEmbeddedObjectsSupplier.hpp>
+#endif
 #ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGESUPPLIER_HPP_
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DOCUMENT_XEMBEDDEDOBJECTSUPPLIER_HPP_
+#include <com/sun/star/document/XEmbeddedObjectSupplier.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_TEXT_XTEXTSECTION_HPP_
@@ -230,6 +236,8 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::drawing;
+using namespace ::com::sun::star::document;
+using namespace ::com::sun::star::frame;
 
 typedef OUString *OUStringPtr;
 SV_DECL_PTRARR_DEL( OUStrings_Impl, OUStringPtr, 20, 10 )
@@ -597,9 +605,11 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     pFieldExport( 0 ),
     pPageTextFrameIdxs( 0 ),
     pPageGraphicIdxs( 0 ),
+    pPageEmbeddedIdxs( 0 ),
     pPageShapeIdxs( 0 ),
     pFrameTextFrameIdxs( 0 ),
     pFrameGraphicIdxs( 0 ),
+    pFrameEmbeddedIdxs( 0 ),
     pSectionExport( NULL ),
     pFrameShapeIdxs( 0 ),
     sParagraphService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.Paragraph")),
@@ -730,9 +740,11 @@ XMLTextParagraphExport::~XMLTextParagraphExport()
     delete pListAutoPool;
     delete pPageTextFrameIdxs;
     delete pPageGraphicIdxs;
+    delete pPageEmbeddedIdxs;
     delete pPageShapeIdxs;
     delete pFrameTextFrameIdxs;
     delete pFrameGraphicIdxs;
+    delete pFrameEmbeddedIdxs;
     delete pFrameShapeIdxs;
 }
 
@@ -821,6 +833,40 @@ void XMLTextParagraphExport::collectFrames()
         }
     }
 
+    Reference < XTextEmbeddedObjectsSupplier > xTEOS( GetExport().GetModel(),
+                                                    UNO_QUERY );
+    if( xTEOS.is() )
+    {
+        xEmbeddeds = Reference < XIndexAccess >( xTEOS->getEmbeddedObjects(),
+                                                  UNO_QUERY );
+        sal_Int32 nCount =  xEmbeddeds->getCount();
+        for( sal_Int32 i = 0; i < nCount; i++ )
+        {
+            Any aAny = xEmbeddeds->getByIndex( i );
+            Reference < XTextContent > xTxtCntnt;
+            aAny >>= xTxtCntnt;
+            Reference < XPropertySet > xPropSet( xTxtCntnt, UNO_QUERY );
+
+            aAny = xPropSet->getPropertyValue( sAnchorType );
+            TextContentAnchorType eAnchor;
+            aAny >>= eAnchor;
+
+            switch( eAnchor )
+            {
+            case TextContentAnchorType_AT_PAGE:
+                if( !pPageEmbeddedIdxs )
+                    pPageEmbeddedIdxs = new SvLongs;
+                pPageEmbeddedIdxs->Insert( i, pPageEmbeddedIdxs->Count() );
+                break;
+            case TextContentAnchorType_AT_FRAME:
+                if( !pFrameEmbeddedIdxs )
+                    pFrameEmbeddedIdxs = new SvLongs;
+                pFrameEmbeddedIdxs->Insert( i, pFrameEmbeddedIdxs->Count() );
+                break;
+            }
+        }
+    }
+
     Reference < XDrawPageSupplier > xDPS( GetExport().GetModel(),
                                                     UNO_QUERY );
     if( xDPS.is() )
@@ -891,6 +937,16 @@ void XMLTextParagraphExport::exportPageFrames( sal_Bool bAutoStyles,
             Reference < XTextContent > xTxtCntnt;
             aAny >>= xTxtCntnt;
             exportTextGraphic( xTxtCntnt, bAutoStyles );
+        }
+    }
+    if( pPageEmbeddedIdxs )
+    {
+        for( sal_Int32 i = 0; i < pPageEmbeddedIdxs->Count(); i++ )
+        {
+            Any aAny = xEmbeddeds->getByIndex( (*pPageEmbeddedIdxs)[i] );
+            Reference < XTextContent > xTxtCntnt;
+            aAny >>= xTxtCntnt;
+            exportTextEmbedded( xTxtCntnt, bAutoStyles );
         }
     }
     if( pPageShapeIdxs )
@@ -1674,6 +1730,8 @@ void XMLTextParagraphExport::_exportTextGraphic(
     OUString sURL;
     aAny = rPropSet->getPropertyValue( sGraphicURL );
     aAny >>= sURL;
+    if( !sURL.getLength() )
+        sURL = exportTextEmbeddedGraphic( rPropSet );
     GetExport().AddAttribute(XML_NAMESPACE_XLINK, sXML_href, sURL );
     GetExport().AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_type,
                                    sXML_simple );
@@ -1740,6 +1798,13 @@ void XMLTextParagraphExport::exportTextGraphic(
     }
 }
 
+OUString XMLTextParagraphExport::exportTextEmbeddedGraphic(
+    const Reference < XPropertySet >& rPropSet )
+{
+    OUString sEmpty;
+    return sEmpty;
+}
+
 void XMLTextParagraphExport::exportShape(
         const Reference < XTextContent > & rTxtCntnt,
         sal_Bool bAutoStyles )
@@ -1758,10 +1823,101 @@ void XMLTextParagraphExport::exportShape(
     }
 }
 
+void XMLTextParagraphExport::_exportTextEmbedded(
+        const Reference < XPropertySet > & rPropSet,
+        const Reference < XPropertySetInfo > & rPropSetInfo )
+{
+    OUString sStyle;
+    Any aAny;
+    if( rPropSetInfo->hasPropertyByName( sFrameStyleName ) )
+    {
+        aAny = rPropSet->getPropertyValue( sFrameStyleName );
+        aAny >>= sStyle;
+    }
+
+    OUString sAutoStyle( sStyle );
+    sAutoStyle = Find( XML_STYLE_FAMILY_TEXT_FRAME, rPropSet, sStyle );
+    if( sAutoStyle.getLength() )
+        GetExport().AddAttribute( XML_NAMESPACE_DRAW, sXML_style_name,
+                                  sAutoStyle );
+    addTextFrameAttributes( rPropSet, sal_False );
+
+    Reference < XModel > xEmbeddedModel;
+    Reference < XEmbeddedObjectSupplier > xEOSupplier( rPropSet, UNO_QUERY );
+    if( xEOSupplier.is() )
+        xEmbeddedModel = Reference < XModel >( xEOSupplier->getEmbeddedObject(),
+                                               UNO_QUERY );
+    const sal_Char *pElem = xEmbeddedModel.is() ? sXML_foreign_object
+                                                : sXML_object;
+
+    // xlink:href
+    OUString sURL = exportTextEmbeddedObject( rPropSet );
+    GetExport().AddAttribute(XML_NAMESPACE_XLINK, sXML_href, sURL );
+    GetExport().AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_type,
+                                   sXML_simple );
+    GetExport().AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_show,
+                                   sXML_embed );
+    GetExport().AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_actuate,
+                                   sXML_onRequest );
+
+    SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_DRAW,
+                              pElem, sal_False, sal_True );
+
+    // svg:desc
+    if( rPropSetInfo->hasPropertyByName( sAlternativeText  ) )
+    {
+        OUString sAltText;
+        aAny = rPropSet->getPropertyValue( sAlternativeText );
+        aAny >>= sAltText;
+        if( sAltText.getLength() )
+        {
+            SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_SVG,
+                                      sXML_desc, sal_True, sal_False );
+            GetExport().GetDocHandler()->characters( sAltText );
+        }
+    }
+
+    // draw:contour
+    exportContour( rPropSet, rPropSetInfo );
+}
+
 void XMLTextParagraphExport::exportTextEmbedded(
-        const Reference < XTextContent > & rTxtCntnt,
+        const Reference < XTextContent > & rTextContent,
         sal_Bool bAutoStyles )
 {
+    Reference < XPropertySet > xPropSet( rTextContent, UNO_QUERY );
+
+    if( bAutoStyles )
+    {
+        Add( XML_STYLE_FAMILY_TEXT_FRAME, xPropSet );
+    }
+    else
+    {
+        Reference< XPropertySetInfo > xPropSetInfo =
+            xPropSet->getPropertySetInfo();
+        Reference< XPropertyState > xPropState( xPropSet, UNO_QUERY );
+        if( xPropState.is() &&
+            xPropSetInfo->hasPropertyByName( sHyperLinkURL ) &&
+            PropertyState_DIRECT_VALUE ==
+                                xPropState->getPropertyState( sHyperLinkURL ) )
+        {
+            addHyperlinkAttributes( xPropSet, xPropState, xPropSetInfo );
+            SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_DRAW,
+                                      sXML_a, sal_False, sal_False );
+            _exportTextEmbedded( xPropSet, xPropSetInfo );
+        }
+        else
+        {
+            _exportTextEmbedded( xPropSet, xPropSetInfo );
+        }
+    }
+}
+
+OUString XMLTextParagraphExport::exportTextEmbeddedObject(
+    const Reference < XPropertySet >& rPropSet )
+{
+    OUString sEmpty;
+    return sEmpty;
 }
 
 void XMLTextParagraphExport::_exportTextRange(

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-20 13:01:35 $
+ *  last change: $Author: mib $ $Date: 2000-11-27 13:37:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -427,23 +427,32 @@ XMLTextFrameContext::XMLTextFrameContext(
         }
     }
 
-    if( XML_TEXT_FRAME_GRAPHIC == nType && !sHRef.getLength() )
-        return; // no URL, no image
+    if( (XML_TEXT_FRAME_GRAPHIC == nType || XML_TEXT_FRAME_OLE == nType)
+        && !sHRef.getLength() )
+        return; // no URL, no image or OLE object
 
-    Reference<XMultiServiceFactory> xFactory( GetImport().GetModel(),
-                                              UNO_QUERY );
-    if( xFactory.is() )
+    if( XML_TEXT_FRAME_OLE == nType )
     {
-        OUString sServiceName;
-        switch( nType )
+        xPropSet = GetImport().GetTextImport()->createAndInsertOLEObject(
+                                                    sHRef );
+    }
+    else
+    {
+        Reference<XMultiServiceFactory> xFactory( GetImport().GetModel(),
+                                                  UNO_QUERY );
+        if( xFactory.is() )
         {
-        case XML_TEXT_FRAME_TEXTBOX: sServiceName = sTextBoxServiceName; break;
-        case XML_TEXT_FRAME_GRAPHIC: sServiceName = sGraphicServiceName; break;
+            OUString sServiceName;
+            switch( nType )
+            {
+            case XML_TEXT_FRAME_TEXTBOX: sServiceName = sTextBoxServiceName; break;
+            case XML_TEXT_FRAME_GRAPHIC: sServiceName = sGraphicServiceName; break;
+            }
+            Reference<XInterface> xIfc = xFactory->createInstance( sServiceName );
+            DBG_ASSERT( xIfc.is(), "couldn't create frame" );
+            if( xIfc.is() )
+                xPropSet = Reference < XPropertySet >( xIfc, UNO_QUERY );
         }
-        Reference<XInterface> xIfc = xFactory->createInstance( sServiceName );
-        DBG_ASSERT( xIfc.is(), "couldn't create frame" );
-        if( xIfc.is() )
-            xPropSet = Reference < XPropertySet >( xIfc, UNO_QUERY );
     }
 
     if( !xPropSet.is() )
@@ -579,8 +588,11 @@ XMLTextFrameContext::XMLTextFrameContext(
         xPropSet->setPropertyValue( sGraphicFilter, aAny );
     }
 
-    Reference < XTextContent > xTxtCntnt( xPropSet, UNO_QUERY );
-    xTxtImport->InsertTextContent( xTxtCntnt );
+    if( XML_TEXT_FRAME_OLE != nType )
+    {
+        Reference < XTextContent > xTxtCntnt( xPropSet, UNO_QUERY );
+        xTxtImport->InsertTextContent( xTxtCntnt );
+    }
 
     // page number (must be set after the frame is inserted, because it
     // will be overwritten then inserting the frame.
