@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.hxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:19:41 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:23:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,6 +305,7 @@
 #define WID_CONTINUOUS                  1
 #define WID_RULE_NAME                   2
 #define WID_IS_ABS_MARGINS              3
+#define WID_IS_OUTLINE                  4
 
 //TextColumns
 #define WID_TXTCOL_LINE_WIDTH           0
