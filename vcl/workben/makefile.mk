@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: obo $ $Date: 2001-06-27 08:35:48 $
+#   last change: $Author: ssa $ $Date: 2001-08-10 11:20:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,9 +74,11 @@ LIBTARGET=NO
 
 # --- Files --------------------------------------------------------
 
-CXXFILES=		svdem.cxx
-
 OBJFILES=		$(OBJ)$/svdem.obj
+.IF "$(remote)"!=""
+OBJFILES+=		$(OBJ)$/officeacceptthread.obj
+EXCEPTIONSFILES=$(OBJFILES)
+.ENDIF
 
 APP1NOSAL=		TRUE
 APP1TARGET= 	$(TARGET)
@@ -92,15 +94,20 @@ APP1STDLIBS=	$(CPPULIB)			\
                 $(SOTLIB)			\
                 $(SVLIB)
 
+.IF "$(remote)"!=""
+APP1STDLIBS+=	$(UNOLIBS)			\
+                $(CPPUHELPERLIB)	\
+                $(UNOTOOLSLIB)		\
+                $(UCBHELPERLIB)		\
+                $(COMPHELPERLIB)	\
+                $(SALHELPERLIB)
+.ENDIF
+
 APP1DEPN=		$(L)$/itools.lib	\
                 $(L)$/sot.lib
 
 .IF "$(GUI)"=="WIN" || "$(GUI)"=="OS2"
 APP1DEF=		$(MISC)$/$(TARGET).def
-.ENDIF
-
-.IF "$(remote)"!=""
-EXCEPTIONSFILES=$(OBJ)$/svdem.obj
 .ENDIF
 
 # --- Targets ------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdem.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: th $ $Date: 2001-03-12 15:57:06 $
+ *  last change: $Author: ssa $ $Date: 2001-08-10 11:20:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,15 @@
 #include <wrkwin.hxx>
 #include <msgbox.hxx>
 
+#ifdef REMOTE_APPSERVER
+#include <comphelper/processfactory.hxx>
+#include <cppuhelper/servicefactory.hxx>
+#include <cppuhelper/bootstrap.hxx>
+#include "officeacceptthread.hxx"
+#endif
+
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
 // -----------------------------------------------------------------------
 
 // Forward declaration
@@ -76,10 +85,37 @@ void Main();
 
 SAL_IMPLEMENT_MAIN()
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMS;
+    Reference< XMultiServiceFactory > xMS;
+
+#ifdef REMOTE_APPSERVER
+    // for this to work make sure an <appname>.ini file is available, you can just copy soffice.ini
+    Reference< XComponentContext > xComponentContext = ::cppu::defaultBootstrap_InitialComponentContext();
+    xMS = Reference< XMultiServiceFactory > (xComponentContext->getServiceManager(), UNO_QUERY);
+    ::comphelper::setProcessServiceFactory( xMS );
+
+    // allow remote clients to connect from any host (0) on the given port
+    ::desktop::OOfficeAcceptorThread *pOfficeAcceptThread = new ::desktop::OOfficeAcceptorThread( xMS,
+        ::rtl::OUString::createFromAscii("socket,host=0,port=8081;urp;"), false, ::rtl::OUString(), ::rtl::OUString() );
+    pOfficeAcceptThread->create();
+#endif
+
     InitVCL( xMS );
+    GetpApp()->WaitForClientConnect();  // is a no-op in local case
     ::Main();
     DeInitVCL();
+
+#ifdef REMOTE_APPSERVER
+    if( pOfficeAcceptThread )
+    {
+        pOfficeAcceptThread->stopAccepting();
+#ifndef LINUX
+        pOfficeAcceptThread->join();
+        delete pOfficeAcceptThread;
+#endif
+        pOfficeAcceptThread = 0;
+    }
+#endif
+
     return 0;
 }
 
