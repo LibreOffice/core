@@ -1,10 +1,10 @@
 /*************************************************************************
-*
+ *
  *  $RCSfile: osl_Socket_Const.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 16:41:17 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 12:33:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,6 @@
 const char * pTestString1 = "test socket";
 const char * pTestString2 = " Passed#OK";
 //define read count
-#define FILE_READ 4000
 //------------------------------------------------------------------------
 //------------------------------------------------------------------------
 
@@ -178,14 +177,14 @@ extern "C"
 #define IP_PORT_IMAP  143
 #define IP_PORT_HTTPS  443
 #define IP_PORT_HTTP2  8080
-
-#define IP_PORT_MYPORT  8888
-#define IP_PORT_MYPORT1  8889
-#define IP_PORT_MYPORT2  8890
-#define IP_PORT_MYPORT3  8891
-#define IP_PORT_MYPORT4  8892
-#define IP_PORT_MYPORT5  8893
-#define IP_PORT_MYPORT6  8894
+/**reference: http://www.iana.org/assignments/port-numbers */
+#define IP_PORT_MYPORT  8881    //8888
+#define IP_PORT_MYPORT1  8882   //8889
+#define IP_PORT_MYPORT2  8883   //8890
+#define IP_PORT_MYPORT3  8884   //8891
+#define IP_PORT_MYPORT4  8885   //8892
+#define IP_PORT_MYPORT5  8886   //8893
+#define IP_PORT_MYPORT6  8887   //8894
 #define IP_PORT_MYPORT7  8895
 #define IP_PORT_MYPORT8  8896
 #define IP_PORT_MYPORT9  8897
@@ -221,8 +220,10 @@ OSLTEST_DECLARE( HostName3,  "deuce.prc.sun.com" );
 OSLTEST_DECLARE( HostIp3,  "129.158.217.199" );
 OSLTEST_DECLARE( HostName4,  "sceri.PRC.Sun.COM" );  //Beijing server for test
 OSLTEST_DECLARE( HostIp4,  "129.158.217.107" );
-OSLTEST_DECLARE( HostName5,  "grande.Germany.Sun.COM" );  //Germany server for test
-OSLTEST_DECLARE( HostIp5,  "129.157.139.140" );
+OSLTEST_DECLARE( HostName5,  "koori.SFBay.Sun.COM" );  //"grande.Germany.Sun.COM" );  //Germany server for test
+OSLTEST_DECLARE( HostIp5,  "10.5.32.20" );
+OSLTEST_DECLARE( HostName6,  "crumple.SFBay.Sun.COM" );  //sfbay
+OSLTEST_DECLARE( HostIp6,  "10.6.103.83" );
 OSLTEST_DECLARE( HostIpInval,  "123.45.67.89" );    //this is valid ip number,but can not arrive --mindy
 OSLTEST_DECLARE( HostIpInval1,  "123.345.67.89" );  //this is real invalid ip number --mindy
 OSLTEST_DECLARE( HostNameInval,  "www.the_hostname_that_can_not_resolvable_to_an_IP_Address.com" );
