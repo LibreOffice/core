@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodes.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:21:01 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 14:38:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -2038,7 +2037,12 @@ void SwNodes::_CopyNodes( const SwNodeRange& rRange,
     if( aRg.aStart >= aRg.aEnd )
         return;
 
-    if( this == &pDoc->GetNodes() &&
+    // when inserting into the source range, nothing need to be done
+    DBG_ASSERT( &aRg.aStart.GetNodes() == this,
+                "aRg should use thisnodes array" );
+    DBG_ASSERT( &aRg.aStart.GetNodes() == &aRg.aEnd.GetNodes(),
+               "Range across different nodes arrays? You deserve punishment!");
+    if( &rIndex.GetNodes() == &aRg.aStart.GetNodes() &&
         rIndex.GetIndex() >= aRg.aStart.GetIndex() &&
         rIndex.GetIndex() < aRg.aEnd.GetIndex() )
             return;
