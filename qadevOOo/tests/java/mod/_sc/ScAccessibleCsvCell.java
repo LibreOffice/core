@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScAccessibleCsvCell.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Date: 2004-11-02 12:01:06 $
+ *  last change: $Date: 2005-02-24 17:52:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,6 @@ public class ScAccessibleCsvCell extends TestCase {
         XAccessibleContext cont = (XAccessibleContext)
                 UnoRuntime.queryInterface(XAccessibleContext.class, oObj);
 
-
         String name = "";
         try {
             XAccessible acc = cont.getAccessibleChild(3);
@@ -201,7 +200,7 @@ public class ScAccessibleCsvCell extends TestCase {
 
         lThread = new loadThread(SOF, args);
         lThread.start();
-
+        shortWait();
     }
 
     /**
