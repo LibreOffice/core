@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapdlg.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:00:57 $
+ *  last change: $Author: cl $ $Date: 2002-04-09 07:09:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 
 #ifndef _IMAPDLG_HXX_
 #define _IMAPDLG_HXX_
+
+#ifndef _SVTOOLS_INETTBC_HXX
+#include <svtools/inettbc.hxx>
+#endif
 
 #ifndef _SFX_CHILDWIN_HXX //autogen
 #include <sfx2/childwin.hxx>
@@ -174,8 +178,11 @@ class SvxIMapDlg : public SfxFloatingWindow
     StatusBar           aStbStatus;
     FixedText           aFtURL;
     FixedText           aFtText;
-    ComboBox            aCbbURL;
+//  ComboBox            aCbbURL;
     Edit                aEdtText;
+    SvtURLBox           maURLBox;
+    FixedText           maFtTarget;
+    ComboBox            maCbbTarget;
 
     virtual void        Resize();
     virtual BOOL        Close();
@@ -219,6 +226,9 @@ public:
 
     void                Update( const Graphic& rGraphic, const ImageMap* pImageMap = NULL,
                                 const TargetList* pTargetList = NULL, void* pEditingObj = NULL );
+
+    virtual void        KeyInput( const KeyEvent& rKEvt );
+
 };
 
 
