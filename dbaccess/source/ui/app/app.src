@@ -1,0 +1,653 @@
+/*************************************************************************
+ *
+ *  $RCSfile: app.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:31:13 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the License); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an AS IS basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): Ocke Janssen
+ *
+ *
+ ************************************************************************/
+#ifndef _DBU_APP_HRC_
+#include "dbu_app.hrc"
+#endif
+#ifndef _GLOBLMN_HRC
+#include <svx/globlmn.hrc>
+#endif
+#ifndef _CNTIDS_HRC
+#include <sfx2/cntids.hrc>
+#endif
+#ifndef DBACCESS_UI_BROWSER_ID_HXX
+#include "browserids.hxx"
+#endif
+#ifndef _DBA_DBACCESS_HELPID_HRC_
+#include "dbaccess_helpid.hrc"
+#endif
+#ifndef DBAUI_TOOLBOX_HXX
+#include "toolbox.hrc"
+#endif
+
+#define MASKCOLOR MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; }
+
+#define MN_VIEW     21
+#define MN_INSERT   22
+#define MN_SORT     23
+#define MN_EXTRA    24
+#define MN_PROPS    25
+#define MN_WIN      30
+#define MN_HELP     31
+#define MN_DBOBJECTS    32
+#define MN_PRVIEW   33
+
+
+String RID_STR_NEW_FORM
+{
+    Text [ de ] ="Formular in Entwurfsansicht erstellen..." ;
+    Text [ en-US ] = "Create Form in Design View..." ;
+};
+
+String RID_STR_NEW_FORM_AUTO
+{
+    Text [ de ] ="Formular unter Verwendung des Assistenten erstellen..." ;
+    Text [ en-US ] = "Use Wizard to Create Form..." ;
+};
+
+String RID_STR_NEW_REPORT_AUTO
+{
+    Text [ de ] ="Bericht unter Verwendung des Assistenten erstellen..." ;
+    Text [ en-US ] = "Use Wizard to Create Report..." ;
+};
+String RID_STR_NEW_QUERY
+{
+    Text [ de ] ="Abfrage in der Entwurfsansicht erstellen..." ;
+    Text [ en-US ] = "Create Query in Design View..." ;
+};
+
+String RID_STR_NEW_QUERY_SQL
+{
+    Text [ de ] ="Abfrage in SQL-Ansicht erstellen..." ;
+    Text [ en-US ] = "Create Query in SQL View..." ;
+};
+
+String RID_STR_NEW_QUERY_AUTO
+{
+    Text [ de ] ="Abfrageunter Verwendung des Assistenten erstellen..." ;
+    Text [ en-US ] = "Use Wizard to Create Query..." ;
+};
+String RID_STR_NEW_TABLE
+{
+    Text [ de ] ="Tabelle in der Entwurfsansicht erstellen..." ;
+    Text [ en-US ] = "Create Table in Design View..." ;
+};
+
+String RID_STR_NEW_TABLE_AUTO
+{
+    Text [ de ] ="Tabelle unter Verwendung des Assistenten erstellen..." ;
+    Text [ en-US ] = "Use Wizard to Create Table..." ;
+};
+String RID_STR_NEW_VIEW
+{
+    Text [ de ] ="Ansicht erstellen... " ;
+    Text [ en-US ] = "Create View..." ;
+};
+
+String RID_STR_FORMS_CONTAINER
+{
+    Text [ de ] ="Formulare" ;
+    Text [ en-US ] = "Forms" ;
+};
+
+String RID_STR_REPORTS_CONTAINER
+{
+    Text [ de ] ="Berichte" ;
+    Text [ en-US ] = "Reports" ;
+};
+
+ToolBox RID_BRW_APPLICATION_TOOLBOX
+{
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( 3 , 1 ) ;
+    //  Size = MAP_APPFONT ( 200 , 14 ) ;
+    OutputSize = TRUE ;
+    Align = BOXALIGN_TOP ;
+    ItemImageList = RID_DEFAULTIMAGELIST_SC ;
+    HideWhenDeactivate = TRUE ;
+//  HelpId = HID_TLB_APPLICATION ;
+
+    ItemList =
+    {
+        ToolBoxItem
+        {
+            Identifier = ID_APP_NEW_FORM;
+            Command = ".uno:DB/NewForm";
+            Text [ de ] ="Formular ..." ;
+            Text [ en-US ] = "Form ..." ;
+            ItemImage = Image
+            {
+                MASKCOLOR;
+                ImageBitmap = Bitmap
+                {
+                    File = "sc014.bmp" ;
+                };
+            };
+            HelpId = SID_NEWDOC ;
+            DropDown = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_OPENDOC ;
+            HelpId = SID_OPENDOC ;
+            Text [ de ] ="Öffnen" ;
+            Text[ en-US ] = "Open";
+            Command = ".uno:Open";
+        };
+        ToolBoxItem
+        {
+            Identifier = ID_BROWSER_SAVEDOC ;
+            HelpId = SID_SAVEDOC ;
+            Text [ de ] ="Speichern" ;
+            Text[ en-US ] = "Save";
+        };
+
+
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            MID_SBA_QRY_COPY
+        };
+        ToolBoxItem
+        {
+            MID_SBA_QRY_PASTE
+            DropDown = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_DB_APP_OPEN;
+            Text [ de ] ="Datenbankobjekt öffnen" ;
+            Text[ en-US ] = "Open Database Object";
+            Command = ".uno:DB/Open";
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_DB_APP_EDIT;
+            Text [ de ] ="Bearbeiten" ;
+            Text[ en-US ] = "Edit";
+            Command = ".uno:DB/Edit";
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_DB_APP_DELETE;
+            Text [ de ] ="Löschen" ;
+            Text[ en-US ] = "Delete";
+            Command = ".uno:DB/Delete";
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_DB_APP_RENAME;
+            Text [ de ] ="Umbennen" ;
+            Text[ en-US ] = "Rename";
+            Command = ".uno:DB/Rename";
+        };
+
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            MID_SBA_QRY_SORTUP
+        };
+        ToolBoxItem
+        {
+            MID_SBA_QRY_SORTDOWN
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_HELP_INDEX;
+            Text [ de ] ="Hilfe" ;
+            Text[ en-US ] = "Help";
+            Command = ".uno:HelpIndex";
+            Hide = TRUE;
+        };
+    };
+};
+Menu RID_MENU_APP_NEW
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = ID_APP_NEW_FORM;
+            Command = ".uno:DB/NewForm";
+            Text [ de ] ="Formular ..." ;
+            Text [ en-US ] = "Form ..." ;
+            ItemBitmap = Bitmap
+            {
+                File = "sc014.bmp" ;
+            };
+        };
+        MenuItem
+        {
+            MID_DOCUMENT_CREATE_REPWIZ
+            Command = ".uno:DB/NewReportAutoPilot";
+            ItemBitmap = Bitmap
+            {
+                File = "sc020.bmp" ;
+            };
+        };
+        MenuItem
+        {
+            MID_QUERY_NEW_DESIGN
+            Command = ".uno:DB/NewQuery";
+            ItemBitmap = Bitmap
+            {
+                File = "sc020.bmp" ;
+            };
+        };
+        MenuItem
+        {
+            MID_QUERY_NEW_SQL
+            Command = ".uno:DB/NewQuerySql";
+            ItemBitmap = Bitmap
+            {
+                File = "sc020.bmp" ;
+            };
+        };
+        MenuItem
+        {
+            Separator = TRUE;
+        };
+        MenuItem
+        {
+            MID_NEW_TABLE_DESIGN
+            Command = ".uno:DB/NewTable";
+            ItemBitmap = Bitmap
+            {
+                File = "sc025.bmp" ;
+            };
+        };
+        MenuItem
+        {
+            MID_NEW_VIEW_DESIGN
+            Command = ".uno:DB/NewView";
+            ItemBitmap = Bitmap
+            {
+                File = "sc028.bmp" ;
+            };
+        };
+        MenuItem
+        {
+            Identifier = ID_NEW_VIEW_SQL;
+            Command = ".uno:DB/NewViewSQL";
+            Text [ de ] ="Ansicht (einfach)..." ;
+            Text [ en-US ] = "View (Simple)..." ;
+            ItemBitmap = Bitmap
+            {
+                File = "sc028.bmp" ;
+            };
+        };
+
+    };
+};
+
+Menu RID_MENU_APP_EDIT
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            ITEM_EDIT_COPY
+        };
+        MenuItem
+        {
+            ITEM_EDIT_PASTE
+        };
+        MenuItem
+        {
+            Identifier = SID_DB_APP_PASTE_SPECIAL;
+            Text [ de ] ="Inhalte einfügen..." ;
+            Text[ en-US ] = "Paste Special...";
+            Command = ".uno:DB/PasteSpecial";
+        };
+        MenuItem
+        {
+            Separator = TRUE ;
+        };
+        MenuItem
+        {
+            Identifier = SID_DB_APP_DELETE;
+            Text [ de ] ="Löschen" ;
+            Text[ en-US ] = "Delete";
+            Command = ".uno:DB/Delete";
+        };
+        MenuItem
+        {
+            Identifier = SID_DB_APP_RENAME;
+            Text [ de ] ="Umbennen" ;
+            Text[ en-US ] = "Rename";
+            Command = ".uno:DB/Rename";
+        };
+        MenuItem
+        {
+            Identifier = SID_DB_APP_EDIT;
+            Text [ de ] ="Bearbeiten" ;
+            Text[ en-US ] = "Edit";
+            Command = ".uno:DB/Edit";
+        };
+        MenuItem
+        {
+            Identifier = SID_DB_APP_OPEN;
+            Text [ de ] ="Öffnen" ;
+            Text[ en-US ] = "Open";
+            Command = ".uno:DB/Open";
+        };
+        MenuItem
+        {
+            Identifier = SID_DB_APP_CONVERTTOVIEW;
+            Text [ de ] ="Als Ansicht erstellen" ;
+            Text[ en-US ] = "Create as View";
+            Command = ".uno:DB/ConvertToView";
+        };
+        MenuItem
+        {
+            MID_DOCUMENT_NEW_AUTOPILOT
+            Command = ".uno:DB/NewFormAutoPilot";
+        };
+        MenuItem
+        {
+            Identifier = ID_DOCUMENT_CREATE_REPWIZ_PRE_SEL ;
+            HelpID = HID_DOCUMENT_CREATE_REPWIZ ;
+            Text [ de ] ="Berichts-Assistent..." ;
+            Text[ en-US ] = "Report Wizard...";
+
+            Command = ".uno:DB/NewReportAutoPilotWithPreSelection";
+        };
+        MenuItem
+        {
+            Separator = TRUE ;
+        };
+        MenuItem
+        {
+            Identifier = SID_DB_APP_SELECTALL;
+            Text [ de ] ="Alles auswählenen" ;
+            Text[ en-US ] = "Select All";
+            Command = ".uno:DB/SelectAll";
+        };
+        MenuItem
+        {
+            Separator = TRUE ;
+        };
+        MenuItem
+        {
+            Identifier = MN_PROPS;
+            Text [ de ] ="~Datenbank" ;
+            Text[ en-US ] = "~Database";
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        Identifier = SID_DB_APP_DSPROPS;
+                        Text [ de ] ="Eigenschaften" ;
+                        Text[ en-US ] = "Properties";
+                        Command = ".uno:DB/DSProperties";
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_DB_APP_DSCONNECTION_TYPE;
+                        Text [ de ] ="Verbingungsart" ;
+                        Text[ en-US ] = "Connection Type";
+                        Command = ".uno:DB/DSConnectionType";
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_DB_APP_DSADVANCED_SETTINGS;
+                        Text [ de ] ="Erweiterte Eigenschaften" ;
+                        Text[ en-US ] = "Advanced Settings";
+                        Command = ".uno:DB/DSAdvancedSettings";
+                    };
+                };
+            };
+        };
+    };
+};
+
+String STR_QUERY_DELETE_DATASOURCE
+{
+    Text [ de ] ="Soll die Datenquelle '%1' gelöscht werden?" ;
+    Text [ en-US ] = "Do you want to delete the data source '%1'?" ;
+};
+
+String STR_APP_TITLE
+{
+    Text [ de ] =" - %PRODUCTNAME Base" ;
+    Text [ en-US ] = " - %PRODUCTNAME Base" ;
+};
+
+String RID_STR_REPORTS_HELP_TEXT_WIZARD
+{
+    Text [ de ] ="Der Assistent wird Sie durch die Schritte führen, die zur Erstellung eines Berichtes notwendig sind." ;
+    Text [ en-US ] = "The wizard will guide you through the steps necessary to create a report." ;
+};
+String RID_STR_FORMS_HELP_TEXT
+{
+    Text [ de ] ="Erstellen Sie ein Formular, indem Sie die Datensatzquelle, Steuerelemente und Steuerelementeigenschaften angeben." ;
+    Text [ en-US ] = "Create a form by specifying the record source, controls, and control properties." ;
+};
+String RID_STR_FORMS_HELP_TEXT_WIZARD
+{
+    Text [ de ] ="Der Assistent wird Sie durch die Schritte führen, die zur Erstellung eines Formulares notwendig sind." ;
+    Text [ en-US ] = "The wizard will guide you through the steps necessary to create a form." ;
+};
+String RID_STR_QUERIES_HELP_TEXT
+{
+    Text [ de ] ="Erstellen Sie eine Abfrage, indem Sie Filter, Eingabetabellen, sowie Sortierungs- und Gruppierungseigenschaften angeben." ;
+    Text [ en-US ] = "Create a query by specifying the filters, input tables, field names,  and  properties for sorting or grouping." ;
+};
+String RID_STR_QUERIES_HELP_TEXT_SQL
+{
+    Text [ de ] ="Erstellen Sie eine Abfrage, indem Sie einen SQL-Befehl direkt eingeben." ;
+    Text [ en-US ] = "Create a query  entering an SQL statement directly." ;
+};
+String RID_STR_QUERIES_HELP_TEXT_WIZARD
+{
+    Text [ de ] ="Der Assistent wird Sie durch die Schritte führen, die zur Erstellung einer Abfrage notwendig sind." ;
+    Text [ en-US ] = "The wizard will guide you through the steps necessary to create a query." ;
+};
+String RID_STR_TABLES_HELP_TEXT_DESIGN
+{
+    Text [ de ] ="Erstellen Sie eine Tabelle, indem Sie Feldnamen und -eigenschaften, sowie Datentypen angeben." ;
+    Text [ en-US ] = "Create a table by specifying the field names and properties, as well as the data types." ;
+};
+String RID_STR_TABLES_HELP_TEXT_WIZARD
+{
+    Text [ de ] ="Wählen Sie aus geschäftlichen oder privaten Beispieltabellen aus, die Sie dann für Ihren Zweck anpassen." ;
+    Text [ en-US ] = "Choose from a selection of business and personal table samples, which you customize to create a table." ;
+};
+String RID_STR_VIEWS_HELP_TEXT_DESIGN
+{
+    Text [ de ] ="Erstellen Sie eine Ansicht, indem Sie Tabellen und Feldnamen angeben, die Sie anzeigen möchten." ;
+    Text [ en-US ] = "Create a view by specifying the tables and field names you would like to have visible." ;
+};
+String RID_STR_VIEWS_HELP_TEXT_WIZARD
+{
+    Text [ de ] ="Öffnet den Ansichtswizard" ;
+    Text [ en-US ] = "Opens the view wizard" ;
+};
+String STR_QUERY_DELETE_FORM
+{
+    Text [ de ] ="Soll das Formular '%1' gelöscht werden?" ;
+    Text [ en-US ] = "Do you want to delete the form '$name$'?" ;
+};
+String STR_QUERY_DELETE_REPORT
+{
+    Text [ de ] ="Soll der Bericht '%1' gelöscht werden?" ;
+    Text [ en-US ] = "Do you want to delete the report '$name$'?" ;
+};
+
+String STR_DATABASE
+{
+    Text [ de ] ="Datenbank" ;
+    Text [ en-US ] = "Database" ;
+};
+String STR_TASKS
+{
+    Text [ de ] ="Aufgaben" ;
+    Text [ en-US ] = "Tasks" ;
+};
+String STR_DESCRIPTION
+{
+    Text [ de ] ="Beschreibung" ;
+    Text [ en-US ] = "Description" ;
+};
+String STR_PREVIEW
+{
+    Text [ de ] ="Vorschau" ;
+    Text [ en-US ] = "Preview" ;
+};
+String STR_DISABLEPREVIEW
+{
+    Text [ de ] ="Vorschau ausblenden" ;
+    Text [ en-US ] = "Disable Preview" ;
+};
+QueryBox APP_SAVEMODIFIED
+{
+    Buttons = WB_YES_NO_CANCEL ;
+    DefButton = WB_DEF_YES ;
+    Message [ de ]= "Die Datenbank wurde geändert.\nMöchten Sie die Änderungen speichern?" ;
+    Message [ en-US ] = "The database has been modified.\nDo you want to save the changes?" ;
+};
+QueryBox APP_CLOSEDOCUMENTS
+{
+    Buttons = WB_YES_NO ;
+    DefButton = WB_DEF_YES ;
+    Message [ de ] = "Die Verbingungsart wurde geändert.\nDamit die Änderungen wirksam werden, müssen alle Formulare, Berichte, Abfragen und Tabellen geschlossen werden.\n\nMöchten Sie jetzt alle Dokumente schließen?" ;
+    Message [ en-US ] = "The connection type has been altered.\nFor the changes to take effect, all forms, reports, queries and tables must be closed.\n\nDo you want to close all documents now?" ;
+};
+
+Menu RID_MENU_APP_PREVIEW
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = SID_DB_APP_DISABLE_PREVIEW;
+            Text [ de ] ="Keine" ;
+            Text[ en-US ] = "None";
+            Command = ".uno:DB/DisablePreview";
+            Checkable = TRUE;
+            RadioCheck = TRUE;
+            AutoCheck = TRUE;
+        };
+        MenuItem
+        {
+            Identifier = SID_DB_APP_VIEW_DOCINFO_PREVIEW;
+            Text [ de ] ="Dokumentinformationen" ;
+            Text[ en-US ] = "Document Information";
+            Command = ".uno:DB/ShowDocInfoPreview";
+            Checkable = TRUE;
+            RadioCheck = TRUE;
+            AutoCheck = TRUE;
+        };
+        MenuItem
+        {
+            Identifier = SID_DB_APP_VIEW_DOC_PREVIEW;
+            Text [ de ] ="Dokument" ;
+            Text[ en-US ] = "Document";
+            Command = ".uno:DB/ShowDocPreview";
+            Checkable = TRUE;
+            RadioCheck = TRUE;
+            AutoCheck = TRUE;
+        };
+    };
+};
+String RID_STR_FORM
+{
+    Text [ de ] ="Formular";
+    Text [ en-US ] = "Form";
+};
+
+String RID_STR_REPORT
+{
+    Text [ de ] ="Bericht";
+    Text [ en-US ] = "Report";
+};
+String STR_FRM_LABEL
+{
+    Text [ de ] ="~Name des Formulars" ;
+    Text [ en-US ] = "F~orm name" ;
+};
+String STR_RPT_LABEL
+{
+    Text [ de ] ="~Name des Berichts" ;
+    Text [ en-US ] = "~Report name" ;
+};
+
+String STR_FOLDER_LABEL
+{
+    Text [ de ] ="~Name des Ordners" ;
+    Text [ en-US ] = "F~older name" ;
+};
+
