@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animobjs.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cl $ $Date: 2002-08-30 11:25:06 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:09:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -608,7 +608,7 @@ void SdAnimationWin::UpdateControl( ULONG nListPos, BOOL bDisableCtrls )
         {
             SdrPaintInfoRec aPaintInfoRec;
             VirtualDevice   aVD;
-            Rectangle       aObjRect( pObject->GetBoundRect() );
+            Rectangle       aObjRect( pObject->GetCurrentBoundRect() );
             Size            aObjSize( aObjRect.GetSize() );
             Point           aOrigin( Point( -aObjRect.Left(), -aObjRect.Top() ) );
             MapMode         aMap( aVD.GetMapMode() );
@@ -622,7 +622,7 @@ void SdAnimationWin::UpdateControl( ULONG nListPos, BOOL bDisableCtrls )
             ExtOutputDevice aOut( &aVD );
             aVD.SetDrawMode( GetDisplayBackground().GetColor().IsDark() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
             aVD.Erase();
-            pObject->Paint( aOut, aPaintInfoRec );
+            pObject->SingleObjectPainter( aOut, aPaintInfoRec ); // #110094#-17
             aBmp = BitmapEx( aVD.GetBitmap( aObjRect.TopLeft(), aObjSize ) );
         }
 
