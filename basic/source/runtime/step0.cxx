@@ -2,9 +2,9 @@
  *
  *  $RCSfile: step0.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ab $ $Date: 2000-10-18 09:08:27 $
+ *  last change: $Author: hjs $ $Date: 2000-11-06 12:15:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@
 #include <basrid.hxx>
 #include "sbunoobj.hxx"
 #include <com/sun/star/uno/Any.hxx>
+
+#include <string>
+#include <algorithm>
 
 #include "segmentc.hxx"
 #pragma SW_SEGMENT_CLASS( SBRUNTIME, SBRUNTIME_CODE )
@@ -493,8 +496,8 @@ void SbiRuntime::StepREDIMP()
                     {
                         if( i == nDims )
                         {
-                            lBoundNew = max( lBoundNew, lBoundOld );
-                            uBoundNew = min( uBoundNew, uBoundOld );
+                            lBoundNew = std::max( lBoundNew, lBoundOld );
+                            uBoundNew = std::min( uBoundNew, uBoundOld );
                         }
                         short j = i - 1;
                         pActualIndices[j] = pLowerBounds[j] = lBoundNew;
