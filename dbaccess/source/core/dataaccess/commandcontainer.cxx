@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commandcontainer.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-30 09:55:07 $
+ *  last change: $Author: hr $ $Date: 2001-11-01 16:41:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,8 @@ OCommandContainer::~OCommandContainer()
 //--------------------------------------------------------------------------
 Reference< XPropertySet > OCommandContainer::createObject()
 {
-    return new OCommandDefinition(OCommandDefinition::AccessControl());
+    OCommandDefinition::AccessControl aAccessControl;
+    return new OCommandDefinition(aAccessControl);
 }
 
 //--------------------------------------------------------------------------
