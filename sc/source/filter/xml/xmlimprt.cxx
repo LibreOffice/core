@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: sab $ $Date: 2001-08-29 08:30:20 $
+ *  last change: $Author: obo $ $Date: 2001-09-13 10:15:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1489,7 +1489,7 @@ ScXMLImport::ScXMLImport(const sal_uInt16 nImportFlag) :
     xTableStylesPropertySetMapper = new XMLPropertySetMapper((XMLPropertyMapEntry*)aXMLScTableStylesProperties, xScPropHdlFactory);
 }
 
-ScXMLImport::~ScXMLImport()
+ScXMLImport::~ScXMLImport() throw()
 {
 //  RemoveUnusedNumRules();
 

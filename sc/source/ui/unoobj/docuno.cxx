@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docuno.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: nn $ $Date: 2001-08-17 19:41:54 $
+ *  last change: $Author: obo $ $Date: 2001-09-13 10:18:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -527,7 +527,7 @@ sal_Int16 SAL_CALL ScModelObj::resetActionLocks() throw(uno::RuntimeException)
     return nRet;
 }
 
-void SAL_CALL ScModelObj::lockControllers()
+void SAL_CALL ScModelObj::lockControllers() throw (::com::sun::star::uno::RuntimeException)
 {
     ScUnoGuard aGuard;
     SfxBaseModel::lockControllers();
@@ -535,7 +535,7 @@ void SAL_CALL ScModelObj::lockControllers()
         pDocShell->LockPaint();
 }
 
-void SAL_CALL ScModelObj::unlockControllers()
+void SAL_CALL ScModelObj::unlockControllers() throw (::com::sun::star::uno::RuntimeException)
 {
     ScUnoGuard aGuard;
     if (hasControllersLocked())
