@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 13:09:20 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:34:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,8 +195,8 @@
 #ifndef SD_PREVIEW_CHILD_WINDOW_HXX
 #include "PreviewChildWindow.hxx"
 #endif
-#ifndef SD_FU_SLIDE_SHOW_HXX
-#include "fuslshow.hxx"
+#ifndef _SD_SLIDESHOW_HXX
+#include "slideshow.hxx"
 #endif
 #include "SdUnoOutlineView.hxx"
 #include "SpellDialogChildWindow.hxx"
@@ -983,6 +983,7 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
 {
     ViewShell::GetMenuState(rSet);
 
+/*
     if ( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PRESENTATION ) )
     {
         SfxChildWindow* pPreviewChildWindow = GetViewFrame()->GetChildWindow(
@@ -997,7 +998,7 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
             rSet.DisableItem( SID_PRESENTATION );
         }
     }
-
+*/
     // Vorlagenkatalog darf nicht aufgerufen werden
     rSet.DisableItem( SID_STYLE_CATALOG );
 
