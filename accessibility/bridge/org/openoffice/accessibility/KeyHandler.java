@@ -59,7 +59,7 @@
 package org.openoffice.accessibility;
 
 import com.sun.star.uno.UnoRuntime;
-import drafts.com.sun.star.awt.XKeyHandler;
+import com.sun.star.awt.XKeyHandler;
 import org.openoffice.java.accessibility.AccessibleKeyBinding;
 import org.openoffice.java.accessibility.Build;
 
