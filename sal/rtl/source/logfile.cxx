@@ -2,9 +2,9 @@
  *
  *  $RCSfile: logfile.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 17:15:13 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 19:11:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,17 +89,20 @@
 #ifndef _RTL_ALLOC_H_
 #include <rtl/alloc.h>
 #endif
+#include "osl/thread.h"
+
+#include <algorithm>
 
 #ifdef _MSC_VER
 #define vsnprintf _vsnprintf
 #endif
 
-
+using namespace rtl;
 using namespace osl;
 using namespace std;
 
-namespace rtl
-{
+namespace {
+
 static oslFileHandle g_aFile = 0;
 static sal_Bool g_bHasBeenCalled = sal_False;
 static const sal_Int32 g_BUFFERSIZE = 4096;
@@ -127,11 +130,8 @@ LoggerGuard::~LoggerGuard()
         g_bHasBeenCalled = sal_False;
     }
 }
-}
 
-using namespace rtl;
-
-static Mutex & getLogMutex()
+Mutex & getLogMutex()
 {
     static Mutex *pMutex = 0;
     if( !pMutex )
@@ -146,7 +146,7 @@ static Mutex & getLogMutex()
     return *pMutex;
 }
 
-static OUString getFileUrl( const OUString &name )
+OUString getFileUrl( const OUString &name )
 {
     OUString aRet;
     OSL_VERIFY( osl_getFileURLFromSystemPath( name.pData, &aRet.pData ) == osl_File_E_None );
@@ -158,8 +158,7 @@ static OUString getFileUrl( const OUString &name )
     return aRet;
 }
 
-extern "C" void SAL_CALL rtl_logfile_trace  ( const char *pszFormat, ... )
-{
+void init() {
     if( !g_bHasBeenCalled )
     {
         MutexGuard guard( getLogMutex() );
@@ -229,7 +228,13 @@ extern "C" void SAL_CALL rtl_logfile_trace  ( const char *pszFormat, ... )
             g_bHasBeenCalled = sal_True;
         }
     }
+}
 
+}
+
+extern "C" void SAL_CALL rtl_logfile_trace  ( const char *pszFormat, ... )
+{
+    init();
     if( g_buffer )
     {
         va_list args;
@@ -241,6 +246,38 @@ extern "C" void SAL_CALL rtl_logfile_trace  ( const char *pszFormat, ... )
             nConverted = (nConverted > g_BUFFERSIZE ? g_BUFFERSIZE : nConverted );
             if( nConverted > 0 )
                 osl_writeFile( g_aFile, g_buffer, nConverted, (sal_uInt64*)&nWritten );
+        }
+        va_end(args);
+    }
+}
+
+extern "C" void SAL_CALL rtl_logfile_longTrace(char const * format, ...) {
+    init();
+    if (g_buffer != 0) {
+        sal_uInt32 time = osl_getGlobalTimer();
+        oslThreadIdentifier threadId = osl_getThreadIdentifier(0);
+        va_list args;
+        va_start(args, format);
+        {
+            MutexGuard g(getLogMutex());
+            int n1 = snprintf(
+                g_buffer, g_BUFFERSIZE, "%06lu %lu ", time, threadId);
+            if (n1 >= 0) {
+                sal_uInt64 n2;
+                osl_writeFile(
+                    g_aFile, g_buffer,
+                    static_cast< sal_uInt64 >(
+                        std::min(n1, static_cast< int >(g_BUFFERSIZE))),
+                    &n2);
+                n1 = vsnprintf(g_buffer, g_BUFFERSIZE, format, args);
+                if (n1 > 0) {
+                    osl_writeFile(
+                        g_aFile, g_buffer,
+                        static_cast< sal_uInt64 >(
+                            std::min(n1, static_cast< int >(g_BUFFERSIZE))),
+                        &n2);
+                }
+            }
         }
         va_end(args);
     }
