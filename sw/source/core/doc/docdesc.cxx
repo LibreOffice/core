@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docdesc.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 15:10:21 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 14:36:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
@@ -192,6 +191,7 @@
 #endif
 
 #include <SwUndoPageDesc.hxx>
+#include <headerfooterhelper.hxx>
 
 using namespace com::sun::star;
 
@@ -473,6 +473,9 @@ void SwDoc::ChgPageDesc( USHORT i, const SwPageDesc &rChged )
         }
     }
     pDesc->ChgFooterShare( rChged.IsFooterShared() );
+
+    // if header/footer nodes are in undo area, copy them into the document
+    saveHeaderFooterNodes( *pDesc, GetNodes() );
 
     if ( pDesc->GetName() != rChged.GetName() )
         pDesc->SetName( rChged.GetName() );
