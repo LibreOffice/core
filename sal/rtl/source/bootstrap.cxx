@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jbu $ $Date: 2001-05-17 09:01:51 $
+ *  last change: $Author: jbu $ $Date: 2001-05-17 10:06:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,7 +216,8 @@ static void getFromIniFile( rtl_uString **ppValue, rtl_uString *pName )
         static NameValueList nameValueList;
         OUString &file = getIniFileNameImpl();
         oslFileHandle handle;
-        if( osl_File_E_None == osl_openFile( file.pData, &handle , osl_File_OpenFlag_Read ) )
+        if( file.getLength() &&
+            osl_File_E_None == osl_openFile( file.pData, &handle , osl_File_OpenFlag_Read ) )
         {
             ByteSequence seq;
             sal_uInt64 nSize = 0;
