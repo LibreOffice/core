@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleContextBase.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:00:23 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:52:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,22 +62,22 @@
 
 #include "AccessibleContextBase.hxx"
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #endif
 
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYCHANGEEVENT_HPP_
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEEVENTLISTENER_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessibleEventListener.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEEVENTLISTENER_HPP_
+#include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLERELATIONTYPE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleRelationType.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLERELATIONTYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #endif
 
 #ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX_
@@ -101,7 +101,7 @@
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star::accessibility;
+using namespace ::com::sun::star::accessibility;
 using ::com::sun::star::uno::Reference;
 
 namespace accessibility {
@@ -110,9 +110,9 @@ namespace accessibility {
 
 // Define a shortcut for the somewhot longish base class name.
 typedef ::cppu::WeakComponentImplHelper4<
-    ::drafts::com::sun::star::accessibility::XAccessible,
-    ::drafts::com::sun::star::accessibility::XAccessibleContext,
-    ::drafts::com::sun::star::accessibility::XAccessibleEventBroadcaster,
+    ::com::sun::star::accessibility::XAccessible,
+    ::com::sun::star::accessibility::XAccessibleContext,
+    ::com::sun::star::accessibility::XAccessibleEventBroadcaster,
     ::com::sun::star::lang::XServiceInfo> BaseClass;
 
 AccessibleContextBase::AccessibleContextBase (
@@ -173,7 +173,7 @@ sal_Bool AccessibleContextBase::SetState (sal_Int16 aState)
             uno::Any aNewValue;
             aNewValue <<= aState;
             CommitChange(
-                AccessibleEventId::ACCESSIBLE_STATE_EVENT,
+                AccessibleEventId::STATE_CHANGED,
                 aNewValue,
                 uno::Any());
         }
@@ -200,7 +200,7 @@ sal_Bool AccessibleContextBase::ResetState (sal_Int16 aState)
         uno::Any aOldValue;
         aOldValue <<= aState;
         CommitChange(
-            AccessibleEventId::ACCESSIBLE_STATE_EVENT,
+            AccessibleEventId::STATE_CHANGED,
             uno::Any(),
             aOldValue);
         return sal_True;
@@ -237,11 +237,11 @@ void AccessibleContextBase::SetRelationSet (
     // both sets.
     typedef std::pair<short int,short int> RD;
     const RD aRelationDescriptors[] = {
-        RD(AccessibleRelationType::CONTROLLED_BY, AccessibleEventId::CONTROLLED_BY_EVENT),
-        RD(AccessibleRelationType::CONTROLLER_FOR, AccessibleEventId::CONTROLLER_FOR_EVENT),
-        RD(AccessibleRelationType::LABELED_BY, AccessibleEventId::LABELED_BY_EVENT),
-        RD(AccessibleRelationType::LABEL_FOR, AccessibleEventId::LABEL_FOR_EVENT),
-        RD(AccessibleRelationType::MEMBER_OF, AccessibleEventId::MEMBER_OF_EVENT),
+        RD(AccessibleRelationType::CONTROLLED_BY, AccessibleEventId::CONTROLLED_BY_RELATION_CHANGED),
+        RD(AccessibleRelationType::CONTROLLER_FOR, AccessibleEventId::CONTROLLER_FOR_RELATION_CHANGED),
+        RD(AccessibleRelationType::LABELED_BY, AccessibleEventId::LABELED_BY_RELATION_CHANGED),
+        RD(AccessibleRelationType::LABEL_FOR, AccessibleEventId::LABEL_FOR_RELATION_CHANGED),
+        RD(AccessibleRelationType::MEMBER_OF, AccessibleEventId::MEMBER_OF_RELATION_CHANGED),
         RD(AccessibleRelationType::INVALID, -1),
     };
     for (int i=0; aRelationDescriptors[i].first!=AccessibleRelationType::INVALID; i++)
@@ -569,9 +569,9 @@ uno::Sequence< ::rtl::OUString> SAL_CALL
     ThrowIfDisposed ();
     static const OUString sServiceNames[2] = {
         OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "drafts.com.sun.star.accessibility.Accessible")),
+            "com.sun.star.accessibility.Accessible")),
         OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "drafts.com.sun.star.accessibility.AccessibleContext"))
+            "com.sun.star.accessibility.AccessibleContext"))
     };
     return uno::Sequence<OUString> (sServiceNames, 2);
 }
@@ -644,7 +644,7 @@ void AccessibleContextBase::SetAccessibleDescription (const ::rtl::OUString& rDe
         msDescription = rDescription;
 
         CommitChange(
-            AccessibleEventId::ACCESSIBLE_DESCRIPTION_EVENT,
+            AccessibleEventId::DESCRIPTION_CHANGED,
             aNewValue,
             aOldValue);
     }
@@ -665,7 +665,7 @@ void AccessibleContextBase::SetAccessibleName (const ::rtl::OUString& rName)
         msName = rName;
 
         CommitChange(
-            AccessibleEventId::ACCESSIBLE_NAME_EVENT,
+            AccessibleEventId::NAME_CHANGED,
             aNewValue,
             aOldValue);
     }
