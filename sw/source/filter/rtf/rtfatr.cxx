@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfatr.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 12:28:58 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:49:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2106,7 +2106,7 @@ Writer& OutRTF_SwTblNode(Writer& rWrt, const SwTableNode & rNode)
         // Start Tabellendefinition
         rWrt.Strm() << sRTF_TROWD << aTblAdjust.GetBuffer();
 
-        if( !nLine && rTbl.IsHeadlineRepeat() )
+        if(  rTbl.GetRowsToRepeat() > nLine )
             rWrt.Strm() << sRTF_TRHDR;
 
         const SwTableLine* pLine = pBoxArr[ 0 ]->GetBox()->GetUpper();
