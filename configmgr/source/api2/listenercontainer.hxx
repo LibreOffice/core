@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listenercontainer.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-16 18:15:43 $
+ *  last change: $Author: jb $ $Date: 2000-11-20 01:38:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -578,7 +578,7 @@ namespace configmgr
             {
                 if ( nIndex < m_aContainers.size() && m_aContainers[nIndex].pContainer  )
                 {
-                    return m_aContainers[nIndex].pContainer->addInterface(aType,xListener);
+                    return m_aContainers[nIndex].pContainer->removeInterface(aType,xListener);
                 }
             }
             return 0;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: broadcaster.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-16 18:15:43 $
+ *  last change: $Author: jb $ $Date: 2000-11-20 01:38:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,11 +104,11 @@ namespace configmgr
             /// give all property veto listeners on the affected node a chance to veto
             void queryConstraints(NodeChange const& aChange) throw(css::beans::PropertyVetoException);
             /// give all property veto listeners on any of the affected nodes a chance to veto
-            void queryConstraints(NodeChanges const& aChanges) throw(css::beans::PropertyVetoException);
+            void queryConstraints(NodeChanges const& aChanges, bool bSingleBase = true) throw(css::beans::PropertyVetoException);
             /// notify all listeners which are affected by this change
             void notifyListeners(NodeChange const& aChange) throw();
-            /// notify all listeners which are affected by any of these changes
-            void notifyListeners(NodeChanges const& aChanges) throw();
+            /// notify all listeners which are affected by any of these changes (potentially from many different bases)
+            void notifyListeners(NodeChanges const& aChanges, bool bSingleBase) throw();
 
             class Impl;
         private:

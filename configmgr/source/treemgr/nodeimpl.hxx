@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodeimpl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-13 11:54:51 $
+ *  last change: $Author: jb $ $Date: 2000-11-20 01:38:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@ namespace configmgr
         class ElementTreeImpl;
 
         struct NodeInfo;
+        class NodeChangeImpl;
         class NodeChanges;
 //-----------------------------------------------------------------------------
 
@@ -124,8 +125,8 @@ namespace configmgr
         class NodeImpl : public vos::OReference
         {
         public:
-            void collectChanges(NodeChanges& rChanges)  const
-                { doCollectChanges(rChanges); }
+            void collectChanges(NodeChanges& rChanges, TreeImpl* pParent, NodeOffset nNode) const
+                { doCollectChangesWithTarget(rChanges,pParent,nNode); }
 
             bool hasChanges()                   const { return doHasChanges(); }
             void markChanged()                        { doMarkChanged(); }
@@ -140,7 +141,7 @@ namespace configmgr
 
         private:
             virtual bool doHasChanges() const = 0;
-            virtual void doCollectChanges(NodeChanges& rChanges) const = 0;
+            virtual void doCollectChangesWithTarget(NodeChanges& rChanges, TreeImpl* pParent, NodeOffset nNode) const = 0;
             virtual void doMarkChanged() = 0;
             virtual void doCommitChanges() = 0;
             virtual NodeImplHolder doCloneIndirect(bool bIndirect) = 0;
@@ -169,6 +170,8 @@ namespace configmgr
 
         // MoreNodeImpl implementation - direct clients don't need it
         private:
+            virtual void doCollectChangesWithTarget(NodeChanges& rChanges, TreeImpl* pParent, NodeOffset nNode) const;
+
             virtual NodeType::Enum  getType() const;
             virtual void            dispatch(INodeHandler& rHandler);
         };
@@ -211,7 +214,7 @@ namespace configmgr
             void        insertElement(Name const& aName, SetEntry const& aNewEntry) { doInsertElement(aName,aNewEntry); }
             void        removeElement(Name const& aName)                            { doRemoveElement(aName); }
 
-            void        initElements(TreeImpl& rParentTree, NodeOffset nPos, TreeDepth nDepth);
+            void        initElements(TemplateProvider const& aTemplateProvider, TreeImpl& rParentTree, NodeOffset nPos, TreeDepth nDepth);
 
             SetNodeVisitor::Result dispatchToElements(SetNodeVisitor& aVisitor)     { return doDispatchToElements(aVisitor); }
 
@@ -227,6 +230,7 @@ namespace configmgr
             virtual void finishCommit(SubtreeChange& rChanges);
             virtual void revertCommit(SubtreeChange& rChanges);
 
+            void adjustToChanges(NodeChanges& rLocalChanges, SubtreeChange const& rExternalChanges, TemplateProvider const& aTemplateProvider, TreeDepth nDepth);
         protected:
             TreeImpl*   getParentTree() const;
             NodeOffset  getContextOffset() const;
@@ -240,13 +244,17 @@ namespace configmgr
             virtual void        doInsertElement(Name const& aName, SetEntry const& aNewEntry) = 0;
             virtual void        doRemoveElement(Name const& aName) = 0;
 
-            virtual void        doInitElements(ISubtree& rTree, TreeDepth nDepth) = 0;
+            virtual void        doInitElements(TemplateProvider const& aTemplateProvider, ISubtree& rTree, TreeDepth nDepth) = 0;
             virtual void        doClearElements() = 0;
+
+            virtual void        doAdjustToChanges(NodeChanges& rLocalChanges, SubtreeChange const& rExternalChanges, TemplateProvider const& aTemplateProvider, TreeDepth nDepth) = 0;
 
             virtual SetNodeVisitor::Result doDispatchToElements(SetNodeVisitor& aVisitor) = 0;
 
+            virtual void        doCollectChanges(NodeChanges& rChanges) const = 0;
         // More NodeImpl implementation - direct clients don't need it
         private:
+            virtual void            doCollectChangesWithTarget(NodeChanges& rChanges, TreeImpl* pParent, NodeOffset nNode) const;
             virtual void            dispatch(INodeHandler& rHandler);
         };
 
@@ -286,7 +294,13 @@ namespace configmgr
             virtual void finishCommit(ValueChange& rChange);
             virtual void revertCommit(ValueChange& rChange);
 
+            void adjustToChange(NodeChanges& rLocalChanges, ValueChange const& rExternalChange, TreeImpl& rParentTree, NodeOffset nPos);
         // More NodeImpl implementation - direct clients don't need it
+        protected:
+            virtual NodeChangeImpl* doAdjustToChange(ValueChange const& rExternalChange);
+            virtual NodeChangeImpl* doCollectChange() const;
+
+            virtual void doCollectChangesWithTarget(NodeChanges& rChanges, TreeImpl* pParent, NodeOffset nNode) const;
         private:
             virtual void            dispatch(INodeHandler& rHandler);
         };

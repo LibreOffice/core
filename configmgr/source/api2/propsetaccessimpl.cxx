@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propsetaccessimpl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-16 18:15:43 $
+ *  last change: $Author: jb $ $Date: 2000-11-20 01:38:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,7 +247,7 @@ void implSetPropertyValues( NodeGroupAccess& rNode, const Sequence< OUString >& 
             aTree.integrate(aChanges, aNode, true);
 
             impl.clearForBroadcast();
-            aSender.notifyListeners(aChanges);
+            aSender.notifyListeners(aChanges, true);
         }
     }
     catch (configuration::TypeMismatch& ex)
@@ -398,7 +398,7 @@ void implSetHierarchicalPropertyValues( NodeGroupAccess& rNode, const Sequence< 
             aTree.integrate(aChanges, aNode, false);
 
             impl.clearForBroadcast();
-            aSender.notifyListeners(aChanges);
+            aSender.notifyListeners(aChanges, true); // if we use 'false' we don't need 'Deep' change objects
         }
     }
     catch (configuration::TypeMismatch& ex)

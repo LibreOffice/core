@@ -2,9 +2,9 @@
  *
  *  $RCSfile: translatechanges.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-16 18:15:43 $
+ *  last change: $Author: jb $ $Date: 2000-11-20 01:38:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,17 +104,21 @@ namespace configmgr
 // resolve the relative path from a given base to the changed node
 bool resolveChangeLocation(RelativePath& aPath, ExtendedNodeChangeInfo const& aChange, Tree const& aBaseTree)
 {
-    AbsolutePath aOuterBasePath         = aBaseTree.getContextPath();
-    AbsolutePath aChangeBaseTreePath    = aChange.baseTree.getContextPath();
-    RelativePath aChangeBaseNodePath    = aChange.baseTree.getLocalPath(aChange.baseNode);
-//  RelativePath aChangeLocalPath       = aChange.accessor;
-
+    return resolveChangeLocation(aPath,aChange,aBaseTree,aBaseTree.getRootNode());
+}
+bool resolveChangeLocation(RelativePath& aPath, ExtendedNodeChangeInfo const& aChange, Tree const& aBaseTree, NodeRef const& aBaseNode)
+{
     typedef Path::Iterator Iter;
 
-    Iter aChangeIt = aChangeBaseTreePath.begin(),   aChangeEnd = aChangeBaseTreePath.end();
-    Iter aOuterIt  = aOuterBasePath.begin(),        aOuterEnd  = aOuterBasePath.end();
+    AbsolutePath aOuterBaseTreePath     = aBaseTree.getContextPath();
+    AbsolutePath aChangeBaseTreePath    = aChange.baseTree.getContextPath();
+    RelativePath aOuterBaseNodePath     = aBaseTree.getLocalPath(aBaseNode);
+    RelativePath aChangeBaseNodePath    = aChange.baseTree.getLocalPath(aChange.baseNode);
 
-    // resolve the outer path against the base tree path
+    // First start resolving the context pathes
+    Iter aChangeIt = aChangeBaseTreePath.begin(),   aChangeEnd = aChangeBaseTreePath.end();
+    Iter aOuterIt  = aOuterBaseTreePath.begin(),    aOuterEnd  = aOuterBaseTreePath.end();
+
     while (aOuterIt != aOuterEnd && aChangeIt != aChangeEnd)
     {
         if (*aOuterIt != *aChangeIt) return false; // mismatch
@@ -122,36 +126,37 @@ bool resolveChangeLocation(RelativePath& aPath, ExtendedNodeChangeInfo const& aC
         ++aChangeIt;
     }
 
-    // now consider the base node path
-    if (aOuterIt == aOuterEnd)
+    // Prepend any remaining parts to the respective node pathes
+    if (aChangeIt != aChangeEnd)
     {
-        aPath = RelativePath( Path::Components(aChangeIt, aChangeEnd) ).compose(aChangeBaseNodePath);
+        aChangeBaseNodePath = RelativePath( Path::Components(aChangeIt,aChangeEnd) ).compose(aChangeBaseNodePath);
     }
-    else //(aChangeIt == aChangeEnd)
+    else if (aOuterIt != aOuterEnd)
     {
-        aChangeIt = aChangeBaseNodePath.begin();
-        aChangeEnd = aChangeBaseNodePath.end();
-
-        // resolve the outer path against the base node path
-        while (aOuterIt != aOuterEnd && aChangeIt != aChangeEnd)
-        {
-            if (*aOuterIt != *aChangeIt) return false; // mismatch
-            ++aOuterIt;
-            ++aChangeIt;
-        }
-
-        if (aOuterIt == aOuterEnd)
-        {
-            aPath = RelativePath( Path::Components(aChangeIt, aChangeEnd) );
-        }
+        aOuterBaseNodePath = RelativePath( Path::Components(aOuterIt,aOuterEnd) ).compose(aOuterBaseNodePath);
     }
 
-    // now consider the existing change accessor
-    if (aOuterIt == aOuterEnd)
+    // Continue by resolving the node pathes
+    aChangeIt = aChangeBaseNodePath.begin(); aChangeEnd = aChangeBaseNodePath.end();
+    aOuterIt  = aOuterBaseNodePath.begin();  aOuterEnd  = aOuterBaseNodePath.end();
+
+    while (aOuterIt != aOuterEnd && aChangeIt != aChangeEnd)
     {
-        aPath = aPath.compose(aChange.accessor);
+        if (*aOuterIt != *aChangeIt) return false; // mismatch
+        ++aOuterIt;
+        ++aChangeIt;
     }
-    else //(aChangeIt == aChangeEnd) // shall we support actually going inside ?
+
+    // Next consider the stored accessor
+    if (aChangeIt != aChangeEnd) // stepping outward - prepend
+    {
+        aPath = RelativePath( Path::Components(aChangeIt, aChangeEnd) ).compose(aChange.accessor);
+    }
+    else if (aOuterIt == aOuterEnd) // exact match outside
+    {
+        aPath = aChange.accessor;
+    }
+    else //(aChangeIt == aChangeEnd) but outer left // shall we support actually going inside the accessor?
     {
         aChangeIt   = aChange.accessor.begin();
         aChangeEnd  = aChange.accessor.end();
@@ -163,6 +168,7 @@ bool resolveChangeLocation(RelativePath& aPath, ExtendedNodeChangeInfo const& aC
             ++aOuterIt;
             ++aChangeIt;
         }
+
         if (aOuterIt == aOuterEnd)
         {
             aPath = RelativePath( Path::Components(aChangeIt, aChangeEnd) );
@@ -172,16 +178,21 @@ bool resolveChangeLocation(RelativePath& aPath, ExtendedNodeChangeInfo const& aC
     return (aOuterIt == aOuterEnd); // resolved completely and assigned ??
 
 }
+
 // ---------------------------------------------------------------------------------------------------
 // change path and base settings to start from the given base
 bool rebaseChange(ExtendedNodeChangeInfo& aChange, Tree const& aBaseTree)
 {
+    return rebaseChange(aChange,aBaseTree,aBaseTree.getRootNode());
+}
+bool rebaseChange(ExtendedNodeChangeInfo& aChange, Tree const& aBaseTree, NodeRef const& aBaseNode)
+{
     RelativePath aNewPath;
-    if (resolveChangeLocation(aNewPath,aChange,aBaseTree))
+    if (resolveChangeLocation(aNewPath,aChange,aBaseTree, aBaseNode))
     {
         aChange.accessor = aNewPath;
         aChange.baseTree = aBaseTree;
-        aChange.baseNode = aBaseTree.getRootNode();
+        aChange.baseNode = aBaseNode;
         return true;
     }
     else
@@ -241,8 +252,13 @@ void fillEventSource(lang::EventObject& rEvent, Tree const& aTree, NodeRef const
 /// fill a change info from a NodeChangeInfo
 void fillChange(util::ElementChange& rChange, ExtendedNodeChangeInfo const& aInfo, Tree const& aBaseTree, Factory& rFactory)
 {
+    fillChange(rChange,aInfo,aBaseTree,aBaseTree.getRootNode(),rFactory);
+}
+/// fill a change info from a NodeChangeInfo
+void fillChange(util::ElementChange& rChange, ExtendedNodeChangeInfo const& aInfo, Tree const& aBaseTree, NodeRef const& aBaseNode, Factory& rFactory)
+{
     RelativePath aRelativePath;
-    if (!resolveChangeLocation(aRelativePath, aInfo, aBaseTree))
+    if (!resolveChangeLocation(aRelativePath, aInfo, aBaseTree, aBaseNode))
         OSL_ENSURE(false, "WARNING: Change is not part of the given Tree");
 
     UnoChange aUnoChange;

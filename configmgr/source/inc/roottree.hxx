@@ -2,9 +2,9 @@
  *
  *  $RCSfile: roottree.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-10 12:19:02 $
+ *  last change: $Author: jb $ $Date: 2000-11-20 01:38:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 namespace configmgr
 {
     class ISubtree;
+    class Change;
     struct TreeChangeList;
 
     namespace configuration
@@ -72,7 +73,10 @@ namespace configmgr
 //-----------------------------------------------------------------------------
         class Tree; typedef Tree RootTree;
         class TreeImpl;
+        class NodeRef;
+        class NodeChanges;
         class AbsolutePath;
+        class TemplateProvider;
         typedef unsigned int NodeOffset;
         typedef unsigned int TreeDepth;
 
@@ -80,11 +84,11 @@ namespace configmgr
 
         RootTree createReadOnlyTree(    AbsolutePath const& aContextPath,
                                         ISubtree& rCacheNode, TreeDepth nDepth,
-                                        NodeOffset nRoot = 1);
+                                        TemplateProvider const& aTemplateProvider);
 
         RootTree createUpdatableTree(   AbsolutePath const& aContextPath,
                                         ISubtree& rCacheNode, TreeDepth nDepth,
-                                        NodeOffset nRoot = 1);
+                                        TemplateProvider const& aTemplateProvider);
 
 //-----------------------------------------------------------------------------
         class CommitHelper
@@ -100,6 +104,27 @@ namespace configmgr
             // restore the changes in rChangeList as pending
             void revertCommit(TreeChangeList& rChangeList);
         };
+
+//-----------------------------------------------------------------------------
+        /** adjusts <var>aTree</var> tree to the (externally produced) changes under <var>aExternalChanges</var>
+            and collects the changes this induces locally.
+            @param rLocalChanges
+                a collection that will hold the changes induced by <var>aExternalChanges</var>.
+            @param aExternalChanges
+                a structured change that has already been applied to the master tree.
+            @param aBaseTree
+                the Tree that contains (directly) the affected node of <var>aExternalChanges</var>.
+            @param aBaseNode
+                a NodeRef referring to the (directly) affected node of <var>aExternalChanges</var>.
+            @return
+                <TRUE/> if any changes occur in this tree (so rLocalChanges is not empty), <FALSE/> otherwise.
+
+        */
+        bool adjustToChanges(   NodeChanges& rLocalChanges,
+                                Tree const& aBaseTree, NodeRef const& aBaseNode,
+                                Change const& aExternalChange,
+                                TemplateProvider const& aTemplateProvider) ;
+
 
 //-----------------------------------------------------------------------------
     }

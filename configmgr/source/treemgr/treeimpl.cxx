@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeimpl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-14 10:53:36 $
+ *  last change: $Author: jb $ $Date: 2000-11-20 01:38:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,8 @@
 #include "nodechangeimpl.hxx"
 #include "template.hxx"
 
-#include "cmtreemodel.hxx"
+#include "valuenode.hxx"
+#include "change.hxx"
 
 #include <osl/diagnose.h>
 
@@ -88,19 +89,15 @@ public:
     /** constructs a TreeImplBuilder to append onto <var>rList</var>
         the products of <var>rFactory</var> up to depth <var>nDepth</var>
     */
-    TreeImplBuilder(NodeFactory& rFactory, TreeImpl& rTree)
-        : m_rFactory(rFactory)
+    TreeImplBuilder(TemplateProvider const& aTemplateProvider, NodeFactory& rFactory, TreeImpl& rTree)
+        : m_aTemplateProvider(aTemplateProvider)
+        , m_rFactory(rFactory)
         , m_rTree(rTree)
         , m_nParent(0)
         , m_nDepthLeft(rTree.m_nDepth)
     {
         OSL_ASSERT(m_rTree.m_aNodes.empty());
     }
-
-    /** helper function to locate or build a <type>Template</type>
-        for the elements of set <var>rSet</var>
-    */
-    static TemplateHolder findElementTemplate(ISubtree& rSet);
 
 private:
     /// implements the NodeModification handler for ValueNodes
@@ -115,19 +112,12 @@ private:
     /// add a Node for value node <var>rValue</var> to the list
     void addValue(ValueNode& rValue);
 
+    TemplateProvider m_aTemplateProvider;
     NodeFactory&    m_rFactory;
     TreeImpl&   m_rTree;
     NodeOffset  m_nParent;
     TreeDepth   m_nDepthLeft;
 };
-//-----------------------------------------------------------------------------
-
-TemplateHolder TreeImplBuilder::findElementTemplate(ISubtree& rSet)
-{
-    OUString sFullName = rSet.getChildTemplateName();
-
-    return Template::fromPath(sFullName);
-}
 //-----------------------------------------------------------------------------
 
 void TreeImplBuilder::handle(ValueNode& rValue)
@@ -189,8 +179,9 @@ void TreeImplBuilder::addGroup(ISubtree& rTree)
 
 void TreeImplBuilder::addSet(ISubtree& rTree)
 {
-    TemplateHolder aTemplate = findElementTemplate(rTree);
+    TemplateHolder aTemplate = makeSetElementTemplate(rTree, m_aTemplateProvider);
     OSL_ASSERT(aTemplate.isValid());
+    OSL_ENSURE(aTemplate->isInstanceTypeKnown(),"ERROR: Cannor create set instance without knowing the instance type");
 
     NodeImplHolder aSetNode( m_rFactory.makeSetNode(rTree,aTemplate.getBodyPtr()) );
     OSL_ENSURE( aSetNode.isValid(), "could not make set node wrapper" );
@@ -203,7 +194,7 @@ void TreeImplBuilder::addSet(ISubtree& rTree)
         // this also relies on one based offsets
         NodeOffset nNodeAdded = m_rTree.m_aNodes.size() + m_rTree.root() - 1;
 
-        m_rTree.m_aNodes.back().setImpl().initElements(m_rTree, nNodeAdded, m_nDepthLeft);
+        m_rTree.m_aNodes.back().setImpl().initElements(m_aTemplateProvider, m_rTree, nNodeAdded, m_nDepthLeft);
     }
 }
 
@@ -257,12 +248,12 @@ void Node::renameNode(Name const& aName)
 //-----------------------------------------------------------------------------
 
 /// creates a TreeImpl for a detached, virgin instance of <var>aTemplate</var>
-TreeImpl::TreeImpl( NodeOffset nRoot)
+TreeImpl::TreeImpl( )
 : m_aNodes()
 , m_pParentTree(0)
 , m_nParentNode(0)
 , m_nDepth(0)
-, m_nRoot(nRoot)
+//, m_nRoot(nRoot)
 {
 }
 //-----------------------------------------------------------------------------
@@ -272,7 +263,7 @@ TreeImpl::TreeImpl( TreeImpl& rParentTree, NodeOffset nParentNode )
 , m_pParentTree(&rParentTree)
 , m_nParentNode(nParentNode)
 , m_nDepth(0)
-, m_nRoot(1)
+//, m_nRoot(1)
 {
 }
 //-----------------------------------------------------------------------------
@@ -314,11 +305,11 @@ AbsolutePath TreeImpl::getContextPath() const
     return AbsolutePath(aPath);
 }
 //-----------------------------------------------------------------------------
-void TreeImpl::build(NodeFactory& rFactory, INode& rCacheNode, TreeDepth nDepth)
+void TreeImpl::build(NodeFactory& rFactory, INode& rCacheNode, TreeDepth nDepth, TemplateProvider const& aTemplateProvider)
 {
     OSL_ASSERT(m_aNodes.empty());
     m_nDepth = nDepth;
-    TreeImplBuilder(rFactory,*this).applyToNode(rCacheNode);
+    TreeImplBuilder(aTemplateProvider, rFactory,*this).applyToNode(rCacheNode);
 }
 //-----------------------------------------------------------------------------
 
@@ -361,18 +352,18 @@ bool TreeImpl::hasChanges() const
 }
 //-----------------------------------------------------------------------------
 
-void TreeImpl::collectChanges(NodeChanges& rChanges) const
+void TreeImpl::collectChanges(NodeChanges& rChanges)
 {
     implCollectChangesFrom(root(),rChanges);
 }
 //-----------------------------------------------------------------------------
 
-void TreeImpl::implCollectChangesFrom(NodeOffset nNode, NodeChanges& rChanges) const
+void TreeImpl::implCollectChangesFrom(NodeOffset nNode, NodeChanges& rChanges)
 {
     Node const* pNode = node(nNode);
     if (pNode->hasChanges())
     {
-        pNode->collectChanges(rChanges);
+        pNode->collectChanges(rChanges,this,nNode);
         for (NodeOffset nChild = firstChild(nNode); isValidNode(nChild); nChild = findNextChild(nNode, nChild) )
         {
             implCollectChangesFrom(nChild,rChanges);
@@ -459,6 +450,27 @@ void TreeImpl::legacyFinishCommit(Change& rRootChange)
 void TreeImpl::legacyRevertCommit(Change& rRootChange)
 {
     doRevertCommit( rRootChange, root() );
+}
+//-----------------------------------------------------------------------------
+
+void TreeImpl::adjustToChanges(NodeChanges& rLocalChanges, Change const& aExternalChange, TemplateProvider const& aTemplateProvider)
+{
+    OSL_PRECOND( name(root()).toString() == aExternalChange.getNodeName(), "Name of change does not match actual node" );
+
+    TreeDepth nDepth = getAvailableDepth();
+
+    doAdjustToChanges(rLocalChanges,aExternalChange,root(),aTemplateProvider, nDepth);
+}
+//-----------------------------------------------------------------------------
+
+void TreeImpl::adjustToChanges(NodeChanges& rLocalChanges, NodeOffset nNode, Change const& aExternalChange, TemplateProvider const& aTemplateProvider)
+{
+    OSL_PRECOND( isValidNode(nNode), "ERROR: Valid node required for adjusting to changes" );
+    OSL_PRECOND( name(nNode).toString() == aExternalChange.getNodeName(), "Name of change does not match actual node" );
+
+    TreeDepth nDepth = remainingDepth(getAvailableDepth(),depthTo(nNode));
+
+    doAdjustToChanges(rLocalChanges,aExternalChange,nNode,aTemplateProvider, nDepth);
 }
 //-----------------------------------------------------------------------------
 
@@ -576,6 +588,43 @@ void TreeImpl::doRevertCommit(Change& rChange, NodeOffset nNode)
 }
 //-----------------------------------------------------------------------------
 
+void TreeImpl::doAdjustToChanges(NodeChanges& rLocalChanges, Change const& rChange, NodeOffset nNode, TemplateProvider const& aTemplateProvider, TreeDepth nDepth)
+{
+    OSL_ASSERT(isValidNode(nNode));
+    Node* pNode = node(nNode);
+
+    OSL_ENSURE(rChange.getNodeName() == name(nNode).toString(), "ERROR: Change name does not match node");
+    if (pNode->isValueNode())
+    {
+        OSL_ENSURE(rChange.ISA(ValueChange),"ERROR: Change type does not match node");
+
+        ValueChange const& rValueChange = static_cast<ValueChange const&>(rChange);
+
+        pNode->valueImpl().adjustToChange(rLocalChanges, rValueChange, *this, nNode);
+    }
+    else if (pNode->isSetNode())
+    {
+        OSL_ENSURE(rChange.ISA(SubtreeChange),"ERROR: Change type does not match node");
+
+        SubtreeChange const& rSubtreeChange = static_cast<SubtreeChange const&>(rChange);
+
+        OSL_ENSURE(rSubtreeChange.isSetNodeChange(),"ERROR: Change type GROUP does not match set");
+
+        pNode->setImpl().adjustToChanges(rLocalChanges, rSubtreeChange, aTemplateProvider, nDepth);
+    }
+    else
+    {
+        OSL_ENSURE(rChange.ISA(SubtreeChange),"ERROR: Change type does not match node");
+
+        SubtreeChange const& rSubtreeChange = static_cast<SubtreeChange const&>(rChange);
+
+        OSL_ENSURE(!rSubtreeChange.isSetNodeChange(),"ERROR: Change type SET does not match group");
+
+        doAdjustToSubChanges( rLocalChanges, rSubtreeChange, nNode, aTemplateProvider, nDepth);
+    }
+}
+//-----------------------------------------------------------------------------
+
 void TreeImpl::doCommitSubChanges(SubtreeChange& aChangesParent, NodeOffset nParentNode)
 {
     for(NodeOffset nNode = firstChild(nParentNode); nNode != 0; nNode = findNextChild(nParentNode,nNode) )
@@ -614,6 +663,27 @@ void TreeImpl::doRevertSubCommitted(SubtreeChange& aChangesParent, NodeOffset nP
         OSL_ENSURE( nNode != 0, "Changed node not found in tree");
 
         doRevertCommit(*it,nNode);
+    }
+}
+//-----------------------------------------------------------------------------
+
+void TreeImpl::doAdjustToSubChanges(NodeChanges& rLocalChanges, SubtreeChange const& aChangesParent, NodeOffset nParentNode,
+                                    TemplateProvider const& aTemplateProvider, TreeDepth nDepth)
+{
+    for(SubtreeChange::ChildIterator
+            it = aChangesParent.begin(),
+            stop = aChangesParent.end();
+        it != stop;
+        ++it)
+    {
+        NodeOffset nNode = findChild(nParentNode, Name(it->getNodeName(), Name::NoValidate()) );
+        OSL_ENSURE( nNode != 0 || depthTo(nParentNode) >= getAvailableDepth(), "Changed node not found in tree");
+
+        if (nNode != 0)
+        {
+            OSL_ENSURE( nDepth > 0, "Depth is smaller than expected for tree");
+            doAdjustToChanges(rLocalChanges, *it,nNode,aTemplateProvider,childDepth(nDepth));
+        }
     }
 }
 //-----------------------------------------------------------------------------
@@ -814,13 +884,13 @@ ElementTreeImpl const* RootTreeImpl::doCastToElementTree() const
 //-----------------------------------------------------------------------------
 
 RootTreeImpl::RootTreeImpl( NodeFactory& rNodeFactory,
-                        AbsolutePath const& aContextPath,
-                        ISubtree& rCacheNode, TreeDepth nDepth,
-                        NodeOffset nRoot)
-: TreeImpl(nRoot)
+                            AbsolutePath const& aContextPath,
+                            ISubtree& rCacheNode, TreeDepth nDepth,
+                            TemplateProvider const& aTemplateProvider)
+: TreeImpl()
 , m_aContextPath(aContextPath)
 {
-    TreeImpl::build(rNodeFactory,rCacheNode,nDepth);
+    TreeImpl::build(rNodeFactory,rCacheNode,nDepth, aTemplateProvider);
 }
 //-----------------------------------------------------------------------------
 // class ElementTreeImpl
@@ -828,49 +898,32 @@ RootTreeImpl::RootTreeImpl( NodeFactory& rNodeFactory,
 
 ElementTreeImpl::ElementTreeImpl(   NodeFactory& rFactory,
                                     INode& rCacheNode, TreeDepth nDepth,
-                                    TemplateHolder aTemplateInfo )
+                                    TemplateHolder aTemplateInfo,
+                                    TemplateProvider const& aTemplateProvider )
 : TreeImpl()
 , m_aInstanceInfo(aTemplateInfo)
 , m_pOwnedNode(0)
 {
-    TreeImpl::build( rFactory, rCacheNode, nDepth );
+    TreeImpl::build( rFactory, rCacheNode, nDepth, aTemplateProvider );
 }
 //-----------------------------------------------------------------------------
 
 ElementTreeImpl::ElementTreeImpl(   NodeFactory& rFactory,
                                     TreeImpl& rParentTree, NodeOffset nParentNode,
                                     INode& rCacheNode, TreeDepth nDepth,
-                                    TemplateHolder aTemplateInfo )
+                                    TemplateHolder aTemplateInfo,
+                                    TemplateProvider const& aTemplateProvider )
 : TreeImpl( rParentTree, nParentNode)
 , m_aInstanceInfo(aTemplateInfo)
 , m_pOwnedNode(0)
 {
-    TreeImpl::build( rFactory, rCacheNode, nDepth );
+    TreeImpl::build( rFactory, rCacheNode, nDepth, aTemplateProvider );
 }
 //-----------------------------------------------------------------------------
 
-ElementTreeImpl::ElementTreeImpl( TemplateHolder aTemplate, ITemplateProvider* pProvider )
-: TreeImpl()
-, m_aInstanceInfo(aTemplate)
-, m_pOwnedNode(0)
-{
-    OSL_ENSURE(pProvider, "INTERNAL ERROR: Cannot create Element: No Template provider");
-    OSL_ENSURE(aTemplate.isValid(), "INTERNAL ERROR: Cannot create Element: No Template");
-    if (!pProvider)             throw Exception("INTERNAL ERROR: Cannot create Element Instance: No Template provider");
-    if (!aTemplate.isValid())   throw Exception("INTERNAL ERROR: Cannot create Element Instance: No Template");
-
-    std::auto_ptr<INode> pNewNode( pProvider->createInstance(aTemplate->getPath().toString()) );
-    if (!pNewNode.get())
-    {
-        throw Exception("ERROR: Provider can't create Element Instance From Template");
-    }
-
-    TreeImpl::build( NodeType::getDirectAccessFactory(), *pNewNode, ~0u );
-    m_pOwnedNode = pNewNode.release();
-}
-//-----------------------------------------------------------------------------
-
-ElementTreeImpl::ElementTreeImpl( TemplateHolder aTemplate, std::auto_ptr<INode>& pNewNode )
+ElementTreeImpl::ElementTreeImpl(   std::auto_ptr<INode>& pNewNode,
+                                    TemplateHolder aTemplate,
+                                    TemplateProvider const& aTemplateProvider )
 : TreeImpl()
 , m_aInstanceInfo(aTemplate)
 , m_pOwnedNode(0)
@@ -880,7 +933,7 @@ ElementTreeImpl::ElementTreeImpl( TemplateHolder aTemplate, std::auto_ptr<INode>
         throw Exception("ERROR: Provider can't create Element Instance From Template");
     }
 
-    TreeImpl::build( NodeType::getDirectAccessFactory(), *pNewNode, ~0u );
+    TreeImpl::build( NodeType::getDirectAccessFactory(), *pNewNode, c_TreeDepthAll, aTemplateProvider );
     m_pOwnedNode = pNewNode.release();
 }
 //-----------------------------------------------------------------------------

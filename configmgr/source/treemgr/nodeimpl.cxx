@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodeimpl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-14 10:53:36 $
+ *  last change: $Author: jb $ $Date: 2000-11-20 01:38:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -12,16 +12,16 @@
  *         - GNU Lesser General Public License Version 2.1
  *         - Sun Industry Standards Source License Version 1.1
  *
- *  Sun Microsystems Inc., October, 2000
+ *  Sun Microsystems Inc.,October,2000
  *
  *  GNU Lesser General Public License Version 2.1
  *  =============================================
- *  Copyright 2000 by Sun Microsystems, Inc.
- *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *  Copyright 2000 by Sun Microsystems,Inc.
+ *  901 San Antonio Road,Palo Alto,CA 94303,USA
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
- *  License version 2.1, as published by the Free Software Foundation.
+ *  License version 2.1,as published by the Free Software Foundation.
  *
  *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -29,8 +29,8 @@
  *  Lesser General Public License for more details.
  *
  *  You should have received a copy of the GNU Lesser General Public
- *  License along with this library; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  License along with this library; if not,write to the Free Software
+ *  Foundation,Inc.,59 Temple Place,Suite 330,Boston,
  *  MA  02111-1307  USA
  *
  *
@@ -42,15 +42,15 @@
  *  License at http://www.openoffice.org/license.html.
  *
  *  Software provided under this License is provided on an "AS IS" basis,
- *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
- *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
- *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  WITHOUT WARRANTY OF ANY KIND,EITHER EXPRESSED OR IMPLIED,INCLUDING,
+ *  WITHOUT LIMITATION,WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE,FIT FOR A PARTICULAR PURPOSE,OR NON-INFRINGING.
  *  See the License for the specific provisions governing your rights and
  *  obligations concerning the Software.
  *
- *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *  The Initial Developer of the Original Code is: Sun Microsystems,Inc.
  *
- *  Copyright: 2000 by Sun Microsystems, Inc.
+ *  Copyright: 2000 by Sun Microsystems,Inc.
  *
  *  All Rights Reserved.
  *
@@ -62,7 +62,9 @@
 #include "nodeimpl.hxx"
 
 #include "treeimpl.hxx"
+#include "nodechange.hxx"
 #include "nodechangeimpl.hxx"
+#include "change.hxx"
 
 #include "cmtreemodel.hxx"
 
@@ -78,9 +80,9 @@ namespace configmgr
 
 namespace
 {
-    inline void fillInfo(NodeInfo& rInfo, OUString const& sName, NodeAttributes const& aAttributes)
+    inline void fillInfo(NodeInfo& rInfo,OUString const& sName,NodeAttributes const& aAttributes)
     {
-        rInfo.name = Name(sName, Name::NoValidate());
+        rInfo.name = Name(sName,Name::NoValidate());
 
         rInfo.is.writable    = aAttributes.writable;
         rInfo.is.nullable    = aAttributes.optional;
@@ -90,9 +92,9 @@ namespace
         rInfo.is.localized   = false;
         rInfo.is.defaultable = false;
     }
-    inline void fetchInfo(NodeInfo& rInfo, INode const& rNode)
+    inline void fetchInfo(NodeInfo& rInfo,INode const& rNode)
     {
-        fillInfo(rInfo, rNode.getName(), rNode.getAttributes());
+        fillInfo(rInfo,rNode.getName(),rNode.getAttributes());
     }
 }
 
@@ -100,13 +102,13 @@ namespace
 // class NodeImpl
 //-----------------------------------------------------------------------------
 
-void NodeImpl::makeIndirect(NodeImplHolder& aThis, bool bIndirect)
+void NodeImpl::makeIndirect(NodeImplHolder& aThis,bool bIndirect)
 {
-    OSL_PRECOND(aThis.isValid() ,"ERROR: Unexpected NULL node");
+    OSL_PRECOND(aThis.isValid(), "ERROR: Unexpected NULL node");
 
     if (aThis.isValid())
     {
-        OSL_ENSURE(!aThis->doHasChanges() ,"WARNING: Uncommitted changes while (possibly) changing node type - changes may be lost");
+        OSL_ENSURE(!aThis->doHasChanges(), "WARNING: Uncommitted changes while (possibly) changing node type - changes may be lost");
         NodeImplHolder aChanged = aThis->doCloneIndirect(bIndirect);
         aThis = aChanged;
     }
@@ -139,7 +141,7 @@ NodeType::Enum  GroupNodeImpl::getType() const
 
 void GroupNodeImpl::getNodeInfo(NodeInfo& rInfo) const
 {
-    fetchInfo(rInfo, m_rOriginal);
+    fetchInfo(rInfo,m_rOriginal);
 }
 //-----------------------------------------------------------------------------
 
@@ -170,20 +172,20 @@ SetEntry::SetEntry(ElementTreeImpl* pTree_)
 // class SetNodeImpl
 //-----------------------------------------------------------------------------
 
-SetNodeImpl::SetNodeImpl(ISubtree& rOriginal, Template* pTemplate)
+SetNodeImpl::SetNodeImpl(ISubtree& rOriginal,Template* pTemplate)
 : m_rOriginal(rOriginal)
-, m_aTemplate(pTemplate)
-, m_pParentTree(0)
-, m_nContextPos(0)
+,m_aTemplate(pTemplate)
+,m_pParentTree(0)
+,m_nContextPos(0)
 {
 }
 //-----------------------------------------------------------------------------
 
 SetNodeImpl::SetNodeImpl(SetNodeImpl& rOriginal)
 : m_rOriginal(rOriginal.m_rOriginal)
-, m_aTemplate(rOriginal.m_aTemplate)
-, m_pParentTree(rOriginal.m_pParentTree)
-, m_nContextPos(rOriginal.m_nContextPos)
+,m_aTemplate(rOriginal.m_aTemplate)
+,m_pParentTree(rOriginal.m_pParentTree)
+,m_nContextPos(rOriginal.m_nContextPos)
 {
     // unbind the original
     rOriginal.m_aTemplate.unbind();
@@ -208,7 +210,7 @@ NodeOffset  SetNodeImpl::getContextOffset() const
 
 void SetNodeImpl::getNodeInfo(NodeInfo& rInfo) const
 {
-    fetchInfo(rInfo, m_rOriginal);
+    fetchInfo(rInfo,m_rOriginal);
 }
 //-----------------------------------------------------------------------------
 
@@ -232,7 +234,7 @@ void SetNodeImpl::dispatch(INodeHandler& rHandler)
 
 //-----------------------------------------------------------------------------
 
-void SetNodeImpl::initElements(TreeImpl& rParentTree, NodeOffset nPos, TreeDepth nDepth)
+void SetNodeImpl::initElements(TemplateProvider const& aTemplateProvider,TreeImpl& rParentTree,NodeOffset nPos,TreeDepth nDepth)
 {
     OSL_ENSURE(m_pParentTree == 0 || m_pParentTree == &rParentTree, "WARNING: Set Node: Changing parent");
     OSL_ENSURE(m_nContextPos == 0 || m_nContextPos == nPos,         "WARNING: Set Node: Changing location within parent");
@@ -241,7 +243,11 @@ void SetNodeImpl::initElements(TreeImpl& rParentTree, NodeOffset nPos, TreeDepth
 
     OSL_ASSERT(doIsEmpty()); //doClearElements();
 
-    if (nDepth > 0) doInitElements(m_rOriginal, childDepth(nDepth));
+    if (nDepth > 0)
+    {
+        OSL_ENSURE(m_aTemplate.isEmpty() || m_aTemplate->isInstanceTypeKnown(),"ERROR: Need a type-validated template to fill a set");
+        doInitElements(aTemplateProvider,m_rOriginal,childDepth(nDepth));
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -304,7 +310,7 @@ void ValueNodeImpl::setDefault()
 
 void ValueNodeImpl::getNodeInfo(NodeInfo& rInfo) const
 {
-    fetchInfo(rInfo, m_rOriginal);
+    fetchInfo(rInfo,m_rOriginal);
     rInfo.is.defaultable = m_rOriginal.hasDefault();
 }
 //-----------------------------------------------------------------------------
@@ -358,6 +364,26 @@ void SetNodeImpl::revertCommit(SubtreeChange& rChange)
 }
 //-----------------------------------------------------------------------------
 
+void SetNodeImpl::doCollectChangesWithTarget(NodeChanges& rChanges, TreeImpl* pParent, NodeOffset nNode) const
+{
+    OSL_ENSURE(getParentTree()  == pParent, "Unexpected value for context tree parameter");
+    OSL_ENSURE(getContextOffset() == nNode, "Unexpected value for context node parameter");
+
+    doCollectChanges( rChanges );
+}
+//-----------------------------------------------------------------------------
+
+void SetNodeImpl::adjustToChanges(NodeChanges& rLocalChanges, SubtreeChange const& rExternalChange, TemplateProvider const& aTemplateProvider, TreeDepth nDepth)
+{
+    if (nDepth > 0)
+    {
+        OSL_ASSERT( aTemplateProvider.isValid() );
+
+        doAdjustToChanges(rLocalChanges, rExternalChange, aTemplateProvider, childDepth(nDepth));
+    }
+}
+//-----------------------------------------------------------------------------
+
 //-----------------------------------------------------------------------------
 std::auto_ptr<SubtreeChange> GroupNodeImpl::preCommitChanges()
 {
@@ -377,6 +403,12 @@ void GroupNodeImpl::revertCommit(SubtreeChange& rChange)
 {
     OSL_ENSURE(!rChange.isSetNodeChange(),"ERROR: Change type SET does not match group");
     OSL_ENSURE(!hasChanges(),"ERROR: Old-style commit not supported: changes not restored");
+}
+//-----------------------------------------------------------------------------
+
+void GroupNodeImpl::doCollectChangesWithTarget(NodeChanges& , TreeImpl* , NodeOffset ) const
+{
+    OSL_ENSURE(!hasChanges(),"ERROR: Some Pending changes may be missed by collection");
 }
 //-----------------------------------------------------------------------------
 
@@ -400,7 +432,68 @@ void ValueNodeImpl::revertCommit(ValueChange& )
 }
 //-----------------------------------------------------------------------------
 
+void ValueNodeImpl::doCollectChangesWithTarget(NodeChanges& rChanges, TreeImpl* pParent, NodeOffset nNode) const
+{
+    if (NodeChangeImpl* pThisChange = doCollectChange())
+    {
+        pThisChange->setTarget(pParent,nNode);
+
+        rChanges.add( NodeChange(pThisChange) );
+    }
+}
 //-----------------------------------------------------------------------------
+
+NodeChangeImpl* ValueNodeImpl::doCollectChange() const
+{
+    OSL_ENSURE(!hasChanges(),"ERROR: Some Pending changes missed by collection");
+    return 0;
+}
+//-----------------------------------------------------------------------------
+
+
+void ValueNodeImpl::adjustToChange(NodeChanges& rLocalChanges, ValueChange const& rExternalChange, TreeImpl& rParentTree, NodeOffset nPos)
+{
+    if (NodeChangeImpl* pThisChange = doAdjustToChange(rExternalChange))
+    {
+        pThisChange->setTarget(&rParentTree,nPos);
+
+        rLocalChanges.add( NodeChange(pThisChange) );
+    }
+    else
+        OSL_TRACE("WARNING: Configuration: derived class hides an external value change from listeners");
+}
+//-----------------------------------------------------------------------------
+NodeChangeImpl* ValueNodeImpl::doAdjustToChange(ValueChange const& rExternalChange)
+{
+    // convert rExternalChange exactly to a NodeChange
+    ValueChangeImpl* pChangeImpl = 0;
+
+    switch( rExternalChange. getMode() )
+    {
+    case ValueChange::wasDefault:
+    case ValueChange::changeValue:
+    case ValueChange::typeIsAny:
+        pChangeImpl = new ValueReplaceImpl( rExternalChange.getNewValue(), rExternalChange.getOldValue() );
+        break;
+
+        break;
+
+    case ValueChange::setToDefault:
+        pChangeImpl = new ValueResetImpl( rExternalChange.getNewValue(), rExternalChange.getOldValue() );
+        break;
+
+    default: OSL_ENSURE(false, "Unknown change mode");
+        // fall thru to next case for somewhat meaningful return value
+    case ValueChange::changeDefault:
+        pChangeImpl = new ValueReplaceImpl( getValue(), getValue() );
+        break;
+    }
+    OSL_ASSERT( pChangeImpl );
+
+    return pChangeImpl;
+}
+//-----------------------------------------------------------------------------
+
 namespace
 {
     struct AbstractNodeCast : INodeHandler
@@ -431,7 +524,7 @@ namespace
 
         NodeType& get() const
         {
-            OSL_ENSURE(m_pNode, "INTERNAL ERROR: Node not set after Cast." );
+            OSL_ENSURE(m_pNode,"INTERNAL ERROR: Node not set after Cast." );
             return *m_pNode;
         }
 

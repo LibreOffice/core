@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeimplobj.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-16 18:15:43 $
+ *  last change: $Author: jb $ $Date: 2000-11-20 01:38:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,10 +119,8 @@ namespace configmgr
             Factory&                    m_rFactory;
             OProviderImpl&              m_rProviderImpl;
         public:
-            ApiProvider(Factory& rFactory, OProviderImpl& rProviderImpl )
-                : m_rFactory(rFactory)
-                , m_rProviderImpl(rProviderImpl)
-            {}
+            ApiProvider(Factory& rFactory, OProviderImpl& rProviderImpl );
+
             ~ApiProvider()
             {}
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: broadcaster.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-17 15:54:55 $
+ *  last change: $Author: jb $ $Date: 2000-11-20 01:38:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,7 +181,7 @@ namespace configmgr
 
         NotifierData getNotifierData() const { return m_aNotifierData; }
 
-        bool translateChanges(ChangesInfos& aInfos, NodeChanges const& aChanges) const;
+        bool translateChanges(ChangesInfos& aInfos, NodeChanges const& aChanges, bool bSingleBase) const;
 
         void queryConstraints(ChangesInfos const& aChanges) { this->doQueryConstraints(aChanges); }
         void notifyListeners(ChangesInfos const& aChanges)  { this->doNotifyListeners(aChanges); }
@@ -961,7 +961,7 @@ namespace configmgr
     }
 // ---------------------------------------------------------------------------------------------------
 
-    bool Broadcaster::Impl::translateChanges(ChangesInfos& aInfos, NodeChanges const& aChanges) const
+    bool Broadcaster::Impl::translateChanges(ChangesInfos& aInfos, NodeChanges const& aChanges, bool bSingleBase) const
     {
         ChangesInfos aNewInfos;
         aNewInfos.reserve( aChanges.getCount() );
@@ -975,7 +975,16 @@ namespace configmgr
 
             ChangeData& aNewChange = aNewInfos.back();
 
-            if( !aNewChange.rebase(aBaseTree) )     OSL_TRACE("Change is not within expected tree");
+            // enabling the Single base optimization requires a base node (not only a base tree) for correct accessors
+            //if (!bSingleBase || !configuration::equalTree(aBaseTree,aNewChange.info.baseTree))
+            {
+                if( !aNewChange.rebase(aBaseTree) )
+                {
+                    OSL_TRACE("Change is not within expected tree - skipping for notification");
+                    continue;
+                }
+            }
+
             if( !aNewChange.resolveObjects(rFactory) )  OSL_TRACE("Cannot find affected elements of Change");
 
         }
@@ -1064,16 +1073,16 @@ void Broadcaster::queryConstraints(NodeChange const& aChange) throw(com::sun::st
 
     NodeChanges aChanges;
     aChanges.add(aChange);
-    this->queryConstraints(aChanges);
+    this->queryConstraints(aChanges,true);
 }
 // ---------------------------------------------------------------------------------------------------
 
-void Broadcaster::queryConstraints(NodeChanges const& aChanges) throw(com::sun::star::beans::PropertyVetoException)
+void Broadcaster::queryConstraints(NodeChanges const& aChanges, bool bSingleBase) throw(com::sun::star::beans::PropertyVetoException)
 {
     OSL_ENSURE(!aChanges.isEmpty(),"Constraint query without a change !");
 
     ChangesInfos aInfos;
-    if (m_pImpl->translateChanges(aInfos,aChanges))
+    if (m_pImpl->translateChanges(aInfos,aChanges,bSingleBase))
     {
         m_pImpl->queryConstraints(aInfos);
     }
@@ -1086,16 +1095,16 @@ void Broadcaster::notifyListeners(NodeChange const& aChange) throw()
 
     NodeChanges aChanges;
     aChanges.add(aChange);
-    this->notifyListeners(aChanges);
+    this->notifyListeners(aChanges, true);
 }
 // ---------------------------------------------------------------------------------------------------
 
-void Broadcaster::notifyListeners(NodeChanges const& aChanges) throw()
+void Broadcaster::notifyListeners(NodeChanges const& aChanges, bool bSingleBase) throw()
 {
     OSL_ENSURE(!aChanges.isEmpty(),"Notifying without a change !");
 
     ChangesInfos aInfos;
-    if (m_pImpl->translateChanges(aInfos,aChanges))
+    if (m_pImpl->translateChanges(aInfos,aChanges, bSingleBase))
     {
         m_pImpl->notifyListeners(aInfos);
         m_pImpl->notifyRootListeners(aInfos);

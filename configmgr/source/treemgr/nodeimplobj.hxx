@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodeimplobj.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-10 19:16:05 $
+ *  last change: $Author: jb $ $Date: 2000-11-20 01:38:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,6 @@ namespace configmgr
 
         protected:
             virtual bool doHasChanges() const;
-            virtual void doCollectChanges(NodeChanges& rChanges) const;
             virtual void doCommitChanges();
             virtual void doMarkChanged();
             virtual NodeImplHolder doCloneIndirect(bool bIndirect);
@@ -134,7 +133,6 @@ namespace configmgr
 
         protected:
             virtual bool doHasChanges() const;
-            virtual void doCollectChanges(NodeChanges& rChanges) const;
             virtual void doCommitChanges();
             virtual void doMarkChanged();
             virtual NodeImplHolder doCloneIndirect(bool bIndirect);
@@ -171,9 +169,10 @@ namespace configmgr
             virtual void finishCommit(ValueChange& rChange);
             virtual void revertCommit(ValueChange& rChange);
 
+            virtual NodeChangeImpl* doAdjustToChange(ValueChange const& rExternalChange);
         protected:
             virtual bool doHasChanges() const;
-            virtual void doCollectChanges(NodeChanges& rChanges) const;
+            virtual NodeChangeImpl* doCollectChange() const;
             virtual void doCommitChanges();
             virtual void doMarkChanged();
             virtual NodeImplHolder doCloneIndirect(bool bIndirect);
@@ -204,7 +203,6 @@ namespace configmgr
         // Base obverrideables
         private:
             virtual bool doHasChanges() const;
-            virtual void doCollectChanges(NodeChanges& rChanges) const;
             virtual void doCommitChanges();
             virtual void doMarkChanged();
             virtual NodeImplHolder doCloneIndirect(bool bIndirect);
@@ -227,7 +225,6 @@ namespace configmgr
         // Base obverrideables
         private:
             virtual bool doHasChanges() const;
-            virtual void doCollectChanges(NodeChanges& rChanges) const;
             virtual void doCommitChanges();
             virtual void doMarkChanged();
             virtual NodeImplHolder doCloneIndirect(bool bIndirect);
@@ -257,7 +254,7 @@ namespace configmgr
         // Base obverrideables
         private:
             virtual bool doHasChanges() const;
-            virtual void doCollectChanges(NodeChanges& rChanges) const;
+            virtual void doCollectChangesWithTarget(NodeChanges& rChanges, TreeImpl* pParent, NodeOffset nNode) const;
             virtual void doCommitChanges();
             virtual void doMarkChanged();
             virtual NodeImplHolder doCloneIndirect(bool bIndirect);
@@ -288,7 +285,8 @@ namespace configmgr
             virtual void doInsertElement(Name const& aName, SetEntry const& aNewEntry);
             virtual void doRemoveElement(Name const& aName);
 
-            virtual void doInitElements(ISubtree& rTree, TreeDepth nDepth);
+            virtual void doInitElements(TemplateProvider const& aTemplateProvider, ISubtree& rTree, TreeDepth nDepth);
+            virtual Element doMakeAdditionalElement(AddNode const& aAddNodeChange, TemplateProvider const& aTemplateProvider, TreeDepth nDepth);
 
             virtual bool doHasChanges() const;
             virtual void doCollectChanges(NodeChanges& rChanges) const;
@@ -316,7 +314,8 @@ namespace configmgr
             virtual void doInsertElement(Name const& aName,  SetEntry const& aNewEntry);
             virtual void doRemoveElement(Name const& aName);
 
-            virtual void doInitElements(ISubtree& rTree, TreeDepth nDepth);
+            virtual void doInitElements(TemplateProvider const& aTemplateProvider, ISubtree& rTree, TreeDepth nDepth);
+            virtual Element doMakeAdditionalElement(AddNode const& aAddNodeChange, TemplateProvider const& aTemplateProvider, TreeDepth nDepth);
 
             virtual bool doHasChanges() const;
             virtual void doCollectChanges(NodeChanges& rChanges) const;
@@ -345,7 +344,8 @@ namespace configmgr
             virtual void doInsertElement(Name const& aName, SetEntry const& aNewEntry);
             virtual void doRemoveElement(Name const& aName);
 
-            virtual void doInitElements(ISubtree& rTree, TreeDepth nDepth);
+            virtual void doInitElements(TemplateProvider const& aTemplateProvider, ISubtree& rTree, TreeDepth nDepth);
+            virtual Element doMakeAdditionalElement(AddNode const& aAddNodeChange, TemplateProvider const& aTemplateProvider, TreeDepth nDepth);
 
             virtual bool doHasChanges() const;
             virtual void doCollectChanges(NodeChanges& rChanges) const;
@@ -373,7 +373,8 @@ namespace configmgr
             virtual void doInsertElement(Name const& aName,  SetEntry const& aNewEntry);
             virtual void doRemoveElement(Name const& aName);
 
-            virtual void doInitElements(ISubtree& rTree, TreeDepth nDepth);
+            virtual void doInitElements(TemplateProvider const& aTemplateProvider, ISubtree& rTree, TreeDepth nDepth);
+            virtual Element doMakeAdditionalElement(AddNode const& aAddNodeChange, TemplateProvider const& aTemplateProvider, TreeDepth nDepth);
 
             virtual bool doHasChanges() const;
             virtual void doCollectChanges(NodeChanges& rChanges) const;
@@ -412,7 +413,13 @@ namespace configmgr
             virtual void doInsertElement(Name const& aName, SetEntry const& aNewEntry);
             virtual void doRemoveElement(Name const& aName);
 
-            virtual void doInitElements(ISubtree& rTree, TreeDepth nDepth);
+            virtual void doInitElements(TemplateProvider const& aTemplateProvider, ISubtree& rTree, TreeDepth nDepth);
+            virtual Element doMakeAdditionalElement(AddNode const& aAddNodeChange, TemplateProvider const& aTemplateProvider, TreeDepth nDepth);
+
+            virtual void doAdjustChangedElement(NodeChanges& rLocalChanges, Name const& aName, Change const& aChange, TemplateProvider const& aTemplateProvider);
+
+            virtual NodeChangeImpl* doAdjustToAddedElement(Name const& aName, AddNode const& aAddNodeChange, Element const& aNewElement);
+            virtual NodeChangeImpl* doAdjustToRemovedElement(Name const& aName, RemoveNode const& aRemoveNodeChange);
 
             virtual bool doHasChanges() const;
             virtual void doCollectChanges(NodeChanges& rChanges) const;
@@ -461,7 +468,13 @@ namespace configmgr
             virtual void doInsertElement(Name const& aName,  SetEntry const& aNewEntry);
             virtual void doRemoveElement(Name const& aName);
 
-            virtual void doInitElements(ISubtree& rTree, TreeDepth nDepth);
+            virtual void doInitElements(TemplateProvider const& aTemplateProvider, ISubtree& rTree, TreeDepth nDepth);
+            virtual Element doMakeAdditionalElement(AddNode const& aAddNodeChange, TemplateProvider const& aTemplateProvider, TreeDepth nDepth);
+
+            virtual void doAdjustChangedElement(NodeChanges& rLocalChanges, Name const& aName, Change const& aChange, TemplateProvider const& aTemplateProvider);
+
+            virtual NodeChangeImpl* doAdjustToAddedElement(Name const& aName, AddNode const& aAddNodeChange, Element const& aNewElement);
+            virtual NodeChangeImpl* doAdjustToRemovedElement(Name const& aName, RemoveNode const& aRemoveNodeChange);
 
             virtual bool doHasChanges() const;
             virtual void doCollectChanges(NodeChanges& rChanges) const;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeimplobj.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-16 18:15:43 $
+ *  last change: $Author: jb $ $Date: 2000-11-20 01:38:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,10 @@
 #include "notifierimpl.hxx"
 #include "apifactory.hxx"
 #include "apitreeaccess.hxx"
+#include "nodechange.hxx"
+#include "nodechangeinfo.hxx"
+#include "broadcaster.hxx"
+#include "roottree.hxx"
 
 #include <cppuhelper/queryinterface.hxx>
 
@@ -81,9 +85,15 @@ namespace configmgr
 //-----------------------------------------------------------------------------
 // API object implementation wrappers
 //-------------------------------------------------------------------------
+ApiProvider::ApiProvider(Factory& rFactory, OProviderImpl& rProviderImpl )
+    : m_rFactory(rFactory)
+    , m_rProviderImpl(rProviderImpl)
+{}
+//-------------------------------------------------------------------------
+
 configuration::TemplateProvider ApiProvider::getTemplateProvider() const
 {
-    return TemplateProvider(&m_rProviderImpl);
+    return m_rProviderImpl.getTemplateProvider();
 }
 //-------------------------------------------------------------------------
 
@@ -443,14 +453,150 @@ void ApiRootTreeImpl::disposing(IConfigBroadcaster* pSource)
 }
 // ---------------------------------------------------------------------------------------------------
 
-//INodeListener : IConfigListener
-void ApiRootTreeImpl::nodeChanged(Change const& aChange, OUString const& aPath, IConfigBroadcaster* pSource)
+static
+void disposeOneRemovedNode(configuration::NodeChange const& , configuration::NodeChangeInfo const& aRemoveInfo, Factory& aFactory)
 {
+    OSL_ENSURE(aRemoveInfo.oldElement.isValid(), "Cannot dispose removed/replaced element: No tree object available");
+    if (aRemoveInfo.oldElement.isValid())
+    {
+        configuration::ElementTree aElementTree( aRemoveInfo.oldElement.getBodyPtr() );
+
+        SetElement* pSetElement = aFactory.findSetElement(aElementTree );
+
+        if (pSetElement)
+        {
+            // factory always does an extra acquire
+            UnoInterfaceRef xReleaseSetElement(pSetElement->getUnoInstance(), uno::UNO_REF_NO_ACQUIRE);
+
+            pSetElement->haveNewParent(0);
+            pSetElement->disposeTree(true);
+        }
+    }
 }
 // ---------------------------------------------------------------------------------------------------
 
-void ApiRootTreeImpl::nodeDeleted(OUString const& aPath, IConfigBroadcaster* pSource)
+static
+void disposeRemovedNodes(configuration::NodeChanges const& aChanges, Factory& aFactory)
 {
+    using configuration::NodeChange;
+    using configuration::NodeChangeInfo;
+    for (NodeChanges::Iterator it = aChanges.begin(); it != aChanges.end(); ++it)
+    {
+        NodeChangeInfo aInfo;
+        if (it->getChangeInfo(aInfo))
+        {
+            switch (aInfo.type)
+            {
+            case NodeChangeInfo::eReplaceElement:
+                if (aInfo.oldElement == aInfo.newElement) break;
+
+                // else dispose the old one: fall thru
+
+            case NodeChangeInfo::eRemoveElement:
+                disposeOneRemovedNode( *it, aInfo, aFactory );
+                break;
+
+            default: break;
+            }
+        }
+    }
+}
+// ---------------------------------------------------------------------------------------------------
+//INodeListener : IConfigListener
+void ApiRootTreeImpl::nodeChanged(Change const& aChange, OUString const& sPath, IConfigBroadcaster* pSource)
+{
+    using configuration::Path;
+    using configuration::NodeChanges;
+    using configuration::RelativePath;
+
+    OSL_ASSERT( m_pNotificationSource == pSource );
+
+    try
+    {
+        OClearableWriteSynchronized aLocalGuard(m_aTreeImpl.getDataLock());
+
+        Tree aTree( m_aTreeImpl.getTree() );
+
+        OSL_ENSURE( Path(sPath, Path::NoValidate()).getType() == configuration::PathType::eABSOLUTE,
+                    "Unexpected format for 'nodeChanged' Path location - path is not absolute" );
+
+        bool bValidNotification = sPath.indexOf(m_aLocationPath) == 0;
+        OSL_ENSURE(bValidNotification, "Notified Path does not match this tree's path - ignoring notification");
+
+        if (bValidNotification)
+        {
+            // find the node
+            NodeRef aNode = aTree.getRootNode();
+
+            if (sPath != m_aLocationPath)
+            {
+                OSL_ASSERT(sPath.getLength() > m_aLocationPath.getLength());
+                OSL_ENSURE(sPath[m_aLocationPath.getLength()] == sal_Unicode('/'),
+                            "'nodeChanged' Path does not respect directory boundaries - erratic notification");
+
+                OSL_ENSURE(sPath.getLength() > m_aLocationPath.getLength()+1, "Unexpected path format: slash terminated");
+
+                RelativePath aLocalConfigPath = configuration::reduceRelativePath(sPath, aTree, aNode);
+
+                bValidNotification = configuration::findDescendantNode(aTree, aNode, aLocalConfigPath);
+            }
+
+            if (bValidNotification)
+            {
+                OSL_ENSURE( aChange.getNodeName() == aNode.getName().toString(),
+                            "Change's node-name does not match found node's name - erratic notification");
+
+                configuration::TemplateProvider aProviderForNewSets = m_aTreeImpl.getProvider().getTemplateProvider();
+
+                NodeChanges aChanges;
+
+                if (configuration::adjustToChanges(aChanges, aTree,aNode, aChange,aProviderForNewSets))
+                {
+                    OSL_ASSERT(aChanges.getCount() > 0);
+
+                    Broadcaster aSender(m_aTreeImpl.getNotifier().makeBroadcaster(aChanges,false));
+
+                    aLocalGuard.downgrade(); // partial clear for broadcast
+
+                    aSender.notifyListeners(aChanges, false);
+
+                    disposeRemovedNodes(aChanges, m_aTreeImpl.getFactory());
+                }
+            }
+        }
+    }
+    catch (configuration::Exception& e)
+    {
+        rtl::OString sMsg("Unexpected error trying to react on update: ");
+        sMsg += e.what();
+        OSL_ENSURE(false, sMsg.getStr() );
+    }
+}
+// ---------------------------------------------------------------------------------------------------
+
+void ApiRootTreeImpl::nodeDeleted(OUString const& sPath, IConfigBroadcaster* pSource)
+{
+#ifdef DBG_UTIL
+    using configuration::Path;
+
+    {
+        OReadSynchronized aLocalGuard(m_aTreeImpl.getDataLock());
+
+        OSL_ENSURE( Path(sPath, Path::NoValidate()).getType() == configuration::PathType::eABSOLUTE,
+                    "Unexpected format for 'deleted' Path location - path is not absolute" );
+
+
+        OSL_ENSURE( m_aLocationPath.indexOf( sPath ) == 0, "'deleted' Path does not indicate this tree or its context");
+
+        const OUString delimiter = OUString::createFromAscii("/");
+        OSL_ENSURE( m_aLocationPath.indexOf( sPath ) == m_aLocationPath.concat(delimiter).indexOf( sPath.concat(delimiter) ),
+                            "'deleted' Path does not check subdirectory boundaries");
+    }
+#endif
+
+    OSL_VERIFY( implSetNotificationSource(0) == pSource );
+
+    m_aTreeImpl.disposeTree(true);
 }
 
 // ---------------------------------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: roottree.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-13 11:54:51 $
+ *  last change: $Author: jb $ $Date: 2000-11-20 01:38:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@
 #include "roottreeimpl.hxx"
 #include "nodefactory.hxx"
 #include "noderef.hxx"
+#include "nodechange.hxx"
 #include "cmtreemodel.hxx"
 
 namespace configmgr
@@ -76,22 +77,48 @@ namespace configmgr
 
 RootTree createReadOnlyTree(    AbsolutePath const& aContextPath,
                                 ISubtree& rCacheNode, TreeDepth nDepth,
-                                NodeOffset nRoot)
+                                TemplateProvider const& aTemplateProvider)
 {
     return RootTree( new RootTreeImpl(  NodeType::getReadAccessFactory(),
-                                        aContextPath, rCacheNode, nDepth
+                                        aContextPath, rCacheNode, nDepth,
+                                        aTemplateProvider
                                     ));
 }
 //-----------------------------------------------------------------------------
 
 RootTree createUpdatableTree(   AbsolutePath const& aContextPath,
                                 ISubtree& rCacheNode, TreeDepth nDepth,
-                                NodeOffset nRoot)
+                                TemplateProvider const& aTemplateProvider)
 {
     return RootTree( new RootTreeImpl(  NodeType::getDeferredChangeFactory(),
-                                        aContextPath, rCacheNode, nDepth
+                                        aContextPath, rCacheNode, nDepth,
+                                        aTemplateProvider
                                     ));
 }
+
+//-----------------------------------------------------------------------------
+// update on notify method
+//-----------------------------------------------------------------------------
+bool adjustToChanges(   NodeChanges& rLocalChanges,
+                        Tree const& aBaseTree, NodeRef const& aBaseNode,
+                        Change const& aExternalChange,
+                        TemplateProvider const& aTemplateProvider)
+{
+    OSL_PRECOND( !aBaseTree.isEmpty(), "ERROR: Configuration: Tree operation requires a valid Tree");
+    OSL_PRECOND(  aBaseTree.isValidNode(aBaseNode), "ERROR: Configuration: NodeRef does not match Tree");
+
+    if (!aBaseTree.isEmpty())
+    {
+        OSL_ENSURE(rLocalChanges.getCount() == 0, "Should pass empty container to adjustToChanges(...)");
+
+        TreeImplHelper::impl(aBaseTree)->adjustToChanges(rLocalChanges, TreeImplHelper::offset(aBaseNode), aExternalChange,aTemplateProvider);
+
+        return rLocalChanges.getCount() != 0;
+    }
+    else
+        return false;
+}
+//-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 // class CommitHelper

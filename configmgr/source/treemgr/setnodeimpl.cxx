@@ -2,9 +2,9 @@
  *
  *  $RCSfile: setnodeimpl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-14 13:04:47 $
+ *  last change: $Author: jb $ $Date: 2000-11-20 01:38:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,11 @@
 #include "configpath.hxx"
 #include "treeimpl.hxx"
 
-#include "cmtreemodel.hxx"
+#include "nodechange.hxx"
+#include "nodechangeimpl.hxx"
+
+#include "valuenode.hxx"
+#include "change.hxx"
 
 #include <osl/diagnose.h>
 #include <stl/vector>
@@ -83,17 +87,57 @@ namespace
     class CollectElementTrees : NodeModification
     {
     public:
-        CollectElementTrees(NodeFactory& rFactory, ISubtree& aSet,
+        CollectElementTrees(NodeFactory& rFactory,
                             TreeImpl* pParentTree, NodeOffset nPos,
-                            TreeDepth nDepth, TemplateHolder const& aTemplate)
-        : m_rFactory(rFactory)
-        , m_aTemplate(aTemplate)
+                            TreeDepth nDepth,
+                            TemplateHolder const& aTemplate,
+                            TemplateProvider const& aTemplateProvider)
+        : m_aTemplate(aTemplate)
+        , m_aTemplateProvider(aTemplateProvider)
+        , m_rFactory(rFactory)
         , m_pParentTree(pParentTree)
         , m_nPos(nPos)
         , m_nDepth(nDepth)
         {
             OSL_ENSURE(m_aTemplate.isValid(),"WARNING: Collecting a set without a template");
+        }
+
+        void collect(ISubtree& aSet)
+        {
             NodeModification::applyToChildren(aSet);
+        }
+
+        ElementTreeHolder create(INode& aNode)
+        {
+            OSL_ENSURE(collection.empty(),"warning: trying to reuse a full collection");
+
+            collection.resize(1); // make an empty one for case of failure
+            NodeModification::applyToNode(aNode);
+
+            OSL_ENSURE(collection.size()==2,"warning: could not create an element");
+            return collection.back();
+        }
+
+        ElementTreeHolder create(ISubtree& aNode)
+        {
+            OSL_ENSURE(collection.empty(),"warning: trying to reuse a full collection");
+
+            collection.resize(1); // make an empty one for case of failure
+            handle(aNode);
+
+            OSL_ENSURE(collection.size()==2,"warning: could not create an element");
+            return collection.back();
+        }
+
+        ElementTreeHolder create(ValueNode& aNode)
+        {
+            OSL_ENSURE(collection.empty(),"warning: trying to reuse a full collection");
+
+            collection.resize(1); // make an empty one for case of failure
+            handle(aNode);
+
+            OSL_ENSURE(collection.size()==2,"warning: could not create an element");
+            return collection.back();
         }
 
         typedef vector<ElementTreeHolder> Collection;
@@ -103,8 +147,9 @@ namespace
         void handle(ISubtree& rTree);
 
         void add(INode& rNode);
-        NodeFactory& m_rFactory;
-        TemplateHolder m_aTemplate;
+        TemplateHolder      m_aTemplate;
+        TemplateProvider    m_aTemplateProvider;
+        NodeFactory&        m_rFactory;
         TreeImpl*   m_pParentTree;
         NodeOffset  m_nPos;
         TreeDepth   m_nDepth;
@@ -123,11 +168,11 @@ namespace
     }
     void CollectElementTrees::handle(ValueNode& rValue)
     {
-// Template handling for values not defined at the moment
-#if 0
         if (m_aTemplate.isValid())
         {
+            OSL_ENSURE(m_aTemplate->isInstanceTypeKnown(),"ERROR: Template must have a validated type when building a set.");
             OSL_ENSURE(m_aTemplate->isInstanceValue(),"ERROR: Found a value node in a Complex Template Set");
+
             if (!m_aTemplate->isInstanceValue())
                 throw Exception("INTERNAL ERROR: Corrupt tree contains a value node within a template-set");
 
@@ -142,14 +187,15 @@ namespace
             //  throw TypeMismatch(aValueType.getTypeName(),aExpectedType.getTypeName(), "INTERNAL ERROR: - Corrupt tree contains mistyped value node within a value-set")));
             }
         }
-#endif
         add(rValue);
     }
     void CollectElementTrees::handle(ISubtree& rTree)
     {
         if (m_aTemplate.isValid())
         {
+            OSL_ENSURE(m_aTemplate->isInstanceTypeKnown(),"ERROR: Template must have a validated type when building a set.");
             OSL_ENSURE(!m_aTemplate->isInstanceValue(),"ERROR: Found a non-leaf node in a Value Set");
+
             if (m_aTemplate->isInstanceValue())
                 throw Exception("INTERNAL ERROR: Corrupt tree contains a non-leaf node within a value-set");
 
@@ -164,10 +210,10 @@ namespace
 
         ElementTreeImpl * pNewTree;
         if (m_pParentTree)
-            pNewTree = new ElementTreeImpl(rNodeFactory, *m_pParentTree, m_nPos, rNode,m_nDepth, m_aTemplate);
+            pNewTree = new ElementTreeImpl(rNodeFactory, *m_pParentTree, m_nPos, rNode,m_nDepth, m_aTemplate, m_aTemplateProvider);
 
         else
-            pNewTree = new ElementTreeImpl(rNodeFactory, rNode,m_nDepth, m_aTemplate);
+            pNewTree = new ElementTreeImpl(rNodeFactory, rNode,m_nDepth, m_aTemplate, m_aTemplateProvider);
 
         collection.push_back(pNewTree);
     }
@@ -313,6 +359,149 @@ void AbstractSetNodeImpl::implInitElement(Element const& aNewElement)
     OSL_ENSURE(m_aDataSet.getElement(aName) == 0,"INTERNAL ERROR: Duplicate element name in set");
 
     m_aDataSet.insertElement(aName,aNewElement);
+}
+//-------------------------------------------------------------------------
+
+void AbstractSetNodeImpl::doAdjustToChanges(NodeChanges& rLocalChanges, SubtreeChange const& rExternalChanges,
+                                            TemplateProvider const& aTemplateProvider, TreeDepth nDepth)
+{
+    for (SubtreeChange::ChildIterator it = rExternalChanges.begin(); it != rExternalChanges.end(); ++it)
+    {
+        implAdjustToElementChange(rLocalChanges, *it, aTemplateProvider, nDepth);
+    }
+}
+//-------------------------------------------------------------------------
+
+void AbstractSetNodeImpl::implAdjustToElementChange(NodeChanges& rLocalChanges, Change const& aChange, TemplateProvider const& aTemplateProvider, TreeDepth nDepth)
+{
+    Name aName( aChange.getNodeName(), Name::NoValidate() );
+
+    NodeChangeImpl* pThisChange = 0;
+    if (aChange.ISA(AddNode))
+    {
+        AddNode const& aAddNode = static_cast<AddNode const&>(aChange);
+
+        Element aNewElement = doMakeAdditionalElement(aAddNode,aTemplateProvider,nDepth);
+
+        pThisChange = doAdjustToAddedElement(aName, aAddNode,aNewElement);
+    }
+    else if (aChange.ISA(RemoveNode))
+    {
+        RemoveNode const& aRemoveNode = static_cast<RemoveNode const&>(aChange);
+        pThisChange = doAdjustToRemovedElement(aName, aRemoveNode);
+    }
+    else if (nDepth > 0)
+    {
+        doAdjustChangedElement(rLocalChanges,aName, aChange,aTemplateProvider);
+    }
+    else
+    {
+        SetEntry aCheck = doFindElement(aName);
+
+        if (aCheck.isValid()) // found even beyond nDepth
+        {
+            doAdjustChangedElement(rLocalChanges,aName, aChange,aTemplateProvider);
+        }
+    }
+
+    if (pThisChange)
+    {
+        rLocalChanges.add( NodeChange(pThisChange) );
+    }
+}
+
+// Default implementations
+//-------------------------------------------------------------------------
+
+void AbstractSetNodeImpl::doAdjustChangedElement(NodeChanges& rLocalChanges, Name const& aName, Change const& aChange, TemplateProvider const& aTemplateProvider)
+{
+    if (Element* pElement = getStoredElement(aName))
+    {
+        // recurse to element tree
+        OSL_ASSERT(pElement->isValid());
+        (*pElement)->adjustToChanges(rLocalChanges,aChange,aTemplateProvider);
+    }
+    else
+    {
+        // could be changed to do an insert instead (?)
+        OSL_ENSURE( false, "Changed Element doesn't exist - (and not adding now)" );
+    }
+}
+//-------------------------------------------------------------------------
+
+NodeChangeImpl* AbstractSetNodeImpl::doAdjustToAddedElement(Name const& aName, AddNode const& aAddNodeChange, Element const& aNewElement)
+{
+    OSL_ENSURE( validatedName(aNewElement) == aName, "Unexpected Name on new element" );
+
+    if (Element* pOriginal = getStoredElement(aName))
+    {
+        OSL_ENSURE( aAddNodeChange.isReplacing(), "Added Element already exists - replacing" );
+
+        Element aOldElement = *pOriginal;
+        implReplaceElement(aName,aNewElement, false);
+
+        return doCreateReplace(aName,aNewElement,aOldElement);
+    }
+    else
+    {
+        OSL_ENSURE( !aAddNodeChange.isReplacing(), "Replaced Element doesn't exist - simply adding" );
+        implInsertElement(aName,aNewElement, false);
+
+        return doCreateInsert(aName,aNewElement);
+    }
+}
+//-------------------------------------------------------------------------
+
+NodeChangeImpl* AbstractSetNodeImpl::doAdjustToRemovedElement(Name const& aName, RemoveNode const& aRemoveNodeChange)
+{
+    if (Element* pOriginal = getStoredElement(aName))
+    {
+        Element aOldElement = *pOriginal;
+        implRemoveElement(aName, false);
+
+        return doCreateRemove(aName,aOldElement);
+    }
+    else
+    {
+        OSL_ENSURE( false, "Removed Element doesn't exist - ignoring" );
+        return 0;
+    }
+}
+//-------------------------------------------------------------------------
+
+NodeChangeImpl* AbstractSetNodeImpl::doCreateInsert(Name const& aName, Element const& aNewElement) const
+{
+    // type equality check
+    typedef SetInsertTreeImpl   SetInsertImpl;
+    typedef SetInsertValueImpl  SetInsertImpl;
+
+    NodeChangeImpl* pRet = new SetInsertImpl(aName, aNewElement, true);
+    pRet->setTarget( getParentTree(), getContextOffset() );
+    return pRet;
+}
+//-------------------------------------------------------------------------
+
+NodeChangeImpl* AbstractSetNodeImpl::doCreateReplace(Name const& aName, Element const& aNewElement, Element const& aOldElement) const
+{
+    // type equality check
+    typedef SetReplaceTreeImpl  SetReplaceImpl;
+    typedef SetReplaceValueImpl SetReplaceImpl;
+
+    NodeChangeImpl* pRet = new SetReplaceImpl(aName, aNewElement, aOldElement);
+    pRet->setTarget( getParentTree(), getContextOffset() );
+    return pRet;
+}
+//-------------------------------------------------------------------------
+
+NodeChangeImpl* AbstractSetNodeImpl::doCreateRemove(Name const& aName, Element const& aOldElement) const
+{
+    // type equality check
+    typedef SetRemoveTreeImpl   SetRemoveImpl;
+    typedef SetRemoveValueImpl  SetRemoveImpl;
+
+    NodeChangeImpl* pRet = new SetRemoveImpl(aName, aOldElement);
+    pRet->setTarget( getParentTree(), getContextOffset() );
+    return pRet;
 }
 //-------------------------------------------------------------------------
 
@@ -464,11 +653,11 @@ void ValueSetNodeImpl::doRemoveElement(Name const& aName)
 }
 //-------------------------------------------------------------------------
 
-void TreeSetNodeImpl::initHelper(NodeFactory& rFactory, ISubtree& rTree, TreeDepth nDepth)
+void TreeSetNodeImpl::initHelper(TemplateProvider const& aTemplateProvider, NodeFactory& rFactory, ISubtree& rTree, TreeDepth nDepth)
 {
-    CollectElementTrees aCollector( rFactory, rTree,
-                                    getParentTree(), getContextOffset(),
-                                    nDepth, getElementTemplate() );
+    CollectElementTrees aCollector( rFactory, getParentTree(), getContextOffset(),
+                                    nDepth, getElementTemplate(), aTemplateProvider );
+    aCollector.collect(rTree);
 
     typedef CollectElementTrees::Collection::const_iterator Iter;
     for(Iter it = aCollector.collection.begin(), stop = aCollector.collection.end();
@@ -479,11 +668,11 @@ void TreeSetNodeImpl::initHelper(NodeFactory& rFactory, ISubtree& rTree, TreeDep
 }
 //-------------------------------------------------------------------------
 
-void ValueSetNodeImpl::initHelper(NodeFactory& rFactory, ISubtree& rSet)
+void ValueSetNodeImpl::initHelper(TemplateProvider const& aTemplateProvider, NodeFactory& rFactory, ISubtree& rSet)
 {
-    CollectElementTrees aCollector( rFactory, rSet,
-                                    getParentTree(), getContextOffset(),
-                                    0, getElementTemplate() );
+    CollectElementTrees aCollector( rFactory, getParentTree(), getContextOffset(),
+                                    0, getElementTemplate(), aTemplateProvider );
+    aCollector.collect(rSet);
 
     typedef CollectElementTrees::Collection::const_iterator Iter;
     for(Iter it = aCollector.collection.begin(), stop = aCollector.collection.end();
@@ -491,6 +680,51 @@ void ValueSetNodeImpl::initHelper(NodeFactory& rFactory, ISubtree& rSet)
     {
         implInitElement(implMakeElement(*it));
     }
+}
+//-------------------------------------------------------------------------
+
+ElementTreeHolder TreeSetNodeImpl::makeAdditionalElement(TemplateProvider const& aTemplateProvider, NodeFactory& rFactory, AddNode const& aAddNodeChange, TreeDepth nDepth)
+{
+    // need 'unsafe', because ownership would be gone when notifications are sent
+    if (INode* pNode = aAddNodeChange.getAddedNode_unsafe())
+    {
+        OSL_ENSURE( pNode->ISA(ISubtree), "Type mismatch when adjusting to update: value element found in tree set");
+
+        if ( ISubtree* pTreeNode = pNode->asISubtree() )
+        {
+            CollectElementTrees aCollector( rFactory, getParentTree(), getContextOffset(),
+                                        nDepth, getElementTemplate(), aTemplateProvider );
+
+            implMakeElement(aCollector.create(*pTreeNode));
+        }
+    }
+    else
+    {
+        OSL_ENSURE(false, "Cannot correctly add a node without an INode object");
+    }
+    return Element();
+}
+//-------------------------------------------------------------------------
+
+ElementTreeHolder ValueSetNodeImpl::makeAdditionalElement(TemplateProvider const& aTemplateProvider, NodeFactory& rFactory, AddNode const& aAddNodeChange)
+{
+    // need 'unsafe', because ownership would be gone when notifications are sent
+    if (INode* pNode = aAddNodeChange.getAddedNode_unsafe())
+    {
+        OSL_ENSURE( pNode->ISA(ValueNode), "Type mismatch when adjusting to update: complex element found in value set");
+        if ( ValueNode* pValueNode = pNode->asValueNode() )
+        {
+            CollectElementTrees aCreator( rFactory, getParentTree(), getContextOffset(),
+                                            0, getElementTemplate(), aTemplateProvider );
+
+            return implMakeElement(aCreator.create(*pValueNode));
+        }
+    }
+    else
+    {
+        OSL_ENSURE(false, "Cannot correctly add a node without an INode object");
+    }
+    return Element();
 }
 //-------------------------------------------------------------------------
 

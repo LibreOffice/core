@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodechangeimpl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: lla $ $Date: 2000-11-09 14:26:05 $
+ *  last change: $Author: jb $ $Date: 2000-11-20 01:38:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ namespace configmgr
 //-----------------------------------------------------------------------------
 
 // life cycle states for a NodeChangeImpl
-enum { eTestedChange = 0x01, eAppliedChange = 0x02 };
+enum { eTestedChange = 0x01, eAppliedChange = 0x02, eNoCheck = 0x07 };
 //-----------------------------------------------------------------------------
 
 NodeChangeImpl::NodeChangeImpl(bool bNoCheck)
@@ -84,7 +84,7 @@ NodeChangeImpl::NodeChangeImpl(bool bNoCheck)
 , m_nTargetNode(0)
 , m_nState(0)
 {
-    if (bNoCheck) m_nState = (eTestedChange | eAppliedChange);
+    if (bNoCheck) m_nState = eNoCheck;
 }
 //-----------------------------------------------------------------------------
 
@@ -167,13 +167,13 @@ RelativePath NodeChangeImpl::getPathToChangingNode() const
 
 void NodeChangeImpl::setTarget(TreeHolder const& aChangingTree, NodeOffset nChangingNode)
 {
-    OSL_ENSURE(m_nState == 0, "WARNING: Configuration: Retargeting change that already was tested or applied");
+    OSL_ENSURE(m_nState == 0 || (m_aTargetTree.isEmpty() && m_nState == eNoCheck), "WARNING: Configuration: Retargeting change that already was tested or applied");
 
     OSL_ENSURE( aChangingTree.isValid(), "ERROR: Configuration Change: NULL Target Tree is not allowed" );
     OSL_ENSURE( nChangingNode, "ERROR: Configuration Change: NULL Target Node is not allowed" );
     OSL_ENSURE( aChangingTree->isValidNode(nChangingNode), "ERROR: Configuration Change: Target Node does not match Tree" );
 
-    m_nState = 0;
+    if (m_nState != eNoCheck) m_nState = 0; // previous checks are invalidated
 
     m_aTargetTree = aChangingTree;
     m_nTargetNode = nChangingNode;
@@ -183,7 +183,7 @@ void NodeChangeImpl::setTarget(TreeHolder const& aChangingTree, NodeOffset nChan
 bool NodeChangeImpl::isChange() const
 {
     OSL_ENSURE(m_nState & eTestedChange, "WARNING: Configuration: Change was not tested  - isChange is meaningless");
-    return !(m_nState & eTestedChange) || doIsChange(!(m_nState & eAppliedChange));
+    return (m_nState == eNoCheck) || !(m_nState & eTestedChange) || doIsChange(!(m_nState & eAppliedChange));
 }
 //-----------------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodeimplobj.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-13 18:00:16 $
+ *  last change: $Author: jb $ $Date: 2000-11-20 01:38:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,11 +152,6 @@ bool ReadOnlyValueNodeImpl::doHasChanges()  const
 }
 //-----------------------------------------------------------------------------
 
-void ReadOnlyValueNodeImpl::doCollectChanges(NodeChanges& ) const
-{
-}
-//-----------------------------------------------------------------------------
-
 void ReadOnlyValueNodeImpl::doCommitChanges()
 {
     failReadOnly();
@@ -242,11 +237,6 @@ void DirectValueNodeImpl::setNodeName(Name const& aName)
 bool DirectValueNodeImpl::doHasChanges()    const
 {
     return false;
-}
-//-----------------------------------------------------------------------------
-
-void DirectValueNodeImpl::doCollectChanges(NodeChanges& ) const
-{
 }
 //-----------------------------------------------------------------------------
 
@@ -401,20 +391,44 @@ bool DeferredValueNodeImpl::doHasChanges() const
 }
 //-----------------------------------------------------------------------------
 
-void DeferredValueNodeImpl::doCollectChanges(NodeChanges& rChanges) const
+NodeChangeImpl* DeferredValueNodeImpl::doCollectChange() const
 {
     OSL_ENSURE(!m_pNewName,"No support for renaming existing value nodes in current changes lists");
     // TODO
     if (m_bDefault)
     {
         OSL_ASSERT(!m_pNewValue);
-        rChanges.add(NodeChange(new ValueResetImpl(ValueNodeImpl::getDefaultValue(), ValueNodeImpl::getValue())));
+        return new ValueResetImpl(ValueNodeImpl::getDefaultValue(), ValueNodeImpl::getValue());
     }
 
     else if (m_pNewValue)
     {
-        rChanges.add(NodeChange(new ValueReplaceImpl(*m_pNewValue, ValueNodeImpl::getValue())));
+        return new ValueReplaceImpl(*m_pNewValue, ValueNodeImpl::getValue());
+    }
+    else
+    {
+        return 0;
+    }
+}
+//-----------------------------------------------------------------------------
 
+NodeChangeImpl* DeferredValueNodeImpl::doAdjustToChange(ValueChange const& rExternalChange)
+{
+    OSL_ENSURE(!m_pNewName,"Renamed value node may be the wrong one for update adjustment");
+
+    if (m_bDefault && rExternalChange.getMode() == ValueChange::changeDefault)
+    {
+        OSL_ASSERT(!m_pNewValue);
+
+        return new ValueReplaceImpl(rExternalChange.getNewValue(), rExternalChange.getOldValue());
+    }
+    else if (m_pNewValue) // return Surrogate
+    {
+        return new ValueReplaceImpl(*m_pNewValue, *m_pNewValue);
+    }
+    else
+    {
+        return ValueNodeImpl::doAdjustToChange(rExternalChange);
     }
 }
 //-----------------------------------------------------------------------------
@@ -543,11 +557,6 @@ bool ReadOnlyGroupNodeImpl::doHasChanges() const
 }
 //-----------------------------------------------------------------------------
 
-void ReadOnlyGroupNodeImpl::doCollectChanges(NodeChanges& ) const
-{
-}
-//-----------------------------------------------------------------------------
-
 void ReadOnlyGroupNodeImpl::doCommitChanges()
 {
     failReadOnly();
@@ -590,11 +599,6 @@ void DirectGroupNodeImpl::setNodeName(Name const& rName)
 bool DirectGroupNodeImpl::doHasChanges() const
 {
     return false;
-}
-//-----------------------------------------------------------------------------
-
-void DirectGroupNodeImpl::doCollectChanges(NodeChanges& ) const
-{
 }
 //-----------------------------------------------------------------------------
 
@@ -667,7 +671,7 @@ bool DeferredGroupNodeImpl::doHasChanges() const
 }
 //-----------------------------------------------------------------------------
 
-void DeferredGroupNodeImpl::doCollectChanges(NodeChanges& ) const
+void DeferredGroupNodeImpl::doCollectChangesWithTarget(NodeChanges& , TreeImpl* , NodeOffset ) const
 {
     OSL_ENSURE(!m_pNewName,"No support for renaming value nodes in current changes tree");
     // TODO
@@ -754,9 +758,15 @@ void ReadOnlyTreeSetNodeImpl::doRemoveElement(Name const& )
 }
 //-----------------------------------------------------------------------------
 
-void ReadOnlyTreeSetNodeImpl::doInitElements(ISubtree& rTree, TreeDepth nDepth)
+void ReadOnlyTreeSetNodeImpl::doInitElements(TemplateProvider const& aTemplateProvider, ISubtree& rTree, TreeDepth nDepth)
 {
-    TreeSetNodeImpl::initHelper(NodeType::getReadAccessFactory(), rTree, nDepth);
+    TreeSetNodeImpl::initHelper(aTemplateProvider, NodeType::getReadAccessFactory(), rTree, nDepth);
+}
+//-----------------------------------------------------------------------------
+
+ReadOnlyTreeSetNodeImpl::Element ReadOnlyTreeSetNodeImpl::doMakeAdditionalElement(AddNode const& aAddNodeChange, TemplateProvider const& aTemplateProvider, TreeDepth nDepth)
+{
+    return TreeSetNodeImpl::makeAdditionalElement(aTemplateProvider, NodeType::getReadAccessFactory(), aAddNodeChange, nDepth);
 }
 //-----------------------------------------------------------------------------
 
@@ -818,9 +828,15 @@ void ReadOnlyValueSetNodeImpl::doRemoveElement(Name const& )
 }
 //-----------------------------------------------------------------------------
 
-void ReadOnlyValueSetNodeImpl::doInitElements(ISubtree& rTree, TreeDepth )
+void ReadOnlyValueSetNodeImpl::doInitElements(TemplateProvider const& aTemplateProvider, ISubtree& rTree, TreeDepth )
 {
-    ValueSetNodeImpl::initHelper(NodeType::getReadAccessFactory(), rTree);
+    ValueSetNodeImpl::initHelper(aTemplateProvider, NodeType::getReadAccessFactory(), rTree);
+}
+//-----------------------------------------------------------------------------
+
+ReadOnlyValueSetNodeImpl::Element ReadOnlyValueSetNodeImpl::doMakeAdditionalElement(AddNode const& aAddNodeChange, TemplateProvider const& aTemplateProvider, TreeDepth )
+{
+    return ValueSetNodeImpl::makeAdditionalElement(aTemplateProvider, NodeType::getReadAccessFactory(), aAddNodeChange);
 }
 //-----------------------------------------------------------------------------
 
@@ -897,9 +913,15 @@ void DirectTreeSetNodeImpl::doRemoveElement(Name const& aName)
 }
 //-----------------------------------------------------------------------------
 
-void DirectTreeSetNodeImpl::doInitElements(ISubtree& rTree, TreeDepth nDepth)
+void DirectTreeSetNodeImpl::doInitElements(TemplateProvider const& aTemplateProvider, ISubtree& rTree, TreeDepth nDepth)
 {
-    TreeSetNodeImpl::initHelper(NodeType::getDirectAccessFactory(), rTree, nDepth);
+    TreeSetNodeImpl::initHelper(aTemplateProvider,NodeType::getDirectAccessFactory(), rTree, nDepth);
+}
+//-----------------------------------------------------------------------------
+
+DirectTreeSetNodeImpl::Element DirectTreeSetNodeImpl::doMakeAdditionalElement(AddNode const& aAddNodeChange, TemplateProvider const& aTemplateProvider, TreeDepth nDepth)
+{
+    return TreeSetNodeImpl::makeAdditionalElement(aTemplateProvider, NodeType::getDirectAccessFactory(), aAddNodeChange, nDepth);
 }
 //-----------------------------------------------------------------------------
 
@@ -971,9 +993,15 @@ void DirectValueSetNodeImpl::doRemoveElement(Name const& aName)
 }
 //-----------------------------------------------------------------------------
 
-void DirectValueSetNodeImpl::doInitElements(ISubtree& rTree, TreeDepth )
+void DirectValueSetNodeImpl::doInitElements(TemplateProvider const& aTemplateProvider, ISubtree& rTree, TreeDepth )
 {
-    ValueSetNodeImpl::initHelper(NodeType::getDirectAccessFactory(), rTree);
+    ValueSetNodeImpl::initHelper(aTemplateProvider, NodeType::getDirectAccessFactory(), rTree);
+}
+//-----------------------------------------------------------------------------
+
+DirectValueSetNodeImpl::Element DirectValueSetNodeImpl::doMakeAdditionalElement(AddNode const& aAddNodeChange, TemplateProvider const& aTemplateProvider, TreeDepth )
+{
+    return ValueSetNodeImpl::makeAdditionalElement(aTemplateProvider, NodeType::getDirectAccessFactory(), aAddNodeChange);
 }
 //-----------------------------------------------------------------------------
 
@@ -1138,9 +1166,15 @@ void DeferredTreeSetNodeImpl::doRemoveElement(Name const& aName)
 }
 //-----------------------------------------------------------------------------
 
-void DeferredTreeSetNodeImpl::doInitElements(ISubtree& rTree, TreeDepth nDepth)
+void DeferredTreeSetNodeImpl::doInitElements(TemplateProvider const& aTemplateProvider, ISubtree& rTree, TreeDepth nDepth)
 {
-    TreeSetNodeImpl::initHelper(NodeType::getDeferredChangeFactory(), rTree, nDepth);
+    TreeSetNodeImpl::initHelper(aTemplateProvider, NodeType::getDeferredChangeFactory(), rTree, nDepth);
+}
+//-----------------------------------------------------------------------------
+
+DeferredTreeSetNodeImpl::Element DeferredTreeSetNodeImpl::doMakeAdditionalElement(AddNode const& aAddNodeChange, TemplateProvider const& aTemplateProvider, TreeDepth nDepth)
+{
+    return TreeSetNodeImpl::makeAdditionalElement(aTemplateProvider, NodeType::getDeferredChangeFactory(), aAddNodeChange, nDepth);
 }
 //-----------------------------------------------------------------------------
 
@@ -1166,18 +1200,18 @@ void DeferredTreeSetNodeImpl::doCollectChanges(NodeChanges& rChanges) const
         {
             if (pOriginal)
             {
-                rChanges.add(NodeChange(new SetReplaceTreeImpl(it->first,it->second,*pOriginal)));
+                rChanges.add(NodeChange(doCreateReplace(it->first,it->second,*pOriginal)));
             }
             else
             {
-                rChanges.add(NodeChange(new SetInsertTreeImpl(it->first,it->second, true)));
+                rChanges.add(NodeChange(doCreateInsert(it->first,it->second)));
             }
         }
         else
         {
             if (pOriginal)
             {
-                rChanges.add(NodeChange(new SetRemoveTreeImpl(it->first,*pOriginal)));
+                rChanges.add(NodeChange(doCreateRemove(it->first,*pOriginal)));
             }
 
             //else nothing to do
@@ -1572,6 +1606,112 @@ void DeferredTreeSetNodeImpl::implRemoveOldElement(Name const& aName)
 }
 //-----------------------------------------------------------------------------
 
+void DeferredTreeSetNodeImpl::doAdjustChangedElement(NodeChanges& rLocalChanges, Name const& aName, Change const& aChange, TemplateProvider const& aTemplateProvider)
+{
+    if (Element* pLocalElement = m_aChangedData.getElement(aName))
+    {
+        if (pLocalElement->isValid())
+        {
+            // we have a complete replacement for the changed node
+            Element aLocalElement = *pLocalElement;
+
+            // also signal something happened
+            rLocalChanges.add( NodeChange( doCreateReplace(aName,aLocalElement,aLocalElement) ) );
+        }
+        else
+        {
+            // already removed locally - should be notified by different route (if applicable)
+        }
+
+        if (Element* pElement = getStoredElement(aName))
+        {
+            // recurse to element tree - but do not notify those changes (?)
+            //OSL_ENSURE(false, "Cannot properly notify this case - what can we do ?");
+
+            OSL_ASSERT(pElement->isValid());
+            //NodeChanges aIgnoredChanges;
+            (*pElement)->adjustToChanges(rLocalChanges/*aIgnoredChanges*/,aChange,aTemplateProvider);
+        }
+        else
+        {
+            // could be changed to do an insert instead (?)
+            OSL_ENSURE( false, "Changed Element didn't exist before it was removed/replaced" );
+        }
+    }
+    else
+    {
+        TreeSetNodeImpl::doAdjustChangedElement(rLocalChanges,aName,aChange,aTemplateProvider);
+    }
+}
+//-----------------------------------------------------------------------------
+
+NodeChangeImpl* DeferredTreeSetNodeImpl::doAdjustToAddedElement(Name const& aName, AddNode const& aAddNodeChange, Element const& aNewElement)
+{
+    if (Element* pLocalElement = m_aChangedData.getElement(aName))
+    {
+        // We have another element replacing ours - what do we do ?
+        if (Element* pOriginal = getStoredElement(aName))
+        {
+            OSL_ENSURE( aAddNodeChange.isReplacing(), "Added Element already exists - replacing" );
+
+            TreeSetNodeImpl::implReplaceElement(aName,aNewElement, false);
+        }
+        else
+        {
+            OSL_ENSURE( !aAddNodeChange.isReplacing(), "Replaced Element doesn't exist - simply adding" );
+            TreeSetNodeImpl::implInsertElement(aName,aNewElement, false);
+        }
+
+
+        if (pLocalElement->isValid()) // ours remains a valid replacement
+        {
+            Element aLocalElement = *pLocalElement;
+
+            // just signal something happened
+            return doCreateReplace(aName,aLocalElement,aLocalElement);
+        }
+        else // had been removed locally
+        {
+            // signal what happened
+            return doCreateInsert(aName,aNewElement);
+        }
+    }
+    else
+    {
+        return TreeSetNodeImpl::doAdjustToAddedElement(aName,aAddNodeChange,aNewElement);
+    }
+}
+//-----------------------------------------------------------------------------
+
+NodeChangeImpl* DeferredTreeSetNodeImpl::doAdjustToRemovedElement(Name const& aName, RemoveNode const& aRemoveNodeChange)
+{
+    if (Element* pLocalElement = m_aChangedData.getElement(aName))
+    {
+        if (Element* pOriginal = getStoredElement(aName))
+        {
+            // take away the original
+                TreeSetNodeImpl::implRemoveElement(aName, false);
+        }
+
+        if (pLocalElement->isValid()) // remains a valid replacement
+        {
+            Element aLocalElement = *pLocalElement;
+
+            // signal something happened
+            return doCreateReplace(aName,aLocalElement,aLocalElement);
+        }
+        else // already was removed locally
+        {
+            return 0;
+        }
+    }
+    else
+    {
+        return TreeSetNodeImpl::doAdjustToRemovedElement(aName,aRemoveNodeChange);
+    }
+}
+//-----------------------------------------------------------------------------
+
 //-----------------------------------------------------------------------------
 // class DeferredValueSetNodeImpl
 //-----------------------------------------------------------------------------
@@ -1695,12 +1835,17 @@ void DeferredValueSetNodeImpl::doRemoveElement(Name const& aName)
 }
 //-----------------------------------------------------------------------------
 
-void DeferredValueSetNodeImpl::doInitElements(ISubtree& rTree, TreeDepth )
+void DeferredValueSetNodeImpl::doInitElements(TemplateProvider const& aTemplateProvider, ISubtree& rTree, TreeDepth )
 {
-    ValueSetNodeImpl::initHelper(NodeType::getDeferredChangeFactory(), rTree);
+    ValueSetNodeImpl::initHelper(aTemplateProvider, NodeType::getDeferredChangeFactory(), rTree);
 }
 //-----------------------------------------------------------------------------
 
+DeferredValueSetNodeImpl::Element DeferredValueSetNodeImpl::doMakeAdditionalElement(AddNode const& aAddNodeChange, TemplateProvider const& aTemplateProvider, TreeDepth )
+{
+    return ValueSetNodeImpl::makeAdditionalElement(aTemplateProvider, NodeType::getDeferredChangeFactory(), aAddNodeChange);
+}
+//-----------------------------------------------------------------------------
 
 bool DeferredValueSetNodeImpl::doHasChanges() const
 {
@@ -1723,18 +1868,18 @@ void DeferredValueSetNodeImpl::doCollectChanges(NodeChanges& rChanges) const
         {
             if (pOriginal)
             {
-                rChanges.add(NodeChange(new SetReplaceValueImpl(it->first,it->second,*pOriginal)));
+                rChanges.add(NodeChange(doCreateReplace(it->first,it->second,*pOriginal)));
             }
             else
             {
-                rChanges.add(NodeChange(new SetInsertValueImpl(it->first,it->second, true)));
+                rChanges.add(NodeChange(doCreateInsert(it->first,it->second)));
             }
         }
         else
         {
             if (pOriginal)
             {
-                rChanges.add(NodeChange(new SetRemoveValueImpl(it->first,*pOriginal)));
+                rChanges.add(NodeChange(doCreateRemove(it->first,*pOriginal)));
             }
 
             //else nothing to do
@@ -2126,6 +2271,114 @@ void DeferredValueSetNodeImpl::implRemoveOldElement(Name const& aName)
 
     OSL_ENSURE(pOldElement || pAddedElement,"WARNING: Element being removed was not found in set");
 }
+//-----------------------------------------------------------------------------
+
+void DeferredValueSetNodeImpl::doAdjustChangedElement(NodeChanges& rLocalChanges, Name const& aName, Change const& aChange, TemplateProvider const& aTemplateProvider)
+{
+    if (Element* pLocalElement = m_aChangedData.getElement(aName))
+    {
+        if (pLocalElement->isValid())
+        {
+            // we have a complete replacement for the changed node
+            Element aLocalElement = *pLocalElement;
+
+            // also signal something happened
+            rLocalChanges.add( NodeChange( doCreateReplace(aName,aLocalElement,aLocalElement) ) );
+        }
+        else
+        {
+            // already removed locally - should be notified by different route (if applicable)
+        }
+
+        if (Element* pElement = getStoredElement(aName))
+        {
+            // recurse to element tree - but do not notify those changes (?)
+            //OSL_ENSURE(false, "Cannot properly notify this case - what can we do ?");
+
+            OSL_ASSERT(pElement->isValid());
+            //NodeChanges aIgnoredChanges;
+            (*pElement)->adjustToChanges(rLocalChanges/*aIgnoredChanges*/,aChange,aTemplateProvider);
+        }
+        else
+        {
+            // could be changed to do an insert instead (?)
+            OSL_ENSURE( false, "Changed Element didn't exist before it was removed/replaced" );
+        }
+    }
+    else
+    {
+        ValueSetNodeImpl::doAdjustChangedElement(rLocalChanges,aName,aChange,aTemplateProvider);
+    }
+}
+//-----------------------------------------------------------------------------
+
+NodeChangeImpl* DeferredValueSetNodeImpl::doAdjustToAddedElement(Name const& aName, AddNode const& aAddNodeChange, Element const& aNewElement)
+{
+    if (Element* pLocalElement = m_aChangedData.getElement(aName))
+    {
+        // We have another element replacing ours - what do we do ?
+        if (Element* pOriginal = getStoredElement(aName))
+        {
+            OSL_ENSURE( aAddNodeChange.isReplacing(), "Added Element already exists - replacing" );
+
+            ValueSetNodeImpl::implReplaceElement(aName,aNewElement, false);
+        }
+        else
+        {
+            OSL_ENSURE( !aAddNodeChange.isReplacing(), "Replaced Element doesn't exist - simply adding" );
+            ValueSetNodeImpl::implInsertElement(aName,aNewElement, false);
+        }
+
+
+        if (pLocalElement->isValid()) // ours remains a valid replacement
+        {
+            Element aLocalElement = *pLocalElement;
+
+            // just signal something happened
+            return doCreateReplace(aName,aLocalElement,aLocalElement);
+        }
+        else // had been removed locally
+        {
+            // signal what happened
+            return doCreateInsert(aName,aNewElement);
+        }
+    }
+    else
+    {
+        return ValueSetNodeImpl::doAdjustToAddedElement(aName,aAddNodeChange,aNewElement);
+    }
+}
+//-----------------------------------------------------------------------------
+
+NodeChangeImpl* DeferredValueSetNodeImpl::doAdjustToRemovedElement(Name const& aName, RemoveNode const& aRemoveNodeChange)
+{
+    if (Element* pLocalElement = m_aChangedData.getElement(aName))
+    {
+        if (Element* pOriginal = getStoredElement(aName))
+        {
+            // take away the original
+                ValueSetNodeImpl::implRemoveElement(aName, false);
+        }
+
+        if (pLocalElement->isValid()) // remains a valid replacement
+        {
+            Element aLocalElement = *pLocalElement;
+
+            // signal something happened
+            return doCreateReplace(aName,aLocalElement,aLocalElement);
+        }
+        else // already was removed locally
+        {
+            return 0;
+        }
+    }
+    else
+    {
+        return ValueSetNodeImpl::doAdjustToRemovedElement(aName,aRemoveNodeChange);
+    }
+}
+//-----------------------------------------------------------------------------
+
 
 
 //-----------------------------------------------------------------------------

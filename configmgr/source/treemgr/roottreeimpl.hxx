@@ -2,9 +2,9 @@
  *
  *  $RCSfile: roottreeimpl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-13 18:00:16 $
+ *  last change: $Author: jb $ $Date: 2000-11-20 01:38:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ namespace configmgr
             RootTreeImpl(   NodeFactory& rNodeFactory,
                             AbsolutePath const& aContextPath,
                             ISubtree& rCacheTree, TreeDepth nDepth,
-                            NodeOffset nRoot = 1);
+                            TemplateProvider const& aTemplateProvider);
 
             // make it public
         private:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valuenode.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: lla $ $Date: 2000-11-15 10:30:41 $
+ *  last change: $Author: jb $ $Date: 2000-11-20 01:38:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,6 +246,19 @@ namespace configmgr
         void init();
         void check_init();
     };
+    //==========================================================================
+    //= inlines
+    //==========================================================================
+    inline void NodeAction::applyToNode(INode const& aNode)
+    { aNode.dispatch(*this); }
+    inline void NodeAction::applyToChildren(ISubtree const& aSubtree)
+    { aSubtree.forEachChild(*this); }
+
+    inline void NodeModification::applyToNode(INode& aNode)
+    { aNode.dispatch(*this); }
+    inline void NodeModification::applyToChildren(ISubtree& aSubtree)
+    { aSubtree.forEachChild(*this); }
+
 
 } // namespace configmgr
 

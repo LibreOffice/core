@@ -2,9 +2,9 @@
  *
  *  $RCSfile: translatechanges.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-16 18:15:43 $
+ *  last change: $Author: jb $ $Date: 2000-11-20 01:38:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,10 +102,23 @@ namespace configmgr
         struct UnoChange { uno::Any oldValue, newValue; };
 
     //interpreting NodeChanges
-        // resolve the relative path from a given base to the changed node
-        bool resolveChangeLocation(configuration::RelativePath& aPath, configuration::ExtendedNodeChangeInfo const& aChange, configuration::Tree const& aBaseTree);
-        // change path and base settings to start from the given base
-        bool rebaseChange(configuration::ExtendedNodeChangeInfo& aChange, configuration::Tree const& aBaseTree);
+        // resolve the relative path from a given base tree (root) to the changed node
+        bool resolveChangeLocation( configuration::RelativePath& aPath,
+                                    configuration::ExtendedNodeChangeInfo const& aChange,
+                                    configuration::Tree const& aBaseTree);
+        // resolve the relative path from a given base node to the changed node
+        bool resolveChangeLocation( configuration::RelativePath& aPath,
+                                    configuration::ExtendedNodeChangeInfo const& aChange,
+                                    configuration::Tree const& aBaseTree,
+                                    configuration::NodeRef const& aBaseNode);
+
+        // change path and base settings to start from the given base tree (root)
+        bool rebaseChange(  configuration::ExtendedNodeChangeInfo& aChange,
+                            configuration::Tree const& aBaseTree);
+        // change path and base settings to start from the given base node
+        bool rebaseChange(  configuration::ExtendedNodeChangeInfo& aChange,
+                            configuration::Tree const& aBaseTree,
+                            configuration::NodeRef const& aBaseNode);
         // resolve non-uno elements to Uno Objects
         bool resolveUnoObjects(UnoChange& aUnoChange, configuration::NodeChangeInfo const& aChange,  Factory& rFactory);
         // resolve non-uno elements to Uno Objects inplace
@@ -116,7 +129,16 @@ namespace configmgr
         void fillEventSource(lang::EventObject& rEvent, configuration::Tree const& aTree, configuration::NodeRef const& aNode, Factory& rFactory);
 
         /// fill a change info from a NodeChangeInfo
-        void fillChange(util::ElementChange& rChange, configuration::ExtendedNodeChangeInfo const& aInfo, configuration::Tree const& aBaseTree, Factory& rFactory);
+        void fillChange(util::ElementChange& rChange,
+                        configuration::ExtendedNodeChangeInfo const& aInfo,
+                        configuration::Tree const& aBaseTree,
+                        Factory& rFactory);
+        /// fill a change info from a NodeChangeInfo
+        void fillChange(util::ElementChange& rChange,
+                        configuration::ExtendedNodeChangeInfo const& aInfo,
+                        configuration::Tree const& aBaseTree,
+                        configuration::NodeRef const& aBaseNode,
+                        Factory& rFactory);
         /// fill a change info from a NodeChangeInfo (base,path and uno objects are assumed to be resolved already)
         void fillChangeFromResolved(util::ElementChange& rChange, configuration::ExtendedNodeChangeInfo const& aInfo);
 

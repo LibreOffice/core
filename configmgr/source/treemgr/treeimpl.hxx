@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeimpl.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-14 10:53:36 $
+ *  last change: $Author: jb $ $Date: 2000-11-20 01:38:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,6 @@ namespace configmgr
 {
     class INode;
     class ISubtree;
-    class ITemplateProvider;
 
     class Change;
     class SubtreeChange;
@@ -101,6 +100,7 @@ namespace configmgr
         class NodeID;
         class Tree;
         class TreeImpl;
+        class TemplateProvider;
         struct NodeFactory;
 //-----------------------------------------------------------------------------
         typedef unsigned int NodeOffset;
@@ -168,10 +168,12 @@ namespace configmgr
 
         // change management
             bool hasChanges()                   const { return m_pSpecificNode->hasChanges(); }
-            void collectChanges(NodeChanges& rChanges)  const { m_pSpecificNode->collectChanges(rChanges); }
             void markChanged()                        { m_pSpecificNode->markChanged(); }
             void commitChanges()                      { m_pSpecificNode->commitChanges(); }
             void makeIndirect(bool bIndirect)         { NodeImpl::makeIndirect(m_pSpecificNode,bIndirect); }
+
+            void collectChanges(NodeChanges& rChanges, TreeImpl* pTree, NodeOffset nContext)    const
+            { m_pSpecificNode->collectChanges(rChanges,pTree,nContext); }
 
         /// renames a node without concern for context consistency ! Only works for nodes without parent
             void    renameNode(Name const& aName);
@@ -221,13 +223,13 @@ namespace configmgr
         //  Construction
             /// creates a TreeImpl for a detached, virgin tree
             explicit
-            TreeImpl( NodeOffset nRoot = 1);
+            TreeImpl( );
 
             /// creates a TreeImpl with a parent tree
             TreeImpl(TreeImpl& rParentTree, NodeOffset nParentNode );
 
-            /// fills this TreeImpl starting from rNode, using the given factory
-            void build(NodeFactory& rFactory, INode& rNode, TreeDepth nDepth);
+            /// fills this TreeImpl starting from rNode, using the given factory and template provider
+            void build(NodeFactory& rFactory, INode& rNode, TreeDepth nDepth, TemplateProvider const& aTemplateProvider);
 
         public:
             /// destroys a TreeImpl
@@ -280,10 +282,16 @@ namespace configmgr
 
         // Change management
             bool    hasChanges() const;
-            void    collectChanges(NodeChanges& rChanges) const;
+            void    collectChanges(NodeChanges& rChanges);
             void    markChanged(NodeOffset nNode);
             void    commitChanges();
             void    makeIndirect(bool bIndirect);
+        // external update
+            void    adjustToChanges(NodeChanges& rLocalChanges, Change const& aExternalChange,
+                                    TemplateProvider const& aTemplateProvider);
+            void    adjustToChanges(NodeChanges& rLocalChanges, NodeOffset nNode, Change const& aExternalChange,
+                                    TemplateProvider const& aTemplateProvider);
+
 
         // Node iteration and access
             /** gets the <type>NodeOffset</type> of the first child node
@@ -354,10 +362,14 @@ namespace configmgr
             std::auto_ptr<Change> doCommitChanges(NodeOffset nNode);
             void doFinishCommit(Change& rChange, NodeOffset nNode);
             void doRevertCommit(Change& rChange, NodeOffset nNode);
+            void doAdjustToChanges(NodeChanges& rLocalChanges, Change const& rChange, NodeOffset nNode,
+                                    TemplateProvider const& aTemplateProvider, TreeDepth nDepth);
 
             void doCommitSubChanges(SubtreeChange& aChangesParent, NodeOffset nParentNode);
             void doFinishSubCommitted(SubtreeChange& aChangesParent, NodeOffset nParentNode);
             void doRevertSubCommitted(SubtreeChange& aChangesParent, NodeOffset nParentNode);
+            void doAdjustToSubChanges(NodeChanges& rLocalChanges, SubtreeChange const& rChange, NodeOffset nParentNode,
+                                        TemplateProvider const& aTemplateProvider, TreeDepth nDepth);
         protected:
             /// set a new parent context for this tree
             void setContext(TreeImpl* pParentTree, NodeOffset nParentNode);
@@ -377,7 +389,7 @@ namespace configmgr
 
             virtual void doGetPathRoot(Path::Components& rPath) const = 0;
         private:
-            void implCollectChangesFrom(NodeOffset nNode, NodeChanges& rChanges) const;
+            void implCollectChangesFrom(NodeOffset nNode, NodeChanges& rChanges);
             void implCommitChangesFrom(NodeOffset nNode);
 
             mutable OTreeAccessor m_aOwnLock;
@@ -385,8 +397,10 @@ namespace configmgr
             NodeList        m_aNodes;
             TreeImpl*   m_pParentTree;
             NodeOffset  m_nParentNode;
-            NodeOffset  const m_nRoot; /// base of <type>NodeOffset</type>s used in this class
             TreeDepth   m_nDepth;
+
+            enum { m_nRoot = 1 }; /// base of <type>NodeOffset</type>s used in this class
+            //NodeOffset    const m_nRoot; /// base of <type>NodeOffset</type>s used in this class
 
             void implGetContextPath(Path::Components& rPath) const;
 
@@ -398,11 +412,8 @@ namespace configmgr
         {
         public:
 
-            /// creates a TreeImpl for a detached, virgin instance of <var>aTemplate</var>
-            ElementTreeImpl( TemplateHolder aTemplate, ITemplateProvider* pProvider );
-
-            /// creates a TreeImpl for a detached, virgin instance of <var>aTemplate</var>
-            ElementTreeImpl( TemplateHolder aTemplate, std::auto_ptr<INode>& pNewNode );
+            /// creates a TreeImpl for a detached, virgin instance of <var>aTemplate</var> (always will be direct)
+            ElementTreeImpl( std::auto_ptr<INode>& pNewNode, TemplateHolder aTemplate, TemplateProvider const& aTemplateProvider  );
 
             /** creates a TreeImpl with a parent tree, that (supposedly)
                 is an instance of <var>aTemplateInfo</var>
@@ -410,14 +421,16 @@ namespace configmgr
             ElementTreeImpl(NodeFactory& rNodeFactory,
                             TreeImpl& rParentTree, NodeOffset nParentNode,
                             INode& rCacheNode, TreeDepth nDepth,
-                            TemplateHolder aTemplateInfo );
+                            TemplateHolder aTemplateInfo,
+                            TemplateProvider const& aTemplateProvider );
 
             /** creates a TreeImpl with no parent node, that (supposedly)
                 is an instance of <var>aTemplateInfo</var>
             */
             ElementTreeImpl(NodeFactory& rNodeFactory,
                             INode& rCacheNode, TreeDepth nDepth,
-                            TemplateHolder aTemplateInfo );
+                            TemplateHolder aTemplateInfo,
+                            TemplateProvider const& aTemplateProvider );
 
             ~ElementTreeImpl();
 
