@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-17 17:23:43 $
+ *  last change: $Author: sab $ $Date: 2000-11-20 18:22:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,6 +292,14 @@ struct ScCopyBlockFromClipParams
 
 #define BCA_BRDCST_ALWAYS ScAddress( 0, 32767, 0 )
 #define BCA_LISTEN_ALWAYS ScRange( BCA_BRDCST_ALWAYS, BCA_BRDCST_ALWAYS )
+
+// -----------------------------------------------------------------------
+
+// DDE Link Modes
+
+#define SC_DDE_DEFAULT      0
+#define SC_DDE_ENGLISH      1
+#define SC_DDE_TEXT         2
 
 // -----------------------------------------------------------------------
 
@@ -622,7 +630,8 @@ public:
     BOOL            GetDdeLinkData( USHORT nPos, String& rAppl, String& rTopic, String& rItem ) const;
     BOOL            UpdateDdeLink( const String& rAppl, const String& rTopic, const String& rItem );
 
-                    // Fuer XML Export/Import:
+                    // For XML Export/Import:
+    BOOL            GetDdeLinkMode(USHORT nPos, USHORT& nMode);
     BOOL            GetDdeLinkResultDimension( USHORT nPos , USHORT& nCol, USHORT& nRow, ScMatrix*& pMatrix);
     BOOL            GetDdeLinkResult(const ScMatrix* pMatrix, USHORT nCol, USHORT nRow, String& rStrValue, double& rDoubValue, BOOL& bIsString);
 
