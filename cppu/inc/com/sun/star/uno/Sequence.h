@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Sequence.h,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-30 10:51:55 $
+ *  last change: $Author: dbo $ $Date: 2001-05-10 14:40:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,12 +172,6 @@ public:
         @return this sequence
     */
     inline Sequence< E > & SAL_CALL operator = ( const Sequence< E > & rSeq ) SAL_THROW( () );
-
-    /** Gets type of elements.
-        <br>
-        @return type of element
-    */
-    inline const Type & getElementType() const SAL_THROW( () );
 
     /** Gets length of sequence.
         <br>

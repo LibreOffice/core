@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Sequence.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-30 10:51:55 $
+ *  last change: $Author: dbo $ $Date: 2001-05-10 14:40:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,12 +140,6 @@ inline Sequence< E >::~Sequence() SAL_THROW( () )
     const Type & rType = ::getCppuType( this );
     ::uno_type_destructData(
         this, rType.getTypeLibType(), cpp_release );
-}
-//__________________________________________________________________________________________________
-template< class E >
-inline const Type & Sequence< E >::getElementType() const SAL_THROW( () )
-{
-    return ::getCppuType( (const ElementType *)0 );
 }
 //__________________________________________________________________________________________________
 template< class E >
