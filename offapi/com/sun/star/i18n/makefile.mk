@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: obo $ $Date: 2002-10-08 16:47:55 $
+#   last change: $Author: vg $ $Date: 2003-04-17 17:57:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -113,6 +113,10 @@ IDLFILES=\
     ParseResult.idl \
     reservedWords.idl \
     ScriptType.idl \
+    TextConversion.idl \
+    TextConversionOption.idl \
+    TextConversionResult.idl \
+    TextConversionType.idl \
     Transliteration.idl \
     TransliterationModules.idl \
     TransliterationModulesNew.idl \
@@ -129,6 +133,7 @@ IDLFILES=\
     XIndexEntrySupplier.idl \
     XLocaleData.idl \
     XNumberFormatCode.idl \
+    XTextConversion.idl \
     XTransliteration.idl
 
 # ------------------------------------------------------------------
