@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: aw $ $Date: 2001-08-01 11:43:30 $
+ *  last change: $Author: bm $ $Date: 2001-09-14 11:22:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -543,6 +543,7 @@ SdXMLExport::SdXMLExport( sal_Bool bIsDraw, sal_uInt16 nExportFlags )
     mpPageMasterInfoList(new ImpXMLEXPPageMasterList(1, 4, 4)),
     mpPageMaterUsageList(new ImpXMLEXPPageMasterList(1, 4, 4)),
     mpAutoLayoutInfoList(new ImpXMLAutoLayoutInfoList(1, 4, 4)),
+    mpSdPropHdlFactory(0L),
     mpPropertySetMapper(0L),
     mpPresPagePropsMapper(0L),
     mnDocMasterPageCount(0L),
@@ -558,8 +559,8 @@ SdXMLExport::SdXMLExport( sal_Bool bIsDraw, sal_uInt16 nExportFlags )
     msStartShape( RTL_CONSTASCII_USTRINGPARAM("StartShape") ),
     msEndShape( RTL_CONSTASCII_USTRINGPARAM("EndShape") ),
     msPageLayoutNames( RTL_CONSTASCII_USTRINGPARAM("PageLayoutNames") ),
-    mnUsedDateStyles( NULL ),
-    mnUsedTimeStyles( NULL )
+    mnUsedDateStyles( 0 ),
+    mnUsedTimeStyles( 0 )
 {
 
 
@@ -2575,4 +2576,49 @@ OUString SAL_CALL SdDrawXMLExport_Content_getImplementationName() throw()
 uno::Reference< uno::XInterface > SAL_CALL SdDrawXMLExport_Content_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
 {
     return (cppu::OWeakObject*)new SdXMLExport( sal_True, EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_FONTDECLS );
+}
+
+// XServiceInfo
+OUString SAL_CALL SdXMLExport::getImplementationName() throw( uno::RuntimeException )
+{
+    if( IsDraw())
+    {
+        // Draw
+
+        switch( getExportFlags())
+        {
+            case EXPORT_ALL:
+                return SdDrawXMLExport_getImplementationName();
+            case (EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES):
+                return SdDrawXMLExport_Style_getImplementationName();
+            case (EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_FONTDECLS):
+                return SdDrawXMLExport_Content_getImplementationName();
+            case EXPORT_META:
+                return SdDrawXMLExport_Meta_getImplementationName();
+            case EXPORT_SETTINGS:
+                return SdDrawXMLExport_Settings_getImplementationName();
+            default:
+                return OUString::createFromAscii( "SdXMLExport.Draw" );
+        }
+    }
+    else
+    {
+        // Impress
+
+        switch( getExportFlags())
+        {
+            case EXPORT_ALL:
+                return SdImpressXMLExport_getImplementationName();
+            case (EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES):
+                return SdImpressXMLExport_Style_getImplementationName();
+            case (EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_FONTDECLS):
+                return SdImpressXMLExport_Content_getImplementationName();
+            case EXPORT_META:
+                return SdImpressXMLExport_Meta_getImplementationName();
+            case EXPORT_SETTINGS:
+                return SdImpressXMLExport_Settings_getImplementationName();
+            default:
+                return OUString::createFromAscii( "SdXMLExport.Impress" );
+        }
+    }
 }
