@@ -151,7 +151,7 @@
 <FormatCode>M"월"</FormatCode>
 </FormatElement>
 <FormatElement msgid="DataFormatskey20" default="false" type="medium" usage="DATE" formatindex="37">
-<FormatCode>YY"년도 제"QQ"사분기"</FormatCode>
+<FormatCode>YY"년도 제"Q"사분기"</FormatCode>
 </FormatElement>
 <FormatElement msgid="DataFormatskey21" default="false" type="medium" usage="DATE" formatindex="38">
 <FormatCode>"제"WW"주"</FormatCode>
@@ -199,7 +199,7 @@
 <FormatCode>YYYY"년" M"월"</FormatCode>
 </FormatElement>
 <FormatElement msgid="DateFormatskey23" default="false" type="medium" usage="DATE" formatindex="52">
-<FormatCode>YYYY"년도 제"QQ"사분기"</FormatCode>
+<FormatCode>YYYY"년도 제"Q"사분기"</FormatCode>
 </FormatElement>
 <FormatElement msgid="DateFormatskey24" default="false" type="medium" usage="DATE" formatindex="53">
 <FormatCode>YY"年" M"月"</FormatCode>
@@ -208,10 +208,10 @@
 <FormatCode>YYYY"年" M"月"</FormatCode>
 </FormatElement>
 <FormatElement msgid="DateFormatskey26" default="false" type="medium" usage="DATE" formatindex="55">
-<FormatCode>YYYY"年度 第"QQ"四分期"</FormatCode>
+<FormatCode>[NatNum1]YYYY"年度 第"QQ"四分期"</FormatCode>
 </FormatElement>
 <FormatElement msgid="DateFormatskey27" default="false" type="medium" usage="DATE" formatindex="56">
-<FormatCode>YY"年度 第"QQ"四分期"</FormatCode>
+<FormatCode>[NatNum1]YY"年度 第"QQ"四分期"</FormatCode>
 </FormatElement>
 <FormatElement msgid="DateFormatskey28" default="false" type="medium" usage="DATE" formatindex="57">
 <FormatCode>M"月"</FormatCode>
@@ -561,8 +561,8 @@
 </LC_TRANSLITERATION>
 <LC_MISC>
 <ForbiddenCharacters>
-<ForbiddenLineBeginCharacters>!%),.:;?]}￠?'"′″℃〉》」』】〕！％），．：；？］｝￠</ForbiddenLineBeginCharacters>
-<ForbiddenLineEndCharacters>[\{￡￥'"〈《「『【〔＄（［｛￦</ForbiddenLineEndCharacters>
+<ForbiddenLineBeginCharacters>!%),.:;?]}¢￠?'"′″℃&gt;〉＞》」』】〕！％），．：；？］｝｡｣､･ ﾞﾟ</ForbiddenLineBeginCharacters>
+<ForbiddenLineEndCharacters>$(¥£[\{￡￥'"&lt;＜《「『【〔＄（［｛￦｢</ForbiddenLineEndCharacters>
 </ForbiddenCharacters>
 <ReservedWords>
 <trueWord>참</trueWord>
@@ -573,10 +573,10 @@
 <quarter4Word>4</quarter4Word>
 <aboveWord>위</aboveWord>
 <belowWord>아래</belowWord>
-<quarter1Abbreviation>1</quarter1Abbreviation>
-<quarter2Abbreviation>2</quarter2Abbreviation>
-<quarter3Abbreviation>3</quarter3Abbreviation>
-<quarter4Abbreviation>4</quarter4Abbreviation>
+<quarter1Abbreviation>일</quarter1Abbreviation>
+<quarter2Abbreviation>이</quarter2Abbreviation>
+<quarter3Abbreviation>삼</quarter3Abbreviation>
+<quarter4Abbreviation>사</quarter4Abbreviation>
 </ReservedWords>
 </LC_MISC>
 
