@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globstr.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-24 20:49:10 $
+ *  last change: $Author: kz $ $Date: 2001-07-26 22:32:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2040,11 +2040,11 @@ Resource RID_GLOBSTR
         Text [ spanish ] = "Desproteger hoja" ;
         Text [ french ] = "Annuler la protection de la feuille" ;
         Text [ dutch ] = "Werkbladbeveiliging opheffen" ;
-        Text[ chinese_simplified ] = "È¡Ïû±£»¤¹¤×÷±í";
+        Text[ chinese_simplified ] = "È¡Ïû¹¤×÷±í±£»¤";
         Text[ russian ] = "Ñíÿòü çàùèòó ñ ëèñòà";
         Text[ polish ] = "Usuñ ochronê arkusza";
         Text[ japanese ] = "•\\‚Ì•ÛŒì‚Ì‰ğœ";
-        Text[ chinese_traditional ] = "¨ú®ø«OÅ@¤u§@ªí";
+        Text[ chinese_traditional ] = "¨ú®ø¤u§@ªí«OÅ@";
         Text[ arabic ] = "ÅáÛÇÁ ÍãÇíÉ ÇáÌÏæá";
         Text[ greek ] = "ÊáôÜñãçóç ğñïóôáóßáò ğßíáêá";
         Text[ korean ] = "½ÃÆ® º¸È£ ÇØÁ¦";
@@ -2876,7 +2876,7 @@ Resource RID_GLOBSTR
         Text [ danish ] = "Søgningen gav intet resultat." ;
         Text [ portuguese ] = "Impossível encontrar expressão procurada." ;
         Text [ portuguese_brazilian ] = "Suchbegriff nicht gefunden." ;
-        Text[ chinese_simplified ] = "Ã»ÓĞÕÒµ½ËÑÑ°ÄÚÈİ¡£";
+        Text[ chinese_simplified ] = "Ã»ÓĞÕÒµ½ËÑÑ°ÌõÄ¿¡£";
         Text[ russian ] = "Äàííûå, óäîâëåòâîğÿşùèå óñëîâèş, íå îáíàğóæåíû.";
         Text[ polish ] = "Szukanego has³a nie znaleziono.";
         Text[ japanese ] = "ŒŸõ·°‚ÍŒ©‚Â‚©‚è‚Ü‚¹‚ñB";
@@ -4360,7 +4360,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "Thesaurus" ;
         Text [ english_us ] = "Thesaurus" ;
         Text [ italian ] = "Sinonimi" ;
-        Text [ spanish ] = "Sinónimos" ;
+        Text [ spanish ] = "Diccionario de sinónimos" ;
         Text [ french ] = "Dictionnaire des synonymes" ;
         Text [ dutch ] = "Thesaurus" ;
         Text [ swedish ] = "Synonymordlista" ;
@@ -6831,7 +6831,7 @@ Resource RID_GLOBSTR
         Text [ danish ] = "Tekstimport" ;
         Text [ portuguese ] = "Importar ficheiros de texto" ;
         Text [ portuguese_brazilian ] = "Textimport" ;
-        Text[ chinese_simplified ] = "ÊäÈëÎÄ±¾";
+        Text[ chinese_simplified ] = "ÊäÈëÎÄ×Ö";
         Text[ russian ] = "Èìïîğò ôàéëîâ òåêñòà";
         Text[ polish ] = "Import tekstu";
         Text[ japanese ] = "Ã·½Ä‚Ì²İÎß°Ä";
@@ -6857,7 +6857,7 @@ Resource RID_GLOBSTR
         Text [ danish ] = "Teksteksport" ;
         Text [ portuguese ] = "Exportar texto" ;
         Text [ portuguese_brazilian ] = "Textexport" ;
-        Text[ chinese_simplified ] = "Êä³öÎÄ±¾";
+        Text[ chinese_simplified ] = "Êä³öÎÄ×Ö";
         Text[ russian ] = "İêñïîğòòåêñòà";
         Text[ polish ] = "Eksport tekstu";
         Text[ japanese ] = "Ã·½Ä‚Ì´¸½Îß°Ä";
@@ -10169,6 +10169,7 @@ Resource RID_GLOBSTR
     };
 */
 };
+
 
 
 
