@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexentrysupplier_default.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-05-28 16:35:48 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 14:39:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,9 +171,9 @@ sal_Int16 Index::getIndexWeight(const OUString& rIndexEntry)
 OUString Index::getIndexDescription(const OUString& rIndexEntry)
 {
     sal_Int16 wgt = getIndexWeight(rIndexEntry);
-    if (wgt < 0xFF) {
-        if (keys[wgt].desc)
-            return OUString(keys[wgt].desc, keys[wgt].desc_leng);
+    if (wgt < MAX_KEYS) {
+        if (keys[wgt].desc.getLength())
+            return keys[wgt].desc;
         else
             return OUString(&keys[wgt].key, 1);
     }
@@ -184,18 +184,18 @@ OUString Index::getIndexDescription(const OUString& rIndexEntry)
 
 void Index::makeIndexKeys(const lang::Locale &rLocale, const OUString &algorithm) throw (RuntimeException)
 {
-    sal_Unicode* keyStr = LocaleData().getIndexKeysByAlgorithm(rLocale, algorithm);
+    OUString keyStr = LocaleData().getIndexKeysByAlgorithm(rLocale, algorithm);
 
-    if (!keyStr) {
+    if (!keyStr.getLength()) {
         keyStr = LocaleData().getIndexKeysByAlgorithm(LOCALE_EN,
                     LocaleData().getDefaultIndexAlgorithm(LOCALE_EN));
         if (!keyStr)
             throw RuntimeException();
     }
 
-    sal_Int16 j = 0;
+    sal_Int16 j = 0, len = keyStr.getLength();
 
-    for (sal_Int16 i = 0; keyStr[i] && j < MAX_KEYS; i++)
+    for (sal_Int16 i = 0; i < len && j < MAX_KEYS; i++)
     {
         sal_Unicode curr = keyStr[i];
 
@@ -204,11 +204,10 @@ void Index::makeIndexKeys(const lang::Locale &rLocale, const OUString &algorithm
 
         switch(curr) {
             case sal_Unicode('-'):
-                if (j > 0 && keyStr[i + 1]) {
-                    for (curr = keyStr[++i]; j < 0xFF && keys[j-1].key < curr; j++) {
+                if (j > 0 && i + 1 < len ) {
+                    for (curr = keyStr[++i]; j < MAX_KEYS && keys[j-1].key < curr; j++) {
                         keys[j].key = keys[j-1].key+1;
-                        keys[j].desc = NULL;
-                        keys[j].desc_leng = 0;
+                        keys[j].desc = OUString();
                     }
                 } else
                     throw RuntimeException();
@@ -216,20 +215,18 @@ void Index::makeIndexKeys(const lang::Locale &rLocale, const OUString &algorithm
             case sal_Unicode('('):
                 if (j > 0) {
                     sal_Int16 end = i+1;
-                    while (keyStr[end] && keyStr[end] != sal_Unicode(')')) end++;
+                    while (end < len && keyStr[end] != sal_Unicode(')')) end++;
 
-                    if (!keyStr[end]) // no found
+                    if (end >= len) // no found
                         throw RuntimeException();
-                    keys[j-1].desc = keyStr+i+1;
-                    keys[j-1].desc_leng = end-i-1;
+                    keys[j-1].desc = keyStr.copy(i+1, end-i-1);
                     i=end+1;
                 } else
                     throw RuntimeException();
                 break;
             default:
                 keys[j].key = curr;
-                keys[j].desc = NULL;
-                keys[j++].desc_leng = 0;
+                keys[j++].desc = OUString();
                 break;
         }
     }
