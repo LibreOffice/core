@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 08:05:06 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 13:22:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,6 +151,10 @@
 #include <services/layoutmanager.hxx>
 #endif
 
+#ifndef __FRAMEWORK_SERVICES_LICENSE_HXX_
+#include <services/license.hxx>
+#endif
+
 #ifndef __FRAMEWORK_UIFACTORY_UIELEMENTFACTORYMANAGER_HXX_
 #include <uifactory/uielementfactorymanager.hxx>
 #endif
@@ -227,6 +231,7 @@ COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::URLTransformer              
                         COMPONENTINFO( ::framework::BackingComp                             )
                         COMPONENTINFO( ::framework::DispatchHelper                          )
                         COMPONENTINFO( ::framework::LayoutManager                           )
+                        COMPONENTINFO( ::framework::License                                 )
                         COMPONENTINFO( ::framework::UIElementFactoryManager                 )
                         COMPONENTINFO( ::framework::PopupMenuControllerFactory              )
                         COMPONENTINFO( ::framework::FontMenuController                      )
@@ -259,6 +264,7 @@ COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                  
                         IFFACTORY( ::framework::BackingComp                             )   else
                         IFFACTORY( ::framework::DispatchHelper                          )   else
                         IFFACTORY( ::framework::LayoutManager                           )   else
+                        IFFACTORY( ::framework::License                                 )   else
                         IFFACTORY( ::framework::UIElementFactoryManager                 )   else
                         IFFACTORY( ::framework::PopupMenuControllerFactory              )   else
                         IFFACTORY( ::framework::FontMenuController                      )   else
