@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.77 $
+#   $Revision: 1.78 $
 #
-#   last change: $Author: svesik $ $Date: 2004-04-21 12:08:17 $
+#   last change: $Author: rt $ $Date: 2004-05-19 08:06:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -279,6 +279,7 @@ SHL4OBJS=       \
                 $(SLO)$/headermenucontroller.obj    \
                 $(SLO)$/footermenucontroller.obj    \
                 $(SLO)$/controlmenucontroller.obj   \
+                $(SLO)$/macrosmenucontroller.obj   \
                 $(SLO)$/dockingareadefaultacceptor.obj  \
                 $(SLO)$/uicommanddescription.obj    \
                 $(SLO)$/modulemanager.obj           \
