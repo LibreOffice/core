@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unowrapper.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: pb $ $Date: 2002-05-30 13:14:49 $
+ *  last change: $Author: ssa $ $Date: 2002-06-10 15:54:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,8 +126,13 @@
         case WINDOW_WORKWINDOW:
         case WINDOW_DOCKINGWINDOW:  return new VCLXTopWindow;
 
-        case WINDOW_WINDOW:
         case WINDOW_FLOATINGWINDOW:
+            if( pWindow->IsMenuFloatingWindow() )
+                return new VCLXMenuWindow;
+            else
+                return new VCLXTopWindow;
+
+        case WINDOW_WINDOW:
         case WINDOW_TABPAGE:        return new VCLXContainer;
 
         case WINDOW_TOOLBOX:        return new VCLXToolBox;
@@ -329,29 +334,41 @@ void UnoWrapper::WindowDestroyed( Window* pWindow )
 
     if ( !xPeer.is() )
     {
-        sal_Int32 nIndexInParent = -1;
-        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > xParent;
+        xPeer = (::com::sun::star::awt::XWindowPeer*) new VCLXMenuWindow();
+        SetWindowInterface( pWindow, xPeer );
+    }
 
-        Window* pParent = pWindow->GetAccessibleParentWindow();
-        if ( pParent )
+    if ( xPeer.is() )
+    {
+        VCLXMenuWindow* pVCLXMenuWindow = VCLXMenuWindow::GetImplementation( xPeer );
+        DBG_ASSERT( pVCLXMenuWindow, "UnoWrapper::CreateAccessible: no pVCLXMenuWindow!" );
+        if ( pVCLXMenuWindow )
         {
-            // get accessible parent
-            xParent = pParent->GetAccessible();
+            sal_Int32 nIndexInParent = -1;
+            ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > xParent;
 
-            // get index in parent
-            for ( USHORT n = pParent->GetAccessibleChildWindowCount(); n; )
+            Window* pParent = pWindow->GetAccessibleParentWindow();
+            if ( pParent )
             {
-                Window* pChild = pParent->GetAccessibleChildWindow( --n );
-                if ( pChild == pWindow )
+                // get accessible parent
+                xParent = pParent->GetAccessible();
+
+                // get index in parent
+                for ( USHORT n = pParent->GetAccessibleChildWindowCount(); n; )
                 {
-                    nIndexInParent = n;
-                    break;
+                    Window* pChild = pParent->GetAccessibleChildWindow( --n );
+                    if ( pChild == pWindow )
+                    {
+                        nIndexInParent = n;
+                        break;
+                    }
                 }
             }
-        }
 
-        xPeer = (::com::sun::star::awt::XWindowPeer*) new VCLXMenuWindow( pMenu, nIndexInParent, xParent );
-        SetWindowInterface( pWindow, xPeer );
+            pVCLXMenuWindow->SetMenu( pMenu );
+            pVCLXMenuWindow->SetIndexInParent( nIndexInParent );
+            pVCLXMenuWindow->SetAccessibleParent( xParent );
+        }
     }
 
     return ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >( xPeer, ::com::sun::star::uno::UNO_QUERY );
