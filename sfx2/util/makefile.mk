@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: hjs $ $Date: 2001-10-23 15:44:40 $
+#   last change: $Author: kz $ $Date: 2001-12-19 15:35:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -244,6 +244,8 @@ $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo NoSuchElementException>>$@
     @echo __CT>>$@
 .ENDIF         # "$(COM)"=="MSC" 
+
+$(MISC)$/$(PRJNAME).hid : $(SRS)$/hidother.hid
 
 $(SRS)$/hidother.hid: hidother.src
 .IF "$(GUI)$(CPU)"=="WNTI"
