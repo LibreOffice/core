@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xehelper.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:40:06 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 11:51:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,15 +195,8 @@ class XclExpCachedValue
 {
 public:
     virtual                     ~XclExpCachedValue();
-    virtual sal_uInt32          GetSize() const = 0;
     virtual void                Save( XclExpStream& rStrm ) const = 0;
 };
-
-inline XclExpStream& operator<<( XclExpStream& rStrm, const XclExpCachedValue& rValue )
-{
-    rValue.Save( rStrm );
-    return rStrm;
-}
 
 
 // ----------------------------------------------------------------------------
@@ -213,8 +206,6 @@ class XclExpCachedDouble : public XclExpCachedValue
 {
 public:
     explicit inline             XclExpCachedDouble( double fVal ) : mfVal( fVal ) {}
-    /** Returns size of this value. */
-    virtual sal_uInt32          GetSize() const;
     /** Writes the double value to stream. */
     virtual void                Save( XclExpStream& rStrm ) const;
 
@@ -230,8 +221,6 @@ class XclExpCachedString : public XclExpCachedValue
 {
 public:
     explicit                    XclExpCachedString( const String& rStr, XclStrFlags nFlags = EXC_STR_DEFAULT );
-    /** Returns size of this value. */
-    virtual sal_uInt32          GetSize() const;
     /** Writes the string to stream. */
     virtual void                Save( XclExpStream& rStrm ) const;
 
@@ -242,37 +231,33 @@ private:
 
 // ----------------------------------------------------------------------------
 
+/** A cached value that stores an error code. */
+class XclExpCachedError : public XclExpCachedValue
+{
+public:
+    explicit                    XclExpCachedError( USHORT nScError );
+    /** Writes the error code to stream. */
+    virtual void                Save( XclExpStream& rStrm ) const;
+
+private:
+    sal_uInt8                   mnError;
+};
+
+
+// ----------------------------------------------------------------------------
+
 class ScDocument;
 class ScMatrix;
 
-/** 2-dimensional matrix of cached values (for EXTERNNAME, tArray, ...).
-    @descr  The file format is as follows:
-    (1 byte) BIFF2-BIFF7: column count(*) / BIFF8: column count - 1
-    (2 byte) BIFF2-BIFF7: row count / BIFF8: row count - 1
-    (x byte) list of values (doubles, strings)
-
-    (*) In BIFF2-BIFF7 256 columns are stored as 0 columns.
-
-    - Structure of a double value: (XclExpCachedValueDbl)
-        (1 byte) 0x01 (identifier)
-        (8 byte) double
-
-    - structure of a string value: (XclExpCachedValueStr)
-        (1 byte) 0x02 (identifier)
-        (x byte) byte string or Unicode string (always write flag field)
-*/
+/** Contains cached values in a 2-dimensional array. */
 class XclExpCachedMatrix
 {
 public:
     /** Constructs and fills a new matrix.
-        @param nCols  The column count of the value matrix.
-        @param nRows  The row count of the value matrix.
-        @param pMatrix  The Calc value matrix.
+        @param rMatrix  The Calc value matrix.
         @param nFlags  Flags for writing strings. */
-                                XclExpCachedMatrix(
-                                    ScDocument& rDoc,
-                                    sal_uInt16 nCols, sal_uInt16 nRows,
-                                    const ScMatrix* pMatrix,
+    explicit                    XclExpCachedMatrix(
+                                    const ScMatrix& rMatrix,
                                     XclStrFlags nFlags = EXC_STR_DEFAULT );
 
     /** Returns the byte count of all contained data. */
@@ -281,17 +266,11 @@ public:
     void                        Save( XclExpStream& rStrm ) const;
 
 private:
-    /** Appends a double value to the value list. */
-    void                        Append( double fVal );
-    /** Appends a string to the value list. */
-    void                        Append( const String& rStr, XclStrFlags nFlags );
-
-private:
     typedef ScfDelList< XclExpCachedValue > XclExpCachedValueList;
 
     XclExpCachedValueList       maValueList;    /// The list containing the cached values.
-    sal_uInt16                  mnCols;         /// Column count of the value matrix.
-    sal_uInt16                  mnRows;         /// Row count of the value matrix.
+    USHORT                      mnScCols;       /// Calc column count of the value matrix.
+    USHORT                      mnScRows;       /// Calc row count of the value matrix.
 };
 
 
