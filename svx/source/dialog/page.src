@@ -2,9 +2,9 @@
  *
  *  $RCSfile: page.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: pb $ $Date: 2001-12-18 13:13:33 $
+ *  last change: $Author: kz $ $Date: 2001-12-21 21:42:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ dutch ] = "~Formaat";
         Text[ french ] = "~Format";
         Text[ spanish ] = "~Formato";
-        Text[ italian ] = "F~ormato";
+        Text[ italian ] = "Formato";
         Text[ danish ] = "Forma~ter";
         Text[ swedish ] = "~Format";
         Text[ polish ] = "~Format";
@@ -143,7 +143,7 @@ TabPage RID_SVXPAGE_PAGE
         Text = "~Breite" ;
         Text [ ENGLISH ] = "~Width" ;
         Text [ norwegian ] = "~Bredde" ;
-        Text [ italian ] = "~Largh." ;
+        Text [ italian ] = "~Larghezza" ;
         Text [ portuguese_brazilian ] = "~Largura" ;
         Text [ portuguese ] = "~Largura" ;
         Text [ finnish ] = "~Leveys" ;
@@ -295,7 +295,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ french ] = "Pa~ysage";
         Text[ spanish ] = "~Horizontal";
         Text[ finnish ] = "V~aakataso";
-        Text[ italian ] = "~Orizzont.";
+        Text[ italian ] = "Orizzontale";
         Text[ danish ] = "Liggende";
         Text[ swedish ] = "L~iggande";
         Text[ polish ] = "Orientacja pozioma";
@@ -801,7 +801,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ dutch ] = "Op~maak";
         Text[ french ] = "For~mat";
         Text[ spanish ] = "For~mato";
-        Text[ italian ] = "For~mato";
+        Text[ italian ] = "Formato";
         Text[ danish ] = "Format";
         Text[ swedish ] = "For~mat";
         Text[ polish ] = "For~mat";
@@ -1074,7 +1074,7 @@ TabPage RID_SVXPAGE_PAGE
         Text = "Hor~izontal" ;
         Text [ ENGLISH ] = "Hori~zontal" ;
         Text [ norwegian ] = "Hor~izontal" ;
-        Text [ italian ] = "~Orizzontale" ;
+        Text [ italian ] = "Orizzontale" ;
         Text [ portuguese_brazilian ] = "Hor~izontal" ;
         Text [ portuguese ] = "Hor~izontal" ;
         Text [ french ] = "Hor~izontal" ;
@@ -1104,7 +1104,7 @@ TabPage RID_SVXPAGE_PAGE
         Text = "~Vertikal" ;
         Text [ ENGLISH ] = "~Vertical" ;
         Text [ norwegian ] = "~Vertikal" ;
-        Text [ italian ] = "~Verticale" ;
+        Text [ italian ] = "Verti~cale" ;
         Text [ portuguese_brazilian ] = "~Vertical" ;
         Text [ portuguese ] = "~Vertical" ;
         Text [ finnish ] = "~Pystytaso" ;
@@ -1192,7 +1192,7 @@ TabPage RID_SVXPAGE_PAGE
         Text = "Referenzabsa~tzvorlage" ;
         Text [ ENGLISH ] = "Reference ~Style" ;
         Text [ english_us ] = "Reference ~Style" ;
-        Text [ italian ] = "~Modello di paragr.di rifer." ;
+        Text [ italian ] = "Modello di paragr.di rifer." ;
         Text [ spanish ] = "Estilo de ~referencia" ;
         Text [ french ] = "Style de ~paragraphe réf." ;
         Text [ dutch ] = "Re~ferentie-alineaprofiel" ;
@@ -2950,6 +2950,7 @@ String RID_SVXSTR_PAPERBIN_SETTINGS
     Text[ finnish ] = "[Tulostinasetuksien mukaan]";
 };
  // ********************************************************************** EOF
+
 
 
 
