@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-04 13:26:55 $
+ *  last change: $Author: vg $ $Date: 2003-07-14 12:45:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2771,12 +2771,6 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
             applied.
             */
             pWWZOrder->InsertEscherObject(pObject, pF->nSpId);
-
-            const SwFmtAnchor *pAnchor =
-                    (const SwFmtAnchor *)aFlySet.GetItem(RES_HORI_ORIENT);
-
-            ASSERT(pAnchor && pAnchor->GetAnchorId() ==
-                eAnchor, "Not the anchor type requested!");
 
             pRetFrmFmt = rDoc.Insert( *pPaM, *pObject, &aFlySet );
 
