@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_cb.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cp $ $Date: 2001-06-26 11:59:01 $
+ *  last change: $Author: cp $ $Date: 2001-07-19 14:12:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,7 +233,7 @@ Preedit_InsertText(preedit_text_t *pText, XIMText *pInsertText, int where,
         }
 
         // convert multibyte chars to unicode
-        rtl_TextEncoding nEncoding = gsl_getSystemTextEncoding();
+        rtl_TextEncoding nEncoding = osl_getThreadTextEncoding();
 
         if (nEncoding != RTL_TEXTENCODING_UNICODE)
         {

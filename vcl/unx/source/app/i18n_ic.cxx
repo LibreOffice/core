@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_ic.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ok $ $Date: 2001-07-12 13:33:27 $
+ *  last change: $Author: cp $ $Date: 2001-07-19 14:12:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -719,7 +719,7 @@ SalI18N_InputContext::EndExtTextInput( USHORT nFlags )
             XIMUnicodeText aPendingText;
             int nLen;
             sal_Unicode* pPtr;
-            rtl_TextEncoding nEncoding = gsl_getSystemTextEncoding();
+            rtl_TextEncoding nEncoding = osl_getThreadTextEncoding();
 
             // buffer is already unicode
             if ( mbMultiLingual || nEncoding == RTL_TEXTENCODING_UNICODE )

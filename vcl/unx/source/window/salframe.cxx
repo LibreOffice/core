@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: pl $ $Date: 2001-07-18 10:23:01 $
+ *  last change: $Author: cp $ $Date: 2001-07-19 14:14:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1612,7 +1612,7 @@ BOOL SalFrame::PostEvent( void *pData )
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void SalFrame::SetTitle( const XubString& rTitle )
 {
-    ByteString aByteTitle( rTitle, gsl_getSystemTextEncoding() );
+    ByteString aByteTitle( rTitle, osl_getThreadTextEncoding() );
 
     char* pTitle = (char*)aByteTitle.GetBuffer();
     XTextProperty aTitle;
@@ -2113,7 +2113,7 @@ long SalFrameData::HandleKeyEvent( XKeyEvent *pEvent )
     if( !nKeyCode && !nLen && !nKeyString)
         return 0;
 
-    rtl_TextEncoding nEncoding = gsl_getSystemTextEncoding();
+    rtl_TextEncoding nEncoding = osl_getThreadTextEncoding();
     sal_Unicode *pBuffer;
     sal_Unicode *pString;
     sal_Size     nBufferSize = nLen * 2;
@@ -2687,7 +2687,7 @@ long SalFrameData::HandleClientMessage( XClientMessageEvent *pEvent )
                 pLast = pLast->maFrameData.pNextFrame_;
             if( pLast == pFrame_ )
             {
-                ByteString aExec( SessionManagerClient::getExecName(), gsl_getSystemTextEncoding() );
+                ByteString aExec( SessionManagerClient::getExecName(), osl_getThreadTextEncoding() );
                 char* argv[2];
                 argv[0] = "/bin/sh";
                 argv[1] = const_cast<char*>(aExec.GetBuffer());
