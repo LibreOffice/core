@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charatr.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 17:52:22 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:21:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,8 @@ inline const SvxCharRotateItem  &SwAttrSet::GetCharRotate( BOOL bInP ) const
     {   return (const SvxCharRotateItem&)Get( RES_CHRATR_ROTATE, bInP ); }
 inline const SvxCharReliefItem  &SwAttrSet::GetCharRelief( BOOL bInP ) const
     {   return (const SvxCharReliefItem&)Get( RES_CHRATR_RELIEF, bInP ); }
+inline const SvxCharHiddenItem  &SwAttrSet::GetCharHidden( BOOL bInP ) const
+    {   return (const SvxCharHiddenItem&)Get( RES_CHRATR_HIDDEN, bInP ); }
 
 /******************************************************************************
  *  Implementierung der Charakter-Attribut Methoden vom SwFmt
@@ -204,5 +206,7 @@ inline const SvxCharRotateItem      &SwFmt::GetCharRotate( BOOL bInP ) const
     {   return aSet.GetCharRotate(bInP); }
 inline const SvxCharReliefItem      &SwFmt::GetCharRelief( BOOL bInP ) const
     {   return aSet.GetCharRelief(bInP); }
+inline const SvxCharHiddenItem      &SwFmt::GetCharHidden( BOOL bInP ) const
+    {   return aSet.GetCharHidden(bInP); }
 
 #endif
