@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScChartsObj.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-05-27 13:03:51 $
+ *  last change:$Date: 2003-09-08 12:07:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,10 +61,18 @@
 
 package mod._sc;
 
+import java.io.PrintWriter;
+
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+import util.SOfficeFactory;
+
 import com.sun.star.awt.Rectangle;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sheet.XCellRangeAddressable;
 import com.sun.star.sheet.XSpreadsheet;
 import com.sun.star.sheet.XSpreadsheetDocument;
@@ -72,19 +80,11 @@ import com.sun.star.sheet.XSpreadsheets;
 import com.sun.star.table.CellRangeAddress;
 import com.sun.star.table.XCell;
 import com.sun.star.table.XCellRange;
-import com.sun.star.table.XTableChart;
 import com.sun.star.table.XTableCharts;
 import com.sun.star.table.XTableChartsSupplier;
-import com.sun.star.uno.UnoRuntime;
-import java.io.PrintWriter;
-import lib.StatusException;
-import lib.TestCase;
-import lib.TestEnvironment;
-import lib.TestParameters;
-import util.SOfficeFactory;
-
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
+import com.sun.star.uno.UnoRuntime;
 
 /**
 * Test for object which is represented by service
@@ -261,7 +261,6 @@ public class ScChartsObj extends TestCase {
         XTableChartsSupplier oSupp = (XTableChartsSupplier)
             UnoRuntime.queryInterface(XTableChartsSupplier.class, oSheet);
 
-        XTableChart oChart = null;
 
         log.println("Insert Chart");
         XTableCharts oCharts = oSupp.getCharts();
