@@ -2,9 +2,9 @@
  *
  *  $RCSfile: factory.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2002-08-15 12:26:49 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:34:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,7 +218,7 @@ Reference<XInterface > OSingleFactoryHelper::createInstanceEveryTime(
     }
     else if( pCreateFunction )
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         if (xContext.is())
         {
            OSL_TRACE( "### ignoring context calling OSingleFactoryHelper::createInstanceEveryTime()!\n" );
@@ -690,7 +690,7 @@ Reference<XInterface > SAL_CALL ORegistryFactoryHelper::createInstanceWithArgume
     }
     else if( xModuleFactory.is() )
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         OSL_TRACE( "### no context ORegistryFactoryHelper::createInstanceWithArgumentsAndContext()!\n" );
 #endif
         return xModuleFactory->createInstanceWithArgumentsAndContext( Arguments, Reference< XComponentContext >() );
@@ -723,7 +723,7 @@ Reference< XInterface > ORegistryFactoryHelper::createInstanceWithArgumentsAndCo
     }
     else if( xModuleFactoryDepr.is() )
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         if (xContext.is())
         {
             OSL_TRACE( "### ignoring context calling ORegistryFactoryHelper::createInstanceWithArgumentsAndContext()!\n" );
