@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqliterator.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:07:23 $
+ *  last change: $Author: oj $ $Date: 2001-09-27 06:12:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1036,57 +1036,80 @@ void OSQLParseTreeIterator::traverseOnePredicate(
                 OSL_ASSERT("OSQLParseTreeIterator: Fehler im Parse Tree");
             }
             // found a parameter
-            OSQLColumns::const_iterator aIter = ::connectivity::find(m_aSelectColumns->begin(),m_aSelectColumns->end(),aColumnName,m_aCaseEqual);
-            if(aIter != m_aSelectColumns->end())
-            {
-                OParseColumn* pNewColumn = new OParseColumn(*aIter,m_aCaseEqual.isCaseSensitive());
-                pNewColumn->setName(rValue);
-                pNewColumn->setRealName(rValue);
-                m_aParameters->push_back(pNewColumn);
-            }
-            else if(aColumnName.getLength())// search in the tables for the right one
-            {
-                OSQLTables::const_iterator aTableIter = m_aTables.end();
-                if(aTableRange.getLength())
-                    aTableIter = m_aTables.find(aTableRange);
-                if(aTableIter == m_aTables.end())
-                    aTableIter = m_aTables.begin();
+            if(SQL_ISRULE(pColumnRef,general_set_fct) || SQL_ISRULE(pColumnRef,set_fct_spec))
+            {// found a function as column_ref
+                ::rtl::OUString sFunctionName;
+                pColumnRef->getChild(0)->parseNodeToStr(sFunctionName,m_xDatabaseMetaData,NULL,sal_False,sal_False);
+                sal_Int32 nType = ::connectivity::OSQLParser::getFunctionReturnType(sFunctionName,m_pParser ? &m_pParser->getContext() : NULL);
 
-                for(;aTableIter != m_aTables.end();++aTableIter)
-                {
-                    if(aTableIter->second.is())
-                    {
-                        Reference<XNameAccess> xColumns = aTableIter->second->getColumns();
-                        if(xColumns.is() && xColumns->hasByName(aColumnName))
-                        {
-                            Reference<XPropertySet> xColumn;
-                            xColumns->getByName(aColumnName) >>= xColumn;
-                            OParseColumn* pNewColumn = new OParseColumn(xColumn,m_aCaseEqual.isCaseSensitive());
-                            pNewColumn->setName(rValue);
-                            pNewColumn->setRealName(rValue);
-                            m_aParameters->push_back(pNewColumn);
-                            break;
-                        }
-                    }
-                }
+                OParseColumn* pColumn = new OParseColumn(   rValue  ,
+                                                            ::rtl::OUString(),
+                                                            ::rtl::OUString(),
+                                                            ColumnValue::NULLABLE_UNKNOWN,
+                                                            0,
+                                                            0,
+                                                            nType,
+                                                            sal_False,
+                                                            sal_False,
+                                                            m_aCaseEqual.isCaseSensitive());
+                pColumn->setFunction(sal_True);
+                pColumn->setRealName(rValue);
+                m_aParameters->push_back(pColumn);
             }
             else
             {
-                ::rtl::OUString aNewColName(getUniqueColumnName(rValue));
+                OSQLColumns::const_iterator aIter = ::connectivity::find(m_aSelectColumns->begin(),m_aSelectColumns->end(),aColumnName,m_aCaseEqual);
+                if(aIter != m_aSelectColumns->end())
+                {
+                    OParseColumn* pNewColumn = new OParseColumn(*aIter,m_aCaseEqual.isCaseSensitive());
+                    pNewColumn->setName(rValue);
+                    pNewColumn->setRealName(rValue);
+                    m_aParameters->push_back(pNewColumn);
+                }
+                else if(aColumnName.getLength())// search in the tables for the right one
+                {
+                    OSQLTables::const_iterator aTableIter = m_aTables.end();
+                    if(aTableRange.getLength())
+                        aTableIter = m_aTables.find(aTableRange);
+                    if(aTableIter == m_aTables.end())
+                        aTableIter = m_aTables.begin();
 
-                OParseColumn* pColumn = new OParseColumn(aNewColName,
-                                                        ::rtl::OUString(),
-                                                        ::rtl::OUString(),
-                                                        ColumnValue::NULLABLE_UNKNOWN,
-                                                        0,
-                                                        0,
-                                                        DataType::VARCHAR,
-                                                        sal_False,
-                                                        sal_False,
-                                                        m_xDatabaseMetaData->storesMixedCaseQuotedIdentifiers());
-                pColumn->setName(rValue);
-                pColumn->setRealName(rValue);
-                m_aParameters->push_back(pColumn);
+                    for(;aTableIter != m_aTables.end();++aTableIter)
+                    {
+                        if(aTableIter->second.is())
+                        {
+                            Reference<XNameAccess> xColumns = aTableIter->second->getColumns();
+                            if(xColumns.is() && xColumns->hasByName(aColumnName))
+                            {
+                                Reference<XPropertySet> xColumn;
+                                xColumns->getByName(aColumnName) >>= xColumn;
+                                OParseColumn* pNewColumn = new OParseColumn(xColumn,m_aCaseEqual.isCaseSensitive());
+                                pNewColumn->setName(rValue);
+                                pNewColumn->setRealName(rValue);
+                                m_aParameters->push_back(pNewColumn);
+                                break;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    ::rtl::OUString aNewColName(getUniqueColumnName(rValue));
+
+                    OParseColumn* pColumn = new OParseColumn(aNewColName,
+                                                            ::rtl::OUString(),
+                                                            ::rtl::OUString(),
+                                                            ColumnValue::NULLABLE_UNKNOWN,
+                                                            0,
+                                                            0,
+                                                            DataType::VARCHAR,
+                                                            sal_False,
+                                                            sal_False,
+                                                            m_xDatabaseMetaData->storesMixedCaseQuotedIdentifiers());
+                    pColumn->setName(rValue);
+                    pColumn->setRealName(rValue);
+                    m_aParameters->push_back(pColumn);
+                }
             }
         }
         else if (SQL_ISRULE(pParseNode,column_ref))// Column-Name (und TableRange):

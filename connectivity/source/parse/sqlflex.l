@@ -2,7 +2,7 @@
 
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlflex.l,v 1.13 2001-08-14 13:23:51 oj Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlflex.l,v 1.14 2001-09-27 06:12:35 oj Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -10,7 +10,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: oj $ $Date: 2001-08-14 13:23:51 $ $Revision: 1.13 $
+//	$Author: oj $ $Date: 2001-09-27 06:12:35 $ $Revision: 1.14 $
 //
 // Description:
 //
@@ -113,6 +113,7 @@ OSQLScanner* xxx_pGLOBAL_SQLSCAN = NULL;
 [Aa][Nn][Yy]									{SQL_NEW_KEYWORD(SQL_TOKEN_ANY); return SQL_TOKEN_ANY; }
 [Aa][Ss]										{SQL_NEW_KEYWORD(SQL_TOKEN_AS); return SQL_TOKEN_AS; }
 [Aa][Ss][Cc]									{SQL_NEW_KEYWORD(SQL_TOKEN_ASC); return SQL_TOKEN_ASC; }
+[Aa][Ss][Cc][Ii][Ii]							{SQL_NEW_KEYWORD(SQL_TOKEN_ASC); return SQL_TOKEN_ASCII; }
 [Aa][Tt]										{SQL_NEW_KEYWORD(SQL_TOKEN_AT); return SQL_TOKEN_AT; }
 [Aa][Uu][Tt][Hh][Oo][Rr][Ii][Zz][Aa][Tt][Ii][Oo][Nn]   		{SQL_NEW_KEYWORD(SQL_TOKEN_AUTHORIZATION); return SQL_TOKEN_AUTHORIZATION; }
 [Aa][Vv][Gg]									{SQL_NEW_KEYWORD(SQL_TOKEN_AVG); return SQL_TOKEN_AVG; }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlparse.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-25 06:14:12 $
+ *  last change: $Author: oj $ $Date: 2001-09-27 06:12:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,6 +248,8 @@ namespace connectivity
 
         // RuleId mit enum, wesentlich effizienter
         static sal_uInt32 RuleID(OSQLParseNode::Rule eRule);
+        // compares the _sFunctionName with all known function names and return the DataType of the return value
+        static sal_Int32 getFunctionReturnType(const ::rtl::OUString& _sFunctionName, const OParseContext* pContext = NULL);
 
 
 

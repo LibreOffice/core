@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PColumn.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 10:13:36 $
+ *  last change: $Author: oj $ $Date: 2001-09-27 06:12:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,8 @@
  *
  *
  ************************************************************************/
+#ifndef _CONNECTIVITY_PCOLUMN_HXX_
+#define _CONNECTIVITY_PCOLUMN_HXX_
 
 #ifndef _CONNECTIVITY_SDBCX_COLUMN_HXX_
 #include "connectivity/sdbcx/VColumn.hxx"
@@ -111,4 +113,6 @@ namespace connectivity
         };
     }
 }
+
+#endif //_CONNECTIVITY_PCOLUMN_HXX_
 

@@ -1,7 +1,7 @@
 %{
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.31 2001-08-24 06:07:23 oj Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.32 2001-09-27 06:12:35 oj Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -9,7 +9,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: oj $ $Date: 2001-08-24 06:07:23 $ $Revision: 1.31 $
+//	$Author: oj $ $Date: 2001-09-27 06:12:35 $ $Revision: 1.32 $
 //
 // Description:
 //
@@ -185,7 +185,24 @@ using namespace connectivity;
 
 /* ODBC KEYWORDS */
 %token <pParseNode> SQL_TOKEN_CALL SQL_TOKEN_D SQL_TOKEN_FN SQL_TOKEN_T SQL_TOKEN_TS SQL_TOKEN_OJ
+/* string functions */
+%token <pParseNode> SQL_TOKEN_ASCII SQL_TOKEN_BIT_LENGTH  SQL_TOKEN_CHAR  SQL_TOKEN_CHAR_LENGTH  SQL_TOKEN_CHARACTER_LENGTH
+%token <pParseNode> SQL_TOKEN_CONCAT          
+%token <pParseNode> SQL_TOKEN_DIFFERENCE  SQL_TOKEN_INSERT SQL_TOKEN_LCASE  SQL_TOKEN_LEFT SQL_TOKEN_LENGTH  SQL_TOKEN_LOCATE          
+%token <pParseNode> SQL_TOKEN_LOCATE_2 SQL_TOKEN_LTRIM SQL_TOKEN_OCTET_LENGTH SQL_TOKEN_POSITION SQL_TOKEN_REPEAT SQL_TOKEN_REPLACE         
+%token <pParseNode> SQL_TOKEN_RIGHT SQL_TOKEN_RTRIM SQL_TOKEN_SOUNDEX SQL_TOKEN_SPACE  SQL_TOKEN_SUBSTRING SQL_TOKEN_UCASE           
 
+/* time and date functions */
+%token <pParseNode> SQL_TOKEN_CURRENT_DATE SQL_TOKEN_CURRENT_TIME SQL_TOKEN_CURRENT_TIMESTAMP SQL_TOKEN_CURDATE SQL_TOKEN_CURTIME          
+%token <pParseNode> SQL_TOKEN_DAYNAME  SQL_TOKEN_DAYOFMONTH  SQL_TOKEN_DAYOFWEEK  SQL_TOKEN_DAYOFYEAR SQL_TOKEN_EXTRACT          
+%token <pParseNode> SQL_TOKEN_HOUR SQL_TOKEN_MINUTE  SQL_TOKEN_MONTH  SQL_TOKEN_MONTHNAME SQL_TOKEN_NOW SQL_TOKEN_QUARTER          
+%token <pParseNode> SQL_TOKEN_SECOND SQL_TOKEN_TIMESTAMPADD SQL_TOKEN_TIMESTAMPDIFF SQL_TOKEN_WEEK SQL_TOKEN_YEAR 
+
+/* numeric functions */
+%token <pParseNode> SQL_TOKEN_ABS SQL_TOKEN_ACOS SQL_TOKEN_ASIN SQL_TOKEN_ATAN SQL_TOKEN_ATAN2 SQL_TOKEN_CEILING 
+%token <pParseNode> SQL_TOKEN_COS SQL_TOKEN_COT SQL_TOKEN_DEGREES SQL_TOKEN_EXP SQL_TOKEN_FLOOR SQL_TOKEN_LOGF    
+%token <pParseNode> SQL_TOKEN_LOG10 SQL_TOKEN_MOD SQL_TOKEN_PI SQL_TOKEN_POWER SQL_TOKEN_RADIANS SQL_TOKEN_RAND    
+%token <pParseNode> SQL_TOKEN_ROUND   SQL_TOKEN_SIGN    SQL_TOKEN_SIN     SQL_TOKEN_SQRT    SQL_TOKEN_TAN SQL_TOKEN_TRUNCATE
 
 %token <pParseNode> SQL_TOKEN_INVALIDSYMBOL
 
@@ -229,7 +246,7 @@ using namespace connectivity;
 %type <pParseNode> /*op_authorization op_schema*/ nil_fkt schema_element base_table_def base_table_element base_table_element_commalist
 %type <pParseNode> column_def odbc_fct_spec	odbc_call_spec odbc_fct_type op_parameter union_statement
 %type <pParseNode> op_odbc_call_parameter odbc_parameter_commalist odbc_parameter
-%type <pParseNode> catalog_name schema_name table_node
+%type <pParseNode> catalog_name schema_name table_node numeric_function string_function function_name date_function
 %%
 
 /* Parse Tree an OSQLParser zurueckliefern
@@ -1011,8 +1028,6 @@ boolean_primary:
 	;
 subroutine:
 	{
-			if(!xxx_pGLOBAL_SQLPARSER->inPredicateCheck())
-				YYERROR;
 		}
 	;
 boolean_test:
@@ -1761,7 +1776,7 @@ set_fct_spec:
 			$$->append($2);
 			$$->append($3 = newNode("}", SQL_NODE_PUNCTUATION));
 		}
-	|	SQL_TOKEN_NAME '(' value_exp_commalist ')'
+	|	function_name '(' value_exp_commalist ')'
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
@@ -1769,6 +1784,87 @@ set_fct_spec:
 			$$->append($3);
 			$$->append($4 = newNode(")", SQL_NODE_PUNCTUATION));
 		}
+	;
+function_name:
+		string_function
+	|	date_function
+	|	numeric_function
+	|	SQL_TOKEN_NAME
+	;
+string_function:
+		SQL_TOKEN_ASCII
+	|	SQL_TOKEN_BIT_LENGTH
+	|	SQL_TOKEN_CHAR
+	|	SQL_TOKEN_CHAR_LENGTH
+	|	SQL_TOKEN_CHARACTER_LENGTH
+	|	SQL_TOKEN_CONCAT
+	|	SQL_TOKEN_DIFFERENCE
+	|	SQL_TOKEN_INSERT
+	|	SQL_TOKEN_LCASE         
+	|	SQL_TOKEN_LEFT          
+	|	SQL_TOKEN_LENGTH        
+	|	SQL_TOKEN_LOCATE        
+	|	SQL_TOKEN_LOCATE_2      
+	|	SQL_TOKEN_LTRIM         
+	|	SQL_TOKEN_OCTET_LENGTH  
+	|	SQL_TOKEN_POSITION      
+	|	SQL_TOKEN_REPEAT        
+	|	SQL_TOKEN_REPLACE       
+	|	SQL_TOKEN_RIGHT         
+	|	SQL_TOKEN_RTRIM         
+	|	SQL_TOKEN_SOUNDEX       
+	|	SQL_TOKEN_SPACE         
+	|	SQL_TOKEN_SUBSTRING     
+	|	SQL_TOKEN_UCASE         
+	;
+date_function:
+		SQL_TOKEN_CURRENT_DATE
+	|	SQL_TOKEN_CURRENT_TIME        
+	|	SQL_TOKEN_CURRENT_TIMESTAMP   
+	|	SQL_TOKEN_CURDATE             
+	|	SQL_TOKEN_CURTIME             
+	|	SQL_TOKEN_DAYNAME             
+	|	SQL_TOKEN_DAYOFMONTH          
+	|	SQL_TOKEN_DAYOFWEEK           
+	|	SQL_TOKEN_DAYOFYEAR           
+	|	SQL_TOKEN_EXTRACT             
+	|	SQL_TOKEN_HOUR                
+	|	SQL_TOKEN_MINUTE              
+	|	SQL_TOKEN_MONTH               
+	|	SQL_TOKEN_MONTHNAME           
+	|	SQL_TOKEN_NOW                 
+	|	SQL_TOKEN_QUARTER             
+	|	SQL_TOKEN_SECOND              
+	|	SQL_TOKEN_TIMESTAMPADD        
+	|	SQL_TOKEN_TIMESTAMPDIFF       
+	|	SQL_TOKEN_WEEK                
+	|	SQL_TOKEN_YEAR                
+	;
+numeric_function:
+		SQL_TOKEN_ABS
+	|	SQL_TOKEN_ACOS            
+	|	SQL_TOKEN_ASIN            
+	|	SQL_TOKEN_ATAN            
+	|	SQL_TOKEN_ATAN2           
+	|	SQL_TOKEN_CEILING         
+	|	SQL_TOKEN_COS             
+	|	SQL_TOKEN_COT             
+	|	SQL_TOKEN_DEGREES         
+	|	SQL_TOKEN_EXP             
+	|	SQL_TOKEN_FLOOR           
+	|	SQL_TOKEN_LOGF            
+	|	SQL_TOKEN_LOG10           
+	|	SQL_TOKEN_MOD             
+	|	SQL_TOKEN_PI              
+	|	SQL_TOKEN_POWER           
+	|	SQL_TOKEN_RADIANS         
+	|	SQL_TOKEN_RAND            
+	|	SQL_TOKEN_ROUND           
+	|	SQL_TOKEN_SIGN            
+	|	SQL_TOKEN_SIN             
+	|	SQL_TOKEN_SQRT            
+	|	SQL_TOKEN_TAN             
+	|	SQL_TOKEN_TRUNCATE        
 	;
 op_parameter:
 		{$$ = SQL_NEW_RULE;}
