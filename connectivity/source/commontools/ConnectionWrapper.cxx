@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConnectionWrapper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2002-08-15 13:38:58 $
+ *  last change: $Author: oj $ $Date: 2002-08-21 10:23:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,6 +249,17 @@ void OConnectionWrapper::createUniqueId( const ::rtl::OUString& _rURL
             sal_Int32 nValue = 0;
             if ( pBegin->Value >>= nValue )
                 sValue = ::rtl::OUString::valueOf(nValue);
+            else
+            {
+                Sequence< ::rtl::OUString> aSeq;
+                if ( pBegin->Value >>= aSeq )
+                {
+                    const ::rtl::OUString* pSBegin = aSeq.getConstArray();
+                    const ::rtl::OUString* pSEnd   = pSBegin + aSeq.getLength();
+                    for(;pSBegin != pSEnd;++pSBegin)
+                        aError = rtl_digest_update(aDigest,pSBegin->getStr(),pSBegin->getLength()*sizeof(sal_Unicode));
+                }
+            }
         }
         if ( sValue.getLength() > 0 )
         {
