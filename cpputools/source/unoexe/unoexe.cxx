@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoexe.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2000-10-13 10:47:26 $
+ *  last change: $Author: jbu $ $Date: 2000-10-26 12:41:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -769,14 +769,11 @@ extern "C" int SAL_CALL main( int argc, const char * argv[] )
                 if (xNewReg.is())
                     xRegistry = (xRegistry.is() ? nestRegistries( xMgr, xNewReg, xRegistry ) : xNewReg);
             }
-            if (! nReadOnly) // todo
-            {
             // ReadWrite registry
             Reference< XSimpleRegistry > xNewReg(
                 openRegistry( xMgr, aRegistries[nPos], sal_False, sal_True ) );
             if (xNewReg.is())
                 xRegistry = (xRegistry.is() ? nestRegistries( xMgr, xNewReg, xRegistry ) : xNewReg);
-            }
         }
 
         // init service manager with registry
