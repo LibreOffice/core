@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idlccompile.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-18 13:40:45 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 12:48:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,10 +228,10 @@ sal_Bool copyFile(const OString* source, const OString& target)
         return sal_False;
     }
 
-    sal_uInt32 totalSize = 512;
-    sal_uInt32 readSize = 0;
-    sal_uInt32 writeSize = 0;
-    sal_Char pBuffer[513];
+    size_t totalSize = 512;
+    size_t readSize  = 0;
+    size_t writeSize = 0;
+    char   pBuffer[513];
 
     while ( !feof(pSource) )
     {
@@ -352,7 +352,7 @@ sal_Int32 compileFile(const OString * pathname)
                                    0, startDir.pData, 0, 0, &hProcess);
 
     oslProcessInfo hInfo;
-    hInfo.Size = sizeof(oslProcessInfo);
+    hInfo.Size = (sal_uInt32)(sizeof(oslProcessInfo));
     OSL_VERIFY( osl_getProcessInfo(hProcess, osl_Process_EXITCODE, &hInfo) == osl_Process_E_None );
 
     if ( procError || (hInfo.Code != 0) )
