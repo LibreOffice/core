@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WizardPages.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-04 17:52:24 $
+ *  last change: $Author: oj $ $Date: 2002-11-05 07:02:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1295,32 +1295,6 @@ String STR_COPYTABLE_TITLE_MOVE
     Text[ catalan ] = "Mou la taula";
     Text[ finnish ] = "Siirrä taulukkoa";
     Text[ thai ] = "à¸¢à¹‰à¸²à¸¢à¸•à¸²à¸£à¸²à¸‡";
-};
-String STR_DUPL_FIELDNAME
-{
-    Text = "Der Name \'$Name: not supported by cvs2svn $\' existiert bereits.\nBitte geben Sie einen neuen Namen an." ;
-    Text [ ENGLISH ] = "The name \'$Name: not supported by cvs2svn $\' does already exist.\nPlease enter a new name." ;
-    Text [ portuguese ] = "O nome \'$Name: not supported by cvs2svn $\'  já existe.\nIndique outro." ;
-    Text [ english_us ] = "The name \'$Name: not supported by cvs2svn $\' already exists.\nPlease enter a new name." ;
-    Text [ portuguese_brazilian ] = "Der Name \'$Name: not supported by cvs2svn $\' existiert bereits.\nBitte geben Sie einen neuen Namen an." ;
-    Text [ swedish ] = "Namnet \'$Name: not supported by cvs2svn $\' finns redan.\nAnge ett nytt namn." ;
-    Text [ danish ] = "Navnet \'$Name: not supported by cvs2svn $\' findes allerede.\nAngiv et andet navn." ;
-    Text [ italian ] = "Il nome \'$Nome:  $\' esiste già.\nSpecificatene un altro." ;
-    Text [ spanish ] = "El nombre \'$Name: not supported by cvs2svn $\' ya existe.\nEscriba otro nombre." ;
-    Text [ french ] = "Le nom '$Name: not supported by cvs2svn $' existe déjà.\nIndiquez-en un autre !" ;
-    Text [ dutch ] = "De naam \'$Name: not supported by cvs2svn $\' bestaat reeds.\nGeef een nieuwe naam aan." ;
-    Text[ chinese_simplified ] = "åç§° \'$Name: not supported by cvs2svn $\' å·²ç»å­˜åœ¨ã€‚\nè¯·æ‚¨ç»™å®šä¸€ä¸ªæ–°åç§°ã€‚";
-    Text[ russian ] = "Èìÿ \'$Name: not supported by cvs2svn $\' óæå ñóùåñòâóåò.\nÂâåäèòå, ïîæàëóéñòà, äğóãîå èìÿ.";
-    Text[ polish ] = "Nazwa \'$Name: not supported by cvs2svn $\' ju¿ istnieje.\nWpisz now¹ nazwê.";
-    Text[ japanese ] = "\'$Name: not supported by cvs2svn $\' ã®åå‰ã¯ã™ã§ã«ã‚ã‚Šã¾ã™ã€‚\næ–°ã—ã„åå‰ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„ã€‚";
-    Text[ chinese_traditional ] = "é€™å€‹åç¨±\'$Name: not supported by cvs2svn $\'å·²ç¶“å­˜åœ¨ã€‚\nè«‹è¼¸å…¥ä¸€å€‹æ–°åç¨±ã€‚";
-    Text[ arabic ] = "ÇáÇÓã \'$Name: not supported by cvs2svn $\' ãæÌæÏ ãÓÈŞÇğ.\nÇáÑÌÇÁ ÅÏÎÇá ÇÓã ÌÏíÏ.";
-    Text[ greek ] = "Ôï üíïìá \'$Name: not supported by cvs2svn $\' õğÜñ÷åé Şäç.\nĞáñáêáëş åğéëİîôå Üëëï üíïìá.";
-    Text[ korean ] = "ì´ë¦„ \'$Name: not supported by cvs2svn $\'ì´(ê°€) ì´ë¯¸ ì¡´ì¬í•©ë‹ˆë‹¤.\nìƒˆ ì´ë¦„ì„ ì…ë ¥í•˜ì‹­ì‹œì˜¤.";
-    Text[ turkish ] = "Ad \'$Name: not supported by cvs2svn $\' mevcut durumda.\nLütfen başka bir ad girin.";
-    Text[ catalan ] = "El nom \'$Name: not supported by cvs2svn $\' ja existeix.\nEscriu un altre nom.";
-    Text[ finnish ] = "Nimi \'$Name: not supported by cvs2svn $\' on jo käytössä.\nSyötä uusi nimi.";
-    Text[ thai ] = "à¸Šà¸·à¹ˆà¸­ \'$Name: not supported by cvs2svn $\' à¸¡à¸µà¸­à¸¢à¸¹à¹ˆà¹à¸¥à¹‰à¸§\nà¸à¸£à¸¸à¸“à¸²à¹ƒà¸ªà¹ˆà¸Šà¸·à¹ˆà¸­à¹ƒà¸«à¸¡à¹ˆ";
 };
 ErrorBox ERROR_INVALID_TABLE_NAME
 {

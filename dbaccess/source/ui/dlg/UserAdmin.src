@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UserAdmin.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2002-11-04 17:57:47 $
+ *  last change: $Author: oj $ $Date: 2002-11-05 07:05:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,28 +333,28 @@ ModalDialog DLG_PASSWORD
     {
         Pos = MAP_APPFONT ( 3 , 3 ) ;
         Size = MAP_APPFONT ( WIN_X - 3 - 6 - 6 - 50 , 8 ) ;
-        Text = "Benutzer \"$Name: not supported by cvs2svn $\"" ;
-        Text [ English ] = "User \"$Name: not supported by cvs2svn $\"" ;
-        Text[ english_us ] = "User \"$Name: not supported by cvs2svn $\"";
-        Text[ portuguese ] = "Utilizador \"$Name: not supported by cvs2svn $\"";
-        Text[ russian ] = "œÓÎ¸ÁÓ‚‡ÚÂÎ¸ \"$Name: not supported by cvs2svn $\"";
-        Text[ greek ] = "User \"$Name: not supported by cvs2svn $\"";
-        Text[ dutch ] = "Gebruiker \"$Name: not supported by cvs2svn $\"";
-        Text[ french ] = "Utilisateur \"$Name: not supported by cvs2svn $\"";
-        Text[ spanish ] = "Usuario \"$Name: not supported by cvs2svn $\"";
-        Text[ finnish ] = "User \"$Name: not supported by cvs2svn $\"";
-        Text[ italian ] = "Utente \"$Name: not supported by cvs2svn $\"";
-        Text[ danish ] = "Bruger \"$Name: not supported by cvs2svn $\"";
-        Text[ swedish ] = "Anv‰ndare \"$Name: not supported by cvs2svn $\"";
-        Text[ polish ] = "Uøytkownik \"$Name: not supported by cvs2svn $\"";
-        Text[ portuguese_brazilian ] = "User \"$Name: not supported by cvs2svn $\"";
-        Text[ japanese ] = "„É¶„Éº„Ç∂„Éº \"$Name: not supported by cvs2svn $\"";
-        Text[ korean ] = "ÏÇ¨Ïö©Ïûê \"$Name: not supported by cvs2svn $\"";
-        Text[ chinese_simplified ] = "‰ΩøÁî®ËÄÖ \"$Name: not supported by cvs2svn $\"";
-        Text[ chinese_traditional ] = "‰ΩøÁî®ËÄÖ<$Name: not supported by cvs2svn $>";
-        Text[ turkish ] = "User \"$Name: not supported by cvs2svn $\"";
-        Text[ arabic ] = "User \"$Name: not supported by cvs2svn $\"";
-        Text[ catalan ] = "Usuari \"$Name: not supported by cvs2svn $\"";
+        Text = "Benutzer \"$name$:  $\"" ;
+        Text [ English ] = "User \"$name$:  $\"" ;
+        Text[ english_us ] = "User \"$name$:  $\"";
+        Text[ portuguese ] = "Utilizador \"$name$:  $\"";
+        Text[ russian ] = "œÓÎ¸ÁÓ‚‡ÚÂÎ¸ \"$name$:  $\"";
+        Text[ greek ] = "User \"$name$:  $\"";
+        Text[ dutch ] = "Gebruiker \"$name$:  $\"";
+        Text[ french ] = "Utilisateur \"$name$:  $\"";
+        Text[ spanish ] = "Usuario \"$name$:  $\"";
+        Text[ finnish ] = "User \"$name$:  $\"";
+        Text[ italian ] = "Utente \"$name$:  $\"";
+        Text[ danish ] = "Bruger \"$name$:  $\"";
+        Text[ swedish ] = "Anv‰ndare \"$name$:  $\"";
+        Text[ polish ] = "Uøytkownik \"$name$:  $\"";
+        Text[ portuguese_brazilian ] = "User \"$name$:  $\"";
+        Text[ japanese ] = "„É¶„Éº„Ç∂„Éº \"$name$:  $\"";
+        Text[ korean ] = "ÏÇ¨Ïö©Ïûê \"$name$:  $\"";
+        Text[ chinese_simplified ] = "‰ΩøÁî®ËÄÖ \"$name$:  $\"";
+        Text[ chinese_traditional ] = "‰ΩøÁî®ËÄÖ<$name$:  $>";
+        Text[ turkish ] = "User \"$name$:  $\"";
+        Text[ arabic ] = "User \"$name$:  $\"";
+        Text[ catalan ] = "Usuari \"$name$:  $\"";
         Text[ thai ] = "‡∏ú‡∏π‡πâ‡πÉ‡∏ä‡πâ \"$‡∏ä‡∏∑‡πà‡∏≠: OpenOffice641C $\"";
     };
 

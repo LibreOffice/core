@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UserAdmin.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:43:44 $
+ *  last change: $Author: oj $ $Date: 2002-11-05 07:05:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,7 +178,7 @@ OPasswordDialog::OPasswordDialog(Window* _pParent,const String& _sUserName) :
 
     FreeResource();
     String sUser = aFLUser.GetText();
-    sUser.SearchAndReplaceAscii("$Name: not supported by cvs2svn $",_sUserName);
+    sUser.SearchAndReplaceAscii("$name$:  $",_sUserName);
     aFLUser.SetText(sUser);
     aOKBtn.Disable();
 

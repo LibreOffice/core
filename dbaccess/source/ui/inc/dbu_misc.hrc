@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_misc.hrc,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:25:34 $
+ *  last change: $Author: oj $ $Date: 2002-11-05 07:02:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,11 +75,10 @@
 #define STR_WIZ_TABLE_COPY                  RID_STR_MISC_START +  6
 #define STR_COPYTABLE_TITLE_COPY            RID_STR_MISC_START +  7
 #define STR_COPYTABLE_TITLE_MOVE            RID_STR_MISC_START +  8
-#define STR_DUPL_FIELDNAME                  RID_STR_MISC_START +  9
+#define STR_COULDNOTOPEN_LINKEDDOC          RID_STR_MISC_START +  9
 #define STR_ERR_DUPL_TABLENAME              RID_STR_MISC_START + 10
-#define STR_COULDNOTOPEN_LINKEDDOC          RID_STR_MISC_START + 11
-#define STR_UNDO_COLON                      RID_STR_MISC_START + 12
-#define STR_REDO_COLON                      RID_STR_MISC_START + 13
+#define STR_UNDO_COLON                      RID_STR_MISC_START + 11
+#define STR_REDO_COLON                      RID_STR_MISC_START + 12
 
 
 // please adjust checking before insert new strings

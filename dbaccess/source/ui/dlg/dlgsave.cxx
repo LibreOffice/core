@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsave.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-07 13:06:34 $
+ *  last change: $Author: oj $ $Date: 2002-11-05 07:06:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -326,7 +326,7 @@ IMPL_LINK(OSaveAsDlg, ButtonClickHdl, Button *, pButton)
 
             sal_Bool bOverwrite = ( (m_nFlags & SAD_OVERWRITE) == SAD_OVERWRITE );
             String aText( bOverwrite ? m_aExistsOverwrite : m_aExists);
-            aText.SearchAndReplace(String::CreateFromAscii("$Name: not supported by cvs2svn $"),m_aName);
+            aText.SearchAndReplace(String::CreateFromAscii("$name$:  $"),m_aName);
             OSQLMessageBox aDlg(this, String(ModuleRes(STR_OBJECT_ALREADY_EXSISTS)), aText, bOverwrite ? WB_YES_NO : WB_OK, OSQLMessageBox::Query);
 
             if(aDlg.Execute() == RET_YES)
