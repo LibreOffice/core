@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpage.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: dl $ $Date: 2001-06-21 10:34:31 $
+ *  last change: $Author: aw $ $Date: 2001-07-23 12:45:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1798,7 +1798,6 @@ void SdrPage::ReadData(const SdrIOHeader& rHead, SvStream& rIn)
     // #88340#
     if(!aMasters.GetCount() && !IsMasterPage())
     {
-        DBG_ERROR("Page without MasterPageDescriptor loaded (!)");
         if(pModel && pModel->GetMasterPageCount() > 2)
         {
             // This is not allowed. Create a dummy entry
