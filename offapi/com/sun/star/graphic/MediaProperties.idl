@@ -1,0 +1,153 @@
+/*************************************************************************
+ *
+ *  $RCSfile: MediaProperties.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2004-06-11 09:35:50 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef com_sun_star_graphic_MediaProperties_idl
+#define com_sun_star_graphic_MediaProperties_idl
+
+#include <com/sun/star/beans/PropertyValues.idl>
+#include <com/sun/star/io/XInputStream.idl>
+#include <com/sun/star/io/XStream.idl>
+
+module com { module sun { module star { module graphic
+{
+
+/** This service describes the properties that are used
+    when using the <type>XGraphicProvider</type> interface methods
+*/
+service MediaProperties
+{
+    /** Property that describes the location of the source or target
+        of the graphic as URL.
+
+        <p>A URL can be used instead of the
+        <member>InputStream</member> or <member>OutputStream</member>
+        property</p>
+
+        <p>In addition to the normal protocols like file:// or http://
+        you can use private URL's as follows to get access to graphics
+        lying inside the resource system within an Office context:</p>
+
+        <ul>
+            <li>private:resource/projectshortname/bitmap/12345</li>
+            <li>private:resource/projectshortname/bitmapex/12345</li>
+            <li>private:resource/projectshortname/image/12345</li>
+            <li>private:resource/projectshortname/imagelist/12345</li>
+            <li>private:resource/projectshortname/imagelist/12345/12</li>
+        </ul>
+    */
+    [optional, property ] string URL;
+
+    /** This property is only used for loading graphics or querying
+        graphic descriptors
+
+        <p>A <member>InputStream</member> can be used instead of the
+        <member>URL</member> property</p>
+
+        @see com::sun::star::io::XInputStream
+    */
+    [optional, property ] ::com::sun::star::io::XInputStream InputStream;
+
+    /** This property is only used for storing graphics
+
+        <p>A <member>OutputStream</member> can be used instead of the
+        <member>URL</member> property</p>
+
+        @see com::sun::star::io::XStream
+    */
+    [optional, property ] ::com::sun::star::io::XStream OutputStream;
+
+    /** This property is only used for storing graphics and describes the
+        format into which the graphic is to be converted
+
+        <p>At the moment, the following mime types are supported for storing
+        graphics:</p>
+
+        <ul>
+            <li>image/bmp</li>
+            <li>image/gif</li>
+            <li>image/jpeg</li>
+            <li>image/png</li>
+            <li>image/tiff</li>
+            <li>image/svg+xml</li>
+            <li>image/x-cmu-raster</li>
+            <li>image/x-emf</li>
+            <li>image/x-eps</li>
+            <li>image/x-met</li>
+            <li>image/x-pict</li>
+            <li>image/x-portable-bitmap</li>
+            <li>image/x-portable-pixmap</li>
+            <li>image/x-wmf</li>
+            <li>image/x-svm</li>
+            <li>image/x-xpixmap</li>
+            <li>image/x-vclgraphic</li>
+        </ul>
+    */
+    [optional, property ] string MimeType;
+
+    /** Additional properties that will be passed to the
+    appropriate filter module.
+    */
+    [optional, property] ::com::sun::star::beans::PropertyValues FilterData;
+};
+
+} ; } ; } ; } ;
+
+#endif
