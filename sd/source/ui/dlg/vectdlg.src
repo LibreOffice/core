@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vectdlg.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 23:53:53 $
+ *  last change: $Author: kz $ $Date: 2001-06-14 00:11:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -463,5 +463,6 @@ ModalDialog DLG_VECTORIZE
     Text[ catalan ] = "Convertir en polígono";
     Text[ finnish ] = "Muunna monikulmioksi";
 };
+
 
 
