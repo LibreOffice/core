@@ -240,7 +240,14 @@ BEGIN
         $checksumfile = "so_checksum";
         $separator = "/";
         $pathseparator = "\:";
-        $libextension = "\.so";
+        if ( $plat =~ /darwin/i )
+        {
+            $libextension = "\.dylib";
+        }
+        else
+        {
+            $libextension = "\.so";
+        }
         $quote = "\'";
         $isunix = 1;
         $iswin = 0;
