@@ -99,13 +99,25 @@ public class AnyConverter
     }
 
     /** checks if the any contains a value which implements interfaces.
+        If <em>object</em> is an any with an interface type, then true is also returned if the any contains
+        a null reference. This is because interfacec are allowed to have a null value contrary
+        to other UNO types.
         @param object the object to check
         @return true when the any contains an object which implements interfaces, false otherwise.
      */
     static public boolean isObject(Object object){
         boolean retVal= false;
         if (object instanceof Any)
+        {
+            if( ((Any) object).getObject() == null )
+            {
+                Type _t= ((Any) object).getType();
+                if (_t.getTypeClass() == TypeClass.INTERFACE)
+                    return true;
+            }
             object= ((Any) object).getObject();
+
+        }
         if (object != null && object.getClass().getInterfaces().length > 0)
             retVal= true;
         return retVal;
@@ -233,6 +245,8 @@ public class AnyConverter
      *  The argument <em>object</em> is examined for implemented interfaces. If it has implemented interfaces
      *  then the method attempts to query for the interface specified by the <em>type</em> argument. That query
      *  (UnoRuntime.queryInterface) might return null, if the interface is not implemented.
+     *  If <em>object</em> is an Any which contains an interface type and a null reference,
+     *  then null is returned.
      *
      *  @param type the Type of the returned value
      *  @param object the object that is to be converted
@@ -254,8 +268,8 @@ public class AnyConverter
     }
 
     /**
-       Examines the argument |object| if is correspond to the type in argument |what|.
-       |object| is either matched directly against the type or if it is an any then the
+       Examines the argument <em>object</em> if is correspond to the type in argument <em>what</em>.
+       <em>object</em> is either matched directly against the type or if it is an any then the
        contained object is matched against the type.
     */
     static private boolean containsType( TypeClass what, Object object){
@@ -277,7 +291,14 @@ public class AnyConverter
         int srcTypeValue=0;
 
         if (src instanceof Any)
-            _src= ((Any) src).getObject();
+        {
+            Any _a= (Any) src;
+            // If the any contains an Interface with a null reference then it is valid and
+            // null is returned
+            if ( _a.getObject() == null && _a.getType().getTypeClass() == TypeClass.INTERFACE)
+                return null;
+            _src= _a.getObject();
+        }
 
         if (_src != null)
         {
