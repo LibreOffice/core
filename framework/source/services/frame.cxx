@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: as $ $Date: 2001-08-16 12:16:12 $
+ *  last change: $Author: as $ $Date: 2001-08-29 13:52:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1002,11 +1002,13 @@ void SAL_CALL Frame::activate() throw( css::uno::RuntimeException )
         m_eActiveState = eState;
         aWriteLock.unlock();
         implts_sendFrameActionEvent( css::frame::FrameAction_FRAME_UI_ACTIVATED );
+        ::vos::OClearableGuard aSolarGuard( Application::GetSolarMutex() );
         Window* pWindow = VCLUnoHelper::GetWindow( xComponentWindow );
         if( pWindow != NULL )
         {
             Application::SetDefModalDialogParent( pWindow );
         }
+        aSolarGuard.clear();
     }
 }
 
@@ -1781,29 +1783,35 @@ void SAL_CALL Frame::windowDeactivated( const css::lang::EventObject& aEvent ) t
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     ReadGuard aReadLock( m_aLock );
 
-    if( m_eActiveState != E_INACTIVE )
+    css::uno::Reference< css::frame::XFrame > xParent          ( m_xParent, css::uno::UNO_QUERY );
+    css::uno::Reference< css::awt::XWindow >  xContainerWindow = m_xContainerWindow;
+    EActiveState                              eActiveState     = m_eActiveState    ;
+
+    aReadLock.unlock();
+
+    if( eActiveState != E_INACTIVE )
     {
         // Deactivation is always done implicitely by activation of another frame.
         // Only if no activation is done, deactivations have to be processed if the activated window
         // is a parent window of the last active Window!
+        ::vos::OClearableGuard aSolarGuard( Application::GetSolarMutex() );
         Window* pFocusWindow = Application::GetFocusWindow();
         if  (
-                ( m_xContainerWindow.is()                                                              ==  sal_True    )   &&
-                ( pFocusWindow                                                                         !=  NULL        )   &&
-                ( m_xParent.is()                                                                       ==  sal_True    )   &&
-                ( (css::uno::Reference< css::frame::XDesktop >( m_xParent, css::uno::UNO_QUERY )).is() ==  sal_False   )
+                ( xContainerWindow.is()                                                              ==  sal_True    )   &&
+                ( pFocusWindow                                                                       !=  NULL        )   &&
+                ( xParent.is()                                                                       ==  sal_True    )   &&
+                ( (css::uno::Reference< css::frame::XDesktop >( xParent, css::uno::UNO_QUERY )).is() ==  sal_False   )
             )
         {
-            css::uno::Reference< css::awt::XWindow >  xParentWindow   = m_xParent->getContainerWindow()             ;
-            Window*                                   pOwnWindow      = VCLUnoHelper::GetWindow( m_xContainerWindow );
-            Window*                                   pParentWindow   = VCLUnoHelper::GetWindow( xParentWindow      );
+            css::uno::Reference< css::awt::XWindow >  xParentWindow   = xParent->getContainerWindow()             ;
+            Window*                                   pOwnWindow      = VCLUnoHelper::GetWindow( xContainerWindow );
+            Window*                                   pParentWindow   = VCLUnoHelper::GetWindow( xParentWindow    );
             if( pParentWindow->IsChild( pFocusWindow ) )
             {
-                css::uno::Reference< css::frame::XFramesSupplier > xSupplier( m_xParent, css::uno::UNO_QUERY );
+                css::uno::Reference< css::frame::XFramesSupplier > xSupplier( xParent, css::uno::UNO_QUERY );
                 if( xSupplier.is() == sal_True )
                 {
-                    /* UNSAFE AREA ----------------------------------------------------------------------------- */
-                    aReadLock.unlock();
+                    aSolarGuard.clear();
                     xSupplier->setActiveFrame( css::uno::Reference< css::frame::XFrame >() );
                 }
             }
@@ -2283,6 +2291,7 @@ void Frame::impl_disposeContainerWindow( css::uno::Reference< css::awt::XWindow 
     {
         // All VclComponents are XComponents; so call dispose before discarding
         // a css::uno::Reference< XVclComponent >, because this frame is the owner of the window
+        ::vos::OClearableGuard aSolarGuard( Application::GetSolarMutex() );
         Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
         if  (
                 ( pWindow                                !=  NULL     )   &&
@@ -2291,6 +2300,7 @@ void Frame::impl_disposeContainerWindow( css::uno::Reference< css::awt::XWindow 
         {
             Application::SetDefModalDialogParent( NULL );
         }
+        aSolarGuard.clear();
 
         xWindow->setVisible( sal_False );
         xWindow->dispose();
@@ -2540,6 +2550,7 @@ sal_Bool Frame::implts_setComponent(  const   css::uno::Reference< css::awt::XWi
             {
                 // All VclComponents are XComponents; so call dispose before discarding
                 // a css::uno::Reference< XVclComponent >, because this frame is the owner of the Component.
+                ::vos::OClearableGuard aSolarGuard( Application::GetSolarMutex() );
                 Window* pContainerWindow    = VCLUnoHelper::GetWindow( xContainerWindow     );
                 Window* pOldComponentWindow = VCLUnoHelper::GetWindow( xOldComponentWindow  );
                 if  (
@@ -2549,6 +2560,7 @@ sal_Bool Frame::implts_setComponent(  const   css::uno::Reference< css::awt::XWi
                 {
                     Application::SetDefModalDialogParent( pContainerWindow );
                 }
+                aSolarGuard.clear();
                 xOldComponentWindow->dispose();
                 xOldComponentWindow = css::uno::Reference< css::awt::XWindow >();
             }
@@ -2588,11 +2600,13 @@ sal_Bool Frame::implts_setComponent(  const   css::uno::Reference< css::awt::XWi
             )
         {
             xComponentWindow->setFocus();
+            ::vos::OClearableGuard aSolarGuard( Application::GetSolarMutex() );
             Window* pWindow = VCLUnoHelper::GetWindow( xComponentWindow );
             if( pWindow != NULL )
             {
                 Application::SetDefModalDialogParent( pWindow );
             }
+            aSolarGuard.clear();
         }
 
         /* SAFE AREA ------------------------------------------------------------------------------------------- */
