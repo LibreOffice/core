@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formatclipboard.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-05 11:03:14 $
+ *  last change: $Author: rt $ $Date: 2004-12-10 17:22:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,8 +141,10 @@ bool SdFormatClipboard::CanCopyThisType( UINT32 nObjectInventor, UINT16 nObjectI
         case OBJ_DUMMY:
         case OBJ_FRAME:
         case OBJ_UNO:
-        case OBJ_CUSTOMSHAPE:
             return false;
+            break;
+        case OBJ_CUSTOMSHAPE:
+            return true;
             break;
         default:
             return false;
