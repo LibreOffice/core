@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-30 18:40:09 $
+ *  last change: $Author: cp $ $Date: 2001-07-12 09:11:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,23 @@ class   SalFrame;
 class   SalColormap;
 class   SalI18N_InputContext;
 
+class SalFrameDelData
+{
+    private:
+
+        sal_Bool            mbDeleted;
+        SalFrameDelData*    mpNext;
+
+    public:
+                            SalFrameDelData () : mbDeleted(sal_False), mpNext(NULL)
+                                         {}
+        void                Delete ()    { mbDeleted = sal_True; }
+        sal_Bool            IsDeleted () { return mbDeleted; }
+        void                SetNext (SalFrameDelData* pData)
+                                         { mpNext = pData; }
+        SalFrameDelData*    GetNext ()   { return mpNext; }
+};
+
 // -=-= SalFrameData =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 DECLARE_LIST( SalFrameList, SalFrame *);
 class SalFrameData
@@ -106,7 +123,6 @@ class SalFrameData
     friend  SalFrame* SalInstance::CreateChildFrame( SystemParentData*, ULONG );
 
     static Bool checkKeyReleaseForRepeat( Display*, XEvent*, XPointer pSalFrameData );
-
                             STDAPI( SalFrameData )
 
             SalFrame       *pNextFrame_;        // pointer to next frame
@@ -167,6 +183,10 @@ class SalFrameData
 
             SalI18N_InputContext *mpInputContext;
             Bool            mbInputFocus;
+            SalFrameDelData *mpDeleteData;
+            void            RegisterDeleteData (SalFrameDelData *pData);
+            void            UnregisterDeleteData (SalFrameDelData *pData);
+            void            NotifyDeleteData ();
 
             SalGraphics    *GetGraphics();
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: pl $ $Date: 2001-07-10 11:29:01 $
+ *  last change: $Author: cp $ $Date: 2001-07-12 09:08:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -593,6 +593,8 @@ inline SalFrameData::SalFrameData( SalFrame *pFrame )
 
     maResizeTimer.SetTimeoutHdl( LINK( this, SalFrameData, HandleResizeTimer ) );
     maResizeTimer.SetTimeout( 50 );
+
+    mpDeleteData                = NULL;
 }
 
 SalFrame::SalFrame() : maFrameData( this ) {}
@@ -600,6 +602,8 @@ SalFrame::SalFrame() : maFrameData( this ) {}
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 inline SalFrameData::~SalFrameData()
 {
+    NotifyDeleteData ();
+
     if ( mpInputContext != NULL )
         delete mpInputContext;
 
@@ -1956,6 +1960,38 @@ long SalFrameData::HandleMouseEvent( XEvent *pEvent )
     return 0;
 }
 
+//
+// The eventhandler member functions may indirectly call their own destructor.
+// So make sure to be notified of that case to not to touch any member in the
+// rest of the eventhandler.
+//
+void
+SalFrameData::RegisterDeleteData (SalFrameDelData *pData)
+{
+    pData->SetNext (mpDeleteData);
+    mpDeleteData = pData;
+}
+void
+SalFrameData::NotifyDeleteData ()
+{
+    for (SalFrameDelData* pData = mpDeleteData; pData != NULL; pData = pData->GetNext())
+        pData->Delete();
+}
+void
+SalFrameData::UnregisterDeleteData (SalFrameDelData *pData)
+{
+    if (mpDeleteData == pData)
+    {
+        mpDeleteData = pData->GetNext ();
+    }
+    else
+    {
+        SalFrameDelData* pList = mpDeleteData;
+        while (pList->GetNext() != pData)
+            pList = pList->GetNext ();
+        pList->SetNext (pData->GetNext());
+    }
+}
 
 // F10 means either KEY_F10 or KEY_MENU, which has to be decided
 // in the independent part.
@@ -2121,6 +2157,9 @@ long SalFrameData::HandleKeyEvent( XKeyEvent *pEvent )
         nSize = 1;
     }
 
+    SalFrameDelData aDeleteWatch;
+    RegisterDeleteData (&aDeleteWatch);
+
     if (   mpInputContext != NULL
         && mpInputContext->UseContext()
         && KeyRelease != pEvent->type
@@ -2161,13 +2200,13 @@ long SalFrameData::HandleKeyEvent( XKeyEvent *pEvent )
 
       //
       // update the spot location for PreeditPosition IME style
-    // XXX don't touch mpInputContext in case of key-up events, the frame may be
-    // already destroyed (eg. after pressing Esc in a tabwindow)
-    //
-    if (KeyRelease != pEvent->type)
+      //
+    if (! aDeleteWatch.IsDeleted())
     {
         if (mpInputContext != NULL && mpInputContext->UseContext())
             mpInputContext->UpdateSpotLocation();
+
+        UnregisterDeleteData (&aDeleteWatch);
     }
 
     free (pBuffer);
