@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 15:41:16 $
+ *  last change: $Author: rt $ $Date: 2004-05-21 12:57:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3137,7 +3137,7 @@ Any lcl_GetDisplayBitmap(String sLinkSuffix)
         BOOL bHighContrast = Application::GetSettings().GetStyleSettings().GetWindowColor().IsDark();
         ImageList aEntryImages( SW_RES(bHighContrast ? IMG_NAVI_ENTRYBMPH : IMG_NAVI_ENTRYBMP) );
         const Image& rImage = aEntryImages.GetImage( nImgId );
-        Bitmap aBitmap = rImage.GetBitmap();
+        Bitmap aBitmap( rImage.GetBitmapEx().GetBitmap() );
         Reference<awt::XBitmap> xBmp = VCLUnoHelper::CreateBitmap( aBitmap );
         aRet.setValue( &xBmp, ::getCppuType((Reference<awt::XBitmap>*)0) );
     }
