@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: sj $ $Date: 2002-06-13 16:05:17 $
+ *  last change: $Author: sj $ $Date: 2002-08-09 15:26:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,6 +257,9 @@
 #endif
 #ifndef _COM_SUN_STAR_AWT_POINT_HPP_
 #include <com/sun/star/awt/Point.hpp>
+#endif
+#ifndef _SVX_WRITINGMODEITEM_HXX
+#include <svx/writingmodeitem.hxx>
 #endif
 #ifndef _SVX_ESCHEREX_HXX
 #include <escherex.hxx>
@@ -4389,6 +4392,7 @@ PPTParaSheet::PPTParaSheet( UINT32 nInstance )
         maParaLevel[ i ].mnBulletOfs = 0;
         maParaLevel[ i ].mnDefaultTab = 0x240;
         maParaLevel[ i ].mnAsianLineBreak = 0;
+        maParaLevel[ i ].mnBiDi = 0;
     }
 }
 
@@ -4523,7 +4527,7 @@ void PPTParaSheet::Read( SdrPowerPointImport& rManager, SvStream& rIn, sal_Bool 
                 maParaLevel[ nLevel ].mnAsianLineBreak |= nVal16;
             }
             if ( nPMask & 0x200000 )
-                rIn >> nVal16;      // #88602#
+                rIn >> maParaLevel[ nLevel ].mnBiDi;        // #88602#
             nPMask &=~0x2e0000;
         }
         nPMask >>= 18; // wenn normaler Text obere Flags ignorieren
@@ -5297,7 +5301,7 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
                 nCharCount--;
 
                 rIn >> nMask;
-                aSet.mnAttrSet = nMask & 0x1fdf5;
+                aSet.mnAttrSet = nMask & 0x21fdf5;
                 sal_uInt16 nBulFlg = 0;
                 if ( nMask & 0xF )
                     rIn >> nBulFlg; // Bullet-HardAttr-Flags
@@ -5359,7 +5363,7 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
                     aSet.mnAttrSet |= ( ( nMask >> 17 ) & 7 ) << PPT_ParaAttr_AsianLB_1;
                 }
                 if ( nMask & 0x200000 )                     // #88602#
-                    rIn >> nDummy16;
+                    rIn >> aSet.mpArry[ PPT_ParaAttr_BiDi ];
             }
             else
                 nCharCount = nStringLen;
@@ -6115,7 +6119,7 @@ BOOL PPTParagraphObj::GetAttrib( UINT32 nAttr, UINT32& nRetValue, UINT32 nInstan
     UINT32  nMask = 1 << nAttr;
     nRetValue = 0;
 
-    if ( nAttr > 20 )
+    if ( nAttr > 21 )
     {
         DBG_ERROR( "SJ:PPTParagraphObj::GetAttrib - attribute does not exist" );
         return FALSE;
@@ -6301,6 +6305,13 @@ BOOL PPTParagraphObj::GetAttrib( UINT32 nAttr, UINT32& nRetValue, UINT32 nInstan
                     bIsHardAttribute = 1;
             }
             break;
+            case PPT_ParaAttr_BiDi :
+            {
+                nRetValue = rParaLevel.mnBiDi;
+                if ( pParaLevel && ( nRetValue != pParaLevel->mnBiDi ) )
+                    bIsHardAttribute = 1;
+            }
+            break;
         }
     }
     return (BOOL)bIsHardAttribute;
@@ -6388,6 +6399,11 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet, SdrPowerPointImport& rManager, 
         rSet.Put( SfxBoolItem( EE_PARA_FORBIDDENRULES, nVal != 0 ) );
     if ( GetAttrib( PPT_ParaAttr_AsianLB_3, nVal, nInstanceInSheet ) )
         rSet.Put( SfxBoolItem( EE_PARA_HANGINGPUNCTUATION, nVal != 0 ) );
+
+    if ( GetAttrib( PPT_ParaAttr_BiDi, nVal, nInstanceInSheet ) )
+    {
+        rSet.Put( SvxWritingModeItem( nVal == 1 ? com::sun::star::text::WritingMode_RL_TB : com::sun::star::text::WritingMode_LR_TB, EE_PARA_WRITINGDIR ) );
+    }
 
     // LineSpacing
     PPTPortionObj* pPortion = First();
