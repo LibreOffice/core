@@ -3,9 +3,9 @@
  *
  *  $RCSfile: TypeDetection.xcu,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-17 15:15:42 $
+ *  last change: $Author: vg $ $Date: 2003-06-20 10:35:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2148,7 +2148,7 @@
         <value xml:lang="en-US">Microsoft Excel 2003 XML</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,writer_MS_Excel_2003,com.sun.star.text.TextDocument,com.sun.star.comp.Writer.XmlFilterAdaptor,524353,com.sun.star.documentconversion.XSLTFilter;;com.sun.star.comp.Writer.XMLImporter;com.sun.star.comp.Writer.XMLExporter;;;;,0,</value>
+        <value>0,calc_MS_Excel_2003,com.sun.star.sheet.SpreadsheetDocument,com.sun.star.comp.Writer.XmlFilterAdaptor,524353,com.sun.star.documentconversion.XSLTFilter;;com.sun.star.comp.Writer.XMLImporter;com.sun.star.comp.Writer.XMLExporter;;;;,0,</value>
       </prop>
     </node>
     <node oor:name="PocketWord File" oor:op="replace">
@@ -7307,7 +7307,7 @@
   <node oor:name="DetectServices">
     <node oor:name="com.sun.star.comp.filters.XMLFilterDetect" oor:op="replace">
     <prop oor:name="Types">
-        <value>writer_DocBook_File writer_Flat_XML_File writer_XHTML_File writer_MS_Word_2003</value>
+        <value>writer_DocBook_File writer_Flat_XML_File writer_XHTML_File writer_MS_Word_2003 calc_MS_Excel_2003</value>
     </prop>
     </node>
   </node>
