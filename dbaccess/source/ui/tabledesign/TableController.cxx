@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 16:31:52 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:51:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,9 +73,6 @@
 #endif
 #ifndef _DBU_TBL_HRC_
 #include "dbu_tbl.hrc"
-#endif
-#ifndef _SV_TOOLBOX_HXX
-#include <vcl/toolbox.hxx>
 #endif
 #ifndef DBACCESS_UI_BROWSER_ID_HXX
 #include "browserids.hxx"
@@ -309,9 +306,6 @@ FeatureState OTableController::GetState(sal_uInt16 _nId) const
         case ID_BROWSER_CLOSE:
             aReturn.bEnabled = sal_True;
             break;
-        case ID_TABLE_DESIGN_NO_CONNECTION:
-            aReturn.aState = ::cppu::bool2any( isConnected() );
-            break;
         case ID_BROWSER_EDITDOC:
             aReturn.aState = ::cppu::bool2any(isEditable());
             aReturn.bEnabled = m_bNew || isEditable();// the editable flag is set through this one -> || isAddAllowed() || isDropAllowed() || isAlterAllowed();
@@ -361,19 +355,15 @@ FeatureState OTableController::GetState(sal_uInt16 _nId) const
     return aReturn;
 }
 // -----------------------------------------------------------------------------
-void OTableController::Execute(sal_uInt16 _nId)
+void OTableController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >& aArgs)
 {
     switch(_nId)
     {
-        case ID_TABLE_DESIGN_NO_CONNECTION:
-            if (!isConnected())
-                reconnect( sal_False );
-            break;
         case ID_BROWSER_EDITDOC:
             setEditable(!isEditable());
             static_cast<OTableDesignView*>(getView())->setReadOnly(!isEditable());
             InvalidateFeature(ID_BROWSER_PASTE);
-            InvalidateFeature(ID_BROWSER_CLEAR_QUERY);
+            InvalidateFeature(SID_BROWSER_CLEAR_QUERY);
             break;
         case ID_BROWSER_SAVEASDOC:
             doSaveDoc(sal_True);
@@ -395,7 +385,7 @@ void OTableController::Execute(sal_uInt16 _nId)
             doEditIndexes();
             break;
         default:
-            OTableController_BASE::Execute(_nId);
+            OTableController_BASE::Execute(_nId,aArgs);
     }
     InvalidateFeature(_nId);
 }
@@ -730,7 +720,7 @@ sal_Bool SAL_CALL OTableController::suspend(sal_Bool _bSuspend) throw( RuntimeEx
             switch (aQry.Execute())
             {
                 case RET_YES:
-                    Execute(ID_BROWSER_SAVEDOC);
+                    Execute(ID_BROWSER_SAVEDOC,Sequence<PropertyValue>());
                     if ( isModified() )
                         bCheck = sal_False; // when we save the table this must be false else some press cancel
                     break;
@@ -776,6 +766,8 @@ sal_Bool SAL_CALL OTableController::suspend(sal_Bool _bSuspend) throw( RuntimeEx
 // -----------------------------------------------------------------------------
 void OTableController::AddSupportedFeatures()
 {
+    OSingleDocumentController::AddSupportedFeatures();
+
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Redo")]            = ID_BROWSER_REDO;
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Save")]            = ID_BROWSER_SAVEDOC;
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Undo")]            = ID_BROWSER_UNDO;
@@ -785,18 +777,9 @@ void OTableController::AddSupportedFeatures()
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:NewDoc")]          = SID_NEWDOC;
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:SaveAs")]          = ID_BROWSER_SAVEASDOC;
 
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Copy")]            = ID_BROWSER_COPY;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Cut")]             = ID_BROWSER_CUT;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Paste")]           = ID_BROWSER_PASTE;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DBIndexDesign")]   = SID_INDEXDESIGN;
 
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DB/IndexDesign")]  = SID_INDEXDESIGN;
-
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DBSlots/EditDoc")] = ID_BROWSER_EDITDOC;
-}
-// -----------------------------------------------------------------------------
-ToolBox* OTableController::CreateToolBox(Window* _pParent)
-{
-    return new ToolBox(_pParent, ModuleRes(RID_BRW_TABLEDESIGN_TOOLBOX));
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:EditDoc")] = ID_BROWSER_EDITDOC;
 }
 // -----------------------------------------------------------------------------
 SfxUndoManager* OTableController::getUndoMgr()
@@ -856,28 +839,6 @@ void OTableController::losingConnection( )
         setModified(sal_True);
     }
     InvalidateAll();
-}
-
-// -----------------------------------------------------------------------------
-void OTableController::reconnect(sal_Bool _bUI)
-{
-    OTableController_BASE::reconnect( _bUI );
-
-    ToolBox* pToolBox = getView()->getToolBox();
-    if(pToolBox)
-    {
-        if ( isConnected() )
-        {
-            pToolBox->RemoveItem(pToolBox->GetItemPos(ID_TABLE_DESIGN_NO_CONNECTION)-1);
-            pToolBox->HideItem(ID_TABLE_DESIGN_NO_CONNECTION);
-        }
-        else if(!pToolBox->IsItemVisible(ID_TABLE_DESIGN_NO_CONNECTION))
-        {
-
-            pToolBox->InsertSeparator(pToolBox->GetItemPos(ID_TABLE_DESIGN_NO_CONNECTION));
-            pToolBox->ShowItem(ID_TABLE_DESIGN_NO_CONNECTION);
-        }
-    }
 }
 // -----------------------------------------------------------------------------
 TOTypeInfoSP OTableController::getTypeInfoByType(sal_Int32 _nDataType) const
