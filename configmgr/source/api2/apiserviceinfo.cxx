@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apiserviceinfo.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-13 12:06:34 $
+ *  last change: $Author: jb $ $Date: 2000-11-13 13:22:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,7 @@
  *
  *
  ************************************************************************/
-#include "confsvccomponent.hxx"
+#include "apiserviceinfo.hxx"
 
 namespace configmgr
 {

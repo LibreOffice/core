@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apiaccessobj.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-13 12:14:15 $
+ *  last change: $Author: jb $ $Date: 2000-11-13 13:22:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,8 @@
 #include "apitreeimplobj.hxx"
 #include "noderef.hxx"
 
+#include "apiserviceinfo.hxx"
+
 namespace configmgr
 {
 //-----------------------------------------------------------------------------
@@ -77,29 +79,6 @@ namespace configmgr
 //-----------------------------------------------------------------------------
         using configuration::Tree;
         using configuration::NodeRef;
-
-//-----------------------------------------------------------------------------
-extern ServiceInfo const aRootElementUpdateAccessSI;
-extern ServiceInfo const aRootElementAdminAccessSI;
-extern ServiceInfo const aRootElementReadAccessSI;
-extern ServiceInfo const aInnerGroupInfoSI;
-extern ServiceInfo const aInnerGroupUpdateSI;
-extern ServiceInfo const aInnerSetInfoSI;
- extern ServiceInfo const aInnerTreeSetSI;
- extern ServiceInfo const aInnerValueSetSI;
- extern ServiceInfo const aSetElementGroupInfoSI;
- extern ServiceInfo const aSetElementGroupUpdateSI;
- extern ServiceInfo const aSetElementSetInfoSI;
- extern ServiceInfo const aSetElementTreeSetSI;
- extern ServiceInfo const aSetElementValueSetSI;
- extern ServiceInfo const aRootElementGroupInfoSI;
- extern ServiceInfo const aRootElementGroupUpdateSI;
- extern ServiceInfo const aRootElementSetInfoSI;
- extern ServiceInfo const aRootElementTreeSetUpdateSI;
- extern ServiceInfo const aRootElementValueSetUpdateSI;
- extern ServiceInfo const aRootElementReadAccessSI;
- extern ServiceInfo const aRootElementUpdateAccessSI;
- extern ServiceInfo const aRootElementAdminAccessSI;
 
 //-----------------------------------------------------------------------------
 // Inner Elements
