@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-20 09:36:29 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 16:12:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -738,7 +738,10 @@ enum SwPropNameIds
 /* 0658 */  UNO_NAME_SECT_LEFT_MARGIN,
 /* 0659 */  UNO_NAME_SECT_RIGHT_MARGIN,
 /* 0660 */  UNO_NAME_PARA_IS_CONNECT_BORDER,
-/* 0661 */  SW_PROPNAME_END
+/* 0661 */  UNO_NAME_ITEMS,
+/* 0662 */  UNO_NAME_SELITEM,
+/* 0663 */  UNO_NAME_PARA_IS_CONNECT_BORDER,
+/* 0664 */  SW_PROPNAME_END
 
 };
 
