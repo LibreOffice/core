@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagechg.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:07:02 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:18:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1710,7 +1710,9 @@ void SwRootFrm::AssertFlyPages()
 
     //Auf welche Seite will der 'letzte' Fly?
     USHORT nMaxPg = 0;
-    for ( USHORT i = 0; i < pTbl->Count(); ++i )
+    USHORT i;
+
+    for ( i = 0; i < pTbl->Count(); ++i )
     {
         const SwFmtAnchor &rAnch = (*pTbl)[i]->GetAnchor();
         if ( !rAnch.GetCntntAnchor() && nMaxPg < rAnch.GetPageNum() )
