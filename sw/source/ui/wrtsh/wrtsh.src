@@ -2,9 +2,10 @@
  *
  *  $RCSfile: wrtsh.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-14 20:20:07 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-11-21 14:39:17 $
+ *
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2512,6 +2513,36 @@ String STR_UNDO_SETRUBYATTR
     Text[ arabic ] = "ÊÚííä ÑãæÒ ÕæÊíÉ";
     Text[ catalan ] = "Aplicar símbolos fonéticos";
     Text[ finnish ] = "Phonetische Symbole setzen";
+};
+#102505#
+String STR_UNDO_TMPAUTOCORR
+{
+    Text = "AutoKorrektur" ;
+    Text [ English ] = "AutoCorrect" ;
+    Text [ portuguese ] = "AutoCorrecção" ;
+    Text [ english_us ] = "AutoCorrect" ;
+    Text [ portuguese_brazilian ] = "AutoKorrektur" ;
+    Text [ swedish ] = "AutoKorrigering" ;
+    Text [ danish ] = "AutoKorrektur" ;
+    Text [ italian ] = "Correzione automatica" ;
+    Text [ spanish ] = "AutoCorrección" ;
+    Text [ french ] = "AutoCorrection" ;
+    Text [ dutch ] = "AutoCorrectie" ;
+    Text[ chinese_simplified ] = "è‡ªåŠ¨æ›´æ­£";
+    Text[ russian ] = "Àâòîçàìåíà";
+    Text[ polish ] = "Autokorekta";
+    Text[ japanese ] = "ã‚ªãƒ¼ãƒˆã‚³ãƒ¬ã‚¯ãƒˆ";
+    Text[ chinese_traditional ] = "è‡ªå‹•æ ¡æ­£";
+    Text[ arabic ] = "ÊÕÍíÍ ÊáŞÇÆí";
+    Text[ dutch ] = "AutoCorrectie";
+    Text[ chinese_simplified ] = "è‡ªåŠ¨æ›´æ­£";
+    Text[ greek ] = "ÁõôïÄéüñèùóç";
+    Text[ korean ] = "ìë™ê³ ì¹¨";
+    Text[ turkish ] = "Otomatik düzeltme";
+    Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Correcció automàtica";
+    Text[ finnish ] = "Automaattinen korjaus";
+    Text[ thai ] = "à¹à¸à¹‰à¹„à¸‚à¹ƒà¸«à¹‰à¸–à¸¹à¸à¸•à¹‰à¸­à¸‡à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
 };
 String STR_INSERT_FOOTNOTE
 {
