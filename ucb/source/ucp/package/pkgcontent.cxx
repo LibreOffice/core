@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontent.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kso $ $Date: 2001-01-22 11:28:27 $
+ *  last change: $Author: kso $ $Date: 2001-01-24 12:42:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,7 +288,9 @@ Content::Content( const Reference< XMultiServiceFactory >& rxSMgr,
         m_aProps.bIsFolder    = sal_True;
         m_aProps.bIsDocument  = sal_False;
         m_aProps.nSize        = 0;
+#if SUPD>616
         m_aProps.bCompressed  = sal_False;
+#endif
     }
     else
     {
@@ -303,7 +305,9 @@ Content::Content( const Reference< XMultiServiceFactory >& rxSMgr,
         m_aProps.bIsFolder    = sal_False;
         m_aProps.bIsDocument  = sal_True;
         m_aProps.nSize        = 0;
+#if SUPD>616
         m_aProps.bCompressed  = sal_False;
+#endif
     }
 }
 
