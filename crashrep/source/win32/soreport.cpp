@@ -37,7 +37,11 @@
 #if _MSC_VER < 1300
 #define COMEX "9"
 #else
+#if _MSC_VER < 1310
 #define COMEX "8"
+#else
+#define COMEX "10"
+#endif
 #endif
 
 #ifdef PRODUCT
