@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: cl $ $Date: 2001-12-11 12:37:57 $
+ *  last change: $Author: fs $ $Date: 2001-12-18 11:53:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -498,6 +498,12 @@ void SvxShape::Init() throw()
     // be called again
     if(pObj == NULL)
         return;
+
+    osl_incrementInterlockedCount( &m_refCount );
+    {
+        pObj->setUnoShape( *this, SdrObject::GrantXShapeAccess() );
+    }
+    osl_decrementInterlockedCount( &m_refCount );
 
     // no model? this should not be
     if(!pObj->GetModel())
@@ -1009,19 +1015,22 @@ void SvxShape::Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) throw()
 
     const SdrHint* pSdrHint = PTR_CAST( SdrHint, &rHint );
 
+
+    sal_Bool bClearMe = sal_False;
+
     if( pSdrHint && pObj)
     {
         if( pSdrHint->GetKind() == HINT_OBJREMOVED )
         {
             if( pObj == pSdrHint->GetObject() )
             {
-                pObj = NULL;
+                bClearMe = sal_True;
             }
         }
         else if( pSdrHint->GetKind() == HINT_MODELCLEARED )
         {
+            bClearMe = sal_True;
             pModel = NULL;
-            pObj = NULL;
         }
         else if( pSdrHint->GetKind() == HINT_OBJLISTCLEAR )
         {
@@ -1030,7 +1039,7 @@ void SvxShape::Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) throw()
             {
                 if( pSdrHint->GetObjList() == pObjList )
                 {
-                    pObj = NULL;
+                    bClearMe = sal_True;
                     break;
                 }
 
@@ -1039,8 +1048,12 @@ void SvxShape::Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) throw()
         }
     }
 
-    if( pObj == NULL )
+    if( bClearMe )
     {
+        if( pObj )
+            pObj->setUnoShape( NULL, SdrObject::GrantXShapeAccess() );
+
+        pObj = NULL;
         if(!bDisposing)
             dispose();
     }
