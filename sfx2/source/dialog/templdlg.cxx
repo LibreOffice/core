@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dv $ $Date: 2000-12-09 15:00:14 $
+ *  last change: $Author: mba $ $Date: 2001-06-11 09:59:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2150,8 +2150,8 @@ SfxTemplateDialog_Impl::SfxTemplateDialog_Impl(
     aFilterLb.SetFont( aFont );
     aActionTbL.SetHelpId( HID_TEMPLDLG_TOOLBOX_LEFT );
 
-    SFX_IMAGEMANAGER()->RegisterToolBox( &aActionTbL, SFX_TOOLBOX_CHANGEOUTSTYLE );
-    SFX_IMAGEMANAGER()->RegisterToolBox( &aActionTbR, SFX_TOOLBOX_CHANGEOUTSTYLE );
+    pB->GetImageManager()->RegisterToolBox( &aActionTbL, SFX_TOOLBOX_CHANGEOUTSTYLE );
+    pB->GetImageManager()->RegisterToolBox( &aActionTbR, SFX_TOOLBOX_CHANGEOUTSTYLE );
 }
 
 // ------------------------------------------------------------------------
@@ -2206,8 +2206,8 @@ void SfxCommonTemplateDialog_Impl::InvalidateBindings()
 
 SfxTemplateDialog_Impl::~SfxTemplateDialog_Impl()
 {
-    SFX_IMAGEMANAGER()->ReleaseToolBox( &aActionTbL );
-    SFX_IMAGEMANAGER()->ReleaseToolBox( &aActionTbR );
+    pBindings->GetImageManager()->ReleaseToolBox( &aActionTbL );
+    pBindings->GetImageManager()->ReleaseToolBox( &aActionTbR );
 }
 
 //-------------------------------------------------------------------------
