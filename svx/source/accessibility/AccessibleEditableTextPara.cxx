@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEditableTextPara.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: thb $ $Date: 2002-10-02 17:07:03 $
+ *  last change: $Author: sab $ $Date: 2002-10-22 15:41:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1512,7 +1512,9 @@ namespace accessibility
 
         try
         {
-            SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();
+            // #102710# Request edit view when doing changes
+            SvxEditViewForwarder& rCacheVF = GetEditViewForwarder( sal_True );
+            SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();    // MUST be after GetEditViewForwarder(), see method docs
 
             DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
                        "AccessibleEditableTextPara::deleteText: index value overflow");
@@ -1540,7 +1542,9 @@ namespace accessibility
 
         try
         {
-            SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();
+            // #102710# Request edit view when doing changes
+            SvxEditViewForwarder& rCacheVF = GetEditViewForwarder( sal_True );
+            SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();    // MUST be after GetEditViewForwarder(), see method docs
 
             DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
                        "AccessibleEditableTextPara::insertText: index value overflow");
@@ -1570,7 +1574,9 @@ namespace accessibility
 
         try
         {
-            SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();
+            // #102710# Request edit view when doing changes
+            SvxEditViewForwarder& rCacheVF = GetEditViewForwarder( sal_True );
+            SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();    // MUST be after GetEditViewForwarder(), see method docs
 
             DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
                        "AccessibleEditableTextPara::replaceText: index value overflow");
@@ -1600,7 +1606,9 @@ namespace accessibility
 
         try
         {
-            SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();
+            // #102710# Request edit view when doing changes
+            SvxEditViewForwarder& rCacheVF = GetEditViewForwarder( sal_True );
+            SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();    // MUST be after GetEditViewForwarder(), see method docs
             USHORT nPara = static_cast< USHORT >( GetParagraphIndex() );
 
             DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
