@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-27 20:53:49 $
+ *  last change: $Author: jp $ $Date: 2000-11-28 11:37:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1009,7 +1009,7 @@ SwView::~SwView()
 
     //JP 27.11.00: Bug 80631 - the last view must end the text edit
     SdrView *pSdrView = pWrtShell ? pWrtShell->GetDrawView() : 0;
-    if( pSdrView->IsTextEdit() )
+    if( pSdrView && pSdrView->IsTextEdit() )
         pSdrView->EndTextEdit( sal_True );
 
     SetWindow( 0 );
