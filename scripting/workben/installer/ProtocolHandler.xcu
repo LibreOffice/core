@@ -2,7 +2,7 @@
 <oor:node xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" oor:name="ProtocolHandler" oor:package="org.openoffice.Office">
  <node oor:name="HandlerSet">
   <node oor:name="com.sun.star.comp.ScriptProtocolHandler" oor:op="replace">
-   <prop oor:name="Protocols">
+   <prop oor:name="Protocols" oor:type="oor:string-list">
     <value>script:*</value>
    </prop>
   </node>
