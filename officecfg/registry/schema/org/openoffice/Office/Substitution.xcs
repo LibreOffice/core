@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Substitution.xcs,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 18:28:54 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 14:32:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,6 +350,7 @@
 		</set>
 	</component>
 </oor:component-schema>
+
 
 
 
