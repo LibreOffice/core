@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: obr $ $Date: 2000-11-01 08:17:45 $
+#   last change: $Author: pb $ $Date: 2000-11-20 12:56:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,7 +85,7 @@ CFLAGS+=-Od
 
 SRS1NAME=appl
 SRC1FILES =  \
-        app.src sfx.src image.src
+        app.src sfx.src image.src newhelp.src
 
 SRS2NAME=sfx
 SRC2FILES =  \
@@ -127,8 +127,10 @@ SLOFILES =  \
         $(SLO)$/basmgr.obj \
         $(SLO)$/oinstanceprovider.obj \
         $(SLO)$/opluginframefactory.obj \
-                $(SLO)$/pluginacceptthread.obj  \
-        $(SLO)$/officeacceptthread.obj
+        $(SLO)$/pluginacceptthread.obj  \
+        $(SLO)$/officeacceptthread.obj \
+        $(SLO)$/newhelp.obj \
+        $(SLO)$/helpinterceptor.obj
 
 EXCEPTIONSFILES=\
         $(SLO)$/appmain.obj		\
@@ -139,6 +141,7 @@ EXCEPTIONSFILES=\
         $(SLO)$/picklist.obj	\
         $(SLO)$/rmacceptor.obj	\
         $(SLO)$/appcfg.obj		\
+        $(SLO)$/helpinterceptor.obj \
 
 .IF "$(GUI)" == "MAC"
 SLOFILES +=\
@@ -154,5 +157,4 @@ SLOFILES +=\
 # --- Targets -------------------------------------------------------
 
 .INCLUDE :  target.mk
-
 
