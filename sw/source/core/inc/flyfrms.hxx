@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flyfrms.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:36:26 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:04:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,10 @@
 // OD 11.11.2003 #i22341#
 class SwFmtAnchor;
 
+// --> OD 2004-06-23 #i28701#
+class SwFlyAtCntFrm;
+class SwTxtFrm;
+
 //Basisklasse fuer diejenigen Flys, die sich relativ frei Bewegen koennen -
 //also die nicht _im_ Inhalt gebundenen Flys.
 class SwFlyFreeFrm : public SwFlyFrm
@@ -89,21 +93,21 @@ class SwFlyFreeFrm : public SwFlyFrm
     bool HasEnvironmentAutoSize() const;
 
 protected:
+    // OD 2004-05-12 #i28701# - new friend class <SwFlyNotify> for access to
+    // method <NotifyBackground>
+    friend class SwFlyNotify;
     virtual void NotifyBackground( SwPageFrm *pPage,
                                    const SwRect& rRect, PrepareHint eHint);
 
-
     SwFlyFreeFrm( SwFlyFrmFmt*, SwFrm *pAnchor );
+
 public:
+    // --> OD 2004-06-29 #i28701#
+    TYPEINFO();
 
     virtual ~SwFlyFreeFrm();
 
     virtual void MakeAll();
-
-          SwPageFrm *GetPage()       { return pPage; }
-    const SwPageFrm *GetPage() const { return pPage; }
-    void  SetPage( SwPageFrm *pNew ) { pPage = pNew; }
-
 };
 
 
@@ -111,6 +115,9 @@ public:
 class SwFlyLayFrm : public SwFlyFreeFrm
 {
 public:
+    // --> OD 2004-06-29 #i28701#
+    TYPEINFO();
+
     SwFlyLayFrm( SwFlyFrmFmt*, SwFrm *pAnchor );
     SwFlyLayFrm( SwFlyLayFrm& );
 
@@ -124,7 +131,22 @@ class SwFlyAtCntFrm : public SwFlyFreeFrm
 protected:
     virtual void MakeAll();
 
+    // OD 2004-05-12 #i28701#
+    virtual bool _InvalidationAllowed( const InvalidationType _nInvalid ) const;
+
+    /** method to assure that anchored object is registered at the correct
+        page frame
+
+        OD 2004-07-02 #i28701#
+
+        @author OD
+    */
+    virtual void RegisterAtCorrectPage();
+
 public:
+    // --> OD 2004-06-29 #i28701#
+    TYPEINFO();
+
     SwFlyAtCntFrm( SwFlyFrmFmt*, SwFrm *pAnchor );
 
     virtual void Modify( SfxPoolItem*, SfxPoolItem* );
@@ -134,8 +156,16 @@ public:
     // OD 2004-03-23 #i26791#
     virtual void MakeObjPos();
 
-    // OD 2004-03-24 #i26791# - made public
-    void AssertPage();
+    /** method to determine, if a format on the Writer fly frame is possible
+
+        OD 2004-05-11 #i28701#
+        refine 'IsFormatPossible'-conditions of method
+        <SwFlyFreeFrm::IsFormatPossible()> by:
+        format isn't possible, if method <MakeAll()> is already in progress.
+
+        @author OD
+    */
+    virtual bool IsFormatPossible() const;
 };
 
 //Die Flys, die an einem Zeichen in einem Cntnt haengen.
@@ -153,6 +183,9 @@ protected:
     virtual void MakeAll();
 
 public:
+    // --> OD 2004-06-29 #i28701#
+    TYPEINFO();
+
     SwFlyInCntFrm( SwFlyFrmFmt*, SwFrm *pAnchor );
 
     virtual ~SwFlyInCntFrm();
