@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltbli.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dvo $ $Date: 2001-08-30 10:01:59 $
+ *  last change: $Author: dvo $ $Date: 2002-06-07 12:48:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,8 @@ class SwTableLineFmt;
 class SwXMLTableCell_Impl;
 class SwXMLTableRows_Impl;
 class SwXMLDDETableContext_Impl;
-class StringIntHasher;
+class TableBoxIndexHasher;
+class TableBoxIndex;
 
 namespace com { namespace sun { namespace star {
     namespace text { class XTextContent; }
@@ -118,10 +119,10 @@ class SwXMLTableContext : public XMLTextTableContext
     SwTableBoxFmt       *pBoxFmt;
     SwTableLineFmt      *pLineFmt;
 
-    // hash map of shared format, indexed by the (XML) style name and
-    // the column width
-    typedef std::hash_map<pair<rtl::OUString,sal_Int32>,
-                          SwTableBoxFmt*,StringIntHasher> map_BoxFmt;
+    // hash map of shared format, indexed by the (XML) style name,
+    // the column width, and protection flag
+    typedef std::hash_map<TableBoxIndex,SwTableBoxFmt*,
+                          TableBoxIndexHasher> map_BoxFmt;
     map_BoxFmt* pSharedBoxFormats;
 
     SvXMLImportContextRef   xParentTable;   // if table is a sub table
@@ -166,6 +167,7 @@ class SwXMLTableContext : public XMLTextTableContext
         SwTableBox* pBox,   /// the table box
         const ::rtl::OUString& rStyleName, /// XML style name
         sal_Int32 nColumnWidth,     /// width of column
+        sal_Bool bProtected,        /// is cell protected?
         sal_Bool bMayShare, /// may the format be shared (no value, formula...)
         sal_Bool& bNew,     /// true, if the format it not from the cache
         sal_Bool* pModifyLocked );  /// if set, call pBox->LockModify() and return old lock status
