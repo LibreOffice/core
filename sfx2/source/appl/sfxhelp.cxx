@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: pb $ $Date: 2001-03-22 14:25:49 $
+ *  last change: $Author: as $ $Date: 2001-03-29 11:04:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,9 @@
 #include <unotools/configmgr.hxx>
 #endif
 
+#include <berkeleydb/db_cxx.h>
+#include <svtools/pathoptions.hxx>
+
 #include "sfxsids.hrc"
 #include "app.hxx"
 #include "viewfrm.hxx"
@@ -120,6 +123,73 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
+
+// class SfxHelpDB_Impl --------------------------------------------------
+
+class SfxHelpDB_Impl
+{
+private:
+    String      m_aDBPath;
+    String      m_aModule;
+    Db*         m_pDB;
+
+public:
+    SfxHelpDB_Impl( const String& rPath );
+    ~SfxHelpDB_Impl();
+
+    String      GetHelpText( ULONG nHelpId, const String& rModule );
+};
+
+SfxHelpDB_Impl::SfxHelpDB_Impl( const String& rPath ) :
+
+    m_aDBPath   ( rPath ),
+    m_pDB       ( NULL )
+
+{
+}
+
+SfxHelpDB_Impl::~SfxHelpDB_Impl()
+{
+    delete m_pDB;
+}
+
+String SfxHelpDB_Impl::GetHelpText( ULONG nHelpId, const String& rModule )
+{
+    String aHelpText;
+
+    if ( !m_pDB )
+        m_pDB = new Db( NULL, 0 );
+
+    if ( m_aModule != rModule )
+    {
+        m_aModule = rModule;
+        INetURLObject aPath( m_aDBPath );
+        aPath.insertName( rModule );
+        aPath.setExtension( DEFINE_CONST_UNICODE("ht") );
+        ByteString aPathStr( aPath.getFSysPath( INetURLObject::FSYS_DETECT ), osl_getThreadTextEncoding() );
+        int nError = m_pDB->open( aPathStr.GetBuffer(), NULL, DB_BTREE, DB_RDONLY, 0664 );
+
+        if ( nError )
+        {
+            m_aModule.Erase();
+            aHelpText = String( DEFINE_CONST_UNICODE("Error: ") );
+            aHelpText += String::CreateFromInt32( nError );
+            return aHelpText;
+        }
+    }
+
+    ByteString aKeyStr = ByteString::CreateFromInt32( nHelpId );
+    Dbt aKey( (void*)aKeyStr.GetBuffer(), aKeyStr.Len() );
+    Dbt aData;
+    aData.set_flags( DB_DBT_MALLOC );
+    if ( !m_pDB->get( NULL, &aKey, &aData, 0 ) )
+    {
+        ByteString aHelpStr( (sal_Char*)aData.get_data(), aData.get_size() );
+        aHelpText = String( aHelpStr, RTL_TEXTENCODING_UTF8 );
+    }
+
+    return aHelpText;
+}
 
 void AppendConfigToken_Impl( String& rURL, sal_Bool bQuestionMark )
 {
@@ -141,16 +211,46 @@ void AppendConfigToken_Impl( String& rURL, sal_Bool bQuestionMark )
 
 SfxHelp_Impl::SfxHelp_Impl() :
 
+    pDB     ( NULL ),
     bIsDebug( sal_False )
 
 {
     char* pEnv = getenv( "help_debug" );
     if ( pEnv )
         bIsDebug = sal_True;
+
+    Any aLocale = ::utl::ConfigManager::GetConfigManager()->GetDirectConfigProperty( ::utl::ConfigManager::LOCALE );
+    ::rtl::OUString aLocaleStr;
+    if ( !( aLocale >>= aLocaleStr ) )
+        aLocaleStr = ::rtl::OUString( DEFINE_CONST_UNICODE("en") );
+    sal_Int32 nSepPos = aLocaleStr.indexOf( '_' );
+    if ( nSepPos != -1 )
+    {
+        aLanguageStr = aLocaleStr.copy( 0, nSepPos );
+        aCountryStr = aLocaleStr.copy( nSepPos+1 );
+    }
+    else
+    {
+        nSepPos = aLocaleStr.indexOf( '-' );
+        if ( nSepPos != -1 )
+        {
+            aLanguageStr = aLocaleStr.copy( 0, nSepPos );
+            aCountryStr = aLocaleStr.copy( nSepPos+1 );
+        }
+        else
+        {
+            aLanguageStr = aLocaleStr;
+        }
+    }
+
+    INetURLObject aPath( SvtPathOptions().GetHelpPath(), INET_PROT_FILE );
+    aPath.insertName( aLanguageStr );
+    pDB = new SfxHelpDB_Impl( aPath.GetMainURL() );
 }
 
 SfxHelp_Impl::~SfxHelp_Impl()
 {
+    delete pDB;
 }
 
 String SfxHelp_Impl::GetHelpModuleName( ULONG nHelpId )
@@ -225,39 +325,12 @@ BOOL SfxHelp_Impl::Start( ULONG nHelpId )
         aHelpURL += aUser;
         aHelpURL += DEFINE_CONST_UNICODE("&HELP_Ticket=");
         aHelpURL += aTicket;
-
-        Any aLocale = ::utl::ConfigManager::GetConfigManager()->GetDirectConfigProperty( ::utl::ConfigManager::LOCALE );
-        ::rtl::OUString aLocaleStr;
-        if ( !( aLocale >>= aLocaleStr ) )
-            aLocaleStr = ::rtl::OUString( DEFINE_CONST_UNICODE("en") );
-        String aLanguage;
-        String aCountry;
-        sal_Int32 nSepPos = aLocaleStr.indexOf( '_' );
-        if ( nSepPos != -1 )
-        {
-            aLanguage = aLocaleStr.copy( 0, nSepPos );
-            aCountry = aLocaleStr.copy( nSepPos+1 );
-        }
-        else
-        {
-            nSepPos = aLocaleStr.indexOf( '-' );
-            if ( nSepPos != -1 )
-            {
-                aLanguage = aLocaleStr.copy( 0, nSepPos );
-                aCountry = aLocaleStr.copy( nSepPos+1 );
-            }
-            else
-            {
-                aLanguage = aLocaleStr;
-            }
-        }
-
         aHelpURL += DEFINE_CONST_UNICODE("&HELP_Language=");
-        aHelpURL += aLanguage;
-        if ( aCountry.Len() )
+        aHelpURL += aLanguageStr;
+        if ( aCountryStr.Len() )
         {
             aHelpURL += DEFINE_CONST_UNICODE("&HELP_Country=");
-            aHelpURL += aCountry;
+            aHelpURL += aCountryStr;
         }
 
         xFrame = Reference < XDispatchProvider > ( xActiveTask, UNO_QUERY );
@@ -323,10 +396,12 @@ BOOL SfxHelp_Impl::Start( ULONG nHelpId )
 
 XubString SfxHelp_Impl::GetHelpText( ULONG nHelpId )
 {
-    XubString aHelpText;
+    String aModuleName = GetHelpModuleName( nHelpId );
+    XubString aHelpText = pDB->GetHelpText( nHelpId, aModuleName );;
     if ( bIsDebug )
     {
-        aHelpText = GetHelpModuleName( nHelpId );
+        aHelpText += DEFINE_CONST_UNICODE("\n\n");
+        aHelpText += aModuleName;
         aHelpText += DEFINE_CONST_UNICODE(" - ");
         aHelpText += String::CreateFromInt32( nHelpId );
     }

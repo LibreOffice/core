@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pb $ $Date: 2001-03-22 14:22:40 $
+ *  last change: $Author: as $ $Date: 2001-03-29 11:03:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,11 +68,16 @@
 #include <tools/string.hxx>
 
 #if _SOLAR__PRIVATE
+class SfxHelpDB_Impl;
+
 class SfxHelp_Impl : public Help
 {
     String          aTicket;        // for Plugins
     String          aUser;
+    String          aLanguageStr;
+    String          aCountryStr;
     sal_Bool        bIsDebug;
+    SfxHelpDB_Impl* pDB;
 
 private:
     virtual BOOL    Start( ULONG nHelpId );
