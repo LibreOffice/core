@@ -2,9 +2,9 @@
  *
  *  $RCSfile: defaultnumberingprovider.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:08:24 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 11:07:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,6 @@
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
-using namespace drafts::com::sun::star::i18n;
 using namespace ::rtl;
 
 namespace com { namespace sun { namespace star { namespace i18n {
