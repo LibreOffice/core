@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cmc $ $Date: 2001-07-10 13:05:39 $
+ *  last change: $Author: cmc $ $Date: 2001-07-16 09:28:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1468,9 +1468,25 @@ void WW8TabDesc::CalcDefaults()
     nMaxRight = SHRT_MIN;
 
                         // 1. Durchlauf: aeusserste L- und R-Grenzen finden
-    for( pR = pFirstBand; pR; pR = pR->pNextBand ){
+    for( pR = pFirstBand; pR; pR = pR->pNextBand )
+    {
         if( pR->nCenter[0] < nMinLeft )
             nMinLeft = pR->nCenter[0];
+
+        for( short i = 0; i < pR->nWwCols; i++ )
+        {
+           /*
+            #74387# If the margins are so large as to make the displayable
+            area inside them smaller than the minimum allowed then adjust the
+            width to fit.
+            */
+            if ( (pR->nCenter[i+1] - pR->nCenter[i] - pR->nGapHalf * 2)
+                < MINLAY)
+            {
+                pR->nCenter[i+1] = pR->nCenter[i]+MINLAY+pR->nGapHalf * 2;
+            }
+        }
+
         if( pR->nCenter[pR->nWwCols] > nMaxRight )
             nMaxRight = pR->nCenter[pR->nWwCols];
     }
@@ -1485,8 +1501,8 @@ void WW8TabDesc::CalcDefaults()
 
     for( pR = pFirstBand; pR; pR = pR->pNextBand ){
         pR->nSwCols = pR->nWwCols;
-        pR->bLEmptyCol = pR->nCenter[0] - nMinLeft > MINLAY;
-        pR->bREmptyCol = nMaxRight - pR->nCenter[pR->nWwCols] > MINLAY;
+        pR->bLEmptyCol = pR->nCenter[0] - nMinLeft >= MINLAY;
+        pR->bREmptyCol = nMaxRight - pR->nCenter[pR->nWwCols] >= MINLAY;
 
         short nAddCols = pR->bLEmptyCol + pR->bREmptyCol;
         USHORT i;
@@ -2209,13 +2225,6 @@ void WW8TabDesc::AdjustNewBand( SwWW8ImplReader* pReader )
                 nW = pActBand->nCenter[j+1] - pActBand->nCenter[j];
             else
                 nW = nMaxRight - pActBand->nCenter[j];
-            /*
-            #74387# If the margins are so large as to make the displayable
-            area inside them smaller than the minimum allowed then adjust the
-            width to fit.
-            */
-            if ((nW - pActBand->nGapHalf * 2) < MINLAY)
-                nW = MINLAY + pActBand->nGapHalf * 2;
             pActBand->nWidth[ j ] = nW;
         }
 
@@ -3131,11 +3140,14 @@ void SwWW8ImplReader::ReadDocInfo()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par2.cxx,v 1.14 2001-07-10 13:05:39 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par2.cxx,v 1.15 2001-07-16 09:28:11 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.14  2001/07/10 13:05:39  cmc
+      #88976# Western defaults after Eastern to make western charset conversion the default
+
       Revision 1.13  2001/07/10 09:31:26  cmc
       #89439# calculate style's even-byte offset relative to style start, not absolute
 
