@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: os $ $Date: 2001-05-08 08:57:20 $
+ *  last change: $Author: os $ $Date: 2001-07-09 09:03:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -504,6 +504,9 @@ public:
     // Cursor befindet. Return kann sein :
     // - NO_NUMBERING, 0..MAXLEVEL-1, NO_NUMLEVEL .. NO_NUMLEVEL|MAXLEVEL-1
     BYTE GetNumLevel( BOOL* pHasChilds = 0 ) const;
+    // detect highest and lowest level to check moving of outline levels
+    void GetCurrentOutlineLevels( sal_uInt8& rUpper, sal_uInt8& rLower );
+
     String GetUniqueNumRuleName( const String* pChkStr = 0, BOOL bAutoNum = TRUE ) const;
     void ChgNumRuleFmts( const SwNumRule& rRule );
     // setze und erfrage, ob an aktueller PointPos eine Numerierung mit

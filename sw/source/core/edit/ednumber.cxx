@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ednumber.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:18 $
+ *  last change: $Author: os $ $Date: 2001-07-09 09:04:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,6 +305,16 @@ BOOL SwEditShell::MoveParagraph( long nOffset )
     return bRet;
 }
 
+void SwEditShell::GetCurrentOutlineLevels( sal_uInt8& rUpper, sal_uInt8& rLower )
+{
+    SwPaM* pCrsr = GetCrsr();
+    SwPaM aCrsr( *pCrsr->Start() );
+    aCrsr.SetMark();
+    if( pCrsr->HasMark() )
+        *aCrsr.GetPoint() = *pCrsr->End();
+    GetDoc()->GotoNextNum( *aCrsr.GetPoint(), FALSE,
+                            &rUpper, &rLower );
+}
 
 BOOL SwEditShell::MoveNumParas( BOOL bUpperLower, BOOL bUpperLeft )
 {
