@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableGrantCtrl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 16:45:17 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:35:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,7 @@ OTableGrantControl::OTableGrantControl( Window* pParent,const ResId& _RsId)
 //------------------------------------------------------------------------
 OTableGrantControl::~OTableGrantControl()
 {
+    DBG_DTOR(OTableGrantControl,NULL);
     if (m_nDeActivateEvent)
     {
         Application::RemoveUserEvent(m_nDeActivateEvent);
@@ -148,8 +149,6 @@ OTableGrantControl::~OTableGrantControl()
     delete m_pEdit;
 
     m_xTables       = NULL;
-
-    DBG_DTOR(OTableGrantControl,NULL);
 }
 // -----------------------------------------------------------------------------
 void OTableGrantControl::setTablesSupplier(const Reference< XTablesSupplier >& _xTablesSup)
@@ -288,11 +287,11 @@ BOOL OTableGrantControl::SaveModified()
     BOOL bErg = TRUE;
     try
     {
-        Reference<XAuthorizable> xAuth;
-        if(m_xUsers->hasByName(m_sUserName))
+
+        if ( m_xUsers->hasByName(m_sUserName) )
         {
-            m_xUsers->getByName(m_sUserName) >>= xAuth;
-            if(xAuth.is())
+            Reference<XAuthorizable> xAuth(m_xUsers->getByName(m_sUserName),UNO_QUERY);
+            if ( xAuth.is() )
             {
                 switch( GetCurColumnId() )
                 {
@@ -368,13 +367,13 @@ void OTableGrantControl::InitController( CellControllerRef& rController, long nR
 // -----------------------------------------------------------------------------
 void OTableGrantControl::fillPrivilege(sal_Int32 _nRow) const
 {
-    Reference<XAuthorizable> xAuth;
-    if(m_xUsers->hasByName(m_sUserName))
+
+    if ( m_xUsers->hasByName(m_sUserName) )
     {
         try
         {
-            m_xUsers->getByName(m_sUserName) >>= xAuth;
-            if(xAuth.is())
+            Reference<XAuthorizable> xAuth(m_xUsers->getByName(m_sUserName),UNO_QUERY);
+            if ( xAuth.is() )
             {
                 // get the privileges
                 TPrivileges nRights;
