@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsf.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2002-03-06 16:27:23 $
+ *  last change: $Author: iha $ $Date: 2002-10-18 13:03:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -449,7 +449,9 @@ void SdDrawViewShell::GetAttrState( SfxItemSet& rSet )
 
             case SID_SET_DEFAULT:
             {
-                if( !pDrView->GetStyleSheet() )
+                if( !pDrView->GetMarkList().GetMarkCount() ||
+                    ( !pDrView->IsTextEdit() && !pDrView->GetStyleSheet() )
+                  )
                     rSet.DisableItem( nWhich );
             }
             break;
