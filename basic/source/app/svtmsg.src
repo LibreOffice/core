@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtmsg.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-03 19:15:19 $
+ *  last change: $Author: kz $ $Date: 2001-04-26 19:15:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1315,7 +1315,7 @@ String S_UNKNOWN_TYPE
     Text[ greek ] = "Unknown object type ($Arg1) from UId or method '($Arg2)' not supported";
     Text[ dutch ] = "Onbekend objecttype ($Arg1) uit UId of methode '($Arg2)' niet ondersteund";
     Text[ french ] = "Type d'objet inconnu ($Arg1) issu de UId ou méthode '($Arg2)' non supportée";
-    Text[ spanish ] = "Tipo de objeto ($Arg1) desconocido por su UId";
+    Text[ spanish ] = "Tipo de objeto ($Arg1) desconocido por su UId o método '($Arg2)' no apoyado";
     Text[ italian ] = "Unknown object type ($Arg1) from UId";
     Text[ danish ] = "Unknown object type ($Arg1) from UId";
     Text[ swedish ] = "Unknown object type ($Arg1) from UId or method '($Arg2)' not supported";
@@ -1359,7 +1359,7 @@ String S_NO_LIST_BOX_BUTTON
     Text[ greek ] = "ListBoxButton does not exist in ($Arg1)";
     Text[ dutch ] = "ListBoxButton niet voorhanden bij ($Arg1)";
     Text[ french ] = "Bouton de zone de liste inexistant pour ($Arg1)";
-    Text[ spanish ] = "ListBoxButton nicht vorhanden bei ($Arg1)";
+    Text[ spanish ] = "ListBoxButton no existe en ($Arg1)";
     Text[ italian ] = "ListBoxButton nicht vorhanden bei ($Arg1)";
     Text[ danish ] = "ListBoxButton nicht vorhanden bei ($Arg1)";
     Text[ swedish ] = "ListBoxButton does not exist in ($Arg1)";
