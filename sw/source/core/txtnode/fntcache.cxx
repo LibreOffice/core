@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-27 13:18:00 $
+ *  last change: $Author: ama $ $Date: 2001-04-03 12:51:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1268,6 +1268,8 @@ SwFntAccess::SwFntAccess( const void* &rMagic,
                 pFntObj->pPrinter = pOut;
                 pFntObj->pScrFont = NULL;
                 pFntObj->nLeading = USHRT_MAX;
+                pFntObj->nPrtAscent = USHRT_MAX;
+                pFntObj->nPrtHeight = USHRT_MAX;
             }
             pObj = pFntObj;
         }

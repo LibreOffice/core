@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtoutp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-20 12:32:16 $
+ *  last change: $Author: ama $ $Date: 2001-04-03 12:52:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,8 @@ BOOL SwRootFrm::HasSameRect( const SwRect& rRect )
 // rSize muss in Pixel-Koordinaten vorliegen!
 BOOL SwLayVout::DoesFit( const Size &rNew )
 {
-    if( rNew.Height() > 64 )
+    if( rNew.Height() > VIRTUALHEIGHT )
+    Rectangle aTmp( aRect.SVRect() );
         return FALSE;
     if( rNew.Width() <= 0 || rNew.Height() <= 0 )
         return FALSE;
@@ -177,7 +178,10 @@ void SwLayVout::Enter(  ViewShell *pShell, const SwRect &rRect, BOOL bOn )
 
 #ifndef PRODUCT
         if( pShell->GetViewOptions()->IsTest3() )
+        {
+            ++nCount;
             return;
+        }
 #endif
 
     bOn = bOn && !nCount && rRect.HasArea() && pShell->GetWin();

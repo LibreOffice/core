@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtoutp.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:22 $
+ *  last change: $Author: ama $ $Date: 2001-04-03 12:52:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@
 #include "swrect.hxx"       // SwRect
 
 class ViewShell;
+#define VIRTUALHEIGHT 64
 
 /*************************************************************************
  *                      class SwTxtVout
@@ -89,7 +90,7 @@ private:
     BOOL DoesFit( const Size &rOut );
 
 public:
-    SwLayVout() : pVirDev( NULL ), pOut( 0 ), aSize( 0, 50 ), nCount( 0 ) {}
+    SwLayVout() : pVirDev(NULL), pOut(0), aSize(0, VIRTUALHEIGHT), nCount(0) {}
     ~SwLayVout() { delete pVirDev; }
 
     void Enter( ViewShell *pShell, const SwRect &rRect, BOOL bOn );
