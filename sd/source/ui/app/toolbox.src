@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:41:53 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:37:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -633,7 +633,7 @@ String RID_DRAW_VIEWER_TOOLBOX
     Text [ spanish ] = "Barra de funciones (modo vista)" ;
     Text [ french ] = "Barre de fonctions (mode visualisation)" ;
     Text [ swedish ] = "Funktionslist (visningsl�ge)" ;
-    Text [ danish ] = "Funktionslinje" ;
+    Text [ danish ] = "Funktionslinje (visningstilstand)" ;
     Text [ portuguese_brazilian ] = "Barra de fun��es" ;
     Text [ portuguese ] = "Barra de fun��es" ;
     Text[ chinese_simplified ] = "功能栏(视图模式)";
@@ -655,6 +655,8 @@ String RID_DRAW_VIEWER_TOOLBOX
     Text[ hebrew ] = "‮סרגל פעולות נפוצות‬";
     Text[ hindi ] = "फंक्शन् पट्टी";
     Text[ slovak ] = "Panel funkcií (mód náhľadu)";
+    Text[ hungarian ] = "Műveletek eszköztár (nézeti mód)";
+    Text[ slovenian ] = "Funkcijska vrstica (ogledovalni način)";
 };
 
 ToolBox RID_DRAW_VIEWER_TOOLBOX
@@ -751,7 +753,7 @@ String RID_GRAPHIC_VIEWER_TOOLBOX
     Text [ spanish ] = "Barra de funciones (modo vista)" ;
     Text [ french ] = "Barre de fonctions (mode visualisation)" ;
     Text [ swedish ] = "Funktionslist (visningsl�ge)" ;
-    Text [ danish ] = "Funktionslinje" ;
+    Text [ danish ] = "Funktionslinje (visningstilstand)" ;
     Text [ portuguese_brazilian ] = "Barra de fun��es" ;
     Text [ portuguese ] = "Barra de fun��es" ;
     Text[ chinese_simplified ] = "功能栏(视图模式)";
@@ -773,6 +775,8 @@ String RID_GRAPHIC_VIEWER_TOOLBOX
     Text[ hebrew ] = "‮סרגל פעולות נפוצות‬";
     Text[ hindi ] = "फंक्शन् पट्टी";
     Text[ slovak ] = "Panel funkcií (mód náhľadu)";
+    Text[ hungarian ] = "Műveletek eszköztár (nézeti mód)";
+    Text[ slovenian ] = "Funkcijska vrstica (ogledovalni način)";
 };
 
 ToolBox RID_GRAPHIC_VIEWER_TOOLBOX
@@ -854,6 +858,7 @@ ToolBox RID_GRAPHIC_VIEWER_TOOLBOX
     };
     Scroll = TRUE ;
 };
+
 
 
 
