@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwlayer.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-05 14:16:13 $
+ *  last change: $Author: sj $ $Date: 2001-11-27 10:11:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,12 @@
 #include <svx/svdundo.hxx>
 #include <svx/unolingu.hxx>
 #include <svx/drawitem.hxx>
+#ifndef _SVX_FHGTITEM_HXX
+#include <svx/fhgtitem.hxx>
+#endif
+#ifndef _EEITEM_HXX
+#include <svx/eeitem.hxx>
+#endif
 #include <sfx2/viewsh.hxx>
 #include <sfx2/docinf.hxx>
 #include <sfx2/docfile.hxx>
@@ -293,6 +299,14 @@ ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const String& rName ) :
 
     Outliner& rHitOutliner = GetHitTestOutliner();
     rHitOutliner.SetCalcFieldValueHdl( LINK( pScMod, ScModule, CalcFieldValueHdl ) );
+
+    // #95129# SJ: set FontHeight pool defaults without changing static SdrEngineDefaults
+    SfxItemPool* pOutlinerPool = rOutliner.GetEditTextObjectPool();
+    if ( pOutlinerPool )
+         pItemPool->SetPoolDefaultItem(SvxFontHeightItem( 423, 100, EE_CHAR_FONTHEIGHT ));           // 12Pt
+    SfxItemPool* pHitOutlinerPool = rHitOutliner.GetEditTextObjectPool();
+    if ( pHitOutlinerPool )
+         pHitOutlinerPool->SetPoolDefaultItem(SvxFontHeightItem( 423, 100, EE_CHAR_FONTHEIGHT ));    // 12Pt
 
     //  URL-Buttons haben keinen Handler mehr, machen alles selber
 

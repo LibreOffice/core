@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen9.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-19 15:57:42 $
+ *  last change: $Author: sj $ $Date: 2001-11-27 10:12:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,7 +254,6 @@ void ScDocument::InitDrawLayer( SfxObjectShell* pDocShell )
 
     if (!pDrawLayer)
     {
-        SdrEngineDefaults::SetFontHeight(423);      // 12pt
         String aName;
         if ( pShell && !pShell->IsLoading() )       // #88438# don't call GetTitle while loading
             aName = pShell->GetTitle();
