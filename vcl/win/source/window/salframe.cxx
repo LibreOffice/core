@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: ssa $ $Date: 2002-09-23 07:39:43 $
+ *  last change: $Author: tra $ $Date: 2002-09-25 13:53:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4929,9 +4929,18 @@ bool GetSalSystemDisplayInfo( System::DisplayInfo& rInfo )
 
 // -----------------------------------------------------------------------
 
+/* !!!  Parameter rButtons and nDefButton will be ignored currently, the
+        message box has always only an "OK" button !!!
+*/
 int ImplShowNativeDialog( const String& rTitle, const String& rMessage, const std::list< String >& rButtons, int nDefButton )
 {
-    return -1;
+    // Remeber: The MessageBox function exist as ANSI and UNICODE
+    // version even under Win9x!
+    MessageBoxW(0, rMessage.GetBuffer(), rTitle.GetBuffer(), MB_OK | MB_TASKMODAL | MB_SETFOREGROUND);
+
+    // always return 0 because there is only
+    // an "OK" button
+    return 0;
 }
 
 // -----------------------------------------------------------------------
