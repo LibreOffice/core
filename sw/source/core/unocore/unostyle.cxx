@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-17 12:27:45 $
+ *  last change: $Author: mtg $ $Date: 2001-10-24 15:51:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,7 +203,12 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
-
+#ifndef _GETMETRICVAL_HXX
+#include <GetMetricVal.hxx>
+#endif
+#ifndef _FMTFSIZE_HXX
+#include <fmtfsize.hxx>
+#endif
 #define STYLE_FAMILY_COUNT 5            // wir habe fuenf Familien
 
 #define TYPE_BOOL       0
@@ -1189,7 +1194,7 @@ SwXStyle::SwXStyle(SfxStyleSheetBasePool& rPool, SfxStyleFamily eFam,
     {
         pBasePool->SetSearchMask(eFamily, SFXSTYLEBIT_ALL );
         SfxStyleSheetBase* pBase = pBasePool->Find(sStyleName);
-        DBG_ASSERT(pBase, "wo ist der Style?")
+        DBG_ASSERT(pBase, "where is the style?" );
         if(pBase)
         {
             const USHORT nId = SwStyleNameMapper::GetPoolIdFromUIName(sStyleName, GET_POOLID_TXTCOLL);
@@ -1230,7 +1235,7 @@ OUString SwXStyle::getName(void) throw( RuntimeException )
     {
         pBasePool->SetSearchMask(eFamily, SFXSTYLEBIT_ALL );
         SfxStyleSheetBase* pBase = pBasePool->Find(sStyleName);
-        DBG_ASSERT(pBase, "wo ist der Style?")
+        DBG_ASSERT(pBase, "where is the style?" );
         if(!pBase)
             throw RuntimeException();
         SwStyleNameMapper::FillProgName(pBase->GetName(), aString, lcl_GetSwEnumFromSfxEnum ( eFamily ), sal_True);
@@ -1249,7 +1254,7 @@ void SwXStyle::setName(const OUString& rName) throw( RuntimeException )
     {
         pBasePool->SetSearchMask(eFamily, SFXSTYLEBIT_ALL );
         SfxStyleSheetBase* pBase = pBasePool->Find(sStyleName);
-        DBG_ASSERT(pBase, "wo ist der Style?")
+        DBG_ASSERT(pBase, "where is the style?" );
         sal_Bool bExcept = sal_True;
         if(pBase && pBase->IsUserDefined())
         {
@@ -1905,7 +1910,7 @@ void SwXStyle::setPropertyValues(
         pBasePool->SetSearchMask(eFamily);
         SfxStyleSheetBase* pBase = pBasePool->Find(sStyleName);
         pBasePool->SetSearchMask(eFamily, nSaveMask );
-        DBG_ASSERT(pBase, "wo ist der Style?")
+        DBG_ASSERT(pBase, "where is the style?" );
         if(pBase)
             aBaseImpl.pNewBase = new SwDocStyleSheet(*(SwDocStyleSheet*)pBase);
         else
@@ -2295,7 +2300,7 @@ Sequence< PropertyState > SwXStyle::getPropertyStates(
     {
         pBasePool->SetSearchMask(eFamily );
         SfxStyleSheetBase* pBase = pBasePool->Find(sStyleName);
-        DBG_ASSERT(pBase, "wo ist der Style?")
+        DBG_ASSERT(pBase, "where is the style?" );
 
         if(pBase)
         {
@@ -2364,48 +2369,148 @@ Sequence< PropertyState > SwXStyle::getPropertyStates(
 void SwXStyle::setPropertyToDefault(const OUString& rPropertyName)
         throw( UnknownPropertyException, RuntimeException )
 {
+    const Sequence < OUString > aSequence ( &rPropertyName, 1 );
+    setPropertiesToDefault ( aSequence );
+}
+
+void SAL_CALL SwXStyle::setPropertiesToDefault( const Sequence< OUString >& aPropertyNames )
+    throw (UnknownPropertyException, RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
+    if(pBasePool)
+    {
+        pBasePool->SetSearchMask(eFamily);
+        SfxStyleSheetBase* pBase = pBasePool->Find(sStyleName);
+        DBG_ASSERT(pBase, "Where is the style?")
+
+        if(pBase)
+        {
+            SwDocStyleSheet aStyle( *(SwDocStyleSheet*)pBase );
+            SwFmt *pTargetFmt = 0;
+            sal_Int8 nPropSetId;
+            switch(eFamily)
+            {
+                case SFX_STYLE_FAMILY_CHAR:
+                    nPropSetId = PROPERTY_SET_CHAR_STYLE;
+                    pTargetFmt = aStyle.GetCharFmt();
+                case SFX_STYLE_FAMILY_PARA:
+                    nPropSetId = PROPERTY_SET_PARA_STYLE;
+                    pTargetFmt = aStyle.GetCollection();
+                    break;
+                case SFX_STYLE_FAMILY_FRAME:
+                    nPropSetId = PROPERTY_SET_FRAME_STYLE;
+                    pTargetFmt = aStyle.GetFrmFmt();
+                    break;
+                case SFX_STYLE_FAMILY_PAGE:
+                    nPropSetId = PROPERTY_SET_PAGE_STYLE;
+                    {
+                        USHORT nPgDscPos = USHRT_MAX;
+                        SwPageDesc *pDesc = m_pDoc->FindPageDescByName( aStyle.GetPageDesc()->GetName(), &nPgDscPos );
+                        if( pDesc )
+                            pTargetFmt = &pDesc->GetMaster();
+                    }
+                    break;
+                case SFX_STYLE_FAMILY_PSEUDO:
+                    nPropSetId = PROPERTY_SET_NUM_STYLE;
+                    break;
+            }
+
+            const SfxItemPropertyMap* pMap = aSwMapProvider.GetPropertyMap(nPropSetId);
+            const OUString* pNames = aPropertyNames.getConstArray();
+
+            for(sal_Int32 nProp = 0, nEnd = aPropertyNames.getLength(); nProp < nEnd; nProp++)
+            {
+                pMap = SfxItemPropertyMap::GetByName( pMap, pNames[nProp]);
+                if(!pMap)
+                {
+                    UnknownPropertyException aExcept;
+                    aExcept.Message = pNames[nProp];
+                    throw aExcept;
+                }
+                if ( pMap->nWID == FN_UNO_FOLLOW_STYLE || pMap->nWID == FN_UNO_NUM_RULES )
+                    throw RuntimeException();
+                if ( pMap->nFlags & PropertyAttribute::READONLY)
+                    throw RuntimeException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
+
+                pTargetFmt->ResetAttr ( pMap->nWID);
+            }
+        }
+    }
+}
+void SAL_CALL SwXStyle::setAllPropertiesToDefault(  )
+    throw (RuntimeException)
+{
     vos::OGuard aGuard(Application::GetSolarMutex());
     if(pBasePool)
     {
         pBasePool->SetSearchMask(eFamily);
         SfxStyleSheetBase* pBase = pBasePool->Find(sStyleName);
-        DBG_ASSERT(pBase, "wo ist der Style?")
+        DBG_ASSERT(pBase, "where is the style, you fiend!?")
 
         if(pBase)
         {
             SwDocStyleSheet aStyle( *(SwDocStyleSheet*)pBase );
-            String sPropName(rPropertyName);
-            //Sonderbehandlung fuer das SvxNumRuleItem:
-            if(sPropName.EqualsAscii(SW_PROP_NAME_STR(UNO_NAME_NUMBERING_RULES)))
+
+            SwFmt *pTargetFmt = 0;
+            SwPageDesc *pTargetDesc = 0;
+            USHORT nPgDscPos = USHRT_MAX;
+            switch( eFamily )
             {
-                throw RuntimeException();
-            }
-            else if(sPropName.EqualsAscii(SW_PROP_NAME_STR(UNO_NAME_FOLLOW_STYLE)))
-            {
-                throw RuntimeException();
-            }
-            else
-            {
-                sal_Int8 nPropSetId = PROPERTY_SET_CHAR_STYLE;
-                switch(eFamily)
+            case SFX_STYLE_FAMILY_CHAR :
+                pTargetFmt = aStyle.GetCharFmt();
+                break;
+            case SFX_STYLE_FAMILY_PARA :
+                pTargetFmt = aStyle.GetCollection();
+                break;
+            case SFX_STYLE_FAMILY_FRAME:
+                pTargetFmt = aStyle.GetFrmFmt();
+                break;
+            case SFX_STYLE_FAMILY_PAGE:
                 {
-                    case SFX_STYLE_FAMILY_PARA: nPropSetId = PROPERTY_SET_PARA_STYLE  ; break;
-                    case SFX_STYLE_FAMILY_FRAME: nPropSetId = PROPERTY_SET_FRAME_STYLE ;break;
-                    case SFX_STYLE_FAMILY_PAGE: nPropSetId = PROPERTY_SET_PAGE_STYLE  ;break;
-                    case SFX_STYLE_FAMILY_PSEUDO: nPropSetId = PROPERTY_SET_NUM_STYLE   ;break;
+                    SwPageDesc *pDesc = m_pDoc->FindPageDescByName( aStyle.GetPageDesc()->GetName(), &nPgDscPos );
+                    if( pDesc )
+                    {
+                        pTargetFmt = &pDesc->GetMaster();
+                        pDesc->SetUseOn ( PD_ALL );
+                    }
                 }
-
-                SfxItemSet aSet(aStyle.GetItemSet());
-                const SfxItemPropertyMap* _pMap = aSwMapProvider.GetPropertyMap(nPropSetId);
-                const SfxItemPropertyMap* pMap = SfxItemPropertyMap::GetByName(
-                                                            _pMap, rPropertyName);
-
-                if ( pMap->nFlags & PropertyAttribute::READONLY)
-                    throw RuntimeException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
-
-                aSet.InvalidateItem( pMap->nWID);
-                aStyle.SetItemSet(aSet);
+                break;
+            case SFX_STYLE_FAMILY_PSEUDO:
+                break;
             }
+            if( pTargetFmt )
+            {
+                if( USHRT_MAX != nPgDscPos )
+                {
+                    pTargetFmt->ResetAttr( RES_PAGEDESC, RES_FRMATR_END-1 );
+                    SvxLRSpaceItem aLR;
+                    sal_Int32 nSize = GetMetricVal ( CM_1) * 2;
+                    aLR.SetLeft ( nSize );
+                    aLR.SetLeft ( nSize );
+                    SvxULSpaceItem aUL;
+                    aUL.SetUpper ( static_cast < sal_uInt16 > ( nSize ) );
+                    aUL.SetLower ( static_cast < sal_uInt16 > ( nSize ) );
+                    pTargetFmt->SetAttr ( aLR );
+                    pTargetFmt->SetAttr ( aUL );
+
+                    SwPageDesc* pStdPgDsc = m_pDoc->GetPageDescFromPool( RES_POOLPAGE_STANDARD );
+                    SwFmtFrmSize aFrmSz( pStdPgDsc->GetMaster().GetFrmSize() );
+                    if( pStdPgDsc->GetLandscape() )
+                    {
+                        SwTwips nTmp = aFrmSz.GetHeight();
+                        aFrmSz.SetHeight( aFrmSz.GetWidth() );
+                        aFrmSz.SetWidth( nTmp );
+                    }
+                    pTargetFmt->SetAttr( aFrmSz );
+                }
+                else
+                    pTargetFmt->ResetAllAttr();
+
+                if( USHRT_MAX != nPgDscPos )
+                    m_pDoc->ChgPageDesc( nPgDscPos, m_pDoc->GetPageDesc(nPgDscPos) );
+            }
+
         }
         else
             throw RuntimeException();
@@ -2413,28 +2518,24 @@ void SwXStyle::setPropertyToDefault(const OUString& rPropertyName)
     else
         throw RuntimeException();
 }
-/*-- 08.03.99 10:50:27---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
-Any SwXStyle::getPropertyDefault(const OUString& rPropertyName)
-    throw( UnknownPropertyException, lang::WrappedTargetException, RuntimeException )
+Sequence< Any > SAL_CALL SwXStyle::getPropertyDefaults( const Sequence< OUString >& aPropertyNames )
+    throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    Any aRet;
-    if(pBasePool)
+    sal_Int32 nCount = aPropertyNames.getLength();
+    Sequence < Any > aRet ( nCount );
+    if ( nCount )
     {
-        pBasePool->SetSearchMask(eFamily);
-        SfxStyleSheetBase* pBase = pBasePool->Find(sStyleName);
-        DBG_ASSERT(pBase, "wo ist der Style?")
-
-        if(pBase)
+        if( pBasePool)
         {
-            SwDocStyleSheet aStyle( *(SwDocStyleSheet*)pBase );
-            String sPropName(rPropertyName);
-            //Sonderbehandlung fuer das SvxNumRuleItem:
-            if(!sPropName.EqualsAscii(SW_PROP_NAME_STR(UNO_NAME_NUMBERING_RULES)) &&
-                !sPropName.EqualsAscii(SW_PROP_NAME_STR(UNO_NAME_FOLLOW_STYLE)))
+            pBasePool->SetSearchMask(eFamily);
+            SfxStyleSheetBase* pBase = pBasePool->Find(sStyleName);
+            DBG_ASSERT(pBase, "Doesn't seem to be a style!")
+
+            if(pBase)
             {
+                SwDocStyleSheet aStyle( *(SwDocStyleSheet*)pBase );
                 sal_Int8 nPropSetId = PROPERTY_SET_CHAR_STYLE;
                 switch(eFamily)
                 {
@@ -2444,30 +2545,44 @@ Any SwXStyle::getPropertyDefault(const OUString& rPropertyName)
                     case SFX_STYLE_FAMILY_PSEUDO: nPropSetId = PROPERTY_SET_NUM_STYLE   ;break;
                 }
 
-                SfxItemSet aSet = aStyle.GetItemSet();
-                const SfxItemPropertyMap* _pMap = aSwMapProvider.GetPropertyMap(nPropSetId);
-                const SfxItemPropertyMap* pMap = SfxItemPropertyMap::GetByName(
-                                                            _pMap, sPropName);
-                if ( pMap->nFlags & PropertyAttribute::READONLY)
-                    throw RuntimeException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
-
-                const SfxItemSet* pParentSet = aSet.GetParent();
-                if(pParentSet)
-                    aRet = aSwMapProvider.GetPropertySet(nPropSetId).
-                                    getPropertyValue(sPropName, *pParentSet);
-                else if(pMap->nWID != aSet.GetPool()->GetSlotId(pMap->nWID))
+                const SfxItemSet &rSet = aStyle.GetItemSet(), *pParentSet = rSet.GetParent();
+                const SfxItemPropertyMap* pMap = aSwMapProvider.GetPropertyMap(nPropSetId);
+                const OUString *pNames = aPropertyNames.getConstArray();
+                Any *pRet = aRet.getArray();
+                for ( sal_Int32 i = 0 ; i < nCount; i++)
                 {
-                    const SfxPoolItem& rItem = aSet.GetPool()->GetDefaultItem(pMap->nWID);
-                    rItem.QueryValue(aRet, pMap->nMemberId);
+                    pMap = SfxItemPropertyMap::GetByName( pMap, pNames[i]);
+
+                    if ( !pMap )
+                        throw UnknownPropertyException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + pNames[i], static_cast < cppu::OWeakObject * > ( this ) );
+                    if ( pMap->nFlags & PropertyAttribute::READONLY )
+                        throw RuntimeException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + pNames[i], static_cast < cppu::OWeakObject * > ( this ) );
+
+                    if( pParentSet )
+                        pRet[i] = aSwMapProvider.GetPropertySet(nPropSetId).getPropertyValue(pNames[i], *pParentSet);
+                    else if( pMap->nWID != rSet.GetPool()->GetSlotId(pMap->nWID) )
+                    {
+                        const SfxPoolItem& rItem = rSet.GetPool()->GetDefaultItem(pMap->nWID);
+                        rItem.QueryValue(pRet[i], pMap->nMemberId);
+                    }
                 }
             }
+            else
+                throw RuntimeException();
         }
         else
             throw RuntimeException();
     }
-    else
-        throw RuntimeException();
     return aRet;
+}
+/*-- 08.03.99 10:50:27---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+Any SwXStyle::getPropertyDefault(const OUString& rPropertyName)
+    throw( UnknownPropertyException, lang::WrappedTargetException, RuntimeException )
+{
+    const Sequence < OUString > aSequence ( &rPropertyName, 1 );
+    return getPropertyDefaults ( aSequence ).getConstArray()[0];
 }
 /* -----------------21.01.99 13:08-------------------
  *
@@ -2505,6 +2620,8 @@ void SwXStyle::Invalidate()
     mxStyleData.clear();
     mxStyleFamily.clear();
 }
+
+
 /******************************************************************
  * SwXPageStyle
  ******************************************************************/
@@ -2561,7 +2678,7 @@ void SwXPageStyle::setPropertyValues(
         GetBasePool()->SetSearchMask(GetFamily());
         SfxStyleSheetBase* pBase = GetBasePool()->Find(GetStyleName());
         GetBasePool()->SetSearchMask(GetFamily(), nSaveMask );
-        DBG_ASSERT(pBase, "wo ist der Style?")
+        DBG_ASSERT(pBase, "where is the style?" );
         if(pBase)
             aBaseImpl.pNewBase = new SwDocStyleSheet(*(SwDocStyleSheet*)pBase);
         else
