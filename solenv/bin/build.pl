@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.36 $
+#   $Revision: 1.37 $
 #
-#   last change: $Author: vg $ $Date: 2001-08-31 17:16:15 $
+#   last change: $Author: vg $ $Date: 2001-09-07 16:18:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,7 @@ use Cwd;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.36 $ ';
+$id_str = ' $Revision: 1.37 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -102,6 +102,7 @@ $deliver = 0;
 $CurrentPrj = '';
 $StandDir = &get_stand_dir();
 $build_from = '';
+$build_from_opt = '';
 &get_options;
 $ENV{mk_tmp}++;
 %prj_platform = ();
@@ -170,6 +171,14 @@ sub BuildAll {
             &remove_extra_prjs(\%ParentDepsHash);
         };
         while ($Prj = &PickPrjToBuild(\%ParentDepsHash)) {
+            if ($build_from_opt) {
+                if ($build_from_opt ne $Prj) {
+                    &RemoveFromDependencies($Prj, \%ParentDepsHash);
+                    next;
+                } else {
+                    $build_from_opt = '';
+                };
+            };
             print "\n=============\n";
             print "Building project $Prj\n";
             print   "=============\n";
@@ -201,7 +210,7 @@ sub MakeDir {
     if (chdir ($BuildDir)) {
         print "$BuildDir\n";
     } else {
-        print STDERR "\n$BuildDir not found!!\n\n";
+        &print_error("\n$BuildDir not found!!\n");
         exit (1);
     };
     cwd();
@@ -210,7 +219,7 @@ sub MakeDir {
         if (!$error) {
             &RemoveFromDependencies($DirToBuild, \%LocalDepsHash);
         } else {
-            print STDERR "Error $error occurred while making $BuildDir\n";
+            &print_error("Error $error occurred while making $BuildDir");
             $ENV{mk_tmp} = '';
             exit(1);
         };
@@ -254,12 +263,12 @@ sub get_prj_platform {
                 my $platform = $1;
                 my $alias = $2;
                 if ($alias eq 'NULL') {
-                    print "There is no correct alias set in the line $line!\n";
+                    &print_error ("There is no correct alias set in the line $line!");
                     exit (1);
                 };
                 &mark_platform($alias, $platform);
             } else {
-                print STDERR "Misspelling in line: \n$_\n";
+                &print_error("Misspelling in line: \n$_");
                 exit(1);
             };
         };
@@ -402,7 +411,8 @@ sub get_stand_dir {
             return $StandDir;
         } elsif (&IsRootDir($StandDir)) {
             $ENV{mk_tmp} = '';
-            die "Found no project to build\n"
+            &print_error ('Found no project to build');
+            exit (1);
         };
     }
     while (chdir '..');
@@ -439,7 +449,7 @@ sub remove_extra_prjs {
 sub PickPrjToBuild {
     my ($Prj, $DepsHash);
     $DepsHash = shift;
-    $Prj = FindIndepPrj($DepsHash);
+    $Prj = &FindIndepPrj($DepsHash);
     delete $$DepsHash{$Prj};
     return $Prj;
 };
@@ -497,10 +507,9 @@ sub FindIndepPrj {
     $Dependencies = shift;
     @Prjs = keys %$Dependencies;
     if ($#Prjs != -1) {
-        PrjLoop:
         foreach $Prj (@Prjs) {
-            if (IsHashNative($Prj)) {
-                next PrjLoop;
+            if (&IsHashNative($Prj)) {
+                next;
             };
             if (!(defined $$Dependencies{$Prj})) {
                 return $Prj;
@@ -512,19 +521,19 @@ sub FindIndepPrj {
         };
         # If there are only dependent projects in hash - generate error
         return '' if ($build_from);
-        print "\nError: projects";
+        print STDERR "\nError: projects";
         DeadPrjLoop:
         foreach $Prj (keys %$Dependencies) {
             if (IsHashNative($Prj)) {
                 next DeadPrjLoop;
             };
             $i = 0;
-            print "\n$Prj depends on:";
+            print STDERR "\n$Prj depends on:";
             foreach $i (0 .. $#{$$Dependencies{$Prj}}) {
-                print ' ', ${$$Dependencies{$Prj}}[$i];
+                print STDERR (' ', ${$$Dependencies{$Prj}}[$i]);
             };
         };
-        print "\nhave dead or circular dependencies\n\n";
+        &print_error ("\nhave dead or circular dependencies\n");
         $ENV{mk_tmp} = '';
         exit (1);
     };
@@ -556,7 +565,7 @@ sub GetDependenciesArray {
     $prj = shift;
     while (!($DepString =~ /^NULL/)) {
         if (!$DepString) {
-            print STDERR "Project $prj has wrong written dependencies string:\n $string\n";
+            &print_error("Project $prj has wrong written dependencies string:\n $string");
             exit (1);
         };
         $DepString =~ /(\S+)\s*/;
@@ -566,7 +575,7 @@ sub GetDependenciesArray {
             $ParentPrj = $`;
             if (($prj_platform{$ParentPrj} ne $1) &&
                 ($prj_platform{$ParentPrj} ne 'all')) {
-                print "$ParentPrj\.$1 is a wrong dependency identifier!\nCheck if it is platform dependent\n";
+                &print_error ("$ParentPrj\.$1 is a wrong dependency identifier!\nCheck if it is platform dependent");
                 exit (1);
             };
             if (&CheckPlatform($1)) {
@@ -576,7 +585,7 @@ sub GetDependenciesArray {
         } else {
             if ((exists($prj_platform{$ParentPrj})) &&
                 ($prj_platform{$ParentPrj} ne 'all') ) {
-                print "$ParentPrj is a wrong used dependency identifier!\nCheck if it is platform dependent\n";
+                &print_error("$ParentPrj is a wrong used dependency identifier!\nCheck if it is platform dependent");
                 exit (1);
             };
             push(@Dependencies, $ParentPrj);
@@ -612,8 +621,14 @@ sub get_options {
         $arg =~ /^-deliver$/and $deliver = 1                    and next;
         $arg =~ /^-from$/   and $BuildAllParents = 1
                             and $build_from = shift @ARGV       and next;
+        $arg =~ /^-from_opt$/   and $BuildAllParents = 1
+                            and $build_from_opt = shift @ARGV       and next;
         $arg =~ /^-help$/   and &usage                          and exit(0);
         push (@dmake_args, $arg);
+    };
+    if ($build_from && $build_from_opt) {
+        &print_error('Switches -from an -from_opt collision');
+        exit(1);
     };
     @ARGV = @dmake_args;
 };
