@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:34:44 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 15:20:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -805,6 +805,13 @@ SdrEndTextEditKind View::EndTextEdit(BOOL bDontDeleteReally, FuPoor* pFunc)
         pObj = 0;
 
     GetViewShell()->GetViewShellBase().GetEventMultiplexer().MultiplexEvent( sd::tools::EventMultiplexerEvent::EID_END_TEXT_EDIT, (void*)pObj );
+
+    if( pObj )
+    {
+        SdPage* pPage = dynamic_cast< SdPage* >( pObj->GetPage() );
+        if( pPage )
+            pPage->onEndTextEdit( pObj );
+    }
 
     return(eKind);
 }
