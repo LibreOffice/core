@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.34 $
+#   $Revision: 1.35 $
 #
-#   last change: $Author: hjs $ $Date: 2001-02-08 17:08:41 $
+#   last change: $Author: hjs $ $Date: 2001-02-09 17:42:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -2529,7 +2529,15 @@ $(NOPCHTARGET):
 # - PROJECT pre compiled headers -
 # --------------------------------
 .IF "$(PROJECTPCHTARGET)"!=""
+.IF "$(uniq $(TARGETDEPS))"!=""
+.INIT .SEQUENTIAL  :- $(PROJECTPCHTARGET) $(TARGETDEPS)
+.ENDIF
+
+.IF "$(PROJECTPCH_FLAG)"==""
 $(PROJECTPCHTARGET) .PHONY :
+    dmake $(MFLAGS) $@ PROJECTPCH_FLAG=TRUE $(CALLMACROS)
+.ELSE			# "$(PROJECTPCH_FLAG)"!=""
+$(PROJECTPCHTARGET) : $(PROJECTPCHSOURCE).cxx
 .IF "$(COM)"=="MSC" || "(COM)"=="BLC"
 .IF "$(PROJECTPCH4DLL)" != ""
     $(CC) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSSLO) $(PCHSLOFLAGSC) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(CFLAGSOUTOBJ)$(SLO)$/$(PROJECTPCH).obj $(PROJECTPCHSOURCE).cxx
@@ -2537,6 +2545,7 @@ $(PROJECTPCHTARGET) .PHONY :
     $(CC) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSOBJ) $(PCHOBJFLAGSC) $(CDEFS) $(CDEFSOBJ) $(CFLAGSOUTOBJ)$(OBJ)$/$(PROJECTPCH).obj $(PROJECTPCHSOURCE).cxx
 .ENDIF
 .ENDIF
+.ENDIF			# "$(PROJECTPCH_FLAG)"!=""
 .ENDIF
 
 # ----------------------------------
