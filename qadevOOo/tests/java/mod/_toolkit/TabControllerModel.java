@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TabControllerModel.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 14:00:44 $
+ *  last change:$Date: 2003-09-08 13:03:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,11 +61,8 @@
 
 package mod._toolkit;
 
-import com.sun.star.drawing.XControlShape;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.text.XTextDocument;
-import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
+
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
@@ -73,6 +70,11 @@ import lib.TestParameters;
 import util.FormTools;
 import util.WriterTools;
 import util.utils;
+
+import com.sun.star.drawing.XControlShape;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.text.XTextDocument;
+import com.sun.star.uno.XInterface;
 
 public class TabControllerModel extends TestCase {
 
