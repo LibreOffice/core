@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menubarmanager.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:18:05 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 13:20:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,6 +241,7 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener        ,
         String RetrieveLabelFromCommand( const String& aCmdURL );
         void UpdateSpecialFileMenu( Menu* pMenu );
         void UpdateSpecialWindowMenu( Menu* pMenu );
+        void Destroy();
 
 
         struct MenuItemHandler
