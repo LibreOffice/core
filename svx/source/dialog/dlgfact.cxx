@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgfact.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:34:48 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:55:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1441,22 +1441,12 @@ AbstractSvxSearchSimilarityDialog * AbstractDialogFactory_Impl::CreateSvxSearchS
                                                             BOOL bRelax,
                                                             USHORT nOther,
                                                             USHORT nShorter,
-                                                            USHORT nLonger,
-                                                            const ResId& rResId)
+                                                            USHORT nLonger)
 {
-    SvxSearchSimilarityDialog* pDlg=NULL;
-    switch ( rResId.GetId() )
-    {
-        case RID_SVXDLG_SEARCHSIMILARITY :
-            pDlg = new SvxSearchSimilarityDialog( pParent, bRelax, nOther, nShorter, nLonger );
-            break;
-        default:
-            break;
-    }
-
+    SvxSearchSimilarityDialog* pDlg = new SvxSearchSimilarityDialog( pParent, bRelax, nOther, nShorter, nLonger );
     if ( pDlg )
         return new AbstractSvxSearchSimilarityDialog_Impl( pDlg );
-    return 0;
+    return NULL;
 }
 //CHINA001  SvxSearchSimilarityDialog end
 
