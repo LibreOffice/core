@@ -538,8 +538,7 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
         if (contents.startsWith("=")) {
 
             cellElement.setAttribute(ATTRIBUTE_TABLE_FORMULA,
-                                     parseFormula(contents));
-
+                                     contents);
             // String data does not require any additional attributes
         } else if (!type.equals(CELLTYPE_STRING)) {
 
@@ -586,37 +585,5 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
         }
     }
 
-
-    /**
-     *  <p>This method takes a formula and parses it into
-     *  StarOffice XML formula format.</p>
-     *
-     *  <p>Many spreadsheets use ',' as a separator.
-     *  StarOffice XML format uses ';' as a separator instead.</p>
-     *
-     *  <p>Many spreadsheets use '!' as a separator when refencing
-     *  a cell in a different sheet.</p>
-     *
-     *  <blockquote>
-     *  Example: =sheet1!A1
-     *  </blockquote>
-     *
-     *  <p>StarOffice XML format uses '.' as a separator instead.</p>
-     *
-     *  <blockquote>
-     *  Example: =sheet1.A1
-     *  </blockquote>
-     *
-     *  @param  formula  A formula string.
-     *
-     *  @return  A StarOffice XML format formula string.
-     */
-    protected String parseFormula(String formula) {
-
-        formula = formula.replace(',', ';');
-        formula = formula.replace('!', '.');
-
-        return formula;
-    }
 }
 

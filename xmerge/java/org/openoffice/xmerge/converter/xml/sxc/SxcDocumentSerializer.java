@@ -502,8 +502,7 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
 
             Debug.log(Debug.INFO, "TableFormulaNode\n");
             String cellFormula = tableFormulaNode.getNodeValue();
-            String parsedCellFormula = parseFormula(cellFormula);
-            addCell(parsedCellFormula);
+            addCell(cellFormula);
 
         } else if (tableValueNode != null) {
 
@@ -797,15 +796,5 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
         return decimals;
     }
 
-
-    /**
-     *  This abstract method takes a StarOffice formula and parses
-     *  into the spreadsheet formula format.
-     *
-     *  @param  formula  The formula to be parsed
-     *
-     *  @return The parsed formula.
-     */
-    protected abstract String parseFormula(String formula);
 }
 

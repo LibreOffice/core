@@ -220,6 +220,95 @@ final class MinicalcEncoder extends SpreadsheetEncoder {
 
 
     /**
+     *  A cell reference in a StarOffice formula looks like
+     *  [.C2] (for cell C2).  MiniCalc is expecting cell references
+     *  to look like C2.  This method strips out the braces and
+     *  the period.
+     *
+     *  @param  formula  A StarOffice formula <code>String</code>.
+     *
+     *  @return  A MiniCalc formula <code>String</code>.
+     */
+    protected String parseFormula(String formula) {
+
+        StringBuffer inFormula = new StringBuffer(formula);
+        StringBuffer outFormula = new StringBuffer();
+
+        boolean inBrace = false;
+        boolean firstCharAfterBrace = false;
+        boolean firstCharAfterColon = false;
+
+        int len = inFormula.length();
+
+        for (int in = 0; in < len; in++) {
+            switch (inFormula.charAt(in)) {
+            case '[':
+                // We are now inside a StarOffice cell reference.
+                // We also need to strip out the '['
+                inBrace = true;
+
+                // If the next character is a '.', we want to strip it out
+                firstCharAfterBrace = true;
+                break;
+
+            case ']':
+                // We are exiting a StarOffice cell reference
+                // We are stripping out the ']'
+                inBrace = false;
+                break;
+
+            case ':':
+                // We have a cell range reference.
+                // May need to strip out the leading '.'
+                if (inBrace)
+                    firstCharAfterColon = true;
+                outFormula.append(inFormula.charAt(in));
+                break;
+
+            case '.':
+                if (inBrace == true) {
+                    if (firstCharAfterBrace == false &&
+                            firstCharAfterColon == false) {
+                        // Not the first character after the open brace.
+                        // We have hit a separator between a sheet reference
+                        // and a cell reference.  MiniCalc uses a ! as
+                        // this type of separator.
+                        outFormula.append('!');
+                    }
+                    else {
+                        firstCharAfterBrace = false;
+                        firstCharAfterColon = false;
+                        // Since we are in a StarOffice cell reference,
+                        // and we are the first character, we need to
+                        // strip out the '.'
+                    }
+                    break;
+                } else {
+                    // We hit valid data, lets add it to the formula string
+                    outFormula.append(inFormula.charAt(in));
+                    break;
+                }
+
+            case ';':
+                // StarOffice XML format uses ';' as a separator.  MiniCalc (and
+                // many spreadsheets) use ',' as a separator instead.
+                outFormula.append(',');
+                break;
+
+            default:
+                // We hit valid data, lets add it to the formula string
+                outFormula.append(inFormula.charAt(in));
+
+                // Need to make sure that firstCharAfterBrace is not true.
+                firstCharAfterBrace = false;
+                break;
+            }
+        }
+
+        return outFormula.toString();
+    }
+
+    /**
      *  Add a cell to the current WorkSheet.
      *
      *  @param   row             The row number of the cell.
@@ -235,6 +324,10 @@ final class MinicalcEncoder extends SpreadsheetEncoder {
         CellAttributes ca = new CellAttributes(getFormat(fmt),
                                                 fmt.getForeground(),
                                                 fmt.getBackground());
+           if (cellContents.startsWith("=")) {
+                cellContents = parseFormula(cellContents);
+                Debug.log(Debug.INFO, "YAHOO Found Formula" + cellContents);
+        }
 
         CellDescriptor cellDes = new CellDescriptor(row, column, ca, cellContents);
 
@@ -509,6 +602,7 @@ final class MinicalcEncoder extends SpreadsheetEncoder {
         }
         else {
             // Should never get here, but just in case
+            System.out.println("XXXXX Formatting information not found");
             return 0;
         }
     }

@@ -396,6 +396,10 @@ final class MinicalcDecoder extends SpreadsheetDecoder {
             if (contents == null)
                 return new String("");
 
+              // Does the cell contain a formula?
+            if (contents.startsWith("=")) {
+                contents = parseFormula(contents);
+            }
             // Make sure that any MiniCalc peculiarities are stripped off
             if (fmt.getCategory().equalsIgnoreCase(OfficeConstants.CELLTYPE_CURRENCY)) {
                 contents = currencyRemoveSign(contents);
@@ -414,7 +418,37 @@ final class MinicalcDecoder extends SpreadsheetDecoder {
         return contents;
     }
 
+    /**
+     *  <p>This method takes a formula and parses it into
+     *  StarOffice XML formula format.</p>
+     *
+     *  <p>Many spreadsheets use ',' as a separator.
+     *  StarOffice XML format uses ';' as a separator instead.</p>
+     *
+     *  <p>Many spreadsheets use '!' as a separator when refencing
+     *  a cell in a different sheet.</p>
+     *
+     *  <blockquote>
+     *  Example: =sheet1!A1
+     *  </blockquote>
+     *
+     *  <p>StarOffice XML format uses '.' as a separator instead.</p>
+     *
+     *  <blockquote>
+     *  Example: =sheet1.A1
+     *  </blockquote>
+     *
+     *  @param  formula  A formula string.
+     *
+     *  @return  A StarOffice XML format formula string.
+     */
+    protected String parseFormula(String formula) {
 
+        formula = formula.replace(',', ';');
+        formula = formula.replace('!', '.');
+
+        return formula;
+    }
     /**
      *  <p>This method returns the type of the data in the current cell.</p>
      *
