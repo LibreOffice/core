@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galtheme.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-13 22:11:04 $
+ *  last change: $Author: rt $ $Date: 2001-06-15 21:46:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -899,7 +899,7 @@ String RID_GALLERYSTR_THEME_CLIMA
     Text[ dutch ] = "Climate";
     Text[ french ] = "Climat";
     Text[ spanish ] = "Clima";
-    Text[ italian ] = "Climate";
+    Text[ italian ] = "Clima";
     Text[ danish ] = "Climate";
     Text[ swedish ] = "Klimat";
     Text[ polish ] = "Klimat";
@@ -927,7 +927,7 @@ String RID_GALLERYSTR_THEME_EDUCATION
     Text[ dutch ] = "School & University";
     Text[ french ] = "École & université";
     Text[ spanish ] = "Escuela y universidad";
-    Text[ italian ] = "School & University";
+    Text[ italian ] = "Scuola & Università";
     Text[ danish ] = "School & University";
     Text[ swedish ] = "Skola & universitet";
     Text[ polish ] = "Szko³a i uniwersytet";
@@ -955,7 +955,7 @@ String RID_GALLERYSTR_THEME_TROUBLE
     Text[ dutch ] = "Problem Solving";
     Text[ french ] = "Solutions";
     Text[ spanish ] = "Soluciones de problemas";
-    Text[ italian ] = "Problem Solving";
+    Text[ italian ] = "Soluzioni";
     Text[ danish ] = "Problem Solving";
     Text[ swedish ] = "Problemlösningar";
     Text[ polish ] = "Rozwi¹zania problemu";
@@ -985,5 +985,6 @@ String RID_GALLERYSTR_THEME_DUMMY5
     // !!! Don't translate, please !!!
     Text = "Dummy 5";
 };
+
 
 
