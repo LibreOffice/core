@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgass.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-26 22:32:17 $
+ *  last change: $Author: cl $ $Date: 2002-02-14 13:55:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,12 +99,12 @@ ModalDialog DLG_ASS
         Text[ swedish ] = "~Förhandsvisning";
         Text[ polish ] = "P~odgl¹d";
         Text[ portuguese_brazilian ] = "Pre~view";
-        Text[ japanese ] = "ÌßÚËŞ­°(~P)";
-        Text[ chinese_simplified ] = "Ô¤ÀÀ(~P)";
-        Text[ chinese_traditional ] = "¹wÄı(~P)";
+        Text[ japanese ] = "ï¾Œï¾Ÿï¾šï¾‹ï¾ï½­ï½°(~P)";
+        Text[ chinese_simplified ] = "é¢„è§ˆ(~P)";
+        Text[ chinese_traditional ] = "é è¦½(~P)";
         Text[ arabic ] = "ãÚÇíäÉ";
         Text[ greek ] = "Ğñïåğéóêüğçóç";
-        Text[ korean ] = "¹Ì¸®º¸±â(~P)";
+        Text[ korean ] = "ë¯¸ë¦¬ë³´ê¸°(~P)";
         Text[ turkish ] = "Önizleme";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Pre~visualización";
@@ -129,16 +129,16 @@ ModalDialog DLG_ASS
         Text[ swedish ] = "Visa inte den här ~dialogen mer";
         Text[ polish ] = "Nie pokazuj wiêcej ~tego okna dialogowego";
         Text[ portuguese_brazilian ] = "~Start with autopilot";
-        Text[ japanese ] = "‚±‚ÌÀŞ²±Û¸Ş‚ÍÄ‚Ñ•\\¦‚µ‚È‚¢(~D)";
-        Text[ chinese_simplified ] = "²»ÔÙÏÔÊ¾Õâ¸ö¶Ô»°¿ò(~D)";
-        Text[ chinese_traditional ] = "¤£¦AÅã¥Ü³o­Ó¹ï¸Ü¤è¶ô(~D)";
+        Text[ japanese ] = "ã“ã®ï¾€ï¾ï½²ï½±ï¾›ï½¸ï¾ã¯å†ã³è¡¨ç¤ºã—ãªã„(~D)";
+        Text[ chinese_simplified ] = "ä¸å†æ˜¾ç¤ºè¿™ä¸ªå¯¹è¯æ¡†(~D)";
+        Text[ chinese_traditional ] = "ä¸å†é¡¯ç¤ºé€™å€‹å°è©±æ–¹å¡Š(~D)";
         Text[ arabic ] = "ÚÏã ÅÙåÇÑ ãÑÈÚ ÇáÍæÇÑ åĞÇ ãÑÉ ÃÎÑì";
         Text[ greek ] = "Íá ìçí åìöá~íéóôåß îáíÜ áõôüò ï äéÜëïãïò";
-        Text[ korean ] = "ÀÌ ´ëÈ­»óÀÚ¸¦ ´õÀÌ»ó ³ªÅ¸³»Áö ¾Ê±â(~D)";
+        Text[ korean ] = "ì´ ëŒ€í™” ìƒìë¥¼ ë‹¤ì‹œ í‘œì‹œ ì•ˆí•¨(~D)";
         Text[ turkish ] = "Bu pencereyi artık görüntüleme";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~No mostrar más este diálogo";
-        Text[ finnish ] = "~Älä näytä tätä valintaikkunaa uudelleen";
+        Text[ finnish ] = "~?l? n?yt? t?t? valintaikkunaa uudelleen";
     };
 
     // Seite 1
@@ -171,12 +171,12 @@ ModalDialog DLG_ASS
         Text[ swedish ] = "Typ";
         Text[ polish ] = "Typ";
         Text[ portuguese_brazilian ] = "Type";
-        Text[ japanese ] = "í—Ş";
-        Text[ chinese_simplified ] = "ÀàĞÍ";
-        Text[ chinese_traditional ] = "Ãş«¬";
+        Text[ japanese ] = "ç¨®é¡";
+        Text[ chinese_simplified ] = "ç±»å‹";
+        Text[ chinese_traditional ] = "é¡å‹";
         Text[ arabic ] = "ÇáäæÚ";
         Text[ greek ] = "Ôığïò";
-        Text[ korean ] = "Çü½Ä";
+        Text[ korean ] = "í˜•ì‹";
         Text[ turkish ] = "Tür";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Tipo";
@@ -201,16 +201,16 @@ ModalDialog DLG_ASS
         Text[ swedish ] = "~Tom presentation";
         Text[ polish ] = "Pusta preze~ntacja";
         Text[ portuguese_brazilian ] = "~Empty presentation";
-        Text[ japanese ] = "”’†‚ÌÌßÚ¾ŞİÃ°¼®İ(~E)";
-        Text[ chinese_simplified ] = "¿Õ°×ÑİÊ¾ÎÄ¸å(~E)";
-        Text[ chinese_traditional ] = "ªÅ¥ÕÂ²³ø(~E)";
+        Text[ japanese ] = "ç™½ç´™ã®ï¾Œï¾Ÿï¾šï½¾ï¾ï¾ï¾ƒï½°ï½¼ï½®ï¾(~E)";
+        Text[ chinese_simplified ] = "ç©ºç™½æ¼”ç¤ºæ–‡ç¨¿(~E)";
+        Text[ chinese_traditional ] = "ç©ºç™½ç°¡å ±(~E)";
         Text[ arabic ] = "ÚÑÖ ÊŞÏíãí İÇÑÛ";
         Text[ greek ] = "ÊåíŞ ğáñïõóßáóç";
-        Text[ korean ] = "ºó ÇÁ¸®Á¨Å×ÀÌ¼Ç(~E)";
+        Text[ korean ] = "ë¹ˆ í”„ë¦¬ì  í…Œì´ì…˜(~E)";
         Text[ turkish ] = "Boş sunu";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Presentación vacía";
-        Text[ finnish ] = "~Tyhjennä esitys";
+        Text[ finnish ] = "~Tyhjenn? esitys";
     };
 
     RadioButton RB_PAGE1_TEMPLATE
@@ -230,12 +230,12 @@ ModalDialog DLG_ASS
         Text[ swedish ] = "Från ~mall";
         Text[ polish ] = "Na podstawie szablonu";
         Text[ portuguese_brazilian ] = "~Template";
-        Text[ japanese ] = "ÃİÌßÚ°Ä‚©‚ç(~F)";
-        Text[ chinese_simplified ] = "²ÉÓÃÑùÊ½(~F)";
-        Text[ chinese_traditional ] = "±Ä¥Î¼Ë¦¡(~F)";
+        Text[ japanese ] = "ï¾ƒï¾ï¾Œï¾Ÿï¾šï½°ï¾„ã‹ã‚‰(~F)";
+        Text[ chinese_simplified ] = "é‡‡ç”¨æ ·å¼(~F)";
+        Text[ chinese_traditional ] = "æ¡ç”¨æ¨£å¼(~F)";
         Text[ arabic ] = "ãä ÇáŞÇáÈ";
         Text[ greek ] = "Áğü ğñüôõğï";
-        Text[ korean ] = "¼­½Ä ÆÄÀÏ·ÎºÎÅÍ(~F)";
+        Text[ korean ] = "í…œí”Œë¦¿ìœ¼ë¡œë¶€í„°(~F)";
         Text[ turkish ] = "Şablon";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~De plantilla";
@@ -259,12 +259,12 @@ ModalDialog DLG_ASS
         Text[ swedish ] = "~Öppna en redan befintlig presentation";
         Text[ polish ] = "Otwórz istniej¹c¹ prezentacjê";
         Text[ portuguese_brazilian ] = "~Open existing presentation";
-        Text[ japanese ] = "Šù‘¶‚ÌÌßÚ¾ŞİÃ°¼®İ‚ğŠJ‚­(~O)";
-        Text[ chinese_simplified ] = "´ò¿ªÒ»¸öÏÖÓĞµÄÑİÊ¾ÎÄ¸å(~O)";
-        Text[ chinese_traditional ] = "¶}±Ò¤@­Ó²{¦sªºÂ²³ø(~O)";
+        Text[ japanese ] = "æ—¢å­˜ã®ï¾Œï¾Ÿï¾šï½¾ï¾ï¾ï¾ƒï½°ï½¼ï½®ï¾ã‚’é–‹ã(~O)";
+        Text[ chinese_simplified ] = "æ‰“å¼€ä¸€ä¸ªç°æœ‰çš„æ¼”ç¤ºæ–‡ç¨¿(~O)";
+        Text[ chinese_traditional ] = "é–‹å•Ÿä¸€å€‹ç¾å­˜çš„ç°¡å ±(~O)";
         Text[ arabic ] = "İÊÍ ÚÑÖ ÊŞÏíãí ãæÌæÏ";
         Text[ greek ] = "¢íïéãìá õğÜñ÷ïõóáò ğáñïõóßáóçò";
-        Text[ korean ] = "±âÁ¸ ÇÁ¸®Á¨Å×ÀÌ¼Ç ¿­±â(~O)";
+        Text[ korean ] = "ê¸°ì¡´ í”„ë¦¬ì  í…Œì´ì…˜ ì—´ê¸°(~O)";
         Text[ turkish ] = "Mevcut bir sunuyu aç";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Abrir una presentación existente";
@@ -316,7 +316,7 @@ ModalDialog DLG_ASS
         Size = MAP_APPFONT ( 132 , 8 ) ;
         Text = "Wählen Sie eine ~Seitenvorlage" ;
         Text [ ENGLISH ] = "Choose a ~page template" ;
-        Text [ english_us ] = "~Select a Page Style" ;
+        Text [ english_us ] = "~Select a slide design" ;
         Text [ italian ] = "Scegliete un modello di pagina" ;
         Text [ spanish ] = "Elija un ~estilo de página" ;
         Text [ french ] = "~Style de page" ;
@@ -324,15 +324,15 @@ ModalDialog DLG_ASS
         Text [ swedish ] = "Välj en ~sidformatmall" ;
         Text [ danish ] = "Vælg en sidetypografi" ;
         Text [ portuguese ] = "Seleccione um estilo de ~página" ;
-        Text[ chinese_simplified ] = "ÇëÑ¡ÔñÒ»¸öÒ³ÃæÑùÊ½¡£(~S)";
+        Text[ chinese_simplified ] = "è¯·é€‰æ‹©ä¸€ä¸ªé¡µé¢æ ·å¼ã€‚(~S)";
         Text[ russian ] = "Âûáåğèòå ñòèëü ñëàéäà";
         Text[ polish ] = "Wybierz styl strony";
         Text[ portuguese_brazilian ] = "Choose a Background";
-        Text[ japanese ] = "Íß°¼Ş½À²Ù‚ğ‘I‘ğ‚µ‚Ü‚·(~S)";
-        Text[ chinese_traditional ] = "½Ğ±z¿ï¾Ü¤@­Ó­¶­±¼Ë¦¡(~S)";
+        Text[ japanese ] = "ï¾ï¾Ÿï½°ï½¼ï¾ï½½ï¾€ï½²ï¾™ã‚’é¸æŠã—ã¾ã™(~S)";
+        Text[ chinese_traditional ] = "è«‹æ‚¨é¸æ“‡ä¸€å€‹é é¢æ¨£å¼(~S)";
         Text[ arabic ] = "ÇáÑÌÇÁ ÇÎÊíÇÑ ÊÎØíØ ÇáÕİÍÉ";
         Text[ greek ] = "Åğéëİîôå İíá ğñüôõğï ~óåëßäáò";
-        Text[ korean ] = "ÂÊ À¯ÇüÀ» ¼±ÅÃÇÏ½Ê½Ã¿À(~S)";
+        Text[ korean ] = "í˜ì´ì§€ í…œí”Œë¦¿ì„ ì„ íƒí•˜ì‹­ì‹œì˜¤(~S)";
         Text[ turkish ] = "Bir sayfa biçimi seçin";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Elija un ~estilo de página";
@@ -372,14 +372,14 @@ ModalDialog DLG_ASS
         Text [ danish ] = "Vælg et output-medie" ;
         Text [ portuguese ] = "Seleccione o meio de apresentação" ;
         Text [ portuguese_brazilian ] = "W?hlen Sie das Medium Ihrer Pr?sentation" ;
-        Text[ chinese_simplified ] = "ÇëÑ¡Ôñ´òÓ¡ÑİÊ¾ÎÄ¸åµÄÃ½Ìå¡£";
+        Text[ chinese_simplified ] = "è¯·é€‰æ‹©æ‰“å°æ¼”ç¤ºæ–‡ç¨¿çš„åª’ä½“ã€‚";
         Text[ russian ] = "Ñğåäñòâî ïîêàçà ïğåçåíòàöèè";
         Text[ polish ] = "Wybierz medium prezentacji";
-        Text[ japanese ] = "ÌßÚ¾ŞİÃ°¼®İ‚Ì”­•\\•û–@‚ğ‘I‘ğ‚µ‚Ü‚·";
-        Text[ chinese_traditional ] = "½Ğ¿ï¾Ü¤@­Ó¦C¦LÂ²³øªº´CÅé";
+        Text[ japanese ] = "ï¾Œï¾Ÿï¾šï½¾ï¾ï¾ï¾ƒï½°ï½¼ï½®ï¾ã®ç™ºè¡¨æ–¹æ³•ã‚’é¸æŠã—ã¾ã™";
+        Text[ chinese_traditional ] = "è«‹é¸æ“‡ä¸€å€‹åˆ—å°ç°¡å ±çš„åª’é«”";
         Text[ arabic ] = "ÇÎÊÑ ÃÏÇÉ ÇáÚÑÖ ÇáÊŞÏíãí";
         Text[ greek ] = "Åğéëİîôå ìéá óõóêåõŞ İêäïóçò";
-        Text[ korean ] = "ÇÁ¸®Á¨Å×ÀÌ¼Ç Ãâ·Â¸ÅÃ¼¸¦ ¼±ÅÃÇÏ½Ê½Ã¿À";
+        Text[ korean ] = "í”„ë¦¬ì  í…Œì´ì…˜ ì¶œë ¥ ë§¤ì²´ë¥¼ ì„ íƒí•˜ì‹­ì‹œì˜¤";
         Text[ turkish ] = "Bir çıktı ortamı seçin";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Elija un medio de presentación";
@@ -405,15 +405,15 @@ ModalDialog DLG_ASS
         Text[ swedish ] = "Original";
         Text[ polish ] = "Orygina³";
         Text[ portuguese_brazilian ] = "~Original";
-        Text[ japanese ] = "µØ¼ŞÅÙ(~O)";
-        Text[ korean ] = "¿À¸®Áö³Î(~O)";
-        Text[ chinese_simplified ] = "Ô­¼ş(~O)";
-        Text[ chinese_traditional ] = "­ì¥ó(~O)";
+        Text[ japanese ] = "ï½µï¾˜ï½¼ï¾ï¾…ï¾™(~O)";
+        Text[ korean ] = "ì›ë˜ëŒ€ë¡œ(~O)";
+        Text[ chinese_simplified ] = "åŸä»¶(~O)";
+        Text[ chinese_traditional ] = "åŸä»¶(~O)";
         Text[ arabic ] = "ÇáÃÕá";
         Text[ turkish ] = "Aslı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Original";
-        Text[ finnish ] = "~Alkuperäinen";
+        Text[ finnish ] = "~Alkuper?inen";
     };
 
     RadioButton RB_PAGE2_MEDIUM1
@@ -434,16 +434,16 @@ ModalDialog DLG_ASS
         Text[ swedish ] = "~Bildskärm";
         Text[ polish ] = "E~kran";
         Text[ portuguese_brazilian ] = "Dia";
-        Text[ japanese ] = "‰æ–Ê(~R)";
-        Text[ chinese_simplified ] = "ÆÁÄ»(~R)";
-        Text[ chinese_traditional ] = "¿Ã¹õ(~R)";
+        Text[ japanese ] = "ç”»é¢(~R)";
+        Text[ chinese_simplified ] = "å±å¹•(~R)";
+        Text[ chinese_traditional ] = "è¢å¹•(~R)";
         Text[ arabic ] = "ÔÇÔÉ";
         Text[ greek ] = "Ï~èüíç";
-        Text[ korean ] = "È­¸é(~R)";
+        Text[ korean ] = "í™”ë©´(~R)";
         Text[ turkish ] = "Ekran";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "P~antalla";
-        Text[ finnish ] = "~Näyttö";
+        Text[ finnish ] = "~N?ytt?";
     };
 
     RadioButton RB_PAGE2_MEDIUM2
@@ -462,15 +462,15 @@ ModalDialog DLG_ASS
         Text [ swedish ] = "~Dia" ;
         Text [ danish ] = "Dias" ;
         Text [ portuguese ] = "~Diapositivo" ;
-        Text[ chinese_simplified ] = "»ÃµÆÆ¬(~D)";
+        Text[ chinese_simplified ] = "å¹»ç¯ç‰‡(~D)";
         Text[ polish ] = "Slajd";
         Text[ russian ] = "Äèàïîçèòèâû";
         Text[ portuguese_brazilian ] = "Folie";
-        Text[ japanese ] = "½×²ÄŞ(~D)";
-        Text[ chinese_traditional ] = "§ë¼v¤ù(~D)";
+        Text[ japanese ] = "ï½½ï¾—ï½²ï¾„ï¾(~D)";
+        Text[ chinese_traditional ] = "æŠ•å½±ç‰‡(~D)";
         Text[ arabic ] = "ÔÑíÍÉ";
         Text[ greek ] = "ÄéáöÜíåéá";
-        Text[ korean ] = "½½¶óÀÌµå(~D)";
+        Text[ korean ] = "ìŠ¬ë¼ì´ë“œ(~D)";
         Text[ turkish ] = "Slayt";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Diapositiva";
@@ -494,14 +494,14 @@ ModalDialog DLG_ASS
         Text [ danish ] = "Overhead" ;
         Text [ portuguese_brazilian ] = "Papier" ;
         Text [ portuguese ] = "~Transparente" ;
-        Text[ chinese_simplified ] = "Í¸Ã÷²­(~V)";
+        Text[ chinese_simplified ] = "é€æ˜ç®”(~V)";
         Text[ russian ] = "Ïîëèıñòåğí. ïëåíêà";
         Text[ polish ] = "Folia";
-        Text[ japanese ] = "OHP¼°Ä(~V)";
-        Text[ chinese_traditional ] = "³z©ú½¦¯È(~V)";
+        Text[ japanese ] = "OHPï½¼ï½°ï¾„(~V)";
+        Text[ chinese_traditional ] = "é€æ˜è† ç´™(~V)";
         Text[ arabic ] = "ÑŞÇÆŞ ÈáÇÓÊíßíÉ ÔİÇİÉ";
         Text[ greek ] = "ÄéáöÜ~íåéá";
-        Text[ korean ] = "¿À¹öÇìµå(~V)";
+        Text[ korean ] = "ì˜¤ë²„í—¤ë“œ(~V)";
         Text[ turkish ] = "Tepegöz";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Transparencia";
@@ -525,14 +525,14 @@ ModalDialog DLG_ASS
         Text [ danish ] = "Papir" ;
         Text [ portuguese_brazilian ] = "Papier" ;
         Text [ portuguese ] = "~Papel" ;
-        Text[ chinese_simplified ] = "Ö½ÕÅ(~A)";
+        Text[ chinese_simplified ] = "çº¸å¼ (~A)";
         Text[ russian ] = "Áóìàãà";
         Text[ polish ] = "Papi~er";
-        Text[ japanese ] = "—p†(~A)";
-        Text[ chinese_traditional ] = "¯È±i(~A)";
+        Text[ japanese ] = "ç”¨ç´™(~A)";
+        Text[ chinese_traditional ] = "ç´™å¼µ(~A)";
         Text[ arabic ] = "æÑŞ";
         Text[ greek ] = "×áñôß";
-        Text[ korean ] = "¿ëÁö(~A)";
+        Text[ korean ] = "ìš©ì§€(~A)";
         Text[ turkish ] = "Kağıt";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Papel";
@@ -568,12 +568,12 @@ ModalDialog DLG_ASS
         Text[ swedish ] = "Välj en diabildsväxling";
         Text[ polish ] = "Wybierz typ przejœcia slajdu";
         Text[ portuguese_brazilian ] = "Choose your slide change";
-        Text[ japanese ] = "‰æ–ÊØ‚è‘Ö‚¦•û–@‚ğ‘I‘ğ‚µ‚Ü‚·";
-        Text[ chinese_simplified ] = "ÇëÑ¡ÔñÒ»¸ö¸ü»»µÄ»ÃµÆÆ¬¡£";
-        Text[ chinese_traditional ] = "½ĞÅÜ´«¤@­Ó§ë¼v¤ù";
+        Text[ japanese ] = "ç”»é¢åˆ‡ã‚Šæ›¿ãˆæ–¹æ³•ã‚’é¸æŠã—ã¾ã™";
+        Text[ chinese_simplified ] = "è¯·é€‰æ‹©ä¸€ä¸ªæ›´æ¢çš„å¹»ç¯ç‰‡ã€‚";
+        Text[ chinese_traditional ] = "è«‹è®Šæ›ä¸€å€‹æŠ•å½±ç‰‡";
         Text[ arabic ] = "ÇÎÊÑ ØÑíŞÉ ÊÛííÑ ÇáÔÑÇÆÍ";
         Text[ greek ] = "ÅğéëïãŞ áëëáãŞò äéáöáíåéşí";
-        Text[ korean ] = "½½¶óÀÌµå ÀüÈ¯À» ¼±ÅÃÇÏ½Ê½Ã¿À";
+        Text[ korean ] = "ìŠ¬ë¼ì´ë“œ ì „í™˜ì„ ì„ íƒí•˜ì‹­ì‹œì˜¤";
         Text[ turkish ] = "Bir slayt geçişi seçin";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Elija un cambio de diapositiva";
@@ -598,12 +598,12 @@ ModalDialog DLG_ASS
         Text[ swedish ] = "~Effekt";
         Text[ polish ] = "Efekt";
         Text[ portuguese_brazilian ] = "~Effect:";
-        Text[ japanese ] = "Œø‰Ê(~E)";
-        Text[ chinese_simplified ] = "Ğ§¹û(~E)";
-        Text[ chinese_traditional ] = "®ÄªG(~E)";
+        Text[ japanese ] = "åŠ¹æœ(~E)";
+        Text[ chinese_simplified ] = "æ•ˆæœ(~E)";
+        Text[ chinese_traditional ] = "æ•ˆæœ(~E)";
         Text[ arabic ] = "ÇáÊÃËíÑ:";
         Text[ greek ] = "Åöİ:";
-        Text[ korean ] = "È¿°ú(~E):";
+        Text[ korean ] = "íš¨ê³¼(~E):";
         Text[ turkish ] = "Efekt:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Efecto:";
@@ -638,12 +638,12 @@ ModalDialog DLG_ASS
         Text[ swedish ] = "Hasti~ghet";
         Text[ polish ] = "Szy~bkoœæ";
         Text[ portuguese_brazilian ] = "~Speed:";
-        Text[ japanese ] = "½Ëß°ÄŞ(~S)";
-        Text[ chinese_simplified ] = "ËÙ¶È(~S)";
-        Text[ chinese_traditional ] = "³t«×(~S)";
+        Text[ japanese ] = "ï½½ï¾‹ï¾Ÿï½°ï¾„ï¾(~S)";
+        Text[ chinese_simplified ] = "é€Ÿåº¦(~S)";
+        Text[ chinese_traditional ] = "é€Ÿåº¦(~S)";
         Text[ arabic ] = "ÇáÓÑÚÉ:";
         Text[ greek ] = "Ôá÷ıôçôá:";
-        Text[ korean ] = "¼Óµµ(~S):";
+        Text[ korean ] = "ì†ë„(~S):";
         Text[ turkish ] = "Hız:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Vel~ocidad:";
@@ -678,12 +678,12 @@ ModalDialog DLG_ASS
         Text[ swedish ] = "Välj typ av presentation";
         Text[ polish ] = "Wybierz typ prezentacji";
         Text[ portuguese_brazilian ] = "Choose the presentation kind";
-        Text[ japanese ] = "ÌßÚ¾ŞİÃ°¼®İ‚Ìí—Ş‚ğ‘I‘ğ‚µ‚Ü‚·";
-        Text[ chinese_simplified ] = "ÇëÄúÑ¡ÔñÒ»¸öÑİÊ¾ÎÄ¸åµÄÀàĞÍ¡£";
-        Text[ chinese_traditional ] = "½Ğ¿ï¾Ü¤@­ÓÂ²³øªºÃş«¬";
+        Text[ japanese ] = "ï¾Œï¾Ÿï¾šï½¾ï¾ï¾ï¾ƒï½°ï½¼ï½®ï¾ã®ç¨®é¡ã‚’é¸æŠã—ã¾ã™";
+        Text[ chinese_simplified ] = "è¯·æ‚¨é€‰æ‹©ä¸€ä¸ªæ¼”ç¤ºæ–‡ç¨¿çš„ç±»å‹ã€‚";
+        Text[ chinese_traditional ] = "è«‹é¸æ“‡ä¸€å€‹ç°¡å ±çš„é¡å‹";
         Text[ arabic ] = "ÇÎÊÑ äæÚ ÇáÚÑÖ ÇáÊŞÏíãí";
         Text[ greek ] = "Åğéëİîôå ôïí ôığï ôçò ğáñïõóßáóçò";
-        Text[ korean ] = "ÇÁ¸®Á¨Å×ÀÌ¼Ç Çü½ÄÀ» ¼±ÅÃÇÏ½Ê½Ã¿À";
+        Text[ korean ] = "í”„ë¦¬ì  í…Œì´ì…˜ í˜•ì‹ì„ ì„ íƒí•˜ì‹­ì‹œì˜¤";
         Text[ turkish ] = "Sunu türünü seçin";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Elija el tipo de presentación";
@@ -708,12 +708,12 @@ ModalDialog DLG_ASS
         Text[ swedish ] = "~Standard";
         Text[ polish ] = "Domyœlne";
         Text[ portuguese_brazilian ] = "~Standard";
-        Text[ japanese ] = "•W€(~D)";
-        Text[ chinese_simplified ] = "±ê×¼(~D)";
-        Text[ chinese_traditional ] = "¼Ğ·Ç(~D)";
+        Text[ japanese ] = "æ¨™æº–(~D)";
+        Text[ chinese_simplified ] = "æ ‡å‡†(~D)";
+        Text[ chinese_traditional ] = "æ¨™æº–(~D)";
         Text[ arabic ] = "ÇİÊÑÇÖí";
         Text[ greek ] = "ĞñïåğéëïãŞ";
-        Text[ korean ] = "±âº»(~D)";
+        Text[ korean ] = "ê¸°ë³¸(~D)";
         Text[ turkish ] = "Standart";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Predeterminado";
@@ -738,12 +738,12 @@ ModalDialog DLG_ASS
         Text[ swedish ] = "~Automatisk";
         Text[ polish ] = "Automatycznie";
         Text[ portuguese_brazilian ] = "~Auto";
-        Text[ japanese ] = "©“®(~A)";
-        Text[ chinese_simplified ] = "×Ô¶¯(~A)";
-        Text[ chinese_traditional ] = "¦Û°Ê(~A)";
+        Text[ japanese ] = "è‡ªå‹•(~A)";
+        Text[ chinese_simplified ] = "è‡ªåŠ¨(~A)";
+        Text[ chinese_traditional ] = "è‡ªå‹•(~A)";
         Text[ arabic ] = "ÊáŞÇÆí";
         Text[ greek ] = "Áõôüìáôá";
-        Text[ korean ] = "ÀÚµ¿(~A)";
+        Text[ korean ] = "ìë™(~A)";
         Text[ turkish ] = "Otomatik";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Automático";
@@ -768,12 +768,12 @@ ModalDialog DLG_ASS
         Text[ swedish ] = "~Tid per sida";
         Text[ polish ] = "Czas projekcji";
         Text[ portuguese_brazilian ] = "~Duration of page";
-        Text[ japanese ] = "½×²ÄŞ•\\¦ŠÔ(~U)";
-        Text[ chinese_simplified ] = "³ÖĞøÊ±¼ä(~U)";
-        Text[ chinese_traditional ] = "«ùÄò®É¶¡(~U)";
+        Text[ japanese ] = "ï½½ï¾—ï½²ï¾„ï¾è¡¨ç¤ºæ™‚é–“(~U)";
+        Text[ chinese_simplified ] = "æŒç»­æ—¶é—´(~U)";
+        Text[ chinese_traditional ] = "æŒçºŒæ™‚é–“(~U)";
         Text[ arabic ] = "ãÏÉ ÇáÈŞÇÁ";
         Text[ greek ] = "ÄéÜñêåéá óôÜóçò";
-        Text[ korean ] = "Áö¼Ó½Ã°£(~U)";
+        Text[ korean ] = "ì§€ì†ì‹œê°„(~U)";
         Text[ turkish ] = "Durma süresi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Duració~n página";
@@ -823,12 +823,12 @@ ModalDialog DLG_ASS
         Text[ swedish ] = "~Paustid";
         Text[ polish ] = "D³ugoœæ przerwy";
         Text[ portuguese_brazilian ] = "~Duration of pause";
-        Text[ japanese ] = "ŠÔ‚ğ’u‚­ŠÔ(~R)";
-        Text[ chinese_simplified ] = "ÔİÍ£Ê±¼ä(~R)";
-        Text[ chinese_traditional ] = "¼È°±®É¶¡(~R)";
+        Text[ japanese ] = "é–“ã‚’ç½®ãæ™‚é–“(~R)";
+        Text[ chinese_simplified ] = "æš‚åœæ—¶é—´(~R)";
+        Text[ chinese_traditional ] = "æš«åœæ™‚é–“(~R)";
         Text[ arabic ] = "ãÏÉ ÇáÅíŞÇİ ÇáãÄŞÊ";
         Text[ greek ] = "ÄéÜñêåéá ğñïóùñéíŞò äéáêïğŞò";
-        Text[ korean ] = "ÀÏ½ÃÁ¤Áö ±â°£(~R)";
+        Text[ korean ] = "ì¼ì‹œ ì •ì§€ ê¸°ê°„(~R)";
         Text[ turkish ] = "Ara verme sü.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Duración pausa";
@@ -879,16 +879,16 @@ ModalDialog DLG_ASS
         Text[ swedish ] = "Visa ~logotyp";
         Text[ polish ] = "Poka~¿ logo";
         Text[ portuguese_brazilian ] = "Show ~logo";
-        Text[ japanese ] = "ÛºŞ‚Ì•\\¦(~O)";
-        Text[ chinese_simplified ] = "ÏÔÊ¾»Õ±ê(~O)";
-        Text[ chinese_traditional ] = "Åã¥Ü¹Ï¼Ğ(~O)";
+        Text[ japanese ] = "ï¾›ï½ºï¾ã®è¡¨ç¤º(~O)";
+        Text[ chinese_simplified ] = "æ˜¾ç¤ºå¾½æ ‡(~O)";
+        Text[ chinese_traditional ] = "é¡¯ç¤ºåœ–æ¨™(~O)";
         Text[ arabic ] = "ÅÙåÇÑ ÔÚÇÑ";
         Text[ greek ] = "ÅìöÜíéóç ~ëïãüôõğïõ";
-        Text[ korean ] = "·Î°í ³ªÅ¸³»±â(~O)";
+        Text[ korean ] = "ë¡œê³  í‘œì‹œ(~O)";
         Text[ turkish ] = "Logo görüntüle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Mostrar logotipo";
-        Text[ finnish ] = "~Näytä logo";
+        Text[ finnish ] = "~N?yt? logo";
     };
 
     // Seite 4
@@ -918,14 +918,14 @@ ModalDialog DLG_ASS
         Text [ danish ] = "Beskriv dine grundlæggende ideer" ;
         Text [ portuguese ] = "Descreva as suas ideias de base" ;
         Text [ portuguese_brazilian ] = "Nennen Sie Ihre Grundgedanken" ;
-        Text[ chinese_simplified ] = "ÇëÊäÈëÄúµÄ»ù±¾ÉèÏë¡£";
+        Text[ chinese_simplified ] = "è¯·è¾“å…¥æ‚¨çš„åŸºæœ¬è®¾æƒ³ã€‚";
         Text[ russian ] = "Íàçîâèòå Âàøè îñíîâíûå èäåè";
         Text[ polish ] = "Przedstaw g³ówne idee";
-        Text[ japanese ] = "•\\¦‚·‚é€–Ú‚ğ“ü—Í‚µ‚Ü‚·";
-        Text[ chinese_traditional ] = "½Ğ¿é¤J±zªº°ò¥»³]·Q";
+        Text[ japanese ] = "è¡¨ç¤ºã™ã‚‹é …ç›®ã‚’å…¥åŠ›ã—ã¾ã™";
+        Text[ chinese_traditional ] = "è«‹è¼¸å…¥æ‚¨çš„åŸºæœ¬è¨­æƒ³";
         Text[ arabic ] = "Õİ ÃİßÇÑß ÇáÑÆíÓíÉ";
         Text[ greek ] = "ÅêöñÜóôå ôéò âáóéêİò óáò éäİåò";
-        Text[ korean ] = "±âº» ¾ÆÀÌµğ¾î¸¦ ¼­¼úÇÏ½Ê½Ã¿À";
+        Text[ korean ] = "ê¸°ë³¸ ì•„ì´ë””ì–´ë¥¼ ì„¤ëª…í•˜ì‹­ì‹œì˜¤";
         Text[ turkish ] = "Temel düşüncelerinizi belirtin";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Nombre sus ideas principales";
@@ -948,19 +948,19 @@ ModalDialog DLG_ASS
         Text [ danish ] = "Hvad er dit navn eller dit firmas navn?" ;
         Text [ portuguese ] = "Qual é o seu nome ou o nome da sua empresa?" ;
         Text [ portuguese_brazilian ] = "Wie ist Ihr Name oder der Name Ihrer Firma?" ;
-        Text[ chinese_simplified ] = "ÇëÊäÈëÄúµÄĞÕÃûºÍ¹«Ë¾Ãû³Æ¡£";
+        Text[ chinese_simplified ] = "è¯·è¾“å…¥æ‚¨çš„å§“åå’Œå…¬å¸åç§°ã€‚";
         Text[ russian ] = "Íàçîâèòå Âàøå èìÿ è íàèìåíîâàíèå Âàøåé îğãàíèçàöèè";
         Text[ polish ] = "Podaj proszê swoje nazwisko oraz nazwê swojej firmy";
-        Text[ japanese ] = "”­•\\Ò‚Ì–¼‘O‚Ü‚½‚Í‰ïĞ–¼‚Í?";
+        Text[ japanese ] = "ç™ºè¡¨è€…ã®åå‰ã¾ãŸã¯ä¼šç¤¾åã¯?";
 
-        Text[ chinese_traditional ] = "©m¦W©M¤½¥qªº¦WºÙ¡H";
+        Text[ chinese_traditional ] = "å§“åå’Œå…¬å¸çš„åç¨±ï¼Ÿ";
         Text[ arabic ] = "ãÇ åæ ÇÓãß Ãæ ÇÓã ÔÑßÊß¿";
         Text[ greek ] = "Ôï üíïìÜ óáò Ş ôï üíïìá ôçò åôáéñßáò óáò:";
-        Text[ korean ] = "±ÍÇÏ ¼º¸í ¶Ç´Â ±ÍÇÏ°¡ ¼ÓÇØ ÀÖ´Â È¸»çÀÇ ÀÌ¸§Àº ¹«¾ùÀÔ´Ï±î?";
+        Text[ korean ] = "ì‚¬ìš©ì ì´ë¦„ ë˜ëŠ” íšŒì‚¬ì˜ ì´ë¦„ì€ ë¬´ì—‡ì…ë‹ˆê¹Œ?";
         Text[ turkish ] = "Adınız ya da firmanızın adı nedir?";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "¿Cuál es su nombre o el nombre de su empresa?";
-        Text[ finnish ] = "Mikä on yrityksesi nimi?";
+        Text[ finnish ] = "Mik? on yrityksesi nimi?";
     };
     Edit EDT_PAGE4_ASKNAME
     {
@@ -986,18 +986,18 @@ ModalDialog DLG_ASS
         Text [ danish ] = "Hvilket emne skal præsentationen have?" ;
         Text [ portuguese ] = "Qual é o tema da sua apresentação?" ;
         Text [ portuguese_brazilian ] = "Was ist der Themenbereich Ihrer Pr?sentation?" ;
-        Text[ chinese_simplified ] = "ÑİÊ¾ÎÄ¸åµÄÖ÷Ìâ°üÀ¨ÄÄĞ©·½Ãæ£¿";
+        Text[ chinese_simplified ] = "æ¼”ç¤ºæ–‡ç¨¿çš„ä¸»é¢˜åŒ…æ‹¬å“ªäº›æ–¹é¢ï¼Ÿ";
         Text[ russian ] = "Íàçîâèòå òåìó Âàøåé ïğåçåíòàöèè";
         Text[ polish ] = "Co jest tematem twojej prezentacji?";
-        Text[ japanese ] = "ÌßÚ¾ŞİÃ°¼®İ‚ÌÃ°Ï”ÍˆÍ‚Í?";
-        Text[ chinese_traditional ] = "Â²³ø¥DÃD¥]¬A¨º¨Ç¤è­±¡H";
+        Text[ japanese ] = "ï¾Œï¾Ÿï¾šï½¾ï¾ï¾ï¾ƒï½°ï½¼ï½®ï¾ã®ï¾ƒï½°ï¾ç¯„å›²ã¯?";
+        Text[ chinese_traditional ] = "ç°¡å ±ä¸»é¡ŒåŒ…æ‹¬é‚£äº›æ–¹é¢ï¼Ÿ";
         Text[ arabic ] = "ãÇ åæ ãæÖæÚ ÇáÚÑÖ ÇáÊŞÏíãí ÇáÎÇÕ Èß¿";
         Text[ greek ] = "Ğïéü åßíáé ôï áíôéêåßìåíï ôçò ğáñïõóßáóçò óáò;";
-        Text[ korean ] = "±ÍÇÏÀÇ ÇÁ¸®Á¨Å×ÀÌ¼Ç ÁÖÁ¦´Â ¹«¾ùÀÔ´Ï±î?";
+        Text[ korean ] = "í”„ë¦¬ì  í…Œì´ì…˜ ì£¼ì œëŠ” ë¬´ì—‡ì…ë‹ˆê¹Œ?";
         Text[ turkish ] = "Sununuzun konusu nedir?";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "¿Cuál es la temática de su presentación?";
-        Text[ finnish ] = "Mikä on esityksen aihe?";
+        Text[ finnish ] = "Mik? on esityksen aihe?";
     };
     Edit EDT_PAGE4_ASKTOPIC
     {
@@ -1023,18 +1023,18 @@ ModalDialog DLG_ASS
         Text [ danish ] = "Yderligere ideer som skal præsenteres?" ;
         Text [ portuguese ] = "Outras ideias a apresentar?" ;
         Text [ portuguese_brazilian ] = "Weitere darzustellende Gedanken?" ;
-        Text[ chinese_simplified ] = "»¹ĞèÒª¼ÓÈëÆäËûµÄÉèÏë£¿";
+        Text[ chinese_simplified ] = "è¿˜éœ€è¦åŠ å…¥å…¶ä»–çš„è®¾æƒ³ï¼Ÿ";
         Text[ russian ] = "Íàçîâèòå Âàøè äîïîëíèòåëüíûå èäåè";
         Text[ polish ] = "Dodatkowe pomys³y do uwzglêdnienia w prezentacji?";
-        Text[ japanese ] = "‚»‚Ì‘¼‚É•\\¦‚µ‚½‚¢î•ñ‚Í?";
-        Text[ chinese_traditional ] = "ÁÙ­n¥[¤J¨ä¥Lªº³]·Q¡H";
+        Text[ japanese ] = "ãã®ä»–ã«è¡¨ç¤ºã—ãŸã„æƒ…å ±ã¯?";
+        Text[ chinese_traditional ] = "é‚„è¦åŠ å…¥å…¶ä»–çš„è¨­æƒ³ï¼Ÿ";
         Text[ arabic ] = "åá åäÇß ÃİßÇÑ ÃÎÑì ÊÑíÏ ÚÑÖåÇ¿";
         Text[ greek ] = "Ğåñéóóüôåñåò éäİåò ğñïò ğáñïõóßáóç;";
-        Text[ korean ] = "³ªÅ¸³¾ ¾ÆÀÌµğ¾î°¡ ±×¹Û¿¡ ¶Ç ÀÖ½À´Ï±î?";
+        Text[ korean ] = "ê·¸ ë°–ì— ì„¤ëª…í•  ì•„ì´ë””ì–´ê°€ ë˜ ìˆìŠµë‹ˆê¹Œ?";
         Text[ turkish ] = "Eklemek istediğiniz diğer düşünceler?";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "¿Otras ideas a presentar?";
-        Text[ finnish ] = "Muita esiteltäviä ajatuksia?";
+        Text[ finnish ] = "Muita esitelt?vi? ajatuksia?";
     };
     MultiLineEdit EDT_PAGE4_ASKINFORMATION
     {
@@ -1072,15 +1072,15 @@ ModalDialog DLG_ASS
         Text[ spanish ] = "~Elija las páginas que desee";
         Text[ italian ] = "Scegliete le pagine desiderate";
         Text[ danish ] = "Vælg de ønskede sider";
-        Text[ swedish ] = "~Välj ut de önskade sidorna";
+        Text[ swedish ] = "~Välj de önskade sidorna";
         Text[ polish ] = "Wybierz potrzebne strony";
         Text[ portuguese_brazilian ] = "~Choose your pages";
-        Text[ japanese ] = "‚²Šó–]‚ÌÍß°¼Ş‚ğ‘I‘ğ‚µ‚Ä‚­‚¾‚³‚¢(~O)";
-        Text[ chinese_simplified ] = "ÇëÄúÑ¡ÔñÒ³Ãæ(~O)";
-        Text[ chinese_traditional ] = "½Ğ±z¿ï¾Ü­¶­±(~O)";
+        Text[ japanese ] = "ã”å¸Œæœ›ã®ï¾ï¾Ÿï½°ï½¼ï¾ã‚’é¸æŠã—ã¦ãã ã•ã„(~O)";
+        Text[ chinese_simplified ] = "è¯·æ‚¨é€‰æ‹©é¡µé¢(~O)";
+        Text[ chinese_traditional ] = "è«‹æ‚¨é¸æ“‡é é¢(~O)";
         Text[ arabic ] = "ÇÎÊÑ ÕİÍÇÊß";
         Text[ greek ] = "Åğéëİîôå ôéò óåëßäåò ğïõ åğéèõìåßôå";
-        Text[ korean ] = "¿øÇÏ´Â ÆäÀÌÁö¸¦ ¼±ÅÃÇÏ½Ê½Ã¿À(~O)";
+        Text[ korean ] = "ì›í•˜ëŠ” í˜ì´ì§€ë¥¼ ì„ íƒí•˜ì‹­ì‹œì˜¤(~O)";
         Text[ turkish ] = "İstediğiniz sayfaları seçin";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Elija las páginas que desee";
@@ -1093,6 +1093,7 @@ ModalDialog DLG_ASS
         Pos = MAP_APPFONT ( 6 , 50 );
         Size = MAP_APPFONT ( 132 , 100 );
         Border = TRUE;
+        TabStop = TRUE ;
     };
 
     CheckBox CB_PAGE5_SUMMARY
@@ -1100,6 +1101,7 @@ ModalDialog DLG_ASS
         OutputSize = TRUE;
         Pos = MAP_APPFONT ( 6 , 154  );
         Size = MAP_APPFONT ( 132 , 10 );
+        TabStop = TRUE ;
         Text = "~Zusammenfassung erstellen";
         Text [ ENGLISH ] = "~Create summary";
         Text[ english_us ] = "C~reate summary";
@@ -1113,12 +1115,12 @@ ModalDialog DLG_ASS
         Text[ swedish ] = "Skapa ~sammanfattning";
         Text[ polish ] = "Utwórz podsu~mowanie";
         Text[ portuguese_brazilian ] = "~Create summary";
-        Text[ japanese ] = "‚Ü‚Æ‚ß‚Ìì¬(~R)";
-        Text[ chinese_simplified ] = "ºÏ²¢(~R)";
-        Text[ chinese_traditional ] = "¦X¨Ö(~R)";
+        Text[ japanese ] = "ã¾ã¨ã‚ã®ä½œæˆ(~R)";
+        Text[ chinese_simplified ] = "åˆå¹¶(~R)";
+        Text[ chinese_traditional ] = "åˆä½µ(~R)";
         Text[ arabic ] = "ÅäÔÇÁ ÊáÎíÕ";
         Text[ greek ] = "Äçìéïõñãßá óıíïøçò";
-        Text[ korean ] = "¿ä¾à ÀÛ¼º(~R)";
+        Text[ korean ] = "ìš”ì•½ ì‘ì„±(~R)";
         Text[ turkish ] = "Özet oluştur";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Crear resumen";
@@ -1159,14 +1161,14 @@ ModalDialog DLG_ASS
         Text [ danish ] = "<< Tilbage" ;
         Text [ portuguese_brazilian ] = "<< ~Zur?k" ;
         Text [ portuguese ] = "<< ~Anterior" ;
-        Text[ chinese_simplified ] = "<< ·µ»Ø(~B)";
+        Text[ chinese_simplified ] = "<< è¿”å›(~B)";
         Text[ russian ] = "<< ~Íàçàä";
         Text[ polish ] = "<< Wstecz";
-        Text[ japanese ] = "<< –ß‚é(~B)";
-        Text[ chinese_traditional ] = "<< ªğ¦^(~B)";
+        Text[ japanese ] = "<< æˆ»ã‚‹(~B)";
+        Text[ chinese_traditional ] = "<< è¿”å›(~B)";
         Text[ arabic ] = ">> ÇáÓÇÈŞ";
         Text[ greek ] = "<< ~Ğßóù";
-        Text[ korean ] = "<< µÚ·Î(~B)";
+        Text[ korean ] = "<< ë’¤ë¡œ(~B)";
         Text[ turkish ] = "<< Geri";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "<< ~Regresar";
@@ -1191,14 +1193,14 @@ ModalDialog DLG_ASS
         Text [ danish ] = "Næste >>" ;
         Text [ portuguese_brazilian ] = "~Weiter >>" ;
         Text [ portuguese ] = "~Seguinte >>" ;
-        Text[ chinese_simplified ] = "¼ÌĞø  (~N) >>";
+        Text[ chinese_simplified ] = "ç»§ç»­    (~N) >>";
         Text[ russian ] = "~Äàëåå >>";
         Text[ polish ] = "Dalej >>";
-        Text[ japanese ] = "Ÿ‚Ö  (~N) >>";
-        Text[ chinese_traditional ] = "Ä~Äò (~N) >>";
+        Text[ japanese ] = "æ¬¡ã¸(~N) >>";
+        Text[ chinese_traditional ] = "ç¹¼çºŒ   (~N) >>";
         Text[ arabic ] = "ÇáÊÇáí <<";
         Text[ greek ] = "Åğüìåíï >>";
-        Text[ korean ] = "´ÙÀ½  (~N) >>";
+        Text[ korean ] = "ë‹¤ìŒ   (~N) >>";
         Text[ turkish ] = "İleri >>";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Siguiente >>";
@@ -1222,14 +1224,14 @@ ModalDialog DLG_ASS
         Text [ danish ] = "Udfør" ;
         Text [ portuguese ] = "~Criar" ;
         Text [ portuguese_brazilian ] = "~Fertigstellen" ;
-        Text[ chinese_simplified ] = "Íê³É(~C)";
+        Text[ chinese_simplified ] = "å®Œæˆ(~C)";
         Text[ russian ] = "~Ãîòîâî";
         Text[ polish ] = "Utwórz";
-        Text[ japanese ] = "Š®—¹(~C)";
-        Text[ chinese_traditional ] = "§¹¦¨(~C)";
+        Text[ japanese ] = "å®Œäº†(~C)";
+        Text[ chinese_traditional ] = "å®Œæˆ(~C)";
         Text[ arabic ] = "ÅäÔÇÁ";
         Text[ greek ] = "Äçìéïõñãßá";
-        Text[ korean ] = "¸¸µé±â(~C)";
+        Text[ korean ] = "ë§Œë“¤ê¸°(~C)";
         Text[ turkish ] = "Oluştur";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Crear";
@@ -1237,38 +1239,23 @@ ModalDialog DLG_ASS
     };
     Text[ english_us ] = "AutoPilot Presentation";
     Text[ portuguese ] = "AutoPiloto Apresentação";
-    Text[ russian ] = "Àâòîïèëîò - Ïğåçåíòàöèÿ";
+    Text[ russian ] = "Àâòîïèëîò ïğåçåíòàöèé";
     Text[ dutch ] = "AutoPiloot Presentatie";
     Text[ french ] = "AutoPilote de présentation";
     Text[ spanish ] = "AutoPiloto Presentación";
     Text[ italian ] = "Pilota automatico Presentazione";
     Text[ danish ] = "AutoPilot præsentation";
     Text[ swedish ] = "AutoPilot Presentation";
-    Text[ polish ] = "AutoPilot prezentacji";
+    Text[ polish ] = "AutoPilot: Prezentacja";
     Text[ portuguese_brazilian ] = "Autopilot Presentation";
-    Text[ japanese ] = "µ°ÄÊß²Û¯Ä ÌßÚ¾ŞİÃ°¼®İ";
-    Text[ chinese_simplified ] = "×Ô¶¯ÎÄ¼şÖúÀí ÑİÊ¾ÎÄ¸å";
-    Text[ chinese_traditional ] = "¦Û°ÊÀÉ®×§U²z Â²³ø";
+    Text[ japanese ] = "ï½µï½°ï¾„ï¾Šï¾Ÿï½²ï¾›ï½¯ï¾„ ï¾Œï¾Ÿï¾šï½¾ï¾ï¾ï¾ƒï½°ï½¼ï½®ï¾";
+    Text[ chinese_simplified ] = "è‡ªåŠ¨æ–‡ä»¶åŠ©ç† æ¼”ç¤ºæ–‡ç¨¿";
+    Text[ chinese_traditional ] = "è‡ªå‹•æª”æ¡ˆåŠ©ç† ç°¡å ±";
     Text[ arabic ] = "ÇáãÑÔÏ ÇáÂáí ááÚÑÖ ÇáÊŞÏíãí";
     Text[ greek ] = "Ğáñïõóßáóç AutoPilot";
-    Text[ korean ] = "ÀÚµ¿ÆÄÀÏ·µ ÇÁ¸®Á¨Å×ÀÌ¼Ç";
+    Text[ korean ] = "ìë™ íŒŒì¼ëŸ¿ í”„ë¦¬ì  í…Œì´ì…˜";
     Text[ turkish ] = "Sunu OtoPilotu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "AutoPiloto Presentación";
     Text[ finnish ] = "Automaattinen esityksen ohjaus";
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
