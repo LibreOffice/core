@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: gh $ $Date: 2002-11-20 14:11:48 $
+#   last change: $Author: vg $ $Date: 2003-06-10 11:30:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,7 +79,7 @@ LIB1FILES=              \
     $(SLB)$/server.lib
 
 SHL1TARGET= sts$(UPD)$(DLLPOSTFIX)
-SHL1IMPLIB= $(TARGET)
+SHL1IMPLIB= ists
 
 SHL1STDLIBS= \
             $(TOOLSLIB) \
@@ -107,9 +107,6 @@ SHL1STDLIBS+=$(LIBCIMT) \
         $(LIBPRE) advapi32.lib	\
         $(LIBPRE) gdi32.lib
 .ENDIF
-
-#SHL1DEPN=       $(L)$/itools.lib $(SVLIBDEPEND) $(L)$/so2.lib $(L)$/svtool.lib
-
 
 SHL1DEF=        $(MISC)$/$(SHL1TARGET).def
 SHL1LIBS=       $(SLB)$/$(TARGET).lib 
@@ -178,9 +175,7 @@ APP1STDLIBS+= \
 .ENDIF
     
 APP1DEPN=\
-        $(L)$/itools.lib \
-        $(SVLIBDEPEND) \
-        $(LB)$/testtool.lib   \
+        $(LB)$/testtool.lib
 
 APP1OBJS=       $(OBJ)$/testbasi.obj \
                 $(OBJ)$/cmdbasestream.obj \
@@ -212,13 +207,11 @@ APP3STDLIBS+= \
             $(VOSLIB) $(SALLIB)
 .ENDIF
 
-
 APP3LIBS= \
         $(LIBPRE) $(LB)$/miniapp.lib
 
 APP3DEPN=\
-        $(L)$/itools.lib \
-        $(SVLIBDEPEND) \
+        $(SHL1TARGETN) \
         $(LB)$/miniapp.lib
 
 .IF "$(GUI)" != "UNX"
@@ -228,9 +221,7 @@ APP3OBJS=		$(OBJ)$/testapp.obj
 
 # --- Targets -----------------------------------------------------------
 
-ALL: $(LIB1TARGET)                 \
-     ALLTAR
-
+.INCLUDE :  target.mk
 
 # --- Basic-Filter-Datei ---
 
@@ -246,6 +237,4 @@ $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo __CT >> $@
 
 # ------------------------------------------------------------------------
-
-.INCLUDE :  target.mk
 
