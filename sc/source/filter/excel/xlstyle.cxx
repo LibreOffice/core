@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlstyle.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:25:57 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:35:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,13 @@
 
 #ifndef SC_XLSTYLE_HXX
 #include "xlstyle.hxx"
+#endif
+
+#ifndef _SV_FONT_HXX
+#include <vcl/font.hxx>
+#endif
+#ifndef _RTL_TENCINFO_H
+#include <rtl/tencinfo.h>
 #endif
 
 
@@ -159,6 +166,16 @@ ColorData XclDefaultPalette::GetDefColorData( sal_uInt16 nXclIndex, ColorData nD
 
 // Font Data ==================================================================
 
+XclFontData::XclFontData()
+{
+    Clear();
+}
+
+XclFontData::XclFontData( const Font& rFont )
+{
+    FillFromFont( rFont );
+}
+
 void XclFontData::Clear()
 {
     maName.Erase();
@@ -171,6 +188,199 @@ void XclFontData::Clear()
     mnFamily = EXC_FONTFAM_SYSTEM;
     mnCharSet = EXC_FONTCSET_DONTKNOW;
     mbItalic = mbStrikeout = mbOutline = mbShadow = false;
+}
+
+void XclFontData::FillFromFont( const Font& rFont )
+{
+    maName = XclTools::GetXclFontName( rFont.GetName() );   // #106246# substitute with MS fonts
+    maStyle.Erase();
+    SetScUnderline( rFont.GetUnderline() );
+    meEscapem = xlEscNone;
+    SetScHeight( rFont.GetSize().Height() );
+    mnColor = EXC_FONT_AUTOCOLOR;
+    SetScWeight( rFont.GetWeight() );
+    SetScFamily( rFont.GetFamily() );
+    SetScCharSet( rFont.GetCharSet() );
+    SetScPosture( rFont.GetItalic() );
+    SetScStrikeout( rFont.GetStrikeout() );
+    mbOutline = !!rFont.IsOutline();  // BOOL->bool
+    mbShadow = !!rFont.IsShadow();    // BOOL->bool
+}
+
+FontFamily XclFontData::GetScFamily( CharSet eDefCharSet ) const
+{
+    FontFamily eScFamily;
+    // ! format differs from Windows documentation: family is in lower nibble, pitch unknown
+    switch( mnFamily & 0x0F )
+    {
+        case EXC_FONTFAM_ROMAN:         eScFamily = FAMILY_ROMAN;       break;
+        case EXC_FONTFAM_SWISS:         eScFamily = FAMILY_SWISS;       break;
+        case EXC_FONTFAM_MODERN:        eScFamily = FAMILY_MODERN;      break;
+        case EXC_FONTFAM_SCRIPT:        eScFamily = FAMILY_SCRIPT;      break;
+        case EXC_FONTFAM_DECORATIVE:    eScFamily = FAMILY_DECORATIVE;  break;
+        default:
+            eScFamily =
+                ((eDefCharSet == RTL_TEXTENCODING_APPLE_ROMAN) &&
+                (maName.EqualsIgnoreCaseAscii( "Geneva" ) || maName.EqualsIgnoreCaseAscii( "Chicago" ))) ?
+                FAMILY_SWISS : FAMILY_DONTKNOW;
+    }
+    return eScFamily;
+}
+
+CharSet XclFontData::GetScCharSet() const
+{
+    return rtl_getTextEncodingFromWindowsCharset( mnCharSet );
+}
+
+FontItalic XclFontData::GetScPosture() const
+{
+    return mbItalic ? ITALIC_NORMAL : ITALIC_NONE;
+}
+
+FontWeight XclFontData::GetScWeight() const
+{
+    FontWeight eScWeight;
+
+    if( !mnWeight )             eScWeight = WEIGHT_DONTKNOW;
+    else if( mnWeight < 150 )   eScWeight = WEIGHT_THIN;
+    else if( mnWeight < 250 )   eScWeight = WEIGHT_ULTRALIGHT;
+    else if( mnWeight < 325 )   eScWeight = WEIGHT_LIGHT;
+    else if( mnWeight < 375 )   eScWeight = WEIGHT_SEMILIGHT;
+    else if( mnWeight < 450 )   eScWeight = WEIGHT_NORMAL;
+    else if( mnWeight < 550 )   eScWeight = WEIGHT_MEDIUM;
+    else if( mnWeight < 650 )   eScWeight = WEIGHT_SEMIBOLD;
+    else if( mnWeight < 750 )   eScWeight = WEIGHT_BOLD;
+    else if( mnWeight < 850 )   eScWeight = WEIGHT_ULTRABOLD;
+    else                        eScWeight = WEIGHT_BLACK;
+
+    return eScWeight;
+}
+
+FontUnderline XclFontData::GetScUnderline() const
+{
+    FontUnderline eScUnderl = UNDERLINE_NONE;
+    switch( meUnderline )
+    {
+        case xlUnderlSingle:
+        case xlUnderlSingleAcc: eScUnderl = UNDERLINE_SINGLE;  break;
+        case xlUnderlDouble:
+        case xlUnderlDoubleAcc: eScUnderl = UNDERLINE_DOUBLE;  break;
+    }
+    return eScUnderl;
+}
+
+SvxEscapement XclFontData::GetScEscapement() const
+{
+    SvxEscapement eScEscapem = SVX_ESCAPEMENT_OFF;
+    switch( meEscapem )
+    {
+        case xlEscSuper:    eScEscapem = SVX_ESCAPEMENT_SUPERSCRIPT;    break;
+        case xlEscSub:      eScEscapem = SVX_ESCAPEMENT_SUBSCRIPT;      break;
+    }
+    return eScEscapem;
+}
+
+FontStrikeout XclFontData::GetScStrikeout() const
+{
+    return mbStrikeout ? STRIKEOUT_SINGLE : STRIKEOUT_NONE;
+}
+
+void XclFontData::SetScHeight( sal_Int32 nTwips )
+{
+    mnHeight = static_cast< sal_uInt16 >( ::std::min( nTwips, 0x7FFFL ) );
+}
+
+void XclFontData::SetScFamily( FontFamily eScFamily )
+{
+    switch( eScFamily )
+    {
+        case FAMILY_DONTKNOW:   mnCharSet = EXC_FONTFAM_DONTKNOW;   break;
+        case FAMILY_DECORATIVE: mnCharSet = EXC_FONTFAM_DECORATIVE; break;
+        case FAMILY_MODERN:     mnCharSet = EXC_FONTFAM_MODERN;     break;
+        case FAMILY_ROMAN:      mnCharSet = EXC_FONTFAM_ROMAN;      break;
+        case FAMILY_SCRIPT:     mnCharSet = EXC_FONTFAM_SCRIPT;     break;
+        case FAMILY_SWISS:      mnCharSet = EXC_FONTFAM_SWISS;      break;
+        case FAMILY_SYSTEM:     mnCharSet = EXC_FONTFAM_SYSTEM;     break;
+        default:
+            DBG_ERRORFILE( "XclFontData::SetScFamily - unknown font family" );
+            mnCharSet = EXC_FONTFAM_DONTKNOW;
+    }
+}
+
+void XclFontData::SetScCharSet( CharSet eScCharSet )
+{
+    mnCharSet = rtl_getBestWindowsCharsetFromTextEncoding( eScCharSet );
+}
+
+
+void XclFontData::SetScPosture( FontItalic eScPosture )
+{
+    mbItalic = (eScPosture == ITALIC_OBLIQUE) || (eScPosture == ITALIC_NORMAL);
+}
+
+void XclFontData::SetScWeight( FontWeight eScWeight )
+{
+    switch( eScWeight )
+    {
+        case WEIGHT_DONTKNOW:   mnWeight = EXC_FONTWGHT_DONTKNOW;   break;
+        case WEIGHT_THIN:       mnWeight = EXC_FONTWGHT_THIN;       break;
+        case WEIGHT_ULTRALIGHT: mnWeight = EXC_FONTWGHT_ULTRALIGHT; break;
+        case WEIGHT_LIGHT:      mnWeight = EXC_FONTWGHT_LIGHT;      break;
+        case WEIGHT_SEMILIGHT:  mnWeight = EXC_FONTWGHT_SEMILIGHT;  break;
+        case WEIGHT_NORMAL:     mnWeight = EXC_FONTWGHT_NORMAL;     break;
+        case WEIGHT_MEDIUM:     mnWeight = EXC_FONTWGHT_MEDIUM;     break;
+        case WEIGHT_SEMIBOLD:   mnWeight = EXC_FONTWGHT_SEMIBOLD;   break;
+        case WEIGHT_BOLD:       mnWeight = EXC_FONTWGHT_BOLD;       break;
+        case WEIGHT_ULTRABOLD:  mnWeight = EXC_FONTWGHT_ULTRABOLD;  break;
+        case WEIGHT_BLACK:      mnWeight = EXC_FONTWGHT_BLACK;      break;
+        default:                mnWeight = EXC_FONTWGHT_NORMAL;
+    }
+}
+
+void XclFontData::SetScUnderline( FontUnderline eScUnderl )
+{
+    switch( eScUnderl )
+    {
+        case UNDERLINE_SINGLE:  meUnderline = xlUnderlSingle;       break;
+        case UNDERLINE_DOUBLE:  meUnderline = xlUnderlDouble;       break;
+        case UNDERLINE_DOTTED:  meUnderline = xlUnderlSingleAcc;    break;
+        default:                meUnderline = xlUnderlNone;
+    }
+}
+
+void XclFontData::SetScEscapement( SvxEscapement eScEscapem )
+{
+    switch( eScEscapem )
+    {
+        case SVX_ESCAPEMENT_SUPERSCRIPT:    meEscapem = xlEscSuper; break;
+        case SVX_ESCAPEMENT_SUBSCRIPT:      meEscapem = xlEscSub;   break;
+        default:                            meEscapem = xlEscNone;
+    }
+}
+
+void XclFontData::SetScStrikeout( FontStrikeout eScStrikeout )
+{
+    mbStrikeout =
+        (eScStrikeout == STRIKEOUT_SINGLE) || (eScStrikeout == STRIKEOUT_DOUBLE) ||
+        (eScStrikeout == STRIKEOUT_BOLD) || (eScStrikeout == STRIKEOUT_SLASH) ||
+        (eScStrikeout == STRIKEOUT_X);
+}
+
+bool operator==( const XclFontData& rLeft, const XclFontData& rRight )
+{
+    return
+        (rLeft.mnHeight    == rRight.mnHeight)    &&
+        (rLeft.mnWeight    == rRight.mnWeight)    &&
+        (rLeft.mnColor     == rRight.mnColor)     &&
+        (rLeft.meUnderline == rRight.meUnderline) &&
+        (rLeft.meEscapem   == rRight.meEscapem)   &&
+        (rLeft.mnFamily    == rRight.mnFamily)    &&
+        (rLeft.mnCharSet   == rRight.mnCharSet)   &&
+        (rLeft.mbItalic    == rRight.mbItalic)    &&
+        (rLeft.mbStrikeout == rRight.mbStrikeout) &&
+        (rLeft.mbOutline   == rRight.mbOutline)   &&
+        (rLeft.mbShadow    == rRight.mbShadow)    &&
+        (rLeft.maName      == rRight.maName);
 }
 
 
@@ -282,6 +492,4 @@ bool XclXFBase::Equals( const XclXFBase& rCmp ) const
         (mbBorderUsed == rCmp.mbBorderUsed) && (mbAreaUsed  == rCmp.mbAreaUsed);
 }
 
-
 // ============================================================================
-
