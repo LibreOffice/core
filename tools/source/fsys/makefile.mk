@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 17:04:02 $
+#   last change: $Author: rt $ $Date: 2003-04-24 13:27:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,6 +68,14 @@ TARGET=fsys
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+
+.IF "$(GUI)"=="WNT"
+CFLAGS+=-GX
+.ENDIF
+.IF "$(COM)"=="GCC"
+CFLAGSCXX+=-fexceptions
+.ENDIF
+
 
 # --- Files --------------------------------------------------------
 
