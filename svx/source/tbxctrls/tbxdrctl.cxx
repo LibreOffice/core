@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxdrctl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 15:35:54 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:14:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,9 +149,6 @@ void SvxTbxCtlDraw::toggleToolbox()
             bCheck = TRUE;
             xLayoutMgr->createElement( m_sToolboxName );
             xLayoutMgr->showElement( m_sToolboxName );
-            ::com::sun::star::awt::Point aPos;
-            xLayoutMgr->dockWindow( m_sToolboxName,
-                ::drafts::com::sun::star::ui::DockingArea_DOCKINGAREA_BOTTOM, aPos );
         }
 
         GetToolBox().CheckItem( GetId(), bCheck );
