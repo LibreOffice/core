@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-14 14:46:43 $
+ *  last change: $Author: cmc $ $Date: 2002-01-15 11:21:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -638,8 +638,8 @@ sal_Bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
     SvxExtNumType   eType;              // Writer-Num-Typ
     SvxAdjust       eAdj;               // Ausrichtung (Links/rechts/zent.)
     sal_Unicode     cBullet;
-    String          aPrefix;
-    String          aPostfix;
+    String          sPrefix;
+    String          sPostfix;
     WW8LVL          aLVL;
     //
     // 1. LVLF einlesen
@@ -794,8 +794,8 @@ sal_Bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
         if( !cBullet )  // unsave control code?
             cBullet = 0x2190;
 
-        aPrefix  = aEmptyStr;
-        aPostfix = aEmptyStr;
+        sPrefix  = aEmptyStr;
+        sPostfix = aEmptyStr;
     }
     else
     {
@@ -807,14 +807,14 @@ sal_Bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
         1 there is a "prefix" before the number
         */
         if(aLVL.aOfsNumsXCH[0] <= 1)
-            aPrefix = aEmptyStr;
+            sPrefix = aEmptyStr;
         else
-            aPrefix = sNumString.Copy(0,aLVL.aOfsNumsXCH[0]-1);
+            sPrefix = sNumString.Copy(0,aLVL.aOfsNumsXCH[0]-1);
 
         if(nUpperLevel && (sNumString.Len() > aLVL.aOfsNumsXCH[nUpperLevel-1]))
-            aPostfix = sNumString.Copy(aLVL.aOfsNumsXCH[nUpperLevel-1]);
+            sPostfix = sNumString.Copy(aLVL.aOfsNumsXCH[nUpperLevel-1]);
         else
-            aPostfix.Erase();
+            sPostfix.Erase();
     }
 
     switch( aLVL.nAlign )
@@ -856,10 +856,10 @@ sal_Bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
     else
     {
         // reminder: Garnix ist default Prefix
-        if( aPrefix.Len() )
-            rNumFmt.SetPrefix( aPrefix );
+        if( sPrefix.Len() )
+            rNumFmt.SetPrefix( sPrefix );
         // reminder: Point is default Postfix
-        rNumFmt.SetSuffix( aPostfix );
+        rNumFmt.SetSuffix( sPostfix );
         rNumFmt.SetIncludeUpperLevels( nUpperLevel );
     }
 
@@ -877,7 +877,7 @@ void WW8ListManager::AdjustLVL( sal_uInt8       nLevel,
                                 WW8aISet&  rListItemSet,
                                 WW8aCFmt&  rCharFmt,
                                 sal_Bool&      bNewCharFmtCreated,
-                                String     aPrefix )
+                                String     sPrefix )
 {
     bNewCharFmtCreated = sal_False;
     SfxItemSet* pThisLevelItemSet;
@@ -928,7 +928,7 @@ void WW8ListManager::AdjustLVL( sal_uInt8       nLevel,
         if( nWW8MaxListLevel == nIdenticalItemSetLevel )
         {
             // Style definieren
-            String aName( aPrefix.Len() ? aPrefix : rNumRule.GetName() );
+            String aName( sPrefix.Len() ? sPrefix : rNumRule.GetName() );
             (aName += 'z') += String::CreateFromInt32( nLevel );
 
             pFmt = rDoc.MakeCharFmt( aName,
@@ -1025,11 +1025,11 @@ sal_Bool WW8ListManager::LFOequaltoLST(WW8LFOInfo& rLFOInfo)
 
 SwNumRule* WW8ListManager::CreateNextRule(BOOL bSimple)
 {
-    String aPrefix;     // wird erstmal zur Bildung des Style Namens genommen
-    aPrefix  = WW8_ASCII2STR( "WW8Num" );
-    aPrefix += String::CreateFromInt32( nUniqueList++ );
+    String sPrefix;     // wird erstmal zur Bildung des Style Namens genommen
+    sPrefix  = WW8_ASCII2STR( "WW8Num" );
+    sPrefix += String::CreateFromInt32( nUniqueList++ );
     sal_uInt16 nRul =
-        rDoc.MakeNumRule(rDoc.GetUniqueNumRuleName( &aPrefix ));
+        rDoc.MakeNumRule(rDoc.GetUniqueNumRuleName( &sPrefix ));
     SwNumRule* pMyNumRule = rDoc.GetNumRuleTbl()[nRul];
     pMyNumRule->SetAutoRule( sal_False );
     pMyNumRule->SetContinusNum( bSimple );
@@ -1056,7 +1056,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
     sal_uInt16 nLfo;
     sal_Bool   bLVLOk=sal_True;
     sal_uInt8  aBits1;
-    String aPostfix;
+    String sPostfix;
 
     long nOriginalPos = rSt.Tell();
     //
@@ -1246,8 +1246,8 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
                     break;
                 // Nauemsprefix aufbauen: fuer NumRule-Name (eventuell)
                 // und (falls vorhanden) fuer Style-Name (dann auf jeden Fall)
-                String aPrefix(RTL_CONSTASCII_STRINGPARAM( "WW8NumSt" ));
-                aPrefix += String::CreateFromInt32( nLfo + 1 );
+                String sPrefix(RTL_CONSTASCII_STRINGPARAM( "WW8NumSt" ));
+                sPrefix += String::CreateFromInt32( nLfo + 1 );
                 // jetzt dem pNumRule seinen RICHTIGEN Wert zuweisen !!!
                 // (bis dahin war hier die Parent NumRule vermerkt )
                 //
@@ -1256,7 +1256,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
                 if( USHRT_MAX > rReader.StyleUsingLFO( nLfo ) )
                 {
                     sal_uInt16 nRul = rDoc.MakeNumRule(
-                        rDoc.GetUniqueNumRuleName( &aPrefix ), pParentNumRule);
+                        rDoc.GetUniqueNumRuleName( &sPrefix ), pParentNumRule);
                     pLFOInfo->pNumRule = rDoc.GetNumRuleTbl()[ nRul ];
                     pLFOInfo->pNumRule->SetAutoRule( sal_False );
                 }
@@ -1353,7 +1353,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
                 for(nLevel = 0; nLevel < pLFOInfo->nLfoLvl; nLevel++)
                 {
                     AdjustLVL( nLevel, *pLFOInfo->pNumRule, aItemSet, aCharFmt,
-                        bNewCharFmtCreated, aPrefix );
+                        bNewCharFmtCreated, sPrefix );
                     if( bNewCharFmtCreated )
                         aFlagsNewCharFmt += (1 << nLevel);
                 }

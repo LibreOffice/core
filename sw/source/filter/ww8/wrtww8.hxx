@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-10 14:08:09 $
+ *  last change: $Author: cmc $ $Date: 2002-01-15 11:21:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,10 +297,10 @@ friend Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode );
 
     String aMainStg;
     SvPtrarr aTOXArr;
-    SwPosFlyFrms* pFlyPos;          // Pointer auf die aktuelle "FlyFrmTabelle"
-    const SfxItemSet* pISet;        // fuer Doppel-Attribute
-    WW8_WrPct*  pPiece;             // Pointer auf Piece-Table
-    SwNumRuleTbl* pUsedNumTbl;      // alle used NumRules
+    SwPosFlyFrms* pFlyPos;      // Pointer auf die aktuelle "FlyFrmTabelle"
+    const SfxItemSet* pISet;    // fuer Doppel-Attribute
+    WW8_WrPct*  pPiece;         // Pointer auf Piece-Table
+    SwNumRuleTbl* pUsedNumTbl;  // alle used NumRules
     WW8_WrtBookmarks* pBkmks;
     WW8_WrtRedlineAuthor* pRedlAuthors;
     BitmapPalette* pBmpPal;
@@ -309,13 +309,14 @@ friend Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode );
     SwMSConvertControls* pOCXExp;
     WW8OleMaps* pOleMap;
 
-    ULONG nIniFlags;                // Flags aus der writer.ini
+    ULONG nIniFlags;            // Flags aus der writer.ini
     USHORT nCharFmtStart;
     USHORT nFmtCollStart;
-    USHORT nAktFlyPos;              // Index auf das naechste "FlyFrmFmt"
-    USHORT nStyleBeforeFly;         // Style-Nummer des Nodes,
-                                    //       in/an dem ein Fly verankert ist
-    USHORT nLastFmtId;              // Style of last TxtNode in normal range
+    USHORT nAktFlyPos;          // Index auf das naechste "FlyFrmFmt"
+    USHORT nStyleBeforeFly;     // Style-Nummer des Nodes,
+                                //       in/an dem ein Fly verankert ist
+    USHORT nLastFmtId;          // Style of last TxtNode in normal range
+    USHORT nUniqueList;         // current number for creating unique list names
 
     virtual ULONG WriteStorage();
 
@@ -528,6 +529,7 @@ public:
     static void InsAsString8( WW8Bytes& rO, const String& rStr,
                                 rtl_TextEncoding eCodeSet );
     static BOOL CollapseScriptsforWordOk(USHORT nScript, USHORT nWhich);
+    USHORT DupNumRuleWithLvlStart(const SwNumRule *pRule,BYTE nLvl,USHORT nVal);
 
     void InsUInt16( UINT16 n )      { SwWW8Writer::InsUInt16( *pO, n ); }
     void InsUInt32( UINT32 n )      { SwWW8Writer::InsUInt32( *pO, n ); }

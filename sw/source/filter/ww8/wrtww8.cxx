@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-10 14:11:05 $
+ *  last change: $Author: cmc $ $Date: 2002-01-15 11:21:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2149,8 +2149,10 @@ ULONG SwWW8Writer::StoreDoc()
 
     if( pUsedNumTbl )           // all used NumRules
     {
-        // clear array  - it's an auto delete array
-        pUsedNumTbl->Remove( 0, pUsedNumTbl->Count() );
+        // clear the part of the list array that was copied from the document
+        // - it's an auto delete array, so the rest of the array which are
+        // duplicated lists that were added during the export will be deleted.
+        pUsedNumTbl->Remove( 0, pUsedNumTbl->Count()-nUniqueList );
         delete pUsedNumTbl;
     }
 
@@ -2301,7 +2303,7 @@ ULONG SwWW8Writer::WriteStorage()
 SwWW8Writer::SwWW8Writer( const String& rFltName )
     : pChpIter( 0 ), aMainStg( sMainStream ), pPapPlc( 0 ), pChpPlc( 0 ),
     pO( 0 ), pAktPageDesc( 0 ), pISet( 0 ), pUsedNumTbl( 0 ), pBmpPal( 0 ),
-    pKeyMap( 0 ), pOLEExp( 0 ), pOCXExp(0), pOleMap(0)
+    pKeyMap( 0 ), pOLEExp( 0 ), pOCXExp(0), pOleMap(0), nUniqueList(0)
 {
     bWrtWW8 = rFltName.EqualsAscii( FILTER_WW8 );
 }

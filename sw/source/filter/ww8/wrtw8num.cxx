@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8num.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-10 14:11:05 $
+ *  last change: $Author: cmc $ $Date: 2002-01-15 11:21:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,33 @@
 
 using namespace ::com::sun::star::i18n;
 
+USHORT SwWW8Writer::DupNumRuleWithLvlStart(const SwNumRule *pRule,BYTE nLvl,
+    USHORT nVal)
+{
+    //List is set to restart at a particular value so for export make a
+    //completely new list based on this one and export that instead,
+    //which duplicates words behaviour in this respect.
+    USHORT nNumId = USHRT_MAX;
+    String sPrefix  = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM
+        ("WW8TempExport" ));
+    sPrefix += String::CreateFromInt32( nUniqueList++ );
+    SwNumRule* pMyNumRule = new SwNumRule(pDoc->GetUniqueNumRuleName(&sPrefix));
+    pUsedNumTbl->Insert( pMyNumRule, pUsedNumTbl->Count() );
+
+    for (int i=0;i<MAXLEVEL;i++)
+    {
+        const SwNumFmt& rSubRule = pRule->Get(i);
+        pMyNumRule->Set( i, rSubRule );
+    }
+
+    SwNumFmt aNumFmt(pMyNumRule->Get(nLvl));
+    aNumFmt.SetStart(nVal);
+    pMyNumRule->Set(nLvl,aNumFmt);
+
+    if (pMyNumRule)
+        nNumId = GetId( *pMyNumRule );
+    return nNumId;
+}
 
 USHORT SwWW8Writer::GetId( const SwNumRule& rNumRule ) const
 {

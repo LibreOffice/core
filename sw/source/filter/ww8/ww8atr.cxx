@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-14 10:53:53 $
+ *  last change: $Author: cmc $ $Date: 2002-01-15 11:21:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2406,8 +2406,6 @@ static Writer& OutWW8_SvxTwoLinesItem( Writer& rWrt, const SfxPoolItem& rHt )
     return rWrt;
 }
 
-
-
 static Writer& OutWW8_SwNumRuleItem( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwWW8Writer& rWW8Wrt = (SwWW8Writer&)rWrt;
@@ -2432,6 +2430,14 @@ static Writer& OutWW8_SwNumRuleItem( Writer& rWrt, const SfxPoolItem& rHt )
 
                     if( pNum && NO_NUM > pNum->GetLevel() )
                         nLvl = GetRealLevel( pNum->GetLevel() );
+
+                    if (pNum && USHRT_MAX != pNum->GetSetValue() )
+                    {
+                        nNumId = rWW8Wrt.DupNumRuleWithLvlStart(pRule,nLvl,
+                            pNum->GetSetValue());
+                        if (USHRT_MAX != nNumId)
+                            ++nNumId;
+                    }
                 }
                 else if( rWW8Wrt.pOutFmtNode->ISA( SwTxtFmtColl ))
                 {
