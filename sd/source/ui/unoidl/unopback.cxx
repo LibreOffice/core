@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopback.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-20 15:58:39 $
+ *  last change: $Author: cl $ $Date: 2001-02-26 15:27:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+#ifndef _COM_SUN_STAR_DRAWING_BITMAPMODE_HPP_
+#include <com/sun/star/drawing/BitmapMode.hpp>
+#endif
 
 #ifndef _VOS_MUTEX_HXX_ //autogen
 #include <vos/mutex.hxx>
@@ -244,11 +248,11 @@ void SAL_CALL SdUnoPageBackground::setPropertyValue( const OUString& aPropertyNa
         {
             if( pMap->nWID == OWN_ATTR_FILLBMP_MODE )
             {
-                sal_Int32 nMode;
-                if( aValue >>= nMode )
+                drawing::BitmapMode eMode;
+                if( aValue >>= eMode )
                 {
-                    mpSet->Put( XFillBmpStretchItem( nMode == 1 ) );
-                    mpSet->Put( XFillBmpTileItem( nMode == 0 ) );
+                    mpSet->Put( XFillBmpStretchItem( eMode == drawing::BitmapMode_STRETCH ) );
+                    mpSet->Put( XFillBmpTileItem( eMode == drawing::BitmapMode_REPEAT ) );
                     return;
                 }
                 throw lang::IllegalArgumentException();
@@ -308,11 +312,11 @@ uno::Any SAL_CALL SdUnoPageBackground::getPropertyValue( const OUString& Propert
                 if( pStretchItem && pTileItem )
                 {
                     if( pTileItem->GetValue() )
-                        aAny <<= (sal_Int32)0;
+                        aAny <<= drawing::BitmapMode_REPEAT;
                     else if( pStretchItem->GetValue() )
-                        aAny <<= (sal_Int32)1;
+                        aAny <<= drawing::BitmapMode_STRETCH;
                     else
-                        aAny <<= (sal_Int32)2;
+                        aAny <<= drawing::BitmapMode_NO_REPEAT;
                 }
             }
             else
