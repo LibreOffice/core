@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxtoolkit.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obr $ $Date: 2002-08-21 11:40:47 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:20:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,8 +77,8 @@
 #ifndef _COM_SUN_STAR_LANG_XTYPEPROVIDER_HPP_
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_AWT_XEXTENDEDTOOLKIT_HPP_
-#include "drafts/com/sun/star/awt/XExtendedToolkit.hpp"
+#ifndef _COM_SUN_STAR_AWT_XEXTENDEDTOOLKIT_HPP_
+#include <com/sun/star/awt/XExtendedToolkit.hpp>
 #endif
 
 #ifndef _CPPUHELPER_COMPBASE5_HXX_
@@ -136,7 +136,7 @@ class VCLXToolkit : public VCLXToolkit_Impl,
                     ::com::sun::star::lang::XServiceInfo,
                     ::com::sun::star::awt::XSystemChildFactory,
                     ::com::sun::star::awt::XDataTransferProviderAccess,
-                    ::drafts::com::sun::star::awt::XExtendedToolkit >
+                    ::com::sun::star::awt::XExtendedToolkit >
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard > mxClipboard;
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard > mxSelection;
@@ -199,7 +199,7 @@ public:
     sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 
-    // ::drafts::com::sun::star::awt::XExtendedToolkit:
+    // ::com::sun::star::awt::XExtendedToolkit:
 
     virtual ::sal_Int32 SAL_CALL getTopWindowCount()
         throw (::com::sun::star::uno::RuntimeException);
@@ -226,12 +226,12 @@ public:
 
     virtual void SAL_CALL addKeyHandler(
         ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::awt::XKeyHandler > const & rHandler)
+        ::com::sun::star::awt::XKeyHandler > const & rHandler)
         throw (::com::sun::star::uno::RuntimeException);
 
     virtual void SAL_CALL removeKeyHandler(
         ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::awt::XKeyHandler > const & rHandler)
+        ::com::sun::star::awt::XKeyHandler > const & rHandler)
         throw (::com::sun::star::uno::RuntimeException);
 
     virtual void SAL_CALL addFocusListener(
