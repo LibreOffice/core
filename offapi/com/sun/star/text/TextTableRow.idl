@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextTableRow.idl,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 10:45:31 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:23:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@
 
     @see com::sun::star::TextTable
  */
-service TextTableRow
+published service TextTableRow
 {
     interface com::sun::star::beans::XPropertySet;
 
