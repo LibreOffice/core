@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellio.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:15:47 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:14:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -415,6 +415,9 @@ ULONG SwReader::Read( const Reader& rOptions )
     }
 
     pDoc->bInReading = FALSE;
+
+    pDoc->InvalidateNumRules();
+    pDoc->UpdateNumRule();
     pDoc->SetAllUniqueFlyNames();
 
     if( bReadPageDescs )
