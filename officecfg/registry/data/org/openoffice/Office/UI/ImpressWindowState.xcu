@@ -261,7 +261,7 @@
    <node oor:name="private:resource/toolbar/basicshapes" oor:op="replace">
     <prop oor:name="UIName" oor:type="xs:string">
      <value xml:lang="en-US">Basic Shapes</value>
-     <value xml:lang="de">Standardforman</value>
+     <value xml:lang="de">Standardformen</value>
     </prop>
    </node>
    <node oor:name="private:resource/toolbar/symbolshapes" oor:op="replace">
