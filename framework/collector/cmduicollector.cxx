@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmduicollector.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cd $ $Date: 2004-01-20 08:38:26 $
+ *  last change: $Author: cd $ $Date: 2004-01-26 16:40:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,18 +189,20 @@ Projects ProjectModule_Mapping[] =
     { 0             , 0,        "",         false,  MODULE_BASIC          }
 };
 
+
+const char XMLFileExtension[] = ".xcu";
 const char* ModuleToXML_Mapping[] =
 {
-    "GlobalUICommands.xcu",
-    "WriterUICommands.xcu",
-    "CalcUICommands.xcu",
-    "DrawImpressCommands.xcu",
-    "ChartUICommands.xcu",
-    "MathUICommands.xcu",
-    "BasicUICommands.xcu",
-    "BibliographyUICommands.xcu",
-    "BackingUICommands.xcu",
-    "DbAccessUICommands.xcu",
+    "GenericCommands",
+    "WriterCommands",
+    "CalcCommands",
+    "DrawImpressCommands",
+    "ChartCommands",
+    "MathCommands",
+    "BasicIDECommands",
+    "BibliographyCommands",
+    "StartModuleCommands",
+    "DbAccessCommands",
     0
 };
 
@@ -739,22 +741,23 @@ static const char XMLStart[]        = "<?xml version=\"1.0\" encoding=\"UTF-8\"?
 
 bool WriteXMLFiles( const OUString& aOutputDirURL)
 {
-    static const char DocType[]             = "<!DOCTYPE oor:component-data SYSTEM \"../../../../component-update.dtd\">\n";
-    static const char ComponentData[]       = "<oor:component-data oor:name=\"UICommands\" oor:package=\"org.openoffice.Office\" xmlns:oor=\"http://openoffice.org/2001/registry\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n";
-    static const char GroupText[]           = "\t<node oor:name=\"UserInterface\">\n";
-    static const char SetText[]             = "\t\t<node oor:name=\"Label\">\n";
-    static const char NodeStart[]           = "\t\t\t<node oor:name=\"";
-    static const char ReplaceOp[]           = "\" oor:op=\"replace\">\n";
-    static const char NodeEnd[]             = "\t\t\t</node>\n";
-    static const char PropNodeStart[]       = "\t\t\t\t<prop oor:name=\"Label\" oor:type=\"xs:string\">\n";
-    static const char PropNodeEnd[]         = "\t\t\t\t</prop>\n";
-    static const char ValueNodeStart[]      = "\t\t\t\t\t<value xml:lang=\"";
-    static const char ValueNodeMid[]        = "\">";
-    static const char ValueNodeEnd[]        = "</value>\n";
-    static const char ValueNodeEmpty[]      = "\t\t\t\t\t<value/>\n";
-    static const char SetTextEnd[]          = "\t\t</node>\n";
-    static const char GroupTextEnd[]        = "\t</node>\n";
-    static const char ComponentDataEnd[]    = "</oor:component-data>\n";
+    static const char DocType[]                 = "<!DOCTYPE oor:component-data SYSTEM \"../../../../component-update.dtd\">\n";
+    static const char ComponentDataStart[]      = "<oor:component-data oor:name=\"";
+    static const char ComponentDataStartEnd[]   = "\" oor:package=\"org.openoffice.Office.UI\" xmlns:oor=\"http://openoffice.org/2001/registry\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n";
+    static const char GroupText[]               = "\t<node oor:name=\"UserInterface\">\n";
+    static const char SetText[]                 = "\t\t<node oor:name=\"Label\">\n";
+    static const char NodeStart[]               = "\t\t\t<node oor:name=\"";
+    static const char ReplaceOp[]               = "\" oor:op=\"replace\">\n";
+    static const char NodeEnd[]                 = "\t\t\t</node>\n";
+    static const char PropNodeStart[]           = "\t\t\t\t<prop oor:name=\"Label\" oor:type=\"xs:string\">\n";
+    static const char PropNodeEnd[]             = "\t\t\t\t</prop>\n";
+    static const char ValueNodeStart[]          = "\t\t\t\t\t<value xml:lang=\"";
+    static const char ValueNodeMid[]            = "\">";
+    static const char ValueNodeEnd[]            = "</value>\n";
+    static const char ValueNodeEmpty[]          = "\t\t\t\t\t<value/>\n";
+    static const char SetTextEnd[]              = "\t\t</node>\n";
+    static const char GroupTextEnd[]            = "\t</node>\n";
+    static const char ComponentDataEnd[]        = "</oor:component-data>\n";
 
     // Search popup menu commands that can be moved to the global list as they are used in more than one project
     FindAndMoveGlobalPopupMenus();
@@ -768,6 +771,7 @@ bool WriteXMLFiles( const OUString& aOutputDirURL)
     {
         OUString aOutputFileURL( aOutputDirectoryURL );
         aOutputFileURL += OUString::createFromAscii( ModuleToXML_Mapping[i] );
+        aOutputFileURL += OUString::createFromAscii( XMLFileExtension );
 
         osl::File aXMLFile( aOutputFileURL );
 
@@ -781,17 +785,19 @@ bool WriteXMLFiles( const OUString& aOutputDirURL)
 
         if ( nRet == osl::FileBase::E_None )
         {
+            sal_uInt64 nWritten;
+
+            aXMLFile.write( XMLStart, strlen( XMLStart ), nWritten );
+            aXMLFile.write( DocType, strlen( DocType ), nWritten );
+            aXMLFile.write( ComponentDataStart, strlen( ComponentDataStart ), nWritten );
+            aXMLFile.write( ModuleToXML_Mapping[i], strlen( ModuleToXML_Mapping[i] ), nWritten );
+            aXMLFile.write( ComponentDataStartEnd, strlen( ComponentDataStartEnd ), nWritten );
+            aXMLFile.write( GroupText, strlen( GroupText ), nWritten );
+            aXMLFile.write( SetText, strlen( SetText ), nWritten );
+
             if (( moduleMapFiles[i].size() > 0      ) ||
                 ( modulePopupMenusCmd[i].size() > 0 )    )
             {
-                sal_uInt64 nWritten;
-
-                aXMLFile.write( XMLStart, strlen( XMLStart ), nWritten );
-                aXMLFile.write( DocType, strlen( DocType ), nWritten );
-                aXMLFile.write( ComponentData, strlen( ComponentData ), nWritten );
-                aXMLFile.write( GroupText, strlen( GroupText ), nWritten );
-                aXMLFile.write( SetText, strlen( SetText ), nWritten );
-
                 CommandIDToLabelsMap::const_iterator pIter = moduleMapFiles[i].begin();
                 while ( pIter != moduleMapFiles[i].end() )
                 {
@@ -897,10 +903,11 @@ bool WriteXMLFiles( const OUString& aOutputDirURL)
                     }
                 }
 
-                aXMLFile.write( SetTextEnd, strlen( SetTextEnd ), nWritten );
-                aXMLFile.write( GroupTextEnd, strlen( GroupTextEnd ), nWritten );
-                aXMLFile.write( ComponentDataEnd, strlen( ComponentDataEnd ), nWritten );
             }
+
+            aXMLFile.write( SetTextEnd, strlen( SetTextEnd ), nWritten );
+            aXMLFile.write( GroupTextEnd, strlen( GroupTextEnd ), nWritten );
+            aXMLFile.write( ComponentDataEnd, strlen( ComponentDataEnd ), nWritten );
 
             aXMLFile.close();
             ++i;
@@ -958,6 +965,17 @@ bool WriteMenuItem( osl::File& rFile, const OUString& aCmd, const OUString& aHel
     return true;
 }
 
+bool WritePopupMenuEmpty( osl::File& rFile, int nLevel )
+{
+    static const char MenuPopupStart[]  = "<menu:menupopup/>\n";
+
+    sal_uInt64 nWritten;
+    WriteLevel( rFile, nLevel );
+    rFile.write( MenuPopupStart, strlen( MenuPopupStart ), nWritten );
+
+    return true;
+}
+
 bool WritePopupMenuStart( osl::File& rFile, int nLevel )
 {
     static const char MenuPopupStart[]  = "<menu:menupopup>\n";
@@ -983,7 +1001,7 @@ bool WritePopupMenuEnd( osl::File& rFile, int nLevel )
 bool WriteMenuStart( osl::File& rFile, const OUString& aCmd, int nLevel )
 {
     static const char MenuStart[]       = "<menu:menu menu:id=\"";
-    static const char MenuEnd[]         = "/>\n";
+    static const char MenuEnd[]         = ">\n";
     static const char MenuAttrEnd[]     = "\" ";
     static const char MenuLabel[]       = "menu:label=\"";
 
@@ -1041,6 +1059,13 @@ bool WriteMenuBarXML( osl::File& rFile, Menu* pMenu, MODULES eModule, int nLevel
                 WritePopupMenuStart( rFile, nLevel+1 );
                 WriteMenuBarXML( rFile, pMenu->GetPopupMenu( nId ), eModule, nLevel+2 );
                 WritePopupMenuEnd( rFile, nLevel+1 );
+                WriteMenuEnd( rFile, nLevel );
+            }
+            else if ( pMenu->IsMenuBar() )
+            {
+                // write empty popup menu
+                WriteMenuStart( rFile, aCommand, nLevel );
+                WritePopupMenuEmpty( rFile, nLevel+1 );
                 WriteMenuEnd( rFile, nLevel );
             }
             else
