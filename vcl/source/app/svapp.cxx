@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ssa $ $Date: 2001-07-06 14:35:36 $
+ *  last change: $Author: th $ $Date: 2001-07-06 16:14:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,11 +124,6 @@
 #endif
 #ifndef _SV_IDLEMGR_HXX
 #include <idlemgr.hxx>
-#endif
-#ifndef TF_SVDATA
-#ifndef _SV_DRAG_HXX
-#include <drag.hxx>
-#endif
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <svapp.hxx>
@@ -851,15 +846,9 @@ BOOL Application::IsUICaptured()
     // Wenn Mouse gecaptured, oder im TrackingModus oder im Auswahlmodus
     // eines FloatingWindows (wie Menus, Aufklapp-ToolBoxen) soll kein
     // weiteres Fenster aufgezogen werden
-#ifdef TF_SVDATA
+    // D&D aktive !!!
     if ( pSVData->maWinData.mpCaptureWin || pSVData->maWinData.mpTrackWin ||
          pSVData->maWinData.mpFirstFloat || nImplSysDialog )
-#else
-
-    if ( pSVData->maWinData.mpCaptureWin || pSVData->maWinData.mpTrackWin ||
-         pSVData->maWinData.mpFirstFloat || DragManager::GetDragManager() ||
-         nImplSysDialog )
-#endif
         return TRUE;
     else
         return FALSE;
@@ -1422,25 +1411,6 @@ void Application::SetFontPath( const String& rPath )
 
 // -----------------------------------------------------------------------
 
-void Application::EnterMultiThread( BOOL bEnter )
-{
-    ImplSVData* pSVData = ImplGetSVData();
-
-    if ( bEnter )
-        pSVData->mnThreadCount++;
-    else
-        pSVData->mnThreadCount--;
-}
-
-// -----------------------------------------------------------------------
-
-BOOL Application::IsMultiThread()
-{
-    return (ImplGetSVData()->mnThreadCount != 0);
-}
-
-// -----------------------------------------------------------------------
-
 UniqueItemId Application::CreateUniqueId()
 {
     ImplSVData* pSVData = ImplGetSVData();
@@ -1961,15 +1931,6 @@ long Application::CallPreNotify( NotifyEvent& rEvt )
 long Application::CallEvent( NotifyEvent& rEvt )
 {
     return ImplCallEvent( rEvt );
-}
-
-// -----------------------------------------------------------------------
-
-void Application::SetAppInternational( const International& rIntn )
-{
-    AllSettings aSettings = GetSettings();
-    aSettings.SetInternational( rIntn );
-    SetSettings( aSettings );
 }
 
 // -----------------------------------------------------------------------
