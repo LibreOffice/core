@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inetoptions.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sb $ $Date: 2000-11-06 09:09:47 $
+ *  last change: $Author: sb $ $Date: 2000-11-07 12:24:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,12 +68,19 @@
 #endif // SOLARIS
 
 #include <algorithm>
+#include <map>
+#include <set>
+#include <vector>
+#include <utility>
 
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYCHANGEEVENT_HPP_
+#include <com/sun/star/beans/PropertyChangeEvent.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTIESCHANGELISTENER_HPP_
+#include <com/sun/star/beans/XPropertiesChangeListener.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UNO_ANY_HXX_
 #include <com/sun/star/uno/Any.hxx>
-#endif
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
-#include <com/sun/star/uno/Sequence.hxx>
 #endif
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
@@ -141,6 +148,16 @@ public:
 
     void setProperty(Index nIndex, uno::Any const & rValue, bool bFlush);
 
+    void
+    addPropertiesChangeListener(
+        uno::Sequence< rtl::OUString > const & rPropertyNames,
+        uno::Reference< beans::XPropertiesChangeListener > const & rListener);
+
+    void
+    removePropertiesChangeListener(
+        uno::Sequence< rtl::OUString > const & rPropertyNames,
+        uno::Reference< beans::XPropertiesChangeListener > const & rListener);
+
 private:
     enum { ENTRY_COUNT = INDEX_PROXY_SOCKS_PORT + 1 };
 
@@ -155,14 +172,30 @@ private:
         State m_eState;
     };
 
-    Entry m_aEntries[ENTRY_COUNT];
+    // MSVC has problems with the below Map type when
+    // uno::Reference< beans::XPropertiesChangeListener > is not wrapped in
+    // class Listener:
+    class Listener: public uno::Reference< beans::XPropertiesChangeListener >
+    {
+    public:
+        Listener(uno::Reference< beans::XPropertiesChangeListener > const &
+                     rListener):
+            uno::Reference< beans::XPropertiesChangeListener >(rListener) {}
+    };
+
+    typedef std::map< Listener, std::set< rtl::OUString > > Map;
+
     vos::OMutex m_aMutex;
+    Entry m_aEntries[ENTRY_COUNT];
+    Map m_aListeners;
 
     virtual inline ~Impl() { Commit(); }
 
     virtual void Notify(uno::Sequence< rtl::OUString > const & rKeys);
 
     virtual void Commit();
+
+    void notifyListeners(uno::Sequence< rtl::OUString > const & rKeys);
 };
 
 //============================================================================
@@ -170,14 +203,17 @@ private:
 void
 SvtInetOptions::Impl::Notify(uno::Sequence< rtl::OUString > const & rKeys)
 {
-    vos::OGuard aGuard(m_aMutex);
-    for (sal_Int32 i = 0; i < rKeys.getLength(); ++i)
-        for (sal_Int32 j = 0; j < ENTRY_COUNT; ++j)
-            if (rKeys[i] == m_aEntries[j].m_aName)
-            {
-                m_aEntries[j].m_eState = Entry::UNKNOWN;
-                break;
-            }
+    {
+        vos::OGuard aGuard(m_aMutex);
+        for (sal_Int32 i = 0; i < rKeys.getLength(); ++i)
+            for (sal_Int32 j = 0; j < ENTRY_COUNT; ++j)
+                if (rKeys[i] == m_aEntries[j].m_aName)
+                {
+                    m_aEntries[j].m_eState = Entry::UNKNOWN;
+                    break;
+                }
+    }
+    notifyListeners(rKeys);
 }
 
 //============================================================================
@@ -204,6 +240,54 @@ void SvtInetOptions::Impl::Commit()
         aValues.realloc(nCount);
         PutProperties(aKeys, aValues);
     }
+}
+
+//============================================================================
+void
+SvtInetOptions::Impl::notifyListeners(uno::Sequence< rtl::OUString > const &
+                                          rKeys)
+{
+    typedef std::vector< std::pair< uno::Reference<
+                                        beans::XPropertiesChangeListener >,
+                                    uno::Sequence<
+                                        beans::PropertyChangeEvent > > >
+        List;
+    List aNotifications;
+    {
+        vos::OGuard aGuard(m_aMutex);
+        aNotifications.reserve(m_aListeners.size());
+        Map::const_iterator aMapEnd(m_aListeners.end());
+        for (Map::const_iterator aIt(m_aListeners.begin()); aIt != aMapEnd;
+             ++aIt)
+        {
+            Map::data_type const & rSet = aIt->second;
+            Map::data_type::const_iterator aSetEnd(rSet.end());
+            uno::Sequence< beans::PropertyChangeEvent >
+                aEvents(rKeys.getLength());
+            sal_Int32 nCount = 0;
+            for (sal_Int32 i = 0; i < rKeys.getLength(); ++i)
+                if (rSet.find(rKeys[i]) != aSetEnd)
+                {
+                    aEvents[i].PropertyName
+                        = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Inet/"));
+                    aEvents[i].PropertyName += rKeys[i];
+                    aEvents[i].PropertyHandle = -1;
+                    break;
+                }
+            if (nCount > 0)
+            {
+                aEvents.realloc(nCount);
+                aNotifications.
+                    push_back(std::make_pair< List::value_type::first_type,
+                                              List::value_type::second_type >(
+                                  aIt->first, aEvents));
+            }
+        }
+    }
+    for (List::size_type i = 0; i < aNotifications.size(); ++i)
+        if (aNotifications[i].first.is())
+            aNotifications[i].first->
+                propertiesChange(aNotifications[i].second);
 }
 
 //============================================================================
@@ -305,13 +389,44 @@ void SvtInetOptions::Impl::setProperty(Index nIndex, uno::Any const & rValue,
         m_aEntries[nIndex].m_aValue = rValue;
         m_aEntries[nIndex].m_eState = bFlush ? Entry::KNOWN : Entry::MODIFIED;
     }
+    uno::Sequence< rtl::OUString > aKeys(1);
+    aKeys[0] = m_aEntries[nIndex].m_aName;
     if (bFlush)
     {
-        uno::Sequence< rtl::OUString > aKeys(1);
-        aKeys[0] = m_aEntries[nIndex].m_aName;
         uno::Sequence< uno::Any > aValues(1);
         aValues[0] = rValue;
         PutProperties(aKeys, aValues);
+    }
+    else
+        notifyListeners(aKeys);
+}
+
+//============================================================================
+void
+SvtInetOptions::Impl::addPropertiesChangeListener(
+    uno::Sequence< rtl::OUString > const & rPropertyNames,
+    uno::Reference< beans::XPropertiesChangeListener > const & rListener)
+{
+    vos::OGuard aGuard(m_aMutex);
+    Map::data_type & rEntry = m_aListeners[rListener];
+    for (sal_Int32 i = 0; i < rPropertyNames.getLength(); ++i)
+        rEntry.insert(rPropertyNames[i]);
+}
+
+//============================================================================
+void
+SvtInetOptions::Impl::removePropertiesChangeListener(
+    uno::Sequence< rtl::OUString > const & rPropertyNames,
+    uno::Reference< beans::XPropertiesChangeListener > const & rListener)
+{
+    vos::OGuard aGuard(m_aMutex);
+    Map::iterator aIt(m_aListeners.find(rListener));
+    if (aIt != m_aListeners.end())
+    {
+        for (sal_Int32 i = 0; i < rPropertyNames.getLength(); ++i)
+            aIt->second.erase(rPropertyNames[i]);
+        if (aIt->second.empty())
+            m_aListeners.erase(aIt);
     }
 }
 
@@ -525,4 +640,22 @@ void SvtInetOptions::SetProxySocksPort(sal_Int32 nValue, bool bFlush)
     m_xImpl->setProperty(Impl::INDEX_PROXY_SOCKS_PORT,
                          uno::makeAny(nValue),
                          bFlush);
+}
+
+//============================================================================
+void
+SvtInetOptions::addPropertiesChangeListener(
+    uno::Sequence< rtl::OUString > const & rPropertyNames,
+    uno::Reference< beans::XPropertiesChangeListener > const & rListener)
+{
+    m_xImpl->addPropertiesChangeListener(rPropertyNames, rListener);
+}
+
+//============================================================================
+void
+SvtInetOptions::removePropertiesChangeListener(
+    uno::Sequence< rtl::OUString > const & rPropertyNames,
+    uno::Reference< beans::XPropertiesChangeListener > const & rListener)
+{
+    m_xImpl->removePropertiesChangeListener(rPropertyNames, rListener);
 }
