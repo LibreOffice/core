@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inetoptions.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sb $ $Date: 2000-11-03 17:47:21 $
+ *  last change: $Author: sb $ $Date: 2000-11-06 09:09:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,6 @@ namespace unnamed_svt_inetoptions {} using namespace unnamed_svt_inetoptions;
     // unnamed namespaces don't work well yet...
 
 using namespace com::sun::star;
-using namespace svt;
 
 //============================================================================
 //
@@ -113,11 +112,11 @@ template< typename T > inline T takeAny(uno::Any const & rAny)
 
 //============================================================================
 //
-//  InetOptions::Impl
+//  SvtInetOptions::Impl
 //
 //============================================================================
 
-class InetOptions::Impl: public vos::OReference, public utl::ConfigItem
+class SvtInetOptions::Impl: public vos::OReference, public utl::ConfigItem
 {
 public:
     enum Index
@@ -168,7 +167,8 @@ private:
 
 //============================================================================
 // virtual
-void InetOptions::Impl::Notify(uno::Sequence< rtl::OUString > const & rKeys)
+void
+SvtInetOptions::Impl::Notify(uno::Sequence< rtl::OUString > const & rKeys)
 {
     vos::OGuard aGuard(m_aMutex);
     for (sal_Int32 i = 0; i < rKeys.getLength(); ++i)
@@ -182,7 +182,7 @@ void InetOptions::Impl::Notify(uno::Sequence< rtl::OUString > const & rKeys)
 
 //============================================================================
 // virtual
-void InetOptions::Impl::Commit()
+void SvtInetOptions::Impl::Commit()
 {
     uno::Sequence< rtl::OUString > aKeys(ENTRY_COUNT);
     uno::Sequence< uno::Any > aValues(ENTRY_COUNT);
@@ -207,7 +207,7 @@ void InetOptions::Impl::Commit()
 }
 
 //============================================================================
-InetOptions::Impl::Impl():
+SvtInetOptions::Impl::Impl():
     ConfigItem(rtl::OUString::createFromAscii("Inet"))
 {
     m_aEntries[INDEX_DNS_IP_ADDRESS].m_aName
@@ -239,11 +239,11 @@ InetOptions::Impl::Impl():
         aKeys[i] = m_aEntries[i].m_aName;
     if (!EnableNotification(aKeys))
         VOS_ENSURE(false,
-                   "InetOptions::Impl::Impl(): Bad EnableNotifications()");
+                   "SvtInetOptions::Impl::Impl(): Bad EnableNotifications()");
 }
 
 //============================================================================
-uno::Any InetOptions::Impl::getProperty(Index nIndex)
+uno::Any SvtInetOptions::Impl::getProperty(Index nIndex)
 {
     for (int nTryCount = 0; nTryCount < 10; ++nTryCount)
     {
@@ -270,7 +270,7 @@ uno::Any InetOptions::Impl::getProperty(Index nIndex)
             aKeys.realloc(nCount);
             uno::Sequence< uno::Any > aValues(GetProperties(aKeys));
             VOS_ENSURE(aValues.getLength() == nCount,
-                       "InetOptions::Impl::getProperty():"
+                       "SvtInetOptions::Impl::getProperty():"
                            " Bad GetProperties() result");
             nCount = std::min(nCount, aValues.getLength());
             {
@@ -287,7 +287,8 @@ uno::Any InetOptions::Impl::getProperty(Index nIndex)
             }
         }
     }
-    VOS_ENSURE(false, "InetOptions::Impl::getProperty(): Possible life lock");
+    VOS_ENSURE(false,
+               "SvtInetOptions::Impl::getProperty(): Possible life lock");
     {
         vos::OGuard aGuard(m_aMutex);
         return m_aEntries[nIndex].m_aValue;
@@ -295,8 +296,8 @@ uno::Any InetOptions::Impl::getProperty(Index nIndex)
 }
 
 //============================================================================
-void InetOptions::Impl::setProperty(Index nIndex, uno::Any const & rValue,
-                                    bool bFlush)
+void SvtInetOptions::Impl::setProperty(Index nIndex, uno::Any const & rValue,
+                                       bool bFlush)
 {
     SetModified();
     {
@@ -316,11 +317,11 @@ void InetOptions::Impl::setProperty(Index nIndex, uno::Any const & rValue,
 
 //============================================================================
 //
-//  InetOptions
+//  SvtInetOptions
 //
 //============================================================================
 
-InetOptions::InetOptions()
+SvtInetOptions::SvtInetOptions()
 {
     static Impl * pSingleImpl = 0;
     if (!pSingleImpl)
@@ -334,11 +335,11 @@ InetOptions::InetOptions()
 }
 
 //============================================================================
-InetOptions::~InetOptions()
+SvtInetOptions::~SvtInetOptions()
 {}
 
 //============================================================================
-rtl::OUString InetOptions::getDnsIpAddress() const
+rtl::OUString SvtInetOptions::GetDnsIpAddress() const
 {
     return takeAny< rtl::OUString >(m_xImpl->
                                         getProperty(
@@ -346,7 +347,7 @@ rtl::OUString InetOptions::getDnsIpAddress() const
 }
 
 //============================================================================
-rtl::OUString InetOptions::getSmtpServerName() const
+rtl::OUString SvtInetOptions::GetSmtpServerName() const
 {
     return takeAny< rtl::OUString >(m_xImpl->
                                         getProperty(
@@ -354,7 +355,7 @@ rtl::OUString InetOptions::getSmtpServerName() const
 }
 
 //============================================================================
-bool InetOptions::getProtocolRevealMailAddress() const
+bool SvtInetOptions::GetProtocolRevealMailAddress() const
 {
     return
         takeAny< sal_Bool >(m_xImpl->
@@ -364,7 +365,7 @@ bool InetOptions::getProtocolRevealMailAddress() const
 }
 
 //============================================================================
-rtl::OUString InetOptions::getProtocolUserAgent() const
+rtl::OUString SvtInetOptions::GetProtocolUserAgent() const
 {
     return takeAny< rtl::OUString >(m_xImpl->
                                         getProperty(
@@ -372,7 +373,7 @@ rtl::OUString InetOptions::getProtocolUserAgent() const
 }
 
 //============================================================================
-rtl::OUString InetOptions::getProxyNoProxy() const
+rtl::OUString SvtInetOptions::GetProxyNoProxy() const
 {
     return takeAny< rtl::OUString >(m_xImpl->
                                         getProperty(
@@ -380,14 +381,14 @@ rtl::OUString InetOptions::getProxyNoProxy() const
 }
 
 //============================================================================
-sal_Int32 InetOptions::getProxyType() const
+sal_Int32 SvtInetOptions::GetProxyType() const
 {
     return takeAny< sal_Int32 >(m_xImpl->
                                     getProperty(Impl::INDEX_PROXY_TYPE));
 }
 
 //============================================================================
-rtl::OUString InetOptions::getProxyFtpName() const
+rtl::OUString SvtInetOptions::GetProxyFtpName() const
 {
     return takeAny< rtl::OUString >(m_xImpl->
                                         getProperty(
@@ -395,14 +396,14 @@ rtl::OUString InetOptions::getProxyFtpName() const
 }
 
 //============================================================================
-sal_Int32 InetOptions::getProxyFtpPort() const
+sal_Int32 SvtInetOptions::GetProxyFtpPort() const
 {
     return takeAny< sal_Int32 >(m_xImpl->
                                     getProperty(Impl::INDEX_PROXY_FTP_PORT));
 }
 
 //============================================================================
-rtl::OUString InetOptions::getProxyHttpName() const
+rtl::OUString SvtInetOptions::GetProxyHttpName() const
 {
     return takeAny< rtl::OUString >(m_xImpl->
                                         getProperty(
@@ -410,14 +411,14 @@ rtl::OUString InetOptions::getProxyHttpName() const
 }
 
 //============================================================================
-sal_Int32 InetOptions::getProxyHttpPort() const
+sal_Int32 SvtInetOptions::GetProxyHttpPort() const
 {
     return takeAny< sal_Int32 >(m_xImpl->
                                     getProperty(Impl::INDEX_PROXY_HTTP_PORT));
 }
 
 //============================================================================
-rtl::OUString InetOptions::getProxySocksName() const
+rtl::OUString SvtInetOptions::GetProxySocksName() const
 {
     return takeAny< rtl::OUString >(m_xImpl->
                                         getProperty(
@@ -425,7 +426,7 @@ rtl::OUString InetOptions::getProxySocksName() const
 }
 
 //============================================================================
-sal_Int32 InetOptions::getProxySocksPort() const
+sal_Int32 SvtInetOptions::GetProxySocksPort() const
 {
     return takeAny< sal_Int32 >(m_xImpl->
                                     getProperty(
@@ -433,7 +434,8 @@ sal_Int32 InetOptions::getProxySocksPort() const
 }
 
 //============================================================================
-void InetOptions::setDnsIpAddress(rtl::OUString const & rValue, bool bFlush)
+void SvtInetOptions::SetDnsIpAddress(rtl::OUString const & rValue,
+                                     bool bFlush)
 {
     m_xImpl->setProperty(Impl::INDEX_DNS_IP_ADDRESS,
                          uno::makeAny(rValue),
@@ -441,7 +443,7 @@ void InetOptions::setDnsIpAddress(rtl::OUString const & rValue, bool bFlush)
 }
 
 //============================================================================
-void InetOptions::setProtocolRevealMailAddress(bool bValue, bool bFlush)
+void SvtInetOptions::SetProtocolRevealMailAddress(bool bValue, bool bFlush)
 {
     m_xImpl->setProperty(Impl::INDEX_PROTOCOL_REVEAL_MAIL_ADDRESS,
                          uno::makeAny(sal_Bool(bValue)),
@@ -449,8 +451,8 @@ void InetOptions::setProtocolRevealMailAddress(bool bValue, bool bFlush)
 }
 
 //============================================================================
-void InetOptions::setProtocolUserAgent(rtl::OUString const & rValue,
-                                       bool bFlush)
+void SvtInetOptions::SetProtocolUserAgent(rtl::OUString const & rValue,
+                                          bool bFlush)
 {
     m_xImpl->setProperty(Impl::INDEX_PROTOCOL_USER_AGENT,
                          uno::makeAny(rValue),
@@ -458,7 +460,8 @@ void InetOptions::setProtocolUserAgent(rtl::OUString const & rValue,
 }
 
 //============================================================================
-void InetOptions::setProxyNoProxy(rtl::OUString const & rValue, bool bFlush)
+void SvtInetOptions::SetProxyNoProxy(rtl::OUString const & rValue,
+                                     bool bFlush)
 {
     m_xImpl->setProperty(Impl::INDEX_PROXY_NO_PROXY,
                          uno::makeAny(rValue),
@@ -466,7 +469,7 @@ void InetOptions::setProxyNoProxy(rtl::OUString const & rValue, bool bFlush)
 }
 
 //============================================================================
-void InetOptions::setProxyType(ProxyType eValue, bool bFlush)
+void SvtInetOptions::SetProxyType(ProxyType eValue, bool bFlush)
 {
     m_xImpl->setProperty(Impl::INDEX_PROXY_TYPE,
                          uno::makeAny(sal_Int32(eValue)),
@@ -474,7 +477,8 @@ void InetOptions::setProxyType(ProxyType eValue, bool bFlush)
 }
 
 //============================================================================
-void InetOptions::setProxyFtpName(rtl::OUString const & rValue, bool bFlush)
+void SvtInetOptions::SetProxyFtpName(rtl::OUString const & rValue,
+                                     bool bFlush)
 {
     m_xImpl->setProperty(Impl::INDEX_PROXY_FTP_NAME,
                          uno::makeAny(rValue),
@@ -482,7 +486,7 @@ void InetOptions::setProxyFtpName(rtl::OUString const & rValue, bool bFlush)
 }
 
 //============================================================================
-void InetOptions::setProxyFtpPort(sal_Int32 nValue, bool bFlush)
+void SvtInetOptions::SetProxyFtpPort(sal_Int32 nValue, bool bFlush)
 {
     m_xImpl->setProperty(Impl::INDEX_PROXY_FTP_PORT,
                          uno::makeAny(nValue),
@@ -490,7 +494,8 @@ void InetOptions::setProxyFtpPort(sal_Int32 nValue, bool bFlush)
 }
 
 //============================================================================
-void InetOptions::setProxyHttpName(rtl::OUString const & rValue, bool bFlush)
+void SvtInetOptions::SetProxyHttpName(rtl::OUString const & rValue,
+                                      bool bFlush)
 {
     m_xImpl->setProperty(Impl::INDEX_PROXY_HTTP_NAME,
                          uno::makeAny(rValue),
@@ -498,7 +503,7 @@ void InetOptions::setProxyHttpName(rtl::OUString const & rValue, bool bFlush)
 }
 
 //============================================================================
-void InetOptions::setProxyHttpPort(sal_Int32 nValue, bool bFlush)
+void SvtInetOptions::SetProxyHttpPort(sal_Int32 nValue, bool bFlush)
 {
     m_xImpl->setProperty(Impl::INDEX_PROXY_HTTP_PORT,
                          uno::makeAny(nValue),
@@ -506,7 +511,8 @@ void InetOptions::setProxyHttpPort(sal_Int32 nValue, bool bFlush)
 }
 
 //============================================================================
-void InetOptions::setProxySocksName(rtl::OUString const & rValue, bool bFlush)
+void SvtInetOptions::SetProxySocksName(rtl::OUString const & rValue,
+                                       bool bFlush)
 {
     m_xImpl->setProperty(Impl::INDEX_PROXY_SOCKS_NAME,
                          uno::makeAny(rValue),
@@ -514,7 +520,7 @@ void InetOptions::setProxySocksName(rtl::OUString const & rValue, bool bFlush)
 }
 
 //============================================================================
-void InetOptions::setProxySocksPort(sal_Int32 nValue, bool bFlush)
+void SvtInetOptions::SetProxySocksPort(sal_Int32 nValue, bool bFlush)
 {
     m_xImpl->setProperty(Impl::INDEX_PROXY_SOCKS_PORT,
                          uno::makeAny(nValue),
