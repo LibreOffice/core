@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inettbc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-05 09:36:02 $
+ *  last change: $Author: mba $ $Date: 2000-11-06 18:10:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -602,12 +602,14 @@ void SfxURLBox::OpenURL( SfxPickEntry_Impl* pEntry, const String& rName, BOOL bN
     }
     else
     {
+/*
         if ( rName.CompareToAscii( "vnd.sun.star.webdav:", 20 ) == 0 )
         {
             aName = String::CreateFromAscii("http:");
             aName += rName.Copy(20);
         }
         else
+*/
             aName = URIHelper::SmartRelToAbs( rName );
     }
 
