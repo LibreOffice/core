@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawbase.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2002-04-03 12:38:05 $
+ *  last change: $Author: os $ $Date: 2002-06-24 14:53:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@ protected:
     SwEditWin*      pWin;
     Point           aStartPos;              // Position von BeginCreate
     Point           aMDPos;                 // Position von MouseButtonDown
+    USHORT          nSlotId;
     BOOL            bCreateObj  :1;
     BOOL            bInsForm    :1;
 
@@ -106,6 +107,7 @@ public:
     virtual BOOL MouseButtonDown(const MouseEvent& rMEvt);
 
     void         BreakCreate();
+    void         SetSlotId(USHORT nSlot) {nSlotId = nSlot;}
 
     virtual void Activate(const USHORT nSlotId);    // Function aktivieren
     virtual void Deactivate();                      // Function deaktivieren

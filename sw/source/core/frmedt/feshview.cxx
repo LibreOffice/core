@@ -2,9 +2,9 @@
  *
  *  $RCSfile: feshview.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ama $ $Date: 2002-05-30 16:35:18 $
+ *  last change: $Author: os $ $Date: 2002-06-24 14:53:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,15 @@
 #ifndef _SVDOGRP_HXX //autogen
 #include <svx/svdogrp.hxx>
 #endif
+#ifndef _SVDOCIRC_HXX
+#include <svx/svdocirc.hxx>
+#endif
+#ifndef _SVDOPATH_HXX
+#include <svx/svdopath.hxx>
+#endif
+#ifndef _SXCIAITM_HXX
+#include <svx/sxciaitm.hxx>
+#endif
 #ifndef _SVX_FILLITEM_HXX //autogen
 #include <svx/xfillit.hxx>
 #endif
@@ -113,7 +122,9 @@
 #include <so3/ipobj.hxx>
 #endif
 
-
+#ifndef _POOLFMT_HRC
+#include <poolfmt.hrc>      // fuer InitFldTypes
+#endif
 #ifndef _FRMFMT_HXX //autogen
 #include <frmfmt.hxx>
 #endif
@@ -1526,7 +1537,9 @@ BOOL SwFEShell::BeginCreate( UINT16 eSdrObjectKind, const Point &rPos )
             bRet = Imp()->GetDrawView()->BegCreateObj( rPos, GetOut() );
     }
     if ( bRet )
+    {
         ::FrameNotify( this, FLY_DRAG_START );
+    }
     return bRet;
 }
 
@@ -2744,5 +2757,186 @@ long SwFEShell::GetSectionWidth( SwFmt& rFmt ) const
     }
     return 0;
 }
+/* -----------------------------2002/06/24 15:07------------------------------
 
+ ---------------------------------------------------------------------------*/
+void SwFEShell::CreateDefaultShape(UINT16 eSdrObjectKind, const Rectangle& rRect,
+                USHORT nSlotId)
+{
+    SdrView* pDrawView = GetDrawView();
+    SdrModel* pDrawModel = pDrawView->GetModel();
+    SdrObject* pObj = SdrObjFactory::MakeNewObject(
+        SdrInventor, eSdrObjectKind,
+        0L, pDrawModel);
 
+    if(pObj)
+    {
+        Rectangle aRect(rRect);
+        if(OBJ_CARC == eSdrObjectKind || OBJ_CCUT == eSdrObjectKind)
+        {
+            // force quadratic
+            if(aRect.GetWidth() > aRect.GetHeight())
+            {
+                aRect = Rectangle(
+                    Point(aRect.Left() + ((aRect.GetWidth() - aRect.GetHeight()) / 2), aRect.Top()),
+                    Size(aRect.GetHeight(), aRect.GetHeight()));
+            }
+            else
+            {
+                aRect = Rectangle(
+                    Point(aRect.Left(), aRect.Top() + ((aRect.GetHeight() - aRect.GetWidth()) / 2)),
+                    Size(aRect.GetWidth(), aRect.GetWidth()));
+            }
+        }
+        pObj->SetLogicRect(aRect);
+
+        if(pObj->ISA(SdrCircObj))
+        {
+            SfxItemSet aAttr(pDrawModel->GetItemPool());
+            aAttr.Put(SdrCircStartAngleItem(9000));
+            aAttr.Put(SdrCircEndAngleItem(0));
+            pObj->SetItemSet(aAttr);
+        }
+        else if(pObj->ISA(SdrPathObj))
+        {
+            XPolyPolygon aPoly;
+
+            switch(eSdrObjectKind)
+            {
+                case OBJ_PATHLINE:
+                {
+                    XPolygon aInnerPoly;
+                    aInnerPoly[0] = aRect.BottomLeft();
+                    aInnerPoly[1] = aRect.BottomCenter();
+                    aInnerPoly[2] = aRect.BottomCenter();
+                    aInnerPoly[3] = aRect.Center();
+                    aInnerPoly[4] = aRect.TopCenter();
+                    aInnerPoly[5] = aRect.TopCenter();
+                    aInnerPoly[6] = aRect.TopRight();
+
+                    aInnerPoly.SetFlags(1, XPOLY_CONTROL);
+                    aInnerPoly.SetFlags(2, XPOLY_CONTROL);
+                    aInnerPoly.SetFlags(3, XPOLY_SYMMTR);
+                    aInnerPoly.SetFlags(4, XPOLY_CONTROL);
+                    aInnerPoly.SetFlags(5, XPOLY_CONTROL);
+
+                    aPoly.Insert(aInnerPoly);
+                }
+                break;
+                case OBJ_FREELINE:
+                {
+                    XPolygon aInnerPoly;
+                    aInnerPoly[0] = aRect.BottomLeft();
+                    aInnerPoly[1] = aRect.TopLeft();
+                    aInnerPoly[2] = aRect.TopCenter();
+                    aInnerPoly[3] = aRect.Center();
+                    aInnerPoly[4] = aRect.BottomCenter();
+                    aInnerPoly[5] = aRect.BottomRight();
+                    aInnerPoly[6] = aRect.TopRight();
+
+                    aInnerPoly.SetFlags(1, XPOLY_CONTROL);
+                    aInnerPoly.SetFlags(2, XPOLY_CONTROL);
+                    aInnerPoly.SetFlags(3, XPOLY_SMOOTH);
+                    aInnerPoly.SetFlags(4, XPOLY_CONTROL);
+                    aInnerPoly.SetFlags(5, XPOLY_CONTROL);
+
+                    aInnerPoly[7] = aRect.BottomRight();
+
+                    aPoly.Insert(aInnerPoly);
+                }
+                break;
+                case OBJ_POLY:
+                case OBJ_PLIN:
+                {
+                    XPolygon aInnerPoly;
+                    sal_Int32 nWdt(aRect.GetWidth());
+                    sal_Int32 nHgt(aRect.GetHeight());
+
+                    aInnerPoly[0] = aRect.BottomLeft();
+                    aInnerPoly[1] = aRect.TopLeft() + Point((nWdt * 30) / 100, (nHgt * 70) / 100);
+                    aInnerPoly[2] = aRect.TopLeft() + Point(0, (nHgt * 15) / 100);
+                    aInnerPoly[3] = aRect.TopLeft() + Point((nWdt * 65) / 100, 0);
+                    aInnerPoly[4] = aRect.TopLeft() + Point(nWdt, (nHgt * 30) / 100);
+                    aInnerPoly[5] = aRect.TopLeft() + Point((nWdt * 80) / 100, (nHgt * 50) / 100);
+                    aInnerPoly[6] = aRect.TopLeft() + Point((nWdt * 80) / 100, (nHgt * 75) / 100);
+                    aInnerPoly[7] = aRect.BottomRight();
+
+                    if(OBJ_PLIN == eSdrObjectKind)
+                    {
+                        aInnerPoly[8] = aRect.BottomCenter();
+                    }
+
+                    aPoly.Insert(aInnerPoly);
+                }
+                break;
+                case OBJ_LINE :
+                {
+                    aPoly.Insert(XPolygon(2));
+                    sal_Int32 nYMiddle((aRect.Top() + aRect.Bottom()) / 2);
+                    aPoly[0][0] = Point(aRect.TopLeft().X(), nYMiddle);
+                    aPoly[0][1] = Point(aRect.BottomRight().X(), nYMiddle);
+                }
+                break;
+            }
+
+            ((SdrPathObj*)pObj)->SetPathPoly(aPoly);
+        }
+        else if(pObj->ISA(SdrCaptionObj))
+        {
+            BOOL bVerticalText = ( SID_DRAW_TEXT_VERTICAL == nSlotId ||
+                                            SID_DRAW_CAPTION_VERTICAL == nSlotId );
+            ((SdrTextObj*)pObj)->SetVerticalWriting(bVerticalText);
+            if(bVerticalText)
+            {
+                SfxItemSet aSet(pObj->GetItemSet());
+                aSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_CENTER));
+                aSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT));
+                pObj->SetItemSet(aSet);
+            }
+
+            String aText(SW_RESSTR(STR_POOLCOLL_LABEL_FRAME));
+            ((SdrCaptionObj*)pObj)->SetText(aText);
+            ((SdrCaptionObj*)pObj)->SetLogicRect(aRect);
+            ((SdrCaptionObj*)pObj)->SetTailPos(
+                aRect.TopLeft() - Point(aRect.GetWidth() / 2, aRect.GetHeight() / 2));
+        }
+        else if(pObj->ISA(SdrTextObj))
+        {
+            SdrTextObj* pText = (SdrTextObj*)pObj;
+            pText->SetLogicRect(aRect);
+
+            String aText(SW_RESSTR(STR_POOLCOLL_LABEL_FRAME));
+            pText->SetText(aText);
+
+            sal_Bool bVertical = (SID_DRAW_TEXT_VERTICAL == nSlotId);
+            sal_Bool bMarquee = (SID_DRAW_TEXT_MARQUEE == nSlotId);
+
+            pText->SetVerticalWriting(bVertical);
+
+            if(bVertical)
+            {
+                SfxItemSet aSet(pDrawModel->GetItemPool());
+                aSet.Put(SdrTextAutoGrowWidthItem(TRUE));
+                aSet.Put(SdrTextAutoGrowHeightItem(FALSE));
+                aSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP));
+                aSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT));
+                pText->SetItemSet(aSet);
+            }
+
+            if(bMarquee)
+            {
+                SfxItemSet aSet(pDrawModel->GetItemPool(), SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST);
+                aSet.Put( SdrTextAutoGrowWidthItem( FALSE ) );
+                aSet.Put( SdrTextAutoGrowHeightItem( FALSE ) );
+                aSet.Put( SdrTextAniKindItem( SDRTEXTANI_SLIDE ) );
+                aSet.Put( SdrTextAniDirectionItem( SDRTEXTANI_LEFT ) );
+                aSet.Put( SdrTextAniCountItem( 1 ) );
+                aSet.Put( SdrTextAniAmountItem( (INT16)GetWin()->PixelToLogic(Size(2,1)).Width()) );
+                pObj->SetItemSetAndBroadcast(aSet);
+            }
+        }
+        SdrPageView* pPageView = pDrawView->GetPageViewPvNum(0);
+        pDrawView->InsertObject(pObj, *pPageView, pDrawView->IsSolidDraggingNow() ? SDRINSERT_NOBROADCAST : 0);
+    }
+    ImpEndCreate();
+}

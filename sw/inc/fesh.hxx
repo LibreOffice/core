@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fesh.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ama $ $Date: 2002-06-12 07:31:43 $
+ *  last change: $Author: os $ $Date: 2002-06-24 14:53:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -464,6 +464,7 @@ public:
     BOOL EndCreate  ( UINT16 eSdrCreateCmd );
     void BreakCreate();
     BOOL IsDrawCreate() const;
+    void CreateDefaultShape(UINT16 eSdrObjectKind, const Rectangle& rRect, USHORT nSlotId);
 
     // Funktionen fÅr Rubberbox, um Draw-Objekte zu selektieren
     BOOL BeginMark( const Point &rPos );

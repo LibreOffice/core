@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawbase.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ama $ $Date: 2002-04-09 14:20:06 $
+ *  last change: $Author: os $ $Date: 2002-06-24 14:53:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,6 @@
 #ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>
 #endif
-
 #include "cmdid.h"
 #include "basesh.hxx"
 #include "view.hxx"
@@ -124,6 +123,7 @@ SwDrawBase::SwDrawBase(SwWrtShell* pSwWrtShell, SwEditWin* pWindow, SwView* pSwV
     pSh(pSwWrtShell),
     pWin(pWindow),
     pView(pSwView),
+    nSlotId(USHRT_MAX),
     bInsForm(FALSE),
     bCreateObj(TRUE)
 {
@@ -531,8 +531,9 @@ BOOL SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
 \************************************************************************/
 
 
-void SwDrawBase::Activate(const USHORT nSlotId)
+void SwDrawBase::Activate(const USHORT nSlot)
 {
+    SetSlotId(nSlot);
     SdrView *pSdrView = pSh->GetDrawView();
 
     pSdrView->SetCurrentObj(pWin->GetDrawMode());
@@ -741,13 +742,12 @@ void SwDrawBase::CreateDefaultObject()
     Point aStartPos(aWinSize.Width()/2, aWinSize.Height() / 2);
     aStartPos = pWin->PixelToLogic(aStartPos);
     Point aEndPos(aStartPos);
-    aStartPos.X() -= MM50;
-    aStartPos.Y() -= MM50;
-    aEndPos.X() += MM50;
-    aEndPos.Y() += MM50;
-    pSh->BeginCreate(pWin->GetDrawMode(), aStartPos);
-    pSh->MoveCreate(aEndPos);
-    pSh->EndCreate(SDRCREATE_FORCEEND);
+    aStartPos.X() -= 8 * MM50;
+    aStartPos.Y() -= 4 * MM50;
+    aEndPos.X() += 8 * MM50;
+    aEndPos.Y() += 4 * MM50;
+    Rectangle aRect(aStartPos, aEndPos);
+    pSh->CreateDefaultShape(pWin->GetDrawMode(), aRect, nSlotId);
 }
 
 
