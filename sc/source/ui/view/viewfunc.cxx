@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfunc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-24 18:07:45 $
+ *  last change: $Author: er $ $Date: 2001-01-11 18:31:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -976,30 +976,33 @@ void ScViewFunc::ApplyAttributes( const SfxItemSet* pDialogSet,
     ScPatternAttr aNewAttrs( new SfxItemSet(*pDialogSet) );
     aNewAttrs.DeleteUnchanged( &aOldAttrs );
 
-    ULONG nOldFormat =
-        ((const SfxUInt32Item&)pOldSet->Get( ATTR_VALUE_FORMAT )).GetValue();
-    ULONG nNewFormat =
-        ((const SfxUInt32Item&)pDialogSet->Get( ATTR_VALUE_FORMAT )).GetValue();
-    if ( nNewFormat != nOldFormat )
-    {
-        SvNumberFormatter* pFormatter =
-            GetViewData()->GetDocument()->GetFormatTable();
-        const SvNumberformat* pOldEntry = pFormatter->GetEntry( nOldFormat );
-        LanguageType eOldLang =
-            pOldEntry ? pOldEntry->GetLanguage() : LANGUAGE_DONTKNOW;
-        const SvNumberformat* pNewEntry = pFormatter->GetEntry( nNewFormat );
-        LanguageType eNewLang =
-            pNewEntry ? pNewEntry->GetLanguage() : LANGUAGE_DONTKNOW;
-        if ( eNewLang != eOldLang )
+    if ( pDialogSet->GetItemState( ATTR_VALUE_FORMAT ) == SFX_ITEM_SET )
+    {   // #82521# don't reset to default SYSTEM GENERAL if not intended
+        ULONG nOldFormat =
+            ((const SfxUInt32Item&)pOldSet->Get( ATTR_VALUE_FORMAT )).GetValue();
+        ULONG nNewFormat =
+            ((const SfxUInt32Item&)pDialogSet->Get( ATTR_VALUE_FORMAT )).GetValue();
+        if ( nNewFormat != nOldFormat )
         {
-            aNewAttrs.GetItemSet().Put(
-                SvxLanguageItem( eNewLang, ATTR_LANGUAGE_FORMAT ) );
+            SvNumberFormatter* pFormatter =
+                GetViewData()->GetDocument()->GetFormatTable();
+            const SvNumberformat* pOldEntry = pFormatter->GetEntry( nOldFormat );
+            LanguageType eOldLang =
+                pOldEntry ? pOldEntry->GetLanguage() : LANGUAGE_DONTKNOW;
+            const SvNumberformat* pNewEntry = pFormatter->GetEntry( nNewFormat );
+            LanguageType eNewLang =
+                pNewEntry ? pNewEntry->GetLanguage() : LANGUAGE_DONTKNOW;
+            if ( eNewLang != eOldLang )
+            {
+                aNewAttrs.GetItemSet().Put(
+                    SvxLanguageItem( eNewLang, ATTR_LANGUAGE_FORMAT ) );
 
-            //  #40606# nur die Sprache geaendert -> Zahlformat-Attribut nicht anfassen
-            ULONG nNewMod = nNewFormat % SV_COUNTRY_LANGUAGE_OFFSET;
-            if ( nNewMod == ( nOldFormat % SV_COUNTRY_LANGUAGE_OFFSET ) &&
-                 nNewMod <= SV_MAX_ANZ_STANDARD_FORMATE )
-                aNewAttrs.GetItemSet().ClearItem( ATTR_VALUE_FORMAT );
+                //  #40606# nur die Sprache geaendert -> Zahlformat-Attribut nicht anfassen
+                ULONG nNewMod = nNewFormat % SV_COUNTRY_LANGUAGE_OFFSET;
+                if ( nNewMod == ( nOldFormat % SV_COUNTRY_LANGUAGE_OFFSET ) &&
+                     nNewMod <= SV_MAX_ANZ_STANDARD_FORMATE )
+                    aNewAttrs.GetItemSet().ClearItem( ATTR_VALUE_FORMAT );
+            }
         }
     }
 
