@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoport.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-07 08:01:20 $
+ *  last change: $Author: jp $ $Date: 2001-06-13 12:57:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,27 +332,31 @@ void SwXTextPortion::GetPropertyValues( const OUString *pPropertyNames,
                 {
                     case FN_UNO_TEXT_PORTION_TYPE:
                     {
-                        OUString sRet;
+                        const char* pRet;
                         switch (ePortionType)
                         {
-                            case PORTION_TEXT:          sRet = C2U("Text");break;
-                            case PORTION_FIELD:         sRet = C2U("TextField");break;
-                            case PORTION_FRAME:         sRet = C2U("Frame");break;
-                            case PORTION_FOOTNOTE:      sRet = C2U("Footnote");break;
-                            case PORTION_CONTROL_CHAR:  sRet = C2U("ControlCharacter");break;
-                            case PORTION_REFMARK_START:
-                            case PORTION_REFMARK_END:       sRet = C2U(UNO_NAME_REFERENCE_MARK);break;
-                            case PORTION_TOXMARK_START:
-                            case PORTION_TOXMARK_END:       sRet = C2U(UNO_NAME_DOCUMENT_INDEX_MARK);break;
-                            case PORTION_BOOKMARK_START :
-                            case PORTION_BOOKMARK_END :  sRet = C2U(UNO_NAME_BOOKMARK);break;
-                            case PORTION_REDLINE_START:
-                            case PORTION_REDLINE_END:   sRet = C2U("Redline");break;
-                            case PORTION_RUBY_START:
-                            case PORTION_RUBY_END:  sRet = C2U("Ruby");break;
-
-
+                        case PORTION_TEXT:          pRet = "Text";break;
+                        case PORTION_FIELD:         pRet = "TextField";break;
+                        case PORTION_FRAME:         pRet = "Frame";break;
+                        case PORTION_FOOTNOTE:      pRet = "Footnote";break;
+                        case PORTION_CONTROL_CHAR:  pRet = "ControlCharacter";break;
+                        case PORTION_REFMARK_START:
+                        case PORTION_REFMARK_END:   pRet = SW_PROP_NAME_STR(UNO_NAME_REFERENCE_MARK);break;
+                        case PORTION_TOXMARK_START:
+                        case PORTION_TOXMARK_END:   pRet = SW_PROP_NAME_STR(UNO_NAME_DOCUMENT_INDEX_MARK);break;
+                        case PORTION_BOOKMARK_START :
+                        case PORTION_BOOKMARK_END : pRet = SW_PROP_NAME_STR(UNO_NAME_BOOKMARK);break;
+                        case PORTION_REDLINE_START:
+                        case PORTION_REDLINE_END:   pRet = "Redline";break;
+                        case PORTION_RUBY_START:
+                        case PORTION_RUBY_END:      pRet = "Ruby";break;
+                        default:
+                            pRet = 0;
                         }
+
+                        OUString sRet;
+                        if( pRet )
+                            sRet = C2U( pRet );
                         pValues[nProp] <<= sRet;
                     }
                     break;
@@ -872,14 +876,14 @@ Any SwXRubyPortion::getPropertyValue( const OUString& rPropertyName )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     Any aRet;
-    if(GetTextPortionType() == PORTION_RUBY_START &&
-        !rPropertyName.compareToAscii( RTL_CONSTASCII_STRINGPARAM("Ruby") ))
+    if( GetTextPortionType() == PORTION_RUBY_START &&
+        rPropertyName.equalsAsciiL( MAP_CHAR_LEN("Ruby") ))
     {
-        if(rPropertyName.equalsAsciiL( UNO_NAME_RUBY_TEXT.pName, UNO_NAME_RUBY_TEXT.nNameLen))
+        if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_RUBY_TEXT)))
             aRet = aRubyText;
-        else if(rPropertyName.equalsAsciiL( UNO_NAME_RUBY_ADJUST.pName, UNO_NAME_RUBY_ADJUST.nNameLen))
+        else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_RUBY_ADJUST)))
             aRet = aRubyAdjust;
-        else if(rPropertyName.equalsAsciiL( UNO_NAME_RUBY_CHAR_STYLE_NAME.pName, UNO_NAME_RUBY_CHAR_STYLE_NAME.nNameLen))
+        else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_RUBY_CHAR_STYLE_NAME)))
             aRet = aRubyStyle;
     }
     else
