@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-30 14:07:21 $
+ *  last change: $Author: oj $ $Date: 2001-04-12 12:39:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -520,9 +520,6 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
                         }
                     }
                 }
-
-
-                aRows.push_back(aRow);
             }
         }
     }
