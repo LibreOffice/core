@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtools.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-23 10:42:44 $
+ *  last change: $Author: fs $ $Date: 2001-07-25 13:52:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,15 @@
 #ifndef _COM_SUN_STAR_IO_XPERSISTOBJECT_HPP_
 #include <com/sun/star/io/XPersistObject.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XEXECUTABLEDIALOG_HPP_
+#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_XCOMPLETEDCONNECTION_HPP_
+#include <com/sun/star/sdb/XCompletedConnection.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBCX_PRIVILEGE_HPP_
+#include <com/sun/star/sdbcx/Privilege.hpp>
+#endif
 #ifndef _ISOLANG_HXX
 #include <tools/isolang.hxx>
 #endif
@@ -75,11 +84,20 @@
 #ifndef _SVX_FMTOOLS_HXX
 #include "fmtools.hxx"
 #endif
+#ifndef SVX_DBTOOLSCLIENT_HXX
+#include "dbtoolsclient.hxx"
+#endif
 #ifndef _SVX_FMSERVS_HXX
 #include "fmservs.hxx"
 #endif
 #ifndef _SVX_FMGLOB_HXX
 #include "fmglob.hxx"
+#endif
+#ifndef _VCL_STDTEXT_HXX
+#include <vcl/stdtext.hxx>
+#endif
+#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
+#include <toolkit/unohlp.hxx>
 #endif
 
 #include <stdlib.h>
@@ -162,9 +180,14 @@
 #ifndef _COM_SUN_STAR_BEANS_XINTROSPECTION_HPP_
 #include <com/sun/star/beans/XIntrospection.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#endif
 #ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
 #include <com/sun/star/container/XChild.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
+#include <com/sun/star/task/XInteractionHandler.hpp>
 #endif
 
 #ifndef _TOOLS_DEBUG_HXX //autogen
@@ -189,10 +212,6 @@
 
 #ifndef _INTN_HXX //autogen
 #include <tools/intn.hxx>
-#endif
-
-#ifndef _SVX_DBERRBOX_HXX
-#include "dbmsgbox.hxx"
 #endif
 
 #ifndef _SVX_FMPROP_HRC
@@ -260,40 +279,66 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::ui::dialogs;
+using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdbcx;
+using namespace ::com::sun::star::sdb;
+using namespace ::com::sun::star::task;
 using namespace ::svxform;
+using namespace ::connectivity::simple;
 
-//==============================================================================
-//------------------------------------------------------------------------------
-void displayException(const ::dbtools::SQLExceptionInfo& _rError)
+//  ------------------------------------------------------------------------------
+void displayException(const Any& _rExcept, Window* _pParent = NULL)
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
-    if (_rError.isKindOf(::dbtools::SQLExceptionInfo::SQL_EXCEPTION))
+    try
     {
-        SvxDBMsgBox aSvxDBMsgBox(GetpApp()->GetAppWindow(), *(const ::com::sun::star::sdbc::SQLException*)_rError, WB_OK);
-        aSvxDBMsgBox.Execute();
+        // the parent window
+        Window* pParentWindow = _pParent ? _pParent : GetpApp()->GetDefDialogParent();
+        Reference< XWindow > xParentWindow = VCLUnoHelper::GetInterface(pParentWindow);
+
+        Sequence< Any > aArgs(2);
+        aArgs[0] <<= PropertyValue(::rtl::OUString::createFromAscii("SQLException"), 0, makeAny(_rExcept), PropertyState_DIRECT_VALUE);
+        aArgs[1] <<= PropertyValue(::rtl::OUString::createFromAscii("ParentWindow"), 0, makeAny(xParentWindow), PropertyState_DIRECT_VALUE);
+
+        static ::rtl::OUString s_sDialogServiceName = ::rtl::OUString::createFromAscii("com.sun.star.sdb.ErrorMessageDialog");
+        Reference< XExecutableDialog > xErrorDialog(
+            ::comphelper::getProcessServiceFactory()->createInstanceWithArguments(s_sDialogServiceName, aArgs), UNO_QUERY);
+        if (xErrorDialog.is())
+            xErrorDialog->execute();
+        else
+            ShowServiceNotAvailableError(pParentWindow, s_sDialogServiceName, sal_True);
     }
-    else
+    catch(Exception&)
     {
-        DBG_ERROR("::displayException : invalid event (does not contain an ::com::sun::star::sdbc::SQLException) !");
-        ::com::sun::star::sdbc::SQLException aDummy;
-        SvxDBMsgBox aSvxDBMsgBox(GetpApp()->GetAppWindow(), aDummy, WB_OK);
-        aSvxDBMsgBox.Execute();
-            // the SvxDBMsgBox will create a default context info ("read error") for this
+        OSL_ENSURE(sal_False, "displayException: could not display the error message!");
     }
 }
 
 //  ------------------------------------------------------------------------------
-void displayException(const ::com::sun::star::sdbc::SQLException& _rExcept, WinBits nStyle)
+void displayException(const ::com::sun::star::sdbc::SQLException& _rExcept, Window* _pParent)
 {
-    ::dbtools::SQLExceptionInfo aInfo(_rExcept);
-    displayException(aInfo);
+    displayException(makeAny(_rExcept), _pParent);
 }
 
 //  ------------------------------------------------------------------------------
-void displayException(const ::com::sun::star::sdb::SQLErrorEvent& _rEvent, WinBits nStyle)
+void displayException(const ::com::sun::star::sdbc::SQLWarning& _rExcept, Window* _pParent)
 {
-    ::dbtools::SQLExceptionInfo aInfo(_rEvent);
-    displayException(aInfo);
+    displayException(makeAny(_rExcept), _pParent);
+}
+
+//  ------------------------------------------------------------------------------
+void displayException(const ::com::sun::star::sdb::SQLContext& _rExcept, Window* _pParent)
+{
+    displayException(makeAny(_rExcept), _pParent);
+}
+
+//  ------------------------------------------------------------------------------
+void displayException(const ::com::sun::star::sdb::SQLErrorEvent& _rEvent, Window* _pParent)
+{
+    displayException(_rEvent.Reason, _pParent);
 }
 
 //------------------------------------------------------------------------------
@@ -311,9 +356,79 @@ _Optlink
 }
 
 
+namespace svxform
+{
 
+    //------------------------------------------------------------------------------
+    Reference< XConnection > getRowsetConnection(const Reference< XInterface >& _rxRowSet) throw (RuntimeException)
+    {
+        Reference< XConnection> xReturn;
+        Reference< XPropertySet> xRowSetProps(_rxRowSet, UNO_QUERY);
+        if (xRowSetProps.is())
+            xRowSetProps->getPropertyValue(FM_PROP_ACTIVE_CONNECTION) >>= xReturn;
+        return xReturn;
+    }
 
+    //------------------------------------------------------------------------------
+    Reference< XDataSource > getDatasourceObject(const ::rtl::OUString& _rDatasourceName, const Reference< XMultiServiceFactory >& _rxORB)
+    {
+        Reference< XDataSource > xDatasource;
+        try
+        {
+            Reference< XNameAccess > xDatabaseContext(_rxORB->createInstance(SRV_SDB_DATABASE_CONTEXT), UNO_QUERY);
+            if (xDatabaseContext.is() && xDatabaseContext->hasByName(_rDatasourceName))
+                xDatabaseContext->getByName(_rDatasourceName) >>= xDatasource;
+        }
+        catch(Exception&)
+        {
+            OSL_ENSURE(sal_False, "getDatasourceConnection: caught an exception!");
+        }
+        return xDatasource;
+    }
 
+    //------------------------------------------------------------------------------
+    Reference< XConnection > getDatasourceConnection(const ::rtl::OUString& _rDatasourceName, const Reference< XMultiServiceFactory >& _rxORB)
+    {
+        Reference< XConnection > xReturn;
+        try
+        {
+            Reference< XCompletedConnection > xDataSource(getDatasourceObject(_rDatasourceName, _rxORB), UNO_QUERY);
+            if (xDataSource.is())
+            {
+                Reference< XInteractionHandler > xHandler(_rxORB->createInstance(SRV_SDB_INTERACTION_HANDLER), UNO_QUERY);
+                xReturn = xDataSource->connectWithCompletion(xHandler);
+            }
+        }
+        catch(SQLException&)
+        {
+            // allowed to pass
+            throw;
+        }
+        catch(Exception&)
+        {
+            OSL_ENSURE(sal_False, "getDatasourceConnection: caught an exception!");
+        }
+        return xReturn;
+    }
+
+    //------------------------------------------------------------------------------
+    sal_Bool canInsertRecords(const Reference< XPropertySet>& _rxCursorSet)
+    {
+        return ((_rxCursorSet.is() && (::comphelper::getINT32(_rxCursorSet->getPropertyValue(FM_PROP_PRIVILEGES)) & Privilege::INSERT) != 0));
+    }
+
+    //------------------------------------------------------------------------------
+    sal_Bool canUpdateRecords(const Reference< XPropertySet>& _rxCursorSet)
+    {
+        return ((_rxCursorSet.is() && (::comphelper::getINT32(_rxCursorSet->getPropertyValue(FM_PROP_PRIVILEGES)) & Privilege::UPDATE) != 0));
+    }
+
+    //------------------------------------------------------------------------------
+    sal_Bool canDeleteRecords(const Reference< XPropertySet>& _rxCursorSet)
+    {
+        return ((_rxCursorSet.is() && (::comphelper::getINT32(_rxCursorSet->getPropertyValue(FM_PROP_PRIVILEGES)) & Privilege::DELETE) != 0));
+    }
+}   // namespace svxform
 
 //------------------------------------------------------------------------------
 Reference< XInterface> clone(const Reference< ::com::sun::star::io::XPersistObject>& _xObj)
@@ -401,7 +516,7 @@ Reference< XInterface> cloneUsingProperties(const Reference< ::com::sun::star::i
                 e;
 #ifdef DBG_UTIL
                 ::rtl::OString sMessage("cloneUsingProperties : could not transfer the value for property \"");
-                sMessage = sMessage + S(pResult->Name);
+                sMessage = sMessage + ::rtl::OString(pResult->Name.getStr(), pResult->Name.getLength(), RTL_TEXTENCODING_ASCII_US);
                 sMessage = sMessage + '\"';
                 DBG_ERROR(sMessage);
 #endif
@@ -890,16 +1005,15 @@ Sequence<sal_Int16> findValue(const Sequence< ::rtl::OUString>& rList, const ::r
 //------------------------------------------------------------------------------
 sal_uInt32 findValue1(const Sequence< ::rtl::OUString>& rList, const ::rtl::OUString& rValue)
 {
-    const ::rtl::OUString* pTArray = (const ::rtl::OUString*)rList.getConstArray();
-    ::rtl::OString aStr1 = S(rValue);
-    sal_uInt32 i;
-    for (i = 0; i < (sal_uInt32)rList.getLength(); i++)
+    const ::rtl::OUString* pTArray = rList.getConstArray();
+    const ::rtl::OUString* pTArrayStart = pTArray;
+    const ::rtl::OUString* pTArrayEnd = pTArray + rList.getLength();
+    for (; pTArray < pTArrayEnd; ++pTArray)
     {
-        ::rtl::OString aStr2 = S(pTArray[i]);
-        if( rValue==pTArray[i] )
+        if (*pTArray == rValue)
             break;
     }
-    return (i < (sal_uInt32)rList.getLength()) ? i : LIST_ENTRY_NOTFOUND;
+    return (pTArray < pTArrayEnd) ? (pTArray - pTArrayStart) : LIST_ENTRY_NOTFOUND;
 }
 
 
@@ -1543,7 +1657,7 @@ sal_Int16   GridModel2ViewPos(const Reference< ::com::sun::star::container::XInd
             return nViewPos;
         }
     }
-    catch(...)
+    catch(const Exception&)
     {
         DBG_ERROR("GridModel2ViewPos Exception occured!");
     }
@@ -1575,7 +1689,7 @@ sal_Int16   GridView2ModelPos(const Reference< ::com::sun::star::container::XInd
                 return i;
         }
     }
-    catch(...)
+    catch(const Exception&)
     {
         DBG_ERROR("GridView2ModelPos Exception occured!");
     }
@@ -1601,7 +1715,7 @@ sal_Int16   GridViewColumnCount(const Reference< ::com::sun::star::container::XI
             return nCount;
         }
     }
-    catch(...)
+    catch(const Exception&)
     {
         DBG_ERROR("GridView2ModelPos Exception occured!");
     }
@@ -2007,24 +2121,6 @@ Reference< ::com::sun::star::container::XNameAccess> getTableFields(const Refere
 
 
 //------------------------------------------------------------------------------
-Reference< ::com::sun::star::sdbc::XDataSource> getDataSource(const ::rtl::OUString& _rsTitleOrPath)
-{
-    DBG_ASSERT(_rsTitleOrPath.getLength(), "::getDataSource : invalid arg !");
-
-    Reference< ::com::sun::star::sdbc::XDataSource>  xReturn;
-
-    // is it a file url ?
-    Reference< ::com::sun::star::container::XNameAccess> xNamingContext(::comphelper::getProcessServiceFactory()->createInstance(SRV_SDB_DATABASE_CONTEXT), UNO_QUERY);
-    if (xNamingContext.is() && xNamingContext->hasByName(_rsTitleOrPath))
-    {
-        DBG_ASSERT(Reference< XNamingService>(xNamingContext, UNO_QUERY).is(), "::getDataSource : no NamingService interface on the DatabaseAccessContext !");
-        xReturn = Reference< ::com::sun::star::sdbc::XDataSource>(Reference< XNamingService>(xNamingContext, UNO_QUERY)->getRegisteredObject(_rsTitleOrPath), UNO_QUERY);
-    }
-    return xReturn;
-}
-
-
-//------------------------------------------------------------------------------
 void setConnection(const Reference< ::com::sun::star::sdbc::XRowSet>& _rxRowSet, const Reference< ::com::sun::star::sdbc::XConnection>& _rxConn)
 {
     Reference< ::com::sun::star::beans::XPropertySet> xRowSetProps(_rxRowSet, UNO_QUERY);
@@ -2114,7 +2210,9 @@ Reference< ::com::sun::star::sdb::XSQLQueryComposer> getCurrentSettingsComposer(
     Reference< ::com::sun::star::sdbc::XRowSet> xRowSet(_rxRowSetProps, UNO_QUERY);
     try
     {
-        Reference< ::com::sun::star::sdbc::XConnection> xConn( ::dbtools::calcConnection(xRowSet,::comphelper::getProcessServiceFactory()));
+        // get the connection of the rowset
+        Reference< XConnection> xConn = OStaticDataAccessTools().calcConnection(xRowSet, ::comphelper::getProcessServiceFactory());
+
         if (xConn.is())     // implies xRowSet.is() implies _rxRowSetProps.is()
         {
             // build the statement the row set is based on (can't use the ActiveCommand property of the set

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridcl.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-20 12:44:16 $
+ *  last change: $Author: fs $ $Date: 2001-07-25 13:57:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -439,7 +439,7 @@ sal_Int8 FmGridHeader::ExecuteDrop( const ExecuteDropEvent& _rEvt )
         {   // the transferable did not contain the connection -> build an own one
             try
             {
-                xConnection = dbtools::getConnection(sDatasouce, ::rtl::OUString(), ::rtl::OUString(), static_cast<FmGridControl*>(GetParent())->getServiceManager());
+                xConnection = getDatasourceConnection(sDatasouce, static_cast<FmGridControl*>(GetParent())->getServiceManager());
             }
             catch(NoSuchElementException&)
             {   // allowed, means sDatasouce isn't a valid data source name ....
@@ -546,7 +546,7 @@ IMPL_LINK( FmGridHeader, OnAsyncExecuteDrop, void*, NOTINTERESTEDIN )
     try
     {
         // need number formats
-        Reference< XNumberFormatsSupplier > xSupplier = ::dbtools::getNumberFormats(xConnection, sal_True);
+        Reference< XNumberFormatsSupplier > xSupplier = OStaticDataAccessTools().getNumberFormats(xConnection, sal_True);
         Reference< XNumberFormats >  xNumberFormats;
         if (xSupplier.is())
             xNumberFormats = xSupplier->getNumberFormats();
@@ -1095,7 +1095,7 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMe
                 // the application locale
                 ::com::sun::star::lang::Locale aAppLocale = Application::GetSettings().GetUILocale();
 
-                ::dbtools::TransferFormComponentProperties(xReplaced, xCol, aAppLocale);
+                OStaticDataAccessTools().TransferFormComponentProperties(xReplaced, xCol, aAppLocale);
 
                 xCols->replaceByIndex(nPos, aNew);
                 ::comphelper::disposeComponent(xReplaced);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-20 12:42:45 $
+ *  last change: $Author: fs $ $Date: 2001-07-25 13:52:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1264,7 +1264,7 @@ sal_Bool FmXFormShell::ConvertControlTo(const Reference< XFormComponent>& xModel
 
 
     Locale aNewLanguage = Application::GetSettings().GetUILocale();
-    ::dbtools::TransferFormComponentProperties(xOldSet, xNewSet, aNewLanguage);
+    TransferFormComponentProperties(xOldSet, xNewSet, aNewLanguage);
 
     Sequence< ::com::sun::star::script::ScriptEventDescriptor> aOldScripts;
     Reference< XChild> xChild(xOldModel, UNO_QUERY);
@@ -1517,11 +1517,11 @@ void FmXFormShell::ExecuteSearch()
     // jetzt brauche ich noch einen 'initial context'
     sal_Int16 nInitialContext = 0;
     Reference< XForm> xActiveForm( getActiveForm());
-    for (i=0; i<m_arrSearchContexts.size(); ++i)
+    for (i=0; i<(sal_Int32)m_arrSearchContexts.size(); ++i)
     {
         if (m_arrSearchContexts.at(i) == xActiveForm)
         {
-            nInitialContext = i;
+            nInitialContext = (sal_Int16)i;
             break;
         }
     }
@@ -1627,7 +1627,7 @@ sal_Bool FmXFormShell::GetY2KState(sal_uInt16& n)
     Reference< XRowSet> xDB(xForm, UNO_QUERY);
     DBG_ASSERT(xDB.is(), "FmXFormShell::GetY2KState : current form has no dbform-interface !");
 
-    Reference< XNumberFormatsSupplier> xSupplier( ::dbtools::getNumberFormats(::dbtools::getConnection(xDB), sal_False));
+    Reference< XNumberFormatsSupplier> xSupplier( getNumberFormats(getRowsetConnection(xDB), sal_False));
     if (xSupplier.is())
     {
         Reference< XPropertySet> xSet(xSupplier->getNumberFormatSettings());
@@ -1656,7 +1656,7 @@ void FmXFormShell::SetY2KState(sal_uInt16 n)
     Reference< XRowSet> xDB(xActiveForm, UNO_QUERY);
     if (xDB.is())
     {
-        Reference< XNumberFormatsSupplier> xSupplier( ::dbtools::getNumberFormats(::dbtools::getConnection(xDB), sal_False));
+        Reference< XNumberFormatsSupplier> xSupplier( getNumberFormats(getRowsetConnection(xDB), sal_False));
         if (xSupplier.is())
         {
             Reference< XPropertySet> xSet(xSupplier->getNumberFormatSettings());
@@ -1696,7 +1696,7 @@ void FmXFormShell::SetY2KState(sal_uInt16 n)
         Reference< XRowSet> xDB(xCurrentElement, UNO_QUERY);
         if (xDB.is())
         {
-            Reference< XNumberFormatsSupplier> xSupplier( ::dbtools::getNumberFormats(::dbtools::getConnection(xDB), sal_False));
+            Reference< XNumberFormatsSupplier> xSupplier( getNumberFormats(getRowsetConnection(xDB), sal_False));
             if (!xSupplier.is())
                 continue;
 
@@ -1762,7 +1762,7 @@ sal_Bool FmXFormShell::CanMoveRight(const Reference< XPropertySet>& _xController
     sal_Int32 nCount        = ::comphelper::getINT32(_xControllerModel->getPropertyValue(FM_PROP_ROWCOUNT));
     sal_Bool  bIsModified   = ::comphelper::getBOOL(_xControllerModel->getPropertyValue(FM_PROP_ISMODIFIED));
     sal_Bool  bIsNew        = ::comphelper::getBOOL(_xControllerModel->getPropertyValue(FM_PROP_ISNEW));
-    sal_Bool  bCanInsert    = ::dbtools::canInsert(_xControllerModel);
+    sal_Bool  bCanInsert    = canInsertRecords(_xControllerModel);
 
     return  (
                 (   nCount
@@ -2261,7 +2261,7 @@ void FmXFormShell::UpdateFormDispatcher(FmFormNavigationDispatcher* _pDisp)
                 if (::comphelper::getBOOL(xSet->getPropertyValue(FM_PROP_ISNEW)))
                     bEnable = ::comphelper::getBOOL(xSet->getPropertyValue(FM_PROP_ISMODIFIED));
                 else
-                    bEnable = ::dbtools::canInsert(xSet);
+                    bEnable = canInsertRecords(xSet);
             }
             break;
         }
@@ -2577,7 +2577,7 @@ void FmXFormShell::startListening()
 {
     OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     Reference< XRowSet> xDatabaseForm(m_xActiveForm, UNO_QUERY);
-    if (xDatabaseForm.is() && ::dbtools::getConnection(xDatabaseForm).is())
+    if (xDatabaseForm.is() && getRowsetConnection(xDatabaseForm).is())
     {
         Reference< XPropertySet> xActiveFormSet(m_xActiveForm, UNO_QUERY);
         if (xActiveFormSet.is())
@@ -2597,7 +2597,7 @@ void FmXFormShell::startListening()
                 sal_Bool bUseEscapeProcessing = ::comphelper::getBOOL(xActiveFormSet->getPropertyValue(FM_PROP_ESCAPE_PROCESSING));
                 if (bUseEscapeProcessing)
                 {
-                    Reference< XSQLQueryComposerFactory> xFactory(::dbtools::getConnection(xDatabaseForm), UNO_QUERY);
+                    Reference< XSQLQueryComposerFactory> xFactory(getRowsetConnection(xDatabaseForm), UNO_QUERY);
                     if (xFactory.is())
                         m_xParser = xFactory->createQueryComposer();
                 }
@@ -2760,7 +2760,7 @@ void FmXFormShell::ShowProperties(const Reference< XInterface>& rxObject, sal_Bo
 IMPL_LINK(FmXFormShell, OnFoundData, FmFoundRecordInformation*, pfriWhere)
 {
     OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
-    DBG_ASSERT((pfriWhere->nContext >= 0) && (pfriWhere->nContext < m_arrSearchContexts.size()),
+    DBG_ASSERT((pfriWhere->nContext >= 0) && (pfriWhere->nContext < (sal_Int16)m_arrSearchContexts.size()),
         "FmXFormShell::OnFoundData : ungueltiger Kontext !");
     Reference< XForm> xForm( m_arrSearchContexts.at(pfriWhere->nContext));
     DBG_ASSERT(xForm.is(), "FmXFormShell::OnFoundData : ungueltige Form !");
@@ -2816,7 +2816,7 @@ IMPL_LINK(FmXFormShell, OnFoundData, FmFoundRecordInformation*, pfriWhere)
         xModelSet->setPropertyValue(FM_PROP_CURSORCOLOR, makeAny(sal_Int32(COL_LIGHTRED)));
         m_aLastGridFound = xControlModel;
 
-        xGrid->setCurrentColumnPosition(nGridColumn);
+        xGrid->setCurrentColumnPosition((sal_Int16)nGridColumn);
     }
 
     // als der Cursor neu positioniert wurde, habe ich (in positioned) meine Formularleisten-Slots invalidiert, aber das greift
@@ -2833,7 +2833,7 @@ IMPL_LINK(FmXFormShell, OnFoundData, FmFoundRecordInformation*, pfriWhere)
 IMPL_LINK(FmXFormShell, OnCanceledNotFound, FmFoundRecordInformation*, pfriWhere)
 {
     OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
-    DBG_ASSERT((pfriWhere->nContext >= 0) && (pfriWhere->nContext < m_arrSearchContexts.size()),
+    DBG_ASSERT((pfriWhere->nContext >= 0) && (pfriWhere->nContext < (sal_Int16)m_arrSearchContexts.size()),
         "FmXFormShell::OnCanceledNotFound : ungueltiger Kontext !");
     Reference< XForm> xForm( m_arrSearchContexts.at(pfriWhere->nContext));
     DBG_ASSERT(xForm.is(), "FmXFormShell::OnCanceledNotFound : ungueltige Form !");
@@ -2853,7 +2853,7 @@ IMPL_LINK(FmXFormShell, OnCanceledNotFound, FmFoundRecordInformation*, pfriWhere
 IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextInfo)
 {
     OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
-    DBG_ASSERT(pfmscContextInfo->nContext < m_arrSearchContexts.size(), "FmXFormShell::OnSearchContextRequest : invalid parameter !");
+    DBG_ASSERT(pfmscContextInfo->nContext < (sal_Int16)m_arrSearchContexts.size(), "FmXFormShell::OnSearchContextRequest : invalid parameter !");
     Reference< XForm> xForm( m_arrSearchContexts.at(pfmscContextInfo->nContext));
     DBG_ASSERT(xForm.is(), "FmXFormShell::OnSearchContextRequest : unexpected : invalid context !");
 
@@ -2888,7 +2888,7 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
     DBG_ASSERT(pCurrentPage!=NULL, "FmXFormShell::OnSearchContextRequest : no page !");
     // alle Sdr-Controls dieser Seite durchsuchen ...
     ::rtl::OUString sControlSource, sCompareString,aName;
-    for (int i=0; i<pCurrentPage->GetObjCount(); ++i)
+    for (sal_Int32 i=0; i<(sal_Int32)pCurrentPage->GetObjCount(); ++i)
     {
         SdrObject* pCurrent = pCurrentPage->GetObj(i);
 
@@ -3958,7 +3958,8 @@ void FmXFormShell::restoreControlLocks()
                         continue;
 
                     DBG_ASSERT(nBoundControl < m_aControlLocks.Count(), "FmXFormShell::restoreControlLocks : m_aControlLocks is invalid !");
-                    xCtrl->setLock(m_aControlLocks.GetObject(nBoundControl++));
+                    xCtrl->setLock(m_aControlLocks.GetObject((sal_uInt16)nBoundControl));
+                    ++nBoundControl;
                 }
             }
             continue;
@@ -3968,7 +3969,8 @@ void FmXFormShell::restoreControlLocks()
             // a violation of this condition would mean a) setControlLocks hasn't been called or b) the ControlContainer
             // has changed since the last call to setControlLocks.
             // a) clearly is a fault of the programmer and b) shouldn't be possible (as we are in alive mode)
-        xCtrl->setLock(m_aControlLocks.GetObject(nBoundControl++));
+        xCtrl->setLock(m_aControlLocks.GetObject((sal_uInt16)nBoundControl));
+        ++nBoundControl;
     }
     m_aControlLocks.Remove(0, m_aControlLocks.Count());
 }

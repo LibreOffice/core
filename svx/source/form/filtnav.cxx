@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtnav.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-20 12:42:45 $
+ *  last change: $Author: fs $ $Date: 2001-07-25 13:52:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,10 +149,6 @@
 #include <fmtools.hxx>
 #endif
 
-#ifndef _SVX_DBERRBOX_HXX
-#include "dbmsgbox.hxx"
-#endif
-
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
 #endif
@@ -194,7 +190,13 @@
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdb;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::util;
 using namespace ::svxform;
+using namespace ::connectivity::simple;
+using namespace ::connectivity;
 
 
 //........................................................................
@@ -290,7 +292,7 @@ Image FmFilterItems::GetImage() const
 //========================================================================
 TYPEINIT1(FmFilterItem, FmFilterData);
 //------------------------------------------------------------------------
-FmFilterItem::FmFilterItem(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory,
+FmFilterItem::FmFilterItem(const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory,
                            FmFilterItems* pParent,
                      const ::rtl::OUString& aFieldName,
                      const ::rtl::OUString& aText,
@@ -490,7 +492,7 @@ void FmFilterAdapter::InsertElements(const Reference< ::com::sun::star::containe
         // store the filter controls
         FmXFormController* pController = NULL;
         //  ::comphelper::getImplementation(pController, Reference<XUnoTunnel>(xElement, UNO_QUERY));
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > xTunnel(xElement,::com::sun::star::uno::UNO_QUERY);
+        Reference< ::com::sun::star::lang::XUnoTunnel > xTunnel(xElement,UNO_QUERY);
         DBG_ASSERT(xTunnel.is(), "FmFilterAdapter::InsertElements : xTunnel is invalid!");
         if(xTunnel.is())
         {
@@ -541,7 +543,7 @@ void FmFilterAdapter::setText(sal_Int32 nRowPos,
     // get the controller of the text component and its filter rows
     FmFormItem* pFormItem = PTR_CAST(FmFormItem,pFilterItem->GetParent()->GetParent());
     FmXFormController* pController = NULL;
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > xTunnel(pFormItem->GetController(),::com::sun::star::uno::UNO_QUERY);
+    Reference< ::com::sun::star::lang::XUnoTunnel > xTunnel(pFormItem->GetController(),UNO_QUERY);
     DBG_ASSERT(xTunnel.is(), "FmFilterAdapter::InsertElements : xTunnel is invalid!");
     if(xTunnel.is())
     {
@@ -596,7 +598,7 @@ Reference< ::com::sun::star::form::XForm > FmFilterAdapter::findForm(const Refer
 void FmFilterAdapter::textChanged(const ::com::sun::star::awt::TextEvent& e)
 {
     // Find the according formitem in the
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > xControl(e.Source, UNO_QUERY);
+    Reference< ::com::sun::star::awt::XControl > xControl(e.Source, UNO_QUERY);
     if (!m_pModel || !xControl.is())
         return;
 
@@ -642,11 +644,11 @@ void FmFilterAdapter::textChanged(const ::com::sun::star::awt::TextEvent& e)
 //========================================================================
 TYPEINIT1(FmFilterModel, FmParentData);
 //------------------------------------------------------------------------
-FmFilterModel::FmFilterModel(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory)
+FmFilterModel::FmFilterModel(const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory)
               :FmParentData(_rxFactory,NULL, ::rtl::OUString())
+              ,OSQLParserClient(_rxFactory)
               ,m_pAdapter(NULL)
               ,m_pCurrentItems(NULL)
-              ,m_aParser(_rxFactory)
               ,m_xORB(_rxFactory)
 {
 }
@@ -732,7 +734,7 @@ void FmFilterModel::Update(const Reference< ::com::sun::star::container::XIndexA
 
         // And now insert the filters for the form
         FmXFormController* pController = NULL;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > xTunnel(pFormItem->GetController(),::com::sun::star::uno::UNO_QUERY);
+        Reference< ::com::sun::star::lang::XUnoTunnel > xTunnel(pFormItem->GetController(),UNO_QUERY);
         DBG_ASSERT(xTunnel.is(), "FmFilterAdapter::InsertElements : xTunnel is invalid!");
         if(xTunnel.is())
         {
@@ -849,7 +851,7 @@ void FmFilterModel::AppendFilterItems(FmFormItem* pFormItem)
 
     // do we need a new row
     FmXFormController* pController = NULL;
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > xTunnel(pFormItem->GetController(),::com::sun::star::uno::UNO_QUERY);
+    Reference< ::com::sun::star::lang::XUnoTunnel > xTunnel(pFormItem->GetController(),UNO_QUERY);
     DBG_ASSERT(xTunnel.is(), "FmFilterAdapter::InsertElements : xTunnel is invalid!");
     if(xTunnel.is())
     {
@@ -890,7 +892,7 @@ void FmFilterModel::Remove(FmFilterData* pData)
     {
         FmFormItem* pFormItem = (FmFormItem*)pParent;
         FmXFormController* pController = NULL;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > xTunnel(pFormItem->GetController(),::com::sun::star::uno::UNO_QUERY);
+        Reference< ::com::sun::star::lang::XUnoTunnel > xTunnel(pFormItem->GetController(),UNO_QUERY);
         DBG_ASSERT(xTunnel.is(), "FmFilterAdapter::InsertElements : xTunnel is invalid!");
         if(xTunnel.is())
         {
@@ -1005,31 +1007,32 @@ void FmFilterModel::Remove(const ::std::vector<FmFilterData*>::iterator& rPos, F
 
     delete pData;
 }
-using namespace connectivity;
+
 //------------------------------------------------------------------------
 sal_Bool FmFilterModel::ValidateText(FmFilterItem* pItem, UniString& rText, UniString& rErrorMsg) const
 {
     // check the input
-    Reference< ::com::sun::star::beans::XPropertySet >  xField(m_pAdapter->getField(pItem->GetTextComponent()));
-    Reference< ::com::sun::star::sdbc::XConnection >  xConnection(::dbtools::getConnection(Reference< ::com::sun::star::sdbc::XRowSet > (m_xController->getModel(), UNO_QUERY)));
-    Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xFormatSupplier = ::dbtools::getNumberFormats(xConnection, sal_True);
-    Reference< ::com::sun::star::util::XNumberFormatter >  xFormatter(m_xORB->createInstance(FM_NUMBER_FORMATTER), UNO_QUERY);
+    Reference< XPropertySet >   xField(m_pAdapter->getField(pItem->GetTextComponent()));
+
+    Reference< XConnection > xConnection(getRowsetConnection(Reference< XRowSet > (m_xController->getModel(), UNO_QUERY)));
+    Reference< XNumberFormatsSupplier >  xFormatSupplier = OStaticDataAccessTools().getNumberFormats(xConnection, sal_True);
+
+    Reference< XNumberFormatter >  xFormatter(m_xORB->createInstance(FM_NUMBER_FORMATTER), UNO_QUERY);
     xFormatter->attachNumberFormatsSupplier(xFormatSupplier);
 
     ::rtl::OUString aErr, aTxt(rText);
-    OSQLParseNode* pParseNode = const_cast< OSQLParser*>(&m_aParser)->predicateTree(aErr, aTxt, xFormatter, xField);
+    ::rtl::Reference< ISQLParseNode > xParseNode = predicateTree(aErr, aTxt, xFormatter, xField);
     rErrorMsg = aErr;
     rText = aTxt;
-    if (pParseNode)
+    if (xParseNode.is())
     {
         ::rtl::OUString aPreparedText;
         ::com::sun::star::lang::Locale aAppLocale = Application::GetSettings().GetUILocale();
-        pParseNode->parseNodeToPredicateStr(aPreparedText,
+        xParseNode->parseNodeToPredicateStr(aPreparedText,
                                    xConnection->getMetaData(),
                                    xFormatter,
                                    xField,aAppLocale,'.');
         rText = aPreparedText;
-        delete pParseNode;
         return sal_True;
     }
     else
@@ -1084,7 +1087,7 @@ void FmFilterModel::SetCurrentItems(FmFilterItems* pCurrent)
             // determine the filter position
             sal_Int32 nPos = i - rItems.begin();
             FmXFormController* pController = NULL;
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > xTunnel(pFormItem->GetController(),::com::sun::star::uno::UNO_QUERY);
+            Reference< ::com::sun::star::lang::XUnoTunnel > xTunnel(pFormItem->GetController(),UNO_QUERY);
             DBG_ASSERT(xTunnel.is(), "FmFilterAdapter::InsertElements : xTunnel is invalid!");
             if(xTunnel.is())
             {
@@ -1374,11 +1377,12 @@ sal_Bool FmFilterNavigator::EditedEntry( SvLBoxEntry* pEntry, const XubString& r
         else
         {
             // display the error and return sal_False
-            ::vos::OGuard aGuard(Application::GetSolarMutex());
-            ::rtl::OUString aTitle(SVX_RES(RID_STR_SYNTAXERROR));
-            SvxDBMsgBox aDlg(this, aTitle, aErrorMsg, WB_OK | WB_DEF_OK,
-                             SvxDBMsgBox::Info);
-            aDlg.Execute();
+
+            SQLContext aError;
+            aError.Message = String(SVX_RES(RID_STR_SYNTAXERROR));
+            aError.Details = aErrorMsg;
+            displayException(aError, this);
+
             return sal_False;
         }
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-20 12:44:16 $
+ *  last change: $Author: fs $ $Date: 2001-07-25 13:57:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,9 @@
 #ifndef _SVX_GRIDCELL_HXX
 #include "gridcell.hxx"
 #endif
-
+#ifndef SVX_DBTOOLSCLIENT_HXX
+#include "dbtoolsclient.hxx"
+#endif
 #ifndef _SVX_FMTOOLS_HXX
 #include "fmtools.hxx"
 #endif
@@ -196,6 +198,7 @@ using namespace ::dbtools;
 using namespace ::svxform;
 using namespace ::svt;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::datatransfer;
 
 #define ROWSTATUS(row)  !row.Is() ? "NULL" : row->GetStatus() == GRS_CLEAN ? "CLEAN" : row->GetStatus() == GRS_MODIFIED ? "MODIFIED" : row->GetStatus() == GRS_DELETED ? "DELETED" : "INVALID"
@@ -974,7 +977,7 @@ DbGridControl::DbGridControl(
             ,m_bSynchDisplay(sal_True)
             ,m_bForceROController(sal_False)
             ,m_bHandle(sal_False)
-            ,m_aNullDate(DBTypeConversion::getStandardDate())
+            ,m_aNullDate(OTypeConversionClient().getStandardDate())
             ,m_nAsynAdjustEvent(0)
             ,m_pDataSourcePropMultiplexer(NULL)
             ,m_pDataSourcePropListener(NULL)
@@ -1010,7 +1013,7 @@ DbGridControl::DbGridControl(
             ,m_bSynchDisplay(sal_True)
             ,m_bForceROController(sal_False)
             ,m_bHandle(sal_False)
-            ,m_aNullDate(DBTypeConversion::getStandardDate())
+            ,m_aNullDate(OTypeConversionClient().getStandardDate())
             ,m_pDataSourcePropMultiplexer(NULL)
             ,m_pDataSourcePropListener(NULL)
             ,m_pFieldListeners(NULL)
@@ -1483,7 +1486,7 @@ void DbGridControl::setDataSource(const ::com::sun::star::uno::Reference< ::com:
 
     // get a new formatter and data cursor
     m_xFormatter = NULL;
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier = ::dbtools::getNumberFormats(::dbtools::getConnection(_xCursor), sal_True);
+    Reference< XNumberFormatsSupplier >  xSupplier = OStaticDataAccessTools().getNumberFormats(getRowsetConnection(_xCursor), sal_True);
     if (xSupplier.is() && m_xServiceFactory.is())
     {
         m_xFormatter =  ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >(
