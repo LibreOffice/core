@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:27 $
+ *  last change: $Author: dv $ $Date: 2001-04-27 11:52:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@
 #include "accmgr.hxx"
 #include "objface.hxx"
 #include "viewfrm.hxx"
+#include "iodlg.hxx"
 
 #define SfxModule
 #include <sfxslots.hxx>
@@ -124,7 +125,6 @@ SFX_IMPL_INTERFACE(SfxModule,SfxShell,SfxResId(0))
 }
 
 //====================================================================
-
 SfxFileDialog* SfxModule::CreateDocFileDialog
 (
     ULONG                   nFlags, //  arithmetische Veroderung der u.g. Sfx-Winbits
