@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleSpreadsheet.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-05 09:56:31 $
+ *  last change: $Author: sab $ $Date: 2002-08-06 05:03:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -635,6 +635,10 @@ void SAL_CALL
 {
     ScUnoGuard aGuard;
     IsObjectValid();
+
+    if (nChildIndex < 0 || nChildIndex >= getAccessibleChildCount())
+        throw lang::IndexOutOfBoundsException();
+
     if (mpViewShell)
     {
         sal_Int32 nCol(getAccessibleColumn(nChildIndex));
