@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkmgr.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-03 19:16:02 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 19:34:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@ String RID_SVXSTR_FILELINK
     Text[ korean ] = "¹®¼­";
     Text[ turkish ] = "Belge";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Documento";
 };
 String RID_SVXSTR_GRAFIKLINK
 {
@@ -115,6 +116,7 @@ String RID_SVXSTR_GRAFIKLINK
     Text[ korean ] = "±×·¡ÇÈ";
     Text[ turkish ] = "Grafik";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Imagen";
 };
 String RID_SVXSTR_EDITGRFLINK
 {
@@ -145,6 +147,7 @@ String RID_SVXSTR_EDITGRFLINK
     Text[ greek ] = "Óýíäåóç ãñáöéêïý";
     Text[ korean ] = "±×·¡ÇÈ ¿¬°á";
     Text[ turkish ] = "Grafik baðlantýsý oluþtur";
+    Text[ catalan ] = "Enlazar imagen";
 };
 String RID_SVXSTR_GRFLINKPROGRESS
 {
@@ -171,6 +174,7 @@ String RID_SVXSTR_GRFLINKPROGRESS
     Text[ korean ] = "±×·¡ÇÈ °¡Á® ¿À´Â Áß...";
     Text[ turkish ] = "Ýçe aktar (grafik)...";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Importando imagen...";
 };
 Bitmap RID_SVXGRF_GRAPHICLOAD
 {
