@@ -2,9 +2,9 @@
  *
  *  $RCSfile: closedispatcher.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 13:20:58 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 14:52:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,10 @@
 #include <com/sun/star/frame/XController.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_FRAME_COMMANDGROUP_HPP_
+#include <com/sun/star/frame/CommandGroup.hpp>
+#endif
+
 //_______________________________________________
 // includes of other projects
 
@@ -128,18 +132,20 @@ static ::rtl::OUString URL_CLOSEFRAME  = DECLARE_ASCII(".uno:CloseFrame");
 //_______________________________________________
 // declarations
 
-DEFINE_XINTERFACE_4(CloseDispatcher                                 ,
-                    OWeakObject                                     ,
-                    DIRECT_INTERFACE(css::lang::XTypeProvider      ),
-                    DIRECT_INTERFACE(css::frame::XNotifyingDispatch),
-                    DIRECT_INTERFACE(css::frame::XDispatch         ),
-                    DIRECT_INTERFACE(css::frame::XStatusListener   ))
+DEFINE_XINTERFACE_5(CloseDispatcher                                           ,
+                    OWeakObject                                               ,
+                    DIRECT_INTERFACE(css::lang::XTypeProvider                ),
+                    DIRECT_INTERFACE(css::frame::XNotifyingDispatch          ),
+                    DIRECT_INTERFACE(css::frame::XDispatch                   ),
+                    DIRECT_INTERFACE(css::frame::XDispatchInformationProvider),
+                    DIRECT_INTERFACE(css::frame::XStatusListener             ))
 
 // Note: XStatusListener is an implementation detail. Hide it for scripting!
-DEFINE_XTYPEPROVIDER_3(CloseDispatcher               ,
-                       css::lang::XTypeProvider      ,
-                       css::frame::XNotifyingDispatch,
-                       css::frame::XDispatch         )
+DEFINE_XTYPEPROVIDER_4(CloseDispatcher                         ,
+                       css::lang::XTypeProvider                ,
+                       css::frame::XDispatchInformationProvider,
+                       css::frame::XNotifyingDispatch          ,
+                       css::frame::XDispatch                   )
 
 //-----------------------------------------------
 CloseDispatcher::CloseDispatcher(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR      ,
@@ -164,6 +170,42 @@ void SAL_CALL CloseDispatcher::dispatch(const css::util::URL&                   
     throw(css::uno::RuntimeException)
 {
     dispatchWithNotification(aURL, lArguments, css::uno::Reference< css::frame::XDispatchResultListener >());
+}
+
+//-----------------------------------------------
+css::uno::Sequence< sal_Int16 > SAL_CALL CloseDispatcher::getSupportedCommandGroups()
+    throw(css::uno::RuntimeException)
+{
+    css::uno::Sequence< sal_Int16 > lGroups(2);
+    lGroups[0] = css::frame::CommandGroup::VIEW;
+    lGroups[1] = css::frame::CommandGroup::DOCUMENT;
+    return lGroups;
+}
+
+//-----------------------------------------------
+css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL CloseDispatcher::getConfigurableDispatchInformation(sal_Int16 nCommandGroup)
+    throw(css::uno::RuntimeException)
+{
+    if (nCommandGroup == css::frame::CommandGroup::VIEW)
+    {
+        /* Attention: Dont add .uno:CloseFrame here. Because its not realy
+                      a configurable feature ... and further it does not have
+                      a valid UIName entry inside the GenericCommands.xcu ... */
+        css::uno::Sequence< css::frame::DispatchInformation > lViewInfos(1);
+        lViewInfos[0].Command = URL_CLOSEWIN;
+        lViewInfos[0].GroupId = css::frame::CommandGroup::VIEW;
+        return lViewInfos;
+    }
+    else
+    if (nCommandGroup == css::frame::CommandGroup::DOCUMENT)
+    {
+        css::uno::Sequence< css::frame::DispatchInformation > lDocInfos(1);
+        lDocInfos[0].Command = URL_CLOSEDOC;
+        lDocInfos[0].GroupId = css::frame::CommandGroup::DOCUMENT;
+        return lDocInfos;
+    }
+
+    return css::uno::Sequence< css::frame::DispatchInformation >();
 }
 
 //-----------------------------------------------
