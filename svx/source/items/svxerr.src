@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxerr.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-19 11:25:22 $
+ *  last change: $Author: kz $ $Date: 2001-04-03 19:14:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,7 +221,7 @@ Resource RID_SVXERRCTX
         Text[ chinese_simplified ] = "$(ERR) ·¢ÉúÔÚ×°ÈëÒ»¸öÍ¼ĞÎÊ±¡£";
         Text[ russian ] = "$(ERR) ïğè çàãğóçêå ãğàôèêè.";
         Text[ polish ] = "$(ERR) przy ³adowaniu grafiki.";
-        Text[ japanese ] = "$(ERR) ¸Ş×Ì¨¯¸‚ğÛ°ÄŞ’†‚É”­¶B";
+        Text[ japanese ] = "}‚Ì“Ç‚İ‚İ’†‚É $(ERR) ”­¶B";
         Text[ chinese_traditional ] = "$(ERR)µo¥Í¦b¸ü¤J¤@­Ó¹Ï§Î®É¡C";
         Text[ arabic ] = "$(ERR) ÃËäÇÁ ÊÍãíá ÇáÑÓã.";
         Text[ dutch ] = "$(ERR) bij het laden van een afbeelding";
@@ -419,7 +419,7 @@ Resource RID_SVXERRCODE
         Text[ chinese_simplified ] = "ÎŞ·¨ÕÒµ½Í¼ĞÎ $(ARG1)¡£";
         Text[ russian ] = "Íàéòè ãğàôèêó $(ARG1) íå óäàåòñÿ.";
         Text[ polish ] = "Grafiki $(ARG1) nie znaleziono.";
-        Text[ japanese ] = "¸Ş×Ì¨¯¸‚Ì$(ARG1)‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB";
+        Text[ japanese ] = "} $(ARG1) ‚ÍŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½B";
         Text[ chinese_traditional ] = "µLªk§ä¨ì¹Ï§Î $(ARG1)¡C";
         Text[ arabic ] = "ÊÚĞÑ ÇáÚËæÑ Úáì ÇáÑÓã $(ARG1).";
         Text[ dutch ] = "Afbeelding $(ARG1) niet gevonden.";
