@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxdrctl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:21:11 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 18:10:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,8 +134,6 @@ void SvxTbxCtlDraw::StateChanged( USHORT nSID, SfxItemState eState,
                                      hasBigImages(),
                                      GetToolBox().GetDisplayBackground().GetColor().IsDark() );
 
-//            SfxViewFrame* pFrame = GetBindings().GetDispatcher()->GetFrame();
-//            Image aImage = pFrame->GetImageManager()->GetImage( nImage, bHiContrast );
             GetToolBox().SetItemImage( GetId(), aImage );
         }
     }
