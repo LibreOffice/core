@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dr $ $Date: 2001-03-08 11:53:38 $
+ *  last change: $Author: er $ $Date: 2001-03-08 15:41:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1476,7 +1476,7 @@ void ExcelToSc::DoMulArgs( DefTokenId eId, BYTE nAnz )
                 if( aPool.IsSingleOp( eParam[ nLauf ], ocMissing ) )
                 {
                     if( !nNullParam )
-                        nNullParam = aPool.Store( ( double ) 0.0 );
+                        nNullParam = (UINT16) aPool.Store( ( double ) 0.0 );
                     eParam[ nLauf ] = nNullParam;
                 }
             }

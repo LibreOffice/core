@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tokstack.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2001-03-06 16:38:13 $
+ *  last change: $Author: er $ $Date: 2001-03-08 15:42:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@
 #endif
 
 
+typedef OpCode DefTokenId;
 // in PRODUCT version: ambiguity between OpCode (being USHORT) and UINT16
 // Unfortunately a typedef is just a dumb alias and not a real type ...
 //typedef UINT16 TokenId;
@@ -86,10 +87,16 @@ struct TokenId
                         TokenId( UINT16 n ) : nId( n ) {}
                         TokenId( const TokenId& r ) : nId( r.nId ) {}
     inline  TokenId&    operator =( const TokenId& r ) { nId = r.nId; return *this; }
+    inline  TokenId&    operator =( UINT16 n ) { nId = n; return *this; }
     inline              operator UINT16&() { return nId; }
-    inline              operator const UINT16&() const { return nId; }
+    inline              operator UINT16() const { return nId; }
+    inline  BOOL        operator <( UINT16 n ) const { return nId < n; }
+    inline  BOOL        operator >( UINT16 n ) const { return nId > n; }
+    inline  BOOL        operator <=( UINT16 n ) const { return nId <= n; }
+    inline  BOOL        operator >=( UINT16 n ) const { return nId >= n; }
+    inline  BOOL        operator ==( UINT16 n ) const { return nId == n; }
+    inline  BOOL        operator !=( UINT16 n ) const { return nId != n; }
 };
-typedef OpCode DefTokenId;
 
 
 //------------------------------------------------------------------------
