@@ -2,9 +2,9 @@
  *
  *  $RCSfile: securityoptions.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: as $ $Date: 2000-11-01 12:01:31 $
+ *  last change: $Author: as $ $Date: 2000-12-04 13:23:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -443,7 +443,8 @@ sal_Bool SvtSecurityOptions_Impl::IsSecureURL(  const   OUString&   sURL    ,
                 sal_uInt32 nCount = m_seqSecureURLs.getLength();
                 for( sal_uInt32 nItem=0; nItem<nCount; ++nItem )
                 {
-                    OUString sCheckURL = m_seqSecureURLs[nItem]+'*';
+                    OUString sCheckURL = m_seqSecureURLs[nItem];
+                    sCheckURL += OUString(RTL_CONSTASCII_USTRINGPARAM("*"));
                     if( WildCard( sCheckURL ).Matches( sReferer ) == sal_True )
                     {
                         bState = sal_True;
