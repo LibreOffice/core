@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-09-29 15:02:09 $
+ *  last change: $Author: fs $ $Date: 2000-10-11 10:40:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ namespace connectivity
         class ODbaseConnection;
 
         typedef ::std::map< ::rtl::OUString,
-                        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed>, utl::UStringMixLess > OContainer;
+                        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed>, comphelper::UStringMixLess > OContainer;
 
         class ODbaseTable : public ODbaseTable_BASE
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-10 06:06:55 $
+ *  last change: $Author: fs $ $Date: 2000-10-11 10:47:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1808,7 +1808,7 @@ BOOL OResultSet::OpenImpl()
 
     // now check which columns are bound
     OValueVector::iterator aRowIter = m_aRow->begin();
-    ::utl::UStringMixEqual aCase(m_xDBMetaData->storesMixedCaseQuotedIdentifiers());
+    ::comphelper::UStringMixEqual aCase(m_xDBMetaData->storesMixedCaseQuotedIdentifiers());
     sal_Int32 i=0;
     Reference<XFastPropertySet> xProp;
     ++aRowIter;
@@ -2431,7 +2431,7 @@ void OResultSet::ParseAssignValues(const ::std::vector< String>& aColumnNameList
         sal_Int32 nParameter = -1;
         if(m_xParamColumns.isValid())
         {
-            OSQLColumns::const_iterator aIter = find(m_xParamColumns->begin(),m_xParamColumns->end(),aColumnName,::utl::UStringMixEqual(m_pTable->isCaseSensitive()));
+            OSQLColumns::const_iterator aIter = find(m_xParamColumns->begin(),m_xParamColumns->end(),aColumnName,::comphelper::UStringMixEqual(m_pTable->isCaseSensitive()));
             if(aIter != m_xParamColumns->end())
                 nParameter = m_xParamColumns->size() - (m_xParamColumns->end() - aIter) +1;// +1 because the rows start at 1
         }

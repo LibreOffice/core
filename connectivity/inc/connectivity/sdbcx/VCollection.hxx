@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCollection.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-09 12:09:06 $
+ *  last change: $Author: fs $ $Date: 2000-10-11 10:48:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,8 +101,8 @@
 #ifndef _COM_SUN_STAR_SDBC_XCOLUMNLOCATE_HPP_
 #include <com/sun/star/sdbc/XColumnLocate.hpp>
 #endif
-#ifndef _UTL_STLTYPES_HXX_
-#include <unotools/stl_types.hxx>
+#ifndef _COMPHELPER_STLTYPES_HXX_
+#include <comphelper/stl_types.hxx>
 #endif
 #ifndef _CPPUHELPER_INTERFACECONTAINER_H_
 #include <cppuhelper/interfacecontainer.h>
@@ -140,7 +140,7 @@ namespace connectivity
         {
         protected:
 
-            typedef ::std::map< ::rtl::OUString, Object_BASE, ::utl::UStringMixLess> ObjectMap;
+            typedef ::std::map< ::rtl::OUString, Object_BASE, ::comphelper::UStringMixLess> ObjectMap;
             typedef ObjectMap::iterator ObjectIter;
 
             // this combination of map and vector is used to have a fast name and index access

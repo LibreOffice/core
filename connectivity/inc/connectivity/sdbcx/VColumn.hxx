@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VColumn.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:19 $
+ *  last change: $Author: fs $ $Date: 2000-10-11 10:48:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,8 +71,8 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMED_HPP_
 #include <com/sun/star/container/XNamed.hpp>
 #endif
-#ifndef _UNOTOOLS_PROPERTY_ARRAY_HELPER_HXX_
-#include <unotools/proparrhlp.hxx>
+#ifndef _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
+#include <comphelper/proparrhlp.hxx>
 #endif
 #ifndef _CPPUHELPER_COMPBASE3_HXX_
 #include <cppuhelper/compbase3.hxx>
@@ -98,7 +98,7 @@ namespace connectivity
 
         class OColumn : public OBaseMutex,
                         public OColumn_BASE,
-                        public ::utl::OPropertyArrayUsageHelper<OColumn>,
+                        public ::comphelper::OPropertyArrayUsageHelper<OColumn>,
                         public ODescriptor
 
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DResultSet.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-05 14:37:28 $
+ *  last change: $Author: fs $ $Date: 2000-10-11 10:40:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ namespace connectivity
         typedef ::cppu::ImplHelper2<  ::com::sun::star::sdbcx::XRowLocate,
                                       ::com::sun::star::sdbcx::XDeleteRows> ODbaseResultSet_BASE;
         typedef file::OResultSet                                            ODbaseResultSet_BASE2;
-        typedef ::utl::OPropertyArrayUsageHelper<ODbaseResultSet>           ODbaseResultSet_BASE3;
+        typedef ::comphelper::OPropertyArrayUsageHelper<ODbaseResultSet>            ODbaseResultSet_BASE3;
 
 
         class ODbaseResultSet : public ODbaseResultSet_BASE2,

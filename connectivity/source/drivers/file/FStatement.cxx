@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FStatement.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-09 12:34:19 $
+ *  last change: $Author: fs $ $Date: 2000-10-11 10:47:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,8 +77,8 @@
 #ifndef _COMPHELPER_PROPERTY_HXX_
 #include <comphelper/property.hxx>
 #endif
-#ifndef _UTL_UNO3_HXX_
-#include <unotools/uno3.hxx>
+#ifndef _COMPHELPER_UNO3_HXX_
+#include <comphelper/uno3.hxx>
 #endif
 #ifndef _OSL_THREAD_H_
 #include <osl/thread.h>
@@ -220,7 +220,7 @@ void OStatement_Base::clearMyResultSet () throw (SQLException)
         throw DisposedException();
 
     Reference<XCloseable> xCloseable;
-    if(::utl::query_interface(m_xResultSet.get(),xCloseable))
+    if(::comphelper::query_interface(m_xResultSet.get(),xCloseable))
         xCloseable->close();
     m_xResultSet = Reference< XResultSet>();
 }

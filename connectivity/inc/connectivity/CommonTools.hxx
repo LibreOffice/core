@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CommonTools.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:18 $
+ *  last change: $Author: fs $ $Date: 2000-10-11 10:48:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,8 +73,8 @@
 #ifndef _CPPUHELPER_WEAKREF_HXX_
 #include <cppuhelper/weakref.hxx>
 #endif
-#ifndef _UTL_STLTYPES_HXX_
-#include <unotools/stl_types.hxx>
+#ifndef _COMPHELPER_STLTYPES_HXX_
+#include <comphelper/stl_types.hxx>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XFASTPROPERTYSET_HPP_
 #include <com/sun/star/beans/XFastPropertySet.hpp>
@@ -149,7 +149,7 @@ namespace connectivity
     typedef std::vector< ::com::sun::star::uno::WeakReferenceHelper > OWeakRefArray;
     typedef ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier>    OSQLTable;
 
-    DECLARE_STL_MAP(::rtl::OUString,OSQLTable,utl::UStringMixLess,  OSQLTables);
+    DECLARE_STL_MAP(::rtl::OUString,OSQLTable,comphelper::UStringMixLess,  OSQLTables);
 
     // -------------------------------------------------------------------------
     // class ORefVector allows reference counting on a std::vector
@@ -193,14 +193,14 @@ namespace connectivity
     OSQLColumns::const_iterator find(   OSQLColumns::const_iterator __first,
                                         OSQLColumns::const_iterator __last,
                                         const ::rtl::OUString& _rVal,
-                                        const ::utl::UStringMixEqual& _rCase);
+                                        const ::comphelper::UStringMixEqual& _rCase);
     // =======================================================================================
     // search from __first to __last the column with the realname _rVal
     // when no such column exist __last is returned
     OSQLColumns::const_iterator findRealName(   OSQLColumns::const_iterator __first,
                                                 OSQLColumns::const_iterator __last,
                                                 const ::rtl::OUString& _rVal,
-                                                const ::utl::UStringMixEqual& _rCase);
+                                                const ::comphelper::UStringMixEqual& _rCase);
 
     // =======================================================================================
     // the first two find methods are much faster than the one below
@@ -211,7 +211,7 @@ namespace connectivity
                                         OSQLColumns::const_iterator __last,
                                         const ::rtl::OUString& _rProp,
                                         const ::rtl::OUString& _rVal,
-                                        const ::utl::UStringMixEqual& _rCase);
+                                        const ::comphelper::UStringMixEqual& _rCase);
 }
 
 //==================================================================================

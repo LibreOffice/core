@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DDatabaseMetaDataResultSet.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-05 08:22:00 $
+ *  last change: $Author: fs $ $Date: 2000-10-11 10:40:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,8 +92,8 @@
 #ifndef _CPPUHELPER_COMPBASE7_HXX_
 #include <cppuhelper/compbase7.hxx>
 #endif
-#ifndef _UNOTOOLS_PROPERTY_ARRAY_HELPER_HXX_
-#include <unotools/proparrhlp.hxx>
+#ifndef _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
+#include <comphelper/proparrhlp.hxx>
 #endif
 #ifndef _CONNECTIVITY_FILE_ASTATEMENT_HXX_
 #include "file/FStatement.hxx"
@@ -131,7 +131,7 @@ namespace connectivity
         class ODatabaseMetaDataResultSet :  public OBaseMutex,
                                             public  ODatabaseMetaDataResultSet_BASE,
                                             public  ::comphelper::OPropertyContainer,
-                                            public  ::utl::OPropertyArrayUsageHelper<ODatabaseMetaDataResultSet>
+                                            public  ::comphelper::OPropertyArrayUsageHelper<ODatabaseMetaDataResultSet>
         {
 
 

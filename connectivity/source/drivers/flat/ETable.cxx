@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ETable.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-05 14:44:02 $
+ *  last change: $Author: fs $ $Date: 2000-10-11 10:46:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,8 +89,8 @@
 #ifndef _CONFIG_HXX //autogen
 #include <vcl/config.hxx>
 #endif
-#ifndef _UTL_SEQUENCE_HXX_
-#include <unotools/sequence.hxx>
+#ifndef _COMPHELPER_SEQUENCE_HXX_
+#include <comphelper/sequence.hxx>
 #endif
 #ifndef _CONNECTIVITY_DATECONVERSION_HXX_
 #include "connectivity/DateConversion.hxx"
@@ -111,8 +111,8 @@
 #ifndef _CPPUHELPER_EXTRACT_HXX_
 #include <cppuhelper/extract.hxx>
 #endif
-#ifndef _UTL_NUMBERS_HXX_
-#include <unotools/numbers.hxx>
+#ifndef _COMPHELPER_NUMBERS_HXX_
+#include <comphelper/numbers.hxx>
 #endif
 #ifndef _CONNECTIVITY_FLAT_EDRIVER_HXX_
 #include "flat/EDriver.hxx"
@@ -134,7 +134,7 @@ using namespace connectivity;
 using namespace connectivity::flat;
 using namespace connectivity::file;
 using namespace ucb;
-using namespace utl;
+using namespace comphelper;
 using namespace cppu;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
@@ -411,7 +411,7 @@ void OFlatTable::fillColumns()
         else
         {
 
-            switch (utl::getNumberFormatType(m_xNumberFormatter,nIndex))
+            switch (comphelper::getNumberFormatType(m_xNumberFormatter,nIndex))
             {
                 case NUMBERFORMAT_DATE:
                     eType = DataType::DATE;
@@ -482,7 +482,7 @@ OFlatTable::OFlatTable(OFlatConnection* _pConnection,
 {
 
     Any aValue = ConfigManager::GetDirectConfigProperty(ConfigManager::LOCALE);
-    LanguageType eLanguage = ConvertIsoStringToLanguage(utl::getString(aValue),'_');
+    LanguageType eLanguage = ConvertIsoStringToLanguage(comphelper::getString(aValue),'_');
     String sLanguage, sCountry;
     ConvertLanguageToIsoNames(eLanguage, sLanguage, sCountry);
     ::com::sun::star::lang::Locale aAppLocale(sLanguage,sCountry,rtl::OUString());

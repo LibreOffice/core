@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSet.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-06 12:07:30 $
+ *  last change: $Author: fs $ $Date: 2000-10-11 10:46:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,14 +79,14 @@
 #ifndef _COM_SUN_STAR_SDBCX_COMPAREBOOKMARK_HPP_
 #include <com/sun/star/sdbcx/CompareBookmark.hpp>
 #endif
-#ifndef _UTL_PROPERTY_HXX_
-#include <unotools/property.hxx>
+#ifndef _COMPHELPER_PROPERTY_HXX_
+#include <comphelper/property.hxx>
 #endif
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
 #endif
-#ifndef _UTL_SEQUENCE_HXX_
-#include <unotools/sequence.hxx>
+#ifndef _COMPHELPER_SEQUENCE_HXX_
+#include <comphelper/sequence.hxx>
 #endif
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
@@ -337,7 +337,7 @@ Any SAL_CALL OResultSet::queryInterface( const Type & rType ) throw(RuntimeExcep
                                                 ::getCppuType( (const  Reference< ::com::sun::star::beans::XFastPropertySet > *)0 ),
                                                 ::getCppuType( (const  Reference< ::com::sun::star::beans::XPropertySet > *)0 ));
 
-    return ::utl::concatSequences(aTypes.getTypes(),OResultSet_BASE::getTypes());
+    return ::comphelper::concatSequences(aTypes.getTypes(),OResultSet_BASE::getTypes());
 }
 // -------------------------------------------------------------------------
 
@@ -1222,11 +1222,11 @@ void SAL_CALL OResultSet::updateObject( sal_Int32 columnIndex, const Any& x ) th
 //              }
 //              break;
 //          case TypeClass_DOUBLE:
-//              updateDouble(columnIndex,::utl::getDouble(x));
+//              updateDouble(columnIndex,::comphelper::getDouble(x));
 //              break;
 //          case TypeClass_CHAR:
 //          case TypeClass_STRING:
-//              updateString(columnIndex,::utl::getString(x));
+//              updateString(columnIndex,::comphelper::getString(x));
 //              break;
 //          case TypeClass_ENUM:
 //          default:
@@ -1489,9 +1489,9 @@ sal_Bool OResultSet::convertFastPropertyValue(
             throw ::com::sun::star::lang::IllegalArgumentException();
             break;
         case PROPERTY_ID_FETCHDIRECTION:
-            return ::utl::tryPropertyValue(rConvertedValue, rOldValue, rValue, getFetchDirection());
+            return ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getFetchDirection());
         case PROPERTY_ID_FETCHSIZE:
-            return ::utl::tryPropertyValue(rConvertedValue, rOldValue, rValue, getFetchSize());
+            return ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getFetchSize());
         default:
             ;
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PColumn.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:18 $
+ *  last change: $Author: fs $ $Date: 2000-10-11 10:48:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ namespace connectivity
         class OParseColumn;
 
         typedef sdbcx::OColumn OParseColumn_BASE;
-        typedef ::utl::OPropertyArrayUsageHelper<OParseColumn> OParseColumn_PROP;
+        typedef ::comphelper::OPropertyArrayUsageHelper<OParseColumn> OParseColumn_PROP;
 
         class OParseColumn :    public OParseColumn_BASE,
                                 public OParseColumn_PROP

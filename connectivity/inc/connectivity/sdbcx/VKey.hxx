@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VKey.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:19 $
+ *  last change: $Author: fs $ $Date: 2000-10-11 10:48:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@
 #include <osl/diagnose.h>
 #endif
 
-#ifndef _UNOTOOLS_PROPERTY_ARRAY_HELPER_HXX_
-#include <unotools/proparrhlp.hxx>
+#ifndef _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
+#include <comphelper/proparrhlp.hxx>
 #endif
 #ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
 #include "connectivity/CommonTools.hxx"
@@ -96,7 +96,7 @@ namespace connectivity
         class OKey :    public OBaseMutex,
                         public OColumns_BASE,
                         public IRefreshableColumns,
-                        public ::utl::OPropertyArrayUsageHelper<OKey>,
+                        public ::comphelper::OPropertyArrayUsageHelper<OKey>,
                         public ODescriptor
         {
         protected:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqliterator.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:18 $
+ *  last change: $Author: fs $ $Date: 2000-10-11 10:48:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,7 @@ namespace connectivity
         OSQLStatementType           m_eStatementType; // Art des Statements
         OSQLTables                  m_aTables; // Alle Tabellen die im ParseTree und bei der Connection gefunden wurden
         ::vos::ORef<OSQLColumns>    m_aSelectColumns; // alle Spalten aus dem Select-Clause
-        ::utl::UStringMixEqual      m_aCaseEqual;
+        ::comphelper::UStringMixEqual       m_aCaseEqual;
 
         Link                    m_aErrorHdl;        // wird im Fehlerfall gerufen
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>     m_xTables;

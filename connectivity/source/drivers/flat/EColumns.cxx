@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EColumns.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-05 14:42:34 $
+ *  last change: $Author: fs $ $Date: 2000-10-11 10:46:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ Reference< XNamed > OFlatColumns::createObject(const ::rtl::OUString& _rName)
     OFlatTable* pTable = (OFlatTable*)m_pTable;
     ::vos::ORef<OSQLColumns> aCols = pTable->getTableColumns();
 
-    Reference< XNamed > xRet(*find(aCols->begin(),aCols->end(),_rName,::utl::UStringMixEqual(isCaseSensitive())),UNO_QUERY);
+    Reference< XNamed > xRet(*find(aCols->begin(),aCols->end(),_rName,::comphelper::UStringMixEqual(isCaseSensitive())),UNO_QUERY);
     return xRet;
 }
 

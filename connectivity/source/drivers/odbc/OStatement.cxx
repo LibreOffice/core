@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OStatement.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:23 $
+ *  last change: $Author: fs $ $Date: 2000-10-11 10:46:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,14 +73,14 @@
 #ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
 #include "propertyids.hxx"
 #endif
-#ifndef _UTL_PROPERTY_HXX_
-#include <unotools/property.hxx>
+#ifndef _COMPHELPER_PROPERTY_HXX_
+#include <comphelper/property.hxx>
 #endif
 #ifndef _CONNECTIVITY_OTOOLS_HXX_
 #include "odbc/OTools.hxx"
 #endif
-#ifndef _UTL_UNO3_HXX_
-#include <unotools/uno3.hxx>
+#ifndef _COMPHELPER_UNO3_HXX_
+#include <comphelper/uno3.hxx>
 #endif
 #ifndef _OSL_THREAD_H_
 #include <osl/thread.h>
@@ -95,8 +95,8 @@
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
 #endif
-#ifndef _UTL_SEQUENCE_HXX_
-#include <unotools/sequence.hxx>
+#ifndef _COMPHELPER_SEQUENCE_HXX_
+#include <comphelper/sequence.hxx>
 #endif
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
@@ -186,7 +186,7 @@ Sequence< Type > SAL_CALL OStatement_Base::getTypes(  ) throw(RuntimeException)
                                     ::getCppuType( (const Reference< XFastPropertySet > *)0 ),
                                     ::getCppuType( (const Reference< XPropertySet > *)0 ));
 
-    return ::utl::concatSequences(aTypes.getTypes(),OStatement_BASE::getTypes());
+    return ::comphelper::concatSequences(aTypes.getTypes(),OStatement_BASE::getTypes());
 }
 // -------------------------------------------------------------------------
 
@@ -239,7 +239,7 @@ void OStatement_Base::clearMyResultSet () throw (SQLException)
         throw DisposedException();
 
     Reference<XCloseable> xCloseable;
-    if(::utl::query_interface(m_xResultSet.get(),xCloseable))
+    if(::comphelper::query_interface(m_xResultSet.get(),xCloseable))
         xCloseable->close();
     m_xResultSet = Reference< XResultSet>();
 }
@@ -896,26 +896,26 @@ sal_Bool OStatement_Base::convertFastPropertyValue(
     switch(nHandle)
     {
         case PROPERTY_ID_QUERYTIMEOUT:
-            return ::utl::tryPropertyValue(rConvertedValue, rOldValue, rValue, getQueryTimeOut());
+            return ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getQueryTimeOut());
         case PROPERTY_ID_MAXFIELDSIZE:
-            return ::utl::tryPropertyValue(rConvertedValue, rOldValue, rValue, getMaxFieldSize());
+            return ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getMaxFieldSize());
         case PROPERTY_ID_MAXROWS:
-            return ::utl::tryPropertyValue(rConvertedValue, rOldValue, rValue, getMaxRows());
+            return ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getMaxRows());
         case PROPERTY_ID_CURSORNAME:
-            return ::utl::tryPropertyValue(rConvertedValue, rOldValue, rValue, getCursorName());
+            return ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getCursorName());
         case PROPERTY_ID_RESULTSETCONCURRENCY:
-            return ::utl::tryPropertyValue(rConvertedValue, rOldValue, rValue, getResultSetConcurrency());
+            return ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getResultSetConcurrency());
         case PROPERTY_ID_RESULTSETTYPE:
-            return ::utl::tryPropertyValue(rConvertedValue, rOldValue, rValue, getResultSetType());
+            return ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getResultSetType());
         case PROPERTY_ID_FETCHDIRECTION:
-            return ::utl::tryPropertyValue(rConvertedValue, rOldValue, rValue, getFetchDirection());
+            return ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getFetchDirection());
         case PROPERTY_ID_FETCHSIZE:
-            return ::utl::tryPropertyValue(rConvertedValue, rOldValue, rValue, getFetchSize());
+            return ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getFetchSize());
         case PROPERTY_ID_ESCAPEPROCESSING:
-            //  return ::utl::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_bAsLink);
+            //  return ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_bAsLink);
             break;
         case PROPERTY_ID_USEBOOKMARKS:
-            return ::utl::tryPropertyValue(rConvertedValue, rOldValue, rValue, isUsingBookmarks());
+            return ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, isUsingBookmarks());
 
         default:
             ;
@@ -952,7 +952,7 @@ void OStatement_Base::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const A
             setFetchSize(connectivity::getINT32(rValue));
             break;
         case PROPERTY_ID_ESCAPEPROCESSING:
-            //  return ::utl::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_bAsLink);
+            //  return ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_bAsLink);
             break;
         case PROPERTY_ID_USEBOOKMARKS:
             setUsingBookmarks(connectivity::getBOOL(rValue));

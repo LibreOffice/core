@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PreparedStatement.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:22 $
+ *  last change: $Author: fs $ $Date: 2000-10-11 10:46:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,8 +76,8 @@
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
 #endif
-#ifndef _UTL_SEQUENCE_HXX_
-#include <unotools/sequence.hxx>
+#ifndef _COMPHELPER_SEQUENCE_HXX_
+#include <comphelper/sequence.hxx>
 #endif
 
 using namespace connectivity;
@@ -138,7 +138,7 @@ void java_sql_PreparedStatement::saveClassRef( jclass pClass )
                                     ::getCppuType( (const ::com::sun::star::uno::Reference< XParameters > *)0 ),
                                     ::getCppuType( (const ::com::sun::star::uno::Reference< XPreparedBatchExecution > *)0 ));
 
-    return ::utl::concatSequences(aTypes.getTypes(),OStatement_BASE2::getTypes());
+    return ::comphelper::concatSequences(aTypes.getTypes(),OStatement_BASE2::getTypes());
 }
 // -------------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tools.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:26 $
+ *  last change: $Author: fs $ $Date: 2000-10-11 10:42:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,12 +76,10 @@
 #include "java/sql/SQLException.hxx"
 #endif
 
-#ifndef _UTL_UNO3_HXX_
-#include <unotools/uno3.hxx>
+#ifndef _COMPHELPER_UNO3_HXX_
+#include <comphelper/uno3.hxx>
 #endif
 
-//FORWARD_DECLARE_INTERFACE(container,XNameAccess)
-//FORWARD_DECLARE_INTERFACE(uno,Reference)
 #include <com/sun/star/container/XNameAccess.hpp>
 #ifndef _COM_SUN_STAR_UTIL_TIME_HPP_
 #include <com/sun/star/util/Time.hpp>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCollection.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-09 12:06:36 $
+ *  last change: $Author: fs $ $Date: 2000-10-11 10:43:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,7 @@ Sequence< ::rtl::OUString > SAL_CALL OCollection::getElementNames(  ) throw(Runt
 
     sal_Int32 i=0;
     ::rtl::OUString* pStringArray = aNameList.getArray();
-    //  for( ::std::map< ::rtl::OUString, Object_BASE, ::utl::UStringLess> ::const_iterator aIter = m_aNameMap.begin(); aIter != m_aNameMap.end(); ++aIter)
+    //  for( ::std::map< ::rtl::OUString, Object_BASE, ::comphelper::UStringLess> ::const_iterator aIter = m_aNameMap.begin(); aIter != m_aNameMap.end(); ++aIter)
     for(::std::vector< ObjectIter >::const_iterator aIter = m_aElements.begin(); aIter != m_aElements.end();++aIter)
         pStringArray[i++] = (*aIter)->first;
 
@@ -153,7 +153,7 @@ Sequence< ::rtl::OUString > SAL_CALL OCollection::getElementNames(  ) throw(Runt
 void SAL_CALL OCollection::refresh(  ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_rMutex);
-    for( ::std::map< ::rtl::OUString, Object_BASE, ::utl::UStringLess>::iterator aIter = m_aNameMap.begin(); aIter != m_aNameMap.end(); ++aIter)
+    for( ::std::map< ::rtl::OUString, Object_BASE, ::comphelper::UStringLess>::iterator aIter = m_aNameMap.begin(); aIter != m_aNameMap.end(); ++aIter)
     {
         if((*aIter).second.is())
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-09 12:31:04 $
+ *  last change: $Author: fs $ $Date: 2000-10-11 10:45:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1377,7 +1377,7 @@ BOOL ODbaseTable::DeleteRow(const OSQLColumns& _rCols)
 
     Reference<XFastPropertySet> xCol;
     ::rtl::OUString aColName;
-    ::utl::UStringMixEqual aCase(isCaseSensitive());
+    ::comphelper::UStringMixEqual aCase(isCaseSensitive());
     for (USHORT i = 0; i < m_pColumns->getCount(); i++)
     {
         m_pColumns->getByIndex(i) >>= xCol;
@@ -1627,7 +1627,7 @@ BOOL ODbaseTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Refer
     ::rtl::OUString aColName;
     ::std::vector< Reference<XFastPropertySet> > aIndexedCols(m_pColumns->getCount());
 
-    ::utl::UStringMixEqual aCase(isCaseSensitive());
+    ::comphelper::UStringMixEqual aCase(isCaseSensitive());
 
     // first search a key that exist already in the table
     for (i = 0; i < m_pColumns->getCount(); i++)

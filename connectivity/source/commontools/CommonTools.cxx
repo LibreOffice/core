@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CommonTools.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:19 $
+ *  last change: $Author: fs $ $Date: 2000-10-11 10:43:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,7 +288,7 @@ namespace connectivity
     OSQLColumns::const_iterator find(   OSQLColumns::const_iterator __first,
                                         OSQLColumns::const_iterator __last,
                                         const ::rtl::OUString& _rVal,
-                                        const ::utl::UStringMixEqual& _rCase)
+                                        const ::comphelper::UStringMixEqual& _rCase)
     {
         while (__first != __last && !_rCase(getString((*__first)->getFastPropertyValue(PROPERTY_ID_NAME)),_rVal))
             ++__first;
@@ -298,7 +298,7 @@ namespace connectivity
     OSQLColumns::const_iterator findRealName(   OSQLColumns::const_iterator __first,
                                         OSQLColumns::const_iterator __last,
                                         const ::rtl::OUString& _rVal,
-                                        const ::utl::UStringMixEqual& _rCase)
+                                        const ::comphelper::UStringMixEqual& _rCase)
     {
         while (__first != __last && !_rCase(getString((*__first)->getFastPropertyValue(PROPERTY_ID_REALNAME)),_rVal))
             ++__first;
@@ -309,7 +309,7 @@ namespace connectivity
                                         OSQLColumns::const_iterator __last,
                                         const ::rtl::OUString& _rProp,
                                         const ::rtl::OUString& _rVal,
-                                        const ::utl::UStringMixEqual& _rCase)
+                                        const ::comphelper::UStringMixEqual& _rCase)
     {
         while (__first != __last && !_rCase(getString(Reference<XPropertySet>((*__first),UNO_QUERY)->getPropertyValue(_rProp)),_rVal))
             ++__first;

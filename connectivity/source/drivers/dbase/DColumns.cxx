@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DColumns.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:21 $
+ *  last change: $Author: fs $ $Date: 2000-10-11 10:45:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ Reference< XNamed > ODbaseColumns::createObject(const ::rtl::OUString& _rName)
     //  Reference< XFastPropertySet> xCol(pTable->getColumns()[_rName],UNO_QUERY);
     ::vos::ORef<OSQLColumns> aCols = pTable->getTableColumns();
 
-    Reference< XNamed > xRet(*find(aCols->begin(),aCols->end(),_rName,::utl::UStringMixEqual(isCaseSensitive())),UNO_QUERY);
+    Reference< XNamed > xRet(*find(aCols->begin(),aCols->end(),_rName,::comphelper::UStringMixEqual(isCaseSensitive())),UNO_QUERY);
     return xRet;
 }
 

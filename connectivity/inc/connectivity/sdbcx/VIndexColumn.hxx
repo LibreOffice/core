@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VIndexColumn.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:19 $
+ *  last change: $Author: fs $ $Date: 2000-10-11 10:48:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@ namespace connectivity
     namespace sdbcx
     {
         class OIndexColumn;
-        typedef ::utl::OPropertyArrayUsageHelper<OIndexColumn> OIndexColumn_PROP;
+        typedef ::comphelper::OPropertyArrayUsageHelper<OIndexColumn> OIndexColumn_PROP;
 
         class OIndexColumn :    public OColumn,
                                 public OIndexColumn_PROP
