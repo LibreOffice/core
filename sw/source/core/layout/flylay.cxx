@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flylay.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ama $ $Date: 2001-12-12 16:51:56 $
+ *  last change: $Author: ama $ $Date: 2001-12-13 12:59:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -892,7 +892,7 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
                 {
                     rRect  = pUp->Prt();
                     rRect += pUp->Frm().Pos();
-
+#ifndef VERTICAL_LAYOUT
                     const SwPageFrm *pPg = (SwPageFrm*)pUp->Lower();
                     if( !pPg->Lower() )
                         pPg = (SwPageFrm*)pPg->GetNext();
@@ -900,11 +900,7 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
                     if ( pBody->GetPrev() )
                         pBody->GetPrev()->Calc();
                     pBody->Calc();
-#ifdef VERTICAL_LAYOUT
-                    (rRect.*fnRect->fnSetTop)((pBody->*fnRect->fnGetPrtTop)());
-#else
                     rRect.Top( pBody->Frm().Top() + pBody->Prt().Top() );
-#endif
 
                     //Den Bottom setzen wir auf den unteren Rand der letzten Seite.
                     pPg = ((SwRootFrm*)pUp)->GetLastPage();
@@ -917,12 +913,7 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
                         if ( pBody->GetPrev() )
                             pBody->GetPrev()->Calc();
                         pBody->Calc();
-#ifdef VERTICAL_LAYOUT
-                        (rRect.*fnRect->fnSetBottom)(
-                                           (pBody->*fnRect->fnGetPrtBottom)() );
-#else
                         rRect.Bottom( pBody->Frm().Top() + pBody->Prt().Bottom());
-#endif
                         if( pFly->GetFmt()->GetDoc()->IsBrowseMode() )
                         {
                             // Hier wird folgende Situation abgefangen: Im Browse-
@@ -940,18 +931,13 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
                                 if ( pBody->GetPrev() )
                                     pBody->GetPrev()->Calc();
                                 pBody->Calc();
-#ifdef VERTICAL_LAYOUT
-                                SwTwips nBot=(pBody->*fnRect->fnGetPrtBottom)();
-                                if( (rRect.*fnRect->fnBottomDist)( nBot ) > 0 )
-                                    (rRect.*fnRect->fnSetBottom)( nBot );
-#else
                                 SwTwips nBot = pBody->Frm().Top() + pBody->Prt().Bottom();
                                 if( rRect.Bottom() < nBot )
                                     rRect.Bottom( nBot );
-#endif
                             }
                         }
                     }
+#endif
                     pUp = 0;
                 }
             }
@@ -1006,14 +992,8 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
                     rRect.Pos() += pUp->Frm().Pos();
                     if ( pUp->GetType() & (FRM_HEADER | FRM_FOOTER) )
                     {
-#ifdef VERTICAL_LAYOUT
-                        (rRect.*fnRect->fnSetLeftAndWidth)(
-                            (pUp->GetUpper()->Frm().*fnRect->fnGetLeft)(),
-                            (pUp->GetUpper()->Frm().*fnRect->fnGetWidth)() );
-#else
                         rRect.Left ( pUp->GetUpper()->Frm().Left() );
                         rRect.Width( pUp->GetUpper()->Frm().Width());
-#endif
                     }
                     else if ( pUp->IsCellFrm() )                //MA_FLY_HEIGHT
                     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flyincnt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2001-02-01 13:57:58 $
+ *  last change: $Author: ama $ $Date: 2001-12-13 12:59:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,11 +81,6 @@
 #include "txtfrm.hxx"       //fuer IsLocked()
 #include "flyfrms.hxx"
 
-
-#if !defined( PRODUCT ) && defined( WNT ) && !defined( ALPHA )
-USHORT DiesIstEinDummyFuerLibMist = 0;
-#endif
-
 //aus FlyCnt.cxx
 void DeepCalc( const SwFrm *pFrm );
 
@@ -101,8 +96,13 @@ SwFlyInCntFrm::SwFlyInCntFrm( SwFlyFrmFmt *pFmt, SwFrm *pAnch ) :
     SwFlyFrm( pFmt, pAnch )
 {
     bInCnt = bInvalidLayout = bInvalidCntnt = TRUE;
-    const SwFmtVertOrient &rVert = pFmt->GetVertOrient();
-    aRelPos.Y() = rVert.GetPos();
+    SwTwips nRel = pFmt->GetVertOrient().GetPos();
+#ifdef VERTICAL_LAYOUT
+    if( pAnch && pAnch->IsVertical() )
+        aRelPos.X() = pAnch->IsReverse() ? nRel : -nRel;
+    else
+#endif
+    aRelPos.Y() = nRel;
 }
 
 SwFlyInCntFrm::~SwFlyInCntFrm()
@@ -130,7 +130,12 @@ void SwFlyInCntFrm::SetRefPoint( const Point& rPoint, const Point& rRelAttr,
     const SwFlyNotify aNotify( this );
     aRef = rPoint;
     aRelPos = rRelAttr;
+#ifdef VERTICAL_LAYOUT
+    SWRECTFN( GetAnchor() )
+    (Frm().*fnRect->fnSetPos)( rPoint + rRelPos );
+#else
     Frm().Pos( rPoint + rRelPos );
+#endif
 /*
     //Kein InvalidatePos hier, denn das wuerde dem Cntnt ein Prepare
     //senden - dieser hat uns aber gerade gerufen.
@@ -244,10 +249,22 @@ void SwFlyInCntFrm::MakeFlyPos()
         const SwFmtVertOrient &rVert = pFmt->GetVertOrient();
         //Und ggf. noch die aktuellen Werte im Format updaten, dabei darf
         //zu diesem Zeitpunkt natuerlich kein Modify verschickt werden.
+#ifdef VERTICAL_LAYOUT
+        SWRECTFN( GetAnchor() )
+        SwTwips nOld = rVert.GetPos();
+        SwTwips nAct = bVert ? -aRelPos.X() : aRelPos.Y();
+        if( bRev )
+            nAct = -nAct;
+        if( nAct != nOld )
+        {
+            SwFmtVertOrient aVert( rVert );
+            aVert.SetPos( nAct );
+#else
         if ( rVert.GetPos() != aRelPos.Y() )
         {
             SwFmtVertOrient aVert( rVert );
             aVert.SetPos( aRelPos.Y() );
+#endif
             pFmt->LockModify();
             pFmt->SetAttr( aVert );
             pFmt->UnlockModify();
