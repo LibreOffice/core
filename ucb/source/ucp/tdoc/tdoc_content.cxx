@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdoc_content.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 12:31:16 $
+ *  last change: $Author: rt $ $Date: 2004-07-05 10:40:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -368,6 +368,8 @@ rtl::OUString SAL_CALL Content::getImplementationName()
 uno::Sequence< rtl::OUString > SAL_CALL Content::getSupportedServiceNames()
     throw( uno::RuntimeException )
 {
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+
     uno::Sequence< rtl::OUString > aSNS( 1 );
 
     if ( m_aProps.getType() == STREAM )
@@ -396,6 +398,7 @@ uno::Sequence< rtl::OUString > SAL_CALL Content::getSupportedServiceNames()
 rtl::OUString SAL_CALL Content::getContentType()
     throw( uno::RuntimeException )
 {
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
     return m_aProps.getContentType();
 }
 
@@ -405,13 +408,16 @@ uno::Reference< star::ucb::XContentIdentifier > SAL_CALL
 Content::getIdentifier()
     throw( uno::RuntimeException )
 {
-    // Transient?
-    if ( m_eState == TRANSIENT )
     {
-        // Transient contents have no identifier.
-        return uno::Reference< star::ucb::XContentIdentifier >();
-    }
+        osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
+        // Transient?
+        if ( m_eState == TRANSIENT )
+        {
+            // Transient contents have no identifier.
+            return uno::Reference< star::ucb::XContentIdentifier >();
+        }
+    }
     return ContentImplHelper::getIdentifier();
 }
 
@@ -574,18 +580,23 @@ uno::Any SAL_CALL Content::execute(
         // delete ( Supported by folders and streams only )
         //////////////////////////////////////////////////////////////////
 
-        ContentType eType = m_aProps.getType();
-        if ( ( eType != FOLDER ) && ( eType != STREAM ) )
         {
-            ucbhelper::cancelCommandExecution(
-                uno::makeAny( star::ucb::UnsupportedCommandException(
-                                rtl::OUString(
-                                    RTL_CONSTASCII_USTRINGPARAM(
-                                        "delete command only supported by "
-                                        "folders and streams!" ) ),
-                                static_cast< cppu::OWeakObject * >( this ) ) ),
-                Environment );
-            // Unreachable
+            osl::MutexGuard aGuard( m_aMutex );
+
+            ContentType eType = m_aProps.getType();
+            if ( ( eType != FOLDER ) && ( eType != STREAM ) )
+            {
+                ucbhelper::cancelCommandExecution(
+                    uno::makeAny( star::ucb::UnsupportedCommandException(
+                                    rtl::OUString(
+                                        RTL_CONSTASCII_USTRINGPARAM(
+                                            "delete command only supported by "
+                                            "folders and streams!" ) ),
+                                    static_cast< cppu::OWeakObject * >(
+                                        this ) ) ),
+                    Environment );
+                // Unreachable
+            }
         }
 
         sal_Bool bDeletePhysical = sal_False;
@@ -624,18 +635,23 @@ uno::Any SAL_CALL Content::execute(
         // transfer ( Supported by document and folders only )
         //////////////////////////////////////////////////////////////////
 
-        ContentType eType = m_aProps.getType();
-        if ( ( eType != FOLDER ) && ( eType != DOCUMENT ) )
         {
-            ucbhelper::cancelCommandExecution(
-                uno::makeAny( star::ucb::UnsupportedCommandException(
-                                rtl::OUString(
-                                    RTL_CONSTASCII_USTRINGPARAM(
-                                        "transfer command only supported by "
-                                        "folders and documents!" ) ),
-                                static_cast< cppu::OWeakObject * >( this ) ) ),
-                Environment );
-            // Unreachable
+            osl::MutexGuard aGuard( m_aMutex );
+
+            ContentType eType = m_aProps.getType();
+            if ( ( eType != FOLDER ) && ( eType != DOCUMENT ) )
+            {
+                ucbhelper::cancelCommandExecution(
+                    uno::makeAny( star::ucb::UnsupportedCommandException(
+                                    rtl::OUString(
+                                        RTL_CONSTASCII_USTRINGPARAM(
+                                            "transfer command only supported "
+                                            "by folders and documents!" ) ),
+                                    static_cast< cppu::OWeakObject * >(
+                                        this ) ) ),
+                    Environment );
+                // Unreachable
+            }
         }
 
         star::ucb::TransferInfo aInfo;
@@ -785,6 +801,7 @@ Content::createNewContent( const star::ucb::ContentInfo& Info )
 // virtual
 rtl::OUString Content::getParentURL()
 {
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
     Uri aUri( m_xIdentifier->getContentIdentifier() );
     return aUri.getParentUri();
 }
@@ -809,6 +826,8 @@ Content::makeNewIdentifier( const rtl::OUString& rTitle )
 //=========================================================================
 void Content::queryChildren( ContentRefList& rChildren )
 {
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+
     // Only folders (root, documents, folders) have children.
     if ( !m_aProps.getIsFolder() )
         return;
@@ -1489,6 +1508,8 @@ uno::Any Content::open(
                 xEnv );
             // Unreachable
         }
+
+        osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
         rtl::OUString aURL = m_xIdentifier->getContentIdentifier();
 
@@ -2253,6 +2274,14 @@ void Content::transfer(
 }
 
 //=========================================================================
+bool Content::isContentCreator()
+{
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    return
+        ( m_aProps.getType() == FOLDER ) || ( m_aProps.getType() == DOCUMENT );
+}
+
+//=========================================================================
 //static
 bool Content::hasData( ContentProvider* pProvider, const Uri & rUri )
 {
@@ -2373,6 +2402,8 @@ bool Content::storeData( const uno::Reference< io::XInputStream >& xData,
     throw ( star::ucb::CommandFailedException,
             task::DocumentPasswordRequest )
 {
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+
     ContentType eType = m_aProps.getType();
     if ( ( eType == ROOT ) || ( eType == DOCUMENT ) )
     {
@@ -2540,6 +2571,8 @@ bool Content::renameData(
             const uno::Reference< star::ucb::XContentIdentifier >& xOldId,
             const uno::Reference< star::ucb::XContentIdentifier >& xNewId )
 {
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+
     ContentType eType = m_aProps.getType();
     if ( ( eType == ROOT ) || ( eType == DOCUMENT ) )
     {
@@ -2604,6 +2637,8 @@ bool Content::renameData(
 //=========================================================================
 bool Content::removeData()
 {
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+
     ContentType eType = m_aProps.getType();
     if ( ( eType == ROOT ) || ( eType == DOCUMENT ) )
     {
@@ -2660,6 +2695,8 @@ bool Content::removeData()
 //=========================================================================
 bool Content::copyData( const Uri & rSourceUri )
 {
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+
     ContentType eType = m_aProps.getType();
     if ( ( eType == ROOT ) || ( eType == STREAM ) )
     {
@@ -2727,6 +2764,7 @@ bool Content::copyData( const Uri & rSourceUri )
 }
 
 //=========================================================================
+// static
 bool Content::commitStorage( const uno::Reference< embed::XStorage > & xStorage )
 {
     // Commit changes
@@ -2841,20 +2879,28 @@ static rtl::OUString obtainPassword(
 
 //=========================================================================
 uno::Reference< io::XInputStream > Content::getInputStream(
-        const uno::Reference< star::ucb::XCommandEnvironment > & xEnv ) const
+        const uno::Reference< star::ucb::XCommandEnvironment > & xEnv )
     throw ( star::ucb::CommandFailedException,
             task::DocumentPasswordRequest )
 {
-    OSL_ENSURE( m_aProps.getType() == STREAM,
-                "Content::getInputStream - content is no stream!" );
-
-    rtl::OUString aUri( Uri( m_xIdentifier->getContentIdentifier() ).getUri() );
+    rtl::OUString aUri;
     rtl::OUString aPassword;
     bool bPasswordRequested = false;
+
+    {
+        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+
+        OSL_ENSURE( m_aProps.getType() == STREAM,
+                    "Content::getInputStream - content is no stream!" );
+
+        aUri = Uri( m_xIdentifier->getContentIdentifier() ).getUri();
+    }
+
     for ( ;; )
     {
         try
         {
+            osl::Guard< osl::Mutex > aGuard( m_aMutex );
             return uno::Reference< io::XInputStream >(
                 m_pProvider->queryInputStream( aUri, aPassword ) );
         }
@@ -2906,7 +2952,7 @@ static uno::Reference< io::XOutputStream > lcl_getTruncatedOutputStream(
 
 //=========================================================================
 uno::Reference< io::XOutputStream > Content::getTruncatedOutputStream(
-        const uno::Reference< star::ucb::XCommandEnvironment > & xEnv ) const
+        const uno::Reference< star::ucb::XCommandEnvironment > & xEnv )
     throw ( star::ucb::CommandFailedException,
             task::DocumentPasswordRequest )
 {
@@ -2921,10 +2967,12 @@ uno::Reference< io::XOutputStream > Content::getTruncatedOutputStream(
 
 //=========================================================================
 uno::Reference< io::XStream > Content::getStream(
-        const uno::Reference< star::ucb::XCommandEnvironment > & xEnv ) const
+        const uno::Reference< star::ucb::XCommandEnvironment > & xEnv )
     throw ( star::ucb::CommandFailedException,
             task::DocumentPasswordRequest )
 {
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+
     OSL_ENSURE( m_aProps.getType() == STREAM,
                 "Content::getStream - content is no stream!" );
 
@@ -2952,4 +3000,3 @@ uno::Reference< io::XStream > Content::getStream(
         }
     }
 }
-
