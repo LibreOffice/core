@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqliterator.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 18:25:57 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:03:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,6 @@
 #ifndef _CONNECTIVITY_PARSE_SQLITERATOR_HXX_
 #define _CONNECTIVITY_PARSE_SQLITERATOR_HXX_
 
-//#ifndef _SVTOOLS_HASHCONT_HXX //autogen
-//#include <svtools/hashcont.hxx>
-//#endif
 #ifndef _CONNECTIVITY_SQLNODE_HXX
 #include "connectivity/sqlnode.hxx"
 #endif
@@ -130,6 +127,7 @@ namespace connectivity
     #define RET_CONTINUE    1   // Parsevorgang fortsetzen
     #define RET_HANDLED     2   // der Fehler wurde schon behandelt, das Parsen soll (mit Status auf Success) abgebrochen werden
     #define RET_BREAK       3   // Abbrechen, Status-Fehlercode setzen
+    struct OSQLParseTreeIteratorImpl;
 
     class OSQLParseTreeIterator
     {
@@ -148,12 +146,12 @@ namespace connectivity
         ::vos::ORef<OSQLColumns>            m_aCreateColumns;   // the columns for Create table clause
         ::comphelper::UStringMixEqual       m_aCaseEqual;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>     m_xTables;
+        OSQLParseTreeIteratorImpl*          m_pImpl;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>    m_xDatabaseMetaData;
 
         void appendWarning(const ::rtl::OUString& _sErrMsg); // append warnings if m_pParser is set
         // F"ugt eine Tabelle in die Map ein
-        void                traverseOneTableName(const OSQLParseNode * pTableName, const ::rtl::OUString & rTableRange, const sal_Bool bIsCreateTable);
+        void                traverseOneTableName(OSQLTables& _rTables,const OSQLParseNode * pTableName, const ::rtl::OUString & rTableRange, const sal_Bool bIsCreateTable);
         void                traverseORCriteria(OSQLParseNode * pSearchCondition);
         void                traverseANDCriteria(OSQLParseNode * pSearchCondition);
         void                traverseOnePredicate(
@@ -164,12 +162,12 @@ namespace connectivity
                                                 OSQLParseNode * pParameter);
         void traverseByColumnNames(const OSQLParseNode* pSelectNode,sal_Bool _bOrder);
 
-        OSQLParseNode *     getTableRef(OSQLParseNode *pTableRef,::rtl::OUString& aTableRange);
-        OSQLParseNode *     getQualified_join(OSQLParseNode *pTableRef,::rtl::OUString& aTableRange);
-        void                getSelect_statement(OSQLParseNode *pSelect);
+        OSQLParseNode *     getTableRef(OSQLTables& _rTables,OSQLParseNode *pTableRef,::rtl::OUString& aTableRange);
+        OSQLParseNode *     getQualified_join(OSQLTables& _rTables,OSQLParseNode *pTableRef,::rtl::OUString& aTableRange);
+        void                getSelect_statement(OSQLTables& _rTables,OSQLParseNode *pSelect);
         ::rtl::OUString     getUniqueColumnName(const ::rtl::OUString & rColumnName)    const;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > findColumn(const ::rtl::OUString & rColumnName, const ::rtl::OUString & rTableRange);
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > findColumn(const OSQLTables& _rTables,const ::rtl::OUString & rColumnName, const ::rtl::OUString & rTableRange);
 
       protected:
         void setSelectColumnName(::vos::ORef<OSQLColumns>& _rColumns,const ::rtl::OUString & rColumnName,const ::rtl::OUString & rColumnAlias, const ::rtl::OUString & rTableRange,sal_Bool bFkt=sal_False,sal_Int32 _nType = com::sun::star::sdbc::DataType::VARCHAR);
@@ -271,7 +269,7 @@ namespace connectivity
         // den IteratorStatus != IsSuccessful() hinterlaesst, wird die weitere Analyse
         // des Parse Tree abgebrochen. Ansonsten liefert "Status().IsSuccessful() == TRUE".
 
-        void traverseTableNames();
+        void traverseTableNames(OSQLTables& _rTables);
         virtual void setTableName(const ::rtl::OUString & rTableName, const ::rtl::OUString & rCatalogName, const ::rtl::OUString& rSchemaName,
                               const ::rtl::OUString & rTableRange);
         // [TableName enthaelt immer einen Namen, TableRange ist, falls angegeben, die "Range"-
