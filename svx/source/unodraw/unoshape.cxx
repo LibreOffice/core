@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: cl $ $Date: 2001-12-07 10:53:18 $
+ *  last change: $Author: cl $ $Date: 2001-12-07 15:26:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1012,10 +1012,21 @@ void SvxShape::Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) throw()
         else if( pSdrHint->GetKind() == HINT_MODELCLEARED )
         {
             pModel = NULL;
-        }
-        else if( pSdrHint->GetKind() == HINT_OBJLISTCLEARED && pSdrHint->GetObjList() == pObj->GetObjList() )
-        {
             pObj = NULL;
+        }
+        else if( pSdrHint->GetKind() == HINT_OBJLISTCLEAR )
+        {
+            SdrObjList* pObjList = pObj ? pObj->GetObjList() : NULL;
+            while( pObjList )
+            {
+                if( pSdrHint->GetObjList() == pObjList )
+                {
+                    pObj = NULL;
+                    break;
+                }
+
+                pObjList = pObjList->GetUpList();
+            }
         }
     }
 

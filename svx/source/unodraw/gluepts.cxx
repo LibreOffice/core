@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gluepts.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-19 14:49:19 $
+ *  last change: $Author: cl $ $Date: 2001-12-07 15:26:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@
 #include "svdmodel.hxx"
 #include "svdobj.hxx"
 #include "svdglue.hxx"
+#include "svdpage.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
@@ -277,9 +278,23 @@ void SvxUnoGluePointAccess::Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) 
             if( mpObject == pSdrHint->GetObject() )
                 mpObject = NULL;
         }
-        else if( pSdrHint->GetKind() == HINT_MODELCLEARED || pSdrHint->GetKind() == HINT_OBJLISTCLEARED )
+        else if( pSdrHint->GetKind() == HINT_MODELCLEARED )
         {
             mpObject = NULL;
+        }
+        else if( pSdrHint->GetKind() == HINT_OBJLISTCLEAR )
+        {
+            SdrObjList* pObjList = mpObject ? mpObject->GetObjList() : NULL;
+            while( pObjList )
+            {
+                if( pSdrHint->GetObjList() == pObjList )
+                {
+                    mpObject = NULL;
+                    break;
+                }
+
+                pObjList = pObjList->GetUpList();
+            }
         }
     }
 }

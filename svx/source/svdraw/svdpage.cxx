@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpage.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: ka $ $Date: 2001-09-26 08:13:31 $
+ *  last change: $Author: cl $ $Date: 2001-12-07 15:30:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,12 +251,22 @@ void SdrObjList::CopyObjects(const SdrObjList& rSrcList)
 void SdrObjList::Clear()
 {
     ULONG nAnz=GetObjCount();
+
+    if(pModel!=NULL && nAnz!=0)
+    {
+        SdrHint aHint(HINT_OBJLISTCLEAR);
+        aHint.SetPage(pPage);
+        aHint.SetObjList(this);
+        pModel->Broadcast(aHint);
+    }
+
     for (ULONG no=0; no<nAnz; no++) {
         SdrObject* pObj=GetObj(no);
         delete pObj;
     }
     aList.Clear();
-    if (pModel!=NULL && nAnz!=0) {
+    if (pModel!=NULL && nAnz!=0)
+    {
         pModel->SetChanged();
         SdrHint aHint(HINT_OBJLISTCLEARED);
         aHint.SetPage(pPage);
