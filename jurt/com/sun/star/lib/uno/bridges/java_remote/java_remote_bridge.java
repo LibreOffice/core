@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_remote_bridge.java,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kr $ $Date: 2001-02-26 18:22:14 $
+ *  last change: $Author: kr $ $Date: 2001-03-12 15:40:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,7 @@ import com.sun.star.uno.IQueryInterface;
  * The protocol to used is passed by name, the bridge
  * then looks for it under <code>com.sun.star.lib.uno.protocols</code>.
  * <p>
- * @version     $Revision: 1.16 $ $ $Date: 2001-02-26 18:22:14 $
+ * @version     $Revision: 1.17 $ $ $Date: 2001-03-12 15:40:09 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.IProtocol
  * @since       UDK1.0
@@ -883,7 +883,7 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
 
             // is this what we realy want to do, is the writing to the stream realy protected? Not that
             // an other thread flushes the output and an reply arrives before we have added the thread queue!!!
-            synchronized(_xConnection) {
+            synchronized(_outputStream) {
                 _iProtocol.writeRequest((String)object, (TypeDescription)type.getTypeDescription(), operation, ThreadPool.getThreadId(), params, synchron, mustReply);
 
                 if(synchron[0].booleanValue()  && Thread.currentThread() != _messageDispatcher) // prepare a queue for this thread in the threadpool
