@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 19:58:25 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 17:15:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,10 @@ static const ResIdToResName pToolBarResToName[] =
     { 560,      "standardbar",         },
     { 18001,    "formsnavigationbar"   },
     { 18002,    "formsfilterbar"       },
+    { 18003,    "formtextobjectbar"    },
+    { 18004,    "formcontrols"         },
+    { 18005,    "moreformcontrols"     },
+    { 18006,    "formdesign"           },
     { 20050,    "toolbar"              },      //math
     { 30001,    "objectbar"            },      //chart
     { 30513,    "toolbar"              },      //chart
@@ -161,9 +165,6 @@ static const ResIdToResName pToolBarResToName[] =
     { 23031,    "mediaobjectbar"       },      //draw/impress
     { 25060,    "mediaobjectbar"       },      //calc
     { 23311,    "mediaobjectbar"       },      //writer
-    { 18004,    "formcontrols"         },
-    { 18005,    "moreformcontrols"     },
-    { 18006,    "formdesign"           },
     { 0,        ""                     }
 };
 
