@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symtbl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 07:43:30 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-02 11:54:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -447,6 +447,7 @@ SbiProcDef::SbiProcDef( SbiParser* pParser, const String& rName,
     pPool->SetParent( &aParams );
     nLine1  =
     nLine2  = 0;
+    mePropMode = PROPERTY_MODE_NONE;
     bPublic = TRUE;
     bCdecl  = FALSE;
     // Fuer Returnwerte ist das erste Element der Parameterliste
@@ -506,6 +507,30 @@ void SbiProcDef::Match( SbiProcDef* pOld )
     }
     delete pOld;
 }
+
+void SbiProcDef::setPropertyMode( PropertyMode ePropMode )
+{
+    mePropMode = ePropMode;
+    if( mePropMode != PROPERTY_MODE_NONE )
+    {
+        // Prop name = original scanned procedure name
+        maPropName = aName;
+
+        // CompleteProcName includes "Property xxx "
+        // to avoid conflicts with other symbols
+        String aCompleteProcName;
+        aCompleteProcName.AppendAscii( "Property " );
+        switch( mePropMode )
+        {
+            case PROPERTY_MODE_GET:     aCompleteProcName.AppendAscii( "Get " ); break;
+            case PROPERTY_MODE_LET:     aCompleteProcName.AppendAscii( "Let " ); break;
+            case PROPERTY_MODE_SET:     aCompleteProcName.AppendAscii( "Set " ); break;
+        }
+        aCompleteProcName += aName;
+        aName = aCompleteProcName;
+    }
+}
+
 
 //////////////////////////////////////////////////////////////////////////
 
