@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoedge.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-16 13:54:00 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:56:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,10 @@
 
 #ifndef _SVX_SVDOIMP_HXX
 #include "svdoimp.hxx"
+#endif
+
+#ifndef _SDR_PROPERTIES_CONNECTORPROPERTIES_HXX
+#include <svx/sdr/properties/connectorproperties.hxx>
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -306,7 +310,14 @@ SvStream& operator>>(SvStream& rIn, SdrEdgeInfoRec& rEI)
     return rIn;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+
+sdr::properties::BaseProperties* SdrEdgeObj::CreateObjectSpecificProperties()
+{
+    return new sdr::properties::ConnectorProperties(*this);
+}
+
+//////////////////////////////////////////////////////////////////////////////
 
 TYPEINIT1(SdrEdgeObj,SdrTextObj);
 
@@ -331,48 +342,9 @@ SdrEdgeObj::~SdrEdgeObj()
     delete pEdgeTrack;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// ItemSet access
-
-SfxItemSet* SdrEdgeObj::CreateNewItemSet(SfxItemPool& rPool)
-{
-    // include ALL items, 2D and 3D
-    return new SfxItemSet(rPool,
-        // ranges from SdrAttrObj
-        SDRATTR_START, SDRATTRSET_SHADOW,
-        SDRATTRSET_OUTLINER, SDRATTRSET_MISC,
-        SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
-
-        // edge attributes
-        SDRATTR_EDGE_FIRST, SDRATTRSET_EDGE,
-
-        // outliner and end
-        EE_ITEMS_START, EE_ITEMS_END,
-        0, 0);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// private support routines for ItemSet access
-void SdrEdgeObj::ItemSetChanged(const SfxItemSet& rSet)
-{
-    // call parent
-    SdrTextObj::ItemSetChanged(rSet);
-
-    // local changes
-    ImpSetAttrToEdgeInfo();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void SdrEdgeObj::NbcSetStyleSheet(SfxStyleSheet* pNewStyleSheet, FASTBOOL bDontRemoveHardAttr)
-{
-    SdrTextObj::NbcSetStyleSheet(pNewStyleSheet,bDontRemoveHardAttr);
-    ImpSetAttrToEdgeInfo(); // Werte vom Pool nach aEdgeInfo kopieren
-}
-
 void SdrEdgeObj::ImpSetAttrToEdgeInfo()
 {
-    const SfxItemSet& rSet = GetItemSet();
+    const SfxItemSet& rSet = GetObjectItemSet();
     SdrEdgeKind eKind = ((SdrEdgeKindItem&)(rSet.Get(SDRATTR_EDGEKIND))).GetValue();
     sal_Int32 nVal1 = ((SdrEdgeLine1DeltaItem&)rSet.Get(SDRATTR_EDGELINE1DELTA)).GetValue();
     sal_Int32 nVal2 = ((SdrEdgeLine2DeltaItem&)rSet.Get(SDRATTR_EDGELINE2DELTA)).GetValue();
@@ -443,7 +415,7 @@ void SdrEdgeObj::ImpSetAttrToEdgeInfo()
 
 void SdrEdgeObj::ImpSetEdgeInfoToAttr()
 {
-    const SfxItemSet& rSet = GetItemSet();
+    const SfxItemSet& rSet = GetObjectItemSet();
     SdrEdgeKind eKind = ((SdrEdgeKindItem&)(rSet.Get(SDRATTR_EDGEKIND))).GetValue();
     sal_Int32 nValAnz = ((SdrEdgeLineDeltaAnzItem&)rSet.Get(SDRATTR_EDGELINEDELTAANZ)).GetValue();
     sal_Int32 nVal1 = ((SdrEdgeLine1DeltaItem&)rSet.Get(SDRATTR_EDGELINE1DELTA)).GetValue();
@@ -497,28 +469,40 @@ void SdrEdgeObj::ImpSetEdgeInfoToAttr()
     if(n != nValAnz || nVals[0] != nVal1 || nVals[1] != nVal2 || nVals[2] != nVal3)
     {
         // #75371# Here no more notifying is necessary, just local changes are OK.
-        ImpForceItemSet();
-
         if(n != nValAnz)
-            mpObjectItemSet->Put(SdrEdgeLineDeltaAnzItem(n));
+        {
+            GetProperties().SetObjectItemDirect(SdrEdgeLineDeltaAnzItem(n));
+        }
 
         if(nVals[0] != nVal1)
-            mpObjectItemSet->Put(SdrEdgeLine1DeltaItem(nVals[0]));
+        {
+            GetProperties().SetObjectItemDirect(SdrEdgeLine1DeltaItem(nVals[0]));
+        }
 
         if(nVals[1] != nVal2)
-            mpObjectItemSet->Put(SdrEdgeLine2DeltaItem(nVals[1]));
+        {
+            GetProperties().SetObjectItemDirect(SdrEdgeLine2DeltaItem(nVals[1]));
+        }
 
         if(nVals[2] != nVal3)
-            mpObjectItemSet->Put(SdrEdgeLine3DeltaItem(nVals[2]));
+        {
+            GetProperties().SetObjectItemDirect(SdrEdgeLine3DeltaItem(nVals[2]));
+        }
 
         if(n < 3)
-            mpObjectItemSet->ClearItem(SDRATTR_EDGELINE3DELTA);
+        {
+            GetProperties().ClearObjectItemDirect(SDRATTR_EDGELINE3DELTA);
+        }
 
         if(n < 2)
-            mpObjectItemSet->ClearItem(SDRATTR_EDGELINE2DELTA);
+        {
+            GetProperties().ClearObjectItemDirect(SDRATTR_EDGELINE2DELTA);
+        }
 
         if(n < 1)
-            mpObjectItemSet->ClearItem(SDRATTR_EDGELINE1DELTA);
+        {
+            GetProperties().ClearObjectItemDirect(SDRATTR_EDGELINE1DELTA);
+        }
     }
 }
 
@@ -544,12 +528,12 @@ UINT16 SdrEdgeObj::GetObjIdentifier() const
     return UINT16(OBJ_EDGE);
 }
 
-const Rectangle& SdrEdgeObj::GetBoundRect() const
+const Rectangle& SdrEdgeObj::GetCurrentBoundRect() const
 {
     if (bEdgeTrackDirty) {
         ((SdrEdgeObj*)this)->ImpRecalcEdgeTrack();
     }
-    return SdrTextObj::GetBoundRect();
+    return SdrTextObj::GetCurrentBoundRect();
 }
 
 const Rectangle& SdrEdgeObj::GetSnapRect() const
@@ -587,18 +571,19 @@ void SdrEdgeObj::TakeUnrotatedSnapRect(Rectangle& rRect) const
     rRect=GetSnapRect();
 }
 
-FASTBOOL SdrEdgeObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec) const
+sal_Bool SdrEdgeObj::DoPaintObject(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec) const
 {
-    // Hidden objects on masterpages, draw nothing
-    if((rInfoRec.nPaintMode & SDRPAINTMODE_MASTERPAGE) && bNotVisibleAsMaster)
-        return TRUE;
+    // #110094#-16 Moved to ViewContactOfSdrObj::ShouldPaintObject(..)
+    //// Hidden objects on masterpages, draw nothing
+    //if((rInfoRec.nPaintMode & SDRPAINTMODE_MASTERPAGE) && bNotVisibleAsMaster)
+    //  return TRUE;
 
     BOOL bHideContour(IsHideContour());
     BOOL bIsFillDraft(0 != (rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTFILL));
     BOOL bIsLineDraft(0 != (rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTLINE));
 
     // prepare ItemSet of this object
-    const SfxItemSet& rSet = GetItemSet();
+    const SfxItemSet& rSet = GetObjectItemSet();
 
     // perepare ItemSet to avoid old XOut line drawing
     SfxItemSet aEmptySet(*rSet.GetPool());
@@ -662,13 +647,15 @@ FASTBOOL SdrEdgeObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
         ImpDrawColorLineGeometry(rXOut, rSet, *pLineGeometry);
     }
 
-    FASTBOOL bOk=TRUE;
+    sal_Bool bOk(sal_True);
     if (HasText()) {
-        bOk=SdrTextObj::Paint(rXOut,rInfoRec);
+        bOk = SdrTextObj::DoPaintObject(rXOut,rInfoRec);
     }
-    if (bOk && (rInfoRec.nPaintMode & SDRPAINTMODE_GLUEPOINTS) !=0) {
-        bOk=PaintGluePoints(rXOut,rInfoRec);
-    }
+
+    // #110094#-13
+    //if (bOk && (rInfoRec.nPaintMode & SDRPAINTMODE_GLUEPOINTS) !=0) {
+    //  bOk=PaintGluePoints(rXOut,rInfoRec);
+    //}
 
     return bOk;
 }
@@ -824,13 +811,17 @@ void SdrEdgeObj::ImpUndirtyEdgeTrack()
 
 void SdrEdgeObj::ImpRecalcEdgeTrack()
 {
-    Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=aOutRect; // war vorher =GetBoundRect() #36431#
+    Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
     SetRectsDirty();
-    if (!bEdgeTrackDirty) SendRepaintBroadcast();
+    // #110094#-14 if (!bEdgeTrackDirty) SendRepaintBroadcast();
     *pEdgeTrack=ImpCalcEdgeTrack(*pEdgeTrack,aCon1,aCon2,&aEdgeInfo);
     ImpSetEdgeInfoToAttr(); // Die Werte aus aEdgeInfo in den Pool kopieren
     bEdgeTrackDirty=FALSE;
-    SendRepaintBroadcast();
+
+    // Only redraw here, no object change
+    ActionChanged();
+    // BroadcastObjectChange();
+
     SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
 }
 
@@ -965,13 +956,13 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const XPolygon& rTrack0, SdrObjConnection&
     }
     FASTBOOL bCon1=rCon1.pObj!=NULL && rCon1.pObj->GetPage()==pPage && rCon1.pObj->IsInserted();
     FASTBOOL bCon2=rCon2.pObj!=NULL && rCon2.pObj->GetPage()==pPage && rCon2.pObj->IsInserted();
-    const SfxItemSet& rSet = GetItemSet();
+    const SfxItemSet& rSet = GetObjectItemSet();
 
     if (bCon1) {
         if (rCon1.pObj==(SdrObject*)this) { // sicherheitshalber Abfragen #44515#
             aBoundRect1=aOutRect;
         } else {
-            aBoundRect1=rCon1.pObj->GetBoundRect();
+            aBoundRect1=rCon1.pObj->GetCurrentBoundRect();
         }
         aBoundRect1.Move(rCon1.aObjOfs.X(),rCon1.aObjOfs.Y());
         aBewareRect1=aBoundRect1;
@@ -992,7 +983,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const XPolygon& rTrack0, SdrObjConnection&
         if (rCon2.pObj==(SdrObject*)this) { // sicherheitshalber Abfragen #44515#
             aBoundRect2=aOutRect;
         } else {
-            aBoundRect2=rCon2.pObj->GetBoundRect();
+            aBoundRect2=rCon2.pObj->GetCurrentBoundRect();
         }
         aBoundRect2.Move(rCon2.aObjOfs.X(),rCon2.aObjOfs.Y());
         aBewareRect2=aBoundRect2;
@@ -1065,7 +1056,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
     const Point& rPt2, long nAngle2, const Rectangle& rBoundRect2, const Rectangle& rBewareRect2,
     ULONG* pnQuality, SdrEdgeInfoRec* pInfo) const
 {
-    SdrEdgeKind eKind=((SdrEdgeKindItem&)(GetItem(SDRATTR_EDGEKIND))).GetValue();
+    SdrEdgeKind eKind=((SdrEdgeKindItem&)(GetObjectItem(SDRATTR_EDGEKIND))).GetValue();
     FASTBOOL bRts1=nAngle1==0;
     FASTBOOL bObn1=nAngle1==9000;
     FASTBOOL bLks1=nAngle1==18000;
@@ -1812,10 +1803,14 @@ void __EXPORT SdrEdgeObj::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId&, const S
             (pSdrHint && pSdrHint->GetKind()==HINT_OBJREMOVED))
         {
             // Broadcasting nur, wenn auf der selben Page
-            Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetBoundRect();
-            if (!bEdgeTrackDirty) SendRepaintBroadcast();
+            Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
+            // #110094#-14 if (!bEdgeTrackDirty) SendRepaintBroadcast();
             bEdgeTrackDirty=TRUE;
-            SendRepaintBroadcast();
+
+            // only redraw here, no objectchange
+            ActionChanged();
+            // BroadcastObjectChange();
+
             SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
         }
         ((SdrEdgeObj*)this)->nNotifyingCount--;
@@ -1884,13 +1879,14 @@ void SdrEdgeObj::TakeContour(XPolyPolygon& rPoly) const
     SdrTextObj::TakeContour(rPoly);
 }
 
-void SdrEdgeObj::TakeContour(XPolyPolygon& rXPoly, SdrContourType eType) const
-{
-}
+//#110094#-12
+//void SdrEdgeObj::TakeContour(XPolyPolygon& rXPoly, SdrContourType eType) const
+//{
+//}
 
 USHORT SdrEdgeObj::GetHdlCount() const
 {
-    SdrEdgeKind eKind=((SdrEdgeKindItem&)(GetItem(SDRATTR_EDGEKIND))).GetValue();
+    SdrEdgeKind eKind=((SdrEdgeKindItem&)(GetObjectItem(SDRATTR_EDGEKIND))).GetValue();
     USHORT nHdlAnz=0;
     USHORT nPntAnz=pEdgeTrack->GetPointCount();
     if (nPntAnz!=0) {
@@ -1920,7 +1916,7 @@ SdrHdl* SdrEdgeObj::GetHdl(USHORT nHdlNum) const
             pHdl=new ImpEdgeHdl((*pEdgeTrack)[USHORT(nPntAnz-1)],HDL_POLY);
             if (aCon2.pObj!=NULL && aCon2.bBestVertex) pHdl->Set1PixMore(TRUE);
         } else {
-            SdrEdgeKind eKind=((SdrEdgeKindItem&)(GetItem(SDRATTR_EDGEKIND))).GetValue();
+            SdrEdgeKind eKind=((SdrEdgeKindItem&)(GetObjectItem(SDRATTR_EDGEKIND))).GetValue();
             if (eKind==SDREDGE_ORTHOLINES || eKind==SDREDGE_BEZIER) {
                 USHORT nO1=aEdgeInfo.nObj1Lines>0 ? aEdgeInfo.nObj1Lines-1 : 0;
                 USHORT nO2=aEdgeInfo.nObj2Lines>0 ? aEdgeInfo.nObj2Lines-1 : 0;
@@ -2043,8 +2039,8 @@ FASTBOOL SdrEdgeObj::MovDrag(SdrDragStat& rDragStat) const
 
 FASTBOOL SdrEdgeObj::EndDrag(SdrDragStat& rDragStat)
 {
-    Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetBoundRect();
-    SendRepaintBroadcast();
+    Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
+    // #110094#-14 SendRepaintBroadcast();
     ImpEdgeUser* pEdgeUser=(ImpEdgeUser*)rDragStat.pUser;
     if (rDragStat.GetHdl()->GetPointNum()<2) {
         (*pEdgeTrack)=pEdgeUser->aXP;
@@ -2065,7 +2061,7 @@ FASTBOOL SdrEdgeObj::EndDrag(SdrDragStat& rDragStat)
     rDragStat.pUser=NULL;
     SetChanged();
     SetRectsDirty();
-    SendRepaintBroadcast();
+    BroadcastObjectChange();
     if (rDragStat.GetView()!=NULL) {
         rDragStat.GetView()->HideConnectMarker();
     }
@@ -2238,7 +2234,7 @@ FASTBOOL SdrEdgeObj::ImpFindConnector(const Point& rPt, const SdrPageView& rPV, 
             (pThis==NULL || pObj!=(SdrObject*)pThis) && // nicht an mich selbst connecten
             pObj->IsNode())
         {
-            Rectangle aObjBound(pObj->GetBoundRect());
+            Rectangle aObjBound(pObj->GetCurrentBoundRect());
             if (aObjBound.IsOver(aMouseRect)) {
                 aTestCon.ResetVars();
                 bTestBoundHit=FALSE;
@@ -2468,32 +2464,6 @@ void SdrEdgeObj::RestGeoData(const SdrObjGeoData& rGeo)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// pre- and postprocessing for objects for saving
-
-void SdrEdgeObj::PreSave()
-{
-    // call parent
-    SdrTextObj::PreSave();
-
-    // prepare SetItems for storage
-    const SfxItemSet& rSet = GetUnmergedItemSet();
-    const SfxItemSet* pParent = GetStyleSheet() ? &GetStyleSheet()->GetItemSet() : 0L;
-    SdrEdgeSetItem aEdgeAttr(rSet.GetPool());
-    aEdgeAttr.GetItemSet().Put(rSet);
-    aEdgeAttr.GetItemSet().SetParent(pParent);
-    mpObjectItemSet->Put(aEdgeAttr);
-}
-
-void SdrEdgeObj::PostSave()
-{
-    // call parent
-    SdrTextObj::PostSave();
-
-    // remove SetItems from local itemset
-    mpObjectItemSet->ClearItem(SDRATTRSET_EDGE);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void SdrEdgeObj::WriteData(SvStream& rOut) const
 {
@@ -2518,7 +2488,7 @@ void SdrEdgeObj::WriteData(SvStream& rOut) const
 
     if(pPool)
     {
-        const SfxItemSet& rSet = GetUnmergedItemSet();
+        const SfxItemSet& rSet = GetObjectItemSet();
 
         pPool->StoreSurrogate(rOut, &rSet.Get(SDRATTRSET_EDGE));
     }
@@ -2570,7 +2540,7 @@ void SdrEdgeObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
             sal_uInt16 nSetID = SDRATTRSET_EDGE;
             const SdrEdgeSetItem* pEdgeAttr = (const SdrEdgeSetItem*)pPool->LoadSurrogate(rIn, nSetID, 0);
             if(pEdgeAttr)
-                SetItemSet(pEdgeAttr->GetItemSet());
+                SetObjectItemSet(pEdgeAttr->GetItemSet());
         }
         else
         {
@@ -2636,8 +2606,8 @@ void SdrEdgeObj::SetTailPoint( BOOL bTail, const Point& rPt )
 */
 void SdrEdgeObj::setGluePointIndex( sal_Bool bTail, sal_Int32 nIndex /* = -1 */ )
 {
-    Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetBoundRect();
-    SendRepaintBroadcast();
+    Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetCurrentBoundRect();
+    // #110094#-14 BroadcastObjectChange();
 
     SdrObjConnection& rConn1 = GetConnection( bTail );
 
@@ -2664,7 +2634,7 @@ void SdrEdgeObj::setGluePointIndex( sal_Bool bTail, sal_Int32 nIndex /* = -1 */ 
     SetChanged();
     SetRectsDirty();
     ImpRecalcEdgeTrack();
-    bEdgeTrackDirty=TRUE;
+    // bEdgeTrackDirty=TRUE;
 }
 
 /** this method is used by the api to return a glue point id for a connection.
