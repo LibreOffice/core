@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dim.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 14:33:07 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 07:43:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -550,6 +550,7 @@ void SbiParser::Type()
             break;
 
             case EOLN :
+            case REM :
                 pElem = NULL;
                 Next();
             break;
@@ -557,6 +558,8 @@ void SbiParser::Type()
             default:
                 pDim = NULL;
                 pElem = VarDecl(&pDim,FALSE,FALSE);
+                if( !pElem )
+                    bDone = TRUE;   // Error occured
                 if( pDim )
                 {
                     // HOT FIX, to be updated
