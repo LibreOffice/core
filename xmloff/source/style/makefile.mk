@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-13 08:24:12 $
+#   last change: $Author: rt $ $Date: 2004-11-26 13:02:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -105,7 +105,6 @@ CXXFILES = \
         shadwhdl.cxx	\
         shdwdhdl.cxx	\
         styleexp.cxx	\
-        splithdl.cxx	\
         tabsthdl.cxx	\
         undlihdl.cxx	\
         uniref.cxx		\
