@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oemwiz.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-29 16:30:59 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:06:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,9 +71,6 @@
 #ifndef _SFXDOCFILE_HXX
 #include <sfx2/docfile.hxx>
 #endif
-#ifndef SVTOOLS_URIHELPER_HXX
-#include <svtools/urihelper.hxx>
-#endif
 #ifndef _SFXITEMSET_HXX
 #include <svtools/itemset.hxx>
 #endif
@@ -98,6 +95,8 @@
 #ifndef _XTEXTEDT_HXX
 #include <svtools/xtextedt.hxx>
 #endif
+#include "osl/diagnose.h"
+#include "tools/urlobj.hxx"
 
 #include <sfx2/sfxdlg.hxx>
 #include <sfx2/tabdlg.hxx>
@@ -254,8 +253,8 @@ namespace preload
     {
         SvtPathOptions aPathOpt;
         String sFileName = aPathOpt.GetUserConfigPath();//GetModulePath();
-        sFileName = URIHelper::SmartRelToAbs(sFileName);
         INetURLObject aURLObject(sFileName);
+        OSL_ASSERT(aURLObject.getSegmentCount() >= 2);
         aURLObject.removeSegment(); //remove '/config'
         aURLObject.removeSegment(); //remove '/user'
         sFileName = aURLObject.GetMainURL(INetURLObject::DECODE_TO_IURI);
