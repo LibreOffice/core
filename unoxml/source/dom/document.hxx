@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: lo $ $Date: 2004-02-27 16:14:29 $
+ *  last change: $Author: lo $ $Date: 2004-02-27 16:41:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -345,7 +345,7 @@ namespace DOM
     }
 
     // XDocumentEvent
-    virtual Reference< XEvent > createEvent(const OUString& eventType) throw (RuntimeException);
+    virtual Reference< XEvent > SAL_CALL createEvent(const OUString& eventType) throw (RuntimeException);
 
     };
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: lo $ $Date: 2004-02-27 16:14:29 $
+ *  last change: $Author: lo $ $Date: 2004-02-27 16:41:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -533,7 +533,7 @@ namespace DOM
         return OUString();
     }
 
-    Reference< XEvent > createEvent(const OUString& aType) throw (RuntimeException)        
+    Reference< XEvent > SAL_CALL createEvent(const OUString& aType) throw (RuntimeException)        
     {
         events::CEvent *pEvent = 0;
         if (
