@@ -5,15 +5,12 @@
   <node oor:name="States">
   <node oor:name="private:resource/toolbar/tableobjectbar" oor:op="replace">
     <prop oor:name="DockPos" oor:type="xs:string">
-     <value>0,1</value>
+     <value>0,0</value>
     </prop>
     <prop oor:name="Docked" oor:type="xs:boolean">
      <value>true</value>
     </prop>
     <prop oor:name="DockingArea" oor:type="xs:int">
-     <value>0</value>
-    </prop>
-    <prop oor:name="Style" oor:type="xs:int">
      <value>0</value>
     </prop>
      <prop oor:name="UIName" oor:type="xs:string">
@@ -26,15 +23,12 @@
    </node>
    <node oor:name="private:resource/toolbar/queryobjectbar" oor:op="replace">
     <prop oor:name="DockPos" oor:type="xs:string">
-     <value>0,1</value>
+     <value>0,0</value>
     </prop>
     <prop oor:name="Docked" oor:type="xs:boolean">
      <value>true</value>
     </prop>
     <prop oor:name="DockingArea" oor:type="xs:int">
-     <value>0</value>
-    </prop>
-    <prop oor:name="Style" oor:type="xs:int">
      <value>0</value>
     </prop>
      <prop oor:name="UIName" oor:type="xs:string">
@@ -47,15 +41,12 @@
    </node>
   <node oor:name="private:resource/toolbar/reportobjectbar" oor:op="replace">
     <prop oor:name="DockPos" oor:type="xs:string">
-     <value>0,1</value>
+     <value>0,0</value>
     </prop>
     <prop oor:name="Docked" oor:type="xs:boolean">
      <value>true</value>
     </prop>
     <prop oor:name="DockingArea" oor:type="xs:int">
-     <value>0</value>
-    </prop>
-    <prop oor:name="Style" oor:type="xs:int">
      <value>0</value>
     </prop>
      <prop oor:name="UIName" oor:type="xs:string">
@@ -68,15 +59,12 @@
    </node>
    <node oor:name="private:resource/toolbar/formobjectbar" oor:op="replace">
     <prop oor:name="DockPos" oor:type="xs:string">
-     <value>0,1</value>
+     <value>0,0</value>
     </prop>
     <prop oor:name="Docked" oor:type="xs:boolean">
      <value>true</value>
     </prop>
     <prop oor:name="DockingArea" oor:type="xs:int">
-     <value>0</value>
-    </prop>
-    <prop oor:name="Style" oor:type="xs:int">
      <value>0</value>
     </prop>
      <prop oor:name="UIName" oor:type="xs:string">
@@ -89,15 +77,12 @@
    </node>
    <node oor:name="private:resource/toolbar/toolbar" oor:op="replace">
     <prop oor:name="DockPos" oor:type="xs:string">
-     <value>0,1</value>
+     <value>0,0</value>
     </prop>
     <prop oor:name="Docked" oor:type="xs:boolean">
      <value>true</value>
     </prop>
     <prop oor:name="DockingArea" oor:type="xs:int">
-     <value>0</value>
-    </prop>
-    <prop oor:name="Style" oor:type="xs:int">
      <value>0</value>
     </prop>
     <prop oor:name="UIName" oor:type="xs:string">
