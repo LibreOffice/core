@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdwindow.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-08 11:25:44 $
+ *  last change: $Author: ka $ $Date: 2001-03-08 12:38:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -821,7 +821,7 @@ sal_Int8 SdWindow::AcceptDrop( const AcceptDropEvent& rEvt )
             nRet = pViewShell->AcceptDrop( rEvt, this, SDRPAGE_NOTFOUND, SDRLAYER_NOTFOUND );
 
         if( !pViewShell->ISA( SdOutlineViewShell ) )
-            DropScroll( rEvt.maPos );
+            DropScroll( rEvt.maPosPixel );
     }
 
     return nRet;

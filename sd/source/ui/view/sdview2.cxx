@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-08 11:24:32 $
+ *  last change: $Author: ka $ $Date: 2001-03-08 12:38:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -560,7 +560,7 @@ sal_Int8 SdView::AcceptDrop( const AcceptDropEvent& rEvt, SdWindow* pWin, USHORT
                 aRect.Union( pObj->GetLogicRect() );
             }
 
-            if( aRect.IsInside( pOLV->GetWindow()->PixelToLogic( rEvt.maPos ) ) )
+            if( aRect.IsInside( pOLV->GetWindow()->PixelToLogic( rEvt.maPosPixel ) ) )
             {
                 bIsInsideOutlinerView = TRUE;
                 //!!!DND nRet = ( (OutlinerView*) pOLV )->AcceptDrop( rEvt, pWin, nPage, nLayer );
@@ -602,7 +602,7 @@ sal_Int8 SdView::AcceptDrop( const AcceptDropEvent& rEvt, SdWindow* pWin, USHORT
                     SdrPageView*    pPV = NULL;
                     SdWindow*       pWindow = pViewSh->GetActiveWindow();
                     USHORT          nHitLog = USHORT( pWindow->PixelToLogic( Size( HITPIX, 0 ) ).Width() );
-                    Point           aPos( pWindow->PixelToLogic( rEvt.maPos ) );
+                    Point           aPos( pWindow->PixelToLogic( rEvt.maPosPixel ) );
                     BOOL            bHasPickObj = PickObj( aPos, pPickObj, pPV );
 
                     if( bHasPickObj && pPickObj && ( pPickObj->IsEmptyPresObj() || pPickObj->GetUserCall() ) )
@@ -699,7 +699,7 @@ sal_Int8 SdView::ExecuteDrop( const ExecuteDropEvent& rEvt, SdWindow* pWin, USHO
                 aRect.Union( pObj->GetLogicRect() );
             }
 
-            Point aPos = pOLV->GetWindow()->PixelToLogic( rEvt.maPos );
+            Point aPos = pOLV->GetWindow()->PixelToLogic( rEvt.maPosPixel );
 
             if( aRect.IsInside( aPos ) )
             {
@@ -716,7 +716,7 @@ sal_Int8 SdView::ExecuteDrop( const ExecuteDropEvent& rEvt, SdWindow* pWin, USHO
             SdTransferable*     pDragTransferable = SD_MOD()->pTransferDrag;
 
             if( pWin )
-                aPos = pWin->PixelToLogic( rEvt.maPos );
+                aPos = pWin->PixelToLogic( rEvt.maPosPixel );
 
             //!!!DND if( !( bReturn = FmFormView::Drop(rMEvt, pWin) ) ) )
             if( !InsertData( rEvt.maDropEvent.Transferable, aPos, nDropAction, TRUE, 0, nPage, nLayer ) && pViewSh )
