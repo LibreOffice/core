@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cell.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:02:42 $
+ *  last change: $Author: kz $ $Date: 2004-06-28 16:50:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -427,6 +427,8 @@ public:
     void            SetDouble( double n )                   { nErgValue = n; bIsValue = TRUE; }
     void            SetString( const String& r )            { aErgString = r; bIsValue = FALSE; }
     void            SetErrCode( USHORT n );
+    inline BOOL     IsHyperLinkCell() const { return pCode && pCode->IsHyperLink(); }
+    EditTextObject*     CreateURLObject() ;
 };
 
 //          Iterator fuer Referenzen in einer Formelzelle
