@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtox.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:02:38 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:03:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,8 +287,12 @@ BOOL SwEditShell::UpdateTableOf( const SwTOXBase& rTOX, const SfxItemSet* pSet )
         ::StartProgress( STR_STATSTR_TOX_UPDATE, 0, 0, pDocSh );
         ::SetProgressText( STR_STATSTR_TOX_UPDATE, pDocSh );
 
+#if 0
         BOOL bWasUndo = pDoc->DoesUndo();
         pDoc->DoUndo( FALSE );
+#else
+        pDoc->StartUndo(UNDO_TOXCHANGE);
+#endif
 
         // Verzeichnisrumpf erzeugen
         pTOX->Update(pSet);
@@ -303,11 +307,15 @@ BOOL SwEditShell::UpdateTableOf( const SwTOXBase& rTOX, const SfxItemSet* pSet )
         // Seitennummern eintragen
         pTOX->UpdatePageNum();
 
+#if 0
         pDoc->DoUndo( bWasUndo );
 
         //JP erstmal ein Hack, solange keine Verzeichnisse Undofaehig sind
         if( bWasUndo )
             pDoc->DelAllUndoObj();
+#else
+        pDoc->EndUndo(UNDO_TOXCHANGE);
+#endif
 
         ::EndProgress( pDocSh );
         EndAllAction();
