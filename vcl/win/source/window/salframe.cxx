@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 15:17:30 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 11:53:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5129,6 +5129,22 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
                 bInQueryEnd = TRUE;
                 nRet = !ImplHandleShutDownMsg( hWnd );
                 rDef = FALSE;
+
+                // Issue #16314#: ImplHandleShutDownMsg causes a PostMessage in case of allowing shutdown.
+                // This posted message was never processed and cause Windows XP to hang after log off
+                // if there are multiple sessions and the current session wasn't the first one started.
+                // So if shutdown is allowed we assume that a post message was done and retrieve all
+                // messages in the message queue and dispatch them before we return control to the system.
+
+                if ( nRet )
+                {
+                    MSG msg;
+
+                    while( PeekMessage( &msg, NULL, 0, 0, PM_REMOVE ) )
+                    {
+                        DispatchMessage( &msg );
+                    }
+                }
             }
             else
             {
