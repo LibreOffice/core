@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShellBase.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 16:13:15 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:15:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,9 @@
 #ifndef SD_VIEW_SHELL_BASE_HXX
 #define SD_VIEW_SHELL_BASE_HXX
 
+#ifndef SD_VIEW_SHELL_HXX
 #include "ViewShell.hxx"
+#endif
 
 #ifndef SD_GLOB_HXX
 #include "glob.hxx"
@@ -81,6 +83,9 @@
 class SdDrawDocument;
 class SfxRequest;
 
+namespace sd { namespace tools {
+class EventMultiplexer;
+} }
 
 namespace sd {
 
@@ -153,13 +158,13 @@ public:
     /** Callback function for general slot calls.  At the moment these are
         slots for switching the pane docking windows on and off.
     */
-    void Execute (SfxRequest& rRequest);
+    virtual void Execute (SfxRequest& rRequest);
 
     /** Callback function for retrieving item values related to certain
         slots.  This is the companion of Execute() and handles the slots
         concerned with showing the pane docking windows.
     */
-    void GetState (SfxItemSet& rSet);
+    virtual void GetState (SfxItemSet& rSet);
 
     /** Make sure that the given controller is known and used by the frame.
         @param pController
@@ -268,6 +273,20 @@ public:
     */
     void ShowUIControls (bool bVisible);
 
+    /** this method starts the presentation by
+        executing the slot SID_PRESENTATION asynchronous */
+    void StartPresentation();
+
+    /** this methods ends the presentation by
+        executing the slot SID_PRESENTATION_END asynchronous */
+    void StopPresentation();
+
+    /** Return an event multiplexer.  It is a single class that forwards
+        events from various sources.  This method must not be called before
+        LateInit() has terminated.
+    */
+    tools::EventMultiplexer& GetEventMultiplexer (void);
+
 protected:
     osl::Mutex maMutex;
     /** The view tab bar is the control for switching between different
@@ -289,6 +308,8 @@ private:
     PrintManager maPrintManager;
 
     ::std::auto_ptr<FormShellManager> mpFormShellManager;
+
+    ::std::auto_ptr<tools::EventMultiplexer> mpEventMultiplexer;
 
     /** Common code of OuterResizePixel() and InnerResizePixel().
     */
