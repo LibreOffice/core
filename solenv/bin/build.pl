@@ -5,9 +5,9 @@ eval 'exec perl -S $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.73 $
+#   $Revision: 1.74 $
 #
-#   last change: $Author: vg $ $Date: 2002-12-06 16:11:31 $
+#   last change: $Author: vg $ $Date: 2002-12-09 14:35:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,7 +84,7 @@ if (defined $ENV{CWS_WORK_STAMP}) {
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.73 $ ';
+$id_str = ' $Revision: 1.74 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -315,7 +315,6 @@ sub dmake_dir {
         chdir $BuildDir;
         cwd();
         $error_code = system ("$dmake");
-        print STDERR "dmake - " . lc($!) . "\n" if ($error_code);
         if ($error_code && ($error_code != -1) && (!$child)) {
             &print_error("Error $? occurred while making $BuildDir");
         };
@@ -569,7 +568,6 @@ sub PickPrjToBuild {
     $DepsHash = shift;
     $Prj = &FindIndepPrj($DepsHash);
     delete $$DepsHash{$Prj} if (defined $$DepsHash{$Prj});
-    #print "$Prj removed from dependencies hash\n";
     return $Prj;
 };
 
@@ -810,11 +808,11 @@ sub get_switch_options {
 # cancel build when one of children has error exit code
 #
 sub cancel_build {
-    while (&children_number) {sleep(1)};
     print STDERR "\n";
     foreach (keys %broken_build) {
         print STDERR "ERROR: error $_ occurred while making ", $broken_build{$_}, "\n";
     };
+    kill 9 => -$$ if (!$BuildAllParents);
     exit(1);
 };
 
@@ -825,6 +823,7 @@ sub store_error {
     my ($pid, $error_code) = @_;
     my $child_nick = $processes_hash{$pid};
     $broken_build {$error_code} = &CorrectPath($StandDir . $PathHash{$child_nick});
+    &cancel_build if (!$BuildAllParents);
 };
 
 #
@@ -900,7 +899,6 @@ sub children_number {
 };
 
 sub start_child {
-    #&cancel_build if (scalar keys %broken_build);
     my $child_nick = shift;
     my $pid;
     if ($pid = fork) { # parent
@@ -911,7 +909,6 @@ sub start_child {
         sleep(1) if ($BuildAllParents);
     } elsif (defined $pid) { # child
         $child = 1;
-        #print "$child_nick\n";
         &dmake_dir($child_nick);
     };
 };
@@ -977,7 +974,6 @@ sub build_actual_queue {
     my $i = 0;
     do {
         while ($i <= (scalar(@$build_queue) - 1)) {
-            #&cancel_build if (scalar keys %broken_build);
             $Prj = $$build_queue[$i];
             &annonce_module($Prj) if (!(defined $module_annonced{$Prj}));
             $only_dependent = 0;
@@ -1051,7 +1047,6 @@ sub checkout_module {
 
     $cvs_module->verbose(2);
     $cvs_module->{MODULE} .= '/prj' if ($image);
-    #print cwd, "\n";
     $cvs_module->checkout($StandDir, $parent_work_stamp, '');
 };
 
