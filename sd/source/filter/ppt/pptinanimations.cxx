@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptinanimations.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 15:39:02 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 16:46:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -573,6 +573,7 @@ void AnimationImporter::importAnimationContainer( const Atom* pAtom, const Refer
                 Reference< XIterateContainer > xIter( xNode, UNO_QUERY );
                 if( xIter.is() )
                 {
+                    double fDuration = 0.0;
                     Any aTarget, aEmpty;
                     Reference< XEnumerationAccess > xEnumerationAccess( xNode, UNO_QUERY );
                     if( xEnumerationAccess.is() )
@@ -585,6 +586,15 @@ void AnimationImporter::importAnimationContainer( const Atom* pAtom, const Refer
                                 Reference< XAnimate > xChildNode( xEnumeration->nextElement(), UNO_QUERY );
                                 if( xChildNode.is() )
                                 {
+                                    double fChildBegin = 0.0;
+                                    double fChildDuration = 0.0;
+                                    xChildNode->getBegin() >>= fChildBegin;
+                                    xChildNode->getDuration() >>= fChildDuration;
+
+                                    fChildDuration += fChildBegin;
+                                    if( fChildDuration > fDuration )
+                                        fDuration = fChildDuration;
+
                                     if( !aTarget.hasValue() )
                                         aTarget = xChildNode->getTarget();
 
@@ -595,6 +605,9 @@ void AnimationImporter::importAnimationContainer( const Atom* pAtom, const Refer
                     }
 
                     xIter->setTarget( aTarget );
+
+                    double fIterateInterval = xIter->getIterateInterval() * fDuration / 100;
+                    xIter->setIterateInterval( fIterateInterval );
                 }
             }
             break;
