@@ -65,8 +65,8 @@ import com.sun.star.lib.uno.helper.WeakBase;
 import com.sun.star.awt.*;
 
 // Canvas
-import drafts.com.sun.star.rendering.*;
-import drafts.com.sun.star.geometry.*;
+import com.sun.star.rendering.*;
+import com.sun.star.geometry.*;
 
 // system-dependent stuff
 import sun.awt.*;
@@ -75,7 +75,7 @@ import sun.awt.*;
 public class LinePolyPolygon
     extends com.sun.star.lib.uno.helper.ComponentBase
     implements com.sun.star.lang.XServiceInfo,
-               drafts.com.sun.star.rendering.XLinePolyPolygon2D
+               com.sun.star.rendering.XLinePolyPolygon2D
 {
     private java.awt.geom.GeneralPath path;
 
@@ -216,7 +216,7 @@ public class LinePolyPolygon
     //
 
     private static final String s_implName = "XLinePolyPolygon2D.java.impl";
-    private static final String s_serviceName = "drafts.com.sun.star.rendering.LinePolyPolygon2D";
+    private static final String s_serviceName = "com.sun.star.rendering.LinePolyPolygon2D";
 
     public String getImplementationName()
     {
