@@ -2,9 +2,9 @@
 #
 #	$RCSfile: makefile.mk,v $
 #
-#	$Revision: 1.5 $
+#	$Revision: 1.6 $
 #
-#	last change: $Author: fs $ $Date: 2002-08-27 12:08:39 $
+#	last change: $Author: fs $ $Date: 2002-12-02 11:53:00 $
 #
 #	The Contents of this file are made available subject to the terms of
 #	either of the following licenses
@@ -91,7 +91,8 @@ SLOFILES =\
         $(SLO)$/iodlgimp.obj		\
         $(SLO)$/asynclink.obj		\
         $(SLO)$/controlaccess.obj	\
-        $(SLO)$/commonpicker.obj
+        $(SLO)$/commonpicker.obj	\
+        $(SLO)$/fpinteraction.obj
 
 SRCFILES =	iodlg.src	 \
             filepicker.src
