@@ -1,0 +1,1109 @@
+/*************************************************************************
+ *
+ *  $RCSfile: app.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: hr $ $Date: 2004-02-03 19:39:58 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef _GLOBLMN_HRC
+#include "globlmn.hrc"
+#endif
+#ifndef _GLOBALACC_SRC
+#include "globlac.hrc"
+#endif
+#ifndef _SVX_SVXIDS_HRC
+#include "svxids.hrc"
+#endif
+
+#include "app.hrc"
+
+ //----------------------------------------------------------------------------
+
+#define MASKCOLOR       MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; };
+
+ErrorBox RID_ERRBOX_MODULENOTINSTALLED
+{
+    Buttons = WB_OK ;
+    Message = "Die Aktion konnte nicht ausgef¸hrt werden. Das daf¸r benˆtigte %PRODUCTNAME Modul ist momentan nicht installiert." ;
+    Message [ ENGLISH ] = "The action couldn't be executed. The %PRODUCTNAME program module, needed for this action, is currently not installed." ;
+    Message[ english_us ] = "The action could not be executed. The %PRODUCTNAME program module needed for this action is currently not installed.";
+    Message[ portuguese ] = "The action couldn't be executed. The %PRODUCTNAME program module, needed for this action, is currently not installed.";
+    Message[ russian ] = "ÕÂ‚ÓÁÏÓÊÌÓ ‚˚ÔÓÎÌËÚ¸ ‰ÂÈÒÚ‚ËÂ. ÕÂ ÛÒÚ‡ÌÓ‚ÎÂÌ ÒÓÓÚ‚ÂÚÒÚ‚Û˛˘ËÈ ÔÓ„‡ÏÏÌ˚È ÏÓ‰ÛÎ¸ %PRODUCTNAME.";
+    Message[ greek ] = "ƒÂÌ ﬁÙ·Ì ‰ıÌ·Ùﬁ Á ÂÍÙ›ÎÂÛÁ ÙÁÚ ÂÌ›Ò„ÂÈ·Ú. « ÎÂÈÙÔıÒ„ÈÍﬁ ÏÔÌ‹‰· ÙÔı ÒÔ„Ò‹ÏÏ·ÙÔÚ %PRODUCTNAME Ôı ˜ÒÂÈ‹ÊÂÙ·È „È· ·ıÙﬁ ÙÁÌ ÂÌ›Ò„ÂÈ· ‰ÂÌ ÂﬂÌ·È Â„Í·ÙÂÛÙÁÏ›ÌÁ ·ıÙﬁÌ ÙÁ ÛÙÈ„Ïﬁ.";
+    Message[ dutch ] = "De activiteit kan niet worden uitgevoerd. De vereiste module %PRODUCTNAME is niet geÔnstalleerd.";
+    Message[ french ] = "Impossible d'exÈcuter cette opÈration : le module requis de %PRODUCTNAME n'est actuellement pas installÈ !";
+    Message[ spanish ] = "No se pudo ejecutar la acciÛn. El mÛdulo de programa %PRODUCTNAME necesario para esta acciÛn no est· instalado por el momento. ";
+    Message[ finnish ] = "Toimintoa ei voitu suorittaa. %PRODUCTNAMEn ohjelmamoduulia, jota t‰m‰ toiminto tarvitsee, ei ole asennettu.";
+    Message[ italian ] = "Impossibile eseguire l'azione. Il modulo necessario per %PRODUCTNAME non Ë installato.";
+    Message[ danish ] = "Handlingen kunne ikke udf¯res. Det n¯dvendige %PRODUCTNAME-modul er ikke installeret i ¯jeblikket.";
+    Message[ swedish ] = "Det gick inte att utfˆra den h‰r Âtg‰rden. %PRODUCTNAME-programmodulen som behˆvs till det ‰r inte installerad.";
+    Message[ polish ] = "Tej akcji nie moøna by≥o wykonaÊ. Modu≥ programu %PRODUCTNAME, potrzebny do jej wykonania, nie jest zainstalowany.";
+    Message[ portuguese_brazilian ] = "N„o foi possÌvel executar a aÁ„o. O mÛdulo do programa %PRODUCTNAME necess·rio para esta aÁ„o n„o esta instalado no momento.";
+    Message[ japanese ] = "„Ç¢„ÇØ„Ç∑„Éß„É≥„ÅØÂÆüË°å„Åß„Åç„Åæ„Åõ„Çì„ÄÇ„Ç¢„ÇØ„Ç∑„Éß„É≥„ÅÆÂÆüË°å„Å´ÂøÖË¶Å„Å™ %PRODUCTNAME „Éó„É≠„Ç∞„É©„É†„É¢„Ç∏„É•„Éº„É´„Åå„Åæ„Å†„Ç§„É≥„Çπ„Éà„Éº„É´„Åï„Çå„Å¶„ÅÑ„Åæ„Åõ„Çì„ÄÇ";
+    Message[ korean ] = "ÏûëÎèôÏùÑ Ïã§ÌñâÌïòÏßÄ Î™ªÌñàÏäµÎãàÎã§. Ïù¥ ÏûëÎèôÏóê ÌïÑÏöîÌïú %PRODUCTNAME ÌîÑÎ°úÍ∑∏Îû® Î™®ÎìàÏù¥ ÌòÑÏû¨ ÏÑ§ÏπòÎêòÏñ¥ ÏûàÏßÄ ÏïäÏäµÎãàÎã§.";
+    Message[ chinese_simplified ] = "Êó†Ê≥ïÊâßË°åËøô‰∏™Êìç‰Ωú„ÄÇÂõ†‰∏∫ÊâÄÈúÄË¶ÅÁöÑ %PRODUCTNAME Ê®°ÂùóÊ≤°ÊúâÂÆâË£ÖÂ•Ω„ÄÇ";
+    Message[ chinese_traditional ] = "ÁÑ°Ê≥ïÂü∑Ë°åÈÄôÂÄãÂãï‰Ωú„ÄÇÂõ†Áà≤ÊâÄÈúÄË¶ÅÁöÑ %PRODUCTNAME ÂÖÉ‰ª∂Ê≤íÊúâÂÆâË£ùÂ•Ω„ÄÇ";
+    Message[ turkish ] = "Bu i˛lem gerÁekle˛tirilemedi.Bu i˛lem iÁin ˛u anda sistemde kurulu  olmayan  %PRODUCTNAME program mod¸l¸ gerekli.";
+    Message[ arabic ] = "The action couldn't be executed. The %PRODUCTNAME program module, needed for this action, is currently not installed.";
+    Message[ catalan ] = "No es pot executar l'acciÛ. El mÚdul de programa de l'%PRODUCTNAME necessari per aquesta acciÛ no est‡ instal∑lat.";
+    Message[ thai ] = "The action could not be executed. The %PRODUCTNAME program module needed for this action is currently not installed.";
+    Message[ czech ] = "Tuto ƒçinnost nelze vykonat. Vy≈æadovan√Ω programov√Ω modul %PRODUCTNAME nen√≠ nainstalov√°n.";
+    Message[ hebrew ] = "Die Aktion konnte nicht ausgef√ºhrt werden. Das daf√ºr ben√∂tigte %PRODUCTNAME Modul ist momentan nicht installiert.";
+    Message[ hindi ] = "The action could not be executed. The %PRODUCTNAME program module needed for this action is currently not installed.";
+    Message[ slovak ] = "Akcia sa ned√° vykona≈•. programov√Ω modul %PRODUCTNAME potrebn√Ω pre t√∫to akciu moment√°lne nie je nain≈°talovan√Ω";
+};
+
+ // Image-Listen ----------------------------------------------------------
+
+#define IMAGE_ID_LIST\
+    IdList = {\
+        SID_OPENURL;\
+        SID_BROWSE_BACKWARD;\
+        SID_BROWSE_FORWARD;\
+        SID_BROWSE_STOP;\
+        SID_BROWSE_HOME;\
+        SID_RELOAD;\
+        SID_EDITDOC;\
+        SID_SAVEDOC;\
+        SID_DOCINFO;\
+        SID_PRINTDOCDIRECT;\
+        SID_CUT;\
+        SID_COPY;\
+        SID_PASTE; \
+        SID_UNDO;\
+        SID_REDO;\
+        SID_EXPLORER;\
+        SID_NAVIGATOR;\
+        SID_STYLE_DESIGNER;\
+        SID_EXPLORER_CREATEFOLDER;\
+        SID_EXPLORER_CREATEBOOKMARK;\
+        SID_EXPLORER_CREATEWORKPLACE;\
+        SID_EXPLORER_CREATEDATABASE;\
+        SID_PROPERTIES;\
+        SID_EXPLORER_SHOWEXTENSION;\
+        SID_EXPLORER_MAIL_HEADER;\
+        SID_EXPLORER_MAIL_BODY;\
+        SID_EDIT_FRAMESET;\
+        SID_SPLIT_PARENT_HORIZONTAL;\
+        SID_SPLIT_PARENT_VERTICAL;\
+        SID_MODIFY_FRAME;\
+        SID_MAIL_DELETE;\
+        SID_MAIL_NEW;\
+        SID_MAIL_NEWWITHSERVER;\
+        SID_MAIL_FOLLOWUP;\
+        SID_MAIL_FILE;\
+        SID_MAIL_NEXTDELETE;\
+        SID_MAIL_PREVDELETE;\
+        SID_MAIL_ATTACH_FILE;\
+        SID_MAIL_ALLNEWSGROUPS;\
+        SID_MAIL_SIGNATURE;\
+        SID_BASICCOMPILE ; \
+        SID_BASICRUN ;     \
+        SID_BASICSTOP ;    \
+        SID_BASICSTEPINTO ;\
+        SID_BASICSTEPOVER ;\
+        SID_BASICSTEPOUT;  \
+        SID_BASICIDE_TOGGLEBRKPNT ; \
+        SID_BASICIDE_MANAGEBRKPNTS; \
+        SID_BASICIDE_ADDWATCH ;     \
+        SID_BASICIDE_OBJCAT ;       \
+        SID_BASICIDE_CHOOSEMACRO ;  \
+        SID_BASICIDE_MODULEDLG ;    \
+        SID_BASICIDE_MATCHGROUP ;   \
+        SID_BASICLOAD ; \
+        SID_BASICSAVEAS ; \
+        SID_CHOOSE_CONTROLS;        \
+        SID_INSERT_PUSHBUTTON;      \
+        SID_INSERT_CHECKBOX;        \
+        SID_INSERT_RADIOBUTTON;     \
+        SID_INSERT_FIXEDTEXT;       \
+        SID_INSERT_EDIT;            \
+        SID_INSERT_LISTBOX;         \
+        SID_INSERT_COMBOBOX;        \
+        SID_INSERT_HSCROLLBAR ;     \
+        SID_INSERT_VSCROLLBAR ;     \
+        SID_INSERT_GROUPBOX;        \
+        SID_SHOW_PROPERTYBROWSER;   \
+        SID_DIALOG_TESTMODE;        \
+        SID_SHOW_HIDDEN ;           \
+        SID_INSERT_IMAGECONTROL ;   \
+        SID_INSERT_PROGRESSBAR ;    \
+        SID_INSERT_HFIXEDLINE ;     \
+        SID_INSERT_VFIXEDLINE ;     \
+        SID_INSERT_DATEFIELD ;     \
+        SID_INSERT_TIMEFIELD ;     \
+        SID_INSERT_NUMERICFIELD ;     \
+        SID_INSERT_CURRENCYFIELD ;     \
+        SID_INSERT_FORMATTEDFIELD ;     \
+        SID_INSERT_PATTERNFIELD ;     \
+        SID_INSERT_FILECONTROL ;     \
+        SID_OBJECT_SELECT;          \
+        SID_INSERT_SELECT;          \
+        SID_RECORDMACRO;\
+        SID_WIN_FULLSCREEN;\
+        SID_PLUGINS_ACTIVE;\
+        SID_HYPERLINK_INSERT;\
+        SID_BROWSER_MODE;\
+        SID_IMAP;\
+        SID_SETUPPRINTER;\
+        SID_EXITANDRETURN;\
+        SID_HELPMENU;\
+        SID_NEWDOC;\
+        FN_FAX; \
+        SID_NEWDOCDIRECT;\
+        SID_OPENDOC;\
+        SID_SAVEASDOC;\
+        SID_CLOSEDOC;  \
+        SID_PRINTDOC;   \
+        SID_REPEAT;\
+        SID_DELETE;\
+        SID_ATTR_CHAR;    \
+        SID_ATTR_CHAR_POSTURE;\
+        SID_ATTR_CHAR_WEIGHT; \
+        SID_ATTR_CHAR_CONTOUR;\
+        SID_ATTR_CHAR_UNDERLINE;\
+        SID_ATTR_CHAR_COLOR;    \
+        SID_ATTR_PARA_ADJUST_LEFT;\
+        SID_ATTR_PARA_ADJUST_RIGHT;\
+        SID_ATTR_PARA_ADJUST_CENTER;\
+        SID_ATTR_PARA_ADJUST_BLOCK; \
+        SID_ATTR_PARA_LINESPACE_10;\
+        SID_ATTR_PARA_LINESPACE_15;\
+        SID_ATTR_PARA_LINESPACE_20;\
+        SID_ATTR_TRANSFORM;        \
+        SID_ZOOM_TOOLBOX;          \
+        SID_ZOOM_OUT;              \
+        SID_ZOOM_IN;               \
+        SID_SIZE_REAL;             \
+        SID_SIZE_PAGE;             \
+        SID_SIZE_ALL;              \
+        SID_DRAW_LINE;             \
+        SID_DRAW_XLINE;            \
+        SID_DRAW_RECT;             \
+        SID_DRAW_RECT_ROUND;       \
+        SID_DRAW_RECT_MOREROUND;   \
+        SID_DRAW_FULLRECT;         \
+        SID_DRAW_FULLRECT_ROUND;   \
+        SID_DRAW_FULLRECT_MOREROUND;\
+        SID_DRAW_ELLIPSE;           \
+        SID_DRAW_FULLELLIPSE;       \
+        SID_DRAW_PIE;               \
+        SID_DRAW_FULLPIE;           \
+        SID_DRAW_ARC;               \
+        SID_DRAW_CIRCLECUT;         \
+        SID_DRAW_FULLCIRCLECUT;     \
+        SID_DRAW_POLYGON;           \
+        SID_DRAW_POLYGON_NOFILL;    \
+        SID_DRAW_BEZIER_NOFILL;     \
+        SID_DRAW_BEZIER_FILL;       \
+        SID_DRAW_FREELINE_NOFILL;   \
+        SID_DRAW_SELECT;            \
+        SID_DRAW_TEXT;              \
+        SID_DRAW_TEXT_VERTICAL;     \
+        SID_DRAW_TEXT_MARQUEE;      \
+        SID_DRAW_CAPTION;           \
+        SID_DRAW_CAPTION_VERTICAL;  \
+        SID_BEZIER_INSERT;          \
+        SID_BEZIER_DELETE;          \
+        SID_BEZIER_MOVE;            \
+        SID_BEZIER_CLOSE;           \
+        SID_BEZIER_SMOOTH;          \
+        SID_BEZIER_APPEND;          \
+        SID_BEZIER_OPEN;            \
+        SID_BEZIER_EDIT;            \
+        SID_BEZIER_CUTLINE;         \
+        SID_BEZIER_CONVERT;         \
+        SID_BEZIER_EDGE;            \
+        SID_BEZIER_SYMMTR;          \
+        SID_BEZIER_ELIMINATE_POINTS;\
+        SID_OBJECT_ROTATE;          \
+        SID_OBJECT_ALIGN;           \
+        SID_OBJECT_ALIGN_LEFT;      \
+        SID_OBJECT_ALIGN_CENTER;    \
+        SID_OBJECT_ALIGN_RIGHT;     \
+        SID_OBJECT_ALIGN_UP;        \
+        SID_OBJECT_ALIGN_MIDDLE;    \
+        SID_OBJECT_ALIGN_DOWN;      \
+        SID_GROUP;                  \
+        SID_UNGROUP;                \
+        SID_ENTER_GROUP;            \
+        SID_LEAVE_GROUP;            \
+        SID_COPY_FORMAT;            \
+        SID_PASTE_FORMAT;           \
+        SID_INSERT_ORGANIGRAM;      \
+        SID_INSERT_DIAGRAM;         \
+        SID_INSERT_TABLE;           \
+        SID_ATTRIBUTES_AREA;        \
+        SID_ATTRIBUTES_LINE;        \
+        SID_ACTIVATE_CONTROLS;      \
+        SID_OUTLINE_UP;             \
+        SID_OUTLINE_DOWN;           \
+        SID_OUTLINE_LEFT;           \
+        SID_OUTLINE_RIGHT;          \
+        SID_OUTLINE_FORMAT;         \
+        SID_OUTLINE_BULLET;         \
+        SID_PRESENTATION;           \
+        SID_TIMER;                  \
+        SID_REHEARSE_TIMINGS;       \
+        SID_DIA;                    \
+        SID_HIDE_SLIDE;             \
+        SID_CHOOSE_POLYGON;         \
+        SID_DEC_INDENT;             \
+        SID_INC_INDENT;             \
+        SID_INSERT_OBJECT;          \
+        SID_INSERT_PLUGIN;          \
+        SID_INSERT_APPLET;          \
+        SID_SOURCEVIEW;             \
+        SID_HELP_PI;                \
+        SID_HELP_SEARCH;            \
+        SID_HELP_ANNOTATE;          \
+        SID_HELP_BOOKMARK;          \
+        SID_HELP_ZOOMIN;            \
+        SID_HELP_ZOOMOUT;           \
+        SID_FM_PUSHBUTTON; \
+        SID_FM_RADIOBUTTON; \
+        SID_FM_CHECKBOX; \
+        SID_FM_FIXEDTEXT; \
+        SID_FM_GROUPBOX; \
+        SID_FM_EDIT; \
+        SID_FM_LISTBOX; \
+        SID_FM_COMBOBOX; \
+        SID_FM_CTL_PROPERTIES; \
+        SID_FM_PROPERTIES; \
+        SID_FM_TAB_DIALOG; \
+        SID_FM_CONFIG; \
+        SID_FM_RECORD_FIRST; \
+        SID_FM_RECORD_PREV; \
+        SID_FM_RECORD_NEXT; \
+        SID_FM_RECORD_LAST; \
+        SID_FM_RECORD_NEW; \
+        SID_FM_RECORD_DELETE; \
+        SID_FM_ADD_FIELD; \
+        SID_FM_RECORD_SAVE; \
+        SID_FM_DESIGN_MODE; \
+        SID_FM_RECORD_UNDO; \
+        SID_FM_SHOW_FMEXPLORER; \
+        SID_FM_DBGRID;  \
+        SID_FM_IMAGEBUTTON; \
+        SID_FM_FILECONTROL; \
+        SID_FM_DATEFIELD; \
+        SID_FM_TIMEFIELD; \
+        SID_FM_NUMERICFIELD; \
+        SID_FM_CURRENCYFIELD; \
+        SID_FM_PATTERNFIELD; \
+        SID_FM_IMAGECONTROL; \
+        SID_HLINKBAR_LINK; \
+        SID_HLINKBAR_SEARCH; \
+        SID_HLINKBAR_TARGET; \
+        FN_NUM_BULLET_ON;    \
+        FN_NUM_NUMBERING_ON; \
+        SID_FM_SEARCH; \
+        SID_FM_OPEN_READONLY; \
+        SID_FM_USE_WIZARDS; \
+        SID_HELPLINES_MOVE; \
+        SID_GRID_USE; \
+        SID_GRID_VISIBLE; \
+        SID_PGP_DECODE; \
+        SID_FM_RECORD_ABSOLUTE; \
+        SID_FM_FORM_FILTERED; \
+        SID_FM_FORMATTEDFIELD; \
+        SID_FM_FILTER_START; \
+        SID_FM_FILTER_NAVIGATOR; \
+        SID_FM_FILTER_EXECUTE; \
+        SID_FM_FILTER_REMOVE; \
+        SID_FM_VIEW_AS_GRID; \
+        SID_HYPERLINK_DIALOG; \
+        SID_FM_AUTOCONTROLFOCUS;\
+        SID_GALLERY;\
+        SID_GRFFILTER;\
+        SID_GRFFILTER_INVERT;\
+        SID_GRFFILTER_SMOOTH;\
+        SID_GRFFILTER_SHARPEN;\
+        SID_GRFFILTER_REMOVENOISE;\
+        SID_GRFFILTER_SOBEL;\
+        SID_GRFFILTER_MOSAIC;\
+        SID_GRFFILTER_EMBOSS;\
+        SID_GRFFILTER_POSTER;\
+        SID_GRFFILTER_POPART;\
+        SID_GRFFILTER_SEPIA;\
+        SID_GRFFILTER_SOLARIZE;\
+        SID_ATTR_GRAF_CROP;\
+        SID_ATTR_GRAF_LUMINANCE;\
+        SID_ATTR_GRAF_CONTRAST;\
+        SID_ATTR_GRAF_RED;\
+        SID_ATTR_GRAF_GREEN;\
+        SID_ATTR_GRAF_BLUE;\
+        SID_ATTR_GRAF_GAMMA;\
+        SID_ATTR_GRAF_TRANSPARENCE;\
+        SID_ATTR_GRAF_INVERT;\
+        SID_ATTR_GRAF_MODE;\
+        SID_TEXTDIRECTION_LEFT_TO_RIGHT;\
+        SID_TEXTDIRECTION_TOP_TO_BOTTOM;\
+        SID_VIEW_DATA_SOURCE_BROWSER;\
+        SID_INSERT_SOUND;\
+        SID_INSERT_VIDEO;\
+        SID_QUITAPP;\
+        SID_SELECTALL;\
+        SID_ATTR_PARA_LEFT_TO_RIGHT;\
+        SID_ATTR_PARA_RIGHT_TO_LEFT;\
+        SID_DIRECTEXPORTDOCASPDF;\
+        SID_ADDONS;\
+    };\
+    IdCount = {\
+        290;\
+    };
+
+#define OFFICE_ID_LIST\
+    IdList = {\
+        SID_EXPLORER_CREATELINK;\
+        SID_PLUGINS_ACTIVE;\
+        SID_HYPERLINK_INSERT;\
+        SID_BROWSER_MODE;\
+        SID_IMAP;\
+        SID_QUITAPP;\
+        SID_SETUPPRINTER;\
+        SID_EXITANDRETURN;\
+        SID_HELPMENU;\
+        SID_OPENDOC;\
+        SID_SAVEASDOC;\
+        SID_CLOSEDOC;  \
+        SID_PRINTDOC;   \
+        SID_REPEAT;\
+        SID_DELETE;\
+        SID_SELECTALL;\
+        SID_EDITMACRO;  \
+        SID_CONFIGTOOLBOX;\
+        SID_ATTR_CHAR;    \
+        SID_ATTR_CHAR_POSTURE;\
+        SID_ATTR_CHAR_WEIGHT; \
+        SID_ATTR_CHAR_CONTOUR;\
+        SID_ATTR_CHAR_UNDERLINE;\
+        SID_ATTR_CHAR_COLOR;    \
+        SID_ATTR_PARA_ADJUST_LEFT;\
+        SID_ATTR_PARA_ADJUST_RIGHT;\
+        SID_ATTR_PARA_ADJUST_CENTER;\
+        SID_ATTR_PARA_ADJUST_BLOCK; \
+        SID_ATTR_PARA_LINESPACE_10;\
+        SID_ATTR_PARA_LINESPACE_15;\
+        SID_ATTR_PARA_LINESPACE_20;\
+        SID_ATTR_TRANSFORM;        \
+        SID_ZOOM_TOOLBOX;          \
+        SID_ZOOM_OUT;              \
+        SID_ZOOM_IN;               \
+        SID_SIZE_REAL;             \
+        SID_SIZE_PAGE;             \
+        SID_SIZE_ALL;              \
+        SID_DRAW_LINE;             \
+        SID_DRAW_XLINE;            \
+        SID_DRAW_RECT;             \
+        SID_DRAW_RECT_ROUND;       \
+        SID_DRAW_RECT_MOREROUND;   \
+        SID_DRAW_FULLRECT;         \
+        SID_DRAW_FULLRECT_ROUND;   \
+        SID_DRAW_FULLRECT_MOREROUND;\
+        SID_DRAW_ELLIPSE;           \
+        SID_DRAW_FULLELLIPSE;       \
+        SID_DRAW_PIE;               \
+        SID_DRAW_FULLPIE;           \
+        SID_DRAW_ARC;               \
+        SID_DRAW_CIRCLECUT;         \
+        SID_DRAW_FULLCIRCLECUT;     \
+        SID_DRAW_POLYGON;           \
+        SID_DRAW_POLYGON_NOFILL;    \
+        SID_DRAW_BEZIER_NOFILL;     \
+        SID_DRAW_BEZIER_FILL;       \
+        SID_DRAW_FREELINE_NOFILL;   \
+        SID_DRAW_SELECT;            \
+        SID_DRAW_TEXT;              \
+        SID_DRAW_TEXT_VERTICAL;     \
+        SID_DRAW_TEXT_MARQUEE;      \
+        SID_DRAW_CAPTION;           \
+        SID_DRAW_CAPTION_VERTICAL;  \
+        SID_BEZIER_INSERT;          \
+        SID_BEZIER_DELETE;          \
+        SID_BEZIER_MOVE;            \
+        SID_BEZIER_CLOSE;           \
+        SID_BEZIER_SMOOTH;          \
+        SID_BEZIER_APPEND;          \
+        SID_BEZIER_OPEN;            \
+        SID_BEZIER_EDIT;            \
+        SID_BEZIER_CUTLINE;         \
+        SID_OBJECT_ROTATE;          \
+        SID_OBJECT_ALIGN;           \
+        SID_OBJECT_ALIGN_LEFT;      \
+        SID_OBJECT_ALIGN_CENTER;    \
+        SID_OBJECT_ALIGN_RIGHT;     \
+        SID_OBJECT_ALIGN_UP;        \
+        SID_OBJECT_ALIGN_MIDDLE;    \
+        SID_OBJECT_ALIGN_DOWN;      \
+        SID_COPY_FORMAT;            \
+        SID_PASTE_FORMAT;           \
+        SID_INSERT_ORGANIGRAM;      \
+        SID_INSERT_DIAGRAM;         \
+        SID_INSERT_TABLE;           \
+        SID_ATTRIBUTES_AREA;        \
+        SID_ATTRIBUTES_LINE;        \
+        SID_ACTIVATE_CONTROLS;      \
+        SID_OUTLINE_UP;             \
+        SID_OUTLINE_DOWN;           \
+        SID_OUTLINE_LEFT;           \
+        SID_OUTLINE_RIGHT;          \
+        SID_OUTLINE_FORMAT;         \
+        SID_OUTLINE_BULLET;         \
+        SID_PRESENTATION;           \
+        SID_TIMER;                  \
+        SID_REHEARSE_TIMINGS;       \
+        SID_DIA;                    \
+        SID_HIDE_SLIDE;             \
+        SID_CHOOSE_POLYGON;         \
+    };\
+    IdCount = {\
+        101;\
+    };
+#ifndef IMAGE_STDBTN_COLOR
+#define IMAGE_STDBTN_COLOR Color { Red = 0xC000; Green = 0xC000; Blue = 0xC000; }
+#endif
+
+ImageList RID_DEFAULTIMAGELIST_SC
+{
+    ImageBitmap = Bitmap
+    {
+        File = "sc_out.bmp" ;
+        File [ english ] = "sc_out01.bmp" ;
+        File [ english_us ] = "sc_out01.bmp" ;
+        File [ dutch ] = "sc_out31.bmp" ;
+        File [ french ] = "sc_out33.bmp" ;
+        File [ spanish ] = "sc_out34.bmp" ;
+        File [ italian ] = "sc_out39.bmp" ;
+        File [ swedish ] = "sc_out46.bmp" ;
+        File [ danish ] = "sc_out45.bmp" ;
+        File [ russian ] = "sc_out07.bmp";
+        File [ polish ] = "sc_out48.bmp";
+        File [ greek ] = "sc_out30.bmp";
+        File [ japanese ] = "sc_out81.bmp";
+        File [ portuguese ] = "sc_out03.bmp" ;
+        File [ portuguese_brazilian ] = "sc_out55.bmp" ;
+        File [ turkish ] = "sc_out90.bmp" ;
+        File [ chinese_simplified ] = "sc_out86.bmp";
+        File [ chinese_traditional ] = "sc_out88.bmp";
+        File [ korean ] = "sc_out82.bmp";
+        File [ arabic ] = "sc_out96.bmp";
+        File [ czech ] = "sc_out42.bmp";
+        File [ slovak ] = "sc_out43.bmp";
+    };
+    MASKCOLOR
+    IMAGE_ID_LIST
+};
+
+ImageList RID_DEFAULTIMAGELIST_LC
+{
+    ImageBitmap = Bitmap
+    {
+        File = "lc_out.bmp" ;
+        File [ english ] = "lc_out01.bmp" ;
+        File [ english_us ] = "lc_out01.bmp" ;
+        File [ dutch ] = "lc_out31.bmp" ;
+        File [ french ] = "lc_out33.bmp" ;
+        File [ spanish ] = "lc_out34.bmp" ;
+        File [ italian ] = "lc_out39.bmp" ;
+        File [ swedish ] = "lc_out46.bmp" ;
+        File [ danish ] = "lc_out45.bmp" ;
+        File [ russian ] = "lc_out07.bmp";
+        File [ polish ] = "lc_out48.bmp";
+        File [ greek ] = "lc_out30.bmp";
+        File [ japanese ] = "lc_out81.bmp";
+        File [ portuguese ] = "lc_out03.bmp" ;
+        File [ portuguese_brazilian ] = "lc_out55.bmp" ;
+        File [ turkish ] = "lc_out90.bmp" ;
+        File [ chinese_simplified ] = "lc_out86.bmp";
+        File [ chinese_traditional ] = "lc_out88.bmp";
+        File [ korean ] = "lc_out82.bmp";
+        File [ arabic ] = "lc_out96.bmp";
+        File [ czech ] = "lc_out42.bmp";
+        File [ slovak ] = "lc_out43.bmp";
+    };
+    MASKCOLOR
+    IMAGE_ID_LIST
+};
+
+ImageList RID_OFFICEIMAGELIST_SC
+{
+    ImageBitmap = Bitmap
+    {
+        File = "sc_off.bmp" ;
+        File [ english ] = "sc_off01.bmp" ;
+        File [ english_us ] = "sc_off01.bmp" ;
+        File [ dutch ] = "sc_off31.bmp" ;
+        File [ french ] = "sc_off33.bmp" ;
+        File [ spanish ] = "sc_off34.bmp" ;
+        File [ italian ] = "sc_off39.bmp" ;
+        File [ swedish ] = "sc_off46.bmp" ;
+        File [ danish ] = "sc_off45.bmp" ;
+        File [ russian ] = "sc_off07.bmp";
+        File [ polish ] = "sc_off48.bmp";
+        File [ greek ] = "sc_off30.bmp";
+        File [ japanese ] = "sc_off81.bmp";
+        File [ portuguese ] = "sc_off03.bmp" ;
+        File [ portuguese_brazilian ] = "sc_off55.bmp" ;
+        File [ turkish ] = "sc_off90.bmp" ;
+        File [ chinese_simplified ] = "sc_off86.bmp";
+        File [ chinese_traditional ] = "sc_off88.bmp";
+        File [ korean ] = "sc_off82.bmp";
+        File [ arabic ] = "sc_off96.bmp";
+        File [ czech ] = "sc_off42.bmp";
+        File [ slovak ] = "sc_off43.bmp";
+    };
+    MASKCOLOR
+    OFFICE_ID_LIST
+};
+
+ImageList RID_OFFICEIMAGELIST_LC
+{
+    ImageBitmap = Bitmap
+    {
+        File = "lc_off.bmp" ;
+        File [ english ] = "lc_off01.bmp" ;
+        File [ english_us ] = "lc_off01.bmp" ;
+        File [ dutch ] = "lc_off31.bmp" ;
+        File [ french ] = "lc_off33.bmp" ;
+        File [ spanish ] = "lc_off34.bmp" ;
+        File [ italian ] = "lc_off39.bmp" ;
+        File [ swedish ] = "lc_off46.bmp" ;
+        File [ danish ] = "lc_off45.bmp" ;
+        File [ russian ] = "lc_off07.bmp";
+        File [ polish ] = "lc_off48.bmp";
+        File [ greek ] = "lc_off30.bmp";
+        File [ japanese ] = "lc_off81.bmp";
+        File [ portuguese ] = "lc_off03.bmp" ;
+        File [ portuguese_brazilian ] = "lc_off55.bmp" ;
+        File [ turkish ] = "lc_off90.bmp" ;
+        File [ chinese_simplified ] = "lc_off86.bmp";
+        File [ chinese_traditional ] = "lc_off88.bmp";
+        File [ korean ] = "lc_off82.bmp";
+        File [ arabic ] = "lc_off96.bmp";
+        File [ czech ] = "lc_off42.bmp";
+        File [ slovak ] = "lc_off43.bmp";
+    };
+    MASKCOLOR
+    OFFICE_ID_LIST
+};
+
+ImageList RID_DEFAULTIMAGELIST_SCH
+{
+    ImageBitmap = Bitmap
+    {
+        File = "schout.bmp" ;
+        File [ english ] = "schout01.bmp" ;
+        File [ english_us ] = "schout01.bmp" ;
+        File [ dutch ] = "schout31.bmp" ;
+        File [ french ] = "schout33.bmp" ;
+        File [ spanish ] = "schout34.bmp" ;
+        File [ italian ] = "schout39.bmp" ;
+        File [ swedish ] = "schout46.bmp" ;
+        File [ danish ] = "schout45.bmp" ;
+        File [ russian ] = "schout07.bmp";
+        File [ polish ] = "schout48.bmp";
+        File [ greek ] = "schout30.bmp";
+        File [ japanese ] = "schout81.bmp";
+        File [ portuguese ] = "schout03.bmp" ;
+        File [ portuguese_brazilian ] = "schout55.bmp" ;
+        File [ turkish ] = "schout90.bmp" ;
+        File [ chinese_simplified ] = "schout86.bmp";
+        File [ chinese_traditional ] = "schout88.bmp";
+        File [ korean ] = "schout82.bmp";
+        File [ arabic ] = "schout96.bmp";
+        File [ czech ] = "schout42.bmp";
+        File [ slovak ] = "schout43.bmp";
+    };
+    MASKCOLOR
+    IMAGE_ID_LIST
+};
+
+ImageList RID_DEFAULTIMAGELIST_LCH
+{
+    ImageBitmap = Bitmap
+    {
+        File = "lchout.bmp" ;
+        File [ english ] = "lchout01.bmp" ;
+        File [ english_us ] = "lchout01.bmp" ;
+        File [ dutch ] = "lchout31.bmp" ;
+        File [ french ] = "lchout33.bmp" ;
+        File [ spanish ] = "lchout34.bmp" ;
+        File [ italian ] = "lchout39.bmp" ;
+        File [ swedish ] = "lchout46.bmp" ;
+        File [ danish ] = "lchout45.bmp" ;
+        File [ russian ] = "lchout07.bmp";
+        File [ polish ] = "lchout48.bmp";
+        File [ greek ] = "lchout30.bmp";
+        File [ japanese ] = "lchout81.bmp";
+        File [ portuguese ] = "lchout03.bmp" ;
+        File [ portuguese_brazilian ] = "lchout55.bmp" ;
+        File [ turkish ] = "lchout90.bmp" ;
+        File [ chinese_simplified ] = "lchout86.bmp";
+        File [ chinese_traditional ] = "lchout88.bmp";
+        File [ korean ] = "lchout82.bmp";
+        File [ arabic ] = "lchout96.bmp";
+        File [ czech ] = "lchout42.bmp";
+        File [ slovak ] = "lchout43.bmp";
+    };
+    MASKCOLOR
+    IMAGE_ID_LIST
+};
+
+ImageList RID_OFFICEIMAGELIST_SCH
+{
+    ImageBitmap = Bitmap
+    {
+        File = "schoff.bmp" ;
+        File [ english ] = "schoff01.bmp" ;
+        File [ english_us ] = "schoff01.bmp" ;
+        File [ dutch ] = "schoff31.bmp" ;
+        File [ french ] = "schoff33.bmp" ;
+        File [ spanish ] = "schoff34.bmp" ;
+        File [ italian ] = "schoff39.bmp" ;
+        File [ swedish ] = "schoff46.bmp" ;
+        File [ danish ] = "schoff45.bmp" ;
+        File [ russian ] = "schoff07.bmp";
+        File [ polish ] = "schoff48.bmp";
+        File [ greek ] = "schoff30.bmp";
+        File [ japanese ] = "schoff81.bmp";
+        File [ portuguese ] = "schoff03.bmp" ;
+        File [ portuguese_brazilian ] = "schoff55.bmp" ;
+        File [ turkish ] = "schoff90.bmp" ;
+        File [ chinese_simplified ] = "schoff86.bmp";
+        File [ chinese_traditional ] = "schoff88.bmp";
+        File [ korean ] = "schoff82.bmp";
+        File [ arabic ] = "schoff96.bmp";
+        File [ czech ] = "schoff42.bmp";
+        File [ slovak ] = "schoff43.bmp";
+    };
+    MASKCOLOR
+    OFFICE_ID_LIST
+};
+
+ImageList RID_OFFICEIMAGELIST_LCH
+{
+    ImageBitmap = Bitmap
+    {
+        File = "lchoff.bmp" ;
+        File [ english ] = "lchoff01.bmp" ;
+        File [ english_us ] = "lchoff01.bmp" ;
+        File [ dutch ] = "lchoff31.bmp" ;
+        File [ french ] = "lchoff33.bmp" ;
+        File [ spanish ] = "lchoff34.bmp" ;
+        File [ italian ] = "lchoff39.bmp" ;
+        File [ swedish ] = "lchoff46.bmp" ;
+        File [ danish ] = "lchoff45.bmp" ;
+        File [ russian ] = "lchoff07.bmp";
+        File [ polish ] = "lchoff48.bmp";
+        File [ greek ] = "lchoff30.bmp";
+        File [ japanese ] = "lchoff81.bmp";
+        File [ portuguese ] = "lchoff03.bmp" ;
+        File [ portuguese_brazilian ] = "lchoff55.bmp" ;
+        File [ turkish ] = "lchoff90.bmp" ;
+        File [ chinese_simplified ] = "lchoff86.bmp";
+        File [ chinese_traditional ] = "lchoff88.bmp";
+        File [ korean ] = "lchoff82.bmp";
+        File [ arabic ] = "lchoff96.bmp";
+        File [ czech ] = "lchoff42.bmp";
+        File [ slovak ] = "lchoff43.bmp";
+    };
+    MASKCOLOR
+    OFFICE_ID_LIST
+};
+
+ // Strings ---------------------------------------------------------------
+
+
+
+#define MN_EDIT 20
+#define MN_VIEW 21
+#define MN_EXTRA 22
+#define MN_WIN 30
+#define MN_HELP 31
+#define MN_TEMPLATES 11
+
+Menu RID_DEFAULTMENU
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            ITEM_FILE_PICKLIST
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        ITEM_FILE_NEWDOC
+                    };
+                    MenuItem
+                    {
+                        ITEM_FILE_OPENDOC
+                    };
+                    ITEM_FILE_AUTOPILOT
+                    MenuItem
+                    {
+                        Separator = TRUE ;
+                    };
+                    MenuItem
+                    {
+                        ITEM_FILE_CLOSEDOC
+                    };
+                    MenuItem
+                    {
+                        ITEM_FILE_SAVEDOC
+                    };
+                    MenuItem
+                    {
+                        ITEM_FILE_SAVEASDOC
+                    };
+                    MenuItem
+                    {
+                        ITEM_FILE_SAVEDOCS
+                    };
+                    MenuItem
+                    {
+                        ITEM_FILE_MAIL_SENDDOC
+                    };
+                    MenuItem
+                    {
+                        ITEM_FILE_DOCTEMPLATE
+                    };
+
+                    MenuItem
+                    {
+                        Separator = TRUE ;
+                    };
+                    MenuItem
+                    {
+                        ITEM_FILE_DOCINFO
+                    };
+                    MenuItem
+                    {
+                        Separator = TRUE ;
+                    };
+                    MenuItem
+                    {
+                        ITEM_FILE_PRINTDOC
+                    };
+                    MenuItem
+                    {
+                        ITEM_FILE_SETUPPRINTER
+                    };
+                    MenuItem
+                    {
+                        Separator = TRUE ;
+                    };
+                    MenuItem
+                    {
+                        ITEM_FILE_QUITAPP
+                    };
+                };
+            };
+        };
+        MenuItem
+        {
+            Identifier = MN_EDIT ;
+            Text = "~Bearbeiten" ;
+            Text [ English ] = "~Edit" ;
+            Text [ norwegian ] = "~Rediger" ;
+            Text [ italian ] = "~Modifica" ;
+            Text [ portuguese_brazilian ] = "~Editar" ;
+            Text [ portuguese ] = "~Editar" ;
+            Text [ finnish ] = "~Muokkaa" ;
+            Text [ danish ] = "~Rediger" ;
+            Text [ french ] = "~…dition" ;
+            Text [ swedish ] = "~Redigera" ;
+            Text [ dutch ] = "Be~werken" ;
+            Text [ spanish ] = "~Editar" ;
+            Text [ english_us ] = "~Edit" ;
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        ITEM_EDIT_UNDO
+                    };
+                    MenuItem
+                    {
+                        Separator = TRUE ;
+                    };
+                    MenuItem
+                    {
+                        ITEM_EDIT_CUT
+                    };
+                    MenuItem
+                    {
+                        ITEM_EDIT_COPY
+                    };
+                    MenuItem
+                    {
+                        ITEM_EDIT_PASTE
+                    };
+                };
+            };
+            Text[ chinese_simplified ] = "ÁºñËæë(~E)";
+            Text[ russian ] = "~œ‡‚Í‡";
+            Text[ polish ] = "~Edytuj";
+            Text[ japanese ] = "Á∑®ÈõÜ(~E)";
+            Text[ chinese_traditional ] = "Á∑®ËºØ(~E)";
+            Text[ dutch ] = "Be~werken";
+            Text[ chinese_simplified ] = "ÁºñËæë(~E)";
+            Text[ greek ] = "~≈ÂÓÂÒ„·Ûﬂ·";
+            Text[ korean ] = "Ìé∏Ïßë(~E)";
+            Text[ arabic ] = "~ Õ—Ì—";
+            Text[ turkish ] = "D¸~zenle";
+            Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Edita";
+            Text[ thai ] = "‡πÅ~‡∏Å‡πâ‡πÑ‡∏Ç";
+            Text[ czech ] = "√ö~pravy";
+            Text[ hebrew ] = "‚ÄÆ◊¢◊®◊ô◊õ◊î‚Ä¨";
+            Text[ hindi ] = "~‡§∏‡§Ç‡§™‡§æ‡§¶‡§®";
+            Text[ slovak ] = "√ö~pravy";
+        };
+        MenuItem
+        {
+            Identifier = MN_EXTRA ;
+            Text = "E~xtras" ;
+            Text [ English ] = "T~ools" ;
+            Text [ norwegian ] = "Verk~t¯y" ;
+            Text [ italian ] = "~Strumenti" ;
+            Text [ portuguese_brazilian ] = "F~erramentas" ;
+            Text [ portuguese ] = "Ferra~mentas" ;
+            Text [ finnish ] = "Ty~ˆkalut" ;
+            Text [ danish ] = "Fun~ktioner" ;
+            Text [ french ] = "~Outils" ;
+            Text [ swedish ] = "~Verktyg" ;
+            Text [ dutch ] = "E~xtra" ;
+            Text [ spanish ] = "~Herramientas" ;
+            Text [ english_us ] = "~Tools" ;
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        ITEM_TOOLS_BASICCHOOSER
+                    };
+                    ITEM_MN_OPTIONS
+                };
+            };
+            Text[ chinese_simplified ] = "Â∑•ÂÖ∑(~T)";
+            Text[ russian ] = "~—Â‚ËÒ";
+            Text[ polish ] = "~NarzÍdzia";
+            Text[ japanese ] = "„ÉÑ„Éº„É´(~T)";
+            Text[ chinese_traditional ] = "Â∑•ÂÖ∑(~T)";
+            Text[ dutch ] = "E~xtra";
+            Text[ chinese_simplified ] = "Â∑•ÂÖ∑(~T)";
+            Text[ greek ] = "≈~Ò„·ÎÂﬂ·";
+            Text[ korean ] = "ÎèÑÍµ¨(~T)";
+            Text[ arabic ] = "√~œÊ« ";
+            Text[ turkish ] = "~AraÁlar";
+            Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Ei~nes";
+            Text[ thai ] = "‡πÄ~‡∏Ñ‡∏£‡∏∑‡πà‡∏≠‡∏á‡∏°‡∏∑‡∏≠";
+            Text[ czech ] = "~N√°stroje";
+            Text[ hebrew ] = "‚ÄÆ◊õ◊ú◊ô◊ù‚Ä¨";
+            Text[ hindi ] = "~‡§î‡§ú‡§º‡§æ‡§∞";
+            Text[ slovak ] = "N√°s~troje";
+        };
+        ITEM_WINDOW_MENU
+        ITEM_HELP_MENU
+    };
+};
+
+#define  ACC Accelerator
+#define ACCK AcceleratorItem
+
+ // die Acceleratoren
+
+ACC RID_DEFAULTACCEL
+{
+    ItemList =
+    {
+        AI_NEWDOC
+        AI_NEWDOCDIRECT
+        AI_OPENDOC
+        AI_SAVEDOC
+        AI_PRINTDOC
+        AI_QUITAPP
+        AI_CUT
+        AI_COPY
+        AI_PASTE
+        AI_DELETE
+        AI_SELECTALL
+        AI_SEARCH_DLG
+        AI_WIN_FULLSCREEN
+        AI_FOCUSURLBOX
+        AI_CLOSEWIN
+        ACC_CODE( SID_BASICBREAK, KEY_Q, TRUE, TRUE, FALSE )
+        ACC_CODE( SID_VIEW_DATA_SOURCE_BROWSER, KEY_F4, FALSE, FALSE, FALSE )
+        ACC_CODE( SID_FM_GRABCONTROLFOCUS, KEY_F5, FALSE, TRUE, FALSE )
+        ACC_CODE( SID_HANGUL_HANJA_CONVERSION, KEY_F7, TRUE, TRUE, FALSE )
+    };
+};
+
+String RID_DESKTOP
+{
+    Text = "%PRODUCTNAME" ;
+};
+
+String STR_SD_STAROFFICE_XML_DRAW
+{
+    Text = "%PRODUCTNAME XML (Draw)" ;
+    Text [ ENGLISH ] = "StarOffice XML (Draw)" ;
+    Text[ english_us ] = "%PRODUCTNAME XML (Draw)";
+    Text[ portuguese ] = "%PRODUCTNAME XML (Draw)";
+    Text[ russian ] = "%PRODUCTNAME XML (Draw)";
+    Text[ greek ] = "%PRODUCTNAME XML (Draw)";
+    Text[ dutch ] = "%PRODUCTNAME XML (Draw)";
+    Text[ french ] = "%PRODUCTNAME XML (Draw)";
+    Text[ spanish ] = "%PRODUCTNAME XML (Draw)";
+    Text[ italian ] = "%PRODUCTNAME XML (Draw)";
+    Text[ danish ] = "%PRODUCTNAME XML (Draw)";
+    Text[ swedish ] = "%PRODUCTNAME XML (Draw)";
+    Text[ polish ] = "%PRODUCTNAME XML (Draw)";
+    Text[ portuguese_brazilian ] = "%PRODUCTNAME XML (Draw)";
+    Text[ japanese ] = "%PRODUCTNAME XML (Draw)";
+    Text[ korean ] = "%PRODUCTNAME XML (Draw)";
+    Text[ chinese_simplified ] = "%PRODUCTNAME XML (Draw)";
+    Text[ chinese_traditional ] = "%PRODUCTNAME XML (Draw)";
+    Text[ turkish ] = "%PRODUCTNAME XML (Draw)";
+    Text[ arabic ] = "%PRODUCTNAME XML (Draw)";
+    Text[ catalan ] = "%PRODUCTNAME XML (Draw)";
+    Text[ finnish ] = "%PRODUCTNAME XML (Draw)";
+    Text[ thai ] = "%PRODUCTNAME XML (Draw)";
+    Text[ czech ] = "%PRODUCTNAME XML (Draw)";
+    Text[ hebrew ] = "%PRODUCTNAME XML (Draw)";
+    Text[ hindi ] = "%PRODUCTNAME XML (‡§∞‡•á‡§ñ‡§æ‡§ö‡§ø‡§§‡•ç‡§∞)";
+    Text[ slovak ] = "%PRODUCTNAME XML (Draw)";
+};
+
+String STR_SD_STAROFFICE_XML_IMPRESS
+{
+    Text = "%PRODUCTNAME XML (Impress)" ;
+    Text [ ENGLISH ] = "StarOffice XML (Impress)" ;
+    Text[ english_us ] = "%PRODUCTNAME XML (Impress)";
+    Text[ portuguese ] = "%PRODUCTNAME XML (Impress)";
+    Text[ russian ] = "%PRODUCTNAME XML (Impress)";
+    Text[ greek ] = "%PRODUCTNAME XML (Impress)";
+    Text[ dutch ] = "%PRODUCTNAME XML (Impress)";
+    Text[ french ] = "%PRODUCTNAME XML (Impress)";
+    Text[ spanish ] = "%PRODUCTNAME XML (Impress)";
+    Text[ italian ] = "%PRODUCTNAME XML (Impress)";
+    Text[ danish ] = "%PRODUCTNAME XML (Impress)";
+    Text[ swedish ] = "%PRODUCTNAME XML (Impress)";
+    Text[ polish ] = "%PRODUCTNAME XML (Impress)";
+    Text[ portuguese_brazilian ] = "%PRODUCTNAME XML (Impress)";
+    Text[ japanese ] = "%PRODUCTNAME XML (Impress)";
+    Text[ korean ] = "%PRODUCTNAME XML (Impress)";
+    Text[ chinese_simplified ] = "%PRODUCTNAME XML (Impress)";
+    Text[ chinese_traditional ] = "%PRODUCTNAME XML (Impress)";
+    Text[ turkish ] = "%PRODUCTNAME XML (Impress)";
+    Text[ arabic ] = "%PRODUCTNAME XML (Impress)";
+    Text[ catalan ] = "%PRODUCTNAME XML (Impress)";
+    Text[ finnish ] = "%PRODUCTNAME XML (Impress)";
+    Text[ thai ] = "%PRODUCTNAME XML (Impress)";
+    Text[ czech ] = "%PRODUCTNAME XML (Impress)";
+    Text[ hebrew ] = "%PRODUCTNAME XML (Impress)";
+    Text[ hindi ] = "%PRODUCTNAME XML (‡§á‡§Æ‡•ç‡§™‡•ç‡§∞‡•á‡§∏‡•ç‡§∏)";
+    Text[ slovak ] = "%PRODUCTNAME XML (Impress)";
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
