@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ama $ $Date: 2001-04-25 10:03:49 $
+ *  last change: $Author: os $ $Date: 2001-05-02 12:31:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -298,7 +298,6 @@ class SwDoc
     Timer       aChartTimer;            // der Timer fuers Update aller Charts
     Timer       aOLEModifiedTimer;      // Timer for update modified OLE-Objecs
     SwDBData    aDBData;                // database descriptor
-    ::com::sun::star::uno::Sequence <sal_Int8 > aSectionPasswd;
     ::com::sun::star::uno::Sequence <sal_Int8 > aRedlinePasswd;
     String      sTOIAutoMarkURL;        // ::com::sun::star::util::URL of table of index AutoMark file
     SvStringsDtor aPatternNms;          // Array fuer die Namen der Dokument-Vorlagen
@@ -1548,12 +1547,9 @@ public:
     void ChgSection( sal_uInt16 nSect, const SwSection&, const SfxItemSet* = 0, sal_Bool bPreventLinkUpdate = FALSE);
     String GetUniqueSectionName( const String* pChkStr = 0 ) const;
 
-        // Passwort fuer geschuetzte Bereiche erfragen/setzen
-    const ::com::sun::star::uno::Sequence <sal_Int8>&
-            GetSectionPasswd() const            { return aSectionPasswd; }
     void ChgSectionPasswd(
             const ::com::sun::star::uno::Sequence <sal_Int8>& rNew,
-            const SwSection* pSection = 0 );
+            const SwSection& rSection );
 
     // Pointer auf die SfxDocShell vom Doc, kann 0 sein !!!
           SwDocShell* GetDocShell()         { return pDocShell; }

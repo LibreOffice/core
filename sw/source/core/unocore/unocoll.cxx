@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocoll.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2001-03-23 13:40:12 $
+ *  last change: $Author: os $ $Date: 2001-05-02 12:35:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1272,12 +1272,8 @@ Sequence< OUString > SwXTextSections::getSupportedServiceNames(void) throw( Runt
 
   -----------------------------------------------------------------------*/
 SwXTextSections::SwXTextSections(SwDoc* pDoc) :
-    SwUnoCollection(pDoc),
-    nWrongPasswd(0)
+    SwUnoCollection(pDoc)
 {
-    aWrongPasswdTimer.SetTimeout(PASSWORD_STD_TIMEOUT);
-    aWrongPasswdTimer.SetTimeoutHdl(LINK(this, SwXTextSections, WrongPasswordTimerHdl));
-
 }
 /*-- 14.01.99 09:06:05---------------------------------------------------
 
@@ -1291,7 +1287,7 @@ SwXTextSections::~SwXTextSections()
 sal_Int32 SwXTextSections::getCount(void) throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    if(!IsValid() || GetDoc()->GetSectionPasswd().getLength())
+    if(!IsValid())
         throw uno::RuntimeException();
     const SwSectionFmts& rSectFmts = GetDoc()->GetSections();
     sal_uInt16 nCount = rSectFmts.Count();
@@ -1310,7 +1306,7 @@ uno::Any SwXTextSections::getByIndex(sal_Int32 nIndex)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     uno::Any aRet;
-    if(IsValid() && !GetDoc()->GetSectionPasswd().getLength())
+    if(IsValid())
     {
         SwSectionFmts& rFmts = GetDoc()->GetSections();
 
@@ -1346,7 +1342,7 @@ uno::Any SwXTextSections::getByName(const OUString& Name)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     uno::Any aRet;
-    if(IsValid()&& !GetDoc()->GetSectionPasswd().getLength())
+    if(IsValid())
     {
         String aName(Name);
         SwSectionFmts& rFmts = GetDoc()->GetSections();
@@ -1375,7 +1371,7 @@ uno::Sequence< OUString > SwXTextSections::getElementNames(void)
     throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    if(!IsValid() || GetDoc()->GetSectionPasswd().getLength())
+    if(!IsValid())
         throw uno::RuntimeException();
     sal_uInt16 nCount = GetDoc()->GetSections().Count();
     SwSectionFmts& rSectFmts = GetDoc()->GetSections();
@@ -1412,7 +1408,7 @@ sal_Bool SwXTextSections::hasByName(const OUString& Name)
     vos::OGuard aGuard(Application::GetSolarMutex());
     sal_Bool bRet = sal_False;
     String aName(Name);
-    if(IsValid()&& !GetDoc()->GetSectionPasswd().getLength())
+    if(IsValid())
     {
         SwSectionFmts& rFmts = GetDoc()->GetSections();
         for(sal_uInt16 i = 0; i < rFmts.Count(); i++)
@@ -1447,7 +1443,7 @@ sal_Bool SwXTextSections::hasElements(void) throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     sal_uInt16 nCount = 0;
-    if(IsValid()&& !GetDoc()->GetSectionPasswd().getLength())
+    if(IsValid())
     {
         SwSectionFmts& rFmts = GetDoc()->GetSections();
         nCount = rFmts.Count();
@@ -1455,74 +1451,6 @@ sal_Bool SwXTextSections::hasElements(void) throw( uno::RuntimeException )
     else
         throw uno::RuntimeException();
     return nCount > 0;
-}
-/* -----------------19.04.99 09:38-------------------
- *
- * --------------------------------------------------*/
-void SwXTextSections::protect(const OUString& rPassword)
-                            throw( uno::RuntimeException )
-{
-    if(IsValid())
-    {
-        if(GetDoc()->GetSectionPasswd().getLength())
-            throw uno::RuntimeException();
-        ::com::sun::star::uno::Sequence <sal_Int8> aPWD;
-        SvPasswordHelper::GetHashPassword( aPWD, rPassword );
-        GetDoc()->ChgSectionPasswd( aPWD );
-    }
-    else
-        throw uno::RuntimeException();
-}
-/* -----------------19.04.99 09:38-------------------
- *
- * --------------------------------------------------*/
-void SwXTextSections::unprotect(const OUString& rPassword)
-                        throw( IllegalArgumentException, uno::RuntimeException )
-{
-    if(aWrongPasswdTimer.IsActive() || !IsValid())
-        throw uno::RuntimeException();
-
-    ::com::sun::star::uno::Sequence <sal_Int8> aPWD, aEmptySeq;
-    SvPasswordHelper::GetHashPassword( aPWD, rPassword );
-    if( aPWD != GetDoc()->GetSectionPasswd() )
-    {
-        //hier sollen noch illegale Aufrufe abgefangen werden.
-        //wird das Passwort zum vierten Mal falsch eingegeben, dann
-        //wird per Timer gebremst
-        nWrongPasswd++;
-        sal_uInt32 nTimeout = PASSWORD_STD_TIMEOUT;
-        if(nWrongPasswd > 3)
-        {
-            nTimeout *= nWrongPasswd;
-            aWrongPasswdTimer.SetTimeout(nTimeout);
-            aWrongPasswdTimer.Start();
-        }
-        throw IllegalArgumentException();
-    }
-    nWrongPasswd = 0;
-    aWrongPasswdTimer.SetTimeout(PASSWORD_STD_TIMEOUT);
-    GetDoc()->ChgSectionPasswd( aEmptySeq );
-}
-/* -----------------19.04.99 09:38-------------------
- *
- * --------------------------------------------------*/
-sal_Bool SwXTextSections::isProtected(void) throw( uno::RuntimeException )
-{
-    sal_Bool bRet = sal_False;
-    if(IsValid())
-        bRet = 0 != GetDoc()->GetSectionPasswd().getLength();
-    else
-        throw uno::RuntimeException();
-    return bRet;
-}
-/* -----------------19.04.99 09:58-------------------
- *
- * --------------------------------------------------*/
-IMPL_LINK(SwXTextSections, WrongPasswordTimerHdl, Timer*, pTimer)
-{
-    if(nWrongPasswd)
-        nWrongPasswd--;
-    return 0;
 }
 /*-- 14.01.99 09:06:07---------------------------------------------------
 

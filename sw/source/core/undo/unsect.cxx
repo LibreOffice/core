@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unsect.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-08 21:20:32 $
+ *  last change: $Author: os $ $Date: 2001-05-02 12:35:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -510,10 +510,7 @@ void SwUndoChgSectPsswd::Undo( SwUndoIter& rIter )
         pSect = &pNd->GetSection();
         aCurr = pSect->GetPasswd();
     }
-    else
-        aCurr = rDoc.GetSectionPasswd();
-
-    rDoc.ChgSectionPasswd( aPasswd, pSect );
+    rDoc.ChgSectionPasswd( aPasswd, *pSect );
     aPasswd = aCurr;
 }
 
@@ -528,11 +525,14 @@ void SwUndoChgSectPsswd::Redo( SwUndoIter& rUndoIter )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/core/undo/unsect.cxx,v 1.3 2001-03-08 21:20:32 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/core/undo/unsect.cxx,v 1.4 2001-05-02 12:35:28 os Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2001/03/08 21:20:32  jp
+      change: old data transfer API to the new
+
       Revision 1.2  2001/03/02 14:36:12  jp
       password change: use sequence instead of string
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ama $ $Date: 2001-04-24 10:05:31 $
+ *  last change: $Author: os $ $Date: 2001-05-02 12:31:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -812,8 +812,7 @@ public:
         // Passwort fuer geschuetzte Bereiche erfragen/setzen
     void ChgSectionPasswd(
                 const ::com::sun::star::uno::Sequence <sal_Int8>& rNew,
-                const SwSection* pSect = 0 );
-    const ::com::sun::star::uno::Sequence <sal_Int8>& GetSectionPasswd() const;
+                const SwSection& rSect );
 
     String GetUniqueSectionName( const String* pChkStr = 0 ) const;
 

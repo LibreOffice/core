@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocoll.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-03-23 13:39:12 $
+ *  last change: $Author: os $ $Date: 2001-05-02 12:32:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,9 +69,6 @@
 #endif
 #ifndef _SV_TIMER_HXX
 #include <vcl/timer.hxx>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XPROTECTABLE_HPP_
-#include <com/sun/star/util/XProtectable.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -397,18 +394,9 @@ public:
 /*-----------------12.02.98 07:58-------------------
 
 --------------------------------------------------*/
-class SwXTextSections : public cppu::WeakImplHelper4
-<
-        ::com::sun::star::container::XNameAccess,
-        ::com::sun::star::lang::XServiceInfo,
-        ::com::sun::star::container::XIndexAccess,
-        ::com::sun::star::util::XProtectable
->,
-        public SwUnoCollection
+class SwXTextSections : public SwCollectionBaseClass,
+                        public SwUnoCollection
 {
-    Timer   aWrongPasswdTimer;
-    sal_uInt16  nWrongPasswd;
-    DECL_LINK(WrongPasswordTimerHdl, Timer*);
 public:
     SwXTextSections(SwDoc* pDoc);
     virtual ~SwXTextSections();
@@ -425,11 +413,6 @@ public:
     //XElementAccess
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL hasElements(  ) throw(::com::sun::star::uno::RuntimeException);
-
-    //XProtectable
-    virtual void SAL_CALL protect(const rtl::OUString& aPassword) throw( ::com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL unprotect(const rtl::OUString& aPassword) throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL isProtected(void) throw( ::com::sun::star::uno::RuntimeException );
 
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
