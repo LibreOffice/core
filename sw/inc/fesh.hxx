@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fesh.hxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:42:01 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:30:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -532,12 +532,13 @@ public:
 
     void MirrorSelection( BOOL bHorizontal );   //Bei FALSE Vertikal
 
-    //Umankern. erlaubt sind: FLY_PAGE und FLY_AT_CNTNT des enum RndStdIds aus
     //frmatr.hxx. Hier kein enum wg. Abhaengigkeiten
     //Der BOOL ist nur fuer internen Gebrauch! Anker wird nur - anhand der
     //aktuellen Dokumentposition - neu gesetzt aber nicht umgesetzt.
     void ChgAnchor( int eAnchorId, BOOL bSameOnly = FALSE,
                                    BOOL bPosCorr = TRUE );
+
+    BOOL SetDrawingAttr( SfxItemSet &rSet );
 
     // hole die selectierten DrawObj als Grafik (MetaFile/Bitmap)
     // Return-Wert besagt ob konvertiert wurde!!
