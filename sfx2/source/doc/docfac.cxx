@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfac.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-20 10:01:13 $
+ *  last change: $Author: as $ $Date: 2001-07-25 12:43:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,9 +228,13 @@ void SfxObjectFactory::DoInitFactory()
         else if ( aShortName.EqualsAscii( "message" ) )
             pImpl->pNameResId = new SfxResId( STR_DOCTYPENAME_MESSAGE );
 
-        DBG_ASSERT( pImpl->aServiceName.getLength(), "No service name - no filters!" )
-        SfxFilterContainer *pCont = GetFilterContainer();
-        pCont->ReadExternalFilters( pImpl->aServiceName );
+        // There are no filters for "dummy" factory!
+        if( pImpl->aServiceName.compareToAscii("dummy") != 0 )
+        {
+            DBG_ASSERT( pImpl->aServiceName.getLength(), "No service name - no filters!" )
+            SfxFilterContainer *pCont = GetFilterContainer();
+            pCont->ReadExternalFilters( pImpl->aServiceName );
+        }
     }
 }
 
