@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcommuni.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 11:42:13 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 12:26:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,11 @@ BOOL CommunicationManagerClientViaSocketTT::RetryConnect()
     }
 }
 
+BOOL CommunicationManagerClientViaSocketTT::KillApplication()
+{
+    if ( pProcess )
+        return pProcess->Terminate();
+}
 
 #define GETSET(aVar, KeyName, Dafault)                 \
     aVar = aConf.ReadKey(KeyName,"No Entry");          \

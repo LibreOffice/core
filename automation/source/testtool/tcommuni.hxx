@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcommuni.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 11:42:26 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 12:26:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,8 @@ public:
 
     virtual BOOL StartCommunication();
     virtual BOOL StartCommunication( String aApp, String aParams, Environment *pChildEnv );
+
+    BOOL KillApplication();
 
 protected:
     virtual BOOL RetryConnect();
