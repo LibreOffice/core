@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appcfg.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mba $ $Date: 2001-02-26 17:19:03 $
+ *  last change: $Author: pb $ $Date: 2001-02-27 11:31:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1239,6 +1239,7 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     pIni->LeaveLock();
     pIni->Flush();
 #endif
+    aInetOptions.flush();
     SaveConfiguration();
 }
 
