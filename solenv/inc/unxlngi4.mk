@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlngi4.mk,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-08 14:53:46 $
+#   last change: $Author: hr $ $Date: 2004-09-09 11:16:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -110,7 +110,6 @@ CFLAGSEXCEPTIONS=-fexceptions -fno-enforce-eh-specs
 # Flags for disabling exception handling
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 
-# -fpermissive should be removed as soon as possible
 CFLAGSCXX= -pipe $(ARCH_FLAGS) -fno-rtti
 
 # HACK: enable Hamburg developers to build on glibc-2.2 machines but compile vs. glibc-2.1 headers
