@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltabi.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-23 12:44:03 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:53:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,8 @@ ScXMLTableContext::ScXMLTableContext( ScXMLImport& rImport,
                                       const sal_Bool bTempIsSubTable,
                                       const sal_Int32 nSpannedCols) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
-    bStartFormPage(sal_False)
+    bStartFormPage(sal_False),
+    bAutomaticPrintRange(sal_False)
 {
     if (!bTempIsSubTable)
     {
@@ -151,6 +152,9 @@ ScXMLTableContext::ScXMLTableContext( ScXMLImport& rImport,
                     break;
                 case XML_TOK_TABLE_PASSWORD:
                         sPassword = sValue;
+                    break;
+                case XML_TOK_TABLE_AUTOMATIC_PRINT_RANGE:
+                        bAutomaticPrintRange = IsXMLToken(sValue, XML_TRUE);
                     break;
             }
         }
@@ -261,6 +265,7 @@ void ScXMLTableContext::EndElement()
                 }
             }
         }
+        else if (bAutomaticPrintRange) pDoc->SetPrintEntireSheet(GetScImport().GetTables().GetCurrentSheet());
 
         ScOutlineTable* pOutlineTable = pDoc->GetOutlineTable(GetScImport().GetTables().GetCurrentSheet(), sal_False);
         if (pOutlineTable)
