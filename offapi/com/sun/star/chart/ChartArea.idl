@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartArea.idl,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:53:17 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 10:01:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,8 @@ service ChartArea
     /** If the <type>ChartArea</type> may be stored as XML element,
         this service should be supported in order to preserve unparsed
         XML attributes.
+
+    @since #107627#
      */
     [optional] service com::sun::star::xml::UserDefinedAttributeSupplier;
 
