@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuparagr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cl $ $Date: 2002-09-27 12:41:31 $
+ *  last change: $Author: vg $ $Date: 2003-06-06 10:46:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,20 +150,21 @@ FuParagraph::FuParagraph( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
 
     // invalidieren der Slots
     static USHORT SidArray[] = {
-                            SID_ATTR_PARA_ADJUST_LEFT,
-                            SID_ATTR_PARA_ADJUST_RIGHT,
-                            SID_ATTR_PARA_ADJUST_CENTER,
-                            SID_ATTR_PARA_ADJUST_BLOCK,
-                            SID_ATTR_PARA_LINESPACE_10,
-                            SID_ATTR_PARA_LINESPACE_15,
-                            SID_ATTR_PARA_LINESPACE_20,
-                            SID_ATTR_PARA_LRSPACE,
-                            SID_ATTR_PARA_LEFT_TO_RIGHT,
-                            SID_ATTR_PARA_RIGHT_TO_LEFT,
-                            SID_RULER_TEXT_RIGHT_TO_LEFT,
-                            SID_PARASPACE_INCREASE,
-                            SID_PARASPACE_DECREASE,
-                            0 };
+        SID_ATTR_TABSTOP,
+        SID_ATTR_PARA_ADJUST_LEFT,
+        SID_ATTR_PARA_ADJUST_RIGHT,
+        SID_ATTR_PARA_ADJUST_CENTER,
+        SID_ATTR_PARA_ADJUST_BLOCK,
+        SID_ATTR_PARA_LINESPACE_10,
+        SID_ATTR_PARA_LINESPACE_15,
+        SID_ATTR_PARA_LINESPACE_20,
+        SID_ATTR_PARA_LRSPACE,
+        SID_ATTR_PARA_LEFT_TO_RIGHT,
+        SID_ATTR_PARA_RIGHT_TO_LEFT,
+        SID_RULER_TEXT_RIGHT_TO_LEFT,
+        SID_PARASPACE_INCREASE,
+        SID_PARASPACE_DECREASE,
+        0 };
 
     pViewShell->GetViewFrame()->GetBindings().Invalidate( SidArray );
 }
