@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anchoredobject.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:44:00 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:06:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,6 @@
 #ifndef _ANCHOREDOBJECT_HXX
 #include <anchoredobject.hxx>
 #endif
-
 #ifndef _PAM_HXX
 #include <pam.hxx>
 #endif
@@ -289,11 +288,6 @@ void SwAnchoredObject::ResetLastCharRectHeight()
 // =============================================================================
 // accessors for member <mpVertPosOrientFrm>
 // =============================================================================
-const SwLayoutFrm* SwAnchoredObject::GetVertPosOrientFrm() const
-{
-    return mpVertPosOrientFrm;
-}
-
 void SwAnchoredObject::SetVertPosOrientFrm( const SwLayoutFrm& _rVertPosOrientFrm )
 {
     mpVertPosOrientFrm = &_rVertPosOrientFrm;
