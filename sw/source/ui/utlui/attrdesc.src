@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdesc.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:43:29 $
+ *  last change: $Author: hr $ $Date: 2004-03-09 09:32:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2743,5 +2743,15 @@ String STR_DONT_FOLLOW_TEXT_FLOW
 {
     Text = "Dont follow";
     Text[ english_us ] = "Dont follow";
+};
+String STR_CONNECT_BORDER_ON
+{
+    Text = "Umrandung verschmelzen";
+    Text[ english_us ] = "Merge borders";
+};
+String STR_CONNECT_BORDER_OFF
+{
+    Text = "Umrandung nicht verschmelzen";
+    Text[ english_us ] = "Do not merge borders";
 };
 
