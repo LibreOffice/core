@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swblocks.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-31 11:13:43 $
+ *  last change: $Author: jp $ $Date: 2001-10-19 08:19:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,20 +77,8 @@
 #ifndef SVTOOLS_FSTATHELPER_HXX
 #include <svtools/fstathelper.hxx>
 #endif
-#ifndef _COM_SUN_STAR_UCB_XCOMMANDENVIRONMENT_HPP_
-#include <com/sun/star/ucb/XCommandEnvironment.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_TRANSFERINFO_HPP_
-#include <com/sun/star/ucb/TransferInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_NAMECLASH_HPP_
-#include <com/sun/star/ucb/NameClash.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
-#include <com/sun/star/util/DateTime.hpp>
-#endif
-#ifndef _UCBHELPER_CONTENT_HXX
-#include <ucbhelper/content.hxx>
+#ifndef _SFXMACITEM_HXX
+#include <svtools/macitem.hxx>
 #endif
 #ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
@@ -120,29 +108,23 @@
 #ifndef _MDIEXP_HXX
 #include <mdiexp.hxx>       // Progress
 #endif
+#ifndef _SW_XMLTEXTBLOCKS_HXX
+#include <SwXMLTextBlocks.hxx>
+#endif
+#ifndef _DOCSH_HXX
+#include <docsh.hxx>
+#endif
+#ifndef _SWUNOHELPER_HXX
+#include <swunohelper.hxx>
+#endif
+
 #ifndef _STATSTR_HRC
 #include <statstr.hrc>
 #endif
 #ifndef _SWSWERROR_H
 #include <swerror.h>
 #endif
-#ifndef _SW_XMLTEXTBLOCKS_HXX
-#include <SwXMLTextBlocks.hxx>
-#endif
-#ifndef _SFXMACITEM_HXX
-#include <svtools/macitem.hxx>
-#endif
 
-#ifndef _DOCSH_HXX
-#include <docsh.hxx>
-#endif
-
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::ucb;
-using namespace ::com::sun::star::uno;
-using namespace ::rtl;
-
-#define C2U(cChar) rtl::OUString::createFromAscii(cChar)
 SV_IMPL_OP_PTRARR_SORT( SwBlockNames, SwBlockName* );
 
 //////////////////////////////////////////////////////////////////////////
@@ -154,9 +136,11 @@ USHORT SwImpBlocks::Hash( const String& r )
 {
     USHORT n = 0;
     xub_StrLen nLen = r.Len();
-    if( nLen > 8 ) nLen = 8;
-    const sal_Unicode* p = (const sal_Unicode*) r.GetBuffer();
-    while( nLen-- ) n = ( n << 1 ) + *p++;
+    if( nLen > 8 )
+        nLen = 8;
+    const sal_Unicode* p = r.GetBuffer();
+    while( nLen-- )
+        n = ( n << 1 ) + *p++;
     return n;
 }
 
@@ -212,8 +196,6 @@ SwImpBlocks::~SwImpBlocks()
 }
 
 // Loeschen des Inhaltes des Dokuments
-
-
 void SwImpBlocks::ClearDoc()
 {
     pDoc->ClearDoc();
@@ -225,8 +207,6 @@ ULONG SwImpBlocks::GetDocForConversion( USHORT n )
 }
 
 // Erzeugen eines PaMs, der das ganze Dokument umfasst
-
-
 SwPaM* SwImpBlocks::MakePaM()
 {
     SwPaM* pPam = new SwPaM( pDoc->GetNodes().GetEndOfContent() );
@@ -244,8 +224,6 @@ USHORT SwImpBlocks::GetCount() const
 }
 
 // Case Insensitive
-
-
 USHORT SwImpBlocks::GetIndex( const String& rShort ) const
 {
     String s( GetAppCharClass().upper( rShort ) );
@@ -429,30 +407,8 @@ ULONG SwTextBlocks::ConvertToNew()
         aOldFull.SetExtension( String::CreateFromAscii("bak") );
         String aOld( aOldFull.GetMainURL( INetURLObject::NO_DECODE ) );
         String aNew( aNewFull.GetMainURL( INetURLObject::NO_DECODE ) );
-        BOOL bError = FALSE;
-        try
-        {
-            String sMain( aOld );
-            sal_Unicode cSlash = '/';
-            xub_StrLen nSlashPos = sMain.SearchBackward(cSlash);
-            sMain.Erase(nSlashPos);
-            ::ucb::Content aNewContent( sMain,
-                                        Reference< XCommandEnvironment > ());
 
-            Any aAny;
-            TransferInfo aInfo;
-            aInfo.NameClash = NameClash::OVERWRITE;
-            aInfo.NewTitle = aOldFull.GetName();
-            aInfo.SourceURL = aNew;
-            aInfo.MoveData  = TRUE;
-            aAny <<= aInfo;
-            aNewContent.executeCommand( C2U( "transfer" ), aAny);
-        }
-        catch(...)
-        {
-            bError = TRUE;
-        }
-
+        BOOL bError = !SWUnoHelper::UCB_CopyFile( aNew, aOld, TRUE );
         if( bError )
         {
             if (nType == SWBLK_SW2)
@@ -557,51 +513,20 @@ ULONG SwTextBlocks::ConvertToNew()
         {
             delete pOld;
             pImp = pNew;
-            try
-            {
-                ::ucb::Content aOldContent( aOld,
-                                        Reference< XCommandEnvironment > ());
-                aOldContent.executeCommand( C2U( "delete" ),
-                                    makeAny( sal_Bool( sal_True ) ) );
-            }
-            catch(...){}
+            SWUnoHelper::UCB_DeleteFile( aOld );
             pNew->MakeBlockList();
         }
         else
         {
             delete pOld; delete pNew;
-            try
-            {
-                String sMain( aNew );
-                sal_Unicode cSlash = '/';
-                xub_StrLen nSlashPos = sMain.SearchBackward(cSlash);
-                sMain.Erase(nSlashPos);
-                ::ucb::Content aNewContent( sMain, Reference< XCommandEnvironment > ());
-                Any aAny;
-                TransferInfo aInfo;
-                aInfo.NameClash = NameClash::OVERWRITE;
-                aInfo.NewTitle = aNewFull.GetName();
-                aInfo.SourceURL = aOld;
-                aInfo.MoveData  = TRUE;
-                aAny <<= aInfo;
-                aNewContent.executeCommand( C2U( "transfer" ), aAny);
-            }
-            catch(...){}
+            SWUnoHelper::UCB_DeleteFile( aNew );
+            SWUnoHelper::UCB_CopyFile( aOld, aNew, TRUE );
             if ( SWBLK_SW2 == nType )
                 pImp = new Sw2TextBlocks( aOld );
             else
                 pImp = new Sw3TextBlocks( aOld );
         }
         pNew->CloseFile();
-
-        try
-        {
-            ::ucb::Content aContent(
-                aOld, Reference< XCommandEnvironment > ());
-            aContent.executeCommand( C2U( "delete" ), makeAny( sal_Bool( sal_True ) ) );
-        }
-        catch(...){}
-
         FStatHelper::GetModifiedDateTimeOfFile( aNew,
                             &pImp->aDateModified, &pImp->aTimeModified );
     }
