@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbxmod.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 13:32:25 $
+ *  last change: $Author: obo $ $Date: 2004-05-28 14:34:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1648,10 +1648,8 @@ void SimpleTokenizer_Impl::addLines(UINT32 nLine, INT32 nCount)
             }
             else
             {
-                pCommentsBegin->erase(posBegins++);
-                pCommentsEnd->erase(posEnds++);
-                UINT16 dummy = pCommentsBegin->size();
-
+                posBegins = pCommentsBegin->erase( posBegins );
+                posEnds = pCommentsEnd->erase( posEnds );
                 nDiff++;
             }
         }
