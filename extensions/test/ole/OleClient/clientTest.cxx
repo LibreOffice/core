@@ -2,9 +2,9 @@
  *
  *  $RCSfile: clientTest.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jl $ $Date: 2001-12-06 14:46:11 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 09:57:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1001,4 +1001,5 @@ void printSequence( Sequence<Any>& val)
 }
 
 //VARIANT VT_UI1
+
 
