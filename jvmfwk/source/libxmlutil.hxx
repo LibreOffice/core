@@ -2,9 +2,9 @@
  *
  *  $RCSfile: libxmlutil.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jl $ $Date: 2004-04-19 15:56:06 $
+ *  last change: $Author: jl $ $Date: 2004-04-27 15:22:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,12 +91,12 @@ class CXPathContextPtr
 {
     xmlXPathContext* _object;
 
-    CXPathContextPtr(const CXPathContextPtr&);
+    CXPathContextPtr(const jfw::CXPathContextPtr&);
     CXPathContextPtr & operator = (const CXPathContextPtr&);
 public:
     CXPathContextPtr();
-    CXPathContextPtr(xmlXPathContext* aContext);
-    CXPathContextPtr & operator = (xmlXPathContext* pObj);
+    CXPathContextPtr(xmlXPathContextPtr aContext);
+    CXPathContextPtr & operator = (xmlXPathContextPtr pObj);
     ~CXPathContextPtr();
     xmlXPathContext* operator -> ();
     operator xmlXPathContext* ();
@@ -150,7 +150,7 @@ public:
     CXmlCharPtr(xmlChar* aDoc);
     ~CXmlCharPtr();
     CXmlCharPtr & operator = (xmlChar* pObj);
-    xmlChar* operator -> ();
+//    xmlChar* operator -> ();
     operator xmlChar* ();
     operator rtl::OUString ();
     operator rtl::OString ();

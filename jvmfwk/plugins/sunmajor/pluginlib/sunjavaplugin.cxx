@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sunjavaplugin.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2004-04-22 12:52:39 $
+ *  last change: $Author: jl $ $Date: 2004-04-27 15:22:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,7 +152,7 @@ javaPluginError getAllJavaInfos( rtl_uString *sMinVersion,
         typedef std::vector<stoc_javadetect::JavaInfo>::iterator cit;
         for (cit i = vec.begin(); i != vec.end(); i++, j++)
         {
-            arInfo[j] = (JavaInfo*) rtl_allocateMemory(sizeof JavaInfo);
+            arInfo[j] = (JavaInfo*) rtl_allocateMemory(sizeof(JavaInfo));
            JavaInfo* pInfo = arInfo[j];
            pInfo->sVendor = sVendor.pData;
            rtl_uString_acquire(sVendor.pData);

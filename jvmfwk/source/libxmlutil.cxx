@@ -2,9 +2,9 @@
  *
  *  $RCSfile: libxmlutil.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jl $ $Date: 2004-04-19 15:55:25 $
+ *  last change: $Author: jl $ $Date: 2004-04-27 15:22:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ CXPathObjectPtr::operator xmlXPathObject*()
     return _object;
 }
 //===========================================================
-CXPathContextPtr::CXPathContextPtr(xmlXPathContext* aContext)
+CXPathContextPtr::CXPathContextPtr(xmlXPathContextPtr aContext)
     : _object(aContext)
 {
 }
@@ -109,7 +109,7 @@ CXPathContextPtr::~CXPathContextPtr()
     xmlXPathFreeContext(_object);
 }
 
-CXPathContextPtr & CXPathContextPtr::operator = (xmlXPathContext* pObj)
+CXPathContextPtr & CXPathContextPtr::operator = (xmlXPathContextPtr pObj)
 {
     if (_object == pObj)
         return *this;
@@ -193,7 +193,7 @@ CXmlDocPtr::operator xmlDoc*()
 // }
 
 //===========================================================
-CXmlCharPtr::CXmlCharPtr(xmlChar* aChar)
+CXmlCharPtr::CXmlCharPtr(xmlChar * aChar)
     : _object(aChar)
 {
 }
@@ -215,10 +215,10 @@ CXmlCharPtr & CXmlCharPtr::operator = (xmlChar* pObj)
     _object = pObj;
     return *this;
 }
-xmlChar* CXmlCharPtr::operator ->()
-{
-    return _object;
-}
+// xmlChar* CXmlCharPtr::operator ->()
+// {
+//     return _object;
+// }
 
 CXmlCharPtr::operator xmlChar*()
 {

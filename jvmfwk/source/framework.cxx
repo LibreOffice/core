@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framework.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jl $ $Date: 2004-04-26 15:52:15 $
+ *  last change: $Author: jl $ $Date: 2004-04-27 15:22:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@
 #include "osl/mutex.hxx"
 #include "libxml/parser.h"
 #include "libxml/xpath.h"
-#include "libxml/xpathinternals.h"
+#include "libxml/xpathInternals.h"
 #include <vector>
 #include <algorithm>
 #include <functional>
@@ -90,6 +90,12 @@
 
 namespace {
 JavaVM * g_pJavaVM = NULL;
+
+sal_Bool SAL_CALL areEqualJavaInfo(
+    JavaInfo const * pInfoA,JavaInfo const * pInfoB)
+{
+    return jfw_areEqualJavaInfo(pInfoA, pInfoB);
+}
 }
 
 javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSize)
@@ -101,13 +107,13 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
 
     //Prepare the xml document and context
     rtl::OString sSettingsPath = jfw::getVendorSettingsPath();
-     jfw::CXmlDocPtr doc = xmlParseFile(sSettingsPath.getStr());
+     jfw::CXmlDocPtr doc(xmlParseFile(sSettingsPath.getStr()));
     if (doc == NULL)
     {
         OSL_ASSERT(0);
         return JFW_E_ERROR;
     }
-    jfw::CXPathContextPtr context = xmlXPathNewContext(doc);
+    jfw::CXPathContextPtr context(xmlXPathNewContext(doc));
     int reg = xmlXPathRegisterNs(context, (xmlChar*) "jf",
         (xmlChar*) NS_JAVA_FRAMEWORK);
     if (reg == -1)
@@ -212,11 +218,11 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
             return JFW_E_ERROR;
         }
         typedef std::vector<rtl::OString>::const_iterator citLoc;
-        for (citLoc i = vecJRELocations.begin();
-             i != vecJRELocations.end(); i++)
+        for (citLoc ii = vecJRELocations.begin();
+             ii != vecJRELocations.end(); ii++)
         {
             rtl::OUString sLocation =
-                rtl::OStringToOUString(*i, RTL_TEXTENCODING_UTF8);
+                rtl::OStringToOUString(*ii, RTL_TEXTENCODING_UTF8);
             JavaInfo* pInfo = NULL;
             plerr = (*getJavaInfoByPathFunc)(
                 sLocation.pData,
@@ -243,11 +249,11 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
     //Check which JavaInfo from vector vecInfoManual is already
     //contained in vecInfo. If it already exists then remove it from
     //vecInfoManual
-    for (it_info i = vecInfo.begin(); i != vecInfo.end(); i++)
+    for (it_info j = vecInfo.begin(); j != vecInfo.end(); j++)
     {
         it_info it_duplicate =
             std::find_if(vecInfoManual.begin(), vecInfoManual.end(),
-                         std::bind2nd(std::ptr_fun(jfw_areEqualJavaInfo), *i));
+                         std::bind2nd(std::ptr_fun(areEqualJavaInfo), *j));
         if (it_duplicate != vecInfoManual.end())
             vecInfoManual.erase(it_duplicate);
     }
@@ -264,11 +270,11 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
     typedef std::vector<JavaInfo*>::iterator it;
     int index = 0;
     //Add the automatically detected JREs
-    for (it i = vecInfo.begin(); i != vecInfo.end(); i++)
-        (*pparInfo)[index++] = *i;
+    for (it k = vecInfo.begin(); k != vecInfo.end(); k++)
+        (*pparInfo)[index++] = *k;
     //Add the manually detected JREs
-    for (it i = vecInfoManual.begin();i != vecInfoManual.end(); i++)
-        (*pparInfo)[index++] = *i;
+    for (it l = vecInfoManual.begin(); l != vecInfoManual.end(); l++)
+        (*pparInfo)[index++] = *l;
 
     *pSize = nSize;
     return errcode;
@@ -292,7 +298,7 @@ javaFrameworkError SAL_CALL jfw_startVM(JavaVMOption *arOptions, sal_Int32 cOpti
         return errcode;
 
     //get the current java setting (javaInfo)
-    jfw::CJavaInfo aInfo = javaSettings.getJavaInfo();
+    jfw::CJavaInfo aInfo(javaSettings.getJavaInfo());
     //check if a Java has ever been selected
     if (aInfo == NULL)
         return JFW_E_NO_SELECT;
@@ -390,10 +396,10 @@ javaFrameworkError SAL_CALL jfw_startVM(JavaVMOption *arOptions, sal_Int32 cOpti
         index ++;
     }
     //add all options of the arOptions argument
-    for (int i = 0; i < cOptions; i++)
+    for (int ii = 0; ii < cOptions; ii++)
     {
-        arOpt[index].optionString = arOptions[i].optionString;
-        arOpt[index].extraInfo = arOptions[i].extraInfo;
+        arOpt[index].optionString = arOptions[ii].optionString;
+        arOpt[index].extraInfo = arOptions[ii].extraInfo;
         index++;
     }
     //start Java
@@ -425,13 +431,13 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
     jfw::CJavaInfo aCurrentInfo;
     //Prepare the xml document and context
     rtl::OString sSettingsPath = jfw::getVendorSettingsPath();
-     jfw::CXmlDocPtr doc = xmlParseFile(sSettingsPath.getStr());
+     jfw::CXmlDocPtr doc(xmlParseFile(sSettingsPath.getStr()));
     if (doc == NULL)
     {
         OSL_ASSERT(0);
         return JFW_E_ERROR;
     }
-    jfw::CXPathContextPtr context = xmlXPathNewContext(doc);
+    jfw::CXPathContextPtr context(xmlXPathNewContext(doc));
     int reg = xmlXPathRegisterNs(context, (xmlChar*) "jf",
         (xmlChar*) NS_JAVA_FRAMEWORK);
     if (reg == -1)
@@ -662,7 +668,7 @@ javaFrameworkError SAL_CALL jfw_getSelectedJRE(JavaInfo **ppInfo)
     errcode = aSettings.loadFromSettings();
     if (errcode == JFW_E_NONE)
     {
-        jfw::CJavaInfo aInfo = aSettings.getJavaInfo();
+        jfw::CJavaInfo aInfo(aSettings.getJavaInfo());
         if (aInfo == NULL)
             return JFW_E_NO_SELECT;
         //If the javavendors.xml has changed, then the current selected
@@ -700,13 +706,13 @@ javaFrameworkError SAL_CALL jfw_getJavaInfoByPath(
     javaFrameworkError errcode = JFW_E_NONE;
     //Prepare the xml document and context
     rtl::OString sSettingsPath = jfw::getVendorSettingsPath();
-     jfw::CXmlDocPtr doc = xmlParseFile(sSettingsPath.getStr());
+     jfw::CXmlDocPtr doc(xmlParseFile(sSettingsPath.getStr()));
     if (doc == NULL)
     {
         OSL_ASSERT(0);
         return JFW_E_ERROR;
     }
-    jfw::CXPathContextPtr context = xmlXPathNewContext(doc);
+    jfw::CXPathContextPtr context(xmlXPathNewContext(doc));
     int reg = xmlXPathRegisterNs(context, (xmlChar*) "jf",
         (xmlChar*) NS_JAVA_FRAMEWORK);
     if (reg == -1)
@@ -969,7 +975,7 @@ JavaInfo * CJavaInfo::copyJavaInfo(const JavaInfo * pInfo)
     if (pInfo == NULL)
         return NULL;
     JavaInfo* newInfo =
-          (JavaInfo*) rtl_allocateMemory(sizeof JavaInfo);
+          (JavaInfo*) rtl_allocateMemory(sizeof(JavaInfo));
     if (newInfo)
     {
         rtl_copyMemory(newInfo, pInfo, sizeof(JavaInfo));

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fwkutil.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2004-04-26 15:52:15 $
+ *  last change: $Author: jl $ $Date: 2004-04-27 15:22:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@
 #include "rtl/uri.hxx"
 #include "rtl/process.h"
 #include "osl/getglobalmutex.hxx"
-#include "libxml/xpathinternals.h"
+#include "libxml/xpathInternals.h"
 
 #include "framework.hxx"
 #include "elements.hxx"
@@ -223,7 +223,7 @@ javaFrameworkError getPluginLibrary(rtl::OUString & sLibUrl)
     if ((errcode = javaNode.loadFromSettings()) != JFW_E_NONE)
         return errcode;
 
-    CJavaInfo aInfo = javaNode.getJavaInfo();
+    CJavaInfo aInfo(javaNode.getJavaInfo());
     if (aInfo == NULL)
         return JFW_E_NO_SELECT;
 
@@ -248,11 +248,13 @@ javaFrameworkError getPluginLibrary(rtl::OUString & sLibUrl)
     rtl::OUString ouExpr = usBuffer.makeStringAndClear();
     rtl::OString sExpression =
         rtl::OUStringToOString(ouExpr, osl_getThreadTextEncoding());
-    CXPathObjectPtr pathObjVendor = xmlXPathEvalExpression(
+    CXPathObjectPtr pathObjVendor;
+    pathObjVendor = xmlXPathEvalExpression(
         (xmlChar*) sExpression.getStr(), contextVendor);
     if (xmlXPathNodeSetIsEmpty(pathObjVendor->nodesetval))
         return JFW_E_FORMAT_STORE;
-    CXmlCharPtr xmlCharPlugin =
+    CXmlCharPtr xmlCharPlugin;
+    xmlCharPlugin =
         xmlNodeListGetString(
             docVendor,pathObjVendor->nodesetval->nodeTab[0], 1);
 
@@ -273,7 +275,8 @@ javaFrameworkError getVendorPluginURLs(
     OSL_ASSERT(vecPlugins && doc && context);
 
     //get the nodeset for the library elements
-    jfw::CXPathObjectPtr result = xmlXPathEvalExpression(
+    jfw::CXPathObjectPtr result;
+    result = xmlXPathEvalExpression(
         (xmlChar*)"/jf:javaSelection/jf:plugins/jf:library", context);
     if (xmlXPathNodeSetIsEmpty(result->nodesetval))
     {
@@ -288,10 +291,9 @@ javaFrameworkError getVendorPluginURLs(
         //between library elements are also text elements
         if (cur->type == XML_ELEMENT_NODE)
         {
-            jfw::CXmlCharPtr sAttrVendor =
-                xmlGetProp(cur, (xmlChar*) "vendor");
-            jfw::CXmlCharPtr sTextLibrary =
-                xmlNodeListGetString(doc, cur->xmlChildrenNode, 1);
+            jfw::CXmlCharPtr sAttrVendor(xmlGetProp(cur, (xmlChar*) "vendor"));
+            jfw::CXmlCharPtr sTextLibrary(
+                xmlNodeListGetString(doc, cur->xmlChildrenNode, 1));
             PluginLibrary plugin;
             plugin.sVendor = rtl::OString((sal_Char*)(xmlChar*) sAttrVendor);
             //create the file URL to the library
@@ -485,7 +487,8 @@ javaFrameworkError getVersionInformation(
         "/jf:javaSelection/jf:vendorInfos/jf:vendor[@name=\"") +
         sVendor + rtl::OString("\"]/jf:minVersion");
 
-    jfw::CXPathObjectPtr xPathObjectMin =
+    jfw::CXPathObjectPtr xPathObjectMin;
+    xPathObjectMin =
         xmlXPathEvalExpression((xmlChar*) sExpresion.getStr(), context);
     if (xmlXPathNodeSetIsEmpty(xPathObjectMin->nodesetval))
     {
@@ -493,8 +496,9 @@ javaFrameworkError getVersionInformation(
     }
     else
     {
-        jfw::CXmlCharPtr sVersion = xmlNodeListGetString(doc,
-            xPathObjectMin->nodesetval->nodeTab[0]->xmlChildrenNode, 1);
+        jfw::CXmlCharPtr sVersion;
+        sVersion = xmlNodeListGetString(
+            doc, xPathObjectMin->nodesetval->nodeTab[0]->xmlChildrenNode, 1);
         rtl::OString osVersion((sal_Char*)(xmlChar*) sVersion);
         pVersionInfo->sMinVersion = rtl::OStringToOUString(
             osVersion, RTL_TEXTENCODING_UTF8);
@@ -503,16 +507,18 @@ javaFrameworkError getVersionInformation(
     //Get maxVersion
     sExpresion = rtl::OString("/jf:javaSelection/jf:vendorInfos/jf:vendor[@name=\"") +
         sVendor + rtl::OString("\"]/jf:maxVersion");
-    jfw::CXPathObjectPtr xPathObjectMax =
-        xmlXPathEvalExpression((xmlChar*) sExpresion.getStr(), context);
+    jfw::CXPathObjectPtr xPathObjectMax;
+    xPathObjectMax = xmlXPathEvalExpression(
+        (xmlChar*) sExpresion.getStr(), context);
     if (xmlXPathNodeSetIsEmpty(xPathObjectMax->nodesetval))
     {
         pVersionInfo->sMaxVersion = rtl::OUString();
     }
     else
     {
-        jfw::CXmlCharPtr sVersion = xmlNodeListGetString(doc,
-            xPathObjectMax->nodesetval->nodeTab[0]->xmlChildrenNode, 1);
+        jfw::CXmlCharPtr sVersion;
+        sVersion = xmlNodeListGetString(
+            doc,xPathObjectMax->nodesetval->nodeTab[0]->xmlChildrenNode, 1);
         rtl::OString osVersion((sal_Char*) (xmlChar*) sVersion);
         pVersionInfo->sMaxVersion = rtl::OStringToOUString(
             osVersion, RTL_TEXTENCODING_UTF8);
@@ -521,9 +527,9 @@ javaFrameworkError getVersionInformation(
     //Get excludeVersions
     sExpresion = rtl::OString("/jf:javaSelection/jf:vendorInfos/jf:vendor[@name=\"") +
         sVendor + rtl::OString("\"]/jf:excludeVersions/jf:version");
-    jfw::CXPathObjectPtr xPathObjectVersions =
-        xmlXPathEvalExpression((xmlChar*) sExpresion.getStr(),
-                               context);
+    jfw::CXPathObjectPtr xPathObjectVersions;
+    xPathObjectVersions =
+        xmlXPathEvalExpression((xmlChar*) sExpresion.getStr(), context);
     xmlNode* cur = xPathObjectVersions->nodesetval->nodeTab[0];
     while (cur != NULL)
     {
@@ -531,8 +537,8 @@ javaFrameworkError getVersionInformation(
         {
             if (xmlStrcmp(cur->name, (xmlChar*) "version") == 0)
             {
-                jfw::CXmlCharPtr sVersion = xmlNodeListGetString(doc,
-                   cur->xmlChildrenNode, 1);
+                jfw::CXmlCharPtr sVersion;
+                sVersion = xmlNodeListGetString(doc, cur->xmlChildrenNode, 1);
                 rtl::OString osVersion((sal_Char*)(xmlChar*) sVersion);
                 rtl::OUString usVersion = rtl::OStringToOUString(
                     osVersion, RTL_TEXTENCODING_UTF8);
@@ -601,11 +607,11 @@ rtl::ByteSequence decodeBase16(const rtl::ByteSequence& data)
         pData++;
         curChar = *pData;
         //find the index for the next 4bits
-        for (int ii = 0; ii < 16; ii++)
+        for (int j = 0; j < 16; j++)
         {
-            if (curChar == decodingTable[ii])
+            if (curChar == decodingTable[j])
             {
-                nibble |= ii;
+                nibble |= j;
                 break;
             }
         }

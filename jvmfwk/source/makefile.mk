@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: jl $ $Date: 2004-04-20 10:01:50 $
+#   last change: $Author: jl $ $Date: 2004-04-27 15:22:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -97,7 +97,8 @@ SHL1TARGET = $(FRAMEWORKLIB)
 SHL1DEPN=
 SHL1IMPLIB = i$(FRAMEWORKLIB)
 SHL1LIBS = $(SLB)$/$(TARGET).lib
-SHL1STDLIBS = $(CPPULIB) $(CPPUHELPERLIB) $(SALLIB) $(SALHELPERLIB) ixml2.lib
+SHL1STDLIBS = $(CPPULIB) $(CPPUHELPERLIB) $(SALLIB) $(SALHELPERLIB) $(XML2LIB)
+
 SHL1VERSIONMAP = framework.map
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 DEF1NAME = $(SHL1TARGET)

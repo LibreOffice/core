@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elements.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jl $ $Date: 2004-04-26 15:52:14 $
+ *  last change: $Author: jl $ $Date: 2004-04-27 15:22:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 #include <algorithm>
 #include "libxml/parser.h"
 #include "libxml/xpath.h"
-#include "libxml/xpathinternals.h"
+#include "libxml/xpathInternals.h"
 
 // #define NS_JAVA_FRAMEWORK "http://openoffice.org/2004/java/framework/1.0"
 // #define NS_SCHEMA_INSTANCE "http://www.w3.org/2001/XMLSchema-instance"
@@ -98,18 +98,19 @@ javaFrameworkError getElementUpdated(rtl::OString & sValue)
     javaFrameworkError errcode = JFW_E_NONE;
     //Prepare the xml document and context
     rtl::OString sSettingsPath = jfw::getVendorSettingsPath();
-     jfw::CXmlDocPtr doc = xmlParseFile(sSettingsPath.getStr());
+     jfw::CXmlDocPtr doc(xmlParseFile(sSettingsPath.getStr()));
     if (doc == NULL)
     {
         OSL_ASSERT(0);
         return JFW_E_CONFIG_READWRITE;
     }
-    jfw::CXPathContextPtr context = xmlXPathNewContext(doc);
+    jfw::CXPathContextPtr context(xmlXPathNewContext(doc));
     int reg = xmlXPathRegisterNs(context, (xmlChar*) "jf",
         (xmlChar*) NS_JAVA_FRAMEWORK);
     if (reg == -1)
         return JFW_E_ERROR;
-    CXPathObjectPtr pathObj = xmlXPathEvalExpression(
+    CXPathObjectPtr pathObj;
+    pathObj = xmlXPathEvalExpression(
         (xmlChar*)"/jf:javaSelection/jf:updated/text()", context);
     if (xmlXPathNodeSetIsEmpty(pathObj->nodesetval))
             return JFW_E_FORMAT_STORE;
@@ -133,7 +134,7 @@ javaFrameworkError createUserSettingsDocument()
         return JFW_E_ERROR;
 
     //javasettings.xml does not exist yet
-    CXmlDocPtr doc = xmlNewDoc((xmlChar *)"1.0");
+    CXmlDocPtr doc(xmlNewDoc((xmlChar *)"1.0"));
     if (! doc)
         return JFW_E_ERROR;
     //Create a comment
@@ -283,7 +284,7 @@ javaFrameworkError copyShareSettings(xmlDoc * doc, xmlNode * userParent)
 
     //Prepare access to share javasettings.xml
     rtl::OString sSettings = getSharedSettingsPathNoPlatformSuffix();
-    CXmlDocPtr docShare = xmlParseFile(sSettings.getStr());
+    CXmlDocPtr docShare(xmlParseFile(sSettings.getStr()));
     if (docShare == NULL)
         return JFW_E_CONFIG_READWRITE;
     contextShare = xmlXPathNewContext(docShare);
@@ -298,7 +299,8 @@ javaFrameworkError copyShareSettings(xmlDoc * doc, xmlNode * userParent)
     if ( ! pathObj || xmlXPathNodeSetIsEmpty(pathObj->nodesetval))
         return JFW_E_FORMAT_STORE;
 
-    CXmlCharPtr sClasses = xmlNodeListGetString(
+    CXmlCharPtr sClasses;
+    sClasses = xmlNodeListGetString(
         docShare, pathObj->nodesetval->nodeTab[0], 1);
 
     xmlNode* userClasses =
@@ -316,7 +318,7 @@ javaFrameworkError prepareSettingsDocument()
         return errcode;
 
     rtl::OString sSettings = getUserSettingsPath();
-    CXmlDocPtr doc = xmlParseFile(sSettings.getStr());
+    CXmlDocPtr doc(xmlParseFile(sSettings.getStr()));
     if (!doc)
         return JFW_E_CONFIG_READWRITE;
 
@@ -409,13 +411,14 @@ javaFrameworkError CNodeJava::loadUserSettings()
     if (cur == NULL || cur->children == NULL)
         return JFW_E_FORMAT_STORE;
 
+    CXmlCharPtr sNil;
     cur = cur->children;
     while (cur != NULL)
     {
         if (xmlStrcmp(cur->name, (xmlChar*) "enabled") == 0)
         {
             //only overwrite share settings if xsi:nil="false"
-            CXmlCharPtr sNil = xmlGetNsProp(
+            sNil = xmlGetNsProp(
                 cur, (xmlChar*) "nil", (xmlChar*) NS_SCHEMA_INSTANCE);
             if (sNil == NULL)
             {
@@ -424,7 +427,8 @@ javaFrameworkError CNodeJava::loadUserSettings()
             }
             if (xmlStrcmp(sNil, (xmlChar*) "false") == 0)
             {
-                CXmlCharPtr sEnabled = xmlNodeListGetString(
+                CXmlCharPtr sEnabled;
+                sEnabled = xmlNodeListGetString(
                     docUser, cur->children, 1);
                 if (xmlStrcmp(sEnabled, (xmlChar*) "true") == 0)
                     m_bEnabled = sal_True;
@@ -436,13 +440,14 @@ javaFrameworkError CNodeJava::loadUserSettings()
         }
         else if (xmlStrcmp(cur->name, (xmlChar*) "classesDirectory") == 0)
         {
-            CXmlCharPtr sCls = xmlNodeListGetString(
+            CXmlCharPtr sCls;
+            sCls = xmlNodeListGetString(
                 docUser, cur->children, 1);
             m_sClassesDirectory = sCls;
         }
         else if (xmlStrcmp(cur->name, (xmlChar*) "userClassPath") == 0)
         {
-            CXmlCharPtr sNil = xmlGetNsProp(
+            sNil = xmlGetNsProp(
                 cur, (xmlChar*) "nil", (xmlChar*) NS_SCHEMA_INSTANCE);
             if (sNil == NULL)
             {
@@ -451,14 +456,15 @@ javaFrameworkError CNodeJava::loadUserSettings()
             }
             if (xmlStrcmp(sNil, (xmlChar*) "false") == 0)
             {
-                CXmlCharPtr sUser = xmlNodeListGetString(
+                CXmlCharPtr sUser;
+                sUser = xmlNodeListGetString(
                     docUser, cur->children, 1);
                 m_sUserClassPath = sUser;
             }
         }
         else if (xmlStrcmp(cur->name, (xmlChar*) "javaInfo") == 0)
         {
-            CXmlCharPtr sNil = xmlGetNsProp(
+            sNil = xmlGetNsProp(
                 cur, (xmlChar*) "nil", (xmlChar*) NS_SCHEMA_INSTANCE);
             if (sNil == NULL)
             {
@@ -472,7 +478,7 @@ javaFrameworkError CNodeJava::loadUserSettings()
         }
         else if (xmlStrcmp(cur->name, (xmlChar*) "vmParameters") == 0)
         {
-            CXmlCharPtr sNil = xmlGetNsProp(
+            sNil = xmlGetNsProp(
                 cur, (xmlChar*) "nil", (xmlChar*) NS_SCHEMA_INSTANCE);
             if (sNil == NULL)
             {
@@ -488,7 +494,8 @@ javaFrameworkError CNodeJava::loadUserSettings()
                 {
                     if (xmlStrcmp(pOpt->name, (xmlChar*) "param") == 0)
                     {
-                        CXmlCharPtr sOpt = xmlNodeListGetString(
+                        CXmlCharPtr sOpt;
+                        sOpt = xmlNodeListGetString(
                             docUser, pOpt->children, 1);
                         m_arVmParameters.push_back(sOpt);
                     }
@@ -498,7 +505,7 @@ javaFrameworkError CNodeJava::loadUserSettings()
         }
         else if (xmlStrcmp(cur->name, (xmlChar*) "jreLocations") == 0)
         {
-            CXmlCharPtr sNil = xmlGetNsProp(
+            sNil = xmlGetNsProp(
                 cur, (xmlChar*) "nil", (xmlChar*) NS_SCHEMA_INSTANCE);
             if (sNil == NULL)
             {
@@ -514,7 +521,8 @@ javaFrameworkError CNodeJava::loadUserSettings()
                 {
                     if (xmlStrcmp(pLoc->name, (xmlChar*) "location") == 0)
                     {
-                        CXmlCharPtr sLoc = xmlNodeListGetString(
+                        CXmlCharPtr sLoc;
+                        sLoc = xmlNodeListGetString(
                             docUser, pLoc->children, 1);
                         m_arJRELocations.push_back(sLoc);
                     }
@@ -549,11 +557,13 @@ javaFrameworkError CNodeJava::loadShareSettings()
     if (cur->children == NULL)
         return JFW_E_NONE;
     cur = cur->children;
+
     while (cur != NULL)
     {
         if (xmlStrcmp(cur->name, (xmlChar*) "enabled") == 0)
         {
-            CXmlCharPtr sEnabled = xmlNodeListGetString(
+            CXmlCharPtr sEnabled;
+            sEnabled = xmlNodeListGetString(
                 docShare, cur->children, 1);
             if (xmlStrcmp(sEnabled, (xmlChar*) "true") == 0)
                 m_bEnabled = sal_True;
@@ -564,13 +574,15 @@ javaFrameworkError CNodeJava::loadShareSettings()
         }
         else if (xmlStrcmp(cur->name, (xmlChar*) "classesDirectory") == 0)
         {
-            CXmlCharPtr sCls = xmlNodeListGetString(
+            CXmlCharPtr sCls;
+            sCls = xmlNodeListGetString(
                 docShare, cur->children, 1);
             m_sClassesDirectory = sCls;
         }
         else if (xmlStrcmp(cur->name, (xmlChar*) "userClassPath") == 0)
         {
-            CXmlCharPtr sUser = xmlNodeListGetString(
+            CXmlCharPtr sUser;
+            sUser = xmlNodeListGetString(
                 docShare, cur->children, 1);
             m_sUserClassPath = sUser;
         }
@@ -585,11 +597,12 @@ javaFrameworkError CNodeJava::loadShareSettings()
             {
                 if (xmlStrcmp(pOpt->name, (xmlChar*) "param") == 0)
                 {
-                    CXmlCharPtr sOpt = xmlNodeListGetString(
+                    CXmlCharPtr sOpt;
+                    sOpt = xmlNodeListGetString(
                         docShare, pOpt->children, 1);
                     m_arVmParameters.push_back(sOpt);
                 }
-                    pOpt = pOpt->next;
+                pOpt = pOpt->next;
             }
         }
         else if (xmlStrcmp(cur->name, (xmlChar*) "jreLocations") == 0)
@@ -599,7 +612,8 @@ javaFrameworkError CNodeJava::loadShareSettings()
             {
                 if (xmlStrcmp(pLoc->name, (xmlChar*) "location") == 0)
                 {
-                    CXmlCharPtr sLoc = xmlNodeListGetString(
+                    CXmlCharPtr sLoc;
+                    sLoc = xmlNodeListGetString(
                         docShare, pLoc->children, 1);
                     m_arJRELocations.push_back(sLoc);
                 }
@@ -993,7 +1007,8 @@ javaFrameworkError CNodeJavaInfo::loadFromNode(xmlDoc * pDoc, xmlNode * pJavaInf
     if (pJavaInfo->children == NULL)
         return JFW_E_NONE;
     //Get the xsi:nil attribute;
-    CXmlCharPtr sNil = xmlGetNsProp(
+    CXmlCharPtr sNil;
+    sNil = xmlGetNsProp(
         pJavaInfo, (xmlChar*) "nil", (xmlChar*) NS_SCHEMA_INSTANCE);
     if ( ! sNil)
         return JFW_E_FORMAT_STORE;
@@ -1012,7 +1027,8 @@ javaFrameworkError CNodeJavaInfo::loadFromNode(xmlDoc * pDoc, xmlNode * pJavaInf
     {
         if (xmlStrcmp(cur->name, (xmlChar*) "vendor") == 0)
         {
-            CXmlCharPtr xmlVendor = xmlNodeListGetString(
+            CXmlCharPtr xmlVendor;
+            xmlVendor = xmlNodeListGetString(
                 pDoc, cur->children, 1);
             if (! xmlVendor)
                 return JFW_E_NONE;
@@ -1020,33 +1036,38 @@ javaFrameworkError CNodeJavaInfo::loadFromNode(xmlDoc * pDoc, xmlNode * pJavaInf
         }
         else if (xmlStrcmp(cur->name, (xmlChar*) "location") == 0)
         {
-            CXmlCharPtr xmlLocation = xmlNodeListGetString(
+            CXmlCharPtr xmlLocation;
+            xmlLocation = xmlNodeListGetString(
                 pDoc, cur->children, 1);
             sLocation = xmlLocation;
         }
         else if (xmlStrcmp(cur->name, (xmlChar*) "version") == 0)
         {
-            CXmlCharPtr xmlVersion = xmlNodeListGetString(
+            CXmlCharPtr xmlVersion;
+            xmlVersion = xmlNodeListGetString(
                 pDoc, cur->children, 1);
             sVersion = xmlVersion;
         }
         else if (xmlStrcmp(cur->name, (xmlChar*) "features")== 0)
         {
-            CXmlCharPtr xmlFeatures = xmlNodeListGetString(
+            CXmlCharPtr xmlFeatures;
+            xmlFeatures = xmlNodeListGetString(
                     pDoc, cur->children, 1);
             rtl::OUString sFeatures = xmlFeatures;
             nFeatures = sFeatures.toInt64(16);
         }
         else if (xmlStrcmp(cur->name, (xmlChar*) "requirements") == 0)
         {
-            CXmlCharPtr xmlRequire = xmlNodeListGetString(
+            CXmlCharPtr xmlRequire;
+            xmlRequire = xmlNodeListGetString(
                 pDoc, cur->children, 1);
             rtl::OUString sRequire = xmlRequire;
             nRequirements = sRequire.toInt64(16);
         }
         else if (xmlStrcmp(cur->name, (xmlChar*) "vendorData") == 0)
         {
-            CXmlCharPtr xmlData = xmlNodeListGetString(
+            CXmlCharPtr xmlData;
+            xmlData = xmlNodeListGetString(
                 pDoc, cur->children, 1);
             xmlChar* _data = (xmlChar*) xmlData;
             if (_data)
@@ -1059,12 +1080,12 @@ javaFrameworkError CNodeJavaInfo::loadFromNode(xmlDoc * pDoc, xmlNode * pJavaInf
     }
 
     //Get the javainfo attributes
-    CXmlCharPtr sVendorUpdate = xmlGetProp(pJavaInfo,
-                                    (xmlChar*) "vendorUpdate");
+    CXmlCharPtr sVendorUpdate;
+    sVendorUpdate = xmlGetProp(pJavaInfo,
+                               (xmlChar*) "vendorUpdate");
     if ( ! sVendorUpdate)
         return JFW_E_FORMAT_STORE;
     sAttrVendorUpdate = sVendorUpdate;
-
 
     return errcode;
 }
@@ -1189,10 +1210,10 @@ JavaInfo * CNodeJavaInfo::makeJavaInfo() const
 {
     if (bNil == true)
         return NULL;
-    JavaInfo * pInfo = (JavaInfo*) rtl_allocateMemory(sizeof JavaInfo);
+    JavaInfo * pInfo = (JavaInfo*) rtl_allocateMemory(sizeof(JavaInfo));
     if (pInfo == NULL)
         return NULL;
-    memset(pInfo, 0, sizeof JavaInfo);
+    memset(pInfo, 0, sizeof(JavaInfo));
     pInfo->sVendor = sVendor.pData;
     rtl_uString_acquire(pInfo->sVendor);
     pInfo->sLocation = sLocation.pData;
