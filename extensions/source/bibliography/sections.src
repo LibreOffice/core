@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sections.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:27:02 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:34:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1009,7 +1009,7 @@ Menu RID_POPUP_ME_VIEW
             Text[ czech ] = "Vložit sekci...";
             Text[ hebrew ] = "‮הוספת קטע...‬";
             Text[ hindi ] = "विभाग जोड़ो...";
-            Text[ slovak ] = "Vložiť Sekcia.";
+            Text[ slovak ] = "Vložiť oblasť...";
         };
         MenuItem
         {
@@ -1041,7 +1041,7 @@ Menu RID_POPUP_ME_VIEW
             Text[ czech ] = "Smazat sekci...";
             Text[ hebrew ] = "Abschnitt löschen...";
             Text[ hindi ] = "विभाग को मिटाओ...";
-            Text[ slovak ] = "Zmazať Sekcia.";
+            Text[ slovak ] = "Zmazať oblasť...";
         };
         MenuItem
         {
@@ -1073,7 +1073,7 @@ Menu RID_POPUP_ME_VIEW
             Text[ czech ] = "Změnit název...";
             Text[ hebrew ] = "Namen ändern...";
             Text[ hindi ] = "नाम् सुधारो...";
-            Text[ slovak ] = "Upraviť Názov.";
+            Text[ slovak ] = "Upraviť názov...";
         };
     };
 };
@@ -1857,7 +1857,7 @@ String ST_URL
     Text[ english_us ] = "URL";
     Text[ portuguese ] = "URL";
     Text[ russian ] = "URL";
-    Text[ greek ] = "URL";
+    Text[ greek ] = "~URL";
     Text[ dutch ] = "URL";
     Text[ french ] = "URL";
     Text[ spanish ] = "URL";
@@ -2036,6 +2036,10 @@ String ST_CUSTOM5
     Text[ hindi ] = "उपभोक्ता से परिभाषित क्षेत्र ~5";
     Text[ slovak ] = "Užívateľom definované pole ~5";
 };
+
+
+
+
 
 
 
