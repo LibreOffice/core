@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svgprinter.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2001-11-02 11:23:51 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:53:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,8 +110,15 @@ protected:
 
 public:
 
-                            SVGPrinterExport( const REF( NMSP_SAX::XDocumentHandler )& rxHandler, const JobSetup& rSetup,
-                                              const NMSP_RTL::OUString& rJobName, sal_uInt32 nCopies, sal_Bool bCollate );
+    // #110680#
+    SVGPrinterExport(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+        const REF( NMSP_SAX::XDocumentHandler )& rxHandler,
+        const JobSetup& rSetup,
+        const NMSP_RTL::OUString& rJobName,
+        sal_uInt32 nCopies,
+        sal_Bool bCollate );
+
     virtual                 ~SVGPrinterExport();
 
     virtual void            writePage( const JobSetup& rJobSetup, const GDIMetaFile& rMtf );
@@ -119,11 +126,17 @@ public:
 
 // -----------------------------------------------------------------------------
 
-SVGPrinterExport::SVGPrinterExport( const REF( NMSP_SAX::XDocumentHandler )& rxHandler, const JobSetup& rSetup,
-                  const NMSP_RTL::OUString& rJobName, sal_uInt32 nCopies, sal_Bool bCollate ) :
-        SvXMLExport( NMSP_RTL::OUString(), rxHandler ),
-        mpVDev( NULL ),
-        mnPage( 0 )
+// #110680#
+SVGPrinterExport::SVGPrinterExport(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+    const REF( NMSP_SAX::XDocumentHandler )& rxHandler,
+    const JobSetup& rSetup,
+    const NMSP_RTL::OUString& rJobName,
+    sal_uInt32 nCopies,
+    sal_Bool bCollate )
+:   SvXMLExport( xServiceFactory, NMSP_RTL::OUString(), rxHandler ),
+    mpVDev( NULL ),
+    mnPage( 0 )
 {
     maPrinter.SetJobSetup( rSetup );
 
@@ -318,7 +331,9 @@ sal_Bool SAL_CALL SVGPrinter::startJob( const REF( NMSP_SAX::XDocumentHandler )&
 
         const REF( NMSP_SAX::XDocumentHandler ) xDocumentHandler( rxHandler );
 
-        mpWriter = new SVGPrinterExport( xDocumentHandler, aJobSetup, rJobName, nCopies, bCollate );
+        // #110680#
+        // mpWriter = new SVGPrinterExport( xDocumentHandler, aJobSetup, rJobName, nCopies, bCollate );
+        mpWriter = new SVGPrinterExport( mxFact, xDocumentHandler, aJobSetup, rJobName, nCopies, bCollate );
     }
 
     return bRet;
