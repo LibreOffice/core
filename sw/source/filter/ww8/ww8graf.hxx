@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:42:10 $
+ *  last change: $Author: obo $ $Date: 2003-09-01 12:42:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #ifndef __SGI_STL_STACK
 #include <stack>
 #endif
+#ifndef SW_WRITERHELPER
+#include "writerhelper.hxx"
+#endif
 
 struct EscherShape
 {
@@ -92,12 +95,12 @@ private:
 
     std::stack<USHORT> maIndexes;
 
+    sw::hack::SetLayer maSetLayer;
+
     ULONG mnNoInitialObjects;
     ULONG mnInlines;
     SdrPage* mpDrawPg;
     const SvxMSDffShapeOrders *mpShapeOrders;
-    sal_Int8 mnHeaven;
-    sal_Int8 mnHell;
 
     USHORT GetEscherObjectIdx(ULONG nSpId);
     myeiter MapEscherIdxToIter(ULONG nIdx);
@@ -105,8 +108,8 @@ private:
     ULONG GetDrawingObjectPos(short nWwHeight);
     bool InsertObject(SdrObject *pObject, ULONG nPos);
 public:
-    wwZOrderer(SdrPage* pDrawPg, const SvxMSDffShapeOrders *pShapeOrders,
-        sal_Int8 nHeaven, sal_Int8 nHell);
+    wwZOrderer(const sw::hack::SetLayer &rSetLayer, SdrPage* pDrawPg,
+        const SvxMSDffShapeOrders *pShapeOrders);
     void InsertTextLayerObject(SdrObject* pObject);
     /*
      cmc: We should have have seperate ZOrder classes for 95- and 97+ and
