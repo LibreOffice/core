@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabbar.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tbe $ $Date: 2002-09-02 16:17:34 $
+ *  last change: $Author: pl $ $Date: 2002-09-06 12:30:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2618,6 +2618,12 @@ Size TabBar::CalcWindowSizePixel() const
     }
 
     return Size( nWidth, GetSettings().GetStyleSettings().GetScrollBarSize() );
+}
+// -----------------------------------------------------------------------
+
+Rectangle TabBar::GetPageArea() const
+{
+    return Rectangle( Point( mnOffX, mnOffY ), Size( mnOutWidth-mnOffX+1, GetSizePixel().Height()-mnOffY ) );
 }
 
 // -----------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabbar.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tbe $ $Date: 2002-09-02 16:14:51 $
+ *  last change: $Author: pl $ $Date: 2002-09-06 12:30:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -475,6 +475,8 @@ public:
     USHORT          GetPagePos( USHORT nPageId ) const;
     USHORT          GetPageId( const Point& rPos ) const;
     Rectangle       GetPageRect( USHORT nPageId ) const;
+    // returns the rectangle in which page tabs are drawn
+    Rectangle       GetPageArea() const;
 
     void            SetCurPageId( USHORT nPageId );
     USHORT          GetCurPageId() const { return mnCurPageId; }
