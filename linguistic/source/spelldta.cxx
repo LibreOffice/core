@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spelldta.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 12:51:42 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 16:14:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 
 #include <com/sun/star/linguistic2/SpellFailure.hpp>
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
+#include <com/sun/star/linguistic2/XDictionary1.hpp>
 
 #ifndef _TOOLS_DEBUG_HXX //autogen wg. DBG_ASSERT
 #include <tools/debug.hxx>
@@ -75,6 +76,8 @@
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
 #endif
+
+#include <vector>
 
 #include "spelldta.hxx"
 #include "lngsvcmgr.hxx"
@@ -160,6 +163,51 @@ BOOL SeqHasEntry(
             bRes = TRUE;
     }
     return bRes;
+}
+
+
+void SearchSimilarText( const OUString &rText, INT16 nLanguage,
+        Reference< XDictionaryList > &xDicList,
+        std::vector< OUString > & rDicListProps )
+{
+    if (!xDicList.is())
+        return;
+
+    const uno::Sequence< Reference< XDictionary > >
+            aDics( xDicList->getDictionaries() );
+    const Reference< XDictionary >
+            *pDic = aDics.getConstArray();
+    INT32 nDics = xDicList->getCount();
+
+    for (INT32 i = 0;  i < nDics;  i++)
+    {
+        Reference< XDictionary1 > xDic( pDic[i], UNO_QUERY );
+
+        DictionaryType  eType = xDic->getDictionaryType();
+        INT16           nLang = xDic->getLanguage();
+
+        if ( xDic.is() && xDic->isActive()
+            && (nLang == nLanguage  ||  nLang == LANGUAGE_NONE) )
+        {
+            DBG_ASSERT( eType != DictionaryType_MIXED,
+                    "unexpected dictionary type" );
+            const Sequence< Reference< XDictionaryEntry > > aEntries = xDic->getEntries();
+            const Reference< XDictionaryEntry > *pEntries = aEntries.getConstArray();
+            INT32 nLen = aEntries.getLength();
+            for (INT32 k = 0;  k < nLen;  ++k)
+            {
+                String aEntryTxt;
+                if (pEntries[k].is())
+                {
+                    aEntryTxt = pEntries[k]->getDictionaryWord();
+                    // remove characters used to determine hyphenation positions
+                    aEntryTxt.EraseAllChars( '=' );
+                }
+                if (aEntryTxt.Len() > 0  &&  LevDistance( rText, aEntryTxt ) <= 2)
+                    rDicListProps.push_back( aEntryTxt );
+            }
+        }
+    }
 }
 
 
