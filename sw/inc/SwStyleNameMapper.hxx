@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwStyleNameMapper.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 12:22:27 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:27:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,15 +64,25 @@
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
 #endif
-#ifndef _GETPOOLIDFROMNAMEENUM_HXX
-#include <SwGetPoolIdFromName.hxx>
-#endif
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
 #endif
-#include <hash_map>
-#include <stringhash.hxx>
+#ifndef _GETPOOLIDFROMNAMEENUM_HXX
+#include <SwGetPoolIdFromName.hxx>
+#endif
 
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
+
+#ifndef INCLUDED_HASH_MAP
+#include <hash_map>
+#define INCLUDED_HASH_MAP
+#endif
+
+#ifndef _STRINGHASH_HXX
+#include <stringhash.hxx>
+#endif
 
 /* This class holds all data about the names of styles used in the user
  * interface (UI names...these are localised into different languages).
@@ -186,20 +196,22 @@ public:
     // This gets the UI Name from the programmatic name
     static const String& GetUIName ( const String& rName, SwGetPoolIdFromName );
     static         void FillUIName ( const String& rName, String& rFillName, SwGetPoolIdFromName, sal_Bool bDisambiguate = sal_False );
+
     // Get the programmatic Name from the UI name
     static const String& GetProgName ( const String& rName, SwGetPoolIdFromName );
     static         void FillProgName ( const String& rName, String& rFillName, SwGetPoolIdFromName, sal_Bool bDisambiguate = sal_False );
 
     // This gets the UI Name from the Pool ID
-    static          void FillUIName ( sal_uInt16 nId, String& rFillName );
-    static const String& GetUIName  ( sal_uInt16 nId, const String& rName );
+    SW_DLLPUBLIC static          void FillUIName ( sal_uInt16 nId, String& rFillName );
+    SW_DLLPUBLIC static const String& GetUIName  ( sal_uInt16 nId, const String& rName );
 
     // This gets the programmatic Name from the Pool ID
     static          void FillProgName( sal_uInt16 nId, String& rFillName );
     static const String& GetProgName ( sal_uInt16 nId, const String& rName );
 
     // This gets the PoolId from the UI Name
-    static sal_uInt16 GetPoolIdFromUIName( const String& rName, SwGetPoolIdFromName );
+    SW_DLLPUBLIC static sal_uInt16 GetPoolIdFromUIName( const String& rName, SwGetPoolIdFromName );
+
     // Get the Pool ID from the programmatic name
     static sal_uInt16 GetPoolIdFromProgName( const String& rName, SwGetPoolIdFromName );
 
@@ -208,7 +220,7 @@ public:
     // RES_POOLCOLL_LABEL_TABLE, RES_POOLCOLL_LABEL_FRAME
     // forth and back.
     // Non-matching names remain unchanged.
-    static const String GetSpecialExtraProgName( const String& rExtraUIName );
+    SW_DLLPUBLIC static const String GetSpecialExtraProgName( const String& rExtraUIName );
     static const String GetSpecialExtraUIName( const String& rExtraProgName );
 
     static const SvStringsDtor& GetTextUINameArray();
