@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MColumns.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-12 11:48:41 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 15:30:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,12 +110,12 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 typedef connectivity::sdbcx::OCollection OCollection_TYPE;
 
-Reference< XNamed > OColumns::createObject(const ::rtl::OUString& _rName)
+sdbcx::ObjectType OColumns::createObject(const ::rtl::OUString& _rName)
 {
     Reference< XResultSet > xResult = m_pTable->getConnection()->getMetaData()->getColumns(Any(),
     m_pTable->getSchema(),m_pTable->getTableName(),_rName);
 
-    Reference< XNamed > xRet = NULL;
+    sdbcx::ObjectType xRet = NULL;
     if(xResult.is())
     {
                 Reference< XRow > xRow(xResult,UNO_QUERY);
