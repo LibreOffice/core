@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:24:18 $
+#   last change: $Author: jbu $ $Date: 2000-12-08 08:25:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,8 +66,8 @@ PRJNAME=extensions
 TARGET=workben
 LIBTARGET=NO
 
-#TESTAPP=testcomponent
-TESTAPP=testconnection
+TESTAPP=testcomponent
+#TESTAPP=testconnection
 
 TARGETTYPE=CUI
 ENABLE_EXCEPTIONS=TRUE
