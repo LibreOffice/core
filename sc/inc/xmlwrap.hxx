@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlwrap.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sab $ $Date: 2001-10-08 08:03:14 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:18:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,13 +62,24 @@
 #ifndef SC_XMLWRAP_HXX
 #define SC_XMLWRAP_HXX
 
+#ifndef _SOLAR_H
+#include <tools/solar.h>
+#endif
+
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
+#include <com/sun/star/uno/Reference.hxx>
+#endif
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
+#include <com/sun/star/uno/Sequence.hxx>
+#endif
+
 class ScDocument;
 class SfxMedium;
 class SvStorage;
 class ScMySharedData;
 
 namespace com { namespace sun { namespace star {
-    namespace uno { template<class X> class Reference; }
+    namespace beans { class PropertyValue; }
     namespace frame { class XModel; }
     namespace task { class XStatusIndicator; }
     namespace lang { class XMultiServiceFactory; }
