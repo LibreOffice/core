@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MPreparedStatement.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 18:28:25 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 12:22:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,7 +149,7 @@ void SAL_CALL OPreparedStatement::disposing()
 sal_Bool OPreparedStatement::parseSql( const ::rtl::OUString& sql , sal_Bool bAdjusted ) throw (
      ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException )
 {
-    OSL_TRACE("In/Out :: OPreparedStatement::parseSql()");
+    OSL_TRACE("in :: OPreparedStatement::parseSql()");
     if (!OStatement_Base::parseSql( sql ))
         return sal_False;
 
@@ -166,6 +166,8 @@ sal_Bool OPreparedStatement::parseSql( const ::rtl::OUString& sql , sal_Bool bAd
     m_pResultSet->acquire();
     m_xResultSet = Reference<XResultSet>(m_pResultSet);
     initializeResultSet(m_pResultSet);
+    OSL_TRACE("Out :: OPreparedStatement::parseSql()");
+    return sal_True;
 }
 
 // -----------------------------------------------------------------------------
@@ -179,11 +181,12 @@ OResultSet* OPreparedStatement::createResultSet( )
 // -----------------------------------------------------------------------------
 void OPreparedStatement::initializeResultSet( OResultSet* _pResult )
 {
+    OSL_TRACE("In : OPreparedStatement::initializeResultSet( )");
     OStatement_Base::initializeResultSet( _pResult );
 
-    OSL_TRACE("In/Out : OPreparedStatement::initializeResultSet( )");
     _pResult->setParameterColumns(m_xParamColumns);
     _pResult->setParameterRow(m_aParameterRow);
+    OSL_TRACE("Out : OPreparedStatement::initializeResultSet( )");
 }
 
 // -----------------------------------------------------------------------------
@@ -288,11 +291,12 @@ Reference< XConnection > SAL_CALL OPreparedStatement::getConnection(  ) throw(SQ
 Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
+    OSL_TRACE("In: OPreparedStatement::executeQuery" );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
     Reference< XResultSet > rs = OStatement_Base::executeQuery( m_sSqlStatement );
 
-    OSL_TRACE("In/Out: OPreparedStatement::executeQuery" );
+    OSL_TRACE("Out: OPreparedStatement::executeQuery" );
     return rs;
 }
 // -------------------------------------------------------------------------
