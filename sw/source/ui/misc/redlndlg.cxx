@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlndlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-27 13:24:49 $
+ *  last change: $Author: dvo $ $Date: 2002-04-22 12:45:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1316,19 +1316,23 @@ IMPL_LINK( SwRedlineAcceptDlg, GotoHdl, void*, EMPTYARG )
             else
                 bSel = TRUE;
 
+            // #98864# find the selected redline (ignore, if the redline is already gone)
             USHORT nPos = GetRedlinePos(*pActEntry);
+            if( nPos != USHRT_MAX )
+            {
 
-            const SwRedline& rRedln = pSh->GetRedline( nPos );
-            bIsNotFormated |= REDLINE_FORMAT != rRedln.GetType();
+                const SwRedline& rRedln = pSh->GetRedline( nPos );
+                bIsNotFormated |= REDLINE_FORMAT != rRedln.GetType();
 
 //JP 27.9.2001: make no sense if we handle readonly sections
 //          if( !bReadonlySel && rRedln.HasReadonlySel() )
 //              bReadonlySel = TRUE;
 
-            if (pSh->GotoRedline(nPos, TRUE))
-            {
-                pSh->SetInSelect();
-                pSh->EnterAddMode();
+                if (pSh->GotoRedline(nPos, TRUE))
+                {
+                    pSh->SetInSelect();
+                    pSh->EnterAddMode();
+                }
             }
 
             pSelEntry = pActEntry = pTable->NextSelected(pSelEntry);
