@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fcode.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-07 12:23:41 $
+ *  last change: $Author: pl $ $Date: 2001-05-11 18:45:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,9 +77,6 @@
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
-#ifndef _RTL_CHAR_H_
-#include <rtl/char.h>
-#endif
 #ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
 #include <com/sun/star/container/XIndexAccess.hpp>
 #endif
@@ -121,12 +118,15 @@ TYPEINIT1(OOp_COMPARE, OBoolOperator);
 TYPEINIT1(ONumOperator, OOperator);
 
 //------------------------------------------------------------------
+#if 0
 sal_Int32 compareIgnoreCase(const rtl::OUString& rStr1, const rtl::OUString& rStr2, const ::rtl::OLocale& rLocale)
 {
     rtl::OUString aString1 = rStr1.toUpperCase(rLocale);
     rtl::OUString aString2 = rStr2.toUpperCase(rLocale);
     return aString1.compareTo(aString2);
 }
+#endif
+
 //------------------------------------------------------------------
 OCode::~OCode(){}
 
@@ -377,6 +377,7 @@ sal_Bool OOp_COMPARE::operate(const OOperand* pLeft, const OOperand* pRight) con
         case DataType::CHAR:
         case DataType::VARCHAR:
         {
+#if 0
             static String sLanguage;
             static String sCountry;
             if (!sLanguage.Len())
@@ -385,6 +386,13 @@ sal_Bool OOp_COMPARE::operate(const OOperand* pLeft, const OOperand* pRight) con
             static rtl::OLocale aLocale = rtl::OLocale::registerLocale(sLanguage, sCountry);
 
             INT32 nRes = compareIgnoreCase(aLH, aRH, aLocale);
+#endif
+            INT32 nRes = rtl_ustr_compareIgnoreAsciiCase_WithLength
+                (
+                 static_cast<rtl::OUString>(aLH).pData->buffer,
+                 static_cast<rtl::OUString>(aLH).pData->length,
+                 static_cast<rtl::OUString>(aRH).pData->buffer,
+                 static_cast<rtl::OUString>(aRH).pData->length );
             switch(aPredicateType)
             {
                 case SQL_PRED_EQUAL:            bResult = (nRes == 0); break;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FConnection.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-27 10:08:10 $
+ *  last change: $Author: pl $ $Date: 2001-05-11 18:45:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,7 +207,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
         }
     }
 
-    if(aExt.len())
+    if(aExt.getLength())
         m_aFilenameExtension = aExt;
 
     ::ucb::Content aFile;
