@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParagraphProperties.idl,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-27 16:13:45 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 10:42:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,10 @@
 
 #ifndef __com_sun_star_style_ParagraphAdjust_idl__
 #include <com/sun/star/style/ParagraphAdjust.idl>
+#endif
+
+#ifndef __com_sun_star_util_Color_idl__
+#include <com/sun/star/util/Color.idl>
 #endif
 
 #ifndef __com_sun_star_style_LineSpacing_idl__
@@ -127,7 +131,7 @@ service ParagraphProperties
     // DocMerge from xml: property com::sun::star::style::ParagraphProperties::ParaBackColor
     /** contains the paragraph background color.
      */
-    [optional, property] long ParaBackColor;
+    [optional, property] com::sun::star::util::Color ParaBackColor;
 
     //-------------------------------------------------------------------------
 
