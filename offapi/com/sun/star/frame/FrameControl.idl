@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FrameControl.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:14 $
+ *  last change: $Author: mi $ $Date: 2001-11-01 10:29:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,8 +79,6 @@
 // DocMerge from xml: service com::sun::star::frame::FrameControl
 /** contains a frame with a desktop component.
 
-
-
     <p>If the control is visible and has a valid (loadable) component URL,
     then the <member>FrameControl::Frame</member> property is set.</p>
  */
@@ -102,7 +100,7 @@ service FrameControl
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::frame::FrameControl::ComponentUrl
-    /** contains the type of the component which is loaded into the frame
+    /** contains the type of the component which is loaded into the frame,
         or the document which implicitly specifies the type.
      */
     [property] string ComponentUrl;
@@ -124,6 +122,9 @@ service FrameControl
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:43:14  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:20  hjs
     initial import
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FrameLoaderFactory.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2000-11-20 10:06:11 $
+ *  last change: $Author: mi $ $Date: 2001-11-01 10:29:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,33 +80,32 @@ module com { module sun { module star { module frame {
 service FrameLoaderFactory
 {
     //-------------------------------------------------------------------------
-    /** interface to create the loader
-
+    /**interface to create the loader
         <p>
-        After a <type>TypeDetection</type> you can use these interface to create the right loader to load
-        the document into a frame. Give us an internal type name and we create a suitable <type>XSynchronousFrameLoader</type>
-        or< type>XFrameLoader</type> and return it at calling XMultiServiceFactory::createInstance...()
+        After a <type>TypeDetection</type> you can use these interfaces to create the right loader to
+        load the document into a frame. Give it an internal type name and it creates a suitable
+        <type>XSynchronousFrameLoader</type>    or <type>XFrameLoader</type> and returns it by calling
+        XMultiServiceFactory::createInstance...()
          - casted to XInterface! Please check returned object for his supported interface!
 
         @attention  Method XMultiServiceFactory::getAvailableServiceNames() isn't supported!
-                    Please use XNameAcces of these service for access on loader configuration.
+        Please use XNameAcces of these service for access on loader configuration.
         </p>
     */
     interface com::sun::star::lang::XMultiServiceFactory;
 
     //-------------------------------------------------------------------------
-    /** readonly access to loader configuration
+    /**readonly access to loader configuration
 
         <p>
         These interface support a readonly access to our internal configuration of all accessible loader.
-        The return value of XNameAccess::getByName() is a sequence<PropertyValue> packed in an Any!
-
-        Supported properties are:
-            name of property            value type of property      description
-            "Types"                     [sequence< string > ]       loader is registered for these types
-            "UIName"                    [string             ]       localized name of loader to show it at UI
-         </p>
-     */
+        The return value of XNameAccess::getByName() is a sequence<PropertyValue> packed in an Any!</p>
+<pre>
+Supported properties are:
+<property name    value type of property     description/>
+"Types"         [sequence< string > ]      loader is registered for these types
+"UIName"        [string            ]      localized name of loader to show it at UI
+</pre>  */
     interface com::sun::star::container::XNameAccess;
 };
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XFrame.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:25 $
+ *  last change: $Author: mi $ $Date: 2001-11-01 10:29:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,8 +98,6 @@ interface XFrame: com::sun::star::lang::XComponent
     // DocMerge from xml: method com::sun::star::frame::XFrame::getContainerWindow
     /** provides access to the window of the frame.
 
-
-
         <p>Normally this is used as the parent window of the
         controller window.  </p>
 
@@ -152,9 +150,7 @@ interface XFrame: com::sun::star::lang::XComponent
     // DocMerge from xml: method com::sun::star::frame::XFrame::findFrame
     /** searches for a frame with the specified name.
 
-
-
-        <p>Frames may contain other frames (e.g. a frameset) and may
+        <p>Frames may contain other frames (e.g., a frameset) and may
         be contained in other frames. This hierarchy is searched with
         this method.</p>
 
@@ -162,8 +158,9 @@ interface XFrame: com::sun::star::lang::XComponent
         "_self", "_top", "_active" etc. <var>nSearchFlags</var> is ignored when
         comparing these names with <var>aTargetFrameName</var>; further steps are
         controlled by <var>nSearchFlags</var>. If allowed, the name of the frame
-        itself is compared with the desired one, then ( again if allowed )
+        itself is compared with the desired one, and then ( again if allowed )
         the method
+
 
 
 
@@ -178,7 +175,7 @@ interface XFrame: com::sun::star::lang::XComponent
         for the parent frame (if allowed).</p>
 
         <p>If no frame with the given name is found, a new top frame is
-        created if this is not suppressed by a special <type>FrameSearchFlag</type>.
+        created; if this is not suppressed by a special <type>FrameSearchFlag</type>.
         The new frame also gets the desired name.</p>
      */
     com::sun::star::frame::XFrame findFrame( [in] string aTargetFrameName,
@@ -189,16 +186,9 @@ interface XFrame: com::sun::star::lang::XComponent
     // DocMerge from xml: method com::sun::star::frame::XFrame::isTop
     /** determines if the frame is a top frame.
 
-
-
         <p>In general a top frame is the frame which is a direct child of
         a task frame or which does not have a parent. If a frame returns
-        <TRUE/> for this method, all calls to
-
-
-
-
-
+        <TRUE/> for this method, all calls to <member>XDispatchProvider::queryDispatch</member>
         have to stop the search at such a frame unless the flag
         <const>FrameSearchFlag::TASKS</const> is set.</p>
      */
@@ -209,12 +199,10 @@ interface XFrame: com::sun::star::lang::XComponent
     // DocMerge from xml: method com::sun::star::frame::XFrame::activate
     /** activates this frame and thus the component within.
 
-
-
         <p>At first the frame sets itself as the active frame of its
         creator by calling
 
-
+<!-- JRH: Something seems to be missing from here? -->
 
 
         ,
@@ -226,7 +214,7 @@ interface XFrame: com::sun::star::lang::XComponent
         </p>
         <p>Finally, most frames may grab the focus to one of its windows
         or forward the activation to a sub-frame.</p>
-     */
+*/
     [oneway] void activate();
 
     //-------------------------------------------------------------------------
@@ -281,13 +269,13 @@ interface XFrame: com::sun::star::lang::XComponent
 
     // DocMerge from xml: method com::sun::star::frame::XFrame::contextChanged
     /** notifies the frame that the context of the controller within this
-        frame changed (i.e. the selection).
+        frame changed (i.e., the selection).
 
 
 
         <p>According to a call to this interface, the frame calls
 
-
+<!-- JRH: Something seems to be missing from here? -->
 
 
 
@@ -311,7 +299,7 @@ interface XFrame: com::sun::star::lang::XComponent
 
 
 
-        <p>E.g. it is possible to determine instantiation/destruction and
+        <p>E.g., it is possible to determine instantiation/destruction and
         activation/deactivation of components.</p>
      */
     [oneway] void addFrameActionListener( [in]XFrameActionListener xListener );
@@ -333,6 +321,9 @@ interface XFrame: com::sun::star::lang::XComponent
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/03/16 16:41:25  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.5  2000/12/19 16:03:30  mi
     documentations syntax errors fixed
 

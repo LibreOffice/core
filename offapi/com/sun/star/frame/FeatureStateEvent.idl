@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FeatureStateEvent.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: arellano $ $Date: 2001-04-13 20:49:34 $
+ *  last change: $Author: mi $ $Date: 2001-11-01 10:29:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@
 
 // DocMerge from xml: struct com::sun::star::frame::FeatureStateEvent
 /** This event is broadcast by a <type>Controller</type> whenever the state of
-    the feature changes.@see XController
+    the feature changes. @see XController
         @see XStatusListener
  */
 struct FeatureStateEvent: com::sun::star::lang::EventObject
@@ -116,8 +116,6 @@ struct FeatureStateEvent: com::sun::star::lang::EventObject
     // DocMerge from xml: field com::sun::star::frame::FeatureStateEvent::State
     /** contains the state of the feature in this dispatch.
 
-
-
         <p>This can be, for example, simply <TRUE/> for a boolean feature like
         underline on/off. Some simple types like <code>string</code> or
         <atom>boolean</atom> are useful here for generic UI elements, like
@@ -136,6 +134,9 @@ struct FeatureStateEvent: com::sun::star::lang::EventObject
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/04/13 20:49:34  arellano
+    corrected tense and added comment
+
     Revision 1.5  2000/12/21 08:35:10  mi
     @see interface/service/... ident -> @see ident - for new docu generator
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XFramesSupplier.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:25 $
+ *  last change: $Author: mi $ $Date: 2001-11-01 10:29:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,8 @@ interface XFramesSupplier: XFrame
         at the creator frame
         with <var>this</var> as the current argument. Then it broadcasts
         the <type>FrameActionEvent</type> <const>FrameAction::FRAME_ACTIVATED</const>.</p>
-     */
+
+<!-- JRH: Something seems to be missing from here? Or maybe there are pictures? -->   */
     void setActiveFrame( [in] XFrame xFrame );
 
 };
@@ -150,6 +151,9 @@ interface XFramesSupplier: XFrame
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2001/03/16 16:41:25  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.3  2000/11/08 12:43:14  mi
     moved from api
 

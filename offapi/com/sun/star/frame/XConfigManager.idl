@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XConfigManager.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:25 $
+ *  last change: $Author: mi $ $Date: 2001-11-01 10:29:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,15 +84,11 @@
 interface XConfigManager: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-
-
     // DocMerge from xml: method com::sun::star::frame::XConfigManager::addPropertyChangeListener
     /** add a listener to notify changes on "sKeyName"
 
-
-        <p>
-        If "sKeyName" a group of keys, the listener become one notify for every subkey!</p>
-     */
+        <p> If <var>sKeyName</var> specifies a group of keys, the listener gets one notify for each subkey.</p>
+    */
     [oneway] void addPropertyChangeListener( [in] string sKeyName, [in] com::sun::star::beans::XPropertyChangeListener xListener ) ;
 
     //-------------------------------------------------------------------------

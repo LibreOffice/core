@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XInterceptorInfo.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: arellano $ $Date: 2001-04-24 00:10:37 $
+ *  last change: $Author: mi $ $Date: 2001-11-01 10:29:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@
 
     <!-- Dennis: What is the "zB"?  -->
     <!-- Dennis: What "gets" the URL lists? -->
-*/
+<!-- JRH: Something still seems to be missing from here? -->*/
 interface XInterceptorInfo: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -95,6 +95,9 @@ interface XInterceptorInfo: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2001/04/24 00:10:37  arellano
+    modified grammatical number, spelling
+
     Revision 1.4  2001/03/16 16:41:25  jsc
     remove interfaceheader with uik and remove [const] in method definitions
 

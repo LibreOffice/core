@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XStorable.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2001-03-22 17:27:25 $
+ *  last change: $Author: mi $ $Date: 2001-11-01 10:29:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@
 //=============================================================================
 
 // DocMerge from xml: interface com::sun::star::frame::XStorable
-/** offers a simple way to store a component to a URL.
+/** offers a simple way to store a component to an URL.
 
 
 
@@ -167,7 +167,7 @@ interface XStorable: com::sun::star::uno::XInterface
         <dt>string FilterFlags
         </dt>
         <dd>    This string contains flags which depend on the filter.
-        They describe how the data is to be stored. (E.g. the
+        They describe how the data is to be stored. (E.g., the
         field delimitors for text database formats or the
         character set.)
 
@@ -220,6 +220,9 @@ interface XStorable: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/03/22 17:27:25  mi
+    #77161# arguments of XStorable::storeAs/To
+
     Revision 1.5  2001/03/16 16:41:25  jsc
     remove interfaceheader with uik and remove [const] in method definitions
 

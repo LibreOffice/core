@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Frame.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-11 12:09:47 $
+ *  last change: $Author: mi $ $Date: 2001-11-01 10:29:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ service Frame
 
 
     // DocMerge from xml: service com::sun::star::frame::Frame: interface com::sun::star::frame::XFrame
-    /** allows the component to be load and accessed
+    /** allows the component to be loaded and accessed
                 within the frame; it is the main connection to the
                 environment of the component.
      */
@@ -101,26 +101,22 @@ service Frame
     /** provides access to dispatchers for the frame.
 
         <p>What kind of URLs a frame accepts in the calls to <method>XDispatchProvider::queryDispatch</method>,
-        and how the returned dispatcher handles dispatches is completely implementation dependent (though of course
-        the restrictions of <type>XDispatchProvider</type> must be met).</p>
+        and how the returned dispatcher handles dispatches is completely implementation dependent
+        (though of course the restrictions of <type>XDispatchProvider</type> must be met).</p>
 
         <p>Frame implementations may (optionally) support special targets in the call to
         <method>XDispatchProvider::queryDispatch</method>.</p>
 
-        <p>Such special targets are passed as target frame name. They may, in addition, require special frame search
-        flags (see <type>FrameSearchFlag</type>), or, in opposite, limit the set of allowed flags.<br/>
-        Common special targets include:<br/>
+        <p>Such special targets are passed as target frame name. They may, in addition,
+        require special frame search flags (see <type>FrameSearchFlag</type>), or,
+        in opposite, limit the set of allowed flags.<br>
+        Common special targets include:
         <ul>
             <li><b>_blank</b> is used to create a new frame when dispatching the URL.</li>
-            <br/>
             <li><b>_self</b> forces the frame to dispatch the URL into itself.</li>
-            <br/>
             <li><b>_parent</b> dispatches the URL into the parent frame.</li>
-            <br/>
-            <li><b>_top</b> dispatches the URL into the top level frame the frame where this is invoked belongs to.</li>
-            <br/>
+            <li><b>_top</b> dispatches the URL into the top level frame, the frame where this is invoked belongs to.</li>
             <li><b>_helpagent</b> dispatches the URL into the help agent window belonging to the frame.</li>
-            <br/>
         </ul>
         </p>
 
@@ -151,6 +147,9 @@ service Frame
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2001/05/11 12:09:47  fs
+    added a rudimentary documentation to the XDispatchProvider interface (mainlyfor mentioning the _helpagent target)
+
     Revision 1.4  2001/01/23 10:08:25  mi
     optional interfaces now marked as [optional] instead of just a prosa description of this fact
 

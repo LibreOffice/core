@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SynchronousFrameLoader.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2000-11-20 10:06:11 $
+ *  last change: $Author: mi $ $Date: 2001-11-01 10:29:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,24 +83,21 @@
 /** Derivations of this abstract service are used to load components
     into <type>Frame</type>s of the environment.
 
-
-
-    <p>Concrete implementations of this service register for example
+    <p>Concrete implementations of this service register, for example,
     for file name extensions or MIME types to load appropriate
     components. The components loaded are at least <type>Controller</type>.</p>
  */
 service FrameLoader
 {
     //-------------------------------------------------------------------------
-    /** support synchron loading
+    /**support synchron loading
      */
     interface com::sun::star::frame::XSynchronousFrameLoader;
 
     //-------------------------------------------------------------------------
-    /** support initialization of loader with his own configuration!
-
+    /** support initialization of loader with its own configuration!
         <p>
-        A loader can support a readonly access to his own configuration.
+        A loader can support a readonly access to its own configuration.
         But readonly properties couldn't be set ...
         That's the reason for these interface!
         All Anys of given sequence are from Type <type>PropertyValue</type>.
@@ -109,18 +106,20 @@ service FrameLoader
     [optional] interface com::sun::star::lang::XInitialization;
 
     //-------------------------------------------------------------------------
-    /** readonly(!) access to loader configuration
-
+    /**readonly(!) access to loader configuration
         <p>
-        These interface support a readonly access to our internal configuration of THESE loader.
-        The loader himself get his configuration about <type>XInitialization</type> at creation by using
+        These interfaces support readonly access to our internal configuration of THIS loader.
+        The loader itself gets its configuration about <type>XInitialization</type> at creation by using
         the <type>FrameLoaderFactory</type>!
          </p>
      */
     [optional] interface com::sun::star::beans::XPropertySet;
 
-    [optional, property, readonly]  sequence< string >  Types       ;   /// loader is registered for these types
-    [optional, property, readonly]  string              UIName      ;   /// localized name of loader to show it at UI elements
+    /// loader is registered for these types
+    [optional, property, readonly]  sequence< string >  Types       ;
+
+    /// localized name of loader to show it at UI elements
+    [optional, property, readonly]  string              UIName      ;
 };
 
 //=============================================================================
@@ -130,6 +129,9 @@ service FrameLoader
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.1  2000/11/20 10:06:11  as
+    new interfaces for filter and type detection
+
     Revision 1.3  2000/11/08 12:43:14  mi
     moved from api
 

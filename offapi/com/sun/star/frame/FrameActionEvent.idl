@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FrameActionEvent.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-21 08:35:10 $
+ *  last change: $Author: mi $ $Date: 2001-11-01 10:29:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@
 
 // DocMerge from xml: struct com::sun::star::frame::FrameActionEvent
 /** This event struct is broadcast for actions which can happen to
-    components within frames.@see XFrameActionListener
+    components within frames. @see XFrameActionListener
  */
 struct FrameActionEvent: com::sun::star::lang::EventObject
 {
@@ -109,6 +109,9 @@ struct FrameActionEvent: com::sun::star::lang::EventObject
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/21 08:35:10  mi
+    @see interface/service/... ident -> @see ident - for new docu generator
+
     Revision 1.3  2000/11/08 12:43:14  mi
     moved from api
 

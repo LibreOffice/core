@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XExtendedFilterDetection.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:25 $
+ *  last change: $Author: mi $ $Date: 2001-11-01 10:29:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ interface XExtendedFilterDetection: com::sun::star::uno::XInterface
 
         <p>
         Implement it as an extra service for your frameloader to give information about
-        your responsibility for given URL. If you can handle these document return
+        your responsibility for a given URL. If you can handle these documents return
         a valid name for a filter or an empty string otherwise.</p>
      */
     string detect( [in] string sURL, [in] sequence< com::sun::star::beans::PropertyValue > aArgumentlist );

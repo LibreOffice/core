@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XComponentLoader.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mi $ $Date: 2001-03-22 17:25:56 $
+ *  last change: $Author: mi $ $Date: 2001-11-01 10:29:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,8 @@ module com {  module sun {  module star {  module frame {
 
 // DocMerge from xml: interface com::sun::star::frame::XComponentLoader
 /** This is a simple interface to load components by an URL into a
-    frame environment.@see Desktop
+    frame environment.
+        @see Desktop
         @see Frame
         @see XFrame
  */
@@ -104,7 +105,7 @@ interface XComponentLoader: com::sun::star::uno::XInterface
 
         @param aURL
             specifies the URL of the document to load. To create new documents,
-            use "private:factory/scalc", "private:factory/swriter" etc.
+            use "private:factory/scalc", "private:factory/swriter", etc.
 
         @param aTargetFrameName
             specifies the name of the frame to view the document in. If a frame
@@ -114,15 +115,15 @@ interface XComponentLoader: com::sun::star::uno::XInterface
 
         @param nSearchFlags
             use the values of <type>FrameSearchFlag</type> to specify
-            how to find the specified <var>aTargetFrameName</var>. Normally
-            simply use <code>0</code>.
+            how to find the specified <var>aTargetFrameName</var>.
+            Normally, simply use <code>0</code>.
 
         @param aArgs
-            these arguments specify component or filter specific behaviour.
-            For example "ReadOnly" with a boolean value specifies, whether
-            the document is opened read-only; "FilterName" specifies the
-            component type to create and filter to use (for example:
-            "scalc: Text - csv"). For more information see
+            these arguments specify component or filter specific behavior.
+            For example, "ReadOnly" with a boolean value specifies whether
+            the document is opened read-only. "FilterName" specifies the
+            component type to create and the filter to use, for example:
+            "scalc: Text - csv". For more information see
             <type scope="com::sun::star::document">MediaDescriptor</type>.
      */
     com::sun::star::lang::XComponent loadComponentFromURL( [in] string aURL,
@@ -141,6 +142,9 @@ interface XComponentLoader: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.9  2001/03/22 17:25:56  mi
+    #77161# arguments of XComponentLoader::loadComponents
+
     Revision 1.8  2001/03/16 16:41:25  jsc
     remove interfaceheader with uik and remove [const] in method definitions
 

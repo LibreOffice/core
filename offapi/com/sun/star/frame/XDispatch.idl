@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDispatch.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:25 $
+ *  last change: $Author: mi $ $Date: 2001-11-01 10:29:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ module com {  module sun {  module star {  module frame {
 
 // DocMerge from xml: interface com::sun::star::frame::XDispatch
 /** serves state information of objects which can be connected to
-    controllers (e.g. toolbox controllers).
+    controllers (e.g., toolbox controllers).
 
     <p>Each state change is to be broadcast to all registered
     status listeners. The first notification should be performed
@@ -95,10 +95,10 @@ module com {  module sun {  module star {  module frame {
     synchronous notification.</p>
 
     <p>The state consists of enabled/disabled and a short descriptive text
-    of the function (e.g. "undo insert character"). It is to be broadcast
-    whenever this state changes or the controller should reget the value
-    for the URL to which it is connected. Additionally a context-switch-event
-    is to be broadcast whenever the object may be out of scope
+    of the function (e.g., "undo insert character"). It is to be broadcast
+    whenever this state changes or the controller should re-get the value
+    for the URL to which it is connected. Additionally, a context-switch-event
+    is to be broadcast whenever the object may be out of scope,
     to force the state listener to requery the <type>XDispatch</type>.</p>
 
     @see        StatusEvent
@@ -112,12 +112,10 @@ interface XDispatch: com::sun::star::uno::XInterface
     // DocMerge from xml: method com::sun::star::frame::XDispatch::dispatch
     /** dispatches (executes) an URL asynchronously.
 
-        <p>It is only allowed to dispatch URLs for which you get this
-        <type>XDispatch</type>. Additional arguments "'#..." or "?...") are
-        allowed.</p>
+        <p>It is only allowed to dispatch URLs for which this <type>XDispatch</type>
+        was explicitely queried. Additional arguments "'#..." or "?...") are allowed.</p>
 
         @example
-
         <listing>
         // some code for a click-handler of a hyperlink in a view
         XFrame xTargetFrame = m_xFrame-&amp;gt;findFrame(
@@ -137,8 +135,8 @@ interface XDispatch: com::sun::star::uno::XInterface
     /** registers a listener of a controller for a specific URL
         to this object to receive status events.
 
-        <p>It is only allowed to register for URLs for which you got this
-        <type>XDispatch</type>. Additional arguments ("#..." or "?...") will be ignored.</p>
+        <p>It is only allowed to register for URLs for which this <type>XDispatch</type>
+        was explicitely queried. Additional arguments ("#..." or "?...") will be ignored.</p>
 
         @see XDispatch::removeStatusListener
      */
@@ -164,6 +162,9 @@ interface XDispatch: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/03/16 16:41:25  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.5  2000/12/19 16:03:30  mi
     documentations syntax errors fixed
 

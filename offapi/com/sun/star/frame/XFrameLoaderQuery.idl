@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XFrameLoaderQuery.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:25 $
+ *  last change: $Author: mi $ $Date: 2001-11-01 10:29:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@
 
 // DocMerge from xml: interface com::sun::star::frame::XFrameLoaderQuery
 /** Use this interface together with a XMultiServiceFactory to implement a frame
-    loader. You can support detailed informations about supported with XFrameLoaderQuery
+    loader. You can support detailed information about supported properties with XFrameLoaderQuery
     and create matching loader with XMultiServiceFactory.
 
 
@@ -113,7 +113,7 @@ interface XFrameLoaderQuery: com::sun::star::uno::XInterface
 
 
     // DocMerge from idl: method com::sun::star::frame::XFrameLoaderQuery::getLoaderProperties
-    /** return extended informations about all supported properties of an frame loader
+    /** return extended information about all supported properties of an frame loader
                 <P>
                 If you know a name of a loader call these method to get a set of all
                 supported properties. Use these values to create a new loader with special
@@ -128,11 +128,11 @@ interface XFrameLoaderQuery: com::sun::star::uno::XInterface
     /** search a filter for given parameter
 
         <p>
-        If you don't know a filter name of a loader call these method to search anyone
-        which support given parameter. Use returned name to get further informations
+        If you don't know a filter name of a loader, call these method to search for anyone
+        who supports a given parameter. Use returned name to get further information
         by means of getLoaderProperties() or create a new frame loader at a
         XMultiServiceFactory. Don't forget to add returned filter name to argument list
-        for faster creation! Otherwise we search for right loader again.
+        for faster creation! Otherwise, we must search for right loader again.
         (We look for FilterName first!)</p>
      */
     string searchFilter( [in] string sURL, [in] sequence< com::sun::star::beans::PropertyValue > seqArguments );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDesktop.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:25 $
+ *  last change: $Author: mi $ $Date: 2001-11-01 10:29:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,8 +91,6 @@
 // DocMerge from xml: interface com::sun::star::frame::XDesktop
 /** This is the main interface of a desktop service.
 
-
-
     <p>A desktop is an environment for components which can be viewed in
     frames. Frames are like frames in HTML framesets. This does not imply
     that a desktop can handle framesets; the frames may be top frames
@@ -107,9 +105,7 @@ interface XDesktop: com::sun::star::uno::XInterface
     // DocMerge from xml: method com::sun::star::frame::XDesktop::terminate
     /** tries to terminate the desktop.
 
-
-
-        <p>First a vetoable queryTermination-event is broadcast. If no
+        <p>First, a vetoable queryTermination-event is broadcast. If no
         TerminationVetoException was thrown, a notifyTermination-event is
         broadcast and <TRUE/> will be returned; otherwise an
         abortTermination-event is broadcast and <FALSE/> will be returned.
@@ -122,7 +118,7 @@ interface XDesktop: com::sun::star::uno::XInterface
 
     // DocMerge from xml: method com::sun::star::frame::XDesktop::addTerminateListener
     /** registers an event listener to the desktop, which is called
-        when the desktop is queried to terminate and when it really
+        when the desktop is queried to terminate, and when it really
         terminates.
      */
     [oneway] void addTerminateListener( [in] com::sun::star::frame::XTerminateListener xListener );
@@ -131,12 +127,7 @@ interface XDesktop: com::sun::star::uno::XInterface
 
     // DocMerge from xml: method com::sun::star::frame::XDesktop::removeTerminateListener
     /** unregisters an event listener which was registered with
-
-
-
-
-
-        .
+        <member>XDesktop::addTerminateListener</member>.
      */
     [oneway] void removeTerminateListener( [in] com::sun::star::frame::XTerminateListener xListener );
 
@@ -146,8 +137,8 @@ interface XDesktop: com::sun::star::uno::XInterface
     /** @returns
                 a collection of all components which are loaded into a frame.
 
-                <p>The component is by definition the model of the control which
-                is loaded into a frame or, if no model exists, into the control
+                <p>The component is, by definition, the model of the control which
+                is loaded into a frame, or if no model exists, into the control
                 itself.
 
                 <p>The service, <type>Components</type>, which is available from this
@@ -165,7 +156,7 @@ interface XDesktop: com::sun::star::uno::XInterface
                 the component within the desktop environment which has the UI focus.
 
                 <p>Normally, the component is the model part of the
-                active component. If no model existsm it is the active controller
+                active component. If no model exists it is the active controller
                 (view) itself.
      */
     com::sun::star::lang::XComponent getCurrentComponent();
@@ -188,6 +179,9 @@ interface XDesktop: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/03/16 16:41:25  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.5  2000/12/21 08:35:10  mi
     @see interface/service/... ident -> @see ident - for new docu generator
 

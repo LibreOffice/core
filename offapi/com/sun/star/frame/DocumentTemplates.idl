@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentTemplates.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-27 12:34:51 $
+ *  last change: $Author: mi $ $Date: 2001-11-01 10:29:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@ module com {  module sun {  module star {  module frame {
 
 //=============================================================================
 
-/** is an abstract service for a accessing the document templates of the office
+/** is an abstract service for accessing the document templates of the office
     and manipulate them ( add or rename or remove templates )
 */
 
@@ -88,6 +88,9 @@ service DocumentTemplates
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.1  2001/07/27 12:34:51  dv
+    #86311# Added for documentation purposes
+
     Revision 1.4  2001/04/13 20:26:41  arellano
     revised plural and added question
 
