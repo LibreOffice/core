@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filehelper.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 12:44:15 $
+ *  last change: $Author: jb $ $Date: 2001-11-09 11:57:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef _CONFIGMGR_FILEHELPER_HXX_
 #define _CONFIGMGR_FILEHELPER_HXX_
 
+#ifndef CONFIGMGR_UTILITY_HXX_
+#include "utility.hxx"
+#endif
+
 #ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
 #endif
@@ -114,11 +118,11 @@ namespace configmgr
 
         /** replaces a file specified by _aToURL with a file specified by _aFromURL.
         */
-        void replaceFile(const rtl::OUString& _aToURL, const rtl::OUString &_aFromURL) throw (io::IOException);
+        void replaceFile(const rtl::OUString& _aToURL, const rtl::OUString &_aFromURL) CFG_THROW1(io::IOException);
 
         /** removes a file specified by _aURL. Ignores the case of a non-existing file.
         */
-        void removeFile(const rtl::OUString& _aURL) throw (io::IOException);
+        void removeFile(const rtl::OUString& _aURL) CFG_THROW1(io::IOException);
 
         /** creates an error msg string for a given file error return code.
         */
@@ -127,7 +131,7 @@ namespace configmgr
         /** determines the modification time of a directory entry specified by a URL.
             @return the TimeValue of the last modification, if the file exists, otherwise a TimeValue(0,0).
         */
-        TimeValue getModifyTime(rtl::OUString const& _aNormalizedFilename) throw (io::IOException);
+        TimeValue getModifyTime(rtl::OUString const& _aNormalizedFilename);
     }
 } // namespace configmgr
 

@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: typeconverter.hxx,v $
+ *  $RCSfile: utility.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: jb $ $Date: 2001-11-09 11:57:14 $
  *
@@ -58,70 +58,42 @@
  *
  *
  ************************************************************************/
-#ifndef CONFIGMGR_TYPECONVERTER_HXX
-#define CONFIGMGR_TYPECONVERTER_HXX
 
 #ifndef CONFIGMGR_UTILITY_HXX_
-#include "utility.hxx"
-#endif
+#define CONFIGMGR_UTILITY_HXX_
 
-#ifndef _COM_SUN_STAR_SCRIPT_XTYPECONVERTER_HPP_
-#include <com/sun/star/script/XTypeConverter.hpp>
-#endif
+#define CFG_NOTHROW() SAL_THROW( () )
 
-#ifndef _RTL_USTRING_HXX_
-#include <rtl/ustring.hxx>
-#endif
+#define CFG_THROW1( Ex1 )           SAL_THROW( (Ex1) )
+#define CFG_THROW2( Ex1,Ex2 )       SAL_THROW( (Ex1,Ex2) )
+#define CFG_THROW3( Ex1,Ex2,Ex3 )   SAL_THROW( (Ex1,Ex2,Ex3) )
 
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
-#include <com/sun/star/uno/Sequence.hxx>
-#endif
+#define CFG_UNO_THROW1( Ex1 )           \
+    SAL_THROW( (::com::sun::star::Ex1, ::com::sun::star::uno::RuntimeException) )
+
+#define CFG_UNO_THROW2( Ex1,Ex2 )       \
+    SAL_THROW( (::com::sun::star::Ex1, ::com::sun::star::Ex2, ::com::sun::star::uno::RuntimeException) )
+
+#define CFG_UNO_THROW3( Ex1,Ex2,Ex3 )   \
+    SAL_THROW( (::com::sun::star::Ex1, ::com::sun::star::Ex2, ::com::sun::star::Ex3, ::com::sun::star::uno::RuntimeException) )
+
+#define CFG_UNO_THROW_ALL(  ) CFG_UNO_THROW1(uno::Exception)
+#define CFG_UNO_THROW_RTE(  ) CFG_UNO_THROW1(uno::RuntimeException)
 
 namespace configmgr
 {
-    namespace uno = ::com::sun::star::uno;
-    namespace script = ::com::sun::star::script;
-
-    // UNO Type handling
-    uno::Type getSequenceElementType(uno::Type const& rSequenceType);
-
-    uno::Type getBasicType(uno::Type const& rType, bool& bSequence);
-    inline
-    uno::Type getBasicType(uno::Type const& rType)
-    { bool dummy; return getBasicType(rType,dummy); }
-
-    // Any Conversion - uses TypeConverter
-    uno::Any toAny( const uno::Reference< script::XTypeConverter >& xTypeConverter,
-                    const ::rtl::OUString& _rValue,
-                    const uno::TypeClass& _rTypeClass)
-                CFG_UNO_THROW1( script::CannotConvertException );
-
-    rtl::OUString toString(const uno::Reference< script::XTypeConverter >& xTypeConverter, const uno::Any& rValue)
-                CFG_UNO_THROW1( script::CannotConvertException );
-
-    // Type conversion
-    uno::TypeClass toTypeClass(const ::rtl::OUString& _rType);
-    ::rtl::OUString toTypeName(const uno::TypeClass& _rTypeClass);
-
-    uno::Type toType(const ::rtl::OUString& _rsType);
-    uno::Type toListType(const ::rtl::OUString& _rsElementType);
-    ::rtl::OUString toTypeName(const uno::Type& _rType);
-
-    inline
-    uno::Type toType(const ::rtl::OUString& _rsSimpleType, bool isList)
+    class Noncopyable
     {
-        return isList ? toListType(_rsSimpleType) : toType(_rsSimpleType);
-    }
+    protected:
+        Noncopyable() {}
+        ~Noncopyable() {}
+    private:
+        Noncopyable     (Noncopyable& notImplemented);
+        void operator=  (Noncopyable& notImplemented);
+    };
 
-    // template names
-    ::rtl::OUString toTemplateName(const uno::Type& _rType);
-    ::rtl::OUString toTemplateName(const uno::TypeClass& _rBasicType, bool bList = false);
-    ::rtl::OUString toTemplateName(const ::rtl::OUString& _rBasicTypeName, bool bList = false);
+}
 
-     uno::Type parseTemplateName(::rtl::OUString const& sTypeName);
-     bool parseTemplateName(::rtl::OUString const& sTypeName, uno::TypeClass& _rType, bool& bList);
-     bool parseTemplateName(::rtl::OUString const& sTypeName, ::rtl::OUString& _rBasicName, bool& bList);
+#endif // CONFIGMGR_UTILITY_HXX_
 
-} // namespace configmgr
 
-#endif /* CONFIGMGR_TYPECONVERTER_HXX */
