@@ -2,9 +2,9 @@
  *
  *  $RCSfile: postdlg.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:21:42 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:11:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,8 @@ ModalDialog RID_SVXDLG_POSTIT
         Text[ hebrew ] = "‮מחבר‬";
         Text[ hindi ] = "लेखक";
         Text[ slovak ] = "Autor";
+        Text[ hungarian ] = "Szerző";
+        Text[ slovenian ] = "Avtor";
     };
     FixedText FT_LASTEDIT
     {
@@ -136,7 +138,7 @@ ModalDialog RID_SVXDLG_POSTIT
         Text [ portuguese_brazilian ] = "~Texto" ;
         Text [ portuguese ] = "~Texto" ;
         Text [ finnish ] = "~Teksti" ;
-        Text [ danish ] = "Tekst" ;
+        Text [ danish ] = "~Tekst" ;
         Text [ french ] = "Texte" ;
         Text [ swedish ] = "~Text" ;
         Text [ dutch ] = "~Tekst" ;
@@ -158,6 +160,8 @@ ModalDialog RID_SVXDLG_POSTIT
         Text[ hebrew ] = "‮טקסט‬";
         Text[ hindi ] = "~टेक्स्ट्";
         Text[ slovak ] = "~Text";
+        Text[ hungarian ] = "S~zöveg";
+        Text[ slovenian ] = "~Besedilo";
     };
     MultiLineEdit ED_EDIT
     {
@@ -201,6 +205,8 @@ ModalDialog RID_SVXDLG_POSTIT
         Text[ hebrew ] = "‮תוכן עיניינים‬";
         Text[ hindi ] = "विषयसूची";
         Text[ slovak ] = "Obsah";
+        Text[ hungarian ] = "Tartalom";
+        Text[ slovenian ] = "Vsebina";
     };
     OKButton BTN_POST_OK
     {
@@ -245,7 +251,7 @@ ModalDialog RID_SVXDLG_POSTIT
         Text[ spanish ] = "In~sertar";
         Text[ finnish ] = "L~iit�";
         Text[ italian ] = "~Inserisci";
-        Text[ danish ] = "~Paste";
+        Text[ danish ] = "~Inds�t";
         Text[ swedish ] = "~Infoga";
         Text[ polish ] = "Wklej";
         Text[ japanese ] = "挿入(~I)";
@@ -261,6 +267,8 @@ ModalDialog RID_SVXDLG_POSTIT
         Text[ hebrew ] = "‮הוספה‬";
         Text[ hindi ] = "~Insert";
         Text[ slovak ] = "Vlož~iť";
+        Text[ hungarian ] = "~Beszúrás";
+        Text[ slovenian ] = "~Vstavi";
     };
     PushButton BTN_AUTHOR
     {
@@ -294,6 +302,8 @@ ModalDialog RID_SVXDLG_POSTIT
         Text[ hebrew ] = "‮מחבר‬";
         Text[ hindi ] = "~लेखक";
         Text[ slovak ] = "~Autor";
+        Text[ hungarian ] = "Szerző";
+        Text[ slovenian ] = "Avtor";
     };
      // lokale Strings
     String STR_NOTIZ_EDIT
@@ -326,6 +336,8 @@ ModalDialog RID_SVXDLG_POSTIT
         Text[ hebrew ] = "‮עריכת הערה‬";
         Text[ hindi ] = "टिप्पणी संपादन";
         Text[ slovak ] = "Upraviť poznámku";
+        Text[ hungarian ] = "Jegyzet szerkesztése";
+        Text[ slovenian ] = "Uredi opombo";
     };
     String STR_NOTIZ_INSERT
     {
@@ -359,6 +371,8 @@ ModalDialog RID_SVXDLG_POSTIT
         Text[ hebrew ] = "‮הכנסת הערה‬";
         Text[ hindi ] = "टिप्पणी जोड़ो";
         Text[ slovak ] = "Vložiť poznámku";
+        Text[ hungarian ] = "Jegyzet beszúrása";
+        Text[ slovenian ] = "Vstavi opombo";
     };
     Text[ chinese_simplified ] = "备注";
     Text[ russian ] = "����������";
@@ -375,8 +389,11 @@ ModalDialog RID_SVXDLG_POSTIT
     Text[ hebrew ] = "‮הערה‬";
     Text[ hindi ] = "टिप्पणी";
     Text[ slovak ] = "Poznámka";
+    Text[ hungarian ] = "Megjegyzés";
+    Text[ slovenian ] = "Opomba";
 };
  // ********************************************************************** EOF
+
 
 
 
