@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: ab $ $Date: 2000-12-07 14:53:41 $
+ *  last change: $Author: sab $ $Date: 2000-12-07 17:09:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -374,6 +374,7 @@ XML_CONSTASCII_ACTION( sXML_conversion_mode, "conversion-mode" );
 XML_CONSTASCII_ACTION( sXML_copy_back, "copy-back" );
 XML_CONSTASCII_ACTION( sXML_copy_formulas, "copy-formulas" );
 XML_CONSTASCII_ACTION( sXML_copy_outline_levels, "copy-outline-levels" );
+XML_CONSTASCII_ACTION( sXML_copy_results_only, "copy-results-only" );
 XML_CONSTASCII_ACTION( sXML_copy_styles, "copy-styles" );
 XML_CONSTASCII_ACTION( sXML_corner_radius , "corner-radius" );
 XML_CONSTASCII_ACTION( sXML_correct, "correct");
@@ -1354,6 +1355,7 @@ XML_CONSTASCII_ACTION( sXML_table_page, "table-page" );
 XML_CONSTASCII_ACTION( sXML_table_row, "table-row" );
 XML_CONSTASCII_ACTION( sXML_table_row_group, "table-row-group" );
 XML_CONSTASCII_ACTION( sXML_table_rows, "table-rows" );
+XML_CONSTASCII_ACTION( sXML_table_source, "table-source" );
 XML_CONSTASCII_ACTION( sXML_tan, "tan" );
 XML_CONSTASCII_ACTION( sXML_tanh, "tanh" );
 XML_CONSTASCII_ACTION( sXML_target_cell_address, "target-cell-address");
