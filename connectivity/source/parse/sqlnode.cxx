@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlnode.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-08 16:26:02 $
+ *  last change: $Author: fs $ $Date: 2002-04-09 14:39:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,9 @@
 #ifndef _CONNECTIVITY_SQLSCAN_HXX
 #include "sqlscan.hxx"
 #endif
+#ifndef _COMPHELPER_NUMBERS_HXX_
+#include <comphelper/numbers.hxx>
+#endif
 
 
 
@@ -144,15 +147,13 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::i18n;
 using namespace ::osl;
-using namespace connectivity;
-using namespace dbtools;
+using namespace ::connectivity;
+using namespace ::dbtools;
+using namespace ::comphelper;
 
 
 extern int SQLyyparse (void);
 
-extern Any getNumberFormatProperty(const Reference< XNumberFormatsSupplier > & xFormatter,
-                                                          sal_Int32 nKey,
-                                                          const rtl::OUString& );
 extern ::rtl::OUString ConvertLikeToken(const OSQLParseNode* pTokenNode, const OSQLParseNode* pEscapeNode, sal_Bool bInternational);
 //------------------------------------------------------------------
 OSQLParseNode::SQLParseNodeParameter::SQLParseNodeParameter(const ::rtl::OUString& _rIdentifierQuote, const ::rtl::OUString& _rCatalogSep,
@@ -637,7 +638,6 @@ sal_Int16 OSQLParser::buildComparsionRule(OSQLParseNode*& pAppend,OSQLParseNode*
                                             nErg = -1;
                                             m_sErrorMessage = m_pContext->getErrorMessage(OParseContext::ERROR_INVALID_DATE_COMPARE);
                                         }
-
                                     }
                                     catch( Exception& )
                                     {
@@ -678,7 +678,7 @@ sal_Int16 OSQLParser::buildComparsionRule(OSQLParseNode*& pAppend,OSQLParseNode*
                                         {
                                             double fValue = m_xFormatter->convertStringToNumber(
                                                 xFormatTypes->getStandardFormat(::com::sun::star::util::NumberFormat::DATE, *m_pLocale),
-                                                                pLiteral->getTokenValue().getStr());
+                                                                                pLiteral->getTokenValue().getStr());
                                             nErg = buildNode_Date(fValue, nType, pAppend,pLiteral,pCompare);
                                         }
                                         else
@@ -822,8 +822,7 @@ sal_Int16 OSQLParser::buildLikeRule(OSQLParseNode*& pAppend, OSQLParseNode*& pLi
                             sal_Int16 nScale = 0;
                             try
                             {
-                                Any aValue = getNumberFormatProperty(m_xFormatter->getNumberFormatsSupplier(),
-                                                            m_nFormatKey, rtl::OUString::createFromAscii("Decimals"));
+                                Any aValue = getNumberFormatProperty( m_xFormatter, m_nFormatKey, ::rtl::OUString::createFromAscii("Decimals") );
                                 aValue >>= nScale;
                             }
                             catch( Exception& )
@@ -867,8 +866,7 @@ sal_Int16 OSQLParser::buildNode_STR_NUM(OSQLParseNode*& pAppend,OSQLParseNode*& 
         ::rtl::OUString aDec;
         try
         {
-            Any aValue = getNumberFormatProperty(m_xFormatter->getNumberFormatsSupplier(),
-                                        m_nFormatKey, rtl::OUString::createFromAscii("Decimals"));
+            Any aValue = getNumberFormatProperty( m_xFormatter, m_nFormatKey, ::rtl::OUString::createFromAscii("Decimals") );
             aValue >>= nScale;
         }
         catch( Exception& )
@@ -943,7 +941,7 @@ OSQLParseNode* OSQLParser::predicateTree(::rtl::OUString& rErrorMessage, const :
     if (!m_pLocale)
     {
         Locale aPreferredLocale( m_pContext->getPreferredLocale( ) );
-            // this temporary is due to a MSVC compiler bug
+            // this temporary is due to an MSVC compiler bug
         m_pLocale = new Locale( aPreferredLocale );
     }
 
@@ -984,7 +982,7 @@ OSQLParseNode* OSQLParser::predicateTree(::rtl::OUString& rErrorMessage, const :
 
         if (m_nFormatKey && m_xFormatter.is())
         {
-            Any aValue = getNumberFormatProperty(m_xFormatter->getNumberFormatsSupplier(), m_nFormatKey, OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_LOCALE));
+            Any aValue = getNumberFormatProperty( m_xFormatter, m_nFormatKey, OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_LOCALE) );
             OSL_ENSURE(aValue.getValueType() == ::getCppuType((const ::com::sun::star::lang::Locale*)0), "OSQLParser::PredicateTree : invalid language property !");
 
             if (aValue.getValueType() == ::getCppuType((const ::com::sun::star::lang::Locale*)0))
@@ -1105,27 +1103,6 @@ OSQLParser::OSQLParser(const ::com::sun::star::uno::Reference< ::com::sun::star:
         m_pContext = &s_aDefaultContext;
 }
 
-// -----------------------------------------------------------------------------
-Any getNumberFormatProperty(const Reference< ::com::sun::star::util::XNumberFormatsSupplier > &xSupplier,
-                                                   sal_Int32 nKey,
-                                                   const rtl::OUString& aPropertyName)
-{
-    OSL_ENSURE(xSupplier.is(), "getNumberFormatProperty : the formatter doesn't implement a supplier !");
-    Reference< ::com::sun::star::util::XNumberFormats >  xFormats = xSupplier->getNumberFormats();
-
-    if (xFormats.is())
-    {
-        try
-        {
-            Reference< XPropertySet > xProperties(xFormats->getByKey(nKey));
-            return xProperties->getPropertyValue(aPropertyName);
-        }
-        catch( Exception& )
-        {
-        }
-    }
-    return Any();
-}
 // -----------------------------------------------------------------------------
 void OSQLParseNode::substituteParameterNames(OSQLParseNode* _pNode)
 {
