@@ -2,9 +2,9 @@
  *
  *  $RCSfile: schedule.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2000-11-09 13:16:20 $
+ *  last change: $Author: kz $ $Date: 2000-11-27 08:45:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1262,7 +1262,7 @@ Text[ English_us ] = "Progress:";
     Text[ polish ] = "PostÍp:";
     Text[ portuguese_brazilian ] = "Progress";
     Text[ japanese ] = "êiíªèÛãµ:";
-    Text[ korean ] = "Progress";
+    Text[ korean ] = "¡¯«‡";
     Text[ chinese_simplified ] = "Ω¯≥Ã£∫";
     Text[ chinese_traditional ] = "∂iµ{°G";
     Text[ turkish ] = "Progress";
