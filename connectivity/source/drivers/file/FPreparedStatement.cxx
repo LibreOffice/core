@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FPreparedStatement.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-01 10:58:37 $
+ *  last change: $Author: oj $ $Date: 2001-04-04 14:25:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,10 @@ void OPreparedStatement::disposing()
     m_xMetaData = NULL;
     m_xRS       = NULL;
     if(m_aRow.isValid())
+    {
         m_aRow->clear();
+        m_aRow = NULL;
+    }
 
     if(m_pTable)
     {
