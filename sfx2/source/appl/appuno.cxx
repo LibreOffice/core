@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: mba $ $Date: 2001-07-20 10:17:16 $
+ *  last change: $Author: mba $ $Date: 2001-08-22 08:14:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -390,8 +390,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             nItems++;
         if ( rSet.GetItemState( SID_CONTENTTYPE ) == SFX_ITEM_SET )
             nItems++;
-        if ( rSet.GetItemState( SID_VIEW_POS_SIZE ) == SFX_ITEM_SET )
-            nItems++;
+//        if ( rSet.GetItemState( SID_VIEW_POS_SIZE ) == SFX_ITEM_SET )
+//            nItems++;
         if ( rSet.GetItemState( SID_POSTDATA ) == SFX_ITEM_SET )
             nItems++;
         if ( rSet.GetItemState( SID_CHARSET ) == SFX_ITEM_SET )
@@ -549,9 +549,9 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
         SFX_ITEMSET_ARG( &rSet, pRectItem, SfxRectangleItem, SID_VIEW_POS_SIZE, sal_False );
         if ( pRectItem )
         {
-            pValue[nItems].Name = sPosSize;
-            Rectangle aRect = pRectItem->GetValue();
-            DBG_ASSERT(sal_False, "TransformItems()\nSfxIniManager::GetString used to set property \"PosSize\" ...!\n");
+//            pValue[nItems].Name = sPosSize;
+//            Rectangle aRect = pRectItem->GetValue();
+            DBG_ERROR("PosSizeItem not supported yet!");
         }
 
         if ( rSet.GetItemState( SID_CHARSET, sal_False, &pItem ) == SFX_ITEM_SET )
