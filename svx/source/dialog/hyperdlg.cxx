@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyperdlg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: thb $ $Date: 2001-06-15 18:38:58 $
+ *  last change: $Author: sj $ $Date: 2001-10-01 15:25:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,6 +193,7 @@ SvxHpLinkDlg::SvxHpLinkDlg (Window* pParent, SfxBindings* pBindings)
     mbIsHTMLDoc     ( sal_False ),
     mbReadOnly      ( sal_False )
 {
+    mbGrabFocus = sal_True;
     // insert pages
     Image aImage;
     String aStrTitle;
@@ -417,8 +418,11 @@ USHORT SvxHpLinkDlg::SetPage ( SvxHyperlinkItem* pItem )
     aPageSet.Put ( *pItem );
 
     pCurrentPage->Reset( aPageSet );
-    pCurrentPage->SetInitFocus();
-
+    if ( mbGrabFocus )
+    {
+        pCurrentPage->SetInitFocus();   // #92535# grab the focus only once at initialization
+        mbGrabFocus = sal_False;
+    }
     return nPageId;
 }
 
