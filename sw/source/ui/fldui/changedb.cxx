@@ -2,9 +2,9 @@
  *
  *  $RCSfile: changedb.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:32:52 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:21:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,7 @@ SwChangeDBDlg::SwChangeDBDlg(SwView& rVw) :
     aAvailDBFT  (this, SW_RES(FT_AVAILDB    )),
     aUsedDBTLB  (this, SW_RES(TLB_USEDDB    )),
     aAvailDBTLB (this, SW_RES(TLB_AVAILDB   ), 0),
+    aAddDBPB    (this, ResId(PB_ADDDB)),
     aDescFT     (this, SW_RES(FT_DESC       )),
     aDocDBTextFT(this, SW_RES(FT_DOCDBTEXT  )),
     aDocDBNameFT(this, SW_RES(FT_DOCDBNAME  )),
@@ -166,6 +167,7 @@ SwChangeDBDlg::SwChangeDBDlg(SwView& rVw) :
 
     ShowDBName(pSh->GetDBData());
     aOKBT.SetClickHdl(LINK(this, SwChangeDBDlg, ButtonHdl));
+    aAddDBPB.SetClickHdl(LINK(this, SwChangeDBDlg, AddDBHdl));
 
     aUsedDBTLB.SetSelectionMode(MULTIPLE_SELECTION);
     aUsedDBTLB.SetWindowBits(WB_HASLINES|WB_CLIPCHILDREN|WB_SORT|WB_HASBUTTONS|WB_HASBUTTONSATROOT|WB_HSCROLL);
@@ -405,6 +407,16 @@ void SwChangeDBDlg::ShowDBName(const SwDBData& rDBData)
     }
 
     aDocDBNameFT.SetText(sName);
+}
+/*-- 27.05.2004 09:14:01---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+IMPL_LINK( SwChangeDBDlg, AddDBHdl, PushButton *, EMPTYARG )
+{
+    String sNewDB = SwNewDBMgr::LoadAndRegisterDataSource();
+    if(sNewDB.Len())
+        aAvailDBTLB.AddDataSource(sNewDB);
+    return 0;
 }
 
 
