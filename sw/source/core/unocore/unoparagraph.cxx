@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoparagraph.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2000-12-15 12:23:15 $
+ *  last change: $Author: os $ $Date: 2000-12-21 14:52:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -657,6 +657,7 @@ void SwXParagraph::dispose(void) throw( uno::RuntimeException )
         SwParaSelection aSelection(pUnoCrsr);
         pUnoCrsr->GetDoc()->DeleteAndJoin(*pUnoCrsr);
         pUnoCrsr->Remove(this);
+        aLstnrCntnr.Disposing();
     }
     else
         throw uno::RuntimeException();
@@ -769,5 +770,61 @@ OUString SwXParagraph::getString(void) throw( uno::RuntimeException )
     else
         throw uno::RuntimeException();
     return aRet;
+}
+/*-- 11.12.98 08:12:57---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwXParagraph::setString(const OUString& aString) throw( uno::RuntimeException )
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    SwUnoCrsr* pUnoCrsr = GetCrsr();
+
+    if(pUnoCrsr)
+    {
+        if(!SwUnoCursorHelper::IsStartOfPara(*pUnoCrsr))
+            pUnoCrsr->MovePara(fnParaCurr, fnParaStart);
+        SwXTextCursor::SelectPam(*pUnoCrsr, sal_True);
+        if(pUnoCrsr->GetNode()->GetTxtNode()->GetTxt().Len())
+            pUnoCrsr->MovePara(fnParaCurr, fnParaEnd);
+        SwXTextCursor::SetString(*pUnoCrsr, aString);
+        SwXTextCursor::SelectPam(*pUnoCrsr, sal_False);
+    }
+    else if(IsDescriptor())
+        m_sText = aString;
+    else
+        throw uno::RuntimeException();
+
+}
+/* -----------------23.03.99 12:49-------------------
+ *
+ * --------------------------------------------------*/
+uno::Reference< container::XEnumeration >  SwXParagraph::createContentEnumeration(const OUString& rServiceName)
+    throw( uno::RuntimeException )
+{
+    SwUnoCrsr* pUnoCrsr = GetCrsr();
+    if( !pUnoCrsr || COMPARE_EQUAL != rServiceName.compareToAscii("com.sun.star.text.TextContent") )
+        throw uno::RuntimeException();
+
+    uno::Reference< container::XEnumeration >  xRet = new SwXParaFrameEnumeration(*pUnoCrsr, PARAFRAME_PORTION_PARAGRAPH);
+    return xRet;
+}
+/* -----------------23.03.99 12:49-------------------
+ *
+ * --------------------------------------------------*/
+uno::Sequence< OUString > SwXParagraph::getAvailableServiceNames(void) throw( uno::RuntimeException )
+{
+    uno::Sequence< OUString > aRet(1);
+    OUString* pArray = aRet.getArray();
+    pArray[0] = C2U("com.sun.star.text.TextContent");
+    return aRet;
+}
+/*-- 11.12.98 08:12:58---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwXParagraph::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
+{
+    ClientModify(this, pOld, pNew);
+    if(!GetRegisteredIn())
+        aLstnrCntnr.Disposing();
 }
 
