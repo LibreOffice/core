@@ -206,7 +206,7 @@ namespace dynamic_loader {
 
 
     void DynamicLoader::parseUrl(const OUString & locationUrl, OUString * serviceName, OUString * link, OUString * resolver) throw(RuntimeException) {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         OString tmp = OUStringToOString(locationUrl, RTL_TEXTENCODING_ASCII_US);
         OSL_TRACE("DynamicLoader - locationUrl %s", tmp.getStr());
 #endif
@@ -239,7 +239,7 @@ namespace dynamic_loader {
                 else
                     value = token.trim();
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 OString attribute_tmp = OUStringToOString(attribute, RTL_TEXTENCODING_ASCII_US);
                 OSL_TRACE("DynamicLoader - attribute %s", attribute_tmp.getStr());
                 OString value_tmp = OUStringToOString(value, RTL_TEXTENCODING_ASCII_US);
