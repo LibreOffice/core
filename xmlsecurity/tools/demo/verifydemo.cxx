@@ -2,9 +2,9 @@
  *
  *  $RCSfile: verifydemo.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mmi $ $Date: 2004-07-15 08:12:10 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 18:15:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,15 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <unotools/streamhelper.hxx>
+//CP : added by CP
+#include <rtl/locale.h>
+#include <osl/nlsupport.h>
+
+#ifndef _OSL_PROCESS_H_
+#include <osl/process.h>
+#endif
+
+//CP : end
 
 namespace cssu = com::sun::star::uno;
 namespace cssl = com::sun::star::lang;
@@ -169,11 +178,18 @@ int SAL_CALL main( int argc, char **argv )
 
     aSignatureHelper.EndMission();
 
+    // By CP , for correct encoding
+    sal_uInt16 encoding ;
+    rtl_Locale *pLocale = NULL ;
+    osl_getProcessLocale( &pLocale ) ;
+    encoding = osl_getTextEncodingFromLocale( pLocale ) ;
+    // CP end
+
     fprintf( stdout, "------------- Signature details -------------\n" );
     fprintf( stdout, "%s",
         rtl::OUStringToOString(
             getSignatureInformations(aSignatureHelper.GetSignatureInformations(), aSignatureHelper.GetSecurityEnvironment()),
-            RTL_TEXTENCODING_UTF8).getStr());
+            encoding).getStr());
 
     return 0;
 }
