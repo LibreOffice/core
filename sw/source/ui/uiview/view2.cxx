@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: os $ $Date: 2002-06-12 14:18:20 $
+ *  last change: $Author: mba $ $Date: 2002-06-27 09:01:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -376,6 +376,7 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
                 USHORT nOn = ((const SfxBoolItem*)pItem)->GetValue() ? REDLINE_ON : 0;
                 USHORT nMode = pWrtShell->GetRedlineMode();
                 pWrtShell->SetRedlineMode( (nMode & ~REDLINE_ON) | nOn);
+                rReq.Done();
             }
         }
         break;
@@ -418,6 +419,7 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
                     nMode |= REDLINE_SHOW_DELETE;
 
                 pWrtShell->SetRedlineMode( nMode );
+                rReq.Done();
             }
             break;
         case FN_REDLINE_ACCEPT:
@@ -1042,8 +1044,11 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
                     enum SvxZoomType eType = ((const SvxZoomItem *)pItem)->GetType();
                     SetZoom( eType, ((const SvxZoomItem *)pItem)->GetValue() );
                 }
-                delete pDlg;
                 bUp = TRUE;
+                if ( pItem )
+                    rReq.AppendItem( *pItem );
+                rReq.Done();
+                delete pDlg;
             }
         }
         break;

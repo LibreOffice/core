@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsrch.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-31 15:55:46 $
+ *  last change: $Author: mba $ $Date: 2002-06-27 09:01:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,7 +199,9 @@ void SwView::ExecSearch(SfxRequest& rReq, BOOL bNoMessage)
 {
     const SfxItemSet* pArgs = rReq.GetArgs();
     const SfxPoolItem* pItem = 0;
-    BOOL bApi = rReq.IsAPI()|bNoMessage;
+    const USHORT nId = SvxSearchDialogWrapper::GetChildWindowId();
+    SvxSearchDialogWrapper *pWrp = (SvxSearchDialogWrapper*)GetViewFrame()->GetChildWindow(nId);
+    BOOL bApi = !pWrp | bNoMessage;
     BOOL bSrchList = TRUE;
 
     USHORT nSlot = rReq.GetSlot();
@@ -259,8 +261,6 @@ void SwView::ExecSearch(SfxRequest& rReq, BOOL bNoMessage)
             {
                 if(FID_SEARCH_NOW == nSlot && !rReq.IsAPI())
                     SwView::SetMoveType(NID_SRCH_REP);
-                const USHORT nId = SvxSearchDialogWrapper::GetChildWindowId();
-                SvxSearchDialogWrapper *pWrp = (SvxSearchDialogWrapper*)GetViewFrame()->GetChildWindow(nId);
                 if ( pWrp )
                 {
                     pSrchDlg = (SvxSearchDialog*)(pWrp->GetWindow());
@@ -414,7 +414,9 @@ void SwView::ExecSearch(SfxRequest& rReq, BOOL bNoMessage)
                 }
                 break;
             }
-        break;
+
+            rReq.Done();
+            break;
         case FID_SEARCH_SEARCHSET:
         case FID_SEARCH_REPLACESET:
         {
@@ -870,6 +872,9 @@ void SwView::StateSearch(SfxItemSet &rSet)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.9  2001/10/31 15:55:46  jp
+    Bug #93764#: ExechSearch - return correct WhichId range
+
     Revision 1.8  2001/10/08 14:18:33  jp
     Bug #92730#: FUNC_Search - clear replace string if only a search is active
 

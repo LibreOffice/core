@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-29 15:06:25 $
+ *  last change: $Author: mba $ $Date: 2002-06-27 09:01:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1278,8 +1278,7 @@ MOVEPAGE:
             //  print preview is now always in the same frame as the tab view
             //  -> always switch this frame back to normal view
             //  (ScTabViewShell ctor reads stored view data)
-            GetViewFrame()->GetBindings().Execute( SID_VIEWSHELL0, NULL, 0,
-                                                    SFX_CALLMODE_ASYNCHRON );
+            GetViewFrame()->GetDispatcher()->Execute( SID_VIEWSHELL0, NULL, 0, SFX_CALLMODE_ASYNCHRON );
             break;
         case FN_INSERT_BREAK:
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewtab.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2002-05-22 10:36:59 $
+ *  last change: $Author: mba $ $Date: 2002-06-27 09:01:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -476,6 +476,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
 
     switch  ( nSlot )
     {
+/*
     case RES_LR_SPACE:
     case SID_ATTR_LRSPACE:
     {
@@ -492,6 +493,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
         }
     }
     break;
+*/
     case SID_ATTR_LONG_LRSPACE:
     {
         SvxLongLRSpaceItem aLongLR( (const SvxLongLRSpaceItem&)rReq.GetArgs()->
@@ -835,6 +837,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
         }
     }
     break;
+/*
     case RES_UL_SPACE:
     case SID_ATTR_ULSPACE:
     {
@@ -850,6 +853,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
         }
     }
     break;
+*/
     case SID_ATTR_LONG_ULSPACE:
     {
         SvxLongULSpaceItem aLongULSpace( (const SvxLongULSpaceItem&)rReq.GetArgs()->
@@ -1269,8 +1273,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
     {
         switch ( nWhich )
         {
-        case RES_LR_SPACE:
-        case SID_ATTR_LRSPACE:
+//        case RES_LR_SPACE:
+//        case SID_ATTR_LRSPACE:
         case SID_ATTR_LONG_LRSPACE:
         {
             SvxLongLRSpaceItem aLongLR( (long)aPageLRSpace.GetLeft(),
@@ -1331,8 +1335,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
             break;
         }
         case SID_ATTR_LONG_ULSPACE:
-        case SID_ATTR_ULSPACE:
-        case RES_UL_SPACE:
+//        case SID_ATTR_ULSPACE:
+//        case RES_UL_SPACE:
         {
             // Rand Seite Oben Unten
             SvxULSpaceItem aUL( rDesc.GetMaster().GetULSpace() );
