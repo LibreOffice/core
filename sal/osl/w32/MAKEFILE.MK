@@ -2,9 +2,9 @@
 #
 #   $RCSfile: MAKEFILE.MK,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: hr $ $Date: 2003-09-29 14:40:12 $
+#   last change: $Author: hr $ $Date: 2004-02-03 13:26:12 $
 #
 #   Copyright according the GNU Public License.
 #
@@ -25,6 +25,13 @@ MULTITHREAD_OBJ=TRUE
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+
+# Uncomment the following line if you want to compile with -Wall 
+# it disables lots of unnecessary warnings comming from the Win32
+# header files (disabling warnings via command line only works with
+# MSVC >= 7.x)
+#
+# CFLAGS+=/wd4668 /wd4711 /wd4201 /wd4710 /wd4619 /wd4514 /wd4820
 
 # --- Files --------------------------------------------------------
 
@@ -48,12 +55,9 @@ SLOFILES=   $(SLO)$/conditn.obj  \
             $(SLO)$/pipeimpl.obj \
             $(SLO)$/pipe.obj     \
             $(SLO)$/util.obj     \
-            $(SLO)$/dir.obj      \
-            $(SLO)$/tempfile.obj\
-            $(SLO)$/fileimpl.obj\
+            $(SLO)$/file.obj\
             $(SLO)$/path_helper.obj\
             $(SLO)$/procimpl.obj
-
 
 OBJFILES=   $(OBJ)$/conditn.obj  \
             $(OBJ)$/diagnose.obj \
@@ -73,9 +77,7 @@ OBJFILES=   $(OBJ)$/conditn.obj  \
             $(OBJ)$/pipeimpl.obj \
             $(OBJ)$/pipe.obj     \
             $(OBJ)$/util.obj     \
-            $(OBJ)$/dir.obj      \
-            $(OBJ)$/tempfile.obj\
-            $(OBJ)$/fileimpl.obj\
+            $(OBJ)$/file.obj\
             $(OBJ)$/path_helper.obj\
             $(OBJ)$/procimpl.obj
 
