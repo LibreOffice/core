@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FontEmphasis.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2001-02-14 12:53:42 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:03:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@
 //=============================================================================
 /**  Determins the type and position of an emphasis mark in asian texts.
  */
-constants FontEmphasis
+published constants FontEmphasis
 {
     //-------------------------------------------------------------------------
     /** no emphasis mark is used.
