@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: gt $ $Date: 2002-08-13 12:57:30 $
+ *  last change: $Author: pb $ $Date: 2002-08-15 11:47:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -408,13 +408,13 @@ BOOL SvxStdParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
 
             if ( aLeftIndent.IsRelative() )
                 aMargin.SetTxtLeft( rOldItem.GetTxtLeft(),
-                                    aLeftIndent.GetValue() );
+                                    (USHORT)aLeftIndent.GetValue() );
             else
                 aMargin.SetTxtLeft( GetCoreValue( aLeftIndent, eUnit ) );
 
             if ( aRightIndent.IsRelative() )
                 aMargin.SetRight( rOldItem.GetRight(),
-                                  aRightIndent.GetValue() );
+                                  (USHORT)aRightIndent.GetValue() );
             else
                 aMargin.SetRight( GetCoreValue( aRightIndent, eUnit ) );
 
@@ -2223,9 +2223,9 @@ SvxAsianTabPage::SvxAsianTabPage( Window* pParent, const SfxItemSet& rSet ) :
     aCharDistFL(        this, ResId(FL_AS_CHAR_DIST     )),
     aPuntuationCB(      this, ResId(CB_AS_PUNCTUATION   )),
     aScriptSpaceCB(     this, ResId(CB_AS_SCRIPT_SPACE  )),
-    aAdjustNumbersCB(   this, ResId(CB_AS_ADJUST_NUMBERS)),
+    aAdjustNumbersCB(   this, ResId(CB_AS_ADJUST_NUMBERS))/*,
     aTextAlignFT(       this, ResId(FT_TEXT_ALIGN       )),
-    aTextAlignLB(       this, ResId(LB_TEXT_ALIGN       ))
+    aTextAlignLB(       this, ResId(LB_TEXT_ALIGN       ))*/
 {
     FreeResource();
 
@@ -2239,8 +2239,8 @@ SvxAsianTabPage::SvxAsianTabPage( Window* pParent, const SfxItemSet& rSet ) :
     aCharDistFL.Hide();
     aPuntuationCB.Hide();
     aAdjustNumbersCB.Hide();
-    aTextAlignFT.Hide();
-    aTextAlignLB.Hide();
+/*  aTextAlignFT.Hide();
+    aTextAlignLB.Hide(); */
     aScriptSpaceCB.SetPosPixel( aHangingPunctCB.GetPosPixel() );
     aHangingPunctCB.SetPosPixel( aAllowWordBreakCB.GetPosPixel() );
 //JP 28.3.2001 - these options currently not available!
@@ -2342,8 +2342,8 @@ void SvxAsianTabPage::Reset( const SfxItemSet& rSet )
     aAllowWordBreakCB   .Enable(FALSE);
     aPuntuationCB       .Enable(FALSE);
     aAdjustNumbersCB    .Enable(FALSE);
-    aTextAlignFT.Enable(FALSE);
-    aTextAlignLB.Enable(FALSE);
+/*  aTextAlignFT.Enable(FALSE);
+    aTextAlignLB.Enable(FALSE); */
 
 }
 /* -----------------------------19.12.00 12:59--------------------------------
