@@ -67,9 +67,7 @@ class TopWindowListener
                 System.out.println ("top level window not accessible");
             else
             {
-                // Ignore windows that have no accessible name,
-                // i.e. do not represent document windows.
-                if (xContext.getAccessibleName().length() > 0)
+                if ( ! FilterTopLevelNode (xContext))
                 {
                     Object aRootObject = maModel.getRoot();
                     if (aRootObject instanceof VectorNode)
@@ -83,6 +81,19 @@ class TopWindowListener
                 }
             }
         }
+    }
+
+    /** Ignore windows that have no accessible name, i.e. do not represent
+        document windows.
+        @return
+            Returns <true/> when the given object should not be displayed,
+            i.e. filtered out.
+    */
+    private boolean FilterTopLevelNode (XAccessibleContext xContext)
+    {
+        // No filtering at the moment.
+        return false;
+        //        return xContext.getAccessibleName().length() == 0;
     }
 
 
