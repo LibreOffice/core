@@ -27,14 +27,10 @@ $(ZIP1TARGETN) :
 .IF "$(make_zip_deps)" == ""
     @+echo ------------------------------
     @+echo Making: $@
+    @$(!eq,$?,$(?:s/delzip/zzz/) +-$(RM) +echo) $(uniq $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)) >&$(NULLDEV)
+    @+echo rebuilding zipfiles $(eq,$?,$(?:s/delzip/zzz/) >&$(NULLDEV) )
+    @+echo ------------------------------ $(eq,$?,$(?:s/delzip/zzz/) >&$(NULLDEV) )
 .IF "$(common_build_zip)"!=""
-.IF "$(make_zip_deps)" == ""
-.IF "$?"!="$(subst,delzip,zzz $?)"
-    @+-$(RM) $@  $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) >& $(NULLDEV)
-    @+echo rebuilding zipfiles
-    @+echo ------------------------------
-.ENDIF		# "$?"!="$(subst,delzip,zzz $?)"
-.ENDIF			# "$(make_zip_deps)" == ""
     @+-$(GNUCOPY) -p $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) >& $(NULLDEV)
 .IF "$(ZIPDIR)" != ""
 #	+-echo $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP1HELPVAR), $(@:db))}) $(ZIPDIR))
@@ -63,13 +59,13 @@ $(ZIP1TARGETN) :
     @+echo $@ : makefile.mk >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
 .IF "$(common_build_zip)"!=""
 .IF "$(ZIPDIR)" != ""
-    @+-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP1HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zipdep $(ZIPFLAGS) ..$/{$@} $(ZIP1LIST:s/LANGDIR/./) >> ..$/$(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
+    @+-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP1HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zipdep $(ZIPFLAGS) $@ $(foreach,j,$(ZIP1LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP1TARGET), $(@:db))}) $j )) >> ..$/$(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
 .ELSE			# "$(ZIPDIR)" != ""
     @+-zipdep $(ZIPFLAGS) $@ $(foreach,j,$(ZIP1LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP1HELPVAR), $(@:db))}) $j )) >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
 .ENDIF			# "$(ZIPDIR)" != ""
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIPDIR)" != ""
-    +-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP1HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zipdep $(ZIPFLAGS) ..$/{$@} $(ZIP1LIST:s/LANGDIR/./) >> ..$/$(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
+    +-zipdep $(ZIPFLAGS) $@ $(foreach,j,$(ZIP1LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP1TARGET), $(@:db))}) $j )) >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
 .ELSE			# "$(ZIPDIR)" != ""
     +-zipdep $(ZIPFLAGS) $@ $(foreach,j,$(ZIP1LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP1TARGET), $(@:db))}) $j )) >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
 .ENDIF			# "$(ZIPDIR)" != ""
@@ -78,7 +74,6 @@ $(ZIP1TARGETN) :
 .ENDIF
 
 # Anweisungen fuer das Linken
-#next Target
 # unroll begin
 
 .IF "$(GUI)"=="WNT"
@@ -108,14 +103,10 @@ $(ZIP2TARGETN) :
 .IF "$(make_zip_deps)" == ""
     @+echo ------------------------------
     @+echo Making: $@
+    @$(!eq,$?,$(?:s/delzip/zzz/) +-$(RM) +echo) $(uniq $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)) >&$(NULLDEV)
+    @+echo rebuilding zipfiles $(eq,$?,$(?:s/delzip/zzz/) >&$(NULLDEV) )
+    @+echo ------------------------------ $(eq,$?,$(?:s/delzip/zzz/) >&$(NULLDEV) )
 .IF "$(common_build_zip)"!=""
-.IF "$(make_zip_deps)" == ""
-.IF "$?"!="$(subst,delzip,zzz $?)"
-    @+-$(RM) $@  $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) >& $(NULLDEV)
-    @+echo rebuilding zipfiles
-    @+echo ------------------------------
-.ENDIF		# "$?"!="$(subst,delzip,zzz $?)"
-.ENDIF			# "$(make_zip_deps)" == ""
     @+-$(GNUCOPY) -p $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) >& $(NULLDEV)
 .IF "$(ZIPDIR)" != ""
 #	+-echo $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP2HELPVAR), $(@:db))}) $(ZIPDIR))
@@ -144,13 +135,13 @@ $(ZIP2TARGETN) :
     @+echo $@ : makefile.mk >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
 .IF "$(common_build_zip)"!=""
 .IF "$(ZIPDIR)" != ""
-    @+-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP2HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zipdep $(ZIPFLAGS) ..$/{$@} $(ZIP2LIST:s/LANGDIR/./) >> ..$/$(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
+    @+-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP2HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zipdep $(ZIPFLAGS) $@ $(foreach,j,$(ZIP2LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP2TARGET), $(@:db))}) $j )) >> ..$/$(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
 .ELSE			# "$(ZIPDIR)" != ""
     @+-zipdep $(ZIPFLAGS) $@ $(foreach,j,$(ZIP2LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP2HELPVAR), $(@:db))}) $j )) >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
 .ENDIF			# "$(ZIPDIR)" != ""
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIPDIR)" != ""
-    +-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP2HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zipdep $(ZIPFLAGS) ..$/{$@} $(ZIP2LIST:s/LANGDIR/./) >> ..$/$(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
+    +-zipdep $(ZIPFLAGS) $@ $(foreach,j,$(ZIP2LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP2TARGET), $(@:db))}) $j )) >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
 .ELSE			# "$(ZIPDIR)" != ""
     +-zipdep $(ZIPFLAGS) $@ $(foreach,j,$(ZIP2LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP2TARGET), $(@:db))}) $j )) >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
 .ENDIF			# "$(ZIPDIR)" != ""
@@ -159,7 +150,6 @@ $(ZIP2TARGETN) :
 .ENDIF
 
 # Anweisungen fuer das Linken
-#next Target
 # unroll begin
 
 .IF "$(GUI)"=="WNT"
@@ -189,14 +179,10 @@ $(ZIP3TARGETN) :
 .IF "$(make_zip_deps)" == ""
     @+echo ------------------------------
     @+echo Making: $@
+    @$(!eq,$?,$(?:s/delzip/zzz/) +-$(RM) +echo) $(uniq $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)) >&$(NULLDEV)
+    @+echo rebuilding zipfiles $(eq,$?,$(?:s/delzip/zzz/) >&$(NULLDEV) )
+    @+echo ------------------------------ $(eq,$?,$(?:s/delzip/zzz/) >&$(NULLDEV) )
 .IF "$(common_build_zip)"!=""
-.IF "$(make_zip_deps)" == ""
-.IF "$?"!="$(subst,delzip,zzz $?)"
-    @+-$(RM) $@  $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) >& $(NULLDEV)
-    @+echo rebuilding zipfiles
-    @+echo ------------------------------
-.ENDIF		# "$?"!="$(subst,delzip,zzz $?)"
-.ENDIF			# "$(make_zip_deps)" == ""
     @+-$(GNUCOPY) -p $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) >& $(NULLDEV)
 .IF "$(ZIPDIR)" != ""
 #	+-echo $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP3HELPVAR), $(@:db))}) $(ZIPDIR))
@@ -225,13 +211,13 @@ $(ZIP3TARGETN) :
     @+echo $@ : makefile.mk >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
 .IF "$(common_build_zip)"!=""
 .IF "$(ZIPDIR)" != ""
-    @+-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP3HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zipdep $(ZIPFLAGS) ..$/{$@} $(ZIP3LIST:s/LANGDIR/./) >> ..$/$(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
+    @+-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP3HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zipdep $(ZIPFLAGS) $@ $(foreach,j,$(ZIP3LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP3TARGET), $(@:db))}) $j )) >> ..$/$(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
 .ELSE			# "$(ZIPDIR)" != ""
     @+-zipdep $(ZIPFLAGS) $@ $(foreach,j,$(ZIP3LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP3HELPVAR), $(@:db))}) $j )) >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
 .ENDIF			# "$(ZIPDIR)" != ""
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIPDIR)" != ""
-    +-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP3HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zipdep $(ZIPFLAGS) ..$/{$@} $(ZIP3LIST:s/LANGDIR/./) >> ..$/$(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
+    +-zipdep $(ZIPFLAGS) $@ $(foreach,j,$(ZIP3LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP3TARGET), $(@:db))}) $j )) >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
 .ELSE			# "$(ZIPDIR)" != ""
     +-zipdep $(ZIPFLAGS) $@ $(foreach,j,$(ZIP3LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP3TARGET), $(@:db))}) $j )) >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
 .ENDIF			# "$(ZIPDIR)" != ""
@@ -240,7 +226,6 @@ $(ZIP3TARGETN) :
 .ENDIF
 
 # Anweisungen fuer das Linken
-#next Target
 # unroll begin
 
 .IF "$(GUI)"=="WNT"
@@ -270,14 +255,10 @@ $(ZIP4TARGETN) :
 .IF "$(make_zip_deps)" == ""
     @+echo ------------------------------
     @+echo Making: $@
+    @$(!eq,$?,$(?:s/delzip/zzz/) +-$(RM) +echo) $(uniq $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)) >&$(NULLDEV)
+    @+echo rebuilding zipfiles $(eq,$?,$(?:s/delzip/zzz/) >&$(NULLDEV) )
+    @+echo ------------------------------ $(eq,$?,$(?:s/delzip/zzz/) >&$(NULLDEV) )
 .IF "$(common_build_zip)"!=""
-.IF "$(make_zip_deps)" == ""
-.IF "$?"!="$(subst,delzip,zzz $?)"
-    @+-$(RM) $@  $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) >& $(NULLDEV)
-    @+echo rebuilding zipfiles
-    @+echo ------------------------------
-.ENDIF		# "$?"!="$(subst,delzip,zzz $?)"
-.ENDIF			# "$(make_zip_deps)" == ""
     @+-$(GNUCOPY) -p $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) >& $(NULLDEV)
 .IF "$(ZIPDIR)" != ""
 #	+-echo $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP4HELPVAR), $(@:db))}) $(ZIPDIR))
@@ -306,13 +287,13 @@ $(ZIP4TARGETN) :
     @+echo $@ : makefile.mk >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
 .IF "$(common_build_zip)"!=""
 .IF "$(ZIPDIR)" != ""
-    @+-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP4HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zipdep $(ZIPFLAGS) ..$/{$@} $(ZIP4LIST:s/LANGDIR/./) >> ..$/$(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
+    @+-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP4HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zipdep $(ZIPFLAGS) $@ $(foreach,j,$(ZIP4LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP4TARGET), $(@:db))}) $j )) >> ..$/$(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
 .ELSE			# "$(ZIPDIR)" != ""
     @+-zipdep $(ZIPFLAGS) $@ $(foreach,j,$(ZIP4LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP4HELPVAR), $(@:db))}) $j )) >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
 .ENDIF			# "$(ZIPDIR)" != ""
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIPDIR)" != ""
-    +-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP4HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zipdep $(ZIPFLAGS) ..$/{$@} $(ZIP4LIST:s/LANGDIR/./) >> ..$/$(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
+    +-zipdep $(ZIPFLAGS) $@ $(foreach,j,$(ZIP4LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP4TARGET), $(@:db))}) $j )) >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
 .ELSE			# "$(ZIPDIR)" != ""
     +-zipdep $(ZIPFLAGS) $@ $(foreach,j,$(ZIP4LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP4TARGET), $(@:db))}) $j )) >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
 .ENDIF			# "$(ZIPDIR)" != ""
@@ -321,7 +302,6 @@ $(ZIP4TARGETN) :
 .ENDIF
 
 # Anweisungen fuer das Linken
-#next Target
 # unroll begin
 
 .IF "$(GUI)"=="WNT"
@@ -351,14 +331,10 @@ $(ZIP5TARGETN) :
 .IF "$(make_zip_deps)" == ""
     @+echo ------------------------------
     @+echo Making: $@
+    @$(!eq,$?,$(?:s/delzip/zzz/) +-$(RM) +echo) $(uniq $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)) >&$(NULLDEV)
+    @+echo rebuilding zipfiles $(eq,$?,$(?:s/delzip/zzz/) >&$(NULLDEV) )
+    @+echo ------------------------------ $(eq,$?,$(?:s/delzip/zzz/) >&$(NULLDEV) )
 .IF "$(common_build_zip)"!=""
-.IF "$(make_zip_deps)" == ""
-.IF "$?"!="$(subst,delzip,zzz $?)"
-    @+-$(RM) $@  $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) >& $(NULLDEV)
-    @+echo rebuilding zipfiles
-    @+echo ------------------------------
-.ENDIF		# "$?"!="$(subst,delzip,zzz $?)"
-.ENDIF			# "$(make_zip_deps)" == ""
     @+-$(GNUCOPY) -p $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) >& $(NULLDEV)
 .IF "$(ZIPDIR)" != ""
 #	+-echo $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP5HELPVAR), $(@:db))}) $(ZIPDIR))
@@ -387,13 +363,13 @@ $(ZIP5TARGETN) :
     @+echo $@ : makefile.mk >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
 .IF "$(common_build_zip)"!=""
 .IF "$(ZIPDIR)" != ""
-    @+-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP5HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zipdep $(ZIPFLAGS) ..$/{$@} $(ZIP5LIST:s/LANGDIR/./) >> ..$/$(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
+    @+-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP5HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zipdep $(ZIPFLAGS) $@ $(foreach,j,$(ZIP5LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP5TARGET), $(@:db))}) $j )) >> ..$/$(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
 .ELSE			# "$(ZIPDIR)" != ""
     @+-zipdep $(ZIPFLAGS) $@ $(foreach,j,$(ZIP5LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP5HELPVAR), $(@:db))}) $j )) >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
 .ENDIF			# "$(ZIPDIR)" != ""
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIPDIR)" != ""
-    +-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP5HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zipdep $(ZIPFLAGS) ..$/{$@} $(ZIP5LIST:s/LANGDIR/./) >> ..$/$(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
+    +-zipdep $(ZIPFLAGS) $@ $(foreach,j,$(ZIP5LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP5TARGET), $(@:db))}) $j )) >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
 .ELSE			# "$(ZIPDIR)" != ""
     +-zipdep $(ZIPFLAGS) $@ $(foreach,j,$(ZIP5LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP5TARGET), $(@:db))}) $j )) >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
 .ENDIF			# "$(ZIPDIR)" != ""
@@ -402,7 +378,6 @@ $(ZIP5TARGETN) :
 .ENDIF
 
 # Anweisungen fuer das Linken
-#next Target
 # unroll begin
 
 .IF "$(GUI)"=="WNT"
@@ -432,14 +407,10 @@ $(ZIP6TARGETN) :
 .IF "$(make_zip_deps)" == ""
     @+echo ------------------------------
     @+echo Making: $@
+    @$(!eq,$?,$(?:s/delzip/zzz/) +-$(RM) +echo) $(uniq $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)) >&$(NULLDEV)
+    @+echo rebuilding zipfiles $(eq,$?,$(?:s/delzip/zzz/) >&$(NULLDEV) )
+    @+echo ------------------------------ $(eq,$?,$(?:s/delzip/zzz/) >&$(NULLDEV) )
 .IF "$(common_build_zip)"!=""
-.IF "$(make_zip_deps)" == ""
-.IF "$?"!="$(subst,delzip,zzz $?)"
-    @+-$(RM) $@  $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) >& $(NULLDEV)
-    @+echo rebuilding zipfiles
-    @+echo ------------------------------
-.ENDIF		# "$?"!="$(subst,delzip,zzz $?)"
-.ENDIF			# "$(make_zip_deps)" == ""
     @+-$(GNUCOPY) -p $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) >& $(NULLDEV)
 .IF "$(ZIPDIR)" != ""
 #	+-echo $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP6HELPVAR), $(@:db))}) $(ZIPDIR))
@@ -468,13 +439,13 @@ $(ZIP6TARGETN) :
     @+echo $@ : makefile.mk >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
 .IF "$(common_build_zip)"!=""
 .IF "$(ZIPDIR)" != ""
-    @+-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP6HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zipdep $(ZIPFLAGS) ..$/{$@} $(ZIP6LIST:s/LANGDIR/./) >> ..$/$(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
+    @+-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP6HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zipdep $(ZIPFLAGS) $@ $(foreach,j,$(ZIP6LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP6TARGET), $(@:db))}) $j )) >> ..$/$(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
 .ELSE			# "$(ZIPDIR)" != ""
     @+-zipdep $(ZIPFLAGS) $@ $(foreach,j,$(ZIP6LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP6HELPVAR), $(@:db))}) $j )) >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
 .ENDIF			# "$(ZIPDIR)" != ""
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIPDIR)" != ""
-    +-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP6HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zipdep $(ZIPFLAGS) ..$/{$@} $(ZIP6LIST:s/LANGDIR/./) >> ..$/$(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
+    +-zipdep $(ZIPFLAGS) $@ $(foreach,j,$(ZIP6LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP6TARGET), $(@:db))}) $j )) >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
 .ELSE			# "$(ZIPDIR)" != ""
     +-zipdep $(ZIPFLAGS) $@ $(foreach,j,$(ZIP6LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP6TARGET), $(@:db))}) $j )) >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
 .ENDIF			# "$(ZIPDIR)" != ""
@@ -483,7 +454,6 @@ $(ZIP6TARGETN) :
 .ENDIF
 
 # Anweisungen fuer das Linken
-#next Target
 # unroll begin
 
 .IF "$(GUI)"=="WNT"
@@ -513,14 +483,10 @@ $(ZIP7TARGETN) :
 .IF "$(make_zip_deps)" == ""
     @+echo ------------------------------
     @+echo Making: $@
+    @$(!eq,$?,$(?:s/delzip/zzz/) +-$(RM) +echo) $(uniq $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)) >&$(NULLDEV)
+    @+echo rebuilding zipfiles $(eq,$?,$(?:s/delzip/zzz/) >&$(NULLDEV) )
+    @+echo ------------------------------ $(eq,$?,$(?:s/delzip/zzz/) >&$(NULLDEV) )
 .IF "$(common_build_zip)"!=""
-.IF "$(make_zip_deps)" == ""
-.IF "$?"!="$(subst,delzip,zzz $?)"
-    @+-$(RM) $@  $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) >& $(NULLDEV)
-    @+echo rebuilding zipfiles
-    @+echo ------------------------------
-.ENDIF		# "$?"!="$(subst,delzip,zzz $?)"
-.ENDIF			# "$(make_zip_deps)" == ""
     @+-$(GNUCOPY) -p $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) >& $(NULLDEV)
 .IF "$(ZIPDIR)" != ""
 #	+-echo $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP7HELPVAR), $(@:db))}) $(ZIPDIR))
@@ -549,13 +515,13 @@ $(ZIP7TARGETN) :
     @+echo $@ : makefile.mk >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
 .IF "$(common_build_zip)"!=""
 .IF "$(ZIPDIR)" != ""
-    @+-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP7HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zipdep $(ZIPFLAGS) ..$/{$@} $(ZIP7LIST:s/LANGDIR/./) >> ..$/$(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
+    @+-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP7HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zipdep $(ZIPFLAGS) $@ $(foreach,j,$(ZIP7LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP7TARGET), $(@:db))}) $j )) >> ..$/$(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
 .ELSE			# "$(ZIPDIR)" != ""
     @+-zipdep $(ZIPFLAGS) $@ $(foreach,j,$(ZIP7LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP7HELPVAR), $(@:db))}) $j )) >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
 .ENDIF			# "$(ZIPDIR)" != ""
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIPDIR)" != ""
-    +-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP7HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zipdep $(ZIPFLAGS) ..$/{$@} $(ZIP7LIST:s/LANGDIR/./) >> ..$/$(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
+    +-zipdep $(ZIPFLAGS) $@ $(foreach,j,$(ZIP7LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP7TARGET), $(@:db))}) $j )) >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
 .ELSE			# "$(ZIPDIR)" != ""
     +-zipdep $(ZIPFLAGS) $@ $(foreach,j,$(ZIP7LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP7TARGET), $(@:db))}) $j )) >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
 .ENDIF			# "$(ZIPDIR)" != ""
@@ -564,7 +530,6 @@ $(ZIP7TARGETN) :
 .ENDIF
 
 # Anweisungen fuer das Linken
-#next Target
 # unroll begin
 
 .IF "$(GUI)"=="WNT"
@@ -594,14 +559,10 @@ $(ZIP8TARGETN) :
 .IF "$(make_zip_deps)" == ""
     @+echo ------------------------------
     @+echo Making: $@
+    @$(!eq,$?,$(?:s/delzip/zzz/) +-$(RM) +echo) $(uniq $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)) >&$(NULLDEV)
+    @+echo rebuilding zipfiles $(eq,$?,$(?:s/delzip/zzz/) >&$(NULLDEV) )
+    @+echo ------------------------------ $(eq,$?,$(?:s/delzip/zzz/) >&$(NULLDEV) )
 .IF "$(common_build_zip)"!=""
-.IF "$(make_zip_deps)" == ""
-.IF "$?"!="$(subst,delzip,zzz $?)"
-    @+-$(RM) $@  $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) >& $(NULLDEV)
-    @+echo rebuilding zipfiles
-    @+echo ------------------------------
-.ENDIF		# "$?"!="$(subst,delzip,zzz $?)"
-.ENDIF			# "$(make_zip_deps)" == ""
     @+-$(GNUCOPY) -p $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) >& $(NULLDEV)
 .IF "$(ZIPDIR)" != ""
 #	+-echo $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP8HELPVAR), $(@:db))}) $(ZIPDIR))
@@ -630,13 +591,13 @@ $(ZIP8TARGETN) :
     @+echo $@ : makefile.mk >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
 .IF "$(common_build_zip)"!=""
 .IF "$(ZIPDIR)" != ""
-    @+-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP8HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zipdep $(ZIPFLAGS) ..$/{$@} $(ZIP8LIST:s/LANGDIR/./) >> ..$/$(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
+    @+-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP8HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zipdep $(ZIPFLAGS) $@ $(foreach,j,$(ZIP8LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP8TARGET), $(@:db))}) $j )) >> ..$/$(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
 .ELSE			# "$(ZIPDIR)" != ""
     @+-zipdep $(ZIPFLAGS) $@ $(foreach,j,$(ZIP8LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP8HELPVAR), $(@:db))}) $j )) >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
 .ENDIF			# "$(ZIPDIR)" != ""
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIPDIR)" != ""
-    +-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP8HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zipdep $(ZIPFLAGS) ..$/{$@} $(ZIP8LIST:s/LANGDIR/./) >> ..$/$(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
+    +-zipdep $(ZIPFLAGS) $@ $(foreach,j,$(ZIP8LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP8TARGET), $(@:db))}) $j )) >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
 .ELSE			# "$(ZIPDIR)" != ""
     +-zipdep $(ZIPFLAGS) $@ $(foreach,j,$(ZIP8LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP8TARGET), $(@:db))}) $j )) >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
 .ENDIF			# "$(ZIPDIR)" != ""
@@ -645,7 +606,6 @@ $(ZIP8TARGETN) :
 .ENDIF
 
 # Anweisungen fuer das Linken
-#next Target
 # unroll begin
 
 .IF "$(GUI)"=="WNT"
@@ -675,14 +635,10 @@ $(ZIP9TARGETN) :
 .IF "$(make_zip_deps)" == ""
     @+echo ------------------------------
     @+echo Making: $@
+    @$(!eq,$?,$(?:s/delzip/zzz/) +-$(RM) +echo) $(uniq $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)) >&$(NULLDEV)
+    @+echo rebuilding zipfiles $(eq,$?,$(?:s/delzip/zzz/) >&$(NULLDEV) )
+    @+echo ------------------------------ $(eq,$?,$(?:s/delzip/zzz/) >&$(NULLDEV) )
 .IF "$(common_build_zip)"!=""
-.IF "$(make_zip_deps)" == ""
-.IF "$?"!="$(subst,delzip,zzz $?)"
-    @+-$(RM) $@  $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) >& $(NULLDEV)
-    @+echo rebuilding zipfiles
-    @+echo ------------------------------
-.ENDIF		# "$?"!="$(subst,delzip,zzz $?)"
-.ENDIF			# "$(make_zip_deps)" == ""
     @+-$(GNUCOPY) -p $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) >& $(NULLDEV)
 .IF "$(ZIPDIR)" != ""
 #	+-echo $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP9HELPVAR), $(@:db))}) $(ZIPDIR))
@@ -711,13 +667,13 @@ $(ZIP9TARGETN) :
     @+echo $@ : makefile.mk >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
 .IF "$(common_build_zip)"!=""
 .IF "$(ZIPDIR)" != ""
-    @+-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP9HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zipdep $(ZIPFLAGS) ..$/{$@} $(ZIP9LIST:s/LANGDIR/./) >> ..$/$(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
+    @+-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP9HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zipdep $(ZIPFLAGS) $@ $(foreach,j,$(ZIP9LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP9TARGET), $(@:db))}) $j )) >> ..$/$(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
 .ELSE			# "$(ZIPDIR)" != ""
     @+-zipdep $(ZIPFLAGS) $@ $(foreach,j,$(ZIP9LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP9HELPVAR), $(@:db))}) $j )) >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
 .ENDIF			# "$(ZIPDIR)" != ""
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIPDIR)" != ""
-    +-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP9HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zipdep $(ZIPFLAGS) ..$/{$@} $(ZIP9LIST:s/LANGDIR/./) >> ..$/$(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
+    +-zipdep $(ZIPFLAGS) $@ $(foreach,j,$(ZIP9LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP9TARGET), $(@:db))}) $j )) >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
 .ELSE			# "$(ZIPDIR)" != ""
     +-zipdep $(ZIPFLAGS) $@ $(foreach,j,$(ZIP9LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP9TARGET), $(@:db))}) $j )) >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
 .ENDIF			# "$(ZIPDIR)" != ""
@@ -726,7 +682,6 @@ $(ZIP9TARGETN) :
 .ENDIF
 
 # Anweisungen fuer das Linken
-#next Target
 # unroll begin
 
 .IF "$(GUI)"=="WNT"
@@ -756,14 +711,10 @@ $(ZIP10TARGETN) :
 .IF "$(make_zip_deps)" == ""
     @+echo ------------------------------
     @+echo Making: $@
+    @$(!eq,$?,$(?:s/delzip/zzz/) +-$(RM) +echo) $(uniq $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)) >&$(NULLDEV)
+    @+echo rebuilding zipfiles $(eq,$?,$(?:s/delzip/zzz/) >&$(NULLDEV) )
+    @+echo ------------------------------ $(eq,$?,$(?:s/delzip/zzz/) >&$(NULLDEV) )
 .IF "$(common_build_zip)"!=""
-.IF "$(make_zip_deps)" == ""
-.IF "$?"!="$(subst,delzip,zzz $?)"
-    @+-$(RM) $@  $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) >& $(NULLDEV)
-    @+echo rebuilding zipfiles
-    @+echo ------------------------------
-.ENDIF		# "$?"!="$(subst,delzip,zzz $?)"
-.ENDIF			# "$(make_zip_deps)" == ""
     @+-$(GNUCOPY) -p $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) >& $(NULLDEV)
 .IF "$(ZIPDIR)" != ""
 #	+-echo $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP10HELPVAR), $(@:db))}) $(ZIPDIR))
@@ -792,13 +743,13 @@ $(ZIP10TARGETN) :
     @+echo $@ : makefile.mk >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
 .IF "$(common_build_zip)"!=""
 .IF "$(ZIPDIR)" != ""
-    @+-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP10HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zipdep $(ZIPFLAGS) ..$/{$@} $(ZIP10LIST:s/LANGDIR/./) >> ..$/$(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
+    @+-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP10HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zipdep $(ZIPFLAGS) $@ $(foreach,j,$(ZIP10LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP10TARGET), $(@:db))}) $j )) >> ..$/$(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
 .ELSE			# "$(ZIPDIR)" != ""
     @+-zipdep $(ZIPFLAGS) $@ $(foreach,j,$(ZIP10LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP10HELPVAR), $(@:db))}) $j )) >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
 .ENDIF			# "$(ZIPDIR)" != ""
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIPDIR)" != ""
-    +-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP10HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zipdep $(ZIPFLAGS) ..$/{$@} $(ZIP10LIST:s/LANGDIR/./) >> ..$/$(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
+    +-zipdep $(ZIPFLAGS) $@ $(foreach,j,$(ZIP10LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP10TARGET), $(@:db))}) $j )) >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
 .ELSE			# "$(ZIPDIR)" != ""
     +-zipdep $(ZIPFLAGS) $@ $(foreach,j,$(ZIP10LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP10TARGET), $(@:db))}) $j )) >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
 .ENDIF			# "$(ZIPDIR)" != ""
@@ -807,4 +758,3 @@ $(ZIP10TARGETN) :
 .ENDIF
 
 # Anweisungen fuer das Linken
-#next Target
