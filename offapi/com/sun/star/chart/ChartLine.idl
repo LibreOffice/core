@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartLine.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:53:21 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 17:57:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@
 
 /** specifies line elements in a chart (regression lines, etc.).
  */
-service ChartLine
+published service ChartLine
 {
     service com::sun::star::drawing::LineProperties;
     interface com::sun::star::beans::XPropertySet;
