@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: cmc $ $Date: 2001-11-02 09:59:45 $
+ *  last change: $Author: cmc $ $Date: 2002-01-10 14:08:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -376,6 +376,27 @@ extern void sw3io_ConvertToOldField( const SwField* pFld, USHORT& rWhich,
 static Writer& OutWW8_SwFmtBreak( Writer& rWrt, const SfxPoolItem& rHt );
 static Writer& OutWW8_SwNumRuleItem( Writer& rWrt, const SfxPoolItem& rHt );
 
+/*
+Sadly word does not have two different sizes for asian font size and western
+font size, it has to different fonts, but not sizes, so we have to use our
+guess as to the script used and disable the export of one type
+*/
+BOOL SwWW8Writer::CollapseScriptsforWordOk(USHORT nScript, USHORT nWhich)
+{
+    BOOL bRet=TRUE;
+    if ( (nWhich == RES_CHRATR_CJK_FONTSIZE) &&
+          (nScript != com::sun::star::i18n::ScriptType::ASIAN) )
+    {
+        bRet = FALSE;
+    }
+    else if ( (nWhich == RES_CHRATR_FONTSIZE) &&
+          (nScript == com::sun::star::i18n::ScriptType::ASIAN) )
+    {
+        bRet = FALSE;
+    }
+    return bRet;
+}
+
 //------------------------------------------------------------
 //  Hilfsroutinen fuer Styles
 //------------------------------------------------------------
@@ -423,18 +444,10 @@ void SwWW8Writer::Out_SfxItemSet( const SfxItemSet& rSet,
             {
                 BOOL bChp = nWhich >= RES_CHRATR_BEGIN
                             && nWhich < RES_TXTATR_END;
-                if (bChp)
+                if ( bChp &&
+                    (!(SwWW8Writer::CollapseScriptsforWordOk(nScript,nWhich))) )
                 {
-                    if ( (nWhich == RES_CHRATR_CJK_FONTSIZE) &&
-                          (nScript != com::sun::star::i18n::ScriptType::ASIAN) )
-                    {
-                        bChp = FALSE;
-                    }
-                    else if ( (nWhich == RES_CHRATR_FONTSIZE) &&
-                          (nScript == com::sun::star::i18n::ScriptType::ASIAN) )
-                    {
-                        bChp = FALSE;
-                    }
+                    bChp = FALSE;
                 }
                 BOOL bPap = nWhich >= RES_PARATR_BEGIN
                             && nWhich < RES_FRMATR_END;
@@ -1135,8 +1148,8 @@ static Writer& OutWW8_SwColor( Writer& rWrt, const SfxPoolItem& rHt )
     else
         rWrtWW8.pO->Insert( 98, rWrtWW8.pO->Count() );
 
-    rWrtWW8.pO->Insert( rWrtWW8.TransCol( ((const SvxColorItem&)rHt).
-                                        GetValue() ), rWrtWW8.pO->Count() );
+    rWrtWW8.pO->Insert( rWrtWW8.TransCol( rAttr.GetValue() ),
+        rWrtWW8.pO->Count() );
     return rWrt;
 }
 
@@ -1229,16 +1242,27 @@ void SwWW8Writer::OutField( const SwField* pFld, BYTE nFldType,
     WW8_WrPlcFld* pFldP;
     switch ( nTxtTyp )
     {
-    case TXT_MAINTEXT:  pFldP = pFldMain;       break;
-    case TXT_HDFT:      pFldP = pFldHdFt;       break;
-    case TXT_FTN:       pFldP = pFldFtn;        break;
-    case TXT_EDN:       pFldP = pFldEdn;        break;
-    case TXT_TXTBOX:    pFldP = pFldTxtBxs;     break;
-    case TXT_HFTXTBOX:  pFldP = pFldHFTxtBxs;   break;
-
-    default:
-        ASSERT( !this, "was ist das fuer ein SubDoc-Type?" );
-        break;
+        case TXT_MAINTEXT:
+            pFldP = pFldMain;
+            break;
+        case TXT_HDFT:
+            pFldP = pFldHdFt;
+            break;
+        case TXT_FTN:
+            pFldP = pFldFtn;
+            break;
+        case TXT_EDN:
+            pFldP = pFldEdn;
+            break;
+        case TXT_TXTBOX:
+            pFldP = pFldTxtBxs;
+            break;
+        case TXT_HFTXTBOX:
+            pFldP = pFldHFTxtBxs;
+            break;
+        default:
+            ASSERT( !this, "was ist das fuer ein SubDoc-Type?" );
+            return;
     }
 
     if( WRITEFIELD_START & nMode )
@@ -1257,7 +1281,6 @@ void SwWW8Writer::OutField( const SwField* pFld, BYTE nFldType,
     }
     if( WRITEFIELD_CMD_END & nMode )
     {
-//      Strm() << " \\* FORMATVERBINDEN ";
         pFldP->Append( Fc2Cp( Strm().Tell() ), aFld14 );
         InsertSpecialChar( *this, 0x14 );
     }
@@ -1273,8 +1296,10 @@ void SwWW8Writer::OutField( const SwField* pFld, BYTE nFldType,
             if( bUnicode )
                 SwWW8Writer::WriteString16( Strm(), sOut, FALSE );
             else
+            {
                 SwWW8Writer::WriteString8( Strm(), sOut, FALSE,
-                                                RTL_TEXTENCODING_MS_1252 );
+                    RTL_TEXTENCODING_MS_1252 );
+            }
         }
     }
     if( WRITEFIELD_CLOSE & nMode )
@@ -1362,7 +1387,7 @@ void SwWW8Writer::StartTOX( const SwSection& rSect )
         static sal_Char __READONLY_DATA sEntryEnd[] = "\" ";
 
 
-        BYTE nCode;
+        BYTE nCode = 13;
         String aStr;
         switch( pTOX->GetType() )
         {
@@ -1382,8 +1407,7 @@ void SwWW8Writer::StartTOX( const SwSection& rSect )
                     for( BYTE n = 1; n <= 3; ++n )
                     {
                         String aTxt;
-                        int nRet = ::lcl_CheckForm( pTOX->GetTOXForm(),
-                                                    n, aTxt );
+                        int nRet = ::lcl_CheckForm(pTOX->GetTOXForm(),n,aTxt);
 
                         if( 3 == nRet )
                             aFillTxt = aTxt;
@@ -1405,7 +1429,6 @@ void SwWW8Writer::StartTOX( const SwSection& rSect )
         case TOX_TABLES:
             if( !pTOX->IsFromObjectNames() )
             {
-                nCode = 13;
                 aStr.AssignAscii( sContent );
 
                 (( aStr.APP_ASC( "\\c \"" )) += pTOX->GetSequenceName()
@@ -1423,7 +1446,6 @@ void SwWW8Writer::StartTOX( const SwSection& rSect )
 //      case TOX_CONTENT:
         default:
             {
-                nCode = 13;
                 aStr.AssignAscii( sContent );
 
                 String sTOption;
@@ -1643,8 +1665,8 @@ BOOL SwWW8Writer::GetNumberFmt( const SwField& rFld, String& rStr )
             rKeyMap[ NF_KEY_GGG     ].ASIGN_ASC( "ggg" );
         }
 
-        String sFmt( pNumFmt->GetMappedFormatstring(
-                        *(NfKeywordTable*)pKeyMap, aLocDat, TRUE ));
+        String sFmt( pNumFmt->GetMappedFormatstring(*(NfKeywordTable*)pKeyMap,
+            aLocDat, TRUE) );
         if( sFmt.Len() )
         {
             (( rStr.APP_ASC( "\\@\"" )) += sFmt ).APP_ASC( "\" " );
@@ -1668,8 +1690,7 @@ void WW8_GetNumberPara( String& rStr, const SwField& rFld )
     }
 }
 
-void SwWW8Writer::WritePostItBegin( const SwPostItField& rPostIt,
-                                    WW8Bytes* pO )
+void SwWW8Writer::WritePostItBegin( WW8Bytes* pOut )
 {
     BYTE aArr[ 3 ];
     BYTE* pArr = aArr;
@@ -1684,8 +1705,8 @@ void SwWW8Writer::WritePostItBegin( const SwPostItField& rPostIt,
     pChpPlc->AppendFkpEntry( Strm().Tell() );
     WriteChar( 0x05 );              // Annotation reference
 
-    if( pO )
-        pO->Insert( aArr, pArr - aArr, pO->Count() );
+    if( pOut )
+        pOut->Insert( aArr, pArr - aArr, pOut->Count() );
     else
         pChpPlc->AppendFkpEntry( Strm().Tell(), pArr - aArr, aArr );
 }
@@ -1884,7 +1905,7 @@ static Writer& OutWW8_SwField( Writer& rWrt, const SfxPoolItem& rHt )
         {
             const SwPostItField& rPFld = *(SwPostItField*)pFld;
             rWW8Wrt.pAtn->Append( rWW8Wrt.Fc2Cp( rWrt.Strm().Tell() ), rPFld );
-            rWW8Wrt.WritePostItBegin( rPFld, rWW8Wrt.pO );
+            rWW8Wrt.WritePostItBegin( rWW8Wrt.pO );
         }
         break;
 
@@ -2868,7 +2889,6 @@ static Writer& OutWW8_SwFmtSurround( Writer& rWrt, const SfxPoolItem& rHt )
 
 Writer& OutWW8_SwFmtVertOrient( Writer& rWrt, const SfxPoolItem& rHt )
 {
-    const SwFmtVertOrient& rFlyVert = (const SwFmtVertOrient&) rHt;
     SwWW8Writer& rWW8Wrt = (SwWW8Writer&)rWrt;
 
 //!!!! Ankertyp und entsprechende Umrechnung fehlt noch
@@ -2880,14 +2900,22 @@ Writer& OutWW8_SwFmtVertOrient( Writer& rWrt, const SfxPoolItem& rHt )
         short nPos;
         switch( rFlyVert.GetVertOrient() )
         {
-        case VERT_NONE:         nPos = (short)rFlyVert.GetPos(); break;
+        case VERT_NONE:
+            nPos = (short)rFlyVert.GetPos();
+            break;
         case VERT_CENTER:
-        case VERT_LINE_CENTER:  nPos = -8; break;
+        case VERT_LINE_CENTER:
+            nPos = -8;
+            break;
         case VERT_BOTTOM:
-        case VERT_LINE_BOTTOM:  nPos = -12; break;
+        case VERT_LINE_BOTTOM:
+            nPos = -12;
+            break;
         case VERT_TOP:
         case VERT_LINE_TOP:
-        default:                nPos = -4; break;
+        default:
+            nPos = -4;
+            break;
         }
 
         // sprmPDyaAbs
@@ -3251,16 +3279,18 @@ static Writer& OutWW8_SwFmtCol( Writer& rWrt, const SfxPoolItem& rHt )
         BOOL bEven = TRUE;
         USHORT n;
         USHORT nColWidth = rCol.CalcPrtColWidth( 0, (USHORT)nPageSize );
-        for( n = 1; n < nCols; n++ )
+        for (n = 1; n < nCols; n++)
         {
-            short nDiff = nColWidth - rCol.CalcPrtColWidth( n, (USHORT)nPageSize );
+            short nDiff = nColWidth -
+                rCol.CalcPrtColWidth( n, (USHORT)nPageSize );
+
             if( nDiff > 10 || nDiff < -10 )      // Toleranz: 10 tw
             {
                 bEven = FALSE;
                 break;
             }
         }
-        if( bEven )
+        if (bEven)
         {
             USHORT nSpace = rColumns[0]->GetRight() + rColumns[1]->GetLeft();
             for( n = 2; n < nCols; n++ )
@@ -3284,7 +3314,7 @@ static Writer& OutWW8_SwFmtCol( Writer& rWrt, const SfxPoolItem& rHt )
 
         if( !bEven )
         {
-            for( USHORT n = 0; n < nCols; ++n )
+            for (n = 0; n < nCols; ++n)
             {
                 //sprmSDxaColWidth
                 if( rWW8Wrt.bWrtWW8 )
@@ -3292,7 +3322,7 @@ static Writer& OutWW8_SwFmtCol( Writer& rWrt, const SfxPoolItem& rHt )
                 else
                     rWW8Wrt.pO->Insert( 136, rWW8Wrt.pO->Count() );
                 rWW8Wrt.pO->Insert( (BYTE)n, rWW8Wrt.pO->Count() );
-                rWW8Wrt.InsUInt16( rCol.CalcPrtColWidth( n, (USHORT)nPageSize ) );
+                rWW8Wrt.InsUInt16(rCol.CalcPrtColWidth(n, (USHORT)nPageSize));
 
                 if( n+1 != nCols )
                 {
@@ -3303,7 +3333,7 @@ static Writer& OutWW8_SwFmtCol( Writer& rWrt, const SfxPoolItem& rHt )
                         rWW8Wrt.pO->Insert( 137, rWW8Wrt.pO->Count() );
                     rWW8Wrt.pO->Insert( (BYTE)n, rWW8Wrt.pO->Count() );
                     rWW8Wrt.InsUInt16( rColumns[ n ]->GetRight() +
-                                       rColumns[ n + 1 ]->GetLeft() );
+                        rColumns[ n + 1 ]->GetLeft() );
                 }
             }
         }

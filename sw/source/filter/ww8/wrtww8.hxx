@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jp $ $Date: 2001-11-28 11:50:45 $
+ *  last change: $Author: cmc $ $Date: 2002-01-10 14:08:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,8 +201,7 @@ struct WW8_SHD;
 extern SwNodeFnTab aWW8NodeFnTab;
 extern SwAttrFnTab aWW8AttrFnTab;
 
-SV_DECL_VARARR( WW8Bytes, BYTE, 128, 128 );
-
+SV_DECL_VARARR( WW8Bytes, BYTE, 128, 128 )
 
 struct WW8_SepInfo
 {
@@ -218,16 +217,18 @@ struct WW8_SepInfo
           nLnNumRestartNo(0)
     {}
 
-    WW8_SepInfo( const SwPageDesc* pPD, const SwSectionFmt* pFmt, ULONG nLnRestart )
+    WW8_SepInfo( const SwPageDesc* pPD, const SwSectionFmt* pFmt,
+        ULONG nLnRestart )
         : pPageDesc(pPD), pSectionFmt(pFmt), pNumNd(0), nPgRestartNo(0),
           nLnNumRestartNo( nLnRestart ), pPDNd( 0 )
     {}
 };
-SV_DECL_VARARR( WW8_WrSepInfoPtrs, WW8_SepInfo, 4, 4 );
+SV_DECL_VARARR( WW8_WrSepInfoPtrs, WW8_SepInfo, 4, 4 )
 
 
 class WW8_WrPlcSepx     // Plc fuer PageDescs -> Sepx ( Section Extensions )
 {
+private:
     WW8_WrSepInfoPtrs aSects;   // PTRARR von SwPageDesc und SwSectionFmt
     SvULongs aCps;              // PTRARR von CPs
     WW8_PdAttrDesc* pAttrs;
@@ -246,6 +247,9 @@ class WW8_WrPlcSepx     // Plc fuer PageDescs -> Sepx ( Section Extensions )
                                    BYTE nFlag );
     static int HasBorderItem( const SwFmt& rFmt );
 
+    //No copy, no assign
+    WW8_WrPlcSepx(const WW8_WrPlcSepx&);
+    WW8_WrPlcSepx& operator=(const WW8_WrPlcSepx&);
 public:
     WW8_WrPlcSepx();
     ~WW8_WrPlcSepx();
@@ -431,7 +435,7 @@ public:
     void WriteSpecialText( ULONG nStart, ULONG nEnd, BYTE nTTyp );
     void WriteKFTxt1( const SwFmtCntnt& rCntnt );
     void WriteFtnBegin( const SwFmtFtn& rFtn, WW8Bytes* pO = 0 );
-    void WritePostItBegin( const SwPostItField& rFld, WW8Bytes* pO = 0 );
+    void WritePostItBegin( WW8Bytes* pO = 0 );
     void OutWW8FlyFrmsInCntnt( const SwTxtNode& rNd );
     void OutWW8FlyFrm( const SwFrmFmt& rFlyFrmFmt, const Point& rNdTopLeft );
     void OutFlyFrms( const SwCntntNode& rNode );
@@ -523,6 +527,7 @@ public:
     static void InsAsString16( WW8Bytes& rO, const String& );
     static void InsAsString8( WW8Bytes& rO, const String& rStr,
                                 rtl_TextEncoding eCodeSet );
+    static BOOL CollapseScriptsforWordOk(USHORT nScript, USHORT nWhich);
 
     void InsUInt16( UINT16 n )      { SwWW8Writer::InsUInt16( *pO, n ); }
     void InsUInt32( UINT32 n )      { SwWW8Writer::InsUInt32( *pO, n ); }
@@ -542,9 +547,12 @@ public:
     void SetEndPaM( SwPaM* pPam )   { pOrigPam = pPam; }
 };
 
-
 class WW8_WrPlcSubDoc   // Doppel-Plc fuer Foot-/Endnotes und Postits
 {
+private:
+    //No copying
+    WW8_WrPlcSubDoc(const WW8_WrPlcSubDoc&);
+    WW8_WrPlcSubDoc& operator=(const WW8_WrPlcSubDoc&);
 protected:
     SvULongs aCps;                  // PTRARR CP-Pos der Verweise
     SvPtrarr aCntnt;                // PTRARR von SwFmtFtn/PostIts/..
@@ -553,10 +561,9 @@ protected:
     WW8_WrPlcSubDoc();
     ~WW8_WrPlcSubDoc();
 
-    void WriteTxt( SwWW8Writer& rWrt, BYTE nTTyp, long& rCount );
-    void WritePlc( SwWW8Writer& rWrt, BYTE nTTyp,
-                    long& rTxtStt, long& rTxtCnt,
-                    long& rRefStt, long& rRefCnt ) const;
+    void WriteGenericTxt( SwWW8Writer& rWrt, BYTE nTTyp, long& rCount );
+    void WriteGenericPlc( SwWW8Writer& rWrt, BYTE nTTyp, long& rTxtStt,
+        long& rTxtCnt, long& rRefStt, long& rRefCnt ) const;
 
     virtual const SvULongs* GetShapeIdArr() const;
 };
@@ -564,7 +571,12 @@ protected:
 // Doppel-Plc fuer Footnotes/Endnotes
 class WW8_WrPlcFtnEdn : public WW8_WrPlcSubDoc
 {
+private:
     BYTE nTyp;
+
+    //No copying
+    WW8_WrPlcFtnEdn(const WW8_WrPlcFtnEdn&);
+    WW8_WrPlcFtnEdn& operator=(WW8_WrPlcFtnEdn &);
 public:
     WW8_WrPlcFtnEdn( BYTE nTTyp ) : nTyp( nTTyp ) {}
 
@@ -576,6 +588,10 @@ public:
 
 class WW8_WrPlcPostIt : public WW8_WrPlcSubDoc  // Doppel-Plc fuer PostIts
 {
+private:
+    //No copying
+    WW8_WrPlcPostIt(const WW8_WrPlcPostIt&);
+    WW8_WrPlcPostIt& operator=(WW8_WrPlcPostIt&);
 public:
     WW8_WrPlcPostIt() {}
 
@@ -584,14 +600,17 @@ public:
     inline void WritePlc( SwWW8Writer& rWrt ) const;
 };
 
-
 class WW8_WrPlcTxtBoxes : public WW8_WrPlcSubDoc    // Doppel-Plc fuer Textboxen
 {                                                   // Rahmen/DrawTextboxes!
+private:
+
     BYTE nTyp;
     SvULongs aShapeIds;             // VARARR of ShapeIds for the SwFrmFmts
-
     virtual const SvULongs* GetShapeIdArr() const;
 
+    //No copying
+    WW8_WrPlcTxtBoxes(const WW8_WrPlcTxtBoxes&);
+    WW8_WrPlcTxtBoxes& operator=(WW8_WrPlcTxtBoxes&);
 public:
     WW8_WrPlcTxtBoxes( BYTE nTTyp ) : nTyp( nTTyp ) {}
 
@@ -605,6 +624,7 @@ public:
 
 class WW8_WrPlcDrawObj      // PC for DrawObjects and Text-/OLE-/GRF-Boxes
 {
+private:
     SvULongs aCps;                  // VARARR CP-Pos der Verweise
     SvULongs aShapeIds;             // VARARR of ShapeIds for the SwFrmFmts
     SvPtrarr aCntnt;                // PTRARR of SwFrmFmt
@@ -612,13 +632,16 @@ class WW8_WrPlcDrawObj      // PC for DrawObjects and Text-/OLE-/GRF-Boxes
     SvUShorts aThick;               // VARARR of Border Thicknesses
     BYTE nTTyp;
 
+    //No copying
+    WW8_WrPlcDrawObj(const WW8_WrPlcDrawObj&);
+    WW8_WrPlcDrawObj& operator=(const WW8_WrPlcDrawObj&);
 public:
     WW8_WrPlcDrawObj( BYTE nType );
     ~WW8_WrPlcDrawObj();
 
     void WritePlc( SwWW8Writer& rWrt ) const;
     BOOL Append( SwWW8Writer&, WW8_CP nCp, const SwFrmFmt& rFmt,
-                const Point& rNdTopLeft );
+        const Point& rNdTopLeft );
     const SvPtrarr& GetCntntArr() const { return aCntnt; }
     void SetShapeDetails( const SwFrmFmt& rFmt, UINT32 nId, USHORT nThick );
     UINT32 GetShapeId( USHORT n ) const { return aShapeIds[ n ]; }
@@ -626,22 +649,25 @@ public:
 
 };
 
-
 typedef WW8_WrFkp* WW8_FkpPtr;  // Plc fuer Chpx und Papx ( incl PN-Plc )
-SV_DECL_PTRARR( WW8_WrFkpPtrs, WW8_FkpPtr, 4, 4 );
+SV_DECL_PTRARR( WW8_WrFkpPtrs, WW8_FkpPtr, 4, 4 )
 
 class WW8_WrPlcPn                   // Plc fuer Page Numbers
 {
+private:
     SwWW8Writer& rWrt;
     WW8_WrFkpPtrs aFkps;            // PTRARR
     USHORT nFkpStartPage;
     ePLCFT ePlc;
     BOOL bWrtWW8;                   // Fuer Writererkennung
 
+    //No copying
+    WW8_WrPlcPn(const WW8_WrPlcPn&);
+    WW8_WrPlcPn& operator=(const WW8_WrPlcPn&);
 public:
     WW8_WrPlcPn( SwWW8Writer& rWrt, ePLCFT ePl, WW8_FC nStartFc );
     ~WW8_WrPlcPn();
-    void AppendFkpEntry( WW8_FC nEndFc, short nVarLen = 0, const BYTE* pSprms = 0 );
+    void AppendFkpEntry(WW8_FC nEndFc,short nVarLen = 0,const BYTE* pSprms = 0);
     void WriteFkps();
     void WritePlc();
 };
@@ -649,14 +675,18 @@ public:
 // class WW8_WrPlc1 ist erstmal nur fuer Felder
 class WW8_WrPlc1
 {
+private:
     SvULongs aPos;              // PTRARR von CPs
     BYTE* pData;                // Inhalte ( Strukturen )
     ULONG nDataLen;
     USHORT nStructSiz;
+
+    //No copying
+    WW8_WrPlc1(const WW8_WrPlc1&);
+    WW8_WrPlc1& operator=(const WW8_WrPlc1&);
 protected:
     USHORT Count() const { return aPos.Count(); }
     void Write( SvStream& rStrm );
-
 public:
     WW8_WrPlc1( USHORT nStructSz );
     ~WW8_WrPlc1();
@@ -665,9 +695,14 @@ public:
 };
 
 // class WW8_WrPlcFld ist fuer Felder
-class WW8_WrPlcFld: public WW8_WrPlc1
+class WW8_WrPlcFld : public WW8_WrPlc1
 {
+private:
     BYTE nTxtTyp;
+
+    //No copying
+    WW8_WrPlcFld(const WW8_WrPlcFld&);
+    WW8_WrPlcFld& operator=(const WW8_WrPlcFld&);
 public:
     WW8_WrPlcFld( USHORT nStructSz, BYTE nTTyp )
         : WW8_WrPlc1( nStructSz ), nTxtTyp( nTTyp )
@@ -675,18 +710,22 @@ public:
     BOOL Write( SwWW8Writer& rWrt );
 };
 
-class WW8_WrMagicTable: public WW8_WrPlc1
+class WW8_WrMagicTable : public WW8_WrPlc1
 {
+private:
+    //No copying
+    WW8_WrMagicTable(const WW8_WrMagicTable&);
+    WW8_WrMagicTable& operator=(const WW8_WrMagicTable&);
 public:
     WW8_WrMagicTable() : WW8_WrPlc1( 4 ) {Append(0,0);}
     void Append( WW8_CP nCp, ULONG nData );
     BOOL Write( SwWW8Writer& rWrt );
 };
 
-
 // class SwWW8WrGrf sammelt Grafiken und gibt sie aus
 class SwWW8WrGrf
 {
+private:
     SwWW8Writer& rWrt;  // SwWW8Writer fuer Zugriff auf die Vars
     SvPtrarr aNds;      // Positionen der SwGrfNodes und SwOleNodes
     SvPtrarr aFlys;     // Umgebende FlyFrms dazu
@@ -696,11 +735,15 @@ class SwWW8WrGrf
     USHORT nIdx;        // Index in File-Positionen
 
     void Write1GrfHdr( SvStream& rStrm, const SwNoTxtNode* pNd,
-            const SwFlyFrmFmt* pFly, UINT16 mm, UINT16 nWidth, UINT16 nHeight );
+        const SwFlyFrmFmt* pFly, UINT16 mm, UINT16 nWidth, UINT16 nHeight );
     void Write1Grf1( SvStream& rStrm, const SwGrfNode* pGrfNd,
-                    const SwFlyFrmFmt* pFly, UINT16 nWidth, UINT16 nHeight );
+        const SwFlyFrmFmt* pFly, UINT16 nWidth, UINT16 nHeight );
     void Write1Grf( SvStream& rStrm, const SwNoTxtNode* pNd,
-                    const SwFlyFrmFmt* pFly, UINT16 nWidth, UINT16 nHeight );
+        const SwFlyFrmFmt* pFly, UINT16 nWidth, UINT16 nHeight );
+
+    //No copying
+    SwWW8WrGrf(const SwWW8WrGrf&);
+    SwWW8WrGrf& operator=(const SwWW8WrGrf&);
 public:
     SwWW8WrGrf( SwWW8Writer& rW )
         : rWrt( rW ), aNds( 4, 4 ), aFlys( 4, 4 ), aPos( 4, 4 ),
@@ -716,7 +759,11 @@ public:
 // EditEngineTxtAttrs.
 class WW8_AttrIter
 {
+private:
     WW8_AttrIter* pOld;
+    //No copying
+    WW8_AttrIter(const WW8_AttrIter&);
+    WW8_AttrIter& operator=(const WW8_AttrIter&);
 protected:
     SwWW8Writer& rWrt;
 public:
@@ -728,7 +775,6 @@ public:
     virtual void GetItems( WW8Bytes& rItems ) const;
 };
 
-
 class WW8WrtStyle
 {
     SwWW8Writer& rWrt;
@@ -738,7 +784,7 @@ class WW8WrtStyle
 
     void BuildStyleTab();
     void BuildUpx( const SwFmt* pFmt, BOOL bPap, USHORT nPos,
-                   BOOL bInsDefCharSiz );
+        BOOL bInsDefCharSiz );
     USHORT Build_GetWWSlot( const SwFmt& rFmt );
     USHORT GetWWId( const SwFmt& rFmt ) const;
     void Set1StyleDefaults( const SwFmt& rFmt, BOOL bPap );
@@ -747,8 +793,10 @@ class WW8WrtStyle
     void WriteStyle( SvStream& rStrm );
     void SkipOdd();
     void BuildStd( const String& rName, BOOL bPapFmt, short nWwBase,
-                   short nWwNext, USHORT nWwId );
-
+        short nWwNext, USHORT nWwId );
+    //No copying
+    WW8WrtStyle(const WW8WrtStyle&);
+    WW8WrtStyle& operator=(const WW8WrtStyle&);
 public:
     WW8WrtStyle( SwWW8Writer& rWr );
     ~WW8WrtStyle();
@@ -757,9 +805,13 @@ public:
     USHORT Sty_GetWWSlot( const SwFmt& rFmt ) const;
 };
 
-
-struct WW8SaveData
+class WW8SaveData
 {
+private:
+    //No copying
+    WW8SaveData(const WW8SaveData&);
+    WW8SaveData& operator=(const WW8SaveData &);
+public:
     SwWW8Writer& rWrt;
     Point* pOldFlyOffset;
     RndStdIds eOldAnchorType;
@@ -774,13 +826,12 @@ struct WW8SaveData
     BOOL bOldFlyFrmAttrs : 1;
     BOOL bOldStartTOX : 1;
     BOOL bOldInWriteTOX : 1;
-        // bOutPageDesc muss nicht gesichert werden, da es nur nicht waehrend
-        // der Ausgabe von Spezial-Texten veraendert wird.
+    // bOutPageDesc muss nicht gesichert werden, da es nur nicht waehrend der
+    // Ausgabe von Spezial-Texten veraendert wird.
 
     WW8SaveData( SwWW8Writer&, ULONG nStt, ULONG nEnd );
     ~WW8SaveData();
 };
-
 
 // einige halb-interne Funktions-Deklarationen fuer die Node-Tabelle
 
@@ -799,13 +850,13 @@ inline void WW8_WrPlcFtnEdn::WriteTxt( SwWW8Writer& rWrt )
 {
     if( TXT_FTN == nTyp )
     {
-        WW8_WrPlcSubDoc::WriteTxt( rWrt, TXT_FTN, rWrt.pFib->ccpFtn );
+        WriteGenericTxt( rWrt, TXT_FTN, rWrt.pFib->ccpFtn );
         rWrt.pFldFtn->Finish( rWrt.Fc2Cp( rWrt.Strm().Tell() ),
                             rWrt.pFib->ccpText );
     }
     else
     {
-        WW8_WrPlcSubDoc::WriteTxt( rWrt, TXT_EDN, rWrt.pFib->ccpEdn );
+        WriteGenericTxt( rWrt, TXT_EDN, rWrt.pFib->ccpEdn );
         rWrt.pFldEdn->Finish( rWrt.Fc2Cp( rWrt.Strm().Tell() ),
                             rWrt.pFib->ccpText + rWrt.pFib->ccpFtn
                             + rWrt.pFib->ccpHdr + rWrt.pFib->ccpAtn );
@@ -815,41 +866,46 @@ inline void WW8_WrPlcFtnEdn::WriteTxt( SwWW8Writer& rWrt )
 inline void WW8_WrPlcFtnEdn::WritePlc( SwWW8Writer& rWrt ) const
 {
     if( TXT_FTN == nTyp )
-        WW8_WrPlcSubDoc::WritePlc( rWrt, TXT_FTN,
-                    rWrt.pFib->fcPlcffndTxt, rWrt.pFib->lcbPlcffndTxt,
-                    rWrt.pFib->fcPlcffndRef, rWrt.pFib->lcbPlcffndRef );
+    {
+        WriteGenericPlc( rWrt, TXT_FTN, rWrt.pFib->fcPlcffndTxt,
+            rWrt.pFib->lcbPlcffndTxt, rWrt.pFib->fcPlcffndRef,
+            rWrt.pFib->lcbPlcffndRef );
+    }
     else
-        WW8_WrPlcSubDoc::WritePlc( rWrt, TXT_EDN,
-                    rWrt.pFib->fcPlcfendTxt, rWrt.pFib->lcbPlcfendTxt,
-                    rWrt.pFib->fcPlcfendRef, rWrt.pFib->lcbPlcfendRef );
+    {
+        WriteGenericPlc( rWrt, TXT_EDN, rWrt.pFib->fcPlcfendTxt,
+            rWrt.pFib->lcbPlcfendTxt, rWrt.pFib->fcPlcfendRef,
+            rWrt.pFib->lcbPlcfendRef );
+    }
 }
 
 
 void WW8_WrPlcPostIt::WriteTxt( SwWW8Writer& rWrt )
 {
-    WW8_WrPlcSubDoc::WriteTxt( rWrt, TXT_ATN, rWrt.pFib->ccpAtn );
+    WriteGenericTxt( rWrt, TXT_ATN, rWrt.pFib->ccpAtn );
 }
 
 void WW8_WrPlcPostIt::WritePlc( SwWW8Writer& rWrt ) const
 {
-    WW8_WrPlcSubDoc::WritePlc( rWrt, TXT_ATN,
-                    rWrt.pFib->fcPlcfandTxt, rWrt.pFib->lcbPlcfandTxt,
-                    rWrt.pFib->fcPlcfandRef, rWrt.pFib->lcbPlcfandRef );
+    WriteGenericPlc( rWrt, TXT_ATN, rWrt.pFib->fcPlcfandTxt,
+        rWrt.pFib->lcbPlcfandTxt, rWrt.pFib->fcPlcfandRef,
+        rWrt.pFib->lcbPlcfandRef );
 }
 
 void WW8_WrPlcTxtBoxes::WritePlc( SwWW8Writer& rWrt ) const
 {
     if( TXT_TXTBOX == nTyp )
-        WW8_WrPlcSubDoc::WritePlc( rWrt, nTyp,
-                rWrt.pFib->fcPlcftxbxBkd, rWrt.pFib->lcbPlcftxbxBkd,
-                rWrt.pFib->fcPlcftxbxTxt, rWrt.pFib->lcbPlcftxbxTxt );
+    {
+        WriteGenericPlc( rWrt, nTyp, rWrt.pFib->fcPlcftxbxBkd,
+            rWrt.pFib->lcbPlcftxbxBkd, rWrt.pFib->fcPlcftxbxTxt,
+            rWrt.pFib->lcbPlcftxbxTxt );
+    }
     else
-        WW8_WrPlcSubDoc::WritePlc( rWrt, nTyp,
-                rWrt.pFib->fcPlcfHdrtxbxBkd, rWrt.pFib->lcbPlcfHdrtxbxBkd,
-                rWrt.pFib->fcPlcfHdrtxbxTxt, rWrt.pFib->lcbPlcfHdrtxbxTxt );
+    {
+        WriteGenericPlc( rWrt, nTyp, rWrt.pFib->fcPlcfHdrtxbxBkd,
+            rWrt.pFib->lcbPlcfHdrtxbxBkd, rWrt.pFib->fcPlcfHdrtxbxTxt,
+            rWrt.pFib->lcbPlcfHdrtxbxTxt );
+    }
 }
 
-
-
 #endif  //  _WRTWW8_HXX
-
