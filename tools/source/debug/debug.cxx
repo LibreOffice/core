@@ -2,9 +2,9 @@
  *
  *  $RCSfile: debug.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2003-08-07 11:57:20 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 15:52:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1021,6 +1021,17 @@ static void DebugXTorInfo( sal_Char* pBuf )
 }
 
 // -----------------------------------------------------------------------
+BOOL ImplDbgFilterMessage( const sal_Char* pMsg )
+{
+    DebugData*  pData = GetDebugData();
+    if ( !ImplDbgFilter( pData->aDbgData.aInclFilter, pMsg, TRUE ) )
+        return TRUE;
+    if ( ImplDbgFilter( pData->aDbgData.aExclFilter, pMsg, FALSE ) )
+        return TRUE;
+    return FALSE;
+}
+
+// -----------------------------------------------------------------------
 
 void* DbgFunc( USHORT nAction, void* pParam )
 {
@@ -1030,6 +1041,11 @@ void* DbgFunc( USHORT nAction, void* pParam )
         return (void*)&(pData->aDbgData);
     else if ( nAction == DBG_FUNC_GETPRINTMSGBOX )
         return (void*)(pData->pDbgPrintMsgBox);
+    else if ( nAction == DBG_FUNC_FILTERMESSAGE )
+        if ( ImplDbgFilterMessage( (const sal_Char*) pParam ) )
+            return (void*) -1;
+        else
+            return (void*) 0;   // aka NULL
     else
 
     {
@@ -1435,12 +1451,7 @@ void DbgOut( const sal_Char* pMsg, USHORT nDbgOut, const sal_Char* pFile, USHORT
 
     if ( (nDbgOut != DBG_OUT_ERROR) || DbgImplIsAllErrorOut() )
     {
-        if ( !ImplDbgFilter( pData->aDbgData.aInclFilter, pMsg, TRUE ) )
-        {
-            bIn = FALSE;
-            return;
-        }
-        if ( ImplDbgFilter( pData->aDbgData.aExclFilter, pMsg, FALSE ) )
+        if ( ImplDbgFilterMessage( pMsg ) )
         {
             bIn = FALSE;
             return;
