@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dv $ $Date: 2000-12-08 11:35:44 $
+ *  last change: $Author: mba $ $Date: 2000-12-10 16:17:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,6 +206,21 @@ using namespace ucb;
 
 #define C_DELIM                 ';'
 
+class WaitWindow_Impl : public WorkWindow
+{
+    Rectangle   _aRect;
+    USHORT      _nTextStyle;
+    String      _aText;
+
+    public:
+                     WaitWindow_Impl();
+                    ~WaitWindow_Impl();
+    virtual void     Paint( const Rectangle& rRect );
+};
+
+#define X_OFFSET 15
+#define Y_OFFSET 15
+
 //========================================================================
 
 class EntryData_Impl
@@ -365,6 +380,7 @@ public:
                                         const OUString &rTitle );
     OUString            GetTypeFromURL( const OUString& rURL );
     OUString            GetTitleFromURL( const OUString& rURL );
+    BOOL                GetTitleFromURL( const OUString& rURL, OUString& aTitle, OUString& aType );
 
     void                AddToStandard( Content& rRoot,
                                        Content& rFolder );
@@ -2599,7 +2615,10 @@ void SfxDocTemplate_Impl::Construct( const String& rDirs )
     ReadFolderList();
 
     if ( bNewRoot )
-        Rescan( sal_False );
+    {
+        WaitWindow_Impl aWindow;
+        Rescan( sal_True );
+    }
     else
         CreateFromHierarchy( aTemplRoot );
 }
@@ -2964,7 +2983,9 @@ void SfxDocTemplate_Impl::GetTemplates( Content& rTargetFolder,
                     pEntry->SetInUse( sal_True );
                 else
                 {
-                    OUString aFullTitle = GetTitleFromURL( aId );
+                    OUString aFullTitle;
+                    OUString aType;
+                    GetTitleFromURL( aId, aFullTitle, aType );
 
                     if ( aFullTitle.len() )
                         aTitle = aFullTitle;
@@ -2973,7 +2994,8 @@ void SfxDocTemplate_Impl::GetTemplates( Content& rTargetFolder,
 
                     if ( pEntry && pEntry->IsNew() )
                     {
-                        OUString aType = GetTypeFromURL( aId );
+                          if( !aType.getLength() )
+                              aType = GetTypeFromURL( aId );
                         pEntry->SetType( aType );
                     }
                 }
@@ -3276,9 +3298,9 @@ OUString SfxDocTemplate_Impl::GetTypeFromURL( const OUString& rURL )
     OUString                        aTypeName;
 
     if( xTypeDetection.is() == sal_True )
-    {
-        Sequence< PropertyValue > aValues(1);
-        PropertyValue* pValues = aValues.getArray();
+     {
+         Sequence< PropertyValue > aValues(1);
+         PropertyValue* pValues = aValues.getArray();
 
         pValues->Name = OUString( RTL_CONSTASCII_USTRINGPARAM( PARAMETER_OLD_TYPEDETECTION ) );
         pValues->Value = makeAny( sal_Bool( sal_True ) );
@@ -3318,6 +3340,37 @@ OUString SfxDocTemplate_Impl::GetTitleFromURL( const OUString& rURL )
     }
 
     return aTitle;
+}
+
+BOOL SfxDocTemplate_Impl::GetTitleFromURL( const OUString& rURL, OUString& aTitle, OUString& aType )
+{
+    OUString aService( RTL_CONSTASCII_USTRINGPARAM( SERVICENAME_DOCINFO ) );
+    Reference< XStandaloneDocumentInfo > xInfo( mxFactory->createInstance( aService ), UNO_QUERY );
+
+    if ( xInfo.is() )
+    {
+        try
+        {
+            xInfo->loadFromURL( rURL );
+
+            Reference< XPropertySet > aPropSet( xInfo, UNO_QUERY );
+            if ( aPropSet.is() )
+            {
+                OUString aPropName( RTL_CONSTASCII_USTRINGPARAM( TITLE ) );
+                Any aValue = aPropSet->getPropertyValue( aPropName );
+                aValue >>= aTitle;
+
+                OUString aName( RTL_CONSTASCII_USTRINGPARAM( "MIMEType" ) );
+                aValue = aPropSet->getPropertyValue( aName );
+                aValue >>= aType;
+            }
+        }
+        catch ( IOException& ) {}
+        catch ( UnknownPropertyException& ) {}
+        catch ( Exception& ) {}
+    }
+
+    return TRUE;
 }
 
 // -----------------------------------------------------------------------
@@ -3462,5 +3515,32 @@ void SAL_CALL Updater_Impl::run()
 void SAL_CALL Updater_Impl::onTerminated()
 {
     delete this;
+}
+
+WaitWindow_Impl::WaitWindow_Impl()
+    : WorkWindow( NULL, WB_BORDER | WB_3DLOOK )
+{
+    Rectangle aRect = Rectangle( 0, 0, 300, 30000 );
+    _nTextStyle = TEXT_DRAW_CENTER | TEXT_DRAW_VCENTER | TEXT_DRAW_WORDBREAK | TEXT_DRAW_MULTILINE;
+    _aText = String( SfxResId( RID_CNT_STR_WAITING ) );
+    _aRect = GetTextRect( aRect, _aText, _nTextStyle );
+    aRect = _aRect;
+    aRect.Right() += 2*X_OFFSET;
+    aRect.Bottom() += 2*Y_OFFSET;
+    _aRect.SetPos( Point( X_OFFSET, Y_OFFSET ) );
+    SetOutputSizePixel( aRect.GetSize() );
+    Show();
+    Update();
+    Flush();
+}
+
+WaitWindow_Impl::~WaitWindow_Impl()
+{
+    Hide();
+}
+
+void WaitWindow_Impl::Paint( const Rectangle& rRect )
+{
+    DrawText( _aRect, _aText, _nTextStyle );
 }
 
