@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: mtg $ $Date: 2001-08-16 12:26:44 $
+ *  last change: $Author: mtg $ $Date: 2001-09-03 14:58:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,7 +191,9 @@
 #ifndef _SWSTYLENAMEMAPPER_HXX
 #include <SwStyleNameMapper.hxx>
 #endif
-
+#ifndef _SFX_PRINTER_HXX
+#include <sfx2/printer.hxx>
+#endif
 
 #define STYLE_FAMILY_COUNT 5            // wir habe fuenf Familien
 
@@ -2540,6 +2542,30 @@ void SwXPageStyle::setPropertyValues(
                         throw IllegalArgumentException();
                 }
                 break;
+                case RES_PAPER_BIN:
+                {
+                    SfxPrinter *pPrinter = GetDoc()->GetPrt();
+                    OUString sTmp;
+                    sal_uInt16 nBin = USHRT_MAX;
+                    if ( !( pValues[nProp] >>= sTmp ) )
+                        throw IllegalArgumentException();
+                    if ( pPrinter )
+                    {
+                        for (sal_uInt16 i=0, nEnd = pPrinter->GetPaperBinCount(); i < nEnd; i++ )
+                        {
+                            if (sTmp == OUString ( pPrinter->GetPaperBinName ( i ) ) )
+                            {
+                                nBin = i;
+                                break;
+                            }
+                        }
+                        if ( nBin == USHRT_MAX )
+                            throw IllegalArgumentException();
+                        else
+                            pPrinter->SetPaperBin ( nBin );
+                    }
+                }
+                break;
                 default:
                     lcl_SetStyleProperty(pMap, aPropSet, pValues[nProp], aBaseImpl,
                                         GetBasePool(), GetDoc(), GetFamily());
@@ -2567,14 +2593,16 @@ Sequence< Any > SwXPageStyle::getPropertyValues(
     if(!GetDoc())
         throw RuntimeException();
 
+    sal_Int32 nLength = rPropertyNames.getLength();
     SfxItemPropertySet& aPropSet = aSwMapProvider.GetPropertySet(PROPERTY_SET_PAGE_STYLE);
     const OUString* pNames = rPropertyNames.getConstArray();
-    Sequence< Any > aRet(rPropertyNames.getLength());
+    Sequence< Any > aRet ( nLength );
+
     Any* pRet = aRet.getArray();
     const SfxItemPropertyMap*   pMap = aPropSet.getPropertyMap();
     SwStyleBase_Impl aBase(*GetDoc(), GetStyleName());
     SfxStyleSheetBase* pBase = 0;
-    for(sal_Int32 nProp = 0; nProp < rPropertyNames.getLength(); nProp++)
+    for(sal_Int32 nProp = 0; nProp < nLength; nProp++)
     {
         pMap = SfxItemPropertyMap::GetByName( pMap, pNames[nProp]);
         if(!pMap)
@@ -2745,6 +2773,15 @@ MakeObject:
                 {
                     const SfxPoolItem& rItem = aBase.GetItemSet().Get(FN_PARAM_FTN_INFO);
                     rItem.QueryValue(pRet[nProp], pMap->nMemberId);
+                }
+                break;
+                case RES_PAPER_BIN:
+                {
+                    SfxPrinter *pPrinter = GetDoc()->GetPrt();
+                    OUString sTmp;
+                    if (pPrinter )
+                        sTmp = pPrinter->GetPaperBinName ( pPrinter->GetPaperBin() );
+                    pRet[nProp] <<= sTmp;
                 }
                 break;
                 default:
