@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XComponentLoader.idl,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:54:29 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 20:16:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ module com {  module sun {  module star {  module frame {
     @see Frame
     @see XFrame
  */
-interface XComponentLoader: com::sun::star::uno::XInterface
+published interface XComponentLoader: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /** loads a component specified by an URL into the specified
