@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: bm $ $Date: 2001-03-28 11:49:30 $
+ *  last change: $Author: bm $ $Date: 2001-03-28 19:29:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -814,6 +814,13 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
     }
     if( bExportContent )
     {
+        UniReference< XMLShapeExport > rShapeExport;
+
+        // write style name
+        aASName = GetAutoStylePoolP().Find( nStyleFamily, aPropertyStates );
+        if( aASName.getLength())
+            mrExport.AddAttribute( XML_NAMESPACE_CHART, sXML_style_name, aASName );
+
         // attributes
         uno::Reference< drawing::XShape > xShape ( xDiagram, uno::UNO_QUERY );
         if( xShape.is())
@@ -844,35 +851,28 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
 
                 if( bIs3DChart )
                 {
-                    // get transformation matrix
-                    aAny = xPropSet->getPropertyValue(
-                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "D3DTransformMatrix" )));
-                    aAny >>= aTransMatrix;
-
-                    SdXMLImExTransform3D aTransform;
-                    aTransform.AddHomogenMatrix( aTransMatrix );
-                    if( aTransform.NeedsAction())
-                        mrExport.AddAttribute( XML_NAMESPACE_DR3D, sXML_transform,
-                                               aTransform.GetExportString( mrExport.GetMM100UnitConverter()));
-
-                    UniReference< XMLShapeExport > rShapeExport = mrExport.GetShapeExport();
-                    rShapeExport->export3DSceneAttributes( xPropSet );
-                    rShapeExport->export3DLamps( xPropSet );
+                    rShapeExport = mrExport.GetShapeExport();
+                    if( rShapeExport.is())
+                        rShapeExport->export3DSceneAttributes( xPropSet );
                 }
             }
-            catch( beans::UnknownPropertyException )
+            catch( uno::Exception aEx )
             {
-                DBG_ERROR( "Property D3DTransformMatrix not found in Diagram" );
+#ifdef DBG_UTIL
+        String aStr( aEx.Message );
+        ByteString aBStr( aStr, RTL_TEXTENCODING_ASCII_US );
+        DBG_ERROR1( "chart:exportPlotAreaException caught: %s", aBStr.GetBuffer());
+#endif
             }
         }
 
-        // write style name
-        aASName = GetAutoStylePoolP().Find( nStyleFamily, aPropertyStates );
-        if( aASName.getLength())
-            mrExport.AddAttribute( XML_NAMESPACE_CHART, sXML_style_name, aASName );
-
         // element
         pElPlotArea = new SvXMLElementExport( mrExport, XML_NAMESPACE_CHART, sXML_plot_area, sal_True, sal_True );
+
+        // light sources (inside plot area element)
+        if( bIs3DChart &&
+            rShapeExport.is())
+            rShapeExport->export3DLamps( xPropSet );
     }
     else    // autostyles
     {
