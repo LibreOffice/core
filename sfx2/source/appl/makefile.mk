@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: mba $ $Date: 2001-02-23 11:04:54 $
+#   last change: $Author: ab $ $Date: 2001-02-26 11:44:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -124,6 +124,7 @@ SLOFILES =  \
         $(SLO)$/appsys.obj \
         $(SLO)$/loadenv.obj \
         $(SLO)$/basmgr.obj \
+        $(SLO)$/dlgcont.obj \
         $(SLO)$/oinstanceprovider.obj \
         $(SLO)$/opluginframefactory.obj \
         $(SLO)$/pluginacceptthread.obj  \
