@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfrm.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:59:16 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 14:07:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@ private:
     const SdrView*      pView;
 
     USHORT              nAnchorCtrls;
+    Link                aValidateLink;
 
     virtual void        PageCreated( USHORT nId, SfxTabPage &rPage );
 
@@ -99,6 +100,9 @@ public:
                             const SdrView* pView,
                             USHORT nAnchorTypes = 0);
             ~SvxTransformTabDialog();
+
+            //link for the Writer to validate positions
+            void SetValidateFramePosLink( const Link& rLink );
 };
 
 /*************************************************************************
@@ -129,11 +133,11 @@ private:
     FixedText           maFtSizeReference;
     SvxRectCtl          maCtlSize;
 
-    // anchor
+/*  // anchor
     FixedLine           maAnchorBox;
     FixedText           maFtAnchor;
     ListBox             maDdLbAnchor;
-
+*/
     // protect
     FixedLine           maFlProtect;
     TriStateBox         maTsbPosProtect;
@@ -145,8 +149,8 @@ private:
     TriStateBox         maTsbAutoGrowHeight;
 
     // ???
-    FixedText           maFtOrient;
-    ListBox             maDdLbOrient;
+//  FixedText           maFtOrient;
+//  ListBox             maDdLbOrient;
 
     FixedLine           maFlDivider;
 
@@ -177,8 +181,8 @@ private:
     DECL_LINK( ChangeSizeProtectHdl, void * );
     DECL_LINK( ChangePosXHdl, void * );
     DECL_LINK( ChangePosYHdl, void * );
-    DECL_LINK( SetAnchorHdl, ListBox * );
-    DECL_LINK( SetOrientHdl, ListBox * );
+//  DECL_LINK( SetAnchorHdl, ListBox * );
+//  DECL_LINK( SetOrientHdl, ListBox * );
 
     void SetMinMaxPosition();
     void GetTopLeftPosition( INT32& rX, INT32& rY, const Rectangle& rRect );
@@ -212,7 +216,7 @@ public:
     void         Construct();
     void         SetView( const SdrView* pSdrView ) { mpView = pSdrView; }
 
-    void         ShowAnchorCtrls(USHORT nAnchorCtrls); // Writer-spezifische Controls anzeigen
+//  void         ShowAnchorCtrls(USHORT nAnchorCtrls); // Writer-spezifische Controls anzeigen
     virtual void FillUserData();
 
     void        DisableResize();
