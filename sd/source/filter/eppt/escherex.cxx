@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2000-11-03 18:01:54 $
+ *  last change: $Author: sj $ $Date: 2000-11-20 14:52:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -939,7 +939,7 @@ void _EscherEx::AddClientAnchor( const Rectangle& rRect )
 
 // ---------------------------------------------------------------------------------------------
 
-void _EscherEx::EnterGroup( Rectangle* pBoundRect )
+void _EscherEx::EnterGroup( Rectangle* pBoundRect, SvMemoryStream* pClientData )
 {
     Rectangle aRect;
     if ( pBoundRect )
@@ -955,18 +955,26 @@ void _EscherEx::EnterGroup( Rectangle* pBoundRect )
                 << (INT32)aRect.Bottom();
 
     if ( !mnGroupLevel )
-    {
         AddShape( _Escher_ShpInst_Min, 5 );                             // Flags: Group | Patriarch
-        CloseContainer();                                               // _Escher_SpContainer
-    }
     else
     {
         AddShape( _Escher_ShpInst_Min, 0x201 );                         // Flags: Group | HaveAnchor
         AddAtom( 8, _Escher_ClientAnchor );
         PtReplaceOrInsert( _Escher_Persist_Grouping_Logic | mnGroupLevel, mpOutStrm->Tell() );
         *mpOutStrm << (INT16)aRect.Top() << (INT16)aRect.Left() << (INT16)aRect.Right() << (INT16)aRect.Bottom();
-        CloseContainer();                                               // _Escher_SpContainer
     }
+    if ( pClientData )
+    {
+        pClientData->Seek( STREAM_SEEK_TO_END );
+        sal_uInt32 nSize = pClientData->Tell();
+        if ( nSize )
+        {
+            *mpOutStrm << (sal_uInt32)( ( _Escher_ClientData << 16 ) | 0xf )
+                       << nSize;
+            mpOutStrm->Write( pClientData->GetData(), nSize );
+        }
+    }
+    CloseContainer();                                               // _Escher_SpContainer
     mnGroupLevel++;
 }
 

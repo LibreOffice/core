@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escherex.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2000-11-03 18:02:16 $
+ *  last change: $Author: sj $ $Date: 2000-11-20 14:52:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1186,7 +1186,7 @@ class _EscherEx : public _EscherPersistTable
         void    AddAtom( UINT32 nAtomSitze, UINT16 nRecType, int nRecVersion = 0, int nRecInstance = 0 );
         void    AddClientAnchor( const Rectangle& rRectangle );
 
-        void    EnterGroup( Rectangle* pBoundRect = NULL );
+        void    EnterGroup( Rectangle* pBoundRect = NULL, SvMemoryStream* pClientData = NULL );
         UINT32  GetGroupLevel() const { return mnGroupLevel; };
         BOOL    SetGroupSnapRect( UINT32 nGroupLevel, const Rectangle& rRect );
         BOOL    SetGroupLogicRect( UINT32 nGroupLevel, const Rectangle& rRect );
