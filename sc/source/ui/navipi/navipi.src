@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 20:36:53 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 15:43:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -842,7 +842,7 @@ String SCSTR_CONTENT_RANGENAME
     Text [ english_us ] = "Range names" ;
     Text [ italian ] = "Nomi dell'area" ;
     Text [ spanish ] = "Nombres de las áreas" ;
-    Text [ french ] = "Noms de plages" ;
+    Text [ french ] = "Noms de plage" ;
     Text [ swedish ] = "Områdesnamn" ;
     Text [ danish ] = "Områdenavne" ;
     Text [ portuguese ] = "Nomes das áreas" ;
@@ -876,7 +876,7 @@ String SCSTR_CONTENT_DBAREA
     Text[ chinese_simplified ] = "Êı¾İ¿âÇøÓò";
     Text[ russian ] = "Îáëàñòè áàçû äàííûõ";
     Text[ polish ] = "Obszary bazy danych";
-    Text[ japanese ] = "ÃŞ°ÀÍŞ°½‚Ì”ÍˆÍ";
+    Text[ japanese ] = "ÃŞ°ÀÍŞ°½”ÍˆÍ";
     Text[ chinese_traditional ] = "¸ê®Æ®w°Ï°ì";
     Text[ arabic ] = "ãäÇØŞ ŞÇÚÏÉ ÇáÈíÇäÇÊ";
     Text[ dutch ] = "Database-bereiken";
@@ -976,7 +976,7 @@ String SCSTR_CONTENT_AREALINK
     Text [ danish ] = "Sammenkædede områder" ;
     Text [ italian ] = "Aree collegate" ;
     Text [ spanish ] = "Áreas vinculadas" ;
-    Text [ french ] = "Plage externe" ;
+    Text [ french ] = "Plages liées" ;
     Text [ dutch ] = "Gekoppelde bereiken" ;
     Text[ chinese_simplified ] = "Á´½ÓµÄÇøÓò";
     Text[ russian ] = "Ñâÿçàííûå îáëàñòè";
