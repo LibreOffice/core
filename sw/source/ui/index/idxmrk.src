@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 18:16:54 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:20:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,17 +78,20 @@ Text[ english_us ] = "Phonetic reading";    \
     Text[ finnish ] = "Phonetic reading";   \
     Text[ italian ] = "Lettura fonetica";   \
     Text[ danish ] = "Phonetic reading";    \
-    Text[ swedish ] = "Fonetisk l�sning";   \
+    Text[ swedish ] = "Fonetiskt uttal";    \
     Text[ polish ] = "Phonetic reading";    \
     Text[ portuguese_brazilian ] = "Phonetic reading";  \
     Text[ japanese ] = "読み";    \
     Text[ korean ] = "발음 표기";   \
     Text[ chinese_simplified ] = "语音描述";    \
     Text[ chinese_traditional ] = "語音描述";   \
-    Text[ turkish ] = "Phonetic reading";   \
+    Text[ turkish ] = "Fonetik okuma";  \
     Text[ arabic ] = "Phonetic reading";    \
     Text[ catalan ] = "Phonetic reading";   \
-    Text[ thai ] = "Phonetic reading";
+    Text[ thai ] = "Phonetic reading";  \
+    Text[ czech ] = "Fonetické čtení";   \
+    Text[ hebrew ] = "Phonetische Lesart";  \
+    Text[ hindi ] = "Phonetic reading";
 
 #define IDX_DIALOG_WINDOW \
     Window WIN_DLG                                                  \
@@ -114,7 +117,7 @@ Text[ english_us ] = "Phonetic reading";    \
             Text[ danish ] = "Inds�t";\
             Text[ swedish ] = "Infoga";\
             Text[ polish ] = "Wstaw";\
-            Text[ portuguese_brazilian ] = "Insert";\
+            Text[ portuguese_brazilian ] = "Inserir";\
             Text[ japanese ] = "挿入";\
             Text[ korean ] = "삽입";\
             Text[ chinese_simplified ] = "插入";\
@@ -125,6 +128,9 @@ Text[ english_us ] = "Phonetic reading";    \
             Text[ catalan ] = "Insereix";\
             Text[ finnish ] = "Lis��";\
             Text[ thai ] = "แทรก";\
+            Text[ czech ] = "Vložit";\
+            Text[ hebrew ] = "‮הוספה‬";\
+            Text[ hindi ] = "जोड़ो";\
         };                                                          \
         CancelButton BT_CANCEL                                      \
         {                                                           \
@@ -143,7 +149,7 @@ Text[ english_us ] = "Phonetic reading";    \
             Text[ danish ] = "Luk";\
             Text[ swedish ] = "St�ng";\
             Text[ polish ] = "Zamknij";\
-            Text[ portuguese_brazilian ] = "Close";\
+            Text[ portuguese_brazilian ] = "Fechar";\
             Text[ japanese ] = "閉じる";\
             Text[ korean ] = "닫기";\
             Text[ chinese_simplified ] = "关闭";\
@@ -154,6 +160,9 @@ Text[ english_us ] = "Phonetic reading";    \
             Text[ catalan ] = "Tanca";\
             Text[ finnish ] = "Sulje";\
             Text[ thai ] = "ปิด";\
+            Text[ czech ] = "Zavřít";\
+            Text[ hebrew ] = "‮סגירה‬";\
+            Text[ hindi ] = "बन्द करो";\
         };                                                          \
         HelpButton BT_HELP                                          \
         {                                                           \
@@ -168,7 +177,7 @@ Text[ english_us ] = "Phonetic reading";    \
             Text [ ENGLISH ] = "~Delete" ;                          \
             Text [ norwegian ] = "~Slett" ;                         \
             Text [ italian ] = "~Elimina" ;                         \
-            Text [ portuguese_brazilian ] = "~Apagar" ;             \
+            Text [ portuguese_brazilian ] = "E~xcluir" ;             \
             Text [ portuguese ] = "E~liminar" ;                     \
             Text [ finnish ] = "~Poista" ;                          \
             Text [ danish ] = "Slet" ;                              \
@@ -180,7 +189,7 @@ Text[ english_us ] = "Phonetic reading";    \
             TabStop = TRUE ;                                        \
             Text[ chinese_simplified ] = "删除(~D)";               \
             Text[ russian ] = "�������";                            \
-            Text[ polish ] = "Usu�";                                \
+            Text[ polish ] = "~Usu�";                                \
             Text[ japanese ] = "削除(~D)";                         \
             Text[ chinese_traditional ] = "刪除(~D)";              \
             Text[ arabic ] = "���";                                 \
@@ -190,6 +199,9 @@ Text[ english_us ] = "Phonetic reading";    \
             Text[ language_user1 ] = " ";\
             Text[ catalan ] = "~Suprimeix";\
             Text[ thai ] = "~ลบ";\
+            Text[ czech ] = "Smazat";\
+            Text[ hebrew ] = "‮מחיקה‬";\
+            Text[ hindi ] = "~मिटाओ";\
         };                                                          \
         ListBox DCB_INDEX                                           \
         {                                                           \
@@ -215,7 +227,7 @@ Text[ english_us ] = "Phonetic reading";    \
             QuickHelpText[ danish ] = "Nyt brugerdefineret indeks";\
             QuickHelpText[ swedish ] = "Ny anv�ndardefinierad f�rteckning";\
             QuickHelpText[ polish ] = "Nowy indeks u�ytkownika";\
-            QuickHelpText[ portuguese_brazilian ] = "New user defined index";\
+            QuickHelpText[ portuguese_brazilian ] = "Novo �ndice definido por usu�rio";\
             QuickHelpText[ japanese ] = "新しいユーザー定義の索引";\
             QuickHelpText[ korean ] = "새 사용자 정의 색인";\
             QuickHelpText[ chinese_simplified ] = "新建使用者自定目录";\
@@ -225,6 +237,9 @@ Text[ english_us ] = "Phonetic reading";    \
             QuickHelpText[ catalan ] = "Nou �ndex definit per l'usuari";\
             QuickHelpText[ finnish ] = "Uusi uusi k�ytt�j�n m��ritt�m� hakemisto";\
             QuickHelpText[ thai ] = "New User-defined Index";\
+            QuickHelpText[ czech ] = "Nový rejstřík (vytvořený uživatelem) ";\
+            QuickHelpText[ hebrew ] = "Neues benutzerdefiniertes Verzeichnis";\
+            QuickHelpText[ hindi ] = "नया उपभोक्ता से परिभाषित अनुक्रमणी";\
         };                                                          \
         ImageButton BT_PREVSAME                                     \
         {                                                           \
@@ -266,7 +281,7 @@ Text[ english_us ] = "Phonetic reading";    \
             Text [ ENGLISH ] = "Mark" ;                             \
             Text [ norwegian ] = "Merk" ;                           \
             Text [ italian ] = "Contrassegno" ;                     \
-            Text [ portuguese_brazilian ] = "Marca" ;               \
+            Text [ portuguese_brazilian ] = "Sele��o" ;               \
             Text [ portuguese ] = "Marca" ;                        \
             Text [ finnish ] = "Valinta" ;                         \
             Text [ danish ] = "Markering" ;                             \
@@ -287,6 +302,9 @@ Text[ english_us ] = "Phonetic reading";    \
             Text[ language_user1 ] = " ";\
             Text[ catalan ] = "Marca";\
             Text[ thai ] = "เลือก";\
+            Text[ czech ] = "Výběr";\
+            Text[ hebrew ] = "‮מבחר‬";\
+            Text[ hindi ] = "चुनाव";\
         };                                                          \
         FixedText LBL_INDEX                                         \
         {                                                           \
@@ -296,7 +314,7 @@ Text[ english_us ] = "Phonetic reading";    \
             Text [ ENGLISH ] = "~Index" ;                           \
             Text [ norwegian ] = "~Index" ;                         \
             Text [ italian ] = "Indice" ;                          \
-            Text [ portuguese_brazilian ] = "~?ndice" ;             \
+            Text [ portuguese_brazilian ] = "�nd~ice" ;             \
             Text [ portuguese ] = "~�ndice" ;                       \
             Text [ finnish ] = "~Hakemisto" ;                       \
             Text [ danish ] = "~Indeks" ;                           \
@@ -308,7 +326,7 @@ Text[ english_us ] = "Phonetic reading";    \
             Left = TRUE ;                                           \
             Text[ chinese_simplified ] = "目录(~I)";               \
             Text[ russian ] = "���������";                          \
-            Text[ polish ] = "Indeks";                              \
+            Text[ polish ] = "~Indeks";                              \
             Text[ japanese ] = "種類(~I)";                         \
             Text[ chinese_traditional ] = "目錄(~I)";              \
             Text[ arabic ] = "����";                                \
@@ -318,6 +336,9 @@ Text[ english_us ] = "Phonetic reading";    \
             Text[ turkish ] = "~Dizin";\
             Text[ catalan ] = "�n~dex";\
             Text[ thai ] = "~ดัชนี";\
+            Text[ czech ] = "Rejstřík";\
+            Text[ hebrew ] = "~Verzeichnis";\
+            Text[ hindi ] = "~अनक्रमणी";\
         };                                                          \
         Edit SL_ENTRY                                               \
         {                                                           \
@@ -347,7 +368,7 @@ Text[ english_us ] = "Phonetic reading";    \
             Left = TRUE ;                                           \
             Text[ chinese_simplified ] = "条目(~E)";               \
             Text[ russian ] = "�������";                            \
-            Text[ polish ] = "Wpis";                                \
+            Text[ polish ] = "~Wpis";                                \
             Text[ japanese ] = "項目(~E)";                         \
             Text[ chinese_traditional ] = "項目(~E)";              \
             Text[ arabic ] = "�������";                               \
@@ -357,6 +378,9 @@ Text[ english_us ] = "Phonetic reading";    \
             Text[ language_user1 ] = " ";\
             Text[ catalan ] = "~Entrada";\
             Text[ thai ] = "~รายการ";\
+            Text[ czech ] = "Položka";\
+            Text[ hebrew ] = "‮שורה‬";\
+            Text[ hindi ] = "~प्रविष्टि";\
         };                                                          \
         FixedText LBL_KEY                                           \
         {                                                           \
@@ -367,7 +391,7 @@ Text[ english_us ] = "Phonetic reading";    \
             Text [ ENGLISH ] = "~1. Key" ;                          \
             Text [ norwegian ] = "~1. N�kkel" ;                     \
             Text [ italian ] = "Chiave ~1" ;                        \
-            Text [ portuguese_brazilian ] = "~1. Tecla" ;           \
+            Text [ portuguese_brazilian ] = "~1� chave" ;           \
             Text [ portuguese ] = "~1� chave" ;                    \
             Text [ finnish ] = "~1. avain" ;                        \
             Text [ danish ] = "~1. n�gle" ;                         \
@@ -379,7 +403,7 @@ Text[ english_us ] = "Phonetic reading";    \
             Left = TRUE ;                                           \
             Text[ chinese_simplified ] = "第一个关键字";            \
             Text[ russian ] = "1-�� ����";                          \
-            Text[ polish ] = "Pierwszy klucz";                      \
+            Text[ polish ] = "Pi~erwszy klucz";                      \
             Text[ japanese ] = "分類タイトル ~1";                         \
             Text[ chinese_traditional ] = "第一個關鍵字";       \
             Text[ arabic ] = "������� �����";                       \
@@ -389,6 +413,9 @@ Text[ english_us ] = "Phonetic reading";    \
             Text[ language_user1 ] = " ";\
             Text[ catalan ] = "Clau ~1a";\
             Text[ thai ] = "คีย์ที่~1";\
+            Text[ czech ] = "První klíč";\
+            Text[ hebrew ] = "~1. Schlüssel";\
+            Text[ hindi ] = "~1st चाबी";\
         };                                                          \
         ComboBox DCB_KEY                                            \
         {                                                           \
@@ -407,7 +434,7 @@ Text[ english_us ] = "Phonetic reading";    \
             Text [ ENGLISH ] = "~2. Key" ;                          \
             Text [ norwegian ] = "~2. N�kkel" ;                     \
             Text [ italian ] = "Chiave ~2" ;                        \
-            Text [ portuguese_brazilian ] = "~2. Tecla" ;           \
+            Text [ portuguese_brazilian ] = "~2� chave" ;           \
             Text [ portuguese ] = "~2� chave" ;                    \
             Text [ finnish ] = "~2. avain" ;                        \
             Text [ danish ] = "~2. n�gle" ;                         \
@@ -419,7 +446,7 @@ Text[ english_us ] = "Phonetic reading";    \
             Left = TRUE ;                                           \
             Text[ chinese_simplified ] = "第二个关键字";            \
             Text[ russian ] = "2-�� ����";                          \
-            Text[ polish ] = "Drugi klucz";                         \
+            Text[ polish ] = "~Drugi klucz";                         \
             Text[ japanese ] = "分類タイトル ~2";                         \
             Text[ chinese_traditional ] = "第二個關鍵字";       \
             Text[ arabic ] = "������� ������";                      \
@@ -429,6 +456,9 @@ Text[ english_us ] = "Phonetic reading";    \
             Text[ language_user1 ] = " ";\
             Text[ catalan ] = "Clau ~2a";\
             Text[ thai ] = "คีย์ที่~2";\
+            Text[ czech ] = "Druhý klíč";\
+            Text[ hebrew ] = "~2. Schlüssel";\
+            Text[ hindi ] = "~2nd चाबी";\
         };                                                          \
         ComboBox DCB_KEY2                                           \
         {                                                           \
@@ -494,7 +524,7 @@ Text[ english_us ] = "Phonetic reading";    \
             Text [ ENGLISH ] = "~Level" ;                           \
             Text [ norwegian ] = "~Niv�" ;                          \
             Text [ italian ] = "Livello" ;                         \
-            Text [ portuguese_brazilian ] = "~N?vel" ;              \
+            Text [ portuguese_brazilian ] = "~N�vel" ;              \
             Text [ portuguese ] = "~N�vel" ;                        \
             Text [ finnish ] = "~Taso" ;                            \
             Text [ danish ] = "Niveau" ;                             \
@@ -506,16 +536,19 @@ Text[ english_us ] = "Phonetic reading";    \
             Left = TRUE ;                                           \
             Text[ chinese_simplified ] = "级(~L)";                 \
             Text[ russian ] = "�������";                            \
-            Text[ polish ] = "Poziom";                              \
+            Text[ polish ] = "P~oziom";                              \
             Text[ japanese ] = "レベル(~L)";                         \
             Text[ chinese_traditional ] = "級(~L)";                \
             Text[ arabic ] = "�������";                             \
             Text[ greek ] = "�������";\
             Text[ korean ] = "수준(~L)";\
-            Text[ turkish ] = "D~�zey";\
+            Text[ turkish ] = "~D�zey";\
             Text[ language_user1 ] = " ";\
             Text[ catalan ] = "~Nivell";\
             Text[ thai ] = "~ระดับ";\
+            Text[ czech ] = "Úroveň";\
+            Text[ hebrew ] = "St~ufe";\
+            Text[ hindi ] = "~स्तर";\
         };                                                          \
         NumericField SL_LEVEL                                       \
         {                                                           \
@@ -548,18 +581,21 @@ Text[ english_us ] = "Phonetic reading";    \
             Text[ italian ] = "Voce principale";\
             Text[ danish ] = "Ho~vedelement";\
             Text[ swedish ] = "H~uvudpost";\
-            Text[ polish ] = "Wpis g��wny";\
-            Text[ portuguese_brazilian ] = "~Main entry";\
+            Text[ polish ] = "Wpis ~g��wny";\
+            Text[ portuguese_brazilian ] = "~Entrada principal";\
             Text[ japanese ] = "主項目(~M)";\
             Text[ korean ] = "주 항목(~M)";\
             Text[ chinese_simplified ] = "主条目(~M)";\
             Text[ chinese_traditional ] = "主項目(~M)";\
             Text[ arabic ] = "����� �����";\
-            Text[ turkish ] = "A~na giri�";\
+            Text[ turkish ] = "~Ana giri�";\
             Text[ language_user1 ] = " ";\
             Text[ catalan ] = "Entrada ~principal";\
             Text[ finnish ] = "~P��merkint�";\
             Text[ thai ] = "รายการ~หลัก";\
+            Text[ czech ] = "Hlavní položka";\
+            Text[ hebrew ] = "Ha~upteintrag";\
+            Text[ hindi ] = "~प्रधान प्रविष्टि";\
         };                                                                      \
         CheckBox CB_APPLY_TO_ALL                                                \
         {                                                                       \
@@ -577,8 +613,8 @@ Text[ english_us ] = "Phonetic reading";    \
             Text[ italian ] = "~Applica a tutti i testi simili";                 \
             Text[ danish ] = "~Anvend p� alle lignende tekster.";                    \
             Text[ swedish ] = "~Anv�nd p� alla liknande texter.";               \
-            Text[ polish ] = "Zastosuj w podobnych tekstach.";                  \
-            Text[ portuguese_brazilian ] = "~Apply to all similar texts.";      \
+            Text[ polish ] = "~Zastosuj we wszystkich podobnych tekstach.";                  \
+            Text[ portuguese_brazilian ] = "~Aplicar a todos os textos similares.";      \
             Text[ japanese ] = "別の箇所にもある同じ語句に適用(~A)";               \
             Text[ chinese_simplified ] = "适用于相同的正文(~A)";           \
             Text[ chinese_traditional ] = "用於所有相同的內文(~A)";            \
@@ -590,6 +626,9 @@ Text[ english_us ] = "Phonetic reading";    \
             Text[ catalan ] = "~Aplica-ho a tots els textos semblants.";\
             Text[ finnish ] = "~K�yt� kaikissa samanlaisissa teksteiss�.";\
             Text[ thai ] = "ใ~ช้กับข้อความที่คล้ายกันทั้งหมด";\
+            Text[ czech ] = "Použít na všechny podobné texty.";\
+            Text[ hebrew ] = "~Auf alle gleichen Texte anwenden.";\
+            Text[ hindi ] = "~सब समान टेक्स्टों केलिए लागू करो ।";\
         };                                                                      \
         CheckBox CB_CASESENSITIVE                                                \
         {                                                                       \
@@ -608,17 +647,20 @@ Text[ english_us ] = "Phonetic reading";    \
             Text[ italian ] = "Ricerca esatta";\
             Text[ danish ] = "~S�g eksakt";\
             Text[ swedish ] = "E~xakt s�kning";\
-            Text[ polish ] = "Dok�adne wyszukiwanie";\
-            Text[ portuguese_brazilian ] = "Match case";\
+            Text[ polish ] = "Uwzgl�dni~aj wielko�� liter";\
+            Text[ portuguese_brazilian ] = "~Diferenciar Mai�sculas/Min�sculas";\
             Text[ japanese ] = "大文字と小文字を区別する(~T)";\
             Text[ korean ] = "대문자 및 소문자를 구분(~T)";\
             Text[ chinese_simplified ] = "精确搜寻(~T)";\
             Text[ chinese_traditional ] = "精確搜尋(~T)";\
             Text[ arabic ] = "��� ����";\
-            Text[ turkish ] = "B�Y�K/k���k ~harf duyarl�";\
+            Text[ turkish ] = "B�y�k/k���k ~harf duyarl� olarak ayn� olma";\
             Text[ catalan ] = "Coincid�ncia e~xacta";\
             Text[ finnish ] = "Sama kirjainkoko";\
             Text[ thai ] = "ตัวพิมพ์ที่ตร~งกัน";\
+            Text[ czech ] = "Rozlišovat velikost";\
+            Text[ hebrew ] = "E~xakte Suche";\
+            Text[ hindi ] = "के~स तुलना";\
         };                                                                      \
         CheckBox CB_WORDONLY                                                \
         {                                                                       \
@@ -637,17 +679,20 @@ Text[ english_us ] = "Phonetic reading";    \
             Text[ italian ] = "Solo parole intere";\
             Text[ danish ] = "~Kun hele ord";\
             Text[ swedish ] = "Bara hela ~ord";\
-            Text[ polish ] = "Tylko ca�e wyrazy";\
-            Text[ portuguese_brazilian ] = "Whole words only";\
+            Text[ polish ] = "~Tylko ca�e wyrazy";\
+            Text[ portuguese_brazilian ] = "Somente ~palavras inteiras";\
             Text[ japanese ] = "単語として(~W)";\
             Text[ korean ] = "단어 단위로(~W)";\
             Text[ chinese_simplified ] = "只允许单词(~W)";\
             Text[ chinese_traditional ] = "僅是單詞(~W)";\
             Text[ arabic ] = "����� ����� ���";\
-            Text[ turkish ] = "Yaln�zca ~tam s�zc�kler bul";\
+            Text[ turkish ] = "~Yaln�zca tam s�zc�kler";\
             Text[ catalan ] = "Nom�s paraules se~nceres";\
             Text[ finnish ] = "~Vain kokonaiset sanat";\
             Text[ thai ] = "คำ~ทั้งหมดอย่างเดียว";\
+            Text[ czech ] = "Pouze celá slova";\
+            Text[ hebrew ] = "‮מלים שלמים בלבד‬";\
+            Text[ hindi ] = "~केवल पूर्ण शब्द";\
         };                                                                      \
     };
 
@@ -778,17 +823,20 @@ ModalDialog DLG_NEW_USER_IDX
         Text[ danish ] = "Nyt brugerbibliotek";
         Text[ swedish ] = "Ny anv�ndarf�rteckning";
         Text[ polish ] = "Nowy indeks u�ytkownika";
-        Text[ portuguese_brazilian ] = "New user index name";
+        Text[ portuguese_brazilian ] = "Novo �ndice de usu�rio";
         Text[ japanese ] = "新しいユーザー定義の種類";
         Text[ korean ] = "새로운 사용자 색인";
         Text[ chinese_simplified ] = "新增使用者目录";
         Text[ chinese_traditional ] = "新增自訂目錄";
         Text[ arabic ] = "���� ���� ��������";
-        Text[ turkish ] = "Yeni kullan�c� dizini";
+        Text[ turkish ] = "Yeni kullan�c� indexi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Nou �ndex d'usuari";
         Text[ finnish ] = "Uusi k�ytt�j�hakemisto";
         Text[ thai ] = "ดัชนีผู้ใช้ใหม่";
+        Text[ czech ] = "Nový rejstřík (vytvořený uživatelem)";
+        Text[ hebrew ] = "Neues Benutzerverzeichnis";
+        Text[ hindi ] = "नया उपभोक्ता अनुक्रमणी";
     };
     FixedText FT_NAME
     {
@@ -807,8 +855,8 @@ ModalDialog DLG_NEW_USER_IDX
         Text[ italian ] = "~Nome";
         Text[ danish ] = "Navn";
         Text[ swedish ] = "~Namn";
-        Text[ polish ] = "Nazwa";
-        Text[ portuguese_brazilian ] = "Name";
+        Text[ polish ] = "~Nazwa";
+        Text[ portuguese_brazilian ] = "~Nome";
         Text[ japanese ] = "名前(~N)";
         Text[ korean ] = "이름(~N)";
         Text[ chinese_simplified ] = "名称(~N)";
@@ -819,6 +867,9 @@ ModalDialog DLG_NEW_USER_IDX
         Text[ catalan ] = "~Nom";
         Text[ finnish ] = "~Nimi";
         Text[ thai ] = "~ชื่อ";
+        Text[ czech ] = "Název";
+        Text[ hebrew ] = "~Name";
+        Text[ hindi ] = "~नाम";
     };
     Edit ED_NAME
     {
@@ -834,22 +885,25 @@ ModalDialog DLG_NEW_USER_IDX
     Text[ greek ] = "���������� ���� ���������� ������";
     Text[ dutch ] = "Nieuwe gebruikersindex defini�ren";
     Text[ french ] = "Cr�ation d'un nouvel index personnalis�";
-    Text[ spanish ] = "Crear nuevo �ndice de usuario";
+    Text[ spanish ] = "Crear un �ndice de usuario nuevo";
     Text[ italian ] = "Definisci nuovo indice personalizzato";
     Text[ danish ] = "Opret nyt brugerdefineret indeks";
     Text[ swedish ] = "Skapa ny anv�ndardefinierad f�rteckning";
-    Text[ polish ] = "Utw�rz nowy indeks zdefiniowany indywidualnie";
-    Text[ portuguese_brazilian ] = "Define new user index";
+    Text[ polish ] = "Utw�rz nowy indeks definiowany przez u�ytkownika";
+    Text[ portuguese_brazilian ] = "Criar Novo �ndice Personalizado do Usu�rio";
     Text[ japanese ] = "ユーザー定義の種類の作成";
     Text[ korean ] = "새 사용자 정의 색인 만들기";
     Text[ chinese_simplified ] = "新建使用者自定目录";
     Text[ chinese_traditional ] = "新增自訂的目錄";
     Text[ arabic ] = "����� ���� ���� �������� �� ��� ��������";
-    Text[ turkish ] = "Yeni kullan�c� tan�ml� dizin olu�tur";
+    Text[ turkish ] = "Yeni kullan�c�~ tan�ml� dizin olu�tur";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Crea nou �ndex d'usuari";
     Text[ finnish ] = "Luo uusi k�ytt�j�n m��ritt�m� hakemisto";
     Text[ thai ] = "สร้างดัชนีระบุผู้ใช้ใหม่";
+    Text[ czech ] = "Vytvořit nový rejstřík (vytvořený uživatelem)";
+    Text[ hebrew ] = "Neues benutzerdefiniertes  Verzeichnis anlegen";
+    Text[ hindi ] = "नया उपभोक्ता से परिभाषित अनुक्रमणी को उत्पन्न करो";
 };
 
 String STR_IDXMRK_EDIT
@@ -858,7 +912,7 @@ String STR_IDXMRK_EDIT
     Text [ ENGLISH ] = "Edit index entry" ;
     Text [ norwegian ] = "Rediger stikkordregisterinngang" ;
     Text [ italian ] = "Modifica voce di indice" ;
-    Text [ portuguese_brazilian ] = "Editar entrada de ?ndice" ;
+    Text [ portuguese_brazilian ] = "Editar Entrada do �ndice" ;
     Text [ portuguese ] = "Editar entrada de �ndice" ;
     Text [ finnish ] = "Muokkaa hakemistomerkint��" ;
     Text [ danish ] = "Rediger indekselement" ;
@@ -869,7 +923,7 @@ String STR_IDXMRK_EDIT
     Text [ english_us ] = "Edit Index Entry" ;
     Text[ chinese_simplified ] = "编辑目录条目";
     Text[ russian ] = "������ �������� ���������";
-    Text[ polish ] = "Edytuj wpis do indeksu";
+    Text[ polish ] = "Edytuj wpis indeksu";
     Text[ japanese ] = "目次と索引の項目編集";
     Text[ chinese_traditional ] = "編輯目錄項目";
     Text[ arabic ] = "����� ����� �����";
@@ -879,6 +933,9 @@ String STR_IDXMRK_EDIT
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Edita entrada d'�ndex";
     Text[ thai ] = "แก้ไขรายการดัชนี";
+    Text[ czech ] = "Upravit položku rejstříku";
+    Text[ hebrew ] = "Verzeichniseintrag bearbeiten";
+    Text[ hindi ] = "अनुक्रमणिका प्रविष्टि संपादन";
 };
 String STR_IDXMRK_INSERT
 {
@@ -887,7 +944,7 @@ String STR_IDXMRK_INSERT
     Text [ ENGLISH ] = "Insert index entry" ;
     Text [ norwegian ] = "Sett inn oppf�ring i stikkkordregister" ;
     Text [ italian ] = "Inserisci voce di indice" ;
-    Text [ portuguese_brazilian ] = "Inserir entrada de ?ndice" ;
+    Text [ portuguese_brazilian ] = "Inserir Entrada do �ndice" ;
     Text [ portuguese ] = "Inserir entrada no �ndice" ;
     Text [ finnish ] = "Lis�� hakemistomerkint�" ;
     Text [ danish ] = "Inds�t indekselement" ;
@@ -898,7 +955,7 @@ String STR_IDXMRK_INSERT
     Text [ english_us ] = "Insert Index Entry" ;
     Text[ chinese_simplified ] = "插入目录条目";
     Text[ russian ] = "�������� ������� ���������";
-    Text[ polish ] = "Wstaw wpis do indeksu";
+    Text[ polish ] = "Wstaw wpis indeksu";
     Text[ japanese ] = "目次と索引の項目登録";
     Text[ chinese_traditional ] = "插入目錄條目";
     Text[ arabic ] = "����� ����� �����";
@@ -908,6 +965,9 @@ String STR_IDXMRK_INSERT
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Insereix una entrada d'�ndex";
     Text[ thai ] = "แทรกรายการดัชนี";
+    Text[ czech ] = "Vložit položku rejstříku";
+    Text[ hebrew ] = "Verzeichniseintrag einfügen";
+    Text[ hindi ] = "अनुक्रमणिका प्रविष्टि जोड़ो";
 };
 
 #define     AUTH_DIALOG_WINDOW  \
@@ -931,10 +991,10 @@ String STR_IDXMRK_INSERT
             Text[ italian ] = "Dal ~database bibliografico";\
             Text[ danish ] = "fra l~itteraturdatabasen";\
             Text[ swedish ] = "Fr�n litteratur~databas";\
-            Text[ polish ] = "Z bibliograficznej bazy danych";\
-            Text[ portuguese_brazilian ] = "Form bibliography database";\
+            Text[ polish ] = "Z bibliograficznej ~bazy danych";\
+            Text[ portuguese_brazilian ] = "A partir do banco de ~dados de bibliografia";\
             Text[ japanese ] = "蔵書管理データベースから(~D)";\
-            Text[ korean ] = "참고문헌 데이터베이스로부터(~D)";\
+            Text[ korean ] = "참고 문헌 데이터베이스로부터(~D)";\
             Text[ chinese_simplified ] = "采用文献数据库(~D)";\
             Text[ chinese_traditional ] = "從文獻資料庫(~D)";\
             Text[ arabic ] = "�� ����� ������ �������";\
@@ -942,6 +1002,9 @@ String STR_IDXMRK_INSERT
             Text[ catalan ] = "Des de la base de ~dades de la bibliografia";\
             Text[ finnish ] = "L�hdeluettelo~tietokannasta";\
             Text[ thai ] = "จาก~ฐานข้อมูลบรรณานุกรม";\
+            Text[ czech ] = "Ze seznamu literatury";\
+            Text[ hebrew ] = "Aus Literatur~datenbank";\
+            Text[ hindi ] = "ग्रन्थ-सूची ~लेखासंचय से";\
         };                                                          \
         RadioButton RB_FROMDOCCONTENT                               \
         {                                                           \
@@ -959,8 +1022,8 @@ String STR_IDXMRK_INSERT
             Text[ italian ] = "Dal contenuto del documento";\
             Text[ danish ] = "fra ~dokumentindholdet";\
             Text[ swedish ] = "~Fr�n dokumentinneh�ll";\
-            Text[ polish ] = "Z zawarto�ci dokumentu";\
-            Text[ portuguese_brazilian ] = "From document content";\
+            Text[ polish ] = "N~a podstawie zawarto�ci dokumentu";\
+            Text[ portuguese_brazilian ] = "A partir do ~conte�do do documento";\
             Text[ japanese ] = "ドキュメントから(~F)";\
             Text[ korean ] = "문서 내용으로부터(~F)";\
             Text[ chinese_simplified ] = "采用文档内容(~F)";\
@@ -970,6 +1033,9 @@ String STR_IDXMRK_INSERT
             Text[ catalan ] = "~Des del contingut del document";\
             Text[ finnish ] = "~Asiakirjan sis�ll�st�";\
             Text[ thai ] = "~จากเนื้อหาเอกสาร";\
+            Text[ czech ] = "Z obsahu dokumentu";\
+            Text[ hebrew ] = "~Aus Dokumentinhalt";\
+            Text[ hindi ] = "ले~खपत्र विषय से";\
         };                                                          \
         FixedText FT_AUTHOR                             \
         {                                               \
@@ -988,17 +1054,20 @@ String STR_IDXMRK_INSERT
             Text[ danish ] = "Forfatter";\
             Text[ swedish ] = "F�rfattare";\
             Text[ polish ] = "Autor";\
-            Text[ portuguese_brazilian ] = "Author";\
+            Text[ portuguese_brazilian ] = "Autor";\
             Text[ japanese ] = "著者";\
             Text[ korean ] = "저자";\
             Text[ chinese_simplified ] = "作者";\
             Text[ chinese_traditional ] = "作者";\
             Text[ arabic ] = "������";\
-            Text[ turkish ] = "Yazan";\
+            Text[ turkish ] = "Yazar";\
             Text[ language_user1 ] = " ";\
             Text[ catalan ] = "Autor";\
             Text[ finnish ] = "Tekij�";\
             Text[ thai ] = "ผู้เขียน";\
+            Text[ czech ] = "Autor";\
+            Text[ hebrew ] = "‮מחבר‬";\
+            Text[ hindi ] = "लेखक";\
         };                                              \
         FixedText   FI_AUTHOR                           \
         {                                               \
@@ -1023,7 +1092,7 @@ String STR_IDXMRK_INSERT
             Text[ danish ] = "Titel";\
             Text[ swedish ] = "Titel";\
             Text[ polish ] = "Tytu�";\
-            Text[ portuguese_brazilian ] = "Title";\
+            Text[ portuguese_brazilian ] = "T�tulo";\
             Text[ japanese ] = "タイトル";\
             Text[ korean ] = "제목";\
             Text[ chinese_simplified ] = "标题";\
@@ -1034,6 +1103,9 @@ String STR_IDXMRK_INSERT
             Text[ catalan ] = "T�tol";\
             Text[ finnish ] = "Otsikko";\
             Text[ thai ] = "ชื่อ";\
+            Text[ czech ] = "Titul";\
+            Text[ hebrew ] = "‮כותרת‬";\
+            Text[ hindi ] = "शीर्षक";\
         };                                              \
         FixedText   FI_TITLE                            \
         {                                               \
@@ -1057,18 +1129,21 @@ String STR_IDXMRK_INSERT
             Text[ italian ] = "Abbreviazione";\
             Text[ danish ] = "~Kort betegnelse";\
             Text[ swedish ] = "~Kort beteckning";\
-            Text[ polish ] = "Skr�t";\
-            Text[ portuguese_brazilian ] = "Short name";\
+            Text[ polish ] = "Na~zwa kr�tka";\
+            Text[ portuguese_brazilian ] = "~Abreviatura";\
             Text[ japanese ] = "略称(~N)";\
             Text[ korean ] = "약칭(~N)";\
             Text[ chinese_simplified ] = "简称(~N)";\
             Text[ chinese_traditional ] = "簡短描述文(~N)";\
             Text[ arabic ] = "����� �������";\
-            Text[ turkish ] = "K~�saltma";\
+            Text[ turkish ] = "K~�sa ad";\
             Text[ language_user1 ] = " ";\
             Text[ catalan ] = "Dre~cera";\
             Text[ finnish ] = "Lyhyt ~nimi";\
             Text[ thai ] = " ~ชื่อย่อ";\
+            Text[ czech ] = "Krátký název";\
+            Text[ hebrew ] = "~Kurzbezeichnung";\
+            Text[ hindi ] = "छोटा ~नाम";\
         };                                              \
         Edit ED_ENTRY                                   \
         {                                               \
@@ -1103,17 +1178,20 @@ String STR_IDXMRK_INSERT
             Text[ danish ] = "Element";\
             Text[ swedish ] = "Post";\
             Text[ polish ] = "Wpis";\
-            Text[ portuguese_brazilian ] = "Entry";\
+            Text[ portuguese_brazilian ] = "Entrada";\
             Text[ japanese ] = "項目";\
             Text[ korean ] = "항목";\
             Text[ chinese_simplified ] = "条目";\
             Text[ chinese_traditional ] = "條目";\
             Text[ arabic ] = "�����";\
-            Text[ turkish ] = "Giri�";\
+            Text[ turkish ] = "Girdi";\
             Text[ language_user1 ] = " ";\
             Text[ catalan ] = "Entrada";\
             Text[ finnish ] = "Merkint�";\
             Text[ thai ] = "รายการ";\
+            Text[ czech ] = "Položka";\
+            Text[ hebrew ] = "‮שורה‬";\
+            Text[ hindi ] = "प्रविष्टि";\
         };                                              \
         OKButton PB_OK                                  \
         {                                               \
@@ -1134,7 +1212,7 @@ String STR_IDXMRK_INSERT
             Text[ danish ] = "Inds�t";\
             Text[ swedish ] = "Infoga";\
             Text[ polish ] = "Wstaw";\
-            Text[ portuguese_brazilian ] = "Insert";\
+            Text[ portuguese_brazilian ] = "Inserir";\
             Text[ japanese ] = "挿入";\
             Text[ korean ] = "삽입";\
             Text[ chinese_simplified ] = "插入";\
@@ -1145,6 +1223,9 @@ String STR_IDXMRK_INSERT
             Text[ catalan ] = "Insereix";\
             Text[ finnish ] = "Lis��";\
             Text[ thai ] = "แทรก";\
+            Text[ czech ] = "Vložit";\
+            Text[ hebrew ] = "‮הוספה‬";\
+            Text[ hindi ] = "जोड़ो";\
         };                                              \
         CancelButton PB_CANCEL                          \
         {                                               \
@@ -1163,7 +1244,7 @@ String STR_IDXMRK_INSERT
             Text[ danish ] = "Luk";\
             Text[ swedish ] = "St�ng";\
             Text[ polish ] = "Zamknij";\
-            Text[ portuguese_brazilian ] = "Close";\
+            Text[ portuguese_brazilian ] = "Fechar";\
             Text[ japanese ] = "閉じる";\
             Text[ korean ] = "닫기";\
             Text[ chinese_simplified ] = "关闭";\
@@ -1174,6 +1255,9 @@ String STR_IDXMRK_INSERT
             Text[ catalan ] = "Tanca";\
             Text[ finnish ] = "Sulje";\
             Text[ thai ] = "ปิด";\
+            Text[ czech ] = "Zavřít";\
+            Text[ hebrew ] = "‮סגירה‬";\
+            Text[ hindi ] = "बन्द करो";\
         };                                              \
         HelpButton PB_HELP                              \
         {                                               \
@@ -1196,8 +1280,8 @@ String STR_IDXMRK_INSERT
             Text[ italian ] = "Nuovo";\
             Text[ danish ] = "~Ny";\
             Text[ swedish ] = "N~y";\
-            Text[ polish ] = "Nowy";\
-            Text[ portuguese_brazilian ] = "Create entry";\
+            Text[ polish ] = "~Nowy";\
+            Text[ portuguese_brazilian ] = "~Novo";\
             Text[ japanese ] = "新規作成(~N)";\
             Text[ korean ] = "새로 만들기(~N)";\
             Text[ chinese_simplified ] = "新建(~N)";\
@@ -1208,6 +1292,9 @@ String STR_IDXMRK_INSERT
             Text[ catalan ] = "~Nou";\
             Text[ finnish ] = "~Uusi";\
             Text[ thai ] = "ใ~หม่";\
+            Text[ czech ] = "Nový";\
+            Text[ hebrew ] = "‮חדש‬";\
+            Text[ hindi ] = "~नया";\
         };                                              \
         PushButton PB_EDITENTRY                       \
         {                                               \
@@ -1225,8 +1312,8 @@ String STR_IDXMRK_INSERT
             Text[ italian ] = "~Modifica";\
             Text[ danish ] = "~Rediger";\
             Text[ swedish ] = "~Redigera";\
-            Text[ polish ] = "~Edytuj";\
-            Text[ portuguese_brazilian ] = "Edit";\
+            Text[ polish ] = "Edytuj";\
+            Text[ portuguese_brazilian ] = "Editar";\
             Text[ japanese ] = "編集";\
             Text[ korean ] = "편집";\
             Text[ chinese_simplified ] = "编辑";\
@@ -1236,6 +1323,9 @@ String STR_IDXMRK_INSERT
             Text[ catalan ] = "Edita";\
             Text[ finnish ] = "Muokkaa";\
             Text[ thai ] = "แก้ไข";\
+            Text[ czech ] = "Upravit";\
+            Text[ hebrew ] = "‮עריכה‬";\
+            Text[ hindi ] = "संपादन";\
         };                                              \
         String ST_CHANGE                                \
         {                                               \
@@ -1252,9 +1342,9 @@ String STR_IDXMRK_INSERT
             Text[ danish ] = "Modificer";\
             Text[ swedish ] = "�ndra";\
             Text[ polish ] = "Modyfikuj";\
-            Text[ portuguese_brazilian ] = "Apply";\
+            Text[ portuguese_brazilian ] = "Modificar";\
             Text[ japanese ] = "変更";\
-            Text[ korean ] = "변경";\
+            Text[ korean ] = "수정";\
             Text[ chinese_simplified ] = "更改";\
             Text[ chinese_traditional ] = "變更";\
             Text[ arabic ] = "�����";\
@@ -1263,6 +1353,9 @@ String STR_IDXMRK_INSERT
             Text[ catalan ] = "Modifica";\
             Text[ finnish ] = "Muuta";\
             Text[ thai ] = "ดัดแปลงแก้ไข";\
+            Text[ czech ] = "Změnit";\
+            Text[ hebrew ] = "‮שינוי‬";\
+            Text[ hindi ] = "सुधारो";\
         };                                              \
     };
 
@@ -1335,17 +1428,20 @@ ModalDialog DLG_CREATE_AUTH_ENTRY
         Text[ danish ] = "Elementdata";
         Text[ swedish ] = "Postdata";
         Text[ polish ] = "Dane wpisu";
-        Text[ portuguese_brazilian ] = "Entry data";
+        Text[ portuguese_brazilian ] = "Dados de entrada";
         Text[ japanese ] = "入力データ";
         Text[ korean ] = "항목 데이터";
         Text[ chinese_simplified ] = "条目数据";
         Text[ chinese_traditional ] = "條目資料";
         Text[ arabic ] = "������ �������";
-        Text[ turkish ] = "Giri� verileri";
+        Text[ turkish ] = "Veri giri�i";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Dades de l'entrada";
         Text[ finnish ] = "Merkint�tiedot";
         Text[ thai ] = "ป้อนข้อมูล";
+        Text[ czech ] = "Položka";
+        Text[ hebrew ] = "Eintragsdaten";
+        Text[ hindi ] = "प्रविष्टि ड़ॉटा";
     };
     Text[ english_us ] = "Define Bibliography Entry";
     Text[ portuguese ] = "Definir entrada bibliogr�fica";
@@ -1357,10 +1453,10 @@ ModalDialog DLG_CREATE_AUTH_ENTRY
     Text[ italian ] = "Definisci voce bibliografica";
     Text[ danish ] = "Definer litteraturlisteelement";
     Text[ swedish ] = "Definiera litteraturpost";
-    Text[ polish ] = "Zdefiniuj wpis bibliograficzny";
-    Text[ portuguese_brazilian ] = "Define authority entry";
+    Text[ polish ] = "Definiuj pozycj� bibliograficzn�";
+    Text[ portuguese_brazilian ] = "Definir Entrada de Bibliografia";
     Text[ japanese ] = "参考文献項目の登録";
-    Text[ korean ] = "참고문헌 항목 정의";
+    Text[ korean ] = "참고 문헌 항목 정의";
     Text[ chinese_simplified ] = "定义文献条目";
     Text[ chinese_traditional ] = "定義參考文獻條目";
     Text[ arabic ] = "����� ����� �� ���� �������";
@@ -1368,6 +1464,9 @@ ModalDialog DLG_CREATE_AUTH_ENTRY
     Text[ catalan ] = "Defineix entrada de bibliografia";
     Text[ finnish ] = "M��rit� l�hdeluettelomerkint�";
     Text[ thai ] = "ระบุรายการบรรณานุกรม";
+    Text[ czech ] = "Definovat položku použité literatury";
+    Text[ hebrew ] = "Literatureintrag definieren";
+    Text[ hindi ] = "ग्रन्थ-सूची प्रविष्टि को परिभाषा दो";
 };
 String STR_AUTHMRK_EDIT
 {
@@ -1384,10 +1483,10 @@ String STR_AUTHMRK_EDIT
     Text[ italian ] = "Modifica voce bibliografica";
     Text[ danish ] = "Rediger litteraturlisteelement";
     Text[ swedish ] = "Redigera post i litteraturf�rteckning";
-    Text[ polish ] = "Edytuj wpis bibliograficzny";
-    Text[ portuguese_brazilian ] = "Edit authority entry";
+    Text[ polish ] = "Edytuj pozycj� bibliograficzn�";
+    Text[ portuguese_brazilian ] = "Editar Entrada de Bibliografia";
     Text[ japanese ] = "参考文献項目の編集";
-    Text[ korean ] = "참고문헌 항목 편집";
+    Text[ korean ] = "참고 문헌 항목 편집";
     Text[ chinese_simplified ] = "编辑文献目录条目";
     Text[ chinese_traditional ] = "編輯參考文獻目錄條目";
     Text[ arabic ] = "����� ����� �� ���� �������";
@@ -1396,6 +1495,9 @@ String STR_AUTHMRK_EDIT
     Text[ catalan ] = "Edita entrada de bibliografia";
     Text[ finnish ] = "Muokkaa l�hdeluettelomerkint��";
     Text[ thai ] = "แก้ไขรายการบรรณานุกรม";
+    Text[ czech ] = "Upravit položku použité literatury";
+    Text[ hebrew ] = "Literaturverzeichniseintrag bearbeiten";
+    Text[ hindi ] = "ग्रन्थ-सूची प्रविष्टि संपादन";
 };
 String STR_AUTHMRK_INSERT
 {
@@ -1412,10 +1514,10 @@ String STR_AUTHMRK_INSERT
     Text[ italian ] = "Inserisci voce bibliografica";
     Text[ danish ] = "Inds�t litteraturlisteelement";
     Text[ swedish ] = "Infoga post i litteraturf�rteckning";
-    Text[ polish ] = "Wstaw wpis bibliograficzny";
-    Text[ portuguese_brazilian ] = "Insert authority entry";
+    Text[ polish ] = "Wstaw pozycj� bibliograficzn�";
+    Text[ portuguese_brazilian ] = "Inserir Entrada de Bibliografia";
     Text[ japanese ] = "参考文献項目の挿入";
-    Text[ korean ] = "참고문헌 항목 삽입";
+    Text[ korean ] = "참고 문헌 항목 삽입";
     Text[ chinese_simplified ] = "插入文献目录条目";
     Text[ chinese_traditional ] = "插入參考文獻目錄條目";
     Text[ arabic ] = "����� ����� �� ���� �������";
@@ -1424,6 +1526,9 @@ String STR_AUTHMRK_INSERT
     Text[ catalan ] = "Insereix entrada de bibliografia";
     Text[ finnish ] = "Lis�� l�hdeluettelomerkint�";
     Text[ thai ] = "แทรกรายการบรรณานุกรม";
+    Text[ czech ] = "Vložit položku použité literatury";
+    Text[ hebrew ] = "Literaturverzeichniseintrag einfügen";
+    Text[ hindi ] = "ग्रन्थ-सूची प्रविष्टि जोड़ो";
 };
 QueryBox DLG_CHANGE_AUTH_ENTRY
 {
@@ -1441,18 +1546,34 @@ QueryBox DLG_CHANGE_AUTH_ENTRY
     MESSAGE[ italian ] = "La voce bibliografica � gi� presente nel documento con dati diversi. Volete adattare le voci gi� contenute?";
     MESSAGE[ danish ] = "Bibliografielementet findes allerede i dokumentet med afvigende data. Vil du tilpasse de aktuelle elementer i dokumentet?";
     MESSAGE[ swedish ] = "Bibliografiposten finns redan med avvikande data i dokumentet. Vill du anpassa posterna som redan finns d�r?";
-    MESSAGE[ polish ] = "Dokument zawiera ju� wpis bibliograficzny, ale z innymi danymi. Dopasowa� zawarte wpisy?";
-    MESSAGE[ portuguese_brazilian ] = "The bibliography entry is already contained in the document with different data.";
+    MESSAGE[ polish ] = "Dokument zawiera ju� pozycj� bibliograficzn�, ale z innymi danymi. Dopasowa� istniej�ce wpisy?";
+    MESSAGE[ portuguese_brazilian ] = "A entrada de bibliografia j� existe no documento mas com dados diferentes. Deseja ajustar as entradas existentes?";
     MESSAGE[ japanese ] = "この参考文献の項目はこの文書の別の箇所にすでに出てきています。この既存項目に適合させますか。";
-    MESSAGE[ korean ] = "참고문헌 항목은 이미 다른 데이터와 함께 문서에 포함되어 있습니다. 이미 포함된 항목을 조정하겠습니까?";
+    MESSAGE[ korean ] = "참고 문헌 항목은 이미 다른 데이터와 함께 문서에 포함되어 있습니다. 이미 포함된 항목을 조정하겠습니까?";
     MESSAGE[ chinese_simplified ] = "文档内已经含有附带不同数据的目录条目。要调整已经存在的条目？";
     MESSAGE[ chinese_traditional ] = "文件內已經含有附帶不同資料的目錄條目。要調整已經存在的條目？";
     MESSAGE[ arabic ] = "����� ������ ����� ������ �� ������� ������� ������. �� ���� ������ ��������� �������ɿ";
-    MESSAGE[ turkish ] = "Kaynak�a giri�i, farkl� veriler ile belgede mevcut.";
+    MESSAGE[ turkish ] = "Kaynak�a giri�i, farkl� veriler ile belgede mevcut. Bulunan giri�leri ayarlamak istiyor musunuz?";
     MESSAGE[ catalan ] = "L'entrada bibliogr�fica ja existeix amb dades diferents en el document. Voleu ajustar les dades ja existents?";
     MESSAGE[ finnish ] = "Asiakirja sis�lt�� jo l�hdeluettelomerkinn�n, mutta siin� on eri tiedot. Haluatko muokata olemassa olevia merkint�j�?";
     MESSAGE[ thai ] = "เอกสารมีรายการบรรณานุกรมอยู่แล้วแต่มีข้อมูลที่ต่างกัน คุณต้องการปรับรายการที่มีอยู่หรือไม่?";
+    MESSAGE[ czech ] = "Dokument již obsahuje záznam seznamu použité literatury, ale s jinými údaji. Chcete upravit existující záznamy?";
+    MESSAGE[ hebrew ] = "Der Bibliographie-Eintrag ist bereits mit abweichenden Daten im Dokument enthalten. Möchten sie die bereits enthaltenen Einträge anpassen?";
+    MESSAGE[ hindi ] = "लेखपत्र में पहिले से ही ग्रन्थ-सूची प्रविष्टि है, लेकिन अलग ड़ॉटा है । आप अस्तित्व में रहनेवाले प्रविष्टियों को व्यवस्था करना चाहते है?";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
