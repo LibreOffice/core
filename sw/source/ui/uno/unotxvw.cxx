@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxvw.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: os $ $Date: 2002-02-05 14:40:11 $
+ *  last change: $Author: tl $ $Date: 2002-02-13 12:22:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1577,7 +1577,7 @@ OUString SwXTextViewCursor::getString(void) throw( uno::RuntimeException )
     {
         ShellModes  eSelMode = pView->GetShellMode();
         switch(eSelMode)
-
+        {
             case SEL_LIST_TEXT       :
             case SEL_TABLE_LIST_TEXT:
             case SEL_TEXT            :
@@ -1586,6 +1586,7 @@ OUString SwXTextViewCursor::getString(void) throw( uno::RuntimeException )
                 SwPaM* pShellCrsr = rSh.GetCrsr();
                 SwXTextCursor::getTextFromPam(*pShellCrsr, uRet);
             }
+        }
     }
     return uRet;
 }
@@ -1595,7 +1596,21 @@ OUString SwXTextViewCursor::getString(void) throw( uno::RuntimeException )
 void SwXTextViewCursor::setString(const OUString& aString) throw( uno::RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
-    DBG_WARNING("not implemented")
+    if(pView)
+    {
+        ShellModes  eSelMode = pView->GetShellMode();
+        switch(eSelMode)
+        {
+            case SEL_LIST_TEXT       :
+            case SEL_TABLE_LIST_TEXT :
+            case SEL_TEXT            :
+            {
+                SwWrtShell& rSh = pView->GetWrtShell();
+                SwCursor* pShellCrsr = rSh.GetSwCrsr();
+                SwXTextCursor::SetString( *pShellCrsr, aString );
+            }
+        }
+    }
 }
 
 /*-- 29.06.00 17:33:38---------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: os $ $Date: 2001-11-15 15:48:28 $
+ *  last change: $Author: tl $ $Date: 2002-02-13 12:21:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,6 +195,7 @@
 #define C2S(cChar) UniString::CreateFromAscii(cChar)
 
 class SwUnoCrsr;
+class SwCursor;
 class SwBookmark;
 class SwFmtFtn;
 class SwFmtFld;
@@ -534,7 +535,7 @@ public:
     static SwFmtColl*   GetCurTxtFmtColl(SwPaM& rPam, BOOL bConditional);
 
     static void         SelectPam(SwPaM& rCrsr, sal_Bool bExpand);
-    static void         SetString(SwUnoCrsr& rUnoCrsr, const rtl::OUString& rString);
+    static void         SetString(SwCursor& rCrsr, const rtl::OUString& rString);
 
     static              ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
                             createSortDescriptor(sal_Bool bFromTable);

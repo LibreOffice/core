@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj2.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: jp $ $Date: 2002-02-01 12:42:16 $
+ *  last change: $Author: tl $ $Date: 2002-02-13 12:21:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2258,25 +2258,25 @@ void    SwXTextRanges::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
 /* -----------------11.12.98 10:07-------------------
  *
  * --------------------------------------------------*/
-void SwXTextCursor::SetString(SwUnoCrsr& rUnoCrsr, const OUString& rString)
+void SwXTextCursor::SetString(SwCursor& rCrsr, const OUString& rString)
 {
     // Start/EndAction
-    SwDoc* pDoc = rUnoCrsr.GetDoc();
+    SwDoc* pDoc = rCrsr.GetDoc();
     UnoActionContext aAction(pDoc);
     String aText(rString);
     xub_StrLen nTxtLen = aText.Len();
     pDoc->StartUndo(UNDO_INSERT);
-    if(rUnoCrsr.HasMark())
-        pDoc->DeleteAndJoin(rUnoCrsr);
+    if(rCrsr.HasMark())
+        pDoc->DeleteAndJoin(rCrsr);
     if(nTxtLen)
     {
         //OPT: GetSystemCharSet
-        if( !pDoc->Insert(rUnoCrsr, aText) )
+        if( !pDoc->Insert(rCrsr, aText) )
         {
             ASSERT( sal_False, "Doc->Insert(Str) failed." )
         }
-        SwXTextCursor::SelectPam(rUnoCrsr, sal_True);
-        rUnoCrsr.Left(nTxtLen, CRSR_SKIP_CHARS);
+        SwXTextCursor::SelectPam(rCrsr, sal_True);
+        rCrsr.Left(nTxtLen, CRSR_SKIP_CHARS);
     }
     pDoc->EndUndo(UNDO_INSERT);
 }
