@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedata.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: khong $ $Date: 2002-08-16 17:05:43 $
+ *  last change: $Author: vg $ $Date: 2003-10-06 18:27:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,9 +149,14 @@ public:
     virtual com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames() throw( com::sun::star::uno::RuntimeException );
 
 private :
-    inline friend sal_Bool operator == (const com::sun::star::lang::Locale& l1, const com::sun::star::lang::Locale& l2) {
+#if defined(_MSC_VER) && (_MSC_VER >= 1310 )
+    inline friend sal_Bool operator ==(const com::sun::star::lang::Locale& l1, const com::sun::star::lang::Locale& l2);
+#else
+    inline friend sal_Bool operator ==(const com::sun::star::lang::Locale& l1, const com::sun::star::lang::Locale& l2) {
         return l1.Language == l2.Language && l1.Country == l2.Country && l1.Variant == l2.Variant;
     };
+#endif
+
     struct lookupTableItem {
         lookupTableItem(const sal_Char *name, osl::Module* m) : dllName(name), module(m) {}
         const sal_Char* dllName;
@@ -159,7 +164,7 @@ private :
         com::sun::star::lang::Locale aLocale;
         osl::Module *module;
         sal_Bool equals(const com::sun::star::lang::Locale& rLocale) {
-        return rLocale == aLocale;
+        return (rLocale == aLocale);
         }
     };
     List lookupTable;
@@ -175,6 +180,11 @@ private :
         const com::sun::star::uno::Sequence< com::sun::star::i18n::Calendar >& calendarsSeq,
         sal_Int16 len, sal_Int16 item) throw( com::sun::star::uno::RuntimeException );
 };
+#if defined(_MSC_VER) && (_MSC_VER >= 1310 )
+    inline sal_Bool operator ==(const com::sun::star::lang::Locale& l1, const com::sun::star::lang::Locale& l2) {
+        return l1.Language == l2.Language && l1.Country == l2.Country && l1.Variant == l2.Variant;
+    };
+#endif
 
 } } } }
 
