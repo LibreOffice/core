@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormComponent.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-06 13:37:55 $
+ *  last change: $Author: hr $ $Date: 2004-10-13 08:27:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -354,7 +354,19 @@ InterfaceRef SAL_CALL OControl::getContext() throw (RuntimeException)
 void SAL_CALL OControl::createPeer(const Reference<XToolkit>& Toolkit, const Reference<XWindowPeer>& Parent) throw (RuntimeException)
 {
     if (m_xControl.is())
+    {
         m_xControl->createPeer(Toolkit, Parent);
+        try
+        {
+            Reference< XVclWindowPeer > xPeer( m_xControl->getPeer(), UNO_QUERY );
+            if ( xPeer.is() )
+                xPeer->setProperty( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NativeWidgetLook" ) ), makeAny( (sal_Bool)sal_False ) );
+        }
+        catch( const Exception& )
+        {
+            OSL_ENSURE( sal_False, "OControl::createPeer: caught an exception while initializing the peer!" );
+        }
+    }
 }
 
 //------------------------------------------------------------------------------
