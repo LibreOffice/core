@@ -2,9 +2,9 @@
  *
  *  $RCSfile: processfactory.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:55 $
+ *  last change: $Author: fs $ $Date: 2000-10-06 14:28:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,34 +77,18 @@ using namespace osl;
 
 namespace utl
 {
+    // just use the comphelper versions of both functions. The versions here in unotools will become obsolete
+    // from SRC610 on.
 
-/*
-    This function preserves only that the xProcessFactory variable will not be create when
-    the library is loaded.
-*/
-Reference< XMultiServiceFactory > localProcessFactory( const Reference< XMultiServiceFactory >& xSMgr, sal_Bool bSet )
-{
-    Guard< Mutex > aGuard( Mutex::getGlobalMutex() );
-
-    static Reference< XMultiServiceFactory > xProcessFactory;
-    if ( bSet )
+    void setProcessServiceFactory(const Reference< XMultiServiceFactory >& xSMgr)
     {
-        xProcessFactory = xSMgr;
+        ::comphelper::setProcessServiceFactory(xSMgr);
     }
 
-    return xProcessFactory;
-}
-
-
-void setProcessServiceFactory(const Reference< XMultiServiceFactory >& xSMgr)
-{
-    localProcessFactory( xSMgr, sal_True );
-}
-
-Reference< XMultiServiceFactory > getProcessServiceFactory()
-{
-    return localProcessFactory( Reference< XMultiServiceFactory >(), sal_False );
-}
+    Reference< XMultiServiceFactory > getProcessServiceFactory()
+    {
+        return ::comphelper::getProcessServiceFactory();
+    }
 
 } // namesapce utl
 
