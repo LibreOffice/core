@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: rt $ $Date: 2003-04-24 13:23:10 $
+#   last change: $Author: vg $ $Date: 2005-02-17 10:15:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -129,6 +129,7 @@ SHL1STDLIBS=\
     $(SALLIB)					\
     $(JVMACCESSLIB)				\
     $(DBTOOLSLIB)				\
+    $(JVMFWKLIB)				\
     $(COMPHELPERLIB)
 
 SHL1DEPN=
