@@ -1,5 +1,5 @@
 <!--
-	$Id: table.mod,v 1.16 2000-11-23 12:28:37 sab Exp $
+	$Id: table.mod,v 1.17 2000-11-23 15:12:34 sab Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -189,6 +189,18 @@
 <!ATTLIST table:covered-table-cell
 	table:currency %string; #IMPLIED
 >
+<!ELEMENT table:calculation-settings (table:null-date?, table:iteration?)>
+<!ATTLIST table:calculation-settings table:case-sensitive %boolean; "true"
+				table:precision-as-shown %boolean; "false"
+				table:search-criteria-must-apply-to-whole-cell %boolean; "true"
+				table:automatic-find-labels %boolean; "true">
+<!ELEMENT table:null-date EMPTY>
+<!ATTLIST table:null-date table:value-type %valueType; #FIXED "date"
+ 			table:date-value %date; "1899-12-30">
+<!ELEMENT table:iteration EMPTY>
+<!ATTLIST table:iteration table:status (enable|disable) "disable"
+			table:steps %positiveInteger; "100"
+			table:maximum-difference %float; "0.001">
 <!ELEMENT table:content-validations (table:content-validation)+>
 <!ELEMENT table:content-validation (table:help-message?, (table:error-message | table:error-macro)?)>
 <!ATTLIST table:content-validation
