@@ -2,9 +2,9 @@
  *
  *  $RCSfile: odata.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 15:58:19 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 18:00:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -795,8 +795,9 @@ void ODataOutputStream::writeUTF(const OUString& Value)
     sal_Int32 nStrLen = Value.getLength();
     const sal_Unicode * pStr = Value.getStr();
     sal_Int32 nUTFLen = 0;
+    sal_Int32 i;
 
-    for( sal_Int32 i = 0 ; i < nStrLen ; i++ )
+    for( i = 0 ; i < nStrLen ; i++ )
     {
         sal_uInt16 c = pStr[i];
         if( (c >= 0x0001) && (c <= 0x007F) )
