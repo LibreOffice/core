@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoidx.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: os $ $Date: 2001-01-12 16:12:45 $
+ *  last change: $Author: dvo $ $Date: 2001-01-12 18:30:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,9 @@
 #ifndef _COM_SUN_STAR_TEXT_CHAPTERFORMAT_HPP_
 #include <com/sun/star/text/ChapterFormat.hpp>
 #endif
+#ifndef _COM_SUN_STAR_TEXT_REFERENCEFIELDPART_HPP_
+#include <com/sun/star/text/ReferenceFieldPart.hpp>
+#endif
 #ifndef _COM_SUN_STAR_TEXT_BIBLIOGRAPHYDATAFIELD_HPP_
 #include <com/sun/star/text/BibliographyDataField.hpp>
 #endif
@@ -124,7 +127,7 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUES_HPP_
 #include <com/sun/star/beans/PropertyValues.hpp>
 #endif
-#ifndef _COM_SUN_STAR_BEANS_PropertyAttribute_HPP_
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
 #ifndef _UNOIDX_HXX
@@ -526,16 +529,16 @@ void SwXDocumentIndex::setPropertyValue(const OUString& rPropertyName,
                     sal_uInt16 nSet = CAPTION_COMPLETE;
                     switch (nVal)
                     {
-                        case text::ChapterFormat::NAME_NUMBER: nSet = CAPTION_COMPLETE;
+                        case text::ReferenceFieldPart::TEXT: nSet = CAPTION_COMPLETE;
                         break;
-                        case text::ChapterFormat::NUMBER    : nSet = CAPTION_NUMBER;
+                        case text::ReferenceFieldPart::CATEGORY_AND_NUMBER  : nSet = CAPTION_NUMBER;
                         break;
-                        case text::ChapterFormat::NAME : nSet = CAPTION_TEXT;
+                        case text::ReferenceFieldPart::ONLY_CAPTION : nSet = CAPTION_TEXT;
                         break;
                         default:
                             throw IllegalArgumentException();
                     }
-                    pTOXBase->SetCaptionDisplay((SwCaptionDisplay)nVal);
+                    pTOXBase->SetCaptionDisplay((SwCaptionDisplay)nSet);
             }
             break;
             case WID_USE_LEVEL_FROM_SOURCE             :
@@ -795,12 +798,12 @@ uno::Any SwXDocumentIndex::getPropertyValue(const OUString& rPropertyName)
             case WID_LABEL_DISPLAY_TYPE                :
             {
                 bBOOL = sal_False;
-                sal_Int16 nSet = text::ChapterFormat::NAME_NUMBER;
+                sal_Int16 nSet = text::ReferenceFieldPart::TEXT;
                 switch (pTOXBase->GetCaptionDisplay())
                 {
-                    case CAPTION_COMPLETE:  nSet = text::ChapterFormat::NAME_NUMBER;break;
-                    case CAPTION_NUMBER  :  nSet = text::ChapterFormat::NUMBER; break;
-                    case CAPTION_TEXT    :  nSet = text::ChapterFormat::NAME;      break;
+                    case CAPTION_COMPLETE:  nSet = text::ReferenceFieldPart::TEXT;break;
+                    case CAPTION_NUMBER  :  nSet = text::ReferenceFieldPart::CATEGORY_AND_NUMBER;   break;
+                    case CAPTION_TEXT    :  nSet = text::ReferenceFieldPart::ONLY_CAPTION;      break;
                 }
                 aRet <<= nSet;
             }
