@@ -2,9 +2,9 @@
  *
  *  $RCSfile: misc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tl $ $Date: 2000-12-22 12:44:50 $
+ *  last change: $Author: kz $ $Date: 2001-01-03 15:20:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -449,7 +449,9 @@ Reference< XHyphenatedWord > RebuildHyphensAndControlChars(
         }
 
         if (nOrigHyphenPos == -1)
+        {
             DBG_ERROR( "failed to get nOrigHyphenPos" );
+        }
         else
         {
             INT16 nLang = LocaleToLanguage( rxHyphWord->getLocale() );
