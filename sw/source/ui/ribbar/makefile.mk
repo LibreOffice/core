@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 14:57:13 $
+#   last change: $Author: rt $ $Date: 2004-05-21 12:57:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,9 +70,6 @@ TARGET=ribbar
 .INCLUDE :  $(PRJ)$/inc$/swpre.mk
 .INCLUDE :  settings.mk
 .INCLUDE :  $(PRJ)$/inc$/sw.mk
-
-IMGLST_SRS=$(SRS)$/ribbar.srs
-BMP_IN=$(PRJ)$/win/imglst
 
 # --- Files --------------------------------------------------------
 
