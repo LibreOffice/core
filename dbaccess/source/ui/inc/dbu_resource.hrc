@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-29 13:11:51 $
+ *  last change: $Author: fs $ $Date: 2001-06-19 10:58:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@
 #define DLG_INDEXDESIGN                 RID_DIALOG_START + 19
 #define DLG_DOCUMENTLINK                RID_DIALOG_START + 20
 #define DLG_DEADDOCUMENTLINK            RID_DIALOG_START + 21
+#define DLG_DIRECTSQL                   RID_DIALOG_START + 22
 
 //========================================================================
 // tab pages
@@ -422,6 +423,8 @@
 #define STR_ADDRESSBOOK_MOZILLA             RID_STRING_START + 166
 #define STR_ADDRESSBOOK_LDAP                RID_STRING_START + 167
 #define STR_ADDRESSBOOK_OUTLOOK             RID_STRING_START + 168
+#define STR_COMMAND_EXECUTED_SUCCESSFULLY   RID_STRING_START + 169
+#define STR_DIRECTSQL_CONNECTIONLOST        RID_STRING_START + 170
 
 
 //========================================================================
@@ -437,6 +440,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.47  2001/05/29 13:11:51  oj
+ *  #87149# addressbook ui impl
+ *
  *  Revision 1.46  2001/05/23 14:16:41  oj
  *  #87149# new helpids
  *
