@@ -2,9 +2,9 @@
  *
  *  $RCSfile: staticdbtools_s.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:17:53 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 10:02:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,6 +251,12 @@ namespace connectivity
                                         sal_Bool _bDefault) const
     {
         return ::dbtools::isDataSourcePropertyEnabled( _xProp,_sProperty ,_bDefault );
+    }
+
+    // ------------------------------------------------
+    Reference< XConnection > ODataAccessStaticTools::getComponentContextConnection( const Reference< XInterface >& _rxComponent )
+    {
+        return ::dbtools::getActiveConnectionFromParent( _rxComponent );
     }
 
 //........................................................................
