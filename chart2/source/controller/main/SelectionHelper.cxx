@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionHelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: iha $ $Date: 2003-10-28 18:03:30 $
+ *  last change: $Author: iha $ $Date: 2003-10-30 16:06:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,7 +235,7 @@ bool SelectionHelper::getFrameDragSingles()
 SdrObject* SelectionHelper::getObjectToMark()
 {
     //return the selected object itself
-    //or a sub object if one with name "Handles" exsists
+    //or a sub object if one with name "MarkHandles" exsists
 
     SdrObject* pObj = m_pSelectedObj;
 
@@ -250,7 +250,7 @@ SdrObject* SelectionHelper::getObjectToMark()
             {
                 SdrObject* pSubObj = aIterator.Next();
                 rtl::OUString aName = SelectionHelper::getObjectName( pSubObj );
-                if( aName.match(C2U("Handles")) )
+                if( aName.match(C2U("MarkHandles")) )
                 {
                     m_pMarkObj = pSubObj;
                     break;
@@ -272,7 +272,7 @@ bool SelectionHelper::getMarkHandles( SdrHdlList& rHdlList )
     //.. or 3. feature from drawinglayer to create handles for each shape ... (bad performance ... ?) ?
 
     //scenario 1 is now used:
-    //if a child with name Handles exsists
+    //if a child with name MarkHandles exsists
     //this child is marked instead of the logical selected object
 
 /*
