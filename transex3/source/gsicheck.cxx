@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gsicheck.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:10:46 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:50:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@ public:
     void PrintError( ByteString aMsg, ByteString aPrefix, ByteString aContext, ULONG nLine, ByteString aUniqueId = ByteString() );
     void InsertLine( GSILine* pLine, const USHORT nSourceLang);
     void SetReferenceLine( GSILine* pLine );
-    BOOL CheckSyntax( ULONG nLine );
+    BOOL CheckSyntax( ULONG nLine, BOOL bRequireSourceLine );
 
     void WriteError( SvStream &aErrOut );
     void WriteCorrect( SvStream &aOkOut );
@@ -162,33 +162,49 @@ GSILine::GSILine( const ByteString &rLine, ULONG nLine )
                 , nLineNumber( nLine )
                 , bOK( TRUE )
 {
-       if ( rLine.GetTokenCount( '\t' ) == 1 )
-    {
-        ByteString sTmp( rLine );
-        sTmp.SearchAndReplaceAll( "($$)", "\t" );
-        if ( sTmp.GetTokenCount( '\t' ) == 5 )
-        {
-            aFormat = FORMAT_GSI1;
-            aUniqId = sTmp.GetToken( 0, '\t' );
-            aLineType = sTmp.GetToken( 1, '\t' );
-            nLangId = sTmp.GetToken( 2, '\t' ).ToInt32();
-            aStatus = sTmp.GetToken( 3, '\t' );     // ext int ...
-            aText = sTmp.GetToken( 4, '\t' );
-        }
-        else
-            aFormat = FORMAT_UNKNOWN;
-    }
-    else if ( rLine.GetTokenCount( '\t' ) == 15 )
+    if ( rLine.GetTokenCount( '\t' ) == 15 )
     {
         aFormat = FORMAT_SDF;
-        aUniqId = rLine.GetToken( 4, '\t' ).Append("/").Append( rLine.GetToken( 3, '\t' ) ).Append("/").Append( rLine.GetToken( 5, '\t' ) );
+        aUniqId = rLine.GetToken( 4, '\t' ).Append("/").Append( rLine.GetToken( 3, '\t' ) ).Append("/").Append( rLine.GetToken( 5, '\t' ) ).Append("/").Append( rLine.GetToken( 6, '\t' ) ).Append("/").Append( rLine.GetToken( 7, '\t' ) );
         aLineType = "";
         nLangId = rLine.GetToken( 9, '\t' ).ToInt32();
         aStatus = "";
         aText = rLine.GetToken( 10, '\t' );
     }
-    else
-        aFormat = FORMAT_UNKNOWN;
+    else    // allow tabs in gsi files
+    {
+        aFormat = FORMAT_GSI1;
+        ByteString sTmp( rLine );
+        USHORT nPos = sTmp.Search( "($$)" );
+        USHORT nStart = 0;
+        if ( nPos != STRING_NOTFOUND )
+        {
+            aUniqId = sTmp.Copy( nStart, nPos - nStart );
+            nStart = nPos + 4;  // + length of the delemiter
+            nPos = sTmp.Search( "($$)", nStart );
+        }
+        if ( nPos != STRING_NOTFOUND )
+        {
+            aLineType = sTmp.Copy( nStart, nPos - nStart );
+            nStart = nPos + 4;  // + length of the delemiter
+            nPos = sTmp.Search( "($$)", nStart );
+        }
+        if ( nPos != STRING_NOTFOUND )
+        {
+            nLangId = sTmp.Copy( nStart, nPos - nStart ).ToInt32();
+            nStart = nPos + 4;  // + length of the delemiter
+            nPos = sTmp.Search( "($$)", nStart );
+        }
+        if ( nPos != STRING_NOTFOUND )
+        {
+            aStatus = sTmp.Copy( nStart, nPos - nStart );     // ext int ...
+            nStart = nPos + 4;  // + length of the delemiter
+        }
+        if ( nPos != STRING_NOTFOUND )
+            aText = sTmp.Copy( nStart );
+        else
+            aFormat = FORMAT_UNKNOWN;
+    }
 
     if ( FORMAT_UNKNOWN == GetLineFormat() )
         NotOK();
@@ -226,11 +242,14 @@ void GSIBlock::InsertLine( GSILine* pLine, const USHORT nSourceLang)
            ||( !bLineIsInternal && !bInternal )
            ||( pLine->GetLineFormat() == FORMAT_SDF ))  // in sdf files check it all
         {
-            while ( nPos < Count() )
+            if ( nSourceLang != 0 ) // only check blockstructure if source lang is given
             {
-                if ( GetObject( nPos )->GetLanguageId() == pLine->GetLanguageId() )
-                    PrintError( "Translation Language entry double. Checking both.", "File format", "", pLine->GetLineNumber(), pLine->GetUniqId() );
-                nPos++;
+                while ( nPos < Count() )
+                {
+                    if ( GetObject( nPos )->GetLanguageId() == pLine->GetLanguageId() )
+                        PrintError( "Translation Language entry double. Checking both.", "File format", "", pLine->GetLineNumber(), pLine->GetUniqId() );
+                    nPos++;
+                }
             }
 
             Insert( pLine, LIST_APPEND );
@@ -288,18 +307,28 @@ BOOL GSIBlock::TestUTF8( GSILine* pTestee )
         pTestee->NotOK();
         return FALSE;
     }
+    USHORT nErrorPos = pTestee->GetText().SearchChar( "\x01\x02\x03\x04\x05\x06\x07\x08\x0b\x0c\x0e\x0f"
+                                        "\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1a\x1b\x1c\x1d\x1e\x1f\x7f" );
+    if ( nErrorPos != STRING_NOTFOUND )
+    {
+        ByteString aContext( pTestee->GetText().Copy( nErrorPos, 20 ) );
+        PrintError( ByteString( "Line contains illegal character at Position " ).Append( ByteString::CreateFromInt32( nErrorPos ) ), "File format", aContext, pTestee->GetLineNumber(), pTestee->GetUniqId() );
+        pTestee->NotOK();
+        return FALSE;
+    }
     return TRUE;
 }
 
 /*****************************************************************************/
-BOOL GSIBlock::CheckSyntax( ULONG nLine )
+BOOL GSIBlock::CheckSyntax( ULONG nLine, BOOL bRequireSourceLine )
 /*****************************************************************************/
 {
     static LingTest aTester;
 
     if ( !pSourceLine )
     {
-        PrintError( "No source language entry defined!", "File format", "", nLine );
+        if ( bRequireSourceLine )
+            PrintError( "No source language entry defined!", "File format", "", nLine );
         aTester.ReferenceOK( "" );
     }
     else
@@ -336,7 +365,7 @@ BOOL GSIBlock::CheckSyntax( ULONG nLine )
         }
     }
 
-    if ( bInternal && pSourceLine )
+    if ( pSourceLine )
         TestUTF8( pSourceLine );
 
     ULONG i;
@@ -407,7 +436,7 @@ void Help()
 /*****************************************************************************/
 {
     fprintf( stdout, "\n" );
-    fprintf( stdout, "gsicheck Version 1.6.0 (c)1999 - 2001 by SUN Microsystems\n" );
+    fprintf( stdout, "gsicheck Version 1.6.1 (c)1999 - 2001 by SUN Microsystems\n" );
     fprintf( stdout, "=========================================================\n" );
     fprintf( stdout, "\n" );
     fprintf( stdout, "gsicheck checks the syntax of tags in GSI-Files and SDF-Files\n" );
@@ -420,7 +449,8 @@ void Help()
     fprintf( stdout, "-we   Write GSI-File containing all errors\n" );
     fprintf( stdout, "-wc   Write GSI-File containing all correct parts\n" );
     fprintf( stdout, "-i    Check records marked 'int' rather than marked 'ext' or similar\n" );
-    fprintf( stdout, "-l    Numerical 2 digits Identifier of the source language. Default = 49\n" );
+    fprintf( stdout, "-l    Numerical 2 digits Identifier of the source language. Default = 1\n" );
+    fprintf( stdout, "      Use 0 (zero) to disable source language dependent checks\n" );
     fprintf( stdout, "-r    Reference filename to check that source language has not been changed\n" );
        fprintf( stdout, "\n" );
 }
@@ -439,7 +469,7 @@ int _cdecl main( int argc, char *argv[] )
     BOOL bInternal = FALSE;
     BOOL bWriteError = FALSE;
     BOOL bWriteCorrect = FALSE;
-    USHORT nSourceLang = 49;     // German is default
+    USHORT nSourceLang = 1;     // English is default
     ByteString aFilename;
     ByteString aReferenceFilename;
     BOOL bReferenceFile = FALSE;
@@ -615,7 +645,7 @@ int _cdecl main( int argc, char *argv[] )
                 {
                     if ( pBlock )
                     {
-                        pBlock->CheckSyntax( nLine );
+                        pBlock->CheckSyntax( nLine, nSourceLang != 0 );
 
                         if ( bWriteError )
                             pBlock->WriteError( aErrOut );
@@ -683,7 +713,7 @@ int _cdecl main( int argc, char *argv[] )
     }
     if ( pBlock )
     {
-        pBlock->CheckSyntax( nLine );
+        pBlock->CheckSyntax( nLine, nSourceLang != 0 );
 
         if ( bWriteError )
             pBlock->WriteError( aErrOut );
