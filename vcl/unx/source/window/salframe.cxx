@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.171 $
+ *  $Revision: 1.172 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-20 09:04:01 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:08:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1539,7 +1539,10 @@ SalBitmap* X11SalFrame::SnapShot()
         Application::Reschedule ();
     }
     while (XPending(pDisplay));
-    usleep (50000);
+    TimeValue aVal;
+    aVal.Seconds = 0;
+    aVal.Nanosec = 50000000;
+    osl_waitThread( &aVal );
     do
     {
         XSync(pDisplay, False);
