@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-06 11:50:02 $
+ *  last change: $Author: rt $ $Date: 2000-11-14 11:55:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1110,8 +1110,8 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
 //                              0, String() );
                     //  break;
                 }
-                m_aFileStream << (BYTE) min(nPrecision, 255UL);      //Feldlänge
-                nRecLength += (USHORT)min(nPrecision, 255UL);
+                m_aFileStream << (BYTE) Min((ULONG)nPrecision, 255UL);      //Feldlänge
+                nRecLength += (USHORT)Min((ULONG)nPrecision, 255UL);
                 m_aFileStream << (BYTE)0;                                                                //Nachkommastellen
                 break;
             case 'F':
