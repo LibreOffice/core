@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XResultSet.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:35 $
+ *  last change: $Author: mi $ $Date: 2000-12-19 13:46:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,7 +277,7 @@ interface XResultSet: com::sun::star::uno::XInterface
     // DocMerge from xml: method com::sun::star::sdbc::XResultSet::getStatement
     /** returns the Statement that produced this <code>ResultSet</code> object.
         If the result set was generated some other way, such as by an
-        <code>XDatabaseMetaData</code> method, this method returns <null></null>.
+        <code>XDatabaseMetaData</code> method, this method returns <NULL/>.
      */
     [const]com::sun::star::uno::XInterface getStatement() raises (SQLException);
 };
@@ -288,6 +288,9 @@ interface XResultSet: com::sun::star::uno::XInterface
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:43:35  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:42  hjs
     initial import
 

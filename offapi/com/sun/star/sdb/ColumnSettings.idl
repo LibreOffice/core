@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ColumnSettings.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:30 $
+ *  last change: $Author: mi $ $Date: 2000-12-19 13:46:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,7 @@ service ColumnSettings
 
     // DocMerge from xml: property com::sun::star::sdb::ColumnSettings::ControlModel
     /** indicates a control model whichs defines the settings for layouting.
-        The default is <null></null>.
+        The default is <NULL/>.
      */
     [optional, property] com::sun::star::beans::XPropertySet ControlModel;
 };
@@ -142,6 +142,9 @@ service ColumnSettings
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:43:30  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:36  hjs
     initial import
 

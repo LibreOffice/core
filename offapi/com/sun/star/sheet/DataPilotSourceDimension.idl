@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataPilotSourceDimension.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-14 12:53:40 $
+ *  last change: $Author: mi $ $Date: 2000-12-19 13:46:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,7 @@ service DataPilotSourceDimension
 
     // DocMerge from xml: property com::sun::star::sheet::DataPilotSourceDimension::Original
     /** returns the dimension from which this dimension was cloned,
-        or <null></null> if it was not cloned.
+        or <NULL/> if it was not cloned.
      */
     [readonly, property] com::sun::star::container::XNamed Original;
 
@@ -174,6 +174,9 @@ service DataPilotSourceDimension
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/14 12:53:40  mi
+    <true></true> -> <TRUE/> and same with FALSE
+
     Revision 1.3  2000/11/08 12:43:45  mi
     moved from api
 

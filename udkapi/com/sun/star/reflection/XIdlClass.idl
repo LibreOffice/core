@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XIdlClass.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:46 $
+ *  last change: $Author: mi $ $Date: 2000-12-19 13:49:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,7 +194,7 @@ interface XIdlClass: com::sun::star::uno::XInterface
     /** If this class represents an array or sequence type, this method
         returns the <type>XIdlClass</type> object representing the
         component type of the array or sequence; otherwise it returns
-        <null></null>.
+        <NULL/>.
      */
     XIdlClass getComponentType();
 
@@ -298,6 +298,9 @@ interface XIdlClass: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/11/08 12:28:46  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:32  hjs
     initial import
 

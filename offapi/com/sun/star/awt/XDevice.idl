@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDevice.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:11 $
+ *  last change: $Author: mi $ $Date: 2000-12-19 13:46:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@ interface XDevice: com::sun::star::uno::XInterface
 
 
         <p>If the device does not support the GETBITS device capability,
-        this method returns <null></null>.
+        this method returns <NULL/>.
 
         </p>
      */
@@ -180,6 +180,9 @@ interface XDevice: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:42:11  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:34:52  hjs
     initial import
 

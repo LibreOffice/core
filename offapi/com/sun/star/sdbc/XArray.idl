@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XArray.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:35 $
+ *  last change: $Author: mi $ $Date: 2000-12-19 13:46:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,7 +171,7 @@ interface XArray: com::sun::star::uno::XInterface
         designated by this <code>Array</code> object and uses the given
         <code>typeMap</code> to map the array elements.  If the base
         type of the array does not match a user-defined type in
-        <code>typeMap</code> or the <code>typeMap</code> is <null></null>,
+        <code>typeMap</code> or the <code>typeMap</code> is <NULL/>,
         the connection type mapping is used instead.
 
 
@@ -195,7 +195,7 @@ interface XArray: com::sun::star::uno::XInterface
         <code>count</code> successive elements. This method uses the given
         <code>typeMap</code> to map the array elements.  If the base
         type of the array does not match a user-defined type in
-        <code>typeMap</code> or the <code>typeMap</code> is <null></null>,
+        <code>typeMap</code> or the <code>typeMap</code> is <NULL/>,
         the connection type mapping is used instead.
 
 
@@ -220,6 +220,9 @@ interface XArray: com::sun::star::uno::XInterface
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:43:35  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:41  hjs
     initial import
 
