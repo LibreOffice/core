@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flyincnt.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 10:57:16 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:07:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -269,6 +268,20 @@ void SwFlyInCntFrm::MakeObjPos()
     }
 }
 
+// --> OD 2004-12-02 #115759#
+void SwFlyInCntFrm::_ActionOnInvalidation( const InvalidationType _nInvalid )
+{
+    switch ( _nInvalid )
+    {
+        case INVALID_POS:
+        case INVALID_ALL:
+        {
+            AnchorFrm()->Prepare( PREP_FLY_ATTR_CHG, &GetFrmFmt() );
+        }
+        break;
+    }
+}
+// <--
 /*************************************************************************
 |*
 |*  SwFlyInCntFrm::NotifyBackground()
