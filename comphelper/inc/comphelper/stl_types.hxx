@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stl_types.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-18 10:43:35 $
+ *  last change: $Author: oj $ $Date: 2002-04-22 05:48:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,8 @@
 #include <stack>
 #include <set>
 #include <math.h> // prevent conflict between exception and std::exception
+#include <functional>
 
-using namespace std;
 
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
@@ -80,6 +80,7 @@ using namespace std;
 #include <com/sun/star/uno/Reference.hxx>
 #endif
 
+using namespace ::std;
 //... namespace comphelper ................................................
 namespace comphelper
 {
@@ -89,12 +90,12 @@ namespace comphelper
 // comparisation functions
 
 //------------------------------------------------------------------------
-struct UStringLess : public binary_function< ::rtl::OUString, ::rtl::OUString, bool>
+    struct UStringLess : public ::std::binary_function< ::rtl::OUString, ::rtl::OUString, bool>
 {
     bool operator() (const ::rtl::OUString& x, const ::rtl::OUString& y) const { return x < y ? true : false;}      // construct prevents a MSVC6 warning
 };
 //------------------------------------------------------------------------
-struct UStringMixLess : public binary_function< ::rtl::OUString, ::rtl::OUString, bool>
+struct UStringMixLess : public ::std::binary_function< ::rtl::OUString, ::rtl::OUString, bool>
 {
     bool m_bCaseSensitive;
 public:
@@ -151,7 +152,7 @@ public:
     {}
     bool operator() (const ::rtl::OUString& lhs, const ::rtl::OUString& rhs) const
     {
-        return m_bCaseSensitive ? lhs.equals( rhs ) : lhs.equalsIgnoreAsciiCase( rhs );
+        return !!(m_bCaseSensitive ? lhs.equals( rhs ) : lhs.equalsIgnoreAsciiCase( rhs ));
     }
     sal_Bool isCaseSensitive() const {return m_bCaseSensitive;}
 };
@@ -190,6 +191,23 @@ struct OInterfaceCompare
             // sufficient ....
     }
 };
+
+template <class _Tp, class _Arg>
+class mem_fun1_t : public ::std::binary_function<_Tp*,_Arg,void>
+{
+    typedef void (_Tp::*_fun_type)(_Arg);
+public:
+    explicit mem_fun1_t(_fun_type __pf) : _M_f(__pf) {}
+    void operator()(_Tp* __p, _Arg __x) const { (__p->*_M_f)(__x); }
+private:
+    _fun_type _M_f;
+};
+
+template <class _Tp, class _Arg>
+inline mem_fun1_t<_Tp,_Arg> mem_fun(void (_Tp::*__f)(_Arg))
+{
+    return mem_fun1_t<_Tp,_Arg>(__f);
+}
 
 //.........................................................................
 }
