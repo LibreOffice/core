@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basic.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 16:28:23 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:50:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,7 +210,8 @@
 #define MBP_PLUS 8001
 #define MBP_MINUS 8002
 #define MBP_ASSERT 8003
-#define RID_IMGLST_LAYOUT 8004
+#define MBP_QAERROR 8004
+#define RID_IMGLST_LAYOUT 8005
 #define MAIN_ACCEL 9001
 
 #define LOAD_CONF 10001
