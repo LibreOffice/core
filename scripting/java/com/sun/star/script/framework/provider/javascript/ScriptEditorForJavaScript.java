@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptEditorForJavaScript.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-10-29 15:01:18 $
+ *  last change: $Author: rt $ $Date: 2004-01-05 13:45:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,15 +71,34 @@ import org.mozilla.javascript.tools.debugger.Main;
 import org.mozilla.javascript.tools.debugger.ScopeProvider;
 
 import drafts.com.sun.star.script.provider.XScriptContext;
+import com.sun.star.script.framework.browse.ScriptMetaData;
+import com.sun.star.script.framework.provider.PathUtils;
+import com.sun.star.script.framework.log.LogUtils;
+import java.io.IOException;
+import java.net.URL;
 
 public class ScriptEditorForJavaScript {
 
-    public void edit(final XScriptContext xsctxt, String filename) {
+    public void edit(final XScriptContext xsctxt, ScriptMetaData entry ) {
         Main sdb = initUI(xsctxt);
 
         // This is the method we've added to open a file when starting
         // the Rhino debugger
-        sdb.openFile(filename);
+        try {
+                String sUrl = entry.getParcelLocation();
+                if ( !sUrl.endsWith( "/" ) )
+                {
+                    sUrl += "/";
+                }
+                sUrl +=  entry.getLanguageName();
+                URL scriptURL = PathUtils.createScriptURL( sUrl );
+                sdb.openFile(scriptURL);
+         }
+         catch ( IOException e )
+         {
+             LogUtils.DEBUG("Caught exception: " + e );
+             LogUtils.DEBUG( LogUtils.getTrace( e ) );
+         }
     }
 
     public void go(final XScriptContext xsctxt, InputStream in) {
