@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configset.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:19:46 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:39:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -426,7 +426,10 @@ ElementTree SetElementFactory::instantiateTemplate(TemplateHolder const& aTempla
     data::TreeSegment aInstanceTree( m_aProvider.m_aImpl->instantiate(this->getDataAccessor(), aTemplate) );
     OSL_ENSURE(aInstanceTree.is(), "ERROR: Cannot create Element Instance: Provider could not instantiate template");
 
+
     if (!aInstanceTree.is()) return ElementTree::emptyElement();
+    //set removable state
+    aInstanceTree.markRemovable();
 
     ElementTree aRet( this->getDataAccessor(), new ElementTreeImpl( aInstanceTree, aTemplate, m_aProvider ) );
 
@@ -477,16 +480,21 @@ static node::Attributes getNewElementAttributes(bool bInserting)
 {
     node::Attributes aResult;
     aResult.setState( node::isReplaced );
-
+    //Check if you are inserting new dynamic property
+    if(bInserting)
+    {
+        aResult.markRemovable();
+    }
     return aResult;
 }
 
 // Value Element Factory methods
 //-----------------------------------------------------------------------------
 
-ElementTreeHolder ValueSetUpdater::makeValueElement(Name const& aName, UnoAny const& aValue)
+ElementTreeHolder ValueSetUpdater::makeValueElement(Name const& aName, UnoAny const& aValue, bool bInserting)
 {
-    static const node::Attributes aNewValueAttributes = getNewElementAttributes(false); // TODO: get real value
+
+    const node::Attributes aNewValueAttributes = getNewElementAttributes(bInserting); // TODO: get real value
 
     UnoType aType = m_aTemplate->getInstanceType();
 
@@ -504,11 +512,11 @@ ElementTreeHolder ValueSetUpdater::makeValueElement(Name const& aName, UnoAny co
 }
 //-----------------------------------------------------------------------------
 
-ElementTreeHolder ValueSetUpdater::makeValueElement(Name const& aName, ElementNodeRef const& , UnoAny const& aValue)
+ElementTreeHolder ValueSetUpdater::makeValueElement(Name const& aName, ElementNodeRef const& , UnoAny const& aValue, bool bInserting)
 {
     // for now ignoring the node.
     // TODO: merge attributes etc. from that node's value
-    return makeValueElement(aName, aValue);
+    return makeValueElement(aName, aValue,bInserting);
 }
 //-----------------------------------------------------------------------------
 
@@ -558,7 +566,7 @@ static void doValidateSet(Tree const& aParentTree, NodeRef const& aSetNode)
     if (! aParentTree.getView().isSetNode(aSetNode))
         throw Exception("INTERNAL ERROR: Set Update: node is not a set");
 
-    if (!aParentTree.getAttributes(aSetNode).bWritable)
+    if (aParentTree.getAttributes(aSetNode).isReadonly())
         throw ConstraintViolation( "Set Update: Set is read-only !" );
 }
 //-----------------------------------------------------------------------------
@@ -616,7 +624,7 @@ void SetDefaulter::implValidateSet()
 }
 //-----------------------------------------------------------------------------
 
-static void doValidateElement(ElementRef const& aElement)
+static void doValidateElement(ElementRef const& aElement, bool bReqRemovable,Tree const& aTree)
 {
     if (!aElement.isValid())
         throw Exception("INTERNAL ERROR: Set Update: Unexpected NULL element");
@@ -625,16 +633,20 @@ static void doValidateElement(ElementRef const& aElement)
 //  if (!aElement.getAttributes().writable)
 //      throw ConstraintViolation( "Set Update: Existing element is read-only !" );
 
-// DISABLED: replaceable/removable != nullable
-//  if (!aElement.getAttributes().nullable)
-//      throw ConstraintViolation( "Set Update: Existing element cannot be removed (or replaced) !" );
+    if ( bReqRemovable)
+    {
+        Tree aElementTree = aElement.getElementTree(aTree.getDataAccessor()).getTree();
+
+        if(!aElementTree.getAttributes(aElementTree.getRootNode()).isRemovable())
+            throw ConstraintViolation( "New Set Update: Existing element cannot be removed (or replaced) !" );
+    }
 }
 //-----------------------------------------------------------------------------
 
 /// validates that the given element is valid in this context and returns its name
-Path::Component TreeSetUpdater::implValidateElement(ElementRef const& aElement)
+Path::Component TreeSetUpdater::implValidateElement(ElementRef const& aElement, bool bReqRemovable)
 {
-    doValidateElement(aElement);
+    doValidateElement(aElement,bReqRemovable,m_aParentTree);
 
 #if 0 // maybe reeanable for DEBUG ?
     ElementTreeImpl* pElement = TreeImplHelper::elementImpl(aTree)->isTemplateInstance();
@@ -648,9 +660,9 @@ Path::Component TreeSetUpdater::implValidateElement(ElementRef const& aElement)
 //-----------------------------------------------------------------------------
 
 /// validates that the given element is valid and can be replaced in this context and returns its name
-Path::Component ValueSetUpdater::implValidateElement(ElementRef const& aElement)
+Path::Component ValueSetUpdater::implValidateElement(ElementRef const& aElement, bool mReqRemovable)
 {
-    doValidateElement(aElement);
+    doValidateElement(aElement,mReqRemovable,m_aParentTree);
 
 #ifdef _DEBUG
     UnoType aNodeType = ElementHelper::getUnoType(aElement.getElementTree(m_aParentTree.getDataAccessor()));
@@ -757,13 +769,13 @@ UnoAny ValueSetUpdater::implValidateValue(ElementNodeRef const& aElementTree, Un
 {
     node::Attributes aAttributes = aElementTree.getAttributes(aElementTree.getRootNode());
     // Here we assume writable == removable/replaceable
-    if (!aAttributes.bWritable)
+    if (aAttributes.isReadonly())
         throw ConstraintViolation( "Set Update: Existing element is read-only !" );
 
     // Here we assume nullable != removable
     if (!aValue.hasValue())
     {
-        if (!aAttributes.bNullable)
+        if (!aAttributes.isNullable())
             throw ConstraintViolation( "Set Update: Value is not nullable !" );
     }
     return implValidateValue( aValue);
@@ -798,7 +810,7 @@ NodeChange ValueSetUpdater::validateInsertElement (Name const& aName, UnoAny con
 
     UnoAny aValidValue = implValidateValue(aNewValue);
 
-    ElementTreeHolder aNewElement = makeValueElement(aName, aValidValue);
+    ElementTreeHolder aNewElement = makeValueElement(aName, aValidValue,true);
 
     std::auto_ptr<SetElementChangeImpl> pChange( new SetInsertValueImpl(aNewElement->makeExtendedName(aName), aNewElement) );
 
@@ -810,7 +822,7 @@ NodeChange ValueSetUpdater::validateInsertElement (Name const& aName, UnoAny con
 
 NodeChange TreeSetUpdater::validateReplaceElement(ElementRef const& aElement, ElementTree const& aNewElement)
 {
-    Path::Component aName = implValidateElement(aElement);
+    Path::Component aName = implValidateElement(aElement,true);
 
     implValidateTree(aNewElement);
 
@@ -824,13 +836,13 @@ NodeChange TreeSetUpdater::validateReplaceElement(ElementRef const& aElement, El
 
 NodeChange ValueSetUpdater::validateReplaceElement(ElementRef const& aElement, UnoAny const& aNewValue)
 {
-    Path::Component aName = implValidateElement(aElement);
+    Path::Component aName = implValidateElement(aElement,false);
 
     ElementNodeRef aElementNode = extractElementNode(aElement);
 
     UnoAny aValidValue = implValidateValue(aElementNode, aNewValue);
 
-    ElementTreeHolder aNewElement = makeValueElement(aName.getName(), aElementNode, aValidValue);
+    ElementTreeHolder aNewElement = makeValueElement(aName.getName(), aElementNode, aValidValue,false);
 
     std::auto_ptr<SetElementChangeImpl> pChange( new SetReplaceValueImpl(aName, aNewElement) );
 
@@ -842,7 +854,7 @@ NodeChange ValueSetUpdater::validateReplaceElement(ElementRef const& aElement, U
 
 NodeChange TreeSetUpdater::validateRemoveElement (ElementRef const& aElement)
 {
-    Path::Component aName = implValidateElement(aElement);
+    Path::Component aName = implValidateElement(aElement,true);
 
     std::auto_ptr<SetElementChangeImpl> pChange( new SetRemoveTreeImpl(aName) );
 
@@ -855,7 +867,7 @@ NodeChange TreeSetUpdater::validateRemoveElement (ElementRef const& aElement)
 
 NodeChange ValueSetUpdater::validateRemoveElement (ElementRef const& aElement)
 {
-    Path::Component aName = implValidateElement(aElement);
+    Path::Component aName = implValidateElement(aElement,true);
 
     std::auto_ptr<SetElementChangeImpl> pChange( new SetRemoveValueImpl(aName) );
 
