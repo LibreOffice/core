@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confuno.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-04 13:36:25 $
+ *  last change: $Author: sab $ $Date: 2001-09-07 11:10:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ using namespace com::sun::star;
 
 #define SCCOMPSCPREADSHEETSETTINGS_SERVICE      "com.sun.star.comp.SpreadsheetSettings"
 #define SCDOCUMENTSETTINGS_SERVICE              "com.sun.star.document.Settings"
-#define SCSAVEVERSION                           "AlwaysSaveVersionOnClosing"
+#define SCSAVEVERSION                           "SaveVersionOnClose"
 
 
 const SfxItemPropertyMap* lcl_GetConfigPropertyMap()
