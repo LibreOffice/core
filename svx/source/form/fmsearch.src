@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsearch.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2001-10-31 21:43:24 $
+ *  last change: $Author: kz $ $Date: 2001-11-07 21:29:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -644,7 +644,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ swedish ] = "Ta h�nsyn till teckenbredd";
         Text[ polish ] = "Uwzgl�dnij szeroko�� znak�w";
         Text[ portuguese_brazilian ] = "Match half/full width forms";
-        Text[ japanese ] = "全角と半角";
+        Text[ japanese ] = "全角と半角を区別する";
         Text[ korean ] = "반/전체 너비 폼";
         Text[ chinese_simplified ] = "顾全字符宽度";
         Text[ chinese_traditional ] = "顧及字元寬度";
@@ -1052,6 +1052,7 @@ String RID_STR_SEARCH_COUNTING
     Text[ catalan ] = "contando registros de datos";
     Text[ finnish ] = "lasketaan tietueet";
 };
+
 
 
 
