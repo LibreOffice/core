@@ -1,4 +1,4 @@
-od	odk	:	offapi product vos unoil NULL
+od	odk	:	offapi product apiwww NULL
 od	odk										usr1	-	all	od_mkout NULL
 od	odk\examples\java\com\sun\star\comp\demo nmake	-	all	od_javaDemoComp NULL
 od	odk\source\bean\com\sun\star\beans				nmake	-	all	od_beanjava NULL
