@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlgimpl.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 18:06:11 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 07:59:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,7 +157,7 @@ namespace sfx2
 
     private:
         void                    addFilters( sal_uInt32 nFlags,
-                                            const SfxObjectFactory& rFactory,
+                                            const String& rFactory,
                                             SfxFilterFlags nMust,
                                             SfxFilterFlags nDont );
         void                    addFilter( const ::rtl::OUString& rFilterName,
@@ -251,7 +251,7 @@ namespace sfx2
         void                    getRealFilter( String& _rFilter ) const;
 
         ErrCode                 getGraphic( Graphic& rGraphic ) const;
-        void                    createMatcher( const SfxObjectFactory& rFactory );
+        void                    createMatcher( const String& rFactory );
 
         sal_Bool                isShowFilterExtensionEnabled() const;
         void                    addFilterPair( const ::rtl::OUString& rFilter,
