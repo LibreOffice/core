@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen3.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-08 19:31:12 $
+ *  last change: $Author: nn $ $Date: 2001-02-14 19:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -811,9 +811,14 @@ void ScDocument::UpdateReference( UpdateRefMode eUpdateRefMode,
             }
         }
         SetExpandRefs( bExpandRefsOld );
-        // #30428# nach Verschiebungen keine MOVE Anpassungen moeglich!
-        if ( eUpdateRefMode != URM_COPY && ScGlobal::HasClipDoc() )
-            ScGlobal::GetClipDoc()->bCutMode = FALSE;
+
+        // #30428# after moving, no clipboard move ref-updates are possible
+        if ( eUpdateRefMode != URM_COPY && IsClipboardSource() )
+        {
+            ScDocument* pClipDoc = SC_MOD()->GetClipDoc();
+            if (pClipDoc)
+                pClipDoc->bCutMode = FALSE;
+        }
     }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: er $ $Date: 2001-02-13 18:58:28 $
+ *  last change: $Author: nn $ $Date: 2001-02-14 19:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,7 @@
 #include "dpobject.hxx"
 #include "indexmap.hxx"
 #include "detfunc.hxx"      // for UpdateAllComments
+#include "scmod.hxx"
 
 
 void ScDocument::MakeTable( USHORT nTab )
@@ -1183,7 +1184,10 @@ void ScDocument::CopyToClip(USHORT nCol1, USHORT nRow1,
         PutInOrder( nCol1, nCol2 );
         PutInOrder( nRow1, nRow2 );
         if (!pClipDoc)
-            pClipDoc = ScGlobal::GetClipDoc();
+        {
+            DBG_ERROR("CopyToClip: no ClipDoc");
+            pClipDoc = SC_MOD()->GetClipDoc();
+        }
 
         pClipDoc->aDocName = aDocName;
         pClipDoc->aClipRange = ScRange( nCol1,nRow1,0, nCol2,nRow2,0 );
@@ -1228,7 +1232,10 @@ void ScDocument::CopyTabToClip(USHORT nCol1, USHORT nRow1,
         PutInOrder( nCol1, nCol2 );
         PutInOrder( nRow1, nRow2 );
         if (!pClipDoc)
-            pClipDoc = ScGlobal::GetClipDoc();
+        {
+            DBG_ERROR("CopyTabToClip: no ClipDoc");
+            pClipDoc = SC_MOD()->GetClipDoc();
+        }
 
         pClipDoc->aDocName = aDocName;
         pClipDoc->aClipRange = ScRange( nCol1,nRow1,0, nCol2,nRow2,0 );
@@ -1295,8 +1302,8 @@ void ScDocument::TransposeClip( ScDocument* pTransClip, USHORT nFlags, BOOL bAsL
 
 BOOL ScDocument::IsClipboardSource() const
 {
-    ScDocument* pClipDoc = ScGlobal::GetClipDoc();
-    return pClipDoc->xPoolHelper.isValid() &&
+    ScDocument* pClipDoc = SC_MOD()->GetClipDoc();
+    return pClipDoc && pClipDoc->xPoolHelper.isValid() &&
             xPoolHelper->GetDocPool() == pClipDoc->xPoolHelper->GetDocPool();
 }
 
@@ -1373,7 +1380,10 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
     if (!bIsClip)
     {
         if (!pClipDoc)
-            pClipDoc = ScGlobal::GetClipDoc();
+        {
+            DBG_ERROR("CopyFromClip: no ClipDoc");
+            pClipDoc = SC_MOD()->GetClipDoc();
+        }
         if (pClipDoc->bIsClip && pClipDoc->GetTableCount())
         {
             BOOL bOldAutoCalc = GetAutoCalc();
