@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: os $ $Date: 2001-05-15 10:03:55 $
+#   last change: $Author: jp $ $Date: 2001-10-18 12:29:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -131,8 +131,6 @@ SLOFILES =	\
         $(SLO)$/srtdlg.obj
 
 EXCEPTIONSFILES = \
-        $(SLO)$/glosdoc.obj \
-        $(SLO)$/glosbib.obj \
         $(SLO)$/glossary.obj \
         $(SLO)$/numberingtypelistbox.obj
 
