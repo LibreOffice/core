@@ -2122,7 +2122,8 @@ SfxVoidItem Dia SID_DIA
 ]
 
 //--------------------------------------------------------------------------
-DiaAutoItem DiaAuto SID_DIA_AUTO
+SfxVoidItem DiaAuto SID_DIA_AUTO
+( DiaAutoItem DiaAuto ATTR_DIA_AUTO )
 
 [
     /* flags: */
@@ -2138,7 +2139,8 @@ DiaAutoItem DiaAuto SID_DIA_AUTO
     RecordPerSet;
     Synchron;
 
-    Readonly = FALSE,
+    /* status: */
+    SlotType = DiaAutoItem
 
     /* config: */
     AccelConfig = FALSE,
@@ -2149,8 +2151,8 @@ DiaAutoItem DiaAuto SID_DIA_AUTO
 ]
 
 //--------------------------------------------------------------------------
-DiaEffectItem DiaEffect SID_DIA_EFFECT
-
+SfxVoidItem DiaEffect SID_DIA_EFFECT
+( DiaEffectItem DiaEffect ATTR_DIA_EFFECT )
 [
     /* flags: */
     AutoUpdate = TRUE,
@@ -2165,7 +2167,8 @@ DiaEffectItem DiaEffect SID_DIA_EFFECT
     RecordPerSet;
     Synchron;
 
-    Readonly = FALSE,
+    /* status: */
+    SlotType = DiaEffectItem
 
     /* config: */
     AccelConfig = FALSE,
@@ -2203,7 +2206,8 @@ SfxBoolItem DiaMode SID_DIAMODE
 ]
 
 //--------------------------------------------------------------------------
-DiaSpeedItem DiaSpeed SID_DIA_SPEED
+SfxVoidItem DiaSpeed SID_DIA_SPEED
+( DiaSpeedItem DiaSpeed ATTR_DIA_SPEED )
 
 [
     /* flags: */
@@ -2219,7 +2223,8 @@ DiaSpeedItem DiaSpeed SID_DIA_SPEED
     RecordPerSet;
     Synchron;
 
-    Readonly = FALSE,
+    /* status: */
+    SlotType = DiaSpeedItem
 
     /* config: */
     AccelConfig = FALSE,
@@ -2230,7 +2235,8 @@ DiaSpeedItem DiaSpeed SID_DIA_SPEED
 ]
 
 //--------------------------------------------------------------------------
-DiaTimeItem DiaTime SID_DIA_TIME
+SfxVoidItem DiaTime SID_DIA_TIME
+( DiaTimeItem DiaTime ATTR_DIA_TIME )
 
 [
     /* flags: */
@@ -2246,7 +2252,8 @@ DiaTimeItem DiaTime SID_DIA_TIME
     RecordPerSet;
     Synchron;
 
-    Readonly = FALSE,
+    /* status: */
+    SlotType = DiaTimeItem
 
     /* config: */
     AccelConfig = FALSE,
@@ -6869,6 +6876,33 @@ SfxVoidItem ZoomPanning SID_ZOOM_PANNING
     StatusBarConfig = FALSE,
     ToolBoxConfig = TRUE,
     GroupId = GID_VIEW;
+]
+
+SfxVoidItem Mirror SID_OBJECT_MIRROR
+( SfxBoolItem MirrorVert ID_VAL_MIRRORVERT )
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* status: */
+    SlotType = SfxBoolItem
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_DOCUMENT ;
 ]
 
 //--------------------------------------------------------------------------
