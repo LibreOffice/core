@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdocapt.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 10:58:44 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 09:47:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -628,25 +628,40 @@ void SdrCaptionObj::ImpRecalcTail()
     SetXPolyDirty();
 }
 
+// #i35971#
+// SdrCaptionObj::ImpCalcTail1 does move the object(!). What a hack.
+// I really wonder why this had not triggered problems before. I am
+// sure there are some places where SetTailPos() is called at least
+// twice or SetSnapRect after it again just to work around this.
+// Changed this method to not do that.
+// Also found why this has been done: For interactive dragging of the
+// tail end pos for SDRCAPT_TYPE1. This sure was the simplest method
+// to achieve this, for the cost to make a whole group of const methods
+// of this object implicitly chainging the object's position.
 void SdrCaptionObj::ImpCalcTail1(const ImpCaptParams& rPara, Polygon& rPoly, Rectangle& rRect) const
-{ // Gap/EscDir/EscPos
+{
     Polygon aPol(2);
     Point aTl(rPoly[0]);
-    aPol[0]=aTl;
-    aPol[1]=aTl;
+
+    aPol[0] = aTl;
+    aPol[1] = aTl;
+
     EscDir eEscDir;
     Point aEscPos;
-    rPara.CalcEscPos(aTl,rRect,aEscPos,eEscDir);
-    if (eEscDir==LKS || eEscDir==RTS) {
-        long dx=aTl.X()-aEscPos.X();
-        rRect.Move(dx,0);
-        aPol[1].Y()=aEscPos.Y();
-    } else {
-        long dy=aTl.Y()-aEscPos.Y();
-        rRect.Move(0,dy);
-        aPol[1].X()=aEscPos.X();
+
+    rPara.CalcEscPos(aTl, rRect, aEscPos, eEscDir);
+    aPol[1] = aEscPos;
+
+    if(eEscDir==LKS || eEscDir==RTS)
+    {
+        aPol[0].X() = aEscPos.X();
     }
-    rPoly=aPol;
+    else
+    {
+        aPol[0].Y() = aEscPos.Y();
+    }
+
+    rPoly = aPol;
 }
 
 void SdrCaptionObj::ImpCalcTail2(const ImpCaptParams& rPara, Polygon& rPoly, Rectangle& rRect) const
