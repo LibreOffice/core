@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_layout.cxx,v $
  *
- *  $Revision: 1.24 $
- *  last change: $Author: hr $ $Date: 2003-11-07 15:06:07 $
+ *  $Revision: 1.25 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 14:35:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #ifndef _SV_SALLAYOUT_HXX
 #include <sallayout.hxx>
 #endif
+#ifndef _SV_SALGDI_HXX
+#include <salgdi.hxx>
+#endif
 
 #ifdef WIN32
 #include <malloc.h>
@@ -95,6 +98,13 @@ static ServerFontLayoutEngine aSimpleLayoutEngine;
 ServerFontLayout::ServerFontLayout( ServerFont& rFont )
 :   mrServerFont( rFont )
 {}
+
+void ServerFontLayout::DrawText( SalGraphics& rSalGraphics ) const
+{
+    rSalGraphics.DrawServerFontLayout( *this );
+}
+
+//--------------------------------------------------------------------------
 
 // -----------------------------------------------------------------------
 
