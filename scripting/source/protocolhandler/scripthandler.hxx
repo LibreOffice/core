@@ -2,9 +2,9 @@
 *
 *  $RCSfile: scripthandler.hxx,v $
 *
-*  $Revision: 1.5 $
+*  $Revision: 1.6 $
 *
-*  last change: $Author: toconnor $ $Date: 2003-10-29 15:26:02 $
+*  last change: $Author: rt $ $Date: 2004-10-22 14:05:18 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -68,7 +68,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <cppuhelper/implbase4.hxx>
-#include <drafts/com/sun/star/script/provider/XScriptProvider.hpp>
+#include <com/sun/star/script/provider/XScriptProvider.hpp>
 
 namespace rtl
 {
@@ -116,7 +116,6 @@ namespace scripting_protocolhandler
 
 // for simplification
 #define css ::com::sun::star
-#define dcss ::drafts::com::sun::star
 
 class ScriptProtocolHandler :
 public ::cppu::WeakImplHelper4< css::frame::XDispatchProvider,
@@ -126,7 +125,7 @@ private:
     bool m_bInitialised;
     css::uno::Reference < css::lang::XMultiServiceFactory > m_xFactory;
     css::uno::Reference < css::frame::XFrame > m_xFrame;
-    css::uno::Reference < dcss::script::provider::XScriptProvider >
+    css::uno::Reference < css::script::provider::XScriptProvider >
     m_xScriptProvider;
     void createScriptProvider( const ::rtl::OUString& url ) throw( css::uno::RuntimeException );
 public:
