@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdxcgv.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ka $ $Date: 2001-09-06 09:22:12 $
+ *  last change: $Author: ka $ $Date: 2002-07-19 13:04:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,18 +80,18 @@
 #include "svdglob.hxx"  // StringCache
 #include "xoutbmp.hxx"
 
+#ifndef _SV_METAACT_HXX
+#include <vcl/metaact.hxx>
+#endif
 #ifndef _SFXPOOLITEM_HXX //autogen
 #include <svtools/poolitem.hxx>
 #endif
-
 #ifndef _SFXITEMPOOL_HXX //autogen
 #include <svtools/itempool.hxx>
 #endif
-
 #ifndef _BIGINT_HXX //autogen
 #include <tools/bigint.hxx>
 #endif
-
 #ifndef _SOT_FORMATS_HXX //autogen
 #include <sot/formats.hxx>
 #endif
@@ -554,7 +554,7 @@ Bitmap SdrExchangeView::GetMarkedObjBitmap( BOOL bNoVDevIfOneBmpMarked ) const
             SdrObject*  pGrafObjTmp = aMark.GetMark( 0 )->GetObj();
             SdrGrafObj* pGrafObj = ( aMark.GetMarkCount() == 1 ) ? PTR_CAST( SdrGrafObj, pGrafObjTmp ) : NULL;
 
-            if( pGrafObj && !pGrafObj->GetShearAngle() && ( pGrafObj->GetGraphicType() == GRAPHIC_BITMAP ) )
+            if( pGrafObj && ( pGrafObj->GetGraphicType() == GRAPHIC_BITMAP ) )
                 aBmp = pGrafObj->GetTransformedGraphic().GetBitmap();
         }
 
@@ -576,34 +576,48 @@ GDIMetaFile SdrExchangeView::GetMarkedObjMetaFile( BOOL bNoVDevIfOneMtfMarked ) 
 
     if( HasMarkedObj() )
     {
+        Rectangle   aBound( GetMarkedObjBoundRect() );
+        Size        aBoundSize( aBound.GetWidth(), aBound.GetHeight() );
+        MapMode     aMap( pMod->GetScaleUnit(), Point(), pMod->GetScaleFraction(), pMod->GetScaleFraction() );
+
         if( bNoVDevIfOneMtfMarked )
         {
             SdrObject*  pGrafObjTmp = aMark.GetMark( 0 )->GetObj();
             SdrGrafObj* pGrafObj = ( aMark.GetMarkCount() ==1 ) ? PTR_CAST( SdrGrafObj, pGrafObjTmp ) : NULL;
 
-            if( pGrafObj && !pGrafObj->GetShearAngle() && pGrafObj->GetGraphicType() == GRAPHIC_GDIMETAFILE )
-                aMtf = pGrafObj->GetTransformedGraphic().GetGDIMetaFile();
+            if( pGrafObj )
+            {
+                Graphic aGraphic( pGrafObj->GetTransformedGraphic() );
+
+                if( aGraphic.GetType() == GRAPHIC_BITMAP )
+                {
+                    const Point aPos;
+
+                    aMtf.AddAction( new MetaBmpExScaleAction( aPos, aBoundSize, aGraphic.GetBitmapEx() ) );
+                    aMtf.SetPrefMapMode( aMap );
+                    aMtf.SetPrefSize( aBoundSize );
+                }
+                else
+                    aMtf = aGraphic.GetGDIMetaFile();
+            }
         }
 
         if( !aMtf.GetActionCount() )
         {
             VirtualDevice   aOut;
-            Rectangle       aBound( GetMarkedObjBoundRect() );
-            MapMode         aMap( pMod->GetScaleUnit(), Point(),
-                                  pMod->GetScaleFraction(), pMod->GetScaleFraction() );
+            Size            aDummySize( 2, 2 );
 
+            aOut.SetOutputSizePixel( aDummySize );
             aOut.EnableOutput( FALSE );
             aOut.SetMapMode( aMap );
+
             aMtf.Clear();
             aMtf.Record( &aOut );
+
             DrawMarkedObj( aOut, aBound.TopLeft() );
+
             aMtf.Stop();
             aMtf.WindStart();
-
-            const Size  aExtSize( aOut.PixelToLogic( Size( 0, 0  ) ) );
-            Size        aBoundSize( aBound.GetWidth() + ( aExtSize.Width() ),
-                                    aBound.GetHeight() + ( aExtSize.Height() ) );
-
             aMtf.SetPrefMapMode( aMap );
             aMtf.SetPrefSize( aBoundSize );
         }
