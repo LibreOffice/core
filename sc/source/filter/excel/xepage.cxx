@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xepage.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:35:09 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:29:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@ void XclExpHeaderFooter::WriteBody( XclExpStream& rStrm )
     if( maHdrString.Len() )
     {
         XclExpString aExString;
-        if( rStrm.GetRoot().GetBiff() < xlBiff8 )
+        if( rStrm.GetRoot().GetBiff() <= EXC_BIFF5 )
             aExString.AssignByte( maHdrString, rStrm.GetRoot().GetCharSet(), EXC_STR_8BITLENGTH );
         else
             aExString.Assign( maHdrString, EXC_STR_DEFAULT, 255 );  // 16-bit length, but max 255 chars
@@ -155,7 +155,7 @@ void XclExpSetup::WriteBody( XclExpStream& rStrm )
     ::set_flag( nFlags, EXC_SETUP_PORTRAIT,     mrData.mbPortrait );
     ::set_flag( nFlags, EXC_SETUP_INVALID,      !mrData.mbValid );
     ::set_flag( nFlags, EXC_SETUP_BLACKWHITE,   mrData.mbBlackWhite );
-    if( eBiff >= xlBiff5 )
+    if( eBiff >= EXC_BIFF5 )
     {
         ::set_flag( nFlags, EXC_SETUP_DRAFT,        mrData.mbDraftQuality );
         /*  Set the Comments/Notes to "At end of sheet" if Print Notes is true.
@@ -168,7 +168,7 @@ void XclExpSetup::WriteBody( XclExpStream& rStrm )
 
     rStrm   << mrData.mnPaperSize << mrData.mnScaling << mrData.mnStartPage
             << mrData.mnFitToWidth << mrData.mnFitToHeight << nFlags;
-    if( eBiff >= xlBiff5 )
+    if( eBiff >= EXC_BIFF5 )
     {
         rStrm   << mrData.mnHorPrintRes << mrData.mnVerPrintRes
                 << mrData.mfHeaderMargin << mrData.mfFooterMargin << mrData.mnCopies;
@@ -188,14 +188,14 @@ void XclExpPageBreaks::Save( XclExpStream& rStrm )
 {
     if( !mrPageBreaks.empty() )
     {
-        SetRecSize( 2 + ((rStrm.GetRoot().GetBiff() < xlBiff8) ? 2 : 6) * mrPageBreaks.size() );
+        SetRecSize( 2 + ((rStrm.GetRoot().GetBiff() <= EXC_BIFF5) ? 2 : 6) * mrPageBreaks.size() );
         XclExpRecord::Save( rStrm );
     }
 }
 
 void XclExpPageBreaks::WriteBody( XclExpStream& rStrm )
 {
-    bool bWriteRange = (rStrm.GetRoot().GetBiff() >= xlBiff8);
+    bool bWriteRange = (rStrm.GetRoot().GetBiff() == EXC_BIFF8);
 
     rStrm << static_cast< sal_uInt16 >( mrPageBreaks.size() );
     for( ScfUInt16Vec::const_iterator aIt = mrPageBreaks.begin(), aEnd = mrPageBreaks.end(); aIt != aEnd; ++aIt )
@@ -386,7 +386,7 @@ void XclExpPageSettings::Save( XclExpStream& rStrm )
     XclExpDoubleRecord( EXC_ID_BOTTOMMARGIN, maData.mfBottomMargin ).Save( rStrm );
     XclExpSetup( maData ).Save( rStrm );
 
-    if( (GetBiff() >= xlBiff8) && maData.mxBrushItem.get() )
+    if( (GetBiff() == EXC_BIFF8) && maData.mxBrushItem.get() )
         if( const Graphic* pGraphic = maData.mxBrushItem->GetGraphic() )
             XclExpBitmap( *pGraphic ).Save( rStrm );
 }
