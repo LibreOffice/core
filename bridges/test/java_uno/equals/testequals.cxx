@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testequals.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 16:34:49 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 14:51:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 #include "com/sun/star/bridge/XBridge.hpp"
 #include "com/sun/star/bridge/XBridgeFactory.hpp"
+#include "com/sun/star/connection/Connector.hpp"
 #include "com/sun/star/connection/XConnection.hpp"
 #include "com/sun/star/connection/XConnector.hpp"
 #include "com/sun/star/lang/XMultiComponentFactory.hpp"
@@ -148,17 +149,10 @@ void Service::connect(rtl::OUString const & rConnection,
                       rtl::OUString const & rProtocol)
     throw (css::uno::Exception)
 {
-    css::uno::Reference< css::lang::XMultiComponentFactory > xFactory(
-        m_xContext->getServiceManager());
-    css::uno::Reference< css::connection::XConnector > xConnector(
-        xFactory->createInstanceWithContext(
-            rtl::OUString::createFromAscii("com.sun.star.connection.Connector"),
-            m_xContext),
-        css::uno::UNO_QUERY);
     css::uno::Reference< css::connection::XConnection > xConnection(
-        xConnector->connect(rConnection));
+        css::connection::Connector::create(m_xContext)->connect(rConnection));
     css::uno::Reference< css::bridge::XBridgeFactory > xBridgeFactory(
-        xFactory->createInstanceWithContext(
+        m_xContext->getServiceManager()->createInstanceWithContext(
             rtl::OUString::createFromAscii("com.sun.star.bridge.BridgeFactory"),
             m_xContext),
         css::uno::UNO_QUERY);
