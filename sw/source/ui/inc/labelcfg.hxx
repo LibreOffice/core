@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labelcfg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-01-24 09:05:18 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:59:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,13 +65,19 @@
 #include <unotools/configitem.hxx>
 #endif
 
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
+
 class SwLabRecs;
 class SwLabRec;
-class SwLabelConfig : public utl::ConfigItem
+
+class SW_DLLPUBLIC SwLabelConfig : public utl::ConfigItem
 {
     com::sun::star::uno::Sequence<rtl::OUString> aNodeNames;
 
-    com::sun::star::uno::Sequence<rtl::OUString> GetPropertyNames();
+    SW_DLLPRIVATE com::sun::star::uno::Sequence<rtl::OUString> GetPropertyNames();
+
 public:
     SwLabelConfig();
     virtual ~SwLabelConfig();
