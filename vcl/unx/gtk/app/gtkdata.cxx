@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkdata.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:52:09 $
+ *  last change: $Author: rt $ $Date: 2004-06-02 14:54:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -410,6 +410,7 @@ GtkXLib::GtkXLib()
     m_pGtkSalDisplay = NULL;
     m_pTimeout = NULL;
     m_nTimeoutMs = 0;
+    m_pUserEvent = NULL;
 }
 
 GtkXLib::~GtkXLib()
@@ -471,7 +472,7 @@ void GtkXLib::Init()
 
     for (i = 0; i < nParams; i++ )
         g_free( pCmdLineAry[i] );
-    delete pCmdLineAry;
+    delete [] pCmdLineAry;
 
 #if OSL_DEBUG_LEVEL > 1
     if (g_getenv ("SAL_DEBUG_UPDATES"))
@@ -628,6 +629,7 @@ void GtkXLib::PostUserEvent()
                                (gpointer) this, NULL);
         g_source_attach (m_pUserEvent, g_main_context_default ());
     }
+    Wakeup();
 }
 
 void GtkXLib::Wakeup()

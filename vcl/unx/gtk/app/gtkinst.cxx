@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkinst.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:52:22 $
+ *  last change: $Author: rt $ $Date: 2004-06-02 14:53:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,15 @@ extern "C"
 
     SalInstance* create_SalInstance( oslModule pModule )
     {
+        const gchar* pVersion = gtk_check_version( 2, 2, 0 );
+        if( pVersion )
+        {
+#if OSL_DEBUG_LEVEL > 1
+            fprintf( stderr, "gtk version conflict: %s\n", pVersion );
+#endif
+            return NULL;
+        }
+
         GtkYieldMutex *pYieldMutex;
 
         // init gdk thread protection
