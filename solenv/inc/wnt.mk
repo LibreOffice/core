@@ -2,9 +2,9 @@
 #
 #   $RCSfile: wnt.mk,v $
 #
-#   $Revision: 1.43 $
+#   $Revision: 1.44 $
 #
-#   last change: $Author: hro $ $Date: 2002-12-10 16:27:59 $
+#   last change: $Author: rt $ $Date: 2002-12-11 13:22:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -473,18 +473,18 @@ LINKFLAGSOPT=
 LIBCMT=msvcrt.lib
 LIBCIMT=msvcirt.lib
 OLDNAMES=oldnames.lib
-UWINAPILIB=uwinapi.lib
+UWINAPILIB*=uwinapi.lib
 .ELSE
 .IF "$(PRODUCT)"==""
 LIBCMT=libcmt.lib
 LIBCIMT=libcimt.lib
 OLDNAMES=oldnames.lib
-UWINAPILIB=uwinapi.lib
+UWINAPILIB*=uwinapi.lib
 .ELSE
 LIBCMT=libcmt.lib
 LIBCIMT=libcimt.lib
 OLDNAMES=oldnames.lib
-UWINAPILIB=uwinapi.lib
+UWINAPILIB*=uwinapi.lib
 .ENDIF
 .ENDIF
 
