@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-07 16:22:53 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 11:08:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1977,6 +1977,22 @@ USHORT ToolBox::ImplCalcBreaks( long nWidth, long* pMaxLineWidth, BOOL bCalcHorz
 }
 
 // -----------------------------------------------------------------------
+namespace
+{
+    BOOL ImplFollowedByVisibleButton( std::vector< ImplToolItem >::iterator _aSeparator, std::vector< ImplToolItem >::iterator _aEnd )
+    {
+        std::vector< ImplToolItem >::iterator aLookup = _aSeparator;
+        while ( ++aLookup != _aEnd )
+        {
+            if ( aLookup->meType == TOOLBOXITEM_SEPARATOR )
+                return ImplFollowedByVisibleButton( aLookup, _aEnd );
+
+            if ( ( aLookup->meType == TOOLBOXITEM_BUTTON ) && aLookup->mbVisible )
+                return TRUE;
+        }
+        return FALSE;
+    }
+}
 
 void ToolBox::ImplFormat( BOOL bResize )
 {
@@ -2218,18 +2234,7 @@ void ToolBox::ImplFormat( BOOL bResize )
                     {
                         // Feststellen ob dahinter ueberhaupt noch
                         // ein Item sichtbar ist
-                        temp_it = it+1;
-                        while ( temp_it != mpData->m_aItems.end() )
-                        {
-                            if ( (temp_it->meType == TOOLBOXITEM_SEPARATOR) ||
-                                 ((temp_it->meType == TOOLBOXITEM_BUTTON) &&
-                                  temp_it->mbVisible) )
-                            {
-                                it->mbVisible = TRUE;
-                                break;
-                            }
-                            ++temp_it;
-                        }
+                        it->mbVisible = ImplFollowedByVisibleButton( it, mpData->m_aItems.end() );
                     }
                     bLastSep = TRUE;
                 }
