@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScAccessiblePreviewTable.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change:$Date: 2004-12-10 17:04:23 $
+ *  last change:$Date: 2005-03-01 20:29:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,15 +99,15 @@ import util.PropertyName;
 /**
  * Object implements the following interfaces:
  * <ul>
- *  <li> <code>drafts::com::sun::star::accessibility::XAccessibleComponent</code>
+ *  <li> <code>::com::sun::star::accessibility::XAccessibleComponent</code>
  *  </li>
- *  <li> <code>drafts::com::sun::star::accessibility::XAccessibleContext</code>
+ *  <li> <code>::com::sun::star::accessibility::XAccessibleContext</code>
  *  </li>
- *  <li> <code>drafts::com::sun::star::accessibility::XAccessibleSelection
+ *  <li> <code>::com::sun::star::accessibility::XAccessibleSelection
  *  </code></li>
- *  <li><code>drafts::com::sun::star::accessibility::XAccessibleTable</code>
+ *  <li><code>::com::sun::star::accessibility::XAccessibleTable</code>
  *  </li>
- *  <li><code>drafts::com::sun::star::accessibility::XAccessibleEventBroadcaster
+ *  <li><code>::com::sun::star::accessibility::XAccessibleEventBroadcaster
  *  </code></li>
  * </ul>
  * @see com.sun.star.accessibility.XAccessibleComponent
