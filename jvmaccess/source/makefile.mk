@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-26 12:41:24 $
+#   last change: $Author: vg $ $Date: 2003-04-07 10:23:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,6 +66,10 @@ TARGET = $(PRJNAME)
 ENABLE_EXCEPTIONS = TRUE
 
 .INCLUDE: settings.mk
+
+UNOUCRDEP = $(SOLARBINDIR)$/udkapi.rdb
+UNOUCRRDB = $(SOLARBINDIR)$/udkapi.rdb
+UNOUCROUT = $(OUT)$/inc
 
 SLOFILES = \
     $(SLO)$/javainfo.obj \
