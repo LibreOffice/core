@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impimagetree.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-21 14:38:59 $
+ *  last change: $Author: rt $ $Date: 2004-05-28 13:33:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,7 @@ using namespace ::com::sun::star;
 // -----------------
 
 typedef ::std::hash_map< ::rtl::OUString, BitmapEx, ::rtl::OUStringHash > BmpExHashMap;
+static BmpExHashMap aBmpExHashMap;
 
 // -----------------------------------------------------------------------
 
@@ -140,6 +141,14 @@ ImplImageTree::ImplImageTree() :
 
 ImplImageTree::~ImplImageTree()
 {
+}
+
+// -----------------------------------------------------------------------
+
+void ImplImageTree::cleanup()
+{
+    BmpExHashMap aTmp;
+    aBmpExHashMap.swap( aTmp );
 }
 
 // -----------------------------------------------------------------------
@@ -339,7 +348,6 @@ bool ImplImageTree::implLoadFromStream( SvStream& rIStm,
 
 bool ImplImageTree::loadImage( const ::rtl::OUString& rName, BitmapEx& rReturn )
 {
-    static BmpExHashMap                 aBmpExHashMap;
     const BmpExHashMap::const_iterator  aBmpExFindIter( aBmpExHashMap.find( rName ) );
 
     if( aBmpExFindIter != aBmpExHashMap.end() )

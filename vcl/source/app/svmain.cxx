@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmain.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:45:45 $
+ *  last change: $Author: rt $ $Date: 2004-05-28 13:32:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,9 @@
 #endif
 #ifndef _SV_SALIMESTATUS_HXX
 #include <salimestatus.hxx>
+#endif
+#ifndef _SV_IMPIMAGETREE_HXX
+#include <impimagetree.hxx>
 #endif
 
 #include <vos/process.hxx>
@@ -346,6 +349,8 @@ BOOL InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XM
 
 void DeInitVCL()
 {
+    ImplImageTree::cleanup();
+
     delete pExceptionHandler;
     pExceptionHandler = NULL;
 
