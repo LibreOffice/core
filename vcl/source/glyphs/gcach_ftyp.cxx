@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.82 $
- *  last change: $Author: pl $ $Date: 2002-11-18 14:30:49 $
+ *  $Revision: 1.83 $
+ *  last change: $Author: hdu $ $Date: 2002-11-20 15:49:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,9 +87,9 @@
 #ifndef FREETYPE_PATCH
     // VERSION_MINOR in freetype.h is too coarse
     // if patch-level is not available we need to fine-tune the version ourselves
-    #define FTVERSION 205
+    #define FTVERSION 2005
 #else
-    #define FTVERSION (100*FREETYPE_MAJOR + 10*FREETYPE_MAJOR + FREETYPE_PATCH)
+    #define FTVERSION (1000*FREETYPE_MAJOR + 100*FREETYPE_MINOR + FREETYPE_PATCH)
 #endif
 
 #include <vector>
@@ -231,6 +231,42 @@ FtFontInfo::FtFontInfo( const ImplFontData& rFontData,
     // using unicode emulation for non-symbol fonts
     if( maFontData.meCharSet != RTL_TEXTENCODING_SYMBOL )
         maFontData.meCharSet = RTL_TEXTENCODING_UNICODE;
+
+    // boost low font IDs
+    maFontData.mnQuality += 0x1000 - nFontId;
+
+    const char* pLangBoost = NULL;
+    const LanguageType aLang = Application::GetSettings().GetUILanguage();
+    switch( aLang )
+    {
+        case LANGUAGE_JAPANESE:
+            pLangBoost = "jan";    // japanese is default
+            break;
+        case LANGUAGE_CHINESE:
+        case LANGUAGE_CHINESE_SIMPLIFIED:
+        case LANGUAGE_CHINESE_SINGAPORE:
+            pLangBoost = "zhs";
+            break;
+        case LANGUAGE_CHINESE_TRADITIONAL:
+        case LANGUAGE_CHINESE_HONGKONG:
+        case LANGUAGE_CHINESE_MACAU:
+            pLangBoost = "zht";
+            break;
+        case LANGUAGE_KOREAN:
+        case LANGUAGE_KOREAN_JOHAB:
+            pLangBoost = "kor";
+            break;
+    }
+
+    // boost font preference if UI language is mentioned in filename
+    int nPos = rNativeFileName.lastIndexOf( '_' );
+    if( nPos == -1 || rNativeFileName[nPos+1] == '.' )
+        maFontData.mnQuality += 0x1000;     // no langinfo => good
+    else
+    {
+        if( pLangBoost && !strncasecmp( pLangBoost, &rNativeFileName.getStr()[nPos+1], 3 ) )
+           maFontData.mnQuality += 0x2000;  // correct langinfo => better
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -367,7 +403,7 @@ long FreetypeManager::AddFontDir( const String& rUrlName )
             for( int i = aFaceFT->num_charmaps; --i >= 0; )
             {
                 const FT_CharMap aCM = aFaceFT->charmaps[i];
-#if (FTVERSION < 200)
+#if (FTVERSION < 2000)
                 if( aCM->encoding == ft_encoding_none )
 #else
                 if( (aCM->platform_id == TT_PLATFORM_MICROSOFT)
@@ -383,7 +419,6 @@ long FreetypeManager::AddFontDir( const String& rUrlName )
 
             FT_Done_Face( aFaceFT );
 
-            aFontData.mnVerticalOrientation = 0;
             aFontData.mbOrientation = true;
             aFontData.mbDevice      = false;
             aFontData.mnQuality     = 0;    // prefer client-side fonts if available
@@ -401,49 +436,11 @@ long FreetypeManager::AddFontDir( const String& rUrlName )
 
 long FreetypeManager::FetchFontList( ImplDevFontList* pToAdd ) const
 {
-    const char* pLangBoost = NULL;
-    const LanguageType aLang = Application::GetSettings().GetUILanguage();
-    switch( aLang )
-    {
-        case LANGUAGE_JAPANESE:
-            pLangBoost = "jan";    // japanese is default
-            break;
-        case LANGUAGE_CHINESE:
-        case LANGUAGE_CHINESE_SIMPLIFIED:
-        case LANGUAGE_CHINESE_SINGAPORE:
-            pLangBoost = "zhs";
-            break;
-        case LANGUAGE_CHINESE_TRADITIONAL:
-        case LANGUAGE_CHINESE_HONGKONG:
-        case LANGUAGE_CHINESE_MACAU:
-            pLangBoost = "zht";
-            break;
-        case LANGUAGE_KOREAN:
-        case LANGUAGE_KOREAN_JOHAB:
-            pLangBoost = "kor";
-            break;
-    }
-
     long nCount = 0;
     for( FontList::const_iterator it(maFontList.begin()); it != maFontList.end(); ++it, ++nCount )
     {
         const FtFontInfo& rFFI = *it->second;
         ImplFontData* pFontData = new ImplFontData( rFFI.GetFontData() );
-
-        // boost UI font quality if UI language matches
-        const ::rtl::OString* pCFileName = rFFI.GetFontFileName();
-        int nPos = pCFileName->lastIndexOf( '_' );
-        if( nPos == -1 || (*pCFileName)[nPos+1] == '.' )
-            pFontData->mnQuality += 5;      // filenames without langinfo => good
-        else
-        {
-            if( pLangBoost && !strncasecmp( pLangBoost, &pCFileName->getStr()[nPos+1], 3 ) )
-               pFontData->mnQuality += 10;  // filenames with correct langinfo => better
-        }
-
-        // boost low font IDs
-        pFontData->mnQuality += mnMaxFontId - rFFI.GetFontId();
-
         pToAdd->Add( pFontData );
     }
 
@@ -497,7 +494,7 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontIn
     FT_Encoding eEncoding = ft_encoding_unicode;
     if( mpFontInfo->GetFontData().meCharSet == RTL_TEXTENCODING_SYMBOL )
     {
-#if (FTVERSION < 200)
+#if (FTVERSION < 2000)
         eEncoding = ft_encoding_none;
 #else
         if( FT_IS_SFNT( maFaceFT ) )
@@ -579,7 +576,7 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontIn
         mnLoadFlags |= FT_LOAD_NO_HINTING;
     mnLoadFlags |= FT_LOAD_IGNORE_GLOBAL_ADVANCE_WIDTH; //#88334#
 
-#if (FTVERSION < 205) && !defined(TT_CONFIG_OPTION_BYTECODE_INTERPRETER)
+#if (FTVERSION < 2005) && !defined(TT_CONFIG_OPTION_BYTECODE_INTERPRETER)
     mnLoadFlags |= FT_LOAD_NO_HINTING;  // TODO: enable when AH improves
 #endif
 }
@@ -624,7 +621,7 @@ void FreetypeServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor
 
     const FT_Size_Metrics& rMetrics = maFaceFT->size->metrics;
     rTo.mnAscent            = (+rMetrics.ascender + 32) >> 6;
-#if (FTVERSION < 200)
+#if (FTVERSION < 2000)
     rTo.mnDescent           = (+rMetrics.descender + 32) >> 6;
 #else
     rTo.mnDescent           = (-rMetrics.descender + 32) >> 6;
@@ -731,7 +728,7 @@ int FreetypeServerFont::ApplyGlyphTransform( int nGlyphFlags, FT_GlyphRec_* pGly
     }
     else
     {
-        // FT<=205 ignores transforms for bitmaps, so do it manually
+        // FT<=2005 ignores transforms for bitmaps, so do it manually
         FT_BitmapGlyph& rBmpGlyphFT = reinterpret_cast<FT_BitmapGlyph&>(pGlyphFT);
         rBmpGlyphFT->left += (aVector.x + 32) >> 6;
         rBmpGlyphFT->top  += (aVector.y + 32) >> 6;
@@ -794,7 +791,46 @@ int FreetypeServerFont::FixupGlyphIndex( int nGlyphIndex, sal_Unicode aChar ) co
         // TODO: rethink when GSUB is used for non-vertical case
         GlyphSubstitution::const_iterator it = maGlyphSubstitution.find( nGlyphIndex );
         if( it == maGlyphSubstitution.end() )
-          nGlyphFlags |= GetVerticalFlags( aChar );
+        {
+            int nTemp = 0;
+            switch( aChar )
+            {
+                // CJK compatibility forms
+                case 0x2025: nTemp = 0xFE30; break;
+                case 0x2014: nTemp = 0xFE31; break;
+                case 0x2013: nTemp = 0xFE32; break;
+                case 0x005F: nTemp = 0xFE33; break;
+                case 0x0028: nTemp = 0xFE35; break;
+                case 0x0029: nTemp = 0xFE36; break;
+                case 0x007B: nTemp = 0xFE37; break;
+                case 0x007D: nTemp = 0xFE38; break;
+                case 0x3014: nTemp = 0xFE39; break;
+                case 0x3015: nTemp = 0xFE3A; break;
+                case 0x3010: nTemp = 0xFE3B; break;
+                case 0x3011: nTemp = 0xFE3C; break;
+                case 0x300A: nTemp = 0xFE3D; break;
+                case 0x300B: nTemp = 0xFE3E; break;
+                case 0x3008: nTemp = 0xFE3F; break;
+                case 0x3009: nTemp = 0xFE40; break;
+                case 0x300C: nTemp = 0xFE41; break;
+                case 0x300D: nTemp = 0xFE42; break;
+                case 0x300E: nTemp = 0xFE43; break;
+                case 0x300F: nTemp = 0xFE44; break;
+                // #104627# special treatment for some unicodes
+                case 0x002C: nTemp = 0x3001; break;
+                case 0x002E: nTemp = 0x3002; break;
+                case 0x2018: nTemp = 0xFE41; break;
+                case 0x2019: nTemp = 0xFE42; break;
+                case 0x201C: nTemp = 0xFE43; break;
+                case 0x201D: nTemp = 0xFE44; break;
+            }
+            if( nTemp ) // is substitution possible
+                nTemp = GetRawGlyphIndex( nTemp );
+            if( nTemp ) // substitute manually if sensible
+                nGlyphIndex = nTemp | (GF_GSUB | GF_ROTL);
+            else
+                nGlyphFlags |= GetVerticalFlags( aChar );
+        }
         else
         {
             // for vertical GSUB also compensate for nOrientation=2700
@@ -839,8 +875,8 @@ void FreetypeServerFont::InitGlyphData( int nGlyphIndex, GlyphData& rGD ) const
         nLoadFlags |= FT_LOAD_NO_HINTING;
 
     FT_Error rc = -1;
-#if (FTVERSION <= 208)
-    // #88364# freetype<=205 prefers autohinting to embedded bitmaps
+#if (FTVERSION <= 2008)
+    // #88364# freetype<=2005 prefers autohinting to embedded bitmaps
     // => first we have to try without hinting
     if( (nLoadFlags & (FT_LOAD_NO_HINTING | FT_LOAD_NO_BITMAP)) == 0 )
     {
@@ -867,7 +903,7 @@ void FreetypeServerFont::InitGlyphData( int nGlyphIndex, GlyphData& rGD ) const
     int nCharWidth = maFaceFT->glyph->metrics.horiAdvance;
     if( nGlyphFlags & GF_ROTMASK ) {  // for bVertical rotated glyphs
         const FT_Size_Metrics& rMetrics = maFaceFT->size->metrics;
-#if (FTVERSION < 200)
+#if (FTVERSION < 2000)
         nCharWidth = (rMetrics.height - rMetrics.descender) * mfStretch;
 #else
         nCharWidth = (rMetrics.height + rMetrics.descender) * mfStretch;
@@ -913,7 +949,7 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
 
     FT_Int nLoadFlags = mnLoadFlags;
 
-#if (FTVERSION >= 202)
+#if (FTVERSION >= 2002)
     // for 0/90/180/270 degree fonts enable autohinting even if not advisable
     // non-hinted and non-antialiased bitmaps just look too ugly
     if( nCos==0 || nSin==0 )
@@ -921,8 +957,8 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
 #endif
 
     FT_Error rc = -1;
-#if (FTVERSION <= 208)
-    // #88364# freetype<=205 prefers autohinting to embedded bitmaps
+#if (FTVERSION <= 2008)
+    // #88364# freetype<=2005 prefers autohinting to embedded bitmaps
     // => first we have to try without hinting
     if( (nLoadFlags & (FT_LOAD_NO_HINTING | FT_LOAD_NO_BITMAP)) == 0 )
     {
@@ -1001,7 +1037,7 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
 
     FT_Int nLoadFlags = mnLoadFlags;
 
-#if (FTVERSION <= 204) && !defined(TT_CONFIG_OPTION_BYTECODE_INTERPRETER)
+#if (FTVERSION <= 2004) && !defined(TT_CONFIG_OPTION_BYTECODE_INTERPRETER)
     // autohinting in FT<=2.0.4 makes antialiased glyphs look worse
     nLoadFlags |= FT_LOAD_NO_HINTING;
 #else
@@ -1014,8 +1050,8 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
         nLoadFlags |= FT_LOAD_NO_BITMAP;
 
     FT_Error rc = -1;
-#if (FTVERSION <= 208)
-    // #88364# freetype<=205 prefers autohinting to embedded bitmaps
+#if (FTVERSION <= 2008)
+    // #88364# freetype<=2005 prefers autohinting to embedded bitmaps
     // => first we have to try without hinting
     if( (nLoadFlags & (FT_LOAD_NO_HINTING | FT_LOAD_NO_BITMAP)) == 0 )
     {
@@ -1120,7 +1156,7 @@ ULONG FreetypeServerFont::GetFontCodeRanges( sal_uInt32* pCodes ) const
 {
     int nRangeCount = 0;
 
-#if 0 && (FTVERSION >= 212)
+#if 0 && (FTVERSION >= 2102)
     // TODO: enable new version when it is fast enough for big fonts
     // TODO: implement Get_Next_Missing_Char() and use this
     FT_UInt nGlyphIndex = 0;
