@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.hrc,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-22 10:37:31 $
+ *  last change: $Author: obo $ $Date: 2004-11-19 11:33:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,7 +167,7 @@
 #define DLG_RECOGNIZER_SPEAKER          ( RC_DIALOG_BEGIN + 77 )
 
 // mail
-#define RID_MAIL_WINDOW                 ( RC_DIALOG_BEGIN + 78 )
+//#define RID_MAIL_WINDOW                   ( RC_DIALOG_BEGIN + 78 )
 #define RID_ERRBOX_NO_SMTPSERVER        ( RC_DIALOG_BEGIN + 79 )
 #define RID_INFBOX_SEND_SUCCESS         ( RC_DIALOG_BEGIN + 80 )
 #define RID_ERRBOX_SEND_FAILED          ( RC_DIALOG_BEGIN + 81 )
