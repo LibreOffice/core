@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: tbe $ $Date: 2002-06-10 17:46:40 $
+ *  last change: $Author: pl $ $Date: 2002-06-11 15:21:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2288,26 +2288,22 @@ BOOL MenuBar::ImplHandleKeyEvent( const KeyEvent& rKEvent, BOOL bFromMenu )
 
 void MenuBar::SelectEntry( USHORT nId )
 {
-    if( ImplGetWindow() )
-    {
-        MenuBarWindow* pMenuWin = (MenuBarWindow*) ImplGetWindow();
+    MenuBarWindow* pMenuWin = (MenuBarWindow*) ImplGetWindow();
 
+    if( pMenuWin )
+    {
         pMenuWin->GrabFocus();
         nId = GetItemPos( nId );
 
         // #99705# popup the selected menu
         pMenuWin->SetAutoPopup( TRUE );
-
-        if( ITEMPOS_INVALID == pMenuWin->nHighlightedItem )
-        {
-            if( ( nId != ITEMPOS_INVALID ) && ( nId != pMenuWin->nHighlightedItem ) )
-                pMenuWin->ChangeHighlightItem( nId, FALSE );
-        }
-        else
+        if( ITEMPOS_INVALID != pMenuWin->nHighlightedItem )
         {
             pMenuWin->KillActivePopup();
             pMenuWin->ChangeHighlightItem( ITEMPOS_INVALID, FALSE );
         }
+        if( nId != ITEMPOS_INVALID )
+            pMenuWin->ChangeHighlightItem( nId, FALSE );
     }
 }
 
