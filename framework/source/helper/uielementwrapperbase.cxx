@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uielementwrapperbase.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:47:49 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 16:57:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,13 +105,16 @@
 
 const int UIELEMENT_PROPHANDLE_RESOURCEURL  = 1;
 const int UIELEMENT_PROPHANDLE_TYPE         = 2;
-const int UIELEMENT_PROPCOUNT               = 2;
+const int UIELEMENT_PROPHANDLE_FRAME        = 3;
+const int UIELEMENT_PROPCOUNT               = 3;
 const rtl::OUString UIELEMENT_PROPNAME_RESOURCEURL( RTL_CONSTASCII_USTRINGPARAM( "ResourceURL" ));
 const rtl::OUString UIELEMENT_PROPNAME_TYPE( RTL_CONSTASCII_USTRINGPARAM( "Type" ));
+const rtl::OUString UIELEMENT_PROPNAME_FRAME( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
 
 using namespace rtl;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::beans;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::frame;
 
 namespace framework
 {
@@ -119,7 +122,7 @@ namespace framework
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider
 //*****************************************************************************************************************
-DEFINE_XINTERFACE_7     (   UIElementWrapperBase                                            ,
+DEFINE_XINTERFACE_8     (   UIElementWrapperBase                                            ,
                             OWeakObject                                                     ,
                             DIRECT_INTERFACE( ::com::sun::star::lang::XTypeProvider         ),
                             DIRECT_INTERFACE( ::drafts::com::sun::star::ui::XUIElement      ),
@@ -127,16 +130,18 @@ DEFINE_XINTERFACE_7     (   UIElementWrapperBase                                
                             DIRECT_INTERFACE( ::com::sun::star::beans::XFastPropertySet     ),
                             DIRECT_INTERFACE( ::com::sun::star::beans::XPropertySet         ),
                             DIRECT_INTERFACE( ::com::sun::star::lang::XInitialization       ),
+                            DIRECT_INTERFACE( ::com::sun::star::util::XUpdatable            ),
                             DIRECT_INTERFACE( ::com::sun::star::lang::XComponent            )
                         )
 
-DEFINE_XTYPEPROVIDER_7  (   UIElementWrapperBase                        ,
+DEFINE_XTYPEPROVIDER_8  (   UIElementWrapperBase                        ,
                             ::com::sun::star::lang::XTypeProvider       ,
                             ::drafts::com::sun::star::ui::XUIElement    ,
                             ::com::sun::star::beans::XMultiPropertySet  ,
                             ::com::sun::star::beans::XFastPropertySet   ,
                             ::com::sun::star::beans::XPropertySet       ,
                             ::com::sun::star::lang::XInitialization     ,
+                            ::com::sun::star::util::XUpdatable          ,
                             ::com::sun::star::lang::XComponent
                         )
 
@@ -187,11 +192,23 @@ throw ( Exception, RuntimeException )
             {
                 if ( aPropValue.Name.equalsAscii( "ResourceURL" ))
                     aPropValue.Value >>= m_aResourceURL;
+                else if ( aPropValue.Name.equalsAscii( "Frame" ))
+                {
+                    Reference< XFrame > xFrame;
+                    aPropValue.Value >>= xFrame;
+                    m_xWeakFrame = xFrame;
+                }
             }
         }
 
         m_bInitialized = sal_True;
     }
+}
+
+// XUpdatable
+void SAL_CALL UIElementWrapperBase::update() throw (::com::sun::star::uno::RuntimeException)
+{
+    // can be implemented by derived class
 }
 
 // XPropertySet helper
@@ -202,43 +219,12 @@ sal_Bool SAL_CALL UIElementWrapperBase::convertFastPropertyValue( Any&       aCo
 {
     //  Initialize state with FALSE !!!
     //  (Handle can be invalid)
-    sal_Bool bReturn = sal_False;
-
-    switch( nHandle )
-    {
-        case UIELEMENT_PROPHANDLE_RESOURCEURL:
-            bReturn = PropHelper::willPropertyBeChanged(
-                        com::sun::star::uno::makeAny(m_aResourceURL),
-                        aValue,
-                        aOldValue,
-                        aConvertedValue);
-            break;
-
-        case UIELEMENT_PROPHANDLE_TYPE :
-            bReturn = PropHelper::willPropertyBeChanged(
-                        com::sun::star::uno::makeAny(m_nType),
-                        aValue,
-                        aOldValue,
-                        aConvertedValue);
-            break;
-    }
-
-    // Return state of operation.
-    return bReturn ;
+    return sal_False ;
 }
 
 void SAL_CALL UIElementWrapperBase::setFastPropertyValue_NoBroadcast(   sal_Int32               nHandle ,
                                                                         const com::sun::star::uno::Any&    aValue  ) throw( com::sun::star::uno::Exception )
 {
-    switch( nHandle )
-    {
-        case UIELEMENT_PROPHANDLE_RESOURCEURL:
-            aValue >>= m_aResourceURL;
-            break;
-        case UIELEMENT_PROPHANDLE_TYPE:
-            aValue >>= m_nType;
-            break;
-    }
 }
 
 void SAL_CALL UIElementWrapperBase::getFastPropertyValue( com::sun::star::uno::Any& aValue  ,
@@ -251,6 +237,10 @@ void SAL_CALL UIElementWrapperBase::getFastPropertyValue( com::sun::star::uno::A
             break;
         case UIELEMENT_PROPHANDLE_TYPE:
             aValue <<= m_nType;
+            break;
+        case UIELEMENT_PROPHANDLE_FRAME:
+            Reference< XFrame > xFrame( m_xWeakFrame );
+            aValue <<= xFrame;
             break;
     }
 }
@@ -316,6 +306,7 @@ const com::sun::star::uno::Sequence< com::sun::star::beans::Property > UIElement
 
     static const com::sun::star::beans::Property pProperties[] =
     {
+        com::sun::star::beans::Property( UIELEMENT_PROPNAME_FRAME         , UIELEMENT_PROPHANDLE_FRAME          , ::getCppuType((Reference< XFrame >*)NULL), com::sun::star::beans::PropertyAttribute::TRANSIENT | com::sun::star::beans::PropertyAttribute::READONLY ),
         com::sun::star::beans::Property( UIELEMENT_PROPNAME_RESOURCEURL   , UIELEMENT_PROPHANDLE_RESOURCEURL    , ::getCppuType((sal_Int16*)NULL), com::sun::star::beans::PropertyAttribute::TRANSIENT | com::sun::star::beans::PropertyAttribute::READONLY ),
         com::sun::star::beans::Property( UIELEMENT_PROPNAME_TYPE          , UIELEMENT_PROPHANDLE_TYPE           , ::getCppuType((const ::rtl::OUString*)NULL), com::sun::star::beans::PropertyAttribute::TRANSIENT | com::sun::star::beans::PropertyAttribute::READONLY )
     };
