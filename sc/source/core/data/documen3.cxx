@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen3.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:31:49 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 16:28:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1640,6 +1640,10 @@ void ScDocument::SnapVisArea( Rectangle& rRect ) const
         return;
     }
 
+    BOOL bNegativePage = IsNegativePage( nVisibleTab );
+    if ( bNegativePage )
+        ScDrawLayer::MirrorRectRTL( rRect );        // calculate with positive (LTR) values
+
     USHORT nCol = 0;
     lcl_SnapHor( pTable, rRect.Left(), nCol );
     ++nCol;                                         // mindestens eine Spalte
@@ -1649,6 +1653,9 @@ void ScDocument::SnapVisArea( Rectangle& rRect ) const
     lcl_SnapVer( pTable, rRect.Top(), nRow );
     ++nRow;                                         // mindestens eine Zeile
     lcl_SnapVer( pTable, rRect.Bottom(), nRow );
+
+    if ( bNegativePage )
+        ScDrawLayer::MirrorRectRTL( rRect );        // back to real rectangle
 }
 
 void ScDocument::SetDocProtection( BOOL bProtect, const uno::Sequence<sal_Int8>& rPasswd )
