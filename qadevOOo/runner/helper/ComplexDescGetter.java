@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ComplexDescGetter.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 16:27:31 $
+ *  last change:$Date: 2003-05-27 12:02:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,43 +61,81 @@
 package helper;
 
 import complexlib.ComplexTestCase;
+import lib.DynamicClassLoader;
 import share.DescEntry;
 import share.DescGetter;
 import share.ComplexTest;
+import java.io.FileReader;
+import java.io.BufferedReader;
+import java.util.Vector;
 
 /**
  *
  */
-public class ComplexDescGetter implements DescGetter {
+public class ComplexDescGetter extends DescGetter {
 
     ComplexTest testClass;
-    /** Creates new ComplexDescGetter */
-    public ComplexDescGetter(ComplexTest tClass) {
 
-        testClass = tClass;
+    /** Creates new ComplexDescGetter */
+    public ComplexDescGetter() {
     }
 
     public DescEntry[] getDescriptionFor(String entry, String DescPath,
                                                             boolean debug) {
+        // read scenario file
+        if (entry.startsWith("-sce")) {
+            DescEntry[] entries = getScenario(entry.substring(5),null,debug);
+            return entries;
+        }
+        // one single job
+        else if (entry.startsWith("-o")) {
+            DescEntry dEntry = getDescriptionForSingleJob(entry.substring(3), null, debug);
+            if (dEntry != null)
+                return new DescEntry[] {dEntry};
+        }
+        System.out.println("Could not get a testjob with parameter '"
+                            + entry +"'");
+        // no job available
+        return null;
+    }
+
+
+    protected DescEntry getDescriptionForSingleJob(String className, String descPath, boolean debug) {
+        DynamicClassLoader dcl = new DynamicClassLoader();
+        ComplexTestCase testClass = null;
+        boolean returnVal = true;
 
         if (debug) {
-            System.out.println("Searching Class: "+((Object)testClass).toString());
-            System.out.println("Test Name: "+entry);
+            System.out.println("Searching Class: " + className);
+        }
+
+        // create an instance
+        try {
+            testClass = (ComplexTestCase)dcl.getInstance(className);
+        }
+        catch(java.lang.Exception e) {
+            System.out.println("Could not load class " + className);
+            e.printStackTrace();
+            return null;
+        }
+
+        if (debug) {
+            System.out.println("Got test: "+((Object)testClass).toString());
         }
 
         String testObjectName = testClass.getTestObjectName();
         if (testObjectName != null) {
             if (testObjectName.equals(""))
-                testObjectName = entry;
+                testObjectName = className;
         }
         else
-            testObjectName = entry;
+            testObjectName = className;
 
         String[] testMethodName = testClass.getTestMethodNames();
         DescEntry dEntry = new DescEntry();
 
         dEntry.entryName = testObjectName;
-        dEntry.longName = testObjectName;
+        dEntry.longName = className;
         dEntry.isOptional = false;
         dEntry.EntryType = "unit";
         dEntry.isToTest = true;
@@ -113,6 +151,7 @@ public class ComplexDescGetter implements DescGetter {
             dEntry.SubEntries[i] = aEntry;
         }
 
-        return new DescEntry[]{dEntry};
+        return dEntry;
     }
+
 }
