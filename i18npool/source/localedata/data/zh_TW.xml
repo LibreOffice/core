@@ -281,6 +281,15 @@
 </CollationOptions>
 </LC_COLLATION>
 <LC_SEARCH ref="zh_CN"/>
+<LC_INDEX>
+<IndexKey unoid="stroke" default="true" phonetic="false"/>
+<IndexKey unoid="radical" default="false" phonetic="false"/>
+<IndexKey unoid="zhuyin" default="false" phonetic="true"/>
+<IndexKey unoid="pinyin" default="false" phonetic="true"/>
+<UnicodeScript>70</UnicodeScript>
+<FollowPageWord></FollowPageWord>
+<FollowPageWord></FollowPageWord>
+</LC_INDEX>
 <LC_CALENDAR>
 <Calendar unoid="gregorian" default="true">
 <DaysOfWeek ref="zh_CN_gregorian"/>

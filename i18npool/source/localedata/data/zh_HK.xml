@@ -247,6 +247,7 @@
 </CollationOptions>
 </LC_COLLATION>
 <LC_SEARCH ref="zh_CN"/>
+<LC_INDEX ref="zh_TW"/>
 <LC_CALENDAR>
 <Calendar unoid="gregorian" default="true">
 <DaysOfWeek ref="zh_CN_gregorian"/>
