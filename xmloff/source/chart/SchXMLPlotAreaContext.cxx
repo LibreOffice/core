@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLPlotAreaContext.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: bm $ $Date: 2001-01-09 14:26:06 $
+ *  last change: $Author: bm $ $Date: 2001-01-15 08:57:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,9 @@
 #endif
 #ifndef _COM_SUN_STAR_CHART_CHARTAXISASSIGN_HPP_
 #include <com/sun/star/chart/ChartAxisAssign.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CHART_X3DDISPLAY_HPP_
+#include <com/sun/star/chart/X3DDisplay.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_AWT_POINT_HPP_
@@ -253,7 +256,13 @@ SvXMLImportContext* SchXMLPlotAreaContext::CreateChildContext(
             break;
 
         case XML_TOK_PA_WALL:
+            pContext = new SchXMLWallFloorContext( mrImportHelper, GetImport(), nPrefix, rLocalName, mxDiagram,
+                                                   SchXMLWallFloorContext::CONTEXT_TYPE_WALL );
+            break;
         case XML_TOK_PA_FLOOR:
+            pContext = new SchXMLWallFloorContext( mrImportHelper, GetImport(), nPrefix, rLocalName, mxDiagram,
+                                                   SchXMLWallFloorContext::CONTEXT_TYPE_FLOOR );
+            break;
         default:
             pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
     }
@@ -1083,7 +1092,6 @@ SchXMLCategoriesDomainContext::~SchXMLCategoriesDomainContext()
 void SchXMLCategoriesDomainContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
     sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
-    rtl::OUString aValue;
 
     for( sal_Int16 i = 0; i < nAttrCount; i++ )
     {
@@ -1099,3 +1107,65 @@ void SchXMLCategoriesDomainContext::StartElement( const uno::Reference< xml::sax
     }
 }
 
+// ========================================
+
+SchXMLWallFloorContext::SchXMLWallFloorContext(
+    SchXMLImportHelper& rImpHelper,
+    SvXMLImport& rImport,
+    sal_uInt16 nPrefix,
+    const rtl::OUString& rLocalName,
+    uno::Reference< chart::XDiagram >& xDiagram,
+    ContextType eContextType ) :
+        SvXMLImportContext( rImport, nPrefix, rLocalName ),
+        mrImportHelper( rImpHelper ),
+        mxWallFloorSupplier( xDiagram, uno::UNO_QUERY ),
+        meContextType( eContextType )
+{
+}
+
+SchXMLWallFloorContext::~SchXMLWallFloorContext()
+{
+}
+
+void SchXMLWallFloorContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+{
+    if( mxWallFloorSupplier.is())
+    {
+        sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
+        rtl::OUString sAutoStyleName;
+
+        for( sal_Int16 i = 0; i < nAttrCount; i++ )
+        {
+            rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
+            rtl::OUString aLocalName;
+            USHORT nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+
+            if( nPrefix == XML_NAMESPACE_CHART &&
+                aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_style_name )))
+            {
+                sAutoStyleName = xAttrList->getValueByIndex( i );
+            }
+        }
+
+        if( sAutoStyleName.getLength())
+        {
+            // set properties
+            uno::Reference< beans::XPropertySet > xProp( ( meContextType == CONTEXT_TYPE_WALL )
+                                                         ? mxWallFloorSupplier->getWall()
+                                                         : mxWallFloorSupplier->getFloor(),
+                                                         uno::UNO_QUERY );
+            if( xProp.is())
+            {
+                const SvXMLStylesContext* pStylesCtxt = mrImportHelper.GetAutoStylesContext();
+                if( pStylesCtxt )
+                {
+                    const SvXMLStyleContext* pStyle = pStylesCtxt->FindStyleChildContext(
+                        mrImportHelper.GetChartFamilyID(), sAutoStyleName );
+
+                    if( pStyle && pStyle->ISA( XMLPropStyleContext ))
+                        (( XMLPropStyleContext* )pStyle )->FillPropertySet( xProp );
+                }
+            }
+        }
+    }
+}
