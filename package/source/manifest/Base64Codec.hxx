@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Base64Codec.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-27 14:56:52 $
+ *  last change: $Author: mtg $ $Date: 2001-05-08 13:52:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ class OUStringBuffer;
 class Base64Codec
 {
 public:
-    static void encodeBase64(rtl::OUStringBuffer& aStrBuffer, const com::sun::star::uno::Sequence<sal_Int8>& aPass);
-    static void decodeBase64(com::sun::star::uno::Sequence<sal_Int8>& aPass, const rtl::OUString& sBuffer);
+    static void encodeBase64(rtl::OUStringBuffer& aStrBuffer, const com::sun::star::uno::Sequence<sal_uInt8>& aPass);
+    static void decodeBase64(com::sun::star::uno::Sequence<sal_uInt8>& aPass, const rtl::OUString& sBuffer);
 };
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Base64Codec.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-27 14:56:52 $
+ *  last change: $Author: mtg $ $Date: 2001-05-08 13:52:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@ const
       0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0};
 
 
-void ThreeByteToFourByte (const sal_Int8* pBuffer, const sal_Int32 nStart, const sal_Int32 nFullLen, rtl::OUStringBuffer& sBuffer)
+void ThreeByteToFourByte (const sal_uInt8* pBuffer, const sal_Int32 nStart, const sal_Int32 nFullLen, rtl::OUStringBuffer& sBuffer)
 {
     sal_Int32 nLen(nFullLen - nStart);
     if (nLen > 3)
@@ -167,11 +167,11 @@ void ThreeByteToFourByte (const sal_Int8* pBuffer, const sal_Int32 nStart, const
     sBuffer.setCharAt(3, aBase64EncodeTable [nIndex]);
 }
 
-void Base64Codec::encodeBase64(rtl::OUStringBuffer& aStrBuffer, const uno::Sequence<sal_Int8>& aPass)
+void Base64Codec::encodeBase64(rtl::OUStringBuffer& aStrBuffer, const uno::Sequence < sal_uInt8 >& aPass)
 {
     sal_Int32 i(0);
     sal_Int32 nBufferLength(aPass.getLength());
-    const sal_Int8* pBuffer = aPass.getConstArray();
+    const sal_uInt8* pBuffer = aPass.getConstArray();
     while (i < nBufferLength)
     {
         rtl::OUStringBuffer sBuffer;
@@ -184,7 +184,7 @@ void Base64Codec::encodeBase64(rtl::OUStringBuffer& aStrBuffer, const uno::Seque
 const rtl::OUString s2equal(RTL_CONSTASCII_USTRINGPARAM("=="));
 const rtl::OUString s1equal(RTL_CONSTASCII_USTRINGPARAM("="));
 
-void FourByteToThreeByte (sal_Int8* pBuffer, sal_Int32& nLength, const sal_Int32 nStart, const rtl::OUString& sString)
+void FourByteToThreeByte (sal_uInt8* pBuffer, sal_Int32& nLength, const sal_Int32 nStart, const rtl::OUString& sString)
 {
     nLength = 0;
     sal_Int32 nLen (sString.getLength());
@@ -209,25 +209,25 @@ void FourByteToThreeByte (sal_Int8* pBuffer, sal_Int32& nLength, const sal_Int32
             (aBase64DecodeTable [sString [3]]));
 
     sal_uInt8 OneByte ((nBinaer & 0xFF0000) >> 16);
-    pBuffer[nStart + 0] = (sal_Int8)OneByte;
+    pBuffer[nStart + 0] = (sal_uInt8)OneByte;
 
     if (nLength == 1)
         return;
 
     OneByte = (nBinaer & 0xFF00) >> 8;
-    pBuffer[nStart + 1] = (sal_Int8)OneByte;
+    pBuffer[nStart + 1] = (sal_uInt8)OneByte;
 
     if (nLength == 2)
         return;
 
     OneByte = nBinaer & 0xFF;
-    pBuffer[nStart + 2] = (sal_Int8)OneByte;
+    pBuffer[nStart + 2] = (sal_uInt8)OneByte;
 }
 
-void Base64Codec::decodeBase64(uno::Sequence<sal_Int8>& aBuffer, const rtl::OUString& sBuffer)
+void Base64Codec::decodeBase64(uno::Sequence< sal_uInt8 >& aBuffer, const rtl::OUString& sBuffer)
 {
     sal_Int32 nFirstLength((sBuffer.getLength() / 4) * 3);
-    sal_Int8* pBuffer = new sal_Int8[nFirstLength];
+    sal_uInt8* pBuffer = new sal_uInt8[nFirstLength];
     sal_Int32 nSecondLength(0);
     sal_Int32 nLength(0);
     sal_Int32 i = 0;
@@ -240,6 +240,6 @@ void Base64Codec::decodeBase64(uno::Sequence<sal_Int8>& aBuffer, const rtl::OUSt
         i += 4;
         k += 3;
     }
-    aBuffer = uno::Sequence<sal_Int8>(pBuffer, nSecondLength);
+    aBuffer = uno::Sequence<sal_uInt8>(pBuffer, nSecondLength);
     delete[] pBuffer;
 }
