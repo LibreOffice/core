@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backingcomp.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:32:52 $
+ *  last change: $Author: kz $ $Date: 2004-11-28 15:38:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -579,7 +579,7 @@ css::uno::Reference< css::lang::XSingleServiceFactory > BackingComp::impl_create
 void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::frame::XFrame >& xFrame )
     throw (css::uno::RuntimeException)
 {
-    /* SAFE { */
+    /* SAFE */
     WriteGuard aWriteLock(m_aLock);
 
     // check some required states
@@ -665,7 +665,6 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
             xLayoutManager->showElement  ( DECLARE_ASCII( "private:resource/statusbar/statusbar" ));
             xLayoutManager->unlock();
         }
-    }
 
     // establish listening for key accelerators
     m_xWindow->addKeyListener(css::uno::Reference< css::awt::XKeyListener >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY));
