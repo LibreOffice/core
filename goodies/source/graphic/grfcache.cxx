@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfcache.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-02 12:41:50 $
+ *  last change: $Author: ka $ $Date: 2001-04-10 16:06:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -783,7 +783,20 @@ BOOL GraphicCache::IsInDisplayCache( OutputDevice* pOut, const Point& rPt, const
 
 ByteString GraphicCache::GetUniqueID( const GraphicObject& rObj ) const
 {
-    return( ( (GraphicCache*) this )->ImplGetCacheEntry( rObj )->GetID().GetIDString() );
+    ByteString          aRet;
+    GraphicCacheEntry*  pEntry = ( (GraphicCache*) this )->ImplGetCacheEntry( rObj );
+
+    // ensure that the entry is correctly initialized (it has to be read at least once)
+    if( pEntry && !pEntry->IsInitialized() )
+        pEntry->TryToSwapIn();
+
+    // do another call to ImplGetCacheEntry in case of modified entry list
+    pEntry = ( (GraphicCache*) this )->ImplGetCacheEntry( rObj );
+
+    if( pEntry )
+        aRet = pEntry->GetID().GetIDString();
+
+    return aRet;
 }
 
 // -----------------------------------------------------------------------------
