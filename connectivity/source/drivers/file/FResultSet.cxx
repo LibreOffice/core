@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-07 10:37:52 $
+ *  last change: $Author: oj $ $Date: 2001-05-08 13:26:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -422,11 +422,11 @@ sal_Int32 SAL_CALL OResultSet::getRow(  ) throw(SQLException, RuntimeException)
     sal_Int32 nPos = (sal_Int32)(*m_aRow)[0];
     ::std::map<sal_Int32,sal_Int32>::const_iterator aFind = m_aBookmarkToPos.find(nPos);
     OSL_ENSURE(aFind != m_aBookmarkToPos.end(),"OResultSet::getRow() invalid bookmark!");
-    sal_Int32 nRowPos = 1;
-    ::std::map<sal_Int32,sal_Int32>::const_iterator aIter = m_aBookmarkToPos.begin();
-    for(;aIter != aFind;++aIter,++nRowPos)
-        ;
-    return nRowPos;
+    return aFind->second;
+//  ::std::map<sal_Int32,sal_Int32>::const_iterator aIter = m_aBookmarkToPos.begin();
+//  for(;aIter != aFind;++aIter,++nRowPos)
+//      ;
+//  return nRowPos;
 }
 // -------------------------------------------------------------------------
 
@@ -1216,10 +1216,6 @@ again:
                 !m_pSQLAnalyzer->evaluateRestriction()))         // Auswerten der Bedingungen
         {                                                // naechsten Satz auswerten
             // aktuelle Zeile loeschen im Keyset
-            OSL_ENSURE(!m_pFileSet ||
-                       //   !m_pFileSet->IsFrozen() ||
-                        eCursorPosition == OFileTable::FILE_NEXT, "Falsche CursorPosition!");
-
             if (m_pEvaluationKeySet)
             {
                 ++m_aEvaluateIter;
@@ -1334,7 +1330,7 @@ BOOL OResultSet::Move(OFileTable::FilePosition eCursorPosition, INT32 nOffset, B
             ExecuteRow(eCursorPosition,nOffset,TRUE,FALSE,bRetrieveData);
 
             // now set the bookmark for outside
-            (*m_aRow->begin()) = sal_Int32(m_nRowPos + 1);
+            //  (*m_aRow->begin()) = sal_Int32(m_nRowPos + 1);
         }
         else
         {
@@ -1382,7 +1378,7 @@ BOOL OResultSet::Move(OFileTable::FilePosition eCursorPosition, INT32 nOffset, B
                     ExecuteRow(OFileTable::FILE_BOOKMARK,(*m_pFileSet)[m_nRowPos],TRUE,FALSE,bRetrieveData);
 
                     // now set the bookmark for outside
-                    (*m_aRow->begin()) = sal_Int32(m_nRowPos + 1);
+                    //  (*m_aRow->begin()) = sal_Int32(m_nRowPos + 1);
                 }
                 else // Index muß weiter aufgebaut werden
                 {
@@ -1565,6 +1561,8 @@ BOOL OResultSet::SkipDeleted(OFileTable::FilePosition eCursorPosition, INT32 nOf
         if(m_aBookmarkToPos.empty())
         {
             bDataFound = Move(OFileTable::FILE_FIRST, 1, bRetrieveData);
+            if(bDataFound && !m_aRow->isDeleted())
+                m_aBookmarkToPos[(sal_Int32)(*m_aRow)[0]] = nCurPos;
         }
         else
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DIndex.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 10:09:03 $
+ *  last change: $Author: oj $ $Date: 2001-05-08 13:23:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,6 @@ namespace connectivity
 
             ODbaseTable*    m_pTable;
             BOOL            m_bUseCollector : 1;                        // Verwenden des GarbageCollectors
-            sal_Bool        m_bUnique;
 
             ::rtl::OUString getCompletePath();
             void closeImpl();
@@ -183,7 +182,7 @@ namespace connectivity
             void Collect(ONDXPage*);
             ONDXPagePtr getRoot();
 
-            sal_Bool isUnique() const { return m_bUnique; }
+            sal_Bool isUnique() const { return m_IsUnique; }
             BOOL UseCollector() const {return m_bUseCollector;}
             // Tree operationen
             void Insert(ONDXPagePtr aCurPage, ONDXNode& rNode);

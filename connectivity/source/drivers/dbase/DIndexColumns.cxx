@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DIndexColumns.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:17:57 $
+ *  last change: $Author: oj $ $Date: 2001-05-08 13:23:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,8 +87,12 @@ Reference< XNamed > ODbaseIndexColumns::createObject(const ::rtl::OUString& _rNa
     const ODbaseTable* pTable = m_pIndex->getTable();
 
     ::vos::ORef<OSQLColumns> aCols = pTable->getTableColumns();
+    OSQLColumns::const_iterator aIter = find(aCols->begin(),aCols->end(),_rName,::comphelper::UStringMixEqual(isCaseSensitive()));
 
-    Reference< XPropertySet > xCol(*find(aCols->begin(),aCols->end(),_rName,::comphelper::UStringMixEqual(isCaseSensitive())));
+    Reference< XPropertySet > xCol;
+    if(aIter != aCols->end())
+        xCol = *aIter;
+
     if(!xCol.is())
         return Reference< XNamed >();
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fanalyzer.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-07 10:37:52 $
+ *  last change: $Author: oj $ $Date: 2001-05-08 13:26:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,13 +193,12 @@ void OSQLAnalyzer::start(OSQLParseNode* pSQLParseNode)
                     pEvaluateSet = pAttr->preProcess(PTR_CAST(OBoolOperator,pCode1));
             }
 
-            pAttr->bindValue(_pRow);
-
             if (pEvaluateSet)
             {
                 aEvaluateSetList.push_back(pEvaluateSet);
                 pEvaluateSet = NULL;
             }
+            pAttr->bindValue(_pRow);
         }
     }
 
@@ -260,12 +259,13 @@ void OSQLAnalyzer::describeParam(::vos::ORef<OSQLColumns> rParameterColumns)
     // Anlegen von Columns, die eine genauere Beschreibung für die enthalten
     ::vos::ORef<OSQLColumns> aNewParamColumns = new OSQLColumns(*rParameterColumns);
 
-    // Anlegen einer Testzeile, wird benötigt um die Parameter zu beschreiben
-    OValueRow aTestRow = new OValueVector(Reference< XIndexAccess>(m_aCompiler.getOrigColumns(),UNO_QUERY)->getCount());
-    bindResultRow(aTestRow);                    // Binden der Attribute an die Values
 
+    // Anlegen einer Testzeile, wird benötigt um die Parameter zu beschreiben
     OValueRow aParameterRow  = new OValueVector(rParameterColumns->size());
     bindParameterRow(aParameterRow);
+
+    OValueRow aTestRow = new OValueVector(Reference< XIndexAccess>(m_aCompiler.getOrigColumns(),UNO_QUERY)->getCount());
+    delete bindResultRow(aTestRow);                 // Binden der Attribute an die Values
 
     for(OCodeList::iterator aIter = rCodeList.begin(); aIter != rCodeList.end(); ++aIter)
     {

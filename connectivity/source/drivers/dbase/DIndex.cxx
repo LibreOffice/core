@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DIndex.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-07 12:22:11 $
+ *  last change: $Author: oj $ $Date: 2001-05-08 13:23:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,9 @@
 #ifndef _COM_SUN_STAR_SDBC_XRESULTSET_HPP_
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDBCX_XROWLOCATE_HPP_
+#include <com/sun/star/sdbcx/XRowLocate.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
 #include <com/sun/star/sdbc/XRow.hpp>
 #endif
@@ -140,6 +143,7 @@ using namespace connectivity::file;
 using namespace connectivity::sdbcx;
 using namespace connectivity::dbase;
 using namespace com::sun::star::sdbc;
+using namespace com::sun::star::sdbcx;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::ucb;
@@ -150,10 +154,9 @@ IMPLEMENT_SERVICE_INFO(ODbaseIndex,"com.sun.star.sdbcx.driver.dbase.Index","com.
 ODbaseIndex::ODbaseIndex(ODbaseTable* _pTable) : OIndex(_pTable->getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers())
     , m_pTable(_pTable)
     ,m_pFileStream(NULL)
-    ,m_bUnique(sal_False)
     ,m_nCurNode(NODE_NOTFOUND)
 {
-    m_aHeader.db_maxkeys = m_aHeader.db_maxkeys = m_aHeader.db_keylen = m_aHeader.db_pagecount = m_aHeader.db_rootpage = 0;
+    m_aHeader.db_pagecount = m_aHeader.db_rootpage = m_aHeader.db_keytype = m_aHeader.db_maxkeys = m_aHeader.db_keylen = 0;
     m_aHeader.db_name[0] = '\0';
     construct();
 }
@@ -165,7 +168,6 @@ ODbaseIndex::ODbaseIndex(   ODbaseTable* _pTable,
     , m_aHeader(_rHeader)
     , m_pTable(_pTable)
     ,m_pFileStream(NULL)
-    ,m_bUnique(sal_False)
     ,m_nCurNode(NODE_NOTFOUND)
 {
     construct();
@@ -369,7 +371,7 @@ void ODbaseIndex::Collect(ONDXPage* pPage)
     OSL_ENSURE(m_pFileStream,"FileStream is not opened!");
     if (pPage)
     {
-        pPage->acquire();
+        //  pPage->acquire();
         m_aCollector.push_back(pPage);
     }
 }
@@ -598,6 +600,7 @@ BOOL ODbaseIndex::CreateImpl()
 
     m_pFileStream->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
     m_pFileStream->SetBufferSize(512);
+    m_pFileStream->SetFiller('\0');
 
     // Zun‰chst muﬂ das Ergebnis sortiert sein
     Reference<XStatement> xStmt;
@@ -684,14 +687,15 @@ BOOL ODbaseIndex::CreateImpl()
     m_bUseCollector = TRUE;
 
     //  ULONG nRowsLeft = pCursor->RowCount();
+    sal_Int32 nRowsLeft = 0;
     Reference<XRow> xRow(xSet,UNO_QUERY);
 
     if(xSet->last())
     {
-        sal_Int32 nRowsLeft = xSet->getRow();
-        xSet->beforeFirst();
-        sal_Int32 nPos = 0;
+        Reference<XRowLocate> xRowLocate(xSet,UNO_QUERY);
+        nRowsLeft = xSet->getRow();
 
+        xSet->beforeFirst();
         ONDXKey aKey(ORowSetValue(), nType, 0);
         ONDXKey aInsertKey(ORowSetValue(), nType, 0);
         // Erzeugen der Indexstruktur
@@ -705,6 +709,8 @@ BOOL ODbaseIndex::CreateImpl()
                 aKey.setValue(aValue);
                 if (aKey == (*m_aCurLeaf)[m_nCurNode].GetKey())
                 {
+                    ::comphelper::disposeComponent(xSet);
+                    ::comphelper::disposeComponent(xStmt);
                     closeImpl();
                     if(UCBContentHelper::Exists(sFile))
                         UCBContentHelper::Kill(sFile);
@@ -712,22 +718,24 @@ BOOL ODbaseIndex::CreateImpl()
                 }
             }
             aInsertKey.setValue(aValue);
-            aInsertKey.setRecord(++nPos);
+            aInsertKey.setRecord(::comphelper::getINT32(xRowLocate->getBookmark()));
 
             ONDXNode aNewNode(aInsertKey);
             if (!m_aCurLeaf->Insert(aNewNode, --nRowsLeft))
                 break;
-
-    #ifdef DEBUG
-            //DBG_TRACE1("SDB: %s", (const char*)pCursor->Variable(1)->GetString());
-            //      PrintTree();
-    #endif
         }
     }
     xRow = NULL;
     ::comphelper::disposeComponent(xSet);
     ::comphelper::disposeComponent(xStmt);
 
+    if(nRowsLeft)
+    {
+        closeImpl();
+        if(UCBContentHelper::Exists(sFile))
+            UCBContentHelper::Kill(sFile);
+        throw SQLException(::rtl::OUString::createFromAscii("Could not create index!"),*this,SQLSTATE_SEQUENCE,1000,Any());
+    }
     Release();
     createINFEntry();
     return sal_True;

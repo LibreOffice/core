@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DIndexIter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 10:11:27 $
+ *  last change: $Author: oj $ $Date: 2001-05-08 13:23:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,9 +106,9 @@ ULONG OIndexIterator::Find(BOOL bFirst)
         // Vorbereitung , auf kleinstes Element positionieren
         if (bFirst)
         {
-            ONDXPage* pPage = m_aRoot.getBodyPtr();
+            ONDXPage* pPage = m_aRoot;
             while (pPage && !pPage->IsLeaf())
-                pPage = pPage->GetChild(m_pIndex).getBodyPtr();
+                pPage = pPage->GetChild(m_pIndex);
 
             m_aCurLeaf = pPage;
             m_nCurNode = NODE_NOTFOUND;
@@ -157,7 +157,7 @@ ONDXKey* OIndexIterator::GetFirstKey(ONDXPage* pPage, const OOperand& rKey)
         // weiter absteigen
         ONDXPagePtr aPage = (i==0) ? pPage->GetChild(m_pIndex)
                                      : ((*pPage)[i-1]).GetChild(m_pIndex, pPage);
-        pFoundKey = aPage.Is() ? GetFirstKey(aPage.getBodyPtr(), rKey) : NULL;
+        pFoundKey = aPage.Is() ? GetFirstKey(aPage, rKey) : NULL;
     }
     else if (i == pPage->Count())
     {
@@ -185,14 +185,14 @@ ULONG OIndexIterator::GetCompare(BOOL bFirst)
     if (bFirst)
     {
         // Vorbereitung , auf kleinstes Element positionieren
-        ONDXPage* pPage = m_aRoot.getBodyPtr();
+        ONDXPage* pPage = m_aRoot;
         switch (ePredicateType)
         {
             case SQL_PRED_NOTEQUAL:
             case SQL_PRED_LESS:
             case SQL_PRED_LESSOREQUAL:
                 while (pPage && !pPage->IsLeaf())
-                    pPage = pPage->GetChild(m_pIndex).getBodyPtr();
+                    pPage = pPage->GetChild(m_pIndex);
 
                 m_aCurLeaf = pPage;
                 m_nCurNode = NODE_NOTFOUND;
@@ -212,10 +212,10 @@ ULONG OIndexIterator::GetCompare(BOOL bFirst)
                 break;
             case SQL_PRED_GREATEROREQUAL:
             case SQL_PRED_EQUAL:
-                pKey = GetFirstKey(m_aRoot.getBodyPtr(),*m_pOperand);
+                pKey = GetFirstKey(m_aRoot,*m_pOperand);
                 break;
             case SQL_PRED_GREATER:
-                if (!(pKey = GetFirstKey(m_aRoot.getBodyPtr(),*m_pOperand)))
+                if (!(pKey = GetFirstKey(m_aRoot,*m_pOperand)))
                     while ((pKey = GetNextKey()) && !m_pOperator->operate(pKey,m_pOperand));
         }
     }
@@ -251,10 +251,10 @@ ULONG OIndexIterator::GetLike(BOOL bFirst)
     //  ONDXIndex* m_pIndex = GetNDXIndex();
     if (bFirst)
     {
-        ONDXPage* pPage = m_aRoot.getBodyPtr();
+        ONDXPage* pPage = m_aRoot;
 
         while (pPage && !pPage->IsLeaf())
-            pPage = pPage->GetChild(m_pIndex).getBodyPtr();
+            pPage = pPage->GetChild(m_pIndex);
 
         m_aCurLeaf = pPage;
         m_nCurNode = NODE_NOTFOUND;
@@ -272,9 +272,9 @@ ULONG OIndexIterator::GetNull(BOOL bFirst)
     //  ONDXIndex* m_pIndex = GetNDXIndex();
     if (bFirst)
     {
-        ONDXPage* pPage = m_aRoot.getBodyPtr();
+        ONDXPage* pPage = m_aRoot;
         while (pPage && !pPage->IsLeaf())
-            pPage = pPage->GetChild(m_pIndex).getBodyPtr();
+            pPage = pPage->GetChild(m_pIndex);
 
         m_aCurLeaf = pPage;
         m_nCurNode = NODE_NOTFOUND;
@@ -315,17 +315,17 @@ ONDXKey* OIndexIterator::GetNextKey()
     //  ONDXIndex* m_pIndex = GetNDXIndex();
     if (m_aCurLeaf.Is() && ((++m_nCurNode) >= m_aCurLeaf->Count()))
     {
-        ONDXPage* pPage = m_aCurLeaf.getBodyPtr();
+        ONDXPage* pPage = m_aCurLeaf;
         // naechste Seite suchen
         while (pPage)
         {
-            ONDXPage* pParentPage = pPage->GetParent().getBodyPtr();
+            ONDXPage* pParentPage = pPage->GetParent();
             if (pParentPage)
             {
                 USHORT nPos = pParentPage->Search(pPage);
                 if (nPos != pParentPage->Count() - 1)
                 {   // Seite gefunden
-                    pPage = (*pParentPage)[nPos+1].GetChild(m_pIndex,pParentPage).getBodyPtr();
+                    pPage = (*pParentPage)[nPos+1].GetChild(m_pIndex,pParentPage);
                     break;
                 }
             }
@@ -334,7 +334,7 @@ ONDXKey* OIndexIterator::GetNextKey()
 
         // jetzt wieder zum Blatt
         while (pPage && !pPage->IsLeaf())
-            pPage = pPage->GetChild(m_pIndex).getBodyPtr();
+            pPage = pPage->GetChild(m_pIndex);
 
         m_aCurLeaf = pPage;
         m_nCurNode = 0;

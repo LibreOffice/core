@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dindexnode.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-07 12:22:11 $
+ *  last change: $Author: oj $ $Date: 2001-05-08 13:23:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,26 +122,18 @@ ONDXPage::ONDXPage(ODbaseIndex& rInd, sal_uInt32 nPos, ONDXPage* pParent)
            ,nCount(0)
            ,bModified(FALSE)
            ,ppNodes(NULL)
-           ,m_refCount(0)
+           ,aParent(pParent)
 {
     sal_uInt16 nT = rIndex.getHeader().db_maxkeys;
     ppNodes = new ONDXNode[nT];
-    aParent = new ONDXPagePtr(pParent);
-    aChild = new ONDXPagePtr();
 }
 
 //------------------------------------------------------------------
 ONDXPage::~ONDXPage()
 {
     delete[] ppNodes;
-    delete aParent;
-    delete aChild;
-}
-// -------------------------------------------------------------------------
-void ONDXPage::release()
-{
-    if (! osl_decrementInterlockedCount( &m_refCount ))
-        QueryDelete();
+    //  delete aParent;
+    //  delete aChild;
 }
 //------------------------------------------------------------------
 void ONDXPage::QueryDelete()
@@ -153,8 +145,8 @@ void ONDXPage::QueryDelete()
     bModified = FALSE;
     if (rIndex.UseCollector())
     {
-        if ((*aChild).Is())
-            (*aChild)->Release(FALSE);
+        if (aChild.Is())
+            aChild->Release(FALSE);
 
         for (USHORT i = 0; i < rIndex.getHeader().db_maxkeys;i++)
         {
@@ -163,25 +155,23 @@ void ONDXPage::QueryDelete()
 
             ppNodes[i] = ONDXNode();
         }
-        //  RestoreNoDelete();
+        RestoreNoDelete();
 
         nCount = 0;
-        (*aParent).Clear();
+        aParent.Clear();
         rIndex.Collect(this);
     }
     else
-        delete this;
-//  else
-//      SvRefBase::QueryDelete();
+        SvRefBase::QueryDelete();
 }
 //------------------------------------------------------------------
 ONDXPagePtr& ONDXPage::GetChild(ODbaseIndex* pIndex)
 {
-    if (!(*aChild).Is() && pIndex)
+    if (!aChild.Is() && pIndex)
     {
-        (*aChild) = rIndex.CreatePage((*aChild).GetPagePos(),this,(*aChild).HasPage());
+        aChild = rIndex.CreatePage(aChild.GetPagePos(),this,aChild.HasPage());
     }
-    return (*aChild);
+    return aChild;
 }
 
 //------------------------------------------------------------------
@@ -250,7 +240,7 @@ BOOL ONDXPage::Insert(ONDXNode& rNode, sal_uInt32 nRowsLeft)
             {
 
                 // und damit habe ich im folgenden praktisch eine Node weniger
-                if (IsLeaf() && this == rIndex.m_aCurLeaf.getBodyPtr())
+                if (IsLeaf() && this == &rIndex.m_aCurLeaf)
                 {
                     // geht davon aus, dass der Knoten, auf dem die Bedingung (<=)
                     // zutrifft, als m_nCurNode gesetzt ist
@@ -293,7 +283,7 @@ BOOL ONDXPage::Insert(ONDXNode& rNode, sal_uInt32 nRowsLeft)
         }
 
         // neues blatt erzeugen und Seite aufteilen
-        ONDXPagePtr aNewPage = rIndex.CreatePage(nNewPagePos,(*aParent).getBodyPtr());
+        ONDXPagePtr aNewPage = rIndex.CreatePage(nNewPagePos,aParent);
         rIndex.SetPageCount(nNewPageCount);
 
         // wieviele Knoten weren noch eingefuegt
@@ -320,7 +310,7 @@ BOOL ONDXPage::Insert(ONDXNode& rNode, sal_uInt32 nRowsLeft)
         }
 
         aNewPage->Append(aSplitNode);
-        ONDXPagePtr aTempParent = (*aParent);
+        ONDXPagePtr aTempParent = aParent;
         if (IsLeaf())
         {
             rIndex.m_aCurLeaf = aNewPage;
@@ -408,25 +398,25 @@ void ONDXPage::Remove(USHORT nPos)
 void ONDXPage::Release(BOOL bSave)
 {
     // freigeben der Pages
-    if ((*aChild).Is())
-        (*aChild)->Release(bSave);
+    if (aChild.Is())
+        aChild->Release(bSave);
 
     // Pointer freigeben
-    (*aChild).Clear();
+    aChild.Clear();
 
     for (USHORT i = 0; i < rIndex.getHeader().db_maxkeys;i++)
     {
-        if (ppNodes[i].GetChild().isValid())
+        if (ppNodes[i].GetChild())
             ppNodes[i].GetChild()->Release(bSave);
 
         ppNodes[i].GetChild().Clear();
     }
-    (*aParent) = NULL;
+    aParent = NULL;
 }
 //------------------------------------------------------------------
 void ONDXPage::ReleaseFull(BOOL bSave)
 {
-    ONDXPagePtr aTempParent = (*aParent);
+    ONDXPagePtr aTempParent = aParent;
     Release(bSave);
 
     if (aTempParent.Is())
@@ -468,7 +458,7 @@ void ONDXPage::SearchAndReplace(const ONDXKey& rSearch,
     ONDXPage* pPage = this;
 
     while (pPage && (nPos = pPage->Search(rSearch)) == NODE_NOTFOUND)
-        pPage = pPage->aParent->getBodyPtr();
+        pPage = pPage->aParent;
 
     if (pPage)
     {
@@ -494,7 +484,7 @@ USHORT ONDXPage::Search(const ONDXPage* pPage)
 {
     USHORT i = 0xFFFF;
     while (++i < Count())
-        if (((*this)[i]).GetChild().getBodyPtr() == pPage)
+        if (((*this)[i]).GetChild() == pPage)
             break;
 
     // wenn nicht gefunden, dann wird davon ausgegangen, dass die Seite selbst
@@ -514,7 +504,7 @@ BOOL ONDXPage::Delete(USHORT nNodePos)
 
             // beim Parent muss nun der KeyValue ausgetauscht werden
             if (HasParent())
-                (*aParent)->SearchAndReplace(aNode.GetKey(),
+                aParent->SearchAndReplace(aNode.GetKey(),
                                           (*this)[nNodePos-1].GetKey());
         }
     }
@@ -526,53 +516,53 @@ BOOL ONDXPage::Delete(USHORT nNodePos)
     if (HasParent() && nCount < (rIndex.GetMaxNodes() / 2))
     {
         // Feststellen, welcher Knoten auf die Seite zeigt
-        USHORT nParentNodePos = (*aParent)->Search(this);
+        USHORT nParentNodePos = aParent->Search(this);
         // letzte Element auf Vaterseite
         // -> zusammenlegen mit vorletzter Seite
-        if (nParentNodePos == ((*aParent)->Count() - 1))
+        if (nParentNodePos == (aParent->Count() - 1))
         {
             if (!nParentNodePos)
             // zusammenlegen mit linken nachbarn
-                Merge(nParentNodePos,(*aParent)->GetChild(&rIndex));
+                Merge(nParentNodePos,aParent->GetChild(&rIndex));
             else
-                Merge(nParentNodePos,(*(*aParent))[nParentNodePos-1].GetChild(&rIndex,(*aParent).getBodyPtr()));
+                Merge(nParentNodePos,(*aParent)[nParentNodePos-1].GetChild(&rIndex,aParent));
         }
         // sonst Seite mit naechster Seite zusammenlegen
         else
         {
             // zusammenlegen mit rechten nachbarn
-            Merge(nParentNodePos + 1,((*(*aParent))[nParentNodePos + 1].GetChild(&rIndex,(*aParent).getBodyPtr())));
+            Merge(nParentNodePos + 1,((*aParent)[nParentNodePos + 1].GetChild(&rIndex,aParent)));
             nParentNodePos++;
         }
-        if (HasParent() && !(*(*aParent))[nParentNodePos].HasChild())
-            (*aParent)->Delete(nParentNodePos);
+        if (HasParent() && !(*aParent)[nParentNodePos].HasChild())
+            aParent->Delete(nParentNodePos);
 /*
         // letzte Element auf Vaterseite
         // -> zusammenlegen mit vorletzter Seite
-        if (nParentNodePos == ((*aParent)->Count() - 1))
+        if (nParentNodePos == (aParent->Count() - 1))
         {
             if (!nParentNodePos)
             // zusammenlegen mit linken nachbarn
-                Merge(nParentNodePos,(*aParent)->GetChild(&rIndex));
+                Merge(nParentNodePos,aParent->GetChild(&rIndex));
             else
-                Merge(nParentNodePos,(*(*aParent))[nParentNodePos-1].GetChild(&rIndex,(*aParent)));
+                Merge(nParentNodePos,(*aParent)[nParentNodePos-1].GetChild(&rIndex,aParent));
         }
         // sonst Seite mit naechster Seite zusammenlegen
         else if(nParentNodePos != NODE_NOTFOUND)
         {
             // zusammenlegen mit rechten nachbarn
-            Merge(nParentNodePos + 1,((*(*aParent))[nParentNodePos + 1].GetChild(&rIndex,(*aParent))));
+            Merge(nParentNodePos + 1,((*aParent)[nParentNodePos + 1].GetChild(&rIndex,aParent)));
             nParentNodePos++;
         }
         else // Sonderbehandlung
         {
-            // Page ist (*aChild) Page vom Parent => erste Page aus ppNodes an (*aChild) anhängen
-            Merge(0,(*(*aParent))[0].GetChild(&rIndex,(*aParent)));
+            // Page ist aChild Page vom Parent => erste Page aus ppNodes an aChild anhängen
+            Merge(0,(*aParent)[0].GetChild(&rIndex,aParent));
             nParentNodePos = 0;
         }
 
-        if (HasParent() && !(*(*aParent))[nParentNodePos].HasChild())
-            (*aParent)->Delete(nParentNodePos);
+        if (HasParent() && !(*aParent)[nParentNodePos].HasChild())
+            aParent->Delete(nParentNodePos);
 */
 
     }
@@ -610,7 +600,7 @@ ONDXNode ONDXPage::Split(ONDXPage& rPage)
         aResultNode = (*this)[nCount - 1];
 
         if (HasParent())
-            (*aParent)->SearchAndReplace(aLastNode.GetKey(),
+            aParent->SearchAndReplace(aLastNode.GetKey(),
                                       aResultNode.GetKey());
     }
     else
@@ -657,7 +647,7 @@ void ONDXPage::Merge(USHORT nParentNodePos, ONDXPagePtr xPage)
             USHORT nLastNode = bRight ? Count() - 1 : xPage->Count() - 1;
             if (bRight)
             {
-                DBG_ASSERT(xPage.getBodyPtr() != this,"xPage und THIS dürfen nicht gleich sein: Endlosschleife");
+                DBG_ASSERT(&xPage != this,"xPage und THIS dürfen nicht gleich sein: Endlosschleife");
                 // alle Knoten aus xPage auf den linken Knoten verschieben (anhängen)
                 while (xPage->Count())
                 {
@@ -667,7 +657,7 @@ void ONDXPage::Merge(USHORT nParentNodePos, ONDXPagePtr xPage)
             }
             else
             {
-                DBG_ASSERT(xPage.getBodyPtr() != this,"xPage und THIS dürfen nicht gleich sein: Endlosschleife");
+                DBG_ASSERT(&xPage != this,"xPage und THIS dürfen nicht gleich sein: Endlosschleife");
                 // xPage ist die linke Page und THIS die rechte
                 while (xPage->Count())
                 {
@@ -676,29 +666,29 @@ void ONDXPage::Merge(USHORT nParentNodePos, ONDXPagePtr xPage)
                 }
                 // alte Position von xPage beim Parent mit this ersetzen
                 if (nParentNodePos)
-                    (*(*aParent))[nParentNodePos-1].SetChild(this,(*aParent).getBodyPtr());
+                    (*aParent)[nParentNodePos-1].SetChild(this,aParent);
                 else // oder als rechten Knoten setzen
-                    (*aParent)->SetChild(this);
-                (*aParent)->SetModified(TRUE);
+                    aParent->SetChild(this);
+                aParent->SetModified(TRUE);
 
             }
 
             // Child beziehung beim Vaterknoten aufheben
-            (*(*aParent))[nParentNodePos].SetChild();
+            (*aParent)[nParentNodePos].SetChild();
             // Austauschen des KnotenWertes, nur wenn geaenderte Page
             // die linke ist, ansonsten werde
 
-            if((*aParent)->IsRoot() && (*aParent)->Count() == 1)
+            if(aParent->IsRoot() && aParent->Count() == 1)
             {
-                (*(*aParent))[0].SetChild();
-                (*aParent)->ReleaseFull();
-                (*aParent) = NULL;
+                (*aParent)[0].SetChild();
+                aParent->ReleaseFull();
+                aParent = NULL;
                 rIndex.SetRootPos(nPagePos);
                 rIndex.m_aRoot = this;
                 SetModified(TRUE);
             }
             else
-                (*aParent)->SearchAndReplace((*this)[nLastNode].GetKey(),(*this)[nCount-1].GetKey());
+                aParent->SearchAndReplace((*this)[nLastNode].GetKey(),(*this)[nCount-1].GetKey());
 
             xPage->SetModified(FALSE);
             xPage->ReleaseFull(); // wird nicht mehr benoetigt
@@ -716,7 +706,7 @@ void ONDXPage::Merge(USHORT nParentNodePos, ONDXPagePtr xPage)
                     xPage->Remove(0);
                 }
                 // Austauschen des KnotenWertes: Setzt alten letzten Wert durch den letzten von xPage
-                (*aParent)->SearchAndReplace(aReplaceNode.GetKey(),(*this)[nCount-1].GetKey());
+                aParent->SearchAndReplace(aReplaceNode.GetKey(),(*this)[nCount-1].GetKey());
             }
             else
             {
@@ -728,7 +718,7 @@ void ONDXPage::Merge(USHORT nParentNodePos, ONDXPagePtr xPage)
                     Remove(nCount-1);
                 }
                 // Austauschen des KnotenWertes
-                (*aParent)->SearchAndReplace(aReplaceNode.GetKey(),(*this)[Count()-1].GetKey());
+                aParent->SearchAndReplace(aReplaceNode.GetKey(),(*this)[Count()-1].GetKey());
             }
         }
     }
@@ -739,21 +729,21 @@ void ONDXPage::Merge(USHORT nParentNodePos, ONDXPagePtr xPage)
         {
             if (bRight)
             {
-                DBG_ASSERT(xPage.getBodyPtr() != this,"xPage und THIS dürfen nicht gleich sein: Endlosschleife");
+                DBG_ASSERT(&xPage != this,"xPage und THIS dürfen nicht gleich sein: Endlosschleife");
                 // Vaterknoten wird mit integriert
                 // erhaelt zunaechst Child von xPage
-                (*(*aParent))[nParentNodePos].SetChild(xPage->GetChild(),(*aParent).getBodyPtr());
-                Append((*(*aParent))[nParentNodePos]);
+                (*aParent)[nParentNodePos].SetChild(xPage->GetChild(),aParent);
+                Append((*aParent)[nParentNodePos]);
                 for (USHORT i = 0 ; i < xPage->Count(); i++)
                     Append((*xPage)[i]);
             }
             else
             {
-                DBG_ASSERT(xPage.getBodyPtr() != this,"xPage und THIS dürfen nicht gleich sein: Endlosschleife");
+                DBG_ASSERT(&xPage != this,"xPage und THIS dürfen nicht gleich sein: Endlosschleife");
                 // Vaterknoten wird mit integriert
                 // erhaelt zunaechst Child
-                (*(*aParent))[nParentNodePos].SetChild(GetChild(),(*aParent).getBodyPtr()); // Parent merkt sich mein Child
-                Insert(0,(*(*aParent))[nParentNodePos]); // Node vom Parent bei mir einfügen
+                (*aParent)[nParentNodePos].SetChild(GetChild(),aParent); // Parent merkt sich mein Child
+                Insert(0,(*aParent)[nParentNodePos]); // Node vom Parent bei mir einfügen
                 while (xPage->Count())
                 {
                     Insert(0,(*xPage)[xPage->Count()-1]);
@@ -762,20 +752,20 @@ void ONDXPage::Merge(USHORT nParentNodePos, ONDXPagePtr xPage)
                 SetChild(xPage->GetChild());
 
                 if (nParentNodePos)
-                    (*(*aParent))[nParentNodePos-1].SetChild(this,(*aParent).getBodyPtr());
+                    (*aParent)[nParentNodePos-1].SetChild(this,aParent);
                 else
-                    (*aParent)->SetChild(this);
+                    aParent->SetChild(this);
             }
 
             // danach wird der Vaterknoten zurueckgesetzt
-            (*(*aParent))[nParentNodePos].SetChild();
-            (*aParent)->SetModified(TRUE);
+            (*aParent)[nParentNodePos].SetChild();
+            aParent->SetModified(TRUE);
 
-            if((*aParent)->IsRoot() && (*aParent)->Count() == 1)
+            if(aParent->IsRoot() && aParent->Count() == 1)
             {
-                (*(*aParent)).SetChild();
-                (*aParent)->ReleaseFull();
-                (*aParent) = NULL;
+                (*aParent).SetChild();
+                aParent->ReleaseFull();
+                aParent = NULL;
                 rIndex.SetRootPos(nPagePos);
                 rIndex.m_aRoot = this;
                 SetModified(TRUE);
@@ -784,7 +774,7 @@ void ONDXPage::Merge(USHORT nParentNodePos, ONDXPagePtr xPage)
                 // Austauschen des KnotenWertes
                 // beim Append wird der Bereich erweitert, beim INsert verweist der alte Knoten von xPage auf this
                 // deshalb muß der Knoten auch hier aktualisiert werden
-                (*aParent)->SearchAndReplace((*(*aParent))[nParentNodePos-1].GetKey(),(*(*aParent))[nParentNodePos].GetKey());
+                aParent->SearchAndReplace((*aParent)[nParentNodePos-1].GetKey(),(*aParent)[nParentNodePos].GetKey());
 
             xPage->SetModified(FALSE);
             xPage->ReleaseFull();
@@ -796,28 +786,28 @@ void ONDXPage::Merge(USHORT nParentNodePos, ONDXPagePtr xPage)
             {
                 while (nCount < nMaxNodes_2)
                 {
-                    (*(*aParent))[nParentNodePos].SetChild(xPage->GetChild(),(*aParent).getBodyPtr());
-                    Append((*(*aParent))[nParentNodePos]);
-                    (*(*aParent))[nParentNodePos] = (*xPage)[0];
+                    (*aParent)[nParentNodePos].SetChild(xPage->GetChild(),aParent);
+                    Append((*aParent)[nParentNodePos]);
+                    (*aParent)[nParentNodePos] = (*xPage)[0];
                     xPage->Remove(0);
                 }
-                xPage->SetChild((*(*aParent))[nParentNodePos].GetChild());
-                (*(*aParent))[nParentNodePos].SetChild(xPage,(*aParent).getBodyPtr());
+                xPage->SetChild((*aParent)[nParentNodePos].GetChild());
+                (*aParent)[nParentNodePos].SetChild(xPage,aParent);
             }
             else
             {
                 while (nCount < nMaxNodes_2)
                 {
-                    (*(*aParent))[nParentNodePos].SetChild(GetChild(),(*aParent).getBodyPtr());
-                    Insert(0,(*(*aParent))[nParentNodePos]);
-                    (*(*aParent))[nParentNodePos] = (*xPage)[xPage->Count()-1];
+                    (*aParent)[nParentNodePos].SetChild(GetChild(),aParent);
+                    Insert(0,(*aParent)[nParentNodePos]);
+                    (*aParent)[nParentNodePos] = (*xPage)[xPage->Count()-1];
                     xPage->Remove(xPage->Count()-1);
                 }
-                SetChild((*(*aParent))[nParentNodePos].GetChild());
-                (*(*aParent))[nParentNodePos].SetChild(this,(*aParent).getBodyPtr());
+                SetChild((*aParent)[nParentNodePos].GetChild());
+                (*aParent)[nParentNodePos].SetChild(this,aParent);
 
             }
-            (*aParent)->SetModified(TRUE);
+            aParent->SetModified(TRUE);
         }
     }
 }
@@ -832,7 +822,7 @@ BOOL ONDXPage::IsFull() const
 void ONDXPage::PrintPage()
 {
     DBG_TRACE4("\nSDB: -----------Page: %d  Parent: %d  Count: %d  Child: %d-----",
-        nPagePos, HasParent() ? (*aParent)->GetPagePos() : 0 ,nCount, (*aChild).GetPagePos());
+        nPagePos, HasParent() ? aParent->GetPagePos() : 0 ,nCount, aChild.GetPagePos());
 
     for (USHORT i = 0; i < nCount; i++)
     {
@@ -874,7 +864,7 @@ static UINT32 nValue;
 SvStream& connectivity::dbase::operator >> (SvStream &rStream, ONDXPage& rPage)
 {
     rStream.Seek(rPage.GetPagePos() * 512);
-    rStream >> nValue >> (*rPage.aChild);
+    rStream >> nValue >> rPage.aChild;
     rPage.nCount = USHORT(nValue);
 
 //  DBG_ASSERT(rPage.nCount && rPage.nCount < rPage.GetIndex().GetMaxNodes(), "Falscher Count");
@@ -887,15 +877,37 @@ SvStream& connectivity::dbase::operator >> (SvStream &rStream, ONDXPage& rPage)
 SvStream& connectivity::dbase::operator << (SvStream &rStream, const ONDXPage& rPage)
 {
     // Seite existiert noch nicht
-    if ((rPage.GetPagePos() + 1) * 512 > rStream.Seek(STREAM_SEEK_TO_END))
-        rStream.SetStreamSize((rPage.GetPagePos() + 1) * 512);
-    rStream.Seek(rPage.GetPagePos() * 512);
+    ULONG nSize = (rPage.GetPagePos() + 1) * 512;
+    if (nSize > rStream.Seek(STREAM_SEEK_TO_END))
+    {
+        rStream.SetStreamSize(nSize);
+        rStream.Seek(rPage.GetPagePos() * 512);
+
+        char aEmptyData[512];
+        memset(aEmptyData,0x00,512);
+        rStream.Write((BYTE*)aEmptyData,512);
+    }
+    ULONG nCurrentPos = rStream.Seek(rPage.GetPagePos() * 512);
 
     nValue = rPage.nCount;
-    rStream << nValue << (*rPage.aChild);
+    rStream << nValue << rPage.aChild;
 
-    for (USHORT i = 0; i < rPage.nCount; i++)
+    USHORT i = 0;
+    for (; i < rPage.nCount; i++)
         rPage[i].Write(rStream, rPage);
+
+    // check if we have to fill the stream with '\0'
+    if(i < rPage.rIndex.getHeader().db_maxkeys)
+    {
+        ULONG nTell = rStream.Tell() % 512;
+        USHORT nBufferSize = rStream.GetBufferSize();
+        ULONG nSize = nBufferSize - nTell;
+        char* pEmptyData = new char[nSize];
+        memset(pEmptyData,0x00,nSize);
+        rStream.Write((BYTE*)pEmptyData,nSize);
+        rStream.Seek(nTell);
+        delete pEmptyData;
+    }
     return rStream;
 }
 
@@ -906,7 +918,7 @@ SvStream& connectivity::dbase::operator << (SvStream &rStream, const ONDXPage& r
 //------------------------------------------------------------------
 void ONDXNode::Read(SvStream &rStream, ODbaseIndex& rIndex)
 {
-    rStream >> aKey.nRecord; // schluessel
+    rStream >> (sal_uInt32)aKey.nRecord; // schluessel
     if (rIndex.getHeader().db_keytype)
     {
         double aDbl;
@@ -940,7 +952,7 @@ void ONDXNode::Write(SvStream &rStream, const ONDXPage& rPage) const
 {
     const ODbaseIndex& rIndex = rPage.GetIndex();
     if (!rIndex.isUnique() || rPage.IsLeaf())
-        rStream << aKey.nRecord; // schluessel
+        rStream << (sal_uInt32)aKey.nRecord; // schluessel
     else
         rStream << (sal_uInt32)0;   // schluessel
 
@@ -1035,6 +1047,60 @@ void ONDXKey::setValue(const ORowSetValue& _rVal)
 const ORowSetValue& ONDXKey::getValue() const
 {
     return xValue;
+}
+// -----------------------------------------------------------------------------
+//namespace connectivity
+//{
+//  namespace dbase
+//  {
+//  SV_IMPL_REF(ONDXPage);
+//  }
+//}
+//==================================================================
+// ONDXPagePtr
+//==================================================================
+//------------------------------------------------------------------
+SvStream& connectivity::dbase::operator >> (SvStream &rStream, ONDXPagePtr& rPage)
+{
+    rStream >> rPage.nPagePos;
+    return rStream;
+}
+
+//------------------------------------------------------------------
+SvStream& connectivity::dbase::operator << (SvStream &rStream, const ONDXPagePtr& rPage)
+{
+    rStream << rPage.nPagePos;
+    return rStream;
+}
+//------------------------------------------------------------------
+ONDXPagePtr::ONDXPagePtr(const ONDXPagePtr& rRef)
+              :ONDXPageRef(rRef)
+              ,nPagePos(rRef.nPagePos)
+{
+}
+
+//------------------------------------------------------------------
+ONDXPagePtr::ONDXPagePtr(ONDXPage* pRefPage)
+              :ONDXPageRef(pRefPage)
+              ,nPagePos(0)
+{
+    if (pRefPage)
+        nPagePos = pRefPage->GetPagePos();
+}
+//------------------------------------------------------------------
+ONDXPagePtr& ONDXPagePtr::operator=(const ONDXPagePtr& rRef)
+{
+    ONDXPageRef::operator=(rRef);
+    nPagePos = rRef.nPagePos;
+    return *this;
+}
+
+//------------------------------------------------------------------
+ONDXPagePtr& ONDXPagePtr::operator= (ONDXPage* pRef)
+{
+    ONDXPageRef::operator=(pRef);
+    nPagePos = (pRef) ? pRef->GetPagePos() : 0;
+    return *this;
 }
 // -----------------------------------------------------------------------------
 

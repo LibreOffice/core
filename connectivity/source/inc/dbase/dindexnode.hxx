@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dindexnode.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-07 12:23:42 $
+ *  last change: $Author: oj $ $Date: 2001-05-08 13:23:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #ifndef _CONNECTIVITY_FILE_VALUE_HXX_
 #include "FValue.hxx"
 #endif
+#ifndef _REF_HXX
+#include <tools/ref.hxx>
+#endif
 
 namespace connectivity
 {
@@ -126,11 +129,36 @@ namespace connectivity
 
         #define NODE_NOTFOUND 0xFFFF
 
-        class ONDXPagePtr;
+
+        //==================================================================
+        // Index Seitenverweis
+        //==================================================================
+        SV_DECL_REF(ONDXPage); // Basisklasse da weitere Informationen gehalten werden muessen
+
+
+        class ONDXPagePtr : public ONDXPageRef
+        {
+            friend  SvStream& operator << (SvStream &rStream, const ONDXPagePtr&);
+            friend  SvStream& operator >> (SvStream &rStream, ONDXPagePtr&);
+
+            UINT32  nPagePos;       // Position in der Indexdatei
+
+        public:
+            ONDXPagePtr(UINT32 nPos = 0):nPagePos(nPos){}
+            ONDXPagePtr(const ONDXPagePtr& rRef);
+            ONDXPagePtr(ONDXPage* pRefPage);
+
+            ONDXPagePtr& operator=(const ONDXPagePtr& rRef);
+            ONDXPagePtr& operator=(ONDXPage* pPageRef);
+
+            UINT32 GetPagePos() const {return nPagePos;}
+            BOOL HasPage() const {return nPagePos != 0;}
+            //  sal_Bool Is() const { return isValid(); }
+        };
         //==================================================================
         // Index Seite
         //==================================================================
-        class ONDXPage //: public SvRefBase
+        class ONDXPage : public SvRefBase
         {
             friend class ODbaseIndex;
 
@@ -141,20 +169,12 @@ namespace connectivity
             BOOL        bModified : 1;
             USHORT      nCount;
 
-            ONDXPagePtr *aParent,           // VaterSeite
-                    *aChild;                // Zeiger auf rechte ChildPage
+            ONDXPagePtr aParent,            // VaterSeite
+                        aChild;             // Zeiger auf rechte ChildPage
             ODbaseIndex& rIndex;
             ONDXNode*  ppNodes;             // array von Knoten
 
-            oslInterlockedCount         m_refCount;
-
         public:
-            void acquire()
-            {
-                osl_incrementInterlockedCount( &m_refCount );
-            }
-            void release();
-
             // Knoten Operationen
             USHORT  Count() const {return nCount;}
 
@@ -215,54 +235,28 @@ namespace connectivity
         #endif
         };
 
-        //==================================================================
-        // Index Seitenverweis
-        //==================================================================
-        //  SV_DECL_REF(ONDXPage); // Basisklasse da weitere Informationen gehalten werden muessen
-        typedef vos::ORef<ONDXPage>         ONDXPagePtr_BASE;
-
-        class ONDXPagePtr : public ONDXPagePtr_BASE //ONDXPageRef
-        {
-            friend  SvStream& operator << (SvStream &rStream, const ONDXPagePtr&);
-            friend  SvStream& operator >> (SvStream &rStream, ONDXPagePtr&);
-
-            UINT32  nPagePos;       // Position in der Indexdatei
-
-        public:
-            ONDXPagePtr(UINT32 nPos = 0):nPagePos(nPos){}
-            ONDXPagePtr(const ONDXPagePtr& rRef);
-            ONDXPagePtr(ONDXPage* pRefPage);
-
-            ONDXPagePtr& operator=(const ONDXPagePtr& rRef);
-            ONDXPagePtr& operator=(ONDXPage* pPageRef);
-
-            UINT32 GetPagePos() const {return nPagePos;}
-            BOOL HasPage() const {return nPagePos != 0;}
-            sal_Bool Is() const { return isValid(); }
-            void Clear()
-            {
-                unbind();
-            }
-        };
+        SV_IMPL_REF(ONDXPage);
 
         SvStream& operator << (SvStream &rStream, const ONDXPagePtr&);
         SvStream& operator >> (SvStream &rStream, ONDXPagePtr&);
 
-        inline BOOL ONDXPage::IsRoot() const {return !aParent->Is();}
-        inline BOOL ONDXPage::IsLeaf() const {return !aChild->HasPage();}
+        inline BOOL ONDXPage::IsRoot() const {return !aParent.Is();}
+        inline BOOL ONDXPage::IsLeaf() const {return !aChild.HasPage();}
         inline BOOL ONDXPage::IsModified() const {return bModified;}
-        inline BOOL ONDXPage::HasParent() {return aParent->Is();}
-        inline BOOL ONDXPage::HasChild() const {return aChild->HasPage();}
-        inline ONDXPagePtr ONDXPage::GetParent() {return *aParent;}
+        inline BOOL ONDXPage::HasParent() {return aParent.Is();}
+        inline BOOL ONDXPage::HasChild() const {return aChild.HasPage();}
+        inline ONDXPagePtr ONDXPage::GetParent() {return aParent;}
 
         inline void ONDXPage::SetParent(ONDXPagePtr aPa = ONDXPagePtr())
-        { *aParent = aPa;}
+        {
+            aParent = aPa;
+        }
 
         inline void ONDXPage::SetChild(ONDXPagePtr aCh = ONDXPagePtr())
         {
-            *aChild = aCh;
-            if (aChild->Is())
-                (*aChild)->SetParent(this);
+            aChild = aCh;
+            if (aChild.Is())
+                aChild->SetParent(this);
         }
         SvStream& operator >> (SvStream &rStream, ONDXPage& rPage);
         SvStream& operator << (SvStream &rStream, const ONDXPage& rPage);
