@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tracer.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dg $ $Date: 2001-02-13 09:48:02 $
+ *  last change: $Author: jb $ $Date: 2001-02-26 15:53:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,32 +83,68 @@ namespace configmgr
 #include <string.h>
 
 #include <osl/process.h>
+#include <osl/thread.h>
+#include <osl/diagnose.h>
 #include <rtl/ustring.hxx>
-
-#define INFO    1
-#define WARNING 2
-#define ERROR   4
-#define TIME    8
 
 namespace configmgr
 {
 
 struct OTracerSetup
 {
-    sal_Int32       s_nTraceMask;
-    sal_Int32       s_nIndentDepth;
-    FILE*           s_pOutputMedium;
-    sal_Bool        s_bInitialized;
+    enum {
+        INFO    = 0x01,
+        WARNING = 0x02,
+        ERROR   = 0x04,
+        LEVEL_MASK = 0x0f,
 
-    VirtualDevices  s_aDevices;
+        TIME    = 0x10,
+        THREAD  = 0x20,
+        DATA_MASK = 0xf0
+    };
+
+    sal_uInt32      m_nTraceMask;
+    FILE*           m_pOutputMedium;
+    sal_Bool        m_bInitialized;
+    oslThreadKey    m_nThreadKey;
+
+    VirtualDevices  m_aDevices;
 
     OTracerSetup()
-        :s_nTraceMask(INFO | WARNING | ERROR)
-        ,s_nIndentDepth(0)
-        ,s_pOutputMedium(NULL)
-        ,s_bInitialized(sal_False)
+        :m_nTraceMask(WARNING | ERROR)
+        ,m_pOutputMedium(NULL)
+        ,m_bInitialized(sal_False)
     {
+        m_nThreadKey = ::osl_createThreadKey(&freeThreadData);
     }
+    ~OTracerSetup()
+    {
+        ::osl_destroyThreadKey(m_nThreadKey);
+    }
+
+    bool isTracing(sal_uInt32 nTraceValue) const
+    { return (nTraceValue & this->m_nTraceMask) == nTraceValue; }
+
+    void setTracing(sal_uInt32 nTraceValue)
+    { this->m_nTraceMask |= nTraceValue; }
+
+    void setTracing(sal_uInt32 nTraceValue, sal_uInt32 nMask)
+    {
+        OSL_ENSURE( (nTraceValue&nMask) == nTraceValue, "Flags being set must be part of mask");
+        this->m_nTraceMask &= ~nMask;
+        this->m_nTraceMask |= nTraceValue;
+    }
+
+    sal_Int32& indentDepth();
+
+    struct ThreadData
+    {
+        ThreadData() : m_nIndentDepth(0) {}
+        sal_Int32  m_nIndentDepth;
+    };
+
+    ThreadData& ensureThreadData();
+    static void SAL_CALL freeThreadData(void*p);
 };
 
 //==========================================================================
@@ -136,6 +172,47 @@ sal_uInt32 OConfigTracer::getGlobalTimer()
 }
 
 //--------------------------------------------------------------------------
+sal_Int32& OTracerSetup::indentDepth()
+{
+    return ensureThreadData().m_nIndentDepth;
+}
+
+//--------------------------------------------------------------------------
+OTracerSetup::ThreadData& OTracerSetup::ensureThreadData()
+{
+    void * pThreadData = ::osl_getThreadKeyData(m_nThreadKey);
+
+    OTracerSetup::ThreadData* pRet
+        = static_cast< OTracerSetup::ThreadData * >(pThreadData);
+
+    if (pRet == NULL)
+    {
+        pThreadData = pRet = new ThreadData();
+
+        if (!::osl_setThreadKeyData(m_nThreadKey,pThreadData))
+        {
+            OSL_ENSURE(false, "Cannot create per-thread data for tracing");
+            freeThreadData(pThreadData);
+
+            static ThreadData sharedThreadData;
+            pRet = &sharedThreadData;
+        }
+        else
+            OSL_ASSERT( pThreadData == ::osl_getThreadKeyData(m_nThreadKey) );
+
+        OSL_ASSERT( pRet != NULL );
+    }
+
+    return *pRet;
+}
+
+//--------------------------------------------------------------------------
+void OTracerSetup::freeThreadData(void* p)
+{
+    delete static_cast< OTracerSetup::ThreadData * > (p);
+}
+
+//--------------------------------------------------------------------------
 void OConfigTracer::ensureData()
 {
     if (s_pImpl)
@@ -148,7 +225,7 @@ void OConfigTracer::inc()
 {
     ::osl::MutexGuard aGuard(s_aMutex);
     ensureData();
-    ++s_pImpl->s_nIndentDepth;
+    ++s_pImpl->indentDepth();
 }
 
 //--------------------------------------------------------------------------
@@ -156,7 +233,7 @@ void OConfigTracer::dec()
 {
     ::osl::MutexGuard aGuard(s_aMutex);
     ensureData();
-    --s_pImpl->s_nIndentDepth;
+    --s_pImpl->indentDepth();
 }
 
 //--------------------------------------------------------------------------
@@ -164,20 +241,13 @@ void OConfigTracer::traceInfo(const sal_Char* _pFormat, ...)
 {
     ::osl::MutexGuard aGuard(s_aMutex);
     ensureData();
-    if (s_pImpl->s_nTraceMask & INFO)
+    if (s_pImpl->isTracing(OTracerSetup::INFO) )
     {
 
 
         va_list args;
         va_start(args, _pFormat);
-        if (s_pImpl->s_nTraceMask & TIME)
-        {
-            static sal_Char szMessage[1024] = "";
-            sprintf(szMessage, "info (%06lu): ", getGlobalTimer());
-            implTrace(szMessage, _pFormat, args);
-        }
-        else
-            implTrace("info    : ", _pFormat, args);
+        implTrace("info", _pFormat, args);
         va_end(args);
     }
 }
@@ -187,11 +257,11 @@ void OConfigTracer::traceWarning(const sal_Char* _pFormat, ...)
 {
     ::osl::MutexGuard aGuard(s_aMutex);
     ensureData();
-    if (s_pImpl->s_nTraceMask & WARNING)
+    if (s_pImpl->isTracing(OTracerSetup::WARNING))
     {
         va_list args;
         va_start(args, _pFormat);
-        implTrace("warning : ", _pFormat, args);
+        implTrace("warning", _pFormat, args);
         va_end(args);
     }
 }
@@ -201,11 +271,11 @@ void OConfigTracer::traceError(const sal_Char* _pFormat, ...)
 {
     ::osl::MutexGuard aGuard(s_aMutex);
     ensureData();
-    if (s_pImpl->s_nTraceMask & ERROR)
+    if (s_pImpl->isTracing(OTracerSetup::ERROR))
     {
         va_list args;
         va_start(args, _pFormat);
-        implTrace("error   : ", _pFormat, args);
+        implTrace("error", _pFormat, args);
         va_end(args);
     }
 }
@@ -222,8 +292,9 @@ void OConfigTracer::trace(const sal_Char* _pFormat, ...)
 //--------------------------------------------------------------------------
 void OConfigTracer::indent()
 {
-    for (sal_Int32 i=0; i<s_pImpl->s_nIndentDepth; ++i)
-        fprintf(s_pImpl->s_pOutputMedium, " ");
+    sal_Int32 nIndent = s_pImpl->indentDepth();
+    for (sal_Int32 i=0; i<nIndent; ++i)
+        fprintf(s_pImpl->m_pOutputMedium, " ");
 }
 
 //--------------------------------------------------------------------------
@@ -255,10 +326,10 @@ FILE* disambiguate(const ::rtl::OString& _rFileName)
 //--------------------------------------------------------------------------
 void OConfigTracer::ensureInitalized()
 {
-    if (s_pImpl->s_bInitialized)
+    if (s_pImpl->m_bInitialized)
         return;
 
-    s_pImpl->s_bInitialized = sal_True;
+    s_pImpl->m_bInitialized = sal_True;
 
     char* pSettings = getenv("ENVCFGFLAGS");
     if (!pSettings)
@@ -269,11 +340,13 @@ void OConfigTracer::ensureInitalized()
         + valid switches are:
             -m[e|o|f<file>] -   output to stderr (e), stdout (o) or a file (f). In the latter case the whole rest
                                 of the param ('til the next one, means 'til the next whitespace) is the filename
-            -t{i,w,e}*      -   type of output : i includes infos, w includes warnings, e includes errors
+            -t{i,w,e,p,d}*  -   type of output : i includes infos, w includes warnings, e includes errors
+                                content : p includes timestamp, d includes thread-id
     */
 
-    s_pImpl->s_pOutputMedium = stderr;
-    s_pImpl->s_nTraceMask = 0;
+    s_pImpl->m_pOutputMedium = stderr;
+    s_pImpl->setTracing(0, OTracerSetup::LEVEL_MASK);
+    s_pImpl->setTracing(0, OTracerSetup::DATA_MASK);
 
     char* pParamLoop = pSettings;
     while (*pParamLoop)
@@ -295,10 +368,10 @@ void OConfigTracer::ensureInitalized()
                         switch (*pSettings)
                         {
                             case 'e':
-                                s_pImpl->s_pOutputMedium = stderr;
+                                s_pImpl->m_pOutputMedium = stderr;
                                 break;
                             case 'o':
-                                s_pImpl->s_pOutputMedium = stdout;
+                                s_pImpl->m_pOutputMedium = stdout;
                                 break;
                             case 'f':
                             {
@@ -307,7 +380,7 @@ void OConfigTracer::ensureInitalized()
                                 ::rtl::OString sFileName(pSettings, pParamLoop - pSettings);
 
                                 // open the file
-                                s_pImpl->s_pOutputMedium = disambiguate(sFileName);
+                                s_pImpl->m_pOutputMedium = disambiguate(sFileName);
 
                                 break;
                             }
@@ -328,7 +401,7 @@ void OConfigTracer::ensureInitalized()
 
                     FILE* pVirtualDevice = disambiguate(sFileName);
                     if (pVirtualDevice)
-                        s_pImpl->s_aDevices[sVirtualDeviceName] = pVirtualDevice;
+                        s_pImpl->m_aDevices[sVirtualDeviceName] = pVirtualDevice;
                 }
                 case 't':
                 {
@@ -337,12 +410,13 @@ void OConfigTracer::ensureInitalized()
                     {
                         switch (*pSettings)
                         {
-                            case 'i':   s_pImpl->s_nTraceMask |= INFO; break;
-                            case 'w':   s_pImpl->s_nTraceMask |= WARNING; break;
-                            case 'e':   s_pImpl->s_nTraceMask |= ERROR; break;
-                            case 'p':   s_pImpl->s_nTraceMask |= TIME;
+                            case 'i':   s_pImpl->setTracing( OTracerSetup::INFO ); break;
+                            case 'w':   s_pImpl->setTracing( OTracerSetup::WARNING ); break;
+                            case 'e':   s_pImpl->setTracing(  OTracerSetup::ERROR ); break;
+                            case 'p':   s_pImpl->setTracing(  OTracerSetup::TIME );
                                         startGlobalTimer();
                                         break;
+                            case 'd':   s_pImpl->setTracing(  OTracerSetup::THREAD ); break;
                         }
                         ++pSettings;
                     }
@@ -371,8 +445,8 @@ void OConfigTracer::traceToVirtualDevice(const sal_Char* _pDeviceName, const sal
     ensureData();
     ensureInitalized();
 
-    VirtualDevices::const_iterator aDeviceMediumPos = s_pImpl->s_aDevices.find(::rtl::OString(_pDeviceName));
-    if (aDeviceMediumPos != s_pImpl->s_aDevices.end())
+    VirtualDevices::const_iterator aDeviceMediumPos = s_pImpl->m_aDevices.find(::rtl::OString(_pDeviceName));
+    if (aDeviceMediumPos != s_pImpl->m_aDevices.end())
     {
         FILE* pDeviceMedium = (FILE*)aDeviceMediumPos->second;
 
@@ -398,22 +472,52 @@ void OConfigTracer::traceToVirtualDevice(const sal_Char* _pDeviceName, const sal
     return sTimeStamp;
 }
 
+//-----------------------------------------------------------
+// need raw unsigned int to safely printf a value
+static inline
+unsigned int getThreadID()
+{
+    oslThreadIdentifier nRealThreadID = ::osl_getThreadIdentifier(NULL);
+
+    return nRealThreadID; // if this loses data, we can still hope that lsb is changing between thraeds
+}
+
 //--------------------------------------------------------------------------
 void OConfigTracer::implTrace(const sal_Char* _pType, const sal_Char* _pFormat, va_list args)
 {
     ensureInitalized();
-    if (!s_pImpl->s_pOutputMedium)
+    if (!s_pImpl->m_pOutputMedium)
         // no tracing enabled
         return;
 
     if (_pType && strlen(_pType))
     {
-        fprintf(s_pImpl->s_pOutputMedium, "%s", _pType);
+        if (s_pImpl->isTracing(OTracerSetup::THREAD))
+        {
+            fprintf(s_pImpl->m_pOutputMedium, "[%04x] ", getThreadID());
+        }
+
+        fprintf(s_pImpl->m_pOutputMedium, "%s ", _pType);
+
+        if (s_pImpl->isTracing(OTracerSetup::TIME))
+        {
+            static sal_Char szMessage[1024] = "";
+            fprintf(s_pImpl->m_pOutputMedium, "(%06lu)", getGlobalTimer());
+        }
+
+        fprintf(s_pImpl->m_pOutputMedium, ": ");
+
         indent();
     }
-    vfprintf(s_pImpl->s_pOutputMedium, _pFormat, args);
-    fprintf(s_pImpl->s_pOutputMedium,"\n");
-    fflush(s_pImpl->s_pOutputMedium);
+    if (_pType && strlen(_pType))
+    {
+        fprintf(s_pImpl->m_pOutputMedium, "%s", _pType);
+        indent();
+    }
+
+    vfprintf(s_pImpl->m_pOutputMedium, _pFormat, args);
+    fprintf(s_pImpl->m_pOutputMedium,"\n");
+    fflush(s_pImpl->m_pOutputMedium);
 }
 
 }   // namespace configmgr
@@ -423,6 +527,9 @@ void OConfigTracer::implTrace(const sal_Char* _pType, const sal_Char* _pFormat, 
 //**************************************************************************
 // history:
 //  $Log: not supported by cvs2svn $
+//  Revision 1.4  2001/02/13 09:48:02  dg
+//  #83239# timing output
+//
 //  Revision 1.3  2000/11/29 12:45:31  fs
 //  #80122# additional traces upon initialization (process id / executable name)
 //
