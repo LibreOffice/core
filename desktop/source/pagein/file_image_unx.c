@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file_image_unx.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 10:43:11 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 17:41:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,10 +132,22 @@ int file_image_pagein (file_image * image)
         return (0);
 
     if (madvise (w.m_base, w.m_size, MADV_WILLNEED) == -1)
+    {
+#ifndef MACOSX
         return (errno);
+#else
+        /* madvise MADV_WILLNEED need not succeed here */
+        /* but that is fine */
+#endif
+    }
 
+
+#ifndef MACOSX
     if ((s = sysconf (_SC_PAGESIZE)) == -1)
         s = 0x1000;
+#else
+    s = getpagesize();
+#endif
 
     k = (size_t)(s);
     while (w.m_size > k)
