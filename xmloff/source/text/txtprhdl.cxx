@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprhdl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-28 09:01:37 $
+ *  last change: $Author: mib $ $Date: 2001-04-04 13:55:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,9 @@
 #endif
 #ifndef _COM_SUN_STAR_TEXT_RUBYADJUST_HPP_
 #include <com/sun/star/text/RubyAdjust.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_FONTEMPHASIS_HPP_
+#include <com/sun/star/text/FontEmphasis.hpp>
 #endif
 
 #ifndef _XMLOFF_XMLTYPES_HXX
@@ -919,11 +922,11 @@ XMLGrfMirrorPropHdl_Impl::~XMLGrfMirrorPropHdl_Impl()
 
 SvXMLEnumMapEntry __READONLY_DATA pXML_Emphasize_Enum[] =
 {
-    { sXML_none,    EMPHASISMARK_NONE },
-    { sXML_dot,     EMPHASISMARK_DOT },
-    { sXML_circle,  EMPHASISMARK_CIRCLE },
-    { sXML_disc,    EMPHASISMARK_DISC },
-    { sXML_accent,  EMPHASISMARK_ACCENT },
+    { sXML_none,    FontEmphasis::NONE },
+    { sXML_dot,     FontEmphasis::DOT_ABOVE },
+    { sXML_circle,  FontEmphasis::CIRCLE_ABOVE },
+    { sXML_disc,    FontEmphasis::DISK_ABOVE },
+    { sXML_accent,  FontEmphasis::ACCENT_ABOVE },
     { 0, 0 }
 };
 class XMLTextEmphasizePropHdl_Impl : public XMLPropertyHandler
@@ -948,7 +951,7 @@ sal_Bool XMLTextEmphasizePropHdl_Impl::importXML(
         const SvXMLUnitConverter& rUnitConverter ) const
 {
     sal_Bool bRet = sal_True;
-    sal_uInt16 nVal = EMPHASISMARK_NONE;
+    sal_uInt16 nVal = FontEmphasis::NONE;
     sal_Bool bBelow = sal_False;
     sal_Bool bHasPos = sal_False, bHasType = sal_False;
     OUString aToken;
@@ -983,8 +986,8 @@ sal_Bool XMLTextEmphasizePropHdl_Impl::importXML(
 
     if( bRet )
     {
-        if( EMPHASISMARK_NONE != nVal )
-            nVal |= (bBelow ? EMPHASISMARK_POS_BELOW : EMPHASISMARK_POS_ABOVE);
+        if( FontEmphasis::NONE != nVal && bBelow )
+            nVal += 10;
         rValue <<= (sal_Int16)nVal;
     }
 
@@ -1001,23 +1004,20 @@ sal_Bool XMLTextEmphasizePropHdl_Impl::exportXML(
     sal_Int16 nType;
     if( rValue >>= nType )
     {
-        bRet = rUnitConverter.convertEnum( aOut, nType & EMPHASISMARK_STYLE,
+        sal_Bool bBelow = sal_False;
+        if( nType > 10 )
+        {
+            bBelow = sal_True;
+            nType -= 10;
+        }
+        bRet = rUnitConverter.convertEnum( aOut, nType,
                                            pXML_Emphasize_Enum,
                                            sXML_dot );
         if( bRet )
         {
-            const sal_Char *pPos = 0;
-            switch( nType & ~EMPHASISMARK_STYLE )
+            if( nType != 0 )
             {
-            case EMPHASISMARK_POS_ABOVE:
-                pPos = sXML_above;
-                break;
-            case EMPHASISMARK_POS_BELOW:
-                pPos = sXML_below;
-                break;
-            }
-            if( pPos )
-            {
+                const sal_Char *pPos = bBelow ? sXML_below : sXML_above;
                 aOut.append( (sal_Unicode)' ' );
                 aOut.appendAscii( pPos );
             }
