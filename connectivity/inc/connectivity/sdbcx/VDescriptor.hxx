@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VDescriptor.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-19 07:32:27 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 10:13:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,8 +117,8 @@ namespace connectivity
 
             virtual ~ODescriptor();
 
-                    sal_Bool isNew()  const         { return m_bNew;    }
-                    sal_Bool getNew() const         { return m_bNew;    }
+            sal_Bool isNew()  const         { return m_bNew;    }
+            sal_Bool getNew() const         { return m_bNew;    }
             virtual void     setNew(sal_Bool _bNew);
 
             sal_Bool isCaseSensitive() const { return m_aCase.isCaseSensitive(); }

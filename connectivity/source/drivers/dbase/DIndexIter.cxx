@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DIndexIter.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:21 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 10:11:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,7 +205,7 @@ ULONG OIndexIterator::GetCompare(BOOL bFirst)
                 while ((pKey = GetNextKey()) && !m_pOperator->operate(pKey,m_pOperand));
                 break;
             case SQL_PRED_LESS:
-                while ((pKey = GetNextKey()) && !pKey->getValue().hasValue());
+                while ((pKey = GetNextKey()) && pKey->getValue().isNull());
                 break;
             case SQL_PRED_LESSOREQUAL:
                 while (pKey = GetNextKey());
@@ -281,7 +281,7 @@ ULONG OIndexIterator::GetNull(BOOL bFirst)
     }
 
     ONDXKey* pKey;
-    if (!(pKey = GetNextKey()) || pKey->getValue().hasValue())
+    if (!(pKey = GetNextKey()) || !pKey->getValue().isNull())
     {
         pKey = NULL;
         m_aCurLeaf = NULL;

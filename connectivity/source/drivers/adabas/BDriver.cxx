@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BDriver.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-27 10:08:07 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 10:13:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,5 +254,16 @@ Reference< XTablesSupplier > SAL_CALL ODriver::getDataDefinitionByURL( const ::r
 {
     return getDataDefinitionByConnection(connect(url,info));
 }
+// -----------------------------------------------------------------------------
+void SAL_CALL ODriver::acquire() throw(::com::sun::star::uno::RuntimeException)
+{
+    ODriver_BASE::acquire();
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL ODriver::release() throw(::com::sun::star::uno::RuntimeException)
+{
+    ODriver_BASE::release();
+}
+// -----------------------------------------------------------------------------
 
 

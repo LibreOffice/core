@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSet.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-30 14:07:22 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 10:13:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1658,5 +1658,22 @@ void OResultSet::fillRow(sal_Int32 _nToColumn)
     m_nLastColumnPos = _nToColumn;
     m_bFetchData = sal_True;
 }
+// -----------------------------------------------------------------------------
+void SAL_CALL OResultSet::acquire() throw(::com::sun::star::uno::RuntimeException)
+{
+    OResultSet_BASE::acquire();
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OResultSet::release() throw(::com::sun::star::uno::RuntimeException)
+{
+    OResultSet_BASE::release();
+}
+// -----------------------------------------------------------------------------
+::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OResultSet::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
+{
+    return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
+}
+// -----------------------------------------------------------------------------
+
 
 

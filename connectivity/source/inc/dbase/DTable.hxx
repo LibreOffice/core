@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-30 12:46:36 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 10:09:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,7 +166,6 @@ namespace connectivity
             virtual void refreshIndexes();
 
         public:
-            //  DECLARE_CTY_DEFAULTS( ODbaseTable_BASE);
             ODbaseTable( ODbaseConnection* _pConnection);
             ODbaseTable( ODbaseConnection* _pConnection,
                     const ::rtl::OUString& _Name,
@@ -178,7 +177,7 @@ namespace connectivity
 
             void construct(); // can throw any exception
 
-            virtual sal_Int32 getCurrentLastPos() const {return m_aHeader.db_anz;}
+            virtual sal_Int32 getCurrentLastPos() const;
             virtual sal_Bool seekRow(FilePosition eCursorPosition, sal_Int32 nOffset, sal_Int32& nCurPos);
             virtual sal_Bool fetchRow(OValueRow _rRow,const OSQLColumns& _rCols, sal_Bool _bUseTableDefs,sal_Bool bRetrieveData);
 

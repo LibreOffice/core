@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ACallableStatement.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-12 12:32:56 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 10:09:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,13 +89,14 @@ namespace connectivity
         {
             OLEVariant          m_aValue;
         public:
-            DECLARE_CTY_DEFAULTS(OPreparedStatement);
             DECLARE_SERVICE_INFO();
             virtual ~OCallableStatement() {} ;
             // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
             OCallableStatement( OConnection* _pConnection,const OTypeInfoMap& _TypeInfo,const ::rtl::OUString& sql );
 
             virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL release() throw(::com::sun::star::uno::RuntimeException);
 
             // XRow
             virtual sal_Bool SAL_CALL wasNull(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);

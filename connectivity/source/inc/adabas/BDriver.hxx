@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BDriver.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-09 11:44:39 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 10:13:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,8 +96,6 @@ namespace connectivity
         protected:
             virtual SQLHANDLE EnvironmentHandle(::rtl::OUString &_rPath);
         public:
-
-            DECLARE_CTY_DEFAULTS(ODriver_BASE);
             DECLARE_SERVICE_INFO();
 
             ODriver();
@@ -109,6 +107,8 @@ namespace connectivity
             static ::rtl::OUString getImplementationName_Static(  ) throw(::com::sun::star::uno::RuntimeException);
             static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static(  ) throw (::com::sun::star::uno::RuntimeException);
             virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL release() throw(::com::sun::star::uno::RuntimeException);
 
             // XDriver
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL connect( const ::rtl::OUString& url, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AGroup.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 13:44:21 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 10:09:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,11 +89,11 @@ namespace connectivity
         public:
             virtual void refreshUsers();
         public:
-            DECLARE_CTY_DEFAULTS( OGroup_ADO);
-
             OAdoGroup(sal_Bool _bCase, ADOGroup* _pGroup=NULL);
             OAdoGroup(sal_Bool _bCase, const ::rtl::OUString& _Name);
 
+            virtual void SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL release() throw(::com::sun::star::uno::RuntimeException);
             // com::sun::star::lang::XUnoTunnel
             virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
             static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FStatement.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-23 10:51:03 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 10:11:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,6 +180,11 @@ void OStatement_BASE2::disposing()
 
     dispose_ChildImpl();
     OStatement_Base::disposing();
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OStatement_Base::acquire() throw(::com::sun::star::uno::RuntimeException)
+{
+    OStatement_BASE::acquire();
 }
 //-----------------------------------------------------------------------------
 void SAL_CALL OStatement_BASE2::release() throw(RuntimeException)
@@ -404,6 +409,34 @@ OResultSet* OStatement::createResultSet()
 }
 // -------------------------------------------------------------------------
 IMPLEMENT_SERVICE_INFO(OStatement,"com.sun.star.sdbc.driver.file.Statement","com.sun.star.sdbc.Statement");
+// -----------------------------------------------------------------------------
+void SAL_CALL OStatement::acquire() throw(::com::sun::star::uno::RuntimeException)
+{
+    OStatement_BASE2::acquire();
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OStatement::release() throw(::com::sun::star::uno::RuntimeException)
+{
+    OStatement_BASE2::release();
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OStatement_Base::disposing(void)
+{
+    OStatement_BASE::disposing();
+}
+// -----------------------------------------------------------------------------
+::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OStatement_Base::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
+{
+    return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
+}
+// -----------------------------------------------------------------------------
+::com::sun::star::uno::Any SAL_CALL OStatement::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
+{
+    return OStatement_BASE2::queryInterface( rType);
+}
+// -----------------------------------------------------------------------------
+
 
     }
 }
+// -----------------------------------------------------------------------------

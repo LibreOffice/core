@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FTable.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-06 15:48:47 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 10:11:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,7 @@
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #endif
 
+using namespace connectivity;
 using namespace connectivity::file;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -216,6 +217,36 @@ void OFileTable::FileClose()
         delete m_pBuffer;
         m_pBuffer = NULL;
     }
+}
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+void SAL_CALL OFileTable::acquire() throw(::com::sun::star::uno::RuntimeException)
+{
+    OTable_TYPEDEF::acquire();
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OFileTable::release() throw(::com::sun::star::uno::RuntimeException)
+{
+    OTable_TYPEDEF::release();
+}
+// -----------------------------------------------------------------------------
+BOOL OFileTable::InsertRow(OValueVector& rRow, BOOL bFlush,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols)
+{
+    return sal_False;
+}
+// -----------------------------------------------------------------------------
+BOOL OFileTable::DeleteRow(const OSQLColumns& _rCols)
+{
+    return sal_False;
+}
+// -----------------------------------------------------------------------------
+BOOL OFileTable::UpdateRow(OValueVector& rRow, OValueRow pOrgRow,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols)
+{
+    return sal_False;
+}
+// -----------------------------------------------------------------------------
+void OFileTable::addColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& descriptor)
+{
 }
 // -----------------------------------------------------------------------------
 

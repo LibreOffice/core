@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AStatement.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-12 15:10:17 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 10:09:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,23 +206,20 @@ namespace connectivity
                                     sal_Int32 nHandle
                                     ) const;
         public:
-            DECLARE_CTY_ACQUIRE(OStatement_BASE);
             OStatement_Base(OConnection* _pConnection );
 
             using OStatement_BASE::operator ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >;
             // OComponentHelper
             virtual void SAL_CALL disposing(void);
             // XInterface
+            virtual void SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL release() throw(::com::sun::star::uno::RuntimeException);
             virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
             //XTypeProvider
             virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
 
             // XPropertySet
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
-            {
-                return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
-            }
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
             // XStatement
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL executeQuery( const ::rtl::OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) ;
             virtual sal_Int32 SAL_CALL executeUpdate( const ::rtl::OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) ;
@@ -246,13 +243,14 @@ namespace connectivity
                             public ::com::sun::star::lang::XServiceInfo
         {
         public:
-            DECLARE_CTY_DEFAULTS(OStatement_Base);
             // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
             OStatement( OConnection* _pConnection) : OStatement_Base( _pConnection){};
             ~OStatement();
 
             DECLARE_SERVICE_INFO();
 
+            virtual void SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL release() throw(::com::sun::star::uno::RuntimeException);
             virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
             // XBatchExecution
             virtual void SAL_CALL addBatch( const ::rtl::OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);

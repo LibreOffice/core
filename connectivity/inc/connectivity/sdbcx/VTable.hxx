@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VTable.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-20 16:46:49 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 10:13:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,31 +170,20 @@ namespace connectivity
 
             // ODescriptor
             virtual void construct();
-            virtual void refreshColumns(){}
-            virtual void refreshKeys(){}
-            virtual void refreshIndexes(){}
-
+            virtual void refreshColumns();
+            virtual void refreshKeys();
+            virtual void refreshIndexes();
             // ::cppu::OComponentHelper
             virtual void SAL_CALL disposing(void);
             // XPropertySet
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
-            {
-                return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
-            }
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
             // XColumnsSupplier
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getColumns(  ) throw(::com::sun::star::uno::RuntimeException);
             // XKeysSupplier
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > SAL_CALL getKeys(  ) throw(::com::sun::star::uno::RuntimeException);
             // XNamed
-            virtual ::rtl::OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException)
-            {
-                // this is only correct for tables who haven't a schema or catalog name
-                OSL_ENSURE(!m_CatalogName.getLength(),"getName(): forgot to overload getName()!");
-                OSL_ENSURE(!m_SchemaName.getLength(),"getName(): forgot to overload getName()!");
-                return m_Name;
-            }
-            virtual void SAL_CALL setName( const ::rtl::OUString& aName ) throw(::com::sun::star::uno::RuntimeException)
-            {}
+            virtual ::rtl::OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL setName( const ::rtl::OUString& aName ) throw(::com::sun::star::uno::RuntimeException);
             // XDataDescriptorFactory
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL createDataDescriptor( void ) throw(::com::sun::star::uno::RuntimeException);
             // XIndexesSupplier

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BTable.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-15 08:46:40 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 10:11:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -589,6 +589,18 @@ void SAL_CALL OAdabasTable::alterColumnByIndex( sal_Int32 index, const Reference
 {
     return m_SchemaName + '.' + m_Name;
 }
+// -----------------------------------------------------------------------------
+void SAL_CALL OAdabasTable::acquire() throw(::com::sun::star::uno::RuntimeException)
+{
+    OTable_TYPEDEF::acquire();
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OAdabasTable::release() throw(::com::sun::star::uno::RuntimeException)
+{
+    OTable_TYPEDEF::release();
+}
+// -----------------------------------------------------------------------------
+
 
 
 

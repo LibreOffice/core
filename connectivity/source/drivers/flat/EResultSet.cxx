@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EResultSet.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:16:38 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 10:11:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,5 +232,19 @@ IPropertyArrayHelper & OFlatResultSet::getInfoHelper()
 {
     return *OFlatResultSet_BASE3::getArrayHelper();
 }
-
+// -----------------------------------------------------------------------------
+void SAL_CALL OFlatResultSet::acquire() throw(::com::sun::star::uno::RuntimeException)
+{
+    OFlatResultSet_BASE2::acquire();
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OFlatResultSet::release() throw(::com::sun::star::uno::RuntimeException)
+{
+    OFlatResultSet_BASE2::release();
+}
+// -----------------------------------------------------------------------------
+::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OFlatResultSet::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
+{
+    return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
+}
 

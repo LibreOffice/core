@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fcode.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-10 08:51:14 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 10:11:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,16 +148,21 @@ void OOperandRow::bindValue(OValueRow _pRow)
     (*m_pRow)[m_nRowPos].setBound(sal_True);
 }
 // -----------------------------------------------------------------------------
-void OOperandRow::setValue(const ::com::sun::star::uno::Any& _rVal)
+void OOperandRow::setValue(const ORowSetValue& _rVal)
 {
     OSL_ENSURE(m_pRow.isValid() && m_nRowPos < m_pRow->size(),"Invalid RowPos is >= vector.size()");
     (*m_pRow)[m_nRowPos] = _rVal;
 }
 //------------------------------------------------------------------
-Any OOperandRow::getValue() const
+ORowSetValue OOperandRow::getValue() const
 {
     OSL_ENSURE(m_pRow.isValid() && m_nRowPos < m_pRow->size(),"Invalid RowPos is >= vector.size()");
-    return (*m_pRow)[m_nRowPos].makeAny();
+    return (*m_pRow)[m_nRowPos];
+}
+// -----------------------------------------------------------------------------
+void OOperandValue::setValue(const ORowSetValue& _rVal)
+{
+    m_aValue = _rVal;
 }
 //------------------------------------------------------------------
 OOperandAttr::OOperandAttr(sal_uInt16 _nPos,const Reference< XPropertySet>& _xColumn)
@@ -238,19 +243,25 @@ void OOperandParam::describe(const Reference< XPropertySet>& rColumn, ::vos::ORe
 
     Reference< XPropertySet> xColumn = (*rParameterColumns)[getRowPos()];
 
-    xColumn->setPropertyValue(PROPERTY_TYPENAME,rColumn->getPropertyValue(PROPERTY_TYPENAME));
-    xColumn->setPropertyValue(PROPERTY_DEFAULTVALUE,rColumn->getPropertyValue(PROPERTY_DEFAULTVALUE));
-    xColumn->setPropertyValue(PROPERTY_PRECISION,rColumn->getPropertyValue(PROPERTY_PRECISION));
-    xColumn->setPropertyValue(PROPERTY_TYPE,rColumn->getPropertyValue(PROPERTY_TYPE));
-    xColumn->setPropertyValue(PROPERTY_SCALE,rColumn->getPropertyValue(PROPERTY_SCALE));
-    xColumn->setPropertyValue(PROPERTY_ISNULLABLE,rColumn->getPropertyValue(PROPERTY_ISNULLABLE));
-    xColumn->setPropertyValue(PROPERTY_ISAUTOINCREMENT,rColumn->getPropertyValue(PROPERTY_ISAUTOINCREMENT));
+    try
+    {
+        xColumn->setPropertyValue(PROPERTY_TYPENAME,rColumn->getPropertyValue(PROPERTY_TYPENAME));
+        xColumn->setPropertyValue(PROPERTY_DEFAULTVALUE,rColumn->getPropertyValue(PROPERTY_DEFAULTVALUE));
+        xColumn->setPropertyValue(PROPERTY_PRECISION,rColumn->getPropertyValue(PROPERTY_PRECISION));
+        xColumn->setPropertyValue(PROPERTY_TYPE,rColumn->getPropertyValue(PROPERTY_TYPE));
+        xColumn->setPropertyValue(PROPERTY_SCALE,rColumn->getPropertyValue(PROPERTY_SCALE));
+        xColumn->setPropertyValue(PROPERTY_ISNULLABLE,rColumn->getPropertyValue(PROPERTY_ISNULLABLE));
+        xColumn->setPropertyValue(PROPERTY_ISAUTOINCREMENT,rColumn->getPropertyValue(PROPERTY_ISAUTOINCREMENT));
+    }
+    catch(const Exception&)
+    {
+    }
 
     m_eDBType = getINT32(rColumn->getPropertyValue(PROPERTY_TYPE));
 }
 
 //------------------------------------------------------------------
-Any OOperandValue::getValue() const
+ORowSetValue OOperandValue::getValue() const
 {
     return m_aValue;
 }
@@ -261,13 +272,13 @@ OOperandConst::OOperandConst(const OSQLParseNode& rColumnRef, const rtl::OUStrin
     switch (rColumnRef.getNodeType())
     {
         case SQL_NODE_STRING:
-            m_aValue <<= aStrValue;
+            m_aValue = aStrValue;
             m_eDBType = DataType::VARCHAR;
             return;
         case SQL_NODE_INTNUM:
         case SQL_NODE_APPROXNUM:
         {
-            m_aValue <<= aStrValue.toDouble();
+            m_aValue = aStrValue.toDouble();
 
             m_eDBType = DataType::DOUBLE;
             return;
@@ -276,12 +287,12 @@ OOperandConst::OOperandConst(const OSQLParseNode& rColumnRef, const rtl::OUStrin
 
     if (SQL_ISTOKEN(&rColumnRef,TRUE))
     {
-        m_aValue <<= 1.0;
+        m_aValue = 1.0;
         m_eDBType = DataType::BIT;
     }
     else if (SQL_ISTOKEN(&rColumnRef,FALSE))
     {
-        m_aValue <<= 0.0;
+        m_aValue = 0.0;
         m_eDBType = DataType::BIT;
     }
     else
@@ -344,8 +355,8 @@ void OOp_ISNULL::Exec(OCodeStack& rCodeStack)
 //------------------------------------------------------------------
 sal_Bool OOp_ISNULL::operate(const OOperand* pOperand, const OOperand*) const
 {
-    Any aRet(pOperand->getValue());
-    return !aRet.hasValue();
+    ORowSetValue aRet(pOperand->getValue());
+    return aRet.isNull();
 }
 
 //------------------------------------------------------------------
@@ -358,14 +369,14 @@ sal_Bool OOp_ISNOTNULL::operate(const OOperand* pOperand, const OOperand*) const
 sal_Bool OOp_LIKE::operate(const OOperand* pLeft, const OOperand* pRight) const
 {
     sal_Bool bMatch;
-    Any aLH(pLeft->getValue());
-    Any aRH(pRight->getValue());
+    ORowSetValue aLH(pLeft->getValue());
+    ORowSetValue aRH(pRight->getValue());
 
-    if (!aLH.hasValue() || !aRH.hasValue())
+    if (aLH.isNull() || aRH.isNull())
         bMatch = sal_False;
     else
     {
-        bMatch = match(getString(aRH), getString(aLH), cEscape);
+        bMatch = match(aRH.getString(), aLH.getString(), cEscape);
     }
     return bMatch;
 }
@@ -379,13 +390,10 @@ sal_Bool OOp_NOTLIKE::operate(const OOperand* pLeft, const OOperand* pRight) con
 //------------------------------------------------------------------
 sal_Bool OOp_COMPARE::operate(const OOperand* pLeft, const OOperand* pRight) const
 {
-    Any aLH(pLeft->getValue());
-    Any aRH(pRight->getValue());
+    ORowSetValue aLH(pLeft->getValue());
+    ORowSetValue aRH(pRight->getValue());
 
-//  if (!aLH.hasValue() || !aRH.hasValue())
-//      return TRUE;
-
-    if (!aLH.hasValue() || !aRH.hasValue()) // if (!aLH.getValue() || !aRH.getValue())
+    if (aLH.isNull() || aRH.isNull()) // if (!aLH.getValue() || !aRH.getValue())
         return sal_False;
 
     sal_Bool bResult = sal_False;
@@ -404,7 +412,7 @@ sal_Bool OOp_COMPARE::operate(const OOperand* pLeft, const OOperand* pRight) con
 
             static rtl::OLocale aLocale = rtl::OLocale::registerLocale(sLanguage, sCountry);
 
-            INT32 nRes = compareIgnoreCase(getString(aLH), getString(aRH), aLocale);
+            INT32 nRes = compareIgnoreCase(aLH, aRH, aLocale);
             switch(aPredicateType)
             {
                 case SQL_PRED_EQUAL:            bResult = (nRes == 0); break;
@@ -428,9 +436,7 @@ sal_Bool OOp_COMPARE::operate(const OOperand* pLeft, const OOperand* pRight) con
         case DataType::DATE:
         case DataType::TIME:
         {
-            double n,m;
-            aLH >>= n;
-            aRH >>= m;
+            double n = aLH ,m = aRH;
 
             switch (aPredicateType)
             {
@@ -446,8 +452,7 @@ sal_Bool OOp_COMPARE::operate(const OOperand* pLeft, const OOperand* pRight) con
             }
         } break;
         default:
-            DBG_ERROR("OFILECursor::ExecuteRow: Vergleich mit diesem Datentyp nicht implementiert");
-            bResult = sal_False;
+            bResult = aLH == aRH;
     }
     return bResult;
 }
@@ -461,21 +466,47 @@ void ONumOperator::Exec(OCodeStack& rCodeStack)
     OOperand  *pLeft    = rCodeStack.top();
     rCodeStack.pop();
 
-    rCodeStack.push(new OOperandResultNUM(operate(getDouble(pLeft->getValue()), getDouble(pRight->getValue()))));
-    if (IS_TYPE(OOperandResult,pLeft)) delete pLeft;
-    if (IS_TYPE(OOperandResult,pRight)) delete pRight;
+    rCodeStack.push(new OOperandResultNUM(operate(pLeft->getValue(), pRight->getValue())));
+    if (IS_TYPE(OOperandResult,pLeft))
+        delete pLeft;
+    if (IS_TYPE(OOperandResult,pRight))
+        delete pRight;
 }
 //------------------------------------------------------------------
-double OOp_ADD::operate(double fLeft, double fRight) const {return fLeft + fRight;};
+double OOp_ADD::operate(const double& fLeft,const double& fRight) const
+{
+    return fLeft + fRight;
+}
 
 //------------------------------------------------------------------
-double OOp_SUB::operate(double fLeft, double fRight) const {return fLeft - fRight;};
+double OOp_SUB::operate(const double& fLeft,const double& fRight) const
+{
+    return fLeft - fRight;
+}
 
 //------------------------------------------------------------------
-double OOp_MUL::operate(double fLeft, double fRight) const {return fLeft * fRight;};
+double OOp_MUL::operate(const double& fLeft,const double& fRight) const
+{
+    return fLeft * fRight;
+}
 
 //------------------------------------------------------------------
-double OOp_DIV::operate(double fLeft, double fRight) const {return fLeft / fRight;};
+double OOp_DIV::operate(const double& fLeft,const double& fRight) const
+{
+    return fLeft / fRight;
+}
+// -----------------------------------------------------------------------------
+sal_Bool OOperandAttr::isIndexed() const
+{
+    return sal_False;
+}
+// -----------------------------------------------------------------------------
+OEvaluateSet* OOperandAttr::preProcess(OBoolOperator* pOp, OOperand* pRight)
+{
+    return NULL;
+}
+// -----------------------------------------------------------------------------
+
 
 
 

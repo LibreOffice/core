@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OPreparedStatement.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-20 16:54:34 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 10:13:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,8 +118,17 @@ OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const ::std::v
     ,m_sSqlStatement(sql)
 {
 }
-// -------------------------------------------------------------------------
-
+// -----------------------------------------------------------------------------
+void SAL_CALL OPreparedStatement::acquire() throw(::com::sun::star::uno::RuntimeException)
+{
+    OStatement_BASE2::acquire();
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OPreparedStatement::release() throw(::com::sun::star::uno::RuntimeException)
+{
+    OStatement_BASE2::release();
+}
+// -----------------------------------------------------------------------------
 Any SAL_CALL OPreparedStatement::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     Any aRet = OStatement_BASE2::queryInterface(rType);

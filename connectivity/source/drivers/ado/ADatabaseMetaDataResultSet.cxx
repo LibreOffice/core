@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ADatabaseMetaDataResultSet.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-19 14:59:28 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 10:11:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1340,4 +1340,20 @@ void ODatabaseMetaDataResultSet::setTypeInfoMap()
     pMetaData->setTypeInfoMap();
     m_xMetaData = pMetaData;
 }
+// -----------------------------------------------------------------------------
+void SAL_CALL ODatabaseMetaDataResultSet::acquire() throw(::com::sun::star::uno::RuntimeException)
+{
+    ODatabaseMetaDataResultSet_BASE::acquire();
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL ODatabaseMetaDataResultSet::release() throw(::com::sun::star::uno::RuntimeException)
+{
+    ODatabaseMetaDataResultSet_BASE::release();
+}
+// -----------------------------------------------------------------------------
+::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL ODatabaseMetaDataResultSet::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
+{
+    return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
+}
+// -----------------------------------------------------------------------------
 

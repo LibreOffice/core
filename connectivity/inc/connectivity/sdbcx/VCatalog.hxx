@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCatalog.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-12 15:06:39 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 10:13:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,8 +132,6 @@ namespace connectivity
             OCollection*        m_pUsers;
 
         public:
-            DECLARE_CTY_ACQUIRE( OCatalog_BASE);
-
             OCatalog(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> &_xConnection);
             virtual ~OCatalog();
 
@@ -150,6 +148,7 @@ namespace connectivity
             // ::cppu::OComponentHelper
             virtual void SAL_CALL disposing(void);
             // XInterface
+            void SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException);
             void SAL_CALL release() throw(::com::sun::star::uno::RuntimeException);
             // XTablesSupplier
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getTables(  ) throw(::com::sun::star::uno::RuntimeException);

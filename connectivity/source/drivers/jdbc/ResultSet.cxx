@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ResultSet.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-20 17:03:17 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 10:13:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1850,6 +1850,22 @@ void java_sql_ResultSet::getFastPropertyValue(
             break;
     }
 }
+// -----------------------------------------------------------------------------
+void SAL_CALL java_sql_ResultSet::acquire() throw(::com::sun::star::uno::RuntimeException)
+{
+    java_sql_ResultSet_BASE::acquire();
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL java_sql_ResultSet::release() throw(::com::sun::star::uno::RuntimeException)
+{
+    java_sql_ResultSet_BASE::release();
+}
+// -----------------------------------------------------------------------------
+::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL java_sql_ResultSet::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
+{
+    return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
+}
+// -----------------------------------------------------------------------------
 
 
 

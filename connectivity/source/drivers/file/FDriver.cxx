@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FDriver.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-27 10:08:10 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 10:11:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,18 +207,12 @@ Reference< XTablesSupplier > SAL_CALL OFileDriver::getDataDefinitionByConnection
     return xTab;
 }
 
-//------------------------------------------------------------------
-Any SAL_CALL OFileDriver::queryInterface( const Type & rType ) throw(RuntimeException)
-{
-        Any aRet = ::cppu::queryInterface(rType, static_cast<XDataDefinitionSupplier*>(this));
-    if(aRet.hasValue())
-       return aRet;
-    return ODriver_BASE::queryInterface(rType);
-}
 // --------------------------------------------------------------------------------
 Reference< XTablesSupplier > SAL_CALL OFileDriver::getDataDefinitionByURL( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
 {
     return getDataDefinitionByConnection(connect(url,info));
 }
+// -----------------------------------------------------------------------------
+
 
 

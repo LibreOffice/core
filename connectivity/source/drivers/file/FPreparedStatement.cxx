@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FPreparedStatement.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-06 14:03:08 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 10:11:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -600,6 +600,17 @@ Reference<XResultSet> OPreparedStatement::initResultSet()
     m_pResultSet->setParameterRow(m_aRow);
     m_pResultSet->OpenImpl();
     return xRs;
+}
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+void SAL_CALL OPreparedStatement::acquire() throw(::com::sun::star::uno::RuntimeException)
+{
+    OStatement_BASE2::acquire();
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OPreparedStatement::release() throw(::com::sun::star::uno::RuntimeException)
+{
+    OStatement_BASE2::release();
 }
 // -----------------------------------------------------------------------------
 

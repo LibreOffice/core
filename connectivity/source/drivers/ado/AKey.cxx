@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AKey.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-12 12:31:30 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 10:11:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -320,6 +320,17 @@ KeyTypeEnum OAdoKey::Map2KeyRule(const sal_Int32& _eNum) const
             break;
     }
     return eNum;
+}
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+void SAL_CALL OAdoKey::acquire() throw(::com::sun::star::uno::RuntimeException)
+{
+    OKey_ADO::acquire();
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OAdoKey::release() throw(::com::sun::star::uno::RuntimeException)
+{
+    OKey_ADO::release();
 }
 // -----------------------------------------------------------------------------
 

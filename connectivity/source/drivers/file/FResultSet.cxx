@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-19 07:07:28 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 10:11:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2831,6 +2831,37 @@ UINT32 OResultSet::AddParameter(OSQLParseNode * pParameter, const Reference<XPro
     m_xParamColumns->push_back(xParaColumn);
     return nParameter;
 }
+// -----------------------------------------------------------------------------
+void OResultSet::describeColumn(OSQLParseNode* _pParameter,OSQLParseNode* _pNode,const OSQLTable& _xTable)
+{
+    Reference<XPropertySet> xProp;
+    if(SQL_ISRULE(_pNode,column_ref))
+    {
+        ::rtl::OUString sColumnName,sTableRange;
+        m_aSQLIterator.getColumnRange(_pNode,sColumnName,sTableRange);
+        if(sColumnName.getLength())
+        {
+            Reference<XNameAccess> xNameAccess = _xTable->getColumns();
+            if(xNameAccess->hasByName(sColumnName))
+                xNameAccess->getByName(sColumnName) >>= xProp;;
+            AddParameter(_pParameter,xProp);
+        }
+    }
+    else
+        AddParameter(_pParameter,xProp);
+//  else if(SQL_ISRULE(_pNode,num_value_exp))
+//  {
+//      describeColumn(*aIter,_pNode->getChild(),_xTable);
+//  }
+//  else if(SQL_ISRULE(_pNode,term))
+//  {
+//      describeColumn(*aIter,,_xTable);
+//  }
+//  else
+//  {
+//      describeColumn(*aIter,,_xTable);
+//  }
+}
 // -------------------------------------------------------------------------
 void OResultSet::describeParameter()
 {
@@ -2840,22 +2871,27 @@ void OResultSet::describeParameter()
     {
         m_xParamColumns = new OSQLColumns();
         const OSQLTables& xTabs = m_aSQLIterator.getTables();
-        OSQLTable xTable = xTabs.begin()->second;
-
-        ::rtl::OUString aTabName,aTmp,aColName,aParameterName;
-        ::std::vector< OSQLParseNode*>::iterator aIter = aParseNodes.begin();
-        for(;aIter != aParseNodes.end();++aIter)
+        if(xTabs.size())
         {
-            BOOL bNotFound(TRUE);
-            OSQLParseNode* pParseNode = *aIter;
-            pParseNode = pParseNode->getParent();
-            pParseNode = pParseNode->getChild(0);
-
-            m_aSQLIterator.getColumnRange(pParseNode,aColName,aTabName);
-            Reference<XPropertySet> xCol;
-            ::cppu::extractInterface(xCol,xTable->getColumns()->getByName(aColName));
-            m_xParamColumns->push_back(xCol);
+            OSQLTable xTable = xTabs.begin()->second;
+            ::std::vector< OSQLParseNode*>::const_iterator aIter = aParseNodes.begin();
+            for (;aIter != aParseNodes.end();++aIter )
+            {
+                describeColumn(*aIter,(*aIter)->getParent()->getChild(0),xTable);
+            }
         }
+
+//      ::vos::ORef<OSQLColumns> xColumns = m_aSQLIterator.getParameters();
+//      if(xColumns.isValid())
+//      {
+//          OSL_ENSURE(aParseNodes.size() == xColumns->size(),"Not all parameters found!");
+//          ::rtl::OUString aTabName,aColName,aParameterName;
+//          OSQLColumns::iterator aIter = xColumns->begin();
+//          for(;aIter != xColumns->end();++aIter)
+//          {
+//              m_xParamColumns->push_back(*aIter);
+//          }
+//      }
     }
 }
 //------------------------------------------------------------------
@@ -2950,6 +2986,22 @@ void OResultSet::setBoundedColumns(const OValueRow& _rRow,
             OSL_ENSURE(sal_False, "OResultSet::OpenImpl: caught an Exception!");
         }
     }
+}
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+void SAL_CALL OResultSet::acquire() throw(::com::sun::star::uno::RuntimeException)
+{
+    OResultSet_BASE::acquire();
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OResultSet::release() throw(::com::sun::star::uno::RuntimeException)
+{
+    OResultSet_BASE::release();
+}
+// -----------------------------------------------------------------------------
+::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OResultSet::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
+{
+    return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
 // -----------------------------------------------------------------------------
 

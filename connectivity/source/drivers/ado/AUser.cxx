@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AUser.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:09:51 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 10:11:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,6 +240,17 @@ cppu::IPropertyArrayHelper* OUserExtend::createArrayHelper() const
 cppu::IPropertyArrayHelper & OUserExtend::getInfoHelper()
 {
     return *OUserExtend_PROP::getArrayHelper();
+}
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+void SAL_CALL OAdoUser::acquire() throw(::com::sun::star::uno::RuntimeException)
+{
+    OUser_TYPEDEF::acquire();
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OAdoUser::release() throw(::com::sun::star::uno::RuntimeException)
+{
+    OUser_TYPEDEF::release();
 }
 // -----------------------------------------------------------------------------
 

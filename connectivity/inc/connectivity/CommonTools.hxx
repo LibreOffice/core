@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CommonTools.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-12 15:05:31 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 10:13:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,33 +86,6 @@
 #include <osl/interlck.h>
 #endif
 
-    /** used for declaring UNO3-Defaults, i.e. acquire/release
-    */
-//  { baseclass::acquire(); }
-//  { baseclass::release(); }
-
-    #define DECLARE_CTY_DEFAULTS(baseclass) \
-    virtual void    SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException) { baseclass::acquire(); } \
-    virtual void    SAL_CALL release() throw(::com::sun::star::uno::RuntimeException) { baseclass::release(); } \
-    void            SAL_CALL PUT_SEMICOLON_AT_THE_END()
-
-    #define DECLARE_CTY_ACQUIRE(baseclass) \
-        virtual void    SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException) { baseclass::acquire(); }
-
-#define DECLARE_CTY_PROPERTY(realclass,baseclass) \
-    virtual ::cppu::IPropertyArrayHelper* createArrayHelper( sal_Int32 _nId) const \
-    {                                                               \
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > aProps; \
-        describeProperties(aProps);                                 \
-        changePropertyAttributte(aProps);                           \
-        return new ::cppu::OPropertyArrayHelper(aProps);            \
-    }                                                               \
-    virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() \
-    {                                                               \
-        return *realclass::getArrayHelper(isNew() ? 1 : 0); \
-    }
-
-
 namespace com { namespace sun { namespace star { namespace util {
     struct Date;
     struct DateTime;
@@ -159,8 +132,12 @@ namespace connectivity
 
         inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW( () )
             { return ::rtl_allocateMemory( nSize ); }
+//      inline static void * SAL_CALL operator new( size_t nSize,const void* _pHint ) SAL_THROW( () )
+//          { return ::rtl_allocateMemory( nSize ); }
         inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW( () )
             { ::rtl_freeMemory( pMem ); }
+//      inline static void SAL_CALL operator delete( void * pMem,const void* _pHint ) SAL_THROW( () )
+//          { ::rtl_freeMemory( pMem ); }
 
         void acquire()
         {

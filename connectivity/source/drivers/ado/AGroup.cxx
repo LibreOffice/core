@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AGroup.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:09:51 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 10:11:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -324,5 +324,16 @@ RightsEnum OAdoGroup::Map2Right(sal_Int32 _eNum)
 
     return (RightsEnum)nRight;
 }
+// -----------------------------------------------------------------------------
+void SAL_CALL OAdoGroup::acquire() throw(::com::sun::star::uno::RuntimeException)
+{
+    OGroup_ADO::acquire();
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OAdoGroup::release() throw(::com::sun::star::uno::RuntimeException)
+{
+    OGroup_ADO::release();
+}
+// -----------------------------------------------------------------------------
 
 

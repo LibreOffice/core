@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CResultSet.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-26 19:05:48 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 10:11:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,5 +226,21 @@ cppu::IPropertyArrayHelper* OCalcResultSet::createArrayHelper() const
     return new cppu::OPropertyArrayHelper(aProps);
 }
 // -------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+void SAL_CALL OCalcResultSet::acquire() throw(::com::sun::star::uno::RuntimeException)
+{
+    OCalcResultSet_BASE2::acquire();
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OCalcResultSet::release() throw(::com::sun::star::uno::RuntimeException)
+{
+    OCalcResultSet_BASE2::release();
+}
+// -----------------------------------------------------------------------------
+::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OCalcResultSet::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
+{
+    return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
+}
+// -----------------------------------------------------------------------------
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCollection.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-23 10:05:31 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 10:13:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,56 +185,26 @@ namespace connectivity
             // only the name is identical to ::cppu::OComponentHelper
             virtual void SAL_CALL disposing(void);
             // dispatch the refcounting to the parent
-            virtual void SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException)
-            {
-                m_rParent.acquire();
-            }
-            virtual void SAL_CALL release() throw(::com::sun::star::uno::RuntimeException)
-            {
-                m_rParent.release();
-            }
+            virtual void SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL release() throw(::com::sun::star::uno::RuntimeException);
 
-                // ::com::sun::star::container::XElementAccess
-            virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw(::com::sun::star::uno::RuntimeException)
-            {
-                return::getCppuType(static_cast< ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>*>(NULL));
-            }
-
-            virtual sal_Bool SAL_CALL hasElements(  ) throw(::com::sun::star::uno::RuntimeException)
-            {
-                ::osl::MutexGuard aGuard(m_rMutex);
-                return getCount() > 0;
-            }
-
-                // ::com::sun::star::container::XIndexAccess
-            virtual sal_Int32 SAL_CALL getCount(  ) throw(::com::sun::star::uno::RuntimeException)
-            {
-                ::osl::MutexGuard aGuard(m_rMutex);
-                return m_aElements.size();
-            }
-
+            // ::com::sun::star::container::XElementAccess
+            virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw(::com::sun::star::uno::RuntimeException);
+            virtual sal_Bool SAL_CALL hasElements(  ) throw(::com::sun::star::uno::RuntimeException);
+            // ::com::sun::star::container::XIndexAccess
+            virtual sal_Int32 SAL_CALL getCount(  ) throw(::com::sun::star::uno::RuntimeException);
             virtual ::com::sun::star::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) throw(::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
                 // ::com::sun::star::container::XNameAccess
             virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName ) throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
             virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames(  ) throw(::com::sun::star::uno::RuntimeException);
-            virtual sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw(::com::sun::star::uno::RuntimeException)
-            {
-                ::osl::MutexGuard aGuard(m_rMutex);
-                return m_aNameMap.find(aName) != m_aNameMap.end();
-            }
+            virtual sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw(::com::sun::star::uno::RuntimeException);
             // XEnumerationAccess
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > SAL_CALL createEnumeration(  ) throw(::com::sun::star::uno::RuntimeException);
                         // ::com::sun::star::util::XRefreshable
             virtual void SAL_CALL refresh(  ) throw(::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL addRefreshListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XRefreshListener >& l ) throw(::com::sun::star::uno::RuntimeException)
-            {
-                m_aRefreshListeners.addInterface(l);
-            }
-            virtual void SAL_CALL removeRefreshListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XRefreshListener >& l ) throw(::com::sun::star::uno::RuntimeException)
-            {
-                m_aRefreshListeners.removeInterface(l);
-            }
+            virtual void SAL_CALL addRefreshListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XRefreshListener >& l ) throw(::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL removeRefreshListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XRefreshListener >& l ) throw(::com::sun::star::uno::RuntimeException);
             // XDataDescriptorFactory
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL createDataDescriptor(  ) throw(::com::sun::star::uno::RuntimeException);
             // XAppend

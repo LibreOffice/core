@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AIndex.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-12 12:32:56 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 10:09:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,8 +89,8 @@ namespace connectivity
         public:
             virtual void refreshColumns();
         public:
-            DECLARE_CTY_DEFAULTS( OIndex_ADO);
-
+            virtual void SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL release() throw(::com::sun::star::uno::RuntimeException);
             OAdoIndex(sal_Bool _bCase,  OConnection* _pConnection,ADOIndex* _pIndex);
             OAdoIndex(sal_Bool _bCase,  OConnection* _pConnection);
             // com::sun::star::lang::XUnoTunnel

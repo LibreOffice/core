@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FDatabaseMetaDataResultSet.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-19 07:05:10 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 10:13:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,12 +157,12 @@ void ODatabaseMetaDataResultSet::disposing(void)
     m_aRowsIter = m_aRows.end();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL ODatabaseMetaDataResultSet::acquire() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL ODatabaseMetaDataResultSet::acquire() throw(RuntimeException)
 {
     ODatabaseMetaDataResultSet_BASE::acquire();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL ODatabaseMetaDataResultSet::release() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL ODatabaseMetaDataResultSet::release() throw(RuntimeException)
 {
     ODatabaseMetaDataResultSet_BASE::release();
 }
@@ -175,11 +175,11 @@ Any SAL_CALL ODatabaseMetaDataResultSet::queryInterface( const Type & rType ) th
     return aRet;
 }
 // -------------------------------------------------------------------------
-::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL ODatabaseMetaDataResultSet::getTypes(  ) throw(::com::sun::star::uno::RuntimeException)
+Sequence< Type > SAL_CALL ODatabaseMetaDataResultSet::getTypes(  ) throw(RuntimeException)
 {
-    ::cppu::OTypeCollection aTypes( ::getCppuType( (const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XMultiPropertySet > *)0 ),
-                                    ::getCppuType( (const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XFastPropertySet > *)0 ),
-                                    ::getCppuType( (const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > *)0 ));
+    ::cppu::OTypeCollection aTypes( ::getCppuType( (const Reference< ::com::sun::star::beans::XMultiPropertySet > *)0 ),
+                                    ::getCppuType( (const Reference< ::com::sun::star::beans::XFastPropertySet > *)0 ),
+                                    ::getCppuType( (const Reference< ::com::sun::star::beans::XPropertySet > *)0 ));
 
     return ::comphelper::concatSequences(aTypes.getTypes(),ODatabaseMetaDataResultSet_BASE::getTypes());
 }
@@ -840,6 +840,11 @@ void ODatabaseMetaDataResultSet::setImportedKeysMap()
     ODatabaseMetaDataResultSetMetaData* pMetaData = new ODatabaseMetaDataResultSetMetaData(this);
     pMetaData->setImportedKeysMap();
     m_xMetaData = pMetaData;
+}
+// -----------------------------------------------------------------------------
+Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL ODatabaseMetaDataResultSet::getPropertySetInfo(  ) throw(RuntimeException)
+{
+    return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
 // -----------------------------------------------------------------------------
 

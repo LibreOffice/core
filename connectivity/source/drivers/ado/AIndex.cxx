@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AIndex.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-12 12:31:30 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 10:11:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,6 +231,17 @@ void OAdoIndex::fillPropertyValues()
         m_IsPrimaryKeyIndex = m_aIndex.get_PrimaryKey();
         m_IsClustered       = m_aIndex.get_Clustered();
     }
+}
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+void SAL_CALL OAdoIndex::acquire() throw(::com::sun::star::uno::RuntimeException)
+{
+    OIndex_ADO::acquire();
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OAdoIndex::release() throw(::com::sun::star::uno::RuntimeException)
+{
+    OIndex_ADO::release();
 }
 // -----------------------------------------------------------------------------
 

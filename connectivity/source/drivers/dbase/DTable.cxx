@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-30 12:45:56 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 10:11:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2175,4 +2175,7 @@ void ODbaseTable::copyData(ODbaseTable* _pNewTable)
     }
 }
 // -----------------------------------------------------------------------------
-
+sal_Int32 ODbaseTable::getCurrentLastPos() const
+{
+    return m_aHeader.db_anz;
+}

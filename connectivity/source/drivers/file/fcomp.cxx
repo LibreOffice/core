@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fcomp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-10 08:51:14 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 10:11:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,7 +188,7 @@ void OPredicateCompiler::start(OSQLParseNode* pSQLParseNode)
     {
         // Die Where Clause ist meistens optional, d. h. es koennte sich auch
         // um "optional_where_clause" handeln.
-        DBG_ASSERT(SQL_ISRULE(pWhereClause,opt_where_clause),"OFILECursor: Fehler im Parse Tree");
+        DBG_ASSERT(SQL_ISRULE(pWhereClause,opt_where_clause),"OPredicateCompiler: Fehler im Parse Tree");
     }
 }
 
@@ -218,7 +218,7 @@ OOperand* OPredicateCompiler::execute(OSQLParseNode* pPredicateNode)
             m_aCodeList.push_back(new OOp_AND());
         else
         {
-            DBG_ERROR("OFILECursor: Fehler im Parse Tree");
+            DBG_ERROR("OPredicateCompiler: Fehler im Parse Tree");
         }
     }
     else if (SQL_ISRULE(pPredicateNode,comparison_predicate))
@@ -232,6 +232,36 @@ OOperand* OPredicateCompiler::execute(OSQLParseNode* pPredicateNode)
     else if (SQL_ISRULE(pPredicateNode,test_for_null))
     {
         execute_ISNULL(pPredicateNode);
+    }
+    else if(SQL_ISRULE(pPredicateNode,num_value_exp))
+    {
+        execute(pPredicateNode->getChild(0));                           // Bearbeiten des linken Zweigs
+        execute(pPredicateNode->getChild(2));                           // Bearbeiten des rechten Zweigs
+        if (SQL_ISPUNCTUATION(pPredicateNode->getChild(1),"+"))
+        {
+            m_aCodeList.push_back(new OOp_ADD());
+        }
+        else if (SQL_ISPUNCTUATION(pPredicateNode->getChild(1),"-"))
+            m_aCodeList.push_back(new OOp_SUB());
+        else
+        {
+            DBG_ERROR("OPredicateCompiler: Fehler im Parse Tree num_value_exp");
+        }
+    }
+    else if(SQL_ISRULE(pPredicateNode,term))
+    {
+        execute(pPredicateNode->getChild(0));                           // Bearbeiten des linken Zweigs
+        execute(pPredicateNode->getChild(2));                           // Bearbeiten des rechten Zweigs
+        if (SQL_ISPUNCTUATION(pPredicateNode->getChild(1),"*"))
+        {
+            m_aCodeList.push_back(new OOp_MUL());
+        }
+        else if (SQL_ISPUNCTUATION(pPredicateNode->getChild(1),"/"))
+            m_aCodeList.push_back(new OOp_DIV());
+        else
+        {
+            DBG_ERROR("OPredicateCompiler: Fehler im Parse Tree num_value_exp");
+        }
     }
     else
         pOperand = execute_Operand(pPredicateNode);                     // jetzt werden nur einfache Operanden verarbeitet
@@ -284,44 +314,42 @@ OOperand* OPredicateCompiler::execute_COMPARE(OSQLParseNode* pPredicateNode)  th
 
     // wenn es sich um eine Vergleichsoperation auf datum/Zeit handelt, dann
     // erfolgt jetzt bereits eine Umwandlung fuer die Konstante
-    if (pOb)
-    {
-        switch (pPredicateNode->getChild(2)->getNodeType())
-        {
-            case SQL_NODE_STRING:
-            {
-                OOperandConst* pConst = PTR_CAST(OOperandConst,m_aCodeList[m_aCodeList.size() - 2]);
-                switch (pOb->getDBType())
-                {
-                    case DataType::DECIMAL:
-                    case DataType::NUMERIC:
-                    case DataType::REAL:
-                    case DataType::DOUBLE:
-                    case DataType::TIMESTAMP:
-                    case DataType::DATE:
-                    case DataType::TIME:
-                    {
-                        try
-                        {
-                            ::rtl::OUString aVal;
-                            pConst->getValue() >>= aVal;
-                            pConst->setValue(makeAny(aVal.toDouble()));
-                        }
-                        catch( Exception&)
-                        {
-                            ::dbtools::throwGenericSQLException(::rtl::OUString::createFromAscii("Datatype mismatch"),NULL);
-                        }
-                    }   break;
-                    case DataType::TINYINT:
-                    case DataType::SMALLINT:
-                    case DataType::INTEGER:
-                    case DataType::BIT:
-                        ;
-                        ::dbtools::throwGenericSQLException(::rtl::OUString::createFromAscii("Datatype mismatch"),NULL);
-                }
-            }
-        }
-    }
+//  if (pOb)
+//  {
+//      switch (pPredicateNode->getChild(2)->getNodeType())
+//      {
+//          case SQL_NODE_STRING:
+//          {
+//              OOperandConst* pConst = PTR_CAST(OOperandConst,m_aCodeList[m_aCodeList.size() - 2]);
+//              switch (pOb->getDBType())
+//              {
+//                  case DataType::DECIMAL:
+//                  case DataType::NUMERIC:
+//                  case DataType::REAL:
+//                  case DataType::DOUBLE:
+//                  case DataType::TIMESTAMP:
+//                  case DataType::DATE:
+//                  case DataType::TIME:
+//                  {
+//                      try
+//                      {
+//                          pConst->setValue(makeAny(pConst->getValue().getDouble()));
+//                      }
+//                      catch( Exception&)
+//                      {
+//                          ::dbtools::throwGenericSQLException(::rtl::OUString::createFromAscii("Datatype mismatch"),NULL);
+//                      }
+//                  }   break;
+//                  case DataType::TINYINT:
+//                  case DataType::SMALLINT:
+//                  case DataType::INTEGER:
+//                  case DataType::BIT:
+//                      ;
+//                      ::dbtools::throwGenericSQLException(::rtl::OUString::createFromAscii("Datatype mismatch"),NULL);
+//              }
+//          }
+//      }
+//  }
     return NULL;
 }
 
@@ -485,18 +513,16 @@ OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode* pPredicateNode) thr
         {
             pOperand = new OOperandConst(*pODBCNode->getChild(1), pODBCNode->getChild(1)->getTokenValue());
 
-            // setting the Date
-            try
-            {
-                ::rtl::OUString aVal;
-                pOperand->getValue() >>= aVal;
-                pOperand->setValue(makeAny(aVal.toDouble()));
-            }
-            catch( Exception & )
-            {
-                OSL_ENSURE(0,"OPredicateCompiler::execute_Operand Exception");
-                ::dbtools::throwGenericSQLException(::rtl::OUString::createFromAscii("Datatype mismatch"),NULL);
-            }
+//          // setting the Date
+//          try
+//          {
+//              pOperand->setValue(makeAny(pOperand->getValue().getDouble()));
+//          }
+//          catch( Exception & )
+//          {
+//              OSL_ENSURE(0,"OPredicateCompiler::execute_Operand Exception");
+//              ::dbtools::throwGenericSQLException(::rtl::OUString::createFromAscii("Datatype mismatch"),NULL);
+//          }
         }
         else
             ;

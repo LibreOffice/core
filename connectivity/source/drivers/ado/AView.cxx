@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AView.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-24 14:13:15 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 10:11:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,6 +205,17 @@ void OAdoView::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) const
                 break;
         }
     }
+}
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+void SAL_CALL OAdoView::acquire() throw(::com::sun::star::uno::RuntimeException)
+{
+    OView_ADO::acquire();
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OAdoView::release() throw(::com::sun::star::uno::RuntimeException)
+{
+    OView_ADO::release();
 }
 // -----------------------------------------------------------------------------
 

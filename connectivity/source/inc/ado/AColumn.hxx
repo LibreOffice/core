@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AColumn.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-27 11:38:26 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 10:09:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,12 +90,12 @@ namespace connectivity
                                      )
                                      throw (::com::sun::star::uno::Exception);
         public:
-            DECLARE_CTY_DEFAULTS( OColumn_ADO);
-
             OAdoColumn(sal_Bool _bCase,OConnection* _pConnection,_ADOColumn* _pColumn);
             OAdoColumn(sal_Bool _bCase,OConnection* _pConnection);
             // ODescriptor
             virtual void construct();
+            virtual void SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL release() throw(::com::sun::star::uno::RuntimeException);
             // com::sun::star::lang::XUnoTunnel
             virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
             static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AView.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 13:44:21 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 10:09:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,8 +91,6 @@ namespace connectivity
                                     sal_Int32 nHandle
                                          ) const;
         public:
-            DECLARE_CTY_DEFAULTS( OView_ADO);
-
             OAdoView(sal_Bool _bCase, ADOView* _pView=NULL);
             OAdoView(sal_Bool _bCase,  const ::rtl::OUString& _rName,
                     sal_Int32 _nCheckOption = 0,
@@ -103,6 +101,8 @@ namespace connectivity
             // com::sun::star::lang::XUnoTunnel
             virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
             static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
+            virtual void SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL release() throw(::com::sun::star::uno::RuntimeException);
 
             WpADOView getImpl() const { return m_aView;}
         };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FCatalog.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-30 14:07:21 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 10:11:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,5 +154,7 @@ Sequence< Type > SAL_CALL OFileCatalog::getTypes(  ) throw(RuntimeException)
     return aRet;
 }
 // -----------------------------------------------------------------------------
-
+void OFileCatalog::refreshViews(){}
+void OFileCatalog::refreshGroups(){}
+void OFileCatalog::refreshUsers(){}
 

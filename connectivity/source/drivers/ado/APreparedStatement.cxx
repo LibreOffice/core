@@ -2,9 +2,9 @@
  *
  *  $RCSfile: APreparedStatement.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-12 12:31:30 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 10:11:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -460,6 +460,17 @@ void SAL_CALL OPreparedStatement::addBatch( ) throw(SQLException, RuntimeExcepti
 Sequence< sal_Int32 > SAL_CALL OPreparedStatement::executeBatch(  ) throw(SQLException, RuntimeException)
 {
     return Sequence< sal_Int32 > ();
+}
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+void SAL_CALL OPreparedStatement::acquire() throw(::com::sun::star::uno::RuntimeException)
+{
+    OStatement_Base::acquire();
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OPreparedStatement::release() throw(::com::sun::star::uno::RuntimeException)
+{
+    OStatement_Base::release();
 }
 // -----------------------------------------------------------------------------
 

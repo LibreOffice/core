@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PreparedStatement.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-20 17:03:17 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 10:13:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -860,6 +860,17 @@ void SAL_CALL java_sql_PreparedStatement::addBatch( ) throw(::com::sun::star::sd
     } //t.pEnv
     // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
     return out==0 ? 0 : new java_sql_ResultSetMetaData( t.pEnv, out );
+}
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+void SAL_CALL java_sql_PreparedStatement::acquire() throw(::com::sun::star::uno::RuntimeException)
+{
+    OStatement_BASE2::acquire();
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL java_sql_PreparedStatement::release() throw(::com::sun::star::uno::RuntimeException)
+{
+    OStatement_BASE2::release();
 }
 // -----------------------------------------------------------------------------
 

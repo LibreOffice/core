@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dindexnode.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-30 13:57:18 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 10:11:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -808,17 +808,17 @@ void ONDXPage::PrintPage()
         if (!IsLeaf())
             rNode.GetChild(&rIndex, this);
 
-        if (!rKey.getValue().hasValue())
+        if (rKey.getValue().isNull())
         {
             DBG_TRACE2("SDB: [%d,NULL,%d]",rKey.GetRecord(), rNode.GetChild().GetPagePos());
         }
         else if (rIndex.getHeader().db_keytype)
         {
-            DBG_TRACE3("SDB: [%d,%f,%d]",rKey.GetRecord(), getDouble(rKey.getValue()),rNode.GetChild().GetPagePos());
+            DBG_TRACE3("SDB: [%d,%f,%d]",rKey.GetRecord(), rKey.getValue().getDouble(),rNode.GetChild().GetPagePos());
         }
         else
         {
-            DBG_TRACE3("SDB: [%d,%s,%d]",rKey.GetRecord(), (const char* )ByteString(getString(rKey.getValue()).getStr(), rIndex.m_pTable->getConnection()->getTextEncoding()).GetBuffer(),rNode.GetChild().GetPagePos());
+            DBG_TRACE3("SDB: [%d,%s,%d]",rKey.GetRecord(), (const char* )ByteString(rKey.getValue().getString().getStr(), rIndex.m_pTable->getConnection()->getTextEncoding()).GetBuffer(),rNode.GetChild().GetPagePos());
         }
     }
     DBG_TRACE("SDB: -----------------------------------------------\n");
@@ -913,20 +913,21 @@ void ONDXNode::Write(SvStream &rStream, const ONDXPage& rPage) const
 
     if (rIndex.getHeader().db_keytype) // double
     {
-        if (!aKey.getValue().hasValue())
+        if (aKey.getValue().isNull())
         {
             memset(aNodeData.aData,0,rIndex.getHeader().db_keylen);
             rStream.Write((BYTE*)aNodeData.aData,rIndex.getHeader().db_keylen);
         }
         else
-            rStream << (double) getDouble(aKey.getValue());
+            rStream << (double) aKey.getValue();
     }
     else
     {
         memset(aNodeData.aData,0x20,rIndex.getHeader().db_keylen);
-        if (aKey.getValue().hasValue())
+        if (!aKey.getValue().isNull())
         {
-            ByteString aText(getString(aKey.getValue()).getStr(), rIndex.m_pTable->getConnection()->getTextEncoding());
+            ::rtl::OUString sValue = aKey.getValue();
+            ByteString aText(sValue.getStr(), rIndex.m_pTable->getConnection()->getTextEncoding());
             strncpy(aNodeData.aData,aText.GetBuffer(),min(rIndex.getHeader().db_keylen, aText.Len()));
         }
         rStream.Write((BYTE*)aNodeData.aData,rIndex.getHeader().db_keylen);
@@ -960,31 +961,28 @@ StringCompare ONDXKey::Compare(const ONDXKey& rKey) const
     //  DBG_ASSERT(is(), "Falscher Indexzugriff");
     StringCompare eResult;
 
-    if (!getValue().getValue() || !getValue().hasValue())
+    if (getValue().isNull())
     {
-        if (!rKey.getValue().getValue() || !rKey.getValue().hasValue() || (rKey.IsText(getDBType()) && !getString(rKey.getValue()).getLength()))
+        if (rKey.getValue().isNull() || (rKey.IsText(getDBType()) && !rKey.getValue().getString().getLength()))
             eResult = COMPARE_EQUAL;
         else
             eResult = COMPARE_LESS;
     }
-    else if (!rKey.getValue().getValue() || !rKey.getValue().hasValue())
+    else if (rKey.getValue().isNull())
     {
-        if (!getValue().getValue() || !getValue().hasValue() || (IsText(getDBType()) && !getString(getValue()).getLength()))
+        if (getValue().isNull() || (IsText(getDBType()) && !getValue().getString().getLength()))
             eResult = COMPARE_EQUAL;
         else
             eResult = COMPARE_GREATER;
     }
     else if (IsText(getDBType()))
     {
-        INT32 nRes = getString(getValue()).compareTo(getString(rKey.getValue()));
+        INT32 nRes = getValue().getString().compareTo(rKey.getValue());
         eResult = (nRes > 0) ? COMPARE_GREATER : (nRes == 0) ? COMPARE_EQUAL : COMPARE_LESS;
     }
     else
     {
-        double m,n;
-        getValue() >>= m;
-        rKey.getValue() >>= n;
-
+        double m = getValue(),n = rKey.getValue();
         eResult = (m > n) ? COMPARE_GREATER : (n == m) ? COMPARE_EQUAL : COMPARE_LESS;
     }
 
@@ -995,4 +993,16 @@ StringCompare ONDXKey::Compare(const ONDXKey& rKey) const
 
     return eResult;
 }
+// -----------------------------------------------------------------------------
+void ONDXKey::setValue(const ORowSetValue& _rVal)
+{
+    xValue = _rVal;
+}
+// -----------------------------------------------------------------------------
+ORowSetValue ONDXKey::getValue() const
+{
+    return xValue;
+}
+// -----------------------------------------------------------------------------
+
 

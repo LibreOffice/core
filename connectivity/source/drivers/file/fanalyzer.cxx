@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fanalyzer.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-20 16:49:26 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 10:11:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,7 +274,7 @@ void OSQLAnalyzer::describeParam(::vos::ORef<OSQLColumns> rParameterColumns)
                     if (pLeft)
                     {
                         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xCol;
-                        ::cppu::extractInterface(xCol,Reference< XIndexAccess>(m_aCompiler.getOrigColumns(),UNO_QUERY)->getByIndex(pLeft->getRowPos()));
+                        Reference< XIndexAccess>(m_aCompiler.getOrigColumns(),UNO_QUERY)->getByIndex(pLeft->getRowPos()) >>= xCol;
                         OSL_ENSURE(xCol.is(), "Ungültige Struktur");
                         pParam->describe(xCol, aNewParamColumns);
                     }
@@ -300,5 +300,17 @@ void OSQLAnalyzer::clean()
 {
     m_aCompiler.Clean();
 }
+// -----------------------------------------------------------------------------
+OOperandAttr* OSQLAnalyzer::createOperandAttr(sal_Int32 _nPos,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xCol)
+{
+    return new OOperandAttr(_nPos,_xCol);
+}
+// -----------------------------------------------------------------------------
+OOperandAttr* OFILEAnalyzer::createOperandAttr(sal_Int32 _nPos,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xCol)
+{
+    return new OFILEOperandAttr(_nPos,_xCol);
+}
+// -----------------------------------------------------------------------------
+
 
 

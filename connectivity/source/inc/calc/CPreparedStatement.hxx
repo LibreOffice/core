@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CPreparedStatement.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-26 18:27:41 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 10:09:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,6 @@ namespace connectivity
         protected:
             virtual file::OResultSet* createResultSet();
         public:
-            //  DECLARE_CTY_DEFAULTS(file::OStatement);
             OCalcPreparedStatement( file::OConnection* _pConnection,const ::std::vector<connectivity::OTypeInfo>& _TypeInfo) : file::OPreparedStatement( _pConnection,_TypeInfo){}
             DECLARE_SERVICE_INFO();
         };

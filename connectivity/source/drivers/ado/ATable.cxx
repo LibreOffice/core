@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ATable.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-12 12:31:30 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 10:13:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -393,6 +393,17 @@ void OAdoTable::fillPropertyValues()
     OLEString sStr1(_rName);
     pInterface->GetObjectOwner(sStr1,_eNum,_rVar,&aBSTR);
     return aBSTR;
+}
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+void SAL_CALL OAdoTable::acquire() throw(::com::sun::star::uno::RuntimeException)
+{
+    OTable_TYPEDEF::acquire();
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OAdoTable::release() throw(::com::sun::star::uno::RuntimeException)
+{
+    OTable_TYPEDEF::release();
 }
 // -----------------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OStatement.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-20 16:54:34 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 10:13:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1098,4 +1098,30 @@ void OStatement_Base::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) const
 }
 // -------------------------------------------------------------------------
 IMPLEMENT_SERVICE_INFO(OStatement,"com.sun.star.sdbcx.OStatement","com.sun.star.sdbc.Statement");
+// -----------------------------------------------------------------------------
+void SAL_CALL OStatement_Base::acquire() throw(RuntimeException)
+{
+    OStatement_BASE::acquire();
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OStatement_Base::release() throw(RuntimeException)
+{
+    OStatement_BASE::release();
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OStatement::acquire() throw(RuntimeException)
+{
+    OStatement_BASE2::acquire();
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OStatement::release() throw(RuntimeException)
+{
+    OStatement_BASE2::release();
+}
+// -----------------------------------------------------------------------------
+Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OStatement_Base::getPropertySetInfo(  ) throw(RuntimeException)
+{
+    return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
+}
+// -----------------------------------------------------------------------------
 

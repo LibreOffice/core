@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AStatement.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-12 15:07:33 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 10:11:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -850,4 +850,25 @@ OStatement::~OStatement()
 {
 }
 IMPLEMENT_SERVICE_INFO(OStatement,"com.sun.star.sdbcx.AStatement","com.sun.star.sdbc.Statement");
+// -----------------------------------------------------------------------------
+void SAL_CALL OStatement_Base::acquire() throw(::com::sun::star::uno::RuntimeException)
+{
+    OStatement_BASE::acquire();
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OStatement::acquire() throw(::com::sun::star::uno::RuntimeException)
+{
+    OStatement_Base::acquire();
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OStatement::release() throw(::com::sun::star::uno::RuntimeException)
+{
+    OStatement_Base::release();
+}
+// -----------------------------------------------------------------------------
+::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OStatement_Base::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
+{
+    return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
+}
+// -----------------------------------------------------------------------------
 

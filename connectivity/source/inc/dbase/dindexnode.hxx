@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dindexnode.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-28 11:28:46 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 10:09:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ namespace connectivity
         class ONDXKey : public ONDXKey_BASE
         {
             friend class ONDXNode;
-            UINT32              nRecord;                /* Satzzeiger               */
+            UINT32          nRecord;                /* Satzzeiger               */
             ORowSetValue    xValue;                 /* Schluesselwert           */
 
         public:
@@ -116,15 +116,9 @@ namespace connectivity
             inline ONDXKey(const ONDXKey& rKey);
 
             inline ONDXKey& operator= (const ONDXKey& rKey);
-            virtual void setValue(const ::com::sun::star::uno::Any& _rVal)
-            {
-                xValue = _rVal;
-            }
+            virtual void setValue(const ORowSetValue& _rVal);
 
-            virtual ::com::sun::star::uno::Any getValue() const
-            {
-                return xValue.makeAny();
-            }
+            virtual ORowSetValue getValue() const;
 
             UINT32 GetRecord() const {return nRecord;}
             void   ResetRecord() {nRecord = 0;}

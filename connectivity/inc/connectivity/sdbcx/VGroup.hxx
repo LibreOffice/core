@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VGroup.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-25 11:21:54 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 10:13:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,10 +110,10 @@ namespace connectivity
     {
         typedef OCollection OUsers;
 
-                typedef ::cppu::WeakComponentImplHelper4< ::com::sun::star::sdbcx::XUsersSupplier,
-                                                                                                  ::com::sun::star::sdbcx::XAuthorizable,
-                                                  ::com::sun::star::container::XNamed,
-                                                                                                  ::com::sun::star::lang::XServiceInfo> OGroup_BASE;
+        typedef ::cppu::WeakComponentImplHelper4<   ::com::sun::star::sdbcx::XUsersSupplier,
+                                                    ::com::sun::star::sdbcx::XAuthorizable,
+                                                    ::com::sun::star::container::XNamed,
+                                                    ::com::sun::star::lang::XServiceInfo> OGroup_BASE;
 
         class OGroup :  public comphelper::OBaseMutex,
                         public OGroup_BASE,
@@ -131,26 +131,24 @@ namespace connectivity
             // OPropertySetHelper
             virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
         public:
-            DECLARE_CTY_DEFAULTS( OGroup_BASE);
-
             OGroup(sal_Bool _bCase);
             OGroup( const ::rtl::OUString& _Name,sal_Bool _bCase);
             virtual ~OGroup();
             DECLARE_SERVICE_INFO();
 
+            // XInterface
+            virtual void SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL release() throw(::com::sun::star::uno::RuntimeException);
+
             //XInterface
-                        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+            virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
             //XTypeProvider
-                        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
+            virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
 
             // ::cppu::OComponentHelper
             virtual void SAL_CALL disposing(void);
             // XPropertySet
-                        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
-            {
-                return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
-            }
-
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
             // XUsersSupplier
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getUsers(  ) throw(::com::sun::star::uno::RuntimeException);
             // XAuthorizable
@@ -160,12 +158,8 @@ namespace connectivity
             virtual void SAL_CALL revokePrivileges( const ::rtl::OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
             // XNamed
-                        virtual ::rtl::OUString SAL_CALL getName(  ) throw(::com::sun::star::uno::RuntimeException)
-            {
-                return m_Name;
-            }
-                        virtual void SAL_CALL setName( const ::rtl::OUString& aName ) throw(::com::sun::star::uno::RuntimeException)
-            {}
+            virtual ::rtl::OUString SAL_CALL getName(  ) throw(::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL setName( const ::rtl::OUString& aName ) throw(::com::sun::star::uno::RuntimeException);
         };
     }
 }

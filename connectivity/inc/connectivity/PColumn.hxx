@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PColumn.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-01 10:57:35 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 10:13:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,8 @@ namespace connectivity
             sal_Bool        m_bFunction;
             sal_Bool        m_bDbasePrecisionChanged;
         protected:
-            DECLARE_CTY_PROPERTY(OParseColumn_PROP,OParseColumn)
+            virtual ::cppu::IPropertyArrayHelper* createArrayHelper( sal_Int32 _nId) const;
+            virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
         public:
             OParseColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xColumn,sal_Bool _bCase);
             OParseColumn(const ::rtl::OUString& _Name,
