@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: mt $ $Date: 2001-07-18 15:16:25 $
+ *  last change: $Author: mt $ $Date: 2001-07-20 14:25:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,8 @@
 #include <eehtml.hxx>
 #include <editobj2.hxx>
 #include <tools/isolang.hxx>
+
+#include <editxml.hxx>
 
 
 #include "akrnitem.hxx"
@@ -202,7 +204,7 @@ EditPaM ImpEditEngine::ReadXML( SvStream& rInput, EditSelection aSel )
 
     ESelection aESel = CreateESel( aSel );
 
-// CL:    ::ReadXML( *this, aESel, rInput );
+    ::SvxReadXML( *GetEditEnginePtr(), rInput, aESel );
 
     return aSel.Max();
 }
@@ -385,7 +387,7 @@ sal_uInt32 ImpEditEngine::WriteXML( SvStream& rOutput, EditSelection aSel )
 {
     ESelection aESel = CreateESel( aSel );
 
-    // CL:    ::WriteXML( *this, aESel, rOutput );
+    SvxWriteXML( *GetEditEnginePtr(), rOutput, aESel );
 
     return 0;
 }
