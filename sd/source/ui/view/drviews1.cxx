@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-22 13:36:57 $
+ *  last change: $Author: thb $ $Date: 2001-11-06 12:38:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,6 +270,9 @@ void SdDrawViewShell::SelectionHasChanged()
 
             aTabControl.Enable();
             aLayerTab.Enable();
+            aPageBtn.Enable();
+            aMasterPageBtn.Enable();
+            aLayerBtn.Enable();
             aDrawBtn.Enable();
             aNotesBtn.Enable();
             aHandoutBtn.Enable();
@@ -957,6 +960,9 @@ BOOL SdDrawViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
         {
             aTabControl.Disable();
             aLayerTab.Disable();
+            aPageBtn.Disable();
+            aMasterPageBtn.Disable();
+            aLayerBtn.Disable();
             aDrawBtn.Disable();
             aNotesBtn.Disable();
             aHandoutBtn.Disable();

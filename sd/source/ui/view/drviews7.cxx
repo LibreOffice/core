@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-22 13:36:57 $
+ *  last change: $Author: thb $ $Date: 2001-11-06 12:38:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,6 +148,7 @@
 #include "drawdoc.hxx"
 #include "sdresid.hxx"
 #include "sdpage.hxx"
+#include "sdclient.hxx"
 #include "drviewsh.hxx"
 #include "docshell.hxx"
 #include "zoomlist.hxx"
@@ -200,15 +201,6 @@ void SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
     if (pFuSlideShow)
         rSet.Put(SfxBoolItem(SID_LIVE_PRESENTATION, pFuSlideShow->IsLivePresentation()));
 
-    if (pDocSh->IsPreview())
-       {
-           aPresentationBtn.Disable();
-       }
-    else
-    {
-           aPresentationBtn.Enable();
-    }
-
     SfxApplication* pApp = SFX_APP();
 
     if ( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PRESENTATION ) )
@@ -221,7 +213,6 @@ void SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
              pDocSh->IsPreview() )
         {
             rSet.DisableItem( SID_PRESENTATION );
-            aPresentationBtn.Disable();
         }
     }
 
@@ -344,7 +335,6 @@ void SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
         if( bDisable || pDocSh->IsPreview())
         {
             rSet.DisableItem( SID_PRESENTATION );
-            aPresentationBtn.Disable();
             rSet.DisableItem( SID_REHEARSE_TIMINGS );
         }
     }
@@ -1278,34 +1268,19 @@ void SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
         {
             rSet.ClearItem( SID_DRAWINGMODE );
             rSet.DisableItem( SID_DRAWINGMODE );
-            aDrawBtn.Disable();
         }
 
         rSet.ClearItem( SID_NOTESMODE );
         rSet.DisableItem( SID_NOTESMODE );
-        aNotesBtn.Disable();
 
         rSet.ClearItem( SID_HANDOUTMODE );
         rSet.DisableItem( SID_HANDOUTMODE );
-        aHandoutBtn.Disable();
 
         rSet.ClearItem( SID_OUTLINEMODE );
         rSet.DisableItem( SID_OUTLINEMODE );
-        aOutlineBtn.Disable();
 
         rSet.ClearItem( SID_DIAMODE );
         rSet.DisableItem( SID_DIAMODE );
-        aSlideBtn.Disable();
-    }
-    else
-    {
-        aTabControl.Enable();
-        aLayerTab.Enable();
-        aDrawBtn.Enable();
-        aNotesBtn.Enable();
-        aHandoutBtn.Enable();
-        aOutlineBtn.Enable();
-        aSlideBtn.Enable();
     }
 
     if (pDocSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED)
@@ -1313,26 +1288,21 @@ void SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
         // Outplace-Edit: Kein Umschalten erlauben
         rSet.ClearItem( SID_OUTLINEMODE );
         rSet.DisableItem( SID_OUTLINEMODE );
-        aOutlineBtn.Disable();
 
         rSet.ClearItem( SID_DIAMODE );
         rSet.DisableItem( SID_DIAMODE );
-        aSlideBtn.Disable();
 
         rSet.ClearItem( SID_NOTESMODE );
         rSet.DisableItem( SID_NOTESMODE );
-        aNotesBtn.Disable();
 
         rSet.ClearItem( SID_HANDOUTMODE );
         rSet.DisableItem( SID_HANDOUTMODE );
-        aHandoutBtn.Disable();
     }
 
     if ( pFuSlideShow || pDocSh->IsPreview() || bInEffectAssignment )
     {
         // Eigene Slots
         rSet.DisableItem( SID_PRESENTATION );
-        aPresentationBtn.Disable();
         rSet.DisableItem( SID_ZOOM_IN );
         rSet.DisableItem( SID_ZOOM_OUT );
         rSet.DisableItem( SID_ZOOM_PANNING );
@@ -1698,6 +1668,54 @@ void SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
     rSet.DisableItem( SID_INSERT_APPLET );
 #endif
 
+
+    // #94252# Hands off from controls if we're editing an OLE
+    const SdClient* pIPClient = (const SdClient*) GetIPClient();
+
+    // editing an internal OLE switches off our UI
+    if( !pIPClient || !pIPClient->IsUIActive() )
+    {
+        SfxItemState nState = rSet.GetItemState(SID_PRESENTATION);
+        if( pDocSh->IsPreview() || SFX_ITEM_DISABLED == nState )
+            aPresentationBtn.Disable();
+        else if( SFX_ITEM_UNKNOWN != nState )
+            aPresentationBtn.Enable();
+
+        nState = rSet.GetItemState(SID_NOTESMODE);
+        if( SFX_ITEM_DISABLED == nState )
+            aNotesBtn.Disable();
+        else if( SFX_ITEM_UNKNOWN != nState )
+            aNotesBtn.Enable();
+
+        nState = rSet.GetItemState(SID_HANDOUTMODE);
+        if( SFX_ITEM_DISABLED == nState )
+            aHandoutBtn.Disable();
+        else if( SFX_ITEM_UNKNOWN != nState )
+            aHandoutBtn.Enable();
+
+        nState = rSet.GetItemState(SID_OUTLINEMODE);
+        if( SFX_ITEM_DISABLED == nState )
+            aOutlineBtn.Disable();
+        else if( SFX_ITEM_UNKNOWN != nState )
+            aOutlineBtn.Enable();
+
+        nState = rSet.GetItemState(SID_DIAMODE);
+        if( SFX_ITEM_DISABLED == nState )
+            aSlideBtn.Disable();
+        else if( SFX_ITEM_UNKNOWN != nState )
+            aSlideBtn.Enable();
+
+        nState = rSet.GetItemState(SID_DRAWINGMODE);
+        if( SFX_ITEM_DISABLED == nState )
+            aDrawBtn.Disable();
+        else if( SFX_ITEM_UNKNOWN != nState )
+            aDrawBtn.Enable();
+
+        // these are manually changed from SdDrawViewShell::ActivateObject()
+        // and SdDrawViewShell::SelectionHasChanged
+        // aTabControl.Enable();
+        // aLayerTab.Enable();
+    }
 }
 
 
