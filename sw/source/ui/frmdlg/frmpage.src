@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-12 07:14:02 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:21:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,7 @@ TabDialog DLG_FRM_STD
                 Text [ dutch ] = "Overige" ;
                 Text [ swedish ] = "Tillägg" ;
                 Text [ danish ] = "Supplerende" ;
-                Text [ portuguese_brazilian ] = "Zusätze" ;
+                Text [ portuguese_brazilian ] = "Zus?tze" ;
                 Text [ portuguese ] = "Opções" ;
                 Text[ chinese_simplified ] = "ÆäËû";
                 Text[ russian ] = "Ïàðàìåòðû";
@@ -328,7 +328,7 @@ TabDialog DLG_FRM_GRF
     Text [ ENGLISH ] = "Graphic" ;
     Text [ norwegian ] = "Graphic" ;
     Text [ italian ] = "Immagine" ;
-    Text [ portuguese_brazilian ] = "Gráfico" ;
+    Text [ portuguese_brazilian ] = "Gr?fico" ;
     Text [ portuguese ] = "Imagem" ;
     Text [ finnish ] = "Kuvat" ;
     Text [ danish ] = "Grafik" ;
@@ -384,7 +384,7 @@ TabDialog DLG_FRM_GRF
                 Text [ dutch ] = "Overige" ;
                 Text [ swedish ] = "Tillägg" ;
                 Text [ danish ] = "Supplerende" ;
-                Text [ portuguese_brazilian ] = "Zusätze" ;
+                Text [ portuguese_brazilian ] = "Zus?tze" ;
                 Text [ portuguese ] = "Opções" ;
                 Text[ chinese_simplified ] = "ÆäËû";
                 Text[ russian ] = "Ïàðàìåòðû";
@@ -461,7 +461,7 @@ TabDialog DLG_FRM_GRF
                 Text [ ENGLISH ] = "Graphic" ;
                 Text [ norwegian ] = "Graphic" ;
                 Text [ italian ] = "Immagine" ;
-                Text [ portuguese_brazilian ] = "Gráfico" ;
+                Text [ portuguese_brazilian ] = "Gr?fico" ;
                 Text [ portuguese ] = "Imagem" ;
                 Text [ finnish ] = "Kuvat" ;
                 Text [ danish ] = "Grafik" ;
@@ -667,7 +667,7 @@ TabDialog DLG_FRM_OLE
                 Text [ dutch ] = "Overige" ;
                 Text [ swedish ] = "Tillägg" ;
                 Text [ danish ] = "Supplerende" ;
-                Text [ portuguese_brazilian ] = "Zusätze" ;
+                Text [ portuguese_brazilian ] = "Zus?tze" ;
                 Text [ portuguese ] = "Opções" ;
                 Text[ chinese_simplified ] = "ÆäËû";
                 Text[ russian ] = "Ïàðàìåòðû";
@@ -949,7 +949,7 @@ TabPage TP_FRM_STD
         Text [ swedish ] = "Höj~d" ;
         Text [ dutch ] = "H~oogte" ;
         Text [ spanish ] = "A~ltura" ;
-        Text [ english_us ] = "~Height" ;
+        Text [ english_us ] = "H~eight" ;
         Text[ chinese_simplified ] = "¸ß¶È(~H)";
         Text[ russian ] = "Âûñîòà";
         Text[ polish ] = "Wys.";
@@ -1043,7 +1043,7 @@ TabPage TP_FRM_STD
         Text [ ENGLISH ] = "auto. Hei~ght" ;
         Text [ norwegian ] = "auto. Hei~ght" ;
         Text [ italian ] = "Altezza. ~auto" ;
-        Text [ portuguese_brazilian ] = "Altura automática" ;
+        Text [ portuguese_brazilian ] = "Altura autom?tica" ;
         Text [ portuguese ] = "Altura automática" ;
         Text [ finnish ] = "~Automaattinen korkeus" ;
         Text [ danish ] = "Auto. højde" ;
@@ -1562,7 +1562,7 @@ TabPage TP_FRM_STD
         Text [ ENGLISH ] = "Position" ;
         Text [ norwegian ] = "Posisjon" ;
         Text [ italian ] = "Posizione" ;
-        Text [ portuguese_brazilian ] = "Posição" ;
+        Text [ portuguese_brazilian ] = "Posi??o" ;
         Text [ portuguese ] = "Posição" ;
         Text [ finnish ] = "Sijainti" ;
         Text [ danish ] = "Placering" ;
@@ -1892,7 +1892,7 @@ String STR_EDIT_GRF
     TEXT [ English ] = "Link to" ;
     TEXT [ norwegian ] = "Link to" ;
     TEXT [ italian ] = "Collega" ;
-    TEXT [ portuguese_brazilian ] = "Ligação com" ;
+    TEXT [ portuguese_brazilian ] = "Liga??o com" ;
     TEXT [ portuguese ] = "Ligar" ;
     TEXT [ finnish ] = "Linkki" ;
     TEXT [ danish ] = "Kæd" ;
@@ -2242,7 +2242,7 @@ TabPage TP_FRM_ADD
         Text = "~Vorgänger" ;
         Text [ ENGLISH ] = "Previous link" ;
         Text [ english_us ] = "~Previous link" ;
-        Text [ portuguese_brazilian ] = "~Vorgänger" ;
+        Text [ portuguese_brazilian ] = "~Vorg?nger" ;
         Text [ swedish ] = "Före~gående" ;
         Text [ danish ] = "Overordnet" ;
         Text [ italian ] = "~Precedente" ;
@@ -2340,7 +2340,7 @@ TabPage TP_FRM_ADD
         Text = "~Inhalt" ;
         Text [ ENGLISH ] = "Content" ;
         Text [ english_us ] = "~Contents" ;
-        Text [ portuguese_brazilian ] = "Prot~eger conteúdo" ;
+        Text [ portuguese_brazilian ] = "Prot~eger conte?o" ;
         Text [ swedish ] = "~Innehåll" ;
         Text [ danish ] = "Indhold" ;
         Text [ italian ] = "~Contenuto" ;
@@ -2350,7 +2350,7 @@ TabPage TP_FRM_ADD
         Text [ portuguese ] = "~Conteúdo" ;
         Text[ chinese_simplified ] = "ÄÚÈÝ(~C)";
         Text[ russian ] = "Ñîäåðæèìîå";
-        Text[ polish ] = "Zawarto~œæ";
+        Text[ polish ] = "Zawarto~?æ";
         Text[ japanese ] = "“à—e(~C)";
         Text[ chinese_traditional ] = "¤º®e(~C)";
         Text[ arabic ] = "ÇáãÍÊæíÇÊ";
@@ -2368,7 +2368,7 @@ TabPage TP_FRM_ADD
         Text = "~Position" ;
         Text [ ENGLISH ] = "Pos~ition" ;
         Text [ english_us ] = "P~osition" ;
-        Text [ portuguese_brazilian ] = "Proteger pos~ição" ;
+        Text [ portuguese_brazilian ] = "Proteger pos~i??o" ;
         Text [ swedish ] = "~Position" ;
         Text [ danish ] = "Placering" ;
         Text [ italian ] = "Pos~izione" ;
@@ -2423,7 +2423,7 @@ TabPage TP_FRM_ADD
         Text = "Schützen" ;
         Text [ English ] = "Protect" ;
         Text [ english_us ] = "Protect" ;
-        Text [ portuguese_brazilian ] = "Schützen" ;
+        Text [ portuguese_brazilian ] = "Sch?zen" ;
         Text [ swedish ] = "Skydda" ;
         Text [ danish ] = "Beskyt" ;
         Text [ italian ] = "Proteggi" ;
@@ -2450,7 +2450,7 @@ TabPage TP_FRM_ADD
         Text = "~Editierbar in schreibgeschütztem Dokument" ;
         Text [ ENGLISH ] = "Edit in readonly Document" ;
         Text [ english_us ] = "~Editable in read-only document" ;
-        Text [ portuguese_brazilian ] = "Editierbar in schreibgeschütztem Dokument" ;
+        Text [ portuguese_brazilian ] = "Editierbar in schreibgesch?ztem Dokument" ;
         Text [ swedish ] = "R~edigerbar i skrivskyddat dokument" ;
         Text [ danish ] = "Redigerbar i skrivebeskyttet dokument" ;
         Text [ italian ] = "Modificabile nel documento a sola lettura" ;
@@ -2511,7 +2511,7 @@ TabPage TP_FRM_ADD
         Text [ dutch ] = "Overige" ;
         Text [ swedish ] = "Tillägg" ;
         Text [ danish ] = "Indstillinger" ;
-        Text [ portuguese_brazilian ] = "Zusätze" ;
+        Text [ portuguese_brazilian ] = "Zus?tze" ;
         Text [ portuguese ] = "Opções" ;
         Text[ chinese_simplified ] = "ÆäËû";
         Text[ russian ] = "Ïàðàìåòðû";
