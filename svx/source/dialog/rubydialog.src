@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rubydialog.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:01:06 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:37:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,17 +91,20 @@ ModelessDialog RID_SVXDLG_RUBY
         Text[ italian ] = "Riconoscimento automatico";
         Text[ danish ] = "Automatisk genkendelse";
         Text[ swedish ] = "Automatisk igenk�nning";
-        Text[ polish ] = "Automatyczne rozpoznanie";
-        Text[ portuguese_brazilian ] = "Auto detection";
+        Text[ polish ] = "Automatyczne wykrywanie";
+        Text[ portuguese_brazilian ] = "Dete��o autom�tica";
         Text[ japanese ] = "自動認識";
         Text[ korean ] = "자동 인식";
         Text[ chinese_simplified ] = "自动识别";
         Text[ chinese_traditional ] = "自動識別";
-        Text[ turkish ] = "Auto detection";
+        Text[ turkish ] = "Otomatik Alg�lama";
         Text[ arabic ] = "��� ������";
         Text[ catalan ] = "Reconeixement autom�tic";
         Text[ finnish ] = "Automaattinen havainnointi";
         Text[ thai ] = "ตรวจหาอัตโนมัติ";
+        Text[ czech ] = "Automatická detekce";
+        Text[ hebrew ] = "‮גילוי אוטומטי‬";
+        Text[ hindi ] = "स्वचालित खोज";
     };
     FixedText FT_LEFT
     {
@@ -120,16 +123,19 @@ ModelessDialog RID_SVXDLG_RUBY
         Text[ danish ] = "~Basistekst";
         Text[ swedish ] = "~Bastext";
         Text[ polish ] = "Tekst podstawowy";
-        Text[ portuguese_brazilian ] = "Basis text";
+        Text[ portuguese_brazilian ] = "Texto base";
         Text[ japanese ] = "対象文字列";
         Text[ korean ] = "대상 문자열";
         Text[ chinese_simplified ] = "主文字";
         Text[ chinese_traditional ] = "主文字";
-        Text[ turkish ] = "Basis text";
+        Text[ turkish ] = "Temel Metin";
         Text[ arabic ] = "���� �������";
         Text[ catalan ] = "Text base";
         Text[ finnish ] = "Perusteksti";
         Text[ thai ] = "ข้อความฐาน";
+        Text[ czech ] = "Základní text";
+        Text[ hebrew ] = "‮טקסט בסיסי‬";
+        Text[ hindi ] = "आधार टेक्स्ट्";
     };
     FixedText FT_RIGHT
     {
@@ -147,17 +153,20 @@ ModelessDialog RID_SVXDLG_RUBY
         Text[ italian ] = "Testo Ruby";
         Text[ danish ] = "~Fonetisk tekst";
         Text[ swedish ] = "~Ruby-text";
-        Text[ polish ] = "Tekst Ruby";
-        Text[ portuguese_brazilian ] = "Ruby text";
+        Text[ polish ] = "Dopisek fonetyczny";
+        Text[ portuguese_brazilian ] = "Texto ruby";
         Text[ japanese ] = "ルビ文字";
         Text[ korean ] = "덧말 문자";
         Text[ chinese_simplified ] = "拼音或注音符号";
         Text[ chinese_traditional ] = "注音字元";
-        Text[ turkish ] = "Ruby text";
+        Text[ turkish ] = "Ruby Metni";
         Text[ arabic ] = "�� \"����\"";
         Text[ catalan ] = "Text ruby";
         Text[ finnish ] = "Ruby-teksti";
         Text[ thai ] = "ข้อความตัวพิมพ์ขนาดเล็ก";
+        Text[ czech ] = "Ruby text";
+        Text[ hebrew ] = "‮טקסט נוסף 'רובי'‬";
+        Text[ hindi ] = "रूबी टेक्स्ट्";
     };
     Edit ED_LEFT_1
     {
@@ -232,16 +241,19 @@ ModelessDialog RID_SVXDLG_RUBY
         Text[ danish ] = "~Justering";
         Text[ swedish ] = "~Justering";
         Text[ polish ] = "Wyr�wnanie";
-        Text[ portuguese_brazilian ] = "Adjust";
+        Text[ portuguese_brazilian ] = "Alinhamento";
         Text[ japanese ] = "配置";
         Text[ korean ] = "맞춤";
         Text[ chinese_simplified ] = "对齐";
         Text[ chinese_traditional ] = "對齊";
-        Text[ turkish ] = "Adjust";
+        Text[ turkish ] = "Ayarlama";
         Text[ arabic ] = "��������";
         Text[ catalan ] = "Alineament";
         Text[ finnish ] = "Tasaus";
         Text[ thai ] = "จัดตำแหน่ง";
+        Text[ czech ] = "Zarovnání";
+        Text[ hebrew ] = "‮יישור‬";
+        Text[ hindi ] = "पंक्तिकरण";
     };
     ListBox LB_ADJUST
     {
@@ -363,9 +375,9 @@ ModelessDialog RID_SVXDLG_RUBY
     };
     StringList [ portuguese_brazilian ] =
     {
-            "Links" ;
-            "Zentriert" ;
-            "Rechts" ;
+            "Esquerda" ;
+            "Centro" ;
+            "Direita" ;
             "0 1 0" ;
             "1 2 1" ;
     };
@@ -403,8 +415,8 @@ ModelessDialog RID_SVXDLG_RUBY
     };
     StringList [ turkish ] =
     {
-            "Sola" ;
-            "Ortala" ;
+            "Sol" ;
+            "Merkez" ;
             "Sa�" ;
             "0 1 0" ;
             "1 2 1" ;
@@ -441,6 +453,30 @@ ModelessDialog RID_SVXDLG_RUBY
         "0 1 0" ;
         "1 2 1" ;
     };
+    StringList [ czech ] =
+    {
+        "Vlevo" ;
+        "Na střed" ;
+        "Vpravo" ;
+        "0 1 0" ;
+        "1 2 1" ;
+    };
+    StringList [ hebrew ] =
+    {
+        "‮שמאל‬" ;
+        "‮מרכז‬" ;
+        "‮ימין‬" ;
+        "‮0 1 0‬" ;
+        "‮1 2 1‬" ;
+    };
+    StringList [ hindi ] =
+    {
+        "बायाँ" ;
+        "मध्यभाग" ;
+        "दाहिना" ;
+        "0 1 0" ;
+        "1 2 1" ;
+    };
     };
     FixedText FT_POSITION
     {
@@ -451,7 +487,7 @@ ModelessDialog RID_SVXDLG_RUBY
         Text[ english_us ] = "Position";
         Text[ portuguese ] = "~Posi��o";
         Text[ russian ] = "���������";
-        Text[ greek ] = "Position";
+        Text[ greek ] = "����";
         Text[ dutch ] = "~Positie";
         Text[ french ] = "Position";
         Text[ spanish ] = "Posici�n";
@@ -460,15 +496,18 @@ ModelessDialog RID_SVXDLG_RUBY
         Text[ danish ] = "~Placering";
         Text[ swedish ] = "~Position";
         Text[ polish ] = "Pozycja";
-        Text[ portuguese_brazilian ] = "Position";
+        Text[ portuguese_brazilian ] = "Posi��o";
         Text[ japanese ] = "位置";
         Text[ korean ] = "위치";
         Text[ chinese_simplified ] = "位置";
         Text[ chinese_traditional ] = "位置";
-        Text[ turkish ] = "Position";
-        Text[ arabic ] = "Position";
+        Text[ turkish ] = "Pozisyon";
+        Text[ arabic ] = "�����";
         Text[ catalan ] = "Posici�";
         Text[ thai ] = "ตำแหน่ง";
+        Text[ czech ] = "Umístění";
+        Text[ hebrew ] = "‮מיקום‬";
+        Text[ hindi ] = "स्थान";
     };
     ListBox LB_POSITION
     {
@@ -548,13 +587,13 @@ ModelessDialog RID_SVXDLG_RUBY
     };
     StringList [ polish ] =
     {
-        "Na g�rze" ;
-        "Na dole" ;
+        "U g�ry" ;
+        "U do�u" ;
     };
     StringList [ portuguese_brazilian ] =
     {
-        "Oben" ;
-        "Unten" ;
+        "Em cima" ;
+        "Em baixo" ;
     };
     StringList [ japanese ] =
     {
@@ -578,8 +617,8 @@ ModelessDialog RID_SVXDLG_RUBY
     };
     StringList [ turkish ] =
     {
-        "Yukar�" ;
-        "A�a��" ;
+        "�st" ;
+        "Alt" ;
     };
     StringList [ arabic ] =
     {
@@ -595,6 +634,21 @@ ModelessDialog RID_SVXDLG_RUBY
     {
         "ด้านบน" ;
         "ด้านล่าง" ;
+    };
+    StringList [ czech ] =
+    {
+        "Nahoře" ;
+        "Dole" ;
+    };
+    StringList [ hebrew ] =
+    {
+        "‮עליון‬" ;
+        "‮תחתון‬" ;
+    };
+    StringList [ hindi ] =
+    {
+        "ऊपर" ;
+        "नीचे" ;
     };
     };
     FixedText FT_CHAR_STYLE
@@ -613,17 +667,20 @@ ModelessDialog RID_SVXDLG_RUBY
         Text[ italian ] = "Stile del carattere per testo Ruby";
         Text[ danish ] = "~Tegntypografi for fonetisk tekst";
         Text[ swedish ] = "~Teckenformatmall f�r ruby-text";
-        Text[ polish ] = "Styl znak�w tekstu Ruby";
-        Text[ portuguese_brazilian ] = "Character style for ruby text";
+        Text[ polish ] = "Styl znaku dopisku fonetycznego";
+        Text[ portuguese_brazilian ] = "Estilo de Caracter para texto ruby";
         Text[ japanese ] = "ルビ用文字スタイル";
         Text[ korean ] = "덧말 문자용 스타일";
         Text[ chinese_simplified ] = "拼音或注音符号的字符样式";
         Text[ chinese_traditional ] = "注音字元的樣式";
-        Text[ turkish ] = "Character style for ruby text";
+        Text[ turkish ] = "Ruby Metni i�in Karakter Sitili";
         Text[ arabic ] = "��� ������ ��� \"����\"";
         Text[ catalan ] = "Estil de car�cter per text ruby";
         Text[ finnish ] = "Ruby-tekstin merkkityyli";
         Text[ thai ] = "ลักษณะตัวอักษรสำหรับข้อความตัวพิมพ์ขนาดเล็ก";
+        Text[ czech ] = "Znakový styl pro Ruby text";
+        Text[ hebrew ] = "‮סגנון תו לטקסט נוסף 'רובי'‬";
+        Text[ hindi ] = "रूबी टेक्स्ट् केलिए अक्षर शैली";
     };
     ListBox LB_CHAR_STYLE
     {
@@ -649,17 +706,20 @@ ModelessDialog RID_SVXDLG_RUBY
         Text[ italian ] = "Stilista";
         Text[ danish ] = "~Stylist";
         Text[ swedish ] = "~Stylist";
-        Text[ polish ] = "Stylista";
-        Text[ portuguese_brazilian ] = "Stylist";
+        Text[ polish ] = "Sty~lista";
+        Text[ portuguese_brazilian ] = "Estilista";
         Text[ japanese ] = "スタイリスト";
         Text[ korean ] = "스타일리스트";
         Text[ chinese_simplified ] = "各类样式";
         Text[ chinese_traditional ] = "各類樣式";
-        Text[ turkish ] = "Stylist";
+        Text[ turkish ] = "Stil listesi  ";
         Text[ arabic ] = "�������";
         Text[ catalan ] = "Estilista";
         Text[ finnish ] = "Tyylity�kalu";
         Text[ thai ] = "ตัวออกแบบ";
+        Text[ czech ] = "Stylista";
+        Text[ hebrew ] = "‮המסגנן‬";
+        Text[ hindi ] = "स्टइलिस्ट्";
     };
     FixedText FT_PREVIEW
     {
@@ -678,16 +738,19 @@ ModelessDialog RID_SVXDLG_RUBY
         Text[ danish ] = "Eksempel:";
         Text[ swedish ] = "F�rhandsvisning:";
         Text[ polish ] = "Podgl�d:";
-        Text[ portuguese_brazilian ] = "Preview:";
+        Text[ portuguese_brazilian ] = "Visualizar:";
         Text[ japanese ] = "プレビュー:";
-        Text[ korean ] = "미리보기:";
+        Text[ korean ] = "미리 보기:";
         Text[ chinese_simplified ] = "预览：";
         Text[ chinese_traditional ] = "預覽：";
-        Text[ turkish ] = "Preview:";
+        Text[ turkish ] = "�nizleme:";
         Text[ arabic ] = "������:";
         Text[ catalan ] = "Previsualitzaci�:";
         Text[ finnish ] = "Esikatselu:";
         Text[ thai ] = "แสดงตัวอย่าง:";
+        Text[ czech ] = "Náhled:";
+        Text[ hebrew ] = "‮תצוגה מקדימה:‬";
+        Text[ hindi ] = "पूर्वदृश्य:";
     };
     Window WIN_PREVIEW
     {
@@ -712,17 +775,20 @@ ModelessDialog RID_SVXDLG_RUBY
         Text[ italian ] = "Applica";
         Text[ danish ] = "~Anvend";
         Text[ swedish ] = "~Anv�nd";
-        Text[ polish ] = "Zastosuj";
-        Text[ portuguese_brazilian ] = "Apply";
+        Text[ polish ] = "Zastos~uj";
+        Text[ portuguese_brazilian ] = "Ap~licar";
         Text[ japanese ] = "適用(~A)";
         Text[ korean ] = "적용(~A)";
         Text[ chinese_simplified ] = "采用(~A)";
         Text[ chinese_traditional ] = "採用(~A)";
-        Text[ turkish ] = "Apply";
+        Text[ turkish ] = "Uygula";
         Text[ arabic ] = "�����";
         Text[ catalan ] = "Aplica";
         Text[ finnish ] = "K�~yt�";
         Text[ thai ] = "ใ~ช้";
+        Text[ czech ] = "Použít";
+        Text[ hebrew ] = "‮יישום‬";
+        Text[ hindi ] = "~लागू करो";
     };
     PushButton PB_CLOSE
     {
@@ -740,17 +806,20 @@ ModelessDialog RID_SVXDLG_RUBY
         Text[ italian ] = "C~hiudi";
         Text[ danish ] = "~Luk";
         Text[ swedish ] = "St�~ng";
-        Text[ polish ] = "Zamknij";
-        Text[ portuguese_brazilian ] = "Close";
+        Text[ polish ] = "~Zamknij";
+        Text[ portuguese_brazilian ] = "~Fechar";
         Text[ japanese ] = "閉じる(~C)";
         Text[ korean ] = "닫기(~C)";
         Text[ chinese_simplified ] = "关闭(~C)";
         Text[ chinese_traditional ] = "關閉(~C)";
-        Text[ turkish ] = "Close";
+        Text[ turkish ] = "Kapat";
         Text[ arabic ] = "�����";
         Text[ catalan ] = "Tanca";
         Text[ finnish ] = "~Sulje";
         Text[ thai ] = "~ปิด";
+        Text[ czech ] = "Zavřít";
+        Text[ hebrew ] = "‮סגירה‬";
+        Text[ hindi ] = "~बन्द करो";
     };
     HelpButton PB_HELP
     {
@@ -767,7 +836,7 @@ ModelessDialog RID_SVXDLG_RUBY
     Text[ italian ] = "Testo Ruby";
     Text[ danish ] = "Fonetisk tekst";
     Text[ swedish ] = "Ruby";
-    Text[ polish ] = "Ruby";
+    Text[ polish ] = "Dopisek fonetyczny";
     Text[ portuguese_brazilian ] = "Ruby";
     Text[ japanese ] = "ルビ";
     Text[ korean ] = "덧말 넣기";
@@ -778,7 +847,19 @@ ModelessDialog RID_SVXDLG_RUBY
     Text[ catalan ] = "Car�cter fon�tic guia";
     Text[ finnish ] = "Ruby-teksti";
     Text[ thai ] = "ตัวพิมพ์ขนาดเล็ก";
+    Text[ czech ] = "Ruby";
+    Text[ hebrew ] = "‮רובי‬";
+    Text[ hindi ] = "रूबी";
 };
+
+
+
+
+
+
+
+
+
 
 
 
