@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.c,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 15:33:50 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:29:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -674,6 +674,7 @@ oslProcessError SAL_CALL osl_getCommandArg( sal_uInt32 nArg, rtl_uString **strCo
             rtl_str_getLength( pChr ),
             osl_getThreadTextEncoding(),
             OUSTRING_TO_OSTRING_CVTFLAGS );
+        OSL_ASSERT(*strCommandArg != NULL);
 
         tErr=osl_Process_E_None;
     }
@@ -2117,6 +2118,7 @@ oslProcessError SAL_CALL osl_getEnvironment(rtl_uString* pustrEnvVar, rtl_uStrin
             strlen(p_env_var),
             osl_getThreadTextEncoding(),
             OSTRING_TO_OUSTRING_CVTFLAGS);
+        OSL_ASSERT(*ppustrValue != NULL);
 
         osl_error = osl_Process_E_None;
     }
@@ -2150,6 +2152,7 @@ oslProcessError SAL_CALL osl_getProcessWorkingDir(rtl_uString **ppustrWorkingDir
             strlen(buffer),
             osl_getThreadTextEncoding(),
             OSTRING_TO_OUSTRING_CVTFLAGS);
+        OSL_ASSERT(ustrTmp != NULL);
 
         if (osl_getFileURLFromSystemPath(ustrTmp, ppustrWorkingDir) == osl_File_E_None)
             osl_error = osl_Process_E_None;
