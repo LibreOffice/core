@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxitems.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 12:17:13 $
+ *  last change: $Author: kz $ $Date: 2000-11-15 20:54:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1565,7 +1565,7 @@ String RID_SVXITEMS_ITALIC_OBLIQUE
     Text[ japanese ] = "Ξ“‰e–@‚ΜΞ‘Μ";
     Text[ chinese_traditional ] = "¤Ί¶Ι±ΧΕι";
     Text[ arabic ] = "γΗΖα γδΝΟΡ";
-    Text[ greek ] = "Πλάγια με μεγάλη κλίση";
+    Text[ greek ] = "Λοξό με κλίση";
     Text[ korean ] = "Ίρ½ΊµλΗΡ ±βΏοΐΣ²Γ";
     Text[ turkish ] = "Eπri italik";
     Text[ language_user1 ] = " ";
@@ -7160,22 +7160,22 @@ String RID_SVXITEMS_EMPHASISMARK_NONE
     Text [ English ] = "none" ;
     Text[ english_us ] = "none";
     Text[ portuguese ] = "none";
-    Text[ russian ] = "none";
-    Text[ greek ] = "none";
-    Text[ dutch ] = "none";
-    Text[ french ] = "none";
-    Text[ spanish ] = "none";
-    Text[ italian ] = "none";
+    Text[ russian ] = "αεη";
+    Text[ greek ] = "κανένα";
+    Text[ dutch ] = "geen";
+    Text[ french ] = "aucun(e)";
+    Text[ spanish ] = "ninguno";
+    Text[ italian ] = "nessuno";
     Text[ danish ] = "none";
-    Text[ swedish ] = "none";
-    Text[ polish ] = "none";
+    Text[ swedish ] = "inga";
+    Text[ polish ] = "brak";
     Text[ portuguese_brazilian ] = "none";
-    Text[ japanese ] = "none";
+    Text[ japanese ] = "‚Θ‚µ";
     Text[ korean ] = "none";
-    Text[ chinese_simplified ] = "none";
-    Text[ chinese_traditional ] = "none";
+    Text[ chinese_simplified ] = "Ξή";
+    Text[ chinese_traditional ] = "µL";
     Text[ turkish ] = "none";
-    Text[ arabic ] = "none";
+    Text[ arabic ] = "ΘΟζδ";
 };
 String RID_SVXITEMS_EMPHASISMARK_DOTSABOVE
 {
@@ -7183,20 +7183,20 @@ String RID_SVXITEMS_EMPHASISMARK_DOTSABOVE
     Text [ English ] = "Dots above" ;
     Text[ english_us ] = "Dots above";
     Text[ portuguese ] = "Dots above";
-    Text[ russian ] = "Dots above";
-    Text[ greek ] = "Dots above";
-    Text[ dutch ] = "Dots above";
-    Text[ french ] = "Dots above";
-    Text[ spanish ] = "Dots above";
-    Text[ italian ] = "Dots above";
+    Text[ russian ] = "Òξχκθ ρβεπυσ";
+    Text[ greek ] = "Κουκκίδα από πάνω";
+    Text[ dutch ] = "Puntjes erop";
+    Text[ french ] = "Points au-dessus";
+    Text[ spanish ] = "Puntos encima";
+    Text[ italian ] = "Punti in alto";
     Text[ danish ] = "Dots above";
-    Text[ swedish ] = "Dots above";
-    Text[ polish ] = "Dots above";
+    Text[ swedish ] = "Punkter ovanfφr";
+    Text[ polish ] = "Kropki powyΏej";
     Text[ portuguese_brazilian ] = "Dots above";
-    Text[ japanese ] = "Dots above";
+    Text[ japanese ] = "γ‚Ι“_‚π•t‚―‚ι";
     Text[ korean ] = "Dots above";
-    Text[ chinese_simplified ] = "Dots above";
-    Text[ chinese_traditional ] = "Dots above";
+    Text[ chinese_simplified ] = "µγΤΪΙΟ·½";
+    Text[ chinese_traditional ] = "ΒI¦b¤W¤θ";
     Text[ turkish ] = "Dots above";
     Text[ arabic ] = "Dots above";
 };
@@ -7206,20 +7206,20 @@ String RID_SVXITEMS_EMPHASISMARK_DOTSBELOW
     Text [ English ] = "Dots below" ;
     Text[ english_us ] = "Dots below";
     Text[ portuguese ] = "Dots below";
-    Text[ russian ] = "Dots below";
-    Text[ greek ] = "Dots below";
-    Text[ dutch ] = "Dots below";
-    Text[ french ] = "Dots below";
-    Text[ spanish ] = "Dots below";
-    Text[ italian ] = "Dots below";
+    Text[ russian ] = "Òξχκθ ρνθησ";
+    Text[ greek ] = "Κουκκίδα από κάτω";
+    Text[ dutch ] = "Puntjes eronder";
+    Text[ french ] = "Points en dessous";
+    Text[ spanish ] = "Puntos debajo";
+    Text[ italian ] = "Punti in basso";
     Text[ danish ] = "Dots below";
-    Text[ swedish ] = "Dots below";
-    Text[ polish ] = "Dots below";
+    Text[ swedish ] = "Punkter nedanfφr";
+    Text[ polish ] = "Kropki poniΏej";
     Text[ portuguese_brazilian ] = "Dots below";
-    Text[ japanese ] = "Dots below";
+    Text[ japanese ] = "‰Ί‚Ι“_‚π•t‚―‚ι";
     Text[ korean ] = "Dots below";
-    Text[ chinese_simplified ] = "Dots below";
-    Text[ chinese_traditional ] = "Dots below";
+    Text[ chinese_simplified ] = "µγΤΪΟΒ·½";
+    Text[ chinese_traditional ] = "ΒI¦b¤U¤θ";
     Text[ turkish ] = "Dots below";
     Text[ arabic ] = "Dots below";
 };
@@ -7229,20 +7229,20 @@ String RID_SVXITEMS_EMPHASISMARK_SIDEDOTS
     Text [ English ] = "Comma above" ;
     Text[ english_us ] = "Comma above";
     Text[ portuguese ] = "Comma above";
-    Text[ russian ] = "Comma above";
-    Text[ greek ] = "Comma above";
-    Text[ dutch ] = "Comma above";
-    Text[ french ] = "Comma above";
-    Text[ spanish ] = "Comma above";
-    Text[ italian ] = "Comma above";
+    Text[ russian ] = "Ηΰοÿςΰÿ ρβεπυσ";
+    Text[ greek ] = "Κόμμα από πάνω";
+    Text[ dutch ] = "Komma erop";
+    Text[ french ] = "Virgule au-dessus";
+    Text[ spanish ] = "Coma encima";
+    Text[ italian ] = "Virgola in alto";
     Text[ danish ] = "Comma above";
-    Text[ swedish ] = "Comma above";
-    Text[ polish ] = "Comma above";
+    Text[ swedish ] = "Komma ovanfφr";
+    Text[ polish ] = "Przecinek powyΏej";
     Text[ portuguese_brazilian ] = "Comma above";
-    Text[ japanese ] = "Comma above";
+    Text[ japanese ] = "γ‚ΙΊέΟ‚π•t‚―‚ι";
     Text[ korean ] = "Comma above";
-    Text[ chinese_simplified ] = "Comma above";
-    Text[ chinese_traditional ] = "Comma above";
+    Text[ chinese_simplified ] = "¶ΊΊΕΤΪΙΟ·½";
+    Text[ chinese_traditional ] = "³rΈΉ¦b¤W¤θ";
     Text[ turkish ] = "Comma above";
     Text[ arabic ] = "Comma above";
 };
@@ -7252,20 +7252,20 @@ String RID_SVXITEMS_EMPHASISMARK_CIRCLEABOVE
     Text [ English ] = "Ring above" ;
     Text[ english_us ] = "Ring above";
     Text[ portuguese ] = "Ring above";
-    Text[ russian ] = "Ring above";
-    Text[ greek ] = "Ring above";
-    Text[ dutch ] = "Ring above";
-    Text[ french ] = "Ring above";
-    Text[ spanish ] = "Ring above";
-    Text[ italian ] = "Ring above";
+    Text[ russian ] = "Κπσγ ρβεπυσ";
+    Text[ greek ] = "Κύκλος από πάνω";
+    Text[ dutch ] = "Cirkel erop";
+    Text[ french ] = "Cercle au-dessus";
+    Text[ spanish ] = "Cνrculo encima";
+    Text[ italian ] = "Cerchio in alto";
     Text[ danish ] = "Ring above";
-    Text[ swedish ] = "Ring above";
-    Text[ polish ] = "Ring above";
+    Text[ swedish ] = "Cirkel ovanfφr";
+    Text[ polish ] = "OkrΉg powyΏej";
     Text[ portuguese_brazilian ] = "Ring above";
-    Text[ japanese ] = "Ring above";
+    Text[ japanese ] = "γ‚ΙΫ‚π•t‚―‚ι";
     Text[ korean ] = "Ring above";
-    Text[ chinese_simplified ] = "Ring above";
-    Text[ chinese_traditional ] = "Ring above";
+    Text[ chinese_simplified ] = "Τ²Θ¦ΤΪΙΟ·½";
+    Text[ chinese_traditional ] = "¶κ°ι¦b¤W¤θ";
     Text[ turkish ] = "Ring above";
     Text[ arabic ] = "Ring above";
 };
