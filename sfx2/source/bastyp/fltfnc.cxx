@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2001-08-14 14:25:53 $
+ *  last change: $Author: mba $ $Date: 2001-09-04 10:30:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -988,6 +988,20 @@ const SfxFilter* SfxFilterContainer::GetFilter( sal_uInt16 nPos ) const
     return pImpl->aList.GetObject( nPos );
 }
 
+const SfxFilter* SfxFilterContainer::GetAnyFilter( SfxFilterFlags nMust, SfxFilterFlags nDont ) const
+{
+    sal_uInt16 nCount = ( sal_uInt16 ) pImpl->aList.Count();
+    for( sal_uInt16 n = 0; n < nCount; n++ )
+    {
+        const SfxFilter* pFilter = pImpl->aList.GetObject( n );
+        SfxFilterFlags nFlags = pFilter->GetFilterFlags();
+        if ( (nFlags & nMust) == nMust && !(nFlags & nDont ) )
+            return pFilter;
+    }
+
+    return NULL;
+}
+
 //----------------------------------------------------------------
 /*   [Beschreibung]
 
@@ -1259,11 +1273,8 @@ SfxFactoryFilterContainer::SfxFactoryFilterContainer(
 {
     //Defaults in den Container der DefaultFactory laden
     SetFlags( GetFlags() | SFX_FILTER_CONTAINER_FACTORY );
-    if( &SfxObjectFactory::GetDefaultFactory() == &rFactP )
-    {
-        pFunc = &SfxFilterMatcher::AppDetectFilter;
-    }
 }
+
 //----------------------------------------------------------------
 
 sal_uInt32 SfxFactoryFilterContainer::GetFilter4Content(
@@ -1288,11 +1299,13 @@ sal_uInt32 SfxFactoryFilterContainer::GetFilter4Content(
                     "DetectFilter Spec nicht eingehalten" );
         return nErr;
     }
+/*
     else
     {
-        DBG_ERROR( "No DetectFilter function set!" );
+        DBG_ASSERT( !GetFilterCount(), "No DetectFilter function set!" );
         return 0;
     }
+*/
 }
 
 //----------------------------------------------------------------
