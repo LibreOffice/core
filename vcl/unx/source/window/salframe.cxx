@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: pl $ $Date: 2000-12-07 17:56:59 $
+ *  last change: $Author: pl $ $Date: 2000-12-13 16:42:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -826,13 +826,6 @@ void SalFrame::SetClientSize( long nWidth, long nHeight )
         return;
     }
 
-#ifdef DEBUG
-    fprintf( stderr, "SetClientSize: (%d,%d)  (%d,%d)->(%d,%d)\n",
-             maFrameData.aPosSize_.Left(), maFrameData.aPosSize_.Top(),
-             maFrameData.aPosSize_.GetWidth(), maFrameData.aPosSize_.GetHeight(),
-             nWidth, nHeight );
-#endif
-
     XLIB_Window     aDummy;
     int             nX, nY, nScreenWidth, nScreenHeight;
     int             nRealScreenWidth, nRealScreenHeight;
@@ -925,11 +918,6 @@ void SalFrame::SetClientSize( long nWidth, long nHeight )
     Point aPoint ( nX, nY );
     Size  aSize  ( nWidth, nHeight );
     maFrameData.SetPosSize( Rectangle( aPoint, aSize ) );
-#ifdef DEBUG
-    fprintf( stderr, "SetClientSize: (%d,%d)  (%d,%d)\n",
-             maFrameData.aPosSize_.Left(), maFrameData.aPosSize_.Top(),
-             maFrameData.aPosSize_.GetWidth(), maFrameData.aPosSize_.GetHeight() );
-#endif
 }
 
 #if 0
@@ -1095,10 +1083,6 @@ void SalFrameData::SetPosSize( const Rectangle &rPosSize )
     }
 
     XtConfigureWidget( hShell_, values.x, values.y, values.width, values.height, 0 );
-#ifdef DEBUG
-    fprintf( stderr, "XtConfigureWidget (%d,%d) (%d,%d)\n",
-             values.x, values.y, values.width, values.height );
-#endif
     if ( aPosSize_ != rPosSize )
     {
         aPosSize_ = rPosSize;
@@ -1533,7 +1517,7 @@ void SalFrame::SetTitle( const XubString& rTitle )
     {
         fprintf( stderr, "SalFrame::SetTitle !XStringListToTextProperty(%s)\n",
                  pTitle );
-        abort();
+        return;
     }
 
     XSetWMName    ( _GetXDisplay(), maFrameData.GetShellWindow(), &aTitle );
@@ -2708,6 +2692,25 @@ long SalFrameData::Dispatch( XEvent *pEvent )
             case VisibilityNotify:
                 nVisibility_ = pEvent->xvisibility.state;
                 nRet = TRUE;
+                // HACK: this is a workaround for CJK input method
+                // (see #79518#) the input method switches the focus forth and
+                // back while a second document is being mapped
+                // this really should be fixed in the input method
+                // as there are other problems with it too: on some window
+                // managers the focus will end in the status window of
+                // the IME and not in any document.
+                if( nVisibility_ != VisibilityUnobscured
+                    && ! mpParent && maChildren.Count() == 0
+                    )
+                {
+                    XLIB_Window focusWindow = None;
+                    int revert = RevertToNone;
+                    XGetInputFocus( pDisplay_->GetDisplay(), &focusWindow, &revert );
+                    if( focusWindow == GetShellWindow()
+                        || ( focusWindow == GetStackingWindow() && GetStackingWindow() )
+                        || focusWindow == GetWindow() )
+                        XRaiseWindow( pDisplay_->GetDisplay(), GetShellWindow() );
+                }
                 break;
 
             case ReparentNotify:
@@ -2778,9 +2781,6 @@ long SalFrameData::Dispatch( XEvent *pEvent )
                                            0, 0,
                                            &nX, &nY,
                                            &hDummy );
-#ifdef DEBUG
-                    fprintf( stderr, "moveto: %d,%d\n", nX, nY );
-#endif
                     aPosSize_.SetPos( Point( nX, nY ) );
                     RepositionChildren();
                 }
