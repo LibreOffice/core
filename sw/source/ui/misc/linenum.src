@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linenum.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 21:34:03 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 17:57:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -680,24 +680,24 @@ TabPage TP_LINENUMBERING
         Text = "~Neustart am Seitenanfang";
         Text [ ENGLISH ] = "~Restart each new page";
         TabStop = TRUE;
-        Text[ english_us ] = "~Restart each new page";
-        Text[ portuguese ] = "~Restart each new page";
-        Text[ russian ] = "~Restart each new page";
-        Text[ greek ] = "~Restart each new page";
-        Text[ dutch ] = "~Restart each new page";
-        Text[ french ] = "~Restart each new page";
-        Text[ spanish ] = "~Restart each new page";
+        Text[ english_us ] = "~Restart every new page";
+        Text[ portuguese ] = "~Reiniciar no início de página";
+        Text[ russian ] = "~Ïåğåçàïóñê ñ íà÷àëà ñòğàíèöû";
+        Text[ greek ] = "Åğáíåêêß~íçóç óôçí áñ÷Ş ôçò óåëßäáò";
+        Text[ dutch ] = "~Opnieuw starten bij paginabegin";
+        Text[ french ] = "~Reprendre au début des pages";
+        Text[ spanish ] = "~Reiniciar al comienzo de página";
         Text[ italian ] = "~Restart each new page";
-        Text[ danish ] = "~Restart each new page";
-        Text[ swedish ] = "~Restart each new page";
-        Text[ polish ] = "~Restart each new page";
+        Text[ danish ] = "Genstart på hver ny side";
+        Text[ swedish ] = "~Börja om på varje ny sida";
+        Text[ polish ] = "Ponowne uruchomienie na pocz¹tku strony";
         Text[ portuguese_brazilian ] = "~Restart each new page";
-        Text[ japanese ] = "~Restart each new page";
+        Text[ japanese ] = "V‚µ‚¢Íß°¼Ş‚²‚Æ‚É”‚¦’¼‚·(~R)";
         Text[ korean ] = "~Restart each new page";
-        Text[ chinese_simplified ] = "~Restart each new page";
-        Text[ chinese_traditional ] = "~Restart each new page";
+        Text[ chinese_simplified ] = "ÔÚÒ³Ê×ÖØĞÂ¿ªÊ¼(~R)";
+        Text[ chinese_traditional ] = "±q­¶­º­«·s¶}©l(~R)";
         Text[ turkish ] = "~Restart each new page";
-        Text[ arabic ] = "~Restart each new page";
+        Text[ arabic ] = "ÅÚÇÏÉ ÇáÈÏÁ ÚäÏ ßá ÕİÍÉ ÌÏíÏÉ";
     };
     GroupBox GB_COUNT
     {
