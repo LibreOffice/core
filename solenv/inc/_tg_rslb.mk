@@ -11,7 +11,7 @@ RESLIB1HIDFILES:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,.srs,_srs.hid $(RES
 $(HIDRES1PARTICLE): $(RESLIB1HIDFILES)
     @echo ------------------------------
     @echo Making: $@
-    @+if exist $@ rm $@
+    @+$(IFEXIST) $@ $(THEN) $(RM) $@
     $(TYPE) $(RESLIB1HIDFILES) > $@.$(ROUT).tmp 
     @+$(RENAME) $@.$(ROUT).tmp $@
 
@@ -89,7 +89,7 @@ RESLIB2HIDFILES:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,.srs,_srs.hid $(RES
 $(HIDRES2PARTICLE): $(RESLIB2HIDFILES)
     @echo ------------------------------
     @echo Making: $@
-    @+if exist $@ rm $@
+    @+$(IFEXIST) $@ $(THEN) $(RM) $@
     $(TYPE) $(RESLIB2HIDFILES) > $@.$(ROUT).tmp 
     @+$(RENAME) $@.$(ROUT).tmp $@
 
@@ -167,7 +167,7 @@ RESLIB3HIDFILES:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,.srs,_srs.hid $(RES
 $(HIDRES3PARTICLE): $(RESLIB3HIDFILES)
     @echo ------------------------------
     @echo Making: $@
-    @+if exist $@ rm $@
+    @+$(IFEXIST) $@ $(THEN) $(RM) $@
     $(TYPE) $(RESLIB3HIDFILES) > $@.$(ROUT).tmp 
     @+$(RENAME) $@.$(ROUT).tmp $@
 
@@ -245,7 +245,7 @@ RESLIB4HIDFILES:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,.srs,_srs.hid $(RES
 $(HIDRES4PARTICLE): $(RESLIB4HIDFILES)
     @echo ------------------------------
     @echo Making: $@
-    @+if exist $@ rm $@
+    @+$(IFEXIST) $@ $(THEN) $(RM) $@
     $(TYPE) $(RESLIB4HIDFILES) > $@.$(ROUT).tmp 
     @+$(RENAME) $@.$(ROUT).tmp $@
 
@@ -323,7 +323,7 @@ RESLIB5HIDFILES:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,.srs,_srs.hid $(RES
 $(HIDRES5PARTICLE): $(RESLIB5HIDFILES)
     @echo ------------------------------
     @echo Making: $@
-    @+if exist $@ rm $@
+    @+$(IFEXIST) $@ $(THEN) $(RM) $@
     $(TYPE) $(RESLIB5HIDFILES) > $@.$(ROUT).tmp 
     @+$(RENAME) $@.$(ROUT).tmp $@
 
@@ -401,7 +401,7 @@ RESLIB6HIDFILES:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,.srs,_srs.hid $(RES
 $(HIDRES6PARTICLE): $(RESLIB6HIDFILES)
     @echo ------------------------------
     @echo Making: $@
-    @+if exist $@ rm $@
+    @+$(IFEXIST) $@ $(THEN) $(RM) $@
     $(TYPE) $(RESLIB6HIDFILES) > $@.$(ROUT).tmp 
     @+$(RENAME) $@.$(ROUT).tmp $@
 
@@ -479,7 +479,7 @@ RESLIB7HIDFILES:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,.srs,_srs.hid $(RES
 $(HIDRES7PARTICLE): $(RESLIB7HIDFILES)
     @echo ------------------------------
     @echo Making: $@
-    @+if exist $@ rm $@
+    @+$(IFEXIST) $@ $(THEN) $(RM) $@
     $(TYPE) $(RESLIB7HIDFILES) > $@.$(ROUT).tmp 
     @+$(RENAME) $@.$(ROUT).tmp $@
 
@@ -557,7 +557,7 @@ RESLIB8HIDFILES:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,.srs,_srs.hid $(RES
 $(HIDRES8PARTICLE): $(RESLIB8HIDFILES)
     @echo ------------------------------
     @echo Making: $@
-    @+if exist $@ rm $@
+    @+$(IFEXIST) $@ $(THEN) $(RM) $@
     $(TYPE) $(RESLIB8HIDFILES) > $@.$(ROUT).tmp 
     @+$(RENAME) $@.$(ROUT).tmp $@
 
@@ -635,7 +635,7 @@ RESLIB9HIDFILES:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,.srs,_srs.hid $(RES
 $(HIDRES9PARTICLE): $(RESLIB9HIDFILES)
     @echo ------------------------------
     @echo Making: $@
-    @+if exist $@ rm $@
+    @+$(IFEXIST) $@ $(THEN) $(RM) $@
     $(TYPE) $(RESLIB9HIDFILES) > $@.$(ROUT).tmp 
     @+$(RENAME) $@.$(ROUT).tmp $@
 
@@ -713,7 +713,7 @@ RESLIB10HIDFILES:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,.srs,_srs.hid $(RE
 $(HIDRES10PARTICLE): $(RESLIB10HIDFILES)
     @echo ------------------------------
     @echo Making: $@
-    @+if exist $@ rm $@
+    @+$(IFEXIST) $@ $(THEN) $(RM) $@
     $(TYPE) $(RESLIB10HIDFILES) > $@.$(ROUT).tmp 
     @+$(RENAME) $@.$(ROUT).tmp $@
 
