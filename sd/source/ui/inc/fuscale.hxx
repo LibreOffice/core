@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuscale.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:39 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:10:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,26 +59,34 @@
  *
  ************************************************************************/
 
+#ifndef SD_FU_SCALE_HXX
+#define SD_FU_SCALE_HXX
 
-#ifndef _SD_FUSCALE_HXX
-#define _SD_FUSCALE_HXX
-
-#ifndef _SD_FUPOOR_HXX
+#ifndef SD_FU_POOR_HXX
 #include "fupoor.hxx"
 #endif
 
-class FuScale : public FuPoor
+namespace sd {
+
+class FuScale
+    : public FuPoor
 {
- public:
+public:
     TYPEINFO();
 
-    FuScale(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
-            SdDrawDocument* pDoc, SfxRequest& rReq);
-    virtual ~FuScale();
+    FuScale (
+        ViewShell* pViewSh,
+        ::sd::Window* pWin,
+        ::sd::View* pView,
+        SdDrawDocument* pDoc,
+        SfxRequest& rReq);
+    virtual ~FuScale (void);
 
     virtual void Activate();           // Function aktivieren
     virtual void Deactivate();         // Function deaktivieren
 };
 
-#endif      // _SD_FUSCALE_HXX
+} // end of namespace sd
+
+#endif
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuslhide.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-06 15:26:03 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:12:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,13 +59,14 @@
  *
  ************************************************************************/
 
-#ifndef _SD_FUSLHIDE_HXX
-#define _SD_FUSLHIDE_HXX
+#ifndef SD_FU_SLIDE_HIDE_HXX
+#define SD_FU_SLIDE_HIDE_HXX
 
-#ifndef _SD_FUSLID_HXX
+#ifndef SD_FU_SLIDE_HXX
 #include "fuslid.hxx"
 #endif
 
+namespace sd {
 
 /*************************************************************************
 |*
@@ -73,16 +74,22 @@
 |*
 \************************************************************************/
 
-class FuSlideHide : public FuSlide
+class FuSlideHide
+    : public FuSlide
 {
-
- public:
+public:
     TYPEINFO();
 
-    FuSlideHide(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
-                SdDrawDocument* pDoc, SfxRequest& rReq);
-    virtual ~FuSlideHide();
+    FuSlideHide (
+        ViewShell* pViewSh,
+        ::sd::Window* pWin,
+        ::sd::View* pView,
+        SdDrawDocument* pDoc,
+        SfxRequest& rReq);
+    virtual ~FuSlideHide (void);
 };
 
-#endif // _SD_FUSLHIDE_HXX
+} // end of namespace sd
+
+#endif
 
