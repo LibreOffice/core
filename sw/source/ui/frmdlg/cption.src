@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cption.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:56:56 $
+ *  last change: $Author: kz $ $Date: 2001-07-17 20:45:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -401,7 +401,7 @@ ModalDialog DLG_CAPTION
         Text [ dutch ] = "Aan het begin" ;
         Text [ spanish ] = "Al principio" ;
         Text [ english_us ] = "Above" ;
-        Text[ chinese_simplified ] = "ÔÚÊ×¶Ë";
+        Text[ chinese_simplified ] = "ÔÚÆğÊ¼Î»ÖÃ";
         Text[ russian ] = "Â íà÷àëå";
         Text[ polish ] = "Na pocz¹tku";
         Text[ japanese ] = "Å‰‚É";
@@ -428,11 +428,11 @@ ModalDialog DLG_CAPTION
         Text [ dutch ] = "Aan het einde" ;
         Text [ spanish ] = "Al final" ;
         Text [ english_us ] = "Below" ;
-        Text[ chinese_simplified ] = "ÔÚÎ²¶Ë";
+        Text[ chinese_simplified ] = "ÔÚ½áÊøÎ»ÖÃ";
         Text[ russian ] = "Â êîíöå";
         Text[ polish ] = "Na koñcu";
         Text[ japanese ] = "ÅŒã‚É";
-        Text[ chinese_traditional ] = "¦b§Àºİ";
+        Text[ chinese_traditional ] = "¦bµ²§ô¦ì¸m";
         Text[ arabic ] = "İí ÇáäåÇíÉ";
         Text[ greek ] = "Óôï ôİëïò";
         Text[ korean ] = "³¡";
@@ -749,6 +749,7 @@ ModalDialog DLG_SEQUENCE_OPTION
     Text[ finnish ] = "Numeroalueen asetukset";
 };
  // ********************************************************************** EOF
+
 
 
 
