@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ActionMapTypesOOo.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:28:17 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 10:37:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@ enum ActionMapTypesOOo
     OOO_STYLE_ACTIONS = MAX_OOO_PROP_ACTIONS,
     OOO_FONT_DECL_ACTIONS,
     OOO_SHAPE_ACTIONS,
+    OOO_CONNECTOR_ACTIONS,
     OOO_INDEX_ENTRY_TAB_STOP_ACTIONS,
     OOO_TAB_STOP_ACTIONS,
     OOO_LINENUMBERING_ACTIONS,
