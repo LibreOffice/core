@@ -2,9 +2,9 @@
  *
  *  $RCSfile: signdemo.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-26 07:29:34 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 18:15:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,15 @@
 #include <unotools/streamhelper.hxx>
 
 #include <xmlsecurity/biginteger.hxx>
+//CP : added by CP
+#include <rtl/locale.h>
+#include <osl/nlsupport.h>
+
+#ifndef _OSL_PROCESS_H_
+#include <osl/process.h>
+#endif
+
+//CP : end
 
 #include <tools/date.hxx>
 #include <tools/time.hxx>
@@ -126,39 +135,68 @@ int SAL_CALL main( int argc, char **argv )
     /*
      * select a private key certificate
      */
-    cssu::Reference< cssxc::XSecurityEnvironment > xSecurityEnvironment = aSignatureHelper.GetSecurityEnvironment();
-    cssu::Sequence< cssu::Reference< ::com::sun::star::security::XCertificate > > xPersonalCerts
-        = xSecurityEnvironment->getPersonalCertificates() ;
-    int length = xPersonalCerts.getLength();
-    int i;
-
-    fprintf( stdout, "\nSelect a private key certificate for the new signature\n" ) ;
-    fprintf( stdout, "================================================================================\n" ) ;
-    for( i = 0; i < length; i ++ )
+    int n = 0;
+    int i = 0 , index=-1;
+    n = aSignatureHelper.GetSecurityEnvironmentNumber();
+    if(n == 0)
     {
-        fprintf( stdout, "%d:issuer=[%s] subject=[%s]\n",
-            i+1,
-            rtl::OUStringToOString( xPersonalCerts[i]->getIssuerName(), RTL_TEXTENCODING_ASCII_US ).getStr(),
-            rtl::OUStringToOString( xPersonalCerts[i]->getSubjectName(), RTL_TEXTENCODING_ASCII_US ).getStr());
+        fprintf( stdout, "\nNo SecurityEnvironment found!\n" ) ;
+        return -1;
     }
 
-    fprintf( stdout, "================================================================================\n" ) ;
-    bool bInvalid = false;
-    int sel = 0;
+    int * p=NULL;
+    cssu::Reference< ::com::sun::star::security::XCertificate > xPersonalCert;
+    cssu::Sequence< cssu::Reference< cssxc::XSecurityEnvironment > > xSecurityEnvironment(n) ;
 
-    do
+    for(;;)
     {
-        if (bInvalid)
+        for(i=0;i<n;i++)
         {
-            fprintf( stdout, "Invalid value! " );
+            xSecurityEnvironment[i] = aSignatureHelper.GetSecurityEnvironmentByIndex(i);
+            index = i;
+        }
+        fprintf( stdout, "\nSelect a SecurityEnvironment\n" ) ;
+        fprintf( stdout, "================================================================================\n" ) ;
+        for( i = 0; i < n; i ++ )
+        {
+            fprintf( stdout, "[%d]\n%s\n",
+                i+1,
+                rtl::OUStringToOString( xSecurityEnvironment[i]->getSecurityEnvironmentInfo() , RTL_TEXTENCODING_ASCII_US ).getStr());
         }
 
-        fprintf( stdout, "Select <1-%d>:", length ) ;
-        fscanf( stdin, "%d", &sel ) ;
-        bInvalid = true;
-    }while(sel<1 || sel>length);
+        fprintf( stdout, "================================================================================\n" ) ;
 
-    sel--;
+        bool bInvalid = false;
+        int sel = 0;
+        do
+        {
+            if (bInvalid)
+            {
+                fprintf( stdout, "Invalid value! \n" );
+            }
+
+            fprintf( stdout, "Select <1-%d>:", n ) ;
+            fflush(stdin);
+            fscanf( stdin, "%d", &sel ) ;
+            bInvalid = true;
+        }while(sel<1 || sel>n);
+
+        index = sel-1;
+
+        xPersonalCert = getCertificateFromEnvironment(xSecurityEnvironment[index] , true);
+
+        if( xPersonalCert != NULL ) break;
+
+        char cExit[5];
+        fprintf( stdout, "\nDo you want select again?[y/n]\n" ) ;
+        fflush(stdin);
+        fscanf( stdin, "%s", cExit ) ;
+        if( cExit[0] != 'Y' &&  cExit[0] != 'y' )
+        {
+            fprintf( stdout, "\nNo Certificate , so exit!\n" ) ;
+            return -3;
+        }
+    }
 
     /*
      * creates a new signature id
@@ -170,8 +208,9 @@ int SAL_CALL main( int argc, char **argv )
      */
     aSignatureHelper.SetX509Certificate(
         nSecurityId,
-        xPersonalCerts[sel]->getIssuerName(),
-        bigIntegerToNumericString( xPersonalCerts[sel]->getSerialNumber()));
+        index ,
+        xPersonalCert->getIssuerName(),
+        bigIntegerToNumericString( xPersonalCert->getSerialNumber()));
 
     /*
      * configures date/time
@@ -214,11 +253,20 @@ int SAL_CALL main( int argc, char **argv )
 
     aSignatureHelper.EndMission();
 
+    // By CP , for correct encoding
+    sal_uInt16 encoding ;
+    rtl_Locale *pLocale = NULL ;
+    osl_getProcessLocale( &pLocale ) ;
+    encoding = osl_getTextEncodingFromLocale( pLocale ) ;
+    // CP end
+
     fprintf( stdout, "------------- Signature details -------------\n" );
     fprintf( stdout, "%s",
         rtl::OUStringToOString(
             getSignatureInformations(aSignatureHelper.GetSignatureInformations(), aSignatureHelper.GetSecurityEnvironment()),
-            RTL_TEXTENCODING_UTF8).getStr());
+            encoding).getStr());
+
+    fprintf( stdout, "------------- Signature details o-------------\n" );
 
     return 0;
 }
