@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macros.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-26 14:57:01 $
+ *  last change: $Author: dbo $ $Date: 2001-10-11 14:07:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,8 +130,8 @@
 #       define  CPPU_CLBN_NS_TMP UNO_LB_GCC2_NAMESPACE
 #       define  CPPU_DLL_POSTFIX "GCC"
 #   elif ( __GNUC__ == 3 && __GNUC_MINOR__ == 0 )
-#       define  CPPU_CLBN_TMP   UNO_LB_GCC2
-#       define  CPPU_CLBN_NS_TMP UNO_LB_GCC2_NAMESPACE
+#       define  CPPU_CLBN_TMP   UNO_LB_GCC3
+#       define  CPPU_CLBN_NS_TMP UNO_LB_GCC3_NAMESPACE
 #       define  CPPU_DLL_POSTFIX "GCC"
 #  else
 #       error "unknown gcc version"
