@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:33:42 $
+ *  last change: $Author: mba $ $Date: 2003-04-28 13:31:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2199,6 +2199,9 @@ void addTitle_Impl( Sequence < ::com::sun::star::beans::PropertyValue >& rSeq, c
 void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
                              const  SfxHint&        rHint   )
 {
+    if ( !m_pData )
+        return;
+
     if ( &rBC == m_pData->m_pObjectShell )
     {
         SfxSimpleHint* pSimpleHint = PTR_CAST( SfxSimpleHint, &rHint );
