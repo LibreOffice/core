@@ -2,9 +2,9 @@
  *
  *  $RCSfile: modcfg.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2001-02-27 08:13:42 $
+ *  last change: $Author: os $ $Date: 2001-03-15 12:12:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -906,7 +906,7 @@ void SwInsertConfig::Load()
                             pOLEDrawOpt = new InsCaptionOpt(OLE_CAP, &aGlobalNames[GLOB_NAME_DRAW]);
                             pCapOptions->Insert(pOLEDrawOpt);
                         }
-                        lcl_ReadOpt(*pOLEDrawOpt, pValues, nProp, nProp - 653);
+                        lcl_ReadOpt(*pOLEDrawOpt, pValues, nProp, nProp - 53);
                     break;
                     case 60: case 61: case 62: case 63: case 64: case 65: case 66:
                         if(!pOLEMiscOpt)
