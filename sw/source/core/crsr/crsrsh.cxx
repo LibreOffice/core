@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-29 10:57:12 $
+ *  last change: $Author: ama $ $Date: 2001-12-06 14:09:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1397,7 +1397,7 @@ void SwCrsrShell::UpdateCrsr( USHORT eFlags, BOOL bIdleEnd )
         {
             SwCrsrMoveState aTmpState( eMvState );
             aTmpState.bSetInReadOnly = IsReadOnlyAvailable();
-            aTmpState.bRealHeight = !pCurCrsr->HasMark();
+            aTmpState.bRealHeight = TRUE;
             aTmpState.bRealWidth = IsOverwriteCrsr();
             if( !pFrm->GetCharRect( aCharRect, *pCurCrsr->GetPoint(), &aTmpState ) )
             {
@@ -1411,12 +1411,13 @@ void SwCrsrShell::UpdateCrsr( USHORT eFlags, BOOL bIdleEnd )
             }
 //          ALIGNRECT( aCharRect );
 
-            if( aTmpState.bRealHeight )
+            if( !pCurCrsr->HasMark() )
                 aCrsrHeight = aTmpState.aRealHeight;
             else
             {
                 aCrsrHeight.X() = 0;
-                aCrsrHeight.Y() = aCharRect.Height();
+                aCrsrHeight.Y() = aTmpState.aRealHeight.Y() < 0 ?
+                                  -aCharRect.Width() : aCharRect.Height();
             }
         }
         else
