@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xipage.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 16:09:06 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:47:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,12 +327,12 @@ void lclPutMarginItem( SfxItemSet& rItemSet, sal_uInt16 nRecId, double fMarginIn
 void XclImpPageSettings::CreatePageStyle()
 {
     ScDocument& rDoc = GetDoc();
-    USHORT nScTab = GetCurrScTab();
+    SCTAB nScTab = GetCurrScTab();
 
     // *** create page style sheet ***
 
     String aStyleName( RTL_CONSTASCII_USTRINGPARAM( "PageStyle_" ) );
-    if( const String* pTableName = mpRD->pTabNameBuff->Get( nScTab ) )
+    if( const String* pTableName = mpRD->pTabNameBuff->Get( static_cast<sal_uInt16>(nScTab) ) )
         aStyleName.Append( *pTableName );
     else
         aStyleName.Append( String::CreateFromInt32( nScTab + 1 ) );
@@ -416,9 +416,9 @@ void XclImpPageSettings::CreatePageStyle()
     ScfUInt16Vec::const_iterator aIt, aEnd;
 
     for( aIt = maData.maHorPageBreaks.begin(), aEnd = maData.maHorPageBreaks.end(); (aIt != aEnd) && (*aIt <= MAXROW); ++aIt )
-        rDoc.SetRowFlags( *aIt, nScTab, rDoc.GetRowFlags( *aIt, nScTab ) | CR_MANUALBREAK );
+        rDoc.SetRowFlags( static_cast<SCROW>(*aIt), nScTab, rDoc.GetRowFlags( static_cast<SCROW>(*aIt), nScTab ) | CR_MANUALBREAK );
     for( aIt = maData.maVerPageBreaks.begin(), aEnd = maData.maVerPageBreaks.end(); (aIt != aEnd) && (*aIt <= MAXCOL); ++aIt )
-        rDoc.SetColFlags( *aIt, nScTab, rDoc.GetColFlags( *aIt, nScTab ) | CR_MANUALBREAK );
+        rDoc.SetColFlags( static_cast<SCCOL>(*aIt), nScTab, rDoc.GetColFlags( static_cast<SCCOL>(*aIt), nScTab ) | CR_MANUALBREAK );
 
     // set to defaults for next sheet
     maData.SetDefaults();
