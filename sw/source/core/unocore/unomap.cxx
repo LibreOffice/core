@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.137 $
+ *  $Revision: 1.138 $
  *
- *  last change: $Author: tl $ $Date: 2002-09-13 10:21:03 $
+ *  last change: $Author: tl $ $Date: 2002-09-25 09:04:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -980,11 +980,8 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_CHAR_UNDERLINE_HAS_COLOR), RES_CHRATR_UNDERLINE ,  CPPU_E2T(CPPUTYPE_BOOLEAN),              PropertyAttribute::MAYBEVOID, MID_UL_HASCOLOR},
                     { SW_PROP_NMID(UNO_NAME_PARA_LEFT_MARGIN), RES_LR_SPACE,            CPPU_E2T(CPPUTYPE_INT32), PropertyAttribute::MAYBEVOID, MID_TXT_LMARGIN|CONVERT_TWIPS},
                     { SW_PROP_NMID(UNO_NAME_PARA_RIGHT_MARGIN), RES_LR_SPACE,           CPPU_E2T(CPPUTYPE_INT32), PropertyAttribute::MAYBEVOID, MID_R_MARGIN|CONVERT_TWIPS},
-                    { SW_PROP_NMID(UNO_NAME_PARA_LEFT_MARGIN_RELATIVE), RES_LR_SPACE,          CPPU_E2T(CPPUTYPE_INT16), PropertyAttribute::MAYBEVOID,        MID_L_REL_MARGIN},
-                    { SW_PROP_NMID(UNO_NAME_PARA_RIGHT_MARGIN_RELATIVE), RES_LR_SPACE,         CPPU_E2T(CPPUTYPE_INT16), PropertyAttribute::MAYBEVOID,        MID_R_REL_MARGIN},
                     { SW_PROP_NMID(UNO_NAME_PARA_IS_AUTO_FIRST_LINE_INDENT), RES_LR_SPACE,          CPPU_E2T(CPPUTYPE_BOOLEAN),      PropertyAttribute::MAYBEVOID, MID_FIRST_AUTO},
                     { SW_PROP_NMID(UNO_NAME_PARA_FIRST_LINE_INDENT), RES_LR_SPACE,           CPPU_E2T(CPPUTYPE_INT32), PropertyAttribute::MAYBEVOID, MID_FIRST_LINE_INDENT|CONVERT_TWIPS},
-                    { SW_PROP_NMID(UNO_NAME_PARA_FIRST_LINE_INDENT_RELATIVE), RES_LR_SPACE,         CPPU_E2T(CPPUTYPE_INT32), PropertyAttribute::MAYBEVOID, MID_FIRST_LINE_REL_INDENT|CONVERT_TWIPS},
                     { SW_PROP_NMID(UNO_NAME_CHAR_KERNING), RES_CHRATR_KERNING    ,  CPPU_E2T(CPPUTYPE_INT16)  ,         PropertyAttribute::MAYBEVOID,  CONVERT_TWIPS},
                     { SW_PROP_NMID(UNO_NAME_CHAR_NO_HYPHENATION), RES_CHRATR_NOHYPHEN   ,   CPPU_E2T(CPPUTYPE_BOOLEAN)  ,       PropertyAttribute::MAYBEVOID,     0},
                     { SW_PROP_NMID(UNO_NAME_CHAR_SHADOWED), RES_CHRATR_SHADOWED  ,  CPPU_E2T(CPPUTYPE_BOOLEAN)  ,       PropertyAttribute::MAYBEVOID, 0},
@@ -1005,8 +1002,6 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_PARA_REGISTER_MODE_ACTIVE), RES_PARATR_REGISTER,    CPPU_E2T(CPPUTYPE_BOOLEAN)  ,       PropertyAttribute::MAYBEVOID, 0},
                     { SW_PROP_NMID(UNO_NAME_PARA_TOP_MARGIN), RES_UL_SPACE,             CPPU_E2T(CPPUTYPE_INT32), PropertyAttribute::MAYBEVOID, MID_UP_MARGIN|CONVERT_TWIPS},
                     { SW_PROP_NMID(UNO_NAME_PARA_BOTTOM_MARGIN), RES_UL_SPACE,          CPPU_E2T(CPPUTYPE_INT32), PropertyAttribute::MAYBEVOID, MID_LO_MARGIN|CONVERT_TWIPS},
-                    { SW_PROP_NMID(UNO_NAME_PARA_TOP_MARGIN_RELATIVE), RES_UL_SPACE,        CPPU_E2T(CPPUTYPE_INT16), PropertyAttribute::MAYBEVOID, MID_UP_REL_MARGIN},
-                    { SW_PROP_NMID(UNO_NAME_PARA_BOTTOM_MARGIN_RELATIVE), RES_UL_SPACE,         CPPU_E2T(CPPUTYPE_INT16), PropertyAttribute::MAYBEVOID, MID_LO_REL_MARGIN},
                     TABSTOPS_MAP_ENTRY
                     { SW_PROP_NMID(UNO_NAME_CHAR_WORD_MODE), RES_CHRATR_WORDLINEMODE,CPPU_E2T(CPPUTYPE_BOOLEAN)  ,    PropertyAttribute::MAYBEVOID,     0},
                     { SW_PROP_NMID(UNO_NAME_LEFT_BORDER), RES_BOX,              CPPU_E2T(CPPUTYPE_BORDERLINE),  0, LEFT_BORDER  |CONVERT_TWIPS },
