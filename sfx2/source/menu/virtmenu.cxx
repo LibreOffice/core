@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtmenu.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mba $ $Date: 2001-07-02 15:44:55 $
+ *  last change: $Author: mba $ $Date: 2001-07-20 18:49:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -775,6 +775,7 @@ IMPL_LINK( SfxVirtualMenu, Select, Menu *, pMenu )
     else if ( nId >= START_ITEMID_PICKLIST && nId <= END_ITEMID_PICKLIST )
     {
         SfxPickList_Impl::Get()->ExecuteMenuEntry( nId );
+        return sal_True;
     }
 
     pBindings->Execute( nId );
