@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcfg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2002-02-21 14:48:26 $
+ *  last change: $Author: pl $ $Date: 2002-02-28 11:53:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1100,10 +1100,7 @@ const FontSubstConfigItem::FontNameAttr* FontSubstConfigItem::getSubstInfo( cons
         if( lang != m_aSubstitutions.end() )
         {
             ::std::vector< FontNameAttr >::const_iterator it = ::std::lower_bound( lang->second.begin(), lang->second.end(), aSearchAttr, WeakStringSort() );
-            if( it != lang->second.end()
-                && ( it != lang->second.begin()
-                     || aSearchFont.CompareTo( it->Name, aSearchFont.Len() ) == COMPARE_EQUAL )
-                )
+            if( it != lang->second.end() && aSearchFont.CompareTo( it->Name, aSearchFont.Len() ) == COMPARE_EQUAL )
                 return &(*it);
 
         }

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: vg $ $Date: 2001-09-18 09:43:50 $
+#   last change: $Author: pl $ $Date: 2002-02-28 11:49:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,6 +83,7 @@ dummy:
 
 SLOFILES=\
     $(SLO)$/fontmanager.obj		\
+    $(SLO)$/fontcache.obj		\
     $(SLO)$/parseAFM.obj
 
 .IF "$(OS)$(CPU)"=="SOLARISI"

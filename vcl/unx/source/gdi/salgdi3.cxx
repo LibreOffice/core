@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: hdu $ $Date: 2002-02-18 18:15:00 $
+ *  last change: $Author: pl $ $Date: 2002-02-28 11:53:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,8 @@
 #ifdef USE_BUILTIN_RASTERIZER
 static X11GlyphPeer aX11GlyphPeer;
 #endif // USE_BUILTIN_RASTERIZER
+
+using namespace rtl;
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
@@ -1766,6 +1768,14 @@ static void SetImplFontData( const psp::FastPrintFontInfo& aInfo, ImplFontData& 
     rData.mnVerticalOrientation= 0;
     rData.meType        = TYPE_SCALABLE;
     rData.mbDevice      = aInfo.m_eType == psp::fonttype::Builtin;
+    String aMapNames;
+    for( ::std::list< OUString >::const_iterator it = aInfo.m_aAliases.begin(); it != aInfo.m_aAliases.end(); ++it )
+    {
+        if( it != aInfo.m_aAliases.begin() )
+            aMapNames.Append(';');
+        aMapNames.Append( String( *it ) );
+    }
+    rData.maMapNames    = aMapNames;
 }
 
 #endif

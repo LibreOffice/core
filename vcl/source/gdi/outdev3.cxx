@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: ssa $ $Date: 2002-02-21 10:45:39 $
+ *  last change: $Author: pl $ $Date: 2002-02-28 11:53:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1567,6 +1567,13 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
     FontPitch ePitch            = rFont.GetPitch();
     short nOrientation          = rFont.GetOrientation();
     BOOL bVertical              = rFont.IsVertical();
+
+#ifdef DEBUG
+    if( rName.EqualsIgnoreCaseAscii( "Brabalando" ) )
+    {
+        fprintf( stderr, "brabalando asked\n" );
+    }
+#endif
 
     // normalize orientation between 0 and 3600
     if ( nOrientation )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hdu $ $Date: 2001-12-21 16:31:36 $
+ *  last change: $Author: pl $ $Date: 2002-02-28 11:49:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 #endif
 #ifndef __SGI_STL_LIST
 #include <list>
+#endif
+#ifndef __SGI_STL_SET
+#include <set>
 #endif
 #ifndef _PSPRINT_HELPER_HXX_
 #include <psprint/helper.hxx>
@@ -173,25 +176,26 @@ enum type {
 
 struct FastPrintFontInfo
 {
-    fontID                  m_nID; // FontID
-    fonttype::type          m_eType;
+    fontID                                  m_nID; // FontID
+    fonttype::type                          m_eType;
 
     // font attributes
-    ::rtl::OUString         m_aFamilyName;
-    family::type            m_eFamilyStyle;
-    italic::type            m_eItalic;
-    width::type             m_eWidth;
-    weight::type            m_eWeight;
-    pitch::type             m_ePitch;
-    rtl_TextEncoding        m_aEncoding;
+    ::rtl::OUString                         m_aFamilyName;
+    ::std::list< ::rtl::OUString >          m_aAliases;
+    family::type                            m_eFamilyStyle;
+    italic::type                            m_eItalic;
+    width::type                             m_eWidth;
+    weight::type                            m_eWeight;
+    pitch::type                             m_ePitch;
+    rtl_TextEncoding                        m_aEncoding;
 };
 
 struct PrintFontInfo : public FastPrintFontInfo
 {
-    int                     m_nAscend;
-    int                     m_nDescend;
-    int                     m_nLeading;
-    int                     m_nWidth;
+    int                                     m_nAscend;
+    int                                     m_nDescend;
+    int                                     m_nLeading;
+    int                                     m_nWidth;
 };
 
 // the values are per thousand of the font size
@@ -224,6 +228,7 @@ class PrintFontManager
     friend class TrueTypeFontFile;
     friend class Type1FontFile;
     friend class BuiltinFont;
+    friend class FontCache;
 
     struct PrintFontMetrics
     {
@@ -258,6 +263,7 @@ class PrintFontManager
 
         // font attributes
         int                                         m_nFamilyName;  // atom
+        ::std::list< int >                          m_aAliases;
         int                                         m_nPSName;      // atom
         italic::type                                m_eItalic;
         width::type                                 m_eWidth;
@@ -326,6 +332,9 @@ class PrintFontManager
     ::std::list< ::rtl::OString >               m_aFontDirectories;
     ::std::list< int >                          m_aPrivateFontDirectories;
     ::utl::MultiAtomProvider*                   m_pAtoms;
+    // for speeding up findFontFileID
+    ::std::hash_map< ::rtl::OString, ::std::set< fontID >, ::rtl::OStringHash >
+                                                m_aFontFileToFontID;
 
     ::std::hash_map< ::rtl::OString, int, ::rtl::OStringHash >
     m_aDirToAtom;
@@ -339,6 +348,8 @@ class PrintFontManager
     ::std::hash_multimap< sal_Unicode, sal_uInt8 >  m_aUnicodeToAdobecode;
     ::std::hash_multimap< sal_uInt8, sal_Unicode >  m_aAdobecodeToUnicode;
 
+    mutable FontCache*                          m_pFontCache;
+    mutable bool                                m_bFlushFontCache;
 
     ::rtl::OString getAfmFile( PrintFont* pFont ) const;
     ::rtl::OString getFontFile( PrintFont* pFont ) const;
@@ -347,7 +358,7 @@ class PrintFontManager
 
     bool analyzeFontFile( int nDirID, const ::rtl::OString& rFileName, bool bReadFile, const ::std::list< ::rtl::OString >& rXLFDs, ::std::list< PrintFont* >& rNewFonts ) const;
     ::rtl::OUString convertTrueTypeName( void* pNameRecord ) const; // actually a NameRecord* formt font subsetting code
-    ::rtl::OUString analyzeTrueTypeFamilyName( void* pTTFont ) const; // actually a TrueTypeFont* from font subsetting code
+    void analyzeTrueTypeFamilyName( void* pTTFont, ::std::list< ::rtl::OUString >& rnames ) const; // actually a TrueTypeFont* from font subsetting code
     bool analyzeTrueTypeFile( PrintFont* pFont ) const;
     // finds the FIRST id for this font file; there may be more
     // for TrueType collections
@@ -408,6 +419,9 @@ public:
 
     // get a specific fonts style family
     family::type PrintFontManager::getFontFamilyType( fontID nFontID ) const;
+
+    // get a specific fonts family name aliases
+    void PrintFontManager::getFontFamilyAliases( fontID nFontID ) const;
 
     // get a specific fonts type
     fonttype::type getFontType( fontID nFontID ) const
