@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MultiTypeInterfaceContainer.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jl $ $Date: 2002-04-11 13:39:51 $
+ *  last change: $Author: jl $ $Date: 2002-04-23 09:21:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,7 @@ public class MultiTypeInterfaceContainer
     }
 
     /** param key can be null */
-    synchronized public InterfaceContainer getContainer(Type key)
+    synchronized public InterfaceContainer getContainer(Object key)
     {
         InterfaceContainer retVal= null;
         Iterator it= map.keySet().iterator();
@@ -168,7 +168,7 @@ public class MultiTypeInterfaceContainer
     }
 
 
-    synchronized public int removeInterface(Type key, Object iface)
+    synchronized public int removeInterface(Object key, Object iface)
     {
         int retVal= 0;
         InterfaceContainer cont= (InterfaceContainer) map.get(key);
