@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filterfactory.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-29 13:42:10 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 17:19:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,12 +156,52 @@ class FilterFactory : public ::cppu::ImplInheritanceHelper1< BaseContainer      
         /** @short  implement the container string query: "matchByDocumentService=:iflags=:eflags=:..."
 
             @param  lTokens
-                    the list of query tokens ans its values.
+                    the list of query tokens and its values.
 
             @return A string list of internal filter names, including
                     all filters, which match this query.
          */
         OUStringList impl_queryMatchByDocumentService(const QueryTokenizer& lTokens) const;
+
+        //---------------------------------------
+
+        /** TODO document me
+         */
+        OUStringList impl_getListOfInstalledModules() const;
+
+        //---------------------------------------
+
+        /** @short  implement the container string query:
+                    "getSortedFilterList()[:module=<xxx>]:[iflags=<xxx>][:eflags=<xxx>]"
+
+            @param  lTokens
+                    the list of query tokens and its values.
+
+            @return A string list of internal filter names, including
+                    all filters, which match this query.
+         */
+        OUStringList impl_getSortedFilterList(const QueryTokenizer& lTokens) const;
+
+        //---------------------------------------
+
+        /** TODO document me
+         */
+        OUStringList impl_getSortedFilterListForModule(const ::rtl::OUString& sModule,
+                                                             sal_Int32        nIFlags,
+                                                             sal_Int32        nEFlags) const;
+
+        //---------------------------------------
+
+        /** @short  read a specialized and sorted list of filter names from
+                    the configuration (matching the specified module)
+
+            @param  sModule
+                    the module for which the sorted list should be retrieved for.
+
+            @return A string list of internal filter names.
+                    Can be empty.
+         */
+        OUStringList impl_readSortedFilterListFromConfig(const ::rtl::OUString& sModule) const;
 
     //-------------------------------------------
     // static uno helper!
