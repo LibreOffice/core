@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 11:06:30 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:15:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -962,10 +962,10 @@ void OGenericUnoController::showError(const SQLExceptionInfo& _rInfo)
     ::dbaui::showError(_rInfo,getView(),getORB());
 }
 // -----------------------------------------------------------------------------
-Reference< drafts::com::sun::star::frame::XLayoutManager > OGenericUnoController::getLayoutManager(const Reference< XFrame >& _xFrame) const
+Reference< ::com::sun::star::frame::XLayoutManager > OGenericUnoController::getLayoutManager(const Reference< XFrame >& _xFrame) const
 {
     Reference< XPropertySet > xPropSet( _xFrame, UNO_QUERY );
-    Reference< drafts::com::sun::star::frame::XLayoutManager > xLayoutManager;
+    Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
     if ( xPropSet.is() )
     {
         try
@@ -982,7 +982,7 @@ Reference< drafts::com::sun::star::frame::XLayoutManager > OGenericUnoController
 void OGenericUnoController::loadMenu(const Reference< XFrame >& _xFrame)
 {
 
-    Reference< drafts::com::sun::star::frame::XLayoutManager > xLayoutManager = getLayoutManager(_xFrame);
+    Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager = getLayoutManager(_xFrame);
 
 
     if ( xLayoutManager.is() )
@@ -998,7 +998,7 @@ void OGenericUnoController::loadMenu(const Reference< XFrame >& _xFrame)
 }
 
 // -----------------------------------------------------------------------------
-void OGenericUnoController::onLoadedMenu(const Reference< drafts::com::sun::star::frame::XLayoutManager >& _xLayoutManager)
+void OGenericUnoController::onLoadedMenu(const Reference< ::com::sun::star::frame::XLayoutManager >& _xLayoutManager)
 {
     // not interested in
 }
