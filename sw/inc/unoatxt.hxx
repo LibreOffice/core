@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoatxt.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-14 13:11:12 $
+ *  last change: $Author: dvo $ $Date: 2001-04-17 13:52:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,8 +109,8 @@
 #ifndef _CPPUHELPER_IMPLBASE6_HXX_
 #include <cppuhelper/implbase6.hxx> // helper for implementations
 #endif
-#ifndef _UNOEVENT_HXX
-#include "unoevent.hxx"
+#ifndef _SVTOOLS_UNOEVENT_HXX_
+#include <svtools/unoevent.hxx>
 #endif
 
 class SwTextBlocks;
@@ -288,7 +288,7 @@ public:
 
 
 /** Implement the XNameAccess for the AutoText events */
-class SwAutoTextEventDescriptor : public SwBaseEventDescriptor
+class SwAutoTextEventDescriptor : public SvBaseEventDescriptor
 {
     ::rtl::OUString sSwAutoTextEventDescriptor;
 
@@ -324,5 +324,3 @@ protected:
 
 
 #endif
-
-

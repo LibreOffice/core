@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLTextBlocks.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mib $ $Date: 2001-04-12 12:57:03 $
+ *  last change: $Author: dvo $ $Date: 2001-04-17 13:52:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,8 +167,12 @@
 #include <svtools/macitem.hxx>
 #endif
 
-#ifndef _UNOEVENT_HXX
-#include <unoevent.hxx>
+#ifndef _SVTOOLS_UNOEVENT_HXX_
+#include <svtools/unoevent.hxx>
+#endif
+
+#ifndef _SWEVENT_HXX
+#include "swevent.hxx"      // for event IDs
 #endif
 
 
@@ -776,6 +780,14 @@ BOOL SwXMLTextBlocks::IsOnlyTextBlock( USHORT nIdx ) const
     return aNames[nIdx]->bIsOnlyTxt;
 }
 
+// event description for autotext events; this constant should really be
+// taken from unocore/unoevents.cxx or ui/unotxt.cxx
+const struct SvEventDescription aAutotextEvents[] =
+{
+    { SW_EVENT_START_INS_GLOSSARY,  "OnInsertStart" },
+    { SW_EVENT_END_INS_GLOSSARY,    "OnInsertDone" },
+    { 0, NULL }
+};
 
 ULONG SwXMLTextBlocks::GetMacroTable( USHORT nIdx, SvxMacroTableDtor& rMacroTbl )
 {
@@ -825,8 +837,8 @@ ULONG SwXMLTextBlocks::GetMacroTable( USHORT nIdx, SvxMacroTableDtor& rMacroTbl 
                     // create descriptor and reference to it. Either
                     // both or neither must be kept because of the
                     // reference counting!
-                    SwMacroTableEventDescriptor* pDescriptor =
-                        new SwMacroTableEventDescriptor();
+                    SvMacroTableEventDescriptor* pDescriptor =
+                        new SvMacroTableEventDescriptor(aAutotextEvents);
                     Reference<XNameReplace> xReplace = pDescriptor;
                     Sequence<Any> aFilterArguments( 1 );
                     aFilterArguments[0] <<= xReplace;
@@ -1251,7 +1263,7 @@ ULONG SwXMLTextBlocks::SetMacroTable( USHORT nIdx, const SvxMacroTableDtor& rMac
 
                 // construct events object
                 Reference<XNameAccess> xEvents =
-                    new SwMacroTableEventDescriptor(rMacroTbl);
+                    new SvMacroTableEventDescriptor(rMacroTbl,aAutotextEvents);
 
                 // prepare arguments (prepend doc handler to given arguments)
                 Sequence<Any> aParams(2);

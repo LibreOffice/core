@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoatxt.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-04-17 11:44:03 $
+ *  last change: $Author: dvo $ $Date: 2001-04-17 13:52:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,8 +87,8 @@
 #ifndef _UNOOBJ_HXX
 #include <unoobj.hxx>
 #endif
-#ifndef _UNOEVENT_HXX
-#include "unoevent.hxx"
+#ifndef _SVTOOLS_UNOEVENT_HXX_
+#include <svtools/unoevent.hxx>
 #endif
 #ifndef _SWEVENT_HXX
 #include "swevent.hxx"
@@ -1220,18 +1220,19 @@ Reference< container::XNameReplace > SwXAutoTextEntry::getEvents()
 /* -----------------------------30.01.01 18:40--------------------------------
 
  ---------------------------------------------------------------------------*/
-const USHORT aAutotextEvents[] =
+const struct SvEventDescription aAutotextEvents[] =
 {
-    SW_EVENT_START_INS_GLOSSARY,
-    SW_EVENT_END_INS_GLOSSARY,
-    0
+    { SW_EVENT_START_INS_GLOSSARY,  "OnInsertStart" },
+    { SW_EVENT_END_INS_GLOSSARY,    "OnInsertDone" },
+    { 0, NULL }
 };
+
 /* -----------------------------30.01.01 18:40--------------------------------
 
  ---------------------------------------------------------------------------*/
 SwAutoTextEventDescriptor::SwAutoTextEventDescriptor(
     SwXAutoTextEntry& rAutoText ) :
-        SwBaseEventDescriptor(aAutotextEvents),
+        SvBaseEventDescriptor(aAutotextEvents),
         sSwAutoTextEventDescriptor(RTL_CONSTASCII_USTRINGPARAM(
             "SwAutoTextEventDescriptor")),
         rAutoTextEntry(rAutoText)
@@ -1314,6 +1315,8 @@ void SwAutoTextEventDescriptor::getByName(
                 "can't get autotext group; SwAutoTextEntry has illegal name?");
 
     // return empty macro, unless macro is found
+    OUString sEmpty;
+    SvxMacro aEmptyMacro(sEmpty, sEmpty);
     rMacro = aEmptyMacro;
 
     if ( pBlocks &&  !pBlocks->GetError())
