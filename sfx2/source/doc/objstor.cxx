@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-04 10:18:32 $
+ *  last change: $Author: mba $ $Date: 2001-10-08 12:34:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -489,7 +489,8 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
     if ( bHasStorage )
     {
         SvStorageRef xStor( pMed->GetStorage() );
-        if( xStor.Is() && !xStor->GetError() && pMed->GetFilter()->GetVersion() < SOFFICE_FILEFORMAT_60 )
+        DBG_ASSERT( pFilter, "No filter for storage found!" );
+        if( xStor.Is() && !xStor->GetError() && pMed->GetFilter() && pMed->GetFilter()->GetVersion() < SOFFICE_FILEFORMAT_60 )
         {
             // Undoobjekte aufraeumen, muss vor dem eigentlichen Laden erfolgen
             SvEmbeddedObjectRef xThis = this;
