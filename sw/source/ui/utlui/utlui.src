@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utlui.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2000-11-27 08:39:04 $
+ *  last change: $Author: kz $ $Date: 2000-11-29 11:16:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1546,7 +1546,7 @@ String STR_MULT_INTERACT_SPELL_WARN
     Text[ polish ] = "Interaktywne sprawdzanie pisowni\naktywne jest ju¿ w innym dokumencie.";
     Text[ portuguese_brazilian ] = "The interactive spelling already active\\in a different document";
     Text[ japanese ] = "²İÀ×¸Ã¨ÌŞ½ÍßÙÁª¯¸‚Í‚·‚Å‚É\n‚Ù‚©‚ÌÄŞ·­ÒİÄ‚Å±¸Ã¨ÌŞ‚É‚È‚Á‚Ä‚¢‚Ü‚·";
-    Text[ korean ] = "´ëÈ­Çü ¸ÂÃã¹ıÀº \nÀÌ¹Ì ´Ù¸¥ ¹®¼­¿¡¼­ È°¼º»óÅÂÀÔ´Ï´Ù.";
+    Text[ korean ] = "´ëÈ­Çü ¸ÂÃã¹ıÀº \nÀÌ¹Ì ´Ù¸¥ ¹®¼­¿¡¼­ È°¼ºÈ­µÇ¾î ÀÖ½À´Ï´Ù.";
     Text[ chinese_simplified ] = "½»»¥Ê½Õı×Ö·¨¼ì²é\nÒÑ¾­Ê¹ÓÃÔÚÒ»¸öÆäËüÎÄµµÖĞ";
     Text[ chinese_traditional ] = "¥t¤@­Ó¤å¥ó¤w¸g¨Ï¥Î¤¬°Ê¦¡¥¿¦rªk¥\\¯à";
     Text[ arabic ] = "ÇáÊÏŞíŞ ÇáÅãáÇÆí ÇáÊÈÇÏáí\näÔØ ÈÇáİÚá İí ãÓÊäÏ ÂÎÑ";
