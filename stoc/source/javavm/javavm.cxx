@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javavm.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-16 16:01:05 $
+ *  last change: $Author: jl $ $Date: 2001-03-16 16:24:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,10 @@
 #include <osl/conditn.hxx>
 #endif
 
+#ifndef _THREAD_HXX_
+#include <osl/thread.hxx>
+#endif
+
 #include <uno/environment.h>
 
 #include <cppuhelper/factory.hxx>
@@ -127,7 +131,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::java;
 using namespace com::sun::star::registry;
 
-using namespace vos;
 using namespace rtl;
 using namespace cppu;
 using namespace osl;
@@ -159,7 +162,7 @@ namespace stoc_javavm {
 
     class JavaVirtualMachine_Impl;
 
-    class OCreatorThread : public OThread {
+    class OCreatorThread : public Thread {
         JavaVirtualMachine_Impl * _pJavaVirtualMachine_Impl;
         JavaVM                  * _pJVM;
 
