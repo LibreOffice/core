@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2004-11-26 20:42:55 $
+#   last change: $Author: hro $ $Date: 2004-12-03 16:46:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -110,7 +110,46 @@ all: \
     $(MISC)$/ooo11-master-doc.ico \
     $(MISC)$/ooo11-math-doc.ico \
     $(MISC)$/ooo11-writer-doc.ico \
-    $(MISC)$/ooo11-writer-tem.ico
+    $(MISC)$/ooo11-writer-tem.ico \
+    $(MISC)$/so8-base-app.ico \
+    $(MISC)$/so8-base-doc.ico \
+    $(MISC)$/so8-calc-app.ico \
+    $(MISC)$/so8-calc-doc.ico \
+    $(MISC)$/so8-calc-tem.ico \
+    $(MISC)$/so8-chart-doc.ico \
+    $(MISC)$/so8-configuration.ico \
+    $(MISC)$/so8-draw-app.ico \
+    $(MISC)$/so8-draw-doc.ico \
+    $(MISC)$/so8-draw-tem.ico \
+    $(MISC)$/so8-empty-doc.ico \
+    $(MISC)$/so8-empty-tem.ico \
+    $(MISC)$/so8-image-doc.ico \
+    $(MISC)$/so8-impress-app.ico \
+    $(MISC)$/so8-impress-doc.ico \
+    $(MISC)$/so8-impress-tem.ico \
+    $(MISC)$/so8-macro-doc.ico \
+    $(MISC)$/so8-main-app.ico \
+    $(MISC)$/so8-master-doc.ico \
+    $(MISC)$/so8-math-app.ico \
+    $(MISC)$/so8-math-doc.ico \
+    $(MISC)$/so8-open.ico \
+    $(MISC)$/so8-printer.ico \
+    $(MISC)$/so8-web-doc.ico \
+    $(MISC)$/so8-writer-app.ico \
+    $(MISC)$/so8-writer-doc.ico \
+    $(MISC)$/so8-writer-tem.ico \
+    $(MISC)$/so7-base-doc.ico \
+    $(MISC)$/so7-calc-doc.ico \
+    $(MISC)$/so7-calc-tem.ico \
+    $(MISC)$/so7-chart-doc.ico \
+    $(MISC)$/so7-draw-doc.ico \
+    $(MISC)$/so7-draw-tem.ico \
+    $(MISC)$/so7-impress-doc.ico \
+    $(MISC)$/so7-impress-tem.ico \
+    $(MISC)$/so7-master-doc.ico \
+    $(MISC)$/so7-math-doc.ico \
+    $(MISC)$/so7-writer-doc.ico \
+    $(MISC)$/so7-writer-tem.ico
 
 $(MISC)$/%.ico: %.ico
     +$(COPY) $< $@
