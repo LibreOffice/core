@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview3.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-16 13:51:30 $
+ *  last change: $Author: ka $ $Date: 2001-06-19 10:27:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -404,9 +404,14 @@ BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
         else
         {
             // internal paste
-            SdrModel*   pWorkModel = (SdrModel*) pOwnData->GetWorkDocument();
-            SdrPage*    pWorkPage = pWorkModel->GetPage( 0 ); pWorkPage->SetRectsDirty();
-            Size        aSize( pWorkPage->GetAllObjBoundRect().GetSize() );
+            const SdDrawDocument*   pWorkModel = pOwnData->GetWorkDocument();
+            SdrPage*                pWorkPage = (SdrPage*) ( ( pWorkModel->GetPageCount() > 1 ) ?
+                                                pWorkModel->GetSdPage( 0, PK_STANDARD ) :
+                                                pWorkModel->GetPage( 0 ) );
+
+            pWorkPage->SetRectsDirty();
+
+            Size aSize( pWorkPage->GetAllObjBoundRect().GetSize() );
 
             aDropPos.X() = pOwnData->GetStartPos().X() + ( aSize.Width() >> 1 );
             aDropPos.Y() = pOwnData->GetStartPos().Y() + ( aSize.Height() >> 1 );
@@ -667,8 +672,10 @@ BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
 
             if( pOwnData && pOwnData->GetWorkDocument() )
             {
-                SdrModel*   pWorkModel = (SdrModel*) pOwnData->GetWorkDocument();
-                SdrPage*    pWorkPage = pWorkModel->GetPage( 0 );
+                const SdDrawDocument*   pWorkModel = pOwnData->GetWorkDocument();
+                SdrPage*                pWorkPage = (SdrPage*) ( ( pWorkModel->GetPageCount() > 1 ) ?
+                                                    pWorkModel->GetSdPage( 0, PK_STANDARD ) :
+                                                    pWorkModel->GetPage( 0 ) );
 
                 pWorkPage->SetRectsDirty();
 
@@ -692,8 +699,10 @@ BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
 
             if( pOwnData && pOwnData->GetWorkDocument() )
             {
-                SdrModel*   pWorkModel = (SdrModel*) pOwnData->GetWorkDocument();
-                SdrPage*    pWorkPage = pWorkModel->GetPage( 0 );
+                const SdDrawDocument*   pWorkModel = pOwnData->GetWorkDocument();
+                SdrPage*                pWorkPage = (SdrPage*) ( ( pWorkModel->GetPageCount() > 1 ) ?
+                                                    pWorkModel->GetSdPage( 0, PK_STANDARD ) :
+                                                    pWorkModel->GetPage( 0 ) );
 
                 pWorkPage->SetRectsDirty();
 
@@ -717,8 +726,10 @@ BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
 
             if( pOwnData && pOwnData->GetWorkDocument() )
             {
-                SdrModel*   pWorkModel = (SdrModel*) pOwnData->GetWorkDocument();
-                SdrPage*    pWorkPage = pWorkModel->GetPage( 0 );
+                const SdDrawDocument*   pWorkModel = pOwnData->GetWorkDocument();
+                SdrPage*                pWorkPage = (SdrPage*) ( ( pWorkModel->GetPageCount() > 1 ) ?
+                                                    pWorkModel->GetSdPage( 0, PK_STANDARD ) :
+                                                    pWorkModel->GetPage( 0 ) );
 
                 pWorkPage->SetRectsDirty();
 
