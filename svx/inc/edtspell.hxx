@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtspell.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tl $ $Date: 2000-10-27 09:28:06 $
+ *  last change: $Author: tl $ $Date: 2001-07-24 08:25:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,25 +90,16 @@ protected:
     virtual BOOL            SpellContinue();    // Bereich pruefen
     virtual void            ReplaceAll( const String &rNewText, INT16 nLanguage );
     virtual void            SpellEnd();
-//  virtual BOOL            CanRestart();
+//  virtual BOOL            ();
     virtual BOOL            SpellMore();
     virtual BOOL            HasOtherCnt();
     virtual void            ScrollArea();
-#ifndef ENABLEUNICODE
     virtual void            ChangeWord( const String& rNewWord, const USHORT nLang );
     virtual void            ChangeThesWord( const String& rNewWord );
 //  virtual void            ChangeAll( const String& rNewWord );
     virtual void            AutoCorrect( const String& rOldWord, const String& rNewWord );
 
 //  virtual String          GetCurrentWord() const;
-#else
-    virtual void            ChangeWord( const UniString& rNewWord, const USHORT nLang );
-    virtual void            ChangeThesWord( const UniString& rNewWord );
-//  virtual void            ChangeAll( const UniString& rNewWord );
-    virtual void            AutoCorrect( const UniString& rOldWord, const UniString& rNewWord );
-
-//  virtual UniString           GetCurrentWord() const;
-#endif
 
 public:
     EditSpellWrapper( Window* pWin,
