@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh1.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:36:49 $
+ *  last change: $Author: os $ $Date: 2004-05-13 12:31:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,9 +262,6 @@
 #endif
 #ifndef _CRSSKIP_HXX
 #include <crsskip.hxx>
-#endif
-#ifndef SW_WORDCOUNTDIALOG_HXX
-#include <wordcountdialog.hxx>
 #endif
 #ifndef _DOCSTAT_HXX
 #include <docstat.hxx>
@@ -1258,7 +1255,10 @@ void SwTextShell::Execute(SfxRequest &rReq)
             rSh.UpdateDocStat( aDocStat );
             rSh.EndAction();
         }
-        SwWordCountDialog* pDialog = new SwWordCountDialog(GetView().GetWindow());
+
+        SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+        DBG_ASSERT(pFact, "Dialogdiet fail!");
+        AbstractSwWordCountDialog* pDialog = pFact->CreateSwWordCountDialog( GetView().GetWindow() );
         pDialog->SetValues(aCurr, aDocStat );
         pDialog->Execute();
         delete pDialog;
