@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fesh.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-04 13:18:57 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 11:05:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@ class SwTableAutoFmt;
 class SwFrm;
 class SwTabFrm;
 class SwFmtFrmSize;
+class SwFmtRowSplit;
 class SvxBorderLine;
 class SvStorageStream;
 class SdrObject;
@@ -618,6 +619,9 @@ public:
     void SetRowHeight( const SwFmtFrmSize &rSz );
     //Der Pointer muss vom Aufrufer zerstoert werden wenn != 0
     void GetRowHeight( SwFmtFrmSize *&rpSz ) const;
+
+    void SetRowSplit( const SwFmtRowSplit &rSz );
+    void GetRowSplit( SwFmtRowSplit *&rpSz ) const;
 
     void   SetBoxAlign( USHORT nOrient );
     USHORT GetBoxAlign() const;         //USHRT_MAX fuer uneindeutig!
