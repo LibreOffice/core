@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiescher.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-24 11:56:18 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 08:49:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,6 @@
 #ifndef _CHRTDEFS_HXX
 #include "chrtdefs.hxx"
 #endif
-
 
 class ScfProgressBar;
 class XclImpStream;
@@ -262,36 +261,32 @@ public:
 class XclImpCtrlLinkHelper
 {
 public:
-    explicit                    XclImpCtrlLinkHelper( ScDocument& rDoc );
+    explicit                    XclImpCtrlLinkHelper( XclCtrlBindMode eBindMode );
 
+    /** Returns the linked cell address, or 0, if not present. */
+    inline const ScAddress*     GetCellLink() const { return mpCellLink.get(); }
+    /** Returns the value binding mode for linked cells. */
+    inline XclCtrlBindMode      GetBindingMode() const { return meBindMode; }
+    /** Returns the linked source cell range, or 0, if not present. */
+    inline const ScRange*       GetSourceRange() const { return mpSrcRange.get(); }
+
+protected:
     /** Reads the formula for the linked cell from the current position of the stream. */
     void                        ReadCellLinkFormula( XclImpStream& rStrm );
     /** Reads the formula for the source range from the current position of the stream. */
     void                        ReadSrcRangeFormula( XclImpStream& rStrm );
 
-    /** Inserts a string list property from the document to the property set. */
-    void                        InsertStringList(
-                                    ::com::sun::star::uno::Reference<
-                                        ::com::sun::star::beans::XPropertySet >& rxPropSet ) const;
-    /** Inserts a tag property containing the link range address to the property set. */
-    void                        InsertLinkTag(
-                                    ::com::sun::star::uno::Reference<
-                                        ::com::sun::star::beans::XPropertySet >& rxPropSet ) const;
-
-    /** Returns the string from the document, which appears at the passed position in the listbox. */
-    String                      GetString( sal_Int16 nPos ) const;
-
 private:
-    ScDocument&                 mrDoc;          /// Source Calc document.
     ::std::auto_ptr< ScAddress > mpCellLink;    /// Linked cell in the Calc document.
     ::std::auto_ptr< ScRange >  mpSrcRange;     /// Source data range in the Calc document.
+    XclCtrlBindMode             meBindMode;     /// Value binding mode.
 };
 
 
 // ----------------------------------------------------------------------------
 
 /** An old form control object (does not use the OLE mechanism, but is a "simple" drawing object). */
-class XclImpEscherTbxCtrl : public XclImpEscherTxo
+class XclImpEscherTbxCtrl : public XclImpEscherTxo, public XclImpCtrlLinkHelper
 {
 public:
     TYPEINFO();
@@ -312,7 +307,7 @@ public:
     /** Returns the complete component service name for this control. */
     ::rtl::OUString             GetServiceName() const;
 
-    /** Sets control specific properties at the passed property set. */
+    /** Sets form control specific properties. */
     void                        SetProperties( ::com::sun::star::uno::Reference<
                                     ::com::sun::star::beans::XPropertySet >& rxPropSet ) const;
 
@@ -323,7 +318,6 @@ public:
 
 private:
     ScfInt16Vec                 maMultiSel;     /// Indexes of all selected entries in a multi selection.
-    XclImpCtrlLinkHelper        maLinkHelper;   /// Helper for linked ranges.
     sal_Int32                   mnProgressSeg;  /// Progress bar segment identifier.
     sal_uInt16                  mnCtrlType;     /// Type of the control from OBJ record.
     sal_uInt16                  mnState;        /// Checked/unchecked state.
@@ -339,7 +333,7 @@ private:
 class XclImpDffManager;
 
 /** A common Escher OLE object, or an OLE form control. */
-class XclImpEscherOle : public XclImpEscherObj
+class XclImpEscherOle : public XclImpEscherObj, public XclImpCtrlLinkHelper
 {
 public:
     TYPEINFO();
@@ -365,10 +359,6 @@ public:
     /** Reads the contents of the ftPictFmla sub structure in an OBJ record. */
     void                        ReadPictFmla( XclImpStream& rStrm, sal_uInt16 nRecSize );
 
-    /** Sets control specific properties at the passed property set. */
-    void                        SetProperties( ::com::sun::star::uno::Reference<
-                                    ::com::sun::star::beans::XPropertySet >& rxPropSet ) const;
-
     /** Adds a segment to the progress bar. */
     virtual void                InitProgress( ScfProgressBar& rProgress );
     /** Inserts the contained SdrObj into the draw page. */
@@ -376,7 +366,6 @@ public:
 
 private:
     String                      maStorageName;  /// Name of the OLE storage for this object.
-    XclImpCtrlLinkHelper        maLinkHelper;   /// Helper for linked ranges.
     sal_uInt32                  mnBlipId;       /// The BLIP identifier (meta file).
     sal_uInt32                  mnCtrlStrmPos;  /// Position in Ctrl stream for controls.
     sal_Int32                   mnProgressSeg;  /// Progress bar segment identifier.
