@@ -153,6 +153,7 @@ hedabu: ..\inc\langbox.hxx %_DEST%\inc%_EXT%\svx\langbox.hxx
 hedabu: ..\inc\langitem.hxx %_DEST%\inc%_EXT%\svx\langitem.hxx
 hedabu: ..\inc\langtab.hxx %_DEST%\inc%_EXT%\svx\langtab.hxx
 hedabu: ..\inc\layctrl.hxx %_DEST%\inc%_EXT%\svx\layctrl.hxx
+hedabu: ..\inc\lboxctrl.hxx %_DEST%\inc%_EXT%\svx\lboxctrl.hxx
 hedabu: ..\inc\lcolitem.hxx %_DEST%\inc%_EXT%\svx\lcolitem.hxx
 hedabu: ..\inc\lgview3d.hxx %_DEST%\inc%_EXT%\svx\lgview3d.hxx
 hedabu: ..\inc\light3d.hxx %_DEST%\inc%_EXT%\svx\light3d.hxx
