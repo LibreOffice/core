@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-19 15:30:45 $
+ *  last change: $Author: mib $ $Date: 2001-06-26 12:36:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,9 @@
 #ifndef _SFXDOCFILE_HXX //autogen wg. SfxMedium
 #include <sfx2/docfile.hxx>
 #endif
+#ifndef _SFXECODE_HXX
+#include <svtools/sfxecode.hxx>
+#endif
 #ifndef _UTL_STREAM_WRAPPER_HXX_
 #include <unotools/streamwrap.hxx>
 #endif
@@ -171,7 +174,8 @@ sal_Int32 ReadThroughComponent(
     sal_Bool bFormatsOnly,
     sal_uInt16 nStyleFamilyMask,
     sal_Bool bMergeStyles,
-    sal_Bool bOrganizerMode )
+    sal_Bool bOrganizerMode,
+    sal_Bool bEncrypted )
 {
     DBG_ASSERT(xInputStream.is(), "input stream missing");
     DBG_ASSERT(xModelComponent.is(), "document missing");
@@ -242,6 +246,9 @@ sal_Int32 ReadThroughComponent(
     }
     catch( xml::sax::SAXParseException& r )
     {
+        if( bEncrypted )
+            return ERRCODE_SFX_WRONGPASSWORD;
+
 #ifdef DEBUG
         ByteString aError( "SAX parse exception catched while importing:\n" );
         aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
@@ -269,6 +276,9 @@ sal_Int32 ReadThroughComponent(
     }
     catch( xml::sax::SAXException& r )
     {
+        if( bEncrypted )
+            return ERRCODE_SFX_WRONGPASSWORD;
+
 #ifdef DEBUG
         ByteString aError( "SAX exception catched while importing:\n" );
         aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
@@ -344,6 +354,14 @@ sal_Int32 ReadThroughComponent(
     xEventsStream = pStorage->OpenStream( sStreamName,
                                           STREAM_READ | STREAM_NOCREATE );
     xEventsStream->SetBufferSize( 16*1024 );
+
+    Any aAny;
+    sal_Bool bEncrypted =
+        xEventsStream->GetProperty(
+                OUString( RTL_CONSTASCII_USTRINGPARAM("Encrypted") ), aAny ) &&
+        aAny.getValueType() == ::getBooleanCppuType() &&
+        *(sal_Bool *)aAny.getValue();
+
     Reference<io::XInputStream> xInputStream =
         new utl::OInputStreamWrapper( *xEventsStream );
 
@@ -352,7 +370,7 @@ sal_Int32 ReadThroughComponent(
         xInputStream, xModelComponent, sStreamName, rFactory,
         pFilterName, rFilterArguments,
         rName, bMustBeSuccessfull, bBlockMode, rInsertTextRange, bFormatsOnly,
-        nStyleFamilyMask, bMergeStyles, bOrganizerMode );
+        nStyleFamilyMask, bMergeStyles, bOrganizerMode, bEncrypted );
 }
 
 
@@ -659,7 +677,7 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
             "com.sun.star.comp.Writer.XMLImporter",
             aFilterArgs, rName, sal_True, IsBlockMode(), xInsertTextRange,
             aOpt.IsFmtsOnly(), nStyleFamilyMask, aOpt.IsMerge(),
-            IsOrganizerMode() );
+            IsOrganizerMode(), sal_False );
     }
 
     aOpt.ResetAllFmtsOnly();
