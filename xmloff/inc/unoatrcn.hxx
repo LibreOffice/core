@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoatrcn.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2001-07-04 13:33:12 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 14:20:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,17 @@
  *
  ************************************************************************/
 
+#ifndef _SAL_CONFIG_H_
+#include "sal/config.h"
+#endif
+
+#ifndef INCLUDED_XMLOFF_DLLAPI_H
+#include "xmloff/dllapi.h"
+#endif
+
+#ifndef _SAL_TYPES_H_
+#include "sal/types.h"
+#endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
@@ -80,15 +91,17 @@ extern ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  Sv
 
 class SvXMLAttrContainerData;
 
-class SvUnoAttributeContainer : public ::cppu::WeakAggImplHelper3<
-                                            ::com::sun::star::lang::XServiceInfo,
-                                            ::com::sun::star::lang::XUnoTunnel,
-                                            ::com::sun::star::container::XNameContainer >
+class XMLOFF_DLLPUBLIC SvUnoAttributeContainer:
+    public ::cppu::WeakAggImplHelper3<
+        ::com::sun::star::lang::XServiceInfo,
+        ::com::sun::star::lang::XUnoTunnel,
+        ::com::sun::star::container::XNameContainer >
 {
 private:
     SvXMLAttrContainerData* mpContainer;
 
-    sal_uInt16 getIndexByName(const ::rtl::OUString& aName ) const;
+    SAL_DLLPRIVATE sal_uInt16 getIndexByName(const ::rtl::OUString& aName )
+        const;
 
 public:
     SvUnoAttributeContainer( SvXMLAttrContainerData* pContainer = NULL );
