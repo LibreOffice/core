@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TokenWriter.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 12:44:54 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:54:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #ifndef _COM_SUN_STAR_SDBC_XRESULTSET_HPP_
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDBC_XRESULTSETUPDATE_HPP_
+#include <com/sun/star/sdbc/XResultSetUpdate.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
 #include <com/sun/star/sdbc/XRow.hpp>
 #endif
@@ -97,6 +100,10 @@
 #ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"
 #endif
+#ifndef CONNECTIVITY_DATASOURCEHOLDER_HXX
+#include <connectivity/DataSourceHolder.hxx>
+#endif
+#include <memory>
 
 namespace dbaui
 {
@@ -119,6 +126,7 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >  m_xResultSetMetaData;   //
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    m_xFormatter;   // a number formatter working with the connection's NumberFormatsSupplier
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory> m_xFactory;
+        ::std::auto_ptr< ::dbtools::ODataSourceHolder>                                  m_aDataSourceHolder;
 
         ::rtl::OUString m_sName;
         ::rtl::OUString m_sDataSourceName;
@@ -137,7 +145,8 @@ namespace dbaui
         sal_Bool            m_bCheckOnly;
 
         // export data
-        ODatabaseImportExport(  const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
+        ODatabaseImportExport(  const ::svx::ODataAccessDescriptor& _aDataDescriptor,
+                                const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
                                 const String& rExchange = String());
 
@@ -172,10 +181,11 @@ namespace dbaui
 
     public:
         // export data
-        ORTFImportExport(   const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
+        ORTFImportExport(   const ::svx::ODataAccessDescriptor& _aDataDescriptor,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
                             const String& rExchange = String())
-                            : ODatabaseImportExport(_rM,_rxNumberF,rExchange) {};
+                            : ODatabaseImportExport(_aDataDescriptor,_rM,_rxNumberF,rExchange) {};
 
         // import data
         ORTFImportExport(   const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
@@ -217,7 +227,8 @@ namespace dbaui
 
     public:
         // export data
-        OHTMLImportExport(  const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
+        OHTMLImportExport(  const ::svx::ODataAccessDescriptor& _aDataDescriptor,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
                             const String& rExchange = String());
         // import data
@@ -254,6 +265,7 @@ namespace dbaui
         // export data
         ORowSetImportExport(Window* _pParent,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetUpdate >& _xResultSetUpdate,
+                            const ::svx::ODataAccessDescriptor& _aDataDescriptor,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
                             const String& rExchange = String());
 
