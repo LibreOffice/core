@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleSlideView.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-05-27 13:21:56 $
+ *  last change:$Date: 2003-09-08 12:25:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,19 +61,8 @@
 
 package mod._sd;
 
-import com.sun.star.awt.XWindow;
-import com.sun.star.drawing.XDrawPage;
-import com.sun.star.drawing.XDrawPages;
-import com.sun.star.drawing.XDrawPagesSupplier;
-import com.sun.star.drawing.XDrawView;
-import com.sun.star.frame.XModel;
-import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
-import com.sun.star.accessibility.AccessibleRole;
-import com.sun.star.accessibility.XAccessible;
 import java.io.PrintWriter;
+
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
@@ -81,8 +70,19 @@ import lib.TestParameters;
 import util.AccessibilityTools;
 import util.SOfficeFactory;
 import util.utils;
+
+import com.sun.star.accessibility.AccessibleRole;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.awt.XWindow;
+import com.sun.star.drawing.XDrawPages;
+import com.sun.star.drawing.XDrawPagesSupplier;
 import com.sun.star.frame.XDispatch;
 import com.sun.star.frame.XDispatchProvider;
+import com.sun.star.frame.XModel;
+import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
 import com.sun.star.util.URL;
 import com.sun.star.util.XURLTransformer;
 
@@ -112,8 +112,8 @@ public class AccessibleSlideView extends TestCase {
         XDrawPagesSupplier oDPS = (XDrawPagesSupplier)
             UnoRuntime.queryInterface(XDrawPagesSupplier.class, aModel);
         XDrawPages oDPn = oDPS.getDrawPages();
-        XDrawPage fDP1 = oDPn.insertNewByIndex(1);
-        XDrawPage fDP2 = oDPn.insertNewByIndex(2);
+
+    oDPn.insertNewByIndex(0);
 
         shortWait();
 
@@ -125,7 +125,7 @@ public class AccessibleSlideView extends TestCase {
 
         at.getAccessibleObjectForRole(xRoot, AccessibleRole.DOCUMENT);
 
-        oObj = at.SearchedContext;
+        oObj = AccessibilityTools.SearchedContext;
 
         System.out.println("ImplementationName "+utils.getImplName(oObj));
 
