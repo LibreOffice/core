@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtxml.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 08:21:51 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:21:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 
 #pragma hdrstop
 
+#ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
+#include <com/sun/star/embed/ElementModes.hpp>
+#endif
 #ifndef _COM_SUN_STAR_CONTAINER_XINDEXCONTAINER_HPP_
 #include <com/sun/star/container/XIndexContainer.hpp>
 #endif
@@ -95,6 +98,9 @@
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
+#ifndef _SFXSTRITEM_HXX
+#include <svtools/stritem.hxx>
+#endif
 
 #ifndef _SFXDOCFILE_HXX //autogen wg. SfxMedium
 #include <sfx2/docfile.hxx>
@@ -111,6 +117,8 @@
 #ifndef _DOCSH_HXX //autogen wg. SwDoc
 #include <docsh.hxx>
 #endif
+
+#include <unotools/ucbstreamhelper.hxx>
 
 #ifndef _ERRHDL_HXX //autogen wg. ASSERT
 #include <errhdl.hxx>
@@ -130,6 +138,7 @@
 #ifndef _RTL_LOGFILE_HXX_
 #include <rtl/logfile.hxx>
 #endif
+
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -169,17 +178,17 @@ sal_uInt32 SwXMLWriter::_Write()
     Reference< document::XEmbeddedObjectResolver > xObjectResolver;
     SvXMLEmbeddedObjectHelper *pObjectHelper = 0;
 
-    ASSERT( pStg, "Where is my storage?" );
-    pGraphicHelper = SvXMLGraphicHelper::Create( *pStg,
+    ASSERT( xStg.is(), "Where is my storage?" );
+    pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
                                                  GRAPHICHELPER_MODE_WRITE,
                                                  sal_False );
     xGraphicResolver = pGraphicHelper;
 
-    SvPersist *pPersist = pDoc->GetPersist();
+    SfxObjectShell *pPersist = pDoc->GetPersist();
     if( pPersist )
     {
         pObjectHelper = SvXMLEmbeddedObjectHelper::Create(
-                                         *pStg, *pPersist,
+                                         xStg, *pPersist,
                                          EMBEDDEDOBJECTHELPER_MODE_WRITE,
                                          sal_False );
         xObjectResolver = pObjectHelper;
@@ -229,9 +238,6 @@ sal_uInt32 SwXMLWriter::_Write()
         { NULL, 0, 0, NULL, 0, 0 }
     };
     uno::Reference< beans::XPropertySet > xInfoSet(
-#ifndef _URLOBJ_HXX
-#include <tools/urlobj.hxx>
-#endif
                 comphelper::GenericPropertySet_CreateInstance(
                             new comphelper::PropertySetInfo( aInfoMap ) ) );
 
@@ -301,21 +307,45 @@ sal_uInt32 SwXMLWriter::_Write()
     nRedlineMode |= REDLINE_SHOW_INSERT;
     pDoc->SetRedlineMode( nRedlineMode );
 
+    // TODO/LATER : either target medium or mediadescriptor for the current storing must be accessible here
+    SfxMedium* pMedDescrMedium = NULL;
+
     // Set base URI
     OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("BaseURI") );
-    xInfoSet->setPropertyValue( sPropName,
-                            makeAny( OUString(INetURLObject::GetBaseURL()) ) );
-    if( SFX_CREATE_MODE_EMBEDDED == pDoc->GetDocShell()->GetCreateMode() &&
-         !pStg->IsRoot() )
+    ::rtl::OUString aBaseURL;
+    sal_Bool bBaseURLSet = sal_False;
+    if ( pMedDescrMedium && pMedDescrMedium->GetItemSet() )
     {
-        OUString aName( pStg->GetName() );
+        const SfxStringItem* pBaseURLItem = static_cast<const SfxStringItem*>(
+                   pMedDescrMedium->GetItemSet()->GetItem(SID_DOC_BASEURL) );
+        if ( pBaseURLItem )
+        {
+            aBaseURL = pBaseURLItem->GetValue();
+            bBaseURLSet = sal_True;
+        }
+    }
+    xInfoSet->setPropertyValue( sPropName, makeAny( aBaseURL ) );
+
+    // TODO/LATER: separate links from normal embedded objects
+    if( SFX_CREATE_MODE_EMBEDDED == pDoc->GetDocShell()->GetCreateMode() )
+    {
+        OUString aName;
+        if ( pMedDescrMedium && pMedDescrMedium->GetItemSet() )
+        {
+            const SfxStringItem* pDocHierarchItem = static_cast<const SfxStringItem*>(
+                pMedDescrMedium->GetItemSet()->GetItem(SID_DOC_HIERARCHICALNAME) );
+            if ( pDocHierarchItem )
+                aName = pDocHierarchItem->GetValue();
+        }
+
         if( aName.getLength() )
         {
             sPropName = OUString(RTL_CONSTASCII_USTRINGPARAM("StreamRelPath"));
             xInfoSet->setPropertyValue( sPropName, makeAny( aName ) );
         }
     }
-
+    else if ( !bBaseURLSet )
+        xInfoSet->setPropertyValue( sPropName, makeAny( ::rtl::OUString( INetURLObject::GetBaseURL() ) ) );
 
 
     // filter arguments
@@ -370,7 +400,7 @@ sal_uInt32 SwXMLWriter::_Write()
     // export sub streams for package, else full stream into a file
     sal_Bool bWarn = sal_False, bErr = sal_False;
     String sWarnFile, sErrFile;
-    sal_Bool bOASIS = pStg->GetVersion() > SOFFICE_FILEFORMAT_60;
+    sal_Bool bOASIS = ( SotStorage::GetVersion( xStg ) > SOFFICE_FILEFORMAT_60 );
 
     if( !bOrganizerMode && !bBlock &&
         SFX_CREATE_MODE_EMBEDDED != pDoc->GetDocShell()->GetCreateMode() )
@@ -439,20 +469,25 @@ sal_uInt32 SwXMLWriter::_Write()
 //          DBG_ASSERT( !pDoc->GetDocStat().bModified,
 //                      "doc stat is modified!" );
         OUString sStreamName( RTL_CONSTASCII_USTRINGPARAM("layout-cache") );
-        SvStorageStreamRef xStrm =  pStg->OpenStream( sStreamName,
-                               STREAM_WRITE | STREAM_SHARE_DENYWRITE );
-        DBG_ASSERT(xStrm.Is(), "Can't create output stream in package!");
-        if( xStrm.Is() )
+        try
         {
-            xStrm->SetSize( 0 );
-            String aPropName( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("MediaType") ) );
-            OUString aMime( RTL_CONSTASCII_USTRINGPARAM("application/binary") );
-            uno::Any aAny;
-            aAny <<= aMime;
-            xStrm->SetProperty( aPropName, aAny );
-            xStrm->SetBufferSize( 16*1024 );
-            pDoc->WriteLayoutCache( *xStrm );
-            xStrm->Commit();
+            Reference < io::XStream > xStm = xStg->openStreamElement( sStreamName, embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
+            SvStream* pStrm = utl::UcbStreamHelper::CreateStream( xStm );
+            if( !pStrm->GetError() )
+            {
+                Reference < beans::XPropertySet > xSet( xStm, UNO_QUERY );
+                String aPropName( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("MediaType") ) );
+                OUString aMime( RTL_CONSTASCII_USTRINGPARAM("application/binary") );
+                uno::Any aAny;
+                aAny <<= aMime;
+                xSet->setPropertyValue( aPropName, aAny );
+                pDoc->WriteLayoutCache( *pStrm );
+            }
+
+            delete pStrm;
+        }
+        catch ( uno::Exception& )
+        {
         }
     }
 
@@ -507,7 +542,7 @@ sal_uInt32 SwXMLWriter::Write( SwPaM& rPaM, SfxMedium& rMed,
                                const String* pFileName )
 {
     return IsStgWriter()
-            ? ((StgWriter *)this)->Write( rPaM, *rMed.GetOutputStorage( sal_True ), pFileName )
+            ? ((StgWriter *)this)->Write( rPaM, rMed.GetOutputStorage(), pFileName )
             : ((Writer *)this)->Write( rPaM, *rMed.GetOutStream(), pFileName );
 }
 
@@ -520,7 +555,7 @@ sal_Bool SwXMLWriter::WriteThroughComponent(
     const Sequence<beans::PropertyValue> & rMediaDesc,
     sal_Bool bPlainStream )
 {
-    DBG_ASSERT( NULL != pStg, "Need storage!" );
+    DBG_ASSERT( xStg.is(), "Need storage!" );
     DBG_ASSERT( NULL != pStreamName, "Need stream name!" );
     DBG_ASSERT( NULL != pServiceName, "Need service name!" );
 
@@ -528,64 +563,63 @@ sal_Bool SwXMLWriter::WriteThroughComponent(
                                "SwXMLWriter::WriteThroughComponent : stream %s",
                                pStreamName );
 
-    Reference< io::XOutputStream > xOutputStream;
-    SvStorageStreamRef xDocStream;
-
     // open stream
-    OUString sStreamName = OUString::createFromAscii( pStreamName );
-    xDocStream = pStg->OpenStream( sStreamName,
-                                   STREAM_WRITE | STREAM_SHARE_DENYWRITE );
-    DBG_ASSERT(xDocStream.Is(), "Can't create output stream in package!");
-    if (! xDocStream.Is())
-        return sal_False;
-
-    xDocStream->SetSize( 0 );
-
-    String aPropName( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("MediaType") ) );
-    OUString aMime( RTL_CONSTASCII_USTRINGPARAM("text/xml") );
-    uno::Any aAny;
-    aAny <<= aMime;
-    xDocStream->SetProperty( aPropName, aAny );
-
-    if( bPlainStream )
+    sal_Bool bRet = sal_False;
+    try
     {
-        OUString aPropName( RTL_CONSTASCII_USTRINGPARAM("Compressed") );
-        sal_Bool bFalse = sal_False;
-        aAny.setValue( &bFalse, ::getBooleanCppuType() );
-        xDocStream->SetProperty( aPropName, aAny );
+        OUString sStreamName = OUString::createFromAscii( pStreamName );
+        uno::Reference<io::XStream> xStream =
+                xStg->openStreamElement( sStreamName,
+                embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
+
+        Reference <beans::XPropertySet > xSet( xStream, uno::UNO_QUERY );
+        if( !xSet.is() )
+            return sal_False;
+
+        String aPropName( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("MediaType") ) );
+        OUString aMime( RTL_CONSTASCII_USTRINGPARAM("text/xml") );
+        uno::Any aAny;
+        aAny <<= aMime;
+        xSet->setPropertyValue( aPropName, aAny );
+
+        if( bPlainStream )
+        {
+            OUString aPropName( RTL_CONSTASCII_USTRINGPARAM("Compressed") );
+            sal_Bool bFalse = sal_False;
+            aAny.setValue( &bFalse, ::getBooleanCppuType() );
+            xSet->setPropertyValue( aPropName, aAny );
+        }
+        else
+        {
+//REMOVE                OUString aPropName( RTL_CONSTASCII_USTRINGPARAM("Encrypted") );
+            OUString aPropName( RTL_CONSTASCII_USTRINGPARAM("UseCommonStoragePasswordEncryption") );
+            sal_Bool bTrue = sal_True;
+            aAny.setValue( &bTrue, ::getBooleanCppuType() );
+            xSet->setPropertyValue( aPropName, aAny );
+        }
+
+        // set buffer and create outputstream
+        Reference< io::XOutputStream > xOutputStream = xStream->getOutputStream();
+
+        // set Base URL
+        uno::Reference< beans::XPropertySet > xInfoSet;
+        if( rArguments.getLength() > 0 )
+            rArguments.getConstArray()[0] >>= xInfoSet;
+        DBG_ASSERT( xInfoSet.is(), "missing property set" );
+        if( xInfoSet.is() )
+        {
+            OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("StreamName") );
+            xInfoSet->setPropertyValue( sPropName, makeAny( sStreamName ) );
+        }
+
+        // write the stuff
+        bRet = WriteThroughComponent(
+            xOutputStream, xComponent, rFactory,
+            pServiceName, rArguments, rMediaDesc );
     }
-    else
+    catch ( uno::Exception& )
     {
-        OUString aPropName( RTL_CONSTASCII_USTRINGPARAM("Encrypted") );
-        sal_Bool bTrue = sal_True;
-        aAny.setValue( &bTrue, ::getBooleanCppuType() );
-        xDocStream->SetProperty( aPropName, aAny );
     }
-
-
-    // set buffer and create outputstream
-    xDocStream->SetBufferSize( 16*1024 );
-    xOutputStream = new utl::OOutputStreamWrapper( *xDocStream );
-
-    // set Base URL
-    uno::Reference< beans::XPropertySet > xInfoSet;
-    if( rArguments.getLength() > 0 )
-        rArguments.getConstArray()[0] >>= xInfoSet;
-    DBG_ASSERT( xInfoSet.is(), "missing property set" );
-    if( xInfoSet.is() )
-    {
-        OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("StreamName") );
-        xInfoSet->setPropertyValue( sPropName, makeAny( sStreamName ) );
-    }
-
-    // write the stuff
-    sal_Bool bRet = WriteThroughComponent(
-        xOutputStream, xComponent, rFactory,
-        pServiceName, rArguments, rMediaDesc );
-
-    // finally, commit stream.
-    if( bRet )
-        xDocStream->Commit();
 
     return bRet;
 
