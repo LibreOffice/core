@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hdrcont.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ssa $ $Date: 2002-09-17 09:42:05 $
+ *  last change: $Author: nn $ $Date: 2002-09-19 13:31:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -671,6 +671,11 @@ void __EXPORT ScHeaderControl::MouseButtonDown( const MouseEvent& rMEvt )
 
         SetMarking( TRUE );     //  muss vor SelMouseButtonDown sein
         pSelEngine->SelMouseButtonDown( rMEvt );
+
+        //  #74215# In column/row headers a simple click already is a selection.
+        //  -> Call SelMouseMove to ensure CreateAnchor is called (and DestroyAnchor
+        //  if the next click is somewhere else with Control key).
+        pSelEngine->SelMouseMove( rMEvt );
 
         if (IsMouseCaptured())
         {
