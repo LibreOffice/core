@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-25 15:10:45 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 13:47:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1474,7 +1474,7 @@ SwBasicEscherEx::~SwBasicEscherEx()
 void SwBasicEscherEx::WriteFrmExtraData(const SwFrmFmt&)
 {
     AddAtom(4, ESCHER_ClientAnchor);
-    GetStream() << 0x80000000;
+    GetStream() << (sal_uInt32)0x80000000;
 }
 
 void SwBasicEscherEx::WriteEmptyFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId)
@@ -2628,7 +2628,6 @@ UINT32 SwEscherEx::QueryTextID(
 
 bool SwMSConvertControls::ExportControl(Writer &rWrt, const SdrObject *pObj)
 {
-    using namespace ww;
     SwWW8Writer& rWW8Wrt = (SwWW8Writer&)rWrt;
 
     if (!rWW8Wrt.bWrtWW8)
@@ -2677,18 +2676,18 @@ bool SwMSConvertControls::ExportControl(Writer &rWrt, const SdrObject *pObj)
     BYTE *pData = aSpecOLE+2;
     Set_UInt32(pData,(UINT32)pObj);
 
-    String sFld(FieldString(eCONTROL));
+    String sFld(FieldString(ww::eCONTROL));
     sFld.APPEND_CONST_ASC("Forms.");
     sFld += sName;
     sFld.APPEND_CONST_ASC(".1 \\s ");
 
-    rWW8Wrt.OutField(0, eCONTROL, sFld,
+    rWW8Wrt.OutField(0, ww::eCONTROL, sFld,
         WRITEFIELD_START|WRITEFIELD_CMD_START|WRITEFIELD_CMD_END);
 
     rWW8Wrt.pChpPlc->AppendFkpEntry(rWW8Wrt.Strm().Tell(),sizeof(aSpecOLE),
         aSpecOLE);
     rWW8Wrt.WriteChar( 0x1 );
-    rWW8Wrt.OutField(0, eCONTROL, aEmptyStr, WRITEFIELD_END | WRITEFIELD_CLOSE);
+    rWW8Wrt.OutField(0, ww::eCONTROL, aEmptyStr, WRITEFIELD_END | WRITEFIELD_CLOSE);
     return true;
 }
 
