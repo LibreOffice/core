@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unsort.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:40:23 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:23:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,7 +192,9 @@ void SwUndoSort::Undo( SwUndoIter& rIter)
         // JP 25.11.97: Die IndexList muss aber nach SourcePosition
         //              aufsteigend sortiert aufgebaut werden
         SwUndoSortList aIdxList( (BYTE)aSortList.Count() );
-        for(USHORT i=0; i < aSortList.Count(); ++i)
+        USHORT i;
+
+        for( i = 0; i < aSortList.Count(); ++i)
             for( USHORT ii=0; ii < aSortList.Count(); ++ii )
                 if( aSortList[ii]->SORT_TXT_TBL.TXT.nSource == nSttNode + i )
                 {
@@ -256,7 +258,9 @@ void SwUndoSort::Redo( SwUndoIter& rIter)
         RemoveIdx( *rIter.pAktPam );
 
         SwUndoSortList aIdxList( (BYTE)aSortList.Count() );
-        for(USHORT i=0; i < aSortList.Count(); ++i)
+        USHORT i;
+
+        for( i = 0; i < aSortList.Count(); ++i)
         {   // aktuelle Pos ist die Ausgangslage
             SwNodeIndex* pIdx = new SwNodeIndex( rDoc.GetNodes(),
                     aSortList[i]->SORT_TXT_TBL.TXT.nSource);
