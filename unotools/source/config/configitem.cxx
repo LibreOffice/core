@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configitem.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: os $ $Date: 2000-12-06 10:16:26 $
+ *  last change: $Author: os $ $Date: 2000-12-09 13:01:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -409,8 +409,8 @@ sal_Bool ConfigItem::PutProperties( const Sequence< OUString >& rNames,
 #else
     ValueCounter_Impl aCounter(*this);
 #endif
-    Reference<XPropertySet> xPropSet(xHierarchyAccess, UNO_QUERY);
-    sal_Bool bRet = xHierarchyAccess.is() && xPropSet.is();
+    Reference<XNameReplace> xTopNodeReplace(xHierarchyAccess, UNO_QUERY);
+    sal_Bool bRet = xHierarchyAccess.is() && xTopNodeReplace.is();
     if(bRet)
     {
         const OUString* pNames = rNames.getConstArray();
@@ -438,7 +438,7 @@ sal_Bool ConfigItem::PutProperties( const Sequence< OUString >& rNames,
                 }
                 else //direct value
                 {
-                    xPropSet->setPropertyValue(pNames[i], pValues[i]);
+                    xTopNodeReplace->replaceByName(pNames[i], pValues[i]);
                 }
             }
 #ifdef DBG_UTIL
@@ -481,7 +481,6 @@ sal_Bool    ConfigItem::EnableNotification(Sequence< OUString >& rNames)
     OSL_ENSURE(!xChangeLstnr.is(), "EnableNotification already called");
     if(xChangeLstnr.is())
         xChgNot->removeChangesListener( xChangeLstnr );
-
     sal_Bool bRet = sal_True;
 
     try
@@ -730,9 +729,10 @@ sal_Bool ConfigItem::SetSetProperties(
                 OUString* pSetNames = aSetNames.getArray();
                 Sequence< Any> aSetValues(rValues.getLength());
                 Any* pSetValues = aSetValues.getArray();
+                sal_Bool bEmptyNode = rNode.getLength() == 0;
                 for(sal_Int32 k = 0; k < rValues.getLength(); k++)
                 {
-                    pSetNames[k] =  pProperties[k].Name;
+                    pSetNames[k] =  pProperties[k].Name.copy( bEmptyNode ? 1 : 0);
                     pSetValues[k] = pProperties[k].Value;
                 }
                 bRet = PutProperties(aSetNames, aSetValues);
