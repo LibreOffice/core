@@ -62,7 +62,7 @@ import javax.accessibility.AccessibleRole;
 import javax.accessibility.AccessibleState;
 
 import com.sun.star.uno.*;
-import drafts.com.sun.star.accessibility.*;
+import com.sun.star.accessibility.*;
 
 public class Container extends java.awt.Container implements javax.accessibility.Accessible {
 
@@ -306,35 +306,35 @@ public class Container extends java.awt.Container implements javax.accessibility
         /** Called by OpenOffice process to notify property changes */
         public void notifyEvent(AccessibleEventObject event) {
             switch (event.EventId) {
-                case AccessibleEventId.ACCESSIBLE_NAME_EVENT:
+                case AccessibleEventId.NAME_CHANGED:
                     // Set the accessible name for the corresponding context, which will fire a property
                     // change event itself
                     handleNameChangedEvent(event.NewValue);
                     break;
-                case AccessibleEventId.ACCESSIBLE_DESCRIPTION_EVENT:
+                case AccessibleEventId.DESCRIPTION_CHANGED:
                     // Set the accessible description for the corresponding context, which will fire a property
                     // change event itself - so do not set propertyName !
                     handleDescriptionChangedEvent(event.NewValue);
                     break;
-                case AccessibleEventId.ACCESSIBLE_STATE_EVENT:
+                case AccessibleEventId.STATE_CHANGED:
                     // Update the internal state set and fire the appropriate PropertyChangedEvent
                     handleStateChangedEvent(event.OldValue, event.NewValue);
                     break;
-                case AccessibleEventId.ACCESSIBLE_CHILD_EVENT:
+                case AccessibleEventId.CHILD:
                     if (AnyConverter.isObject(event.OldValue)) {
                         AccessibleObjectFactory.removeChild(Container.this, event.OldValue);
                     } else if (AnyConverter.isObject(event.NewValue)) {
                         AccessibleObjectFactory.addChild(Container.this, event.NewValue);
                     }
                     break;
-                case AccessibleEventId.ACCESSIBLE_VISIBLE_DATA_EVENT:
-                case AccessibleEventId.ACCESSIBLE_BOUNDRECT_EVENT:
+                case AccessibleEventId.VISIBLE_DATA_CHANGED:
+                case AccessibleEventId.BOUNDRECT_CHANGED:
                     firePropertyChange(AccessibleContext.ACCESSIBLE_VISIBLE_DATA_PROPERTY, null, null);
                     break;
-                case AccessibleEventId.ACCESSIBLE_SELECTION_EVENT:
+                case AccessibleEventId.SELECTION_CHANGED:
                     firePropertyChange(javax.accessibility.AccessibleContext.ACCESSIBLE_SELECTION_PROPERTY, null, null);
                     break;
-                case AccessibleEventId.ACCESSIBLE_ALL_CHILDREN_CHANGED_EVENT:
+                case AccessibleEventId.INVALIDATE_ALL_CHILDREN:
                     handleAllChildrenChangedEvent();
                     break;
 
@@ -454,7 +454,7 @@ public class Container extends java.awt.Container implements javax.accessibility
                             dbgCheckSelectable();
                         }
                     }
-                    if (unoAS.contains(AccessibleStateType.MULTISELECTABLE)) {
+                    if (unoAS.contains(AccessibleStateType.MULTI_SELECTABLE)) {
                         states.add(AccessibleState.MULTISELECTABLE);
                     }
                 }
@@ -708,7 +708,7 @@ public class Container extends java.awt.Container implements javax.accessibility
 
         public boolean contains(java.awt.Point p) {
             try {
-                return unoAccessibleComponent.contains(new com.sun.star.awt.Point(p.x, p.y));
+                return unoAccessibleComponent.containsPoint(new com.sun.star.awt.Point(p.x, p.y));
             } catch (com.sun.star.uno.RuntimeException e) {
                 return false;
             }
@@ -773,7 +773,7 @@ public class Container extends java.awt.Container implements javax.accessibility
         public javax.accessibility.Accessible getAccessibleAt(java.awt.Point p) {
             try {
                 java.awt.Component c = AccessibleObjectFactory.getAccessibleComponent(
-                    unoAccessibleComponent.getAccessibleAt(new com.sun.star.awt.Point(p.x, p.y)));
+                    unoAccessibleComponent.getAccessibleAtPoint(new com.sun.star.awt.Point(p.x, p.y)));
 
                 return (javax.accessibility.Accessible) c;
             } catch (com.sun.star.uno.RuntimeException e) {
