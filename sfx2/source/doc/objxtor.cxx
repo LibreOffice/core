@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 16:35:16 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:31:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -701,28 +701,24 @@ void SfxObjectShell::InitBasicManager_Impl
     uno::Reference< embed::XStorage > xStorage = xDocStorage;
     if ( xStorage.is() )
     {
-        String aOldURL = INetURLObject::GetBaseURL();
-        String aNewURL;
-        if( HasName() )
-            aNewURL = GetMedium()->GetName();
-        else
-        {
-            aNewURL = GetDocInfo().GetTemplateFileName();
-            // Bei Templates keine ::com::sun::star::util::URL...
-            aNewURL = URIHelper::SmartRelToAbs( aNewURL );
-        }
-        INetURLObject::SetBaseURL( aNewURL );
+        //String aOldURL = INetURLObject::GetBaseURL();
+        //String aNewURL;
+        //if( HasName() )
+        //    aNewURL = GetMedium()->GetName();
+        //else
+        //{
+        //    aNewURL = GetDocInfo().GetTemplateFileName();
+        //    // Bei Templates keine URL...
+        //    aNewURL = URIHelper::SmartRelToAbs( aNewURL );
+        //}
 
         // load BASIC-manager
         SfxErrorContext aErrContext( ERRCTX_SFX_LOADBASIC, GetTitle() );
-#if SUPD<613//MUSTINI
-        SfxIniManager *pIniMgr = SFX_APP()->GetIniManager();
-        String aAppBasicDir( pIniMgr->Get(SFX_KEY_BASIC_PATH) );
-#else
         String aAppBasicDir = SvtPathOptions().GetBasicPath();
-#endif
+
+        // Storage and BaseURL are only needed by binary documents!
         SotStorageRef xDummyStor = new SotStorage( ::rtl::OUString() );
-        pImp->pBasicMgr = pBasicManager = new BasicManager( *xDummyStor /* TODO/LATER: xStorage */,
+        pImp->pBasicMgr = pBasicManager = new BasicManager( *xDummyStor, String() /* TODO/LATER: xStorage */,
                                                             pAppBasic,
                                                             &aAppBasicDir );
         if ( pImp->pBasicMgr->HasErrors() )
@@ -743,8 +739,6 @@ void SfxObjectShell::InitBasicManager_Impl
                 pErr = pImp->pBasicMgr->GetNextError();
             }
         }
-
-        INetURLObject::SetBaseURL( aOldURL );
     }
 
     // not loaded?
