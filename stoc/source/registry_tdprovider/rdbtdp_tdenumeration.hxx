@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rdbtdp_tdenumeration.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:15:39 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:18:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@ class TypeDescriptionEnumerationImpl
 public:
     static rtl::Reference< TypeDescriptionEnumerationImpl > createInstance(
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XComponentContext > & xContext,
+            ::com::sun::star::container::XHierarchicalNameAccess > & xTDMgr,
         const rtl::OUString & rModuleName,
         const ::com::sun::star::uno::Sequence<
             ::com::sun::star::uno::TypeClass > & rTypes,
@@ -146,7 +146,7 @@ private:
     // Note: keys must be open (XRegistryKey->openKey(...)).
     TypeDescriptionEnumerationImpl(
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XComponentContext > & xContext,
+            ::com::sun::star::container::XHierarchicalNameAccess > & xTDMgr,
         const RegistryKeyList & rModuleKeys,
         const ::com::sun::star::uno::Sequence<
             ::com::sun::star::uno::TypeClass > & rTypes,
@@ -157,8 +157,6 @@ private:
     bool queryMore();
     ::com::sun::star::uno::Reference<
         ::com::sun::star::reflection::XTypeDescription > queryNext();
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::container::XHierarchicalNameAccess > getTDMgr();
 
     // members
     osl::Mutex m_aMutex;
@@ -168,8 +166,6 @@ private:
     ::com::sun::star::uno::Sequence<
         ::com::sun::star::uno::TypeClass > m_aTypes;
     ::com::sun::star::reflection::TypeDescriptionSearchDepth m_eDepth;
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
-        m_xContext;
     ::com::sun::star::uno::Reference<
         ::com::sun::star::container::XHierarchicalNameAccess > m_xTDMgr;
 };
