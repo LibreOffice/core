@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc2.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:16:28 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 15:00:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -467,7 +467,6 @@ SdrPage* SdDrawDocument::RemovePage(USHORT nPgNum)
 #ifndef SVX_LIGHT
     ((SdPage*)pPage)->DisconnectLink();
 #endif
-
     if (pCustomShowList)
     {
         for (ULONG i = 0; i < pCustomShowList->Count(); i++)
@@ -818,7 +817,7 @@ void SdDrawDocument::CreateFirstPages()
         SdPage* pHandoutPage = (SdPage*) AllocPage(bMasterPage=FALSE);
 
         // Stets Querformat
-        if (aDefSize.Height() >= aDefSize.Width())
+        if (aDefSize.Height() <= aDefSize.Width())
         {
             pHandoutPage->SetSize(aDefSize);
         }
