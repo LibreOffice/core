@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescControl.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 12:34:20 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:09:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -870,6 +870,8 @@ IMPL_LINK( OFieldDescControl, ChangeHdl, ListBox *, pListBox )
         pListBox->SaveValue();
         TOTypeInfoSP pTypeInfo = getTypeInfo(m_pType->GetSelectEntryPos());
         pActFieldDescr->FillFromTypeInfo(pTypeInfo,sal_True,sal_False); // SetType(pTypeInfo);
+        if ( pTypeInfo.get() )
+            pActFieldDescr->SetTypeName(pTypeInfo->getDBName());
 
         DisplayData(pActFieldDescr);
         CellModified(-1, m_pType->GetPos());
