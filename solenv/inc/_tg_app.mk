@@ -124,11 +124,11 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
 .ENDIF
 .ELSE			# "$(USE_SHELL)"=="4nt"
 .IF "$(APP1ICON)" != ""
-    @-+guw.pl echo 1 ICON \"$(APP1ICON:s/\//\/\//)\" >> $(MISC)$/$(APP1LINKRES:b).rc
+    @-+guw.pl echo 1 ICON \"$(APP1ICON)\" | sed 'sX\\X\\\\Xg' >> $(MISC)$/$(APP1LINKRES:b).rc
 .ENDIF
 .IF "$(APP1VERINFO)" != ""
-    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP1LINKRES:b).rc
-    @-+echo #include  \"$(APP1VERINFO)\" >> $(MISC)$/$(APP1LINKRES:b).rc
+    @-+echo \#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP1LINKRES:b).rc
+    @-+echo \#include  \"$(APP1VERINFO)\" >> $(MISC)$/$(APP1LINKRES:b).rc
 .ENDIF
 .ENDIF			# "$(USE_SHELL)"=="4nt"
     $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP1LINKRES:b).rc
@@ -338,11 +338,11 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
 .ENDIF
 .ELSE			# "$(USE_SHELL)"=="4nt"
 .IF "$(APP2ICON)" != ""
-    @-+guw.pl echo 1 ICON \"$(APP2ICON:s/\//\/\//)\" >> $(MISC)$/$(APP2LINKRES:b).rc
+    @-+guw.pl echo 1 ICON \"$(APP2ICON)\" | sed 'sX\\X\\\\Xg' >> $(MISC)$/$(APP2LINKRES:b).rc
 .ENDIF
 .IF "$(APP2VERINFO)" != ""
-    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP2LINKRES:b).rc
-    @-+echo #include  \"$(APP2VERINFO)\" >> $(MISC)$/$(APP2LINKRES:b).rc
+    @-+echo \#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP2LINKRES:b).rc
+    @-+echo \#include  \"$(APP2VERINFO)\" >> $(MISC)$/$(APP2LINKRES:b).rc
 .ENDIF
 .ENDIF			# "$(USE_SHELL)"=="4nt"
     $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP2LINKRES:b).rc
@@ -552,11 +552,11 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
 .ENDIF
 .ELSE			# "$(USE_SHELL)"=="4nt"
 .IF "$(APP3ICON)" != ""
-    @-+guw.pl echo 1 ICON \"$(APP3ICON:s/\//\/\//)\" >> $(MISC)$/$(APP3LINKRES:b).rc
+    @-+guw.pl echo 1 ICON \"$(APP3ICON)\" | sed 'sX\\X\\\\Xg' >> $(MISC)$/$(APP3LINKRES:b).rc
 .ENDIF
 .IF "$(APP3VERINFO)" != ""
-    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP3LINKRES:b).rc
-    @-+echo #include  \"$(APP3VERINFO)\" >> $(MISC)$/$(APP3LINKRES:b).rc
+    @-+echo \#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP3LINKRES:b).rc
+    @-+echo \#include  \"$(APP3VERINFO)\" >> $(MISC)$/$(APP3LINKRES:b).rc
 .ENDIF
 .ENDIF			# "$(USE_SHELL)"=="4nt"
     $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP3LINKRES:b).rc
@@ -766,11 +766,11 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
 .ENDIF
 .ELSE			# "$(USE_SHELL)"=="4nt"
 .IF "$(APP4ICON)" != ""
-    @-+guw.pl echo 1 ICON \"$(APP4ICON:s/\//\/\//)\" >> $(MISC)$/$(APP4LINKRES:b).rc
+    @-+guw.pl echo 1 ICON \"$(APP4ICON)\" | sed 'sX\\X\\\\Xg' >> $(MISC)$/$(APP4LINKRES:b).rc
 .ENDIF
 .IF "$(APP4VERINFO)" != ""
-    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP4LINKRES:b).rc
-    @-+echo #include  \"$(APP4VERINFO)\" >> $(MISC)$/$(APP4LINKRES:b).rc
+    @-+echo \#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP4LINKRES:b).rc
+    @-+echo \#include  \"$(APP4VERINFO)\" >> $(MISC)$/$(APP4LINKRES:b).rc
 .ENDIF
 .ENDIF			# "$(USE_SHELL)"=="4nt"
     $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP4LINKRES:b).rc
@@ -980,11 +980,11 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
 .ENDIF
 .ELSE			# "$(USE_SHELL)"=="4nt"
 .IF "$(APP5ICON)" != ""
-    @-+guw.pl echo 1 ICON \"$(APP5ICON:s/\//\/\//)\" >> $(MISC)$/$(APP5LINKRES:b).rc
+    @-+guw.pl echo 1 ICON \"$(APP5ICON)\" | sed 'sX\\X\\\\Xg' >> $(MISC)$/$(APP5LINKRES:b).rc
 .ENDIF
 .IF "$(APP5VERINFO)" != ""
-    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP5LINKRES:b).rc
-    @-+echo #include  \"$(APP5VERINFO)\" >> $(MISC)$/$(APP5LINKRES:b).rc
+    @-+echo \#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP5LINKRES:b).rc
+    @-+echo \#include  \"$(APP5VERINFO)\" >> $(MISC)$/$(APP5LINKRES:b).rc
 .ENDIF
 .ENDIF			# "$(USE_SHELL)"=="4nt"
     $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP5LINKRES:b).rc
@@ -1194,11 +1194,11 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
 .ENDIF
 .ELSE			# "$(USE_SHELL)"=="4nt"
 .IF "$(APP6ICON)" != ""
-    @-+guw.pl echo 1 ICON \"$(APP6ICON:s/\//\/\//)\" >> $(MISC)$/$(APP6LINKRES:b).rc
+    @-+guw.pl echo 1 ICON \"$(APP6ICON)\" | sed 'sX\\X\\\\Xg' >> $(MISC)$/$(APP6LINKRES:b).rc
 .ENDIF
 .IF "$(APP6VERINFO)" != ""
-    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP6LINKRES:b).rc
-    @-+echo #include  \"$(APP6VERINFO)\" >> $(MISC)$/$(APP6LINKRES:b).rc
+    @-+echo \#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP6LINKRES:b).rc
+    @-+echo \#include  \"$(APP6VERINFO)\" >> $(MISC)$/$(APP6LINKRES:b).rc
 .ENDIF
 .ENDIF			# "$(USE_SHELL)"=="4nt"
     $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP6LINKRES:b).rc
@@ -1408,11 +1408,11 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
 .ENDIF
 .ELSE			# "$(USE_SHELL)"=="4nt"
 .IF "$(APP7ICON)" != ""
-    @-+guw.pl echo 1 ICON \"$(APP7ICON:s/\//\/\//)\" >> $(MISC)$/$(APP7LINKRES:b).rc
+    @-+guw.pl echo 1 ICON \"$(APP7ICON)\" | sed 'sX\\X\\\\Xg' >> $(MISC)$/$(APP7LINKRES:b).rc
 .ENDIF
 .IF "$(APP7VERINFO)" != ""
-    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP7LINKRES:b).rc
-    @-+echo #include  \"$(APP7VERINFO)\" >> $(MISC)$/$(APP7LINKRES:b).rc
+    @-+echo \#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP7LINKRES:b).rc
+    @-+echo \#include  \"$(APP7VERINFO)\" >> $(MISC)$/$(APP7LINKRES:b).rc
 .ENDIF
 .ENDIF			# "$(USE_SHELL)"=="4nt"
     $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP7LINKRES:b).rc
@@ -1622,11 +1622,11 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
 .ENDIF
 .ELSE			# "$(USE_SHELL)"=="4nt"
 .IF "$(APP8ICON)" != ""
-    @-+guw.pl echo 1 ICON \"$(APP8ICON:s/\//\/\//)\" >> $(MISC)$/$(APP8LINKRES:b).rc
+    @-+guw.pl echo 1 ICON \"$(APP8ICON)\" | sed 'sX\\X\\\\Xg' >> $(MISC)$/$(APP8LINKRES:b).rc
 .ENDIF
 .IF "$(APP8VERINFO)" != ""
-    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP8LINKRES:b).rc
-    @-+echo #include  \"$(APP8VERINFO)\" >> $(MISC)$/$(APP8LINKRES:b).rc
+    @-+echo \#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP8LINKRES:b).rc
+    @-+echo \#include  \"$(APP8VERINFO)\" >> $(MISC)$/$(APP8LINKRES:b).rc
 .ENDIF
 .ENDIF			# "$(USE_SHELL)"=="4nt"
     $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP8LINKRES:b).rc
@@ -1836,11 +1836,11 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
 .ENDIF
 .ELSE			# "$(USE_SHELL)"=="4nt"
 .IF "$(APP9ICON)" != ""
-    @-+guw.pl echo 1 ICON \"$(APP9ICON:s/\//\/\//)\" >> $(MISC)$/$(APP9LINKRES:b).rc
+    @-+guw.pl echo 1 ICON \"$(APP9ICON)\" | sed 'sX\\X\\\\Xg' >> $(MISC)$/$(APP9LINKRES:b).rc
 .ENDIF
 .IF "$(APP9VERINFO)" != ""
-    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP9LINKRES:b).rc
-    @-+echo #include  \"$(APP9VERINFO)\" >> $(MISC)$/$(APP9LINKRES:b).rc
+    @-+echo \#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP9LINKRES:b).rc
+    @-+echo \#include  \"$(APP9VERINFO)\" >> $(MISC)$/$(APP9LINKRES:b).rc
 .ENDIF
 .ENDIF			# "$(USE_SHELL)"=="4nt"
     $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP9LINKRES:b).rc
@@ -2050,11 +2050,11 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
 .ENDIF
 .ELSE			# "$(USE_SHELL)"=="4nt"
 .IF "$(APP10ICON)" != ""
-    @-+guw.pl echo 1 ICON \"$(APP10ICON:s/\//\/\//)\" >> $(MISC)$/$(APP10LINKRES:b).rc
+    @-+guw.pl echo 1 ICON \"$(APP10ICON)\" | sed 'sX\\X\\\\Xg' >> $(MISC)$/$(APP10LINKRES:b).rc
 .ENDIF
 .IF "$(APP10VERINFO)" != ""
-    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP10LINKRES:b).rc
-    @-+echo #include  \"$(APP10VERINFO)\" >> $(MISC)$/$(APP10LINKRES:b).rc
+    @-+echo \#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP10LINKRES:b).rc
+    @-+echo \#include  \"$(APP10VERINFO)\" >> $(MISC)$/$(APP10LINKRES:b).rc
 .ENDIF
 .ENDIF			# "$(USE_SHELL)"=="4nt"
     $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP10LINKRES:b).rc
