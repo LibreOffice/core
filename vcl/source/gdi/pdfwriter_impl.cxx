@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: pl $ $Date: 2002-09-17 11:15:43 $
+ *  last change: $Author: sj $ $Date: 2002-09-17 12:11:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,17 +132,22 @@ static void appendDouble( double fValue, OStringBuffer& rBuffer, int nPrecision 
     {
         fValue *= pow( 10.0, (double)nPrecision );
         nFrac = (sal_Int64)fValue;
-        while( nFrac && ! (nFrac % 10 ) )
-            nFrac /= 10;
     }
-
     if( bNeg && ( nInt || nFrac ) )
         rBuffer.append( '-' );
     rBuffer.append( nInt );
     if( nFrac )
     {
+        int i;
         rBuffer.append( '.' );
-        rBuffer.append( nFrac );
+        sal_Int64 nBound = (sal_Int16)pow( 10, nPrecision - 1 );
+        for ( i = 0; ( i < nPrecision ) && nFrac; i++ )
+        {
+            sal_Int64 nNumb = nFrac / nBound;
+            nFrac -= nNumb * nBound;
+            rBuffer.append( nNumb );
+            nBound /= 10;
+        }
     }
  }
 
