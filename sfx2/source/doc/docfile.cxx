@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-10 14:34:19 $
+ *  last change: $Author: mba $ $Date: 2000-12-14 10:22:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -919,11 +919,18 @@ sal_Bool SfxMedium::IsStorage()
         return pImp->bIsStorage;
 
     if ( pImp->pTempFile )
+    {
         pImp->bIsStorage = SotStorage::IsStorageFile( pImp->pTempFile->GetFileName() );
+        if ( !pImp->bIsStorage )
+            bTriedStorage = TRUE;
+    }
     else
+    {
         pImp->bIsStorage = SotStorage::IsStorageFile( GetInStream() );
-    if ( !pImp->bIsStorage )
-        bTriedStorage = TRUE;
+        if ( pInStream && !pInStream->GetError() && !pImp->bIsStorage )
+            bTriedStorage = TRUE;
+    }
+
     return pImp->bIsStorage;
 }
 
@@ -1106,10 +1113,10 @@ SvStorage* SfxMedium::GetStorage_Impl( BOOL bUCBStorage )
         }
     }
 
-    bTriedStorage = sal_True;
-
     if( !pStream || ( GetError() != SVSTREAM_OK ) )
         return aStorage;
+
+    bTriedStorage = sal_True;
 
     if ( pImp->pTempFile && pOutStream )
     {
