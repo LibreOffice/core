@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scstring.src,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 20:06:49 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 11:38:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #include "sc.hrc" // -> #include <sfx.hrc>
 
  // Strings fuer Interface-Namen ------------------------------------------
@@ -3294,7 +3293,7 @@ String SCSTR_VALID_MINIMUM
     Text [ french ] = "~Minimum" ;
     Text [ portuguese ] = "~Mínimo" ;
     Text [ portuguese_brazilian ] = "~Mínimo" ;
-    Text[ chinese_simplified ] = "æœ€å°(~M)";
+    Text[ chinese_simplified ] = "æœ€å°";
     Text[ russian ] = "Ìèíèìóì";
     Text[ polish ] = "~Minimum";
     Text[ japanese ] = "æœ€å°å€¤(~M)";
@@ -3327,7 +3326,7 @@ String SCSTR_VALID_MAXIMUM
     Text [ french ] = "~Maximum" ;
     Text [ portuguese ] = "~Máximo" ;
     Text [ portuguese_brazilian ] = "~Máximo" ;
-    Text[ chinese_simplified ] = "æœ€å¤§(~M)";
+    Text[ chinese_simplified ] = "æœ€å¤§";
     Text[ russian ] = "Ìàêñèìóì";
     Text[ polish ] = "~Maksimum";
     Text[ japanese ] = "æœ€å¤§å€¤(~M)";
@@ -3360,7 +3359,7 @@ String SCSTR_VALID_VALUE
     Text [ french ] = "~Valeur" ;
     Text [ portuguese ] = "~Valor" ;
     Text [ portuguese_brazilian ] = "~Valor" ;
-    Text[ chinese_simplified ] = "æ•°å€¼(~V)";
+    Text[ chinese_simplified ] = "æ•°å€¼";
     Text[ russian ] = "Çíà÷åíèå";
     Text[ polish ] = "~Wartoœæ";
     Text[ japanese ] = "æ•°å€¤(~V)";
@@ -3384,11 +3383,13 @@ String SCSTR_VALID_RANGE
 {
     Text = "~Quelle" ;
     Text[ english_us ] = "~Source" ;
+    Text[ chinese_simplified ] = "æº";
 };
 String SCSTR_VALID_LIST
 {
     Text = "~Einträge" ;
     Text[ english_us ] = "~Entries" ;
+    Text[ chinese_simplified ] = "æ¡ç›®";
 };
 
  // fuer Dialoge:
