@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-20 13:42:28 $
+ *  last change: $Author: obo $ $Date: 2004-05-28 17:07:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,8 +111,7 @@
 #define INDEXENTRYSUPPLIER_ALL
 #include <indexentrysupplier.hxx>
 #include <indexentrysupplier_asian.hxx>
-#include <indexentrysupplier_western.hxx>
-#include <indexentrysupplier_complex.hxx>
+#include <indexentrysupplier_common.hxx>
 #include <indexentrysupplier_default.hxx>
 
 #define CCLASS_ALL
@@ -184,13 +183,6 @@ IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_ja_phonetic_alphanumeric_first_by_sy
 IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_ja_phonetic_alphanumeric_first_by_consonant )
 IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_ja_phonetic_alphanumeric_last_by_syllable )
 IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_ja_phonetic_alphanumeric_last_by_consonant )
-IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_alphanumeric )
-IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_nl_alphanumeric )
-IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_da_alphanumeric )
-IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_ar_alphanumeric )
-IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_he_alphanumeric )
-IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_hi_alphanumeric )
-IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_th_alphanumeric )
 IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_Unicode )
 IMPL_CREATEINSTANCE_MSF( CalendarImpl )
 IMPL_CREATEINSTANCE( Calendar_gregorian )
@@ -203,6 +195,7 @@ IMPL_CREATEINSTANCE( Calendar_buddhist )
 IMPL_CREATEINSTANCE_MSF( BreakIteratorImpl )
 IMPL_CREATEINSTANCE( BreakIterator_Unicode )
 IMPL_CREATEINSTANCE( BreakIterator_ca )
+IMPL_CREATEINSTANCE( BreakIterator_hu )
 IMPL_CREATEINSTANCE( BreakIterator_ja )
 IMPL_CREATEINSTANCE( BreakIterator_zh )
 IMPL_CREATEINSTANCE( BreakIterator_ko )
@@ -406,27 +399,6 @@ static const struct InstancesArray {
     {   "com.sun.star.i18n.IndexEntrySupplier_ja_phonetic (alphanumeric last) (grouped by consonant)",
         "com.sun.star.i18n.IndexEntrySupplier_ja_phonetic (alphanumeric last) (grouped by consonant)",
         &IndexEntrySupplier_ja_phonetic_alphanumeric_last_by_consonant_CreateInstance },
-    {   "com.sun.star.i18n.IndexEntrySupplier_da_alphanumeric",
-        "com.sun.star.i18n.IndexEntrySupplier_da_alphanumeric",
-        &IndexEntrySupplier_da_alphanumeric_CreateInstance },
-    {   "com.sun.star.i18n.IndexEntrySupplier_nl_alphanumeric",
-        "com.sun.star.i18n.IndexEntrySupplier_nl_alphanumeric",
-        &IndexEntrySupplier_nl_alphanumeric_CreateInstance },
-    {   "com.sun.star.i18n.IndexEntrySupplier_alphanumeric",
-        "com.sun.star.i18n.IndexEntrySupplier_alphanumeric",
-        &IndexEntrySupplier_alphanumeric_CreateInstance },
-    {   "com.sun.star.i18n.IndexEntrySupplier_ar_alphanumeric",
-        "com.sun.star.i18n.IndexEntrySupplier_ar_alphanumeric",
-        &IndexEntrySupplier_ar_alphanumeric_CreateInstance },
-    {   "com.sun.star.i18n.IndexEntrySupplier_he_alphanumeric",
-        "com.sun.star.i18n.IndexEntrySupplier_he_alphanumeric",
-        &IndexEntrySupplier_he_alphanumeric_CreateInstance },
-    {   "com.sun.star.i18n.IndexEntrySupplier_hi_alphanumeric",
-        "com.sun.star.i18n.IndexEntrySupplier_hi_alphanumeric",
-        &IndexEntrySupplier_hi_alphanumeric_CreateInstance },
-    {   "com.sun.star.i18n.IndexEntrySupplier_th_alphanumeric",
-        "com.sun.star.i18n.IndexEntrySupplier_th_alphanumeric",
-        &IndexEntrySupplier_th_alphanumeric_CreateInstance },
     {       "com.sun.star.i18n.IndexEntrySupplier_Unicode",
         "com.sun.star.i18n.IndexEntrySupplier_Unicode",
         &IndexEntrySupplier_Unicode_CreateInstance },
@@ -466,6 +438,9 @@ static const struct InstancesArray {
     {   "com.sun.star.i18n.BreakIterator_ca",
         "com.sun.star.i18n.BreakIterator_ca",
         &BreakIterator_ca_CreateInstance },
+    {   "com.sun.star.i18n.BreakIterator_hu",
+        "com.sun.star.i18n.BreakIterator_hu",
+        &BreakIterator_hu_CreateInstance },
     {   "com.sun.star.i18n.BreakIterator_ja",
         "com.sun.star.i18n.BreakIterator_ja",
         &BreakIterator_ja_CreateInstance },
