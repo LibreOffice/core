@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docdesc.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:39:35 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 09:52:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
+#endif
+#ifndef _SV_VIRDEV_HXX //autogen
+#include <vcl/virdev.hxx>
 #endif
 #ifndef _SFX_PRINTER_HXX //autogen
 #include <sfx2/printer.hxx>
@@ -282,6 +285,7 @@ void lcl_DefaultPageFmt( sal_uInt16 nPoolFmtId, SwFrmFmt &rFmt1,
         aLR.SetRight( 0 );
         aLR.SetLeft(  0 );
     }
+
     if ( bSetFmt1 )
     {
         rFmt1.SetAttr( aFrmSize );
@@ -772,7 +776,7 @@ void SwDoc::PrtDataChanged()
 
             bDraw = FALSE;
             if( pDrawModel )
-                pDrawModel->SetRefDevice( pPrt );
+                pDrawModel->SetRefDevice( _GetRefDev() );
 
             pFntCache->Flush();
             GetRootFrm()->InvalidateAllCntnt();
@@ -780,15 +784,17 @@ void SwDoc::PrtDataChanged()
             if ( pSh )
             {
                 do
-                {   pSh->InitPrt( pPrt );
+                {
+                    pSh->InitPrt( pPrt );
                     pSh = (ViewShell*)pSh->GetNext();
-                } while ( pSh != GetRootFrm()->GetCurrShell() );
+                }
+                while ( pSh != GetRootFrm()->GetCurrShell() );
             }
 
         }
     }
-    if ( bDraw && pDrawModel && pPrt && pPrt != pDrawModel->GetRefDevice() )
-        pDrawModel->SetRefDevice( pPrt );
+    if ( bDraw && pDrawModel && _GetRefDev() != pDrawModel->GetRefDevice() )
+        pDrawModel->SetRefDevice( _GetRefDev() );
 
     PrtOLENotify( TRUE );
 
@@ -925,9 +931,18 @@ void SwDoc::PrtOLENotify( BOOL bAll )
     }
 }
 
+void SwDoc::SetVirDev( VirtualDevice* pVd, sal_Bool bCallVirDevDataChanged )
+{
+    if ( (ULONG)pVirDev != (ULONG)pVd )
+    {
+        delete pVirDev;
+        pVirDev = pVd;
+    }
+}
+
 void SwDoc::SetPrt( SfxPrinter *pP, sal_Bool bCallPrtDataChanged )
 {
-    ASSERT( pP, "Kein Drucker !" );
+    ASSERT( pP, "Kein Drucker!" );
 
     const BOOL bInitPageDesc = pPrt == 0;
 
@@ -936,9 +951,6 @@ void SwDoc::SetPrt( SfxPrinter *pP, sal_Bool bCallPrtDataChanged )
         delete pPrt;
         pPrt = pP;
     }
-
-    if ( bCallPrtDataChanged )
-        PrtDataChanged();
 
     if( bInitPageDesc )
     {
@@ -959,8 +971,21 @@ void SwDoc::SetPrt( SfxPrinter *pP, sal_Bool bCallPrtDataChanged )
         {
             SwPageDesc& rDesc = _GetPageDesc( i );
             ::lcl_DefaultPageFmt( rDesc.GetPoolFmtId(), rDesc.GetMaster(),
-                                    rDesc.GetLeft(), pPrt, TRUE );
+                                  rDesc.GetLeft(), pPrt, TRUE );
         }
+    }
+
+    if ( bCallPrtDataChanged )
+        PrtDataChanged();
+}
+
+void SwDoc::SetUseVirtualDevice( sal_Bool bFlag )
+{
+    if ( !IsUseVirtualDevice() != !bFlag )
+    {
+        _SetUseVirtualDevice( bFlag );
+        PrtDataChanged();
+        SetModified();
     }
 }
 
