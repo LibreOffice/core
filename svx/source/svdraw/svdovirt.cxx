@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdovirt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 11:11:37 $
+ *  last change: $Author: aw $ $Date: 2000-11-01 13:27:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -605,6 +605,11 @@ void SdrVirtObj::SetItemSet( const SfxItemSet& rSet )
 void SdrVirtObj::BroadcastItemChange(const SdrBroadcastItemChange& rChange)
 {
     rRefObj.BroadcastItemChange(rChange);
+}
+
+SfxItemSet* SdrVirtObj::CreateNewItemSet(SfxItemPool& rPool)
+{
+    return rRefObj.CreateNewItemSet(rPool);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

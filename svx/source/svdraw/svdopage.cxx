@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdopage.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:25 $
+ *  last change: $Author: aw $ $Date: 2000-11-01 13:27:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,10 @@
 #include "svdmodel.hxx"
 #include "svdpage.hxx"
 #include "svdpagv.hxx"
+
+#ifndef _SFXITEMSET_HXX
+#include <svtools/itemset.hxx>
+#endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -475,6 +479,11 @@ void SdrPageObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
     aCompat.SetID("SdrPageObj");
 #endif
     rIn>>nPageNum;
+}
+
+SfxItemSet* SdrPageObj::CreateNewItemSet(SfxItemPool& rPool)
+{
+    return new SfxItemSet(rPool);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
