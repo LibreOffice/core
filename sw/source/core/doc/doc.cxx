@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:15:07 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:17:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,10 +227,6 @@
 #include <statstr.hrc>          // StatLine-String
 #endif
 
-#ifndef _UNDOBJ_HXX
-#include <undobj.hxx>
-#endif
-
 // -> #111827#
 #ifndef _SFXITEMITER_HXX
 #include <svtools/itemiter.hxx>
@@ -239,6 +235,8 @@
 #include <comcore.hrc>
 #include <SwUndoTOXChange.hxx>
 // <- #111827#
+
+#include <SwUndoFmt.hxx>
 
 // Seiten-Deskriptoren
 SV_IMPL_PTRARR(SwPageDescs,SwPageDescPtr);
@@ -1278,6 +1276,57 @@ void SwDoc::ChgFmt(SwFmt & rFmt, const SfxItemSet & rSet)
     }
 
     rFmt.SetAttr(rSet);
+
+}
+
+void SwDoc::RenameFmt(SwFmt & rFmt, const String & sNewName,
+                      BOOL bBroadcast)
+{
+    SfxStyleFamily eFamily = SFX_STYLE_FAMILY_ALL;
+
+    if (DoesUndo())
+    {
+        SwUndo * pUndo = NULL;
+
+        switch (rFmt.Which())
+        {
+        case RES_CHRFMT:
+            pUndo = new SwUndoRenameCharFmt(rFmt.GetName(), sNewName, this);
+            eFamily = SFX_STYLE_FAMILY_PARA;
+            break;
+        case RES_TXTFMTCOLL:
+            pUndo = new SwUndoRenameFmtColl(rFmt.GetName(), sNewName, this);
+            eFamily = SFX_STYLE_FAMILY_CHAR;
+            break;
+        case RES_FRMFMT:
+            pUndo = new SwUndoRenameFrmFmt(rFmt.GetName(), sNewName, this);
+            eFamily = SFX_STYLE_FAMILY_FRAME;
+            break;
+
+        default:
+            break;
+        }
+
+        if (pUndo)
+            AppendUndo(pUndo);
+    }
+
+    rFmt.SetName(sNewName);
+
+    if (bBroadcast)
+        BroadcastStyleOperation(sNewName, eFamily, SFX_STYLESHEET_MODIFIED);
+}
+
+void SwDoc::ChgFmt(SwFmt & rFmt, const SfxPoolItem & rItem)
+{
+    if (DoesUndo())
+    {
+        SwUndo * pUndo = new SwUndoFmtAttr(rFmt.GetAttr(rItem.Which()), rFmt);
+
+        AppendUndo(pUndo);
+    }
+
+    rFmt.SetAttr(rItem);
 
 }
 
