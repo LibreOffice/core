@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DBTools.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change:$Date: 2005-02-24 17:22:47 $
+ *  last change:$Date: 2005-03-29 11:53:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,6 @@ import com.sun.star.uno.UnoRuntime;
 
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
-
-import com.sun.star.sdbc.SQLException ;
 import com.sun.star.sdbc.XConnection ;
 import com.sun.star.sdbc.XResultSet ;
 import com.sun.star.sdbc.XResultSetUpdate ;
@@ -88,6 +86,7 @@ import com.sun.star.io.XTextInputStream ;
 import com.sun.star.io.XDataInputStream ;
 import com.sun.star.container.XNameAccess ;
 import com.sun.star.frame.XStorable;
+import com.sun.star.sdb.XDocumentDataSource;
 import com.sun.star.sdbc.XCloseable ;
 import java.sql.Statement;
 import java.sql.Connection;
@@ -373,8 +372,10 @@ public class DBTools {
             revokeDB(name) ;
         } catch (com.sun.star.uno.Exception e) {}
 
-        XStorable store =
-            (XStorable) UnoRuntime.queryInterface(XStorable.class, dataSource);
+        XDocumentDataSource xDDS = (XDocumentDataSource)
+        UnoRuntime.queryInterface(XDocumentDataSource.class, dataSource);
+        XStorable store = (XStorable) UnoRuntime.queryInterface(XStorable.class,
+                xDDS.getDatabaseDocument());
         String aFile = utils.getOfficeTemp(xMSF) + name + ".odb";
         store.storeAsURL(aFile, new PropertyValue[] {  });
 
