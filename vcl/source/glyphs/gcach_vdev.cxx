@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_vdev.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hdu $ $Date: 2001-03-30 12:21:36 $
+ *  last change: $Author: hdu $ $Date: 2001-04-11 10:31:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,6 @@ long VirtDevServerFont::FetchFontList( ImplDevFontList* pToAdd )
         rData.mnHeight      = aFontInfo.GetHeight();
         rData.meFamily      = aFontInfo.GetFamily();
         rData.meCharSet     = aFontInfo.GetCharSet();
-        rData.meScript      = SCRIPT_DONTKNOW;
         rData.mePitch       = aFontInfo.GetPitch();
         rData.meWidthType   = aFontInfo.GetWidthType();
         rData.meWeight      = aFontInfo.GetWeight();
