@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfunc.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:52:34 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 15:43:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -884,7 +884,7 @@ void ScDocFunc::NotifyInputHandler( const ScAddress& rPos )
 
         typedef ::std::list<ScMyRememberItem*> ScMyRememberItemList;
 
-BOOL ScDocFunc::PutData( const ScAddress& rPos, EditEngine& rEngine, BOOL bInterpret, BOOL bApi )
+BOOL ScDocFunc::PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngine, BOOL bInterpret, BOOL bApi )
 {
     //  PutData ruft PutCell oder SetNormalString
 
