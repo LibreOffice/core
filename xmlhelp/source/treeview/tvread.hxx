@@ -46,14 +46,23 @@
 namespace treeview {
 
 
-    struct ConfigData
+    class ConfigData
     {
+    public:
+#define PRODUCTNAME    0
+#define PRODUCTVERSION 1
+#define VENDORNAME     2
+#define VENDORVERSION  3
+#define VENDORSHORT    4
 #define MAX_MODULE_COUNT 16
 
+        rtl::OUString          m_vReplacement[5];
         sal_uInt64    filelen[MAX_MODULE_COUNT];
         rtl::OUString fileurl[MAX_MODULE_COUNT];
         rtl::OUString locale,system;
         rtl::OUString appendix;
+
+        void SAL_CALL replaceName( rtl::OUString& oustring ) const;
     };
 
 
@@ -285,6 +294,22 @@ namespace treeview {
 
         ConfigData init(
             const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xMSF );
+
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
+        getConfiguration(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xMSgr ) const;
+
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XHierarchicalNameAccess >
+        getHierAccess( const ::com::sun::star::uno::Reference<  ::com::sun::star::lang::XMultiServiceFactory >& sProvider,
+                       const char* file ) const;
+
+        ::rtl::OUString
+        getKey( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XHierarchicalNameAccess >& xHierAccess,
+                const char* key ) const;
+
+        void subst(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xMSgr,
+            rtl::OUString& instpath ) const;
 
     };  // end class TVChildTarget
 

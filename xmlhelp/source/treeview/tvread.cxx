@@ -164,6 +164,71 @@ using namespace com::sun::star::container;
 
 
 
+void SAL_CALL ConfigData::replaceName( rtl::OUString& oustring ) const
+{
+    sal_Int32 idx = -1,k = 0,add,off;
+    bool cap = false;
+    rtl::OUStringBuffer aStrBuf( 0 );
+
+    while( ( idx = oustring.indexOf( sal_Unicode('%'),++idx ) ) != -1 )
+    {
+        if( oustring.indexOf( rtl::OUString::createFromAscii( "%PRODUCTNAME" ),
+                              idx ) == idx )
+        {
+            add = 12;
+            off = PRODUCTNAME;
+        }
+        else if( oustring.indexOf( rtl::OUString::createFromAscii( "%PRODUCTVERSION" ),
+                                   idx ) == idx )
+        {
+            add = 15;
+            off = PRODUCTVERSION;
+        }
+        else if( oustring.indexOf( rtl::OUString::createFromAscii( "%VENDORNAME" ),
+                                   idx ) == idx )
+        {
+            add = 11;
+            off = VENDORNAME;
+        }
+        else if( oustring.indexOf( rtl::OUString::createFromAscii( "%VENDORVERSION" ),
+                                   idx ) == idx )
+        {
+            add = 14;
+            off = VENDORVERSION;
+        }
+        else if( oustring.indexOf( rtl::OUString::createFromAscii( "%VENDORSHORT" ),
+                                   idx ) == idx )
+        {
+            add = 12;
+            off = VENDORSHORT;
+        }
+        else
+            add = 0;
+
+        if( add )
+        {
+            if( ! cap )
+            {
+                cap = true;
+                aStrBuf.ensureCapacity( 256 );
+            }
+
+            aStrBuf.append( &oustring.getStr()[k],idx - k );
+            aStrBuf.append( m_vReplacement[off] );
+            k = idx + add;
+        }
+    }
+
+    if( cap )
+    {
+        if( k < oustring.getLength() )
+            aStrBuf.append( &oustring.getStr()[k],oustring.getLength()-k );
+        oustring = aStrBuf.makeStringAndClear();
+    }
+}
+
+
+
 
 //////////////////////////////////////////////////////////////////////////
 // XInterface
@@ -235,6 +300,7 @@ TVRead::TVRead( const ConfigData& configData,TVDom* tvDom )
         return;
 
     Title = tvDom->title;
+    configData.replaceName( Title );
     if( tvDom->isLeaf() )
     {
         TargetURL = ( tvDom->getTargetURL() + configData.appendix );
@@ -585,179 +651,63 @@ TVChildTarget::hasByHierarchicalName( const rtl::OUString& aName )
 ConfigData TVChildTarget::init( const Reference< XMultiServiceFactory >& xSMgr )
 {
     ConfigData configData;
+    Reference< XMultiServiceFactory >  sProvider( getConfiguration(xSMgr) );
 
-    rtl::OUString sProviderService =
-        rtl::OUString::createFromAscii( "com.sun.star.configuration.ConfigurationProvider" );
+    /**********************************************************************/
+    /*                       reading Office.Common                        */
+    /**********************************************************************/
 
-    Any aAny;
-    aAny <<= rtl::OUString::createFromAscii( "local" );
-    PropertyValue aProp( rtl::OUString::createFromAscii( "servertype" ),
-                         -1,
-                         aAny,
-                         PropertyState_DIRECT_VALUE );
+    Reference< XHierarchicalNameAccess > xHierAccess( getHierAccess( sProvider,
+                                                                     "org.openoffice.Office.Common" ) );
+    rtl::OUString system( getKey( xHierAccess,"Help/System" ) );
+    rtl::OUString instPath( getKey( xHierAccess,"Path/Current/Help" ) );
+    if( ! instPath.getLength() )
+        // try to determine path from default
+        instPath = rtl::OUString::createFromAscii( "$(instpath)/help" );
 
-    Sequence< Any > seq(1);
-    seq[0] <<= aProp;
+    // replace anything like $(instpath);
+    subst( xSMgr,instPath );
 
-    Reference< XMultiServiceFactory > sProvider;
-    try
-    {
-        sProvider =
-            Reference< XMultiServiceFactory >(
-                xSMgr->createInstanceWithArguments( sProviderService,seq ),
-                UNO_QUERY );
-    }
-    catch( const com::sun::star::uno::Exception& )
-    {
-        VOS_ENSHURE( sProvider.is()," cant instantiate the multiservicefactory " );
-    }
+    /**********************************************************************/
+    /*                       reading Webtop.Common                        */
+    /**********************************************************************/
 
+    xHierAccess = getHierAccess( sProvider,
+                                 "org.openoffice.Webtop.Common" );
+    rtl::OUString vendorName( getKey(  xHierAccess,"Product/ooName" ) );
 
-    if( ! sProvider.is() )
-        return configData;
+    rtl::OUString setupversion( getKey(  xHierAccess,"Product/ooSetupVersion" ) );
+    rtl::OUString setupextension( getKey(  xHierAccess,"Product/ooSetupExtension") );
+    rtl::OUString vendorVersion( setupversion +
+                                 rtl::OUString::createFromAscii( " " ) +
+                                 setupextension );
+    rtl::OUString vendorShort = vendorName;
 
-    rtl::OUString sReaderService =
-        rtl::OUString::createFromAscii( "com.sun.star.configuration.ConfigurationAccess" );
+    /**********************************************************************/
+    /*                       reading setup                                */
+    /**********************************************************************/
 
-    seq[0] <<= rtl::OUString::createFromAscii( "org.openoffice.Office.Common" );
+    xHierAccess = getHierAccess( sProvider,
+                                 "org.openoffice.Setup" );
 
-
-    Reference< XHierarchicalNameAccess > xHierAccess;
-    try
-    {
-        xHierAccess =
-            Reference< XHierarchicalNameAccess >
-            ( sProvider->createInstanceWithArguments( sReaderService,seq ),
-              UNO_QUERY );
-    }
-    catch( const com::sun::star::uno::Exception& )
-    {
-        VOS_ENSHURE( xHierAccess.is()," cant instantiate the reader service " );
-    }
-
-    if( ! xHierAccess.is() )
-        return configData;
-
-    try
-    {
-        aAny =
-            xHierAccess->getByHierarchicalName( rtl::OUString::createFromAscii("Path/Current/Help") );
-    }
-    catch( const com::sun::star::container::NoSuchElementException& )
-    {
-        VOS_ENSHURE( false," path to help files could not be determined " );
-        return configData;
-    }
-
-
-    rtl::OUString instPath;
-    bool err = ! ( aAny >>= instPath );
-
-    if( err )
-    {
-        VOS_ENSHURE( false," path to help files could not be determined " );
-        return configData;
-    }
-
-    Reference< XConfigManager >  xCfgMgr;
-    try
-    {
-        xCfgMgr =
-            Reference< XConfigManager >(
-                xSMgr->createInstance( rtl::OUString::createFromAscii( "com.sun.star.config.SpecialConfigManager" ) ),
-                UNO_QUERY );
-    }
-    catch( const com::sun::star::uno::Exception& )
-    {
-        VOS_ENSHURE( xCfgMgr.is()," cant instantiate the special config manager " );
-    }
-
-
-    if( ! xCfgMgr.is() )
-        return configData;
-
-    instPath = xCfgMgr->substituteVariables( instPath );
-
-    rtl::OUString url;
-    osl::FileBase::RC errFile = osl::FileBase::getFileURLFromSystemPath( instPath,url );
-    if( errFile != osl::FileBase::E_None )
-        return configData;
-
-
-    Any aAny1;
-    try
-    {
-        aAny1 =
-            xHierAccess->getByHierarchicalName( rtl::OUString::createFromAscii("Help/System") );
-    }
-    catch( const com::sun::star::container::NoSuchElementException& )
-    {
-        VOS_ENSHURE( false," " );
-        return configData;
-    }
-
-
-    rtl::OUString system;
-    err = ! ( aAny1 >>= system );
-
-    if( err )
-    {
-        VOS_ENSHURE( false," path to help files could not be determined " );
-        return configData;
-    }
-
-
-    // Reading Locale
-
-    seq[0] <<= rtl::OUString::createFromAscii( "org.openoffice.Setup" );
-
-    try
-    {
-        xHierAccess =
-            Reference< XHierarchicalNameAccess >
-            ( sProvider->createInstanceWithArguments( sReaderService,seq ),
-              UNO_QUERY );
-    }
-    catch( const com::sun::star::uno::Exception& )
-    {
-        VOS_ENSHURE( xHierAccess.is()," cant instantiate the reader service " );
-    }
-
-    if( ! xHierAccess.is() )
-        return configData;
-
-    Any aAny2;
-    try
-    {
-        aAny2 =
-            xHierAccess->getByHierarchicalName( rtl::OUString::createFromAscii("L10N/ooLocale") );
-    }
-    catch( const com::sun::star::container::NoSuchElementException& )
-    {
-        VOS_ENSHURE( false," path to help files could not be determined " );
-        return configData;
-    }
-
-    rtl::OUString locale;
-    err = ! ( aAny2 >>= locale );
-
-    if( err )
-    {
-        VOS_ENSHURE( false," ");
-        return configData;
-    }
+    rtl::OUString productName( getKey(  xHierAccess,"Product/ooName" ) );
+    setupversion = getKey(  xHierAccess,"Product/ooSetupVersion" );
+    setupextension = getKey(  xHierAccess,"Product/ooSetupExtension");
+    rtl::OUString productVersion( setupversion +
+                                  rtl::OUString::createFromAscii( " " ) +
+                                  setupextension );
+    rtl::OUString locale( getKey( xHierAccess,"L10N/ooLocale" ) );
 
 
     // Determine fileurl from url and locale
-
+    rtl::OUString url;
+    osl::FileBase::RC errFile = osl::FileBase::getFileURLFromSystemPath( instPath,url );
+    if( errFile != osl::FileBase::E_None ) return configData;
     if( url.lastIndexOf( sal_Unicode( '/' ) ) != url.getLength() - 1 )
         url += rtl::OUString::createFromAscii( "/" );
-
     rtl::OUString ret;
-
     sal_Int32 idx;
     osl::DirectoryItem aDirItem;
-
     if( osl::FileBase::E_None == osl::DirectoryItem::get( url + locale,aDirItem ) )
         ret = locale;
     else if( ( ( idx = locale.indexOf( '-' ) ) != -1 ||
@@ -802,20 +752,13 @@ ConfigData TVChildTarget::init( const Reference< XMultiServiceFactory >& xSMgr )
         aDirectory.close();
     }
 
-//      url = url + ret + rtl::OUString::createFromAscii( "/treeview.xml" );
+    configData.m_vReplacement[0] = productName;
+    configData.m_vReplacement[1] = productVersion;
+    configData.m_vReplacement[2] = vendorName;
+    configData.m_vReplacement[3] = vendorVersion;
+    configData.m_vReplacement[4] = vendorShort;
 
-//      // Determine the filelen
-//      sal_uInt64 filelen = 0;
-
-//      osl::FileStatus aStatus( FileStatusMask_FileSize );
-//      if( osl::FileBase::E_None == osl::DirectoryItem::get( url,aDirItem ) &&
-//          osl::FileBase::E_None == aDirItem.getFileStatus( aStatus )  &&
-//          aStatus.isValid( FileStatusMask_FileSize ) )
-//          filelen = aStatus.getFileSize();
-//      configData.fileurl = url;
-//      configData.filelen = filelen;
-
-    configData.system = system;
+       configData.system = system;
     configData.locale = locale;
     configData.appendix =
         rtl::OUString::createFromAscii( "?Language=" ) +
@@ -824,4 +767,127 @@ ConfigData TVChildTarget::init( const Reference< XMultiServiceFactory >& xSMgr )
         configData.system;
 
     return configData;
+}
+
+
+
+
+
+
+
+
+
+Reference< XMultiServiceFactory >
+TVChildTarget::getConfiguration(const Reference< XMultiServiceFactory >& m_xSMgr) const
+{
+    Reference< XMultiServiceFactory > sProvider;
+    if( m_xSMgr.is() )
+    {
+        Any aAny;
+        aAny <<= rtl::OUString::createFromAscii( "plugin" );
+        PropertyValue aProp( rtl::OUString::createFromAscii( "servertype" ),
+                             -1,
+                             aAny,
+                             PropertyState_DIRECT_VALUE );
+
+        Sequence< Any > seq(1);
+        seq[0] <<= aProp;
+
+        try
+        {
+            rtl::OUString sProviderService =
+                rtl::OUString::createFromAscii( "com.sun.star.configuration.ConfigurationProvider" );
+            sProvider =
+                Reference< XMultiServiceFactory >(
+                    m_xSMgr->createInstanceWithArguments( sProviderService,seq ),
+                    UNO_QUERY );
+        }
+        catch( const com::sun::star::uno::Exception& )
+        {
+            OSL_ENSURE( sProvider.is(),"cant instantiate configuration" );
+        }
+    }
+
+    return sProvider;
+}
+
+
+
+Reference< XHierarchicalNameAccess >
+TVChildTarget::getHierAccess( const Reference< XMultiServiceFactory >& sProvider,
+                              const char* file ) const
+{
+    Reference< XHierarchicalNameAccess > xHierAccess;
+
+    if( sProvider.is() )
+    {
+        Sequence< Any > seq(1);
+        rtl::OUString sReaderService =
+            rtl::OUString::createFromAscii( "com.sun.star.configuration.ConfigurationAccess" );
+
+        seq[0] <<= rtl::OUString::createFromAscii( file );
+
+        try
+        {
+            xHierAccess =
+                Reference< XHierarchicalNameAccess >
+                ( sProvider->createInstanceWithArguments( sReaderService,seq ),
+                  UNO_QUERY );
+        }
+        catch( const com::sun::star::uno::Exception& )
+        {
+        }
+    }
+
+    return xHierAccess;
+}
+
+
+
+rtl::OUString
+TVChildTarget::getKey( const Reference< XHierarchicalNameAccess >& xHierAccess,
+                       const char* key ) const
+{
+    rtl::OUString instPath;
+    if( xHierAccess.is() )
+    {
+        Any aAny;
+        try
+        {
+            aAny =
+                xHierAccess->getByHierarchicalName( rtl::OUString::createFromAscii( key ) );
+        }
+        catch( const com::sun::star::container::NoSuchElementException& )
+        {
+        }
+        aAny >>= instPath;
+    }
+    return instPath;
+}
+
+
+
+void TVChildTarget::subst( const Reference< XMultiServiceFactory >& m_xSMgr,
+                           rtl::OUString& instpath ) const
+{
+    Reference< XConfigManager >  xCfgMgr;
+    if( m_xSMgr.is() )
+    {
+        try
+        {
+            xCfgMgr =
+                Reference< XConfigManager >(
+                    m_xSMgr->createInstance( rtl::OUString::createFromAscii( "com.sun.star.config.SpecialConfigManager" ) ),
+                    UNO_QUERY );
+        }
+        catch( const com::sun::star::uno::Exception& e )
+        {
+            OSL_ENSURE( xCfgMgr.is()," cant instantiate the special config manager " );
+        }
+    }
+
+    OSL_ENSURE( xCfgMgr.is(), "specialconfigmanager not found\n" );
+
+    if( xCfgMgr.is() )
+        instpath = xCfgMgr->substituteVariables( instpath );
 }
