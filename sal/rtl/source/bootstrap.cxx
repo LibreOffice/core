@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kr $ $Date: 2001-06-15 13:53:53 $
+ *  last change: $Author: kr $ $Date: 2001-07-25 08:12:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,25 +161,26 @@ static ::rtl::OUString &getIniFileNameImpl()
                 sal_Int32 nCapacity =
                     rtl_uStringbuffer_newFromStringBuffer(
                         &pFileName, pExeName->length + 4, pExeName );
-#ifdef SAL_W32
-                OUString sOldSuffix( RTL_CONSTASCII_USTRINGPARAM( ".exe" ) );
-                const sal_Char *pNewSuffix = ".ini";
 
-                if( pFileName->length > 3 &&
-                    0 == rtl_ustr_compareIgnoreAsciiCase_WithLength(
-                        &(pFileName->buffer[n-4]), 4,
-                        sOldSuffix.pData->buffer, 4 ) )
-#else
-                OUString sOldSuffix( RTL_CONSTASCII_USTRINGPARAM( ".bin" ) );
-                const sal_Char *pNewSuffix = "rc";
-                if( pFileName->length > 3 &&
-                    0 == rtl_ustr_compare_WithLength(
-                        &(pFileName->buffer[n-4]), 4,
-                        sOldSuffix.pData->buffer, 4 ) )
-#endif
-                {
-                    pFileName->length = pFileName->length - 4;
-                }
+                const sal_Char *pNewSuffix = SAL_CONFIGFILE();
+                OUString sOldSuffix( RTL_CONSTASCII_USTRINGPARAM( ".exe" ) );
+
+                if(pFileName->length > sOldSuffix.getLength()
+                && 0 == rtl_ustr_compareIgnoreAsciiCase_WithLength(pFileName->buffer + n - sOldSuffix.getLength(),
+                                                                   sOldSuffix.getLength(),
+                                                                   sOldSuffix.pData->buffer,
+                                                                   sOldSuffix.getLength()))
+                    pFileName->length = pFileName->length - sOldSuffix.getLength();
+
+                sOldSuffix = OUString(RTL_CONSTASCII_USTRINGPARAM( ".bin" ) );
+                if(pFileName->length > sOldSuffix.getLength()
+                && 0 == rtl_ustr_compareIgnoreAsciiCase_WithLength(pFileName->buffer + n - sOldSuffix.getLength(),
+                                                                   sOldSuffix.getLength(),
+                                                                   sOldSuffix.pData->buffer,
+                                                                   sOldSuffix.getLength()))
+                    pFileName->length = pFileName->length - sOldSuffix.getLength();
+
+
                 rtl_uStringbuffer_insert_ascii(
                     &pFileName,
                     &nCapacity,
