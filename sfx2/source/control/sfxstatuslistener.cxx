@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxstatuslistener.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:34:22 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 13:35:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@
 #include <svtools/intitem.hxx>
 #include <svtools/itemset.hxx>
 #include <svtools/itemdel.hxx>
+#include <svtools/visitem.hxx>
 
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
@@ -93,6 +94,9 @@
 #endif
 #ifndef _COM_SUN_STAR_FRAME_STATUS_ITEMSTATE_HPP_
 #include <com/sun/star/frame/status/ItemState.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_STATUS_VISIBILITY_HPP_
+#include <com/sun/star/frame/status/Visibility.hpp>
 #endif
 
 #include "viewfrm.hxx"
@@ -313,6 +317,12 @@ throw( RuntimeException )
             rEvent.State >>= aItemStatus;
             eState = aItemStatus.State;
             pItem = new SfxVoidItem( m_nSlotID );
+        }
+        else if ( pType == ::getCppuType((const ::com::sun::star::frame::status::Visibility*)0) )
+        {
+            Visibility aVisibilityStatus;
+            rEvent.State >>= aVisibilityStatus;
+            pItem = new SfxVisibilityItem( m_nSlotID, aVisibilityStatus.bVisible );
         }
         else
         {
