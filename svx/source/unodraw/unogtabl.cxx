@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unogtabl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 15:09:58 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:01:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@
 #include "svdmodel.hxx"
 #include "xdef.hxx"
 #include "xflgrit.hxx"
+#include "unofill.hxx"
 #include "unomid.hxx"
 
 using namespace ::com::sun::star;
