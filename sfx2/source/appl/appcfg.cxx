@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appcfg.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-02 16:32:09 $
+ *  last change: $Author: mba $ $Date: 2001-11-30 13:45:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,7 +254,7 @@ IMPL_LINK(SfxEventAsyncer_Impl, TimerHdl, Timer*, pTimer)
     return 0L;
 }
 
-
+/*
 const USHORT* SfxApplication::GetOptionsRanges() const
 {
     static USHORT pRange[] =
@@ -286,7 +286,7 @@ const USHORT* SfxApplication::GetOptionsRanges() const
     }
     return pRange;
 }
-
+*/
 //--------------------------------------------------------------------
 
 BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
@@ -439,6 +439,12 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
                     break;
                 case SID_INET_EXE_PLUGIN  :
                     if ( rSet.Put( SfxBoolItem( SID_INET_EXE_PLUGIN, aSecurityOptions.IsExecutePlugins() ) ) )
+                        bRet = TRUE;
+                case SID_MACRO_WARNING :
+                    if ( rSet.Put( SfxBoolItem( SID_MACRO_WARNING, aSecurityOptions.IsWarningEnabled() ) ) )
+                        bRet = TRUE;
+                case SID_MACRO_CONFIRMATION :
+                    if ( rSet.Put( SfxBoolItem( SID_MACRO_CONFIRMATION, aSecurityOptions.IsConfirmationEnabled() ) ) )
                         bRet = TRUE;
                 case SID_SECURE_URL :
                 {
@@ -1041,6 +1047,17 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
             seqURLs[nPosition] = *(const String*)(pList->GetObject(nPosition));
         }
         aSecurityOptions.SetSecureURLs( seqURLs );
+    }
+
+    if ( SFX_ITEM_SET == rSet.GetItemState(SID_MACRO_WARNING, TRUE, &pItem))
+    {
+        DBG_ASSERT(pItem->ISA(SfxBoolItem), "SfxBoolItem expected");
+        aSecurityOptions.SetWarningEnabled( ( (const SfxBoolItem *)pItem )->GetValue() );
+    }
+    if ( SFX_ITEM_SET == rSet.GetItemState(SID_MACRO_CONFIRMATION, TRUE, &pItem))
+    {
+        DBG_ASSERT(pItem->ISA(SfxBoolItem), "SfxBoolItem expected");
+        aSecurityOptions.SetConfirmationEnabled( ( (const SfxBoolItem *)pItem )->GetValue() );
     }
 
     // EnableMetafilePrint

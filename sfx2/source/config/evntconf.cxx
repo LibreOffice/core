@@ -2,9 +2,9 @@
  *
  *  $RCSfile: evntconf.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mba $ $Date: 2001-08-24 07:56:52 $
+ *  last change: $Author: mba $ $Date: 2001-11-30 13:47:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@
 #ifndef _SBXCLASS_HXX //autogen
 #include <svtools/sbx.hxx>
 #endif
+
+#include <svtools/securityoptions.hxx>
+
 #pragma hdrstop
 
 #ifndef _RTL_USTRING_
@@ -144,22 +147,28 @@ TYPEINIT1(SfxEventHint, SfxHint);
 
 // class SfxMacroQueryDlg_Impl -------------------------------------------
 
-SfxMacroQueryDlg_Impl::SfxMacroQueryDlg_Impl( const ResId& rResId ) :
-    ModalDialog( NULL, rResId ),
-    aIcon( this, ResId( ICN_MESSAGE ) ),
-    aFTMessage( this, ResId( FT_MESSAGE ) ),
-    aCBWarning( this, ResId( CB_WARNING ) ),
-    aOKButton( this, ResId( BTN_OK ) ),
-    aCancelButton( this, ResId( BTN_CANCEL ) )
+SfxMacroQueryDlg_Impl::SfxMacroQueryDlg_Impl( const ResId& rResId, const String& rMacName, BOOL bDefault ) :
+    QueryBox( NULL, rResId )
 {
+    SetButtonText( GetButtonId(0), String( SfxResId(BTN_OK) ) );
+    SetButtonText( GetButtonId(1), String( SfxResId(BTN_CANCEL) ) );
+
+    String aText = GetMessText();
+    aText.SearchAndReplace( String::CreateFromAscii("$(MACRO)"), rMacName );
+
+    if ( bDefault )
+    {
+        SetFocusButton(GetButtonId(0));
+        aText.SearchAndReplace( String::CreateFromAscii("$(TEXT)"), String( SfxResId(FT_OK) ) );
+    }
+    else
+    {
+        SetFocusButton(GetButtonId(1));
+        aText.SearchAndReplace( String::CreateFromAscii("$(TEXT)"), String( SfxResId(FT_CANCEL) ) );
+    }
+
+    SetMessText( aText );
     FreeResource();
-    aCBWarning.Show(FALSE);
-    long nY = aCBWarning.GetPosPixel().Y();
-    aOKButton.SetPosPixel( Point( aOKButton.GetPosPixel().X(), nY ) );
-    aCancelButton.SetPosPixel( Point( aCancelButton.GetPosPixel().X(), nY ) );
-    SetOutputSizePixel( Size( GetOutputSizePixel().Width(),
-                              nY + aOKButton.GetSizePixel().Height() + 3 ) );
-    aIcon.SetImage( QueryBox::GetStandardImage() );
 }
 
 // class SfxAsyncEvent_Impl ----------------------------------------------
@@ -696,56 +705,6 @@ void SfxEventConfigItem_Impl::ConfigureEvent( USHORT nId, SvxMacro *pMacro )
     else if ( pMacro )
         aMacroTable.Insert( nId, pMacro );
     SetDefault(FALSE);
-}
-
-BOOL SfxEventConfiguration::IsWarningForced() const
-{
-    return const_cast< SfxEventConfiguration* >(this)->GetAppEventConfig()->bAlwaysWarning;
-}
-
-void SfxEventConfiguration::SetWarningEnabled( BOOL bOn )
-{
-    if ( GetAppEventConfig()->bWarning != bOn )
-    {
-        pAppEventConfig->bWarning = bOn;
-        pAppEventConfig->SetDefault( FALSE );
-    }
-}
-
-void SfxEventConfiguration::SetWarningForced( BOOL bOn )
-{
-    if ( GetAppEventConfig()->bAlwaysWarning != bOn )
-    {
-        pAppEventConfig->bAlwaysWarning = bOn;
-        pAppEventConfig->SetDefault( FALSE );
-    }
-}
-
-BOOL SfxEventConfiguration::Warn_Impl( SfxObjectShell *pDoc, const SvxMacro* pMacro )
-{
-    BOOL bWarn = FALSE;
-    if ( pDoc )
-    {
-        pDocEventConfig = pDoc->GetEventConfig_Impl();
-        if ( !pDocEventConfig )
-            return TRUE;            // IsSecure ???
-
-        // Wenn das Macro sowieso nicht ausgef"uhrt wird, mu\s auch nicht gefragt werden
-        if ( pMacro->GetScriptType() == STARBASIC && !pDoc->IsSecure() )
-            return FALSE;
-
-        // Bei dokumentgebundenen Macros WarningStatus checken
-        // Wenn "Immer warnen" angeschaltet ist, Warnung ausgeben
-        bWarn = GetAppEventConfig()->bAlwaysWarning;
-        if ( bWarn )
-        {
-            SfxMacroQueryDlg_Impl aBox ( SfxResId( DLG_MACROQUERY ) );
-            if ( aBox.Execute() )
-                bWarn = FALSE;
-        }
-    }
-
-    return !bWarn;
 }
 
 void SfxEventConfiguration::AddEvents( SfxMacroTabPage* pPage ) const

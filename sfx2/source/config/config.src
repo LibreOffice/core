@@ -2,9 +2,9 @@
  *
  *  $RCSfile: config.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-16 22:17:03 $
+ *  last change: $Author: mba $ $Date: 2001-11-30 13:47:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ String STR_EVENTCONFIG
     Text[ dutch ] = "Gebeurtenis toewijzen";
     Text[ chinese_simplified ] = "æŒ‡å®šäº‹ä»¶";
     Text[ greek ] = "Áíôéóôïß÷éóç ãåãïíüôïò";
-    Text[ korean ] = "ì´ë²¤íŠ¸ ë°°ì •";
+    Text[ korean ] = "ì´ë²¤íŠ¸ ì§€ì •";
     Text[ turkish ] = "Olay ata";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Asignar acontecimientos";
@@ -117,99 +117,42 @@ String STR_FILTERNAME_CFG
     Text[ catalan ] = "Configuración";
     Text[ finnish ] = "Kokoonpano";
 };
-ModalDialog DLG_MACROQUERY
+
+QueryBox DLG_MACROQUERY
 {
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Moveable = TRUE ;
-    Size = MAP_APPFONT ( 163 , 94 ) ;
-    Text = "Makro ausführen" ;
-    Text [ english ] = "Execute Macro" ;
-    Text [ english_us ] = "Execute Macro" ;
-    Text [ french ] = "Exécuter une macro" ;
-    TEXT[ italian ] = "Esegui macro";
-    TEXT[ portuguese_brazilian ] = "Makro ausf?ren";
-    TEXT[ portuguese ] = "Executar macro";
-    TEXT[ danish ] = "Udfør makro";
-    TEXT[ swedish ] = "Utför makro";
-    TEXT[ dutch ] = "Macro uitvoeren";
-    TEXT[ spanish ] = "Ejecutar macro";
-    TEXT[ chinese_simplified ] = "æ‰§è¡Œå®";
-    TEXT[ russian ] = "Âûïîëíèòü ìàêğîñ";
-    TEXT[ polish ] = "Wykonaj makro";
-    TEXT[ japanese ] = "ï¾ï½¸ï¾›ã®å®Ÿè¡Œ";
-    TEXT[ chinese_traditional ] = "åŸ·è¡Œå·¨é›†";
-    TEXT[ arabic ] = "ÊäİíĞ ÇáãÇßÑæ";
-    FixedImage ICN_MESSAGE
+    Buttons = WB_OK_CANCEL;
+    Title = "Makro ausführen" ;
+    Title [ english ] = "Execute Macro" ;
+    Title [ english_us ] = "Execute Macro" ;
+    Title [ french ] = "Exécuter une macro" ;
+    Title[ italian ] = "Esegui macro";
+    Title[ portuguese_brazilian ] = "Makro ausf?ren";
+    Title[ portuguese ] = "Executar macro";
+    Title[ danish ] = "Udfør makro";
+    Title[ swedish ] = "Utför makro";
+    Title[ dutch ] = "Macro uitvoeren";
+    Title[ spanish ] = "Ejecutar macro";
+    Title[ chinese_simplified ] = "æ‰§è¡Œå®";
+    Title[ russian ] = "Âûïîëíèòü ìàêğîñ";
+    Title[ polish ] = "Wykonaj makro";
+    Title[ japanese ] = "ï¾ï½¸ï¾›ã®å®Ÿè¡Œ";
+    Title[ chinese_traditional ] = "åŸ·è¡Œå·¨é›†";
+    Title[ arabic ] = "ÊäİíĞ ÇáãÇßÑæ";
+    Title[ dutch ] = "Macro uitvoeren";
+    Title[ chinese_simplified ] = "æ‰§è¡Œå®";
+    Title[ greek ] = "Åêôİëåóç ìáêñïåíôïëşí";
+    Title[ korean ] = "ë§¤í¬ë¡œ ì‹¤í–‰";
+    Title[ turkish ] = "Makroyu çalıştır";
+    Title[ language_user1 ] = " ";
+    Title[ catalan ] = "Ejecutar macro";
+    Title[ finnish ] = "Suorita makro";
+
+    Message = "Es wurde ein Ereignis ausgelöst, auf das das Makro $(MACRO) konfiguriert ist. $(TEXT)";
+    Message [English] = "Es wurde ein Ereignis ausgelöst, auf das das Makro $(MACRO) konfiguriert ist. $(TEXT)";
+    Message [English_us] = "Es wurde ein Ereignis ausgelöst, auf das das Makro $(MACRO) konfiguriert ist. $(TEXT)";
+
+    String BTN_OK
     {
-        Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 30 , 30 ) ;
-    };
-    FixedText FT_MESSAGE
-    {
-        WordBreak = TRUE ;
-        Pos = MAP_APPFONT ( 42 , 6 ) ;
-        Size = MAP_APPFONT ( 115 , 46 ) ;
-        Text = "Es wurde ein Ereignis ausgelöst, auf das ein Makro konfiguriert wurde. Möchten Sie dieses Makro ausführen?" ;
-        Text [ English ] = "Es wurde ein Ereignis ausgelöst, auf das ein Makro konfiguriert wurde. Möchten Sie dieses Makro ausführen?" ;
-        Text [ english_us ] = "An event to which a macro is configured has been started.  Do you want to execute the macro?" ;
-        Text [ portuguese_brazilian ] = "Es wurde ein Ereignis ausgel?t, auf das ein Makro konfiguriert wurde. M?hten Sie dieses Makro ausf?ren?" ;
-        Text [ swedish ] = "En händelse utlöstes för vilket ett makro konfigurerades. Skall detta makro utföras?" ;
-        Text [ danish ] = "Der blev udløst en handling, som en makro er konfigureret til. Vil du udføre denne makro?" ;
-        Text [ italian ] = "È stato attivato un evento che è stato configurato su una macro. Esguire la macro?" ;
-        Text [ spanish ] = "Se ha iniciado un acontecimiento en el cual se ha configurado una macro. ¿Desea que se ejecute esta macro?" ;
-        Text [ french ] = "Un événement s'est produit pour lequel une macro a été configurée. Désirez-vous l'exécuter?" ;
-        Text [ dutch ] = "Er werd een gebeurtenis veroorzaakt, waarop een macro werd geconfigureerd. Wilt u dit macro uitvoeren?" ;
-        Text [ portuguese ] = "Produziu-se um evento para o qual foi configurada uma macro. Deseja executá-la?" ;
-        Text[ chinese_simplified ] = "æ“ä½œå‘½ä»¤ç›´æ¥æ¥è‡ªä¸€ä¸ªå®ï¼Œæ‚¨è¦æ‰§è¡Œè¿™ä¸ªå®ï¼Ÿ";
-        Text[ russian ] = "Çàïóùåíî ñîáûòèå, äëÿ êîòîğîãî ñêîíôèãóğèğîâàí ìàêğîñ. Âû õîòèòå âûïîëíèòü ıòîò ìàêğîñ?";
-        Text[ polish ] = "Zosta³o uruchomione wydarzenie, do którego zosta³o skonfigurowane makro. Czy chcesz wykonaæ to makro?";
-        Text[ japanese ] = "ï¾ï½¸ï¾›ã«é–¢é€£ä»˜ã‘ã‚‰ã‚Œã¦ã„ã‚‹ï½²ï¾ï¾ï¾ï¾„ãŒç™ºç”Ÿã—ã¾ã—ãŸã€‚ï¾ï½¸ï¾›ã‚’å®Ÿè¡Œã—ã¾ã™ã‹?";
-        Text[ chinese_traditional ] = "å‹•ä½œæŒ‡ä»¤ç›´æ¥ä¾†æ–¼ä¸€å€‹å·¨é›†ã€‚è¦åŸ·è¡Œé€™å€‹å·¨é›†ï¼Ÿ";
-        Text[ arabic ] = "Êã ÈÏÁ ÍÏË ãõßæøä Úáíå ãÇßÑæ. åá ÊÑíÏ ÊäİíĞ åĞÇ ÇáãÇßÑæ¿";
-        Text[ dutch ] = "Er werd een gebeurtenis veroorzaakt, waarop een macro werd geconfigureerd. Wilt u dit macro uitvoeren?";
-        Text[ chinese_simplified ] = "æ“ä½œå‘½ä»¤ç›´æ¥æ¥è‡ªä¸€ä¸ªå®ï¼Œæ‚¨è¦æ‰§è¡Œè¿™ä¸ªå®ï¼Ÿ";
-        Text[ greek ] = "Åêôåëİóôçêå İíá ãåãïíüò, ôï ïğïßï óõíäİåôáé ìå ìéá ìáêñïåíôïëŞ. Èİëåôå íá åêôåëåóôåß ç ìáêñïåíôïëŞ áõôŞ;";
-        Text[ korean ] = "ë§¤í¬ë¡œê°€ êµ¬ì„±ëœ ì´ë²¤íŠ¸ê°€ ì‹œí–‰ë˜ì—ˆìŠµë‹ˆë‹¤. ì´ ë§¤í¬ë¡œë¥¼ ì‹¤í–‰í•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
-        Text[ turkish ] = "Başlatılan olay ile ilgili bir yapılandırılmış bir makro mevcut. Bu makroyu çalıştırmak istiyor musunuz?";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Se ha iniciado un acontecimiento en el cual se ha configurado una macro. ¿Desea que se ejecute esta macro?";
-        Text[ finnish ] = "Tapahtuma, johon on liitetty makro, on aloitettu.  Haluatko suorittaa makron nyt?";
-    };
-    CheckBox CB_WARNING
-    {
-        Pos = MAP_APPFONT ( 6 , 58 ) ;
-        Size = MAP_APPFONT ( 151 , 10 ) ;
-        Text = " Für dieses Dokument nicht mehr warnen" ;
-        Text [ ENGLISH ] = " Für dieses Dokument nicht mehr warnen" ;
-        Text [ portuguese ] = "Não avisar mais para este documento" ;
-        Text [ english_us ] = "Do not warn again for this document" ;
-        Text [ portuguese_brazilian ] = "F? dieses Dokument nicht mehr warnen" ;
-        Text [ swedish ] = "Varna inte mer för det här dokumentet" ;
-        Text [ danish ] = "Advar ikke igen for dette dokument" ;
-        Text [ italian ] = "Non avvertire più per il documento corrente" ;
-        Text [ spanish ] = "Desactivar las advertencias para este documento" ;
-        Text [ french ] = "Ne plus afficher d'avertissement pour ce document" ;
-        Text [ dutch ] = "Voor dit document niet meer waarschuwen" ;
-        Text[ chinese_simplified ] = "ä¸è¦å†æ¬¡ä¸ºè¿™ä¸ªæ–‡æ¡£æå‡ºè­¦å‘Š";
-        Text[ russian ] = "Áîëüøå íå ïğåäóïğåæäàòü äëÿ ıòîãî äîêóìåíòà";
-        Text[ polish ] = "Nie pokazuj wiêcej ostrze¿enia dla tego dokumentu";
-        Text[ japanese ] = "ã“ã®ï¾„ï¾ï½·ï½­ï¾’ï¾ï¾„ã®ãŸã‚ã«ã‚‚ã†è­¦å‘Šã¯ã—ãªã„ã§ä¸‹ã•ã„";
-        Text[ chinese_traditional ] = "ä¸è¦å†æ¬¡ç‚ºé€™å€‹æ–‡ä»¶æå‡ºè­¦å‘Š";
-        Text[ arabic ] = "ÚÏã ÇáÊÍĞíÑ ãÑÉ ÃÎÑì ÈÇáäÓÈÉ áåĞÇ ÇáãÓÊäÏ";
-        Text[ dutch ] = "Voor dit document niet meer waarschuwen";
-        Text[ chinese_simplified ] = "ä¸è¦å†æ¬¡ä¸ºè¿™ä¸ªæ–‡æ¡£æå‡ºè­¦å‘Š";
-        Text[ greek ] = "¼÷é Üëëç ğñïåéäïğïßçóç ãéá áõôü ôï İããñáöï";
-        Text[ korean ] = "ì´ ë¬¸ì„œì— ëŒ€í•´ì„œëŠ” ë” ì´ìƒ ê²½ê³  ì•ˆí•¨";
-        Text[ turkish ] = "Bu belge için bir daha uyarı görüntüleme";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Desactivar las advertencias para este documento";
-        Text[ finnish ] = "Älä varoita enää tässä asiakirjassa";
-    };
-    OKButton BTN_OK
-    {
-        Pos = MAP_APPFONT ( 44 , 74 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
         Text = "Ausführen" ;
         Text [ ENGLISH ] = "Execute" ;
         Text [ portuguese ] = "Executar" ;
@@ -236,13 +179,11 @@ ModalDialog DLG_MACROQUERY
         Text[ catalan ] = "Ejecutar";
         Text[ finnish ] = "Suorita";
     };
-    CancelButton BTN_CANCEL
+    String BTN_CANCEL
     {
-        Pos = MAP_APPFONT ( 97 , 74 ) ;
-        Size = MAP_APPFONT ( 60 , 14 ) ;
         Text = "Nicht Ausführen" ;
         Text [ ENGLISH ] = "Don't execute" ;
-        Text [ english_us ] = "Do Not Execute" ;
+        Text [ english_us ] = "Don't execute" ;
         Text [ portuguese_brazilian ] = "Nicht Ausf?ren" ;
         Text [ swedish ] = "Utför inte" ;
         Text [ danish ] = "Udfør ikke" ;
@@ -266,27 +207,16 @@ ModalDialog DLG_MACROQUERY
         Text[ catalan ] = "No ejecutar";
         Text[ finnish ] = "Älä suorita";
     };
-    TEXT[ dutch ] = "Macro uitvoeren";
-    TEXT[ chinese_simplified ] = "æ‰§è¡Œå®";
-    TEXT[ greek ] = "Åêôİëåóç ìáêñïåíôïëşí";
-    TEXT[ korean ] = "ë§¤í¬ë¡œ ì‹¤í–‰";
-    TEXT[ turkish ] = "Makroyu çalıştır";
-    TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Ejecutar macro";
-    TEXT[ finnish ] = "Suorita makro";
+    String FT_CANCEL
+    {
+        Text = "Nach den Sicherheitseinstellungen soll dieses Makro nicht ausgeführt werden. Möchten Sie es trotzdem ausführen?";
+        Text [english] = "Nach den Sicherheitseinstellungen soll dieses Makro nicht ausgeführt werden. Möchten Sie es trotzdem ausführen?";
+        Text [english_us] = "Nach den Sicherheitseinstellungen soll dieses Makro nicht ausgeführt werden. Möchten Sie es trotzdem ausführen?";
+    };
+    String FT_OK
+    {
+        Text = "Möchten Sie dieses Makro ausführen?";
+        Text [english] = "Möchten Sie dieses Makro ausführen?";
+        Text [english_us] = "Möchten Sie dieses Makro ausführen?";
+    };
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
