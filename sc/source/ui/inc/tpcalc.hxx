@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpcalc.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2001-05-16 10:51:16 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 11:37:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,9 @@
 #include <svtools/stdctrl.hxx>
 #endif
 
+#ifndef SC_EDITFIELD_HXX
+#include "editfield.hxx"
+#endif
 
 //===================================================================
 
@@ -109,7 +112,7 @@ private:
     FixedText       aFtSteps;
     NumericField    aEdSteps;
     FixedText       aFtEps;
-    Edit            aEdEps;
+    ScDoubleField   aEdEps;
 
     FixedLine       aSeparatorFL;
     FixedLine       aGbDate;
@@ -127,8 +130,6 @@ private:
     FixedText       aFtPrec;
     NumericField    aEdPrec;
 
-    String          aDecSep;
-
     ScDocOptions*   pOldOptions;
     ScDocOptions*   pLocalOptions;
     USHORT          nWhichCalc;
@@ -136,8 +137,6 @@ private:
 #ifdef _TPCALC_CXX
 private:
     void            Init();
-    BOOL            CheckEps();
-    BOOL            GetEps( double& rEps );
 
     //------------------------------------
     // Handler:
