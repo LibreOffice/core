@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rootfrm.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 11:12:06 $
+ *  last change: $Author: rt $ $Date: 2004-03-31 15:07:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,6 +249,16 @@ public:
 
     //Saemtlichen Inhalt invalidieren, Size oder PrtArea
     void InvalidateAllCntnt( BYTE nInvalidate = INV_SIZE );
+
+    /** method to invalidate/re-calculate the position of all floating
+        screen objects (Writer fly frames and drawing objects), which are
+        anchored to paragraph or to character.
+
+        OD 2004-03-16 #i11860#
+
+        @author OD
+    */
+    void InvalidateAllObjPos();
 
     //Ueberfluessige Seiten entfernen.
     void SetSuperfluous()      { bCheckSuperfluous = TRUE; }
