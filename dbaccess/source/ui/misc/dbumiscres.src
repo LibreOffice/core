@@ -2,9 +2,9 @@
 *
 *  $RCSfile: dbumiscres.src,v $
 *
-*  $Revision: 1.57 $
+*  $Revision: 1.58 $
 *
-*  last change: $Author: hr $ $Date: 2003-07-03 18:02:56 $
+*  last change: $Author: hr $ $Date: 2003-07-17 12:19:32 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -79,29 +79,29 @@ String STR_CONNUINAMES
     Text [ english ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Text;Spreadsheet;Addressbook" ;
     Text [ english_us ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Text;Spreadsheet;Address book" ;
     Text[ language_user1 ] = "; Please be carefull with the number/ordering of (semicolon-separated) tokens in the string.";
-    Text[ russian ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Òåêñò;İëåêòğîííàÿ òàáëèöà;Àäğåñíàÿ êíèãà";
-    Text[ finnish ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Laskentataulut;Osoitteisto";
-    Text[ portuguese ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Texto;FolhaCálculo;LivroEndereços";
-    Text[ greek ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Êåßìåíï;¸ããñáöï ğßíáêá;Áôæİíôá äéåõèıíóåùí";
-    Text[ dutch ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Tekst;Werkbladdocument;Adresboek";
+    Text[ russian ] = "Adabas;JDBC;ODBC;dBase;ADO;Òåêñò;İëåêòğîííàÿ òàáëèöà;Àäğåñíàÿ êíèãà";
+    Text[ finnish ] = "Adabas;JDBC;ODBC;dBase;ADO;Teksti;Laskentataulut;Osoitteisto";
+    Text[ portuguese ] = "Adabas;JDBC;ODBC;dBase;ADO;Texto;FolhaCálculo;LivroEndereços";
+    Text[ greek ] = "Adabas;JDBC;ODBC;dBase;ADO;Êåßìåíï;¸ããñáöï ğßíáêá;Áôæİíôá äéåõèıíóåùí";
+    Text[ dutch ] = "Adabas;JDBC;ODBC;dBase;ADO;Tekst;Werkbladdocument;Adresboek";
     Text[ french ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Texte;Classeur;Carnet d'adresses";
     Text[ spanish ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Texto;Hoja de cálculo;Libreta de direcciones";
     Text[ italian ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Testo;Foglio elettronico;Rubrica";
-    Text[ danish ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Tekst;Regneark;Adressekartotek";
+    Text[ danish ] = "Adabas;JDBC;ODBC;dBase;ADO;Tekst;Regneark;Adressekartotek";
     Text[ swedish ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Text;Tabelldokument;Adressbok";
-    Text[ polish ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Tekst;Arkusz kalkulacyjny;Ksi¹¿ka adresowa";
+    Text[ polish ] = "Adabas;JDBC;ODBC;dBase;ADO;Tekst;Arkusz kalkulacyjny;Ksi¹¿ka adresowa";
     Text[ japanese ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;ãƒ†ã‚­ã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«;è¡¨è¨ˆç®—ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆ;ã‚¢ãƒ‰ãƒ¬ã‚¹å¸³";
     Text[ korean ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;í…ìŠ¤íŠ¸;ìŠ¤í”„ë ˆë“œì‹œíŠ¸;ì£¼ì†Œë¡";
     Text[ chinese_simplified ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;æ–‡å­—;å·¥ä½œè¡¨;é€šè®¯ç°¿";
     Text[ chinese_traditional ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;æ–‡å­—;å·¥ä½œè¡¨æ–‡ä»¶;é€šè¨ŠéŒ„";
     Text[ turkish ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Metin;Hesap çizelgesi;Adres defteri";
-    Text[ arabic ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;äÕ;ãÓÊäÏ ÌÏÇæá";
-    Text[ catalan ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Text;Spreadsheet";
-    Text[ thai ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Text;Spreadsheet";
+    Text[ arabic ] = "Adabas;JDBC;ODBC;dBase;ADO;äÕ;ãÓÊäÏ ÌÏÇæá";
+    Text[ catalan ] = "Adabas;JDBC;ODBC;dBase;ADO;Text;Spreadsheet";
+    Text[ thai ] = "Adabas;JDBC;ODBC;à¸”à¸µà¹€à¸šà¸ª;ADO;à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡;à¸à¸£à¸°à¸”à¸²à¸©à¸„à¸³à¸™à¸§à¸“;à¸ªà¸¡à¸¸à¸”à¸—à¸µà¹ˆà¸­à¸¢à¸¹à¹ˆ";
     Text[ czech ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Text;Tabulka;Kontakty";
         Text[ hebrew ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Text;Tabellendokument;Adressbuch";
         Text[ portuguese_brazilian ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Texto;Planilha;Livro de Endereços";
-        Text[ hindi ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥;à¤¸à¥à¤ªà¥à¤°à¥‡à¤¡à¤¶à¥€à¤Ÿà¥;à¤ªà¤¤à¤¾à¤ªà¥à¤¸à¥à¤¤à¤•";
+        Text[ hindi ] = "Adabas;JDBC;ODBC;dBase;ADO;à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥;à¤¸à¥à¤ªà¥à¤°à¥‡à¤¡à¤¶à¥€à¤Ÿà¥;à¤ªà¤¤à¤¾à¤ªà¥à¤¸à¥à¤¤à¤•";
         Text[ slovak ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Text;ZoÅ¡it;AdresÃ¡r";
     };
 };
@@ -405,7 +405,23 @@ String STR_UNKNOWN_TYPE_FOUND
     Text[ chinese_traditional ] = "ç„¡æ³•ç‚ºæ¬„ '#1' æ‰¾åˆ°åˆé©çš„æ¬„é¡å‹ã€‚";
     Text[ slovak ] = "Nebol nÃ¡jdenÃ½ zodpovedajÃºci typ stÄºpca pre stÄºpec '#1'.";
     Text[ portuguese_brazilian ] = "Não foi encontrado um tipo de coluna correspondente para a coluna '#1''.";
+    Text[ greek ] = "No corresponding column type could be found for column '#1'.";
+    Text[ dutch ] = "No corresponding column type could be found for column '#1'.";
+    Text[ finnish ] = "No corresponding column type could be found for column '#1'.";
+    Text[ czech ] = "Pro sloupec '#1' nebyl nalezen odpovÃ­dajÃ­cÃ­ typ sloupce.";
+    Text[ danish ] = "No corresponding column type could be found for column '#1'.";
+    Text[ arabic ] = "No corresponding column type could be found for column '#1'.";
+    Text[ hebrew ] = "No corresponding column type could be found for column '#1'.";
+    Text[ catalan ] = "No corresponding column type could be found for column '#1'.";
+    Text[ hindi ] = "No corresponding column type could be found for column '#1'.";
+    Text[ portuguese ] = "No corresponding column type could be found for column '#1'.";
+    Text[ russian ] = "No corresponding column type could be found for column '#1'.";
+    Text[ polish ] = "No corresponding column type could be found for column '#1'.";
+    Text[ turkish ] = "No corresponding column type could be found for column '#1'.";
+    Text[ thai ] = "No corresponding column type could be found for column '#1'.";
 };
+
+
 
 
 
