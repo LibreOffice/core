@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgfield.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-06-19 15:05:56 $
+ *  last change: $Author: dl $ $Date: 2001-06-26 14:47:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,7 +217,7 @@ void SdModifyFieldDlg::FillControls()
         aLbFormat.InsertEntry( String( SdResId( STR_STANDARD_SMALL ) ) );
         aLbFormat.InsertEntry( String( SdResId( STR_STANDARD_BIG ) ) );
 
-        SvNumberFormatter* pNumberFormatter = NULL /*SD_MOD()->GetNumberFormatter()*/;
+        SvNumberFormatter* pNumberFormatter = SD_MOD()->GetNumberFormatter();
         aDateField.SetFormat( SVXDATEFORMAT_A );    // 13.02.96
         aLbFormat.InsertEntry( aDateField.GetFormatted( *pNumberFormatter, LANGUAGE_SYSTEM ) );
         aDateField.SetFormat( SVXDATEFORMAT_B );    // 13.02.1996
