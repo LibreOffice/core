@@ -2,9 +2,9 @@
  *
  *  $RCSfile: isethint.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mh $ $Date: 2001-10-17 17:06:19 $
+ *  last change: $Author: hr $ $Date: 2002-03-05 16:08:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 #pragma hdrstop
 
+#include <stdarg.h>
 #include "isethint.hxx"
 #include "itemset.hxx"
 
