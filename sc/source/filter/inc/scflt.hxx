@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scflt.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:05 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:57:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,15 @@
 #ifndef SC_SCFLT_HXX
 #define SC_SCFLT_HXX
 
-#include <tools/solar.h>
+#ifndef SC_VIEWOPTI_HXX
 #include "viewopti.hxx"
+#endif
+#ifndef SC_COLLECT_HXX
+#include "collect.hxx"
+#endif
+#ifndef _SOLAR_H
+#include <tools/solar.h>
+#endif
 
 // FehlerNummern
 #define errUnknownFormat    1
@@ -750,7 +757,7 @@ class Sc10Import
     Sc10PatternCollection*  pPatternCollection;
     Sc10DataBaseCollection* pDataBaseCollection;
     INT16                   TabCount;
-    USHORT                  nShowTab;
+    SCTAB                   nShowTab;
     ScViewOptions           aSc30ViewOpt;
     ScfStreamProgressBar*   pPrgrsBar;
 
@@ -772,8 +779,8 @@ public:
     void                    LoadPatternCollection();
     void                    LoadDataBaseCollection();
     void                    LoadTables();
-    void                    LoadCol(USHORT Col, USHORT Tab);
-    void                    LoadColAttr(USHORT Col, USHORT Tab);
+    void                    LoadCol(SCCOL Col, SCTAB Tab);
+    void                    LoadColAttr(SCCOL Col, SCTAB Tab);
     void                    LoadAttr(Sc10ColAttr& rAttr);
     void                    ChangeFormat(USHORT nFormat, USHORT nInfo, ULONG& nKey);
     void                    LoadObjects();
