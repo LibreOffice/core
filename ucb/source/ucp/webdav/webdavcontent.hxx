@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavcontent.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kso $ $Date: 2001-01-26 16:05:04 $
+ *  last change: $Author: kso $ $Date: 2001-02-15 11:10:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,7 @@ class DAVResource;
 struct ContentProperties
 {
   ::rtl::OUString aTitle;           // Title
+  ::rtl::OUString aEscapedTitle;    // escaped Title (taken from URI of DAVResource)
   ::rtl::OUString getcontenttype;   // ContentType
   sal_Bool        bIsDocument;      // IsDocument
   sal_Bool        bIsFolder;        // IsFolder
