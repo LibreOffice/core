@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ilstbox.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mt $ $Date: 2001-10-24 14:18:05 $
+ *  last change: $Author: mt $ $Date: 2001-10-29 14:13:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -823,7 +823,7 @@ void ImplListBoxWindow::MouseMove( const MouseEvent& rMEvt )
             }
         }
     }
-    else if ( ( ( !mbMulti && IsMouseMoveSelect() ) || mbStackMode ) && mpEntryList->GetEntryCount() && !rMEvt.IsLeaveWindow() )
+    else if ( ( ( !mbMulti && IsMouseMoveSelect() ) || mbStackMode ) && mpEntryList->GetEntryCount() )
     {
         Point aPoint;
         Rectangle aRect( aPoint, GetOutputSizePixel() );
@@ -909,7 +909,16 @@ void ImplListBoxWindow::SelectEntry( USHORT nPos, BOOL bSelect )
             {
                 ImplPaint( nPos );
                 if ( !IsVisible( nPos ) )
-                    SetTopEntry( nPos );
+                {
+                    if ( !mnMaxVisibleEntries || !IsReallyVisible() || ( nPos < GetTopEntry() ) )
+                    {
+                        SetTopEntry( nPos );
+                    }
+                    else
+                    {
+                        SetTopEntry( nPos-mnMaxVisibleEntries+1 );
+                    }
+                }
             }
         }
         else
