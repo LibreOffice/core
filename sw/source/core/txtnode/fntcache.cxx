@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: fme $ $Date: 2002-04-10 07:02:27 $
+ *  last change: $Author: fme $ $Date: 2002-04-10 15:48:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -913,13 +913,17 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
         if ( bSwitchH2V )
             rInf.GetFrm()->SwitchHorizontalToVertical( aPos );
 
-        if( rInf.GetSpace() )
-        // Hack, solange DrawStretchText auf Druckern nicht funktioniert:
-        //  || bStretch || rInf.GetKern() )
+        // In the good old days we used to have a simple DrawText if the
+        // output device is the printer. Now we need a DrawTextArray if
+        // 1. KanaCompression is enabled
+        // 2. Justified alignment
+        // Simple kerning is handled by DrawStretchText
+        if( rInf.GetSpace() || rInf.GetKanaComp() )
         {
             long *pKernArray = new long[rInf.GetLen()];
             rInf.GetOut().GetTextArray( rInf.GetText(), pKernArray,
                                          rInf.GetIdx(), rInf.GetLen() );
+
             if( bStretch )
             {
                 xub_StrLen nZwi = rInf.GetLen() - 1;
@@ -947,15 +951,64 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
                     nSum += nDiff;
                 }
             }
+
+            //
+            // Modify Array for special justifications
+            //
+            short nSpaceAdd = rInf.GetSpace();
+            sal_Bool bSpecialJust = sal_False;
+
+            if ( rInf.GetFont() && rInf.GetLen() )
+            {
+                const SwScriptInfo* pSI = rInf.GetScriptInfo();
+                const BYTE nActual = rInf.GetFont()->GetActual();
+
+                // apply kana compression if necessary
+                if ( SW_CJK == nActual && rInf.GetKanaComp() &&
+                     pSI && pSI->CountCompChg() )
+                {
+                    pSI->Compress( pKernArray, rInf.GetIdx(), rInf.GetLen(),
+                                rInf.GetKanaComp(),
+                                (USHORT)aFont.GetSize().Height(), &aPos );
+                    bSpecialJust = sal_True;
+                }
+
+                // apply kashida justification
+                if ( SW_CTL == nActual && nSpaceAdd &&
+                    LANGUAGE_HEBREW != rInf.GetFont()->GetLanguage( SW_CTL ) )
+                {
+                    if ( pSI && pSI->CountKashida() )
+                        pSI->KashidaJustify( pKernArray, 0, rInf.GetIdx(),
+                                            rInf.GetLen(), nSpaceAdd );
+                    bSpecialJust = sal_True;
+                    nSpaceAdd = 0;
+                }
+
+                // apply Asian justification
+                if ( SW_CJK == nActual && nSpaceAdd &&
+                    LANGUAGE_KOREAN != rInf.GetFont()->GetLanguage( SW_CJK ) )
+                {
+                    long nSpaceSum = nSpaceAdd;
+                    for ( USHORT nI = 0; nI < rInf.GetLen(); ++nI )
+                    {
+                        pKernArray[ nI ] += nSpaceSum;
+                        nSpaceSum += nSpaceAdd;
+                    }
+
+                    bSpecialJust = sal_True;
+                    nSpaceAdd = 0;
+                }
+            }
+
             long nKernSum = rInf.GetKern();
 
-            if ( bStretch || bPaintBlank || rInf.GetKern() )
+            if ( bStretch || bPaintBlank || rInf.GetKern() || bSpecialJust )
             {
                 for( xub_StrLen i = 0; i < rInf.GetLen(); i++,
                      nKernSum += rInf.GetKern() )
                 {
                     if ( CH_BLANK == rInf.GetText().GetChar(rInf.GetIdx()+i) )
-                        nKernSum += rInf.GetSpace();
+                        nKernSum += nSpaceAdd;
                     pKernArray[i] += nKernSum;
                 }
 
@@ -968,13 +1021,13 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
                     // handelt, muessen wir zwei ausgeben:
                     if( 1 == rInf.GetLen() )
                     {
-                        pKernArray[0] = rInf.GetSpace();
+                        pKernArray[0] = nSpaceAdd;
                         rInf.GetOut().DrawTextArray( aPos, XubString( sDoubleSpace,
                             RTL_TEXTENCODING_MS_1252 ), pKernArray, 0, 2 );
                     }
                     else
                     {
-                        pKernArray[ rInf.GetLen() - 2 ] += rInf.GetSpace();
+                        pKernArray[ rInf.GetLen() - 2 ] += nSpaceAdd;
                         rInf.GetOut().DrawTextArray( aPos, rInf.GetText(),
                             pKernArray, rInf.GetIdx(), rInf.GetLen() );
                     }
@@ -992,7 +1045,7 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
                 {
                     if( CH_BLANK == rInf.GetText().GetChar( rInf.GetIdx()+i ) )
                     {
-                        nKernSum += rInf.GetSpace();
+                        nKernSum += nSpaceAdd;
                         if( j < i )
                             rInf.GetOut().DrawText( aTmpPos, rInf.GetText(),
                                                     rInf.GetIdx() + j, i - j );
@@ -1088,32 +1141,35 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
             // apply kana compression
             if ( SW_CJK == nActual && rInf.GetKanaComp() && pSI && pSI->CountCompChg() )
             {
+                Point aTmpPos( aPos );
                 pSI->Compress( pScrArray, rInf.GetIdx(), rInf.GetLen(),
-                               rInf.GetKanaComp(), (USHORT)aFont.GetSize().Height() );
+                               rInf.GetKanaComp(),
+                               (USHORT)aFont.GetSize().Height(), &aTmpPos );
                 pSI->Compress( pKernArray, rInf.GetIdx(), rInf.GetLen(),
                                rInf.GetKanaComp(),
                                (USHORT)aFont.GetSize().Height(), &aPos );
             }
 
             // apply kashida justification
-            if ( SW_CTL == nActual && rInf.GetSpace() && pSI && pSI->CountKashida() &&
+            if ( SW_CTL == nActual && nSpaceAdd &&
                  LANGUAGE_HEBREW != rInf.GetFont()->GetLanguage( SW_CTL ) )
             {
-                pSI->KashidaJustify( pKernArray, pScrArray, rInf.GetIdx(), rInf.GetLen(),
-                                     rInf.GetSpace() );
+                if ( pSI && pSI->CountKashida() )
+                    pSI->KashidaJustify( pKernArray, pScrArray, rInf.GetIdx(),
+                                         rInf.GetLen(), nSpaceAdd );
                 nSpaceAdd = 0;
             }
 
             // apply Asian justification
-            if ( SW_CJK == nActual && rInf.GetSpace() &&
+            if ( SW_CJK == nActual && nSpaceAdd &&
                  LANGUAGE_KOREAN != rInf.GetFont()->GetLanguage( SW_CJK ) )
             {
-                long nSpaceSum = rInf.GetSpace();
+                long nSpaceSum = nSpaceAdd;
                 for ( USHORT nI = 0; nI < rInf.GetLen(); ++nI )
                 {
                     pKernArray[ nI ] += nSpaceSum;
                     pScrArray[ nI ] += nSpaceSum;
-                    nSpaceSum += rInf.GetSpace();
+                    nSpaceSum += nSpaceAdd;
                 }
 
                 nSpaceAdd = 0;
@@ -1662,9 +1718,16 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
 #ifdef VERTICAL_LAYOUT
         if ( bSwitchH2V )
             rInf.GetFrm()->SwitchHorizontalToVertical( aPos );
-#endif
 
+        // In the good old days we used to have a simple DrawText if the
+        // output device is the printer. Now we need a DrawTextArray if
+        // 1. KanaCompression is enabled
+        // 2. Justified alignment
+        // Simple kerning is handled by DrawStretchText
+        if( rInf.GetSpace() || rInf.GetKanaComp() )
+#else
         if( rInf.GetSpace() )
+#endif
         // Hack, solange DrawStretchText auf Druckern nicht funktioniert:
         //  || bStretch || rInf.GetKern() )
         {
@@ -1698,8 +1761,59 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
                     nSum += nDiff;
                 }
             }
+
+#ifdef VERTICAL_LAYOUT
+            //
+            // Modify Array for special justifications
+            //
+            short nSpaceAdd = rInf.GetSpace();
+            sal_Bool bSpecialJust = sal_False;
+
+            if ( rInf.GetFont() && rInf.GetLen() )
+            {
+                const SwScriptInfo* pSI = rInf.GetScriptInfo();
+                const BYTE nActual = rInf.GetFont()->GetActual();
+
+                // apply kana compression if necessary
+                if ( SW_CJK == nActual && rInf.GetKanaComp() &&
+                     pSI && pSI->CountCompChg() )
+                {
+                    pSI->Compress( pKernArray, rInf.GetIdx(), rInf.GetLen(),
+                                rInf.GetKanaComp(),
+                                (USHORT)aFont.GetSize().Height(), &aPos );
+                    bSpecialJust = sal_True;
+                }
+
+                // apply Asian justification
+                if ( SW_CJK == nActual && nSpaceAdd &&
+                    LANGUAGE_KOREAN != rInf.GetFont()->GetLanguage( SW_CJK ) )
+                {
+                    long nSpaceSum = nSpaceAdd;
+                    for ( USHORT nI = 0; nI < rInf.GetLen(); ++nI )
+                    {
+                        pKernArray[ nI ] += nSpaceSum;
+                        nSpaceSum += nSpaceAdd;
+                    }
+
+                    bSpecialJust = sal_True;
+                    nSpaceAdd = 0;
+                }
+            }
+#endif
+
             long nKernSum = rInf.GetKern();
 
+#ifdef VERTICAL_LAYOUT
+            if ( bStretch || bPaintBlank || rInf.GetKern() || bSpecialJust )
+            {
+                for( xub_StrLen i = 0; i < rInf.GetLen(); i++,
+                     nKernSum += rInf.GetKern() )
+                {
+                    if ( CH_BLANK == rInf.GetText().GetChar(rInf.GetIdx()+i) )
+                        nKernSum += nSpaceAdd;
+                    pKernArray[i] += nKernSum;
+                }
+#else
             if ( bStretch || bPaintBlank || rInf.GetKern() )
             {
                 for( xub_StrLen i = 0; i < rInf.GetLen(); i++,
@@ -1709,6 +1823,7 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
                         nKernSum += rInf.GetSpace();
                     pKernArray[i] += nKernSum;
                 }
+#endif
 
                 // Bei durch/unterstr. Blocksatz erfordert ein Blank am Ende
                 // einer Textausgabe besondere Massnahmen:
@@ -1719,13 +1834,21 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
                     // handelt, muessen wir zwei ausgeben:
                     if( 1 == rInf.GetLen() )
                     {
+#ifdef VERTICAL_LAYOUT
+                        pKernArray[0] = nSpaceAdd;
+#else
                         pKernArray[0] = rInf.GetSpace();
+#endif
                         rInf.GetOut().DrawTextArray( aPos, XubString( sDoubleSpace,
                             RTL_TEXTENCODING_MS_1252 ), pKernArray, 0, 2 );
                     }
                     else
                     {
+#ifdef VERTICAL_LAYOUT
+                        pKernArray[ rInf.GetLen() - 2 ] += nSpaceAdd;
+#else
                         pKernArray[ rInf.GetLen() - 2 ] += rInf.GetSpace();
+#endif
                         rInf.GetOut().DrawTextArray( aPos, rInf.GetText(),
                             pKernArray, rInf.GetIdx(), rInf.GetLen() );
                     }
@@ -1794,10 +1917,8 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
         long *pKernArray = new long[ rInf.GetLen() ];
         CheckScrFont( rInf.GetShell(), rInf.GetpOut() );
         long nScrPos;
-
         xub_Unicode cCh = rInf.GetText().GetChar( rInf.GetIdx() );
         rInf.GetOut().GetCharWidth( cCh, cCh, &nScrPos );
-
         USHORT nType;
         if( bCompress && ( SwScriptInfo::NONE !=
             ( nType = rInf.GetScriptInfo()->CompType( rInf.GetIdx() ) ) )
@@ -1836,7 +1957,6 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
             if( bRestore )
                 rInf.GetOut().SetMapMode( aOld );
         }
-
         if( bCompress )
             rInf.GetScriptInfo()->Compress( pKernArray, rInf.GetIdx(),
                                     rInf.GetLen(), rInf.GetKanaComp(),
@@ -1883,7 +2003,6 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
 
             // Bei Pairkerning waechst der Printereinfluss auf die Positionierung
             USHORT nMul = 3;
-
             long *pScrArray = NULL;
 
             if ( pPrtFont->GetKerning() )
@@ -1899,7 +2018,6 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
             }
 
             const USHORT nDiv = nMul+1;
-
             // In nSpaceSum wird der durch Blocksatz auf die Spaces verteilte
             // Zwischenraum aufsummiert.
             // Die Spaces selbst werden im Normalfall in der Mitte des
@@ -1917,7 +2035,6 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
             for ( xub_StrLen i=1; i<nCnt; ++i,nKernSum += rInf.GetKern() )
             {
                 nCh = rInf.GetText().GetChar( rInf.GetIdx() + i );
-
                 long nScr;
                 if( pScrArray )
                     nScr = pScrArray[ i ] - pScrArray[ i - 1 ];
@@ -1995,7 +2112,6 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
                 cChPrev = nCh;
                 pKernArray[i-1] = nScrPos - nScr + nKernSum + nSpaceSum;
             }
-
             if( rInf.GetGreyWave() )
             {
                 if( rInf.GetLen() )
@@ -2020,12 +2136,9 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
                         Point aEnd;
                         long nKernVal = pKernArray[ USHORT( rInf.GetLen() - 1 ) ];
 
-
 #ifdef VERTICAL_LAYOUT
-                        USHORT nDir = UnMapDirection(
-                                        GetFont()->GetOrientation(),
-                                        bSwitchH2V );
-                        switch ( nDir )
+                        switch ( UnMapDirection( GetFont()->GetOrientation(),
+                                 bSwitchH2V ) )
 #else
                         switch ( GetFont()->GetOrientation() )
 #endif
@@ -2046,7 +2159,6 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
 
 #ifdef VERTICAL_LAYOUT
                         Point aPos( rInf.GetPos() );
-
                         if ( bSwitchH2V )
                         {
                             rInf.GetFrm()->SwitchHorizontalToVertical( aPos );
@@ -2114,10 +2226,8 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
                                 long nKernEnd = pKernArray[ USHORT( nEnd - 1 ) ];
 
 #ifdef VERTICAL_LAYOUT
-                                USHORT nDir = UnMapDirection(
-                                                GetFont()->GetOrientation(),
-                                                bSwitchH2V );
-                                switch ( nDir )
+                                switch ( UnMapDirection( GetFont()->GetOrientation(),
+                                         bSwitchH2V ) )
 #else
                                 switch ( GetFont()->GetOrientation() )
 #endif
@@ -2193,7 +2303,6 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
             if( nOffs < nLen )
             {
                 register xub_StrLen nTmpIdx = bBullet ? 0 : rInf.GetIdx();
-
 
 #ifdef VERTICAL_LAYOUT
                 if ( bSwitchH2V )
@@ -2436,10 +2545,11 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
         }
 
         // if this is true, we have to check for kashida justification
-        if ( SW_CTL == nActual && rInf.GetSpace() && pSI && pSI->CountKashida() )
+        if ( SW_CTL == nActual && rInf.GetSpace() )
         {
-            pSI->KashidaJustify( pKernArray, 0, rInf.GetIdx(), rInf.GetLen(),
-                                 rInf.GetSpace() );
+            if ( pSI && pSI->CountKashida() )
+                pSI->KashidaJustify( pKernArray, 0, rInf.GetIdx(), rInf.GetLen(),
+                                     rInf.GetSpace() );
             nSpaceAdd = 0;
         }
 
@@ -2532,7 +2642,6 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
         rInf.GetScriptInfo()->Compress( pKernArray, rInf.GetIdx(),rInf.GetLen(),
                         rInf.GetKanaComp(), (USHORT) aFont.GetSize().Height() );
 
-
     long nLeft = 0;
     long nRight = 0;
     xub_StrLen nCnt = 0;
@@ -2577,7 +2686,7 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
 
 #ifdef VERTICAL_LAYOUT
         if ( nSpaceAdd && ( bAsianJust ||
-             CH_BLANK == rInf.GetText().GetChar( nCnt + rInf.GetIdx() ) ) )
+             ( CH_BLANK == rInf.GetText().GetChar( nCnt + rInf.GetIdx() ) ) ) )
             nSpaceSum += nSpaceAdd;
 #else
         if ( nSpaceAdd &&
