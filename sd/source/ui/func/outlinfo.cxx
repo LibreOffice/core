@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlinfo.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2002-04-04 16:14:24 $
+ *  last change: $Author: kz $ $Date: 2002-04-08 15:07:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,7 @@
 #include <svx/svxfont.hxx>
 #include "drawdoc.hxx"
 #include "outlinfo.hxx"
+#include <algorithm>
 
 // ----------------
 // - OutlinerInfo -
