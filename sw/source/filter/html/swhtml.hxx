@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swhtml.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 12:26:12 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:48:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -620,12 +620,6 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     // die Vorlagen auf dem Stack bzw. deren Attribute setzen
     void SetTxtCollAttrs( _HTMLAttrContext *pContext = 0 );
 
-    // die Attribute eine Vorlage zu dem Item-Set hinzufuegen
-    void AddFormatAttrs( SfxItemSet& rItemSet, const SwFmt& rFmt ) const;
-
-    // die Attribute einer Vorlage aus dem Item-Set entfernen
-    void RemoveFormatAttrs( SfxItemSet& rItemSet, const SwFmt& rFmt ) const;
-
     void InsertParaAttrs( const SfxItemSet& rItemSet );
 
     // Verwalten des Attribut-Kontexts
@@ -782,9 +776,13 @@ private:
     void InsertImage();     // htmlgrin.cxx
     void InsertEmbed();     // htmlplug.cxx
 
+#ifdef SOLAR_JAVA
     void NewObject();   // htmlplug.cxx
+#endif
     void EndObject();       // CommandLine mit Applet verkn. (htmlplug.cxx)
+#ifdef SOLAR_JAVA
     void InsertApplet();    // htmlplug.cxx
+#endif
     void EndApplet();       // CommandLine mit Applet verkn. (htmlplug.cxx)
     void InsertParam();     // htmlplug.cxx
 
@@ -905,12 +903,6 @@ public:         // wird in Tabellen benoetigt
     HTMLTableCnts *InsertTableContents( sal_Bool bHead );
 
 private:
-
-    // Eine leere Boxen am Ende der Tabelle einfuegen. Der PaM wird
-    // NICHT in die Zelle verschoben!
-    const SwStartNode *InsertEmptyTableSection();
-
-
     // Eine Section fuer die voruebergende Aufnahme der Tabellen-Ueberschrift
     // anlegen
     SwStartNode *InsertTempTableCaptionSection();
