@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-24 14:44:59 $
+ *  last change: $Author: dr $ $Date: 2001-05-07 14:07:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2825,78 +2825,51 @@ void ImportExcel8::Xct( void )
     XclImpSupbook* pSupbook = pExcRoot->pExtsheetBuffer->GetCurrSupbook();
     if( pSupbook )
     {
-        UINT16  nCrnCount;
-        UINT16  nTabNum = 0;
-
-        aIn >> nCrnCount;
-        if( aIn.GetRecLeft() > 3 )
-            aIn >> nTabNum;
-
-        pSupbook->SetCurrScTab( nTabNum );
+        aIn.Ignore( 2 );
+        pSupbook->SetCurrExcTab( aIn.ReaduInt16() );
     }
 }
 
 void ImportExcel8::Crn( void )
 {
     XclImpSupbook* pSupbook = pExcRoot->pExtsheetBuffer->GetCurrSupbook();
-    if( pSupbook && pSupbook->HasValidScTab() )
+    if( !pSupbook ) return;
+
+    UINT8 nLastCol, nFirstCol, nValType;
+    UINT16 nRow;
+    aIn >> nLastCol >> nFirstCol >> nRow;
+
+    XclImpCrnBase* pCrn;
+    for( USHORT nCol = nFirstCol; (nCol <= nLastCol) && (aIn.GetRecLeft() > 1); nCol++ )
     {
-        UINT8       nLastCol;
-        UINT8       nFirstCol;
-        UINT16      nRow;
-        UINT16      nTab = pSupbook->GetCurrScTab();
-        UINT8       nValType;
-
-        aIn >> nLastCol >> nFirstCol >> nRow;
-
-        ScAddress   aAddr( (UINT16) 0, nRow, nTab );
-
-        for( UINT16 iCol = nFirstCol; (iCol <= nLastCol) && (aIn.GetRecLeft() > 1); iCol++ )
+        aIn >> nValType;
+        switch( nValType )
         {
-            aAddr.SetCol( iCol );
-            aIn >> nValType;
-            switch( nValType )
+            case EXC_CRN_DOUBLE:
+                pCrn = new XclImpCrnDouble( nCol, nRow, aIn.ReadDouble() );
+            break;
+            case EXC_CRN_STRING:
+                pCrn = new XclImpCrnString( nCol, nRow, aIn.ReadUniString( eQuellChar ) );
+            break;
+            case EXC_CRN_BOOL:
+            case EXC_CRN_ERROR:
             {
-                case EXC_CRN_DOUBLE:
-                {
-                    double fVal;
-                    aIn >> fVal;
-                    if( aIn.IsValid() )
-                        pD->SetValue( iCol, nRow, nTab, fVal );
-                }
-                break;
-                case EXC_CRN_STRING:
-                {
-                    String sText( aIn.ReadUniString( eQuellChar ) );
-                    if( aIn.IsValid() )
-                    {
-                        ScStringCell* pStrCell = new ScStringCell( sText );
-                        pD->PutCell( aAddr, pStrCell );
-                    }
-                }
-                break;
-                case EXC_CRN_BOOL:
-                case EXC_CRN_ERROR:
-                {
-                    BOOL    bIsErr = (nValType == EXC_CRN_ERROR);
-                    UINT16  nErrBool;
-                    double  fVal;
+                BOOL bIsErr = (nValType == EXC_CRN_ERROR);
+                UINT16 nErrBool;
+                double fVal;
+                aIn >> nErrBool;
+                aIn.Ignore( 6 );
 
-                    aIn >> nErrBool;
-                    aIn.Ignore( 6 );
-
-                    if( aIn.IsValid() )
-                    {
-                        const ScTokenArray* pTok    = ErrorToFormula( bIsErr, (UINT8)nErrBool, fVal );
-                        ScFormulaCell*      pCell   = new ScFormulaCell( pD, aAddr, pTok );
-
-                        pCell->SetDouble( fVal );
-                        pD->PutCell( aAddr, pCell );
-                    }
-                }
-                break;
+                const ScTokenArray* pTok = ErrorToFormula( bIsErr, (UINT8)nErrBool, fVal );
+                pCrn = new XclImpCrnFormula( nCol, nRow, fVal, pTok );
             }
+            break;
+            default:
+                DBG_ERROR( "ImportExcel8::Crn - unknown data type" );
+                pCrn = NULL;
         }
+        if( pCrn )
+            pSupbook->AppendCrn( pCrn );
     }
 }
 
@@ -2904,6 +2877,56 @@ void ImportExcel8::Externsheet( void )
 {
     pExcRoot->pExtsheetBuffer->Read( aIn );
     pExcRoot->pExtsheetBuffer->CreateTables( *pExcRoot );
+}
+
+
+
+XclImpCrnBase::~XclImpCrnBase()
+{
+}
+
+
+
+void XclImpCrnDouble::SetCell( ScDocument* pDoc, USHORT nTab )
+{
+    pDoc->SetValue( nCol, nRow, nTab, fValue );
+}
+
+
+
+void XclImpCrnString::SetCell( ScDocument* pDoc, USHORT nTab )
+{
+    ScStringCell* pStrCell = new ScStringCell( aText );
+    pDoc->PutCell( ScAddress( nCol, nRow, nTab ), pStrCell );
+}
+
+
+
+void XclImpCrnFormula::SetCell( ScDocument* pDoc, USHORT nTab )
+{
+    ScAddress aPos( nCol, nRow, nTab );
+    ScFormulaCell* pFmlaCell = new ScFormulaCell( pDoc, aPos, pTokArr );
+    pFmlaCell->SetDouble( fValue );
+    pDoc->PutCell( aPos, pFmlaCell );
+}
+
+
+
+XclImpSupbookTab::~XclImpSupbookTab()
+{
+    for( XclImpCrnBase* pCrn = _First(); pCrn; pCrn = _Next() )
+        delete pCrn;
+}
+
+void XclImpSupbookTab::CreateTable( ScDocument* pDoc, const String& rURL )
+{
+    if( pDoc->LinkEmptyTab( nScTab, ScGlobal::GetDocTabName( rURL, aName ), rURL, aName ) )
+    {
+        for( XclImpCrnBase* pCrn = _First(); pCrn; pCrn = _Next() )
+            pCrn->SetCell( pDoc, nScTab );
+    }
+    else
+        nScTab = EXC_TAB_INVALID;
 }
 
 
@@ -2916,32 +2939,25 @@ XclImpSupbook::XclImpSupbook( XclImpStream& rIn, RootData& rExcRoot )
     bSelf = (rIn.GetRecLeft() < (ULONG)(2 + 2 * nTabCnt));
     if( bSelf ) return;
 
-    String aTabName;
-    XclImpSupbookTab* pNewTab;
-
     ReadDocName( rIn, aFileName, bSelf );
 
     if( nTabCnt )
     {
         for( UINT16 nTab = 0; nTab < nTabCnt; nTab++ )
         {
-            pNewTab = new XclImpSupbookTab;
-            ReadTabName( rIn, rExcRoot, pNewTab->aName );
-            List::Insert( pNewTab, LIST_APPEND );
+            String aTabName;
+            ReadTabName( rIn, rExcRoot, aTabName );
+            Append( new XclImpSupbookTab( aTabName ) );
         }
     }
     else
-    {
         // create dummy list entry
-        pNewTab = new XclImpSupbookTab;
-        pNewTab->aName = aFileName;
-        List::Insert( pNewTab, LIST_APPEND );
-    }
+        Append( new XclImpSupbookTab( aFileName ) );
 }
 
 XclImpSupbook::~XclImpSupbook()
 {
-    for( XclImpSupbookTab* pTab = (XclImpSupbookTab*) List::First(); pTab; pTab = (XclImpSupbookTab*) List::Next() )
+    for( XclImpSupbookTab* pTab = _First(); pTab; pTab = _Next() )
         delete pTab;
 }
 
@@ -2963,19 +2979,29 @@ UINT16 XclImpSupbook::GetScTabNum( UINT16 nTab ) const
 {
     if( bSelf )
         return nTab;
-    const XclImpSupbookTab* pTab = Get( nTab );
-    return pTab ? pTab->nScNum : EXC_TAB_INVALID;
+    const XclImpSupbookTab* pTab = _Get( nTab );
+    return pTab ? pTab->GetScTab() : EXC_TAB_INVALID;
 }
 
 UINT16 XclImpSupbook::GetScTabNum( const String& rTabName ) const
 {
     for( UINT32 nIndex = 0; nIndex < List::Count(); nIndex++ )
     {
-        const XclImpSupbookTab* pTab = Get( nIndex );
-        if( pTab && (pTab->aName == rTabName) )
-            return pTab->nScNum;
+        const XclImpSupbookTab* pTab = _Get( nIndex );
+        if( pTab && (pTab->GetName() == rTabName) )
+            return pTab->GetScTab();
     }
     return EXC_TAB_INVALID;
+}
+
+void XclImpSupbook::AppendCrn( XclImpCrnBase*& rpCrn )
+{
+    XclImpSupbookTab* pTab = _Get( nCurrExcTab );
+    if( pTab )
+        pTab->AppendCrn( rpCrn );
+    else
+        delete rpCrn;
+    rpCrn = NULL;
 }
 
 void XclImpSupbook::CreateTables( RootData& rRootData, UINT16 nFirst, UINT16 nLast ) const
@@ -2987,15 +3013,9 @@ void XclImpSupbook::CreateTables( RootData& rRootData, UINT16 nFirst, UINT16 nLa
 
     for( UINT16 nTab = nFirst; nTab <= nLast; nTab++ )
     {
-        XclImpSupbookTab* pSBTab = Get( nTab );
+        XclImpSupbookTab* pSBTab = _Get( nTab );
         if( pSBTab )
-        {
-            UINT16 nNewTabNum;
-            String aTabName( ScGlobal::GetDocTabName( aURL, pSBTab->aName ) );
-
-            if( rRootData.pDoc->LinkEmptyTab( nNewTabNum, aTabName, aURL, pSBTab->aName ) )
-                pSBTab->nScNum = nNewTabNum;
-        }
+            pSBTab->CreateTable( rRootData.pDoc, aURL );
     }
 }
 
