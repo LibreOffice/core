@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backendfactory.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:18:53 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 13:27:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,9 @@
 #ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
 #include <com/sun/star/uno/XComponentContext.hpp>
 #endif
-#include <drafts/com/sun/star/configuration/backend/XBackend.hpp>
+#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XBACKEND_HPP_
+#include <com/sun/star/configuration/backend/XBackend.hpp>
+#endif
 
 namespace configmgr
 {
@@ -86,7 +88,7 @@ namespace configmgr
             typedef com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
                 CreationContext;
 
-            typedef com::sun::star::uno::Reference< drafts::com::sun::star::configuration::backend::XBackend >
+            typedef com::sun::star::uno::Reference< com::sun::star::configuration::backend::XBackend >
                 UnoBackend;
 
             rtl::Reference<IMergedDataProvider> createBackend();
