@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connection.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-25 09:02:00 $
+ *  last change: $Author: oj $ $Date: 2002-12-12 10:43:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,7 +192,6 @@ Reference< XStatement >  OConnection::createStatement(void) throw( SQLException,
     }
     return xStatement;
 }
-
 //------------------------------------------------------------------------------
 Reference< XPreparedStatement >  OConnection::prepareStatement(const rtl::OUString& sql) throw( SQLException, RuntimeException )
 {
@@ -613,6 +612,7 @@ void OConnection::disposing()
 //------------------------------------------------------------------------------
 Reference< XInterface >  OConnection::getParent(void) throw( RuntimeException )
 {
+    MutexGuard aGuard(m_aMutex);
     checkDisposed();
     return m_xParent;
 }

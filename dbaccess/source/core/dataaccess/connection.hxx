@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connection.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-21 10:31:33 $
+ *  last change: $Author: oj $ $Date: 2002-12-12 10:43:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,8 +242,7 @@ protected:
 
     inline  void checkDisposed() throw (::com::sun::star::lang::DisposedException)
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
-        if (!m_xConnection.is())
+        if ( rBHelper.bDisposed || !m_xConnection.is() )
             throw ::com::sun::star::lang::DisposedException();
     }
 };
