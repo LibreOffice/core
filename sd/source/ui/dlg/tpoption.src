@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpoption.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2001-06-05 22:02:18 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 23:48:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,7 +327,7 @@ TabPage TP_OPTIONS_CONTENTS
         Text [ portuguese_brazilian ] = "Hilfslinien beim ~Verschieben" ;
         Text[ chinese_simplified ] = "ÔÚÒÆ¶¯¶ÔÏóÊ±ÏÔÊ¾¸¨ÖúÏß";
         Text[ russian ] = "Íàïğàâ. ëèíèè ïğè ïåğåìåùåíèè îáúåêòà";
-        Text[ polish ] = "Linie pomocne przy przesuwaniu obiektu";
+        Text[ polish ] = "Linie pomocnicze przy przesuwaniu obiektu";
         Text[ japanese ] = "ˆÚ“®‚Ì•â•ü‚ğ•\\¦(~G)";
         Text[ chinese_traditional ] = "¦b²¾°Ê®ÉÅã¥Ü»²§U½u";
         Text[ arabic ] = "ÇáÎØæØ ÇáãÓÇÚÏÉ ÃËäÇÁ ÇáÅÒÇÍÉ";
@@ -383,13 +383,13 @@ TabPage TP_OPTIONS_CONTENTS
         Text [ danish ] = "Hvert enkelt objekts kontur" ;
         Text [ portuguese ] = "~Contorno de cada objecto" ;
         Text [ portuguese_brazilian ] = "~Umri? jedes einzelnen Objektes" ;
-        Text[ chinese_simplified ] = "µ¥¸ö¶ÔÏóµÄÂÖÀª";
+        Text[ chinese_simplified ] = "Ã¿¸öµ¥Ò»¶ÔÏóµÄÂÖÀª";
         Text[ russian ] = "Êîíòóğ êàæäîãî îáúåêòà îòäåëüíî";
         Text[ polish ] = "Obrys pojedynczych obiektów";
         Text[ japanese ] = "ŠeµÌŞ¼Şª¸Ä‚É“K‚µ‚½—ÖŠs‚Ì•\\¦(~C)";
         Text[ chinese_traditional ] = "¨C­Óª«¥óªº½ü¹ø";
         Text[ arabic ] = "ÇáÎØ ÇáßİÇİí áßá ßÇÆä İÑÏí";
-        Text[ greek ] = "Ğåñßãñáììá êÜèå ìåìïíùìİíïõ áíôéêåéìİíï~õ";
+        Text[ greek ] = "Ğåñßãñáììá êÜèå ~ìåìïíùìİíïõ áíôéêåéìİíïõ";
         Text[ korean ] = "°¢ °³º° °³Ã¼ÀÇ À±°û(~C)";
         Text[ turkish ] = "Her bir nesnenin konturu";
         Text[ language_user1 ] = " ";
@@ -727,18 +727,18 @@ TabPage TP_OPTIONS_MISC
         Text [ portuguese ] = "Unidade de medida" ;
         Text [ finnish ] = "Mittayksikkö" ;
         Text [ danish ] = "Måleenhed" ;
-        Text [ french ] = "Unité de mesure" ;
+        Text [ french ] = "Unité de ~mesure" ;
         Text [ swedish ] = "~Måttenhet" ;
         Text [ dutch ] = "Maateenheid" ;
         Text [ spanish ] = "Unidad de medida" ;
         Text [ english_us ] = "~Meas. unit" ;
-        Text[ chinese_simplified ] = "¼ÆÁ¿µ¥Î»";
+        Text[ chinese_simplified ] = "³ß´çµ¥Î»";
         Text[ russian ] = "Åäèíèöà èçìåğåíèÿ";
         Text[ polish ] = "Jednostka miary";
         Text[ japanese ] = "g‚¤’PˆÊ";
         Text[ chinese_traditional ] = "­p¶q³æ¦ì";
         Text[ arabic ] = "æÍÏÉ ÇáŞíÇÓ";
-        Text[ greek ] = "ÌïíÜäá ìİôñçóçò";
+        Text[ greek ] = "~ÌïíÜäá ìİôñçóçò";
         Text[ korean ] = "´ÜÀ§";
         Text[ turkish ] = "Ölçü birimi";
         Text[ language_user1 ] = " ";
@@ -762,17 +762,17 @@ TabPage TP_OPTIONS_MISC
         Text [ danish ] = "Tabulatorafstand" ;
         Text [ italian ] = "Posizione tabulazioni" ;
         Text [ spanish ] = "Distancia entre tabuladores" ;
-        Text [ french ] = "Espace entre les tabulations" ;
+        Text [ french ] = "Espace entre les ~tabulations" ;
         Text [ dutch ] = "Tabstops" ;
         Text [ portuguese ] = "Intervalo entre tabulações" ;
         Text [ portuguese_brazilian ] = "Tabulatorabstand" ;
         Text[ chinese_simplified ] = "ÖÆ±í·ûµÄ¼ä¸ô";
         Text[ russian ] = "Ïîçèöèÿ òàáóëÿòîğà";
-        Text[ polish ] = "Odstêp tabulatorów";
+        Text[ polish ] = "Odstêp miêdzy tabulatorami";
         Text[ japanese ] = "ÀÌŞŠÔŠu";
         Text[ chinese_traditional ] = "»sªí²Åªº¶¡¹j";
         Text[ arabic ] = "ÚáÇãÇÊ ÇáÌÏæáÉ";
-        Text[ greek ] = "Áğüóôáóç óôçëïèåôşí";
+        Text[ greek ] = "Áğüó~ôáóç óôçëïèåôşí";
         Text[ korean ] = "ÅÇ °£°İ";
         Text[ turkish ] = "Sekme durakları";
         Text[ language_user1 ] = " ";
@@ -862,7 +862,7 @@ TabPage TP_OPTIONS_MISC
         Text[ english_us ] = "Compatibility";
         Text[ portuguese ] = "Compatibilidade";
         Text[ russian ] = "Ñîâìåñòèìîñòü";
-        Text[ greek ] = "Compatibility";
+        Text[ greek ] = "Óõìâáôüôçôá";
         Text[ dutch ] = "Compatibiliteit";
         Text[ french ] = "Compatibilité";
         Text[ spanish ] = "Compatibilidad";
@@ -889,7 +889,7 @@ TabPage TP_OPTIONS_MISC
         Text[ english_us ] = "Add ~spacing between paragraphs in the current document";
         Text[ portuguese ] = "A~dicionar espaçamento entre os parágrafos no documento activo";
         Text[ russian ] = "Ñëîæèòü âñå èíòåğâàëû ìåæäó àáçàöàìè â òåêóùåì äîêóìåíòå";
-        Text[ greek ] = "Add ~distances between paragraphs";
+        Text[ greek ] = "Ğñüóèåóç ôùí áğïóôÜóåùí ôùí ğáñáãñÜö~ùí óôï ôñİ÷ïí İããñáöï";
         Text[ dutch ] = "Alle afstanden tussen ~alinea's optellen";
         Text[ french ] = "~Additionner les espacements entre les paragraphes dans le document actif";
         Text[ spanish ] = "Su~mar espacios de párrafo en documento actual";
@@ -900,7 +900,7 @@ TabPage TP_OPTIONS_MISC
         Text[ portuguese_brazilian ] = "Add ~distances between paragraphs";
         Text[ japanese ] = "Œ»İ‚ÌÄŞ·­ÒİÄ‚Å‚·‚×‚Ä‚Ì’i—‚ÌŠÔŠu‚ğ‰ÁZ‚·‚é";
         Text[ korean ] = "ÇöÀç ¹®¼­ÀÇ ¸ğµç ´Ü¶ô °£°İ ÇÕ»ê";
-        Text[ chinese_simplified ] = "ÔÚµ±Ç°ÎÄµµÄÚËùÓĞ¶ÎÂä¼ä¸ñÏà¼Ó";
+        Text[ chinese_simplified ] = "µ±Ç°ÎÄµµÖ®ÖĞËùÓĞ¶ÎÂä¼ä¸ñÏà¼Ó";
         Text[ chinese_traditional ] = "¦b·í«eªº¤å¥ó¤§¤¤¬Û¥[©Ò¦³ªº¬q¸¨¶¡¹j";
         Text[ turkish ] = "Add ~distances between paragraphs";
         Text[ arabic ] = "Add ~distances between paragraphs";
@@ -952,7 +952,7 @@ TabPage TP_OPTIONS_MISC
         Text[ english_us ] = "Equivalent to";
         Text[ portuguese ] = "Corresponde a";
         Text[ russian ] = "Ñîîòâåòñòâóåò";
-        Text[ greek ] = "Equivalent to";
+        Text[ greek ] = "Áíôéóôïé÷åß";
         Text[ dutch ] = "Komt overeen met";
         Text[ french ] = "Correspond à";
         Text[ spanish ] = "Corresponde a";
@@ -980,11 +980,11 @@ TabPage TP_OPTIONS_MISC
         Text[ english_us ] = "~Drawing scale";
         Text[ portuguese ] = "Escala de desenho";
         Text[ russian ] = "Ìàñøòàá ğèñóíêà";
-        Text[ greek ] = "Drawing scale";
+        Text[ greek ] = "Êëßìáêá ó÷åäéáó~ìïı";
         Text[ dutch ] = "Drawing scale";
-        Text[ french ] = "Échelle de dessin";
+        Text[ french ] = "Échelle de ~dessin";
         Text[ spanish ] = "Escala de dibujo";
-        Text[ italian ] = "Drawing scale";
+        Text[ italian ] = "Scala di disegno";
         Text[ danish ] = "Drawing scale";
         Text[ swedish ] = "Te~ckningsskala";
         Text[ polish ] = "Skala rysunku";
@@ -1016,7 +1016,7 @@ TabPage TP_OPTIONS_MISC
         Text [ english_us ] = "Page ~width" ;
         Text [ italian ] = "Larghezza pagina" ;
         Text [ spanish ] = "Ancho de página" ;
-        Text [ french ] = "Largeur de page" ;
+        Text [ french ] = "~Largeur de page" ;
         Text [ dutch ] = "Paginabreedte" ;
         Text [ swedish ] = "Sid~bredd" ;
         Text [ danish ] = "Sidebredde" ;
@@ -1024,11 +1024,11 @@ TabPage TP_OPTIONS_MISC
         Text [ portuguese_brazilian ] = "Seitenbreite" ;
         Text[ chinese_simplified ] = "Ò³Ãæ¿í¶È";
         Text[ russian ] = "Øèğèíà ñòğàíèöû";
-        Text[ polish ] = "Szer. strony";
+        Text[ polish ] = "Szerokoœæ strony";
         Text[ japanese ] = "Íß°¼Ş•";
         Text[ chinese_traditional ] = "­¶­±¼e«×";
         Text[ arabic ] = "ÚÑÖ ÇáÕİÍÉ";
-        Text[ greek ] = "ĞëÜôïò óåëßäáò";
+        Text[ greek ] = "~ĞëÜôïò óåëßäáò";
         Text[ korean ] = "ÂÊ ³Êºñ";
         Text[ turkish ] = "Sayfa genişliği";
         Text[ language_user1 ] = " ";
@@ -1070,18 +1070,18 @@ TabPage TP_OPTIONS_MISC
         Text [ english_us ] = "Page ~height" ;
         Text [ italian ] = "Altezza pagina" ;
         Text [ spanish ] = "Altura de página" ;
-        Text [ french ] = "Hauteur de page" ;
+        Text [ french ] = "~Hauteur de page" ;
         Text [ swedish ] = "S~idhöjd" ;
         Text [ danish ] = "Sidehøjde" ;
         Text [ portuguese ] = "Altura da página" ;
         Text [ portuguese_brazilian ] = "Seitenh?e" ;
         Text[ chinese_simplified ] = "Ò³Ãæ¸ß¶È";
         Text[ russian ] = "Âûñîòà ñòğàíèöû";
-        Text[ polish ] = "Wys. strony";
+        Text[ polish ] = "Wysokoœæ strony";
         Text[ japanese ] = "Íß°¼Ş‚Ì‚‚³";
         Text[ chinese_traditional ] = "­¶­±°ª«×";
         Text[ arabic ] = "ÇÑÊİÇÚ ÇáÕİÍÉ";
-        Text[ greek ] = "¾øïò óåëßäáò";
+        Text[ greek ] = "¾ø~ïò óåëßäáò";
         Text[ korean ] = "ÂÊ ³ôÀÌ";
         Text[ turkish ] = "Sayfa yüksekliği";
         Text[ language_user1 ] = " ";
@@ -1126,6 +1126,7 @@ TabPage TP_OPTIONS_MISC
     Text[ finnish ] = "Muu";
     Text[ catalan ] = "Otros";
 };
+
 
 
 
