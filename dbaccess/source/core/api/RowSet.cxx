@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-05 13:39:30 $
+ *  last change: $Author: oj $ $Date: 2001-04-05 14:14:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2857,8 +2857,10 @@ Sequence< ::rtl::OUString > ORowSetClone::getSupportedServiceNames(  ) throw (Ru
 //------------------------------------------------------------------------------
 void ORowSetClone::disposing()
 {
-    ORowSetBase::disposing();
     MutexGuard aGuard( m_aMutex );
+    delete m_pCache;
+    ORowSetBase::disposing();
+
     m_pParent = NULL;
     OSubComponent::disposing();
 }

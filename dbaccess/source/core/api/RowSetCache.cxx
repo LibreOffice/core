@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-05 07:51:27 $
+ *  last change: $Author: oj $ $Date: 2001-04-05 14:14:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,31 +351,35 @@ void ORowSetCache::setMaxRowSize(sal_Int32 _nSize)
     {
         // now correct the iterator in our iterator vector
         ::std::vector<sal_Int32> aPositions;
+        ::std::map<sal_Int32,sal_Bool> aCacheIterToChange;
+        // first get the positions where they stand now
         ORowSetCacheMap::iterator aCacheIter = m_aCacheIterators.begin();
         for(;aCacheIter != m_aCacheIterators.end();++aCacheIter)
         {
+            aCacheIterToChange[aCacheIter->first] = sal_False;
             if(!aCacheIter->second.aIterator)
                 continue;
             if(aCacheIter->second.aIterator != m_aInsertRow && !m_bInserted && !m_bModified)
             {
                 sal_Int16 nDist = (aCacheIter->second.aIterator - m_pMatrix->begin());
                 aPositions.push_back(nDist);
+                aCacheIterToChange[aCacheIter->first] = sal_True;
             }
         }
         sal_Int32 nKeyPos = (m_aMatrixIter - m_pMatrix->begin());
         m_pMatrix->resize(_nSize);
         m_aMatrixIter = m_pMatrix->begin() + nKeyPos;
         m_aMatrixEnd = m_pMatrix->end();
-        aCacheIter = m_aCacheIterators.begin();
-        ::std::vector<sal_Int32>::iterator aIter = aPositions.begin();
-        for(;aCacheIter != m_aCacheIterators.end();++aCacheIter)
+
+        // now adjust their positions because a resize invalid all iterators
+        ::std::vector<sal_Int32>::const_iterator aIter = aPositions.begin();
+        ::std::map<sal_Int32,sal_Bool>::const_iterator aPosChangeIter = aCacheIterToChange.begin();
+        for(    aCacheIter = m_aCacheIterators.begin();
+                aPosChangeIter != aCacheIterToChange.end();
+                ++aPosChangeIter,++aCacheIter)
         {
-            if(!aCacheIter->second.aIterator)
-                continue;
-            if(aCacheIter->second.aIterator != m_aInsertRow && !m_bInserted && !m_bModified)
-            {
+            if(aPosChangeIter->second)
                 aCacheIter->second.aIterator = m_pMatrix->begin() + *aIter++;
-            }
         }
     }
     if(!m_nPosition)
@@ -1416,7 +1420,7 @@ sal_Bool SAL_CALL ORowSetCache::absolute( sal_Int32 row ) throw(SQLException, Ru
     {
         if(m_bRowCountFinal || last())
         {
-            m_nPosition = m_nRowCount + row; // + row because row is negative
+            m_nPosition = m_nRowCount + row + 1; // + row because row is negative and +1 because row==-1 means last row
             if(m_nPosition < 1)
             {
                 m_bBeforeFirst = sal_True;
@@ -1802,6 +1806,9 @@ void ORowSetCache::setUpdateIterator(const ORowSetMatrix::iterator& _rOriginalRo
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.28  2001/04/05 07:51:27  oj
+    #85735# insert more exceptions when using in wrong order
+
     Revision 1.27  2001/04/02 11:14:53  oj
     changes for character stream
 
