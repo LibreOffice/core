@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-12 13:53:19 $
+ *  last change: $Author: fs $ $Date: 2001-10-25 11:20:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,6 +183,9 @@
 #endif
 #ifndef _SVT_HELPID_HRC
 #include <svtools/helpid.hrc>
+#endif
+#ifndef _UCBHELPER_CONTENT_HXX
+#include <ucbhelper/content.hxx>
 #endif
 
 #ifndef _SFXAPP_HXX
@@ -1637,6 +1640,43 @@ void FileDialogHelper_Impl::saveConfig()
 }
 
 // ------------------------------------------------------------------------
+namespace
+{
+    static ::rtl::OUString getInitPath( const String& _rFallback, const xub_StrLen _nFallbackToken )
+    {
+        SfxApplication *pSfxApp = SFX_APP();
+        String sPath = pSfxApp->GetLastDir_Impl();
+
+        if ( !sPath.Len() )
+            sPath = _rFallback.GetToken( _nFallbackToken, ' ' );
+
+        // check if the path points to a valid (accessible) directory
+        sal_Bool bValid = sal_False;
+        if ( sPath.Len() )
+        {
+            String sPathCheck( sPath );
+            if ( sPathCheck.GetBuffer()[ sPathCheck.Len() - 1 ] != '/' )
+                sPathCheck += '/';
+            sPathCheck += '.';
+            try
+            {
+                ::ucb::Content aContent( sPathCheck, Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
+                bValid = aContent.isFolder();
+            }
+            catch( const Exception& e )
+            {
+                e;  // make compiler happy
+            }
+        }
+
+        if ( !bValid )
+            sPath.Erase();
+
+        return sPath;
+    }
+}
+
+// ------------------------------------------------------------------------
 void FileDialogHelper_Impl::loadConfig()
 {
     Reference < XFilePickerControlAccess > xDlg( mxFileDlg, UNO_QUERY );
@@ -1673,14 +1713,7 @@ void FileDialogHelper_Impl::loadConfig()
                 xDlg->setValue( ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0, aValue );
 
                 if ( ! maPath.getLength() )
-                {
-                    SfxApplication *pSfxApp = SFX_APP();
-                    OUString aPath = pSfxApp->GetLastDir_Impl();
-                    if ( !aPath.getLength() )
-                        aPath = aUserData.GetToken( 2, ' ' );
-
-                    setPath( aPath );
-                }
+                    setPath( getInitPath( aUserData, 2 ) );
 
                 if ( ! maCurFilter.getLength() )
                 {
@@ -1712,14 +1745,7 @@ void FileDialogHelper_Impl::loadConfig()
             aUserData = String::CreateFromAscii( STD_CONFIG_STR );
 
         if ( ! maPath.getLength() )
-        {
-            SfxApplication *pSfxApp = SFX_APP();
-            OUString aPath = pSfxApp->GetLastDir_Impl();
-            if ( !aPath.getLength() )
-                aPath = aUserData.GetToken( 1, ' ' );
-
-            setPath( aPath );
-        }
+            setPath( getInitPath( aUserData, 1 ) );
 
         if ( mbHasAutoExt )
         {
