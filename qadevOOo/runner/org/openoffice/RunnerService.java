@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RunnerService.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-03-25 15:35:16 $
+ *  last change:$Date: 2003-03-26 11:27:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 package org.openoffice;
 
+import share.LogWriter;
 import stats.InternalLogWriter;
 import lib.TestParameters;
 import lib.DynamicClassLoader;
@@ -112,6 +113,12 @@ public class RunnerService implements XJob, XServiceInfo,
         }
 
         TestParameters param = new TestParameters();
+        DynamicClassLoader dcl = new DynamicClassLoader();
+
+
+        // take the standard log writer
+        String standardLogWriter = param.LogWriter;
+        String standardOutProducer = param.OutProducer;
 
         ClParser cli = new ClParser();
 
@@ -127,9 +134,16 @@ public class RunnerService implements XJob, XServiceInfo,
         //parse the commandline arguments
         cli.getCommandLineParameter(param,arguments);
 
-        InternalLogWriter log = new InternalLogWriter();
-        param.put("LogWriter", log);
-        param.put("OutProducer", log);
+        // now compare the standard log writer with the parameters:
+        // if we have a new one, use the new, else use the internal
+        // log writer
+        if (((String)param.get("LogWriter")).equals(standardLogWriter))
+            param.put("LogWriter", "stats.InternalLogWriter");
+        if (((String)param.get("OutProducer")).equals(standardOutProducer))
+            param.put("OutProducer", "stats.InternalLogWriter");
+        LogWriter log = (LogWriter) dcl.getInstance(
+                                            (String)param.get("LogWriter"));
+
         param.put("ServiceFactory", xMSF);
 
         param.ServiceFactory = xMSF; //(XMultiServiceFactory)
@@ -137,14 +151,16 @@ public class RunnerService implements XJob, XServiceInfo,
 
         log.println("TestJob: "+param.get("TestJob"));
 
-        DynamicClassLoader dcl = new DynamicClassLoader();
-
         TestBase toExecute = (TestBase)dcl.getInstance("base.java_fat_service");
 
         boolean worked = toExecute.executeTest(param);
         if (!worked)
             log.println("Test did not execute correctly.");
-        return log.getLog();
+
+        String returnString = "";
+        if (log instanceof InternalLogWriter)
+            returnString = ((InternalLogWriter)log).getLog();
+        return returnString;
     }
 
     /**

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_fat_service.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-03-25 15:33:29 $
+ *  last change:$Date: 2003-03-26 11:28:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,23 +88,22 @@ import share.DescGetter;
 import helper.APIDescGetter;
 import base.TestBase;
 
-import stats.InternalLogWriter;
 import share.LogWriter;
 import stats.Summarizer;
 import util.SOfficeFactory;
 
 /**
- *
  * this class handles tests written in java and running on a fat Office
+ * with the runner as a service.
  */
 public class java_fat_service implements TestBase {
 
     public static boolean debug = false;
-    InternalLogWriter log = null;
+    LogWriter log = null;
 
     public boolean executeTest(lib.TestParameters param) {
-
-        log = (InternalLogWriter)param.get("LogWriter");
+        DynamicClassLoader dcl = new DynamicClassLoader();
+        log = (LogWriter)dcl.getInstance((String)param.get("LogWriter"));
         DescGetter dg = new APIDescGetter();
         String job = (String) param.get("TestJob");
         boolean retValue = true;
@@ -138,7 +137,6 @@ public class java_fat_service implements TestBase {
 
             //get some helper classes
             Summarizer sumIt = new Summarizer();
-            DynamicClassLoader dcl = new DynamicClassLoader();
 
             TestCase tCase = null;
             try {
@@ -151,7 +149,8 @@ public class java_fat_service implements TestBase {
 
             if (tCase == null) {
                 sumIt.summarizeDown(entry,entry.ErrorMsg);
-                LogWriter sumObj = (LogWriter) param.get("OutProducer");
+                LogWriter sumObj = (LogWriter)dcl.getInstance(
+                                        (String)param.get("OutProducer"));
                 sumObj.initialize(entry,true);
                 entry.UserDefinedParams = param;
                 sumObj.summary(entry);
@@ -175,7 +174,8 @@ public class java_fat_service implements TestBase {
             }
             if (tEnv == null) {
                 sumIt.summarizeDown(entry,"Couldn't create "+tCase.getObjectName());
-                LogWriter sumObj = (LogWriter)param.get("OutProducer");
+                LogWriter sumObj = (LogWriter)dcl.getInstance(
+                                            (String)param.get("OutProducer"));
                 sumObj.initialize(entry,true);
                 entry.UserDefinedParams = param;
                 sumObj.summary(entry);
@@ -191,7 +191,8 @@ public class java_fat_service implements TestBase {
 
                 log.println("running: "+entry.SubEntries[j].entryName);
 
-                LogWriter ifclog = (LogWriter)param.get("LogWriter");
+                LogWriter ifclog = (LogWriter)dcl.getInstance(
+                                            (String)param.get("LogWriter"));
 
                 ifclog.initialize(entry.SubEntries[j],true);
                 entry.SubEntries[j].UserDefinedParams = param;
@@ -229,7 +230,8 @@ public class java_fat_service implements TestBase {
                 }
                 sumIt.summarizeUp(entry.SubEntries[j]);
 
-                LogWriter sumIfc = (LogWriter)param.get("OutProducer");
+                LogWriter sumIfc = (LogWriter)dcl.getInstance(
+                                            (String)param.get("OutProducer"));
 
                 sumIfc.initialize(entry.SubEntries[j],true);
                 entry.SubEntries[j].UserDefinedParams = param;
@@ -240,12 +242,13 @@ public class java_fat_service implements TestBase {
             } catch (Exception e) {
             }
             sumIt.summarizeUp(entry);
-            LogWriter sumObj = (LogWriter)param.get("OutProducer");
+            LogWriter sumObj = (LogWriter)dcl.getInstance(
+                                        (String)param.get("OutProducer"));
             sumObj.initialize(entry,true);
             sumObj.summary(entry);
         }
         if (entries.length > 1) {
-            log.println();
+            log.println("");
             int counter = 0;
             log.println("Failures that appeared during scenario execution:");
             for (int i=0;i<entries.length;i++) {
@@ -261,10 +264,9 @@ public class java_fat_service implements TestBase {
     }
 
     protected TestEnvironment getEnv(DescEntry entry, TestParameters param) {
-            log = (InternalLogWriter)param.get("LogWriter");
-            XMultiServiceFactory msf = param.getMSF();
-
             DynamicClassLoader dcl = new DynamicClassLoader();
+            log = (LogWriter)dcl.getInstance((String)param.get("LogWriter"));
+            XMultiServiceFactory msf = param.getMSF();
 
             TestCase tCase = null;
 
@@ -277,7 +279,8 @@ public class java_fat_service implements TestBase {
             }
 
             log.println("Creating: "+tCase.getObjectName());
-            LogWriter log = (LogWriter)param.get("LogWriter");
+            LogWriter log = (LogWriter)dcl.getInstance(
+                                            (String)param.get("LogWriter"));
             log.initialize(entry,true);
             entry.UserDefinedParams = param;
             tCase.setLogWriter((PrintWriter) log);
