@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resourcemanager.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: gt $ $Date: 2004-07-15 06:20:09 $
+ *  last change: $Author: gt $ $Date: 2004-07-27 07:57:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,10 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
 
+class FixedImage;
+class FixedInfo;
+class Control;
+
 namespace XmlSec
 {
     ResMgr*         GetResMgr( void );
@@ -94,6 +98,11 @@ namespace XmlSec
     String          GetContentPart( const String& _rRawString, const String& _rPartId );
 
     String          GetHexString( const ::com::sun::star::uno::Sequence< sal_Int8 >& _rSeq, const char* _pSep = ":", UINT16 _nLineBreak = 0xFFFF );
+
+    long            ShrinkToFitWidth( Control& _rCtrl, long _nOffs = 0 );       // return = new width
+    void            AlignAfterImage( const FixedImage& _rImage, Control& _rCtrl, long _nXOffset = 0 );
+    void            AlignAfterImage( const FixedImage& _rImage, FixedInfo& _rFI, long _nXOffset = 0 );
+    void            AlignAndFitImageAndControl( FixedImage& _rImage, FixedInfo& _rFI, long _nXOffset = 0 );
 }
 
 #define XMLSEC_RES(id)      ResId(id,XmlSec::GetResMgr())

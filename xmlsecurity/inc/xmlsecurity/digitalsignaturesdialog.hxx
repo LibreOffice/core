@@ -2,9 +2,9 @@
  *
  *  $RCSfile: digitalsignaturesdialog.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-14 11:05:44 $
+ *  last change: $Author: gt $ $Date: 2004-07-27 07:56:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
+#include <svtools/stdctrl.hxx>
 #include <svx/simptabl.hxx>
 
 #include <xmlsecurity/documentsignaturehelper.hxx>
@@ -93,6 +94,7 @@ class HeaderBar;
 class DigitalSignaturesDialog : public ModalDialog
 {
 private:
+    enum SigState   { S_NONE, S_VALID, S_BROKEN };
 
     XMLSignatureHelper      maSignatureHelper;
 
@@ -109,6 +111,10 @@ private:
     FixedText           maHintBasicFT;
     FixedText           maHintPackageFT;
     SvxSimpleTable      maSignaturesLB;
+    FixedImage          maSigsValidImg;
+    FixedInfo           maSigsValidFI;
+    FixedImage          maSigsInvalidImg;
+    FixedInfo           maSigsInvalidFI;
 
     PushButton          maViewBtn;
     PushButton          maAddBtn;
@@ -130,6 +136,7 @@ private:
     void                ImplFillSignaturesBox();
     void                ImplShowSignaturesDetails();
 
+    void                SetState( SigState _eState );
 public:
     DigitalSignaturesDialog( Window* pParent, cssu::Reference< css::lang::XMultiServiceFactory >& rxMSF, DocumentSignatureMode eMode, sal_Bool bReadOnly );
     ~DigitalSignaturesDialog();

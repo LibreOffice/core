@@ -2,9 +2,9 @@
  *
  *  $RCSfile: digitalsignaturesdialog.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:24 $
+ *  last change: $Author: gt $ $Date: 2004-07-27 07:57:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,7 @@ ModalDialog RID_XMLSECDLG_DIGSIG
     Moveable = TRUE;
     SVLook = TRUE;
 
-//  Text = "Digital Signatures";
-    Text = "Digital Signatures";
+    Text = "Digitale Signaturen";
     Text [ en-US ] = "Digital Signatures";
 
     FixedText FT_HINT_DOC
@@ -98,7 +97,6 @@ ModalDialog RID_XMLSECDLG_DIGSIG
         Text = "The following have signed this package";
         Text [ en-US ] = "The following have signed this package";
     };
-//  ListBox LB_SIGNATURES
     Control LB_SIGNATURES
     {
         Pos = MAP_APPFONT( DS_COL_0, DS_ROW_1 );
@@ -108,31 +106,64 @@ ModalDialog RID_XMLSECDLG_DIGSIG
     };
     String STR_HEADERBAR
     {
-        Text = "Signer\tDigital ID Issued by\tDate";
-        Text [ en-US ] = "Signer\tDigital ID Issued by\tDate";
+        Text = "\tSigner\tDigital ID Issued by\tDate";
+        Text [ en-US ] = "\tSigner\tDigital ID Issued by\tDate";
+    };
+    FixedImage IMG_STATE_VALID
+    {
+        Pos = MAP_APPFONT( DS_COL_0, DS_ROW_2A );
+        Size = MAP_APPFONT( IMG1_WIDTH, IMG1_HEIGHT );
+        Fixed = Image
+        {
+            ImageBitmap = Bitmap { File = "signet_11x16.png"; };
+            MaskColor = STD_MASKCOLOR;
+        };
+    };
+    FixedText FI_STATE_VALID
+    {
+        Pos = MAP_APPFONT( DS_COL_0, DS_ROW_2A );
+        Size = MAP_APPFONT( DS_COL_7-DS_COL_0, RSC_CD_FIXEDTEXT_HEIGHT );
+        Hide = TRUE;
+        Text = "Die Signaturen in diesem Dokument sind gültig.";
+        Text [ en-US ] = "The signatures in this document are valid";
+    };
+    FixedImage IMG_STATE_BROKEN
+    {
+        Pos = MAP_APPFONT( DS_COL_0, DS_ROW_2A );
+        Size = MAP_APPFONT( IMG1_WIDTH, IMG1_HEIGHT );
+        Fixed = Image
+        {
+            ImageBitmap = Bitmap { File = "caution_11x16.png"; };
+            MaskColor = STD_MASKCOLOR;
+        };
+    };
+    FixedText FI_STATE_BROKEN
+    {
+        Pos = MAP_APPFONT( DS_COL_0, DS_ROW_2A );
+        Size = MAP_APPFONT( DS_COL_7-DS_COL_0, RSC_CD_FIXEDTEXT_HEIGHT );
+        Hide = TRUE;
+        Text = "Die Signaturen in diesem Dokument sind ungültig.";
+        Text [ en-US ] = "The signatures in this document are invalid";
     };
     PushButton BTN_VIEWCERT
     {
         Pos = MAP_APPFONT( DS_COL_1, DS_ROW_3 );
         Size = MAP_APPFONT( DS_COL_2-DS_COL_1, RSC_CD_PUSHBUTTON_HEIGHT );
-//      Text = "Zertifikat anzeigen...";
-        Text = "View Certificate...";
+        Text = "Zertifikat anzeigen...";
         Text [ en-US ] = "View Certificate...";
     };
     PushButton BTN_ADDCERT
     {
         Pos = MAP_APPFONT( DS_COL_3, DS_ROW_3 );
         Size = MAP_APPFONT( DS_COL_4-DS_COL_3, RSC_CD_PUSHBUTTON_HEIGHT );
-//      Text = "Hinzufügen...";
-        Text = "Add...";
+        Text = "Hinzufügen...";
         Text [ en-US ] = "Add...";
     };
     PushButton BTN_REMOVECERT
     {
         Pos = MAP_APPFONT( DS_COL_5, DS_ROW_3 );
         Size = MAP_APPFONT( DS_COL_6-DS_COL_5, RSC_CD_PUSHBUTTON_HEIGHT );
-//      Text = "Entfernen";
-        Text = "Remove";
+        Text = "Entfernen";
         Text [ en-US ] = "Remove";
     };
     FixedLine FL_BOTTOM_SEP

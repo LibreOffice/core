@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resourcemanager.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-26 07:29:31 $
+ *  last change: $Author: gt $ $Date: 2004-07-27 07:57:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,8 @@
 #include "resourcemanager.hxx"
 
 #include <vcl/svapp.hxx>
+#include <vcl/fixed.hxx>
+#include <svtools/stdctrl.hxx>
 #include <svtools/solar.hrc>
 
 
@@ -250,6 +252,43 @@ namespace XmlSec
         }
 
         return aStr;
+    }
+
+    long ShrinkToFitWidth( Control& _rCtrl, long _nOffs )
+    {
+        long    nWidth = _rCtrl.GetTextWidth( _rCtrl.GetText() );
+        Size    aSize( _rCtrl.GetSizePixel() );
+        nWidth += _nOffs;
+        aSize.Width() = nWidth;
+        _rCtrl.SetSizePixel( aSize );
+        return nWidth;
+    }
+
+    void AlignAfterImage( const FixedImage& _rImage, Control& _rCtrl, long _nXOffset )
+    {
+        Point   aPos( _rImage.GetPosPixel() );
+        Size    aSize( _rImage.GetSizePixel() );
+        long    n = aPos.X();
+        n += aSize.Width();
+        n += _nXOffset;
+        aPos.X() = n;
+        n = aPos.Y();
+        n += aSize.Height() / 2;                    // y-position is in the middle of the image
+        n -= _rCtrl.GetSizePixel().Height() / 2;    // center Control
+        aPos.Y() = n;
+        _rCtrl.SetPosPixel( aPos );
+    }
+
+    void AlignAfterImage( const FixedImage& _rImage, FixedInfo& _rFI, long _nXOffset )
+    {
+        AlignAfterImage( _rImage, static_cast< Control& >( _rFI ), _nXOffset );
+        ShrinkToFitWidth( _rFI );
+    }
+
+    void AlignAndFitImageAndControl( FixedImage& _rImage, FixedInfo& _rFI, long _nXOffset )
+    {
+        _rImage.SetSizePixel( _rImage.GetImage().GetSizePixel() );
+        AlignAfterImage( _rImage, _rFI, _nXOffset );
     }
 }
 

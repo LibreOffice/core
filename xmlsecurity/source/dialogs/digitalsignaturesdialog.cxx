@@ -2,9 +2,9 @@
  *
  *  $RCSfile: digitalsignaturesdialog.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-26 15:53:17 $
+ *  last change: $Author: gt $ $Date: 2004-07-27 07:57:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,17 @@ using namespace ::com::sun::star::security;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star;
 
+void DigitalSignaturesDialog::SetState( SigState _eState )
+{
+    bool    bShowValid = _eState == S_VALID;
+    bool    bShowInvalid = _eState == S_BROKEN;
+
+    maSigsValidImg.Show( bShowValid );
+    maSigsValidFI.Show( bShowValid );
+    maSigsInvalidImg.Show( bShowInvalid );
+    maSigsInvalidFI.Show( bShowInvalid );
+}
+
 DigitalSignaturesDialog::DigitalSignaturesDialog( Window* pParent, uno::Reference< lang::XMultiServiceFactory >& rxMSF, DocumentSignatureMode eMode, sal_Bool bReadOnly )
     :ModalDialog        ( pParent, XMLSEC_RES( RID_XMLSECDLG_DIGSIG ) )
     ,maSignatureHelper  ( rxMSF )
@@ -107,6 +118,10 @@ DigitalSignaturesDialog::DigitalSignaturesDialog( Window* pParent, uno::Referenc
     ,maHintBasicFT      ( this, ResId( FT_HINT_BASIC ) )
     ,maHintPackageFT    ( this, ResId( FT_HINT_PACK ) )
     ,maSignaturesLB     ( this, ResId( LB_SIGNATURES ) )
+    ,maSigsValidImg     ( this, ResId( IMG_STATE_VALID ) )
+    ,maSigsValidFI      ( this, ResId( FI_STATE_VALID ) )
+    ,maSigsInvalidImg   ( this, ResId( IMG_STATE_BROKEN ) )
+    ,maSigsInvalidFI    ( this, ResId( FI_STATE_BROKEN ) )
     ,maViewBtn          ( this, ResId( BTN_VIEWCERT ) )
     ,maAddBtn           ( this, ResId( BTN_ADDCERT ) )
     ,maRemoveBtn        ( this, ResId( BTN_REMOVECERT ) )
@@ -115,11 +130,14 @@ DigitalSignaturesDialog::DigitalSignaturesDialog( Window* pParent, uno::Referenc
     ,maCancelBtn        ( this, ResId( BTN_CANCEL ) )
     ,maHelpBtn          ( this, ResId( BTN_HELP ) )
 {
-    static long nTabs[] = { 3, 0, 32*DS_LB_WIDTH/100, 64*DS_LB_WIDTH/100 };
+    static long nTabs[] = { 4, 0, 8*DS_LB_WIDTH/100, 36*DS_LB_WIDTH/100, 74*DS_LB_WIDTH/100 };
     maSignaturesLB.SetTabs( &nTabs[ 0 ] );
     maSignaturesLB.InsertHeaderEntry( String( ResId( STR_HEADERBAR ) ) );
 
     FreeResource();
+
+    SetState( S_NONE );     // first hide state image & info
+
     mbVerifySignatures = true;
     mbSignaturesChanged = false;
 
@@ -142,6 +160,10 @@ DigitalSignaturesDialog::DigitalSignaturesDialog( Window* pParent, uno::Referenc
         case SignatureModeMacros:           maHintBasicFT.Show();   break;
         case SignatureModePackage:          maHintPackageFT.Show(); break;
     }
+
+    // adjust fixed text to images
+    XmlSec::AlignAndFitImageAndControl( maSigsValidImg, maSigsValidFI, 5 );
+    XmlSec::AlignAndFitImageAndControl( maSigsInvalidImg, maSigsInvalidFI, 5 );
 }
 
 DigitalSignaturesDialog::~DigitalSignaturesDialog()
@@ -358,7 +380,10 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
     uno::Reference< ::com::sun::star::security::XCertificate > xCert;
 
     String  aCN_Id( String::CreateFromAscii( "CN" ) );
+    String  aNullStr;
     int     nInfos = aCurrentSignatureInformations.size();
+    int     nValidCnt = 0;
+    bool    bValid;
     for( int n = 0; n < nInfos; ++n )
     {
         const SignatureInformation& rInfo = aCurrentSignatureInformations[n];
@@ -377,7 +402,6 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
         {
             aSubject = XmlSec::GetContentPart( xCert->getSubjectName(), aCN_Id );
             aIssuer = XmlSec::GetContentPart( rInfo.ouX509IssuerName, aCN_Id );
-//          aDateTimeStr = XmlSec::GetDateString( xCert->getNotAfter() );
             aDateTimeStr = XmlSec::GetDateTimeString( rInfo.ouDate, rInfo.ouTime );
         }
         else
@@ -386,13 +410,24 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
             aSubject = String::CreateFromAscii( "ERROR getting certificate!" );
 #endif
         }
-        SvLBoxEntry* pEntry = maSignaturesLB.InsertEntry( aSubject );
-        maSignaturesLB.SetEntryText( aIssuer, pEntry, 1 );
-        maSignaturesLB.SetEntryText( aDateTimeStr, pEntry, 2 );
+
+        bValid = true;
+        if( bValid )
+            ++nValidCnt;
+
+        Image           aImg( bValid? maSigsValidImg.GetImage() : maSigsInvalidImg.GetImage() );
+        SvLBoxEntry*    pEntry = maSignaturesLB.InsertEntry( aNullStr, aImg, aImg );
+        maSignaturesLB.SetEntryText( aSubject, pEntry, 1 );
+        maSignaturesLB.SetEntryText( aIssuer, pEntry, 2 );
+        maSignaturesLB.SetEntryText( aDateTimeStr, pEntry, 3 );
         pEntry->SetUserData( ( void* ) n );     // missuse user data as index
     }
 
-//  maViewBtn.Disable();
+    bValid = ( nValidCnt == nInfos );
+    maSigsInvalidImg.SetImage( bValid? maSigsValidImg.GetImage() : maSigsInvalidImg.GetImage() );
+
+    SetState( bValid? S_VALID : S_BROKEN );
+
     SignatureHighlightHdl( NULL );
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialogs.hrc,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-22 09:43:23 $
+ *  last change: $Author: gt $ $Date: 2004-07-27 07:57:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,11 @@
 #define FT_HINT_DOC                     4
 #define FT_HINT_BASIC                   5
 #define FT_HINT_PACK                    6
+#define IMG_STATE_VALID                 7
+#define FI_STATE_VALID                  8
+#define IMG_STATE_BROKEN                9
+#define FI_STATE_BROKEN                 10
+
 
 //#define DS_WIDTH                      DLGS_WIDTH
 //#define DS_HEIGHT                     DLGS_HEIGHT
@@ -150,7 +155,8 @@
 #define DS_ROW_5                        DLGS_BOTTOM_FL_Y(DS_HEIGHT)
 #define DS_ROW_4                        DLGS_BOTTOM_LAST_CTRL_L(DS_HEIGHT)
 #define DS_ROW_3                        (DS_ROW_4-RSC_CD_PUSHBUTTON_HEIGHT)
-#define DS_ROW_2                        (DS_ROW_3-RSC_SP_CTRL_Y)
+#define DS_ROW_2A                       (DS_ROW_3-RSC_CD_FIXEDTEXT_HEIGHT-RSC_SP_CTRL_Y)
+#define DS_ROW_2                        (DS_ROW_2A-RSC_SP_CTRL_GROUP_Y)
 
 #define DS_LB_WIDTH                     (DS_COL_7-DS_COL_0)
 

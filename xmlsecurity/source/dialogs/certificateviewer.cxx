@@ -2,9 +2,9 @@
  *
  *  $RCSfile: certificateviewer.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-26 07:29:31 $
+ *  last change: $Author: gt $ $Date: 2004-07-27 07:57:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,51 +87,17 @@ using namespace ::com::sun::star::uno;
 namespace
 {
     void ShrinkToFit( FixedImage& _rImage );
-    long ShrinkToFitWidth( Control& _rCtrl, long _nOffs = 0 );      // return = new width
     void AdjustPosAndSize( Control& _rCtrl, Point& _rStartIn_EndOut, long _nXOffset = 0 );
-    void AlignAfterImage( const FixedImage& _rImage, Control& _rCtrl, long _nXOffset = 0 );
-    void AlignAfterImage( const FixedImage& _rImage, FixedInfo& _rFI, long _nXOffset = 0 );
 
     void ShrinkToFit( FixedImage& _rImg )
     {
         _rImg.SetSizePixel( _rImg.GetImage().GetSizePixel() );
     }
 
-    long ShrinkToFitWidth( Control& _rCtrl, long _nOffs )
-    {
-        long    nWidth = _rCtrl.GetTextWidth( _rCtrl.GetText() );
-        Size    aSize( _rCtrl.GetSizePixel() );
-        nWidth += _nOffs;
-        aSize.Width() = nWidth;
-        _rCtrl.SetSizePixel( aSize );
-        return nWidth;
-    }
-
     void AdjustPosAndSize( Control& _rCtrl, Point& _rStartIn_EndOut, long _nOffs )
     {
         _rCtrl.SetPosPixel( _rStartIn_EndOut );
-        _rStartIn_EndOut.X() += ShrinkToFitWidth( _rCtrl, _nOffs );
-    }
-
-    void AlignAfterImage( const FixedImage& _rImage, Control& _rCtrl, long _nXOffset )
-    {
-        Point   aPos( _rImage.GetPosPixel() );
-        Size    aSize( _rImage.GetSizePixel() );
-        long    n = aPos.X();
-        n += aSize.Width();
-        n += _nXOffset;
-        aPos.X() = n;
-        n = aPos.Y();
-        n += aSize.Height() / 2;                    // y-position is in the middle of the image
-        n -= _rCtrl.GetSizePixel().Height() / 2;    // center Control
-        aPos.Y() = n;
-        _rCtrl.SetPosPixel( aPos );
-    }
-
-    void AlignAfterImage( const FixedImage& _rImage, FixedInfo& _rFI, long _nXOffset )
-    {
-        AlignAfterImage( _rImage, static_cast< Control& >( _rFI ), _nXOffset );
-        ShrinkToFitWidth( _rFI );
+        _rStartIn_EndOut.X() += XmlSec::ShrinkToFitWidth( _rCtrl, _nOffs );
     }
 };
 
@@ -243,8 +209,8 @@ CertificateViewerGeneralTP::CertificateViewerGeneralTP( Window* _pParent, Certif
     // adjust position of fixed text depending on image sizes
     ShrinkToFit( maCertImg );
     ShrinkToFit( maKeyImg );
-    AlignAfterImage( maCertImg, maCertInfoFI, 12 );
-    AlignAfterImage( maKeyImg, maHintCorrespPrivKeyFI, 12 );
+    XmlSec::AlignAfterImage( maCertImg, maCertInfoFI, 12 );
+    XmlSec::AlignAfterImage( maKeyImg, maHintCorrespPrivKeyFI, 12 );
 
     // Check if we have the private key...
     long nCertificateCharacters = _pDlg->mxSecurityEnvironment->getCertificateCharacters( xCert );
