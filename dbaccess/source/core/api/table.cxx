@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-28 07:47:23 $
+ *  last change: $Author: oj $ $Date: 2001-10-12 11:58:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -740,9 +740,7 @@ Sequence< sal_Int8 > ODBTable::getUnoTunnelImplementationId()
 // -----------------------------------------------------------------------------
 Reference< XPropertySet > ODBTable::createEmptyObject()
 {
-    OTableColumnDescriptor* pRet = new OTableColumnDescriptor();
-    Reference< XPropertySet > xRet = pRet;
-    return xRet;
+    return new OTableColumnDescriptor();
 }
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------

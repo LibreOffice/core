@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-27 09:14:30 $
+ *  last change: $Author: oj $ $Date: 2001-10-12 11:58:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,20 +133,21 @@ namespace dbaccess
 class OEmptyCollection : public sdbcx::OCollection
 {
 protected:
-    virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException)
-    {
-    }
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > createObject(const ::rtl::OUString& _rName)
-    {
-        return ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed >();
-    }
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createEmptyObject()
-    {
-        return ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >();
-    }
+    virtual void impl_refresh() throw(RuntimeException);
+    virtual Reference< XNamed > createObject(const ::rtl::OUString& _rName);
 public:
     OEmptyCollection(::cppu::OWeakObject& _rParent,::osl::Mutex& _rMutex) : OCollection(_rParent,sal_True,_rMutex,::std::vector< ::rtl::OUString>()){}
 };
+// -----------------------------------------------------------------------------
+void OEmptyCollection::impl_refresh() throw(RuntimeException)
+{
+}
+// -----------------------------------------------------------------------------
+Reference< XNamed > OEmptyCollection::createObject(const ::rtl::OUString& _rName)
+{
+    return Reference< XNamed >();
+}
+// -----------------------------------------------------------------------------
 
 // =========================================================================
 // = ORowSetBase

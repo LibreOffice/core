@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CRowSetDataColumn.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-20 12:59:25 $
+ *  last change: $Author: oj $ $Date: 2001-10-12 11:58:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,8 +266,25 @@ void ORowSetDataColumn::fireValueChange(const ORowSetValue& _rOldValue)
         fire(&nHandle, &aNew, &m_aOldValue, 1, sal_False );
     }
 }
-
-// -------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+DBG_NAME(ORowSetDataColumns )
+ORowSetDataColumns::ORowSetDataColumns(
+                sal_Bool _bCase,
+                const ::vos::ORef< ::connectivity::OSQLColumns>& _rColumns,
+                ::cppu::OWeakObject& _rParent,
+                ::osl::Mutex& _rMutex,
+                const ::std::vector< ::rtl::OUString> &_rVector
+                ) : connectivity::sdbcx::OCollection(_rParent,_bCase,_rMutex,_rVector)
+                ,m_aColumns(_rColumns)
+{
+    DBG_CTOR(ORowSetDataColumns ,NULL);
+}
+// -----------------------------------------------------------------------------
+ORowSetDataColumns::~ORowSetDataColumns()
+{
+    DBG_DTOR(ORowSetDataColumns ,NULL);
+}
+// -----------------------------------------------------------------------------
 Reference< ::com::sun::star::container::XNamed > ORowSetDataColumns::createObject(const ::rtl::OUString& _rName)
 {
     Reference< ::com::sun::star::container::XNamed > xNamed;
@@ -292,6 +309,10 @@ void ORowSetDataColumns::assign(const ::vos::ORef< ::connectivity::OSQLColumns>&
 {
     m_aColumns = _rColumns;
     reFill(_rVector);
+}
+// -----------------------------------------------------------------------------
+void ORowSetDataColumns::impl_refresh() throw(::com::sun::star::uno::RuntimeException)
+{
 }
 // -----------------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CIndexes.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-15 08:29:16 $
+ *  last change: $Author: oj $ $Date: 2001-10-12 11:58:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,10 +166,8 @@ Reference< XPropertySet > OIndexes::createEmptyObject()
 }
 // -------------------------------------------------------------------------
 // XAppend
-void SAL_CALL OIndexes::appendByDescriptor( const Reference< XPropertySet >& descriptor ) throw(SQLException, ElementExistException, RuntimeException)
+void OIndexes::appendObject( const Reference< XPropertySet >& descriptor )
 {
-    ::osl::MutexGuard aGuard(m_rMutex);
-
     if(m_xIndexes.is())
     {
         Reference<XAppend> xData( m_xIndexes,UNO_QUERY);
@@ -242,33 +240,31 @@ void SAL_CALL OIndexes::appendByDescriptor( const Reference< XPropertySet >& des
 
             Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
             xStmt->execute(aSql);
+            ::comphelper::disposeComponent(xStmt);
         }
     }
-    OCollection_TYPE::appendByDescriptor(descriptor);
 }
 // -------------------------------------------------------------------------
 // XDrop
-void SAL_CALL OIndexes::dropByName( const ::rtl::OUString& elementName ) throw(SQLException, NoSuchElementException, RuntimeException)
+void OIndexes::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
 {
-    ::osl::MutexGuard aGuard(m_rMutex);
     if(m_xIndexes.is())
     {
         Reference<XDrop> xData( m_xIndexes,UNO_QUERY);
-        xData->dropByName(elementName);
+        if(xData.is())
+            xData->dropByName(_sElementName);
     }
     else
     {
-        ObjectMap::iterator aIter = m_aNameMap.find(elementName);
-        if( aIter == m_aNameMap.end())
-            throw NoSuchElementException(elementName,*this);
+        ObjectMap::iterator aIter = m_aNameMap.find(_sElementName);
 
         if(!m_pTable->isNew())
         {
             ::rtl::OUString aName,aSchema;
-            sal_Int32 nLen = elementName.indexOf('.');
+            sal_Int32 nLen = _sElementName.indexOf('.');
             if(nLen != -1)
-                aSchema = elementName.copy(0,nLen);
-            aName   = elementName.copy(nLen+1);
+                aSchema = _sElementName.copy(0,nLen);
+            aName   = _sElementName.copy(nLen+1);
 
             ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("DROP INDEX ");
             ::rtl::OUString aQuote  = m_pTable->getMetaData()->getIdentifierQuoteString(  );
@@ -292,24 +288,6 @@ void SAL_CALL OIndexes::dropByName( const ::rtl::OUString& elementName ) throw(S
             xStmt->execute(aSql);
         }
     }
-    OCollection_TYPE::dropByName(elementName);
-}
-// -------------------------------------------------------------------------
-void SAL_CALL OIndexes::dropByIndex( sal_Int32 index ) throw(SQLException, IndexOutOfBoundsException, RuntimeException)
-{
-    ::osl::MutexGuard aGuard(m_rMutex);
-    if(m_xIndexes.is())
-    {
-        Reference<XDrop> xData( m_xIndexes,UNO_QUERY);
-        xData->dropByIndex(index);
-        OCollection_TYPE::dropByIndex(index);
-    }
-    else
-    {
-        if (index < 0 || index >= getCount())
-            throw IndexOutOfBoundsException();
-        dropByName(m_aElements[index]->first);
-    }
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OIndexes::disposing(void)
@@ -320,5 +298,13 @@ void SAL_CALL OIndexes::disposing(void)
         OCollection_TYPE::disposing();
 }
 // -----------------------------------------------------------------------------
+Reference< XNamed > OIndexes::cloneObject(const Reference< XPropertySet >& _xDescriptor)
+{
+    Reference< XNamed > xName(_xDescriptor,UNO_QUERY);
+    OSL_ENSURE(xName.is(),"Must be a XName interface here !");
+    return xName.is() ? createObject(xName->getName()) : Reference< XNamed >();
+}
+// -----------------------------------------------------------------------------
+
 
 

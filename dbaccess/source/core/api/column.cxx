@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-20 12:56:18 $
+ *  last change: $Author: oj $ $Date: 2001-10-12 11:58:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -996,10 +996,8 @@ Sequence< Type > SAL_CALL OColumns::getTypes(  ) throw(RuntimeException)
 }
 // -------------------------------------------------------------------------
 // XAppend
-void SAL_CALL OColumns::appendByDescriptor( const Reference< XPropertySet >& descriptor ) throw(SQLException, ElementExistException, RuntimeException)
+void OColumns::appendObject( const Reference< XPropertySet >& descriptor )
 {
-    ::osl::MutexGuard aGuard(m_rMutex);
-
     Reference<XAppend> xAppend(m_xDrvColumns,UNO_QUERY);
     if(xAppend.is())
     {
@@ -1080,19 +1078,15 @@ void SAL_CALL OColumns::appendByDescriptor( const Reference< XPropertySet >& des
     }
     else if(m_pTable && !m_pTable->isNew() && !m_bAddColumn)
         throw SQLException();
-
-    OColumns_BASE::appendByDescriptor(descriptor);
 }
 // -------------------------------------------------------------------------
 // XDrop
-void SAL_CALL OColumns::dropByName( const ::rtl::OUString& elementName ) throw(SQLException, NoSuchElementException, RuntimeException)
+void OColumns::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
 {
-    ::osl::MutexGuard aGuard(m_rMutex);
-
     Reference<XDrop> xDrop(m_xDrvColumns,UNO_QUERY);
     if(xDrop.is())
     {
-        xDrop->dropByName(elementName);
+        xDrop->dropByName(_sElementName);
     }
     else if(m_pTable && !m_pTable->isNew() && m_bDropColumn)
     {
@@ -1112,23 +1106,25 @@ void SAL_CALL OColumns::dropByName( const ::rtl::OUString& elementName ) throw(S
 
         aSql += aComposedName;
         aSql += ::rtl::OUString::createFromAscii(" DROP ");
-        aSql += ::dbtools::quoteName( aQuote,elementName);
+        aSql += ::dbtools::quoteName( aQuote,_sElementName);
 
         Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
         if(xStmt.is())
             xStmt->execute(aSql);
+        ::comphelper::disposeComponent(xStmt);
     }
     else if(m_pTable && !m_pTable->isNew() && !m_bDropColumn)
         throw SQLException();
-
-    OColumns_BASE::dropByName(elementName);
 }
 // -------------------------------------------------------------------------
-void SAL_CALL OColumns::dropByIndex( sal_Int32 index ) throw(SQLException, IndexOutOfBoundsException, RuntimeException)
+Reference< XNamed > OColumns::cloneObject(const Reference< XPropertySet >& _xDescriptor)
 {
-    ::osl::MutexGuard aGuard(m_rMutex);
-    if (index < 0 || index >= getCount())
-        throw IndexOutOfBoundsException();
-
-    dropByName(m_aElements[index]->first);
+    Reference<XPropertySet> xProp = createEmptyObject();
+    Reference< XNamed > xName(xProp,UNO_QUERY);
+    OSL_ENSURE(xName.is(),"Must be a XName interface here !");
+    if(xProp.is())
+        ::comphelper::copyProperties(_xDescriptor,xProp);
+    return xName;
 }
+// -----------------------------------------------------------------------------
+

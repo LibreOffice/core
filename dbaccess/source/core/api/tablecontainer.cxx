@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-08 07:26:26 $
+ *  last change: $Author: oj $ $Date: 2001-10-12 11:58:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -551,15 +551,11 @@ Reference< XPropertySet > OTableContainer::createEmptyObject()
 }
 // -----------------------------------------------------------------------------
 // XAppend
-void SAL_CALL OTableContainer::appendByDescriptor( const Reference< XPropertySet >& descriptor ) throw(SQLException, ElementExistException, RuntimeException)
+void OTableContainer::appendObject( const Reference< XPropertySet >& descriptor )
 {
-    ::osl::MutexGuard aGuard(m_rMutex);
     // append the new table with a create stmt
     ::rtl::OUString aName = getString(descriptor->getPropertyValue(PROPERTY_NAME));
-    ObjectMap::iterator aIter = m_aNameMap.find(aName);
-    if( aIter != m_aNameMap.end())
-        throw ElementExistException(aName,*this);
-    else if(m_xMasterTables.is() && m_xMasterTables->hasByName(aName))
+    if(m_xMasterTables.is() && m_xMasterTables->hasByName(aName))
     {
         String sMessage(DBACORE_RESSTRING(RID_STR_TABLE_IS_FILTERED));
         sMessage.SearchAndReplaceAscii("$name$", aName);
@@ -778,7 +774,7 @@ void SAL_CALL OTableContainer::appendByDescriptor( const Reference< XPropertySet
         Reference< XStatement > xStmt = m_xConnection->createStatement(  );
         if(xStmt.is())
             xStmt->execute(aSql);
-        OCollection::appendByDescriptor(descriptor);
+        ::comphelper::disposeComponent(xStmt);
     }
     // create a new config entry
     if(m_aTablesConfig.isValid())
@@ -817,18 +813,16 @@ void SAL_CALL OTableContainer::appendByDescriptor( const Reference< XPropertySet
 }
 // -------------------------------------------------------------------------
 // XDrop
-void SAL_CALL OTableContainer::dropByName( const ::rtl::OUString& elementName ) throw(SQLException, NoSuchElementException, RuntimeException)
+void OTableContainer::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
 {
-    ::osl::MutexGuard aGuard(m_rMutex);
-    ObjectMap::iterator aIter = m_aNameMap.find(elementName);
-    if( aIter == m_aNameMap.end())
-        throw NoSuchElementException(elementName,*this);
-
     Reference< XDrop > xDrop(m_xMasterTables,UNO_QUERY);
     if(xDrop.is())
-        xDrop->dropByName(elementName);
+        xDrop->dropByName(_sElementName);
     else
     {
+        ObjectIter aIter = m_aElements[_nPos];
+        if(!aIter->second.is()) // we want to drop a object which isn't loaded yet so we must load it
+            aIter->second = createObject(_sElementName);
         ::rtl::OUString sCatalog,sSchema,sTable,sComposedName;
 
         Reference<XPropertySet> xTable(aIter->second.get(),UNO_QUERY);
@@ -851,20 +845,10 @@ void SAL_CALL OTableContainer::dropByName( const ::rtl::OUString& elementName ) 
         Reference< XStatement > xStmt = m_xConnection->createStatement(  );
         if(xStmt.is())
             xStmt->execute(aSql);
+        ::comphelper::disposeComponent(xStmt);
 
-        OCollection::dropByName(elementName);
     }
     // we don't need to call dropByName when we have xMasterTables
-
-}
-// -----------------------------------------------------------------------------
-void SAL_CALL OTableContainer::dropByIndex( sal_Int32 index ) throw(SQLException, IndexOutOfBoundsException, RuntimeException)
-{
-    ::osl::MutexGuard aGuard(m_rMutex);
-    if (index < 0 || index >= getCount())
-        throw IndexOutOfBoundsException();
-
-    dropByName((*m_aElements[index]).first);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OTableContainer::acquire() throw(RuntimeException)
@@ -884,10 +868,7 @@ void SAL_CALL OTableContainer::elementInserted( const ContainerEvent& Event ) th
     if((Event.Accessor >>= sName) && !hasByName(sName))
     {
         if(!m_xMasterTables.is() || m_xMasterTables->hasByName(sName))
-        {
-            Reference<XPropertySet> xProp(createObject(sName),UNO_QUERY);
-            OCollection::appendByDescriptor(xProp);
-        }
+            insertElement(sName,createObject(sName));
     }
 }
 // -----------------------------------------------------------------------------
@@ -898,9 +879,7 @@ void SAL_CALL OTableContainer::elementRemoved( const ContainerEvent& Event ) thr
     if((Event.Accessor >>= sName) && hasByName(sName))
     {
         if(!m_xMasterTables.is() || !m_xMasterTables->hasByName(sName))
-        {
-            OCollection::dropByName(sName);
-        }
+            ;
     }
 }
 // -----------------------------------------------------------------------------
@@ -984,6 +963,13 @@ void OTableContainer::setNewConfigNode(const ::utl::OConfigurationTreeRoot& _aCo
             }
         }
     }
+}
+// -----------------------------------------------------------------------------
+Reference< XNamed > OTableContainer::cloneObject(const Reference< XPropertySet >& _xDescriptor)
+{
+    Reference< XNamed > xName(_xDescriptor,UNO_QUERY);
+    OSL_ENSURE(xName.is(),"Must be a XName interface here !");
+    return xName.is() ? createObject(xName->getName()) : Reference< XNamed >();
 }
 // -----------------------------------------------------------------------------
 

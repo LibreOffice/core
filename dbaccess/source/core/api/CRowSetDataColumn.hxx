@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CRowSetDataColumn.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:25:57 $
+ *  last change: $Author: oj $ $Date: 2001-10-12 11:58:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,11 +131,7 @@ namespace dbaccess
         ::vos::ORef< ::connectivity::OSQLColumns> m_aColumns;
     protected:
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > createObject(const ::rtl::OUString& _rName);
-        virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException) {}
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createEmptyObject()
-        {
-            return NULL;
-        }
+        virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException);
     public:
         ORowSetDataColumns(
                         sal_Bool _bCase,
@@ -143,12 +139,8 @@ namespace dbaccess
                         ::cppu::OWeakObject& _rParent,
                         ::osl::Mutex& _rMutex,
                         const ::std::vector< ::rtl::OUString> &_rVector
-                        ) : connectivity::sdbcx::OCollection(_rParent,_bCase,_rMutex,_rVector)
-                        ,m_aColumns(_rColumns)
-        {
-        }
-        ~ORowSetDataColumns()
-        {}
+                        );
+        virtual ~ORowSetDataColumns();
         // only the name is identical to ::cppu::OComponentHelper
         virtual void SAL_CALL disposing(void);
         void assign(const ::vos::ORef< ::connectivity::OSQLColumns>& _rColumns,const ::std::vector< ::rtl::OUString> &_rVector);

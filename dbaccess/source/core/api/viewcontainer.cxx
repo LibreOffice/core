@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontainer.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-08 07:26:26 $
+ *  last change: $Author: oj $ $Date: 2001-10-12 11:58:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -349,14 +349,10 @@ Reference< XPropertySet > OViewContainer::createEmptyObject()
 }
 // -----------------------------------------------------------------------------
 // XAppend
-void SAL_CALL OViewContainer::appendByDescriptor( const Reference< XPropertySet >& descriptor ) throw(SQLException, ElementExistException, RuntimeException)
+void OViewContainer::appendObject( const Reference< XPropertySet >& descriptor )
 {
-    ::osl::MutexGuard aGuard(m_rMutex);
     // append the new table with a create stmt
     ::rtl::OUString aName = getString(descriptor->getPropertyValue(PROPERTY_NAME));
-    ObjectMap::iterator aIter = m_aNameMap.find(aName);
-    if( aIter != m_aNameMap.end() || (m_xMasterViews.is() && m_xMasterViews->hasByName(aName)))
-        throw ElementExistException(aName,*this);
 
     Reference<XAppend> xAppend(m_xMasterViews,UNO_QUERY);
     Reference< XPropertySet > xProp = descriptor;
@@ -392,24 +388,21 @@ void SAL_CALL OViewContainer::appendByDescriptor( const Reference< XPropertySet 
         Reference< XStatement > xStmt = m_xConnection->createStatement(  );
         if(xStmt.is())
             xStmt->execute(aSql);
+        ::comphelper::disposeComponent(xStmt);
     }
-
-    OCollection::appendByDescriptor(xProp);
 }
 // -------------------------------------------------------------------------
 // XDrop
-void SAL_CALL OViewContainer::dropByName( const ::rtl::OUString& elementName ) throw(SQLException, NoSuchElementException, RuntimeException)
+void OViewContainer::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
 {
-    ::osl::MutexGuard aGuard(m_rMutex);
-    ObjectMap::iterator aIter = m_aNameMap.find(elementName);
-    if( aIter == m_aNameMap.end())
-        throw NoSuchElementException(elementName,*this);
-
     Reference< XDrop > xDrop(m_xMasterViews,UNO_QUERY);
     if(xDrop.is())
-        xDrop->dropByName(elementName);
+        xDrop->dropByName(_sElementName);
     else
     {
+        ObjectIter aIter = m_aElements[_nPos];
+        if(!aIter->second.is()) // we want to drop a object which isn't loaded yet so we must load it
+            aIter->second = createObject(_sElementName);
         ::rtl::OUString sCatalog,sSchema,sTable,sComposedName;
 
         Reference<XPropertySet> xTable(aIter->second.get(),UNO_QUERY);
@@ -432,17 +425,8 @@ void SAL_CALL OViewContainer::dropByName( const ::rtl::OUString& elementName ) t
         Reference< XStatement > xStmt = m_xConnection->createStatement(  );
         if(xStmt.is())
             xStmt->execute(aSql);
+        ::comphelper::disposeComponent(xStmt);
     }
-    OCollection::dropByName(elementName);
-}
-// -----------------------------------------------------------------------------
-void SAL_CALL OViewContainer::dropByIndex( sal_Int32 index ) throw(SQLException, IndexOutOfBoundsException, RuntimeException)
-{
-    ::osl::MutexGuard aGuard(m_rMutex);
-    if (index < 0 || index >= getCount())
-        throw IndexOutOfBoundsException();
-
-    dropByName((*m_aElements[index]).first);
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL OViewContainer::elementInserted( const ContainerEvent& Event ) throw (RuntimeException)
@@ -450,18 +434,11 @@ void SAL_CALL OViewContainer::elementInserted( const ContainerEvent& Event ) thr
     ::osl::MutexGuard aGuard(m_rMutex);
     ::rtl::OUString sName;
     if((Event.Accessor >>= sName) && !hasByName(sName) && m_xMasterViews.is() && m_xMasterViews->hasByName(sName))
-    {
-        Reference<XPropertySet> xProp(createObject(sName),UNO_QUERY);
-        OCollection::appendByDescriptor(xProp);
-    }
+        insertElement(sName,createObject(sName));
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL OViewContainer::elementRemoved( const ContainerEvent& Event ) throw (RuntimeException)
 {
-    ::osl::MutexGuard aGuard(m_rMutex);
-    ::rtl::OUString sName;
-    if((Event.Accessor >>= sName) && hasByName(sName) && m_xMasterViews.is() && !m_xMasterViews->hasByName(sName))
-        OCollection::dropByName(sName);
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL OViewContainer::disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException)
@@ -470,6 +447,13 @@ void SAL_CALL OViewContainer::disposing( const ::com::sun::star::lang::EventObje
 // -----------------------------------------------------------------------------
 void SAL_CALL OViewContainer::elementReplaced( const ContainerEvent& Event ) throw (RuntimeException)
 {
+}
+// -----------------------------------------------------------------------------
+Reference< XNamed > OViewContainer::cloneObject(const Reference< XPropertySet >& _xDescriptor)
+{
+    Reference< XNamed > xName(_xDescriptor,UNO_QUERY);
+    OSL_ENSURE(xName.is(),"Must be a XName interface here !");
+    return xName.is() ? createObject(xName->getName()) : Reference< XNamed >();
 }
 // -----------------------------------------------------------------------------
 
