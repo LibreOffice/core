@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databasedocument.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 14:43:36 $
+ *  last change: $Author: rt $ $Date: 2004-12-03 14:34:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,20 +152,41 @@ void SAL_CALL ODatabaseSource::removeEventListener( const Reference< XEventListe
     OSubComponent::removeEventListener(_xListener);
 }
 // -----------------------------------------------------------------------------
+void ODatabaseSource::disposeStorages() SAL_THROW(())
+{
+    m_bDisposingSubStorages = sal_True;
+
+    TStorages::iterator aEnd = m_aStorages.end();
+    for ( TStorages::iterator aIter = m_aStorages.begin();
+          aIter != aEnd ;
+          ++aIter
+        )
+    {
+        try
+        {
+            ::comphelper::disposeComponent( aIter->second );
+        }
+        catch( const Exception& )
+        {
+            OSL_ENSURE( sal_False, "ODatabaseSource::disposeStorages: caught an exception!" );
+        }
+    }
+    m_aStorages.clear();
+
+    m_bDisposingSubStorages = sal_False;
+}
+
+// -----------------------------------------------------------------------------
 // XModel
 // ATTENTION: The Application controller attaches the same resource to force a reload.
 sal_Bool SAL_CALL ODatabaseSource::attachResource( const ::rtl::OUString& _sURL, const Sequence< PropertyValue >& _aArguments ) throw (RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
-    TStorages::iterator aIter = m_aStorages.begin();
-    TStorages::iterator aEnd = m_aStorages.end();
     try
     {
         clearConnections();
-        for (; aIter != aEnd ; ++aIter)
-        {
-            ::comphelper::disposeComponent(aIter->second);
-        }
+        disposeStorages();
+
         ::comphelper::disposeComponent(m_xStorage);
         Reference< XNameAccess > xContainer = m_xForms;
         ::comphelper::disposeComponent(xContainer);
@@ -189,8 +210,6 @@ sal_Bool SAL_CALL ODatabaseSource::attachResource( const ::rtl::OUString& _sURL,
     {
         m_xStorage = NULL;
     }
-    m_aStorages.clear();
-
 
     m_bDocumentReadOnly = sal_False;
 
@@ -445,13 +464,8 @@ void SAL_CALL ODatabaseSource::storeAsURL( const ::rtl::OUString& sURL, const Se
                 xMyStorage->copyToStorage( xStorage );
             }
 
-            TStorages::iterator aIter = m_aStorages.begin();
-            TStorages::iterator aEnd = m_aStorages.end();
-            for (; aIter != aEnd ; ++aIter)
-            {
-                ::comphelper::disposeComponent(aIter->second);
-            }
-            m_aStorages.clear();
+            disposeStorages();
+
             m_xStorage = xStorage;
             ::comphelper::disposeComponent(xMyStorage);
 
