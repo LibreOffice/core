@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipFile.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2001-07-12 17:54:22 $
+ *  last change: $Author: jp $ $Date: 2001-07-30 09:48:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,11 +146,7 @@ OUString Impl_GetTempNameBaseDirectory()
     if (!aTempNameBase_Impl.getLength() )
         return OUString ();
     OUString aTmp;
-    #ifdef TF_FILEURL
     FileBase::getSystemPathFromFileURL( aTempNameBase_Impl, aTmp );
-#else
-    FileBase::getSystemPathFromNormalizedPath( aTempNameBase_Impl, aTmp );
-#endif
     return aTmp;
 }
 
@@ -171,11 +167,7 @@ OUString Impl_ConstructTempDir( const OUString* pParent )
 
             // test for valid filename
             OUString aRet;
-#ifdef TF_FILEURL
             FileBase::getFileURLFromSystemPath( getSystemPathFromFileURL( xManager, aTmp ), aRet );
-#else
-            FileBase::normalizePath( getSystemPathFromFileURL( xManager, aTmp ), aRet );
-#endif
             if ( aRet.getLength() )
             {
                 DirectoryItem aItem;
@@ -301,11 +293,7 @@ Reference < XInputStream > ZipFile::createFileStream(
     OUString sFileName;
     if ( sTempFileName.getLength() )
     {
-#ifdef TF_FILEURL
         FileBase::getSystemPathFromFileURL( sTempFileName, sFileName );
-#else
-        FileBase::getSystemPathFromNormalizedPath( sTempFileName, sFileName );
-#endif
     }
 
     if ( bMustDecrypt )
