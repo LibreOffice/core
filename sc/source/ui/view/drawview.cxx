@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-02 18:41:42 $
+ *  last change: $Author: nn $ $Date: 2001-10-05 14:33:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -681,7 +681,7 @@ BOOL ScDrawView::SelectObject( const String& rName )
                 SdrObject* pObject = aIter.Next();
                 while (pObject && !pFound)
                 {
-                    if (pObject->GetName() == rName)
+                    if ( ScDrawLayer::GetVisibleName( pObject ) == rName )
                     {
                         pFound = pObject;
                         nObjectTab = i;
@@ -731,7 +731,7 @@ String ScDrawView::GetSelectedChartName() const
         SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
         if (pObj->GetObjIdentifier() == OBJ_OLE2)
             if ( pDoc->IsChart(pObj) )
-                return pObj->GetName();
+                return ScDrawLayer::GetVisibleName( pObj );
     }
 
     return EMPTY_STRING;        // nichts gefunden

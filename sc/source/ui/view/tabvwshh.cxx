@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwshh.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-14 08:43:38 $
+ *  last change: $Author: nn $ $Date: 2001-10-05 14:33:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,7 @@
 #include "document.hxx"
 #include "docsh.hxx"
 #include "sc.hrc"
+#include "drwlayer.hxx"     // GetVisibleName
 
 //------------------------------------------------------------------
 
@@ -124,7 +125,7 @@ void ScTabViewShell::ExecuteObject( SfxRequest& rReq )
                 {
                     const SdrMarkList& rMarkList = pDrView->GetMarkList();
                     if (rMarkList.GetMarkCount() == 1)
-                        aName = rMarkList.GetMark(0)->GetObj()->GetName();
+                        aName = ScDrawLayer::GetVisibleName( rMarkList.GetMark(0)->GetObj() );
                 }
                 pVisibleSh->SelectObject( aName );
 
