@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bbdlg.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:30:53 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:10:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,7 @@ TabDialog RID_SVXDLG_BBDLG
                 Text[ czech ] = "Okraje";
                 Text[ hebrew ] = "‮מסגרות‬";
                 Text[ hindi ] = "किनारें";
+                Text[ slovak ] = "Okraje";
             };
             PageItem
             {
@@ -153,6 +154,7 @@ TabDialog RID_SVXDLG_BBDLG
                 Text[ czech ] = "Pozadí";
                 Text[ hebrew ] = "‮רקע‬";
                 Text[ hindi ] = "पृष्ठभाग";
+                Text[ slovak ] = "Pozadie";
             };
         };
     };
@@ -171,8 +173,11 @@ TabDialog RID_SVXDLG_BBDLG
     Text[ czech ] = "Okraje / Pozadí";
     Text[ hebrew ] = "Umrandung / Hintergrund";
     Text[ hindi ] = "किनारा / पृष्ठभाग";
+    Text[ slovak ] = "Okraje / Pozadie";
 };
  // ********************************************************************** EOF
+
+
 
 
 
