@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configmgr.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: dg $ $Date: 2001-09-26 15:49:46 $
+ *  last change: $Author: cd $ $Date: 2001-10-09 12:07:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,13 +178,15 @@ Reference< XMultiServiceFactory > ConfigManager::GetConfigurationProvider()
     if(!xConfigurationProvider.is())
     {
         Reference< XMultiServiceFactory > xMSF = ::utl::getProcessServiceFactory();
-        try
-          {
-            xConfigurationProvider = Reference< XMultiServiceFactory >
-            (xMSF->createInstance(
-                    C2U("com.sun.star.configuration.ConfigurationProvider")),
-                        UNO_QUERY);
-        }
+        if ( xMSF.is() )
+        {
+            try
+            {
+                xConfigurationProvider = Reference< XMultiServiceFactory >
+                    (xMSF->createInstance(
+                        C2U("com.sun.star.configuration.ConfigurationProvider")),
+                     UNO_QUERY);
+            }
 #ifdef DBG_UTIL
     catch(Exception& rEx)
     {
@@ -197,6 +199,7 @@ Reference< XMultiServiceFactory > ConfigManager::GetConfigurationProvider()
 #else
     catch(Exception&){}
 #endif
+        }
     }
     return xConfigurationProvider;
 }
@@ -208,32 +211,36 @@ Reference< XMultiServiceFactory > ConfigManager::GetLocalConfigurationProvider()
     if(!pMgrImpl->xLocalConfigurationProvider.is())
     {
         Reference< XMultiServiceFactory > xMSF = ::utl::getProcessServiceFactory();
-        Sequence <Any> aArgs(1);
-        Any* pValues = aArgs.getArray();
-        PropertyValue aPValue;
-        aPValue.Name  = C2U("servertype");
-        aPValue.Value <<= C2U("plugin");
-        pValues[0] <<= aPValue;
-        try
-          {
-            pMgrImpl->xLocalConfigurationProvider = Reference< XMultiServiceFactory >
-            (xMSF->createInstanceWithArguments(
-                    C2U("com.sun.star.configuration.ConfigurationProvider"), aArgs),
-                        UNO_QUERY);
-        }
+        if ( xMSF.is() )
+        {
+            Sequence <Any> aArgs(1);
+            Any* pValues = aArgs.getArray();
+            PropertyValue aPValue;
+            aPValue.Name  = C2U("servertype");
+            aPValue.Value <<= C2U("plugin");
+            pValues[0] <<= aPValue;
+            try
+            {
+                pMgrImpl->xLocalConfigurationProvider = Reference< XMultiServiceFactory >
+                    (xMSF->createInstanceWithArguments(
+                        C2U("com.sun.star.configuration.ConfigurationProvider"), aArgs),
+                     UNO_QUERY);
+            }
 #ifdef DBG_UTIL
-    catch(Exception& rEx)
-    {
-        OString sMsg("CreateInstance with arguments exception: ");
-        sMsg += OString(rEx.Message.getStr(),
-                    rEx.Message.getLength(),
-                     RTL_TEXTENCODING_ASCII_US);
-        OSL_ENSURE(sal_False, sMsg.getStr());
-    }
+            catch(Exception& rEx)
+            {
+                OString sMsg("CreateInstance with arguments exception: ");
+                sMsg += OString(rEx.Message.getStr(),
+                                rEx.Message.getLength(),
+                                RTL_TEXTENCODING_ASCII_US);
+                OSL_ENSURE(sal_False, sMsg.getStr());
+            }
 #else
-    catch(Exception&){}
+            catch(Exception&){}
 #endif
+        }
     }
+
     return pMgrImpl->xLocalConfigurationProvider;
 }
 /* -----------------------------29.08.00 12:35--------------------------------
