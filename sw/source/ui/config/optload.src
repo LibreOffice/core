@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.src,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2001-12-14 18:45:26 $
+ *  last change: $Author: kz $ $Date: 2002-02-04 10:48:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ portuguese_brazilian ] = "~Always";
         Text[ portuguese ] = "~Sempre";
         Text[ danish ] = "Altid";
-        Text[ french ] = "~Toujours";
+        Text[ french ] = "Toujours";
         Text[ swedish ] = "Allt~id";
         Text[ dutch ] = "~Altijd";
         Text[ spanish ] = "~Siempre";
@@ -371,7 +371,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ french ] = "~SÈlection d'objet :";
         Text[ swedish ] = "~Objekturval:";
         Text[ dutch ] = "~Objectselectie";
-        Text[ spanish ] = "~SelecciÛn objeto:";
+        Text[ spanish ] = "SelecciÛn objeto:";
         Text[ english_us ] = "Object selection:";
         Text[ chinese_simplified ] = "ÈÄâÊã©ÂØπË±°Ôºö";
         Text[ russian ] = "¬˚·Ó Ó·˙ÂÍÚ‡:";
@@ -600,7 +600,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ spanish ] = "Ajustar posiciÛn de tabulador";
         Text[ italian ] = "Allinea posizione tabulazione";
         Text[ danish ] = "Align tab stop position";
-        Text[ swedish ] = "Justera ~tabulatorposition";
+        Text[ swedish ] = "Justera tab~ulatorposition";
         Text[ polish ] = "WyrÛwnaj pozycjÍ tabulatora";
         Text[ portuguese_brazilian ] = "Align tab stop position";
         Text[ japanese ] = "„Çø„Éñ„ÅÆ‰ΩçÁΩÆ„ÇíÊèÉ„Åà„Çã";
@@ -793,7 +793,7 @@ TabPage TP_OPTCAPTION_PAGE
         Text = "~Nummerierung" ;
         Text [ English ] = "~Numbering" ;
         Text [ norwegian ] = "~Numbering" ;
-        Text [ italian ] = "~Numerazione" ;
+        Text [ italian ] = "Numerazione" ;
         Text [ portuguese_brazilian ] = "~Numera??o" ;
         Text [ portuguese ] = "~NumeraÁ„o" ;
         Text [ finnish ] = "~Numerointi" ;
@@ -870,12 +870,12 @@ TabPage TP_OPTCAPTION_PAGE
         Text = "~Position" ;
         Text [ English ] = "~Position" ;
         Text [ norwegian ] = "~Posisjon" ;
-        Text [ italian ] = "~Posizione" ;
+        Text [ italian ] = "Posizione" ;
         Text [ portuguese_brazilian ] = "~Posi??o" ;
         Text [ portuguese ] = "~PosiÁ„o" ;
         Text [ finnish ] = "Sijainti" ;
         Text [ danish ] = "Placering" ;
-        Text [ french ] = "~Position" ;
+        Text [ french ] = "Position" ;
         Text [ swedish ] = "~Position" ;
         Text [ dutch ] = "~Positie" ;
         Text [ spanish ] = "~PosiciÛn" ;
