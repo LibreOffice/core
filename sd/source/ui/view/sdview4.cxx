@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview4.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 09:20:10 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:47:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,9 +109,7 @@
 #ifndef _IMPGRF_HXX
 #include <svx/impgrf.hxx>
 #endif
-#ifndef _SVSTOR_HXX //autogen
-#include <so3/svstor.hxx>
-#endif
+#include <sot/storage.hxx>
 #ifndef _SFXAPP_HXX //autogen
 #include <sfx2/app.hxx>
 #endif
@@ -139,6 +137,23 @@
 #ifndef SD_SLIDE_VIEW_HXX
 #include "SlideView.hxx"
 #endif
+
+#include <comphelper/processfactory.hxx>
+
+#ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
+#include <com/sun/star/embed/ElementModes.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_XEMBEDPERSIST_HPP_
+#include <com/sun/star/embed/XEmbedPersist.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_ASPECTS_HPP_
+#include <com/sun/star/embed/Aspects.hpp>
+#endif
+
+
+#include <sfx2/ipclient.hxx>
+
+using namespace com::sun::star;
 
 namespace sd {
 
@@ -252,7 +267,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
         if ((pViewSh
                 && pViewSh->GetViewShell()!=NULL
                 && pViewSh->GetViewShell()->GetIPClient()
-                && pViewSh->GetViewShell()->GetIPClient()->IsInPlaceActive())
+                && pViewSh->GetViewShell()->GetIPClient()->IsObjectInPlaceActive())
             || this->ISA(SlideView))
             nOptions |= SDRINSERT_DONTMARK;
 
@@ -464,13 +479,23 @@ IMPL_LINK( View, DropInsertFileHdl, Timer*, pTimer )
             {
                 if( pViewSh )
                 {
-                    String              aName;
-                    SvStorageRef        aStor( new SvStorage( String(), STREAM_STD_READWRITE ) );
-                    SvInPlaceObjectRef  aIPObj( &static_cast< SvFactory* >( SvInPlaceObject::ClassFactory() )->CreateAndInit( aCurrentDropFile, aStor ) );
+                    //TODO/MBA: testing
+                    ::rtl::OUString aName;
+                    uno::Sequence < beans::PropertyValue > aMedium(1);
+                    aMedium[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) );
+                    aMedium[0].Value <<= ::rtl::OUString( aCurrentDropFile );
 
-                    if( aIPObj.Is() )
+                    uno::Reference < embed::XEmbeddedObject > xObj = pDocSh->GetEmbeddedObjectContainer().
+                            InsertEmbeddedObject( aMedium, aName );
+
+                    uno::Reference < embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
+                    if ( xPersist.is())
                     {
-                        Size        aSize( aIPObj->GetVisArea( ASPECT_CONTENT ).GetSize() );
+                        sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
+                        xPersist->storeOwn();
+
+                        awt::Size aSz( xObj->getVisualAreaSize( nAspect ) );
+                        Size        aSize( aSz.Width, aSz.Height );
                         Rectangle   aRect;
 
                         if (!aSize.Width() || !aSize.Height())
@@ -480,9 +505,8 @@ IMPL_LINK( View, DropInsertFileHdl, Timer*, pTimer )
                         }
 
                         aRect = Rectangle( aDropPos, aSize );
-                        aName = pDocSh->InsertObject( aIPObj, String() )->GetObjName();
 
-                        SdrOle2Obj* pOleObj = new SdrOle2Obj( aIPObj, aName, aRect );
+                        SdrOle2Obj* pOleObj = new SdrOle2Obj( svt::EmbeddedObjectRef( xObj, nAspect ), aName, aRect );
                         ULONG       nOptions = SDRINSERT_SETDEFLAYER;
 
                         if (pViewSh != NULL)
@@ -490,13 +514,15 @@ IMPL_LINK( View, DropInsertFileHdl, Timer*, pTimer )
                             OSL_ASSERT (pViewSh->GetViewShell()!=NULL);
                             SfxInPlaceClient* pIpClient =
                                 pViewSh->GetViewShell()->GetIPClient();
-                            if (pIpClient!=NULL && pIpClient->IsInPlaceActive())
+                            if (pIpClient!=NULL && pIpClient->IsObjectInPlaceActive())
                                 nOptions |= SDRINSERT_DONTMARK;
                         }
 
                         InsertObject( pOleObj, *GetPageViewPvNum(0), nOptions );
                         pOleObj->SetLogicRect( aRect );
-                        aIPObj->SetVisAreaSize( aRect.GetSize() );
+                        aSz.Width = aRect.GetWidth();
+                        aSz.Height = aRect.GetHeight();
+                        xObj->setVisualAreaSize( nAspect,aSz );
                     }
                 }
             }
