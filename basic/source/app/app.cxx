@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ab $ $Date: 2000-12-11 09:32:27 $
+ *  last change: $Author: gh $ $Date: 2000-12-14 17:11:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,11 +119,16 @@
 #include <comphelper/processfactory.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HDL_
+#include <com/sun/star/beans/PropertyValue.hdl>
+#endif
 #include <cppuhelper/servicefactory.hxx>
 #include <com/sun/star/registry/XImplementationRegistration.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ucb/XContentProviderManager.hpp>
 #include <com/sun/star/ucb/ContentProviderServiceInfo2.hpp>
+
+#include <ucbhelper/content.hxx>
 
 using namespace comphelper;
 using namespace ucb;
@@ -133,6 +138,7 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 using namespace com::sun::star::ucb;
+using namespace com::sun::star::beans;
 
 #endif /* _USE_UNO */
 
@@ -168,9 +174,10 @@ Reference< XContentProviderManager > InitializeUCB( void )
 
         Reference< XImplementationRegistration >
             xIR( xSMgr->createInstance( OUString::createFromAscii( "com.sun.star.registry.ImplementationRegistration" ) ), UNO_QUERY );
+
         xIR->registerImplementation( OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
-                                                OUString::createFromAscii(SAL_MODULENAME( "ucb1" )),
-                                                Reference< XSimpleRegistry >() );
+                                        OUString::createFromAscii(SAL_MODULENAME( "ucb1" )),
+                                        Reference< XSimpleRegistry >() );
         xIR->registerImplementation( OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
                                         OUString::createFromAscii(SAL_MODULENAME( "ucpfile1" )),
                                         Reference< XSimpleRegistry >() );
@@ -178,10 +185,31 @@ Reference< XContentProviderManager > InitializeUCB( void )
                                         OUString::createFromAscii(SAL_MODULENAME( "fileacc" )),
                                         Reference< XSimpleRegistry >() );
 
+/*      // Packages
+        xIR->registerImplementation( OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
+                                        OUString::createFromAscii(SAL_MODULENAME( "ucppkg1" )),
+                                        Reference< XSimpleRegistry >() );
+        xIR->registerImplementation( OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
+                                        OUString::createFromAscii(SAL_MODULENAME( "package2" )),
+                                        Reference< XSimpleRegistry >() );
+        xIR->registerImplementation( OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
+                                        OUString::createFromAscii(SAL_MODULENAME( "rdbtdp" )),
+                                        Reference< XSimpleRegistry >() );
+        xIR->registerImplementation( OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
+                                        OUString::createFromAscii(SAL_MODULENAME( "cfgmgr2" )),
+                                        Reference< XSimpleRegistry >() );
+        xIR->registerImplementation( OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
+                                        OUString::createFromAscii(SAL_MODULENAME( "tcv" )),
+                                        Reference< XSimpleRegistry >() );
+        xIR->registerImplementation( OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
+                                        OUString::createFromAscii(SAL_MODULENAME( "sax" )),
+                                        Reference< XSimpleRegistry >() );
+*/
+
         // i18n
         xIR->registerImplementation( OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
-                                                OUString::createFromAscii(SVLIBRARY( "int" )),
-                                                Reference< XSimpleRegistry >() );
+                                        OUString::createFromAscii(SVLIBRARY( "int" )),
+                                        Reference< XSimpleRegistry >() );
 
         //////////////////////////////////////////////////////////////////////
         // Bootstrap readonly service factory again
@@ -192,7 +220,19 @@ Reference< XContentProviderManager > InitializeUCB( void )
     // set global factory
     setProcessServiceFactory( xSMgr );
 
+/*  // Create simple ConfigManager
+    Sequence< Any > aConfArgs(3);
+    aConfArgs[0] <<= PropertyValue( OUString::createFromAscii("servertype"), 0, makeAny( OUString::createFromAscii("local") ), ::com::sun::star::beans::PropertyState_DIRECT_VALUE );
+    aConfArgs[1] <<= PropertyValue( OUString::createFromAscii("sourcepath"), 0, makeAny( OUString::createFromAscii("g:\\") ), ::com::sun::star::beans::PropertyState_DIRECT_VALUE );
+    aConfArgs[2] <<= PropertyValue( OUString::createFromAscii("updatepath"), 0, makeAny( OUString::createFromAscii("g:\\") ), ::com::sun::star::beans::PropertyState_DIRECT_VALUE );
+
+    Reference< XContentProvider > xConfProvider
+        ( xSMgr->createInstanceWithArguments( OUString::createFromAscii( "com.sun.star.configuration.ConfigurationProvider" ), aConfArgs), UNO_QUERY );
+
+*/
     // Create unconfigured Ucb:
+/*  Sequence< Any > aArgs(1);
+    aArgs[1] = makeAny ( xConfProvider );*/
     Sequence< Any > aArgs;
     ucb::ContentBroker::initialize( xSMgr, aArgs );
     xUcb = ucb::ContentBroker::get()->getContentProviderManagerInterface();
@@ -200,6 +240,18 @@ Reference< XContentProviderManager > InitializeUCB( void )
     Reference< XContentProvider > xFileProvider
         ( xSMgr->createInstance( OUString::createFromAscii( "com.sun.star.ucb.FileContentProvider" ) ), UNO_QUERY );
     xUcb->registerContentProvider( xFileProvider, OUString::createFromAscii( "file" ), sal_True );
+
+
+/*  Reference< XContentProvider > xPackageProvider
+        ( xSMgr->createInstance( OUString::createFromAscii( "com.sun.star.ucb.PackageContentProvider" ) ), UNO_QUERY );
+    xUcb->registerContentProvider( xPackageProvider, OUString::createFromAscii( "vnd.sun.star.pkg" ), sal_True );
+    */
+
+#ifdef DEBUG
+    ucb::Content aTester( OUString::createFromAscii("file:///x:/gh"),com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >());
+    BOOL bFolder = aTester.isFolder();
+#endif
+
 
     }
     catch( Exception & rEx)
@@ -272,7 +324,6 @@ void BasicApp::Main( )
 
     pFrame->Show();
 
-    SetDefModalDialogParent( pFrame );
     SetSystemWindowMode( SYSTEMWINDOW_MODE_DIALOG );
 
     PostUserEvent( LINK( this, BasicApp, LateInit ) );
@@ -408,6 +459,7 @@ BasicFrame::BasicFrame() : WorkWindow( NULL,
 , pExecutionStatus( NULL )
 {
 
+    Application::SetDefDialogParent( this );
     pBasic  = TTBasic::CreateMyBasic();     // depending on what was linked to the executable
     bInBreak = FALSE;
     bDisas = FALSE;
@@ -838,6 +890,7 @@ BOOL BasicFrame::Close()
             delete GetWindow( WINDOW_OVERLAP )->GetWindow( WINDOW_FIRSTOVERLAP )->GetWindow( WINDOW_CLIENT );
         }
 
+        Application::SetDefDialogParent( NULL );
         WorkWindow::Close();
 
         return TRUE;

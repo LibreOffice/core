@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ttmsg.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-11 22:40:21 $
+ *  last change: $Author: gh $ $Date: 2000-12-14 17:11:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -622,28 +622,6 @@ String S_UNKNOWN_METHOD
     Text[ chinese_traditional ] = "ª«¥ó¤è¦¡¤£©ú¡G ($Arg1).($Arg2)";
     Text[ arabic ] = "Unknown method '($Arg1)' to ($Arg2)";
     Text[ turkish ] = "Unknown method on object :($Arg1).($Arg2)";
-};
-String S_UNPACKING_STORAGE_FAILED
-{
-    Text = "Entpacken der Storage \"($Arg1)\" nach \"($Arg2)\" ist fehlgeschlagen";
-    Text[ english_us ] = "Unpacking storage \"($Arg1)\" to \"($Arg2)\" failed";
-    Text[ portuguese ] = "Unpacking Storage \"($Arg1)\" to \"($Arg2)\" failed";
-    Text[ russian ] = "Ğàñïàêîâàòü íàêîïèòåëü \"($Arg1)\" â \"($Arg2)\" íå óäàëîñü.";
-    Text[ greek ] = "Unpacking Storage \"($Arg1)\" to \"($Arg2)\" failed";
-    Text[ dutch ] = "Unpacking Storage \"($Arg1)\" to \"($Arg2)\" failed";
-    Text[ french ] = "La décompression du stockage \"($Arg1)\" vers \"($Arg2)\" a échoué.";
-    Text[ spanish ] = "No se pudo descomprimir storage \"($Arg1)\" a \"($Arg2)\"";
-    Text[ italian ] = "Unpacking Storage \"($Arg1)\" to \"($Arg2)\" failed";
-    Text[ danish ] = "Unpacking Storage \"($Arg1)\" to \"($Arg2)\" failed";
-    Text[ swedish ] = "Unpacking Storage \"($Arg1)\" to \"($Arg2)\" failed";
-    Text[ polish ] = "Unpacking Storage \"($Arg1)\" to \"($Arg2)\" failed";
-    Text[ portuguese_brazilian ] = "Unpacking Storage \"($Arg1)\" to \"($Arg2)\" failed";
-    Text[ japanese ] = "‹L‰¯‘•’u \"($Arg1)\" ‚ğ \"($Arg2)\" ‚É’Šo‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B";
-    Text[ korean ] = "Unpacking Storage \"($Arg1)\" to \"($Arg2)\" failed";
-    Text[ chinese_simplified ] = "½âÑ¹ËõÎÄ¼ş \"($Arg1)\" ÖÁ \"($Arg2)\" Ã»ÓĞ³É¹¦¡£";
-    Text[ chinese_traditional ] = "¸ÑÀ£ÁYÀÉ®× \"($Arg1)\" ¦Ü \"($Arg2)\" ¥¢±Ñ¡C";
-    Text[ turkish ] = "Unpacking Storage \"($Arg1)\" to \"($Arg2)\" failed";
-    Text[ arabic ] = "Unpacking Storage \"($Arg1)\" to \"($Arg2)\" failed";
 };
 /*
 String
