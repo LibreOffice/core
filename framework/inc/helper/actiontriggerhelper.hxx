@@ -2,9 +2,9 @@
  *
  *  $RCSfile: actiontriggerhelper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cd $ $Date: 2001-12-04 07:41:59 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:17:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,11 @@
 #include <com/sun/star/container/XIndexContainer.hpp>
 #endif
 
+// #110897#
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+
 #ifndef _SV_MENU_HXX
 #include <vcl/menu.hxx>
 #endif
@@ -93,8 +98,11 @@ namespace framework
             //
             // @param pNewMenu = Must be a valid menu. Please be aware that this implementation is based on
             //                   the above mentioned restriction!!!
+
+            // #110897#
             static com::sun::star::uno::Reference< com::sun::star::container::XIndexContainer > CreateActionTriggerContainerFromMenu(
-                    const Menu* pMenu );
+                const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+                const Menu* pMenu );
 
             // Fills the submitted rActionTriggerContainer with the structure of the menu
             // provided as the second parameter
