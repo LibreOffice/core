@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-15 08:59:00 $
+ *  last change: $Author: rt $ $Date: 2004-08-04 09:01:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1808,31 +1808,16 @@ void DrawViewShell::InsertURLButton(const String& rURL, const String& rText,
 |*
 \************************************************************************/
 
-void DrawViewShell::ShowUIControls( sal_Bool bVisible )
+void DrawViewShell::ShowUIControls (bool bVisible)
 {
-    if (mbHasRulers)
-    {
-        if (mpHorizontalRuler.get() != NULL)
-            mpHorizontalRuler->Show( bVisible );
-
-        if (mpVerticalRuler.get() != NULL)
-            mpVerticalRuler->Show( bVisible );
-    }
-
-    if (mpVerticalScrollBar.get() != NULL)
-        mpVerticalScrollBar->Show( bVisible );
-
-    if (mpHorizontalScrollBar.get() != NULL)
-        mpHorizontalScrollBar->Show( bVisible );
+    ViewShell::ShowUIControls (bVisible);
 
     GetViewFrame()->SetChildWindow(
         LayerDialogChildWindow::GetChildWindowId(),
         IsLayerModeActive() && bVisible);
     aTabControl.Show (bVisible);
-
-    if (mpContentWindow.get() != NULL)
-        mpContentWindow->Show( bVisible );
 }
+
 
 #ifdef WNT
 #pragma optimize ( "", on )
