@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:39:41 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 15:38:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,6 +311,13 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const css::uno::Sequence< css::bean
 
     if ( xModel.is() )
     {
+        // !TODO: replace by ViewFactory
+        if ( pFrame->GetFrameInterface()->getController().is() )
+            pFrame->GetFrameInterface()->setComponent( 0, 0 );
+
+        pFrame = SfxTopFrame::Create( rFrame );
+        aSet.Put( SfxFrameItem( SID_DOCFRAME, pFrame ) );
+
         for ( SfxObjectShell* pDoc = SfxObjectShell::GetFirst( NULL, FALSE ); pDoc; pDoc = SfxObjectShell::GetNext( *pDoc, NULL, FALSE ) )
         {
             if ( xModel == pDoc->GetModel() )
@@ -467,6 +474,11 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const css::uno::Sequence< css::bean
             pMedium->SetUpdatePickList( !bHidden );
 
             // !TODO: replace by ViewFactory
+            if ( pFrame->GetFrameInterface()->getController().is() )
+                pFrame->GetFrameInterface()->setComponent( 0, 0 );
+
+            pFrame = SfxTopFrame::Create( rFrame );
+            aSet.Put( SfxFrameItem( SID_DOCFRAME, pFrame ) );
             if( pFrame->InsertDocument( pDoc ) )
             {
                 pFrame->GetCurrentViewFrame()->UpdateDocument_Impl();
