@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stl_types.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-18 09:29:01 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:48:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,7 @@
 #include <vector>
 #include <map>
 #include <hash_map>
+
 #include <stack>
 #include <set>
 #include <math.h> // prevent conflict between exception and std::exception
