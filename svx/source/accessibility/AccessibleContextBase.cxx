@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleContextBase.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: af $ $Date: 2002-07-11 13:10:32 $
+ *  last change: $Author: thb $ $Date: 2002-11-29 17:56:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,7 +257,7 @@ uno::Reference< XAccessibleContext> SAL_CALL
     AccessibleContextBase::getAccessibleContext (void)
     throw (uno::RuntimeException)
 {
-    CheckDisposedState ();
+    ThrowIfDisposed ();
     return this;
 }
 
@@ -272,7 +272,7 @@ sal_Int32 SAL_CALL
        AccessibleContextBase::getAccessibleChildCount (void)
     throw (uno::RuntimeException)
 {
-    CheckDisposedState ();
+    ThrowIfDisposed ();
     return 0;
 }
 
@@ -286,7 +286,7 @@ uno::Reference<XAccessible> SAL_CALL
     AccessibleContextBase::getAccessibleChild (long nIndex)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    CheckDisposedState ();
+    ThrowIfDisposed ();
     throw lang::IndexOutOfBoundsException (
         ::rtl::OUString::createFromAscii ("no child with index " + nIndex),
         NULL);
@@ -299,7 +299,7 @@ uno::Reference<XAccessible> SAL_CALL
        AccessibleContextBase::getAccessibleParent (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    CheckDisposedState ();
+    ThrowIfDisposed ();
     return mxParent;
 }
 
@@ -310,7 +310,7 @@ sal_Int32 SAL_CALL
        AccessibleContextBase::getAccessibleIndexInParent (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    CheckDisposedState ();
+    ThrowIfDisposed ();
     //  Use a simple but slow solution for now.  Optimize later.
 
     //  Iterate over all the parent's children and search for this object.
@@ -346,7 +346,7 @@ sal_Int16 SAL_CALL
     AccessibleContextBase::getAccessibleRole (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    CheckDisposedState ();
+    ThrowIfDisposed ();
     return maRole;
 }
 
@@ -357,7 +357,7 @@ sal_Int16 SAL_CALL
        AccessibleContextBase::getAccessibleDescription (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    CheckDisposedState ();
+    ThrowIfDisposed ();
     if (msDescription.getLength() == 0)
         // Do not send an event because this is the first time it has been
         // requested.
@@ -372,7 +372,7 @@ OUString SAL_CALL
        AccessibleContextBase::getAccessibleName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    CheckDisposedState ();
+    ThrowIfDisposed ();
     if (msName.getLength() == 0)
         // Do not send an event because this is the first time it has been
         // requested.
@@ -389,7 +389,7 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL
        AccessibleContextBase::getAccessibleRelationSet (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    CheckDisposedState ();
+    ThrowIfDisposed ();
 
     // Create a copy of the relation set and return it.
     ::utl::AccessibleRelationSetHelper* pRelationSet =
@@ -459,7 +459,7 @@ lang::Locale SAL_CALL
     throw (IllegalAccessibleComponentStateException,
         ::com::sun::star::uno::RuntimeException)
 {
-    CheckDisposedState ();
+    ThrowIfDisposed ();
     // Delegate request to parent.
     if (mxParent.is())
     {
@@ -503,7 +503,7 @@ void SAL_CALL
         const uno::Reference<XAccessibleEventListener >& rxListener )
     throw (uno::RuntimeException)
 {
-    CheckDisposedState ();
+    ThrowIfDisposed ();
     rBHelper.removeListener (::getCppuType(&rxListener), rxListener);
 }
 
@@ -516,7 +516,7 @@ void SAL_CALL
        AccessibleContextBase::getImplementationName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    CheckDisposedState ();
+    ThrowIfDisposed ();
     return OUString(RTL_CONSTASCII_USTRINGPARAM("AccessibleContextBase"));
 }
 
@@ -527,7 +527,7 @@ sal_Bool SAL_CALL
      AccessibleContextBase::supportsService (const OUString& sServiceName)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    CheckDisposedState ();
+    ThrowIfDisposed ();
     //  Iterate over all supported service names and return true if on of them
     //  matches the given name.
     uno::Sequence< ::rtl::OUString> aSupportedServices (
@@ -545,7 +545,7 @@ uno::Sequence< ::rtl::OUString> SAL_CALL
        AccessibleContextBase::getSupportedServiceNames (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    CheckDisposedState ();
+    ThrowIfDisposed ();
     static const OUString sServiceNames[2] = {
         OUString(RTL_CONSTASCII_USTRINGPARAM(
             "drafts.com.sun.star.accessibility.Accessible")),
@@ -564,7 +564,7 @@ uno::Sequence< ::com::sun::star::uno::Type>
     AccessibleContextBase::getTypes (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    CheckDisposedState ();
+    ThrowIfDisposed ();
 
     // This class supports no interfaces on its own.  Just return those
     // supported by the base class.
@@ -578,7 +578,7 @@ uno::Sequence<sal_Int8> SAL_CALL
     AccessibleContextBase::getImplementationId (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    CheckDisposedState ();
+    ThrowIfDisposed ();
     static uno::Sequence<sal_Int8> aId;
     if (aId.getLength() == 0)
     {
@@ -596,7 +596,6 @@ uno::Sequence<sal_Int8> SAL_CALL
 
 void SAL_CALL AccessibleContextBase::disposing (void)
 {
-    CheckDisposedState ();
     SetState (AccessibleStateType::DEFUNC);
 }
 
@@ -722,16 +721,23 @@ void AccessibleContextBase::FireEvent (const AccessibleEventObject& aEvent)
 
 
 
-void AccessibleContextBase::CheckDisposedState (void)
+void AccessibleContextBase::ThrowIfDisposed (void)
     throw (::com::sun::star::lang::DisposedException)
 {
-    if (rBHelper.bDisposed)
+    if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
         OSL_TRACE ("Calling disposed object. Throwing exception:");
         throw lang::DisposedException (
             OUString(RTL_CONSTASCII_USTRINGPARAM("object has been already disposed")),
             static_cast<uno::XWeak*>(this));
     }
+}
+
+
+
+sal_Bool AccessibleContextBase::IsDisposed (void)
+{
+    return (rBHelper.bDisposed || rBHelper.bInDispose);
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleGraphicShape.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: af $ $Date: 2002-06-28 14:51:57 $
+ *  last change: $Author: thb $ $Date: 2002-11-29 17:56:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,7 +172,7 @@ void SAL_CALL
     AccessibleGraphicShape::getSupportedServiceNames (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    CheckDisposedState ();
+    ThrowIfDisposed ();
     // Get list of supported service names from base class...
     uno::Sequence<OUString> aServiceNames =
         AccessibleShape::getSupportedServiceNames();

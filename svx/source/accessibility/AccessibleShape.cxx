@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleShape.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: af $ $Date: 2002-11-22 15:18:32 $
+ *  last change: $Author: thb $ $Date: 2002-11-29 17:56:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -364,7 +364,7 @@ sal_Int32 SAL_CALL
        AccessibleShape::getAccessibleChildCount (void)
     throw ()
 {
-    CheckDisposedState ();
+    ThrowIfDisposed ();
     sal_Int32 nChildCount = 0;
 
     // Add the number of shapes that are children of this shape.
@@ -387,7 +387,7 @@ uno::Reference<XAccessible> SAL_CALL
     AccessibleShape::getAccessibleChild (sal_Int32 nIndex)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    CheckDisposedState ();
+    ThrowIfDisposed ();
 
     uno::Reference<XAccessible> xChild;
 
@@ -507,7 +507,7 @@ uno::Reference<XAccessible > SAL_CALL
 awt::Rectangle SAL_CALL AccessibleShape::getBounds (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    CheckDisposedState ();
+    ThrowIfDisposed ();
 
     static const OUString sBoundRectName (
         RTL_CONSTASCII_USTRINGPARAM("BoundRect"));
@@ -640,7 +640,7 @@ awt::Rectangle SAL_CALL AccessibleShape::getBounds (void)
 awt::Point SAL_CALL AccessibleShape::getLocation (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    CheckDisposedState ();
+    ThrowIfDisposed ();
     awt::Rectangle aBoundingBox (getBounds());
     return awt::Point (aBoundingBox.X, aBoundingBox.Y);
 }
@@ -651,7 +651,7 @@ awt::Point SAL_CALL AccessibleShape::getLocation (void)
 awt::Point SAL_CALL AccessibleShape::getLocationOnScreen (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    CheckDisposedState ();
+    ThrowIfDisposed ();
 
     // Get relative position...
     awt::Point aLocation (getLocation ());
@@ -676,7 +676,7 @@ awt::Point SAL_CALL AccessibleShape::getLocationOnScreen (void)
 awt::Size SAL_CALL AccessibleShape::getSize (void)
     throw (uno::RuntimeException)
 {
-    CheckDisposedState ();
+    ThrowIfDisposed ();
     awt::Rectangle aBoundingBox (getBounds());
     return awt::Size (aBoundingBox.Width, aBoundingBox.Height);
 }
@@ -687,7 +687,7 @@ awt::Size SAL_CALL AccessibleShape::getSize (void)
 sal_Int32 SAL_CALL AccessibleShape::getForeground (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    CheckDisposedState ();
+    ThrowIfDisposed ();
     sal_Int32 nColor (0x0ffffffL);
 
     try
@@ -713,7 +713,7 @@ sal_Int32 SAL_CALL AccessibleShape::getForeground (void)
 sal_Int32 SAL_CALL AccessibleShape::getBackground (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    CheckDisposedState ();
+    ThrowIfDisposed ();
     sal_Int32 nColor (0L);
 
     try
@@ -818,7 +818,7 @@ void SAL_CALL
     AccessibleShape::getImplementationName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    CheckDisposedState ();
+    ThrowIfDisposed ();
     return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AccessibleShape"));
 }
 
@@ -829,7 +829,7 @@ uno::Sequence<OUString> SAL_CALL
     AccessibleShape::getSupportedServiceNames (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    CheckDisposedState ();
+    ThrowIfDisposed ();
     // Get list of supported service names from base class...
     uno::Sequence<OUString> aServiceNames =
         AccessibleContextBase::getSupportedServiceNames();
@@ -854,7 +854,7 @@ uno::Sequence<uno::Type> SAL_CALL
     AccessibleShape::getTypes (void)
     throw (uno::RuntimeException)
 {
-    CheckDisposedState ();
+    ThrowIfDisposed ();
     // Get list of types from the context base implementation, ...
     uno::Sequence<uno::Type> aTypeList (AccessibleContextBase::getTypes());
     // ... get list of types from component base implementation, ...
@@ -897,7 +897,6 @@ void SAL_CALL
 {
     try
     {
-        CheckDisposedState ();
         OSL_TRACE ("AccessibleShape::disposing");
 
         if (aEvent.Source == mxShape)
@@ -1269,7 +1268,6 @@ uno::Reference< drawing::XShape > AccessibleShape::GetXShape()
 // protected
 void AccessibleShape::disposing (void)
 {
-    CheckDisposedState ();
     OSL_TRACE ("AccessibleShape::disposing()");
 
     // Make sure to send an event that this object looses the focus in the
