@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PipedConnection_Test.java,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:27:54 $
+ *  last change: $Author: kr $ $Date: 2001-01-17 09:35:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,7 +152,7 @@ public class PipedConnection_Test {
     }
 
     static public boolean test(Vector notpassed) throws Exception {
-        System.err.println("\tTesting PipedConnection...");
+        System.err.println("Testing PipedConnection...");
 
         PipedConnection rightSide = new PipedConnection(new Object[0]);
         PipedConnection leftSide = new PipedConnection(new Object[]{rightSide});
