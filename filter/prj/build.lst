@@ -1,4 +1,4 @@
-fl	filter	:	svtools unotools goodies xmloff svx NULL
+fl	filter	:	svtools unotools goodies xmloff svx javaunohelper NULL
 fl	filter									usr1	-	all	fl_mkout			NULL
 fl	filter\prj								get		-	all	fl_prj				NULL
 fl	filter\source\jars						nmake	-	all	fl_javafilter_binaries	NULL
