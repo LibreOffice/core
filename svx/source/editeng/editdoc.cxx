@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdoc.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: mt $ $Date: 2002-11-08 12:16:38 $
+ *  last change: $Author: mt $ $Date: 2002-11-20 12:16:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2023,7 +2023,7 @@ EditCharAttrib* CharAttribList::FindAttrib( USHORT nWhich, USHORT nPos )
     // => Das startende gilt...
     USHORT nAttr = aAttribs.Count()-1;
     EditCharAttrib* pAttr = GetAttrib( aAttribs, nAttr );
-    while ( pAttr && ( pAttr->GetEnd() >= nPos ) )
+    while ( pAttr )
     {
         if ( ( pAttr->Which() == nWhich ) && pAttr->IsIn(nPos) )
             return pAttr;
