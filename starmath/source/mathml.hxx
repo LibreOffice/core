@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cmc $ $Date: 2001-02-02 10:20:47 $
+ *  last change: $Author: cmc $ $Date: 2001-02-02 12:50:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,11 +77,14 @@ class SfxMedium;
 class SmXMLWrapper
 {
 public:
-    SmXMLWrapper(com::sun::star::uno::Reference<com::sun::star::frame::XModel> &rRef) : rModel(rRef) {};
+    SmXMLWrapper(com::sun::star::uno::Reference<com::sun::star::frame::XModel> &rRef) : rModel(rRef), bFlat(sal_True) {};
     sal_Bool Import(SfxMedium &rMedium);
     sal_Bool Export(SfxMedium &rMedium);
+    void SetFlat(sal_Bool bIn) {bFlat = bIn;}
 private:
     com::sun::star::uno::Reference<com::sun::star::frame::XModel> &rModel;
+    sal_Bool bFlat;     //set true for export to flat .mml, set false for
+                        //export to a .sxm (or whatever) package
 
 };
 

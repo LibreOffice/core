@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cmc $ $Date: 2001-02-02 10:20:47 $
+ *  last change: $Author: cmc $ $Date: 2001-02-02 12:50:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -390,9 +390,10 @@ sal_Bool SmXMLWrapper::Export(SfxMedium &rMedium)
     uno::Reference<io::XOutputStream> xOut;
     SvStorageStreamRef xDocStream;
 
-    if (rMedium.IsStorage())
+    if (!bFlat) //Storage (Package) of Stream
     {
-        xDocStream = rMedium.GetStorage()->OpenStream
+        SvStorage *pStg = rMedium.GetOutputStorage(sal_True);
+        xDocStream = pStg->OpenStream
             (C2S("Content.xml"),STREAM_WRITE|STREAM_SHARE_DENYWRITE);
         xOut = new utl::OOutputStreamWrapper(*xDocStream);
     }
