@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: kz $ $Date: 2004-12-08 17:40:10 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 11:45:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1279,7 +1279,7 @@ public:
     void RemoveAllFmtLanguageDependencies();
 
     SwFrmFmt  *MakeFrmFmt(const String &rFmtName, SwFrmFmt *pDerivedFrom,
-                          BOOL bBroadcast = FALSE);
+                          BOOL bBroadcast = FALSE, BOOL bAuto = TRUE);
     void       DelFrmFmt( SwFrmFmt *pFmt, BOOL bBroadcast = FALSE );
     SwFrmFmt* FindFrmFmtByName( const String& rName ) const
         {   return (SwFrmFmt*)FindFmtByName( (SvPtrarr&)*pFrmFmtTbl, rName ); }
