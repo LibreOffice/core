@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: sj $ $Date: 2001-01-22 18:20:27 $
+ *  last change: $Author: sj $ $Date: 2001-01-31 17:02:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2609,6 +2609,9 @@ void ParagraphObj::ImplGetParagraphValues( PPTExBulletProvider& rBuProv, sal_Boo
         break;
         case ::com::sun::star::style::ParagraphAdjust_RIGHT :
             mnTextAdjust = 2;
+        break;
+        case ::com::sun::star::style::ParagraphAdjust_BLOCK :
+            mnTextAdjust = 3;
         break;
         default :
         case ::com::sun::star::style::ParagraphAdjust_LEFT :
