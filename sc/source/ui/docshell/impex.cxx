@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impex.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:44:43 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 12:37:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -970,11 +970,19 @@ void lcl_PutString( ScDocument* pDoc, USHORT nCol, USHORT nRow, USHORT nTab,
                 pCalendar->setValue( i18n::CalendarFieldIndex::DAY_OF_MONTH, nDay );
                 pCalendar->setValue( i18n::CalendarFieldIndex::MONTH, nMonth );
                 pCalendar->setValue( i18n::CalendarFieldIndex::YEAR, nYear );
+                // #i14974# The imported value should have no fractional value, so set the
+                // time fields to zero (ICU calendar instance defaults to current date/time)
+                pCalendar->setValue( i18n::CalendarFieldIndex::HOUR, 0 );
+                pCalendar->setValue( i18n::CalendarFieldIndex::MINUTE, 0 );
+                pCalendar->setValue( i18n::CalendarFieldIndex::SECOND, 0 );
+                pCalendar->setValue( i18n::CalendarFieldIndex::MILLISECOND, 0 );
                 if ( pCalendar->isValid() )
                 {
                     double fDiff = DateTime(*pFormatter->GetNullDate()) -
                         pCalendar->getEpochStart();
-                    double fDays = pCalendar->getDateTime();
+                    // #i14974# must use getLocalDateTime to get the same
+                    // date values as set above
+                    double fDays = pCalendar->getLocalDateTime();
                     fDays -= fDiff;
 
                     LanguageType eLatin, eCjk, eCtl;
