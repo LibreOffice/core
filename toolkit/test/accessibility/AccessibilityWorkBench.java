@@ -49,7 +49,6 @@ public class AccessibilityWorkBench
         XTerminateListener
 {
     public static final String msVersion = "v1.7";
-    public String msFileName;
     public String msOptionsFileName = ".AWBrc";
 
     public static void main (String args[])
@@ -82,7 +81,7 @@ public class AccessibilityWorkBench
             }
         }
 
-        aWorkBench = new AccessibilityWorkBench (nPortNumber, sFileName);
+        aWorkBench = new AccessibilityWorkBench (nPortNumber);
     }
 
 
@@ -96,11 +95,9 @@ public class AccessibilityWorkBench
     }
 
 
-    public  AccessibilityWorkBench (int nPortNumber, String sFileName)
+    public  AccessibilityWorkBench (int nPortNumber)
     {
         mbInitialized = false;
-
-        msFileName = sFileName;
 
         Layout ();
         //        EventLogger.Instance();
@@ -108,8 +105,7 @@ public class AccessibilityWorkBench
         MessageArea.println (System.getProperty ("os.name") + " / "
             + System.getProperty ("os.arch") + " / "
             + System.getProperty ("os.version"));
-        MessageArea.println ("Using port " + nPortNumber
-            + " and document file name " + msFileName);
+        MessageArea.println ("Using port " + nPortNumber);
         office = new SimpleOffice (nPortNumber);
         info = new InformationWriter ();
 
@@ -180,7 +176,6 @@ public class AccessibilityWorkBench
         aUpdateButton = createButton ("Update", "update");
         aShapesButton = createButton ("Expand Shapes", "shapes");
         aExpandButton = createButton ("Expand All", "expand");
-        aTextButton = createButton("Text", "text");
         aQuitButton = createButton ("Quit", "quit");
         UpdateButtonStates ();
 
@@ -267,6 +262,10 @@ public class AccessibilityWorkBench
         aOptionsMenu.add (aCBItem);
         aCBItem.addActionListener (this);
 
+        aCBItem = new JCheckBoxMenuItem ("Show Text", maCanvas.getShowText());
+        aOptionsMenu.add (aCBItem);
+        aCBItem.addActionListener (this);
+
         aCBItem = new JCheckBoxMenuItem ("Antialiased Rendering", maCanvas.getAntialiasing());
         aOptionsMenu.add (aCBItem);
         aCBItem.addActionListener (this);
@@ -291,7 +290,8 @@ public class AccessibilityWorkBench
                 if (aTokenizer.nextToken() != StreamTokenizer.TT_WORD)
                 {
                     if (aTokenizer.ttype != StreamTokenizer.TT_EOF)
-                        System.out.println ("unexpected token in options file: " + aTokenizer.toString()
+                        System.out.println ("unexpected token in options file: "
+                            + aTokenizer.toString()
                             + " instead of option name");
                     break;
                 }
@@ -299,7 +299,8 @@ public class AccessibilityWorkBench
 
                 if (aTokenizer.nextToken() != '=')
                 {
-                    System.out.println ("unexpected token in options file: " + aTokenizer.toString()
+                    System.out.println ("unexpected token in options file: "
+                        + aTokenizer.toString()
                         + " instead of =");
                     break;
                 }
@@ -316,14 +317,6 @@ public class AccessibilityWorkBench
                         break;
                 }
 
-                System.out.print ("option value " + sOptionName + " is set to ");
-                if (sValue != null)
-                    System.out.println ("string " + sValue);
-                else if (nValue != null)
-                    System.out.println ("number " + nValue);
-                else
-                    System.out.println ("nothing");
-
                 if (aTokenizer.nextToken() == StreamTokenizer.TT_EOF)
                     break;
                 if (aTokenizer.ttype != StreamTokenizer.TT_EOL)
@@ -337,6 +330,8 @@ public class AccessibilityWorkBench
                     maCanvas.setShowDescriptions (sValue.compareTo ("true")==0);
                 else if (sOptionName.compareTo ("ShowNames") == 0)
                     maCanvas.setShowNames (sValue.compareTo ("true")==0);
+                else if (sOptionName.compareTo ("ShowText") == 0)
+                    maCanvas.setShowText (sValue.compareTo ("true")==0);
                 else if (sOptionName.compareTo ("Antialiasing") == 0)
                     maCanvas.setAntialiasing (sValue.compareTo ("true")==0);
                 else
@@ -362,6 +357,7 @@ public class AccessibilityWorkBench
             PrintWriter aOut = new PrintWriter (new FileWriter (aOptionsFile));
             aOut.println ("ShowDescriptions = " + maCanvas.getShowDescriptions());
             aOut.println ("ShowNames = " + maCanvas.getShowNames());
+            aOut.println ("ShowText = " + maCanvas.getShowText());
             aOut.println ("Antialiasing = " + maCanvas.getAntialiasing());
             aOut.close();
         }
@@ -431,7 +427,6 @@ public class AccessibilityWorkBench
         aUpdateButton.setEnabled (mbInitialized);
         aExpandButton.setEnabled (mbInitialized);
         aShapesButton.setEnabled (mbInitialized);
-        aTextButton.setEnabled (mbInitialized);
     }
 
 
@@ -469,11 +464,6 @@ public class AccessibilityWorkBench
             setCursor (new Cursor (Cursor.WAIT_CURSOR));
             maTree.expandAll();
             setCursor (aCursor);
-        }
-        else if (e.getActionCommand().equals("text"))
-        {
-            Canvas.bPaintText = ! Canvas.bPaintText;
-            maCanvas.repaint ();
         }
         else if (e.getActionCommand().equals ("Quit"))
         {
@@ -574,8 +564,7 @@ public class AccessibilityWorkBench
         aQuitButton,
         aUpdateButton,
         aExpandButton,
-        aShapesButton,
-        aTextButton;
+        aShapesButton;
     private JMenuBar
         maMenuBar;
     private String

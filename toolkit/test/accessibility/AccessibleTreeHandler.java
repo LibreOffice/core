@@ -74,12 +74,18 @@ class AccessibleTreeHandler
     {
         AccessibleTreeNode aChild = null;
 
-        XAccessibleContext xContext = xChild.getAccessibleContext();
-        int nIndex = xContext.getAccessibleIndexInParent() + 1;
-        if ((nIndex >= 0) || (nIndex <= maChildList.size()))
+        if (xChild != null)
         {
-            aChild = NodeFactory.Instance().createDefaultNode (xChild, aParent);
-            maChildList.insertElementAt (aChild, nIndex);
+            XAccessibleContext xContext = xChild.getAccessibleContext();
+            if (xContext != null)
+            {
+                int nIndex = xContext.getAccessibleIndexInParent() + 1;
+                if ((nIndex >= 0) || (nIndex <= maChildList.size()))
+                {
+                    aChild = NodeFactory.Instance().createDefaultNode (xChild, aParent);
+                    maChildList.insertElementAt (aChild, nIndex);
+                }
+            }
         }
         return aChild;
     }

@@ -1,6 +1,7 @@
 import com.sun.star.awt.XWindow;
 import drafts.com.sun.star.awt.XExtendedToolkit;
 import drafts.com.sun.star.accessibility.XAccessible;
+import drafts.com.sun.star.accessibility.XAccessibleContext;
 import com.sun.star.uno.XInterface;
 import com.sun.star.uno.UnoRuntime;
 import javax.swing.event.TreeModelEvent;
@@ -59,16 +60,28 @@ class TopWindowListener
     */
     private void AddTopLevelNode (XAccessible xNewTopLevelObject)
     {
-        Object aObject = maModel.getRoot();
-        if ((xNewTopLevelObject != null) && xNewTopLevelObject.getAccessibleContext()== null)
-            System.out.println ("top level window not accessible");
-        if (aObject instanceof VectorNode && xNewTopLevelObject != null)
+        if (xNewTopLevelObject != null)
         {
-            VectorNode aRoot = (VectorNode) aObject;
-            AccessibleTreeNode aNode =
-                NodeFactory.Instance().createDefaultNode (xNewTopLevelObject, aRoot);
-            aRoot.addChild (aNode);
-            maModel.fireTreeNodesInserted (maModel.createEvent (aRoot, aNode));
+            XAccessibleContext xContext = xNewTopLevelObject.getAccessibleContext();
+            if (xContext == null)
+                System.out.println ("top level window not accessible");
+            else
+            {
+                // Ignore windows that have no accessible name,
+                // i.e. do not represent document windows.
+                if (xContext.getAccessibleName().length() > 0)
+                {
+                    Object aRootObject = maModel.getRoot();
+                    if (aRootObject instanceof VectorNode)
+                    {
+                        VectorNode aRoot = (VectorNode) aRootObject;
+                        AccessibleTreeNode aNode =
+                            NodeFactory.Instance().createDefaultNode (xNewTopLevelObject, aRoot);
+                        aRoot.addChild (aNode);
+                        maModel.fireTreeNodesInserted (maModel.createEvent (aRoot, aNode));
+                    }
+                }
+            }
         }
     }
 
@@ -87,13 +100,6 @@ class TopWindowListener
             System.out.println ("removing node " + xTopLevelObject);
             VectorNode aRoot = (VectorNode) aObject;
             maModel.removeNode (xTopLevelObject.getAccessibleContext());
-            /*
-            AccessibleTreeNode aNode = maModel.getNode (xTopLevelObject);
-            TreeModelEvent aEvent = maModel.createEvent (aRoot, aNode);
-            maModel.removeChild (aNode);
-            System.out.println (aNode);
-            maModel.fireTreeNodesRemoved (aEvent);
-            */
         }
     }
 
@@ -131,7 +137,6 @@ class TopWindowListener
     public void windowOpened (final com.sun.star.lang.EventObject aEvent)
         throws RuntimeException
     {
-        System.out.println ("Top window opened: " + aEvent.Source);
         if (maModel != null)
         {
             XWindow xWindow = (XWindow) UnoRuntime.queryInterface(
@@ -155,7 +160,6 @@ class TopWindowListener
     public void windowClosed (final com.sun.star.lang.EventObject aEvent)
         throws RuntimeException
     {
-        System.out.println ("Top window closed: " + aEvent);
         if (maModel != null)
         {
             XWindow xWindow = (XWindow) UnoRuntime.queryInterface(

@@ -1,9 +1,9 @@
 import com.sun.star.lang.IndexOutOfBoundsException;
 import java.util.Vector;
 
-/**
-    Base class for all tree nodes.
- */
+/** The VectorNode class is a simple container whose list of children is
+    managed entirely by its owner.
+*/
 class VectorNode
     extends StringNode
 {

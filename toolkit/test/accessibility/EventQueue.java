@@ -12,6 +12,9 @@ import java.util.LinkedList;
 class EventQueue
     implements Runnable
 {
+    public boolean mbVerbose = false;
+    public boolean mbHandleDisposingEventsSynchronous = true;
+
     public synchronized static EventQueue Instance ()
     {
         if (maInstance == null)
@@ -23,7 +26,8 @@ class EventQueue
     {
         synchronized (maMonitor)
         {
-            System.out.println ("adding regular event " + aEvent);
+            if (mbVerbose)
+                System.out.println ("queing regular event " + aEvent);
             maRegularQueue.addLast (aEvent);
             maMonitor.notify ();
         }
@@ -32,15 +36,16 @@ class EventQueue
 
     public void addDisposingEvent (Runnable aEvent)
     {
-        aEvent.run ();
-        /*
-        synchronized (maMonitor)
-        {
-            System.out.println ("adding disposing event " + aEvent);
-            maDisposingQueue.addLast (aEvent);
-            maMonitor.notify ();
-        }
-        */
+        if (mbHandleDisposingEventsSynchronous)
+            aEvent.run ();
+        else
+            synchronized (maMonitor)
+            {
+                if (mbVerbose)
+                    System.out.println ("queing disposing event " + aEvent);
+                maDisposingQueue.addLast (aEvent);
+                maMonitor.notify ();
+            }
     }
 
 
@@ -68,12 +73,14 @@ class EventQueue
                     if (maDisposingQueue.size() > 0)
                     {
                         aEvent = (Runnable)maDisposingQueue.removeFirst();
-                        System.out.println ("delivering disposing event " + aEvent);
+                        if (mbVerbose)
+                            System.out.println ("delivering disposing event " + aEvent);
                     }
                     else if (maRegularQueue.size() > 0)
                     {
                         aEvent = (Runnable)maRegularQueue.removeFirst();
-                        System.out.println ("delivering regular event " + aEvent);
+                        if (mbVerbose)
+                            System.out.println ("delivering regular event " + aEvent);
                     }
                     else
                         aEvent = null;
@@ -87,7 +94,7 @@ class EventQueue
                     catch( Throwable e )
                     {
                         System.out.println(
-                            "Exception during event delivery: " + e );
+                            "caught exception during event delivery: " + e );
                         e.printStackTrace();
                     }
                 }

@@ -16,8 +16,6 @@ class QueuedListener
 
     public void disposing( final EventObject aEvent)
     {
-        System.out.println( "Queue disposing: " + aEvent.hashCode() );
-
         XAccessibleContext xContext = (XAccessibleContext)UnoRuntime.queryInterface(
             XAccessibleContext.class, aEvent.Source);
         if (xContext == null)
@@ -41,7 +39,6 @@ class QueuedListener
 
     public void notifyEvent( final AccessibleEventObject aEvent )
     {
-        System.out.println( "Queue notifyEvent: " + aEvent.hashCode() );
         EventQueue.Instance().addEvent (new Runnable()
             {
                 public void run()

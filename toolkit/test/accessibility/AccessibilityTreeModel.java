@@ -19,6 +19,8 @@ import com.sun.star.lang.XServiceName;
 public class AccessibilityTreeModel
     extends AccessibilityTreeModelBase
 {
+    public boolean mbVerbose = false;
+
     public AccessibilityTreeModel (AccessibleTreeNode aRoot)
     {
         // create default node (unless we have a 'proper' node)
@@ -43,7 +45,6 @@ public class AccessibilityTreeModel
     public void lock ()
     {
         mnLockCount += 1;
-        System.out.println ("locking: " + mnLockCount);
     }
 
     /** Unlock the tree.  After unlocking the tree as many times as locking
@@ -55,7 +56,6 @@ public class AccessibilityTreeModel
     public void unlock (AccessibleTreeNode aNodeHint)
     {
         mnLockCount -= 1;
-        System.out.println ("unlocking: " + mnLockCount);
         if (mnLockCount == 0)
             fireTreeStructureChanged (
                 new TreeModelEvent (this,
@@ -123,6 +123,13 @@ public class AccessibilityTreeModel
         return aChild;
     }
 
+    public Object getChildNoCreate (Object aParent, int nIndex)
+    {
+        AccessibleTreeNode aChild = (AccessibleTreeNode)super.getChildNoCreate (aParent, nIndex);
+
+        return aChild;
+    }
+
 
 
 
@@ -173,7 +180,8 @@ public class AccessibilityTreeModel
             AccessibleTreeNode aRootNode = (AccessibleTreeNode)getRoot();
             TreeModelEvent aEvent = createEvent (aRootNode, aNode);
             removeChild (aNode);
-            System.out.println (aNode);
+            if (mbVerbose)
+                System.out.println (aNode);
             fireTreeNodesRemoved (aEvent);
             maCanvas.repaint ();
         }
@@ -345,14 +353,17 @@ public class AccessibilityTreeModel
 
 
 
-    protected TreeModelEvent createEvent (AccessibleTreeNode aParentNode, AccessibleTreeNode aChildNode)
+    protected TreeModelEvent createEvent (
+        AccessibleTreeNode aParentNode,
+        AccessibleTreeNode aChildNode)
     {
         Object[] aPathToParent = createPath (aParentNode);
 
         int nIndexInParent = -1;
         if (aChildNode != null)
             nIndexInParent = aParentNode.indexOf (aChildNode);
-        System.out.println (aChildNode + " " + nIndexInParent);
+        if (mbVerbose)
+            System.out.println (aChildNode + " " + nIndexInParent);
 
         if (nIndexInParent == -1)
             // This event may be passed only to treeStructureChanged of the listeners.
@@ -443,9 +454,14 @@ public class AccessibilityTreeModel
 
 
 
-    public void setCanvas( Canvas aCanvas )
+    public void setCanvas (Canvas aCanvas)
     {
         maCanvas = aCanvas;
+    }
+
+    public Canvas getCanvas ()
+    {
+        return maCanvas;
     }
 
     public void updateNode (XAccessibleContext xSource, java.lang.Class class1)
@@ -458,31 +474,25 @@ public class AccessibilityTreeModel
         have changed in the tree view.  Update the canvas representation of
         xSource.
     */
-    public void updateNode (XAccessibleContext xSource,
+    public AccTreeNode updateNode (XAccessibleContext xSource,
         java.lang.Class class1, java.lang.Class class2)
     {
-        AccessibleTreeNode aNode = maNodeMap.GetNode (xSource);
-        System.out.println ("updateing node " + xSource + "  " + aNode);
-        if (aNode instanceof AccTreeNode)
+        AccessibleTreeNode aTreeNode = maNodeMap.GetNode (xSource);
+        AccTreeNode aNode = null;
+        if (mbVerbose)
+            System.out.println ("updating node " + xSource + "  " + aTreeNode);
+        if (aTreeNode instanceof AccTreeNode)
         {
+            aNode = (AccTreeNode) aTreeNode;
             // Get list of affected children.
-            Vector aChildIndices = ((AccTreeNode)aNode).updateChildren (
+            Vector aChildIndices = (aNode).updateChildren (
                 class1, class2);
             // Fire events that these children may have changed.
             fireTreeNodesChanged (
-                createChangeEvent ((AccTreeNode)aNode, aChildIndices));
-
-            // Update the graphical representation of aNode in the Canvas.
-            if (maCanvas != null)
-                maCanvas.updateNode ((AccTreeNode)aNode);
-            maCanvas.repaint ();
+                createChangeEvent (aNode, aChildIndices));
         }
+        return aNode;
     }
-
-    // Making both of these static is clearly a hack.
-    protected static MessageInterface maMessageArea;
-    protected static Print maPrinter;
-    protected static boolean mbVerbose = true;
 
     /** The listener to be registered with the accessible objects.
      * Could be set to 'this' for same-thread event delivery, or to an

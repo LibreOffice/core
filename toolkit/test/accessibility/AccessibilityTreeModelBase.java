@@ -46,6 +46,21 @@ public class AccessibilityTreeModelBase
         return aChild;
     }
 
+    public synchronized Object getChildNoCreate (Object aParent, int nIndex)
+    {
+        Object aChild = null;
+        try
+        {
+            if (aParent != null && aParent instanceof AccessibleTreeNode)
+                aChild = ((AccessibleTreeNode)aParent).getChildNoCreate(nIndex);
+            else
+                System.out.println ("getChild called for unknown parent node");
+        }
+        catch (com.sun.star.lang.IndexOutOfBoundsException e)
+        { }
+        return aChild;
+    }
+
     /** iterate over all children and look for child */
     public synchronized int getIndexOfChild (Object aParent, Object aChild)
     {

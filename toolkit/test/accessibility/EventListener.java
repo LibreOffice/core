@@ -23,6 +23,8 @@ import com.sun.star.lang.XServiceName;
 */
 public class EventListener
 {
+    public boolean mbVerbose = false;
+
     public EventListener (AccessibilityTreeModel aTreeModel)
     {
         maTreeModel = aTreeModel;
@@ -43,7 +45,8 @@ public class EventListener
      */
     public void disposing (XAccessibleContext xContext)
     {
-        System.out.println("dispose: " + objectToString(xContext));
+        if (mbVerbose)
+            System.out.println("disposing " + xContext);
         maTreeModel.removeNode (xContext);
     }
 
@@ -115,7 +118,8 @@ public class EventListener
             System.out.println ("    unhandled event");
         else
         {
-            aHandler.Print (System.out);
+            if (mbVerbose)
+                aHandler.Print (System.out);
             aHandler.Process ();
         }
     }

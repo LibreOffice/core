@@ -6,13 +6,11 @@ class QueuedTopWindowListener
 {
     public QueuedTopWindowListener (TopWindowListener aListener)
     {
-        System.out.println ("starting new queued top window listener");
         maListener = aListener;
     }
 
     public void windowOpened (final com.sun.star.lang.EventObject aEvent) throws RuntimeException
     {
-        System.out.println ("QueuedTopWindowListener: Top window opened: " + aEvent.Source);
         EventQueue.Instance().addEvent (new Runnable()
             {
                 public void run()
@@ -28,7 +26,7 @@ class QueuedTopWindowListener
 
     public void windowClosing (final com.sun.star.lang.EventObject aEvent) throws RuntimeException
     {
-        System.out.println ("QueuedTopWindowListener: Top window closing: " + aEvent);
+        // Ignored.
     }
 
 
@@ -36,7 +34,6 @@ class QueuedTopWindowListener
 
     public void windowClosed (final com.sun.star.lang.EventObject aEvent) throws RuntimeException
     {
-        System.out.println ("QueuedTopWindowListener: Top window closed: " + aEvent);
         EventQueue.Instance().addEvent (new Runnable()
             {
                 public void run()
@@ -76,7 +73,6 @@ class QueuedTopWindowListener
 
     public void disposing( final EventObject aEvent)
     {
-        System.out.println( "QueueTopWindowListener disposing: " + aEvent.hashCode() );
         EventQueue.Instance().addDisposingEvent (new Runnable()
             {
                 public void run()
@@ -87,7 +83,6 @@ class QueuedTopWindowListener
             }
             );
     }
-
 
     private TopWindowListener maListener;
 }

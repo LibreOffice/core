@@ -52,6 +52,7 @@ JAVA_FILES = 								\
     AccessibleTreeNode.java					\
     AccessibleUNOHandler.java				\
     Canvas.java								\
+    CanvasShape.java						\
     ChildEventHandler.java					\
     ContextEventHandler.java				\
     EventHandler.java						\
