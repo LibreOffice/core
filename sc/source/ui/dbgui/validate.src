@@ -2,9 +2,9 @@
  *
  *  $RCSfile: validate.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:55 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 20:36:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -756,7 +756,7 @@ TabPage TP_VALIDATION_VALUES
         Text[ chinese_simplified ] = "ΤΚΠνΏΥµ¥ΤªΈρ(~B)";
         Text[ russian ] = "Οπξοσρκ οσρςϋυ ÿχεεκ";
         Text[ polish ] = "Dopuζ puste komσrki";
-        Text[ japanese ] = "‹σ”’ΎΩ‚π‹–‚·(~B)";
+        Text[ japanese ] = "‹σ”’ΎΩ‚ΰg‚¤(~B)";
         Text[ chinese_traditional ] = "®e³\\ªΕ®ζ(~B)";
         Text[ arabic ] = "ΗαΣγΗΝ ΘΗαΞαΗνΗ ΗαέΗΡΫΙ";
         Text[ greek ] = "Να επιτραπούν κενά κελιά";
@@ -986,7 +986,7 @@ TabPage TP_VALIDATION_ERROR
         Text[ chinese_simplified ] = "ΚδΘλΞήΠ§ΚύΦµΚ±ΟΤΚΎ΄νΞσ±¨Έζ(~M)";
         Text[ russian ] = "Βϋδΰβΰςό ρξξαωενθε ξα ξψθακε οπθ ββξδε νεδξοσρςθμϋυ ηνΰχενθι";
         Text[ polish ] = "PokaΏ ko~munikat o b³κdzie przy wpisywaniu nieprawid³owych wartoci";
-        Text[ japanese ] = "—Lψ‚Ε‚Θ‚Ά’l‚π“ό—Ν‚µ‚½Ϋ‚Ι΄Χ°Ò―Ύ°Όή‚π•\\¦(~M)";
+        Text[ japanese ] = "–³ψ‚Θ’l‚ª“ό—Ν‚³‚κ‚½‚η΄Χ°Ò―Ύ°Όή‚π•\\¦‚·‚ι(~M)";
         Text[ chinese_traditional ] = "¦bΏι¤JµL®ΔΌΖ­Θ®ΙΕγ¥άΏω»~³ψ§i(~M)";
         Text[ arabic ] = "ΕΩεΗΡ ΡΣΗαΙ ΞΨΓ ΪδΟ ΕΟΞΗα ήνγ ΫνΡ ΥΗαΝΙ";
         Text[ greek ] = "Εμφάνιση μηνύματος σφάλματος σε περίπτωση εισαγωγής μη έγκυρων τιμών";
@@ -1194,7 +1194,7 @@ TabPage TP_VALIDATION_ERROR
     {
             < "’†~" ; Default ; > ;
         < "x" ; Default ; > ;
-        < "²έΜ«Ò°Ό®έ" ; Default ; > ;
+        < "ξ•ρ" ; Default ; > ;
         < "ΟΈΫ" ; Default ; > ;
     };
     StringList [ chinese_traditional ] =
