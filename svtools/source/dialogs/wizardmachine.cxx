@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wizardmachine.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:38:16 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 13:23:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,12 +236,30 @@ namespace svt
         }
     };
 
+    long OWizardMachine::calcRightHelpOffset(sal_uInt32 _nButtonFlags)
+    {
+        sal_Int32 nMask = 1;
+        sal_Int32 nRightAlignedButtonCount = -1;
+        for (int i = 0; i < 8*sizeof(_nButtonFlags); i++ )
+        {
+            if( ( _nButtonFlags & nMask ) != 0 )
+                nRightAlignedButtonCount++;
+            nMask <<= 1;
+        }
+        Size aSize = GetPageSizePixel();
+        sal_Int32 nTotButtonWidth = nRightAlignedButtonCount * LogicalCoordinateToPixel(50);
+        sal_Int32 nTotRightButtonSpaceOffset = (nRightAlignedButtonCount) * WIZARDDIALOG_BUTTON_STDOFFSET_X;
+        if ((_nButtonFlags & WZB_NEXT) && (_nButtonFlags & WZB_NEXT))
+            nTotRightButtonSpaceOffset = (nTotRightButtonSpaceOffset - WIZARDDIALOG_BUTTON_STDOFFSET_X) + WIZARDDIALOG_BUTTON_SMALLSTDOFFSET_X;
+        return aSize.Width() - nTotButtonWidth - nTotRightButtonSpaceOffset;
+    }
+
     //=====================================================================
     //= OWizardMachine
     //=====================================================================
     //---------------------------------------------------------------------
-    OWizardMachine::OWizardMachine(Window* _pParent, const ResId& _rRes, sal_uInt32 _nButtonFlags,sal_Bool _bCheckButtonStates)
-        :WizardDialog(_pParent, _rRes)
+    OWizardMachine::OWizardMachine(Window* _pParent, const ResId& _rRes, sal_uInt32 _nButtonFlags, sal_Bool _bCheckButtonStates, sal_Bool _RoadmapMode, sal_Int16 _nLeftAlignCount )
+        :WizardDialog(_pParent, _rRes, _RoadmapMode, _nLeftAlignCount )
         ,m_pFinish(NULL)
         ,m_pCancel(NULL)
         ,m_pNextPage(NULL)
@@ -259,18 +277,7 @@ namespace svt
             m_pHelp= new HelpButton(this, WB_TABSTOP);
             m_pHelp->SetSizePixel( LogicToPixel( Size( 50, 14 ), MAP_APPFONT ) );
             m_pHelp->Show();
-
-            AddButton( m_pHelp, WIZARDDIALOG_BUTTON_STDOFFSET_X );
-        }
-
-        // the cancel button
-        if (_nButtonFlags & WZB_CANCEL)
-        {
-            m_pCancel = new CancelButton(this, WB_TABSTOP);
-            m_pCancel->SetSizePixel( LogicToPixel( Size( 50, 14 ), MAP_APPFONT ) );
-            m_pCancel->Show();
-
-            AddButton( m_pCancel, WIZARDDIALOG_BUTTON_STDOFFSET_X );
+            AddButton( m_pHelp, WIZARDDIALOG_BUTTON_STDOFFSET_X);
         }
 
         // the previous button
@@ -282,7 +289,7 @@ namespace svt
             m_pPrevPage->Show();
 
             if (_nButtonFlags & WZB_NEXT)
-                AddButton( m_pPrevPage );       // no x-offset to the next button
+                AddButton( m_pPrevPage, ( WIZARDDIALOG_BUTTON_SMALLSTDOFFSET_X) );      // half x-offset to the next button
             else
                 AddButton( m_pPrevPage, WIZARDDIALOG_BUTTON_STDOFFSET_X );
             SetPrevButton( m_pPrevPage );
@@ -313,6 +320,17 @@ namespace svt
             AddButton( m_pFinish, WIZARDDIALOG_BUTTON_STDOFFSET_X );
             m_pFinish->SetClickHdl( LINK( this, OWizardMachine, OnFinish ) );
         }
+
+        // the cancel button
+        if (_nButtonFlags & WZB_CANCEL)
+        {
+            m_pCancel = new CancelButton(this, WB_TABSTOP);
+            m_pCancel->SetSizePixel( LogicToPixel( Size( 50, 14 ), MAP_APPFONT ) );
+            m_pCancel->Show();
+
+            AddButton( m_pCancel, WIZARDDIALOG_BUTTON_STDOFFSET_X );
+        }
+
 
     }
 
@@ -589,6 +607,7 @@ namespace svt
 
         // don't travel directly on m_pImpl->aStateHistory, in case something goes wrong
         ::std::stack< WizardState > aTravelVirtually = m_pImpl->aStateHistory;
+        ::std::stack< WizardState > aOldStateHistory = m_pImpl->aStateHistory;
 
         WizardState nCurrentRollbackState = getCurrentState();
         while ( nCurrentRollbackState != _nTargetState )
@@ -597,11 +616,12 @@ namespace svt
             nCurrentRollbackState = aTravelVirtually.top();
             aTravelVirtually.pop();
         }
-
-        if ( !ShowPage( _nTargetState ) )
-            return sal_False;
-
         m_pImpl->aStateHistory = aTravelVirtually;
+        if ( !ShowPage( _nTargetState ) )
+        {
+            m_pImpl->aStateHistory = aOldStateHistory;
+            return sal_False;
+        }
         return sal_True;
     }
 
@@ -616,7 +636,7 @@ namespace svt
 
         // don't travel directly on m_pImpl->aStateHistory, in case something goes wrong
         ::std::stack< WizardState > aTravelVirtually = m_pImpl->aStateHistory;
-
+        ::std::stack< WizardState > aOldStateHistory = m_pImpl->aStateHistory;
         while ( nCurrentState != _nTargetState )
         {
             WizardState nNextState = determineNextState( nCurrentState );
@@ -632,17 +652,16 @@ namespace svt
             // get the next state
             nCurrentState = nNextState;
         }
-
+        m_pImpl->aStateHistory = aTravelVirtually;
         // show the target page
         if ( !ShowPage( nCurrentState ) )
         {
             // argh! prepareLeaveCurrentPage succeeded, determineNextState succeeded,
             // but ShowPage doesn't? Somebody behaves very strange here ....
             DBG_ERROR( "OWizardMachine::skipUntil: very unpolite ...." );
+            m_pImpl->aStateHistory = aOldStateHistory;
             return sal_False;
         }
-
-        m_pImpl->aStateHistory = aTravelVirtually;
         return sal_True;
     }
 
