@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.209 $
+ *  $Revision: 1.210 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-25 13:11:44 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:18:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,10 +161,10 @@
 #endif
 #include <com/sun/star/awt/XWindowPeer.hpp>
 
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_XCANVAS_HPP_
-#include <drafts/com/sun/star/rendering/XCanvas.hpp>
-#endif
 #ifndef _COM_SUN_STAR_RENDERING_XCANVAS_HPP_
+#include <com/sun/star/rendering/XCanvas.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_XWINDOW_HPP_
 #include <com/sun/star/awt/XWindow.hpp>
 #endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
@@ -4287,7 +4287,7 @@ Window::~Window()
 
     // Dispose of the canvas implementation (which, currently, has an
     // own wrapper window as a child to this one.
-    Reference< ::drafts::com::sun::star::rendering::XCanvas >  xCanvas( mpWindowImpl->mxCanvas );
+    Reference< ::com::sun::star::rendering::XCanvas >  xCanvas( mpWindowImpl->mxCanvas );
     if( xCanvas.is() )
     {
         ::com::sun::star::uno::Reference < ::com::sun::star::lang::XComponent >
@@ -9028,10 +9028,10 @@ BOOL Window::IsNativeWidgetEnabled() const
     return ImplGetWinData()->mbEnableNativeWidget;
 }
 
-Reference< ::drafts::com::sun::star::rendering::XCanvas > Window::GetCanvas() const
+Reference< ::com::sun::star::rendering::XCanvas > Window::GetCanvas() const
 {
     // try to retrieve hard reference from weak member
-    Reference< ::drafts::com::sun::star::rendering::XCanvas >  xCanvas( mpWindowImpl->mxCanvas );
+    Reference< ::com::sun::star::rendering::XCanvas >  xCanvas( mpWindowImpl->mxCanvas );
 
     // canvas still valid? Then we're done.
     if( xCanvas.is() )
@@ -9091,7 +9091,7 @@ Reference< ::drafts::com::sun::star::rendering::XCanvas > Window::GetCanvas() co
         Reference<lang::XMultiServiceFactory> xCanvasFactory(
             xFactory->createInstance(
                 OUString( RTL_CONSTASCII_USTRINGPARAM(
-                              "drafts.com.sun.star."
+                              "com.sun.star."
                               "rendering.CanvasFactory") ) ), UNO_QUERY );
         if (xCanvasFactory.is()) {
             xCanvas.set( xCanvasFactory->createInstanceWithArguments(
@@ -9123,10 +9123,10 @@ Reference< ::drafts::com::sun::star::rendering::XCanvas > Window::GetCanvas() co
     return xCanvas;
 }
 
-Reference< ::drafts::com::sun::star::rendering::XCanvas > Window::GetFullscreenCanvas( const Size& rFullscreenSize ) const
+Reference< ::com::sun::star::rendering::XCanvas > Window::GetFullscreenCanvas( const Size& rFullscreenSize ) const
 {
     // try to retrieve hard reference from weak member
-    Reference< ::drafts::com::sun::star::rendering::XCanvas >  xCanvas( mpWindowImpl->mxCanvas );
+    Reference< ::com::sun::star::rendering::XCanvas >  xCanvas( mpWindowImpl->mxCanvas );
 
     // canvas still valid? Then we're done.
     if( xCanvas.is() )
@@ -9188,7 +9188,7 @@ Reference< ::drafts::com::sun::star::rendering::XCanvas > Window::GetFullscreenC
         Reference<lang::XMultiServiceFactory> xCanvasFactory(
             xFactory->createInstance(
                 OUString( RTL_CONSTASCII_USTRINGPARAM(
-                              "drafts.com.sun.star."
+                              "com.sun.star."
                               "rendering.CanvasFactory") ) ), UNO_QUERY );
         if (xCanvasFactory.is()) {
             xCanvas.set( xCanvasFactory->createInstanceWithArguments(
