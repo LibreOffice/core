@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.108 $
+ *  $Revision: 1.109 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-13 08:53:31 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 11:15:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1881,6 +1881,27 @@ void PolyArgs::ClosePolygon()
     DBG_ASSERT( (mpFlagAry[mnPoints]==POLY_NORMAL), "FTGlyphOutline: PolyFinishFS failed!" );
 
     Polygon aPoly( mnPoints, mpPointAry, (bHasOffline ? mpFlagAry : NULL) );
+
+    // #i35928#
+    // This may be a invalid polygons, e.g. the last point is a control point.
+    // So close the polygon (and add the first point again) if the last point
+    // is a control point or different from first
+    const sal_uInt16 nPolySize(aPoly.GetSize());
+    if(nPolySize)
+    {
+        if((aPoly.HasFlags() && POLY_CONTROL == aPoly.GetFlags(nPolySize - 1))
+            || (aPoly.GetPoint(nPolySize - 1) != aPoly.GetPoint(0)))
+        {
+            aPoly.SetSize(nPolySize + 1);
+            aPoly.SetPoint(aPoly.GetPoint(nPolySize - 1), nPolySize);
+
+            if(aPoly.HasFlags())
+            {
+                aPoly.SetFlags(nPolySize, aPoly.GetFlags(nPolySize - 1));
+            }
+        }
+    }
+
     mrPolyPoly.Insert( aPoly );
     mnPoints = 0;
     bHasOffline = false;
