@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:55:04 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 13:24:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,21 +72,13 @@
 
 //#define _SV_OUTDEV_CXX
 
-#ifndef REMOTE_APPSERVER
 #ifndef _SV_SVSYS_HXX
 #include <svsys.h>
 #endif
-#endif
 
-#ifndef REMOTE_APPSERVER
 #ifndef _SV_SALGDI_HXX
 #include <salgdi.hxx>
 #endif
-#else
-#ifndef _SV_RMOUTDEV_HXX
-#include <rmoutdev.hxx>
-#endif
-#endif // REMOTE_APPSERVER
 
 #ifndef _SV_SALLAYOUT_HXX
 #include <sallayout.hxx>
