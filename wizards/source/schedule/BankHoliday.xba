@@ -108,24 +108,25 @@ End Function
 Sub CalInsertOwnDataInTables(ByVal iSelYear as Integer)
 	&apos; inserts the individual data from the table into the previously unsorted list
 Dim CurEventName as String
-Dim CurYear as Integer
-Dim CurMonth as Integer
-Dim CurDay as Integer
+Dim CurEvYear as Integer
+Dim CurEvMonth as Integer
+Dim CurEvDay as Integer
 Dim LastIndex as Integer
 Dim i as Integer
+Dim DateStr as String
 	LastIndex = Ubound(DlgCalModel.lstOwnData.StringItemList())
 	For i = 0 To LastIndex
-		CurYear = CalGetYearOfEvent(i)
-		If DlgCalModel.lstOwnData.StringItemList(i) &lt;&gt; &quot;&quot; Then
-			If (CurYear = iSelYear) Or (CurYear = 0) Then
-				CurMonth = CalGetMonthofEvent(i)
-				CurDay = CalGetDayofEvent(i)
+		If GetSelectedDateUnits(CurEvDay, CurEvMonth, CurEvYear, i) &lt;&gt; SBDATEUNDEFINED Then
+			If (CurEvYear = iSelYear) Or (CurEvYear = SBYEARUNDEFINED) Then
 				CurEventName = CalGetNameOfEvent(i)
-				CalInsertBankholiday(DateSerial(CurYear, CurMonth, CurDay), CurEventName, cHolidayType_Own)
+				CalInsertBankholiday(DateSerial(CurEvYear, CurEvMonth, CurEvDay), CurEventName, cHolidayType_Own)
 			End If
 		End If
 	Next
 End Sub
+
+
+
 
 
 &apos; Finds eg the first,second Monday in a month
