@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formres.src,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:23:35 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 12:33:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3013,6 +3013,7 @@ String RID_STR_SELECTEDITEMS
     Text = "Auswahl" ;
     Text [ English ] = "Selection" ;
     Text [ english_us ] = "Selection" ;
+    Text[ chinese_simplified ] = "选择";
 };
 String RID_STR_TIMEMIN
 {
@@ -5627,36 +5628,42 @@ String RID_STR_SCROLLVALUE_MIN
     Text = "Min. Bildlaufwert" ;
     Text [ ENGLISH ] = "Scroll value min." ;
     Text [ english_us ] = "Scroll value min.";
+    Text[ chinese_simplified ] = "最小滚动数值。";
 };
 String RID_STR_DEFAULT_SCROLLVALUE
 {
     Text = "Standard Bildlaufwert" ;
     Text [ ENGLISH ] = "Default scroll value" ;
     Text[ english_us ] = "Default scroll value";
+    Text[ chinese_simplified ] = "默认滚动数值";
 };
 String RID_STR_LINEINCREMENT
 {
     Text = "Kleine �nderung" ;
     Text [ english ] = "Small change" ;
     Text [ english_us ] = "Small change";
+    Text[ chinese_simplified ] = "小变化";
 };
 String RID_STR_BLOCKINCREMENT
 {
     Text = "Gro�e �nderung" ;
     Text [ english ] = "Large change" ;
     Text [ english_us ] = "Large change";
+    Text[ chinese_simplified ] = "大变化";
 };
 String RID_STR_REPEAT_DELAY
 {
     Text = "Verz�gerung" ;
     Text [ english ] = "Delay" ;
     Text [ english_us ] = "Delay";
+    Text[ chinese_simplified ] = "延迟";
 };
 String RID_STR_REPEAT
 {
     Text = "Wiederholung" ;
     Text [ english ] = "Repeat" ;
     Text [ english_us ] = "Repeat";
+    Text[ chinese_simplified ] = "重复";
 };
 String RID_STR_VISIBLESIZE
 {
@@ -6049,6 +6056,7 @@ String RID_STR_BOUND_CELL
     Text = "Verkn�pfte Zelle";
     Text [ english ]= "Linked cell";
     Text [ english_us ]= "Linked cell";
+    Text[ chinese_simplified ] = "链接的单元格";
 };
 
 String RID_STR_LIST_CELL_RANGE
@@ -6056,6 +6064,7 @@ String RID_STR_LIST_CELL_RANGE
     Text = "Quellzellenbereich";
     Text [ english ]= "Source cell range";
     Text [ english_us ]= "Source cell range";
+    Text[ chinese_simplified ] = "源单元格区域";
 };
 
 String RID_STR_CELL_EXCHANGE_TYPE
@@ -6063,6 +6072,7 @@ String RID_STR_CELL_EXCHANGE_TYPE
     Text = "Inhalt der verkn�pften Zelle";
     Text [ english ] = "Contents of the linked cell";
     Text [ english_us ] = "Contents of the linked cell";
+    Text[ chinese_simplified ] = "链接的单元格内容";
 };
 
 String RID_STR_ENUM_CELL_EXCHANGE_TYPE
@@ -6070,6 +6080,7 @@ String RID_STR_ENUM_CELL_EXCHANGE_TYPE
     Text = "Der ausgew�hlte Eintrag;Position des ausgew�hlten Eintrags";
     Text [ english ] = "The selected entry;Position of the selected entry";
     Text [ english_us ] = "The selected entry;Position of the selected entry";
+    Text[ chinese_simplified ] = "选择的条目；选择的条目的位置";
 };
 
 String RID_STR_SHOW_SCROLLBARS
@@ -6084,6 +6095,7 @@ String RID_STR_SYMBOLCOLOR
     Text = "Symbolfarbe" ;
     Text [ english ] = "Symbol color" ;
     Text [ english_us ] = "Symbol color" ;
+    Text[ chinese_simplified ] = "符号颜色";
 };
 
 Resource RID_RSC_ENUM_SCROLLBARS
