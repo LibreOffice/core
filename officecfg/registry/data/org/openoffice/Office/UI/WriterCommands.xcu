@@ -925,6 +925,9 @@
                     <value xml:lang="de">Umrandung</value>
                     <value xml:lang="en-US">Borders</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:PageColumnDialog" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
