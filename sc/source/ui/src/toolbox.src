@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.src,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 13:29:27 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 03:24:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1719,7 +1719,7 @@ FloatingWindow RID_TBXCTL_INSOBJ
         SID_SEARCH_DLG;
         SID_HELP_PI;
 
-        Die Office-weite ImageListe sollte zentral zur Verfuegung gestellt
+        Die Office-weite Image Liste sollte zentral zur Verfuegung gestellt
         werden. Die folgende RID_OFFICEIMAGELIST_xx sorgt nur dafuer, dass
         im Anpassen/Symbolleiste-Dialog ein paar Bimaps mehr erscheinen :-/
 */
@@ -1946,171 +1946,55 @@ FloatingWindow RID_TBXCTL_INSOBJ
 
 ImageList RID_DEFAULTIMAGELIST_SC
 {
-    ImageBitmap = Bitmap
-    {
-        File = "sc_out.bmp" ;
-        File [ english ] = "sc_out01.bmp" ;
-        File [ english_us ] = "sc_out01.bmp" ;
-        File [ dutch ] = "sc_out31.bmp" ;
-        File [ french ] = "sc_out33.bmp" ;
-        File [ spanish ] = "sc_out34.bmp" ;
-        File [ italian ] = "sc_out39.bmp" ;
-        File [ swedish ] = "sc_out46.bmp" ;
-        File [ danish ] = "sc_out45.bmp" ;
-        File [ russian ] = "sc_out07.bmp" ;
-        File [ polish ] = "sc_out48.bmp" ;
-        File [ greek ] = "sc_out30.bmp" ;
-        File [ japanese ] = "sc_out81.bmp" ;
-        File [ portuguese ] = "sc_out03.bmp" ;
-        File [ portuguese_brazilian ] = "sc_out55.bmp" ;
-        File [ turkish ] = "sc_out90.bmp" ;
-        File [ chinese_simplified ] = "sc_out86.bmp" ;
-        File [ chinese_traditional ] = "sc_out88.bmp" ;
-        File [ japanese ] = "sc_out81.bmp" ;
-        File [ korean ] = "sc_out82.bmp" ;
-        File [ arabic ] = "sc_out96.bmp" ;
-        File [ czech ] = "sc_out42.bmp" ;
-        File [ slovak ] = "sc_out43.bmp" ;
-        File [ hungarian ] = "sc_out36.bmp" ;
-        File [ slovenian ] = "sc_out50.bmp" ;
-        File [ catalan ] = "sc_out37.bmp" ;
-
-    };
+    Prefix = "sc";
     MaskColor = STD_MASKCOLOR ;
     DEFAULT_IDLIST
 };
 
 ImageList RID_DEFAULTIMAGELIST_LC
 {
-    ImageBitmap = Bitmap
-    {
-        File = "lc_out.bmp" ;
-        File [ english ] = "lc_out01.bmp" ;
-        File [ english_us ] = "lc_out01.bmp" ;
-        File [ dutch ] = "lc_out31.bmp" ;
-        File [ french ] = "lc_out33.bmp" ;
-        File [ spanish ] = "lc_out34.bmp" ;
-        File [ italian ] = "lc_out39.bmp" ;
-        File [ swedish ] = "lc_out46.bmp" ;
-        File [ danish ] = "lc_out45.bmp" ;
-        File [ russian ] = "lc_out07.bmp" ;
-        File [ polish ] = "lc_out48.bmp" ;
-        File [ greek ] = "lc_out30.bmp" ;
-        File [ japanese ] = "lc_out81.bmp" ;
-        File [ portuguese ] = "lc_out03.bmp" ;
-        File [ portuguese_brazilian ] = "lc_out55.bmp" ;
-        File [ turkish ] = "lc_out90.bmp" ;
-        File [ chinese_simplified ] = "lc_out86.bmp" ;
-        File [ chinese_traditional ] = "lc_out88.bmp" ;
-        File [ japanese ] = "lc_out81.bmp" ;
-        File [ korean ] = "lc_out82.bmp" ;
-        File [ arabic ] = "lc_out96.bmp" ;
-        File [ czech ] = "lc_out42.bmp" ;
-        File [ slovak ] = "lc_out43.bmp" ;
-        File [ hungarian ] = "lc_out36.bmp" ;
-        File [ slovenian ] = "lc_out50.bmp" ;
-        File [ catalan ] = "lc_out37.bmp" ;
-
-    };
+    Prefix = "lc";
     MaskColor = STD_MASKCOLOR ;
     DEFAULT_IDLIST
 };
 
 ImageList RID_DEFAULTIMAGELIST_SCH
 {
-    ImageBitmap = Bitmap
-    {
-        File = "sch_out.bmp" ;
-        File [ english ] = "sch_out01.bmp" ;
-        File [ english_us ] = "sch_out01.bmp" ;
-        File [ dutch ] = "sch_out31.bmp" ;
-        File [ french ] = "sch_out33.bmp" ;
-        File [ spanish ] = "sch_out34.bmp" ;
-        File [ italian ] = "sch_out39.bmp" ;
-        File [ swedish ] = "sch_out46.bmp" ;
-        File [ danish ] = "sch_out45.bmp" ;
-        File [ russian ] = "sch_out07.bmp" ;
-        File [ polish ] = "sch_out48.bmp" ;
-        File [ greek ] = "sch_out30.bmp" ;
-        File [ japanese ] = "sch_out81.bmp" ;
-        File [ portuguese ] = "sch_out03.bmp" ;
-        File [ portuguese_brazilian ] = "sch_out55.bmp" ;
-        File [ turkish ] = "sch_out90.bmp" ;
-        File [ chinese_simplified ] = "sch_out86.bmp" ;
-        File [ chinese_traditional ] = "sch_out88.bmp" ;
-        File [ japanese ] = "sch_out81.bmp" ;
-        File [ korean ] = "sch_out82.bmp" ;
-        File [ arabic ] = "sch_out96.bmp" ;
-        File [ czech ] = "sch_out42.bmp" ;
-        File [ slovak ] = "sch_out43.bmp" ;
-        File [ hungarian ] = "sch_out36.bmp" ;
-        File [ slovenian ] = "sch_out50.bmp" ;
-        File [ catalan ] = "sch_out37.bmp" ;
-
-    };
+    Prefix = "sch";
     MaskColor = SC_HC_MASKCOLOR ;
     DEFAULT_IDLIST
 };
 
 ImageList RID_DEFAULTIMAGELIST_LCH
 {
-    ImageBitmap = Bitmap
-    {
-        File = "lch_out.bmp" ;
-        File [ english ] = "lch_out01.bmp" ;
-        File [ english_us ] = "lch_out01.bmp" ;
-        File [ dutch ] = "lch_out31.bmp" ;
-        File [ french ] = "lch_out33.bmp" ;
-        File [ spanish ] = "lch_out34.bmp" ;
-        File [ italian ] = "lch_out39.bmp" ;
-        File [ swedish ] = "lch_out46.bmp" ;
-        File [ danish ] = "lch_out45.bmp" ;
-        File [ russian ] = "lch_out07.bmp" ;
-        File [ polish ] = "lch_out48.bmp" ;
-        File [ greek ] = "lch_out30.bmp" ;
-        File [ japanese ] = "lch_out81.bmp" ;
-        File [ portuguese ] = "lch_out03.bmp" ;
-        File [ portuguese_brazilian ] = "lch_out55.bmp" ;
-        File [ turkish ] = "lch_out90.bmp" ;
-        File [ chinese_simplified ] = "lch_out86.bmp" ;
-        File [ chinese_traditional ] = "lch_out88.bmp" ;
-        File [ japanese ] = "lch_out81.bmp" ;
-        File [ korean ] = "lch_out82.bmp" ;
-        File [ arabic ] = "lch_out96.bmp" ;
-        File [ czech ] = "lch_out42.bmp" ;
-        File [ slovak ] = "lch_out43.bmp" ;
-        File [ hungarian ] = "lch_out36.bmp" ;
-        File [ slovenian ] = "lch_out50.bmp" ;
-        File [ catalan ] = "lch_out37.bmp" ;
-
-    };
+    Prefix = "lch";
     MaskColor = SC_HC_MASKCOLOR ;
     DEFAULT_IDLIST
 };
 ImageList RID_OFFICEIMAGELIST_SC
 {
-    ImageBitmap = Bitmap { File = "sc_off.bmp" ; };
+    Prefix = "sc";
     MaskColor = STD_MASKCOLOR ;
     OFFICE_IDLIST
 };
 
 ImageList RID_OFFICEIMAGELIST_LC
 {
-    ImageBitmap = Bitmap { File = "lc_off.bmp" ; };
+    Prefix = "lc";
     MaskColor = STD_MASKCOLOR ;
     OFFICE_IDLIST
 };
 
 ImageList RID_OFFICEIMAGELIST_SCH
 {
-    ImageBitmap = Bitmap { File = "sch_off.bmp" ; };
+    Prefix = "sch";
     MaskColor = SC_HC_MASKCOLOR ;
     OFFICE_IDLIST
 };
 
 ImageList RID_OFFICEIMAGELIST_LCH
 {
-    ImageBitmap = Bitmap { File = "lch_off.bmp" ; };
+    Prefix = "lch";
     MaskColor = SC_HC_MASKCOLOR ;
     OFFICE_IDLIST
 };
