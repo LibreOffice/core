@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: pb $ $Date: 2000-12-10 14:18:55 $
+#   last change: $Author: kz $ $Date: 2001-02-08 15:12:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -141,7 +141,7 @@ EXCEPTIONSFILES=\
         $(SLO)$/rmacceptor.obj	\
         $(SLO)$/appcfg.obj		\
         $(SLO)$/helpinterceptor.obj \
-        $(SLO)$/newhelp.obj \
+        $(SLO)$/newhelp.obj
 
 .IF "$(GUI)" == "MAC"
 SLOFILES +=\
