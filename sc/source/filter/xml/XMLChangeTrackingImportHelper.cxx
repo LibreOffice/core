@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangeTrackingImportHelper.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 17:22:04 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:46:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -445,7 +445,7 @@ void ScXMLChangeTrackingImportHelper::GetMultiSpannedRange()
         {
             static_cast<ScMyDelAction*>(pCurrentAction)->nD = nMultiSpannedSlaveCount;
         }
-        nMultiSpannedSlaveCount++;
+        ++nMultiSpannedSlaveCount;
         if (nMultiSpannedSlaveCount >= nMultiSpanned)
         {
             nMultiSpanned = 0;
@@ -587,8 +587,9 @@ void ScXMLChangeTrackingImportHelper::CreateGeneratedActions(ScMyGeneratedList& 
 {
     if (!rList.empty())
     {
-        ScMyGeneratedList::iterator aItr = rList.begin();
-        while (aItr != rList.end())
+        ScMyGeneratedList::iterator aItr(rList.begin());
+        ScMyGeneratedList::iterator aEndItr(rList.end());
+        while (aItr != aEndItr)
         {
             if (((*aItr)->nID == 0))
             {
@@ -602,7 +603,7 @@ void ScXMLChangeTrackingImportHelper::CreateGeneratedActions(ScMyGeneratedList& 
                     DBG_ASSERT((*aItr)->nID, "could not insert generated action");
                 }
             }
-            aItr++;
+            ++aItr;
         }
     }
 }
@@ -616,8 +617,9 @@ void ScXMLChangeTrackingImportHelper::SetDeletionDependencies(ScMyDelAction* pAc
             (pAction->nActionType == SC_CAT_DELETE_TABS)), "wrong action type");
         if (pDelAct)
         {
-            ScMyGeneratedList::iterator aItr = pAction->aGeneratedList.begin();
-            while (aItr != pAction->aGeneratedList.end())
+            ScMyGeneratedList::iterator aItr(pAction->aGeneratedList.begin());
+            ScMyGeneratedList::iterator aEndItr(pAction->aGeneratedList.end());
+            while (aItr != aEndItr)
             {
                 DBG_ASSERT((*aItr)->nID, "a not inserted generated action");
                 pDelAct->SetDeletedInThis((*aItr)->nID, pTrack);
@@ -647,8 +649,9 @@ void ScXMLChangeTrackingImportHelper::SetDeletionDependencies(ScMyDelAction* pAc
         DBG_ASSERT(((pAction->nActionType == SC_CAT_DELETE_COLS) ||
             (pAction->nActionType == SC_CAT_DELETE_ROWS) ||
             (pAction->nActionType == SC_CAT_DELETE_TABS)), "wrong action type");
-        ScMyMoveCutOffs::iterator aItr = pAction->aMoveCutOffs.begin();
-        while(aItr != pAction->aMoveCutOffs.end())
+        ScMyMoveCutOffs::iterator aItr(pAction->aMoveCutOffs.begin());
+        ScMyMoveCutOffs::iterator aEndItr(pAction->aMoveCutOffs.end());
+        while(aItr != aEndItr)
         {
             ScChangeAction* pChangeAction = pTrack->GetAction(aItr->nID);
             if (pChangeAction && (pChangeAction->GetType() == SC_CAT_MOVE))
@@ -673,8 +676,9 @@ void ScXMLChangeTrackingImportHelper::SetMovementDependencies(ScMyMoveAction* pA
         {
             if (pMoveAct)
             {
-                ScMyGeneratedList::iterator aItr = pAction->aGeneratedList.begin();
-                while (aItr != pAction->aGeneratedList.end())
+                ScMyGeneratedList::iterator aItr(pAction->aGeneratedList.begin());
+                ScMyGeneratedList::iterator aEndItr(pAction->aGeneratedList.end());
+                while (aItr != aEndItr)
                 {
                     DBG_ASSERT((*aItr)->nID, "a not inserted generated action");
                     pMoveAct->SetDeletedInThis((*aItr)->nID, pTrack);
@@ -722,8 +726,9 @@ void ScXMLChangeTrackingImportHelper::SetDependencies(ScMyBaseAction* pAction)
     {
         if (!pAction->aDependencies.empty())
         {
-            ScMyDependencies::iterator aItr = pAction->aDependencies.begin();
-            while(aItr != pAction->aDependencies.end())
+            ScMyDependencies::iterator aItr(pAction->aDependencies.begin());
+            ScMyDependencies::iterator aEndItr(pAction->aDependencies.end());
+            while(aItr != aEndItr)
             {
                 pAct->AddDependent(*aItr, pTrack);
                 aItr = pAction->aDependencies.erase(aItr);
@@ -731,8 +736,9 @@ void ScXMLChangeTrackingImportHelper::SetDependencies(ScMyBaseAction* pAction)
         }
         if (!pAction->aDeletedList.empty())
         {
-            ScMyDeletedList::iterator aItr = pAction->aDeletedList.begin();
-            while(aItr != pAction->aDeletedList.end())
+            ScMyDeletedList::iterator aItr(pAction->aDeletedList.begin());
+            ScMyDeletedList::iterator aEndItr(pAction->aDeletedList.end());
+            while(aItr != aEndItr)
             {
                 pAct->SetDeletedInThis((*aItr)->nID, pTrack);
                 ScChangeAction* pDeletedAct = pTrack->GetAction((*aItr)->nID);
@@ -835,8 +841,9 @@ void ScXMLChangeTrackingImportHelper::CreateChangeTrack(ScDocument* pTempDoc)
         // #97286# old files didn't store 100th seconds, disable until encountered
         pTrack->SetTime100thSeconds( FALSE );
 
-        ScMyActions::iterator aItr = aActions.begin();
-        while (aItr != aActions.end())
+        ScMyActions::iterator aItr(aActions.begin());
+        ScMyActions::iterator aEndItr(aActions.end());
+        while (aItr != aEndItr)
         {
             ScChangeAction* pAction = NULL;
 
@@ -882,18 +889,19 @@ void ScXMLChangeTrackingImportHelper::CreateChangeTrack(ScDocument* pTempDoc)
             else
                 DBG_ERROR("no action");
 
-            aItr++;
+            ++aItr;
         }
         if (pTrack->GetLast())
             pTrack->SetActionMax(pTrack->GetLast()->GetActionNumber());
 
         aItr = aActions.begin();
-        while (aItr != aActions.end())
+        aEndItr = aActions.end();
+        while (aItr != aEndItr)
         {
             SetDependencies(*aItr);
 
             if ((*aItr)->nActionType == SC_CAT_CONTENT)
-                aItr++;
+                ++aItr;
             else
             {
                 if (*aItr)
@@ -903,7 +911,8 @@ void ScXMLChangeTrackingImportHelper::CreateChangeTrack(ScDocument* pTempDoc)
         }
 
         aItr = aActions.begin();
-        while (aItr != aActions.end())
+        aEndItr = aActions.end();
+        while (aItr != aEndItr)
         {
             DBG_ASSERT((*aItr)->nActionType == SC_CAT_CONTENT, "wrong action type");
             SetNewCell(static_cast<ScMyContentAction*>(*aItr));
