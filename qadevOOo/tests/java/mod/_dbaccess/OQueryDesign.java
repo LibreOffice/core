@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OQueryDesign.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-02-27 11:18:50 $
+ *  last change:$Date: 2003-05-27 12:37:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@ package mod._dbaccess;
 //import com.sun.star.awt.XControl;
 //import com.sun.star.awt.XControlModel;
 import com.sun.star.awt.XWindow;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.frame.XDispatch;
 import com.sun.star.frame.XDispatchProvider;
@@ -108,7 +109,7 @@ public class OQueryDesign extends TestCase {
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
         Desk = (XDesktop) UnoRuntime.queryInterface(
-                    XDesktop.class, DesktopTools.createDesktop(Param.getMSF()) );
+                    XDesktop.class, DesktopTools.createDesktop((XMultiServiceFactory)Param.getMSF()) );
     }
 
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {

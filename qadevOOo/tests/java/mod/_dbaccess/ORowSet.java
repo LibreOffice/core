@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ORowSet.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-01-31 10:37:25 $
+ *  last change:$Date: 2003-05-27 12:37:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,13 +220,13 @@ public class ORowSet extends TestCase {
 
         this.log = log ;
         tmpDir = (String) Param.get("TMPURL") ;
-            tmpDir = utils.getOfficeTemp(Param.getMSF());
+            tmpDir = utils.getOfficeTemp((XMultiServiceFactory)Param.getMSF());
 /*        origDB = (String) Param.get("DOCPTH") +
             System.getProperty("file.separator") + "ORowSet.dbf" ;*/
 
         origDB = util.utils.getFullTestDocName("TestDB/testDB.dbf");
 
-        dbTools = new DBTools(Param.getMSF()) ;
+        dbTools = new DBTools((XMultiServiceFactory)Param.getMSF()) ;
 
         // creating DataSource and registering it in DatabaseContext
         String dbURL = (String) Param.get("test.db.url");
@@ -342,8 +342,8 @@ public class ORowSet extends TestCase {
             do {
                 tableName = "ORowSet_tmp" + uniqueSuffix ;
                 oldF = utils.getFullURL(origDB);
-                newF = utils.getOfficeTemp(Param.getMSF())+tableName+".dbf";
-            } while (!utils.overwriteFile(Param.getMSF(),oldF,newF) &&
+                newF = utils.getOfficeTemp((XMultiServiceFactory)Param.getMSF())+tableName+".dbf";
+            } while (!utils.overwriteFile((XMultiServiceFactory)Param.getMSF(),oldF,newF) &&
                 uniqueSuffix++ < 50);
         }
 
@@ -351,7 +351,7 @@ public class ORowSet extends TestCase {
         XConnection connection = null ;
 
         try {
-            xMSF = Param.getMSF();
+            xMSF = (XMultiServiceFactory)Param.getMSF();
 
             Object oRowSet = xMSF.createInstance("com.sun.star.sdb.RowSet") ;
 
