@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Toolkit.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 14:00:56 $
+ *  last change:$Date: 2003-09-08 13:03:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,19 +61,8 @@
 
 package mod._toolkit;
 
-import com.sun.star.awt.XControl;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.awt.XControlModel;
-import com.sun.star.awt.XWindow;
-import com.sun.star.awt.XWindowPeer;
-import com.sun.star.drawing.XControlShape;
-import com.sun.star.drawing.XShape;
-import com.sun.star.frame.XController;
-import com.sun.star.text.XTextDocument;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
-import com.sun.star.view.XControlAccess;
 import java.io.PrintWriter;
+
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
@@ -82,6 +71,18 @@ import util.FormTools;
 import util.SOfficeFactory;
 import util.WriterTools;
 import util.utils;
+
+import com.sun.star.awt.XControlModel;
+import com.sun.star.awt.XWindow;
+import com.sun.star.awt.XWindowPeer;
+import com.sun.star.drawing.XControlShape;
+import com.sun.star.drawing.XShape;
+import com.sun.star.frame.XController;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.text.XTextDocument;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
+import com.sun.star.view.XControlAccess;
 
 /**
 * Test for <code>com.sun.star.awt.Toolkit</code> service.
@@ -134,7 +135,6 @@ public class Toolkit extends TestCase {
 
         //now get the toolkit
         try {
-            XControl ctrl = the_access.getControl(the_Model) ;
             win = cntrlr.getFrame().getContainerWindow();
             //win = (XWindow) UnoRuntime.queryInterface(XWindow.class, ctrl) ;
             the_win = the_access.getControl(the_Model).getPeer();
