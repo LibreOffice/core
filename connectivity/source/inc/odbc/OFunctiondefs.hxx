@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OFunctiondefs.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:27 $
+ *  last change: $Author: oj $ $Date: 2000-09-21 09:53:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,13 +65,9 @@
 
 #if defined(WIN) || defined(WNT)
 
-//  #include "odbc3imp.hxx"
-#include <tools/prewin.h>
+//  #include <tools/prewin.h>
 #include <odbc/sqlext.h>
-#include <tools/postwin.h>
-
-
-
+//  #include <tools/postwin.h>
 
 #ifndef SQL_C_BOOKMARK
 #define SQL_C_BOOKMARK   SQL_C_ULONG                     /* BOOKMARK         */
@@ -88,53 +84,9 @@
 //--------------------------------------------------------------------------
 
 #ifdef MAC
-
-#include <mac_start.h>
-
-#define sal_Bool    SQLBOOL
-#define PFUNC   SQLPFUNC
-
-#ifdef __powerc
-
-#ifndef _ODBCCFM_H
-#include <ODBCCfm.h>
-#endif
-
-#else
-
-#ifndef __ODBCSHAREDLIBRARY__
-  #include <odbc/ODBCSharedLibrary.h>
-#endif
-
-#endif
-
-#ifndef __SQLEXT
-  #include <odbc/sqlext.h>
-#endif
-
-#include <mac_end.h>
-
-// Schnell wieder weg mit dem ganzen Zeug
-
-#undef sal_Bool
-#undef PFUNC
-
-#ifdef __powerc
-    // Herkoemmliche Version (DLL-Bindung automatisch beim Start des Programms).
-    // odbcdefs.hxx biegt die in den Quellen benutzten NSQL-Methoden auf die
-    // herkoemmlichen SQL...-Aufrufe um.
-    //  #include "odbc3defs.hxx"
-#else
-    // Stub-Version: dynamische Bindung an die DLL zur Laufzeit.
-    // odbcstub definiert die in den Quellen benutzten NSQL...-Methoden
-    // als indirekte Funktionsaufrufe.
-    // odbcimp zieht sich selbst preos2, odbc und postos2 an.
-    //  #include "odbc3imp.hxx"
-#endif
-
+#include <odbc/sqlext.h>
 #define SDB_ODBC_CHAR UCHAR
-
-#endif
+#endif // MAC
 
 //--------------------------------------------------------------------------
 

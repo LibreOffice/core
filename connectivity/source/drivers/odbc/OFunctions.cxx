@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OFunctions.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:23 $
+ *  last change: $Author: oj $ $Date: 2000-09-21 09:54:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ sal_Bool connectivity::LoadLibrary_ADABAS(::rtl::OUString &_rPath)
     static oslModule pODBCso = NULL;
 
     if (bLoaded)
-        return TRUE;
+        return sal_True;
 
     char *pPath =getenv("DBROOT");
     if(pPath)
@@ -103,14 +103,14 @@ sal_Bool connectivity::LoadLibrary_ADABAS(::rtl::OUString &_rPath)
 }
 // -------------------------------------------------------------------------
 // Dynamisches Laden der DLL/shared lib und Adressen der Funktionen besorgen:
-// Liefert TRUE bei Erfolg.
+// Liefert sal_True bei Erfolg.
 sal_Bool connectivity::LoadLibrary_ODBC3(::rtl::OUString &_rPath)
 {
     static sal_Bool bLoaded = sal_False;
     static oslModule pODBCso = NULL;
 
     if (bLoaded)
-        return TRUE;
+        return sal_True;
 #ifdef WIN
     _rPath = ::rtl::OUString::createFromAscii("ODBC.DLL");
 
