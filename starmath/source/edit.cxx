@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: tl $ $Date: 2001-09-03 10:40:38 $
+ *  last change: $Author: tl $ $Date: 2001-09-21 08:25:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -388,10 +388,6 @@ void SmEditWindow::KeyInput(const KeyEvent& rKEvt)
     }
     else
     {
-        SmDocShell *pDocShell = GetDoc();
-        if (pDocShell)
-            pDocShell->SetModified( TRUE );
-
         // Timer neu starten, um den Handler (auch bei längeren Eingaben)
         // möglichst nur einmal am Ende aufzurufen.
         aCursorMoveTimer.Start();
@@ -422,7 +418,15 @@ void SmEditWindow::KeyInput(const KeyEvent& rKEvt)
             }
         }
         else
+        {
+            // have doc-shell modified only for formula input/change and not
+            // cursor travelling and such things...
+            SmDocShell *pDocShell = GetDoc();
+            if (pDocShell)
+                pDocShell->SetModified( GetEditEngine()->IsModified() );
+
             aModifyTimer.Start();
+        }
     }
 }
 
