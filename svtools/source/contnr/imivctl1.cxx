@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imivctl1.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 09:06:19 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 12:34:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,7 @@
 #include "svmedit.hxx"
 
 #include <algorithm>
+#include <memory>
 
 #define DD_SCROLL_PIXEL 24
 #define IMPICNVIEW_ACC_RETURN 1
@@ -390,18 +391,24 @@ void SvxIconChoiceCtrl_Impl::InsertEntry( SvxIconChoiceCtrlEntry* pEntry, ULONG 
     }
 }
 
-void SvxIconChoiceCtrl_Impl::CreateAutoMnemonics( void )
+void SvxIconChoiceCtrl_Impl::CreateAutoMnemonics( MnemonicGenerator* _pGenerator )
 {
-    MnemonicGenerator   aMnemonicGenerator;
-    ULONG               nEntryCount = GetEntryCount();
-    ULONG               i;
+    ::std::auto_ptr< MnemonicGenerator > pAutoDeleteOwnGenerator;
+    if ( !_pGenerator )
+    {
+        _pGenerator = new MnemonicGenerator;
+        pAutoDeleteOwnGenerator.reset( _pGenerator );
+    }
+
+    ULONG   nEntryCount = GetEntryCount();
+    ULONG   i;
 
     // insert texts in generator
     for( i = 0; i < nEntryCount; ++i )
     {
         DBG_ASSERT( GetEntry( i ), "-SvxIconChoiceCtrl_Impl::CreateAutoMnemonics(): more expected than provided!" );
 
-        aMnemonicGenerator.RegisterMnemonic( GetEntry( i )->GetText() );
+        _pGenerator->RegisterMnemonic( GetEntry( i )->GetText() );
     }
 
     // exchange texts with generated mnemonics
@@ -410,7 +417,7 @@ void SvxIconChoiceCtrl_Impl::CreateAutoMnemonics( void )
         SvxIconChoiceCtrlEntry* pEntry = GetEntry( i );
         String                  aTxt = pEntry->GetText();
 
-        if( aMnemonicGenerator.CreateMnemonic( aTxt ) )
+        if( _pGenerator->CreateMnemonic( aTxt ) )
             pEntry->SetText( aTxt );
     }
 }
