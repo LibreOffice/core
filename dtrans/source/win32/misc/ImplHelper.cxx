@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImplHelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-09 08:48:25 $
+ *  last change: $Author: tra $ $Date: 2001-03-15 06:56:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,7 +281,11 @@ sal_Bool SAL_CALL CopyFormatEtc( LPFORMATETC petcDest, LPFORMATETC petcSrc )
     __try
     {
         petcDest->cfFormat = petcSrc->cfFormat;
-        petcDest->ptd      = CopyTargetDevice(petcSrc->ptd);
+
+        petcDest->ptd      = NULL;
+        if ( NULL != petcSrc->ptd )
+            petcDest->ptd  = CopyTargetDevice(petcSrc->ptd);
+
         petcDest->dwAspect = petcSrc->dwAspect;
         petcDest->lindex   = petcSrc->lindex;
         petcDest->tymed    = petcSrc->tymed;
