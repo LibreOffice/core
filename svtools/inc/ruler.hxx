@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ruler.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 11:46:08 $
+ *  last change: $Author: hr $ $Date: 2004-04-07 12:47:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -771,7 +771,10 @@ private:
     void                ImplDraw();
     void                ImplDrawExtra( BOOL bPaint = FALSE );
     void                ImplUpdate( BOOL bMustCalc = FALSE );
-    BOOL                ImplHitTest( const Point& rPos, ImplRulerHitTest* pHitTest ) const;
+    BOOL                ImplHitTest( const Point& rPos,
+                                     ImplRulerHitTest* pHitTest,
+                                     BOOL bRequiredStyle = FALSE,
+                                     USHORT nRequiredStyle = 0 ) const;
     BOOL                ImplDocHitTest( const Point& rPos, RulerType eDragType, ImplRulerHitTest* pHitTest ) const;
     BOOL                ImplStartDrag( ImplRulerHitTest* pHitTest, USHORT nModifier );
     void                ImplDrag( const Point& rPos );
