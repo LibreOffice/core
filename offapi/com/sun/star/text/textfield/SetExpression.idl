@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SetExpression.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 00:50:33 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:43:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,7 @@ published service SetExpression
     /** determines whether changes in language attributes at the position the text field
         is located also change the number format as appropriate for this language.
 
-    @since #107627#
+    @since OOo 1.1.2
      */
     [optional, property] boolean IsFixedLanguage;
 };
