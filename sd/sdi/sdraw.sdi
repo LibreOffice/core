@@ -2219,6 +2219,8 @@ DiaSpeedItem DiaSpeed SID_DIA_SPEED
     RecordPerSet;
     Synchron;
 
+    Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
