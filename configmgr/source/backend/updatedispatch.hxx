@@ -2,9 +2,9 @@
  *
  *  $RCSfile: updatedispatch.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-06-07 14:16:12 $
+ *  last change: $Author: jb $ $Date: 2002-07-14 16:49:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,12 +119,16 @@ namespace configmgr
             virtual Result handle(data::ValueNodeAccess const& _aNode);
             virtual Result handle(data::GroupNodeAccess const& _aNode);
             virtual Result handle(data::SetNodeAccess const& _aNode);
+            virtual Result handle(data::TreeAccessor const& _aElement);
         private:
             sal_Int16 getUpdateAttributes(node::Attributes const & _aAttributes, bool bAdded);
             sal_Int16 getUpdateAttributeMask(node::Attributes const & _aAttributes);
+
+            bool testReplacedAndGetName(data::NodeAccess const & _aNode, OUString & _aName);
         private:
             UpdateHandler   m_xUpdateHandler;
             OUString        m_aLocale;
+            OUString        m_aElementName;
             bool    m_bInLocalizedValues;
         };
 // -----------------------------------------------------------------------------

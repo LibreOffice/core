@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstrings.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2002-07-03 14:07:27 $
+ *  last change: $Author: jb $ $Date: 2002-07-14 16:49:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,7 @@ namespace configmgr
         IMPLEMENT_CONSTASCII_USTRING(TAG_IMPORT,    OOR_TAG_PREFIX_"import");
         IMPLEMENT_CONSTASCII_USTRING(TAG_INSTANCE,  OOR_TAG_PREFIX_"node-ref");
         IMPLEMENT_CONSTASCII_USTRING(TAG_ITEMTYPE,  OOR_TAG_PREFIX_"item");
+        IMPLEMENT_CONSTASCII_USTRING(TAG_USES,      OOR_TAG_PREFIX_"uses");
 
         // attribute names
         IMPLEMENT_CONSTASCII_USTRING(ATTR_NAME,     OOR_PREFIX_"name");

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementformatter.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2002-07-11 17:23:01 $
+ *  last change: $Author: jb $ $Date: 2002-07-14 16:49:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,6 +224,27 @@ void ElementFormatter::addInstanceType(OUString const & _aElementType, OUString 
 }
 // -----------------------------------------------------------------------------
 
+static ::rtl::OUString toXmlTypeName(const uno::TypeClass& _rTypeClass)
+{
+    ::rtl::OUString aRet;
+    switch(_rTypeClass)
+    {
+    case uno::TypeClass_BOOLEAN:  aRet = VALUETYPE_BOOLEAN; break;
+    case uno::TypeClass_SHORT:    aRet = VALUETYPE_SHORT; break;
+    case uno::TypeClass_LONG:     aRet = VALUETYPE_INT; break;
+    case uno::TypeClass_HYPER:    aRet = VALUETYPE_LONG; break;
+    case uno::TypeClass_DOUBLE:   aRet = VALUETYPE_DOUBLE; break;
+    case uno::TypeClass_STRING:   aRet = VALUETYPE_STRING; break;
+    case uno::TypeClass_SEQUENCE: aRet = VALUETYPE_BINARY; break;
+    case uno::TypeClass_ANY:      aRet = VALUETYPE_ANY; break;
+    default:
+        OSL_ENSURE(false,"Cannot get type name: unknown typeclass");
+        break;
+    }
+    return aRet;
+}
+// -----------------------------------------------------------------------------
+
 void ElementFormatter::addPropertyValueType(uno::Type const& _aType)
 {
     if (_aType == uno::Type()) return;
@@ -231,7 +252,7 @@ void ElementFormatter::addPropertyValueType(uno::Type const& _aType)
     bool bList = false;
     uno::Type       aSimpleType         = getBasicType(_aType, bList);
     uno::TypeClass  aSimpleTypeClass    = aSimpleType.getTypeClass();
-    OUString        aSimpleTypeName     = toTypeName(aSimpleTypeClass);
+    OUString        aSimpleTypeName     = toXmlTypeName(aSimpleTypeClass);
 
     OUString sNsPrefix = (bList || aSimpleTypeClass == uno::TypeClass_ANY) ? NS_PREFIX_OOR : NS_PREFIX_XS;
 
@@ -287,6 +308,7 @@ OUString ElementFormatter::getElementTag() const
     case ElementType::instance:  return TAG_INSTANCE;
     case ElementType::item_type: return TAG_ITEMTYPE;
     case ElementType::value:     return TAG_VALUE;
+    case ElementType::uses:      return TAG_USES;
 
     case ElementType::unknown:
         OSL_ENSURE(false, "ElementFormatter: Trying to get Tag for 'unknown' element type");
@@ -308,110 +330,6 @@ uno::Reference< sax::XAttributeList > ElementFormatter::getElementAttributes() c
 }
 // -----------------------------------------------------------------------------
 
-#if 0
-/// retrieve data type of a property,
-uno::Type ElementParser::getPropertyValueType(SaxAttributeList const& xAttribs) const
-{
-    OUString sTypeName;
-    if (!this->maybeGetAttribute(xAttribs, ATTR_VALUETYPE, sTypeName))
-        return uno::Type(); // => VOID
-
-    uno::Type aType;
-
-    if (matchSuffix(sTypeName,VALUETYPE_LIST_SUFFIX))
-    {
-        OUString sBasicName = stripTypeName( stripSuffix(sTypeName,VALUETYPE_LIST_SUFFIX), NS_PREFIX_OOR );
-
-        aType = toListType(sBasicName);
-    }
-    else
-    {
-        OUString sBasicName = stripTypeName( sTypeName, NS_PREFIX_OOR );
-
-        aType = toType(sBasicName);
-    }
-
-    if (aType == uno::Type())
-        badValueType("Unknown type name: ", sTypeName);
-
-    return aType;
-}
-// -----------------------------------------------------------------------------
-
-/// retrieve element type and associated module name of a set,
-bool ElementParser::getSetElementType(SaxAttributeList const& xAttribs, OUString& aElementType, OUString& aElementTypeModule) const
-{
-    if (!this->maybeGetAttribute(xAttribs, ATTR_ITEMTYPE, aElementType))
-        return false;
-
-    maybeGetAttribute(xAttribs, ATTR_ITEMTYPECOMPONENT, aElementTypeModule);
-
-    return true;
-}
-// -----------------------------------------------------------------------------
-
-/// retrieve instance type and associated module name of a set,
-bool ElementParser::getInstanceType(SaxAttributeList const& xAttribs, OUString& aElementType, OUString& aElementTypeModule) const
-{
-    if (!this->maybeGetAttribute(xAttribs, ATTR_ITEMTYPE, aElementType))
-        return false;
-
-    maybeGetAttribute(xAttribs, ATTR_ITEMTYPECOMPONENT, aElementTypeModule);
-
-    return true;
-}
-// -----------------------------------------------------------------------------
-
-/// retrieve the component for an import or uses element,
-bool ElementParser::getImportComponent(SaxAttributeList const& xAttribs, OUString& _rsComponent) const
-{
-    return this->maybeGetAttribute(xAttribs, ATTR_COMPONENT, _rsComponent);
-}
-// -----------------------------------------------------------------------------
-
-// low-level internal methods
-/// checks for presence of a boolean attribute and assigns its value if it exists (and is a bool)
-bool ElementParser::maybeGetAttribute(SaxAttributeList const& xAttribs, OUString const& aAttributeName, bool& rAttributeValue) const
-{
-    OUString sAttribute;
-
-    if ( !this->maybeGetAttribute(xAttribs, aAttributeName, sAttribute) )
-    {
-        return false;
-    }
-
-    else if (sAttribute.equals(ATTR_VALUE_TRUE))
-        rAttributeValue = true; // will return true
-
-    else if (sAttribute.equals(ATTR_VALUE_FALSE))
-        rAttributeValue = false;  // will return true
-
-    else
-    {
-        OSL_ENSURE(sAttribute.getLength() == 0, "Invalid text found in boolean attribute");
-        return false;
-    }
-
-    return true;
-}
-// -----------------------------------------------------------------------------
-
-/// checks for presence of an attribute and assigns its value if it exists
-bool ElementParser::maybeGetAttribute(SaxAttributeList const& xAttribs, OUString const& aAttributeName, OUString& rAttributeValue) const
-{
-    return xAttribs.is() && impl_maybeGetAttribute(xAttribs, aAttributeName, rAttributeValue);
-}
-// -----------------------------------------------------------------------------
-
-/// assigns an attribute value or an empty string if it doesn't exist
-void ElementParser::alwaysGetAttribute(SaxAttributeList const& xAttribs, OUString const& aAttributeName, OUString& rAttributeValue) const
-{
-    if (xAttribs.is())
-        rAttributeValue = xAttribs->getValueByName(aAttributeName);
-    else
-        rAttributeValue = OUString();
-}
-#endif
 // -----------------------------------------------------------------------------
 } // namespace
 } // namespace

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmtree.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: jb $ $Date: 2002-07-03 14:36:47 $
+ *  last change: $Author: jb $ $Date: 2002-07-14 16:49:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -319,6 +319,22 @@ namespace configmgr
       }
 
 //  // -------------------------- ValueNode implementation --------------------------
+    bool ValueNode::setValueType(uno::Type const& _aType)
+    {
+        if (_aType == this->getValueType()) return true;
+
+        if (!this->isNull()) return false;
+
+        uno::TypeClass eTC = this->getValueType().getTypeClass();
+        if (eTC != uno::TypeClass_VOID && eTC != uno::TypeClass_ANY)
+            return false;
+
+        m_aValuePair = AnyPair(_aType);
+
+        OSL_ASSERT(_aType == this->getValueType());
+
+        return true;
+    }
     bool ValueNode::setValue(Any const& _aValue)
     {
         sal_Bool bRet = m_aValuePair.setFirst(_aValue);

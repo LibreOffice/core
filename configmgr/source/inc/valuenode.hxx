@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valuenode.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: jb $ $Date: 2002-07-03 14:36:46 $
+ *  last change: $Author: jb $ $Date: 2002-07-14 16:49:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -345,6 +345,7 @@ namespace configmgr
         uno::Any    getUserValue()  const {return m_aValuePair.getFirst();}
         uno::Any    getDefault()    const {return m_aValuePair.getSecond();}
 
+        bool setValueType(uno::Type const& _aType);
         bool setValue(uno::Any const& _aValue);
         void setDefault();
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementparser.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2002-07-03 14:07:23 $
+ *  last change: $Author: jb $ $Date: 2002-07-14 16:49:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,6 +180,9 @@ ElementType::Enum ElementParser::getNodeType(OUString const& _sElementName, SaxA
     else if (_sElementName.equals(TAG_TEMPLATES))
         eResult = ElementType::templates;
 
+    else if (_sElementName.equals(TAG_USES))
+        eResult = ElementType::uses;
+
     else
         eResult = ElementType::other;
 
@@ -217,6 +220,7 @@ OUString ElementParser::getName(OUString const& _sElementName, SaxAttributeList 
     case ElementType::value:
     case ElementType::item_type:
     case ElementType::import:
+    case ElementType::uses:
     case ElementType::templates:
     case ElementType::component:
         OSL_ENSURE(!bNameFound, "Configuration Parser: Unexpected name attribute is ignored\n");
@@ -369,6 +373,72 @@ OUString stripTypeName(OUString const & _sString, OUString const & _sPrefix)
     return _sString;
 }
 // -----------------------------------------------------------------------------
+static
+uno::Type xmlToScalarType(const OUString& _rType)
+{
+    uno::Type aRet;
+
+    if     (_rType.equalsIgnoreAsciiCaseAscii(VALUETYPE_BOOLEAN))
+        aRet = ::getBooleanCppuType();
+
+    else if(_rType.equalsIgnoreAsciiCaseAscii(VALUETYPE_SHORT))
+        aRet = ::getCppuType(static_cast<sal_Int16 const*>(0));
+
+    else if(_rType.equalsIgnoreAsciiCaseAscii(VALUETYPE_INT))
+        aRet = ::getCppuType(static_cast<sal_Int32 const*>(0));
+
+    else if(_rType.equalsIgnoreAsciiCaseAscii(VALUETYPE_LONG))
+        aRet = ::getCppuType(static_cast<sal_Int64 const*>(0));
+
+    else if(_rType.equalsIgnoreAsciiCaseAscii(VALUETYPE_DOUBLE))
+        aRet = ::getCppuType(static_cast< double  const*>(0));
+
+    else if(_rType.equalsIgnoreAsciiCaseAscii(VALUETYPE_STRING))
+        aRet = ::getCppuType(static_cast<OUString const*>(0));
+
+    else if(_rType.equalsIgnoreAsciiCaseAscii(VALUETYPE_BINARY))
+        aRet = ::getCppuType(static_cast<uno::Sequence<sal_Int8> const*>(0));
+
+    else if(_rType.equalsIgnoreAsciiCaseAscii(VALUETYPE_ANY))
+        aRet = ::getCppuType(static_cast<uno::Any const*>(0));
+
+    else
+        OSL_ENSURE(false,"Cannot parse: Unknown value type");
+
+    return aRet;
+}
+// -----------------------------------------------------------------------------
+uno::Type xmlToListType(const OUString& _aElementType)
+{
+    uno::Type aRet;
+
+    if     (_aElementType.equalsIgnoreAsciiCaseAscii(VALUETYPE_BOOLEAN))
+        aRet = ::getCppuType(static_cast<uno::Sequence<sal_Bool> const*>(0));
+
+    else if(_aElementType.equalsIgnoreAsciiCaseAscii(VALUETYPE_SHORT))
+        aRet = ::getCppuType(static_cast<uno::Sequence<sal_Int16> const*>(0));
+
+    else if(_aElementType.equalsIgnoreAsciiCaseAscii(VALUETYPE_INT))
+        aRet = ::getCppuType(static_cast<uno::Sequence<sal_Int32> const*>(0));
+
+    else if(_aElementType.equalsIgnoreAsciiCaseAscii(VALUETYPE_LONG))
+        aRet = ::getCppuType(static_cast<uno::Sequence<sal_Int64> const*>(0));
+
+    else if(_aElementType.equalsIgnoreAsciiCaseAscii(VALUETYPE_DOUBLE))
+        aRet = ::getCppuType(static_cast<uno::Sequence<double> const*>(0));
+
+    else if(_aElementType.equalsIgnoreAsciiCaseAscii(VALUETYPE_STRING))
+        aRet = ::getCppuType(static_cast<uno::Sequence<rtl::OUString> const*>(0));
+
+    else if(_aElementType.equalsIgnoreAsciiCaseAscii(VALUETYPE_BINARY))
+        aRet = ::getCppuType(static_cast<uno::Sequence<uno::Sequence<sal_Int8> > const*>(0));
+
+    else
+        OSL_ENSURE(false,"Cannot parse: Unknown list value type");
+
+    return aRet;
+}
+// -----------------------------------------------------------------------------
 /// retrieve data type of a property,
 uno::Type ElementParser::getPropertyValueType(SaxAttributeList const& xAttribs) const
 {
@@ -383,7 +453,7 @@ uno::Type ElementParser::getPropertyValueType(SaxAttributeList const& xAttribs) 
     {
         OUString sBasicName = stripTypeName( stripSuffix(sTypeName,VALUETYPE_LIST_SUFFIX), NS_PREFIX_OOR );
 
-        aType = toListType(sBasicName);
+        aType = xmlToListType(sBasicName);
     }
     else
     {
@@ -391,7 +461,7 @@ uno::Type ElementParser::getPropertyValueType(SaxAttributeList const& xAttribs) 
 
         OUString sBasicName = stripTypeName( sTypeName, sPrefix );
 
-        aType = toType(sBasicName);
+        aType = xmlToScalarType(sBasicName);
     }
 
     if (aType == uno::Type())

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: schemaparser.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-07-03 14:07:26 $
+ *  last change: $Author: jb $ $Date: 2002-07-14 16:49:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,10 @@ void SAL_CALL SchemaParser::startElement( const OUString& aName, const uno::Refe
         this->startSkipping( aName, xAttribs );
         break;
 
+    case ElementType::uses:
+        this->startSkipping( aName, xAttribs );
+        break;
+
     case ElementType::instance:
         this->handleInstance(aInfo,xAttribs);
         this->startSkipping( aName, xAttribs );
@@ -178,7 +182,7 @@ void SAL_CALL SchemaParser::startElement( const OUString& aName, const uno::Refe
 
     default: // skip unknown elements
         OSL_ENSURE( aInfo.type >= ElementType::other, "Schema XML parser - Unexpected: found layer element in schema data\n");
-        OSL_ENSURE( aInfo.type <  ElementType::other, "Schema XML parser - Unexpected: found unknown element tag\n");
+        OSL_ENSURE( aInfo.type <  ElementType::other, "Schema XML parser - Warning: ignoring unknown element tag\n");
         this->startSkipping( aName, xAttribs );
         OSL_ASSERT( this->isSkipping() );
         return;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layermerge.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jb $ $Date: 2002-07-11 16:58:27 $
+ *  last change: $Author: jb $ $Date: 2002-07-14 16:49:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,10 @@
 
 #ifndef CONFIGMGR_VALUECONVERTER_HXX
 #include "valuetypeconverter.hxx"
+#endif
+
+#ifndef CONFIGMGR_TYPECONVERTER_HXX
+#include "typeconverter.hxx"
 #endif
 
 #include <drafts/com/sun/star/configuration/backend/SchemaAttribute.hpp>
@@ -275,8 +279,7 @@ void LayerMergeHandler::checkPropertyType(uno::Type const & _aType)
 
                 OSL_ENSURE( pValue->isNull(), "Layer merging: Non-null 'any' value" );
 
-                // TODO:
-                // pValue->setValueType(_aType);
+                OSL_VERIFY( pValue->setValueType(_aType) );
             }
             else if (_aType == uno::Type() && m_pConverter)
                 m_pConverter->m_bConvertData = true;
@@ -337,7 +340,18 @@ void LayerMergeHandler::setLocalizedValue(ISubtree * pProperty, uno::Any const &
             pLocalizedCont->addChild( base_ptr(aLocValue) );
         }
         else // TODO !!
-            OSL_ENSURE(false, "Layer merging: cannot add new locale having only a NULL value");
+        {
+            node::Attributes aAttributes = pLocalizedCont->getAttributes();
+            aAttributes.bLocalized = false;
+
+            uno::Type aValueType = parseTemplateName(pLocalizedCont->getElementTemplateName());
+            OSL_ENSURE(uno::Type() != aValueType, "Cannot determine type for localized NULL value");
+
+            std::auto_ptr<ValueNode> aLocValue =
+                m_aFactory.getNodeFactory().createNullValueNode(m_aLocale,aValueType,aAttributes);
+
+            pLocalizedCont->addChild( base_ptr(aLocValue) );
+        }
     }
 
     else if (ValueNode * pValue = pProperty->asValueNode())
@@ -644,8 +658,10 @@ void SAL_CALL LayerMergeHandler::dropNode( const OUString& aName )
         m_aContext.ensureRemovable(pDropped);
     }
     else
-        m_aContext.raiseNoSuchElementException("Layer merging: The node to be removed does not exist.",aName);
-
+    {
+        // m_aContext.raiseNoSuchElementException("Layer merging: The node to be removed does not exist.",aName);
+        OSL_TRACE("Layer merging: The node to be removed does not exist.");
+    }
     m_aContext.getCurrentParent().removeChild(aName);
 }
 // -----------------------------------------------------------------------------
@@ -671,7 +687,7 @@ void SAL_CALL LayerMergeHandler::overrideProperty( const OUString& aName, sal_In
     }
     else // ignore non-matched data
     {
-        OSL_ENSURE(false,"Layer merging: The property to be overridden does not exist.");
+        OSL_TRACE("Layer merging: The property to be overridden does not exist.");
         //   m_aContext.raiseUnknownPropertyException("Layer merging: The property to be overridden does not exist.",aName);
         this->skipNode();
     }

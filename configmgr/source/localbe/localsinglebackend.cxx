@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localsinglebackend.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jb $ $Date: 2002-07-11 17:17:42 $
+ *  last change: $Author: jb $ $Date: 2002-07-14 16:49:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,14 +127,14 @@ static const rtl::OUString kMetaConfPrefix(
 static const rtl::OUString kSchemaDataUrl(kMetaConfPrefix +
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SchemaDataUrl"))) ;
 static const rtl::OUString kDefaultDataUrl(kMetaConfPrefix +
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultDataUrl"))) ;
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultLayerUrls"))) ;
 static const rtl::OUString kUserDataUrl(kMetaConfPrefix +
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UserDataUrl"))) ;
-static const rtl::OUString kUserName(kMetaConfPrefix +
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UserName"))) ;
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UserLayerUrl"))) ;
+static const rtl::OUString kEntity(kMetaConfPrefix +
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EntityLayer"))) ;
+
 static const rtl::OUString kAdminMode(kMetaConfPrefix +
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_session_class_"))) ;
-
 static const rtl::OUString kAdminModeValue(
         RTL_CONSTASCII_USTRINGPARAM("adminconfiguration")) ;
 
@@ -153,25 +153,62 @@ void SAL_CALL LocalSingleBackend::initialize(
     for (sal_Int32 i = 0 ; i < aParameters.getLength() ; ++ i) {
         if (aParameters [i] >>= context) { break ; }
     }
-    rtl::OUString adminMode ;
 
-    context->getValueByName(kAdminMode) >>= adminMode ;
-    if (adminMode.equals(kAdminModeValue)) {
-        context->getValueByName(kDefaultDataUrl) >>= mUserDataUrl ;
+    // Setting: schema
+    context->getValueByName(kSchemaDataUrl) >>= mSchemaDataUrl;
+
+    // Setting: default layer(s)
+    uno::Any aDefaultDataSetting = context->getValueByName(kDefaultDataUrl);
+    rtl::OUString defaults;
+
+    if (context->getValueByName(kDefaultDataUrl) >>= defaults)
+    {
+        fillFromBlankSeparated(defaults, mDefaultDataUrl) ;
     }
-    else {
-        rtl::OUString defaults ;
+    else
+    {
+        context->getValueByName(kDefaultDataUrl) >>= mDefaultDataUrl ;
+    }
 
-        if (context->getValueByName(kDefaultDataUrl) >>= defaults) {
-            fillFromBlankSeparated(defaults, mDefaultDataUrl) ;
+    // Setting: admin mode tag
+    rtl::OUString adminModeSelector ;
+    bool bAdminMode =
+            (context->getValueByName(kAdminMode) >>= adminModeSelector) &&
+             adminModeSelector.equalsIgnoreAsciiCase(kAdminModeValue) ;
+
+    if (bAdminMode)
+    {
+        // find given entity
+        if ( (context->getValueByName(kEntity) >>= mOwnId) && mOwnId.getLength() )
+        {
+            for (sal_Int32 ix = 0; ix < mDefaultDataUrl.getLength(); ++ix)
+            {
+                if (mDefaultDataUrl.getConstArray()[ix].equals(mOwnId))
+                {
+                    mDefaultDataUrl.realloc(ix);
+                    // this is the last round through the loop
+                }
+            }
+            mUserDataUrl = mOwnId;
         }
-        else {
-            context->getValueByName(kDefaultDataUrl) >>= mDefaultDataUrl ;
+        else if (sal_Int32 nLen = mDefaultDataUrl.getLength()) // administrate last default layer
+        {
+            --nLen;
+            mUserDataUrl = mOwnId = mDefaultDataUrl[nLen];
+            mDefaultDataUrl.realloc(nLen);
         }
+        else
+        {
+            OSL_ENSURE(false, "Cannot find target entity for admin mode - fallback to normal mode");
+            bAdminMode = false;
+        }
+    }
+
+    if (!bAdminMode)
+    {
         context->getValueByName(kUserDataUrl) >>= mUserDataUrl ;
+        mOwnId = mUserDataUrl;
     }
-    context->getValueByName(kSchemaDataUrl) >>= mSchemaDataUrl ;
-    context->getValueByName(kUserName) >>= mOwnId ;
 }
 //------------------------------------------------------------------------------
 
@@ -282,9 +319,9 @@ sal_Bool LocalSingleBackend::isMoreRecent(const rtl::OUString& aFileUrl,
 }
 //------------------------------------------------------------------------------
 
-static const rtl::OUString kDefaultsSubPath(
+static const rtl::OUString kDataSubPath(
                                         RTL_CONSTASCII_USTRINGPARAM("/data")) ;
-static const rtl::OUString kLocalisedDefaultsSubPath(
+static const rtl::OUString kLocalisedDataSubPath(
                                         RTL_CONSTASCII_USTRINGPARAM("/res")) ;
 
 uno::Reference<backend::XLayer> SAL_CALL LocalSingleBackend::getLayer(
@@ -428,13 +465,12 @@ LocalFileLayer *LocalSingleBackend::getFileLayer(
 
 void LocalSingleBackend::getLayerDirectories(sal_Int32 aLayerIndex,
                                              rtl::OUString& aLayerUrl,
-                                             rtl::OUString& aSubLayerUrl) {
-    aLayerUrl = (aLayerIndex == -1 ? mUserDataUrl :
-                                     mDefaultDataUrl [aLayerIndex]) ;
-    if (mDefaultDataUrl.getLength() == 0 || aLayerIndex != -1) {
-        aSubLayerUrl = aLayerUrl + kLocalisedDefaultsSubPath ;
-        aLayerUrl += kDefaultsSubPath ;
-    }
+                                             rtl::OUString& aSubLayerUrl)
+{
+    OUString const & aLayerBaseUrl = (aLayerIndex == -1 ? mUserDataUrl : mDefaultDataUrl [aLayerIndex]) ;
+
+    aLayerUrl       = aLayerBaseUrl + kDataSubPath ;
+    aSubLayerUrl    = aLayerBaseUrl + kLocalisedDataSubPath ;
 }
 //------------------------------------------------------------------------------
 

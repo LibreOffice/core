@@ -2,9 +2,9 @@
  *
  *  $RCSfile: updatedispatch.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-06-07 14:16:12 $
+ *  last change: $Author: jb $ $Date: 2002-07-14 16:49:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 #ifndef CONFIGMGR_SETNODEACCESS_HXX
 #include "setnodeaccess.hxx"
 #endif
+#ifndef CONFIGMGR_MATCHLOCALE_HXX
+#include "matchlocale.hxx"
+#endif
 
 #include <drafts/com/sun/star/configuration/backend/XUpdateHandler.hpp>
 #include <drafts/com/sun/star/configuration/backend/NodeAttribute.hpp>
@@ -93,6 +96,7 @@ namespace configmgr
 UpdateDispatcher::UpdateDispatcher(UpdateHandler const & _xUpdateHandler, OUString const & _aLocale)
 : m_xUpdateHandler(_xUpdateHandler)
 , m_aLocale(_aLocale)
+, m_aElementName()
 , m_bInLocalizedValues(false)
 {
 }
@@ -132,6 +136,7 @@ void UpdateDispatcher::startUpdate(configuration::AbsolutePath const & _aContext
     OUString sContext = _aContextPath.toString();
     m_xUpdateHandler->startUpdate(sContext);
     m_bInLocalizedValues = false;
+    m_aElementName = OUString();
 }
 // -----------------------------------------------------------------------------
 
@@ -289,13 +294,16 @@ void UpdateDispatcher::handle(SubtreeChange const& aSubtree)
 
 data::SetVisitor::Result UpdateDispatcher::handle(data::ValueNodeAccess const& _aNode)
 {
+    OUString aName;
+
     // special case: doing members of a localized property (as set)
     if (m_bInLocalizedValues)
     {
-        OSL_ENSURE(data::NodeAccess(_aNode).isLocalRoot(), "Adding a localized subvalue but not as root of element tree");
-        OUString aLocale = _aNode.getName().toString();
+        // the node name is the locale
+        OUString aLocale;
+        OSL_VERIFY(testReplacedAndGetName(_aNode,aLocale)); // "Adding a localized subvalue but not as root of element tree"
 
-        if (aLocale.getLength())
+        if (aLocale.getLength() && aLocale != localehelper::getDefaultLocale())
         {
             m_xUpdateHandler->setPropertyValueForLocale( _aNode.getValue(), aLocale );
         }
@@ -304,11 +312,10 @@ data::SetVisitor::Result UpdateDispatcher::handle(data::ValueNodeAccess const& _
             m_xUpdateHandler->setPropertyValue( _aNode.getValue() );
         }
     }
-    else if (data::NodeAccess(_aNode).isLocalRoot()) // we must be inside a set of values
+    else if (testReplacedAndGetName(_aNode,aName)) // we must be inside a set of values
     {
         OSL_ENSURE(!_aNode.isLocalized(), "UpdateDispatcher: Cannot add a localized value in a layer .");
 
-        OUString aName = _aNode.getName().toString();
         sal_Int16 nAttr = getUpdateAttributes(_aNode.getAttributes(),true);
 
         if (!_aNode.isNull())
@@ -326,7 +333,6 @@ data::SetVisitor::Result UpdateDispatcher::handle(data::ValueNodeAccess const& _
     }
     else // normal case: updating a single property
     {
-        OUString aName = _aNode.getName().toString();
         sal_Int16 nAttr     = getUpdateAttributes(_aNode.getAttributes(),false);
         sal_Int16 nAttrMask = getUpdateAttributeMask(_aNode.getAttributes());
 
@@ -351,9 +357,9 @@ data::SetVisitor::Result UpdateDispatcher::handle(data::GroupNodeAccess const& _
 {
     OSL_ENSURE( !m_bInLocalizedValues, "UpdateDispatcher: A localized value cannot be a complete group");
 
-    OUString aName = _aNode.getName().toString();
+    OUString aName;
 
-    if ( data::NodeAccess(_aNode).isLocalRoot() )
+    if ( testReplacedAndGetName(_aNode,aName) )
     {
         sal_Int16 nAttr = getUpdateAttributes(_aNode.getAttributes(),true);
 
@@ -382,9 +388,9 @@ data::SetVisitor::Result UpdateDispatcher::handle(data::SetNodeAccess const& _aN
 {
     OSL_ENSURE( !m_bInLocalizedValues, "UpdateDispatcher: A localized value cannot be a complete set");
 
-    OUString aName = _aNode.getName().toString();
+    OUString aName;
 
-    if ( data::NodeAccess(_aNode).isLocalRoot() )
+    if ( testReplacedAndGetName(_aNode,aName) )
     {
         OSL_ENSURE( !_aNode.isLocalizedValueSetNode(), "UpdateDispatcher: Cannot add a localized value in a layer." );
 
@@ -422,6 +428,34 @@ data::SetVisitor::Result UpdateDispatcher::handle(data::SetNodeAccess const& _aN
         }
     }
     return CONTINUE;
+}
+// -----------------------------------------------------------------------------
+
+bool UpdateDispatcher::testReplacedAndGetName(data::NodeAccess const & _aNode, OUString & _aName)
+{
+    if (m_aElementName.getLength())
+    {
+        OSL_ENSURE( _aNode.isLocalRoot(), "ERROR - UpdateDispatcher: Found orphaned 'element' name for inner node");
+        _aName = m_aElementName;
+        m_aElementName = OUString();
+        return true;
+    }
+    else
+    {
+        OSL_ENSURE(!_aNode.isLocalRoot(), "ERROR - UpdateDispatcher: Found no 'element' name for fragment root node");
+        _aName = _aNode.getName().toString();
+        return false;
+    }
+    // return _aNode.isLocalRoot();
+}
+// -----------------------------------------------------------------------------
+
+data::SetVisitor::Result UpdateDispatcher::handle(data::TreeAccessor const& _aElement)
+{
+    m_aElementName = _aElement.getName().toString();
+    Result aRes = SetVisitor::handle(_aElement); // dispatch to root node
+    m_aElementName = OUString(); // clear - just to be safe
+    return aRes;
 }
 // -----------------------------------------------------------------------------
 

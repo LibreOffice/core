@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerupdatemerger.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2002-07-11 16:58:29 $
+ *  last change: $Author: jb $ $Date: 2002-07-14 16:49:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -436,7 +436,6 @@ void SAL_CALL LayerUpdateMerger::addProperty( const OUString& aName, sal_Int16 a
     if (!xUpdate.is())
     {
         BasicUpdateMerger::addProperty(aName, aAttributes, aType);
-        OSL_ASSERT(BasicUpdateMerger::isHandling());
         return;
     }
 
@@ -486,7 +485,6 @@ void SAL_CALL LayerUpdateMerger::addPropertyWithValue( const OUString& aName, sa
     if (!xUpdate.is())
     {
         BasicUpdateMerger::addPropertyWithValue(aName, aAttributes, aValue);
-        OSL_ASSERT(BasicUpdateMerger::isHandling());
         return;
     }
 
