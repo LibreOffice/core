@@ -2,9 +2,9 @@
  *
  *  $RCSfile: read.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:24:21 $
+ *  last change: $Author: rt $ $Date: 2003-05-21 07:57:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,11 +79,17 @@
 #include "scerrors.hxx"
 #endif
 
+#ifndef SC_FPROGRESSBAR_HXX
+#include "fprogressbar.hxx"
+#endif
 #ifndef SC_XILINK_HXX
 #include "xilink.hxx"
 #endif
 #ifndef SC_XICONTENT_HXX
 #include "xicontent.hxx"
+#endif
+#ifndef SC_XIESCHER_HXX
+#include "xiescher.hxx"
 #endif
 
 #ifndef SC_XCLIMPCHARTS_HXX
@@ -101,12 +107,9 @@
 
 FltError ImportExcel::Read( void )
 {
-#ifdef DEBUGGING
-    BOOL bDebugging = TRUE;
-    if( bDebugging )
+#if EXC_INCL_DUMPER
     {
-        Biff8RecDumper  aDumper( *pExcRoot, FALSE );
-
+        Biff8RecDumper aDumper( *pExcRoot, FALSE );
         if( aDumper.Dump( aIn ) )
             return eERR_OK;
     }
@@ -1006,9 +1009,9 @@ FltError ImportExcel::Read( void )
 
 FltError ImportExcel8::Read( void )
 {
-#ifdef DEBUGGING
+#if EXC_INCL_DUMPER
     {
-        Biff8RecDumper  aDumper( *pExcRoot, TRUE );
+        Biff8RecDumper aDumper( *pExcRoot, TRUE );
         if( aDumper.Dump( aIn ) )
             return eERR_OK;
     }
@@ -1153,7 +1156,7 @@ FltError ImportExcel8::Read( void )
                     case EXC_ID_EXTERNSHEET:    GetLinkManager().ReadExternsheet( maStrm ); break;
                     case EXC_ID_SUPBOOK:        GetLinkManager().ReadSupbook( maStrm );     break;
                     case EXC_ID_XCT:            GetLinkManager().ReadXct( maStrm );         break;
-                    case EXC_ID_CRN:            GetLinkManager().ReadCrn( maStrm, *pFormConv );break;
+                    case EXC_ID_CRN:            GetLinkManager().ReadCrn( maStrm );         break;
                     case EXC_ID_EXTERNNAME:     GetLinkManager().ReadExternname( maStrm );  break;
                 }
 
@@ -1254,7 +1257,7 @@ FltError ImportExcel8::Read( void )
                         case EXC_ID_HLINK:          XclImpHyperlink::ReadHlink( maStrm );           break;
                         case EXC_ID_LABELRANGES:    XclImpLabelranges::ReadLabelranges( maStrm );   break;
                         case EXC_ID_DVAL:           XclImpValidation::ReadDval( maStrm );           break;
-                        case EXC_ID_DV:             XclImpValidation::ReadDv( maStrm, *pFormConv ); break;
+                        case EXC_ID_DV:             XclImpValidation::ReadDv( maStrm );             break;
 
                         case EXC_ID_QSI:            GetWebQueryBuffer().ReadQsi( maStrm );          break;
                         case EXC_ID_SXSTRING:       GetWebQueryBuffer().ReadSxstring( maStrm );     break;
@@ -1367,7 +1370,7 @@ FltError ImportExcel8::Read( void )
                                 aIn.StoreGlobalPosition();
                                 break;
                             case Biff8C:
-                                GetObjectManager().SetNewCurrObjChart();
+                                GetObjectManager().StartNewChartObj();
                                 pExcRoot->bChartTab = TRUE;
                                 ReadChart8( *pProgress, TRUE );
                                 pExcRoot->bChartTab = FALSE;
