@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-27 16:04:26 $
+ *  last change: $Author: cmc $ $Date: 2002-06-28 14:15:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1510,7 +1510,7 @@ void WW8TabBandDesc::ReadNewShd(const BYTE* pS )
         memset( pNewSHDs, 0, nWwCols * sizeof(sal_uInt32) );
     }
 
-    short nAnz = nLen >> 1;
+    short nAnz = nLen / 10; //10 bytes each
     if (nAnz > nWwCols)
         nAnz = nWwCols;
 
