@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDeco.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-18 11:43:14 $
+ *  last change: $Author: fs $ $Date: 2001-06-22 15:32:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,7 @@ ODBTableDecorator::ODBTableDecorator(const OConfigurationNode& _rTableConfig,
     // load the settings from the configuration
     if(m_aConfigurationNode.isValid())
         loadFrom(m_aConfigurationNode.openNode(CONFIGKEY_SETTINGS));
+
     // we don't collect the privileges here, this is potentially expensive. Instead we determine them on request.
     // (see getFastPropertyValue)
     m_nPrivileges = -1;
@@ -434,14 +435,10 @@ void ODBTableDecorator::flush_NoBroadcast_NoCommit()
     if(m_aConfigurationNode.isValid())
     {
         storeTo(m_aConfigurationNode.openNode(CONFIGKEY_SETTINGS));
-        if(!m_pColumns)
-            getColumns();
 
         OColumns* pColumns = static_cast<OColumns*>(m_pColumns);
         if(pColumns)
-        {
             pColumns->storeSettings(m_aConfigurationNode.openNode(CONFIGKEY_QRYDESCR_COLUMNS));
-        }
     }
 }
 // XRename,
@@ -520,6 +517,10 @@ Reference< XNameAccess> ODBTableDecorator::getColumns() throw (RuntimeException)
                                     m_xMetaData->supportsAlterTableWithDropColumn());
         //  pCol->setParent(this);
         m_pColumns  = pCol;
+
+        // load the UI settings of the columns
+        if (m_aConfigurationNode.isValid())
+            pCol->loadSettings(m_aConfigurationNode.openNode(CONFIGKEY_QRYDESCR_COLUMNS));
     }
 
     return m_pColumns;
