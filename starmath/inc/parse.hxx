@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parse.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:57:24 $
+ *  last change: $Author: tl $ $Date: 2000-12-12 16:12:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,6 @@
 #define PARSE_HXX
 
 
-#include <ctype.h>
 
 #ifndef _STACK_HXX //autogen
 #include <tools/stack.hxx>
@@ -288,7 +287,7 @@ inline BOOL SmParser::TokenInGroup(ULONG nGroup)
 
 inline BOOL SmParser::IsWhiteSpace(const xub_Unicode cChar) const
 {
-    return isspace(cChar) != 0;
+    return cChar == ' ' || cChar == '\t' || cChar == '\n' || cChar == '\r';
 }
 
 inline BOOL SmParser::IsComment(const xub_Unicode *pPos) const
