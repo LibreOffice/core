@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" oor:package="org.openoffice.Office" oor:name="Common">
+ <node oor:name="Misc">
+  <prop oor:name="FirstRun" oor:type="xs:boolean">
+   <value>false</value>
+  </prop>
+ </node>
+ <node oor:name="Security">
+  <node oor:name="Scripting">
+   <prop oor:name="OfficeBasic" oor:type="xs:int">
+    <value>2</value>
+   </prop>
+   </node>
+ </node>
+</oor:component-data>

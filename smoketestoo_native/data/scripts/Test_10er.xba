@@ -1,0 +1,689 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="Test_10er" script:language="StarBasic">REM  10er Test
+
+const sSWLogFileName = &quot;swlog.dat&quot;, sSCLogFileName = &quot;sclog.dat&quot;
+const sSDLogFileName = &quot;sdlog.dat&quot;, sSMathLogFileName = &quot;smalog.dat&quot;
+const sSImDLogFileName = &quot;simlog.dat&quot;, sSChartLogFileName = &quot;schlog.dat&quot;
+const sSHptLogFileName = &quot;shptlog.dat&quot;, sSMessageLogFileName = &quot;smeslog.dat&quot;
+const sSDrawLogFileName = &quot;sdrwlog.dat&quot;, sJavaLogFileName = &quot;javalog.dat&quot;
+const sLogFileName = &quot;log.dat&quot;
+const cTempFileName = &quot;ttt&quot;
+
+const cMessageSaveOpenXMLDoc = &quot;Save/Open Document XML&quot;
+const cMessageSaveOpen50Doc = &quot;Save/Open Document 5.0&quot;
+const cMessageNewDoc = &quot;New Document&quot;
+const cMessageCloseDoc = &quot;Close Document&quot;
+const cMessageCutObj = &quot;Cut Object&quot;
+const cMessagePasteObj = &quot;Paste Object&quot;
+
+Global sWorkPath$
+Global sWorkPathURL$
+Global FileChannel%
+Global MainFileChannel%
+
+Sub Main
+	call TestAllDocs()
+end Sub
+
+Sub DeleteAllSavedFiles()
+	Dim sFileName as String
+	sFileName = sWorkPath+cTempFileName+&quot;.&quot;+GetDocEndings(frmWriter)
+	If FileExists (sFileName) then
+		Kill (sFileName)
+	End If
+	sFileName = sWorkPath+cTempFileName+&quot;.&quot;+GetDocEndings(frmCalc)
+	If FileExists (sFileName) then
+		Kill (sFileName)
+	End If
+	sFileName = sWorkPath+cTempFileName+&quot;.&quot;+GetDocEndings(frmImpress)
+	If FileExists (sFileName) then
+		Kill (sFileName)
+	End If
+	sFileName = sWorkPath+cTempFileName+&quot;.&quot;+GetDocEndings(frmDraw)
+	If FileExists (sFileName) then
+		Kill (sFileName)
+	End If
+	sFileName = sWorkPath+cTempFileName+&quot;.&quot;+GetDocEndings(frmHyperText)
+	If FileExists (sFileName) then
+		Kill (sFileName)
+	End If
+		sFileName = sWorkPath+cTempFileName+&quot;.&quot;+GetDocEndings(frmWriter or cFlt50)
+	If FileExists (sFileName) then
+		Kill (sFileName)
+	End If
+	sFileName = sWorkPath+cTempFileName+&quot;.&quot;+GetDocEndings(frmCalc or cFlt50)
+	If FileExists (sFileName) then
+		Kill (sFileName)
+	End If
+	sFileName = sWorkPath+cTempFileName+&quot;.&quot;+GetDocEndings(frmImpress or cFlt50)
+	If FileExists (sFileName) then
+		Kill (sFileName)
+	End If
+	sFileName = sWorkPath+cTempFileName+&quot;.&quot;+GetDocEndings(frmDraw or cFlt50)
+	If FileExists (sFileName) then
+		Kill (sFileName)
+	End If
+End Sub
+
+Sub DeleteAllLogFiles()
+	If FileExists (sWorkPath+sLogFileName) then
+		Kill (sWorkPath+sLogFileName)
+	End If
+	If FileExists (sWorkPath+sSWLogFileName) then
+		Kill (sWorkPath+sSWLogFileName)
+	End If
+	If FileExists (sWorkPath+sSCLogFileName) then
+		Kill (sWorkPath+sSCLogFileName)
+	End If	
+	If FileExists (sWorkPath+sSDLogFileName) then
+		Kill (sWorkPath+sSDLogFileName)
+	End If	
+	If FileExists (sWorkPath+sSMathLogFileName) then
+		Kill (sWorkPath+sSMathLogFileName)
+	End If	
+	If FileExists (sWorkPath+sSImDLogFileName) then
+		Kill (sWorkPath+sSImDLogFileName)
+	End If	
+	If FileExists (sWorkPath+sSChartLogFileName) then
+		Kill (sWorkPath+sSChartLogFileName)
+	End If	
+	If FileExists (sWorkPath+sSHptLogFileName) then
+		Kill (sWorkPath+sSHptLogFileName)
+	End If	
+	If FileExists (sWorkPath+sSMessageLogFileName) then
+		Kill (sWorkPath+sSMessageLogFileName)
+	End If
+	If FileExists (sWorkPath+sSDrawLogFileName) then
+		Kill (sWorkPath+sSDrawLogFileName)
+	End If
+	If FileExists (sWorkPath+sJavaLogFileName) then
+		Kill (sWorkPath+sJavaLogFileName)
+	End If
+end Sub
+
+Function OpenLogDat (sFileName as String) as Integer
+	Dim LocaleFileChannel%
+	If FileExists (sWorkPath+sFileName) then
+		Kill (sWorkPath+sFileName)
+	End If	
+	LocaleFileChannel% = Freefile 
+	Open sWorkPath+sFileName For Output As LocaleFileChannel%
+	OpenLogDat = LocaleFileChannel%
+end Function
+
+Function GetWorkPath as string
+	sTemp = &quot;$(userpath)/temp/&quot;
+	GetWorkPath = CreateUnoService(&quot;com.sun.star.config.SpecialConfigManager&quot;).SubstituteVariables(sTemp)
+End Function
+
+Function GetWorkURL as string
+	sTemp = &quot;$(userurl)/temp/&quot;
+	GetWorkURL = CreateUnoService(&quot;com.sun.star.config.SpecialConfigManager&quot;).SubstituteVariables(sTemp)
+End Function
+
+Function GetSystem (sTmpWorkPath as string) as string
+	GetSystem = &quot;&quot;
+	if InStr (sTmpWorkPath, &quot;:&quot;) then
+		GetSystem = &quot;windows&quot;
+	else
+		GetSystem = &quot;unix&quot;
+	End If
+end Function
+
+Function ConvertPathToWin (sTmpWorkPath as string) as string
+	for i%=1 to Len(sTmpWorkPath)
+		sTemp = Mid (sTmpWorkPath, i%, 1)
+		if sTemp = &quot;/&quot; then
+			sTmpWorkPath = Left (sTmpWorkPath, i%-1) + &quot;\&quot; + Right (sTmpWorkPath, Len(sTmpWorkPath)-i%)
+		else
+			if sTemp = &quot;|&quot; then
+				sTmpWorkPath = Left (sTmpWorkPath, i%-1) + &quot;:&quot; + Right (sTmpWorkPath, Len(sTmpWorkPath)-i%)
+			end If
+		end If
+	next i%
+	ConvertPathToWin = sTmpWorkPath
+end Function
+
+Sub TestAllDocs()
+
+	sWorkPath = GetWorkPath
+	sWorkPathURL = GetWorkURL
+	
+	if GetSystem (sWorkPath) = &quot;windows&quot; then
+		sWorkPath = ConvertPathToWin (sWorkPath)
+	end if
+		
+	call DeleteAllSavedFiles()
+	call DeleteAllLogFiles()
+	MainFileChannel = OpenLogDat (sLogFileName)
+    call WriteTestSequence (MainFileChannel)
+	if bMakeWriterTest then
+		call MakeDocTest (frmWriter)
+	end if
+	if bMakeCalcTest then
+		call MakeDocTest (frmCalc)
+	end if
+	if bMakeImpressTest then
+		call MakeDocTest (frmImpress)
+	end if
+	if bMakeDrawTest then
+		call MakeDocTest (frmDraw)
+	end if
+	if bMakeHTMLTest then
+		call MakeDocTest (frmHyperText)
+	end if
+	if bMakeChartTest then
+		call MakeChartTest (frmChart)
+	end if	
+	if bMakeMathTest then
+		call MakeNewDoc (frmMath)
+	end if
+	if bMakeJavaTest then
+		call TestJava (frmJava)
+	end if
+	
+	Close #MainFileChannel
+end Sub
+
+Sub WriteTestSequence (FileChannel as integer)
+	Print #FileChannel, &quot;Sequence of testing&quot;
+	
+	if bMakeWriterTest then
+		WriteTests (&quot;writer  : &quot;, true, FileChannel)
+	end if
+	if bMakeCalcTest then
+		WriteTests (&quot;calc    : &quot;, true, FileChannel)
+	end if
+	if bMakeImpressTest then
+		WriteTests (&quot;impress : &quot;, true, FileChannel)
+	end if
+	if bMakeDrawTest then
+		WriteTests (&quot;draw    : &quot;, true, FileChannel)
+	end if
+	if bMakeHTMLTest then
+		WriteTests (&quot;HTML    : &quot;, true, FileChannel)
+	end if
+	if bMakeChartTest then
+		WriteTests (&quot;chart   : &quot;, false, FileChannel)
+	end if	
+	if bMakeMathTest then
+		WriteTests (&quot;math    : &quot;, false, FileChannel)
+	end if
+	if bMakeJavaTest then
+		WriteTests (&quot;Java    : &quot;, false, FileChannel)
+	end if
+	
+	
+	Print #FileChannel
+end Sub
+
+Sub WriteTests (sText as string, bTestAll as boolean, nFileChannel as integer)
+	Dim sWriteStr as string
+	
+	sWriteStr = sText
+	sWriteStr = sWriteStr + &quot;new&quot;
+	if bTestAll then
+	if bMakeCutTest then
+		sWriteStr = sWriteStr + &quot;, cut&quot;
+	end if
+	if bMakePasteTest then
+		sWriteStr = sWriteStr + &quot;, paste&quot;
+	end if
+	if bMakeSaveOpenXMLTest then
+		sWriteStr = sWriteStr + &quot;, save XML&quot;
+	end if
+	if bMakeSaveOpen50Test then
+		sWriteStr = sWriteStr + &quot;, save 5.0&quot;
+	end if
+	if bMakeSaveOpenXMLTest then
+		sWriteStr = sWriteStr + &quot;, open XML&quot;
+	end if
+	if bMakeSaveOpen50Test then
+		sWriteStr = sWriteStr + &quot;, open 5.0&quot;
+	end if
+	end if
+	
+	sWriteStr = sWriteStr + &quot;, close&quot;
+	
+	Print #nFileChannel, sWriteStr
+end Sub
+
+Sub MakeDocTest (FilterType as Integer)
+	Dim oDoc as Object
+	Dim sFileNameXML$, sFileName50$
+	Dim bError as Boolean
+	FileChannel% = OpenLogDat (GetLogFileName(FilterType))
+	oDoc = LoadDoc (&quot;private:factory/&quot; + GetDocFilter(FilterType or cFltNewDoc))
+	wait (1000)
+	LogState (not IsNull (oDoc), GetDocFilter(FilterType or cFltNewDoc)+&quot; &quot;+ cMessageNewDoc, FileChannel)
+	LogState (not IsNull (oDoc), GetDocFilter(FilterType or cFltNewDoc)+&quot; &quot;+ cMessageNewDoc, MainFileChannel)
+	SetStatus (FilterType, cDocNew, not IsNull (oDoc))
+	if not IsNull (oDoc) then
+		call CutAndPaste(FilterType, oDoc)
+&apos;		bError = oDoc.CurrentController.frame.close
+		if bMakeSaveOpenXMLTest and IsFilterAvailable (FilterType or cFltXML) then
+			sFileNameXML = sWorkPathURL+cTempFileName+&quot;.&quot;+GetDocEndings(FilterType)
+			SaveDoc (sFileNameXML, oDoc, GetDocFilter(FilterType or cFltXML))
+		end if
+		if bMakeSaveOpen50Test and IsFilterAvailable (FilterType or cFlt50) then
+			sFileName50 = sWorkPathURL+cTempFileName+&quot;.&quot;+GetDocEndings(FilterType or cFlt50)
+			SaveDoc (sFileName50, oDoc, GetDocFilter(FilterType or cFlt50))
+		end if	
+&apos;		oDoc.dispose
+		oDoc.close (true)
+&apos;		bError = true &apos; nur zum ¦bergang, weil bError = oDoc.CurrentController.frame.close nicht geht
+&apos;		LogState (bError, GetDocFilter(FilterType)+&quot; &quot;+ cMessageCloseDoc, FileChannel)
+&apos;		LogState (bError, GetDocFilter(FilterType)+&quot; &quot;+ cMessageCloseDoc, MainFileChannel)
+&apos;		SetStatus (FilterType, cDocClose, bError)
+		if bMakeSaveOpenXMLTest and IsFilterAvailable (FilterType or cFltXML) then
+			oDoc = LoadDoc (sFileNameXML)
+			
+&apos;			oDoc = Documents.open(sFileName)
+			LogState (not IsNull (oDoc),GetDocFilter(FilterType or cFltNewDoc)+&quot; &quot;+ cMessageSaveOpenXMLDoc, FileChannel)
+			LogState (not IsNull (oDoc),GetDocFilter(FilterType or cFltNewDoc)+&quot; &quot;+ cMessageSaveOpenXMLDoc, MainFileChannel)
+			SetStatus (FilterType, cDocSaveOpenXML, not IsNull (oDoc))
+			
+			if not IsNull (oDoc) then
+&apos;				oDoc.dispose
+				oDoc.close (true)
+			end If	
+		end if
+		
+		if bMakeSaveOpen50Test and IsFilterAvailable (FilterType or cFlt50) then
+			oDoc = LoadDoc (sFileName50)
+			
+&apos;			oDoc = Documents.open(sFileName)
+			LogState (not IsNull (oDoc),GetDocFilter(FilterType or cFltNewDoc)+&quot; &quot;+ cMessageSaveOpen50Doc, FileChannel)
+			LogState (not IsNull (oDoc),GetDocFilter(FilterType or cFltNewDoc)+&quot; &quot;+ cMessageSaveOpen50Doc, MainFileChannel)
+			SetStatus (FilterType, cDocSaveOpen50, not IsNull (oDoc))
+			
+			if not IsNull (oDoc) then
+&apos;				oDoc.dispose
+				oDoc.close (true)
+			end If	
+		end if
+	end If		
+	Print #FileChannel, &quot;---&quot;
+	Close #FileChannel%
+End Sub
+
+Sub MakeNewDoc (FilterType as Integer)
+	DIM oDoc as Object
+	Dim bError as Boolean
+	FileChannel% = OpenLogDat (GetLogFileName(FilterType))
+&apos;	oDoc = Documents.Add(GetDocFilter(FilterType))
+	oDoc = LoadDoc (&quot;private:factory/&quot; + GetDocFilter(FilterType or cFltNewDoc))
+	wait (1000)
+	LogState (not IsNull (oDoc), GetDocFilter(FilterType or cFltNewDoc)+&quot; &quot;+ cMessageNewDoc, FileChannel)
+	LogState (not IsNull (oDoc), GetDocFilter(FilterType or cFltNewDoc)+&quot; &quot;+ cMessageNewDoc, MainFileChannel)
+	SetStatus (FilterType, cDocNew, not IsNull (oDoc))
+	if not IsNull (oDoc) then
+&apos;		oDoc.dispose
+		oDoc.close (true)
+&apos;		bError = true &apos; nur zum ¦bergang, weil bError = oDoc.CurrentController.frame.close nicht geht
+&apos;		LogState (bError, GetDocFilter(FilterType)+&quot; &quot;+ cMessageCloseDoc, FileChannel)
+&apos;		LogState (bError, GetDocFilter(FilterType)+&quot; &quot;+ cMessageCloseDoc, MainFileChannel)
+&apos;		SetStatus (FilterType, cDocClose, bError)
+	end	If
+	Print #FileChannel, &quot;---&quot;
+	Close #FileChannel%
+End Sub
+
+Sub MakeChartTest (FilterType as Integer)
+	Dim oCharts as Object
+	Dim oDoc as Object
+	Dim oRange(0) as New com.sun.star.table.CellRangeAddress
+	Dim oRect as New com.sun.star.awt.Rectangle
+	const cChartName=&quot;TestChart&quot;
+	Dim bError as Boolean
+	FileChannel% = OpenLogDat (GetLogFileName(FilterType))
+	oDoc = LoadDoc (&quot;private:factory/&quot; + GetDocFilter(frmCalc or cFltNewDoc))
+	if not IsNull (oDoc) then
+		oCharts = oDoc.sheets(0).Charts
+		oCharts.AddNewByName (cChartName, oRect, oRange(), true, true)
+		bError=oCharts.HasByName(cChartName)
+		LogState (bError, GetDocFilter(FilterType or cFltNewDoc)+&quot; &quot;+ cMessageNewDoc, FileChannel)
+		LogState (bError, GetDocFilter(FilterType or cFltNewDoc)+&quot; &quot;+ cMessageNewDoc, MainFileChannel)
+		SetStatus (FilterType, cDocNew, bError)
+&apos;		oDoc.dispose
+		oDoc.close (true)
+	else
+		LogState (not IsNull (oDoc), GetDocFilter(frmCalc or cFltNewDoc)+&quot; &quot;+ cMessageNewDoc, FileChannel)
+		LogState (not IsNull (oDoc), GetDocFilter(frmCalc or cFltNewDoc)+&quot; &quot;+ cMessageNewDoc, MainFileChannel)
+		SetStatus (frmCalc, cDocNew, not IsNull (oDoc))
+	End if
+	Print #FileChannel, &quot;---&quot;
+	Close #FileChannel%
+End Sub
+
+Sub LogState (bState as Boolean, sText as String, nLocaleFileChannel as integer)
+	if bState then
+		Print #nLocaleFileChannel, sText+&quot; -&gt; ok&quot;
+	else
+		Print #nLocaleFileChannel, sText+&quot; -&gt; error&quot;
+	end If	
+end Sub
+
+Function GetDocEndings (DocType as Integer) as String
+	Select Case ( DocType )
+		case frmWriter 
+			GetDocEndings = &quot;sxw&quot; &apos; Textdokument 
+		case frmCalc
+			GetDocEndings = &quot;sxc&quot; &apos;Tabellendokument 
+		case frmImpress
+			GetDocEndings = &quot;sxi&quot; &apos;PrÕsentation 
+		case frmDraw
+			GetDocEndings = &quot;sxd&quot; &apos;Zeichen
+		case frmHyperText, frmHyperText or cFlt50
+			GetDocEndings = &quot;html&quot; &apos;Hypertext-Dokument
+		case frmWriter or cFlt50
+			GetDocEndings = &quot;sdw&quot; &apos; Textdokument 5.0
+		case frmCalc or cFlt50
+			GetDocEndings = &quot;sdc&quot; &apos;Tabellendokument 5.0
+		case frmImpress or cFlt50
+			GetDocEndings = &quot;sdd&quot; &apos;PrÕsentation 5.0
+		case frmDraw or cFlt50
+			GetDocEndings = &quot;sda&quot; &apos;Zeichen 5.0
+		case else
+			GetDocEndings = &quot;&quot;
+	end Select		
+end Function
+
+Function GetDocFilter (DocType as Integer) as String
+	Select Case ( DocType )
+		case frmWriter 
+			GetDocFilter = &quot;StarOffice XML (Writer)&quot; &apos; Textdokument 
+		case frmCalc
+			GetDocFilter = &quot;StarOffice XML (Calc)&quot; &apos;Tabellendokument 
+		case frmImpress
+			GetDocFilter = &quot;StarOffice XML (Impress)&quot; &apos;Präsentation 
+		case frmDraw
+			GetDocFilter = &quot;StarOffice XML (Draw)&quot; &apos;Zeichen
+		case frmMath
+			GetDocFilter = &quot;StarOffice XML (Math)&quot; &apos;Formel 
+		case frmHyperText, frmHyperText or cFlt50
+			GetDocFilter = &quot;HTML&quot; &apos;Hypertext-Dokument
+			
+		case frmWriter or cFlt50
+			GetDocFilter = &quot;StarWriter 5.0&quot; &apos; Textdokument 5.0
+		case frmCalc or cFlt50
+			GetDocFilter = &quot;StarCalc 5.0&quot; &apos;Tabellendokument 5.0
+		case frmImpress or cFlt50
+			GetDocFilter = &quot;StarImpress 5.0&quot; &apos;Präsentation 5.0
+		case frmDraw or cFlt50
+			GetDocFilter = &quot;StarDraw 5.0&quot; &apos;Zeichen 5.0
+		case frmMath or cFlt50
+			GetDocFilter = &quot;StarMath 5.0&quot; &apos;Formel 5.0
+			
+		case frmWriter or cFltNewDoc
+			GetDocFilter = &quot;swriter&quot; &apos; Textdokument 
+		case frmCalc or cFltNewDoc
+			GetDocFilter = &quot;scalc&quot; &apos;Tabellendokument 
+		case frmMessage or cFltNewDoc
+			GetDocFilter = &quot;Message&quot; &apos;Nachricht 
+		case frmImpress or cFltNewDoc
+			GetDocFilter = &quot;simpress&quot; &apos;Präsentation 
+		case frmDraw or cFltNewDoc
+			GetDocFilter = &quot;sdraw&quot; &apos;Zeichen
+		case frmMath or cFltNewDoc
+			GetDocFilter = &quot;smath&quot; &apos;Formel 
+		case frmImage or cFltNewDoc
+			GetDocFilter = &quot;simage&quot; &apos;Bild 
+		case frmHyperText or cFltNewDoc
+			GetDocFilter = &quot;swriter/web&quot; &apos;Hypertext-Dokument
+		case frmChart or cFltNewDoc
+			GetDocFilter = &quot;schart&quot; &apos;Diagramm 			
+		case else
+			GetDocFilter = &quot;&quot;
+	end Select		
+end Function
+
+Function GetLogFileName (DocType as Integer) as String
+	Select Case ( DocType )
+		case frmWriter 
+			GetLogFileName = sSWLogFileName &apos; Textdokument 
+		case frmCalc
+			GetLogFileName = sSCLogFileName &apos;Tabellendokument 
+		case frmMessage
+			GetLogFileName = sSMessageLogFileName &apos;Nachricht 
+		case frmImpress
+			GetLogFileName = sSDLogFileName &apos;PrÕsentation 
+		case frmDraw
+			GetLogFileName = sSDrawLogFileName &apos;Zeichnen
+		case frmMath
+			GetLogFileName = sSMathLogFileName &apos;Formel 
+		case frmImage
+			GetLogFileName = sSImDLogFileName &apos;Bild 
+		case frmHyperText
+			GetLogFileName = sSHptLogFileName &apos;Hypertext-Dokument 
+		case frmChart
+			GetLogFileName = sSChartLogFileName &apos;Diagramm 
+		case frmJava
+			GetLogFileName = sJavaLogFileName &apos;Java
+		case else
+			GetLogFileName = &quot;&quot;
+	end Select		
+end Function
+
+Function IsFilterAvailable (FilterType as Integer) as boolean
+	IsFilterAvailable = true
+	if (FilterType = (frmHyperText or cFlt50)) then
+		IsFilterAvailable = false
+	end if
+End Function
+
+Function TestJava (FilterType as Integer) as boolean
+	Dim oObj as Object
+	FileChannel% = OpenLogDat (GetLogFileName(FilterType))
+	oObj = createUnoService(cUnoJavaLoader)
+	LogState (not IsNull (oObj), &quot;Java &quot;+ cMessageNewDoc, FileChannel)
+	LogState (not IsNull (oObj), &quot;Java &quot;+ cMessageNewDoc, MainFileChannel)
+	SetStatus (FilterType, cDocNew, not IsNull (oObj))
+	
+	Print #FileChannel, &quot;---&quot;
+	Close #FileChannel%
+	
+	TestJava = not IsNull (oObj)
+End Function
+
+Sub CutAndPaste (DocType as Integer, oDoc as Object)
+	Dim sText as String
+	Dim oWin as Object
+	Dim oText as Object
+	Dim oView as Object
+	Dim bCutState as boolean, bPasteState as boolean
+	Select Case ( DocType )
+		case frmWriter
+			Dim oCursor as Object
+			
+			sText = &quot;AutomaticText&quot;
+			oText = oDoc.GetText
+			oCursor = oText.CreateTextCursor
+			oText.InsertString(oCursor, sText, true) &apos; Cursor selektiert den Text
+			oView = oDoc.getCurrentController
+			oView.Select(oCursor)
+			
+			if bMakeCutTest then
+			call CutText (oDoc)
+			
+			if oText.GetString = &quot;&quot; Then
+				bCutState = True
+			else
+				bCutState = False
+			end If
+			SetStatus (DocType, cDocCut, bCutState)
+			LogState (bCutState, GetDocFilter(DocType or cFltNewDoc)+&quot; &quot;+ cMessageCutObj, FileChannel)
+			LogState (bCutState, GetDocFilter(DocType or cFltNewDoc)+&quot; &quot;+ cMessageCutObj, MainFileChannel)
+			end if
+			
+			if bMakePasteTest and bMakeCutTest then
+			call PasteText (oDoc)
+			
+			if oText.GetString = sText Then
+				bPasteState = True
+			else
+				bPasteState = False
+			end If
+			SetStatus (DocType, cDocPaste, bPasteState)
+			LogState (bPasteState, GetDocFilter(DocType or cFltNewDoc)+&quot; &quot;+ cMessagePasteObj, FileChannel)
+			LogState (bPasteState, GetDocFilter(DocType or cFltNewDoc)+&quot; &quot;+ cMessagePasteObj, MainFileChannel)
+			end if
+
+		case frmCalc
+			DIM oCell as Object
+			
+			sText = &quot;AutomaticText&quot;
+			oCell = oDoc.Sheets(0).GetCellByPosition(0, 0)
+			oCell.String = sText
+			oView = oDoc.getCurrentController
+			oView.Select(oCell)
+			
+			if bMakeCutTest then
+			call CutText (oDoc)
+			
+			if oCell.String = &quot;&quot; Then
+				bCutState = True
+			else
+				bCutState = False
+			end If
+			SetStatus (DocType, cDocCut, bCutState)
+			LogState (bCutState, GetDocFilter(DocType or cFltNewDoc)+&quot; &quot;+ cMessageCutObj, FileChannel)
+			LogState (bCutState, GetDocFilter(DocType or cFltNewDoc)+&quot; &quot;+ cMessageCutObj, MainFileChannel)
+			end if
+			
+			if bMakePasteTest and bMakeCutTest then
+			call PasteText (oDoc)
+			
+			if oCell.String = sText Then
+				bPasteState = True
+			else
+				bPasteState = False
+			end If
+			SetStatus (DocType, cDocPaste, bPasteState)
+			LogState (bPasteState, GetDocFilter(DocType or cFltNewDoc)+&quot; &quot;+ cMessagePasteObj, FileChannel)
+			LogState (bPasteState, GetDocFilter(DocType or cFltNewDoc)+&quot; &quot;+ cMessagePasteObj, MainFileChannel)
+			end if
+		case frmMessage
+		case frmImpress, frmDraw
+			Dim oPage as Object
+			Dim oRect as Object
+			Dim xSize as Object
+			Dim xPoint as Object
+			Dim bObjState as Boolean
+			
+			xSize = CreateUnoStruct (&quot;com.sun.star.awt.Size&quot;)
+			xPoint = CreateUnoStruct (&quot;com.sun.star.awt.Point&quot;)
+			xSize.Width = 2000
+			xSize.Height = 2000
+			xPoint.x = 10000
+			xPoint.y = 10000
+			oPage = oDoc.DrawPages(0)
+			oRect = oDoc.CreateInstance(&quot;com.sun.star.drawing.RectangleShape&quot;)
+			oRect.Size = xSize
+			oRect.Position = xPoint
+			oPage.add(oRect)
+			
+			oView = oDoc.getCurrentController
+			oView.Select(oRect)
+			
+			&apos; Pr²ft ob ²berhaupt ein Object angelegt wurde
+			if oPage.count = 1 Then
+				bObjState = True
+			else
+				bObjState = False
+			end If
+			
+			if bMakeCutTest then			
+			call CutText (oDoc)
+			
+			if (oPage.count = 0) and bObjState Then
+				bCutState = True
+			else
+				bCutState = False
+			end If
+			SetStatus (DocType, cDocCut, bCutState)
+			LogState (bCutState, GetDocFilter(DocType or cFltNewDoc)+&quot; &quot;+ cMessageCutObj, FileChannel)
+			LogState (bCutState, GetDocFilter(DocType or cFltNewDoc)+&quot; &quot;+ cMessageCutObj, MainFileChannel)
+			end if 
+			
+			if bMakePasteTest and bMakeCutTest then
+			call PasteText (oDoc)
+			
+			if (oPage.count = 1) and bObjState Then
+				bPasteState = True
+			else
+				bPasteState = False
+			end If
+			SetStatus (DocType, cDocPaste, bPasteState)
+			LogState (bPasteState, GetDocFilter(DocType or cFltNewDoc)+&quot; &quot;+ cMessagePasteObj, FileChannel)
+			LogState (bPasteState, GetDocFilter(DocType or cFltNewDoc)+&quot; &quot;+ cMessagePasteObj, MainFileChannel)
+			end if
+		case frmMath
+		case frmImage
+		case frmHyperText
+		case frmChart
+	end Select		
+end Sub
+
+Sub LoadLibrary( LibName as String )
+	
+	dim args(1)
+	dim arg as new com.sun.star.beans.PropertyValue
+	arg.Name = &quot;LibraryName&quot;
+	arg.Value = LibName
+	args(0) = arg
+	
+	dim url as new com.sun.star.util.URL
+	dim trans as object
+	trans = createUnoService(&quot;com.sun.star.util.URLTransformer&quot; )
+	url.Complete = &quot;slot:6517&quot;
+	trans.parsestrict( url )
+
+	dim disp as object
+	disp = StarDesktop.currentFrame.queryDispatch( url, &quot;&quot;, 0 )
+	disp.dispatch( url, args() )
+	
+End Sub
+
+Sub LoadDoc (DocName as String) as Object
+	dim trans as object
+	trans = createUnoService(&quot;com.sun.star.util.URLTransformer&quot; )
+	url = createUnoStruct(&quot;com.sun.star.util.URL&quot; )
+	url.Complete = DocName
+	if Left(DocName, 5 ) &lt;&gt; &quot;file:&quot; then
+	trans.parsestrict( url )
+	endif
+	
+	Dim aPropArray(0) as Object
+	aPropArray(0) = CreateUnoStruct(&quot;com.sun.star.beans.PropertyValue&quot;)
+	aPropArray(0).Name = &quot;OpenFlags&quot;
+	aPropArray(0).Value = &quot;S&quot;
+
+	dim doc as object
+	dim noargs()
+	doc = StarDesktop.loadComponentFromURL( url.Complete, &quot;_blank&quot;, 0, aPropArray() )	&apos; XModel
+	LoadDoc = doc
+End Sub
+
+Sub SaveDoc (DocName as String, oDoc as Object, sFilterName as string )
+	dim trans as object
+	trans = createUnoService(&quot;com.sun.star.util.URLTransformer&quot; )
+	url = createUnoStruct(&quot;com.sun.star.util.URL&quot; )
+	url.Complete = DocName
+	if Left(DocName, 5 ) &lt;&gt; &quot;file:&quot; then
+	trans.parsestrict( url )
+	endif
+	
+	if not (sFilterName = &quot;&quot;) then
+		Dim aPropArray(0) as Object
+		aPropArray(0) = CreateUnoStruct(&quot;com.sun.star.beans.PropertyValue&quot;)
+		aPropArray(0).Name = &quot;FilterName&quot;
+		aPropArray(0).Value = sFilterName
+	
+		oDoc.storeAsURL( url.Complete, aPropArray() )
+	else
+		MessageBox &quot;Filtername is unknown!&quot;
+	end if	
+end Sub
+</script:module>

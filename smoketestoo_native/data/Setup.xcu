@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" oor:name="Setup" oor:package="org.openoffice">
+ <node oor:name="Office">
+  <prop oor:name="ooLicenseAcceptDate" oor:type="xs:string">
+   <value>2100-01-01T00:00:00</value>
+  </prop>
+ </node>
+</oor:component-data>
