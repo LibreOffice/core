@@ -35,16 +35,16 @@
   </dlg:button>
   <dlg:text dlg:id="WelcomeTextLabel" dlg:tab-index="21" dlg:left="6" dlg:top="38" dlg:width="258" dlg:height="20" dlg:page="1" dlg:value="WelcomeTextLabel" dlg:multiline="true"/>
   <dlg:text dlg:id="WelcomeTextLabel3" dlg:tab-index="22" dlg:left="6" dlg:top="58" dlg:width="258" dlg:height="12" dlg:page="1" dlg:value="WelcomeTextLabel3"/>
-  <dlg:button dlg:id="cmdTemplateImport" dlg:tab-index="23" dlg:left="248" dlg:top="75" dlg:width="14" dlg:height="14" dlg:page="2" dlg:tag="TemplateImportPath" dlg:help-url="HID:34585" dlg:value="...">
+  <dlg:button dlg:id="cmdTemplateImport" dlg:tab-index="23" dlg:left="248" dlg:top="75" dlg:width="14" dlg:height="14" dlg:page="2" dlg:tag="txtTemplateImportPath" dlg:help-url="HID:34585" dlg:value="...">
    <script:event script:event-name="on-performaction" script:location="application" script:macro-name="ImportWizard.DialogModul.TakoverFolderName" script:language="StarBasic"/>
   </dlg:button>
-  <dlg:button dlg:id="cmdTemplateExport" dlg:tab-index="24" dlg:left="248" dlg:top="91" dlg:width="14" dlg:height="14" dlg:page="2" dlg:tag="TemplateExportPath" dlg:help-url="HID:34600" dlg:value="...">
+  <dlg:button dlg:id="cmdTemplateExport" dlg:tab-index="24" dlg:left="248" dlg:top="91" dlg:width="14" dlg:height="14" dlg:page="2" dlg:tag="txtTemplateExportPath" dlg:help-url="HID:34600" dlg:value="...">
    <script:event script:event-name="on-performaction" script:location="application" script:macro-name="ImportWizard.DialogModul.TakoverFolderName" script:language="StarBasic"/>
   </dlg:button>
-  <dlg:button dlg:id="cmdDocumentImport" dlg:tab-index="25" dlg:left="248" dlg:top="148" dlg:width="14" dlg:height="14" dlg:page="2" dlg:tag="DocumentImportPath" dlg:help-url="HID:34590" dlg:value="...">
+  <dlg:button dlg:id="cmdDocumentImport" dlg:tab-index="25" dlg:left="248" dlg:top="148" dlg:width="14" dlg:height="14" dlg:page="2" dlg:tag="txtDocumentImportPath" dlg:help-url="HID:34590" dlg:value="...">
    <script:event script:event-name="on-performaction" script:location="application" script:macro-name="ImportWizard.DialogModul.TakoverFolderName" script:language="StarBasic"/>
   </dlg:button>
-  <dlg:button dlg:id="cmdDocumentExport" dlg:tab-index="26" dlg:left="248" dlg:top="164" dlg:width="14" dlg:height="14" dlg:page="2" dlg:tag="DocumentExportPath" dlg:help-url="HID:34601" dlg:value="...">
+  <dlg:button dlg:id="cmdDocumentExport" dlg:tab-index="26" dlg:left="248" dlg:top="164" dlg:width="14" dlg:height="14" dlg:page="2" dlg:tag="txtDocumentExportPath" dlg:help-url="HID:34601" dlg:value="...">
    <script:event script:event-name="on-performaction" script:location="application" script:macro-name="ImportWizard.DialogModul.TakoverFolderName" script:language="StarBasic"/>
   </dlg:button>
   <dlg:radiogroup>
