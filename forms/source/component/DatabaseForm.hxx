@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-18 06:44:45 $
+ *  last change: $Author: fs $ $Date: 2001-10-22 15:25:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -524,7 +524,7 @@ private:
                     const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxCompletionHandler = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >());
     bool    fillParameters(ReusableMutexGuard& _rClearForNotifies,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxCompletionHandler = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >());
-    OParameterInfoImpl* createParameterInfo() const;
+    void    createParameterInfo();
     bool    hasValidParent() const;
     // if there are no parameter infos we now that we have a complete new statement to execute
     bool    needStatementRebuild() const {return m_pParameterInfo == NULL;}
@@ -557,6 +557,9 @@ private:
 
     /// checks if we currently share our connection with our parent
     sal_Bool    isSharingConnection( ) const { return m_bSharingConnection; }
+
+    /// invalidate all our parameter-related stuff
+    void        invlidateParameters();
 
     // error handling
     void    onError(const ::com::sun::star::sdb::SQLErrorEvent& _rEvent);
