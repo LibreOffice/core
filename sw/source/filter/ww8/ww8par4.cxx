@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par4.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-01 12:44:08 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 11:38:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,9 +110,7 @@
 #include <svx/msocximex.hxx>
 #endif
 
-#ifndef SMDLL0_HXX
-#include <starmath/smdll0.hxx>
-#endif
+#include <sot/exchange.hxx>
 
 #ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
@@ -329,7 +327,7 @@ SwFlyFrmFmt* SwWW8ImplReader::InsertOle(SdrOle2Obj &rObject,
     SwFlyFrmFmt *pRet = 0;
 
     SfxItemSet *pMathFlySet = 0;
-    if (SmModuleDummy::HasID(*rObject.GetObjRef()->GetSvFactory()))
+    if (SotExchange::IsMath(*rObject.GetObjRef()->GetSvFactory()))
     {
         /*
         StarMath sets it own fixed size, so its counter productive to use the
