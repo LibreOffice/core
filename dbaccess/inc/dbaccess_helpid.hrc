@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbaccess_helpid.hrc,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-17 07:25:54 $
+ *  last change: $Author: fs $ $Date: 2001-08-06 07:42:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,6 +287,18 @@
 #define HID_BROWSER_BEW_DOCUMENT                    (HID_DBACCESS_START + 195)
 #define HID_DLG_PASSWORD                            (HID_DBACCESS_START + 196)
 
+#define HID_DLGIDX_NEWINDEX                         (HID_DBACCESS_START + 197)
+#define HID_DLGIDX_DROPINDEX                        (HID_DBACCESS_START + 198)
+#define HID_DLGIDX_RENAMEINDEX                      (HID_DBACCESS_START + 199)
+#define HID_DLGIDX_SAVEINDEX                        (HID_DBACCESS_START + 200)
+#define HID_DLGIDX_RESETINDEX                       (HID_DBACCESS_START + 201)
+#define HID_DLGIDX_INDEXLIST                        (HID_DBACCESS_START + 202)
+#define UID_DLGINDEX_INDEXDETAILS_BACK              (HID_DBACCESS_START + 203)
+#define UID_DLGINDEX_INDEXDETAILS_MAIN              (HID_DBACCESS_START + 204)
+#define HID_DLGINDEX_INDEXDETAILS_FIELD             (HID_DBACCESS_START + 205)
+#define HID_DLGINDEX_INDEXDETAILS_SORTORDER         (HID_DBACCESS_START + 206)
+
+#define HID_DOCLINKEDIT_URL                         (HID_DBACCESS_START + 207)
 
 // don't forget to update the file util/hidother.src
 
@@ -297,6 +309,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.40  2001/07/17 07:25:54  oj
+ *  #89575# new pwd change dialog
+ *
  *  Revision 1.39  2001/07/16 06:16:15  oj
  *  #86731# some helpids for toolbars
  *
