@@ -2,9 +2,9 @@
 #
 #   $RCSfile: wnt.mk,v $
 #
-#   $Revision: 1.36 $
+#   $Revision: 1.37 $
 #
-#   last change: $Author: hjs $ $Date: 2002-07-17 11:47:09 $
+#   last change: $Author: hjs $ $Date: 2002-08-07 19:52:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -261,7 +261,7 @@ CC+= /NMttNoLines
 .ENDIF
 
 #.IF"$(bndchk)"==""
-.IF "$(COMEX)"=="3" || "$(COMEX)"=="7" || "$(COMEX)"=="1"
+.IF "$(COMEX)"=="3" || "$(COMEX)"=="7" || "$(COMEX)"=="9"
 CFLAGS+=-Zm200
 .ENDIF
 #.ENDIF
@@ -385,7 +385,7 @@ CFLAGSDEBUG=
 CDEFS+=-D__STL_NO_NEW_IOSTREAMS -DSTLPORT_VERSION=400 -D__STL_USE_ABBREVS
 CDEFS+=-D_MT
 .ENDIF
-.IF "$(COMEX)"=="7"
+.IF "$(COMEX)"=="7" || "$(COMEX)"=="9"
 #CDEFS+=-D__STL_NO_NEW_IOSTREAMS -DSTLPORT_VERSION=400 -D__STL_USE_ABBREVS
 CDEFS+=-DSTLPORT_VERSION=400
 CDEFS+=-D_MT
