@@ -120,7 +120,7 @@ public:
 
                                 UCBStorage_Impl( const String&, StreamMode, UCBStorage*, BOOL );
                                 UCBStorage_Impl( SvStream&, UCBStorage*, BOOL );
-    void                        Init( const String&, StreamMode, UCBStorage* );
+    void                        Init();
     BOOL                        Commit();
     BOOL                        Revert();
 };
@@ -494,6 +494,7 @@ UCBStorage::UCBStorage( SvStream& rStrm, BOOL bDirect )
     // to class UCBStorage !
     pImp = new UCBStorage_Impl( rStrm, this, bDirect );
     pImp->AddRef();
+    pImp->Init();
     StorageBase::nMode = pImp->m_nMode;
 }
 
@@ -503,6 +504,7 @@ UCBStorage::UCBStorage( const String& rName, StreamMode nMode, BOOL bDirect )
     // to class UCBStorage !
     pImp = new UCBStorage_Impl( rName, nMode, this, bDirect );
     pImp->AddRef();
+    pImp->Init();
     StorageBase::nMode = pImp->m_nMode;
 }
 
@@ -529,6 +531,7 @@ UCBStorage_Impl::UCBStorage_Impl( const String& rName, StreamMode nMode, UCBStor
     , m_pContent( NULL )
     , m_pSource( NULL )
     , m_pStream( NULL )
+    , m_nMode( nMode )
     , m_bIsRoot( TRUE )
     , m_bDirect( bDirect )
 {
@@ -544,7 +547,6 @@ UCBStorage_Impl::UCBStorage_Impl( const String& rName, StreamMode nMode, UCBStor
     String aTemp = String::CreateFromAscii("vnd.sun.star.pkg://");
     aTemp += INetURLObject::encode( aName, INetURLObject::PART_AUTHORITY, '%', INetURLObject::ENCODE_ALL );
     m_aURL = aTemp;
-    Init( m_aURL, nMode, pStorage );
 }
 
 UCBStorage_Impl::UCBStorage_Impl( SvStream& rStream, UCBStorage* pStorage, BOOL bDirect )
@@ -568,23 +570,20 @@ UCBStorage_Impl::UCBStorage_Impl( SvStream& rStream, UCBStorage* pStorage, BOOL 
     rStream >> *m_pStream;
 
     // check opening mode
-    StreamMode nMode = STREAM_READ;
+    m_nMode = STREAM_READ;
     if( rStream.IsWritable() )
-        nMode = STREAM_READ | STREAM_WRITE;
-
-    // proceed as usual
-    Init( m_aURL, nMode, pStorage );
+        m_nMode = STREAM_READ | STREAM_WRITE;
 }
 
-void UCBStorage_Impl::Init( const String& rName, StreamMode nMode, UCBStorage* pStorage )
+void UCBStorage_Impl::Init()
 {
-    INetURLObject aObj( rName );
+    INetURLObject aObj( m_aURL );
     m_aName = m_aOriginalName = aObj.GetLastName();
 
     try
     {
         // create content; where to put StreamMode ?! ( already done when opening the file of the package ? )
-        m_pContent = new ::ucb::Content( rName, Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+        m_pContent = new ::ucb::Content( m_aURL, Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
     }
     catch( ... )
     {
@@ -598,10 +597,10 @@ void UCBStorage_Impl::Init( const String& rName, StreamMode nMode, UCBStorage* p
         // make methods like IsStream or IsStorage and FillInfoList possible
         Sequence< ::rtl::OUString > aProps(4);
         ::rtl::OUString* pProps = aProps.getArray();
-        pProps[0] == ::rtl::OUString::createFromAscii( "Title" );
-        pProps[1] == ::rtl::OUString::createFromAscii( "IsFolder" );
-        pProps[2] == ::rtl::OUString::createFromAscii( "MediaType" );
-        pProps[3] == ::rtl::OUString::createFromAscii( "Size" );
+        pProps[0] = ::rtl::OUString::createFromAscii( "Title" );
+        pProps[1] = ::rtl::OUString::createFromAscii( "IsFolder" );
+        pProps[2] = ::rtl::OUString::createFromAscii( "MediaType" );
+        pProps[3] = ::rtl::OUString::createFromAscii( "Size" );
         ::ucb::ResultSetInclude eInclude = ::ucb::INCLUDE_FOLDERS_AND_DOCUMENTS;
 
         try
@@ -612,16 +611,17 @@ void UCBStorage_Impl::Init( const String& rName, StreamMode nMode, UCBStorage* p
             while ( xResultSet->next() )
             {
                 // insert all into the children list
-                ::rtl::OUString aId = xContentAccess->queryContentIdentifierString();
+//                ::rtl::OUString aId = xContentAccess->queryContentIdentifierString();
+                ::rtl::OUString aTitle( xRow->getString(1) );
                 BOOL bIsFolder( xRow->getBoolean(2) );
                 sal_Int64 nSize = xRow->getLong(4);
                 ::rtl::OUString aContentType= xRow->getString(3);
-                UCBStorageElement_Impl* pElement = new UCBStorageElement_Impl( aId, aContentType, bIsFolder, (ULONG) nSize );
+                UCBStorageElement_Impl* pElement = new UCBStorageElement_Impl( aTitle, aContentType, bIsFolder, (ULONG) nSize );
                 m_aChildrenList.Insert( pElement, LIST_APPEND );
                 if ( !bIsFolder )
                 {
                     // will be replaced by a detection using the MediaType
-                    BaseStorageStream* pStream = m_pAntiImpl->OpenStream( xRow->getString(1), nMode, m_bDirect );
+                    BaseStorageStream* pStream = m_pAntiImpl->OpenStream( xRow->getString(1), m_nMode, m_bDirect );
                     if ( Storage::IsStorageFile( const_cast < SvStream* > ( pStream->GetSvStream() ) ) )
                         pElement->m_bIsStorage = TRUE;
                     delete pStream;
