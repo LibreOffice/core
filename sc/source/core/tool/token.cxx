@@ -2,9 +2,9 @@
  *
  *  $RCSfile: token.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 11:49:57 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:40:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1528,10 +1528,11 @@ ScToken* ScTokenArray::AddBad( const String& rStr )
 }
 
 
-BOOL ScTokenArray::GetAdjacentExtendOfOuterFuncRefs( USHORT& nExtend,
+BOOL ScTokenArray::GetAdjacentExtendOfOuterFuncRefs( SCCOLROW& nExtend,
         const ScAddress& rPos, ScDirection eDir )
 {
-    USHORT nCol, nRow;
+    SCCOL nCol;
+    SCROW nRow;
     switch ( eDir )
     {
         case DIR_BOTTOM :
@@ -1542,7 +1543,7 @@ BOOL ScTokenArray::GetAdjacentExtendOfOuterFuncRefs( USHORT& nExtend,
         break;
         case DIR_RIGHT :
             if ( rPos.Col() < MAXCOL )
-                nCol = (nExtend = rPos.Col()) + 1;
+                nCol = static_cast<SCCOL>(nExtend = rPos.Col()) + 1;
             else
                 return FALSE;
         break;
@@ -1554,7 +1555,7 @@ BOOL ScTokenArray::GetAdjacentExtendOfOuterFuncRefs( USHORT& nExtend,
         break;
         case DIR_LEFT :
             if ( rPos.Col() > 0 )
-                nCol = (nExtend = rPos.Col()) - 1;
+                nCol = static_cast<SCCOL>(nExtend = rPos.Col()) - 1;
             else
                 return FALSE;
         break;
@@ -1593,7 +1594,8 @@ BOOL ScTokenArray::GetAdjacentExtendOfOuterFuncRefs( USHORT& nExtend,
                                 break;
                                 case DIR_RIGHT :
                                     if ( rRef.nCol == nCol
-                                            && rRef.nCol > nExtend )
+                                            && static_cast<SCCOLROW>(rRef.nCol)
+                                            > nExtend )
                                     {
                                         nExtend = rRef.nCol;
                                         bRet = TRUE;
@@ -1609,7 +1611,8 @@ BOOL ScTokenArray::GetAdjacentExtendOfOuterFuncRefs( USHORT& nExtend,
                                 break;
                                 case DIR_LEFT :
                                     if ( rRef.nCol == nCol
-                                            && rRef.nCol < nExtend )
+                                            && static_cast<SCCOLROW>(rRef.nCol)
+                                            < nExtend )
                                     {
                                         nExtend = rRef.nCol;
                                         bRet = TRUE;
@@ -1633,8 +1636,9 @@ BOOL ScTokenArray::GetAdjacentExtendOfOuterFuncRefs( USHORT& nExtend,
                                     }
                                 break;
                                 case DIR_RIGHT :
-                                    if ( rRef.Ref1.nCol == nCol
-                                            && rRef.Ref2.nCol > nExtend )
+                                    if ( rRef.Ref1.nCol == nCol &&
+                                            static_cast<SCCOLROW>(rRef.Ref2.nCol)
+                                            > nExtend )
                                     {
                                         nExtend = rRef.Ref2.nCol;
                                         bRet = TRUE;
@@ -1649,8 +1653,9 @@ BOOL ScTokenArray::GetAdjacentExtendOfOuterFuncRefs( USHORT& nExtend,
                                     }
                                 break;
                                 case DIR_LEFT :
-                                    if ( rRef.Ref2.nCol == nCol
-                                            && rRef.Ref1.nCol < nExtend )
+                                    if ( rRef.Ref2.nCol == nCol &&
+                                            static_cast<SCCOLROW>(rRef.Ref1.nCol)
+                                            < nExtend )
                                     {
                                         nExtend = rRef.Ref1.nCol;
                                         bRet = TRUE;
@@ -1836,6 +1841,8 @@ void ScTokenArray::ReadjustRelative3DReferences( const ScAddress& rOldPos,
 
 void ScRawToken::Load30( SvStream& rStream )
 {
+#if SC_ROWLIMIT_STREAM_ACCESS
+#error address types changed!
     UINT16 nOp;
     BYTE n;
     nRefCnt = 0;
@@ -1951,6 +1958,7 @@ void ScRawToken::Load30( SvStream& rStream )
             sbyte.cByte = 0;
             sbyte.bHasForceArray = false;
     }
+#endif // SC_ROWLIMIT_STREAM_ACCESS
 }
 
 // Bei unbekannten Tokens steht in cStr (k)ein Pascal-String (cStr[0] = Laenge),
@@ -1958,6 +1966,8 @@ void ScRawToken::Load30( SvStream& rStream )
 
 void ScRawToken::Load( SvStream& rStream, USHORT nVer )
 {
+#if SC_ROWLIMIT_STREAM_ACCESS
+#error address types changed!
     BYTE n;
     UINT16 nOp;
     USHORT i;
@@ -2091,10 +2101,13 @@ void ScRawToken::Load( SvStream& rStream, USHORT nVer )
             *((BYTE*)cStr) = n;     // length including length byte
         }
     }
+#endif // SC_ROWLIMIT_STREAM_ACCESS
 }
 
 void ScToken::Store( SvStream& rStream ) const
 {
+#if SC_ROWLIMIT_STREAM_ACCESS
+#error address types changed!
     short i;
     rStream << (UINT16) eOp << (BYTE) eType;
     switch( eType )
@@ -2170,6 +2183,7 @@ void ScToken::Store( SvStream& rStream ) const
                 rStream.Write( pUnknown, pUnknown[ 0 ] );
         }
     }
+#endif // SC_ROWLIMIT_STREAM_ACCESS
 }
 
 /*----------------------------------------------------------------------*/
