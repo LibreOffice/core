@@ -2,9 +2,9 @@
  *
  *  $RCSfile: simplecontinuousactivitybase.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:00:27 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:49:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,37 +70,35 @@ namespace presentation
 {
     namespace internal
     {
-        SimpleContinuousActivityBase::SimpleContinuousActivityBase( const ActivityParameters& rParms ) :
+        SimpleContinuousActivityBase::SimpleContinuousActivityBase(
+            const ActivityParameters& rParms ) :
             ActivityBase( rParms ),
-            maTimer(),
+            maTimer( rParms.mrActivitiesQueue.getTimer() ),
             mnMinSimpleDuration( rParms.mnMinDuration ),
             mnMinNumberOfFrames( rParms.mnMinNumberOfFrames ),
             mnCurrPerformCalls( 0 )
         {
         }
 
-        void SimpleContinuousActivityBase::start()
+        void SimpleContinuousActivityBase::startAnimation()
         {
             // init timer. We measure animation time only when we're
             // actually started.
             maTimer.reset();
         }
 
-        bool SimpleContinuousActivityBase::perform()
+        double SimpleContinuousActivityBase::calcTimeLag() const
         {
-            // call base class, for start() calls and end handling
-            if( !ActivityBase::perform() )
-                return false; // done, we're ended
+            ActivityBase::calcTimeLag();
+            if (! isActive())
+                return 0.0;
 
             // retrieve locally elapsed time
             const double nCurrElapsedTime( maTimer.getElapsedTime() );
 
             // log time
-            VERBOSE_TRACE( "SimpleContinuousActivityBase::perform(): next step is based on time: %f", nCurrElapsedTime );
-
-
-            // calc relative animation position
-            // ================================
+            VERBOSE_TRACE( "SimpleContinuousActivityBase::calcTimeLag(): "
+                           "next step is based on time: %f", nCurrElapsedTime );
 
             // go to great length to ensure a proper animation
             // run. Since we don't know how often we will be called
@@ -110,10 +108,12 @@ namespace presentation
             // times.
 
             // fraction of time elapsed
-            const double nFractionElapsedTime( nCurrElapsedTime / mnMinSimpleDuration );
+            const double nFractionElapsedTime(
+                nCurrElapsedTime / mnMinSimpleDuration );
 
             // fraction of minimum calls performed
-            const double nFractionRequiredCalls( (double)mnCurrPerformCalls / mnMinNumberOfFrames );
+            const double nFractionRequiredCalls(
+                (double)mnCurrPerformCalls / mnMinNumberOfFrames );
 
             // okay, so now, the decision is easy:
             //
@@ -129,17 +129,36 @@ namespace presentation
             // down, and take the required minimal number of steps,
             // sufficiently equally distributed across the animation
             // time line.
-            double nT;
             if( nFractionElapsedTime < nFractionRequiredCalls )
             {
-                VERBOSE_TRACE( "SimpleContinuousActivityBase::perform(): t=%f is based on time", nFractionElapsedTime );
-                nT = nFractionElapsedTime;
+                VERBOSE_TRACE( "SimpleContinuousActivityBase::calcTimeLag(): "
+                               "t=%f is based on time", nFractionElapsedTime );
+                return 0.0;
             }
             else
             {
-                VERBOSE_TRACE( "SimpleContinuousActivityBase::perform(): t=%f is based on number of calls", nFractionRequiredCalls );
-                nT = nFractionRequiredCalls;
+                VERBOSE_TRACE( "SimpleContinuousActivityBase::perform(): "
+                               "t=%f is based on number of calls",
+                               nFractionRequiredCalls );
+
+                // lag global time, so all other animations lag, too:
+                return ((nFractionElapsedTime - nFractionRequiredCalls)
+                        * mnMinSimpleDuration);
             }
+        }
+
+        bool SimpleContinuousActivityBase::perform()
+        {
+            // call base class, for start() calls and end handling
+            if( !ActivityBase::perform() )
+                return false; // done, we're ended
+
+
+            // get relative animation position
+            // ===============================
+
+            const double nCurrElapsedTime( maTimer.getElapsedTime() );
+            double nT( nCurrElapsedTime / mnMinSimpleDuration );
 
 
             // one of the stop criteria reached?
@@ -149,16 +168,17 @@ namespace presentation
             // matched.
             bool bActivityEnding( false );
 
-            if( maRepeats.isValid() )
+            if( isRepeatCountValid() )
             {
                 // Finite duration
                 // ===============
 
                 // When we've autoreverse on, the repeat count
                 // doubles
-                const double nEffectiveRepeat( mbAutoReverse ?
-                                               2.0*maRepeats.getValue() :
-                                               maRepeats.getValue() );
+                const double nRepeatCount( getRepeatCount() );
+                const double nEffectiveRepeat( isAutoReverse() ?
+                                               2.0*nRepeatCount :
+                                               nRepeatCount );
 
                 // time (or frame count) elapsed?
                 if( nEffectiveRepeat <= nT )
@@ -178,7 +198,7 @@ namespace presentation
             // ========================
 
             // TODO(Q3): Refactor this mess
-            if( mbAutoReverse )
+            if( isAutoReverse() )
             {
                 // divert active duration into repeat and
                 // fractional part.
@@ -211,8 +231,8 @@ namespace presentation
             double nRelativeSimpleTime( modf(nT, &nRepeats) );
 
             // clamp repeats to max permissible value (maRepeats.getValue() - 1.0)
-            if( maRepeats.isValid() &&
-                nRepeats >= maRepeats.getValue() )
+            if( isRepeatCountValid() &&
+                nRepeats >= getRepeatCount() )
             {
                 // Note that this code here only gets
                 // triggered if maRepeats.getValue() is an
@@ -239,7 +259,7 @@ namespace presentation
                 // nRelativeSimpleTime=1.0. For auto-reversed
                 // animations, nRelativeSimpleTime must become
                 // 0.0
-                nRelativeSimpleTime = mbAutoReverse ? 0.0 : 1.0;
+                nRelativeSimpleTime = isAutoReverse() ? 0.0 : 1.0;
                 nRepeats -= 1.0;
             }
 
@@ -252,17 +272,27 @@ namespace presentation
                            static_cast<sal_uInt32>( nRepeats ) );
 
 
-            // delayed end() call from end condition check below.
-            // Issued after the simplePerform() call above, to give
-            // animations the chance to correctly reach the animation
-            // end value.
+            // delayed endActivity() call from end condition check
+            // below. Issued after the simplePerform() call above, to
+            // give animations the chance to correctly reach the
+            // animation end value, without spurious bail-outs because
+            // of isActive() returning false.
             if( bActivityEnding )
-                end();
+                endActivity();
 
             // one more frame successfully performed
             ++mnCurrPerformCalls;
 
             return isActive();
         }
+
+        void SimpleContinuousActivityBase::dequeued()
+        {
+            ENSURE_AND_THROW( !isActive(),
+                              "SimpleContinuousActivityBase::dequeued(): Dequeued, but still active?!" );
+
+            endAnimation();
+        }
+
     }
 }
