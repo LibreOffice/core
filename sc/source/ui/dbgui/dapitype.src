@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dapitype.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-26 22:31:43 $
+ *  last change: $Author: dr $ $Date: 2001-12-17 14:24:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,34 +68,34 @@ ModalDialog RID_SCDLG_DAPITYPE
     OutputSize = TRUE ;
     HelpId = HID_DATAPILOT_TYPE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 191 , 63 ) ;
+    Size = MAP_APPFONT ( 241 , 63 ) ;
     Text = "Quelle auswählen" ;
     Text [ ENGLISH ] = "Select source" ;
     Moveable = TRUE ;
     Closeable = FALSE ;
     OKButton BTN_OK
     {
-        Pos = MAP_APPFONT ( 135 , 6 ) ;
+        Pos = MAP_APPFONT ( 185 , 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         DefButton = TRUE ;
     };
     CancelButton BTN_CANCEL
     {
-        Pos = MAP_APPFONT ( 135 , 23 ) ;
+        Pos = MAP_APPFONT ( 185 , 23 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
     HelpButton BTN_HELP
     {
-        Pos = MAP_APPFONT ( 135 , 43 ) ;
+        Pos = MAP_APPFONT ( 185 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
     RadioButton BTN_SELECTION
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 114 , 10 ) ;
+        Size = MAP_APPFONT ( 164 , 10 ) ;
         Text = "~Aktuelle Selektion" ;
         Text [ ENGLISH ] = "Current selection" ;
         TabStop = TRUE ;
@@ -111,26 +111,26 @@ ModalDialog RID_SCDLG_DAPITYPE
         Text[ swedish ] = "Aktuell markering";
         Text[ polish ] = "~Aktualna selekcja";
         Text[ portuguese_brazilian ] = "Current selection";
-        Text[ japanese ] = "Œ»İ‚Ì‘I‘ğ(~C)";
-        Text[ korean ] = "ÇöÀç ¼±ÅÃ(~C)";
-        Text[ chinese_simplified ] = "µ±Ç°µÄÑ¡ÖĞ(~C)";
-        Text[ chinese_traditional ] = "·í«eªº¿ï¨ú(~C)";
+        Text[ japanese ] = "ç¾åœ¨ã®é¸æŠç¯„å›²(~C)";
+        Text[ korean ] = "í˜„ì¬ ì„ íƒ(~C)";
+        Text[ chinese_simplified ] = "å½“å‰çš„é€‰ä¸­(~C)";
+        Text[ chinese_traditional ] = "ç›®å‰çš„é¸å–(~C)";
         Text[ arabic ] = "ÇáÊÍÏíÏ ÇáÍÇáí";
         Text[ turkish ] = "~Yürürlükteki seçim";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Selección a~ctual";
+        Text[ catalan ] = "Sele~cció actual";
         Text[ finnish ] = "~Nykyinen valinta";
     };
     RadioButton BTN_DATABASE
     {
         Pos = MAP_APPFONT ( 12 , 28 ) ;
-        Size = MAP_APPFONT ( 114 , 10 ) ;
+        Size = MAP_APPFONT ( 164 , 10 ) ;
         Text = "~In %PRODUCTNAME angemeldete Datenquelle" ;
         Text [ ENGLISH ] = "Database source" ;
         TabStop = TRUE ;
         Text[ english_us ] = "~Data source registered in %PRODUCTNAME";
         Text[ portuguese ] = "~Fonte de dados ligada ao %PRODUCTNAME";
-        Text[ russian ] = "~Èñòî÷íèê äàííûõ, çàğåã. â %PRODUCTNAME";
+        Text[ russian ] = "~Èñõîäíûå äàííûå, çàğåã. â %PRODUCTNAME";
         Text[ greek ] = "Óôï %PRODUCTNAME äçëùìİíï áñ÷åßï ğñïİëåõóçò äåäïìİíùí";
         Text[ dutch ] = "~In %PRODUCTNAME aangemelde gegevensbron";
         Text[ french ] = "Source de données sous %PRODUCTNAME";
@@ -140,20 +140,20 @@ ModalDialog RID_SCDLG_DAPITYPE
         Text[ swedish ] = "Datakälla som är registrerad i %PRODUCTNAME";
         Text[ polish ] = "Zarejestr. ~w %PRODUCTNAME Ÿród³o danych";
         Text[ portuguese_brazilian ] = "Database source";
-        Text[ japanese ] = "%PRODUCTNAME ‚É“o˜^‚µ‚½ÃŞ°À¿°½(~D)";
-        Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º ¼Ò½º(~D)";
-        Text[ chinese_simplified ] = "ÔÚ %PRODUCTNAME ÖĞµÇ¼ÇµÄÊı¾İÔ´(~D)";
-        Text[ chinese_traditional ] = "%PRODUCTNAME ¤w¸gµn°Oªº¸ê®Æ·½(~D)";
+        Text[ japanese ] = "%PRODUCTNAME ã«ç™»éŒ²ã—ãŸãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹(~D)";
+        Text[ korean ] = "ë°ì´í„°ë² ì´ìŠ¤ ì†ŒìŠ¤(~D)";
+        Text[ chinese_simplified ] = "åœ¨ %PRODUCTNAME ä¸­ç™»è®°çš„æ•°æ®æº(~D)";
+        Text[ chinese_traditional ] = "%PRODUCTNAME å·²ç¶“ç™»è¨˜çš„è³‡æ–™æº(~D)";
         Text[ arabic ] = "ãÕÏÑ ÇáÈíÇäÇÊ ÇáãÓÌá İí %PRODUCTNAME";
         Text[ turkish ] = "%PRODUCTNAME'de kayıtlı veri kaynağı";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "F~uente de datos registrada en %PRODUCTNAME";
+        Text[ catalan ] = "F~ont de dades registrada a %PRODUCTNAME";
         Text[ finnish ] = "~Tietolähde rekisteröity ohjelmaan %PRODUCTNAME";
     };
     RadioButton BTN_EXTERNAL
     {
         Pos = MAP_APPFONT ( 12 , 42 ) ;
-        Size = MAP_APPFONT ( 114 , 10 ) ;
+        Size = MAP_APPFONT ( 164 , 10 ) ;
         Text = "~Externe Quelle/Schnittstelle" ;
         Text [ ENGLISH ] = "External source/interface" ;
         TabStop = TRUE ;
@@ -169,20 +169,20 @@ ModalDialog RID_SCDLG_DAPITYPE
         Text[ swedish ] = "Extern källa/gränssnitt";
         Text[ polish ] = "~Zewnêtrzne(y) Ÿród³o/interfejs";
         Text[ portuguese_brazilian ] = "External source/interface";
-        Text[ japanese ] = "ŠO•”¿°½/²İÀ°Ìª²½(~E)";
-        Text[ korean ] = "¿ÜºÎ ¼Ò½º/ÀÎÅÍ ÆäÀÌ½º(~E)";
-        Text[ chinese_simplified ] = "Íâ²¿Ô´/½çÃæ(~E)";
-        Text[ chinese_traditional ] = "¥~³¡¸ê®Æ·½/¬É­±(~E)";
+        Text[ japanese ] = "å¤–éƒ¨ã‚½ãƒ¼ã‚¹/ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ã‚¤ã‚¹(~E)";
+        Text[ korean ] = "ì™¸ë¶€ ì†ŒìŠ¤/ì¸í„° í˜ì´ìŠ¤(~E)";
+        Text[ chinese_simplified ] = "å¤–éƒ¨æº/ç•Œé¢(~E)";
+        Text[ chinese_traditional ] = "å¤–éƒ¨è³‡æ–™æº/ç•Œé¢(~E)";
         Text[ arabic ] = "ãÕÏÑ ÎÇÑÌí/æÇÌåÉ ÎÇÑÌíÉ";
         Text[ turkish ] = "~Dış kaynak/arabirim";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Fuente externa/Interfaz";
+        Text[ catalan ] = "Font/interfície ~externa";
         Text[ finnish ] = "~Ulkoinen lähde/liittymä";
     };
     FixedLine FL_FRAME
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 123 , 8 ) ;
+        Size = MAP_APPFONT ( 173 , 8 ) ;
         Text = "Auswahl" ;
         Text [ ENGLISH ] = "Select" ;
         Text[ english_us ] = "Selection";
@@ -197,14 +197,14 @@ ModalDialog RID_SCDLG_DAPITYPE
         Text[ swedish ] = "Urval";
         Text[ polish ] = "Wybór";
         Text[ portuguese_brazilian ] = "Select";
-        Text[ japanese ] = "‘I‘ğ";
-        Text[ korean ] = "¼±ÅÃ";
-        Text[ chinese_simplified ] = "Ñ¡Ôñ";
-        Text[ chinese_traditional ] = "¿ï¨ú";
+        Text[ japanese ] = "é¸æŠ";
+        Text[ korean ] = "ì„ íƒ";
+        Text[ chinese_simplified ] = "é€‰æ‹©";
+        Text[ chinese_traditional ] = "é¸å–";
         Text[ arabic ] = "ÊÍÏíÏ";
         Text[ turkish ] = "Seçim";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Selección";
+        Text[ catalan ] = "Selecció";
         Text[ finnish ] = "Valinta";
     };
     Text[ english_us ] = "Select Source";
@@ -219,14 +219,14 @@ ModalDialog RID_SCDLG_DAPITYPE
     Text[ swedish ] = "Välj ut källa";
     Text[ polish ] = "Wybierz Ÿród³o";
     Text[ portuguese_brazilian ] = "Select source";
-    Text[ japanese ] = "¿°½‚Ì‘I‘ğ";
-    Text[ korean ] = "¼Ò½º ¼±ÅÃ";
-    Text[ chinese_simplified ] = "Ñ¡ÔñÔ´";
-    Text[ chinese_traditional ] = "¿ï¾Ü¸ê®Æ·½";
+    Text[ japanese ] = "ã‚½ãƒ¼ã‚¹ã®é¸æŠ";
+    Text[ korean ] = "ì†ŒìŠ¤ ì„ íƒ";
+    Text[ chinese_simplified ] = "é€‰æ‹©æº";
+    Text[ chinese_traditional ] = "é¸æ“‡è³‡æ–™æº";
     Text[ arabic ] = "ÊÍÏíÏ ãÕÏÑ";
     Text[ turkish ] = "Kaynak seç";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Seleccionar fuente";
+    Text[ catalan ] = "Seleccioneu la font";
     Text[ finnish ] = "Valitse lähde";
 };
 
@@ -281,14 +281,14 @@ ModalDialog RID_SCDLG_DAPISERVICE
         Text[ swedish ] = "Service";
         Text[ polish ] = "Serwis";
         Text[ portuguese_brazilian ] = "Service";
-        Text[ japanese ] = "»°ËŞ½(~S)";
-        Text[ korean ] = "¼­ºñ½º(~S)";
-        Text[ chinese_simplified ] = "·şÎñ(~S)";
-        Text[ chinese_traditional ] = "¦øªA(~S)";
+        Text[ japanese ] = "ã‚µãƒ¼ãƒ“ã‚¹(~S)";
+        Text[ korean ] = "ì„œë¹„ìŠ¤(~S)";
+        Text[ chinese_simplified ] = "æœåŠ¡(~S)";
+        Text[ chinese_traditional ] = "ä¼ºæœ(~S)";
         Text[ arabic ] = "ÎÏãÉ";
         Text[ turkish ] = "~Hizmet";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Servicio";
+        Text[ catalan ] = "~Servei";
         Text[ finnish ] = "~Palvelu";
     };
     ListBox LB_SERVICE
@@ -317,14 +317,14 @@ ModalDialog RID_SCDLG_DAPISERVICE
         Text[ swedish ] = "Källa";
         Text[ polish ] = "ród³o";
         Text[ portuguese_brazilian ] = "Source";
-        Text[ japanese ] = "¿°½(~U)";
-        Text[ korean ] = "¼Ò½º(~U)";
-        Text[ chinese_simplified ] = "Ô´(~U)";
-        Text[ chinese_traditional ] = "¸ê®Æ·½(~U)";
+        Text[ japanese ] = "ã‚½ãƒ¼ã‚¹(~U)";
+        Text[ korean ] = "ì†ŒìŠ¤(~U)";
+        Text[ chinese_simplified ] = "æº(~U)";
+        Text[ chinese_traditional ] = "è³‡æ–™æº(~U)";
         Text[ arabic ] = "ÇáãÕÏÑ";
         Text[ turkish ] = "~Kaynak";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Fuente";
+        Text[ catalan ] = "F~ont";
         Text[ finnish ] = "Läh~de";
     };
     Edit ED_SOURCE
@@ -352,14 +352,14 @@ ModalDialog RID_SCDLG_DAPISERVICE
         Text[ swedish ] = "Namn";
         Text[ polish ] = "Nazwa";
         Text[ portuguese_brazilian ] = "Name";
-        Text[ japanese ] = "–¼‘O(~N)";
-        Text[ korean ] = "ÀÌ¸§(~N)";
-        Text[ chinese_simplified ] = "Ãû³Æ(~N)";
-        Text[ chinese_traditional ] = "¦WºÙ(~N)";
+        Text[ japanese ] = "åå‰(~N)";
+        Text[ korean ] = "ì´ë¦„(~N)";
+        Text[ chinese_simplified ] = "åç§°(~N)";
+        Text[ chinese_traditional ] = "åç¨±(~N)";
         Text[ arabic ] = "ÇáÇÓã";
         Text[ turkish ] = "~Ad";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Nombre";
+        Text[ catalan ] = "~Nom";
         Text[ finnish ] = "~Nimi";
     };
     Edit ED_NAME
@@ -387,14 +387,14 @@ ModalDialog RID_SCDLG_DAPISERVICE
         Text[ swedish ] = "Användare";
         Text[ polish ] = "U¿ytkownik";
         Text[ portuguese_brazilian ] = "User";
-        Text[ japanese ] = "Õ°»Ş°(~E)";
-        Text[ korean ] = "»ç¿ëÀÚ(~E)";
-        Text[ chinese_simplified ] = "Ê¹ÓÃÕß(~E)";
-        Text[ chinese_traditional ] = "¨Ï¥ÎªÌ(~E)";
+        Text[ japanese ] = "ãƒ¦ãƒ¼ã‚¶ãƒ¼(~E)";
+        Text[ korean ] = "ì‚¬ìš©ì(~E)";
+        Text[ chinese_simplified ] = "ä½¿ç”¨è€…(~E)";
+        Text[ chinese_traditional ] = "ä½¿ç”¨è€…(~E)";
         Text[ arabic ] = "ÇáãÓÊÎÏã";
         Text[ turkish ] = "~Kullanıcı";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Usuar~io";
+        Text[ catalan ] = "U~suari";
         Text[ finnish ] = "Käyt~täjä";
     };
     Edit ED_USER
@@ -422,14 +422,14 @@ ModalDialog RID_SCDLG_DAPISERVICE
         Text[ swedish ] = "Lösenord";
         Text[ polish ] = "Has³o";
         Text[ portuguese_brazilian ] = "Password";
-        Text[ japanese ] = "Êß½Ü°ÄŞ(~P)";
-        Text[ korean ] = "ÆĞ½º¿öµå(~P)";
-        Text[ chinese_simplified ] = "ÃÜÂë(~P)";
-        Text[ chinese_traditional ] = "±K½X(~P)";
+        Text[ japanese ] = "ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰(~P)";
+        Text[ korean ] = "íŒ¨ìŠ¤ì›Œë“œ(~P)";
+        Text[ chinese_simplified ] = "å¯†ç (~P)";
+        Text[ chinese_traditional ] = "å¯†ç¢¼(~P)";
         Text[ arabic ] = "ßáãÉ ÇáÓÑ";
         Text[ turkish ] = "~Şifre";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Contraseña";
+        Text[ catalan ] = "Con~trasenya";
         Text[ finnish ] = "~Salasana";
     };
     Edit ED_PASSWD
@@ -458,19 +458,19 @@ ModalDialog RID_SCDLG_DAPISERVICE
         Text[ swedish ] = "Urval";
         Text[ polish ] = "Wybór";
         Text[ portuguese_brazilian ] = "Select";
-        Text[ japanese ] = "‘I‘ğ";
-        Text[ korean ] = "¼±ÅÃ";
-        Text[ chinese_simplified ] = "Ñ¡Ôñ";
-        Text[ chinese_traditional ] = "¿ï¨ú";
+        Text[ japanese ] = "é¸æŠ";
+        Text[ korean ] = "ì„ íƒ";
+        Text[ chinese_simplified ] = "é€‰æ‹©";
+        Text[ chinese_traditional ] = "é¸å–";
         Text[ arabic ] = "ÊÍÏíÏ";
         Text[ turkish ] = "Seçim";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Selección";
+        Text[ catalan ] = "Selecció";
         Text[ finnish ] = "Valinta";
     };
     Text[ english_us ] = "External Source";
     Text[ portuguese ] = "Fonte de dados externa";
-    Text[ russian ] = "Âíåøíèé èñòî÷íèê äàííûõ";
+    Text[ russian ] = "Âíåøíèå èñõîäíûå äàííûå";
     Text[ greek ] = "Åîùôåñéêü áñ÷åßï ğñïİëåõóçò äåäïìİíùí";
     Text[ dutch ] = "Externe bron";
     Text[ french ] = "Source de données externe";
@@ -480,14 +480,14 @@ ModalDialog RID_SCDLG_DAPISERVICE
     Text[ swedish ] = "Extern datakälla";
     Text[ polish ] = "Zewnêtrzne Ÿród³o danych";
     Text[ portuguese_brazilian ] = "External source";
-    Text[ japanese ] = "ŠO•”ÃŞ°À¿°½";
-    Text[ korean ] = "¿ÜºÎ µ¥ÀÌÅÍ¼Ò½º";
-    Text[ chinese_simplified ] = "Íâ²¿Êı¾İÔ´";
-    Text[ chinese_traditional ] = "¥~³¡¸ê®Æ·½";
+    Text[ japanese ] = "å¤–éƒ¨ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹";
+    Text[ korean ] = "ì™¸ë¶€ ë°ì´í„°ì†ŒìŠ¤";
+    Text[ chinese_simplified ] = "å¤–éƒ¨æ•°æ®æº";
+    Text[ chinese_traditional ] = "å¤–éƒ¨è³‡æ–™æº";
     Text[ arabic ] = "ãÕÏÑ ÈíÇäÇÊ ÎÇÑÌí";
     Text[ turkish ] = "Dış veri kaynağı";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Fuente de datos externa";
+    Text[ catalan ] = "Font externa";
     Text[ finnish ] = "Ulkoinen lähde";
 };
 
@@ -528,7 +528,7 @@ ModalDialog RID_SCDLG_DAPIDATA
     FixedText FT_DATABASE
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 40 , 8 ) ;
+        Size = MAP_APPFONT ( 52 , 8 ) ;
         Text = "~Datenbank" ;
         Text [ ENGLISH ] = "Database" ;
         Text[ english_us ] = "~Database";
@@ -543,21 +543,21 @@ ModalDialog RID_SCDLG_DAPIDATA
         Text[ swedish ] = "Databas";
         Text[ polish ] = "Baza danych";
         Text[ portuguese_brazilian ] = "Database";
-        Text[ japanese ] = "ÃŞ°ÀÍŞ°½(~D)";
-        Text[ korean ] = "µ¥ÀÌÅÍ º£ÀÌ½º(~D)";
-        Text[ chinese_simplified ] = "Êı¾İ¿â(~D)";
-        Text[ chinese_traditional ] = "¸ê®Æ®w(~D)";
+        Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹(~D)";
+        Text[ korean ] = "ë°ì´í„°ë² ì´ìŠ¤(~D)";
+        Text[ chinese_simplified ] = "æ•°æ®åº“(~D)";
+        Text[ chinese_traditional ] = "è³‡æ–™åº«(~D)";
         Text[ arabic ] = "ŞÇÚÏÉ ÈíÇäÇÊ";
         Text[ turkish ] = "~Veritabanı";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Base de datos";
+        Text[ catalan ] = "~Base de dades";
         Text[ finnish ] = "~Tietokanta";
     };
     ListBox LB_DATABASE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 56 , 12 ) ;
-        Size = MAP_APPFONT ( 120 , 80 ) ;
+        Pos = MAP_APPFONT ( 66 , 12 ) ;
+        Size = MAP_APPFONT ( 110 , 80 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
@@ -565,12 +565,12 @@ ModalDialog RID_SCDLG_DAPIDATA
     FixedText FT_OBJECT
     {
         Pos = MAP_APPFONT ( 12 , 30 ) ;
-        Size = MAP_APPFONT ( 40 , 8 ) ;
+        Size = MAP_APPFONT ( 52 , 8 ) ;
         Text = "Daten~quelle" ;
         Text [ ENGLISH ] = "Data source" ;
         Text[ english_us ] = "Data so~urce";
         Text[ portuguese ] = "Fonte de ~dados";
-        Text[ russian ] = "Èñòî÷íèê äàííûõ";
+        Text[ russian ] = "Èñõîäíûå äàííûå";
         Text[ greek ] = "Ğñïİëåõóç äåäïìİíùí";
         Text[ dutch ] = "~Gegevensbron";
         Text[ french ] = "~Source de données";
@@ -580,21 +580,21 @@ ModalDialog RID_SCDLG_DAPIDATA
         Text[ swedish ] = "Datakälla";
         Text[ polish ] = "ród³o danych";
         Text[ portuguese_brazilian ] = "Data source";
-        Text[ japanese ] = "ÃŞ°À¿°½(~U)";
-        Text[ korean ] = "µ¥ÀÌÅÍ ¼Ò½º(~U)";
-        Text[ chinese_simplified ] = "Êı¾İÔ´(~U)";
-        Text[ chinese_traditional ] = "¸ê®Æ·½(~U)";
+        Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹(~U)";
+        Text[ korean ] = "ë°ì´í„° ì†ŒìŠ¤(~U)";
+        Text[ chinese_simplified ] = "æ•°æ®æº(~U)";
+        Text[ chinese_traditional ] = "è³‡æ–™æº(~U)";
         Text[ arabic ] = "ãÕÏÑ ÇáÈíÇäÇÊ";
         Text[ turkish ] = "Veri ka~ynağı";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Fuente de d~atos";
+        Text[ catalan ] = "~Font de dades";
         Text[ finnish ] = "Tieto~lähde";
     };
     ComboBox CB_OBJECT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 56 , 28 ) ;
-        Size = MAP_APPFONT ( 120 , 80 ) ;
+        Pos = MAP_APPFONT ( 66 , 28 ) ;
+        Size = MAP_APPFONT ( 110 , 80 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
@@ -602,7 +602,7 @@ ModalDialog RID_SCDLG_DAPIDATA
     FixedText FT_OBJTYPE
     {
         Pos = MAP_APPFONT ( 12 , 46 ) ;
-        Size = MAP_APPFONT ( 40 , 8 ) ;
+        Size = MAP_APPFONT ( 52 , 8 ) ;
         Text = "~Art" ;
         Text [ ENGLISH ] = "Type" ;
         Text[ english_us ] = "~Type";
@@ -617,21 +617,21 @@ ModalDialog RID_SCDLG_DAPIDATA
         Text[ swedish ] = "Typ";
         Text[ polish ] = "Typ";
         Text[ portuguese_brazilian ] = "Type";
-        Text[ japanese ] = "í—Ş(~T)";
-        Text[ korean ] = "Å¸ÀÔ(~T)";
-        Text[ chinese_simplified ] = "ÀàĞÍ(~T)";
-        Text[ chinese_traditional ] = "Ãş«¬(~T)";
+        Text[ japanese ] = "ç¨®é¡(~T)";
+        Text[ korean ] = "ìœ í˜•(~T)";
+        Text[ chinese_simplified ] = "ç±»å‹(~T)";
+        Text[ chinese_traditional ] = "é¡å‹(~T)";
         Text[ arabic ] = "ÇáäæÚ";
         Text[ turkish ] = "~Tür";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Tipo";
+        Text[ catalan ] = "~Tipus";
         Text[ finnish ] = "~Tyyppi";
     };
     ListBox LB_OBJTYPE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 56 , 44 ) ;
-        Size = MAP_APPFONT ( 120 , 80 ) ;
+        Pos = MAP_APPFONT ( 66 , 44 ) ;
+        Size = MAP_APPFONT ( 110 , 80 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         StringList =
@@ -741,29 +741,29 @@ ModalDialog RID_SCDLG_DAPIDATA
     };
     StringList [ japanese ] =
     {
-            < "Ã°ÌŞÙ" ; Default ; > ;
-        < "¸´Ø°" ; Default ; > ;
+            < "ãƒ†ãƒ¼ãƒ–ãƒ«" ; Default ; > ;
+        < "ã‚¯ã‚¨ãƒªãƒ¼" ; Default ; > ;
         < "Sql" ; Default ; > ;
         < "Sql [Native]" ; Default ; > ;
     };
     StringList [ korean ] =
     {
-            < "½ÃÆ®" ; Default ; > ;
-        < "ÁúÀÇ" ; Default ; > ;
+            < "ì‹œíŠ¸" ; Default ; > ;
+        < "ì§ˆì˜" ; Default ; > ;
         < "Sql" ; Default ; > ;
         < "Sql [Native]" ; Default ; > ;
     };
     StringList [ chinese_simplified ] =
     {
-            < "¹¤×÷±í" ; Default ; > ;
-        < "²éÑ¯" ; Default ; > ;
+            < "å·¥ä½œè¡¨" ; Default ; > ;
+        < "æŸ¥è¯¢" ; Default ; > ;
         < "Sql" ; Default ; > ;
         < "Sql [Native]" ; Default ; > ;
     };
     StringList [ chinese_traditional ] =
     {
-            < "ªí®æ" ; Default ; > ;
-        < "¬d¸ß" ; Default ; > ;
+            < "è¡¨æ ¼" ; Default ; > ;
+        < "æŸ¥è©¢" ; Default ; > ;
         < "Sql" ; Default ; > ;
         < "Sql [Native]" ; Default ; > ;
     };
@@ -783,10 +783,10 @@ ModalDialog RID_SCDLG_DAPIDATA
     };
     StringList [ catalan ] =
     {
-            < "Tabla" ; Default ; > ;
+            < "Full" ; Default ; > ;
         < "Consulta" ; Default ; > ;
         < "Sql" ; Default ; > ;
-        < "Sql [Native]" ; Default ; > ;
+        < "SQL [natiu]" ; Default ; > ;
     };
     StringList [ finnish ] =
     {
@@ -815,19 +815,19 @@ ModalDialog RID_SCDLG_DAPIDATA
         Text[ swedish ] = "Urval";
         Text[ polish ] = "Wybór";
         Text[ portuguese_brazilian ] = "Select";
-        Text[ japanese ] = "‘I‘ğ";
-        Text[ korean ] = "¼±ÅÃ";
-        Text[ chinese_simplified ] = "Ñ¡Ôñ";
-        Text[ chinese_traditional ] = "¿ï¨ú";
+        Text[ japanese ] = "é¸æŠ";
+        Text[ korean ] = "ì„ íƒ";
+        Text[ chinese_simplified ] = "é€‰æ‹©";
+        Text[ chinese_traditional ] = "é¸å–";
         Text[ arabic ] = "ÊÍÏíÏ";
         Text[ turkish ] = "Seçim";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Selección";
+        Text[ catalan ] = "Selecció";
         Text[ finnish ] = "Valinta";
     };
     Text[ english_us ] = "Select Data Source";
     Text[ portuguese ] = "Seleccionar fonte de dados";
-    Text[ russian ] = "Âûáğàòü èñòî÷íèê äàííûõ";
+    Text[ russian ] = "Âûáğàòü èñõîäíûå äàííûå";
     Text[ greek ] = "ÅğéëïãŞ ğñïİëåõóçò äåäïìİíùí";
     Text[ dutch ] = "Gegevensbron selecteren";
     Text[ french ] = "Sélection de la source de données";
@@ -837,22 +837,14 @@ ModalDialog RID_SCDLG_DAPIDATA
     Text[ swedish ] = "Välj ut datakälla";
     Text[ polish ] = "Wybierz Ÿród³o danych";
     Text[ portuguese_brazilian ] = "Select data source";
-    Text[ japanese ] = "ÃŞ°À¿°½‚Ì‘I‘ğ";
-    Text[ korean ] = "µ¥ÀÌÅÍ ¼Ò½º ¼±ÅÃ";
-    Text[ chinese_simplified ] = "Ñ¡ÔñÊı¾İÔ´";
-    Text[ chinese_traditional ] = "¿ï¾Ü¸ê®Æ·½";
+    Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹ã®é¸æŠ";
+    Text[ korean ] = "ë°ì´í„° ì†ŒìŠ¤ ì„ íƒ";
+    Text[ chinese_simplified ] = "é€‰æ‹©æ•°æ®æº";
+    Text[ chinese_traditional ] = "é¸æ“‡è³‡æ–™æº";
     Text[ arabic ] = "ÊÍÏíÏ ãÕÏÑ ÇáÈíÇäÇÊ";
     Text[ turkish ] = "Veri kaynağı seç";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Seleccionar fuente de datos";
+    Text[ catalan ] = "Seleccioneu la font de dades";
     Text[ finnish ] = "Valitse tietolähde";
 };
-
-
-
-
-
-
-
-
 
