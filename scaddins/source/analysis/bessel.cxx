@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bessel.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 10:32:04 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:39:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@ double BesselJ( double x, sal_Int32 n ) throw( IllegalArgumentException )
 
                 TERM(n,0) = (x/2)^n / n!
          */
-        double fTerm = pow( x / 2.0, n ) / Fak( n );
+        double fTerm = pow( x / 2.0, (double)n ) / Fak( n );
         sal_Int32 nK = 1;   // Start the iteration with k=1.
         fResult = fTerm;    // Start result with TERM(n,0).
 
@@ -201,7 +201,7 @@ double BesselI( double x, sal_Int32 n ) throw( IllegalArgumentException )
 
                 TERM(n,0) = (x/2)^n / n!
          */
-        double fTerm = pow( x / 2.0, n ) / Fak( n );
+        double fTerm = pow( x / 2.0, (double)n ) / Fak( n );
         sal_Int32 nK = 1;   // Start the iteration with k=1.
         fResult = fTerm;    // Start result with TERM(n,0).
 
