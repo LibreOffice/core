@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: os $ $Date: 2002-11-01 13:31:33 $
+ *  last change: $Author: fme $ $Date: 2002-11-15 14:34:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -784,7 +784,7 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
             nPixWidth = rInf.GetOut().PixelToLogic( aTmp ).Width();
         }
 
-        aPos.X() += rInf.GetFrm()->IsRightToLeft() ? -nPixWidth : nPixWidth;
+        aPos.X() += rInf.GetFrm()->IsRightToLeft() ? 0 : nPixWidth;
     }
 
     Color aOldColor( pTmpFont->GetColor() );

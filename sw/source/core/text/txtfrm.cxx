@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: fme $ $Date: 2002-11-04 12:27:25 $
+ *  last change: $Author: fme $ $Date: 2002-11-15 14:33:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -362,7 +362,9 @@ void SwTxtFrm::SwitchLTRtoRTL( SwRect& rRect ) const
     SWAP_IF_NOT_SWAPPED( this )
 
     long nWidth = rRect.Width();
-    rRect.Left( 2 * ( Frm().Left() + Prt().Left() ) + Prt().Width() - rRect.Right() );
+    rRect.Left( 2 * ( Frm().Left() + Prt().Left() ) +
+                Prt().Width() - rRect.Right() );
+
     rRect.Width( nWidth );
 
     UNDO_SWAP( this )
@@ -372,7 +374,7 @@ void SwTxtFrm::SwitchLTRtoRTL( Point& rPoint ) const
 {
     SWAP_IF_NOT_SWAPPED( this )
 
-    rPoint.X() = 2 * ( Frm().Left() + Prt().Left() ) + Prt().Width() - rPoint.X();
+    rPoint.X() = 2 * ( Frm().Left() + Prt().Left() ) + Prt().Width() - rPoint.X() - 1;
 
     UNDO_SWAP( this )
 }
