@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2001-08-02 10:30:29 $
+ *  last change: $Author: jb $ $Date: 2001-09-14 12:08:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,29 +133,6 @@ namespace utl
         class Impl;
         static Impl const& data();
     };
-//-----------------------------------------------------------------------------
-
-// ===================================================================================
-/// @deprecated: old bootstrap helpers, scheduled for removal
-enum BootstrapRetVal
-{
-    BOOTSTRAP_OK = 0,
-    BOOTSTRAP_INI_NOT_FOUND,
-    BOOTSTRAP_INI_INVALID,
-    SVERSION_INI_NOT_FOUND,
-    SVERSION_INI_NO_ENTRY,
-    SVERSION_INI_INVALID,
-    SREGISTRY_INI_NOT_FOUND,
-    SREGISTRY_INI_INVALID
-};
-
-/// @deprecated: get the office/user install directories (the latter may be empty resp. unknown)
-BootstrapRetVal bootstrap_locateUserInstallationPath(rtl::OUString& _rOfficeInstallPath,rtl::OUString& _rUserInstallPath, rtl::OUString& _sIniPath);
-
-/// @deprecated: retrieve product key and logo information from bootstrap profile (providing hard-coded defaults)
-BootstrapRetVal bootstrap_getProductKeyAndLogo( rtl::OUString& _rProductKey, rtl::OUString& _rLogo, rtl::OUString& _sIniPath );
-// ===================================================================================
-
 //-----------------------------------------------------------------------------
 } // namespace utl
 
