@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfrm.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-06 21:08:40 $
+ *  last change: $Author: kz $ $Date: 2001-09-24 21:11:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -527,8 +527,8 @@ TabPage RID_SVXPAGE_POSITION
         Text[English] = "~Position" ;
         Hide = TRUE ;
         Text[ english_us ] = "~Position";
-        Text[ portuguese ] = "~Position";
-        Text[ russian ] = "~Position";
+        Text[ portuguese ] = "~PosiÁ„o";
+        Text[ russian ] = "~œÓÁËˆËˇ";
         Text[ greek ] = "~Position";
         Text[ dutch ] = "~Position";
         Text[ french ] = "~Position";
@@ -539,9 +539,9 @@ TabPage RID_SVXPAGE_POSITION
         Text[ swedish ] = "~Position";
         Text[ polish ] = "~Pozycja";
         Text[ portuguese_brazilian ] = "~Position";
-        Text[ japanese ] = "~Position";
+        Text[ japanese ] = "‰ΩçÁΩÆ";
         Text[ korean ] = "~Position";
-        Text[ chinese_simplified ] = "~Position";
+        Text[ chinese_simplified ] = "‰ΩçÁΩÆ";
         Text[ chinese_traditional ] = "~Position";
         Text[ turkish ] = "~Position";
         Text[ arabic ] = "~Position";
@@ -1932,6 +1932,7 @@ TabDialog RID_SVXDLG_TRANSFORM
     Text[ catalan ] = "PosiciÛn y tamaÒo";
 };
  // ********************************************************************** EOF
+
 
 
 
