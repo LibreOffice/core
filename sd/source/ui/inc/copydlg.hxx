@@ -2,9 +2,9 @@
  *
  *  $RCSfile: copydlg.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:37 $
+ *  last change: $Author: af $ $Date: 2001-05-15 13:26:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,19 +102,19 @@ private:
     MetricField         aMtrFldMoveY;
     FixedText           aFtAngle;
     MetricField         aMtrFldAngle;
-    GroupBox            aGrpMovement;
+    FixedLine           aGrpMovement;
 
     FixedText           aFtWidth;
     MetricField         aMtrFldWidth;
     FixedText           aFtHeight;
     MetricField         aMtrFldHeight;
-    GroupBox            aGrpEnlargement;
+    FixedLine           aGrpEnlargement;
 
     FixedText           aFtStartColor;
     ColorLB             aLbStartColor;
     FixedText           aFtEndColor;
     ColorLB             aLbEndColor;
-    GroupBox            aGrpColor;
+    FixedLine           aGrpColor;
 
     OKButton            aBtnOK;
     CancelButton        aBtnCancel;
