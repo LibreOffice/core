@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Sequence.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pluby $ $Date: 2000-10-10 17:39:11 $
+ *  last change: $Author: dbo $ $Date: 2000-11-15 12:28:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,6 @@ inline Sequence< E >::Sequence( const Sequence< E > & rSeq )
 //__________________________________________________________________________________________________
 template< class E >
 inline Sequence< E >::Sequence( const E * pElements, sal_Int32 len )
-    : _pSequence( 0 )
 {
     const Type & rType = ::getCppuType( this );
     ::uno_type_sequence_construct( &_pSequence, rType.getTypeLibType(),
@@ -127,7 +126,6 @@ inline Sequence< E >::Sequence( const E * pElements, sal_Int32 len )
 //__________________________________________________________________________________________________
 template< class E >
 inline Sequence< E >::Sequence( sal_Int32 len )
-    : _pSequence( 0 )
 {
     const Type & rType = ::getCppuType( this );
     ::uno_type_sequence_construct( &_pSequence, rType.getTypeLibType(), 0, len, cpp_acquire );
