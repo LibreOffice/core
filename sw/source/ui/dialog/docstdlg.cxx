@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docstdlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:21:20 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 11:48:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,16 @@ SwDocStatPage::SwDocStatPage(Window *pParent, const SfxItemSet &rSet) :
     Update();
     FreeResource();
     aUpdatePB.SetClickHdl(LINK(this, SwDocStatPage, UpdateHdl));
+    //#111684# is the current view a page preview no SwFEShell can be found -> hide the update button
+    SwDocShell* pDocShell = (SwDocShell*) SfxObjectShell::Current();
+    SwFEShell* pFEShell = pDocShell->GetFEShell();
+    if(!pFEShell)
+    {
+        aUpdatePB.Show(FALSE);
+        aLineLbl.Show(FALSE);
+        aLineNo .Show(FALSE);
+    }
+
 }
 
 
@@ -229,7 +239,8 @@ IMPL_LINK( SwDocStatPage, UpdateHdl, PushButton*, pButton)
     Update();
     SwDocShell* pDocShell = (SwDocShell*) SfxObjectShell::Current();
     SwFEShell* pFEShell = pDocShell->GetFEShell();
-    aLineNo.SetText( String::CreateFromInt32( pFEShell->GetLineCount(FALSE)));
+    if(pFEShell)
+        aLineNo.SetText( String::CreateFromInt32( pFEShell->GetLineCount(FALSE)));
     //pButton->Disable();
     return 0;
 }
