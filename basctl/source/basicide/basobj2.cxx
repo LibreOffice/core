@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basobj2.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-23 12:03:15 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 17:49:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,10 +270,6 @@ BOOL BasicIDE::HasShell( SfxObjectShell* pShell )
             }
             pDocShell = SfxObjectShell::GetNext( *pDocShell );
         }
-    }
-    else
-    {
-        bHasShell = TRUE;
     }
 
     return bHasShell;
