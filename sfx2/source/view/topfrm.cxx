@@ -2,9 +2,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 17:09:07 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 20:04:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,8 +64,8 @@
 
 #include "topfrm.hxx"
 
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
-#include <drafts/com/sun/star/frame/XModuleManager.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
+#include <com/sun/star/frame/XModuleManager.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
 #include <com/sun/star/util/XURLTransformer.hpp>
@@ -100,8 +100,8 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
-#include <drafts/com/sun/star/frame/XLayoutManager.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
+#include <com/sun/star/frame/XLayoutManager.hpp>
 #endif
 
 #ifndef _SV_MENU_HXX
@@ -176,7 +176,7 @@ DBG_NAME(SfxTopViewFrame);
 #include <comphelper/sequenceashashmap.hxx>
 static ::rtl::OUString GetModuleName_Impl( const ::rtl::OUString& sDocService )
 {
-    uno::Reference< container::XNameAccess > xMM( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("drafts.com.sun.star.frame.ModuleManager")), uno::UNO_QUERY );
+    uno::Reference< container::XNameAccess > xMM( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.ModuleManager")), uno::UNO_QUERY );
     ::rtl::OUString sVar;
     if ( !xMM.is() )
         return sVar;
@@ -489,7 +489,7 @@ SfxTopFrame* SfxTopFrame::Create( SfxObjectShell* pDoc, USHORT nViewId, BOOL bHi
                 Reference < XIndexAccess > xContainer(xSupplier->getFrames(), UNO_QUERY);
                 if (xContainer.is())
                 {
-                    Reference< drafts::com::sun::star::frame::XModuleManager > xCheck(::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString::createFromAscii("drafts.com.sun.star.frame.ModuleManager" )), UNO_QUERY);
+                    Reference< ::com::sun::star::frame::XModuleManager > xCheck(::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString::createFromAscii("com.sun.star.frame.ModuleManager" )), UNO_QUERY);
                     sal_Int32 nCount = xContainer->getCount();
                     for (sal_Int32 i=0; i<nCount; ++i)
                     {
@@ -725,7 +725,7 @@ void SfxTopFrame::SetMenuBarOn_Impl( BOOL bOn )
     pImp->bMenuBarOn = bOn;
 
     Reference< com::sun::star::beans::XPropertySet > xPropSet( GetFrameInterface(), UNO_QUERY );
-    Reference< drafts::com::sun::star::frame::XLayoutManager > xLayoutManager;
+    Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
 
     if ( xPropSet.is() )
     {
@@ -752,7 +752,7 @@ BOOL SfxTopFrame::IsMenuBarOn_Impl() const
 BOOL SfxTopFrame::IsMenuBarVisible_Impl() const
 {
     Reference< com::sun::star::beans::XPropertySet > xPropSet( GetFrameInterface(), UNO_QUERY );
-    Reference< drafts::com::sun::star::frame::XLayoutManager > xLayoutManager;
+    Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
 
     if ( xPropSet.is() )
     {
