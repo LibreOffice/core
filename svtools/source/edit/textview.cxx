@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textview.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mt $ $Date: 2001-10-10 12:12:16 $
+ *  last change: $Author: mt $ $Date: 2001-10-23 13:57:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1830,7 +1830,10 @@ void TextView::dragGestureRecognized( const ::com::sun::star::datatransfer::dnd:
 
         mpCursor->Hide();
 
-        rDGE.DragSource->startDrag( rDGE, datatransfer::dnd::DNDConstants::ACTION_COPY_OR_MOVE, 0 /*cursor*/, 0 /*image*/, pDataObj, mxDnDListener );
+        sal_Int8 nActions = datatransfer::dnd::DNDConstants::ACTION_COPY;
+        if ( !IsReadOnly() )
+            nActions |= datatransfer::dnd::DNDConstants::ACTION_MOVE;
+        rDGE.DragSource->startDrag( rDGE, nActions, 0 /*cursor*/, 0 /*image*/, pDataObj, mxDnDListener );
     }
 }
 
@@ -1888,7 +1891,7 @@ void TextView::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEv
             maSelection = mpTextEngine->ImpInsertText( mpDDInfo->maDropPos, aText );
 
         if ( aPrevSel.HasRange() &&
-                ( rDTDE.DropAction == datatransfer::dnd::DNDConstants::ACTION_MOVE ) || !bStarterOfDD )
+                ( rDTDE.DropAction & datatransfer::dnd::DNDConstants::ACTION_MOVE ) || !bStarterOfDD )
         {
             // ggf. Selection anpasssen:
             if ( ( mpDDInfo->maDropPos.GetPara() < aPrevSel.GetStart().GetPara() ) ||
@@ -1963,15 +1966,18 @@ void TextView::dragOver( const ::com::sun::star::datatransfer::dnd::DropTargetDr
     Point aDocPos = GetDocPos( aMousePos );
     mpDDInfo->maDropPos = mpTextEngine->GetPaM( aDocPos );
 
+/*
     Size aOutSize = mpWindow->GetOutputSizePixel();
     if ( ( aMousePos.X() < 0 ) || ( aMousePos.X() > aOutSize.Width() ) ||
          ( aMousePos.Y() < 0 ) || ( aMousePos.Y() > aOutSize.Height() ) )
     {
-        // Scrollen ?
+        // Scroll?
+        // No, I will not receive events for this...
     }
+*/
 
-    // Nicht in Selektion droppen:
-    if ( IsInSelection( mpDDInfo->maDropPos ) )
+    // Don't drop in selection or in read only engine
+    if ( IsReadOnly() || IsInSelection( mpDDInfo->maDropPos ) )
     {
         ImpHideDDCursor();
         rDTDE.Context->rejectDrag();
