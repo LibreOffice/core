@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pspgraphics.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 09:37:34 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 09:56:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -758,9 +758,12 @@ bool PspFontLayout::LayoutText( ImplLayoutArgs& rArgs )
 class PspServerFontLayout : public ServerFontLayout
 {
 public:
-    PspServerFontLayout( ::psp::PrinterGfx&, ServerFont& rFont );
+    PspServerFontLayout( psp::PrinterGfx&, ServerFont& rFont, const ImplLayoutArgs& rArgs );
 
     virtual void        InitFont() const;
+    const sal_Unicode*  getTextPtr() const { return maText.getStr() - mnMinCharPos; }
+    int                 getMinCharPos() const { return mnMinCharPos; }
+    int                 getMaxCharPos() const { return mnMinCharPos+maText.getLength()-1; }
 private:
     ::psp::PrinterGfx&  mrPrinterGfx;
     int                 mnFontID;
@@ -769,9 +772,11 @@ private:
     bool                mbVertical;
     bool                mbArtItalic;
     bool                mbArtBold;
+    rtl::OUString       maText;
+    int                 mnMinCharPos;
 };
 
-PspServerFontLayout::PspServerFontLayout( ::psp::PrinterGfx& rGfx, ServerFont& rFont )
+PspServerFontLayout::PspServerFontLayout( ::psp::PrinterGfx& rGfx, ServerFont& rFont, const ImplLayoutArgs& rArgs )
         :   ServerFontLayout( rFont ),
             mrPrinterGfx( rGfx )
 {
@@ -781,6 +786,8 @@ PspServerFontLayout::PspServerFontLayout( ::psp::PrinterGfx& rGfx, ServerFont& r
     mbVertical   = mrPrinterGfx.GetFontVertical();
     mbArtItalic  = mrPrinterGfx.GetArtificialItalic();
     mbArtBold    = mrPrinterGfx.GetArtificialBold();
+    maText       = OUString( rArgs.mpStr + rArgs.mnMinCharPos, rArgs.mnEndCharPos - rArgs.mnMinCharPos+1 );
+    mnMinCharPos = rArgs.mnMinCharPos;
 }
 
 void PspServerFontLayout::InitFont() const
@@ -791,18 +798,23 @@ void PspServerFontLayout::InitFont() const
 
 //--------------------------------------------------------------------------
 
-void DrawPrinterLayout( const SalLayout& rLayout, ::psp::PrinterGfx& rGfx )
+static void DrawPrinterLayout( const SalLayout& rLayout, ::psp::PrinterGfx& rGfx, bool bIsPspServerFontLayout )
 {
     const int nMaxGlyphs = 200;
     sal_Int32   aGlyphAry[ nMaxGlyphs ];
     sal_Int32   aWidthAry[ nMaxGlyphs ];
     sal_Int32   aIdxAry  [ nMaxGlyphs ];
     sal_Unicode aUnicodes[ nMaxGlyphs ];
+    int         aCharPosAry [ nMaxGlyphs ];
+
     Point aPos;
     long nUnitsPerPixel = rLayout.GetUnitsPerPixel();
+    const sal_Unicode* pText = bIsPspServerFontLayout ? static_cast<const PspServerFontLayout&>(rLayout).getTextPtr() : NULL;
+    int nMinCharPos = bIsPspServerFontLayout ? static_cast<const PspServerFontLayout&>(rLayout).getMinCharPos() : 0;
+    int nMaxCharPos = bIsPspServerFontLayout ? static_cast<const PspServerFontLayout&>(rLayout).getMaxCharPos() : 0;
     for( int nStart = 0;; )
     {
-        int nGlyphCount = rLayout.GetNextGlyphs( nMaxGlyphs, aGlyphAry, aPos, nStart, aWidthAry );
+        int nGlyphCount = rLayout.GetNextGlyphs( nMaxGlyphs, aGlyphAry, aPos, nStart, aWidthAry, bIsPspServerFontLayout ? aCharPosAry : NULL );
         if( !nGlyphCount )
             break;
 
@@ -811,8 +823,11 @@ void DrawPrinterLayout( const SalLayout& rLayout, ::psp::PrinterGfx& rGfx )
         {
             nXOffset += aWidthAry[ i ];
             aIdxAry[ i ] = nXOffset / nUnitsPerPixel;
-            sal_uInt32 nGlyphIdx = aGlyphAry[i] & (GF_IDXMASK | GF_ROTMASK);
-            aUnicodes[i] = (aGlyphAry[i] & GF_ISCHAR) ? nGlyphIdx : 0;
+            sal_Int32 nGlyphIdx = aGlyphAry[i] & (GF_IDXMASK | GF_ROTMASK);
+            if( bIsPspServerFontLayout )
+                aUnicodes[i] = (aCharPosAry[i] >= nMinCharPos && aCharPosAry[i] <= nMaxCharPos) ? pText[ aCharPosAry[i] ] : 0;
+            else
+                aUnicodes[i] = (aGlyphAry[i] & GF_ISCHAR) ? nGlyphIdx : 0;
             aGlyphAry[i] = nGlyphIdx;
         }
 
@@ -832,13 +847,13 @@ void PspFontLayout::InitFont() const
 
 void PspFontLayout::DrawText( SalGraphics& ) const
 {
-    DrawPrinterLayout( *this, mrPrinterGfx );
+    DrawPrinterLayout( *this, mrPrinterGfx, false );
 }
 
 void PspGraphics::DrawServerFontLayout( const ServerFontLayout& rLayout )
 {
     // print complex text
-    DrawPrinterLayout( rLayout, *m_pPrinterGfx );
+    DrawPrinterLayout( rLayout, *m_pPrinterGfx, true );
 }
 
 ImplFontCharMap* PspGraphics::GetImplFontCharMap() const
@@ -1047,7 +1062,7 @@ SalLayout* PspGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLevel
 
     if( m_pServerFont[ nFallbackLevel ]
         && !(rArgs.mnFlags & SAL_LAYOUT_DISABLE_GLYPH_PROCESSING) )
-        pLayout = new PspServerFontLayout( *m_pPrinterGfx, *m_pServerFont[nFallbackLevel] );
+        pLayout = new PspServerFontLayout( *m_pPrinterGfx, *m_pServerFont[nFallbackLevel], rArgs );
     else
         pLayout = new PspFontLayout( *m_pPrinterGfx );
 
