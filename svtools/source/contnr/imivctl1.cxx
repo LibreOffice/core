@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imivctl1.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-27 11:23:02 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 10:01:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,7 +301,7 @@ void SvxIconChoiceCtrl_Impl::SetStyle( WinBits nWinStyle )
     if( nWinBits & WB_NOSELECTION )
         eSelectionMode = NO_SELECTION;
     if( !(nWinStyle & (WB_ALIGN_TOP | WB_ALIGN_LEFT)))
-        nWinStyle |= WB_ALIGN_TOP;
+        nWinBits |= WB_ALIGN_LEFT;
     if( (nWinStyle & WB_DETAILS))
     {
         if( !pColumns  )
@@ -3186,13 +3186,14 @@ Rectangle SvxIconChoiceCtrl_Impl::CalcFocusRect( SvxIconChoiceCtrlEntry* pEntry 
     Rectangle aBmpRect( CalcBmpRect( pEntry ) );
     Rectangle aTextRect( CalcTextRect( pEntry ) );
     Rectangle aBoundRect( GetEntryBoundRect( pEntry ) );
-    Rectangle aFocusRect( aBoundRect.Left(), aBmpRect.Top() - 2,
-                          aBoundRect.Right() - 4, aTextRect.Bottom() + 4 );
+    Rectangle aFocusRect( aBoundRect.Left(), aBmpRect.Top() - 1,
+                          aBoundRect.Right() - 4, aTextRect.Bottom() + 1 );
     // Das Fokusrechteck soll nicht den Text beruehren
     if( aFocusRect.Left() - 1 >= pEntry->aRect.Left() )
         aFocusRect.Left()--;
     if( aFocusRect.Right() + 1 <= pEntry->aRect.Right() )
         aFocusRect.Right()++;
+
     return aFocusRect;
 }
 
