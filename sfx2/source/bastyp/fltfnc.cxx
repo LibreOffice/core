@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 10:41:13 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 16:27:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,21 +351,16 @@ const SfxFilter* SfxFilterContainer::GetDefaultFilter_Impl( const String& rName 
     if ( bFirstRead )
         ReadFilters_Impl();
 
-    const SfxFilter* pFirstFilter=0;
     sal_uInt16 nCount = ( sal_uInt16 ) pFilterArr->Count();
     for( sal_uInt16 n = 0; n < nCount; n++ )
     {
         const SfxFilter* pFilter = pFilterArr->GetObject( n );
         if ( pFilter->GetServiceName().CompareIgnoreCaseToAscii( rName ) == COMPARE_EQUAL )
-        {
-            if ( pFilter->GetFilterFlags() & SFX_FILTER_PREFERED )
-                return pFilter;
-            else if ( !pFirstFilter )
-                pFirstFilter = pFilter;
-        }
+            // default filters are inserted into the cache first
+            return pFilter;
     }
 
-    return pFirstFilter;
+    return NULL;
 }
 
 
@@ -727,6 +722,10 @@ const SfxFilter* SfxFilterMatcher::GetFilterForProps( const com::sun::star::uno:
             if ( (aProps[::rtl::OUString::createFromAscii("PreferredFilter")] >>= aValue) && aValue.getLength() )
             {
                 const SfxFilter* pFilter = SfxFilter::GetFilterByName( aValue );
+                if ( !pFilter )
+                    // if preferred filter is a Writer filter, but Writer module is not installed
+                    continue;
+
                 if ( pImpl->aName.getLength() )
                 {
                     // if this is not the global FilterMatcher: check if filter matches the document type
