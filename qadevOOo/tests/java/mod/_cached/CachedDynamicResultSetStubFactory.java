@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CachedDynamicResultSetStubFactory.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-05-27 12:33:40 $
+ *  last change:$Date: 2003-09-08 11:35:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,13 @@
 
 package mod._cached;
 
+import java.io.PrintWriter;
+
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+
 import com.sun.star.beans.Property;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.ucb.Command;
@@ -73,15 +80,10 @@ import com.sun.star.ucb.XContentIdentifier;
 import com.sun.star.ucb.XContentIdentifierFactory;
 import com.sun.star.ucb.XContentProvider;
 import com.sun.star.ucb.XDynamicResultSet;
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
-import com.sun.star.uno.Type;
-import com.sun.star.uno.AnyConverter;
-import java.io.PrintWriter;
-import lib.StatusException;
-import lib.TestCase;
-import lib.TestEnvironment;
-import lib.TestParameters;
 
 /**
 * Test for object which is represented by service
@@ -126,7 +128,6 @@ public class CachedDynamicResultSetStubFactory extends TestCase {
         XInterface oObj = null;
         Object oInterface = null;
         XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF();
-        Object relationContainer = null ;
 
 
         try {
