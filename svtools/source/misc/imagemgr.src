@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2002-01-14 21:20:44 $
+ *  last change: $Author: kz $ $Date: 2002-01-18 21:18:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1113,7 +1113,7 @@ String STR_DESCRIPTION_CALC_TEMPLATE
     Text[ swedish ] = "%PRODUCTNAME 6.0 tabelldokument mall";
     Text[ polish ] = "%PRODUCTNAME 6.0 - Szablon arkusza kalkulacyjnego";
     Text[ portuguese_brazilian ] = "%PRODUCTNAME 6.0 Tabledocument Template";
-    Text[ japanese ] = "%productname% 6.0 表計算ドキュメント テンプレート";
+    Text[ japanese ] = "%PRODUCTNAME 6.0 表計算ドキュメント テンプレート";
     Text[ korean ] = "%PRODUCTNAME 6.0 스프레드시트 템플릿";
     Text[ chinese_simplified ] = "%PRODUCTNAME 6.0 工作表文档样式";
     Text[ chinese_traditional ] = "%PRODUCTNAME 6.0 工作表文件樣式";
@@ -1185,7 +1185,7 @@ String STR_DESCRIPTION_WRITER_TEMPLATE
     Text[ swedish ] = "%PRODUCTNAME 6.0 textdokument mall";
     Text[ polish ] = "%PRODUCTNAME 6.0 - Szablon dokumentu tekstowego";
     Text[ portuguese_brazilian ] = "%PRODUCTNAME 6.0 Textdocument Template";
-    Text[ japanese ] = "%productname% 6.0 文書ドキュメント テンプレート";
+    Text[ japanese ] = "%PRODUCTNAME 6.0 文書ドキュメント テンプレート";
     Text[ korean ] = "%PRODUCTNAME 6.0 텍스트 문서 템플릿";
     Text[ chinese_simplified ] = "%PRODUCTNAME 6.0 文本文档样式";
     Text[ chinese_traditional ] = "%PRODUCTNAME 6.0 文字文件樣式";
