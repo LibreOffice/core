@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:39:19 $
+ *  last change: $Author: nn $ $Date: 2000-11-27 15:42:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,19 +109,6 @@
 #define THESIZE             1000000 //!!! langt... :-)
 #define TBX_WINDOW_HEIGHT   22 // in Pixeln - fuer alle Systeme gleich?
 
-#if defined OS2 || defined MAC
-#define INPUTWIN_APPFONT
-#else
-#undef INPUTWIN_APPFONT
-#endif
-
-#ifdef INPUTWIN_APPFONT
-//  Unter OS/2 wird die Fontgroesse vom App-Font genommen
-#else
-#define TEXT_FONT_HEIGHT    180         // 9pt
-#endif
-
-// STATIC DATA -----------------------------------------------------------
 
 //==================================================================
 //  class ScInputWindowWrapper
@@ -604,17 +591,10 @@ ScTextWnd::ScTextWnd( Window* pParent )
         bIsInsertMode( TRUE ),
         bFormulaMode ( FALSE )
 {
-    //  Unter OS/2 sieht alles andere als der App-Font bei kleinen Aufloesungen
-    //  voellig daneben aus. Unter Windows kann der App-Font z.B. die typographischen
-    //  Anfuehrungszeichen nicht darstellen, darum hier die Unterscheidung:
-#ifdef INPUTWIN_APPFONT
+    //  #79096# always use application font, so a font with cjk chars can be installed
     Font aAppFont = GetFont();
     aTextFont = aAppFont;
     aTextFont.SetSize( PixelToLogic( aAppFont.GetSize(), MAP_TWIP ) );  // AppFont ist in Pixeln
-#else
-    aTextFont = System::GetStandardFont( STDFONT_SWISS );
-    aTextFont.SetSize( Size(0,TEXT_FONT_HEIGHT) );
-#endif
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 
