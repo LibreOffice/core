@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgmerge.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 13:51:15 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:24:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -657,6 +657,7 @@ CfgOutputParser::CfgOutputParser( const ByteString &rOutputFile )
             String( rOutputFile, RTL_TEXTENCODING_ASCII_US ),
             STREAM_STD_WRITE | STREAM_TRUNC
         );
+    pOutputStream->SetStreamCharSet( RTL_TEXTENCODING_UTF8 );
 
     if ( !pOutputStream->IsOpen()) {
         ByteString sError( "Unable to open output file: " );
@@ -766,11 +767,15 @@ void CfgExport::WorkOnRessourceEnd()
 //                  sOutput += ByteString::CreateFromInt64( Export::LangId[ i ]);
                     sOutput += sCur;
                     sOutput += "\t";
+
                     sOutput += sText; sOutput += "\t\t\t\t";
                     sOutput += sTimeStamp;
 
                     //if ( bUTF8 )
                     //  sOutput = UTF8Converter::ConvertToUTF8( sOutput, Export::GetCharSet( Export::LangId[ i ] ));
+                   // if( sCur.EqualsIgnoreCaseAscii("de") ){
+                   //   sOutput = UTF8Converter::ConvertToUTF8( sOutput, RTL_TEXTENCODING_MS_1252 );
+                   // }
 
                     pOutputStream->WriteLine( sOutput );
             //  }
