@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmui.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: os $ $Date: 2002-08-23 13:35:15 $
+ *  last change: $Author: gt $ $Date: 2002-11-29 10:15:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,8 +121,8 @@ String STR_BOTTOM
 };
 String STR_CENTER_HORI
 {
-    TEXT = "~Zentriert" ;
-    TEXT [ English ] = "Centered" ;
+    TEXT = "M~itte" ;
+    TEXT [ English ] = "Center" ;
     TEXT [ norwegian ] = "Centered" ;
     TEXT [ italian ] = "Centrato" ;
     TEXT [ portuguese_brazilian ] = "Centralizado" ;
@@ -133,7 +133,7 @@ String STR_CENTER_HORI
     TEXT [ swedish ] = "~Centrerad" ;
     TEXT [ dutch ] = "~Gecentreerd" ;
     TEXT [ spanish ] = "~Centrado" ;
-    TEXT [ english_us ] = "~Centered" ;
+    TEXT [ english_us ] = "~Center" ;
     TEXT[ chinese_simplified ] = "å±…ä¸­(~C)";
     TEXT[ russian ] = "Ïî öåíòðó";
     TEXT[ polish ] = "Do œrodka";
@@ -457,10 +457,10 @@ String STR_REL_BORDER
 };
 String STR_REL_PRTAREA
 {
-    TEXT = "Textbereich" ;
-    TEXT [ English ] = "Text area" ;
+    TEXT = "Paragraph-Textbereich" ;
+    TEXT [ English ] = "Paragraph text area" ;
     Text [ portuguese ] = "Área de texto" ;
-    Text [ english_us ] = "Text area" ;
+    Text [ english_us ] = "Paragraph text area" ;
     Text [ portuguese_brazilian ] = "Textbereich" ;
     Text [ swedish ] = "Textområde" ;
     Text [ danish ] = "Tekstområde" ;
