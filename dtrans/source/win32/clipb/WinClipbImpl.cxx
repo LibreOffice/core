@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinClipbImpl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-22 14:13:57 $
+ *  last change: $Author: tra $ $Date: 2001-07-19 12:40:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@
 #endif
 
 #ifndef _APNDATAOBJECT_HXX_
-#include "APNDataObject.hxx"
+#include "..\dtobj\APNDataObject.hxx"
 #endif
 
 #ifndef _WINCLIPBOARD_HXX_
