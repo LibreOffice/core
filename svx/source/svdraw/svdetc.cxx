@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdetc.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 15:40:23 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 14:12:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,6 +169,10 @@
 #ifndef _SVX_XFLBCKIT_HXX
 #include "xflbckit.hxx"
 #endif
+#ifndef _SVX_EXTRUSION_BAR_HXX
+#include "extrusionbar.hxx"
+#endif
+
 
 /******************************************************************************
 * Globale Daten der DrawingEngine
@@ -184,6 +188,8 @@ SdrGlobalData::SdrGlobalData() :
     pSysLocale = new SvtSysLocale;
     pCharClass = pSysLocale->GetCharClassPtr();
     pLocaleData = pSysLocale->GetLocaleDataPtr();
+
+    svx::ExtrusionBar::RegisterInterface();
 }
 
 SdrGlobalData::~SdrGlobalData()
