@@ -2,9 +2,9 @@
  *
  *  $RCSfile: present.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2001-03-01 21:33:29 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:58:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,7 +192,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ chinese_traditional ] = "§ë¼v¤ù±q(~F)";
         Text[ arabic ] = "ÈÏÇíÉ ãä ÇáÔÑíÍÉ:";
         Text[ greek ] = "Áğü ôç ~äéáöÜíåéá:";
-        Text[ korean ] = "½½¶óÀÌµå ºÎÅÍ:(~F)";
+        Text[ korean ] = "½½¶óÀÌµå ºÎÅÍ(~F):";
         Text[ turkish ] = "Başlangıç:";
         Text[ language_user1 ] = " ";
     };
@@ -290,7 +290,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ chinese_traditional ] = "¼Ğ·Ç(~D)";
         Text[ arabic ] = "ÇİÊÑÇÖí";
         Text[ greek ] = "ĞñïåğéëïãŞ";
-        Text[ korean ] = "±âº»";
+        Text[ korean ] = "±âº»(~D)";
         Text[ turkish ] = "Standart";
         Text[ language_user1 ] = " ";
     };
@@ -317,7 +317,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ chinese_traditional ] = "µøµ¡(~W)";
         Text[ arabic ] = "ÇáäÇİĞÉ";
         Text[ greek ] = "~ĞáñÜèõñï";
-        Text[ korean ] = "Ã¢";
+        Text[ korean ] = "Ã¢(~W)";
         Text[ turkish ] = "Pencere";
         Text[ language_user1 ] = " ";
     };
@@ -344,7 +344,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ chinese_traditional ] = "¦Û°Ê(~U)";
         Text[ arabic ] = "ÊáŞÇÆí";
         Text[ greek ] = "Áõôüìáôá";
-        Text[ korean ] = "ÀÚµ¿";
+        Text[ korean ] = "ÀÚµ¿(~U)";
         Text[ turkish ] = "Otomatik";
         Text[ language_user1 ] = " ";
     };
@@ -427,7 +427,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ chinese_traditional ] = "Åã¥Ü¹Ï¼Ğ(~L)";
         Text[ arabic ] = "ÅÙåÇÑ ÇáÔÚÇÑ";
         Text[ greek ] = "ÅìöÜíéóç ëïãüôõğïõ";
-        Text[ korean ] = "·Î°í ³ªÅ¸³»±â";
+        Text[ korean ] = "·Î°í ³ªÅ¸³»±â(~L)";
         Text[ turkish ] = "Logo görüntüle";
         Text[ language_user1 ] = " ";
     };
@@ -485,7 +485,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ chinese_traditional ] = "¤â°Ê§ó´«§ë¼v¤ù(~C)";
         Text[ arabic ] = "ÊÛííÑ ÇáÔÑíÍÉ íÏæíÇğ";
         Text[ greek ] = "ÁëëáãŞ äéá~öáíåéşí (slides) ÷åéñïêßíçôá";
-        Text[ korean ] = "¼öµ¿À¸·Î ½½¶óÀÌµå ÀüÈ¯";
+        Text[ korean ] = "¼öµ¿À¸·Î ½½¶óÀÌµå ÀüÈ¯(~C)";
         Text[ turkish ] = "Manüel slayt geçişi";
         Text[ language_user1 ] = " ";
     };
@@ -617,14 +617,14 @@ ModalDialog DLG_START_PRESENTATION
         Text [ danish ] = "Diasovergang ved klik på baggrunden" ;
         Text [ portuguese ] = "Transição diapos.: clique plano de ~fundo" ;
         Text [ portuguese_brazilian ] = "Diawechsel bei ~Klick auf Hintergrund" ;
-        Text[ chinese_simplified ] = "µ¥»÷±³¾°£¬¸ü»»ÑİÊ¾ÎÄ¸åÒ³Ãæ(~M)";
+        Text[ chinese_simplified ] = "µ¥»÷±³¾°£¬¸ü»»ÑİÊ¾ÎÄ¸åÒ³Ãæ(~K)";
         Text[ russian ] = "Ïåğåõîä ñëàéäà ïî ùåë÷êó íà ôîíå";
         Text[ polish ] = "Zmiana ~slajdu przy klikniêciu t³a";
-        Text[ japanese ] = "”wŒi‚ğ¸Ø¯¸‚µ‚Ä‰æ–ÊØ‚è‘Ö‚¦(~M)";
-        Text[ chinese_traditional ] = "«ö¤@¤U¹«ÁäÅÜ§óÂ²³ø(~M)";
+        Text[ japanese ] = "”wŒi‚ğ¸Ø¯¸‚µ‚Ä‰æ–ÊØ‚è‘Ö‚¦(~K)";
+        Text[ chinese_traditional ] = "«ö¤@¤U¹«ÁäÅÜ§óÂ²³ø(~K)";
         Text[ arabic ] = "ÊÛííÑ ÇáÔÑíÍÉ ÚäÏ ÇáäŞÑ İæŞ ÇáÎáİíÉ";
         Text[ greek ] = "ÁëëáãŞ äéáöÜíåéáò (slides) ìå ~êëéê ôïõ öüíôïõ";
-        Text[ korean ] = "¹è°æ¿¡ Å¬¸¯ÇØ¼­ ½½¶óÀÌµå ÀüÈ¯";
+        Text[ korean ] = "¹è°æ¿¡ Å¬¸¯ÇØ¼­ ½½¶óÀÌµå ÀüÈ¯(~K)";
         Text[ turkish ] = "Artalana tıklayınca slayt değiştir";
         Text[ language_user1 ] = "RB: bitte auf die Länge des Textes achten. Der Text soll nicht die Länge des deutschen Textes überschreiten.";
     };
