@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: mtg $ $Date: 2000-11-16 11:55:52 $
+#   last change: $Author: mtg $ $Date: 2000-11-21 10:54:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,6 +74,7 @@ TARGET=package
 LIB1TARGET= $(SLB)$/package.lib
 LIB1FILES=	\
     $(SLB)$/zipapi.lib \
+    $(SLB)$/zippackage.lib 
 
 # --- Shared-Library -----------------------------------------------
 
@@ -81,15 +82,16 @@ SHL1TARGET= package$(DLLPOSTFIX)
 SHL1IMPLIB= _ipackage
 
 SHL1STDLIBS= \
-        $(TOOLSLIB)		\
         $(VOSLIB)		\
         $(CPPULIB)		\
+        $(UCBHELPERLIB)\
         $(CPPUHELPERLIB)\
         $(COMPHELPERLIB)\
         $(RTLLIB)		\
         $(SALLIB)		\
-        $(UNOTOOLSLIB)	\
-        $(ZLIB3RDLIB)
+        $(TOOLSLIB)		\
+        $(ZLIB3RDLIB) 
+        #$(UNOTOOLSLIB)	\
 
 SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
 SHL1LIBS=   $(LIB1TARGET)
@@ -110,9 +112,9 @@ DEF1DES     =Package Lib
 
 $(MISC)$/$(SHL1TARGET).flt: makefile.mk
 .IF "$(GUI)"=="WNT"
-    +echo	_CT?	   >	$@
+#	+echo	_CT?	   >	$@
 .ENDIF
-    +echo	_CTA	   >>	$@
-    +echo	sXML_	   >>	$@
+#	+echo	_CTA	   >>	$@
+    +echo	Fzt_	   >>	$@
 
 
