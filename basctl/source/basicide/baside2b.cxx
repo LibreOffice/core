@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2b.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 18:50:52 $
+ *  last change: $Author: kz $ $Date: 2005-01-17 14:24:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1452,7 +1452,9 @@ WatchItem* WatchItem::GetRootItem( void )
 SbxDimArray* WatchItem::GetRootArray( void )
 {
     WatchItem* pRootItem = GetRootItem();
-    SbxDimArray* pRet = pRootItem ? pRootItem->mpArray : NULL;
+    SbxDimArray* pRet = NULL;
+    if( pRootItem )
+        pRet = pRootItem->mpArray;
     return pRet;
 }
 
