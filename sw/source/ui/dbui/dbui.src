@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbui.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:14:21 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:50:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,7 @@ ModalDialog DLG_DBSELECTION
     Text[ czech ] = "Výběr databáze";
     Text[ hebrew ] = "Datenbankauswahl";
     Text[ hindi ] = "लेखासंचय चुनाव";
+    Text[ slovak ] = "Výber databázy";
 };
  // DLG_PRINTMONITOR ------------------------------------------------------
 ModelessDialog DLG_PRINTMONITOR
@@ -189,6 +190,7 @@ ModelessDialog DLG_PRINTMONITOR
         Text[ czech ] = "se tiskne na";
         Text[ hebrew ] = "wird ausgegeben als";
         Text[ hindi ] = "के दिन छपाई किया ";
+        Text[ slovak ] = "sa tlačí na";
     };
     FixedText FT_SENDING
     {
@@ -229,6 +231,7 @@ ModelessDialog DLG_PRINTMONITOR
         TEXT[ czech ] = "je odesíláno komu";
         TEXT[ hebrew ] = "wird versandt an";
         TEXT[ hindi ] = "के दिन भेजा";
+        TEXT[ slovak ] = "sa posiela komu";
     };
     FixedText FT_PRINTER
     {
@@ -298,6 +301,7 @@ ModelessDialog DLG_PRINTMONITOR
         Text[ czech ] = "Kontrola odeslání";
         Text[ hebrew ] = "Versenden-Monitor";
         Text[ hindi ] = "भेजो-मोनिटर";
+        Text[ slovak ] = "Kontrola odosielania";
     };
     Text [ portuguese ] = "Monitor de impress�o" ;
     Text [ english_us ] = "Print monitor" ;
@@ -324,6 +328,7 @@ ModelessDialog DLG_PRINTMONITOR
     Text[ czech ] = "Monitorování tisku";
     Text[ hebrew ] = "Speichern-Monitor";
     Text[ hindi ] = "छपाई मोनिटर";
+    Text[ slovak ] = "Monitorovanie tlače";
 };
 
 String STR_DB_EMAIL
@@ -355,7 +360,10 @@ String STR_DB_EMAIL
     Text[ czech ] = "E-mail";
     Text[ hebrew ] = "E-mail";
     Text[ hindi ] = "E-mail";
+    Text[ slovak ] = "E-mail";
 };
+
+
 
 
 
