@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolfmt.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-25 14:59:40 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 13:32:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
