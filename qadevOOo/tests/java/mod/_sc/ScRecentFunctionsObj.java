@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScRecentFunctionsObj.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:16:17 $
+ *  last change:$Date: 2003-05-27 13:11:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ public class ScRecentFunctionsObj extends TestCase {
     * Creates Spreadsheet document.
     */
     protected void initialize( TestParameters tParam, PrintWriter log ) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
 
         try {
             log.println( "creating a Spreadsheet document" );
@@ -138,7 +138,7 @@ public class ScRecentFunctionsObj extends TestCase {
 
         try {
             log.println("Getting test object ") ;
-            XMultiServiceFactory oDocMSF = Param.getMSF();
+            XMultiServiceFactory oDocMSF = (XMultiServiceFactory)Param.getMSF();
             oObj =  (XInterface)oDocMSF.createInstance(
                 "com.sun.star.sheet.RecentFunctions");
             allFunctions =  (XInterface)oDocMSF.createInstance(
