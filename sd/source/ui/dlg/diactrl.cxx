@@ -2,9 +2,9 @@
  *
  *  $RCSfile: diactrl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 10:30:17 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 12:24:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,9 +97,11 @@ SFX_IMPL_TOOLBOX_CONTROL( SdTbxCtlDiaPages,  SfxUInt16Item )
 |*
 \************************************************************************/
 
-DiaEffectControl::DiaEffectControl( Window* pParent, SfxBindings& rBdx, WinBits nStyle ) :
+DiaEffectControl::DiaEffectControl( Window* pParent,
+                                    const uno::Reference< frame::XFrame >& rFrame,
+                                    WinBits nStyle ) :
         Window          ( pParent, nStyle ),
-        rBindings       ( rBdx ),
+        m_xFrame        ( rFrame ),
         aFtDescr        ( this, 0 ),
         aLbEffect       ( this, WinBits( WB_BORDER | WB_DROPDOWN ) )
 {
@@ -166,7 +168,17 @@ IMPL_LINK( DiaEffectControl, SelectDiaEffectHdl, void *, p )
     DiaEffectItem aDiaEffectItem( aLbEffect.GetSelectedEffect() );
 
     if( p )
-        rBindings.GetDispatcher()->Execute( SID_DIA, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aDiaEffectItem, (void*) NULL, 0L );
+    {
+        ::uno::Any a;
+        ::uno::Sequence< ::beans::PropertyValue > aArgs( 1 );
+        aDiaEffectItem.QueryValue( a );
+        aArgs[0].Name   = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DiaEffect" ));
+        aArgs[0].Value  = a;
+        SfxToolBoxControl::Dispatch( ::uno::Reference< ::frame::XDispatchProvider >( m_xFrame->getController(), ::uno::UNO_QUERY ),
+                                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:DiaEffect" )),
+                                     aArgs );
+//        rBindings.GetDispatcher()->Execute( SID_DIA, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aDiaEffectItem, (void*) NULL, 0L );
+    }
 
     return( 0L );
 }
@@ -179,9 +191,11 @@ SFX_IMPL_TOOLBOX_CONTROL( SdTbxCtlDiaSpeed, DiaSpeedItem )
 |*
 \************************************************************************/
 
-DiaSpeedControl::DiaSpeedControl( Window* pParent, SfxBindings& rBdx, WinBits nStyle ) :
+DiaSpeedControl::DiaSpeedControl( Window* pParent,
+                                  const uno::Reference< frame::XFrame >& rFrame,
+                                  WinBits nStyle ) :
         Window          ( pParent, nStyle ),
-        rBindings       ( rBdx ),
+        m_xFrame        ( rFrame ),
         aLbSpeed        ( this, WinBits( WB_BORDER | WB_DROPDOWN ) )
 {
     String  aStrSlow( SdResId( STR_SLOW ) );
@@ -242,8 +256,18 @@ IMPL_LINK( DiaSpeedControl, SelectDiaSpeedHdl, void *, p )
     DiaSpeedItem aDiaSpeedItem( eFS );
 
     if( p )
-        rBindings.GetDispatcher()->Execute(
-            SID_DIA, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aDiaSpeedItem, (void*) NULL, 0L );
+    {
+        ::uno::Any a;
+        ::uno::Sequence< ::beans::PropertyValue > aArgs( 1 );
+        aArgs[0].Name   = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DiaSpeed" ));
+        aDiaSpeedItem.QueryValue( a );
+        aArgs[0].Value  = a;
+        SfxToolBoxControl::Dispatch( ::uno::Reference< ::frame::XDispatchProvider >( m_xFrame->getController(), ::uno::UNO_QUERY ),
+                                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:DiaSpeed" )),
+                                     aArgs );
+//      rBindings.GetDispatcher()->Execute(
+//          SID_DIA, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aDiaSpeedItem, (void*) NULL, 0L );
+    }
     return( 0L );
 }
 
@@ -255,9 +279,11 @@ SFX_IMPL_TOOLBOX_CONTROL( SdTbxCtlDiaAuto, DiaAutoItem )
 |*
 \************************************************************************/
 
-DiaAutoControl::DiaAutoControl( Window* pParent, SfxBindings& rBdx, WinBits nStyle ) :
+DiaAutoControl::DiaAutoControl( Window* pParent,
+                                const uno::Reference< frame::XFrame >& rFrame,
+                                WinBits nStyle ) :
         Window          ( pParent, nStyle ),
-        rBindings       ( rBdx ),
+        m_xFrame        ( rFrame ),
         aFtDescr        ( this, 0 ),
         aLbAuto         ( this, WinBits( WB_BORDER | WB_DROPDOWN ) )
 {
@@ -353,8 +379,19 @@ IMPL_LINK( DiaAutoControl, SelectDiaAutoHdl, void *, p )
 */
 
     if( p )
-        rBindings.GetDispatcher()->Execute(
-            SID_DIA, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aDiaAutoItem, (void*) NULL, 0L );
+    {
+        ::uno::Any a;
+        ::uno::Sequence< ::beans::PropertyValue > aArgs( 1 );
+        aArgs[0].Name   = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DiaAuto" ));
+        aDiaAutoItem.QueryValue( a );
+        aArgs[0].Value  = a;
+        SfxToolBoxControl::Dispatch( ::uno::Reference< ::frame::XDispatchProvider >( m_xFrame->getController(), ::uno::UNO_QUERY ),
+                                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:DiaAuto" )),
+                                     aArgs );
+
+//        rBindings.GetDispatcher()->Execute(
+//          SID_DIA, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aDiaAutoItem, (void*) NULL, 0L );
+    }
     return( 0L );
 }
 
@@ -366,9 +403,9 @@ SFX_IMPL_TOOLBOX_CONTROL( SdTbxCtlDiaTime, DiaTimeItem )
 |*
 \************************************************************************/
 
-DiaTimeControl::DiaTimeControl( Window* pParent, SfxBindings& rBdx, WinBits nStyle ) :
+DiaTimeControl::DiaTimeControl( Window* pParent, const uno::Reference< frame::XFrame >& rFrame, WinBits nStyle ) :
         TimeField   ( pParent, nStyle ),
-        rBindings   ( rBdx )
+        m_xFrame    ( rFrame )
 {
     SetModifyHdl( LINK( this, DiaTimeControl, ModifyDiaTimeHdl ) );
     SetGetFocusHdl( LINK( this, DiaTimeControl, GetFocusHdl ) );
@@ -393,9 +430,9 @@ DiaTimeControl::DiaTimeControl( Window* pParent, SfxBindings& rBdx, WinBits nSty
 |*
 \************************************************************************/
 
-DiaTimeControl::DiaTimeControl( Window* pParent, SfxBindings& rBdx, ResId nRId ) :
+DiaTimeControl::DiaTimeControl( Window* pParent, const uno::Reference< frame::XFrame >& rFrame, ResId nRId ) :
         TimeField       ( pParent, nRId ),
-        rBindings       ( rBdx )
+        m_xFrame        ( rFrame )
 {
     SetGetFocusHdl( LINK( this, DiaTimeControl, GetFocusHdl ) );
 }
@@ -415,8 +452,19 @@ IMPL_LINK( DiaTimeControl, ModifyDiaTimeHdl, void *, p )
     DiaTimeItem aDiaTimeItem( lTime );
 
     if( p )
-        rBindings.GetDispatcher()->Execute(
-            SID_DIA, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aDiaTimeItem, (void*) NULL, 0L );
+    {
+        ::uno::Any a;
+        ::uno::Sequence< ::beans::PropertyValue > aArgs( 1 );
+        aArgs[0].Name   = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DiaTime" ));
+        aDiaTimeItem.QueryValue( a );
+        aArgs[0].Value  = a;
+        SfxToolBoxControl::Dispatch( ::uno::Reference< ::frame::XDispatchProvider >( m_xFrame->getController(), ::uno::UNO_QUERY ),
+                                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:DiaTime" )),
+                                    aArgs );
+//      rBindings.GetDispatcher()->Execute(
+//          SID_DIA, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aDiaTimeItem, (void*) NULL, 0L );
+    }
+
     return( 0L );
 }
 
@@ -462,9 +510,11 @@ void DiaTimeControl::Up()
 // SdPagesField
 //========================================================================
 
-SdPagesField::SdPagesField( Window* pParent, SfxBindings& rBdx, WinBits nBits ) :
-    SvxMetricField  ( pParent, rBdx, nBits ),
-    rBindings       ( rBdx )
+SdPagesField::SdPagesField( Window* pParent,
+                            const uno::Reference< frame::XFrame >& rFrame,
+                            WinBits nBits ) :
+    SvxMetricField  ( pParent, rFrame, nBits ),
+    m_xFrame        ( rFrame )
 {
     String aStr( SdResId( STR_SLIDE_PLURAL ) );
     SetCustomUnitText( aStr );
@@ -515,8 +565,19 @@ void SdPagesField::Update( const SfxUInt16Item* pItem )
 void SdPagesField::Modify()
 {
     SfxUInt16Item aItem( SID_PAGES_PER_ROW, (UINT16) GetValue() );
+
+    ::uno::Any a;
+    ::uno::Sequence< ::beans::PropertyValue > aArgs( 1 );
+    aArgs[0].Name   = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PagesPerRow" ));
+    aItem.QueryValue( a );
+    aArgs[0].Value  = a;
+    SfxToolBoxControl::Dispatch( ::uno::Reference< ::frame::XDispatchProvider >( m_xFrame->getController(), ::uno::UNO_QUERY ),
+                                 rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:PagesPerRow" )),
+                                 aArgs );
+/*
     rBindings.GetDispatcher()->Execute(
         SID_PAGES_PER_ROW, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD, &aItem, 0L, 0L );
+*/
 }
 
 /*************************************************************************
@@ -528,9 +589,8 @@ void SdPagesField::Modify()
 |*
 \************************************************************************/
 
-SdTbxCtlDiaEffect::SdTbxCtlDiaEffect( USHORT nId, ToolBox& rTbx,
-                                    SfxBindings& rBindings ) :
-        SfxToolBoxControl( nId, rTbx, rBindings )
+SdTbxCtlDiaEffect::SdTbxCtlDiaEffect( USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
+        SfxToolBoxControl( nSlotId, nId, rTbx )
 {
 }
 
@@ -541,7 +601,7 @@ void SdTbxCtlDiaEffect::StateChanged( USHORT nSId,
 {
     // FadeEffecListBox vom Window (DiaEffectControl) holen
     FadeEffectLB* pFadeEffectLB = (FadeEffectLB*) &( ( (DiaEffectControl*)
-                GetToolBox().GetItemWindow( SID_DIA_EFFECT ) )->aLbEffect );
+                GetToolBox().GetItemWindow( GetId() ) )->aLbEffect );
     if ( pFadeEffectLB )
     {
         if( pState )
@@ -569,9 +629,9 @@ void SdTbxCtlDiaEffect::StateChanged( USHORT nSId,
 
 Window* SdTbxCtlDiaEffect::CreateItemWindow( Window *pParent )
 {
-    if( GetId() == SID_DIA_EFFECT )
+    if( GetSlotId() == SID_DIA_EFFECT )
     {
-        return( new DiaEffectControl( pParent, GetBindings() ) );
+        return( new DiaEffectControl( pParent, m_xFrame ) );
     }
 
     return( NULL );
@@ -580,8 +640,8 @@ Window* SdTbxCtlDiaEffect::CreateItemWindow( Window *pParent )
 /*************************************************************************/
 /*************************************************************************/
 
-SdTbxCtlDiaSpeed::SdTbxCtlDiaSpeed( USHORT nId, ToolBox& rTbx, SfxBindings& rBindings ) :
-        SfxToolBoxControl( nId, rTbx, rBindings )
+SdTbxCtlDiaSpeed::SdTbxCtlDiaSpeed( USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
+        SfxToolBoxControl( nSlotId, nId, rTbx )
 {
 }
 
@@ -592,7 +652,7 @@ void SdTbxCtlDiaSpeed::StateChanged( USHORT nSId,
 {
     // ListBox vom Window (DiaSpeedControl) holen
     ListBox* pLB = (ListBox*) &( ( (DiaSpeedControl*)
-                GetToolBox().GetItemWindow( SID_DIA_SPEED ) )->aLbSpeed );
+                GetToolBox().GetItemWindow( GetId() ) )->aLbSpeed );
     if ( pLB )
     {
         if( pState )
@@ -620,9 +680,9 @@ void SdTbxCtlDiaSpeed::StateChanged( USHORT nSId,
 
 Window* SdTbxCtlDiaSpeed::CreateItemWindow( Window *pParent )
 {
-    if( GetId() == SID_DIA_SPEED )
+    if( GetSlotId() == SID_DIA_SPEED )
     {
-        return( new DiaSpeedControl( pParent, GetBindings() ) );
+        return( new DiaSpeedControl( pParent, m_xFrame ) );
     }
 
     return( NULL );
@@ -631,8 +691,8 @@ Window* SdTbxCtlDiaSpeed::CreateItemWindow( Window *pParent )
 /*************************************************************************/
 /*************************************************************************/
 
-SdTbxCtlDiaAuto::SdTbxCtlDiaAuto( USHORT nId, ToolBox& rTbx, SfxBindings& rBindings ) :
-        SfxToolBoxControl( nId, rTbx, rBindings )
+SdTbxCtlDiaAuto::SdTbxCtlDiaAuto( USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
+        SfxToolBoxControl( nSlotId, nId, rTbx )
 {
 }
 
@@ -643,7 +703,7 @@ void SdTbxCtlDiaAuto::StateChanged( USHORT nSId,
 {
     // ListBox vom Window (DiaAutoControl) holen
     ListBox* pLB = (ListBox*) &( ( (DiaAutoControl*)
-                GetToolBox().GetItemWindow( SID_DIA_AUTO ) )->aLbAuto );
+                GetToolBox().GetItemWindow( GetId() ) )->aLbAuto );
     if ( pLB )
     {
         if( pState )
@@ -677,9 +737,9 @@ void SdTbxCtlDiaAuto::StateChanged( USHORT nSId,
 
 Window* SdTbxCtlDiaAuto::CreateItemWindow( Window *pParent )
 {
-    if( GetId() == SID_DIA_AUTO )
+    if( GetSlotId() == SID_DIA_AUTO )
     {
-        return( new DiaAutoControl( pParent, GetBindings() ) );
+        return( new DiaAutoControl( pParent, m_xFrame ) );
     }
 
     return( NULL );
@@ -688,8 +748,8 @@ Window* SdTbxCtlDiaAuto::CreateItemWindow( Window *pParent )
 /*************************************************************************/
 /*************************************************************************/
 
-SdTbxCtlDiaTime::SdTbxCtlDiaTime( USHORT nId, ToolBox& rTbx, SfxBindings& rBindings ) :
-        SfxToolBoxControl( nId, rTbx, rBindings )
+SdTbxCtlDiaTime::SdTbxCtlDiaTime( USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
+        SfxToolBoxControl( nSlotId, nId, rTbx )
 {
 }
 
@@ -698,7 +758,7 @@ SdTbxCtlDiaTime::SdTbxCtlDiaTime( USHORT nId, ToolBox& rTbx, SfxBindings& rBindi
 void SdTbxCtlDiaTime::StateChanged( USHORT nSId,
                         SfxItemState eState, const SfxPoolItem* pState )
 {
-    DiaTimeControl* pDTC = (DiaTimeControl*) GetToolBox().GetItemWindow( SID_DIA_TIME );
+    DiaTimeControl* pDTC = (DiaTimeControl*) GetToolBox().GetItemWindow( GetId() ); //SID_DIA_TIME );
 
     if ( pDTC )
     {
@@ -742,9 +802,9 @@ void SdTbxCtlDiaTime::StateChanged( USHORT nSId,
 
 Window* SdTbxCtlDiaTime::CreateItemWindow( Window *pParent )
 {
-    if( GetId() == SID_DIA_TIME )
+    if( GetSlotId() == SID_DIA_TIME )
     {
-        return( new DiaTimeControl( pParent, GetBindings(),
+        return( new DiaTimeControl( pParent, m_xFrame,
                 WinBits( WB_BORDER | WB_SPIN | WB_REPEAT ) ) );
     }
 
@@ -757,9 +817,8 @@ Window* SdTbxCtlDiaTime::CreateItemWindow( Window *pParent )
 |*
 \************************************************************************/
 
-SdTbxCtlDiaPages::SdTbxCtlDiaPages( USHORT nId, ToolBox& rTbx, SfxBindings& rBind ) :
-    SfxToolBoxControl( nId, rTbx, rBind ),
-    rBindings( rBind )
+SdTbxCtlDiaPages::SdTbxCtlDiaPages( USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
+    SfxToolBoxControl( nSlotId, nId, rTbx )
 {
 }
 
@@ -800,7 +859,7 @@ void SdTbxCtlDiaPages::StateChanged( USHORT nSID,
 
 Window* SdTbxCtlDiaPages::CreateItemWindow( Window* pParent )
 {
-    return new SdPagesField( pParent, rBindings );
+    return new SdPagesField( pParent, m_xFrame );
 }
 
 
