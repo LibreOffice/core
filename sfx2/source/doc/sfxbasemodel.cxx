@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-27 08:15:22 $
+ *  last change: $Author: as $ $Date: 2002-06-28 09:15:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,10 @@
 #include <com/sun/star/container/XIndexContainer.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_UCB_NAMECLASH_HPP_
+#include <com/sun/star/ucb/NameClash.hpp>
+#endif
+
 #ifndef _UNO_MAPPING_HXX_
 #include <uno/mapping.hxx>
 #endif
@@ -133,6 +137,32 @@
 
 #include <svtools/sbx.hxx>
 #include <basic/sbuno.hxx>
+
+#ifndef _OSL_FILE_HXX_
+#include <osl/file.hxx>
+#endif
+
+#ifndef _THREAD_HXX_
+#include <osl/thread.hxx>
+#endif
+
+#ifndef _URLOBJ_HXX_
+#include <tools/urlobj.hxx>
+#endif
+
+#ifndef _UNOTOOLS_TEMPFILE_HXX_
+#include <unotools/tempfile.hxx>
+#endif
+
+#ifndef _UNOTOOLS_LOCALFILEHELPER_HXX_
+#include <unotools/localfilehelper.hxx>
+#endif
+
+#ifndef _UCBHELPER_CONTENT_HXX
+#include <ucbhelper/content.hxx>
+#endif
+
+#include <vos/mutex.hxx>
 
 //________________________________________________________________________________________________________
 //  includes of my own project
@@ -177,8 +207,6 @@
 #ifndef _SFX_BASMGR_HXX
 #include <basmgr.hxx>
 #endif
-
-#include <vos/mutex.hxx>
 
 #if SUPD>614
 #ifndef _SFXEVENT_HXX
@@ -1141,9 +1169,109 @@ void SAL_CALL SfxBaseModel::setPrinter(const SEQUENCE< PROPERTYVALUE >& rPrinter
 }
 
 //________________________________________________________________________________________________________
-//  XPrintable
+//  ImplPrintWatch thread for asynchronous printing with moving temp. file to ucb location
 //________________________________________________________________________________________________________
 
+/* This implements a thread which will be started to wait for asynchronous
+   print jobs to temp. localy files. If they finish we move the temp. files
+   to her right locations by using the ucb.
+ */
+class ImplUCBPrintWatcher : public ::osl::Thread
+{
+    private:
+        /// of course we must know the printer which execute the job
+        SfxPrinter* m_pPrinter;
+        /// this describes the target location for the printed temp file
+        String m_sTargetURL;
+        /// it holds the temp file alive, till the print job will finish and remove it from disk automaticly if the object die
+        ::utl::TempFile* m_pTempFile;
+
+    public:
+        /* initialize this watcher but don't start it */
+        ImplUCBPrintWatcher( SfxPrinter* pPrinter, ::utl::TempFile* pTempFile, const String& sTargetURL )
+                : m_pPrinter  ( pPrinter   )
+                , m_sTargetURL( sTargetURL )
+                , m_pTempFile ( pTempFile  )
+        {}
+
+        /* waits for finishing of the print job and moves the temp file afterwards
+           Note: Starting of the job is done outside this thread!
+           But we have to free some of the given ressources on heap!
+         */
+        void SAL_CALL run()
+        {
+            /* SAFE { */
+            {
+                ::vos::OGuard aGuard( Application::GetSolarMutex() );
+                while( m_pPrinter->IsPrinting() )
+                    Application::Yield();
+                m_pPrinter = NULL; // don't delete it! It's borrowed only :-)
+            }
+            /* } SAFE */
+
+            // lock for further using of our member isn't neccessary - because
+            // we truns alone by defenition. Nobody join for us nor use us ...
+            ImplUCBPrintWatcher::moveAndDeleteTemp(&m_pTempFile,m_sTargetURL);
+
+            // finishing of this run() method will call onTerminate() automaticly
+            // kill this thread there!
+        }
+
+        /* nobody wait for this thread. We must kill ourself ...
+         */
+        void SAL_CALL onTerminated()
+        {
+            delete this;
+        }
+
+        /* static helper to move the temp. file to the target location by using the ucb
+           It's static to be useable from outside too. So it's not realy neccessary to start
+           the thread, if finishing of the job was detected outside this thread.
+           But it must be called without using a corresponding thread for the given parameter!
+         */
+        static void moveAndDeleteTemp( ::utl::TempFile** ppTempFile, const String& sTargetURL )
+        {
+            // move the file
+            try
+            {
+                INetURLObject aSplitter(sTargetURL);
+                String        sFileName = aSplitter.getName(
+                                            INetURLObject::LAST_SEGMENT,
+                                            true,
+                                            INetURLObject::DECODE_WITH_CHARSET);
+                if (aSplitter.removeSegment() && sFileName.Len()>0)
+                {
+                    ::ucb::Content aSource(
+                            ::rtl::OUString((*ppTempFile)->GetURL()),
+                            ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >());
+
+                    ::ucb::Content aTarget(
+                            ::rtl::OUString(aSplitter.GetMainURL(INetURLObject::NO_DECODE)),
+                            ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >());
+
+                    aTarget.transferContent(
+                            aSource,
+                            ::ucb::InsertOperation_COPY,
+                            ::rtl::OUString(sFileName),
+                            ::com::sun::star::ucb::NameClash::ERROR);
+                }
+            }
+            catch( ::com::sun::star::ucb::ContentCreationException& ) { DBG_ERROR("content create exception"); }
+            catch( ::com::sun::star::ucb::CommandAbortedException&  ) { DBG_ERROR("command abort exception"); }
+            catch( ::com::sun::star::uno::RuntimeException&         ) { DBG_ERROR("runtime exception"); }
+            catch( ::com::sun::star::uno::Exception&                ) { DBG_ERROR("unknown exception"); }
+
+            // kill the temp file!
+            delete *ppTempFile;
+            *ppTempFile = NULL;
+        }
+};
+
+//------------------------------------------------
+
+//________________________________________________________________________________________________________
+//  XPrintable
+//________________________________________________________________________________________________________
 void SAL_CALL SfxBaseModel::print(const SEQUENCE< PROPERTYVALUE >& rOptions)
         throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
@@ -1162,6 +1290,14 @@ void SAL_CALL SfxBaseModel::print(const SEQUENCE< PROPERTYVALUE >& rOptions)
 
     SfxAllItemSet aArgs( pView->GetPool() );
     sal_Bool bMonitor = sal_False;
+    // We need this information at the end of this method, if we start the vcl printer
+    // by executing the slot. Because if it is a ucb relevant URL we must wait for
+    // finishing the print job and move the temporary local file by using the ucb
+    // to the right location. But in case of no file name is given or it is already
+    // a local one we can supress this special handling. Because then vcl makes all
+    // right for us.
+    String sUcbUrl;
+    ::utl::TempFile* pUCBPrintTempFile = NULL;
 
     sal_Bool bWaitUntilEnd = sal_True;
     for ( int n = 0; n < rOptions.getLength(); ++n )
@@ -1172,14 +1308,48 @@ void SAL_CALL SfxBaseModel::print(const SEQUENCE< PROPERTYVALUE >& rOptions)
         // FileName-Property?
         if ( rProp.Name.compareToAscii( "FileName" ) == 0 )
         {
-            if ( rProp.Value.getValueType() == ::getCppuType((const OUSTRING*)0) )
+            // unpack th URL and check for a valid and well known protocol
+            OUSTRING sTemp;
+            if (
+                ( rProp.Value.getValueType()!=::getCppuType((const OUSTRING*)0))  ||
+                (!(rProp.Value>>=sTemp))
+               )
             {
-                OUSTRING sTemp;
-                rProp.Value >>= sTemp;
-                aArgs.Put( SfxStringItem( SID_FILE_NAME, String( sTemp ) ) );
-            }
-            else if ( rProp.Value.getValueType() != ::getCppuVoidType() )
                 throw ILLEGALARGUMENTEXCEPTION();
+            }
+
+            String sURL(sTemp);
+            INetURLObject aCheck(sURL);
+            if (aCheck.GetProtocol()==INET_PROT_NOT_VALID)
+                throw ILLEGALARGUMENTEXCEPTION();
+
+            // It's a valid URL. but now we must know, if it is a local one or not.
+            // It's a question of using ucb or not!
+            String sPath;
+            if (::utl::LocalFileHelper::ConvertURLToSystemPath(sURL,sPath))
+            {
+                // it's a local file, we can use vcl without special handling
+                // And we have to use the system notation of the incoming URL.
+                // But it into the descriptor and let the slot be executed at
+                // the end of this method.
+                aArgs.Put( SfxStringItem(SID_FILE_NAME,sPath) );
+            }
+            else
+            {
+                // it's an ucb target. So we must use a temp. file for vcl
+                // and move it after printing by using the ucb.
+                // Create a temp file on the heap (because it must delete the
+                // real file on disk automaticly if it die - bt we have to share it with
+                // some other sources ... e.g. the ImplUCBPrintWatcher).
+                // And we put the name of this temp file to the descriptor instead
+                // of the URL. The URL we save for later using seperatly.
+                // Execution of the print job will be done later by executing
+                // a slot ...
+                pUCBPrintTempFile = new ::utl::TempFile();
+                pUCBPrintTempFile->EnableKillingFile();
+                aArgs.Put( SfxStringItem(SID_FILE_NAME,pUCBPrintTempFile->GetFileName()) );
+                sUcbUrl = sURL;
+            }
         }
 
         // CopyCount-Property
@@ -1236,12 +1406,39 @@ void SAL_CALL SfxBaseModel::print(const SEQUENCE< PROPERTYVALUE >& rOptions)
         }
     }
 
+    // Execute the print request every time.
+    // It doesn'tmatter if it is a real printer used or we print to a local file
+    // nor if we print to a temp file and move it afterwards by using the ucb.
+    // That will be handled later. see pUCBPrintFile below!
     aArgs.Put( SfxBoolItem( SID_SILENT, !bMonitor ) );
     if ( bWaitUntilEnd )
         aArgs.Put( SfxBoolItem( SID_ASYNCHRON, sal_False ) );
     SfxRequest aReq( SID_PRINTDOC, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_API, pView->GetPool() );
     aReq.SetArgs( aArgs );
     pView->ExecuteSlot( aReq );
+
+    // Ok - may be execution before has finished (or started!) printing.
+    // And may it was a printing to a file.
+    // Now we have to check if we can move the file (if neccessary) via ucb to his right location.
+    // Cases:
+    //  a) printing finished                        => move the file directly and forget the watcher thread
+    //  b) printing is asynchron and runs currently => start watcher thread and exit this method
+    //                                                 This thread make all neccessary things by itself.
+    if (pUCBPrintTempFile!=NULL)
+    {
+        // a)
+        SfxPrinter* pPrinter = pView->GetPrinter();
+        if ( ! pPrinter->IsPrinting() )
+            ImplUCBPrintWatcher::moveAndDeleteTemp(&pUCBPrintTempFile,sUcbUrl);
+        // b)
+        else
+        {
+            // Note: we create(d) some ressource on the heap. (thread and tep file)
+            // They will be delected by the thread automaticly if he finish his run() method.
+            ImplUCBPrintWatcher* pWatcher = new ImplUCBPrintWatcher( pPrinter, pUCBPrintTempFile, sUcbUrl );
+            pWatcher->create();
+        }
+    }
 }
 
 //________________________________________________________________________________________________________
