@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXTextDocument.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change:$Date: 2004-05-03 08:48:57 $
+ *  last change:$Date: 2004-09-08 15:56:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
