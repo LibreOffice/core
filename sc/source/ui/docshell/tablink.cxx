@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablink.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:49:09 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:26:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,8 +142,8 @@ __EXPORT ScTableLink::~ScTableLink()
     StopRefreshTimer();
     String aEmpty;
     ScDocument* pDoc = pDocShell->GetDocument();
-    USHORT nCount = pDoc->GetTableCount();
-    for (USHORT nTab=0; nTab<nCount; nTab++)
+    SCTAB nCount = pDoc->GetTableCount();
+    for (SCTAB nTab=0; nTab<nCount; nTab++)
         if (pDoc->IsLinked(nTab) && pDoc->GetLinkDoc(nTab)==aFileName)
             pDoc->SetLink( nTab, SC_LINK_NONE, aEmpty, aEmpty, aEmpty, aEmpty, 0 );
 }
@@ -275,8 +275,8 @@ BOOL ScTableLink::Refresh(const String& rNewFile, const String& rNewFilter,
     BOOL bAutoTab = (pSrcDoc->GetTableCount() == 1) &&
                     ScDocShell::HasAutomaticTableName( rNewFilter );
 
-    USHORT nCount = pDoc->GetTableCount();
-    for (USHORT nTab=0; nTab<nCount; nTab++)
+    SCTAB nCount = pDoc->GetTableCount();
+    for (SCTAB nTab=0; nTab<nCount; nTab++)
     {
         BYTE nMode = pDoc->GetLinkMode(nTab);
         if (nMode && pDoc->GetLinkDoc(nTab)==aFileName)
@@ -316,7 +316,7 @@ BOOL ScTableLink::Refresh(const String& rNewFile, const String& rNewFilter,
 
             //  kopieren
 
-            USHORT nSrcTab = 0;
+            SCTAB nSrcTab = 0;
             BOOL bFound = TRUE;         // kein Tab-Name angegeben: immer die erste
             if ( aTabName.Len() && !bAutoTab )
                 bFound = pSrcDoc->GetTable( aTabName, nSrcTab );
