@@ -2,9 +2,9 @@
  *
  *  $RCSfile: taskcreator.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: as $ $Date: 2001-08-16 09:45:11 $
+ *  last change: $Author: mba $ $Date: 2001-09-19 08:06:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,6 +173,7 @@ css::uno::Reference< css::frame::XFrame > TaskCreator::createSystemTask( const T
         // Create a new blank container window and get access to parent container to append new created task.
         css::uno::Reference< css::awt::XWindowPeer > xPeer      = xToolkit->createWindow( aDescriptor );
         css::uno::Reference< css::awt::XWindow >     xWindow    ( xPeer, css::uno::UNO_QUERY );
+        xPeer->setBackground( 0xFFFFFFFF );
         css::uno::Reference< css::frame::XFrames >   xContainer = aInfo.xParent->getFrames();
         if(
             ( xWindow.is()    == sal_True ) &&
