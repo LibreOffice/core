@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listcombopages.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 20:50:09 $
+ *  last change: $Author: fs $ $Date: 2001-03-14 13:29:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -379,26 +379,26 @@ TabPage RID_PAGE_LCW_FIELDLINK
         Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + 3 , 15 ) ;
         Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 10, 8 ) ;
         Group = TRUE;
-        Text = "Feld aus der &Listentabelle";
+        Text = "Feld aus der ~Listentabelle";
         Text [ english ] = "Field from the List Table";
         Text [ english_us ] = "Field from the List Table";
-        Text [ portuguese ] = "Campo da &tabela de listagem";
+        Text [ portuguese ] = "Campo da ~tabela de listagem";
         Text [ russian ] = "Ïîëå èç òàáëèöû ñïèñêà";
-        Text [ dutch ] = "Veld uit de &lijsttabel";
+        Text [ dutch ] = "Veld uit de ~lijsttabel";
         Text [ french ] = "Champ de la table de liste";
-        Text [ spanish ] = "Campo del list&ado";
-        Text [ italian ] = "Campo dalla tabella di &elenco";
-        Text [ danish ] = "Felt fra &listetabellen";
-        Text [ swedish ] = "Fält från &listtabellen";
+        Text [ spanish ] = "Campo del list~ado";
+        Text [ italian ] = "Campo dalla tabella di ~elenco";
+        Text [ danish ] = "Felt fra ~listetabellen";
+        Text [ swedish ] = "Fält från ~listtabellen";
         Text [ polish ] = "Pole z tabeli listy";
         Text [ portuguese_brazilian ] = "Do you want to save the value in a database field?";
         Text [ japanese ] = "Ø½ÄÃ°ÌŞÙ‚©‚ç‚ÌÌ¨°ÙÄŞ";
         Text [ chinese_simplified ] = "´ÓÁĞµ¥±í¸ñÉú³É×Ö¶Î";
         Text [ chinese_traditional ] = "±q²M³æªí®æ²Õ¦¨Äæ¦ì";
-        Text [ arabic ] = "ÍŞá ãä ÌÏæá &ÇáŞÇÆãÉ";
-        Text [ dutch ] = "Veld uit de &lijsttabel";
+        Text [ arabic ] = "ÍŞá ãä ÌÏæá ~ÇáŞÇÆãÉ";
+        Text [ dutch ] = "Veld uit de ~lijsttabel";
         Text [ chinese_simplified ] = "´ÓÁĞµ¥±í¸ñÉú³É×Ö¶Î";
-        Text [ greek ] = "Ğåäßï áğü ôïí &Ğßíáêá ëßóôáò";
+        Text [ greek ] = "Ğåäßï áğü ôïí ~Ğßíáêá ëßóôáò";
         Text [ korean ] = "¸ñ·Ï Ç¥·ÎºÎÅÍÀÇ ÇÊµå";
         Text [ turkish ] = "Liste tablosu alanı";
     };
@@ -443,6 +443,9 @@ String RID_STR_COMBOWIZ_DBFIELD
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/03/09 20:50:09  kz
+ *  Merge SRC624: 09.03.01 - 21:50:15 (NoBranch)
+ *
  *  Revision 1.2  2001/02/28 09:18:30  fs
  *  finalized the list/combo wizard
  *
