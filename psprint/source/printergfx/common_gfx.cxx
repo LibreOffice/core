@@ -2,9 +2,9 @@
  *
  *  $RCSfile: common_gfx.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pl $ $Date: 2001-12-13 17:58:09 $
+ *  last change: $Author: pl $ $Date: 2002-10-01 10:06:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -507,7 +507,7 @@ PrinterGfx::DrawPolygon (sal_uInt32 nPoints, const Point* pPath)
     {
         PSSetColor (maFillColor);
         PSSetColor ();
-        WritePS (mpPageBody, "fill\n");
+        WritePS (mpPageBody, "eofill\n");
     }
 
     // restore the current path
