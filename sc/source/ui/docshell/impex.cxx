@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impex.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:25:22 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:58:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@ class StarBASIC;
 #include <ctype.h>
 #include <stdlib.h>
 
+#ifndef _OSL_ENDIAN_H_
+#include <osl/endian.h>
+#endif
 #include <tools/list.hxx>
 #include <tools/string.hxx>
 #include <rtl/math.hxx>
@@ -383,7 +386,7 @@ BOOL ScImportExport::ExportData( const String& rMimeType,
 // static
 inline void ScImportExport::SetNoEndianSwap( SvStream& rStrm )
 {
-#ifdef __BIGENDIAN
+#ifdef OSL_BIGENDIAN
     rStrm.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
 #else
     rStrm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
