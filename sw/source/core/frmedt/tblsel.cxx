@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblsel.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 09:55:14 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:46:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -391,8 +391,6 @@ void GetTblSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
         return;
     }
 
-    //Muss ein HeadlineRepeat beachtet werden?
-    const BOOL bRepeat = pStartTab->GetTable()->IsHeadlineRepeat();
     int bChkProtected = TBLSEARCH_PROTECT & eSearchType;
 
     BOOL bTblIsValid;
@@ -417,11 +415,10 @@ void GetTblSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
                 break;
             }
 
-            const SwLayoutFrm *pRow = (const SwLayoutFrm*)pTable->Lower();
-            //Wenn die Row eine wiederholte Headline ist wird sie nicht
-            //beachtet.
-            if( bRepeat && pTable->IsFollow() )
-                pRow = (const SwLayoutFrm*)pRow->GetNext();
+            // Skip any repeated headlines in the follow:
+            const SwLayoutFrm* pRow = pTable->IsFollow() ?
+                                      pTable->GetFirstNonHeadlineRow() :
+                                     (const SwLayoutFrm*)pTable->Lower();
 
             while( pRow && bTblIsValid )
             {
@@ -533,9 +530,6 @@ BOOL ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
     ASSERT( pEnd, "ohne Frame geht gar nichts" );
 
 
-    //Muss ein HeadlineRepeat beachtet werden?
-    const BOOL bRepeat = pTNd->GetTable().IsHeadlineRepeat();
-
     BOOL bTblIsValid, bValidChartSel;
     int nLoopMax = 100;     //JP 28.06.99: max 100 loops - Bug 67292
     USHORT i = 0;
@@ -570,11 +564,10 @@ BOOL ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
 
             _Sort_CellFrms aCellFrms;
 
-            const SwLayoutFrm *pRow = (const SwLayoutFrm*)pTable->Lower();
-            //Wenn die Row eine wiederholte Headline ist wird sie nicht
-            //beachtet.
-            if( bRepeat && pTable->IsFollow() )
-                pRow = (const SwLayoutFrm*)pRow->GetNext();
+            // Skip any repeated headlines in the follow:
+            const SwLayoutFrm* pRow = pTable->IsFollow() ?
+                                      pTable->GetFirstNonHeadlineRow() :
+                                      (const SwLayoutFrm*)pTable->Lower();
 
             while( pRow && bTblIsValid && bValidChartSel )
             {
@@ -803,9 +796,6 @@ BOOL GetAutoSumSel( const SwCrsrShell& rShell, SwCellFrms& rBoxes )
                       *pEnd   = pCrsr->GetCntntNode(FALSE)->GetFrm(
                       &pCrsr->GetMkPos() )->GetUpper();
 
-    //Muss ein HeadlineRepeat beachtet werden?
-    const BOOL bRepeat = pStart->FindTabFrm()->GetTable()->IsHeadlineRepeat();
-
     const SwLayoutFrm* pSttCell = pStart;
     while( pSttCell && !pSttCell->IsCellFrm() )
         pSttCell = pSttCell->GetUpper();
@@ -825,11 +815,10 @@ BOOL GetAutoSumSel( const SwCrsrShell& rShell, SwCellFrms& rBoxes )
         SwSelUnion *pUnion = aUnions[i];
         const SwTabFrm *pTable = pUnion->GetTable();
 
-        const SwLayoutFrm *pRow = (const SwLayoutFrm*)pTable->Lower();
-        //Wenn die Row eine wiederholte Headline ist wird sie nicht
-        //beachtet.
-        if( bRepeat && pTable->IsFollow() )
-            pRow = (const SwLayoutFrm*)pRow->GetNext();
+        // Skip any repeated headlines in the follow:
+        const SwLayoutFrm* pRow = pTable->IsFollow() ?
+                                  pTable->GetFirstNonHeadlineRow() :
+                                  (const SwLayoutFrm*)pTable->Lower();
 
         while( pRow )
         {
@@ -896,11 +885,10 @@ BOOL GetAutoSumSel( const SwCrsrShell& rShell, SwCellFrms& rBoxes )
             SwSelUnion *pUnion = aUnions[i];
             const SwTabFrm *pTable = pUnion->GetTable();
 
-            const SwLayoutFrm *pRow = (const SwLayoutFrm*)pTable->Lower();
-            //Wenn die Row eine wiederholte Headline ist wird sie nicht
-            //beachtet.
-            if( bRepeat && pTable->IsFollow() )
-                pRow = (const SwLayoutFrm*)pRow->GetNext();
+            // Skip any repeated headlines in the follow:
+            const SwLayoutFrm* pRow = pTable->IsFollow() ?
+                                      pTable->GetFirstNonHeadlineRow() :
+                                      (const SwLayoutFrm*)pTable->Lower();
 
             while( pRow )
             {
@@ -1068,17 +1056,17 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
         const SwTabFrm *pTabFrm = aUnions[i]->GetTable();
 
         SwRect &rUnion = aUnions[i]->GetUnion();
-        const SwLayoutFrm *pRow = (const SwLayoutFrm*)pTabFrm->Lower();
-        if ( pRow && pTabFrm->IsFollow() && pTable->IsHeadlineRepeat() )
-            pRow = (SwLayoutFrm*)pRow->GetNext();
+
+        // Skip any repeated headlines in the follow:
+        const SwLayoutFrm* pRow = pTabFrm->IsFollow() ?
+                                  pTabFrm->GetFirstNonHeadlineRow() :
+                                  (const SwLayoutFrm*)pTabFrm->Lower();
 
         while ( pRow )
         {
             if ( pRow->Frm().IsOver( rUnion ) )
             {
                 const SwLayoutFrm *pCell = pRow->FirstCell();
-//              while ( !pCell->IsCellFrm() )
-//                  pCell = pCell->GetUpper();
 
                 while ( pCell && pRow->IsAnLower( pCell ) )
                 {
@@ -1839,10 +1827,7 @@ void lcl_FindStartEndCol( const SwLayoutFrm *&rpStart,
         if ( pTab->HasFollowFlowLine() )
         {
             pTab = pTab->GetFollow();
-            const SwFrm* pTmpRow = pTab->Lower();
-            if ( pTab->GetTable()->IsHeadlineRepeat() )
-                pTmpRow = pTmpRow->GetNext();
-
+            const SwFrm* pTmpRow = pTab->GetFirstNonHeadlineRow();
             if ( pTmpRow && pTmpRow->GetNext() )
                 pLastValidTab = pTab;
         }
@@ -1995,8 +1980,6 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrm *pStart,
     pTable = pStart->FindTabFrm();
     pEndTable = pEnd->FindTabFrm();
 
-    const FASTBOOL bRepeat = pTable->GetTable()->IsHeadlineRepeat();
-
     const long nStSz = pStart->GetFmt()->GetFrmSize().GetWidth();
     const long nEdSz = pEnd->GetFmt()->GetFrmSize().GetWidth();
     const long nWish = Max( 1L, pTable->GetFmt()->GetFrmSize().GetWidth() );
@@ -2077,9 +2060,10 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrm *pStart,
             //Um dies zu vermeiden werden jetzt fuer die Table die erste und
             //letzte Zelle innerhalb der Union ermittelt und aus genau deren
             //Werten wird die Union neu gebildet.
-            const SwLayoutFrm *pRow = (SwLayoutFrm*)pTable->Lower();
-            if ( bRepeat && pRow && pTable->IsFollow() )
-                pRow = (SwLayoutFrm*)pRow->GetNext();
+            const SwLayoutFrm* pRow = pTable->IsFollow() ?
+                                      pTable->GetFirstNonHeadlineRow() :
+                                      (const SwLayoutFrm*)pTable->Lower();
+
             if ( pRow && pTable->IsFollow() && pRow->IsInFollowFlowRow() )
                 pRow = (SwLayoutFrm*)pRow->GetNext();
             while ( pRow && !pRow->Frm().IsOver( aUnion ) )
@@ -2166,20 +2150,16 @@ BOOL CheckSplitCells( const SwCursor& rCrsr, USHORT nDiv,
 
     ::MakeSelUnions( aUnions, pStart, pEnd, eSearchType );
 
-    //Muss ein HeadlineRepeat beachtet werden?
-    const BOOL bRepeat = pStart->FindTabFrm()->GetTable()->IsHeadlineRepeat();
-
     //Jetzt zu jedem Eintrag die Boxen herausfischen und uebertragen.
     for ( USHORT i = 0; i < aUnions.Count(); ++i )
     {
         SwSelUnion *pUnion = aUnions[i];
         const SwTabFrm *pTable = pUnion->GetTable();
 
-        const SwLayoutFrm *pRow = (const SwLayoutFrm*)pTable->Lower();
-        //Wenn die Row eine wiederholte Headline ist wird sie nicht
-        //beachtet.
-        if ( bRepeat && pTable->IsFollow() )
-            pRow = (const SwLayoutFrm*)pRow->GetNext();
+        // Skip any repeated headlines in the follow:
+        const SwLayoutFrm* pRow = pTable->IsFollow() ?
+                                  pTable->GetFirstNonHeadlineRow() :
+                                  (const SwLayoutFrm*)pTable->Lower();
 
         while ( pRow )
         {
@@ -2222,12 +2202,13 @@ void lcl_InsertRow( SwTableLine &rLine, SwLayoutFrm *pUpper, SwFrm *pSibling )
     SwRowFrm *pRow = new SwRowFrm( rLine );
     if ( pUpper->IsTabFrm() && ((SwTabFrm*)pUpper)->IsFollow() )
     {
-        ((SwTabFrm*)pUpper)->FindMaster()->InvalidatePos(); //kann die Zeile vielleicht aufnehmen
-        if ( ((SwTabFrm*)pUpper)->GetTable()->IsHeadlineRepeat() &&
-             pSibling && !pSibling->GetPrev() )
+        SwTabFrm* pTabFrm = (SwTabFrm*)pUpper;
+        pTabFrm->FindMaster()->InvalidatePos(); //kann die Zeile vielleicht aufnehmen
+
+        if ( pSibling && pTabFrm->IsInHeadline( *pSibling ) )
         {
-            //Nicht vor die Headline-Wiederholung pasten.
-            pSibling = pSibling->GetNext();
+            // Skip any repeated headlines in the follow:
+            pSibling = pTabFrm->GetFirstNonHeadlineRow();
         }
     }
     pRow->Paste( pUpper, pSibling );
@@ -2344,7 +2325,6 @@ inline void UnsetFollow( SwFlowFrm *pTab )
     pTab->bIsFollow = FALSE;
 }
 
-
 void _FndBox::DelFrms( SwTable &rTable )
 {
     //Alle Lines zwischen pLineBefore und pLineBehind muessen aus dem
@@ -2369,6 +2349,25 @@ void _FndBox::DelFrms( SwTable &rTable )
         ASSERT( nEndPos != USHRT_MAX, "Fuchs Du hast die Line gestohlen!" );
         --nEndPos;
     }
+
+    // Delete all follow flow line:
+    const USHORT nRepeat = rTable.GetRowsToRepeat();
+    SwFrmFmt* pTblFmt = rTable.GetFrmFmt();
+    SwClientIter aTblIter( *pTblFmt );
+    SwClient* pLastTbl = aTblIter.GoStart();
+    if ( pLastTbl )
+    {
+        do
+        {
+            SwTabFrm* pTabFrm = PTR_CAST( SwTabFrm, pLastTbl );
+            if ( pTabFrm )
+            {
+                if ( pTabFrm->GetFollow() && pTabFrm->HasFollowFlowLine() )
+                    pTabFrm->RemoveFollowFlowLine();
+            }
+        } while( 0 != ( pLastTbl = aTblIter++ ));
+    }
+
     for ( USHORT i = nStPos; i <= nEndPos; ++i)
     {
         SwFrmFmt *pFmt = rTable.GetTabLines()[i]->GetFrmFmt();
@@ -2386,13 +2385,19 @@ void _FndBox::DelFrms( SwTable &rTable )
                                             (SwTabFrm*)pFrm->GetUpper() : 0;
                     if ( !pUp )
                     {
-                        if ( ((SwTabFrm*)pFrm->GetUpper())->GetTable()->IsHeadlineRepeat() &&
+                        const USHORT nRepeat =
+                                ((SwTabFrm*)pFrm->GetUpper())->GetTable()->GetRowsToRepeat();
+                        if ( nRepeat > 0 &&
                              ((SwTabFrm*)pFrm->GetUpper())->IsFollow() )
                         {
-                            if ( !pFrm->GetNext() && pFrm->GetPrev() &&
-                                 !pFrm->GetPrev()->GetPrev() )
+                            if ( !pFrm->GetNext() )
                             {
-                                pUp = (SwTabFrm*)pFrm->GetUpper();
+                                SwRowFrm* pFirstNonHeadline =
+                                    ((SwTabFrm*)pFrm->GetUpper())->GetFirstNonHeadlineRow();
+                                if ( pFirstNonHeadline == pFrm )
+                                {
+                                    pUp = (SwTabFrm*)pFrm->GetUpper();
+                                }
                             }
                         }
                     }
@@ -2441,12 +2446,6 @@ void _FndBox::DelFrms( SwTable &rTable )
                     }
                     if ( bDel )
                     {
-                        if ( pFrm->IsInSplitTableRow() ||
-                             pFrm->IsInFollowFlowRow() )
-                        {
-                            SwTabFrm* pTab = pFrm->FindTabFrm();
-                            pTab->SetFollowFlowLine( FALSE );
-                        }
                         pFrm->Cut();
                         delete pFrm;
                     }
@@ -2462,6 +2461,38 @@ BOOL lcl_IsLineOfTblFrm( const SwTabFrm& rTable, const SwFrm& rChk )
     if( pTblFrm->IsFollow() )
         pTblFrm->FindMaster( true );
     return &rTable == pTblFrm;
+}
+
+/*
+ * lcl_UpdateRepeatedHeadlines
+ */
+void lcl_UpdateRepeatedHeadlines( SwTabFrm& rTabFrm, bool bCalcLowers )
+{
+    ASSERT( rTabFrm.IsFollow(), "lcl_UpdateRepeatedHeadlines called for non-follow tab" )
+
+    // Delete remaining headlines:
+    SwRowFrm* pLower = 0;
+    while ( ( pLower = (SwRowFrm*)rTabFrm.Lower() ) && pLower->IsRepeatedHeadline() )
+    {
+        pLower->Cut();
+        delete pLower;
+    }
+
+    // Insert fresh set of headlines:
+    pLower = (SwRowFrm*)rTabFrm.Lower();
+    SwTable& rTable = *rTabFrm.GetTable();
+    const USHORT nRepeat = rTable.GetRowsToRepeat();
+    for ( USHORT nIdx = 0; nIdx < nRepeat; ++nIdx )
+    {
+        SwRowFrm* pHeadline = new SwRowFrm(
+                                *rTable.GetTabLines()[ nIdx ] );
+        pHeadline->SetRepeatedHeadline( true );
+        pHeadline->Paste( &rTabFrm, pLower );
+        pHeadline->RegistFlys();
+    }
+
+    if ( bCalcLowers )
+        rTabFrm.SetCalcLowers();
 }
 
 void _FndBox::MakeFrms( SwTable &rTable )
@@ -2526,13 +2557,10 @@ void _FndBox::MakeFrms( SwTable &rTable )
             if ( pUpper->IsTabFrm() )
                 ((SwTabFrm*)pUpper)->SetCalcLowers();
         }
-        else if ( nStPos == 0 && rTable.IsHeadlineRepeat() )
+        else if ( rTable.GetRowsToRepeat() > 0 )
         {
-            //Headline in den Follow einsetzen
-            SwRowFrm *pRow = new SwRowFrm( *rTable.GetTabLines()[0] );
-            pRow->Paste( pTable, pTable->Lower() );
-            pRow->RegistFlys();
-            pTable->SetCalcLowers();
+            // Insert new headlines:
+            lcl_UpdateRepeatedHeadlines( *pTable, true );
         }
     }
 }
@@ -2636,29 +2664,25 @@ void _FndBox::MakeNewFrms( SwTable &rTable, const USHORT nNumber,
 
     //Die Headlines mussen ggf. auch verarbeitet werden. Um gut arbeitenden
     //Code nicht zu zerfasern wird hier nochmals iteriert.
-    if ( !bBehind && nBfPos == USHRT_MAX && rTable.IsHeadlineRepeat() )
+    const USHORT nRowsToRepeat = rTable.GetRowsToRepeat();
+    if ( nRowsToRepeat > 0 &&
+         ( ( !bBehind && ( nBfPos == USHRT_MAX || nBfPos + 1 < nRowsToRepeat ) ) ||
+           (  bBehind && ( ( nBfPos == USHRT_MAX && nRowsToRepeat > 1 ) || nBfPos + 2 < nRowsToRepeat ) ) ) )
     {
         for ( pTable = (SwTabFrm*)aTabIter.First( TYPE(SwFrm) ); pTable;
               pTable = (SwTabFrm*)aTabIter.Next() )
         {
             if ( pTable->Lower() )
             {
+                USHORT nRowCount = 0;
+
                 if ( pTable->IsFollow() )
                 {
-                    //Alte Headline vernichten
-                    SwFrm *pLow = pTable->Lower();
-                    pLow->Cut();
-                    delete pLow;
+                    lcl_UpdateRepeatedHeadlines( *pTable, true );
                 }
-                if ( ((SwRowFrm*)pTable->Lower())->GetTabLine() !=
-                     rTable.GetTabLines()[0] )
-                {
-                    //Neue Headline einsetzen
-                    SwRowFrm *pRow = new SwRowFrm( *rTable.GetTabLines()[0]);
-                    pRow->Paste( pTable, pTable->Lower() );
-                    pRow->RegistFlys();
-                    pTable->SetCalcLowers();
-                }
+
+                ASSERT( ((SwRowFrm*)pTable->Lower())->GetTabLine() ==
+                        rTable.GetTabLines()[0], "MakeNewFrms: Table corruption!" )
             }
         }
     }
@@ -2695,32 +2719,36 @@ BOOL _FndBox::AreLinesToRestore( const SwTable &rTable ) const
         return FALSE;
     }
 
-    if ( nBfPos == USHRT_MAX && nBhPos == 0 )
+    if ( rTable.GetRowsToRepeat() > 0 )
     {
         // ups. sollte unsere zu wiederholende Kopfzeile geloescht worden
         // sein??
-        if( rTable.IsHeadlineRepeat() )
+        SwClientIter aIter( *rTable.GetFrmFmt() );
+        for( SwTabFrm* pTable = (SwTabFrm*)aIter.First( TYPE( SwFrm ));
+             pTable; pTable = (SwTabFrm*)aIter.Next() )
         {
-            SwClientIter aIter( *rTable.GetFrmFmt() );
-            for( SwTabFrm* pTable = (SwTabFrm*)aIter.First( TYPE( SwFrm ));
-                    pTable; pTable = (SwTabFrm*)aIter.Next() )
-                if( pTable->IsFollow() )
-                {
-                    //Headline in den Follow einsetzen
-                    SwRowFrm *pRow = new SwRowFrm( *rTable.GetTabLines()[0] );
-                    pRow->Paste( pTable, pTable->Lower() );
-                    pRow->RegistFlys();
-                }
+            if( pTable->IsFollow() )
+            {
+                // Insert new headlines:
+                lcl_UpdateRepeatedHeadlines( *pTable, false );
+            }
         }
-        return FALSE;
     }
 
+    // Some adjacent lines at the beginning of the table have been deleted:
+    if ( nBfPos == USHRT_MAX && nBhPos == 0 )
+        return FALSE;
+
+    // Some adjacent lines at the end of the table have been deleted:
     if ( nBhPos == USHRT_MAX && nBfPos == (rTable.GetTabLines().Count() - 1) )
         return FALSE;
 
+    // Some adjacent lines in the middle of the table have been deleted:
     if ( nBfPos != USHRT_MAX && nBhPos != USHRT_MAX && (nBfPos + 1) == nBhPos )
         return FALSE;
 
+    // The structure of the deleted lines is more complex due to split lines.
+    // A call of MakeFrms() is necessary.
     return TRUE;
 }
 
