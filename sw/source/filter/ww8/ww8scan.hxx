@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 17:33:23 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 11:59:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1392,6 +1392,10 @@ public:
     INT32 lcbPlcfHdrtxbxTxt;// 0x236
     WW8_FC fcPlcffldHdrTxbx;// 0x23a ...PLCF of field boundaries recorded in the header textbox subdoc.
     INT32 lcbPlcffldHdrTxbx;// 0x23e
+    WW8_FC fcStwUser;
+    sal_uInt32 lcbStwUser;
+    WW8_FC fcSttbttmbd;
+    sal_uInt32 lcbSttbttmbd;
 
     WW8_FC fcSttbFnm;       // 0x02da offset in the table stream of masters subdocument names
     INT32 lcbSttbFnm;       // 0x02de length
