@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: kso $ $Date: 2001-06-13 12:12:33 $
+#   last change: $Author: kso $ $Date: 2001-06-13 16:33:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -200,7 +200,6 @@ IDLFILES=\
     ServiceNotFoundException.idl\
     SimpleFileAccess.idl\
     SortingInfo.idl\
-        SplitCommandArgument.idl\
     Store.idl\
     SynchronizePolicy.idl\
     TransferCommandOperation.idl\
