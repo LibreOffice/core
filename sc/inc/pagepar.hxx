@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagepar.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:49 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 16:04:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,16 +83,17 @@ struct ScPageTableParam
     BOOL    bSkipEmpty;
     BOOL    bScaleNone;
     BOOL    bScaleAll;
+    BOOL    bScaleTo;
     BOOL    bScalePageNum;
     USHORT  nScaleAll;
+    USHORT  nScaleWidth;
+    USHORT  nScaleHeight;
     USHORT  nScalePageNum;
     USHORT  nFirstPageNo;
 
     ScPageTableParam();
-    ScPageTableParam( const ScPageTableParam& r );
     ~ScPageTableParam();
 
-    ScPageTableParam&   operator=   ( const ScPageTableParam& r );
     BOOL                operator==  ( const ScPageTableParam& r ) const;
     void                Reset       ();
 };
@@ -107,10 +108,8 @@ struct ScPageAreaParam
     ScRange aRepeatCol;
 
     ScPageAreaParam();
-    ScPageAreaParam( const ScPageAreaParam& r );
     ~ScPageAreaParam();
 
-    ScPageAreaParam&    operator=   ( const ScPageAreaParam& r );
     BOOL                operator==  ( const ScPageAreaParam& r ) const;
     void                Reset       ();
 };
