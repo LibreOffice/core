@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.117 $
+ *  $Revision: 1.118 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 17:56:56 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 11:09:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1800,6 +1800,7 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
                             if( pModel->IsWriter() )
                                 aPoint += pObj->GetAnchorPos();
 
+                            ForceMetricToItemPoolMetric( aPoint );
                             pEdgeObj->SetTailPoint( pMap->nWID == OWN_ATTR_EDGE_START_POS, aPoint );
                             return;
                         }
@@ -2461,6 +2462,7 @@ uno::Any SvxShape::_getPropertyValue( const OUString& PropertyName )
                             if( pModel->IsWriter() )
                                 aPoint -= pObj->GetAnchorPos();
 
+                            ForceMetricTo100th_mm( aPoint );
                             awt::Point aUnoPoint( aPoint.X(), aPoint.Y() );
 
                             aAny <<= aUnoPoint;
