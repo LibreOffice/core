@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chartlis.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-20 11:33:20 $
+ *  last change: $Author: nn $ $Date: 2001-07-20 10:03:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,11 +195,7 @@ void ScChartListener::Update()
         bDirty = FALSE;
         //! irgendwann mal erkennen, was sich innerhalb des Charts geaendert hat
         chart::ChartDataChangeEvent aEvent( pUnoData->GetSource(),
-#ifdef TF_ONE51
                                         chart::ChartDataChangeType_ALL,
-#else
-                                        CHARTDATACHANGETYPE_ALL,
-#endif
                                         0, 0, 0, 0 );
         pUnoData->GetListener()->chartDataChanged( aEvent );
     }
