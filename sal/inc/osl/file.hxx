@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 13:13:08 $
+ *  last change: $Author: obo $ $Date: 2004-09-08 16:15:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1017,6 +1017,7 @@ public:
         @see getPos()
         @see read()
         @see write()
+        @see getSize()
         @see setSize()
     */
 
@@ -1132,7 +1133,7 @@ public:
         Sets the file size of an open file. The file can be truncated or enlarged by the function.
         The position of the file pointer is not affeced by this function.
 
-        @param uSize [int]
+        @param uSize [in]
         New size in bytes.
 
         @return
@@ -1148,6 +1149,31 @@ public:
     inline RC setSize( sal_uInt64 uSize )
     {
         return (RC) osl_setFileSize( _pData, uSize );
+    }
+
+    /** Get the file size of an open file.
+
+        Gets the file size of an open file.
+        The position of the file pointer is not affeced by this function.
+
+        @param rSize [out]
+        Current size in bytes.
+
+        @return
+        E_None on success
+        E_INVAL the format of the parameters was not valid
+        E_OVERFLOW the resulting file offset would be a value which cannot  be represented correctly for regular files
+
+        @see open()
+        @see setPos()
+        @see getSize()
+        @see setSize()
+        @see getStatus()
+    */
+
+    inline RC getSize( sal_uInt64 &rSize )
+    {
+        return (RC) osl_getFileSize( _pData, &rSize );
     }
 
     /** Read a number of bytes from a file.
