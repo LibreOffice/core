@@ -296,9 +296,9 @@ close FILEIN;
 close FILEOUT;
 chmod 0755, "$main::currentWorkingDir/setsdkenv_unix";
 
-print "\n... \"setsdkenv_windows.bat\" batch file has been prepared.\n";
+print "\n... \"setsdkenv_unix\" script file has been prepared.\n";
 print "For each time you want to use this configured SDK environment,\n";
-print "you have to run the \"setsdkenv_unix\" file in a new shell!\n\n";
+print "you have to run the \"setsdkenv_unix\" script in a new shell!\n\n";
 
 exit $return;
 
