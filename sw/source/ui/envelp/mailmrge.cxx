@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmrge.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:26:11 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 16:39:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,10 +76,11 @@
 #ifndef _MAILENUM_HXX //autogen
 #include <goodies/mailenum.hxx>
 #endif
-#ifndef _SVX_MULTIFIL_HXX
-#include <svx/multifil.hxx>
-#endif
-
+//CHINA001 #ifndef _SVX_MULTIFIL_HXX
+//CHINA001 #include <svx/multifil.hxx>
+//CHINA001 #endif
+#include <svx/svxdlg.hxx> //CHINA001
+#include <svx/dialogs.hrc> //CHINA001
 #ifndef _HELPID_H
 #include <helpid.h>
 #endif
@@ -755,15 +756,20 @@ IMPL_LINK( SwMailMergeDlg, InsertPathHdl, PushButton *, pBtn )
 
 IMPL_LINK( SwMailMergeDlg, AttachFileHdl, PushButton *, pBtn )
 {
-    SvxMultiFileDialog* pFileDlg = new SvxMultiFileDialog(this);
-    pFileDlg->SetFiles(aAttachED.GetText());
-    pFileDlg->SetHelpId(HID_FILEDLG_MAILMRGE2);
+    //CHINA001 SvxMultiFileDialog* pFileDlg = new SvxMultiFileDialog(this);
+    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+    if(pFact)
+    {
+        AbstractSvxMultiFileDialog* pFileDlg = pFact->CreateSvxMultiFileDialog( this, ResId(RID_SVXDLG_MULTIPATH) );
+        DBG_ASSERT(pFileDlg, "Dialogdiet fail!");//CHINA001
+        pFileDlg->SetFiles(aAttachED.GetText());
+        pFileDlg->SetHelpId(HID_FILEDLG_MAILMRGE2);
 
-    if (pFileDlg->Execute())
-        aAttachED.SetText(pFileDlg->GetFiles());
+        if (pFileDlg->Execute())
+            aAttachED.SetText(pFileDlg->GetFiles());
 
-    delete pFileDlg;
-
+        delete pFileDlg;
+    }
     return 0;
 }
 /* -----------------------------05.06.01 14:56--------------------------------
