@@ -2,9 +2,9 @@
  *
  *  $RCSfile: modcfg.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: os $ $Date: 2001-06-25 14:46:03 $
+ *  last change: $Author: os $ $Date: 2001-09-03 14:50:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -792,7 +792,7 @@ void SwInsertConfig::Load()
             pOLEFormulaOpt = pCapOptions->Find(OLE_CAP, &aGlobalNames[GLOB_NAME_MATH   ]);
             pOLEChartOpt = pCapOptions->Find(OLE_CAP, &aGlobalNames[GLOB_NAME_CHART  ]);
         }
-        else if(aNames.getLength() > 2)
+        else if(!bIsWeb)
             return;
 
         nInsTblFlags = 0;
@@ -800,38 +800,35 @@ void SwInsertConfig::Load()
         {
             if(pValues[nProp].hasValue())
             {
+                sal_Bool bBool = nProp < 5 ? *(sal_Bool*)pValues[nProp].getValue() : sal_False;
                 switch(nProp)
                 {
                     case  0:
                     {
-                        sal_Bool bVal = *(sal_Bool*)pValues[nProp].getValue();
-                        if(bVal)
+                        if(bBool)
                             nInsTblFlags|= HEADLINE;
                     }
                     break;//"Table/Header",
                     case  1:
                     {
-                        sal_Bool bVal = *(sal_Bool*)pValues[nProp].getValue();
-                        if(bVal)
+                        if(bBool)
                             nInsTblFlags|= REPEAT;
                     }
                     break;//"Table/RepeatHeader",
                     case  2:
                     {
-                        sal_Bool bVal = *(sal_Bool*)pValues[nProp].getValue();
-                        if(bVal)
+                        if(bBool)
                             nInsTblFlags|= DEFAULT_BORDER;
                     }
                     break;//"Table/Border",
                     case  3:
                     {
-                        sal_Bool bVal = *(sal_Bool*)pValues[nProp].getValue();
-                        if(bVal)
+                        if(bBool)
                             nInsTblFlags|= SPLIT_LAYOUT;
                     }
                     break;//"Table/Split",
                     case 4:
-                        bInsWithCaption = *(sal_Bool*)pValues[nProp].getValue();
+                        bInsWithCaption = bBool;
                     break;
                     case  5: case  6: case  7: case  8: case  9: case 10: case 11:
                         if(!pWriterTableOpt)
