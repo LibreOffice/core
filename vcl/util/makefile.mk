@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.50 $
+#   $Revision: 1.51 $
 #
-#   last change: $Author: vg $ $Date: 2004-01-06 14:47:00 $
+#   last change: $Author: hr $ $Date: 2004-02-04 14:46:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -310,8 +310,8 @@ SHL2STDLIBS += -lXext -lSM -lICE -lX11
 .ELSE           # "$(OS)"=="SOLARIS"
 .IF "$(CPU)" == "I"
 SHL2STDLIBS += -Wl,-Bstatic -lXinerama -Wl,-Bdynamic 
-SHL2STDLIBS += -lXext -lSM -lICE -lX11
 .ENDIF 			# "$(CPU)=="I"
+SHL2STDLIBS += -lXext -lSM -lICE -lX11
 .ENDIF          # "$(OS)"=="SOLARIS"
 
 .ENDIF          # "$(GUIBASE)"=="unx"
