@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexppr.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:26:45 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:16:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -463,6 +463,7 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
                 FilterPropertyInfoList_Impl::iterator *pPropIter = aPropIters;
 
                 FilterPropertyInfoList_Impl::iterator aItr = aPropInfos.begin();
+                OSL_ENSURE(aItr != aPropInfos.end(),"Invalid iterator!");
 
                 pStates = aStates.getConstArray();
                 i = 0;
@@ -515,6 +516,7 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
                 sal_Bool bGotValue = sal_False;
                 XMLPropertyState aNewProperty( -1 );
                 aNewProperty.maValue = *pValues;
+                ++pValues;
                 for( std::list<sal_uInt32>::iterator aIndexItr =
                         aItr->GetIndexes().begin();
                     aIndexItr != aItr->GetIndexes().end();
