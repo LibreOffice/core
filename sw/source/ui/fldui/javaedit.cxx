@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javaedit.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-03 16:53:21 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 15:28:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,6 @@
 
 // include ---------------------------------------------------------------
 
-#ifdef PRECOMPILED
-#include "ui_pch.hxx"
-#endif
 
 #pragma hdrstop
 
