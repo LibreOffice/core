@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pamain.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jbu $ $Date: 2002-10-01 10:41:46 $
+ *  last change: $Author: pl $ $Date: 2002-11-22 13:09:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,8 @@ void MyApp::Main()
     //-------------------------------------------------
     Reference< XComponentContext > xCtx = defaultBootstrap_InitialComponentContext();
     Reference< XMultiServiceFactory > xFactory(  xCtx->getServiceManager(), UNO_QUERY );
-
+    if( xFactory.is() )
+        setProcessServiceFactory( xFactory );
     /*
      *  Create UCB.
      */
