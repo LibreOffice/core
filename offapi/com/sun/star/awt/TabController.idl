@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TabController.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:40 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 08:52:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,19 +65,19 @@
 #include <com/sun/star/awt/XTabController.idl>
 #endif
 
+
 //=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
 //=============================================================================
 
-/** specifies a standard tab controller
+/** specifies a standard tab controller.
  */
-
 service TabController
 {
-    // DocMerge: empty anyway
-    interface XTabController;
+    interface com::sun::star::awt::XTabController;
+
 };
 
 //=============================================================================
@@ -85,4 +85,3 @@ service TabController
 }; }; }; };
 
 #endif
-
