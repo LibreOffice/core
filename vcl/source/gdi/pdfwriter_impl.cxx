@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 12:31:02 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 11:22:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2819,7 +2819,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
     TextAlign eAlign = m_aCurrentPDFState.m_aFont.GetAlign();
 
     // transform font height back to current units
-    nFontHeight = m_pReferenceDevice->ImplDevicePixelToLogicWidth( nFontHeight );
+    nFontHeight = m_pReferenceDevice->ImplDevicePixelToLogicHeight( nFontHeight );
     if( m_aCurrentPDFState.m_aFont.GetWidth() )
     {
         Font aFont( m_aCurrentPDFState.m_aFont );
@@ -2833,6 +2833,11 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
         }
         // force state before GetFontMetric
         m_pReferenceDevice->ImplNewFont();
+    }
+    // if the mapmode is distorted we need to adjust for that also
+    if( m_aCurrentPDFState.m_aMapMode.GetScaleX() != m_aCurrentPDFState.m_aMapMode.GetScaleY() )
+    {
+        fXScale *= (double)(m_aCurrentPDFState.m_aMapMode.GetScaleX() / m_aCurrentPDFState.m_aMapMode.GetScaleY());
     }
 
     double fAngle = (double)m_aCurrentPDFState.m_aFont.GetOrientation() * M_PI / 1800.0;
