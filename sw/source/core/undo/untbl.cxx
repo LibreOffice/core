@@ -2,9 +2,9 @@
  *
  *  $RCSfile: untbl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 09:57:43 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:48:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,12 +305,12 @@ USHORT __FAR_DATA aSave_BoxCntntSet[] = {
 
 
 SwUndoInsTbl::SwUndoInsTbl( const SwPosition& rPos, USHORT nCl, USHORT nRw,
-                            USHORT nAdj, USHORT nInsert,
+                            USHORT nAdj, const SwInsertTableOptions& rInsTblOpts,
                             const SwTableAutoFmt* pTAFmt,
                             const SvUShorts* pColArr )
     : SwUndo( UNDO_INSTABLE ), nSttNode( rPos.nNode.GetIndex() ),
     nRows( nRw ), nCols( nCl ), nAdjust( nAdj ), pDDEFldType( 0 ),
-    nInsTblFlags( nInsert ), pColWidth( 0 ), pRedlData( 0 ), pAutoFmt( 0 )
+    aInsTblOpts( rInsTblOpts ), pColWidth( 0 ), pRedlData( 0 ), pAutoFmt( 0 )
 {
     if( pColArr )
     {
@@ -391,9 +391,9 @@ void SwUndoInsTbl::Redo( SwUndoIter& rUndoIter )
 
     SwPosition aPos( *rUndoIter.pAktPam->GetPoint() );
     aPos.nNode = nSttNode;
-    const SwTable* pTbl = rDoc.InsertTable( aPos, nRows, nCols,
-                                    (SwHoriOrient)nAdjust,
-                                    nInsTblFlags, pAutoFmt, pColWidth );
+    const SwTable* pTbl = rDoc.InsertTable( aInsTblOpts, aPos, nRows, nCols,
+                                            (SwHoriOrient)nAdjust,
+                                            pAutoFmt, pColWidth );
     ((SwFrmFmt*)pTbl->GetFrmFmt())->SetName( sTblNm );
     SwTableNode* pTblNode = (SwTableNode*)rDoc.GetNodes()[nSttNode]->GetTableNode();
 
@@ -433,9 +433,9 @@ void SwUndoInsTbl::Repeat( SwUndoIter& rUndoIter )
 {
     // keine Tabelle in Tabelle
     if( !rUndoIter.pAktPam->GetNode()->FindTableNode() )
-        rUndoIter.GetDoc().InsertTable( *rUndoIter.pAktPam->GetPoint(),
-                                    nRows, nCols, (SwHoriOrient)nAdjust,
-                                    nInsTblFlags, pAutoFmt, pColWidth );
+        rUndoIter.GetDoc().InsertTable( aInsTblOpts, *rUndoIter.pAktPam->GetPoint(),
+                                        nRows, nCols, (SwHoriOrient)nAdjust,
+                                        pAutoFmt, pColWidth );
 }
 
 // -----------------------------------------------------
@@ -469,7 +469,7 @@ SwUndoTblToTxt::SwUndoTblToTxt( const SwTable& rTbl, sal_Unicode cCh )
     nSttNd( 0 ), nEndNd( 0 ), cTrenner( cCh ), pDDEFldType( 0 ),
     nAdjust( rTbl.GetFrmFmt()->GetHoriOrient().GetHoriOrient() ),
     sTblNm( rTbl.GetFrmFmt()->GetName() ),
-    bHdlnRpt( rTbl.IsHeadlineRepeat() ),
+    nHdlnRpt( rTbl.GetRowsToRepeat() ),
     pHistory( 0 )
 {
     pTblSave = new _SaveTable( rTbl );
@@ -538,7 +538,7 @@ void SwUndoTblToTxt::Undo( SwUndoIter& rUndoIter )
                                                             *pBoxSaves );
     SwTableFmt* pTableFmt = rDoc.MakeTblFrmFmt( sTblNm, rDoc.GetDfltFrmFmt() );
     pTableFmt->Add( &pTblNd->GetTable() );      // das Frame-Format setzen
-    pTblNd->GetTable().SetHeadlineRepeat( bHdlnRpt );
+    pTblNd->GetTable().SetRowsToRepeat( nHdlnRpt );
 
     // erzeuge die alte Tabellen Struktur
     pTblSave->CreateNew( pTblNd->GetTable() );
@@ -747,12 +747,13 @@ void SwUndoTblToTxt::AddBoxPos( SwDoc& rDoc, ULONG nNdIdx, xub_StrLen nCntntIdx 
 
 // -----------------------------------------------------
 
-SwUndoTxtToTbl::SwUndoTxtToTbl( const SwPaM& rRg, sal_Unicode cCh, USHORT nAdj,
-                                USHORT nInsert, const SwTableAutoFmt* pAFmt )
-    : SwUndo( UNDO_TEXTTOTABLE ), SwUndRng( rRg ), pAutoFmt( 0 ),
-    nAdjust( nAdj ), cTrenner( cCh ), pDelBoxes( 0 ), nInsTblFlags( nInsert ),
-    pHistory( 0 )
-
+SwUndoTxtToTbl::SwUndoTxtToTbl( const SwPaM& rRg,
+                                const SwInsertTableOptions& rInsTblOpts,
+                                sal_Unicode cCh, USHORT nAdj,
+                                const SwTableAutoFmt* pAFmt )
+    : SwUndo( UNDO_TEXTTOTABLE ), SwUndRng( rRg ), aInsTblOpts( rInsTblOpts ),
+      pAutoFmt( 0 ), nAdjust( nAdj ), cTrenner( cCh ), pDelBoxes( 0 ),
+      pHistory( 0 )
 {
     if( pAFmt )
         pAutoFmt = new SwTableAutoFmt( *pAFmt );
@@ -853,8 +854,8 @@ void SwUndoTxtToTbl::Redo( SwUndoIter& rUndoIter )
     SetPaM( rUndoIter );
 
     const SwTable* pTable = rUndoIter.GetDoc().TextToTable(
-                *rUndoIter.pAktPam, cTrenner, (SwHoriOrient)nAdjust,
-                nInsTblFlags, pAutoFmt );
+                aInsTblOpts, *rUndoIter.pAktPam, cTrenner,
+                (SwHoriOrient)nAdjust, pAutoFmt );
     ((SwFrmFmt*)pTable->GetFrmFmt())->SetName( sTblNm );
 }
 
@@ -863,8 +864,9 @@ void SwUndoTxtToTbl::Repeat( SwUndoIter& rUndoIter )
 {
     // keine Tabelle in Tabelle
     if( !rUndoIter.pAktPam->GetNode()->FindTableNode() )
-        rUndoIter.GetDoc().TextToTable( *rUndoIter.pAktPam, cTrenner,
-                            (SwHoriOrient)nAdjust, nInsTblFlags, pAutoFmt );
+        rUndoIter.GetDoc().TextToTable( aInsTblOpts, *rUndoIter.pAktPam,
+                                        cTrenner, (SwHoriOrient)nAdjust,
+                                        pAutoFmt );
 }
 
 void SwUndoTxtToTbl::AddFillBox( const SwTableBox& rBox )
@@ -883,9 +885,11 @@ SwHistory& SwUndoTxtToTbl::GetHistory()
 
 // -----------------------------------------------------
 
-SwUndoTblHeadline::SwUndoTblHeadline( const SwTable& rTbl, BOOL bOldHdl )
+SwUndoTblHeadline::SwUndoTblHeadline( const SwTable& rTbl, USHORT nOldHdl,
+                                      USHORT nNewHdl )
     : SwUndo( UNDO_TABLEHEADLINE ),
-    bOldHeadline( bOldHdl )
+    nOldHeadline( nOldHdl ),
+    nNewHeadline( nNewHdl )
 {
     ASSERT( rTbl.GetTabSortBoxes().Count(), "Tabelle ohne Inhalt" );
     const SwStartNode *pSttNd = rTbl.GetTabSortBoxes()[ 0 ]->GetSttNd();
@@ -901,7 +905,7 @@ void SwUndoTblHeadline::Undo( SwUndoIter& rUndoIter )
     SwTableNode* pTNd = rDoc.GetNodes()[ nTblNd ]->GetTableNode();
     ASSERT( pTNd, "keinen Tabellen-Node gefunden" );
 
-    rDoc.SetHeadlineRepeat( pTNd->GetTable(), bOldHeadline );
+    rDoc.SetRowsToRepeat( pTNd->GetTable(), nOldHeadline );
 }
 
 
@@ -912,7 +916,7 @@ void SwUndoTblHeadline::Redo( SwUndoIter& rUndoIter )
     SwTableNode* pTNd = rDoc.GetNodes()[ nTblNd ]->GetTableNode();
     ASSERT( pTNd, "keinen Tabellen-Node gefunden" );
 
-    rDoc.SetHeadlineRepeat( pTNd->GetTable(), !bOldHeadline );
+    rDoc.SetRowsToRepeat( pTNd->GetTable(), nNewHeadline );
 }
 
 
@@ -920,8 +924,7 @@ void SwUndoTblHeadline::Repeat( SwUndoIter& rUndoIter )
 {
     SwTableNode* pTblNd = rUndoIter.pAktPam->GetNode()->FindTableNode();
     if( pTblNd )
-        rUndoIter.GetDoc().SetHeadlineRepeat( pTblNd->GetTable(),
-                                                !bOldHeadline );
+        rUndoIter.GetDoc().SetRowsToRepeat( pTblNd->GetTable(), nNewHeadline );
 }
 
 
