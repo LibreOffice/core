@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layact.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:10:13 $
+ *  last change: $Author: kz $ $Date: 2004-08-30 16:32:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2139,7 +2139,10 @@ BOOL SwLayAction::FormatCntnt( const SwPageFrm *pPage )
 
             // OD 2004-05-10 #i28701# - format floating screen object at content frame.
             // No format, if action flag <bAgain> is set or action is interrupted.
-            if ( !IsAgain() && !IsInterrupt() &&
+            // OD 2004-08-30 #117736# - allow format on interruption of action, if
+            // it's the format for this interrupt
+            if ( !IsAgain() &&
+                 ( !IsInterrupt() || mbFormatCntntOnInterrupt ) &&
                  pCntnt->IsTxtFrm() &&
                  !SwObjectFormatter::FormatObjsAtFrm( *(const_cast<SwCntntFrm*>(pCntnt)),
                                                       *pPage, this ) )
