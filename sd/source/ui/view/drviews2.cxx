@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews2.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 13:12:29 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-28 13:34:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,6 +201,17 @@
 #endif
 #include "sdabstdlg.hxx" //CHINA001
 #include "new_foil.hrc" //CHINA001
+
+#ifndef _COM_SUN_STAR_DRAWING_XMASTERPAGESSUPPLIER_HPP_
+#include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGES_HPP_
+#include <com/sun/star/drawing/XDrawPages.hpp>
+#endif
+
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+
 namespace sd {
 
 /*************************************************************************
@@ -469,6 +480,35 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if (pFuActual && pFuActual->GetSlotID() == SID_BEZIER_EDIT )
                 GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
             rReq.Done ();
+        break;
+
+        case SID_INSERT_MASTER_PAGE:
+        {
+            // Use the API to create a new page.
+            Reference<drawing::XMasterPagesSupplier> xMasterPagesSupplier (
+                GetDoc()->getUnoModel(), UNO_QUERY);
+            if (xMasterPagesSupplier.is())
+            {
+                Reference<drawing::XDrawPages> xMasterPages (
+                    xMasterPagesSupplier->getMasterPages());
+                if (xMasterPages.is())
+                {
+                    USHORT nIndex = GetCurPageId();
+                    xMasterPages->insertNewByIndex (nIndex);
+
+                    // Create shapes for the default layout.
+                    SdPage* pMasterPage = GetDoc()->GetMasterSdPage(
+                        nIndex, PK_STANDARD);
+                    pMasterPage->CreateTitleAndLayout (TRUE,TRUE);
+                }
+            }
+
+            Cancel();
+            if (pFuActual && pFuActual->GetSlotID() == SID_BEZIER_EDIT )
+                GetViewFrame()->GetDispatcher()->Execute(
+                    SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
+            rReq.Done ();
+        }
         break;
 
         case SID_MODIFYPAGE:
@@ -746,6 +786,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         break;
 
         case SID_RENAMEPAGE:
+        case SID_RENAME_MASTER_PAGE:
         {
             if (ePageKind==PK_STANDARD || ePageKind==PK_NOTES )
             {
@@ -1196,6 +1237,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         break;
 
         case SID_DELETE_PAGE:
+        case SID_DELETE_MASTER_PAGE:
             DeleteActualPage();
             Cancel();
             rReq.Ignore ();
