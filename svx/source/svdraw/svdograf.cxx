@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: ka $ $Date: 2001-09-25 16:17:09 $
+ *  last change: $Author: thb $ $Date: 2001-10-16 11:12:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,6 +347,13 @@ Graphic SdrGrafObj::GetTransformedGraphic( ULONG nTransformFlags ) const
         }
 
         aTransGraphic = pGraphic->GetTransformedGraphic( &aActAttr );
+
+        if( nTransformFlags & SDRGRAFOBJ_TRANSFORMATTR_SIZE )
+        {
+            // #86518# also set size and mapmode to new graphic
+            aTransGraphic.SetPrefMapMode( GetModel()->GetScaleUnit() );
+            aTransGraphic.SetPrefSize( GetSnapRect().GetSize() );
+        }
     }
 
     return aTransGraphic;
@@ -530,6 +537,9 @@ void SdrGrafObj::SetGraphicLink( const String& rFileName, const String& rFilterN
     aFilterName = rFilterName;
     ImpLinkAnmeldung();
     pGraphic->SetUserData();
+
+    // #92205# A linked graphic is per definition swapped out (has to be loaded)
+    pGraphic->SetSwapState();
 }
 
 // -----------------------------------------------------------------------------
