@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TabControllerModel.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-09-08 13:03:04 $
+ *  last change:$Date: 2004-01-05 20:42:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,12 @@
  *
  *
  ************************************************************************/
-
 package mod._toolkit;
+
+import com.sun.star.drawing.XControlShape;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.text.XTextDocument;
+import com.sun.star.uno.XInterface;
 
 import java.io.PrintWriter;
 
@@ -67,69 +71,69 @@ import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
+
 import util.FormTools;
 import util.WriterTools;
 import util.utils;
 
-import com.sun.star.drawing.XControlShape;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.text.XTextDocument;
-import com.sun.star.uno.XInterface;
 
 public class TabControllerModel extends TestCase {
-
     XTextDocument xTextDoc;
 
     protected void initialize(TestParameters param, PrintWriter log) {
         try {
-            log.println( "creating a textdocument" );
-            xTextDoc = WriterTools.createTextDoc((XMultiServiceFactory)param.getMSF());
-        } catch ( Exception e ) {
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't create document", e );
+            log.println("creating a textdocument");
+            xTextDoc = WriterTools.createTextDoc(
+                               (XMultiServiceFactory) param.getMSF());
+        } catch (Exception e) {
+            e.printStackTrace(log);
+            throw new StatusException("Couldn't create document", e);
         }
     }
 
     protected void cleanup(TestParameters param, PrintWriter log) {
-        log.println( "disposing xTextDoc" );
-        xTextDoc.dispose();
+        log.println("disposing xTextDoc");
+        util.DesktopTools.closeDoc(xTextDoc);
+        ;
     }
 
-    public TestEnvironment createTestEnvironment( TestParameters param,
-                                                  PrintWriter log ) {
-
+    public TestEnvironment createTestEnvironment(TestParameters param,
+                                                 PrintWriter log) {
         XInterface oObj = null;
 
-        log.println( "inserting some ControlShapes" );
-        XControlShape shape1 = FormTools.createControlShape(
-                                xTextDoc,3000,4500,15000,1000,"CommandButton");
-        XControlShape shape2 = FormTools.createControlShape(
-                                xTextDoc,5000,3500,7500,5000,"TextField");
+        log.println("inserting some ControlShapes");
+
+        XControlShape shape1 = FormTools.createControlShape(xTextDoc, 3000,
+                                                            4500, 15000, 1000,
+                                                            "CommandButton");
+        XControlShape shape2 = FormTools.createControlShape(xTextDoc, 5000,
+                                                            3500, 7500, 5000,
+                                                            "TextField");
 
         try {
-            oObj = (XInterface) ((XMultiServiceFactory)param.getMSF()).createInstance(
-                                    "com.sun.star.awt.TabControllerModel");
+            oObj = (XInterface) ((XMultiServiceFactory) param.getMSF()).createInstance(
+                           "com.sun.star.awt.TabControllerModel");
         } catch (Exception e) {
             e.printStackTrace(log);
             throw new StatusException("Couldn't create " +
-                                                "TabControllerModel", e);
+                                      "TabControllerModel", e);
         }
 
-        log.println( "creating a new environment for TabControllerModel" );
-        TestEnvironment tEnv = new TestEnvironment( oObj );
+        log.println("creating a new environment for TabControllerModel");
 
-        tEnv.addObjRelation("OBJNAME", "stardiv.vcl.controlmodel.TabController");
-        tEnv.addObjRelation("Model1",shape1.getControl());
-        tEnv.addObjRelation("Model2",shape2.getControl());
+        TestEnvironment tEnv = new TestEnvironment(oObj);
+
+        tEnv.addObjRelation("OBJNAME",
+                            "stardiv.vcl.controlmodel.TabController");
+        tEnv.addObjRelation("Model1", shape1.getControl());
+        tEnv.addObjRelation("Model2", shape2.getControl());
+
 
         //Object Relation for XPersistObject
-        tEnv.addObjRelation("noPS",new Boolean(true));
+        tEnv.addObjRelation("noPS", new Boolean(true));
 
-        System.out.println("ImplementationName: "+utils.getImplName(oObj));
+        System.out.println("ImplementationName: " + utils.getImplName(oObj));
 
         return tEnv;
-
     } // finish method getTestEnvironment
-
-}    // finish class TabControllerModel
-
+} // finish class TabControllerModel
