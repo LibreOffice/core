@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pardlg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:46:54 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 13:42:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,13 +204,19 @@ SwParaDlg::SwParaDlg(Window *pParent,
         if(!bHtmlMode || (nHtmlMode & HTMLMODE_FULL_STYLES))
         {
             AddTabPage(TP_DROPCAPS,  SwDropCapsPage::Create,        SwDropCapsPage::GetRanges);
+        }
+        else
+        {
+            RemoveTabPage(TP_DROPCAPS);
+        }
+        if(!bHtmlMode || (nHtmlMode & (HTMLMODE_SOME_STYLES|HTMLMODE_FULL_STYLES)))
+        {
             DBG_ASSERT(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageCreatorFunc fail!");//CHINA001
             DBG_ASSERT(pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageRangesFunc fail!");//CHINA001
             AddTabPage(TP_BACKGROUND, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ) ); //CHINA001 AddTabPage(TP_BACKGROUND,SvxBackgroundTabPage::Create,    SvxBackgroundTabPage::GetRanges);
         }
         else
         {
-            RemoveTabPage(TP_DROPCAPS);
             RemoveTabPage(TP_BACKGROUND);
         }
         if(!bHtmlMode || (nHtmlMode & HTMLMODE_PARA_BORDER))
