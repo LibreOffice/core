@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redcom.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:34:15 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:01:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,15 +62,16 @@
 #ifndef SC_REDCOM_HXX
 #define SC_REDCOM_HXX
 
-#ifndef _SVX_POSTDLG_HXX //autogen
-#include <svx/postdlg.hxx>
-#endif
+//CHINA001 #ifndef _SVX_POSTDLG_HXX //autogen
+//CHINA001 #include <svx/postdlg.hxx>
+//CHINA001 #endif
 
 #ifndef SC_CHGTRACK_HXX
 #include "chgtrack.hxx"
 #endif
 
 class ScDocShell;
+class AbstractSvxPostItDialog; //CHINA001
 
 class ScRedComDialog
 {
@@ -79,10 +80,10 @@ private:
     ScChangeAction  *pChangeAction;
     ScDocShell      *pDocShell;
     String          aComment;
-    SvxPostItDialog* pDlg;
+    AbstractSvxPostItDialog* pDlg;
 
-    DECL_LINK( PrevHdl, SvxPostItDialog* );
-    DECL_LINK( NextHdl, SvxPostItDialog* );
+    DECL_LINK( PrevHdl, AbstractSvxPostItDialog* );
+    DECL_LINK( NextHdl, AbstractSvxPostItDialog* );
 
 protected:
 
