@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: ka $ $Date: 2001-04-02 14:33:08 $
+ *  last change: $Author: fs $ $Date: 2001-04-03 08:12:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,13 @@
 #ifndef _FILELIST_HXX
 #include <sot/filelist.hxx>
 #endif
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
+#endif
 
+#ifndef _COM_SUN_STAR_DATATRANSFER_CLIPBOARD_XCLIPBOARDNOTIFIER_HPP_
+#include <com/sun/star/datatransfer/clipboard/XClipboardNotifier.hpp>
+#endif
 #ifndef _COM_SUN_STAR_DATATRANSFER_CLIPBOARD_XFLUSHABLECLIPBOARD_HPP_
 #include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
 #endif
@@ -924,12 +930,55 @@ Reference< XClipboard> TransferableHelper::GetSystemClipboard()
     return xClipboard;
 }
 
+// ---------------------------------
+// - TransferableClipboardNotifier -
+// ---------------------------------
+
+class TransferableClipboardNotifier : public ::cppu::WeakImplHelper1< XClipboardListener >
+{
+protected:
+    TransferableDataHelper*     mpListener;
+
+public:
+    TransferableClipboardNotifier( TransferableDataHelper* _pListener );
+
+protected:
+    // XClipboardListener
+    virtual void SAL_CALL changedContents( const clipboard::ClipboardEvent& event ) throw (RuntimeException);
+    // XEventListener
+    virtual void SAL_CALL disposing( const EventObject& Source ) throw (RuntimeException);
+};
+
+// -----------------------------------------------------------------------------
+
+TransferableClipboardNotifier::TransferableClipboardNotifier( TransferableDataHelper* _pListener )
+    :mpListener( _pListener )
+{
+    DBG_ASSERT( mpListener, "TransferableClipboardNotifier::TransferableClipboardNotifier: invalid master listener!" );
+}
+
+// -----------------------------------------------------------------------------
+
+void SAL_CALL TransferableClipboardNotifier::changedContents( const clipboard::ClipboardEvent& event ) throw (RuntimeException)
+{
+    if (mpListener)
+        mpListener->ClipboardContentChanged( event.Contents );
+}
+
+// -----------------------------------------------------------------------------
+
+void SAL_CALL TransferableClipboardNotifier::disposing( const EventObject& Source ) throw (RuntimeException)
+{
+    mpListener = NULL;
+}
+
 // --------------------------
 // - TransferableDataHelper -
 // --------------------------
 
 TransferableDataHelper::TransferableDataHelper() :
-    mpFormats( new DataFlavorExVector )
+    mpFormats( new DataFlavorExVector ),
+    mpClipboardListener( NULL )
 {
 }
 
@@ -937,7 +986,8 @@ TransferableDataHelper::TransferableDataHelper() :
 
 TransferableDataHelper::TransferableDataHelper( const Reference< ::com::sun::star::datatransfer::XTransferable >& rxTransferable ) :
     mxTransfer( rxTransferable ),
-    mpFormats( new DataFlavorExVector )
+    mpFormats( new DataFlavorExVector ),
+    mpClipboardListener( NULL )
 {
     InitFormats();
 }
@@ -946,7 +996,9 @@ TransferableDataHelper::TransferableDataHelper( const Reference< ::com::sun::sta
 
 TransferableDataHelper::TransferableDataHelper( const TransferableDataHelper& rDataHelper ) :
     mxTransfer( rDataHelper.mxTransfer ),
-    mpFormats( new DataFlavorExVector( *rDataHelper.mpFormats ) )
+    mpFormats( new DataFlavorExVector( *rDataHelper.mpFormats ) ),
+    mxClipboard( rDataHelper.mxClipboard ),
+    mpClipboardListener( NULL )
 {
 }
 
@@ -965,6 +1017,7 @@ TransferableDataHelper& TransferableDataHelper::operator=( const TransferableDat
 TransferableDataHelper::~TransferableDataHelper()
 {
     delete mpFormats;
+    StopClipboardListening( );
 }
 
 // -----------------------------------------------------------------------------
@@ -1566,6 +1619,40 @@ sal_Bool TransferableDataHelper::GetInterface( const DataFlavor& rFlavor, Refere
 }
 
 // -----------------------------------------------------------------------------
+void TransferableDataHelper::ClipboardContentChanged( const Reference< XTransferable >& _rxNewContent )
+{
+    mxTransfer = _rxNewContent;
+    InitFormats();
+}
+
+// -----------------------------------------------------------------------------
+
+sal_Bool TransferableDataHelper::StartClipboardListening( )
+{
+    if (mpClipboardListener)
+        StopClipboardListening( );
+
+    Reference< XClipboardNotifier > xNotifier(mxClipboard, UNO_QUERY);
+    if (xNotifier.is())
+    {
+        mpClipboardListener = new TransferableClipboardNotifier( this );
+        xNotifier->addClipboardListener( mpClipboardListener );
+        return sal_True;
+    }
+    return sal_False;
+}
+
+// -----------------------------------------------------------------------------
+
+void TransferableDataHelper::StopClipboardListening( )
+{
+    Reference< XClipboardNotifier > xNotifier(mxClipboard, UNO_QUERY);
+    if (mpClipboardListener && xNotifier.is())
+        xNotifier->removeClipboardListener( mpClipboardListener );
+    mpClipboardListener = NULL;
+}
+
+// -----------------------------------------------------------------------------
 
 TransferableDataHelper TransferableDataHelper::CreateFromSystemClipboard()
 {
@@ -1574,6 +1661,8 @@ TransferableDataHelper TransferableDataHelper::CreateFromSystemClipboard()
 
     if( xClipboard.is() )
     {
+        const sal_uInt32 nRef = Application::ReleaseSolarMutex();
+
         try
         {
             Reference< XTransferable > xTransferable( xClipboard->getContents() );
@@ -1587,6 +1676,8 @@ TransferableDataHelper TransferableDataHelper::CreateFromSystemClipboard()
         catch( const ::com::sun::star::uno::Exception& )
         {
         }
+
+        Application::AcquireSolarMutex( nRef );
     }
 
     return aRet;
