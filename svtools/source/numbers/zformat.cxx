@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: er $ $Date: 2002-12-05 16:38:08 $
+ *  last change: $Author: er $ $Date: 2002-12-06 18:05:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2250,7 +2250,7 @@ BOOL SvNumberformat::GetOutputString(double fNumber,
                 else
                 {
                     char aBuf[100];
-                    sprintf( aBuf, "%.f", fNum );   // simple rounded integer
+                    sprintf( aBuf, "%.f", fNum );   // simple rounded integer (#100211# - checked)
                     sStr.AssignAscii( aBuf );
                     ImpTransliterate( sStr, NumFor[nIx].GetNatNum() );
                 }
