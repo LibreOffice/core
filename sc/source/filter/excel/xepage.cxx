@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xepage.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 16:19:05 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:12:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,9 +361,14 @@ XclExpPageSettings::XclExpPageSettings( const XclExpRoot& rRoot ) :
 
     // *** page breaks ***
 
-    for( SCROW nScRow = 1, nScMaxRow = GetMaxPos().Row(); nScRow <= nScMaxRow; ++nScRow )
-        if( rDoc.GetRowFlags( nScRow, nScTab ) & CR_MANUALBREAK )
-            maData.maHorPageBreaks.push_back( static_cast< sal_uInt16 >( nScRow ) );
+    ScCompressedArrayIterator< SCROW, BYTE> aIter( rDoc.GetRowFlagsArray( nScTab), 1, GetMaxPos().Row());
+    do
+    {
+        if (*aIter & CR_MANUALBREAK)
+            for (SCROW j=aIter.GetRangeStart(); j<=aIter.GetRangeEnd(); ++j)
+                maData.maHorPageBreaks.push_back( static_cast< sal_uInt16 >( j ) );
+    } while (aIter.NextRange());
+
     for( SCCOL nScCol = 1, nScMaxCol = GetMaxPos().Col(); nScCol <= nScMaxCol; ++nScCol )
         if( rDoc.GetColFlags( nScCol, nScTab ) & CR_MANUALBREAK )
             maData.maVerPageBreaks.push_back( static_cast< sal_uInt16 >( nScCol ) );
