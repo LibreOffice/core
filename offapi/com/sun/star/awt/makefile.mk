@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: rt $ $Date: 2004-02-10 15:55:02 $
+#   last change: $Author: kz $ $Date: 2004-02-25 16:55:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -275,6 +275,7 @@ IDLFILES=\
     XSpinListener.idl\
     XSpinValue.idl\
     XSystemChildFactory.idl\
+    XSystemDependentMenuPeer.idl\
     XSystemDependentWindowPeer.idl\
     SystemDependentXWindow.idl\
     XTabController.idl\
@@ -297,7 +298,8 @@ IDLFILES=\
     XView.idl\
     XWindow.idl\
     XWindowListener.idl\
-    XWindowPeer.idl
+    XWindowPeer.idl\
+    XMenuExtended.idl
 
 # ------------------------------------------------------------------
 
