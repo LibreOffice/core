@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2002-06-10 15:21:04 $
+ *  last change: $Author: ghiggins $ $Date: 2002-06-26 22:27:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -514,7 +514,7 @@ String STR_ASK_START_SETUP_MANUALLY
 
 String STR_SSO_REQUEST
 {
-    Text = "Bitte geben Sie ihren Benutzernamen und ihr Passwort ein. ";
+    Text = "Bitte geben Sie Ihren Benutzernamen und Ihr Kennwort ein. ";
     Text[ ENGLISH ] = "Please enter you Single Signon username and password. ";
     Text[ english_us ] = "Please enter your single sign-on user name and password. ";
     Text[ portuguese ] = "Please enter you Single Signon username and password. ";
