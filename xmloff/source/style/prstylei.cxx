@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prstylei.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-16 16:36:55 $
+ *  last change: $Author: sab $ $Date: 2001-02-28 08:24:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,11 +129,10 @@ XMLPropStyleContext::XMLPropStyleContext( SvXMLImport& rImport,
         const Reference< XAttributeList > & xAttrList,
         SvXMLStylesContext& rStyles, sal_uInt16 nFamily,
         sal_Bool bDefault ) :
-    SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList, nFamily ),
+    SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList, nFamily, bDefault ),
     xStyles( &rStyles ),
     sIsPhysical( RTL_CONSTASCII_USTRINGPARAM( "IsPhysical" ) ),
-    sFollowStyle( RTL_CONSTASCII_USTRINGPARAM( "FollowStyle" ) ),
-    bDefaultStyle( bDefault )
+    sFollowStyle( RTL_CONSTASCII_USTRINGPARAM( "FollowStyle" ) )
 {
 }
 
@@ -179,6 +178,10 @@ void XMLPropStyleContext::FillPropertySet(
         xImpPrMap->FillPropertySet( aProperties, rPropSet );
 }
 
+void XMLPropStyleContext::SetDefaults()
+{
+}
+
 Reference < XStyle > XMLPropStyleContext::Create()
 {
     Reference < XStyle > xNewStyle;
@@ -204,7 +207,7 @@ Reference < XStyle > XMLPropStyleContext::Create()
 void XMLPropStyleContext::CreateAndInsert( sal_Bool bOverwrite )
 {
     const OUString& rName = GetName();
-    if( 0 == rName.getLength() || bDefaultStyle )
+    if( 0 == rName.getLength() || IsDefaultStyle() )
         return;
 
     Reference < XNameContainer > xFamilies =

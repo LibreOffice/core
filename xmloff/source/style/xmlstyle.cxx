@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-01 09:49:03 $
+ *  last change: $Author: sab $ $Date: 2001-02-28 08:24:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,12 +269,13 @@ SvXMLStyleContext::SvXMLStyleContext(
         SvXMLImport& rImp, sal_uInt16 nPrfx,
         const OUString& rLName,
         const uno::Reference< xml::sax::XAttributeList >&,
-        sal_uInt16 nFam ) :
+        sal_uInt16 nFam, sal_Bool bDefault ) :
     SvXMLImportContext( rImp, nPrfx, rLName ),
     nHelpId( UCHAR_MAX ),
     nFamily( nFam ),
     bValid( sal_True ),
-    bNew( sal_True )
+    bNew( sal_True ),
+    bDefaultStyle( bDefault )
 {
 }
 
@@ -301,6 +302,10 @@ void SvXMLStyleContext::StartElement( const uno::Reference< xml::sax::XAttribute
 
         SetAttribute( nPrefix, aLocalName, rValue );
     }
+}
+
+void SvXMLStyleContext::SetDefaults()
+{
 }
 
 void SvXMLStyleContext::CreateAndInsert( sal_Bool bOverwrite )
@@ -984,7 +989,9 @@ void SvXMLStylesContext::CopyStylesToDoc( sal_Bool bOverwrite,
         if( !pStyle )
             continue;
 
-        if( InsertStyleFamily( pStyle->GetFamily() ) )
+        if (pStyle->IsDefaultStyle())
+            pStyle->SetDefaults();
+        else if( InsertStyleFamily( pStyle->GetFamily() ) )
             pStyle->CreateAndInsert( bOverwrite );
     }
 
@@ -992,7 +999,7 @@ void SvXMLStylesContext::CopyStylesToDoc( sal_Bool bOverwrite,
     for( i=0; i<nCount; i++ )
     {
         SvXMLStyleContext *pStyle = GetStyle( i );
-        if( !pStyle )
+        if( !pStyle || pStyle->IsDefaultStyle())
             continue;
 
         if( InsertStyleFamily( pStyle->GetFamily() ) )
@@ -1010,7 +1017,7 @@ void SvXMLStylesContext::FinishStyles( sal_Bool bOverwrite )
     for( sal_uInt32 i=0; i<nCount; i++ )
     {
         SvXMLStyleContext *pStyle = GetStyle( i );
-        if( !pStyle || !pStyle->IsValid() )
+        if( !pStyle || !pStyle->IsValid() || pStyle->IsDefaultStyle() )
             continue;
 
         if( InsertStyleFamily( pStyle->GetFamily() ) )
