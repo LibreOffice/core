@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-15 11:18:44 $
+ *  last change: $Author: kz $ $Date: 2001-05-16 10:33:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -432,7 +432,7 @@ void SvxShape::Init() throw()
         }
         else
         {
-            DBG_ASSERT(aShapeType.len() == 0, "[CL] unknown SdrObjekt identifier");
+            DBG_ASSERT(aShapeType.getLength() == 0, "[CL] unknown SdrObjekt identifier");
         }
     }
 }
