@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: cl $ $Date: 2002-10-28 11:08:56 $
+ *  last change: $Author: sj $ $Date: 2002-12-12 12:22:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -731,13 +731,6 @@ BOOL SdDrawDocShell::ConvertTo( SfxMedium& rMedium )
         {
             pFilter = new SdPPTFilter( rMedium, *this, sal_True );
             ((SdPPTFilter*)pFilter)->PreSaveBasic();
-            SvStorageRef xOleSource( new SvStorage( sal_False, String() ) );
-            xOleSource->SetVersion( SOFFICE_FILEFORMAT_50 );
-            sal_Bool bInPlaceObjects = SfxInPlaceObject::SaveAs( &xOleSource );
-            if( bInPlaceObjects )
-                bInPlaceObjects = SfxInPlaceObject::SaveAsChilds( &xOleSource );
-            if ( bInPlaceObjects )
-                ((SdPPTFilter*)pFilter)->SetOleSource( xOleSource );
         }
         else if ( aTypeName.SearchAscii( "CGM_Computer_Graphics_Metafile" ) != STRING_NOTFOUND )
         {
