@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-20 16:03:43 $
+ *  last change: $Author: cl $ $Date: 2000-12-21 11:10:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1279,6 +1279,47 @@ void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const u
             break;
         }
 
+        case SDRATTR_OBJMOVEPROTECT:
+        {
+            sal_Bool bMoveProtect;
+            if( rVal >>= bMoveProtect )
+            {
+                pObj->SetMoveProtect(bMoveProtect);
+                return;
+            }
+            break;
+        }
+        case SDRATTR_OBJECTNAME:
+        {
+            OUString aName;
+            if( rVal >>= aName )
+            {
+                pObj->SetName( aName );
+                return;
+            }
+            break;
+        }
+        case SDRATTR_OBJPRINTABLE:
+        {
+            sal_Bool bPrintable;
+            if( rVal >>= bPrintable )
+            {
+                pObj->SetPrintable(bPrintable);
+                return;
+            }
+            break;
+        }
+        case SDRATTR_OBJSIZEPROTECT:
+        {
+            sal_Bool bResizeProtect;
+            if( rVal >>= bResizeProtect )
+            {
+                pObj->SetResizeProtect(bResizeProtect);
+                return;
+            }
+            break;
+        }
+
         case XATTR_FILLBITMAP:
         case XATTR_FILLGRADIENT:
         case XATTR_FILLHATCH:
@@ -1670,6 +1711,22 @@ uno::Any SAL_CALL SvxShape::getPropertyValue( const OUString& PropertyName )
             case SDRATTR_SHEARANGLE:
                 aAny <<= pObj->GetShearAngle();
                 break;
+            case SDRATTR_OBJMOVEPROTECT:
+                aAny = bool2any( pObj->IsMoveProtect() );
+                break;
+            case SDRATTR_OBJECTNAME:
+            {
+                OUString aName( pObj->GetName() );
+                aAny <<= aName;
+                break;
+            }
+            case SDRATTR_OBJPRINTABLE:
+                aAny = bool2any( pObj->IsPrintable() );
+                break;
+            case SDRATTR_OBJSIZEPROTECT:
+                aAny = bool2any( pObj->IsResizeProtect() );
+                break;
+
             default:
             {
                 DBG_ASSERT( pMap->nWID < SDRATTR_NOTPERSIST_FIRST || pMap->nWID > SDRATTR_NOTPERSIST_LAST, "Not persist item not handled!" );
