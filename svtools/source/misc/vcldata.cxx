@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vcldata.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:02 $
+ *  last change: $Author: pb $ $Date: 2001-07-10 09:52:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,6 @@
 
 ResMgr * ImpSvtData::GetResMgr()
 {
-    return GetResMgr(Application::GetSettings().GetInternational().
-                      GetLanguage());
+    return GetResMgr(Application::GetSettings().GetUILanguage());
 }
 
