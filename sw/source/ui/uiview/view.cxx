@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 13:49:59 $
+ *  last change: $Author: hr $ $Date: 2004-04-07 12:46:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -621,9 +621,11 @@ IMPL_LINK( SwView, AttrChangedNotify, SwWrtShell *, EMPTYARG )
                 GetViewFrame()->GetBindings().ENTERREGISTRATIONS();
                 bAttrChgNotifiedWithRegistrations = sal_True;
             }
+
         }
         else
             SelectShell();
+
     }
     GetViewImpl()->GetUNOObject_Impl()->NotifySelChanged();
     return 0;
@@ -837,7 +839,8 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
     nRightBorderDistance( 0 ),
     nNewPage(USHRT_MAX),
     bInMailMerge(FALSE),
-    bInDtor(FALSE)
+    bInDtor(FALSE),
+    pNumRuleNodeFromDoc(0) // #i23726#
 {
     // OD 18.12.2002 #103492# - According to discussion with MBA and further
     // investigations, no old SfxViewShell will be set as parameter <pOldSh>,
