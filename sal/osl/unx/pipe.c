@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pipe.c,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mfe $ $Date: 2001-02-19 13:29:30 $
+ *  last change: $Author: mfe $ $Date: 2001-02-26 16:10:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,8 @@
 
 #include <osl/pipe.h>
 #include <osl/diagnose.h>
-#include <osl/signal.h>
+/*#include <osl/signal.h>*/
+#include <osl/thread.h>
 
 #define PIPEDEFAULTPATH     "/tmp"
 #define PIPEALTERNATEPATH   "/var/tmp"
@@ -87,7 +88,8 @@ typedef struct _oslPipeImpl {
     int  m_Socket;
     sal_Char m_Name[PATH_MAX + 1];
 #if defined(LINUX)
-    sal_Bool bInShutDown;
+    sal_Bool m_bIsAccepting;
+    sal_Bool m_bIsInShutdown;
 #endif
 } oslPipeImpl;
 
@@ -122,16 +124,16 @@ static struct
 
 /* map */
 /* mfe: NOT USED
-static int osl_NativeFromPipeError(oslPipeError errorCode)
-{
-    int i = 0;
+   static int osl_NativeFromPipeError(oslPipeError errorCode)
+   {
+   int i = 0;
 
-    while ((PipeError[i].error != osl_Pipe_E_invalidError) &&
-           (PipeError[i].error != errorCode)) i++;
+   while ((PipeError[i].error != osl_Pipe_E_invalidError) &&
+   (PipeError[i].error != errorCode)) i++;
 
-    return PipeError[i].errcode;
+   return PipeError[i].errcode;
 
-}
+   }
 */
 
 /* reverse map */
@@ -185,7 +187,7 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *ustrPipeName, oslPipeOptions Option
         rtl_uString2String( &strPipeName,
                             rtl_uString_getStr(ustrPipeName),
                             rtl_uString_getLength(ustrPipeName),
-                            RTL_TEXTENCODING_UTF8,
+                            osl_getThreadTextEncoding(),
                             OUSTRING_TO_OSTRING_CVTFLAGS );
         pszPipeName = rtl_string_getStr(strPipeName);
         pPipe = osl_psz_createPipe(pszPipeName, Options, Security);
@@ -207,7 +209,7 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
     size_t     len;
     struct sockaddr_un addr;
 
-    sal_Char     name[PATH_MAX + 1] = "";
+    sal_Char     name[PATH_MAX + 1];
     oslPipeImpl* pPipeImpl;
 
     if (access(PIPEDEFAULTPATH, O_RDWR) == 0)
@@ -224,7 +226,9 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
 
     if (Security)
     {
-        sal_Char Ident[256] = "";
+        sal_Char Ident[256];
+
+        Ident[0] = '\0';
 
         OSL_VERIFY(osl_psz_getUserIdent(Security, Ident, sizeof(Ident)));
 
@@ -392,33 +396,37 @@ void SAL_CALL osl_destroyPipe(oslPipe Pipe)
     pPipeImpl = (oslPipeImpl*) Pipe;
 
     ConnFD = pPipeImpl->m_Socket;
+#if defined(LINUX)
+    if ( pPipeImpl->m_bIsAccepting == sal_True )
+    {
+        pPipeImpl->m_bIsInShutdown = sal_True;
+        pPipeImpl->m_Socket = -1;
+        fd = socket(AF_UNIX, SOCK_STREAM, 0);
+        memset(&addr, 0, sizeof(addr));
+
+        OSL_TRACE("osl_destroyPipe : Pipe Name '%s'",pPipeImpl->m_Name);
+
+        addr.sun_family = AF_UNIX;
+        strcpy(addr.sun_path, pPipeImpl->m_Name);
+        len = sizeof(addr.sun_family) + strlen(addr.sun_path);
+
+        nRet = connect( fd, (struct sockaddr *)&addr, len);
+#if defined(DEBUG)
+        if ( nRet < 0 )
+        {
+            perror("connect in osl_destroyPipe");
+        }
+#endif /* DEBUG */
+        close(fd);
+    }
+#endif /* LINUX */
+
 
     nRet = shutdown(ConnFD, 2);
     if ( nRet < 0 )
     {
         OSL_TRACE("shutdown in destroyPipe failed : '%s'\n",strerror(errno));
     }
-
-#if defined(LINUX)
-    pPipeImpl->m_Socket = -1;
-    fd = socket(AF_UNIX, SOCK_STREAM, 0);
-    memset(&addr, 0, sizeof(addr));
-
-    OSL_TRACE("osl_destroyPipe : Pipe Name '%s'",pPipeImpl->m_Name);
-
-    addr.sun_family = AF_UNIX;
-    strcpy(addr.sun_path, pPipeImpl->m_Name);
-    len = sizeof(addr.sun_family) + strlen(addr.sun_path);
-
-    nRet = connect( fd, (struct sockaddr *)&addr, len);
-#if defined(DEBUG)
-    if ( nRet < 0 )
-    {
-        perror("connect in osl_destroyPipe");
-    }
-#endif
-    close(fd);
-#endif
 
     nRet = close(ConnFD);
     if ( nRet < 0 )
@@ -431,8 +439,15 @@ void SAL_CALL osl_destroyPipe(oslPipe Pipe)
         unlink(pPipeImpl->m_Name);
     }
 
-    /* free memory */
-    __osl_destroyPipeImpl(pPipeImpl);
+#ifdef LINUX
+    if ( pPipeImpl->m_bIsAccepting == sal_False )
+    {
+#endif
+        /* free memory */
+        __osl_destroyPipeImpl(pPipeImpl);
+#ifdef LINUX
+    }
+#endif
 
     OSL_TRACE("Out osl_destroyPipe");
 }
@@ -456,10 +471,36 @@ oslPipe SAL_CALL osl_acceptPipe(oslPipe Pipe)
 
     OSL_ASSERT(strlen(pParamPipeImpl->m_Name) > 0);
 
-    if ((s = accept(pParamPipeImpl->m_Socket, NULL, NULL)) < 0)
+#if defined(LINUX)
+    pParamPipeImpl->m_bIsAccepting = sal_True;
+#endif
+
+    s = accept(pParamPipeImpl->m_Socket, NULL, NULL);
+
+#if defined(LINUX)
+    pParamPipeImpl->m_bIsAccepting = sal_False;
+#endif
+
+    if ( s < 0 )
     {
+#if defined(DEBUG)
+        fprintf(stderr,"osl_acceptPipe : accept error '%s'\n",strerror(errno));
+#endif
         return NULL;
     }
+
+#if defined(LINUX)
+    if ( pParamPipeImpl->m_bIsInShutdown == sal_True )
+    {
+        close(s);
+        __osl_destroyPipeImpl(pParamPipeImpl);
+
+#if defined(DEBUG)
+        fprintf(stderr,"osl_acceptPipe : destroying while accept\n");
+#endif /* DEBUG */
+        return NULL;
+    }
+#endif /* LINUX */
     else
     {
         /* alloc memory */
