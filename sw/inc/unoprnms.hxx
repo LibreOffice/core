@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: tl $ $Date: 2002-08-30 11:58:52 $
+ *  last change: $Author: tl $ $Date: 2002-10-08 14:20:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -714,8 +714,9 @@ enum SwPropNameIds
 /* 0634 */  UNO_NAME_BACK_COLOR_TRANSPARENCY,
 /* 0635 */  UNO_NAME_HEADER_DYNAMIC_SPACING,
 /* 0636 */  UNO_NAME_FOOTER_DYNAMIC_SPACING,
+/* 0637 */  UNO_NAME_BASIC_LIBRARIES,
 
-/* 0637 */  SW_PROPNAME_END
+/* 0638 */  SW_PROPNAME_END
 };
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: tl $ $Date: 2002-09-26 14:25:57 $
+ *  last change: $Author: tl $ $Date: 2002-10-08 14:20:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2195,6 +2195,9 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
                 bMode = sal_True;
             aAny.setValue(&bMode, ::getBooleanCppuType());
         }
+        break;
+        case WID_DOC_BASIC_LIBRARIES:
+            aAny <<= pDocShell->GetBasicContainer();
         break;
         default:
         {
