@@ -1,5 +1,5 @@
 <!--
-	$Id: office.mod,v 1.47 2003-04-17 15:59:01 vg Exp $
+	$Id: office.mod,v 1.48 2004-11-09 12:25:20 hr Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -196,9 +196,11 @@
 				  meta:document-statistic?)">
 <!ELEMENT office:meta %meta;>
 
-<!ENTITY % script	"(script:library-embedded |
-					  script:library-linked)*,office:events?">
+<!ENTITY % script	"office:script-data*,office:events?">
 <!ELEMENT office:script (%script;)>
+<!ATTLIST office:script script:language %string; #REQUIRED>
+
+<!ELEMENT office:script-data (script:libraries*)>
 
 <!ELEMENT office:font-decls (style:font-decl)*>
 
