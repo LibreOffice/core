@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XChangesListener.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:10:54 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 02:02:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ module com {  module sun {  module star {  module util {
     @see XChangesNotifier
     @see XChangesBatch
  */
-interface XChangesListener: com::sun::star::lang::XEventListener
+published interface XChangesListener: com::sun::star::lang::XEventListener
 {
     //-------------------------------------------------------------------------
     /** is invoked when a batch of changes occurred.
