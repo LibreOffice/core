@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2000-11-15 21:34:54 $
+ *  last change: $Author: kz $ $Date: 2000-11-27 08:17:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,7 +299,7 @@ TabDialog RID_SCDLG_OPTIONS
     Text[ chinese_simplified ] = "Ή¤Χχ±νΞΔµµΡ΅Οξ";
     Text[ russian ] = "Οΰπΰμεςπϋ Δξκσμενς ύλεκςπξννξι ςΰαλθφϋ";
     Text[ polish ] = "Opcje arkusza kalkulacyjnego";
-    Text[ japanese ] = "•\\vZ‚ΜµΜίΌ®έ";
+    Text[ japanese ] = "µΜίΌ®έ •\\vZΔή·­ÒέΔ";
     Text[ chinese_traditional ] = "¤u§@ªν¤ε¥σΏο¶µ";
     Text[ arabic ] = "ΞΥΗΖΥ γΣΚδΟ ΜΟζα";
     Text[ greek ] = "Επιλογές εγγράφου πίνακα";
@@ -874,7 +874,7 @@ TabPage RID_SCPAGE_CALC
         Text[ chinese_simplified ] = "ΛΡΡ°·¶Ξ§ = ΊΝ <> ±ΨΠλΚΚΣΓΘ«²ΏµΔµ¥ΤªΈρ(~W)";
         Text[ russian ] = "Σρλξβθÿ οξθρκΰ = θ <> δξλζνϋ πΰροπξρςπΰνÿςόρÿ νΰ βρώ ÿχεικσ";
         Text[ polish ] = "Kryt~eria wyszukiwania = i <> muszΉ odnosiζ siκ do ca³ych komσrek";
-        Text[ japanese ] = "υπ=‚Ζ<>‚Ν‚·‚Χ‚Δ‚ΜΎΩ‚Ι“K—p(~W)";
+        Text[ japanese ] = "υπ = ‚Ζ <> ‚Ν‚·‚Χ‚Δ‚ΜΎΩ‚Ι“K—p(~W)";
         Text[ chinese_traditional ] = "΄M§δ½d³ς = ©M <> ¥²¶·ΎA¥Ξ¥ώ³΅ªΊΐx¦s®ζ(~W)";
         Text[ arabic ] = "νΜΘ Γδ ΚδΨΘή γΪΗννΡ ΗαΘΝΛ = ζ <> Ϊαμ ΞαΗνΗ ίΗγαΙ";
         Text[ greek ] = "Τα κριτήρια αναζήτησης = και <> πρέπει να ταιριάζουν με ολόκληρα κελιά";
