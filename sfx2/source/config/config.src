@@ -2,9 +2,9 @@
  *
  *  $RCSfile: config.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:29 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 18:59:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,7 +264,7 @@ ModalDialog DLG_MACROQUERY
         Text [ danish ] = "Udfør ikke" ;
         Text [ italian ] = "Non eseguire" ;
         Text [ spanish ] = "No ejecutar" ;
-        Text [ french ] = "Ne pas lancer" ;
+        Text [ french ] = "Ne pas exécuter" ;
         Text [ dutch ] = "Niet uitvoeren" ;
         Text [ portuguese ] = "Não executar" ;
         Text[ chinese_simplified ] = "²»Ö´ÐÐ";
