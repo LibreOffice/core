@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envprt.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-23 11:10:24 $
+ *  last change: $Author: kz $ $Date: 2002-08-03 20:13:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,25 +76,26 @@ TabPage TP_ENV_PRT
         Text = "Umschlageinzug" ;
         Text[ ENGLISH ] = "Envelope orientation" ;
         Text[ english_us ] = "Envelope orientation";
-        Text[ portuguese ] = "Envelope orientation";
+        Text[ portuguese ] = "Orientação do envelope";
         Text[ russian ] = "Ñïîñîá ïîäà÷è êîíâåğòà";
         Text[ greek ] = "Envelope orientation";
-        Text[ dutch ] = "Envelope orientation";
-        Text[ french ] = "Envelope orientation";
-        Text[ spanish ] = "Envelope orientation";
+        Text[ dutch ] = "Envelopinvoer";
+        Text[ french ] = "Orientation de l'enveloppe";
+        Text[ spanish ] = "Orientación del sobre";
         Text[ finnish ] = "Envelope orientation";
         Text[ italian ] = "Caricamento busta";
-        Text[ danish ] = "Envelope orientation";
-        Text[ swedish ] = "Kuvertindrag";
+        Text[ danish ] = "Konvolutindryk";
+        Text[ swedish ] = "Kuvertmatning";
         Text[ polish ] = "Orientacja koperty";
         Text[ portuguese_brazilian ] = "Envelope orientation";
-        Text[ japanese ] = "••“›‚ÌŒü‚«";
-        Text[ korean ] = "Envelope orientation";
-        Text[ chinese_simplified ] = "ĞÅ·â·½Ïò";
-        Text[ chinese_traditional ] = "«H«Ê¤è¦V";
+        Text[ japanese ] = "å°ç­’ã®å‘ã";
+        Text[ korean ] = "ë´‰íˆ¬ ë°©í–¥";
+        Text[ chinese_simplified ] = "ä¿¡å°æ–¹å‘";
+        Text[ chinese_traditional ] = "ä¿¡å°æ–¹å‘";
         Text[ turkish ] = "Envelope orientation";
         Text[ arabic ] = "Envelope orientation";
         Text[ catalan ] = "Envelope orientation";
+        Text[ thai ] = "à¸§à¸²à¸‡à¹à¸™à¸§à¸‹à¸­à¸‡à¸ˆà¸”à¸«à¸¡à¸²à¸¢";
     };
     ToolBox BOX_ALIGN
     {
@@ -144,7 +145,7 @@ TabPage TP_ENV_PRT
         Text [ ENGLISH_US ] = "~Print from top" ;
         Text [ SPANISH ] = "Imprimir r~everso" ;
         Text [ FINNISH ] = "~Tulosta alusta" ;
-        Text [ FRENCH ] = "Imprimer du ~haut" ;
+        Text [ FRENCH ] = "Imprimer à partir du haut" ;
         Text [ ITALIAN ] = "Stampa da sopra" ;
         Text [ DUTCH ] = "B~ovenkant bedrukken" ;
         Text [ PORTUGUESE_BRAZILIAN ] = "Imprimir parte superior" ;
@@ -153,17 +154,18 @@ TabPage TP_ENV_PRT
         TabStop = TRUE ;
         Group = TRUE ;
         Check = TRUE ;
-        Text[ chinese_simplified ] = "´ÓÉÏ·½¿ªÊ¼´òÓ¡(~P)";
+        Text[ chinese_simplified ] = "ä»ä¸Šæ–¹å¼€å§‹æ‰“å°(~P)";
         Text[ russian ] = "Ïå÷àòàòü ñâåğõó";
         Text[ polish ] = "Drukuj od góry";
-        Text[ japanese ] = "••“›‚Ì•\\‚ğã‚É‚·‚é(~P)";
-        Text[ chinese_traditional ] = "±q¤W¤è¶}©l¦C¦L(~P)";
+        Text[ japanese ] = "å°ç­’ã®è¡¨ã‚’ä¸Šã«ã™ã‚‹(~P)";
+        Text[ chinese_traditional ] = "å¾ä¸Šæ–¹é–‹å§‹åˆ—å°(~P)";
         Text[ arabic ] = "ÇáØÈÇÚÉ ãä ÃÚáì";
         Text[ greek ] = "Åêôığùóç áğü ğÜíù";
-        Text[ korean ] = "À§¿¡¼­ºÎÅÍ ÀÎ¼â(~P)";
+        Text[ korean ] = "ìœ„ì—ì„œë¶€í„° ì¸ì‡„(~P)";
         Text[ turkish ] = "Üstten yazdır";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Imprimir r~everso";
+        Text[ thai ] = "~à¸à¸´à¸¡à¸à¹Œà¸ˆà¸²à¸à¸”à¹‰à¸²à¸™à¸šà¸™";
     };
     RadioButton BTN_BOTTOM
     {
@@ -176,24 +178,25 @@ TabPage TP_ENV_PRT
         Text [ ENGLISH_US ] = "Print from ~bottom" ;
         Text [ SPANISH ] = "Imprimir ~anverso" ;
         Text [ FINNISH ] = "~Tulosta lopusta" ;
-        Text [ FRENCH ] = "Imprimer du ~bas" ;
+        Text [ FRENCH ] = "Imprimer à partir du bas" ;
         Text [ ITALIAN ] = "Stampa da sotto" ;
         Text [ DUTCH ] = "~Onderkant bedrukken" ;
         Text [ PORTUGUESE_BRAZILIAN ] = "Imprimir parte inferior" ;
         Text [ SWEDISH ] = "Skriv ~ut nedifrån" ;
         Text [ PORTUGUESE ] = "Imprimir a partir de baixo" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "´ÓÏÂ·½¿ªÊ¼´òÓ¡(~B)";
+        Text[ chinese_simplified ] = "ä»ä¸‹æ–¹å¼€å§‹æ‰“å°(~B)";
         Text[ russian ] = "Ïå÷àòàòü ñíèçó";
         Text[ polish ] = "Drukuj od do³u";
-        Text[ japanese ] = "••“›‚Ì•\\‚ğ‰º‚É‚·‚é(~B)";
-        Text[ chinese_traditional ] = "±q¤U¤è¶}©l¦C¦L(~B)";
+        Text[ japanese ] = "å°ç­’ã®è¡¨ã‚’ä¸‹ã«ã™ã‚‹(~B)";
+        Text[ chinese_traditional ] = "å¾ä¸‹æ–¹é–‹å§‹åˆ—å°(~B)";
         Text[ arabic ] = "ÇáØÈÇÚÉ ãä ÃÓİá";
         Text[ greek ] = "Åêôığùóç áğü êÜôù";
-        Text[ korean ] = "¾Æ·¡¿¡¼­ºÎÅÍ ÀÎ¼â(~B)";
+        Text[ korean ] = "ì•„ë˜ì—ì„œë¶€í„° ì¸ì‡„(~B)";
         Text[ turkish ] = "Alttan yazdır";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Imprimir ~anverso";
+        Text[ thai ] = "à¸à¸´à¸¡à¸à¹Œà¸ˆà¸²à¸à¸”à¹‰à¸²à¸™~à¸¥à¹ˆà¸²à¸‡";
     };
     FixedText TXT_RIGHT
     {
@@ -206,24 +209,25 @@ TabPage TP_ENV_PRT
         Text [ ENGLISH_US ] = "~Shift right" ;
         Text [ SPANISH ] = "Hacia la ~derecha" ;
         Text [ FINNISH ] = "~Siirrä oikealle" ;
-        Text [ FRENCH ] = "Vers la ~droite" ;
+        Text [ FRENCH ] = "Vers la droite" ;
         Text [ ITALIAN ] = "Sposta a destra" ;
         Text [ DUTCH ] = "Naar re~chts" ;
         Text [ PORTUGUESE_BRAZILIAN ] = "Trocar ? direita" ;
         Text [ SWEDISH ] = "Åt höger" ;
         Text [ PORTUGUESE ] = "À direita" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "ÏòÓÒ(~S)";
+        Text[ chinese_simplified ] = "å‘å³(~S)";
         Text[ russian ] = "Âïğàâî";
         Text[ polish ] = "Na prawo";
-        Text[ japanese ] = "‰E‚É(~S)";
-        Text[ chinese_traditional ] = "¦V¥k(~S)";
+        Text[ japanese ] = "å³ã«(~S)";
+        Text[ chinese_traditional ] = "å‘å³(~S)";
         Text[ arabic ] = "Åáì Çáíãíä";
         Text[ greek ] = "Ğñïò ôá äåîéÜ";
-        Text[ korean ] = "¿À¸¥ÂÊÀ¸·Î ÀÌµ¿(~S)";
+        Text[ korean ] = "ì˜¤ë¥¸ìª½ìœ¼ë¡œ ì´ë™(~S)";
         Text[ turkish ] = "S~ağa";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Hacia la ~derecha";
+        Text[ thai ] = "à¹€~à¸¥à¸·à¹ˆà¸­à¸™à¸—à¸²à¸‡à¸‚à¸§à¸²";
     };
     MetricField FLD_RIGHT
     {
@@ -253,24 +257,25 @@ TabPage TP_ENV_PRT
         Text [ ENGLISH_US ] = "Shift ~down" ;
         Text [ SPANISH ] = "Hacia a~bajo" ;
         Text [ FINNISH ] = "~Siirrä alas" ;
-        Text [ FRENCH ] = "Vers le ~bas" ;
+        Text [ FRENCH ] = "Vers le bas" ;
         Text [ ITALIAN ] = "Sposta in basso" ;
         Text [ DUTCH ] = "~Naar beneden" ;
         Text [ PORTUGUESE_BRAZILIAN ] = "Trocar abaixo" ;
         Text [ SWEDISH ] = "~Nedåt" ;
         Text [ PORTUGUESE ] = "Para baixo" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "ÏòÏÂ(~D)";
+        Text[ chinese_simplified ] = "å‘ä¸‹(~D)";
         Text[ russian ] = "Âíèç";
         Text[ polish ] = "W dó³";
-        Text[ japanese ] = "‰º‚É(~D)";
-        Text[ chinese_traditional ] = "¦V¤U(~D)";
+        Text[ japanese ] = "ä¸‹ã«(~D)";
+        Text[ chinese_traditional ] = "å‘ä¸‹(~D)";
         Text[ arabic ] = "Åáì ÃÓİá";
         Text[ greek ] = "Ğñïò ôá êÜôù";
-        Text[ korean ] = "¾Æ·¡·Î ÀÌµ¿(~D)";
+        Text[ korean ] = "ì•„ë˜ë¡œ ì´ë™(~D)";
         Text[ turkish ] = "~Aşağı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Hacia a~bajo";
+        Text[ thai ] = "à¹€à¸¥à¸·à¹ˆà¸­à¸™ ~à¸¥à¸‡";
     };
     MetricField FLD_DOWN
     {
@@ -296,25 +301,26 @@ TabPage TP_ENV_PRT
         Text = "Aktueller Drucker" ;
         Text[ ENGLISH ] = "Current printer" ;
         Text[ english_us ] = "Current printer";
-        Text[ portuguese ] = "Current printer";
+        Text[ portuguese ] = "Impressora activa";
         Text[ russian ] = "Òåêóùèé ïğèíòåğ";
         Text[ greek ] = "Current printer";
-        Text[ dutch ] = "Current printer";
-        Text[ french ] = "Current printer";
-        Text[ spanish ] = "Current printer";
+        Text[ dutch ] = "Actuele printer";
+        Text[ french ] = "Imprimante active";
+        Text[ spanish ] = "Impresora actual";
         Text[ finnish ] = "Current printer";
         Text[ italian ] = "Stampante attuale";
-        Text[ danish ] = "Current printer";
+        Text[ danish ] = "Aktuel printer";
         Text[ swedish ] = "Aktuell skrivare";
         Text[ polish ] = "Aktualna drukarka";
         Text[ portuguese_brazilian ] = "Current printer";
-        Text[ japanese ] = "Œ»İ‚ÌÌßØİÀ";
-        Text[ korean ] = "Current printer";
-        Text[ chinese_simplified ] = "µ±Ç°µÄ´òÓ¡»ú";
-        Text[ chinese_traditional ] = "·í«eªº¦Lªí¾÷";
+        Text[ japanese ] = "ç¾åœ¨ã®ãƒ—ãƒªãƒ³ã‚¿";
+        Text[ korean ] = "í˜„ì¬ í”„ë¦°í„°";
+        Text[ chinese_simplified ] = "å½“å‰çš„æ‰“å°æœº";
+        Text[ chinese_traditional ] = "ç›®å‰çš„å°è¡¨æ©Ÿ";
         Text[ turkish ] = "Current printer";
         Text[ arabic ] = "Current printer";
         Text[ catalan ] = "Current printer";
+        Text[ thai ] = "à¹€à¸„à¸£à¸·à¹ˆà¸­à¸‡à¸à¸´à¸¡à¸à¹Œà¸›à¸±à¸ˆà¸ˆà¸¸à¸šà¸±à¸™";
     };
     FixedText TXT_PRINTER
     {
@@ -334,17 +340,18 @@ TabPage TP_ENV_PRT
         Text [ SWEDISH ] = "- Ingen skrivare installerad -" ;
         Text [ PORTUGUESE ] = "- Nenhuma impressora instalada -" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "- Ã»ÓĞ°²×°´òÓ¡»ú -";
+        Text[ chinese_simplified ] = "- æ²¡æœ‰å®‰è£…æ‰“å°æœº -";
         Text[ russian ] = "- Ïğèíòåğ íå èíñòàëëèğîâàí -";
         Text[ polish ] = "- Drukarka nie jest zainstalowana -";
-        Text[ japanese ] = "- ÌßØİÀ‚ª²İ½Ä°Ù‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ -";
-        Text[ chinese_traditional ] = "- ¨S¦³¦w¸Ë¦Lªí¾÷ -";
+        Text[ japanese ] = "- ãƒ—ãƒªãƒ³ã‚¿ãŒã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ã•ã‚Œã¦ã„ã¾ã›ã‚“ -";
+        Text[ chinese_traditional ] = "- æ²’æœ‰å®‰è£å°è¡¨æ©Ÿ -";
         Text[ arabic ] = "- áÇ íæÌÏ ØÇÈÚÉ ãËÈÊÉ -";
         Text[ greek ] = "- Äåí İ÷åé åãêáôáóôáèåß åêôõğùôŞò -";
-        Text[ korean ] = "- ÇÁ¸°ÅÍ°¡ ¼³Ä¡µÇÁö ¾Ê¾Ò½À´Ï´Ù. -";
+        Text[ korean ] = "- í”„ë¦°í„°ê°€ ì„¤ì¹˜ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤. -";
         Text[ turkish ] = "- Kurulu yazıcı yok -";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "- No hay instalada ninguna impresora -";
+        Text[ thai ] = "- à¹„à¸¡à¹ˆà¹„à¸”à¹‰à¸•à¸´à¸”à¸•à¸±à¹‰à¸‡à¹€à¸„à¸£à¸·à¹ˆà¸­à¸‡à¸à¸´à¸¡à¸à¹Œ -";
     };
     PushButton BTN_PRTSETUP
     {
@@ -356,24 +363,25 @@ TabPage TP_ENV_PRT
         Text [ english_us ] = "Setup..." ;
         Text [ italian ] = "Imposta..." ;
         Text [ spanish ] = "Configurar..." ;
-        Text [ french ] = "~Paramétrer..." ;
+        Text [ french ] = "Paramétrer..." ;
         Text [ dutch ] = "~Configureren..." ;
         Text [ swedish ] = "Ställ ~in..." ;
         Text [ danish ] = "Indstil..." ;
         Text [ portuguese_brazilian ] = "Einrichten..." ;
         Text [ portuguese ] = "~Configurar..." ;
-        Text[ chinese_simplified ] = "ÉèÖÃ(~S)...";
+        Text[ chinese_simplified ] = "è®¾ç½®...";
         Text[ russian ] = "Íàñòğîèòü...";
         Text[ polish ] = "Konfiguruj...";
-        Text[ japanese ] = "İ’è...";
+        Text[ japanese ] = "è¨­å®š...";
         Text[ language_user1 ] = " ";
-        Text[ chinese_traditional ] = "³]¸m...";
+        Text[ chinese_traditional ] = "è¨­ç½®...";
         Text[ arabic ] = "...ÅÚÏÇÏ";
         Text[ greek ] = "~ÅãêáôÜóôáóç...";
-        Text[ korean ] = "¼Â¾÷...";
+        Text[ korean ] = "ì„¤ì¹˜...";
         Text[ turkish ] = "Ayarlar...";
         Text[ catalan ] = "Configurar...";
         Text[ finnish ] = "Asennus";
+        Text[ thai ] = "à¸•à¸´à¸”à¸•à¸±à¹‰à¸‡...";
     };
 };
  // Bitmaps ******************************************************************
