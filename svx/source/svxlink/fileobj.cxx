@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileobj.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 15:01:38 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 10:08:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -393,6 +393,12 @@ BOOL SvFileObject::LoadFile_Impl()
 
     // z.Z. nur auf die aktuelle DocShell
     xMed = new SfxMedium( sFileNm, STREAM_STD_READ, TRUE );
+    SvLinkSource::StreamToLoadFrom aStreamToLoadFrom =
+        getStreamToLoadFrom();
+    xMed->setStreamToLoadFrom(
+        aStreamToLoadFrom.m_xInputStreamToLoadFrom,
+        aStreamToLoadFrom.m_bIsReadOnly);
+    // setStreamToLoadFrom(0,0);
     // Keinen Eintrag im Roter Button Menu
     xMed->SetDontCreateCancellable();
     if( sReferer.Len() )
