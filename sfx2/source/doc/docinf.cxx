@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docinf.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: cd $ $Date: 2002-08-26 14:19:56 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 14:13:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@
 #include <svtools/saveopt.hxx>
 #include <tools/tenccvt.hxx>
 #include <svtools/useroptions.hxx>
+#include "rtl/tencinfo.h"
 
 #include "docfilt.hxx"
 #include "fcontnr.hxx"
@@ -150,8 +151,6 @@ class SfxPSCodePageProperty_Impl : public SfxPSProperty_Impl
     private:
         CharSet nEncoding;
 
-        UINT16 GetCodePage( CharSet nEncoding );
-
     public:
         SfxPSCodePageProperty_Impl( CharSet nCharSet ) : SfxPSProperty_Impl( 1, VT_I2 ), nEncoding( nCharSet ) {}
         virtual ~SfxPSCodePageProperty_Impl() {}
@@ -162,56 +161,16 @@ class SfxPSCodePageProperty_Impl : public SfxPSProperty_Impl
 
 ULONG SfxPSCodePageProperty_Impl::Save( SvStream& rStream )
 {
-    rStream << (UINT16)GetCodePage( nEncoding );
+    sal_uInt32 nCodePage = rtl_getWindowsCodePageFromTextEncoding(nEncoding);
+    if (nCodePage == 0)
+        nCodePage = 1252;
+    rStream << (UINT16)nCodePage;
     return rStream.GetErrorCode();
 }
 
 ULONG SfxPSCodePageProperty_Impl::Len()
 {
     return sizeof( UINT16 );
-}
-
-UINT16 SfxPSCodePageProperty_Impl::GetCodePage( CharSet nEncoding )
-{
-    switch ( nEncoding )
-    {
-        case RTL_TEXTENCODING_MS_1252:
-            return 1252;
-        case RTL_TEXTENCODING_MS_1250:
-            return 1250;
-        case RTL_TEXTENCODING_MS_1251:
-            return 1251;
-        case RTL_TEXTENCODING_MS_1253:
-            return 1253;
-        case RTL_TEXTENCODING_MS_1254:
-            return 1254;
-        case RTL_TEXTENCODING_MS_1255:
-            return 1255;
-        case RTL_TEXTENCODING_MS_1256:
-            return 1256;
-        case RTL_TEXTENCODING_MS_1257:
-            return 1257;
-        case RTL_TEXTENCODING_MS_1258:
-            return 1258;
-        case RTL_TEXTENCODING_MS_874:
-            return 874;
-        case RTL_TEXTENCODING_MS_932:
-            return 932;
-        case RTL_TEXTENCODING_MS_936:
-            return 936;
-        case RTL_TEXTENCODING_MS_949:
-            return 949;
-        case RTL_TEXTENCODING_MS_950:
-            return 950;
-        case RTL_TEXTENCODING_MS_1361:
-            return 1361;
-        case RTL_TEXTENCODING_UTF7:
-            return 65000;
-        case RTL_TEXTENCODING_UTF8:
-            return 65001;
-        default:
-            return 1252; // defautl case
-    }
 }
 
 //=========================================================================
@@ -249,60 +208,9 @@ public:
 
 void SfxPSStringProperty_Impl::SetCodePage( UINT16 nCodePage )
 {
-    switch ( nCodePage )
-    {
-        case 1252:
-            nEncoding = RTL_TEXTENCODING_MS_1252;
-            break;
-        case 1250:
-            nEncoding = RTL_TEXTENCODING_MS_1250;
-            break;
-        case 1251:
-            nEncoding = RTL_TEXTENCODING_MS_1251;
-            break;
-        case 1253:
-            nEncoding = RTL_TEXTENCODING_MS_1253;
-            break;
-        case 1254:
-            nEncoding = RTL_TEXTENCODING_MS_1254;
-            break;
-        case 1255:
-            nEncoding = RTL_TEXTENCODING_MS_1255;
-            break;
-        case 1256:
-            nEncoding = RTL_TEXTENCODING_MS_1256;
-            break;
-        case 1257:
-            nEncoding = RTL_TEXTENCODING_MS_1257;
-            break;
-        case 1258:
-            nEncoding = RTL_TEXTENCODING_MS_1258;
-            break;
-        case 874:
-            nEncoding = RTL_TEXTENCODING_MS_874;
-            break;
-        case 932:
-            nEncoding = RTL_TEXTENCODING_MS_932;
-            break;
-        case 936:
-            nEncoding = RTL_TEXTENCODING_MS_936;
-            break;
-        case 949:
-            nEncoding = RTL_TEXTENCODING_MS_949;
-            break;
-        case 950:
-            nEncoding = RTL_TEXTENCODING_MS_950;
-            break;
-        case 1361:
-            nEncoding = RTL_TEXTENCODING_MS_1361;
-            break;
-        case 65000 :
-            nEncoding = RTL_TEXTENCODING_UTF7;
-            break;
-        case 65001 :
-            nEncoding = RTL_TEXTENCODING_UTF8;
-            break;
-    }
+    rtl_TextEncoding nEnc = rtl_getTextEncodingFromWindowsCodePage(nCodePage);
+    if (nEnc != RTL_TEXTENCODING_DONTKNOW)
+        nEncoding = nEnc;
 }
 
 //-------------------------------------------------------------------------
