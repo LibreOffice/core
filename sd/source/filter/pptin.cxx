@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 12:27:04 $
+ *  last change: $Author: hr $ $Date: 2003-08-07 15:26:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,7 +228,7 @@
 #include <sfx2/docfac.hxx>
 #define MAX_USER_MOVE       2
 
-SdPPTImport::SdPPTImport( SdDrawDocument* pDocument, SvStream& rDocStream, SvStorage& rStorage, SfxMedium& rMedium )
+SdPPTImport::SdPPTImport( SdDrawDocument* pDocument, SvStream& rDocStream, SvStorage& rStorage, SfxMedium& rMedium, MSFilterTracer* pTracer )
 {
 
     sal_uInt32 nImportFlags = 0;
@@ -260,7 +260,7 @@ SdPPTImport::SdPPTImport( SdDrawDocument* pDocument, SvStream& rDocStream, SvSto
     delete pSummaryInformation;
 #endif
 
-    PowerPointImportParam aParam( rDocStream, nImportFlags );
+    PowerPointImportParam aParam( rDocStream, nImportFlags, pTracer );
     pFilter = new ImplSdPPTImport( pDocument, rStorage, rMedium, aParam );
 }
 
@@ -855,6 +855,8 @@ sal_Bool ImplSdPPTImport::Import()
                 DffRecordHeader aPageHd;
                 if ( SeekToAktPage( &aPageHd ) )
                 {
+                    if ( mbTracing )
+                        mpTracer->AddAttribute( rtl::OUString::createFromAscii( "MasterPage" ), rtl::OUString::valueOf( (sal_Int32)nAktPageNum + 1 ) );
                     sal_uInt32 nPageRecEnd = aPageHd.GetRecEndFilePos();
                     DffRecordHeader aPPDrawHd;
                     if ( SeekToRec( rStCtrl, PPT_PST_PPDrawing, nPageRecEnd, &aPPDrawHd ) )
@@ -890,6 +892,8 @@ sal_Bool ImplSdPPTImport::Import()
                             }
                         }
                     }
+                    if ( mbTracing )
+                        mpTracer->RemoveAttribute( rtl::OUString::createFromAscii( "MasterPage" ) );
                 }
                 rStCtrl.Seek( nFPosMerk );
                 ImportPageEffect( (SdPage*)pMPage );
