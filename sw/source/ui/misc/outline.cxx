@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outline.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-22 08:52:54 $
+ *  last change: $Author: os $ $Date: 2002-10-16 09:16:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -526,7 +526,7 @@ SwOutlineSettingsTabPage::SwOutlineSettingsTabPage(Window* pParent, const SfxIte
     aCollLbl(this, SW_RES(FT_COLL)),
     aCollBox(this, SW_RES(LB_COLL)),
     aNumberLbl(this, SW_RES(FT_NUMBER)),
-    aNumberBox(this, SW_RES(LB_NUMBER), INSERT_NUM_TYPE_NO_NUMBERING),
+    aNumberBox(this, SW_RES(LB_NUMBER), INSERT_NUM_TYPE_NO_NUMBERING|INSERT_NUM_EXTENDED_TYPES),
     aCharFmtFT(this, SW_RES(FT_CHARFMT)),
     aCharFmtLB(this, SW_RES(LB_CHARFMT)),
     aAllLevelFT(    this, ResId(FT_ALL_LEVEL)),
