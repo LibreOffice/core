@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLTextBlocks.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mtg $ $Date: 2001-06-06 09:57:50 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:13:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,6 +186,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
 using namespace ::rtl;
+using ::xmloff::token::XML_BLOCK_LIST;
 
 
 /*
@@ -1156,7 +1157,7 @@ void SwXMLTextBlocks::WriteInfo( void )
         uno::Reference<xml::sax::XDocumentHandler> xHandler(xWriter, uno::UNO_QUERY);
 
         SwXMLBlockListExport aExp(*this, OUString::createFromAscii(XMLN_BLOCKLIST), xHandler);
-        aExp.exportDoc( sXML_block_list );
+        aExp.exportDoc( XML_BLOCK_LIST );
         xDocStream->Commit();
         xDocStream.Clear();
         xBlkRoot->Commit();

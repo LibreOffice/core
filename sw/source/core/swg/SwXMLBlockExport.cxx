@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLBlockExport.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-18 18:30:40 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:13:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,8 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 using namespace ::rtl;
+using ::xmloff::token::XMLTokenEnum;
+
 sal_Char __READONLY_DATA sXML_np__block_list[] = "_block-list";
 
 SwXMLBlockListExport::SwXMLBlockListExport( SwXMLTextBlocks & rBlocks, const rtl::OUString &rFileName,
@@ -76,7 +78,7 @@ SwXMLBlockListExport::SwXMLBlockListExport( SwXMLTextBlocks & rBlocks, const rtl
                                   sXML_n_block_list, XML_NAMESPACE_BLOCKLIST );
 }
 
-sal_uInt32 SwXMLBlockListExport::exportDoc(const sal_Char *pClass)
+sal_uInt32 SwXMLBlockListExport::exportDoc(enum XMLTokenEnum eClass)
 {
     GetDocHandler()->startDocument();
 
