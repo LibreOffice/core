@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgass.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2001-08-14 17:01:31 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:49:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,8 +91,10 @@
 #include <sfx2/app.hxx>
 #endif
 
-enum OutputType { OUTPUT_PAGE, OUTPUT_OVERHEAD, OUTPUT_SLIDE, OUTPUT_PRESENTATION, OUTPUT_ORIGINAL };
-enum StartType { ST_EMPTY, ST_TEMPLATE, ST_OPEN };
+#include "sdenumdef.hxx" //CHINA001
+//move to sdenumdef.hxx
+//CHINA001 enum OutputType { OUTPUT_PAGE, OUTPUT_OVERHEAD, OUTPUT_SLIDE, OUTPUT_PRESENTATION, OUTPUT_ORIGINAL };
+//CHINA001 enum StartType { ST_EMPTY, ST_TEMPLATE, ST_OPEN };
 
 class AssistentDlgImpl;
 
