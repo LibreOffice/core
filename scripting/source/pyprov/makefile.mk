@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2004-01-05 14:31:06 $
+#   last change: $Author: rt $ $Date: 2004-02-10 16:15:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -106,5 +106,10 @@ SHL1DEPN=
 SHL1LIBS=$(SLB)$/$(TARGET).lib
 
 # --- Targets ------------------------------------------------------
+ALL : ALLTAR \
+        $(DLLDEST)$/pythonscript.py
+
+$(DLLDEST)$/%.py: %.py
+    +cp $? $@
 
 .INCLUDE :  target.mk
