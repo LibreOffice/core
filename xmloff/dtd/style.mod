@@ -1,5 +1,5 @@
 <!--
-	$Id: style.mod,v 1.60 2004-03-30 16:11:59 rt Exp $
+	$Id: style.mod,v 1.61 2004-07-06 13:16:25 rt Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -448,3 +448,6 @@
 <!ELEMENT style:region-left %region-content;>
 <!ELEMENT style:region-center %region-content;>
 <!ELEMENT style:region-right %region-content;>
+
+<!-- control shape properties -->
+<!ATTLIST style:properties draw:symbol-color %color; #IMPLIED>
