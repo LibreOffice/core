@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flowfrm.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:05:13 $
+ *  last change: $Author: rt $ $Date: 2004-01-07 16:33:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -877,12 +877,19 @@ SwLayoutFrm *SwFrm::GetNextLeaf( MakePageType eMakePage )
      // die Verkettung absuchen.
     if( IsInFly() )
         eMakePage = MAKEPAGE_NONE;
+
     //Bei Tabellen gleich den grossen Sprung wagen, ein einfaches GetNext...
     //wuerde die erste Zellen und in der Folge alle weiteren Zellen nacheinander
     //abklappern....
-    SwLayoutFrm *pLayLeaf;
+    SwLayoutFrm *pLayLeaf = 0;
     if ( IsTabFrm() )
-        pLayLeaf = ((SwTabFrm*)this)->FindLastCntnt()->GetUpper();
+    {
+        SwCntntFrm* pTmp = ((SwTabFrm*)this)->FindLastCntnt();
+        if ( pTmp )
+            pLayLeaf = pTmp->GetUpper();
+        else
+            pLayLeaf = GetNextLayoutLeaf();
+    }
     else
         pLayLeaf = GetNextLayoutLeaf();
 
