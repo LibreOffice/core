@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoidx.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-30 11:30:49 $
+ *  last change: $Author: os $ $Date: 2000-12-09 14:04:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1227,6 +1227,7 @@ SwXDocumentIndexMark::SwXDocumentIndexMark(TOXTypes eToxType) :
     m_pTOXMark(0),
     nLevel(USHRT_MAX),
     eType(eToxType),
+    bMainEntry(sal_False),
     bIsDescriptor(sal_True)
 {
     InitMap(eToxType);
@@ -1243,7 +1244,8 @@ SwXDocumentIndexMark::SwXDocumentIndexMark(const SwTOXType* pType,
     m_pTOXMark(pMark),
     nLevel(USHRT_MAX),
     eType(pType->GetType()),
-    bIsDescriptor(sal_False)
+    bIsDescriptor(sal_False),
+    bMainEntry(sal_False)
 {
     m_pDoc->GetUnoCallBack()->Add(this);
     InitMap(eType);
@@ -1579,6 +1581,9 @@ void SwXDocumentIndexMark::setPropertyValue(const OUString& rPropertyName,
                 case WID_SECONDARY_KEY:
                     aMark.SetSecondaryKey(lcl_AnyToString(aValue));
                 break;
+                case WID_MAIN_ENTRY:
+                    aMark.SetMainEntry(*(sal_Bool*)aValue.getValue());
+                break;
             }
 
             SwTxtTOXMark* pTxtMark = pCurMark->GetTxtTOXMark();
@@ -1647,6 +1652,9 @@ void SwXDocumentIndexMark::setPropertyValue(const OUString& rPropertyName,
             case WID_USER_IDX_NAME :
                 sUserIndexName = lcl_AnyToString(aValue);
             break;
+            case WID_MAIN_ENTRY:
+                bMainEntry = *(sal_Bool*)aValue.getValue();
+            break;
         }
     }
     else
@@ -1690,6 +1698,12 @@ uno::Any SwXDocumentIndexMark::getPropertyValue(const OUString& rPropertyName)
                 case WID_USER_IDX_NAME :
                     aRet <<= OUString(pType->GetTypeName());
                 break;
+                case WID_MAIN_ENTRY:
+                {
+                    sal_Bool bTemp = pCurMark->IsMainEntry();
+                    aRet.setValue(&bTemp, ::getBooleanCppuType());
+                }
+                break;
             }
         }
     }
@@ -1711,6 +1725,11 @@ uno::Any SwXDocumentIndexMark::getPropertyValue(const OUString& rPropertyName)
             break;
             case WID_USER_IDX_NAME :
                 aRet <<= OUString(sUserIndexName);
+            break;
+            case WID_MAIN_ENTRY:
+            {
+                aRet.setValue(&bMainEntry, ::getBooleanCppuType());
+            }
             break;
         }
     }

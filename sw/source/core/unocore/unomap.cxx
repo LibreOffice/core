@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-30 11:30:49 $
+ *  last change: $Author: os $ $Date: 2000-12-09 14:04:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1359,6 +1359,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_ALTERNATIVE_TEXT),WID_ALT_TEXT,         &::getCppuType((const OUString*)0)  ,       PROPERTY_NONE,     0},
                     { SW_PROP_NAME(UNO_NAME_PRIMARY_KEY),       WID_PRIMARY_KEY,    &::getCppuType((const OUString*)0)  ,       PROPERTY_NONE,     0},
                     { SW_PROP_NAME(UNO_NAME_SECONDARY_KEY),   WID_SECONDARY_KEY,    &::getCppuType((const OUString*)0)  ,       PROPERTY_NONE,     0},
+                    { SW_PROP_NAME(UNO_NAME_IS_MAIN_ENTRY),   WID_MAIN_ENTRY,       &::getBooleanCppuType()  ,      PROPERTY_NONE,     0},
                     { SW_PROP_NAME(UNO_NAME_ANCHOR_TYPE   ),    0,  &::getCppuType((const sal_Int16*)0),                PropertyAttribute::READONLY, MID_ANCHOR_ANCHORTYPE},
 #if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__))
                     { SW_PROP_NAME(UNO_NAME_ANCHOR_TYPES   ),   FN_UNO_ANCHOR_TYPES, new uno::Type(::getCppuType((uno::Sequence<text::TextContentAnchorType>*)0)),PropertyAttribute::READONLY, 0xff},

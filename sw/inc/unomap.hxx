@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-30 11:30:49 $
+ *  last change: $Author: os $ $Date: 2000-12-09 14:04:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,7 +147,7 @@
 #define WID_LEVEL                               1004
 #define WID_CREATE_FROM_MARKS                   1005
 #define WID_CREATE_FROM_OUTLINE                 1006
-//#define WID_PARAGRAPH_STYLE_NAMES               1007
+#define WID_MAIN_ENTRY                          1007
 #define WID_CREATE_FROM_CHAPTER                 1008
 #define WID_CREATE_FROM_LABELS                  1009
 #define WID_PROTECTED                           1000

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoidx.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-30 11:30:49 $
+ *  last change: $Author: os $ $Date: 2000-12-09 14:04:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,7 +196,8 @@ class SwXDocumentIndexMark : public cppu::WeakImplHelper4
     const SwTOXMark*            m_pTOXMark;
     const SfxItemPropertyMap*   _pMap;
 
-    sal_Bool                        bIsDescriptor;
+    sal_Bool                    bIsDescriptor;
+    sal_Bool                    bMainEntry;
     TOXTypes                    eType;
     sal_uInt16                      nLevel;
     String                      sAltText;

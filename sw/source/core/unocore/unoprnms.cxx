@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: os $ $Date: 2000-11-29 17:26:02 $
+ *  last change: $Author: os $ $Date: 2000-12-09 14:04:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -617,4 +617,5 @@ const SwPropNameLen __FAR_DATA UNO_NAME_HEADER_SECTION                      (MAP
 const SwPropNameLen __FAR_DATA UNO_NAME_PARA_IS_HANGING_PUNCTUATION         (MAP_CHAR_LEN("ParaIsHangingPunctuation"));
 const SwPropNameLen __FAR_DATA UNO_NAME_PARA_IS_CHARACTER_DISTANCE          (MAP_CHAR_LEN("ParaIsCharacterDistance"));
 const SwPropNameLen __FAR_DATA UNO_NAME_PARA_IS_FORBIDDEN_RULES             (MAP_CHAR_LEN("ParaIsForbiddenRules"));
+const SwPropNameLen __FAR_DATA UNO_NAME_IS_MAIN_ENTRY                       (MAP_CHAR_LEN("IsMainEntry"));
 
