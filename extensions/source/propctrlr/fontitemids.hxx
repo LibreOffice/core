@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontitemids.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-11 11:25:49 $
+ *  last change: $Author: fs $ $Date: 2001-06-11 11:28:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,8 @@
  *
  ************************************************************************/
 
-#ifndef _EXTENSIONS_PROPCTRLR_CONTROLFONT_HXX_
-#define _EXTENSIONS_PROPCTRLR_CONTROLFONT_HXX_
+#ifndef _EXTENSIONS_PROPCTRLR_FONTITEMIDS_HXX_
+#define _EXTENSIONS_PROPCTRLR_FONTITEMIDS_HXX_
 
 #define CFID_FONT               1
 #define CFID_HEIGHT             2
@@ -96,11 +96,14 @@ namespace pcr
 }   // namespace pcr
 //........................................................................
 
-#endif // _EXTENSIONS_PROPCTRLR_CONTROLFONT_HXX_
+#endif // _EXTENSIONS_PROPCTRLR_FONTITEMIDS_HXX_
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/06/11 11:25:49  fs
+ *  initial checkin - item ids for changing a control font
+ *
  *
  *  Revision 1.0 11.06.01 10:17:20  fs
  ************************************************************************/
