@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-23 11:54:34 $
+ *  last change: $Author: cl $ $Date: 2001-02-01 17:18:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -436,31 +436,52 @@ void SAL_CALL SvxUnoTextRangeBase::_setPropertyValue( const OUString& PropertyNa
         const SfxItemPropertyMap* pMap = SfxItemPropertyMap::GetByName(aPropSet.getPropertyMap(), PropertyName );
         if ( pMap )
         {
+            ESelection aSel( GetSelection() );
+            sal_Bool bParaAttrib = (pMap->nWID >= EE_PARA_START) && ( pMap->nWID <= EE_PARA_END );
 
-            SfxItemSet* pOldSet = NULL;
-            if( nPara != -1 )
-                pOldSet = pForwarder->GetParaAttribs( (USHORT)nPara ).Clone();
-            else
-                pOldSet = pForwarder->GetAttribs( GetSelection() ). Clone();
-
-            SfxItemSet aNewSet( *pOldSet->GetPool(), pOldSet->GetRanges() );
-
-            if(!SetPropertyValueHelper( *pOldSet, pMap, aValue, aNewSet, &aSelection, (SvxTextEditSource*)GetEditSource() ))
+            if( nPara == -1 && !bParaAttrib )
             {
-                //  Fuer Teile von zusammengesetzten Items mit mehreren Properties (z.B. Hintergrund)
-                //  muss vorher das alte Item aus dem Dokument geholt werden
-                aNewSet.Put(pOldSet->Get(pMap->nWID));          // altes Item in neuen Set
-                aPropSet.setPropertyValue(PropertyName, aValue, aNewSet);
+                SfxItemSet aOldSet( pForwarder->GetAttribs( aSel ) );
+                // we have a selection and no para attribute
+                SfxItemSet aNewSet( *aOldSet.GetPool(), aOldSet.GetRanges() );
+
+                if(!SetPropertyValueHelper( aOldSet, pMap, aValue, aNewSet, &aSelection, (SvxTextEditSource*)GetEditSource() ))
+                {
+                    //  Fuer Teile von zusammengesetzten Items mit mehreren Properties (z.B. Hintergrund)
+                    //  muss vorher das alte Item aus dem Dokument geholt werden
+                    aNewSet.Put(aOldSet.Get(pMap->nWID));           // altes Item in neuen Set
+                    aPropSet.setPropertyValue(pMap, aValue, aNewSet);
+                }
+
+                pForwarder->QuickSetAttribs( aNewSet, GetSelection() );
+            }
+            else
+            {
+                sal_Int32 nEndPara = nPara;
+
+                if( nPara == -1 )
+                {
+                    nPara = aSel.nStartPara;
+                    nEndPara = aSel.nEndPara;
+                }
+
+                do
+                {
+                    // we have a paragraph
+                    SfxItemSet aNewSet( pForwarder->GetParaAttribs( (USHORT)nPara ) );
+
+                    if(!SetPropertyValueHelper( aNewSet, pMap, aValue, aNewSet, &aSelection, (SvxTextEditSource*)GetEditSource() ))
+                    {
+                        aPropSet.setPropertyValue(pMap, aValue, aNewSet);
+                    }
+
+                    pForwarder->SetParaAttribs( (USHORT)nPara, aNewSet );
+                    nPara++;
+                }
+                while( nPara < nEndPara );
             }
 
-            if(nPara != -1)
-                pForwarder->SetParaAttribs( (USHORT)nPara, aNewSet );
-            else
-                pForwarder->QuickSetAttribs( aNewSet, GetSelection() );
-
             GetEditSource()->UpdateData();
-
-            delete pOldSet;
             return;
         }
     }
@@ -487,10 +508,7 @@ sal_Bool SvxUnoTextRangeBase::SetPropertyValueHelper( const SfxItemSet& rOldSet,
         {
             uno::Reference< container::XIndexReplace > xRule;
             if( !aValue.hasValue() || ((aValue >>= xRule) && !xRule.is()) )
-            {
-                    rNewSet.ClearItem(EE_PARA_NUMBULLET);
-                    return sal_True;
-            }
+                return sal_True;
 
             return sal_False;
         }
@@ -615,7 +633,7 @@ uno::Any SAL_CALL SvxUnoTextRangeBase::_getPropertyValue(const OUString& Propert
             else
             {
                 if(!GetPropertyValueHelper( *pAttribs, pMap, aAny, &aSelection, (SvxTextEditSource*)GetEditSource() ))
-                    aAny = aPropSet.getPropertyValue(PropertyName, *pAttribs);
+                    aAny = aPropSet.getPropertyValue(pMap, *pAttribs);
             }
 
             delete pAttribs;
@@ -923,7 +941,7 @@ uno::Any SAL_CALL SvxUnoTextRangeBase::getPropertyDefault( const OUString& aProp
                     {
                         SfxItemSet aSet( *pPool,    pMap->nWID, pMap->nWID);
                         aSet.Put(pPool->GetDefaultItem(pMap->nWID));
-                        return aPropSet.getPropertyValue(aPropertyName, aSet);
+                        return aPropSet.getPropertyValue(pMap, aSet);
                     }
                 }
             }
