@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gsiconv.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:26 $
+ *  last change: $Author: nf $ $Date: 2000-11-03 16:07:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,6 @@ void Help()
     fprintf( stdout, "          MS_1254 => Turkish\n" );
     fprintf( stdout, "          MS_1255 => Hebrew\n" );
     fprintf( stdout, "          MS_1256 => Arabic\n" );
-    fprintf( stdout, "          MS_1257 => Russian\n" );
     fprintf( stdout, "\n" );
     fprintf( stdout, "Allowed langids:\n" );
     fprintf( stdout, "          1  => ENGLISH_US\n" );

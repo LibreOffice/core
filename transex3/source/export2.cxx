@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:26 $
+ *  last change: $Author: nf $ $Date: 2000-11-03 16:07:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,7 @@ CharSet Export::GetCharSet( USHORT nLangId )
         case COMMENT: return RTL_TEXTENCODING_MS_1252;
         case ENGLISH_US: return RTL_TEXTENCODING_MS_1252;
         case PORTUGUESE: return RTL_TEXTENCODING_MS_1252;
-        case RUSSIAN: return RTL_TEXTENCODING_MS_1257;
+        case RUSSIAN: return RTL_TEXTENCODING_MS_1251;
         case GREEK: return RTL_TEXTENCODING_MS_1253;
         case DUTCH: return RTL_TEXTENCODING_MS_1252;
         case FRENCH: return RTL_TEXTENCODING_MS_1252;
