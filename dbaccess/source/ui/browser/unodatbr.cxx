@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-11 09:18:56 $
+ *  last change: $Author: fs $ $Date: 2001-01-17 08:16:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1944,10 +1944,16 @@ void SAL_CALL SbaTableQueryBrowser::elementRemoved( const ContainerEvent& _rEven
 
         if (pDSLoop)
         {
-            // a table or query belonging to the deleted data source is currently beeing displayed.
-            OSL_ENSURE(m_pTreeView->getListBox()->GetRootLevelParent(m_pCurrentlyDisplayed) == pDSLoop, "SbaTableQueryBrowser::elementRemoved: inconsistence (1)!");
-            if (isSelected(pDSLoop))    // unload
+            if (isSelected(pDSLoop))
+            {   // a table or query belonging to the deleted data source is currently beeing displayed.
+                OSL_ENSURE(m_pTreeView->getListBox()->GetRootLevelParent(m_pCurrentlyLoaded) == pDSLoop, "SbaTableQueryBrowser::elementRemoved: inconsistence (1)!");
                 unloadForm();
+            }
+            else
+                OSL_ENSURE(
+                        (NULL == m_pCurrentlyLoaded)
+                    ||  (m_pTreeView->getListBox()->GetRootLevelParent(m_pCurrentlyLoaded) != pDSLoop), "SbaTableQueryBrowser::elementRemoved: inconsistence (2)!");
+
             // look for user data to delete
             SvTreeEntryList* pList = m_pTreeModel->GetChildList(pDSLoop);
             if(pList)
