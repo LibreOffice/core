@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file_python.scp,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-25 13:00:46 $
+ *  last change: $Author: hr $ $Date: 2005-02-11 16:53:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,20 +114,6 @@ File gid_File_Py_Python_Core
 End
 #endif
 
-// Items for Python Scripting Framework Runtime 
-// Scripting Framework ScriptProvider for Python
-
-File gid_File_Py_Scriptprovider
-    TXT_FILE_BODY;
-    Dir = gid_Dir_Program;
-  #ifdef UNX
-    Name = STRING(CONCAT5(pyprov,OFFICEUPD,DLLSUFFIX,.uno,UNXSUFFIX));
-  #else
-    Name = STRING(CONCAT5(pyprov,OFFICEUPD,DLLSUFFIX,.uno,.dll));
-  #endif
-    RegistryID = gid_Starregistry_Services_Rdb;
-    Styles = (PACKED,UNO_COMPONENT);
-End
 
 // substitute for the python Windows basic scripts
 
@@ -148,7 +134,8 @@ File gid_File_Py_Pythonscript
     TXT_FILE_BODY;
     Dir = gid_Dir_Program;
     Name = "pythonscript.py";
-    Styles = (PACKED);
+    RegistryID = gid_Starregistry_Services_Rdb;
+    Styles = (PACKED,UNO_COMPONENT);
 End
  
 //Scripting Framework Python example scripts
