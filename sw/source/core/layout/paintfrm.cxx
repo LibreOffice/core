@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: od $ $Date: 2002-11-14 11:23:32 $
+ *  last change: $Author: od $ $Date: 2002-11-20 13:12:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -341,6 +341,9 @@ static double aEdgeScale = 0.5;
 //bTablines ist waerend des Paints einer Tabelle TRUE.
 static SwLineRects *pLines = 0;
 static SwSubsRects *pSubsLines = 0;
+// OD 18.11.2002 #99672# - global variable for sub-lines of body, header, footer,
+// section and footnote frames.
+static SwSubsRects *pSpecSubsLines = 0;
 
 static SfxProgress *pProgress = 0;
 
@@ -578,11 +581,13 @@ void SwLineRects::ConnectEdges( OutputDevice *pOut )
         long nL1a, nL1b, nL1c, nL1d;
 
         if ( bVert )
-        {   nL1a = rL1.Top();   nL1b = rL1.Left();
+        {
+            nL1a = rL1.Top();   nL1b = rL1.Left();
             nL1c = rL1.Right(); nL1d = rL1.Bottom();
         }
         else
-        {   nL1a = rL1.Left();   nL1b = rL1.Top();
+        {
+            nL1a = rL1.Left();   nL1b = rL1.Top();
             nL1c = rL1.Bottom(); nL1d = rL1.Right();
         }
 
@@ -598,11 +603,13 @@ void SwLineRects::ConnectEdges( OutputDevice *pOut )
 
             long nL2a, nL2b, nL2c, nL2d;
             if ( bVert )
-            {   nL2a = rL2.Top();   nL2b = rL2.Left();
+            {
+                nL2a = rL2.Top();   nL2b = rL2.Left();
                 nL2c = rL2.Right(); nL2d = rL2.Bottom();
             }
             else
-            {   nL2a = rL2.Left();   nL2b = rL2.Top();
+            {
+                nL2a = rL2.Left();   nL2b = rL2.Top();
                 nL2c = rL2.Bottom(); nL2d = rL2.Right();
             }
 
@@ -731,52 +738,54 @@ void SwSubsRects::RemoveSuperfluousSubsidiaryLines( const SwLineRects &rRects )
     //entfernt bzw. zerstueckelt..
     for ( USHORT i = 0; i < Count(); ++i )
     {
-        SwLineRect &rSubs = operator[](i);
+        // OD 18.11.2002 #99672# - get a copy instead of a reference, because
+        // an <insert> may destroy the object due to a necessary array resize.
+        const SwLineRect aSubsLineRect = SwLineRect( operator[](i) );
 
-        if ( rSubs.IsPainted() )
+        if ( aSubsLineRect.IsPainted() )
             continue;
 
-        const FASTBOOL bVert = rSubs.Height() > rSubs.Width();
-        SwRect aSubs( rSubs );
-        if ( bVert )
+        const bool bVerticalSubs = aSubsLineRect.Height() > aSubsLineRect.Width();
+        SwRect aSubsRect( aSubsLineRect );
+        if ( bVerticalSubs )
         {
-            aSubs.Left  ( aSubs.Left()   - (nPixelSzW+nHalfPixelSzW) );
-            aSubs.Right ( aSubs.Right()  + (nPixelSzW+nHalfPixelSzW) );
+            aSubsRect.Left  ( aSubsRect.Left()  - (nPixelSzW+nHalfPixelSzW) );
+            aSubsRect.Right ( aSubsRect.Right() + (nPixelSzW+nHalfPixelSzW) );
         }
         else
         {
-            aSubs.Top   ( aSubs.Top()    - (nPixelSzH+nHalfPixelSzH) );
-            aSubs.Bottom( aSubs.Bottom() + (nPixelSzH+nHalfPixelSzH) );
+            aSubsRect.Top   ( aSubsRect.Top()    - (nPixelSzH+nHalfPixelSzH) );
+            aSubsRect.Bottom( aSubsRect.Bottom() + (nPixelSzH+nHalfPixelSzH) );
         }
         for ( USHORT k = 0; k < rRects.Count(); ++k )
         {
             SwLineRect &rLine = rRects[k];
 
-            if ( !bVert == rLine.Height() > rLine.Width() ) //gleiche Ausrichtung?
+            if ( !bVerticalSubs == rLine.Height() > rLine.Width() ) //gleiche Ausrichtung?
                 continue;
 
-            if ( aSubs.IsOver( rLine ) )
+            if ( aSubsRect.IsOver( rLine ) )
             {
-                if ( bVert ) //Vertikal?
+                if ( bVerticalSubs ) //Vertikal?
                 {
-                    if ( aSubs.Left()  <= rLine.Right() &&
-                         aSubs.Right() >= rLine.Left() )
+                    if ( aSubsRect.Left()  <= rLine.Right() &&
+                         aSubsRect.Right() >= rLine.Left() )
                     {
                         long nTmp = rLine.Top()-(nPixelSzH+1);
-                        if ( rSubs.Top() < nTmp )
+                        if ( aSubsLineRect.Top() < nTmp )
                         {
-                            SwRect aRect( rSubs );
-                            aRect.Bottom( nTmp );
-                            Insert( SwLineRect( aRect, 0, 0,
-                                                rSubs.GetSubColor() ), Count());
+                            SwRect aNewSubsRect( aSubsLineRect );
+                            aNewSubsRect.Bottom( nTmp );
+                            Insert( SwLineRect( aNewSubsRect, 0, 0,
+                                                aSubsLineRect.GetSubColor() ), Count());
                         }
                         nTmp = rLine.Bottom()+nPixelSzH+1;
-                        if ( rSubs.Bottom() > nTmp )
+                        if ( aSubsLineRect.Bottom() > nTmp )
                         {
-                            SwRect aRect( rSubs );
-                            aRect.Top( nTmp );
-                            Insert( SwLineRect( aRect, 0, 0,
-                                                rSubs.GetSubColor() ), Count());
+                            SwRect aNewSubsRect( aSubsLineRect );
+                            aNewSubsRect.Top( nTmp );
+                            Insert( SwLineRect( aNewSubsRect, 0, 0,
+                                                aSubsLineRect.GetSubColor() ), Count());
                         }
                         Remove( i, 1 );
                         --i;
@@ -785,24 +794,24 @@ void SwSubsRects::RemoveSuperfluousSubsidiaryLines( const SwLineRects &rRects )
                 }
                 else                                    //Horizontal
                 {
-                    if ( aSubs.Top()    <= rLine.Bottom() &&
-                         aSubs.Bottom() >= rLine.Top() )
+                    if ( aSubsRect.Top() <= rLine.Bottom() &&
+                         aSubsRect.Bottom() >= rLine.Top() )
                     {
                         long nTmp = rLine.Left()-(nPixelSzW+1);
-                        if ( rSubs.Left() < nTmp )
+                        if ( aSubsLineRect.Left() < nTmp )
                         {
-                            SwRect aRect( rSubs );
-                            aRect.Right( nTmp );
-                            Insert( SwLineRect( aRect, 0, 0,
-                                                rSubs.GetSubColor() ), Count());
+                            SwRect aNewSubsRect( aSubsLineRect );
+                            aNewSubsRect.Right( nTmp );
+                            Insert( SwLineRect( aNewSubsRect, 0, 0,
+                                                aSubsLineRect.GetSubColor() ), Count());
                         }
                         nTmp = rLine.Right()+nPixelSzW+1;
-                        if ( rSubs.Right() > nTmp )
+                        if ( aSubsLineRect.Right() > nTmp )
                         {
-                            SwRect aRect( rSubs );
-                            aRect.Left( nTmp );
-                            Insert( SwLineRect( aRect, 0, 0,
-                                                rSubs.GetSubColor() ), Count());
+                            SwRect aNewSubsRect( aSubsLineRect );
+                            aNewSubsRect.Left( nTmp );
+                            Insert( SwLineRect( aNewSubsRect, 0, 0,
+                                                aSubsLineRect.GetSubColor() ), Count());
                         }
                         Remove( i, 1 );
                         --i;
@@ -939,16 +948,16 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
         for ( USHORT i = 0; i < Count(); ++i )
         {
             SwLineRect &rLi = operator[](i);
-            const FASTBOOL bVert = rLi.Height() > rLi.Width();
+            const bool bVerticalSubs = rLi.Height() > rLi.Width();
 
             for ( USHORT k = i+1; k < Count(); ++k )
             {
                 SwLineRect &rLk = operator[](k);
                 if ( rLi.SSize() == rLk.SSize() )
                 {
-                    if ( bVert == rLk.Height() > rLk.Width() )
+                    if ( bVerticalSubs == rLk.Height() > rLk.Width() )
                     {
-                        if ( bVert )
+                        if ( bVerticalSubs )
                         {
                             long nLi = rLi.Right();
                             long nLk = rLk.Right();
@@ -2055,7 +2064,11 @@ void SwRootFrm::Paint( const SwRect& rRect ) const
         if ( !pPage->IsEmptyPage() && aRect.IsOver( pPage->Frm() ) )
         {
             if ( pSh->GetWin() )
+            {
                 pSubsLines = new SwSubsRects;
+                // OD 18.11.2002 #99672# - create array for special sub-lines
+                pSpecSubsLines = new SwSubsRects;
+            }
 
             SwRect aPaintRect( pPage->Frm() );
             aPaintRect._Intersection( aRect );
@@ -2100,6 +2113,14 @@ void SwRootFrm::Paint( const SwRect& rRect ) const
                 pLines->LockLines( FALSE );
             }
 
+            if( pSh->GetWin() )
+            {
+                // OD 18.11.2002 #99672# - collect sub-lines
+                pPage->RefreshSubsidiary( aPaintRect );
+                // OD 18.11.2002 #99672# - paint special sub-lines
+                pSpecSubsLines->PaintSubsidiary( pSh->GetOut(), NULL );
+            }
+
             pPage->Paint( aPaintRect );
             if( pSh->GetWin() )
                 lcl_PaintShadow( pPage->Frm(), pSh );
@@ -2123,9 +2144,9 @@ void SwRootFrm::Paint( const SwRect& rRect ) const
 
             if ( pSh->GetWin() )
             {
-                pPage->RefreshSubsidiary( aPaintRect );
                 pSubsLines->PaintSubsidiary( pSh->GetOut(), pLines );
                 DELETEZ( pSubsLines );
+                DELETEZ( pSpecSubsLines );
             }
             pVout->Leave();
             if( bControlExtra )
@@ -2264,7 +2285,8 @@ void SwLayoutFrm::Paint( const SwRect& rRect ) const
         pFrm->Calc();
 
     if ( pFrm->IsFtnContFrm() )
-    {   ::lcl_EmergencyFormatFtnCont( (SwFtnContFrm*)pFrm );
+    {
+        ::lcl_EmergencyFormatFtnCont( (SwFtnContFrm*)pFrm );
         pFrm = Lower();
     }
 
@@ -3348,46 +3370,6 @@ void SwLayoutFrm::PaintColLines( const SwRect &rRect, const SwFmtCol &rFmtCol,
     }
 }
 
-/*************************************************************************
-|*
-|*  SwPageFrm::PaintAllBorders()
-|*
-|*  Beschreibung        Malt Schatten und Umrandung aller innenliegenden Frms
-|*  Ersterstellung      MA 23. Jan. 95
-|*  Letzte Aenderung    MA 06. May. 95
-|*
-|*************************************************************************/
-
-void MA_FASTCALL lcl_PaintLowerBorders( const SwLayoutFrm *pLay,
-                               const SwRect &rRect, const SwPageFrm *pPage )
-{
-    const SwFrm *pFrm = pLay->Lower();
-    if ( pFrm )
-    {
-        SwShortCut aShortCut( *pFrm, rRect );
-        OutputDevice *pOut = pGlobalShell->GetOut();
-        pOut->Push( PUSH_FILLCOLOR );
-        do
-        {   if ( pFrm->Frm().IsOver( rRect ) )
-            {
-                if ( pFrm->IsLayoutFrm() )
-                    ::lcl_PaintLowerBorders( (SwLayoutFrm*)pFrm, rRect, pPage );
-
-                SwBorderAttrAccess aAccess( SwFrm::GetCache(), (SwFrm*)pFrm );
-                const SwBorderAttrs &rAttrs = *aAccess.Get();
-                pFrm->PaintBorder( rRect, pPage, rAttrs );
-            }
-            pFrm = pFrm->GetNext();
-        } while ( pFrm && !aShortCut.Stop( pFrm->Frm() ) );
-        pOut->Pop();
-    }
-}
-
-void SwPageFrm::PaintAllBorders( const SwRect &rRect ) const
-{
-    ::lcl_PaintLowerBorders( this, rRect, this );
-}
-
 void SwPageFrm::PaintGrid( OutputDevice* pOut, SwRect &rRect ) const
 {
     if( !bHasGrid || pRetoucheFly || pRetoucheFly2 )
@@ -3680,6 +3662,60 @@ void SwPageFrm::PaintGrid( OutputDevice* pOut, SwRect &rRect ) const
     }
 }
 
+/** paint margin area of a page
+
+    OD 20.11.2002 for #104598#:
+    implement paint of margin area; margin area will be painted for a
+    view shell with a window and if the document is not in online layout.
+
+    @author OD
+
+    @param _rOutputRect
+    input parameter - constant instance reference of the rectangle, for
+    which an output has to be generated.
+
+    @param _pViewShell
+    input parameter - instance of the view shell, on which the output
+    has to be generated.
+*/
+void SwPageFrm::PaintMarginArea( const SwRect& _rOutputRect,
+                                 ViewShell* _pViewShell ) const
+{
+    if ( _pViewShell->GetWin() &&
+         !_pViewShell->GetDoc()->IsBrowseMode()
+       )
+    {
+        SwRect aPgPrtRect( Prt() );
+        aPgPrtRect.Pos() += Frm().Pos();
+        if ( !aPgPrtRect.IsInside( _rOutputRect ) )
+        {
+            SwRect aPgRect = Frm();
+            aPgRect._Intersection( _rOutputRect );
+            SwRegionRects aPgRegion( aPgRect );
+            aPgRegion -= aPgPrtRect;
+            const SwPageFrm* pPage = static_cast<const SwPageFrm*>(this);
+            if ( pPage->GetSortedObjs() )
+                ::lcl_SubtractFlys( this, pPage, aPgRect, aPgRegion );
+            if ( aPgRegion.Count() )
+            {
+                OutputDevice *pOut = _pViewShell->GetOut();
+                if ( pOut->GetFillColor() != aGlobalRetoucheColor )
+                    pOut->SetFillColor( aGlobalRetoucheColor );
+                for ( USHORT i = 0; i < aPgRegion.Count(); ++i )
+                {
+                    if ( 1 < aPgRegion.Count() )
+                    {
+                        ::SwAlignRect( aPgRegion[i], pGlobalShell );
+                        if( !aPgRegion[i].HasArea() )
+                            continue;
+                    }
+                    pOut->DrawRect( aPgRegion[i].SVRect() );
+                }
+            }
+        }
+    }
+}
+
 /*************************************************************************
 |*
 |*  SwFrm::PaintBaBo()
@@ -3712,9 +3748,16 @@ void SwFrm::PaintBaBo( const SwRect& rRect, const SwPageFrm *pPage,
         pFly->GetAnchor()->PaintBackground( rRect, pPage, rAttrs, FALSE );
     }
 */
+    // OD 20.11.2002 #104598# - take care of page margin area
+    // Note: code move from <SwFrm::PaintBackground(..)> to new method
+    // <SwPageFrm::Paintmargin(..)>.
+    if ( IsPageFrm() )
+    {
+        static_cast<const SwPageFrm*>(this)->PaintMarginArea( rRect, pGlobalShell );
+    }
 
-    /// OD 06.08.2002 #99657# - paint border before painting background
-    /// paint grid for page frame and paint border
+    // OD 06.08.2002 #99657# - paint border before painting background
+    // paint grid for page frame and paint border
     {
         SwRect aRect( rRect );
         if( IsPageFrm() )
@@ -3725,7 +3768,7 @@ void SwFrm::PaintBaBo( const SwRect& rRect, const SwPageFrm *pPage,
     */
     }
 
-    /// paint background
+    // paint background
     {
         PaintBackground( rRect, pPage, rAttrs, FALSE, bLowerBorder );
     }
@@ -3816,37 +3859,6 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
 
             OutputDevice *pOut = pSh->GetOut();
 
-            if ( bPageFrm && bWin && !bBrowse )
-            {
-                //Irgendjemand muss sich um den Rand der Seite kuemmern. Eine Farbe
-                //kann fuer diesen Rand niemals angegeben sein.
-                SwRect aPgRect( Prt() );
-                aPgRect.Pos() += Frm().Pos();
-                if ( !aPgRect.IsInside( rRect ) )
-                {
-                    aPgRect = Frm();
-                    aPgRect._Intersection( rRect );
-                    SwRegionRects aPgRegion( aPgRect );
-                    aPgRegion -= aRect;
-                    if ( pPage->GetSortedObjs() )
-                        ::lcl_SubtractFlys( this, pPage, aPgRect, aPgRegion );
-                    if ( aPgRegion.Count() )
-                    {
-                        if ( pOut->GetFillColor() != aGlobalRetoucheColor )
-                            pOut->SetFillColor( aGlobalRetoucheColor );
-                        for ( USHORT i = 0; i < aPgRegion.Count(); ++i )
-                        {
-                            if ( 1 < aPgRegion.Count() )
-                            {
-                                ::SwAlignRect( aPgRegion[i], pGlobalShell );
-                                if( !aPgRegion[i].HasArea() )
-                                    continue;
-                            }
-                            pOut->DrawRect( aPgRegion[i].SVRect() );
-                        }
-                    }
-                }
-            }
             if ( aRect.HasArea() )
             {
                 SvxBrushItem* pNewItem;
@@ -3990,7 +4002,6 @@ void SwPageFrm::RefreshSubsidiary( const SwRect &rRect ) const
 |*  Letzte Aenderung    MA 22. Jan. 95
 |*
 |*************************************************************************/
-
 void SwLayoutFrm::RefreshLaySubsidiary( const SwPageFrm *pPage,
                                         const SwRect &rRect ) const
 {
@@ -4028,7 +4039,8 @@ void SwLayoutFrm::RefreshLaySubsidiary( const SwPageFrm *pPage,
         return;
     SwShortCut aShortCut( *pLow, rRect );
     while( pLow && !aShortCut.Stop( pLow->Frm() ) )
-    {   if ( pLow->Frm().IsOver( rRect ) && pLow->Frm().HasArea() )
+    {
+        if ( pLow->Frm().IsOver( rRect ) && pLow->Frm().HasArea() )
         {
             if ( pLow->IsLayoutFrm() )
                 ((const SwLayoutFrm*)pLow)->RefreshLaySubsidiary( pPage, rRect);
@@ -4067,13 +4079,18 @@ void SwLayoutFrm::RefreshLaySubsidiary( const SwPageFrm *pPage,
 |*************************************************************************/
 
 //Malt die angegebene Linie, achtet darauf, dass keine Flys uebermalt werden.
-    PointPtr pX = &Point::nA;
-    PointPtr pY = &Point::nB;
-    SizePtr pWidth = &Size::nA;
-    SizePtr pHeight = &Size::nB;
+PointPtr pX = &Point::nA;
+PointPtr pY = &Point::nB;
+SizePtr pWidth = &Size::nA;
+SizePtr pHeight = &Size::nB;
 
-void MA_FASTCALL lcl_RefreshLine( const SwLayoutFrm *pLay, const SwPageFrm *pPage,
-                         const Point &rP1, const Point &rP2, const BYTE nSubColor )
+// OD 18.11.2002 #99672# - new parameter <_pSubsLines>
+void MA_FASTCALL lcl_RefreshLine( const SwLayoutFrm *pLay,
+                                  const SwPageFrm *pPage,
+                                  const Point &rP1,
+                                  const Point &rP2,
+                                  const BYTE nSubColor,
+                                  SwLineRects* _pSubsLines )
 {
     //In welche Richtung gehts? Kann nur Horizontal oder Vertikal sein.
     ASSERT( ((rP1.X() == rP2.X()) || (rP1.Y() == rP2.Y())),
@@ -4144,7 +4161,9 @@ void MA_FASTCALL lcl_RefreshLine( const SwLayoutFrm *pLay, const SwPageFrm *pPag
         if ( aP1.*pDirPt < aP2.*pDirPt )
         {
             SwRect aRect( aP1, aP2 );
-            pSubsLines->AddLineRect( aRect, 0, 0, nSubColor );
+            // OD 18.11.2002 #99672# - use parameter <_pSubsLines> instead of
+            // global variable <pSubsLines>.
+            _pSubsLines->AddLineRect( aRect, 0, 0, nSubColor );
         }
         aP1 = aP2;
         aP1.*pDirPt += 1;
@@ -4195,6 +4214,12 @@ void SwLayoutFrm::PaintSubsidiaryLines( const SwPageFrm *pPage,
         }
     }
 
+    // OD 18.11.2002 #99672# - collect body, header, footer, footnote and section
+    // sub-lines in <pSpecSubsLine> array.
+    const bool bSpecialSublines = IsBodyFrm() || IsHeaderFrm() || IsFooterFrm() ||
+                                  IsFtnFrm() || IsSctFrm();
+    SwLineRects* pUsedSubsLines = bSpecialSublines ? pSpecSubsLines : pSubsLines;
+
     // NOTE: for cell frames only left and right (horizontal layout) respectively
     //      top and bottom (vertical layout) lines painted.
     const bool bVert = IsVertical() ? true : false;
@@ -4204,11 +4229,13 @@ void SwLayoutFrm::PaintSubsidiaryLines( const SwPageFrm *pPage,
         if ( !bCell || !bVert )
         {
             if ( aOriginal.Left() == aOut.Left() )
-                ::lcl_RefreshLine( this, pPage, aOut.Pos(), aLB, nSubColor );
+                ::lcl_RefreshLine( this, pPage, aOut.Pos(), aLB, nSubColor,
+                                   pUsedSubsLines );
             // OD 14.11.2002 #104821# - in vertical layout set page/column break at right
             if ( aOriginal.Right() == nRight )
                 ::lcl_RefreshLine( this, pPage, aRT, aRB,
-                                   (bBreak && bVert) ? SUBCOL_BREAK : nSubColor );
+                                   (bBreak && bVert) ? SUBCOL_BREAK : nSubColor,
+                                   pUsedSubsLines );
         }
         // OD 14.11.2002 #104822# - adjust control for drawing top and bottom lines
         if ( !bCell || bVert )
@@ -4216,9 +4243,11 @@ void SwLayoutFrm::PaintSubsidiaryLines( const SwPageFrm *pPage,
             if ( aOriginal.Top() == aOut.Top() )
                 // OD 14.11.2002 #104821# - in horizontal layout set page/column break at top
                 ::lcl_RefreshLine( this, pPage, aOut.Pos(), aRT,
-                                   (bBreak && !bVert) ? SUBCOL_BREAK : nSubColor );
+                                   (bBreak && !bVert) ? SUBCOL_BREAK : nSubColor,
+                                   pUsedSubsLines );
             if ( aOriginal.Bottom() == nBottom )
-                ::lcl_RefreshLine( this, pPage, aLB, aRB, nSubColor );
+                ::lcl_RefreshLine( this, pPage, aLB, aRB, nSubColor,
+                                   pUsedSubsLines );
         }
     }
     else
@@ -4229,13 +4258,13 @@ void SwLayoutFrm::PaintSubsidiaryLines( const SwPageFrm *pPage,
             if ( aOriginal.Left() == aOut.Left() )
             {
                 SwRect aRect( aOut.Pos(), aLB );
-                pSubsLines->AddLineRect( aRect, 0, 0, nSubColor );
+                pUsedSubsLines->AddLineRect( aRect, 0, 0, nSubColor );
             }
             // OD 14.11.2002 #104821# - in vertical layout set page/column break at right
             if ( aOriginal.Right() == nRight )
             {
                 SwRect aRect( aRT, aRB );
-                pSubsLines->AddLineRect( aRect, 0, 0,
+                pUsedSubsLines->AddLineRect( aRect, 0, 0,
                         (bBreak && bVert) ? SUBCOL_BREAK : nSubColor );
             }
         }
@@ -4246,13 +4275,13 @@ void SwLayoutFrm::PaintSubsidiaryLines( const SwPageFrm *pPage,
             {
                 // OD 14.11.2002 #104821# - in horizontal layout set page/column break at top
                 SwRect aRect( aOut.Pos(), aRT );
-                pSubsLines->AddLineRect( aRect, 0, 0,
+                pUsedSubsLines->AddLineRect( aRect, 0, 0,
                         (bBreak && !bVert) ? SUBCOL_BREAK : nSubColor );
             }
             if ( aOriginal.Bottom() == nBottom )
             {
                 SwRect aRect( aLB, aRB );
-                pSubsLines->AddLineRect( aRect, 0, 0, nSubColor );
+                pUsedSubsLines->AddLineRect( aRect, 0, 0, nSubColor );
             }
         }
     }
