@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objdraw.src,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-26 08:44:40 $
+ *  last change: $Author: kz $ $Date: 2002-12-05 10:25:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@
         Text[ turkish ] = "Standar~t";\
         Text[ language_user1 ] = " ";\
         Text[ catalan ] = "Per ~defecte";\
-        Text[ finnish ] = "~Oletusarvo";\
+        Text[ finnish ] = "~Palauta oletustyyli";\
         Text[ thai ] = "~аё„а№€аёІа№ЂаёЈаёґа№€аёЎаё•а№‰аё™";\
     };
 
@@ -109,7 +109,7 @@
         Text [ italian ] = "St~ile" ; \
         Text [ portuguese_brazilian ] = "Es~tilo" ; \
         Text [ portuguese ] = "Estil~o" ; \
-        Text [ finnish ] = "~Tyyli" ; \
+        Text [ finnish ] = "T~yyli" ; \
         Text [ danish ] = "Typografi" ; \
         Text [ french ] = "St~yle" ; \
         Text [ swedish ] = "Sti~l" ; \
@@ -428,7 +428,7 @@
             };\
         };\
         Text[ chinese_simplified ] = "иЎЊи·ќ(~L)";\
-        Text[ russian ] = "междустрочный";\
+        Text[ russian ] = "Шаг строк";\
         Text[ polish ] = "Odstкp wierszy";\
         Text[ japanese ] = "иЎЊй–“(~L)";\
         Text[ chinese_traditional ] = "е€—й–“йљ”(~L)";\
@@ -479,7 +479,7 @@
         Text[ turkish ] = "~Metin...";\
         Text[ language_user1 ] = " ";\
         Text[ catalan ] = "Te~xt...";\
-        Text[ finnish ] = "Teks~ti";\
+        Text[ finnish ] = "Teks~ti...";\
         Text[ thai ] = "аё‚а№‰аё­~аё„аё§аёІаёЎ...";\
     };
 
@@ -525,12 +525,12 @@
         Text [ ENGLISH ] = "~Name Object..." ; \
         Text[ english_us ] = "~Name Object...";\
         Text[ portuguese ] = "~Name Object...";\
-        Text[ russian ] = "~Name Object...";\
+        Text[ russian ] = "~Объект имени...";\
         Text[ greek ] = "~Name Object...";\
-        Text[ dutch ] = "~Name Object...";\
+        Text[ dutch ] = "Na~am geven aan object...";\
         Text[ french ] = "~Nommer l'objet...";\
         Text[ spanish ] = "~Nombrar objeto...";\
-        Text[ finnish ] = "~Name Object...";\
+        Text[ finnish ] = "~Nimeд objekti...";\
         Text[ italian ] = "~Nome oggetto...";\
         Text[ danish ] = "Navngiv ob~jekt...";\
         Text[ swedish ] = "Namnge ob~jekt...";\
@@ -748,7 +748,7 @@
             };\
         };\
         Text[ chinese_simplified ] = "жЋ’еєЏ(~A)";\
-        Text[ russian ] = "Р~асположение";\
+        Text[ russian ] = "Р~асположить";\
         Text[ polish ] = "~Rozmieszczenie";\
         Text[ japanese ] = "ж•ґе€—(~A)";\
         Text[ chinese_traditional ] = "жЋ’еєЏ(~A)";\
@@ -842,7 +842,7 @@
         Text [ portuguese ] = "~Вncora" ; \
         Text [ portuguese_brazilian ] = "~Verankerung" ; \
         Text[ chinese_simplified ] = "й”Ѓе®љ(~C)";\
-        Text[ russian ] = "~Привязка";\
+        Text[ russian ] = "~Якорь";\
         Text[ polish ] = "~Zakotwiczenie";\
         Text[ japanese ] = "г‚ўгѓіг‚«гѓј(~C)";\
         Text[ chinese_traditional ] = "йЋ–е®љ(~C)";\
@@ -867,7 +867,7 @@
         Text [ italian ] = "~Allineamento" ; \
         Text [ portuguese_brazilian ] = "Ali~nhamento" ; \
         Text [ portuguese ] = "Ali~nhamento" ; \
-        Text [ finnish ] = "~Tasaus" ; \
+        Text [ finnish ] = "T~asaus" ; \
         Text [ danish ] = "~Justering" ; \
         Text [ french ] = "~Alignement" ; \
         Text [ swedish ] = "Juste~ring" ; \
@@ -936,7 +936,7 @@ String RID_DRAW_OBJECTBAR
     Text [ italian ] = "Barra degli oggetti per disegno" ;
     Text [ portuguese_brazilian ] = "Barra de Ferramentas para desenhar objetos" ;
     Text [ portuguese ] = "Barra de objectos de desenho" ;
-    Text [ finnish ] = "Piirrosobjektipalkki" ;
+    Text [ finnish ] = "Piirroksen muotoilurivi" ;
     Text [ danish ] = "Tegneobjektlinje" ;
     Text [ french ] = "Barre d'objets de dessin" ;
     Text [ swedish ] = "Ritobjektslist" ;
@@ -944,7 +944,7 @@ String RID_DRAW_OBJECTBAR
     Text [ spanish ] = "Barra de objetos de dibujo" ;
     Text [ english_us ] = "Drawing Object Bar" ;
     Text[ chinese_simplified ] = "з»е›ѕеЇ№и±Ўж Џ";
-    Text[ russian ] = "Панель графических объектов";
+    Text[ russian ] = "Контекстная панель рисунка";
     Text[ polish ] = "Pasek obiektуw graficznych";
     Text[ japanese ] = "е›іеЅўжЏЏз”»г‚Єгѓ–г‚ёг‚§г‚Їгѓ€гѓђгѓј";
     Text[ chinese_traditional ] = "з№Єењ–з‰©д»¶е€—";
@@ -1111,15 +1111,15 @@ String RID_TEXT_TOOLBOX
     Text [ italian ] = "Barra degli oggetti di testo" ;
     Text [ portuguese_brazilian ] = "Barra de ferramentas para objetos de texto" ;
     Text [ portuguese ] = "Barra de objectos de texto" ;
-    Text [ finnish ] = "Tekstiobjektipalkki" ;
+    Text [ finnish ] = "Tekstin muotoilurivi" ;
     Text [ danish ] = "Tekstobjektlinje" ;
     Text [ french ] = "Barre d'objets de texte" ;
     Text [ swedish ] = "Textobjektlist" ;
-    Text [ dutch ] = "Werkbalk voor tekstobjecten" ;
+    Text [ dutch ] = "Tekstobjectbalk" ;
     Text [ spanish ] = "Barra de objetos de texto" ;
     Text [ english_us ] = "Text Object Bar" ;
     Text[ chinese_simplified ] = "ж–‡е­—еЇ№и±Ўж Џ";
-    Text[ russian ] = "Панель объектов текста";
+    Text[ russian ] = "Контекстная панель текста";
     Text[ polish ] = "Pasek obiektуw tekstowych";
     Text[ japanese ] = "гѓ†г‚­г‚№гѓ€г‚Єгѓ–г‚ёг‚§г‚Їгѓ€гѓђгѓј";
     Text[ chinese_traditional ] = "ж–‡е­—з‰©д»¶е€—";
@@ -1318,9 +1318,9 @@ String RID_GRAPHIC_OBJECTBAR
     Text [ ENGLISH ] = "Toolbar for graphic objects" ;
     Text[ english_us ] = "Graphics Object Bar";
     Text[ portuguese ] = "Barra de objectos grбficos";
-    Text[ russian ] = "Панель объектов для графики";
+    Text[ russian ] = "Контекстная панель графических объектов";
     Text[ greek ] = "ГсбммЮ есгблеЯщн гйб бнфйкеЯменб гсбцйкюн";
-    Text[ dutch ] = "Werkbalk voor grafische objecten";
+    Text[ dutch ] = "Objectbalk afbeeldingen";
     Text[ french ] = "Barre d'objets graphiques";
     Text[ spanish ] = "Barra de objetos grбficos";
     Text[ italian ] = "Barra degli oggetti grafici";
@@ -1335,7 +1335,7 @@ String RID_GRAPHIC_OBJECTBAR
     Text[ turkish ] = "Toolbar for graphic objects";
     Text[ arabic ] = "ФСнШ ЯЗЖдЗК ХжСЙ";
     Text[ catalan ] = "Barra d'objectes grаfics";
-    Text[ finnish ] = "Grafiikkaobjektipalkki";
+    Text[ finnish ] = "Grafiikan muotoilurivi";
     Text[ thai ] = "а№Ѓаё–аёљаё§аё±аё•аё–аёёаёЃаёЈаёІаёџаёґаё„";
 };
 ToolBox RID_GRAPHIC_OBJECTBAR
@@ -1588,7 +1588,7 @@ String RID_POPUP_DRAW
     Text [ finnish ] = "Piirrosobjektien ponnahdusvalikko" ;
     Text [ english_us ] = "Pop-up menu for drawing objects" ;
     Text[ chinese_simplified ] = "з»е›ѕеј№е‡єејЏиЏњеЌ•";
-    Text[ russian ] = "Всплывающее меню для графических объектов";
+    Text[ russian ] = "Всплывающее меню для рисунков";
     Text[ polish ] = "Menu podrкczne obiektуw graficznych";
     Text[ japanese ] = "е›іеЅўжЏЏз”»г‚Єгѓ–г‚ёг‚§г‚Їгѓ€гЃ®гѓќгѓѓгѓ—г‚ўгѓѓгѓ—гѓЎгѓ‹гѓҐгѓј";
     Text[ chinese_traditional ] = "з№Єењ–еї«йЎЇеЉџиѓЅиЎЁ";
@@ -1741,13 +1741,13 @@ Menu RID_POPUP_CHART
             Text [ italian ] = "Cambia area dati..." ;
             Text [ spanish ] = "Modificar бrea de ~datos..." ;
             Text [ french ] = "M~odifier la plage de donnйes..." ;
-            Text [ dutch ] = "~Gegevensbereik veranderen..." ;
+            Text [ dutch ] = "~Gegevensbereik wijzigen..." ;
             Text [ swedish ] = "Дndra ~dataomrеde..." ;
             Text [ danish ] = "Rediger dataomrеde..." ;
             Text [ portuguese_brazilian ] = "Datenbereich ?ndern..." ;
             Text [ portuguese ] = "~Modificar бrea de dados..." ;
             Text[ chinese_simplified ] = "ж›ґж”№ж•°жЌ®еЊєеџџ(~M)...";
-                                                Text[ russian ] = "Изменить область данных...";
+                                                Text[ russian ] = "Изменить диапазон данных...";
                                                 Text[ polish ] = "Zmieс obszar danych..";
                                                 Text[ japanese ] = "гѓ‡гѓјг‚їзЇ„е›ІгЃ®е¤‰ж›ґ(~M)...";
                                                 Text[ chinese_traditional ] = "дї®ж”№иі‡ж–™еЌЂеџџ(~M)...";
@@ -1757,7 +1757,7 @@ Menu RID_POPUP_CHART
             Text[ turkish ] = "~Veri alanэnэ deрiюtir...";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Modifica l'аrea de dades...";
-            Text[ finnish ] = "~Muokkaa tietoaluetta...";
+            Text[ finnish ] = "~Muuta tietoaluetta...";
             Text[ thai ] = "~аё”аё±аё”а№Ѓаё›аёҐаё‡аёЉа№€аё§аё‡аё‚а№‰аё­аёЎаё№аёҐ...";
         };
          //------------------------------
