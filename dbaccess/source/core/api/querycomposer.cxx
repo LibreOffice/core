@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-09 12:28:33 $
+ *  last change: $Author: oj $ $Date: 2001-01-22 08:22:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -783,8 +783,10 @@ sal_Bool OQueryComposer::setANDCriteria(OSQLParseNode * pCondition,
             ::rtl::OUString aColumnName;
 
 
-            pCondition->parseNodeToPredicateStr(aValue,m_xConnection->getMetaData(), xFormatter, m_aLocale,m_sDecimalSep.toChar());
-            pCondition->getChild(0)->parseNodeToPredicateStr(aColumnName,m_xConnection->getMetaData(), xFormatter, m_aLocale,m_sDecimalSep.toChar());
+            //  pCondition->parseNodeToStr(aValue,m_xConnection->getMetaData(), xFormatter, m_aLocale,m_sDecimalSep.toChar());
+            pCondition->parseNodeToStr(aValue,m_xConnection->getMetaData(),NULL);
+            //  pCondition->getChild(0)->parseNodeToStr(aColumnName,m_xConnection->getMetaData(), xFormatter, m_aLocale,m_sDecimalSep.toChar());
+            pCondition->getChild(0)->parseNodeToStr(aColumnName,m_xConnection->getMetaData(), NULL);
 
             // don't display the column name
             aValue = aValue.copy(aColumnName.getLength());
