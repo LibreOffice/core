@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ama $ $Date: 2001-05-18 14:20:33 $
+ *  last change: $Author: fme $ $Date: 2001-08-17 13:03:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -436,8 +436,9 @@ void SwTxtFrm::_InvalidateRange( const SwCharRange &aRange, const long nD)
     }
     if(bInv)
     {
-        if( GetFollow() )
-            ((SwTxtFrm*)GetFollow())->InvalidateRange( aRange, nD );
+// 90365: nD is passed to a follow two times
+//        if( GetFollow() )
+//            ((SwTxtFrm*)GetFollow())->InvalidateRange( aRange, nD );
         InvalidateSize();
     }
 }
