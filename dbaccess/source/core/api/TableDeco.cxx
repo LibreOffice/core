@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDeco.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 08:55:51 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 11:02:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -578,7 +578,7 @@ Reference< XNameAccess> ODBTableDecorator::getColumns() throw (RuntimeException)
 sal_Int64 SAL_CALL ODBTableDecorator::getSomething( const Sequence< sal_Int8 >& rId ) throw(RuntimeException)
 {
     if (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
-        return (sal_Int64)this;
+        return reinterpret_cast<sal_Int64>(this);
 
     sal_Int64 nRet = 0;
     Reference<XUnoTunnel> xTunnel(m_xTable,UNO_QUERY);
