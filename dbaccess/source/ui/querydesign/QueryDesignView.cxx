@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 16:52:55 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 10:53:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1181,6 +1181,7 @@ namespace
 
         ::rtl::OUString aTableListStr;
         // wird gebraucht um sicher zustelllen das eine Tabelle nicht doppelt vorkommt
+        map< ::rtl::OUString,sal_Bool,::comphelper::UStringMixLess> aTableNames;
 
         // generate outer join clause in from
         if(!pConnList->empty())
@@ -1200,6 +1201,18 @@ namespace
 
                     if(aJoin.getLength())
                     {
+                        // insert tables into table list to avoid double entries
+                        OQueryTableWindow* pEntryTabFrom = static_cast<OQueryTableWindow*>(pEntryConn->GetSourceWin());
+                        OQueryTableWindow* pEntryTabTo = static_cast<OQueryTableWindow*>(pEntryConn->GetDestWin());
+
+                        ::rtl::OUString sTabName(BuildTable(_xConnection,pEntryTabFrom));
+                        if(aTableNames.find(sTabName) == aTableNames.end())
+                            aTableNames[sTabName] = sal_True;
+                        sTabName = BuildTable(_xConnection,pEntryTabTo);
+                        if(aTableNames.find(sTabName) == aTableNames.end())
+                            aTableNames[sTabName] = sal_True;
+
+                        // create join
                         sal_Bool bUseEscape = ::dbtools::isDataSourcePropertyEnabled(_xConnection,PROPERTY_OUTERJOINESCAPE,sal_True);
                         ::rtl::OUString aStr;
                         if ( bUseEscape )
@@ -1214,7 +1227,6 @@ namespace
             }
 
             // and now all inner joins
-            map< ::rtl::OUString,sal_Bool,::comphelper::UStringMixLess> aTableNames;
             aIter = pConnList->begin();
             for(;aIter != pConnList->end();++aIter)
             {
