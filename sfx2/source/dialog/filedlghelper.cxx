@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-28 17:00:48 $
+ *  last change: $Author: fs $ $Date: 2001-12-07 15:51:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,6 +296,7 @@ private:
     void                    enablePasswordBox();
     void                    updateFilterOptionsBox();
     void                    updateVersions();
+    void                    updatePreviewState( sal_Bool _bUpdatePreviewWindow = sal_True );
     void                    dispose();
 
     void                    loadConfig();
@@ -497,30 +498,8 @@ void FileDialogHelper_Impl::handleControlStateChanged( const FilePickerEvent& aE
             break;
 
         case ExtendedFilePickerElementIds::CHECKBOX_PREVIEW:
-            if ( mbHasPreview )
-            {
-                Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
-
-                // check, wether or not we have to display a preview
-                if ( xCtrlAccess.is() )
-                {
-                    try
-                    {
-                        Any aValue = xCtrlAccess->getValue( ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0 );
-                        sal_Bool bShowPreview = sal_False;
-
-                        if ( aValue >>= bShowPreview )
-                        {
-                            mbShowPreview = bShowPreview;
-                            TimeOutHdl_Impl( NULL );
-                        }
-                    }
-                    catch( Exception )
-                    {
-                        DBG_ERRORFILE( "FileDialogHelper_Impl::controlStateChanged: caught an exception!" );
-                    }
-                }
-            }
+            updatePreviewState();
+            break;
     }
 }
 
@@ -632,6 +611,36 @@ void FileDialogHelper_Impl::enablePasswordBox()
         ExtendedFilePickerElementIds::CHECKBOX_PASSWORD,
         CheckPasswordCapability()( getCurentSfxFilter() )
     );
+}
+
+// ------------------------------------------------------------------------
+void FileDialogHelper_Impl::updatePreviewState( sal_Bool _bUpdatePreviewWindow )
+{
+    if ( mbHasPreview )
+    {
+        Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
+
+        // check, wether or not we have to display a preview
+        if ( xCtrlAccess.is() )
+        {
+            try
+            {
+                Any aValue = xCtrlAccess->getValue( ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0 );
+                sal_Bool bShowPreview = sal_False;
+
+                if ( aValue >>= bShowPreview )
+                {
+                    mbShowPreview = bShowPreview;
+                    if ( _bUpdatePreviewWindow )
+                        TimeOutHdl_Impl( NULL );
+                }
+            }
+            catch( Exception )
+            {
+                DBG_ERRORFILE( "FileDialogHelper_Impl::updatePreviewState: caught an exception!" );
+            }
+        }
+    }
 }
 
 // ------------------------------------------------------------------------
@@ -1130,8 +1139,7 @@ void FileDialogHelper_Impl::preExecute()
 {
     loadConfig( );
     setDefaultValues( );
-    enablePasswordBox( );
-    updateFilterOptionsBox( );
+    updatePreviewState( sal_False );
 
     // allow for dialog implementations which need to be executed before they return valid values for
     // current filter and such
