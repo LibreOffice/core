@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hjs $ $Date: 2001-10-19 12:38:32 $
+#   last change: $Author: hjs $ $Date: 2001-10-19 13:51:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -123,13 +123,13 @@ OUTDIR2INC= \
 .INCLUDE :	tg_ext.mk
 
 .IF "$(GUI)"=="WNT"
-$(MISC)$/so_custom_patch :  $(PACKAGE_DIR)$/$(ADD_FILES_FLAG_FILE)
+$(PACKAGE_DIR)$/so_custom_patch :  $(PACKAGE_DIR)$/$(ADD_FILES_FLAG_FILE)
     +win32_custom.bat $(PACKAGE_DIR) $(TARFILE_NAME) ms && $(TOUCH) $@
     
-$(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(MISC)$/so_custom_patch
+$(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(PACKAGE_DIR)$/so_custom_patch
 .ENDIF          # "$(GUI)"=="WNT"
 
-TG_DELIVER : build$/$(INPATH)$/so_predeliver
+TG_DELIVER : $(PACKAGE_DIR)$/so_predeliver
         $(DELIVER)
 
 .IF "$(BUILD_SOSL)"!=""
