@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formdlgs.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-03 16:25:04 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 12:40:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,7 +150,7 @@ TabPage RID_SCTAB_FUNCTION
             < "Information" ; Default ; > ;
             < "Logical" ; Default ; > ;
             < "Mathematical" ; Default ; > ;
-            < "Matrix" ; Default ; > ;
+            < "Array" ; Default ; > ;
             < "Statistical" ; Default ; > ;
             < "Spreadsheet" ; Default ; > ;
             < "Text" ; Default ; > ;
@@ -899,7 +899,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text [ italian ] = "Matrice" ;
         Text [ portuguese_brazilian ] = "Matri~x" ;
         Text [ portuguese ] = "Matri~z" ;
-        Text [ ENGLISH_US ] = "~Matrix" ;
+        Text [ ENGLISH_US ] = "Array" ;
         Text [ dutch ] = "Matri~x" ;
         Text [ swedish ] = "~Matris" ;
         Text [ danish ] = "Matrix" ;
