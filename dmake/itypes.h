@@ -1,4 +1,4 @@
-/* RCS  $Id: itypes.h,v 1.2 2003-03-25 14:02:12 hr Exp $
+/* RCS  $Id: itypes.h,v 1.3 2004-04-21 14:10:32 svesik Exp $
 --
 -- SYNOPSIS
 --      Type declarations for common types
@@ -27,25 +27,55 @@
 #ifndef ITYPES_h
 #define ITYPES_h
 
-typedef unsigned char uint8;
-typedef signed char int8;
+#ifndef HAVE_INT8
+  typedef unsigned char uint8;
+#endif
+
+#ifndef HAVE_INT8
+  typedef signed char int8;
+#endif
+
 #if SIZEOF_SHORT == 2
-typedef unsigned short uint16;
-typedef short int16;
+# ifndef HAVE_UINT16
+    typedef unsigned short uint16;
+# endif
+
+# ifndef HAVE_INT16
+    typedef short int16;
+# endif
+
 #elif SIZEOF_INT == 2
-typedef unsigned int uint16;
-typedef int int16;
+
+# ifndef HAVE_UNIT16
+    typedef unsigned int uint16;
+# endif
+
+# ifndef HAVE_INT16
+     typedef int int16;
+# endif
 #else
-#error "No 2 byte type, you lose."
+# ifndef HAVE_INT16
+#   error "No 2 byte type, you lose."
+# endif
 #endif
 #if SIZEOF_INT == 4
-typedef unsigned int uint32;
-typedef int int32;
+# ifndef HAVE_UINT32
+    typedef unsigned int uint32;
+# endif
+# ifndef HAVE_INT32
+    typedef int int32;
+# endif
 #elif SIZEOF_LONG == 4
-typedef unsigned long uint32;
-typedef long int32;
+# ifndef HAVE_UINT32
+    typedef unsigned long uint32;
+# endif
+# ifndef HAVE_INT32
+    typedef long int32;
+# endif
 #else
-#error "No 4 byte type, you lose."
+# ifndef HAVE_INT32
+#   error "No 4 byte type, you lose."
+# endif
 #endif
 
 #endif
