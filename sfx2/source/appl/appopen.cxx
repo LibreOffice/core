@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 13:27:21 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:18:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -607,9 +607,14 @@ SfxMedium* SfxApplication::InsertDocumentDialog
 
         pMedium->UseInteractionHandler(TRUE);
 
-        SfxFilterMatcher aMatcher( rFact );
+        SfxFilterMatcher* pMatcher = NULL;
+        if ( rFact.Len() )
+            pMatcher = new SfxFilterMatcher( rFact );
+        else
+            pMatcher = new SfxFilterMatcher();
+
         const SfxFilter* pFilter=0;
-        sal_uInt32 nError = aMatcher.DetectFilter( *pMedium, &pFilter, FALSE );
+        sal_uInt32 nError = pMatcher->DetectFilter( *pMedium, &pFilter, FALSE );
         if ( nError == ERRCODE_NONE && pFilter )
             pMedium->SetFilter( pFilter );
         else
@@ -617,6 +622,8 @@ SfxMedium* SfxApplication::InsertDocumentDialog
 
         if( pMedium && CheckPasswd_Impl( 0, SFX_APP()->GetPool(), pMedium ) == ERRCODE_ABORT )
             pMedium = NULL;
+
+        DELETEZ( pMatcher );
     }
 
     delete pURLList;
