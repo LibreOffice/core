@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpath.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-05 10:39:47 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:40:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,9 @@
 #ifndef _PICKERHELPER_HXX
 #include <svtools/pickerhelper.hxx>
 #endif
-
+#ifndef _AEITEM_HXX //autogen
+#include <svtools/aeitem.hxx>
+#endif
 #ifndef _SVTABBX_HXX //autogen
 #include <svtools/svtabbx.hxx>
 #endif
@@ -122,6 +124,9 @@
 #ifndef  _COM_SUN_STAR_UI_DIALOGS_EXECUTABLEDIALOGRESULTS_HPP_
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #endif
+#ifndef SVX_OPTHEADERTABLISTBOX_HXX
+#include "optHeaderTabListbox.hxx"
+#endif
 #ifndef _SVX_READONLYIMAGE_HXX
 #include <readonlyimage.hxx>
 #endif
@@ -132,6 +137,7 @@
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::uno;
+using namespace svx;
 
 // define ----------------------------------------------------------------
 
@@ -197,141 +203,6 @@ long SvxPathControl_Impl::Notify( NotifyEvent& rNEvt )
     if ( m_pFocusCtrl && rNEvt.GetWindow() != m_pFocusCtrl && rNEvt.GetType() == EVENT_GETFOCUS )
         m_pFocusCtrl->GrabFocus();
     return nRet;
-}
-
-// class OptHeaderTabListBox ---------------------------------------------
-
-class OptHeaderTabListBox : public SvTabListBox
-{
-private:
-    BOOL        m_bFirstPaint;
-    HeaderBar*  m_pHeaderBar;
-
-    DECL_LINK( TabBoxScrollHdl_Impl, SvTabListBox* );
-
-public:
-    OptHeaderTabListBox( Window* pParent, WinBits nBits );
-
-    virtual void    Paint( const Rectangle& rRect );
-    void            InitHeaderBar( HeaderBar* _pHeaderBar );
-    virtual void    InitEntry( SvLBoxEntry*, const XubString&, const Image&, const Image& );
-    virtual void    RequestHelp( const HelpEvent& rHEvt );
-};
-
-// class OptLBoxString_Impl ----------------------------------------------
-
-class OptLBoxString_Impl : public SvLBoxString
-{
-public:
-    OptLBoxString_Impl( SvLBoxEntry* pEntry, USHORT nFlags, const String& rTxt ) :
-        SvLBoxString( pEntry, nFlags, rTxt ) {}
-
-    virtual void Paint( const Point& rPos, SvLBox& rDev, USHORT nFlags, SvLBoxEntry* pEntry );
-};
-
-// -----------------------------------------------------------------------
-
-void OptLBoxString_Impl::Paint( const Point& rPos, SvLBox& rDev, USHORT, SvLBoxEntry* pEntry )
-{
-    Font aOldFont( rDev.GetFont() );
-    Font aFont( aOldFont );
-    //detect readonly state by asking for a valid Image
-    if(pEntry && !(!((OptHeaderTabListBox&)rDev).GetCollapsedEntryBmp(pEntry)))
-        aFont.SetColor( Application::GetSettings().GetStyleSettings().GetDeactiveTextColor() );
-    rDev.SetFont( aFont );
-    rDev.DrawText( rPos, GetText() );
-    rDev.SetFont( aOldFont );
-}
-
-OptHeaderTabListBox::OptHeaderTabListBox( Window* pParent, WinBits nWinStyle ) :
-
-    SvTabListBox( pParent, nWinStyle ),
-
-    m_bFirstPaint( TRUE ),
-    m_pHeaderBar( NULL )
-
-{
-}
-
-// -----------------------------------------------------------------------
-
-void OptHeaderTabListBox::Paint( const Rectangle& rRect )
-{
-    if ( m_bFirstPaint )
-    {
-        m_bFirstPaint = FALSE;
-        RepaintScrollBars();
-    }
-
-    SvTabListBox::Paint( rRect );
-}
-
-void OptHeaderTabListBox::InitHeaderBar( HeaderBar* _pHeaderBar )
-{
-    m_pHeaderBar = _pHeaderBar;
-    SetScrolledHdl( LINK( this, OptHeaderTabListBox, TabBoxScrollHdl_Impl ) );
-}
-
-void OptHeaderTabListBox::InitEntry( SvLBoxEntry* pEntry, const XubString& rTxt,
-                                     const Image& rImg1, const Image& rImg2 )
-{
-    SvTabListBox::InitEntry( pEntry, rTxt, rImg1, rImg2 );
-    USHORT nTabCount = TabCount();
-
-    for ( USHORT nCol = 1; nCol < nTabCount; ++nCol )
-    {
-        // alle Spalten mit eigener Klasse initialisieren (Spalte 0 == Bitmap)
-        SvLBoxString* pCol = (SvLBoxString*)pEntry->GetItem( nCol );
-        OptLBoxString_Impl* pStr = new OptLBoxString_Impl( pEntry, 0, pCol->GetText() );
-        pEntry->ReplaceItem( pStr, nCol );
-    }
-}
-/*-- 26.02.2004 14:21:54---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-void OptHeaderTabListBox::RequestHelp( const HelpEvent& rHEvt )
-{
-    bool bHandled = false;
-    if( Help::IsBalloonHelpEnabled() || Help::IsQuickHelpEnabled() )
-    {
-        Point aPos( ScreenToOutputPixel( rHEvt.GetMousePosPixel() ));
-        SvLBoxEntry* pEntry = GetEntry( aPos );
-        if( pEntry )
-        {
-            String sEntry = ReadOnlyImage::GetHelpTip();
-            SvLBoxTab* pTab;
-            SvLBoxItem* pItem = GetItem( pEntry, aPos.X(), &pTab );
-            Image aEntryImage = GetCollapsedEntryBmp( pEntry );
-            BOOL bNotReadOnly = !aEntryImage;
-            if( !bNotReadOnly && pItem && SV_ITEM_ID_LBOXCONTEXTBMP == pItem->IsA())
-            {
-                Point aPos = SvTreeListBox::GetEntryPos( pEntry );
-                Size aSize( pItem->GetSize( this, pEntry ) );
-
-                if((aPos.X() + aSize.Width()) > GetSizePixel().Width())
-                    aSize.Width() = GetSizePixel().Width() - aPos.X();
-
-                aPos = OutputToScreenPixel(aPos);
-                Rectangle aItemRect( aPos, aSize );
-                if(Help::IsBalloonHelpEnabled())
-                {
-                    aPos.X() += aSize.Width();
-                    Help::ShowBalloon( this, aPos, aItemRect, sEntry );
-                }
-                else
-                    Help::ShowQuickHelp( this, aItemRect, sEntry,
-                        QUICKHELP_LEFT|QUICKHELP_VCENTER );
-                bHandled = true;
-            }
-        }
-    }
-    if(!bHandled)
-        SvTabListBox::RequestHelp(rHEvt);
-}
-IMPL_LINK( OptHeaderTabListBox, TabBoxScrollHdl_Impl, SvTabListBox*, pList )
-{
-    m_pHeaderBar->SetOffset( -GetXOffset() );
-    return 0;
 }
 
 // functions -------------------------------------------------------------
