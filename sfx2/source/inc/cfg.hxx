@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 16:13:28 $
+ *  last change: $Author: rt $ $Date: 2005-02-02 14:03:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,13 +174,13 @@ struct SfxStylesInfo_Impl
         SfxStylesInfo_Impl();
         void setModel(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel);
 
-        sal_Bool parseStyleCommand(const ::rtl::OUString&   sCommand,
-                                         SfxStyleInfo_Impl& aStyle  );
+        sal_Bool parseStyleCommand(SfxStyleInfo_Impl& aStyle);
+        void getLabel4Style(SfxStyleInfo_Impl& aStyle);
 
         ::std::vector< SfxStyleInfo_Impl > getStyleFamilies();
         ::std::vector< SfxStyleInfo_Impl > getStyles(const ::rtl::OUString& sFamily);
 
-        static ::rtl::OUString generateCommand(const ::rtl::OUString sFamily, ::rtl::OUString sStyle);
+        static ::rtl::OUString generateCommand(const ::rtl::OUString& sFamily, const ::rtl::OUString& sStyle);
 };
 
 struct SfxGroupInfo_Impl
