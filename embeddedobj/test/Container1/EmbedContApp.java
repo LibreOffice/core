@@ -859,6 +859,7 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
     // Helper methods
     public XEmbeddedObject createEmbedObject( String aServiceName )
     {
+        String aFactoryServiceName = null;
         XEmbeddedObject xEmbObj = null;
         byte[] pClassID = new byte[16];
 
@@ -868,6 +869,8 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
                                     0xAA, 0x47, 0xDA, 0xE2, 0xEE, 0x68, 0x9D, 0xD6 };
             for ( int ind = 0; ind < 16; ind++ )
                 pClassID[ind] = (byte)pTempClassID[ind];
+
+            aFactoryServiceName = "com.sun.star.embed.OOoEmbeddedObjectFactory";
         }
         else if ( aServiceName.equals( "com.sun.star.comp.Writer.GlobalDocument" ) )
         {
@@ -875,6 +878,8 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
                                     0x95, 0x62, 0xBD, 0x13, 0xEA, 0x6F, 0x15, 0xA0 };
             for ( int ind = 0; ind < 16; ind++ )
                 pClassID[ind] = (byte)pTempClassID[ind];
+
+            aFactoryServiceName = "com.sun.star.embed.OOoEmbeddedObjectFactory";
         }
         else if ( aServiceName.equals( "com.sun.star.comp.Writer.WebDocument" ) )
         {
@@ -882,6 +887,8 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
                                     0x91, 0xCE, 0x39, 0xC3, 0x90, 0x3F, 0xAC, 0x5E };
             for ( int ind = 0; ind < 16; ind++ )
                 pClassID[ind] = (byte)pTempClassID[ind];
+
+            aFactoryServiceName = "com.sun.star.embed.OOoEmbeddedObjectFactory";
         }
         else if ( aServiceName.equals( "com.sun.star.comp.Calc.SpreadsheetDocument" ) )
         {
@@ -889,6 +896,8 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
                                     0xA5, 0x91, 0x42, 0xD9, 0xAE, 0x74, 0x95, 0x0F };
             for ( int ind = 0; ind < 16; ind++ )
                 pClassID[ind] = (byte)pTempClassID[ind];
+
+            aFactoryServiceName = "com.sun.star.embed.OOoEmbeddedObjectFactory";
         }
         else if ( aServiceName.equals( "com.sun.star.comp.Draw.PresentationDocument" ) )
         {
@@ -896,6 +905,8 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
                                     0x80, 0x3B, 0x99, 0xD9, 0xBF, 0xAC, 0x10, 0x47 };
             for ( int ind = 0; ind < 16; ind++ )
                 pClassID[ind] = (byte)pTempClassID[ind];
+
+            aFactoryServiceName = "com.sun.star.embed.OOoEmbeddedObjectFactory";
         }
         else if ( aServiceName.equals( "com.sun.star.comp.Draw.DrawingDocument" ) )
         {
@@ -903,6 +914,8 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
                                     0x99, 0x1C, 0xCB, 0xEE, 0xAC, 0x6B, 0xD5, 0xE3 };
             for ( int ind = 0; ind < 16; ind++ )
                 pClassID[ind] = (byte)pTempClassID[ind];
+
+            aFactoryServiceName = "com.sun.star.embed.OOoEmbeddedObjectFactory";
         }
         else if ( aServiceName.equals( "com.sun.star.comp.Math.FormulaDocument" ) )
         {
@@ -910,6 +923,8 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
                                     0x85, 0x51, 0x61, 0x47, 0xE7, 0x76, 0xA9, 0x97 };
             for ( int ind = 0; ind < 16; ind++ )
                 pClassID[ind] = (byte)pTempClassID[ind];
+
+            aFactoryServiceName = "com.sun.star.embed.OOoEmbeddedObjectFactory";
         }
         else if ( aServiceName.equals( "BitmapImage" ) )
         {
@@ -917,13 +932,15 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
                                     0x8C, 0x3D, 0x00, 0xAA, 0x00, 0x1A, 0x16, 0x52 };
             for ( int ind = 0; ind < 16; ind++ )
                 pClassID[ind] = (byte)pTempClassID[ind];
+
+            aFactoryServiceName = "com.sun.star.embed.OleEmbeddedObjectFactory";
         }
 
         if ( pClassID != null )
         {
             // create embedded object based on the class ID
             try {
-                Object oEmbedFactory = m_xServiceFactory.createInstance( "com.sun.star.embed.EmbeddedObjectFactory" );
+                Object oEmbedFactory = m_xServiceFactory.createInstance( aFactoryServiceName );
                 XEmbedObjectFactory xEmbedFactory = (XEmbedObjectFactory)UnoRuntime.queryInterface(
                                                                                         XEmbedObjectFactory.class,
                                                                                         oEmbedFactory );
@@ -937,7 +954,7 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
                 }
                 else
                     JOptionPane.showMessageDialog( m_aFrame,
-                                                   "Can't create EmbedFactory!",
+                                                   "Can't create EmbedCreator!",
                                                    "Error:",
                                                    JOptionPane.ERROR_MESSAGE );
             }
@@ -957,18 +974,23 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
         XEmbeddedObject xEmbObj = null;
 
         try {
-            Object oEmbedFactory = m_xServiceFactory.createInstance( "com.sun.star.embed.EmbeddedObjectFactory" );
-            XEmbedObjectFactory xEmbedFactory = (XEmbedObjectFactory)UnoRuntime.queryInterface(
-                                                                                    XEmbedObjectFactory.class,
-                                                                                    oEmbedFactory );
-            if ( xEmbedFactory != null )
+            Object oLinkCreator = m_xServiceFactory.createInstance( "com.sun.star.embed.EmbeddedObjectCreator" );
+            XLinkCreator xLinkCreator = (XLinkCreator)UnoRuntime.queryInterface(
+                                                                                    XLinkCreator.class,
+                                                                                    oLinkCreator );
+            if ( xLinkCreator != null )
             {
-                Object oEmbObj = xEmbedFactory.createInstanceLink( m_xStorage, "EmbedSub", aLinkURL, true );
+                PropertyValue[] aMedDescr = { new PropertyValue(), new PropertyValue() };
+                aMedDescr[0].Name = "URL";
+                aMedDescr[0].Value = (Object) aLinkURL;
+                aMedDescr[1].Name = "ReadOnly";
+                aMedDescr[1].Value = (Object) new Boolean( false );
+                Object oEmbObj = xLinkCreator.createInstanceLink( m_xStorage, "EmbedSub", aMedDescr );
                 xEmbObj = (XEmbeddedObject)UnoRuntime.queryInterface( XEmbeddedObject.class, oEmbObj );
             }
             else
                 JOptionPane.showMessageDialog( m_aFrame,
-                                               "Can't create EmbedFactory!",
+                                               "Can't create LinkCreator!",
                                                "Error:",
                                                JOptionPane.ERROR_MESSAGE );
         }
@@ -986,21 +1008,20 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
     {
         XEmbeddedObject xEmbObj = null;
         try {
-            Object oEmbedFactory = m_xServiceFactory.createInstance( "com.sun.star.embed.EmbeddedObjectFactory" );
-            XEmbedObjectFactory xEmbedFactory = (XEmbedObjectFactory)UnoRuntime.queryInterface(
-                                                                                    XEmbedObjectFactory.class,
-                                                                                    oEmbedFactory );
-            if ( xEmbedFactory != null )
+            Object oEmbedCreator = m_xServiceFactory.createInstance( "com.sun.star.embed.EmbeddedObjectCreator" );
+            XEmbedObjectCreator xEmbedCreator = (XEmbedObjectCreator)UnoRuntime.queryInterface(
+                                                                                    XEmbedObjectCreator.class,
+                                                                                    oEmbedCreator );
+            if ( xEmbedCreator != null )
             {
                 PropertyValue[] aMedDescr = { new PropertyValue(), new PropertyValue() };
                 aMedDescr[0].Name = "URL";
                 aMedDescr[0].Value = (Object) aFileURI;
                 aMedDescr[1].Name = "ReadOnly";
                 aMedDescr[1].Value = (Object) new Boolean( false );
-                Object oEmbObj = xEmbedFactory.createInstanceInitFromMediaDescriptor( m_xStorage,
+                Object oEmbObj = xEmbedCreator.createInstanceInitFromMediaDescriptor( m_xStorage,
                                                                                     "EmbedSub",
-                                                                                    aMedDescr,
-                                                                                    true );
+                                                                                    aMedDescr );
                 xEmbObj = (XEmbeddedObject)UnoRuntime.queryInterface( XEmbeddedObject.class, oEmbObj );
             }
             else
@@ -1147,10 +1168,10 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
             Object oStorage = xStorageFactory.createInstanceWithArguments( aArgs );
             XStorage xTargetStorage = (XStorage)UnoRuntime.queryInterface( XStorage.class, oStorage );
 
-            Object oEmbedFactory = m_xServiceFactory.createInstance( "com.sun.star.embed.EmbeddedObjectFactory" );
-            XEmbedObjectFactory xEmbedFactory = (XEmbedObjectFactory)UnoRuntime.queryInterface(
-                                                                                    XEmbedObjectFactory.class,
-                                                                                    oEmbedFactory );
+            Object oEmbedCreator = m_xServiceFactory.createInstance( "com.sun.star.embed.EmbeddedObjectCreator" );
+            XEmbedObjectCreator xEmbedCreator = (XEmbedObjectCreator)UnoRuntime.queryInterface(
+                                                                                    XEmbedObjectCreator.class,
+                                                                                    oEmbedCreator );
 
             XNameAccess xNameAccess = (XNameAccess)UnoRuntime.queryInterface( XNameAccess.class,
                                                                             xTargetStorage );
@@ -1164,6 +1185,7 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
             if ( xNameAccess.hasByName( "LinkName" ) && xTargetStorage.isStreamElement( "LinkName" ) )
             {
             /*
+                // OOo links will not be tested until they have correct persistence
                 XStream xLinkStream = xTargetStorage.openStreamElement( "LinkName", ElementModes.ELEMENT_READ );
                 if ( xLinkStream != null )
                 {
@@ -1174,14 +1196,14 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
                         int nRead = xInStream.readBytes( pBuff, 1000 );
                         m_aLinkURI = new String( pBuff[0] );
                         xInStream.closeInput();
-                        oEmbObj = xEmbedFactory.createInstanceLink( m_aLinkURI );
+                        oEmbObj = xEmbedCreator.createInstanceLink( m_aLinkURI );
                         m_bLinkObj = true;
                     }
                 }
             */
             }
             else
-                oEmbObj = xEmbedFactory.createInstanceInitFromEntry( xTargetStorage,
+                oEmbObj = xEmbedCreator.createInstanceInitFromEntry( xTargetStorage,
                                                                     "EmbedSub",
                                                                     false );
 
