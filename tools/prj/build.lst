@@ -1,0 +1,37 @@
+tl	tools	:	external vos NULL
+tl	tools									usr1	-	all	tl_mkout NULL
+tl	tools\bootstrp\isdll					get		-	all	tl_bsisdll NULL
+tl	tools\bootstrp\addexes					get		-	all	tl_bsexes NULL
+tl	tools\bootstrp\addexe2					get		-	all	tl_bsexe2 NULL
+tl	tools\inc								get		-	all	tl_inc NULL
+tl	tools\jobs								get		-	all	tl_jobs NULL
+tl	tools\mac\inc							get		-	all	tl_mcinc NULL
+tl	tools\os2\inc							get		-	all	tl_o2inc NULL
+tl	tools\prj								get		-	all	tl_prj NULL
+tl	tools\prj								usr7	-	all	tl_deliver NULL
+tl	tools\prj								usr42	-	all	tl_zn NULL
+tl	tools\workben							get		-	all	tl_wben NULL
+tl	tools\source\solar						nmake	-	u	tl_sol NULL
+tl	tools\source\generic					nmake	-	all	tl_gen tl_sol.u NULL
+tl	tools\source\memtools					nmake	-	all	tl_mem tl_sol.u NULL
+tl	tools\source\memmgr						nmake	-	all	tl_mgr tl_sol.u NULL
+tl	tools\source\debug						nmake	-	all	tl_deb tl_sol.u NULL
+tl	tools\source\intntl						nmake	-	all	tl_int tl_sol.u NULL
+tl	tools\source\datetime					nmake	-	all	tl_dat tl_sol.u NULL
+tl	tools\source\stream						nmake	-	all	tl_str tl_sol.u NULL
+tl	tools\source\rc							nmake	-	all	tl_rc tl_sol.u NULL
+tl	tools\source\ref						nmake	-	all	tl_ref tl_sol.u NULL
+tl	tools\source\fsys						nmake	-	all	tl_fsys tl_sol.u NULL
+tl	tools\source\zcodec						nmake	-	all	tl_zco tl_sol.u NULL
+tl	tools\source\communi					nmake	-	all	tl_com tl_sol.u NULL
+tl	tools\source\inet						nmake	-	all	tl_inet tl_sol.u NULL
+tl	tools\source\timestamp					nmake	-	all	tl_tstamp tl_sol.u NULL
+tl	tools\source\string						nmake	-	all	tl_string tl_sol.u NULL
+tl	tools\win\source\dll					nmake	-	w	tl_dllw NULL
+tl	tools\os2\source\dll					nmake	-	p	tl_dllp NULL
+tl	tools\os2\source\wps					nmake	-	p	tl_wps NULL
+tl	tools\unx\source\dll					nmake	-	u	tl_dllu tl_sol.u NULL
+tl	tools\mac\source						nmake	-	m	tl_dllm NULL
+tl	tools\util								nmake	-	all	tl_utl tl_com tl_dat tl_deb tl_dllm.m tl_dllp.p tl_dllu.u tl_dllw.w tl_fsys tl_gen tl_inet tl_int tl_mem tl_mgr tl_rc tl_ref tl_str tl_string tl_tstamp tl_wps.p tl_zco NULL
+tl	tools\symbol							nmake	-	all	tl_sym tl_utl NULL
+tl	tools\bootstrp							nmake	-	all	tl_bstrp tl_utl NULL

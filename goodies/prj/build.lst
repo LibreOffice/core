@@ -1,0 +1,32 @@
+go	goodies	:	so3 NULL
+go	goodies									usr1	-	all	g_mkout NULL
+go	goodies\inc								get		-	all	g_inc NULL
+go	goodies\prj								get		-	all	g_prj NULL
+go	goodies\jobs							get		-	all	g_jobs NULL
+go	goodies\source\base3d					nmake	-	all	g_base3d NULL
+go	goodies\source\base2d					nmake	-	all	g_base2d NULL
+go	goodies\source\graphic					nmake	-	all	g_graph NULL
+go	goodies\source\filter.vcl\eos2met		nmake	-	all	g_vfeom NULL
+go	goodies\source\filter.vcl\ios2met		nmake	-	all	g_vfiom NULL
+go	goodies\source\filter.vcl\epict			nmake	-	all	g_vfept NULL
+go	goodies\source\filter.vcl\egif			nmake	-	all	g_vfegf NULL
+go	goodies\source\filter.vcl\epng			nmake	-	all	g_vfepn NULL
+go	goodies\source\filter.vcl\ipcd			nmake	-	all	g_vfipc NULL
+go	goodies\source\filter.vcl\ipcx			nmake	-	all	g_vfipx NULL
+go	goodies\source\filter.vcl\ipict			nmake	-	all	g_vfipt NULL
+go	goodies\source\filter.vcl\idxf			nmake	-	all	g_vfidx NULL
+go	goodies\source\filter.vcl\itiff			nmake	-	all	g_vfitf NULL
+go	goodies\source\filter.vcl\ipbm			nmake	-	all	g_vfpbm NULL
+go	goodies\source\filter.vcl\epbm			nmake	-	all	g_epbm NULL
+go	goodies\source\filter.vcl\epgm			nmake	-	all	g_epgm NULL
+go	goodies\source\filter.vcl\eppm			nmake	-	all	g_eppm NULL
+go	goodies\source\filter.vcl\iras			nmake	-	all	g_iras NULL
+go	goodies\source\filter.vcl\expm			nmake	-	all	g_expm NULL
+go	goodies\source\filter.vcl\eras			nmake	-	all	g_eras NULL
+go	goodies\source\filter.vcl\etiff			nmake	-	all	g_etiff NULL
+go	goodies\source\filter.vcl\eps			nmake	-	all	g_eps NULL
+go	goodies\source\filter.vcl\itga			nmake	-	all	g_itga NULL
+go	goodies\source\filter.vcl\ipsd			nmake	-	all	g_ipsd NULL
+go	goodies\source\filter.vcl\ieps			nmake	-	all	g_ieps NULL
+go	goodies\source\filter.vcl\icgm			nmake	-	all	g_icgm NULL
+go	goodies\util							nmake	-	all	g_util g_base2d g_base3d g_eras g_etiff g_expm g_graph g_ieps g_ipsd g_iras g_itga g_vfpbm NULL

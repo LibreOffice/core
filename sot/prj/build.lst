@@ -1,0 +1,8 @@
+to	sot	:	tools ucbhelper unotools NULL
+to	sot										usr1	-	all	sot_mkout NULL
+to	sot\inc									get		-	all	sot_inc NULL
+to	sot\jobs								get		-	all	sot_jobs NULL
+to	sot\prj									get		-	all	sot_prj NULL
+to	sot\source\base							nmake	-	all	sot_base NULL
+to	sot\source\sdstor						nmake	-	all	sot_sdst NULL
+to	sot\util								nmake	-	all	sot_ut sot_base sot_sdst NULL

@@ -1,0 +1,34 @@
+vc	vcl	:	psprint rsc sot ucbhelper unotools NULL
+vc	vcl										usr1	-	all	vc_mkout NULL
+vc	vcl\source\unotypes						nmake	-	all	vc_unot NULL
+vc	vcl\source\ex							nmake	-	all	vc_ex vc_remo NULL
+vc	vcl\source\glyphs						nmake	-	all	vc_glyphs NULL
+vc	vcl\source\remote						nmake	-	all	vc_remo vc_glyphs vc_unot NULL
+vc	vcl\source\app							nmake	-	all	vc_app vc_remo NULL
+vc	vcl\source\gdi							nmake	-	all	vc_gdi NULL
+vc	vcl\source\window						nmake	-	all	vc_win NULL
+vc	vcl\source\control						nmake	-	all	vc_ctrl NULL
+vc	vcl\source\src							nmake	-	all	vc_src NULL
+vc	vcl\source\helper						nmake	-	all	vc_hlp NULL
+vc	vcl\win\source\app						nmake	-	w	vc__appw NULL
+vc	vcl\win\source\gdi						nmake	-	w	vc__gdiw NULL
+vc	vcl\win\source\window					nmake	-	w	vc__winw NULL
+vc	vcl\win\source\src						nmake	-	w	vc__srcw NULL
+vc	vcl\os2\source\app						nmake	-	p	vc__appp NULL
+vc	vcl\os2\source\gdi						nmake	-	p	vc__gdip NULL
+vc	vcl\os2\source\window					nmake	-	p	vc__winp NULL
+vc	vcl\os2\source\src						nmake	-	p	vc__srcp NULL
+vc	vcl\unx\source\app						nmake	-	u	vc__appu NULL
+vc	vcl\unx\source\gdi						nmake	-	u	vc__gdiu NULL
+vc	vcl\unx\source\window					nmake	-	u	vc__winu NULL
+vc	vcl\unx\source\src						nmake	-	u	vc__srcu NULL
+vc	vcl\aqua\source\app						nmake	-	u	vc__appa NULL
+vc	vcl\aqua\source\gdi						nmake	-	u	vc__gdia NULL
+vc	vcl\aqua\source\window					nmake	-	u	vc__wina NULL
+vc	vcl\aqua\source\src						nmake	-	u	vc__srca NULL
+vc	vcl\mac\source\app						nmake	-	m	vc__appm NULL
+vc	vcl\mac\source\gdi						nmake	-	m	vc__gdim NULL
+vc	vcl\mac\source\window					nmake	-	m	vc__winm NULL
+vc	vcl\mac\source\src						nmake	-	m	vc__srcm NULL
+vc	vcl\util								nmake	-	all	vc_util vc__appa.u vc__appm.m vc__appp.p vc__appu.u vc__appw.w vc__gdim.m vc__gdip.p vc__gdiu.u vc__gdiw.w vc__srcm.m vc__srcp.p vc__srcu.u vc__srcw.w vc__wina.u vc__winm.m vc__winp.p vc__winu.u vc__winw.w vc_app vc_ctrl vc_ex vc_gdi vc_hlp vc_remo vc_src vc_win NULL
+vc	vcl\workben								nmake	-	all	vc_wrkb vc_util NULL

@@ -1,0 +1,9 @@
+ph	comphelper	:	cppuhelper offuh NULL
+ph	comphelper								usr1	-	all	ph_mkout NULL
+ph	comphelper\source\container				nmake	-	all	ph_container NULL
+ph	comphelper\source\eventattachermgr		nmake	-	all	ph_evtatmgr NULL
+ph	comphelper\source\misc					nmake	-	all	ph_misc NULL
+ph	comphelper\source\processfactory		nmake	-	all	ph_procfact NULL
+ph	comphelper\source\property				nmake	-	all	ph_property NULL
+ph	comphelper\source\streaming				nmake	-	all	ph_streaming NULL
+ph	comphelper\util							nmake	-	all	ph_util ph_container ph_evtatmgr ph_misc ph_procfact ph_property ph_streaming NULL

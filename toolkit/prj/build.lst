@@ -1,0 +1,9 @@
+ti	toolkit	:	vcl NULL
+ti	toolkit									usr1	-	all	ti_mkout NULL
+ti	toolkit\prj								get		-	all	ti_prj NULL
+ti	toolkit\inc								get		-	all	ti_inc NULL
+ti	toolkit\source\unotypes					nmake	-	all	ti_unotypes NULL
+ti	toolkit\source\helper					nmake	-	all	ti_helper ti_unotypes NULL
+ti	toolkit\source\awt						nmake	-	all	ti_awt ti_unotypes NULL
+ti	toolkit\source\controls					nmake	-	all	ti_controls ti_unotypes NULL
+ti	toolkit\util							nmake	-	all	ti_util ti_awt ti_controls ti_helper NULL

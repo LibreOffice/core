@@ -1,0 +1,8 @@
+r	rsc	:	tools NULL
+r	rsc										usr1	-	all	rsc_mkout NULL
+r	rsc\source\misc							nmake	-	all	rsc_misc NULL
+r	rsc\source\tools						nmake	-	all	rsc_tool NULL
+r	rsc\source\res							nmake	-	all	rsc_res NULL
+r	rsc\source\parser						nmake	-	all	rsc_pars NULL
+r	rsc\source\rsc							nmake	-	all	rsc_rsc NULL
+r	rsc\source\prj							nmake	-	all	rsc_sprj rsc_misc rsc_pars rsc_res rsc_rsc rsc_tool NULL
