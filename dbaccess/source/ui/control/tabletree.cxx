@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabletree.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-05 10:00:59 $
+ *  last change: $Author: fs $ $Date: 2000-10-09 12:36:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,6 +191,7 @@ Reference< XConnection > OTableTreeListBox::UpdateTableList(const ::rtl::OUStrin
     DBG_ASSERT(m_xORB.is(), "OTableTreeListBox::UpdateTableList : please use setServiceFactory to give me a service factory !");
 
     String sCurrentActionError;
+    String sCurrentActionDetails;
     try
     {
         if (m_xORB.is())
@@ -229,30 +230,32 @@ Reference< XConnection > OTableTreeListBox::UpdateTableList(const ::rtl::OUStrin
                 // will be caught and translated into an SQLContext exception
                 throw Exception();
 
-//          sCurrentActionError = String(ModuleRes(STR_COULDNOTCONNECT_PLEASECHECK));
-//          xConnection = xDriver->connect(_rConnectionURL, _rProperties);
-//              // exceptions thrown by connect will be caught and re-routed
-//          DBG_ASSERT(xConnection.is(), "OTableTreeListBox::UpdateTableList : got an invalid connection!");
-//              // if no exception was thrown, the connection should be no-NULL)
-//          if (!xConnection.is())
-//              throw Exception();
-//
-//          Reference< XTablesSupplier > xTableSupp;
-//          Reference< XViewsSupplier > xViewSupp;
-//          sCurrentActionError = String(ModuleRes(STR_NOTABLEINFO));
-//          xMetaData = xConnection->getMetaData();
-//
-//          // get the table supplier and the tables
-//          xTableSupp = xDefinitionAccess->getDataDefinitionByConnection(xConnection);
-//          if (!xTableSupp.is())
-//              throw Exception();
-//
-//          xTables = xTableSupp->getTables();
-//
-//          // get the views supplier and the views
-//          xViewSupp = Reference< XViewsSupplier >(xTableSupp, UNO_QUERY);
-//          if (xViewSupp.is())
-//              xViews = xViewSupp->getViews();
+            sCurrentActionError = String(ModuleRes(STR_COULDNOTCONNECT));
+            sCurrentActionDetails = String(ModuleRes(STR_COULDNOTCONNECT_PLEASECHECK));
+            xConnection = xDriver->connect(_rConnectionURL, _rProperties);
+                // exceptions thrown by connect will be caught and re-routed
+            DBG_ASSERT(xConnection.is(), "OTableTreeListBox::UpdateTableList : got an invalid connection!");
+                // if no exception was thrown, the connection should be no-NULL)
+            if (!xConnection.is())
+                throw Exception();
+            sCurrentActionDetails = String();
+
+            Reference< XTablesSupplier > xTableSupp;
+            Reference< XViewsSupplier > xViewSupp;
+            sCurrentActionError = String(ModuleRes(STR_NOTABLEINFO));
+            xMetaData = xConnection->getMetaData();
+
+            // get the table supplier and the tables
+            xTableSupp = xDefinitionAccess->getDataDefinitionByConnection(xConnection);
+            if (!xTableSupp.is())
+                throw Exception();
+
+            xTables = xTableSupp->getTables();
+
+            // get the views supplier and the views
+            xViewSupp = Reference< XViewsSupplier >(xTableSupp, UNO_QUERY);
+            if (xViewSupp.is())
+                xViews = xViewSupp->getViews();
         }
     }
     catch(RuntimeException&)
@@ -263,7 +266,7 @@ Reference< XConnection > OTableTreeListBox::UpdateTableList(const ::rtl::OUStrin
     {
         sCurrentActionError.SearchAndReplaceAscii("#connurl#", _rConnectionURL);
         // prepend a string stating what we were doing and throw again
-        SQLContext aExtendedInfo = prependContextInfo(e, NULL, sCurrentActionError.GetBuffer());
+        SQLContext aExtendedInfo = prependContextInfo(e, NULL, sCurrentActionError.GetBuffer(), sCurrentActionDetails.GetBuffer());
         throw aExtendedInfo;
     }
     catch(Exception&)
@@ -361,6 +364,9 @@ void OTableTreeListBox::UpdateTableList(const Reference< XDatabaseMetaData >& _r
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/10/05 10:00:59  fs
+ *  initial checkin
+ *
  *
  *  Revision 1.0 28.09.00 13:32:32  fs
  ************************************************************************/
