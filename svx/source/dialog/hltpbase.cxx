@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hltpbase.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: iha $ $Date: 2002-12-03 13:36:02 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:46:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -835,6 +835,8 @@ String SvxHyperlinkTabPageBase::CreateUiNameFromURL( const String& aStrURL )
                 aStrUiURL = aURLObj.GetMainURL(INetURLObject::DECODE_UNAMBIGUOUS);
             }
     }
+    if(!aStrUiURL.Len())
+        return aStrURL;
     return aStrUiURL;
 }
 
