@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoredline.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mtg $ $Date: 2001-11-01 18:28:11 $
+ *  last change: $Author: mtg $ $Date: 2001-11-15 18:44:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,11 +363,16 @@ Any SwXRedlinePortion::getPropertyValue( const OUString& rPropertyName )
     if(rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_REDLINE_TEXT)))
     {
         SwNodeIndex* pNodeIdx = pRedline->GetContentIdx();
-        if(pNodeIdx && 1 < ( pNodeIdx->GetNode().EndOfSectionIndex() - pNodeIdx->GetNode().GetIndex() ) )
+        if(pNodeIdx )
         {
-            SwUnoCrsr* pUnoCrsr = GetCrsr();
-            Reference<XText> xRet = new SwXRedlineText(pUnoCrsr->GetDoc(), *pNodeIdx);
-            aRet <<= xRet;
+            if ( 1 < ( pNodeIdx->GetNode().EndOfSectionIndex() - pNodeIdx->GetNode().GetIndex() ) )
+            {
+                SwUnoCrsr* pUnoCrsr = GetCrsr();
+                Reference<XText> xRet = new SwXRedlineText(pUnoCrsr->GetDoc(), *pNodeIdx);
+                aRet <<= xRet;
+            }
+            else
+                DBG_ASSERT(0, "Empty section in redline portion! (end node immediately follows start node)")
         }
     }
     else
@@ -634,10 +639,15 @@ Any SwXRedline::getPropertyValue( const OUString& rPropertyName )
     else if(rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_REDLINE_TEXT)))
     {
         SwNodeIndex* pNodeIdx = pRedline->GetContentIdx();
-        if(pNodeIdx && 1 < ( pNodeIdx->GetNode().EndOfSectionIndex() - pNodeIdx->GetNode().GetIndex() ) )
+        if( pNodeIdx )
         {
-            Reference<XText> xRet = new SwXRedlineText(pDoc, *pNodeIdx);
-            aRet <<= xRet;
+            if ( 1 < ( pNodeIdx->GetNode().EndOfSectionIndex() - pNodeIdx->GetNode().GetIndex() ) )
+            {
+                Reference<XText> xRet = new SwXRedlineText(pDoc, *pNodeIdx);
+                aRet <<= xRet;
+            }
+            else
+                DBG_ASSERT(0, "Empty section in redline portion! (end node immediately follows start node)")
         }
     }
     else
