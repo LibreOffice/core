@@ -2,9 +2,9 @@
  *
  *  $RCSfile: updatehelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-28 08:50:15 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:34:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,12 +71,12 @@ namespace configmgr
 {
 //..........................................................................
     namespace memory    { class UpdateAccessor; }
-    namespace data      { class NodeAddress; class NodeAccess; }
+    namespace data      { class NodeAddress; class NodeAccessRef; }
 
 //..........................................................................
 
 // adjust a set of changes to the target tree, return true, if there are changes left
-    bool adjustUpdateToTree(SubtreeChange & _rUpdateTree, data::NodeAccess const & _aRootNode);
+    bool adjustUpdateToTree(SubtreeChange & _rUpdateTree, data::NodeAccessRef const & _aRootNode);
 
 // adjust a set of changes to the target tree, return true, if there are changes left
     bool adjustUpdateToTree(SubtreeChange & _rUpdateTree, memory::UpdateAccessor& _anUpdateAccess, data::NodeAddress _aRootNode);
@@ -88,7 +88,7 @@ namespace configmgr
     void applyUpdateWithAdjustmentToTree(SubtreeChange& _anUpdateTree, memory::UpdateAccessor& _anUpdateAccess, data::NodeAddress _aRootNode);
 
 // apply a set of changes to the target tree, return true, if there are changes found
-    bool createUpdateFromDifference(SubtreeChange& _rResultingUpdateTree, data::NodeAccess const & _aExistingData, ISubtree const & _aNewData);
+    bool createUpdateFromDifference(SubtreeChange& _rResultingUpdateTree, data::NodeAccessRef const & _aExistingData, ISubtree const & _aNewData);
 
 //..........................................................................
 }   // namespace configmgr
