@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: jp $ $Date: 2002-03-14 14:25:43 $
+ *  last change: $Author: jp $ $Date: 2002-03-14 17:42:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1058,18 +1058,18 @@ void SwDocShell::Execute(SfxRequest& rReq)
             {
                 BYTE nLevel = pDlg->GetLevel();
                 BYTE nPara = pDlg->GetPara();
-                SwDoc* pDoc = new SwDoc();
-                SfxObjectShellRef xDocSh( new SwDocShell( pDoc, SFX_CREATE_MODE_STANDARD));
+                SwDoc* pSmryDoc = new SwDoc();
+                SfxObjectShellRef xDocSh( new SwDocShell( pSmryDoc, SFX_CREATE_MODE_STANDARD));
                 xDocSh->DoInitNew( 0 );
                 BOOL bImpress = FN_ABSTRACT_STARIMPRESS == nWhich;
-                pDoc->Summary( pDoc, nLevel, nPara, bImpress );
+                pDoc->Summary( pSmryDoc, nLevel, nPara, bImpress );
                 if( bImpress )
                 {
                     WriterRef xWrt;
                     ::GetRTFWriter( aEmptyStr, xWrt );
                     SvMemoryStream *pStrm = new SvMemoryStream();
                     pStrm->SetBufferSize( 16348 );
-                    SwWriter aWrt( *pStrm, *pDoc );
+                    SwWriter aWrt( *pStrm, *pSmryDoc );
                     ErrCode eErr = aWrt.Write( xWrt );
                     if( !ERRCODE_TOERROR( eErr ) )
                     {
@@ -1104,9 +1104,8 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     xDocSh->SetTitle( aTmp );
                     pView->GetWrtShell().SetNewDoc();
                     pFrame->Show();
-                    pDoc->SetModified();
+                    pSmryDoc->SetModified();
                 }
-
             }
             delete pDlg;
         }
