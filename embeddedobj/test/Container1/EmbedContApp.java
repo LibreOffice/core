@@ -680,6 +680,7 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
                                     synchronized( m_oImageLock )
                                     {
                                         m_aImage = m_aToolkit.createImage( aPNGData );
+                                        // m_aImage = m_aToolkit.createImage( "file:///d:/test1.png" );
                                     }
                                 }
                             }
