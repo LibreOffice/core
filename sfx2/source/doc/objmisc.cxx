@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-25 09:36:08 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 18:21:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1848,7 +1848,7 @@ void SfxObjectShell::AdjustMacroMode( const String& rScriptType )
         if ( xSignatures.is() && pImp->nMacroMode != MacroExecMode::FROM_LIST )
         {
             ::com::sun::star::uno::Sequence< security::DocumentSignaturesInformation > aScriptingSignatureInformations;
-            uno::Reference < embed::XStorage > xStore = GetMedium()->GetStorage();
+            uno::Reference < embed::XStorage > xStore = GetMedium()->GetLastCommitReadStorage_Impl();
             sal_uInt16 nSignatureState = GetScriptingSignatureState();
             if ( nSignatureState == SIGNATURESTATE_SIGNATURES_BROKEN )
             {
@@ -1860,7 +1860,7 @@ void SfxObjectShell::AdjustMacroMode( const String& rScriptType )
                 }
             }
             else if ( nSignatureState == SIGNATURESTATE_SIGNATURES_OK && xStore.is() )
-                aScriptingSignatureInformations = xSignatures->VerifyScriptingContentSignatures( xStore );
+                aScriptingSignatureInformations = xSignatures->verifyScriptingContentSignatures( xStore, uno::Reference< io::XInputStream >() );
 
             sal_Int32 nNumOfInfos = aScriptingSignatureInformations.getLength();
 
