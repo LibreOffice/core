@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: er $ $Date: 2001-05-31 16:51:28 $
+ *  last change: $Author: nn $ $Date: 2001-06-13 19:32:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3429,15 +3429,33 @@ void SvNumberformat::GetFormatSpecialInfo(BOOL& bThousand,
                                           USHORT& nPrecision,
                                           USHORT& nAnzLeading) const
 {
-    const ImpSvNumberformatInfo& rInfo = NumFor[0].Info();
-    bThousand = rInfo.bThousand;
-    nPrecision = GetFormatPrecision();
+    // as before: take info from nNumFor=0 for whole format (for dialog etc.)
+
+    short nDummyType;
+    GetNumForInfo( 0, nDummyType, bThousand, nPrecision, nAnzLeading );
+
+    // "negative in red" is only useful for the whole format
+
     const Color* pColor = NumFor[1].GetColor();
     if (fLimit1 == 0.0 && fLimit2 == 0.0 && pColor
                        && (*pColor == rScan.GetRedColor()))
         IsRed = TRUE;
     else
         IsRed = FALSE;
+}
+
+void SvNumberformat::GetNumForInfo( USHORT nNumFor, short& rScannedType,
+                    BOOL& bThousand, USHORT& nPrecision, USHORT& nAnzLeading ) const
+{
+    // take info from a specified sub-format (for XML export)
+
+    if ( nNumFor > 3 )
+        return;             // invalid
+
+    const ImpSvNumberformatInfo& rInfo = NumFor[nNumFor].Info();
+    rScannedType = rInfo.eScannedType;
+    bThousand = rInfo.bThousand;
+    nPrecision = rInfo.nCntPost;
     if (bStandard && rInfo.eScannedType == NUMBERFORMAT_NUMBER)
                                                         // StandardFormat
         nAnzLeading = 1;
@@ -3446,7 +3464,7 @@ void SvNumberformat::GetFormatSpecialInfo(BOOL& bThousand,
         nAnzLeading = 0;
         BOOL bStop = FALSE;
         USHORT i = 0;
-        const USHORT nAnz = NumFor[0].GetnAnz();
+        const USHORT nAnz = NumFor[nNumFor].GetnAnz();
         while (!bStop && i < nAnz)
         {
             short nType = rInfo.nTypeArray[i];
