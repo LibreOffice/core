@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews4.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-08 11:21:50 $
+ *  last change: $Author: dl $ $Date: 2001-03-29 11:44:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,10 +172,12 @@ void SdDrawViewShell::DeleteActualPage()
 
         pDrView->AddUndo(new SdrUndoDelPage(*pPage));
         pDoc->RemovePage(pPage->GetPageNum());
+        pPage->SetModel( NULL );
 
         pPage = pDoc->GetSdPage(nPage, PK_NOTES);
         pDrView->AddUndo(new SdrUndoDelPage(*pPage));
         pDoc->RemovePage(pPage->GetPageNum());
+        pPage->SetModel( NULL );
 
         pDrView->EndUndo();
     }
