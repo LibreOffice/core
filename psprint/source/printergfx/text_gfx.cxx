@@ -2,9 +2,9 @@
   *
   *  $RCSfile: text_gfx.cxx,v $
   *
-  *  $Revision: 1.8 $
+  *  $Revision: 1.9 $
   *
-  *  last change: $Author: pl $ $Date: 2001-06-13 13:09:46 $
+  *  last change: $Author: cp $ $Date: 2001-07-06 16:11:14 $
   *
   *  The Contents of this file are made available subject to the terms of
   *  either of the following licenses
@@ -413,6 +413,37 @@ void PrinterGfx::drawVerticalizedText(
 }
 
 void
+PrinterGfx::LicenceWarning(const Point& rPoint, const sal_Unicode* pStr,
+                           sal_Int16 nLen, const sal_Int32* pDeltaArray)
+{
+    // treat it like a builtin font in case a user has that font also in the
+    // printer. This is not so unlikely as it may seem; no print embedding
+    // licensed fonts are often used (or so they say) in companies:
+    // they are installed on displays and printers, but get not embedded in
+    // print files or documents because they are not licensed for use outside
+    // the company.
+    rtl::OString aMessage( "The font " );
+    aMessage += rtl::OUStringToOString( mrFontMgr.getPSName(mnFontID),
+            RTL_TEXTENCODING_ASCII_US );
+    aMessage += " could not be downloaded\nbecause its license does not allow for that";
+    PSComment( aMessage.getStr() );
+
+    rtl::OString aFontName = rtl::OUStringToOString(
+            mrFontMgr.getPSName(mnFontID),
+            RTL_TEXTENCODING_ASCII_US);
+    PSSetFont (aFontName, RTL_TEXTENCODING_ISO_8859_1);
+
+    sal_Size  nSize    = 4 * nLen;
+    sal_uChar* pBuffer = (sal_uChar*)alloca (nSize* sizeof(sal_uChar));
+
+    ConverterFactory* pCvt = GetConverterFactory ();
+    nSize = pCvt->Convert (pStr, nLen, pBuffer, nSize, RTL_TEXTENCODING_ISO_8859_1);
+
+    PSMoveTo (rPoint);
+    PSShowText (pBuffer, nLen, nSize, pDeltaArray);
+}
+
+void
 PrinterGfx::drawText(
                      const Point& rPoint,
                      const sal_Unicode* pStr,
@@ -423,82 +454,35 @@ PrinterGfx::drawText(
     if (!(nLen > 0))
         return;
 
-    fonttype::type   eType     = mrFontMgr.getFontType (mnFontID);
-    rtl_TextEncoding nEncoding = mrFontMgr.getFontEncoding (mnFontID);
+    fonttype::type   eType          = mrFontMgr.getFontType (mnFontID);
+    fonttype::type   eEffectiveType = fonttype::Unknown;
+    rtl_TextEncoding nEncoding      = mrFontMgr.getFontEncoding (mnFontID);
 
-    switch (eType)
+    if (eType == fonttype::Type1)
+        PSUploadPS1Font (mnFontID);
+
+    if (   eType == fonttype::TrueType
+        && !mrFontMgr.isFontDownloadingAllowed(mnFontID))
     {
-        case fonttype::Type1:
-            PSUploadPS1Font (mnFontID);
-        case fonttype::TrueType:
-            // not nice but necessary since both fonttype::Type1 and
-            // fonttype::TrueType rely on not breaking here
-            if( eType == fonttype::TrueType )
-            {
-                if( mrFontMgr.isFontDownloadingAllowed( mnFontID ) )
-                {
-                    // search for a glyph set matching the set font
-                    std::list< GlyphSet >::iterator aIter;
-                    for (aIter = maPS3Font.begin(); aIter != maPS3Font.end(); aIter++)
-                        if (   ((*aIter).GetFontID()  == mnFontID)
-                               && ((*aIter).IsVertical() == mbTextVertical))
-                        {
-                            (*aIter).DrawText (*this, rPoint, pStr, nLen, pDeltaArray);
-                            break;
-                        }
+        LicenceWarning(rPoint, pStr, nLen, pDeltaArray);
+        return;
+    }
 
-                    // not found ? create a new one
-                    if (aIter == maPS3Font.end())
-                    {
-                        maPS3Font.push_back (GlyphSet(mnFontID, mbTextVertical));
-                        maPS3Font.back().DrawText (*this, rPoint, pStr, nLen, pDeltaArray);
-                    }
-                    break;
-                }
-                else
-                {
-                    // treat it like a builtin font in case a user has that font
-                    // also in the printer. This is not so unlikely as it may seem;
-                    // no print embedding licensed fonts are often used (or so
-                    // they say) in companies:
-                    // they are installed on displays and printers, but get not
-                    // embedded in print files or documents because they are not
-                    // licensed for use outside the company.
-                    rtl::OString aMessage( "The font " );
-                    aMessage += rtl::OUStringToOString( mrFontMgr.getPSName(mnFontID), RTL_TEXTENCODING_ASCII_US );
-                    aMessage += " could not be downloaded\nbecause its license does not allow for that";
-                    PSComment( aMessage.getStr() );
-                }
-            }
-        case fonttype::Builtin:
+    // search for a glyph set matching the set font
+    std::list< GlyphSet >::iterator aIter;
+    for (aIter = maPS3Font.begin(); aIter != maPS3Font.end(); aIter++)
+        if (   ((*aIter).GetFontID()  == mnFontID)
+            && ((*aIter).IsVertical() == mbTextVertical))
         {
-            rtl::OString aFontName = rtl::OUStringToOString(
-                                                            mrFontMgr.getPSName(mnFontID),
-                                                            RTL_TEXTENCODING_ASCII_US);
-            PSSetFont (aFontName, nEncoding);
-
-            sal_Size  nSize    = 4 * nLen;
-            sal_uChar* pBuffer = (sal_uChar*)alloca (nSize* sizeof(sal_uChar));
-
-            ConverterFactory* pCvt = GetConverterFactory ();
-            nSize = pCvt->Convert (pStr, nLen, pBuffer, nSize, nEncoding);
-
-            PSMoveTo (rPoint);
-            PSShowText (pBuffer, nLen, nSize, pDeltaArray);
+            (*aIter).DrawText (*this, rPoint, pStr, nLen, pDeltaArray);
+            break;
         }
-        break;
 
-        default:
-        {
-            WritePS (mpPageBody, "%%%% Error: unsupported font ");
-            WritePS (mpPageBody, mrFontMgr.getPSName(mnFontID));
-            WritePS (mpPageBody, " ID: ");
-            WritePS (mpPageBody, rtl::OString::valueOf (mnFontID));
-            WritePS (mpPageBody, " Type: ");
-            WritePS (mpPageBody, rtl::OString::valueOf ((sal_Int32)eType));
-            WritePS (mpPageBody, "\n");
-        }
-        break;
+    // not found ? create a new one
+    if (aIter == maPS3Font.end())
+    {
+        maPS3Font.push_back (GlyphSet(mnFontID, mbTextVertical));
+        maPS3Font.back().DrawText (*this, rPoint, pStr, nLen, pDeltaArray);
     }
 }
 
@@ -607,6 +591,8 @@ PrinterGfx::GetGlyphOutline (sal_Unicode c,
 /*
  * spool the converted truetype fonts to the page header after the page body is
  * complete
+ * for Type1 fonts spool additional reencoding vectors that are necessary to access the
+ * whole font
  */
 
 void
@@ -614,6 +600,17 @@ PrinterGfx::OnEndPage ()
 {
     std::list< GlyphSet >::iterator aIter;
     for (aIter = maPS3Font.begin(); aIter != maPS3Font.end(); ++aIter)
-        aIter->PSUploadFont (*mpPageHeader, *this, mbUploadPS42Fonts ? true : false );
+    {
+        if (aIter->GetFontType() == fonttype::TrueType)
+        {
+            aIter->PSUploadFont (*mpPageHeader, *this, mbUploadPS42Fonts ? true : false );
+        }
+        else
+        // (   aIter->GetFontType() == fonttype::Type1
+        //  || aIter->GetFontType() == fonttype::Builtin )
+        {
+            aIter->PSUploadEncoding (mpPageHeader, *this);
+        }
+    }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: common_gfx.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-08 16:32:30 $
+ *  last change: $Author: cp $ $Date: 2001-07-06 16:10:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -625,7 +625,7 @@ void
 PrinterGfx::PSSetFont ()
 {
     GraphicsStatus& rCurrent( currentState() );
-    if( maVirtualStatus.maFont          != rCurrent.maFont          ||
+    if( maVirtualStatus.maFont           != rCurrent.maFont         ||
         maVirtualStatus.mnTextHeight     != rCurrent.mnTextHeight   ||
         maVirtualStatus.maEncoding       != rCurrent.maEncoding     ||
         maVirtualStatus.mnTextWidth      != rCurrent.mnTextWidth )
@@ -636,28 +636,41 @@ PrinterGfx::PSSetFont ()
         rCurrent.mnTextHeight        = maVirtualStatus.mnTextHeight;
 
         sal_Int32 nTextHeight = rCurrent.mnTextHeight;
-        sal_Int32 nTextWidth  = rCurrent.mnTextWidth ? rCurrent.mnTextWidth : rCurrent.mnTextHeight;
+        sal_Int32 nTextWidth  = rCurrent.mnTextWidth ? rCurrent.mnTextWidth
+                                                     : rCurrent.mnTextHeight;
 
         sal_Char  pSetFont [256];
         sal_Int32 nChar = 0;
 
-        nChar  = psp::appendStr  ("/",                        pSetFont);
-        nChar += psp::appendStr  (rCurrent.maFont.getStr(),   pSetFont + nChar);
-        switch (rCurrent.maEncoding)
+        nChar += psp::appendStr  ("/",                      pSetFont + nChar);
+        nChar += psp::appendStr  (rCurrent.maFont.getStr(), pSetFont + nChar);
+
+        // postscript based fonts need reencoding
+        if (   (   rCurrent.maEncoding == RTL_TEXTENCODING_MS_1252)
+            || (   rCurrent.maEncoding == RTL_TEXTENCODING_ISO_8859_1)
+            || (   rCurrent.maEncoding >= RTL_TEXTENCODING_USER_START
+                && rCurrent.maEncoding <= RTL_TEXTENCODING_USER_END)
+           )
         {
-            case RTL_TEXTENCODING_MS_1252:
-            case RTL_TEXTENCODING_ISO_8859_1:
-                nChar += psp::appendStr  (" findfont1252 ", pSetFont + nChar);
-                break;
-            default:
-                nChar += psp::appendStr  (" findfont ",     pSetFont + nChar);
-                break;
+            rtl::OString aEncoding =
+                        psp::GlyphSet::GetGlyphSetEncodingName (rCurrent.maEncoding,
+                                                                rCurrent.maFont);
+
+            nChar += psp::appendStr  (" ",              pSetFont + nChar);
+            nChar += psp::appendStr  (aEncoding,        pSetFont + nChar);
+            nChar += psp::appendStr  (" psp_findfont ", pSetFont + nChar);
         }
+        else
+        // tt based fonts mustn't reencode, the encoding is implied by the fontname
+        // same for symbol type1 fonts, dont try to touch them
+        {
+            nChar += psp::appendStr  (" findfont ",     pSetFont + nChar);
+        }
+
         nChar += psp::getValueOf (nTextWidth,   pSetFont + nChar);
-        nChar += psp::appendStr  (" ",              pSetFont + nChar);
-        nChar += psp::getValueOf (-nTextHeight,     pSetFont + nChar);
-        nChar += psp::appendStr  (" matrix scale makefont setfont\n",
-                                  pSetFont + nChar);
+        nChar += psp::appendStr  (" ",          pSetFont + nChar);
+        nChar += psp::getValueOf (-nTextHeight, pSetFont + nChar);
+        nChar += psp::appendStr  (" matrix scale makefont setfont\n", pSetFont + nChar);
 
         WritePS (mpPageBody, pSetFont);
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerjob.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pl $ $Date: 2001-07-05 16:36:55 $
+ *  last change: $Author: cp $ $Date: 2001-07-06 16:11:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -795,17 +795,11 @@ bool PrinterJob::writeProlog (osl::File* pFile)
         "/egrave /eacute /ecircumflex /edieresis /igrave /iacute /icircumflex /idieresis\n"
         "/eth /ntilde /ograve /oacute /ocircumflex /otilde /odieresis /divide\n"
         "/oslash /ugrave /uacute /ucircumflex /udieresis /yacute /thorn /ydieresis] def\n"
-        "/findfont1252 {\n"
-        "findfont\n"
-        "dup length dict begin\n"
-        "{  1 index /FID ne\n"
-        "   { def }\n"
-        "   { pop pop }\n"
-        "   ifelse\n"
-        "} forall\n"
-        "/Encoding ISO1252Encoding def\n"
-        "currentdict end\n"
-        "/reenc1252font exch definefont } def\n"
+        "\n"
+        "/psp_findfont { exch dup findfont dup length dict begin\n"
+        "{ 1 index /FID ne { def } { pop pop } ifelse } forall\n"
+        "/Encoding 3 -1 roll def currentdict end /psp_reencodedfont\n"
+        "exch definefont } def\n"
         "\n"
         "/pathdict dup 8 dict def load begin\n"
         "/rcmd { { currentfile 1 string readstring pop 0 get dup 32 gt { exit }\n"

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glyphset.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-08 11:46:04 $
+ *  last change: $Author: cp $ $Date: 2001-07-06 16:10:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #ifndef _PSPRINT_GLYPHSET_HXX_
 #define _PSPRINT_GLYPHSET_HXX_
 
+#ifndef _PSPRINT_FONTMANAGER_HXX_
+#include <psprint/fontmanager.hxx>
+#endif
 #ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
 #endif
@@ -87,24 +90,28 @@ class GlyphSet
 {
     private:
 
-        sal_Int32       mnFontID;
-        sal_Bool        mbVertical;
-        rtl::OString    maBaseName;
-        bool            mbUploadPS42Fonts;
+        sal_Int32           mnFontID;
+        sal_Bool            mbVertical;
+        rtl::OString        maBaseName;
+        fonttype::type      meBaseType;
+        rtl_TextEncoding    mnBaseEncoding;
 
         typedef std::hash_map< sal_Unicode, sal_uInt8 > glyph_mapping_t;
         typedef std::list< glyph_mapping_t > glyphlist_t;
 
         glyphlist_t     maGlyphList;
 
-        rtl::OString    GetGlyphSetName (sal_Int32 nGlyphSetID,
-                                PrintFontManager& rFontMgr);
+        rtl::OString    GetGlyphSetName (sal_Int32 nGlyphSetID);
+        sal_Int32       GetGlyphSetEncoding (sal_Int32 nGlyphSetID);
+        rtl::OString    GetGlyphSetEncodingName (sal_Int32 nGlyphSetID);
         sal_Bool        GetGlyphID (sal_Unicode nChar,
                                 sal_uChar* nOutGlyphID, sal_Int32* nOutGlyphSetID);
         sal_Bool        LookupGlyphID (sal_Unicode nChar,
                                 sal_uChar* nOutGlyphID, sal_Int32* nOutGlyphSetID);
         sal_Bool        AddGlyphID (sal_Unicode nChar,
                                 sal_uChar* nOutGlyphID, sal_Int32* nOutGlyphSetID);
+        sal_uChar       GetAnsiMapping (sal_Unicode nUnicodeChar);
+        sal_uChar       GetSymbolMapping (sal_Unicode nUnicodeChar);
 
         void            ImplDrawText (PrinterGfx &rGfx, const Point& rPoint,
                                 const sal_Unicode* pStr, sal_Int16 nLen);
@@ -119,6 +126,10 @@ class GlyphSet
                         ~GlyphSet ();
 
         sal_Int32       GetFontID ();
+        fonttype::type  GetFontType ();
+        static rtl::OString
+                        GetGlyphSetEncodingName (rtl_TextEncoding nEnc,
+                                                 const rtl::OString &rFontName);
         sal_Bool        IsVertical ();
 
         sal_Bool        SetFont (sal_Int32 nFontID, sal_Bool bVertical);
@@ -126,7 +137,7 @@ class GlyphSet
         void            DrawText (PrinterGfx &rGfx, const Point& rPoint,
                                 const sal_Unicode* pStr, sal_Int16 nLen,
                                 const sal_Int32* pDeltaArray = NULL);
-
+        sal_Bool        PSUploadEncoding(osl::File* pOutFile, PrinterGfx &rGfx);
         sal_Bool        PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAsType42 );
 };
 
