@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shells.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-05 13:30:24 $
+ *  last change: $Author: os $ $Date: 2002-11-22 07:21:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1738,8 +1738,7 @@ ToolBox RID_BEZIER_TOOLBOX
 };
 String RID_DRAW_TEXT_TOOLBOX
 {
-    Text = "Textobjektleiste" ;
-    Text [ English ] = "Text objectbar" ;
+    Text = "Textobjektleiste/Grafik" ;
     Text [ norwegian ] = "Tegne tekstmodus" ;
     Text [ italian ] = "Barra degli oggetti di testo" ;
     Text [ portuguese_brazilian ] = "Modo desenhar texto" ;
@@ -1750,7 +1749,7 @@ String RID_DRAW_TEXT_TOOLBOX
     Text [ swedish ] = "Textobjektlist" ;
     Text [ dutch ] = "Tekstobjectbalk" ;
     Text [ spanish ] = "Barra de objetos de texto" ;
-    Text [ english_us ] = "Text Object Bar" ;
+    Text [ english_us ] = "Text Object Bar/Graphics" ;
     Text[ chinese_simplified ] = "ж–‡е­—еЇ№и±Ўж Џ";
     Text[ russian ] = "Панель объектов текста";
     Text[ polish ] = "Pasek obiektуw tekstowych";
