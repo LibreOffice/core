@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lstbox.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 12:13:15 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 15:42:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,7 +183,7 @@ void ListBox::ImplInit( Window* pParent, WinBits nStyle )
         mpFloatWin->SetAutoWidth( TRUE );
         mpFloatWin->SetPopupModeEndHdl( LINK( this, ListBox, ImplPopupModeEndHdl ) );
 
-        mpImplWin = new ImplWin( this, WB_NOBORDER );
+        mpImplWin = new ImplWin( this, (nStyle & (WB_LEFT|WB_RIGHT|WB_CENTER))|WB_NOBORDER );
         mpImplWin->SetMBDownHdl( LINK( this, ListBox, ImplClickBtnHdl ) );
         mpImplWin->SetUserDrawHdl( LINK( this, ListBox, ImplUserDrawHdl ) );
         mpImplWin->Show();
@@ -453,7 +453,20 @@ void ListBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, UL
         }
     }
 
-    long nOnePixel = GetDrawPixel( pDev, 1 );
+    long        nOnePixel = GetDrawPixel( pDev, 1 );
+    USHORT      nTextStyle = TEXT_DRAW_VCENTER;
+    Rectangle   aTextRect( aPos, aSize );
+
+    if ( GetStyle() & WB_CENTER )
+        nTextStyle |= TEXT_DRAW_CENTER;
+    else if ( GetStyle() & WB_RIGHT )
+        nTextStyle |= TEXT_DRAW_RIGHT;
+    else
+        nTextStyle |= TEXT_DRAW_LEFT;
+
+    aTextRect.Left() += 3*nOnePixel;
+    aTextRect.Right() -= 3*nOnePixel;
+
     if ( IsDropDownBox() )
     {
         XubString   aText = GetSelectEntry();
@@ -473,16 +486,19 @@ void ListBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, UL
             pDev->IntersectClipRegion( aClip );
         }
 
-        pDev->DrawText( Point( aPos.X()+nOffX, aPos.Y()+nOffY ), aText );
+        pDev->DrawText( aTextRect, aText, nTextStyle );
     }
     else
     {
         long        nTextHeight = pDev->GetTextHeight();
         USHORT      nLines = (USHORT)(aSize.Height() / nTextHeight);
         Rectangle   aClip( aPos, aSize );
+
         pDev->IntersectClipRegion( aClip );
+
         if ( !nLines )
             nLines = 1;
+
         for ( USHORT n = 0; n < nLines; n++ )
         {
             USHORT nEntry = n+mpImplLB->GetTopEntry();
@@ -495,7 +511,12 @@ void ListBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, UL
                 pDev->SetFillColor();
                 pDev->SetTextColor( COL_WHITE );
             }
-            pDev->DrawText( Point( aPos.X() + 3*nOnePixel, aPos.Y() + n*nTextHeight + nOnePixel ), mpImplLB->GetEntryList()->GetEntryText( nEntry ) );
+
+            aTextRect.Top() = aPos.Y() + n*nTextHeight;
+            aTextRect.Bottom() = aTextRect.Top() + nTextHeight;
+
+            pDev->DrawText( aTextRect, mpImplLB->GetEntryList()->GetEntryText( nEntry ), nTextStyle );
+
             if ( bSelected )
                 pDev->SetTextColor( COL_BLACK );
         }
