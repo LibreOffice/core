@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-29 10:15:48 $
+ *  last change: $Author: gt $ $Date: 2000-10-25 13:15:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2086,8 +2086,8 @@ XclCf::XclCf( const ScCondFormatEntry& r, RootData& rRD ) :
     ExcUPN*         pForm1      = new ExcUPN( &rRD, *pScTokArry1, NULL, TRUE );
     nFormLen1 = pForm1->GetLen();
 
-    ScTokenArray*   pScTokArry2;
-    ExcUPN*         pForm2;
+    ScTokenArray*   pScTokArry2 = NULL;
+    ExcUPN*         pForm2 = NULL;
     if( bSingForm )
         nFormLen2 = 0;
     else
@@ -2875,6 +2875,9 @@ UINT16 XclHlink::GetLen() const
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2000/09/29 10:15:48  nn
+    ini manager replaced by options
+
     Revision 1.1.1.1  2000/09/18 16:45:15  hr
     initial import
 
