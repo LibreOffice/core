@@ -185,7 +185,7 @@ ALLTAR : $(RPMFILE)
 
 %.desktop :
     @$(MKDIRHIER) $(@:d)
-    @ln -s $(subst,$(UNIXFILENAME)-, /etc/$(UNIXFILENAME)/share/xdg/$(@:f)) $@
+    @ln -s -f $(subst,$(UNIXFILENAME)-, /etc/$(UNIXFILENAME)/share/xdg/$(@:f)) $@
 
 # --- icons --------------------------------------------------------
 
