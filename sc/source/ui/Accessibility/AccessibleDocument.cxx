@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-29 13:05:05 $
+ *  last change: $Author: sab $ $Date: 2002-08-30 13:30:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -593,7 +593,7 @@ uno::Reference< XAccessible > ScChildrenShapes::Get(sal_Int32 nIndex) const
         GetCount(); // fill list with filtered shapes (no internal shapes)
 
     if (static_cast<sal_uInt32>(nIndex) >= maZOrderedShapes.size())
-        throw lang::IndexOutOfBoundsException();
+        return NULL;
 
     return Get(maZOrderedShapes[nIndex]);
 }
@@ -614,17 +614,20 @@ uno::Reference< XAccessible > ScChildrenShapes::GetAt(const awt::Point& rPoint) 
                 SdrObject * pObj = GetDrawPage()->CheckHit(aPnt, 1, NULL, false);
     //            if (pObj->GetLayer() != SC_LAYER_INTERN)
     //            {
-                uno::Reference<drawing::XShape> xShape (pObj->getUnoShape(), uno::UNO_QUERY);
-                SortedShapes::iterator aItr;;
-                if (FindShape(xShape, aItr))
+                if (pObj)
                 {
-                    if ((*aItr) && (*aItr)->pAccShape)
-                        xAccessible = (*aItr)->pAccShape;
+                    uno::Reference<drawing::XShape> xShape (pObj->getUnoShape(), uno::UNO_QUERY);
+                    SortedShapes::iterator aItr;;
+                    if (FindShape(xShape, aItr))
+                    {
+                        if ((*aItr) && (*aItr)->pAccShape)
+                            xAccessible = (*aItr)->pAccShape;
+                        else
+                            xAccessible = Get(aItr - maZOrderedShapes.begin());
+                    }
                     else
-                        xAccessible = Get(aItr - maZOrderedShapes.begin());
+                        DBG_ERRORFILE("a shape is not in the list");
                 }
-                else
-                    DBG_ERRORFILE("a shape is not in the list");
     //            }
             }
         }
@@ -1591,7 +1594,7 @@ sal_Int32 SAL_CALL
 {
     ScUnoGuard aGuard;
     IsObjectValid();
-    sal_Int32 nCount(0);
+    sal_Int32 nCount(1);
     if (mpChildrenShapes)
         nCount = mpChildrenShapes->GetCount(); // returns the count of the shapes inclusive the table
 
@@ -1612,7 +1615,7 @@ uno::Reference<XAccessible> SAL_CALL
     uno::Reference<XAccessible> xAccessible;
     if (nIndex >= 0)
     {
-        sal_Int32 nCount(0);
+        sal_Int32 nCount(1);
         if (mpChildrenShapes)
         {
             xAccessible = mpChildrenShapes->Get(nIndex); // returns NULL if it is the table or out of range
