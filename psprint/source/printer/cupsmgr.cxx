@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cupsmgr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-09 10:59:43 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 15:54:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -388,9 +388,13 @@ void CUPSManager::runDests()
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "starting cupsGetDests\n" );
 #endif
-    osl::MutexGuard aGuard( m_aCUPSMutex );
+    int nDests = 0;
+    cups_dest_t* pDests = NULL;
+    nDests = m_pCUPSWrapper->cupsGetDests( &pDests );
 
-    m_nDests = m_pCUPSWrapper->cupsGetDests( (cups_dest_t**)&m_pDests );
+    osl::MutexGuard aGuard( m_aCUPSMutex );
+    m_nDests = nDests;
+    m_pDests = pDests;
     m_bNewDests = true;
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "finished cupsGetDests\n" );
@@ -755,11 +759,13 @@ bool CUPSManager::checkPrintersChanged()
     {
         bChanged = m_bNewDests;
         m_aCUPSMutex.release();
-        initialize();
     }
 
     if( ! bChanged )
         bChanged = PrinterInfoManager::checkPrintersChanged();
+
+    if( bChanged )
+        initialize();
 
     return bChanged;
 }
