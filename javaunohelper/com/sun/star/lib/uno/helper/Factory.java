@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Factory.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2002-08-13 10:35:49 $
+ *  last change: $Author: dbo $ $Date: 2002-09-03 07:46:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ import com.sun.star.uno.UnoRuntime;
     @attention
     This factory implementation does not support lang.XSingleServiceFactory.
 */
-class Factory
+public class Factory
     extends ComponentBase
     implements XSingleComponentFactory, XServiceInfo
 {
