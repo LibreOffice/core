@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen5.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:22:38 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:04:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,11 @@
  *
  ************************************************************************/
 
+#ifndef _COM_SUN_STAR_EMBED_XCLASSIFIEDOBJECT_HPP_
+#include <com/sun/star/embed/XClassifiedObject.hpp>
+#endif
+
+
 #ifdef PCH
 #include "core_pch.hxx"
 #endif
@@ -76,12 +81,12 @@
 #include <svx/svdpage.hxx>
 #include <sch/schdll.hxx>
 #include <sch/memchrt.hxx>
-#include <so3/ipobj.hxx>
+//REMOVE    #include <so3/ipobj.hxx>
 
-#ifndef SO2_DECL_SVINPLACEOBJECT_DEFINED
-#define SO2_DECL_SVINPLACEOBJECT_DEFINED
-SO2_DECL_REF(SvInPlaceObject)
-#endif
+//REMOVE    #ifndef SO2_DECL_SVINPLACEOBJECT_DEFINED
+//REMOVE    #define SO2_DECL_SVINPLACEOBJECT_DEFINED
+//REMOVE    SO2_DECL_REF(SvInPlaceObject)
+//REMOVE    #endif
 
 #include "document.hxx"
 #include "drwlayer.hxx"
@@ -92,6 +97,8 @@ SO2_DECL_REF(SvInPlaceObject)
 #include <tools/globname.hxx>
 #endif
 #include <sot/exchange.hxx>
+
+using namespace ::com::sun::star;
 
 // -----------------------------------------------------------------------
 
@@ -122,16 +129,10 @@ void ScDocument::UpdateAllCharts(BOOL bDoUpdate)
             {
                 if ( pObject->GetObjIdentifier() == OBJ_OLE2 )
                 {
-                    SvInPlaceObjectRef aIPObj = ((SdrOle2Obj*)pObject)->GetObjRef();
-                    if (aIPObj.Is())
+                    uno::Reference< embed::XEmbeddedObject > xIPObj = ((SdrOle2Obj*)pObject)->GetObjRef();
+                    if ( xIPObj.is() )
                     {
-                        // String aIPName = aIPObj->GetName()->GetName();
-
-                        SvInfoObject* pInfoObj = pShell->Find( aIPObj );
-                        String aIPName;
-
-                        if ( pInfoObj )
-                            aIPName = pInfoObj->GetObjName();
+                        String aIPName = ((SdrOle2Obj*)pObject)->GetPersistName();
 
                         for (nPos=0; nPos<nDataCount; nPos++)
                         {
@@ -141,16 +142,16 @@ void ScDocument::UpdateAllCharts(BOOL bDoUpdate)
                                 if (bDoUpdate)
                                 {
                                     SchMemChart* pMemChart = pChartObj->CreateMemChart();
-                                    SchDLL::Update( aIPObj, pMemChart );
+                                    SchDLL::Update( xIPObj, pMemChart );
+                                    ((SdrOle2Obj*)pObject)->GetNewReplacement();
                                     delete pMemChart;
                                 }
                                 else        // nur Position uebernehmen
                                 {
-                                    SchMemChart* pChartData = SchDLL::GetChartData(aIPObj);
+                                    SchMemChart* pChartData = SchDLL::GetChartData(xIPObj);
                                     if (pChartData)
                                     {
                                         pChartObj->SetExtraStrings(*pChartData);
-//                                      aIPObj->SetModified( TRUE );
                                     }
                                 }
                                 ScChartListener* pCL = new ScChartListener(
@@ -229,10 +230,10 @@ void ScDocument::UpdateChartArea( const String& rChartName,
             if ( pObject->GetObjIdentifier() == OBJ_OLE2 &&
                     ((SdrOle2Obj*)pObject)->GetPersistName() == rChartName )
             {
-                SvInPlaceObjectRef aIPObj = ((SdrOle2Obj*)pObject)->GetObjRef();
-                if (aIPObj.Is())
+                uno::Reference< embed::XEmbeddedObject > xIPObj = ((SdrOle2Obj*)pObject)->GetObjRef();
+                if ( xIPObj.is() )
                 {
-                    const SchMemChart* pChartData = SchDLL::GetChartData(aIPObj);
+                    const SchMemChart* pChartData = SchDLL::GetChartData(xIPObj);
                     if ( pChartData )
                     {
                         ScChartArray aArray( this, *pChartData );
@@ -253,13 +254,16 @@ void ScDocument::UpdateChartArea( const String& rChartName,
                         SchMemChart* pMemChart = aArray.CreateMemChart();
                         ScChartArray::CopySettings( *pMemChart, *pChartData );
 
-                        SchDLL::Update( aIPObj, pMemChart, pWindow );
+                        SchDLL::Update( xIPObj, pMemChart, pWindow );
+                        ((SdrOle2Obj*)pObject)->GetNewReplacement();
                         delete pMemChart;
 
                         // Dies veranlaesst Chart zum sofortigen Update
                         //SvData aEmpty;
                         //aIPObj->SendDataChanged( aEmpty );
-                        aIPObj->SendViewChanged();
+
+                        // the method below did nothing in SO7
+//REMOVE                            aIPObj->SendViewChanged();
 
                         // repaint only
                         pObject->ActionChanged();
@@ -291,10 +295,10 @@ void ScDocument::UpdateChart( const String& rChartName, Window* pWindow )
             if ( pObject->GetObjIdentifier() == OBJ_OLE2 &&
                     ((SdrOle2Obj*)pObject)->GetPersistName() == rChartName )
             {
-                SvInPlaceObjectRef aIPObj = ((SdrOle2Obj*)pObject)->GetObjRef();
-                if (aIPObj.Is())
+                uno::Reference< embed::XEmbeddedObject > xIPObj = ((SdrOle2Obj*)pObject)->GetObjRef();
+                if ( xIPObj.is() )
                 {
-                    const SchMemChart* pChartData = SchDLL::GetChartData(aIPObj);
+                    const SchMemChart* pChartData = SchDLL::GetChartData(xIPObj);
                     if ( pChartData )
                     {
                         ScChartArray aArray( this, *pChartData );
@@ -308,26 +312,31 @@ void ScDocument::UpdateChart( const String& rChartName, Window* pWindow )
 
                         //  #72576# disable SetModified for readonly documents only
 
-                        BOOL bEnabled = ( ((pShell && pShell->IsReadOnly()) ||
-                                            IsImportingXML()) &&
-                                            aIPObj->IsEnableSetModified() );
-                        if (bEnabled)
-                            aIPObj->EnableSetModified(FALSE);
+                        // TODO/LATER: should be handled in future somehow
+//REMOVE                            BOOL bEnabled = ( ((pShell && pShell->IsReadOnly()) ||
+//REMOVE                                                IsImportingXML()) &&
+//REMOVE                                                aIPObj->IsEnableSetModified() );
+//REMOVE                            if (bEnabled)
+//REMOVE                                aIPObj->EnableSetModified(FALSE);
 
-                        SchDLL::Update( aIPObj, pMemChart, pWindow );
+                        SchDLL::Update( xIPObj, pMemChart, pWindow );
+                        ((SdrOle2Obj*)pObject)->GetNewReplacement();
                         delete pMemChart;
 
                         // Dies veranlaesst Chart zum sofortigen Update
                         //SvData aEmpty;
                         //aIPObj->SendDataChanged( aEmpty );
-                        aIPObj->SendViewChanged();
+
+                        // the method below did nothing in SO7
+//REMOVE                            aIPObj->SendViewChanged();
 
                         // redraw only
                         pObject->ActionChanged();
                         // pObject->SendRepaintBroadcast();
 
-                        if (bEnabled)
-                            aIPObj->EnableSetModified(TRUE);
+                        // TODO/LATER: should be handled in future somehow
+//REMOVE                            if (bEnabled)
+//REMOVE                                aIPObj->EnableSetModified(TRUE);
 
                         return;         // nicht weitersuchen
                     }
@@ -452,12 +461,13 @@ SchMemChart* ScDocument::FindChartData(const String& rName, BOOL bForModify)
             if ( pObject->GetObjIdentifier() == OBJ_OLE2 &&
                     ((SdrOle2Obj*)pObject)->GetPersistName() == rName )
             {
-                SvInPlaceObjectRef aIPObj = ((SdrOle2Obj*)pObject)->GetObjRef();
-                if ( aIPObj.Is() )
+                uno::Reference< embed::XEmbeddedObject > xIPObj = ((SdrOle2Obj*)pObject)->GetObjRef();
+                if ( xIPObj.is() )
                 {
-                    if (bForModify)
-                        aIPObj->SetModified( TRUE );
-                    return SchDLL::GetChartData( aIPObj );
+                    // TODO/LATER: probably it should be handled somehow in future
+//REMOVE                        if (bForModify)
+//REMOVE                            aIPObj->SetModified( TRUE );
+                    return SchDLL::GetChartData( xIPObj );
                 }
             }
             pObject = aIter.Next();
@@ -521,27 +531,39 @@ void ScDocument::UpdateChartListenerCollection()
                             BOOL bIsChart = FALSE;
                             USHORT nId;
 
-                            //  Ask the SvPersist for the InfoObject to find out
-                            //  whether it is a Chart. The old way with GetObjRef
-                            //  loads the object which takes too much unnecessary
-                            //  time
-                            SvInfoObject* pInfoObj = pShell->Find(aObjName);
-                            DBG_ASSERT(pInfoObj, "Why isn't here a SvInfoObject?");
-                            if ( pInfoObj && ( nId = SotExchange::IsChart( pInfoObj->GetClassName() ) ) )
+//REMOVE                                //  Ask the SvPersist for the InfoObject to find out
+//REMOVE                                //  whether it is a Chart. The old way with GetObjRef
+//REMOVE                                //  loads the object which takes too much unnecessary
+//REMOVE                                //  time
+//REMOVE                                SvInfoObject* pInfoObj = pShell->Find(aObjName);
+//REMOVE                                DBG_ASSERT(pInfoObj, "Why isn't here a SvInfoObject?");
+//REMOVE                                if ( pInfoObj && ( nId = SotExchange::IsChart( pInfoObj->GetClassName() ) ) )
+                            uno::Reference< embed::XEmbeddedObject > xIPObj = ((SdrOle2Obj*)pObject)->GetObjRef();
+                            DBG_ASSERT( xIPObj.is(), "No embedded object is given!");
+                            uno::Reference< embed::XClassifiedObject > xClassified( xIPObj, uno::UNO_QUERY );
+                            DBG_ASSERT( xClassified.is(), "The object must implement XClassifiedObject!" );
+                            if ( xClassified.is() )
                             {
-                                SvInPlaceObjectRef aIPObj = ((SdrOle2Obj*)pObject)->GetObjRef();
-                                DBG_ASSERT(aIPObj.Is(), "no SvInPlaceObject given");
-                                if (aIPObj.Is())
+                                SvGlobalName aObjectClassName;
+                                try {
+                                    aObjectClassName = SvGlobalName( xClassified->getClassID() );
+                                } catch( uno::Exception& )
                                 {
-                                    BOOL bSO6 = (nId >= SOFFICE_FILEFORMAT_60);
-                                    SchMemChart* pChartData = SchDLL::GetChartData(aIPObj);
+                                    // TODO: handle error
+                                }
+
+                                if ( nId = SotExchange::IsChart( aObjectClassName ) )
+                                {
+//REMOVE                                        BOOL bSO6 = (nId >= SOFFICE_FILEFORMAT_60);
+                                    SchMemChart* pChartData = SchDLL::GetChartData(xIPObj);
                                     // #84359# manually inserted OLE object
                                     // => no listener at ScAddress(0,0,0)
                                     // >=SO6: if no series set
                                     // < SO6: if no SomeData set
                                     if ( pChartData &&
-                                        ((!bSO6 && pChartData->SomeData1().Len()) ||
-                                        (bSO6 && pChartData->GetChartRange().maRanges.size())) )
+                                         pChartData->GetChartRange().maRanges.size() )
+//REMOVE                                            ((!bSO6 && pChartData->SomeData1().Len()) ||
+//REMOVE                                            (bSO6 && pChartData->GetChartRange().maRanges.size())) )
                                     {
                                         if ( PastingDrawFromOtherDoc() )
                                         {
@@ -556,7 +578,8 @@ void ScDocument::UpdateChartListenerCollection()
                                             SchChartRange aChartRange;
                                             pChartData->SetChartRange( aChartRange );
                                             pChartData->SetReadOnly( FALSE );
-                                            SchDLL::Update( aIPObj, pChartData );
+                                            SchDLL::Update( xIPObj, pChartData );
+                                            ((SdrOle2Obj*)pObject)->GetNewReplacement();
                                         }
                                         else
                                         {
@@ -581,31 +604,33 @@ void ScDocument::UpdateChartListenerCollection()
 
                                                 //  #81525# re-create series ranges from old extra string
                                                 //  if not set (after loading)
-                                                if ( !bSO6 )
-                                                {
-                                                    String aOldData3 = pChartData->SomeData3();
-                                                    aArray.SetExtraStrings( *pChartData );
-                                                    if ( aOldData3 != pChartData->SomeData3() )
-                                                    {
-                                                        //  #96148# ChartRange isn't saved in binary format anyway,
-                                                        //  but SomeData3 (sheet names) has to survive swapping out,
-                                                        //  or the chart can't be saved to 6.0 format.
-
-                                                        bForceSave = TRUE;
-                                                    }
-                                                }
+//REMOVE                                                    if ( !bSO6 )
+//REMOVE                                                    {
+//REMOVE                                                        String aOldData3 = pChartData->SomeData3();
+//REMOVE                                                        aArray.SetExtraStrings( *pChartData );
+//REMOVE                                                        if ( aOldData3 != pChartData->SomeData3() )
+//REMOVE                                                        {
+//REMOVE                                                            //  #96148# ChartRange isn't saved in binary format anyway,
+//REMOVE                                                            //  but SomeData3 (sheet names) has to survive swapping out,
+//REMOVE                                                            //  or the chart can't be saved to 6.0 format.
+//REMOVE
+//REMOVE                                                            bForceSave = TRUE;
+//REMOVE                                                        }
+//REMOVE                                                    }
                                             }
 
     #if 1
     // #74046# initially loaded charts need the number formatter standard precision
-                                            BOOL bEnabled = aIPObj->IsEnableSetModified();
-                                            if (bEnabled)
-                                                aIPObj->EnableSetModified(FALSE);
+                                            // TODO/LATER: probably should be handled somehow in the future
+//REMOVE                                                BOOL bEnabled = aIPObj->IsEnableSetModified();
+//REMOVE                                                if (bEnabled)
+//REMOVE                                                    aIPObj->EnableSetModified(FALSE);
                                             pChartData->SetNumberFormatter( GetFormatTable() );
-                                            SchDLL::Update( aIPObj, pChartData );
+                                            SchDLL::Update( xIPObj, pChartData );
+                                            ((SdrOle2Obj*)pObject)->GetNewReplacement();
                                             //! pChartData got deleted, don't use it anymore
-                                            if (bEnabled)
-                                                aIPObj->EnableSetModified(TRUE);
+//REMOVE                                                if (bEnabled)
+//REMOVE                                                    aIPObj->EnableSetModified(TRUE);
     #ifndef PRODUCT
     //                                          static BOOL bShown74046 = 0;
     //                                          if ( !bShown74046 && SOFFICE_FILEFORMAT_NOW > SOFFICE_FILEFORMAT_50 )
@@ -615,23 +640,33 @@ void ScDocument::UpdateChartListenerCollection()
     //                                          }
     #endif
     #endif
-                                            if ( bForceSave )
-                                            {
-                                                //  #96148# after adjusting the data that wasn't in the MemChart
-                                                //  in a binary file (ChartRange etc.), the chart object has to be
-                                                //  saved (within the open document, in transacted mode, so the
-                                                //  original file isn't changed yet), so the changes are still
-                                                //  there after the chart is swapped out and loaded again.
-                                                //  The chart can't get the modified flag set, because then it
-                                                //  wouldn't be swapped out at all. So it has to be saved manually
-                                                //  here (which is unnecessary if the chart is modified before it
-                                                //  it swapped out). At this point, we don't have to care about
-                                                //  contents being lost when saving in old binary format, because
-                                                //  the chart was just loaded from that format.
-
-                                                aIPObj->DoSave();
-                                                aIPObj->DoSaveCompleted();
-                                            }
+                                                // the following saving was used only for SO5 formats
+//REMOVE                                                if ( bForceSave )
+//REMOVE                                                {
+//REMOVE                                                    //  #96148# after adjusting the data that wasn't in the MemChart
+//REMOVE                                                    //  in a binary file (ChartRange etc.), the chart object has to be
+//REMOVE                                                    //  saved (within the open document, in transacted mode, so the
+//REMOVE                                                    //  original file isn't changed yet), so the changes are still
+//REMOVE                                                    //  there after the chart is swapped out and loaded again.
+//REMOVE                                                    //  The chart can't get the modified flag set, because then it
+//REMOVE                                                    //  wouldn't be swapped out at all. So it has to be saved manually
+//REMOVE                                                    //  here (which is unnecessary if the chart is modified before it
+//REMOVE                                                    //  it swapped out). At this point, we don't have to care about
+//REMOVE                                                    //  contents being lost when saving in old binary format, because
+//REMOVE                                                    //  the chart was just loaded from that format.
+//REMOVE
+//REMOVE                                                    uno::Reference< embed::XEmbedPersist > xPersist( xIOPbj, uno::UNO_QUERY );
+//REMOVE                                                    try
+//REMOVE                                                    {
+//REMOVE                                                        xPersist->storeOwn();
+//REMOVE                                                    }
+//REMOVE                                                    catch( uno::Exception& )
+//REMOVE                                                    {
+//REMOVE                                                        // TODO/LATER: error handling
+//REMOVE                                                    }
+//REMOVE    //REMOVE                                                    aIPObj->DoSave();
+//REMOVE    //REMOVE                                                    aIPObj->DoSaveCompleted();
+//REMOVE                                                }
                                         }
                                     }
                                 }
