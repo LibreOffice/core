@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontactofpageobj.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 17:47:17 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 15:37:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,12 +106,9 @@ namespace sdr
         {
         protected:
             Rectangle                               maDestinationRectangle;
-            OutputDevice*                           mpOut;
-            MapMode                                 maOldMapMode;
             Point                                   maTranslate;
             Fraction                                maScaleX;
             Fraction                                maScaleY;
-            DisplayInfo                             maDisplayInfo;
             ViewContact&                            mrUserViewContact;
 
         public:
@@ -123,11 +120,8 @@ namespace sdr
             // existing.
             virtual ~OCOfPageObjPagePainter();
 
-            // Own initialization
-            void Init(DisplayInfo& rDisplayInfo, const Rectangle& rDestinationRectangle);
-
             // Own paint
-            sal_Bool PaintIt();
+            sal_Bool PaintIt(DisplayInfo& rDisplayInfo, const Rectangle& rDestinationRectangle);
 
             // Own reaction on changes
             virtual void InvalidatePartOfView(const Rectangle& rRectangle) const;
@@ -147,78 +141,75 @@ namespace sdr
         {
         }
 
-        void OCOfPageObjPagePainter::Init(DisplayInfo& rDisplayInfo, const Rectangle& rDestinationRectangle)
+        sal_Bool OCOfPageObjPagePainter::PaintIt(DisplayInfo& rDisplayInfo, const Rectangle& rDestinationRectangle)
         {
-            mpOut = rDisplayInfo.GetOutputDevice();
+            // save old clipping from OutDev
+            sal_Bool bRetval(sal_False);
+
+            OutputDevice* pOut = rDisplayInfo.GetOutputDevice();
             maDestinationRectangle = rDestinationRectangle;
 
-            if(mpOut)
+            if(pOut)
             {
                 // remap sizes. Destination size is size of rPaintRectangle,
                 // source size is the page size.
-                maOldMapMode = mpOut->GetMapMode();
+                MapMode aOldMapMode = pOut->GetMapMode();
 
                 // calc translation
-                maTranslate = Point(maDestinationRectangle.TopLeft() + maOldMapMode.GetOrigin());
+                maTranslate = Point(maDestinationRectangle.TopLeft() + aOldMapMode.GetOrigin());
 
                 // calc scaling
                 maScaleX = Fraction(maDestinationRectangle.GetWidth(), mpStartPage->GetWdt());
                 maScaleY = Fraction(maDestinationRectangle.GetHeight(), mpStartPage->GetHgt());
 
-                // Initialize DisplayInfo, standard entries
-                maDisplayInfo.SetExtendedOutputDevice(rDisplayInfo.GetExtendedOutputDevice());
-                maDisplayInfo.SetPaintInfoRec(rDisplayInfo.GetPaintInfoRec());
-                maDisplayInfo.SetOutputDevice(mpOut);
-
-                // No need to paint page itself
-                maDisplayInfo.SetPagePainting(sal_False);
-            }
-        }
-
-        sal_Bool OCOfPageObjPagePainter::PaintIt()
-        {
-            // save old clipping from OutDev
-            sal_Bool bRetval(sal_False);
-
-            if(mpOut)
-            {
-                sal_Bool bRememberedClipping(mpOut->IsClipRegion());
+                // save clipping
+                sal_Bool bRememberedClipping(pOut->IsClipRegion());
                 Region aRememberedClipping;
 
                 if(bRememberedClipping)
                 {
-                    aRememberedClipping = mpOut->GetClipRegion();
+                    aRememberedClipping = pOut->GetClipRegion();
                 }
 
                 // add clipping against object bounds
-                mpOut->IntersectClipRegion(maDestinationRectangle);
+                pOut->IntersectClipRegion(maDestinationRectangle);
 
                 // change origin
-                MapMode aNewMapMode(mpOut->GetMapMode());
+                MapMode aNewMapMode(pOut->GetMapMode());
                 aNewMapMode.SetOrigin(maTranslate);
-                mpOut->SetMapMode(aNewMapMode);
+                pOut->SetMapMode(aNewMapMode);
 
                 // change scaling
                 Point aEmptyPoint;
-                mpOut->SetMapMode(MapMode(MAP_RELATIVE, aEmptyPoint, maScaleX, maScaleY));
+                pOut->SetMapMode(MapMode(MAP_RELATIVE, aEmptyPoint, maScaleX, maScaleY));
+
+                // create copy of DisplayInfo. Do copy PageView to have it available at
+                // included page painting.
+                DisplayInfo aDisplayInfo(rDisplayInfo.GetPageView());
+                aDisplayInfo.SetExtendedOutputDevice(rDisplayInfo.GetExtendedOutputDevice());
+                aDisplayInfo.SetPaintInfoRec(rDisplayInfo.GetPaintInfoRec());
+                aDisplayInfo.SetOutputDevice(pOut);
+
+                // make MasterPages visible
+                aDisplayInfo.SetPagePainting(sal_True);
 
                 // keep draw hierarchy up-to-date
-                PreProcessDisplay(maDisplayInfo);
+                PreProcessDisplay(aDisplayInfo);
 
                 // do processing
-                ProcessDisplay(maDisplayInfo);
+                ProcessDisplay(aDisplayInfo);
 
                 // restore original MapMode
-                mpOut->SetMapMode(maOldMapMode);
+                pOut->SetMapMode(aOldMapMode);
 
                 // restore remembered clipping
                 if(bRememberedClipping)
                 {
-                    mpOut->SetClipRegion(aRememberedClipping);
+                    pOut->SetClipRegion(aRememberedClipping);
                 }
                 else
                 {
-                    mpOut->SetClipRegion();
+                    pOut->SetClipRegion();
                 }
             }
 
@@ -323,8 +314,7 @@ namespace sdr
             if(mpPagePainter)
             {
                 rPaintRectangle = GetPaintRectangle();
-                mpPagePainter->Init(rDisplayInfo, rPaintRectangle);
-                bRetval = mpPagePainter->PaintIt();
+                bRetval = mpPagePainter->PaintIt(rDisplayInfo, rPaintRectangle);
             }
 
             return bRetval;
