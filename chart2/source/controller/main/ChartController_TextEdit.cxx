@@ -4,6 +4,7 @@
 #include "ChartWindow.hxx"
 #include "TitleHelper.hxx"
 #include "chartview/ObjectIdentifier.hxx"
+#include "macros.hxx"
 
 #include <svx/svdotext.hxx>
 
@@ -102,10 +103,16 @@ bool ChartController::EndTextEdit()
         //Paragraph* pPara =
         TitleHelper::setCompleteString( aString, uno::Reference<
             ::drafts::com::sun::star::chart2::XTitle >::query( xPropSet ), m_xCC );
+        try
+        {
+            //need to rebuild to react on changed size of title
+            impl_rebuildView();
+        }
+        catch( uno::RuntimeException& e)
+        {
+            ASSERT_EXCEPTION( e );
+        }
     }
-    //we invalidate the outliner region because the outliner has some
-    //paint problems (left and right borders are not completly painted)
-    m_pChartWindow->Invalidate( m_pDrawViewWrapper->GetMarkedObjBoundRect() );
     return true;
 }
 
