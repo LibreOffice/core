@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextTableCursor.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:10:06 $
+ *  last change: $Author: hr $ $Date: 2003-11-07 15:18:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,30 +88,22 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::text::TextTableCursor
 /** specifies a cursor in text tables.
 
-
-
-    <p>This cursor can be used to:
-    </p>
+    <p>This cursor can be used to:</p>
     <ul>
-    <li>travel through text table cells
-    </li>
-    <li>select text table cells
-    </li>
-    <li>get property values from the selected cells
-    </li>
-    <li>set property values in the selected cells
-    </li>
+        <li>travel through text table cells</li>
+        <li>select text table cells</li>
+        <li>get property values from the selected cells</li>
+        <li>set property values in the selected cells</li>
     </ul>
+
+    @see    com::sun::star::text::TextTable
  */
 service TextTableCursor
 {
-    // DocMerge: empty anyway
     interface com::sun::star::text::XTextTableCursor;
 
-    // DocMerge: empty anyway
     interface com::sun::star::beans::XPropertySet;
     service com::sun::star::style::CharacterProperties;
     service com::sun::star::style::CharacterPropertiesAsian;
