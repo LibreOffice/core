@@ -67,6 +67,9 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.HashMap;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
@@ -75,7 +78,11 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 import org.w3c.dom.Document;
+import org.w3c.dom.DOMImplementation;
+import org.w3c.dom.DocumentType;
+import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
+import org.w3c.dom.NamedNodeMap;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
@@ -106,6 +113,9 @@ public abstract class OfficeDocument
     /** DOM <code>Document</code> of content.xml. */
     private Document styleDoc = null;
 
+    /** DOM <code>Docuemtn</code> of META-INF/manifest.xml. */
+    private Document manifestDoc = null;
+
     private String documentName = null;
     private String fileName = null;
 
@@ -121,6 +131,8 @@ public abstract class OfficeDocument
      */
     private OfficeZip zip = null;
 
+    /** Collection to keep track of the embedded objects in the document. */
+    private Map embeddedObjects = null;
 
     /**
      *  Default constructor.
@@ -275,6 +287,103 @@ public abstract class OfficeDocument
 
 
     /**
+     * Returns all the embedded objects (graphics, formulae, etc.) present in
+     * this document.
+     *
+     * @return An <code>Iterator</code> of <code>EmbeddedObject</code> objects.
+     */
+    public Iterator getEmbeddedObjects() {
+
+        if (embeddedObjects == null) {
+            embeddedObjects = new HashMap();
+
+            // Need to read the manifest file and construct a list of objects
+            NodeList nl = manifestDoc.getElementsByTagName(TAG_MANIFEST_FILE);
+
+            // Don't create the HashMap if there are no embedded objects
+            int len = nl.getLength();
+            for (int i = 0; i < len; i++) {
+                Node n = nl.item(i);
+
+                NamedNodeMap attrs = n.getAttributes();
+
+                String type = attrs.getNamedItem(ATTRIBUTE_MANIFEST_FILE_TYPE).getNodeValue();
+                String path = attrs.getNamedItem(ATTRIBUTE_MANIFEST_FILE_PATH).getNodeValue();
+
+
+                /*
+                 * According to OpenOffice.org XML File Format document (ver. 1)
+                 * there are only two types of embedded object:
+                 *
+                 *      Objects with an XML representation.
+                 *      Objects without an XML representation.
+                 *
+                 * The former are represented by one or more XML files.
+                 * The latter are in binary form.
+                 */
+                if (type.startsWith("application") && type.indexOf("xml") != -1
+                            && !path.equals("/"))       // Exclude the main document entries
+                {
+                    // Take off the trailing '/'
+                    String name = path.substring(0, path.length() - 1);
+                    embeddedObjects.put(path, new EmbeddedXMLObject(name, type, zip));
+                }
+                else {
+                    embeddedObjects.put(path, new EmbeddedBinaryObject(path, type, zip));
+                }
+            }
+        }
+
+        return embeddedObjects.values().iterator();
+    }
+
+    /**
+     * Returns the embedded object corresponding to the name provided.
+     * The name should be stripped of any preceding path characters, such as
+     * '/', '.' or '#'.
+     *
+     * @param   name    The name of the embedded object to retrieve.
+     *
+     * @return  An <code>EmbeddedObject</code> instance representing the named
+     *          object.
+     */
+    public EmbeddedObject getEmbeddedObject(String name) {
+        if (name == null) {
+            return null;
+        }
+
+        if (embeddedObjects == null) {
+            getEmbeddedObjects();
+        }
+
+        if (embeddedObjects.containsKey(name)) {
+            return (EmbeddedObject)embeddedObjects.get(name);
+        }
+        else {
+            return null;
+        }
+    }
+
+
+    /**
+     * Adds a new embedded object to the document.
+     *
+     * @param   embObj  An instance of <code>EmbeddedObject</code>.
+     */
+    public void addEmbeddedObject(EmbeddedObject embObj) {
+        if (embObj == null) {
+            return;
+        }
+
+        if (embeddedObjects == null) {
+            embeddedObjects = new HashMap();
+        }
+
+        embeddedObjects.put(embObj.getName(), embObj);
+    }
+
+
+    /**
      *  Read the Office <code>Document</code> from the given
      *  <code>InputStream</code>.
      *
@@ -364,6 +473,18 @@ public abstract class OfficeDocument
         }
 
 
+        // Read in the META-INF/manifest.xml file
+        byte manifestBytes[] = zip.getManifestXMLBytes();
+
+        if (manifestBytes != null) {
+
+            try {
+                manifestDoc = parse(builder, manifestBytes);
+            } catch (SAXException ex) {
+                throw new OfficeDocumentException(ex);
+            }
+        }
+
     }
 
 
@@ -377,7 +498,7 @@ public abstract class OfficeDocument
      *
      *  @throws  IOException  If any I/O error occurs.
      */
-    public void read(InputStream is,boolean isZip) throws IOException {
+    public void read(InputStream is, boolean isZip) throws IOException {
 
         Debug.log(Debug.INFO, "reading Office file");
 
@@ -391,67 +512,7 @@ public abstract class OfficeDocument
 
     if (isZip)
     {
-        // read in Office zip file format
-
-        zip = new OfficeZip();
-        zip.read(is);
-
-        // grab the content.xml and
-        // parse it into contentDoc.
-
-        byte contentBytes[] = zip.getContentXMLBytes();
-
-        if (contentBytes == null) {
-
-        throw new OfficeDocumentException("Entry content.xml not found in file");
-        }
-         try {
-         contentDoc = parse(builder, contentBytes);
-
-         } catch (SAXException ex) {
-
-         throw new OfficeDocumentException(ex);
-         }
-
-         // if style.xml exists, grab the style.xml
-         // parse it into styleDoc.
-
-         byte styleBytes[] = zip.getStyleXMLBytes();
-
-         if (styleBytes != null) {
-
-         try {
-
-             styleDoc = parse(builder, styleBytes);
-
-         } catch (SAXException ex) {
-
-             throw new OfficeDocumentException(ex);
-         }
-         }
-         byte metaBytes[] = zip.getMetaXMLBytes();
-
-         if (metaBytes != null) {
-
-         try {
-
-             metaDoc = parse(builder, metaBytes);
-
-         } catch (SAXException ex) {
-
-             throw new OfficeDocumentException(ex);
-         }
-         }
-         byte settingsBytes[] = zip.getSettingsXMLBytes();
-         if (settingsBytes != null) {
-         try {
-             settingsDoc = parse(builder, settingsBytes);
-
-         } catch (SAXException ex) {
-
-             throw new OfficeDocumentException(ex);
-         }
-         }
+            read(is);
     }
     else{
         try{
@@ -504,25 +565,53 @@ public abstract class OfficeDocument
      *  @throws  IOException  If any I/O error occurs.
      */
     public void write(OutputStream os) throws IOException {
-
-        // create a OfficeZip object if one does not exist.
         if (zip == null) {
-
             zip = new OfficeZip();
         }
 
-        // set bytes for content.xml in zip
-        byte contentBytes[] = docToBytes(contentDoc);
-        zip.setContentXMLBytes(contentBytes);
+        initManifestDOM();
 
-        // if there is a styleDoc, set bytes
-        // for it in zip as well
+        Element domEntry;
+        Element manifestRoot = manifestDoc.getDocumentElement();
 
-        if (styleDoc != null) {
+    // Write content to the Zip file and then write any of the optional
+        // data, if it exists.
+    zip.setContentXMLBytes(docToBytes(contentDoc));
 
-            byte styleBytes[] = docToBytes(styleDoc);
-            zip.setStyleXMLBytes(styleBytes);
+        domEntry = manifestDoc.createElement(TAG_MANIFEST_FILE);
+        domEntry.setAttribute(ATTRIBUTE_MANIFEST_FILE_PATH, "content.xml");
+        domEntry.setAttribute(ATTRIBUTE_MANIFEST_FILE_TYPE, "text/xml");
+
+        manifestRoot.appendChild(domEntry);
+
+    if (styleDoc != null) {
+            zip.setStyleXMLBytes(docToBytes(styleDoc));
+
+            domEntry = manifestDoc.createElement(TAG_MANIFEST_FILE);
+            domEntry.setAttribute(ATTRIBUTE_MANIFEST_FILE_PATH, "styles.xml");
+            domEntry.setAttribute(ATTRIBUTE_MANIFEST_FILE_TYPE, "text/xml");
+            manifestRoot.appendChild(domEntry);
         }
+
+        if (metaDoc != null) {
+            zip.setMetaXMLBytes(docToBytes(metaDoc));
+
+            domEntry = manifestDoc.createElement(TAG_MANIFEST_FILE);
+            domEntry.setAttribute(ATTRIBUTE_MANIFEST_FILE_PATH, "meta.xml");
+            domEntry.setAttribute(ATTRIBUTE_MANIFEST_FILE_TYPE, "text/xml");
+            manifestRoot.appendChild(domEntry);
+        }
+
+        if (settingsDoc != null) {
+            zip.setSettingsXMLBytes(docToBytes(settingsDoc));
+
+            domEntry = manifestDoc.createElement(TAG_MANIFEST_FILE);
+            domEntry.setAttribute(ATTRIBUTE_MANIFEST_FILE_PATH, "settings.xml");
+            domEntry.setAttribute(ATTRIBUTE_MANIFEST_FILE_TYPE, "text/xml");
+            manifestRoot.appendChild(domEntry);
+        }
+
+        zip.setManifestXMLBytes(docToBytes(manifestDoc));
 
         zip.write(os);
     }
@@ -536,29 +625,11 @@ public abstract class OfficeDocument
      *
      *  @throws  IOException  If any I/O error occurs.
      */
-    public void write(OutputStream os,boolean isZip) throws IOException {
+    public void write(OutputStream os, boolean isZip) throws IOException {
 
-        // create a OfficeZip object if one does not exist.
+        // Create an OfficeZip object if one does not exist.
         if (isZip){
-        if (zip == null) {
-
-        zip = new OfficeZip();
-        }
-
-        // set bytes for content.xml in zip
-        byte contentBytes[] = docToBytes(contentDoc);
-        zip.setContentXMLBytes(contentBytes);
-
-        // if there is a styleDoc, set bytes
-        // for it in zip as well
-
-        if (styleDoc != null) {
-
-        byte styleBytes[] = docToBytes(styleDoc);
-        zip.setStyleXMLBytes(styleBytes);
-        }
-
-        zip.write(os);
+            write(os);
     }
     else{
         byte contentBytes[] = docToBytes(contentDoc);
@@ -586,7 +657,7 @@ public abstract class OfficeDocument
      *
      *  @throws  IOException  If any I/O error occurs.
      */
-    private byte[] docToBytes(Document doc)
+    static byte[] docToBytes(Document doc)
         throws IOException {
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -819,6 +890,46 @@ public abstract class OfficeDocument
 
         StringReader r = new StringReader(buffer.toString());
         return r;
+    }
+
+
+    /**
+     * Method to return the MIME type of the document.
+     *
+     * @return  String  The document's MIME type.
+     */
+    protected abstract String getDocumentMimeType();
+
+
+    /**
+     * Method to create the initial entries in the manifest.xml file stored
+     * in an SX? file.
+     */
+    private void initManifestDOM() throws IOException {
+
+        try {
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            DOMImplementation domImpl = builder.getDOMImplementation();
+
+            DocumentType docType = domImpl.createDocumentType(TAG_MANIFEST_ROOT,
+                                        "-//OpenOffice.org//DTD Manifest 1.0//EN",
+                                        "Manifest.dtd");
+        manifestDoc = domImpl.createDocument("manifest", TAG_MANIFEST_ROOT, docType);
+        } catch (ParserConfigurationException ex) {
+            throw new OfficeDocumentException(ex);
+        }
+
+        // Add the <manifest:manifest> entry
+        Element manifestRoot = manifestDoc.getDocumentElement();
+
+        manifestRoot.setAttribute("xmlns:manifest", "http://openoffice.org/2001/manifest");
+
+        Element docRoot = manifestDoc.createElement(TAG_MANIFEST_FILE);
+
+        docRoot.setAttribute(ATTRIBUTE_MANIFEST_FILE_PATH, "/");
+        docRoot.setAttribute(ATTRIBUTE_MANIFEST_FILE_TYPE, getDocumentMimeType());
+
+        manifestRoot.appendChild(docRoot);
     }
 }
 
