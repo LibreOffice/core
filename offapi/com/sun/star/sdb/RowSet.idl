@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.idl,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:11:24 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 21:41:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
 #endif
 
  module com {  module sun {  module star {  module sdbc {
-interface XConnection;
+published interface XConnection;
 };};};};
 
 #ifndef __com_sun_star_sdb_ResultSet_idl__
@@ -78,13 +78,13 @@ interface XConnection;
 #endif
 
  module com {  module sun {  module star {  module sdbcx {
-interface XDeleteRows;
+published interface XDeleteRows;
 };};};};
 
  module com {  module sun {  module star {  module sdb {
 
-interface XRowSetApproveBroadcaster;
-interface XResultSetAccess;
+published interface XRowSetApproveBroadcaster;
+published interface XResultSetAccess;
 
 
 /** is a client side RowSet, which use retrieves is data based on a database table,
@@ -193,7 +193,7 @@ interface XResultSetAccess;
     </p>
 
  */
-service RowSet
+published service RowSet
 {
     service com::sun::star::sdbc::RowSet;
 
