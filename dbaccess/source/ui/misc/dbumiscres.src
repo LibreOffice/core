@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbumiscres.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-29 13:11:51 $
+ *  last change: $Author: kz $ $Date: 2001-05-30 19:39:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,20 +88,20 @@ Resource RSC_DATASOURCE_TYPES
     {
         Text = "Adabas;JDBC;ODBC;dBase;ADO;Text;Tabellendokument;Adressbuch" ;
         Text [ english ] = "Adabas;JDBC;ODBC;dBase;ADO;Text;Spreadsheet;Addressbook" ;
-        Text [ english_us ] = "Adabas;JDBC;ODBC;dBase;ADO;Text;Spreadsheet;Addressbook" ;
+        Text [ english_us ] = "Adabas;JDBC;ODBC;dBase;ADO;Text;Spreadsheet" ;
         Text[ portuguese ] = "Adabas;JDBC;ODBC;dBase;ADO;Texto;Folha de cálculo";
         Text[ russian ] = "Adabas;JDBC;ODBC;dBase;ADO;Òåêñò;Äîêóìåíò ıëåêòğîííîé òàáëèöû";
         Text[ greek ] = "Adabas;JDBC;ODBC;dBase;ADO;Êåßìåíï;¸ããñáöï ğßíáêá";
         Text[ dutch ] = "Adabas;JDBC;ODBC;dBase;ADO;Tekst;Werkbladdocument";
         Text[ french ] = "Adabas;JDBC;ODBC;dBase;ADO;Texte;Classeur";
         Text[ spanish ] = "Adabas;JDBC;ODBC;dBase;ADO;Texto;Hoja de cálculo";
-        Text[ italian ] = "Adabas;JDBC;ODBC;dBase;ADO;Testo;Foglio elettronico";
+        Text[ italian ] = "Adabas;JDBC;ODBC;dBase;ADO;Testo;Foglio elettronico;Rubrica";
         Text[ danish ] = "Adabas;JDBC;ODBC;dBase;Tekst";
-        Text[ swedish ] = "Adabas;JDBC;ODBC;dBase;ADO;Text;Tabelldokument";
+        Text[ swedish ] = "Adabas;JDBC;ODBC;dBase;ADO;Text;Tabelldokument;Adressbok";
         Text[ polish ] = "Adabas;JDBC;ODBC;dBase;ADO;Tekst;Arkusz kalkulacyjny";
         Text[ portuguese_brazilian ] = "Adabas;JDBC;ODBC;dBase;Text";
         Text[ japanese ] = "Adabas;JDBC;ODBC;dBase;ADO;Ã·½Ä;•\\ŒvZÄŞ·­ÒİİÄ";
-        Text[ korean ] = "Adabas;JDBC;ODBC;dBase;ÅØ½ºÆ®";
+        Text[ korean ] = "Adabas;JDBC;ODBC;dBase;ÅØ½ºÆ®;½ºÇÁ·¹µå½ÃÆ® ¹®¼­";
         Text[ chinese_simplified ] = "Adabas;JDBC;ODBC;dBase;ADO;ÎÄ×Ö;¹¤×÷±íÎÄµµ";
         Text[ chinese_traditional ] = "Adabas;JDBC;ODBC;dBase;ADO;¤å¦r;¤u§@ªí¤å¥ó";
         Text[ turkish ] = "Adabas;JDBC;ODBC;dBase;Text";
@@ -123,12 +123,12 @@ Resource RSC_CHARSETS
         Text[ language_user1 ] = "Please be carefull with the number/ordering of (semicolon-separated) tokens in the string.";
         Text[ portuguese ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Sistema;UTF-8";
         Text[ russian ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Ñèñòåìà;UTF-8";
-        Text[ greek ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/ DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Óıóôçìá";
+        Text[ greek ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/ DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Óıóôçìá;UTF-8";
         Text[ dutch ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Systeem;UTF-8";
         Text[ french ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/ DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Système;UTF-8";
         Text[ spanish ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Sistema;UTF-8";
         Text[ finnish ] = "Ansi;Mac;DOS;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System";
-        Text[ italian ] = "Ansi;Mac;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Sistema";
+        Text[ italian ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Sistema; UTF-8";
         Text[ danish ] = "Ansi;Mac;Dos;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System";
         Text[ swedish ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System;UTF-8";
         Text[ polish ] = "Ansi;Mac;IBMPC(437);IBMPC (850)/DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System;UTF-8";
@@ -158,7 +158,7 @@ String STR_GENERAL_SDB_ERROR
     Text[ italian ] = "Errore durante il collegamento alla sorgente dati";
     Text[ danish ] = "Fejl under forbindelsen med datakilden";
     Text[ swedish ] = "Fel under förbindelsen med datakällan";
-    Text[ polish ] = "B³¹d w ³¹czeniu ze ?ród³em danych";
+    Text[ polish ] = "B³¹d w ³¹czeniu ze Ÿród³em danych";
     Text[ portuguese_brazilian ] = "Error while connecting to the data source";
     Text[ japanese ] = "ÃŞ°À¿°½‚ÖÚ‘±‚Ì´×°";
     Text[ korean ] = "µ¥ÀÌÅÍ ¼Ò½º¿¡ ¿¬°á½Ã¿¡ ¿À·ù";
@@ -203,12 +203,12 @@ String STR_UNEXPECTED_ERROR
     Text [ english_us ] = "An unexpected error occurred. The operation could not be performed.";
     Text[ portuguese ] = "Ocorreu um erro imprevisto. É impossível executar a operação.";
     Text[ russian ] = "Ïğîèçîøëà íåîæèäàííàÿ îøèáêà. Âûïîëíèòü äàííóş îïåğàöèş íåâîçìîæíî.";
-    Text[ greek ] = "An unexpected error occured. The operation could not be completed.";
+    Text[ greek ] = "ĞáñïõóéÜóôçêå İíá ìç áíáìåíüìåíï óöÜëìá. Äåí Şôáí äõíáôüí íá åêôåëåóôåß ç åíôïëŞ.";
     Text[ dutch ] = "Er is een onverwachte fout opgetreden. De opdracht kan niet worden uitgevoerd.";
     Text[ french ] = "Une erreur imprévue s'est produite : impossible d'exécuter l'opération !";
     Text[ spanish ] = "Ha ocurrido un error. No se puede ejecutar la operación.";
     Text[ finnish ] = "Ein unerwarteter Fehler ist aufgetreten. Die operation kann nicht ausgeführt werden.";
-    Text[ italian ] = "An unexpected error occured. The operation could not be completed.";
+    Text[ italian ] = "Si è verificato un errore inaspettato. Impossibile terminare l'operazione.";
     Text[ danish ] = "An unexpected error occured. The operation could not be completed.";
     Text[ swedish ] = "Ett oväntat fel har uppstått. Det går inte att utföra operationen.";
     Text[ polish ] = "Wyst¹pi³ nieoczekiwany b³¹d. Operacji nie mo¿na wykonaæ.";
@@ -229,12 +229,12 @@ String STR_COULDNOTOPEN_LINKEDDOC
     Text [ english_us ] = "The document\n\n$file$\n\ncould not be opened.";
     Text[ portuguese ] = "Foi impossível abrir o documento\n\n$file$\n\n.";
     Text[ russian ] = "Îòêğûòü äîêóìåíò\n\n$file$\n\níåâîçìîæíî.";
-    Text[ greek ] = "Th document\n\n$file$\n\ncould not be opened.";
+    Text[ greek ] = "Äåí Şôáí äõíáôüí íá áíïé÷ôåß ôï İããñáöï\n\n$file$.";
     Text[ dutch ] = "Het document\n\n$file$\n\nkon niet worden geopend.";
     Text[ french ] = "Impossible d'ouvrir\n\nle document\n\n$file$ !";
     Text[ spanish ] = "No se pudo abrir el documento\n\n$file$\n\n.";
     Text[ finnish ] = "Das Dokument\n\n$file$\n\nkonnte nicht geöffnet werden.";
-    Text[ italian ] = "Th document\n\n$file$\n\ncould not be opened.";
+    Text[ italian ] = "Impossibile\naprire il documento\n\n$file$.";
     Text[ danish ] = "Th document\n\n$file$\n\ncould not be opened.";
     Text[ swedish ] = "Det gick inte att öppna dokumentet\n\n$file$\n\n.";
     Text[ polish ] = "Otwarcie dokumentu\n\n$file$\n\nnie powiod³o siê.";
@@ -256,11 +256,11 @@ String STR_MISSING_TABLES_XDROP
     Text[ portuguese ] = "A tabela não tem suporte na ligação da base de dados e por isso impossível de eliminar.";
     Text[ russian ] = "Óäàëèòü òàáëèöó íåâîçìîæíî, ïîñêîëüêó ñîåäèåíåíèå áàçû äàííûõ ıòîãî íå ïîääåğæèâàåò.";
     Text[ greek ] = "The table can't be dropped, 'cause the database connection does not support this.";
-    Text[ dutch ] = "The table can't be dropped, 'cause the database connection does not support this.";
+    Text[ dutch ] = "De tabel kan niet worden gewist, daar deze niet wordt ondersteund door de database.";
     Text[ french ] = "Impossible de supprimer la table : elle n'est pas supportée par la connexion de BD.";
     Text[ spanish ] = "No se puede eliminar la tabla porque la conexión con la base de datos no apoya esta acción.";
     Text[ finnish ] = "The table can't be dropped, 'cause the database connection does not support this.";
-    Text[ italian ] = "The table can't be dropped, 'cause the database connection does not support this.";
+    Text[ italian ] = "Impossibile eliminare la tabella perché non è supportata dal collegamento al database.";
     Text[ danish ] = "The table can't be dropped, 'cause the database connection does not support this.";
     Text[ swedish ] = "Det går inte att radera tabellen eftersom databasförbindelsen inte stödjer den.";
     Text[ polish ] = "Tabeli nie mo¿na usun¹æ, poniewa¿ nie jest ona os³ugiwana przez po³¹czenie z baz¹ danych.";
@@ -284,11 +284,11 @@ String STR_BUTTON_TEXT_ALL
     Text[ portuguese ] = "~Tudo";
     Text[ russian ] = "~Âñå";
     Text[ greek ] = "~All";
-    Text[ dutch ] = "~All";
+    Text[ dutch ] = "~Alle";
     Text[ french ] = "~Tout";
     Text[ spanish ] = "~Todos";
     Text[ finnish ] = "~All";
-    Text[ italian ] = "~All";
+    Text[ italian ] = "~Tutti";
     Text[ danish ] = "~All";
     Text[ swedish ] = "~Alla";
     Text[ polish ] = "~Wszystkie";
@@ -305,6 +305,9 @@ String STR_BUTTON_TEXT_ALL
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.24  2001/05/29 13:11:51  oj
+ *  #87149# addressbook ui impl
+ *
  *  Revision 1.23  2001/05/23 14:16:41  oj
  *  #87149# new helpids
  *
