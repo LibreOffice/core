@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fetab.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ama $ $Date: 2002-05-22 10:32:23 $
+ *  last change: $Author: ama $ $Date: 2002-06-11 16:10:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1327,11 +1327,26 @@ const SwFrm *lcl_FindFrm( const SwLayoutFrm *pLay, const Point &rPt, SwTwips nFu
                 pFrm = pFrm->GetUpper();
             if ( pFrm )
             {
+#ifdef VERTICAL_LAYOUT
+                if( pFrm->IsVertical() )
+                {
+                    if ( ::IsSame(pFrm->Frm().Top(), rPt.Y()) ||
+                         ::IsSame(pFrm->Frm().Bottom(),rPt.Y()) )
+                        return pFrm;
+                }
+                else
+                {
+                    if ( ::IsSame(pFrm->Frm().Left(), rPt.X()) ||
+                         ::IsSame(pFrm->Frm().Right(),rPt.X()) )
+                        return pFrm;
+                }
+#else
                 if ( ::IsSame(pFrm->Frm().Left(), rPt.X()) ||
                      ::IsSame(pFrm->Frm().Right(),rPt.X()) )
                 {
                     return pFrm;
                 }
+#endif
                 pFrm = pFrm->GetUpper();
             }
         } while ( pFrm );
