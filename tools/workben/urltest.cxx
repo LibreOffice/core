@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urltest.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 09:00:40 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 10:00:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -469,31 +469,41 @@ main()
 
     if (true)
     {
-        static sal_Char const * const aTest[]
-            = { /*TODO "vnd.sun.star.help://",*/
-                /*TODO "vnd.sun.star.help://swriter",*/
-                "vnd.sun.star.help://swriter/",
-                "vnd.sun.star.help://swriter/12345",
-                "vnd.sun.star.help://swriter/1234X",
-                "vnd.sun.star.help://swriter/?a=b?c=d",
-                "vnd.sun.star.help://swriter/12345?a=b?c=d",
-                "vnd.sun.star.help://swriter/12345???",
-                "vnd.sun.star.help://swriter/#xxx",
-                "vnd.sun.star.help://swriter/12345#xxx",
-                "vnd.sun.star.help://swriter/1234X#xxx",
-                "vnd.sun.star.help://swriter/?a=b?c=d#xxx",
-                "vnd.sun.star.help://swriter/12345?a=b?c=d#xxx",
-                "vnd.sun.star.help://swriter/12345???#xxx",
-                "vnd.sun.star.help://swriter/start" };
+        struct Test { char const * in; char const * out; };
+        static Test const aTest[]
+            = { { "vnd.sun.star.help://", "vnd.sun.star.help:///" },
+                { "vnd.sun.star.help:///", 0 },
+                { "vnd.sun.star.help://swriter",
+                  "vnd.sun.star.help://swriter/" },
+                { "vnd.sun.star.help://swriter/", 0 },
+                { "vnd.sun.star.help://swriter/12345", 0 },
+                { "vnd.sun.star.help://swriter/1234X", 0 },
+                { "vnd.sun.star.help://swriter/?a=b?c=d", 0 },
+                { "vnd.sun.star.help://swriter/12345?a=b?c=d", 0 },
+                { "vnd.sun.star.help://swriter/12345???", 0 },
+                { "vnd.sun.star.help://swriter/#xxx", 0 },
+                { "vnd.sun.star.help://swriter/12345#xxx", 0 },
+                { "vnd.sun.star.help://swriter/1234X#xxx", 0 },
+                { "vnd.sun.star.help://swriter/?a=b?c=d#xxx", 0 },
+                { "vnd.sun.star.help://swriter/12345?a=b?c=d#xxx", 0 },
+                { "vnd.sun.star.help://swriter/12345???#xxx", 0 },
+                { "vnd.sun.star.help://swriter/start", 0 },
+                { "vnd.sun.star.help://swriter/s/t/a/r/t", 0 },
+                { "vnd.sun.star.help://swriter/a%2Fb%3Fc%2534d/e?f", 0 },
+                { "vnd.sun.star.help://swriter?foo",
+                  "vnd.sun.star.help://swriter/?foo" },
+                { "vnd.sun.star.help://swriter/?foo", 0 } };
         for (int i = 0; i < sizeof aTest / sizeof aTest[0]; ++i)
         {
-            INetURLObject aUrl(aTest[i]);
+            INetURLObject aUrl(aTest[i].in);
             if (aUrl.HasError())
-                printf("BAD %s\n", aTest[i]);
+                printf("BAD %s\n", aTest[i].in);
             else if (aUrl.GetMainURL(INetURLObject::DECODE_TO_IURI).
-                         CompareToAscii(aTest[i]) != 0)
+                         CompareToAscii(
+                             aTest[i].out == 0 ? aTest[i].in : aTest[i].out)
+                     != 0)
                 printf("BAD %s -> %s\n",
-                       aTest[i],
+                       aTest[i].in,
                        ByteString(aUrl.GetMainURL(
                                       INetURLObject::DECODE_TO_IURI),
                                   RTL_TEXTENCODING_ASCII_US).
