@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module_xsltfilter.scp,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 13:11:09 $
+ *  last change: $Author: rt $ $Date: 2004-07-05 08:59:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@ Module gid_Module_Optional_Xsltfiltersamples
     MOD_NAME_DESC(MODULE_OPTIONAL_XSLTFILTERSAMPLES);
     ParentID = gid_Module_Optional;
     Files = ( gid_File_Xsl_Sofftodocbookheadings,gid_File_Xsl_Docbooktosoffheadings,
-    gid_File_Stw_Docbooktemplate,gid_File_Xsl_Mswordxmlimport,
+    gid_File_Stw_Docbooktemplate,
     gid_File_Xsl_Common_Measure_Conversion,
     gid_File_Xsl_Export_Common_Body,
     gid_File_Xsl_Export_Common_Table_Of_Content,
@@ -77,6 +77,13 @@ Module gid_Module_Optional_Xsltfiltersamples
     gid_File_Xsl_Export_Common_Table_Table_Cells,
     gid_File_Xsl_Export_Common_Table_Table_Columns,
     gid_File_Xsl_Export_Common_Table_Table_Rows,
+    gid_File_Xsl_Export_Excelml_Ooo2excelml,
+    gid_File_Xsl_Export_Excelml_Style_Mapping,
+    gid_File_Xsl_Export_Excelml_Styles,
+    gid_File_Xsl_Export_Excelml_Table,
+    gid_File_Xsl_Export_Wordml_Ooo2wordml,
+    gid_File_Xsl_Import_Excelml_Excelml2ooo,
+    gid_File_Xsl_Import_Wordml_Wordml2ooo,
     gid_File_Xsl_Export_Xhtml_Body,
     gid_File_Xsl_Export_Xhtml_Header,
     gid_File_Xsl_Export_Xhtml_Master_Chapter_Numbering,
