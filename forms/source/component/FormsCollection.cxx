@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormsCollection.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-04 16:28:34 $
+ *  last change: $Author: fs $ $Date: 2002-10-02 14:42:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 
 #ifndef _COM_SUN_STAR_FORM_XFORM_HPP_
 #include <com/sun/star/form/XForm.hpp>
+#endif
+#ifndef _RTL_LOGFILE_HXX_
+#include <rtl/logfile.hxx>
 #endif
 
 //.........................................................................
@@ -176,7 +179,10 @@ StringSequence SAL_CALL OFormsCollection::getSupportedServiceNames() throw(Runti
 //------------------------------------------------------------------------------
 void OFormsCollection::disposing()
 {
-    OInterfaceContainer::disposing();
+    {
+        RTL_LOGFILE_CONTEXT( aLogger, "forms::OFormsCollection::disposing" );
+        OInterfaceContainer::disposing();
+    }
     FormsCollectionComponentBase::disposing();
     m_xParent = NULL;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormComponent.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: tbe $ $Date: 2002-08-01 14:57:01 $
+ *  last change: $Author: fs $ $Date: 2002-10-02 14:46:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,9 @@
 #endif
 #ifndef _FRM_SERVICES_HXX_
 #include "services.hxx"
+#endif
+#ifndef _RTL_LOGFILE_HXX_
+#include <rtl/logfile.hxx>
 #endif
 
 #ifndef _COMPHELPER_BASIC_IO_HXX_
@@ -576,13 +579,17 @@ void SAL_CALL OControlModel::setParent(const InterfaceRef& _rxParent) throw(com:
 {
     osl::MutexGuard aGuard(m_aMutex);
 
-    Reference<com::sun::star::lang::XComponent> xComp(m_xParent, UNO_QUERY);
+    Reference<XComponent> xComp(m_xParent, UNO_QUERY);
     if (xComp.is())
         xComp->removeEventListener(static_cast<XPropertiesChangeListener*>(this));
 
-    xComp = Reference<com::sun::star::lang::XComponent>(_rxParent, UNO_QUERY);
-    if (xComp.is())
-        xComp->addEventListener(static_cast<XPropertiesChangeListener*>(this));
+    {
+        xComp = xComp.query( _rxParent );
+        RTL_LOGFILE_CONTEXT( aLogger, "forms::OControlModel::setParent::logOnEventListener" );
+        if ( xComp.is() )
+            xComp->addEventListener(static_cast<XPropertiesChangeListener*>(this));
+    }
+
     m_xParent = _rxParent;
 }
 
@@ -961,14 +968,17 @@ void SAL_CALL OBoundControlModel::setParent(const Reference<XInterface>& _rxPare
     osl::MutexGuard aGuard(m_aMutex);
 
     // log off old listeners
-        Reference<XLoadable> xLoadable(m_xParent, UNO_QUERY);
-    if (xLoadable.is())
-        xLoadable->removeLoadListener(this);
+    Reference< XLoadable > xLoadable( m_xParent, UNO_QUERY );
+    if ( xLoadable.is() )
+        xLoadable->removeLoadListener( this );
 
     // log on new listeners
-        xLoadable = Reference<XLoadable>(_rxParent, UNO_QUERY);
-    if (xLoadable.is())
-        xLoadable->addLoadListener(this);
+    {
+        xLoadable = xLoadable.query( _rxParent );
+        RTL_LOGFILE_CONTEXT( aLogger, "forms::OBoundControlModel::setParent::logOnLoadListener" );
+        if ( xLoadable.is() )
+            xLoadable->addLoadListener( this );
+    }
 
     OControlModel::setParent(_rxParent);
 }
