@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: pl $ $Date: 2002-01-15 17:34:43 $
+#   last change: $Author: pl $ $Date: 2002-02-06 11:36:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -131,7 +131,8 @@ SLOFILES=	$(SLO)$/salmisc.obj 	\
             $(SLO)$/region.obj		\
             $(SLO)$/virdev.obj		\
             $(SLO)$/wall.obj		\
-            $(SLO)$/opengl.obj
+            $(SLO)$/opengl.obj		\
+            $(SLO)$/fontcfg.obj
 
 .IF "$(remote)"!=""
 EXCEPTIONSFILES=	$(SLO)$/bitmap.obj		\
