@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ldump.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 09:13:12 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 11:36:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ LibDump::LibDump( char *cFileName )
     fprintf( stderr, "LIB-NT File Dumper v4.00 (C) 2000 Sun Microsystems, Inc.\n\n" );
     fprintf( stderr, "%s ", cFileName );
 
-    int nSlots =  63997;
+    int nSlots =  0xfffff;
     pBaseTab = new ExportSet( nSlots );
     pIndexTab = new ExportSet( nSlots );
     pFilterLines = new char * [MAXFILT];
@@ -450,6 +450,7 @@ bool LibDump::ReadDataBase()
     FILE* pfBase = 0;
     char  aBuf[MAX_MAN];
     char* pStr;
+    char  cBuffer[ 30 ];
     int   nLen;
     LibExport *pData;
 
@@ -473,23 +474,19 @@ bool LibDump::ReadDataBase()
         if ( *(pStr+nLen-1) == '\n' )
             *(pStr+nLen-1) = '\0';
         pData = new LibExport;
-        pData->cExportName = new char[ strlen( pStr ) + 1 ];
-        strcpy( pData->cExportName, pStr );
+        pData->cExportName = pStr;
         pData->nOrdinal = nBaseLines;
         pData->bExport=false;
 
         if (pBaseTab->Insert(pData->cExportName, pData ) == NULL)
             bRet = false;
-        char *cBuffer = new char[ 30 ];
-        sprintf( cBuffer, "%lu", pData->nOrdinal );
+        ltoa( pData->nOrdinal, cBuffer, 10 );
         if (pIndexTab->Insert( cBuffer, pData ) == NULL)
             bRet = false;
-        delete [] cBuffer;
         nBaseLines++;
         if ( nBaseLines >= MAXBASE )
             DumpError( 610 );
     }
-    //nNumber = nBaseLines-1;
     fclose( pfBase );
     return bRet;
 }
