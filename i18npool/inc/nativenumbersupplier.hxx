@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nativenumbersupplier.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 11:03:14 $
+ *  last change: $Author: rt $ $Date: 2004-06-11 16:05:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,7 @@ public:
         sal_Unicode SAL_CALL getNativeNumberChar( const sal_Unicode inChar,
                 const ::com::sun::star::lang::Locale& aLocale, sal_Int16 nNativeNumberMode )
                 throw(com::sun::star::uno::RuntimeException) ;
+
 private:
         ::com::sun::star::lang::Locale aLocale;
         sal_Bool useOffset;
