@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: gt $ $Date: 2001-05-08 12:20:21 $
+ *  last change: $Author: nn $ $Date: 2001-05-08 15:27:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2125,7 +2125,7 @@ sal_Int16 ConvertData::GetMatchingLevel( const STRING& rRef ) const
     {
         const sal_Unicode*  p = rRef.getStr();
 
-        if( wcscmp( aName.getStr(), p + 1 ) == 0 )
+        if ( aName == p + 1 )
         {
             sal_Int16       n;
             switch( *p )
