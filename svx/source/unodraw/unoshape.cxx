@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.120 $
+ *  $Revision: 1.121 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 16:33:44 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 18:16:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2546,6 +2546,20 @@ uno::Any SvxShape::_getPropertyValue( const OUString& PropertyName )
                 }
                 break;
             }
+            case OWN_ATTR_UINAME_SINGULAR:
+                {
+                    String aTmp;
+                    pObj->TakeObjNameSingul( aTmp );
+                    aAny <<= OUString( aTmp );
+                }
+                break;
+            case OWN_ATTR_UINAME_PLURAL:
+                {
+                    String aTmp;
+                    pObj->TakeObjNamePlural( aTmp );
+                    aAny <<= OUString( aTmp );
+                }
+                break;
             default:
             {
                 DBG_ASSERT( pMap->nWID == SDRATTR_TEXTDIRECTION || (pMap->nWID < SDRATTR_NOTPERSIST_FIRST || pMap->nWID > SDRATTR_NOTPERSIST_LAST), "Not persist item not handled!" );
@@ -3907,7 +3921,7 @@ SvxShapeText::SvxShapeText( SdrObject* pObject ) throw ()
 : SvxShape( pObject, aSvxMapProvider.GetMap(SVXMAP_TEXT) ), SvxUnoTextBase( ImplGetSvxUnoOutlinerTextCursorPropertyMap() )
 {
     if( pObject && pObject->GetModel() )
-        SetEditSource( new SvxTextEditSource( pObject ) );
+        SetEditSource( new SvxTextEditSource( pObject, static_cast< uno::XWeak * >( this ) ) );
 }
 
 //----------------------------------------------------------------------
@@ -3915,18 +3929,31 @@ SvxShapeText::SvxShapeText( SdrObject* pObject, const SfxItemPropertyMap* pPrope
 : SvxShape( pObject, pPropertySet ), SvxUnoTextBase( ImplGetSvxUnoOutlinerTextCursorPropertyMap() )
 {
     if( pObject && pObject->GetModel() )
-        SetEditSource( new SvxTextEditSource( pObject ) );
+        SetEditSource( new SvxTextEditSource( pObject, static_cast< uno::XWeak * >( this ) ) );
 }
 
 //----------------------------------------------------------------------
 SvxShapeText::~SvxShapeText() throw ()
 {
+    // check if only this instance is registered at the ranges
+    DBG_ASSERT( (NULL == GetEditSource()) || (GetEditSource()->getRanges().size()==1),
+        "svx::SvxShapeText::~SvxShapeText(), text shape with living text ranges destroyed!");
+    if ( pModel )
+    {
+        const SvxUnoTextRangeBaseList& rRanges = GetEditSource()->getRanges();
+        SvxUnoTextRangeBaseList::const_iterator aIter;
+        for( aIter = rRanges.begin(); aIter != rRanges.end(); aIter++ )
+        {
+            SvxUnoTextRangeBase* pRange = (*aIter);
+            pRange = pRange;
+        }
+    }
 }
 
 void SvxShapeText::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage ) throw ()
 {
     if( pNewObj && (NULL == GetEditSource()))
-        SetEditSource( new SvxTextEditSource( pNewObj ) );
+        SetEditSource( new SvxTextEditSource( pNewObj, static_cast< uno::XWeak* >(this) ) );
 
     SvxShape::Create( pNewObj, pNewPage );
 }
@@ -4041,6 +4068,41 @@ void SvxShapeText::unlock()
     SvxTextEditSource* pEditSource = (SvxTextEditSource*)GetEditSource();
     if( pEditSource )
         pEditSource->unlock();
+}
+
+// ::com::sun::star::text::XTextRange
+uno::Reference< text::XTextRange > SAL_CALL SvxShapeText::getStart() throw(uno::RuntimeException)
+{
+    SvxTextForwarder* pForwarder = pEditSource ? pEditSource->GetTextForwarder() : NULL;
+    if( pForwarder )
+        ::GetSelection( aSelection, pForwarder );
+    return SvxUnoTextBase::getStart();
+
+}
+
+uno::Reference< text::XTextRange > SAL_CALL SvxShapeText::getEnd() throw(uno::RuntimeException)
+{
+    SvxTextForwarder* pForwarder = pEditSource ? pEditSource->GetTextForwarder() : NULL;
+    if( pForwarder )
+        ::GetSelection( aSelection, pForwarder );
+    return SvxUnoTextBase::getEnd();
+}
+
+OUString SAL_CALL SvxShapeText::getString() throw(uno::RuntimeException)
+{
+    SvxTextForwarder* pForwarder = pEditSource ? pEditSource->GetTextForwarder() : NULL;
+    if( pForwarder )
+        ::GetSelection( aSelection, pForwarder );
+    return SvxUnoTextBase::getString();
+}
+
+
+void SAL_CALL SvxShapeText::setString( const OUString& aString ) throw(uno::RuntimeException)
+{
+    SvxTextForwarder* pForwarder = pEditSource ? pEditSource->GetTextForwarder() : NULL;
+    if( pForwarder )
+        ::GetSelection( aSelection, pForwarder );
+    SvxUnoTextBase::setString( aString );
 }
 
 
