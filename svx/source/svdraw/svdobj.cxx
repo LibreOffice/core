@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: ka $ $Date: 2001-11-06 11:57:46 $
+ *  last change: $Author: vg $ $Date: 2001-11-14 19:03:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2254,7 +2254,8 @@ void SdrObject::ImpDrawLineGeometry(
 
                         if( aLine.GetLength() > 16000 )
                         {
-                            Rectangle   aOutRect( Point(), rXOut.GetOutDev()->GetOutputSizePixel() );
+                            Point       aPoint;
+                            Rectangle   aOutRect( aPoint, rXOut.GetOutDev()->GetOutputSizePixel() );
                             Line        aIntersection;
 
                             if( aLine.Intersection( aOutRect, aIntersection ) )
