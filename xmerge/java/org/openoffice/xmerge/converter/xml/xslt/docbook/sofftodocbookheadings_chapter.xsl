@@ -664,6 +664,12 @@
 			<xsl:apply-templates/>
 		</xsl:element>
 		</xsl:when>
+<!-- Change Made By Kevin Fowlks (fowlks@msu.edu) June 16th, 2003 -->
+		<xsl:when test="@text:style-name=&apos;Citation&apos;">
+			<xsl:element name="quote">
+				<xsl:apply-templates/>	
+			</xsl:element>
+		</xsl:when>
             <xsl:when test="@text:style-name=&apos;FileName&apos;">
                 <xsl:element name="filename">
 			<xsl:apply-templates/>

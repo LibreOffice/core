@@ -1201,6 +1201,13 @@
         </xsl:element>
     </xsl:template>
 
+<!-- Change Made By Kevin Fowlks (fowlks@msu.edu) June 16th, 2003 -->
+    <xsl:template match="quote">
+        <xsl:element name="text:span">
+            <xsl:attribute name="text:style-name">Citation</xsl:attribute>
+            <xsl:apply-templates/>
+        </xsl:element>
+    </xsl:template>
 
     <xsl:template match="guimenu">
         <xsl:element name="text:span">
