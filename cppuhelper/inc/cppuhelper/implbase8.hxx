@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implbase8.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-16 17:51:29 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 23:13:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,24 +60,6 @@
  ************************************************************************/
 #ifndef _CPPUHELPER_IMPLBASE8_HXX_
 #define _CPPUHELPER_IMPLBASE8_HXX_
-
-#if defined( MACOSX ) && ( __GNUC__ < 3 )
-/* use old impl helpers for macosx */
-
-#define __IFC8 Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7, Ifc8
-#define __CLASS_IFC8 class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5, class Ifc6, class Ifc7, class Ifc8
-#define __PUBLIC_IFC8 public Ifc1, public Ifc2, public Ifc3, public Ifc4, public Ifc5, public Ifc6, public Ifc7, public Ifc8
-
-#ifndef _CPPUHELPER_IMPLBASE_HXX_
-#include <cppuhelper/implbase.hxx>
-#endif
-
-__DEF_IMPLHELPER_PRE( 8 )
-    __IFC_WRITEOFFSET( 1 ) __IFC_WRITEOFFSET( 2 ) __IFC_WRITEOFFSET( 3 ) __IFC_WRITEOFFSET( 4 )
-    __IFC_WRITEOFFSET( 5 ) __IFC_WRITEOFFSET( 6 ) __IFC_WRITEOFFSET( 7 ) __IFC_WRITEOFFSET( 8 )
-__DEF_IMPLHELPER_POST( 8 )
-
-#else /* ! MACOSX */
 
 #ifndef _CPPUHELPER_IMPLBASE_EX_HXX_
 #include <cppuhelper/implbase_ex.hxx>
@@ -321,7 +303,5 @@ namespace cppu
             }
     };
 }
-
-#endif /* MACOSX */
 
 #endif
