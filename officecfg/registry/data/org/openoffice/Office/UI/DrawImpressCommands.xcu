@@ -307,7 +307,7 @@
                     <value xml:lang="sk">Snímkov na riadok</value>
                     <value xml:lang="sv">Diabilder per rad</value>
                     <value xml:lang="th">ภาพนิ่งต่อแถว</value>
-                    <value xml:lang="tr">Satır  başına slayt sayısı</value>
+                    <value xml:lang="tr">Satır başına slayt sayısı</value>
                     <value xml:lang="hi">स्लइडस एक पंक्ति पर</value>
                     <value xml:lang="zh-CN">一组的幻灯片</value>
                     <value xml:lang="pt">Diapositivos por série</value>
@@ -2014,7 +2014,7 @@
                     <value xml:lang="th">เลข~หน้า</value>
                     <value xml:lang="tr">~Sayfa Sayısı</value>
                     <value xml:lang="hi">~पृष्ठ का संख्या</value>
-                    <value xml:lang="zh-CN">页码(~P)</value>
+                    <value xml:lang="zh-CN">页码</value>
                     <value xml:lang="pt">Número de ~página</value>
                 </prop>
             </node>
@@ -2603,7 +2603,7 @@
                     <value xml:lang="th">วาง~พิเศษ...</value>
                     <value xml:lang="tr">Ö~zel yapıştır...</value>
                     <value xml:lang="hi">~विशेष को छिपकाओ...</value>
-                    <value xml:lang="zh-CN">粘贴内容(~S)...</value>
+                    <value xml:lang="zh-CN">粘贴内容...</value>
                     <value xml:lang="pt">Colar ~especial...</value>
                 </prop>
             </node>
@@ -2882,7 +2882,7 @@
                     <value xml:lang="th">ภาพ~นิ่ง...</value>
                     <value xml:lang="tr">~Slayt...</value>
                     <value xml:lang="hi">~स्लइड...</value>
-                    <value xml:lang="zh-CN">页面(~E)...</value>
+                    <value xml:lang="zh-CN">幻灯片...</value>
                     <value xml:lang="pt">~Página...</value>
                 </prop>
             </node>
@@ -3161,7 +3161,7 @@
                     <value xml:lang="th">นำ~ส่งต่อ</value>
                     <value xml:lang="tr">Bir ~öne getir</value>
                     <value xml:lang="hi">~आगे की ओर लाना</value>
-                    <value xml:lang="zh-CN">上移一层(~F)</value>
+                    <value xml:lang="zh-CN">上移一层</value>
                     <value xml:lang="pt">Trazer para a ~frente</value>
                 </prop>
             </node>
@@ -3440,7 +3440,7 @@
                     <value xml:lang="th">ดัดแปลงแก้ไข~ระดับ...</value>
                     <value xml:lang="tr">Sayfa ~düzeni...</value>
                     <value xml:lang="hi">~अभिन्यास सुधारो...</value>
-                    <value xml:lang="zh-CN">页面版式(~L)...</value>
+                    <value xml:lang="zh-CN">更改版式...</value>
                     <value xml:lang="pt">Modificar ~configuração de página...</value>
                 </prop>
             </node>
@@ -3905,7 +3905,7 @@
                     <value xml:lang="th">ออกแบบ~ภาพนิ่ง...</value>
                     <value xml:lang="tr">~Slayt tasarımı...</value>
                     <value xml:lang="hi">~स्लइड डिसैन...</value>
-                    <value xml:lang="zh-CN">页面样式(~S)...</value>
+                    <value xml:lang="zh-CN">幻灯片设计...</value>
                     <value xml:lang="pt">~Estilo de página...</value>
                 </prop>
             </node>
@@ -4139,9 +4139,9 @@
                     <value xml:lang="el">Τοποθέτηση σε κύκλο (προοπτικά)</value>
                     <value xml:lang="es">Posicionar en círculo ( en perspectiva )</value>
                     <value xml:lang="fi">Venytä ympyräksi (perspektiiviin)</value>
-                    <value xml:lang="fr">Positionner sur le cercle (en perspective )  </value>
+                    <value xml:lang="fr">Positionner sur le cercle (en perspective ) </value>
                     <value xml:lang="he">Setzen auf Kreis (perspektivisch)</value>
-                    <value xml:lang="it">Poni su cerchio  (in prospettiva)</value>
+                    <value xml:lang="it">Poni su cerchio (in prospettiva)</value>
                     <value xml:lang="ja">円形にする(遠近法)</value>
                     <value xml:lang="ko">원에 설정(원근감있게)</value>
                     <value xml:lang="nl">Op cirkel zetten (perspectivisch)</value>
@@ -4201,7 +4201,7 @@
                     <value xml:lang="el">Τοποθέτηση σε κύκλο (παραμόρφωση)</value>
                     <value xml:lang="es">Posicionar en círculo (distorsionado)</value>
                     <value xml:lang="fi">Aseta ympyrään (vääristä)</value>
-                    <value xml:lang="fr">Positionner sur le cercle (déformer)  </value>
+                    <value xml:lang="fr">Positionner sur le cercle (déformer) </value>
                     <value xml:lang="he">Setzen auf Kreis (verzerren)</value>
                     <value xml:lang="it">Poni su cerchio (distorci)</value>
                     <value xml:lang="ja">円形にする(ゆがめる)</value>
@@ -6416,9 +6416,9 @@
                     <value xml:lang="sk">Zobraziť predlo~hu</value>
                     <value xml:lang="sv">Arbetsområde</value>
                     <value xml:lang="th">มุมมอง~ต้นแบบ</value>
-                    <value xml:lang="tr">~Ana  görünümü</value>
+                    <value xml:lang="tr">~Ana görünümü</value>
                     <value xml:lang="hi">~मास्टर दृश्य</value>
-                    <value xml:lang="zh-CN">工作区域(~K)</value>
+                    <value xml:lang="zh-CN">工作区域</value>
                     <value xml:lang="pt">~Vista de trabalho</value>
                 </prop>
             </node>
