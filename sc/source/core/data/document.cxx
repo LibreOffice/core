@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-23 10:51:06 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:54:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3163,7 +3163,7 @@ void ScDocument::GetSelectionFrame( const ScMarkData& rMark,
     rLineInner.SetLine(NULL, BOXINFO_LINE_HORI);
     rLineInner.SetLine(NULL, BOXINFO_LINE_VERT);
     rLineInner.SetTable(TRUE);
-    rLineInner.SetDist((BOOL)FALSE);
+    rLineInner.SetDist(TRUE);
     rLineInner.SetMinDist(FALSE);
 
     ScLineFlags aFlags;
@@ -3172,7 +3172,8 @@ void ScDocument::GetSelectionFrame( const ScMarkData& rMark,
     {
         ScRange aRange;
         rMark.GetMarkArea(aRange);
-        rLineInner.SetTable(aRange.aStart!=aRange.aEnd);
+        rLineInner.EnableHor( aRange.aStart.Row() != aRange.aEnd.Row() );
+        rLineInner.EnableVer( aRange.aStart.Col() != aRange.aEnd.Col() );
         for (SCTAB i=0; i<=MAXTAB; i++)
             if (pTab[i] && rMark.GetTableSelect(i))
                 pTab[i]->MergeBlockFrame( &rLineOuter, &rLineInner, aFlags,
