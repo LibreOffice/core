@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:27:40 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:11:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -650,17 +650,21 @@ void IndexBox_Impl::SelectExecutableEntry()
 {
     sal_Bool bSelectNew = sal_False;
     USHORT nPos = GetEntryPos( GetText() );
-    USHORT nOldPos = nPos;
-    String aEntryText;
-    IndexEntry_Impl* pEntry = (IndexEntry_Impl*)(ULONG)GetEntryData( nPos );
-    while ( !pEntry || pEntry->m_aURL.Len() == 0 )
+    if ( nPos != COMBOBOX_ENTRY_NOTFOUND )
     {
-        pEntry = (IndexEntry_Impl*)(ULONG)GetEntryData( ++nPos );
-        aEntryText = GetEntry( nPos );
-    }
+        USHORT nOldPos = nPos;
+        String aEntryText;
+        IndexEntry_Impl* pEntry = (IndexEntry_Impl*)(ULONG)GetEntryData( nPos );
+        USHORT nCount = GetEntryCount();
+        while ( nPos < nCount && ( !pEntry || pEntry->m_aURL.Len() == 0 ) )
+        {
+            pEntry = (IndexEntry_Impl*)(ULONG)GetEntryData( ++nPos );
+            aEntryText = GetEntry( nPos );
+        }
 
-    if ( nOldPos != nPos )
-        SetText( aEntryText );
+        if ( nOldPos != nPos )
+            SetText( aEntryText );
+    }
 }
 
 // class IndexTabPage_Impl -----------------------------------------------
@@ -1093,6 +1097,7 @@ SearchTabPage_Impl::SearchTabPage_Impl( Window* pParent ) :
     Link aLink = LINK( this, SearchTabPage_Impl, SearchHdl );
     aSearchED.SetSearchLink( aLink );
     aSearchBtn.SetClickHdl( aLink );
+    aSearchED.SetModifyHdl( LINK( this, SearchTabPage_Impl, ModifyHdl ) );
     aOpenBtn.SetClickHdl( LINK( this, SearchTabPage_Impl, OpenHdl ) );
 
     aMinSize = GetSizePixel();
@@ -1119,6 +1124,8 @@ SearchTabPage_Impl::SearchTabPage_Impl( Window* pParent ) :
             }
         }
     }
+
+    ModifyHdl( &aSearchED );
 }
 
 // -----------------------------------------------------------------------
@@ -1178,40 +1185,43 @@ void SearchTabPage_Impl::RememberSearchText( const String& rSearchText )
 
 IMPL_LINK( SearchTabPage_Impl, SearchHdl, PushButton*, EMPTYARG )
 {
-    EnterWait();
-    ClearSearchResults();
     String aSearchText = TRIM( aSearchED.GetText() );
-    RememberSearchText( aSearchText );
-    String aSearchURL = HELP_URL;
-    aSearchURL += aFactory;
-    aSearchURL += String( HELP_SEARCH_TAG );
-    if ( !aFullWordsCB.IsChecked() )
-        aSearchText = sfx2::PrepareSearchString( aSearchText, xBreakIterator, true );
-    aSearchURL += aSearchText;
-    AppendConfigToken_Impl( aSearchURL, sal_False );
-    if ( aScopeCB.IsChecked() )
-        aSearchURL += DEFINE_CONST_UNICODE("&Scope=Heading");
-    Sequence< ::rtl::OUString > aFactories = SfxContentHelper::GetResultSet( aSearchURL );
-    const ::rtl::OUString* pFacs  = aFactories.getConstArray();
-    UINT32 i, nCount = aFactories.getLength();
-    for ( i = 0; i < nCount; ++i )
+    if ( aSearchText.Len() > 0 )
     {
-        String aRow( pFacs[i] );
-        String aTitle, aType;
-        xub_StrLen nIdx = 0;
-        aTitle = aRow.GetToken( 0, '\t', nIdx );
-        aType = aRow.GetToken( 0, '\t', nIdx );
-        String* pURL = new String( aRow.GetToken( 0, '\t', nIdx ) );
-        USHORT nPos = aResultsLB.InsertEntry( aTitle );
-        aResultsLB.SetEntryData( nPos, (void*)(ULONG)pURL );
-    }
-    LeaveWait();
+        EnterWait();
+        ClearSearchResults();
+        RememberSearchText( aSearchText );
+        String aSearchURL = HELP_URL;
+        aSearchURL += aFactory;
+        aSearchURL += String( HELP_SEARCH_TAG );
+        if ( !aFullWordsCB.IsChecked() )
+            aSearchText = sfx2::PrepareSearchString( aSearchText, xBreakIterator, true );
+        aSearchURL += aSearchText;
+        AppendConfigToken_Impl( aSearchURL, sal_False );
+        if ( aScopeCB.IsChecked() )
+            aSearchURL += DEFINE_CONST_UNICODE("&Scope=Heading");
+        Sequence< ::rtl::OUString > aFactories = SfxContentHelper::GetResultSet( aSearchURL );
+        const ::rtl::OUString* pFacs  = aFactories.getConstArray();
+        UINT32 i, nCount = aFactories.getLength();
+        for ( i = 0; i < nCount; ++i )
+        {
+            String aRow( pFacs[i] );
+            String aTitle, aType;
+            xub_StrLen nIdx = 0;
+            aTitle = aRow.GetToken( 0, '\t', nIdx );
+            aType = aRow.GetToken( 0, '\t', nIdx );
+            String* pURL = new String( aRow.GetToken( 0, '\t', nIdx ) );
+            USHORT nPos = aResultsLB.InsertEntry( aTitle );
+            aResultsLB.SetEntryData( nPos, (void*)(ULONG)pURL );
+        }
+        LeaveWait();
 
-    if ( !nCount )
-    {
-        InfoBox aBox( this, SfxResId( RID_INFO_NOSEARCHRESULTS ) );
-        aBox.SetText( String( SfxResId( STR_HELP_WINDOW_TITLE ) ) );
-        aBox.Execute();
+        if ( !nCount )
+        {
+            InfoBox aBox( this, SfxResId( RID_INFO_NOSEARCHRESULTS ) );
+            aBox.SetText( String( SfxResId( STR_HELP_WINDOW_TITLE ) ) );
+            aBox.Execute();
+        }
     }
     return 0;
 }
@@ -1221,6 +1231,15 @@ IMPL_LINK( SearchTabPage_Impl, SearchHdl, PushButton*, EMPTYARG )
 IMPL_LINK( SearchTabPage_Impl, OpenHdl, PushButton*, EMPTYARG )
 {
     aResultsLB.GetDoubleClickHdl().Call( &aResultsLB );
+    return 0;
+}
+
+// -----------------------------------------------------------------------
+
+IMPL_LINK( SearchTabPage_Impl, ModifyHdl, Edit*, EMPTYARG )
+{
+    String aSearchText = TRIM( aSearchED.GetText() );
+    aSearchBtn.Enable( aSearchText.Len() > 0 );
     return 0;
 }
 
