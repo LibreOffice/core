@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instbdlg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-11 12:40:43 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:35:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,9 +62,9 @@
 #ifndef SC_INSTBDLG_HXX
 #define SC_INSTBDLG_HXX
 
-#ifndef _SV_HXX
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
 #endif
-
 
 #ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
@@ -83,6 +83,9 @@
 #endif
 #ifndef _DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>
+#endif
+#ifndef _SV_FIELD_HXX
+#include <vcl/field.hxx>
 #endif
 #ifndef _EMBOBJ_HXX //autogen
 #include <so3/embobj.hxx>
@@ -107,7 +110,7 @@ class ScDocShell;
 class ScInsertTableDlg : public ModalDialog
 {
 public:
-            ScInsertTableDlg( Window* pParent, ScViewData& rViewData, USHORT nTabCount);
+            ScInsertTableDlg( Window* pParent, ScViewData& rViewData, SCTAB nTabCount);
             ~ScInsertTableDlg();
 
     virtual short   Execute();      // ueberladen, um Dialog-Parent zu setzen
@@ -119,7 +122,7 @@ public:
     const String*   GetNextTable( USHORT* pN = NULL );
     ScDocShell*     GetDocShellTables() { return pDocShTables; }
     BOOL            IsTableBefore() { return aBtnBefore.IsChecked(); }
-    USHORT          GetTableCount() { return nTableCount;}
+    SCTAB           GetTableCount() { return nTableCount;}
 
 private:
     RadioButton             aBtnBefore;
@@ -147,7 +150,7 @@ private:
 
     USHORT              nSelTabIndex;   // fuer GetFirstTable() / GetNextTable()
     String              aStrCurSelTable;
-    USHORT              nTableCount;
+    SCTAB               nTableCount;
 
 #ifdef SC_INSTBDLG_CXX
     void    Init_Impl();
