@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbar.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 20:48:02 $
+ *  last change: $Author: fs $ $Date: 2001-03-12 13:20:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,7 +181,7 @@ ToolBox RID_BIB_TOOLBAR
         ToolBoxItem
         {
             Identifier = TBC_BT_FILTERCRIT ;
-            HelpID = SID_SBA_QRY_FILTERCRIT ;
+            HelpID = SID_FM_FILTERCRIT ;
             ItemBitmap = Bitmap { File = "sc10715.bmp" ; };
             Text = "Standard Filter" ;
             Text [ ENGLISH ] = "Standard Filter" ;
@@ -210,7 +210,7 @@ ToolBox RID_BIB_TOOLBAR
         ToolBoxItem
         {
             Identifier = TBC_BT_REMOVEFILTER ;
-            HelpID = SID_SBA_QRY_REMOVEFILTER ;
+            HelpID = SID_FM_REMOVE_FILTER_SORT ;
             ItemBitmap = Bitmap { File = "sc10711.bmp" ; };
             Text = "Filter entfernen" ;
             Text [ ENGLISH ] = "Remove Filter" ;
@@ -301,7 +301,7 @@ ToolBox RID_BIB_TOOLBAR
         ToolBoxItem
         {
             Identifier = TBC_BT_NEWCARD ;
-            //HelpID = SID_SBA_QRY_REMOVEFILTER ;
+            //HelpID = SID_FM_REMOVE_FILTER_SORT ;
             Command = ".uno:Bib/newEntry" ;
             ItemBitmap = Bitmap { File = "newcard.bmp" ; };
             Text = "Neue Adresse" ;
@@ -328,7 +328,7 @@ ToolBox RID_BIB_TOOLBAR
         ToolBoxItem
         {
             Identifier = TBC_BT_EDITCARD ;
-            //HelpID = SID_SBA_QRY_REMOVEFILTER ;
+            //HelpID = SID_FM_REMOVE_FILTER_SORT ;
             Command = ".uno:Bib/changeEntry" ;
             ItemBitmap = Bitmap { File = "modcard.bmp" ; };
             Text = "Adresse bearbeiten" ;
@@ -355,7 +355,7 @@ ToolBox RID_BIB_TOOLBAR
         ToolBoxItem
         {
             Identifier = TBC_BT_REMOVECARD ;
-            //HelpID = SID_SBA_QRY_REMOVEFILTER ;
+            //HelpID = SID_FM_REMOVE_FILTER_SORT ;
             Command = ".uno:Bib/removeEntry" ;
             ItemBitmap = Bitmap { File = "remcard.bmp" ; };
             Text = "Adresse löschen" ;
