@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NestedRegistry.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 12:38:28 $
+ *  last change:$Date: 2003-09-08 11:44:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,19 +61,21 @@
 
 package mod._defreg;
 
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.registry.XSimpleRegistry;
-import com.sun.star.uno.XInterface;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
+
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 import util.RegistryTools;
 import util.utils;
+
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.registry.XSimpleRegistry;
+import com.sun.star.uno.XInterface;
 
 /**
 * Test for object which is represented by service
@@ -123,6 +125,7 @@ public class NestedRegistry extends TestCase {
     */
     protected void copyFile(String src, String dst, PrintWriter log)
             throws java.io.IOException {
+        log.println("Copy File "+src+" to "+dst);
         File srcF = new File(src) ;
         File dstF = new File(dst) ;
 
@@ -172,7 +175,6 @@ public class NestedRegistry extends TestCase {
                                                     throws StatusException {
         XInterface oObj = null;
         Object oInterface = null;
-        Object fileAcc = null;
 
         final String tmpDir = utils.getOfficeTempDirSys((XMultiServiceFactory)Param.getMSF()) ;
         final String openF = tmpDir + "XSimpleRegistry_open" + uniq + ".rdb" ;
