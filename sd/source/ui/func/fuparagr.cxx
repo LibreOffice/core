@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuparagr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dl $ $Date: 2000-11-30 15:30:16 $
+ *  last change: $Author: os $ $Date: 2002-05-07 12:37:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,8 +121,7 @@ FuParagraph::FuParagraph( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
         // linker Rand als Offset
         const long nOff = ( (SvxLRSpaceItem&)aNewAttr.Get( EE_PARA_LRSPACE ) ).GetTxtLeft();
         // Umrechnung, da TabulatorTabPage immer von Twips ausgeht !
-        long nTwipOff = OutputDevice::LogicToLogic( nOff, MAP_100TH_MM, MAP_TWIP );
-        SfxInt32Item aOff( SID_ATTR_TABSTOP_OFFSET, nTwipOff );
+        SfxInt32Item aOff( SID_ATTR_TABSTOP_OFFSET, nOff );
         aNewAttr.Put( aOff );
 
         SdParagraphDlg* pDlg = new SdParagraphDlg( NULL, &aNewAttr );
