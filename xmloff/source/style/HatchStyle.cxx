@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HatchStyle.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cl $ $Date: 2002-09-25 16:19:26 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:19:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,7 @@ using namespace ::xmloff::token;
 enum SvXMLTokenMapAttrs
 {
     XML_TOK_HATCH_NAME,
+    XML_TOK_HATCH_DISPLAY_NAME,
     XML_TOK_HATCH_STYLE,
     XML_TOK_HATCH_COLOR,
     XML_TOK_HATCH_DISTANCE,
@@ -124,6 +125,7 @@ enum SvXMLTokenMapAttrs
 static __FAR_DATA SvXMLTokenMapEntry aHatchAttrTokenMap[] =
 {
     { XML_NAMESPACE_DRAW, XML_NAME, XML_TOK_HATCH_NAME },
+    { XML_NAMESPACE_DRAW, XML_DISPLAY_NAME, XML_TOK_HATCH_DISPLAY_NAME },
     { XML_NAMESPACE_DRAW, XML_STYLE, XML_TOK_HATCH_STYLE },
     { XML_NAMESPACE_DRAW, XML_COLOR, XML_TOK_HATCH_COLOR },
     { XML_NAMESPACE_DRAW, XML_HATCH_DISTANCE, XML_TOK_HATCH_DISTANCE },
@@ -164,6 +166,7 @@ sal_Bool XMLHatchStyleImport::importXML(
     sal_Bool bHasStyle = sal_False;
     sal_Bool bHasColor = sal_False;
     sal_Bool bHasDist  = sal_False;
+    OUString aDisplayName;
 
     drawing::Hatch aHatch;
     aHatch.Style = drawing::HatchStyle_SINGLE;
@@ -190,6 +193,9 @@ sal_Bool XMLHatchStyleImport::importXML(
                     rStrName = rStrValue;
                     bHasName = sal_True;
                 }
+                break;
+            case XML_TOK_HATCH_DISPLAY_NAME:
+                aDisplayName = rStrValue;
                 break;
             case XML_TOK_HATCH_STYLE:
                 {
@@ -223,6 +229,13 @@ sal_Bool XMLHatchStyleImport::importXML(
     }
 
     rValue <<= aHatch;
+
+    if( aDisplayName.getLength() )
+    {
+        rImport.AddStyleDisplayName( XML_STYLE_FAMILY_SD_HATCH_ID, rStrName,
+                                     aDisplayName );
+        rStrName = aDisplayName;
+    }
 
     bRet = bHasName && bHasStyle && bHasColor && bHasDist;
 
@@ -270,7 +283,13 @@ sal_Bool XMLHatchStyleExport::exportXML(
             else
             {
                 // Name
-                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, rStrName );
+                sal_Bool bEncoded = sal_False;
+                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME,
+                                      rExport.EncodeStyleName( rStrName,
+                                                                &bEncoded ) );
+                if( bEncoded )
+                    rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DISPLAY_NAME,
+                                            rStrName );
 
                 aStrValue = aOut.makeStringAndClear();
                 rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_STYLE, aStrValue );
