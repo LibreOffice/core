@@ -7359,7 +7359,7 @@ SfxVoidItem ClosePreview SID_PREVIEW_CLOSE
 
 //--------------------------------------------------------------------------
 SfxVoidItem SelectTables SID_SELECT_TABLES
-()
+( SfxIntegerListItem Tables SID_SELECT_TABLES )
 [
     /* flags: */
     AutoUpdate = FALSE,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh3.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dr $ $Date: 2002-05-22 07:22:30 $
+ *  last change: $Author: mba $ $Date: 2002-07-12 13:52:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,10 @@
 #include "autofmt.hxx"
 #include "dwfunctr.hxx"
 #include "shtabdlg.hxx"
+
+#include <svtools/ilstitem.hxx>
+#define _SVSTDARR_ULONGS
+#include <svtools/svstdarr.hxx>
 
 #define IS_EDITMODE() GetViewData()->HasEditView( GetViewData()->GetActivePart() )
 #define IS_AVAILABLE(WhichId,ppItem) \
@@ -716,31 +720,49 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             sal_uInt16 nTabCount = rDoc.GetTableCount();
             sal_uInt16 nTab;
 
-            ScShowTabDlg* pDlg = new ScShowTabDlg( GetDialogParent() );
-            pDlg->SetDescription(
-                String( ScResId( STR_DLG_SELECTTABLES_TITLE ) ),
-                String( ScResId( STR_DLG_SELECTTABLES_LBNAME ) ),
-                SID_SELECT_TABLES, HID_SELECTTABLES );
-
-            // fill all table names with selection state
-            String aTabName;
-            for( nTab = 0; nTab < nTabCount; ++nTab )
+            SvULongs aIndexList( 4, 4 );
+            SFX_REQUEST_ARG( rReq, pItem, SfxIntegerListItem, SID_SELECT_TABLES, sal_False );
+            if ( pItem )
+                pItem->GetList( aIndexList );
+            else
             {
-                rDoc.GetName( nTab, aTabName );
-                pDlg->Insert( aTabName, rMark.GetTableSelect( nTab ) );
+                ScShowTabDlg* pDlg = new ScShowTabDlg( GetDialogParent() );
+                pDlg->SetDescription(
+                    String( ScResId( STR_DLG_SELECTTABLES_TITLE ) ),
+                    String( ScResId( STR_DLG_SELECTTABLES_LBNAME ) ),
+                    SID_SELECT_TABLES, HID_SELECTTABLES );
+
+                // fill all table names with selection state
+                String aTabName;
+                for( nTab = 0; nTab < nTabCount; ++nTab )
+                {
+                    rDoc.GetName( nTab, aTabName );
+                    pDlg->Insert( aTabName, rMark.GetTableSelect( nTab ) );
+                }
+
+                if( pDlg->Execute() == RET_OK )
+                {
+                    sal_uInt16 nSelCount = pDlg->GetSelectEntryCount();
+                    sal_uInt16 nSelIx;
+                    for( nSelIx = 0; nSelIx < nSelCount; ++nSelIx )
+                        aIndexList.Insert( pDlg->GetSelectEntryPos( nSelIx ), nSelIx );
+                    delete pDlg;
+                    rReq.AppendItem( SfxIntegerListItem( SID_SELECT_TABLES, aIndexList ) );
+                }
+                else
+                    rReq.Ignore();
             }
 
-            if( pDlg->Execute() == RET_OK )
+            if ( aIndexList.Count() )
             {
-                sal_uInt16 nSelCount = pDlg->GetSelectEntryCount();
+                sal_uInt16 nSelCount = aIndexList.Count();
                 sal_uInt16 nSelIx;
-                sal_uInt16 nSelTab = nSelCount ? pDlg->GetSelectEntryPos( 0 ) : 0;
                 sal_uInt16 nFirstVisTab = 0;
 
                 // special case: only hidden tables selected -> do nothing
                 sal_Bool bVisSelected = sal_False;
                 for( nSelIx = 0; !bVisSelected && (nSelIx < nSelCount); ++nSelIx )
-                    bVisSelected = rDoc.IsVisible( nFirstVisTab = pDlg->GetSelectEntryPos( nSelIx ) );
+                    bVisSelected = rDoc.IsVisible( nFirstVisTab = aIndexList[nSelIx] );
                 if( !bVisSelected )
                     nSelCount = 0;
 
@@ -751,7 +773,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                         rMark.SelectTable( nTab, sal_False );
 
                     for( nSelIx = 0; nSelIx < nSelCount; ++nSelIx )
-                        rMark.SelectTable( pDlg->GetSelectEntryPos( nSelIx ), sal_True );
+                        rMark.SelectTable( aIndexList[nSelIx], sal_True );
 
                     // activate another table, if current is deselected
                     if( !rMark.GetTableSelect( rViewData.GetTabNo() ) )
@@ -763,8 +785,9 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     rViewData.GetDocShell()->PostPaintExtras();
                     rViewData.GetBindings().Invalidate( FID_FILL_TAB );
                 }
+
+                rReq.Done();
             }
-            delete pDlg;
         }
         break;
 
