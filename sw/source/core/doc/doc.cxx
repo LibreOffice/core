@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 18:14:23 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:26:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -675,24 +675,36 @@ void SwDoc::UpdateDocStat( SwDocStat& rStat )
             switch( ( pNd = GetNodes()[ --n ])->GetNodeType() )
             {
             case ND_TEXTNODE:
+                if ( !((SwTxtNode*)pNd)->HasHiddenCharAttribute( true ) &&
+                     !((SwTxtNode*)pNd)->HasHiddenParaField() )
                 {
-                    const String& rStr = ((SwTxtNode*)pNd)->GetTxt();
+                    String& rWordStr = (String&)((SwTxtNode*)pNd)->GetTxt();
+                    String aOldStr( rWordStr );
 
-                    if( rStr.Len() && pBreakIt->xBreak.is() )
+                    // fills the hidden ranges with cChar, so that the break iterator ignores them
+                    const xub_Unicode cChar(' ');
+                    USHORT nNumOfMaskedChars =
+                            SwScriptInfo::MaskHiddenRanges( *((SwTxtNode*)pNd), rWordStr, &cChar );
+
+                    if( rWordStr.Len() && pBreakIt->xBreak.is() )
                     {
                         SwScanner aScanner( *((SwTxtNode*)pNd), NULL,
                                             ::com::sun::star::i18n::WordType::WORD_COUNT,
-                                            0, rStr.Len(), sal_False, sal_False );
+                                            0, rWordStr.Len(), sal_False, sal_False );
 
                         while ( aScanner.NextWord() )
                         {
                             if ( aScanner.GetLen() > 1 ||
-                                 CH_TXTATR_BREAKWORD != rStr.GetChar( aScanner.GetBegin() ) )
+                                 CH_TXTATR_BREAKWORD != rWordStr.GetChar( aScanner.GetBegin() ) )
                                 ++rStat.nWord;
                         }
                     }
-                    rStat.nChar += rStr.Len();
+
+                    ASSERT( rWordStr.Len() >= nNumOfMaskedChars,
+                            "More characters hidden that characters in string!" )
+                    rStat.nChar += rWordStr.Len() - nNumOfMaskedChars;
                     ++rStat.nPara;
+                    rWordStr = aOldStr;
                 }
                 break;
             case ND_TABLENODE:      ++rStat.nTbl;   break;
@@ -1024,7 +1036,7 @@ BOOL SwDoc::RemoveInvisibleContent()
                 pFmtFld; pFmtFld = (SwFmtFld*)aIter.Next() )
             if( pFmtFld->GetTxtFld() &&
                 0 != ( pTxtNd = (SwTxtNode*)pFmtFld->GetTxtFld()->GetpTxtNode() ) &&
-                pTxtNd->GetpSwpHints() && !pTxtNd->GetpSwpHints()->IsVisible() &&
+                pTxtNd->GetpSwpHints() && pTxtNd->HasHiddenParaField() &&
                 &pTxtNd->GetNodes() == &GetNodes() )
             {
                 bRet = TRUE;
@@ -1235,5 +1247,16 @@ void SwDoc::AppendUndoForInsertFromDB( const SwPaM& rPam, BOOL bIsTable )
     }
 }
 
+bool SwDoc::ContainsHiddenChars() const
+{
+    for( ULONG n = GetNodes().Count(); n; )
+    {
+        SwNode* pNd = GetNodes()[ --n ];
+        if ( ND_TEXTNODE == pNd->GetNodeType() &&
+             ((SwTxtNode*)pNd)->HasHiddenCharAttribute( false ) )
+            return true;
+    }
 
+    return false;
+}
 
