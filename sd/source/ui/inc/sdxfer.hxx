@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxfer.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2001-06-08 08:01:09 $
+ *  last change: $Author: ka $ $Date: 2001-07-02 10:12:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,6 @@ private:
     SvEmbeddedObjectRef             aDocShellRef;
     TransferableDataHelper*         pOLEDataHelper;
     TransferableObjectDescriptor*   pObjDesc;
-    SvObjectDescriptor*             pObjectDescriptor;
     const SdView*                   pSdView;
     SdView*                         pSdViewIntern;
     SdDrawDocument*                 pSdDrawDocument;
