@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unchss.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:57:45 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:55:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,10 +104,10 @@ StyleSheetUndoAction::StyleSheetUndoAction(SdDrawDocument* pTheDoc,
 
     // ItemSets anlegen; Vorsicht, das neue koennte aus einem anderen Pool
     // stammen, also mitsamt seinen Items clonen
-    pNewSet = new SfxItemSet(*(SfxItemPool*)SdrObject::GetGlobalDrawObjectItemPool(), pTheNewItemSet->GetRanges());
+    pNewSet = new SfxItemSet((SfxItemPool&)SdrObject::GetGlobalDrawObjectItemPool(), pTheNewItemSet->GetRanges());
     pTheDoc->MigrateItemSet( pTheNewItemSet, pNewSet, pTheDoc );
 
-    pOldSet = new SfxItemSet(*(SfxItemPool*)SdrObject::GetGlobalDrawObjectItemPool(),pStyleSheet->GetItemSet().GetRanges());
+    pOldSet = new SfxItemSet((SfxItemPool&)SdrObject::GetGlobalDrawObjectItemPool(),pStyleSheet->GetItemSet().GetRanges());
     pTheDoc->MigrateItemSet( &pStyleSheet->GetItemSet(), pOldSet, pTheDoc );
 
     aComment = String(SdResId(STR_UNDO_CHANGE_PRES_OBJECT));
