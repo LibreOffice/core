@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSecurityFrameworkController.java,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:24 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:35:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -353,7 +353,7 @@ public class XMLSecurityFrameworkController
             XSAXEventKeeperStatusChangeBroadcaster xSaxEventKeeperStatusChangeBroadcaster =
                 (XSAXEventKeeperStatusChangeBroadcaster)UnoRuntime.queryInterface(
                     XSAXEventKeeperStatusChangeBroadcaster.class, m_xSAXEventKeeper);
-            xSaxEventKeeperStatusChangeBroadcaster.addXSAXEventKeeperStatusChangeListener(this);
+            xSaxEventKeeperStatusChangeBroadcaster.addSAXEventKeeperStatusChangeListener(this);
         }
 
         boolean rc = !m_bSAXEventKeeperIncluded;
@@ -391,7 +391,7 @@ public class XMLSecurityFrameworkController
                     int cloneKeeperId = m_xSAXEventKeeper.cloneElementCollector(
                         keeperId,
                         m_bIsExporting?
-                        (ElementMarkPriority.PRI_BEFOREMODIFY):(ElementMarkPriority.PRI_AFTERMODIFY));
+                        (ElementMarkPriority.BEFOREMODIFY):(ElementMarkPriority.AFTERMODIFY));
 
                     /*
                      * notifies the key keeper id.
@@ -421,7 +421,7 @@ public class XMLSecurityFrameworkController
                     int cloneKeeperId = m_xSAXEventKeeper.cloneElementCollector(
                         keeperId,
                         m_bIsExporting?
-                        (ElementMarkPriority.PRI_AFTERMODIFY):(ElementMarkPriority.PRI_BEFOREMODIFY));
+                        (ElementMarkPriority.AFTERMODIFY):(ElementMarkPriority.BEFOREMODIFY));
 
                     /*
                      * sets the security id.
@@ -750,14 +750,14 @@ public class XMLSecurityFrameworkController
                 {
                     keeperId = m_xSAXEventKeeper.addSecurityElementCollector(
                         m_bIsExporting?
-                        (ElementMarkPriority.PRI_BEFOREMODIFY):(ElementMarkPriority.PRI_AFTERMODIFY),
+                        (ElementMarkPriority.BEFOREMODIFY):(ElementMarkPriority.AFTERMODIFY),
                         true);
                 }
                 else
                 {
                     keeperId = m_xSAXEventKeeper.addSecurityElementCollector(
                         m_bIsExporting?
-                        (ElementMarkPriority.PRI_AFTERMODIFY):(ElementMarkPriority.PRI_BEFOREMODIFY),
+                        (ElementMarkPriority.AFTERMODIFY):(ElementMarkPriority.BEFOREMODIFY),
                         false);
                 }
 
@@ -859,7 +859,7 @@ public class XMLSecurityFrameworkController
         XSAXEventKeeperStatusChangeBroadcaster xSaxEventKeeperStatusChangeBroadcaster =
             (XSAXEventKeeperStatusChangeBroadcaster)UnoRuntime.queryInterface(
                 XSAXEventKeeperStatusChangeBroadcaster.class, m_xSAXEventKeeper);
-        xSaxEventKeeperStatusChangeBroadcaster.addXSAXEventKeeperStatusChangeListener(null);
+        xSaxEventKeeperStatusChangeBroadcaster.addSAXEventKeeperStatusChangeListener(null);
 
         m_xSAXEventKeeper = null;
         m_xXMLDocumentWrapper = null;
@@ -1018,12 +1018,12 @@ public class XMLSecurityFrameworkController
     /*
      * XSignatureCreationResultListener
      */
-    public void signatureCreated(int securityId, SignatureCreationResult creationResult)
+    public void signatureCreated(int securityId, SecurityOperationStatus creationResult)
     {
         String message = new String();
         message += "A Signature is created:";
         message += "\nSecurity Id = "+securityId;
-        message += "\nCreation result = "+((creationResult==SignatureCreationResult.CREATIONSUCCEED)?"Succeed":"Fail");
+        message += "\nCreation result = "+((creationResult==SecurityOperationStatus.OPERATION_SUCCEEDED)?"Succeed":"Fail");
 
         m_testTool.showMessage("Message from : SignatureCreator\n\n"+message+"\n ");
     }
@@ -1031,12 +1031,12 @@ public class XMLSecurityFrameworkController
     /*
      * XSignatureVerifyResultListener
      */
-    public void signatureVerified(int securityId, SignatureVerifyResult verifyResult)
+    public void signatureVerified(int securityId, SecurityOperationStatus verifyResult)
     {
         String message = new String();
         message += "A Signature is verified:";
         message += "\nSecurity Id = "+securityId;
-        message += "\nVerify result = "+((verifyResult==SignatureVerifyResult.VERIFYSUCCEED)?"Succeed":"Fail");
+        message += "\nVerify result = "+((verifyResult==SecurityOperationStatus.OPERATION_SUCCEEDED)?"Succeed":"Fail");
 
         m_testTool.showMessage("Message from : SignatureVerifier\n\n"+message+"\n ");
     }
@@ -1044,12 +1044,12 @@ public class XMLSecurityFrameworkController
     /*
      * XEncryptionResultListener
      */
-    public void encrypted(int securityId, EncryptionResult encryptionResult)
+    public void encrypted(int securityId, SecurityOperationStatus encryptionResult)
     {
         String message = new String();
         message += "An EncryptedData is encrypted:";
         message += "\nSecurity Id = "+securityId;
-        message += "\nEncrypt result = "+((encryptionResult==EncryptionResult.ENCRYPTIONSUCCEED)?"Succeed":"Fail");
+        message += "\nEncrypt result = "+((encryptionResult==SecurityOperationStatus.OPERATION_SUCCEEDED)?"Succeed":"Fail");
 
         m_testTool.showMessage("Message from : Encryptor\n\n"+message+"\n ");
     }
@@ -1057,12 +1057,12 @@ public class XMLSecurityFrameworkController
     /*
      * XDecryptionResultListener methods
      */
-    public void decrypted(int securityId, DecryptionResult decryptionResult)
+    public void decrypted(int securityId, SecurityOperationStatus decryptionResult)
     {
         String message = new String();
         message += "An EncryptedData is decrypted:";
         message += "\nSecurity Id = "+securityId;
-        message += "\nDecrypt result = "+((decryptionResult==DecryptionResult.DECRYPTIONSUCCEED)?"Succeed":"Fail");
+        message += "\nDecrypt result = "+((decryptionResult==SecurityOperationStatus.OPERATION_SUCCEEDED)?"Succeed":"Fail");
 
         m_testTool.showMessage("Message from : Decryptor\n\n"+message+"\n ");
     }
