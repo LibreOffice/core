@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2004-12-10 17:49:41 $
+dnl * Date: $Date: 2004-12-13 12:16:35 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.79 $ )
+AC_REVISION( $Revision: 1.80 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -252,12 +252,6 @@ AC_ARG_WITH(frame-home,
                         "/cygdrive/c/Program Files/Microsoft Visual Studio .NET 2003/Vc7"
 
                         Usage: --with-frame-home=<absolute path to Framework SDK [[home]]>
-],,)
-AC_ARG_WITH(wdevenv-path,
-[  --with-wdevenv-path     For Microsoft C/C++ .NET compiler users, please supply the path
-                          pointing to the wdevenv.exe. 
- 
-                          Usage: --with-wdevenv-path=<absolute path to wdevenv.exe>
 ],,)
 AC_ARG_WITH(psdk-home,
 [  --with-psdk-home        For Windows users, please supply the path to the
@@ -1073,29 +1067,11 @@ if test "$COMEX" = "8" -o "$COMEX" = "10"; then
 	# Convert to posix path with 8.3 filename restrictions ( No spaces )
 	FRAME_HOME=`cygpath -d "$FRAME_HOME"`
 	FRAME_HOME=`cygpath -u "$FRAME_HOME"`
-
-	dnl Check wdevenv.exe (Not needed for VC toolkit)
-    if test -z "$ENABLE_VCTK"; then
-	AC_PATH_PROG(WDEVENV_PATH, wdevenv.exe)
-	if test -n "$WDEVENV_PATH"; then
-		WDEVENV_PATH=`dirname "$WDEVENV_PATH"`
-	fi
-	if test -x "$with_wdevenv_path/wdevenv.exe"; then
-		WDEVENV_PATH="$with_wdevenv_path"
-	fi
-	if test ! -x "$WDEVENV_PATH/wdevenv.exe"; then
-		AC_MSG_ERROR([wdevenv.exe not found. Make sure it's in the path or use --with-wdevenv-path])
-	fi
-	# Convert to posix path with 8.3 filename restrictions ( No spaces )
-	WDEVENV_PATH=`cygpath -d "$WDEVENV_PATH"`
-	WDEVENV_PATH=`cygpath -u "$WDEVENV_PATH"`
-    fi
 fi
 AC_SUBST(MIDL_PATH)
 AC_SUBST(CSC_PATH)
 AC_SUBST(NMAKE_PATH)
 AC_SUBST(FRAME_HOME)
-AC_SUBST(WDEVENV_PATH)
 
 dnl ===================================================================
 dnl Check if stdc headers are available excluding windows.
