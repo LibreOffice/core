@@ -1,5 +1,5 @@
 <!--
-	$Id: style.mod,v 1.13 2000-12-01 16:45:15 sab Exp $
+	$Id: style.mod,v 1.14 2000-12-04 12:15:09 sab Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -306,7 +306,7 @@
 <!ATTLIST style:properties
 	table:align (left | center | right | margins) #IMPLIED
 	table:border-model (collapsing | separating) #IMPLIED
-	fo:vertical-align (top | middle | bottom) #IMPLIED
+	fo:vertical-align (top | middle | bottom | automatic) #IMPLIED
 	fo:direction (ltr | ttb) #IMPLIED
 	style:rotation-angle %nonNegativeInteger; #IMPLIED
 	style:rotation-align (none | bottom | top | center) #IMPLIED
