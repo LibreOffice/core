@@ -2,9 +2,9 @@
  *
  *  $RCSfile: taskcreator.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: as $ $Date: 2001-05-02 13:00:46 $
+ *  last change: $Author: as $ $Date: 2001-08-10 11:54:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,12 +121,6 @@
 
 namespace framework{
 
-using namespace ::com::sun::star::awt       ;
-using namespace ::com::sun::star::frame     ;
-using namespace ::com::sun::star::lang      ;
-using namespace ::com::sun::star::uno       ;
-using namespace ::rtl                       ;
-
 //_________________________________________________________________________________________________________________
 //  non exported const
 //_________________________________________________________________________________________________________________
@@ -139,83 +133,71 @@ using namespace ::rtl                       ;
 //  declarations
 //_________________________________________________________________________________________________________________
 
-//*****************************************************************************************************************
-//  constructor
-//*****************************************************************************************************************
-TaskCreator::TaskCreator( const Reference< XMultiServiceFactory >& xFactory )
-        // Init member
-        :   m_xFactory( xFactory )
-{
-}
+/*-****************************************************************************************************//**
+    @short      create a new task with a system window inside
+    @descr      With this method you can create a new empty system task. We create the task and the container
+                window inside of it. Created node will be a child of given parent frame.
 
-//*****************************************************************************************************************
-//  destructor
-//*****************************************************************************************************************
-TaskCreator::~TaskCreator()
-{
-    // Free memory and release used references.
-    m_xFactory = Reference< XMultiServiceFactory >();
-}
+    @seealso    method createBrowserTask()
 
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-Reference< XFrame > TaskCreator::createNewSystemTask( const OUString& sName )
+    @param      "aInfo", collection of information, which are used to create task
+    @return     A reference to the new created task.
+
+    @onerror    We return a null-reference.
+    @threadsafe no
+*//*-*****************************************************************************************************/
+css::uno::Reference< css::frame::XFrame > TaskCreator::createSystemTask( const TaskInfo& aInfo )
 {
     // Safe impossible cases.
     // Method is not designed for all incoming parameter!
-    LOG_ASSERT( impldbg_checkParameter_createNewSystemTask( sName ), "TaskCreator::createNewSystemTask()\nInvalid parameter detected!\n" )
+    LOG_ASSERT2( implcp_createSystemTask( aInfo ), "TaskCreator::createNewSystemTask()", "Invalid parameter detected!" )
 
-    OUString sFrameName = impl_filterNames( sName );
+    // Set default return value to NULL!
+    css::uno::Reference< css::frame::XFrame > xTask;
 
-    // We must append a new task at our desktop.
-    // If no desktop exist we cant work correctly.
-    // Desktop is an one instance service. We will get a reference to it only!
-    Reference< XFramesSupplier > xDesktop( m_xFactory->createInstance( SERVICENAME_DESKTOP ), UNO_QUERY );
-    // Create the new task.
-    Reference< XFrame > xTask( m_xFactory->createInstance( SERVICENAME_TASK ), UNO_QUERY );
-    // Get the toolkit to create a blank window for the new task.
-    Reference< XToolkit > xToolkit( m_xFactory->createInstance( SERVICENAME_VCLTOOLKIT ), UNO_QUERY );
-    // Safe impossible cases
-    LOG_ASSERT( !(xDesktop.is()==sal_False), "TaskCreator::createNewSystemTask()\nServicename of Desktop is unknown!\n"     )
-    LOG_ASSERT( !(xTask.is()   ==sal_False), "TaskCreator::createNewSystemTask()\nServicename of Task is unknown!\n"        )
-    LOG_ASSERT( !(xToolkit.is()==sal_False), "TaskCreator::createNewSystemTask()\nServicename of VCLToolkit is unknown!\n"  )
-    if  (
-            ( xDesktop.is() ==  sal_True    )   &&
-            ( xTask.is()    ==  sal_True    )   &&
-            ( xToolkit.is() ==  sal_True    )
-        )
+    // Get toolkit to create task container window.
+    css::uno::Reference< css::awt::XToolkit > xToolkit( aInfo.xFactory->createInstance( SERVICENAME_VCLTOOLKIT ), css::uno::UNO_QUERY );
+    if( xToolkit.is() == sal_True )
     {
-        // Describe the window properties.
-        WindowDescriptor aDescriptor;
-        aDescriptor.Type                =   WindowClass_TOP             ;
-        aDescriptor.WindowServiceName   =   DECLARE_ASCII("window")     ;
-        aDescriptor.ParentIndex         =   -1                          ;
-        aDescriptor.Parent              =   Reference< XWindowPeer >()  ;
-        aDescriptor.Bounds              =   Rectangle(0,0,0,0)          ;
-        aDescriptor.WindowAttributes    =   WindowAttribute::BORDER     |
-                                            WindowAttribute::MOVEABLE   |
-                                            WindowAttribute::SIZEABLE   |
-                                            WindowAttribute::CLOSEABLE  ;
-        // Create a new blank window and set it on this instance.
-        Reference< XWindowPeer >    xPeer   = xToolkit->createWindow( aDescriptor );
-        Reference< XWindow >        xWindow ( xPeer, UNO_QUERY );
-        if  (
-                ( xWindow.is()  ==  sal_True    )   &&
-                ( xTask.is()    ==  sal_True    )
-            )
+        // Describe window properties.
+        css::awt::WindowDescriptor aDescriptor;
+        aDescriptor.Type                =   css::awt::WindowClass_TOP                       ;
+        aDescriptor.WindowServiceName   =   DECLARE_ASCII("window")                         ;
+        aDescriptor.ParentIndex         =   -1                                              ;
+        aDescriptor.Parent              =   css::uno::Reference< css::awt::XWindowPeer >()  ;
+        aDescriptor.Bounds              =   css::awt::Rectangle(0,0,0,0)                    ;
+        aDescriptor.WindowAttributes    =   css::awt::WindowAttribute::BORDER               |
+                                            css::awt::WindowAttribute::MOVEABLE             |
+                                            css::awt::WindowAttribute::SIZEABLE             |
+                                            css::awt::WindowAttribute::CLOSEABLE            ;
+        // Create a new blank container window and get access to parent container to append new created task.
+        css::uno::Reference< css::awt::XWindowPeer > xPeer      = xToolkit->createWindow( aDescriptor );
+        css::uno::Reference< css::awt::XWindow >     xWindow    ( xPeer, css::uno::UNO_QUERY );
+        css::uno::Reference< css::frame::XFrames >   xContainer = aInfo.xParent->getFrames();
+        if(
+            ( xWindow.is()    == sal_True ) &&
+            ( xContainer.is() == sal_True )
+          )
         {
-            // Set window on task.
-            // Do it before you call other interface methods on task-object ...
-            // because this object must be initialized before you can do such things.
-            // Otherwise he throw an exception for UNINITIALIZED working mode!
-            xTask->initialize( xWindow );
-            // Don't forget to create tree-bindings! Set this desktop as parent of new task ...
-            // ... and append it to his container.
-            // (Parent will automaticly set by "append()"!)
-            xTask->setName( sFrameName );
-            xDesktop->getFrames()->append( xTask );
-            xWindow->setEnable( sal_True );
+            // Create new system task.
+            xTask = css::uno::Reference< css::frame::XFrame >( aInfo.xFactory->createInstance( SERVICENAME_TASK ), css::uno::UNO_QUERY );
+            if( xTask.is() == sal_True )
+            {
+                // Set window on task.
+                // Do it before you call other interface methods on task-object ...
+                // because this object must be initialized before you can do such things.
+                // Otherwise he throw an exception for UNINITIALIZED working mode!
+
+                // Don't forget to create tree-bindings! use given parent as parent node of new task ...
+                // ... and append it to his container.
+                // (task member xParent will automaticly set by "append()" call!)
+
+                // ! sTaskName already filtered by TaskInfo structure! Special targets are not allowed here ...
+                xTask->initialize  ( xWindow         );
+                xTask->setName     ( aInfo.sTaskName );
+                xContainer->append ( xTask           );
+                xWindow->setVisible( aInfo.bVisible  );
+            }
         }
     }
 
@@ -224,44 +206,10 @@ Reference< XFrame > TaskCreator::createNewSystemTask( const OUString& sName )
 }
 
 //*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-Reference< XFrame > TaskCreator::createNewBrowserTask( const OUString& sName )
+css::uno::Reference< css::frame::XFrame > TaskCreator::createBrowserTask( const TaskInfo& aInfo )
 {
-    // Safe impossible cases.
-    // Method is not designed for all incoming parameter!
-    LOG_ASSERT( impldbg_checkParameter_createNewBrowserTask( sName ), "TaskCreator::createNewBrowserTask()\nInvalid parameter detected!\n" )
-    // Set default return value if method failed.
-    Reference< XFrame > xPlugInFrame;
-
-    OUString sFrameName = impl_filterNames( sName );
-
-    LOG_ASSERT( sal_False, "TaskCreator::createNewBrowserTask()\nNot supported yet! Return empty reference.\n" )
-
-    // Return result of operation.
-    return xPlugInFrame;
-}
-
-//*****************************************************************************************************************
-//  private method
-//*****************************************************************************************************************
-OUString TaskCreator::impl_filterNames( const OUString& sName )
-{
-    // Filter special names which can't be a valid frame name!
-    // Attention: "_beamer" is a valid name - because:
-    //  It exist one beamer for one task tree only.
-    //  If he exist we can find it - otherwhise he will be created by our task-frame!
-    OUString sReturn = sName;
-    if  (
-            ( sName == SPECIALTARGET_BLANK  )   ||
-            ( sName == SPECIALTARGET_SELF   )   ||
-            ( sName == SPECIALTARGET_PARENT )   ||
-            ( sName == SPECIALTARGET_TOP    )
-        )
-    {
-        sReturn = OUString();
-    }
-    return sReturn;
+    LOG_ERROR( "TaskCreator::createNewBrowserTask()", "Not supported yet! Return empty reference." )
+    return css::uno::Reference< css::frame::XFrame >();
 }
 
 //_________________________________________________________________________________________________________________
@@ -271,47 +219,48 @@ OUString TaskCreator::impl_filterNames( const OUString& sName )
 /*-----------------------------------------------------------------------------------------------------------------
     The follow methods checks the parameter for other functions. If a parameter or his value is non valid,
     we return "sal_False". (else sal_True) This mechanism is used to throw an ASSERT!
-
-    ATTENTION
-
-        If you miss a test for one of this parameters, contact the autor or add it himself !(?)
-        But ... look for right testing! See using of this methods!
 -----------------------------------------------------------------------------------------------------------------*/
 
 #ifdef ENABLE_ASSERTIONS
 
 //*****************************************************************************************************************
-// We look for invalid pointer only. An empty name is allowd!
-sal_Bool TaskCreator::impldbg_checkParameter_createNewSystemTask( const OUString& sName )
+sal_Bool TaskCreator::implcp_createSystemTask( const TaskInfo& aInfo )
 {
-    // Set default return value.
-    sal_Bool bOK = sal_True;
-    // Check parameter.
-    if  (
-            ( &sName == NULL )
-        )
-    {
-        bOK = sal_False ;
-    }
-    // Return result of check.
-    return bOK ;
+    return(
+            ( &aInfo              == NULL                       )   ||
+            ( aInfo.xFactory.is() == sal_False                  )   ||
+            ( aInfo.xParent.is()  == sal_False                  )   ||
+            ( aInfo.sTaskName     == SPECIALTARGET_SELF         )   ||
+            ( aInfo.sTaskName     == SPECIALTARGET_BLANK        )   ||
+            ( aInfo.sTaskName     == SPECIALTARGET_PARENT       )   ||
+            ( aInfo.sTaskName     == SPECIALTARGET_TOP          )   ||
+            ( aInfo.sTaskName     == SPECIALTARGET_MENUBAR      )   ||
+            ( aInfo.sTaskName     == SPECIALTARGET_HELPAGENT    )   ||
+            (
+                ( aInfo.bVisible  != sal_True  ) &&
+                ( aInfo.bVisible  != sal_False )
+            )
+          );
 }
 
 //*****************************************************************************************************************
-// We look for invalid pointer only. An empty name is allowd!
-sal_Bool TaskCreator::impldbg_checkParameter_createNewBrowserTask( const OUString& sName )
+sal_Bool TaskCreator::implcp_createBrowserTask( const TaskInfo& aInfo )
 {
-    // Set default return value.
-    sal_Bool bOK = sal_True;
-    // Check parameter.
-    if  (
-            ( &sName == NULL )
-        )
-    {
-        bOK = sal_False ;
-    }
-    // Return result of check.
-    return bOK ;
+    return(
+            ( &aInfo              == NULL                       )   ||
+            ( aInfo.xFactory.is() == sal_False                  )   ||
+            ( aInfo.xParent.is()  == sal_False                  )   ||
+            ( aInfo.sTaskName     == SPECIALTARGET_SELF         )   ||
+            ( aInfo.sTaskName     == SPECIALTARGET_BLANK        )   ||
+            ( aInfo.sTaskName     == SPECIALTARGET_PARENT       )   ||
+            ( aInfo.sTaskName     == SPECIALTARGET_TOP          )   ||
+            ( aInfo.sTaskName     == SPECIALTARGET_MENUBAR      )   ||
+            ( aInfo.sTaskName     == SPECIALTARGET_HELPAGENT    )   ||
+            (
+                ( aInfo.bVisible  != sal_True  ) &&
+                ( aInfo.bVisible  != sal_False )
+            )
+          );
 }
 
 #endif  // #ifdef ENABLE_ASSERTIONS

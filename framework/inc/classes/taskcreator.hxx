@@ -2,9 +2,9 @@
  *
  *  $RCSfile: taskcreator.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: as $ $Date: 2001-05-21 06:11:22 $
+ *  last change: $Author: as $ $Date: 2001-08-10 11:54:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,10 +120,69 @@ namespace framework{
 //  exported definitions
 //_________________________________________________________________________________________________________________
 
+struct TaskInfo
+{
+    //-------------------------------------------------------------------------------------------------------------
+    public:
+        //---------------------------------------------------------------------------------------------------------
+        // Create new info structure and fill it with valid values.
+        inline TaskInfo( const css::uno::Reference< css::lang::XMultiServiceFactory >& xNewFactory ,
+                         const css::uno::Reference< css::frame::XFrame >&              xNewParent  ,
+                         const ::rtl::OUString&                                        sNewName    ,
+                               sal_Bool                                                bNewVisible )
+        {
+            xFactory    = xNewFactory                                                                          ;
+            xParent     = css::uno::Reference< css::frame::XFramesSupplier >( xNewParent, css::uno::UNO_QUERY );
+            sTaskName   = impl_filterNames( sNewName )                                                         ;
+            bVisible    = bNewVisible                                                                          ;
+        }
+
+        //---------------------------------------------------------------------------------------------------------
+        // Don't forget to release references and memory!
+        inline ~TaskInfo()
+        {
+            xFactory    = css::uno::Reference< css::lang::XMultiServiceFactory >();
+            xParent     = css::uno::Reference< css::frame::XFramesSupplier >()    ;
+            sTaskName   = ::rtl::OUString()                                       ;
+            bVisible    = sal_False                                               ;
+        }
+
+    private:
+        //---------------------------------------------------------------------------------------------------------
+        // Filter special names which can't be a valid frame name!
+        // Attention: "_beamer" is a valid name - because:
+        //  It exist one beamer for one task tree only.
+        //  If he exist, we can find it - otherwhise he will be created by our task-frame!
+        inline ::rtl::OUString impl_filterNames( const ::rtl::OUString& sName )
+        {
+            ::rtl::OUString sFiltered( sName );
+            if(
+                ( sName == SPECIALTARGET_BLANK      )   ||
+                ( sName == SPECIALTARGET_SELF       )   ||
+                ( sName == SPECIALTARGET_PARENT     )   ||
+                ( sName == SPECIALTARGET_TOP        )   ||
+                ( sName == SPECIALTARGET_MENUBAR    )   ||
+                ( sName == SPECIALTARGET_HELPAGENT  )
+              )
+            {
+                sFiltered = ::rtl::OUString();
+            }
+            return sFiltered;
+        }
+
+    //-------------------------------------------------------------------------------------------------------------
+    public:
+        css::uno::Reference< css::lang::XMultiServiceFactory >  xFactory    ;
+        css::uno::Reference< css::frame::XFramesSupplier >      xParent     ;
+        ::rtl::OUString                                         sTaskName   ;
+        sal_Bool                                                bVisible    ;
+};
+
 /*-************************************************************************************************************//**
     @short          a helper to create new tasks or plugin frames for "_blank" or FrameSearchFlag::CREATE at desktop
     @descr          There are different places to create new tasks/plugin frames. Its not easy to service this code!
-                    Thats the reason for this helper. These implementation is not thread safe!
+                    Thats the reason for this helper. He capsulate asynchronous/synchronous creation by calling
+                    a simple interface.
 
     @implements     -
     @base           -
@@ -131,113 +190,47 @@ namespace framework{
     @devstatus      ready to use
     @threadsafe     no
 *//*-*************************************************************************************************************/
-
 class TaskCreator
 {
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
     //-------------------------------------------------------------------------------------------------------------
-
     public:
 
         //---------------------------------------------------------------------------------------------------------
         //  constructor / destructor
         //---------------------------------------------------------------------------------------------------------
+                 TaskCreator() {};
+        virtual ~TaskCreator() {};
 
-        /*-****************************************************************************************************//**
-            @short      standard constructor
-            @descr      Initialize some member.
-
-            @seealso    -
-
-            @param      -
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
-         TaskCreator( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory );
-
-        /*-****************************************************************************************************//**
-            @short      standard destructor to delete instance
-            @descr      Clear all member.
-
-            @seealso    -
-
-            @param      -
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
-        virtual ~TaskCreator();
-
-        /*-****************************************************************************************************//**
-            @short      create a new task/plugin frame
-            @descr      With these methods you can create a new empty system task or a new empty plugin frame
-                        in a browser window.
-
-            @seealso    -
-
-            @param      "sName", name of new task
-            @return     A reference to the new created task/plugin. (It's a frame too ... frame is the baseclass of a task!)
-
-            @onerror    We return a null-reference.
-        *//*-*****************************************************************************************************/
-
-        css::uno::Reference< css::frame::XFrame >   createNewSystemTask ( const ::rtl::OUString& sName );
-        css::uno::Reference< css::frame::XFrame >   createNewBrowserTask( const ::rtl::OUString& sName );
+        static css::uno::Reference< css::frame::XFrame > createSystemTask ( const TaskInfo& aInfo );
+        static css::uno::Reference< css::frame::XFrame > createBrowserTask( const TaskInfo& aInfo );
 
     //-------------------------------------------------------------------------------------------------------------
     //  protected methods
     //-------------------------------------------------------------------------------------------------------------
-
     protected:
 
     //-------------------------------------------------------------------------------------------------------------
     //  private methods
     //-------------------------------------------------------------------------------------------------------------
-
     private:
-
-        ::rtl::OUString impl_filterNames( const ::rtl::OUString& sName );
 
     //-------------------------------------------------------------------------------------------------------------
     //  debug methods
     //  (should be private everyway!)
     //-------------------------------------------------------------------------------------------------------------
-
-        /*-****************************************************************************************************//**
-            @short      debug-method to check incoming parameter of some other mehods of this class
-            @descr      The following methods are used to check parameters for other methods
-                        of this class. The return value is used directly for an ASSERT(...).
-
-            @seealso    ASSERTs in implementation!
-
-            @param      references to checking variables
-            @return     sal_False on invalid parameter<BR>
-                        sal_True  otherway
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
     #ifdef ENABLE_ASSERTIONS
-
     private:
-
-        static sal_Bool impldbg_checkParameter_createNewSystemTask  (   const   ::rtl::OUString&    sName   );
-        static sal_Bool impldbg_checkParameter_createNewBrowserTask (   const   ::rtl::OUString&    sName   );
-
+        static sal_Bool implcp_createSystemTask ( const TaskInfo& aInfo );
+        static sal_Bool implcp_createBrowserTask( const TaskInfo& aInfo );
     #endif  //  #ifdef ENABLE_ASSERTIONS
 
     //-------------------------------------------------------------------------------------------------------------
     //  private variables
     //  (should be private everyway!)
     //-------------------------------------------------------------------------------------------------------------
-
     private:
-
-        css::uno::Reference< css::lang::XMultiServiceFactory >  m_xFactory  ;
 
 };      //  class TaskCreator
 
