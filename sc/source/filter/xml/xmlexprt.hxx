@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-07 16:11:06 $
+ *  last change: $Author: dr $ $Date: 2000-11-08 12:56:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,9 +94,6 @@
 #ifndef _COM_SUN_STAR_TABLE_CELLADDRESS_HPP_
 #include <com/sun/star/table/CellAddress.hpp>
 #endif
-#ifndef _COM_SUN_STAR_TABLE_XCELL_HPP_
-#include <com/sun/star/table/XCell.hpp>
-#endif
 #ifndef _COM_SUN_STAR_UTIL_DATE_HPP_
 #include <com/sun/star/util/Date.hpp>
 #endif
@@ -105,15 +102,6 @@
 #endif
 #ifndef _COM_SUN_STAR_SHEET_XSUBTOTALDESCRIPTOR_HPP_
 #include <com/sun/star/sheet/XSubTotalDescriptor.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_VALIDATIONALERTSTYLE_HPP_
-#include <com/sun/star/sheet/ValidationAlertStyle.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_VALIDATIONTYPE_HPP_
-#include <com/sun/star/sheet/ValidationType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_CONDITIONOPERATOR_HPP_
-#include <com/sun/star/sheet/ConditionOperator.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SHEET_XLABELRANGES_HPP_
 #include <com/sun/star/sheet/XLabelRanges.hpp>
@@ -125,14 +113,19 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
 
+#ifndef SC_SCGLOB_HXX
+#include "global.hxx"
+#endif
+
 #ifndef _XMLSTYLE_HXX
 #include "xmlstyle.hxx"
 #endif
 #ifndef SC_XMLMAPCH_HXX_
 #include "xmlmapch.hxx"
 #endif
-
-#include "global.hxx"
+#ifndef _SC_XMLEXPORTITERATOR_HXX
+#include "XMLExportIterator.hxx"
+#endif
 
 class SvXMLExportItemMapper;
 class SfxPoolItem;
@@ -144,7 +137,6 @@ class ScDocument;
 class ScRange;
 class ScRangeList;
 class ScArea;
-class ScHorizontalCellIterator;
 struct ScQueryEntry;
 struct ScQueryParam;
 
@@ -235,128 +227,6 @@ public:
     rtl::OUString* GetStyleNameByIndex(const sal_Int32 nIndex);
 };
 
-struct ScMyShape
-{
-    ScAddress   aAddress;
-    sal_Int32   nIndex;
-};
-
-typedef std::vector<ScMyShape>      ScMyShapes;
-typedef std::vector<ScMyShapes>     ScMyShapesVector;
-
-class ScShapesContainer
-{
-    ScMyShapesVector    aDrawPages;
-public:
-    ScShapesContainer();
-    ~ScShapesContainer();
-    void AddNewTable();
-    void AddNewShape(const sal_Int16 nTable, const ScMyShape& aShape);
-    sal_Bool HasShape(const sal_Int16 nTable, const sal_Int32 nColumn, const sal_Int32 nRow);
-    sal_Bool GetNextShape(const sal_Int16 nTable, ScMyShape& aShape);
-    void Sort();
-};
-
-struct ScMyRange
-{
-    com::sun::star::table::CellRangeAddress aCellRange;
-    sal_Int32                               nRows;
-    sal_Bool                                bIsFirst;
-};
-
-typedef std::vector<ScMyRange> ScMyMergedRanges;
-typedef std::vector<ScMyMergedRanges> ScMyMergedRangesVec;
-
-class ScMyMergedCells
-{
-    ScMyMergedRangesVec                     aTables;
-public:
-    ScMyMergedCells();
-    ~ScMyMergedCells();
-    void AddNewTable();
-    void AddRange(const sal_Int16 nTable, const com::sun::star::table::CellRangeAddress aMergedRange);
-    sal_Bool GetNextMergedRange(const sal_Int16 nTable, ScMyRange& aMyRange);
-    void SortAndRemoveDoublets();
-};
-
-
-struct ScMyAreaLink
-{
-    ::rtl::OUString                 sFilter;
-    ::rtl::OUString                 sFilterOptions;
-    ::rtl::OUString                 sURL;
-    ::rtl::OUString                 sSourceStr;
-    ::com::sun::star::table::CellRangeAddress aDestRange;
-
-    inline sal_Int32                GetColCount() const { return aDestRange.EndColumn - aDestRange.StartColumn + 1; }
-    inline sal_Int32                GetRowCount() const { return aDestRange.EndRow - aDestRange.StartRow + 1; }
-
-    sal_Bool                        Compare( const ScMyAreaLink& rAreaLink ) const;
-};
-
-class ScMyAreaLinks
-{
-private:
-    ::std::vector< ScMyAreaLink >   aAreaLinkVec;
-public:
-                                    ScMyAreaLinks();
-                                    ~ScMyAreaLinks();
-
-    inline void                     AddNewAreaLink( const ScMyAreaLink& rAreaLink )
-                                        { aAreaLinkVec.push_back( rAreaLink ); }
-    sal_Bool                        GetNextAreaLink( ScMyAreaLink& rAreaLink );
-    void                            Sort();
-};
-
-
-typedef std::vector<com::sun::star::table::CellRangeAddress> ScMyEmptyDatabaseRangesVec;
-typedef std::vector<ScMyEmptyDatabaseRangesVec> ScMyEmptyDatabaseRangesVecVec;
-
-class ScMyEmptyDatabaseRanges
-{
-    ScMyEmptyDatabaseRangesVecVec           aTables;
-public:
-    ScMyEmptyDatabaseRanges(const sal_Int16 nTables);
-    ~ScMyEmptyDatabaseRanges();
-    void AddNewEmptyDatabaseRange(const com::sun::star::table::CellRangeAddress& aCellRangeAddress);
-    sal_Bool GetNextEmptyDatabaseRange(const sal_Int16 nTable, com::sun::star::table::CellRangeAddress& aCellRange);
-    void Sort();
-};
-
-struct ScMyValidationRange
-{
-    com::sun::star::table::CellRangeAddress aRange;
-    rtl::OUString sName;
-    sal_Int32 nIndex;
-    sal_Bool bUsed;
-
-    ScMyValidationRange();
-    ~ScMyValidationRange();
-};
-
-struct ScMyValidation
-{
-    rtl::OUString sName;
-    rtl::OUString sErrorMessage;
-    rtl::OUString sErrorTitle;
-    rtl::OUString sImputMessage;
-    rtl::OUString sImputTitle;
-    rtl::OUString sFormula1;
-    rtl::OUString sFormula2;
-    com::sun::star::table::CellAddress aBaseCell;
-    com::sun::star::sheet::ValidationAlertStyle aAlertStyle;
-    com::sun::star::sheet::ValidationType aValidationType;
-    com::sun::star::sheet::ConditionOperator aOperator;
-    sal_Bool bShowErrorMessage;
-    sal_Bool bShowImputMessage;
-    sal_Bool bIgnoreBlanks;
-
-    ScMyValidation();
-    ~ScMyValidation();
-
-    sal_Bool IsEqual(const ScMyValidation& aVal) const;
-};
-
 struct ScMyColumnRowGroup
 {
     sal_Int32   nField;
@@ -393,29 +263,6 @@ public:
     void Sort();
 };
 
-struct ScMyCell
-{
-    com::sun::star::uno::Reference<com::sun::star::table::XCell> xCell;
-    com::sun::star::table::CellAddress  aCellAddress;
-    com::sun::star::table::CellRangeAddress aMatrixRange;
-    com::sun::star::table::CellRangeAddress aMergeRange;
-    ScMyAreaLink                        aAreaLink;
-    std::vector<ScMyShape>              aShapes;
-    sal_Int32                           nValidationIndex;
-    sal_Bool                            bHasShape;
-    sal_Bool                            bIsMergedBase;
-    sal_Bool                            bIsCovered;
-    sal_Bool                            bHasAreaLink;
-    sal_Bool                            bHasAnnotation;
-    sal_Bool                            bIsMatrixBase;
-    sal_Bool                            bIsMatrixCovered;
-
-    ScMyCell();
-    ~ScMyCell();
-};
-
-class ScMyNotEmptyCellsIterator;
-class ScMyValidations;
 class ScOutlineArray;
 
 class ScXMLExport : public SvXMLExport
@@ -446,8 +293,6 @@ class ScXMLExport : public SvXMLExport
     ScColumnRowStyles                   aColumnStyles;
     ScColumnRowStyles                   aRowStyles;
     ScFormatRangeStyles                 aCellStyles;
-    ScShapesContainer                   aShapesContainer;
-    ScMyMergedCells                     aMergedCells;
     ScRowFormatRanges                   aRowFormatRanges;
     std::vector<rtl::OUString>          aTableStyles;
     com::sun::star::table::CellRangeAddress aRowHeaderRange;
@@ -462,21 +307,25 @@ class ScXMLExport : public SvXMLExport
     std::vector<sal_Int32>      nLastColumns;
     std::vector<sal_Int32>      nLastRows;
 
+    ScMyShapesContainer         aShapesContainer;
+    ScMyMergedRangesContainer   aMergedRangesContainer;
+    ScMyValidationsContainer    aValidationsContainer;
     ScMyNotEmptyCellsIterator*  pCellsItr;
-    ScMyValidations*            pValidations;
 
     virtual void _ExportStyles( sal_Bool bUsed );
     virtual void _ExportAutoStyles();
     virtual void _ExportMasterStyles();
     virtual void _ExportContent();
 
+    void CollectInternalShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
+
     void SetLastColumn(const sal_Int32 nTable, const sal_Int32 nCol);// { if(nCol > nLastColumns[nTable]) nLastColumns[nTable] = nCol; }
     void SetLastRow(const sal_Int32 nTable, const sal_Int32 nRow);// { if(nRow > nLastRows[nTable]) nLastRows[nTable] = nRow; }
 
     com::sun::star::table::CellRangeAddress GetEndAddress(com::sun::star::uno::Reference<com::sun::star::sheet::XSpreadsheet>& xTable,
                                                         const sal_Int16 nTable);
-    ScMyEmptyDatabaseRanges GetEmptyDatabaseRanges(const sal_Int16 nTableCount);
-    void GetAreaLinks( com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheetDocument>& xSpreadDoc, ScMyAreaLinks& rAreaLinks );
+    ScMyEmptyDatabaseRangesContainer GetEmptyDatabaseRanges();
+    void GetAreaLinks( com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheetDocument>& xSpreadDoc, ScMyAreaLinksContainer& rAreaLinks );
     sal_Bool GetxCurrentShapes(com::sun::star::uno::Reference<com::sun::star::container::XIndexAccess>& xShapes);
     void WriteColumn(const sal_Int32 nRepeatColumns, const sal_Int32 nStyleIndex, const sal_Bool bIsVisible);
     void OpenHeaderColumn();
@@ -565,77 +414,9 @@ public:
 
     UniReference < XMLPropertySetMapper > GetCellStylesPropertySetMapper() { return xCellStylesPropertySetMapper; }
 
-    ScMyValidations* GetValidations() { return pValidations; }
-
 //  SvXMLExportItemMapper& GetParaItemMapper() { return *pParaItemMapper; }
 //  SvXMLExportItemMapper& GetTableItemMapper() { return *pTableItemMapper; }
 //  SwXMLAutoStylePool& GetAutoStylePool() { return *pAutoStylePool; }
-};
-
-class ScMyValidations
-{
-    std::vector<ScMyValidation>     aValidations;
-    std::vector<ScMyValidationRange> aValidationRanges;
-    rtl::OUString                   sEmptyString;
-public:
-    ScMyValidations();
-    ~ScMyValidations();
-    sal_Bool AddValidation(const com::sun::star::uno::Any& aAny,
-        const com::sun::star::table::CellRangeAddress& aCellRange);
-    rtl::OUString GetCondition(const ScMyValidation& aValidation);
-    rtl::OUString GetBaseCellAddress(ScDocument* pDoc, const com::sun::star::table::CellAddress& aCell);
-    void WriteMessage(ScXMLExport& rExport,
-        const rtl::OUString& sTitle, const rtl::OUString& sMessage,
-        const sal_Bool bShowMessage, const sal_Bool bIsHelpMessage);
-    void WriteValidations(ScXMLExport& rExport);
-    const rtl::OUString& GetValidationName(const sal_Int32 nIndex);
-    const sal_Int32 GetValidationIndex(const com::sun::star::table::CellAddress& aCell);
-    void Sort();
-};
-
-class ScMyNotEmptyCellsIterator
-{
-    ScShapesContainer*                      pShapes;
-    ScMyEmptyDatabaseRanges*                pEmptyDatabaseRanges;
-    ScMyMergedCells*                        pMergedCells;
-    ScMyAreaLinks*                          pAreaLinks;
-    com::sun::star::uno::Reference<com::sun::star::sheet::XSpreadsheet> xTable;
-
-    ScXMLExport&                            rExport;
-    ScHorizontalCellIterator*               pCellItr;
-
-    ScMyCell                                aCurrentCell;
-    ScMyShape                               aCurrentShape;
-    ScMyRange                               aNextMergedCells;
-    com::sun::star::table::CellRangeAddress aNextEmptyCells;
-    ScMyAreaLink                            aNextAreaLink;
-    sal_Int16                               nCurrentTable;
-
-    sal_Bool                                bHasShapes; // Current Table has shapes
-    sal_Bool                                bHasShape; // Current Cell has shapes
-    sal_Bool                                bHasEmptyDatabaseRanges; // Current Table has empty DatabaseRanges
-    sal_Bool                                bIsEmptyDatabaseRange; // Current Cell is in a empty Database Range
-    sal_Bool                                bHasMergedCells; // Current Table has merged Cells
-    sal_Bool                                bIsMergedBase; // Current Cell is the left top edge of merged Cells
-    sal_Bool                                bIsCovered; // Current Cell is covered by a merged Cell
-    sal_Bool                                bHasAreaLinks; // Current document has area links
-    sal_Bool                                bHasAreaLink; // Current cell has a area link
-    sal_Bool                                bHasAnnotation; // Current Cell has Annotation
-    sal_Bool                                bIsMatrixBase; // Current Cell is the left top edge of a matrix Cell
-    sal_Bool                                bIsMatrixCovered; // Current Cell is in a Matrix but not the left top edge of a matrix
-
-    void  HasAnnotation(ScMyCell& aCell);
-public:
-    ScMyNotEmptyCellsIterator(ScXMLExport& rExport);
-    ~ScMyNotEmptyCellsIterator();
-
-    void SetShapes(ScShapesContainer* pTempShapes);
-    void SetEmptyDatabaseRanges(ScMyEmptyDatabaseRanges* pTempEmptyDatabaseRanges);
-    void SetMergedCells(ScMyMergedCells* pTempMergedCells);
-    void SetAreaLinks(ScMyAreaLinks* pNewAreaLinks);
-    void SetCurrentTable(const sal_Int32 nTable);
-
-    sal_Bool GetNext(ScMyCell& aCell);
 };
 
 #endif

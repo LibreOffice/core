@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: dr $ $Date: 2000-11-02 16:44:33 $
+#   last change: $Author: dr $ $Date: 2000-11-08 12:56:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -109,7 +109,8 @@ CXXFILES = \
         XMLTableHeaderFooterContext.cxx \
         XMLCellRangeSourceContext.cxx \
         XMLConsolidationContext.cxx \
-        XMLConverter.cxx
+        XMLConverter.cxx \
+        XMLExportIterator.cxx
 
 SLOFILES =  \
         $(SLO)$/xmlwrap.obj \
@@ -138,7 +139,8 @@ SLOFILES =  \
         $(SLO)$/XMLTableHeaderFooterContext.obj \
         $(SLO)$/XMLCellRangeSourceContext.obj \
         $(SLO)$/XMLConsolidationContext.obj \
-        $(SLO)$/XMLConverter.obj
+        $(SLO)$/XMLConverter.obj \
+        $(SLO)$/XMLExportIterator.obj
 
 
 # --- Tagets -------------------------------------------------------
