@@ -1,7 +1,7 @@
 
 CXX=g++
 
-CXXFLAGS= -O2 -Wall -ansi -pedantic -DMYTHES_STANDALONE -I.
+CXXFLAGS= -O2 -Wall -ansi -pedantic -I.
 
 LDFLAGS=-L. -lmythes
 

@@ -3,9 +3,9 @@
  *  $RCSfile: nthesimp.cxx,v $
  *  (modified version of sspellimp.cxx)
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 13:00:19 $
+ *  last change: $Author: hr $ $Date: 2004-03-09 12:43:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@
 #include <linguistic/lngprops.hxx>
 #include "nthesdta.hxx"
 #include <dictmgr.hxx>
-#include <csutil.hxx>
+
 
 // values asigned to capitalization types
 #define CAPTYPE_UNKNOWN 0
@@ -144,23 +144,29 @@ Thesaurus::Thesaurus() :
 Thesaurus::~Thesaurus()
 {
 
-    for (int i = 0; i < numthes; i++) {
-        if (aThes[i]) delete aThes[i];
-        aThes[i] = NULL;
-        if (aCharSetInfo[i]) delete aCharSetInfo[i];
-        aCharSetInfo[i] = NULL;
+    if (aThes) {
+        for (int i = 0; i < numthes; i++) {
+            if (aThes[i]) delete aThes[i];
+            aThes[i] = NULL;
+        }
+        delete[] aThes;
     }
-    if (aThes) delete[] aThes;
     aThes = NULL;
-    if (aCharSetInfo) delete[] aCharSetInfo;
+    if (aCharSetInfo) {
+        for (int i = 0; i < numthes; i++) {
+            if (aCharSetInfo[i]) delete aCharSetInfo[i];
+            aCharSetInfo[i] = NULL;
+        }
+        delete[] aCharSetInfo;
+    }
     aCharSetInfo = NULL;
+    numthes = 0;
     if (aTEncs) delete[] aTEncs;
     aTEncs = NULL;
     if (aTLocs) delete[] aTLocs;
     aTLocs = NULL;
     if (aTNames) delete[] aTNames;
     aTNames = NULL;
-    numthes = 0;
 
     if (pPropHelper)
         pPropHelper->RemoveAsPropListener();
@@ -190,7 +196,7 @@ Sequence< Locale > SAL_CALL Thesaurus::getLocales()
         dictentry * upthes;  // shared thesaurus list entry pointer
         SvtPathOptions aPathOpt;
         int numusr;          // number of user dictionary entries
-        int numshr = 0;      // number of shared dictionary entries
+        int numshr;          // number of shared dictionary entries
 
     if (!numthes) {
 

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2004-02-04 12:59:24 $
+#   last change: $Author: hr $ $Date: 2004-03-09 12:42:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,10 +79,10 @@ MYTHESLIB=libmythes.lib
 
 .IF "$(ULINGULIB)"==""
 .IF "$(GUI)"=="UNX"
-ULINGULIB=-lulingu$(UPD)$(DLLPOSTFIX)
+ULINGULIB=-lulingu
 .ENDIF # unx
 .IF "$(GUI)"=="WNT"
-ULINGULIB=$(LIBPRE) ulingu.lib
+ULINGULIB=libulingu.lib
 .ENDIF # wnt
 .ENDIF
 
