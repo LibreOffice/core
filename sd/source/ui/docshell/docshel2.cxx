@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: thb $ $Date: 2002-03-13 11:19:42 $
+ *  last change: $Author: ka $ $Date: 2002-03-13 16:42:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -510,42 +510,6 @@ BOOL SdDrawDocShell::CheckPageName( Window* pWin, String& rName )
             {
                 bUnique = TRUE;
             }
-        }
-        delete pDlg;
-    }
-    else
-        bUnique = TRUE;
-
-    return( bUnique );
-}
-
-/*************************************************************************
-|*
-|* Prfen, ob das Objekt vorhanden ist und dann den Anwender zwingen einen
-|* noch nicht vorhandenen Namen einzugeben. Wird FALSE zurueckgegeben,
-|* wurde die Aktion vom Anwender abgebrochen (s.o.).
-|*
-\************************************************************************/
-
-BOOL SdDrawDocShell::CheckObjectName( Window* pWin, String& rName )
-{
-    BOOL bUnique = FALSE;
-
-    // Ist der Objektname schon vorhanden?
-    SdrObject* pObj = pDoc->GetObj( rName );
-    if( pObj )
-    {
-//        String aDesc( SdResId( STR_WARN_OBJECT_EXISTS ) );
-        String aDesc = String( SdResId( STR_WARN_OBJECT_EXISTS ) );
-        SvxNameDialog* pDlg = new SvxNameDialog( pWin, rName, aDesc );
-
-        while( !bUnique && pDlg->Execute() == RET_OK )
-        {
-            pDlg->GetName( rName );
-
-            pObj = pDoc->GetObj( rName );
-            if( !pObj )
-                bUnique = TRUE;
         }
         delete pDlg;
     }

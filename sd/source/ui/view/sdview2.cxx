@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview2.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: ka $ $Date: 2001-11-23 14:12:30 $
+ *  last change: $Author: ka $ $Date: 2002-03-13 16:44:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #ifndef _URLOBJ_HXX //autogen
 #include <tools/urlobj.hxx>
 #endif
+#ifndef _MSGBOX_HXX //autogen
+#include <vcl/msgbox.hxx>
+#endif
 #ifndef _SVDETC_HXX //autogen
 #include <svx/svdetc.hxx>
 #endif
@@ -85,6 +88,9 @@
 #endif
 #ifndef _SVX_XEXCH_HXX //autogen
 #include <svx/xexch.hxx>
+#endif
+#ifndef _SVX_DLG_NAME_HXX
+#include <svx/dlgname.hxx>
 #endif
 #ifndef _SFXDOCFILE_HXX //autogen
 #include <sfx2/docfile.hxx>
@@ -948,13 +954,36 @@ BOOL SdView::GetExchangeList( List*& rpExchangeList, List* pBookmarkList, USHORT
     if( pBookmarkList )
     {
         String* pString = (String*) pBookmarkList->First();
+
         while( pString && bNameOK )
         {
             String* pNewName = new String( *pString );
+
             if( nType == 0  || nType == 2 )
                 bNameOK = pDocSh->CheckPageName( pViewSh->GetWindow(), *pNewName );
-            if( bNameOK && (nType == 1  || nType == 2) )
-                bNameOK = pDocSh->CheckObjectName( pViewSh->GetWindow(), *pNewName );
+
+            if( bNameOK && ( nType == 1  || nType == 2 ) )
+            {
+                if( pDoc->GetObj( *pNewName ) )
+                {
+                    String          aTitle( SdResId( STR_TITLE_NAMEGROUP ) );
+                    String          aDesc( SdResId( STR_DESC_NAMEGROUP ) );
+                    SvxNameDialog*  pDlg = new SvxNameDialog( pViewSh->GetWindow(), *pNewName, aDesc );
+
+                    bNameOK = FALSE;
+                    pDlg->SetText( aTitle );
+
+                    while( !bNameOK && pDlg->Execute() == RET_OK )
+                    {
+                        pDlg->GetName( *pNewName );
+
+                        if( !pDoc->GetObj( *pNewName ) )
+                            bNameOK = TRUE;
+                    }
+
+                    delete pDlg;
+                }
+            }
 
             if( bListIdentical )
                 bListIdentical = ( *pString == *pNewName );

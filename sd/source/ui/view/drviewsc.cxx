@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsc.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dl $ $Date: 2001-09-28 12:22:03 $
+ *  last change: $Author: ka $ $Date: 2002-03-13 16:44:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,30 +166,31 @@ void SdDrawViewShell::FuTemp03(SfxRequest& rReq)
             const SdrMarkList& rMarkList = pDrView->GetMarkList();
             SdrObject* pObj = NULL;
             ULONG nMarkCount = rMarkList.GetMarkCount();
-            String aName;
-            String aDesc( SdResId( STR_DESC_NAMEGROUP ) );
 
             if( nMarkCount == 1 )
             {
+                String aName;
+                String aTitle( SdResId( STR_TITLE_NAMEGROUP ) );
+                String aDesc( SdResId( STR_DESC_NAMEGROUP ) );
+
                 pObj = rMarkList.GetMark( 0 )->GetObj();
-                if (pObj->ISA(SdrObjGroup) || pObj->ISA(SdrGrafObj) || pObj->ISA(SdrOle2Obj))
-                {
+
+                if( pObj->ISA( SdrObjGroup ) || pObj->ISA( SdrGrafObj ) || pObj->ISA( SdrOle2Obj ) )
                     aName = pObj->GetName();
-                }
+
                 SvxNameDialog* pDlg = new SvxNameDialog( NULL, aName, aDesc );
+
+                pDlg->SetText( aTitle );
+                pDlg->SetCheckNameHdl( LINK( this, SdDrawViewShell, NameObjectHdl ) );
 
                 if( pDlg->Execute() == RET_OK )
                 {
                     pDlg->GetName( aName );
 
-                    if( pDocSh->CheckObjectName( NULL, aName ) )
-                    {
-                        if (pObj->ISA(SdrObjGroup) || pObj->ISA(SdrGrafObj) || pObj->ISA(SdrOle2Obj))
-                        {
-                            pObj->SetName(aName);
-                        }
-                    }
+                    if( pObj->ISA( SdrObjGroup ) || pObj->ISA( SdrGrafObj ) || pObj->ISA( SdrOle2Obj ) )
+                        pObj->SetName( aName );
                 }
+
                 delete pDlg;
             }
 
@@ -1022,5 +1023,14 @@ void SdDrawViewShell::UpdateIMapDlg( SdrObject* pObj )
     }
 }
 
+// -----------------------------------------------------------------------------
 
+IMPL_LINK( SdDrawViewShell, NameObjectHdl, SvxNameDialog*, pDialog )
+{
+    String aName;
 
+    if( pDialog )
+        pDialog->GetName( aName );
+
+    return( ( !aName.Len() || ( pDoc && !pDoc->GetObj( aName ) ) ) ? 1 : 0 );
+}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews9.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-30 15:42:26 $
+ *  last change: $Author: ka $ $Date: 2002-03-13 16:44:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,12 +253,11 @@ void SdDrawViewShell::ExecGallery(SfxRequest& rReq)
                         SdrMark* pMark = rMarkList.GetMark(0);
                         SdrObject* pObj = pMark->GetObj();
 
-                        if (pObj->GetObjInventor() == SdrInventor &&
-                            pObj->GetObjIdentifier() == OBJ_GRAF)
+                        if (pObj->GetObjInventor() == SdrInventor && pObj->GetObjIdentifier() == OBJ_GRAF)
                         {
                             pGrafObj = (SdrGrafObj*) pObj;
 
-                            if ( pGrafObj->IsEmptyPresObj() )
+                            if( pGrafObj->IsEmptyPresObj() )
                             {
                                 /******************************************
                                 * Das leere Graphik-Objekt bekommt eine neue
@@ -284,7 +283,7 @@ void SdDrawViewShell::ExecGallery(SfxRequest& rReq)
                 }
 
 
-                if (bInsertNewObject)
+                if( bInsertNewObject )
                 {
                     pGrafObj = new SdrGrafObj(aGraphic, aRect);
                     SdrPageView* pPV = pDrView->GetPageViewPvNum(0);
@@ -293,43 +292,44 @@ void SdDrawViewShell::ExecGallery(SfxRequest& rReq)
 
                 // Soll nur ein Link benutzt werden?
                 if( pGrafObj && pGal->IsLinkage() )
-                {
                     pGrafObj->SetGraphicLink( pGal->GetURL().GetMainURL( INetURLObject::NO_DECODE ), pGal->GetFilterName() );
-                }
             }
             // Sound als OLE-Objekt einfuegen
             else if (nFormats & SGA_FORMAT_SOUND)
             {
-                SvInPlaceObjectRef  aIPObj;
-                SvStorageRef        aStor = new SvStorage( String(), STREAM_STD_READWRITE );
-                String              aName;
+                String aURL( pGal->GetURL().GetMainURL( INetURLObject::NO_DECODE ) );
 
-                aIPObj = &((SvFactory*)SvInPlaceObject::ClassFactory())->CreateAndInit( pGal->GetURL().GetMainURL( INetURLObject::NO_DECODE ), aStor );
-                if (aIPObj.Is())
+                if( pGal->IsLinkage() )
+                    InsertURLButton( aURL, aURL, String(), NULL );
+                else
                 {
-                    Size        aSize(aIPObj->GetVisArea(ASPECT_CONTENT).GetSize());
+                    SvInPlaceObjectRef  aIPObj;
+                    SvStorageRef        aStor = new SvStorage( String(), STREAM_STD_READWRITE );
+                    String              aName;
 
-                    if (!aSize.Width() || !aSize.Height())
+                    aIPObj = &( static_cast< SvFactory* >( SvInPlaceObject::ClassFactory() ) )->CreateAndInit( aURL, aStor );
+
+                    if( aIPObj.Is() )
                     {
-                        aSize.Width()   = 1410;
-                        aSize.Height()  = 1000;
+                        Size aSize( aIPObj->GetVisArea( ASPECT_CONTENT ).GetSize() );
+
+                        if( !aSize.Width() || !aSize.Height() )
+                        {
+                            aSize.Width()   = 1410;
+                            aSize.Height()  = 1000;
+                        }
+
+                        SdrPageView*    pPV = pDrView->GetPageViewPvNum(0);
+                        Size            aPageSize( pPV->GetPage()->GetSize() );
+                        Point           aPnt( (aPageSize.Width() - aSize.Width() ) >> 1, ( aPageSize.Height() - aSize.Height() ) >> 1 );
+                        Rectangle       aRect(aPnt, aSize);
+
+                        aName = pDocSh->InsertObject( aIPObj, String() )->GetObjName();
+                        SdrOle2Obj* pOleObj = new SdrOle2Obj( aIPObj, aName, aRect );
+                        pDrView->InsertObject( pOleObj, *pPV, SDRINSERT_SETDEFLAYER );
+                        pOleObj->SetLogicRect( aRect );
+                        aIPObj->SetVisAreaSize( aRect.GetSize() );
                     }
-
-                    SdrPageView* pPV = pDrView->GetPageViewPvNum(0);
-                    Size aPageSize = pPV->GetPage()->GetSize();
-                    Point aPnt ((aPageSize.Width()  - aSize.Width())  / 2,
-                                (aPageSize.Height() - aSize.Height()) / 2);
-
-                    Rectangle aRect(aPnt, aSize);
-
-                    aName = pDocSh->InsertObject(aIPObj, String())->GetObjName();
-
-                    SdrOle2Obj* pOleObj = new SdrOle2Obj(aIPObj, aName, aRect);
-
-                    pDrView->InsertObject(pOleObj, *pPV, SDRINSERT_SETDEFLAYER);
-                    pOleObj->SetLogicRect(aRect);
-                    aIPObj->SetVisAreaSize(aRect.GetSize());
-                    ActivateObject(pOleObj, 0);
                 }
             }
 
@@ -444,8 +444,9 @@ void SdDrawViewShell::AttrExec (SfxRequest &rReq)
 
                     pAttr->ClearItem (XATTR_FILLCOLOR);
                     pAttr->ClearItem (XATTR_FILLSTYLE);
-                    pAttr->Put (XFillColorItem (-1, Color ((short) pRed->GetValue (), (short) pGreen->GetValue (),
-                                                           (short) pBlue->GetValue ())),
+                    pAttr->Put (XFillColorItem (-1, Color ((BYTE) pRed->GetValue (),
+                                                           (BYTE) pGreen->GetValue (),
+                                                           (BYTE) pBlue->GetValue ())),
                                 XATTR_FILLCOLOR);
                     pAttr->Put (XFillStyleItem (XFILL_SOLID), XATTR_FILLSTYLE);
                     rBindings.Invalidate (SID_ATTR_FILL_COLOR);
@@ -465,8 +466,9 @@ void SdDrawViewShell::AttrExec (SfxRequest &rReq)
                     SFX_REQUEST_ARG (rReq, pBlue, SfxUInt32Item, ID_VAL_BLUE, FALSE);
 
                     pAttr->ClearItem (XATTR_LINECOLOR);
-                    pAttr->Put (XLineColorItem (-1, Color ((short) pRed->GetValue (), (short) pGreen->GetValue (),
-                                                           (short) pBlue->GetValue ())),
+                    pAttr->Put (XLineColorItem (-1, Color ((BYTE) pRed->GetValue (),
+                                                           (BYTE) pGreen->GetValue (),
+                                                           (BYTE) pBlue->GetValue ())),
                                 XATTR_LINECOLOR);
                     rBindings.Invalidate (SID_ATTR_LINE_COLOR);
                     break;
@@ -487,8 +489,9 @@ void SdDrawViewShell::AttrExec (SfxRequest &rReq)
 
                     XGradientList *pGradientList = pDoc->GetGradientList ();
                     long          nCounts        = pGradientList->Count ();
-                    Color         aColor ((short) pRed->GetValue (), (short) pGreen->GetValue (),
-                                          (short) pBlue->GetValue ());
+                    Color         aColor ((BYTE) pRed->GetValue (),
+                                          (BYTE) pGreen->GetValue (),
+                                          (BYTE) pBlue->GetValue ());
 
                     pAttr->ClearItem (XATTR_FILLGRADIENT);
                     pAttr->ClearItem (XATTR_FILLSTYLE);
@@ -547,8 +550,9 @@ void SdDrawViewShell::AttrExec (SfxRequest &rReq)
 
                     XHatchList *pHatchList = pDoc->GetHatchList ();
                     long       nCounts     = pHatchList->Count ();
-                    Color      aColor ((short) pRed->GetValue (), (short) pGreen->GetValue (),
-                                       (short) pBlue->GetValue ());
+                    Color      aColor ((BYTE) pRed->GetValue (),
+                                       (BYTE) pGreen->GetValue (),
+                                       (BYTE) pBlue->GetValue ());
 
                     pAttr->ClearItem (XATTR_FILLHATCH);
                     pAttr->ClearItem (XATTR_FILLSTYLE);
