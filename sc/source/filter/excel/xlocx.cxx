@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlocx.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 08:48:26 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:39:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,8 +173,8 @@ using ::com::sun::star::table::CellRangeAddress;
 XclOcxConverter::XclOcxConverter( const XclRoot& rRoot ) :
     SvxMSConvertOCXControls( rRoot.GetDocShell(), NULL ),
     mrDoc( rRoot.GetDoc() ),
-    mnCurrTab( 0 ),
-    mnCachedTab( 0 )
+    mnCurrScTab( 0 ),
+    mnCachedScTab( 0 )
 {
 }
 
@@ -182,28 +182,28 @@ XclOcxConverter::~XclOcxConverter()
 {
 }
 
-void XclOcxConverter::SetCurrTab( sal_uInt16 nTab )
+void XclOcxConverter::SetCurrScTab( USHORT nScTab )
 {
     /*  Invalidate SvxMSConvertOCXControls::xFormComps whenever sheet index changes,
         otherwise GetDrawPage() will not be called in SvxMSConvertOCXControls::GetFormComps(). */
-    if( mnCurrTab != nTab )
+    if( mnCurrScTab != nScTab )
         xFormComps = NULL;
 
-    mnCurrTab = nTab;
+    mnCurrScTab = nScTab;
 }
 
 const Reference< XDrawPage >& XclOcxConverter::GetDrawPage()
 {
     // find and cache draw page if uninitialized or sheet index has been changed
-    if( !xDrawPage.is() || (mnCachedTab != mnCurrTab) )
+    if( !xDrawPage.is() || (mnCachedScTab != mnCurrScTab) )
     {
         if( ScDrawLayer* pDrawLayer = mrDoc.GetDrawLayer() )
         {
             // mnCurrTab set in ReadControl() contains sheet index of current control
-            if( SdrPage* pPage = pDrawLayer->GetPage( mnCurrTab ) )
+            if( SdrPage* pPage = pDrawLayer->GetPage( mnCurrScTab ) )
             {
                 xDrawPage = Reference< XDrawPage >( pPage->getUnoPage(), UNO_QUERY );
-                mnCachedTab = mnCurrTab;
+                mnCachedScTab = mnCurrScTab;
             }
         }
     }
@@ -227,7 +227,7 @@ bool XclImpOcxConverter::CreateSdrUnoObj( XclImpEscherOle& rOcxCtrl )
     if( mxStrm.Is() && rOcxCtrl.IsControl() )
     {
         // virtual call of GetDrawPage() needs current sheet index
-        SetCurrTab( rOcxCtrl.GetTab() );
+        SetCurrScTab( rOcxCtrl.GetScTab() );
 
         // stream position of the extra data for this control
         sal_uInt32 nStrmPos = rOcxCtrl.GetCtrlStreamPos();
@@ -257,7 +257,7 @@ bool XclImpOcxConverter::CreateSdrUnoObj( XclImpEscherOle& rOcxCtrl )
 bool XclImpOcxConverter::CreateSdrUnoObj( XclImpEscherTbxCtrl& rTbxCtrl )
 {
     // virtual call of GetDrawPage() needs current sheet index
-    SetCurrTab( rTbxCtrl.GetTab() );
+    SetCurrScTab( rTbxCtrl.GetScTab() );
 
     const Reference< XMultiServiceFactory >& rxServiceFactory = GetServiceFactory();
     if( rxServiceFactory.is() )
