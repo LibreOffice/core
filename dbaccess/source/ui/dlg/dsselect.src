@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsselect.src,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-24 12:14:02 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 15:19:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,23 @@ ModalDialog DLG_DATASOURCE_SELECTION
         Text = "Wählen Sie eine Datenquelle:";
         Text [ english ] = "Choose a data source:";
         Text [ english_us ] = "Choose a data source:";
+        Text[ portuguese ] = "Seleccionar fonte de dados:";
+        Text[ russian ] = "Choose a data source:";
+        Text[ greek ] = "Åğéëİîôå ìéá ğñïİëåõóç äåäïìİíùí:";
+        Text[ dutch ] = "Choose a data source:";
+        Text[ french ] = "Choisissez une source de données :";
+        Text[ spanish ] = "Seleccione una fuente de datos:";
+        Text[ italian ] = "Choose a data source:";
+        Text[ danish ] = "Choose a data source:";
+        Text[ swedish ] = "Välj en datakälla:";
+        Text[ polish ] = "Wybierz Ÿród³o danych:";
+        Text[ portuguese_brazilian ] = "Choose a data source:";
+        Text[ japanese ] = "ÃŞ°À¿°½‚ğ‘I‘ğ‚µ‚Ü‚·:";
+        Text[ korean ] = "Choose a data source:";
+        Text[ chinese_simplified ] = "ÇëÄúÑ¡ÔñÒ»¸öÊı¾İÔ´£º";
+        Text[ chinese_traditional ] = "¿ï¾Ü¸ê®Æ·½¡G";
+        Text[ turkish ] = "Choose a data source:";
+        Text[ arabic ] = "ÇÎÊÑ ãÕÏÑ ÈíÇäÇÊ:";
     };
     ListBox LB_DATASOURCE
     {
@@ -144,7 +161,7 @@ ModalDialog DLG_DATASOURCE_SELECTION
         Text = "Verwalten..." ;
         Text [ ENGLISH ] = "Manage..." ;
         Text [ english_us ] = "Organize..." ;
-        Text [ portuguese ] = "A organizar..." ;
+        Text [ portuguese ] = "Gerir..." ;
         Text [ portuguese_brazilian ] = "Verwalten..." ;
         Text [ swedish ] = "Förvalta..." ;
         Text [ danish ] = "Administrer..." ;
@@ -182,7 +199,7 @@ ModalDialog DLG_DATASOURCE_SELECTION
         Text[ russian ] = "ëîêàëüíûé èñòî÷íèê äàííûõ";
         Text[ polish ] = "lokalne Ÿród³a danych";
         Text[ japanese ] = "Û°¶ÙÃŞ°À¿°½";
-        Text[ chinese_traditional ] = "§½³¡¸ê®Æ·½";
+        Text[ chinese_traditional ] = "§½³¡ªº¸ê®Æ·½";
         Text[ arabic ] = "ãÕÇÏÑ ÈíÇäÇÊ ãÍáíÉ";
         Text[ greek ] = "ôïğéêİò ğñïåëåıóåéò äåäïìİíùí";
         Text[ korean ] = "·ÎÄÃ Å×ÀÌÅÍ ¼Ò½º";
@@ -192,13 +209,33 @@ ModalDialog DLG_DATASOURCE_SELECTION
     {
         Text = "Die Programmbibliothek #lib# konnte nicht geladen werden oder ist defekt. Die ODBC-Datenquellen-Konfiguration ist nicht verfügbar.";
         Text [ english ] = "The program library #lib# could not be loaded or is corrupted. The ODBC data source configuration is not available.";
-        Text [ english_us ] = "The program library #lib# could not be loaded or is corrupted. The ODBC data source configuration is not available.";
+        Text [ english_us ] = "Could not load the program library #lib# or it is corrupted. The ODBC data source configuration is not available.";
+        Text[ portuguese ] = "Ou foi impossível carregar a biblioteca #lib# do programa ou esta está com defeito. A configuração da fonte de dados ODBC não está disponível.";
+        Text[ russian ] = "The program library #lib# could not be loaded or is corrupted. The ODBC data source configuration is not available.";
+        Text[ greek ] = "Ç âéâëéïèŞêç ôïõ ğñïãñÜììáôïò #lib# äåí Şôáí äõíáôüí íá öïñôùèåß Ş åßíáé åëáôôùìáôéêŞ. Ç äéáìüñöùóç ôùí ğñïåëåıóåùí ôùí äåäïìİíùí ôïõ ODBC äåí åßíáé äéáèİóéìç.";
+        Text[ dutch ] = "The program library #lib# could not be loaded or is corrupted. The ODBC data source configuration is not available.";
+        Text[ french ] = "La bibliothèque de programme #lib# n'a pas pu être chargée ou est défectueuse. La configuration de la source de données ODBC n'est pas disponible.";
+        Text[ spanish ] = "No se pudo cargar la biblioteca de programa #lib#, quizás esté dañada. La configuración de fuente de datos ODBC no está disponible.";
+        Text[ italian ] = "The program library #lib# could not be loaded or is corrupted. The ODBC data source configuration is not available.";
+        Text[ danish ] = "The program library #lib# could not be loaded or is corrupted. The ODBC data source configuration is not available.";
+        Text[ swedish ] = "Det gick inte att ladda programbiblioteket #lib# eller så är det defekt. Konfigurationen av ODBC-datakällor är inte tillgänglig.";
+        Text[ polish ] = "Za³adowanie biblioteki programu #lib# nie by³o mo¿liwe. Jest ona byæ mo¿e uszkodzona. Wybór Ÿród³a danych ODBC nie jest mo¿liwy.";
+        Text[ portuguese_brazilian ] = "The program library #lib# could not be loaded or is corrupted. The ODBC data source configuration is not available.";
+        Text[ japanese ] = "#lib# ÌßÛ¸Ş×Ñ×²ÌŞ×Ø‚ğ“Ç‚İ‚ß‚È‚©‚Á‚½‚©A‚Ü‚½‚Í‚»‚ê©‘Ì‚ÉÄ×ÌŞÙ‚ª‚ ‚è‚Ü‚·BODBC ÃŞ°À¿°½‚Ìİ’è‚Í‚Å‚«‚Ü‚¹‚ñB";
+        Text[ korean ] = "The program library #lib# could not be loaded or is corrupted. The ODBC data source configuration is not available.";
+        Text[ chinese_simplified ] = "ÎŞ·¨×°Èë³ÌĞò¿â #lib# »òÒÑ¾­Ëğ»µ¡£ÎŞ·¨ÅäÖÃ ODBC Êı¾İÔ´¡£";
+        Text[ chinese_traditional ] = "µLªk¸Ë¤Jµ{¦¡®w #lib# ©Î¤w¸g·l§¥¡CµLªk³]©w ODBC ¸ê®Æ·½¡C";
+        Text[ turkish ] = "The program library #lib# could not be loaded or is corrupted. The ODBC data source configuration is not available.";
+        Text[ arabic ] = "ÅãÇ Ãäå ÊÚĞÑ ÊÍãíá ãßÊÈÉ ÇáÈÑäÇãÌ #lib#¡ Ãæ ÃäåÇ ãÚØæÈÉ. Êßæíä ãÕÇÏÑ ÈíÇäÇÊ ODBC ÛíÑ ãÊæİÑ.";
     };
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/10/24 12:14:02  fs
+ *  initial checkin - dialog for selecting system datasources
+ *
  *
  *  Revision 1.0 24.10.00 09:42:47  fs
  ************************************************************************/
