@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: cl $ $Date: 2001-04-03 11:38:21 $
+ *  last change: $Author: cl $ $Date: 2001-04-27 20:41:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,9 @@
 
 #ifndef _SVDOOLE2_HXX
 #include <svx/svdoole2.hxx>
+#endif
+#ifndef _SVDOGRAF_HXX
+#include <svx/svdograf.hxx>
 #endif
 
 #ifndef _SD_SPOUTLINER_HXX
@@ -1156,6 +1159,12 @@ void SdXShape::SetEmptyPresObj( sal_Bool bEmpty ) throw()
         {
             // really delete SdrOutlinerObj at pObj
             pObj->NbcSetOutlinerParaObject(0L);
+            SdrGrafObj* pGraphicObj = PTR_CAST( SdrGrafObj, pObj );
+            if( pGraphicObj )
+            {
+                Graphic aEmpty;
+                pGraphicObj->SetGraphic(aEmpty);
+            }
         }
         else
         {
