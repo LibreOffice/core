@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: cp $ $Date: 2001-04-06 15:05:51 $
+ *  last change: $Author: cp $ $Date: 2001-04-09 09:49:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1865,8 +1865,11 @@ SalGraphics::GetCharWidth( USHORT nChar1, USHORT nChar2, long  *pWidthAry )
             for( int i = nChar1; i <= nChar2; ++i )
             {
                 if (! ::GetCharWidth (maGraphicsData.mpServerSideFont, i, &nWidth) )
-                    if (! ::GetCharWidth (maGraphicsData.mpSrvFallbackFont, i, &nWidth) )
-                        ::GetCharWidth (maGraphicsData.mpSrvFallbackFont, '?', &nWidth);
+                    if (maGraphicsData.mpSrvFallbackFont != NULL)
+                    {
+                        if (! ::GetCharWidth (maGraphicsData.mpSrvFallbackFont, i, &nWidth) )
+                            ::GetCharWidth (maGraphicsData.mpSrvFallbackFont, '?', &nWidth);
+                    }
 
                 pWidthAry[ i - nChar1 ] = nWidth;
             }
