@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unitools.mk,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: hjs $ $Date: 2004-07-13 16:30:06 $
+#   last change: $Author: hjs $ $Date: 2004-07-16 13:14:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,7 +65,7 @@ SORT*=sort
 SED*=sed
 .IF "$(USE_SHELL)"!="4nt"
 # change drive and directory
-CDD=cdd
+CDD=cd
 # expect cygwin tools to exist
 COPY*=cp
 COPYRECURSE=-r
@@ -83,7 +83,7 @@ RENAME*=mv
 TOUCH*=touch
 TYPE*=cat
 .ELSE			# "$(USE_SHELL)"!="4nt"
-CDD=cd
+CDD=cdd
 COPY*=copy
 COPYRECURSE=/s
 COPYUPDATE=/u
