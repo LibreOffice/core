@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lbenv.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pluby $ $Date: 2000-10-19 18:26:50 $
+ *  last change: $Author: pliao $ $Date: 2000-11-14 17:49:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -903,7 +903,11 @@ static uno_Environment * initDefaultEnvironment( const OUString & rEnvTypeName, 
 #ifdef SAL_UNX
         aLibName.appendAscii( RTL_CONSTASCII_STRINGPARAM("lib") );
         aLibName.append( rEnvTypeName );
+#ifdef MACOSX
+        aLibName.appendAscii( RTL_CONSTASCII_STRINGPARAM("_uno.dylib") );
+#else
         aLibName.appendAscii( RTL_CONSTASCII_STRINGPARAM("_uno.so") );
+#endif
 #else
         aLibName.append( rEnvTypeName );
         aLibName.appendAscii( RTL_CONSTASCII_STRINGPARAM("_uno.dll") );
