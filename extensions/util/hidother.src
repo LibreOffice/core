@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 09:07:22 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 13:22:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,3 +161,4 @@ hidspecial HID_PROP_SCALEIMAGE                  { HelpId = HID_PROP_SCALEIMAGE; 
 hidspecial HID_PROP_BOUND_CELL                  { HelpId = HID_PROP_BOUND_CELL; }
 hidspecial HID_PROP_LIST_CELL_RANGE             { HelpId = HID_PROP_LIST_CELL_RANGE; }
 hidspecial HID_PROP_CELL_EXCHANGE_TYPE          { HelpId = HID_PROP_CELL_EXCHANGE_TYPE; }
+hidspecial HID_PROP_SELECTEDITEMS               { HelpId = HID_PROP_SELECTEDITEMS; }
