@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialcontrol.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:43:41 $
+ *  last change: $Author: obo $ $Date: 2004-11-18 17:05:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,7 @@ private:
 // ----------------------------------------------------------------------------
 
 DialControlBmp::DialControlBmp( Window& rParent ) :
+    VirtualDevice( rParent, 0, 0 ),
     mrParent( rParent ),
     mbEnabled( true )
 {
@@ -136,7 +137,7 @@ void DialControlBmp::CopyBackground( const DialControlBmp& rSrc )
     Init( rSrc.maRect.GetSize() );
     mbEnabled = rSrc.mbEnabled;
     Point aPos;
-    DrawBitmap( aPos, rSrc.GetBitmap( aPos, maRect.GetSize() ) );
+    DrawBitmapEx( aPos, rSrc.GetBitmapEx( aPos, maRect.GetSize() ) );
 }
 
 void DialControlBmp::DrawBackground( const Size& rSize, bool bEnabled )
@@ -224,16 +225,19 @@ void DialControlBmp::DrawBackground()
     // *** background with 3D effect ***
 
     SetLineColor();
-    SetFillColor( GetBackgroundColor() );
-    DrawRect( maRect );
+    SetFillColor();
+    Erase();
 
     EnableRTL( TRUE ); // #107807# draw 3D effect in correct direction
 
     sal_uInt8 nDiff = mbEnabled ? 0x18 : 0x10;
     Color aColor;
-    SetLineColor();
 
     aColor = GetBackgroundColor();
+    SetFillColor( aColor );
+    DrawPie( maRect, maRect.TopRight(), maRect.TopCenter() );
+    DrawPie( maRect, maRect.BottomLeft(), maRect.BottomCenter() );
+
     aColor.DecreaseLuminance( nDiff );
     SetFillColor( aColor );
     DrawPie( maRect, maRect.BottomCenter(), maRect.TopRight() );
@@ -358,7 +362,7 @@ DialControl::~DialControl()
 void DialControl::Paint( const Rectangle& rRect )
 {
     Point aPos;
-    DrawBitmap( aPos, mpImpl->maBmpBuffered.GetBitmap( aPos, mpImpl->maWinSize ) );
+    DrawBitmapEx( aPos, mpImpl->maBmpBuffered.GetBitmapEx( aPos, mpImpl->maWinSize ) );
 }
 
 void DialControl::StateChanged( StateChangedType nStateChange )
