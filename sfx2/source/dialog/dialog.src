@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-16 15:05:39 $
+ *  last change: $Author: obo $ $Date: 2001-06-08 21:56:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,7 +350,7 @@ PushButton BTN_STANDARD
     Text [ english_us ] = "~Home" ;
     Text[ chinese_simplified ] = "±ê×¼(~H)";
     Text[ russian ] = "Ñòàíäàğò";
-    Text[ polish ] = "Domy?lnie";
+    Text[ polish ] = "Domyœlnie";
     Text[ japanese ] = "•W€(~H)";
     Text[ chinese_traditional ] = "¼Ğ·Ç(~H)";
     Text[ arabic ] = "ŞíÇÓí";
@@ -579,7 +579,7 @@ InfoBox MSG_TABPAGE_INVALIDPARENT
     Message[ chinese_traditional ] = "³o­Ó¼Ë¦¡µLªk³Q·í§@¼Ë¦¡¤å¥ó¡M\n§_«h·|¤Ş°_»¼Âk¤Ş¥Î¡C";
     Message[ arabic ] = "áÇ íãßä ÇÓÊÎÏÇã åĞÇ ÇáŞÇáÈ ßŞÇáÈ ÃÓÇÓí¡\náÃä åĞÇ Óæİ íÄÏí áäÔæÁ ãÑÌÚ ãÊÑÏÏ (¿).";
     Message[ greek ] = "Äåí åßíáé äõíáôüí íá ÷ñçóéìïğïéçèåß áõôü ğñüôõğï ùò âáóéêü ğñüôõğï;\nåğåéäŞ ğñïêığôåé ìßá áíáäñïìéêŞ ëåéôïõñãßá.";
-    Message[ korean ] = "ÀÌ ¼­½ÄÆÄÀÏÀº ±âº»¼­½ÄÆÄÀÏ·Î »ç¿ëÇÒ ¼ö ¾ø½À´Ï´Ù. \nÀç±Í°¡¡¡¹ß»ıÇÒ¼ö ÀÖ±â ¶§¹®ÀÔ´Ï´Ù.";
+    Message[ korean ] = "ÀÌ ¼­½Ä ÆÄÀÏÀº ±âº» ¼­½Ä ÆÄÀÏ·Î »ç¿ëÇÒ ¼ö ¾ø½À´Ï´Ù. \n¸®Ä¿¼ÇÀÌ¡¡¹ß»ıÇÒ ¼ö ÀÖ±â ¶§¹®ÀÔ´Ï´Ù.";
     Message[ turkish ] = "Bu şablon (özyineleme nedeniyle)\n temel şablon olarak kullanılamaz.";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "Esta plantilla no se puede utilizar como plantilla base,\nya que podría provocar una referencia recursiva.";
@@ -601,7 +601,7 @@ InfoBox MSG_POOL_STYLE_NAME
     MESSAGE [ english_us ] = "Name already exists as a default Style.\nPlease choose another name." ;
     MESSAGE[ chinese_simplified ] = "Õâ¸öÃû³ÆÊÇÒ»¸ö±ê×¼ÑùÊ½µÄÃû³Æ¡£\nÇëÊ¹ÓÃÆäËûÒ»¸öÃû³Æ¡£";
     MESSAGE[ russian ] = "İòî èìÿ óæå ïğèñâîåíî îäíîìó ñòèëş ïî óìîë÷àíèş.\nÏğèñâîéòå, ïîæàëóéñòà, äğóãîå èìÿ.";
-    MESSAGE[ polish ] = "Ta nazwa jest ju¿ nazw¹ stylu domy?lnego .\nProszê wybierz inn¹ nazwê.";
+    MESSAGE[ polish ] = "Ta nazwa jest ju¿ nazw¹ stylu domyœlnego .\nProszê wybierz inn¹ nazwê.";
     MESSAGE[ japanese ] = "‚±‚Ì–¼‘O‚Í‚·‚Å‚É•W€½À²Ù–¼‚Åg‚í‚ê‚Ä‚¢‚Ü‚·B\n•Ê‚Ì–¼‘O‚ğ‘I‘ğ‚µ‚Ä‚­‚¾‚³‚¢B";
     MESSAGE[ chinese_traditional ] = "³o­Ó¦WºÙ¬O¤@­Ó¼Ğ·Ç¼Ë¦¡ªº¦WºÙ¡C\n½Ğ±z±Ä¥Î¨ä¥L¤@­Ó¦WºÙ¡C";
     MESSAGE[ arabic ] = "åĞÇ ÇáÇÓã ãæÌæÏ ãÓÈŞÇğ ßÇÓã äãØ ÇİÊÑÇÖí.\nÇáÑÌÇÁ ÇÎÊíÇÑ ÇÓã ÂÎÑ.";
@@ -635,7 +635,7 @@ QueryBox MSG_OVERWRITE_STYLE
     Message[ chinese_traditional ] = "¼Ë¦¡¤w¸g¦s¦b¡C±z­nÂĞ¼g¥¦¡S";
     Message[ arabic ] = "åĞÇ ÇáäãØ ãæÌæÏ ÈÇáİÚá. åá ÊÑíÏ ÇáßÊÇÈÉ İæŞå¿";
     Message[ greek ] = "Ôï ğñüôõğï õğÜñ÷åé Şäç. Íá äéáãñáöåß;";
-    Message[ korean ] = "¼­½ÄÆÄÀÏÀÌ ÀÌ¹Ì ÀÖ½À´Ï´Ù. µ¤¾î¾º¿ì½Ã°Ú½À´Ï±î?";
+    Message[ korean ] = "¼­½Ä ÆÄÀÏÀÌ ÀÌ¹Ì ÀÖ½À´Ï´Ù. µ¤¾î¾º¿ì½Ã°Ú½À´Ï±î?";
     Message[ turkish ] = "Şablon mevcut durumda. Üzerine yazılsın mı?";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "El estilo ya existe. ¿Desea sobrescribirlo?";
@@ -945,7 +945,7 @@ ModalDialog RID_URLOPEN
     Text [ portuguese ] = "Entrar URL" ;
     Text[ chinese_simplified ] = "ÊäÈë URL";
     Text[ russian ] = "Ââåñòè URL";
-    Text[ polish ] = "Wprowad? URL";
+    Text[ polish ] = "WprowadŸ URL";
     Text[ japanese ] = "URL“ü—Í";
     Text[ chinese_traditional ] = "¿é¤J URL";
     Text[ arabic ] = "ÅÏÎÇá URL";
@@ -1095,4 +1095,5 @@ ErrorBox MSG_ERROR_WRONG_CONFIRM
 };
 
 // ******************************************************************* EOF
+
 
