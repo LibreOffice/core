@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abstract.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 21:16:44 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 08:25:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,7 +163,7 @@ ModalDialog DLG_INSERT_ABSTRACT
         Text[ chinese_simplified ] = "Ã¿ÕÂ½Ú°üº¬µÄ¶ÎÂä";
         Text[ russian ] = "Àáçàöåâ â ãëàâå";
         Text[ polish ] = "Akapity w rozdziale";
-        Text[ japanese ] = "Í‚²‚Æ‚Ì’i—";
+        Text[ japanese ] = "Í‚ ‚½‚è‚Ì’i—";
         Text[ chinese_traditional ] = "¨C³¹¸`¥]§tªº¬q¸¨";
         Text[ arabic ] = "İŞÑÇÊ İí ßá İÕá";
         Text[ dutch ] = "Alinea's per kop";
