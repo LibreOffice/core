@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis_funcnames.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 17:46:43 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:19:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,15 +82,18 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "ARBEJDSDAG";
         Text[ swedish ] = "ARBETSDAGAR";
         Text[ polish ] = "WORKDAY";
-        Text[ portuguese_brazilian ] = "WORKDAY";
+        Text[ portuguese_brazilian ] = "DIATRABALHO";
         Text[ japanese ] = "WORKDAY";
         Text[ korean ] = "WORKDAY";
         Text[ chinese_simplified ] = "WORKDAY";
         Text[ chinese_traditional ] = "WORKDAY";
-        Text[ turkish ] = "WORKDAY";
+        Text[ turkish ] = "«ALIﬁMAG‹N‹";
         Text[ arabic ] = "WORKDAY";
         Text[ catalan ] = "WORKDAY";
         Text[ thai ] = "WORKDAY";
+        Text[ czech ] = "WORKDAY";
+        Text[ hebrew ] = "ARBEITSTAG";
+        Text[ hindi ] = "WORKDAY";
     };
 
     String ANALYSIS_FUNCNAME_Yearfrac
@@ -109,7 +112,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "≈R.BRÿK";
         Text[ swedish ] = "≈RDEL";
         Text[ polish ] = "YEARFRAC";
-        Text[ portuguese_brazilian ] = "YEARFRAC";
+        Text[ portuguese_brazilian ] = "FRA«√OANO";
         Text[ japanese ] = "YEARFRAC";
         Text[ korean ] = "YEARFRAC";
         Text[ chinese_simplified ] = "YEARFRAC";
@@ -118,6 +121,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "YEARFRAC";
         Text[ catalan ] = "YEARFRAC";
         Text[ thai ] = "YEARFRAC";
+        Text[ czech ] = "YEARFRAC";
+        Text[ hebrew ] = "BRTEILJAHRE";
+        Text[ hindi ] = "YEARFRAC";
     };
 
     String ANALYSIS_FUNCNAME_Edate
@@ -136,15 +142,18 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "EDATO";
         Text[ swedish ] = "EDATUM";
         Text[ polish ] = "EDATE";
-        Text[ portuguese_brazilian ] = "EDATE";
+        Text[ portuguese_brazilian ] = "DATAM";
         Text[ japanese ] = "EDATE";
         Text[ korean ] = "EDATE";
         Text[ chinese_simplified ] = "EDATE";
         Text[ chinese_traditional ] = "EDATE";
-        Text[ turkish ] = "EDATE";
+        Text[ turkish ] = "\nEDATE";
         Text[ arabic ] = "EDATE";
         Text[ catalan ] = "EDATE";
         Text[ thai ] = "EDATE";
+        Text[ czech ] = "EDATE";
+        Text[ hebrew ] = "EDATUM";
+        Text[ hindi ] = "EDATE";
     };
 
     String ANALYSIS_FUNCNAME_Weeknum
@@ -157,13 +166,13 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ greek ] = "WEEKNUM";
         Text[ dutch ] = "WEEKNUMMER";
         Text[ french ] = "NO.SEMAINE";
-        Text[ spanish ] = "NUM.SEMANA";
+        Text[ spanish ] = "N⁄M.DE.SEMANA";
         Text[ finnish ] = "VIIKKO_NRO";
         Text[ italian ] = "NUM.SETTIMANA";
         Text[ danish ] = "KALENDERUGE";
         Text[ swedish ] = "VECKONR";
         Text[ polish ] = "WEEKNUM";
-        Text[ portuguese_brazilian ] = "WEEKNUM";
+        Text[ portuguese_brazilian ] = "N⁄MSEMANA";
         Text[ japanese ] = "WEEKNUM";
         Text[ korean ] = "WEEKNUM";
         Text[ chinese_simplified ] = "WEEKNUM";
@@ -172,6 +181,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "WEEKNUM";
         Text[ catalan ] = "WEEKNUM";
         Text[ thai ] = "WEEKNUM";
+        Text[ czech ] = "WEEKNUM";
+        Text[ hebrew ] = "KALENDERWOCHE";
+        Text[ hindi ] = "WEEKNUM";
     };
 
     String ANALYSIS_FUNCNAME_Eomonth
@@ -190,15 +202,18 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "SLUT.P≈.M≈NED";
         Text[ swedish ] = "SLUTM≈NAD";
         Text[ polish ] = "EOMONTH";
-        Text[ portuguese_brazilian ] = "EOMONTH";
+        Text[ portuguese_brazilian ] = "FIMM S";
         Text[ japanese ] = "EOMONTH";
         Text[ korean ] = "EOMONTH";
         Text[ chinese_simplified ] = "EOMONTH";
         Text[ chinese_traditional ] = "EOMONTH";
-        Text[ turkish ] = "EOMONTH";
+        Text[ turkish ] = "\nEOMONTH";
         Text[ arabic ] = "EOMONTH";
         Text[ catalan ] = "EOMONTH";
         Text[ thai ] = "EOMONTH";
+        Text[ czech ] = "EOMONTH";
+        Text[ hebrew ] = "MONATSENDE";
+        Text[ hindi ] = "EOMONTH";
     };
 
     String ANALYSIS_FUNCNAME_Networkdays
@@ -211,13 +226,13 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ greek ] = "NETWORKDAYS";
         Text[ dutch ] = "NETTO.WERKDAGEN";
         Text[ french ] = "NB.JOURS.OUVRES";
-        Text[ spanish ] = "DIAS.LAB";
+        Text[ spanish ] = "DÕAS.LABORABLES";
         Text[ finnish ] = "TY÷PƒIVƒT";
         Text[ italian ] = "GIORNI.LAVORATIVI.TOT";
         Text[ danish ] = "ANTAL.ARBEJDSDAGE";
         Text[ swedish ] = "NETTOARBETSDAGAR";
         Text[ polish ] = "NETWORKDAYS";
-        Text[ portuguese_brazilian ] = "NETWORKDAYS";
+        Text[ portuguese_brazilian ] = "DIATRABALHOTOTAL";
         Text[ japanese ] = "NETWORKDAYS";
         Text[ korean ] = "NETWORKDAYS";
         Text[ chinese_simplified ] = "NETWORKDAYS";
@@ -226,6 +241,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "NETWORKDAYS";
         Text[ catalan ] = "NETWORKDAYS";
         Text[ thai ] = "NETWORKDAYS";
+        Text[ czech ] = "NETWORKDAYS";
+        Text[ hebrew ] = "NETTOARBEITSTAGE";
+        Text[ hindi ] = "NETWORKDAYS";
     };
 
     String ANALYSIS_FUNCNAME_Amordegrc
@@ -253,6 +271,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "AMORDEGRC";
         Text[ catalan ] = "AMORDEGRC";
         Text[ thai ] = "AMORDEGRC";
+        Text[ czech ] = "AMORDEGRC";
+        Text[ hebrew ] = "AMORDEGRK";
+        Text[ hindi ] = "AMORDEGRC";
     };
 
     String ANALYSIS_FUNCNAME_Amorlinc
@@ -280,6 +301,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "AMORLINC";
         Text[ catalan ] = "AMORLINC";
         Text[ thai ] = "AMORLINC";
+        Text[ czech ] = "AMORLINC";
+        Text[ hebrew ] = "AMORLINEARK";
+        Text[ hindi ] = "AMORLINC";
     };
 
     String ANALYSIS_FUNCNAME_Accrint
@@ -298,7 +322,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "P≈LÿBRENTE";
         Text[ swedish ] = "UPPLRƒNTA";
         Text[ polish ] = "ACCRINT";
-        Text[ portuguese_brazilian ] = "ACCRINT";
+        Text[ portuguese_brazilian ] = "JUROSACUM";
         Text[ japanese ] = "ACCRINT";
         Text[ korean ] = "ACCRINT";
         Text[ chinese_simplified ] = "ACCRINT";
@@ -307,6 +331,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "ACCRINT";
         Text[ catalan ] = "ACCRINT";
         Text[ thai ] = "ACCRINT";
+        Text[ czech ] = "ACCRINT";
+        Text[ hebrew ] = "AUFGELZINS";
+        Text[ hindi ] = "ACCRINT";
     };
 
     String ANALYSIS_FUNCNAME_Accrintm
@@ -325,7 +352,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "P≈LÿBRENTE.UDLÿB";
         Text[ swedish ] = "UPPLOBLRƒNTA";
         Text[ polish ] = "ACCRINTM";
-        Text[ portuguese_brazilian ] = "ACCRINTM";
+        Text[ portuguese_brazilian ] = "JUROSACUMV";
         Text[ japanese ] = "ACCRINTM";
         Text[ korean ] = "ACCRINTM";
         Text[ chinese_simplified ] = "ACCRINTM";
@@ -334,6 +361,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "ACCRINTM";
         Text[ catalan ] = "ACCRINTM";
         Text[ thai ] = "ACCRINTM";
+        Text[ czech ] = "ACCRINTM";
+        Text[ hebrew ] = "AUFGELZINSF";
+        Text[ hindi ] = "ACCRINTM";
     };
 
     String ANALYSIS_FUNCNAME_Received
@@ -352,7 +382,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "MODTAGET.VED.UDLÿB";
         Text[ swedish ] = "BELOPP";
         Text[ polish ] = "RECEIVED";
-        Text[ portuguese_brazilian ] = "RECEIVED";
+        Text[ portuguese_brazilian ] = "RECEBER";
         Text[ japanese ] = "RECEIVED";
         Text[ korean ] = "RECEIVED";
         Text[ chinese_simplified ] = "RECEIVED";
@@ -361,6 +391,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "RECEIVED";
         Text[ catalan ] = "RECEIVED";
         Text[ thai ] = "RECEIVED";
+        Text[ czech ] = "RECEIVED";
+        Text[ hebrew ] = "AUSZAHLUNG";
+        Text[ hindi ] = "RECEIVED";
     };
 
     String ANALYSIS_FUNCNAME_Disc
@@ -379,7 +412,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "DISKONTO";
         Text[ swedish ] = "DISK";
         Text[ polish ] = "DISC";
-        Text[ portuguese_brazilian ] = "DISC";
+        Text[ portuguese_brazilian ] = "DESC";
         Text[ japanese ] = "DISC";
         Text[ korean ] = "DISC";
         Text[ chinese_simplified ] = "DISC";
@@ -388,6 +421,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "DISC";
         Text[ catalan ] = "DISC";
         Text[ thai ] = "‡∏™‡πà‡∏ß‡∏ô‡∏•‡∏î";
+        Text[ czech ] = "DISC";
+        Text[ hebrew ] = "DISAGIO";
+        Text[ hindi ] = "DISC";
     };
 
     String ANALYSIS_FUNCNAME_Duration
@@ -406,7 +442,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "VARIGHED";
         Text[ swedish ] = "L÷PTID";
         Text[ polish ] = "DURATION";
-        Text[ portuguese_brazilian ] = "DURATION";
+        Text[ portuguese_brazilian ] = "DURA«√O";
         Text[ japanese ] = "DURATION";
         Text[ korean ] = "DURATION";
         Text[ chinese_simplified ] = "DURATION";
@@ -415,6 +451,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "DURATION";
         Text[ catalan ] = "DURATION";
         Text[ thai ] = "DURATION";
+        Text[ czech ] = "DURATION";
+        Text[ hebrew ] = "DURATION";
+        Text[ hindi ] = "DURATION";
     };
 
     String ANALYSIS_FUNCNAME_Effect
@@ -424,7 +463,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ english_us ] = "EFFECT";
         Text[ portuguese ] = "EFECTIVA";
         Text[ russian ] = "›‘‘≈ “";
-        Text[ greek ] = "EFFECT";
+        Text[ greek ] = "EFFECTIVE";
         Text[ dutch ] = "EFFECT.RENTE";
         Text[ french ] = "TAUX.EFFECTIF";
         Text[ spanish ] = "INT.EFECTIVO";
@@ -433,15 +472,18 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "EFFEKTIV.RENTE";
         Text[ swedish ] = "EFFRƒNTA";
         Text[ polish ] = "EFFECT";
-        Text[ portuguese_brazilian ] = "EFFECT";
+        Text[ portuguese_brazilian ] = "EFETIVA";
         Text[ japanese ] = "EFFECT";
         Text[ korean ] = "EFFECT";
         Text[ chinese_simplified ] = "EFFECT";
         Text[ chinese_traditional ] = "EFFECT";
         Text[ turkish ] = "EFFECT";
-        Text[ arabic ] = "EFFECT";
+        Text[ arabic ] = "EFFECTIVE";
         Text[ catalan ] = "EFFECT";
         Text[ thai ] = "EFFECT";
+        Text[ czech ] = "EFFECT";
+        Text[ hebrew ] = "EFFEKTIV";
+        Text[ hindi ] = "EFFECT";
     };
 
     String ANALYSIS_FUNCNAME_Cumprinc
@@ -460,7 +502,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "AKKUM.HOVEDSTOL";
         Text[ swedish ] = "KUMPRIS";
         Text[ polish ] = "CUMPRINC";
-        Text[ portuguese_brazilian ] = "CUMPRINC";
+        Text[ portuguese_brazilian ] = "PGTOCAPACUM";
         Text[ japanese ] = "CUMPRINC";
         Text[ korean ] = "CUMPRINC";
         Text[ chinese_simplified ] = "CUMPRINC";
@@ -469,6 +511,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "CUMPRINC";
         Text[ catalan ] = "CUMPRINC";
         Text[ thai ] = "CUMPRINC";
+        Text[ czech ] = "CUMPRINC";
+        Text[ hebrew ] = "KUMKAPITAL";
+        Text[ hindi ] = "CUMPRINC";
     };
 
     String ANALYSIS_FUNCNAME_Cumipmt
@@ -487,7 +532,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "AKKUM.RENTE";
         Text[ swedish ] = "KUMRƒNTA";
         Text[ polish ] = "CUMIPMT";
-        Text[ portuguese_brazilian ] = "CUMIPMT";
+        Text[ portuguese_brazilian ] = "PGTOJURACUM";
         Text[ japanese ] = "CUMIPMT";
         Text[ korean ] = "CUMIPMT";
         Text[ chinese_simplified ] = "CUMIPMT";
@@ -496,6 +541,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "CUMIPMT";
         Text[ catalan ] = "CUMIPMT";
         Text[ thai ] = "CUMIPMT";
+        Text[ czech ] = "CUMIPMT";
+        Text[ hebrew ] = "KUMZINSZ";
+        Text[ hindi ] = "CUMIPMT";
     };
 
     String ANALYSIS_FUNCNAME_Price
@@ -514,15 +562,18 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "KURS";
         Text[ swedish ] = "PRIS";
         Text[ polish ] = "PRICE";
-        Text[ portuguese_brazilian ] = "PRICE";
+        Text[ portuguese_brazilian ] = "PRE«O";
         Text[ japanese ] = "PRICE";
         Text[ korean ] = "PRICE";
         Text[ chinese_simplified ] = "PRICE";
         Text[ chinese_traditional ] = "PRICE";
-        Text[ turkish ] = "PRICE";
+        Text[ turkish ] = "F›YAT";
         Text[ arabic ] = "PRICE";
         Text[ catalan ] = "PRICE";
         Text[ thai ] = "‡∏£‡∏≤‡∏Ñ‡∏≤";
+        Text[ czech ] = "PRICE";
+        Text[ hebrew ] = "KURS";
+        Text[ hindi ] = "PRICE";
     };
 
     String ANALYSIS_FUNCNAME_Pricedisc
@@ -541,7 +592,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "KURS.DISKONTO";
         Text[ swedish ] = "PRISDISK";
         Text[ polish ] = "PRICEDISC";
-        Text[ portuguese_brazilian ] = "PRICEDISC";
+        Text[ portuguese_brazilian ] = "PRE«ODESC";
         Text[ japanese ] = "PRICEDISC";
         Text[ korean ] = "PRICEDISC";
         Text[ chinese_simplified ] = "PRICEDISC";
@@ -550,6 +601,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "PRICEDISC";
         Text[ catalan ] = "PRICEDISC";
         Text[ thai ] = "PRICEDISC";
+        Text[ czech ] = "PRICEDISC";
+        Text[ hebrew ] = "KURSDISAGIO";
+        Text[ hindi ] = "PRICEDISC";
     };
 
     String ANALYSIS_FUNCNAME_Pricemat
@@ -568,7 +622,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "KURS.UDLÿB";
         Text[ swedish ] = "PRISF÷RF";
         Text[ polish ] = "PRICEMAT";
-        Text[ portuguese_brazilian ] = "PRICEMAT";
+        Text[ portuguese_brazilian ] = "PRE«OVENC";
         Text[ japanese ] = "PRICEMAT";
         Text[ korean ] = "PRICEMAT";
         Text[ chinese_simplified ] = "PRICEMAT";
@@ -577,6 +631,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "PRICEMAT";
         Text[ catalan ] = "PRICEMAT";
         Text[ thai ] = "PRICEMAT";
+        Text[ czech ] = "PRICEMAT";
+        Text[ hebrew ] = "KURSF√ÑLLIG";
+        Text[ hindi ] = "PRICEMAT";
     };
 
     String ANALYSIS_FUNCNAME_Mduration
@@ -595,7 +652,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "MVARIGHED";
         Text[ swedish ] = "ML÷PTID";
         Text[ polish ] = "MDURATION";
-        Text[ portuguese_brazilian ] = "MDURATION";
+        Text[ portuguese_brazilian ] = "MDURA«√O";
         Text[ japanese ] = "MDURATION";
         Text[ korean ] = "MDURATION";
         Text[ chinese_simplified ] = "MDURATION";
@@ -604,6 +661,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "MDURATION";
         Text[ catalan ] = "MDURATION";
         Text[ thai ] = "MDURATION";
+        Text[ czech ] = "MDURATION";
+        Text[ hebrew ] = "MDURATION";
+        Text[ hindi ] = "MDURATION";
     };
 
     String ANALYSIS_FUNCNAME_Nominal
@@ -631,6 +691,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "NOMINAL";
         Text[ catalan ] = "NOMINAL";
         Text[ thai ] = "NOMINAL";
+        Text[ czech ] = "NOMINAL";
+        Text[ hebrew ] = "NOMINAL";
+        Text[ hindi ] = "NOMINAL";
     };
 
     String ANALYSIS_FUNCNAME_Dollarfr
@@ -649,7 +712,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "KR.BRÿK";
         Text[ swedish ] = "BR≈K";
         Text[ polish ] = "DOLLARFR";
-        Text[ portuguese_brazilian ] = "DOLLARFR";
+        Text[ portuguese_brazilian ] = "MOEDAFRA";
         Text[ japanese ] = "DOLLARFR";
         Text[ korean ] = "DOLLARFR";
         Text[ chinese_simplified ] = "DOLLARFR";
@@ -658,6 +721,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "DOLLARFR";
         Text[ catalan ] = "DOLLARFR";
         Text[ thai ] = "DOLLARFR";
+        Text[ czech ] = "DOLLARFR";
+        Text[ hebrew ] = "NOTIERUNGBRU";
+        Text[ hindi ] = "DOLLARFR";
     };
 
     String ANALYSIS_FUNCNAME_Dollarde
@@ -676,7 +742,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "KR.DECIMAL";
         Text[ swedish ] = "DECTAL";
         Text[ polish ] = "DOLLARDE";
-        Text[ portuguese_brazilian ] = "DOLLARDE";
+        Text[ portuguese_brazilian ] = "MOEDADEC";
         Text[ japanese ] = "DOLLARDE";
         Text[ korean ] = "DOLLARDE";
         Text[ chinese_simplified ] = "DOLLARDE";
@@ -685,6 +751,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "DOLLARDE";
         Text[ catalan ] = "DOLLARDE";
         Text[ thai ] = "DOLLARDE";
+        Text[ czech ] = "DOLLARDE";
+        Text[ hebrew ] = "NOTIERUNGDEZ";
+        Text[ hindi ] = "DOLLARDE";
     };
 
     String ANALYSIS_FUNCNAME_Yield
@@ -703,7 +772,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "AFKAST";
         Text[ swedish ] = "NOMAVK";
         Text[ polish ] = "YIELD";
-        Text[ portuguese_brazilian ] = "YIELD";
+        Text[ portuguese_brazilian ] = "LUCRO";
         Text[ japanese ] = "YIELD";
         Text[ korean ] = "YIELD";
         Text[ chinese_simplified ] = "YIELD";
@@ -712,6 +781,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "YIELD";
         Text[ catalan ] = "YIELD";
         Text[ thai ] = "‡∏ú‡∏•‡∏ó‡∏µ‡πà‡∏á‡∏≠‡∏Å‡πÄ‡∏á‡∏¢";
+        Text[ czech ] = "YIELD";
+        Text[ hebrew ] = "RENDITE";
+        Text[ hindi ] = "YIELD";
     };
 
     String ANALYSIS_FUNCNAME_Yielddisc
@@ -730,7 +802,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "AFKAST.DISKONTO";
         Text[ swedish ] = "NOMAVKDISK";
         Text[ polish ] = "YIELDDISC";
-        Text[ portuguese_brazilian ] = "YIELDDISC";
+        Text[ portuguese_brazilian ] = "LUCRODESC";
         Text[ japanese ] = "YIELDDISC";
         Text[ korean ] = "YIELDDISC";
         Text[ chinese_simplified ] = "YIELDDISC";
@@ -739,6 +811,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "YIELDDISC";
         Text[ catalan ] = "YIELDDISC";
         Text[ thai ] = "YIELDDISC";
+        Text[ czech ] = "YIELDDISC";
+        Text[ hebrew ] = "RENDITEDIS";
+        Text[ hindi ] = "YIELDDISC";
     };
 
     String ANALYSIS_FUNCNAME_Yieldmat
@@ -757,7 +832,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "AFKAST.UDLÿBSDATO";
         Text[ swedish ] = "NOMAVKF÷RF";
         Text[ polish ] = "YIELDMAT";
-        Text[ portuguese_brazilian ] = "YIELDMAT";
+        Text[ portuguese_brazilian ] = "LUCROVENC";
         Text[ japanese ] = "YIELDMAT";
         Text[ korean ] = "YIELDMAT";
         Text[ chinese_simplified ] = "YIELDMAT";
@@ -766,6 +841,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "YIELDMAT";
         Text[ catalan ] = "YIELDMAT";
         Text[ thai ] = "YIELDMAT";
+        Text[ czech ] = "YIELDMAT";
+        Text[ hebrew ] = "RENDITEF√ÑLL";
+        Text[ hindi ] = "YIELDMAT";
     };
 
     String ANALYSIS_FUNCNAME_Tbilleq
@@ -784,7 +862,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "TTBILLEQ";
         Text[ swedish ] = "SSVXEKV";
         Text[ polish ] = "TBILLEQ";
-        Text[ portuguese_brazilian ] = "TBILLEQ";
+        Text[ portuguese_brazilian ] = "OTN";
         Text[ japanese ] = "TBILLEQ";
         Text[ korean ] = "TBILLEQ";
         Text[ chinese_simplified ] = "TBILLEQ";
@@ -793,6 +871,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "TBILLEQ";
         Text[ catalan ] = "TBILLEQ";
         Text[ thai ] = "TBILLEQ";
+        Text[ czech ] = "TBILLEQ";
+        Text[ hebrew ] = "TBILL√ÑQUIV";
+        Text[ hindi ] = "TBILLEQ";
     };
 
     String ANALYSIS_FUNCNAME_Tbillprice
@@ -811,7 +892,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "STATSOBLIGATION.KURS";
         Text[ swedish ] = "SSVXPRIS";
         Text[ polish ] = "TBILLPRICE";
-        Text[ portuguese_brazilian ] = "TBILLPRICE";
+        Text[ portuguese_brazilian ] = "OTNVALOR";
         Text[ japanese ] = "TBILLPRICE";
         Text[ korean ] = "TBILLPRICE";
         Text[ chinese_simplified ] = "TBILLPRICE";
@@ -820,6 +901,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "TBILLPRICE";
         Text[ catalan ] = "TBILLPRICE";
         Text[ thai ] = "TBILLPRICE";
+        Text[ czech ] = "TBILLPRICE";
+        Text[ hebrew ] = "TBILLKURS";
+        Text[ hindi ] = "TBILLPRICE";
     };
 
     String ANALYSIS_FUNCNAME_Tbillyield
@@ -838,7 +922,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "STATSOBLIGATION.AFKAST";
         Text[ swedish ] = "SSVXRƒNTA";
         Text[ polish ] = "TBILLYIELD";
-        Text[ portuguese_brazilian ] = "TBILLYIELD";
+        Text[ portuguese_brazilian ] = "OTNLUCRO";
         Text[ japanese ] = "TBILLYIELD";
         Text[ korean ] = "TBILLYIELD";
         Text[ chinese_simplified ] = "TBILLYIELD";
@@ -847,6 +931,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "TBILLYIELD";
         Text[ catalan ] = "TBILLYIELD";
         Text[ thai ] = "TBILLYIELD";
+        Text[ czech ] = "TBILLYIELD";
+        Text[ hebrew ] = "TBILLRENDITE";
+        Text[ hindi ] = "TBILLYIELD";
     };
 
     String ANALYSIS_FUNCNAME_Oddfprice
@@ -865,7 +952,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "ULIGE.KURS.P≈LYDENDE";
         Text[ swedish ] = "UDDAFPRIS";
         Text[ polish ] = "ODDFPRICE";
-        Text[ portuguese_brazilian ] = "ODDFPRICE";
+        Text[ portuguese_brazilian ] = "PRE«OPRIMINC";
         Text[ japanese ] = "ODDFPRICE";
         Text[ korean ] = "ODDFPRICE";
         Text[ chinese_simplified ] = "ODDFPRICE";
@@ -874,6 +961,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "ODDFPRICE";
         Text[ catalan ] = "ODDFPRICE";
         Text[ thai ] = "ODDFPRICE";
+        Text[ czech ] = "ODDFPRICE";
+        Text[ hebrew ] = "UNREGER.KURS";
+        Text[ hindi ] = "ODDFPRICE";
     };
 
     String ANALYSIS_FUNCNAME_Oddfyield
@@ -892,7 +982,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "ULIGE.FÿRSTE.AFKAST";
         Text[ swedish ] = "UDDAFAVKASTNING";
         Text[ polish ] = "ODDFYIELD";
-        Text[ portuguese_brazilian ] = "ODDFYIELD";
+        Text[ portuguese_brazilian ] = "LUCROPRIMINC";
         Text[ japanese ] = "ODDFYIELD";
         Text[ korean ] = "ODDFYIELD";
         Text[ chinese_simplified ] = "ODDFYIELD";
@@ -901,6 +991,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "ODDFYIELD";
         Text[ catalan ] = "ODDFYIELD";
         Text[ thai ] = "ODDFYIELD";
+        Text[ czech ] = "ODDFYIELD";
+        Text[ hebrew ] = "UNREGER.REND";
+        Text[ hindi ] = "ODDFYIELD";
     };
 
     String ANALYSIS_FUNCNAME_Oddlprice
@@ -919,7 +1012,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "ULIGE.SIDSTE.KURS";
         Text[ swedish ] = "UDDASPRIS";
         Text[ polish ] = "ODDLPRICE";
-        Text[ portuguese_brazilian ] = "ODDLPRICE";
+        Text[ portuguese_brazilian ] = "PRE«O⁄LTINC";
         Text[ japanese ] = "ODDLPRICE";
         Text[ korean ] = "ODDLPRICE";
         Text[ chinese_simplified ] = "ODDLPRICE";
@@ -928,6 +1021,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "ODDLPRICE";
         Text[ catalan ] = "ODDLPRICE";
         Text[ thai ] = "ODDLPRICE";
+        Text[ czech ] = "ODDLPRICE";
+        Text[ hebrew ] = "UNREGLE.KURS";
+        Text[ hindi ] = "ODDLPRICE";
     };
 
     String ANALYSIS_FUNCNAME_Oddlyield
@@ -946,7 +1042,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "ULIGE.SIDSTE.AFKAST";
         Text[ swedish ] = "UDDASAVKASTNING";
         Text[ polish ] = "ODDLYIELD";
-        Text[ portuguese_brazilian ] = "ODDLYIELD";
+        Text[ portuguese_brazilian ] = "LUCRO⁄LTINC";
         Text[ japanese ] = "ODDLYIELD";
         Text[ korean ] = "ODDLYIELD";
         Text[ chinese_simplified ] = "ODDLYIELD";
@@ -955,6 +1051,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "ODDLYIELD";
         Text[ catalan ] = "ODDLYIELD";
         Text[ thai ] = "ODDLYIELD";
+        Text[ czech ] = "ODDLYIELD";
+        Text[ hebrew ] = "UNREGLE.REND";
+        Text[ hindi ] = "ODDLYIELD";
     };
 
     String ANALYSIS_FUNCNAME_Xirr
@@ -973,15 +1072,18 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "INTERN.RENTE";
         Text[ swedish ] = "XIRR";
         Text[ polish ] = "XIRR";
-        Text[ portuguese_brazilian ] = "XIRR";
+        Text[ portuguese_brazilian ] = "XTIR";
         Text[ japanese ] = "XIRR";
         Text[ korean ] = "XIRR";
         Text[ chinese_simplified ] = "XIRR";
         Text[ chinese_traditional ] = "XIRR";
-        Text[ turkish ] = "XIRR";
+        Text[ turkish ] = "\nXIRR";
         Text[ arabic ] = "XIRR";
         Text[ catalan ] = "XIRR";
         Text[ thai ] = "XIRR";
+        Text[ czech ] = "XIRR";
+        Text[ hebrew ] = "XINTZINSFUSS";
+        Text[ hindi ] = "XIRR";
     };
 
     String ANALYSIS_FUNCNAME_Xnpv
@@ -1000,7 +1102,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "NETTO.NUTIDSV∆RDI";
         Text[ swedish ] = "XNUVƒRDE";
         Text[ polish ] = "XNPV";
-        Text[ portuguese_brazilian ] = "XNPV";
+        Text[ portuguese_brazilian ] = "XVPL";
         Text[ japanese ] = "XNPV";
         Text[ korean ] = "XNPV";
         Text[ chinese_simplified ] = "XNPV";
@@ -1009,6 +1111,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "XNPV";
         Text[ catalan ] = "XNPV";
         Text[ thai ] = "XNPV";
+        Text[ czech ] = "XNPV";
+        Text[ hebrew ] = "XKAPITALWERT";
+        Text[ hindi ] = "XNPV";
     };
 
     String ANALYSIS_FUNCNAME_Intrate
@@ -1027,7 +1132,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "RENTEFOD";
         Text[ swedish ] = "≈RSRƒNTA";
         Text[ polish ] = "INTRATE";
-        Text[ portuguese_brazilian ] = "INTRATE";
+        Text[ portuguese_brazilian ] = "TAXAJUROS";
         Text[ japanese ] = "INTRATE";
         Text[ korean ] = "INTRATE";
         Text[ chinese_simplified ] = "INTRATE";
@@ -1036,6 +1141,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "INTRATE";
         Text[ catalan ] = "INTRATE";
         Text[ thai ] = "INTRATE";
+        Text[ czech ] = "INTRATE";
+        Text[ hebrew ] = "ZINSSATZ";
+        Text[ hindi ] = "INTRATE";
     };
 
     String ANALYSIS_FUNCNAME_Coupncd
@@ -1054,7 +1162,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "KUPONDAGE.ANK";
         Text[ swedish ] = "KUPNKD";
         Text[ polish ] = "COUPNCD";
-        Text[ portuguese_brazilian ] = "COUPNCD";
+        Text[ portuguese_brazilian ] = "CUPDATAPR”X";
         Text[ japanese ] = "COUPNCD";
         Text[ korean ] = "COUPNCD";
         Text[ chinese_simplified ] = "COUPNCD";
@@ -1063,6 +1171,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "COUPNCD";
         Text[ catalan ] = "COUPNCD";
         Text[ thai ] = "COUPNCD";
+        Text[ czech ] = "COUPNCD";
+        Text[ hebrew ] = "ZINSTERMNZ";
+        Text[ hindi ] = "COUPNCD";
     };
 
     String ANALYSIS_FUNCNAME_Coupdays
@@ -1081,7 +1192,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "KUPONDAGE.A";
         Text[ swedish ] = "KUPDAGB";
         Text[ polish ] = "COUPDAYS";
-        Text[ portuguese_brazilian ] = "COUPDAYS";
+        Text[ portuguese_brazilian ] = "CUPDIAS";
         Text[ japanese ] = "COUPDAYS";
         Text[ korean ] = "COUPDAYS";
         Text[ chinese_simplified ] = "COUPDAYS";
@@ -1090,6 +1201,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "COUPDAYS";
         Text[ catalan ] = "COUPDAYS";
         Text[ thai ] = "COUPDAYS";
+        Text[ czech ] = "COUPDAYS";
+        Text[ hebrew ] = "ZINSTERMTAGE";
+        Text[ hindi ] = "COUPDAYS";
     };
 
     String ANALYSIS_FUNCNAME_Coupdaysnc
@@ -1108,7 +1222,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "KUPONDAGE.ANK";
         Text[ swedish ] = "KUPDAGNK";
         Text[ polish ] = "COUPDAYSNC";
-        Text[ portuguese_brazilian ] = "COUPDAYSNC";
+        Text[ portuguese_brazilian ] = "CUPIASPR”X";
         Text[ japanese ] = "COUPDAYSNC";
         Text[ korean ] = "COUPDAYSNC";
         Text[ chinese_simplified ] = "COUPDAYSNC";
@@ -1117,6 +1231,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "COUPDAYSNC";
         Text[ catalan ] = "COUPDAYSNC";
         Text[ thai ] = "COUPDAYSNC";
+        Text[ czech ] = "COUPDAYSNC";
+        Text[ hebrew ] = "ZINSTERMTAGNZ";
+        Text[ hindi ] = "COUPDAYSNC";
     };
 
     String ANALYSIS_FUNCNAME_Coupdaybs
@@ -1135,7 +1252,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "KUPONDAGE.SA";
         Text[ swedish ] = "KUPDAGBB";
         Text[ polish ] = "COUPDAYBS";
-        Text[ portuguese_brazilian ] = "COUPDAYBS";
+        Text[ portuguese_brazilian ] = "CUPDIASINLIQ";
         Text[ japanese ] = "COUPDAYBS";
         Text[ korean ] = "COUPDAYBS";
         Text[ chinese_simplified ] = "COUPDAYBS";
@@ -1144,6 +1261,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "COUPDAYBS";
         Text[ catalan ] = "COUPDAYBS";
         Text[ thai ] = "COUPDAYBS";
+        Text[ czech ] = "COUPDAYBS";
+        Text[ hebrew ] = "ZINSTERMTAGVA";
+        Text[ hindi ] = "COUPDAYBS";
     };
 
     String ANALYSIS_FUNCNAME_Couppcd
@@ -1162,7 +1282,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "KUPONDAG.FORRIGE";
         Text[ swedish ] = "KUPFKD";
         Text[ polish ] = "COUPPCD";
-        Text[ portuguese_brazilian ] = "COUPPCD";
+        Text[ portuguese_brazilian ] = "CUPDATAANT";
         Text[ japanese ] = "COUPPCD";
         Text[ korean ] = "COUPPCD";
         Text[ chinese_simplified ] = "COUPPCD";
@@ -1171,6 +1291,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "COUPPCD";
         Text[ catalan ] = "COUPPCD";
         Text[ thai ] = "COUPPCD";
+        Text[ czech ] = "COUPPCD";
+        Text[ hebrew ] = "ZINSTERMVZ";
+        Text[ hindi ] = "COUPPCD";
     };
 
     String ANALYSIS_FUNCNAME_Coupnum
@@ -1189,7 +1312,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "KUPONBETALINGER";
         Text[ swedish ] = "KUPANT";
         Text[ polish ] = "COUPNUM";
-        Text[ portuguese_brazilian ] = "COUPNUM";
+        Text[ portuguese_brazilian ] = "CUPN⁄M";
         Text[ japanese ] = "COUPNUM";
         Text[ korean ] = "COUPNUM";
         Text[ chinese_simplified ] = "COUPNUM";
@@ -1198,6 +1321,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "COUPNUM";
         Text[ catalan ] = "COUPNUM";
         Text[ thai ] = "COUPNUM";
+        Text[ czech ] = "COUPNUM";
+        Text[ hebrew ] = "ZINSTERMZAHL";
+        Text[ hindi ] = "COUPNUM";
     };
 
     String ANALYSIS_FUNCNAME_Fvschedule
@@ -1216,7 +1342,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "FVTABEL";
         Text[ swedish ] = "F÷RRƒNTNING";
         Text[ polish ] = "FVSCHEDULE";
-        Text[ portuguese_brazilian ] = "FVSCHEDULE";
+        Text[ portuguese_brazilian ] = "VFPLANO";
         Text[ japanese ] = "FVSCHEDULE";
         Text[ korean ] = "FVSCHEDULE";
         Text[ chinese_simplified ] = "FVSCHEDULE";
@@ -1225,6 +1351,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "FVSCHEDULE";
         Text[ catalan ] = "FVSCHEDULE";
         Text[ thai ] = "FVSCHEDULE";
+        Text[ czech ] = "FVSCHEDULE";
+        Text[ hebrew ] = "ZW2";
+        Text[ hindi ] = "FVSCHEDULE";
     };
 
     String ANALYSIS_FUNCNAME_Iseven
@@ -1243,7 +1372,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "ER.LIGE";
         Text[ swedish ] = "ƒRJƒMN";
         Text[ polish ] = "ISEVEN";
-        Text[ portuguese_brazilian ] = "ISEVEN";
+        Text[ portuguese_brazilian ] = "…PAR";
         Text[ japanese ] = "ISEVEN";
         Text[ korean ] = "ISEVEN";
         Text[ chinese_simplified ] = "ISEVEN";
@@ -1252,6 +1381,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "ISEVEN";
         Text[ catalan ] = "ISEVEN";
         Text[ thai ] = "ISEVEN";
+        Text[ czech ] = "ISEVEN";
+        Text[ hebrew ] = "ISTGERADE";
+        Text[ hindi ] = "ISEVEN";
     };
 
     String ANALYSIS_FUNCNAME_Isodd
@@ -1270,7 +1402,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "ER.ULIGE";
         Text[ swedish ] = "ƒRUDDA";
         Text[ polish ] = "ISODD";
-        Text[ portuguese_brazilian ] = "ISODD";
+        Text[ portuguese_brazilian ] = "…ÕMPAR";
         Text[ japanese ] = "ISODD";
         Text[ korean ] = "ISODD";
         Text[ chinese_simplified ] = "ISODD";
@@ -1279,6 +1411,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "ISODD";
         Text[ catalan ] = "ISODD";
         Text[ thai ] = "ISODD";
+        Text[ czech ] = "ISODD";
+        Text[ hebrew ] = "ISTUNGERADE";
+        Text[ hindi ] = "ISODD";
     };
 
     String ANALYSIS_FUNCNAME_Gcd
@@ -1297,7 +1432,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "STÿRSTE.F∆LLES.DIVISOR";
         Text[ swedish ] = "SGD";
         Text[ polish ] = "GCD";
-        Text[ portuguese_brazilian ] = "GCD";
+        Text[ portuguese_brazilian ] = "MDC";
         Text[ japanese ] = "GCD";
         Text[ korean ] = "GCD";
         Text[ chinese_simplified ] = "GCD";
@@ -1306,6 +1441,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "GCD";
         Text[ catalan ] = "GCD";
         Text[ thai ] = "GCD";
+        Text[ czech ] = "GCD";
+        Text[ hebrew ] = "GGT";
+        Text[ hindi ] = "GCD";
     };
 
     String ANALYSIS_FUNCNAME_Lcm
@@ -1324,7 +1462,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "MINDSTE.F∆LLES.MULTIPLUM";
         Text[ swedish ] = "MGM";
         Text[ polish ] = "LCM";
-        Text[ portuguese_brazilian ] = "LCM";
+        Text[ portuguese_brazilian ] = "MMC";
         Text[ japanese ] = "LCM";
         Text[ korean ] = "LCM";
         Text[ chinese_simplified ] = "LCM";
@@ -1333,6 +1471,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "LCM";
         Text[ catalan ] = "LCM";
         Text[ thai ] = "LCM";
+        Text[ czech ] = "LCM";
+        Text[ hebrew ] = "KGV";
+        Text[ hindi ] = "LCM";
     };
 
     String ANALYSIS_FUNCNAME_Multinomial
@@ -1360,6 +1501,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "MULTINOMIAL";
         Text[ catalan ] = "MULTINOMIAL";
         Text[ thai ] = "MULTINOMIAL";
+        Text[ czech ] = "MULTINOMIAL";
+        Text[ hebrew ] = "POLYNOMIAL";
+        Text[ hindi ] = "MULTINOMIAL";
     };
 
     String ANALYSIS_FUNCNAME_Seriessum
@@ -1378,7 +1522,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "SERIESUM";
         Text[ swedish ] = "SERIESUMMA";
         Text[ polish ] = "SERIESSUM";
-        Text[ portuguese_brazilian ] = "SERIESSUM";
+        Text[ portuguese_brazilian ] = "SOMASEQ‹ NCIA";
         Text[ japanese ] = "SERIESSUM";
         Text[ korean ] = "SERIESSUM";
         Text[ chinese_simplified ] = "SERIESSUM";
@@ -1387,6 +1531,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "SERIESSUM";
         Text[ catalan ] = "SERIESSUM";
         Text[ thai ] = "SERIESSUM";
+        Text[ czech ] = "SERIESSUM";
+        Text[ hebrew ] = "POTENZREIHE";
+        Text[ hindi ] = "SERIESSUM";
     };
 
     String ANALYSIS_FUNCNAME_Quotient
@@ -1405,7 +1552,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "KVOTIENT";
         Text[ swedish ] = "KVOT";
         Text[ polish ] = "QUOTIENT";
-        Text[ portuguese_brazilian ] = "QUOTIENT";
+        Text[ portuguese_brazilian ] = "QUOCIENTE";
         Text[ japanese ] = "QUOTIENT";
         Text[ korean ] = "QUOTIENT";
         Text[ chinese_simplified ] = "QUOTIENT";
@@ -1414,6 +1561,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "QUOTIENT";
         Text[ catalan ] = "QUOTIENT";
         Text[ thai ] = "QUOTIENT";
+        Text[ czech ] = "QUOTIENT";
+        Text[ hebrew ] = "QUOTIENT";
+        Text[ hindi ] = "QUOTIENT";
     };
 
     String ANALYSIS_FUNCNAME_Mround
@@ -1432,7 +1582,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "MAFRUND";
         Text[ swedish ] = "MAVRUNDA";
         Text[ polish ] = "MROUND";
-        Text[ portuguese_brazilian ] = "MROUND";
+        Text[ portuguese_brazilian ] = "MARRED";
         Text[ japanese ] = "MROUND";
         Text[ korean ] = "MROUND";
         Text[ chinese_simplified ] = "MROUND";
@@ -1441,6 +1591,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "MROUND";
         Text[ catalan ] = "MROUND";
         Text[ thai ] = "MROUND";
+        Text[ czech ] = "MROUND";
+        Text[ hebrew ] = "VRUNDEN";
+        Text[ hindi ] = "MROUND";
     };
 
     String ANALYSIS_FUNCNAME_Sqrtpi
@@ -1459,7 +1612,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "KVRODPI";
         Text[ swedish ] = "ROTPI";
         Text[ polish ] = "SQRTPI";
-        Text[ portuguese_brazilian ] = "SQRTPI";
+        Text[ portuguese_brazilian ] = "RAIZPI";
         Text[ japanese ] = "SQRTPI";
         Text[ korean ] = "SQRTPI";
         Text[ chinese_simplified ] = "SQRTPI";
@@ -1468,6 +1621,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "SQRTPI";
         Text[ catalan ] = "SQRTPI";
         Text[ thai ] = "SQRTPI";
+        Text[ czech ] = "SQRTPI";
+        Text[ hebrew ] = "WURZELPI";
+        Text[ hindi ] = "SQRTPI";
     };
 
     String ANALYSIS_FUNCNAME_Randbetween
@@ -1486,7 +1642,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "SLUMPMELLEM";
         Text[ swedish ] = "SLUMP.MELLAN";
         Text[ polish ] = "RANDBETWEEN";
-        Text[ portuguese_brazilian ] = "RANDBETWEEN";
+        Text[ portuguese_brazilian ] = "ALEAT”RIOENTRE";
         Text[ japanese ] = "RANDBETWEEN";
         Text[ korean ] = "RANDBETWEEN";
         Text[ chinese_simplified ] = "RANDBETWEEN";
@@ -1495,6 +1651,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "RANDBETWEEN";
         Text[ catalan ] = "RANDBETWEEN";
         Text[ thai ] = "RANDBETWEEN";
+        Text[ czech ] = "RANDBETWEEN";
+        Text[ hebrew ] = "ZUFALLSBEREICH";
+        Text[ hindi ] = "RANDBETWEEN";
     };
 
     String ANALYSIS_FUNCNAME_Besseli
@@ -1522,6 +1681,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "BESSELI";
         Text[ catalan ] = "BESSELI";
         Text[ thai ] = "BESSELI";
+        Text[ czech ] = "BESSELI";
+        Text[ hebrew ] = "BESSELI";
+        Text[ hindi ] = "BESSELI";
     };
 
     String ANALYSIS_FUNCNAME_Besselj
@@ -1549,6 +1711,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "BESSELJ";
         Text[ catalan ] = "BESSELJ";
         Text[ thai ] = "BESSELJ";
+        Text[ czech ] = "BESSELJ";
+        Text[ hebrew ] = "BESSELJ";
+        Text[ hindi ] = "BESSELJ";
     };
 
     String ANALYSIS_FUNCNAME_Besselk
@@ -1576,6 +1741,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "BESSELK";
         Text[ catalan ] = "BESSELK";
         Text[ thai ] = "BESSELK";
+        Text[ czech ] = "BESSELK";
+        Text[ hebrew ] = "BESSELK";
+        Text[ hindi ] = "BESSELK";
     };
 
     String ANALYSIS_FUNCNAME_Bessely
@@ -1603,6 +1771,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "BESSELY";
         Text[ catalan ] = "BESSELY";
         Text[ thai ] = "BESSELY";
+        Text[ czech ] = "BESSELY";
+        Text[ hebrew ] = "BESSELY";
+        Text[ hindi ] = "BESSELY";
     };
 
     String ANALYSIS_FUNCNAME_Bin2Dec
@@ -1621,7 +1792,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "BIN.TIL.DEC";
         Text[ swedish ] = "BIN.TILL.DEC";
         Text[ polish ] = "BIN2DEC";
-        Text[ portuguese_brazilian ] = "BIN2DEC";
+        Text[ portuguese_brazilian ] = "BINADEC";
         Text[ japanese ] = "BIN2DEC";
         Text[ korean ] = "BIN2DEC";
         Text[ chinese_simplified ] = "BIN2DEC";
@@ -1630,6 +1801,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "BIN2DEC";
         Text[ catalan ] = "BIN2DEC";
         Text[ thai ] = "BIN2DEC";
+        Text[ czech ] = "BIN2DEC";
+        Text[ hebrew ] = "BININDEZ";
+        Text[ hindi ] = "BIN2DEC";
     };
 
     String ANALYSIS_FUNCNAME_Bin2Hex
@@ -1648,7 +1822,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "BIN.TIL.HEX";
         Text[ swedish ] = "BIN.TIll.HEX";
         Text[ polish ] = "BIN2HEX";
-        Text[ portuguese_brazilian ] = "BIN2HEX";
+        Text[ portuguese_brazilian ] = "BINAHEX";
         Text[ japanese ] = "BIN2HEX";
         Text[ korean ] = "BIN2HEX";
         Text[ chinese_simplified ] = "BIN2HEX";
@@ -1657,6 +1831,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "BIN2HEX";
         Text[ catalan ] = "BIN2HEX";
         Text[ thai ] = "BIN2HEX";
+        Text[ czech ] = "BIN2HEX";
+        Text[ hebrew ] = "BININHEX";
+        Text[ hindi ] = "BIN2HEX";
     };
 
     String ANALYSIS_FUNCNAME_Bin2Oct
@@ -1675,7 +1852,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "BIN.TIL.OKT";
         Text[ swedish ] = "BIN.TILL.OKT";
         Text[ polish ] = "BIN2OCT";
-        Text[ portuguese_brazilian ] = "BIN2OCT";
+        Text[ portuguese_brazilian ] = "BINAOCT";
         Text[ japanese ] = "BIN2OCT";
         Text[ korean ] = "BIN2OCT";
         Text[ chinese_simplified ] = "BIN2OCT";
@@ -1684,6 +1861,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "BIN2OCT";
         Text[ catalan ] = "BIN2OCT";
         Text[ thai ] = "BIN2OCT";
+        Text[ czech ] = "BIN2OCT";
+        Text[ hebrew ] = "BININOKT";
+        Text[ hindi ] = "BIN2OCT";
     };
 
     String ANALYSIS_FUNCNAME_Delta
@@ -1711,6 +1891,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "DELTA";
         Text[ catalan ] = "DELTA";
         Text[ thai ] = "‡πÄ‡∏î‡∏•‡∏ï‡πâ‡∏≤";
+        Text[ czech ] = "DELTA";
+        Text[ hebrew ] = "DELTA";
+        Text[ hindi ] = "DELTA";
     };
 
     String ANALYSIS_FUNCNAME_Dec2Bin
@@ -1729,7 +1912,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "DEC.TIL.BIN";
         Text[ swedish ] = "DEC.TILL.BIN";
         Text[ polish ] = "DEC2BIN";
-        Text[ portuguese_brazilian ] = "DEC2BIN";
+        Text[ portuguese_brazilian ] = "DECABIN";
         Text[ japanese ] = "DEC2BIN";
         Text[ korean ] = "DEC2BIN";
         Text[ chinese_simplified ] = "DEC2BIN";
@@ -1738,6 +1921,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "DEC2BIN";
         Text[ catalan ] = "DEC2BIN";
         Text[ thai ] = "DEC2BIN";
+        Text[ czech ] = "DEC2BIN";
+        Text[ hebrew ] = "DEZINBIN";
+        Text[ hindi ] = "DEC2BIN";
     };
 
     String ANALYSIS_FUNCNAME_Dec2Hex
@@ -1756,7 +1942,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "DEC.TIL.HEX";
         Text[ swedish ] = "DEC.TILL.HEX";
         Text[ polish ] = "DEC2HEX";
-        Text[ portuguese_brazilian ] = "DEC2HEX";
+        Text[ portuguese_brazilian ] = "DECAHEX";
         Text[ japanese ] = "DEC2HEX";
         Text[ korean ] = "DEC2HEX";
         Text[ chinese_simplified ] = "DEC2HEX";
@@ -1765,6 +1951,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "DEC2HEX";
         Text[ catalan ] = "DEC2HEX";
         Text[ thai ] = "DEC2HEX";
+        Text[ czech ] = "DEC2HEX";
+        Text[ hebrew ] = "DEZINHEX";
+        Text[ hindi ] = "DEC2HEX";
     };
 
     String ANALYSIS_FUNCNAME_Dec2Oct
@@ -1783,7 +1972,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "DEC.TIL.OKT";
         Text[ swedish ] = "DEC.TILL.OKT";
         Text[ polish ] = "DEC2OCT";
-        Text[ portuguese_brazilian ] = "DEC2OCT";
+        Text[ portuguese_brazilian ] = "DECAOCT";
         Text[ japanese ] = "DEC2OCT";
         Text[ korean ] = "DEC2OCT";
         Text[ chinese_simplified ] = "DEC2OCT";
@@ -1792,6 +1981,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "DEC2OCT";
         Text[ catalan ] = "DEC2OCT";
         Text[ thai ] = "DEC2OCT";
+        Text[ czech ] = "DEC2OCT";
+        Text[ hebrew ] = "DEZINOKT";
+        Text[ hindi ] = "DEC2OCT";
     };
 
     String ANALYSIS_FUNCNAME_Erf
@@ -1810,7 +2002,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "FEJLFUNK";
         Text[ swedish ] = "FELF";
         Text[ polish ] = "ERF";
-        Text[ portuguese_brazilian ] = "ERF";
+        Text[ portuguese_brazilian ] = "FUNERRO";
         Text[ japanese ] = "ERF";
         Text[ korean ] = "ERF";
         Text[ chinese_simplified ] = "ERF";
@@ -1819,6 +2011,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "ERF";
         Text[ catalan ] = "ERF";
         Text[ thai ] = "ERF";
+        Text[ czech ] = "ERF";
+        Text[ hebrew ] = "GAUSSFEHLER";
+        Text[ hindi ] = "ERF";
     };
 
     String ANALYSIS_FUNCNAME_Erfc
@@ -1837,7 +2032,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "FEJLFUNK.KOMP";
         Text[ swedish ] = "FELFK";
         Text[ polish ] = "ERFC";
-        Text[ portuguese_brazilian ] = "ERFC";
+        Text[ portuguese_brazilian ] = "FUNERROCOMPL";
         Text[ japanese ] = "ERFC";
         Text[ korean ] = "ERFC";
         Text[ chinese_simplified ] = "ERFC";
@@ -1846,6 +2041,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "ERFC";
         Text[ catalan ] = "ERFC";
         Text[ thai ] = "ERFC";
+        Text[ czech ] = "ERFC";
+        Text[ hebrew ] = "GAUSSFKOMPL";
+        Text[ hindi ] = "ERFC";
     };
 
     String ANALYSIS_FUNCNAME_Gestep
@@ -1864,7 +2062,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "GETRIN";
         Text[ swedish ] = "SLSTEG";
         Text[ polish ] = "GESTEP";
-        Text[ portuguese_brazilian ] = "GESTEP";
+        Text[ portuguese_brazilian ] = "DEGRAU";
         Text[ japanese ] = "GESTEP";
         Text[ korean ] = "GESTEP";
         Text[ chinese_simplified ] = "GESTEP";
@@ -1873,6 +2071,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "GESTEP";
         Text[ catalan ] = "GESTEP";
         Text[ thai ] = "GESTEP";
+        Text[ czech ] = "GESTEP";
+        Text[ hebrew ] = "GGANZZAHL";
+        Text[ hindi ] = "GESTEP";
     };
 
     String ANALYSIS_FUNCNAME_Hex2Bin
@@ -1891,7 +2092,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "HEX.TIL.BIN";
         Text[ swedish ] = "HEX.TILL.BIN";
         Text[ polish ] = "HEX2BIN";
-        Text[ portuguese_brazilian ] = "HEX2BIN";
+        Text[ portuguese_brazilian ] = "HEXABIN";
         Text[ japanese ] = "HEX2BIN";
         Text[ korean ] = "HEX2BIN";
         Text[ chinese_simplified ] = "HEX2BIN";
@@ -1900,6 +2101,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "HEX2BIN";
         Text[ catalan ] = "HEX2BIN";
         Text[ thai ] = "HEX2BIN";
+        Text[ czech ] = "HEX2BIN";
+        Text[ hebrew ] = "HEXINBIN";
+        Text[ hindi ] = "HEX2BIN";
     };
 
     String ANALYSIS_FUNCNAME_Hex2Dec
@@ -1918,7 +2122,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "HEX.TIL.DEC";
         Text[ swedish ] = "HEX.TILL.DEC";
         Text[ polish ] = "HEX2DEC";
-        Text[ portuguese_brazilian ] = "HEX2DEC";
+        Text[ portuguese_brazilian ] = "HEXADEC";
         Text[ japanese ] = "HEX2DEC";
         Text[ korean ] = "HEX2DEC";
         Text[ chinese_simplified ] = "HEX2DEC";
@@ -1927,6 +2131,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "HEX2DEC";
         Text[ catalan ] = "HEX2DEC";
         Text[ thai ] = "HEX2DEC";
+        Text[ czech ] = "HEX2DEC";
+        Text[ hebrew ] = "HEXINDEZ";
+        Text[ hindi ] = "HEX2DEC";
     };
 
     String ANALYSIS_FUNCNAME_Hex2Oct
@@ -1945,7 +2152,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "HEX.TIL.OKT";
         Text[ swedish ] = "HEX.TILL.OKT";
         Text[ polish ] = "HEX2OCT";
-        Text[ portuguese_brazilian ] = "HEX2OCT";
+        Text[ portuguese_brazilian ] = "HEXAOCT";
         Text[ japanese ] = "HEX2OCT";
         Text[ korean ] = "HEX2OCT";
         Text[ chinese_simplified ] = "HEX2OCT";
@@ -1954,6 +2161,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "HEX2OCT";
         Text[ catalan ] = "HEX2OCT";
         Text[ thai ] = "HEX2OCT";
+        Text[ czech ] = "HEX2OCT";
+        Text[ hebrew ] = "HEXINOKT";
+        Text[ hindi ] = "HEX2OCT";
     };
 
     String ANALYSIS_FUNCNAME_Imabs
@@ -1981,6 +2191,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "IMABS";
         Text[ catalan ] = "IMABS";
         Text[ thai ] = "IMABS";
+        Text[ czech ] = "IMABS";
+        Text[ hebrew ] = "IMABS";
+        Text[ hindi ] = "IMABS";
     };
 
     String ANALYSIS_FUNCNAME_Imaginary
@@ -1999,7 +2212,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "IMAGIN∆RDEL";
         Text[ swedish ] = "IMAGINƒR";
         Text[ polish ] = "IMAGINARY";
-        Text[ portuguese_brazilian ] = "IMAGINARY";
+        Text[ portuguese_brazilian ] = "IMAGIN¡RIO";
         Text[ japanese ] = "IMAGINARY";
         Text[ korean ] = "IMAGINARY";
         Text[ chinese_simplified ] = "IMAGINARY";
@@ -2008,6 +2221,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "IMAGINARY";
         Text[ catalan ] = "IMAGINARY";
         Text[ thai ] = "IMAGINARY";
+        Text[ czech ] = "IMAGINARY";
+        Text[ hebrew ] = "IMAGIN√ÑRTEIL";
+        Text[ hindi ] = "IMAGINARY";
     };
 
     String ANALYSIS_FUNCNAME_Impower
@@ -2026,7 +2242,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "IMAGPOTENS";
         Text[ swedish ] = "IMUPPH÷JT";
         Text[ polish ] = "IMPOWER";
-        Text[ portuguese_brazilian ] = "IMPOWER";
+        Text[ portuguese_brazilian ] = "IMPOT";
         Text[ japanese ] = "IMPOWER";
         Text[ korean ] = "IMPOWER";
         Text[ chinese_simplified ] = "IMPOWER";
@@ -2035,6 +2251,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "IMPOWER";
         Text[ catalan ] = "IMPOWER";
         Text[ thai ] = "IMPOWER";
+        Text[ czech ] = "IMPOWER";
+        Text[ hebrew ] = "IMAPOTENZ";
+        Text[ hindi ] = "IMPOWER";
     };
 
     String ANALYSIS_FUNCNAME_Imargument
@@ -2053,7 +2272,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "IMAGARGUMENT";
         Text[ swedish ] = "IMARGUMENT";
         Text[ polish ] = "IMARGUMENT";
-        Text[ portuguese_brazilian ] = "IMARGUMENT";
+        Text[ portuguese_brazilian ] = "IMARG";
         Text[ japanese ] = "IMARGUMENT";
         Text[ korean ] = "IMARGUMENT";
         Text[ chinese_simplified ] = "IMARGUMENT";
@@ -2062,6 +2281,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "IMARGUMENT";
         Text[ catalan ] = "IMARGUMENT";
         Text[ thai ] = "IMARGUMENT";
+        Text[ czech ] = "IMARGUMENT";
+        Text[ hebrew ] = "IMARGUMENT";
+        Text[ hindi ] = "IMARGUMENT";
     };
 
     String ANALYSIS_FUNCNAME_Imcos
@@ -2089,6 +2311,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "IMCOS";
         Text[ catalan ] = "IMCOS";
         Text[ thai ] = "IMCOS";
+        Text[ czech ] = "IMCOS";
+        Text[ hebrew ] = "IMCOS";
+        Text[ hindi ] = "IMCOS";
     };
 
     String ANALYSIS_FUNCNAME_Imdiv
@@ -2116,6 +2341,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "IMDIV";
         Text[ catalan ] = "IMDIV";
         Text[ thai ] = "IMDIV";
+        Text[ czech ] = "IMDIV";
+        Text[ hebrew ] = "IMDIV";
+        Text[ hindi ] = "IMDIV";
     };
 
     String ANALYSIS_FUNCNAME_Imexp
@@ -2143,6 +2371,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "IMEXP";
         Text[ catalan ] = "IMEXP";
         Text[ thai ] = "IMEXP";
+        Text[ czech ] = "IMEXP";
+        Text[ hebrew ] = "IMEXP";
+        Text[ hindi ] = "IMEXP";
     };
 
     String ANALYSIS_FUNCNAME_Imconjugate
@@ -2161,7 +2392,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "IMAGKONJUGERE";
         Text[ swedish ] = "IMKONJUGAT";
         Text[ polish ] = "IMCONJUGATE";
-        Text[ portuguese_brazilian ] = "IMCONJUGATE";
+        Text[ portuguese_brazilian ] = "IMCONJ";
         Text[ japanese ] = "IMCONJUGATE";
         Text[ korean ] = "IMCONJUGATE";
         Text[ chinese_simplified ] = "IMCONJUGATE";
@@ -2170,6 +2401,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "IMCONJUGATE";
         Text[ catalan ] = "IMCONJUGATE";
         Text[ thai ] = "IMCONJUGATE";
+        Text[ czech ] = "IMCONJUGATE";
+        Text[ hebrew ] = "IMKONJUGIERTE";
+        Text[ hindi ] = "IMCONJUGATE";
     };
 
     String ANALYSIS_FUNCNAME_Imln
@@ -2197,6 +2431,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "IMLN";
         Text[ catalan ] = "IMLN";
         Text[ thai ] = "IMLN";
+        Text[ czech ] = "IMLN";
+        Text[ hebrew ] = "IMLN";
+        Text[ hindi ] = "IMLN";
     };
 
     String ANALYSIS_FUNCNAME_Imlog10
@@ -2224,6 +2461,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "IMLOG10";
         Text[ catalan ] = "IMLOG10";
         Text[ thai ] = "IMLOG10";
+        Text[ czech ] = "IMLOG10";
+        Text[ hebrew ] = "IMLOG10";
+        Text[ hindi ] = "IMLOG10";
     };
 
     String ANALYSIS_FUNCNAME_Imlog2
@@ -2251,6 +2491,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "IMLOG2";
         Text[ catalan ] = "IMLOG2";
         Text[ thai ] = "IMLOG2";
+        Text[ czech ] = "IMLOG2";
+        Text[ hebrew ] = "IMLOG2";
+        Text[ hindi ] = "IMLOG2";
     };
 
     String ANALYSIS_FUNCNAME_Improduct
@@ -2269,7 +2512,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "IMAGPRODUKT";
         Text[ swedish ] = "IMPRODUKT";
         Text[ polish ] = "IMPRODUCT";
-        Text[ portuguese_brazilian ] = "IMPRODUCT";
+        Text[ portuguese_brazilian ] = "IMPROD";
         Text[ japanese ] = "IMPRODUCT";
         Text[ korean ] = "IMPRODUCT";
         Text[ chinese_simplified ] = "IMPRODUCT";
@@ -2278,6 +2521,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "IMPRODUCT";
         Text[ catalan ] = "IMPRODUCT";
         Text[ thai ] = "IMPRODUCT";
+        Text[ czech ] = "IMPRODUCT";
+        Text[ hebrew ] = "IMPRODUKT";
+        Text[ hindi ] = "IMPRODUCT";
     };
 
     String ANALYSIS_FUNCNAME_Imreal
@@ -2305,6 +2551,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "IMREAL";
         Text[ catalan ] = "IMREAL";
         Text[ thai ] = "IMREAL";
+        Text[ czech ] = "IMREAL";
+        Text[ hebrew ] = "IMREALTEIL";
+        Text[ hindi ] = "IMREAL";
     };
 
     String ANALYSIS_FUNCNAME_Imsin
@@ -2323,7 +2572,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "IMAGSIN";
         Text[ swedish ] = "IMSIN";
         Text[ polish ] = "IMSIN";
-        Text[ portuguese_brazilian ] = "IMSIN";
+        Text[ portuguese_brazilian ] = "IMSENO";
         Text[ japanese ] = "IMSIN";
         Text[ korean ] = "IMSIN";
         Text[ chinese_simplified ] = "IMSIN";
@@ -2332,6 +2581,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "IMSIN";
         Text[ catalan ] = "IMSIN";
         Text[ thai ] = "IMSIN";
+        Text[ czech ] = "IMSIN";
+        Text[ hebrew ] = "IMSIN";
+        Text[ hindi ] = "IMSIN";
     };
 
     String ANALYSIS_FUNCNAME_Imsub
@@ -2350,7 +2602,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "IMAGSUB";
         Text[ swedish ] = "IMDIFF";
         Text[ polish ] = "IMSUB";
-        Text[ portuguese_brazilian ] = "IMSUB";
+        Text[ portuguese_brazilian ] = "IMSUBTR";
         Text[ japanese ] = "IMSUB";
         Text[ korean ] = "IMSUB";
         Text[ chinese_simplified ] = "IMSUB";
@@ -2359,6 +2611,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "IMSUB";
         Text[ catalan ] = "IMSUB";
         Text[ thai ] = "IMSUB";
+        Text[ czech ] = "IMSUB";
+        Text[ hebrew ] = "IMSUB";
+        Text[ hindi ] = "IMSUB";
     };
 
     String ANALYSIS_FUNCNAME_Imsum
@@ -2377,7 +2632,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "IMAGSUM";
         Text[ swedish ] = "IMSUM";
         Text[ polish ] = "IMSUM";
-        Text[ portuguese_brazilian ] = "IMSUM";
+        Text[ portuguese_brazilian ] = "IMSOMA";
         Text[ japanese ] = "IMSUM";
         Text[ korean ] = "IMSUM";
         Text[ chinese_simplified ] = "IMSUM";
@@ -2386,6 +2641,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "IMSUM";
         Text[ catalan ] = "IMSUM";
         Text[ thai ] = "IMSUM";
+        Text[ czech ] = "IMSUM";
+        Text[ hebrew ] = "IMSUMME";
+        Text[ hindi ] = "IMSUM";
     };
 
     String ANALYSIS_FUNCNAME_Imsqrt
@@ -2404,7 +2662,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "IMAGKVROD";
         Text[ swedish ] = "IMROT";
         Text[ polish ] = "IMSQRT";
-        Text[ portuguese_brazilian ] = "IMSQRT";
+        Text[ portuguese_brazilian ] = "IMRAIZ";
         Text[ japanese ] = "IMSQRT";
         Text[ korean ] = "IMSQRT";
         Text[ chinese_simplified ] = "IMSQRT";
@@ -2413,6 +2671,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "IMSQRT";
         Text[ catalan ] = "IMSQRT";
         Text[ thai ] = "IMSQRT";
+        Text[ czech ] = "IMSQRT";
+        Text[ hebrew ] = "IMWURZEL";
+        Text[ hindi ] = "IMSQRT";
     };
 
     String ANALYSIS_FUNCNAME_Complex
@@ -2431,7 +2692,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "KOMPLEKS";
         Text[ swedish ] = "KOMPLEX";
         Text[ polish ] = "COMPLEX";
-        Text[ portuguese_brazilian ] = "COMPLEX";
+        Text[ portuguese_brazilian ] = "COMPLEXO";
         Text[ japanese ] = "COMPLEX";
         Text[ korean ] = "COMPLEX";
         Text[ chinese_simplified ] = "COMPLEX";
@@ -2440,6 +2701,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "COMPLEX";
         Text[ catalan ] = "COMPLEX";
         Text[ thai ] = "COMPLEX";
+        Text[ czech ] = "COMPLEX";
+        Text[ hebrew ] = "KOMPLEXE";
+        Text[ hindi ] = "COMPLEX";
     };
 
     String ANALYSIS_FUNCNAME_Oct2Bin
@@ -2458,7 +2722,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "OKT.TIL.BIN";
         Text[ swedish ] = "OKT.TILL.BIN";
         Text[ polish ] = "OCT2BIN";
-        Text[ portuguese_brazilian ] = "OCT2BIN";
+        Text[ portuguese_brazilian ] = "OCTABIN";
         Text[ japanese ] = "OCT2BIN";
         Text[ korean ] = "OCT2BIN";
         Text[ chinese_simplified ] = "OCT2BIN";
@@ -2467,6 +2731,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "OCT2BIN";
         Text[ catalan ] = "OCT2BIN";
         Text[ thai ] = "OCT2BIN";
+        Text[ czech ] = "OCT2BIN";
+        Text[ hebrew ] = "OKTINBIN";
+        Text[ hindi ] = "OCT2BIN";
     };
 
     String ANALYSIS_FUNCNAME_Oct2Dec
@@ -2485,15 +2752,18 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "OKT.TIL.DEC";
         Text[ swedish ] = "OKT.TILL.DEC";
         Text[ polish ] = "OCT2DEC";
-        Text[ portuguese_brazilian ] = "OCT2DEZ";
+        Text[ portuguese_brazilian ] = "OCTADEC";
         Text[ japanese ] = "OCT2DEC";
         Text[ korean ] = "OCT2DEZ";
         Text[ chinese_simplified ] = "OCT2DEC";
         Text[ chinese_traditional ] = "OCT2DEC";
-        Text[ turkish ] = "OCT2DEZ";
+        Text[ turkish ] = "OCT2DEC";
         Text[ arabic ] = "OCT2DEZ";
         Text[ catalan ] = "OCT2DEZ";
         Text[ thai ] = "OCT2DEC";
+        Text[ czech ] = "OCT2DEC";
+        Text[ hebrew ] = "OKTINDEZ";
+        Text[ hindi ] = "OCT2DEC";
     };
 
     String ANALYSIS_FUNCNAME_Oct2Hex
@@ -2512,7 +2782,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "OKT.TIL.HEX";
         Text[ swedish ] = "OKT.TILL.HEX";
         Text[ polish ] = "OCT2HEX";
-        Text[ portuguese_brazilian ] = "OCT2HEX";
+        Text[ portuguese_brazilian ] = "OCTAHEX";
         Text[ japanese ] = "OCT2HEX";
         Text[ korean ] = "OCT2HEX";
         Text[ chinese_simplified ] = "OCT2HEX";
@@ -2521,6 +2791,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "OCT2HEX";
         Text[ catalan ] = "OCT2HEX";
         Text[ thai ] = "OCT2HEX";
+        Text[ czech ] = "OCT2HEX";
+        Text[ hebrew ] = "OKTINHEX";
+        Text[ hindi ] = "OCT2HEX";
     };
 
     String ANALYSIS_FUNCNAME_Convert
@@ -2539,7 +2812,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "KONVERTER";
         Text[ swedish ] = "KONVERTERA";
         Text[ polish ] = "CONVERT";
-        Text[ portuguese_brazilian ] = "CONVERT";
+        Text[ portuguese_brazilian ] = "CONVERTER";
         Text[ japanese ] = "CONVERT";
         Text[ korean ] = "CONVERT";
         Text[ chinese_simplified ] = "CONVERT";
@@ -2548,6 +2821,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "CONVERT";
         Text[ catalan ] = "CONVERT";
         Text[ thai ] = "CONVERT";
+        Text[ czech ] = "CONVERT";
+        Text[ hebrew ] = "UMWANDELN";
+        Text[ hindi ] = "CONVERT";
     };
 
     String ANALYSIS_FUNCNAME_Factdouble
@@ -2566,7 +2842,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ danish ] = "DOBBELT.FAKULTET";
         Text[ swedish ] = "DUBBELFAKULTET";
         Text[ polish ] = "FACTDOUBLE";
-        Text[ portuguese_brazilian ] = "FACTDOUBLE";
+        Text[ portuguese_brazilian ] = "FATDUPLO";
         Text[ japanese ] = "FACTDOUBLE";
         Text[ korean ] = "FACTDOUBLE";
         Text[ chinese_simplified ] = "FACTDOUBLE";
@@ -2575,9 +2851,37 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ arabic ] = "FACTDOUBLE";
         Text[ catalan ] = "FACTDOUBLE";
         Text[ thai ] = "FACTDOUBLE";
+        Text[ czech ] = "FACTDOUBLE";
+        Text[ hebrew ] = "ZWEIFAKULT√ÑT";
+        Text[ hindi ] = "FACTDOUBLE";
     };
 
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
