@@ -6766,8 +6766,8 @@ SfxVoidItem Protect FN_TABLE_SET_READ_ONLY_CELLS
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem ProtectTraceChangeMode FN_REDLINE_PROTECT
-()
+SfxBoolItem ProtectTraceChangeMode FN_REDLINE_PROTECT
+
 [
     /* flags: */
     AutoUpdate = FALSE,
