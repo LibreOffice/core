@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dr $ $Date: 2002-10-16 12:13:03 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:48:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -699,8 +699,8 @@ void ScContentTree::GetTableNames()
         return;
 
     String aName;
-    USHORT nCount = pDoc->GetTableCount();
-    for ( USHORT i=0; i<nCount; i++ )
+    SCTAB nCount = pDoc->GetTableCount();
+    for ( SCTAB i=0; i<nCount; i++ )
     {
         pDoc->GetName( i, aName );
         InsertContent( SC_CONTENT_TABLE, aName );
@@ -793,10 +793,10 @@ void ScContentTree::GetDrawNames( USHORT nType, USHORT nId )
     SfxObjectShell* pShell = pDoc->GetDocumentShell();
     if (pDrawLayer && pShell)
     {
-        USHORT nTabCount = pDoc->GetTableCount();
-        for (USHORT nTab=0; nTab<nTabCount; nTab++)
+        SCTAB nTabCount = pDoc->GetTableCount();
+        for (SCTAB nTab=0; nTab<nTabCount; nTab++)
         {
-            SdrPage* pPage = pDrawLayer->GetPage(nTab);
+            SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
             DBG_ASSERT(pPage,"Page ?");
             if (pPage)
             {
@@ -901,8 +901,8 @@ void ScContentTree::GetNoteStrings()
     if (!pDoc)
         return;
 
-    USHORT nTabCount = pDoc->GetTableCount();
-    for (USHORT nTab=0; nTab<nTabCount; nTab++)
+    SCTAB nTabCount = pDoc->GetTableCount();
+    for (SCTAB nTab=0; nTab<nTabCount; nTab++)
     {
         ScCellIterator aIter( pDoc, 0,0,nTab, MAXCOL,MAXROW,nTab );
         ScBaseCell* pCell = aIter.GetFirst();
@@ -924,8 +924,8 @@ ScAddress ScContentTree::GetNotePos( ULONG nIndex )
         return ScAddress();
 
     ULONG nFound = 0;
-    USHORT nTabCount = pDoc->GetTableCount();
-    for (USHORT nTab=0; nTab<nTabCount; nTab++)
+    SCTAB nTabCount = pDoc->GetTableCount();
+    for (SCTAB nTab=0; nTab<nTabCount; nTab++)
     {
         ScCellIterator aIter( pDoc, 0,0,nTab, MAXCOL,MAXROW,nTab );
         ScBaseCell* pCell = aIter.GetFirst();
@@ -959,8 +959,8 @@ BOOL ScContentTree::NoteStringsChanged()
     SvLBoxEntry* pEntry = FirstChild( pParent );
 
     BOOL bEqual = TRUE;
-    USHORT nTabCount = pDoc->GetTableCount();
-    for (USHORT nTab=0; nTab<nTabCount && bEqual; nTab++)
+    SCTAB nTabCount = pDoc->GetTableCount();
+    for (SCTAB nTab=0; nTab<nTabCount && bEqual; nTab++)
     {
         ScCellIterator aIter( pDoc, 0,0,nTab, MAXCOL,MAXROW,nTab );
         ScBaseCell* pCell = aIter.GetFirst();
@@ -1009,10 +1009,10 @@ BOOL ScContentTree::DrawNamesChanged( USHORT nType, USHORT nId )
     SfxObjectShell* pShell = pDoc->GetDocumentShell();
     if (pDrawLayer && pShell)
     {
-        USHORT nTabCount = pDoc->GetTableCount();
-        for (USHORT nTab=0; nTab<nTabCount && bEqual; nTab++)
+        SCTAB nTabCount = pDoc->GetTableCount();
+        for (SCTAB nTab=0; nTab<nTabCount && bEqual; nTab++)
         {
-            SdrPage* pPage = pDrawLayer->GetPage(nTab);
+            SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
             DBG_ASSERT(pPage,"Page ?");
             if (pPage)
             {
@@ -1063,7 +1063,9 @@ BOOL lcl_GetRange( ScDocument* pDoc, USHORT nType, const String& rName, ScRange&
         if (pList)
             if (pList->SearchName( rName, nPos ))
             {
-                USHORT nTab,nCol1,nRow1,nCol2,nRow2;
+                SCTAB nTab;
+                SCCOL nCol1, nCol2;
+                SCROW nRow1, nRow2;
                 (*pList)[nPos]->GetArea(nTab,nCol1,nRow1,nCol2,nRow2);
                 rRange = ScRange( nCol1,nRow1,nTab, nCol2,nRow2,nTab );
                 bFound = TRUE;
@@ -1082,12 +1084,12 @@ void lcl_DoDragObject( ScDocShell* pSrcShell, const String& rName, USHORT nType,
         BOOL bOle = ( nType == SC_CONTENT_OLEOBJECT );
         BOOL bGraf = ( nType == SC_CONTENT_GRAPHIC );
         USHORT nDrawId = bOle ? OBJ_OLE2 : ( bGraf ? OBJ_GRAF : OBJ_GRUP );
-        USHORT nTab = 0;
+        SCTAB nTab = 0;
         SdrObject* pObject = pModel->GetNamedObject( rName, nDrawId, nTab );
         if (pObject)
         {
             SdrView aEditView( pModel );
-            aEditView.ShowPagePgNum( nTab, Point() );
+            aEditView.ShowPagePgNum( static_cast<sal_uInt16>(nTab), Point() );
             SdrPageView* pPV = aEditView.GetPageViewPvNum(0);
             aEditView.MarkObj(pObject, pPV);
 
@@ -1256,7 +1258,7 @@ void ScContentTree::DoDrag()
                         }
                         else if ( nType == SC_CONTENT_TABLE )
                         {
-                            USHORT nTab;
+                            SCTAB nTab;
                             if ( pSrcDoc->GetTable( aText, nTab ) )
                             {
                                 ScRange aRange( 0,0,nTab, MAXCOL,MAXROW,nTab );
