@@ -23532,3 +23532,6 @@ _TI2?AVPropertyVetoException@beans@star@sun@com@@
 ?GetWindow@AccessibleShapeTreeInfo@accessibility@@QBEPAVWindow@@XZ
 ?GetEditSource@AccessibleTextHelper@accessibility@@UBEABVSvxEditSource@@XZ
 ?GetOffset@AccessibleTextHelper@accessibility@@UBE?AVPoint@@XZ
+?SetPosAndSize@?%O:\SRX642\src\svx\source\fmcomp\gridctrl.cxx122746407@@YAXAAVButton@@AAVPoint@@ABVSize@@@Z
+?setCheckBoxState@?%O:\SRX642\src\svx\source\fmcomp\gridcell.cxx1654623372@@YAXABV?$Reference@VXColumn@sdb@star@sun@com@@@uno@star@sun@com@@PAVCheckBoxControl@svt@@@Z
+?getColumnPropertyFromPeer@?%O:\SRX642\src\svx\source\fmcomp\fmgridcl.cxx2011425450@@YA?AVOUString@rtl@@PAVFmXGridPeer@@JABV23@@Z
