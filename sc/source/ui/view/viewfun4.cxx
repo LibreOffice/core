@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun4.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-06 09:58:04 $
+ *  last change: $Author: nn $ $Date: 2000-11-09 11:54:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,6 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/fcontnr.hxx>
-#include <sfx2/inimgr.hxx>
 #include <svtools/filter.hxx>
 #include <svtools/stritem.hxx>
 #include <svtools/urlbmk.hxx>

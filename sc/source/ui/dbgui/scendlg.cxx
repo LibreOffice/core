@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scendlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-29 10:16:25 $
+ *  last change: $Author: nn $ $Date: 2000-11-09 11:52:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,6 @@
 #include "scitems.hxx"
 #include <svx/drawitem.hxx>
 #include <svx/xtable.hxx>
-#include <sfx2/inimgr.hxx>
 #include <sfx2/objsh.hxx>
 #include <svtools/useroptions.hxx>
 #include <vcl/msgbox.hxx>
