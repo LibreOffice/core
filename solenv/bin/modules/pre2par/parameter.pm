@@ -2,9 +2,9 @@
 #
 #   $RCSfile: parameter.pm,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-01-31 10:51:35 $
+#   last change: $Author: vg $ $Date: 2005-03-23 15:59:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -104,6 +104,7 @@ sub getparameter
         if ($param eq "-s") { $pre2par::globals::prefilename = shift(@ARGV); }
         elsif ($param eq "-o") { $pre2par::globals::parfilename = shift(@ARGV); }
         elsif ($param eq "-l") { $pre2par::globals::langfilename = shift(@ARGV); }
+        elsif ($param eq "-v") { $pre2par::globals::logging = 1; }
         else
         {
             print("\n*************************************\n");
@@ -198,7 +199,8 @@ sub make_path_absolute
 
 sub outputparameter
 {
-    print "\n$pre2par::globals::prog -s $pre2par::globals::prefilename -o $pre2par::globals::parfilename\n";
+    $pre2par::globals::logging ? ($logoption = " -v") : ($logoption = "");
+    print "\n$pre2par::globals::prog -s $pre2par::globals::prefilename -o $pre2par::globals::parfilename$logoption\n";
 
 #   print "\n********************************************************\n";
 #   print "This is $pre2par::globals::prog, version 1.0\n";
