@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rsc.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: pl $ $Date: 2001-11-07 16:51:18 $
+ *  last change: $Author: pl $ $Date: 2002-11-01 12:16:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -358,6 +358,7 @@ RscCmdLine::RscCmdLine( short argc, char ** argv, RscError * pEH )
                     if( m_aOutputFiles.back().nLangTypeId != LANGUAGE_DONTKNOW )    \
                         m_aOutputFiles.push_back( OutputFile() );                   \
                     m_aOutputFiles.back().nLangTypeId = LANGUAGE_##Name ;           \
+                    m_aOutputFiles.back().aLangName = ByteString( (*ppStr)+3 ).ToLowerAscii(); \
                 }
                 LT( SYSTEM              );
 #include <rsclang.c>
@@ -895,14 +896,29 @@ ERRTYPE RscCompiler::Link()
             pTC->pEH->StdOut( "Generating .rc file\n" );
 
             // Schreibe Datei
+            sal_Char cSearchDelim = ByteString( DirEntry::GetSearchDelimiter(), RTL_TEXTENCODING_ASCII_US ).GetChar( 0 );
+            sal_Char cAccessDelim = ByteString( DirEntry::GetAccessDelimiter(), RTL_TEXTENCODING_ASCII_US ).GetChar( 0 );
             pTC->ChangeLanguage( it->nLangTypeId );
             pTC->ChangeDefLanguage( International::GetNeutralLanguage( it->nLangTypeId ) );
             pTC->SetSourceCharSet( it->nSourceCharSet );
             pTC->ClearSysNames();
             ByteString aSysSearchPath( it->aLangSearchPath );
-            if( aSysSearchPath.Len() )
-                aSysSearchPath.Append( ByteString( DirEntry::GetSearchDelimiter(), RTL_TEXTENCODING_ASCII_US ) );
-            aSysSearchPath.Append( pTC->GetSearchPath() );
+            xub_StrLen nIndex = 0;
+            ByteString aSearchPath = pTC->GetSearchPath();
+            while( nIndex != STRING_NOTFOUND )
+            {
+                ByteString aToken = aSearchPath.GetToken( 0, cSearchDelim, nIndex );
+                if( aSysSearchPath.Len() )
+                    aSysSearchPath.Append( cSearchDelim );
+                aSysSearchPath.Append( aToken );
+                aSysSearchPath.Append( cAccessDelim );
+                aSysSearchPath.Append( it->aLangName );
+                aSysSearchPath.Append( cSearchDelim );
+                aSysSearchPath.Append( aToken );
+            }
+#ifdef DEBUG
+            fprintf( stderr, "setting search path for language %s: %s\n", it->aLangName.GetBuffer(), aSysSearchPath.GetBuffer() );
+#endif
             pTC->SetSysSearchPath( aSysSearchPath );
 
             aError = pTC->WriteRc( foutput );
