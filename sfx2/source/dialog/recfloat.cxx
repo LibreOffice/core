@@ -2,9 +2,9 @@
  *
  *  $RCSfile: recfloat.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-18 15:06:09 $
+ *  last change: $Author: mba $ $Date: 2002-07-23 13:15:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,7 @@ BOOL SfxRecordingFloat_Impl::Close()
     if ( xRecorder.is() && xRecorder->getRecordedMacro().getLength() )
     {
         QueryBox aBox( this, WB_YES_NO | WB_DEF_NO , String( SfxResId( STR_MACRO_LOSS ) ) );
-        aBox.SetText( String( STR_CANCEL_RECORDING ) );
+        aBox.SetText( String( SfxResId(STR_CANCEL_RECORDING) ) );
         bRet = ( aBox.Execute() == RET_YES );
     }
 

@@ -6560,7 +6560,7 @@ SfxBoolItem ReadOnly SID_DOC_READONLY
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem Recording SID_RECORDMACRO
+SfxBoolItem MacroRecorder SID_RECORDMACRO
 [
     /* flags: */
     AutoUpdate = TRUE,
@@ -6607,7 +6607,7 @@ SfxVoidItem StopRecording SID_STOP_RECORDING
     GroupId = GID_MACRO;
 ]
 
-SfxBoolItem MacroRecorder SID_RECORDING_FLOATWINDOW
+SfxBoolItem MacroRecordingFloat SID_RECORDING_FLOATWINDOW
 
 [
     /* flags: */
@@ -6624,10 +6624,10 @@ SfxBoolItem MacroRecorder SID_RECORDING_FLOATWINDOW
     Synchron;
 
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_MACRO;
 ]
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-18 15:11:33 $
+ *  last change: $Author: mba $ $Date: 2002-07-23 13:16:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3416,6 +3416,7 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
                 aProp <<= xSupplier;
                 xSet->setPropertyValue(sProperty,aProp);
                 GetBindings().SetRecorder_Impl( xRecorder );
+                SetChildWindow( SID_RECORDING_FLOATWINDOW, TRUE );
             }
 
             rReq.Done();
