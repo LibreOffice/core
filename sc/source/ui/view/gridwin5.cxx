@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin5.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 12:02:01 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:58:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,8 +144,8 @@ BOOL ScGridWindow::ShowNoteMarker( SCsCOL nPosX, SCsROW nPosY, BOOL bKeyboard )
 {
     BOOL bDone = FALSE;
 
-    ScPostIt    aNote;
     ScDocument* pDoc = pViewData->GetDocument();
+    ScPostIt    aNote(pDoc);
     SCTAB       nTab = pViewData->GetTabNo();
     ScAddress   aCellPos( nPosX, nPosY, nTab );
 
