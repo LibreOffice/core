@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.119 $
+ *  $Revision: 1.120 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-18 15:22:50 $
+ *  last change: $Author: sab $ $Date: 2001-06-21 09:45:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2167,8 +2167,13 @@ void ScXMLExport::WriteCell (ScMyCell& aCell)
     case table::CellContentType_TEXT :
         {
             if (GetCellText(aCell))
+            {
+                rtl::OUString sFormula(aCell.xCell->getFormula());
+                if (sFormula[0] == '\'')
+                    sFormula = sFormula.copy(1);
                 GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
-                    aCell.xCell->getFormula(), aCell.sStringValue, XML_NAMESPACE_TABLE, sal_True, sal_False);
+                    sFormula, aCell.sStringValue, XML_NAMESPACE_TABLE, sal_True, sal_False);
+            }
         }
         break;
     case table::CellContentType_FORMULA :
