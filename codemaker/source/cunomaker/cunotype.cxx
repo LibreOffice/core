@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cunotype.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 17:06:07 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 19:45:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -551,7 +551,7 @@ void CunoType::dumpLGetCunoType(FileStream& o)
 {
     OString typeName(m_typeName.replace('/', '_'));
 
-    o << "#if ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || ((__GNUC__<3) && defined(__APPLE__)))\n"
+    o << "#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500))\n"
       << "static typelib_TypeDescriptionReference * s_pType_" << typeName << " = 0;\n"
       << "#endif\n\n";
 
@@ -566,7 +566,7 @@ void CunoType::dumpLGetCunoType(FileStream& o)
     }
     inc();
 
-    o << indent() << "#if ! ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || ((__GNUC__<3) && defined(__APPLE__)))\n"
+    o << indent() << "#if ! (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500))\n"
       << indent() << "static typelib_TypeDescriptionReference * s_pType_" << typeName << " = 0;\n"
       << indent() << "#endif\n\n";
 
@@ -603,7 +603,7 @@ void CunoType::dumpGetCunoType(FileStream& o)
 
     if ( !m_typeName.equals("com/sun/star/uno/Exception") )
     {
-        o << "#if ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || ((__GNUC__<3) && defined(__APPLE__)))\n"
+        o << "#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500))\n"
           << "static typelib_TypeDescriptionReference * s_pType_" << typeName << " = 0;\n"
           << "#endif\n\n";
     }
@@ -616,7 +616,7 @@ void CunoType::dumpGetCunoType(FileStream& o)
         o << indent() << "return typelib_static_type_getByTypeClass( typelib_TypeClass_EXCEPTION );\n";
     } else
     {
-        o << indent() << "#if ! ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || ((__GNUC__<3) && defined(__APPLE__)))\n"
+        o << indent() << "#if ! (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500))\n"
           << indent() << "static typelib_TypeDescriptionReference * s_pType_" << typeName << " = 0;\n"
           << indent() << "#endif\n\n";
 
@@ -724,14 +724,14 @@ void CunoType::dumpCGetCunoType(FileStream& o)
 
     dumpOpenExternC(o);
 
-    o << "#if ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || ((__GNUC__<3) && defined(__APPLE__)))\n"
+    o << "#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500))\n"
       << "static typelib_TypeDescriptionReference * s_pType_" << typeName << " = 0;\n"
       << "#endif\n\n";
 
     o << "typelib_TypeDescriptionReference ** SAL_CALL getCUnoType_" << m_name << "() SAL_THROW_EXTERN_C( () )\n{\n";
     inc();
 
-    o << "#if ! ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || ((__GNUC__<3) && defined(__APPLE__)))\n"
+    o << "#if ! (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500))\n"
       << indent() << "static typelib_TypeDescriptionReference * s_pType_" << typeName << " = 0;\n"
       << "#endif\n\n";
 
@@ -1937,7 +1937,7 @@ void InterfaceType::dumpGetCunoType(FileStream& o)
 
     if ( !m_typeName.equals("com/sun/star/uno/XInterface") )
     {
-        o << "#if ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || ((__GNUC__<3) && defined(__APPLE__)))\n"
+        o << "#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500))\n"
           << "static typelib_TypeDescriptionReference * s_pType_" << typeName << " = 0;\n"
           << "#endif\n\n";
     }
@@ -1950,7 +1950,7 @@ void InterfaceType::dumpGetCunoType(FileStream& o)
         o << indent() << "return typelib_static_type_getByTypeClass( typelib_TypeClass_INTERFACE );\n";
     } else
     {
-        o << indent() << "#if ! ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || ((__GNUC__<3) && defined(__APPLE__)))\n"
+        o << indent() << "#if ! (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500))\n"
           << indent() << "static typelib_TypeDescriptionReference * s_pType_" << typeName << " = 0;\n"
           << indent() << "#endif\n\n";
 
@@ -1994,14 +1994,14 @@ void InterfaceType::dumpCGetCunoType(FileStream& o)
 
     dumpOpenExternC(o);
 
-    o << "#if ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || ((__GNUC__<3) && defined(__APPLE__)))\n"
+    o << "#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500))\n"
       <<  "static typelib_TypeDescriptionReference * s_pType_" << typeName << " = 0;\n"
       << "#endif\n\n";
 
     o << "typelib_TypeDescriptionReference ** SAL_CALL getCUnoType_" << m_name << "() SAL_THROW_EXTERN_C( () )\n{\n";
     inc();
 
-    o << "#if ! ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || ((__GNUC__<3) && defined(__APPLE__)))\n"
+    o << "#if ! (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500))\n"
       << indent() << "static typelib_TypeDescriptionReference * s_pType_" << typeName << " = 0;\n"
       << "#endif\n\n";
 
@@ -3190,14 +3190,14 @@ void EnumType::dumpGetCunoType(FileStream& o)
 
     dumpOpenExternC(o);
 
-    o << "#if ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || ((__GNUC__<3) && defined(__APPLE__)))\n"
+    o << "#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500))\n"
       << "static typelib_TypeDescriptionReference * s_pType_" << typeName << " = 0;\n"
       << "#endif\n\n";
 
     o << "typelib_TypeDescriptionReference ** SAL_CALL getCUnoType_" << m_name << "() SAL_THROW_EXTERN_C( () )\n{\n";
     inc();
 
-    o << indent() << "#if ! ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || ((__GNUC__<3) && defined(__APPLE__)))\n"
+    o << indent() << "#if ! (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500))\n"
       << indent() << "static typelib_TypeDescriptionReference * s_pType_" << typeName << " = 0;\n"
       << indent() << "#endif\n\n";
 
@@ -3225,14 +3225,14 @@ void EnumType::dumpCGetCunoType(FileStream& o)
 
     dumpOpenExternC(o);
 
-    o << "#if ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || ((__GNUC__<3) && defined(__APPLE__)))\n"
+    o << "#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500))\n"
       << "static typelib_TypeDescriptionReference * s_pType_" << typeName << " = 0;\n"
       << "#endif\n\n";
 
     o << "typelib_TypeDescriptionReference ** SAL_CALL getCUnoType_" << m_name << "() SAL_THROW_EXTERN_C( () )\n{\n";
     inc();
 
-    o << "#if ! ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || ((__GNUC__<3) && defined(__APPLE__)))\n"
+    o << "#if ! (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500))\n"
       << indent() << "static typelib_TypeDescriptionReference * s_pType_" << typeName << " = 0;\n"
       << "#endif\n\n";
 
