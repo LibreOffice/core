@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sc.hrc,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 13:56:28 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 11:36:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -723,6 +723,7 @@
 #define FID_INSERT_NAME         (INSERT_MENU_START + 12)
 #define FID_USE_NAME            (INSERT_MENU_START + 13)
 #define FID_APPLY_NAME          (INSERT_MENU_START + 14)
+#define FID_INS_TABLE_EXT       (INSERT_MENU_START + 15)
 //#define SID_CHARMAP               (INSERT_MENU_START + 15)//!!! kommt von sfx
 //aus sfx: #define SID_INSERT_POSTIT       (INSERT_MENU_START + 16)
 #define SID_INSERT_CLIPART      (INSERT_MENU_START + 17) //!!! sollte vom Svx kommen
