@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-09 14:10:33 $
+ *  last change: $Author: mib $ $Date: 2001-03-14 13:35:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1715,6 +1715,9 @@ void XMLTextFieldExport::ExportFieldDeclarations(
     // get text fields supplier and field master name access
     Reference<XTextFieldsSupplier> xTextFieldsSupp(GetExport().GetModel(),
                                                    UNO_QUERY);
+    if( !xTextFieldsSupp.is() )
+        return;
+
     Reference<container::XNameAccess> xFieldMasterNameAccess(
         xTextFieldsSupp->getTextFieldMasters(), UNO_QUERY);
 
