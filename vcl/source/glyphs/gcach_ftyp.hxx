@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_ftyp.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jbu $ $Date: 2001-05-14 09:27:39 $
+ *  last change: $Author: hdu $ $Date: 2001-05-17 12:59:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,12 +66,59 @@ typedef int FT_Int;
 
 // -----------------------------------------------------------------------
 
-struct FtFontInfo
+// FtFontFile has the responsibility that a font file is only mapped once.
+// (#86621#) the old directly ft-managed solution caused it to be mapped
+// in up to nTTC*nSizes*nOrientation*nSynthetic times
+class FtFontFile
 {
-    ImplFontData    aFontData;
-    ::rtl::OString  aNativeFileName;
-    int             nFaceNum;
-    int             nFontId;
+public:
+    static FtFontFile*      FindFontFile( const ::rtl::OString& rNativeFileName );
+
+    bool                    Map();
+    void                    Unmap();
+
+    const unsigned char*    GetBuffer() const { return mpFileMap; }
+    int                     GetSize() const { return mnFileSize; }
+    const ::rtl::OString*   GetFileName() const { return &maNativeFileName; }
+
+private:
+                            FtFontFile( const ::rtl::OString& rNativeFileName );
+
+    const ::rtl::OString    maNativeFileName;
+    const unsigned char*    mpFileMap;
+    int                     mnFileSize;
+    int                     mnRefCount;
+};
+
+// -----------------------------------------------------------------------
+
+// FtFontInfo corresponds to an unscaled font face
+class FtFontInfo
+{
+public:
+    FtFontInfo( const ImplFontData&, const ::rtl::OString&,
+        int nFaceNum, int nFontId, int nSynthetic );
+
+    bool                  MapFile() { return mpFontFile->Map(); }
+    void                  Unmap() { mpFontFile->Unmap(); }
+
+    const unsigned char*  GetBuffer() const { return mpFontFile->GetBuffer(); }
+    int                   GetFileSize() const { return mpFontFile->GetSize(); }
+
+    const ::rtl::OString* GetFontFileName() const { return mpFontFile->GetFileName(); }
+    const ImplFontData&   GetFontData() const { return maFontData; }
+    int                   GetFaceNum() const { return mnFaceNum; }
+    int                   GetSynthetic() const { return mnSynthetic; }
+
+    int                   GetFontId() const { return mnFontId; }
+    void                  SetFontId( int nFontId ) { mnFontId = nFontId; }
+
+private:
+    ImplFontData    maFontData;
+    FtFontFile*     mpFontFile;
+    const int       mnFaceNum;
+    const int       mnSynthetic;
+    int             mnFontId;
 };
 
 // -----------------------------------------------------------------------
@@ -103,13 +150,13 @@ private:
 class FreetypeServerFont : public ServerFont
 {
     public:
-                                FreetypeServerFont( const ImplFontSelectData&, const FtFontInfo& );
+                                FreetypeServerFont( const ImplFontSelectData&, FtFontInfo* );
     virtual                     ~FreetypeServerFont();
 
-    virtual const ::rtl::OString*   GetFontFileName() const { return &mrFontInfo.aNativeFileName; }
-    virtual int                 GetFontFaceNum() const { return mrFontInfo.nFaceNum; }
-    virtual int                 GetFontId() const { return mrFontInfo.nFontId; }
-    virtual void                SetFontId( int nFontId ) { mrFontInfo.nFontId = nFontId; }
+    virtual const ::rtl::OString* GetFontFileName() const { return mpFontInfo->GetFontFileName(); }
+    virtual int                 GetFontFaceNum() const { return mpFontInfo->GetFaceNum(); }
+    virtual int                 GetFontId() const { return mpFontInfo->GetFontId(); }
+    virtual void                SetFontId( int nFontId ) { mpFontInfo->SetFontId( nFontId ); }
     virtual bool                TestFont() { return (maFaceFT != NULL); }
 
     virtual void                FetchFontMetric( ImplFontMetricData&, long& rFactor ) const;
@@ -130,7 +177,7 @@ friend GlyphCache;
 private:
     int                         mnWidth;
     struct FT_FaceRec_*         maFaceFT;
-    FtFontInfo&                 mrFontInfo;
+    FtFontInfo*                 mpFontInfo;
     FT_Int                      mnLoadFlags;
 
     typedef ::std::hash_map<int,int> GlyphSubstitution;

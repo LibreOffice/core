@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.39 $
- *  last change: $Author: hdu $ $Date: 2001-05-16 15:40:20 $
+ *  $Revision: 1.40 $
+ *  last change: $Author: hdu $ $Date: 2001-05-17 12:59:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,19 +79,142 @@
 
 #include <vector>
 
-// -----------------------------------------------------------------------
-
-static FT_Library aLibFT = 0;
-
-// =======================================================================
-// FreetypeManager
-// =======================================================================
+// TODO: move file mapping stuff to OSL
+#if defined(UNX)
+    #include <unistd.h>
+    #include <fcntl.h>
+    #include <sys/stat.h>
+    #include <sys/mman.h>
+#elif defined(WIN32)
+    #include <windows.h>
+    #include <io.h>
+#endif
 
 #include "freetype/internal/ftobjs.h"
 #include "freetype/internal/sfnt.h"
 #include "freetype/internal/ftstream.h"
 
+// -----------------------------------------------------------------------
+
+static FT_Library aLibFT = 0;
+
+struct EqStr{ bool operator()(const char* a, const char* b) const { return !strcmp(a,b); } };
+typedef ::std::hash_map<const char*,FtFontFile*,::std::hash<const char*>, EqStr> FontFileList;
+static FontFileList aFontFileList;
+
 // =======================================================================
+// FreetypeManager
+// =======================================================================
+
+FtFontFile::FtFontFile( const ::rtl::OString& rNativeFileName )
+:   maNativeFileName( rNativeFileName ),
+    mpFileMap( NULL ),
+    mnFileSize( 0 ),
+    mnRefCount( 0 )
+{}
+
+// -----------------------------------------------------------------------
+
+FtFontFile* FtFontFile::FindFontFile( const ::rtl::OString& rNativeFileName )
+{
+    // font file already known? (e.g. for ttc, synthetic, aliased fonts)
+    const char* pFileName = rNativeFileName.getStr();
+    FontFileList::const_iterator it = aFontFileList.find( pFileName );
+    if( it != aFontFileList.end() )
+        return (*it).second;
+
+    // no => create new one
+    FtFontFile* pFontFile = new FtFontFile( rNativeFileName );
+    aFontFileList[ pFileName ] = pFontFile;
+    return pFontFile;
+}
+
+// -----------------------------------------------------------------------
+
+bool FtFontFile::Map()
+{
+    if( mnRefCount++ <= 0 )
+    {
+        const char* pFileName = maNativeFileName.getStr();
+#if defined(UNX)
+        int nFile = open( pFileName, O_RDONLY );
+        if( nFile < 0 )
+            return false;
+
+        struct stat aStat;
+        fstat( nFile, &aStat );
+        mnFileSize = aStat.st_size;
+        mpFileMap = (const unsigned char*)
+            mmap( NULL, mnFileSize, PROT_READ, MAP_SHARED, nFile, NULL );
+        close( nFile );
+#elif defined(WIN32)
+        void* pFileDesc = CreateFile( pFileName, GENERIC_READ, FILE_SHARE_READ,
+                        NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0 );
+        if( pFileDesc == INVALID_HANDLE_VALUE)
+            return false;
+
+        mnFileSize = GetFileSize( pFileDesc, NULL );
+        HANDLE aHandle = CreateFileMapping( pFileDesc, NULL, PAGE_READONLY, 0, mnFileSize, "TTF" );
+        mpFileMap = (const unsigned char*) MapViewOfFile( aHandle, FILE_MAP_READ, 0, 0, mnFileSize );
+        CloseHandle( pFileDesc );
+#else
+        FILE* pFile = fopen( pFileName, "rb" );
+        if( !pFile )
+            return false;
+
+        struct stat aStat;
+        stat( pFileName, &aStat );
+        mnFileSize = aStat.st_size;
+        mpFileMap = new unsigned char[ mnFileSize ];
+        if( mnFileSize != fread( mpFileMap, 1, mnFileSize, pFile ) )
+        {
+            delete[] mpFileMap;
+            mpFileMap = NULL;
+        }
+        fclose( pFile );
+#endif
+    }
+
+    return (mpFileMap != NULL);
+}
+
+// -----------------------------------------------------------------------
+
+void FtFontFile::Unmap()
+{
+    if( (--mnRefCount > 0) || (mpFileMap == NULL) )
+        return;
+
+#if defined(UNX)
+    munmap( mpFileMap, mnFileSize );
+#elif defined(WIN32)
+    UnmapViewOfFile( mpFileMap );
+#else
+    delete[] mpFileMap;
+#endif
+
+    mpFileMap = NULL;
+}
+
+// =======================================================================
+
+FtFontInfo::FtFontInfo( const ImplFontData& rFontData,
+    const ::rtl::OString& rNativeFileName, int nFaceNum, int nFontId, int nSynthetic )
+:   mpFontFile( FtFontFile::FindFontFile( rNativeFileName ) ),
+    maFontData( rFontData ),
+    mnFaceNum( nFaceNum ),
+    mnFontId( nFontId ),
+    mnSynthetic( nSynthetic )
+{
+    maFontData.mpSysData = (void*)this;
+    maFontData.mpNext    = NULL;
+
+    // using unicode emulation for non-symbol fonts
+    if( maFontData.meCharSet != RTL_TEXTENCODING_SYMBOL )
+        maFontData.meCharSet    = RTL_TEXTENCODING_UNICODE;
+}
+
+// -----------------------------------------------------------------------
 
 size_t std::hash<FtFontInfo*>::operator()( const FtFontInfo* pFI ) const
 {
@@ -122,15 +245,11 @@ FreetypeManager::~FreetypeManager()
 
 // -----------------------------------------------------------------------
 
-void*
-FreetypeManager::GetFontHandle (int nFontId)
+void* FreetypeManager::GetFontHandle (int nFontId)
 {
-    FontList::const_iterator it;
-    for( it = maFontList.begin(); it != maFontList.end(); ++it )
-    {
-        if ((*it)->nFontId == nFontId)
+    for( FontList::const_iterator it = maFontList.begin(); it != maFontList.end(); ++it )
+        if( nFontId == (*it)->GetFontId() )
             return (void*)*it;
-    }
     return NULL;
 }
 
@@ -142,22 +261,7 @@ void FreetypeManager::AddFontFile( const rtl::OString& rNormalizedName,
     if( !rNormalizedName.getLength() )
         return;
 
-    FtFontInfo* const pFontInfo = new FtFontInfo;
-
-    pFontInfo->aNativeFileName = rNormalizedName;
-    pFontInfo->nFaceNum = nFaceNum;
-    pFontInfo->nFontId  = nFontId;
-
-    ImplFontData& rData = pFontInfo->aFontData;
-    rData               = *pData;
-    rData.mpSysData     = pFontInfo;
-    rData.mpNext        = NULL;
-
-    // using unicode emulation for non-symbol fonts
-    if( rData.meCharSet != RTL_TEXTENCODING_SYMBOL )
-        rData.meCharSet = RTL_TEXTENCODING_UNICODE;
-
-    maFontList.insert( pFontInfo );
+    maFontList.insert( new FtFontInfo( *pData, rNormalizedName, nFaceNum, nFontId, 0 ) );
 }
 
 // -----------------------------------------------------------------------
@@ -180,11 +284,12 @@ long FreetypeManager::AddFontDir( const String& rUrlName )
 #else
         osl::FileStatus aFileStatus( FileStatusMask_NativePath );
 #endif
+
         rcOSL = aDirItem.getFileStatus( aFileStatus );
         ::rtl::OUString aUSytemPath;
 #ifdef TF_FILEURL
-        OSL_VERIFY(
-            ::osl::FileBase::getSystemPathFromFileURL( aFileStatus.getFileURL(), aUSytemPath ) == osl_File_E_None);
+        OSL_VERIFY(  osl_File_E_None
+            == ::osl::FileBase::getSystemPathFromFileURL( aFileStatus.getFileURL(), aUSytemPath ));
 #else
         ::rtl::OUString aUFileName = aFileStatus.getNativePath();
 #endif
@@ -198,58 +303,51 @@ long FreetypeManager::AddFontDir( const String& rUrlName )
             if( (rcFT != FT_Err_Ok) || (aFaceFT == NULL) )
                 break;
 
-            if( !FT_IS_SCALABLE( aFaceFT ) )    // ignore non-TT fonts for now
+            if( !FT_IS_SCALABLE( aFaceFT ) )    // ignore non-scalabale fonts
                 continue;
 
             nMaxFaces = aFaceFT->num_faces;
 
-            FtFontInfo* const pFontInfo = new FtFontInfo;
-            pFontInfo->aNativeFileName  = aCFileName;
-            pFontInfo->nFaceNum         = nFaceNum;
-
-            ImplFontData& rData = pFontInfo->aFontData;
-
-            rData.mpNext        = NULL;
-            rData.mpSysData     = pFontInfo;
+            ImplFontData aFontData;
 
             // TODO: prefer unicode names if available
             // TODO: prefer locale specific names if available?
-            rData.maName        = String::CreateFromAscii( aFaceFT->family_name );
-            rData.maStyleName   = String::CreateFromAscii( aFaceFT->style_name );
+            aFontData.maName        = String::CreateFromAscii( aFaceFT->family_name );
+            aFontData.maStyleName   = String::CreateFromAscii( aFaceFT->style_name );
 
-            rData.mnWidth       = 0;
-            rData.mnHeight      = 0;
+            aFontData.mnWidth   = 0;
+            aFontData.mnHeight  = 0;
 
             // TODO: extract better font characterization data from font
-            rData.meFamily      = FAMILY_DONTKNOW;
+            aFontData.meFamily  = FAMILY_DONTKNOW;
 
-            rData.meCharSet = RTL_TEXTENCODING_UNICODE;
+            aFontData.meCharSet = RTL_TEXTENCODING_UNICODE;
             for( int i = aFaceFT->num_charmaps; --i >= 0; )
             {
                 const FT_CharMap aCM = aFaceFT->charmaps[i];
 #ifdef FT20b8
                 if( aCM->encoding == ft_encoding_none )
-                    rData.meCharSet = RTL_TEXTENCODING_SYMBOL;
+                    aFontData.meCharSet = RTL_TEXTENCODING_SYMBOL;
 #else // FT20b8
                 if( (aCM->platform_id == TT_PLATFORM_MICROSOFT)
                 &&  (aCM->encoding_id == TT_MS_ID_SYMBOL_CS) )
-                    rData.meCharSet = RTL_TEXTENCODING_SYMBOL;
+                    aFontData.meCharSet = RTL_TEXTENCODING_SYMBOL;
 #endif // FT20b8
             }
 
-            rData.mePitch       = FT_IS_FIXED_WIDTH( aFaceFT ) ? PITCH_FIXED : PITCH_VARIABLE;
-            rData.meWidthType   = WIDTH_DONTKNOW;
-            rData.meWeight      = FT_STYLE_FLAG_BOLD & aFaceFT->style_flags ? WEIGHT_BOLD : WEIGHT_NORMAL;
-            rData.meItalic      = FT_STYLE_FLAG_ITALIC & aFaceFT->style_flags ? ITALIC_NORMAL : ITALIC_NONE;
+            aFontData.mePitch       = FT_IS_FIXED_WIDTH( aFaceFT ) ? PITCH_FIXED : PITCH_VARIABLE;
+            aFontData.meWidthType   = WIDTH_DONTKNOW;
+            aFontData.meWeight      = FT_STYLE_FLAG_BOLD & aFaceFT->style_flags ? WEIGHT_BOLD : WEIGHT_NORMAL;
+            aFontData.meItalic      = FT_STYLE_FLAG_ITALIC & aFaceFT->style_flags ? ITALIC_NORMAL : ITALIC_NONE;
 
-            rData.mnVerticalOrientation = 0;
-            rData.mbOrientation = true;
-            rData.mbDevice      = false;
-            rData.mnQuality     = 0;        // prefer client-side fonts if available
+            aFontData.mnVerticalOrientation = 0;
+            aFontData.mbOrientation = true;
+            aFontData.mbDevice      = false;
+            aFontData.mnQuality     = 0;    // prefer client-side fonts if available
 
             FT_Done_Face( aFaceFT );
 
-            maFontList.insert( pFontInfo );
+            AddFontFile( aCFileName, nFaceNum, 0, &aFontData );
             ++nCount;
         }
     }
@@ -264,7 +362,7 @@ long FreetypeManager::FetchFontList( ImplDevFontList* pToAdd ) const
 {
     long nCount = 0;
     for( FontList::const_iterator it(maFontList.begin()); it != maFontList.end(); ++it, ++nCount )
-        pToAdd->Add( new ImplFontData( (*it)->aFontData ) );
+        pToAdd->Add( new ImplFontData( (*it)->GetFontData() ) );
     return nCount;
 }
 
@@ -284,7 +382,7 @@ FreetypeServerFont* FreetypeManager::CreateFont( const ImplFontSelectData& rFSD 
     FtFontInfo* pFI = (FtFontInfo*)rFSD.mpFontData->mpSysData;
     if( maFontList.find( pFI ) != maFontList.end() )
     {
-        FreetypeServerFont* pFont = new FreetypeServerFont( rFSD, *pFI );
+        FreetypeServerFont* pFont = new FreetypeServerFont( rFSD, pFI );
         return pFont;
     }
 
@@ -295,18 +393,21 @@ FreetypeServerFont* FreetypeManager::CreateFont( const ImplFontSelectData& rFSD 
 // FreetypeServerFont
 // =======================================================================
 
-FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, const FtFontInfo& rFI )
+FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontInfo* pFI )
 :   ServerFont(rFSD),
-    mrFontInfo(const_cast<FtFontInfo&>(rFI)),
+    mpFontInfo(pFI),
     maFaceFT(NULL)
 {
-    const char* pszFontFileName = rFI.aNativeFileName.getStr();
-    FT_Error rc = FT_New_Face( aLibFT, pszFontFileName, rFI.nFaceNum, &maFaceFT );
+    if( !pFI->MapFile() )
+        return;
+
+    FT_Error rc = FT_New_Memory_Face( aLibFT, (FT_Byte*)pFI->GetBuffer(),
+        pFI->GetFileSize(), mpFontInfo->GetFaceNum(), &maFaceFT );
     if( rc != FT_Err_Ok || maFaceFT->num_glyphs == 0 )
         return;
 
     FT_Encoding eEncoding = ft_encoding_unicode;
-    if( mrFontInfo.aFontData.meCharSet == RTL_TEXTENCODING_SYMBOL )
+    if( mpFontInfo->GetFontData().meCharSet == RTL_TEXTENCODING_SYMBOL )
     {
 #ifdef FT20b8
         eEncoding = ft_encoding_none;
@@ -328,12 +429,12 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, const Ft
 
     if( rFSD.mnOrientation != 0 )       // no embedded bitmap for rotated text
         mnLoadFlags |= FT_LOAD_NO_BITMAP;
-    //if( nSin != 0 && nCos != 0 )      // hinting for 0/90/180/270 degrees only
-    //  mnLoadFlags |= FT_LOAD_NO_HINTING;
+    if( nSin != 0 && nCos != 0 )        // hinting for 0/90/180/270 degrees only
+        mnLoadFlags |= FT_LOAD_NO_HINTING;
     //if( rFSD.mbVertical )
     //  mnLoadFlags |= FT_LOAD_VERTICAL_LAYOUT;
 
-#if /*defined(FT20B8) &&*/ !defined(TT_CONFIG_OPTION_BYTECODE_INTERPRETER)
+#if defined(FT20B8) && !defined(TT_CONFIG_OPTION_BYTECODE_INTERPRETER)
     mnLoadFlags |= FT_LOAD_NO_HINTING;  // TODO: enable when AH improves
 #endif
 }
@@ -342,6 +443,8 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, const Ft
 
 FreetypeServerFont::~FreetypeServerFont()
 {
+    mpFontInfo->Unmap();
+
     if( maFaceFT )
         FT_Done_Face( maFaceFT );
 }
@@ -364,19 +467,19 @@ void FreetypeServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor
     rTo.mnLeading           = ((rMetrics.height + 32) >> 6) - (rTo.mnAscent + rTo.mnDescent);
     rTo.mnSlant             = 0;
 
-    rTo.maName              = mrFontInfo.aFontData.maName;
-    rTo.maStyleName         = mrFontInfo.aFontData.maStyleName;
+    rTo.maName              = mpFontInfo->GetFontData().maName;
+    rTo.maStyleName         = mpFontInfo->GetFontData().maStyleName;
 
     rTo.mnFirstChar         = 0x0020;
     rTo.mnLastChar          = 0xFFFE;
 
     rTo.mnOrientation       = GetFontSelData().mnOrientation;
 
-    rTo.meCharSet           = mrFontInfo.aFontData.meCharSet;
-    rTo.meFamily            = mrFontInfo.aFontData.meFamily;
-    rTo.meWeight            = mrFontInfo.aFontData.meWeight;
-    rTo.meItalic            = mrFontInfo.aFontData.meItalic;
-    rTo.mePitch             = mrFontInfo.aFontData.mePitch;
+    rTo.meCharSet           = mpFontInfo->GetFontData().meCharSet;
+    rTo.meFamily            = mpFontInfo->GetFontData().meFamily;
+    rTo.meWeight            = mpFontInfo->GetFontData().meWeight;
+    rTo.meItalic            = mpFontInfo->GetFontData().meItalic;
+    rTo.mePitch             = mpFontInfo->GetFontData().mePitch;
 
     rTo.meType              = TYPE_SCALABLE;
     rTo.mbDevice            = FALSE;
@@ -464,7 +567,7 @@ static void SetTransform( int nSin, int nCos, int nHeight, int nGlyphFlags, FT_G
 
 int FreetypeServerFont::GetGlyphIndex( sal_Unicode aChar ) const
 {
-    if( mrFontInfo.aFontData.meCharSet == RTL_TEXTENCODING_SYMBOL )
+    if( mpFontInfo->GetFontData().meCharSet == RTL_TEXTENCODING_SYMBOL )
         if( FT_IS_SFNT( maFaceFT ) )
             aChar |= 0xF000;    // emulate W2K high/low mapping of symbols
         else {
@@ -708,7 +811,7 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
 ULONG FreetypeServerFont::GetKernPairs( ImplKernPairData** ppKernPairs ) const
 {
     *ppKernPairs = NULL;
-    if( !FT_HAS_KERNING( maFaceFT ) )
+    if( !FT_HAS_KERNING( maFaceFT ) || !FT_IS_SFNT( maFaceFT ) )
         return 0;
 
     // first figure out which glyph pairs are involved in kerning
