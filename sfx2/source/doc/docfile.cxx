@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: dv $ $Date: 2001-08-28 08:58:00 $
+ *  last change: $Author: mba $ $Date: 2001-09-06 07:52:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -770,7 +770,7 @@ SvStream* SfxMedium::GetInStream()
     if ( pInStream )
         return pInStream;
 
-    if ( pImp->pTempFile )
+    if ( pImp->pTempFile || pImp->pTempDir )
     {
         pInStream = new SvFileStream( aName, nStorOpenMode );
 
@@ -836,9 +836,7 @@ SvStream* SfxMedium::GetOutStream()
 
         if ( pImp->pTempFile )
         {
-            INetURLObject aURL( aName, INET_PROT_FILE );
-//            pOutStream = ::utl::UcbStreamHelper::CreateStream( pImp->pTempFile->GetURL(), nStorOpenMode );
-            pOutStream = new SvFileStream( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_STD_READWRITE );
+            pOutStream = new SvFileStream( aName, STREAM_STD_READWRITE );
             CloseStorage();
         }
     }
@@ -929,7 +927,10 @@ sal_Bool SfxMedium::IsStorage()
 
     if ( pImp->pTempFile )
     {
-        pImp->bIsStorage = SotStorage::IsStorageFile( pImp->pTempFile->GetFileName() );
+        String aURL;
+        if ( !::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aURL ) )
+            DBG_ERROR("Physical name not convertable!");
+        pImp->bIsStorage = SotStorage::IsStorageFile( aURL );
         if ( !pImp->bIsStorage )
             bTriedStorage = TRUE;
     }
@@ -1101,10 +1102,11 @@ SvStorage* SfxMedium::GetStorage_Impl( BOOL bUCBStorage )
         return aStorage;
 
     String aStorageName;
-    if ( pImp->pTempFile )
+    if ( pImp->pTempFile || pImp->pTempDir )
     {
         // open storage with the URL of the tempfile
-        aStorageName = pImp->pTempFile->GetURL();
+        if ( !::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aStorageName ) )
+            DBG_ERROR("Physical name not convertable!");
         CloseOutStream();
         aStorage = new SvStorage( bUCBStorage, aStorageName, nStorOpenMode, bDirect ? 0 : STORAGE_TRANSACTED );
     }
@@ -1120,9 +1122,9 @@ SvStorage* SfxMedium::GetStorage_Impl( BOOL bUCBStorage )
                 // packed remote files can't be opened outside the storage, so they must be reopened
                 // inside the storage even if it is expensive
                 pImp->bIsDiskSpannedJAR = TRUE;
-                SfxFilterFlags nMust = SFX_FILTER_IMPORT, nDont = SFX_FILTER_NOTINSTALLED | SFX_FILTER_STARONEFILTER;
                 CloseInStream();
                 aStorage = new SvStorage( TRUE, aStorageName, nStorOpenMode, bDirect ? 0 : STORAGE_TRANSACTED );
+                SfxFilterFlags nMust = SFX_FILTER_IMPORT, nDont = SFX_FILTER_NOTINSTALLED | SFX_FILTER_STARONEFILTER;
                 SetFilter( SFX_APP()->GetFilterMatcher().GetFilter4ClipBoardId( aStorage->GetFormat(), nMust, nDont ) );
             }
             else
@@ -1131,14 +1133,24 @@ SvStorage* SfxMedium::GetStorage_Impl( BOOL bUCBStorage )
                 if ( !pImp->aDoneLink.IsSet() )
                     DownLoad();
 
-                // create a storage on the stream
-                aStorage = new SvStorage( pInStream, FALSE );
-                if ( !aStorage->GetName().Len() )
-                    aStorage->SetName( aStorageName );
+                if ( ::utl::LocalFileHelper::IsLocalFile( aLogicName ) &&
+                    ( bUCBStorage || UCBStorage::IsStorageFile( pInStream ) ) )
+                {
+                    // JAR files can't be created on a stream, ctor with stream copies the stream to a TempFile and opens it
+                    CloseInStream();
+                    aStorage = new SvStorage( TRUE, aStorageName, nStorOpenMode, bDirect ? 0 : STORAGE_TRANSACTED );
+                }
+                else
+                {
+                    // create a storage on the stream
+                    aStorage = new SvStorage( pInStream, FALSE );
+                    if ( !aStorage->GetName().Len() )
+                        aStorage->SetName( aStorageName );
+                }
             }
         }
         else
-            return aStorage;
+            return NULL;
     }
 
     if( GetError() != SVSTREAM_OK )
@@ -1542,7 +1554,6 @@ void SfxMedium::GetMedium_Impl()
             xInteractionHandler = Reference< ::com::sun::star::task::XInteractionHandler > (
                 xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.task.InteractionHandler") ) ), UNO_QUERY );
 
-//        ::utl::UcbLockBytesRef xLockBytes;
         ::utl::UcbLockBytesHandler* pHandler = pImp->aHandler;
         INetProtocol eProt = GetURLObject().GetProtocol();
         if ( eProt != INET_PROT_HTTP && eProt != INET_PROT_FTP )
@@ -2116,7 +2127,9 @@ SfxMedium::~SfxMedium()
     if( pImp->bIsTemp && GetPhysicalName().Len() )
     {
         String aTemp;
-        ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aTemp );
+        if ( !::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aTemp ))
+            DBG_ERROR("Physical name not convertable!");
+
         if ( !::utl::UCBContentHelper::Kill( aTemp ) )
             DBG_ERROR("Couldn't remove temporary file!");
     }
