@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2004-04-13 12:08:59 $
+#   last change: $Author: kz $ $Date: 2004-06-11 12:15:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,6 +67,10 @@ TARGET = deployment_registry_configuration
 ENABLE_EXCEPTIONS = TRUE
 
 .INCLUDE : settings.mk
+
+SRS1NAME = $(TARGET)
+SRC1FILES = \
+        dp_configuration.src
 
 INCPRE += ..$/..$/inc
 
