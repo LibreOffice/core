@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-07 17:28:25 $
+ *  last change: $Author: jp $ $Date: 2001-03-09 13:50:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,9 +99,6 @@
 #endif
 #ifndef _SVDPAGE_HXX
 #include <svx/svdpage.hxx>
-#endif
-#ifndef _SVDTRANS_HXX
-#include <svx/svdtrans.hxx>
 #endif
 #ifndef _OUTLOBJ_HXX
 #include <svx/outlobj.hxx>
@@ -1904,22 +1901,19 @@ void SwEscherEx::WriteOLEFlyFrame( const SwFrmFmt& rFmt, UINT32 nShapeId )
     SwNodeIndex aIdx( *rFmt.GetCntnt().GetCntntIdx(), 1 );
     SwOLENode& rOLENd = *aIdx.GetNode().GetOLENode();
     const SvInPlaceObjectRef xObj( rOLENd.GetOLEObj().GetOleRef() );
-    SvData aData( FORMAT_GDIMETAFILE );
-    GDIMetaFile* pMtf;
 
     const SdrObject* pSdrObj = rFmt.FindRealSdrObject();
-    if( pSdrObj && xObj->GetData( &aData ) &&
-        aData.GetData( &pMtf, TRANSFER_MOVE ) )
+    if( pSdrObj )
     {
+        GDIMetaFile aMtf;
+        xObj->GetGDIMetaFile( aMtf );
         OpenContainer( ESCHER_SpContainer );
 
         AddShape( ESCHER_ShpInst_PictureFrame, 0xa10, nShapeId );
         EscherPropertyContainer aPropOpt;
-        if ( pMtf )
-        {
 /*
             SvMemoryStream aGrfStrm;
-            WriteWindowMetafile( aGrfStrm, *pMtf );
+            WriteWindowMetafile( aGrfStrm, aMtf );
             const BYTE* pMem = (BYTE*)aGrfStrm.GetData();
             UINT32 nLen = aGrfStrm.GetSize();
             Size aSz( rOLENd.GetTwipSize() );
@@ -1927,7 +1921,7 @@ void SwEscherEx::WriteOLEFlyFrame( const SwFrmFmt& rFmt, UINT32 nShapeId )
             aSz.Height() = DrawModelToEmu( aSz.Height() );
             Rectangle aRect( Point(0,0), aSz );
 */
-            Graphic         aGraphic( *pMtf );
+            Graphic         aGraphic( aMtf );
             GraphicObject   aGraphicObject( aGraphic );
             ByteString      aUniqueId = aGraphicObject.GetUniqueID();
             if ( aUniqueId.Len() )
@@ -1946,7 +1940,7 @@ void SwEscherEx::WriteOLEFlyFrame( const SwFrmFmt& rFmt, UINT32 nShapeId )
             }
 //          aPropOpt.AddOpt( ESCHER_Prop_pib, AddWMF( *QueryPicStream(),
 //                                  pMem + 22, nLen - 22, aRect ), TRUE );
-        }
+
         pTxtBxs->Append( *pSdrObj, nShapeId );
         UINT32 nPicId = pTxtBxs->Count();
         nPicId *= 0x10000;
@@ -2316,11 +2310,14 @@ BOOL SwMSConvertControls::ExportControl(Writer &rWrt, const SdrObject *pObj)
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtw8esh.cxx,v 1.9 2001-02-07 17:28:25 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtw8esh.cxx,v 1.10 2001-03-09 13:50:44 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.9  2001/02/07 17:28:25  jp
+      Bug #73759#: WriteFrmExtraData - set right values
+
       Revision 1.8  2001/01/18 10:59:22  cmc
       #82587# Slightly Bizarre word late binding problem solved
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndnotxt.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:17 $
+ *  last change: $Author: jp $ $Date: 2001-03-09 13:53:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,27 +65,41 @@
 
 #pragma hdrstop
 
-#include "hintids.hxx"
+#ifndef _HINTIDS_HXX
+#include <hintids.hxx>
+#endif
 
-#ifndef _IPOBJ_HXX //autogen
+#ifndef _IPOBJ_HXX
 #include <so3/ipobj.hxx>
 #endif
-#ifndef _SV_POLY_HXX //autogen
+#ifndef _SV_POLY_HXX
 #include <vcl/poly.hxx>
 #endif
-#ifndef _CONTDLG_HXX_ //autogen
+#ifndef _CONTDLG_HXX_
 #include <svx/contdlg.hxx>
 #endif
 
 #ifndef _DOCARY_HXX
 #include <docary.hxx>
 #endif
-#include "doc.hxx"
-#include "fmtcol.hxx"
-#include "ndnotxt.hxx"
-#include "ndgrf.hxx"
-#include "ndole.hxx"
-#include "ndindex.hxx"
+#ifndef _DOC_HXX
+#include <doc.hxx>
+#endif
+#ifndef _FMTCOL_HXX
+#include <fmtcol.hxx>
+#endif
+#ifndef _NDNOTXT_HXX
+#include <ndnotxt.hxx>
+#endif
+#ifndef _NDGRF_HXX
+#include <ndgrf.hxx>
+#endif
+#ifndef _NDOLE_HXX
+#include <ndole.hxx>
+#endif
+#ifndef _NDINDEX_HXX
+#include <ndindex.hxx>
+#endif
 
 
 SwNoTxtNode::SwNoTxtNode( const SwNodeIndex & rWhere,
@@ -168,14 +182,8 @@ Graphic SwNoTxtNode::GetGraphic() const
     {
         ASSERT( GetOLENode(), "new type of Node?" );
         SvInPlaceObjectRef xObj( ((SwOLENode*)this)->GetOLEObj().GetOleRef() );
-
-        SvData aData( FORMAT_GDIMETAFILE );
-        if ( xObj->GetData( &aData ) )
-        {
-            GDIMetaFile *pPtr;
-            if ( aData.GetData( &pPtr, TRANSFER_REFERENCE ) )
-                aRet = *pPtr;
-        }
+        GDIMetaFile aMtf;
+        aRet = xObj->GetGDIMetaFile( aMtf );
     }
     return aRet;
 }

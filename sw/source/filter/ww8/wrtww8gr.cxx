@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8gr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-20 13:43:47 $
+ *  last change: $Author: jp $ $Date: 2001-03-09 13:50:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -551,52 +551,38 @@ void SwWW8WrGrf::Write1Grf( SvStream& rStrm, const SwNoTxtNode* pNd,
         ASSERT( pOleNd, " Wer hat den OleNode versteckt ?" );
         SwOLEObj&                   rSObj= pOleNd->GetOLEObj();
         const SvInPlaceObjectRef    rObj(  rSObj.GetOleRef() );
-        SvData                      aData( FORMAT_GDIMETAFILE );
 
-        // das MetaFile wird sich jetzt ueber die SvData-Schnittstelle
-        // besorgt, d.h. SvData-Object anlegen und via GetData
-        // das MetaFile abholen. MakeMetaFile entfaellt,
-        // der Rest ist gleich geblieben (KA 30.09.96)
-        if ( rObj->GetData( &aData ) )
-        {
-            GDIMetaFile* pMtf = NULL;
+        GDIMetaFile aMtf;
+        rObj->GetGDIMetaFile( aMtf );
 
-            if ( aData.GetData( &pMtf, TRANSFER_MOVE ) )
-            {
-                DBG_ASSERT( pMtf, "Wo ist denn nun das MetaFile?" );
-
-                Size aS ( pMtf->GetPrefSize() );
+        Size aS( aMtf.GetPrefSize() );
 #ifdef DEBUG
-                MapMode aMap ( pMtf->GetPrefMapMode() );
-                ASSERT( pMtf->GetActionCount(), "OLE schreiben OK ? ( No Meta-Action )" );
-                ASSERT( pMtf->GetPrefMapMode().GetMapUnit() == MAP_100TH_MM,
-                        "MapMode des Ole ist nicht 1/100mm!" );
+        MapMode aMap ( aMtf.GetPrefMapMode() );
+        ASSERT( aMtf.GetActionCount(), "OLE schreiben OK ? ( No Meta-Action )" );
+        ASSERT( aMtf.GetPrefMapMode().GetMapUnit() == MAP_100TH_MM,
+                "MapMode des Ole ist nicht 1/100mm!" );
 #endif
-                pMtf->WindStart();
-                pMtf->Play( Application::GetDefaultDevice(),
-                            Point( 0, 0 ), Size( 2880, 2880 ) );
-                Write1GrfHdr( rStrm, pNd, pFly, 8, nWidth, nHeight );   // Header
-                WriteWindowMetafileBits( rStrm, *pMtf );                // eigentliche Grafik
+        aMtf.WindStart();
+        aMtf.Play( Application::GetDefaultDevice(),
+                    Point( 0, 0 ), Size( 2880, 2880 ) );
+        Write1GrfHdr( rStrm, pNd, pFly, 8, nWidth, nHeight );   // Header
+        WriteWindowMetafileBits( rStrm, aMtf );             // eigentliche Grafik
 
 #ifdef DEBUG_KA
 
-                if( rWrt.GetIniFlags() & WWFL_KA_DEBUG )
-                {
-                    SvFileStream aS( WW8_ASCII2STR( "d:\\xxx.svm" ), STREAM_WRITE | STREAM_TRUNC );
+        if( rWrt.GetIniFlags() & WWFL_KA_DEBUG )
+        {
+            SvFileStream aS( WW8_ASCII2STR( "d:\\xxx.svm" ), STREAM_WRITE | STREAM_TRUNC );
 
-                    aS << *pMtf;
-                    aS.Close();
+            aS << aMtf;
+            aS.Close();
 
-                    aS.Open( WW8_ASCII2STR( "d:\\xxx.wmf" ), STREAM_WRITE | STREAM_TRUNC  );
-                    WriteWindowMetafile( aS, *pMtf );
-                }
+            aS.Open( WW8_ASCII2STR( "d:\\xxx.wmf" ), STREAM_WRITE | STREAM_TRUNC  );
+            WriteWindowMetafile( aS, aMtf );
+        }
 
 #endif // DEBUG_KA
 
-                // brauchen wir nicht mehr
-                delete pMtf;
-            }
-        }
     }
 
     UINT32 nPos2 = rStrm.Tell();                    // Ende merken
@@ -635,11 +621,14 @@ void SwWW8WrGrf::Write()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtww8gr.cxx,v 1.2 2000-10-20 13:43:47 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtww8gr.cxx,v 1.3 2001-03-09 13:50:44 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2000/10/20 13:43:47  jp
+      use correct INetURL-Decode enum
+
       Revision 1.1.1.1  2000/09/18 17:14:58  hr
       initial import
 
