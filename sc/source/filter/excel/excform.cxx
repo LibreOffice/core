@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:32:04 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 15:00:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,15 +221,17 @@ void ImportExcel::Formula( SCCOL nCol, SCROW nRow, SCTAB nTab,
 
 
 
-ExcelToSc::~ExcelToSc() {}
-
-
-ExcelToSc::ExcelToSc( RootData* pRD, XclImpStream& aStr ) :
-    ExcelConverterBase( aStr, 512 ),
-    ExcRoot( pRD )
+ExcelToSc::ExcelToSc( XclImpStream& rStrm ) :
+    ExcelConverterBase( rStrm, 512 ),
+    XclImpRoot( rStrm.GetRoot() ),
+    maFuncProv( rStrm.GetRoot() ),
+    meBiff( rStrm.GetRoot().GetBiff() )
 {
 }
 
+ExcelToSc::~ExcelToSc()
+{
+}
 
 void ExcelToSc::GetDummy( const ScTokenArray*& pErgebnis )
 {
@@ -290,7 +292,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, UINT32 nFormulaLen, 
             case 0x02: // Data Table                            [325 277]
                 nUINT16 = 3;
 
-                if( pExcRoot->eHauptDateiTyp != Biff2 )
+                if( meBiff != xlBiff2 )
                     nUINT16++;
 
                 aIn.Ignore( nUINT16 );
@@ -415,6 +417,8 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, UINT32 nFormulaLen, 
             }
                 break;
             case 0x12: // Unary Plus                            [312 264]
+                aPool << ocAdd << aStack;
+                aPool >> aStack;
                 break;
             case 0x13: // Unary Minus                           [312 264]
                 aPool << ocNegSub << aStack;
@@ -431,7 +435,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, UINT32 nFormulaLen, 
             case 0x16: // Missing Argument                      [314 266]
                 aPool << ocMissing;
                 aPool >> aStack;
-                pExcRoot->pIR->GetTracer().TraceFormulaMissingArg();
+                GetTracer().TraceFormulaMissingArg();
                 break;
             case 0x17: // String Constant                       [314 266]
                 aIn >> nLen;
@@ -446,7 +450,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, UINT32 nFormulaLen, 
 
                 aIn >> nOpt;
 
-                if( pExcRoot->eHauptDateiTyp == Biff2 )
+                if( meBiff == xlBiff2 )
                 {
                     nData = aIn.ReaduInt8();
                     nFakt = 1;
@@ -467,24 +471,26 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, UINT32 nFormulaLen, 
             }
                 break;
             case 0x1A: // External Reference                    [330    ]
-                switch( pExcRoot->eHauptDateiTyp )
+                switch( meBiff )
                 {
-                    case Biff2: aIn.Ignore( 7 ); break;
-                    case Biff3:
-                    case Biff4: aIn.Ignore( 10 ); break;
-                    case Biff5:
+                    case xlBiff2:   aIn.Ignore( 7 );    break;
+                    case xlBiff3:
+                    case xlBiff4:   aIn.Ignore( 10 );   break;
+                    case xlBiff5:
+                    case xlBiff7:
                         DBG_WARNING( "-ExcelToSc::Convert(): 0x1A gibt's nicht in Biff5!" );
                     default:
                         DBG_WARNING( "-ExcelToSc::Convert(): Ein wenig vergesslich, was?" );
                 }
                 break;
             case 0x1B: // End External Reference                [330    ]
-                switch( pExcRoot->eHauptDateiTyp )
+                switch( meBiff )
                 {
-                    case Biff2: aIn.Ignore( 3 ); break;
-                    case Biff3:
-                    case Biff4: aIn.Ignore( 4 ); break;
-                    case Biff5:
+                    case xlBiff2:   aIn.Ignore( 3 );    break;
+                    case xlBiff3:
+                    case xlBiff4:   aIn.Ignore( 4 );    break;
+                    case xlBiff5:
+                    case xlBiff7:
                         DBG_WARNING( "-ExcelToSc::Convert(): 0x1B gibt's nicht in Biff5!" );
                     default:
                         DBG_WARNING( "-ExcelToSc::Convert(): Ein wenig vergesslich, was?" );
@@ -538,47 +544,53 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, UINT32 nFormulaLen, 
             case 0x41:
             case 0x61:
             case 0x21: // Function, Fixed Number of Arguments   [333 282]
-                if( pExcRoot->eHauptDateiTyp == Biff2 ||
-                    pExcRoot->eHauptDateiTyp == Biff3 )
-                    nIndexToFunc = aIn.ReaduInt8();
+            {
+                sal_uInt16 nXclFunc;
+                if( meBiff <= xlBiff3 )
+                    nXclFunc = aIn.ReaduInt8();
                 else
-                    aIn >> nIndexToFunc;
-
-                DoDefArgs( nIndexToFunc );
-                break;
+                    aIn >> nXclFunc;
+                if( const XclFunctionInfo* pFuncInfo = maFuncProv.GetFuncInfoFromXclFunc( nXclFunc ) )
+                    DoMulArgs( pFuncInfo->meOpCode, pFuncInfo->mnMaxParamCount );
+                else
+                    DoMulArgs( ocNoName, 0 );
+            }
+            break;
             case 0x42:
             case 0x62:
             case 0x22: // Function, Variable Number of Arg.     [333 283]
             {
-                BYTE nAnz;
-                aIn >> nAnz;
-                nAnz &= 0x7F;
-
-                if( pExcRoot->eHauptDateiTyp == Biff2 ||
-                    pExcRoot->eHauptDateiTyp == Biff3 )
-                    nIndexToFunc = aIn.ReaduInt8();
+                sal_uInt16 nXclFunc;
+                sal_uInt8 nParamCount;
+                aIn >> nParamCount;
+                nParamCount &= 0x7F;
+                if( meBiff <= xlBiff3 )
+                    nXclFunc = aIn.ReaduInt8();
                 else
-                    aIn >> nIndexToFunc;
-
-                DoMulArgs( IndexToToken( nIndexToFunc ), nAnz );
+                    aIn >> nXclFunc;
+                if( const XclFunctionInfo* pFuncInfo = maFuncProv.GetFuncInfoFromXclFunc( nXclFunc ) )
+                    DoMulArgs( pFuncInfo->meOpCode, nParamCount );
+                else
+                    DoMulArgs( ocNoName, 0 );
             }
-                break;
+            break;
             case 0x43:
             case 0x63:
             case 0x23: // Name                                  [318 269]
             {
                 aIn >> nUINT16;
-                switch( pExcRoot->eHauptDateiTyp )
+                switch( meBiff )
                 {
-                    case Biff2: aIn.Ignore( 5 ); break;
-                    case Biff3:
-                    case Biff4: aIn.Ignore( 8 ); break;
-                    case Biff5: aIn.Ignore( 12 ); break;
+                    case xlBiff2:   aIn.Ignore( 5 );    break;
+                    case xlBiff3:
+                    case xlBiff4:   aIn.Ignore( 8 );    break;
+                    case xlBiff5:
+                    case xlBiff7:   aIn.Ignore( 12 );   break;
                     default:
                         DBG_ERROR(
                         "-ExcelToSc::Convert(): Ein wenig vergesslich, was?" );
                 }
-                const XclImpName* pName = pExcRoot->pIR->GetNameBuffer().GetNameFromIndex(nUINT16);
+                const XclImpName* pName = GetNameBuffer().GetNameFromIndex(nUINT16);
                 if(pName && !pName->GetScRangeData())
                     aStack << aPool.Store( ocMacro, pName->GetXclName() );
                 else
@@ -658,35 +670,22 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, UINT32 nFormulaLen, 
             case 0x46:
             case 0x66:
             case 0x26: // Constant Reference Subexpression      [321 271]
-                aIn.Ignore( 6 );        // mehr steht da nicht!
+                aIn.Ignore( 6 );
                 break;
             case 0x47:
             case 0x67:
             case 0x27: // Erroneous Constant Reference Subexpr. [322 272]
-                if( pExcRoot->eHauptDateiTyp == Biff2 )
-                    aIn.Ignore( 4 );    // mehr steht da nicht!
-                else
-                    aIn.Ignore( 6 );    // mehr steht da nicht!
-                aPool << ocBad;
-                aPool >> aStack;
+                aIn.Ignore( (meBiff == xlBiff2) ? 4 : 6 );
                 break;
             case 0x48:
             case 0x68:
             case 0x28: // Incomplete Constant Reference Subexpr.[331 281]
-                if( pExcRoot->eHauptDateiTyp == Biff2 )
-                    aIn.Ignore( 4 );    // mehr steht da nicht!
-                else
-                    aIn.Ignore( 6 );    // mehr steht da nicht!
-                aPool << ocBad;
-                aPool >> aStack;
+                aIn.Ignore( (meBiff == xlBiff2) ? 4 : 6 );
                 break;
             case 0x49:
             case 0x69:
             case 0x29: // Variable Reference Subexpression      [331 281]
-                if( pExcRoot->eHauptDateiTyp == Biff2 )
-                    aIn.Ignore( 1 );    // mehr steht da nicht!
-                else
-                    aIn.Ignore( 2 );    // mehr steht da nicht!
+                aIn.Ignore( (meBiff == xlBiff2) ? 1 : 2 );
                 break;
             case 0x4C:
             case 0x6C:
@@ -733,22 +732,12 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, UINT32 nFormulaLen, 
             case 0x4E:
             case 0x6E:
             case 0x2E: // Reference Subexpression Within a Name [332 282]
-                if( pExcRoot->eHauptDateiTyp == Biff2 )
-                    aIn.Ignore( 1 );    // mehr steht da nicht!
-                else
-                    aIn.Ignore( 2 );    // mehr steht da nicht!
-                aPool << ocBad;
-                aPool >> aStack;
+                aIn.Ignore( (meBiff == xlBiff2) ? 1 : 2 );
                 break;
             case 0x4F:
             case 0x6F:
             case 0x2F: // Incomplete Reference Subexpression... [332 282]
-                if( pExcRoot->eHauptDateiTyp == Biff2 )
-                    aIn.Ignore( 1 );    // mehr steht da nicht!
-                else
-                    aIn.Ignore( 2 );    // mehr steht da nicht!
-                aPool << ocBad;
-                aPool >> aStack;
+                aIn.Ignore( (meBiff == xlBiff2) ? 1 : 2 );
                 break;
             case 0x58:
             case 0x78:
@@ -769,21 +758,21 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, UINT32 nFormulaLen, 
                 if( nINT16 >= 0 )
                 {
                     const ExtName*  pExtName;
-                    pExtName = pExcRoot->pExtNameBuff->GetName( nUINT16 );
+                    pExtName = mpRD->pExtNameBuff->GetName( nUINT16 );
                     if( pExtName && pExtName->IsDDE() &&
-                        pExcRoot->pExtSheetBuff->IsLink( ( UINT16 ) nINT16 ) )
+                        mpRD->pExtSheetBuff->IsLink( ( UINT16 ) nINT16 ) )
                     {
                         String          aAppl, aExtDoc;
                         TokenId         nPar1, nPar2;
 
-                        pExcRoot->pExtSheetBuff->GetLink( ( UINT16 ) nINT16 , aAppl, aExtDoc );
+                        mpRD->pExtSheetBuff->GetLink( ( UINT16 ) nINT16 , aAppl, aExtDoc );
                         nPar1 = aPool.Store( aAppl );
                         nPar2 = aPool.Store( aExtDoc );
                         nMerk0 = aPool.Store( pExtName->aName );
                         aPool   << ocDde << ocOpen << nPar1 << ocSep << nPar2 << ocSep
                                 << nMerk0 << ocClose;
 
-                        pExcRoot->pDoc->CreateDdeLink( aAppl, aExtDoc, pExtName->aName, SC_DDE_DEFAULT );
+                        GetDoc().CreateDdeLink( aAppl, aExtDoc, pExtName->aName, SC_DDE_DEFAULT );
                     }
                     else
                         aPool << ocBad;
@@ -811,7 +800,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, UINT32 nFormulaLen, 
 
                 if( nExtSheet >= 0 )
                 {   // von extern
-                    if( pExcRoot->pExtSheetBuff->GetScTabIndex( nExtSheet, nTabLast ) )
+                    if( mpRD->pExtSheetBuff->GetScTabIndex( nExtSheet, nTabLast ) )
                     {
                         nTabFirst = nTabLast;
                         nExtSheet = 0;      // gefunden
@@ -826,7 +815,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, UINT32 nFormulaLen, 
 
                 if( nExtSheet <= 0 )
                 {   // in aktuellem Workbook
-                    BOOL        b3D = ( static_cast<SCTAB>(nTabFirst) != aEingPos.Tab() ) || bRangeName;
+                    BOOL    b3D = ( static_cast<SCTAB>(nTabFirst) != aEingPos.Tab() ) || bRangeName;
                     aSRD.nTab = static_cast<SCTAB>(nTabFirst);
                     aSRD.SetFlag3D( b3D );
                     aSRD.SetTabRel( FALSE );
@@ -882,7 +871,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, UINT32 nFormulaLen, 
                 if( nExtSheet >= 0 )
                     // von extern
                 {
-                    if( pExcRoot->pExtSheetBuff->GetScTabIndex( nExtSheet, nTabLast ) )
+                    if( mpRD->pExtSheetBuff->GetScTabIndex( nExtSheet, nTabLast ) )
                     {
                         nTabFirst = nTabLast;
                         nExtSheet = 0;      // gefunden
@@ -1021,19 +1010,11 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, UINT32 nFormulaLen, co
         {           //                                      SDK4 SDK5
             case 0x01: // Array Formula                         [325    ]
                        // Array Formula or Shared Formula       [    277]
-                if( pExcRoot->eHauptDateiTyp == Biff2 )
-                    nIgnore = 3;
-                else
-                    nIgnore = 4;
+                nIgnore = (meBiff == xlBiff2) ? 3 : 4;
                 bArrayFormula = TRUE;
                 break;
             case 0x02: // Data Table                            [325 277]
-            {
-                if( pExcRoot->eHauptDateiTyp == Biff2 )
-                    nIgnore = 3;
-                else
-                    nIgnore = 4;
-            }
+                nIgnore = (meBiff == xlBiff2) ? 3 : 4;
                 break;
             case 0x03: // Addition                              [312 264]
             case 0x04: // Subtraction                           [313 264]
@@ -1067,7 +1048,7 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, UINT32 nFormulaLen, co
 
                 aIn >> nOpt;
 
-                if( pExcRoot->eHauptDateiTyp == Biff2 )
+                if( meBiff == xlBiff2 )
                 {
                     nData = aIn.ReaduInt8();
                     nFakt = 1;
@@ -1086,23 +1067,25 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, UINT32 nFormulaLen, co
             }
                 break;
             case 0x1A: // External Reference                    [330    ]
-                switch( pExcRoot->eHauptDateiTyp )
+                switch( meBiff )
                 {
-                    case Biff2: nIgnore = 7;        break;
-                    case Biff3:
-                    case Biff4: nIgnore = 10;       break;
-                    case Biff5: DBG_WARNING( "-ExcelToSc::Convert(): 0x1A gibt's nicht in Biff5!" );
-                    default:    DBG_WARNING( "-ExcelToSc::Convert(): Ein wenig vergesslich, was?" );
+                    case xlBiff2:   nIgnore = 7;    break;
+                    case xlBiff3:
+                    case xlBiff4:   nIgnore = 10;   break;
+                    case xlBiff5:
+                    case xlBiff7:   DBG_WARNING( "-ExcelToSc::Convert(): 0x1A gibt's nicht in Biff5!" );
+                    default:        DBG_WARNING( "-ExcelToSc::Convert(): Ein wenig vergesslich, was?" );
                 }
                 break;
             case 0x1B: // End External Reference                [330    ]
-                switch( pExcRoot->eHauptDateiTyp )
+                switch( meBiff )
                 {
-                    case Biff2: nIgnore = 3;        break;
-                    case Biff3:
-                    case Biff4: nIgnore = 4;        break;
-                    case Biff5: DBG_WARNING( "-ExcelToSc::Convert(): 0x1B gibt's nicht in Biff5!" );
-                    default:    DBG_WARNING( "-ExcelToSc::Convert(): Ein wenig vergesslich, was?" );
+                    case xlBiff2:   nIgnore = 3;        break;
+                    case xlBiff3:
+                    case xlBiff4:   nIgnore = 4;        break;
+                    case xlBiff5:
+                    case xlBiff7:   DBG_WARNING( "-ExcelToSc::Convert(): 0x1B gibt's nicht in Biff5!" );
+                    default:        DBG_WARNING( "-ExcelToSc::Convert(): Ein wenig vergesslich, was?" );
                 }
                 break;
             case 0x1C: // Error Value                           [314 266]
@@ -1113,7 +1096,7 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, UINT32 nFormulaLen, co
                 nIgnore = 2;
                 break;
             case 0x1F: // Number                                [315 266]
-                nIgnore = sizeof( double );
+                nIgnore = 8;
                 break;
             case 0x40:
             case 0x60:
@@ -1123,29 +1106,24 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, UINT32 nFormulaLen, co
             case 0x41:
             case 0x61:
             case 0x21: // Function, Fixed Number of Arguments   [333 282]
-                if( pExcRoot->eHauptDateiTyp == Biff2 || pExcRoot->eHauptDateiTyp == Biff3 )
-                    nIgnore = 1;
-                else
-                    nIgnore = 2;
+                nIgnore = (meBiff <= xlBiff3) ? 1 : 2;
                 break;
             case 0x42:
             case 0x62:
             case 0x22: // Function, Variable Number of Arg.     [333 283]
-                if( pExcRoot->eHauptDateiTyp == Biff2 || pExcRoot->eHauptDateiTyp == Biff3 )
-                    nIgnore = 2;
-                else
-                    nIgnore = 3;
+                nIgnore = (meBiff <= xlBiff3) ? 2 : 3;
                 break;
             case 0x43:
             case 0x63:
             case 0x23: // Name                                  [318 269]
-                switch( pExcRoot->eHauptDateiTyp )
+                switch( meBiff )
                 {
-                    case Biff2: nIgnore = 7;        break;
-                    case Biff3:
-                    case Biff4: nIgnore = 10;       break;
-                    case Biff5: nIgnore = 14;       break;
-                    default:    DBG_ERROR( "-ExcelToSc::Convert(): Ein wenig vergesslich, was?" );
+                    case xlBiff2:   nIgnore = 7;    break;
+                    case xlBiff3:
+                    case xlBiff4:   nIgnore = 10;   break;
+                    case xlBiff5:
+                    case xlBiff7:   nIgnore = 14;   break;
+                    default:        DBG_ERROR( "-ExcelToSc::Convert(): Ein wenig vergesslich, was?" );
                 }
                 break;
             case 0x44:
@@ -1201,18 +1179,12 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, UINT32 nFormulaLen, co
             case 0x48:
             case 0x68:
             case 0x28: // Incomplete Constant Reference Subexpr.[331 281]
-                if( pExcRoot->eHauptDateiTyp == Biff2 )
-                    nIgnore = 4;
-                else
-                    nIgnore = 6;
+                nIgnore = (meBiff == xlBiff2) ? 4 : 6;
                 break;
             case 0x49:
             case 0x69:
             case 0x29: // Variable Reference Subexpression      [331 281]
-                if( pExcRoot->eHauptDateiTyp == Biff2 )
-                    nIgnore = 1;
-                else
-                    nIgnore = 2;
+                nIgnore = (meBiff == xlBiff2) ? 1 : 2;
                 break;
             case 0x4A:
             case 0x6A:
@@ -1272,10 +1244,7 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, UINT32 nFormulaLen, co
             case 0x4F:
             case 0x6F:
             case 0x2F: // Incomplete Reference Subexpression... [332 282]
-                if( pExcRoot->eHauptDateiTyp == Biff2 )
-                    nIgnore = 1;
-                else
-                    nIgnore = 2;
+                nIgnore = (meBiff == xlBiff2) ? 1 : 2;
                 break;
             case 0x58:
             case 0x78:
@@ -1302,7 +1271,7 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, UINT32 nFormulaLen, co
                 if( nExtSheet >= 0 )
                     // von extern
                 {
-                    if( pExcRoot->pExtSheetBuff->GetScTabIndex( nExtSheet, nTabLast ) )
+                    if( mpRD->pExtSheetBuff->GetScTabIndex( nExtSheet, nTabLast ) )
                     {
                         nTabFirst = nTabLast;
                         nExtSheet = 0;      // gefunden
@@ -1357,7 +1326,7 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, UINT32 nFormulaLen, co
                 if( nExtSheet >= 0 )
                     // von extern
                 {
-                    if( pExcRoot->pExtSheetBuff->GetScTabIndex( nExtSheet, nTabLast ) )
+                    if( mpRD->pExtSheetBuff->GetScTabIndex( nExtSheet, nTabLast ) )
                     {
                         nTabFirst = nTabLast;
                         nExtSheet = 0;      // gefunden
@@ -1522,832 +1491,6 @@ void ExcelToSc::DoMulArgs( DefTokenId eId, BYTE nAnz )
 }
 
 
-DefTokenId ExcelToSc::IndexToToken( UINT16 nIndex )
-{
-    static const DefTokenId pMap[ nLastInd + 1 ] =
-    {
-        ocCount,            // XlfCount         0
-        ocIf,               // XlfIf
-        ocIsNV,             // XlfIsna
-        ocIsError,          // XlfIserror
-        ocSum,              // XlfSum
-        ocAverage,          // XlfAverage
-        ocMin,              // XlfMin
-        ocMax,              // XlfMax
-        ocRow,
-        ocColumn,
-        ocNoValue,          // XlfNa
-        ocNBW,              // XlfNpv
-        ocStDev,            // XlfStdev
-        ocCurrency,         // XlfDollar
-        ocFixed,            // XlfFixed
-        ocSin,              // XlfSin
-        ocCos,              // XlfCos
-        ocTan,              // XlfTan
-        ocArcTan,           // XlfAtan
-        ocPi,               // XlfPi
-        ocSqrt,             // XlfSqrt
-        ocExp,              // XlfExp
-        ocLn,               // XlfLn
-        ocLog10,            // XlfLog10
-        ocAbs,              // XlfAbs
-        ocInt,              // XlfInt
-        ocPlusMinus,        // XlfSign
-        ocRound,            // XlfRound
-        ocLookup,           // XlfLookup
-        ocIndex,            // XlfIndex
-        ocRept,             // XlfRept
-        ocMid,              // XlfMid
-        ocLen,              // XlfLen
-        ocValue,            // XlfValue
-        ocTrue,             // XlfTrue
-        ocFalse,            // XlfFalse
-        ocAnd,              //          *
-        ocOr,               //          *
-        ocNot,              //          *
-        ocMod,              // XlfMod
-        ocDBCount,          // XlfDcount
-        ocDBSum,            // XlfDsum
-        ocDBAverage,        // XlfDaverage
-        ocDBMin,            // XlfDmin
-        ocDBMax,            // XlfDmax
-        ocDBStdDev,         // XlfDstdev
-        ocVar,              // XlfVar
-        ocDBVar,            // XlfDvar
-        ocText,             // XlfText
-        ocRGP,              // XlfLinest
-        ocTrend,            // XlfTrend
-        ocRKP,              // XlfLogest
-        ocGrowth,           // XlfGrowth
-        ocNoName,           // XlfGoto
-        ocNoName,           // XlfHalt
-        ocNoName,           // ?
-        ocBW,               // XlfPv
-        ocZW,               // XlfFv
-        ocZZR,              // XlfNper
-        ocRMZ,              // XlfPmt
-        ocZins,             // XlfRate
-        ocMIRR,             // XlfMirr
-        ocIKV,              // XlfIrr
-        ocRandom,           // XlfRand
-        ocMatch,            // XlfMatch
-        ocGetDate,          // XlfDate
-        ocGetTime,          // XlfTime
-        ocGetDay,           // XlfDay
-        ocGetMonth,         // XlfMonth
-        ocGetYear,          // XlfYear
-        ocGetDayOfWeek,     // XlfWeekday
-        ocGetHour,          // XlfHour
-        ocGetMin,           // XlfMinute
-        ocGetSec,           // XlfSecond
-        ocGetActTime,       // XlfNow
-        ocAreas,            // XlfAreas
-        ocRows,             // XlfRows
-        ocColumns,          // XlfColumns
-        ocOffset,           // XlfOffset
-        ocNoName,           // XlfAbsref
-        ocNoName,           // XlfRelref
-        ocNoName,           // XlfArgument
-        ocSearch,           // XlfSearch
-        ocMatTrans,         // XlfTranspose
-        ocNoName,           // XlfError
-        ocNoName,           // XlfStep
-        ocType,             // XlfType
-        ocNoName,           // XlfEcho
-        ocNoName,           // XlfSetName
-        ocNoName,           // XlfCaller
-        ocNoName,           // XlfDeref
-        ocNoName,           // XlfWindows
-        ocNoName,           // XlfSeries
-        ocNoName,           // XlfDocuments
-        ocNoName,           // XlfActiveCell
-        ocNoName,           // XlfSelection
-        ocNoName,           // XlfResult
-        ocArcTan2,          // XlfAtan2
-        ocArcSin,           // XlfAsin
-        ocArcCos,           // XlfAcos
-        ocChose,            // XlfChose
-        ocHLookup,          // XlfHlookup
-        ocVLookup,          // XlfVlookup
-        ocNoName,           // XlfLinks
-        ocNoName,           // XlfInput
-        ocIsRef,            // XlfIsref
-        ocNoName,           // XlfGetFormula
-        ocNoName,           // XlfGetName
-        ocNoName,           // XlfSetValue
-        ocLog10,            // XlfLog
-        ocNoName,           // XlfExec
-        ocChar,             // XlfChar
-        ocLower,            // XlfLower
-        ocUpper,            // XlfUpper
-        ocPropper,          // XlfProper
-        ocLeft,             // XlfLeft
-        ocRight,            // XlfRight
-        ocExact,            // XlfExact
-        ocTrim,             // XlfTrim
-        ocReplace,          // XlfReplace
-        ocSubstitute,       // XlfSubstitute
-        ocCode,             // XlfCode
-        ocNoName,           // XlfNames
-        ocNoName,           // XlfDirectory
-        ocFind,             // XlfFind
-        ocCell,             // XlfCell
-        ocIsErr,            // XlfIserr
-        ocIsString,         // XlfIstext
-        ocIsValue,          // XlfIsnumber
-        ocIsEmpty,          // XlfIsblank
-        ocT,                // XlfT
-        ocN,                // XlfN
-        ocNoName,           // XlfFopen
-        ocNoName,           // XlfFclose
-        ocNoName,           // XlfFsize
-        ocNoName,           // XlfFreadln
-        ocNoName,           // XlfFread
-        ocNoName,           // XlfFwriteln
-        ocNoName,           // XlfFwrite
-        ocNoName,           // XlfFpos
-        ocGetDateValue,     // XlfDatevalue
-        ocGetTimeValue,     // XlfTimevalue
-        ocLIA,              // XlfSln
-        ocDIA,              // XlfSyd
-        ocGDA,              // XlfDdb
-        ocNoName,           // XlfGetDef
-        ocNoName,           // XlfReftext
-        ocNoName,           // XlfTextref
-        ocIndirect,         // XlfIndirect
-        ocNoName,           // XlfRegister
-        ocNoName,           // XlfCall
-        ocNoName,           // XlfAddBar
-        ocNoName,           // XlfAddMenu
-        ocNoName,           // XlfAddCommand
-        ocNoName,           // XlfEnableCommand
-        ocNoName,           // XlfCheckCommand
-        ocNoName,           // XlfRenameCommand
-        ocNoName,           // XlfShowBar
-        ocNoName,           // XlfDeleteMenu
-        ocNoName,           // XlfDeleteCommand
-        ocNoName,           // XlfGetChartItem
-        ocNoName,           // XlfDialogBox
-        ocClean,            // XlfClean
-        ocMatDet,           // XlfMdeterm
-        ocMatInv,           // XlfMinverse
-        ocMatMult,          // XlfMmult
-        ocNoName,           // XlfFiles
-        ocZinsZ,            // XlfIpmt
-        ocKapz,             // XlfPpmt
-        ocCount2,           // XlfCounta
-        ocNoName,           // XlfCancelKey
-        ocNoName,           // ?
-        ocNoName,           // XlfAppMin
-        ocNoName,           // XlfAppMax
-        ocNoName,           // XlfBringToFront
-        ocNoName,           // XlfInitiate
-        ocNoName,           // XlfRequest
-        ocNoName,           // XlfPoke
-        ocNoName,           // XlfExecute
-        ocNoName,           // XlfTerminate
-        ocNoName,           // XlfRestart
-        ocNoName,           // XlfHelp
-        ocNoName,           // XlfGetBar
-        ocProduct,          // XlfProduct
-        ocFact,             // XlfFact
-        ocNoName,           // XlfGetCell
-        ocNoName,           // XlfGetWorkspace
-        ocNoName,           // XlfGetWindow
-        ocNoName,           // XlfGetDocument
-        ocDBProduct,        // XlfDproduct
-        ocIsNonString,      // XlfIsnontext
-        ocNoName,           // XlfGetNote,
-        ocNoName,           // XlfNote
-        ocStDevP,           // XlfStdevp
-        ocVarP,             // XlfVarp
-        ocDBStdDevP,        // XlfDstdevp
-        ocDBVarP,           // XlfDvarp
-        ocTrunc,            // XlfTrunc
-        ocIsLogical,        // XlfIslogical
-        ocDBCount2,         // XlfDcounta
-        ocNoName,           // XlfDeleteBar
-        ocNoName,           // XlfUnregister
-        ocNoName,           // ?
-        ocNoName,           // ?
-        ocNoName,           // XlfUsdollar
-        ocNoName,           // XlfFindb
-        ocNoName,           // XlfSearchb
-        ocNoName,           // XlfReplaceb
-        ocNoName,           // XlfLeftb
-        ocNoName,           // XlfRightb
-        ocNoName,           // XlfMidb
-        ocNoName,           // XlfLenb
-        ocRoundUp,          // XlfRoundup
-        ocRoundDown,        // XlfRounddown
-        ocNoName,           // XlfAsc
-        ocNoName,           // XlfDbcs
-        ocRank,             // XlfRank
-        ocNoName,           // ?
-        ocNoName,           // ?
-        ocAdress,           // XlfAddress
-        ocGetDiffDate360,   // XlfDays360
-        ocGetActDate,       // XlfToday
-        ocVBD,              // XlfVdb
-        ocNoName,           // XlfEditColor
-        ocNoName,           // XlfShowLevels
-        ocNoName,           // XlfFormatMain
-        ocNoName,           // ?
-        ocMedian,           // XlfMedian
-        ocSumProduct,       // XlfSumproduct
-        ocSinHyp,           // XlfSinh
-        ocCosHyp,           // XlfCosh
-        ocTanHyp,           // XlfTanh
-        ocArcSinHyp,        // XlfAsinh
-        ocArcCosHyp,        // XlfAcosh
-        ocArcTanHyp,        // XlfAtanh
-        ocDBGet,            // XlfDget
-        ocNoName,           // XlfCreateObject
-        ocNoName,           // XlfVolatile
-        ocNoName,           // XlfLastError
-        ocNoName,           // XlfCustomUndo
-        ocNoName,           // XlfCustomRepeat
-        ocNoName,           // XlfFormulaConvert
-        ocNoName,           // XlfGetLinkInfo
-        ocNoName,           // XlfTextBox
-        ocNoName,           // XlfInfo
-        ocNoName,           // XlfGroup
-        ocNoName,           // XlfGetObject
-        ocGDA2,             // XlfDb
-        ocNoName,           // XlfPause
-        ocNoName,           // ?
-        ocNoName,           // ?
-        ocNoName,           // XlfResume
-        ocFrequency,        // XlfFrequency
-        ocNoName,           // XlfAddToolbar
-        ocNoName,           // XlfDeleteToolbar
-        ocExternal,         // Add In
-        ocNoName,           // XlfResetToolbar
-        ocNoName,           // XlfEvaluate
-        ocNoName,           // XlfGetToolbar
-        ocNoName,           // XlfGetTool
-        ocNoName,           // XlfSpellingCheck
-        ocErrorType,        // XlfErrorType
-        ocNoName,           // XlfAppTitle
-        ocNoName,           // XlfWindowTitle
-        ocNoName,           // XlfSaveToolbar
-        ocNoName,           // XlfEnableTool
-        ocNoName,           // XlfPressTool
-        ocNoName,           // XlfRegisterId
-        ocNoName,           // XlfGetWorkbook
-        ocAveDev,           // XlfAvedev
-        ocBetaDist,         // XlfBetadist
-        ocGammaLn,          // XlfGammaln
-        ocBetaInv,          // XlfBetainv
-        ocBinomDist,        // XlfBinomdist
-        ocChiDist,          // XlfChidist
-        ocChiInv,           // XlfChiinv
-        ocKombin,           // XlfCombin
-        ocConfidence,       // XlfConfidence
-        ocKritBinom,        // XlfCritbinom
-        ocEven,             // XlfEven
-        ocExpDist,          // XlfExpondist
-        ocFDist,            // XlfFdist
-        ocFInv,             // XlfFinv
-        ocFisher,           // XlfFisher
-        ocFisherInv,        // XlfFisherinv
-        ocFloor,            // XlfFloor
-        ocGammaDist,        // XlfGammadist
-        ocGammaInv,         // XlfGammainv
-        ocCeil,             // XlfCeiling
-        ocHypGeomDist,      // XlfHypgeomdist
-        ocLogNormDist,      // XlfLognormdist
-        ocLogInv,           // XlfLoginv
-        ocNegBinomVert,     // XlfNegbinomdist
-        ocNormDist,         // XlfNormdist
-        ocStdNormDist,      // XlfNormsdist
-        ocNormInv,          // XlfNorminv
-        ocSNormInv,         // XlfNormsinv
-        ocStandard,         // XlfStandardize
-        ocOdd,              // XlfOdd
-        ocVariationen,      // XlfPermut
-        ocPoissonDist,      // XlfPoisson
-        ocTDist,            // XlfTdist
-        ocWeibull,          // XlfWeibull
-        ocSumXMY2,          // XlfSumxmy2
-        ocSumX2MY2,         // XlfSumx2my2
-        ocSumX2DY2,         // XlfSumx2py2
-        ocChiTest,          // XlfChitest
-        ocCorrel,           // XlfCorrel
-        ocCovar,            // XlfCovar
-        ocForecast,         // XlfForecast
-        ocFTest,            // XlfFtest
-        ocIntercept,        // XlfIntercept
-        ocPearson,          // XlfPearson
-        ocRSQ,              // XlfRsq
-        ocSTEYX,            // XlfSteyx
-        ocSlope,            // XlfSlope
-        ocTTest,            // XlfTtest
-        ocProb,             // XlfProb
-        ocDevSq,            // XlfDevsq
-        ocGeoMean,          // XlfGeomean
-        ocHarMean,          // XlfHarmean
-        ocSumSQ,            // XlfSumsq
-        ocKurt,             // XlfKurt
-        ocSchiefe,          // XlfSkew
-        ocZTest,            // XlfZtest,
-        ocLarge,            // XlfLarge
-        ocSmall,            // XlfSmall
-        ocQuartile,         // XlfQuartile
-        ocPercentile,       // XlfPercentile
-        ocPercentrank,      // XlfPercentrank
-        ocModalValue,       // XlfMode
-        ocTrimMean,         // XlfTrimmean
-        ocTInv,             // XlfTinv
-        ocNoName,           // ?
-        ocNoName,           // XlfMovieCommand
-        ocNoName,           // XlfGetMovie
-        ocConcat,           // XlfConcatenate
-        ocPower,            // XlfPower
-        ocNoName,           // XlfPivotAddData
-        ocNoName,           // XlfGetPivotTable
-        ocNoName,           // XlfGetPivotField
-        ocNoName,           // XlfGetPivotItem
-        ocRad,              // XlfRadians
-        ocDeg,              // XlfDegrees
-        ocSubTotal,         // XlfSubtotal
-        ocSumIf,            // XlfSumif
-        ocCountIf,          // XlfCountif
-        ocCountEmptyCells,  // XlfCountblank
-        ocNoName,           // XlfScenarioGet
-        ocNoName,           // XlfOptionsListsGet
-        ocISPMT,            // XlfIspmt
-        ocNoName,           // XlfDatedif
-        ocNoName,           // XlfDatestring
-        ocNoName,           // XlfNumberstring
-        ocRoman,            // XlfRoman
-        ocNoName,           // XlfOpenDialog
-        ocNoName,           // XlfSaveDialog            356
-        ocNoName,           //
-        ocNoName,           //
-        ocHyperLink,                // HYPERLINK #359
-        ocNoName,           //                          360
-        ocAverageA,         // MITTELWERTA
-        ocMaxA,             // MAXA
-        ocMinA,             // MINA
-        ocStDevPA,          // STABWNA
-        ocVarPA,            // VARIANZENA               365
-        ocStDevA,           // STABWA
-        ocVarA,             // VARIANZA
-        ocNoName,           //
-        ocNoName,           //
-        ocNoName,           //  370
-        ocNoName,           //
-        ocNoName,           //
-        ocNoName,           //
-        ocNoName,           //
-        ocNoName,           //  375
-        ocNoName,           //
-        ocNoName,           //
-        ocNoName,           //
-        ocNoName,           //
-        ocNoName,           //  380
-        ocNoName,           //
-        ocNoName,           //
-        ocNoName,           //
-        ocNoName,           //
-        ocNoName,           //  385
-        ocNoName,           //
-        ocNoName,           //
-        ocNoName,           //
-        ocNoName,           //
-        ocNoName,           //  390
-        ocNoName,           //
-        ocNoName,           //
-        ocNoName,           //
-        ocNoName,           //
-        ocNoName,           //  395
-        ocNoName,           //
-        ocNoName,           //
-        ocNoName,           //
-        ocNoName            //  399
-    };
-
-    if( nIndex <= nLastInd )
-        return pMap[ nIndex ];
-    else
-        return ocNoName;
-}
-
-
-BYTE ExcelToSc::IndexToAnzahl( UINT16 nIndex )
-{
-    static const BYTE pMap[ nLastInd + 1 ] =
-    {
-        0,      // XlfCount
-        0,      // ##XlfIf##
-        1,      // XlfIsna
-        1,      // XlfIserror
-        1,      // XlfSum
-        1,      // XlfAverage
-        1,      // XlfMin
-        1,      // XlfMax
-        1,      // XlfRow
-        1,      // XlfColumn
-        0,      // XlfNa
-        0,      // XlfNpv
-        0,      // XlfStdev
-        2,      // XlfDollar
-        3,      // XlfFixed
-        1,      // XlfSin
-        1,      // XlfCos
-        1,      // XlfTan
-        1,      // XlfAtan
-        0,      // XlfPi
-        1,      // XlfSqrt
-        1,      // XlfExp
-        1,      // XlfLn
-        1,      // XlfLog10
-        1,      // XlfAbs
-        1,      // XlfInt
-        1,      // XlfSign
-        2,      // XlfRound
-        0,      // XlfLookup
-        0,      // XlfIndex
-        2,      // XlfRept
-        3,      // XlfMid
-        1,      // XlfLen
-        1,      // XlfValue
-        0,      // XlfTrue
-        0,      // XlfFalse
-        0,      // XlfAnd           *Parmeter n-Stueck?
-        0,      // XlfOr            *
-        1,      // XlfNot
-        2,      // XlfMod
-        3,      // XlfDcount
-        3,      // XlfDsum
-        3,      // XlfDaverage
-        3,      // XlfDmin
-        3,      // XlfDmax
-        3,      // XlfDstdev
-        0,      // XlfVar
-        3,      // XlfDvar
-        2,      // XlfText
-        0,      // XlfLinest
-        4,      // XlfTrend
-        0,      // XlfLogest
-        0,      // XlfGrowth
-        0,      // XlfGoto
-        0,      // XlfHalt
-        0,      // ?
-        0,      // XlfPv
-        0,      // XlfFv
-        0,      // XlfNper
-        3,      // XlfPmt
-        0,      // XlfRate
-        3,      // XlfMirr
-        0,      // XlfIrr
-        0,      // XlfRand
-        0,      // XlfMatch
-        3,      // XlfDate
-        3,      // XlfTime
-        1,      // XlfDay
-        1,      // XlfMonth
-        1,      // XlfYear
-        1,      // XlfWeekday
-        1,      // XlfHour
-        1,      // XlfMinute
-        1,      // XlfSecond
-        0,      // XlfNow
-        1,      // XlfAreas
-        1,      // XlfRows
-        1,      // XlfColumns
-        0,      // XlfOffset
-        0,      // XlfAbsref
-        0,      // XlfRelref
-        0,      // XlfArgument
-        2,      // XlfSearch
-        1,      // XlfTranspose
-        1,      // XlfError
-        0,      // XlfStep
-        1,      // XlfType
-        0,      // XlfEcho
-        0,      // XlfSetName
-        0,      // XlfCaller
-        0,      // XlfDeref
-        0,      // XlfWindows
-        0,      // XlfSeries
-        0,      // XlfDocuments
-        0,      // XlfActiveCell
-        0,      // XlfSelection
-        0,      // XlfResult
-        2,      // XlfAtan2
-        1,      // XlfAsin
-        1,      // XlfAcos
-        0,      // XlfChoose
-        3,      // XlfHlookup
-        3,      // XlfVlookup
-        0,      // XlfLinks
-        0,      // XlfInput
-        1,      // XlfIsref
-        0,      // XlfGetFormula
-        0,      // XlfGetName
-        0,      // XlfSetValue
-        1,      // XlfLog
-        0,      // XlfExec
-        1,      // XlfChar
-        1,      // XlfLower
-        1,      // XlfUpper
-        1,      // XlfProper
-        2,      // XlfLeft
-        2,      // XlfRight
-        2,      // XlfExact
-        1,      // XlfTrim
-        4,      // XlfReplace
-        4,      // XlfSubstitute
-        1,      // XlfCode
-        0,      // XlfNames
-        0,      // XlfDirectory
-        2,      // XlfFind
-        2,      // XlfCell
-        1,      // XlfIserr
-        1,      // XlfIstext
-        1,      // XlfIsnumber
-        1,      // XlfIsblank
-        1,      // XlfT
-        1,      // XlfN
-        0,      // XlfFopen
-        0,      // XlfFclose
-        0,      // XlfFsize
-        0,      // XlfFreadln
-        0,      // XlfFread
-        0,      // XlfFwriteln
-        0,      // XlfFwrite
-        0,      // XlfFpos
-        1,      // XlfDatevalue
-        1,      // XlfTimevalue
-        3,      // XlfSln
-        4,      // XlfSyd
-        0,      // XlfDdb
-        0,      // XlfGetDef
-        0,      // XlfReftext
-        0,      // XlfTextref
-        2,      // XlfIndirect
-        0,      // XlfRegister
-        0,      // XlfCall
-        0,      // XlfAddBar
-        0,      // XlfAddMenu
-        0,      // XlfAddCommand
-        0,      // XlfEnableCommand
-        0,      // XlfCheckCommand
-        0,      // XlfRenameCommand
-        0,      // XlfShowBar
-        0,      // XlfDeleteMenu
-        0,      // XlfDeleteCommand
-        0,      // XlfGetChartItem
-        0,      // XlfDialogBox
-        1,      // XlfClean
-        1,      // XlfMdeterm
-        1,      // XlfMinverse
-        2,      // XlfMmult
-        0,      // XlfFiles
-        0,      // XlfIpmt
-        0,      // XlfPpmt
-        0,      // XlfCounta
-        0,      // XlfCancelKey
-        0,      // ?
-        0,      // XlfAppMinimize
-        0,      // XlfAppMaximize
-        0,      // XlfBringToFront
-        0,      // XlfInitiate
-        0,      // XlfRequest
-        0,      // XlfPoke
-        0,      // XlfExecute
-        0,      // XlfTerminate
-        0,      // XlfRestart
-        0,      // XlfHelp
-        0,      // XlfGetBar
-        0,      // XlfProduct
-        1,      // XlfFact
-        0,      // XlfGetCell
-        0,      // XlfGetWorkspace
-        0,      // XlfGetWindow
-        0,      // XlfGetDocument
-        3,      // XlfDproduct
-        1,      // XlfIsnontext
-        0,      // XlfGetNote
-        0,      // XlfNote
-        3,      // XlfStdevp
-        0,      // XlfVarp
-        3,      // XlfDstdevp
-        3,      // XlfDvarp
-        1,      // XlfTrunc
-        1,      // XlfIslogical
-        3,      // XlfDcounta
-        0,      // XlfDeleteBar
-        0,      // XlfUnregister
-        0,      // ?
-        0,      // ?
-        0,      // XlfUsdollar
-        0,      // XlfFindb
-        0,      // XlfSearchb
-        0,      // XlfReplaceb
-        0,      // XlfLeftb
-        0,      // XlfRightb
-        0,      // XlfMidb
-        0,      // XlfLenb
-        2,      // XlfRoundup
-        2,      // XlfRounddown
-        0,      // XlfAsc
-        0,      // XlfDbcs
-        0,      // XlfRank
-        0,      // ?
-        0,      // ?
-        0,      // XlfAddress
-        2,      // XlfDays360
-        0,      // XlfToday
-        0,      // XlfVdb
-        0,      // ?
-        0,      // ?
-        0,      // ?
-        0,      // ?
-        0,      // XlfMedian
-        0,      // XlfSumproduct
-        1,      // XlfSinh
-        1,      // XlfCosh
-        1,      // XlfTanh
-        1,      // XlfAsinh
-        1,      // XlfAcosh
-        1,      // XlfAtanh
-        3,      // XlfDget
-        0,      // XlfCreateObject
-        0,      // XlfVolatile
-        0,      // XlfLastError
-        0,      // XlfCustomUndo
-        0,      // XlfCustomRepeat
-        0,      // XlfFormulaConvert
-        0,      // XlfGetLinkInfo
-        0,      // XlfTextBox
-        1,      // XlfInfo
-        0,      // XlfGroup
-        0,      // XlfGetObject
-        0,      // XlfDb
-        0,      // XlfPause
-        0,      // ?
-        0,      // ?
-        0,      // XlfResume
-        2,      // XlfFrequency
-        0,      // XlfAddToolbar
-        0,      // XlfDeleteToolbar
-        2,      // Add In
-        0,      // XlfResetToolbar
-        0,      // XlfEvaluate
-        0,      // XlfGetToolbar
-        0,      // XlfGetTool
-        0,      // XlfSpellingCheck
-        1,      // XlfErrorType
-        0,      // XlfAppTitle
-        0,      // XlfWindowTitle
-        0,      // XlfSaveToolbar
-        0,      // XlfEnableTool
-        0,      // XlfPressTool
-        0,      // XlfRegisterId
-        0,      // XlfGetWorkbook
-        0,      // XlfAvedev
-        0,      // XlfBetadist
-        1,      // XlfGammaln
-        0,      // XlfBetainv
-        4,      // XlfBinomdist
-        2,      // XlfChidist
-        2,      // XlfChiinv
-        2,      // XlfCombin
-        3,      // XlfConfidence
-        3,      // XlfCritbinom
-        1,      // XlfEven
-        3,      // XlfExpondist
-        3,      // XlfFdist
-        3,      // XlfFinv
-        1,      // XlfFisher
-        1,      // XlfFisherinv
-        2,      // XlfFloor             ??? da war mal eine 0 ???
-        4,      // XlfGammadist
-        3,      // XlfGammainv
-        2,      // XlfCeiling
-        4,      // XlfHypgeomdist
-        3,      // XlfLognormdist
-        3,      // XlfLoginv
-        3,      // XlfNegbinomdist
-        4,      // XlfNormdist
-        1,      // XlfNormsdist
-        3,      // XlfNorminv
-        1,      // XlfNormsinv
-        3,      // XlfStandardize
-        1,      // XlfOdd
-        2,      // XlfPermut
-        3,      // XlfPoisson
-        3,      // XlfTdist
-        4,      // XlfWeibull
-        2,      // XlfSumxmy2
-        2,      // XlfSumx2my2
-        2,      // XlfSumx2py2
-        2,      // XlfChitest
-        2,      // XlfCorrel
-        2,      // XlfCovar
-        3,      // XlfForecast
-        2,      // XlfFtest
-        2,      // XlfIntercept
-        2,      // XlfPearson
-        2,      // XlfRsq
-        2,      // XlfSteyx
-        2,      // XlfSlope
-        4,      // XlfTtest
-        0,      // XlfProb
-        0,      // XlfDevsq
-        0,      // XlfGeomean
-        0,      // XlfHarmean
-        0,      // XlfSumsq
-        0,      // XlfKurt
-        0,      // XlfSkew
-        0,      // XlfZtest
-        2,      // XlfLarge
-        2,      // XlfSmall
-        2,      // XlfQuartile
-        2,      // XlfPercentile
-        2,      // XlfPercentrank
-        0,      // XlfMode
-        2,      // XlfTrimmean
-        2,      // XlfTinv
-        0,      // ?
-        0,      // XlfMovieCommand
-        0,      // XlfGetMovie
-        0,      // XlfConcatenate
-        2,      // XlfPower
-        0,      // XlfPivotAddData
-        0,      // XlfGetPivotTable
-        0,      // XlfGetPivotField
-        0,      // XlfGetPivotItem
-        1,      // XlfRadians
-        1,      // XlfDegrees
-        0,      // XlfSubtotal
-        0,      // XlfSumif
-        2,      // XlfCountif
-        1,      // XlfCountblank
-        0,      // XlfScenarioGet
-        0,      // XlfOptionsListsGet
-        4,      // XlfIspmt
-        3,      // XlfDatedif
-        0,      // XlfDatestring
-        0,      // XlfNumberstring
-        1,      // XlfRoman
-        0,      // XlfOpenDialog
-        0,      // XlfSaveDialog        356
-        0,      //
-        0,      //
-        0,      //
-        0,      //                      360
-        0,      // MITTELWERTA
-        0,      // MAXA
-        0,      // MINA
-        0,      // STABWNA
-        0,      // VARIANZENA           365
-        0,      // STABWA
-        0,      // VARIANZA
-        0,      //
-        0,      //
-        0,      //                      370
-        0,      //
-        0,      //
-        0,      //
-        0,      //
-        0,      //                      375
-        0,      //
-        0,      //
-        0,      //
-        0,      //
-        0,      //                      380
-        0,      //
-        0,      //
-        0,      //
-        0,      //
-        0,      //                      385
-        0,      //
-        0,      //
-        0,      //
-        0,      //
-        0,      //                      390
-        0,      //
-        0,      //
-        0,      //
-        0,      //
-        0,      //                      395
-        0,      //
-        0,      //
-        0,      //
-        0       //
-    };
-
-    if( nIndex <= nLastInd )
-        return pMap[ nIndex ];
-    else
-        return 0;
-}
-
-
 void ExcelToSc::ExcRelToScRel( UINT16 nRow, UINT8 nCol, SingleRefData &rSRD, const BOOL bName )
 {
     if( bName )
@@ -2384,7 +1527,7 @@ void ExcelToSc::ExcRelToScRel( UINT16 nRow, UINT8 nCol, SingleRefData &rSRD, con
         // T A B
         // #67965# abs needed if rel in shared formula for ScCompiler UpdateNameReference
         if ( rSRD.IsTabRel() && !rSRD.IsFlag3D() )
-            rSRD.nTab = pExcRoot->pIR->GetCurrScTab();
+            rSRD.nTab = GetCurrScTab();
     }
     else
     {
@@ -2404,7 +1547,7 @@ void ExcelToSc::ExcRelToScRel( UINT16 nRow, UINT8 nCol, SingleRefData &rSRD, con
         // T A B
         // #i10184# abs needed if rel in shared formula for ScCompiler UpdateNameReference
         if ( rSRD.IsTabRel() && !rSRD.IsFlag3D() )
-            rSRD.nTab = pExcRoot->pIR->GetCurrScTab() + rSRD.nRelTab;
+            rSRD.nTab = GetCurrScTab() + rSRD.nRelTab;
     }
 }
 
@@ -2472,8 +1615,8 @@ BOOL ExcelToSc::GetShrFmla( const ScTokenArray*& rpErgebnis, UINT32 nFormulaLen 
 
             aIn >> nRow >> nCol;
 
-            aStack << aPool.Store( pExcRoot->pShrfmlaBuff->Find(
-                ScAddress( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), pExcRoot->pIR->GetCurrScTab() ) ) );
+            aStack << aPool.Store( mpRD->pShrfmlaBuff->Find(
+                ScAddress( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), GetCurrScTab() ) ) );
 
             bRet = TRUE;
         }
