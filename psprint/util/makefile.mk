@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: cp $ $Date: 2001-05-23 11:49:56 $
+#   last change: $Author: cp $ $Date: 2001-05-28 11:07:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,7 +88,11 @@ LIB1FILES=	$(SLB)$/fontman.lib			\
 SHL1TARGET= psp$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB= ipsp
 SHL1LIBS=$(LIB1FILES)
-SHL1VERSIONMAP=	libpsp.map
+.IF "$(OS)"=="SOLARIS"
+SHL1VERSIONMAP=libpsp_solaris.map
+.ELSE   # should work for all gcc/binutils based linker (ld)
+SHL1VERSIONMAP=libpsp_linux.map
+.ENDIF
 SHL1STDLIBS=$(UNOTOOLSLIB)		\
             $(TOOLSLIB) 		\
             $(VOSLIB)			\

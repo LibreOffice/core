@@ -1,0 +1,6 @@
+LIBPSPRINT_1_0 {
+    global:
+        __1cDpsp*;
+    local:
+        *;
+};
