@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<parcel language="BeanShell" xmlns:parcel="scripting.dtd">
+
+    <script language="BeanShell">
+        <locale lang="en">
+            <displayname value="Hello World"/>
+            <description>
+                Adds the the string "Hello World" into the current text doc.
+            </description>
+        </locale>
+        <functionname value="helloworld.bsh"/>
+        <logicalname value="HelloWorld.BeanShell"/>
+    </script>
+
+</parcel>
