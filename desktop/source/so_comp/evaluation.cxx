@@ -2,9 +2,9 @@
  *
  *  $RCSfile: evaluation.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 13:52:48 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 08:53:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,41 +101,47 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::registry;
 
+namespace desktop {
+
 static SOEvaluation*    pSOEval=0;
-static const char*      pSupportedServices[] =
+
+const char* SOEvaluation::interfaces[] =
 {
     "com.sun.star.beans.XExactName",
     "com.sun.star.beans.XMaterialHolder",
     "com.sun.star.lang.XComponent",
     "com.sun.star.lang.XServiceInfo",
+    NULL,
 };
+
+const char* SOEvaluation::implementationName = "com.sun.star.comp.desktop.Evaluation";
+const char* SOEvaluation::serviceName = "com.sun.star.office.Evaluation";
 
 OUString SOEvaluation::GetImplementationName()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.desktop.Evaluation" ));
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( implementationName));
 }
 
 Sequence< OUString > SOEvaluation::GetSupportedServiceNames()
 {
-    sal_Int32 nSize = sizeof( pSupportedServices ) / sizeof( const char *);
+    sal_Int32 nSize = (sizeof( interfaces ) / sizeof( const char *)) - 1;
     Sequence< OUString > aResult( nSize );
 
     for( sal_Int32 i = 0; i < nSize; i++ )
-        aResult[i] = OUString::createFromAscii( pSupportedServices[i] );
+        aResult[i] = OUString::createFromAscii( interfaces[i] );
     return aResult;
 }
 
-Reference< XInterface >  SAL_CALL SOEvaluation_CreateInstance( const Reference< XMultiServiceFactory >& rSMgr )
+Reference< XInterface >  SAL_CALL SOEvaluation::CreateInstance(
+    const Reference< XMultiServiceFactory >& rSMgr )
 {
     static osl::Mutex   aMutex;
-
     if ( pSOEval == 0 )
     {
         osl::MutexGuard guard( aMutex );
         if ( pSOEval == 0 )
             return (XComponent*) ( new SOEvaluation( rSMgr ) );
     }
-
     return (XComponent*)0;
 }
 
@@ -304,6 +310,7 @@ Any SAL_CALL SOEvaluation::getMaterial() throw( RuntimeException )
     // provide a com::sun::star::util::Date with the time bomb date.
     Any a;
 
+    // change here to force recompile 00001
 #ifdef TIMEBOMB
     // Code for extracting/providing time bomb date!
     int nDay   = TIMEBOMB % 100;
@@ -325,10 +332,10 @@ throw ( RuntimeException )
 sal_Bool SAL_CALL SOEvaluation::supportsService( const ::rtl::OUString& rServiceName )
 throw ( RuntimeException )
 {
-    sal_Int32 nSize = sizeof( pSupportedServices ) / sizeof( const char *);
+    sal_Int32 nSize = (sizeof( interfaces ) / sizeof( const char *))-1;
 
     for( sal_Int32 i = 0; i < nSize; i++ )
-        if ( rServiceName.equalsAscii( pSupportedServices[i] ))
+        if ( rServiceName.equalsAscii( interfaces[i] ))
             return sal_True;
     return sal_False;
 }
@@ -339,60 +346,4 @@ throw ( RuntimeException )
     return SOEvaluation::GetSupportedServiceNames();
 }
 
-extern "C"
-{
-
-void SAL_CALL component_getImplementationEnvironment(   const   sal_Char**          ppEnvironmentTypeName   ,
-                                                                uno_Environment**   ppEnvironment           )
-{
-    *ppEnvironmentTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME ;
 }
-
-sal_Bool SAL_CALL component_writeInfo(  void*   pServiceManager , void*   pRegistryKey    )
-{
-    Reference< XMultiServiceFactory >  xMan( reinterpret_cast< XMultiServiceFactory* >( pServiceManager ) ) ;
-    Reference< XRegistryKey > xKey( reinterpret_cast< XRegistryKey* >( pRegistryKey ) ) ;
-
-    // Eigentliche Implementierung und ihre Services registrieren
-    ::rtl::OUString aTempStr;
-
-    ::rtl::OUString aImpl( RTL_CONSTASCII_USTRINGPARAM("/") );
-    aImpl += SOEvaluation::GetImplementationName();
-    aImpl += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
-    Reference< XRegistryKey > xNewKey = xKey->createKey( aImpl );
-    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.office.Evaluation") );
-
-    return sal_True;
-}
-
-void* SAL_CALL component_getFactory(    const   sal_Char*   pImplementationName ,
-                                                void*       pServiceManager     ,
-                                                void*       pRegistryKey        )
-{
-    // Set default return value for this operation - if it failed.
-    void* pReturn = NULL ;
-    if  ( pImplementationName && pServiceManager )
-    {
-        // Define variables which are used in following macros.
-        Reference< XSingleServiceFactory >   xFactory                                             ;
-        Reference< XMultiServiceFactory >    xServiceManager( reinterpret_cast< XMultiServiceFactory* >( pServiceManager ) ) ;
-
-        if ( SOEvaluation::GetImplementationName().compareToAscii( pImplementationName ) == COMPARE_EQUAL )
-        {
-            xFactory = Reference< XSingleServiceFactory >( cppu::createSingleFactory( xServiceManager, SOEvaluation::GetImplementationName(),
-                                                                SOEvaluation_CreateInstance, SOEvaluation::GetSupportedServiceNames() ) );
-        }
-
-        // Factory is valid - service was found.
-        if ( xFactory.is() )
-        {
-            xFactory->acquire();
-            pReturn = xFactory.get();
-        }
-    }
-
-    // Return with result of this operation.
-    return pReturn ;
-}
-
-} // extern "C"
