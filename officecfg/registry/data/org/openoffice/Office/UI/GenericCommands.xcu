@@ -3,9 +3,9 @@
  *
  *  $RCSfile: GenericCommands.xcu,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 13:42:58 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:26:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -919,12 +919,6 @@
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
-                </prop>
-            </node>
-            <node oor:name=".uno:AutoPilotSDBImport" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">AutoPilot: StarBase 5.2 Datenbank-Import</value>
-                    <value xml:lang="en-US">AutoPilot: StarBase 5.2 Database Import</value>
                 </prop>
             </node>
             <node oor:name=".uno:InsertObjectChart" oor:op="replace">
