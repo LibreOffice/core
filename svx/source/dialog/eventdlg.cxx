@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventdlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 15:35:09 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:07:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,8 +71,8 @@
 #ifndef  _COM_SUN_STAR_DOCUMENT_XEVENTSSUPPLIER_HPP_
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #endif
-#ifndef  _DRAFTS_COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
-#include <drafts/com/sun/star/frame/XModuleManager.hpp>
+#ifndef  _COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
+#include <com/sun/star/frame/XModuleManager.hpp>
 #endif
 
 #include <comphelper/processfactory.hxx>
@@ -171,11 +171,11 @@ SvxEventConfigPage::SvxEventConfigPage( Window* pParent, const SfxItemSet& rSet 
     {
         // first establish if this type of application module
         // supports document configuration
-        uno::Reference< drafts::com::sun::star::frame::XModuleManager >
+        uno::Reference< ::com::sun::star::frame::XModuleManager >
             xModuleManager(
             ::comphelper::getProcessServiceFactory()->createInstance(
                 OUString( RTL_CONSTASCII_USTRINGPARAM(
-                    "drafts.com.sun.star.frame.ModuleManager" ) ) ),
+                    "com.sun.star.frame.ModuleManager" ) ) ),
             uno::UNO_QUERY );
 
         OUString aModuleId;
