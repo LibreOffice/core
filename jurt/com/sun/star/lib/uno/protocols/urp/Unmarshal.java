@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Unmarshal.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kr $ $Date: 2001-01-16 18:01:32 $
+ *  last change: $Author: kr $ $Date: 2001-03-14 10:16:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -378,15 +378,32 @@ class Unmarshal implements IUnmarshal {
                             zInterface = Any.class;
 
                     else if(memberTypeInfo.isInterface()) { // is the member an interface ?
+                        // if the field type is an array
+                        // we have to unrole it,
+                        // to ensure that the component type
+                        // is at least an XInterface.
                         Class xInterface = zInterface;
 
-                        if(!XInterface.class.isAssignableFrom(fields[i].getType())) // is the member type not derived of XInterface ?
+                        int array_deepness = 0;
+                        while(xInterface.isArray()) {
+                            xInterface = xInterface.getComponentType();
+                            ++ array_deepness;
+                        }
+
+                        if(!XInterface.class.isAssignableFrom(xInterface)) // is the member type not derived of XInterface ?
                             xInterface = XInterface.class; // ensure that we get at least an XInterface
 
-                        if(zInterface.isArray())
-                            zInterface = Class.forName("[L" + xInterface.getName() + ";");
-                        else
-                            zInterface = xInterface;
+                        String array_prefix = "";
+                        while(array_deepness > 0) {
+                            array_prefix += "[";
+
+                            -- array_deepness;
+                        }
+
+                        if(array_prefix.length() != 0)
+                            xInterface = Class.forName(array_prefix + "L" + xInterface.getName() + ";");
+
+                        zInterface = xInterface;
                     }
                 }
 
