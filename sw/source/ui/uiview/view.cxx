@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 13:02:28 $
+ *  last change: $Author: rt $ $Date: 2005-04-01 16:36:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -954,7 +954,8 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
 
     SwDocShell* pDocSh = PTR_CAST( SwDocShell, pFrame->GetObjectShell() );
     BOOL bOldModifyFlag = pDocSh->IsEnableSetModified();
-    pDocSh->EnableSetModified( FALSE );
+    if(bOldModifyFlag)
+        pDocSh->EnableSetModified( sal_False );
     ASSERT( pDocSh, "View ohne DocShell." );
     SwWebDocShell* pWebDShell = PTR_CAST( SwWebDocShell, pDocSh );
 
@@ -1212,7 +1213,8 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
 
     aTimer.SetTimeoutHdl(LINK(this, SwView, TimeoutHdl));
     bAttrChgNotified = bAttrChgNotifiedWithRegistrations = sal_False;
-    pDocSh->EnableSetModified( bOldModifyFlag );
+    if(bOldModifyFlag)
+        pDocSh->EnableSetModified( sal_True );
     InvalidateBorder();
 }
 
