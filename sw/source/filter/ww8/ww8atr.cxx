@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:56:17 $
+ *  last change: $Author: rt $ $Date: 2004-05-25 15:11:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4070,7 +4070,7 @@ static Writer& OutWW8_SwFmtBox( Writer& rWrt, const SfxPoolItem& rHt )
 SwTwips SwWW8Writer::CurrentPageWidth(SwTwips &rLeft, SwTwips &rRight) const
 {
     const SwFrmFmt* pFmt = pAktPageDesc ? &pAktPageDesc->GetMaster()
-        : &pDoc->GetPageDesc(0).GetMaster();
+        : &const_cast<const SwDoc *>(pDoc)->GetPageDesc(0).GetMaster();
 
     const SvxLRSpaceItem& rLR = pFmt->GetLRSpace();
     SwTwips nPageSize = pFmt->GetFrmSize().GetWidth();
