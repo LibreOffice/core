@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paraitem.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-19 17:16:29 $
+ *  last change: $Author: tl $ $Date: 2002-07-23 10:34:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,7 +311,7 @@ sal_Bool SvxLineSpacingItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
                 eInterLineSpace =  SVX_INTER_LINE_SPACE_OFF;
                 eLineSpace = aLSp.Mode == style::LineSpacingMode::FIX ? SVX_LINE_SPACE_FIX : SVX_LINE_SPACE_MIN;
                 nLineHeight = aLSp.Height;
-                if(nMemberId&CONVERT_TWIPS)
+                if(bConvert)
                     nLineHeight = (USHORT)MM100_TO_TWIP(nLineHeight);
             }
             break;
