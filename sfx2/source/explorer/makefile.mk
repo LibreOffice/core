@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: mba $ $Date: 2001-05-03 10:31:39 $
+#   last change: $Author: pb $ $Date: 2001-05-07 10:37:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,8 +84,7 @@ SLOFILES = \
         $(SLO)$/iodlg.obj		\
         $(SLO)$/iodlgimp.obj	\
         $(SLO)$/iodlgimpl.obj	\
-        $(SLO)$/sfxdir.obj		\
-        $(SLO)$/fileview.obj
+        $(SLO)$/sfxdir.obj
 
 .IF "$(GUI)"=="WNT"
 CXXFILES += goffline.cxx
@@ -97,8 +96,7 @@ EXCEPTIONSFILES = \
 
 SRCFILES = \
         explorer.src	\
-        iodlg.src		\
-        fileview.src
+        iodlg.src
 
 # --- Targets ------------------------------------------------------
 
