@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_cb.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:41 $
+ *  last change: $Author: cp $ $Date: 2000-11-03 17:05:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@ void PreeditDrawCallback ( XIC ic, XPointer client_data,
                            XIMPreeditDrawCallbackStruct *call_data );
 void PreeditCaretCallback( XIC ic, XPointer client_data,
                            XIMPreeditCaretCallbackStruct *call_data );
+void GetPreeditSpotLocation(XIC ic, XPointer client_data);
 
 /* private hook to prevent from sending further edit events */
 void PreeditCancelCallback( XPointer client_data );

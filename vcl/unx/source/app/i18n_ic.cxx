@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_ic.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:42 $
+ *  last change: $Author: cp $ $Date: 2000-11-03 17:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,7 +225,8 @@ XVaAddToNestedList( XVaNestedList a_srclist, char* name, XPointer value )
 //
 // ----------------------------------------------------------------------------
 
-SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
+SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame,
+                                             Bool aIsOnTheSpot) :
             mbUseable( True ),
             maContext( (XIC)NULL ),
             mpAttributes( NULL ),
@@ -236,11 +237,6 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
             #endif
             mnStatusStyle( 0 ),
             mnPreeditStyle( 0 ),
-            mnSupportedPreeditStyle( XIMPreeditCallbacks |
-                    XIMPreeditNothing | XIMPreeditNone
-                                 /* | XIMPreeditCallbacks
-                                    | XIMPreeditArea
-                                    | XIMPreeditPosition */ ),
             mnSupportedStatusStyle( // XIMStatusCallbacks |
                     XIMStatusNothing | XIMStatusNone
                                 /*  | XIMStatusCallbacks
@@ -250,8 +246,13 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
     pInputMethod = pFrame->maFrameData.GetDisplay()->GetInputMethod();
     mbMultiLingual = pInputMethod->IsMultiLingual();
 
-    if (    pInputMethod->UseMethod()
-        &&  SupportInputMethodStyle( pInputMethod->GetSupportedStyles() ) )
+    mnSupportedPreeditStyle = (aIsOnTheSpot?
+                               XIMPreeditCallbacks | XIMPreeditPosition |
+                               XIMPreeditNothing | XIMPreeditNone :
+                               XIMPreeditPosition | XIMPreeditNothing |
+                               XIMPreeditNone);
+    if (pInputMethod->UseMethod()
+        && SupportInputMethodStyle( pInputMethod->GetSupportedStyles() ) )
     {
         XLIB_Window  aClientWindow= pFrame->maFrameData.GetShellWindow();
         XLIB_Window  aFocusWindow= pFrame->maFrameData.GetWindow();
@@ -615,17 +616,78 @@ SalI18N_InputContext::UnsetICFocus()
 
 // ---------------------------------------------------------------------------
 //
-// not used, multi byte input method only
+// multi byte input method only
 //
 // ---------------------------------------------------------------------------
+
+void
+SalI18N_InputContext::SetPreeditState(Bool aPreeditState) {
+#if XlibSpecificationRelease >= 6
+  XIMPreeditState preedit_state = XIMPreeditUnKnown;
+  XVaNestedList preedit_attr;
+
+  preedit_attr = XVaCreateNestedList(0,
+                                     XNPreeditState, &preedit_state,
+                                     0);
+  if (!XGetICValues(maContext,
+                    XNPreeditAttributes, preedit_attr,
+                    NULL)) {
+    XFree(preedit_attr);
+
+    preedit_state = (aPreeditState? XIMPreeditEnable : XIMPreeditDisable);
+    preedit_attr = XVaCreateNestedList(0,
+                                       XNPreeditState, preedit_state,
+                                       0);
+    XSetICValues(maContext,
+                 XNPreeditAttributes, preedit_attr,
+                 NULL);
+  }
+  XFree(preedit_attr);
+#endif
+  return;
+}
+
+void
+SalI18N_InputContext::SetLanguage(LanguageType aInputLanguage) {
+  // not yet implemented
+  return;
+}
 
 void
 SalI18N_InputContext::EndExtTextInput( USHORT nFlags )
 {
     if ( mbUseable && (maContext != NULL) )
     {
-        char *pPendingChars = XmbResetIC( maContext );
+#if XlibSpecificationRelease >= 6
+      // restore conversion state after resetting XIC
+      XIMPreeditState preedit_state = XIMPreeditUnKnown;
+      XVaNestedList preedit_attr;
 
+      Bool is_preedit_state = False;
+      preedit_attr = XVaCreateNestedList(0,
+                                         XNPreeditState, &preedit_state,
+                                         0);
+      if (!XGetICValues(maContext,
+                        XNPreeditAttributes, preedit_attr,
+                        NULL)) {
+        is_preedit_state = True;
+      }
+      XFree(preedit_attr);
+#endif
+
+      char *pPendingChars = XmbResetIC( maContext );
+
+#if XlibSpecificationRelease >= 6
+        preedit_attr = XVaCreateNestedList(0,
+                                           XNPreeditState, preedit_state,
+                                           0);
+        if (is_preedit_state) {
+          XSetICValues(maContext,
+                       XNPreeditAttributes, preedit_attr,
+                       NULL);
+        }
+        XFree(preedit_attr);
+#endif
         // text is unicode
         if (   (pPendingChars != NULL)
             && (nFlags & SAL_FRAME_ENDEXTTEXTINPUT_COMPLETE) )

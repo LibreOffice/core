@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2000-10-19 18:32:02 $
+ *  last change: $Author: cp $ $Date: 2000-11-03 17:08:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -450,21 +450,6 @@ void SalFrameData::Init( USHORT nSalFrameStyle, SystemParentData* pParentData )
     // Pointer
     pFrame_->SetPointer( POINTER_ARROW );
 
-    // Setup for use of InputMethod
-    if (   nSalFrameStyle & SAL_FRAME_STYLE_MOVEABLE
-        || nSalFrameStyle & SAL_FRAME_STYLE_SIZEABLE )
-    {
-        mpInputContext = new SalI18N_InputContext( pFrame_ );
-        if ( mpInputContext->UseContext() )
-            {
-            mpInputContext->ExtendEventMask( XtWindow( hShell_ ) );
-            mpInputContext->Unmap();
-        }
-    }
-    else
-    {
-        mpInputContext = NULL;
-    }
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1228,7 +1213,7 @@ void SalFrameData::ShowFullScreen( BOOL bFullScreen )
         if ( mpInputContext != NULL )
         {
             delete mpInputContext;
-            mpInputContext = new SalI18N_InputContext( pFrame_ );
+            mpInputContext = new SalI18N_InputContext( pFrame_, True);
         }
         Call( SALEVENT_RESIZE, NULL );
     }
@@ -1256,7 +1241,7 @@ void SalFrameData::ShowFullScreen( BOOL bFullScreen )
             pFrame_->Show( TRUE );
         if ( mpInputContext != NULL )
         {
-            mpInputContext = new SalI18N_InputContext( pFrame_ );
+            mpInputContext = new SalI18N_InputContext( pFrame_, True);
             if ( bMapped_ )
                 mpInputContext->SetICFocus();
             else
@@ -1457,19 +1442,41 @@ void SalFrame::Sync()
 
 void SalFrame::SetInputContext( SalInputContext* pContext )
 {
-}
+  if (pContext == NULL) return;
 
-// -----------------------------------------------------------------------
+  // 1. We should create an input context for this frame
+  //    only when SAL_INPUTCONTEXT_TEXT is set.
 
-void SalFrame::UpdateExtTextInputArea()
-{
+  if (!(pContext->mnOptions & SAL_INPUTCONTEXT_TEXT)) {
+    return;
+  }
+  // 2. We should use on-the-spot inputstyle
+  //    only when SAL_INPUTCONTEXT_EXTTEXTINPUT is set.
+
+  if (maFrameData.mpInputContext == NULL) {
+    Bool isOnTheSpot =
+      (pContext->mnOptions & SAL_INPUTCONTEXT_EXTTEXTINPUT);
+    Bool preeditState =
+      (pContext->mnOptions & SAL_INPUTCONTEXT_EXTTEXTINPUT_ON);
+
+    maFrameData.mpInputContext = new SalI18N_InputContext(maFrameData.pFrame_,
+                                                          isOnTheSpot);
+    if (maFrameData.mpInputContext->UseContext()) {
+      //maFrameData.mpInputContext->SetPreeditState(preeditState);
+      maFrameData.mpInputContext->ExtendEventMask(XtWindow(maFrameData.hShell_));
+      if (pContext->mnOptions & SAL_INPUTCONTEXT_CHANGELANGUAGE) {
+        maFrameData.mpInputContext->SetLanguage(pContext->meLanguage);
+      }
+    }
+  }
+  return;
 }
 
 // -----------------------------------------------------------------------
 
 void SalFrame::EndExtTextInput( USHORT nFlags )
 {
-    maFrameData.mpInputContext->EndExtTextInput( nFlags );
+  maFrameData.mpInputContext->EndExtTextInput( nFlags );
 }
 
 // -----------------------------------------------------------------------
@@ -1777,16 +1784,8 @@ long SalFrameData::HandleKeyEvent( XKeyEvent *pEvent )
     unsigned char   *pPrintable = (unsigned char*)alloca( nLen );
     pPrintable[0] = 0;
 
-    // if we haven't got an input context yet then it's time to build it
-    if ( mpInputContext == NULL )
-    {
-        mpInputContext = new SalI18N_InputContext( pFrame_ );
-        if ( mpInputContext->UseContext() )
-            mpInputContext->ExtendEventMask( XtWindow( hShell_ ) );
-    }
     // singlebyte code composed by input method, the new default
-    if ( mpInputContext->UseContext() )
-    {
+    if (mpInputContext != NULL && mpInputContext->UseContext()) {
         Status nStatus;
         nKeySym = pDisplay_->GetKeySym( pEvent, pPrintable, &nLen,
                 &nStatus, mpInputContext->GetContext() );
@@ -1905,6 +1904,7 @@ long SalFrameData::HandleKeyEvent( XKeyEvent *pEvent )
     // as well it shouldn't be possible to generate more than a single
     // char without an input method
     if (   nSize > 1
+        && mpInputContext != NULL
         && mpInputContext->UseContext()
         && KeyRelease != pEvent->type )
     {
@@ -1955,12 +1955,14 @@ long SalFrameData::HandleFocusEvent( XFocusChangeEvent *pEvent )
      *  #71791# cast focus event to the input context, otherwise the
      *  status window does not follow the application frame
      */
+
     if ( mpInputContext != NULL  )
     {
         if( FocusIn == pEvent->type )
-            mpInputContext->SetICFocus();
-        else
-            mpInputContext->UnsetICFocus();
+          mpInputContext->SetICFocus();
+        // else
+        //  we don't have to call XUnsetICFocus() for FocusOut.
+        //    mpInputContext->UnsetICFocus();
     }
 
     if ( pEvent->mode == NotifyNormal || pEvent->mode == NotifyWhileGrabbed )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_ic.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:41 $
+ *  last change: $Author: cp $ $Date: 2000-11-03 17:05:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef _SAL_I18N_INPUTCONTEXT_HXX
 #define _SAL_I18N_INPUTCONTEXT_HXX
 
+#ifndef _TOOLS_LANG_HXX
+#include <tools/lang.hxx>
+#endif
+
 #ifndef _SAL_I18N_CALLBACK_HXX
 #include "i18n_cb.hxx"
 #endif
@@ -115,7 +119,10 @@ public:
     void Map( SalFrame *pFrame );
     void Unmap();
 
-    SalI18N_InputContext( SalFrame *pFrame );
+    void SetPreeditState(Bool aPreeditState);
+    void SetLanguage(LanguageType aInputLanguage);
+
+    SalI18N_InputContext( SalFrame *aFrame, Bool aIsOnTheSpot);
     ~SalI18N_InputContext();
 
 private:
