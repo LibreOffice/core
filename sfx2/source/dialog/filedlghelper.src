@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dv $ $Date: 2001-06-15 14:58:13 $
+ *  last change: $Author: hjs $ $Date: 2001-06-29 02:06:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,13 +180,13 @@ String STR_CB_AUTO_EXTENSION
     Text[ English ] = "automatic file name ~extensions" ;
     Text[ english_us ] = "~Automatic file name extension" ;
     Text[ portuguese_brazilian ] = "automatische Dateinamens~erweiterung" ;
-    Text[ swedish ] = "~automatiskt filnamnstillägg" ;
+    Text[ swedish ] = "~Automatiskt filnamnstillägg" ;
     Text[ danish ] = "automatisk filtypenavn" ;
     Text[ italian ] = "~Estensione automatica del nome del file" ;
     Text[ spanish ] = "~Ampliación automática del nombre de archivo" ;
     Text[ french ] = "~Extension automatique du nom de fichier" ;
     Text[ dutch ] = "automatische bestandsnaam~extensie" ;
-    Text[ portuguese ] = "Extensão automática do nome de ficheiro" ;
+    Text[ portuguese ] = "E~xtensão automática do nome de ficheiro" ;
     Text[ chinese_simplified ] = "×Ô¶¯¼ÓÉÏÎÄµµÀ©Õ¹Ãû(~A)";
     Text[ russian ] = "Àâòîìàòè÷åñêîå ğàñøèğåíèå èìåíè ôàéëà";
     Text[ polish ] = "Automatyczne rozszerzenie nazwy pliku";
@@ -209,7 +209,7 @@ String STR_CB_SELECTION
     Text[ spanish ] = "~Selección" ;
     Text[ french ] = "~Sélection" ;
     Text[ dutch ] = "~Selectie" ;
-    Text[ swedish ] = "~Markering" ;
+    Text[ swedish ] = "Mark~ering" ;
     Text[ danish ] = "Markering" ;
     Text[ portuguese ] = "S~elecção" ;
     Text[ portuguese_brazilian ] = "S~elektion" ;
@@ -289,7 +289,7 @@ String STR_CB_READONLY
     Text[ English ] = "~Read only" ;
     Text[ english_us ] = "~Read-only" ;
     Text[ portuguese_brazilian ] = "Nur lesen" ;
-    Text[ swedish ] = "~bara läsning" ;
+    Text[ swedish ] = "~Bara läsning" ;
     Text[ danish ] = "Skrivebeskyttet" ;
     Text[ italian ] = "Sola lettura" ;
     Text[ spanish ] = "Solo ~lectura" ;
@@ -315,7 +315,7 @@ String STR_CB_PASSWORD
     Text[ English ] = "Save ~with password" ;
     Text[ english_us ] = "Save with ~password" ;
     Text[ portuguese_brazilian ] = "guardar con senha" ;
-    Text[ swedish ] = "spara med lösenord" ;
+    Text[ swedish ] = "S~para med lösenord" ;
     Text[ danish ] = "gem med adgangskode" ;
     Text[ italian ] = "Sal~va con password" ;
     Text[ spanish ] = "Guardar con c~ontraseña" ;
@@ -339,7 +339,7 @@ String STR_CB_FILTER_OPTIONS
 {
     Text = "Filtereinstellungen ~bearbeiten" ;
     Text[ English ] = "~Customize Filtersettings" ;
-    Text[ english_us ] = "Edit filter settings";
+    Text[ english_us ] = "Edit ~filter settings";
     Text[ portuguese ] = "~Editar configuração de filtros";
     Text[ russian ] = "~Èçìåíåíèå íàñòğîåê ôèëüòğà";
     Text[ dutch ] = "~Filterinstellingen ~bewerken";
@@ -347,11 +347,11 @@ String STR_CB_FILTER_OPTIONS
     Text[ spanish ] = "Editar ~configuración de filtros";
     Text[ italian ] = "~Modifica impostazioni filtro";
     Text[ danish ] = "Rediger filterindstillinger";
-    Text[ swedish ] = "~redigera filterinställningar";
+    Text[ swedish ] = "~Redigera filterinställningar";
     Text[ polish ] = "Edytuj ustawienia filtra";
     Text[ portuguese_brazilian ] = "~Customize Filtersettings";
     Text[ japanese ] = "Ì¨ÙÀİ’è‚Ì•ÒW";
-    Text[ chinese_simplified ] = "±à¼­É¸Ñ¡Éè¶¨";
+    Text[ chinese_simplified ] = "±à¼­É¸Ñ¡µÄÉè¶¨";
     Text[ chinese_traditional ] = "½s¿è¿z¿ï³]©w";
     Text[ arabic ] = "ÊÍÑíÑ ÅÚÏÇÏÇÊ ÇáİáÊÑ";
     Text[ greek ] = "Åğåîåñãáóßá ñõèìßóåùí ößëôñïõ";
@@ -376,8 +376,8 @@ String STR_PB_PLAY
     Text[ portuguese_brazilian ] = "Ab~spielen" ;
     Text[ chinese_simplified ] = "·ÅÓ³(~P)";
     Text[ russian ] = "Âîñïğîèçâåñòè";
-    Text[ polish ] = "Odtwarzaj";
-    Text[ japanese ] = "Ä¶‚·‚é(~P)";
+    Text[ polish ] = "Odtwórz";
+    Text[ japanese ] = "Ä¶(~P)";
     Text[ greek ] = "Åêôİëå~óç";
     Text[ korean ] = "Àç»ı(~P)";
     Text[ chinese_traditional ] = "©ñ¬M(~P)";
@@ -396,7 +396,7 @@ String STR_PB_STOP
     Text[ spanish ] = "~Detener" ;
     Text[ french ] = "~Arrêter" ;
     Text[ dutch ] = "~Stoppen" ;
-    Text[ swedish ] = "Stopp" ;
+    Text[ swedish ] = "St~opp" ;
     Text[ danish ] = "Stop" ;
     Text[ portuguese ] = "~Parar" ;
     Text[ portuguese_brazilian ] = "A~nhalten" ;
@@ -470,6 +470,25 @@ String STR_LB_IMAGE_TEMPLATE
     Text = "Stil:" ;
     Text[ English ] = "Style:" ;
     Text[ english_us ] = "Style:" ;
+    Text[ portuguese ] = "Estilo:";
+    Text[ russian ] = "Style:";
+    Text[ greek ] = "Style:";
+    Text[ dutch ] = "Style:";
+    Text[ french ] = "Style:";
+    Text[ spanish ] = "Estilo:";
+    Text[ finnish ] = "Style:";
+    Text[ italian ] = "Stile:";
+    Text[ danish ] = "Style:";
+    Text[ swedish ] = "Stil:";
+    Text[ polish ] = "Styl:";
+    Text[ portuguese_brazilian ] = "Style:";
+    Text[ japanese ] = "í—Ş:";
+    Text[ korean ] = "Style:";
+    Text[ chinese_simplified ] = "·ç¸ñ£º";
+    Text[ chinese_traditional ] = "­·®æ¡G";
+    Text[ turkish ] = "Style:";
+    Text[ arabic ] = "Style:";
+    Text[ catalan ] = "Style:";
 };
 
 String STR_LB_TEMPLATES
@@ -487,11 +506,11 @@ String STR_LB_TEMPLATES
     Text[ dutch ] = "S~jablonen:" ;
     Text[ spanish ] = "P~lantillas:" ;
     Text[ english_us ] = "~Templates:" ;
-    Text[ chinese_simplified ] = "ÑùÊ½(~T)";
+    Text[ chinese_simplified ] = "ÑùÊ½(~T)£º";
     Text[ russian ] = "Øàáëîíû";
-    Text[ polish ] = "Szablony";
+    Text[ polish ] = "Szablony:";
     Text[ japanese ] = "ÃİÌßÚ°Ä(~T)";
-    Text[ chinese_traditional ] = "¼Ë¦¡(~T)";
+    Text[ chinese_traditional ] = "¼Ë¦¡(~T)¡G";
     Text[ arabic ] = "ŞæÇáÈ";
     Text[ greek ] = "Ğñüôõğá";
     Text[ korean ] = "¼­½ÄÆÄÀÏ(~T)";
@@ -515,8 +534,8 @@ String STR_LB_VERSION
     Text[ polish ] = "Wersja:";
     Text[ portuguese_brazilian ] = "~Version:";
     Text[ japanese ] = "ÊŞ°¼Ş®İ(~V):";
-    Text[ chinese_simplified ] = "°æ±¾(~V)";
-    Text[ chinese_traditional ] = "ª©¥»(~V)";
+    Text[ chinese_simplified ] = "°æ±¾(~V)£º";
+    Text[ chinese_traditional ] = "ª©¥»(~V)¡G";
     Text[ arabic ] = "ÇáÅÕÏÇÑ:";
     Text[ greek ] = "¸êäïóç:";
     Text[ korean ] = "¹öÀü(~V):";
@@ -526,4 +545,5 @@ String STR_LB_VERSION
 };
 
 //******************************************************************** EOF
+
 
