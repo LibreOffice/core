@@ -69,6 +69,7 @@ JAVA_FILES = 								\
     OfficeConnection.java					\
     QueuedListener.java						\
     QueuedTopWindowListener.java			\
+    SelectionDialog.java					\
     SimpleOffice.java						\
     StringNode.java							\
     TableEventHandler.java					\
