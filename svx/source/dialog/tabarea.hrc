@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabarea.hrc,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: af $ $Date: 2002-11-22 14:47:01 $
+ *  last change: $Author: vg $ $Date: 2005-03-07 17:40:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,11 +175,7 @@
 #define FT_Y_OFFSET 2
 #define MTR_FLD_X_OFFSET 1
 #define MTR_FLD_Y_OFFSET 2
-#define RBT_FILL_OFF 1
-#define RBT_COLOR 2
-#define RBT_GRADIENT 3
-#define RBT_HATCH 4
-#define RBT_BITMAP 5
+#define LB_AREA_TYPE 19
 #define RBT_ROW 6
 #define RBT_COLUMN 7
 #define MTR_FLD_OFFSET 3
