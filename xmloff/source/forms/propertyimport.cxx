@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyimport.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 12:10:50 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 16:00:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -362,13 +362,13 @@ namespace xmloff
     ::com::sun::star::util::Time OPropertyImport::implGetTime(double _nValue)
     {
         ::com::sun::star::util::Time aTime;
-        sal_Int32 nIntValue = sal_Int32(_nValue * 8640000);
+        sal_uInt32 nIntValue = sal_Int32(_nValue * 8640000);
         nIntValue *= 8640000;
-        aTime.HundredthSeconds = nIntValue % 100;
+        aTime.HundredthSeconds = (sal_uInt16)( nIntValue % 100 );
         nIntValue /= 100;
-        aTime.Seconds = nIntValue % 60;
+        aTime.Seconds = (sal_uInt16)( nIntValue % 60 );
         nIntValue /= 60;
-        aTime.Minutes = nIntValue % 60;
+        aTime.Minutes = (sal_uInt16)( nIntValue % 60 );
         nIntValue /= 60;
         OSL_ENSURE(nIntValue < 24, "OPropertyImport::implGetTime: more than a day?");
         aTime.Hours = (sal_uInt16)nIntValue;
