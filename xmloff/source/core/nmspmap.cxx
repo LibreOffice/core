@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nmspmap.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 21:32:24 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 11:58:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -479,6 +479,16 @@ sal_uInt16 SvXMLNamespaceMap::GetKeyByAttrName( const OUString& rAttrName,
 
 sal_Bool SvXMLNamespaceMap::NormalizeOasisURN( ::rtl::OUString& rName )
 {
+    // #i38644#
+    // we exported the wrong namespace for smil, so we correct this here on load
+    // for older documents
+    if( rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "http://www.w3.org/2001/SMIL20" ) ) )
+    {
+        rName = GetXMLToken( ::xmloff::token::XML_N_SMIL );
+        return true;
+    }
+
+    //
     // Check if URN matches
     // :urn:oasis:names:tc:[^:]*:xmlns:[^:]*:1.[^:]*
     //                     |---|       |---| |-----|
