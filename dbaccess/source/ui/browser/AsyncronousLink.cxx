@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AsyncronousLink.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-09 15:42:43 $
+ *  last change: $Author: fs $ $Date: 2001-03-15 08:15:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@
 //==================================================================
 using namespace dbaui;
 //------------------------------------------------------------------
-OAsyncronousLink::OAsyncronousLink(const Link& _rHandler, NAMESPACE_VOS(OMutex)* _pEventSafety, NAMESPACE_VOS(OMutex)* _pDestructionSafety)
+OAsyncronousLink::OAsyncronousLink(const Link& _rHandler, ::vos::OMutex* _pEventSafety, ::vos::OMutex* _pDestructionSafety)
     :m_aHandler(_rHandler)
     ,m_pEventSafety(NULL)
     ,m_pDestructionSafety(NULL)
