@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 08:44:57 $
+ *  last change: $Author: vg $ $Date: 2003-05-26 08:14:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,7 +294,6 @@ String STR_PAGE_COUNT_MACRO
         SID_PLAYMACRO                   ;\
         SID_CHAR_DLG                    ;\
         SID_PARA_DLG                    ;\
-        SID_INSERT_PREVIEW ; \
         SID_INSERT_SPINBUTTON ;\
         SID_INSERT_HSCROLLBAR ;\
         SID_INSERT_VSCROLLBAR ;\
@@ -306,7 +305,6 @@ String STR_PAGE_COUNT_MACRO
         FN_THESAURUS_DLG                ;\
         FN_HYPHENATE_OPT_DLG            ;\
         FN_GLOSSARY_DLG                 ;\
-        SID_INSERT_URLBUTTON            ;\
                                                     \
         FN_INSERT_FLD_DATE    ;\
         FN_INSERT_FLD_TIME    ;\
@@ -331,7 +329,7 @@ String STR_PAGE_COUNT_MACRO
                                         \
         };                              \
     IdCount = {                         \
-        167;                            \
+        165;                            \
     };
 
 
