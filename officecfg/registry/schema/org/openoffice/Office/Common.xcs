@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:52:54 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 13:37:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -823,6 +823,18 @@
 		</group>
 	</templates>
 	<component>
+		<group oor:name="InternalMSExport">
+			<info>
+				<author>MAV</author>
+				<desc xml:lang="en-US">Contains internal MSExport settings that are common for all apps.</desc>
+			</info>
+			<prop oor:name="UseOldExport" oor:type="xs:boolean">
+				<info>
+					<desc xml:lang="en-US">Specifies if an old ( 5.0 format )way instead of a new one ( 6.0 OLE embedded document ) should be used for export of inplace objects in case MS-filters are not used for them.</desc>
+				</info>
+				<value>false</value>
+			</prop>
+		</group>
 		<group oor:name="Passwords">
 			<info>
 				<author>MAV</author>
