@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdmailsuppl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obr $ $Date: 2001-06-27 06:30:38 $
+ *  last change: $Author: obr $ $Date: 2001-08-23 14:57:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,8 +238,9 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
 
                     OUString aProgramConfig = OUString::createFromAscii( "base" );
 
-                    aConfigRoot += OUString::createFromAscii( "/Profiles/" );
+                    aConfigRoot += OUString::createFromAscii( "/Profiles/['" );
                     aConfigRoot += aProfile;
+                    aConfigRoot += OUString::createFromAscii( "']" );
 
                     // create name access to format strings
                     aProperty.Value = makeAny( aConfigRoot + OUString::createFromAscii( "/FormatStrings" ) );
