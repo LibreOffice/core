@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-18 18:48:37 $
+#   last change: $Author: vg $ $Date: 2003-06-04 10:38:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,19 +86,12 @@ BUILD_ACTION=
 BUILD_FLAGS=
 
 .IF "$(GUI)"=="UNX"
-
 .IF "$(COMNAME)"=="sunpro5"
+.IF "$(BUILD_TOOLS)$/cc"=="$(shell +which cc)"
 CC:=$(COMPATH)$/bin$/cc
 CXX:=$(COMPATH)$/bin$/CC
 .ENDIF          # "$(COMNAME)"=="sunpro5"
-
-.IF "$(COMNAME)"=="gcc3"
-CC:=$(COMPATH)$/bin$/gcc3
-CXX:=$(COMPATH)$/bin$/g++3
-.ENDIF          # "$(COMNAME)"=="gcc3"
-
-.EXPORT : CC CXX
-
+.ENDIF          # "$(BUILD_TOOLS)$/cc"=="$(shell +which cc)"
 .ENDIF
 
 # --- Targets ------------------------------------------------------
@@ -111,17 +104,10 @@ all: \
 .INCLUDE : target.mk
 .INCLUDE : tg_ext.mk
 
-TG_DELIVER : $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE)
-        $(DELIVER)
-
 # Since you never know what will be in a patch (for example, it may already
 # patch at configure level), we remove the entire package directory if a patch
 # is newer.
 $(MISC)$/remove_build.flag : $(PATCH_FILE_NAME)
     $(REMOVE_PACKAGE_COMMAND)
     +$(TOUCH) $(MISC)$/remove_build.flag
-
-.IF "$(BUILD_SOSL)"!=""
-ALLTAR : TG_DELIVER
-.ENDIF
 
