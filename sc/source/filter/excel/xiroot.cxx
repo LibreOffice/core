@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiroot.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-16 08:17:24 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 13:36:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 #ifndef SC_XISTYLE_HXX
 #include "xistyle.hxx"
 #endif
+#ifndef SC_XIPAGE_HXX
+#include "xipage.hxx"
+#endif
 #ifndef SC_XICONTENT_HXX
 #include "xicontent.hxx"
 #endif
@@ -86,6 +89,7 @@
 #endif
 
 #include "root.hxx"
+#include "excimp8.hxx"
 
 
 // Global data ================================================================
@@ -112,20 +116,10 @@ XclImpRoot::XclImpRoot( XclImpRootData& rImpRootData ) :
     mrImpData.mpNumFmtBuffer.reset( new XclImpNumFmtBuffer( GetRoot() ) );
     mrImpData.mpXFBuffer.reset( new XclImpXFBuffer( GetRoot() ) );
     mrImpData.mpXFIndexBuffer.reset( new XclImpXFIndexBuffer( GetRoot() ) );
+    mrImpData.mpPageSettings.reset( new XclImpPageSettings( GetRoot() ) );
     mrImpData.mpTabIdBuffer.reset( new XclImpTabIdBuffer );
+    mrImpData.mpNameBuffer.reset( new XclImpNameBuffer( GetRoot() ) );
     mrImpData.mpLinkManager.reset( new XclImpLinkManager( GetRoot() ) );
-}
-
-XclImpRoot::XclImpRoot( const XclImpRoot& rRoot ) :
-    XclRoot( rRoot ),
-    mrImpData( rRoot.mrImpData )
-{
-}
-
-XclImpRoot& XclImpRoot::operator=( const XclImpRoot& rRoot )
-{
-    XclRoot::operator=( rRoot );
-    return *this;
 }
 
 void XclImpRoot::SetBiff( XclBiff eBiff )
@@ -166,9 +160,29 @@ XclImpXFIndexBuffer& XclImpRoot::GetXFIndexBuffer() const
     return *mrImpData.mpXFIndexBuffer;
 }
 
+XclImpPageSettings& XclImpRoot::GetPageSettings() const
+{
+    return *mrImpData.mpPageSettings;
+}
+
+_ScRangeListTabs& XclImpRoot::GetPrintAreaBuffer() const
+{
+    return *mpRD->pPrintRanges;
+}
+
+_ScRangeListTabs& XclImpRoot::GetTitleAreaBuffer() const
+{
+    return *mpRD->pPrintTitles;
+}
+
 XclImpTabIdBuffer& XclImpRoot::GetTabIdBuffer() const
 {
     return *mrImpData.mpTabIdBuffer;
+}
+
+XclImpNameBuffer& XclImpRoot::GetNameBuffer() const
+{
+    return *mrImpData.mpNameBuffer;
 }
 
 XclImpLinkManager& XclImpRoot::GetLinkManager() const
@@ -188,6 +202,14 @@ XclImpCondFormatManager& XclImpRoot::GetCondFormatManager() const
     if( !mrImpData.mpCondFmtManager.get() )
         mrImpData.mpCondFmtManager.reset( new XclImpCondFormatManager( GetRoot() ) );
     return *mrImpData.mpCondFmtManager;
+}
+
+XclImpAutoFilterBuffer& XclImpRoot::GetFilterManager() const
+{
+    // TODO still in old RootData
+    if( !mpRD->pAutoFilterBuffer )
+        mpRD->pAutoFilterBuffer = new XclImpAutoFilterBuffer;
+    return *mpRD->pAutoFilterBuffer;
 }
 
 XclImpWebQueryBuffer& XclImpRoot::GetWebQueryBuffer() const
