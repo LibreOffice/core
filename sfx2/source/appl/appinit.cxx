@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 16:37:35 $
+ *  last change: $Author: vg $ $Date: 2003-05-26 08:28:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -341,7 +341,7 @@ FASTBOOL SfxApplication::Initialize_Impl()
     SfxEventConfiguration::RegisterEvent(SFX_EVENT_ACTIVATEDOC,     String(SfxResId(STR_EVENT_ACTIVATEDOC)),    aEventNames.GetString( 10 ) );
     SfxEventConfiguration::RegisterEvent(SFX_EVENT_DEACTIVATEDOC,   String(SfxResId(STR_EVENT_DEACTIVATEDOC)),  aEventNames.GetString( 11 ) );
     SfxEventConfiguration::RegisterEvent(SFX_EVENT_PRINTDOC,        String(SfxResId(STR_EVENT_PRINTDOC)),       aEventNames.GetString( 12 ) );
-    //SfxEventConfiguration::RegisterEvent(SFX_EVENT_MODIFYCHANGED, String(SfxResId(SFX_EVENT_MODIFYCHANGED)),  aEventNames.GetString( 13 ) );
+    SfxEventConfiguration::RegisterEvent(SFX_EVENT_MODIFYCHANGED,   String(SfxResId(STR_EVENT_MODIFYCHANGED)), aEventNames.GetString( 13 ) );
 
     // Subklasse initialisieren
     bDowning = sal_False;
@@ -368,9 +368,6 @@ FASTBOOL SfxApplication::Initialize_Impl()
     SvtSaveOptions aSaveOptions;
     pImp->pAutoSaveTimer->SetTimeout( aSaveOptions.GetAutoSaveTime() * 60000 );
     pImp->pAutoSaveTimer->SetTimeoutHdl( LINK( pApp, SfxApplication, AutoSaveHdl_Impl ) );
-
-    // App-StartEvent
-    NotifyEvent(SfxEventHint(SFX_EVENT_STARTAPP), sal_False);
 
 //(dv)  if ( !pAppData_Impl->bBean )
 //(mba)        doFirstTimeInit();
