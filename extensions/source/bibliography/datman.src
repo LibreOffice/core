@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-05 13:42:39 $
+ *  last change: $Author: kz $ $Date: 2002-11-27 16:54:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ ModalDialog RID_DLG_MAPPING
         Text [ENGLISH] = "Column names";
         Text[ english_us ] = "Column names";
         Text[ portuguese ] = "Nomes de coluna";
-        Text[ russian ] = "Названия колонок";
+        Text[ russian ] = "Названия столбцов";
         Text[ greek ] = "Пньмбфб уфзлюн";
         Text[ dutch ] = "Kolomnamen";
         Text[ french ] = "Noms des colonnes";
@@ -461,7 +461,7 @@ ModalDialog RID_DLG_MAPPING
         Text [ENGLISH] = "<none>";
         Text[ english_us ] = "<none>";
         Text[ portuguese ] = "<nenhum>";
-        Text[ russian ] = "<без>";
+        Text[ russian ] = "<нет>";
         Text[ greek ] = "<кбнЭнб>";
         Text[ dutch ] = "<geen>";
         Text[ french ] = "<aucun>";
@@ -484,7 +484,7 @@ ModalDialog RID_DLG_MAPPING
     };
     Text[ english_us ] = "Column Layout for Table %1";
     Text[ portuguese ] = "Atribuiзгo de colunas para a tabela %1";
-    Text[ russian ] = "Расположение колонок для таблицы %1";
+    Text[ russian ] = "Расположение столбцов таблицы %1";
     Text[ greek ] = "Рспудйпсйумьт уфзлюн гйб рЯнбкб %1";
     Text[ dutch ] = "Kolomindeling voor tabel %1";
     Text[ french ] = "Assignation de colonnes pour la table %1";
