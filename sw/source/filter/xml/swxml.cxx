@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:14:06 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:21:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,12 @@
 #include <tools/urlobj.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_EMBED_XSTORAGE_HPP_
+#include <com/sun/star/embed/XStorage.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
+#include <com/sun/star/embed/ElementModes.hpp>
+#endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
@@ -111,6 +117,9 @@
 #ifndef _SFXECODE_HXX
 #include <svtools/sfxecode.hxx>
 #endif
+#ifndef _SFXSTRITEM_HXX
+#include <svtools/stritem.hxx>
+#endif
 #ifndef _UTL_STREAM_WRAPPER_HXX_
 #include <unotools/streamwrap.hxx>
 #endif
@@ -126,6 +135,9 @@
 #ifndef _RTL_LOGFILE_HXX_
 #include <rtl/logfile.hxx>
 #endif
+
+#include <sfx2/frame.hxx>
+#include <unotools/ucbstreamhelper.hxx>
 
 #ifndef _SWSWERROR_H
 #include <swerror.h>
@@ -383,7 +395,7 @@ sal_Int32 ReadThroughComponent(
 
 /// read a component (storage version)
 sal_Int32 ReadThroughComponent(
-    SvStorage* pStorage,
+    Reference<embed::XStorage> xStorage,
     Reference<XComponent> xModelComponent,
     const sal_Char* pStreamName,
     const sal_Char* pCompatibilityStreamName,
@@ -401,12 +413,21 @@ sal_Int32 ReadThroughComponent(
     sal_Bool bMergeStyles,
     sal_Bool bOrganizerMode )
 {
-    DBG_ASSERT(NULL != pStorage, "Need storage!");
+    DBG_ASSERT(xStorage.is(), "Need storage!");
     DBG_ASSERT(NULL != pStreamName, "Please, please, give me a name!");
 
     // open stream (and set parser input)
     OUString sStreamName = OUString::createFromAscii(pStreamName);
-    if (! pStorage->IsStream(sStreamName))
+    sal_Bool bContainsStream = sal_False;
+    try
+    {
+        bContainsStream = xStorage->isStreamElement(sStreamName);
+    }
+    catch( container::NoSuchElementException& )
+    {
+    }
+
+    if (!bContainsStream )
     {
         // stream name not found! Then try the compatibility name.
         // if no stream can be opened, return immediatly with OK signal
@@ -417,7 +438,15 @@ sal_Int32 ReadThroughComponent(
 
         // if so, does the stream exist?
         sStreamName = OUString::createFromAscii(pCompatibilityStreamName);
-        if (! pStorage->IsStream(sStreamName) )
+        try
+        {
+            bContainsStream = xStorage->isStreamElement(sStreamName);
+        }
+        catch( container::NoSuchElementException& )
+        {
+        }
+
+        if (! bContainsStream )
             return 0;
     }
 
@@ -432,27 +461,37 @@ sal_Int32 ReadThroughComponent(
         xInfoSet->setPropertyValue( sPropName, makeAny( sStreamName ) );
     }
 
-    // get input stream
-    SvStorageStreamRef xEventsStream;
-    xEventsStream = pStorage->OpenStream( sStreamName,
-                                          STREAM_READ | STREAM_NOCREATE );
+    try
+    {
+        // get input stream
+        Reference <io::XStream> xStream = xStorage->openStreamElement( sStreamName, embed::ElementModes::READ );
+        Reference <beans::XPropertySet > xProps( xStream, uno::UNO_QUERY );
 
-    Any aAny;
-    sal_Bool bEncrypted =
-        xEventsStream->GetProperty(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("Encrypted") ), aAny ) &&
-        aAny.getValueType() == ::getBooleanCppuType() &&
-        *(sal_Bool *)aAny.getValue();
+        Any aAny = xProps->getPropertyValue(
+                OUString( RTL_CONSTASCII_USTRINGPARAM("Encrypted") ) );
 
-    Reference < io::XInputStream > xStream = xEventsStream->GetXInputStream();
-    // read from the stream
-    return ReadThroughComponent(
-        xStream, xModelComponent, sStreamName, rFactory,
-        pFilterName, rFilterArguments,
-        rName, bMustBeSuccessfull, bBlockMode, rInsertTextRange, bFormatsOnly,
-        nStyleFamilyMask, bMergeStyles, bOrganizerMode, bEncrypted );
+        sal_Bool bEncrypted = aAny.getValueType() == ::getBooleanCppuType() &&
+                *(sal_Bool *)aAny.getValue();
+
+        Reference <io::XInputStream> xInputStream = xStream->getInputStream();
+
+        // read from the stream
+        return ReadThroughComponent(
+            xInputStream, xModelComponent, sStreamName, rFactory,
+            pFilterName, rFilterArguments,
+            rName, bMustBeSuccessfull, bBlockMode, rInsertTextRange, bFormatsOnly,
+            nStyleFamilyMask, bMergeStyles, bOrganizerMode, bEncrypted );
+    }
+    catch ( packages::WrongPasswordException& )
+    {
+        return ERRCODE_SFX_WRONGPASSWORD;
+    }
+    catch ( uno::Exception& )
+    {
+        OSL_ENSURE( sal_False, "Error on import!\n" );
+        // TODO/LATER: error handling
+    }
 }
-
 
 sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
 {
@@ -472,27 +511,25 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
     SvXMLEmbeddedObjectHelper *pObjectHelper = 0;
 
     // get the input stream (storage or stream)
-    SvStorageStreamRef xDocStream;
     Reference<io::XInputStream> xInputStream;
-    SvStorage *pStorage = 0;
+    Reference<embed::XStorage> xStorage;
     if( pMedium )
-        pStorage = pMedium->GetStorage();
+        xStorage = pMedium->GetStorage();
     else
-        pStorage = pStg;
+        xStorage = xStg;
 
-    ASSERT( pStorage, "XML Reader can only read from storage" );
-    if( !pStorage )
+    if( !xStorage.is() )
         return ERR_SWG_READ_ERROR;
 
-    pGraphicHelper = SvXMLGraphicHelper::Create( *pStorage,
+    pGraphicHelper = SvXMLGraphicHelper::Create( xStorage,
                                                  GRAPHICHELPER_MODE_READ,
                                                  sal_False );
     xGraphicResolver = pGraphicHelper;
-    SvPersist *pPersist = rDoc.GetPersist();
+    SfxObjectShell *pPersist = rDoc.GetPersist();
     if( pPersist )
     {
         pObjectHelper = SvXMLEmbeddedObjectHelper::Create(
-                                        *pStorage, *pPersist,
+                                        xStorage, *pPersist,
                                         EMBEDDEDOBJECTHELPER_MODE_READ,
                                         sal_False );
         xObjectResolver = pObjectHelper;
@@ -569,6 +606,7 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
 
     // try to get an XStatusIndicator from the Medium
     uno::Reference<task::XStatusIndicator> xStatusIndicator;
+
     if (pDocSh->GetMedium())
     {
         SfxItemSet* pSet = pDocSh->GetMedium()->GetItemSet();
@@ -633,13 +671,34 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
     }
 
     // Set base URI
-    OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("BaseURI") );
-    xInfoSet->setPropertyValue( sPropName,
-                            makeAny( OUString(INetURLObject::GetBaseURL()) ) );
-    if( SFX_CREATE_MODE_EMBEDDED == rDoc.GetDocShell()->GetCreateMode() &&
-         !pStorage->IsRoot() )
+    // there is ambiguity which medium should be used here
+    // for now the own medium has a preference
+    SfxMedium* pMedDescrMedium = pMedium ? pMedium : pDocSh->GetMedium();
+    OSL_ENSURE( pMedDescrMedium, "There is no medium to get MediaDescriptor from!\n" );
+
+    ::rtl::OUString aBaseURL = OUString(INetURLObject::GetBaseURL());
+    if ( pMedDescrMedium && pMedDescrMedium->GetItemSet() )
     {
-        OUString aName( pStorage->GetName() );
+        const SfxStringItem* pBaseURLItem = static_cast<const SfxStringItem*>(
+                pMedDescrMedium->GetItemSet()->GetItem(SID_DOC_BASEURL) );
+        if ( pBaseURLItem )
+            aBaseURL = pBaseURLItem->GetValue();
+    }
+    OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("BaseURI") );
+    xInfoSet->setPropertyValue( sPropName, makeAny( aBaseURL ) );
+
+    // TODO/LATER: separate links from usual embedded objects
+    if( SFX_CREATE_MODE_EMBEDDED == rDoc.GetDocShell()->GetCreateMode() )
+    {
+        OUString aName = ::rtl::OUString::createFromAscii( "dummyObjectName" );
+        if ( pMedDescrMedium && pMedDescrMedium->GetItemSet() )
+        {
+            const SfxStringItem* pDocHierarchItem = static_cast<const SfxStringItem*>(
+                pMedDescrMedium->GetItemSet()->GetItem(SID_DOC_HIERARCHICALNAME) );
+            if ( pDocHierarchItem )
+                aName = pDocHierarchItem->GetValue();
+        }
+
         if( aName.getLength() )
         {
             sPropName = OUString(RTL_CONSTASCII_USTRINGPARAM("StreamRelPath"));
@@ -669,7 +728,7 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
     // force redline mode to "none"
     rDoc.SetRedlineMode_intern( REDLINE_NONE );
 
-    sal_Bool bOASIS = pStorage->GetVersion() > SOFFICE_FILEFORMAT_60;
+    sal_Bool bOASIS = ( SotStorage::GetVersion( xStorage ) > SOFFICE_FILEFORMAT_60 );
     // --> OD 2004-08-10 #i28749# - set property <ShapePositionInHoriL2R>
     {
         const sal_Bool bShapePositionInHoriL2R = !bOASIS;
@@ -685,7 +744,7 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
           bInsertMode) )
     {
         nWarn = ReadThroughComponent(
-            pStorage, xModelComp, "meta.xml", "Meta.xml", xServiceFactory,
+            xStorage, xModelComp, "meta.xml", "Meta.xml", xServiceFactory,
             (bOASIS ? "com.sun.star.comp.Writer.XMLOasisMetaImporter"
                     : "com.sun.star.comp.Writer.XMLMetaImporter"),
             aEmptyArgs, rName, sal_False, IsBlockMode(), xInsertTextRange,
@@ -693,7 +752,7 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
             sal_False );
 
         nWarn2 = ReadThroughComponent(
-            pStorage, xModelComp, "settings.xml", NULL, xServiceFactory,
+            xStorage, xModelComp, "settings.xml", NULL, xServiceFactory,
             (bOASIS ? "com.sun.star.comp.Writer.XMLOasisSettingsImporter"
                     : "com.sun.star.comp.Writer.XMLSettingsImporter"),
             aFilterArgs, rName, sal_False, IsBlockMode(), xInsertTextRange,
@@ -702,7 +761,7 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
     }
 
     nRet = ReadThroughComponent(
-        pStorage, xModelComp, "styles.xml", NULL, xServiceFactory,
+        xStorage, xModelComp, "styles.xml", NULL, xServiceFactory,
         (bOASIS ? "com.sun.star.comp.Writer.XMLOasisStylesImporter"
                 : "com.sun.star.comp.Writer.XMLStylesImporter"),
         aFilterArgs, rName, sal_True, IsBlockMode(), xInsertTextRange,
@@ -711,7 +770,7 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
 
     if( !nRet && !(IsOrganizerMode() || aOpt.IsFmtsOnly()) )
         nRet = ReadThroughComponent(
-           pStorage, xModelComp, "content.xml", "Content.xml", xServiceFactory,
+           xStorage, xModelComp, "content.xml", "Content.xml", xServiceFactory,
             (bOASIS ? "com.sun.star.comp.Writer.XMLOasisContentImporter"
                     : "com.sun.star.comp.Writer.XMLContentImporter"),
            aFilterArgs, rName, sal_True, IsBlockMode(), xInsertTextRange,
@@ -722,12 +781,16 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
           aOpt.IsFmtsOnly() ) )
     {
         OUString sStreamName( RTL_CONSTASCII_USTRINGPARAM("layout-cache") );
-        SvStorageStreamRef xStrm = pStorage->OpenStream( sStreamName,
-                                      STREAM_READ | STREAM_NOCREATE );
-        if( xStrm.Is() && !xStrm->GetError() )
+        try
         {
-            xStrm->SetBufferSize( 16*1024 );
-            rDoc.ReadLayoutCache( *xStrm );
+            Reference < io::XStream > xStm = xStorage->openStreamElement( sStreamName, embed::ElementModes::READ );
+            SvStream* pStrm = utl::UcbStreamHelper::CreateStream( xStm );
+            if( !pStrm->GetError() )
+                rDoc.ReadLayoutCache( *pStrm );
+            delete pStrm;
+        }
+        catch ( uno::Exception& )
+        {
         }
     }
 
@@ -794,19 +857,19 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
 USHORT XMLReader::GetSectionList( SfxMedium& rMedium,
                                     SvStrings& rStrings ) const
 {
-    SvStorage* pStg;
     Reference< lang::XMultiServiceFactory > xServiceFactory =
             comphelper::getProcessServiceFactory();
     ASSERT( xServiceFactory.is(),
             "XMLReader::Read: got no service manager" );
-    if( xServiceFactory.is() && 0 != ( pStg = rMedium.GetStorage() ) )
+    Reference < embed::XStorage > xStg;
+    if( xServiceFactory.is() && ( xStg = rMedium.GetStorage() ).is() )
     {
         xml::sax::InputSource aParserInput;
         OUString sDocName( RTL_CONSTASCII_USTRINGPARAM( "content.xml" ) );
         aParserInput.sSystemId = sDocName;
-        SvStorageStreamRef xDocStream = pStg->OpenStream( sDocName,
-            ( STREAM_READ | STREAM_SHARE_DENYWRITE | STREAM_NOCREATE ) );
-        aParserInput.aInputStream = xDocStream->GetXInputStream();
+
+        Reference < io::XStream > xStm = xStg->openStreamElement( sDocName, embed::ElementModes::READ );
+        aParserInput.aInputStream = xStm->getInputStream();
 
         // get parser
         Reference< XInterface > xXMLParser = xServiceFactory->createInstance(
