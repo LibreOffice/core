@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-06 11:47:00 $
+ *  last change: $Author: mba $ $Date: 2001-10-10 11:21:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -708,6 +708,12 @@ SfxObjectShellLock SfxApplication::NewDoc_Impl( const String& rFact, const SfxIt
             pNew->ClearItem( SID_PROGRESS_STATUSBAR_CONTROL );
             ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs;
             TransformItems( SID_OPENDOC, *pNew, aArgs );
+
+            sal_Int32 nLength = aArgs.getLength();
+            aArgs.realloc( nLength + 1 );
+            aArgs[nLength].Name = DEFINE_CONST_UNICODE("Title");
+            aArgs[nLength].Value <<= ::rtl::OUString( xDoc->GetTitle( SFX_TITLE_DETECT ) );
+
             xModel->attachResource( ::rtl::OUString(), aArgs );
             delete pNew;
         }
