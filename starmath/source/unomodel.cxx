@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tl $ $Date: 2001-05-17 10:02:06 $
+ *  last change: $Author: mtg $ $Date: 2001-06-11 16:34:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -781,7 +781,7 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
                 for (USHORT i = 0, nEnd = rManager.GetSymbolCount(); i < nEnd; i++)
                 {
                     const SmSym * pSymbol = rManager.GetSymbol ( i );
-                    if (!pSymbol->IsPredefined () )
+                    if (pSymbol && !pSymbol->IsPredefined () )
                     {
                         aVector.push_back ( pSymbol );
                         nCount++;
