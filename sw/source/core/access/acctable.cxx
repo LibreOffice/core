@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acctable.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:38:23 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:13:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,20 +75,20 @@
 #include <list>
 #include <set>
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
+#include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLETABLEMODELCHANGE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleTableModelChange.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLETABLEMODELCHANGE_HPP_
+#include <com/sun/star/accessibility/AccessibleTableModelChange.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLETABLEMODELCHANGETYPE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleTableModelChangeType.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLETABLEMODELCHANGETYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleTableModelChangeType.hpp>
 #endif
 
 #ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX_
@@ -136,10 +136,10 @@
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
-using namespace ::drafts::com::sun::star::accessibility;
+using namespace ::com::sun::star::accessibility;
 using namespace ::rtl;
 
-const sal_Char sServiceName[] = "drafts.com.sun.star.table.AccessibleTableView";
+const sal_Char sServiceName[] = "com.sun.star.table.AccessibleTableView";
 const sal_Char sImplementationName[] = "com.sun.star.comp.Writer.SwAccessibleTableView";
 
 typedef ::std::less < sal_Int32 > Int32Less_Impl;
@@ -702,7 +702,7 @@ void SwAccessibleTable::FireTableChangeEvent(
     aModelChange.LastColumn = rTableData.GetColumnCount() - 1;
 
     AccessibleEventObject aEvent;
-    aEvent.EventId = AccessibleEventId::ACCESSIBLE_TABLE_MODEL_EVENT;
+    aEvent.EventId = AccessibleEventId::TABLE_MODEL_CHANGED;
     aEvent.NewValue <<= aModelChange;
 
     FireAccessibleEvent( aEvent );
@@ -779,7 +779,7 @@ void SwAccessibleTable::GetStates(
     // MULTISELECTABLE
     SwCrsrShell* pCrsrShell = GetCrsrShell();
     if( pCrsrShell  )
-        rStateSet.AddState( AccessibleStateType::MULTISELECTABLE );
+        rStateSet.AddState( AccessibleStateType::MULTI_SELECTABLE );
 }
 
 SwAccessibleTable::SwAccessibleTable(
@@ -839,7 +839,7 @@ void SwAccessibleTable::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
             if( sOldName != GetName() )
             {
                 AccessibleEventObject aEvent;
-                aEvent.EventId = AccessibleEventId::ACCESSIBLE_NAME_EVENT;
+                aEvent.EventId = AccessibleEventId::NAME_CHANGED;
                 aEvent.OldValue <<= sOldName;
                 aEvent.NewValue <<= GetName();
                 FireAccessibleEvent( aEvent );
@@ -853,7 +853,7 @@ void SwAccessibleTable::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
             if( sDesc != sOldDesc )
             {
                 AccessibleEventObject aEvent;
-                aEvent.EventId = AccessibleEventId::ACCESSIBLE_DESCRIPTION_EVENT;
+                aEvent.EventId = AccessibleEventId::DESCRIPTION_CHANGED;
                 aEvent.OldValue <<= sOldDesc;
                 aEvent.NewValue <<= sDesc;
                 FireAccessibleEvent( aEvent );
@@ -1602,7 +1602,7 @@ Reference<XAccessible> SAL_CALL SwAccessibleTable::getSelectedAccessibleChild(
     return getAccessibleChild( nChildIndex );
 }
 
-void SAL_CALL SwAccessibleTable::deselectSelectedAccessibleChild(
+void SAL_CALL SwAccessibleTable::deselectAccessibleChild(
     sal_Int32 nSelectedChildIndex )
     throw ( IndexOutOfBoundsException,
             RuntimeException )
