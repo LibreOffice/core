@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: kz $ $Date: 2001-12-14 17:33:51 $
+ *  last change: $Author: rt $ $Date: 2001-12-19 17:59:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1793,7 +1793,7 @@ String STR_UNDO_DRAGDROP
     Text[ chinese_simplified ] = "ζ‹–ζ”Ύ";
     Text[ russian ] = "Οεπεςΰρκθβΰνθε";
     Text[ polish ] = "PrzeciΉgij i upuζ";
-    Text[ japanese ] = "γƒ‰γƒ©γƒƒγ‚°&γƒ‰γƒ­γƒƒγƒ—";
+    Text[ japanese ] = "γƒ‰γƒ©γƒƒγ‚°οΌ†γƒ‰γƒ­γƒƒγƒ—";
     Text[ greek ] = "Μετακίνηση και Aπόθεση";
     Text[ korean ] = "λ“λκ·Έ μ•¤ λ“λ΅­";
     Text[ chinese_traditional ] = "ζ‹–ζ›³";
@@ -9889,7 +9889,7 @@ String STR_GENERAL_PUBLISHING_ERROR
     Text[ chinese_simplified ] = "δΏε­ε‘θ΅¨ζ–‡δ»¶ζ—¶ε‘η”δΈ€δΈªι”™θ――γ€‚";
     Text[ russian ] = "Οπθ ρξυπΰνενθθ οσαλθκΰφθθ οπξθηξψλΰ ξψθακΰ.";
     Text[ polish ] = "WystΉpi³ b³Ήd w trakcie zapisywania publikacji.";
-    Text[ japanese ] = "η™Ίθ΅¨γ™γ‚‹γ‚‚γ®γ‚’δΏε­γ™γ‚‹ι›γ« γ‚¨γƒ©γƒΌγη™Ίη”γ—γΎγ—γγ€‚";
+    Text[ japanese ] = "η™Ίθ΅¨ζ–Ήζ³•γ‚’δΏε­γ™γ‚‹γ¨γγ«γ‚¨γƒ©γƒΌγη™Ίη”γ—γΎγ—γγ€‚";
     Text[ greek ] = "Παρουσιάστηκε σφάλμα κατά την αποθήκευση της δημοσίευσης.";
     Text[ korean ] = "κ²μ‹λ¬Όμ„ μ €μ¥ν•  λ• μ¤λ¥κ°€ λ°μƒν–μµλ‹λ‹¤.";
     Text[ chinese_traditional ] = "δΏε­η™Όθ΅¨ζª”ζ΅ζ™‚η™Όη”δΈ€ε€‹ι―θª¤γ€‚";
@@ -12168,7 +12168,7 @@ String STR_GRAPHIC_DOCUMENT_FULLTYPE_50
     Text[ chinese_simplified ] = "%PRODUCTNAME 5.0 η»ε›Ύ";
     Text[ russian ] = "Πθρσνξκ %PRODUCTNAME 5.0";
     Text[ polish ] = "Rysunek %PRODUCTNAME 5.0";
-    Text[ japanese ] = "%PRODUCTNAME 5.0γ®ε›³ε½Άζη”»";
+    Text[ japanese ] = "%PRODUCTNAME 5.0 ε›³ε½Άζη”»";
     Text[ greek ] = "Σχέδιο (%PRODUCTNAME 5.0)";
     Text[ korean ] = "%PRODUCTNAME 5.0 κ·Έλ¦¬κΈ°";
     Text[ chinese_traditional ] = "%PRODUCTNAME 5.0 ηΉªε–";
@@ -12268,7 +12268,7 @@ String STR_VIEWTYPE_TEXTURE
     Text[ chinese_simplified ] = "ηΊΉη†";
     Text[ russian ] = "Òεκρςσπΰ";
     Text[ polish ] = "Tekstura";
-    Text[ japanese ] = "γƒ†γ‚―γ‚Ήγƒγƒ£";
+    Text[ japanese ] = "γƒ†γ‚―γ‚Ήγƒγƒ£γƒΌ";
     Text[ greek ] = "Υφή";
     Text[ korean ] = "μ§κ°";
     Text[ chinese_traditional ] = "η΄‹η†";
@@ -13696,6 +13696,7 @@ String STR_UNDO_GRAFTRANSPARENCY
     Text[ catalan ] = "Transparθncia";
     Text[ finnish ] = "Lδpikuultavuus";
 };
+
 
 
 
