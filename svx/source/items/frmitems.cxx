@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmitems.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 16:07:38 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 12:11:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4067,7 +4067,6 @@ const GraphicObject* SvxBrushItem::GetGraphicObject( SfxObjectShell* pSh ) const
             pImpl->xMedium = new SfxMedium(
                 *pStrLink, STREAM_STD_READ, sal_False );
 
-            pImpl->xMedium->SetTransferPriority( SFX_TFPRIO_VISIBLE_LOWRES_GRAPHIC );
             if( pImpl->xMedium->IsRemote() )
             {
                 if( pSh )
