@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WNameMatch.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-10 09:46:29 $
+ *  last change: $Author: oj $ $Date: 2002-05-23 11:59:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,16 +195,15 @@ sal_Bool OWizNameMatching::LeavePage()
 {
     DBG_CHKTHIS(OWizNameMatching,NULL);
 
-    const ODatabaseExport::TColumnVector* pSrcColumns       = m_pParent->getSrcVector();
+    const ODatabaseExport::TColumnVector* pSrcColumns = m_pParent->getSrcVector();
 
     m_pParent->m_vColumnPos.clear();
     m_pParent->m_vColumnTypes.clear();
-    m_pParent->m_vColumnPos.resize(pSrcColumns->size(),CONTAINER_ENTRY_NOTFOUND);
+    m_pParent->m_vColumnPos.resize(pSrcColumns->size(),ODatabaseExport::TPositions::value_type(CONTAINER_ENTRY_NOTFOUND,CONTAINER_ENTRY_NOTFOUND));
     m_pParent->m_vColumnTypes.resize(pSrcColumns->size(),CONTAINER_ENTRY_NOTFOUND);
 
 
-    const ODatabaseExport::TColumns* pDestColumns = m_pParent->getSourceColumns();
-
+    sal_Int32 nParamPos = 0;
     SvLBoxEntry* pLeftEntry = m_CTRL_LEFT.GetModel()->First();
     SvLBoxEntry* pRightEntry = m_CTRL_RIGHT.GetModel()->First();
     while(pLeftEntry && pRightEntry)
@@ -212,19 +211,24 @@ sal_Bool OWizNameMatching::LeavePage()
         OFieldDescription* pSrcField = static_cast<OFieldDescription*>(pLeftEntry->GetUserData());
         DBG_ASSERT(pSrcField,"OWizNameMatching: OColumn can not be null!");
 
-        OFieldDescription* pDestField = static_cast<OFieldDescription*>(pRightEntry->GetUserData());
-        DBG_ASSERT(pDestField,"OWizNameMatching: OColumn can not be null!");
+        ODatabaseExport::TColumnVector::const_iterator aSrcIter = pSrcColumns->begin();
+        for(;aSrcIter != pSrcColumns->end() && (*aSrcIter)->second != pSrcField;++aSrcIter)
+            ;
+        sal_Int32 nPos = ::std::distance(pSrcColumns->begin(),aSrcIter);
 
-        sal_Int32 nPos = m_CTRL_LEFT.GetModel()->GetAbsPos(pLeftEntry);
+        //  sal_Int32 nPos = m_CTRL_LEFT.GetModel()->GetAbsPos(pLeftEntry);
         if(m_CTRL_LEFT.GetCheckButtonState(pLeftEntry) == SV_BUTTON_CHECKED)
         {
+            OFieldDescription* pDestField = static_cast<OFieldDescription*>(pRightEntry->GetUserData());
+            DBG_ASSERT(pDestField,"OWizNameMatching: OColumn can not be null!");
             const ODatabaseExport::TColumnVector* pDestColumns          = m_pParent->getDestVector();
             ODatabaseExport::TColumnVector::const_iterator aDestIter    = pDestColumns->begin();
 
             for(;aDestIter != pDestColumns->end() && (*aDestIter)->second != pDestField;++aDestIter)
                 ;
 
-            m_pParent->m_vColumnPos[nPos]   = ::std::distance(pDestColumns->begin(),aDestIter) + 1;
+            m_pParent->m_vColumnPos[nPos].first = ::std::distance(pDestColumns->begin(),aDestIter) + 1;
+            m_pParent->m_vColumnPos[nPos].second = ++nParamPos;
             const OTypeInfo* pTypeInfo = m_pParent->convertType((*aDestIter)->second->getTypeInfo());
             sal_Int32 nType = ::com::sun::star::sdbc::DataType::VARCHAR;
             if(pTypeInfo)
@@ -232,7 +236,7 @@ sal_Bool OWizNameMatching::LeavePage()
             m_pParent->m_vColumnTypes[nPos] = nType;
         }
         else
-            m_pParent->m_vColumnPos[nPos] = CONTAINER_ENTRY_NOTFOUND;
+            m_pParent->m_vColumnPos[nPos].first = CONTAINER_ENTRY_NOTFOUND;
 
         pLeftEntry = m_CTRL_LEFT.GetModel()->Next(pLeftEntry);
         pRightEntry = m_CTRL_RIGHT.GetModel()->Next(pRightEntry);
