@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:57:29 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:36:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2974,15 +2974,15 @@ void ParagraphObj::ImplGetParagraphValues( PPTExBulletProvider& rBuProv, sal_Boo
 
     if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "ParaBottomMargin" ) ), bGetPropStateValue ) )
     {
-        sal_uInt32 nSpacing = *( (sal_uInt32*)mAny.getValue() );
-        mnLineSpacingBottom = (sal_Int16)(-( nSpacing / 4.40972 ) );
+        double fSpacing = *( (sal_uInt32*)mAny.getValue() ) + ( 2540.0 / 576.0 ) - 1;
+        mnLineSpacingBottom = (sal_Int16)(-( fSpacing * 576.0 / 2540.0 ) );
     }
     meLineSpacingBottom = ePropState;
 
     if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "ParaTopMargin" ) ), bGetPropStateValue ) )
     {
-        sal_uInt32 nSpacing = *( (sal_uInt32*)mAny.getValue() );
-        mnLineSpacingTop = (sal_Int16)(-( nSpacing / 4.40972 ) );
+        double fSpacing = *( (sal_uInt32*)mAny.getValue() ) + ( 2540.0 / 576.0 ) - 1;
+        mnLineSpacingTop = (sal_Int16)(-( fSpacing * 576.0 / 2540.0 ) );
     }
     meLineSpacingTop = ePropState;
 
@@ -4482,11 +4482,18 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 }
                 else
                 {
-                    sal_Bool bIsFontwork = FALSE;
+                    sal_Bool bIsFontwork = sal_False;
+                    sal_Bool bIsHatching = sal_False;
                     ::com::sun::star::uno::Any aAny;
+                    ::com::sun::star::drawing::FillStyle eFS;
                     if ( GetPropertyValue( aAny, mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "IsFontwork" ) ), sal_True ) )
                         aAny >>= bIsFontwork;
-                    if ( bIsFontwork || ( mType == "drawing.Measure" ) || ( mType == "drawing.Caption" ) )
+                    if ( GetPropertyValue( aAny, mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "FillStyle" ) ), sal_True ) )
+                    {
+                        aAny >>= eFS;
+                        bIsHatching = eFS == ::com::sun::star::drawing::FillStyle_HATCH;
+                    }
+                    if ( bIsHatching || bIsFontwork || ( mType == "drawing.Measure" ) || ( mType == "drawing.Caption" ) )
                     {
                         if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "BoundRect" ) ) ) )
                         {
