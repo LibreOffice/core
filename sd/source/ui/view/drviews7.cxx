@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-17 11:08:34 $
+ *  last change: $Author: hr $ $Date: 2000-11-21 17:36:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,8 @@
 #ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
 #endif
+
+#include <svtools/moduleoptions.hxx>
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
@@ -1130,11 +1132,11 @@ void __EXPORT SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
 
     // Sind die Module verfuegbar?
 
-    if (!(pApp->HasFeature(SFX_FEATURE_SCALC)))
+    if (!SvtModuleOptions().IsCalc())
     {
         rSet.DisableItem( SID_ATTR_TABLE );
     }
-    if (!(pApp->HasFeature(SFX_FEATURE_SCHART)))
+    if (!SvtModuleOptions().IsChart())
     {
         rSet.DisableItem( SID_INSERT_DIAGRAM );
     }
@@ -1144,7 +1146,7 @@ void __EXPORT SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem( SID_INSERT_IMAGE );
     }
 #endif
-    if (!(pApp->HasFeature(SFX_FEATURE_SMATH)))
+    if (!SvtModuleOptions().IsMath())
     {
         rSet.DisableItem( SID_INSERT_MATH );
     }
