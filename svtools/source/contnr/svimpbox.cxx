@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svimpbox.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-17 08:31:59 $
+ *  last change: $Author: fs $ $Date: 2002-05-23 11:44:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2096,13 +2096,12 @@ void SvImpLBox::MouseButtonUp( const MouseEvent& rMEvt)
     if(!ButtonUpCheckCtrl( rMEvt ) )
         aSelEng.SelMouseButtonUp( rMEvt );
     EndScroll();
-//#if defined(MAC) || defined(OV_DEBUG)
     if( nFlags & F_START_EDITTIMER )
     {
         nFlags &= (~F_START_EDITTIMER);
+        aEditClickPos = rMEvt.GetPosPixel();
         aEditTimer.Start();
     }
-//#endif
 
     return;
 }
@@ -2124,9 +2123,7 @@ void SvImpLBox::MouseMove( const MouseEvent& rMEvt)
 
 BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
 {
-//#if defined(MAC) || defined(OV_DEBUG)
     aEditTimer.Stop();
-//#endif
 
     if( rKEvt.GetKeyCode().IsMod2() )
         return FALSE; // Alt-Taste nicht auswerten
@@ -2333,7 +2330,10 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
 
         case KEY_F2:
             if( !bShift && !bMod1 )
+            {
+                aEditClickPos = Point( -1, -1 );
                 EditTimerCall( 0 );
+            }
             break;
 
         case KEY_F8:
@@ -2507,9 +2507,7 @@ void __EXPORT SvImpLBox::GetFocus()
 
 void __EXPORT SvImpLBox::LoseFocus()
 {
-//#if defined(MAC) || defined(OV_DEBUG)
     aEditTimer.Stop();
-//#endif
     if( pCursor )
         pView->SetEntryFocus( pCursor,FALSE );
     ShowCursor( FALSE );
@@ -3016,11 +3014,22 @@ void SvImpLBox::SetCurEntry( SvLBoxEntry* pEntry )
         pView->Select( pEntry, TRUE );
 }
 
-//#if defined(MAC) || defined(OV_DEBUG)
 IMPL_LINK( SvImpLBox, EditTimerCall, Timer *, pTimer )
 {
     if( pView->IsInplaceEditingEnabled() )
     {
+        sal_Bool bIsMouseTriggered = aEditClickPos.X() >= 0;
+        if ( bIsMouseTriggered )
+        {
+            Point aCurrentMousePos = pView->GetPointerPosPixel();
+            if  (   ( abs( aCurrentMousePos.X() - aEditClickPos.X() ) > 5 )
+                ||  ( abs( aCurrentMousePos.Y() - aEditClickPos.Y() ) > 5 )
+                )
+            {
+                return 0L;
+            }
+        }
+
         SvLBoxEntry* pEntry = GetCurEntry();
         if( pEntry )
         {
@@ -3031,8 +3040,6 @@ IMPL_LINK( SvImpLBox, EditTimerCall, Timer *, pTimer )
     }
     return 0;
 }
-//#endif
-
 
 BOOL SvImpLBox::RequestHelp( const HelpEvent& rHEvt )
 {

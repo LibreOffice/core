@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svimpbox.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-17 08:28:32 $
+ *  last change: $Author: fs $ $Date: 2002-05-23 11:44:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,10 +181,9 @@ private:
     BOOL                bSubLstOpLR : 1;    // open/close sublist with cursor left/right, defaulted with FALSE
     BOOL                bContextMenuHandling : 1;
 
-//#if defined (MAC) || defined(OV_DEBUG)
+    Point               aEditClickPos;
     Timer               aEditTimer;
     DECL_LINK( EditTimerCall, Timer * );
-//#endif
 
     DECL_LINK( BeginDragHdl, void* );
     DECL_LINK( MyUserEvent,void*);
