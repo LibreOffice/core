@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flyfrms.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:41:21 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:05:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,6 @@
  ************************************************************************/
 #ifndef _FLYFRMS_HXX
 #define _FLYFRMS_HXX
-
 #include "flyfrm.hxx"
 
 // OD 11.11.2003 #i22341#
@@ -76,9 +75,14 @@ class SwFlyFreeFrm : public SwFlyFrm
 {
     SwPageFrm *pPage;   //Bei dieser Seite ist der Fly angemeldet.
 
-    // --> OD 2004-10-29 #i36347# - flag to prevent calling of method
-    // <CheckClip(..)> during <MakeAll()>
-    bool mbNoCheckClip;
+    // --> OD 2004-11-15 #i34753# - flag for at-page anchored Writer fly frames
+    // to prevent a positioning - call of method <MakeObjPos()> -, if Writer
+    // fly frame is already clipped during its format by the object formatter.
+    bool mbNoMakePos;
+    // <--
+    // --> OD 2004-11-12 #i37068# - flag to prevent move in method
+    // <CheckClip(..)>
+    bool mbNoMoveOnCheckClip;
     // <--
     void CheckClip( const SwFmtFrmSize &rSz );  //'Emergency' Clipping.
 
@@ -113,14 +117,34 @@ public:
 
     virtual void MakeAll();
 
-    // --> OD 2004-11-01 #i36347# - accessors for member <mbNoCheckClip>
-    inline void SetNoCheckClip( const bool _bNewNoCheckClip )
+    // --> OD 2004-11-12 #i37068# - accessors for member <mbNoMoveOnCheckClip>
+    inline void SetNoMoveOnCheckClip( const bool _bNewNoMoveOnCheckClip )
     {
-        mbNoCheckClip = _bNewNoCheckClip;
+        mbNoMoveOnCheckClip = _bNewNoMoveOnCheckClip;
     }
-    inline bool IsNoCheckClip() const
+    inline bool IsNoMoveOnCheckClip() const
     {
-        return mbNoCheckClip;
+        return mbNoMoveOnCheckClip;
+    }
+    // <--
+    // --> OD 2004-11-15 #i34753# - accessors for member <mbNoMakePos>
+    inline void SetNoMakePos( const bool _bNoMakePos )
+    {
+        if ( IsFlyLayFrm() )
+        {
+            mbNoMakePos = _bNoMakePos;
+        }
+    }
+    inline bool IsNoMakePos() const
+    {
+        if ( IsFlyLayFrm() )
+        {
+            return mbNoMakePos;
+        }
+        else
+        {
+            return false;
+        }
     }
     // <--
 };
@@ -181,14 +205,6 @@ public:
         @author OD
     */
     virtual bool IsFormatPossible() const;
-
-    /** method to check, if a lower Writer fly frame is in its format routine
-
-        OD 2004-11-01 #i36347
-
-        @author OD
-    */
-    bool IsLowerInProgress() const;
 };
 
 //Die Flys, die an einem Zeichen in einem Cntnt haengen.
@@ -242,6 +258,12 @@ public:
 
     // OD 2004-03-23 #i26791#
     virtual void MakeObjPos();
+
+    // --> OD 2004-12-02 #115759# - invalidate anchor frame on invalidation
+    // of the position, because the position is calculated during the
+    // format of the anchor frame
+    virtual void _ActionOnInvalidation( const InvalidationType _nInvalid );
+    // <--
 };
 
 inline void SwFlyInCntFrm::InvalidateLayout() const
