@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 09:57:11 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:52:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1804,8 +1804,8 @@ void SwFrm::ImplInvalidateLineNum()
 void SwFrm::ReinitializeFrmSizeAttrFlags()
 {
     const SwFmtFrmSize &rFmtSize = GetAttrSet()->GetFrmSize();
-    if ( ATT_VAR_SIZE == rFmtSize.GetSizeType() ||
-         ATT_MIN_SIZE == rFmtSize.GetSizeType())
+    if ( ATT_VAR_SIZE == rFmtSize.GetHeightSizeType() ||
+         ATT_MIN_SIZE == rFmtSize.GetHeightSizeType())
     {
         bFixSize = FALSE;
         if ( GetType() & (FRM_HEADER | FRM_FOOTER | FRM_ROW) )
@@ -1825,7 +1825,7 @@ void SwFrm::ReinitializeFrmSizeAttrFlags()
             } while ( ((SwLayoutFrm*)this)->IsAnLower( pCnt ) );
         }
     }
-    else if ( rFmtSize.GetSizeType() == ATT_FIX_SIZE )
+    else if ( rFmtSize.GetHeightSizeType() == ATT_FIX_SIZE )
     {
         if( IsVertical() )
             ChgSize( Size( rFmtSize.GetWidth(), Frm().Height()));
@@ -2275,7 +2275,7 @@ SwLayoutFrm::SwLayoutFrm( SwFrmFmt* pFmt ):
     pLower( 0 )
 {
     const SwFmtFrmSize &rFmtSize = pFmt->GetFrmSize();
-    if ( rFmtSize.GetSizeType() == ATT_FIX_SIZE )
+    if ( rFmtSize.GetHeightSizeType() == ATT_FIX_SIZE )
         BFIXHEIGHT = TRUE;
 }
 
@@ -3078,7 +3078,7 @@ void SwLayoutFrm::Format( const SwBorderAttrs *pAttrs )
         {
             const SwTwips nBorder = nUpper + nLower;
             const SwFmtFrmSize &rSz = GetFmt()->GetFrmSize();
-            SwTwips nMinHeight = rSz.GetSizeType() == ATT_MIN_SIZE ? rSz.GetHeight() : 0;
+            SwTwips nMinHeight = rSz.GetHeightSizeType() == ATT_MIN_SIZE ? rSz.GetHeight() : 0;
             do
             {   bValidSize = TRUE;
 
