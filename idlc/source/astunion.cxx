@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astunion.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 15:09:35 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 15:46:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,9 +321,9 @@ sal_Bool AstUnion::dump(RegistryKey& rKey)
 
     sal_uInt16 nMember = getNodeCount(NT_union_branch);
 
+    OUString emptyStr;
     typereg::Writer aBlob(
-        TYPEREG_VERSION_0, getDocumentation(),
-        OStringToOUString(getFileName(), RTL_TEXTENCODING_UTF8), RT_TYPE_UNION,
+        TYPEREG_VERSION_0, getDocumentation(), emptyStr, RT_TYPE_UNION,
         false, OStringToOUString(getRelativName(), RTL_TEXTENCODING_UTF8), 1,
         nMember, 0, 0);
     aBlob.setSuperTypeName(
@@ -368,8 +368,7 @@ sal_Bool AstUnion::dump(RegistryKey& rKey)
                     disc = aConst.m_value.aHyper;
 
                 aBlob.setFieldData(
-                    index++, pBranch->getDocumentation(), OUString(),
-                    RT_ACCESS_READWRITE,
+                    index++, pBranch->getDocumentation(), emptyStr, RT_ACCESS_READWRITE,
                     OStringToOUString(
                         pBranch->getLocalName(), RTL_TEXTENCODING_UTF8),
                     OStringToOUString(
@@ -386,7 +385,7 @@ sal_Bool AstUnion::dump(RegistryKey& rKey)
             aConst.m_type = RT_TYPE_INT64;
             aConst.m_value.aHyper = disc + 1;
             aBlob.setFieldData(
-                0, pDefault->getDocumentation(), OUString(), RT_ACCESS_DEFAULT,
+                0, pDefault->getDocumentation(), emptyStr, RT_ACCESS_DEFAULT,
                 OStringToOUString(
                     pDefault->getLocalName(), RTL_TEXTENCODING_UTF8),
                 OStringToOUString(
