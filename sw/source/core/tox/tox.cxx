@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tox.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-17 16:24:04 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:37:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -922,6 +922,38 @@ SwTOXBase::~SwTOXBase()
 //    if( GetTOXType()->GetType() == TOX_USER  )
 //        delete aData.pTemplateName;
 }
+
+void SwTOXBase::SetTitle(const String& rTitle)
+    {   aTitle = rTitle; }
+
+
+SwTOXBase & SwTOXBase::operator = (const SwTOXBase & rSource)
+{
+    aForm = rSource.aForm;
+    aName = rSource.aName;
+    aTitle = rSource.aTitle;
+    sMainEntryCharStyle = rSource.sMainEntryCharStyle;
+    sSequenceName = rSource.sSequenceName;
+    eLanguage = rSource.eLanguage;
+    sSortAlgorithm = rSource.sSortAlgorithm;
+    aData = rSource.aData;
+    nCreateType = rSource.nCreateType;
+    nOLEOptions = rSource.nOLEOptions;
+    eCaptionDisplay = rSource.eCaptionDisplay;
+    bProtected = rSource.bProtected;
+    bFromChapter = rSource.bFromChapter;
+    bFromObjectNames = rSource.bFromObjectNames;
+    bLevelFromChapter = rSource.bLevelFromChapter;
+
+    if (rSource.GetAttrSet())
+        SetAttrSet(*rSource.GetAttrSet());
+
+    return *this;
+}
+
+/* -----------------16.07.99 16:02-------------------
+
+ --------------------------------------------------*/
 
 String SwFormToken::GetString() const
 {
