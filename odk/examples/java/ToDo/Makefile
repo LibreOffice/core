@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.18 $
+#  $Revision: 1.19 $
 #
-#  last change: $Author: rt $ $Date: 2005-01-31 17:18:57 $
+#  last change: $Author: rt $ $Date: 2005-03-29 12:18:41 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -158,7 +158,7 @@ JavaToDoExample : $(COMP_REGISTERFLAG)
 	@echo Please load the "$(QM)ToDo.ods$(QM)" document to see how this component works, see
 	@echo the example description.
 	@echo -
-	@echo make ToDo.ods.load
+	@echo $(MAKE) ToDo.ods.load
 	@echo --------------------------------------------------------------------------------
 
 ToDo.ods.load : $(COMP_REGISTERFLAG)
