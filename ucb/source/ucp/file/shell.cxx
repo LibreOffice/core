@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-30 11:02:18 $
+ *  last change: $Author: kso $ $Date: 2000-12-01 10:01:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2532,7 +2532,7 @@ shell::ensuredir( const rtl::OUString& aUnqPath )
 {
     sal_Int32 nPos = 4; // start after "//./"
 
-    while ( nPos != - 1 )
+    while ( ( nPos != - 1 ) && ( nPos != aUnqPath.getLength() - 1 ) )
     {
         nPos = aUnqPath.indexOf( '/', nPos + 1 );
 
