@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin3.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2002-04-25 15:20:15 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:32:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,16 +198,20 @@ BOOL ScGridWindow::DrawKeyInput(const KeyEvent& rKEvt)
         BOOL bOldMarked = pDrView->HasMarkedObj();
         if (pDraw->KeyInput( rKEvt ))
         {
+            BOOL bLeaveDraw = FALSE;
             BOOL bUsed = TRUE;
             BOOL bNewMarked = pDrView->HasMarkedObj();
             if ( !pViewData->GetView()->IsDrawSelMode() )
                 if ( !bNewMarked )
                 {
                     pViewData->GetViewShell()->SetDrawShell( FALSE );
+                    bLeaveDraw = TRUE;
                     if ( !bOldMarked &&
                         rKEvt.GetKeyCode().GetCode() == KEY_DELETE )
                         bUsed = FALSE;                  // nichts geloescht
                 }
+            if (!bLeaveDraw)
+                UpdateStatusPosSize();      // #108137# for moving/resizing etc. by keyboard
             return bUsed;
         }
     }
@@ -444,44 +448,46 @@ void ScGridWindow::UpdateStatusPosSize()
 {
     ScDrawView* pDrView = pViewData->GetView()->GetScDrawView();
     if (!pDrView)
-        return;         // sollte dann gar nicht gerufen werden
-
-    Point aPos = PixelToLogic(aCurMousePos);
-    pDrView->GetPageViewPvNum(0)->LogicToPagePos(aPos);
+        return;         // shouldn't be called in that case
 
     SfxItemSet aSet(pViewData->GetViewShell()->GetPool(), SID_ATTR_POSITION, SID_ATTR_SIZE);
 
-    // Position- und Groesse-Items
-    if ( pDrView->IsAction() )
+    //  Fill items for position and size:
+    //  #108137# show action rectangle during action,
+    //  position and size of selected object(s) if something is selected,
+    //  mouse position otherwise
+
+    BOOL bActionItem = FALSE;
+    if ( pDrView->IsAction() )              // action rectangle
     {
         Rectangle aRect;
         pDrView->TakeActionRect( aRect );
-
-        if ( aRect.IsEmpty() )
-            aSet.Put( SfxPointItem(SID_ATTR_POSITION, aPos) );
-        else
+        if ( !aRect.IsEmpty() )
         {
             pDrView->GetPageViewPvNum(0)->LogicToPagePos(aRect);
             aSet.Put( SfxPointItem( SID_ATTR_POSITION, aRect.TopLeft() ) );
             aSet.Put( SvxSizeItem( SID_ATTR_SIZE,
-                    Size( aRect.Right() - aRect.Left(),
-                            aRect.Bottom() - aRect.Top() ) ) );
+                    Size( aRect.Right() - aRect.Left(), aRect.Bottom() - aRect.Top() ) ) );
+            bActionItem = TRUE;
         }
     }
-    else
+    if ( !bActionItem )
     {
-        aSet.Put( SfxPointItem(SID_ATTR_POSITION, aPos) );
-
-        if ( pDrView->HasMarkedObj() )
+        if ( pDrView->HasMarkedObj() )      // selected objects
         {
             Rectangle aRect = pDrView->GetAllMarkedRect();
             pDrView->GetPageViewPvNum(0)->LogicToPagePos(aRect);
+            aSet.Put( SfxPointItem( SID_ATTR_POSITION, aRect.TopLeft() ) );
             aSet.Put( SvxSizeItem( SID_ATTR_SIZE,
-                    Size( aRect.Right() - aRect.Left(),
-                            aRect.Bottom() - aRect.Top()) ) );
+                    Size( aRect.Right() - aRect.Left(), aRect.Bottom() - aRect.Top() ) ) );
         }
-        else
+        else                                // mouse position
+        {
+            Point aPos = PixelToLogic(aCurMousePos);
+            pDrView->GetPageViewPvNum(0)->LogicToPagePos(aPos);
+            aSet.Put( SfxPointItem( SID_ATTR_POSITION, aPos ) );
             aSet.Put( SvxSizeItem( SID_ATTR_SIZE, Size( 0, 0 ) ) );
+        }
     }
 
     pViewData->GetBindings().SetState(aSet);
