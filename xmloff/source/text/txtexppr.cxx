@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtexppr.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 07:58:58 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:00:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -488,10 +488,11 @@ void XMLTextExportPropertySetMapper::ContextFilter(
 
     sal_Bool bNeedsAnchor = sal_False;
 
-    for( ::std::vector< XMLPropertyState >::iterator propertie = rProperties.begin();
-         propertie != rProperties.end();
-         propertie++ )
+    for( ::std::vector< XMLPropertyState >::iterator aIter = rProperties.begin();
+         aIter != rProperties.end();
+         ++aIter )
     {
+        XMLPropertyState *propertie = &(*aIter);
         if( propertie->mnIndex == -1 )
             continue;
 
