@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlsect.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 06:27:53 $
+ *  last change: $Author: mib $ $Date: 2001-10-24 14:16:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,7 @@
 
 void SwHTMLParser::NewDivision( int nToken )
 {
-    String aId, aHRef, aStyle, aClass;
+    String aId, aHRef, aStyle, aClass, aLang;
     SvxAdjust eAdjust = HTML_CENTER_ON==nToken ? SVX_ADJUST_CENTER
                                                : SVX_ADJUST_END;
 
@@ -168,6 +168,9 @@ void SwHTMLParser::NewDivision( int nToken )
             break;
         case HTML_O_CLASS:
             aClass = pOption->GetString();
+            break;
+        case HTML_O_LANG:
+            aLang = pOption->GetString();
             break;
         case HTML_O_HREF:
             aHRef =  INetURLObject::RelToAbs( pOption->GetString() );
@@ -196,10 +199,10 @@ void SwHTMLParser::NewDivision( int nToken )
     sal_Bool bStyleParsed = sal_False, bPositioned = sal_False;
     SfxItemSet aItemSet( pDoc->GetAttrPool(), pCSS1Parser->GetWhichMap() );
     SvxCSS1PropertyInfo aPropInfo;
-    if( HasStyleOptions( aStyle, aId, aClass ) )
+    if( HasStyleOptions( aStyle, aId, aClass, &aLang ) )
     {
         bStyleParsed = ParseStyleOptions( aStyle, aId, aClass,
-                                          aItemSet, aPropInfo );
+                                          aItemSet, aPropInfo, &aLang );
         if( bStyleParsed )
         {
             bPositioned = HTML_DIVISION_ON == nToken && aClass.Len() &&
@@ -583,7 +586,7 @@ sal_Bool SwHTMLParser::EndSections( sal_Bool bLFStripped )
 
 void SwHTMLParser::NewMultiCol()
 {
-    String aId, aStyle, aClass;
+    String aId, aStyle, aClass, aLang;
     long nWidth = 100;
     sal_uInt16 nCols = 0, nGutter = 10;
     sal_Bool bPrcWidth = sal_True;
@@ -602,6 +605,9 @@ void SwHTMLParser::NewMultiCol()
             break;
         case HTML_O_CLASS:
             aClass = pOption->GetString();
+            break;
+        case HTML_O_LANG:
+            aLang = pOption->GetString();
             break;
         case HTML_O_COLS:
             nCols = (sal_uInt16)pOption->GetNumber();
@@ -632,9 +638,9 @@ void SwHTMLParser::NewMultiCol()
     sal_Bool bStyleParsed = sal_False;
     SfxItemSet aItemSet( pDoc->GetAttrPool(), pCSS1Parser->GetWhichMap() );
     SvxCSS1PropertyInfo aPropInfo;
-    if( HasStyleOptions( aStyle, aId, aClass ) )
+    if( HasStyleOptions( aStyle, aId, aClass, &aLang ) )
         bStyleParsed = ParseStyleOptions( aStyle, aId, aClass,
-                                          aItemSet, aPropInfo );
+                                          aItemSet, aPropInfo, &aLang );
 
     // Calculate width.
     sal_uInt8 nPrcWidth = bPrcWidth ? (sal_uInt8)nWidth : 0;

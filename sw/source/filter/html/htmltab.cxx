@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmltab.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2001-10-09 14:57:36 $
+ *  last change: $Author: mib $ $Date: 2001-10-24 14:16:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3367,7 +3367,7 @@ void _SectionSaveStruct::Restore( SwHTMLParser& rParser )
 
 class _CellSaveStruct : public _SectionSaveStruct
 {
-    String aStyle, aId, aClass;
+    String aStyle, aId, aClass, aLang;
     String aBGImage;
     Color aBGColor;
 
@@ -3488,6 +3488,9 @@ _CellSaveStruct::_CellSaveStruct( SwHTMLParser& rParser, HTMLTable *pCurTable,
             case HTML_O_CLASS:
                 aClass = pOption->GetString();
                 break;
+            case HTML_O_LANG:
+                aLang = pOption->GetString();
+                break;
             case HTML_O_SDNUM:
                 aNumFmt = pOption->GetString();
                 bHasNumFmt = sal_True;
@@ -3533,14 +3536,14 @@ _CellSaveStruct::_CellSaveStruct( SwHTMLParser& rParser, HTMLTable *pCurTable,
         rParser.InsertAttr( &rParser.aAttrTab.pAdjust, SvxAdjustItem(eAdjust),
                             pCntxt );
 
-    if( rParser.HasStyleOptions( aStyle, aId, aClass ) )
+    if( rParser.HasStyleOptions( aStyle, aId, aClass, &aLang ) )
     {
         SfxItemSet aItemSet( rParser.pDoc->GetAttrPool(),
                              rParser.pCSS1Parser->GetWhichMap() );
         SvxCSS1PropertyInfo aPropInfo;
 
         if( rParser.ParseStyleOptions( aStyle, aId, aClass, aItemSet,
-                                       aPropInfo ) )
+                                       aPropInfo, &aLang ) )
             rParser.InsertAttrs( aItemSet, aPropInfo, pCntxt );
     }
 

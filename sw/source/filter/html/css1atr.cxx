@@ -2,9 +2,9 @@
  *
  *  $RCSfile: css1atr.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2001-10-11 12:53:49 $
+ *  last change: $Author: mib $ $Date: 2001-10-24 14:16:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,9 @@
 #ifndef _XOUTBMP_HXX //autogen
 #include <svx/xoutbmp.hxx>
 #endif
+#ifndef _SVX_LANGITEM_HXX
+#include <svx/langitem.hxx>
+#endif
 #ifndef _HTMLOUT_HXX //autogen
 #include <svtools/htmlout.hxx>
 #endif
@@ -173,6 +176,9 @@
 #endif
 #ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
+#endif
+#ifndef _ISOLANG_HXX
+#include <tools/isolang.hxx>
 #endif
 
 #ifndef _CHARFMT_HXX //autogen
@@ -1364,14 +1370,17 @@ void SwHTMLWriter::SubtractItemSet( SfxItemSet& rItemSet,
             {
             case RES_CHRATR_FONT:
             case RES_CHRATR_FONTSIZE:
+            case RES_CHRATR_LANGUAGE:
             case RES_CHRATR_POSTURE:
             case RES_CHRATR_WEIGHT:
             case RES_CHRATR_CJK_FONT:
             case RES_CHRATR_CJK_FONTSIZE:
+            case RES_CHRATR_CJK_LANGUAGE:
             case RES_CHRATR_CJK_POSTURE:
             case RES_CHRATR_CJK_WEIGHT:
             case RES_CHRATR_CTL_FONT:
             case RES_CHRATR_CTL_FONTSIZE:
+            case RES_CHRATR_CTL_LANGUAGE:
             case RES_CHRATR_CTL_POSTURE:
             case RES_CHRATR_CTL_WEIGHT:
                 bRefItemSet = ( SFX_ITEM_SET ==
@@ -1500,6 +1509,7 @@ sal_Bool SwHTMLWriter::HasScriptDependentItems( const SfxItemSet& rItemSet,
     {
         RES_CHRATR_FONT,        RES_CHRATR_CJK_FONT,        RES_CHRATR_CTL_FONT,
         RES_CHRATR_FONTSIZE,    RES_CHRATR_CJK_FONTSIZE,    RES_CHRATR_CTL_FONTSIZE,
+        RES_CHRATR_LANGUAGE,    RES_CHRATR_CJK_LANGUAGE,    RES_CHRATR_CTL_LANGUAGE,
         RES_CHRATR_POSTURE,     RES_CHRATR_CJK_POSTURE,     RES_CHRATR_CTL_POSTURE,
         RES_CHRATR_WEIGHT,      RES_CHRATR_CJK_WEIGHT,      RES_CHRATR_CTL_WEIGHT,
         0,                      0,                          0
@@ -1616,7 +1626,7 @@ static sal_Bool OutCSS1Rule( SwHTMLWriter& rHTMLWrt, const String& rSelector,
 
             SfxItemSet aScriptItemSet( *rItemSet.GetPool(),
                                        RES_CHRATR_FONT, RES_CHRATR_FONTSIZE,
-                                       RES_CHRATR_POSTURE, RES_CHRATR_POSTURE,
+                                       RES_CHRATR_LANGUAGE, RES_CHRATR_POSTURE,
                                        RES_CHRATR_WEIGHT, RES_CHRATR_WEIGHT,
                                        RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_WEIGHT,
                                        0 );
@@ -1729,7 +1739,7 @@ static void OutCSS1DropCapRule(
 
             SfxItemSet aScriptItemSet( rHTMLWrt.pDoc->GetAttrPool(),
                                        RES_CHRATR_FONT, RES_CHRATR_FONTSIZE,
-                                       RES_CHRATR_POSTURE, RES_CHRATR_POSTURE,
+                                       RES_CHRATR_LANGUAGE, RES_CHRATR_POSTURE,
                                        RES_CHRATR_WEIGHT, RES_CHRATR_WEIGHT,
                                        RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_WEIGHT,
                                        0 );
@@ -2927,6 +2937,34 @@ static Writer& OutCSS1_SvxKerning( Writer& rWrt, const SfxPoolItem& rHt )
     return rWrt;
 }
 
+static Writer& OutCSS1_SvxLanguage( Writer& rWrt, const SfxPoolItem& rHt )
+{
+    SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
+
+    // Language will be exported rules only
+    if( rHTMLWrt.IsCSS1Source( CSS1_OUTMODE_PARA ) )
+        return rWrt;
+
+    sal_uInt16 nScript = CSS1_OUTMODE_WESTERN;
+    switch( rHt.Which() )
+    {
+    case RES_CHRATR_CJK_LANGUAGE:   nScript = CSS1_OUTMODE_CJK; break;
+    case RES_CHRATR_CTL_LANGUAGE:   nScript = CSS1_OUTMODE_CTL; break;
+    }
+    if( !rHTMLWrt.IsCSS1Script( nScript ) )
+        return rWrt;
+
+    ASSERT( !rHTMLWrt.IsCSS1Source(CSS1_OUTMODE_HINT),
+            "Language wirklich als Hint ausgeben?" );
+
+    String sOut = ConvertLanguageToIsoString(
+            ((const SvxLanguageItem &)rHt).GetLanguage() );
+
+    rHTMLWrt.OutCSS1_Property( sCSS1_P_so_language, sOut );
+
+    return rWrt;
+}
+
 static Writer& OutCSS1_SvxUnderline( Writer& rWrt, const SfxPoolItem& rHt )
 {
     // Mit dieser Methode werden nur Hints ausgegeben!
@@ -3770,7 +3808,7 @@ SwAttrFnTab aCSS1AttrFnTab = {
 /* RES_CHRATR_FONT  */              OutCSS1_SvxFont,
 /* RES_CHRATR_FONTSIZE  */          OutCSS1_SvxFontHeight,
 /* RES_CHRATR_KERNING   */          OutCSS1_SvxKerning,
-/* RES_CHRATR_LANGUAGE  */          0,
+/* RES_CHRATR_LANGUAGE  */          OutCSS1_SvxLanguage,
 /* RES_CHRATR_POSTURE   */          OutCSS1_SvxPosture,
 /* RES_CHRATR_PROPORTIONALFONTSIZE*/0,
 /* RES_CHRATR_SHADOWED  */          0,
@@ -3784,12 +3822,12 @@ SwAttrFnTab aCSS1AttrFnTab = {
 /* RES_CHRATR_BACKGROUND */         OutCSS1_SvxBrush, // Neu: Zeichenhintergrund
 /* RES_CHRATR_CJK_FONT */           OutCSS1_SvxFont,
 /* RES_CHRATR_CJK_FONTSIZE */       OutCSS1_SvxFontHeight,
-/* RES_CHRATR_CJK_LANGUAGE */       0,
+/* RES_CHRATR_CJK_LANGUAGE */       OutCSS1_SvxLanguage,
 /* RES_CHRATR_CJK_POSTURE */        OutCSS1_SvxPosture,
 /* RES_CHRATR_CJK_WEIGHT */         OutCSS1_SvxFontWeight,
 /* RES_CHRATR_CTL_FONT */           OutCSS1_SvxFont,
 /* RES_CHRATR_CTL_FONTSIZE */       OutCSS1_SvxFontHeight,
-/* RES_CHRATR_CTL_LANGUAGE */       0,
+/* RES_CHRATR_CTL_LANGUAGE */       OutCSS1_SvxLanguage,
 /* RES_CHRATR_CTL_POSTURE */        OutCSS1_SvxPosture,
 /* RES_CHRATR_CTL_WEIGHT */         OutCSS1_SvxFontWeight,
 /* RES_CHRATR_WRITING_DIRECTION */  0,
@@ -3902,6 +3940,9 @@ SwAttrFnTab aCSS1AttrFnTab = {
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.11  2001/10/11 12:53:49  vg
+      #65293# added type vvoid
+
       Revision 1.10  2001/10/09 14:57:36  mib
       #90476#: Support for CJK/CTL font attributes
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlgrin.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2001-10-09 14:57:36 $
+ *  last change: $Author: mib $ $Date: 2001-10-24 14:16:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
 #endif
+#ifndef _ISOLANG_HXX
+#include <tools/isolang.hxx>
+#endif
 #ifndef _SFXSTRITEM_HXX
 #include <svtools/stritem.hxx>
 #endif
@@ -97,6 +100,12 @@
 #endif
 #ifndef _SVX_ULSPITEM_HXX //autogen
 #include <svx/ulspitem.hxx>
+#endif
+#ifndef _SVX_LANGITEM_HXX
+#include <svx/langitem.hxx>
+#endif
+#ifndef _SVX_SCRIPTTYPEITEM_HXX
+#include <svx/scripttypeitem.hxx>
 #endif
 #ifndef _SFXDOCFILE_HXX //autogen
 #include <sfx2/docfile.hxx>
@@ -1020,7 +1029,7 @@ void SwHTMLParser::InsertBodyOptions()
     pDoc->SetTxtFmtColl( *pPam,
                          pCSS1Parser->GetTxtCollFromPool( RES_POOLCOLL_TEXT ) );
 
-    String aBackGround, aId, aStyle;
+    String aBackGround, aId, aStyle, aLang;
     Color aBGColor, aTextColor, aLinkColor, aVLinkColor;
     BOOL bBGColor=FALSE, bTextColor=FALSE;
     BOOL bLinkColor=FALSE, bVLinkColor=FALSE;
@@ -1100,6 +1109,10 @@ void SwHTMLParser::InsertBodyOptions()
                 aStyle = pOption->GetString();
                 bTextColor = TRUE;
                 break;
+            case HTML_O_LANG:
+                aLang = pOption->GetString();
+                break;
+
         }
 
         if( bSetEvent )
@@ -1190,6 +1203,32 @@ void SwHTMLParser::InsertBodyOptions()
         pCharFmt->SetAttr( SvxColorItem(aVLinkColor) );
         pCSS1Parser->SetBodyVLinkSet();
     }
+    if( aLang.Len() )
+    {
+        LanguageType eLang = ConvertIsoStringToLanguage( aLang );
+        sal_uInt16 nWhich = 0;
+        if( LANGUAGE_DONTKNOW != eLang )
+        {
+            switch( GetScriptTypeOfLanguage( eLang ) )
+            {
+            case SCRIPTTYPE_LATIN:
+                nWhich = RES_CHRATR_LANGUAGE;
+                break;
+            case SCRIPTTYPE_ASIAN:
+                nWhich = RES_CHRATR_CJK_LANGUAGE;
+                break;
+            case SCRIPTTYPE_COMPLEX:
+                nWhich = RES_CHRATR_CTL_LANGUAGE;
+                break;
+            }
+            if( nWhich )
+            {
+                SvxLanguageItem aLang( eLang );
+                aLang.SetWhich( nWhich );
+                pDoc->SetDefault( aLang );
+            }
+        }
+    }
 
     if( aId.Len() )
         InsertBookmark( aId );
@@ -1210,7 +1249,7 @@ void SwHTMLParser::NewAnchor()
 
     SvxMacroTableDtor aMacroTbl;
     String sHRef, aName, sTarget;
-    String aId, aStyle, aClass;
+    String aId, aStyle, aClass, aLang;
     BOOL bHasHRef = FALSE, bFixed = FALSE;
 
     ScriptType eDfltScriptType;
@@ -1248,6 +1287,9 @@ void SwHTMLParser::NewAnchor()
                 break;
             case HTML_O_SDFIXED:
                 bFixed = TRUE;
+                break;
+            case HTML_O_LANG:
+                aLang = pOption->GetString();
                 break;
 
             case HTML_O_SDONCLICK:
@@ -1342,12 +1384,12 @@ ANCHOR_SETEVENT:
     }
 
     // Styles parsen
-    if( HasStyleOptions( aStyle, aId, aStrippedClass ) )
+    if( HasStyleOptions( aStyle, aId, aStrippedClass, &aLang ) )
     {
         SfxItemSet aItemSet( pDoc->GetAttrPool(), pCSS1Parser->GetWhichMap() );
         SvxCSS1PropertyInfo aPropInfo;
 
-        if( ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo ) )
+        if( ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo, &aLang ) )
         {
             DoPositioning( aItemSet, aPropInfo, pCntxt );
             InsertAttrs( aItemSet, aPropInfo, pCntxt, TRUE );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swhtml.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mib $ $Date: 2001-10-09 14:57:36 $
+ *  last change: $Author: mib $ $Date: 2001-10-24 14:16:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,6 +233,9 @@
 #endif
 #ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
+#endif
+#ifndef _NDHINTS_HXX
+#include <ndhints.hxx>
 #endif
 #ifndef _MDIEXP_HXX
 #include <mdiexp.hxx>           // ...Percent()
@@ -2132,6 +2135,49 @@ void __EXPORT SwHTMLParser::NextToken( int nToken )
 
 /*  */
 
+extern BOOL lcl_css1atr_equalFontItems( const SfxPoolItem& r1, const SfxPoolItem& r2 );
+
+void lcl_swhtml_getItemInfo( const _HTMLAttr& rAttr,
+                                 sal_Bool& rScriptDependent, sal_Bool& rFont,
+                                 sal_uInt16& rScriptType )
+{
+    sal_uInt16 nWhich = rAttr.GetItem().Which();
+    switch( nWhich )
+    {
+    case RES_CHRATR_FONT:
+        rFont = sal_True;
+    case RES_CHRATR_FONTSIZE:
+    case RES_CHRATR_LANGUAGE:
+    case RES_CHRATR_POSTURE:
+    case RES_CHRATR_WEIGHT:
+        rScriptType = ::com::sun::star::i18n::ScriptType::LATIN;
+        rScriptDependent = sal_True;
+        break;
+    case RES_CHRATR_CJK_FONT:
+        rFont = sal_True;
+    case RES_CHRATR_CJK_FONTSIZE:
+    case RES_CHRATR_CJK_LANGUAGE:
+    case RES_CHRATR_CJK_POSTURE:
+    case RES_CHRATR_CJK_WEIGHT:
+        rScriptType = ::com::sun::star::i18n::ScriptType::ASIAN;
+        rScriptDependent = sal_True;
+        break;
+    case RES_CHRATR_CTL_FONT:
+        rFont = sal_True;
+    case RES_CHRATR_CTL_FONTSIZE:
+    case RES_CHRATR_CTL_LANGUAGE:
+    case RES_CHRATR_CTL_POSTURE:
+    case RES_CHRATR_CTL_WEIGHT:
+        rScriptType = ::com::sun::star::i18n::ScriptType::COMPLEX;
+        rScriptDependent = sal_True;
+        break;
+    default:
+        rScriptDependent = sal_False;
+        rFont = sal_False;
+        break;
+    }
+}
+
 BOOL SwHTMLParser::AppendTxtNode( SwHTMLAppendMode eMode, BOOL bUpdateNum )
 {
     // Ein harter Zeilen-Umbruch am Ende muss immer entfernt werden.
@@ -2205,29 +2251,90 @@ BOOL SwHTMLParser::AppendTxtNode( SwHTMLAppendMode eMode, BOOL bUpdateNum )
                      pAttr->GetSttPara() == rEndIdx &&
                      pAttr->GetSttCnt() != nEndCnt) )
                 {
-                    // den besehrigen Teil setzen
-                    _HTMLAttr *pSetAttr =
-                        pAttr->Clone( rEndIdx, nEndCnt );
-                    pAttr->ClearPrev();
-
                     bWholePara =
                         pAttr->GetSttPara() == rEndIdx &&
                         pAttr->GetSttCnt() == 0;
 
-                    // Wenn das Attribut den gesamten Absatz umspannt, werden
-                    // alle auesseren Attribute nicht mehr beachtet. Deshalb
-                    // darf es auch nicht in die Prev-Liste eines ausseren
-                    // Attributs eingetragen werden, denn dieses wird ja
-                    // erstmal nicht gesetzt. Das fuehrt zu verschiebenungen,
-                    // wenn Felder ins Rennen kommen (siehe #51020#)
-                    if( !pNext || bWholePara )
+                    xub_StrLen nStt = pAttr->nSttCntnt;
+                    sal_Bool bScript = sal_False, bFont = sal_False;
+                    sal_uInt16 nScriptItem;
+                    sal_Bool bInsert = sal_True;
+                       lcl_swhtml_getItemInfo( *pAttr, bScript, bFont,
+                                            nScriptItem );
+                        // den besehrigen Teil setzen
+                    if( bInsert && bScript )
                     {
-                        USHORT nTmp = pAttr->bInsAtStart ? 0
-                                                         : aSetAttrTab.Count();
-                        aSetAttrTab.Insert( pSetAttr, nTmp );
+                        const SwTxtNode *pTxtNd =
+                            pAttr->GetSttPara().GetNode().GetTxtNode();
+                        ASSERT( pTxtNd, "No text node" );
+                        const String& rText = pTxtNd->GetTxt();
+                        sal_uInt16 nScriptTxt =
+                            pBreakIt->xBreak->getScriptType(
+                                        rText, pAttr->GetSttCnt() );
+                        xub_StrLen nScriptEnd = (xub_StrLen)pBreakIt->xBreak
+                                ->endOfScript( rText, nStt, nScriptTxt );
+                        while( nScriptEnd < nEndCnt )
+                        {
+                            if( nScriptItem == nScriptTxt )
+                            {
+                                _HTMLAttr *pSetAttr =
+                                    pAttr->Clone( rEndIdx, nScriptEnd );
+                                pSetAttr->nSttCntnt = nStt;
+                                pSetAttr->ClearPrev();
+                                if( !pNext || bWholePara )
+                                {
+                                    USHORT nTmp = pSetAttr->bInsAtStart ? 0
+                                                    : aSetAttrTab.Count();
+                                    aSetAttrTab.Insert( pSetAttr, nTmp );
+                                }
+                                else
+                                    pNext->InsertPrev( pSetAttr );
+                            }
+                            nStt = nScriptEnd;
+                            nScriptTxt = pBreakIt->xBreak->getScriptType(
+                                            rText, nStt );
+                            nScriptEnd = (xub_StrLen)pBreakIt->xBreak
+                                ->endOfScript( rText, nStt, nScriptTxt );
+                        }
+                        bInsert = nScriptItem == nScriptTxt;
+                    }
+                    if( bInsert )
+                    {
+                        _HTMLAttr *pSetAttr =
+                            pAttr->Clone( rEndIdx, nEndCnt );
+                        pSetAttr->nSttCntnt = nStt;
+
+                        // Wenn das Attribut den gesamten Absatz umspannt, werden
+                        // alle auesseren Attribute nicht mehr beachtet. Deshalb
+                        // darf es auch nicht in die Prev-Liste eines ausseren
+                        // Attributs eingetragen werden, denn dieses wird ja
+                        // erstmal nicht gesetzt. Das fuehrt zu verschiebenungen,
+                        // wenn Felder ins Rennen kommen (siehe #51020#)
+                        if( !pNext || bWholePara )
+                        {
+                            USHORT nTmp = pSetAttr->bInsAtStart ? 0
+                                                             : aSetAttrTab.Count();
+                            aSetAttrTab.Insert( pSetAttr, nTmp );
+                        }
+                        else
+                            pNext->InsertPrev( pSetAttr );
                     }
                     else
-                        pNext->InsertPrev( pSetAttr );
+                    {
+                        _HTMLAttr *pPrev = pAttr->GetPrev();
+                        if( pPrev )
+                        {
+                            // Die Previous-Attribute muessen trotzdem gesetzt werden.
+                            if( !pNext || bWholePara )
+                            {
+                                USHORT nTmp = pPrev->bInsAtStart ? 0 : aSetAttrTab.Count();
+                                aSetAttrTab.Insert( pPrev, nTmp );
+                            }
+                            else
+                                pNext->InsertPrev( pPrev );
+                        }
+                    }
+                    pAttr->ClearPrev();
                 }
 
                 pAttr->SetStart( rPos );
@@ -2246,6 +2353,84 @@ BOOL SwHTMLParser::AppendTxtNode( SwHTMLAppendMode eMode, BOOL bUpdateNum )
 
     // Attrubute im Absatz davor sollte man jetzt setzen (wegen JavaScript)
     SetAttr();
+
+    // Now it is time to get rid of all script dependent hints that are
+    // equal to the settings in the style
+    SwTxtNode *pTxtNd = rEndIdx.GetNode().GetTxtNode();
+    ASSERT( pTxtNd, "There is the txt node" );
+    sal_uInt16 nCntAttr = (pTxtNd  && pTxtNd->GetpSwpHints())
+                            ? pTxtNd->GetSwpHints().Count() : 0;
+    if( nCntAttr )
+    {
+        // These are the end position of all script depenent hints.
+        // If we find a hint that starts before the current end position,
+        // we have to set it. If we finf a hint that start behind or at
+        // that position, we have to take the hint's value into account.
+        // If it is equal to the style, or in fact the paragarph's value
+        // for that hint, the hint is removed. Otherwise it's end position
+        // is remembered.
+        xub_StrLen aEndPos[15] =
+            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+        SwpHints& rHints = pTxtNd->GetSwpHints();
+        for( sal_uInt16 i=0; i < nCntAttr; i++ )
+        {
+            SwTxtAttr *pHt = rHints.GetHt( i );
+            sal_uInt16 nWhich = pHt->Which();
+            sal_Int16 nIdx = -1;
+            if( RES_CHRATR_CJK_FONT <= nWhich &&
+                    nWhich <= RES_CHRATR_CTL_WEIGHT )
+            {
+                nIdx = (nWhich - RES_CHRATR_CJK_FONT + 5);
+            }
+            else switch( nWhich )
+            {
+            case RES_CHRATR_FONT:       nIdx = 0;   break;
+            case RES_CHRATR_FONTSIZE:   nIdx = 1;   break;
+            case RES_CHRATR_LANGUAGE:   nIdx = 2;   break;
+            case RES_CHRATR_POSTURE:    nIdx = 3;   break;
+            case RES_CHRATR_WEIGHT:     nIdx = 4;   break;
+            }
+            if( nIdx != -1 )
+            {
+                xub_StrLen nStt = *pHt->GetStart();
+                if( nStt >= aEndPos[nIdx] )
+                {
+                    sal_Bool bFont = (nIdx % 5) == 0;
+                    const SfxPoolItem& rItem =
+                        ((const SwCntntNode *)pTxtNd)->GetAttr( nWhich );
+                    if( bFont ? lcl_css1atr_equalFontItems(rItem,pHt->GetAttr())
+                              : rItem == pHt->GetAttr() )
+                    {
+                        // The hint is the same as set in the paragraph and
+                        // therfor, it can be deleted
+                        // CAUTION!!! This WILL delete the hint and it MAY
+                        // also delete the SwpHints!!! To avoid any trouble
+                        // we leave the loop immediately if this is the last
+                        // hint.
+                        pTxtNd->Delete( pHt, sal_True );
+                        if( 1 == nCntAttr )
+                            break;
+                        i--;
+                        nCntAttr--;
+                    }
+                    else
+                    {
+                        // The hint is deifferent. Therfor all hints within that
+                        // hint have to be ignored.
+                        aEndPos[nIdx] = pHt->GetEnd() ? *pHt->GetEnd() : nStt;
+                    }
+                }
+                else
+                {
+                    // The hint starts before another one ends.
+                    // The hint in this case is not deleted
+                    ASSERT( pHt->GetEnd() && *pHt->GetEnd() <= aEndPos[nIdx],
+                            "hints aren't nested properly!" );
+                }
+            }
+        }
+    }
+
 
     if( !pTable && !--nParaCnt )
         Show();
@@ -2828,7 +3013,6 @@ void SwHTMLParser::NewAttr( _HTMLAttr **ppAttr, const SfxPoolItem& rItem )
         (*ppAttr) = new _HTMLAttr( *pPam->GetPoint(), rItem, ppAttr );
 }
 
-extern BOOL lcl_css1atr_equalFontItems( const SfxPoolItem& r1, const SfxPoolItem& r2 );
 
 void SwHTMLParser::EndAttr( _HTMLAttr* pAttr, _HTMLAttr **ppDepAttr,
                             BOOL bChkEmpty )
@@ -2880,6 +3064,8 @@ void SwHTMLParser::EndAttr( _HTMLAttr* pAttr, _HTMLAttr **ppDepAttr,
 
 
     sal_Bool bInsert;
+    sal_uInt16 nScriptItem;
+    sal_Bool bScript = sal_False, bFont = sal_False;
     // ein Bereich ??
     if( !bChkEmpty || (RES_PARATR_BEGIN <= nWhich && bMoveBack) ||
         RES_PAGEDESC == nWhich || RES_BREAK == nWhich ||
@@ -2890,72 +3076,7 @@ void SwHTMLParser::EndAttr( _HTMLAttr* pAttr, _HTMLAttr **ppDepAttr,
         // We do some optimization for script depenedent attribtes here.
         if( *pEndIdx == pAttr->GetSttPara() )
         {
-            sal_Bool bScript = sal_False, bFont = sal_False;
-            sal_uInt16 nScriptItem;
-            switch( nWhich )
-            {
-            case RES_CHRATR_FONT:
-                bFont = sal_True;
-            case RES_CHRATR_FONTSIZE:
-            case RES_CHRATR_POSTURE:
-            case RES_CHRATR_WEIGHT:
-                nScriptItem = ::com::sun::star::i18n::ScriptType::LATIN;
-                bScript = sal_True;
-                break;
-            case RES_CHRATR_CJK_FONT:
-                bFont = sal_True;
-            case RES_CHRATR_CJK_FONTSIZE:
-            case RES_CHRATR_CJK_POSTURE:
-            case RES_CHRATR_CJK_WEIGHT:
-                nScriptItem = ::com::sun::star::i18n::ScriptType::ASIAN;
-                bScript = sal_True;
-                break;
-            case RES_CHRATR_CTL_FONT:
-                bFont = sal_True;
-            case RES_CHRATR_CTL_FONTSIZE:
-            case RES_CHRATR_CTL_POSTURE:
-            case RES_CHRATR_CTL_WEIGHT:
-                nScriptItem = ::com::sun::star::i18n::ScriptType::COMPLEX;
-                bScript = sal_True;
-                break;
-            }
-
-            if( bScript )
-            {
-                if( !pNext )
-                {
-                    const SfxPoolItem& rItem =
-                        pAttr->GetSttPara().GetNode().GetCntntNode()
-                             ->GetAttr( nWhich );
-                    if( bFont ? lcl_css1atr_equalFontItems( rItem, pAttr->GetItem() )
-                              : rItem == pAttr->GetItem() )
-                    {
-                        // The attribute is set by an outermost element
-                        // and its value is the same as the one of the
-                        // paragagraph. In the case we don't have to
-                        // set the attribute.
-                        bInsert = sal_False;
-                    }
-                }
-
-                if( bInsert )
-                {
-                    const SwTxtNode *pTxtNd = pAttr->GetSttPara().GetNode()
-                                            .GetTxtNode();
-                    ASSERT( pTxtNd, "No text node" );
-                    const String& rText = pTxtNd->GetTxt();
-                    sal_uInt16 nScriptTxt = pBreakIt->xBreak->getScriptType(
-                                rText, pAttr->GetSttCnt() );
-                    xub_StrLen nScriptEnd = (xub_StrLen)pBreakIt->xBreak
-                        ->endOfScript( rText, pAttr->GetSttCnt(), nScriptTxt );
-                    if( nEndCnt <= nScriptEnd && nScriptItem != nScriptTxt )
-                    {
-                        // There is no script change within the attribute
-                        // and it does not have the text's script
-                        bInsert = sal_False;
-                    }
-                }
-            }
+            lcl_swhtml_getItemInfo( *pAttr, bScript, bFont, nScriptItem );
         }
     }
     else
@@ -2963,6 +3084,39 @@ void SwHTMLParser::EndAttr( _HTMLAttr* pAttr, _HTMLAttr **ppDepAttr,
         bInsert = sal_False;
     }
 
+    if( bInsert && bScript )
+    {
+        const SwTxtNode *pTxtNd = pAttr->GetSttPara().GetNode()
+                                            .GetTxtNode();
+        ASSERT( pTxtNd, "No text node" );
+        const String& rText = pTxtNd->GetTxt();
+        sal_uInt16 nScriptTxt = pBreakIt->xBreak->getScriptType(
+                        rText, pAttr->GetSttCnt() );
+        xub_StrLen nScriptEnd = (xub_StrLen)pBreakIt->xBreak
+                    ->endOfScript( rText, pAttr->GetSttCnt(), nScriptTxt );
+        while( nScriptEnd < nEndCnt )
+        {
+            if( nScriptItem == nScriptTxt )
+            {
+                _HTMLAttr *pSetAttr = pAttr->Clone( *pEndIdx, nScriptEnd );
+                pSetAttr->ClearPrev();
+                if( pNext )
+                    pNext->InsertPrev( pSetAttr );
+                else
+                {
+                    USHORT nTmp = pSetAttr->bInsAtStart ? 0
+                                                        : aSetAttrTab.Count();
+                    aSetAttrTab.Insert( pSetAttr, nTmp );
+                }
+            }
+            pAttr->nSttCntnt = nScriptEnd;
+            nScriptTxt = pBreakIt->xBreak->getScriptType(
+                            rText, nScriptEnd );
+            nScriptEnd = (xub_StrLen)pBreakIt->xBreak
+                    ->endOfScript( rText, nScriptEnd, nScriptTxt );
+        }
+        bInsert = nScriptItem == nScriptTxt;
+    }
     if( bInsert )
     {
         pAttr->nEndPara = *pEndIdx;
@@ -3285,7 +3439,7 @@ void SwHTMLParser::InsertAttrs( _HTMLAttrs& rAttrs )
 
 void SwHTMLParser::NewStdAttr( int nToken )
 {
-    String aId, aStyle, aClass;
+    String aId, aStyle, aClass, aLang;
 
     const HTMLOptions *pOptions = GetOptions();
     for( USHORT i = pOptions->Count(); i; )
@@ -3302,6 +3456,9 @@ void SwHTMLParser::NewStdAttr( int nToken )
         case HTML_O_CLASS:
             aClass = pOption->GetString();
             break;
+        case HTML_O_LANG:
+            aLang = pOption->GetString();
+            break;
         }
     }
 
@@ -3309,12 +3466,12 @@ void SwHTMLParser::NewStdAttr( int nToken )
     _HTMLAttrContext *pCntxt = new _HTMLAttrContext( nToken );
 
     // Styles parsen
-    if( HasStyleOptions( aStyle, aId, aClass ) )
+    if( HasStyleOptions( aStyle, aId, aClass, &aLang ) )
     {
         SfxItemSet aItemSet( pDoc->GetAttrPool(), pCSS1Parser->GetWhichMap() );
         SvxCSS1PropertyInfo aPropInfo;
 
-        if( ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo ) )
+        if( ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo, &aLang ) )
         {
             if( HTML_SPAN_ON != nToken || !aClass.Len() ||
                 !CreateContainer( aClass, aItemSet, aPropInfo, pCntxt ) )
@@ -3332,7 +3489,7 @@ void SwHTMLParser::NewStdAttr( int nToken,
                                _HTMLAttr **ppAttr2, const SfxPoolItem *pItem2,
                                _HTMLAttr **ppAttr3, const SfxPoolItem *pItem3 )
 {
-    String aId, aStyle, aClass;
+    String aId, aStyle, aClass, aLang;
 
     const HTMLOptions *pOptions = GetOptions();
     for( USHORT i = pOptions->Count(); i; )
@@ -3349,6 +3506,9 @@ void SwHTMLParser::NewStdAttr( int nToken,
         case HTML_O_CLASS:
             aClass = pOption->GetString();
             break;
+        case HTML_O_LANG:
+            aLang = pOption->GetString();
+            break;
         }
     }
 
@@ -3356,7 +3516,7 @@ void SwHTMLParser::NewStdAttr( int nToken,
     _HTMLAttrContext *pCntxt = new _HTMLAttrContext( nToken );
 
     // Styles parsen
-    if( HasStyleOptions( aStyle, aId, aClass ) )
+    if( HasStyleOptions( aStyle, aId, aClass, &aLang ) )
     {
         SfxItemSet aItemSet( pDoc->GetAttrPool(), pCSS1Parser->GetWhichMap() );
         SvxCSS1PropertyInfo aPropInfo;
@@ -3367,7 +3527,7 @@ void SwHTMLParser::NewStdAttr( int nToken,
         if( pItem3 )
             aItemSet.Put( *pItem3 );
 
-        if( ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo ) )
+        if( ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo, &aLang ) )
             DoPositioning( aItemSet, aPropInfo, pCntxt );
 
         InsertAttrs( aItemSet, aPropInfo, pCntxt, TRUE );
@@ -3406,7 +3566,7 @@ void SwHTMLParser::EndTag( int nToken )
 
 void SwHTMLParser::NewBasefontAttr()
 {
-    String aId, aStyle, aClass;
+    String aId, aStyle, aClass, aLang;
     USHORT nSize = 3;
 
     const HTMLOptions *pOptions = GetOptions();
@@ -3427,6 +3587,9 @@ void SwHTMLParser::NewBasefontAttr()
         case HTML_O_CLASS:
             aClass = pOption->GetString();
             break;
+        case HTML_O_LANG:
+            aLang = pOption->GetString();
+            break;
         }
     }
 
@@ -3440,7 +3603,7 @@ void SwHTMLParser::NewBasefontAttr()
     _HTMLAttrContext *pCntxt = new _HTMLAttrContext( HTML_BASEFONT_ON );
 
     // Styles parsen
-    if( HasStyleOptions( aStyle, aId, aClass ) )
+    if( HasStyleOptions( aStyle, aId, aClass, &aLang ) )
     {
         SfxItemSet aItemSet( pDoc->GetAttrPool(), pCSS1Parser->GetWhichMap() );
         SvxCSS1PropertyInfo aPropInfo;
@@ -3452,7 +3615,7 @@ void SwHTMLParser::NewBasefontAttr()
         aFontHeight.SetWhich( RES_CHRATR_CTL_FONTSIZE );
         aItemSet.Put( aFontHeight );
 
-        if( ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo ) )
+        if( ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo, &aLang ) )
             DoPositioning( aItemSet, aPropInfo, pCntxt );
 
         InsertAttrs( aItemSet, aPropInfo, pCntxt, TRUE );
@@ -3483,12 +3646,6 @@ void SwHTMLParser::EndBasefontAttr()
         aBaseFontStack.Remove( aBaseFontStack.Count()-1, 1 );
 }
 
-#define HTML_FONT_WESTERN 0
-#define HTML_FONT_CJK 1
-#define HTML_FONT_CTL 2
-#define HTML_FONT_DEFAULT 3
-#define HTML_FONT_UNKNOWN 4
-
 void SwHTMLParser::NewFontAttr( int nToken )
 {
     USHORT nBaseSize =
@@ -3500,7 +3657,7 @@ void SwHTMLParser::NewFontAttr( int nToken )
             ? (aFontStack[aFontStack.Count()-1] & FONTSIZE_MASK)
             : nBaseSize );
 
-    String aFace, aId, aStyle, aClass;
+    String aFace, aId, aStyle, aClass, aLang;
     Color aColor;
     ULONG nFontHeight = 0;  // tatsaechlich einzustellende Font-Hoehe
     USHORT nSize = 0;       // Fontgroesse in Netscape-Notation (1-7)
@@ -3550,6 +3707,9 @@ void SwHTMLParser::NewFontAttr( int nToken )
             break;
         case HTML_O_CLASS:
             aClass = pOption->GetString();
+            break;
+        case HTML_O_LANG:
+            aLang = pOption->GetString();
             break;
         }
     }
@@ -3640,7 +3800,7 @@ void SwHTMLParser::NewFontAttr( int nToken )
     _HTMLAttrContext *pCntxt = new _HTMLAttrContext( nToken );
 
     // Styles parsen
-    if( HasStyleOptions( aStyle, aId, aClass ) )
+    if( HasStyleOptions( aStyle, aId, aClass, &aLang ) )
     {
         SfxItemSet aItemSet( pDoc->GetAttrPool(), pCSS1Parser->GetWhichMap() );
         SvxCSS1PropertyInfo aPropInfo;
@@ -3691,7 +3851,7 @@ void SwHTMLParser::NewFontAttr( int nToken )
             InsertAttr( &aAttrTab.pFont, aFont, pCntxt );
             aFont.SetWhich( RES_CHRATR_CJK_FONT );
             InsertAttr( &aAttrTab.pFontCJK, aFont, pCntxt );
-            aFont.SetWhich( RES_CHRATR_CJK_FONT );
+            aFont.SetWhich( RES_CHRATR_CTL_FONT );
             InsertAttr( &aAttrTab.pFontCTL, aFont, pCntxt );
         }
     }
@@ -3721,7 +3881,7 @@ void SwHTMLParser::NewPara()
         AddParSpace();
 
     eParaAdjust = SVX_ADJUST_END;
-    String aId, aStyle, aClass;
+    String aId, aStyle, aClass, aLang;
 
     const HTMLOptions *pOptions = GetOptions();
     for( USHORT i = pOptions->Count(); i; )
@@ -3741,6 +3901,9 @@ void SwHTMLParser::NewPara()
             case HTML_O_CLASS:
                 aClass = pOption->GetString();
                 break;
+            case HTML_O_LANG:
+                aLang = pOption->GetString();
+                break;
         }
     }
 
@@ -3752,12 +3915,12 @@ void SwHTMLParser::NewPara()
 
     // Styles parsen (Class nicht beruecksichtigen. Das geht nur, solange
     // keine der CSS1-Properties der Klasse hart formatiert werden muss!!!)
-    if( HasStyleOptions( aStyle, aId, aEmptyStr ) )
+    if( HasStyleOptions( aStyle, aId, aEmptyStr, &aLang ) )
     {
         SfxItemSet aItemSet( pDoc->GetAttrPool(), pCSS1Parser->GetWhichMap() );
         SvxCSS1PropertyInfo aPropInfo;
 
-        if( ParseStyleOptions( aStyle, aId, aEmptyStr, aItemSet, aPropInfo ) )
+        if( ParseStyleOptions( aStyle, aId, aEmptyStr, aItemSet, aPropInfo, &aLang ) )
         {
             ASSERT( !aClass.Len() || !pCSS1Parser->GetClass( aClass ),
                     "Class wird nicht beruecksichtigt" );
@@ -3836,7 +3999,7 @@ void SwHTMLParser::NewHeading( int nToken )
 {
     eParaAdjust = SVX_ADJUST_END;
 
-    String aId, aStyle, aClass;
+    String aId, aStyle, aClass, aLang;
 
     const HTMLOptions *pOptions = GetOptions();
     for( USHORT i = pOptions->Count(); i; )
@@ -3855,6 +4018,9 @@ void SwHTMLParser::NewHeading( int nToken )
                 break;
             case HTML_O_CLASS:
                 aClass = pOption->GetString();
+                break;
+            case HTML_O_LANG:
+                aLang = pOption->GetString();
                 break;
         }
     }
@@ -3882,12 +4048,12 @@ void SwHTMLParser::NewHeading( int nToken )
     _HTMLAttrContext *pCntxt = new _HTMLAttrContext( nToken, nTxtColl, aClass );
 
     // Styles parsen (zu Class siehe auch NewPara)
-    if( HasStyleOptions( aStyle, aId, aEmptyStr ) )
+    if( HasStyleOptions( aStyle, aId, aEmptyStr, &aLang ) )
     {
         SfxItemSet aItemSet( pDoc->GetAttrPool(), pCSS1Parser->GetWhichMap() );
         SvxCSS1PropertyInfo aPropInfo;
 
-        if( ParseStyleOptions( aStyle, aId, aEmptyStr, aItemSet, aPropInfo ) )
+        if( ParseStyleOptions( aStyle, aId, aEmptyStr, aItemSet, aPropInfo, &aLang ) )
         {
             ASSERT( !aClass.Len() || !pCSS1Parser->GetClass( aClass ),
                     "Class wird nicht beruecksichtigt" );
@@ -3956,7 +4122,7 @@ void SwHTMLParser::EndHeading()
 
 void SwHTMLParser::NewTxtFmtColl( int nToken, USHORT nColl )
 {
-    String aId, aStyle, aClass;
+    String aId, aStyle, aClass, aLang;
 
     const HTMLOptions *pOptions = GetOptions();
     for( USHORT i = pOptions->Count(); i; )
@@ -3972,6 +4138,9 @@ void SwHTMLParser::NewTxtFmtColl( int nToken, USHORT nColl )
                 break;
             case HTML_O_CLASS:
                 aClass = pOption->GetString();
+                break;
+            case HTML_O_LANG:
+                aLang = pOption->GetString();
                 break;
         }
     }
@@ -4011,12 +4180,12 @@ void SwHTMLParser::NewTxtFmtColl( int nToken, USHORT nColl )
     _HTMLAttrContext *pCntxt = new _HTMLAttrContext( nToken, nColl, aClass );
 
     // Styles parsen (zu Class siehe auch NewPara)
-    if( HasStyleOptions( aStyle, aId, aEmptyStr ) )
+    if( HasStyleOptions( aStyle, aId, aEmptyStr, &aLang ) )
     {
         SfxItemSet aItemSet( pDoc->GetAttrPool(), pCSS1Parser->GetWhichMap() );
         SvxCSS1PropertyInfo aPropInfo;
 
-        if( ParseStyleOptions( aStyle, aId, aEmptyStr, aItemSet, aPropInfo ) )
+        if( ParseStyleOptions( aStyle, aId, aEmptyStr, aItemSet, aPropInfo, &aLang ) )
         {
             ASSERT( !aClass.Len() || !pCSS1Parser->GetClass( aClass ),
                     "Class wird nicht beruecksichtigt" );
@@ -4079,7 +4248,7 @@ void SwHTMLParser::EndTxtFmtColl( int nToken )
 
 void SwHTMLParser::NewDefList()
 {
-    String aId, aStyle, aClass;
+    String aId, aStyle, aClass, aLang;
 
     const HTMLOptions *pOptions = GetOptions();
     for( USHORT i = pOptions->Count(); i; )
@@ -4095,6 +4264,9 @@ void SwHTMLParser::NewDefList()
                 break;
             case HTML_O_CLASS:
                 aClass = pOption->GetString();
+                break;
+            case HTML_O_LANG:
+                aLang = pOption->GetString();
                 break;
         }
     }
@@ -4156,12 +4328,12 @@ void SwHTMLParser::NewDefList()
     pCntxt->SetMargins( nLeft, nRight, nIndent );
 
     // Styles parsen
-    if( HasStyleOptions( aStyle, aId, aClass ) )
+    if( HasStyleOptions( aStyle, aId, aClass, &aLang ) )
     {
         SfxItemSet aItemSet( pDoc->GetAttrPool(), pCSS1Parser->GetWhichMap() );
         SvxCSS1PropertyInfo aPropInfo;
 
-        if( ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo ) )
+        if( ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo, &aLang ) )
         {
             DoPositioning( aItemSet, aPropInfo, pCntxt );
             InsertAttrs( aItemSet, aPropInfo, pCntxt );
@@ -4646,7 +4818,7 @@ void SwHTMLParser::SetTxtCollAttrs( _HTMLAttrContext *pContext )
 
 void SwHTMLParser::NewCharFmt( int nToken )
 {
-    String aId, aStyle, aClass;
+    String aId, aStyle, aClass, aLang;
 
     const HTMLOptions *pOptions = GetOptions();
     for( USHORT i = pOptions->Count(); i; )
@@ -4663,6 +4835,9 @@ void SwHTMLParser::NewCharFmt( int nToken )
         case HTML_O_CLASS:
             aClass = pOption->GetString();
             break;
+        case HTML_O_LANG:
+            aLang = pOption->GetString();
+            break;
         }
     }
 
@@ -4675,12 +4850,12 @@ void SwHTMLParser::NewCharFmt( int nToken )
 
 
     // Styles parsen (zu Class siehe auch NewPara)
-    if( HasStyleOptions( aStyle, aId, aEmptyStr ) )
+    if( HasStyleOptions( aStyle, aId, aEmptyStr, &aLang ) )
     {
         SfxItemSet aItemSet( pDoc->GetAttrPool(), pCSS1Parser->GetWhichMap() );
         SvxCSS1PropertyInfo aPropInfo;
 
-        if( ParseStyleOptions( aStyle, aId, aEmptyStr, aItemSet, aPropInfo ) )
+        if( ParseStyleOptions( aStyle, aId, aEmptyStr, aItemSet, aPropInfo, &aLang ) )
         {
             ASSERT( !aClass.Len() || !pCSS1Parser->GetClass( aClass ),
                     "Class wird nicht beruecksichtigt" );
@@ -5427,439 +5602,3 @@ void _HTMLAttr::InsertPrev( _HTMLAttr *pPrv )
 
     pAttr->pPrev = pPrv;
 }
-
-/*************************************************************************
-
-      $Log: not supported by cvs2svn $
-      Revision 1.9  2001/06/29 10:37:29  mib
-      #88918#: Use UTF-8 for Clipboard, evaluate encoding in insert mode
-
-      Revision 1.8  2001/04/05 15:01:28  jp
-      access the html.vor only at used time, not in startup
-
-      Revision 1.7  2001/03/07 08:06:13  mib
-      #84201#: 6.0 template support
-
-      Revision 1.6  2000/12/08 15:14:18  mib
-      #75662#: Don't add blanks to comments
-
-      Revision 1.5  2000/11/20 14:45:26  jp
-      UpdateDocState without second parameter
-
-      Revision 1.4  2000/11/15 16:26:50  hr
-      #65293# includes
-
-      Revision 1.3  2000/11/13 10:42:42  jp
-      must changes: use Search from SvtPathOptions
-
-      Revision 1.2  2000/10/31 09:07:20  mib
-      #79777#: Oboslete assert removed
-
-      Revision 1.1.1.1  2000/09/18 17:14:56  hr
-      initial import
-
-      Revision 1.494  2000/09/18 16:04:47  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.493  2000/09/05 14:01:29  mib
-      #78294#: removed support for frameset documents
-
-      Revision 1.492  2000/08/04 10:55:23  jp
-      Soft-/HardHyphens & HardBlanks changed from attribute to unicode character
-
-      Revision 1.491  2000/06/26 09:52:42  jp
-      must change: GetAppWindow->GetDefaultDevice
-
-      Revision 1.490  2000/06/13 09:37:51  os
-      using UCB
-
-      Revision 1.489  2000/04/10 12:20:58  mib
-      unicode
-
-      Revision 1.488  2000/03/17 15:19:53  mib
-      #74249#: Call EndAction before collaing DocumentDetected
-
-      Revision 1.487  2000/03/13 15:07:03  jp
-      remove JavaScript
-
-      Revision 1.486  2000/03/03 15:21:01  os
-      StarView remainders removed
-
-      Revision 1.485  2000/03/03 12:44:32  mib
-      Removed JavaScript
-
-      Revision 1.484  2000/02/11 15:41:10  hr
-      #70473# changes for unicode
-
-      Revision 1.483  2000/01/20 11:48:38  jp
-      Bug #72119#: HTML-Template is moved into an other directory
-
-      Revision 1.482  1999/10/21 17:50:12  jp
-      have to change - SearchFile with SfxIniManager, dont use SwFinder for this
-
-      Revision 1.481  1999/09/21 09:50:36  mib
-      multiple text encodings
-
-      Revision 1.480  1999/09/17 12:14:52  mib
-      support of multiple and non system text encodings
-
-      Revision 1.479  1999/07/21 14:11:18  JP
-      Bug #67779#: set any MsgBoxType at the StringErrorInfo
-
-
-      Rev 1.478   21 Jul 1999 16:11:18   JP
-   Bug #67779#: set any MsgBoxType at the StringErrorInfo
-
-      Rev 1.477   11 Jun 1999 10:27:36   MIB
-   #66744#: EnableModified flag
-
-      Rev 1.476   10 Jun 1999 10:34:32   JP
-   have to change: no AppWin from SfxApp
-
-      Rev 1.475   27 Apr 1999 16:42:26   JP
-   Bug #65314#: neu: IsJavaScriptEnabled
-
-      Rev 1.474   15 Apr 1999 13:48:30   MIB
-   #41833#: Styles fuer A-Tag
-
-      Rev 1.473   13 Apr 1999 10:58:56   MIB
-   #64638#: ASP-tags wie unbekannte Tags behandeln
-
-      Rev 1.472   09 Apr 1999 17:52:00   MA
-   #64467# EndAction und VirDev
-
-      Rev 1.471   08 Apr 1999 17:33:44   MIB
-   #64522#: Styles fuer TD/TH auswerten
-
-      Rev 1.470   08 Apr 1999 12:45:54   MA
-   #64467# F?r die EndAction immer alles per VirDev painten
-
-      Rev 1.469   07 Apr 1999 13:50:46   MIB
-   #64327#: GetBrowseWidth fuer Tabellen in Rahmen richtig
-
-      Rev 1.468   29 Mar 1999 16:06:08   MIB
-   #64051#: Undo auch nach JavaScript anschalten
-
-      Rev 1.467   17 Mar 1999 16:41:52   MIB
-   #63049#: Numerierungen mit relativen Abstaenden
-
-      Rev 1.466   15 Mar 1999 13:14:30   JP
-   Bug #63339#: Einfuegen Doc - Absaetze richtig zusammenfassen
-
-      Rev 1.465   11 Mar 1999 23:55:22   JP
-   Task #63171#: Optionen fuer Feld-/LinkUpdate Doc oder Modul lokal
-
-      Rev 1.464   10 Mar 1999 15:43:22   MIB
-   #62682#: Beim Setzen der Control-Groesse wenn noetig auf die ViewShell warten
-
-      Rev 1.463   25 Feb 1999 17:27:10   MIB
-   #61691#: falscher Assert
-
-      Rev 1.462   25 Feb 1999 16:01:58   MIB
-   #61949#: globale Shell entsorgti, #62261#: <BR CLEAR> auch fuer Controls
-
-      Rev 1.461   23 Feb 1999 08:56:34   MA
-   Syntaxfehler fuer Update
-
-      Rev 1.460   22 Feb 1999 08:40:30   MA
-   1949globale Shell entsorgt, Shells am RootFrm
-
-      Rev 1.459   11 Jan 1999 10:45:30   MIB
-   #60137#: UCS2-/UTF8-Unterstuetzung jetzt auch fuer F-Sets richtig
-
-      Rev 1.458   18 Dec 1998 09:23:34   MIB
-   #60137#: UTF-8-/UCS-2-Unterstuetzung fuer HTML
-
-      Rev 1.457   04 Dec 1998 14:23:58   MIB
-   #54626#: <LH> ausserhalb von <OL>/<UL> verbessert, entspricht #55072#
-
-      Rev 1.456   02 Dec 1998 10:55:12   MIB
-   #59886#: Kein Assert bei Attributen in Previous-Listen mehr
-
-      Rev 1.455   23 Nov 1998 13:12:46   OM
-   #58216# Enum fuer Aktualisieren von Verknuepfungen
-
-      Rev 1.454   20 Nov 1998 11:51:24   MIB
-   #59064#: Unbekannte Token/<NOSCRIPT> und <NOEMEBED> beibehalten
-
-      Rev 1.453   18 Nov 1998 10:24:30   MIB
-   #59579#: Inhalt von <TITLE> und <NOSCRIPT> nicht zur Filter-Detection heranziehen
-
-      Rev 1.452   13 Nov 1998 14:38:26   MIB
-   Nachtrag zu #58450#: Fuss-/Endnoten: Assert bei Verwendung der Vorlegen weg
-
-      Rev 1.451   11 Nov 1998 17:42:02   MIB
-   #59059#: Beim Abbrechen Pendung-Stack noch aufraeumen
-
-      Rev 1.450   02 Nov 1998 17:14:26   MIB
-   #58480#: Fuss-/Endnoten
-
-      Rev 1.449   23 Oct 1998 09:47:16   MIB
-   #58172#: Nach JS-Aufruf falls vorhanden zuletzt aktive ViewShell wieder setzten
-
-      Rev 1.448   13 Oct 1998 17:28:34   MIB
-   #57901#: Fixed-Font-Namen vom System holen, alten Namen entfernt
-
-      Rev 1.447   07 Oct 1998 11:07:26   MIB
-   #57559#: Erstes Token immer im Continue behandeln, 55072 erstmal raus
-
-      Rev 1.446   01 Sep 1998 12:06:50   MIB
-   #55072#: <LI> ohne <OL>/<UL> verbessert
-
-      Rev 1.445   01 Sep 1998 09:52:02   MIB
-   #55248#: Header beenden, wenn Dokuemnttyp erkannt wurde
-
-      Rev 1.444   31 Aug 1998 18:43:54   MIB
-   #55134#: DocumentDetected zum Anlegen der View aufrufen, bevor Controls eingef. werden
-
-      Rev 1.443   26 Aug 1998 13:29:00   MIB
-   #54970#: bCallNextToken nicht setzen, wenn keine Listbox, Applet, etc. einefuegt wurde
-
-      Rev 1.442   26 Aug 1998 09:30:42   MIB
-   #55144#: Umlauf bei Tabellen in Rahmen richtig setzen und beachten
-
-      Rev 1.441   25 Aug 1998 11:09:42   MIB
-   #50455#: Applet erst beim </APPLET> anlegen, weil erst dann alle Parameter da sind
-
-      Rev 1.440   28 Jul 1998 12:04:58   MIB
-   #54025#: Auf ObjectDying der ViewShell achten, #52559#: JavaScript-Zeilennummern
-
-      Rev 1.439   23 Jul 1998 11:14:12   JP
-   Task #52654#: Einfuegen Doc nicht mit einer CrsrShell sondern mit einen PaM
-
-      Rev 1.438   13 Jul 1998 09:20:28   MIB
-   #50966#: Fonts optional ignorieren
-
-      Rev 1.437   08 Jul 1998 17:19:46   MIB
-   StarScript
-
-      Rev 1.436   02 Jul 1998 15:50:10   JP
-   Modules Path ueber den PathFinder herausfinden
-
-      Rev 1.435   26 Jun 1998 12:21:48   OM
-   #51184# SubType an ExpressionFields richtig setzen und abfragen
-
-      Rev 1.434   15 Jun 1998 15:39:02   JP
-   Bug #51132#: _SetAttr - nicht pAttr sonder pAttr->pItem ist das Attribut
-
-      Rev 1.433   15 Jun 1998 13:13:28   MIB
-   fix #51020#: Im AppendTxtNode Attrs die den ganzen Absatz sofort setzen
-
-      Rev 1.432   08 Jun 1998 12:08:42   MIB
-   fix #50795#: <BODY>-Tag ist sicheres Indiz fuer Text-Dokument
-
-      Rev 1.431   05 Jun 1998 14:04:32   JP
-   Bug #42487#: Sprung zum Mark schon waehrend des Ladens ausfuehren
-
-      Rev 1.430   20 May 1998 10:41:04   MIB
-   fix #50341#: Script-Feld fuer nicht beendetes Script einfuegen
-
-      Rev 1.429   15 May 1998 11:31:02   MIB
-   UNO-Controls statt VC-Controls (noch geht nicht viel)
-
-      Rev 1.428   12 May 1998 15:50:44   JP
-   rund um Flys/DrawObjs im Doc/FESh umgestellt/optimiert
-
-      Rev 1.427   29 Apr 1998 17:37:52   MIB
-   fix: HTML-Seitenvorlage in SW-Doks wieder setzen
-
-      Rev 1.426   21 Apr 1998 13:47:26   MIB
-   fix: Keine Bookmark fuer abs-pos Objekte mit ID einfuegen
-
-      Rev 1.425   16 Apr 1998 11:36:42   MIB
-   Keine HTML-Seiten-Vorlage mehr setzen, Warnings
-
-      Rev 1.424   15 Apr 1998 14:54:36   MIB
-   Zwei-seitige Printing-Extensions
-
-      Rev 1.423   03 Apr 1998 12:22:16   MIB
-   Export des Rahmen-Namens als ID
-
-      Rev 1.422   02 Apr 1998 19:42:40   MIB
-   Positionierung von spaltigen Rahmen
-
-      Rev 1.421   27 Mar 1998 17:28:54   MIB
-   direkte absolute Positionierung und Groessen-Export von Controls und Marquee
-
-      Rev 1.420   27 Mar 1998 09:58:32   MIB
-   direkte Positionierung von Grafiken etc.
-
-      Rev 1.419   25 Mar 1998 12:13:26   MIB
-   abs.-pos. Container angefangen, Statistik-Feld
-
-      Rev 1.418   20 Mar 1998 10:46:12   MIB
-   Font-Listen in Font-Attributen
-
-      Rev 1.417   13 Mar 1998 09:29:36   MIB
-   Rahmen-Anker-Verschiebung entfernt
-
-      Rev 1.416   28 Feb 1998 07:28:58   MH
-   chg: [OW|MTF] -> UNX
-
-      Rev 1.415   27 Feb 1998 16:22:42   JP
-   ObjectDying-MessageItem umbenannt
-
-      Rev 1.414   27 Feb 1998 14:05:42   MIB
-   Auto-gebundene Rahmen
-
-      Rev 1.413   24 Feb 1998 11:31:22   MIB
-   Jetzt auch HTML_LISTING und HTML_XMP vernichtet (wegen #42029#)
-
-      Rev 1.412   20 Feb 1998 19:02:22   MA
-   header
-
-      Rev 1.411   20 Feb 1998 13:27:14   MA
-   headerfiles gewandert
-
-      Rev 1.410   17 Feb 1998 10:51:04   MIB
-   HTML-H6 -> HEADLINE6
-
-      Rev 1.409   16 Feb 1998 12:28:42   MIB
-   DokInfo-Feld jetzt auch fixed
-
-      Rev 1.408   10 Feb 1998 09:51:20   MIB
-   fix: Fuer Absatz-Abstand am Start-/Ende von Listen auch OL/UL/DL beachten
-
-      Rev 1.407   29 Jan 1998 21:34:22   JP
-   GetEndOfIcons ersetzt durch GetEndOfExtras, das auf GetEndOfRedlines mappt
-
-      Rev 1.406   23 Jan 1998 16:10:04   MA
-   includes
-
-      Rev 1.405   22 Jan 1998 19:58:26   JP
-   CTOR des SwPaM umgestellt
-
-      Rev 1.404   19 Jan 1998 16:24:02   MIB
-   Numerierungs-Umbau
-
-      Rev 1.403   17 Dec 1997 15:48:26   ER
-   cast fuer IRIX
-
-      Rev 1.402   16 Dec 1997 18:09:04   JP
-   GetSearchDelim gegen SFX_SEARCH_DELIMITER ausgetauscht
-
-      Rev 1.401   03 Dec 1997 12:42:50   JP
-   Extensions auf dem MAC zulassen
-
-      Rev 1.400   26 Nov 1997 19:09:52   MA
-   includes
-
-      Rev 1.399   25 Nov 1997 11:53:20   TJ
-   include svhtml.hxx
-
-      Rev 1.398   17 Nov 1997 10:17:28   JP
-   Umstellung Numerierung
-
-      Rev 1.397   30 Oct 1997 18:19:26   JP
-   DocumentVorlagen-Verwaltung in die Basisklasse verschoben
-
-      Rev 1.396   20 Oct 1997 12:21:42   MIB
-   fix: Kleine CSS1-Attribute aus Class hart setzen, wenn Vorlage benutzt wird.
-
-      Rev 1.395   20 Oct 1997 09:52:58   MIB
-   Nur fuer absolute positioning benoetigten Code groesstenteils auskommentiert
-
-      Rev 1.394   17 Oct 1997 13:21:30   MIB
-   page-break-xxx auch uber STYLE/CLASS und ID-Optionen
-
-      Rev 1.393   14 Oct 1997 14:36:42   JP
-   pNext vom Ring wurde privat; zugriff ueber GetNext()
-
-      Rev 1.392   14 Oct 1997 14:30:20   MIB
-   fix #44228#: ViewShell-Zerstoerung/Rekonstruktion ueber Clients
-
-      Rev 1.391   09 Oct 1997 14:40:46   JP
-   Umstellung NodeIndex/-Array/BigPtrArray
-
-      Rev 1.390   06 Oct 1997 15:41:24   OM
-   Feldumstellung
-
-      Rev 1.389   06 Oct 1997 15:27:24   MIB
-   Kein NewApplet aufrufen, wenn SOLAR_JAVA nicht gesetzt
-
-      Rev 1.388   19 Sep 1997 12:20:24   MIB
-   fix: Seiten-Umbruch auch vor Tabellen temporaer setzen
-
-      Rev 1.387   19 Sep 1997 11:27:38   MIB
-   fix #41370#: HRs in Tabellen-Zellen (nicht freigeschaltet)
-
-      Rev 1.386   18 Sep 1997 16:38:12   JP
-   Continue: beim Einfuegen von nur einem Node nicht falsch zusammenfassen
-
-      Rev 1.385   18 Sep 1997 09:18:34   JP
-   Teilfix fuer Bug 42487
-
-      Rev 1.384   16 Sep 1997 17:23:52   MIB
-   abs. Positioning fuer Absatz-Tags
-
-      Rev 1.383   16 Sep 1997 14:55:36   MIB
-   ITEMID_BOXINFOITEM (voreubergendend) definieren
-
-      Rev 1.382   16 Sep 1997 11:00:44   MIB
-   Kopf-/Fusszeilen ohne Moven von Nodes, autom. Beenden von Bereichen/Rahmen
-
-      Rev 1.381   12 Sep 1997 11:51:20   MIB
-   fix #41136#: &(xxx);-Makros
-
-      Rev 1.380   10 Sep 1997 11:00:24   MIB
-   HTMLReader::IsFormat() wieder raus
-
-      Rev 1.379   09 Sep 1997 14:09:48   MIB
-   Ueberall Browse-View-Breite statt Seitenbreite verwenden
-
-      Rev 1.378   08 Sep 1997 17:41:40   MIB
-   Verankerung von AUTO_CNTNT-Rahmen nicht mehr verschieben
-
-      Rev 1.377   04 Sep 1997 12:36:54   JP
-   Umstellungen fuer FilterDetection im SwModule und SwDLL
-
-      Rev 1.376   02 Sep 1997 20:45:32   OS
-   Header
-
-      Rev 1.375   02 Sep 1997 11:12:08   MIB
-   fix #42192#: Attribute schnellstmoeglich setzen
-
-      Rev 1.374   01 Sep 1997 11:54:46   MIB
-   fix #42679#: Im Titel nur auf </TITLE> achten, keine Schleife mehr.
-
-      Rev 1.373   29 Aug 1997 16:50:20   OS
-   DLL-Umstellung
-
-      Rev 1.372   15 Aug 1997 12:47:46   OS
-   charatr/frmatr/txtatr aufgeteilt
-
-      Rev 1.371   14 Aug 1997 13:38:10   MA
-   #42534# Error in NextToken abfragen und State setzen
-
-      Rev 1.370   12 Aug 1997 13:44:22   OS
-   Header-Umstellung
-
-      Rev 1.369   11 Aug 1997 14:06:24   OM
-   Headerfile-Umstellung
-
-      Rev 1.368   07 Aug 1997 13:15:18   MIB
-   fix #42192#: Zeichen-Attribute moeglicht frueh setzen. Noch nicht freigeschaltet
-
-      Rev 1.367   04 Aug 1997 13:53:42   MIB
-   aboslute psoitioning (fuer fast alle Zeichen-Attribute/-Vorlagen)
-
-      Rev 1.366   31 Jul 1997 10:44:44   MIB
-   DIV-Stack weg
-
-      Rev 1.365   25 Jul 1997 13:00:38   MIB
-   fix #40408#: <NOEMBED>-Tag
-
-      Rev 1.364   18 Jul 1997 10:54:32   MIB
-   fix #40951#: In Reschedule/DocDetected absichtlich geaenderte URLs beachten
-
-      Rev 1.363   16 Jul 1997 18:38:40   MIB
-   non-pro: Asserts zur Call-Stack-Kontrolle, kein Assert f. frueher gesetze Attrs
-
-      Rev 1.362   10 Jul 1997 16:44:46   MIB
-   fix #41379#: Keine Absatz-Attribute fuer leere Absaetze (auch hinter Tabellen)
-
-      Rev 1.361   10 Jul 1997 12:02:50   MIB
-   fix #41547#: Keine Tabellen in Tabellen einfuegen
-
-*************************************************************************/
-

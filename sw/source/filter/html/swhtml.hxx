@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swhtml.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2001-10-09 14:57:36 $
+ *  last change: $Author: mib $ $Date: 2001-10-24 14:16:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,7 +258,10 @@ struct _HTMLAttrTable
                 *pEscapement,
                 *pCaseMap,
                 *pKerning,      // (nur fuer SPACER)
-                *pCharBrush     // Zeichen-Hintergrund
+                *pCharBrush,    // Zeichen-Hintergrund
+                *pLanguage,
+                *pLanguageCJK,
+                *pLanguageCTL
                 ;
 };
 
@@ -826,10 +829,11 @@ private:
     void EndStyle();
 
     inline sal_Bool HasStyleOptions( const String &rStyle, const String &rId,
-                                 const String &rClass );
+                                 const String &rClass, const String *pLang=0 );
     sal_Bool ParseStyleOptions( const String &rStyle, const String &rId,
                             const String &rClass, SfxItemSet &rItemSet,
-                            SvxCSS1PropertyInfo &rPropInfo );
+                            SvxCSS1PropertyInfo &rPropInfo,
+                             const String *pLang=0 );
 
 
     // Einfuegen von Controls und ::com::sun::star::form::Forms (htmlform.cxx)
@@ -1044,9 +1048,10 @@ inline void _HTMLAttrContext::GetULSpace( sal_uInt16& rUpper,
 
 inline sal_Bool SwHTMLParser::HasStyleOptions( const String &rStyle,
                                            const String &rId,
-                                           const String &rClass )
+                                           const String &rClass,
+                                            const String *pLang )
 {
-    return rStyle.Len() || rId.Len() || rClass.Len();
+    return rStyle.Len() || rId.Len() || rClass.Len() || (pLang && pLang->Len());
 }
 
 inline const _HTMLAttrContext *SwHTMLParser::GetTopContext() const

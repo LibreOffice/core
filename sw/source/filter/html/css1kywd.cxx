@@ -2,9 +2,9 @@
  *
  *  $RCSfile: css1kywd.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 06:27:52 $
+ *  last change: $Author: mib $ $Date: 2001-10-24 14:16:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -307,3 +307,4 @@ sal_Char __FAR_DATA CSS1_CONSTASCII_DEF( sCSS1_PV_landscape, "landscape" );
 
 sal_Char __FAR_DATA CSS1_CONSTASCII_DEF( sCSS1_class_abs_pos, "sd-abs-pos" );
 
+sal_Char __FAR_DATA CSS1_CONSTASCII_DEF( sCSS1_P_so_language, "so-language" );

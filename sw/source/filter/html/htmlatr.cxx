@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlatr.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mib $ $Date: 2001-10-09 14:57:36 $
+ *  last change: $Author: mib $ $Date: 2001-10-24 14:16:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,9 @@
 #endif
 #ifndef _SVX_BRSHITEM_HXX //autogen
 #include <svx/brshitem.hxx>
+#endif
+#ifndef _SVX_LANGITEM_HXX
+#include <svx/langitem.hxx>
 #endif
 
 
@@ -476,7 +479,8 @@ struct SwHTMLFmtInfo
 
     // Konstruktor zum Erstellen der Format-Info
     SwHTMLFmtInfo( const SwFmt *pFmt, SwDoc *pDoc, SwDoc *pTemlate,
-                   BOOL bOutStyles, sal_uInt16 nScript=CSS1_OUTMODE_ANY_SCRIPT,
+                   BOOL bOutStyles, LanguageType eDfltLang=LANGUAGE_DONTKNOW,
+                   sal_uInt16 nScript=CSS1_OUTMODE_ANY_SCRIPT,
                    BOOL bHardDrop=FALSE );
     ~SwHTMLFmtInfo();
 
@@ -497,8 +501,9 @@ struct SwHTMLFmtInfo
 SV_IMPL_OP_PTRARR_SORT( SwHTMLFmtInfos, SwHTMLFmtInfo* )
 
 SwHTMLFmtInfo::SwHTMLFmtInfo( const SwFmt *pF, SwDoc *pDoc, SwDoc *pTemplate,
-                              BOOL bOutStyles, sal_uInt16 nCSS1Script,
-                              BOOL bHardDrop ) :
+                              BOOL bOutStyles,
+                              LanguageType eDfltLang,
+                              sal_uInt16 nCSS1Script, BOOL bHardDrop ) :
     pFmt( pF ), pItemSet( 0 ), bScriptDependent( sal_False )
 {
     USHORT nRefPoolId = 0;
@@ -673,6 +678,40 @@ SwHTMLFmtInfo::SwHTMLFmtInfo( const SwFmt *pF, SwDoc *pDoc, SwDoc *pTemplate,
             (pRefFmt ? pRefFmt : pFmt)->GetULSpace();
         nTopMargin = rULSpace.GetUpper();
         nBottomMargin = rULSpace.GetLower();
+
+        // export language if it differs from the default language
+        sal_uInt16 nWhichId =
+            SwHTMLWriter::GetLangWhichIdFromScript( nCSS1Script );
+        const SvxLanguageItem& rLang =
+            (const SvxLanguageItem&)pFmt->GetAttr( nWhichId );
+        LanguageType eLang = rLang.GetLanguage();
+        DBG_ASSERT( LANGUAGE_DONTKNOW != eDfltLang, "missing language" );
+        if( eLang != eDfltLang )
+        {
+            if( !pItemSet )
+                pItemSet = new SfxItemSet( *pFmt->GetAttrSet().GetPool(),
+                                           pFmt->GetAttrSet().GetRanges() );
+            pItemSet->Put( rLang );
+        }
+
+        static sal_uInt16 aWhichIds[3] =
+            { RES_CHRATR_LANGUAGE, RES_CHRATR_CJK_LANGUAGE,
+                RES_CHRATR_CTL_LANGUAGE };
+        for( sal_uInt16 i=0; i<3; i++ )
+        {
+            if( aWhichIds[i] != nWhichId )
+            {
+                const SvxLanguageItem& rLang =
+                    (const SvxLanguageItem&)pFmt->GetAttr(aWhichIds[i]);
+                if( rLang.GetLanguage() != eLang )
+                {
+                    if( !pItemSet )
+                        pItemSet = new SfxItemSet( *pFmt->GetAttrSet().GetPool(),
+                                                   pFmt->GetAttrSet().GetRanges() );
+                    pItemSet->Put( rLang );
+                }
+            }
+        }
     }
 }
 
@@ -763,7 +802,8 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
     else
     {
         pFmtInfo = new SwHTMLFmtInfo( &rFmt, rWrt.pDoc, rHWrt.pTemplate,
-                                      rHWrt.bCfgOutStyles, rHWrt.nCSS1Script,
+                                      rHWrt.bCfgOutStyles, rHWrt.eLang,
+                                      rHWrt.nCSS1Script,
                                       !rHWrt.IsHTMLMode(HTMLMODE_DROPCAPS) );
         rHWrt.aTxtCollInfos.C40_PTR_INSERT( SwHTMLFmtInfo, pFmtInfo );
         String aName( rFmt.GetName() );
@@ -1089,6 +1129,25 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
         bNoStyle = FALSE;
     }
 
+    LanguageType eLang = rInfo.pItemSet
+        ? ((const SvxLanguageItem&)rInfo.pItemSet->Get(SwHTMLWriter::GetLangWhichIdFromScript(rHWrt.nCSS1Script))).GetLanguage()
+           : rHWrt.eLang;
+
+    if( rInfo.pItemSet )
+    {
+        static sal_uInt16 aWhichIds[3] = { RES_CHRATR_LANGUAGE, RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CTL_LANGUAGE };
+
+        for( sal_uInt16 i=0; i<3; i++ )
+        {
+            // export language if it differs from the default language only.
+            const SfxPoolItem *pItem;
+            if( SFX_ITEM_SET == rInfo.pItemSet->GetItemState( aWhichIds[i],
+                        sal_True, &pItem ) &&
+                ((const SvxLanguageItem *)pItem)->GetLanguage() == eLang )
+                rInfo.pItemSet->ClearItem( aWhichIds[i] );
+        }
+    }
+
     // Ein <P> wird nur geschrieben, wenn
     // - wir in keiner OL/UL/DL sind, oder
     // - der Absatz einer OL/UL nicht numeriert ist, oder
@@ -1102,7 +1161,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
     if( !bPara ||
         (!rInfo.bInNumBulList && !rHWrt.nDefListLvl) ||
         (rInfo.bInNumBulList && !bNumbered) ||
-        (!rHWrt.bCfgOutStyles && (bHasParSpace || pAdjItem)) ||
+        (!rHWrt.bCfgOutStyles && (bHasParSpace || pAdjItem || eLang != rHWrt.eLang)) ||
         (rHWrt.bCfgOutStyles /*&& rHWrt.bPoolCollTextModified*/) )
     {
         // jetzt werden Optionen ausgegeben
@@ -1111,6 +1170,13 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
 
         ByteString sOut( '<' );
         sOut += aToken;
+
+        if( eLang != rHWrt.eLang )
+        {
+            rWrt.Strm() << sOut.GetBuffer();
+            rHWrt.OutLanguage( eLang );
+            sOut.Erase();
+        }
 
         if( rHWrt.bCfgOutStyles &&
             (pFmtInfo->aClass.Len() || pFmtInfo->bScriptDependent) )
@@ -1539,10 +1605,13 @@ HTMLOnOffState HTMLEndPosLst::GetHTMLItemState( const SfxPoolItem& rItem )
 
     case RES_CHRATR_FONT:
     case RES_CHRATR_FONTSIZE:
+    case RES_CHRATR_LANGUAGE:
     case RES_CHRATR_CJK_FONT:
     case RES_CHRATR_CJK_FONTSIZE:
+    case RES_CHRATR_CJK_LANGUAGE:
     case RES_CHRATR_CTL_FONT:
     case RES_CHRATR_CTL_FONTSIZE:
+    case RES_CHRATR_CTL_LANGUAGE:
     case RES_TXTATR_INETFMT:
         eState = HTML_REAL_VALUE;
         break;
@@ -1962,6 +2031,7 @@ void HTMLEndPosLst::Insert( const SfxPoolItem& rItem,
     {
     case RES_CHRATR_FONT:
     case RES_CHRATR_FONTSIZE:
+    case RES_CHRATR_LANGUAGE:
     case RES_CHRATR_POSTURE:
     case RES_CHRATR_WEIGHT:
         bDependsOnScript = sal_True;
@@ -1970,6 +2040,7 @@ void HTMLEndPosLst::Insert( const SfxPoolItem& rItem,
 
     case RES_CHRATR_CJK_FONT:
     case RES_CHRATR_CJK_FONTSIZE:
+    case RES_CHRATR_CJK_LANGUAGE:
     case RES_CHRATR_CJK_POSTURE:
     case RES_CHRATR_CJK_WEIGHT:
         bDependsOnScript = sal_True;
@@ -1978,6 +2049,7 @@ void HTMLEndPosLst::Insert( const SfxPoolItem& rItem,
 
     case RES_CHRATR_CTL_FONT:
     case RES_CHRATR_CTL_FONTSIZE:
+    case RES_CHRATR_CTL_LANGUAGE:
     case RES_CHRATR_CTL_POSTURE:
     case RES_CHRATR_CTL_WEIGHT:
         bDependsOnScript = sal_True;
@@ -2896,6 +2968,27 @@ static Writer& OutHTML_SvxFontHeight( Writer& rWrt, const SfxPoolItem& rHt )
     return rWrt;
 }
 
+static Writer& OutHTML_SvxLanguage( Writer& rWrt, const SfxPoolItem& rHt )
+{
+    SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
+    if( rHTMLWrt.bOutOpts )
+        return rWrt;
+
+    if( rHTMLWrt.bTagOn )
+    {
+        ByteString sOut( '<' );
+        sOut += sHTML_span;
+        rWrt.Strm() << sOut.GetBuffer();
+        rHTMLWrt.OutLanguage( ((const SvxLanguageItem &)rHt).GetLanguage() );
+        rWrt.Strm() << '>';
+    }
+    else
+    {
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), sHTML_span, FALSE );
+    }
+
+    return rWrt;
+}
 static Writer& OutHTML_SwWeight( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
@@ -3331,7 +3424,7 @@ SwAttrFnTab aHTMLAttrFnTab = {
 /* RES_CHRATR_FONT  */              OutHTML_SvxFont,
 /* RES_CHRATR_FONTSIZE  */          OutHTML_SvxFontHeight,
 /* RES_CHRATR_KERNING   */          OutHTML_CSS1Attr,
-/* RES_CHRATR_LANGUAGE  */          0,
+/* RES_CHRATR_LANGUAGE  */          OutHTML_SvxLanguage,
 /* RES_CHRATR_POSTURE   */          OutHTML_SwPosture,
 /* RES_CHRATR_PROPORTIONALFONTSIZE*/0,
 /* RES_CHRATR_SHADOWED  */          0,
@@ -3345,12 +3438,12 @@ SwAttrFnTab aHTMLAttrFnTab = {
 /* RES_CHRATR_BACKGROUND */         OutHTML_CSS1Attr, // Neu: Zeichenhintergrund
 /* RES_CHRATR_CJK_FONT */           OutHTML_SvxFont,
 /* RES_CHRATR_CJK_FONTSIZE */       OutHTML_SvxFontHeight,
-/* RES_CHRATR_CJK_LANGUAGE */       0,
+/* RES_CHRATR_CJK_LANGUAGE */       OutHTML_SvxLanguage,
 /* RES_CHRATR_CJK_POSTURE */        OutHTML_SwPosture,
 /* RES_CHRATR_CJK_WEIGHT */         OutHTML_SwWeight,
 /* RES_CHRATR_CTL_FONT */           OutHTML_SvxFont,
 /* RES_CHRATR_CTL_FONTSIZE */       OutHTML_SvxFontHeight,
-/* RES_CHRATR_CTL_LANGUAGE */       0,
+/* RES_CHRATR_CTL_LANGUAGE */       OutHTML_SvxLanguage,
 /* RES_CHRATR_CTL_POSTURE */        OutHTML_SwPosture,
 /* RES_CHRATR_CTL_WEIGHT */         OutHTML_SwWeight,
 /* RES_CHRATR_WRITING_DIRECTION */  0,

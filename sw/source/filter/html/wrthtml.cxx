@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrthtml.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mib $ $Date: 2001-10-09 14:57:36 $
+ *  last change: $Author: mib $ $Date: 2001-10-24 14:16:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@
 #ifndef _URLOBJ_HXX //autogen
 #include <tools/urlobj.hxx>
 #endif
+#ifndef _ISOLANG_HXX
+#include <tools/isolang.hxx>
+#endif
 #ifndef _FRMHTMLW_HXX //autogen
 #include <sfx2/frmhtmlw.hxx>
 #endif
@@ -115,6 +118,9 @@
 #endif
 #ifndef _SVX_SCRIPTTYPEITEM_HXX
 #include <svx/scripttypeitem.hxx>
+#endif
+#ifndef _SVX_LANGITEM_HXX
+#include <svx/langitem.hxx>
 #endif
 #ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
@@ -433,6 +439,9 @@ sal_uInt32 SwHTMLWriter::WriteStream()
         nCSS1Script = CSS1_OUTMODE_WESTERN;
         break;
     }
+    eLang = ((const SvxLanguageItem&)pDoc
+            ->GetDefault(GetLangWhichIdFromScript(nCSS1Script))).GetLanguage();
+
     nFootNote = nEndNote = 0;
 
     nWarn = 0;
@@ -1129,6 +1138,9 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
     Strm() << sOut.GetBuffer();
     sOut.Erase();
 
+    // language
+    OutLanguage( eLang );
+
     // Textfarbe ausgeben, wenn sie an der Standard-Vorlage gesetzt ist
     // und sich geaendert hat.
     OutBodyColor( sHTML_O_text,
@@ -1294,6 +1306,36 @@ void SwHTMLWriter::OutBackground( const SfxItemSet& rItemSet,
                                                &pItem ))
     {
         OutBackground( ((const SvxBrushItem*)pItem), rEmbGrfNm, bGraphic );
+    }
+}
+
+sal_uInt16 SwHTMLWriter::GetLangWhichIdFromScript( sal_uInt16 nScript )
+{
+    sal_uInt16 nWhichId;
+    switch( nScript )
+    {
+    case CSS1_OUTMODE_CJK:
+        nWhichId = RES_CHRATR_CJK_LANGUAGE;
+        break;
+    case CSS1_OUTMODE_CTL:
+        nWhichId = RES_CHRATR_CJK_LANGUAGE;
+        break;
+    default:
+        nWhichId = RES_CHRATR_LANGUAGE;
+        break;
+    }
+    return nWhichId;
+}
+
+void SwHTMLWriter::OutLanguage( LanguageType eLang )
+{
+    if( LANGUAGE_DONTKNOW != eLang )
+    {
+        ByteString sOut( ' ' );
+        (sOut += sHTML_O_lang) += "=\"";
+        Strm() << sOut.GetBuffer();
+        HTMLOutFuncs::Out_String( Strm(), ConvertLanguageToIsoString(eLang),
+                                  eDestEnc, &aNonConvertableCharacters ) << '"';
     }
 }
 

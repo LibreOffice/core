@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxcss1.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2001-10-09 14:57:36 $
+ *  last change: $Author: mib $ $Date: 2001-10-24 14:16:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@
 #ifndef _HINTIDS_HXX
 #define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
 #define ITEMID_FONT         SID_ATTR_CHAR_FONT
+#define ITEMID_LANGUAGE     SID_ATTR_CHAR_LANGUAGE
 #define ITEMID_POSTURE      SID_ATTR_CHAR_POSTURE
 #define ITEMID_WEIGHT       SID_ATTR_CHAR_WEIGHT
 #define ITEMID_FONTHEIGHT   SID_ATTR_CHAR_FONTHEIGHT
@@ -96,6 +97,9 @@
 #define ITEMID_BRUSH SID_ATTR_BRUSH
 #endif
 
+#ifndef _ISOLANG_HXX
+#include <tools/isolang.hxx>
+#endif
 #ifndef _CTRLTOOL_HXX
 #include <svtools/ctrltool.hxx>
 #endif
@@ -147,6 +151,9 @@
 #endif
 #ifndef _SVX_LRSPITEM_HXX //autogen
 #include <svx/lrspitem.hxx>
+#endif
+#ifndef _SVX_LANGITEM_HXX
+#include <svx/langitem.hxx>
 #endif
 #ifndef _SFXITEMPOOL_HXX //autogen
 #include <svtools/itempool.hxx>
@@ -424,6 +431,10 @@ struct SvxCSS1ItemIds
     USHORT nULSpace;
     USHORT nBox;
     USHORT nBrush;
+
+    USHORT nLanguage;
+    USHORT nLanguageCJK;
+    USHORT nLanguageCTL;
 };
 
 
@@ -900,6 +911,10 @@ SvxCSS1Parser::SvxCSS1Parser( SfxItemPool& rPool, USHORT nMinFixLineSp,
     aItemIds.nULSpace = rPool.GetTrueWhich( SID_ATTR_ULSPACE, FALSE );
     aItemIds.nBox = rPool.GetTrueWhich( SID_ATTR_BORDER_OUTER, FALSE );
     aItemIds.nBrush = rPool.GetTrueWhich( SID_ATTR_BRUSH, FALSE );
+
+    aItemIds.nLanguage = rPool.GetTrueWhich( SID_ATTR_CHAR_LANGUAGE, FALSE );
+    aItemIds.nLanguageCJK = rPool.GetTrueWhich( SID_ATTR_CHAR_CJK_LANGUAGE, FALSE );
+    aItemIds.nLanguageCTL = rPool.GetTrueWhich( SID_ATTR_CHAR_CTL_LANGUAGE, FALSE );
 
     aWhichMap.Insert( (USHORT)0, (USHORT)0 );
     SvParser::BuildWhichTbl( aWhichMap, (USHORT *)&aItemIds,
@@ -3114,6 +3129,34 @@ static void ParseCSS1_orphans( const CSS1Expression *pExpr,
 }
 // /Feature: PrintExt
 
+static void ParseCSS1_so_language( const CSS1Expression *pExpr,
+                               SfxItemSet &rItemSet,
+                               SvxCSS1PropertyInfo& rPropInfo,
+                               const SvxCSS1Parser& rParser )
+{
+    if( CSS1_IDENT == pExpr->GetType() ||
+        CSS1_STRING == pExpr->GetType() )
+    {
+        LanguageType eLang = ConvertIsoStringToLanguage( pExpr->GetString() );
+        if( LANGUAGE_DONTKNOW != eLang )
+        {
+            SvxLanguageItem aLang( eLang, aItemIds.nLanguage );
+            if( rParser.IsSetWesternProps() )
+                rItemSet.Put( aLang );
+            if( rParser.IsSetCJKProps() )
+            {
+                aLang.SetWhich( aItemIds.nLanguageCJK );
+                rItemSet.Put( aLang );
+            }
+            if( rParser.IsSetCTLProps() )
+            {
+                aLang.SetWhich( aItemIds.nLanguageCTL );
+                rItemSet.Put( aLang );
+            }
+        }
+    }
+}
+
 /*  */
 
 // die Zuordung Property zu parsender Funktion
@@ -3182,8 +3225,9 @@ static CSS1PropEntry __FAR_DATA aCSS1PropFnTab[] =
     CSS1_PROP_ENTRY(page_break_after),
     CSS1_PROP_ENTRY(page_break_inside),
     CSS1_PROP_ENTRY(widows),
-    CSS1_PROP_ENTRY(orphans)
+    CSS1_PROP_ENTRY(orphans),
 // /Feature: PrintExt
+    CSS1_PROP_ENTRY(so_language)
 };
 
 /*  */

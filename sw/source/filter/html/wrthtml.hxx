@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrthtml.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2001-10-09 14:57:36 $
+ *  last change: $Author: mib $ $Date: 2001-10-24 14:16:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #define _SVSTDARR_STRINGSSORTDTOR
 #define _SVSTDARR_ULONGS
 #include <svtools/svstdarr.hxx>
+#ifndef _LANG_HXX
+#include <tools/lang.hxx>
+#endif
 
 #ifndef _STREAM_HXX //autogen
 #include <tools/stream.hxx>
@@ -325,6 +328,7 @@ public:
                                     // that is not contained in class names)
 
     rtl_TextEncoding    eDestEnc;
+    LanguageType        eLang;
 
     // Beschreibung der Export-Konfiguration
     // 0
@@ -445,6 +449,8 @@ public:
     void OutBackground( const SfxItemSet& rItemSet, String &rEmbGrfName,
                         sal_Bool bGraphic );
 
+    void OutLanguage( LanguageType eLang );
+
     // ALT/ALIGN/WIDTH/HEIGHT/HSPACE/VSPACE-Optionen des aktuellen
     // Frame-Formats ausgeben und ggf. ein <BR CLEAR=...> vorne an
     // rEndTags anhaengen
@@ -533,6 +539,7 @@ public:
     static void PrepareFontList( const SvxFontItem& rFontItem, String& rNames,
                                  sal_Unicode cQuote, sal_Bool bGeneric );
     static sal_uInt16 GetCSS1ScriptForScriptType( sal_uInt16 nScriptType );
+    static sal_uInt16 GetLangWhichIdFromScript( sal_uInt16 nScript );
 
     FieldUnit GetCSS1Unit() const { return eCSS1Unit; }
 };

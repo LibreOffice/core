@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlcss1.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2001-10-09 14:57:36 $
+ *  last change: $Author: mib $ $Date: 2001-10-24 14:16:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 #ifndef _INTN_HXX //autogen
 #include <tools/intn.hxx>
 #endif
+#ifndef _ISOLANG_HXX
+#include <tools/isolang.hxx>
+#endif
 #ifndef _SFXDOCFILE_HXX //autogen
 #include <sfx2/docfile.hxx>
 #endif
@@ -114,6 +117,9 @@
 #endif
 #ifndef _SVX_FONTITEM_HXX
 #include <svx/fontitem.hxx>
+#endif
+#ifndef _SVX_LANGITEM_HXX
+#include <svx/langitem.hxx>
 #endif
 #ifndef _HTMLTOKN_H
 #include <svtools/htmltokn.h>
@@ -731,13 +737,13 @@ extern BOOL lcl_css1atr_equalFontItems( const SfxPoolItem& r1, const SfxPoolItem
 static void RemoveScriptItems( SfxItemSet& rItemSet, sal_uInt16 nScript,
                                const SfxItemSet *pParentItemSet = 0 )
 {
-    static sal_uInt16 aWhichIds[3][4] =
+    static sal_uInt16 aWhichIds[3][5] =
     {
-        { RES_CHRATR_FONT, RES_CHRATR_FONTSIZE,
+        { RES_CHRATR_FONT, RES_CHRATR_FONTSIZE, RES_CHRATR_LANGUAGE,
             RES_CHRATR_POSTURE, RES_CHRATR_WEIGHT },
-        { RES_CHRATR_CJK_FONT, RES_CHRATR_CJK_FONTSIZE,
+        { RES_CHRATR_CJK_FONT, RES_CHRATR_CJK_FONTSIZE, RES_CHRATR_CJK_LANGUAGE,
             RES_CHRATR_CJK_POSTURE, RES_CHRATR_CJK_WEIGHT },
-        { RES_CHRATR_CTL_FONT, RES_CHRATR_CTL_FONTSIZE,
+        { RES_CHRATR_CTL_FONT, RES_CHRATR_CTL_FONTSIZE, RES_CHRATR_CTL_LANGUAGE,
             RES_CHRATR_CTL_POSTURE, RES_CHRATR_CTL_WEIGHT }
     };
 
@@ -762,7 +768,7 @@ static void RemoveScriptItems( SfxItemSet& rItemSet, sal_uInt16 nScript,
 
     for( sal_uInt16 j=0; j < 3; j++ )
     {
-        for( sal_uInt16 i=0; i < 4; i++ )
+        for( sal_uInt16 i=0; i < 5; i++ )
         {
             sal_uInt16 nWhich = aWhichIds[j][i];
             const SfxPoolItem *pItem;
@@ -1128,18 +1134,21 @@ BOOL SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
                     if( CSS1_SCRIPT_WESTERN != nScript )
                     {
                         aScriptItemSet.ClearItem( RES_CHRATR_FONT );
+                        aScriptItemSet.ClearItem( RES_CHRATR_LANGUAGE );
                         aScriptItemSet.ClearItem( RES_CHRATR_POSTURE );
                         aScriptItemSet.ClearItem( RES_CHRATR_WEIGHT );
                     }
                     if( CSS1_SCRIPT_CJK != nScript )
                     {
                         aScriptItemSet.ClearItem( RES_CHRATR_CJK_FONT );
+                        aScriptItemSet.ClearItem( RES_CHRATR_CJK_LANGUAGE );
                         aScriptItemSet.ClearItem( RES_CHRATR_CJK_POSTURE );
                         aScriptItemSet.ClearItem( RES_CHRATR_CJK_WEIGHT );
                     }
                     if( CSS1_SCRIPT_CTL != nScript )
                     {
                         aScriptItemSet.ClearItem( RES_CHRATR_CTL_FONT );
+                        aScriptItemSet.ClearItem( RES_CHRATR_CTL_LANGUAGE );
                         aScriptItemSet.ClearItem( RES_CHRATR_CTL_POSTURE );
                         aScriptItemSet.ClearItem( RES_CHRATR_CTL_WEIGHT );
                     }
@@ -1790,6 +1799,16 @@ _HTMLAttr **SwHTMLParser::GetAttrTabEntry( USHORT nWhich )
     case RES_KEEP:
         ppAttr = &aAttrTab.pKeep;
         break;
+
+    case RES_CHRATR_LANGUAGE:
+        ppAttr = &aAttrTab.pLanguage;
+        break;
+    case RES_CHRATR_CJK_LANGUAGE:
+        ppAttr = &aAttrTab.pLanguageCJK;
+        break;
+    case RES_CHRATR_CTL_LANGUAGE:
+        ppAttr = &aAttrTab.pLanguageCTL;
+        break;
     }
 
     return ppAttr;
@@ -2042,7 +2061,8 @@ BOOL SwHTMLParser::ParseStyleOptions( const String &rStyle,
                                       const String &rId,
                                       const String &rClass,
                                       SfxItemSet &rItemSet,
-                                      SvxCSS1PropertyInfo &rPropInfo )
+                                      SvxCSS1PropertyInfo &rPropInfo,
+                                         const String *pLang )
 {
     BOOL bRet = FALSE;
 
@@ -2079,6 +2099,22 @@ BOOL SwHTMLParser::ParseStyleOptions( const String &rStyle,
 
     if( bRet )
         rPropInfo.SetBoxItem( rItemSet, MIN_BORDER_DIST );
+
+    if( pLang && pLang->Len() )
+    {
+        LanguageType eLang = ConvertIsoStringToLanguage( *pLang );
+        if( LANGUAGE_DONTKNOW != eLang )
+        {
+            SvxLanguageItem aLang( eLang );
+            rItemSet.Put( aLang );
+            aLang.SetWhich( RES_CHRATR_CJK_LANGUAGE );
+            rItemSet.Put( aLang );
+            aLang.SetWhich( RES_CHRATR_CTL_LANGUAGE );
+            rItemSet.Put( aLang );
+
+            bRet = sal_True;
+        }
+    }
 
     return bRet;
 }
