@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-21 16:03:50 $
+ *  last change: $Author: mtg $ $Date: 2001-03-23 13:37:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -337,6 +337,7 @@ XMLPropertyMapEntry aXMLParaPropMap[] =
     M_ED( "ParaIsCharacterDistance", STYLE, text_autospace, XML_TYPE_TEXT_AUTOSPACE, 0 ),
     M_ED( "ParaIsHangingPunctuation", STYLE, punctuation_wrap, XML_TYPE_TEXT_PUNCTUATION_WRAP, 0 ),
     M_ED( "ParaIsForbiddenRules", STYLE, line_break, XML_TYPE_TEXT_LINE_BREAK, 0 ),
+    M_ED( "TabStopDistance", STYLE, tab_stop_distance, XML_TYPE_MEASURE, 0 ),
     { 0, 0, 0, 0 }
 };
 

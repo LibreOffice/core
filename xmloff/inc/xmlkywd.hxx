@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.133 $
+ *  $Revision: 1.134 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-22 17:36:24 $
+ *  last change: $Author: mtg $ $Date: 2001-03-23 13:37:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1601,6 +1601,7 @@ XML_CONSTASCII_ACTION( sXML_table_row_group, "table-row-group" );
 XML_CONSTASCII_ACTION( sXML_table_rows, "table-rows" );
 XML_CONSTASCII_ACTION( sXML_table_source, "table-source" );
 XML_CONSTASCII_ACTION( sXML_table_view, "table-view" );
+XML_CONSTASCII_ACTION( sXML_tab_stop_distance, "tab-stop-distance" );
 XML_CONSTASCII_ACTION( sXML_tan, "tan" );
 XML_CONSTASCII_ACTION( sXML_tanh, "tanh" );
 XML_CONSTASCII_ACTION( sXML_target_cell_address, "target-cell-address");
