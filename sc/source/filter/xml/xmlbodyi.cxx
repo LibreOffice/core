@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlbodyi.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-24 12:25:49 $
+ *  last change: $Author: dr $ $Date: 2000-11-02 16:45:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,13 @@
 #include "xmlimprt.hxx"
 #include "xmldpimp.hxx"
 #include "xmlcvali.hxx"
+
+#ifndef SC_XMLLABRI_HXX
 #include "xmllabri.hxx"
+#endif
+#ifndef _SC_XMLCONSOLIDATIONCONTEXT_HXX
+#include "XMLConsolidationContext.hxx"
+#endif
 
 #include <xmloff/xmltkmap.hxx>
 
@@ -146,6 +152,10 @@ SvXMLImportContext *ScXMLBodyContext::CreateChildContext( USHORT nPrefix,
         break;
     case XML_TOK_BODY_DATA_PILOT_TABLES:
         pContext = new ScXMLDataPilotTablesContext ( GetScImport(), nPrefix, rLocalName,
+                                                        xAttrList );
+        break;
+    case XML_TOK_BODY_CONSOLIDATION:
+        pContext = new ScXMLConsolidationContext ( GetScImport(), nPrefix, rLocalName,
                                                         xAttrList );
         break;
     }
