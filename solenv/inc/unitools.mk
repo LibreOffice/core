@@ -168,7 +168,7 @@ DUMPBIN*=$(WRAPCMD) dumpbin
 .ELIF "$(GUI)"=="UNX"	# "$(GUI)"=="WNT"
 SED*=sed
 SORT*=sort
-PERL=perl
+PERL*=perl
 TYPE=cat
 CDD=cd
 COPY=cp -f
