@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: mib $ $Date: 2001-03-07 14:27:21 $
+#   last change: $Author: as $ $Date: 2001-03-19 13:02:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,7 +94,7 @@ SRC2FILES = smres.src   \
             commands.src
 
 SLOFILES =  \
-                $(SLO)$/frmload.obj \
+                $(SLO)$/register.obj \
                 $(SLO)$/typemap.obj \
         $(SLO)$/symbol.obj \
         $(SLO)$/toolbox.obj \
@@ -117,7 +117,7 @@ SLOFILES =  \
         $(SLO)$/xchar.obj
 
 EXCEPTIONSFILES =   \
-                $(SLO)$/frmload.obj  \
+                $(SLO)$/register.obj  \
         $(SLO)$/mathml.obj \
         $(SLO)$/unomodel.obj
 
