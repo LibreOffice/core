@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwAccessibleFooterView.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Date: 2003-05-27 13:40:16 $
+ *  last change: $Date: 2003-09-08 12:40:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,22 +60,8 @@
  ************************************************************************/
 package mod._sw;
 
-import com.sun.star.awt.XWindow;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.container.XNameAccess;
-import com.sun.star.frame.XController;
-import com.sun.star.frame.XModel;
-import com.sun.star.style.XStyle;
-import com.sun.star.style.XStyleFamiliesSupplier;
-import com.sun.star.text.XTextDocument;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
-import com.sun.star.view.XViewSettingsSupplier;
-import com.sun.star.accessibility.AccessibleRole;
-import com.sun.star.accessibility.XAccessible;
-import com.sun.star.accessibility.XAccessibleComponent;
 import java.io.PrintWriter;
+
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
@@ -84,8 +70,22 @@ import util.AccessibilityTools;
 import util.WriterTools;
 import util.utils;
 
+import com.sun.star.accessibility.AccessibleRole;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.awt.XWindow;
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.container.XNameAccess;
+import com.sun.star.frame.XController;
+import com.sun.star.frame.XModel;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.style.XStyle;
+import com.sun.star.style.XStyleFamiliesSupplier;
+import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
+import com.sun.star.view.XViewSettingsSupplier;
 
 /**
 * Test of accessible object for a footer of a text document.<p>
@@ -181,7 +181,7 @@ public class SwAccessibleFooterView extends TestCase {
 
         at.getAccessibleObjectForRole(xRoot, AccessibleRole.FOOTER);
 
-        oObj = at.SearchedContext;
+        oObj = AccessibilityTools.SearchedContext;
 
         log.println("ImplementationName " + utils.getImplName(oObj));
 //        at.printAccessibleTree(log, xRoot);
@@ -231,11 +231,4 @@ public class SwAccessibleFooterView extends TestCase {
         xTextDoc = WriterTools.createTextDoc((XMultiServiceFactory)Param.getMSF());
     }
 
-    private void shortWait() {
-        try {
-            Thread.sleep(5000) ;
-        } catch (InterruptedException e) {
-            System.out.println("While waiting :" + e) ;
-        }
-    }
 }
