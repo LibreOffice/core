@@ -15,7 +15,6 @@
         <language> c++ </language>
         <status value="final"/>
         <supported-service> com.sun.star.document.TypeDetection </supported-service>
-        <type> com.</type>
     </component-description>
 
     <component-description>
