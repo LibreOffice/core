@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexpl.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hjs $ $Date: 2001-09-12 18:11:08 $
+ *  last change: $Author: fs $ $Date: 2002-04-15 15:47:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -583,6 +583,7 @@ private:
 protected:
     virtual void Resize();
     virtual sal_Bool Close();
+    virtual void GetFocus();
     virtual Size CalcDockingSize( SfxChildAlignment );
     virtual SfxChildAlignment CheckAlignment( SfxChildAlignment, SfxChildAlignment );
 

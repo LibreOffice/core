@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexpl.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fs $ $Date: 2001-12-10 16:49:11 $
+ *  last change: $Author: fs $ $Date: 2002-04-15 15:50:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3477,6 +3477,15 @@ void FmExplorerWin::StateChanged( sal_uInt16 nSID, SfxItemState eState, const Sf
     }
     else
         Update( NULL );
+}
+
+//-----------------------------------------------------------------------
+void FmExplorerWin::GetFocus()
+{
+    if ( m_pFmExplorer )
+        m_pFmExplorer->GrabFocus();
+    else
+        SfxDockingWindow::GetFocus();
 }
 
 //-----------------------------------------------------------------------
