@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: tl $ $Date: 2002-09-09 12:06:46 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 13:48:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,6 @@
  *
  ************************************************************************/
 
-#ifdef PRECOMPILED
-#include "core_pch.hxx"
-#endif
 
 #pragma hdrstop
 
