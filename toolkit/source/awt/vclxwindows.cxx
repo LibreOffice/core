@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 12:49:07 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 12:36:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,7 +304,7 @@ void VCLXButton::setColorModel( sal_Int16 BitCount, const ::com::sun::star::uno:
 {
     ::vos::OGuard aGuard( GetMutex() );
 
-    maImageConsumer.SetColorModel( BitCount, RGBAPal.getLength(), (const unsigned long*) RGBAPal.getConstArray(), RedMask, GreenMask, BlueMask, AlphaMask );
+    maImageConsumer.SetColorModel( BitCount, RGBAPal.getLength(), (const sal_uInt32*) RGBAPal.getConstArray(), RedMask, GreenMask, BlueMask, AlphaMask );
 }
 
 void VCLXButton::setPixelsByBytes( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, const ::com::sun::star::uno::Sequence< sal_Int8 >& ProducerData, sal_Int32 Offset, sal_Int32 Scansize ) throw(::com::sun::star::uno::RuntimeException)
@@ -319,7 +319,7 @@ void VCLXButton::setPixelsByLongs( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sa
 {
     ::vos::OGuard aGuard( GetMutex() );
 
-    maImageConsumer.SetPixelsByLongs( X, Y, Width, Height, (const unsigned long*) ProducerData.getConstArray(), Offset, Scansize );
+    maImageConsumer.SetPixelsByLongs( X, Y, Width, Height, (const sal_uInt32*) ProducerData.getConstArray(), Offset, Scansize );
     ImplUpdateImage( sal_True );
 }
 
@@ -535,7 +535,7 @@ IMPL_XTYPEPROVIDER_START( VCLXImageControl )
     VCLXWindow::getTypes()
 IMPL_XTYPEPROVIDER_END
 
-void VCLXImageControl::setPosSize( long X, long Y, long Width, long Height, short Flags ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXImageControl::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, short Flags ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 
@@ -559,7 +559,7 @@ void VCLXImageControl::setColorModel( sal_Int16 BitCount, const ::com::sun::star
 {
     ::vos::OGuard aGuard( GetMutex() );
 
-    maImageConsumer.SetColorModel( BitCount, RGBAPal.getLength(), (const unsigned long*) RGBAPal.getConstArray(), RedMask, GreenMask, BlueMask, AlphaMask );
+    maImageConsumer.SetColorModel( BitCount, RGBAPal.getLength(), (const sal_uInt32*) RGBAPal.getConstArray(), RedMask, GreenMask, BlueMask, AlphaMask );
 }
 
 void VCLXImageControl::setPixelsByBytes( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, const ::com::sun::star::uno::Sequence< sal_Int8 >& ProducerData, sal_Int32 Offset, sal_Int32 Scansize ) throw(::com::sun::star::uno::RuntimeException)
@@ -574,7 +574,7 @@ void VCLXImageControl::setPixelsByLongs( sal_Int32 X, sal_Int32 Y, sal_Int32 Wid
 {
     ::vos::OGuard aGuard( GetMutex() );
 
-    maImageConsumer.SetPixelsByLongs( X, Y, Width, Height, (const unsigned long*) ProducerData.getConstArray(), Offset, Scansize );
+    maImageConsumer.SetPixelsByLongs( X, Y, Width, Height, (const sal_uInt32*) ProducerData.getConstArray(), Offset, Scansize );
     ImplUpdateImage( sal_True );
 }
 
