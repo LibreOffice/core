@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slider.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 13:24:26 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 10:46:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,7 +275,15 @@ void Slider::ImplUpdateRects( BOOL bUpdate )
         {
             Region aInvalidRegion( aOldThumbRect );
             aInvalidRegion.Union( maThumbRect );
-            Invalidate( aInvalidRegion );
+
+            if( !IsBackground() && GetParent() )
+            {
+                const Point aPos( GetPosPixel() );
+                aInvalidRegion.Move( aPos.X(), aPos.Y() );
+                GetParent()->Invalidate( aInvalidRegion, INVALIDATE_TRANSPARENT | INVALIDATE_UPDATE );
+            }
+            else
+                Invalidate( aInvalidRegion );
         }
     }
 }
@@ -578,6 +586,10 @@ long Slider::ImplDoAction( BOOL bCallEndSlide )
         case SCROLL_PAGEDOWN:
             nDelta = ImplSlide( mnThumbPos+mnPageSize, bCallEndSlide );
             break;
+
+        case SCROLL_SET:
+            nDelta = ImplSlide( ImplCalcThumbPos( GetPointerPosPixel().X() ), bCallEndSlide );
+            break;
     }
 
     return nDelta;
@@ -592,6 +604,20 @@ void Slider::ImplDoMouseAction( const Point& rMousePos, BOOL bCallAction )
 
     switch ( meScrollType )
     {
+        case( SCROLL_SET ):
+        {
+            const bool bUp = ImplIsPageUp( rMousePos ), bDown = ImplIsPageDown( rMousePos );
+
+            if ( bUp || bDown )
+            {
+                bAction = bCallAction;
+                mnStateFlags |= ( bUp ? SLIDER_STATE_CHANNEL1_DOWN : SLIDER_STATE_CHANNEL2_DOWN );
+            }
+            else
+                mnStateFlags &= ~( SLIDER_STATE_CHANNEL1_DOWN | SLIDER_STATE_CHANNEL2_DOWN );
+            break;
+        }
+
         case SCROLL_PAGEUP:
             if ( ImplIsPageUp( rMousePos ) )
             {
@@ -688,26 +714,60 @@ void Slider::MouseButtonDown( const MouseEvent& rMEvt )
         }
         else if ( ImplIsPageUp( rMousePos ) )
         {
-            nTrackFlags     = STARTTRACK_BUTTONREPEAT;
-            meScrollType    = SCROLL_PAGEUP;
-            mnDragDraw      = SLIDER_DRAW_CHANNEL;
+            if( GetStyle() & WB_SLIDERSET )
+                meScrollType = SCROLL_SET;
+            else
+            {
+                nTrackFlags = STARTTRACK_BUTTONREPEAT;
+                meScrollType = SCROLL_PAGEUP;
+            }
+
+            mnDragDraw = SLIDER_DRAW_CHANNEL;
         }
         else if ( ImplIsPageDown( rMousePos ) )
         {
-            nTrackFlags     = STARTTRACK_BUTTONREPEAT;
-            meScrollType    = SCROLL_PAGEDOWN;
-            mnDragDraw      = SLIDER_DRAW_CHANNEL;
+            if( GetStyle() & WB_SLIDERSET )
+                meScrollType = SCROLL_SET;
+            else
+            {
+                nTrackFlags = STARTTRACK_BUTTONREPEAT;
+                meScrollType = SCROLL_PAGEDOWN;
+            }
+
+            mnDragDraw = SLIDER_DRAW_CHANNEL;
         }
 
         // Soll Tracking gestartet werden
-        if ( meScrollType != SCROLL_DONTKNOW )
+        if( meScrollType != SCROLL_DONTKNOW )
         {
             // Startposition merken fuer Abbruch und EndScroll-Delta
             mnStartPos = mnThumbPos;
-            ImplDoMouseAction( rMousePos );
+            ImplDoMouseAction( rMousePos, meScrollType != SCROLL_SET );
             Update();
-            StartTracking( nTrackFlags );
+
+            if( meScrollType != SCROLL_SET )
+                StartTracking( nTrackFlags );
         }
+    }
+}
+
+// -----------------------------------------------------------------------
+
+void Slider::MouseButtonUp( const MouseEvent& rMEvt )
+{
+    if( SCROLL_SET == meScrollType )
+    {
+        // Button und PageRect-Status wieder herstellen
+        const USHORT nOldStateFlags = mnStateFlags;
+
+        mnStateFlags &= ~( SLIDER_STATE_CHANNEL1_DOWN | SLIDER_STATE_CHANNEL2_DOWN | SLIDER_STATE_THUMB_DOWN );
+
+        if ( nOldStateFlags != mnStateFlags )
+            ImplDraw( mnDragDraw );
+
+        mnDragDraw = 0;
+        ImplDoAction( TRUE );
+        meScrollType = SCROLL_DONTKNOW;
     }
 }
 
