@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews5.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:31:35 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 15:09:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,6 @@
 
 #include <sfx2/viewfrm.hxx>
 #include "LayerTabBar.hxx"
-#include "LayerDialogChildWindow.hxx"
 
 #include "strings.hrc"
 #include "res_bmp.hrc"
@@ -194,94 +193,9 @@ void DrawViewShell::Resize (const Point &rPos, const Size &rSize)
         }
     }
 
-    sd::Slideshow* pSlideShow = ( mpSlideShow ? mpSlideShow : ( pDrView ? pDrView->GetSlideShow() : NULL ) );
-
     if(mpSlideShow != NULL)
         mpSlideShow->resize( rSize );
 }
-
-#if 0
-
-/*************************************************************************
-|*
-|* Ersatz fuer AdjustPosSizePixel ab Sfx 248a
-|*
-\************************************************************************/
-
-void DrawViewShell::OuterResizePixel(const Point &rPos, const Size &rSize)
-{
-    if (!mpSlideShow || !mpSlideShow->isFullScreen())
-    {
-        ViewShell::OuterResizePixel(rPos, rSize);
-
-        if ( GetDocSh()->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
-        {
-            SetZoomRect( GetDocSh()->GetVisArea(ASPECT_CONTENT) );
-        }
-    }
-
-    sd::Slideshow* pSlideShow = ( mpSlideShow ? mpSlideShow : ( pDrView ? pDrView->GetSlideShow() : NULL ) );
-
-    if( pSlideShow && !pSlideShow->isFullScreen())
-        mpSlideShow->resize( rSize );
-}
-
-
-
-/*************************************************************************
-|*
-|* Ersatz fuer AdjustPosSizePixel ab Sfx 248a
-|*
-\************************************************************************/
-
-void DrawViewShell::InnerResizePixel(const Point &rPos, const Size &rSize)
-{
-    if (!mpSlideShow)
-    {
-        // Da die innere Groesse vorgegeben wird, ist ein Zoomen auf
-        // Seitenbreite nicht erlaubt
-        bZoomOnPage = FALSE;
-
-        ViewShell::InnerResizePixel(rPos, rSize);
-
-        SetZoomRect( GetDocSh()->GetVisArea(ASPECT_CONTENT) );
-    }
-}
-
-/*************************************************************************
-|*
-|* Ersatz fuer AdjustPosSizePixel ab Sfx 248a
-|*
-\************************************************************************/
-
-void DrawViewShell::OuterResizePixel(const Point &rPos, const Size &rSize)
-{
-    if (!mpSlideShow || !mpSlideShow->isFullScreen())
-    {
-        ViewShell::OuterResizePixel(rPos, rSize);
-
-        if ( GetDocSh()->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
-        {
-            SetZoomRect( GetDocSh()->GetVisArea(ASPECT_CONTENT) );
-        }
-    }
-
-    sd::Slideshow* pSlideShow = ( mpSlideShow ? mpSlideShow : ( pDrView ? pDrView->GetSlideShow() : NULL ) );
-
-    if( pSlideShow )
-        pSlideShow->resize( rSize );
-}
-
-
-/** This call is simply delegated to the base class.
-*/
-void DrawViewShell::AdjustPosSizePixel(const Point &rNewPos,
-                                         const Size &rNewSize)
-{
-    ViewShell::AdjustPosSizePixel (rNewPos, rNewSize);
-}
-#endif
-
 
 void DrawViewShell::ArrangeGUIElements (void)
 {
