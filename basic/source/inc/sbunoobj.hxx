@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbunoobj.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ab $ $Date: 2002-08-12 08:56:55 $
+ *  last change: $Author: ab $ $Date: 2002-11-28 16:34:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,32 +185,19 @@ public:
     virtual SbxObject* CreateObject( const String& );
 };
 
-enum NamespaceStatus
-{
-    NS_ROOT,
-    NS_FREE,
-    NS_COM,
-    NS_COM_SUN,
-    NS_COM_SUN_STAR,
-    NS_UNO_CLASS
-};
-
 // Wrapper fuer eine Uno-Klasse
 class SbUnoClass: public SbxObject
 {
     const Reference< XIdlClass >    m_xClass;
-    NamespaceStatus                 meNamespaceStatus;
 
 public:
     TYPEINFO();
-    SbUnoClass( const String& aName, NamespaceStatus eNamespaceStatus )
+    SbUnoClass( const String& aName )
         : SbxObject( aName )
-        , meNamespaceStatus( eNamespaceStatus )
     {}
     SbUnoClass( const String& aName, const Reference< XIdlClass >& xClass_ )
         : SbxObject( aName )
         , m_xClass( xClass_ )
-        , meNamespaceStatus( NS_UNO_CLASS )
     {}
     //~SbUnoClass();
 

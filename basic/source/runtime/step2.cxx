@@ -2,9 +2,9 @@
  *
  *  $RCSfile: step2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ab $ $Date: 2002-11-18 08:38:47 $
+ *  last change: $Author: ab $ $Date: 2002-11-28 16:38:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,67 +76,6 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::lang;
 
 
-/*
-// #72488 Spezielle SbxVariable, die beim get das Verhalten
-// einer nicht initialisierten Variable simuliert. Wenn als
-// Typ SbxOBJECT verlangt wird, geht das jedoch nicht.
-class UnoClassSbxVariable : public SbxVariable
-{
-    SbxDataType eOrgType;
-    BOOL bOverWritten;
-    const SbiImage* mpImg;
-    SbiRuntime* mpRuntime;
-
-public:
-    UnoClassSbxVariable( SbxDataType eType, const SbiImage* pImg_, SbiRuntime* pRuntime_ )
-        : SbxVariable( SbxVARIANT ), mpImg( pImg_ ), mpRuntime( pRuntime_ )
-    {
-        eOrgType = eType;
-        bOverWritten = FALSE;
-    }
-
-    virtual BOOL Get( SbxValues& ) const;
-    virtual BOOL Put( const SbxValues& );
-};
-*/
-
-BOOL UnoClassSbxVariable::Get( SbxValues& rRes ) const
-{
-    static SbxVariable* pDummy = new SbxVariable( SbxVARIANT );
-    if( mbOverWritten || rRes.eType == SbxOBJECT || rRes.eType == SbxVARIANT )
-    {
-        return SbxVariable::Get( rRes );
-    }
-    if( mpImg->GetFlag( SBIMG_EXPLICIT ) )
-    {
-        mpRuntime->Error( SbERR_VAR_UNDEFINED );
-        return FALSE;
-    }
-    return pDummy->Get( rRes );
-}
-
-BOOL UnoClassSbxVariable::Put( const SbxValues& rRes )
-{
-    // Sonst, falls keine Parameter sind, anderen Error Code verwenden
-    if( !mbOverWritten )
-    {
-        if( mpImg->GetFlag( SBIMG_EXPLICIT ) )
-        {
-            mpRuntime->Error( SbERR_VAR_UNDEFINED );
-            return FALSE;
-        }
-        mbOverWritten = TRUE;
-
-        SetType( meOrgType );
-        if( meOrgType != SbxVARIANT )
-            SetFlag( SBX_FIXED );
-    }
-    return SbxVariable::Put( rRes );
-}
-
-TYPEINIT1(UnoClassSbxVariable,SbxVariable)
-
-
 // Suchen eines Elements
 // Die Bits im String-ID:
 // 0x8000 - Argv ist belegt
@@ -173,7 +112,7 @@ SbxVariable* SbiRuntime::FindElement
                 SbxVariable* pUnoClass = findUnoClass( aName );
                 if( pUnoClass )
                 {
-                    pElem = new UnoClassSbxVariable( t, pImg, this );
+                    pElem = new SbxVariable( t );
                     SbxValues aRes( SbxOBJECT );
                     aRes.pObj = pUnoClass;
                     pElem->SbxVariable::Put( aRes );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: runtime.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ab $ $Date: 2002-08-30 13:22:15 $
+ *  last change: $Author: ab $ $Date: 2002-11-28 16:38:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -841,12 +841,7 @@ void SbiRuntime::TOSMakeTemp()
     SbxVariable* p = refExprStk->Get( nExprLvl - 1 );
     if( p->GetRefCount() != 1 )
     {
-        // #74573 UnoClassSbxVariable spezialbehandeln
-        SbxVariable* pNew;
-        if( p->ISA( UnoClassSbxVariable ) )
-            pNew = new UnoClassSbxVariable( *(UnoClassSbxVariable*)p );
-        else
-            pNew = new SbxVariable( *p );
+        SbxVariable* pNew = new SbxVariable( *p );
         pNew->SetFlag( SBX_READWRITE );
         refExprStk->Put( pNew, nExprLvl - 1 );
     }

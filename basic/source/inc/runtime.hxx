@@ -2,9 +2,9 @@
  *
  *  $RCSfile: runtime.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ab $ $Date: 2001-11-26 16:29:57 $
+ *  last change: $Author: ab $ $Date: 2002-11-28 16:34:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,34 +273,6 @@ struct RefSaveItem
     RefSaveItem* pNext;
 
     RefSaveItem() { pNext = NULL; }
-};
-
-// #72488 Spezielle SbxVariable, die beim get das Verhalten
-// einer nicht initialisierten Variable simuliert. Wenn als
-// Typ SbxOBJECT verlangt wird, geht das jedoch nicht.
-class UnoClassSbxVariable : public SbxVariable
-{
-    SbxDataType meOrgType;
-    BOOL mbOverWritten;
-    const SbiImage* mpImg;
-    SbiRuntime* mpRuntime;
-
-public:
-    UnoClassSbxVariable( SbxDataType eType, const SbiImage* pImg_, SbiRuntime* pRuntime_ )
-        : SbxVariable( SbxVARIANT ), mpImg( pImg_ ), mpRuntime( pRuntime_ )
-    {
-        meOrgType = eType;
-        mbOverWritten = FALSE;
-    }
-    UnoClassSbxVariable( const UnoClassSbxVariable& r )
-        : SbxVariable( r ), meOrgType( r.meOrgType), mbOverWritten( r.mbOverWritten),
-          mpImg( r.mpImg ), mpRuntime( r.mpRuntime )
-    {}
-
-    virtual BOOL Get( SbxValues& ) const;
-    virtual BOOL Put( const SbxValues& );
-
-    TYPEINFO();
 };
 
 // #72732 Spezielle SbxVariable, die beim put/get prueft,
