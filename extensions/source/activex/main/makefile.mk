@@ -1,12 +1,12 @@
 #**************************************************************************
 #
-#     $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/extensions/source/activex/main/makefile.mk,v 1.1 2002-08-14 14:40:52 mav Exp $
+#     $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/extensions/source/activex/main/makefile.mk,v 1.2 2002-10-25 17:05:13 hjs Exp $
 #
 # =========================================================================
 #
-#     $Date: 2002-08-14 14:40:52 $
-#     $Author: mav $
-#     $Revision: 1.1 $
+#     $Date: 2002-10-25 17:05:13 $
+#     $Author: hjs $
+#     $Revision: 1.2 $
 #
 # =========================================================================
 #
@@ -82,8 +82,12 @@ SHL1RES=$(RES)$/$(TARGET).res
 
 .INCLUDE : target.mk
 
-$(MISC)$/envsettings.h :
+$(MISC)$/envsettings.h : makefile.mk
     +-$(RM) $@
 # it looks wrong; but rc likes it that way...
-    +echo #define MISC .$/..$/$(INPATH)$/misc > $@
+.IF "$(USE_SHELL)"!="4nt"
+    +echo "#define MISC .\..\$(INPATH)\misc" > $@
+.ELSE			# "$(USE_SHELL)"!="4nt"
+    +echo #define MISC .\..\$(INPATH)\misc > $@
+.ENDIF			# "$(USE_SHELL)"!="4nt"
 
