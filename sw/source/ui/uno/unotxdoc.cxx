@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: os $ $Date: 2002-08-14 08:50:06 $
+ *  last change: $Author: tl $ $Date: 2002-08-14 10:08:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1900,7 +1900,7 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName,
     if(!pMap)
         throw UnknownPropertyException();
     if(pMap->nFlags & PropertyAttribute::READONLY)
-        throw IllegalArgumentException();
+        throw PropertyVetoException();
     switch(pMap->nWID)
     {
         case  WID_DOC_CHAR_COUNT     :
