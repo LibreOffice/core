@@ -2,9 +2,9 @@
  *
  *  $RCSfile: loadenv.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 14:35:53 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 10:38:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,7 +198,9 @@ class LoadEnv : private ThreadHelpBase
             /// identifies a content, which can be used with a ContentHandler and is not related to a target frame
             E_CAN_BE_HANDLED,
             /// identifies a content, which can be loaded into a target frame
-            E_CAN_BE_LOADED
+            E_CAN_BE_LOADED,
+            /// special mode for non real loading, In such case the model is given directly!
+            E_CAN_BE_SET
         };
 
     //___________________________________________
@@ -521,6 +523,9 @@ class LoadEnv : private ThreadHelpBase
 
         /** TODO document me ... */
         void impl_setResult(sal_Bool bResult);
+
+        /** TODO document me ... */
+        css::uno::Reference< css::uno::XInterface > impl_searchLoader();
 
     //___________________________________________
     // private helper
