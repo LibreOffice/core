@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globlac.hrc,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2002-09-02 13:37:44 $
+ *  last change: $Author: os $ $Date: 2002-09-13 12:43:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,9 +237,8 @@
 #define AI_UNDO                     ACC_CODE( SID_UNDO, KEY_Z, FALSE, TRUE, FALSE ) \
                                     ACC_CODE( SID_UNDO, KEY_BACKSPACE, FALSE, FALSE, TRUE ) \
                                     ACC_CODE( SID_UNDO, KEY_UNDO, FALSE, FALSE, FALSE )
-#define AI_REDO
-#define AI_REPEAT                   ACC_CODE( SID_REPEAT, KEY_Y, FALSE, TRUE, FALSE )\
-                                    ACC_CODE( SID_REPEAT, KEY_REPEAT, FALSE, FALSE, FALSE )
+#define AI_REDO                     ACC_CODE( SID_REDO, KEY_Y, FALSE, TRUE, FALSE )
+#define AI_REPEAT                   ACC_CODE( SID_REPEAT, KEY_REPEAT, FALSE, FALSE, FALSE )
 #define AI_DELETE                   ACC_CODE( SID_DELETE, KEY_DELETE, FALSE, FALSE, FALSE )
 
 // Non Product
