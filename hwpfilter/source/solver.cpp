@@ -2,9 +2,9 @@
  *
  *  $RCSfile: solver.cpp,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2003-10-15 14:42:05 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 16:17:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,9 @@ int mgcLinearSystem::Inverse (int n, float** a)
   int* indxr = new int[n];
   int* ipiv  = new int[n];
 
-  int i, j, k, irow, icol;
+  int i, j, k;
+  int irow = 0;
+  int icol = 0;
   float big, pivinv, save;
 
   for (j = 0; j < n; j++)
@@ -222,7 +224,9 @@ int mgcLinearSystem::Solve (int n, float** a, float* b)
     return 0;
   }
 
-  int i, j, k, irow, icol;
+  int i, j, k;
+  int irow = 0;
+  int icol = 0;
   float big, pivinv, save;
 
   for (j = 0; j < n; j++)
@@ -562,7 +566,9 @@ int mgcLinearSystemD::Inverse (int n, double** a)
   int* indxr = new int[n];
   int* ipiv  = new int[n];
 
-  int i, j, k, irow, icol;
+  int i, j, k;
+  int irow = 0;
+  int icol = 0;
   double big, pivinv, save;
 
   for (j = 0; j < n; j++)
@@ -668,7 +674,9 @@ int mgcLinearSystemD::Solve (int n, double** a, double* b)
     return 0;
   }
 
-  int i, j, k, irow, icol;
+  int i, j, k;
+  int irow = 0;
+  int icol = 0;
   double big, pivinv, save;
 
   for (j = 0; j < n; j++)
