@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgrid.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: vg $ $Date: 2002-05-21 09:16:43 $
+ *  last change: $Author: kz $ $Date: 2002-05-27 20:13:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,10 +184,10 @@ TabPage RID_SVXPAGE_GRID
         Text[ russian ] = "Ğàçğåøåíèå";
         Text[ polish ] = "Rozdzielczoœæ";
         Text[ japanese ] = "è§£åƒåº¦(~R)";
-        Text[ chinese_traditional ] = "è§£æåº¦(~R)";
+        Text[ chinese_traditional ] = "è§£æåº¦";
         Text[ arabic ] = "ÇáÇÓÊÈÇäÉ";
         Text[ greek ] = "ÁíÜëõóç";
-        Text[ korean ] = "í•´ìƒë„(~R)";
+        Text[ korean ] = "í•´ìƒë„";
         Text[ turkish ] = "Çözünürlük";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "R~esolución";
@@ -306,10 +306,10 @@ TabPage RID_SVXPAGE_GRID
         Text[ russian ] = "Ğàçäåëåíèå";
         Text[ polish ] = "Podzia³";
         Text[ japanese ] = "ç‚¹ã®é–“éš”(~U)";
-        Text[ chinese_traditional ] = "ç·šé»é–“éš”(~U)";
+        Text[ chinese_traditional ] = "ç·šé»é–“éš”";
         Text[ arabic ] = "ÇáÊŞÓíã ÇáİÑÚí";
         Text[ greek ] = "~Õğïäéáßñåóç";
-        Text[ korean ] = "ì„¸ë¶„í™”(~U)";
+        Text[ korean ] = "ì„¸ë¶„í™”";
         Text[ turkish ] = "Bölümleme";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "S~ubdivisión";
@@ -334,9 +334,9 @@ TabPage RID_SVXPAGE_GRID
         Text[ polish ] = "Poziomo";
         Text[ portuguese_brazilian ] = "~Eixo X";
         Text[ japanese ] = "æ¨ªã«(~O)";
-        Text[ korean ] = "ìˆ˜í‰(~O)";
+        Text[ korean ] = "ê°€ë¡œ";
         Text[ chinese_simplified ] = "æ°´å¹³æ–¹å‘(~O)";
-        Text[ chinese_traditional ] = "æ°´å¹³æ–¹å‘(~O)";
+        Text[ chinese_traditional ] = "æ°´å¹³æ–¹å‘(~A)";
         Text[ turkish ] = "X ekseni";
         Text[ arabic ] = "ÃİŞí";
         Text[ finnish ] = "~Vaakataso";
@@ -363,9 +363,9 @@ TabPage RID_SVXPAGE_GRID
         Text[ polish ] = "~Pionowo";
         Text[ portuguese_brazilian ] = "~Eixo Y";
         Text[ japanese ] = "ç¸¦ã«(~V)";
-        Text[ korean ] = "ìˆ˜ì§(~V)";
+        Text[ korean ] = "ì„¸ë¡œ";
         Text[ chinese_simplified ] = "å‚ç›´æ–¹å‘(~V)";
-        Text[ chinese_traditional ] = "å‚ç›´æ–¹å‘(~V)";
+        Text[ chinese_traditional ] = "å‚ç›´æ–¹å‘(~E)";
         Text[ turkish ] = "Y ekseni";
         Text[ arabic ] = "~ÑÃÓí";
         Text[ finnish ] = "~Pystytaso";
@@ -407,7 +407,7 @@ TabPage RID_SVXPAGE_GRID
         Text[ russian ] = "Ïóíêòû";
         Text[ polish ] = "Punkty";
         Text[ japanese ] = "ãƒã‚¤ãƒ³ãƒˆ";
-        Text[ chinese_traditional ] = " æ¥é»";
+        Text[ chinese_traditional ] = "é»";
         Text[ arabic ] = "äŞØÉ/äŞÇØ";
         Text[ greek ] = "Óçìåßá";
         Text[ korean ] = "ì ";
