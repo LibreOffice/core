@@ -1,0 +1,379 @@
+/*************************************************************************
+ *
+ *  $RCSfile: analysisadd.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: gt $ $Date: 2001-04-06 13:59:16 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/beans/XPropertySet.idl>
+
+module com
+{
+module sun
+{
+module star
+{
+module sheet
+{
+module addin
+{
+    /**
+     * Interface with analysis functions.
+     */
+    [ uik(20D2C191-648C-11d4-9F8D0050-04D75D79), ident("XAnalysis", 1.0) ]
+    interface XAnalysis : com::sun::star::uno::XInterface
+    {
+        /// _test.
+        double get_Test(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long Mode, [in] double f1, [in] double f2, [in] double f3 );
+
+
+        /// workday.
+        long getWorkday(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long nStartDate, [in] long nDays, [in] sequence< sequence<long> > aHolidays );
+
+        /// yearfrac.
+        double getYearfrac(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long nStartDate, [in] long nEndDate, [in] long nMode );
+
+        /// edate.
+        long getEdate(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long nStartDate, [in] long nNumOfMonths );
+
+        /// weeknum.
+        long getWeeknum(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long nStartDate, [in] long nMode );
+
+        /// eomonth.
+        long getEomonth(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long nStartDate, [in] long nMonths );
+
+        /// networkdays.
+        long getNetworkdays(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long nStartDate, [in] long nEndDate, [in] sequence< sequence<long> > aHolidays );
+
+        /// iseven.
+        long getIseven(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long nValue );
+
+        /// isodd.
+        long getIsodd(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long nValue );
+
+        /// multinomial.
+        double getMultinomial(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] sequence< sequence<long> > aValList );
+
+        /// seriessum.
+        double getSeriessum(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] double X, [in] double N, [in] double M, [in] sequence< sequence<double> > CoeffList );
+
+        // quotient.
+        double getQuotient(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] double Num, [in] double Denum );
+
+        // mround.
+        double getMround(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] double Number, [in] double Multiple );
+
+        // sqrtpi.
+        double getSqrtpi(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] double Number );
+
+        // randbetween.
+        double getRandbetween(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] double Min, [in] double Max );
+
+        /// gcd.
+        double getGcd(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] sequence< sequence<double> > ValList );
+
+        /// lcm.
+        double getLcm(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] sequence< sequence<double> > ValList );
+
+        /// besseli.
+        double getBesseli(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] double Num, [in] long Order );
+
+        /// besselj.
+        double getBesselj(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] double Num, [in] long Order );
+
+        /// besselk.
+        double getBesselk(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] double Num, [in] long Order );
+
+        /// bessely.
+        double getBessely(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] double Num, [in] long Order );
+
+        /// bin2oct.
+        string getBin2oct(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] string BinaryNum, [in] long nPlaces );
+
+        /// bin2dec.
+        double getBin2dec(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] string BinaryNum );
+
+        /// bin2hex.
+        string getBin2hex(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] string BinaryNum, [in] long nPlaces );
+
+        /// oct2bin.
+        string getOct2bin(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] string OctalNum, [in] long nPlaces );
+
+        /// oct2dec.
+        double getOct2dec(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] string OctalNum );
+
+        /// oct2hex.
+        string getOct2hex(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] string OctalNum, [in] long nPlaces );
+
+        /// dec2bin.
+        string getDec2bin(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long Value, [in] long nPlaces );
+
+        /// dec2oct.
+        string getDec2oct(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long Value, [in] long nPlaces );
+
+        /// dec2hex.
+        string getDec2hex(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] double Value, [in] long nPlaces );
+
+        /// hex2bin.
+        string getHex2bin(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] string HexadecimalValue, [in] long nPlaces );
+
+        /// hex2dec.
+        double getHex2dec(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] string HexadecimalValue );
+
+        /// hex2oct.
+        string getHex2oct(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] string HexadecimalValue, [in] long nPlaces );
+
+        /// delta.
+        long getDelta(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] double Num1, [in] double Num2 );
+
+        /// erf.
+        double getErf(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] double LowerLimit, [in] double UpperLimit );
+
+        /// erfc.
+        double getErfc(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] double LowerLimit );
+
+        /// gestep.
+        long getGestep(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] double Num, [in] double Step );
+
+        /// factdouble.
+        double getFactdouble(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long Num );
+
+        /// imabs.
+        double getImabs(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] string Num );
+
+        /// imaginary.
+        double getImaginary(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] string Num );
+
+        /// impower.
+        string getImpower(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] string Num, [in] double Power );
+
+        /// imargument.
+        double getImargument(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] string Num );
+
+        /// imcos.
+        string getImcos(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] string Num );
+
+        /// imdiv.
+        string getImdiv(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] string Num1, [in] string Num2 );
+
+        /// imexp.
+        string getImexp(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] string Num );
+
+        /// imconjugate.
+        string getImconjugate(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] string Num );
+
+        /// imln.
+        string getImln(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] string Num );
+
+        /// imlog10.
+        string getImlog10(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] string Num );
+
+        /// imlog2.
+        string getImlog2(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] string Num );
+
+        /// improduct.
+        string getImproduct(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] string Num1, [in] string Num2 );
+
+        /// imreal.
+        double getImreal(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] string Num );
+
+        /// imsin.
+        string getImsin(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] string Num );
+
+        /// imsub.
+        string getImsub(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] string Num1, [in] string Num2 );
+
+        /// imsum.
+        string getImsum(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] string Num1, [in] string Num2 );
+
+        /// imsqrt.
+        string getImsqrt(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] string Num );
+
+        /// complex.
+        string getComplex(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] double Real, [in] double Imaginary, [in] string Suffix );
+
+        /// convert.
+        double getConvert(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] double Value, [in] string FromUnit, [in] string ToUnit );
+    };
+
+    service Analysis
+    {
+        // exported interfaces:
+        interface XAnalysis;
+    };
+};
+};
+};
+};
+};
+
