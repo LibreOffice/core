@@ -215,3 +215,8 @@ Image IMG_HELP_TOOLBOX_PRINT
     MaskColor = Color { Red = 0xC000; Green = 0xC000; Blue = 0xC000; };
 };
 
+String STR_HELP_WINDOW_TITLE
+{
+    Text = "%PRODUCTNAME Hilfe";
+    Text [ english_us ] = "%PRODUCTNAME Help";
+};
