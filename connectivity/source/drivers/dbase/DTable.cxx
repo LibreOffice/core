@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-30 08:03:38 $
+ *  last change: $Author: kso $ $Date: 2000-10-31 09:48:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -459,7 +459,11 @@ String ODbaseTable::getEntry()
         if(aName == m_Name)
         {
             Reference< XContentAccess > xContentAccess( xDir, UNO_QUERY );
+#if SUPD>611
+            aURL = xContentAccess->queryContentIdentifierString();
+#else
             aURL = xContentAccess->queryContentIdentfierString();
+#endif
             break;
         }
     }

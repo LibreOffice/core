@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ETable.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-30 11:00:36 $
+ *  last change: $Author: kso $ $Date: 2000-10-31 09:49:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -546,7 +546,11 @@ String OFlatTable::getEntry()
         if(aName == m_Name)
         {
             Reference< XContentAccess > xContentAccess( xDir, UNO_QUERY );
+#if SUPD>611
+            aURL = xContentAccess->queryContentIdentifierString();
+#else
             aURL = xContentAccess->queryContentIdentfierString();
+#endif
             break;
         }
     }
