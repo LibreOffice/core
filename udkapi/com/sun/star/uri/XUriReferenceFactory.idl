@@ -1,0 +1,195 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XUriReferenceFactory.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2004-01-19 18:19:58 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2003 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_uri_XUriReferenceFactory_idl__
+#define __com_sun_star_uri_XUriReferenceFactory_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/uri/RelativeUriExcessParentSegments.idl>
+#include <com/sun/star/uri/XUriReference.idl>
+
+module com { module sun { module star { module uri {
+
+/**
+   creates URI references.
+
+   <p>See <a href="http://www.ietf.org/rfc/rfc2396.txt">RFC&nbsp;2396</a> for a
+   description of URI references and related terms.</p>
+ */
+interface XUriReferenceFactory: com::sun::star::uno::XInterface {
+    /**
+       parses the textual representation of a URI reference.
+
+       @param uriReference
+       the textual representation of a URI reference.
+
+       @returns
+       an object that supports
+       <type scope="com::sun::star::uri">XUriReference</type> (and possibly also
+       additional, scheme-specific interfaces), if the given input can be parsed
+       into a URI reference; otherwise, <NULL/> is returned.
+     */
+    XUriReference parse([in] string uriReference);
+
+    /**
+       resolves a relative URI reference to absolute form.
+
+       @param baseUriReference
+       the base URI reference.  If the given <code>uriReference</code> is a
+       same-document reference, <code>baseUriReference</code> is used as a
+       reference to the current document.
+
+       @param uriReference
+       any URI reference.  Backwards-compatible relative URI references starting
+       with a scheme component (see RFC&nbsp;2396, Section&nbsp;5.2,
+       step&nbsp;3) are not supported; instead, they are interpreted as absolute
+       URI references.
+
+       @param processSpecialBaseSegments
+       if <TRUE/>, special segments (&ldquo;<code>.</code>&rdquo; and
+       &ldquo;<code>..</code>&rdquo;) within the path of the base URI (except
+       for the last, cut-off segment) are processed as suggested by
+       RFC&nbsp;2396.  If <FALSE/>, special segments within the path of the base
+       URI are treated like ordinary segments.
+
+       @param excessParentSegments
+       details how excess special parent segments
+       (&ldquo;<code>..</code>&rdquo;) are handled.
+
+       @returns
+       a fresh object that supports
+       <type scope="com::sun::star::uri">XUriReference</type> (and possibly also
+       additional, scheme-specific interfaces), if the given
+       <code>uriReference</code> is either already absolute, or can be resolved
+       to an absolute URI reference, relative to the given
+       <code>baseUriReference</code>; otherwise, <NULL/> is returned.
+       Especially, if <code>baseUriReference</code> is <NULL/>, or is not an
+       absolute, hierarchical URI reference, or if <code>uriReference</code> is
+       <NULL/>, then <NULL/> is always returned.
+     */
+    XUriReference makeAbsolute(
+        [in] XUriReference baseUriReference, [in] XUriReference uriReference,
+        [in] boolean processSpecialBaseSegments,
+        [in] RelativeUriExcessParentSegments excessParentSegments);
+
+    /**
+       changes an absolute URI refrence to relative form.
+
+       @param baseUriReference
+       the base URI reference.
+
+       @param uriReference
+       any URI reference.
+
+       @param preferAuthorityOverRelativePath
+       controls how a relative URI reference is generated when both
+       <code>baseUriReference</code> (e.g.,
+       &ldquo;<code>scheme://auth/a/b</code>&rdquo;) and
+       <code>uriReference</code> (e.g.,
+       &ldquo;<code>scheme://auth//c/d</code>&rdquo;) have the same scheme and
+       authority components, and the path component of <code>uriReference</code>
+       starts with &ldquo;<code>//</code>&rdquo;.  If <TRUE/>, the generated
+       relative URI reference includes an authority component (e.g.,
+       &ldquo;<code>//auth//c/d</code>&rdquo;); if <FALSE/>, the generated
+       relative URI reference has a relative path (e.g.,
+       &ldquo;<code>..//c/d</code>&rdquo;).
+
+       @param preferAbsoluteOverRelativePath
+       controls how a relative URI reference is generated when both
+       <code>baseUriReference</code> (e.g.,
+       &ldquo;<code>scheme://auth/a/b</code>&rdquo;) and
+       <code>uriReference</code> (e.g.,
+       &ldquo;<code>scheme://auth/c/d</code>&rdquo;) have the same scheme and
+       authority components (if present), but share no common path segments.  If
+       <TRUE/>, the generated relative URI reference has an absolute path (e.g.,
+       &ldquo;<code>/c/d</code>&rdquo;); if <FALSE/>, the generated relative URI
+       reference has a relative path (e.g., &ldquo;<code>../c/d</code>&rdquo;).
+
+       @param encodeRetainedSpecialSegments
+       if <TRUE/>, special segments (&ldquo;<code>.</code>&rdquo; and
+       &ldquo;<code>..</code>&rdquo;) that are already present in the path
+       component of the given <code>uriReference</code> and which end up in a
+       relative path returned from this method, are encoded (as
+       &ldquo;<code>%2E</code>&rdquo; and &ldquo;<code>%2E%2E</code>&rdquo;,
+       respectively).
+
+       @returns
+       a fresh object that supports
+       <type scope="com::sun::star::uri">XUriReference</type>, if the given
+       <code>uriReference</code> is either already relative, or is not
+       hierarchical, or is of a different scheme than the given
+       <code>baseUriReference</code>, or can be changed to a relative URI
+       reference, relative to the given <code>baseUriReference</code>;
+       otherwise, <NULL/> is returned.  Especially, if
+       <code>baseUriReference</code> is <NULL/>, or is not an absolute,
+       hierarchical URI reference, or if <code>uriReference</code> is <NULL/>,
+       then <NULL/> is always returned.
+     */
+    XUriReference makeRelative(
+        [in] XUriReference baseUriReference, [in] XUriReference uriReference,
+        [in] boolean preferAuthorityOverRelativePath,
+        [in] boolean preferAbsoluteOverRelativePath,
+        [in] boolean encodeRetainedSpecialSegments);
+};
+
+}; }; }; };
+
+#endif
