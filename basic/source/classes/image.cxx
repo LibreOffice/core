@@ -2,9 +2,9 @@
  *
  *  $RCSfile: image.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ab $ $Date: 2001-08-07 11:20:11 $
+ *  last change: $Author: ab $ $Date: 2001-09-04 10:14:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@ SbiImage::SbiImage()
     nDimBase   = 0;
     bInit      =
     bError     = FALSE;
+    bFirstInit = TRUE;
     eCharSet   = gsl_getSystemTextEncoding();
 }
 
