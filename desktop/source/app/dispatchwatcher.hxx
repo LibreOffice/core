@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatchwatcher.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: lo $ $Date: 2002-10-17 10:46:29 $
+ *  last change: $Author: vg $ $Date: 2003-05-16 14:21:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,7 @@ class DispatchWatcher : public ::cppu::WeakImplHelper1< ::com::sun::star::frame:
         {
             REQUEST_OPEN,
             REQUEST_VIEW,
+            REQUEST_START,
             REQUEST_PRINT,
             REQUEST_PRINTTO,
             REQUEST_FORCEOPEN,
