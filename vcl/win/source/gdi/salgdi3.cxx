@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: th $ $Date: 2000-11-06 20:51:17 $
+ *  last change: $Author: th $ $Date: 2000-12-08 18:37:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -564,12 +564,19 @@ void ImplGetLogFontFromFontSelect( HDC hDC,
         nNameLen = (sizeof( rLogFont.lfFaceName )/sizeof( wchar_t ))-1-nOff;
     memcpy( rLogFont.lfFaceName+nOff, aName.GetBuffer(), nNameLen*sizeof( wchar_t ) );
     rLogFont.lfFaceName[nNameLen+nOff] = 0;
+/*
     if ( pFont->mpFontData &&
          ((pFont->meCharSet == RTL_TEXTENCODING_DONTKNOW) ||
           ((WIN_BYTE)(pFont->mpFontData->mpSysData) == OEM_CHARSET)) )
         rLogFont.lfCharSet = (WIN_BYTE)(pFont->mpFontData->mpSysData);
     else
         rLogFont.lfCharSet = ImplCharSetToWin( pFont->meCharSet );
+*/
+    if ( pFont->mpFontData )
+        rLogFont.lfCharSet = (WIN_BYTE)(pFont->mpFontData->mpSysData);
+    else
+        rLogFont.lfCharSet = ImplCharSetToWin( pFont->meCharSet );
+
     rLogFont.lfPitchAndFamily  = ImplPitchToWin( pFont->mePitch );
     rLogFont.lfPitchAndFamily |= ImplFamilyToWin( pFont->meFamily );
     rLogFont.lfWeight          = ImplWeightToWin( pFont->meWeight );
@@ -633,9 +640,15 @@ USHORT SalGraphics::SetFont( ImplFontSelectData* pFont )
             nNameLen = sizeof( maGraphicsData.mpLogFont->lfFaceName )-1;
         memcpy( maGraphicsData.mpLogFont->lfFaceName, aName.GetBuffer(), nNameLen );
         maGraphicsData.mpLogFont->lfFaceName[nNameLen] = 0;
+/*
         if ( pFont->mpFontData &&
              ((pFont->meCharSet == RTL_TEXTENCODING_DONTKNOW) ||
               ((WIN_BYTE)(pFont->mpFontData->mpSysData) == OEM_CHARSET)) )
+            maGraphicsData.mpLogFont->lfCharSet = (WIN_BYTE)(pFont->mpFontData->mpSysData);
+        else
+            maGraphicsData.mpLogFont->lfCharSet = ImplCharSetToWin( pFont->meCharSet );
+*/
+        if ( pFont->mpFontData )
             maGraphicsData.mpLogFont->lfCharSet = (WIN_BYTE)(pFont->mpFontData->mpSysData);
         else
             maGraphicsData.mpLogFont->lfCharSet = ImplCharSetToWin( pFont->meCharSet );
