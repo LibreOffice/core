@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scwarngs.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 21:35:30 $
+ *  last change: $Author: kz $ $Date: 2001-02-12 09:24:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ Resource RID_WRNHDLSC
         Text[ chinese_traditional ] = "¥uΐx¦s¤F·ν«eªΊªν®ζ΅C";
         Text[ arabic ] = "Κγ ΝέΩ ΗαΜΟζα ΗαΝΗαν έήΨ.";
         Text[ greek ] = "Αποθηκεύτηκε μόνο ο τρέχων πίνακας.";
-        Text[ korean ] = "Θ°ΌΊµΘ ½ΓΖ®ΈΈΐΜ ΐϊΐεµΛ΄Ο΄Ω.";
+        Text[ korean ] = "Θ°ΌΊµΘ ½ΓΖ®ΈΈΐΜ ΐϊΐεµΗΎϊ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Yalnύzca yόrόrlόkteki tablo kaydedildi.";
         Text[ language_user1 ] = " ";
     };
@@ -113,7 +113,7 @@ Resource RID_WRNHDLSC
         Text[ chinese_traditional ] = "¤wΈg¶WΉL¦CªΊ³Μ¤jΌΖ¥Ψ΅A¨S¦³¶Χ¤J¶WΉLªΊ¦C΅I";
         Text[ arabic ] = "Κγ ΚΜΗζÒ ΗαΪΟΟ ΗαΓήΥμ ααΥέζέ΅ αεΠΗ αγ νΚγ ΗΣΚνΡΗΟ ΗαΥέζέ ΗαÒΗΖΟΙ!";
         Text[ greek ] = "Έγινε υπέρβαση του μέγιστου αριθμού γραμμών. Δεν θα γίνει εισαγωγή των γραμμών που ξεπερνούν το όριο!";
-        Text[ korean ] = "ΗΰΐΗ °ΉΌφ°΅ ΓΦ΄λΈ¦ ΓΚ°ϊΗί½ΐ΄Ο΄Ω. Γί°΅ΐϋΐΞ Ηΰΐ» °΅Α® ΏΓ Όφ Ύψ½ΐ΄Ο΄Ω !";
+        Text[ korean ] = "ΗΰΐΗ ΓΦ΄λ΅΅°³ΌφΈ¦ ΓΚ°ϊΗί½ΐ΄Ο΄Ω. Γί°΅ΐϋΐΞ ΗΰΐΊ΅΅ΗΤ²²΅΅µιΏ©ΏΝΑφΑφ΅΅ΎΚΎÒ½ΐ΄Ο΄Ω !";
         Text[ turkish ] = "Azami satύr sayύsύ aώύldύ. Fazla satύrlar iηe aktarύlmadύ!";
         Text[ language_user1 ] = " ";
     };
