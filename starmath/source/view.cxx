@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:57:27 $
+ *  last change: $Author: tl $ $Date: 2001-03-08 09:27:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,9 @@
 #endif
 #ifndef _SVX_ZOOM_HXX //autogen
 #include <svx/zoom.hxx>
+#endif
+#ifndef _MyEDITENG_HXX
+#include <svx/editeng.hxx>
 #endif
 #ifndef _SV_WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
@@ -1179,9 +1182,9 @@ SmEditWindow *SmViewShell::GetEditWindow()
 
     if (pWrapper != NULL)
     {
-        DBG_ASSERT(pWrapper->GetWindow() != NULL, "pSmEditWindow == NULL");
-
-        return pWrapper->GetEditWindow();
+        SmEditWindow *pEditWin  = pWrapper->GetEditWindow();
+        DBG_ASSERT( pEditWin, "SmEditWindow missing" );
+        return pEditWin;
     }
 
     return NULL;
@@ -1522,7 +1525,7 @@ SmViewShell::SmViewShell(SfxViewFrame *pFrame, SfxViewShell *):
     SetStatusText(String());
     SetWindow(&aGraphic);
     SfxShell::SetName(C2S("SmView"));
-    SfxShell::SetUndoManager (GetDoc()->GetUndoManager());
+    SfxShell::SetUndoManager( &GetDoc()->GetEditEngine().GetUndoManager() );
     SetHelpId( HID_SMA_VIEWSHELL_DOCUMENT );
 }
 
@@ -1536,6 +1539,7 @@ void SmViewShell::Deactivate( BOOL bIsMDIActivate )
     SmEditWindow *pEdit = GetEditWindow();
     if ( pEdit )
         pEdit->Flush();
+
     SfxViewShell::Deactivate( bIsMDIActivate );
 }
 
@@ -1543,6 +1547,7 @@ void SmViewShell::Deactivate( BOOL bIsMDIActivate )
 void SmViewShell::Activate( BOOL bIsMDIActivate )
 {
     SfxViewShell::Activate( bIsMDIActivate );
+
     SmEditWindow *pEdit = GetEditWindow();
     if ( pEdit )
     {
