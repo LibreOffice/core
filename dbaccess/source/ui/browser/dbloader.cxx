@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbloader.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:32:39 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 12:02:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,12 @@
 #ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
 #include <com/sun/star/lang/XInitialization.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
+#include <com/sun/star/container/XChild.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_XDATASOURCE_HPP_
+#include <com/sun/star/sdbc/XDataSource.hpp>
+#endif
 #ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
 #endif
@@ -123,6 +129,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
+using ::com::sun::star::sdbc::XDataSource;
 using namespace dbaui;
 
 class DBContentLoader : public ::cppu::WeakImplHelper2< XFrameLoader, XServiceInfo>
@@ -269,7 +276,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
             const PropertyValue* pIter  = m_aArgs.getConstArray();
             const PropertyValue* pEnd       = pIter + m_aArgs.getLength();
 
-            for(;pIter != pEnd;++pIter)
+            for ( ; ( pIter != pEnd ) && !xModel.is(); ++pIter )
             {
                 if(0 == pIter->Name.compareToAscii(PROPERTY_DATASOURCE))
                 {
@@ -290,13 +297,33 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
                     }
                     break;
                 }
+                else if ( 0 == pIter->Name.compareToAscii( PROPERTY_ACTIVECONNECTION ) )
+                {
+                    Reference< XChild > xAsChild( pIter->Value, UNO_QUERY );
+                    if ( xAsChild.is() )
+                    {
+                        OSL_ENSURE( Reference< XDataSource >( xAsChild->getParent(), UNO_QUERY ).is(),
+                            "DBContentLoader::load: a connection whose parent is no data source?" );
+                        xModel = xModel.query( xAsChild->getParent() );
+                    }
+                }
             }
             if ( bSuccess = ( xModel.is() && xModel->getURL().getLength() != 0) )
             {
-                xController->attachModel(xModel);
-                xModel->connectController( xController );
-                xModel->setCurrentController(xController);
+                try
+                {
+                    xController->attachModel(xModel);
+                    xModel->connectController( xController );
+                    xModel->setCurrentController(xController);
+                }
+                catch( const Exception& )
+                {
+                    OSL_ENSURE( sal_False, "DBContentLoader::load: caught an exception!" );
+                    bSuccess = sal_False;
+                }
             }
+
+            OSL_ENSURE( bSuccess, "DBContentLoader::load: missing the required arguments - could not initialize the query design!" );
         }
         if ( bSuccess )
         {
