@@ -18664,3 +18664,10 @@ _real@8@40088f3d4c83f2e79800
 ?StartDrag@GalleryBrowser2@@QAEXPAVWindow@@PBVPoint@@@Z
 ?TogglePreview@GalleryBrowser2@@QAEXPAVWindow@@PBVPoint@@@Z
 ?meInitMode@GalleryBrowser2@@0W4GalleryBrowserMode@@A
+_real@8@3fffc000000000000000
+_real@8@4005f000000000000000
+??0OAutoDispose@svxform@@QAE@V?$Reference@VXInterface@uno@star@sun@com@@@uno@star@sun@com@@@Z
+??1OAutoDispose@svxform@@QAE@XZ
+??_R0?AVSQLContext@sdb@star@sun@com@@@8
+??_R0?AVSQLWarning@sdbc@star@sun@com@@@8
+?get@?$Reference@VXConnection@sdbc@star@sun@com@@@uno@star@sun@com@@QBAPAVXConnection@sdbc@345@XZ
