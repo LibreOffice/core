@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TestCase.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 16:27:40 $
+ *  last change:$Date: 2003-02-13 17:33:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,7 +189,7 @@ public abstract class TestCase {
      */
     public synchronized void disposeTestEnvironment( TestEnvironment tEnv,
         TestParameters tParam ) {
-        cleanupTestEnvironment( tParam, tEnv, log );
+        cleanup( tParam, log );
     }
 
     /**
