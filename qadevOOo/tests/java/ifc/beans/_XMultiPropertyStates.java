@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XMultiPropertyStates.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-12-11 11:33:56 $
+ *  last change:$Date: 2004-11-02 11:53:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,8 +99,14 @@ public class _XMultiPropertyStates extends MultiMethodTest {
             throw new StatusException(Status.failed("No PropertyNames given"));
         }
 
-        log.println("Totally " + names.length + " properties encountered.");
+        log.println("Totally " + names.length + " properties encountered:");
+        log.print("{");
+        for (int i = 0; i < names.length; i++)
+            log.print(names[i] + " ");
+        log.print("}");
+        log.println("");
     }
+
 
     /**
     * Test calls the method and checks return value.
@@ -115,9 +121,9 @@ public class _XMultiPropertyStates extends MultiMethodTest {
             result = (defaults != null) && defaults.length == names.length;
             log.println("Number of default values: " + defaults.length);
         } catch (com.sun.star.beans.UnknownPropertyException e) {
-            log.println("some properties seem to be unknown");
+            log.println("some properties seem to be unknown: " + e.toString());
         } catch (com.sun.star.lang.WrappedTargetException e) {
-            log.println("Wrapped target Exception was thrown");
+            log.println("Wrapped target Exception was thrown: " + e.toString());
         }
         tRes.tested("getPropertyDefaults()", result) ;
     }
@@ -134,7 +140,7 @@ public class _XMultiPropertyStates extends MultiMethodTest {
             result = (states != null) && (states.length == names.length);
             log.println("Number of states: " + states.length);
         } catch (com.sun.star.beans.UnknownPropertyException e) {
-            log.println("some properties seem to be unknown");
+            log.println("some properties seem to be unknown: " + e.toString());
         }
         tRes.tested("getPropertyStates()", result) ;
     }
@@ -171,7 +177,7 @@ public class _XMultiPropertyStates extends MultiMethodTest {
                     prop = xPropSetInfo.getPropertyByName(names[i]);
                 }
                 catch(com.sun.star.beans.UnknownPropertyException e) {
-                    log.println("couldn't get property info");
+                    log.println("couldn't get property info: " + e.toString());
                     throw new StatusException(Status.failed
                         ("couldn't get property info"));
                 }
@@ -193,7 +199,7 @@ public class _XMultiPropertyStates extends MultiMethodTest {
             result = (oObj.getPropertyStates(the_first)[0].equals
                 (PropertyState.DEFAULT_VALUE));
         } catch (com.sun.star.beans.UnknownPropertyException e) {
-            log.println("some properties seem to be unknown");
+            log.println("some properties seem to be unknown: " + e.toString());
         }
 
         if (!result) {
@@ -253,7 +259,7 @@ public class _XMultiPropertyStates extends MultiMethodTest {
                 result &= part_result;
             }
         } catch (com.sun.star.beans.UnknownPropertyException e) {
-            log.println("some properties seem to be unknown");
+            log.println("some properties seem to be unknown: " + e.toString());
             result=false;
         }
 
