@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementaccess.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-16 18:07:57 $
+ *  last change: $Author: jb $ $Date: 2001-02-05 10:05:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,8 +90,8 @@
 #include <com/sun/star/util/XChangesBatch.hpp>
 #endif
 
-#ifndef _CPPUHELPER_IMPLBASE2_HXX_
-#include <cppuhelper/implbase2.hxx>
+#ifndef _CPPUHELPER_IMPLBASE3_HXX_
+#include <cppuhelper/implbase3.hxx>
 #endif
 #ifndef _CPPUHELPER_IMPLBASE5_HXX_
 #include <cppuhelper/implbase5.hxx>
@@ -127,10 +127,10 @@ namespace configmgr
             <type scope='configmgr::configapi'>NodeAccess</type> and
             <type scope='configmgr::configapi'>InnerElement</type>.</p>
     */
-    typedef  ::cppu::WeakImplHelper2
+    typedef  ::cppu::WeakImplHelper3
                 < css::container::XChild
                 , css::container::XNamed
-//              , css::lang::XServiceInfo
+                , css::lang::XServiceInfo
                 >
                 InnerElementImplHelper;
 
@@ -168,6 +168,19 @@ namespace configmgr
 
         virtual void SAL_CALL  // not supported (! - missing exception)
             setName( const OUString& aName )
+                throw(uno::RuntimeException);
+
+        // XServiceInfo
+        virtual OUString SAL_CALL
+            getImplementationName(  )
+                throw(uno::RuntimeException);
+
+        virtual sal_Bool SAL_CALL
+            supportsService( const OUString& ServiceName )
+                throw(uno::RuntimeException);
+
+        virtual uno::Sequence< OUString > SAL_CALL
+            getSupportedServiceNames(  )
                 throw(uno::RuntimeException);
 
     protected:

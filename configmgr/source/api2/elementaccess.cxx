@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementaccess.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-16 18:07:57 $
+ *  last change: $Author: jb $ $Date: 2001-02-05 10:05:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -343,6 +343,12 @@ void SAL_CALL BasicUpdateElement::removeEventListener( const uno::Reference< css
 // XServiceInfo
 //-----------------------------------------------------------------------------------
 
+OUString SAL_CALL BasicInnerElement::getImplementationName(  ) throw(uno::RuntimeException)
+{
+    return implGetImplementationName( getNodeAccess(), getElementClass() );
+}
+//-----------------------------------------------------------------------------------
+
 OUString SAL_CALL BasicSetElement::getImplementationName(  ) throw(uno::RuntimeException)
 {
     return implGetImplementationName( getNodeAccess(), getElementClass() );
@@ -362,6 +368,12 @@ OUString SAL_CALL BasicUpdateElement::getImplementationName(  ) throw(uno::Runti
 //-----------------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------------
+sal_Bool SAL_CALL BasicInnerElement::supportsService( const OUString& ServiceName ) throw(uno::RuntimeException)
+{
+    return implSupportsService( getNodeAccess(), getElementClass(), ServiceName );
+}
+//-----------------------------------------------------------------------------------
+
 sal_Bool SAL_CALL BasicSetElement::supportsService( const OUString& ServiceName ) throw(uno::RuntimeException)
 {
     return implSupportsService( getNodeAccess(), getElementClass(), ServiceName );
@@ -381,6 +393,12 @@ sal_Bool SAL_CALL BasicUpdateElement::supportsService( const OUString& ServiceNa
 //-----------------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------------
+uno::Sequence< OUString > SAL_CALL  BasicInnerElement::getSupportedServiceNames(  ) throw(uno::RuntimeException)
+{
+    return implGetSupportedServiceNames( getNodeAccess(), getElementClass() );
+}
+//-----------------------------------------------------------------------------------
+
 uno::Sequence< OUString > SAL_CALL  BasicSetElement::getSupportedServiceNames(  ) throw(uno::RuntimeException)
 {
     return implGetSupportedServiceNames( getNodeAccess(), getElementClass() );
