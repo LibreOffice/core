@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfdlg.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 14:45:11 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 11:18:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,7 +226,7 @@ TabPage TP_DOCINFODESC
         Text [ dutch ] = "~Beschrijving" ;
         Text [ spanish ] = "~Comentario" ;
         Text [ english_us ] = "~Comments" ;
-        Text[ chinese_simplified ] = "æ³¨è§£(~C)";
+        Text[ chinese_simplified ] = "æ³¨è§£";
         Text[ russian ] = "Îïèñàíèå";
         Text[ polish ] = "~Komentarz";
         Text[ japanese ] = "ã‚³ãƒ¡ãƒ³ãƒˆ(~C)";
@@ -534,7 +534,7 @@ TabPage TP_DOCINFODOC
         Text [ danish ] = "Sidst udskrevet:" ;
         Text [ portuguese_brazilian ] = "Impresso:" ;
         Text [ portuguese ] = "Impresso em:" ;
-        Text[ chinese_simplified ] = "ä¸Šæ¬¡æ‰“å°çš„æ—¥æœŸï¼š";
+        Text[ chinese_simplified ] = "æœ€åæ‰“å°æ—¥æœŸ:";
         Text[ russian ] = "Íàïå÷àòàí:";
         Text[ polish ] = "Wydrukowany:";
         Text[ japanese ] = "å°åˆ·æ—¥æ™‚:";
@@ -576,7 +576,7 @@ TabPage TP_DOCINFODOC
         Text [ swedish ] = "Redigeringstid:" ;
         Text [ finnish ] = "Muokattu:" ;
         Text [ english_us ] = "Editing time:" ;
-        Text[ chinese_simplified ] = "ç¼–è¾‘æ—¶é—´ï¼š";
+        Text[ chinese_simplified ] = "ç¼–è¾‘æ—¶é—´:";
         Text[ russian ] = "Îòğåäàêòèğîâàí:";
         Text[ polish ] = "Edycja:";
         Text[ japanese ] = "ç·¨é›†æ™‚é–“:";
@@ -615,7 +615,7 @@ TabPage TP_DOCINFODOC
         Text [ french ] = "Révision n° :" ;
         Text [ dutch ] = "Versie:" ;
         Text [ portuguese ] = "Versão:" ;
-        Text[ chinese_simplified ] = "æ–‡æ¡£å·ç ï¼š";
+        Text[ chinese_simplified ] = "æ–‡ä»¶å·:";
         Text[ russian ] = "Âåğñèÿ:";
         Text[ polish ] = "Wersja:";
         Text[ japanese ] = "ãƒãƒ¼ã‚¸ãƒ§ãƒ³:";
@@ -1186,7 +1186,7 @@ TabPage TP_DOCINFORELOAD
         Text[ portuguese_brazilian ] = "para a ~URL";
         Text[ japanese ] = "URL ã¸";
         Text[ korean ] = "ì „ì†¡ URL";
-        Text[ chinese_simplified ] = "é€è‡³ URL";
+        Text[ chinese_simplified ] = "è½¬åˆ° URL";
         Text[ chinese_traditional ] = "é€è‡³ URL";
         Text[ turkish ] = "URL adresine";
         Text[ arabic ] = "URL~";

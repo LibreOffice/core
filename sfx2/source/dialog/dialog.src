@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 14:44:51 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 11:17:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -691,7 +691,7 @@ InfoBox MSG_TABPAGE_INVALIDPARENT
     Message [ dutch ] = "Dit sjabloon kan niet als basissjabloon worden gebruikt;\nhierdoor zou een kringverbinding ontstaan." ;
     Message [ spanish ] = "Este estilo no se puede utilizar como estilo de base,\nya que podrнa provocar una referencia recursiva." ;
     Message [ english_us ] = "This Style cannot be used as a base Style,\nbecause it would result in a recursive reference." ;
-    Message[ chinese_simplified ] = "иї™дёЄж ·ејЏж— жі•иў«еЅ“дЅњж ·ејЏж–‡д»¶пјЊ\nеђ¦е€™дјљеј•иµ·йЂ’еЅ’еј•з”ЁгЂ‚";
+    Message[ chinese_simplified ] = "ж­¤ж ·ејЏж— жі•з”Ёдёєеџєжњ¬ж ·ејЏпјЊ\nеђ¦е€™дјљеј•иµ·йЂ’еЅ’еј•з”ЁгЂ‚";
     Message[ russian ] = "Невозможно применить этот шаблон в качестве базисного,\nтак как возникнет рекурсия.";
     Message[ polish ] = "Tego szablonu nie moїna uїyж jako szablonu podstawowego,\nponiewaї mogіoby powstaж odwoіanie cykliczne.";
     Message[ japanese ] = "гЃ“гЃ®г‚№г‚їг‚¤гѓ«гЃЇгѓ™гѓјг‚№ г‚№г‚їг‚¤гѓ«гЃЁгЃ—гЃ¦дЅїз”ЁгЃ§гЃЌгЃѕгЃ›г‚“пЅЎ\nг‚Ёгѓ©гѓјгЃЊз™єз”џгЃ—гЃѕгЃ™гЂ‚";
