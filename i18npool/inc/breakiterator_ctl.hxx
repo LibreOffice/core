@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakiterator_ctl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2002-03-26 17:57:44 $
+ *  last change: $Author: khong $ $Date: 2002-05-03 19:09:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,10 @@ public:
     virtual sal_Int32 SAL_CALL nextCharacters(const rtl::OUString& text, sal_Int32 start,
         const lang::Locale& rLocale, sal_Int16 nCharacterIteratorMode, sal_Int32 count,
         sal_Int32& nDone) throw(com::sun::star::uno::RuntimeException);
-
+    virtual LineBreakResults SAL_CALL getLineBreak( const rtl::OUString& Text, sal_Int32 nStartPos,
+        const com::sun::star::lang::Locale& nLocale, sal_Int32 nMinBreakPos,
+        const LineBreakHyphenationOptions& hOptions, const LineBreakUserOptions& bOptions )
+        throw(com::sun::star::uno::RuntimeException);
 protected:
     rtl::OUString cachedText; // for cell index
     sal_Int32* nextCellIndex;

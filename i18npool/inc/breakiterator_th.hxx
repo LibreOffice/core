@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakiterator_th.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2002-03-26 17:57:44 $
+ *  last change: $Author: khong $ $Date: 2002-05-03 19:09:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,19 +75,8 @@ public:
     BreakIterator_th();
     ~BreakIterator_th();
 
-    Boundary SAL_CALL nextWord( const rtl::OUString& Text, sal_Int32 nStartPos,
-            const lang::Locale& nLocale, sal_Int16 WordType)
-            throw(com::sun::star::uno::RuntimeException);
-    Boundary SAL_CALL previousWord( const rtl::OUString& Text, sal_Int32 nStartPos,
-            const lang::Locale& nLocale, sal_Int16 WordType)
-            throw(com::sun::star::uno::RuntimeException);
-    Boundary SAL_CALL getWordBoundary( const rtl::OUString& Text, sal_Int32 nPos,
-            const lang::Locale& nLocale, sal_Int16 WordType, sal_Bool bDirection )
-            throw(com::sun::star::uno::RuntimeException);
 protected:
     void SAL_CALL makeIndex(const rtl::OUString& text, sal_Int32 pos) throw(com::sun::star::uno::RuntimeException);
-private:
-    xdictionary *dict;
 };
 
 } } } }

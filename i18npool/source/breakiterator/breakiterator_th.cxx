@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakiterator_th.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: khong $ $Date: 2002-05-02 21:43:33 $
+ *  last change: $Author: khong $ $Date: 2002-05-03 19:07:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,8 +156,6 @@ void SAL_CALL BreakIterator_th::makeIndex(const OUString& Text, sal_Int32 nStart
         free(previousCellIndex);
         nextCellIndex = (sal_Int32*) calloc(cellIndexSize, sizeof(sal_Int32));
         previousCellIndex = (sal_Int32*) calloc(cellIndexSize, sizeof(sal_Int32));
-        // for finding correct word boundary
-        dict->setCellBoundary(nextCellIndex);
         }
         // reset nextCell for new Text
         memset(nextCellIndex, 0, cellIndexSize * sizeof(sal_Int32));
