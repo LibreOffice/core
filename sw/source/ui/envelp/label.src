@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2001-12-21 21:28:11 $
+ *  last change: $Author: kz $ $Date: 2002-01-16 21:31:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -497,7 +497,7 @@ TabPage TP_LAB_LAB
         Text[ chinese_simplified ] = "æ ‡ç­¾";
         Text[ russian ] = "Íàäïèñü";
         Text[ polish ] = "Napis";
-        Text[ japanese ] = "ãŠã‚‚ã¦ãŒã";
+        Text[ japanese ] = "è¡¨é¢";
         Text[ language_user1 ] = " ";
         Text[ chinese_traditional ] = "æ¨™ç±¤";
         Text[ arabic ] = "äÕ ÇáÈØÇŞÉ";
@@ -1004,7 +1004,7 @@ TabPage TP_PRIVATE_DATA
         Text[ swedish ] = "Gatuadres~s";
         Text[ polish ] = "Ulica";
         Text[ portuguese_brazilian ] = "Street";
-        Text[ japanese ] = "ç”ºå(~T)";
+        Text[ japanese ] = "å¸‚ç”ºæ‘åç•ªåœ°(~T)";
         Text[ korean ] = "ê±°ë¦¬ ë²ˆì§€(~T)";
         Text[ chinese_simplified ] = "è¡—é“(~T)";
         Text[ chinese_traditional ] = "è¡—é“(~T)";
