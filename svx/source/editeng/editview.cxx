@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editview.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-17 17:20:11 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:45:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -918,13 +918,15 @@ EESpellState EditView::StartThesaurus()
 }
 
 
-void EditView::StartTextConversion( LanguageType nLang, BOOL bMultipleDoc )
+void EditView::StartTextConversion(
+        LanguageType nSrcLang, LanguageType nDestLang, const Font *pDestFont,
+        INT32 nOptions, BOOL bIsInteractive, BOOL bMultipleDoc )
 {
 #ifdef SVX_LIGHT
 #else
     DBG_CHKTHIS( EditView, 0 );
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
-    PIMPEE->Convert( this, nLang, bMultipleDoc );
+    PIMPEE->Convert( this, nSrcLang, nDestLang, pDestFont, nOptions, bIsInteractive, bMultipleDoc );
 #endif
 }
 
