@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprov.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-07 14:28:57 $
+ *  last change: $Author: cl $ $Date: 2001-03-14 16:39:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@
 #include <vcl/svapp.hxx>
 #endif
 
-#include <unotools/propertysetinfo.hxx>
+#include <comphelper/propertysetinfo.hxx>
 
 #ifndef _SVX_DIALMGR_HXX
 #include "dialmgr.hxx"
@@ -458,9 +458,9 @@ SfxItemPropertyMap* ImplGetSvxPageShapePropertyMap()
     return aPageShapePropertyMap_Impl;
 }
 
-utl::PropertyMapEntry* ImplGetSvxDrawingDefaultsPropertyMap()
+comphelper::PropertyMapEntry* ImplGetSvxDrawingDefaultsPropertyMap()
 {
-    static utl::PropertyMapEntry aSvxDrawingDefaultsPropertyMap_Impl[] =
+    static comphelper::PropertyMapEntry aSvxDrawingDefaultsPropertyMap_Impl[] =
     {
         SHADOW_PROPERTIES
         LINE_PROPERTIES_DEFAULTS
@@ -1013,7 +1013,7 @@ void SvxUnogetInternalNameForItem( const sal_Int16 nWhich, const rtl::OUString& 
 
 ///////////////////////////////////////////////////////////////////////
 
-utl::PropertySetInfo* SvxPropertySetInfoPool::getOrCreate( sal_Int32 nServiceId ) throw()
+comphelper::PropertySetInfo* SvxPropertySetInfoPool::getOrCreate( sal_Int32 nServiceId ) throw()
 {
     vos::OGuard aGuard( Application::GetSolarMutex() );
 
@@ -1025,7 +1025,7 @@ utl::PropertySetInfo* SvxPropertySetInfoPool::getOrCreate( sal_Int32 nServiceId 
 
     if( mpInfos[ nServiceId ] == NULL )
     {
-        mpInfos[nServiceId] = new utl::PropertySetInfo();
+        mpInfos[nServiceId] = new comphelper::PropertySetInfo();
         mpInfos[nServiceId]->acquire();
 
         switch( nServiceId )
@@ -1042,5 +1042,5 @@ utl::PropertySetInfo* SvxPropertySetInfoPool::getOrCreate( sal_Int32 nServiceId 
     return mpInfos[ nServiceId ];
 }
 
-utl::PropertySetInfo* SvxPropertySetInfoPool::mpInfos[SVXUNO_SERVICEID_LASTID+1] = { NULL };
+comphelper::PropertySetInfo* SvxPropertySetInfoPool::mpInfos[SVXUNO_SERVICEID_LASTID+1] = { NULL };
 

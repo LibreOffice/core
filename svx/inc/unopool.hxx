@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopool.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2001-03-06 08:47:29 $
+ *  last change: $Author: cl $ $Date: 2001-03-14 16:38:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
 
-#ifndef _UTL_PROPERTYSETHELPER_HXX_
-#include <unotools/propertysethelper.hxx>
+#ifndef _COMPHELPER_PROPERTYSETHELPER_HXX_
+#include <comphelper/propertysethelper.hxx>
 #endif
 
 #ifndef _CPPUHELPER_IMPLBASE4_HXX_
@@ -86,7 +86,7 @@ class SfxItemPool;
 class SvxUnoDrawPool :  public ::cppu::OWeakAggObject,
                         public ::com::sun::star::lang::XServiceInfo,
                         public ::com::sun::star::lang::XTypeProvider,
-                        public utl::PropertySetHelper
+                        public comphelper::PropertySetHelper
 {
 public:
     SvxUnoDrawPool( SdrModel* pModel ) throw();
@@ -97,13 +97,13 @@ public:
     */
     virtual SfxItemPool* getModelPool( sal_Bool bReadOnly ) throw();
 
-    // overiden helpers from utl::PropertySetHelper
-    virtual void _setPropertyValues( const utl::PropertyMapEntry** ppEntries, const ::com::sun::star::uno::Any* pValues ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException );
-    virtual void _getPropertyValues( const utl::PropertyMapEntry** ppEntries, ::com::sun::star::uno::Any* pValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException );
+    // overiden helpers from comphelper::PropertySetHelper
+    virtual void _setPropertyValues( const comphelper::PropertyMapEntry** ppEntries, const ::com::sun::star::uno::Any* pValues ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException );
+    virtual void _getPropertyValues( const comphelper::PropertyMapEntry** ppEntries, ::com::sun::star::uno::Any* pValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException );
 
-    virtual void _getPropertyStates( const utl::PropertyMapEntry** ppEntries, ::com::sun::star::beans::PropertyState* pStates ) throw(::com::sun::star::beans::UnknownPropertyException );
-    virtual void _setPropertyToDefault( const utl::PropertyMapEntry* pEntry )  throw(::com::sun::star::beans::UnknownPropertyException );
-    virtual ::com::sun::star::uno::Any _getPropertyDefault( const utl::PropertyMapEntry* pEntry ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException );
+    virtual void _getPropertyStates( const comphelper::PropertyMapEntry** ppEntries, ::com::sun::star::beans::PropertyState* pStates ) throw(::com::sun::star::beans::UnknownPropertyException );
+    virtual void _setPropertyToDefault( const comphelper::PropertyMapEntry* pEntry )  throw(::com::sun::star::beans::UnknownPropertyException );
+    virtual ::com::sun::star::uno::Any _getPropertyDefault( const comphelper::PropertyMapEntry* pEntry ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException );
 
     // XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
@@ -121,8 +121,8 @@ public:
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException );
 
 protected:
-    virtual void getAny( SfxItemPool* pPool, const utl::PropertyMapEntry* pEntry, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException);
-    virtual void putAny( SfxItemPool* pPool, const utl::PropertyMapEntry* pEntry, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::IllegalArgumentException);
+    virtual void getAny( SfxItemPool* pPool, const comphelper::PropertyMapEntry* pEntry, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException);
+    virtual void putAny( SfxItemPool* pPool, const comphelper::PropertyMapEntry* pEntry, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::IllegalArgumentException);
 
 protected:
     SdrModel* mpModel;

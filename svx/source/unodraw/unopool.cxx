@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopool.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-05 12:54:58 $
+ *  last change: $Author: cl $ $Date: 2001-03-14 16:39:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
 #include <com/sun/star/beans/PropertyState.hpp>
 #endif
 
-#include <unotools/propertysetinfo.hxx>
+#include <comphelper/propertysetinfo.hxx>
 
 #ifndef _RTL_UUID_H_
 #include <rtl/uuid.h>
@@ -139,10 +139,10 @@ SfxItemPool* SvxUnoDrawPool::getModelPool( sal_Bool bReadOnly ) throw()
     }
 }
 
-void SvxUnoDrawPool::getAny( SfxItemPool* pPool, const utl::PropertyMapEntry* pEntry, Any& rValue )
+void SvxUnoDrawPool::getAny( SfxItemPool* pPool, const comphelper::PropertyMapEntry* pEntry, Any& rValue )
     throw(UnknownPropertyException)
 {
-    switch( pEntry->mnWhich )
+    switch( pEntry->mnHandle )
     {
     case OWN_ATTR_FILLBMP_MODE:
         {
@@ -163,12 +163,12 @@ void SvxUnoDrawPool::getAny( SfxItemPool* pPool, const utl::PropertyMapEntry* pE
             break;
         }
     default:
-        pPool->GetDefaultItem( pEntry->mnWhich ).QueryValue( rValue, pEntry->mnMemberId );
+        pPool->GetDefaultItem( pEntry->mnHandle ).QueryValue( rValue, pEntry->mnMemberId );
     }
 
 
     // check for needed metric translation
-    const SfxMapUnit eMapUnit = pPool->GetMetric(pEntry->mnWhich);
+    const SfxMapUnit eMapUnit = pPool->GetMetric(pEntry->mnHandle);
     if(pEntry->mnMemberId & SFX_METRIC_ITEM && eMapUnit != SFX_MAPUNIT_100TH_MM)
     {
         // map the metric of the itempool to 100th mm
@@ -215,12 +215,12 @@ void SvxUnoDrawPool::getAny( SfxItemPool* pPool, const utl::PropertyMapEntry* pE
     }
 }
 
-void SvxUnoDrawPool::putAny( SfxItemPool* pPool, const utl::PropertyMapEntry* pEntry, const Any& rValue )
+void SvxUnoDrawPool::putAny( SfxItemPool* pPool, const comphelper::PropertyMapEntry* pEntry, const Any& rValue )
     throw(UnknownPropertyException, IllegalArgumentException)
 {
     Any aValue( rValue );
 
-    const SfxMapUnit eMapUnit = pPool->GetMetric(pEntry->mnWhich);
+    const SfxMapUnit eMapUnit = pPool->GetMetric(pEntry->mnHandle);
     if(pEntry->mnMemberId & SFX_METRIC_ITEM && eMapUnit != SFX_MAPUNIT_100TH_MM)
     {
         switch(eMapUnit)
@@ -244,7 +244,7 @@ void SvxUnoDrawPool::putAny( SfxItemPool* pPool, const utl::PropertyMapEntry* pE
         }
     }
 
-    const sal_uInt16 nWhich = pEntry->mnWhich;
+    const sal_uInt16 nWhich = pEntry->mnHandle;
     switch( nWhich )
     {
         case OWN_ATTR_FILLBMP_MODE:
@@ -276,7 +276,7 @@ void SvxUnoDrawPool::putAny( SfxItemPool* pPool, const utl::PropertyMapEntry* pE
     }
 }
 
-void SvxUnoDrawPool::_setPropertyValues( const utl::PropertyMapEntry** ppEntries, const Any* pValues )
+void SvxUnoDrawPool::_setPropertyValues( const comphelper::PropertyMapEntry** ppEntries, const Any* pValues )
     throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException )
 {
     vos::OGuard aGuard( Application::GetSolarMutex() );
@@ -291,7 +291,7 @@ void SvxUnoDrawPool::_setPropertyValues( const utl::PropertyMapEntry** ppEntries
         putAny( pPool, *ppEntries++, *pValues++ );
 }
 
-void SvxUnoDrawPool::_getPropertyValues( const utl::PropertyMapEntry** ppEntries, Any* pValue )
+void SvxUnoDrawPool::_getPropertyValues( const comphelper::PropertyMapEntry** ppEntries, Any* pValue )
     throw(UnknownPropertyException, WrappedTargetException )
 {
     vos::OGuard aGuard( Application::GetSolarMutex() );
@@ -306,7 +306,7 @@ void SvxUnoDrawPool::_getPropertyValues( const utl::PropertyMapEntry** ppEntries
         getAny( pPool, *ppEntries++, *pValue++ );
 }
 
-void SvxUnoDrawPool::_getPropertyStates( const utl::PropertyMapEntry** ppEntries, PropertyState* pStates )
+void SvxUnoDrawPool::_getPropertyStates( const comphelper::PropertyMapEntry** ppEntries, PropertyState* pStates )
     throw(UnknownPropertyException )
 {
     vos::OGuard aGuard( Application::GetSolarMutex() );
@@ -317,7 +317,7 @@ void SvxUnoDrawPool::_getPropertyStates( const utl::PropertyMapEntry** ppEntries
     {
         while( *ppEntries )
         {
-            const sal_uInt16 nWhich = (*ppEntries)->mnWhich;
+            const sal_uInt16 nWhich = (*ppEntries)->mnHandle;
 
             switch( nWhich )
             {
@@ -358,7 +358,7 @@ void SvxUnoDrawPool::_getPropertyStates( const utl::PropertyMapEntry** ppEntries
     }
 }
 
-void SvxUnoDrawPool::_setPropertyToDefault( const utl::PropertyMapEntry* pEntry )
+void SvxUnoDrawPool::_setPropertyToDefault( const comphelper::PropertyMapEntry* pEntry )
     throw(UnknownPropertyException )
 {
     vos::OGuard aGuard( Application::GetSolarMutex() );
@@ -366,10 +366,10 @@ void SvxUnoDrawPool::_setPropertyToDefault( const utl::PropertyMapEntry* pEntry 
     SfxItemPool* pPool = getModelPool( sal_True );
 
     if( pPool && pPool != mpDefaultsPool )
-        pPool->Put( mpDefaultsPool->GetDefaultItem( pEntry->mnWhich ), pEntry->mnWhich );
+        pPool->Put( mpDefaultsPool->GetDefaultItem( pEntry->mnHandle ), pEntry->mnHandle );
 }
 
-Any SvxUnoDrawPool::_getPropertyDefault( const utl::PropertyMapEntry* pEntry )
+Any SvxUnoDrawPool::_getPropertyDefault( const comphelper::PropertyMapEntry* pEntry )
     throw(UnknownPropertyException, WrappedTargetException )
 {
     vos::OGuard aGuard( Application::GetSolarMutex() );
