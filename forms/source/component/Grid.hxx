@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Grid.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:14:02 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:03:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,7 @@ class OGridControlModel :public OControlModel
     ::com::sun::star::uno::Any              m_aTabStop;
     ::com::sun::star::uno::Any              m_aBackgroundColor;
     ::com::sun::star::uno::Any              m_aCursorColor;             // transient
+    ::com::sun::star::uno::Any              m_aBorderColor;
     ::rtl::OUString                         m_aDefaultControl;
     ::rtl::OUString                         m_sHelpText;
 // [properties]
