@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathtype.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cmc $ $Date: 2001-10-19 11:39:20 $
+ *  last change: $Author: cmc $ $Date: 2001-10-31 16:39:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,6 +188,25 @@ String aSizes[7] =
     "user 2"
 };
 #endif
+
+static sal_Unicode Convert(sal_Unicode nIn)
+{
+    static sal_Unicode aMathTypeTable[] =
+    {
+0x2208, 0x0192, 0x2026, 0x2192, 0x221A, 0x221A, 0x221A, 0xE090, 0x005E, 0x02C7,
+0x02D8, 0x00B4, 0x0060, 0x02DC, 0x00AF, 0x0362, 0xE099, 0xE09A, 0x20DB, 0xE09C,
+0xE09D, 0x0028, 0x0029, 0x2220, 0x22AF, 0xE0A2, 0xE0A3, 0xE0A4, 0xE0A5, 0xE0A6,
+0xE0A7, 0x002F, 0x005C, 0x274F, 0xE0AB, 0x0393, 0x0394, 0x0398, 0x039b, 0x039e,
+0x03A0, 0x03a3, 0x03a5, 0x03a6, 0x03a8, 0x03A9, 0x03B1, 0x03B2, 0x03b3, 0x03b4,
+0x03b5, 0x03b6, 0x03b7, 0x03b8, 0x03b9, 0x03ba, 0x03bb, 0x03bc, 0x03bd, 0x03be,
+0x03bf, 0x03c0, 0x03c1, 0x03c3, 0x03c4, 0x03c5, 0x03c6, 0x03c7, 0x03c8, 0x03c9,
+0x03b5, 0x03d1, 0x03d6, 0xE0D2, 0x03db, 0x2118, 0x2202, 0x2129, 0xE0D7, 0xE0D8,
+0x22A4, 0xE0DA, 0x2190, 0x2191, 0x2193
+    };
+    if ((nIn >= 0xE089) && (nIn <= 0xE0DD))
+        nIn = aMathTypeTable[nIn-0xE089];
+    return nIn;
+}
 
 void EQNOLEFILEHDR::Read(SvStorageStream *pS)
 {
@@ -3181,7 +3200,7 @@ void MathType::HandleMath(SmNode *pNode,int nLevel)
     SmMathSymbolNode *pTemp=(SmMathSymbolNode *)pNode;
     for(int i=0;i<pTemp->GetText().Len();i++)
     {
-        sal_Unicode nArse = pTemp->GetText().GetChar(i);
+        sal_Unicode nArse = Convert(pTemp->GetText().GetChar(i));
         if ((nArse == 0x2224) || (nArse == 0x2288) || (nArse == 0x2285) ||
             (nArse == 0x2289))
         {
@@ -3263,13 +3282,7 @@ void MathType::HandleMath(SmNode *pNode,int nLevel)
             *pS << sal_uInt8(END); //end embel
         }
         else
-        {
-            //Convert StarMath to Unicode. Provisional Table
-            //until unicode font designers come back with
-            //something complete
             *pS << nArse;
-        }
-
     }
 }
 
@@ -3429,7 +3442,8 @@ void MathType::HandleText(SmNode *pNode,int nLevel)
         else
             *pS << sal_uInt8(0x3+128); //typeface
 #endif
-        *pS << sal_uInt16(pTemp->GetText().GetChar(i));
+        sal_uInt16 nChar = pTemp->GetText().GetChar(i);
+        *pS << Convert(nChar);
 
         //Mathtype can only have these sort of character
         //attributes on a single character, starmath can put them
