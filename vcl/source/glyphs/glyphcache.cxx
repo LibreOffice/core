@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glyphcache.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hdu $ $Date: 2000-11-22 15:31:51 $
+ *  last change: $Author: hdu $ $Date: 2000-11-22 17:25:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,8 +259,6 @@ ULONG GlyphCache::GarbageCollect()
     // prepare advance to next font for garbage collection
     ServerFont* pServerFont = pCurrentGCFont;
     pCurrentGCFont = pCurrentGCFont->pNextGCFont;
-    if( pCurrentGCFont == pServerFont )
-        pCurrentGCFont = NULL;
 
     ULONG nBytesCollected;
     DBG_ASSERT( (pServerFont->GetRefCount() >= 0), "GlyphCache::GC detected RefCount underflow" );
@@ -276,6 +274,9 @@ ULONG GlyphCache::GarbageCollect()
         ServerFont* pNext = pServerFont->pNextGCFont;
         pPrev->pNextGCFont = pNext;
         pNext->pPrevGCFont = pPrev;
+
+        if( pCurrentGCFont == pServerFont )
+            pCurrentGCFont = NULL;
 
         nBytesCollected = pServerFont->GetByteCount();
         aFontList.erase( pServerFont->GetFontSelData() );
