@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartController.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-07 17:18:42 $
+ *  last change: $Author: iha $ $Date: 2003-10-28 16:06:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -872,6 +872,7 @@ bool isFormatObjectSID( sal_Int32 nSlotID )
                 || (sal_Int32)SID_INSERT_GRIDS == nSlotID
                 || (sal_Int32)SID_INSERT_STATISTICS == nSlotID
                 || (sal_Int32)SID_CHARMAP == nSlotID
+                || (sal_Int32)SID_TEXTEDIT == nSlotID
                 || isFormatObjectSID(nSlotID)
                 )
             {
@@ -991,6 +992,10 @@ tMakeSlotIdCommandMap m_aSlotIdCommandMap =
         else if((sal_Int32)SID_CHARMAP == nSlotID)
         {
             this->executeDispatch_InsertSpecialCharacter();
+        }
+        else if((sal_Int32)SID_TEXTEDIT == nSlotID)
+        {
+            this->executeDispatch_EditText();
         }
         else if( isFormatObjectSID(nSlotID) )
         {
