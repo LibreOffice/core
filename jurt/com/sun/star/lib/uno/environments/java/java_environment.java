@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_environment.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kr $ $Date: 2001-02-26 18:26:36 $
+ *  last change: $Author: kr $ $Date: 2001-05-04 11:52:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,6 @@ import com.sun.star.lib.uno.typedesc.TypeDescription;
 
 import com.sun.star.uno.IEnvironment;
 import com.sun.star.uno.IQueryInterface;
-import com.sun.star.uno.MappingException;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
@@ -92,7 +91,7 @@ import com.sun.star.uno.XInterface;
  * interface defined in the uno runtime.
  * <p>
  * <p>
- * @version     $Revision: 1.4 $ $ $Date: 2001-02-26 18:26:36 $
+ * @version     $Revision: 1.5 $ $ $Date: 2001-05-04 11:52:11 $
  * @author      Kay Ramme
  * @see         com.sun.star.uno.UnoRuntime
  * @see         com.sun.star.uno.IEnvironment
@@ -183,11 +182,11 @@ public class java_environment implements IEnvironment, Disposable {
         }
 
         // IQueryInterface - delegate calls through this proxy
-        public Object queryInterface(Type type) throws MappingException {
+        public Object queryInterface(Type type) {
             return UnoRuntime.queryInterface(type, object);
         }
 
-        public boolean isSame(Object object) throws MappingException {
+        public boolean isSame(Object object) {
             return UnoRuntime.areSame(this.object, object);
         }
 
