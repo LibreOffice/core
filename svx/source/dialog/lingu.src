@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lingu.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-08 17:56:24 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 20:59:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@ QueryBox RID_SVXQB_CONTINUE
     MESSAGE[ russian ] = "Οπξδξλζθςό οπξβεπκσ β νΰχΰλε δξκσμενςΰ?";
     MESSAGE[ polish ] = "Kontuynuowaζ sprawdzanie na poczΉtku dokumentu?";
     MESSAGE[ japanese ] = "•¶“ª‚ΕΑª―Έ‚π‘±s‚µ‚ά‚·‚©H";
-    MESSAGE[ chinese_traditional ] = "±q¤ε¥σ¶}ΊέΔ~Δς΄M§δ΅H";
+    MESSAGE[ chinese_traditional ] = "±q¤ε¥σ°_©l¦μΈmΔ~Δς΄M§δ΅H";
     MESSAGE[ arabic ] = "εα ΚΡνΟ γΚΗΘΪΙ ΗαΚΟήνή ΪδΟ ΘΟΗνΙ ΗαγΣΚδΟΏ";
     MESSAGE[ greek ] = "Να συνεχιστεί ο έλεγχος από την αρχή του εγγράφου;";
     MESSAGE[ korean ] = "Ή®Ό­ Γ³ΐ½Ώ΅Ό­ °Λ»ηΈ¦ °θΌΣΗÒ±ξΏδ?";
