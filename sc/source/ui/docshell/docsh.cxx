@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-05 17:13:03 $
+ *  last change: $Author: nn $ $Date: 2000-10-20 09:14:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 #include "ui_pch.hxx"
 #endif
 
+#pragma hdrstop
 
 #include "scitems.hxx"
 
