@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawController.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 13:53:56 $
+ *  last change: $Author: rt $ $Date: 2004-11-22 10:11:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,8 +159,8 @@ public:
     */
     virtual void FireSelectionChangeListener (void) throw();
 
-    DECLARE_XINTERFACE();
-    DECLARE_XTYPEPROVIDER();
+    DECLARE_XINTERFACE()
+    DECLARE_XTYPEPROVIDER()
 
     // XComponent
     virtual void SAL_CALL dispose() throw( ::com::sun::star::uno::RuntimeException );
