@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbgloop.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:19 $
+ *  last change: $Author: hr $ $Date: 2004-03-12 12:36:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,8 @@ void DbgLoopStack::Pop()
 void DbgLoopStack::Print( SvStream &rOS ) const
 {
     rOS << "POS: " << nPtr << '\n';
-    for( USHORT i = 0; i < DBG_MAX_STACK; ++i )
+    USHORT i;
+    for( i = 0; i < DBG_MAX_STACK; ++i )
         rOS << i << " ";
     rOS << '\n';
     for( i = 0; i < DBG_MAX_STACK; ++i )
