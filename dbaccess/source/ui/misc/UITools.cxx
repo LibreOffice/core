@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-20 12:56:17 $
+ *  last change: $Author: oj $ $Date: 2001-09-20 13:33:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,19 @@
 #ifndef _COM_SUN_STAR_AWT_TEXTALIGN_HPP_
 #include <com/sun/star/awt/TextAlign.hpp>
 #endif
+#ifndef _COM_SUN_STAR_AWT_FONTDESCRIPTOR_HPP_
+#include <com/sun/star/awt/FontDescriptor.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_FONTWEIGHT_HPP_
+#include <com/sun/star/awt/FontWeight.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_FONTRELIEF_HPP_
+#include <com/sun/star/awt/FontRelief.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_FONTWIDTH_HPP_
+#include <com/sun/star/awt/FontWidth.hpp>
+#endif
+
 #ifndef DBAUI_TYPEINFO_HXX
 #include "TypeInfo.hxx"
 #endif
@@ -573,6 +586,7 @@ sal_Int32 mapTextAllign(const SvxCellHorJustify& _eAlignment)
     sal_Int32 nAlignment = com::sun::star::awt::TextAlign::LEFT;
     switch (_eAlignment)
     {
+        case SVX_HOR_JUSTIFY_STANDARD:
         case SVX_HOR_JUSTIFY_LEFT:      nAlignment = ::com::sun::star::awt::TextAlign::LEFT;    break;
         case SVX_HOR_JUSTIFY_CENTER:    nAlignment = ::com::sun::star::awt::TextAlign::CENTER;  break;
         case SVX_HOR_JUSTIFY_RIGHT:     nAlignment = ::com::sun::star::awt::TextAlign::RIGHT;   break;
@@ -590,6 +604,81 @@ void setColumnUiProperties( const Reference< XPropertySet>& _rxColumn,const OFie
         _rxColumn->setPropertyValue(PROPERTY_ALIGN,makeAny(dbaui::mapTextAllign(_pFieldDesc->GetHorJustify())));
     if(_rxColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_HELPTEXT))
         _rxColumn->setPropertyValue(PROPERTY_HELPTEXT,makeAny(_pFieldDesc->GetDescription()));
+}
+float ConvertFontWeight( ::FontWeight eWeight )
+{
+    if( eWeight == WEIGHT_DONTKNOW )
+        return ::com::sun::star::awt::FontWeight::DONTKNOW;
+    else if( eWeight == WEIGHT_THIN )
+        return ::com::sun::star::awt::FontWeight::THIN;
+    else if( eWeight == WEIGHT_ULTRALIGHT )
+        return ::com::sun::star::awt::FontWeight::ULTRALIGHT;
+    else if( eWeight == WEIGHT_LIGHT )
+        return ::com::sun::star::awt::FontWeight::LIGHT;
+    else if( eWeight == WEIGHT_SEMILIGHT )
+        return ::com::sun::star::awt::FontWeight::SEMILIGHT;
+    else if( ( eWeight == WEIGHT_NORMAL ) || ( eWeight == WEIGHT_MEDIUM ) )
+        return ::com::sun::star::awt::FontWeight::NORMAL;
+    else if( eWeight == WEIGHT_SEMIBOLD )
+        return ::com::sun::star::awt::FontWeight::SEMIBOLD;
+    else if( eWeight == WEIGHT_BOLD )
+        return ::com::sun::star::awt::FontWeight::BOLD;
+    else if( eWeight == WEIGHT_ULTRABOLD )
+        return ::com::sun::star::awt::FontWeight::ULTRABOLD;
+    else if( eWeight == WEIGHT_BLACK )
+        return ::com::sun::star::awt::FontWeight::BLACK;
+
+    OSL_ENSURE(0, "Unknown FontWeigth" );
+    return ::com::sun::star::awt::FontWeight::DONTKNOW;
+}
+// -----------------------------------------------------------------------------
+float ConvertFontWidth( ::FontWidth eWidth )
+{
+    if( eWidth == WIDTH_DONTKNOW )
+        return ::com::sun::star::awt::FontWidth::DONTKNOW;
+    else if( eWidth == WIDTH_ULTRA_CONDENSED )
+        return ::com::sun::star::awt::FontWidth::ULTRACONDENSED;
+    else if( eWidth == WIDTH_EXTRA_CONDENSED )
+        return ::com::sun::star::awt::FontWidth::EXTRACONDENSED;
+    else if( eWidth == WIDTH_CONDENSED )
+        return ::com::sun::star::awt::FontWidth::CONDENSED;
+    else if( eWidth == WIDTH_SEMI_CONDENSED )
+        return ::com::sun::star::awt::FontWidth::SEMICONDENSED;
+    else if( eWidth == WIDTH_NORMAL )
+        return ::com::sun::star::awt::FontWidth::NORMAL;
+    else if( eWidth == WIDTH_SEMI_EXPANDED )
+        return ::com::sun::star::awt::FontWidth::SEMIEXPANDED;
+    else if( eWidth == WIDTH_EXPANDED )
+        return ::com::sun::star::awt::FontWidth::EXPANDED;
+    else if( eWidth == WIDTH_EXTRA_EXPANDED )
+        return ::com::sun::star::awt::FontWidth::EXTRAEXPANDED;
+    else if( eWidth == WIDTH_ULTRA_EXPANDED )
+        return ::com::sun::star::awt::FontWidth::ULTRAEXPANDED;
+
+    OSL_ENSURE(0, "Unknown FontWidth" );
+    return ::com::sun::star::awt::FontWidth::DONTKNOW;
+}
+// -----------------------------------------------------------------------------
+::com::sun::star::awt::FontDescriptor CreateFontDescriptor( const Font& rFont )
+{
+    ::com::sun::star::awt::FontDescriptor aFD;
+    aFD.Name            = rFont.GetName();
+    aFD.StyleName       = rFont.GetStyleName();
+    aFD.Height          = (sal_Int16)rFont.GetSize().Height();
+    aFD.Width           = (sal_Int16)rFont.GetSize().Width();
+    aFD.Family          = rFont.GetFamily();
+    aFD.CharSet         = rFont.GetCharSet();
+    aFD.Pitch           = rFont.GetPitch();
+    aFD.CharacterWidth  = ConvertFontWidth( rFont.GetWidthType() );
+    aFD.Weight          = ConvertFontWeight( rFont.GetWeight() );
+    aFD.Slant           = (::com::sun::star::awt::FontSlant)rFont.GetItalic();
+    aFD.Underline       = rFont.GetUnderline();
+    aFD.Strikeout       = rFont.GetStrikeout();
+    aFD.Orientation     = rFont.GetOrientation();
+    aFD.Kerning         = rFont.IsKerning();
+    aFD.WordLineMode    = rFont.IsWordLineMode();
+    aFD.Type            = 0;   // ??? => Nur an Metric...
+    return aFD;
 }
 // .........................................................................
 }

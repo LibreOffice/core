@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-20 12:56:17 $
+ *  last change: $Author: oj $ $Date: 2001-09-20 13:33:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,10 @@ namespace com { namespace sun { namespace star {
         class XEventListener;
         class XMultiServiceFactory;
     }
+    namespace awt
+    {
+        struct FontDescriptor;
+    }
     namespace sdbc
     {
         class XDatabaseMetaData;
@@ -91,6 +95,7 @@ namespace com { namespace sun { namespace star {
 
 class Window;
 enum SvxCellHorJustify;
+class Font;
 // .........................................................................
 namespace dbaui
 {
@@ -175,6 +180,12 @@ namespace dbaui
     */
     void setColumnUiProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxColumn,
                                 const OFieldDescription* _pFieldDesc);
+
+    /** convert Font to ::com::sun::star::awt::FontDescriptor
+        @param  _rFont  Font to be converted
+        @return the new FontDescriptor
+    */
+    ::com::sun::star::awt::FontDescriptor CreateFontDescriptor( const Font& _rFont );
 // .........................................................................
 }
 // .........................................................................

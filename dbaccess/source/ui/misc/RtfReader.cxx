@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RtfReader.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-16 13:40:36 $
+ *  last change: $Author: oj $ $Date: 2001-09-20 13:36:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,12 @@
 #endif
 #ifndef DBAUI_WIZARD_CPAGE_HXX
 #include "WCPage.hxx"
+#endif
+#ifndef DBAUI_TOOLS_HXX
+#include "UITools.hxx"
+#endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
 #endif
 
 using namespace dbaui;
@@ -364,7 +370,7 @@ sal_Bool ORTFReader::CreateTable(int nToken)
     sal_Bool bStrikeoutSet=sal_False;
     sal_Bool bItalicSet=sal_False;
 
-    FontDescriptor aFont;
+    FontDescriptor aFont = ::dbaui::CreateFontDescriptor(Application::GetSettings().GetStyleSettings().GetAppFont());
     do
     {
         switch(nTmpToken2)

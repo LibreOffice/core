@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HtmlReader.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-16 13:40:36 $
+ *  last change: $Author: oj $ $Date: 2001-09-20 13:33:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,12 @@
 #ifndef _RTL_TENCINFO_H
 #include <rtl/tencinfo.h>
 #endif
+#ifndef DBAUI_TOOLS_HXX
+#include "UITools.hxx"
+#endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
 
 using namespace dbaui;
 using namespace ::com::sun::star::uno;
@@ -171,7 +177,7 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::awt;
 
 #define CONTAINER_ENTRY_NOTFOUND    ((ULONG)0xFFFFFFFF)
-#define DBAUI_HTML_FONTSIZES 7      // wie Export, HTML-Options
+#define DBAUI_HTML_FONTSIZES    8       // wie Export, HTML-Options
 #define HTML_META_NONE          0
 #define HTML_META_AUTHOR        1
 #define HTML_META_DESCRIPTION   2
@@ -515,7 +521,7 @@ void OHTMLReader::TableFontOn(FontDescriptor& _rFont,sal_Int32 &_rTextColor)
                 sal_Int16 nSize = (sal_Int16) pOption->GetNumber();
                 if ( nSize == 0 )
                     nSize = 1;
-                else if ( nSize > DBAUI_HTML_FONTSIZES )
+                else if ( nSize < DBAUI_HTML_FONTSIZES )
                     nSize = DBAUI_HTML_FONTSIZES;
 
                 _rFont.Height = nSize;
@@ -561,7 +567,7 @@ sal_Bool OHTMLReader::CreateTable(int nToken)
     sal_Int16 nHeight = 0;
 
     String aTableName;
-    FontDescriptor aFont;
+    FontDescriptor aFont = ::dbaui::CreateFontDescriptor(Application::GetSettings().GetStyleSettings().GetAppFont());
     sal_Int32 nTextColor = 0;
     do
     {
