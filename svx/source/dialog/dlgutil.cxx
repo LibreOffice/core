@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgutil.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pb $ $Date: 2000-11-10 08:00:04 $
+ *  last change: $Author: tl $ $Date: 2001-03-22 11:00:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,12 +110,14 @@ String GetDicInfoStr( const String& rName, const USHORT nLang, const BOOL bNeg )
         aTmp.AppendAscii( sTmp );
     }
 
-    aTmp += sal_Unicode( '[' );
     if ( LANGUAGE_NONE == nLang )
         aTmp += String( ResId( RID_SVXSTR_LANGUAGE_ALL, DIALOG_MGR() ) );
     else
+    {
+        aTmp += sal_Unicode( '[' );
         aTmp += ::GetLanguageString( (LanguageType)nLang );
-    aTmp += sal_Unicode( ']' );
+        aTmp += sal_Unicode( ']' );
+    }
 
     return aTmp;
 }
