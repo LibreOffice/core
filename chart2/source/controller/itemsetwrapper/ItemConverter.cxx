@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ItemConverter.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-04 12:37:17 $
+ *  last change: $Author: bm $ $Date: 2003-11-04 13:09:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,32 +125,6 @@ bool ItemConverter::IsValid() const
 uno::Reference< beans::XPropertySet > ItemConverter::GetPropertySet() const
 {
     return m_xPropertySet;
-}
-
-uno::Reference< beans::XPropertySet > ItemConverter::SetNewPropertySet(
-    const uno::Reference< beans::XPropertySet > & xNewProp )
-{
-    uno::Reference< lang::XComponent > xComp( m_xPropertySet, uno::UNO_QUERY );
-    if( xComp.is())
-    {
-        // method of base class ::utl::OEventListenerAdapter
-        stopComponentListening( xComp );
-    }
-
-    m_xPropertySetInfo.set( NULL );
-    m_xPropertySet.set( xNewProp );
-
-    if( m_xPropertySet.is())
-    {
-        m_xPropertySetInfo.set( m_xPropertySet->getPropertySetInfo());
-
-        uno::Reference< lang::XComponent > xNewComp( m_xPropertySet, uno::UNO_QUERY );
-        if( xNewComp.is())
-        {
-            // method of base class ::utl::OEventListenerAdapter
-            startComponentListening( xNewComp );
-        }
-    }
 }
 
 void ItemConverter::_disposing( const lang::EventObject& _rSource )
