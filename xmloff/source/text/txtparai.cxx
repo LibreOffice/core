@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparai.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 10:48:54 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:06:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1644,7 +1644,7 @@ XMLParaContext::XMLParaContext(
         sal_Bool bHead ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     xStart( rImport.GetTextImport()->GetCursorAsRange()->getStart() ),
-    nOutlineLevel( 1 ),
+    nOutlineLevel( IsXMLToken( rLName, XML_H ) ? 1 : -1 ),
     pHints( 0 ),
     bIgnoreLeadingSpace( sal_True ),
     bHeading( bHead )
@@ -1720,11 +1720,7 @@ XMLParaContext::~XMLParaContext()
         xTxtImport->FindOutlineStyleName( sStyleName, nOutlineLevel );
 
     // set style and hard attributes at the previous paragraph
-    sStyleName = xTxtImport->SetStyleAndAttrs( GetImport(), xAttrCursor,
-                                               sStyleName, sal_True );
-
-    if( bHeading )
-        xTxtImport->SetOutlineStyle( nOutlineLevel, sStyleName );
+    sStyleName = xTxtImport->SetStyleAndAttrs( GetImport(), xAttrCursor, sStyleName, sal_True, bHeading ? nOutlineLevel : -1 );
 
     if( pHints && pHints->Count() )
     {
