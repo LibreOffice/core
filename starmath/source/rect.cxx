@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rect.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2004-12-08 17:19:22 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:59:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ BOOL SmIsMathAlpha(const XubString &rText)
     if (rText.Len() == 0)
         return FALSE;
 
-    DBG_ASSERT(rText.Len() == 1, "Sm : String enthält nicht genau ein Zeichen");
+    DBG_ASSERT(rText.Len() == 1, "Sm : String enthaelt nicht genau ein Zeichen");
     xub_Unicode cChar = rText.GetChar(0);
 
     // ist es ein griechisches Zeichen ?
@@ -224,7 +224,7 @@ void SmRect::BuildRect(const OutputDevice &rDev, const SmFormat *pFormat,
         long  nDelta = pWindow->GetFontMetric().GetIntLeading();
         if (nDelta == 0)
         {   // dieser Wert entspricht etwa einem Leading von 80 bei einer
-            // Fonthöhe von 422 (12pt)
+            // Fonthoehe von 422 (12pt)
             nDelta = nFontHeight * 8L / 43;
         }
         SetTop(GetTop() - nDelta);
@@ -257,7 +257,7 @@ void SmRect::BuildRect(const OutputDevice &rDev, const SmFormat *pFormat,
 
     if (bAllowSmaller)
     {
-        // für Symbole und Operatoren aus dem StarMath Font passen wir den
+        // fuer Symbole und Operatoren aus dem StarMath Font passen wir den
         // oberen und unteren Rand dem Zeichen an.
         SetTop(nGlyphTop);
         SetBottom(nGlyphBottom);
