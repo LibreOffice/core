@@ -1,12 +1,12 @@
 #**************************************************************************
 #
-#     $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/extensions/source/activex/main/makefile.mk,v 1.2 2002-10-25 17:05:13 hjs Exp $
+#     $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/extensions/source/activex/main/makefile.mk,v 1.3 2003-05-22 09:25:18 vg Exp $
 #
 # =========================================================================
 #
-#     $Date: 2002-10-25 17:05:13 $
-#     $Author: hjs $
-#     $Revision: 1.2 $
+#     $Date: 2003-05-22 09:25:18 $
+#     $Author: vg $
+#     $Revision: 1.3 $
 #
 # =========================================================================
 #
@@ -32,7 +32,8 @@ use_shl_versions=
 VERSIONOBJ=
 LIBTARGET=NO
 USE_DEFFILE=YES
-INCPRE+=$(SOLARINCDIR)$/external$/atl \
+
+INCPRE+=$(ATL_INCLUDE) \
     -I$(MISC) \
 
 # --- Files -------------------------------------
@@ -62,6 +63,11 @@ SHL1STDLIBS=\
     gdi32.lib \
     urlmon.lib \
     Shlwapi.lib
+
+.IF "$(COMEX)"=="8"
+    SHL1STDLIBS+= $(COMPATH)$/atlmfc$/lib$/atls.lib
+.ENDIF
+
 
 #    kernel32.lib \
 #    rpcndr.lib \
