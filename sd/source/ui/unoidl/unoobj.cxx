@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 15:42:39 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:02:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,6 +206,9 @@ using ::com::sun::star::uno::makeAny;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::drawing::XShape;
+
+extern OUString getPageApiNameFromUiNameImpl( const String& rUIName );
+extern String getUiNameFromPageApiNameImpl( const ::rtl::OUString& rApiName );
 
 ///////////////////////////////////////////////////////////////////////
 
@@ -770,6 +773,17 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
                 else
                 {
                     aString = pInfo->aBookmark ;
+                    sal_Int32 nPos = aString.lastIndexOf( sal_Unicode('#') );
+                    if( nPos >= 0 )
+                    {
+                        OUString aURL( aString.copy( 0, nPos+1 ) );
+                        OUString aName( aString.copy( nPos+1 ) );
+                        if(pDoc->GetPageByName( aName, bIsMasterPage ) != SDRPAGE_NOTFOUND)
+                        {
+                            aURL += SdDrawPage::getPageApiNameFromUiName( aName );
+                            aString = aURL;
+                        }
+                    }
                 }
             }
 
@@ -1475,20 +1489,16 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
                 {
                     if( eClickAction == presentation::ClickAction_BOOKMARK )
                     {
-                        const OUString aApiPageName( RTL_CONSTASCII_USTRINGPARAM("page") );
-
-                        if( aStrBookmark.indexOf( aApiPageName ) == 0 )
+                        aStrBookmark = getUiNameFromPageApiNameImpl( aStrBookmark );
+                    }
+                    else if( eClickAction == presentation::ClickAction_DOCUMENT )
+                    {
+                        sal_Int32 nPos = aStrBookmark.lastIndexOf( sal_Unicode('#') );
+                        if( nPos >= 0 )
                         {
-                            if( aStrBookmark.indexOf( aApiPageName ) == 0 )
-                            {
-                                sal_Int32 nPageNumber = aStrBookmark.copy( aApiPageName.getLength() ).toInt32();
-                                OUStringBuffer sBuffer;
-                                String aPageName( SdResId(STR_PAGE) );
-                                sBuffer.append( aPageName );
-                                sBuffer.append( sal_Unicode( ' ' ) );
-                                sBuffer.append( nPageNumber );
-                                aStrBookmark = sBuffer.makeStringAndClear();
-                            }
+                            OUString aURL( aStrBookmark.copy( 0, nPos+1 ) );
+                            aURL += getUiNameFromPageApiNameImpl( aStrBookmark.copy( nPos+1 ) );
+                            aStrBookmark = aURL;
                         }
                     }
 
@@ -1723,37 +1733,30 @@ uno::Any SAL_CALL SdUnoEventsAccess::getByName( const OUString& aName )
             break;
         case presentation::ClickAction_BOOKMARK:
             {
-                String aPageName( SdResId(STR_PAGE) );
-                aPageName += sal_Unicode( ' ' );
-
-                const OUString aStrBookmark( pInfo->aBookmark );
-                if( aStrBookmark.indexOf( aPageName ) == 0 )
-                {
-                    sal_Int32 nPageNumber = aStrBookmark.copy( aPageName.Len() ).toInt32();
-                    OUStringBuffer sBuffer;
-                    sBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( "page" ) );
-                    sBuffer.append( nPageNumber );
-                    aAny <<= sBuffer.makeStringAndClear();
-                }
-                else
-                {
-                    aAny <<= aStrBookmark;
-                }
-
+                const OUString aStrBookmark( getPageApiNameFromUiNameImpl( pInfo->aBookmark ) );
                 pProperties->Name = maStrBookmark;
                 pProperties->Handle = -1;
-                pProperties->Value = aAny;
+                pProperties->Value <<= aStrBookmark;
                 pProperties->State = beans::PropertyState_DIRECT_VALUE;
             }
             break;
 
         case presentation::ClickAction_DOCUMENT:
         case presentation::ClickAction_PROGRAM:
-            aAny <<= OUString( pInfo->aBookmark );
-            pProperties->Name = maStrBookmark;
-            pProperties->Handle = -1;
-            pProperties->Value = aAny;
-            pProperties->State = beans::PropertyState_DIRECT_VALUE;
+            {
+                OUString aString( pInfo->aBookmark );
+                sal_Int32 nPos = aString.lastIndexOf( sal_Unicode('#') );
+                if( nPos >= 0 )
+                {
+                    OUString aURL( aString.copy( 0, nPos+1 ) );
+                    aURL += getPageApiNameFromUiNameImpl( aString.copy( nPos+1 ) );
+                    aString = aURL;
+                }
+                pProperties->Name = maStrBookmark;
+                pProperties->Handle = -1;
+                pProperties->Value <<= aString;
+                pProperties->State = beans::PropertyState_DIRECT_VALUE;
+            }
             break;
 
         case presentation::ClickAction_VANISH:
