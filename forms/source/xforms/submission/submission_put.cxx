@@ -2,9 +2,9 @@
  *
  *  $RCSfile: submission_put.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 11:01:25 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:41:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ CSubmissionPut::CSubmissionPut(const rtl::OUString& aURL, const CSS::uno::Refere
 {
 }
 
-CSubmission::SubmissionResult CSubmissionPut::submit()
+CSubmission::SubmissionResult CSubmissionPut::submit(const CSS::uno::Reference< CSS::task::XInteractionHandler >& aInteractionHandler)
 {
     // PUT always uses application/xml
     auto_ptr< CSerialization > apSerialization(new CSerializationAppXML());
@@ -94,8 +94,11 @@ CSubmission::SubmissionResult CSubmissionPut::submit()
 
     // create a commandEnvironment and use the default interaction handler
     CCommandEnvironmentHelper *pHelper = new CCommandEnvironmentHelper;
-    pHelper->m_aInteractionHandler = Reference< XInteractionHandler >(m_aFactory->createInstance(
-        OUString::createFromAscii("com.sun.star.task.InteractionHandler")), UNO_QUERY);
+    if( aInteractionHandler.is() )
+        pHelper->m_aInteractionHandler = aInteractionHandler;
+    else
+        pHelper->m_aInteractionHandler = Reference< XInteractionHandler >(m_aFactory->createInstance(
+            OUString::createFromAscii("com.sun.star.task.InteractionHandler")), UNO_QUERY);
     OSL_ENSURE(pHelper->m_aInteractionHandler.is(), "failed to create IntreractionHandler");
 
     CProgressHandlerHelper *pProgressHelper = new CProgressHandlerHelper;
@@ -111,6 +114,14 @@ CSubmission::SubmissionResult CSubmissionPut::submit()
         Reference< XInputStream > aInStream = apSerialization->getInputStream();
         aContent.writeStream(aInStream, sal_True);
         //aContent.closeStream();
+
+        // get reply (if any)
+        try {
+            m_aResultStream = aContent.openStream();
+        } catch (Exception& oe) {
+            OSL_ENSURE(sal_False, "Cannot open reply stream from content");
+        }
+
     } catch (Exception& e)
     {
         // XXX

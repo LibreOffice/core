@@ -2,9 +2,9 @@
  *
  *  $RCSfile: submission_post.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 11:00:56 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:40:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ CSubmissionPost::CSubmissionPost(const rtl::OUString& aURL, const CSS::uno::Refe
 {
 }
 
-CSubmission::SubmissionResult CSubmissionPost::submit()
+CSubmission::SubmissionResult CSubmissionPost::submit(const CSS::uno::Reference< CSS::task::XInteractionHandler >& aInteractionHandler)
 {
     // PUT always uses application/xml
     auto_ptr< CSerialization > apSerialization(new CSerializationAppXML());
@@ -95,8 +95,11 @@ CSubmission::SubmissionResult CSubmissionPost::submit()
 
     // create a commandEnvironment and use the default interaction handler
     CCommandEnvironmentHelper *pHelper = new CCommandEnvironmentHelper;
-    pHelper->m_aInteractionHandler = Reference< XInteractionHandler >(m_aFactory->createInstance(
-        OUString::createFromAscii("com.sun.star.task.InteractionHandler")), UNO_QUERY);
+    if( aInteractionHandler.is() )
+        pHelper->m_aInteractionHandler = aInteractionHandler;
+    else
+        pHelper->m_aInteractionHandler = Reference< XInteractionHandler >(m_aFactory->createInstance(
+            OUString::createFromAscii("com.sun.star.task.InteractionHandler")), UNO_QUERY);
     OSL_ENSURE(pHelper->m_aInteractionHandler.is(), "failed to create IntreractionHandler");
     CProgressHandlerHelper *pProgressHelper = new CProgressHandlerHelper;
     pHelper->m_aProgressHandler = Reference< XProgressHandler >(pProgressHelper);
@@ -122,7 +125,11 @@ CSubmission::SubmissionResult CSubmissionPost::submit()
 
         // wait for command to finish
         // pProgressHelper->m_cFinished.wait();
-
+        try {
+            m_aResultStream = aContent.openStream();
+        } catch (Exception& oe) {
+            OSL_ENSURE(sal_False, "Cannot open reply stream from content");
+        }
     } catch (Exception& e)
     {
         // XXX
