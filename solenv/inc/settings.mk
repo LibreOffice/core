@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.157 $
+#   $Revision: 1.158 $
 #
-#   last change: $Author: hr $ $Date: 2004-12-10 18:03:38 $
+#   last change: $Author: kz $ $Date: 2004-12-16 11:40:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1134,6 +1134,8 @@ CPPUMAKER*=cppumaker
 JAVAMAKER*=javamaker
 .IF "$(GUI)" == "WNT"
 CLIMAKER*=climaker
+CSC*=csc
+VBC*=vbc
 .ENDIF
 
 RDBMAKER*=rdbmaker
