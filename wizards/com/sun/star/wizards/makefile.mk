@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: tv $ $Date: 2004-10-22 14:10:57 $
+#   last change: $Author: pjunck $ $Date: 2004-10-27 13:27:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -107,6 +107,7 @@ JAVAFILES=							\
     db$/FieldColumn.java					\
     db$/RecordParser.java					\
     db$/SQLQueryComposer.java				\
+    db$/TableDescriptor.java				\
     ui$/event$/AbstractListener.java			\
     ui$/event$/CommonListener.java				\
     ui$/event$/DataAware.java				\
@@ -123,6 +124,7 @@ JAVAFILES=							\
     ui$/AggregateComponent.java				\
     ui$/CommandFieldSelection.java				\
     ui$/ControlScroller.java				\
+    ui$/DBLimitedFieldSelection.java			\
     ui$/DocumentPreview.java				\
     ui$/FilterComponent.java				\
     ui$/FieldSelection.java					\
@@ -139,8 +141,13 @@ JAVAFILES=							\
     ui$/XCommandSelectionListener.java			\
     ui$/XFieldSelectionListener.java			\
     ui$/XPathSelectionListener.java				\
-    document$/OfficeDocument.java				\
+    document$/Control.java					\
+    document$/DatabaseControl.java				\
     document$/FormHandler.java				\
+    document$/GridControl.java				\
+    document$/OfficeDocument.java				\
+    document$/Shape.java					\
+    document$/TimeStampControl.java				\
     text$/TextDocument.java					\
     text$/TextFieldHandler.java				\
     text$/TextFrameHandler.java				\
