@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fieldmappingpage.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-02 10:45:28 $
+ *  last change: $Author: fs $ $Date: 2002-01-09 10:43:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -24,7 +24,7 @@
  *  License version 2.1, as published by the Free Software Foundation.
  *
  *  This library is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ 4*  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  *  Lesser General Public License for more details.
  *
@@ -90,6 +90,20 @@ namespace abp
         FreeResource();
 
         m_aInvokeDialog.SetClickHdl( LINK( this, FieldMappingPage, OnInvokeDialog ) );
+
+        // check the size of the InvokeDialog button - some languages are very ... gossipy here ....
+        // 96349 - 09.01.2002 - fs@openoffice.org
+        sal_Int32 nTextWidth = m_aInvokeDialog.GetTextWidth( m_aInvokeDialog.GetText() );
+
+        sal_Int32 nBorderSpace = m_aInvokeDialog.LogicToPixel( Point( 4, 0 ), MAP_APPFONT ).X();
+        sal_Int32 nSpace = m_aInvokeDialog.GetOutputSizePixel().Width() - 2 * nBorderSpace;
+
+        if ( nSpace < nTextWidth )
+        {
+            Size aButtonSize = m_aInvokeDialog.GetSizePixel();
+            aButtonSize.Width() += nTextWidth - nSpace;
+            m_aInvokeDialog.SetSizePixel( aButtonSize );
+        }
     }
 
     //---------------------------------------------------------------------
@@ -158,6 +172,9 @@ namespace abp
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/08/02 10:45:28  fs
+ *  #88530# layout changes
+ *
  *  Revision 1.1  2001/08/01 11:05:09  fs
  *  initial checkin - address book auto pilot - page for invoking the field mapping
  *
