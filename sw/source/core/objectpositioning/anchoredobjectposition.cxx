@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anchoredobjectposition.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:50:58 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:01:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -832,7 +832,7 @@ SwTwips SwAnchoredObjectPosition::_CalcRelPosX(
 {
     // determine 'page' alignment layout frame
     const SwFrm& rPageAlignLayFrm =
-            _rEnvOfObj.GetHoriEnvironmentLayoutFrm( _rHoriOrientFrm, true );
+            _rEnvOfObj.GetHoriEnvironmentLayoutFrm( _rHoriOrientFrm );
 
     const bool bEvenPage = !rPageAlignLayFrm.OnRightPage();
     const bool bToggle = _rHoriOrient.IsPosToggle() && bEvenPage;
@@ -934,7 +934,7 @@ SwTwips SwAnchoredObjectPosition::_CalcRelPosX(
     // adjust calculated relative horizontal position, in order to
     // keep object inside 'page' alignment layout frame
     const SwFrm& rEnvironmentLayFrm =
-            _rEnvOfObj.GetHoriEnvironmentLayoutFrm( _rHoriOrientFrm, false );
+            _rEnvOfObj.GetHoriEnvironmentLayoutFrm( _rHoriOrientFrm );
     nRelPosX = _AdjustHoriRelPos( rEnvironmentLayFrm, nRelPosX );
 
     // if object is a Writer fly frame and it's anchored to a content and
