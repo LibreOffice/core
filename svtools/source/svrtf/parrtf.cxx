@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parrtf.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-27 20:15:21 $
+ *  last change: $Author: jp $ $Date: 2001-09-12 11:22:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,7 +297,12 @@ ISCHAR_SCANTEXT:
         case '}':
             --nOpenBrakets;
             if( 0 <= nOpenBrakets )
+            {
                 aParserStates.Remove( nOpenBrakets );
+                nUCharOverread = aParserStates.Count()
+                        ? aParserStates[aParserStates.Count()-1].nUCharOverread
+                        : 1;
+            }
             DBG_ASSERT( nOpenBrakets == aParserStates.Count(),
                         "ParserStateStack unequal to bracket count" );
             nRet = nNextCh;
