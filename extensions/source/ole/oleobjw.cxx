@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oleobjw.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:16:51 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 13:07:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,13 +58,15 @@
  *
  *
  ************************************************************************/
-
 #include "ole2uno.hxx"
+#include "rtl/ustrbuf.hxx"
 
-#ifndef _OSL_MUTEX_HXX_
-#include <osl/mutex.hxx>
-#endif
-#include <osl/diagnose.h>
+
+#include "osl/diagnose.h"
+#include "osl/doublecheckedlocking.h"
+#include "osl/thread.h"
+
+#include "external/boost/scoped_array.hpp"
 
 #ifndef _COM_SUN_STAR_SCRIPT_FAILREASON_HPP_
 #include <com/sun/star/script/FailReason.hpp>
@@ -105,12 +107,13 @@
 #ifndef _COM_SUN_STAR_SCRIPT_XLIBRARYACCESS_HPP_
 #include <com/sun/star/script/XLibraryAccess.hpp>
 #endif
-#ifndef _COM_SUN_STAR_BRIDGE_XBRIDGESUPPLIER_HPP_
-#include <com/sun/star/bridge/XBridgeSupplier.hpp>
-#endif
+
 #ifndef _COM_SUN_STAR_BRIDGE_MODELDEPENDENT_HPP_
 #include <com/sun/star/bridge/ModelDependent.hpp>
 #endif
+
+#include "com/sun/star/bridge/oleautomation/NamedArgument.hpp"
+#include "com/sun/star/bridge/oleautomation/PropertyPutArgument.hpp"
 
 #include <typelib/typedescription.hxx>
 #include <rtl/uuid.h>
@@ -119,20 +122,19 @@
 #include <rtl/ustring>
 #endif
 
-//#include <tools/presys.h>
-
 #include "jscriptclasses.hxx"
-//#include <tools/postsys.h>
 
 #include "oleobjw.hxx"
 #include "unoobjw.hxx"
-
+#include <stdio.h>
 using namespace std;
+using namespace boost;
 using namespace osl;
 using namespace rtl;
 using namespace cppu;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::bridge;
+using namespace com::sun::star::bridge::oleautomation;
 using namespace com::sun::star::bridge::ModelDependent;
 
 #define JSCRIPT_ID_PROPERTY L"_environment"
@@ -149,7 +151,7 @@ namespace ole_adapter
 // called.
 // Before UNO object is wrapped to COM object this map is checked
 // to see if the UNO object is already a wrapper.
-hash_map<sal_uInt32,sal_uInt32> AdapterToWrapperMap;
+hash_map<sal_uInt32, sal_uInt32> AdapterToWrapperMap;
 // key: XInterface of the wrapper object.
 // value: XInterface of the Interface created by the Invocation Adapter Factory.
 // A COM wrapper is responsible for removing the corresponding entry
@@ -168,13 +170,15 @@ hash_map<sal_uInt32, WeakReference<XInterface> > ComPtrToWrapperMap;
 IUnknownWrapper_Impl::IUnknownWrapper_Impl( Reference<XMultiServiceFactory>& xFactory,
                                            sal_uInt8 unoWrapperClass, sal_uInt8 comWrapperClass):
     UnoConversionUtilities<IUnknownWrapper_Impl>( xFactory, unoWrapperClass, comWrapperClass),
-    m_pxIdlClass( NULL), m_pDispatch(NULL), m_eJScript( JScriptUndefined)
+    m_pxIdlClass( NULL), m_eJScript( JScriptUndefined),
+    m_bComTlbIndexInit(false)
 {
 }
 
 
 IUnknownWrapper_Impl::~IUnknownWrapper_Impl()
 {
+    o2u_attachCurrentThread();
     MutexGuard guard(getBridgeMutex());
     XInterface * xIntRoot = (OWeakObject *)this;
 #if OSL_DEBUG_LEVEL > 0
@@ -193,21 +197,31 @@ IUnknownWrapper_Impl::~IUnknownWrapper_Impl()
         WrapperToAdapterMap.erase( it);
     }
 
-     IT_Com it_c= ComPtrToWrapperMap.find( (sal_uInt32) m_pUnknown);
+     IT_Com it_c= ComPtrToWrapperMap.find( (sal_uInt32) m_spUnknown.p);
     if(it_c != ComPtrToWrapperMap.end())
         ComPtrToWrapperMap.erase(it_c);
 
-    o2u_attachCurrentThread();
-
-    m_pUnknown->Release();
-    if (m_pDispatch)
-    {
-        m_pDispatch->Release();
-    }
-
+#if OSL_DEBUG_LEVEL > 0
+    fprintf(stderr,"[automation bridge] ComPtrToWrapperMap  contains: %i \n",
+            ComPtrToWrapperMap.size());
+#endif
 }
 
+Any IUnknownWrapper_Impl::queryInterface(const Type& t)
+    throw (RuntimeException)
+{
+    if (t == getCppuType(static_cast<Reference<XInvocation>*>( 0)))
+    {
+        if (m_spDispatch)
+            return WeakImplHelper4<XInvocation, XBridgeSupplier2,
+                XInitialization, XAutomationObject>::queryInterface(t);
+        else
+            return Any();
+    }
 
+    return WeakImplHelper4<XInvocation, XBridgeSupplier2,
+        XInitialization, XAutomationObject>::queryInterface(t);
+}
 
 Reference<XIntrospectionAccess> SAL_CALL IUnknownWrapper_Impl::getIntrospection(void)
     throw (RuntimeException )
@@ -217,73 +231,6 @@ Reference<XIntrospectionAccess> SAL_CALL IUnknownWrapper_Impl::getIntrospection(
     return ret;
 }
 
-DispIdMap::iterator IUnknownWrapper_Impl::getDispIdEntry(const OUString& name)
-{
-
-    DispIdMap::iterator iter = m_dispIdMap.find(name);
-
-    if (iter == m_dispIdMap.end())
-    {
-        unsigned int    flags = 0;
-        HRESULT         result;
-        DISPID          dispId;
-        OLECHAR*        oleNames[1];
-
-        oleNames[0] = (OLECHAR*)name.getStr();
-
-        result = m_pDispatch->GetIDsOfNames(IID_NULL,
-                                            oleNames,
-                                            1,
-                                            LOCALE_SYSTEM_DEFAULT,
-                                            &dispId);
-
-        if (result == NOERROR)
-        {
-            flags |= DISPATCH_METHOD;
-            flags |= DISPATCH_PROPERTYPUT;
-            flags |= DISPATCH_PROPERTYPUTREF;
-
-            DISPPARAMS      dispparams;
-            VARIANT         varResult;
-            EXCEPINFO       excepinfo;
-            unsigned int    uArgErr;
-
-            VariantInit(&varResult);
-
-            // converting UNO parameters to OLE variants
-            dispparams.rgdispidNamedArgs = NULL;
-            dispparams.cArgs = 0;
-            dispparams.cNamedArgs = 0;
-            dispparams.rgvarg = NULL;
-
-            // try to invoke PROPERTY_GET to evaluate if this name denotes a property
-            result = m_pDispatch->Invoke(dispId,
-                                         IID_NULL,
-                                         LOCALE_SYSTEM_DEFAULT,
-                                         DISPATCH_PROPERTYGET,
-                                         &dispparams,
-                                         &varResult,
-                                         &excepinfo,
-                                         &uArgErr);
-
-            if (result == S_OK)
-            {
-                flags |= DISPATCH_PROPERTYGET;
-            }
-
-            // freeing allocated OLE parameters
-            VariantClear(&varResult);
-
-            if (flags != 0)
-            {
-                iter = ((DispIdMap&)m_dispIdMap).insert(
-                    DispIdMap::value_type(name, pair<DISPID, unsigned short>(dispId, flags))).first;
-            }
-        }
-    }
-
-    return iter;
-}
 
 
 Any SAL_CALL IUnknownWrapper_Impl::invoke( const OUString& aFunctionName,
@@ -292,39 +239,61 @@ Any SAL_CALL IUnknownWrapper_Impl::invoke( const OUString& aFunctionName,
     throw(IllegalArgumentException, CannotConvertException, InvocationTargetException,
           RuntimeException)
 {
-
-     Any ret;
-
-    setCurrentInvokeCall( aFunctionName);
-
-
-
-    DispIdMap::iterator iter = getDispIdEntry(aFunctionName);
-
-    if ((iter != m_dispIdMap.end()) && (((*iter).second.second & DISPATCH_METHOD) != 0))
+    if ( ! m_spDispatch )
     {
+        throw RuntimeException(
+            OUSTR("[automation bridge] The object does not have an IDispatch interface"),
+            Reference<XInterface>());
+    }
+
+    Any ret;
+
+    try
+    {
+        o2u_attachCurrentThread();
+
         TypeDescription methodDesc;
-        getMethodInfo( methodDesc );
+        getMethodInfo(aFunctionName, methodDesc);
         if( methodDesc.is())
-            ret = invokeWithDispIdUnoTlb((*iter).second.first,
-                               aParams,
-                               aOutParamIndex,
-                               aOutParam);
-        else
-            ret= invokeWithDispIdComTlb( (*iter).second.first, //DISPID
+        {
+            ret = invokeWithDispIdUnoTlb(aFunctionName,
                                          aParams,
                                          aOutParamIndex,
                                          aOutParam);
-
+        }
+        else
+        {
+            ret= invokeWithDispIdComTlb( aFunctionName,
+                                         aParams,
+                                         aOutParamIndex,
+                                         aOutParam);
+        }
     }
-    else
+    catch (IllegalArgumentException &)
     {
-        OUString message= OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "OleBridge: coult not get DISPID for ")) + aFunctionName;
-        //throw RuntimeException( message, Reference<XInterface>());
-        throw InvocationTargetException();
+        throw;
     }
+    catch (CannotConvertException &)
+    {
+        throw;
+    }
+    catch (BridgeRuntimeError & e)
+    {
+         throw RuntimeException(e.message, Reference<XInterface>());
+    }
+    catch (Exception & e)
+    {
+        throw RuntimeException(OUSTR("[automation bridge] unexpected exception in "
+                                     "IUnknownWrapper_Impl::invoke ! Message : \n") +
+                               e.Message, Reference<XInterface>());
 
+    }
+    catch(...)
+    {
+        throw RuntimeException(
+            OUSTR("[automation bridge] unexpected exception in "
+                  "IUnknownWrapper_Impl::Invoke !"), Reference<XInterface>());
+    }
     return ret;
 }
 
@@ -333,558 +302,103 @@ void SAL_CALL IUnknownWrapper_Impl::setValue( const OUString& aPropertyName,
     throw(UnknownPropertyException, CannotConvertException, InvocationTargetException,
           RuntimeException)
 {
-
-    DispIdMap::iterator iter = getDispIdEntry(aPropertyName);
-
-    if ((iter != m_dispIdMap.end()) && (((*iter).second.second & DISPATCH_PROPERTYPUT) != 0))
+    if ( ! m_spDispatch )
     {
-        setValueWithDispId((*iter).second.first, aValue);
+        throw RuntimeException(
+            OUSTR("[automation bridge] The object does not have an IDispatch interface"),
+            Reference<XInterface>());
     }
-    else
-        throw UnknownPropertyException();
-}
-
-Any SAL_CALL IUnknownWrapper_Impl::getValue( const OUString& aPropertyName )
-        throw(UnknownPropertyException, RuntimeException)
-{
-    setCurrentGetCall( aPropertyName);
-
-    Any ret;
-
-    DispIdMap::iterator iter = getDispIdEntry(aPropertyName);
-
-    if (iter != m_dispIdMap.end() && (((*iter).second.second & DISPATCH_PROPERTYGET) != 0))
+    try
     {
-        ret = getValueWithDispId((*iter).second.first);
-    }
-    else
-        throw UnknownPropertyException();
+        o2u_attachCurrentThread();
 
-    return ret;
-}
-
-sal_Bool SAL_CALL IUnknownWrapper_Impl::hasMethod( const OUString& aName )
-        throw(RuntimeException)
-{
-    sal_Bool ret = FALSE;
-
-    o2u_attachCurrentThread();
-
-    DispIdMap::iterator iter = ((IUnknownWrapper_Impl*)this)->getDispIdEntry(aName);
-
-    ret = (
-            (iter != ((IUnknownWrapper_Impl*)this)->m_dispIdMap.end()) &&
-            (((*iter).second.second & DISPATCH_METHOD) != 0)
-          );
-
-    return ret;
-}
-
-sal_Bool SAL_CALL IUnknownWrapper_Impl::hasProperty( const OUString& aName )
-        throw(RuntimeException)
-{
-    sal_Bool ret = FALSE;
-
-    o2u_attachCurrentThread();
-
-    DispIdMap::iterator iter = ((IUnknownWrapper_Impl*)this)->getDispIdEntry(aName);
-
-    ret = (
-            (iter != ((IUnknownWrapper_Impl*)this)->m_dispIdMap.end()) &&
-            (((*iter).second.second & DISPATCH_PROPERTYGET) != 0)
-          );
-
-    return ret;
-}
-
-Any SAL_CALL IUnknownWrapper_Impl::createBridge( const Any& modelDepObject,
-                const Sequence< sal_Int8 >& aProcessId, sal_Int16 sourceModelType,
-                 sal_Int16 destModelType )
-    throw( IllegalArgumentException, RuntimeException)
-{
-    Any ret;
-
-    if (
-        (sourceModelType == UNO) &&
-        (destModelType == OLE) &&
-        (modelDepObject.getValueTypeClass() == TypeClass_INTERFACE)
-       )
-    {
-        Reference<XInterface> xInt( *(XInterface**) modelDepObject.getValue());
-        Reference<XInterface> xSelf( (OWeakObject*)this);
-
-        if (xInt == xSelf)
+        ITypeInfo * pInfo = getTypeInfo();
+        FuncDesc aDescGet(pInfo);
+        FuncDesc aDescPut(pInfo);
+        VarDesc aVarDesc(pInfo);
+        getPropDesc(aPropertyName, & aDescGet, & aDescPut, & aVarDesc);
+        //check if there is such a property at all or if it is read only
+        if ( ! aDescPut && ! aDescGet && ! aVarDesc)
         {
-            VARIANT* pVariant = (VARIANT*) CoTaskMemAlloc(sizeof(VARIANT));
+            OUString msg(OUSTR("[automation bridge]Property \"") + aPropertyName +
+                         OUSTR("\" is not supported"));
+            throw UnknownPropertyException(msg, Reference<XInterface>());
+        }
 
-            VariantInit(pVariant);
+        if ( (! aDescPut && aDescGet) || aVarDesc
+             && aVarDesc->wVarFlags == VARFLAG_FREADONLY )
+        {
+            //read-only
+            OUString msg(OUSTR("[automation bridge] Property ") + aPropertyName +
+                         OUSTR(" is read-only"));
+            OString sMsg = OUStringToOString(msg, osl_getThreadTextEncoding());
+            OSL_ENSURE(0, sMsg.getStr());
+            // ignore silently
+            return;
+        }
 
-            if (m_pDispatch != NULL)
+        HRESULT hr= S_OK;
+        DISPPARAMS dispparams;
+        CComVariant varArg;
+        CComVariant varRefArg;
+        CComVariant varResult;
+        ExcepInfo excepinfo;
+        unsigned int uArgErr;
+
+        // converting UNO value to OLE variant
+        DISPID dispidPut= DISPID_PROPERTYPUT;
+        dispparams.rgdispidNamedArgs = &dispidPut;
+        dispparams.cArgs = 1;
+        dispparams.cNamedArgs = 1;
+        dispparams.rgvarg = & varArg;
+
+        OSL_ASSERT(aDescPut || aVarDesc);
+
+        VARTYPE vt = 0;
+        DISPID dispid = 0;
+        INVOKEKIND invkind = INVOKE_PROPERTYPUT;
+        //determine the expected type, dispid, invoke kind (DISPATCH_PROPERTYPUT,
+        //DISPATCH_PROPERTYPUTREF)
+        if (aDescPut)
+        {
+            vt = getElementTypeDesc(& aDescPut->lprgelemdescParam[0].tdesc);
+            dispid = aDescPut->memid;
+            invkind = aDescPut->invkind;
+        }
+        else
+        {
+            vt = getElementTypeDesc( & aVarDesc->elemdescVar.tdesc);
+            dispid = aVarDesc->memid;
+            if (vt == VT_UNKNOWN || vt == VT_DISPATCH ||
+                (vt & VT_ARRAY) || (vt & VT_BYREF))
             {
-                V_VT(pVariant) = VT_DISPATCH;
-                V_DISPATCH(pVariant) = m_pDispatch;
-                m_pDispatch->AddRef();
+                invkind = INVOKE_PROPERTYPUTREF;
             }
+        }
+
+        // convert the uno argument
+        if (vt & VT_BYREF)
+        {
+            anyToVariant( & varRefArg, aValue, vt ^ VT_BYREF);
+            varArg.vt = vt;
+            if( (vt & VT_TYPEMASK) == VT_VARIANT)
+                varArg.byref = & varRefArg;
+            else if ((vt & VT_TYPEMASK) == VT_DECIMAL)
+                varArg.byref = & varRefArg.decVal;
             else
-            {
-                V_VT(pVariant) = VT_UNKNOWN;
-                V_UNKNOWN(pVariant) = m_pUnknown;
-                m_pUnknown->AddRef();
-            }
-
-            ret.setValue((void*)&pVariant, getCppuType( (sal_uInt32*) 0));
+                varArg.byref = & varRefArg.byref;
         }
-    }
-
-    return ret;
-}
-
-Any  IUnknownWrapper_Impl::invokeWithDispIdUnoTlb(DISPID dispID,
-                          const Sequence< Any >& Params,
-                          Sequence< sal_Int16 >& OutParamIndex,
-                          Sequence< Any >& OutParam)
-              throw ( IllegalArgumentException, CannotConvertException,
-                      InvocationTargetException, RuntimeException)
-{
-    Any ret;
-    HRESULT hr= S_OK;
-    o2u_attachCurrentThread();
-
-
-    sal_Int32 parameterCount= Params.getLength();
-    sal_Int32 outParameterCount= 0;
-    typelib_InterfaceMethodTypeDescription* pMethod= NULL;
-    TypeDescription methodDesc;
-    getMethodInfo( methodDesc);
-
-    // We need to know whether the IDispatch is from a JScript object.
-    // Then out and in/out parameters have to be treated differently than
-    // with common COM objects.
-    sal_Bool bJScriptObject= isJScriptObject();
-
-    CComVariant *pVarParams= NULL;
-    CComVariant *pVarParamsRef= NULL;
-    sal_Bool bConvOk= sal_True;
-    sal_Bool bConvRet= sal_True;
-
-    if( methodDesc.is())
-    {
-        pMethod=    ( typelib_InterfaceMethodTypeDescription* )methodDesc.get();
-        parameterCount= pMethod->nParams;
-        // Create the Array for the array being passed in DISPPARAMS
-        // the array also contains the outparameter (but not the values)
-        if( pMethod->nParams > 0)
-            pVarParams= new CComVariant[ parameterCount];
-        // Create the Array for the out an in/out parameter. These values
-        // are referenced by the VT_BYREF VARIANTs in DISPPARAMS.
-        // We need to find out the number of out and in/out parameter.
-        for( sal_Int32 i=0; i < parameterCount; i++)
+        else
         {
-            if( pMethod->pParams[i].bOut)
-                outParameterCount++;
+            anyToVariant(& varArg, aValue, vt);
         }
+        // call to IDispatch
+        hr = m_spDispatch->Invoke(dispid, IID_NULL, LOCALE_USER_DEFAULT, invkind,
+                                 &dispparams, & varResult, & excepinfo, &uArgErr);
 
-        if( !bJScriptObject)
-        {
-            pVarParamsRef= new CComVariant[ outParameterCount];
-            // build up the parameters for IDispatch::Invoke
-            sal_Int32 outParamIndex=0;
-
-            for( i= 0; i < parameterCount; i++)
-            {
-
-                // In parameter
-                if( pMethod->pParams[i].bIn == sal_True && ! pMethod->pParams[i].bOut)
-                {
-                    bConvOk= anyToVariant( &pVarParams[parameterCount - i -1], Params.getConstArray()[i]);
-                }
-                // Out parameter + in/out parameter
-                else if( pMethod->pParams[i].bOut == sal_True)
-                {
-                    CComVariant var;
-                    switch( pMethod->pParams[i].pTypeRef->eTypeClass)
-                    {
-                    case TypeClass_INTERFACE:
-                    case TypeClass_STRUCT:
-                        if( pMethod->pParams[i].bIn &&  (bConvOk= anyToVariant( &var,Params[i])))
-                            pVarParamsRef[ outParamIndex]= var;
-                        else
-                        {
-                            pVarParamsRef[ outParamIndex].vt= VT_DISPATCH;
-                            pVarParamsRef[ outParamIndex].pdispVal= 0;
-                        }
-                        pVarParams[parameterCount - i -1].vt = VT_DISPATCH | VT_BYREF;
-                        pVarParams[parameterCount - i -1].ppdispVal= &pVarParamsRef[outParamIndex].pdispVal;
-                        break;
-                    case TypeClass_ENUM:
-                    case TypeClass_LONG:
-                    case TypeClass_UNSIGNED_LONG:
-                        if( pMethod->pParams[i].bIn  &&  (bConvOk= anyToVariant( &var,Params[i])))
-                            pVarParamsRef[ outParamIndex]= var;
-                        else
-                        {
-                            pVarParamsRef[ outParamIndex].vt = VT_I4;
-                            pVarParamsRef[ outParamIndex].lVal= 0;
-                        }
-                        pVarParams[parameterCount - i -1].vt = VT_I4 | VT_BYREF;
-                        pVarParams[parameterCount - i -1].plVal= &pVarParamsRef[outParamIndex].lVal;
-                        break;
-                    case TypeClass_SEQUENCE:
-                        if( pMethod->pParams[i].bIn &&  (bConvOk= anyToVariant( &var,Params[i])))
-                            pVarParamsRef[ outParamIndex]= var;
-                        else
-                        {
-                            pVarParamsRef[ outParamIndex].vt = VT_ARRAY| VT_VARIANT;
-                            pVarParamsRef[ outParamIndex].parray= NULL;
-                        }
-                        pVarParams[parameterCount - i -1].vt = VT_ARRAY| VT_BYREF | VT_VARIANT;
-                        pVarParams[parameterCount - i -1].pparray= &pVarParamsRef[outParamIndex].parray;
-                        break;
-                    case TypeClass_ANY:
-                        if( pMethod->pParams[i].bIn &&  (bConvOk= anyToVariant( &var,Params[i])))
-                            pVarParamsRef[ outParamIndex]= var;
-                        else
-                        {
-                            pVarParamsRef[ outParamIndex].vt = VT_EMPTY;
-                            pVarParamsRef[ outParamIndex].lVal = 0;
-                        }
-                        pVarParams[parameterCount - i -1].vt = VT_VARIANT | VT_BYREF;
-                        pVarParams[parameterCount - i -1].pvarVal= &pVarParamsRef[outParamIndex];
-                        break;
-                    case TypeClass_BOOLEAN:
-                        if( pMethod->pParams[i].bIn &&  (bConvOk= anyToVariant( &var,Params[i])) )
-                            pVarParamsRef[ outParamIndex]= var;
-                        else
-                        {
-                            pVarParamsRef[ outParamIndex].vt = VT_BOOL;
-                            pVarParamsRef[ outParamIndex].boolVal = 0;
-                        }
-                        pVarParams[parameterCount - i -1].vt = VT_BOOL| VT_BYREF;
-                        pVarParams[parameterCount - i -1].pboolVal= &pVarParamsRef[outParamIndex].boolVal;
-                        break;
-
-                    case TypeClass_STRING:
-                        if( pMethod->pParams[i].bIn &&  (bConvOk= anyToVariant( &var,Params[i])))
-                            pVarParamsRef[ outParamIndex]= var;
-                        else
-                        {
-                            pVarParamsRef[ outParamIndex].vt = VT_BSTR;
-                            pVarParamsRef[ outParamIndex].bstrVal= 0;
-                        }
-                        pVarParams[parameterCount - i -1].vt = VT_BSTR| VT_BYREF;
-                        pVarParams[parameterCount - i -1].pbstrVal= &pVarParamsRef[outParamIndex].bstrVal;
-                        break;
-
-                    case TypeClass_FLOAT:
-                        if( pMethod->pParams[i].bIn &&  (bConvOk= anyToVariant( &var,Params[i])))
-                            pVarParamsRef[ outParamIndex]= var;
-                        else
-                        {
-                            pVarParamsRef[ outParamIndex].vt = VT_R4;
-                            pVarParamsRef[ outParamIndex].fltVal= 0;
-                        }
-                        pVarParams[parameterCount - i -1].vt = VT_R4| VT_BYREF;
-                        pVarParams[parameterCount - i -1].pfltVal= &pVarParamsRef[outParamIndex].fltVal;
-                        break;
-                    case TypeClass_DOUBLE:
-                        if( pMethod->pParams[i].bIn&&  (bConvOk= anyToVariant( &var,Params[i])))
-                            pVarParamsRef[ outParamIndex]= var;
-                        else
-                        {
-                            pVarParamsRef[ outParamIndex].vt = VT_R8;
-                            pVarParamsRef[ outParamIndex].dblVal= 0;
-                        }
-                        pVarParams[parameterCount - i -1].vt = VT_R8| VT_BYREF;
-                        pVarParams[parameterCount - i -1].pdblVal= &pVarParamsRef[outParamIndex].dblVal;
-                        break;
-                    case TypeClass_BYTE:
-                        if( pMethod->pParams[i].bIn &&  (bConvOk= anyToVariant( &var,Params[i])))
-                            pVarParamsRef[ outParamIndex]= var;
-                        else
-                        {
-                            pVarParamsRef[ outParamIndex].vt = VT_UI1;
-                            pVarParamsRef[ outParamIndex].bVal= 0;
-                        }
-                        pVarParams[parameterCount - i -1].vt = VT_UI1| VT_BYREF;
-                        pVarParams[parameterCount - i -1].pbVal= &pVarParamsRef[outParamIndex].bVal;
-                        break;
-                    case TypeClass_CHAR:
-                    case TypeClass_SHORT:
-                    case TypeClass_UNSIGNED_SHORT:
-                        if( pMethod->pParams[i].bIn&&  (bConvOk= anyToVariant( &var,Params[i])))
-                            pVarParamsRef[ outParamIndex]= var;
-                        else
-                        {
-                            pVarParamsRef[ outParamIndex].vt = VT_I2;
-                            pVarParamsRef[ outParamIndex].iVal = 0;
-                        }
-                        pVarParams[parameterCount - i -1].vt = VT_I2| VT_BYREF;
-                        pVarParams[parameterCount - i -1].piVal= &pVarParamsRef[outParamIndex].iVal;
-                        break;
-
-                    default:
-                        if( pMethod->pParams[i].bIn  &&  (bConvOk= anyToVariant( &var,Params[i])))
-                            pVarParamsRef[ outParamIndex]= var;
-                        else
-                        {
-                            pVarParamsRef[ outParamIndex].vt = VT_EMPTY;
-                            pVarParamsRef[ outParamIndex].lVal = 0;
-                        }
-                        pVarParams[parameterCount - i -1].vt = VT_VARIANT | VT_BYREF;
-                        pVarParams[parameterCount - i -1].pvarVal= &pVarParamsRef[outParamIndex];
-                    }
-                    outParamIndex++;
-                } // end else if
-                if( ! bConvOk) break;
-            } // end for
-        }
-        else // it is an JScriptObject
-        {
-            for( sal_Int32 i= 0; i< parameterCount; i++)
-            {
-                // In parameter
-                if( pMethod->pParams[i].bIn == sal_True && ! pMethod->pParams[i].bOut)
-                {
-                    bConvOk= anyToVariant( &pVarParams[parameterCount - i -1], Params.getConstArray()[i]);
-                }
-                // Out parameter + in/out parameter
-                else if( pMethod->pParams[i].bOut == sal_True)
-                {
-                    CComObject<JScriptOutParam>* pParamObject;
-                    if( SUCCEEDED( CComObject<JScriptOutParam>::CreateInstance( &pParamObject)))
-                    {
-                        CComPtr<IUnknown> pUnk(pParamObject->GetUnknown());
-                        CComQIPtr<IDispatch> pDisp( pUnk);
-
-                        pVarParams[ parameterCount - i -1].vt= VT_DISPATCH;
-                        pVarParams[ parameterCount - i -1].pdispVal= pDisp;
-                        pVarParams[ parameterCount - i -1].pdispVal->AddRef();
-                        // if the param is in/out then put the parameter on index 0
-                        if( pMethod->pParams[i].bIn == sal_True ) // in / out
-                        {
-                            CComVariant varParam;
-                            bConvOk= anyToVariant( &varParam, Params.getConstArray()[i]);
-                            if( bConvOk)
-                            {
-                                CComDispatchDriver dispDriver( pDisp);
-                                if( pDisp)
-                                    if( FAILED( dispDriver.PutPropertyByName( L"0", &varParam)))
-                                        bConvOk= sal_False;
-                            }
-                        }
-                    }
-                }
-                if( ! bConvOk) break;
-            }
-        }
-    }
-    // No type description Available, that is we have to deal with a COM component,
-    // that does not implements UNO interfaces ( IDispatch based)
-    else
-    {
-        if( parameterCount)
-        {
-            pVarParams= new CComVariant[parameterCount];
-            CComVariant var;
-            for( sal_Int32 i= 0; i < parameterCount; i++)
-            {
-                var.Clear();
-                if( bConvOk= anyToVariant( &var, Params[i]))
-                    pVarParams[ parameterCount - 1 -i]= var;
-            }
-        }
-    }
-
-    if( bConvOk)
-    {
-        CComVariant     varResult;
-        EXCEPINFO       excepinfo;
-        unsigned int    uArgErr;
-        DISPPARAMS dispparams= { pVarParams, NULL, parameterCount, 0};
-        // invoking OLE method
-        hr = m_pDispatch->Invoke(dispID,
-                                     IID_NULL,
-                                     LOCALE_SYSTEM_DEFAULT,
-                                     DISPATCH_METHOD,
-                                     &dispparams,
-                                     &varResult,
-                                     &excepinfo,
-                                     &uArgErr);
-
-        // converting return value and out parameter back to UNO
-        if (hr == S_OK)
-        {
-            if( outParameterCount && pMethod)
-            {
-                OutParamIndex.realloc( outParameterCount);
-                OutParam.realloc( outParameterCount);
-                sal_Int32 outIndex=0;
-                for( sal_Int32 i= 0; i < parameterCount; i++)
-                {
-                    if( pMethod->pParams[i].bOut )
-                    {
-                        OutParamIndex[outIndex]= i;
-                        Any outAny;
-                        if( !bJScriptObject)
-                        {
-                            if( bConvRet= variantToAny2( &pVarParamsRef[outIndex], outAny,
-                                Type(pMethod->pParams[i].pTypeRef), sal_False))
-                                OutParam[outIndex++]= outAny;
-
-                        }
-                        else //JScriptObject
-                        {
-                            if( pVarParams[i].vt= VT_DISPATCH)
-                            {
-                                CComDispatchDriver pDisp( pVarParams[i].pdispVal);
-                                if( pDisp)
-                                {
-                                    CComVariant varOut;
-                                    if( SUCCEEDED( pDisp.GetPropertyByName( L"0", &varOut)))
-                                    {
-                                        if( bConvRet= variantToAny2( &varOut, outAny,
-                                            Type(pMethod->pParams[parameterCount - 1 - i].pTypeRef), sal_False))
-                                            OutParam[outParameterCount - 1 - outIndex++]= outAny;
-
-                                    }
-                                    else
-                                        bConvRet= sal_False;
-                                }
-                                else
-                                    bConvRet= sal_False;
-                            }
-                            else
-                                bConvRet= sal_False;
-                        }
-                    }
-                    if( !bConvRet) break;
-                }
-            }
-            // return value, no type information available
-            if ( bConvRet)
-                if( pMethod )
-                    bConvRet= variantToAny2(&varResult, ret, Type( pMethod->pReturnTypeRef), sal_False);
-                else
-                    bConvRet= variantToAny(&varResult, ret, sal_False);
-        }
-
-        if( pVarParams)
-            delete[] pVarParams;
-        // The destructor of CComVariant calls VariantClear which takes null pointers into account
-        // and does not try to destroy them.
-        if( pVarParamsRef)
-            delete[] pVarParamsRef;
-
-        if( !bConvRet) // conversion of return or out parameter failed
-            throw CannotConvertException( L"Call to COM object failed. Conversion of return or out value failed",
-                Reference<XInterface>( static_cast<XWeak*>(this), UNO_QUERY ), TypeClass_UNKNOWN,
-                FailReason::UNKNOWN, 0);// lookup error code
-        // conversion of return or out parameter failed
+        // lookup error code
         switch (hr)
         {
-            case S_OK:
-                break;
-            case DISP_E_BADPARAMCOUNT:
-                throw IllegalArgumentException();
-                break;
-            case DISP_E_BADVARTYPE:
-                throw RuntimeException();
-                break;
-            case DISP_E_EXCEPTION:
-                throw InvocationTargetException();
-                break;
-            case DISP_E_MEMBERNOTFOUND:
-                throw IllegalArgumentException();
-                break;
-            case DISP_E_NONAMEDARGS:
-                throw IllegalArgumentException();
-                break;
-            case DISP_E_OVERFLOW:
-                throw CannotConvertException(L"call to OLE object failed", static_cast<XInterface*>(
-                    static_cast<XWeak*>(this)), TypeClass_UNKNOWN, FailReason::OUT_OF_RANGE, uArgErr);
-                break;
-            case DISP_E_PARAMNOTFOUND:
-                throw IllegalArgumentException(L"call to OLE object failed", static_cast<XInterface*>(
-                    static_cast<XWeak*>(this)), uArgErr);
-                break;
-            case DISP_E_TYPEMISMATCH:
-                throw CannotConvertException(L"call to OLE object failed",static_cast<XInterface*>(
-                    static_cast<XWeak*>(this)) , TypeClass_UNKNOWN, FailReason::UNKNOWN, uArgErr);
-                break;
-            case DISP_E_UNKNOWNINTERFACE:
-                throw RuntimeException() ;
-                break;
-            case DISP_E_UNKNOWNLCID:
-                throw RuntimeException() ;
-                break;
-            case DISP_E_PARAMNOTOPTIONAL:
-                throw CannotConvertException(L"call to OLE object failed", static_cast<XInterface*>(
-                    static_cast<XWeak*>(this)), TypeClass_UNKNOWN, FailReason::NO_DEFAULT_AVAILABLE, uArgErr);
-                break;
-            default:
-                throw RuntimeException();
-                break;
-        }
-    }
-    if( !bConvOk) // conversion of parameters failed
-    {
-        if( pVarParams)
-            delete [] pVarParams;
-        if( pVarParamsRef)
-            delete [] pVarParamsRef;
-        throw CannotConvertException( L"Call to COM object failed. Conversion of in or in/out parameters failed",
-            Reference<XInterface>( static_cast<XWeak*>(this), UNO_QUERY ), TypeClass_UNKNOWN,
-            FailReason::UNKNOWN, 0);
-    }
-
-    return ret;
-}
-
-void IUnknownWrapper_Impl::setValueWithDispId(DISPID dispID,
-                                              const Any& Value)
-                                              throw (UnknownPropertyException,
-                                                         CannotConvertException,
-                                                       InvocationTargetException,
-                                                       RuntimeException)
-{
-    HRESULT         hr= S_OK;
-    DISPPARAMS      dispparams;
-    VARIANT         varResult;
-    EXCEPINFO       excepinfo;
-    unsigned int    uArgErr;
-
-    o2u_attachCurrentThread();
-
-    VariantInit(&varResult);
-
-    // converting UNO value to OLE variant
-    DISPID dispidPut= DISPID_PROPERTYPUT;
-    dispparams.rgdispidNamedArgs = &dispidPut;
-    dispparams.cArgs = 1;
-    dispparams.cNamedArgs = 1;
-
-    dispparams.rgvarg = (VARIANTARG*)malloc(sizeof(VARIANTARG));
-
-    anyToVariant(&(dispparams.rgvarg[0]), Value);
-
-    // set OLE property
-    hr = m_pDispatch->Invoke(dispID,
-                                 IID_NULL,
-                                 LOCALE_SYSTEM_DEFAULT,
-                                 DISPATCH_PROPERTYPUT,
-                                 &dispparams,
-                                 &varResult,
-                                 &excepinfo,
-                                 &uArgErr);
-
-    // freeing allocated OLE parameters
-    VariantClear(&(dispparams.rgvarg[0]));
-    free(dispparams.rgvarg);
-    VariantClear(&varResult);
-
-    // lookup error code
-    switch (hr)
-    {
         case S_OK:
             break;
         case DISP_E_BADPARAMCOUNT:
@@ -904,15 +418,15 @@ void IUnknownWrapper_Impl::setValueWithDispId(DISPID dispID,
             break;
         case DISP_E_OVERFLOW:
             throw CannotConvertException(L"call to OLE object failed", static_cast<XInterface*>(
-                static_cast<XWeak*>(this)), TypeClass_UNKNOWN, FailReason::OUT_OF_RANGE, uArgErr);
+                                             static_cast<XWeak*>(this)), TypeClass_UNKNOWN, FailReason::OUT_OF_RANGE, uArgErr);
             break;
         case DISP_E_PARAMNOTFOUND:
             throw IllegalArgumentException(L"call to OLE object failed", static_cast<XInterface*>(
-                static_cast<XWeak*>(this)), uArgErr) ;
+                                               static_cast<XWeak*>(this)), uArgErr) ;
             break;
         case DISP_E_TYPEMISMATCH:
             throw CannotConvertException(L"call to OLE object failed", static_cast<XInterface*>(
-                static_cast<XWeak*>(this)), TypeClass_UNKNOWN, FailReason::UNKNOWN, uArgErr);
+                                             static_cast<XWeak*>(this)), TypeClass_UNKNOWN, FailReason::UNKNOWN, uArgErr);
             break;
         case DISP_E_UNKNOWNINTERFACE:
             throw RuntimeException();
@@ -922,105 +436,762 @@ void IUnknownWrapper_Impl::setValueWithDispId(DISPID dispID,
             break;
         case DISP_E_PARAMNOTOPTIONAL:
             throw CannotConvertException(L"call to OLE object failed",static_cast<XInterface*>(
-                static_cast<XWeak*>(this)) , TypeClass_UNKNOWN, FailReason::NO_DEFAULT_AVAILABLE, uArgErr);
+                                             static_cast<XWeak*>(this)) , TypeClass_UNKNOWN, FailReason::NO_DEFAULT_AVAILABLE, uArgErr);
             break;
         default:
             throw  RuntimeException();
             break;
+        }
+    }
+    catch (CannotConvertException &)
+    {
+        throw;
+    }
+    catch (UnknownPropertyException &)
+    {
+        throw;
+    }
+    catch (BridgeRuntimeError& e)
+    {
+        throw RuntimeException(
+            e.message, Reference<XInterface>());
+    }
+    catch (Exception & e)
+    {
+        throw RuntimeException(OUSTR("[automation bridge] unexpected exception in "
+                                     "IUnknownWrapper_Impl::setValue ! Message : \n") +
+                               e.Message, Reference<XInterface>());
+
+    }
+    catch (...)
+    {
+        throw RuntimeException(
+            OUSTR("[automation bridge] unexpected exception in "
+            "IUnknownWrapper_Impl::setValue !"), Reference<XInterface>());
     }
 }
 
-Any  IUnknownWrapper_Impl::getValueWithDispId(DISPID dispID)
-                        throw (UnknownPropertyException,RuntimeException)
+Any SAL_CALL IUnknownWrapper_Impl::getValue( const OUString& aPropertyName )
+        throw(UnknownPropertyException, RuntimeException)
 {
+    if ( ! m_spDispatch )
+    {
+        throw RuntimeException(
+            OUSTR("[automation bridge] The object does not have an IDispatch interface"),
+            Reference<XInterface>());
+    }
     Any ret;
-    HRESULT hr;
-    DISPPARAMS      dispparams;
-    VARIANT         varResult;
-    EXCEPINFO       excepinfo;
-    unsigned int    uArgErr;
+    try
+    {
+        o2u_attachCurrentThread();
+        ITypeInfo * pInfo = getTypeInfo();
+        FuncDesc aDescGet(pInfo);
+        FuncDesc aDescPut(pInfo);
+        VarDesc aVarDesc(pInfo);
+        getPropDesc(aPropertyName, & aDescGet, & aDescPut, & aVarDesc);
+        if ( ! aDescGet && ! aDescPut && ! aVarDesc)
+        {
+            //property not found
+            OUString msg(OUSTR("[automation bridge]Property \"") + aPropertyName +
+                         OUSTR("\" is not supported"));
+            throw UnknownPropertyException(msg, Reference<XInterface>());
+        }
+        // write-only should not be possible
+        OSL_ASSERT(  aDescGet  || ! aDescPut);
 
-    o2u_attachCurrentThread();
+        HRESULT hr;
+        DISPPARAMS dispparams = {0, 0, 0, 0};
+        CComVariant varResult;
+        ExcepInfo excepinfo;
+        unsigned int uArgErr;
+        DISPID dispid;
+        if (aDescGet)
+            dispid = aDescGet->memid;
+        else if (aVarDesc)
+            dispid = aVarDesc->memid;
+        else
+            dispid = aDescPut->memid;
 
-    VariantInit(&varResult);
-
-    // converting UNO parameters to OLE variants
-    dispparams.rgdispidNamedArgs = NULL;
-    dispparams.cArgs = 0;
-    dispparams.cNamedArgs = 0;
-    dispparams.rgvarg = NULL;
-
-    // invoking OLE method
-    hr = m_pDispatch->Invoke(dispID,
+        hr = m_spDispatch->Invoke(dispid,
                                  IID_NULL,
-                                 LOCALE_SYSTEM_DEFAULT,
+                                 LOCALE_USER_DEFAULT,
                                  DISPATCH_PROPERTYGET,
                                  &dispparams,
                                  &varResult,
                                  &excepinfo,
                                  &uArgErr);
 
-    // converting return value and out parameter back to UNO
-    if (hr == S_OK)
-    {
-        // If the com object implements uno interfaces then we have
-        // to convert the attribute into the expected type.
-        TypeDescription attrInfo;
-        getAttributeInfo( attrInfo);
-        if( attrInfo.is() )
-            variantToAny2( &varResult, ret, Type( attrInfo.get()->pWeakRef));
-        else
-            variantToAny(&varResult, ret);
-    }
+        // converting return value and out parameter back to UNO
+        if (hr == S_OK)
+        {
+            // If the com object implements uno interfaces then we have
+            // to convert the attribute into the expected type.
+            TypeDescription attrInfo;
+            getAttributeInfo(aPropertyName, attrInfo);
+            if( attrInfo.is() )
+                variantToAny( &varResult, ret, Type( attrInfo.get()->pWeakRef));
+            else
+                variantToAny(&varResult, ret);
+        }
 
-    // freeing allocated OLE parameters
-    VariantClear(&varResult);
-
-    // lookup error code
-    switch (hr)
-    {
+        // lookup error code
+        switch (hr)
+        {
         case S_OK:
             break;
         case DISP_E_BADPARAMCOUNT:
-            throw RuntimeException();
+            throw RuntimeException(OUString(excepinfo.bstrDescription),
+                                   Reference<XInterface>());
             break;
         case DISP_E_BADVARTYPE:
-            throw RuntimeException();
+            throw RuntimeException(OUString(excepinfo.bstrDescription),
+                                   Reference<XInterface>());
             break;
         case DISP_E_EXCEPTION:
-            throw RuntimeException();
+            throw RuntimeException(OUString(excepinfo.bstrDescription),
+                                   Reference<XInterface>());
             break;
         case DISP_E_MEMBERNOTFOUND:
-            throw UnknownPropertyException();
+            throw UnknownPropertyException(OUString(excepinfo.bstrDescription),
+                                   Reference<XInterface>());
             break;
         case DISP_E_NONAMEDARGS:
-            throw RuntimeException();
+            throw RuntimeException(OUString(excepinfo.bstrDescription),
+                                   Reference<XInterface>());
             break;
         case DISP_E_OVERFLOW:
-            throw RuntimeException();
+            throw RuntimeException(OUString(excepinfo.bstrDescription),
+                                   Reference<XInterface>());
             break;
         case DISP_E_PARAMNOTFOUND:
-            throw RuntimeException();
+            throw RuntimeException(OUString(excepinfo.bstrDescription),
+                                   Reference<XInterface>());
             break;
         case DISP_E_TYPEMISMATCH:
-            throw RuntimeException();
+            throw RuntimeException(OUString(excepinfo.bstrDescription),
+                                   Reference<XInterface>());
             break;
         case DISP_E_UNKNOWNINTERFACE:
-            throw RuntimeException();
+            throw RuntimeException(OUString(excepinfo.bstrDescription),
+                                   Reference<XInterface>());
             break;
         case DISP_E_UNKNOWNLCID:
-            throw RuntimeException();
+            throw RuntimeException(OUString(excepinfo.bstrDescription),
+                                   Reference<XInterface>());
             break;
         case DISP_E_PARAMNOTOPTIONAL:
-            throw RuntimeException();
+            throw RuntimeException(OUString(excepinfo.bstrDescription),
+                                   Reference<XInterface>());
             break;
         default:
-            throw RuntimeException();
+            throw RuntimeException(OUString(excepinfo.bstrDescription),
+                                   Reference<XInterface>());
             break;
+        }
+    }
+    catch (UnknownPropertyException& )
+    {
+        throw;
+    }
+    catch (BridgeRuntimeError& e)
+    {
+        throw RuntimeException(
+            e.message, Reference<XInterface>());
+    }
+    catch (Exception & e)
+    {
+        throw RuntimeException(OUSTR("[automation bridge] unexpected exception in "
+                                     "IUnknownWrapper_Impl::getValue ! Message : \n") +
+                               e.Message, Reference<XInterface>());
+    }
+    catch (...)
+    {
+        throw RuntimeException(
+            OUSTR("[automation bridge] unexpected exception in "
+            "IUnknownWrapper_Impl::getValue !"), Reference<XInterface>());
+    }
+    return ret;
+}
+
+sal_Bool SAL_CALL IUnknownWrapper_Impl::hasMethod( const OUString& aName )
+        throw(RuntimeException)
+{
+    if ( ! m_spDispatch )
+    {
+        throw RuntimeException(
+            OUSTR("[automation bridge] The object does not have an IDispatch interface"),
+            Reference<XInterface>());
+    }
+    sal_Bool ret = sal_False;
+
+    try
+    {
+        o2u_attachCurrentThread();
+        ITypeInfo* pInfo = getTypeInfo();
+        FuncDesc aDesc(pInfo);
+        getFuncDesc(aName, & aDesc);
+        // Automation properties can have arguments. Those are treated as methods and
+        //are called through XInvocation::invoke.
+        if ( ! aDesc)
+        {
+            FuncDesc aDescGet(pInfo);
+            FuncDesc aDescPut(pInfo);
+            VarDesc aVarDesc(pInfo);
+            getPropDesc( aName, & aDescGet, & aDescPut, & aVarDesc);
+            if (aDescGet  && aDescGet->cParams > 0
+                || aDescPut && aDescPut->cParams > 0)
+                ret = sal_True;
+        }
+        else
+            ret = sal_True;
+    }
+    catch (BridgeRuntimeError& e)
+    {
+        throw RuntimeException(e.message, Reference<XInterface>());
+    }
+    catch (Exception & e)
+    {
+        throw RuntimeException(OUSTR("[automation bridge] unexpected exception in "
+                                     "IUnknownWrapper_Impl::hasMethod ! Message : \n") +
+                               e.Message, Reference<XInterface>());
+    }
+    catch (...)
+    {
+        throw RuntimeException(OUSTR("[automation bridge] unexpected exception in "
+            "IUnknownWrapper_Impl::hasMethod !"), Reference<XInterface>());;
+    }
+    return ret;
+}
+
+sal_Bool SAL_CALL IUnknownWrapper_Impl::hasProperty( const OUString& aName )
+        throw(RuntimeException)
+{
+    if ( ! m_spDispatch )
+    {
+        throw RuntimeException(OUSTR("[automation bridge] The object does not have an "
+            "IDispatch interface"), Reference<XInterface>());
+        return sal_False;
+    }
+    sal_Bool ret = sal_False;
+    try
+    {
+        o2u_attachCurrentThread();
+
+        ITypeInfo * pInfo = getTypeInfo();
+        FuncDesc aDescGet(pInfo);
+        FuncDesc aDescPut(pInfo);
+        VarDesc aVarDesc(pInfo);
+        getPropDesc(aName, & aDescGet, & aDescPut, & aVarDesc);
+        // Automation properties can have parameters. If so, we access them through
+        // XInvocation::invoke. Thas is, hasProperty must return false for such a
+        // property
+        if (aVarDesc
+            || aDescPut && aDescPut->cParams == 0
+            || aDescGet && aDescGet->cParams == 0)
+        {
+            ret = sal_True;
+        }
+    }
+    catch (BridgeRuntimeError& e)
+    {
+        throw RuntimeException(e.message, Reference<XInterface>());
+    }
+    catch (Exception & e)
+    {
+        throw RuntimeException(OUSTR("[automation bridge] unexpected exception in "
+                                     "IUnknownWrapper_Impl::hasProperty ! Message : \n") +
+                               e.Message, Reference<XInterface>());
+
+    }
+    catch (...)
+    {
+        throw RuntimeException(OUSTR("[automation bridge] unexpected exception in "
+            "IUnknownWrapper_Impl::hasProperty !"), Reference<XInterface>());
+    }
+    return ret;
+}
+
+Any SAL_CALL IUnknownWrapper_Impl::createBridge( const Any& modelDepObject,
+                const Sequence< sal_Int8 >& aProcessId, sal_Int16 sourceModelType,
+                 sal_Int16 destModelType )
+    throw( IllegalArgumentException, RuntimeException)
+{
+    Any ret;
+    o2u_attachCurrentThread();
+
+    if (
+        (sourceModelType == UNO) &&
+        (destModelType == OLE) &&
+        (modelDepObject.getValueTypeClass() == TypeClass_INTERFACE)
+       )
+    {
+        Reference<XInterface> xInt( *(XInterface**) modelDepObject.getValue());
+        Reference<XInterface> xSelf( (OWeakObject*)this);
+
+        if (xInt == xSelf)
+        {
+            VARIANT* pVariant = (VARIANT*) CoTaskMemAlloc(sizeof(VARIANT));
+
+            VariantInit(pVariant);
+            if (m_bOriginalDispatch == sal_True)
+            {
+                pVariant->vt = VT_DISPATCH;
+                pVariant->pdispVal = m_spDispatch;
+                pVariant->pdispVal->AddRef();
+            }
+            else
+            {
+                pVariant->vt = VT_UNKNOWN;
+                pVariant->punkVal = m_spUnknown;
+                pVariant->punkVal->AddRef();
+            }
+
+            ret.setValue((void*)&pVariant, getCppuType( (sal_uInt32*) 0));
+        }
     }
 
     return ret;
 }
+/** @internal
+    @exception IllegalArgumentException
+    @exception CannotConvertException
+    @exception InvocationTargetException
+    @RuntimeException
+*/
+Any  IUnknownWrapper_Impl::invokeWithDispIdUnoTlb(const OUString& sFunctionName,
+                                                  const Sequence< Any >& Params,
+                                                  Sequence< sal_Int16 >& OutParamIndex,
+                                                  Sequence< Any >& OutParam)
+{
+    Any ret;
+    HRESULT hr= S_OK;
+
+    sal_Int32 parameterCount= Params.getLength();
+    sal_Int32 outParameterCount= 0;
+    typelib_InterfaceMethodTypeDescription* pMethod= NULL;
+    TypeDescription methodDesc;
+    getMethodInfo(sFunctionName, methodDesc);
+
+    // We need to know whether the IDispatch is from a JScript object.
+    // Then out and in/out parameters have to be treated differently than
+    // with common COM objects.
+    sal_Bool bJScriptObject= isJScriptObject();
+    scoped_array<CComVariant> sarParams;
+    scoped_array<CComVariant> sarParamsRef;
+    CComVariant *pVarParams= NULL;
+    CComVariant *pVarParamsRef= NULL;
+    sal_Bool bConvRet= sal_True;
+
+    if( methodDesc.is())
+    {
+        pMethod = (typelib_InterfaceMethodTypeDescription* )methodDesc.get();
+        parameterCount = pMethod->nParams;
+        // Create the Array for the array being passed in DISPPARAMS
+        // the array also contains the outparameter (but not the values)
+        if( pMethod->nParams > 0)
+        {
+            sarParams.reset(new CComVariant[ parameterCount]);
+            pVarParams = sarParams.get();
+        }
+
+        // Create the Array for the out an in/out parameter. These values
+        // are referenced by the VT_BYREF VARIANTs in DISPPARAMS.
+        // We need to find out the number of out and in/out parameter.
+        for( sal_Int32 i=0; i < parameterCount; i++)
+        {
+            if( pMethod->pParams[i].bOut)
+                outParameterCount++;
+        }
+
+        if( !bJScriptObject)
+        {
+            sarParamsRef.reset(new CComVariant[outParameterCount]);
+            pVarParamsRef = sarParamsRef.get();
+            // build up the parameters for IDispatch::Invoke
+            sal_Int32 outParamIndex=0;
+            int i = 0;
+            try
+            {
+                for( i= 0; i < parameterCount; i++)
+                {
+                    // In parameter
+                    if( pMethod->pParams[i].bIn == sal_True && ! pMethod->pParams[i].bOut)
+                    {
+                        anyToVariant( &pVarParams[parameterCount - i -1], Params.getConstArray()[i]);
+                    }
+                    // Out parameter + in/out parameter
+                    else if( pMethod->pParams[i].bOut == sal_True)
+                    {
+                        CComVariant var;
+                        if(pMethod->pParams[i].bIn)
+                        {
+                            anyToVariant( & var,Params[i]);
+                            pVarParamsRef[outParamIndex] = var;
+                        }
+
+                        switch( pMethod->pParams[i].pTypeRef->eTypeClass)
+                        {
+                        case TypeClass_INTERFACE:
+                        case TypeClass_STRUCT:
+                            if( ! pMethod->pParams[i].bIn)
+                            {
+                                pVarParamsRef[ outParamIndex].vt= VT_DISPATCH;
+                                pVarParamsRef[ outParamIndex].pdispVal= 0;
+                            }
+                            pVarParams[parameterCount - i -1].vt = VT_DISPATCH | VT_BYREF;
+                            pVarParams[parameterCount - i -1].ppdispVal= &pVarParamsRef[outParamIndex].pdispVal;
+                            break;
+                        case TypeClass_ENUM:
+                        case TypeClass_LONG:
+                        case TypeClass_UNSIGNED_LONG:
+                            if( ! pMethod->pParams[i].bIn)
+                            {
+                                pVarParamsRef[ outParamIndex].vt = VT_I4;
+                                pVarParamsRef[ outParamIndex].lVal = 0;
+                            }
+                            pVarParams[parameterCount - i -1].vt = VT_I4 | VT_BYREF;
+                            pVarParams[parameterCount - i -1].plVal= &pVarParamsRef[outParamIndex].lVal;
+                            break;
+                        case TypeClass_SEQUENCE:
+                            if( ! pMethod->pParams[i].bIn)
+                            {
+                                pVarParamsRef[ outParamIndex].vt = VT_ARRAY| VT_VARIANT;
+                                pVarParamsRef[ outParamIndex].parray= NULL;
+                            }
+                            pVarParams[parameterCount - i -1].vt = VT_ARRAY| VT_BYREF | VT_VARIANT;
+                            pVarParams[parameterCount - i -1].pparray= &pVarParamsRef[outParamIndex].parray;
+                            break;
+                        case TypeClass_ANY:
+                            if( ! pMethod->pParams[i].bIn)
+                            {
+                                pVarParamsRef[ outParamIndex].vt = VT_EMPTY;
+                                pVarParamsRef[ outParamIndex].lVal = 0;
+                            }
+                            pVarParams[parameterCount - i -1].vt = VT_VARIANT | VT_BYREF;
+                            pVarParams[parameterCount - i -1].pvarVal = &pVarParamsRef[outParamIndex];
+                            break;
+                        case TypeClass_BOOLEAN:
+                            if( ! pMethod->pParams[i].bIn)
+                            {
+                                pVarParamsRef[ outParamIndex].vt = VT_BOOL;
+                                pVarParamsRef[ outParamIndex].boolVal = 0;
+                            }
+                            pVarParams[parameterCount - i -1].vt = VT_BOOL| VT_BYREF;
+                            pVarParams[parameterCount - i -1].pboolVal =
+                                & pVarParamsRef[outParamIndex].boolVal;
+                            break;
+
+                        case TypeClass_STRING:
+                            if( ! pMethod->pParams[i].bIn)
+                            {
+                                pVarParamsRef[ outParamIndex].vt = VT_BSTR;
+                                pVarParamsRef[ outParamIndex].bstrVal= 0;
+                            }
+                            pVarParams[parameterCount - i -1].vt = VT_BSTR| VT_BYREF;
+                            pVarParams[parameterCount - i -1].pbstrVal=
+                                & pVarParamsRef[outParamIndex].bstrVal;
+                            break;
+
+                        case TypeClass_FLOAT:
+                            if( ! pMethod->pParams[i].bIn)
+                            {
+                                pVarParamsRef[ outParamIndex].vt = VT_R4;
+                                pVarParamsRef[ outParamIndex].fltVal= 0;
+                            }
+                            pVarParams[parameterCount - i -1].vt = VT_R4| VT_BYREF;
+                            pVarParams[parameterCount - i -1].pfltVal =
+                                & pVarParamsRef[outParamIndex].fltVal;
+                            break;
+                        case TypeClass_DOUBLE:
+                            if( ! pMethod->pParams[i].bIn)
+                            {
+                                pVarParamsRef[ outParamIndex].vt = VT_R8;
+                                pVarParamsRef[ outParamIndex].dblVal= 0;
+                            }
+                            pVarParams[parameterCount - i -1].vt = VT_R8| VT_BYREF;
+                            pVarParams[parameterCount - i -1].pdblVal=
+                                & pVarParamsRef[outParamIndex].dblVal;
+                            break;
+                        case TypeClass_BYTE:
+                            if( ! pMethod->pParams[i].bIn)
+                            {
+                                pVarParamsRef[ outParamIndex].vt = VT_UI1;
+                                pVarParamsRef[ outParamIndex].bVal= 0;
+                            }
+                            pVarParams[parameterCount - i -1].vt = VT_UI1| VT_BYREF;
+                            pVarParams[parameterCount - i -1].pbVal=
+                                & pVarParamsRef[outParamIndex].bVal;
+                            break;
+                        case TypeClass_CHAR:
+                        case TypeClass_SHORT:
+                        case TypeClass_UNSIGNED_SHORT:
+                            if( ! pMethod->pParams[i].bIn)
+                            {
+                                pVarParamsRef[ outParamIndex].vt = VT_I2;
+                                pVarParamsRef[ outParamIndex].iVal = 0;
+                            }
+                            pVarParams[parameterCount - i -1].vt = VT_I2| VT_BYREF;
+                            pVarParams[parameterCount - i -1].piVal=
+                                & pVarParamsRef[outParamIndex].iVal;
+                            break;
+
+                        default:
+                            if( ! pMethod->pParams[i].bIn)
+                            {
+                                pVarParamsRef[ outParamIndex].vt = VT_EMPTY;
+                                pVarParamsRef[ outParamIndex].lVal = 0;
+                            }
+                            pVarParams[parameterCount - i -1].vt = VT_VARIANT | VT_BYREF;
+                            pVarParams[parameterCount - i -1].pvarVal =
+                                & pVarParamsRef[outParamIndex];
+                        }
+                        outParamIndex++;
+                    } // end else if
+                } // end for
+            }
+            catch (IllegalArgumentException & e)
+            {
+                e.ArgumentPosition = i;
+                throw;
+            }
+            catch (CannotConvertException & e)
+            {
+                e.ArgumentIndex = i;
+                throw;
+            }
+        }
+        else // it is an JScriptObject
+        {
+            int i;
+            try
+            {
+                for(i = 0; i< parameterCount; i++)
+                {
+                    // In parameter
+                    if( pMethod->pParams[i].bIn == sal_True && ! pMethod->pParams[i].bOut)
+                    {
+                        anyToVariant( &pVarParams[parameterCount - i -1], Params.getConstArray()[i]);
+                    }
+                    // Out parameter + in/out parameter
+                    else if( pMethod->pParams[i].bOut == sal_True)
+                    {
+                        CComObject<JScriptOutParam>* pParamObject;
+                        if( SUCCEEDED( CComObject<JScriptOutParam>::CreateInstance( &pParamObject)))
+                        {
+                            CComPtr<IUnknown> pUnk(pParamObject->GetUnknown());
+                            CComQIPtr<IDispatch> pDisp( pUnk);
+
+                            pVarParams[ parameterCount - i -1].vt= VT_DISPATCH;
+                            pVarParams[ parameterCount - i -1].pdispVal= pDisp;
+                            pVarParams[ parameterCount - i -1].pdispVal->AddRef();
+                            // if the param is in/out then put the parameter on index 0
+                            if( pMethod->pParams[i].bIn == sal_True ) // in / out
+                            {
+                                CComVariant varParam;
+                                anyToVariant( &varParam, Params.getConstArray()[i]);
+                                CComDispatchDriver dispDriver( pDisp);
+                                if(FAILED( dispDriver.PutPropertyByName( L"0", &varParam)))
+                                    throw BridgeRuntimeError(
+                                        OUSTR("[automation bridge]IUnknownWrapper_Impl::"
+                                              "invokeWithDispIdUnoTlb\n"
+                                              "Could not set property \"0\" for the in/out "
+                                              "param!"));
+
+                            }
+                        }
+                        else
+                        {
+                            throw BridgeRuntimeError(
+                                OUSTR("[automation bridge]IUnknownWrapper_Impl::"
+                                      "invokeWithDispIdUnoTlb\n"
+                                      "Could not create out parameter at index: ") +
+                                OUString::valueOf((sal_Int32) i));
+                        }
+
+                    }
+                }
+            }
+            catch (IllegalArgumentException & e)
+            {
+                e.ArgumentPosition = i;
+                throw;
+            }
+            catch (CannotConvertException & e)
+            {
+                e.ArgumentIndex = i;
+                throw;
+            }
+        }
+    }
+    // No type description Available, that is we have to deal with a COM component,
+    // that does not implements UNO interfaces ( IDispatch based)
+    else
+    {
+        //We should not run into this block, because invokeWithDispIdComTlb should
+        //have been called instead.
+        OSL_ASSERT(0);
+    }
+
+
+    CComVariant     varResult;
+    ExcepInfo       excepinfo;
+    unsigned int    uArgErr;
+    DISPPARAMS dispparams= { pVarParams, NULL, parameterCount, 0};
+    // Get the DISPID
+    FuncDesc aDesc(getTypeInfo());
+    getFuncDesc(sFunctionName, & aDesc);
+    // invoking OLE method
+    hr = m_spDispatch->Invoke(aDesc->memid,
+                             IID_NULL,
+                             LOCALE_USER_DEFAULT,
+                             DISPATCH_METHOD,
+                             &dispparams,
+                             &varResult,
+                             &excepinfo,
+                             &uArgErr);
+
+    // converting return value and out parameter back to UNO
+    if (hr == S_OK)
+    {
+        if( outParameterCount && pMethod)
+        {
+            OutParamIndex.realloc( outParameterCount);
+            OutParam.realloc( outParameterCount);
+            sal_Int32 outIndex=0;
+            int i;
+            try
+            {
+                for( i = 0; i < parameterCount; i++)
+                {
+                    if( pMethod->pParams[i].bOut )
+                    {
+                        OutParamIndex[outIndex]= (sal_Int16) i;
+                        Any outAny;
+                        if( !bJScriptObject)
+                        {
+                            variantToAny( &pVarParamsRef[outIndex], outAny,
+                                        Type(pMethod->pParams[i].pTypeRef), sal_False);
+                            OutParam[outIndex++]= outAny;
+                        }
+                        else //JScriptObject
+                        {
+                            if( pVarParams[i].vt= VT_DISPATCH)
+                            {
+                                CComDispatchDriver pDisp( pVarParams[i].pdispVal);
+                                if( pDisp)
+                                {
+                                    CComVariant varOut;
+                                    if( SUCCEEDED( pDisp.GetPropertyByName( L"0", &varOut)))
+                                    {
+                                        variantToAny( &varOut, outAny,
+                                                    Type(pMethod->pParams[parameterCount - 1 - i].pTypeRef), sal_False);
+                                        OutParam[outParameterCount - 1 - outIndex++]= outAny;
+                                    }
+                                    else
+                                        bConvRet= sal_False;
+                                }
+                                else
+                                    bConvRet= sal_False;
+                            }
+                            else
+                                bConvRet= sal_False;
+                        }
+                    }
+                    if( !bConvRet) break;
+                }
+            }
+            catch(IllegalArgumentException & e)
+            {
+                e.ArgumentPosition = i;
+                throw;
+            }
+            catch(CannotConvertException & e)
+            {
+                e.ArgumentIndex = i;
+                throw;
+            }
+        }
+        // return value, no type information available
+        if ( bConvRet)
+        {
+            try
+            {
+                if( pMethod )
+                    variantToAny(&varResult, ret, Type( pMethod->pReturnTypeRef), sal_False);
+                else
+                    variantToAny(&varResult, ret, sal_False);
+            }
+            catch (IllegalArgumentException & e)
+            {
+                e.Message =
+                    OUSTR("[automation bridge]IUnknownWrapper_Impl::invokeWithDispIdUnoTlb\n"
+                    "Could not convert return value! \n Message: \n") + e.Message;
+                throw;
+            }
+            catch (CannotConvertException & e)
+            {
+                e.Message =
+                    OUSTR("[automation bridge]IUnknownWrapper_Impl::invokeWithDispIdUnoTlb\n"
+                    "Could not convert return value! \n Message: \n") + e.Message;
+                throw;
+            }
+        }
+    }
+
+    if( !bConvRet) // conversion of return or out parameter failed
+        throw CannotConvertException( L"Call to COM object failed. Conversion of return or out value failed",
+                                      Reference<XInterface>( static_cast<XWeak*>(this), UNO_QUERY   ), TypeClass_UNKNOWN,
+                                      FailReason::UNKNOWN, 0);// lookup error code
+    // conversion of return or out parameter failed
+    switch (hr)
+    {
+    case S_OK:
+        break;
+    case DISP_E_BADPARAMCOUNT:
+        throw IllegalArgumentException();
+        break;
+    case DISP_E_BADVARTYPE:
+        throw RuntimeException();
+        break;
+    case DISP_E_EXCEPTION:
+        throw InvocationTargetException();
+        break;
+    case DISP_E_MEMBERNOTFOUND:
+        throw IllegalArgumentException();
+        break;
+    case DISP_E_NONAMEDARGS:
+        throw IllegalArgumentException();
+        break;
+    case DISP_E_OVERFLOW:
+        throw CannotConvertException(L"call to OLE object failed", static_cast<XInterface*>(
+                                         static_cast<XWeak*>(this)), TypeClass_UNKNOWN, FailReason::OUT_OF_RANGE, uArgErr);
+        break;
+    case DISP_E_PARAMNOTFOUND:
+        throw IllegalArgumentException(L"call to OLE object failed", static_cast<XInterface*>(
+                                           static_cast<XWeak*>(this)), uArgErr);
+        break;
+    case DISP_E_TYPEMISMATCH:
+        throw CannotConvertException(L"call to OLE object failed",static_cast<XInterface*>(
+                                         static_cast<XWeak*>(this)) , TypeClass_UNKNOWN, FailReason::UNKNOWN, uArgErr);
+        break;
+    case DISP_E_UNKNOWNINTERFACE:
+        throw RuntimeException() ;
+        break;
+    case DISP_E_UNKNOWNLCID:
+        throw RuntimeException() ;
+        break;
+    case DISP_E_PARAMNOTOPTIONAL:
+        throw CannotConvertException(L"call to OLE object failed", static_cast<XInterface*>(
+                                         static_cast<XWeak*>(this)), TypeClass_UNKNOWN, FailReason::NO_DEFAULT_AVAILABLE, uArgErr);
+                break;
+    default:
+        throw RuntimeException();
+        break;
+    }
+
+    return ret;
+}
+
 
 
     // --------------------------
@@ -1028,25 +1199,17 @@ Any  IUnknownWrapper_Impl::getValueWithDispId(DISPID dispID)
 void SAL_CALL IUnknownWrapper_Impl::initialize( const Sequence< Any >& aArguments ) throw(Exception, RuntimeException)
 {
     // 1.parameter is IUnknown
-    // 2.parameter is a Sequence<Type> ( not mandatory)
+    // 2.parameter is a boolean which indicates if the the COM pointer was a IUnknown or IDispatch
+    // 3.parameter is a Sequence<Type>
     HRESULT result;
     o2u_attachCurrentThread();
+    OSL_ASSERT(aArguments.getLength() == 3);
 
-    if( aArguments.getLength() == 1)
-    {
-        m_pUnknown= *(IUnknown**) aArguments[0].getValue();
-        result = m_pUnknown->QueryInterface(IID_IDispatch, (void**) &m_pDispatch);
-        m_pUnknown->AddRef();
-    }
-    else if( aArguments.getLength() == 2)
-    {
-        m_pUnknown= *(IUnknown**) aArguments[0].getValue();
-        result = m_pUnknown->QueryInterface(IID_IDispatch, (void**) &m_pDispatch);
-        m_pUnknown->AddRef();
+    m_spUnknown= *(IUnknown**) aArguments[0].getValue();
+    m_spUnknown.QueryInterface( & m_spDispatch.p);
 
-        aArguments[1] >>= m_seqTypes;
-    }
-
+    aArguments[1] >>= m_bOriginalDispatch;
+    aArguments[2] >>= m_seqTypes;
 }
 
 // UnoConversionUtilities --------------------------------------------------------------------------------
@@ -1076,9 +1239,9 @@ Reference<XInterface> IUnknownWrapper_Impl::createComWrapperInstance()
 
 
 
-void IUnknownWrapper_Impl::getMethodInfo( TypeDescription& methodInfo)
+void IUnknownWrapper_Impl::getMethodInfo(const OUString& sName, TypeDescription& methodInfo)
 {
-    TypeDescription desc= getInterfaceMemberDescOfCurrentCall();
+    TypeDescription desc= getInterfaceMemberDescOfCurrentCall(sName);
     if( desc.is())
     {
         typelib_TypeDescription* pMember= desc.get();
@@ -1087,9 +1250,9 @@ void IUnknownWrapper_Impl::getMethodInfo( TypeDescription& methodInfo)
     }
 }
 
-void IUnknownWrapper_Impl::getAttributeInfo( TypeDescription& attributeInfo)
+void IUnknownWrapper_Impl::getAttributeInfo(const OUString& sName, TypeDescription& attributeInfo)
 {
-    TypeDescription desc= getInterfaceMemberDescOfCurrentCall();
+    TypeDescription desc= getInterfaceMemberDescOfCurrentCall(sName);
     if( desc.is())
     {
         typelib_TypeDescription* pMember= desc.get();
@@ -1099,23 +1262,14 @@ void IUnknownWrapper_Impl::getAttributeInfo( TypeDescription& attributeInfo)
         }
     }
 }
-TypeDescription IUnknownWrapper_Impl::getInterfaceMemberDescOfCurrentCall( )
+TypeDescription IUnknownWrapper_Impl::getInterfaceMemberDescOfCurrentCall(const OUString& sName)
 {
     TypeDescription ret;
-    OUString usCurrentCall;
-    if( m_usCurrentInvoke.getLength())
-    {
-        usCurrentCall= m_usCurrentInvoke;
-    }
-    else
-    {
-        usCurrentCall= m_usCurrentGet;
-    }
-    OSL_ENSURE( usCurrentCall.getLength() != 0, "");
 
     for( sal_Int32 i=0; i < m_seqTypes.getLength(); i++)
     {
         TypeDescription _curDesc( m_seqTypes[i]);
+        _curDesc.makeComplete();
         typelib_InterfaceTypeDescription * pInterface= (typelib_InterfaceTypeDescription*) _curDesc.get();
         if( pInterface)
         {
@@ -1129,7 +1283,7 @@ TypeDescription IUnknownWrapper_Impl::getInterfaceMemberDescOfCurrentCall( )
 
                 typelib_InterfaceMemberTypeDescription* pInterfaceMember=
                     (typelib_InterfaceMemberTypeDescription*) pDescMember;
-                if( OUString( pInterfaceMember->pMemberName) == usCurrentCall)
+                if( OUString( pInterfaceMember->pMemberName) == sName)
                 {
                     pMember= pInterfaceMember;
                     break;
@@ -1153,7 +1307,7 @@ sal_Bool IUnknownWrapper_Impl::isJScriptObject()
 {
     if(  m_eJScript == JScriptUndefined)
     {
-        CComDispatchDriver disp( m_pDispatch);
+        CComDispatchDriver disp( m_spDispatch);
         if( disp)
         {
             CComVariant result;
@@ -1177,80 +1331,264 @@ sal_Bool IUnknownWrapper_Impl::isJScriptObject()
 
 
 
-// The function ultimately calls IDispatch::Invoke on the wrapped COM object.
-// The COM object does not implement UNO Interfaces ( via IDispatch). This
-// is the case when the OleObjectFactory service has been used to create a
-// component.
-Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(DISPID dispID,
-                          const Sequence< Any >& Params,
-                          Sequence< sal_Int16 >& OutParamIndex,
-                          Sequence< Any >& OutParam)
-              throw ( IllegalArgumentException, CannotConvertException,
-                      InvocationTargetException, RuntimeException)
+/** @internal
+    The function ultimately calls IDispatch::Invoke on the wrapped COM object.
+    The COM object does not implement UNO Interfaces ( via IDispatch). This
+    is the case when the OleObjectFactory service has been used to create a
+    component.
+    @exception IllegalArgumentException
+    @exception CannotConvertException
+    @InvocationTargetException
+    @RuntimeException
+    @BridgeRuntimeError
+*/
+Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(const OUString& sFuncName,
+                                                  const Sequence< Any >& Params,
+                                                  Sequence< sal_Int16 >& OutParamIndex,
+                                                  Sequence< Any >& OutParam)
 {
     Any ret;
     HRESULT result;
 
-    DISPPARAMS      dispparams;
+    DISPPARAMS      dispparams = {NULL, NULL, 0, 0};
     CComVariant     varResult;
-    EXCEPINFO       excepinfo;
+    ExcepInfo       excepinfo;
     unsigned int    uArgErr;
-    sal_uInt32          i;
+    sal_Int32           i;
+    sal_Int32 nUnoArgs = Params.getLength();
+    DISPID idPropertyPut = DISPID_PROPERTYPUT;
+    scoped_array<DISPID> arDispidNamedArgs;
+    scoped_array<CComVariant> ptrArgs;
+    scoped_array<CComVariant> ptrRefArgs; // referenced arguments
+    CComVariant * arArgs = NULL;
+    CComVariant * arRefArgs = NULL;
+    sal_Int32 revIndex = 0;
+    bool bVarargParam = false;
 
-    o2u_attachCurrentThread();
+    // Get type info for the call. It can be a method call or property put or
+    // property get operation.
+    FuncDesc aFuncDesc(getTypeInfo());
+    getFuncDescForInvoke(sFuncName, Params, & aFuncDesc);
 
-    // converting UNO parameters to OLE variants
-    dispparams.rgdispidNamedArgs = NULL;
-    dispparams.cArgs = Params.getLength();
-    dispparams.cNamedArgs = 0;
+    //Set the array of DISPIDs for named args if it is a property put operation.
+    //If there are other named arguments another array is set later on.
+    if (aFuncDesc->invkind == INVOKE_PROPERTYPUT
+        || aFuncDesc->invkind == INVOKE_PROPERTYPUTREF)
+        dispparams.rgdispidNamedArgs = & idPropertyPut;
 
-    CComVariant* arArgs = NULL;
-    CComVariant* arRefArgs= NULL; // referenced arguments
-
-    // Obtain type information via the IDispatch interface
-    getParameterInfo();
-
-    dispparams.cArgs= m_seqCurrentParamTypes.getLength();
-    if (dispparams.cArgs == 0)
+    //Determine the number of named arguments
+    for (int iParam = 0; iParam < nUnoArgs; iParam ++)
     {
-        dispparams.rgvarg = NULL;
+        const Any & curArg = Params[iParam];
+        if (curArg.getValueType() == getCppuType((NamedArgument*) 0))
+            dispparams.cNamedArgs ++;
+    }
+    //In a property put operation a property value is a named argument (DISPID_PROPERTYPUT).
+    //Therefore the number of named arguments is increased by one.
+    //Although named, the argument is not named in a actual language, such as  Basic,
+    //therefore it is never a com.sun.star.bridge.oleautomation.NamedArgument
+    if (aFuncDesc->invkind == DISPATCH_PROPERTYPUT
+        || aFuncDesc->invkind == DISPATCH_PROPERTYPUTREF)
+        dispparams.cNamedArgs ++;
+
+    //Determine the number of all arguments and named arguments
+    if (aFuncDesc->cParamsOpt == -1)
+    {
+        //Attribute vararg is set on this method. "Unlimited" number of args
+        //supported. There can be no optional or defaultvalue on any of the arguments.
+        dispparams.cArgs = nUnoArgs;
     }
     else
     {
-        arArgs = new CComVariant[dispparams.cArgs];
-        arRefArgs= new CComVariant[dispparams.cArgs];
+        //If there are namesd arguments, then the dispparams.cArgs
+        //is the number of supplied args, otherwise it is the expected number.
+        if (dispparams.cNamedArgs)
+            dispparams.cArgs = nUnoArgs;
+        else
+            dispparams.cArgs = aFuncDesc->cParams;
+    }
 
+    //check if there are not to many arguments supplied
+    if (nUnoArgs > dispparams.cArgs)
+    {
+        OUStringBuffer buf(256);
+        buf.appendAscii("[automation bridge] There are too many arguments for this method");
+        throw IllegalArgumentException( buf.makeStringAndClear(),
+            Reference<XInterface>(), (sal_Int16) dispparams.cArgs);
+    }
 
-        for (i = 0; i < dispparams.cArgs; i++)
+    //Set up the array of DISPIDs (DISPPARAMS::rgdispidNamedArgs)
+    //for the named arguments.
+    //If there is only one named arg and if it is because of a property put
+    //operation, then we need not set up the DISPID array.
+    if (dispparams.cNamedArgs > 0 &&
+        ! (dispparams.cNamedArgs == 1 &&
+           (aFuncDesc->invkind == INVOKE_PROPERTYPUT ||
+            aFuncDesc->invkind == INVOKE_PROPERTYPUT)))
+    {
+        //set up an array containing the member and parameter names
+        //which is then used in ITypeInfo::GetIDsOfNames
+        //First determine the size of the array of names which is passed to
+        //ITypeInfo::GetIDsOfNames. It must hold the method names + the named
+        //args.
+        int nSizeAr = dispparams.cNamedArgs + 1;
+        if (aFuncDesc->invkind == INVOKE_PROPERTYPUT
+            || aFuncDesc->invkind == INVOKE_PROPERTYPUTREF)
         {
-            sal_Int32 revIndex= dispparams.cArgs - i -1;
-            arRefArgs[revIndex].byref=0;
-            // out param
-            if (m_seqCurrentParamTypes[i] & PARAMFLAG_FOUT &&
-                ! (m_seqCurrentParamTypes[i] & PARAMFLAG_FIN)  )
+            nSizeAr = dispparams.cNamedArgs; //counts the DISID_PROPERTYPUT
+        }
+
+        scoped_array<OLECHAR*> saNames(new OLECHAR*[nSizeAr]);
+        OLECHAR ** arNames = saNames.get();
+        arNames[0] = const_cast<OLECHAR*>(sFuncName.getStr());
+
+        int cNamedArg = 0;
+        for (int iParams = 0; iParams < dispparams.cArgs; iParams ++)
+        {
+            const Any &  curArg = Params[iParams];
+            if (curArg.getValueType() == getCppuType((NamedArgument*) 0))
             {
-                VARTYPE type= m_seqCurrentVartypes[i] ^ VT_BYREF;
-                if( type == VT_VARIANT )
-                {
-                    arArgs[revIndex].vt= VT_VARIANT | VT_BYREF;
-                    arArgs[revIndex].byref= &arRefArgs[revIndex];
-                }
-                else
+                const NamedArgument& arg = *(NamedArgument const*) curArg.getValue();
+                //We put the parameter names in reverse order into the array,
+                //so we can use the DISPID array for DISPPARAMS::rgdispidNamedArgs
+                //The first name in the array is the method name
+                arNames[nSizeAr - 1 - cNamedArg++] = const_cast<OLECHAR*>(arg.Name.getStr());
+            }
+        }
+
+        //Prepare the array of DISPIDs for ITypeInfo::GetIDsOfNames
+        //it must be big enough to contain the DISPIDs of the member + parameters
+        arDispidNamedArgs.reset(new DISPID[nSizeAr]);
+        HRESULT hr = getTypeInfo()->GetIDsOfNames(arNames, nSizeAr,
+                                                  arDispidNamedArgs.get());
+        if (hr == S_OK)
+        {
+            // In a "property put" operation, the property value is a named param with the
+            //special DISPID DISPID_PROPERTYPUT
+            if (aFuncDesc->invkind == DISPATCH_PROPERTYPUT
+                || aFuncDesc->invkind == DISPATCH_PROPERTYPUTREF)
+            {
+                //Element at index 0 in the DISPID array must be DISPID_PROPERTYPUT
+                //The first item in the array arDispidNamedArgs is the DISPID for
+                //the method. We replace it with DISPID_PROPERTYPUT.
+                DISPID*  arIDs = arDispidNamedArgs.get();
+                arIDs[0] = DISPID_PROPERTYPUT;
+                dispparams.rgdispidNamedArgs = arIDs;
+            }
+            else
+            {
+                //The first item in the array arDispidNamedArgs is the DISPID for
+                //the method. It must be removed
+                DISPID*  arIDs = arDispidNamedArgs.get();
+                dispparams.rgdispidNamedArgs = & arIDs[1];
+            }
+        }
+        else if (hr == DISP_E_UNKNOWNNAME)
+        {
+             throw IllegalArgumentException(
+                 OUSTR("[automation bridge]One of the named arguments is wrong!"),
+                 Reference<XInterface>(), 0);
+        }
+        else
+        {
+            throw InvocationTargetException(
+                OUSTR("[automation bridge] ITypeInfo::GetIDsOfNames returned error ")
+                + OUString::valueOf((sal_Int32) hr, 16), Reference<XInterface>(), Any());
+        }
+    }
+
+    //Convert arguments
+    ptrArgs.reset(new CComVariant[dispparams.cArgs]);
+    ptrRefArgs.reset(new CComVariant[dispparams.cArgs]);
+    arArgs = ptrArgs.get();
+    arRefArgs = ptrRefArgs.get();
+    try
+    {
+        for (i = 0; i < (sal_Int32) dispparams.cArgs; i++)
+        {
+            revIndex= dispparams.cArgs - i -1;
+            arRefArgs[revIndex].byref=0;
+            Any  anyArg;
+            if ( i < nUnoArgs)
+                anyArg= Params.getConstArray()[i];
+
+            //Test if the current parameter is a "vararg" parameter.
+            if (bVarargParam || (aFuncDesc->cParamsOpt == -1 &&
+                                aFuncDesc->cParams == (i + 1)))
+            {   //This parameter is from the variable argument list. There is no
+                //type info available, except that it must be a VARIANT
+                bVarargParam = true;
+            }
+
+            unsigned short paramFlags = PARAMFLAG_FOPT | PARAMFLAG_FIN;
+            VARTYPE varType = VT_VARIANT;
+            if ( ! bVarargParam)
+            {
+                paramFlags =
+                    aFuncDesc->lprgelemdescParam[i].paramdesc.wParamFlags;
+                varType = getElementTypeDesc(
+                    & aFuncDesc->lprgelemdescParam[i].tdesc);
+            }
+            //Make sure that there is a UNO parameter for every
+            // expected parameter. If there is no UNO parameter where the
+            // called function expects one, then it must be optional. Otherwise
+            // its a UNO programming error.
+            if (i  >= nUnoArgs && !(paramFlags & PARAMFLAG_FOPT))
+            {
+                OUStringBuffer buf(256);
+                buf.appendAscii("ole automation bridge: The called function expects an argument at"
+                                "position: "); //a different number of arguments")),
+                buf.append(OUString::valueOf((sal_Int32) i));
+                buf.appendAscii(" (index starting at 0).");
+                throw IllegalArgumentException( buf.makeStringAndClear(),
+                                                Reference<XInterface>(), (sal_Int16) i);
+            }
+            //make sure we get no void any for an in parameter. In StarBasic
+            //this may be caused by
+            // Dim arg
+            // obj.func(arg)
+            //A void any is allowed if the parameter is optional
+            if ( ! (aFuncDesc->lprgelemdescParam[i].paramdesc.wParamFlags & PARAMFLAG_FOPT)
+                && (i < nUnoArgs) && (paramFlags & PARAMFLAG_FIN) &&
+                Params.getConstArray()[i].getValueTypeClass() == TypeClass_VOID)
+            {
+                OUStringBuffer buf(256);
+                buf.appendAscii("ole automation bridge: The argument at position: ");
+                buf.append(OUString::valueOf((sal_Int32) i));
+                buf.appendAscii(" (index starts with 0) is uninitialized.");
+                throw IllegalArgumentException( buf.makeStringAndClear(),
+                                                Reference<XInterface>(), (sal_Int16) i);
+            }
+
+            // Property Put arguments
+            if (anyArg.getValueType() == getCppuType((PropertyPutArgument*)0))
+            {
+                PropertyPutArgument arg;
+                anyArg >>= arg;
+                anyArg <<= arg.Value;
+            }
+            // named argument
+            if (anyArg.getValueType() == getCppuType((NamedArgument*) 0))
+            {
+                NamedArgument aNamedArgument;
+                anyArg >>= aNamedArgument;
+                anyArg <<= aNamedArgument.Value;
+            }
+            // out param
+            if (paramFlags & PARAMFLAG_FOUT &&
+                ! (paramFlags & PARAMFLAG_FIN)  )
+            {
+                VARTYPE type= varType ^ VT_BYREF;
+                if (i < nUnoArgs)
                 {
                     arRefArgs[revIndex].vt= type;
-                    arArgs[revIndex].vt= m_seqCurrentVartypes[i];
-                    arArgs[revIndex].byref= &arRefArgs[revIndex].byref;
                 }
-            }
-            // in/out param
-            else if( m_seqCurrentParamTypes[i] & PARAMFLAG_FOUT&&
-                     m_seqCurrentParamTypes[i] & PARAMFLAG_FIN)
-            {
-                VARTYPE type= m_seqCurrentVartypes[i] ^ VT_BYREF;
-                CComVariant var;
-                anyToVariant( &arRefArgs[revIndex],
-                         Params.getConstArray()[i], m_seqCurrentVartypes[i]);
-
+                else
+                {
+                    //optional arg
+                    arRefArgs[revIndex].vt = VT_ERROR;
+                    arRefArgs[revIndex].scode = DISP_E_PARAMNOTFOUND;
+                }
                 if( type == VT_VARIANT )
                 {
                     arArgs[revIndex].vt= VT_VARIANT | VT_BYREF;
@@ -1258,37 +1596,107 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(DISPID dispID,
                 }
                 else
                 {
-                    arArgs[revIndex].vt= arRefArgs[revIndex].vt | VT_BYREF;
-                    arArgs[revIndex].byref= &arRefArgs[revIndex].byref;
+                    arArgs[revIndex].vt= varType;
+                    if (type == VT_DECIMAL)
+                        arArgs[revIndex].byref= & arRefArgs[revIndex].decVal;
+                    else
+                        arArgs[revIndex].byref= & arRefArgs[revIndex].byref;
                 }
             }
-            // in/param
-            else if(  m_seqCurrentParamTypes[i] & PARAMFLAG_FIN &&
-                      ! (m_seqCurrentParamTypes[i] & PARAMFLAG_FOUT))
+            // in/out  + in byref params
+            else if (varType & VT_BYREF)
             {
-                if( m_seqCurrentVartypes[i] & VT_BYREF)
+                VARTYPE type = varType ^ VT_BYREF;
+                CComVariant var;
+
+                if (i < nUnoArgs && anyArg.getValueTypeClass() != TypeClass_VOID)
                 {
-                    anyToVariant( &arRefArgs[revIndex],
-                        Params.getConstArray()[i], m_seqCurrentVartypes[i]);
-                    arArgs[revIndex].vt= m_seqCurrentVartypes[i];
-                    if( (m_seqCurrentVartypes[i] & 0x0fff ) == VT_VARIANT)
-                        arArgs[revIndex].byref= &arRefArgs[revIndex];
-                    else
-                        arArgs[revIndex].byref= &arRefArgs[revIndex].byref;
+                    anyToVariant( & arRefArgs[revIndex], anyArg, type);
+                }
+                else if (paramFlags & PARAMFLAG_FHASDEFAULT)
+                {
+                    //optional arg with default
+                    VariantCopy( & arRefArgs[revIndex],
+                                & aFuncDesc->lprgelemdescParam[i].paramdesc.
+                                pparamdescex->varDefaultValue);
                 }
                 else
-                    anyToVariant( &arArgs[revIndex],
-                        Params.getConstArray()[i], m_seqCurrentVartypes[i]);
-            }
+                {
+                    //optional arg
+                    //e.g: call func(x) in basic : func() ' no arg supplied
+                    OSL_ASSERT(paramFlags & PARAMFLAG_FOPT);
+                    arRefArgs[revIndex].vt = VT_ERROR;
+                    arRefArgs[revIndex].scode = DISP_E_PARAMNOTFOUND;
+                }
 
+                // Set the converted arguments in the array which will be
+                // DISPPARAMS::rgvarg
+                // byref arg VT_XXX |VT_BYREF
+                arArgs[revIndex].vt = varType;
+                if (revIndex == 0 && aFuncDesc->invkind == INVOKE_PROPERTYPUT)
+                {
+                    arArgs[revIndex] = arRefArgs[revIndex];
+                }
+                else if (type == VT_DECIMAL)
+                {
+                    arArgs[revIndex].byref= & arRefArgs[revIndex].decVal;
+                }
+                else if (type == VT_VARIANT)
+                {
+                    if ( ! (paramFlags & PARAMFLAG_FOUT))
+                        arArgs[revIndex] = arRefArgs[revIndex];
+                    else
+                        arArgs[revIndex].byref = & arRefArgs[revIndex];
+                }
+                else
+                {
+                    arArgs[revIndex].byref = & arRefArgs[revIndex].byref;
+                    arArgs[revIndex].vt = arRefArgs[revIndex].vt | VT_BYREF;
+                }
+
+            }
+            // in parameter no VT_BYREF except for array, interfaces
+            else
+            {   // void any stands for optional param
+                if (i < nUnoArgs && anyArg.getValueTypeClass() != TypeClass_VOID)
+                {
+                    anyToVariant( & arArgs[revIndex], anyArg, varType);
+                }
+                //optional arg but no void any supplied
+                //Basic:  obj.func() ' first parameter left out because it is optional
+                else if (paramFlags & PARAMFLAG_FHASDEFAULT)
+                {
+                    //optional arg with defaulteithter as direct arg : VT_XXX or
+                    VariantCopy( & arArgs[revIndex],
+                        & aFuncDesc->lprgelemdescParam[i].paramdesc.
+                            pparamdescex->varDefaultValue);
+                }
+                else
+                {
+                    OSL_ASSERT(paramFlags & PARAMFLAG_FOPT);
+                    arArgs[revIndex].vt = VT_ERROR;
+                    arArgs[revIndex].scode = DISP_E_PARAMNOTFOUND;
+                }
+            }
         }
+    }
+    catch (IllegalArgumentException & e)
+    {
+        e.ArgumentPosition = i;
+        throw;
+    }
+    catch (CannotConvertException & e)
+    {
+        e.ArgumentIndex = i;
+        throw;
     }
     dispparams.rgvarg= arArgs;
     // invoking OLE method
-    result = m_pDispatch->Invoke(dispID,
+    DWORD localeId = LOCALE_USER_DEFAULT;
+    result = m_spDispatch->Invoke(aFuncDesc->memid,
                                  IID_NULL,
-                                 LOCALE_SYSTEM_DEFAULT,
-                                 DISPATCH_METHOD,
+                                 localeId,
+                                 aFuncDesc->invkind,
                                  &dispparams,
                                  &varResult,
                                  &excepinfo,
@@ -1297,80 +1705,129 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(DISPID dispID,
     // converting return value and out parameter back to UNO
     if (result == S_OK)
     {
-        if ( m_seqCurrentParamTypes.getLength())
+
+        // allocate space for the out param Sequence and indices Sequence
+        int outParamsCount= 0; // includes in/out parameter
+        for (int i = 0; i < aFuncDesc->cParams; i++)
         {
-            // allocate space for the out param Sequence and indices Sequence
-            sal_Int32 outParamsCount= 0; // includes in/out parameter
-            for( sal_Int32 iparams=0; iparams < m_seqCurrentParamTypes.getLength(); iparams++)
-            {
-                if( m_seqCurrentParamTypes[iparams] & PARAMFLAG_FOUT)
-                    outParamsCount++;
-            }
+            if (aFuncDesc->lprgelemdescParam[i].paramdesc.wParamFlags &
+                PARAMFLAG_FOUT)
+                outParamsCount++;
+        }
 
-            OutParamIndex.realloc( outParamsCount);
-            OutParam.realloc( outParamsCount);
-
-            sal_Int32 outParamIndex=0;
-            for( sal_Int32 i=0; i < m_seqCurrentParamTypes.getLength(); i ++)
+        OutParamIndex.realloc(outParamsCount);
+        OutParam.realloc(outParamsCount);
+        // Convert out params
+        if (outParamsCount)
+        {
+            int outParamIndex=0;
+            for (int paramIndex = 0; paramIndex < nUnoArgs; paramIndex ++)
             {
-                if( m_seqCurrentParamTypes[i] & PARAMFLAG_FOUT)
+                //Determine the index within the method sinature
+                int realParamIndex = paramIndex;
+                int revParamIndex = dispparams.cArgs - paramIndex - 1;
+                if (Params[paramIndex].getValueType()
+                    == getCppuType((NamedArgument*) 0))
                 {
-                    OutParamIndex[outParamIndex]= i;
-                    // variantToAny is called with the "reduce range" parameter set to sal_False.
-                    // That causes VT_I4 values not to be converted down to a "lower" type. That
-                    // feature exist for JScript only because it only uses VT_I4 for integer types.
-                    // If JScript objects are used then the function invokeWithDispIdUnoTlb is used
-                    // rather then this one.
-                    variantToAny( &arRefArgs[dispparams.cArgs - i -1], OutParam[outParamIndex], sal_False );
-                    outParamIndex++;
+                    //dispparams.rgdispidNamedArgs contains the mapping from index
+                    //of named args list to index of parameter list
+                    realParamIndex = dispparams.rgdispidNamedArgs[revParamIndex];
                 }
+
+                // no named arg, always come before named args
+                if (! (aFuncDesc->lprgelemdescParam[realParamIndex].paramdesc.wParamFlags
+                       & PARAMFLAG_FOUT))
+                    continue;
+                Any outAny;
+                // variantToAny is called with the "reduce range" parameter set to sal_False.
+                // That causes VT_I4 values not to be converted down to a "lower" type. That
+                // feature exist for JScript only because it only uses VT_I4 for integer types.
+                try
+                {
+                    variantToAny( & arRefArgs[revParamIndex], outAny, sal_False );
+                }
+                catch (IllegalArgumentException & e)
+                {
+                    e.ArgumentPosition = paramIndex;
+                    throw;
+                }
+                catch (CannotConvertException & e)
+                {
+                    e.ArgumentIndex = paramIndex;
+                    throw;
+                }
+                OutParam[outParamIndex] = outAny;
+                OutParamIndex[outParamIndex] = paramIndex;
+                outParamIndex++;
             }
+            OutParam.realloc(outParamIndex);
+            OutParamIndex.realloc(outParamIndex);
         }
         // Return value
-        variantToAny(&varResult, ret);
+        variantToAny(&varResult, ret, sal_False);
     }
 
-    // lookup error code
+    // map error codes to exceptions
+    OUString message;
     switch (result)
     {
         case S_OK:
             break;
         case DISP_E_BADPARAMCOUNT:
-            throw IllegalArgumentException();
+            throw IllegalArgumentException(OUSTR("[automation bridge] Wrong "
+                  "number of arguments. Object returned DISP_E_BADPARAMCOUNT."),
+                  0, 0);
             break;
         case DISP_E_BADVARTYPE:
-            throw RuntimeException();
+            throw RuntimeException(OUSTR("[automation bridge] One or more "
+                  "arguments have the wrong type. Object returned "
+                  "DISP_E_BADVARTYPE."), 0);
             break;
         case DISP_E_EXCEPTION:
-            throw InvocationTargetException();
-            break;
+                message = OUSTR("[automation bridge]: ");
+                message += OUString(excepinfo.bstrDescription,
+                    ::SysStringLen(excepinfo.bstrDescription));
+                throw InvocationTargetException(message, Reference<XInterface>(), Any());
+                break;
         case DISP_E_MEMBERNOTFOUND:
-            throw IllegalArgumentException();
+            message = OUSTR("[automation bridge]: A function with the name \"")
+                + sFuncName + OUSTR("\" is not supported. Object returned "
+                "DISP_E_MEMBERNOTFOUND.");
+            throw IllegalArgumentException(message, 0, 0);
             break;
         case DISP_E_NONAMEDARGS:
-            throw IllegalArgumentException();
+            throw IllegalArgumentException(OUSTR("[automation bridge] Object "
+                  "returned DISP_E_NONAMEDARGS"),0, uArgErr);
             break;
         case DISP_E_OVERFLOW:
-            throw CannotConvertException(L"call to OLE object failed", static_cast<XInterface*>(
+            throw CannotConvertException(L"[automation bridge] Call failed.",
+                                         static_cast<XInterface*>(
                 static_cast<XWeak*>(this)), TypeClass_UNKNOWN, FailReason::OUT_OF_RANGE, uArgErr);
             break;
         case DISP_E_PARAMNOTFOUND:
-            throw IllegalArgumentException(L"call to OLE object failed", static_cast<XInterface*>(
-                static_cast<XWeak*>(this)), uArgErr);
+            throw IllegalArgumentException(OUSTR("[automation bridge]Call failed."
+                                                 "Object returned DISP_E_PARAMNOTFOUND."),
+                                           0, uArgErr);
             break;
         case DISP_E_TYPEMISMATCH:
-            throw CannotConvertException(L"call to OLE object failed",static_cast<XInterface*>(
+            throw CannotConvertException(OUSTR("[automation bridge] Call  failed. "
+                                         "Object returned DISP_E_TYPEMISMATCH"),
+                static_cast<XInterface*>(
                 static_cast<XWeak*>(this)) , TypeClass_UNKNOWN, FailReason::UNKNOWN, uArgErr);
             break;
         case DISP_E_UNKNOWNINTERFACE:
-            throw RuntimeException() ;
+            throw RuntimeException(OUSTR("[automation bridge] Call failed. "
+                                       "Object returned DISP_E_UNKNOWNINTERFACE."),0);
             break;
         case DISP_E_UNKNOWNLCID:
-            throw RuntimeException() ;
+            throw RuntimeException(OUSTR("[automation bridge] Call failed. "
+                                       "Object returned DISP_E_UNKNOWNLCID."),0);
             break;
         case DISP_E_PARAMNOTOPTIONAL:
-            throw CannotConvertException(L"call to OLE object failed", static_cast<XInterface*>(
-                static_cast<XWeak*>(this)), TypeClass_UNKNOWN, FailReason::NO_DEFAULT_AVAILABLE, uArgErr);
+            throw CannotConvertException(OUSTR("[automation bridge] Call failed."
+                  "Object returned DISP_E_PARAMNOTOPTIONAL"),
+                        static_cast<XInterface*>(static_cast<XWeak*>(this)),
+                              TypeClass_UNKNOWN, FailReason::NO_DEFAULT_AVAILABLE, uArgErr);
             break;
         default:
             throw RuntimeException();
@@ -1380,139 +1837,398 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(DISPID dispID,
     return ret;
 }
 
-sal_Bool IUnknownWrapper_Impl::getParameterInfo()
+void IUnknownWrapper_Impl::getFuncDescForInvoke(const OUString & sFuncName,
+                                                const Sequence<Any> & seqArgs,
+                                                FUNCDESC** pFuncDesc)
 {
-    sal_Bool ret= sal_True;
-    ITypeInfo* pType= getTypeInfo();
-    if(! pType )
-        return sal_False;
-    // build the map of function names and their tlb index
-    if( sal_False == isComTlbIndex())
-        buildComTlbIndex();
+    int nUnoArgs = seqArgs.getLength();
+    const Any * arArgs = seqArgs.getConstArray();
+    ITypeInfo* pInfo = getTypeInfo();
 
+    //If the last of the positional arguments is a PropertyPutArgument
+    //then obtain the type info for the property put operation.
+
+    //The property value is always the last argument, in a positional argument list
+    //or in a list of named arguments. A PropertyPutArgument is actually a named argument
+    //hence it must not be put in an extra NamedArgument structure
+    if (nUnoArgs > 0 &&
+        arArgs[nUnoArgs - 1].getValueType() == getCppuType((PropertyPutArgument*) 0))
+    {
+        // DISPATCH_PROPERTYPUT
+        FuncDesc aDescGet(pInfo);
+        FuncDesc aDescPut(pInfo);
+        VarDesc aVarDesc(pInfo);
+        getPropDesc(sFuncName, & aDescGet, & aDescPut, & aVarDesc);
+        if ( ! aDescPut)
+        {
+            throw IllegalArgumentException(
+                OUSTR("[automation bridge] The object does not have a writeable property: ")
+                + sFuncName, Reference<XInterface>(), 0);
+        }
+        *pFuncDesc = aDescPut.Detach();
+    }
+    else
+    {   // DISPATCH_METHOD
+        FuncDesc aFuncDesc(pInfo);
+        getFuncDesc(sFuncName, & aFuncDesc);
+        if ( ! aFuncDesc)
+        {
+            // Fallback: DISPATCH_PROPERTYGET can mostly be called as
+            // DISPATCH_METHOD
+            ITypeInfo * pInfo = getTypeInfo();
+            FuncDesc aDescPut(pInfo);
+            VarDesc aVarDesc(pInfo);
+            getPropDesc(sFuncName, & aFuncDesc, & aDescPut, & aVarDesc);
+            if ( ! aFuncDesc )
+            {
+                throw IllegalArgumentException(
+                    OUSTR("[automation bridge] The object does not have a function"
+                          "or readable property \"")
+                    + sFuncName, Reference<XInterface>(), 0);
+            }
+        }
+        *pFuncDesc = aFuncDesc.Detach();
+    }
+}
+bool IUnknownWrapper_Impl::getDispid(const OUString& sFuncName, DISPID * id)
+{
+    OSL_ASSERT(m_spDispatch);
+    LPOLESTR lpsz = const_cast<LPOLESTR> (sFuncName.getStr());
+    HRESULT hr = m_spDispatch->GetIDsOfNames(IID_NULL, &lpsz, 1, LOCALE_USER_DEFAULT, id);
+    return hr == S_OK ? true : false;
+}
+void IUnknownWrapper_Impl::getFuncDesc(const OUString & sFuncName, FUNCDESC ** pFuncDesc)
+
+{
+    OSL_ASSERT( * pFuncDesc == 0);
+    buildComTlbIndex();
     typedef TLBFuncIndexMap::const_iterator cit;
-    cit itIndex= m_mapComFunc.find( m_usCurrentInvoke );
+        typedef TLBFuncIndexMap::iterator it;
+    //We assume there is only one entry with the function name. A property
+    //would have two entries.
+    cit itIndex= m_mapComFunc.find(sFuncName);
+    if (itIndex == m_mapComFunc.end())
+    {
+        //try case insensive with IDispatch::GetIDsOfNames
+        DISPID id;
+        if (getDispid(sFuncName, &id))
+        {
+            CComBSTR memberName;
+            unsigned int pcNames=0;
+            // get the case sensitive name
+            if( SUCCEEDED(getTypeInfo()->GetNames( id, & memberName, 1, &pcNames)))
+            {
+                //get the associated index and add an entry to the map
+                //with the name sFuncName which differs in the casing of the letters to
+                //the actual name as obtained from ITypeInfo
+                cit itOrg  = m_mapComFunc.find(OUString(memberName));
+                OSL_ASSERT(itOrg != m_mapComFunc.end());
+                itIndex =
+                    m_mapComFunc.insert( TLBFuncIndexMap::value_type
+                    ( make_pair(sFuncName, itOrg->second ) ));
+            }
+        }
+    }
+
+#if OSL_DEBUG_LEVEL >= 1
+    // There must only be one entry if sFuncName represents a function or two
+    // if it is a property
+    pair<cit, cit> p = m_mapComFunc.equal_range(sFuncName.toAsciiLowerCase());
+    int numEntries = 0;
+    for ( ;p.first != p.second; p.first ++, numEntries ++);
+    OSL_ASSERT( ! (numEntries > 3) );
+#endif
     if( itIndex != m_mapComFunc.end())
     {
-        FUNCDESC* funcDesc= NULL;
-        if( SUCCEEDED( pType->GetFuncDesc( itIndex->second, &funcDesc)))
+        ITypeInfo* pType= getTypeInfo();
+        FUNCDESC * pDesc = NULL;
+        if (SUCCEEDED(pType->GetFuncDesc(itIndex->second, & pDesc)))
         {
-            m_seqCurrentParamTypes.realloc( funcDesc->cParams);
-            m_seqCurrentVartypes.realloc( funcDesc->cParams);
-            // Examine each param
-            for( sal_Int16 iparams= 0; iparams < funcDesc->cParams; iparams++)
+            if (pDesc->invkind == INVOKE_FUNC)
             {
-                sal_Int32 flags= funcDesc->lprgelemdescParam[iparams].paramdesc.wParamFlags;
-                m_seqCurrentParamTypes[iparams]= flags & ( PARAMFLAG_FIN | PARAMFLAG_FOUT);
-                // default is PARAMFLAG_IN
-                if( m_seqCurrentParamTypes[iparams] == 0)
-                    m_seqCurrentParamTypes[iparams]= PARAMFLAG_FIN;
-
-                if( ! getElementTypeDesc( & funcDesc->lprgelemdescParam[iparams].tdesc,
-                                    m_seqCurrentVartypes[iparams]))
-                                    ret= sal_False;
-
-                if( ! ret) break;
+                (*pFuncDesc) = pDesc;
             }
-            pType->ReleaseFuncDesc( funcDesc);
+            else
+            {
+                pType->ReleaseFuncDesc(pDesc);
+            }
         }
         else
-            ret= sal_False;
-    }
-    else
-        ret= sal_False;
-
-    return ret;
-}
-
-// Gets the element type in a VARIANT like style. E.g. if desc->lptdesc contains
-// a VT_PTR than it is replaced by VT_BYREF and VT_SAFEARRAY is replaced by VT_ARRAY
-// If the TYPEDESC describes an SAFEARRAY then varType is a combination of VT_ARRAY
-// and the element type
-sal_Bool IUnknownWrapper_Impl::getElementTypeDesc( TYPEDESC *desc, VARTYPE& varType )
-{
-    sal_Bool ret= sal_True;
-    VARTYPE _type;
-
-    if( desc->vt == VT_PTR)
-    {
-        if( getElementTypeDesc( desc->lptdesc, _type))
-            varType= _type | VT_BYREF;
-        else
-            ret= sal_False;
-    }
-    else if( desc->vt == VT_SAFEARRAY )
-    {
-        if( getElementTypeDesc( desc->lptdesc, _type))
-            varType= _type | VT_ARRAY;
-        else
-            sal_False;
-    }
-    else
-    {
-        varType= desc->vt;
-    }
-    return ret;
-}
-
-sal_Bool IUnknownWrapper_Impl::buildComTlbIndex()
-{
-    sal_Bool ret= sal_True;
-
-    ITypeInfo* pType= getTypeInfo();
-    if( pType)
-    {
-        TYPEATTR* typeAttr= NULL;
-        if( SUCCEEDED( pType->GetTypeAttr( &typeAttr)))
         {
-            for( long i= 0; i < typeAttr->cFuncs; i++)
+            throw BridgeRuntimeError(OUSTR("[automation bridge] Could not get "
+                                           "FUNCDESC for ") + sFuncName);
+        }
+    }
+   //else no entry found for sFuncName, pFuncDesc will not be filled in
+}
+
+void IUnknownWrapper_Impl::getPropDesc(const OUString & sFuncName, FUNCDESC ** pFuncDescGet,
+                                       FUNCDESC** pFuncDescPut, VARDESC** pVarDesc)
+{
+    OSL_ASSERT( * pFuncDescGet == 0 && * pFuncDescPut == 0);
+    buildComTlbIndex();
+    typedef TLBFuncIndexMap::const_iterator cit;
+    pair<cit, cit> p = m_mapComFunc.equal_range(sFuncName);
+    if (p.first == m_mapComFunc.end())
+    {
+        //try case insensive with IDispatch::GetIDsOfNames
+        DISPID id;
+        if (getDispid(sFuncName, &id))
+        {
+            CComBSTR memberName;
+            unsigned int pcNames=0;
+            // get the case sensitive name
+            if( SUCCEEDED(getTypeInfo()->GetNames( id, & memberName, 1, &pcNames)))
             {
-                FUNCDESC* funcDesc= NULL;
-                if( SUCCEEDED( pType->GetFuncDesc( i, &funcDesc)))
+                //As opposed to getFuncDesc, we do not add the value because we would
+                // need to find the get and set description for the property. This would
+                //mean to iterate over all FUNCDESCs again.
+                p = m_mapComFunc.equal_range(OUString(memberName));
+            }
+        }
+    }
+
+    for ( int i = 0 ;p.first != p.second; p.first ++, i ++)
+    {
+        // There are a maximum of two entries, property put and property get
+        OSL_ASSERT( ! (i > 2) );
+        ITypeInfo* pType= getTypeInfo();
+        FUNCDESC * pFuncDesc = NULL;
+        if (SUCCEEDED( pType->GetFuncDesc(p.first->second, & pFuncDesc)))
+        {
+            if (pFuncDesc->invkind == INVOKE_PROPERTYGET)
+            {
+                (*pFuncDescGet) = pFuncDesc;
+            }
+            else if (pFuncDesc->invkind == INVOKE_PROPERTYPUT ||
+                     pFuncDesc->invkind == INVOKE_PROPERTYPUTREF)
+            {
+                //a property can have 3 entries, put, put ref, get
+                // If INVOKE_PROPERTYPUTREF or INVOKE_PROPERTYPUT is used
+                //depends on what is found first.
+                if ( * pFuncDescPut)
                 {
-                    BSTR memberName= NULL;
-                    unsigned int pcNames=0;
-                    if( SUCCEEDED(pType->GetNames( funcDesc->memid, & memberName, 1, &pcNames)))
-                    {
-                        m_mapComFunc.insert( TLBFuncIndexMap::value_type( OUString( memberName), i));
-                        SysFreeString( memberName);
-                    }
-                    else
-                        ret= sal_False;
-                    pType->ReleaseFuncDesc( funcDesc);
+                    //we already have found one
+                    pType->ReleaseFuncDesc(pFuncDesc);
                 }
                 else
-                    ret=sal_False;
+                {
+                    (*pFuncDescPut) = pFuncDesc;
+                }
             }
-            pType->ReleaseTypeAttr( typeAttr);
+            else
+            {
+                pType->ReleaseFuncDesc(pFuncDesc);
+            }
         }
-        else
-            ret= sal_False;
+        //ITypeInfo::GetFuncDesc may even provide a funcdesc for a VARDESC
+        // with invkind = INVOKE_FUNC. Since this function should only return
+        //a value for a real property (XInvokation::hasMethod, ..::hasProperty
+        //we need to make sure that sFuncName represents a real property.
+        VARDESC * pVD = NULL;
+        if (SUCCEEDED(pType->GetVarDesc(p.first->second, & pVD)))
+            (*pVarDesc) = pVD;
     }
-    else
-        ret= sal_False;
-    return ret;
+   //else no entry for sFuncName, pFuncDesc will not be filled in
 }
 
-inline sal_Bool IUnknownWrapper_Impl::isComTlbIndex()
+VARTYPE IUnknownWrapper_Impl::getElementTypeDesc(const TYPEDESC *desc)
 {
-    if( m_mapComFunc.size())
-        return sal_True;
-    return sal_False;
+    VARTYPE _type;
+
+    if (desc->vt == VT_PTR)
+    {
+        _type = getElementTypeDesc(desc->lptdesc);
+        _type |= VT_BYREF;
+    }
+    else if (desc->vt == VT_SAFEARRAY)
+    {
+        _type = getElementTypeDesc(desc->lptdesc);
+        _type |= VT_ARRAY;
+    }
+    else if (desc->vt == VT_USERDEFINED)
+    {
+        ITypeInfo* thisInfo = getTypeInfo(); //kept by this instance
+        CComPtr<ITypeInfo>  spRefInfo;
+        thisInfo->GetRefTypeInfo(desc->hreftype, & spRefInfo.p);
+        if (spRefInfo)
+        {
+            TypeAttr  attr(spRefInfo);
+            spRefInfo->GetTypeAttr( & attr);
+            if (attr->typekind == TKIND_ENUM)
+            {
+                //We use the type of the first enum value.
+                if (attr->cVars == 0)
+                {
+                    throw BridgeRuntimeError(OUSTR("[automation bridge] Could "
+                        "not obtain type description"));
+                }
+                VarDesc var(spRefInfo);
+                spRefInfo->GetVarDesc(0, & var);
+                _type = var->lpvarValue->vt;
+            }
+            else if (attr->typekind == TKIND_INTERFACE)
+            {
+                _type = VT_UNKNOWN;
+            }
+            else if (attr->typekind == TKIND_DISPATCH)
+            {
+                _type = VT_DISPATCH;
+            }
+            else
+            {
+                throw BridgeRuntimeError(OUSTR("[automation bridge] "
+                    "Unhandled user defined type."));
+            }
+        }
+    }
+    else
+    {
+        _type = desc->vt;
+    }
+    return _type;
+}
+
+void IUnknownWrapper_Impl::buildComTlbIndex()
+{
+    if ( ! m_bComTlbIndexInit)
+    {
+        MutexGuard guard(getBridgeMutex());
+        {
+            if ( ! m_bComTlbIndexInit)
+            {
+                OUString sError;
+                ITypeInfo* pType= getTypeInfo();
+                TypeAttr typeAttr(pType);
+                if( SUCCEEDED( pType->GetTypeAttr( &typeAttr)))
+                {
+                    for( long i= 0; i < typeAttr->cFuncs; i++)
+                    {
+                        FuncDesc funcDesc(pType);
+                        if( SUCCEEDED( pType->GetFuncDesc( i, &funcDesc)))
+                        {
+                            CComBSTR memberName;
+                            unsigned int pcNames=0;
+                            if( SUCCEEDED(pType->GetNames( funcDesc->memid, & memberName, 1, &pcNames)))
+                            {
+                                OUString usName(memberName);
+                                m_mapComFunc.insert( TLBFuncIndexMap::value_type( usName, i));
+                            }
+                            else
+                            {
+                                sError = OUSTR("[automation bridge] IUnknownWrapper_Impl::buildComTlbIndex, " \
+                                                "ITypeInfo::GetNames failed.");
+                            }
+                        }
+                        else
+                            sError = OUSTR("[automation bridge] IUnknownWrapper_Impl::buildComTlbIndex, " \
+                                            "ITypeInfo::GetFuncDesc failed.");
+                    }
+
+                    //If we create an Object in JScript and a a property then it
+                    //has VARDESC instead of FUNCDESC
+                    for (long i = 0; i < typeAttr->cVars; i++)
+                    {
+                        VarDesc varDesc(pType);
+                        if (SUCCEEDED(pType->GetVarDesc(i, & varDesc)))
+                        {
+                            CComBSTR memberName;
+                            unsigned int pcNames = 0;
+                            if (SUCCEEDED(pType->GetNames(varDesc->memid, & memberName, 1, &pcNames)))
+                            {
+                                if (varDesc->varkind == VAR_DISPATCH)
+                                {
+                                    OUString usName(memberName);
+                                    m_mapComFunc.insert(TLBFuncIndexMap::value_type(
+                                                        usName, i));
+                                }
+                            }
+                            else
+                            {
+                                sError = OUSTR("[automation bridge] IUnknownWrapper_Impl::buildComTlbIndex, " \
+                                                "ITypeInfo::GetNames failed.");
+                            }
+                        }
+                        else
+                            sError = OUSTR("[automation bridge] IUnknownWrapper_Impl::buildComTlbIndex, " \
+                                           "ITypeInfo::GetVarDesc failed.");
+
+                    }
+                }
+                else
+                    sError = OUSTR("[automation bridge] IUnknownWrapper_Impl::buildComTlbIndex, " \
+                                    "ITypeInfo::GetTypeAttr failed.");
+
+                if (sError.getLength())
+                {
+                    throw BridgeRuntimeError(sError);
+                }
+
+                m_bComTlbIndexInit = true;
+            }
+        }
+    }
 }
 
 ITypeInfo* IUnknownWrapper_Impl::getTypeInfo()
 {
     HRESULT hr= S_OK;
-    if( !m_pDispatch)
-        return NULL;
+    if( !m_spDispatch)
+    {
+        throw BridgeRuntimeError(OUSTR("The object has no IDispatch interface!"));
+    }
 
     if( !m_spTypeInfo )
     {
-        LCID localId= GetUserDefaultLCID();
-        CComPtr< ITypeInfo > spType;
-        if( SUCCEEDED( m_pDispatch->GetTypeInfo( 0, localId, &spType.p)))
-            m_spTypeInfo= spType;
+        MutexGuard guard(getBridgeMutex());
+        if( ! m_spTypeInfo)
+        {
+            CComPtr< ITypeInfo > spType;
+            if( SUCCEEDED( m_spDispatch->GetTypeInfo( 0, LOCALE_USER_DEFAULT, &spType.p)))
+
+            {
+                OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
+
+                //If this is a dual interface then TYPEATTR::typekind is usually TKIND_INTERFACE
+                //We need to get the type description for TKIND_DISPATCH
+                TypeAttr typeAttr(spType.p);
+                if( SUCCEEDED(spType->GetTypeAttr( &typeAttr)))
+                {
+                    if (typeAttr->typekind == TKIND_INTERFACE &&
+                            typeAttr->wTypeFlags & TYPEFLAG_FDUAL)
+                    {
+                        HREFTYPE refDispatch;
+                        if (SUCCEEDED(spType->GetRefTypeOfImplType(-1, &refDispatch)))
+                        {
+                            CComPtr<ITypeInfo> spTypeDisp;
+                            if (SUCCEEDED(spType->GetRefTypeInfo(refDispatch, & spTypeDisp)))
+                                m_spTypeInfo= spTypeDisp;
+                        }
+                        else
+                        {
+                            throw BridgeRuntimeError(
+                                OUSTR("[automation bridge] Could not obtain type information "
+                                "for dispatch interface." ));
+                        }
+                    }
+                    else if (typeAttr->typekind == TKIND_DISPATCH)
+                    {
+                        m_spTypeInfo= spType;
+                    }
+                    else
+                    {
+                        throw BridgeRuntimeError(
+                            OUSTR("[automation bridge] Automation object does not "
+                            "provide type information."));
+                    }
+                }
+            }
+            else
+            {
+                throw BridgeRuntimeError(OUSTR("[automation bridge]The dispatch object does not "
+                                               "support ITypeInfo!"));
+            }
+        }
     }
     return m_spTypeInfo;
 }
