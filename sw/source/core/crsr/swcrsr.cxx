@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcrsr.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 09:34:34 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 13:05:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,6 +187,7 @@ struct _PercentHdl
         }
         else
         {
+            bNodeIdx = TRUE;
             nStt = rPam.GetMark()->nNode.GetIndex();
             nEnd = rPam.GetPoint()->nNode.GetIndex();
         }
