@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:10:05 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:52:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,8 +239,8 @@ static sal_uInt8* X11_getPaletteBmpFromImage(
     writeLE( nColors, pBuffer+50 );
 
     XColor aColors[256];
-    if( nColors > (1<<nBitCount) ) // paranoia
-        nColors = (1 << nBitCount);
+    if( nColors > (1U << nBitCount) ) // paranoia
+        nColors = (1U << nBitCount);
     for( unsigned long nPixel = 0; nPixel < nColors; nPixel++ )
     {
         aColors[nPixel].flags = DoRed | DoGreen | DoBlue;
@@ -451,9 +451,9 @@ PixmapHolder::PixmapHolder( Display* pDisplay ) :
 #if OSL_DEBUG_LEVEL > 1
     static const char* pClasses[] =
         { "StaticGray", "GrayScale", "StaticColor", "PseudoColor", "TrueColor", "DirectColor" };
-    fprintf( stderr, "PixmapHolder visual: id = 0x%x, class = %s (%d), depth=%d; color map = 0x%x\n",
+    fprintf( stderr, "PixmapHolder visual: id = 0x%lx, class = %s (%d), depth=%d; color map = 0x%lx\n",
              m_aInfo.visualid,
-             (m_aInfo.c_class >= 0 && m_aInfo.c_class < sizeof(pClasses)/sizeof(pClasses[0])) ? pClasses[m_aInfo.c_class] : "<unknown>",
+             (m_aInfo.c_class >= 0 && unsigned(m_aInfo.c_class) < sizeof(pClasses)/sizeof(pClasses[0])) ? pClasses[m_aInfo.c_class] : "<unknown>",
              m_aInfo.c_class,
              m_aInfo.depth,
              m_aColormap  );
@@ -545,10 +545,10 @@ void PixmapHolder::setBitmapDataPalette( const sal_uInt8* pData, XImage* pImage 
     }
 
     // allocate buffer to hold header and scanlines, initialize to zero
-    for( int y = 0; y < nHeight; y++ )
+    for( unsigned int y = 0; y < nHeight; y++ )
     {
         const sal_uInt8* pScanline = pBMData + (nHeight-1-y)*nScanlineSize;
-        for( int x = 0; x < nWidth; x++ )
+        for( unsigned int x = 0; x < nWidth; x++ )
         {
             int nCol = 0;
             switch( nDepth )
