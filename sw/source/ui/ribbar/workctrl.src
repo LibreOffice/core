@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workctrl.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-06 19:26:02 $
+ *  last change: $Author: kz $ $Date: 2001-04-26 20:23:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -539,7 +539,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ chinese_simplified ] = "ΞΔ±ΎΏς";
         Text[ russian ] = "Òεκρςξβΰÿ πΰμκΰ";
         Text[ polish ] = "Ramka tekstu";
-        Text[ japanese ] = "Γ·½ΔΞή―Έ½";
+        Text[ japanese ] = "Γ·½Δg";
         Text[ chinese_traditional ] = "¤ε¦r¤θ¶τ";
         Text[ arabic ] = "ίΗΟΡ δΥ";
         Text[ greek ] = "Πλαίσιο κειμένου";
@@ -1046,7 +1046,7 @@ String STR_IMGBTN_FRM_DOWN
     Text[ chinese_simplified ] = "ΟΒÒ»ΈφΞΔ±ΎΏς";
     Text[ russian ] = "Ρλεδσώωΰÿ ςεκρςξβΰÿ πΰμκΰ";
     Text[ polish ] = "Nastκpna ramka tekstowa";
-    Text[ japanese ] = "‚ΜΓ·½ΔΞή―Έ½";
+    Text[ japanese ] = "‚ΜΓ·½Δg";
     Text[ chinese_traditional ] = "¤U¤@­Σ¤ε¦r¤θ¶τ";
     Text[ arabic ] = "ίΗΟΡ ΗαδΥ ΗαΚΗαν";
     Text[ greek ] = "Επόμενο πλαίσιο κειμένου";
@@ -1451,7 +1451,7 @@ String STR_IMGBTN_FRM_UP
     Text[ chinese_simplified ] = "ΙΟÒ»ΈφΞΔ±ΎΏς";
     Text[ russian ] = "Οπεδϋδσωΰÿ ςεκρςξβΰÿ πΰμκΰ";
     Text[ polish ] = "Poprzednia ramka tekstowa";
-    Text[ japanese ] = "‘O‚ΜΓ·½ΔΞή―Έ½";
+    Text[ japanese ] = "‘O‚ΜΓ·½Δg";
     Text[ chinese_traditional ] = "¤W¤@­Σ¤ε¦r¤θ¶τ";
     Text[ arabic ] = "ίΗΟΡ ΗαδΥ ΗαΣΗΘή";
     Text[ greek ] = "Προηγούμενο πλαίσιο κειμένου";
