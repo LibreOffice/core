@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cancelcommandexecution.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-25 07:07:40 $
+ *  last change: $Author: sb $ $Date: 2001-08-29 13:32:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,7 @@ void cancelCommandExecution( const com::sun::star::uno::Any & rException,
                                     xEnv )
     throw( com::sun::star::uno::Exception );
 
+#if SUPD < 641
 /** Cancel the execution of a command by throwing the appropriate exception.
     If an Interaction Handler is given with the command environment and the
     handler handles the exception by selecting the supplied continuation,
@@ -190,6 +191,7 @@ void cancelCommandExecution( const com::sun::star::ucb::IOErrorCode eError,
                                 com::sun::star::ucb::XCommandProcessor > &
                                     xContext = 0 )
     throw( com::sun::star::uno::Exception );
+#endif // SUPD, 641
 
 /** Cancel the execution of a command by throwing the appropriate exception.
     If an Interaction Handler is given with the command environment and the

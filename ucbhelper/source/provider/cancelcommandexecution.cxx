@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cancelcommandexecution.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kso $ $Date: 2001-07-04 13:06:32 $
+ *  last change: $Author: sb $ $Date: 2001-08-29 13:34:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,7 @@ void cancelCommandExecution( const uno::Any & rException,
     throw uno::RuntimeException();
 }
 
+#if SUPD < 641
 //=========================================================================
 void cancelCommandExecution( const ucb::IOErrorCode eError,
                              const rtl::OUString & rArg,
@@ -214,6 +215,7 @@ void cancelCommandExecution( const ucb::IOErrorCode eError,
     OSL_ENSURE( sal_False, "Return from cppu::throwException call!!!" );
     throw uno::RuntimeException();
 }
+#endif // SUPD, 641
 
 //=========================================================================
 void cancelCommandExecution( const ucb::IOErrorCode eError,
