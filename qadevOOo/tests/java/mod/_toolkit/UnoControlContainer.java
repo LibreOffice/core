@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlContainer.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:19:22 $
+ *  last change:$Date: 2003-05-27 14:02:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package mod._toolkit;
 
 import com.sun.star.awt.XControl;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.awt.XControlModel;
 import com.sun.star.awt.XDevice;
 import com.sun.star.awt.XToolkit;
@@ -95,8 +96,8 @@ public class UnoControlContainer extends TestCase {
     protected void initialize(TestParameters param, PrintWriter log) {
         try {
             log.println( "creating a textdocument" );
-            xTD2 = WriterTools.createTextDoc(param.getMSF());
-            xTextDoc = WriterTools.createTextDoc(param.getMSF());
+            xTD2 = WriterTools.createTextDoc((XMultiServiceFactory)param.getMSF());
+            xTextDoc = WriterTools.createTextDoc((XMultiServiceFactory)param.getMSF());
         } catch ( Exception e ) {
             // Some exception occures.FAILED
             e.printStackTrace( log );
@@ -188,7 +189,7 @@ public class UnoControlContainer extends TestCase {
         // finished create Object Relations -----------------------------------
         // create the UnoControlContainer
         try {
-            oObj = (XInterface) param.getMSF().createInstance(
+            oObj = (XInterface) ((XMultiServiceFactory)param.getMSF()).createInstance(
                                     "com.sun.star.awt.UnoControlContainer");
             XControl xCtrl = (XControl)
                 UnoRuntime.queryInterface(XControl.class, oObj);

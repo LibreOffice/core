@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlContainerModel.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:19:22 $
+ *  last change:$Date: 2003-05-27 14:02:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package mod._toolkit;
 
 import com.sun.star.uno.XInterface;
+import com.sun.star.lang.XMultiServiceFactory;
 import java.io.PrintWriter;
 import lib.StatusException;
 import lib.TestCase;
@@ -75,7 +76,7 @@ public class UnoControlContainerModel extends TestCase  {
                                                         PrintWriter log) {
         XInterface oObj = null;
         try {
-            oObj = (XInterface) param.getMSF().createInstance
+            oObj = (XInterface) ((XMultiServiceFactory)param.getMSF()).createInstance
                 ("com.sun.star.awt.UnoControlContainerModel");
         }
         catch (Exception e) {
