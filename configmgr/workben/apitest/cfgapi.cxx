@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgapi.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-01 20:56:53 $
+ *  last change: $Author: jb $ $Date: 2000-12-04 17:08:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,8 +203,8 @@ void commit()
 
 // -----------------------------------------------------------------------------
 static sal_Bool             s_bInitialized  =   sal_False;
-static const sal_Char*      s_pSourcePath   =   "f:/local/613/SRC613/configmgr/workben/local_io/share";
-static const sal_Char*      s_pUpdatePath   =   "f:/local/613/SRC613/configmgr/workben/local_io/share";
+static const sal_Char*      s_pSourcePath   =   "g:/src/configmgr/workben/local_io/share";
+static const sal_Char*      s_pUpdatePath   =   "g:/src/configmgr/workben/local_io/user";
 static const sal_Char*      s_pRootNode     =   "org.openoffice.test";
 static const sal_Char*      s_pServerType   =   "local";
 static const sal_Char*      s_pLocale       =   "de-DE";
@@ -428,7 +428,8 @@ int _cdecl main( int argc, char * argv[] )
 
         rtl::OUString sUser;
 
-        if (!sServerType.equalsIgnoreCase(ASCII("local")) && !sServerType.equalsIgnoreCase(ASCII("setup")))
+        bool bLocal = sServerType.equalsIgnoreCase(ASCII("local")) || sServerType.equalsIgnoreCase(ASCII("setup"));
+        if (!bLocal)
         {
             rtl::OUString sServer;
             sServer =           enterValue("server  : ", s_pServer,false);
@@ -487,18 +488,22 @@ int _cdecl main( int argc, char * argv[] )
 
         cout << "---------------------------------------------------------------\n Configuration Provider created !\n---------------------------------------------------------------" << endl;
 
-        OUString sPath =    enterValue("nodepath: ", s_pRootNode, false);
-        cout << endl;
-        OUString sLocale =  enterValue("locale  : ", s_pLocale, false);
-        cout << endl;
-
         Sequence< Any > aArgs;
         aArgs = createSequence(sUser, ASCII(""));
 
+        OUString sPath =    enterValue("nodepath: ", s_pRootNode, false);
+        cout << endl;
+
         aArgs.realloc(aArgs.getLength() + 1);
         aArgs[aArgs.getLength() - 1] <<= configmgr::createPropertyValue(ASCII("nodepath"), sPath);
-        aArgs.realloc(aArgs.getLength() + 1);
-        aArgs[aArgs.getLength() - 1] <<= configmgr::createPropertyValue(ASCII("locale"), sLocale);
+
+        if (!bLocal)
+        {
+            OUString sLocale =  enterValue("locale  : ", s_pLocale, false);
+            cout << endl;
+            aArgs.realloc(aArgs.getLength() + 1);
+            aArgs[aArgs.getLength() - 1] <<= configmgr::createPropertyValue(ASCII("locale"), sLocale);
+        }
 /*
 #else
         OUString aStr = ASCII("String");
