@@ -2,9 +2,9 @@
  *
  *  $RCSfile: preload.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:48:23 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:28:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ ModalDialog RID_DLG_OEMWIZARD
         Text [ english_us ] = "<< Back" ;
         Text[ portuguese ] = "<< Anterior";
         Text[ russian ] = "<< Νΰηΰδ";
-        Text[ greek ] = "<< Πίσω";
+        Text[ greek ] = "<< Προηγούμενο";
         Text[ dutch ] = "<< Vorige";
         Text[ french ] = "<< Prιcιdent";
         Text[ spanish ] = "<< Regresar";
@@ -122,7 +122,7 @@ ModalDialog RID_DLG_OEMWIZARD
         Text[ japanese ] = "ζ¬΅γΈ >>";
         Text[ korean ] = "λ‹¤μ >>";
         Text[ chinese_simplified ] = "η»§η»­ >>";
-        Text[ chinese_traditional ] = "ηΉΌηΊ >>";
+        Text[ chinese_traditional ] = "δΈ‹δΈ€ζ­¥ >>";
         Text[ turkish ] = "έleri >>";
         Text[ arabic ] = "ΗαΚΗαν >>";
         Text[ catalan ] = "Segόent >>";
@@ -173,7 +173,7 @@ ModalDialog RID_DLG_OEMWIZARD
         Text[ english_us ] = "Finish";
         Text[ portuguese ] = "Criar";
         Text[ russian ] = "Γξςξβξ";
-        Text[ greek ] = "Δημιουργία";
+        Text[ greek ] = "Τέλος";
         Text[ dutch ] = "Voltooien";
         Text[ french ] = "Crιer";
         Text[ spanish ] = "Crear";
@@ -202,7 +202,7 @@ ModalDialog RID_DLG_OEMWIZARD
         Text[english_us] = " - Software License Agreement";
         Text[ portuguese ] = " - Software License Agreement";
         Text[ russian ] = "Λθφενηθξννξε ρξγλΰψενθε νΰ θροξλόηξβΰνθε οπξγπΰμμνξγξ ξαεροεχενθÿ";
-        Text[ greek ] = " - Software License Agreement";
+        Text[ greek ] = " - Άδεια χρήσης λογισμικού";
         Text[ dutch ] = " - Software-licentieovereenkomst";
         Text[ french ] = " - Contrat de licence du logiciel";
         Text[ spanish ] = " - Contrato de licencia para el uso de software ";
@@ -232,7 +232,7 @@ ModalDialog RID_DLG_OEMWIZARD
         Text[english_us] = "- User Data";
         Text[ portuguese ] = "- User Data";
         Text[ russian ] = "#ΘΜί?";
-        Text[ greek ] = "- User Data";
+        Text[ greek ] = " =-Δεδομένα χρήστη";
         Text[ dutch ] = "- User Data";
         Text[ french ] = " - Donnιes d'utilisateur";
         Text[ spanish ] = " - Datos del usuario";
@@ -268,7 +268,7 @@ TabPage RID_TP_WELCOME
     Text[ english_us ] = "Welcome";
     Text[ portuguese ] = "Bem-vindo!";
     Text[ russian ] = "Δξαπξ οξζΰλξβΰςό";
-    Text[ greek ] = "Καλώς ήρθατε";
+    Text[ greek ] = "Καλώς ορίσατε";
     Text[ dutch ] = "Welkom";
     Text[ french ] = "Bienvenue";
     Text[ spanish ] = "Bienvenido";
@@ -290,7 +290,7 @@ TabPage RID_TP_WELCOME
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 174 ) ;
         WordBreak = TRUE ;
-        Text [ language_user1 ] = "LHO:; EM 30 AUG 2002: DO NOT DELETE YOUR TRANSLATION!!! THE GERMAN TEXT IS MISSING BUT WILL RETURN!! ENGLISH IS CORRECT!LHO: Please eliminate any notion about the training in all languages except German, English, French and Japanese";
+        Text [ language_user1 ] = "; LHO:; EM 30 AUG 2002: DO NOT DELETE YOUR TRANSLATION!!! THE GERMAN TEXT IS MISSING BUT WILL RETURN!! ENGLISH IS CORRECT!LHO: Please eliminate any notion about the training in all languages except German, English, French and Japanese";
         Text = "Herzlich willkommen zu %PRODUCTNAME %PRODUCTVERSION OEM\n\n"
         "Um %PRODUCTNAME %PRODUCTVERSION OEM starten zu kφnnen, geben Sie bitte auf der dem Lizenztext folgenden "
         "Dialogseite Ihre Benutzerdaten ein. In der Readme-Datei im %PRODUCTNAME-Produktverzeichnis finden Sie "
@@ -305,7 +305,7 @@ TabPage RID_TP_WELCOME
         Text [ english_us ] = "Welcome to %PRODUCTNAME %PRODUCTVERSION OEM\n\nTo start the %PRODUCTNAME %PRODUCTVERSION OEM, please enter your personal data in the dialog following the license text. Important information is contained in the readme files which are located in the %PRODUCTNAME product directory. Please read these files carefully. You can also find detailed information at the Sun website \n\nhttp://www.sun.com/staroffice.\n\nSupport and Training:\n\nGet FREE software support valid for 60 days from date of purchase and FREE access to a web-based %PRODUCTNAME course available through the Sun(tm) Web Learning Center (valid for 90 days from the date of registration). To take advantage of this offer, visit the website below.\n\nhttp://www.sun.com/star/service\n\nWe hope you enjoy working with %PRODUCTNAME.";
         Text[ portuguese ] = "Welcome to %PRODUCTNAME %PRODUCTVERSION OEM\n\nTo start %PRODUCTNAME %PRODUCTVERSION OEM, please enter your personal data in the dialog following the license text.\n\nImportant information is contained in the readme files which are located in the StarOffice product directory. Please read these files carefully.\n\nYou can also find detailed information on the Sun Internet pages at\n\nhttp://www.sun.com/staroffice.\n\nWe hope you enjoy working with StarOffice.";
         Text[ russian ] = "Δξαπξ οξζΰλξβΰςό β %PRODUCTNAME %PRODUCTVERSION OEM\n\nΔλÿ ηΰοσρκΰ %PRODUCTNAME %PRODUCTVERSION OEM, ββεδθςε βΰψθ οεπρξνΰλόνϋε δΰννϋε β δθΰλξγε, ρλεδσώωεμ ηΰ λθφενηθξννϋμ ρξγλΰψενθεμ. Βΰζνΰÿ θντξπμΰφθÿ ρξδεπζθςρÿ β τΰιλΰυ readme, πΰροξλξζεννϋυ β κΰςΰλξγε %PRODUCTNAME. Βνθμΰςελόνξ ξηνΰκξμόςερό ρ ύςθμθ τΰιλΰμθ οξδπξανσώ θντξπμΰφθώ μξζνξ νΰιςθ νΰ θνςεπνες-ρςπΰνθφε Sun\n\nhttp://www.sun.com/staroffice.\n\nΟξδδεπζκΰ θ ξασχενθε:\n\nΟξηβξνθςε αερολΰςνξ ξδθν (1) πΰη β ρλσζασ οξδδεπζκθ StarOffice 6.0 (δξρςσονξ β ςεχενθε 60 δνει ρ μξμενςΰ οπθξαπεςενθÿ) οξλσχθςε αερολΰςνϋι δξρςσο κ ξασχΰώωθμ θνςεπνες-κσπρΰμ \"Οεπευξδ κ οπθκλΰδνξμσ κξμολεκρσ οπξγπΰμμ StarOffice 6.0\" (WO-1605), δξρςσονϋμ νΰ ξασχΰώωεμ θνςεπνες-φενςπε Sun(tm) (δξρςσονξ β  ςεχενθε 60 δνει ρ μξμενςΰ οπθξαπεςενθÿ). Χςξαϋ βξροξλόηξβΰςόρÿ οπεθμσωερςβΰμθ δΰννξγξ οπεδλξζενθε, οξρεςθςε θνςεπνες-ρΰις, σκΰηΰννϋι νθζε.\n\nhttp://www.sun.com/star/service\n\nΝΰδεεμρÿ, χςξ πΰαξςΰ ρξ %PRODUCTNAME δξρςΰβθς βΰμ σδξβξλόρςβθε.";
-        Text[ greek ] = "Welcome to %PRODUCTNAME %PRODUCTVERSION OEM\n\nTo start %PRODUCTNAME %PRODUCTVERSION OEM, please enter your personal data in the dialog following the license text.\n\nImportant information is contained in the readme files which are located in the StarOffice product directory. Please read these files carefully.\n\nYou can also find detailed information on the Sun Internet pages at\n\nhttp://www.sun.com/staroffice.\n\nWe hope you enjoy working with StarOffice.";
+        Text[ greek ] = "Καλώς ορίσατε στο %PRODUCTNAME %PRODUCTVERSION OEM\n\nΓια να ξεκινήσει το %PRODUCTNAME %PRODUCTVERSION OEM, εισαγάγετε τα προσωπικά σας δεδομένα στο παράθυρο διαλόγου που ακολουθεί το κείμενο της άδειας. Τα αρχεία readme που βρίσκονται στον κατάλογο προϊόντος του %PRODUCTNAME περιέχουν σημαντικές πληροφορίες. Διαβάστε αυτά τα αρχεία προσεκτικά. Μπορείτε επίσης να βρείτε αναλυτικές πληροφορίες στην τοποθεσία Web της Sun στη διεύθυνση\n\nhttp://www.sun.com/staroffice.\n\nΥποστήριξη και εκπαίδευση:\n\nΈχετε τη δυνατότητα να κάνετε ένα (1) δωρεάν τηλεφώνημα για τεχνική υποστήριξη του StarOffice 6.0 (ισχύει για 60 ημέρες από την ημερομηνία αγοράς) και επίσης έχετε δικαίωμα για δωρεάν πρόσβαση σε ένα μάθημα εκπαίδευσης στο Web, το \"Transitioning to the StarOffice 6.0 Application Suite\" (WO-1605), το οποίο είναι διαθέσιμο στο Sun(tm) Web Learning Center (ισχύει για 60 ημέρες από την ημερομηνία αγοράς). Για να εκμεταλλευτείτε αυτή την προσφορά, επισκεφτείτε την παρακάτω τοποθεσία web.\n\nhttp://www.sun.com/star/service\n\nΕλπίζουμε να μείνετε ικανοποιημένοι από το %PRODUCTNAME.";
         Text[ dutch ] = "Welkom bij %PRODUCTNAME %PRODUCTVERSION OEM\n\nVoordat u %PRODUCTNAME %PRODUCTVERSION OEM kunt starten, moet u in het dialoogvenster dat na de licentietekst wordt weergegeven uw gebruikersgegevens invoeren.\n\nIn het bestand Readme in de %PRODUCTNAME-productdirectory vindt u belangrijke informatie over het programma. Lees dit bestand zorgvuldig door.\n\nBovendien is er gedetailleerde informatie beschikbaar op de internetsite van Sun. Het adres is\n\nhttp://www.sun.com/staroffice.\n\nVeel succes met het gebruik van de nieuwe versie van %PRODUCTNAME.\n\nHet %PRODUCTNAME-team.";
         Text[ french ] = "%PRODUCTNAME %PRODUCTVERSION OEM - Bienvenue !\n\nAvant de pouvoir dιmarrer %PRODUCTNAME %PRODUCTVERSION OEM, vous devez spιcifier vos donnιes personnelles la page suivant la licence dans la boξte de dialogue. Le fichier Readme (placι dans le rιpertoire de %PRODUCTNAME) contient des informations importantes sur le programme. Il est vivement conseillι d'en prendre connaissance. Vous trouverez ιgalement des informations dιtaillιes sur le site Internet de Sun ΰ l'adresse\n\nhttp://www.sun.com/staroffice.\n\nSupport et formation :\n\nProfitez du support logiciel gratuit durant 60 jours ΰ compter de la date d'achat ! Une formation Web pour StarOffice vous est ιgalement offerte par le Sun(tm) Web Learning Center ; cette offre est valable durant 90 jours ΰ compter de la date d'enregistrement. Pour plus de dιtails, visitez le site Web\n\nhttp://www.sun.com/star/service\n\nL'ιquipe de %PRODUCTNAME espθre que cette nouvelle version rιpondra ΰ vos attentes et vous souhaite un agrιable travail !";
         Text[ spanish ] = "Bienvenidos a %PRODUCTNAME %PRODUCTVERSION OEM\n\nPara iniciar %PRODUCTNAME %PRODUCTVERSION OEM, introduzca sus datos personales en el diαlogo que sigue al texto de licencia. Encontrarα informaciσn importante relativa al programa en los archivos readme, en el directorio de %PRODUCTNAME. Lea estos archivos atentamente. Tambiιn encontrarα informaciσn detallada en la pαgina de Internet de Sun\n\nhttp://www.sun.com/staroffice.\n\nnSoporte y formaciσn:\n\\Utilice el servicio de asistencia tιcnica gratuito durante los 60 dνas siguientes a la compra. Para aprovechar esta oferta visite la pαgina\n\nhttp://www.sun.com/star/service\n\nEsperamos que disfrute trabajando con %PRODUCTNAME.";
@@ -322,7 +322,7 @@ TabPage RID_TP_WELCOME
         Text[ arabic ] = "Welcome to %PRODUCTNAME %PRODUCTVERSION OEM\n\nTo start %PRODUCTNAME %PRODUCTVERSION OEM, please enter your personal data in the dialog following the license text.\n\nImportant information is contained in the readme files which are located in the StarOffice product directory. Please read these files carefully.\n\nYou can also find detailed information on the Sun Internet pages at\n\nhttp://www.sun.com/staroffice.\n\nWe hope you enjoy working with StarOffice.";
         Text[ catalan ] = "Benvinguts a %PRODUCTNAME %PRODUCTVERSION OEM\n\nPer iniciar %PRODUCTNAME %PRODUCTVERSION OEM, introduοu les dades personals en el quadre de diΰleg mιs avall del text de llicθncia.\n\nHi ha informaciσ important als fitxers readme que estan ubicats en el directori de l'StarOffice. Llegiu els fitxers amb atenciσ.\n\nTambι podeu trobar informaciσ detallada a la pΰgina d'Internet de Sun a\n\nhttp://www.sun.com/staroffice.\n\nEsperem que gaudeixi treballant amb l'StarOffice.";
         Text[ thai ] = "Welcome to %PRODUCTNAME %PRODUCTVERSION OEM\n\nTo start %PRODUCTNAME %PRODUCTVERSION OEM, please enter your personal data in the dialog following the license text.\n\nImportant information is contained in the readme files which are located in the StarOffice product directory. Please read these files carefully.\n\nYou can also find detailed information on the Sun Internet pages at\n\nhttp://www.sun.com/staroffice.\n\nWe hope you enjoy working with StarOffice.";
-        Text[ portuguese_brazilian ] = "Bem-vindo ao %PRODUCTNAME %PRODUCTVERSION OEM\n\nPara iniciar o %PRODUCTNAME %PRODUCTVERSION OEM, preencha seus dados pessoais nas caixas de diαlogo que seguem o texto da licenηa.\n\nOs arquivos readme contκm informaηυes importantes e estγo localizados no diretσrio do %PRODUCTNAME. Leia atentamente esses arquivos.\n\nPara maiores informaηυes visite a pαgina internet da SUN no endereηo \n\nhttp://www.sun.com/staroffice.\n\nDesejamos um bom trabalho com o %PRODUCTNAME.";
+        Text[ portuguese_brazilian ] = "Bem-vindo ao %PRODUCTNAME %PRODUCTVERSION OEM\n\nPara iniciar o %PRODUCTNAME %PRODUCTVERSION OEM, preencha seus dados pessoais nas caixas de diαlogo que seguem o texto da licenηa.\n\nOs arquivos readme contιm informaηυes importantes e estγo localizados no diretσrio do %PRODUCTNAME. Leia atentamente esses arquivos.\n\nPara maiores informaηυes visite a pαgina internet da SUN no endereηo \n\nhttp://www.sun.com/staroffice.\n\nDesejamos um bom trabalho com o %PRODUCTNAME.";
         Text[ czech ] = "VΓ­tejte v %PRODUCTNAME %PRODUCTVERSION OEM\n\nKe spuΕ΅tΔ›nΓ­ %PRODUCTNAME %PRODUCTVERSION OEM zadejte prosΓ­m svΓ© osobnΓ­ ΓΊdaje do dialogu, kterΓ½ nΓ΅sleduje za textem tΓ©to licence. Soubory README obsahujΓ­ dΕ―leΕΎitΓ© informace a jsou umΓ­stΔ›ny v adresΓ΅Ε™i aplikace %PRODUCTNAME. ProsΓ­m pΕ™eΔtΔ›te si pozornΔ› tyto soubory. DetailnΓ­ informace taktΓ©ΕΎ najdete na webovΓ½ch strΓ΅nkΓ΅ch spoleΔnosti Sun, na adrese\n\nhttp://www.sun.com/staroffice.\n\nPodpora a Ε΅kolenΓ­:\n\nZΓ­skΓ΅te jeden volnΓ½ telefonΓ΅t na podporu (platnΓ© 60 dnΓ­ od nΓ΅kupu) a volnΓ½ pΕ™Γ­stup k materiΓ΅lu \"Transitioning to the StarOffice 6.0 Application Suite\" (WO-1605); online webovΓ© Ε΅kolenΓ­ dostupnΓ© pΕ™es Sun(tm) Web Learning Center (platnΓ© 60 dnΓ­ od nΓ΅kupu). ZΓ­skejte tuto vΓ½hodnou nabΓ­dku navΕ΅tΓ­venΓ­m strΓ΅nky:\n\nhttp://www.sun.com/star/service\n\nDoufΓ΅me, ΕΎe se vΓ΅m bude dobΕ™e pracovat s produktem %PRODUCTNAME.";
         Text[ hebrew ] = "Welcome to %PRODUCTNAME %PRODUCTVERSION OEM\n\nTo start the %PRODUCTNAME %PRODUCTVERSION OEM, please enter your personal data in the dialog following the license text. Important information is contained in the readme files which are located in the %PRODUCTNAME product directory. Please read these files carefully. You can also find detailed information at the Sun website \n\nhttp://www.sun.com/staroffice.\n\nSupport and Training:\n\nGet FREE software support valid for 60 days from date of purchase and FREE access to a web-based %PRODUCTNAME course available through the Sun(tm) Web Learning Center (valid for 90 days from the date of registration). To take advantage of this offer, visit the website below.\n\nhttp://www.sun.com/star/service\n\nWe hope you enjoy working with %PRODUCTNAME.";
         Text[ hindi ] = "Welcome to %PRODUCTNAME %PRODUCTVERSION OEM\n\nTo start the %PRODUCTNAME %PRODUCTVERSION OEM, please enter your personal data in the dialog following the license text. Important information is contained in the readme files which are located in the %PRODUCTNAME product directory. Please read these files carefully. You can also find detailed information at the Sun website \n\nhttp://www.sun.com/staroffice.\n\nSupport and Training:\n\nGet FREE software support valid for 60 days from date of purchase and FREE access to a web-based %PRODUCTNAME course available through the Sun(tm) Web Learning Center (valid for 90 days from the date of registration). To take advantage of this offer, visit the website below.\n\nhttp://www.sun.com/star/service\n\nWe hope you enjoy working with %PRODUCTNAME.";
@@ -383,7 +383,7 @@ TabPage RID_TP_LICENSE
     Text[ english_us ] = "License Agreement";
     Text[ portuguese ] = "License Agreement";
     Text[ russian ] = "Λθφενηθξννξε ρξγλΰψενθε";
-    Text[ greek ] = "License Agreement";
+    Text[ greek ] = "Άδεια χρήσης";
     Text[ dutch ] = "Licentieovereenkomst";
     Text[ french ] = "Contrat de licence";
     Text[ spanish ] = "Contrato de licencia";
@@ -426,7 +426,7 @@ TabPage RID_TP_LICENSE
         Text[ chinese_simplified ] = "θ―·ζ‰§θ΅δ»¥δΈ‹η„ζ“δ½οΌδ»¥η»§η»­ε®‰θ£…οΌ";
         Text[ portuguese ] = "Leia o seguinte contrato de licenηa com atenηγo. Se usar a barra de deslocamento poderα visualizar o texto completo.";
         Text[ russian ] = "Οπξχθςΰιςε, οξζΰλσιρςΰ, ρλεδσώωεε λθφενηθξννξε ρξγλΰψενθε. Θροξλόησιςε οξλξρσ οπξκπσςκθ, χςξαϋ σβθδεςό ξρςΰλόνσώ χΰρςό ςεκρςΰ.";
-        Text[ greek ] = "Παρακαλώ διαβάστε την ακόλουθη 'Συμφωνία Άδειας Χρήσης'. Χρησιμοποιήστε τη γραμμή κύλισης για να εμφανιστεί ολόκληρο το κείμενο.";
+        Text[ greek ] = "Διαβάστε προσεκτικά την παρακάτω άδεια χρήσης. Χρησιμοποιήστε τη γραμμή κύλισης για δείτε ολόκληρο το κείμενο.";
         Text[ dutch ] = "Lees de volgende licentieovereenkomst door. Met de beeldschuifbalk kunt u de resterende tekst van de overeenkomst zichtbaar maken.";
         Text[ finnish ] = "Lue seuraava lisenssisopimus huolellisesti. Voit vierittδδ tekstiδ vierityspalkin avulla.";
         Text[ danish ] = "Lζs den fψlgende licensaftale. Du kan se resten af licensaftalen ved hjζlp af rullepanelet.";
@@ -507,12 +507,12 @@ TabPage RID_TP_LICENSE
         Text[ chinese_simplified ] = "θ―·ι…θ―»θ®Έε―θ―εθ®®δΈ­η„ε…¨ιƒ¨ζ΅ζ¬Ύγ€‚ι€θΏ‡ε·ζ†ζ–η‚Ήε‡» %PAGEDOWN ζ‰ι’®οΌι…θ―»θ®Έε―θ―εθ®®η„ε…¨ιƒ¨ε†…ε®Ήγ€‚";
         Text[ portuguese ] = "Clique no botγo '%1' se concordar com os termos do contrato de licenηa. Se nγo os aceitar clique no botγo '%2' e a instalaηγo serα cancelada.";
         Text[ russian ] = "Ερλθ βϋ οπθνθμΰεςε βρε σρλξβθÿ λθφενηθξννξγξ ρξγλΰψενθÿ, νΰζμθςε κνξοκσ '%1'. Ερλθ βϋ νε ρξγλΰρνϋ ρ ύςθμθ σρλξβθÿμθ, νΰζμθςε '%2', θ σρςΰνξβκΰ ασδες οπεκπΰωενΰ.";
-        Text[ greek ] = "Αν αποδέχεστε όλους τους όρους της 'Άδειας χρήσης', επιλέξτε το πεδίο '%1'. Διαφορετικά επιλέξτε το πεδίο '%2' για να ακυρωθεί η εγκατάσταση.";
+        Text[ greek ] = "Αν αποδέχεστε όλους τους όρους της άδειας χρήσης, πατήστε '%1'. Διαφορετικά, πατήστε '%2' για να ακυρώσετε την εγκατάσταση.";
         Text[ dutch ] = "Als u met alle voorwaarden in deze licentieovereenkomst akkoord gaat, klikt u op de knop '%1'. Als u de voorwaarden niet accepteert, klikt u op '%2'. De installatie wordt dan geannuleerd.";
         Text[ finnish ] = "Jos hyvδksyt kaikki lisenssisopimuksen ehdot, valitse '%1'. Muussa tapauksessa peruuta asennus valitsemalla '%2'.";
         Text[ danish ] = "Hvis du accepterer alle betingelser i denne licensaftale, skal du klikke pε knappen '%1'. Hvis du ikke accepterer betingelserne, skal du klikke pε '%2'. Herefter afbrydes installationen.";
         Text[ polish ] = "JeΏeli akceptujesz wszystkie warunki umowy licencyjnej, kliknij przycisk %1. W przeciwnym przypadku kliknij przycisk %2, aby anulowaζ instalacjκ.";
-        Text[ portuguese_brazilian ] = "Se vocκ concorda com os termos do contrato de licenηa, clique no botγo \"%1\". Caso contrαrio, clique no botγo \"%2\" para cancelar a instalaηγo.";
+        Text[ portuguese_brazilian ] = "Se vocκ concorda com os termos do contrato de licenηa, clique no botγo '%1'. Caso contrαrio, clique no botγo '%2' para cancelar a instalaηγo.";
         Text[ turkish ] = "Tόm lisans anlaώmasύnύ okuyun. Bu metni okumak iηin kaydύrma ηubuπunu ya da %PAGEDOWN dόπmesini kullanabilirsiniz.";
         Text[ arabic ] = "ΕΠΗ ίδΚ γζΗέήΗπ Ϊαμ ίΗέΙ ΤΡζΨ ΗΚέΗήνΙ ΗαΚΡΞνΥ εΠε΅ ΗδήΡ έζή '%1'. ΓγΗ έν ΝΗαΙ ΡέΦί αεΗ΅ έΗδήΡ έζή '%2'. έν εΠε ΗαΝΗαΙ Σζέ νΚγ ήΨΪ ΪγανΙ ΗαΚΛΘνΚ.";
         Text[ catalan ] = "Si accepteu les condicions d'aquest acord, feu clic a '%1'. En el cas que no sigui aixν, feu clic a '%2' per cancel·lar la instal·laciσ.";
@@ -541,7 +541,7 @@ TabPage RID_TP_LICENSE
         Text[ danish ] = "Side nedad";
         Text[ swedish ] = "Rulla ned";
         Text[ polish ] = "Strona w dσ³";
-        Text[ portuguese_brazilian ] = "Pαgina para baixo";
+        Text[ portuguese_brazilian ] = "Prσx. Pαg.";
         Text[ japanese ] = "δΈ‹γΈ";
         Text[ korean ] = "μ•„λλ΅";
         Text[ chinese_simplified ] = "η”»ιΆε‘δΈ‹";
@@ -607,7 +607,7 @@ TabPage RID_TP_LICENSE
         Text[ danish ] = "Accept the License Agreement.";
         Text[ swedish ] = "Acceptera licensavtalet.";
         Text[ polish ] = "Accept the License Agreement.";
-        Text[ portuguese_brazilian ] = "Accept the License Agreement.";
+        Text[ portuguese_brazilian ] = "Aceitar o Contrato de Licenηa";
         Text[ japanese ] = "γƒ©γ‚¤γ‚»γƒ³γ‚Ήζ΅ι …γ«εζ„γ™γ‚‹γ€‚";
         Text[ korean ] = "μ‚¬μ©μ μ‚¬μ©κ¶ κ³„μ•½μ— λ™μν•μ‹­μ‹μ¤.";
         Text[ chinese_simplified ] = "θ―·ζ‚¨ζ¥ε—θ®Έε―θ―εθ®®γ€‚";
@@ -640,7 +640,7 @@ TabPage RID_TP_LICENSE
         Text[ danish ] = "I accept the terms of the Agreement.";
         Text[ swedish ] = "Jag accepterar villkoren i avtalet.";
         Text[ polish ] = "I accept the terms of the Agreement.";
-        Text[ portuguese_brazilian ] = "I accept the terms of the Agreement.";
+        Text[ portuguese_brazilian ] = "Eu aceito os termos do Contrato.";
         Text[ japanese ] = "γƒ©γ‚¤γ‚»γƒ³γ‚Ήζ΅ι …γ«εζ„γ—γΎγ™γ€‚";
         Text[ korean ] = "μ‚¬μ©κ¶ κ³„μ•½ μ΅°κ±΄μ— λ™μν•©λ‹λ‹¤.";
         Text[ chinese_simplified ] = "ζ‘ζ¥ε—εθ®®η„ζ΅ζ¬Ύγ€‚";
@@ -664,7 +664,7 @@ TabPage RID_TP_LICENSE
         Text [ spanish ] = "~Aceptar" ;
         Text [ english_us ] = "~Accept" ;
         Text [ portuguese ] = "~Aceitar" ;
-        Text [ portuguese_brazilian ] = "Akzeptieren" ;
+        Text [ portuguese_brazilian ] = "Aceitar" ;
         Text [ swedish ] = "A~cceptera" ;
         Text [ danish ] = "Accepter" ;
         Text [ dutch ] = "~Accepteren" ;
@@ -705,7 +705,7 @@ TabPage RID_TP_LICENSE
         Text[ italian ] = "~Non accetto";
         Text[ danish ] = "Accepter ikke";
         Text[ polish ] = "Odrzuζ";
-        Text[ portuguese_brazilian ] = "Nicht akzeptieren";
+        Text[ portuguese_brazilian ] = "Recusar";
         Text[ korean ] = "κ±°λ¶€";
         Text[ turkish ] = "Reddet";
         Text[ arabic ] = "ΡέΦ";
@@ -723,6 +723,7 @@ TabPage RID_TP_LICENSE
     Text[ hindi ] = "License Agreement";
     Text[ slovak ] = "LicenΔnΓ½ dohovor";
 };
+
 
 
 
