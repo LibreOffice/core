@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sjapplet_impl.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 15:12:18 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 18:17:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 
 #define HWND int
 #define HMENU int
+#define HDC int
 
 #include <rtl/ustring>
 #include <rtl/process.h>
