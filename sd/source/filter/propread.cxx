@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propread.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:43:47 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:17:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -607,7 +607,7 @@ PropRead::PropRead( SvStorage& rStorage, const String& rName ) :
 {
     if ( rStorage.IsStream( rName ) )
     {
-        mpSvStream = rStorage.OpenStream( rName, STREAM_STD_READ );
+        mpSvStream = rStorage.OpenSotStream( rName, STREAM_STD_READ );
         if ( mpSvStream )
         {
             mpSvStream->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
