@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibcont.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2000-11-15 15:54:56 $
+ *  last change: $Author: os $ $Date: 2000-12-01 12:46:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
 #include <com/sun/star/util/XURLTransformer.hpp>
+#endif
+#ifndef _BIBCONFIG_HXX
+#include "bibconfig.hxx"
 #endif
 
 
@@ -171,9 +174,10 @@ void BibBookContainer::Split()
 IMPL_LINK( BibBookContainer, SplitHdl, Timer*,pT)
 {
     long nSize= GetItemSize( TOP_WINDOW);
-    pDatMan->setBeamerSize(nSize);
-    nSize=  GetItemSize( BOTTOM_WINDOW);
-    pDatMan->setViewSize(nSize);
+    BibConfig* pConfig = BibModul::GetConfig();
+    pConfig->setBeamerSize(nSize);
+    nSize = GetItemSize( BOTTOM_WINDOW);
+    pConfig->setViewSize(nSize);
     return 0;
 }
 
@@ -227,7 +231,8 @@ void BibBookContainer::CreateTopWin()
 
     pTopWin= new DockingWindow(this,0);
 
-    long nSize=pDatMan->getBeamerSize();
+    BibConfig* pConfig = BibModul::GetConfig();
+    long nSize = pConfig->getBeamerSize();
     InsertItem(TOP_WINDOW, pTopWin, nSize, 0, 0, SWIB_PERCENTSIZE );
 
 }
@@ -244,7 +249,8 @@ void BibBookContainer::CreateBottomWin()
     }
 
     pBottomWin= new DockingWindow(this,0);
-    long nSize=pDatMan->getViewSize();
+    BibConfig* pConfig = BibModul::GetConfig();
+    long nSize = pConfig->getViewSize();
     InsertItem(BOTTOM_WINDOW, pBottomWin, nSize, 1, 0, SWIB_PERCENTSIZE );
 
 }
@@ -344,7 +350,8 @@ void BibBookContainer::createTopFrame(Window* pWin)
     }
     pTopWin=new BibWindowContainer(this,pWin);
     pTopWin->Show();
-    long nSize=pDatMan->getBeamerSize();
+    BibConfig* pConfig = BibModul::GetConfig();
+    long nSize = pConfig->getBeamerSize();
     InsertItem(TOP_WINDOW, pTopWin, nSize, 1, 0, SWIB_PERCENTSIZE  );
 
 }
@@ -361,7 +368,8 @@ void BibBookContainer::createBottomFrame(Window* pWin)
 
     pBottomWin=new BibWindowContainer(this,pWin);
 
-    long nSize=pDatMan->getViewSize();
+    BibConfig* pConfig = BibModul::GetConfig();
+    long nSize = pConfig->getViewSize();
     InsertItem(BOTTOM_WINDOW, pBottomWin, nSize, 1, 0, SWIB_PERCENTSIZE  );
 
 }

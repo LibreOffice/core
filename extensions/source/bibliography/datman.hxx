@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-11-20 12:23:38 $
+ *  last change: $Author: os $ $Date: 2000-12-01 12:46:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,14 +75,10 @@
 #include <com/sun/star/sdb/XSQLQueryComposer.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_REGISTRY_XSIMPLEREGISTRY_HPP_
-#include <com/sun/star/registry/XSimpleRegistry.hpp>
-#endif
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx> // helper for implementations
 #endif
 
-class BibRegistry;
 class Window;
 
 //-----------------------------------------------------------------------------
@@ -95,9 +91,7 @@ class BibDataManager :  public cppu::WeakImplHelper1 < ::com::sun::star::beans::
 private:
         ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >                   xForm;
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >            xGridModel;
-        ::com::sun::star::uno::Reference< ::com::sun::star::registry::XSimpleRegistry >             xRegistry;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >               xSourceProps;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >               xGlobalProps;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer >        xParser;
         ::rtl::OUString                     aActiveDataTable;
         ::rtl::OUString                     aDataSourceURL;
@@ -114,16 +108,14 @@ private:
         rtl::OUString               sIdentifierMapping;
 protected:
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >               createGlobalProperties();
         void                        InsertFields(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent > & xGrid);
-        void                        InitRegistry();
         void                        SetMeAsUidListener();
         void                        RemoveMeAsUidListener();
 
         void                        UpdateAddressbookCursor(::rtl::OUString aSourceName);
 public:
 
-        BibDataManager(BibRegistry * pRegistry);
+        BibDataManager();
         ~BibDataManager();
 
         virtual void                SAL_CALL propertyChange(const ::com::sun::star::beans::PropertyChangeEvent& evt)
@@ -153,23 +145,13 @@ public:
         ::rtl::OUString                     getFilter();
 
         ::com::sun::star::uno::Sequence< ::rtl::OUString>           getQueryFields();
-        void                        setQueryField(const ::rtl::OUString& rField);
         ::rtl::OUString                     getQueryField();
         void                        startQueryWith(const ::rtl::OUString& rQuery);
-        ::rtl::OUString                     getQueryString();
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer >        getParser();
 
 //      void                        saveGridModel(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > & xDbForm);
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >            loadGridModel(const ::rtl::OUString& rName);
 
-        void                        setBeamerSize(long nSize);
-        long                        getBeamerSize();
-        void                        setViewSize(long nSize);
-        long                        getViewSize();
-
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >               getViewProperties();
-
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >               getChildViewProperties(const ::rtl::OUString& rName);
 
         ::rtl::OUString                     getControlName(sal_Int32 nFormatKey );
 

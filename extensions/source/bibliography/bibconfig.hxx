@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibconfig.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-11-20 12:23:38 $
+ *  last change: $Author: os $ $Date: 2000-12-01 12:46:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,11 @@ class BibConfig : public utl::ConfigItem
     rtl::OUString   sTableOrQuery;
     sal_Int32       nTblOrQuery;
 
+    rtl::OUString   sQueryField;
+    rtl::OUString   sQueryText;
+    long            nBeamerSize;
+    long            nViewSize;
+
     MappingArray*               pMappingsArr;
     rtl::OUString               aColumnDefaults[COLUMN_COUNT];
 
@@ -150,6 +155,19 @@ public:
 
     const rtl::OUString&    GetDefColumnName(sal_uInt16 nIndex) const
                                             {return aColumnDefaults[nIndex];}
+
+
+    void                    setBeamerSize(long nSize) {nBeamerSize = nSize;}
+    long                    getBeamerSize()const {return nBeamerSize;}
+    void                    setViewSize(long nSize) {nViewSize = nSize;}
+    long                    getViewSize() {return nViewSize;}
+
+    const rtl::OUString&    getQueryField() const {return sQueryField;}
+    void                    setQueryField(const rtl::OUString& rSet) {sQueryField = rSet;}
+
+    const rtl::OUString&    getQueryText() const {return sQueryText;}
+    void                    setQueryText(const rtl::OUString& rSet) {sQueryText = rSet;}
+
 };
 /* -----------------------------20.11.00 11:47--------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2000-11-27 14:15:21 $
+ *  last change: $Author: os $ $Date: 2000-12-01 12:46:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,9 +198,6 @@
 #endif
 #ifndef _BIB_VIEW_HXX
 #include "bibview.hxx"
-#endif
-#ifndef _BIB_REGISTRY_HXX
-#include "registry.hxx"
 #endif
 #ifndef _BIB_FMPROP_HRC
 #include "bibprop.hrc"
@@ -818,15 +815,12 @@ rtl::OUString gGlobalName(C2U("theGlobals"));
 rtl::OUString gBeamerSize(C2U("theBeamerSize"));
 rtl::OUString gViewSize(C2U("theViewSize"));
 
-BibDataManager::BibDataManager(BibRegistry * pRegistry) :
+BibDataManager::BibDataManager() :
     pToolbar(0),
     pGridWin(0)
 {
 
 //  nEditMode = DatabaseRecordMode_STANDARD;
-    xRegistry = pRegistry;
-    xGlobalProps=createGlobalProperties();
-
 }
 /* --------------------------------------------------
 
@@ -999,22 +993,6 @@ Reference< XForm >  BibDataManager::createDatabaseForm(BibDBDescriptor& rDesc)
                     rDesc.nCommandType = CommandType::TABLE;
                 }
 
-                Reference< registry::XRegistryKey >  xRoot;
-                try
-                {
-                    xRoot = xRegistry->getRootKey();
-                }
-                catch(Exception&)
-                {}
-                if(xRoot.is())
-                {
-                    Reference< registry::XRegistryKey >  xKey = xRoot->openKey(aActiveDataTable);
-                    if(!xKey.is())
-                        xKey = xRoot->createKey(aActiveDataTable);
-                    xSourceProps=Reference< XPropertySet > (xKey, UNO_QUERY);
-                }
-
-
                 aVal <<= aActiveDataTable;
                 aPropertySet->setPropertyValue(C2U("Command"), aVal);
                 aVal <<= rDesc.nCommandType;
@@ -1032,8 +1010,9 @@ Reference< XForm >  BibDataManager::createDatabaseForm(BibDBDescriptor& rDesc)
                 aString += aActiveDataTable;
                 aString += aQuoteChar;
                 xParser->setQuery(aString);
-                setQueryField(getQueryField());
-                startQueryWith(getQueryString());
+                BibConfig* pConfig = BibModul::GetConfig();
+                pConfig->setQueryField(getQueryField());
+                startQueryWith(pConfig->getQueryText());
 
                 xResult = xForm;
             }
@@ -1152,125 +1131,41 @@ Sequence<rtl::OUString> BibDataManager::getQueryFields()
     return aFieldSeq;
 }
 //------------------------------------------------------------------------
-void BibDataManager::setQueryField(const rtl::OUString& rQuery)
-{
-    if(xSourceProps.is())
-    {
-        try
-        {
-            Any aQuery; aQuery <<= rQuery;
-            xSourceProps->setPropertyValue(C2U("QueryField"),aQuery);
-
-        }
-    #ifdef DBG_UTIL
-            catch(Exception& e )
-    #else
-            catch(Exception&)
-    #endif
-        {
-            DBG_ERROR("Exception in BibDataManager::setQueryField")
-        }
-    }
-}
-//------------------------------------------------------------------------
 rtl::OUString BibDataManager::getQueryField()
 {
-    rtl::OUString aFieldString;
-    if(xSourceProps.is())
+    BibConfig* pConfig = BibModul::GetConfig();
+    OUString aFieldString = pConfig->getQueryField();
+    if(!aFieldString.getLength())
     {
-        try
+        Sequence<rtl::OUString> aSeq = getQueryFields();
+        const rtl::OUString* pFields = aSeq.getConstArray();
+        if(aSeq.getLength()>0)
         {
-            Any aField=xSourceProps->getPropertyValue(C2U("QueryField"));
-
-            if(aField.getValueType() == ::getVoidCppuType())
-            {
-                Sequence<rtl::OUString> aSeq=getQueryFields();
-                const rtl::OUString* pFields = aSeq.getConstArray();
-                if(aSeq.getLength()>0)
-                {
-                    aFieldString=pFields[0];
-                }
-            }
-            else
-            {
-                aFieldString = *(OUString*)aField.getValue();
-            }
-
-        }
-    #ifdef DBG_UTIL
-            catch(Exception& e )
-    #else
-            catch(Exception&)
-    #endif
-        {
-            DBG_ERROR("Exception in BibDataManager::getQueryField")
+            aFieldString=pFields[0];
         }
     }
-
     return aFieldString;
 }
 //------------------------------------------------------------------------
 void BibDataManager::startQueryWith(const OUString& rQuery)
 {
-    if(xSourceProps.is())
-    {
-        try
-        {
-            Any aQuery;
-            aQuery <<= rQuery;
-            xSourceProps->setPropertyValue(C2U("QueryText"), aQuery);
+    BibConfig* pConfig = BibModul::GetConfig();
+    pConfig->setQueryText( rQuery );
 
-            rtl::OUString aQueryString;
-            if(rQuery.len()>0)
-            {
-                aQueryString=aQuoteChar;
-                aQueryString+=getQueryField();
-                aQueryString+=aQuoteChar;
-                aQueryString+=C2U(" like '");
-                String sQuery(rQuery);
-                sQuery.SearchAndReplaceAll('?','_');
-                sQuery.SearchAndReplaceAll('*','%');
-                aQueryString += sQuery;
-                aQueryString+=C2U("%'");
-            }
-            setFilter(aQueryString);
-
-        }
-    #ifdef DBG_UTIL
-            catch(Exception& e )
-    #else
-            catch(Exception&)
-    #endif
-        {
-            DBG_ERROR("Exception in BibDataManager::StartQueryWith")
-        }
-    }
-}
-//------------------------------------------------------------------------
-rtl::OUString BibDataManager::getQueryString()
-{
     rtl::OUString aQueryString;
-    if(xSourceProps.is())
+    if(rQuery.len()>0)
     {
-        try
-        {
-            Any aQuery=xSourceProps->getPropertyValue(C2U("QueryText"));
-            if(aQuery.getValueType() == ::getCppuType((OUString*)0))
-            {
-                aQueryString=*(OUString*)aQuery.getValue();
-            }
-        }
-    #ifdef DBG_UTIL
-            catch(Exception& e )
-    #else
-            catch(Exception&)
-    #endif
-        {
-            DBG_ERROR("Exception in BibDataManager::getQueryString")
-        }
-
+        aQueryString=aQuoteChar;
+        aQueryString+=getQueryField();
+        aQueryString+=aQuoteChar;
+        aQueryString+=C2U(" like '");
+        String sQuery(rQuery);
+        sQuery.SearchAndReplaceAll('?','_');
+        sQuery.SearchAndReplaceAll('*','%');
+        aQueryString += sQuery;
+        aQueryString+=C2U("%'");
     }
-    return aQueryString;
+    setFilter(aQueryString);
 }
 /* -----------------03.12.99 15:05-------------------
 
@@ -1313,8 +1208,9 @@ void BibDataManager::setActiveDataSource(const rtl::OUString& rURL)
             aString+=aActiveDataTable;
             aString+=aQuoteChar;
             xParser->setQuery(aString);
-            setQueryField(getQueryField());
-            startQueryWith(getQueryString());
+            BibConfig* pConfig = BibModul::GetConfig();
+            pConfig->setQueryField(getQueryField());
+            startQueryWith(pConfig->getQueryText());
             setActiveDataTable(aActiveDataTable);
         }
         FeatureStateEvent aEvent;
@@ -1381,14 +1277,6 @@ void BibDataManager::setActiveDataTable(const rtl::OUString& rTable)
                     saveGridModel(xGridModel);
                 }*/
 
-                Reference< registry::XRegistryKey >  xRoot = xRegistry->getRootKey();
-                Reference< registry::XRegistryKey >  xKey = xRoot->openKey(aActiveDataTable);
-
-                if(!xKey.is())
-                    xKey = xRoot->createKey(aActiveDataTable);
-
-                xSourceProps=Reference< XPropertySet > (xKey, UNO_QUERY);
-
                 Reference< sdbc::XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
                 aQuoteChar = xMetaData->getIdentifierQuoteString();
 
@@ -1401,8 +1289,9 @@ void BibDataManager::setActiveDataTable(const rtl::OUString& rTable)
                 aString+=aQuoteChar;
                 xParser->setQuery(aString);
 
-                setQueryField(getQueryField());
-                startQueryWith(getQueryString());
+                BibConfig* pConfig = BibModul::GetConfig();
+                pConfig->setQueryField(getQueryField());
+                startQueryWith(pConfig->getQueryText());
 
                 BibDBDescriptor aDesc;
                 aDesc.sDataSource = aDataSourceURL;
@@ -1491,169 +1380,6 @@ Reference< awt::XControlModel >  BibDataManager::loadGridModel(const rtl::OUStri
     return xModel;
 }
 //------------------------------------------------------------------------
-/*void BibDataManager::saveGridModel(const Reference< awt::XControlModel > & rGridModel)
-{
-    try
-    {
-        Reference< XPersistObject >  aPersistObject(rGridModel, UNO_QUERY );
-
-        Any aGridModel(&aPersistObject, ::getCppuType((const XPersistObject*)0));
-
-        xSourceProps->setPropertyValue(gGridName,aGridModel);
-    }
-    catch(Exception& rEx)
-    {
-        DBG_ERROR("::saveGridModelData: something went wrong !");
-    }
-
-}*/
-//------------------------------------------------------------------------
-Reference< XPropertySet >   BibDataManager::createGlobalProperties()
-{
-    Reference< XPropertySet >   xRet;
-    try
-    {
-        Reference< registry::XRegistryKey >  xRoot = xRegistry->getRootKey();
-        if(xRoot.is())
-        {
-            Reference< registry::XRegistryKey >  xKey = xRoot->openKey(gGlobalName);
-            if(!xKey.is())
-                xKey = xRoot->createKey(gGlobalName);
-            xRet = Reference< XPropertySet > (xKey, UNO_QUERY);
-        }
-
-    }
-
-#ifdef DBG_UTIL
-        catch(Exception& e )
-#else
-        catch(Exception&)
-#endif
-    {
-        DBG_ERROR("::getViewProperties: something went wrong !");
-    }
-
-    return xRet;
-}
-//------------------------------------------------------------------------
-void BibDataManager::setViewSize(long nSize)
-{
-    if(xGlobalProps.is())
-    {
-        try
-        {
-            Any aViewSize; aViewSize <<= (sal_Int32) nSize;
-            xGlobalProps->setPropertyValue(gViewSize,aViewSize);
-        }
-    #ifdef DBG_UTIL
-            catch(Exception& e )
-    #else
-            catch(Exception&)
-    #endif
-        {
-            DBG_ERROR("::setViewSize: something went wrong !");
-        }
-    }
-}
-//------------------------------------------------------------------------
-long BibDataManager::getViewSize()
-{
-    long nSize=0;
-    if(xGlobalProps.is())
-    {
-        try
-        {
-            Any aViewSize=xGlobalProps->getPropertyValue(gViewSize);
-
-            if(aViewSize.getValueType() != ::getVoidCppuType())
-            {
-                aViewSize >>= nSize;
-            }
-        }
-    #ifdef DBG_UTIL
-            catch(Exception& e )
-    #else
-            catch(Exception&)
-    #endif
-        {
-            DBG_ERROR("::getViewSize: something went wrong !");
-        }
-    }
-    return nSize;
-}
-//------------------------------------------------------------------------
-void BibDataManager::setBeamerSize(long nSize)
-{
-    if(xGlobalProps.is())
-    {
-        try
-        {
-            Any aBeamerSize; aBeamerSize <<= (sal_Int32) nSize;
-            xGlobalProps->setPropertyValue(gBeamerSize,aBeamerSize);
-        }
-    #ifdef DBG_UTIL
-            catch(Exception& e )
-    #else
-            catch(Exception&)
-    #endif
-        {
-            DBG_ERROR("::setBeamerSize: something went wrong !");
-        }
-    }
-}
-//------------------------------------------------------------------------
-long BibDataManager::getBeamerSize()
-{
-    long nSize=0;
-    if(xGlobalProps.is())
-    {
-        try
-        {
-            Any aBeamerSize=xGlobalProps->getPropertyValue(gBeamerSize);
-
-            if(aBeamerSize.getValueType() != ::getVoidCppuType())
-            {
-                aBeamerSize >>= nSize;
-            }
-        }
-    #ifdef DBG_UTIL
-            catch(Exception& e )
-    #else
-            catch(Exception&)
-    #endif
-        {
-            DBG_ERROR("::getBeamerSize: something went wrong !");
-        }
-    }
-    return nSize;
-}
-//------------------------------------------------------------------------
-Reference< XPropertySet >   BibDataManager::getViewProperties()
-{
-    if(xSourceProps.is())
-    {
-        try
-        {
-            Reference< registry::XRegistryKey >  xKey = Reference< registry::XRegistryKey > (xSourceProps, UNO_QUERY);
-            Reference< registry::XRegistryKey >  xViewKey=xKey->openKey(gViewName);
-            if(!xViewKey.is())
-            {
-                xViewKey=xKey->createKey(gViewName);
-            }
-            return Reference< XPropertySet > (xViewKey, UNO_QUERY);
-        }
-    #ifdef DBG_UTIL
-            catch(Exception& e )
-    #else
-            catch(Exception&)
-    #endif
-        {
-            DBG_ERROR("::getViewProperties: something went wrong !");
-        }
-    }
-    return Reference< XPropertySet > ();
-}
-//------------------------------------------------------------------------
 rtl::OUString BibDataManager::getControlName(sal_Int32 nFormatKey )
 {
     rtl::OUString aResStr;
@@ -1692,68 +1418,52 @@ rtl::OUString BibDataManager::getControlName(sal_Int32 nFormatKey )
     return aResStr;
 }
 //------------------------------------------------------------------------
-Reference< awt::XControlModel >  BibDataManager::loadControlModel(const rtl::OUString& rName, sal_Bool bForceListBox)
+Reference< awt::XControlModel >  BibDataManager::loadControlModel(
+                    const rtl::OUString& rName, sal_Bool bForceListBox)
 {
     Reference< awt::XControlModel >  xModel;
-
     rtl::OUString aName(C2U("View_"));
-    aName+=rName;
+    aName += rName;
 
     try
     {
-        Reference< io::XPersistObject >  aObject;
-        Any aControlModel;
-        if(xSourceProps.is())
-            xSourceProps->getPropertyValue(aName);
-        if(aControlModel.getValueType() == ::getCppuType((Reference<io::XPersistObject>*)0))
+        Reference< XNameAccess >  xFields = getColumns(xForm);
+        if (!xFields.is())
+            return xModel;
+        Reference< XPropertySet >  xField;
+
+        Any aElement;
+
+        if(xFields->hasByName(rName))
         {
-            aObject=*(Reference< io::XPersistObject > *)aControlModel.getValue();
-        }
+            aElement = xFields->getByName(rName);
+            xField = *(Reference< XPropertySet > *)aElement.getValue();
+            Reference< XPropertySetInfo >  xInfo = xField.is() ? xField->getPropertySetInfo() : Reference< XPropertySetInfo > ();
+            sal_Int32 nFormatKey = 0;
+            if (xInfo.is() && xInfo->hasPropertyByName(FM_PROP_FORMATKEY))
+                xField->getPropertyValue(FM_PROP_FORMATKEY) >>= nFormatKey;
 
-        if(!aObject.is() )
-        {
-            Reference< XNameAccess >  xFields = getColumns(xForm);
-            if (!xFields.is())
-                return xModel;
-            Reference< XPropertySet >  xField;
+            rtl::OUString aInstanceName(C2U("com.sun.star.form.component."));
 
-            Any aElement;
+            if (bForceListBox)
+                aInstanceName += C2U("ListBox");
+            else
+                aInstanceName += getControlName(nFormatKey);
 
-            if(xFields->hasByName(rName))
-            {
-                aElement = xFields->getByName(rName);
-                xField = *(Reference< XPropertySet > *)aElement.getValue();
-                Reference< XPropertySetInfo >  xInfo = xField.is() ? xField->getPropertySetInfo() : Reference< XPropertySetInfo > ();
-                sal_Int32 nFormatKey = 0;
-                if (xInfo.is() && xInfo->hasPropertyByName(FM_PROP_FORMATKEY))
-                    xField->getPropertyValue(FM_PROP_FORMATKEY) >>= nFormatKey;
+            Reference< lang::XMultiServiceFactory >  xMgr = comphelper::getProcessServiceFactory();
+            Reference< XInterface >  xObject = xMgr->createInstance(aInstanceName);
+            xModel=Reference< awt::XControlModel > ( xObject, UNO_QUERY );
+            Reference< XPropertySet >  xPropSet( xModel, UNO_QUERY );
+            Any aFieldName; aFieldName <<= aName;
+            xPropSet->setPropertyValue( FM_PROP_NAME,aFieldName);
 
-                rtl::OUString aInstanceName(C2U("com.sun.star.form.component."));
+            Any aDbSource; aDbSource <<= rName;
+            xPropSet->setPropertyValue(FM_PROP_CONTROLSOURCE,aDbSource);
 
-                if (bForceListBox)
-                    aInstanceName += C2U("ListBox");
-                else
-                    aInstanceName += getControlName(nFormatKey);
+            Reference< XFormComponent >  aFormComp(xModel,UNO_QUERY );
 
-                Reference< lang::XMultiServiceFactory >  xMgr = comphelper::getProcessServiceFactory();
-                Reference< XInterface >  xObject = xMgr->createInstance(aInstanceName);
-                xModel=Reference< awt::XControlModel > ( xObject, UNO_QUERY );
-                Reference< XPropertySet >  xPropSet( xModel, UNO_QUERY );
-                Any aFieldName; aFieldName <<= aName;
-                xPropSet->setPropertyValue( FM_PROP_NAME,aFieldName);
-
-                Any aDbSource; aDbSource <<= rName;
-                xPropSet->setPropertyValue(FM_PROP_CONTROLSOURCE,aDbSource);
-
-                Reference< XFormComponent >  aFormComp(xModel,UNO_QUERY );
-
-                Reference< XNameContainer >  xNameCont(xForm, UNO_QUERY);
-                xNameCont->insertByName(aName, Any(&xModel, ::getCppuType((Reference<XFormComponent>*)0)));
-            }
-        }
-        else
-        {
-            xModel=Reference< awt::XControlModel > (aObject,UNO_QUERY );
+            Reference< XNameContainer >  xNameCont(xForm, UNO_QUERY);
+            xNameCont->insertByName(aName, Any(&xModel, ::getCppuType((Reference<XFormComponent>*)0)));
         }
     }
 #ifdef DBG_UTIL

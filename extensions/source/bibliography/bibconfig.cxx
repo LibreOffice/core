@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibconfig.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2000-11-20 12:23:38 $
+ *  last change: $Author: os $ $Date: 2000-12-01 12:46:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,9 @@ Sequence<OUString>& BibConfig::GetPropertyNames()
  ---------------------------------------------------------------------------*/
 BibConfig::BibConfig() :
     ConfigItem(C2U("Office.DataAccess/Bibliography")),
-    pMappingsArr(new MappingArray)
+    pMappingsArr(new MappingArray),
+    nBeamerSize(0),
+    nViewSize(0)
 {
     //Names of the default columns
     aColumnDefaults[0] = C2U("Identifier");
@@ -207,7 +209,7 @@ BibConfig::BibConfig() :
                 pAssignmentPropertyNames[nFieldIdx] = sSubPrefix;
                 pAssignmentPropertyNames[nFieldIdx++] += C2U("/FieldName");
                 pAssignmentPropertyNames[nFieldIdx] = sSubPrefix;
-                pAssignmentPropertyNames[nFieldIdx++]   += C2U("/DatasourceFieldName");
+                pAssignmentPropertyNames[nFieldIdx++]   += C2U("/DatabaseFieldName");
             }
             Sequence<Any> aAssignmentValues = GetProperties(aAssignmentPropertyNames);
             const Any* pAssignmentValues = aAssignmentValues.getConstArray();
@@ -319,7 +321,7 @@ void    BibConfig::Commit()
         sPrefix += C2U("Fields");
         sal_Int32 nFieldAssignment = 0;
         OUString sFieldName = C2U("/FieldName");
-        OUString sDatabaseFieldName = C2U("/DatasourceFieldName");
+        OUString sDatabaseFieldName = C2U("/DatabaseFieldName");
         ClearNodeSet( sPrefix );
 
         while(pMapping->aColumnPairs[nFieldAssignment].sLogicalColumnName.getLength())

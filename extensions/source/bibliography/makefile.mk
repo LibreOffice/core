@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hjs $ $Date: 2000-11-15 16:30:45 $
+#   last change: $Author: os $ $Date: 2000-12-01 12:46:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,7 +83,6 @@ CXXFILES=			bibconfig.cxx\
                     bibbeam.cxx  \
                     toolbar.cxx	 \
                     datman.cxx	 \
-                    registry.cxx \
                     bibexch.cxx	 \
                     fieldwin.cxx
 
@@ -98,7 +97,6 @@ SLOFILES=			$(SLO)$/bibconfig.obj \
                     $(SLO)$/bibbeam.obj  \
                     $(SLO)$/toolbar.obj  \
                     $(SLO)$/datman.obj	\
-                    $(SLO)$/registry.obj \
                     $(SLO)$/bibexch.obj \
                     $(SLO)$/fieldwin.obj
 
@@ -168,7 +166,6 @@ UNOTYPES=\
     com.sun.star.io.XActiveDataSink \
     com.sun.star.lang.XLocalizable \
     com.sun.star.lang.XServiceName \
-    com.sun.star.registry.XSimpleRegistry \
     com.sun.star.sdb.CommandType\
     com.sun.star.sdb.XDatabaseEnvironment \
     com.sun.star.sdb.XColumn\

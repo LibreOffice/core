@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibmod.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-11-13 11:41:26 $
+ *  last change: $Author: os $ $Date: 2000-12-01 12:46:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,16 +63,8 @@
 #define BIBMOD_HXX
 
 
-#ifndef _COM_SUN_STAR_REGISTRY_MERGECONFLICTEXCEPTION_HPP_
-#include <com/sun/star/registry/MergeConflictException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_REGISTRY_XSIMPLEREGISTRY_HPP_
-#include <com/sun/star/registry/XSimpleRegistry.hpp>
-#endif
-
 class ResMgr;
 class BibDataManager;
-class BibRegistry;
 class BibConfig;
 
 #define BIBLIOGRAPHY_INI_GROUP      "Bibliography"
@@ -86,9 +78,6 @@ class BibModul
     private:
         ResMgr*                 pResMgr;
         static BibConfig*       pBibConfig;
-
-        BibRegistry*            pRegistry;
-        ::com::sun::star::uno::Reference< ::com::sun::star::registry::XSimpleRegistry >         xRegistry;
 
     public:
                                 BibModul();
@@ -106,9 +95,5 @@ typedef PtrBibModul*    HdlBibModul;
 
 HdlBibModul     OpenBibModul();
 void            CloseBibModul(HdlBibModul ppBibModul);
-
-//PtrBibModul       GetBibModul();
-
-
 
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibload.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2000-11-27 14:19:19 $
+ *  last change: $Author: os $ $Date: 2000-12-01 12:46:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -412,7 +412,7 @@ void BibliographyLoader::loadView(const Reference< frame::XFrame > & rFrame, con
     m_xDatMan = m_pDatMan;
     BibDBDescriptor aBibDesc = BibModul::GetConfig()->GetBibliographyURL();
 
-    if(!aBibDesc.sDataSource.getLength());
+    if(!aBibDesc.sDataSource.getLength())
     {
         DBChangeDialogConfig_Impl aConfig;
         const Sequence<OUString> aSources = aConfig.GetDataSourceNames();
@@ -451,8 +451,6 @@ void BibliographyLoader::loadView(const Reference< frame::XFrame > & rFrame, con
         rFrame->setComponent( xWin, xCtrRef);
         pBeamer->SetXController(xCtrRef);
         //!
-
-        long nBeamerSize = pDatMan->getBeamerSize();
 
         pDatMan->loadDatabase();
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framectr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-11-15 15:54:56 $
+ *  last change: $Author: os $ $Date: 2000-12-01 12:46:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,15 +103,13 @@
 #ifndef _TOOLKIT_UNOHLP_HXX
 #include <toolkit/helper/vclunohelper.hxx>
 #endif
-
-//#ifndef _COM_SUN_STAR_DATA_XDATABASEDIALOGS_HPP_
-//#include <com/sun/star/data/XDatabaseDialogs.hpp>
-//#endif
+#ifndef _BIBCONFIG_HXX
+#include "bibconfig.hxx"
+#endif
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx> // helper for implementations
 #endif
 
-//using namespace vos;
 using namespace osl;
 using namespace cppu;
 using namespace rtl;
@@ -362,7 +360,8 @@ void BibFrameController_Impl::dispatch(const util::URL& aURL, const uno::Sequenc
             aValue=pPropertyValue[1].Value;
             rtl::OUString aQueryField;
             aValue >>= aQueryField;
-            pDatMan->setQueryField(aQueryField);
+            BibConfig* pConfig = BibModul::GetConfig();
+            pConfig->setQueryField(aQueryField);
             pDatMan->startQueryWith(aQuery);
         }
         else if(aCommand.EqualsAscii("Bib/standardFilter"))
@@ -403,6 +402,7 @@ void BibFrameController_Impl::addStatusListener(
     const uno::Reference< frame::XStatusListener > & aListener,
     const util::URL& aURL)
 {
+    BibConfig* pConfig = BibModul::GetConfig();
     // create a new Reference and insert into listener array
     aStatusListeners.Insert( new BibStatusDispatch( aURL, aListener ), aStatusListeners.Count() );
 
@@ -452,7 +452,7 @@ void BibFrameController_Impl::addStatusListener(
         aEvent.IsEnabled  = sal_True;
         aEvent.Requery    = sal_False;
         aEvent.Source     = (XDispatch *) this;
-        aEvent.State <<= pDatMan->getQueryString();
+        aEvent.State <<= pConfig->getQueryText();
         aListener->statusChanged( aEvent );
     }
     else if (aURL.Path == C2U("Bib/removeFilter") )
@@ -604,7 +604,8 @@ void BibFrameController_Impl::ChangeDataSource(const uno::Sequence< beans::Prope
             aEvent.IsEnabled  = sal_True;
             aEvent.Requery    = sal_False;
             aEvent.Source     = (XDispatch *) this;
-            aEvent.State <<= pDatMan->getQueryString();
+            BibConfig* pConfig = BibModul::GetConfig();
+            aEvent.State <<= pConfig->getQueryText();
             pObj->xListener->statusChanged( aEvent );
             bQueryText=sal_True;
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibmod.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2000-11-14 11:06:35 $
+ *  last change: $Author: os $ $Date: 2000-12-01 12:46:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,6 @@
 
 #include "bibmod.hxx"
 #include "bibresid.hxx"
-#include "registry.hxx"
 #include "datman.hxx"
 #include "bibconfig.hxx"
 static PtrBibModul pBibModul=NULL;
@@ -132,8 +131,6 @@ BibConfig* BibModul::pBibConfig = 0;
 BibModul::BibModul()
 {
     pResMgr = ResMgr::CreateResMgr( "bib" MAKE_NUMSTR(SUPD) );
-    pRegistry = new BibRegistry();
-    xRegistry = pRegistry;
 }
 
 BibModul::~BibModul()
@@ -141,13 +138,11 @@ BibModul::~BibModul()
     delete pResMgr;
     delete pBibConfig;
     pBibConfig = 0;
-    xRegistry = 0;
-    //delete pRegistry;
 }
 
 BibDataManager*  BibModul::createDataManager()
 {
-    return new BibDataManager(pRegistry);
+    return new BibDataManager();
 }
 //-----------------------------------------------------------------------------
 BibConfig*  BibModul::GetConfig()
