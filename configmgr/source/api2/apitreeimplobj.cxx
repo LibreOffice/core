@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeimplobj.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-04 15:04:59 $
+ *  last change: $Author: dg $ $Date: 2000-12-04 19:34:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ configuration::TemplateProvider ApiProvider::getTemplateProvider() const
 
 UnoTypeConverter ApiProvider::getTypeConverter() const
 {
-    return m_rProviderImpl.getDefaultOptions()->getTypeConverter();
+    return m_rProviderImpl.getTypeConverter();
 }
 //-------------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-04 09:20:27 $
+ *  last change: $Author: dg $ $Date: 2000-12-04 19:34:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,10 +147,11 @@ namespace configmgr
                                  IConfigSession* _pSession,
                                  Module& _rModule, const ConnectionSettings& _rSettings)
                   :m_xDefaultOptions(new OOptions(_rModule.getConverter()))
-                  ,m_pTreeMgr(new TreeManager(_pSession, m_xDefaultOptions))
                   ,m_pNewProviders(0)
                   ,m_pProvider(_pProvider)
     {
+
+        m_pTreeMgr = new TreeManager(_pSession, new OOptions(_rModule.getConverter()));
         m_pTreeMgr->acquire();
 
         // put out of line to get rid of the order dependency (and to have a acquired configuration)
@@ -158,23 +159,17 @@ namespace configmgr
 
         // read the default locale for the user
         rtl::OUString sDefaultLocale(ssDefaultLocale);
+        rtl::OUString sDefaultUser;
         try
         {
             // if we have a user name, we have to add it for the request and we remember it for the session
-            rtl::OUString sUserName;
-            rtl::OUString sProfile;
             if (_rSettings.hasUser())
             {
                 // the username is also part of the connection settings
-                m_xDefaultOptions->setUser(_rSettings.getUser());
-
-                sProfile  = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("["));
-                sProfile  += _rSettings.getUser();
-                sProfile  += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("]/"));
+                sDefaultUser = _rSettings.getUser();
             }
-            sProfile += ssUserProfile;
 
-            ISubtree* pSubTree = m_pTreeMgr->requestSubtree(sProfile, m_xDefaultOptions);
+            ISubtree* pSubTree = m_pTreeMgr->requestSubtree(ssUserProfile, m_xDefaultOptions);
             if (pSubTree)
             {
                 INode* pNode = pSubTree->getChild(ssInternational);
@@ -194,6 +189,7 @@ namespace configmgr
             // default locale is en-US
         }
         m_xDefaultOptions->setDefaultLocale(sDefaultLocale);
+        m_xDefaultOptions->setDefaultUser(sDefaultUser);
     }
 
     //-----------------------------------------------------------------------------
@@ -312,15 +308,14 @@ namespace configmgr
     }
 
     //-----------------------------------------------------------------------------------
-    OUString OProviderImpl::getErrorMessage(OUString const& _rAccessor)
+    OUString OProviderImpl::getErrorMessage(OUString const& _rAccessor, const vos::ORef < OOptions >& _xOptions)
     {
         CFG_TRACE_ERROR("config provider: the cache manager could not provide the tree (neither from the cache nor from the session)");
-
-        ::rtl::OUString sMessage = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("The read access for node "));
-        ::rtl::OUString sPurePath, sUser, sLocale;
-        sal_Bool bHasExtension = IConfigSession::splitNodeAccessor(_rAccessor, sPurePath, sUser, sLocale) != 0;
-        CFG_TRACE_INFO_NI("config provider: the user we tried this for is \"%s\", the locale \"%s\", the path \"%s\"", OUSTRING2ASCII(sUser), OUSTRING2ASCII(sLocale), OUSTRING2ASCII(sPurePath));
-        sMessage += sPurePath;
+        ::rtl::OUString sMessage;
+        ::rtl::OUString sUser(_xOptions->getUser());
+        ::rtl::OUString sLocale(_xOptions->getLocale());
+        CFG_TRACE_INFO_NI("config provider: the user we tried this for is \"%s\", the locale \"%s\", the path \"%s\"", OUSTRING2ASCII(sUser), OUSTRING2ASCII(sLocale), OUSTRING2ASCII(_rAccessor));
+        sMessage += _rAccessor;
 
         if (sUser.getLength())
         {
@@ -360,7 +355,7 @@ namespace configmgr
 
         if (!pTree)
         {
-            ::rtl::OUString sMessage = getErrorMessage(_rAccessor);
+            ::rtl::OUString sMessage = getErrorMessage(_rAccessor, _xOptions);
 
             // append the error message given by the tree provider
             if (sErrorMessage.getLength())
@@ -402,7 +397,7 @@ namespace configmgr
 
         if (!pTree)
         {
-            ::rtl::OUString sMessage = getErrorMessage(_rAccessor);
+            ::rtl::OUString sMessage = getErrorMessage(_rAccessor, _xOptions);
 
             // append the error message given by the tree provider
             if (sErrorMessage.getLength())
@@ -422,10 +417,6 @@ namespace configmgr
                                 *pTree, nDepth, getTemplateProvider()
                             ));
 
-        #if defined(DEBUG) || defined(_DEBUG)
-            if (_rAccessor == IConfigSession::getUserAdminAccessor())
-                {   CFG_TRACE_ERROR("config provider: DATA ERROR: User Admin Accessor points to a non-set node"); }
-        #endif
 
         return m_pNewProviders->getWriterFactory().makeAccessRoot(aRootTree, _xOptions);
     }

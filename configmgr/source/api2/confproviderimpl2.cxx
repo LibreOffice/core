@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confproviderimpl2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dg $ $Date: 2000-12-03 11:45:59 $
+ *  last change: $Author: dg $ $Date: 2000-12-04 19:34:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,22 +116,18 @@ namespace configmgr
         sal_Int32 nLevels;
         OProviderImpl::FactoryArguments::extractArgs(aArgs, sPath, sUser, sLocale, nLevels);
 
-        vos::ORef<OOptions> xOptions = new OOptions(*getDefaultOptions());
+        vos::ORef<OOptions> xOptions = new OOptions(getDefaultOptions());
         xOptions->setUser(sUser);
         xOptions->setLocale(sLocale);
 
-        // determine which parts are need for the path
-        m_pTreeMgr->getPathRequirements(sPath, xOptions, nLevels, sUser, sLocale);
-        ::rtl::OUString sNodeAccessor = IConfigSession::composeNodeAccessor(sPath, sUser, sLocale);
-
-        CFG_TRACE_INFO_NI("config provider: node accessor extracted from the args is %s", OUSTRING2ASCII(sNodeAccessor));
+        CFG_TRACE_INFO_NI("config provider: node accessor extracted from the args is %s", OUSTRING2ASCII(sPath));
         CFG_TRACE_INFO_NI("config provider: level depth extracted from the args is %i", nLevels);
 
         // create the access object
         uno::Reference< uno::XInterface > xReturn;
         if (aArgs.getLength() != 0)
         {
-            NodeElement* pElement = buildReadAccess(sNodeAccessor, xOptions, nLevels);
+            NodeElement* pElement = buildReadAccess(sPath, xOptions, nLevels);
             if (pElement != 0)
             {
                 xReturn = pElement->getUnoInstance();
@@ -154,23 +150,18 @@ namespace configmgr
         sal_Int32 nLevels;
         OProviderImpl::FactoryArguments::extractArgs(aArgs, sPath, sUser, sLocale, nLevels);
 
-        vos::ORef<OOptions> xOptions = new OOptions(*getDefaultOptions());
+        vos::ORef<OOptions> xOptions = new OOptions(getDefaultOptions());
         xOptions->setUser(sUser);
         xOptions->setLocale(sLocale);
 
-        // determine which parts are need for the path
-        m_pTreeMgr->getPathRequirements(sPath, xOptions, nLevels, sUser, sLocale);
-        ::rtl::OUString sNodeAccessor = IConfigSession::composeNodeAccessor(sPath, sUser, sLocale);
-
-        CFG_TRACE_INFO_NI("config provider: node accessor extracted from the args is %s", OUSTRING2ASCII(sNodeAccessor));
+        CFG_TRACE_INFO_NI("config provider: node accessor extracted from the args is %s", OUSTRING2ASCII(sPath));
         CFG_TRACE_INFO_NI("config provider: level depth extracted from the args is %i", nLevels);
-
 
         // create the access object
         uno::Reference< uno::XInterface > xReturn;
         if (aArgs.getLength() != 0)
         {
-            NodeElement* pElement = buildUpdateAccess(sNodeAccessor, xOptions, nLevels);
+            NodeElement* pElement = buildUpdateAccess(sPath, xOptions, nLevels);
             if (pElement != 0)
             {
                 xReturn = pElement->getUnoInstance();
