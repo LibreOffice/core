@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvw.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 11:40:15 $
+ *  last change: $Author: kz $ $Date: 2004-06-29 08:10:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,9 +84,10 @@
 #define MN_READONLY_SOURCEVIEW          (RC_DOCVW_BEGIN + 20)
 #define MN_READONLY_RELOAD_FRAME        (RC_DOCVW_BEGIN + 21)
 #define MN_READONLY_RELOAD              (RC_DOCVW_BEGIN + 22)
+#define MN_READONLY_COPY                (RC_DOCVW_BEGIN + 23)
 
 //Bei den folgenden brauchen wir Luft fuer die Gallery-Themen
-#define MN_READONLY_GRAPHICTOGALLERY    (RC_DOCVW_BEGIN + 23)
+#define MN_READONLY_GRAPHICTOGALLERY    (RC_DOCVW_BEGIN + 24)
 #define MN_READONLY_BACKGROUNDTOGALLERY (RC_DOCVW_BEGIN + 60)
 
 
