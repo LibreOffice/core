@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-08 08:11:22 $
+ *  last change: $Author: oj $ $Date: 2002-07-08 09:47:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -655,7 +655,8 @@ namespace dbaui
                 ::rtl::OUString sCommand,sSrcDataSourceName;
                 _rPasteData[daDataSource]       >>= sSrcDataSourceName;
                 _rPasteData[daCommand]          >>= sCommand;
-                _rPasteData[daConnection]       >>= xSrcConnection;
+                if ( _rPasteData.has(daConnection) )
+                    _rPasteData[daConnection]   >>= xSrcConnection;
                 if ( _rPasteData.has(daSelection) )
                     _rPasteData[daSelection]    >>= aSelection;
                 if ( _rPasteData.has(daCursor) )
@@ -1361,6 +1362,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.49  2002/07/08 08:11:22  oj
+ *  #97156# saveData and d&d source corrected
+ *
  *  Revision 1.48  2002/06/11 12:28:27  fs
  *  #65293# correct an error which came in in the merge ->1.43
  *
