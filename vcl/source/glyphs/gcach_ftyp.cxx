@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hdu $ $Date: 2000-11-28 13:01:59 $
+ *  last change: $Author: hdu $ $Date: 2001-02-15 16:09:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,6 @@
 #include "freetype/tttags.h"
 
 #include <vector>
-//#include <hash_multimap>
 
 // -----------------------------------------------------------------------
 
@@ -98,7 +97,7 @@ static FT_Library aLibFT = 0;
 size_t std::hash<FtFontInfo*>::operator()( const FtFontInfo* pFI ) const
 {
     size_t nHash = ::rtl::OUString( pFI->aFontData.maName ).hashCode();
-    nHash += ::rtl::OUString( pFI->aFontData.maStyleName ).hashCode();
+//###   nHash += ::rtl::OUString( pFI->aFontData.maStyleName ).hashCode();
     return nHash;
 }
 
@@ -106,10 +105,19 @@ size_t std::hash<FtFontInfo*>::operator()( const FtFontInfo* pFI ) const
 
 bool std::equal_to<FtFontInfo*>::operator()( const FtFontInfo* pA, const FtFontInfo* pB ) const
 {
-    if( (pA->aFontData.maName       == pB->aFontData.maName)
-    &&  (pA->aFontData.maStyleName  == pB->aFontData.maStyleName) )
+    if( (pA->aFontData.maName == pB->aFontData.maName)  )
         return true;
     return false;
+}
+
+// -----------------------------------------------------------------------
+
+inline int CalcSimilarity( const FtFontInfo* pA, const FtFontInfo* pB )
+{
+    int nSimilarity = 0;
+    nSimilarity +=  3*(pA->aFontData.meItalic   == pB->aFontData.meItalic);
+    nSimilarity +=  2*(pA->aFontData.meWeight   == pB->aFontData.meWeight);
+    return nSimilarity;
 }
 
 // -----------------------------------------------------------------------
@@ -147,14 +155,20 @@ long FreetypeManager::AddFontDir( const String& rNormalizedName )
         const char* pszFontFileName = aCFileName.getStr();
 
         FT_FaceRec_* aFaceFT = NULL;
-        FT_Error rcFT = FT_New_Face( aLibFT, pszFontFileName, 0, &aFaceFT );
-        if( (rcFT == FT_Err_Ok) && (aFaceFT != NULL) )
+        for( int nFaceNum = 0, nMaxFaces = 1; nFaceNum < nMaxFaces; ++nFaceNum )
         {
+            FT_Error rcFT = FT_New_Face( aLibFT, pszFontFileName, nFaceNum, &aFaceFT );
+            if( (rcFT != FT_Err_Ok) || (aFaceFT == NULL) )
+                break;
+
             if( !FT_IS_SFNT( aFaceFT ) )    // ignore non-TT fonts for now
                 continue;
 
+            nMaxFaces = aFaceFT->num_faces;
+
             FtFontInfo* const pFontInfo = new FtFontInfo;
-            pFontInfo->aNativeFileName = aCFileName;
+            pFontInfo->aNativeFileName  = aCFileName;
+            pFontInfo->nFaceNum         = nFaceNum;
 
             ImplFontData& rData = pFontInfo->aFontData;
 
@@ -174,7 +188,7 @@ long FreetypeManager::AddFontDir( const String& rNormalizedName )
 
             int i = aFaceFT->num_charmaps;
             while( (--i >= 0) && (aFaceFT->charmaps[i]->encoding != ft_encoding_none) );
-            rData.meCharSet     = (i >= 0) ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UNICODE;
+            rData.meCharSet = (i >= 0) ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UNICODE;
             rData.meScript      = SCRIPT_DONTKNOW;
 
             rData.mePitch       = FT_IS_FIXED_WIDTH( aFaceFT ) ? PITCH_FIXED : PITCH_VARIABLE;
@@ -189,10 +203,8 @@ long FreetypeManager::AddFontDir( const String& rNormalizedName )
 
             FT_Done_Face( aFaceFT );
 
-            if( !maFontList.insert( pFontInfo ).second )
-                delete pFontInfo;
-            else
-                ++nCount;
+            maFontList.insert( pFontInfo );
+            ++nCount;
         }
     }
 
@@ -224,12 +236,34 @@ void FreetypeManager::ClearFontList( )
 FreetypeServerFont* FreetypeManager::CreateFont( const ImplFontSelectData& rFSD )
 {
     FtFontInfo aFontInfo;
-    aFontInfo.aFontData.maName      = rFSD.maName;
     aFontInfo.aFontData.maStyleName = rFSD.maStyleName;
+    aFontInfo.aFontData.meWeight        = rFSD.meWeight;
+    aFontInfo.aFontData.meItalic            = rFSD.meItalic;
 
-    FontList::const_iterator it = maFontList.find( &aFontInfo );
-    if( it != maFontList.end() )
-        return new FreetypeServerFont( rFSD, **it );
+    for( xub_StrLen nBreaker1 = 0, nBreaker2 = 0; nBreaker2 != STRING_LEN; nBreaker1 = nBreaker2 + 1 )
+    {
+        nBreaker2 = rFSD.maName.Search( ';', nBreaker1 );
+        if( nBreaker2 == STRING_NOTFOUND )
+            nBreaker2 = STRING_LEN;
+        aFontInfo.aFontData.maName = rFSD.maName.Copy( nBreaker1, nBreaker2-nBreaker1 );
+
+        // find best match (e.g. only regular available but bold requested)
+        typedef std::pair<FontList::const_iterator,FontList::const_iterator> CPair;
+        const CPair aRange = maFontList.equal_range( &aFontInfo );
+        int nBestMatch = 0;
+        FontList::const_iterator it_best = aRange.first;
+        for( FontList::const_iterator it = aRange.first; it != aRange.second; ++it )
+        {
+            const int nMatchVal = CalcSimilarity( (*it), &aFontInfo );
+            if( nBestMatch < nMatchVal )
+            {
+                nBestMatch = nMatchVal;
+                it_best = it;
+            }
+        }
+        if( it_best != aRange.second )
+            return new FreetypeServerFont( rFSD, **it_best );
+    }
 
     return NULL;
 }
@@ -242,9 +276,12 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, const Ft
 :   ServerFont(rFSD), mrFontInfo(rFI)
 {
     const char* pszFontFileName = rFI.aNativeFileName.getStr();
-    FT_Error rc = FT_New_Face( aLibFT, pszFontFileName, 0, &maFaceFT );
+    FT_Error rc = FT_New_Face( aLibFT, pszFontFileName, rFI.nFaceNum, &maFaceFT );
 
-    rc = FT_Select_Charmap( maFaceFT, ft_encoding_unicode );
+    FT_Encoding eEncoding = ft_encoding_unicode;
+    if( mrFontInfo.aFontData.meCharSet == RTL_TEXTENCODING_SYMBOL )
+        eEncoding = ft_encoding_none;
+    rc = FT_Select_Charmap( maFaceFT, eEncoding );
 
     rc = FT_Set_Pixel_Sizes( maFaceFT, rFSD.mnHeight, rFSD.mnWidth );
 
@@ -252,8 +289,13 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, const Ft
     //TODO: GSUB glyph substitution
     //TODO: GPOS
 
+    // TODO: query GASP table for load flags
+    mnLoadFlags = FT_LOAD_DEFAULT;
+
     if( rFSD.mnOrientation != 0 )
     {
+        mnLoadFlags |= FT_LOAD_NO_HINTING;
+
         FT_Matrix aMatrix;
         aMatrix.xx = +nCos;
         aMatrix.yy = +nCos;
@@ -261,6 +303,9 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, const Ft
         aMatrix.yx = +nSin;
         FT_Set_Transform( maFaceFT, &aMatrix, 0 );
     }
+
+//  if( rFSD.mbVertical )
+//      mnLoadFlags |= FT_LOAD_VERTICAL_LAYOUT;
 }
 
 // -----------------------------------------------------------------------
@@ -277,7 +322,7 @@ void FreetypeServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor
 {
     rFactor = 0x100;
 
-    rTo.mnWidth             = GetFontSelData().mnWidth;
+    rTo.mnWidth         = GetFontSelData().mnWidth;
 
     const FT_Size_Metrics& rMetrics = maFaceFT->size->metrics;
     rTo.mnAscent            = (rMetrics.height - rMetrics.descender + 32) >> 6;
@@ -329,6 +374,7 @@ void FreetypeServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor
     rTo.mnUnderlineSize     = 0;    // TODO
     rTo.mnUnderlineOffset   = rTo.mnDescent;
     rTo.mnBUnderlineSize    = 0;    // TODO
+
     rTo.mnBUnderlineOffset  = rTo.mnDescent;
     rTo.mnDUnderlineSize    = 0;    // TODO
     rTo.mnDUnderlineOffset1 = rTo.mnDescent;
@@ -336,10 +382,10 @@ void FreetypeServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor
     rTo.mnWUnderlineSize    = rTo.mnDescent;
     rTo.mnWUnderlineOffset  = 0;    // TODO
     rTo.mnBStrikeoutSize    = rTo.mnStrikeoutSize * 2;
-    rTo.mnBStrikeoutOffset  = rTo.mnStrikeoutOffset;
+    rTo.mnBStrikeoutOffset  = -rTo.mnStrikeoutOffset;
     rTo.mnDStrikeoutSize    = rTo.mnStrikeoutSize;
-    rTo.mnDStrikeoutOffset1 = rTo.mnStrikeoutOffset - rTo.mnStrikeoutSize;
-    rTo.mnDStrikeoutOffset2 = rTo.mnStrikeoutOffset + rTo.mnStrikeoutSize;
+    rTo.mnDStrikeoutOffset1 = -rTo.mnStrikeoutOffset - rTo.mnStrikeoutSize;
+    rTo.mnDStrikeoutOffset2 = -rTo.mnStrikeoutOffset + rTo.mnStrikeoutSize;
 }
 
 // -----------------------------------------------------------------------
@@ -347,26 +393,29 @@ void FreetypeServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor
 int FreetypeServerFont::GetGlyphIndex( sal_Unicode aChar ) const
 {
     if( mrFontInfo.aFontData.meCharSet == RTL_TEXTENCODING_SYMBOL )
-        aChar += 0xF020;    //### HACK, what encoding can be used to avoid this?
+        aChar |= 0xF000;    // emulate W2K hig/low mapping of symbols
 
     int nGlyphIndex = FT_Get_Char_Index( maFaceFT, aChar );
+
+    // do glyph substitution if necessary
+    GlyphSubstitution::const_iterator it = aGlyphSubstitution.find( nGlyphIndex );
+    if( it != aGlyphSubstitution.end() )
+        nGlyphIndex = (*it).first;
+
     return nGlyphIndex;
 }
 
 // -----------------------------------------------------------------------
 
-void FreetypeServerFont::SetGlyphData( int nGlyphIndex, bool bWithBitmap, GlyphData& rGD ) const
+void FreetypeServerFont::InitGlyphData( int nGlyphIndex, GlyphData& rGD ) const
 {
-    FT_Int nLoadFlags = FT_LOAD_DEFAULT;
-    if( GetFontSelData().mnOrientation != 0 )
-        nLoadFlags |= FT_LOAD_NO_HINTING;
-    if( GetFontSelData().mbVertical )
-        nLoadFlags |= FT_LOAD_VERTICAL_LAYOUT;
-    FT_Error rc = FT_Load_Glyph( maFaceFT, nGlyphIndex, nLoadFlags );
+    FT_Error rc = FT_Load_Glyph( maFaceFT, nGlyphIndex, mnLoadFlags );
 
+#if 0
     if( GetFontSelData().mbVertical && FT_HAS_VERTICAL(maFaceFT) )
         rGD.SetCharWidth( (maFaceFT->glyph->metrics.vertAdvance + 32) >> 6 );
     else
+#endif
         rGD.SetCharWidth( (maFaceFT->glyph->metrics.horiAdvance + 32) >> 6 );
 
     FT_Glyph aGlyphFT;
@@ -376,67 +425,122 @@ void FreetypeServerFont::SetGlyphData( int nGlyphIndex, bool bWithBitmap, GlyphD
 
     FT_BBox aBbox;
     FT_Glyph_Get_CBox( aGlyphFT, ft_glyph_bbox_gridfit, &aBbox );
-    rGD.SetOffset( aBbox.xMin, -aBbox.yMax );
-    const Size aSize( ( (aBbox.xMax - aBbox.xMin + 7 ) & ~7), (aBbox.yMax - aBbox.yMin) );
-    rGD.SetSize( aSize );
-
-    if( bWithBitmap && !rGD.GetBitmap() )
+    if( aBbox.yMin > aBbox.yMax )   // circumvent freetype bug
     {
-        Bitmap* pBitmap = new Bitmap( aSize, 1);
+        int t; t = aBbox.yMin, aBbox.yMin=aBbox.yMax, aBbox.yMax=t;
+    }
+    rGD.SetOffset( aBbox.xMin, -aBbox.yMax );
+    rGD.SetSize( Size( (aBbox.xMax-aBbox.xMin+7)&~7, (aBbox.yMax-aBbox.yMin) ) );
 
-        if( !pBitmap->IsEmpty())    // empty bitmap e.g. for SPACE character
-        {
-            rc = FT_Glyph_To_Bitmap( &aGlyphFT, ft_render_mode_mono, 0, TRUE );
+    FT_Done_Glyph( aGlyphFT );
+}
 
-            const FT_Bitmap& rBitmapFT = reinterpret_cast<FT_BitmapGlyph>(aGlyphFT)->bitmap;
-            const unsigned char* pSourceBuffer = rBitmapFT.buffer;
-            const int pitch = rBitmapFT.pitch;
-            const int rows = rBitmapFT.rows;
+// -----------------------------------------------------------------------
 
-            DBG_ASSERT( (aSize==Size(pitch*8,rows)), "FT::CreateGlyph size mismatch!" );
+bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap ) const
+{
+    FT_Error rc = FT_Load_Glyph( maFaceFT, nGlyphIndex, mnLoadFlags );
+    if( rc != FT_Err_Ok )
+        return false;
 
-            BitmapWriteAccess* const wa = pBitmap->AcquireWriteAccess();
+    FT_Glyph aGlyphFT;
+    rc = FT_Get_Glyph( maFaceFT->glyph, &aGlyphFT );
+    if( rc != FT_Err_Ok )
+        return false;
 
-            long x, y;
-            switch( wa->GetScanlineFormat())
-            {
-                case (BMP_FORMAT_1BIT_MSB_PAL | BMP_FORMAT_BOTTOM_UP):
-                    for( y = 0; y < rows; ++y)
-                    {
-                        Scanline pDestBuffer = wa->GetScanline( y );
-                        for( x = 0; x < pitch; ++x )
-                            pDestBuffer[x] = ~pSourceBuffer[ y * pitch + x ];
-                    }
-                    break;
+    // TODO: if( GetFontSelData().mbVertical ) ...
 
-                case (BMP_FORMAT_1BIT_MSB_PAL | BMP_FORMAT_TOP_DOWN):
-                    // TODO
-                    DBG_ASSERT( FALSE, "CreateGlyph: BOTTOM_UP@1BIT_LSB failure!" );
-                    break;
+    if( aGlyphFT->format != ft_glyph_format_bitmap )
+    {
+        rc = FT_Glyph_To_Bitmap( &aGlyphFT, ft_render_mode_mono, NULL, TRUE );
+        if( rc != FT_Err_Ok )
+            return false;
+    }
 
-                case (BMP_FORMAT_1BIT_LSB_PAL | BMP_FORMAT_BOTTOM_UP):
-                    // TODO
-                    DBG_ASSERT( FALSE, "CreateGlyph: BOTTOM_UP@1BIT_LSB failure!" );
-                    break;
+    const FT_Bitmap& rBitmapFT = reinterpret_cast<FT_BitmapGlyph>(aGlyphFT)->bitmap;
 
-                case (BMP_FORMAT_1BIT_LSB_PAL | BMP_FORMAT_TOP_DOWN):
-                    // TODO
-                    DBG_ASSERT( FALSE, "CreateGlyph: TOP_DOWN@1BIT_LSB failure!" );
-                    break;
+    rRawBitmap.mnHeight         = rBitmapFT.rows;
+    rRawBitmap.mnWidth          = rBitmapFT.pitch * 8;
+    rRawBitmap.mnScanlineSize   = rBitmapFT.pitch;
+    rRawBitmap.mnBitCount       = 1;
 
-                default:
-                    DBG_ASSERT( FALSE, "CreateGlyph: illegal ScanlineFormat!" );
-                    break;
-            }
+    FT_BBox aBbox;
+    FT_Glyph_Get_CBox( aGlyphFT, ft_glyph_bbox_gridfit, &aBbox );
+    if( aBbox.yMin > aBbox.yMax )   // it really happened...
+        { int t; t = aBbox.yMin, aBbox.yMin=aBbox.yMax, aBbox.yMax=t; }
+    rRawBitmap.mnXOffset        = +aBbox.xMin;
+    rRawBitmap.mnYOffset        = -aBbox.yMax;
 
-            pBitmap->ReleaseAccess( wa);
-        }
+    const ULONG nNeededSize = rRawBitmap.mnScanlineSize * rRawBitmap.mnHeight;
+    if( rRawBitmap.mnAllocated < nNeededSize )
+    {
+        delete[] rRawBitmap.mpBits;
+        rRawBitmap.mnAllocated = 2*nNeededSize;
+        rRawBitmap.mpBits = new unsigned char[ rRawBitmap.mnAllocated ];
+    }
 
-        // TODO: if( GetFontSelData().mbVertical ) ...
-        rGD.SetBitmap( pBitmap);
+    const unsigned char* pSrc = rBitmapFT.buffer;
+    unsigned char* pDest = rRawBitmap.mpBits;
+    for( int i = nNeededSize; --i >= 0; )
+        *(pDest++) = ~*(pSrc++);
+
+    FT_Done_Glyph( aGlyphFT );
+    return true;
+}
+
+// -----------------------------------------------------------------------
+
+bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap ) const
+{
+    FT_Int nLoadFlags = mnLoadFlags | FT_LOAD_NO_BITMAP;
+    FT_Error rc = FT_Load_Glyph( maFaceFT, nGlyphIndex, nLoadFlags );
+    if( rc != FT_Err_Ok )
+        return false;
+
+    FT_Glyph aGlyphFT;
+    rc = FT_Get_Glyph( maFaceFT->glyph, &aGlyphFT );
+    if( rc != FT_Err_Ok )
+        return false;
+
+    // TODO: if( GetFontSelData().mbVertical ) ...
+
+    rc = FT_Glyph_To_Bitmap( &aGlyphFT, ft_render_mode_normal, NULL, TRUE );
+    if( rc != FT_Err_Ok )
+        return false;
+
+    const FT_Bitmap& rBitmapFT  = reinterpret_cast<FT_BitmapGlyph>(aGlyphFT)->bitmap;
+    rRawBitmap.mnHeight         = rBitmapFT.rows;
+    rRawBitmap.mnWidth          = rBitmapFT.width;
+    rRawBitmap.mnScanlineSize   = (rBitmapFT.pitch + 3) & -4;
+    rRawBitmap.mnBitCount       = 8;
+
+    FT_BBox aBbox;
+    FT_Glyph_Get_CBox( aGlyphFT, ft_glyph_bbox_gridfit, &aBbox );
+    if( aBbox.yMin > aBbox.yMax )   // it really happened...
+        { int t; t = aBbox.yMin, aBbox.yMin=aBbox.yMax, aBbox.yMax=t; }
+    rRawBitmap.mnXOffset        = +aBbox.xMin;
+    rRawBitmap.mnYOffset        = -aBbox.yMax;
+
+    const ULONG nNeededSize = rRawBitmap.mnScanlineSize * rRawBitmap.mnHeight;
+    if( rRawBitmap.mnAllocated < nNeededSize )
+    {
+        delete[] rRawBitmap.mpBits;
+        rRawBitmap.mnAllocated = 2*nNeededSize;
+        rRawBitmap.mpBits = new unsigned char[ rRawBitmap.mnAllocated ];
+    }
+
+    const unsigned char* pSrc = rBitmapFT.buffer;
+    unsigned char* pDest = rRawBitmap.mpBits;
+    for( int y = rRawBitmap.mnHeight, x; --y >= 0 ; )
+    {
+        for( x = 0; x < rBitmapFT.width; ++x )
+            *(pDest++) = *(pSrc++);
+        for(; x < rRawBitmap.mnScanlineSize; ++x )
+            *(pDest++) = 0;
     }
 
     FT_Done_Glyph( aGlyphFT );
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -553,7 +657,8 @@ ULONG FreetypeServerFont::GetKernPairs( ImplKernPairData** ppKernPairs ) const
 
         // translate both glyph indizes in kerning pairs to characters
         // problem is that these are 1:n mappings...
-        KernVector aKernCharVector( nKernCount );
+        KernVector aKernCharVector;
+        aKernCharVector.reserve( nKernCount );
         KernVector::iterator it;
         for( it = aKernGlyphVector.begin(); it != aKernGlyphVector.end(); ++it )
         {
@@ -562,6 +667,7 @@ ULONG FreetypeServerFont::GetKernPairs( ImplKernPairData** ppKernPairs ) const
                 ft_kerning_default, &aKernVal );
             aKernPair.mnKern = aKernVal.x;
             if( (aKernPair.mnKern == 0) || (rcFT != FT_Err_Ok) )
+
                 continue;
 
             typedef std::pair<Cmap::iterator,Cmap::iterator> CPair;
@@ -594,7 +700,7 @@ ULONG FreetypeServerFont::GetKernPairs( ImplKernPairData** ppKernPairs ) const
 }
 
 // -----------------------------------------------------------------------
-// outline helper functions
+// outline stuff
 // -----------------------------------------------------------------------
 
 class PolyArgs
@@ -733,9 +839,10 @@ static int FT_cubic_to( FT_Vector* /*const*/ p1, FT_Vector* /*const*/ p2, FT_Vec
 
 // -----------------------------------------------------------------------
 
-bool FreetypeServerFont::GetGlyphOutline( int nGlyphIndex, bool bOptimize, PolyPolygon& rPolyPoly ) const
+bool FreetypeServerFont::GetGlyphOutline( int nGlyphIndex, PolyPolygon& rPolyPoly ) const
 {
-    FT_Error rc = FT_Load_Glyph( maFaceFT, nGlyphIndex, FT_LOAD_NO_HINTING | FT_LOAD_NO_BITMAP );
+    FT_Int nLoadFlags = FT_LOAD_NO_HINTING | FT_LOAD_NO_BITMAP;
+    FT_Error rc = FT_Load_Glyph( maFaceFT, nGlyphIndex, nLoadFlags );
 
     FT_Glyph aGlyphFT;
     rc = FT_Get_Glyph( maFaceFT->glyph, &aGlyphFT );
@@ -759,9 +866,6 @@ bool FreetypeServerFont::GetGlyphOutline( int nGlyphIndex, bool bOptimize, PolyP
     aPolyArg.ClosePolygon();    // close last polygon
 
     FT_Done_Glyph( aGlyphFT );
-
-    if( bOptimize)
-        rPolyPoly.Optimize( /*POLY_OPTIMIZE_NO_SAME |*/ POLY_OPTIMIZE_REDUCE | POLY_OPTIMIZE_EDGES );
 
     return true;
 }

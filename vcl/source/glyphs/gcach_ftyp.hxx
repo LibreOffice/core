@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_ftyp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hdu $ $Date: 2000-11-16 13:42:52 $
+ *  last change: $Author: hdu $ $Date: 2001-02-15 16:09:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #ifndef NO_FREETYPE_FONTS
 
 #include <glyphcache.hxx>
+typedef int FT_Int;
 
 // -----------------------------------------------------------------------
 
@@ -69,6 +70,7 @@ struct FtFontInfo
 {
     ImplFontData aFontData;
     ::rtl::OString aNativeFileName;
+    int nFaceNum;
 };
 
 // -----------------------------------------------------------------------
@@ -82,12 +84,13 @@ public:
     long                        AddFontDir( const String& rNormalizedName );
     long                        FetchFontList( ImplDevFontList* ) const;
     void                        ClearFontList();
+
     class FreetypeServerFont*   CreateFont( const ImplFontSelectData& );
 
 private:
     struct std::hash<FtFontInfo*> { size_t operator()( const FtFontInfo* ) const; };
     struct std::equal_to<FtFontInfo*> { bool operator()( const FtFontInfo*, const FtFontInfo* ) const; };
-    typedef ::std::hash_set<FtFontInfo*> FontList;
+    typedef ::std::hash_multiset<FtFontInfo*> FontList;
     FontList                    maFontList;
 };
 
@@ -97,19 +100,31 @@ class FreetypeServerFont : public ServerFont
 {
     public:
                                 FreetypeServerFont( const ImplFontSelectData&, const FtFontInfo& );
+
+    virtual const ::rtl::OString*   GetFontFileName() const { return &mrFontInfo.aNativeFileName; }
+    virtual int                 GetFontFaceNum() const { return mrFontInfo.nFaceNum; }
+
+    virtual void                FetchFontMetric( ImplFontMetricData&, long& rFactor ) const;
+
+    virtual int                 GetGlyphIndex( sal_Unicode ) const;
+    virtual bool                GetGlyphBitmap1( int nGlyphIndex, RawBitmap& ) const;
+    virtual bool                GetGlyphBitmap8( int nGlyphIndex, RawBitmap& ) const;
+    virtual bool                GetGlyphOutline( int nGlyphIndex, PolyPolygon& ) const;
+
 protected:
 friend GlyphCache;
     virtual                     ~FreetypeServerFont();
 
-    virtual void                FetchFontMetric( ImplFontMetricData&, long& rFactor ) const;
-    virtual int                 GetGlyphIndex( sal_Unicode ) const;
-    virtual void                SetGlyphData( int nGlyphIndex, bool bWithBitmap, GlyphData& ) const;
-    virtual bool                GetGlyphOutline( int nGlyphIndex, bool bOptimize, PolyPolygon& ) const;
+    virtual void                InitGlyphData( int nGlyphIndex, GlyphData& ) const;
     virtual ULONG               GetKernPairs( ImplKernPairData** ) const;
 
 private:
     struct FT_FaceRec_*         maFaceFT;
     const FtFontInfo&           mrFontInfo;
+    FT_Int                      mnLoadFlags;
+
+    typedef ::std::hash_map<int,int> GlyphSubstitution;
+    GlyphSubstitution           aGlyphSubstitution;
 };
 
 // -----------------------------------------------------------------------

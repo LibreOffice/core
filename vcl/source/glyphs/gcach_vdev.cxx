@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_vdev.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hdu $ $Date: 2000-11-22 12:44:51 $
+ *  last change: $Author: hdu $ $Date: 2001-02-15 16:09:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,7 +189,7 @@ int VirtDevServerFont::GetGlyphIndex( sal_Unicode aChar ) const
 
 // -----------------------------------------------------------------------
 
-void VirtDevServerFont::SetGlyphData( int nGlyphIndex, bool bWithBitmap, GlyphData& rGD ) const
+void VirtDevServerFont::InitGlyphData( int nGlyphIndex, GlyphData& rGD ) const
 {
     Font aFont;
     aFont.SetName       ( GetFontSelData().maName );
@@ -210,19 +210,32 @@ void VirtDevServerFont::SetGlyphData( int nGlyphIndex, bool bWithBitmap, GlyphDa
     const Rectangle aRect = vdev.GetTextRect( aRect, nGlyphIndex );
     rGD.SetOffset( aRect.Top(), aRect.Left() );
     rGD.SetDelta( vdev.GetTextWidth( nGlyphIndex ), 0 );
-    const Size aSize( aRect.GetSize() );
-    rGD.SetSize( aSize );
+    rGD.SetSize( aRect.GetSize() );
+}
 
-    if( bWithBitmap && !rGD.GetBitmap() )
-    {
-        // draw bitmap
-        vdev.SetOutputSizePixel( aSize, TRUE );
-        vdev.DrawText( Point(0,0)-rGD.GetMetric().GetOffset(), nGlyphIndex );
+// -----------------------------------------------------------------------
 
-        // create new glyph item
-        const Bitmap& rBitmap = vdev.GetBitmap( Point(0,0), aSize );
-        rGD.SetBitmap( new Bitmap( rBitmap ) );
-    }
+bool VirtDevServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& ) const
+{
+#if 0
+    // draw bitmap
+    vdev.SetOutputSizePixel( aSize, TRUE );
+    vdev.DrawText( Point(0,0)-rGD.GetMetric().GetOffset(), nGlyphIndex );
+
+    // create new glyph item
+    const Bitmap& rBitmap = vdev.GetBitmap( Point(0,0), aSize );
+    rGD.SetBitmap( new Bitmap( rBitmap ) );
+    return true;
+#else
+    return false;
+#endif
+}
+
+// -----------------------------------------------------------------------
+
+bool     VirtDevServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& ) const
+{
+    return false;
 }
 
 // -----------------------------------------------------------------------
@@ -266,7 +279,7 @@ ULONG VirtDevServerFont::GetKernPairs( ImplKernPairData** ppImplKernPairs ) cons
 
 // -----------------------------------------------------------------------
 
-bool VirtDevServerFont::GetGlyphOutline( int nGlyphIndex, bool bOptimize, PolyPolygon& rPolyPoly ) const
+bool VirtDevServerFont::GetGlyphOutline( int nGlyphIndex, PolyPolygon& rPolyPoly ) const
 {
     Font aFont;
     aFont.SetName       ( GetFontSelData().maName );
@@ -279,7 +292,8 @@ bool VirtDevServerFont::GetGlyphOutline( int nGlyphIndex, bool bOptimize, PolyPo
     VirtualDevice vdev( 1 );
     vdev.SetFont( aFont );
 
-    return vdev.GetGlyphOutline( nGlyphIndex, rPolyPoly, bOptimize);
+    const bool bOptimize = true;
+    return vdev.GetGlyphOutline( nGlyphIndex, rPolyPoly, bOptimize );
 }
 
 // =======================================================================

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_vdev.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hdu $ $Date: 2000-11-16 13:42:52 $
+ *  last change: $Author: hdu $ $Date: 2001-02-15 16:08:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,17 +65,22 @@
 
 class VirtDevServerFont : public ServerFont
 {
+public:
+    virtual bool                    GetGlyphBitmap1( int nGlyphIndex, RawBitmap& ) const;
+    virtual bool                    GetGlyphBitmap8( int nGlyphIndex, RawBitmap& ) const;
+    virtual bool                    GetGlyphOutline( int nGlyphIndex, PolyPolygon& ) const;
+
 protected:
 friend GlyphCache;
-    static VirtDevServerFont*   CreateFont( const ImplFontSelectData& );
-    virtual void                FetchFontMetric( ImplFontMetricData&, long& rFactor ) const;
-    virtual int                 GetGlyphIndex( sal_Unicode ) const;
-    virtual void                SetGlyphData( int nGlyphIndex, bool bWithBitmap, GlyphData& ) const;
-    virtual bool                GetGlyphOutline( int nGlyphIndex, bool bOptimize, PolyPolygon& ) const;
-    virtual ULONG               GetKernPairs( ImplKernPairData** ) const = 0;
-
     static long                 FetchFontList( ImplDevFontList* );
     static void                 ClearFontList();
+
+    static VirtDevServerFont*   CreateFont( const ImplFontSelectData& );
+    virtual void                    FetchFontMetric( ImplFontMetricData&, long& rFactor ) const;
+    virtual ULONG               GetKernPairs( ImplKernPairData** ) const;
+
+    virtual int                 GetGlyphIndex( sal_Unicode ) const;
+    virtual void                    InitGlyphData( int nGlyphIndex, GlyphData& ) const;
 
 private:
                                 VirtDevServerFont( const ImplFontSelectData& );
