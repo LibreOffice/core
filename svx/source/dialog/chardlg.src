@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.src,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: pb $ $Date: 2002-05-08 07:31:13 $
+ *  last change: $Author: kz $ $Date: 2002-05-16 15:13:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1043,6 +1043,26 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Size = MAP_APPFONT ( 248 , 8 );
         Text = "Schriftart f¸r komplexe Skripte";
         Text [ english_us ] = "Complex script font";
+        Text[ portuguese ] = "Complex script font";
+        Text[ russian ] = "Complex script font";
+        Text[ greek ] = "Complex script font";
+        Text[ dutch ] = "Complex script font";
+        Text[ french ] = "Complex script font";
+        Text[ spanish ] = "Complex script font";
+        Text[ finnish ] = "Complex script font";
+        Text[ italian ] = "Complex script font";
+        Text[ danish ] = "Complex script font";
+        Text[ swedish ] = "Complex script font";
+        Text[ polish ] = "Complex script font";
+        Text[ portuguese_brazilian ] = "Complex script font";
+        Text[ japanese ] = "Complex script font";
+        Text[ korean ] = "Complex script font";
+        Text[ chinese_simplified ] = "Complex script font";
+        Text[ chinese_traditional ] = "Complex script font";
+        Text[ turkish ] = "Complex script font";
+        Text[ arabic ] = "Complex script font";
+        Text[ catalan ] = "Complex script font";
+        Text[ thai ] = "Complex script font";
     };
     FixedText FT_CTL_NAME
     {
@@ -1070,6 +1090,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ arabic ] = "‰Ê⁄ «·Œÿ";
         Text[ catalan ] = "Fuente";
         Text[ finnish ] = "Fontti";
+        Text[ thai ] = "Font";
     };
     ComboBox LB_CTL_NAME
     {
@@ -1105,6 +1126,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ arabic ] = "‰„ÿ «·Œÿ";
         Text[ catalan ] = "Estilo";
         Text[ finnish ] = "~Kirjasinlaji";
+        Text[ thai ] = "T~ypeface";
     };
     ComboBox LB_CTL_STYLE
     {
@@ -1267,6 +1289,13 @@ TabPage RID_SVXPAGE_CHAR_NAME
             "Lihavointi" ;
             "Lihavointi ja kursivointi" ;
         };
+    StringList [ thai ] =
+    {
+        "Normal" ;
+        "Kursiv" ;
+        "Fett" ;
+        "Fett Kursiv" ;
+    };
     };
     FixedText FT_CTL_SIZE
     {
@@ -1294,6 +1323,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ arabic ] = "ÕÃ„ «·Œÿ";
         Text[ catalan ] = "TamaÒo";
         Text[ finnish ] = "Koko";
+        Text[ thai ] = "Size";
     };
     MetricBox LB_CTL_SIZE
     {
@@ -1329,6 +1359,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ arabic ] = "«··€…";
         Text[ catalan ] = "Idioma";
         Text[ finnish ] = "Kieli";
+        Text[ thai ] = "Language";
     };
     ListBox LB_CTL_LANG
     {
@@ -2655,6 +2686,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ arabic ] = "·Ê‰ «·Œÿ";
         Text[ catalan ] = "Color de fuente";
         Text[ finnish ] = "Fontin ~v‰ri";
+        Text[ thai ] = "Font ~color";
     };
     ListBox LB_FONTCOLOR
     {
@@ -3358,6 +3390,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ turkish ] = "Saydam";
         Text[ catalan ] = "Transparente";
         Text[ finnish ] = "L‰pin‰kyv‰";
+        Text[ thai ] = "Transparent";
     };
 };
 
