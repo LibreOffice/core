@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grafctrl.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 20:13:54 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 11:09:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #define ITEMID_SIZE 0
 #define ITEMID_BRUSH 0
 #define ITEMID_GRF_CROP SID_ATTR_GRAF_CROP
@@ -908,7 +907,7 @@ Window* SvxGrafModeToolBoxControl::CreateItemWindow( Window *pParent )
 void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
 {
     SfxItemPool&    rPool = rView.GetModel()->GetItemPool();
-    SfxItemSet      aSet( rPool, SDRATTR_GRAF_FIRST, SDRATTR_GRAF_LAST-1 );
+    SfxItemSet      aSet( rPool, SDRATTR_GRAF_FIRST, SDRATTR_GRAF_LAST );
 
     String              aUndoStr( rView.GetDescriptionOfMarkedObjects() );
     const SfxItemSet*   pArgs = rReq.GetArgs();
