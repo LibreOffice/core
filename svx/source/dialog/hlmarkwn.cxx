@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hlmarkwn.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2001-07-02 10:32:31 $
+ *  last change: $Author: os $ $Date: 2002-03-14 14:25:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -390,13 +390,25 @@ int SvxHlinkDlgMarkWnd::FillTree( uno::Reference< container::XNameAccess > xLink
     const ULONG nLinks = aNames.getLength();
     const OUString* pNames = aNames.getConstArray();
 
-    uno::Any aAny;
 
     for( ULONG i = 0; i < nLinks; i++ )
     {
+        uno::Any aAny;
         OUString aLink( *pNames++ );
 
-        aAny = xLinks->getByName( aLink );
+        BOOL bError = FALSE;
+        try
+        {
+            aAny = xLinks->getByName( aLink );
+        }
+        catch(const uno::Exception&)
+        {
+            // if the name of the target was invalid (like empty headings)
+            // no object can be provided
+            bError = TRUE;
+        }
+        if(bError)
+            continue;
 
         uno::Reference< beans::XPropertySet > xTarget;
 
