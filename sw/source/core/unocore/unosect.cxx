@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosect.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2001-02-12 13:26:51 $
+ *  last change: $Author: os $ $Date: 2001-02-16 10:27:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,9 @@
 #ifndef _DOCTXM_HXX
 #include <doctxm.hxx>
 #endif
-
+#ifndef _FMTFTNTX_HXX
+#include <fmtftntx.hxx>
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -157,6 +159,8 @@ struct SwTextSectionProperties_Impl
 
     SwFmtCol*   pColItem;
     SvxBrushItem* pBrushItem;
+    SwFmtFtnAtTxtEnd* pFtnItem;
+    SwFmtEndAtTxtEnd* pEndItem;
     sal_Bool    bDDE;
     sal_Bool    bHidden;
     sal_Bool    bProtect;
@@ -168,12 +172,16 @@ struct SwTextSectionProperties_Impl
         bProtect(0),
         pColItem(0),
         pBrushItem(0),
+        pFtnItem(0),
+        pEndItem(0),
         bUpdateType(sal_True){}
 
     ~SwTextSectionProperties_Impl()
     {
         delete pColItem;
         delete pBrushItem;
+        delete pFtnItem;
+        delete pEndItem;
     }
 };
 /* -----------------------------11.07.00 12:10--------------------------------
@@ -372,6 +380,11 @@ void SwXTextSection::attachToRange(const uno::Reference< text::XTextRange > & xT
                 aSet.Put(*pProps->pBrushItem);
             if(pProps->pColItem)
                 aSet.Put(*pProps->pColItem);
+            if(pProps->pFtnItem)
+                aSet.Put(*pProps->pFtnItem);
+            if(pProps->pEndItem)
+                aSet.Put(*pProps->pEndItem);
+
         pRet = pDoc->Insert( aPam, aSect, aSet.Count() ? &aSet : 0 );
         pRet->GetFmt()->Add(this);
 
@@ -660,13 +673,26 @@ void SwXTextSection::setPropertyValues(
                                     pProps->pColItem = new SwFmtCol;
                                     pPutItem = pProps->pColItem;
                             }
-                            else //if(RES_BACKGROUND == pMap->nWID)
+                            else if(RES_BACKGROUND == pMap->nWID)
                             {
                                 if(!pProps->pBrushItem)
                                     pProps->pBrushItem = new SvxBrushItem;
                                 pPutItem = pProps->pBrushItem;
                             }
-                            pPutItem->PutValue(pValues[nProperty], pMap->nMemberId);
+                            else if(RES_FTN_AT_TXTEND == pMap->nWID)
+                            {
+                                if(!pProps->pFtnItem)
+                                    pProps->pFtnItem = new SwFmtFtnAtTxtEnd;
+                                pPutItem = pProps->pFtnItem;
+                            }
+                            else if(RES_END_AT_TXTEND == pMap->nWID)
+                            {
+                                if(!pProps->pEndItem)
+                                    pProps->pEndItem = new SwFmtEndAtTxtEnd;
+                                pPutItem = pProps->pEndItem;
+                            }
+                            if(pPutItem)
+                                pPutItem->PutValue(pValues[nProperty], pMap->nMemberId);
                         }
 
                 }
@@ -874,13 +900,26 @@ Sequence< Any > SwXTextSection::getPropertyValues(
                                     pProps->pColItem = new SwFmtCol;
                                     pQueryItem = pProps->pColItem;
                             }
-                            else //if(RES_BACKGROUND == pMap->nWID)
+                            else if(RES_BACKGROUND == pMap->nWID)
                             {
                                 if(!pProps->pBrushItem)
                                     pProps->pBrushItem = new SvxBrushItem;
                                 pQueryItem = pProps->pBrushItem;
                             }
-                            pQueryItem->QueryValue(pRet[nProperty], pMap->nMemberId);
+                            else if(RES_FTN_AT_TXTEND == pMap->nWID)
+                            {
+                                if(!pProps->pFtnItem)
+                                    pProps->pFtnItem = new SwFmtFtnAtTxtEnd;
+                                pQueryItem = pProps->pFtnItem;
+                            }
+                            else if(RES_END_AT_TXTEND == pMap->nWID)
+                            {
+                                if(!pProps->pEndItem)
+                                    pProps->pEndItem = new SwFmtEndAtTxtEnd;
+                                pQueryItem = pProps->pEndItem;
+                            }
+                            if(pQueryItem)
+                                pQueryItem->QueryValue(pRet[nProperty], pMap->nMemberId);
                         }
                 }
             }
