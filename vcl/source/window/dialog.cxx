@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mt $ $Date: 2001-02-16 11:13:00 $
+ *  last change: $Author: mt $ $Date: 2001-02-19 12:43:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -837,15 +837,15 @@ void Dialog::GrabFocusToFirstControl()
 
 void Dialog::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULONG nFlags )
 {
+    Point aPos = pDev->LogicToPixel( rPos );
+    Size aSize = pDev->LogicToPixel( rSize );
+
     ImplInitSettings();
 
     pDev->Push();
     pDev->SetMapMode();
     pDev->SetLineColor();
     pDev->SetFillColor( GetBackground().GetColor() );
-
-    Point aPos = pDev->LogicToPixel( rPos );
-    Size aSize = pDev->LogicToPixel( rSize );
 
     pDev->DrawRect( Rectangle( aPos, aSize ) );
 
