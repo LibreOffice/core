@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-25 18:47:20 $
+ *  last change: $Author: nn $ $Date: 2001-05-03 10:07:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6929,7 +6929,6 @@ uno::Any ScTableSheetObj::GetOnePropertyValue( const SfxItemPropertyMap* pMap )
         ScDocument* pDoc = pDocSh->GetDocument();
         USHORT nTab = GetTab_Impl();
 
-        uno::Any aAny;
         if ( pMap->nWID == SC_WID_UNO_PAGESTL )
         {
             String aStyle = ScStyleNameConversion::DisplayToProgrammaticName(
