@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.106 $
+ *  $Revision: 1.107 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-09 18:23:40 $
+ *  last change: $Author: cl $ $Date: 2001-02-11 15:11:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -660,6 +660,7 @@ XML_CONSTASCII_ACTION( sXML_filter_or, "filter-or");
 XML_CONSTASCII_ACTION( sXML_first_date_time, "first-date-time");
 XML_CONSTASCII_ACTION( sXML_first_page, "first-page");
 XML_CONSTASCII_ACTION( sXML_first_page_number, "first-page-number");
+XML_CONSTASCII_ACTION( sXML_fit_to_contour, "fit-to-contour");
 XML_CONSTASCII_ACTION( sXML_fit_to_size, "fit-to-size" );
 XML_CONSTASCII_ACTION( sXML_fix, "fix" );
 XML_CONSTASCII_ACTION( sXML_fixed, "fixed" );
