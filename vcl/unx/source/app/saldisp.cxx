@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cp $ $Date: 2001-03-02 07:50:59 $
+ *  last change: $Author: pl $ $Date: 2001-03-02 09:53:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1273,11 +1273,11 @@ final void SalDisplay::Init( Colormap hXColmap, const XVisualInfo* pXVI )
 
         // - - - - - - - - - - Fonts - - - - - - - - - - - - - - - -
 
+#ifndef USE_BUILTIN_RASTERIZER
         const char *pFontPath = getenv( "SAL_FONTPATH" );
         if( pFontPath )
             AddFontPath( ByteString( pFontPath ) );
 
-#ifndef USE_BUILTIN_RASTERIZER
         pFontPath = getenv( "SAL_FONTPATH_PRIVATE" );
         if( pFontPath )
             AddFontPath( ByteString( pFontPath ) );
@@ -2447,6 +2447,7 @@ sal_IsValidFontpath( const ByteString &rFontPath,
 
 final void SalDisplay::AddFontPath( const ByteString &rPath ) const
 {
+#ifndef USE_BUILTIN_RASTERIZER
     const char cSeparator = ';' ;
 
     if( rPath.Len()
@@ -2498,6 +2499,7 @@ final void SalDisplay::AddFontPath( const ByteString &rPath ) const
 
         pXLib_->SetIgnoreXErrors( bOld );
     }
+#endif
 }
 
 // Events
