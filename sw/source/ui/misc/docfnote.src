@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfnote.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-11 18:37:07 $
+ *  last change: $Author: kz $ $Date: 2001-04-26 20:20:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,10 +198,10 @@ TabPage TP_FOOTNOTEOPTION
         Text[ portuguese ] = "Numbering";
         Text[ russian ] = "Íóìåðàöèÿ";
         Text[ greek ] = "Áñßè~ìçóç";
-        Text[ dutch ] = "Numbering";
+        Text[ dutch ] = "~Nummering";
         Text[ french ] = "Nu~mérotation";
         Text[ spanish ] = "~Numeración";
-        Text[ italian ] = "Numbering";
+        Text[ italian ] = "Numerazione";
         Text[ danish ] = "Numbering";
         Text[ swedish ] = "Nu~mrering";
         Text[ polish ] = "Numeracja";
@@ -271,10 +271,10 @@ TabPage TP_FOOTNOTEOPTION
         Text[ portuguese ] = "Counting";
         Text[ russian ] = "Ñ÷åò";
         Text[ greek ] = "ÌÝôñçóç";
-        Text[ dutch ] = "Counting";
+        Text[ dutch ] = "~Telling";
         Text[ french ] = "~Comptage";
         Text[ spanish ] = "Contar";
-        Text[ italian ] = "Counting";
+        Text[ italian ] = "Conteggio";
         Text[ danish ] = "Counting";
         Text[ swedish ] = "Räk~ning";
         Text[ polish ] = "Liczenie";
@@ -948,10 +948,10 @@ TabPage TP_ENDNOTEOPTION
         Text[ portuguese ] = "Numbering";
         Text[ russian ] = "Íóìåðàöèÿ";
         Text[ greek ] = "Áñßèì~çóç";
-        Text[ dutch ] = "Numbering";
+        Text[ dutch ] = "Nu~mmering";
         Text[ french ] = "Nu~mérotation";
         Text[ spanish ] = "Numeración";
-        Text[ italian ] = "Numbering";
+        Text[ italian ] = "Numerazione";
         Text[ danish ] = "Numbering";
         Text[ swedish ] = "Nu~mrering";
         Text[ polish ] = "Numeracja";
