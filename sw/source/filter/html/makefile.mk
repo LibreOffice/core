@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:14:56 $
+#   last change: $Author: mtg $ $Date: 2001-02-20 16:21:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,32 +80,6 @@ CDEFS=$(CDEFS) -Dmydebug
 
 # --- Files --------------------------------------------------------
 
-CXXFILES = \
-        css1atr.cxx      \
-        css1kywd.cxx      \
-        htmlatr.cxx     \
-        htmlbas.cxx      \
-        htmlcss1.cxx      \
-        htmlctxt.cxx      \
-        htmldraw.cxx      \
-        htmlfld.cxx      \
-        htmlfldw.cxx      \
-        htmlfly.cxx      \
-        htmlflyt.cxx      \
-        htmlform.cxx     \
-        htmlforw.cxx     \
-        htmlftn.cxx      \
-        htmlgrin.cxx      \
-        htmlnum.cxx      \
-        htmlplug.cxx      \
-        htmlsect.cxx      \
-        htmltab.cxx      \
-        htmltabw.cxx      \
-        parcss1.cxx      \
-        svxcss1.cxx      \
-        swhtml.cxx 		\
-        wrthtml.cxx      \
-
 SLOFILES =  \
         $(SLO)$/css1atr.obj \
         $(SLO)$/css1kywd.obj \
@@ -131,6 +105,7 @@ SLOFILES =  \
         $(SLO)$/svxcss1.obj \
         $(SLO)$/swhtml.obj \
         $(SLO)$/wrthtml.obj \
+        $(SLO)$/HTMLHelper.obj \
 
 # --- Tagets -------------------------------------------------------
 
