@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdet2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 09:11:46 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:34:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,9 +85,7 @@
 #ifndef _PARHTML_HXX //autogen
 #include <svtools/parhtml.hxx>
 #endif
-#ifndef _SO_CLSIDS_HXX
-#include <so3/clsids.hxx>
-#endif
+#include <sot/clsids.hxx>
 
 #ifndef _SHELLIO_HXX //autogen
 #include <shellio.hxx>
@@ -261,11 +259,11 @@ ULONG SwFilterDetect::GlobDetectFilter( SfxMedium& rMedium, const SfxFilter **pp
             // dann ueberpruefe mal ob der richtige ausgewaehlt wurde
         if( rMedium.IsStorage() )
         {
-            SvStorageRef aStg = rMedium.GetStorage();
+            uno::Reference < embed::XStorage > aStg = rMedium.GetStorage();
 
             if( *ppFilter &&
-                aStg.Is() && SVSTREAM_OK == aStg->GetError() &&
-                SwIoSystem::IsValidStgFilter( *aStg, **ppFilter ))
+                aStg.is() &&
+                SwIoSystem::IsValidStgFilter( aStg, **ppFilter ))
             {
                 nRet = ERRCODE_NONE;
                 break;
@@ -280,7 +278,7 @@ ULONG SwFilterDetect::GlobDetectFilter( SfxMedium& rMedium, const SfxFilter **pp
             while ( pFltr )
             {
                 if( (sal_Unicode)'C' == pFltr->GetUserData().GetChar(0) &&
-                    aStg.Is() && SwIoSystem::IsValidStgFilter( *aStg, *pFltr ) )
+                    aStg.is() && SwIoSystem::IsValidStgFilter( aStg, *pFltr ) )
                 {
                     *ppFilter = pFltr;
                     nRet = ERRCODE_NONE;
