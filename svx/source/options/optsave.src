@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsave.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: os $ $Date: 2001-10-25 14:10:27 $
+ *  last change: $Author: fs $ $Date: 2001-10-26 09:25:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -342,10 +342,10 @@ TabPage RID_SFXPAGE_SAVE
     CheckBox BTN_NOPRETTYPRINTING
     {
         Pos = MAP_APPFONT ( 12 , 85 ) ;
-        Size = MAP_APPFONT ( 162 , 8 ) ;
-        Text = "~XML-Dateien Größenoptimieren (ohne Pretty Printing)" ;
-        Text [ english ] = "Size optimization for XML files (no pretty printing)" ;
-        Text [ english_us ] = "Size optimization for XML files (no pretty printing)" ;
+        Size = MAP_APPFONT ( 260 - 12 - 12 , 8 ) ;
+        Text = "XML-Format auf Größe optimieren (ohne Pretty Printing)" ;
+        Text [ english ] = "Size optimization for XML format (no pretty printing)" ;
+        Text [ english_us ] = "Size optimization for XML format (no pretty printing)" ;
     };
 
     FixedLine GB_RELATIVE
