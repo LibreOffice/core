@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msashape.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:22 $
+ *  last change: $Author: sj $ $Date: 2000-10-10 15:35:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,9 +151,17 @@ static const mso_AutoShape mso =
 
 #define MSO_I | (sal_Int32)0x80000000
 
+static const sal_Int32 mso_sptDefault0[] =
+{
+    1, 0
+};
 static const sal_Int32 mso_sptDefault1400[] =
 {
     1, 1400
+};
+static const sal_Int32 mso_sptDefault1800[] =
+{
+    1, 1800
 };
 static const sal_Int32 mso_sptDefault2700[] =
 {
@@ -162,6 +170,10 @@ static const sal_Int32 mso_sptDefault2700[] =
 static const sal_Int32 mso_sptDefault3600[] =
 {
     1, 3600
+};
+static const sal_Int32 mso_sptDefault3700[] =
+{
+    1, 3700
 };
 static const sal_Int32 mso_sptDefault5400[] =
 {
@@ -172,16 +184,12 @@ static const sal_Int32 mso_sptDefault10800[] =
     1, 10800
 };
 
-static const sal_Int32 mso_sptRectangleDefault[] =
-{
-    1, 0
-};
 static const mso_AutoShape msoRectangle =
 {
     NULL, 0,
     NULL, 0,
     NULL, 0,
-    (sal_Int32*)mso_sptRectangleDefault,
+    (sal_Int32*)mso_sptDefault0,
     NULL,
     NULL,
     0x80000000, 0x80000000
@@ -2803,7 +2811,6 @@ static const SvxMSDffCalculationData mso_sptNoSmokingCalc[] =
     { 0x6081, 0x406, 0x407, 450 },                  // f
     { 0x6082, 0x406, 0x407, 450 }                   // 10
 };
-
 static const mso_AutoShape msoNoSmoking =
 {
     (sal_Int32*)mso_sptNoSmokingVert, sizeof( mso_sptNoSmokingVert ) >> 3,
@@ -2811,6 +2818,345 @@ static const mso_AutoShape msoNoSmoking =
     (SvxMSDffCalculationData*)mso_sptNoSmokingCalc, sizeof( mso_sptNoSmokingCalc ) / sizeof( SvxMSDffCalculationData ),
     (sal_Int32*)mso_sptDefault2700,
     (sal_Int32*)mso_sptEllipseTextRect,
+    NULL,
+    0x80000000, 0x80000000
+};
+
+// aware : control points are always part of the bounding box
+static const sal_Int32 mso_sptHeartVert[] =
+{
+    10800,  21599, 321,     6886,   70,     6036,   // ppp
+    -9,     5766,   -1,     5474,   2,      5192,   // ccp
+    6,      4918,   43,     4641,   101,    4370,   // ccp
+    159,    4103,   245,    3837,   353,    3582,   // ccp
+    460,    3326,   591,    3077,   741,    2839,   // ccp
+    892,    2598,   1066,   2369,   1253,   2155,   // ccp
+    1443,   1938,   1651,   1732,   1874,   1543,   // ccp
+    2097,   1351,   2337,   1174,   2587,   1014,   // ccp
+    2839,   854,    3106,   708,    3380,   584,    // ccp
+    3656,   459,    3945,   350,    4237,   264,    // ccp
+    4533,   176,    4838,   108,    5144,   66,     // ccp
+    5454,   22,     5771,   1,      6086,   3,      // ccp
+    6407,   7,      6731,   35,     7048,   89,     // ccp
+    7374,   144,    7700,   226,    8015,   335,    // ccp
+    8344,   447,    8667,   590,    8972,   756,    // ccp
+    9297,   932,    9613,   1135,   9907,   1363,   // ccp
+    10224,  1609,   10504,  1900,   10802,  2169,   // ccp
+    11697,  1363,                                   // p
+    11971,  1116,   12304,  934,    12630,  756,    // ccp
+    12935,  590,    13528,  450,    13589,  335,    // ccp
+    13901,  226,    14227,  144,    14556,  89,     // ccp
+    14872,  35,     15195,  7,      15517,  3,      // ccp
+    15830,  0,      16147,  22,     16458,  66,     // ccp
+    16764,  109,    17068,  177,    17365,  264,    // ccp
+    17658,  349,    17946,  458,    18222,  584,    // ccp
+    18496,  708,    18762,  854,    19015,  1014,   // ccp
+    19264,  1172,   19504,  1349,   19730,  1543,   // ccp
+    19950,  1731,   20158,  1937,   20350,  2155,   // ccp
+    20536,  2369,   20710,  2598,   20861,  2839,   // ccp
+    21010,  3074,   21143,  3323,   21251,  3582,   // ccp
+    21357,  3835,   21443,  4099,   21502,  4370,   // ccp
+    21561,  4639,   21595,  4916,   21600,  5192,   // ccp
+    21606,  5474,   21584,  5760,   21532,  6036,   // ccp
+    21478,  6326,   21366,  6603,   21282,  6887,   // ccp
+    10802,  21602                                   // p
+};
+static const sal_uInt16 mso_sptHeartSegm[] =
+{
+    0x4000, 0x0002, 0x2010, 0x0001, 0x2010, 0x0001, 0x6001, 0x8000
+};
+static const sal_Int32 mso_sptHeartTextRect[] =
+{
+    1,  5080,   2540,   16520,  13550
+};
+static const sal_Int32 mso_sptHeartBoundRect[] =
+{
+    -9, 0, 21606, 21602
+};
+static const mso_AutoShape msoHeart =
+{
+    (sal_Int32*)mso_sptHeartVert, sizeof( mso_sptHeartVert ) >> 3,
+    (sal_uInt16*)mso_sptHeartSegm, sizeof( mso_sptHeartSegm ) >> 1,
+    NULL, 0,
+    NULL,
+    (sal_Int32*)mso_sptHeartTextRect,
+    (sal_Int32*)mso_sptHeartBoundRect,
+    0x80000000, 0x80000000
+};
+
+static const sal_Int32 mso_sptLightningBoldVert[] =
+{
+    8458,   0,      0,      3923,
+    7564,   8416,   4993,   9720,
+    12197,  13904,  9987,   14934,
+    21600,  21600,  14768,  12911,
+    16558,  12016,  11030,  6840,
+    12831,  6120,   8458,   0
+};
+static const sal_Int32 mso_sptLightningBoldTextRect[] =
+{
+    1,  8680,   7410,   13970,  14190
+};
+static const mso_AutoShape msoLightningBold =
+{
+    (sal_Int32*)mso_sptLightningBoldVert, sizeof( mso_sptLightningBoldVert ) >> 3,
+    NULL, 0,
+    NULL, 0,
+    NULL,
+    (sal_Int32*)mso_sptLightningBoldTextRect,
+    NULL,
+    0x80000000, 0x80000000
+};
+
+static const sal_Int32 mso_sptSunVert[] =       // adj value 2700 -> 10125
+{
+    0, 10800, 4 MSO_I, 8 MSO_I, 4 MSO_I, 9 MSO_I,
+    0x0a MSO_I, 0x0b MSO_I, 0x0c MSO_I, 0x0d MSO_I, 0x0e MSO_I, 0x0f MSO_I,
+    0x10 MSO_I, 0x11 MSO_I, 0x12 MSO_I, 0x13 MSO_I, 0x14 MSO_I, 0x15 MSO_I,
+    0x16 MSO_I, 0x17 MSO_I, 0x18 MSO_I, 0x19 MSO_I, 0x1a MSO_I, 0x1b MSO_I,
+    0x1c MSO_I, 0x1d MSO_I, 0x1e MSO_I, 0x1f MSO_I, 0x20 MSO_I, 0x21 MSO_I,
+    0x22 MSO_I, 0x23 MSO_I, 0x24 MSO_I, 0x25 MSO_I, 0x26 MSO_I, 0x27 MSO_I,
+    0x28 MSO_I, 0x29 MSO_I, 0x2a MSO_I, 0x2b MSO_I, 0x2c MSO_I, 0x2d MSO_I,
+    0x2e MSO_I, 0x2f MSO_I, 0x30 MSO_I, 0x31 MSO_I, 0x32 MSO_I, 0x33 MSO_I,
+    0 MSO_I,0 MSO_I,1 MSO_I,1 MSO_I
+};
+static const sal_uInt16 mso_sptSunSegm[] =
+{
+    0x4000, 0x0002, 0x6001, 0x8000,
+    0x4000, 0x0002, 0x6001, 0x8000,
+    0x4000, 0x0002, 0x6001, 0x8000,
+    0x4000, 0x0002, 0x6001, 0x8000,
+    0x4000, 0x0002, 0x6001, 0x8000,
+    0x4000, 0x0002, 0x6001, 0x8000,
+    0x4000, 0x0002, 0x6001, 0x8000,
+    0x4000, 0x0002, 0x6001, 0x8000,
+    0xa302, 0x6000, 0x8000
+};
+static const SvxMSDffCalculationData mso_sptSunCalc[] =
+{
+    { 0x2000, DFF_Prop_adjustValue, 0, 0 },
+    { 0x8000, 21600, 0, DFF_Prop_adjustValue },
+    { 0x2000, DFF_Prop_adjustValue, 0, 2700 },
+    { 0x2001, 0x402, 5080, 7425 },
+    { 0x2000, 0x403, 2540, 0 },
+    { 0x8000, 10125, 0, DFF_Prop_adjustValue },
+    { 0x2001, 0x405, 2120, 7425 },
+    { 0x2000, 0x406, 210, 0 },
+    { 0x4000, 10800, 0x407, 0 },    // y1 (0x8)
+    { 0x8000, 10800, 0, 0x407 },    // y2 (0x9)
+    { 0x0081, 0, 10800, 450 },      // 0xa
+    { 0x0082, 0, 10800, 450 },      // 0xb
+    { 0x6081, 0x404, 0x408, 450 },  // 0xc
+    { 0x6082, 0x404, 0x408, 450 },  // 0xd
+    { 0x6081, 0x404, 0x409, 450 },  // 0xe
+    { 0x6082, 0x404, 0x409, 450 },  // 0xf
+    { 0x0081, 0, 10800, 900 },      // 0x10
+    { 0x0082, 0, 10800, 900 },      // 0x11
+    { 0x6081, 0x404, 0x408, 900 },  // 0x12
+    { 0x6082, 0x404, 0x408, 900 },  // 0x13
+    { 0x6081, 0x404, 0x409, 900 },  // 0x14
+    { 0x6082, 0x404, 0x409, 900 },  // 0x15
+    { 0x0081, 0, 10800, 1350 },     // 0x16
+    { 0x0082, 0, 10800, 1350 },     // 0x17
+    { 0x6081, 0x404, 0x408, 1350 }, // 0x18
+    { 0x6082, 0x404, 0x408, 1350 }, // 0x19
+    { 0x6081, 0x404, 0x409, 1350 }, // 0x1a
+    { 0x6082, 0x404, 0x409, 1350 }, // 0x1b
+    { 0x0081, 0, 10800, 1800 },     // 0x1c
+    { 0x0082, 0, 10800, 1800 },     // 0x1d
+    { 0x6081, 0x404, 0x408, 1800 }, // 0x1e
+    { 0x6082, 0x404, 0x408, 1800 }, // 0x1f
+    { 0x6081, 0x404, 0x409, 1800 }, // 0x20
+    { 0x6082, 0x404, 0x409, 1800 }, // 0x21
+    { 0x0081, 0, 10800, 2250 },     // 0x22
+    { 0x0082, 0, 10800, 2250 },     // 0x23
+    { 0x6081, 0x404, 0x408, 2250 }, // 0x24
+    { 0x6082, 0x404, 0x408, 2250 }, // 0x25
+    { 0x6081, 0x404, 0x409, 2250 }, // 0x26
+    { 0x6082, 0x404, 0x409, 2250 }, // 0x27
+    { 0x0081, 0, 10800, 2700 },     // 0x28
+    { 0x0082, 0, 10800, 2700 },     // 0x29
+    { 0x6081, 0x404, 0x408, 2700 }, // 0x2a
+    { 0x6082, 0x404, 0x408, 2700 }, // 0x2b
+    { 0x6081, 0x404, 0x409, 2700 }, // 0x2c
+    { 0x6082, 0x404, 0x409, 2700 }, // 0x2d
+    { 0x0081, 0, 10800, 3150 },     // 0x2e
+    { 0x0082, 0, 10800, 3150 },     // 0x2f
+    { 0x6081, 0x404, 0x408, 3150 }, // 0x30
+    { 0x6082, 0x404, 0x408, 3150 }, // 0x31
+    { 0x6081, 0x404, 0x409, 3150 }, // 0x32
+    { 0x6082, 0x404, 0x409, 3150 }, // 0x33
+    { 0x2081, DFF_Prop_adjustValue, 10800, 450 },   // 0x34 ( textbox )
+    { 0x2081, DFF_Prop_adjustValue, 10800, 2250 }   // 0x35
+
+};
+static const sal_Int32 mso_sptSunTextRect[] =
+{
+    1,  0x34 MSO_I, 0x34 MSO_I, 0x35 MSO_I, 0x35 MSO_I
+};
+static const mso_AutoShape msoSun =
+{
+    (sal_Int32*)mso_sptSunVert, sizeof( mso_sptSunVert ) >> 3,
+    (sal_uInt16*)mso_sptSunSegm, sizeof( mso_sptSunSegm ) >> 1,
+    (SvxMSDffCalculationData*)mso_sptSunCalc, sizeof( mso_sptSunCalc ) / sizeof( SvxMSDffCalculationData ),
+    (sal_Int32*)mso_sptDefault5400,
+    (sal_Int32*)mso_sptSunTextRect,
+    NULL,
+    0x80000000, 0x80000000
+};
+
+static const sal_Int32 mso_sptMoonVert[] =      // adj value 0 -> 18900
+{
+    21600, 0,
+    3 MSO_I, 4 MSO_I, 0 MSO_I, 5080, 0 MSO_I, 10800,    // ccp
+    0 MSO_I, 16520, 3 MSO_I, 5 MSO_I, 21600, 21600,     // ccp
+    9740, 21600, 0, 16730, 0, 10800,                    // ccp
+    0, 4870, 9740, 0, 21600, 0                          // ccp
+};
+static const sal_uInt16 mso_sptMoonSegm[] =
+{
+    0x4000, 0x2004, 0x6000, 0x8000
+};
+static const SvxMSDffCalculationData mso_sptMoonCalc[] =
+{
+    { 0x2000, DFF_Prop_adjustValue, 0, 0 },
+    { 0x8000, 21600, 0, DFF_Prop_adjustValue },
+    { 0x2001, 0x401, 1, 2 },
+    { 0x6000, 0x402, DFF_Prop_adjustValue, 0 },
+    { 0x2001, DFF_Prop_adjustValue, 1794, 10000 },
+    { 0x8000, 21600, 0, 0x0404 },
+    { 0x2001, DFF_Prop_adjustValue, 4000, 18900 },
+    { 0x8081, 0, 10800, 0x406 },
+    { 0x8082, 0, 10800, 0x406 },
+    { 0x6000, 0x407, 0x407, 0 },
+    { 0x8000, 21600, 0, 0x408 }
+};
+static const sal_Int32 mso_sptMoonTextRect[] =
+{
+    1,  9 MSO_I, 8 MSO_I, 0 MSO_I,  0xa MSO_I
+};
+static const mso_AutoShape msoMoon =
+{
+    (sal_Int32*)mso_sptMoonVert, sizeof( mso_sptMoonVert ) >> 3,
+    (sal_uInt16*)mso_sptMoonSegm, sizeof( mso_sptMoonSegm ) >> 1,
+    (SvxMSDffCalculationData*)mso_sptMoonCalc, sizeof( mso_sptMoonCalc ) / sizeof( SvxMSDffCalculationData ),
+    (sal_Int32*)mso_sptDefault10800,
+    (sal_Int32*)mso_sptMoonTextRect,
+    NULL,
+    0x80000000, 0x80000000
+};
+
+static const sal_Int32 mso_sptBracketPairVert[] =       // adj value 0 -> 10800
+{
+    0 MSO_I,0,      0,      1 MSO_I,    // left top alignment
+    0,      2 MSO_I,0 MSO_I,21600,      // left  bottom "
+    3 MSO_I,21600,  21600,  2 MSO_I,    // right bottom "
+    21600, 1 MSO_I, 3 MSO_I,0           // right top    "
+};
+static const sal_uInt16 mso_sptBracketPairSegm[] =
+{
+    0x4000, 0xa701, 0x0001, 0xa801, 0x8000,
+    0x4000, 0xa701, 0x0001, 0xa801, 0x8000
+};
+static const SvxMSDffCalculationData mso_sptBracketPairCalc[] =
+{
+    { 0x6000, DFF_Prop_geoLeft, DFF_Prop_adjustValue, 0 },
+    { 0x6000, DFF_Prop_geoTop, DFF_Prop_adjustValue, 0 },
+    { 0xa000, DFF_Prop_geoBottom, 0, DFF_Prop_adjustValue },
+    { 0xa000, DFF_Prop_geoRight, 0, DFF_Prop_adjustValue },
+    { 0x2082, DFF_Prop_adjustValue, 0, 450 },
+    { 0x2000, 0x404, 0, 10800 },
+    { 0x8000, 0, 0, DFF_Prop_adjustValue },
+    { 0xa000, 0x406, 0, 0x405 },
+    { 0xa000, DFF_Prop_geoLeft, 0, 0x407 },
+    { 0xa000, DFF_Prop_geoTop, 0, 0x407 },
+    { 0x6000, DFF_Prop_geoRight, 0x407, 0 },
+    { 0x6000, DFF_Prop_geoBottom, 0x407, 0 },
+    { 0xa000, DFF_Prop_geoLeft, 0, 0x405 },
+    { 0xa000, DFF_Prop_geoTop, 0, 0x405 },
+    { 0x6000, DFF_Prop_geoRight, 0x405, 0 },
+    { 0x6000, DFF_Prop_geoBottom, 0x405, 0 }
+};
+static const sal_Int32 mso_sptBracketPairTextRect[] =
+{
+    1, 8 MSO_I, 9 MSO_I, 0xa MSO_I, 0xb MSO_I
+};
+static const mso_AutoShape msoBracketPair =
+{
+    (sal_Int32*)mso_sptBracketPairVert, sizeof( mso_sptBracketPairVert ) >> 3,
+    (sal_uInt16*)mso_sptBracketPairSegm, sizeof( mso_sptBracketPairSegm ) >> 1,
+    (SvxMSDffCalculationData*)mso_sptBracketPairCalc, sizeof( mso_sptBracketPairCalc ) / sizeof( SvxMSDffCalculationData ),
+    (sal_Int32*)mso_sptDefault3700,
+    (sal_Int32*)mso_sptBracketPairTextRect,
+    NULL,
+    0x80000000, 0x80000000
+};
+
+static const sal_uInt16 mso_sptPlaqueSegm[] =
+{
+    0x4000, 0xa801, 0x0001, 0xa701, 0x0001, 0xa801, 0x0001, 0xa701, 0x6000, 0x8000
+};
+static const sal_Int32 mso_sptPlaqueTextRect[] =
+{
+    1, 0xc MSO_I, 0xd MSO_I, 0xe MSO_I, 0xf MSO_I
+};
+static const mso_AutoShape msoPlaque =
+{
+    (sal_Int32*)mso_sptBracketPairVert, sizeof( mso_sptBracketPairVert ) >> 3,
+    (sal_uInt16*)mso_sptPlaqueSegm, sizeof( mso_sptPlaqueSegm ) >> 1,
+    (SvxMSDffCalculationData*)mso_sptBracketPairCalc, sizeof( mso_sptBracketPairCalc ) / sizeof( SvxMSDffCalculationData ),
+    (sal_Int32*)mso_sptDefault3600,
+    (sal_Int32*)mso_sptPlaqueTextRect,
+    NULL,
+    0x80000000, 0x80000000
+};
+
+static const sal_Int32 mso_sptBracePairVert[] =     // adj value 0 -> 5400
+{
+    4 MSO_I,0,      0 MSO_I,1 MSO_I,            // left bracket
+    0 MSO_I,6 MSO_I,0       ,10800,
+    0 MSO_I,7 MSO_I,0 MSO_I,2 MSO_I,
+    4 MSO_I,21600,
+    8 MSO_I,21600,  3 MSO_I, 2 MSO_I,           // right bracket
+    3 MSO_I,7 MSO_I,21600,  10800,
+    3 MSO_I,6 MSO_I,3 MSO_I, 1 MSO_I,
+    8 MSO_I,0
+};
+static const sal_uInt16 mso_sptBracePairSegm[] =
+{
+    0x4000, 0xa701, 0x0001, 0xa801, 0xa701, 0x0001, 0xa801, 0x8000,
+    0x4000, 0xa701, 0x0001, 0xa801, 0xa701, 0x0001, 0xa801, 0x8000
+};
+static const SvxMSDffCalculationData mso_sptBracePairCalc[] =
+{
+    { 0x6000, DFF_Prop_geoLeft, DFF_Prop_adjustValue, 0 },
+    { 0x6000, DFF_Prop_geoTop, DFF_Prop_adjustValue, 0 },
+    { 0xa000, DFF_Prop_geoBottom, 0, DFF_Prop_adjustValue },
+    { 0xa000, DFF_Prop_geoRight, 0, DFF_Prop_adjustValue },
+    { 0x2001, 0x400, 2, 1 },                                    //  4
+    { 0x2001, DFF_Prop_adjustValue, 2, 1 },                     //  5
+    { 0x8000, 10800, 0, DFF_Prop_adjustValue },                 //  6
+    { 0x8000, 21600, 0, 0x406 },                                //  7
+    { 0xa000, DFF_Prop_geoRight, 0, 0x405 },                    //  8
+    { 0x2001, DFF_Prop_adjustValue, 1, 3 },                     //  9
+    { 0x6000, 0x409, DFF_Prop_adjustValue, 0 },                 // xa
+    { 0x6000, DFF_Prop_geoLeft, 0x40a, 0 },                     // xb
+    { 0x6000, DFF_Prop_geoTop, 0x409, 0 },                      // xc
+    { 0xa000, DFF_Prop_geoRight, 0, 0x40a },                    // xd
+    { 0xa000, DFF_Prop_geoBottom, 0, 0x409 }                    // xe
+
+};
+static const sal_Int32 mso_sptBracePairTextRect[] =
+{
+    1, 0xb MSO_I, 0xc MSO_I, 0xd MSO_I, 0xe MSO_I
+};
+static const mso_AutoShape msoBracePair =
+{
+    (sal_Int32*)mso_sptBracePairVert, sizeof( mso_sptBracePairVert ) >> 3,
+    (sal_uInt16*)mso_sptBracePairSegm, sizeof( mso_sptBracePairSegm ) >> 1,
+    (SvxMSDffCalculationData*)mso_sptBracePairCalc, sizeof( mso_sptBracePairCalc ) / sizeof( SvxMSDffCalculationData ),
+    (sal_Int32*)mso_sptDefault1800,
+    (sal_Int32*)mso_sptBracePairTextRect,
     NULL,
     0x80000000, 0x80000000
 };
@@ -2992,6 +3338,14 @@ SvxMSDffAutoShape::SvxMSDffAutoShape( const DffPropertyReader& rPropReader, SvSt
         break;
         case mso_sptDonut :                 pDefAutoShape = &msoDonut; break;
         case mso_sptNoSmoking :             pDefAutoShape = &msoNoSmoking; break;
+//      case mso_sptBlockArc :              break;
+        case mso_sptHeart :                 pDefAutoShape = &msoHeart; break;
+        case mso_sptLightningBolt :         pDefAutoShape = &msoLightningBold; break;
+        case mso_sptSun :                   pDefAutoShape = &msoSun; break;
+        case mso_sptMoon :                  pDefAutoShape = &msoMoon; break;
+        case mso_sptBracketPair :           pDefAutoShape = &msoBracketPair; break;
+        case mso_sptBracePair :             pDefAutoShape = &msoBracePair; break;
+        case mso_sptPlaque :                pDefAutoShape = &msoPlaque; break;
         case mso_sptArrow :                 pDefAutoShape = &msoArrow; break;
         case mso_sptUpArrow :               pDefAutoShape = &msoUpArrow; break;
         case mso_sptDownArrow :             pDefAutoShape = &msoDownArrow; break;
