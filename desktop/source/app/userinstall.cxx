@@ -2,9 +2,9 @@
  *
  *  $RCSfile: userinstall.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-09 11:07:59 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 14:14:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,8 +286,6 @@ namespace desktop {
             localizable->setLocale(aLocale);
 
             // org.openoffice.Setup/L10N/ooLocale
-            // org.openoffice.Setup/Office/ooSetupInstallPath
-            // org.openoffice.Common/Path/Current/OfficeInstall
             // org.openoffice.Office.Linguistic/General/DefaultLocale
             // org.openoffice.Office.Linguistic/General/DefaultLocale_CJK
 
@@ -300,20 +298,10 @@ namespace desktop {
                 theConfigProvider->createInstanceWithArguments(sAccessSrvc, theArgs), UNO_QUERY_THROW);
             hpset->setHierarchicalPropertyValue(OUString::createFromAscii("L10N/ooLocale"), makeAny(aUserLanguage));
             Reference< XChangesBatch >(hpset, UNO_QUERY_THROW)->commitChanges();
-            hpset->setHierarchicalPropertyValue(OUString::createFromAscii("Office/ooSetupInstallPath"), makeAny(aUserPath));
-            Reference< XChangesBatch >(hpset, UNO_QUERY_THROW)->commitChanges();
-
-            v.Value <<= OUString::createFromAscii("org.openoffice.Office.Common/Path/Current");
-            theArgs[0] <<= v;
-            Reference< XPropertySet > pset = Reference< XPropertySet >(
-                theConfigProvider->createInstanceWithArguments(sAccessSrvc, theArgs), UNO_QUERY_THROW);
-            pset->setPropertyValue(OUString::createFromAscii("OfficeInstall"),
-                                   makeAny(aBasePath+OUString::createFromAscii("/program")));
-            Reference< XChangesBatch >(pset, UNO_QUERY_THROW)->commitChanges();
 
             v.Value <<= OUString::createFromAscii("org.openoffice.Office.Linguistic/General");
             theArgs[0] <<= v;
-            pset = Reference< XPropertySet >(
+            Reference< XPropertySet > pset = Reference< XPropertySet >(
                 theConfigProvider->createInstanceWithArguments(sAccessSrvc, theArgs), UNO_QUERY_THROW);
             if (aUserLanguage.equalsAscii("ja") || aUserLanguage.equalsAscii("ko")
                 || aUserLanguage.equalsAscii("zh-CN") || aUserLanguage.equalsAscii("zh-TW"))
