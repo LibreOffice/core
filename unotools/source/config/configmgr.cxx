@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configmgr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:54 $
+ *  last change: $Author: os $ $Date: 2000-09-21 12:46:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,8 +74,8 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
-#ifndef _COM_SUN_STAR_BEANS_XMULTIPROPERTYSET_HPP_
-#include <com/sun/star/beans/XMultiPropertySet.hpp>
+#ifndef _COM_SUN_STAR_CONTAINER_XHIERARCHICALNAMEACCESS_HPP_
+#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
@@ -160,7 +160,7 @@ Reference< XMultiServiceFactory > ConfigManager::GetConfigurationProvider()
 /* -----------------------------29.08.00 12:35--------------------------------
 
  ---------------------------------------------------------------------------*/
-Reference< XMultiPropertySet> ConfigManager::AddConfigItem(utl::ConfigItem& rCfgItem)
+Reference< XHierarchicalNameAccess > ConfigManager::AddConfigItem(utl::ConfigItem& rCfgItem)
 {
     ConfigItemList::iterator aListIter = pMgrImpl->aItemList.begin();
 #ifdef DBG_UTIL
@@ -200,7 +200,7 @@ Reference< XMultiPropertySet> ConfigManager::AddConfigItem(utl::ConfigItem& rCfg
 #else
     catch(Exception&){}
 #endif
-    return Reference<XMultiPropertySet>(xIFace, UNO_QUERY);
+    return Reference<XHierarchicalNameAccess>(xIFace, UNO_QUERY);
 }
 /* -----------------------------29.08.00 12:35--------------------------------
 
