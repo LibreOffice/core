@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextNumRuleInfo.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2001-04-18 08:52:32 $
+ *  last change: $Author: cl $ $Date: 2001-11-16 14:44:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,13 +113,9 @@ void XMLTextNumRuleInfo::Set(
 
     Any aAny;
 
-    // check if numbering is enabled in edit engine
-    if( xPropSetInfo->hasPropertyByName( sIsNumbering ) )
-    {
-        aAny = xPropSet->getPropertyValue( sIsNumbering );
-        if( !(*(sal_Bool *)aAny.getValue()) )
-            return;
-    }
+    // check if this paragraph supports a numbering
+    if( !xPropSetInfo->hasPropertyByName( sNumberingLevel ) )
+        return;
 
     if( xPropSetInfo->hasPropertyByName( sNumberingRules ) )
     {

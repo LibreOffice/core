@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: mib $ $Date: 2001-11-07 13:25:05 $
+ *  last change: $Author: cl $ $Date: 2001-11-16 14:47:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1423,17 +1423,36 @@ void XMLTextParagraphExport::exportText(
     Reference < XEnumeration > xParaEnum = xEA->createEnumeration();
     Reference < XPropertySet > xPropertySet( rText, UNO_QUERY );
     Reference < XTextSection > xBaseSection;
+
+    sal_Bool bExportLevels = sal_True;
+
     if (xPropertySet.is())
     {
-        if (xPropertySet->getPropertySetInfo()->
-            hasPropertyByName( sTextSection ))
+        Reference < XPropertySetInfo > xInfo ( xPropertySet->getPropertySetInfo() );
+
+        if( xInfo.is() )
         {
-            Any aAny = xPropertySet->getPropertyValue(sTextSection);
-            aAny >>= xBaseSection;
+            if (xInfo->hasPropertyByName( sTextSection ))
+            {
+                xPropertySet->getPropertyValue(sTextSection) >>= xBaseSection ;
+            }
+
+            // for applications that use the outliner we need to check if
+            // the current text object needs the level information exported
+            if( !bAutoStyles )
+            {
+                // fixme: move string to class member, couldn't do now because
+                //        of no incompatible build
+                OUString sHasLevels( RTL_CONSTASCII_USTRINGPARAM("HasLevels") );
+                if (xInfo->hasPropertyByName( sHasLevels ) )
+                {
+                    xPropertySet->getPropertyValue(sHasLevels) >>= bExportLevels;
+                }
+            }
         }
     }
     exportTextContentEnumeration( xParaEnum, bAutoStyles, xBaseSection,
-                                  bProgress, bExportParagraph   );
+                                  bProgress, bExportParagraph, 0, bExportLevels );
 }
 
 void XMLTextParagraphExport::exportText(
@@ -1449,7 +1468,7 @@ void XMLTextParagraphExport::exportText(
     Reference < XEnumerationAccess > xEA( rText, UNO_QUERY );
     Reference < XEnumeration > xParaEnum = xEA->createEnumeration();
     exportTextContentEnumeration( xParaEnum, bAutoStyles, rBaseSection,
-                                  bProgress, bExportParagraph   );
+                                  bProgress, bExportParagraph );
 }
 
 sal_Bool XMLTextParagraphExport::exportTextContentEnumeration(
@@ -1458,7 +1477,8 @@ sal_Bool XMLTextParagraphExport::exportTextContentEnumeration(
         const Reference < XTextSection > & rBaseSection,
         sal_Bool bProgress,
         sal_Bool bExportParagraph,
-        const Reference < XPropertySet > *pRangePropSet )
+        const Reference < XPropertySet > *pRangePropSet,
+        sal_Bool bExportLevels)
 {
     sal_Bool bHasMoreElements = rContEnum->hasMoreElements();
     if( !bHasMoreElements )
@@ -1495,22 +1515,24 @@ sal_Bool XMLTextParagraphExport::exportTextContentEnumeration(
         Reference<XServiceInfo> xServiceInfo( xTxtCntnt, UNO_QUERY );
         if( xServiceInfo->supportsService( sParagraphService ) )
         {
-            if( bAutoStyles )
+            if( bExportLevels )
             {
-                exportListAndSectionChange( xCurrentTextSection, xTxtCntnt,
-                                            aPrevNumInfo, aNextNumInfo,
-                                            bAutoStyles );
-            }
-            else
-            {
-                aNextNumInfo.Set( xTxtCntnt );
+                if( bAutoStyles )
+                {
+                    exportListAndSectionChange( xCurrentTextSection, xTxtCntnt,
+                                                aPrevNumInfo, aNextNumInfo,
+                                                bAutoStyles );
+                }
+                else
+                {
+                    aNextNumInfo.Set( xTxtCntnt );
 
-                exportListAndSectionChange( xCurrentTextSection, aPropSetHelper,
-                                            TEXT_SECTION, xTxtCntnt,
-                                            aPrevNumInfo, aNextNumInfo,
-                                            bAutoStyles );
+                    exportListAndSectionChange( xCurrentTextSection, aPropSetHelper,
+                                                TEXT_SECTION, xTxtCntnt,
+                                                aPrevNumInfo, aNextNumInfo,
+                                                bAutoStyles );
+                }
             }
-
 
             // if we found a mute section: skip all section content
             if (pSectionExport->IsMuteSection(xCurrentTextSection))
@@ -1585,7 +1607,7 @@ sal_Bool XMLTextParagraphExport::exportTextContentEnumeration(
         bHasMoreElements = rContEnum->hasMoreElements();
     }
 
-    if( bHasContent && !bAutoStyles )
+    if( bExportLevels && bHasContent && !bAutoStyles )
     {
         aNextNumInfo.Reset();
 
