@@ -11,5 +11,5 @@
             <value xml:lang="en-US">%productname% Text Document (%productname% Writer/Web)</value>
             <value xml:lang="x-translate">%productname% %formatversion% Text Document (%productname% Writer/Web)</value>
         </prop>
-        <prop oor:name="Flags"><value>EXPORT TEMPLATE</value></prop>
+        <prop oor:name="Flags"><value>EXPORT TEMPLATE ALIEN</value></prop>
     </node>
