@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-14 13:59:37 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:14:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,9 @@
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #endif
 /** === end UNO includes === **/
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
+#endif
 
 #include <algorithm>
 #include <functional>
@@ -154,6 +157,19 @@ namespace xmloff
         sal_Bool operator()(const PropertyValue& _rLeft, const PropertyValue& _rRight)
         {
             return _rLeft.Name < _rRight.Name;
+        }
+    };
+
+    //=====================================================================
+    struct PropertyValueCompare : public ::std::binary_function< PropertyValue, ::rtl::OUString, bool>
+    {
+        bool operator() (const PropertyValue& lhs, const ::rtl::OUString& rhs) const
+        {
+            return lhs.Name == rhs;
+        }
+        bool operator() (const ::rtl::OUString& lhs, const PropertyValue& rhs) const
+        {
+            return lhs == rhs.Name;
         }
     };
 
@@ -259,7 +275,7 @@ namespace xmloff
             }
         }
 #endif
-        OSL_ENSURE(m_aValues.size(), "OElementImport::EndElement: no properties read!");
+        OSL_ENSURE(!m_aValues.empty(), "OElementImport::EndElement: no properties read!");
 
         // set the properties
         Reference< XMultiPropertySet > xMultiProps(m_xElement, UNO_QUERY);
@@ -466,7 +482,8 @@ namespace xmloff
     //---------------------------------------------------------------------
     void OElementImport::handleAttribute(sal_uInt16 _nNamespaceKey, const ::rtl::OUString& _rLocalName, const ::rtl::OUString& _rValue)
     {
-        static const ::rtl::OUString s_sNameAttribute = ::rtl::OUString::createFromAscii(getCommonControlAttributeName(CCA_NAME));
+        static const ::rtl::OUString s_sServiceNameAttribute = ::rtl::OUString::createFromAscii(OAttributeMetaData::getCommonControlAttributeName(CCA_SERVICE_NAME));
+        static const ::rtl::OUString s_sNameAttribute = ::rtl::OUString::createFromAscii(OAttributeMetaData::getCommonControlAttributeName(CCA_NAME));
 
         if (!m_sServiceName.getLength() &&
             token::IsXMLToken( _rLocalName, token::XML_CONTROL_IMPLEMENTATION))
@@ -569,21 +586,21 @@ namespace xmloff
     //---------------------------------------------------------------------
     void OControlImport::handleAttribute(sal_uInt16 _nNamespaceKey, const ::rtl::OUString& _rLocalName, const ::rtl::OUString& _rValue)
     {
-        if ( !m_sControlId.getLength() && _rLocalName.equalsAscii( getCommonControlAttributeName( CCA_CONTROL_ID ) ) )
+        if ( !m_sControlId.getLength() && _rLocalName.equalsAscii( OAttributeMetaData::getCommonControlAttributeName( CCA_CONTROL_ID ) ) )
         {   // it's the control id
             m_sControlId = _rValue;
         }
-        else if ( _rLocalName.equalsAscii( getBindingAttributeName( BA_LINKED_CELL ) ) )
+        else if ( _rLocalName.equalsAscii( OAttributeMetaData::getBindingAttributeName( BA_LINKED_CELL ) ) )
         {   // it's the address of a spreadsheet cell
             m_sBoundCellAddress = _rValue;
         }
         else
         {
             sal_Int32 nHandle;
-            if  (   ( _rLocalName.equalsAscii( getCommonControlAttributeName( CCA_VALUE ) ) && ( nHandle = PROPID_VALUE ) )
-                ||  ( _rLocalName.equalsAscii( getCommonControlAttributeName( CCA_CURRENT_VALUE ) ) && ( nHandle = PROPID_CURRENT_VALUE ) )
-                ||  ( _rLocalName.equalsAscii( getSpecialAttributeName( SCA_MIN_VALUE ) ) && ( nHandle = PROPID_MIN_VALUE ) )
-                ||  ( _rLocalName.equalsAscii( getSpecialAttributeName( SCA_MAX_VALUE ) ) && ( nHandle = PROPID_MAX_VALUE ) )
+            if  (   ( _rLocalName.equalsAscii( OAttributeMetaData::getCommonControlAttributeName( CCA_VALUE ) ) && ( nHandle = PROPID_VALUE ) )
+                ||  ( _rLocalName.equalsAscii( OAttributeMetaData::getCommonControlAttributeName( CCA_CURRENT_VALUE ) ) && ( nHandle = PROPID_CURRENT_VALUE ) )
+                ||  ( _rLocalName.equalsAscii( OAttributeMetaData::getSpecialAttributeName( SCA_MIN_VALUE ) ) && ( nHandle = PROPID_MIN_VALUE ) )
+                ||  ( _rLocalName.equalsAscii( OAttributeMetaData::getSpecialAttributeName( SCA_MAX_VALUE ) ) && ( nHandle = PROPID_MAX_VALUE ) )
                 // it's no == in the second part, it's an assignment!!!!!
                 )
             {
@@ -946,7 +963,7 @@ namespace xmloff
     void OReferredControlImport::handleAttribute(sal_uInt16 _nNamespaceKey, const ::rtl::OUString& _rLocalName,
         const ::rtl::OUString& _rValue)
     {
-        static const ::rtl::OUString s_sReferenceAttributeName = ::rtl::OUString::createFromAscii(getCommonControlAttributeName(CCA_FOR));
+        static const ::rtl::OUString s_sReferenceAttributeName = ::rtl::OUString::createFromAscii(OAttributeMetaData::getCommonControlAttributeName(CCA_FOR));
         if (_rLocalName == s_sReferenceAttributeName)
             m_sReferringControls = _rValue;
         else
@@ -966,7 +983,7 @@ namespace xmloff
     //---------------------------------------------------------------------
     void OPasswordImport::handleAttribute(sal_uInt16 _nNamespaceKey, const ::rtl::OUString& _rLocalName, const ::rtl::OUString& _rValue)
     {
-        static const ::rtl::OUString s_sEchoCharAttributeName = ::rtl::OUString::createFromAscii(getSpecialAttributeName(SCA_ECHO_CHAR));
+        static const ::rtl::OUString s_sEchoCharAttributeName = ::rtl::OUString::createFromAscii(OAttributeMetaData::getSpecialAttributeName(SCA_ECHO_CHAR));
         if (_rLocalName == s_sEchoCharAttributeName)
         {
             // need a special handling for the EchoChar property
@@ -999,8 +1016,8 @@ namespace xmloff
     {
         // need special handling for the State & CurrentState properties:
         // they're stored as booleans, but expected to be int16 properties
-        if  (  _rLocalName.equalsAscii( getCommonControlAttributeName( CCA_CURRENT_SELECTED ) )
-            || _rLocalName.equalsAscii( getCommonControlAttributeName( CCA_SELECTED ) )
+        if  (  _rLocalName.equalsAscii( OAttributeMetaData::getCommonControlAttributeName( CCA_CURRENT_SELECTED ) )
+            || _rLocalName.equalsAscii( OAttributeMetaData::getCommonControlAttributeName( CCA_SELECTED ) )
             )
         {
             const OAttribute2Property::AttributeAssignment* pProperty = m_rContext.getAttributeMap().getAttributeTranslation(_rLocalName);
@@ -1034,8 +1051,8 @@ namespace xmloff
     //---------------------------------------------------------------------
     void OURLReferenceImport::handleAttribute(sal_uInt16 _nNamespaceKey, const ::rtl::OUString& _rLocalName, const ::rtl::OUString& _rValue)
     {
-        static const sal_Char* s_pTargetLocationAttributeName   = getCommonControlAttributeName( CCA_TARGET_LOCATION );
-        static const sal_Char* s_pImageDataAttributeName        = getCommonControlAttributeName( CCA_IMAGE_DATA );
+        static const sal_Char* s_pTargetLocationAttributeName   = OAttributeMetaData::getCommonControlAttributeName( CCA_TARGET_LOCATION );
+        static const sal_Char* s_pImageDataAttributeName        = OAttributeMetaData::getCommonControlAttributeName( CCA_IMAGE_DATA );
 
         // need to make the URL absolute if
         // * it's the image-data attribute
@@ -1076,7 +1093,7 @@ namespace xmloff
         OURLReferenceImport::StartElement(_rxAttrList);
 
         // handle the target-frame attribute
-        simulateDefaultedAttribute(getCommonControlAttributeName(CCA_TARGET_FRAME), PROPERTY_TARGETFRAME, "_blank");
+        simulateDefaultedAttribute(OAttributeMetaData::getCommonControlAttributeName(CCA_TARGET_FRAME), PROPERTY_TARGETFRAME, "_blank");
     }
 
     //=====================================================================
@@ -1093,7 +1110,7 @@ namespace xmloff
     //---------------------------------------------------------------------
     void OValueRangeImport::handleAttribute( sal_uInt16 _nNamespaceKey, const ::rtl::OUString& _rLocalName, const ::rtl::OUString& _rValue )
     {
-        if ( _rLocalName.equalsAscii( getSpecialAttributeName( SCA_STEP_SIZE ) ) )
+        if ( _rLocalName.equalsAscii( OAttributeMetaData::getSpecialAttributeName( SCA_STEP_SIZE ) ) )
         {
             GetImport().GetMM100UnitConverter().convertNumber( m_nStepSizeValue, _rValue );
         }
@@ -1190,7 +1207,7 @@ namespace xmloff
         }
 
         if (bHaveEmptyIsNull)
-            simulateDefaultedAttribute(getDatabaseAttributeName(DA_CONVERT_EMPTY), PROPERTY_EMPTY_IS_NULL, "false");
+            simulateDefaultedAttribute(OAttributeMetaData::getDatabaseAttributeName(DA_CONVERT_EMPTY), PROPERTY_EMPTY_IS_NULL, "false");
     }
 
     //---------------------------------------------------------------------
@@ -1371,10 +1388,10 @@ namespace xmloff
             // for the auto-completion
             // the attribute default does not equal the property default, so in case we did not read this attribute,
             // we have to simulate it
-            simulateDefaultedAttribute( getSpecialAttributeName( SCA_AUTOMATIC_COMPLETION ), PROPERTY_AUTOCOMPLETE, "false");
+            simulateDefaultedAttribute( OAttributeMetaData::getSpecialAttributeName( SCA_AUTOMATIC_COMPLETION ), PROPERTY_AUTOCOMPLETE, "false");
 
             // same for the convert-empty-to-null attribute, which's default is different from the property default
-            simulateDefaultedAttribute( getDatabaseAttributeName( DA_CONVERT_EMPTY ), PROPERTY_EMPTY_IS_NULL, "false");
+            simulateDefaultedAttribute( OAttributeMetaData::getDatabaseAttributeName( DA_CONVERT_EMPTY ), PROPERTY_EMPTY_IS_NULL, "false");
         }
     }
 
@@ -1441,7 +1458,7 @@ namespace xmloff
     //---------------------------------------------------------------------
     void OListAndComboImport::handleAttribute(sal_uInt16 _nNamespaceKey, const ::rtl::OUString& _rLocalName, const ::rtl::OUString& _rValue)
     {
-        static const ::rtl::OUString s_sListSourceAttributeName = ::rtl::OUString::createFromAscii(getDatabaseAttributeName(DA_LIST_SOURCE));
+        static const ::rtl::OUString s_sListSourceAttributeName = ::rtl::OUString::createFromAscii(OAttributeMetaData::getDatabaseAttributeName(DA_LIST_SOURCE));
         if (s_sListSourceAttributeName == _rLocalName)
         {
             PropertyValue aListSource;
@@ -1465,11 +1482,11 @@ namespace xmloff
 
             implPushBackPropertyValue( aListSource );
         }
-        else if ( _rLocalName.equalsAscii( getBindingAttributeName( BA_LIST_CELL_RANGE ) ) )
+        else if ( _rLocalName.equalsAscii( OAttributeMetaData::getBindingAttributeName( BA_LIST_CELL_RANGE ) ) )
         {
             m_sCellListSource = _rValue;
         }
-        else if ( _rLocalName.equalsAscii( getBindingAttributeName( BA_LIST_LINKING_TYPE ) ) )
+        else if ( _rLocalName.equalsAscii( OAttributeMetaData::getBindingAttributeName( BA_LIST_LINKING_TYPE ) ) )
         {
             sal_Int16 nLinkageType = 0;
             convertString(
@@ -1591,9 +1608,9 @@ namespace xmloff
 
         // the current-selected and selected
         const ::rtl::OUString sSelectedAttribute = GetImport().GetNamespaceMap().GetQNameByKey(
-            GetPrefix(), ::rtl::OUString::createFromAscii(getCommonControlAttributeName(CCA_CURRENT_SELECTED)));
+            GetPrefix(), ::rtl::OUString::createFromAscii(OAttributeMetaData::getCommonControlAttributeName(CCA_CURRENT_SELECTED)));
         const ::rtl::OUString sDefaultSelectedAttribute = GetImport().GetNamespaceMap().GetQNameByKey(
-            GetPrefix(), ::rtl::OUString::createFromAscii(getCommonControlAttributeName(CCA_SELECTED)));
+            GetPrefix(), ::rtl::OUString::createFromAscii(OAttributeMetaData::getCommonControlAttributeName(CCA_SELECTED)));
 
         // propagate the selected flag
         sal_Bool bSelected;
@@ -1625,7 +1642,7 @@ namespace xmloff
     void OComboItemImport::StartElement(const Reference< sax::XAttributeList >& _rxAttrList)
     {
         const ::rtl::OUString sLabelAttributeName = GetImport().GetNamespaceMap().GetQNameByKey(
-            GetPrefix(), ::rtl::OUString::createFromAscii(getCommonControlAttributeName(CCA_LABEL)));
+            GetPrefix(), ::rtl::OUString::createFromAscii(OAttributeMetaData::getCommonControlAttributeName(CCA_LABEL)));
         m_xListBoxImport->implPushBackLabel(_rxAttrList->getValueByName(sLabelAttributeName));
 
         SvXMLImportContext::StartElement(_rxAttrList);
@@ -1781,6 +1798,8 @@ namespace xmloff
         if( token::IsXMLToken(_rLocalName, token::XML_FORM) )
             return new OFormImport( m_rFormImport, *this, _nPrefix, _rLocalName,
                                     m_xMeAsContainer);
+        else if ( token::IsXMLToken(_rLocalName, token::XML_CONNECTION_RESOURCE) )
+            return new OXMLDataSourceImport(GetImport(), _nPrefix, _rLocalName, _rxAttrList,m_xElement);
         else if( token::IsXMLToken(_rLocalName, token::XML_EVENT_LISTENERS) &&
                  (XML_NAMESPACE_OFFICE == _nPrefix) ||
                  token::IsXMLToken( _rLocalName, token::XML_PROPERTIES) )
@@ -1798,7 +1817,7 @@ namespace xmloff
         OFormImport_Base::StartElement(_rxAttrList);
 
         // handle the target-frame attribute
-        simulateDefaultedAttribute(getCommonControlAttributeName(CCA_TARGET_FRAME), PROPERTY_TARGETFRAME, "_blank");
+        simulateDefaultedAttribute(OAttributeMetaData::getCommonControlAttributeName(CCA_TARGET_FRAME), PROPERTY_TARGETFRAME, "_blank");
     }
 
     //---------------------------------------------------------------------
@@ -1819,12 +1838,14 @@ namespace xmloff
     void OFormImport::handleAttribute(sal_uInt16 _nNamespaceKey, const ::rtl::OUString& _rLocalName, const ::rtl::OUString& _rValue)
     {
         // handle the master/details field attributes (they're way too special to let the OPropertyImport handle them)
-        static const ::rtl::OUString s_sMasterFieldsAttributeName = ::rtl::OUString::createFromAscii(getFormAttributeName(faMasterFields));
-        static const ::rtl::OUString s_sDetailFieldsAttributeName = ::rtl::OUString::createFromAscii(getFormAttributeName(faDetailFiels));
+        static const ::rtl::OUString s_sMasterFieldsAttributeName = ::rtl::OUString::createFromAscii(OAttributeMetaData::getFormAttributeName(faMasterFields));
+        static const ::rtl::OUString s_sDetailFieldsAttributeName = ::rtl::OUString::createFromAscii(OAttributeMetaData::getFormAttributeName(faDetailFiels));
+
         if (s_sMasterFieldsAttributeName == _rLocalName)
             implTranslateStringListProperty(PROPERTY_MASTERFIELDS, _rValue);
         else if (s_sDetailFieldsAttributeName == _rLocalName)
             implTranslateStringListProperty(PROPERTY_DETAILFIELDS, _rValue);
+
 #if SUPD<632
         // for compatibility (had a typo in the attribute name)
         else if (0 == _rLocalName.compareToAscii("tabbing-cycle"))
@@ -1898,7 +1919,39 @@ namespace xmloff
         // add the property to the base class' array
         implPushBackPropertyValue(aProp);
     }
+    //=====================================================================
+    //= OXMLDataSourceImport
+    //=====================================================================
+    OXMLDataSourceImport::OXMLDataSourceImport(
+                    SvXMLImport& _rImport
+                    ,sal_uInt16 nPrfx
+                    , const ::rtl::OUString& _sLocalName
+                    ,const Reference< ::com::sun::star::xml::sax::XAttributeList > & _xAttrList
+                    ,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xElement) :
+        SvXMLImportContext( _rImport, nPrfx, _sLocalName )
+    {
+        OSL_ENSURE(_xAttrList.is(),"Attribute list is NULL!");
+        const SvXMLNamespaceMap& rMap = _rImport.GetNamespaceMap();
 
+        sal_Int16 nLength = (_xElement.is() && _xAttrList.is()) ? _xAttrList->getLength() : 0;
+        for(sal_Int16 i = 0; i < nLength; ++i)
+        {
+            ::rtl::OUString sLocalName;
+            ::rtl::OUString sAttrName = _xAttrList->getNameByIndex( i );
+            sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
+            ::rtl::OUString sValue = _xAttrList->getValueByIndex( i );
+
+            if ( sLocalName.equalsAscii(OAttributeMetaData::getCommonControlAttributeName(CCA_TARGET_LOCATION)) )
+            {
+                INetURLObject aURL(sValue);
+                if ( aURL.GetProtocol() == INET_PROT_FILE )
+                    _xElement->setPropertyValue(PROPERTY_DATASOURCENAME,makeAny(sValue));
+                else
+                    _xElement->setPropertyValue(PROPERTY_URL,makeAny(sValue)); // the url is the "sdbc:" string
+                break;
+            }
+        }
+    }
     //---------------------------------------------------------------------
     OControlImport* OFormImport::implCreateChildContext(
             sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
