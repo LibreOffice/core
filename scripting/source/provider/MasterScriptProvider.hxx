@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterScriptProvider.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: npower $ $Date: 2003-08-27 13:57:48 $
+ *  last change: $Author: npower $ $Date: 2003-09-04 07:24:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,18 +63,19 @@
 #define _FRAMEWORK_SCRIPT_PROVIDER_XFUNCTIONPROVIDER_HXX_
 
 #include <rtl/ustring>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase5.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 
 #include <drafts/com/sun/star/script/framework/provider/XScriptProvider.hpp>
+#include <drafts/com/sun/star/script/framework/provider/XScriptProviderAccess.hpp>
 #include <drafts/com/sun/star/script/framework/runtime/XScriptInvocation.hpp>
 #include <drafts/com/sun/star/script/framework/storage/XScriptStorageManager.hpp>
 #include <drafts/com/sun/star/script/framework/browse/XBrowseNode.hpp>
 
 #include "ScriptingContext.hxx"
-
+#include "ProviderCache.hxx"
 namespace func_provider
 {
 // for simplification
@@ -82,8 +83,9 @@ namespace func_provider
 #define dcsssf ::drafts::com::sun::star::script::framework
 
 class MasterScriptProvider :
-            public ::cppu::WeakImplHelper4 < dcsssf::provider::XScriptProvider,
-                dcsssf::browse::XBrowseNode, css::lang::XServiceInfo, css::lang::XInitialization >
+            public ::cppu::WeakImplHelper5 < dcsssf::provider::XScriptProvider,
+                dcsssf::browse::XBrowseNode, dcsssf::provider::XScriptProviderAccess,
+                css::lang::XServiceInfo, css::lang::XInitialization >
 {
 public:
     MasterScriptProvider(
@@ -105,6 +107,9 @@ public:
     virtual sal_Int16 SAL_CALL getType()
         throw ( css::uno::RuntimeException );
 
+    // XBrowseNode implementation
+    virtual css::uno::Sequence< css::uno::Reference< dcsssf::provider::XScriptProvider > > SAL_CALL
+        getAllProviders() throw ( css::uno::RuntimeException );
     virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
         throw( css::uno::RuntimeException );
     virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames( )
@@ -121,7 +126,7 @@ public:
      * @param args expected to contain a single ::rtl::OUString
      * containing the URI
      */
-    virtual void SAL_CALL initialize( css::uno::Sequence < css::uno::Any > const & args )
+    virtual void SAL_CALL initialize( const css::uno::Sequence < css::uno::Any > & args )
         throw ( css::uno::Exception, css::uno::RuntimeException);
 private:
     void addStorageAsListener() throw( css::uno::RuntimeException );
@@ -140,7 +145,7 @@ private:
     bool m_bInitialised;
     bool m_bIsValid;
     css::uno::Reference< css::beans::XPropertySet > m_XScriptingContext;
-
+    ProviderCache* m_pPCache;
     osl::Mutex m_mutex;
 };
 } // namespace func_provider

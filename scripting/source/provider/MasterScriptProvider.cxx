@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterScriptProvider.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: npower $ $Date: 2003-08-27 13:57:48 $
+ *  last change: $Author: npower $ $Date: 2003-09-04 07:24:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,8 @@
 
 #include <util/scriptingconstants.hxx>
 #include <util/util.hxx>
+
+#include "ActiveMSPList.hxx"
 #include "MasterScriptProvider.hxx"
 
 using namespace ::com::sun::star;
@@ -96,7 +98,8 @@ Sequence< ::rtl::OUString > s_serviceNames = Sequence <
 //
 //*************************************************************************
 MasterScriptProvider::MasterScriptProvider( const Reference< XComponentContext > & xContext ) throw ( RuntimeException ):
-        m_xContext( xContext ), m_bInitialised( false ), m_bIsValid( false )
+        m_xContext( xContext ), m_bInitialised( false ), m_bIsValid( false ),
+        m_pPCache( 0 )
 {
     OSL_TRACE( "< MasterScriptProvider ctor called >\n" );
 
@@ -142,10 +145,15 @@ MasterScriptProvider::~MasterScriptProvider()
     OSL_TRACE( "< MasterScriptProvider dtor called >\n" );
 
     //s_moduleCount.modCnt.release( &s_moduleCount.modCnt );
+    if ( m_pPCache )
+    {
+        delete m_pPCache;
+    }
+    m_pPCache = 0;
 }
 
 //*************************************************************************
-void SAL_CALL MasterScriptProvider::initialize( Sequence < Any > const & args )
+void SAL_CALL MasterScriptProvider::initialize( const Sequence < Any >& args )
 throw ( Exception, RuntimeException )
 {
     OSL_TRACE( "< MasterScriptProvider::initialize() method called >\n" );
@@ -178,129 +186,174 @@ throw ( Exception, RuntimeException )
         }
     }
 
+    Sequence< Any > invokeArgs( 1 );
+
     if ( args.getLength() != 0 )
     {
-        try
+        Any stringAny;
+        ::rtl::OUString ouStr;
+        stringAny <<= ouStr;
+
+        // check if first parameter is a string
+        // if it is, this implies that this is a MSP created
+        // with a user or share ctx ( used for browse functionality )
+
+        //
+        if ( args[ 0 ].getValueTypeName().equals( stringAny.getValueTypeName() ) )
         {
-            Reference< XInterface > xInterface;
-            if ( sal_False == ( args[ 0 ] >>= xInterface ) )
+            ::rtl::OUString dir;
+            args[ 0 ] >>= dir;
+            OSL_TRACE("Creating MSP for user or share, dir is %s",
+            ::rtl::OUStringToOString( dir , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+            invokeArgs[ 0 ] = args[ 0 ];
+        }
+        else
+        {
+            try
             {
-                throw RuntimeException(
-                    OUSTR( "MasterScriptProvider::initialize: could not extract xModel from arguments" ),
-                    Reference< XInterface >() );
-            }
-            validateXRef( xInterface,
+                Reference< XInterface > xInterface;
+                if ( sal_False == ( args[ 0 ] >>= xInterface ) )
+                {
+                    throw RuntimeException(
+                        OUSTR( "MasterScriptProvider::initialize: could not extract xModel from arguments" ),
+                        Reference< XInterface >() );
+                }
+                validateXRef( xInterface,
                           "MasterScriptProvider::initialize: invalid xModel xinterface" );
 
-            m_xModel = Reference< frame::XModel > ( xInterface, UNO_QUERY_THROW );
+                m_xModel = Reference< frame::XModel > ( xInterface, UNO_QUERY_THROW );
 
-            Any propValXModel;
-            propValXModel <<= m_xModel;
+                Any propValXModel;
+                propValXModel <<= m_xModel;
 
-            ::rtl::OUString url ( m_xModel->getURL() );
+                ::rtl::OUString url ( m_xModel->getURL() );
 
-            if ( displayDialog == sal_False )
-            {
-                url = ::rtl::OUString::createFromAscii( "NoDialog::" ).concat( url );
-            }
+                if ( displayDialog == sal_False )
+                {
+                    url = ::rtl::OUString::createFromAscii( "NoDialog::" ).concat( url );
+                }
 
-            // Initial val, indicates no document script storage
-            scripting_constants::ScriptingConstantsPool& scriptingConstantsPool =
+                // Initial val, indicates no document script storage
+                scripting_constants::ScriptingConstantsPool& scriptingConstantsPool =
                 scripting_constants::ScriptingConstantsPool::instance();
-            sal_Int32 documentScriptStorageID =
+                sal_Int32 documentScriptStorageID =
                 scriptingConstantsPool.DOC_STORAGE_ID_NOT_SET;
 
-            OSL_TRACE( "about to call addStorageAsListener");
-            addStorageAsListener();
+                OSL_TRACE( "about to call addStorageAsListener");
+                addStorageAsListener();
 
-            if ( url.getLength() )
-            {
-                // If document url is valid (i.e. pointing to a document) we want to get
-                // the StorageManager to create a storage component, this will be done
-                // by the document in the next rev.
-                Reference< XInterface > xInterface = m_xMgr->createInstanceWithContext(
-                    ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ),
+                if ( url.getLength() )
+                {
+                    OSL_TRACE("Creating MSP for document, url is %s",
+                        ::rtl::OUStringToOString( url , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+            invokeArgs[ 0 ] <<= m_XScriptingContext;
+                    // If document url is valid (i.e. pointing to a document) we want to get
+                    // the StorageManager to create a storage component, this will be done
+                    // by the document in the next rev.
+                    Reference< XInterface > xInterface = m_xMgr->createInstanceWithContext(
+                        ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ),
                                                          m_xContext );
-                validateXRef( xInterface,
-                    "MasterScriptProvider::initialise: cannot get SimpleFileAccess Service\n" );
-                Reference < ucb::XSimpleFileAccess > xSimpleFileAccess = Reference <
-                        ucb::XSimpleFileAccess > ( xInterface, UNO_QUERY_THROW );
+                    validateXRef( xInterface,
+                        "MasterScriptProvider::initialise: cannot get SimpleFileAccess Service\n" );
+                    Reference < ucb::XSimpleFileAccess > xSimpleFileAccess = Reference <
+                            ucb::XSimpleFileAccess > ( xInterface, UNO_QUERY_THROW );
 
 
-                OSL_TRACE( ">>>> About to create storage for %s",
-                    ::rtl::OUStringToOString( url,
-                        RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-                // ask storage manager to create storage
-                try
-                {
-                    documentScriptStorageID =
-                        m_xScriptStorageMgr->createScriptStorageWithURI(
+                    OSL_TRACE( ">>>> About to create storage for %s",
+                        ::rtl::OUStringToOString( url,
+                            RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+                    // ask storage manager to create storage
+                    try
+                    {
+                        documentScriptStorageID =
+                            m_xScriptStorageMgr->createScriptStorageWithURI(
                             xSimpleFileAccess, url );
-                    OSL_TRACE( ">>>> Created storage %d - for %s ",
-                        documentScriptStorageID, ::rtl::OUStringToOString(
-                            url, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-                }
-                catch ( RuntimeException & e )
-                {
-                    /* No need to rethrow exception because if no storage available
-                       we continue on...*/
-                    OSL_TRACE( ">>>> Failed to create document storage for %s: %s",
-                               ::rtl::OUStringToOString( url,
+                        OSL_TRACE( ">>>> Created storage %d - for %s ",
+                            documentScriptStorageID, ::rtl::OUStringToOString(
+                                url, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+                    }
+                    catch ( RuntimeException & e )
+                    {
+                        /* No need to rethrow exception because if no storage available
+                           we continue on...*/
+                        OSL_TRACE( ">>>> Failed to create document storage for %s: %s",
+                                   ::rtl::OUStringToOString( url,
                                                          RTL_TEXTENCODING_ASCII_US ).pData->buffer,
                                ::rtl::OUStringToOString( e.Message,
                                                          RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+                    }
+
                 }
 
+                Any propValUrl;
+                propValUrl <<= url;
+
+                Any propValSid;
+                propValSid <<= documentScriptStorageID ;
+
+                OSL_TRACE( "!!** XModel URL inserted into any is %s \n",
+                       ::rtl::OUStringToOString( url , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+                // set up invocation context.
+                m_XScriptingContext->setPropertyValue( scriptingConstantsPool.DOC_REF,
+                                                   propValXModel );
+                m_XScriptingContext->setPropertyValue( scriptingConstantsPool.DOC_URI,
+                                                   propValUrl );
+                m_XScriptingContext->setPropertyValue( scriptingConstantsPool.DOC_STORAGE_ID,
+                                                   propValSid );
             }
 
-            Any propValUrl;
-            propValUrl <<= url;
-
-            Any propValSid;
-            propValSid <<= documentScriptStorageID ;
-
-            OSL_TRACE( "!!** XModel URL inserted into any is %s \n",
-                       ::rtl::OUStringToOString( url , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-            // set up invocation context.
-            m_XScriptingContext->setPropertyValue( scriptingConstantsPool.DOC_REF,
-                                                   propValXModel );
-            m_XScriptingContext->setPropertyValue( scriptingConstantsPool.DOC_URI,
-                                                   propValUrl );
-            m_XScriptingContext->setPropertyValue( scriptingConstantsPool.DOC_STORAGE_ID,
-                                                   propValSid );
-        }
-        catch ( beans::UnknownPropertyException & e )
-        {
-            ::rtl::OUString temp = OUSTR(
+            catch ( beans::UnknownPropertyException & e )
+            {
+                ::rtl::OUString temp = OUSTR(
                                        "MasterScriptProvider::initialize: caught UnknownPropertyException: " );
-            throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
-        }
-        catch ( beans::PropertyVetoException & e )
-        {
-            ::rtl::OUString temp = OUSTR(
+                throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
+            }
+            catch ( beans::PropertyVetoException & e )
+            {
+                ::rtl::OUString temp = OUSTR(
                                        "MasterScriptProvider::initialize: caught PropertyVetoException: " );
-            throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
-        }
-        catch ( lang::IllegalArgumentException & e )
-        {
-            ::rtl::OUString temp = OUSTR(
+                throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
+            }
+            catch ( lang::IllegalArgumentException & e )
+            {
+                ::rtl::OUString temp = OUSTR(
                                        "MasterScriptProvider::initialize: caught IllegalArgumentException: " );
-            throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
-        }
-        catch ( lang::WrappedTargetException & e )
-        {
-            ::rtl::OUString temp = OUSTR(
+                throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
+            }
+            catch ( lang::WrappedTargetException & e )
+            {
+                ::rtl::OUString temp = OUSTR(
                                        "MasterScriptProvider::initialize: caught WrappedTargetException: " );
-            throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
+                throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
+            }
+            catch ( RuntimeException & e )
+            {
+                ::rtl::OUString temp = OUSTR( "MasterScriptProvider::initialize: " );
+                throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
+            }
         }
-        catch ( RuntimeException & e )
-        {
-            ::rtl::OUString temp = OUSTR( "MasterScriptProvider::initialize: " );
-            throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
-        }
-        OSL_TRACE( "Initialised XMasterScriptProvider" );
+    }
+    else // no args
+    {
+        // use either scriping context or maybe zero args?
+        //invokeArgs[ 0 ] <<= m_XScriptingContext;
+        invokeArgs = Sequence< Any >( 0 ); // no arguments
     }
 
+    // should be zero, if not initialised, put assert here
+    if ( m_pPCache == 0 )
+    {
+        m_pPCache = new ProviderCache( m_xContext, invokeArgs );
+    }
+    if ( m_xModel.is() )
+    {
+        // This MSP created from a document, add to ActiveMSPList
+        // ??? will the Reference to "this" cause problems, don't know if
+        // reference objects are simple or shared?
+        ActiveMSPList::instance( m_xContext ).addActiveMSP( m_xModel, Reference< provider::XScriptProvider >( this ) );
+
+    }
+    OSL_TRACE( "Initialised XMasterScriptProvider" );
     m_bInitialised = true;
     m_bIsValid = true;
 }
@@ -341,19 +394,15 @@ throw ( lang::IllegalArgumentException, RuntimeException )
     Reference< provider::XScriptProvider > xScriptProvider;
     try
     {
-        // need to pass the scripting context
-        Sequence < Any > aArgs( 1 );
-        aArgs[ 0 ] <<= m_XScriptingContext;
-        xScriptProvider = getScriptProvider( language, aArgs );
+        ::rtl::OUStringBuffer buf( 80 );
+        buf.appendAscii( "drafts.com.sun.star.script.framework.provider.ScriptProviderFor");
+        buf.append( language );
+        ::rtl::OUString serviceName = buf.makeStringAndClear();
+        xScriptProvider = m_pPCache->getProvider( serviceName );
+        validateXRef( xScriptProvider, "MasterScriptProvider::getScript() failed to obtain provider" );
         xScript=xScriptProvider->getScript( scriptURI );
     }
-    catch ( lang::IllegalArgumentException & e )
-    {
-        ::rtl::OUString temp = OUSTR( "MasterScriptProvider::getScript: can't get XScript for " );
-        temp.concat( scriptURI ).concat(  OUSTR( " :"  ) ).concat( e.Message );
-        throw lang::IllegalArgumentException( temp,
-                Reference < XInterface > (), 1 );
-    }
+
     catch ( RuntimeException & e )
     {
         ::rtl::OUString temp = OUSTR( "MasterScriptProvider::getScript: can't get XScript for " );
@@ -486,80 +535,55 @@ MasterScriptProvider::getScriptProvider(
     }
     return xScriptProvider;
 }
-const css::uno::Sequence< ::rtl::OUString >&
-MasterScriptProvider::getProviderNames()
-{
-    OSL_TRACE("In getProviderNames()");
-    static css::uno::Sequence< ::rtl::OUString > providers(0);
-    try
-    {
-        OSL_TRACE("1");
-        Reference < container::XContentEnumerationAccess > xEnum( m_xMgr, UNO_QUERY_THROW );
-        OSL_TRACE("2");
-        //::rtl::OUString langProvider =  ::rtl::OUString::createFromAscii( "drafts.com.sun.star.script.framework.provider.LanguageScriptProvider" );
-        ::rtl::OUString langProvider =  ::rtl::OUString::createFromAscii( "drafts.com.sun.star.script.framework.provider.ScriptProvider" );
-        OSL_TRACE("3");
-        Reference< container::XEnumeration > providerEnum = xEnum->createContentEnumeration ( langProvider );
-        OSL_TRACE("4");
-        int i = 0;
-        validateXRef( providerEnum,
-            "no XEnumeration" );
-        OSL_TRACE("5");
-        while ( providerEnum->hasMoreElements() == sal_True )
-        {
-            OSL_TRACE("6");
-            ::rtl::OUString sp;
-            if ( sal_False == ( providerEnum->nextElement() >>= sp ) )
-            {
-                OSL_TRACE("Can't extract string from element");
-            }
-            else
-            {
-                OSL_TRACE("Can extract string...");
-                OSL_TRACE(" provider[%n] = %s", i++,
-                    ::rtl::OUStringToOString( sp,
-                        RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-            }
-        }
-    }
-    catch ( css::uno::Exception& e )
-    {
-        OSL_TRACE("MasterScriptProvider::getProviderNames() %s",
-            ::rtl::OUStringToOString( e.Message,
-                RTL_TEXTENCODING_ASCII_US ).pData->buffer  );
-
-    }
-    return providers;
-}
 
 ::rtl::OUString SAL_CALL
 MasterScriptProvider::getName()
         throw ( css::uno::RuntimeException )
 {
-    return ::rtl::OUString();
+    return  ActiveMSPList::instance( m_xContext ).getName();
 }
 
 Sequence< Reference< browse::XBrowseNode > > SAL_CALL
 MasterScriptProvider::getChildNodes()
         throw ( css::uno::RuntimeException )
 {
-     return Sequence< Reference< browse::XBrowseNode > > ( 0 );
+    // 1. create a XBrowseNodeImpl (location )node for each MSP in the ActiveMSPList
+    // 2. add each Provider as a childNode for (location ) node
+     return ActiveMSPList::instance( m_xContext ).getChildNodes();
 }
 
 sal_Bool SAL_CALL
 MasterScriptProvider::hasChildNodes()
         throw ( css::uno::RuntimeException )
 {
-    return sal_True;
+    return ActiveMSPList::instance( m_xContext ).hasChildNodes();
 }
 
 sal_Int16 SAL_CALL
 MasterScriptProvider::getType()
         throw ( css::uno::RuntimeException )
 {
-    return 0;
+    return ActiveMSPList::instance( m_xContext ).getType();
 }
 
+
+Sequence< Reference< provider::XScriptProvider > > SAL_CALL
+MasterScriptProvider::getAllProviders() throw ( css::uno::RuntimeException )
+{
+    if ( m_pPCache )
+    {
+        return m_pPCache->getAllProviders();
+    }
+    else
+    {
+        OSL_TRACE("MasterScriptProvider::getAllProviders() something wrong, no language providers");
+        ::rtl::OUString errorMsg;
+        errorMsg = ::rtl::OUString::createFromAscii("MasterScriptProvider::getAllProviders, unknown error, cache not initialised");
+        throw RuntimeException( errorMsg.concat( errorMsg ),
+                        Reference< XInterface >() );
+
+    }
+}
 //*************************************************************************
 ::rtl::OUString SAL_CALL MasterScriptProvider::getImplementationName( )
 throw( RuntimeException )
