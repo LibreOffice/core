@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonames.hxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: nn $ $Date: 2002-09-09 13:57:14 $
+ *  last change: $Author: sab $ $Date: 2002-09-27 12:10:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -436,6 +436,7 @@
 #define SC_UNO_SPELLONLINE          "SpellOnline"
 #define SC_UNO_STANDARDDEC          "StandardDecimals"
 #define SC_UNO_REGEXENABLED         "RegularExpressions"
+#define SC_UNO_BASICLIBRARIES       "BasicLibraries"
 
 //  document properties from FormModel
 #define SC_UNO_APPLYFMDES           "ApplyFormDesignMode"
