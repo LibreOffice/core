@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_tbl.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-19 11:42:17 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 13:07:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,10 @@
 #define STR_TABLEDESIGN_NO_PRIM_KEY_HEAD    RID_STR_TBL_START + 46
 #define STR_TABLEDESIGN_TITLE               RID_STR_TBL_START + 47
 #define STR_NO_TYPE_INFO_AVAILABLE          RID_STR_TBL_START + 48
+#define STR_CHANGE_COLUMN_NAME              RID_STR_TBL_START + 49
+#define STR_CHANGE_COLUMN_TYPE              RID_STR_TBL_START + 50
+#define STR_CHANGE_COLUMN_DESCRIPTION       RID_STR_TBL_START + 51
+#define STR_CHANGE_COLUMN_ATTRIBUTE         RID_STR_TBL_START + 52
 
 // please adjust checking before insert new strings
 
