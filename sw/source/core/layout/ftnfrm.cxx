@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftnfrm.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: od $ $Date: 2002-11-15 11:02:39 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:51:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -631,7 +631,7 @@ void SwFtnFrm::InvalidateNxtFtnCnts( SwPageFrm *pPage )
 
 SwTwips SwFtnFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     static USHORT nNum = USHRT_MAX;
     SwTxtFtn* pTxtFtn = GetAttr();
     if ( pTxtFtn->GetFtn().GetNumber() == nNum )
@@ -645,7 +645,7 @@ SwTwips SwFtnFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
 
 SwTwips SwFtnFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     static USHORT nNum = USHRT_MAX;
     if( nNum != USHRT_MAX )
     {
@@ -1480,7 +1480,7 @@ void SwFtnBossFrm::ResetFtn( const SwFtnFrm *pCheck )
 
 void SwFtnBossFrm::InsertFtn( SwFtnFrm* pNew )
 {
-#if defined(DEBUG) && !defined(PRODUCT)
+#if (OSL_DEBUG_LEVEL > 1) && !defined(PRODUCT)
     static USHORT nStop = 0;
     if ( nStop == pNew->GetFrmId() )
     {
