@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.121 $
+ *  $Revision: 1.122 $
  *
- *  last change: $Author: ssa $ $Date: 2002-09-20 10:59:45 $
+ *  last change: $Author: hdu $ $Date: 2002-09-20 14:11:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5678,14 +5678,14 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
 
 // -----------------------------------------------------------------------
 
-xub_StrLen OutputDevice::GetTextBreak( const String& rOrigStr, long nTextWidth,
+xub_StrLen OutputDevice::GetTextBreak( const String& rStr, long nTextWidth,
                                        xub_StrLen nIndex, xub_StrLen nLen,
                                        long nCharExtra, BOOL /*TODO: bCellBreaking*/ ) const
 {
     DBG_TRACE( "OutputDevice::GetTextBreak()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
-    SalLayout* pSalLayout = ImplLayout( rOrigStr, nIndex, nLen, Point(0,0) );
+    SalLayout* pSalLayout = ImplLayout( rStr, nIndex, nLen, Point(0,0) );
     xub_StrLen nRetVal = STRING_LEN;
     if( pSalLayout )
     {
@@ -5696,14 +5696,14 @@ xub_StrLen OutputDevice::GetTextBreak( const String& rOrigStr, long nTextWidth,
         long nWidthFactor = pSalLayout->GetUnitsPerPixel();
         long nSubPixelFactor = (nWidthFactor < 64 ) ? 64 : 1;
         nTextWidth *= nWidthFactor * nSubPixelFactor;
-        long nTextWidth2 = ImplLogicWidthToDevicePixel( nTextWidth );
-        long nCharExtra2 = 0;
+        long nTextPixelWidth = ImplLogicWidthToDevicePixel( nTextWidth );
+        long nExtraPixelWidth = 0;
         if( nCharExtra != 0 )
         {
             nCharExtra *= nWidthFactor * nSubPixelFactor;
-            nCharExtra2 = ImplLogicWidthToDevicePixel( nCharExtra );
+            nExtraPixelWidth = ImplLogicWidthToDevicePixel( nCharExtra );
         }
-        nRetVal = pSalLayout->GetTextBreak( nTextWidth2, nCharExtra2, nSubPixelFactor );
+        nRetVal = pSalLayout->GetTextBreak( nTextPixelWidth, nExtraPixelWidth, nSubPixelFactor );
 
         pSalLayout->Release();
     }
@@ -5713,72 +5713,57 @@ xub_StrLen OutputDevice::GetTextBreak( const String& rOrigStr, long nTextWidth,
 
 // -----------------------------------------------------------------------
 
-xub_StrLen OutputDevice::GetTextBreak( const String& rOrigStr, long nTextWidth,
-                                       sal_Unicode nExtraChar, xub_StrLen& rExtraCharPos,
+xub_StrLen OutputDevice::GetTextBreak( const String& rStr, long nTextWidth,
+                                       sal_Unicode nHyphenatorChar, xub_StrLen& rHyphenatorPos,
                                        xub_StrLen nIndex, xub_StrLen nLen,
                                        long nCharExtra ) const
 {
     DBG_TRACE( "OutputDevice::GetTextBreak()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
-    xub_StrLen nRetVal = STRING_LEN;
-    rExtraCharPos = nRetVal;
+    rHyphenatorPos = STRING_LEN;
 
-    SalLayout* pSalLayout = ImplLayout( rOrigStr, nIndex, nLen, Point(0,0) );
+    SalLayout* pSalLayout = ImplLayout( rStr, nIndex, nLen, Point(0,0) );
     if( !pSalLayout )
         return STRING_LEN;
-
-    // return early if it fits completely
-    long nWidthFactor = pSalLayout->GetUnitsPerPixel();
-    long nSubPixelFactor = (nWidthFactor < 64 ) ? 64 : 1;
-
-    nTextWidth *= nWidthFactor * nSubPixelFactor;
-    long nTextWidth2 = ImplLogicWidthToDevicePixel( nTextWidth );
-    long nTextWidth3 = nTextWidth2;
-    long nCharExtra2 = 0;
-    if( nCharExtra != 0 )
-    {
-        nCharExtra *= nWidthFactor * nSubPixelFactor;
-        nCharExtra2 = ImplLogicWidthToDevicePixel( nCharExtra );
-
-        xub_StrLen nEndIndex = rOrigStr.Len();
-        if( (ULONG)nIndex + nLen < nEndIndex )
-            nEndIndex = nIndex + nLen;
-        nTextWidth3 -= (nEndIndex - nIndex) * nCharExtra2;
-    }
-
-    if( (pSalLayout->GetTextWidth() * nSubPixelFactor) <= nTextWidth3 )
-        return STRING_LEN;
-
-    // get width of extrachar
-    String aExtraStr( &nExtraChar, 1 );
-    SalLayout* pExtraLayout = ImplLayout( aExtraStr, 0, 1, Point(0,0) );
-    long nExtraWidth = 0;
-    if( pExtraLayout )
-    {
-        nExtraWidth = pExtraLayout->GetTextWidth() * nSubPixelFactor;
-        pExtraLayout->Release();
-    }
 
     // convert logical widths into layout units
     // NOTE: be very careful to avoid rounding errors for nCharExtra case
     // problem with rounding errors especially for small nCharExtras
     // TODO: remove when layout units have subpixel granularity
-    nRetVal = pSalLayout->GetTextBreak( nTextWidth2 - nExtraWidth, nCharExtra2, nSubPixelFactor );
-    if( (nCharExtra2 != 0) && (nRetVal != STRING_LEN) )
+    long nWidthFactor = pSalLayout->GetUnitsPerPixel();
+    long nSubPixelFactor = (nWidthFactor < 64 ) ? 64 : 1;
+
+    nTextWidth *= nWidthFactor * nSubPixelFactor;
+    long nTextPixelWidth = ImplLogicWidthToDevicePixel( nTextWidth );
+    long nExtraPixelWidth = 0;
+    if( nCharExtra != 0 )
     {
-        nTextWidth -= (nRetVal - nIndex - 1) * nCharExtra;
-        nTextWidth2 = ImplLogicWidthToDevicePixel( nTextWidth );
+        nCharExtra *= nWidthFactor * nSubPixelFactor;
+        nExtraPixelWidth = ImplLogicWidthToDevicePixel( nCharExtra );
     }
 
-    // calculate rExtraCharPos
-    if( nCharExtra2 != 0 )
-        rExtraCharPos = pSalLayout->GetTextBreak( nTextWidth2 + nCharExtra2, 0, nSubPixelFactor );
-    if( rExtraCharPos == STRING_LEN )
-        rExtraCharPos = nRetVal;
+    // calculate un-hyphenated break position
+    xub_StrLen nRetVal = pSalLayout->GetTextBreak( nTextPixelWidth, nExtraPixelWidth, nSubPixelFactor );
+
+    // calculate hyphenated break position
+    String aHyphenatorStr( &nHyphenatorChar, 1 );
+    SalLayout* pHyphenatorLayout = ImplLayout( aHyphenatorStr, 0, 1, Point(0,0) );
+    if( pHyphenatorLayout )
+    {
+        // calculate subpixel width of hyphenation character
+        long nHyphenatorPixelWidth = pHyphenatorLayout->GetTextWidth() * nSubPixelFactor;
+        pHyphenatorLayout->Release();
+
+        // calculate hyphenated break position
+        nTextPixelWidth -= nHyphenatorPixelWidth + nExtraPixelWidth;
+        rHyphenatorPos = pSalLayout->GetTextBreak( nTextPixelWidth, nExtraPixelWidth, nSubPixelFactor );
+
+        if( rHyphenatorPos > nRetVal )
+            rHyphenatorPos = nRetVal;
+    }
 
     pSalLayout->Release();
-
     return nRetVal;
 }
 
