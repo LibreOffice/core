@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: cl $ $Date: 2002-09-27 12:39:58 $
+ *  last change: $Author: af $ $Date: 2002-11-12 10:24:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -399,6 +399,9 @@ void SdDrawViewShell::SelectionHasChanged()
 
 void SdDrawViewShell::SetZoom( long nZoom )
 {
+    // Make sure that the zoom factor will not be recalculated on
+    // following window resizings.
+    bZoomOnPage = FALSE;
     SdViewShell::SetZoom( nZoom );
     GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOM );
 }
