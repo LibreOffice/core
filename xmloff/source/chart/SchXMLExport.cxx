@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: rt $ $Date: 2003-08-07 12:30:03 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:32:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,9 +207,28 @@ SchXMLExportHelper::SchXMLExportHelper(
         mnDomainAxes( 0 ),
         mbHasSeriesLabels( sal_False ),
         mbHasCategoryLabels( sal_False ),
-        mbRowSourceColumns( sal_True ),
-        msCLSID( rtl::OUString( SvGlobalName( SO3_SCH_CLASSID ).GetHexName()))
+        mbRowSourceColumns( sal_True )
+        // #110680#
+        // this id depends on the ServiceManager used due to the binary filter stripping.
+        // ,msCLSID( rtl::OUString( SvGlobalName( SO3_SCH_CLASSID ).GetHexName()))
 {
+    // #110680#
+    // changed initialisation for msCLSID. Compare the ServiceInfo name with
+    // the known name of the LegacyServiceManager.
+    Reference<lang::XServiceInfo> xServiceInfo( mrExport.getServiceFactory(), UNO_QUERY );
+    DBG_ASSERT( xServiceInfo.is(), "XMultiServiceFactory without xServiceInfo (!)" );
+    OUString rdbURL = xServiceInfo->getImplementationName();
+    OUString implLegacyServiceManagerName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.office.LegacyServiceManager" ) );
+
+    if( rdbURL.equals( implLegacyServiceManagerName ))
+    {
+        msCLSID = rtl::OUString( SvGlobalName( BF_SO3_SCH_CLASSID ).GetHexName());
+    }
+    else
+    {
+        msCLSID = rtl::OUString( SvGlobalName( SO3_SCH_CLASSID ).GetHexName());
+    }
+
     msTableName = rtl::OUString::createFromAscii( "local-table" );
 
     // create factory
@@ -2454,10 +2473,13 @@ void SchXMLExportHelper::exportText( const ::rtl::OUString& rText, bool bConvert
 // class SchXMLExport
 // ========================================
 
-SchXMLExport::SchXMLExport( sal_uInt16 nExportFlags ) :
-        SvXMLExport( MAP_CM, ::xmloff::token::XML_CHART, nExportFlags ),
-        maAutoStylePool( *this ),
-        maExportHelper( *this, maAutoStylePool )
+// #110680#
+SchXMLExport::SchXMLExport(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+    sal_uInt16 nExportFlags )
+:   SvXMLExport( xServiceFactory, MAP_CM, ::xmloff::token::XML_CHART, nExportFlags ),
+    maAutoStylePool( *this ),
+    maExportHelper( *this, maAutoStylePool )
 {
 }
 
@@ -2592,9 +2614,10 @@ OUString SAL_CALL SchXMLExport_getImplementationName() throw()
 
 uno::Reference< uno::XInterface > SAL_CALL SchXMLExport_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
 {
+    // #110680#
     // #103997# removed some flags from EXPORT_ALL
-    return (cppu::OWeakObject*)new SchXMLExport(
-        EXPORT_ALL ^ ( EXPORT_SETTINGS | EXPORT_MASTERSTYLES | EXPORT_SCRIPTS ));
+    // return (cppu::OWeakObject*)new SchXMLExport( EXPORT_ALL ^ ( EXPORT_SETTINGS | EXPORT_MASTERSTYLES | EXPORT_SCRIPTS ));
+    return (cppu::OWeakObject*)new SchXMLExport( rSMgr, EXPORT_ALL ^ ( EXPORT_SETTINGS | EXPORT_MASTERSTYLES | EXPORT_SCRIPTS ));
 }
 
 // ============================================================
@@ -2613,9 +2636,11 @@ OUString SAL_CALL SchXMLExport_Styles_getImplementationName() throw()
     return OUString( RTL_CONSTASCII_USTRINGPARAM( "SchXMLExport.Styles" ));
 }
 
-uno::Reference< uno::XInterface > SAL_CALL SchXMLExport_Styles_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
+uno::Reference< uno::XInterface > SAL_CALL SchXMLExport_Styles_createInstance(const uno::Reference< lang::XMultiServiceFactory >& rSMgr) throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new SchXMLExport( EXPORT_STYLES );
+    // #110680#
+    // return (cppu::OWeakObject*)new SchXMLExport( EXPORT_STYLES );
+    return (cppu::OWeakObject*)new SchXMLExport( rSMgr, EXPORT_STYLES );
 }
 
 // ------------------------------------------------------------
@@ -2634,7 +2659,9 @@ OUString SAL_CALL SchXMLExport_Content_getImplementationName() throw()
 
 uno::Reference< uno::XInterface > SAL_CALL SchXMLExport_Content_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new SchXMLExport( EXPORT_AUTOSTYLES | EXPORT_CONTENT | EXPORT_FONTDECLS );
+    // #110680#
+    // return (cppu::OWeakObject*)new SchXMLExport( EXPORT_AUTOSTYLES | EXPORT_CONTENT | EXPORT_FONTDECLS );
+    return (cppu::OWeakObject*)new SchXMLExport( rSMgr, EXPORT_AUTOSTYLES | EXPORT_CONTENT | EXPORT_FONTDECLS );
 }
 
 // ------------------------------------------------------------
@@ -2651,9 +2678,11 @@ OUString SAL_CALL SchXMLExport_Meta_getImplementationName() throw()
     return OUString( RTL_CONSTASCII_USTRINGPARAM( "SchXMLExport.Meta" ));
 }
 
-uno::Reference< uno::XInterface > SAL_CALL SchXMLExport_Meta_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
+uno::Reference< uno::XInterface > SAL_CALL SchXMLExport_Meta_createInstance(const uno::Reference< lang::XMultiServiceFactory >& rSMgr) throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new SchXMLExport( EXPORT_META );
+    // #110680#
+    // return (cppu::OWeakObject*)new SchXMLExport( EXPORT_META );
+    return (cppu::OWeakObject*)new SchXMLExport( rSMgr, EXPORT_META );
 }
 
 
