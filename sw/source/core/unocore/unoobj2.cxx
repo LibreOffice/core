@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj2.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:22:27 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:35:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -934,6 +934,12 @@ const SwPaM*    SwXTextCursor::GetPaM() const
 {
     return GetCrsr() ? GetCrsr() : 0;
 }
+// -----------------------------------------------------------------------------
+SwPaM*  SwXTextCursor::GetPaM()
+{
+    return GetCrsr() ? GetCrsr() : 0;
+}
+
 /*-- 09.12.98 14:19:02---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -1685,15 +1691,15 @@ sal_Bool        SwXTextRange::XTextRangeToSwPaM( SwUnoInternalPaM& rToFill,
 
     uno::Reference<lang::XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
     SwXTextRange* pRange = 0;
-    SwXTextCursor* pCursor = 0;
+    OTextCursorHelper* pCursor = 0;
     SwXTextPortion* pPortion = 0;
     SwXText* pText = 0;
     if(xRangeTunnel.is())
     {
         pRange = (SwXTextRange*)xRangeTunnel->getSomething(
                                 SwXTextRange::getUnoTunnelId());
-        pCursor = (SwXTextCursor*)xRangeTunnel->getSomething(
-                                SwXTextCursor::getUnoTunnelId());
+        pCursor = (OTextCursorHelper*)xRangeTunnel->getSomething(
+                                OTextCursorHelper::getUnoTunnelId());
         pPortion = (SwXTextPortion*)xRangeTunnel->getSomething(
                                 SwXTextPortion::getUnoTunnelId());
         pText = (SwXText*)xRangeTunnel->getSomething(
@@ -1707,8 +1713,8 @@ sal_Bool        SwXTextRange::XTextRangeToSwPaM( SwUnoInternalPaM& rToFill,
         xTextCursor = pText->createCursor();
         xTextCursor->gotoEnd(sal_True);
         Reference<XUnoTunnel> xCrsrTunnel( xTextCursor, UNO_QUERY);
-        pCursor = (SwXTextCursor*)xCrsrTunnel->getSomething(
-                                                    SwXTextCursor::getUnoTunnelId());
+        pCursor = (OTextCursorHelper*)xCrsrTunnel->getSomething(
+                                                    OTextCursorHelper::getUnoTunnelId());
     }
     if(pRange && pRange->GetDoc() == rToFill.GetDoc())
     {
@@ -1716,8 +1722,11 @@ sal_Bool        SwXTextRange::XTextRangeToSwPaM( SwUnoInternalPaM& rToFill,
     }
     else
     {
-        SwUnoCrsr* pUnoCrsr = pCursor? pCursor->GetCrsr() : pPortion ? pPortion->GetCrsr() : 0;
-        if(pUnoCrsr && pUnoCrsr->GetDoc() == rToFill.GetDoc())
+        SwDoc*      pDoc = pCursor ? pCursor->GetDoc() : NULL;
+        if ( !pDoc )
+            pDoc = pPortion ? pPortion->GetCrsr()->GetDoc() : NULL;
+        const SwPaM* pUnoCrsr = pCursor ? pCursor->GetPaM() : pPortion ? pPortion->GetCrsr() : 0;
+        if(pUnoCrsr && pDoc == rToFill.GetDoc())
             {
                 DBG_ASSERT((SwPaM*)pUnoCrsr->GetNext() == pUnoCrsr, "was machen wir mit Ringen?" )
                 bRet = sal_True;
@@ -2645,5 +2654,7 @@ void    SwXParaFrameEnumeration::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
         }
     }
 }
+// -----------------------------------------------------------------------------
+IMPLEMENT_FORWARD_XINTERFACE2(SwXTextCursor,SwXTextCursor_Base,OTextCursorHelper)
 
 
