@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spelleng.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-24 10:32:06 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:24:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@
 #include <svx/langitem.hxx>
 #include <svx/editobj.hxx>
 #include <svx/editview.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <vcl/msgbox.hxx>
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
