@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appbas.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-27 09:31:00 $
+ *  last change: $Author: cd $ $Date: 2001-12-06 07:39:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,7 @@
 #include <svtools/undoopt.hxx>
 #include <svtools/pathoptions.hxx>
 #include <svtools/useroptions.hxx>
+#include <unotools/bootstrap.hxx>
 
 #pragma hdrstop
 
@@ -264,15 +265,12 @@ StarBASIC* SfxApplication::GetBasic_Impl() const
 //------------------------------------------------------------------------
 String lcl_GetVersionString(ResMgr* pImpResMgr)
 {
-    ResId aVerId( RID_BUILDVERSION, pImpResMgr );
-    ResMgr *pResMgr = pImpResMgr->IsAvailable(
-        aVerId.SetRT( RSC_STRING ) )
-                    ? pImpResMgr
-                    : 0;
-    aVerId.SetResMgr( pResMgr );
-    if ( !Resource::GetResManager()->IsAvailable( aVerId ) )
-        DBG_ERROR( "No RID_BUILD_VERSION in label-resource-dll" );
-    String aVersion( aVerId );
+    ::rtl::OUString aDefault;
+    String aVersion( utl::Bootstrap::getBuildIdData( aDefault ));
+
+    if ( aVersion.Len() == 0 )
+        DBG_ERROR( "No BUILDID in bootstrap file found" );
+
     aVersion.Erase( 0, aVersion.Search( ':' ) + 1 );
     aVersion.Erase( aVersion.Search( ')' ) );
     return aVersion;

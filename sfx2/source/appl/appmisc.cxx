@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmisc.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-15 15:03:07 $
+ *  last change: $Author: cd $ $Date: 2001-12-06 07:39:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,7 @@
 #include <framework/menuconfiguration.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/localfilehelper.hxx>
+#include <unotools/bootstrap.hxx>
 #include <svtools/moduleoptions.hxx>
 #include <osl/file.hxx>
 
@@ -298,13 +299,11 @@ void SfxApplication::InitializeDisplayName_Impl()
         aGuard.clear();
 
 #ifndef PRODUCT
+        ::rtl::OUString aDefault;
         aTitle += DEFINE_CONST_UNICODE(" [");
-        ResId aVerId( RID_BUILDVERSION, pAppData_Impl->pLabelResMgr );
-        ResMgr* pResMgr = pAppData_Impl->pLabelResMgr->IsAvailable( aVerId.SetRT( RSC_STRING ) )
-                        ? pAppData_Impl->pLabelResMgr
-                        : NULL;
-        aVerId.SetResMgr( pResMgr );
-        aTitle += String( aVerId );
+
+        String aVerId( utl::Bootstrap::getBuildIdData( aDefault ));
+        aTitle += aVerId;
         aTitle += 0x005D ; // 5Dh ^= ']'
 #endif
         if ( GetDemoKind() == SFX_DEMOKIND_DEMO )
@@ -388,20 +387,18 @@ ModalDialog* SfxApplication::CreateAboutDialog()
 
 {
     // Buildversion suchen
-    ResId aVerId( RID_BUILDVERSION, pAppData_Impl->pLabelResMgr );
-    ResMgr *pResMgr = pAppData_Impl->pLabelResMgr->IsAvailable(
-                            aVerId.SetRT( RSC_STRING ) )
-                    ? pAppData_Impl->pLabelResMgr
-                    : 0;
-    aVerId.SetResMgr( pResMgr );
-    if ( !Resource::GetResManager()->IsAvailable( aVerId ) )
-        DBG_ERROR( "No RID_BUILD_VERSION in label-resource-dll" );
+    ::rtl::OUString aDefault;
+    String          aVerId( utl::Bootstrap::getBuildIdData( aDefault ));
+
+    if ( aVerId.Len() == 0 )
+        DBG_ERROR( "No BUILDID in bootstrap file" );
+
     String aVersion( '[' );
-    ( aVersion += String( aVerId ) ) += ']';
+    ( aVersion += aVerId ) += ']';
 
     // About-Dialog suchen
     ResId aDialogResId( RID_DEFAULTABOUT, pAppData_Impl->pLabelResMgr );
-    pResMgr = pAppData_Impl->pLabelResMgr->IsAvailable(
+    ResMgr* pResMgr = pAppData_Impl->pLabelResMgr->IsAvailable(
                         aDialogResId.SetRT( RSC_MODALDIALOG ) )
                     ? pAppData_Impl->pLabelResMgr
                     : 0;
