@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh3.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:50 $
+ *  last change: $Author: vg $ $Date: 2003-06-02 07:28:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,7 +247,11 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                                             SID_JUMPTOMARK, TRUE, &pItem ) == SFX_ITEM_SET )
                     aAddress = ((const SfxStringItem*)pItem)->GetValue();
 
-                BOOL bUnmark = FALSE;
+                //  #i14927# SID_CURRENTCELL with a single cell must unmark if FN_PARAM_1
+                //  isn't set (for recorded macros, because IsAPI is no longer available).
+                //  ScGridWindow::MouseButtonUp no longer executes the slot for a single
+                //  cell if there is a multi selection.
+                BOOL bUnmark = ( nSlot == SID_CURRENTCELL );
                 if ( pReqArgs->GetItemState( FN_PARAM_1, TRUE, &pItem ) == SFX_ITEM_SET )
                     bUnmark = ((const SfxBoolItem*)pItem)->GetValue();
 
@@ -359,8 +363,8 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     }
                     else
                     {
-                        //  aus dem Navigator die Selektion nur aufheben, wenn Parameter da
-                        if( rReq.IsAPI() || bUnmark )
+                        //  remove old selection, unless bUnmark argument is FALSE (from navigator)
+                        if( bUnmark )
                         {
                             MoveCursorAbs( nCol, nRow,
                                 SC_FOLLOW_NONE, FALSE, FALSE );
