@@ -1,0 +1,2 @@
+
+.INCLUDE .NOINFER .IGNORE : $(INCFILENAME:d:d:d)UNIX$/macros.mk
