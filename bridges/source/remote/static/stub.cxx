@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stub.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:28:49 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 16:30:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,14 +58,7 @@
  *
  *
  ************************************************************************/
-#ifdef SOLARIS
-#include <alloca.h>
-#elif defined MACOSX
-#include <sys/types.h>
-#include <sys/malloc.h>
-#else
-#include <malloc.h>
-#endif
+#include <sal/alloca.h>
 
 #include <osl/diagnose.h>
 
