@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-28 10:16:47 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 16:51:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1829,6 +1829,14 @@ Reference< XInterface >  SwXTextDocument::createInstance(const OUString& rServic
             }
             if(!xRet.is())
             {
+                //! we don't want to insert OLE2 Shapes (e.g. "com.sun.star.drawing.OLE2Shape", ...)
+                //! like this (by creating them with the documents factory and
+                //! adding the shapes to the draw page).
+                //! For inserting OLE objects the proper way is to use
+                //! "com.sun.star.text.TextEmbeddedObject"!
+                if (rServiceName.lastIndexOf( C2U(".OLE2Shape") ) == rServiceName.getLength() - 10)
+                    throw ServiceNotRegisteredException();  // declare service to be not registered with this factory
+
                 //hier den Draw - Service suchen
                 Reference< XInterface >  xTmp = SvxFmMSFactory::createInstance(rServiceName);
                 if(bShape)
