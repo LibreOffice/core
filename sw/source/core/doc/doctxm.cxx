@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctxm.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 14:07:31 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:26:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,6 +193,9 @@
 #endif
 #ifndef _EDITSH_HXX
 #include <editsh.hxx>
+#endif
+#ifndef _SCRIPTINFO_HXX
+#include <scriptinfo.hxx>
 #endif
 
 const sal_Unicode cNumRepl      = '@';
@@ -1375,8 +1378,9 @@ void SwTOXBaseSection::UpdateMarks( const SwTOXInternational& rIntl,
             if( pTOXSrc->GetNodes().IsDocNodes() &&
                 pTOXSrc->GetTxt().Len() && pTOXSrc->GetDepends() &&
                 pTOXSrc->GetFrm() &&
-                (!IsFromChapter() ||
-                    ::lcl_FindChapterNode( *pTOXSrc, 0 ) == pOwnChapterNode ))
+               (!IsFromChapter() || ::lcl_FindChapterNode( *pTOXSrc, 0 ) == pOwnChapterNode ) &&
+               !pTOXSrc->HasHiddenParaField() &&
+               !SwScriptInfo::IsInHiddenRange( *pTOXSrc, *pTxtMark->GetStart() ) )
             {
                 SwTOXSortTabBase* pBase = 0;
                 if(TOX_INDEX == eTOXTyp)
@@ -1437,6 +1441,8 @@ void SwTOXBaseSection::UpdateOutline( const SwTxtNode* pOwnChapterNode )
         if( pTxtNd && pTxtNd->Len() && pTxtNd->GetDepends() &&
             USHORT(pTxtNd->GetTxtColl()->GetOutlineLevel()+1) <= GetLevel() &&
             pTxtNd->GetFrm() &&
+           !pTxtNd->HasHiddenParaField() &&
+           !pTxtNd->HasHiddenCharAttribute( true ) &&
             ( !IsFromChapter() ||
                ::lcl_FindChapterNode( *pTxtNd, 0 ) == pOwnChapterNode ))
         {
