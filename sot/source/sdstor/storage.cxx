@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storage.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-22 09:20:10 $
+ *  last change: $Author: mba $ $Date: 2001-06-25 10:05:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -562,9 +562,17 @@ void SotStorage::CreateStorage( BOOL bForceUCBStorage, StreamMode nMode, Storage
 
             if ( bIsUCBStorage )
             {
-                // UCBStorage always works directly on the UCB content, so discard the stream first
-                DELETEZ( pStorStm );
-                pOwnStg = new UCBStorage( aName, nMode, (nStorageMode & STORAGE_TRANSACTED) ? FALSE : TRUE );
+                if ( UCBStorage::GetLinkedFile( *pStorStm ).Len() )
+                {
+                    pOwnStg = new UCBStorage( *pStorStm, (nStorageMode & STORAGE_TRANSACTED) ? FALSE : TRUE );
+                    bDelStm = TRUE;
+                }
+                else
+                {
+                    // UCBStorage always works directly on the UCB content, so discard the stream first
+                    DELETEZ( pStorStm );
+                    pOwnStg = new UCBStorage( aName, nMode, (nStorageMode & STORAGE_TRANSACTED) ? FALSE : TRUE );
+                }
             }
             else
             {

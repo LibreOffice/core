@@ -48,6 +48,7 @@
 #include <tools/ref.hxx>
 #include <tools/debug.hxx>
 #include <unotools/streamhelper.hxx>
+#include <unotools/ucbhelper.hxx>
 #include <tools/list.hxx>
 #include <tools/urlobj.hxx>
 
@@ -202,6 +203,7 @@ public:
                                                 // reference is destroyed
     BOOL                        m_bIsRoot;      // marks this storage as root storages that manages all oommits and reverts
     BOOL                        m_bDirty;       // ???
+    BOOL                        m_bIsLinked;
     ULONG                       m_nFormat;
     String                      m_aUserTypeName;
     SvGlobalName                m_aClassId;
@@ -750,9 +752,24 @@ BOOL UCBStorageStream::GetProperty( const String& rName, ::com::sun::star::uno::
 
 UCBStorage::UCBStorage( SvStream& rStrm, BOOL bDirect )
 {
-    // pImp must be initialized in the body, because otherwise the vtable of the stream is not initialized
-    // to class UCBStorage !
-    pImp = new UCBStorage_Impl( rStrm, this, bDirect );
+    String aURL = GetLinkedFile( rStrm );
+    if ( aURL.Len() )
+    {
+        StreamMode nMode = STREAM_READ;
+        if( rStrm.IsWritable() )
+            nMode = STREAM_READ | STREAM_WRITE;
+
+        ::ucb::Content aContent( aURL, Reference < XCommandEnvironment >() );
+        pImp = new UCBStorage_Impl( aContent, aURL, nMode, this, bDirect, TRUE );
+        pImp->m_bIsLinked = TRUE;
+    }
+    else
+    {
+        // pImp must be initialized in the body, because otherwise the vtable of the stream is not initialized
+        // to class UCBStorage !
+        pImp = new UCBStorage_Impl( rStrm, this, bDirect );
+    }
+
     pImp->AddRef();
     pImp->Init();
     StorageBase::nMode = pImp->m_nMode;
@@ -808,6 +825,7 @@ UCBStorage_Impl::UCBStorage_Impl( const ::ucb::Content& rContent, const String& 
     , m_bModified( FALSE )
     , m_bCommited( FALSE )
     , m_bDirty( FALSE )
+    , m_bIsLinked( FALSE )
     , m_aClassId( SvGlobalName() )
 {
     String aName( rName );
@@ -835,6 +853,7 @@ UCBStorage_Impl::UCBStorage_Impl( const String& rName, StreamMode nMode, UCBStor
     , m_bModified( FALSE )
     , m_bCommited( FALSE )
     , m_bDirty( FALSE )
+    , m_bIsLinked( FALSE )
     , m_aClassId( SvGlobalName() )
 {
     String aName( rName );
@@ -869,6 +888,7 @@ UCBStorage_Impl::UCBStorage_Impl( SvStream& rStream, UCBStorage* pStorage, BOOL 
     , m_bDirect( bDirect )
     , m_nFormat( 0 )
     , m_bDirty( FALSE )
+    , m_bIsLinked( FALSE )
     , m_bModified( FALSE )
     , m_bCommited( FALSE )
     , m_aClassId( SvGlobalName() )
@@ -1237,15 +1257,18 @@ sal_Int16 UCBStorage_Impl::Commit()
                     aType <<= (rtl::OUString) m_aContentType;
                     m_pContent->setPropertyValue( ::rtl::OUString::createFromAscii( "MediaType" ), aType );
 
-                    Any aAny;
-                    m_pContent->executeCommand( ::rtl::OUString::createFromAscii("flush"), aAny );
-                    if ( m_pSource != 0 )
+                    if (  !m_bIsLinked )
                     {
-                        m_pStream = ::utl::UcbStreamHelper::CreateStream( m_pTempFile->GetURL(), STREAM_STD_READ );
-                        m_pSource->Seek(0);
-                        *m_pStream >> *m_pSource;
-                        DELETEZ( m_pStream );
-                        m_pSource->Seek(0);
+                        Any aAny;
+                        m_pContent->executeCommand( ::rtl::OUString::createFromAscii("flush"), aAny );
+                        if ( m_pSource != 0 )
+                        {
+                            m_pStream = ::utl::UcbStreamHelper::CreateStream( m_pTempFile->GetURL(), STREAM_STD_READ );
+                            m_pSource->Seek(0);
+                            *m_pStream >> *m_pSource;
+                            DELETEZ( m_pStream );
+                            m_pSource->Seek(0);
+                        }
                     }
                 }
                 catch ( CommandAbortedException& )
@@ -1954,6 +1977,63 @@ BOOL UCBStorage::IsStorageFile( SvStream* pFile )
     BOOL bRet = ( nBytes == 0x04034b50 );         // magic Bytes!
     pFile->Seek( nPos );
     return bRet;
+}
+
+String UCBStorage::GetLinkedFile( SvStream &rStream )
+{
+    String aString;
+    ULONG nPos = rStream.Tell();
+    rStream.Seek( STREAM_SEEK_TO_END );
+    if ( !rStream.Tell() )
+        return aString;
+
+    rStream.Seek(0);
+    UINT32 nBytes;
+    rStream >> nBytes;
+    if( nBytes == 0x04034b50 )
+    {
+        rStream.ReadByteString( aString, RTL_TEXTENCODING_UTF8 );
+        if ( aString.CompareToAscii( "ContentURL=", 11 ) == COMPARE_EQUAL )
+            aString.Erase( 0, 11 );
+        else
+            aString.Erase();
+    }
+
+    rStream.Seek( nPos );
+    return aString;
+}
+
+String UCBStorage::CreateLinkFile( const String& rName )
+{
+    SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( rName, STREAM_STD_READWRITE | STREAM_TRUNC );
+    *pStream << ( UINT32 ) 0x04034b50;
+
+    INetURLObject aObj( rName );
+    String aTmp = aObj.GetName();
+    String aURL = String::CreateFromAscii( "content." );
+    aURL += aTmp;
+    aObj.SetName( aURL );
+    aURL = aObj.GetMainURL();
+    BOOL bRet = ::utl::UCBContentHelper::MakeFolder( aURL );
+    if ( !bRet )
+    {
+        aURL += '.';
+        for ( sal_Int32 i=0; !bRet; i++ )
+        {
+            String aTmp( aURL );
+            aTmp += String::CreateFromInt32( i );
+            bRet = ::utl::UCBContentHelper::MakeFolder( aTmp );
+            if ( bRet )
+                aURL = aTmp;
+        }
+    }
+
+    String aLink = String::CreateFromAscii("ContentURL=");
+    aLink += aURL;
+    pStream->WriteByteString( aLink, RTL_TEXTENCODING_UTF8 );
+    pStream->Flush();
+    delete pStream;
+    return aURL;
 }
 
 BOOL UCBStorage::SetProperty( const String& rName, const ::com::sun::star::uno::Any& rValue )

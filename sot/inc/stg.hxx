@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stg.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-22 09:19:54 $
+ *  last change: $Author: mba $ $Date: 2001-06-25 10:03:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,6 +321,8 @@ protected:
                                 ~UCBStorage();
 public:
     static BOOL                 IsStorageFile( SvStream* );
+    static String               GetLinkedFile( SvStream& );
+    static String               CreateLinkFile( const String& rName );
 
                                 UCBStorage( const ::ucb::Content& rContent, const String& rName, StreamMode nMode, BOOL bDirect = TRUE, BOOL bIsRoot = TRUE );
                                 UCBStorage( const String& rName, StreamMode nMode, BOOL bDirect = TRUE, BOOL bIsRoot = TRUE );
