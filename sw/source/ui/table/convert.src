@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convert.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:47 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 17:56:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
     TEXT [ portuguese ] = "Converter tabela em texto" ;
     TEXT [ finnish ] = "Muunna taulukko tekstiksi" ;
     TEXT [ danish ] = "Konverter tabel til tekst" ;
-    TEXT [ french ] = "Convertir tableau en texte" ;
+    TEXT [ french ] = "Convertir le tableau en texte" ;
     TEXT [ swedish ] = "Omvandla tabell till text" ;
     TEXT [ dutch ] = "Tabel naar tekst converteren" ;
     TEXT [ spanish ] = "Convertir tabla en texto" ;
@@ -328,7 +328,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         Text[ portuguese_brazilian ] = "Don't split table";
         Text[ portuguese ] = "Não ~dividir tabela";
         Text[ danish ] = "Opdel tabel ikke";
-        Text[ french ] = "Pas de c~oupure de tableau";
+        Text[ french ] = "Ne pas ~diviser le tableau";
         Text[ swedish ] = "Dela i~nte tabell";
         Text[ dutch ] = "Tabel niet ~splitsen";
         Text[ spanish ] = "~No dividir tabla";
