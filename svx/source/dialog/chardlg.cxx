@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: pb $ $Date: 2001-11-08 06:23:25 $
+ *  last change: $Author: tl $ $Date: 2001-11-14 12:49:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2200,9 +2200,17 @@ BOOL SvxCharEffectsPage::FillItemSet( SfxItemSet& rSet )
 
     if ( pOld )
     {
+        //! if there are different underline styles in the selection the
+        //! item-state in the 'rOldSet' will be invalid. In this case
+        //! changing the underline style will be allowed if a style is
+        //! selected in the listbox.
+        BOOL bAllowChg = LISTBOX_ENTRY_NOTFOUND != nPos  &&
+                         SFX_ITEM_DEFAULT > rOldSet.GetItemState( nWhich, TRUE );
+
         const SvxUnderlineItem& rItem = *( (const SvxUnderlineItem*)pOld );
         if ( (FontUnderline)rItem.GetValue() == eUnder &&
-             ( UNDERLINE_NONE == eUnder || rItem.GetColor() == m_aColorLB.GetSelectEntryColor() ) )
+             ( UNDERLINE_NONE == eUnder || rItem.GetColor() == m_aColorLB.GetSelectEntryColor() ) &&
+             ! bAllowChg )
             bChanged = FALSE;
     }
 
@@ -2226,8 +2234,16 @@ BOOL SvxCharEffectsPage::FillItemSet( SfxItemSet& rSet )
 
     if ( pOld )
     {
+        //! if there are different strikeout styles in the selection the
+        //! item-state in the 'rOldSet' will be invalid. In this case
+        //! changing the strikeout style will be allowed if a style is
+        //! selected in the listbox.
+        BOOL bAllowChg = LISTBOX_ENTRY_NOTFOUND != nPos  &&
+                         SFX_ITEM_DEFAULT > rOldSet.GetItemState( nWhich, TRUE );
+
         const SvxCrossedOutItem& rItem = *( (const SvxCrossedOutItem*)pOld );
-        if ( !m_aStrikeoutLB.IsEnabled() || (FontStrikeout)rItem.GetValue() == eStrike )
+        if ( !m_aStrikeoutLB.IsEnabled()
+            || ((FontStrikeout)rItem.GetValue() == eStrike  && !bAllowChg) )
             bChanged = FALSE;
     }
 
@@ -2313,9 +2329,15 @@ BOOL SvxCharEffectsPage::FillItemSet( SfxItemSet& rSet )
 
     if ( pOld )
     {
-        const SvxCaseMapItem& rItem = *( (const SvxCaseMapItem*)pOld );
+        //! if there are different effect styles in the selection the
+        //! item-state in the 'rOldSet' will be invalid. In this case
+        //! changing the effect style will be allowed if a style is
+        //! selected in the listbox.
+        BOOL bAllowChg = LISTBOX_ENTRY_NOTFOUND != nPos  &&
+                         SFX_ITEM_DEFAULT > rOldSet.GetItemState( nWhich, TRUE );
 
-        if ( (SvxCaseMap)rItem.GetValue() == eCaseMap )
+        const SvxCaseMapItem& rItem = *( (const SvxCaseMapItem*)pOld );
+        if ( (SvxCaseMap)rItem.GetValue() == eCaseMap  &&  !bAllowChg )
             bChanged = FALSE;
     }
 
