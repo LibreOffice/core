@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: kz $ $Date: 2004-03-25 14:56:35 $
+#   last change: $Author: obo $ $Date: 2004-06-01 09:13:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,12 +83,11 @@ SHL1IMPLIB= $(TARGET)
 
 SHL1STDLIBS= \
         $(VCLLIB) \
-    $(UNOTOOLSLIB) \
+        $(UNOTOOLSLIB) \
         $(TOOLSLIB) \
-    $(CPPULIB) \
+        $(CPPULIB) \
         $(SALLIB) \
     $(JVMACCESSLIB)
-    
 
 SHL1LIBS=   $(SLB)$/$(TARGET).lib
 SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
