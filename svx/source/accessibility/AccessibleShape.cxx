@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleShape.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 10:32:59 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 18:11:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1066,103 +1066,8 @@ void AccessibleShape::ViewForwarderChanged (ChangeType aChangeType,
     AccessibleShape::CreateAccessibleBaseName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    sal_Int32 nResourceId;
-    OUString sName;
-
-    switch (ShapeTypeHandler::Instance().GetTypeId (mxShape))
-    {
-        case DRAWING_3D_CUBE:
-            nResourceId = STR_ObjNameSingulCube3d;
-            break;
-        case DRAWING_3D_EXTRUDE:
-            nResourceId = STR_ObjNameSingulExtrude3d;
-            break;
-        case DRAWING_3D_LATHE:
-            nResourceId = STR_ObjNameSingulLathe3d;
-            break;
-//BFS01        case DRAWING_3D_POLYGON:
-//BFS01            nResourceId = STR_ObjNameSingulPoly3d;
-//BFS01            break;
-        case DRAWING_3D_SCENE:
-            nResourceId = STR_ObjNameSingulScene3d;
-            break;
-        case DRAWING_3D_SPHERE:
-            nResourceId = STR_ObjNameSingulSphere3d;
-            break;
-        case DRAWING_CAPTION:
-            nResourceId = STR_ObjNameSingulCAPTION;
-            break;
-        case DRAWING_CLOSED_BEZIER:
-            nResourceId = STR_ObjNameSingulPATHFILL;
-            break;
-        case DRAWING_CLOSED_FREEHAND:
-            nResourceId = STR_ObjNameSingulFREEFILL;
-            break;
-        case DRAWING_CONNECTOR:
-            nResourceId = STR_ObjNameSingulEDGE;
-            break;
-        case DRAWING_CONTROL:
-            nResourceId = STR_ObjNameSingulUno;
-            break;
-        case DRAWING_ELLIPSE:
-            nResourceId = STR_ObjNameSingulCIRCE;
-            break;
-        case DRAWING_GROUP:
-            nResourceId = STR_ObjNameSingulGRUP;
-            break;
-        case DRAWING_LINE:
-            nResourceId = STR_ObjNameSingulLINE;
-            break;
-        case DRAWING_MEASURE:
-            nResourceId = STR_ObjNameSingulMEASURE;
-            break;
-        case DRAWING_OPEN_BEZIER:
-            nResourceId = STR_ObjNameSingulPATHLINE;
-            break;
-        case DRAWING_OPEN_FREEHAND:
-            nResourceId = STR_ObjNameSingulFREELINE;
-            break;
-        case DRAWING_PAGE:
-            nResourceId = STR_ObjNameSingulPAGE;
-            break;
-        case DRAWING_POLY_LINE:
-            nResourceId = STR_ObjNameSingulPLIN;
-            break;
-        case DRAWING_POLY_LINE_PATH:
-            nResourceId = STR_ObjNameSingulPLIN;
-            break;
-        case DRAWING_POLY_POLYGON:
-            nResourceId = STR_ObjNameSingulPOLY;
-            break;
-        case DRAWING_POLY_POLYGON_PATH:
-            nResourceId = STR_ObjNameSingulPOLY;
-            break;
-        case DRAWING_RECTANGLE:
-            nResourceId = STR_ObjNameSingulRECT;
-            break;
-        case DRAWING_TEXT:
-            nResourceId = STR_ObjNameSingulTEXT;
-            break;
-        default:
-            nResourceId = -1;
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("UnknownAccessibleShape"));
-            uno::Reference<drawing::XShapeDescriptor> xDescriptor (mxShape, uno::UNO_QUERY);
-            if (xDescriptor.is())
-                sName += ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM(": "))
-                    + xDescriptor->getShapeType();
-            break;
-    }
-
-    if (nResourceId != -1)
-    {
-        ::vos::OGuard aGuard (::Application::GetSolarMutex());
-        sName = OUString (SVX_RESSTR((unsigned short)nResourceId));
-    }
-
-    return sName;
+    return ShapeTypeHandler::CreateAccessibleBaseName( mxShape );
 }
-
-
 
 
 ::rtl::OUString
