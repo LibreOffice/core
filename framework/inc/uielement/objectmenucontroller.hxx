@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objectmenucontroller.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 15:41:24 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:30:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,8 +106,8 @@
 #include <com/sun/star/frame/XStatusListener.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XPOPUPMENUCONTROLLER_HPP_
-#include <drafts/com/sun/star/frame/XPopupMenuController.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XPOPUPMENUCONTROLLER_HPP_
+#include <com/sun/star/frame/XPopupMenuController.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_EMBED_VERBDESCRIPTOR_HPP_
