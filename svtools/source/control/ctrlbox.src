@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrlbox.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-17 13:07:24 $
+ *  last change: $Author: rt $ $Date: 2002-11-04 17:07:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -585,7 +585,7 @@ String STR_SVT_INDEXENTRY_STROKE
     Text[ danish ] = "Stroke";
     Text[ swedish ] = "Stroke";
     Text[ polish ] = "Kreski (stroke)";
-    Text[ portuguese_brazilian ] = "Stroke";
+    Text[ portuguese_brazilian ] = "Tra�o";
     Text[ japanese ] = "総画数";
     Text[ korean ] = "획수";
     Text[ chinese_simplified ] = "笔画";
