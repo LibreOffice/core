@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objectcontactofobjlistpainter.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:25:43 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:20:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,10 @@
 #include <svx/sdr/contact/objectcontact.hxx>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 //////////////////////////////////////////////////////////////////////////////
 // predeclarations
 
@@ -79,7 +83,7 @@ namespace sdr
 {
     namespace contact
     {
-        class ObjectContactPainter : public ObjectContact
+        class SVX_DLLPUBLIC ObjectContactPainter : public ObjectContact
         {
         protected:
             // Bitfield
@@ -119,7 +123,7 @@ namespace sdr
         // typedef for transferring SdrObject
         typedef ::std::vector< SdrObject* > SdrObjectVector;
 
-        class ObjectContactOfObjListPainter : public ObjectContactPainter
+        class SVX_DLLPUBLIC ObjectContactOfObjListPainter : public ObjectContactPainter
         {
         protected:
             // Set StartPoint for next run, also given in constructor
