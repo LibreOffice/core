@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpoption.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-04-04 06:56:19 $
+ *  last change: $Author: os $ $Date: 2001-04-04 11:09:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -496,7 +496,9 @@ BOOL SdTpOptionsMisc::FillItemSet( SfxItemSet& rAttrs )
         aOptsItem.SetMasterPagePaintCaching( aCbxMasterPageCache.IsChecked() );
         aOptsItem.SetDragWithCopy( aCbxCopy.IsChecked() );
         aOptsItem.SetStartWithActualPage( aCbxStartWithActualPage.IsChecked() );
+#if SUPD>627
         aOptsItem.SetSummationOfParagraphs( aCbxCompatibility.IsChecked() );
+#endif
 
         rAttrs.Put( aOptsItem );
 
@@ -551,7 +553,9 @@ void SdTpOptionsMisc::Reset( const SfxItemSet& rAttrs )
     aCbxMasterPageCache.Check( aOptsItem.IsMasterPagePaintCaching() );
     aCbxCopy.Check( aOptsItem.IsDragWithCopy() );
     aCbxStartWithActualPage.Check( aOptsItem.IsStartWithActualPage() );
+#if SUPD>627
     aCbxCompatibility.Check( aOptsItem.IsSummationOfParagraphs() );
+#endif
     aCbxStartWithTemplate.SaveValue();
     aCbxMarkedHitMovesAlways.SaveValue();
     aCbxCrookNoContortion.SaveValue();
