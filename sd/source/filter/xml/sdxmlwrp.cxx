@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlwrp.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: cl $ $Date: 2002-01-22 10:18:53 $
+ *  last change: $Author: mtg $ $Date: 2002-01-29 15:52:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -378,8 +378,6 @@ sal_Int32 ReadThroughComponent(
     SvStorageStreamRef xEventsStream;
     xEventsStream = pStorage->OpenStream( sStreamName,
                                           STREAM_READ | STREAM_NOCREATE );
-    xEventsStream->SetBufferSize( 16*1024 );
-
     Any aAny;
     sal_Bool bEncrypted =
         xEventsStream->GetProperty(
@@ -387,8 +385,7 @@ sal_Int32 ReadThroughComponent(
         aAny.getValueType() == ::getBooleanCppuType() &&
         *(sal_Bool *)aAny.getValue();
 
-    Reference<io::XInputStream> xInputStream =
-        new utl::OInputStreamWrapper( *xEventsStream );
+    Reference<io::XInputStream> xInputStream = xEventsStream->GetXInputStream();
 
     // read from the stream
     return ReadThroughComponent(
