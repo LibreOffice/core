@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionExport.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dvo $ $Date: 2001-08-27 17:18:32 $
+ *  last change: $Author: dvo $ $Date: 2001-09-24 13:40:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,7 +157,6 @@ class XMLSectionExport
     const ::rtl::OUString sMainEntryCharacterStyleName;
     const ::rtl::OUString sParaStyleHeading;
     const ::rtl::OUString sParaStyleLevel;
-    const ::rtl::OUString sSection;
     const ::rtl::OUString sTitle;
     const ::rtl::OUString sName;
     const ::rtl::OUString sUseAlphabeticalSeparators;
@@ -174,16 +173,6 @@ class XMLSectionExport
     const ::rtl::OUString sDocumentIndex;
     const ::rtl::OUString sContentSection;
     const ::rtl::OUString sHeaderSection;
-
-    const ::rtl::OUString sTableOfContent;
-    const ::rtl::OUString sIllustrationIndex;
-    const ::rtl::OUString sTableIndex;
-    const ::rtl::OUString sAlphabeticalIndex;
-    const ::rtl::OUString sObjectIndex;
-    const ::rtl::OUString sBibliography;
-    const ::rtl::OUString sUserIndex;
-    const ::rtl::OUString sIndexBody;
-    const ::rtl::OUString sIndexTitle;
 
     const ::rtl::OUString sTextSection;
     const ::rtl::OUString sIsGlobalDocumentSection;
@@ -341,7 +330,7 @@ protected:
      * should have been set at GetExport() before calling this method.
      */
     void ExportBaseIndexStart(
-        const ::rtl::OUString sElementName,
+        ::xmloff::token::XMLTokenEnum eElement,
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::beans::XPropertySet > & rSection);
 

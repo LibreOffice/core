@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLRedlineExport.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
+ *  last change: $Author: dvo $ $Date: 2001-09-24 13:40:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -567,7 +567,7 @@ void XMLRedlineExport::ExportChangeInfo(
         {
             SvXMLElementExport aParagraph(
                 rExport, XML_NAMESPACE_TEXT, XML_P, sal_True, sal_False);
-            rExport.GetDocHandler()->characters(aSubString);
+            rExport.Characters(aSubString);
         }
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtftne.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
+ *  last change: $Author: dvo $ $Date: 2001-09-24 13:40:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,7 +240,7 @@ void XMLTextParagraphExport::exportTextFootnoteHelper(
                                      (bIsEndnote ? XML_ENDNOTE_CITATION :
                                                    XML_FOOTNOTE_CITATION),
                                      sal_False, sal_False);
-            GetExport().GetDocHandler()->characters(sText);
+            GetExport().Characters(sText);
         }
 
         {
@@ -398,7 +398,7 @@ void XMLTextParagraphExport::exportTextFootnoteConfigurationHelper(
             SvXMLElementExport aElem(GetExport(), XML_NAMESPACE_TEXT,
                                      XML_FOOTNOTE_CONTINUATION_NOTICE_FORWARD,
                                      sal_True, sal_False);
-            GetExport().GetDocHandler()->characters(sTmp);
+            GetExport().Characters(sTmp);
         }
 
         // begin notice / ergo sum
@@ -410,7 +410,7 @@ void XMLTextParagraphExport::exportTextFootnoteConfigurationHelper(
             SvXMLElementExport aElem(GetExport(), XML_NAMESPACE_TEXT,
                                      XML_FOOTNOTE_CONTINUATION_NOTICE_BACKWARD,
                                      sal_True, sal_False);
-            GetExport().GetDocHandler()->characters(sTmp);
+            GetExport().Characters(sTmp);
         }
     }
 }

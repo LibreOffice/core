@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLLineNumberingExport.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
+ *  last change: $Author: dvo $ $Date: 2001-09-24 13:40:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,7 +261,7 @@ void XMLLineNumberingExport::Export()
                 SvXMLElementExport aSeparatorElem(rExport, XML_NAMESPACE_TEXT,
                                                   XML_LINENUMBERING_SEPARATOR,
                                                   sal_True, sal_False);
-                rExport.GetDocHandler()->characters(sSeparator);
+                rExport.Characters(sSeparator);
             }
         }
         // else: no configuration: don't save -> default

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionExport.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: dvo $ $Date: 2001-08-27 17:18:32 $
+ *  last change: $Author: dvo $ $Date: 2001-09-24 13:40:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,7 +230,6 @@ XMLSectionExport::XMLSectionExport(
             RTL_CONSTASCII_USTRINGPARAM("MainEntryCharacterStyleName")),
         sParaStyleHeading(RTL_CONSTASCII_USTRINGPARAM("ParaStyleHeading")),
         sParaStyleLevel(RTL_CONSTASCII_USTRINGPARAM("ParaStyleLevel")),
-        sSection(GetXMLToken(XML_SECTION)),
         sTitle(RTL_CONSTASCII_USTRINGPARAM("Title")),
         sName(RTL_CONSTASCII_USTRINGPARAM("Name")),
         sUseAlphabeticalSeparators(
@@ -259,15 +258,6 @@ XMLSectionExport::XMLSectionExport(
         sDocumentIndex(RTL_CONSTASCII_USTRINGPARAM("DocumentIndex")),
         sContentSection(RTL_CONSTASCII_USTRINGPARAM("ContentSection")),
         sHeaderSection(RTL_CONSTASCII_USTRINGPARAM("HeaderSection")),
-        sTableOfContent(GetXMLToken(XML_TABLE_OF_CONTENT)),
-        sIllustrationIndex(GetXMLToken(XML_ILLUSTRATION_INDEX)),
-        sAlphabeticalIndex(GetXMLToken(XML_ALPHABETICAL_INDEX)),
-        sTableIndex(GetXMLToken(XML_TABLE_INDEX)),
-        sObjectIndex(GetXMLToken(XML_OBJECT_INDEX)),
-        sBibliography(GetXMLToken(XML_BIBLIOGRAPHY)),
-        sUserIndex(GetXMLToken(XML_USER_INDEX)),
-        sIndexBody(GetXMLToken(XML_INDEX_BODY)),
-        sIndexTitle(GetXMLToken(XML_INDEX_TITLE)),
         sTextSection(RTL_CONSTASCII_USTRINGPARAM("TextSection")),
         sIsGlobalDocumentSection(RTL_CONSTASCII_USTRINGPARAM("IsGlobalDocumentSection")),
         sProtectionKey(RTL_CONSTASCII_USTRINGPARAM("ProtectionKey")),
@@ -392,13 +382,9 @@ void XMLSectionExport::ExportSectionEnd(
             if (xIndex.is())
             {
                 // index end: close index body element
-                GetExport().GetDocHandler()->ignorableWhitespace(
-                    GetExport().sWS);
-                GetExport().GetDocHandler()->endElement(
-                    GetExport().GetNamespaceMap().GetQNameByKey(
-                        XML_NAMESPACE_TEXT, sIndexBody));
-                GetExport().GetDocHandler()->ignorableWhitespace(
-                    GetExport().sWS);
+                GetExport().EndElement( XML_NAMESPACE_TEXT, XML_INDEX_BODY,
+                                        sal_True );
+                GetExport().IgnorableWhitespace();
 
                 switch (MapSectionType(xIndex->getServiceName()))
                 {
@@ -452,12 +438,8 @@ void XMLSectionExport::ExportSectionEnd(
             GetExport().CheckAttrList();
 
             // element surrounded by whitespace
-            GetExport().GetDocHandler()->ignorableWhitespace(GetExport().sWS);
-            GetExport().GetDocHandler()->endElement(
-                GetExport().GetNamespaceMap().GetQNameByKey(
-                    XML_NAMESPACE_TEXT,
-                    GetXMLToken(eElement)));
-            GetExport().GetDocHandler()->ignorableWhitespace(GetExport().sWS);
+            GetExport().EndElement( XML_NAMESPACE_TEXT, eElement, sal_True);
+            GetExport().IgnorableWhitespace();
         }
         else
         {
@@ -518,13 +500,8 @@ void XMLSectionExport::ExportIndexHeaderStart(
     GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_NAME, xName->getName());
 
     // format already handled -> export only start element
-    GetExport().GetDocHandler()->ignorableWhitespace(GetExport().sWS);
-    GetExport().GetDocHandler()->startElement(
-        GetExport().GetNamespaceMap().GetQNameByKey(XML_NAMESPACE_TEXT,
-                                                    sIndexTitle),
-        GetExport().GetXAttrList() );
-    GetExport().GetDocHandler()->ignorableWhitespace(GetExport().sWS);
-    GetExport().ClearAttrList();
+    GetExport().StartElement( XML_NAMESPACE_TEXT, XML_INDEX_TITLE, sal_True );
+    GetExport().IgnorableWhitespace();
 }
 
 
@@ -605,13 +582,8 @@ void XMLSectionExport::ExportRegularSectionStart(
     }
 
     // export element
-    GetExport().GetDocHandler()->ignorableWhitespace( GetExport().sWS );
-    GetExport().GetDocHandler()->startElement(
-        GetExport().GetNamespaceMap().GetQNameByKey(XML_NAMESPACE_TEXT,
-                                                    sSection),
-        GetExport().GetXAttrList() );
-    GetExport().GetDocHandler()->ignorableWhitespace( GetExport().sWS );
-    GetExport().ClearAttrList();
+    GetExport().IgnorableWhitespace();
+    GetExport().StartElement( XML_NAMESPACE_TEXT, XML_SECTION, sal_True );
 
     // data source
     // unfortunately, we have to test all relevant strings for non-zero length
@@ -699,7 +671,7 @@ void XMLSectionExport::ExportTableOfContentStart(
     const Reference<XPropertySet> & rPropertySet)
 {
     // export TOC element start
-    ExportBaseIndexStart(sTableOfContent, rPropertySet);
+    ExportBaseIndexStart(XML_TABLE_OF_CONTENT, rPropertySet);
 
     // scope for table-of-content-source element
     {
@@ -750,7 +722,7 @@ void XMLSectionExport::ExportObjectIndexStart(
     const Reference<XPropertySet> & rPropertySet)
 {
     // export index start
-    ExportBaseIndexStart(sObjectIndex, rPropertySet);
+    ExportBaseIndexStart(XML_OBJECT_INDEX, rPropertySet);
 
     // scope for index source element
     {
@@ -775,7 +747,7 @@ void XMLSectionExport::ExportIllustrationIndexStart(
     const Reference<XPropertySet> & rPropertySet)
 {
     // export index start
-    ExportBaseIndexStart(sIllustrationIndex, rPropertySet);
+    ExportBaseIndexStart(XML_ILLUSTRATION_INDEX, rPropertySet);
 
     // scope for index source element
     {
@@ -792,7 +764,7 @@ void XMLSectionExport::ExportTableIndexStart(
     const Reference<XPropertySet> & rPropertySet)
 {
     // export index start
-    ExportBaseIndexStart(sTableIndex, rPropertySet);
+    ExportBaseIndexStart(XML_TABLE_INDEX, rPropertySet);
 
     // scope for index source element
     {
@@ -809,7 +781,7 @@ void XMLSectionExport::ExportAlphabeticalIndexStart(
     const Reference<XPropertySet> & rPropertySet)
 {
     // export TOC element start
-    ExportBaseIndexStart(sAlphabeticalIndex, rPropertySet);
+    ExportBaseIndexStart(XML_ALPHABETICAL_INDEX, rPropertySet);
 
     // scope for table-of-content-source element
     {
@@ -873,7 +845,7 @@ void XMLSectionExport::ExportUserIndexStart(
     const Reference<XPropertySet> & rPropertySet)
 {
     // export TOC element start
-    ExportBaseIndexStart(sUserIndex, rPropertySet);
+    ExportBaseIndexStart(XML_USER_INDEX, rPropertySet);
 
     // scope for table-of-content-source element
     {
@@ -903,7 +875,7 @@ void XMLSectionExport::ExportBibliographyStart(
     const Reference<XPropertySet> & rPropertySet)
 {
     // export TOC element start
-    ExportBaseIndexStart(sBibliography, rPropertySet);
+    ExportBaseIndexStart(XML_BIBLIOGRAPHY, rPropertySet);
 
     // scope for table-of-content-source element
     {
@@ -917,7 +889,7 @@ void XMLSectionExport::ExportBibliographyStart(
 
 
 void XMLSectionExport::ExportBaseIndexStart(
-    const OUString sElementName,
+    XMLTokenEnum eElement,
     const Reference<XPropertySet> & rPropertySet)
 {
     // protect + protection key
@@ -936,12 +908,8 @@ void XMLSectionExport::ExportBaseIndexStart(
     }
 
     // index  Element start
-    GetExport().GetDocHandler()->ignorableWhitespace( GetExport().sWS );
-    GetExport().GetDocHandler()->startElement(
-        GetExport().GetNamespaceMap().GetQNameByKey(XML_NAMESPACE_TEXT,
-                                                    sElementName),
-        GetExport().GetXAttrList() );
-    GetExport().ClearAttrList();
+    GetExport().IgnorableWhitespace();
+    GetExport().StartElement( XML_NAMESPACE_TEXT, eElement, sal_False );
 }
 
 static const sal_Char* aTypeSourceElementNameMap[] =
@@ -1013,7 +981,7 @@ void XMLSectionExport::ExportBaseIndexSource(
         aAny = rPropertySet->getPropertyValue(sTitle);
         OUString sTitleString;
         aAny >>= sTitleString;
-        GetExport().GetDocHandler()->characters(sTitleString);
+        GetExport().Characters(sTitleString);
     }
 
     // export level templates (all indices)
@@ -1065,13 +1033,8 @@ void XMLSectionExport::ExportBaseIndexBody(
     GetExport().CheckAttrList();
 
     // start surrounded by whitespace
-    GetExport().GetDocHandler()->ignorableWhitespace(GetExport().sWS);
-    GetExport().GetDocHandler()->startElement(
-        GetExport().GetNamespaceMap().GetQNameByKey(XML_NAMESPACE_TEXT,
-                                                    sIndexBody),
-        GetExport().GetXAttrList() );
-    GetExport().ClearAttrList();
-    GetExport().GetDocHandler()->ignorableWhitespace(GetExport().sWS);
+    GetExport().IgnorableWhitespace();
+    GetExport().StartElement( XML_NAMESPACE_TEXT, XML_INDEX_BODY, sal_True );
 }
 
 void XMLSectionExport::ExportTableAndIllustrationIndexSourceAttributes(
@@ -1580,7 +1543,7 @@ void XMLSectionExport::ExportIndexTemplateElement(
         // entry text or span element: write text
         if (TOK_TTYPE_TEXT == nTokenType)
         {
-            GetExport().GetDocHandler()->characters(sText);
+            GetExport().Characters(sText);
         }
     }
 }

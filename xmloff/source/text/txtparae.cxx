@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: mib $ $Date: 2001-09-20 14:18:38 $
+ *  last change: $Author: dvo $ $Date: 2001-09-24 13:40:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -651,9 +651,7 @@ void XMLTextParagraphExport::exportListChange(
                 OUString *pElem = (*pListElements)[pListElements->Count()-1];
                 pListElements->Remove( pListElements->Count()-1 );
 
-                GetExport().GetDocHandler()->ignorableWhitespace(
-                        GetExport().sWS );
-                GetExport().GetDocHandler()->endElement( *pElem );
+                GetExport().EndElement( *pElem, sal_True );
 
                 delete pElem;
             }
@@ -727,11 +725,8 @@ void XMLTextParagraphExport::exportListChange(
                     GetExport().GetNamespaceMap().GetQNameByKey(
                                         XML_NAMESPACE_TEXT,
                                         GetXMLToken(eLName) ) );
-            GetExport().GetDocHandler()->ignorableWhitespace(
-                    GetExport().sWS );
-            GetExport().GetDocHandler()->startElement(
-                    *pElem, GetExport().GetXAttrList() );
-            GetExport().ClearAttrList();
+            GetExport().IgnorableWhitespace();
+            GetExport().StartElement( *pElem, sal_False );
 
             if( !pListElements )
                 pListElements = new OUStrings_Impl;
@@ -752,10 +747,8 @@ void XMLTextParagraphExport::exportListChange(
             pElem = new OUString(  GetExport().GetNamespaceMap().GetQNameByKey(
                                         XML_NAMESPACE_TEXT,
                                         GetXMLToken(eLName) ) );
-            GetExport().GetDocHandler()->ignorableWhitespace( GetExport().sWS );
-            GetExport().GetDocHandler()->startElement(
-                    *pElem, GetExport().GetXAttrList() );
-            GetExport().ClearAttrList();
+            GetExport().IgnorableWhitespace();
+            GetExport().StartElement( *pElem, sal_False );
 
             pListElements->Insert( pElem, pListElements->Count() );
         }
@@ -771,8 +764,7 @@ void XMLTextParagraphExport::exportListChange(
                 "SwXMLExport::ExportListChange: list elements missing" );
 
         OUString *pElem = (*pListElements)[pListElements->Count()-1];
-        GetExport().GetDocHandler()->ignorableWhitespace( GetExport().sWS );
-        GetExport().GetDocHandler()->endElement( *pElem );
+        GetExport().EndElement( *pElem, sal_True );
 
         pListElements->Remove( pListElements->Count()-1 );
         delete pElem;
@@ -789,10 +781,8 @@ void XMLTextParagraphExport::exportListChange(
         pElem = new OUString( GetExport().GetNamespaceMap().GetQNameByKey(
                                 XML_NAMESPACE_TEXT,
                                 GetXMLToken(XML_LIST_ITEM) ) );
-        GetExport().GetDocHandler()->ignorableWhitespace( GetExport().sWS );
-        GetExport().GetDocHandler()->startElement( *pElem,
-                GetExport().GetXAttrList() );
-        GetExport().ClearAttrList();
+        GetExport().IgnorableWhitespace();
+        GetExport().StartElement( *pElem, sal_False );
 
         pListElements->Insert( pElem, pListElements->Count() );
     }
@@ -1810,7 +1800,7 @@ void XMLTextParagraphExport::exportTextField(
         else
         {
             // write only characters
-            GetExport().GetDocHandler()->characters(rTextRange->getString());
+            GetExport().Characters(rTextRange->getString());
         }
 
     }
@@ -2368,7 +2358,7 @@ void XMLTextParagraphExport::_exportTextGraphic(
     {
         SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_SVG,
                                   XML_DESC, sal_True, sal_False );
-        GetExport().GetDocHandler()->characters( sAltText );
+        GetExport().Characters( sAltText );
     }
     */
 
@@ -2481,7 +2471,7 @@ void XMLTextParagraphExport::exportAlternativeText(
         {
             SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_SVG,
                                       XML_DESC, sal_True, sal_False );
-            GetExport().GetDocHandler()->characters( sAltText );
+            GetExport().Characters( sAltText );
         }
     }
 }
@@ -2762,7 +2752,7 @@ void XMLTextParagraphExport::exportText( const OUString& rText,
         {
             DBG_ASSERT( 0==nSpaceChars, "pending spaces" );
             OUString sExp( rText.copy( nExpStartPos, nPos - nExpStartPos ) );
-            GetExport().GetDocHandler()->characters( sExp );
+            GetExport().Characters( sExp );
             nExpStartPos = nPos;
         }
 
@@ -2830,7 +2820,7 @@ void XMLTextParagraphExport::exportText( const OUString& rText,
     {
         DBG_ASSERT( 0==nSpaceChars, " pending spaces " );
         OUString sExp( rText.copy( nExpStartPos, nEndPos - nExpStartPos ) );
-        GetExport().GetDocHandler()->characters( sExp );
+        GetExport().Characters( sExp );
     }
 
     // If there are some spaces left, they have to be exported now.
@@ -3002,12 +2992,10 @@ void XMLTextParagraphExport::exportRuby(
                                      XML_STYLE_NAME, sStyleName);
 
             // export <text:ruby> and <text:ruby-base> start elements
-            GetExport().GetDocHandler()->startElement(
-                sTextRuby, GetExport().GetXAttrList());
+            GetExport().StartElement( XML_NAMESPACE_TEXT, XML_RUBY, sal_False);
             GetExport().ClearAttrList();
-            GetExport().GetDocHandler()->startElement(
-                sTextRubyBase, GetExport().GetXAttrList());
-
+            GetExport().StartElement( XML_NAMESPACE_TEXT, XML_RUBY_BASE,
+                                      sal_False );
             bOpenRuby = sal_True;
         }
         else
@@ -3020,7 +3008,8 @@ void XMLTextParagraphExport::exportRuby(
                 return;
 
             // close <text:ruby-base>
-            GetExport().GetDocHandler()->endElement(sTextRubyBase);
+            GetExport().EndElement(XML_NAMESPACE_TEXT, XML_RUBY_BASE,
+                                   sal_False);
 
             // write the ruby text (with char style)
             {
@@ -3033,11 +3022,11 @@ void XMLTextParagraphExport::exportRuby(
                     GetExport(), XML_NAMESPACE_TEXT, XML_RUBY_TEXT,
                     sal_False, sal_False);
 
-                GetExport().GetDocHandler()->characters(sOpenRubyText);
+                GetExport().Characters(sOpenRubyText);
             }
 
             // and finally, close the ruby
-            GetExport().GetDocHandler()->endElement(sTextRuby);
+            GetExport().EndElement(XML_NAMESPACE_TEXT, XML_RUBY, sal_False);
             bOpenRuby = sal_False;
         }
     }

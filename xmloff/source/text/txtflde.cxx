@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: dvo $ $Date: 2001-08-02 18:51:31 $
+ *  last change: $Author: dvo $ $Date: 2001-09-24 13:40:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1631,7 +1631,7 @@ void XMLTextFieldExport::ExportFieldHelper(
                       sal_True, XML_NAMESPACE_OFFICE);
         SvXMLElementExport aUrlField(rExport, XML_NAMESPACE_TEXT, XML_A,
                                      sal_False, sal_False);
-        GetExport().GetDocHandler()->characters(sPresentation);
+        GetExport().Characters(sPresentation);
         break;
     }
 
@@ -1708,7 +1708,7 @@ void XMLTextFieldExport::ExportFieldHelper(
     default:
         DBG_ERROR("unkown field type encountered!");
         // always export content
-        GetExport().GetDocHandler()->characters(sPresentation);
+        GetExport().Characters(sPresentation);
     }
 }
 
@@ -2080,10 +2080,10 @@ void XMLTextFieldExport::ExportElement(enum XMLTokenEnum eElementName,
         SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT,
                                   eElementName, bAddSpace, bAddSpace );
         // export content
-        GetExport().GetDocHandler()->characters(sContent);
+        GetExport().Characters(sContent);
     } else {
         // always export content
-        GetExport().GetDocHandler()->characters(sContent);
+        GetExport().Characters(sContent);
     }
 }
 
@@ -2126,7 +2126,7 @@ void XMLTextFieldExport::ExportMacro(
     GetExport().GetEventExport().ExportSingleEvent( aSeq, sOnClick, sal_False );
 
     // and finally, the field presentation
-    GetExport().GetDocHandler()->characters(rContent);
+    GetExport().Characters(rContent);
 }
 
 /// export all data-style related attributes
@@ -2311,7 +2311,7 @@ void XMLTextFieldExport::ProcessParagraphSequence(
     {
         SvXMLElementExport aParagraph(
             GetExport(), XML_NAMESPACE_TEXT, XML_P, sal_True, sal_False);
-        GetExport().GetDocHandler()->characters(aSubString);
+        GetExport().Characters(aSubString);
     }
 }
 
