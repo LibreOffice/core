@@ -2,9 +2,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.46 $
+#   $Revision: 1.47 $
 #
-#   last change: $Author: bustamam $ $Date: 2002-04-25 22:05:34 $
+#   last change: $Author: hr $ $Date: 2002-05-13 15:35:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,7 +60,7 @@
 #
 #*************************************************************************
 
-LIBSMKREV!:="$$Revision: 1.46 $$"
+LIBSMKREV!:="$$Revision: 1.47 $$"
 
 .IF "$(COM)"=="WTC"
 LIBPRE=libr
@@ -72,7 +72,14 @@ LIBPRE=libr
 #externe libs in plattform.mk
 #
 
-ICUI18NLIB=-licui18n -licuuc -licule -licudata
+ICUI18NLIB=-licui18n -licuuc -licule
+# Sparc, PowerPC platforms are big-endian otherwise assume little-endian.
+# should we put this in unx*.mk platform dependent files?
+.IF "$(CPU)"=="S" || "$(CPU)"=="P"
+ICUI18NLIB+=-licudt20b
+.ELSE
+ICUI18NLIB+=-licudt20l
+.ENDIF
 GPC3RDLIB=-lgpc
 SALHELPERLIB=-lsalhelper$(UDK_MAJOR)$(COMID)
 XMLSCRIPTLIB =-lxcr$(OFFICEUPD)$(DLLPOSTFIX)
