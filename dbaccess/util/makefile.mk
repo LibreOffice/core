@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: oj $ $Date: 2001-07-16 07:57:35 $
+#   last change: $Author: fs $ $Date: 2001-08-16 14:11:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -157,15 +157,8 @@ SHL2STDLIBS= \
         $(SOTLIB)				\
         $(SO2LIB)				\
         $(UCBHELPERLIB) 		\
-        $(DBTOOLSLIB)
-
-.IF "$(DBTOOLSLIB)" == ""
-SHL2STDLIBS+=idbt$(UPD)$(DLLPOSTFIX).lib
-.ENDIF
-
-.IF "$(COMPHELPERLIB)" == ""
-SHL2STDLIBS+= icomphelp2.lib
-.ENDIF
+        $(DBTOOLSLIB)			\
+        $(BASICLIB)
 
 SHL2LIBS=$(LIB2TARGET)
 SHL2DEF=$(MISC)$/$(SHL2TARGET).def
