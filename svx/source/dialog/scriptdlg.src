@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scriptdlg.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 12:02:34 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 16:38:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,7 @@ ModalDialog RID_DLG_SCRIPTORGANIZER
     };
 
 };
-ModalDialog DLG_NEWLIB
+ModalDialog RID_DLG_NEWLIB
 {
     Text [ de ] = "Bibliothek erstellen" ;
     Text [ en-US ] = "Create Library" ;
@@ -229,62 +229,62 @@ ModalDialog DLG_NEWLIB
         Text [ en-US ] = "Enter the new name for the selected object." ;
     };
 };
-String STR_DELQUERY
+String RID_SVXSTR_DELQUERY
 {
     Text [ de ] = "Möchten Sie das folgende Objekt löschen?";
     Text [ en-US ] = "Do you want to delete the following object?";
 };
-String STR_DELQUERY_TITLE
+String RID_SVXSTR_DELQUERY_TITLE
 {
     Text [ de ] = "Löschen bestätigen";
     Text [ en-US ] = "Confirm Deletion";
 };
-String STR_DELFAILED
+String RID_SVXSTR_DELFAILED
 {
     Text [ de ] = "Das ausgewälte Objekt konnte nicht gelöscht werden.";
     Text [ en-US ] = "The selected object could not be deleted.";
 };
-String STR_DELFAILEDPERM
+String RID_SVXSTR_DELFAILEDPERM
 {
     Text [ de ] = " Sie haben keine Berechtigung zum Löschen dieses Objektes.";
     Text [ en-US ] = " You do not have permission to delete this object.";
 };
-String STR_DELFAILED_TITLE
+String RID_SVXSTR_DELFAILED_TITLE
 {
     Text [ de ] = "Fehler beim Löschen";
     Text [ en-US ] = "Error Deleting Object";
 };
-String STR_CREATEFAILED
+String RID_SVXSTR_CREATEFAILED
 {
     Text [ de ] = "Das Objekt konnte nicht erstellt werden.";
     Text [ en-US ] = "The object could not be created.";
 };
-String STR_CREATEFAILEDDUP
+String RID_SVXSTR_CREATEFAILEDDUP
 {
     Text [ de ] = " Ein Objekt mit dem selben Namen existiert bereits.";
     Text [ en-US ] = " Object with the same name already exists.";
 };
-String STR_CREATEFAILEDPERM
+String RID_SVXSTR_CREATEFAILEDPERM
 {
     Text [ de ] = " Sie haben keine Berechtigung zum Erstellen dieses Objektes.";
     Text [ en-US ] = " You do not have permission to create this object.";
 };
-String STR_CREATEFAILED_TITLE
+String RID_SVXSTR_CREATEFAILED_TITLE
 {
     Text [ de ] = "Fehler beim Erstellen";
     Text [ en-US ] = "Error Creating Object";
 };
-String STR_RENAMEFAILED
+String RID_SVXSTR_RENAMEFAILED
 {
     Text [ de ] = "Das Objekt konnte nicht umbenannt werden.";
     Text [ en-US ] = "The object could not be renamed.";
 };
-String STR_RENAMEFAILEDPERM
+String RID_SVXSTR_RENAMEFAILEDPERM
 {
     Text [ de ] = " Sie haben keine Berechtigung zum Umbenennen dieses Objektes.";
     Text [ en-US ] = " You do not have permission to rename this object.";
 };
-String STR_RENAMEFAILED_TITLE
+String RID_SVXSTR_RENAMEFAILED_TITLE
 {
     Text [ de ] = "Fehler beim Umbennen";
     Text [ en-US ] = "Error Renaming Object";
