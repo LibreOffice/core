@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globstr.hrc,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 14:01:21 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 12:56:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -562,7 +562,10 @@
 #define STR_NAME_ERROR_SELECTION    399
 #define STR_NAME_ERROR_NAME         400
 
-#define STR_COUNT                   401
+#define STR_CHANGED_MOVE_REJECTION_WARNING      401
+#define STR_CHANGED_DELETE_REJECTION_WARNING    402
+
+#define STR_COUNT                   403
 
 
 #endif
