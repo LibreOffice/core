@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LayoutManager.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Date: 2004-02-25 18:14:05 $
+ *  last change: $Date: 2004-07-23 10:47:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,7 +158,7 @@ public class LayoutManager extends TestCase {
         log.println("TestObject: " + util.utils.getImplName(xManager));
         tEnv = new TestEnvironment(xManager);
 
-        tEnv.addObjRelation("XLayoutManager.Frame", xTextDoc.getCurrentController().getFrame());
+        tEnv.addObjRelation("XLayoutManager.TextDoc", xTextDoc);
 
         return tEnv;
     }
