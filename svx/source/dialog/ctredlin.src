@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctredlin.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-01 20:43:45 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 20:44:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
  //
  // $Workfile:   ctredlin.src  $
  //   $Author: kz $
- //     $Date: 2001-03-01 20:43:45 $
- // $Revision: 1.10 $
+ //     $Date: 2001-03-09 20:44:09 $
+ // $Revision: 1.11 $
  //  $Logfile:   T:/svx/source/dialog/ctredlin.srv  $
  //---------------------------------------------------------------------------
 
@@ -993,7 +993,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text [ spanish ] = "Descripción" ;
         Text [ french ] = "Description" ;
         Text [ dutch ] = "Omschrijviing" ;
-        Text [ portuguese ] = "Comentário" ;
+        Text [ portuguese ] = "Descrição" ;
         Text[ chinese_simplified ] = "ËµÃ÷";
         Text[ russian ] = "Îïèñàíèå";
         Text[ polish ] = "Komentarz";
