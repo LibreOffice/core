@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuolbull.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 11:07:24 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:47:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,11 +97,12 @@
 #ifndef SD_WINDOW_SHELL_HXX
 #include "Window.hxx"
 #endif
-#ifndef SD_OUTLINE_BULLET_DLG_HXX
-#include "OutlineBulletDlg.hxx"
-#endif
+//CHINA001 #ifndef SD_OUTLINE_BULLET_DLG_HXX
+//CHINA001 #include "OutlineBulletDlg.hxx"
+//CHINA001 #endif
 #include "drawdoc.hxx"
-
+#include "sdabstdlg.hxx" //CHINA001
+#include "dlgolbul.hrc" //CHINA001
 namespace sd {
 
 TYPEINIT1( FuOutlineBullet, FuPoor );
@@ -130,8 +131,11 @@ FuOutlineBullet::FuOutlineBullet(ViewShell* pViewShell, ::sd::Window* pWindow,
         aNewAttr.Put( aEditAttr, FALSE );
 
         // Dialog hochfahren und ausfuehren
-        OutlineBulletDlg* pDlg = new OutlineBulletDlg( NULL, &aNewAttr, pView );
-
+        //CHINA001 OutlineBulletDlg* pDlg = new OutlineBulletDlg( NULL, &aNewAttr, pView );
+        SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
+        DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
+        SfxAbstractTabDialog* pDlg = pFact->CreateSdItemSetTabDlg(ResId( TAB_OUTLINEBULLET ), NULL, &aNewAttr, pView );
+        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
         USHORT nResult = pDlg->Execute();
 
         switch( nResult )
