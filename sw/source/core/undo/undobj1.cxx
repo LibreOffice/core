@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undobj1.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:08:06 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 14:41:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,6 @@
 #ifndef _DCONTACT_HXX
 #include <dcontact.hxx>
 #endif
-#include <svx/svdundo.hxx> // #111827#
 
 // Inline Methode vom UndoIter
 inline SwDoc& SwUndoIter::GetDoc() const { return *pAktPam->GetDoc(); }
@@ -302,7 +301,9 @@ void SwUndoFlyBase::DelFly( SwDoc* pDoc )
 
 SwUndoInsLayFmt::SwUndoInsLayFmt( SwFrmFmt* pFormat )
     : SwUndoFlyBase( pFormat,
-            RES_DRAWFRMFMT == pFormat->Which() ? UNDO_INSDRAWFMT : UNDO_INSLAYFMT )
+                     RES_DRAWFRMFMT == pFormat->Which() ?
+                     UNDO_INSDRAWFMT : UNDO_INSLAYFMT ),
+      pSdrObjLast(NULL), pSdrObjCopy(NULL), pSdrUndo(NULL)
 {
     const SwFmtAnchor& rAnchor = pFrmFmt->GetAnchor();
     nRndId = rAnchor.GetAnchorId();
@@ -327,6 +328,12 @@ SwUndoInsLayFmt::SwUndoInsLayFmt( SwFrmFmt* pFormat )
     default:
         ASSERT( FALSE, "Was denn fuer ein FlyFrame?" );
     }
+}
+
+SwUndoInsLayFmt::~SwUndoInsLayFmt()
+{
+    delete pSdrUndo;
+    delete pSdrObjCopy;
 }
 
 void SwUndoInsLayFmt::Undo( SwUndoIter& rUndoIter )
@@ -407,15 +414,26 @@ String SwUndoInsLayFmt::GetComment() const
 
         if (pSdrObj)
         {
-            SdrObject * pSdrObjCopy = pSdrObj->Clone();
-            SdrUndoNewObj * pSdrUndo = new SdrUndoNewObj(*pSdrObjCopy);
+            // -> #i30295#
+            if (pSdrObj != pSdrObjLast)
+            {
+                delete pSdrUndo;
+                delete pSdrObjCopy;
 
-            aResult = pSdrUndo->GetComment();
+                pSdrObjCopy = pSdrObj->Clone();
 
-            delete pSdrUndo;
-            delete pSdrObjCopy;
+                pSdrUndo = new SdrUndoNewObj(*pSdrObjCopy);
 
-            bDone = true;
+                pSdrObjLast = pSdrObj;
+            }
+            // <- #i30295#
+
+            if (pSdrUndo)
+            {
+                aResult = pSdrUndo->GetComment();
+
+                bDone = true;
+            }
         }
     }
 
