@@ -2,9 +2,9 @@
  *
  *  $RCSfile: units.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 13:04:53 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 13:51:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -323,21 +323,21 @@ ItemList [ language_user1 ] =
     {
          < "mm" ; FUNIT_MM ; > ;
         < "cm" ; FUNIT_CM ; > ;
-        < "Population_s" ; FUNIT_M ; > ;
+        < "m" ; FUNIT_M ; > ;
         < "km" ; FUNIT_KM ; > ;
         < "twips" ; FUNIT_TWIP ; > ;
         < "twip" ; FUNIT_TWIP ; > ;
-        < "pt" ; FUNIT_POINT ; > ;
+        < "pkt." ; FUNIT_POINT ; > ;
         < "PI" ; FUNIT_PICA ; > ;
         < "\"" ; FUNIT_INCH ; > ;
-        < "in" ; FUNIT_INCH ; > ;
+        < "i" ; FUNIT_INCH ; > ;
         < "Tommer" ; FUNIT_INCH ; > ;
         < "'" ; FUNIT_FOOT ; > ;
-        < "ft" ; FUNIT_FOOT ; > ;
+        < "fod" ; FUNIT_FOOT ; > ;
         < "Fod" ; FUNIT_FOOT ; > ;
-        < "feet" ; FUNIT_FOOT ; > ;
+        < "fod" ; FUNIT_FOOT ; > ;
         < "Mil" ; FUNIT_MILE ; > ;
-        < "mile" ; FUNIT_MILE ; > ;
+        < "mil" ; FUNIT_MILE ; > ;
         < "%" ; FUNIT_PERCENT ; > ;
     };
     ItemList [ swedish ] =
@@ -655,7 +655,50 @@ ItemList [ language_user1 ] =
         < "míľa" ; FUNIT_MILE ; > ;
         < "%" ; FUNIT_PERCENT ; > ;
     };
+    ItemList [ hungarian ] =
+    {
+         < "mm" ; FUNIT_MM ; > ;
+        < " cm" ; FUNIT_CM ; > ;
+        < "m" ; FUNIT_M ; > ;
+        < "km" ; FUNIT_KM ; > ;
+        < "twip" ; FUNIT_TWIP ; > ;
+        < "twip" ; FUNIT_TWIP ; > ;
+        < "pt" ; FUNIT_POINT ; > ;
+        < "pi" ; FUNIT_PICA ; > ;
+        < "\"" ; FUNIT_INCH ; > ;
+        < "in" ; FUNIT_INCH ; > ;
+        < "hüvelyk" ; FUNIT_INCH ; > ;
+        < "'" ; FUNIT_FOOT ; > ;
+        < "ft" ; FUNIT_FOOT ; > ;
+        < "láb" ; FUNIT_FOOT ; > ;
+        < "láb" ; FUNIT_FOOT ; > ;
+        < "mérföld" ; FUNIT_MILE ; > ;
+        < "mérföld" ; FUNIT_MILE ; > ;
+        < "%" ; FUNIT_PERCENT ; > ;
     };
+    ItemList [ slovenian ] =
+    {
+         < "mm" ; FUNIT_MM ; > ;
+        < "cm" ; FUNIT_CM ; > ;
+        < "m" ; FUNIT_M ; > ;
+        < "km" ; FUNIT_KM ; > ;
+        < "twips" ; FUNIT_TWIP ; > ;
+        < "twip" ; FUNIT_TWIP ; > ;
+        < "pt" ; FUNIT_POINT ; > ;
+        < "pi" ; FUNIT_PICA ; > ;
+        < "\"" ; FUNIT_INCH ; > ;
+        < "in" ; FUNIT_INCH ; > ;
+        < "palec" ; FUNIT_INCH ; > ;
+        < "'" ; FUNIT_FOOT ; > ;
+        < "ft" ; FUNIT_FOOT ; > ;
+        < "čevelj" ; FUNIT_FOOT ; > ;
+        < "čevljev" ; FUNIT_FOOT ; > ;
+        < "milj" ; FUNIT_MILE ; > ;
+        < "milja" ; FUNIT_MILE ; > ;
+        < "%" ; FUNIT_PERCENT ; > ;
+    };
+    };
+
 
 
 
