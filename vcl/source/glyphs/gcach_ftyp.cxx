@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.22 $
- *  last change: $Author: hdu $ $Date: 2001-03-29 16:05:35 $
+ *  $Revision: 1.23 $
+ *  last change: $Author: hdu $ $Date: 2001-03-30 09:05:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -378,8 +378,9 @@ static int SetVerticalFlags( sal_Unicode nChar )
     {
         if( nChar == 0x2010 || nChar == 0x2015
         ||  nChar == 0x2016 || nChar == 0x2026
-        || (nChar >= 0x3008 && nChar <= 0x3017) )
-            return 0;   // not turned
+        || (nChar >= 0x3008 && nChar <= 0x3017)
+        ||  nChar >= 0xFF00 )
+            return 0;   // not rotated
 /*
         else if( nChar == 0x3001 || nChar == 0x3002 )
         {
