@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crefl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dbo $ $Date: 2002-10-17 07:49:57 $
+ *  last change: $Author: dbo $ $Date: 2002-11-11 16:41:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/reflection/XTypeDescription.hpp>
 
+using namespace com::sun::star;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 using namespace cppu;
@@ -550,7 +551,28 @@ void SAL_CALL component_getImplementationEnvironment(
 sal_Bool SAL_CALL component_writeInfo(
     void * pServiceManager, void * pRegistryKey )
 {
-    return component_writeInfoHelper( pServiceManager, pRegistryKey, g_entries );
+    if (component_writeInfoHelper( pServiceManager, pRegistryKey, g_entries ))
+    {
+        try
+        {
+            // register singleton
+            registry::XRegistryKey * pKey =
+                reinterpret_cast< registry::XRegistryKey * >( pRegistryKey );
+            Reference< registry::XRegistryKey > xKey(
+                pKey->createKey(
+                    OUSTR(IMPLNAME "/UNO/SINGLETONS/com.sun.star.reflection.theCoreReflection") ) );
+            xKey->setStringValue( OUSTR("com.sun.star.reflection.CoreReflection") );
+            return sal_True;
+        }
+        catch (Exception & exc)
+        {
+#ifdef _DEBUG
+            OString cstr( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
+            OSL_ENSURE( 0, cstr.getStr() );
+#endif
+        }
+    }
+    return sal_False;
 }
 //==================================================================================================
 void * SAL_CALL component_getFactory(
