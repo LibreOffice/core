@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 18:22:53 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 17:09:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1005,7 +1005,7 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode );
 Writer& OutWW8_SwFmtHoriOrient( Writer& rWrt, const SfxPoolItem& rHt );
 Writer& OutWW8_SwFmtVertOrient( Writer& rWrt, const SfxPoolItem& rHt );
 
-sal_uInt16 GetWordFirstLineOffset(const SwNumFmt &rFmt);
+sal_Int16 GetWordFirstLineOffset(const SwNumFmt &rFmt);
 //A bit of a bag on the side for now
 String FieldString(ww::eField eIndex);
 String BookmarkToWord(const String &rBookmark);
