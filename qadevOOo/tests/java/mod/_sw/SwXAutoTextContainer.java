@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXAutoTextContainer.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:18:42 $
+ *  last change:$Date: 2003-05-27 13:42:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,7 @@ public class SwXAutoTextContainer extends TestCase {
         // first we write what we are intend to do to log file
         log.println("creating a AutoTextContainer");
         try {
-            XMultiServiceFactory myMSF = Param.getMSF();
+            XMultiServiceFactory myMSF = (XMultiServiceFactory)Param.getMSF();
             Object oInst = myMSF.createInstance
                 ("com.sun.star.text.AutoTextContainer");
             oContainer = (XAutoTextContainer)UnoRuntime.queryInterface
