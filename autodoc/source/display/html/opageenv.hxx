@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opageenv.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 14:16:48 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 08:58:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,7 @@ class OuputPage_Environment
     void                MoveDir_2Index();
     void                MoveDir_Up();
 
+    void                SetFile_Css();
     void                SetFile_Overview();
     void                SetFile_AllDefs();
     void                SetFile_Index(
@@ -130,7 +131,7 @@ class OuputPage_Environment
                                                 i_rEnum );
     void                SetFile_Typedef(
                             const ary::cpp::Typedef &
-                                                i_rEnum );
+                                                i_rTypedef );
     void                SetFile_Operations(
                             const ary::cpp::FileGroup *
                                                 i_pFile = 0 );  /// Only needed for global functions.
