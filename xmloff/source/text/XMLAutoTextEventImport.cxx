@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLAutoTextEventImport.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hjs $ $Date: 2001-09-12 10:31:04 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:37:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,8 +119,10 @@ using ::xmloff::token::XML_AUTO_TEXT_EVENTS;
 const sal_Char sAPI_AutoText[] = "com.sun.star.text.AutoTextContainer";
 
 
-XMLAutoTextEventImport::XMLAutoTextEventImport() throw() :
-    SvXMLImport()
+// #110680#
+XMLAutoTextEventImport::XMLAutoTextEventImport(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory) throw()
+:   SvXMLImport(xServiceFactory)
 {
 }
 
@@ -196,6 +198,8 @@ Reference< XInterface > SAL_CALL XMLAutoTextEventImport_createInstance(
         const Reference< XMultiServiceFactory > & rSMgr)
     throw( Exception )
 {
-    return (cppu::OWeakObject*)new XMLAutoTextEventImport;
+    // #110680#
+    // return (cppu::OWeakObject*)new XMLAutoTextEventImport;
+    return (cppu::OWeakObject*)new XMLAutoTextEventImport(rSMgr);
 }
 
