@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhtml.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2001-07-27 10:24:29 $
+ *  last change: $Author: mba $ $Date: 2001-11-09 15:24:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -527,23 +527,27 @@ void SfxHTMLParser::StartFileDownload( const String& rURL, int nToken,
             pDLMedium->SetLoadTargetFrame( pShMedium->GetLoadTargetFrame() );
     }
 
-    // Downloading-Flag auf TRUE setzen. Es werden dann auch
-    // Data-Available-Links, wenn wir in den Pending-Staus gelangen.
-    SetDownloadingFile( TRUE );
-
     // Download anstossen (Achtung: Kann auch synchron sein).
-    pDLMedium->DownLoad( STATIC_LINK( this, SfxHTMLParser, FileDownloadDone ) );
-
-    // Wenn das Dowsnloading-Flag noch gesetzt ist erfolgt der Download
-    // asynchron. Wir gehen dann in den Pedning-Staus und warten dort.
-    // Solange sind alle Aufrufe des Data-Avaialble-Link gesperrt.
-    if( IsDownloadingFile() )
+    if ( pMedium->GetDoneLink() == Link() )
+        pDLMedium->DownLoad();
+    else
     {
-        // Den aktuellen Zustand einfrieren und in den Pending-Status gehen.
-        // Wenn der Download beendet oder abgebrochen wurde, wird ueber
-        // NewDataRead ein Continue mit dem uebergeben Token angesteossen.
-        SaveState( nToken );
-        eState = SVPAR_PENDING;
+        // Downloading-Flag auf TRUE setzen. Es werden dann auch
+        // Data-Available-Links, wenn wir in den Pending-Staus gelangen.
+        SetDownloadingFile( TRUE );
+        pDLMedium->DownLoad( STATIC_LINK( this, SfxHTMLParser, FileDownloadDone ) );
+
+        // Wenn das Dowsnloading-Flag noch gesetzt ist erfolgt der Download
+        // asynchron. Wir gehen dann in den Pedning-Staus und warten dort.
+        // Solange sind alle Aufrufe des Data-Avaialble-Link gesperrt.
+        if( IsDownloadingFile() )
+        {
+            // Den aktuellen Zustand einfrieren und in den Pending-Status gehen.
+            // Wenn der Download beendet oder abgebrochen wurde, wird ueber
+            // NewDataRead ein Continue mit dem uebergeben Token angesteossen.
+            SaveState( nToken );
+            eState = SVPAR_PENDING;
+        }
     }
 }
 
