@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocrsrhelper.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 13:51:12 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:26:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,6 +231,7 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertyMap* pMap
     switch(pMap->nWID)
     {
         case FN_UNO_PARA_CHAPTER_NUMBERING_LEVEL:
+#if 0
             if( pAny )
             {
                 SwFmtColl* pFmt = 0;
@@ -241,6 +242,20 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertyMap* pMap
                 sal_Int8 nRet = -1;
                 if(pFmt && ((SwTxtFmtColl*)pFmt)->GetOutlineLevel() != NO_NUMBERING)
                     nRet = ((SwTxtFmtColl*)pFmt)->GetOutlineLevel();
+                *pAny <<= nRet;
+            }
+#endif
+            if (pAny)
+            {
+                const SwTxtNode * pTmpNode = pNode;
+
+                if (!pTmpNode)
+                    pTmpNode = rPam.GetNode()->GetTxtNode();
+
+                sal_Int8 nRet = -1;
+                if (pTmpNode && pTmpNode->GetOutlineLevel() != NO_NUMBERING)
+                    nRet = pTmpNode->GetOutlineLevel();
+
                 *pAny <<= nRet;
             }
         break;
