@@ -2,9 +2,9 @@
  *
  *  $RCSfile: field.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mt $ $Date: 2001-10-31 09:53:27 $
+ *  last change: $Author: ssa $ $Date: 2002-10-25 11:44:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,12 @@
 #ifndef _SV_RC_H
 #include <rc.h>
 #endif
-
+#ifndef _TOOLS_RESARY_HXX
+#include <tools/resary.hxx>
+#endif
+#ifndef _SV_SVIDS_HRC
+#include <svids.hrc>
+#endif
 #include <field.hxx>
 #include <event.hxx>
 #include <svapp.hxx>
@@ -87,6 +92,8 @@
 #endif
 
 using namespace ::com::sun::star;
+
+static ResStringArray *strAllUnits = NULL;
 
 // -----------------------------------------------------------------------
 
@@ -1121,9 +1128,47 @@ static XubString ImplMetricGetUnitText( const XubString& rStr )
 
 // -----------------------------------------------------------------------
 
+// #104355# support localized mesaurements
+
+static String ImplMetricToString( FieldUnit rUnit )
+{
+    if( !strAllUnits )
+    {
+        ResMgr* pResMgr = ImplGetResMgr();
+        strAllUnits = new ResStringArray( ResId (SV_FUNIT_STRINGS, pResMgr) );
+    }
+    // return unit's default string (ie, the first one )
+    for( USHORT i=0; i < strAllUnits->Count(); i++ )
+        if( (FieldUnit) strAllUnits->GetValue( i ) == rUnit )
+            return strAllUnits->GetString( i );
+
+    return String();
+}
+
+static FieldUnit ImplStringToMetric( const String &rMetricString )
+{
+    if( !strAllUnits )
+    {
+        ResMgr* pResMgr = ImplGetResMgr();
+        strAllUnits = new ResStringArray( ResId (SV_FUNIT_STRINGS, pResMgr) );
+    }
+    // return FieldUnit
+    String aStr( rMetricString );
+    aStr.ToLowerAscii();
+    for( USHORT i=0; i < strAllUnits->Count(); i++ )
+        if ( strAllUnits->GetString( i ).Equals( aStr ) )
+            return (FieldUnit) strAllUnits->GetValue( i );
+
+    return FUNIT_NONE;
+}
+
+// -----------------------------------------------------------------------
+
 static FieldUnit ImplMetricGetUnit( const XubString& rStr )
 {
     XubString aStr = ImplMetricGetUnitText( rStr );
+    return ImplStringToMetric( aStr );
+/*
     aStr.ToLowerAscii();
 
     if ( aStr.EqualsAscii( "mm" ) )             // Milimeter
@@ -1164,6 +1209,7 @@ static FieldUnit ImplMetricGetUnit( const XubString& rStr )
         return FUNIT_PERCENT;
     else
         return FUNIT_NONE;
+*/
 }
 
 #define K *1000L
@@ -1539,6 +1585,13 @@ XubString MetricFormatter::CreateFieldText( long nValue ) const
 {
     XubString aStr = NumericFormatter::CreateFieldText( nValue );
 
+    if( meUnit == FUNIT_CUSTOM )
+        aStr += maCustomUnitText;
+    else
+        aStr += ImplMetricToString( meUnit );
+
+    return aStr;
+    /*
     // Einheit dranhaengen
     switch ( meUnit )
     {
@@ -1578,8 +1631,8 @@ XubString MetricFormatter::CreateFieldText( long nValue ) const
         default:
             break;
     }
-
     return aStr;
+    */
 }
 
 // -----------------------------------------------------------------------
