@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appreg.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-19 11:31:25 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 16:02:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,8 +72,6 @@
 #include "appdata.hxx"
 #include "arrdecl.hxx"
 #include "intfrm.hxx"
-//#include "ipfrm.hxx"
-#include "tbxcust.hxx"
 #include "sfxhelp.hxx"
 #include "templdlg.hxx"
 #include "objmnctl.hxx"
@@ -98,7 +96,6 @@ void SfxApplication::Registrations_Impl()
     SfxModule::RegisterInterface();
     SfxViewFrame::RegisterInterface();
     SfxInternalFrame::RegisterInterface();
-    //SfxInPlaceFrame::RegisterInterface();
     SfxTopViewFrame::RegisterInterface();
     SfxObjectShell::RegisterInterface();
     SfxViewShell::RegisterInterface();
@@ -106,9 +103,6 @@ void SfxApplication::Registrations_Impl()
     // ChildWindows
     SfxRecordingFloatWrapper_Impl::RegisterChildWindow();
     SfxNavigatorWrapper::RegisterChildWindow();
-//  SfxToolboxCustomWindow::RegisterChildWindow();
-//  SfxMailChildWinWrapper_Impl::RegisterChildWindow();
-//  SfxMailChildWinWrapper_Impl::RegisterChildWindow();
     SfxPartChildWnd_Impl::RegisterChildWindow();
     SfxTemplateDialogWrapper::RegisterChildWindow(TRUE);
 
@@ -118,8 +112,6 @@ void SfxApplication::Registrations_Impl()
     SfxCancelToolBoxControl_Impl::RegisterControl(SID_BROWSE_STOP);
     SfxAppToolBoxControl_Impl::RegisterControl( SID_NEWDOCDIRECT );
     SfxAppToolBoxControl_Impl::RegisterControl( SID_AUTOPILOTMENU );
-    SfxReloadToolBoxControl_Impl::RegisterControl( SID_RELOAD );
-    SfxAddonsToolBoxControl_Impl::RegisterControl( SID_ADDONS );
 };
 
 //--------------------------------------------------------------------
