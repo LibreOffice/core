@@ -2,9 +2,9 @@
  *
  *  $RCSfile: present.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-29 02:32:45 $
+ *  last change: $Author: kz $ $Date: 2001-07-14 20:16:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,11 +224,11 @@ ModalDialog DLG_START_PRESENTATION
         Text [ spanish ] = "~Presentaciσn personalizada" ;
         Text [ french ] = "~Prιsentation ΰ l'ιcran personnalisιe" ;
         Text [ dutch ] = "~Individuele schermpresentatie" ;
-        Text[ chinese_simplified ] = "ΈφΘΛµΔΡέΚΎΞΔΈε(~C)";
+        Text[ chinese_simplified ] = "ΧΤ¶¨µΔΡέΚΎΞΔΈε(~C)";
         Text[ russian ] = "Οπξθηβξλόνΰÿ δεμξνρςπΰφθÿ";
         Text[ polish ] = "Indywidualny pokaz slajdσw";
         Text[ japanese ] = "–Ϊ“I•Κ½Χ²ΔήΌ®°(~C)";
-        Text[ chinese_traditional ] = "¦Ϋ­qªΊΒ²³ψ(~C)";
+        Text[ chinese_traditional ] = "¨Ο¥ΞªΜªΊ©ρ¬MΒ²³ψ§λΌv¤ω(~C)";
         Text[ arabic ] = "ΪΡΦ ΚήΟνγν γΞΥΥ";
         Text[ greek ] = "Προσαρμοσμέν~η παρουσίαση οθόνης";
         Text[ korean ] = "°³ΐΞΐϋ ½½¶σΐΜµε Όξ(~C)";
@@ -297,7 +297,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ chinese_traditional ] = "ΌΠ·Η(~D)";
         Text[ arabic ] = "ΗέΚΡΗΦν";
         Text[ greek ] = "Προεπιλογή";
-        Text[ korean ] = "±βΊ»(~D)";
+        Text[ korean ] = "Η¥ΑΨ(~D)";
         Text[ turkish ] = "Standart";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Predeterminado";
@@ -500,7 +500,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ russian ] = "Ρμενΰ ρλΰιδΰ βπσχνσώ";
         Text[ polish ] = "Zmieniaj slajdy rκcznie";
         Text[ japanese ] = "θ“®‚Ε‰ζ–ΚΨ‚θ‘Φ‚¦(~C)";
-        Text[ chinese_traditional ] = "¤β°Κ§σ΄«§λΌv¤ω(~C)";
+        Text[ chinese_traditional ] = "¤β°ΚΕά΄«§λΌv¤ω(~C)";
         Text[ arabic ] = "ΚΫννΡ ΗαΤΡνΝΙ νΟζνΗπ";
         Text[ greek ] = "Αλλαγή δια~φανειών (slides) χειροκίνητα";
         Text[ korean ] = "ΌφµΏΐΈ·Ξ ½½¶σΐΜµε ΐόΘ―(~C)";
@@ -530,7 +530,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ russian ] = "Οξκΰηΰςό σκΰηΰςελό μϋψθ";
         Text[ polish ] = "Wskanik myszy widoczny";
         Text[ japanese ] = "Ο³½Ξί²έΐ‚ª–Ϊ‚Ι©‚¦‚ι(~V)";
-        Text[ chinese_traditional ] = "Εγ¥ά·ΖΉ«ΌΠ(~V)";
+        Text[ chinese_traditional ] = "Εγ¥άΉ«ΌΠ(~V)";
         Text[ arabic ] = "γΔΤΡ ΗαγΗζΣ γΡΖν";
         Text[ greek ] = "Δείκτης ποντικιού ορατός";
         Text[ korean ] = "Έ¶Ώμ½Ί ΖχΐΞΕΝ ΊΈΐΜ°Τ(~V)";
@@ -560,7 +560,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ russian ] = "Σκΰηΰςελό μϋψθ β βθδε κΰπΰνδΰψΰ";
         Text[ polish ] = "Wskanik myszy jako piσro";
         Text[ japanese ] = "Ο³½Ξί²έΐ‚πΝίέ‚Ζ‚µ‚Δ(~P)";
-        Text[ chinese_traditional ] = "Ή«ΌΠΕγ¥ά¦¨µ§«¬(~P)";
+        Text[ chinese_traditional ] = "Ή«ΌΠΕγ¥ά¦¨µeµ§(~P)";
         Text[ arabic ] = "γΔΤΡ ΗαγΗζΣ Ϊαμ ενΖΙ ήαγ";
         Text[ greek ] = "Δείκτης ποντικιού ως πένα";
         Text[ korean ] = "Έ¶Ώμ½Ί ΖχΐΞΕΝΈ¦ ΖζΐΈ·Ξ(~P)";
@@ -676,7 +676,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ russian ] = "Βρεγδΰ νΰ οεπεδνεμ ολΰνε";
         Text[ polish ] = "Pokaz slajdσw zawsze na pierwszym planie";
         Text[ japanese ] = "½Χ²ΔήΌ®°‚ªν‚Ι‘Oi(~O)";
-        Text[ chinese_traditional ] = "Α`¬O«eΊέΕγ¥άΒ²³ψ(~O)";
+        Text[ chinese_traditional ] = "Α`¬O«eΊέΕγ¥ά©ρ¬MΒ²³ψ§λΌv¤ω(~O)";
         Text[ arabic ] = "ΗαΪΡΦ ΟΗΖγΗπ έν ΗαΓγΗγνΙ";
         Text[ greek ] = "Παρουσίαση οθόνης πάντα σε πρώτο πλάνο";
         Text[ korean ] = "ΗΑΈ®Α¨ΕΧΐΜΌΗΐ» ΗΧ»σ ΐόΈιΏ΅(~O)";
@@ -693,6 +693,7 @@ ModalDialog DLG_START_PRESENTATION
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Iniciar presentaciσn";
 };
+
 
 
 
