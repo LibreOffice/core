@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-19 16:18:52 $
+#   last change: $Author: vg $ $Date: 2003-04-01 13:31:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,8 +66,7 @@ PRJINC=$(PRJ)$/source
 PRJNAME=configmgr
 
 TARGET=configtools
-TARGET1=configshutdown
-TARGET2=configimport
+TARGET1=configimport
 TARGETTYPE=CUI
 LIBTARGET=NO
 
@@ -83,12 +82,10 @@ CDEFS += -DDLL_VERSION=\"$(UPD)$(DLLPOSTFIX)\"
 
 APPSTDLIBS=\
             $(SALLIB) \
-            $(VOSLIB) \
             $(CPPULIB)	\
             $(CPPUHELPERLIB)
 
 OBJFILES=\
-    $(OBJ)$/configshutdown.obj \
     $(OBJ)$/configimport.obj \
     $(OBJ)$/unomain.obj 
 
@@ -103,19 +100,6 @@ APP1TARGET= $(TARGET1)
 .ENDIF
 
 APP1OBJS=	\
-    $(OBJ)$/configshutdown.obj
-
-#---------------------------------------
-
-APP2STDLIBS = $(APPSTDLIBS)
-
-.IF "$(GUI)"=="UNX"
-APP2TARGET= $(TARGET2).bin
-.ELSE
-APP2TARGET= $(TARGET2)
-.ENDIF
-
-APP2OBJS=	\
     $(OBJ)$/filehelper.obj \
     $(OBJ)$/oslstream.obj \
     $(OBJ)$/trivialbufferedfile.obj \
