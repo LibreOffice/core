@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview3.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: nn $ $Date: 2002-10-09 16:00:37 $
+ *  last change: $Author: nn $ $Date: 2002-10-14 14:44:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -713,7 +713,10 @@ void ScTabView::AlignToCursor( short nCurX, short nCurY, ScFollowMode eMode,
 
         long nCellSizeX;
         long nCellSizeY;
-        aViewData.GetMergeSizePixel( nCurX, nCurY, nCellSizeX, nCellSizeY );
+        if ( nCurX >= 0 && nCurY >= 0 )
+            aViewData.GetMergeSizePixel( (USHORT)nCurX, (USHORT)nCurY, nCellSizeX, nCellSizeY );
+        else
+            nCellSizeX = nCellSizeY = 0;
         Size aScrSize = aViewData.GetScrSize();
         long nSpaceX = ( aScrSize.Width()  - nCellSizeX ) / 2;
         long nSpaceY = ( aScrSize.Height() - nCellSizeY ) / 2;
@@ -1966,7 +1969,30 @@ void ScTabView::PaintRangeFinder( long nNumber )
                                 //  wegnehmen -> Repaint
                                 //  SC_UPDATE_MARKS: Invalidate, nicht bis zum Zeilenende
 
-                                if ( nCol2 - nCol1 > 1 && nRow2 - nRow1 > 1 )
+                                BOOL bHiddenEdge = FALSE;
+                                ScDocument* pDoc = aViewData.GetDocument();
+                                while ( nCol1 > 0 && ( pDoc->GetColFlags( nCol1, nTab ) & CR_HIDDEN ) )
+                                {
+                                    --nCol1;
+                                    bHiddenEdge = TRUE;
+                                }
+                                while ( nCol2 < MAXCOL && ( pDoc->GetColFlags( nCol2, nTab ) & CR_HIDDEN ) )
+                                {
+                                    ++nCol2;
+                                    bHiddenEdge = TRUE;
+                                }
+                                while ( nRow1 > 0 && ( pDoc->GetRowFlags( nRow1, nTab ) & CR_HIDDEN ) )
+                                {
+                                    --nRow1;
+                                    bHiddenEdge = TRUE;
+                                }
+                                while ( nRow2 < MAXROW && ( pDoc->GetRowFlags( nRow2, nTab ) & CR_HIDDEN ) )
+                                {
+                                    ++nRow2;
+                                    bHiddenEdge = TRUE;
+                                }
+
+                                if ( nCol2 - nCol1 > 1 && nRow2 - nRow1 > 1 && !bHiddenEdge )
                                 {
                                     //  nur an den Raendern entlang
                                     PaintArea( nCol1, nRow1, nCol2, nRow1, SC_UPDATE_MARKS );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: nn $ $Date: 2002-09-11 18:07:18 $
+ *  last change: $Author: nn $ $Date: 2002-10-14 14:44:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2315,8 +2315,8 @@ void ScOutputData::DrawRefMark( USHORT nRefStartX, USHORT nRefStartY,
     if ( nRefStartX == nRefEndX && nRefStartY == nRefEndY )
         pDoc->ExtendMerge( nRefStartX, nRefStartY, nRefEndX, nRefEndY, nTab );
 
-    if ( nRefStartX <= nX2 && nRefEndX >= nX1 &&
-         nRefStartY <= nY2 && nRefEndY >= nY1 )
+    if ( nRefStartX <= nVisX2 && nRefEndX >= nVisX1 &&
+         nRefStartY <= nVisY2 && nRefEndY >= nVisY1 )
     {
         long nMinX = nScrX;
         long nMinY = nScrY;
@@ -2328,9 +2328,9 @@ void ScOutputData::DrawRefMark( USHORT nRefStartX, USHORT nRefStartY,
         BOOL bRight  = FALSE;
 
         long nPosY = nScrY;
-        BOOL bNoStartY = FALSE;
+        BOOL bNoStartY = ( nY1 < nRefStartY );
         BOOL bNoEndY   = FALSE;
-        for (USHORT nArrY=1; nArrY+1<nArrCount; nArrY++)
+        for (USHORT nArrY=1; nArrY<nArrCount; nArrY++)      // loop to end for bNoEndY check
         {
             USHORT nY = pRowInfo[nArrY].nRowNo;
 
@@ -2410,8 +2410,8 @@ void ScOutputData::DrawOneChange( USHORT nRefStartX, USHORT nRefStartY,
     if ( nRefStartX == nRefEndX && nRefStartY == nRefEndY )
         pDoc->ExtendMerge( nRefStartX, nRefStartY, nRefEndX, nRefEndY, nTab );
 
-    if ( nRefStartX <= nX2 + 1 && nRefEndX >= nX1 &&
-         nRefStartY <= nY2 + 1 && nRefEndY >= nY1 )         // +1 weil's links oben raus geht
+    if ( nRefStartX <= nVisX2 + 1 && nRefEndX >= nVisX1 &&
+         nRefStartY <= nVisY2 + 1 && nRefEndY >= nVisY1 )       // +1 because it touches next cells left/top
     {
         long nMinX = nScrX;
         long nMinY = nScrY;
@@ -2423,9 +2423,9 @@ void ScOutputData::DrawOneChange( USHORT nRefStartX, USHORT nRefStartY,
         BOOL bRight  = FALSE;
 
         long nPosY = nScrY;
-        BOOL bNoStartY = FALSE;
+        BOOL bNoStartY = ( nY1 < nRefStartY );
         BOOL bNoEndY   = FALSE;
-        for (USHORT nArrY=1; nArrY<nArrCount; nArrY++)
+        for (USHORT nArrY=1; nArrY<nArrCount; nArrY++)      // loop to end for bNoEndY check
         {
             USHORT nY = pRowInfo[nArrY].nRowNo;
 

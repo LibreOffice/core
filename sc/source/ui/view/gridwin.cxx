@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: nn $ $Date: 2002-10-08 13:43:10 $
+ *  last change: $Author: nn $ $Date: 2002-10-14 14:44:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3579,8 +3579,31 @@ void lcl_PaintOneRange( ScDocShell* pDocSh, const ScRange& rRange, USHORT nEdges
     USHORT nCol2 = rRange.aEnd.Col();
     USHORT nRow2 = rRange.aEnd.Row();
     USHORT nTab2 = rRange.aEnd.Tab();
+    BOOL bHiddenEdge = FALSE;
 
-    if ( nCol2 > nCol1 + 1 && nRow2 > nRow1 + 1 )
+    ScDocument* pDoc = pDocSh->GetDocument();
+    while ( nCol1 > 0 && ( pDoc->GetColFlags( nCol1, nTab1 ) & CR_HIDDEN ) )
+    {
+        --nCol1;
+        bHiddenEdge = TRUE;
+    }
+    while ( nCol2 < MAXCOL && ( pDoc->GetColFlags( nCol2, nTab1 ) & CR_HIDDEN ) )
+    {
+        ++nCol2;
+        bHiddenEdge = TRUE;
+    }
+    while ( nRow1 > 0 && ( pDoc->GetRowFlags( nRow1, nTab1 ) & CR_HIDDEN ) )
+    {
+        --nRow1;
+        bHiddenEdge = TRUE;
+    }
+    while ( nRow2 < MAXROW && ( pDoc->GetRowFlags( nRow2, nTab1 ) & CR_HIDDEN ) )
+    {
+        ++nRow2;
+        bHiddenEdge = TRUE;
+    }
+
+    if ( nCol2 > nCol1 + 1 && nRow2 > nRow1 + 1 && !bHiddenEdge )
     {
         //  nur an den Raendern entlang
         //  (die Ecken werden evtl. zweimal getroffen)
@@ -3594,8 +3617,8 @@ void lcl_PaintOneRange( ScDocShell* pDocSh, const ScRange& rRange, USHORT nEdges
         if ( nEdges & SCE_BOTTOM )
             pDocSh->PostPaint( nCol1, nRow2, nTab1, nCol2, nRow2, nTab2, PAINT_MARKS );
     }
-    else    // alles am Stueck
-        pDocSh->PostPaint( rRange, PAINT_MARKS );
+    else    // everything in one call
+        pDocSh->PostPaint( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, PAINT_MARKS );
 }
 
 void lcl_PaintRefChanged( ScDocShell* pDocSh, const ScRange& rOldUn, const ScRange& rNewUn )
