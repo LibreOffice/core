@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menudocumenthandler.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cd $ $Date: 2001-05-02 05:42:06 $
+ *  last change: $Author: cd $ $Date: 2001-05-03 08:57:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,8 @@ class ReadMenuDocumentHandlerBase : public ::com::sun::star::xml::sax::XDocument
                 ::com::sun::star::uno::RuntimeException );
 
     protected:
+        ::rtl::OUString getErrorLineString();
+
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator > m_xLocator;
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler> m_xReader;
 };
