@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventsupplier.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:38:33 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 13:16:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -538,6 +538,15 @@ void SfxEvents_Impl::BlowUpMacro( const ANY& rEvent, ANY& rRet, SfxObjectShell* 
         aOutProps[2].Value <<= aLibrary;
         aOutProps[3].Name = OUSTRING::createFromAscii( PROP_MACRO_NAME );
         aOutProps[3].Value <<= aMacroName;
+        rRet <<= aOutProps;
+    }
+    else if ( aType.compareToAscii( SVX_MACRO_LANGUAGE_JAVASCRIPT ) == 0 )
+    {
+        aOutProps[1] = aInProps[1];
+        rRet <<= aOutProps;
+    }
+    else
+    {
         rRet <<= aOutProps;
     }
 }
