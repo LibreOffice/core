@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-18 15:14:30 $
+ *  last change: $Author: kz $ $Date: 2003-08-25 13:54:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -356,6 +356,7 @@ class SalDisplay
     XLIB_Window     hRootWindow_;
     Size            aSize_;             // Screen Size [pixel]
     Pair            aResolution_;       // [dpi]
+    bool            mbExactResolution;
     ULONG           nMaxRequestSize_;   // [byte]
 
     srv_vendor_t    meServerVendor;
@@ -497,6 +498,7 @@ public:
     SalVisual      *GetRootVisual() const { return pRootVisual_; }
     const Size     &GetScreenSize() const { return aSize_; }
     const Pair     &GetResolution() const { return aResolution_; }
+    bool            GetExactResolution() const { return mbExactResolution; }
     ULONG           GetProperties() const { return nProperties_; }
     ULONG           GetMaxRequestSize() const { return nMaxRequestSize_; }
     ULONG           GetImageDepths() const { return nImageDepths_; }
