@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: vg $ $Date: 2003-10-06 16:07:33 $
+#   last change: $Author: vg $ $Date: 2003-12-17 15:55:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,7 +80,10 @@ PATCH_FILE_NAME=db-3.2.9.patch
 CONFIGURE_DIR=out
 #relative to CONFIGURE_DIR
 CONFIGURE_ACTION=..$/dist$/configure
-CONFIGURE_FLAGS=--enable-cxx --enable-java --enable-dynamic --enable-shared
+CONFIGURE_FLAGS=--enable-cxx --enable-dynamic --enable-shared
+.IF "$(SOLAR_JAVA)"!=""
+CONFIGURE_FLAGS+=--enable-java
+.ENDIF
 
 BUILD_DIR=$(CONFIGURE_DIR)
 .IF "$(OS)"=="IRIX"
@@ -92,7 +95,9 @@ BUILD_ACTION=make
 
 OUT2LIB=$(BUILD_DIR)$/.libs$/libdb*$(DLLPOST)
 
+.IF "$(SOLAR_JAVA)"!=""
 OUT2BIN=java$/classes$/db.jar
+.ENDIF
 
 .ENDIF			# "$(GUI)"=="UNX"
 
@@ -129,7 +134,9 @@ OUT2INC= \
     include$/db_185.h \
     include$/db_cxx.h
 
+.IF "$(SOLAR_JAVA)"!=""
 OUT2CLASS=java$/classes$/db.jar
+.ENDIF
 
 # --- Targets ------------------------------------------------------
 
