@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cachecontroller.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ssmith $ $Date: 2002-12-13 10:30:43 $
+ *  last change: $Author: ssmith $ $Date: 2002-12-16 12:49:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -456,14 +456,7 @@ CacheLocation CacheController::loadComponent(ComponentRequest const & _aRequest)
         aResultAddress = aCache->addComponentData(aTargetSpace, aData.instance(), bWithDefaults);
         if (aData.instance().templateData().get()!=NULL)
         {
-            aTemplateResultAdddress = addTemplates(aData.instance().componentTemplateData () );
-
-            memory::Accessor aTemplatesAccessor( m_aTemplates.getDataSegment(_aRequest.getComponentName()) );
-            AbsolutePath aTemplateParent = AbsolutePath::makeModulePath(_aRequest.getComponentName(), AbsolutePath::NoValidate());
-            if (!m_aTemplates.hasNode(aTemplatesAccessor, aTemplateParent))
-            {
-                OSL_ENSURE(false,"Template not found in cache");
-            }
+            aTemplateResultAdddress = addTemplates(aData.mutableInstance().componentTemplateData () );
         }
         // notify the new data to all clients
         m_aNotifier.notifyCreated(_aRequest);
@@ -558,13 +551,13 @@ std::auto_ptr<ISubtree> CacheController::loadTemplateData(TemplateRequest const 
     return  aMultiTemplates;
 }
 // -------------------------------------------------------------------------
-data::TreeAddress CacheController::addTemplates ( backend::ComponentData & _aComponentInstance )
+data::TreeAddress CacheController::addTemplates ( backend::ComponentData const & _aComponentInstance )
 {
-    OSL_PRECOND(_aComponentInstance.first.get(), "addTemplates: Data must not be NULL");
+    OSL_PRECOND(_aComponentInstance.data.get(), "addTemplates: Data must not be NULL");
     osl::MutexGuard aGuard(m_aTemplatesMutex);
-    TemplateCacheData::ModuleName aModuleName = _aComponentInstance.second;
+    TemplateCacheData::ModuleName aModuleName = _aComponentInstance.name;
     memory::UpdateAccessor aTemplatesUpdater( m_aTemplates.createDataSegment(aModuleName) );
-    AbsolutePath aTemplateLocation = AbsolutePath::makeModulePath(_aComponentInstance.second , AbsolutePath::NoValidate());
+    AbsolutePath aTemplateLocation = AbsolutePath::makeModulePath(_aComponentInstance.name , AbsolutePath::NoValidate());
     data::TreeAddress aTemplateAddr;
     if (!m_aTemplates.hasNode(aTemplatesUpdater.accessor(),aTemplateLocation ))
     {
@@ -603,7 +596,7 @@ CacheLocation CacheController::loadTemplate(TemplateRequest const & _aRequest) C
 
         std::auto_ptr<ISubtree> aMultiTemplates = loadTemplateData(aTemplateRequest);
         //add-if-not-loaded
-        addTemplates(std::make_pair(aMultiTemplates, aModuleName));
+        addTemplates(backend::ComponentData(aMultiTemplates, aModuleName));
 
     }
     memory::Accessor aTemplateAccessor( m_aTemplates.getDataSegment(aModuleName) );

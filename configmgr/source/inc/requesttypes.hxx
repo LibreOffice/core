@@ -2,9 +2,9 @@
  *
  *  $RCSfile: requesttypes.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ssmith $ $Date: 2002-12-13 10:29:38 $
+ *  last change: $Author: ssmith $ $Date: 2002-12-16 12:46:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,16 @@ namespace configmgr
         using configuration::AbsolutePath;
         using configuration::Name;
 // ---------------------------------------------------------------------------
-        typedef std::pair<std::auto_ptr<ISubtree>, Name> ComponentData;
+      //typedef std::pair<std::auto_ptr<ISubtree>, Name> ComponentData;
+        struct ComponentDataStruct
+        {
+            const std::auto_ptr<ISubtree>& data;
+            Name name;
+            ComponentDataStruct (const std::auto_ptr<ISubtree>& _data, Name _name)
+              : data(_data), name(_name) {}
+        };
+        typedef struct ComponentDataStruct ComponentData;
+
         class NodePath
         {
             AbsolutePath m_path;
@@ -162,8 +171,8 @@ namespace configmgr
             Data        const & templateData() const { return m_template; }
             Name        const & component() const { return m_component; }
 
-            ComponentData  componentTemplateData () const { return std::make_pair(m_template,m_component);}
-            ComponentData  componentNodeData () const { return std::make_pair(m_node,m_component);}
+            ComponentData  componentTemplateData () const { return ComponentData(m_template,m_component);}
+            ComponentData  componentNodeData () const { return ComponentData(m_node,m_component);}
             Data &  mutableData() { return m_node; }
             Data extractData() { return m_node; }
             Data extractTemplateData() { return m_template; }

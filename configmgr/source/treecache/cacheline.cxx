@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cacheline.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ssmith $ $Date: 2002-12-13 10:30:44 $
+ *  last change: $Author: ssmith $ $Date: 2002-12-16 12:49:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -462,14 +462,14 @@ namespace configmgr
                                                            bool _bWithDefaults
                                                          ) CFG_UNO_THROW_RTE(  )
     {
-        OSL_PRECOND(_aComponentInstance.first.get(), "CacheLine::insertDefaults: inserting NULL defaults !");
-        OSL_PRECOND(_aComponentInstance.second == this->getModuleName(),"Data location does not match module");
+        OSL_PRECOND(_aComponentInstance.data.get(), "CacheLine::insertDefaults: inserting NULL defaults !");
+        OSL_PRECOND(_aComponentInstance.name == this->getModuleName(),"Data location does not match module");
 
         OSL_PRECOND(!base().is(), "Data is already loaded");
 
         if (!base().is()) // no data yet
         {
-            this->setBase( data::buildTree(_aAccessToken, _aComponentInstance.first->getName(), *_aComponentInstance.first, _bWithDefaults) );
+            this->setBase( data::buildTree(_aAccessToken, _aComponentInstance.data->getName(), *_aComponentInstance.data, _bWithDefaults) );
         }
 
         return this->base();

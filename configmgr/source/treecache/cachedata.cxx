@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cachedata.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ssmith $ $Date: 2002-12-13 10:30:43 $
+ *  last change: $Author: ssmith $ $Date: 2002-12-16 12:49:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -426,11 +426,11 @@ namespace configmgr
 // -------------------------------------------------------------------------
 
     data::TreeAddress TemplateCacheData::addTemplates(  memory::UpdateAccessor& _aUpdateToken,
-                                                        backend::ComponentData & _aComponentInstance) CFG_UNO_THROW_RTE(  )
+                                                        backend::ComponentData const & _aComponentInstance) CFG_UNO_THROW_RTE(  )
     {
-        OSL_PRECOND(_aComponentInstance.first.get(), "addTemplates: Data must not be NULL");
+        OSL_PRECOND(_aComponentInstance.data.get(), "addTemplates: Data must not be NULL");
         // we should already have the module in cache !
-        ModuleName aModuleName ( _aComponentInstance.second);
+        ModuleName aModuleName ( _aComponentInstance.name);
         CacheLineRef xModule = internalGetModule(aModuleName);
 
         OSL_ENSURE( xModule.is(), "ExtendedCacheData::addTemplates: No module to add the templates to - where did the data segment come from ?");
@@ -442,7 +442,7 @@ namespace configmgr
 
         static const OUString aDummyTemplateName(RTL_CONSTASCII_USTRINGPARAM("cfg:Template"));
         static const OUString aDummyTemplateModule(RTL_CONSTASCII_USTRINGPARAM("cfg:Templates"));
-        _aComponentInstance.first->makeSetNode(aDummyTemplateName,aDummyTemplateModule);
+        _aComponentInstance.data->makeSetNode(aDummyTemplateName,aDummyTemplateModule);
 
         data::TreeAddress aResult = xModule->setComponentData(_aUpdateToken, _aComponentInstance, true);
 

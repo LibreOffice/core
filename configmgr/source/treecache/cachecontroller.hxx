@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cachecontroller.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ssmith $ $Date: 2002-12-13 10:30:43 $
+ *  last change: $Author: ssmith $ $Date: 2002-12-16 12:49:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,11 +329,11 @@ namespace configmgr
         // saves all pending changes from a cache access to the backend
         bool saveAllPendingChanges(CacheRef const & _aCache, RequestOptions const & _aOptions)
             CFG_UNO_THROW_RTE(  );
-        // load templates componentwise from backedn
+        // load templates componentwise from backend
         std::auto_ptr<ISubtree> loadTemplateData(TemplateRequest const & _aRequest)
             CFG_UNO_THROW_ALL(  );
         // add templates componentwise to cache
-        data::TreeAddress addTemplates ( backend::ComponentData & _aComponentInstance );
+        data::TreeAddress addTemplates ( backend::ComponentData const & _aComponentInstance );
         CacheRef getCacheAlways(RequestOptions const & _aOptions);
 
         OTreeDisposeScheduler   * createDisposer();

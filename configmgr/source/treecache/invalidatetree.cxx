@@ -2,9 +2,9 @@
  *
  *  $RCSfile: invalidatetree.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ssmith $ $Date: 2002-12-13 10:30:45 $
+ *  last change: $Author: ssmith $ $Date: 2002-12-16 12:49:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,7 +226,7 @@ CacheLocation CacheController::refreshComponent(ComponentRequest const & _aReque
 
     ComponentResult aLoadedInstance = this->getComponentData(aForcedRequest);
     AbsolutePath aRequestPath = AbsolutePath::makeModulePath(_aRequest.getComponentName(), AbsolutePath::NoValidate());
-    NodeInstance aNodeInstance(aLoadedInstance.instance().data(),aRequestPath) ;
+    NodeInstance aNodeInstance(aLoadedInstance.mutableInstance().mutableData(),aRequestPath) ;
     NodeResult aLoadedNodeInstance(aNodeInstance) ;
 
     CacheLocation aResult;
