@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rangeseq.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:49 $
+ *  last change: $Author: nn $ $Date: 2000-10-18 18:22:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,8 @@ public:
     static BOOL FillStringArray( com::sun::star::uno::Any& rAny,
                                 const ScMatrix* pMatrix, SvNumberFormatter* pFormatter );
     static BOOL FillMixedArray( com::sun::star::uno::Any& rAny,
-                                ScDocument* pDoc, const ScRange& rRange );
+                                ScDocument* pDoc, const ScRange& rRange,
+                                BOOL bAllowNV = FALSE );
     static BOOL FillMixedArray( com::sun::star::uno::Any& rAny,
                                 const ScMatrix* pMatrix );
 };
