@@ -72,7 +72,7 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
     @-+echo 1 ICON $(APP1ICON) >> $(MISC)$/$(APP1LINKRES:b).rc
 .ENDIF
 .IF "$(APP1VERINFO)" != ""
-     @-+echo "#include"  "$(APP1VERINFO)" >> $(MISC)$/$(APP1LINKRES:b).rc
+     @-+echo #include  "$(APP1VERINFO)" >> $(MISC)$/$(APP1LINKRES:b).rc
 .ENDIF
     $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP1LINKRES:b).rc
 .ENDIF			# "$(APP1LINKRES)" != ""
@@ -227,7 +227,7 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
     @-+echo 1 ICON $(APP2ICON) >> $(MISC)$/$(APP2LINKRES:b).rc
 .ENDIF
 .IF "$(APP2VERINFO)" != ""
-     @-+echo "#include"  "$(APP2VERINFO)" >> $(MISC)$/$(APP2LINKRES:b).rc
+     @-+echo #include  "$(APP2VERINFO)" >> $(MISC)$/$(APP2LINKRES:b).rc
 .ENDIF
     $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP2LINKRES:b).rc
 .ENDIF			# "$(APP2LINKRES)" != ""
@@ -382,7 +382,7 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
     @-+echo 1 ICON $(APP3ICON) >> $(MISC)$/$(APP3LINKRES:b).rc
 .ENDIF
 .IF "$(APP3VERINFO)" != ""
-     @-+echo "#include"  "$(APP3VERINFO)" >> $(MISC)$/$(APP3LINKRES:b).rc
+     @-+echo #include  "$(APP3VERINFO)" >> $(MISC)$/$(APP3LINKRES:b).rc
 .ENDIF
     $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP3LINKRES:b).rc
 .ENDIF			# "$(APP3LINKRES)" != ""
@@ -537,7 +537,7 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
     @-+echo 1 ICON $(APP4ICON) >> $(MISC)$/$(APP4LINKRES:b).rc
 .ENDIF
 .IF "$(APP4VERINFO)" != ""
-     @-+echo "#include"  "$(APP4VERINFO)" >> $(MISC)$/$(APP4LINKRES:b).rc
+     @-+echo #include  "$(APP4VERINFO)" >> $(MISC)$/$(APP4LINKRES:b).rc
 .ENDIF
     $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP4LINKRES:b).rc
 .ENDIF			# "$(APP4LINKRES)" != ""
@@ -692,7 +692,7 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
     @-+echo 1 ICON $(APP5ICON) >> $(MISC)$/$(APP5LINKRES:b).rc
 .ENDIF
 .IF "$(APP5VERINFO)" != ""
-     @-+echo "#include"  "$(APP5VERINFO)" >> $(MISC)$/$(APP5LINKRES:b).rc
+     @-+echo #include  "$(APP5VERINFO)" >> $(MISC)$/$(APP5LINKRES:b).rc
 .ENDIF
     $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP5LINKRES:b).rc
 .ENDIF			# "$(APP5LINKRES)" != ""
@@ -847,7 +847,7 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
     @-+echo 1 ICON $(APP6ICON) >> $(MISC)$/$(APP6LINKRES:b).rc
 .ENDIF
 .IF "$(APP6VERINFO)" != ""
-     @-+echo "#include"  "$(APP6VERINFO)" >> $(MISC)$/$(APP6LINKRES:b).rc
+     @-+echo #include  "$(APP6VERINFO)" >> $(MISC)$/$(APP6LINKRES:b).rc
 .ENDIF
     $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP6LINKRES:b).rc
 .ENDIF			# "$(APP6LINKRES)" != ""
@@ -1002,7 +1002,7 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
     @-+echo 1 ICON $(APP7ICON) >> $(MISC)$/$(APP7LINKRES:b).rc
 .ENDIF
 .IF "$(APP7VERINFO)" != ""
-     @-+echo "#include"  "$(APP7VERINFO)" >> $(MISC)$/$(APP7LINKRES:b).rc
+     @-+echo #include  "$(APP7VERINFO)" >> $(MISC)$/$(APP7LINKRES:b).rc
 .ENDIF
     $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP7LINKRES:b).rc
 .ENDIF			# "$(APP7LINKRES)" != ""
@@ -1157,7 +1157,7 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
     @-+echo 1 ICON $(APP8ICON) >> $(MISC)$/$(APP8LINKRES:b).rc
 .ENDIF
 .IF "$(APP8VERINFO)" != ""
-     @-+echo "#include"  "$(APP8VERINFO)" >> $(MISC)$/$(APP8LINKRES:b).rc
+     @-+echo #include  "$(APP8VERINFO)" >> $(MISC)$/$(APP8LINKRES:b).rc
 .ENDIF
     $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP8LINKRES:b).rc
 .ENDIF			# "$(APP8LINKRES)" != ""
@@ -1312,7 +1312,7 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
     @-+echo 1 ICON $(APP9ICON) >> $(MISC)$/$(APP9LINKRES:b).rc
 .ENDIF
 .IF "$(APP9VERINFO)" != ""
-     @-+echo "#include"  "$(APP9VERINFO)" >> $(MISC)$/$(APP9LINKRES:b).rc
+     @-+echo #include  "$(APP9VERINFO)" >> $(MISC)$/$(APP9LINKRES:b).rc
 .ENDIF
     $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP9LINKRES:b).rc
 .ENDIF			# "$(APP9LINKRES)" != ""
@@ -1467,7 +1467,7 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
     @-+echo 1 ICON $(APP10ICON) >> $(MISC)$/$(APP10LINKRES:b).rc
 .ENDIF
 .IF "$(APP10VERINFO)" != ""
-     @-+echo "#include"  "$(APP10VERINFO)" >> $(MISC)$/$(APP10LINKRES:b).rc
+     @-+echo #include  "$(APP10VERINFO)" >> $(MISC)$/$(APP10LINKRES:b).rc
 .ENDIF
     $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP10LINKRES:b).rc
 .ENDIF			# "$(APP10LINKRES)" != ""

@@ -3,8 +3,8 @@
 #*    $Workfile:   tg_app.mk  $
 #*
 #*    Ersterstellung    XX  TT.MM.JJ
-#*    Letzte Aenderung  $Author: pluby $ $Date: 2000-10-09 03:01:25 $
-#*    $Revision: 1.3 $
+#*    Letzte Aenderung  $Author: kz $ $Date: 2000-10-10 14:58:36 $
+#*    $Revision: 1.4 $
 #*
 #*    $Logfile:   T:/solar/inc/tg_app.mkv  $
 #*
@@ -118,7 +118,7 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
     @-+echo 1 ICON $(APP$(TNR)ICON) >> $(MISC)$/$(APP$(TNR)LINKRES:b).rc
 .ENDIF
 .IF "$(APP$(TNR)VERINFO)" != ""
-     @-+echo "#include"  "$(APP$(TNR)VERINFO)" >> $(MISC)$/$(APP$(TNR)LINKRES:b).rc
+     @-+echo #include  "$(APP$(TNR)VERINFO)" >> $(MISC)$/$(APP$(TNR)LINKRES:b).rc
 .ENDIF
     $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP$(TNR)LINKRES:b).rc
 .ENDIF			# "$(APP$(TNR)LINKRES)" != ""
