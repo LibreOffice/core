@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-20 13:33:23 $
+ *  last change: $Author: oj $ $Date: 2001-09-24 12:17:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,9 @@
 #endif
 #ifndef DBAUI_FIELDDESCRIPTIONS_HXX
 #include "FieldDescriptions.hxx"
+#endif
+#ifndef _SVX_SVXENUM_HXX
+#include <svx/svxenum.hxx>
 #endif
 
 // .........................................................................

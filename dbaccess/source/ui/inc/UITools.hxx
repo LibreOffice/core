@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-20 13:33:23 $
+ *  last change: $Author: oj $ $Date: 2001-09-24 12:19:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,9 @@
 #ifndef DBAUI_TYPEINFO_HXX
 #include "TypeInfo.hxx"
 #endif
-
+#ifndef _SVX_SVXENUM_HXX
+#include <svx/svxenum.hxx>
+#endif
 // we only need forward decl here
 namespace com { namespace sun { namespace star {
 
@@ -94,7 +96,6 @@ namespace com { namespace sun { namespace star {
 }}}
 
 class Window;
-enum SvxCellHorJustify;
 class Font;
 // .........................................................................
 namespace dbaui
