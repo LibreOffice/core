@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tracer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-25 07:41:06 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 17:04:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,15 +87,15 @@ namespace sw
         {
             using namespace com::sun::star::uno;
             using namespace ::com::sun::star::beans;
-            Sequence<PropertyValue> aConfigData(1);
+            Sequence<PropertyValue> aConfig(1);
             PropertyValue aPropValue;
             aPropValue.Value <<=
                 OUString(rMed.GetURLObject().GetMainURL(
                     INetURLObject::NO_DECODE));
             aPropValue.Name = C2O("DocumentURL");
-            aConfigData[0] = aPropValue;
+            aConfig[0] = aPropValue;
             OUString aTraceConfigPath(CAU("Office.Tracing/Import/Word"));
-            if (mpTrace = new MSFilterTracer(aTraceConfigPath, &aConfigData))
+            if ((mpTrace = new MSFilterTracer(aTraceConfigPath, &aConfig)))
                 mpTrace->StartTracing();
         }
 
