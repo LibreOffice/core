@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FConnection.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-17 06:46:48 $
+ *  last change: $Author: oj $ $Date: 2001-06-28 12:22:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,7 @@ namespace connectivity
             sal_Bool                    m_bClosed;
             sal_Bool                    m_bAutoCommit;
             sal_Bool                    m_bReadOnly;
+            sal_Bool                    m_bShowDeleted;
 
 
         public:
@@ -191,10 +192,12 @@ namespace connectivity
             ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent>  getContent() const { return m_xContent; }
             // create a catalog or return the catalog already created
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier > createCatalog();
-            String getExtension() const { return m_aFilenameExtension;}
-            String getURL() const { return m_aURL; }
 
-            OFileDriver*        getDriver() const { return m_pDriver; }
+
+            String          getExtension()  const { return m_aFilenameExtension;}
+            String          getURL()        const { return m_aURL; }
+            OFileDriver*    getDriver()     const { return m_pDriver; }
+            sal_Bool        showDeleted()   const { return m_bShowDeleted; }
 
         };
     }

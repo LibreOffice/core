@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FConnection.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-25 07:15:00 $
+ *  last change: $Author: oj $ $Date: 2001-06-28 12:22:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,7 @@ OConnection::OConnection(OFileDriver*   _pDriver)
                          ,m_pDriver(_pDriver)
                          ,m_bClosed(sal_False)
                          ,m_xMetaData(NULL)
+                         ,m_bShowDeleted(sal_False)
 {
     ModuleContext::AddRef();
 }
@@ -192,7 +193,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
     {
         if(0 == pBegin->Name.compareToAscii("Extension"))
             pBegin->Value >>= aExt;
-        if(0 == pBegin->Name.compareToAscii("CharSet"))
+        else if(0 == pBegin->Name.compareToAscii("CharSet"))
         {
             ::rtl::OUString sIanaName;
             pBegin->Value >>= sIanaName;
@@ -206,6 +207,10 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
             if(m_nTextEncoding == RTL_TEXTENCODING_DONTKNOW)
                 m_nTextEncoding = osl_getThreadTextEncoding();
 
+        }
+        else if (0 == pBegin->Name.compareToAscii("ShowDeleted"))
+        {
+            pBegin->Value >>= m_bShowDeleted;
         }
     }
 

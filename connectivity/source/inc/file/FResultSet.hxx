@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-27 10:02:09 $
+ *  last change: $Author: oj $ $Date: 2001-06-28 12:22:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,6 +309,7 @@ OFILEKeyCompare(const void * elem1, const void * elem2);
             sal_Bool                                m_bRowUpdated;
             sal_Bool                                m_bRowInserted;
             sal_Bool                                m_bRowDeleted;
+            sal_Bool                                m_bShowDeleted;
 
             void construct();
             sal_Bool evaluate();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-12 12:39:45 $
+ *  last change: $Author: oj $ $Date: 2001-06-28 12:22:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -504,8 +504,11 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
                             {
                                 aRow[6] = ORowSetValue(::rtl::OUString::createFromAscii("INSERT"));
                                 aRows.push_back(aRow);
-                                aRow[6] = ORowSetValue(::rtl::OUString::createFromAscii("DELETE"));
-                                aRows.push_back(aRow);
+                                if(!m_pConnection->showDeleted())
+                                {
+                                    aRow[6] = ORowSetValue(::rtl::OUString::createFromAscii("DELETE"));
+                                    aRows.push_back(aRow);
+                                }
                                 aRow[6] = ORowSetValue(::rtl::OUString::createFromAscii("UPDATE"));
                                 aRows.push_back(aRow);
                                 aRow[6] = ORowSetValue(::rtl::OUString::createFromAscii("CREATE"));

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-27 10:02:11 $
+ *  last change: $Author: oj $ $Date: 2001-06-28 12:22:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,6 +183,7 @@ OResultSet::OResultSet(OStatement_Base* pStmt,OSQLParseTreeIterator&    _aSQLIte
                         ,m_nFetchDirection(FetchDirection::FORWARD)
                         ,m_nTextEncoding(pStmt->getOwnConnection()->getTextEncoding())
                         ,m_nCurrentPosition(0)
+                        ,m_bShowDeleted(pStmt->getOwnConnection()->showDeleted())
 {
     osl_incrementInterlockedCount( &m_refCount );
 
@@ -867,6 +868,11 @@ void SAL_CALL OResultSet::deleteRow() throw(SQLException, RuntimeException)
 
     if(m_pTable->isReadOnly())
         throw SQLException(::rtl::OUString::createFromAscii("Table is readonly!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
+    if (m_bShowDeleted)
+        throw SQLException(::rtl::OUString::createFromAscii("Row could not be deleted. The option \"Display inactive records\" is set!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
+    if(m_aRow->isDeleted())
+        throw SQLException(::rtl::OUString::createFromAscii("Row was already deleted!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
+
     sal_Int32 nPos = (sal_Int32)(*m_aRow)[0];
     m_bRowDeleted = m_pTable->DeleteRow(m_xColumns.getBody());
     if(m_bRowDeleted && m_pFileSet)
@@ -1234,7 +1240,7 @@ again:
     {
         m_pTable->fetchRow(m_aEvaluateRow, m_pTable->getTableColumns().getBody(), sal_True,TRUE);
 
-        if (m_aEvaluateRow->isDeleted() ||
+        if ((!m_bShowDeleted && m_aEvaluateRow->isDeleted()) ||
             (m_pSQLAnalyzer->hasRestriction() && //!bShowDeleted && m_aEvaluateRow->isDeleted() ||// keine Anzeige von geloeschten Sätzen
                 !m_pSQLAnalyzer->evaluateRestriction()))         // Auswerten der Bedingungen
         {                                                // naechsten Satz auswerten
@@ -1505,11 +1511,6 @@ BOOL OResultSet::Move(OFileTable::FilePosition eCursorPosition, INT32 nOffset, B
         // Fetch nur bei SELECT moeglich!
         return sal_False;
 
-    if(m_aRow->isDeleted())
-    {
-        //  ++m_nRowPos; // start at next row
-        //  goto IgnoreDeletedRows;
-    }
     return sal_True;
 
 Error:
@@ -1585,7 +1586,7 @@ BOOL OResultSet::SkipDeleted(OFileTable::FilePosition eCursorPosition, INT32 nOf
         if(m_aBookmarks.empty())
         {
             bDataFound = Move(OFileTable::FILE_FIRST, 1, bRetrieveData);
-            if(bDataFound && !m_aRow->isDeleted())
+            if(bDataFound && (m_bShowDeleted || !m_aRow->isDeleted()))
                 m_aBookmarksPositions.push_back(m_aBookmarks.insert(TInt2IntMap::value_type((sal_Int32)(*m_aRow)[0],m_aBookmarksPositions.size()+1)).first);
         }
         else
@@ -1594,7 +1595,7 @@ BOOL OResultSet::SkipDeleted(OFileTable::FilePosition eCursorPosition, INT32 nOf
             nBookmark = (*m_aBookmarksPositions.rbegin())->first;
 
             bDataFound = Move(OFileTable::FILE_BOOKMARK, nBookmark, bRetrieveData);
-            OSL_ENSURE(!m_aRow->isDeleted(),"A bookmark should not be deleted!");
+            OSL_ENSURE((m_bShowDeleted || !m_aRow->isDeleted()),"A bookmark should not be deleted!");
             nCurPos    = (*m_aBookmarksPositions.rbegin())->second;
         }
 
@@ -1603,7 +1604,7 @@ BOOL OResultSet::SkipDeleted(OFileTable::FilePosition eCursorPosition, INT32 nOf
         while(bDataFound)
         {
             bDataFound = Move(OFileTable::FILE_NEXT, 1, sal_False); // we don't need the data here
-            if(bDataFound && !m_aRow->isDeleted())
+            if(bDataFound && (m_bShowDeleted || !m_aRow->isDeleted()))
             {   // we weren't on the last row we remember it and move on
                 ++nCurPos;
                 m_aBookmarksPositions.push_back(m_aBookmarks.insert(TInt2IntMap::value_type((sal_Int32)(*m_aRow)[0],m_aBookmarksPositions.size()+1)).first);
@@ -1622,12 +1623,12 @@ BOOL OResultSet::SkipDeleted(OFileTable::FilePosition eCursorPosition, INT32 nOf
     else if (eCursorPosition != OFileTable::FILE_RELATIVE)
     {
         bDataFound = Move(eCursorPosition, nOffset, bRetrieveData);
-        bDone = bDataFound && !m_aRow->isDeleted();
+        bDone = bDataFound && (m_bShowDeleted || !m_aRow->isDeleted());
     }
     else
     {
         bDataFound = Move(eDelPosition, 1, bRetrieveData);
-        if (bDataFound && !m_aRow->isDeleted())
+        if (bDataFound && (m_bShowDeleted || !m_aRow->isDeleted()))
             bDone = (--nDelOffset) == 0;
         else
             bDone = FALSE;
@@ -1638,8 +1639,8 @@ BOOL OResultSet::SkipDeleted(OFileTable::FilePosition eCursorPosition, INT32 nOf
     {
         bDataFound = Move(eDelPosition, 1, bRetrieveData);
         if (eCursorPosition != OFileTable::FILE_RELATIVE)
-            bDone = bDataFound && !m_aRow->isDeleted();
-        else if (bDataFound && !m_aRow->isDeleted())
+            bDone = bDataFound && (m_bShowDeleted || !m_aRow->isDeleted());
+        else if (bDataFound && (m_bShowDeleted || !m_aRow->isDeleted()))
             bDone = (--nDelOffset) == 0;
         else
             bDone = FALSE;
@@ -1673,7 +1674,7 @@ sal_Bool OResultSet::moveAbsolute(sal_Int32 _nOffset,sal_Bool _bRetrieveData)
             else
             {
                 bDataFound = Move(OFileTable::FILE_FIRST, 1, _bRetrieveData);
-                if(bDataFound && !m_aRow->isDeleted())
+                if(bDataFound && (m_bShowDeleted || !m_aRow->isDeleted()))
                 {
                     ++nCurPos;
                     m_aBookmarksPositions.push_back(m_aBookmarks.insert(TInt2IntMap::value_type((sal_Int32)(*m_aRow)[0],m_aBookmarksPositions.size()+1)).first);
@@ -1684,7 +1685,7 @@ sal_Bool OResultSet::moveAbsolute(sal_Int32 _nOffset,sal_Bool _bRetrieveData)
             while (bDataFound && nNewOffset)
             {
                 bDataFound = Move(OFileTable::FILE_NEXT, 1, _bRetrieveData);
-                if(bDataFound && !m_aRow->isDeleted())
+                if(bDataFound && (m_bShowDeleted || !m_aRow->isDeleted()))
                 {
                     ++nCurPos;
                     m_aBookmarksPositions.push_back(m_aBookmarks.insert(TInt2IntMap::value_type((sal_Int32)(*m_aRow)[0],m_aBookmarksPositions.size()+1)).first);
@@ -1696,7 +1697,7 @@ sal_Bool OResultSet::moveAbsolute(sal_Int32 _nOffset,sal_Bool _bRetrieveData)
         {
             sal_Int32 nBookmark = m_aBookmarksPositions[nNewOffset-1]->first;
             bDataFound = Move(OFileTable::FILE_BOOKMARK,nBookmark, _bRetrieveData);
-            OSL_ENSURE(!m_aRow->isDeleted(),"moveAbsolute row can't be deleted!");
+            OSL_ENSURE((m_bShowDeleted || !m_aRow->isDeleted()),"moveAbsolute row can't be deleted!");
         }
     }
     else
