@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforlist.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: er $ $Date: 2001-06-10 21:20:49 $
+ *  last change: $Author: er $ $Date: 2001-06-18 09:45:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,9 @@
 #include "svstdarr.hxx"
 
 #define _ZFORLIST_CXX
+#ifndef _OSL_MUTEX_HXX_
+#include <osl/mutex.hxx>
+#endif
 #include "zforlist.hxx"
 #undef _ZFORLIST_CXX
 
@@ -115,7 +118,9 @@
 #include "zformat.hxx"
 #include "numhead.hxx"
 
-#include "currencyconfigitem.hxx"
+#include "syslocaleoptions.hxx"
+#include "listener.hxx"
+#include "smplhint.hxx"
 
 
 using namespace ::com::sun::star;
@@ -147,6 +152,65 @@ using namespace ::com::sun::star::lang;
 static BOOL bIndexTableInitialized = FALSE;
 static ULONG __FAR_DATA theIndexTable[NF_INDEX_TABLE_ENTRIES];
 
+
+// ====================================================================
+
+/**
+    instead of every number formatter being a listener we have a registry which
+    also handles one instance of the SysLocale options
+ */
+
+class SvNumberFormatterRegistry_Impl : public SvtListener
+{
+    List                    aFormatters;
+    SvtSysLocaleOptions     aSysLocaleOptions;
+
+public:
+                            SvNumberFormatterRegistry_Impl();
+    virtual                 ~SvNumberFormatterRegistry_Impl();
+
+            void            Insert( SvNumberFormatter* pThis )
+                                { aFormatters.Insert( pThis, LIST_APPEND ); }
+            SvNumberFormatter*  Remove( SvNumberFormatter* pThis )
+                                    { return (SvNumberFormatter*)aFormatters.Remove( pThis ); }
+            ULONG           Count()
+                                { return aFormatters.Count(); }
+
+    virtual void            Notify( SvtBroadcaster& rBC, const SfxHint& rHint );
+
+};
+
+
+SvNumberFormatterRegistry_Impl::SvNumberFormatterRegistry_Impl()
+{
+    aSysLocaleOptions.AddListener( *this );
+}
+
+
+SvNumberFormatterRegistry_Impl::~SvNumberFormatterRegistry_Impl()
+{
+    aSysLocaleOptions.RemoveListener( *this );
+}
+
+
+void SvNumberFormatterRegistry_Impl::Notify( SvtBroadcaster& rBC, const SfxHint& rHint )
+{
+    const SfxSimpleHint* p = PTR_CAST( SfxSimpleHint, &rHint );
+    if( p && (p->GetId() & (SYSLOCALEOPTIONS_HINT_CURRENCY)) )
+    {
+        ::osl::MutexGuard aGuard( SvNumberFormatter::GetMutex() );
+        for ( SvNumberFormatter* p = (SvNumberFormatter*)aFormatters.First();
+                p; p = (SvNumberFormatter*)aFormatters.Next() )
+        {
+            p->ResetDefaultSystemCurrency();
+        }
+    }
+}
+
+
+// ====================================================================
+
+SvNumberFormatterRegistry_Impl* SvNumberFormatter::pFormatterRegistry = NULL;
 BOOL SvNumberFormatter::bCurrencyTableInitialized = FALSE;
 NfCurrencyTable SvNumberFormatter::theCurrencyTable;
 USHORT SvNumberFormatter::nSystemCurrencyPosition = 0;
@@ -177,6 +241,16 @@ SvNumberFormatter::SvNumberFormatter( LanguageType eLang )
 
 SvNumberFormatter::~SvNumberFormatter()
 {
+    {
+        ::osl::MutexGuard aGuard( GetMutex() );
+        pFormatterRegistry->Remove( this );
+        if ( !pFormatterRegistry->Count() )
+        {
+            delete pFormatterRegistry;
+            pFormatterRegistry = NULL;
+        }
+    }
+
     SvNumberformat* pEntry = aFTable.First();
     while (pEntry)
     {
@@ -223,6 +297,9 @@ void SvNumberFormatter::ImpConstruct( LanguageType eLang )
     pMergeTable = new SvULONGTable;
     bNoZero = FALSE;
     pColorLink = NULL;
+
+    ::osl::MutexGuard aGuard( GetMutex() );
+    GetFormatterRegistry().Insert( this );
 }
 
 
@@ -246,6 +323,33 @@ void SvNumberFormatter::ChangeIntl(LanguageType eLnge)
         pFormatScanner->ChangeIntl();
         pStringScanner->ChangeIntl();
     }
+}
+
+
+// static
+::osl::Mutex& SvNumberFormatter::GetMutex()
+{
+    static ::osl::Mutex* pMutex = NULL;
+    if( !pMutex )
+    {
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+        if( !pMutex )
+        {
+            static ::osl::Mutex aMutex;
+            pMutex = &aMutex;
+        }
+    }
+    return *pMutex;
+}
+
+
+// static
+SvNumberFormatterRegistry_Impl& SvNumberFormatter::GetFormatterRegistry()
+{
+    ::osl::MutexGuard aGuard( GetMutex() );
+    if ( !pFormatterRegistry )
+        pFormatterRegistry = new SvNumberFormatterRegistry_Impl;
+    return *pFormatterRegistry;
 }
 
 
@@ -2576,6 +2680,7 @@ USHORT SvNumberFormatter::GetYear2000Default()
 // static
 const NfCurrencyTable& SvNumberFormatter::GetTheCurrencyTable()
 {
+    ::osl::MutexGuard aGuard( GetMutex() );
     while ( !bCurrencyTableInitialized )
         ImpInitCurrencyTable();
     return theCurrencyTable;
@@ -2634,24 +2739,44 @@ const NfCurrencyEntry* SvNumberFormatter::GetCurrencyEntry(
 
 
 // static
-void SvNumberFormatter::SetDefaultCurrency( const NfCurrencyEntry* pCurr )
+IMPL_STATIC_LINK( SvNumberFormatter, CurrencyChangeLink, void*, pNull )
 {
-    const NfCurrencyTable& rTable = GetTheCurrencyTable();
-    if ( !pCurr )
+    ::osl::MutexGuard aGuard( GetMutex() );
+    String aAbbrev;
+    LanguageType eLang = LANGUAGE_SYSTEM;
+    SvtSysLocaleOptions().GetCurrencyAbbrevAndLanguage( aAbbrev, eLang );
+    SetDefaultSystemCurrency( aAbbrev, eLang );
+    return 0;
+}
+
+
+// static
+void SvNumberFormatter::SetDefaultSystemCurrency( const String& rAbbrev, LanguageType eLang )
+{
+    ::osl::MutexGuard aGuard( GetMutex() );
+    if ( !rAbbrev.Len() )
     {   // SYSTEM
         nSystemCurrencyPosition = 0;
         return ;
     }
+    const NfCurrencyTable& rTable = GetTheCurrencyTable();
     USHORT nCount = rTable.Count();
     const NfCurrencyEntryPtr* ppData = rTable.GetData();
     for ( USHORT j = 0; j < nCount; j++, ppData++ )
     {
-        if ( *ppData == pCurr )
+        if ( (*ppData)->GetLanguage() == eLang && (*ppData)->GetBankSymbol() == rAbbrev )
         {
             nSystemCurrencyPosition = j;
-            break;  // for
+            return ;
         }
     }
+    nSystemCurrencyPosition = 0;    // not found => SYSTEM
+}
+
+
+void SvNumberFormatter::ResetDefaultSystemCurrency()
+{
+    nDefaultSystemCurrencyFormat = NUMBERFORMAT_ENTRY_NOT_FOUND;
 }
 
 
@@ -3044,12 +3169,11 @@ void lcl_CheckCurrencySymbolPosition( const NfCurrencyEntry& rCurr )
 void SvNumberFormatter::ImpInitCurrencyTable()
 {
     // racing condition possible:
+    // ::osl::MutexGuard aGuard( GetMutex() );
     // while ( !bCurrencyTableInitialized )
     //      ImpInitCurrencyTable();
-    static BOOL bInitializing = FALSE;
-    if ( bCurrencyTableInitialized || bInitializing )
+    if ( bCurrencyTableInitialized )
         return ;
-    bInitializing = TRUE;
 
     LanguageType eSysLang = System::GetLanguage();
     LocaleDataWrapper* pLocaleData = new LocaleDataWrapper(
@@ -3058,7 +3182,7 @@ void SvNumberFormatter::ImpInitCurrencyTable()
     // get user configured currency
     String aConfiguredCurrencyAbbrev;
     LanguageType eConfiguredCurrencyLanguage = LANGUAGE_SYSTEM;
-    SvtCurrencyConfigItem().GetAbbrevAndLanguage(
+    SvtSysLocaleOptions().GetCurrencyAbbrevAndLanguage(
         aConfiguredCurrencyAbbrev, eConfiguredCurrencyLanguage );
     USHORT nSecondarySystemCurrencyPosition = 0;
     NfCurrencyEntryPtr pEntry;
@@ -3137,8 +3261,9 @@ void SvNumberFormatter::ImpInitCurrencyTable()
     DBG_ASSERT( !aConfiguredCurrencyAbbrev.Len() || nSystemCurrencyPosition,
         "configured currency not in I18N locale data" );
     delete pLocaleData;
+    SvtSysLocaleOptions::SetCurrencyChangeLink(
+        STATIC_LINK( NULL, SvNumberFormatter, CurrencyChangeLink ) );
     bCurrencyTableInitialized = TRUE;
-    bInitializing = FALSE;
 }
 
 
