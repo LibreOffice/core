@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdhtmlfilter.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:20:17 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 17:26:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,12 +92,15 @@
 SdHTMLFilter::SdHTMLFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell, sal_Bool bShowProgress ) :
     SdFilter( rMedium, rDocShell, bShowProgress )
 {
+    mbHideSpell = mrDocument.GetHideSpell();
+    mrDocument.SetHideSpell(TRUE);
 }
 
 // -----------------------------------------------------------------------------
 
 SdHTMLFilter::~SdHTMLFilter()
 {
+    mrDocument.SetHideSpell(mbHideSpell);
 }
 
 // -----------------------------------------------------------------------------
