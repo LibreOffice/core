@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menumanager.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cd $ $Date: 2001-05-02 05:42:28 $
+ *  last change: $Author: cd $ $Date: 2001-05-03 08:03:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,10 @@
 #include <com/sun/star/frame/FeatureStateEvent.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
@@ -121,12 +125,22 @@
 namespace framework
 {
 
+class BmkMenu;
 class MenuManager : public XSTATUSLISTENER      ,
                     public OMutexMember         ,
                     public ::cppu::OWeakObject
 {
     public:
-        MenuManager( REFERENCE< XFRAME >& rFrame, Menu* pMenu, sal_Bool bDelete, sal_Bool bDeleteChildren, sal_Bool bIsBookmarkMenu = sal_False );
+        MenuManager( REFERENCE< XFRAME >& rFrame,
+                     Menu* pMenu,
+                     sal_Bool bDelete,
+                     sal_Bool bDeleteChildren );
+
+        MenuManager( REFERENCE< XFRAME >& rFrame,
+                     BmkMenu* pBmkMenu,
+                     sal_Bool bDelete,
+                     sal_Bool bDeleteChildren );
+
         virtual ~MenuManager();
 
         // XInterface
@@ -156,7 +170,10 @@ class MenuManager : public XSTATUSLISTENER      ,
         void UpdateSpecialFileMenu( Menu* pMenu );
         void UpdateSpecialWindowMenu( Menu* pMenu );
 
-        PopupMenu* CreateBookmarkMenu( const ::rtl::OUString aURL, const ::rtl::OUString aReferer );
+
+        BmkMenu* CreateBookmarkMenu(
+            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+            const ::rtl::OUString& aURL );
 
         struct MenuItemHandler
         {
@@ -164,6 +181,7 @@ class MenuManager : public XSTATUSLISTENER      ,
                 nItemId( aItemId ), pSubMenuManager( pManager ), xMenuItemDispatch( rDispatch ) {}
 
             USHORT                  nItemId;
+            ::rtl::OUString         aTargetFrame;
             ::rtl::OUString         aMenuItemURL;
             ::rtl::OUString         aFilter;
             ::rtl::OUString         aPassword;
@@ -171,6 +189,10 @@ class MenuManager : public XSTATUSLISTENER      ,
             MenuManager*            pSubMenuManager;
             REFERENCE< XDISPATCH >  xMenuItemDispatch;
         };
+
+        void             CreatePicklistArguments(
+                            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgsList,
+                            const MenuItemHandler* );
 
         MenuItemHandler* GetMenuItemHandler( USHORT nItemId );
 
