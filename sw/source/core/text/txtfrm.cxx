@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:38:02 $
+ *  last change: $Author: rt $ $Date: 2004-10-28 13:04:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2091,6 +2091,7 @@ KSHORT SwTxtFrm::CalcFitToContent()
     SetPara( pDummy, false );
     const SwPageFrm* pPage = FindPageFrm();
 
+    const Point   aOldFrmPos   = Frm().Pos();
     const SwTwips nOldFrmWidth = Frm().Width();
     const SwTwips nOldPrtWidth = Prt().Width();
     const SwTwips nPageWidth = GetUpper()->IsVertical() ?
@@ -2099,6 +2100,10 @@ KSHORT SwTxtFrm::CalcFitToContent()
 
     Frm().Width( nPageWidth );
     Prt().Width( nPageWidth );
+
+    // --> FME 2004-07-19 #i25422# objects anchored as character in RTL
+    if ( IsRightToLeft() )
+        Frm().Pos().X() += nOldFrmWidth - nPageWidth;
 
     // --> FME 2004-07-16 #i31490#
     SwTxtFrmLocker aLock( this );
@@ -2113,6 +2118,11 @@ KSHORT SwTxtFrm::CalcFitToContent()
 
     Frm().Width( nOldFrmWidth );
     Prt().Width( nOldPrtWidth );
+
+    // --> FME 2004-07-19 #i25422# objects anchored as character in RTL
+    if ( IsRightToLeft() )
+        Frm().Pos() = aOldFrmPos;
+
 
     SetPara( pOldPara );
 
