@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdata.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obr $ $Date: 2002-08-23 10:07:25 $
+ *  last change: $Author: jbu $ $Date: 2002-08-27 15:06:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,13 @@
 #endif
 
 #include <osl/file.hxx>
+#ifndef _UNO_CURRENT_CONTEXT_HXX_
+#include <uno/current_context.hxx>
+#endif
+
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
+#endif
 
 #ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
@@ -269,6 +276,38 @@ ResMgr* ImplGetResMgr()
     return pSVData->mpResMgr;
 }
 
+class AccessBridgeCurrentContext: public cppu::WeakImplHelper1< com::sun::star::uno::XCurrentContext >
+{
+public:
+    AccessBridgeCurrentContext(
+        const com::sun::star::uno::Reference< com::sun::star::uno::XCurrentContext > &context ) :
+        m_prevContext( context ) {}
+
+    // XCurrentContext
+    virtual com::sun::star::uno::Any SAL_CALL getValueByName( const rtl::OUString& Name )
+        throw (com::sun::star::uno::RuntimeException);
+private:
+    com::sun::star::uno::Reference< com::sun::star::uno::XCurrentContext > m_prevContext;
+};
+
+com::sun::star::uno::Any AccessBridgeCurrentContext::getValueByName( const rtl::OUString & Name )
+    throw (com::sun::star::uno::RuntimeException)
+{
+    com::sun::star::uno::Any ret;
+    if( Name.equalsAscii( "java-vm.interaction-handler" ) )
+    {
+        // Currently, for accessbility no interaction handler shall be offered.
+        // There may be introduced later on a handler using native toolkits
+        // jbu->obr: Instantiate here your interaction handler
+    }
+    else if( m_prevContext.is() )
+    {
+        ret = m_prevContext->getValueByName( Name );
+    }
+    return ret;
+}
+
+
 bool ImplInitAccessBridge()
 {
     bool bSuccess = true;
@@ -279,6 +318,10 @@ bool ImplInitAccessBridge()
         {
             Reference< XMultiServiceFactory > xFactory(vcl::unohelper::GetMultiServiceFactory());
 
+            // customize the java-not-available-interaction-handler entry within the
+            // current context.
+            com::sun::star::uno::ContextLayer layer(
+                new AccessBridgeCurrentContext( com::sun::star::uno::getCurrentContext() ) );
             if(xFactory.is())
             {
                 Reference< XExtendedToolkit > xToolkit =
