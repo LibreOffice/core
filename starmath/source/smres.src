@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-01 08:07:48 $
+ *  last change: $Author: kz $ $Date: 2000-12-06 15:00:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3233,7 +3233,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text[ french ] = "Type~ :";
         Text[ swedish ] = "Teckens~til:";
         Text[ dutch ] = "~Type:";
-        Text[ spanish ] = "~Carαcter:";
+        Text[ spanish ] = "~Estilo:";
         Text[ english_us ] = "~Type:";
         Text[ chinese_simplified ] = "ΧΦΜε£Ί";
         Text[ chinese_traditional ] = "¦r«¬΅G";
@@ -3430,7 +3430,7 @@ WarningBox RID_NOMATHTYPEFACEWARNING
     Message[ chinese_traditional ] = "¨S¦³¦wΈΛ StarMath ¦r«¬\n¦ΣµLªk¥Ώ±`ΉB§@΅I\n½Π±z¦wΈΛ StarMath ¦r«¬΅AµM¦Z¦A­«·s¶}±Ò StaMath΅C";
     Message[ arabic ] = "ΗαΞΨ \"StarMath\" ΫνΡ γυΛΘψσΚ!\nΘΟζδ εΠΗ ΗαΞΨ αΗ νΣΚΨνΪ %PRODUCTNAME Math ΗαΪγα ΘΤία ΥΝνΝ...\nΗαΡΜΗΑ ΚΛΘνΚ εΠΗ ΗαΞΨ΅ Λγ ΘΟΑ %PRODUCTNAME Math γΜΟΟΗπ.";
     Message[ greek ] = "Δεν έγινε η εγκατάσταση της γραμματοσειράς \"StarMath\".\nΧωρίς αυτή τη γραμματοσειρά το %PRODUCTNAME Math δεν θα εκτελεστεί σωστά.\nΠαρακαλώ να γίνει πρώτα η εγκατάσταση αυτής της γραμματοσειράς και στη συνέχεια η επανεκκίνηση του %PRODUCTNAME Math.";
-    Message[ korean ] = "\"%PRODUCTNAME Math\" ±Ϋ²ΓΐΜ Ό³Δ΅µΗΎξ ΐΦΑφ ΎΚ½ΐ΄Ο΄Ω!\nΐΜ ±Ϋ²ΓΐΜ ΎψΐΈΈι %PRODUCTNAME Math°΅ Α¦΄λ·Ξ ΐΫΎχΐ» ΗÒ Όφ Ύψ½ΐ΄Ο΄Ω...\n±Ϋ²Γΐ» Ό³Δ΅ΗΟ°ν %PRODUCTNAME MathΈ¦ »υ·Ξ ½ΓΐΫΗΟ½Κ½ΓΏΐ.";
+    Message[ korean ] = "\"%PRODUCTNAME Math\" ±Ϋ²ΓΐΜ Ό³Δ΅µΗΎξ ΐΦΑφ ΎΚ½ΐ΄Ο΄Ω!\nΐΜ ±Ϋ²ΓΐΜ ΎψΐΈΈι %PRODUCTNAME Math°΅ Α¦΄λ·Ξ ΐΫΎχΐ» ΗÒ Όφ Ύψ½ΐ΄Ο΄Ω...\n±Ϋ²Γΐ» Ό³Δ΅ΗΡ ΄Ωΐ½, %PRODUCTNAME MathΈ¦ ΄Ω½Γ ½ΓΐΫΗΟ½Κ½ΓΏΐ.";
     Message[ turkish ] = "\"StarMath\" yazύtipi yόklenmedi!\nBu yazύtipi olmadan StarMath programύ doπru bir biηimde ηalύώmaz...\nYazύtipini yόkleyin ve StarMath programύnύ yeniden baώlatύn.";
     Message[ language_user1 ] = " ";
 };
@@ -4676,7 +4676,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ portuguese ] = "Divisγo (χ)" ;
                 Text[ chinese_simplified ] = "³ύ·¨(Ò»ΠΠΛ«µγ)";
                 Text[ russian ] = "Δελενθε (δβξεςξχθε ρ χεπςξι)";
-                Text[ polish ] = "Dzielenie (Dwukropek-Kreska)";
+                Text[ polish ] = "Dzielenie (dwukropek-kreska)";
                 Text[ japanese ] = "„Z(ό‚Ι2“_)";
                 Text[ chinese_traditional ] = "°£ªk(¤@¦ζΒωΒI)";
                 Text[ arabic ] = "(χ) ήΣγΙ";
@@ -4702,7 +4702,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ portuguese ] = "Divisγo (barra diagonal)" ;
                 Text[ chinese_simplified ] = "³ύ·¨(Π±Οί)";
                 Text[ russian ] = "Δελενθε (κξρΰÿ χεπςΰ)";
-                Text[ polish ] = "Dzielenie (Kreska ukona)";
+                Text[ polish ] = "Dzielenie (kreska ukona)";
                 Text[ japanese ] = "„Z(Ξό)";
                 Text[ chinese_traditional ] = "°£ªk(±Χ½u)";
                 Text[ arabic ] = "(/) ήΣγΙ";
@@ -7459,7 +7459,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_simplified ] = "µγ";
                 Text[ russian ] = "Òξχκΰ";
                 Text[ polish ] = "Punkt";
-                Text[ japanese ] = "ΌέΈήΩ Δή―Δ";
+                Text[ japanese ] = "ΌέΈήΩΔή―Δ";
                 Text[ chinese_traditional ] = "ΒI";
                 Text[ arabic ] = "δήΨΙ";
                 Text[ greek ] = "Κουκκίδα";
@@ -7571,7 +7571,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_simplified ] = "Λ«µγ";
                 Text[ russian ] = "Δβξεςξχθε (γξπθηξνςΰλόνξ)";
                 Text[ polish ] = "Dwukropek";
-                Text[ japanese ] = "ΐήΜήΩ Δή―Δ";
+                Text[ japanese ] = "ΐήΜήΩΔή―Δ";
                 Text[ chinese_traditional ] = "ΒωΒI";
                 Text[ arabic ] = "δήΨΙ γÒΟζΜΙ";
                 Text[ greek ] = "Διπλή κουκκίδα";
@@ -7683,7 +7683,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_simplified ] = "Θύµγ";
                 Text[ russian ] = "Μνξγξςξχθε";
                 Text[ polish ] = "potrσjny punkt";
-                Text[ japanese ] = "ΔΨΜίΩ Δή―Δ";
+                Text[ japanese ] = "ΔΨΜίΩΔή―Δ";
                 Text[ chinese_traditional ] = "¤TΒI";
                 Text[ arabic ] = "δήΨΙ ΛαΗΛνΙ";
                 Text[ greek ] = "Τριπλή κουκκίδα";
@@ -9272,7 +9272,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ chinese_simplified ] = "µγΟςΟΒ";
                 TEXT[ russian ] = "Òξχκθ ρνθησ";
                 TEXT[ polish ] = "Kropki na dole";
-                TEXT[ japanese ] = "Δή―Δ‰Ί";
+                TEXT[ japanese ] = "‰Ί‚ΙΔή―Δ";
                 TEXT[ chinese_traditional ] = "ΒI¦V¤U";
                 TEXT[ arabic ] = "δήΗΨ ΓΣέα";
                 TEXT[ greek ] = "Κουκκίδες κάτω";
@@ -9298,7 +9298,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ chinese_simplified ] = "ΦΠΟςµγ";
                 TEXT[ russian ] = "Òξχκθ οξ φενςπσ";
                 TEXT[ polish ] = "Kropki w rodku";
-                TEXT[ japanese ] = "Δή―Δ’†‰›";
+                TEXT[ japanese ] = "’†‰›‚ΙΔή―Δ";
                 TEXT[ chinese_traditional ] = "¤¤¦VΒI";
                 TEXT[ arabic ] = "δήΗΨ έν ΗαζΣΨ";
                 TEXT[ greek ] = "Κουκκίδες κεντραρισμένα";
@@ -9835,7 +9835,7 @@ String STR_MATH_DOCUMENT_FULLTYPE_50
     Text [ swedish ] = "%PRODUCTNAME 5.0 Formel" ;
     Text [ danish ] = "%PRODUCTNAME 5.0 formel" ;
     Text [ italian ] = "Formula %PRODUCTNAME 5.0" ;
-    Text [ spanish ] = "Fσrmula %PRODUCTNAME 5.0" ;
+    Text [ spanish ] = "%PRODUCTNAME 5.0 Fσrmula" ;
     Text [ french ] = "%PRODUCTNAME 5.0 Formule" ;
     Text [ dutch ] = "%PRODUCTNAME 5.0 Formule" ;
     Text [ portuguese_brazilian ] = "%PRODUCTNAME 5.0 Formel" ;
@@ -9860,7 +9860,7 @@ String STR_MATH_DOCUMENT_FULLTYPE_40
     Text [ swedish ] = "%PRODUCTNAME 4.0 Formel" ;
     Text [ danish ] = "%PRODUCTNAME 4.0 formel" ;
     Text [ italian ] = "Formula %PRODUCTNAME 4.0" ;
-    Text [ spanish ] = "Fσrmula %PRODUCTNAME 4.0" ;
+    Text [ spanish ] = "%PRODUCTNAME 4.0 Fσrmula" ;
     Text [ french ] = "%PRODUCTNAME 4.0 Formule" ;
     Text [ dutch ] = "%PRODUCTNAME 4.0 Formule" ;
     Text [ portuguese_brazilian ] = "%PRODUCTNAME 4.0 Formel" ;
@@ -9885,7 +9885,7 @@ String STR_MATH_DOCUMENT_FULLTYPE_31
     Text [ swedish ] = "%PRODUCTNAME 3.0 Formel" ;
     Text [ danish ] = "%PRODUCTNAME 3.0 formel" ;
     Text [ italian ] = "Formula %PRODUCTNAME 3.0" ;
-    Text [ spanish ] = "Fσrmula %PRODUCTNAME 3.0" ;
+    Text [ spanish ] = "%PRODUCTNAME 3.0 Fσrmula" ;
     Text [ french ] = "%PRODUCTNAME 3.0 Formule" ;
     Text [ dutch ] = "%PRODUCTNAME 3.0 Formule" ;
     Text [ portuguese_brazilian ] = "%PRODUCTNAME 3.0 Formel" ;
@@ -10584,7 +10584,7 @@ ToolBox RID_MATH_TOOLBOX
             Text[ chinese_traditional ] = "§σ·s";
             Text[ arabic ] = "ΚΝΟνΛ";
             Text[ greek ] = "Ενημέρωση";
-            Text[ korean ] = "°»½Ε";
+            Text[ korean ] = "»υ·Ξ °νΔ§";
             Text[ turkish ] = "Gόncelle";
             Text[ language_user1 ] = " ";
         };
