@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.85 $
+#   $Revision: 1.86 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-20 10:10:15 $
+#   last change: $Author: obo $ $Date: 2004-11-16 14:57:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -227,6 +227,7 @@ SHL4OBJS=       \
                 $(SLO)$/desktop.obj					\
           $(SLO)$/loaddispatcher.obj          \
                 $(SLO)$/dispatchprovider.obj		\
+                $(SLO)$/dispatchinformationprovider.obj		\
                 $(SLO)$/documentproperties.obj		\
                 $(SLO)$/droptargetlistener.obj		\
                 $(SLO)$/frame.obj					\
@@ -323,7 +324,8 @@ SHL4OBJS=       \
                 $(SLO)$/statusbarfactory.obj			\
                 $(SLO)$/recentfilesmenucontroller.obj   \
                 $(SLO)$/progressbarwrapper.obj          \
-                $(SLO)$/statusindicatorinterfacewrapper.obj
+                $(SLO)$/statusindicatorinterfacewrapper.obj \
+                $(SLO)$/uicategorydescription.obj
 
 SHL4STDLIBS=	\
                 $(FWILIB)                           \
