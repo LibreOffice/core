@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.15 $
+#  $Revision: 1.16 $
 #
-#  last change: $Author: vg $ $Date: 2003-07-09 10:41:11 $
+#  last change: $Author: obo $ $Date: 2003-10-20 13:13:42 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -62,16 +62,19 @@ COMPONENT1_MANIFESTFILE=$(OUT_COMP_CLASS)/$(COMPONENT1_NAME).uno.Manifest
 REGISTERFLAG=$(OUT_MISC)$(PS)java_$(COMPONENT1_NAME)_register_component.flag
 
 IDLFILES = XInstanceInspector.idl
+# differentiate between real type and service descriptions
+IDLFILES2= InstanceInspector.idl
 
 # normally the idl file should be stored in a directory tree fitting the module structure,
 # for the example we know the module structure
-PACKAGE = org/OpenOffice
+PACKAGE = org/openoffice
 
 JAVAFILES  = InstanceInspector.java \
 	Test.java
 
 GENJAVAFILES = $(patsubst %.idl,$(OUT_COMP_GEN)/$(PACKAGE)/%.java,$(IDLFILES))
 GENURDFILES = $(patsubst %.idl,$(OUT_COMP_GEN)/%.urd,$(IDLFILES))
+GENURDFILES += $(patsubst %.idl,$(OUT_COMP_GEN)/%.urd,$(IDLFILES2))
 
 CLASSFILES = $(patsubst %.java,$(OUT_COMP_CLASS)/%.class,$(JAVAFILES))
 CLASSFILES += $(subst $(OUT_COMP_GEN),$(OUT_COMP_CLASS),$(GENJAVAFILES:.java=.class))
