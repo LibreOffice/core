@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr1.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: er $ $Date: 2001-02-28 14:29:23 $
+ *  last change: $Author: dr $ $Date: 2001-03-08 11:52:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,11 +75,15 @@
 
 #include "scitems.hxx"
 #include <svx/langitem.hxx>
+#include <svx/algitem.hxx>
 #include <unotools/textsearch.hxx>
 #include <svtools/zforlist.hxx>
+#include <svtools/zformat.hxx>
 #include <tools/intn.hxx>
 #include <tools/solar.h>
 #include <unotools/charclass.hxx>
+#include <sfx2/docfile.hxx>
+#include <sfx2/printer.hxx>
 
 #include <stdlib.h>
 #include <string.h>
@@ -94,6 +98,7 @@
 #include "scmatrix.hxx"
 #include "docoptio.hxx"
 #include "globstr.hrc"
+#include "attrib.hxx"
 
 
 // PI jetzt als F_PI aus solar.h
@@ -1104,6 +1109,217 @@ void ScInterpreter::ScType()
                 nType = 1;
     }
     PushInt( nType );
+}
+
+
+inline BOOL lcl_FormatHasNegColor( const SvNumberformat* pFormat )
+{
+    return pFormat && pFormat->GetColor( 1 );
+}
+
+
+inline BOOL lcl_FormatHasOpenPar( const SvNumberformat* pFormat )
+{
+    return pFormat && (pFormat->GetFormatstring().Search( '(' ) != STRING_NOTFOUND);
+}
+
+
+void ScInterpreter::ScCell()
+{   // ATTRIBUTE ; [REF]
+    BYTE nParamCount = GetByte();
+    if( MustHaveParamCount( nParamCount, 1, 2 ) )
+    {
+        ScAddress aCellPos( aPos );
+        BOOL bError = FALSE;
+        if( nParamCount == 2 )
+            bError = !PopDoubleRefOrSingleRef( aCellPos );
+        String aInfoType( GetString() );
+        if( bError || nGlobalError )
+            SetIllegalParameter();
+        else
+        {
+            String          aResult;
+            ScBaseCell*     pCell = GetCell( aCellPos );
+
+            aInfoType.ToUpperAscii();
+
+// *** ADDRESS INFO ***
+            if( aInfoType.EqualsAscii( "COL" ) )
+            {   // column number (1-based)
+                PushInt( aCellPos.Col() + 1 );
+            }
+            else if( aInfoType.EqualsAscii( "ROW" ) )
+            {   // row number (1-based)
+                PushInt( aCellPos.Row() + 1 );
+            }
+            else if( aInfoType.EqualsAscii( "SHEET" ) )
+            {   // table number (1-based)
+                PushInt( aCellPos.Tab() + 1 );
+            }
+            else if( aInfoType.EqualsAscii( "ADDRESS" ) )
+            {   // address formatted as [['FILENAME'#]$TABLE.]$COL$ROW
+                USHORT nFlags = (aCellPos.Tab() == aPos.Tab()) ? (SCA_ABS) : (SCA_ABS_3D);
+                aCellPos.Format( aResult, nFlags, pDok );
+                PushString( aResult );
+            }
+            else if( aInfoType.EqualsAscii( "FILENAME" ) )
+            {   // file name and table name: 'FILENAME'#$TABLE
+                USHORT nTab = aCellPos.Tab();
+                if( nTab < pDok->GetTableCount() )
+                {
+                    if( pDok->GetLinkMode( nTab ) == SC_LINK_VALUE )
+                        pDok->GetName( nTab, aResult );
+                    else
+                    {
+                        SfxObjectShell* pShell = pDok->GetDocumentShell();
+                        if( pShell && pShell->GetMedium() )
+                        {
+                            aResult = (sal_Unicode) '\'';
+                            aResult += pShell->GetMedium()->GetName();
+                            aResult.AppendAscii( "'#$" );
+                            String aTabName;
+                            pDok->GetName( nTab, aTabName );
+                            aResult += aTabName;
+                        }
+                    }
+                }
+                PushString( aResult );
+            }
+            else if( aInfoType.EqualsAscii( "COORD" ) )
+            {   // address, lotus 1-2-3 formatted: $TABLE:$COL$ROW
+                ScAddress( aCellPos.Tab(), 0, 0 ).Format( aResult, (SCA_COL_ABSOLUTE|SCA_VALID_COL) );
+                aResult += ':';
+                String aCellStr;
+                aCellPos.Format( aCellStr, (SCA_COL_ABSOLUTE|SCA_VALID_COL|SCA_ROW_ABSOLUTE|SCA_VALID_ROW) );
+                aResult += aCellStr;
+                PushString( aResult );
+            }
+
+// *** CELL PROPERTIES ***
+            else if( aInfoType.EqualsAscii( "CONTENTS" ) )
+            {   // contents of the cell, no formatting
+                if( pCell && pCell->HasStringData() )
+                {
+                    GetCellString( aResult, pCell );
+                    PushString( aResult );
+                }
+                else
+                    PushDouble( GetCellValue( aCellPos, pCell ) );
+            }
+            else if( aInfoType.EqualsAscii( "TYPE" ) )
+            {   // b = blank; l = string (label); v = otherwise (value)
+                if( HasCellStringData( pCell ) )
+                    aResult = 'l';
+                else
+                    aResult = HasCellValueData( pCell ) ? 'v' : 'b';
+                PushString( aResult );
+            }
+            else if( aInfoType.EqualsAscii( "WIDTH" ) )
+            {   // column width (rounded off as count of zero characters in standard font and size)
+                Printer*    pPrinter = pDok->GetPrinter();
+                MapMode     aOldMode( pPrinter->GetMapMode() );
+                Font        aOldFont( pPrinter->GetFont() );
+                Font        aDefFont;
+
+                pPrinter->SetMapMode( MAP_TWIP );
+                pDok->GetDefPattern()->GetFont( aDefFont, pPrinter );
+                pPrinter->SetFont( aDefFont );
+                long nZeroWidth = pPrinter->GetTextWidth( String( '0' ) );
+                pPrinter->SetFont( aOldFont );
+                pPrinter->SetMapMode( aOldMode );
+                int nZeroCount = (int)(pDok->GetColWidth( aCellPos.Col(), aCellPos.Tab() ) / nZeroWidth);
+                PushInt( nZeroCount );
+            }
+            else if( aInfoType.EqualsAscii( "PREFIX" ) )
+            {   // ' = left; " = right; ^ = centered
+                if( HasCellStringData( pCell ) )
+                {
+                    const SvxHorJustifyItem* pJustAttr = (const SvxHorJustifyItem*)
+                        pDok->GetAttr( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(), ATTR_HOR_JUSTIFY );
+                    switch( pJustAttr->GetValue() )
+                    {
+                        case SVX_HOR_JUSTIFY_STANDARD:
+                        case SVX_HOR_JUSTIFY_LEFT:
+                        case SVX_HOR_JUSTIFY_BLOCK:     aResult = '\''; break;
+                        case SVX_HOR_JUSTIFY_CENTER:    aResult = '^';  break;
+                        case SVX_HOR_JUSTIFY_RIGHT:     aResult = '"';  break;
+                        case SVX_HOR_JUSTIFY_REPEAT:    aResult = '\\'; break;
+                    }
+                }
+                PushString( aResult );
+            }
+            else if( aInfoType.EqualsAscii( "PROTECT" ) )
+            {   // 1 = cell locked
+                const ScProtectionAttr* pProtAttr = (const ScProtectionAttr*)
+                    pDok->GetAttr( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(), ATTR_PROTECTION );
+                PushInt( pProtAttr->GetProtection() ? 1 : 0 );
+            }
+
+// *** FORMATTING ***
+            else if( aInfoType.EqualsAscii( "FORMAT" ) )
+            {   // specific format code for standard formats
+                ULONG   nFormat = pDok->GetNumberFormat( aCellPos );
+                BOOL    bAppendPrec = TRUE;
+                USHORT  nPrec, nLeading;
+                BOOL    bThousand, bIsRed;
+                pFormatter->GetFormatSpecialInfo( nFormat, bThousand, bIsRed, nPrec, nLeading );
+
+                switch( pFormatter->GetType( nFormat ) )
+                {
+                    case NUMBERFORMAT_NUMBER:       aResult = (bThousand ? ',' : 'F');  break;
+                    case NUMBERFORMAT_CURRENCY:     aResult = 'C';                      break;
+                    case NUMBERFORMAT_SCIENTIFIC:   aResult = 'S';                      break;
+                    case NUMBERFORMAT_PERCENT:      aResult = 'P';                      break;
+                    default:
+                    {
+                        bAppendPrec = FALSE;
+                        switch( pFormatter->GetIndexTableOffset( nFormat ) )
+                        {
+                            case NF_DATE_SYSTEM_SHORT:
+                            case NF_DATE_SYS_DMMMYY:
+                            case NF_DATE_SYS_DDMMYY:
+                            case NF_DATE_SYS_DDMMYYYY:
+                            case NF_DATE_SYS_DMMMYYYY:
+                            case NF_DATE_DIN_DMMMYYYY:
+                            case NF_DATE_SYS_DMMMMYYYY:
+                            case NF_DATE_DIN_DMMMMYYYY: aResult.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "D1" ) );  break;
+                            case NF_DATE_SYS_DDMMM:     aResult.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "D2" ) );  break;
+                            case NF_DATE_SYS_MMYY:      aResult.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "D3" ) );  break;
+                            case NF_DATETIME_SYSTEM_SHORT_HHMM:
+                            case NF_DATETIME_SYS_DDMMYYYY_HHMMSS:
+                                                        aResult.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "D4" ) );  break;
+                            case NF_DATE_DIN_MMDD:      aResult.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "D5" ) );  break;
+                            case NF_TIME_HHMMSSAMPM:    aResult.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "D6" ) );  break;
+                            case NF_TIME_HHMMAMPM:      aResult.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "D7" ) );  break;
+                            case NF_TIME_HHMMSS:        aResult.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "D8" ) );  break;
+                            case NF_TIME_HHMM:          aResult.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "D9" ) );  break;
+                            default:                    aResult = 'G';
+                        }
+                    }
+                }
+                if( bAppendPrec )
+                    aResult += String::CreateFromInt32( nPrec );
+                const SvNumberformat* pFormat = pFormatter->GetEntry( nFormat );
+                if( lcl_FormatHasNegColor( pFormat ) )
+                    aResult += '-';
+                if( lcl_FormatHasOpenPar( pFormat ) )
+                    aResult.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "()" ) );
+                PushString( aResult );
+            }
+            else if( aInfoType.EqualsAscii( "COLOR" ) )
+            {   // 1 = negative values are colored, otherwise 0
+                const SvNumberformat* pFormat = pFormatter->GetEntry( pDok->GetNumberFormat( aCellPos ) );
+                PushInt( lcl_FormatHasNegColor( pFormat ) ? 1 : 0 );
+            }
+            else if( aInfoType.EqualsAscii( "PARENTHESES" ) )
+            {   // 1 = format string contains a '(' character, otherwise 0
+                const SvNumberformat* pFormat = pFormatter->GetEntry( pDok->GetNumberFormat( aCellPos ) );
+                PushInt( lcl_FormatHasOpenPar( pFormat ) ? 1 : 0 );
+            }
+            else
+                SetIllegalArgument();
+        }
+    }
 }
 
 

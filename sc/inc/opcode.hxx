@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opcode.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2001-03-05 14:43:44 $
+ *  last change: $Author: dr $ $Date: 2001-03-08 11:48:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,6 +165,7 @@ enum OpCodeEnum
         ocIsNonString       = SC_OPCODE_IS_NON_STRING,
         ocIsLogical         = SC_OPCODE_IS_LOGICAL,
         ocType              = SC_OPCODE_TYPE,
+        ocCell              = SC_OPCODE_CELL,
         ocIsRef             = SC_OPCODE_IS_REF,
         ocIsValue           = SC_OPCODE_IS_VALUE,
         ocIsFormula         = SC_OPCODE_IS_FORMULA,

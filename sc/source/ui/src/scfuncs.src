@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scfuncs.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dr $ $Date: 2001-03-05 14:56:08 $
+ *  last change: $Author: dr $ $Date: 2001-03-08 11:55:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -11628,6 +11628,41 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ korean ] = "µ¥ÀÌÅÍ À¯ÇüÀÌ¡¡°áÁ¤µÇ´Â °ª";
             Text[ turkish ] = "Veri tipi belirlenecek deðer.";
             Text[ language_user1 ] = " ";
+        };
+    };
+     // -=*# Resource for function CELL/ZELLE #*=-
+    Resource SC_OPCODE_CELL
+    {
+        String 1 // Description
+        {
+            Text = "Ermittelt Informationen über Adresse, Formatierung oder Inhalt einer Zelle." ;
+            Text [ english ] = "Determines information about address, formatting or contents of a cell." ;
+        };
+        ExtraData =
+        {
+            ID_FUNCTION_GRP_INFO;
+            U2S( HID_FUNC_ZELLE );
+            2;  0;  1;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text = "Infotyp" ;
+            Text [ english ] = "info_type" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text = "Zeichenkette, die die Art der Information bestimmt." ;
+            Text [ english ] = "This text specifies the type of information." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text = "Referenz" ;
+            Text [ english ] = "reference" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text = "Die Position der zu untersuchenden Zelle." ;
+            Text [ english ] = "The position of the cell you want to examine." ;
         };
     };
      // -=*# Resource for function AKTUELL #*=-

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dr $ $Date: 2001-03-05 14:54:42 $
+ *  last change: $Author: dr $ $Date: 2001-03-08 11:53:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1625,7 +1625,7 @@ DefTokenId ExcelToSc::IndexToToken( UINT16 nIndex )
         ocNoName,           // XlfNames
         ocNoName,           // XlfDirectory
         ocFind,             // XlfFind
-        ocNoName,           // XlfCell
+        ocCell,             // XlfCell
         ocIsErr,            // XlfIserr
         ocIsString,         // XlfIstext
         ocIsValue,          // XlfIsnumber
@@ -2038,7 +2038,7 @@ BYTE ExcelToSc::IndexToAnzahl( UINT16 nIndex )
         0,      // XlfNames
         0,      // XlfDirectory
         2,      // XlfFind
-        0,      // XlfCell
+        2,      // XlfCell
         1,      // XlfIserr
         1,      // XlfIstext
         1,      // XlfIsnumber

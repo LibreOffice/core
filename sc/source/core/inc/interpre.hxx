@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpre.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dr $ $Date: 2001-03-05 14:47:06 $
+ *  last change: $Author: dr $ $Date: 2001-03-08 11:50:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -374,6 +374,7 @@ void ScIsString();
 void ScIsNonString();
 void ScIsLogical(UINT16 aOldNumType);
 void ScType();
+void ScCell();
 void ScIsRef();
 void ScIsValue();
 void ScIsFormula();
@@ -505,9 +506,6 @@ void ScGetDate();
 void ScGetTime();
 void ScGetDiffDate();
 void ScGetDiffDate360();
-void ScNBW();
-void ScIKV();
-void ScMIRR();
 void ScPower();
 void ScAmpersand();
 void ScAdd();
@@ -523,6 +521,10 @@ void ScDecimal();
 void ScConvert();
 
 //----------------------- Finanzfunktionen ------------------------------------
+void ScNBW();
+void ScIKV();
+void ScMIRR();
+
 double ScGetBw(double fZins, double fZzr, double fRmz,
                       double fZw, double fF);
 void ScBW();

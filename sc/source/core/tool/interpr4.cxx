@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr4.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dr $ $Date: 2001-03-05 14:53:14 $
+ *  last change: $Author: dr $ $Date: 2001-03-08 11:52:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3106,6 +3106,7 @@ StackVar ScInterpreter::Interpret()
                     case ocIsNonString      : ScIsNonString();              break;
                     case ocIsLogical        : ScIsLogical(nOldOpCode);      break;
                     case ocType             : ScType();                     break;
+                    case ocCell             : ScCell();                     break;
                     case ocIsRef            : ScIsRef();                    break;
                     case ocIsValue          : ScIsValue();                  break;
                     case ocIsFormula        : ScIsFormula();                break;

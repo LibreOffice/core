@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dr $ $Date: 2001-03-05 14:47:45 $
+ *  last change: $Author: dr $ $Date: 2001-03-08 11:51:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1323,6 +1323,11 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "TYPE";
         Text[ turkish ] = "TYPE";
         Text[ language_user1 ] = " ";
+    };
+    String SC_OPCODE_CELL
+    {
+        Text = "ZELLE" ;
+        Text [ english ] = "CELL" ;
     };
     String SC_OPCODE_IS_REF
     {
@@ -7207,6 +7212,7 @@ Resource RID_SC_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_IS_NON_STRING { Text = "ISNONTEXT" ; };
     String SC_OPCODE_IS_LOGICAL { Text = "ISLOGICAL" ; };
     String SC_OPCODE_TYPE { Text = "TYPE" ; };
+    String SC_OPCODE_CELL { Text = "CELL" ; };
     String SC_OPCODE_IS_REF { Text = "ISREF" ; };
     String SC_OPCODE_IS_VALUE { Text = "ISNUMBER" ; };
     String SC_OPCODE_IS_FORMULA { Text = "ISFORMULA" ; };
@@ -7272,6 +7278,7 @@ Resource RID_SC_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_COUNT_2 { Text = "COUNTA" ; };
     String SC_OPCODE_NBW { Text = "NPV" ; };
     String SC_OPCODE_IKV { Text = "IRR" ; };
+    String SC_OPCODE_MIRR { Text = "MIRR" ; };
     String SC_OPCODE_VAR { Text = "VAR" ; };
     String SC_OPCODE_VAR_A { Text = "VARA" ; };
     String SC_OPCODE_VAR_P { Text = "VARP" ; };
