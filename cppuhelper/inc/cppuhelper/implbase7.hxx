@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implbase7.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dbo $ $Date: 2001-11-09 13:49:15 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 17:51:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,8 @@
 #ifndef _CPPUHELPER_IMPLBASE7_HXX_
 #define _CPPUHELPER_IMPLBASE7_HXX_
 
-#ifdef MACOSX /* use old impl helpers for macosx */
+#if defined( MACOSX ) && ( __GNUC__ < 3 )
+/* use old impl helpers for macosx */
 
 #define __IFC7 Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7
 #define __CLASS_IFC7 class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5, class Ifc6, class Ifc7
