@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-29 16:16:08 $
+ *  last change: $Author: fs $ $Date: 2001-02-05 14:00:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,9 @@
 #endif
 #ifndef _COMPHELPER_PROPERTY_HXX_
 #include <comphelper/property.hxx>
+#endif
+#ifndef _DBAUI_PROPERTYSETITEM_HXX_
+#include "propertysetitem.hxx"
 #endif
 
 //.........................................................................
@@ -433,6 +436,7 @@ Reference< XPropertySet > ODatasourceMap::createNew(const ::rtl::OUString& _rNam
         SfxItemSet* pItems = new SfxItemSet(*_pPool, _pRanges);
         pItems->Put(SfxBoolItem(DSID_NEWDATASOURCE, sal_True));
         pItems->Put(SfxStringItem(DSID_NAME, _rName));
+        pItems->Put(OPropertySetItem(DSID_DATASOURCE_UNO, xReturn));
         m_aDatasources[_rName] = DatasourceInfo(xReturn, pItems);
     }
     return xReturn;
@@ -802,6 +806,20 @@ sal_Bool ODbAdminDialog::getCurrentSettings(Sequence< PropertyValue >& _rDriverP
 }
 
 //-------------------------------------------------------------------------
+sal_Bool ODbAdminDialog::isApplyable()
+{
+    return GetApplyButton()->IsEnabled();
+}
+
+//-------------------------------------------------------------------------
+sal_Bool ODbAdminDialog::applyChanges()
+{
+    DBG_ASSERT(isApplyable(), "ODbAdminDialog::applyChanges: invalid call!");
+    short nResult = SfxTabDialog::Ok();
+    return (AR_KEEP != implApplyChanges());
+}
+
+//-------------------------------------------------------------------------
 short ODbAdminDialog::Ok()
 {
     short nResult = SfxTabDialog::Ok();
@@ -828,6 +846,7 @@ void ODbAdminDialog::PageCreated(USHORT _nId, SfxTabPage& _rPage)
             break;
         case PAGE_QUERYADMINISTRATION:
             static_cast<OQueryAdministrationPage&>(_rPage).setServiceFactory(m_xORB);
+            static_cast<OQueryAdministrationPage&>(_rPage).SetAdminDialog(this);
             break;
     }
 
@@ -869,10 +888,12 @@ SfxItemSet* ODbAdminDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rp
     *pCounter++ = new SfxBoolItem(DSID_NEWDATASOURCE, sal_False);
     *pCounter++ = new SfxBoolItem(DSID_DELETEDDATASOURCE, sal_False);
     *pCounter++ = new SfxBoolItem(DSID_SUPPRESSVERSIONCL, sal_True);
+    *pCounter++ = new OPropertySetItem(DSID_DATASOURCE_UNO);
 
     // create the pool
     static SfxItemInfo __READONLY_DATA aItemInfos[DSID_LAST_ITEM_ID - DSID_FIRST_ITEM_ID + 1] =
     {
+        {0,0},
         {0,0},
         {0,0},
         {0,0},
@@ -1178,6 +1199,7 @@ void ODbAdminDialog::resetPages(const Reference< XPropertySet >& _rxDatasource, 
     // reset some meta data items in the input set which are for tracking the state of the current ds
     GetInputSetImpl()->Put(SfxBoolItem(DSID_NEWDATASOURCE, sal_False));
     GetInputSetImpl()->Put(SfxBoolItem(DSID_DELETEDDATASOURCE, _bDeleted));
+    GetInputSetImpl()->Put(OPropertySetItem(DSID_DATASOURCE_UNO, _rxDatasource));
 
     // fill in the remembered settings for the data source
     if (m_sCurrentDatasource.getLength())   // the current datasource is not deleted
@@ -2242,6 +2264,9 @@ IMPL_LINK(ODatasourceSelector, OnButtonPressed, Button*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.32  2001/01/29 16:16:08  nn
+ *  added DST_CALC
+ *
  *  Revision 1.31  2001/01/26 16:13:26  fs
  *  added the query administration page
  *
