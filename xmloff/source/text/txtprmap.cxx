@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: mib $ $Date: 2001-05-10 10:09:49 $
+ *  last change: $Author: mib $ $Date: 2001-05-16 08:37:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -514,7 +514,7 @@ XMLPropertyMapEntry aXMLFramePropMap[] =
     // RES_ANCHOR
     // moved to here because it is not used for automatic styles
     M_ED( "AnchorType",         TEXT,   anchor_type,            XML_TYPE_TEXT_ANCHOR_TYPE, CTF_ANCHORTYPE ),
-    M_ED( "AnchorPageNo",       TEXT,   anchor_page_number,     XML_TYPE_NUMBER16, CTF_ANCHORPAGENUMBER ),
+    // AnchorPage number is not required for styles!
     M_ED( "HoriOrientPosition", SVG,    x,        XML_TYPE_MEASURE, 0 ),
     M_ED( "VertOrientPosition", SVG,    y,        XML_TYPE_MEASURE, 0 ),
     // ***** The map for automatic styles starts here *****
@@ -741,7 +741,7 @@ XMLPropertyMapEntry *lcl_txtprmap_getMap( sal_uInt16 nType )
         pMap = aXMLFramePropMap;
         break;
     case TEXT_PROP_MAP_AUTO_FRAME:
-        pMap = &(aXMLFramePropMap[11]);
+        pMap = &(aXMLFramePropMap[10]);
         DBG_ASSERT( pMap->msXMLName == sXML_margin_left, "frame map changed" );
         break;
     case TEXT_PROP_MAP_SHAPE:

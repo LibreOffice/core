@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtexppr.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-23 16:30:35 $
+ *  last change: $Author: mib $ $Date: 2001-05-16 08:37:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -427,7 +427,6 @@ void XMLTextExportPropertySetMapper::ContextFilter(
 
     // anchor
     XMLPropertyState* pAnchorTypeState = NULL;
-    XMLPropertyState* pAnchorPageNumberState = NULL;
 
     // horizontal position and relation
     XMLPropertyState* pHoriOrientState = NULL;
@@ -502,7 +501,6 @@ void XMLTextExportPropertySetMapper::ContextFilter(
         case CTF_WRAP_CONTOUR_MODE:     pWrapContourModeState = propertie; break;
         case CTF_WRAP_PARAGRAPH_ONLY:   pWrapParagraphOnlyState = propertie; break;
         case CTF_ANCHORTYPE:            pAnchorTypeState = propertie; break;
-        case CTF_ANCHORPAGENUMBER:      pAnchorPageNumberState = propertie; bNeedsAnchor = sal_True; break;
 
         case CTF_HORIZONTALPOS:             pHoriOrientState = propertie; bNeedsAnchor = sal_True; break;
         case CTF_HORIZONTALPOS_MIRRORED:    pHoriOrientMirroredState = propertie; bNeedsAnchor = sal_True; break;
@@ -832,9 +830,6 @@ void XMLTextExportPropertySetMapper::ContextFilter(
                     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("AnchorType") ) );
         aAny >>= eAnchor;
     }
-
-    if( pAnchorPageNumberState && TextContentAnchorType_AT_PAGE != eAnchor )
-        pAnchorPageNumberState->mnIndex = -1;
 
     if( pHoriOrientState && pHoriOrientMirroredState )
     {
