@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: vg $ $Date: 2001-08-24 10:22:12 $
+ *  last change: $Author: rt $ $Date: 2001-08-27 20:24:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4269,7 +4269,7 @@ SfxSlotInfo FN_INSERT_SYMBOL
     SlotName[ swedish ] = "Infoga specialtecken  ";
     SlotName[ polish ] = "Wstaw znak specjalny   ";
     SlotName[ portuguese_brazilian ] = "InsertSymbol ";
-    SlotName[ japanese ] = "特殊文字の挿入 ";
+    SlotName[ japanese ] = "記号と特殊文字の挿入 ";
     SlotName[ chinese_simplified ] = "插入特殊字符 ";
     SlotName[ chinese_traditional ] = "插入特殊字元 ";
     SlotName[ arabic ] = "����� ���� ���� ";
@@ -9489,6 +9489,7 @@ SfxSlotInfo FN_EDIT_HYPERLINK
     SlotName[ catalan ] = "Editar hiperenlace";
     SlotName[ finnish ] = "Muokkaa hyperlinkki�";
 };
+
 
 
 
