@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AxTestComponents.cpp,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2000-10-12 13:17:46 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 13:10:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,16 +67,18 @@
 #include "stdafx.h"
 #include "resource.h"
 #include <initguid.h>
-#include "AxTestComponents.h"
+//#include "AxTestComponents.h"
 
-#include "AxTestComponents_i.c"
+//#include "AxTestComponents_i.c"
 #include "Basic.h"
+#include "Foo.h"
 
 
 CComModule _Module;
 
 BEGIN_OBJECT_MAP(ObjectMap)
 OBJECT_ENTRY(CLSID_Basic, CBasic)
+OBJECT_ENTRY(CLSID_Foo, CFoo)
 END_OBJECT_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
