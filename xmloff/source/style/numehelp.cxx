@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numehelp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2000-09-25 14:44:26 $
+ *  last change: $Author: sab $ $Date: 2000-10-23 15:29:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,9 @@
 #ifndef _TOOLS_SOLMATH_HXX
 #include <tools/solmath.hxx>
 #endif
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
@@ -106,29 +109,36 @@ sal_Bool XMLNumberFormatAttributesExportHelper::GetCurrencySymbol(const sal_Int3
         uno::Reference <util::XNumberFormats> xNumberFormats = xNumberFormatsSupplier->getNumberFormats();
         if (xNumberFormats.is())
         {
-            uno::Reference <beans::XPropertySet> xNumberPropertySet = xNumberFormats->getByKey(nNumberFormat);
-            uno::Any aCurrencySymbol = xNumberPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_CURRENCYSYMBOL)));
-            uno::Any aCurrencyExtension = xNumberPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_CURRENCYEXTENSION)));
-            if ( aCurrencySymbol >>= sCurrencySymbol)
+            try
             {
-                rtl::OUString sCurrencyExtension;
-                if ( aCurrencyExtension >>= sCurrencyExtension)
+                uno::Reference <beans::XPropertySet> xNumberPropertySet = xNumberFormats->getByKey(nNumberFormat);
+                uno::Any aCurrencySymbol = xNumberPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_CURRENCYSYMBOL)));
+                uno::Any aCurrencyExtension = xNumberPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_CURRENCYEXTENSION)));
+                if ( aCurrencySymbol >>= sCurrencySymbol)
                 {
-                    if ( sCurrencyExtension.getLength() != 0 )
+                    rtl::OUString sCurrencyExtension;
+                    if ( aCurrencyExtension >>= sCurrencyExtension)
                     {
-                        International IntTest((sCurrencyExtension.toInt32(16) * -1));
-                        sCurrencySymbol = rtl::OUString(IntTest.GetCurrBankSymbol());
-                        return sal_True;
+                        if ( sCurrencyExtension.getLength() != 0 )
+                        {
+                            International IntTest((sCurrencyExtension.toInt32(16) * -1));
+                            sCurrencySymbol = rtl::OUString(IntTest.GetCurrBankSymbol());
+                            return sal_True;
+                        }
+                        else
+                        {
+                            if ( sCurrencySymbol.getLength() == 1 && sCurrencySymbol.toChar() == NfCurrencyEntry::GetEuroSymbol() )
+                                sCurrencySymbol = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EUR"));
+                            return sal_True;
+                        }
                     }
                     else
-                    {
-                        if ( sCurrencySymbol.getLength() == 1 && sCurrencySymbol.toChar() == NfCurrencyEntry::GetEuroSymbol() )
-                            sCurrencySymbol = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EUR"));
                         return sal_True;
-                    }
                 }
-                else
-                    return sal_True;
+            }
+            catch ( uno::Exception& )
+            {
+                DBG_ERROR("Numberformat not found");
             }
         }
     }
@@ -144,14 +154,21 @@ sal_Int16 XMLNumberFormatAttributesExportHelper::GetCellType(const sal_Int32 nNu
         uno::Reference <util::XNumberFormats> xNumberFormats = xNumberFormatsSupplier->getNumberFormats();
         if (xNumberFormats.is())
         {
-            uno::Reference <beans::XPropertySet> xNumberPropertySet = xNumberFormats->getByKey(nNumberFormat);
-            uno::Any aIsStandardFormat = xNumberPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STANDARDFORMAT)));
-            aIsStandardFormat >>= bIsStandard;
-            uno::Any aNumberFormat = xNumberPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_TYPE)));
-            sal_Int16 nNumberFormat;
-            if ( aNumberFormat >>= nNumberFormat )
+            try
             {
-                return nNumberFormat;
+                uno::Reference <beans::XPropertySet> xNumberPropertySet = xNumberFormats->getByKey(nNumberFormat);
+                uno::Any aIsStandardFormat = xNumberPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STANDARDFORMAT)));
+                aIsStandardFormat >>= bIsStandard;
+                uno::Any aNumberFormat = xNumberPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_TYPE)));
+                sal_Int16 nNumberFormat;
+                if ( aNumberFormat >>= nNumberFormat )
+                {
+                    return nNumberFormat;
+                }
+            }
+            catch ( uno::Exception& )
+            {
+                DBG_ERROR("Numberformat not found");
             }
         }
     }
