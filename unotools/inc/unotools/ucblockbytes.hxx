@@ -128,6 +128,9 @@ public:
     String                  GetRealURL() const;
     DateTime                GetExpireDate() const;
 
+    // calling this method delegates the responsibility to call closeinput to the caller!
+    NS_UNO::Reference < NS_IO::XInputStream > getInputStream();
+
 #if _SOLAR__PRIVATE
     sal_Bool                setInputStream_Impl( const NS_UNO::Reference < NS_IO::XInputStream > &rxInputStream );
     sal_Bool                setStream_Impl( const NS_UNO::Reference < NS_IO::XStream > &rxStream );

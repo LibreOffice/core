@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucblockbytes.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-25 10:11:24 $
+ *  last change: $Author: mba $ $Date: 2001-06-26 14:43:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -494,6 +494,13 @@ UcbLockBytes::~UcbLockBytes()
             {}
         }
     }
+}
+
+Reference < XInputStream > UcbLockBytes::getInputStream()
+{
+    vos::OClearableGuard aGuard( m_aMutex );
+    m_bDontClose = sal_True;
+    return m_xInputStream;
 }
 
 //----------------------------------------------------------------------------
