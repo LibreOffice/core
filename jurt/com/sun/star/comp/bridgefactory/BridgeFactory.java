@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BridgeFactory.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2000-10-06 16:29:18 $
+ *  last change: $Author: kr $ $Date: 2000-10-19 15:46:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,8 @@ package com.sun.star.comp.bridgefactory;
 
 
 import java.util.Enumeration;
+import java.util.Vector;
+
 
 import com.sun.star.lang.XEventListener;
 import com.sun.star.lang.XComponent;
@@ -95,12 +97,12 @@ import com.sun.star.uno.UnoRuntime;
  * <p>
  * This component is only usable for remote bridges.
  * <p>
- * @version     $Revision: 1.2 $ $ $Date: 2000-10-06 16:29:18 $
+ * @version     $Revision: 1.3 $ $ $Date: 2000-10-19 15:46:30 $
  * @author      Kay Ramme
  * @see         com.sun.star.uno.UnoRuntime
  * @since       UDK1.0
  */
-public class BridgeFactory implements XBridgeFactory, XEventListener {
+public class BridgeFactory implements XBridgeFactory/*, XEventListener*/ {
     static private final boolean DEBUG = false;
 
     /**
@@ -144,40 +146,6 @@ public class BridgeFactory implements XBridgeFactory, XEventListener {
         return FactoryHelper.writeRegistryServiceInfo(BridgeFactory.class.getName(), __serviceName, regKey);
     }
 
-    // TODO : (jbu) WeakTable still necessary ?????
-    static protected WeakTable _bridges = new WeakTable();
-
-    /****
-     * gets called, when an instantiated bridge is disposed
-     ****/
-    public void disposing( com.sun.star.lang.EventObject event )
-    {
-        // TODO:
-        // jbu: in my eyes, this would be the better solution, but
-        //      XBridge.getName() always returns "remote" instead the name
-        //      of the bridge given during creating it
-//          System.out.println( "disposing called\n" );
-//          XBridge bridge = (XBridge) UnoRuntime.queryInterface( XBridge.class , event.Source );
-//          if( bridge != null )
-//          {
-//              System.out.println( "removing from hashmap :\n" + bridge.getName() );
-//              _bridges.remove( bridge.getName() );
-//          }
-
-        // iterating about all bridges, to find the correct one to remove
-        java.util.Enumeration enum = _bridges.keys();
-        while( enum.hasMoreElements() )
-        {
-            Object key = enum.nextElement();
-            XBridge value = (XBridge) _bridges.get( key, XBridge.class );
-            if( value != null && value.equals( event.Source ) )
-            {
-                _bridges.remove( key );
-                break;
-            }
-        }
-    }
-
     /**
      * Creates a remote bridge and memorizes it under <code>sName</code>.
      * <p>
@@ -195,24 +163,23 @@ public class BridgeFactory implements XBridgeFactory, XEventListener {
         if(sName == null || sName.length() == 0)
             sName = sProtocol + ":" + aConnection.getDescription();
 
-        XBridge xBridge = (XBridge)_bridges.get(sName, XBridge.class);
+        // do not create a new bridge, if one already exists
+        IBridge iBridges[] = UnoRuntime.getBridges();
+        for(int i = 0; i < iBridges.length; ++ i) {
+            XBridge xBridge = (XBridge)UnoRuntime.queryInterface(XBridge.class, iBridges[i]);
 
-        if(xBridge != null)
-            throw new BridgeExistsException(sName + " already exists");
+            if(xBridge != null) {
+                if(xBridge.getName().equals(sName))
+                    throw new BridgeExistsException(sName + " already exists");
+            }
+        }
+
+        XBridge xBridge = null;
 
         try {
-            IBridge iBridge = UnoRuntime.getBridgeByName("java", null, "remote", sName, new Object[]{sProtocol, aConnection, anInstanceProvider});
+            IBridge iBridge = UnoRuntime.getBridgeByName("java", null, "remote", sName, new Object[]{sProtocol, aConnection, anInstanceProvider, sName});
 
-            xBridge = (XBridge)_bridges.put(sName, iBridge, XBridge.class);
-            XComponent component = (XComponent) UnoRuntime.queryInterface( XComponent.class , xBridge );
-            if( component == null )
-            {
-                System.out.println( "warning : bridges does not support XComponent" );
-            }
-            else
-            {
-                component.addEventListener( this );
-            }
+            xBridge = (XBridge)UnoRuntime.queryInterface(XBridge.class, iBridge);
         }
         catch(Exception exception) {
             throw new com.sun.star.lang.IllegalArgumentException(exception.getMessage());
@@ -231,7 +198,17 @@ public class BridgeFactory implements XBridgeFactory, XEventListener {
      * @see                           com.sun.star.bridge.XBridgeFactory
      */
     public XBridge getBridge(String sName) throws com.sun.star.uno.RuntimeException {
-        XBridge xBridge = (XBridge)_bridges.get(sName, XBridge.class);
+        XBridge xBridge = null;
+
+        IBridge iBridges[] = UnoRuntime.getBridges();
+        for(int i = 0; i < iBridges.length; ++ i) {
+            xBridge = (XBridge)UnoRuntime.queryInterface(XBridge.class, iBridges[i]);
+
+            if(xBridge != null) {
+                if(!xBridge.getName().equals(sName))
+                    xBridge = null;
+            }
+        }
 
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".getBridge:" + sName + " " + xBridge);
 
@@ -245,14 +222,21 @@ public class BridgeFactory implements XBridgeFactory, XEventListener {
      * @see                           com.sun.star.bridge.XBridgeFactory
      */
     public synchronized XBridge[] getExistingBridges() throws com.sun.star.uno.RuntimeException {
-        XBridge bridges[] = new XBridge[_bridges.size()];
+        Vector vector = new Vector();
 
-        Enumeration keys = _bridges.keys();
-        for(int i = 0; i < bridges.length; ++ i) {
-            bridges[i] = (XBridge)_bridges.get((String)keys.nextElement(), XBridge.class);
+        IBridge iBridges[] = UnoRuntime.getBridges();
+        for(int i = 0; i < iBridges.length; ++ i) {
+            XBridge xBridge = (XBridge)UnoRuntime.queryInterface(XBridge.class, iBridges[i]);
+
+            if(xBridge != null)
+                vector.addElement(xBridge);
         }
 
-        return bridges;
+        XBridge xBridges[]= new XBridge[vector.size()];
+        for(int i = 0; i < vector.size(); ++ i)
+            xBridges[i] = (XBridge)vector.elementAt(i);
+
+        return xBridges;
     }
 }
 
