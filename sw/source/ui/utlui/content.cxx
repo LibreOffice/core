@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: os $ $Date: 2002-08-15 09:56:44 $
+ *  last change: $Author: os $ $Date: 2002-10-08 14:08:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2994,7 +2994,10 @@ void SwContentTree::EditEntry(SvLBoxEntry* pEntry, sal_uInt8 nMode)
             }
         }
         break;
-
+        case CONTENT_TYPE_DRAWOBJECT :
+            if(EDIT_MODE_DELETE == nMode)
+                nSlot = SID_DELETE;
+        break;
     }
     if(nSlot)
         pActiveShell->GetView().GetViewFrame()->
