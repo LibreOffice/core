@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unowrapper.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tbe $ $Date: 2002-05-17 09:59:54 $
+ *  last change: $Author: ssa $ $Date: 2002-05-27 15:52:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,7 @@
         case WINDOW_LONGCURRENCYFIELD:  return new VCLXCurrencyField;
         case WINDOW_DIALOG:
         case WINDOW_MODALDIALOG:
+        case WINDOW_TABDIALOG:
         case WINDOW_MODELESSDIALOG: return new VCLXDialog;
         case WINDOW_PATTERNFIELD:   return new VCLXPatternField;
         case WINDOW_RADIOBUTTON:    return new VCLXRadioButton;
@@ -138,7 +139,6 @@
         // case WINDOW_SPLITTER:
         // case WINDOW_METRICFIELD:
         // case WINDOW_STATUSBAR:
-        // case WINDOW_TABDIALOG:
         // case WINDOW_TABCONTROL:
         // case WINDOW_NUMERICBOX:
         // case WINDOW_TRISTATEBOX:
