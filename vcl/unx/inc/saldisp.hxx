@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:54:08 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 12:26:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -475,7 +475,7 @@ public:
     bool            GetExactResolution() const { return mbExactResolution; }
     ULONG           GetProperties() const { return nProperties_; }
     ULONG           GetMaxRequestSize() const { return nMaxRequestSize_; }
-    void            GetScreenFontResolution( long& rDPIX, long& rDPIY ) const;
+    void            GetScreenFontResolution( sal_Int32& rDPIX, sal_Int32& rDPIY ) const;
 
     BOOL            MouseCaptured( const SalFrame *pFrameData ) const
     { return m_pCapture == pFrameData; }
