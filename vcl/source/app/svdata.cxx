@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdata.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: th $ $Date: 2001-06-15 13:40:44 $
+ *  last change: $Author: th $ $Date: 2001-07-25 10:52:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,16 +118,12 @@
 // static Empty-SV-String
 static XubString aImplSVEmptyStr;
 XubString& rImplSVEmptyStr = aImplSVEmptyStr;
-#ifdef ENABLEUNICODE
 static ByteString aImplSVEmptyByteStr;
 ByteString& rImplSVEmptyByteStr = aImplSVEmptyByteStr;
-#endif
 
-#ifndef WIN
 ImplSVData private_aImplSVData;
 // static SV-Data
 ImplSVData* pImplSVData = &private_aImplSVData;
-#endif
 
 // static SharedLib SV-Data
 ImplSVShlData aImplSVShlData;
@@ -136,16 +132,9 @@ ImplSVShlData aImplSVShlData;
 
 void ImplInitSVData()
 {
-#ifndef WIN
     ImplSVData* pSVData = pImplSVData;
     ImplSVData** ppSVData = (ImplSVData**)GetAppData( SHL_SV );
     *ppSVData = &private_aImplSVData;
-#else
-    // alloc global instance data
-    ImplSVData* pSVData = new ImplSVData;
-    ImplSVData** ppSVData = (ImplSVData**)GetAppData( SHL_SV );
-    *ppSVData = pSVData;
-#endif
 
     // init global sharedlib data
     // ...
@@ -191,17 +180,12 @@ void ImplDestroySVData()
 {
     ImplSVData** ppSVData = (ImplSVData**)GetAppData( SHL_SV );
     ImplSVData*  pSVData = *ppSVData;
-#ifdef WIN
-    delete pSVData;
-#endif
 
     // delete global sharedlib data
     // ...
 
     *ppSVData = NULL;
-#ifndef WIN
     pImplSVData = NULL;
-#endif
 }
 
 // -----------------------------------------------------------------------
@@ -274,7 +258,7 @@ Window* ImplFindWindow( const SalFrame* pFrame, Point& rSalFramePos )
 
 void rvpExceptionHandler()
 {
-#ifdef DEBUG
+#ifdef DBG_UTIL
     fprintf( stderr, "RVP exception caught!\n" );
 #endif
 }
