@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoedsrc.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 14:14:37 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 18:16:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,27 @@
 #endif
 
 #include "unoedsrc.hxx"
+
+
+//------------------------------------------------------------------------
+
+void SvxEditSource::addRange( SvxUnoTextRangeBase* pNewRange )
+{
+}
+
+//------------------------------------------------------------------------
+
+void SvxEditSource::removeRange( SvxUnoTextRangeBase* pOldRange )
+{
+}
+
+//------------------------------------------------------------------------
+
+const SvxUnoTextRangeBaseList& SvxEditSource::getRanges() const
+{
+    static SvxUnoTextRangeBaseList gList;
+    return gList;
+}
 
 //------------------------------------------------------------------------
 
