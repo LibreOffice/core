@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inettbc.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pb $ $Date: 2001-02-05 09:58:31 $
+ *  last change: $Author: mba $ $Date: 2001-02-08 10:15:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,20 +97,27 @@
 #include "helper.hxx"
 #include "ucbhelp.hxx"
 
+class SfxURLBox_Impl
+{
+public:
+    SvStringsDtor*                  pURLs;
+    SvStringsDtor*                  pCompletions;
+};
+
 // -----------------------------------------------------------------------
 class SfxMatchContext_Impl : public ::vos::OThread
 {
     static ::vos::OMutex*           pDirMutex;
 
     SvStringsDtor                   aPickList;
-    SvStringsDtor                   aCompletions;
-    SvStringsDtor                   aURLs;
+    SvStringsDtor*                  pCompletions;
+    SvStringsDtor*                  pURLs;
     AsynchronLink                   aLink;
     String                          aBaseURL;
     String                          aText;
     SfxURLBox*                      pBox;
     SfxCancellable*                 pCancel;
-    BOOL                            bStop; // Abbruch erwuenscht
+    BOOL                            bStop;
     BOOL                            bOnlyDirectories;
 
     DECL_STATIC_LINK(               SfxMatchContext_Impl, Select_Impl, void* );
@@ -120,18 +127,14 @@ class SfxMatchContext_Impl : public ::vos::OThread
     virtual void SAL_CALL           Cancel();
     void                            Insert( const String& rCompletion, const String& rURL, BOOL bForce = FALSE);
     void                            ReadFolder( const String& rURL, const String& rMatch, BOOL bSmart );
+
 public:
     static ::vos::OMutex*           GetMutex();
 
-                                    SfxMatchContext_Impl( SfxURLBox* pBoxP, const String& rText, BOOL bSelectFirst  );
+                                    SfxMatchContext_Impl( SfxURLBox* pBoxP, const String& rText );
                                     ~SfxMatchContext_Impl();
     void                            Stop();
 };
-
-void SAL_CALL SfxMatchContext_Impl::Cancel()
-{
-    terminate();
-}
 
 ::vos::OMutex* SfxMatchContext_Impl::pDirMutex = 0;
 
@@ -144,7 +147,7 @@ void SAL_CALL SfxMatchContext_Impl::Cancel()
 }
 
 SfxMatchContext_Impl::SfxMatchContext_Impl(
-    SfxURLBox* pBoxP, const String& rText, BOOL bSelectFirst  )
+    SfxURLBox* pBoxP, const String& rText )
     : aText(  rText )
     , pBox( pBoxP )
     , aLink( STATIC_LINK( this, SfxMatchContext_Impl, Select_Impl ) )
@@ -153,18 +156,19 @@ SfxMatchContext_Impl::SfxMatchContext_Impl(
     , bOnlyDirectories( pBoxP->bOnlyDirectories )
     , aBaseURL( pBoxP->aBaseURL )
 {
-    // Pickliste abziehen wg. konkurrierender Zugriffe
+    pURLs = new SvStringsDtor;
+    pCompletions = new SvStringsDtor;
+
+    // get copy of picklist because it is not threadsafe
     SfxPickList_Impl& rList = *SfxPickList_Impl::Get();
     USHORT nCount = (USHORT)rList.HistoryPickEntryCount();
-    // Uber char* casten fuer getrennte Impdaten
+
     for( USHORT nPos = 0; nPos < nCount; nPos++ )
     {
         const StringPtr pStr = new String(rList.GetHistoryPickEntry( nPos )->aTitle );
         aPickList.Insert(pStr, nPos );
     }
 
-    // Thread starten
-//    Application::EnterMultiThread();
     create();
 }
 
@@ -172,7 +176,14 @@ SfxMatchContext_Impl::~SfxMatchContext_Impl()
 {
     aLink.ClearPendingCall();
     delete pCancel;
-//    Application::EnterMultiThread( FALSE );
+    delete pURLs;
+    delete pCompletions;
+}
+
+void SAL_CALL SfxMatchContext_Impl::Cancel()
+{
+    // Cancel button pressed
+    terminate();
 }
 
 void SfxMatchContext_Impl::Stop()
@@ -184,17 +195,26 @@ void SfxMatchContext_Impl::Stop()
     }
 }
 
-// Select l"auft im Mainthread, da "uber einen asynchronen Link gecalled wird.
-// Es wird immer erst gerufen, wenn der Thread mit seiner Arbeit fertig ist.
-// Falls inzwischen der MatchContext zerst"ort wurde, fliegt auch der asynchrone Link
-// ab, da er ja ein member des MatchContexts ist, d.h. der Link wird dann auch nicht gecalled
+void SfxMatchContext_Impl::onTerminated( )
+{
+    // protect against concurrency
+    aLink.CreateMutex();
+    aLink.Call( this );
+}
+
+// This method is called via AsynchronLink, so it has the SolarMutex and calling solar code ( VCL ... )
+// is safe. It is called when the thread is terminated ( finished work or stopped ). Cancelling the
+// thread via Cancellable does not not discard the information gained so far, it inserts all collected
+// completions into the listbox.
 IMPL_STATIC_LINK( SfxMatchContext_Impl, Select_Impl, void*, pArg )
 {
     if( pArg )
     {
+        // avoid recursion through cancel button
         DELETEZ( pThis->pCancel );
         if( pThis->bStop )
         {
+            // completions was stopped, no display
             delete pThis;
             return 0;
         }
@@ -203,21 +223,28 @@ IMPL_STATIC_LINK( SfxMatchContext_Impl, Select_Impl, void*, pArg )
     SfxURLBox* pBox = pThis->pBox;
     pBox->bAutoCompleteMode = TRUE;
 
+    // insert all completed strings into the listbox
     pBox->Clear();
-    for( USHORT nPos = 0; nPos<pThis->aCompletions.Count(); nPos++ )
-    {
-        String aMatchString( pThis->aText );
-        aMatchString += *pThis->aCompletions[nPos];
-        pBox->InsertEntry( aMatchString );
-    }
+    for( USHORT nPos = 0; nPos<pThis->pCompletions->Count(); nPos++ )
+        pBox->InsertEntry( *(*pThis->pCompletions)[nPos] );
 
-    if( pThis->aCompletions.Count() )
+    if( pThis->pCompletions->Count() )
     {
+        // select the first one
         String aTmp( pBox->GetEntry(0) );
         pBox->SetText( aTmp );
         pBox->SetSelection( Selection( pThis->aText.Len(), aTmp.Len() ) );
     }
 
+    // transfer string lists to listbox and forget them
+    delete pBox->pImp->pURLs;
+    delete pBox->pImp->pCompletions;
+    pBox->pImp->pURLs = pThis->pURLs;
+    pBox->pImp->pCompletions = pThis->pCompletions;
+    pThis->pURLs = NULL;
+    pThis->pCompletions = NULL;
+
+    // force listbox to resize ( it may be open )
     pBox->Resize();
     return 0;
 }
@@ -225,39 +252,53 @@ IMPL_STATIC_LINK( SfxMatchContext_Impl, Select_Impl, void*, pArg )
 void SfxMatchContext_Impl::Insert( const String& rCompletion, const String& rURL, BOOL bForce )
 {
     if( !bForce )
-        for( USHORT nPos = aCompletions.Count(); nPos--; )
-            if( *aCompletions[ nPos ] == rCompletion )
+    {
+        // avoid doubles
+        for( USHORT nPos = pCompletions->Count(); nPos--; )
+            if( *(*pCompletions)[ nPos ] == rCompletion )
                 return;
+    }
 
     const StringPtr pCompletion = new String( rCompletion );
-    aCompletions.Insert( pCompletion, aCompletions.Count() );
+    pCompletions->Insert( pCompletion, pCompletions->Count() );
     const StringPtr pURL = new String( rURL );
-    aURLs.Insert( pURL, aURLs.Count() );
+    pURLs->Insert( pURL, pURLs->Count() );
 }
 
 void SfxMatchContext_Impl::ReadFolder( const String& rURL, const String& rMatch, BOOL bSmart )
 {
+    // check folder to scan
     if( !SfxContentHelper::IsFolder( rURL ) )
         return;
 
+    // string to match with
     INetURLObject aMatchObj( rMatch );
     String aMatchName;
+
     if ( rURL != aMatchObj.GetMainURL() )
     {
         aMatchName = aMatchObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
+
+        // matching is always done case insensitive, but completion will be case sensitive and case preserving
         aMatchName.ToLowerAscii();
     }
 
     xub_StrLen nMatchLen = aMatchName.Len();
+
+    // get a sequence of all children of the folder
     ::com::sun::star::uno::Sequence< ::rtl::OUString > aEntries =
                 SfxContentHelper::GetFolderContentProperties( rURL, sal_True );
+
     const ::rtl::OUString* pEntries = aEntries.getConstArray();
     UINT32 nCount = aEntries.getLength();
     for ( UINT32 i=0; schedule() && i < nCount; i++ )
     {
         String aRow( pEntries[i] );
         String aTitle = aRow.GetToken( 0, '\t' );
+
+        // matching is always done case insensitive, but completion will be case sensitive and case preserving
         aTitle.ToLowerAscii();
+
         String aURL = aRow.GetToken( 3, '\t' );
         sal_Bool bIsFolder = ( '1' == aRow.GetToken( 4, '\t' ).GetChar(0) );
 
@@ -267,15 +308,37 @@ void SfxMatchContext_Impl::ReadFolder( const String& rURL, const String& rMatch,
             INetURLObject aObj( aURL );
             sal_Unicode aDelimiter = '/';
             if ( bSmart )
+                // when parsing is done "smart", the delimiter must be "guessed"
                 aObj.getFSysPath( INetURLObject::FSYS_DETECT, &aDelimiter );
+
             if ( bIsFolder )
                 aObj.setFinalSlash();
+
+            // get the last name of the URL
             String aMatch = aObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
+            String aInput( aText );
             if ( nMatchLen )
-                aMatch.Erase( 0, nMatchLen );
+            {
+                if ( aText.Len() && aText.GetChar( aText.Len() - 1 ) == '.' )
+                {
+                    // if a "special folder" URL was typed, don't touch the user input
+                    aMatch.Erase( 0, nMatchLen );
+                }
+                else
+                {
+                    // make the user input case preserving
+                    DBG_ASSERT( aInput.Len() >= nMatchLen, "Suspicious Matching!" );
+                    aInput.Erase( aInput.Len() - nMatchLen );
+                }
+            }
+
+            aInput += aMatch;
+
+            // folders should get a final slash automatically
             if ( bIsFolder )
-                aMatch += aDelimiter;
-            Insert( aMatch, aObj.GetMainURL(), TRUE );
+                aInput += aDelimiter;
+
+            Insert( aInput, aObj.GetMainURL(), TRUE );
         }
     }
 }
@@ -292,6 +355,7 @@ String ParseSmart( String aText, String aBaseURL, String aWorkDir )
     if( aBaseURL.Len() )
     {
         INetProtocol eBaseProt = INetURLObject::CompareProtocolScheme( aBaseURL );
+
         // if a base URL is set the string may be parsed relative
         if( aText.Search( '/' ) == 0 )
         {
@@ -344,8 +408,8 @@ void SfxMatchContext_Impl::run()
     ::vos::OGuard aGuard( GetMutex() );
 
     // Reset match lists
-    aCompletions.Remove( 0, aCompletions.Count() );
-    aURLs.Remove( 0, aURLs.Count() );
+    pCompletions->Remove( 0, pCompletions->Count() );
+    pURLs->Remove( 0, pURLs->Count() );
 
     // check for input
     USHORT nTextLen = aText.Len();
@@ -384,7 +448,7 @@ void SfxMatchContext_Impl::run()
                 {
                     // if text input is a directory, it must be part of the match list! Until then it is scanned
                     if ( SfxContentHelper::IsFolder( aMainURL ) && aURLObject.hasFinalSlash() )
-                        Insert( String(), aMatch );
+                        Insert( aText, aMatch );
                     else
                         // otherwise the parent folder will be taken
                         aURLObject.removeSegment();
@@ -426,7 +490,6 @@ void SfxMatchContext_Impl::run()
                 case INET_PROT_HTTPS:
                 case INET_PROT_FTP:
                 {
-                    // Wenn schon mehr, als der Pfad da ist, kein kurzes Matchen
                     if( eProt == INET_PROT_NOT_VALID && !bFull )
                     {
                         aObj.SetSmartURL( aText );
@@ -451,9 +514,7 @@ void SfxMatchContext_Impl::run()
                                 aMatch = aCurObj.GetMainURL();
                             }
 
-                            String aTmp( aMatch );
-                            aTmp.Erase( 0, aText.Len() );
-                            Insert( aTmp, aMatch );
+                            Insert( aMatch, aMatch );
                         }
 
                         // now try smart matching
@@ -477,11 +538,7 @@ void SfxMatchContext_Impl::run()
                             aMatch.Erase( 0, INetURLObject::GetScheme( aCurObj.GetProtocol() ).Len() );
 
                         if( aText.Len() < aMatch.Len() )
-                        {
-                            String aTmp( aMatch );
-                            aTmp.Erase( 0, aText.Len() );
-                            Insert( aTmp, aURL );
-                        }
+                            Insert( aMatch, aURL );
 
                         continue;
                     }
@@ -489,26 +546,19 @@ void SfxMatchContext_Impl::run()
                 }
                 default:
                 {
-                    // Dateien matchen sofort den gesamten Namen
                     if( bFull )
                         continue;
 
                     if( aText.CompareTo( aCurMainURL, aText.Len() ) == COMPARE_EQUAL )
                     {
                         if( aText.Len() < aCurMainURL.Len() )
-                        {
-                            String aTmp( aCurMainURL );
-                            aTmp.Erase( 0, aText.Len() );
-                            Insert( aTmp, aCurMainURL );
-                        }
+                            Insert( aCurMainURL, aCurMainURL );
 
                         continue;
                     }
 /*                                      // PathToFileName is forbidden for generic parsing !
                     if( eProt == INET_PROT_NOT_VALID )
                     {
-                        // Noch keine erkennbares Protocol
-                        // Bei File-Protocol auch als Pfadname versuchen
                         if( aCurObj.GetProtocol() == INET_PROT_FILE &&
                             aText.CompareTo( aCurObj.PathToFileName(), aText.Len() ) == COMPARE_EQUAL )
                         {
@@ -535,12 +585,6 @@ void SfxMatchContext_Impl::run()
     return;
 }
 
-void SfxMatchContext_Impl::onTerminated( )
-{
-    aLink.CreateMutex();
-    aLink.Call( this );
-}
-
 void SfxURLBox::TryAutoComplete( BOOL bForward, BOOL bForce )
 {
     if( Application::AnyInput( INPUT_KEYBOARD ) ) return;
@@ -553,7 +597,7 @@ void SfxURLBox::TryAutoComplete( BOOL bForward, BOOL bForce )
     USHORT nLen = (USHORT)aSelection.Min();
     aCurText.Erase( nLen );
     if( aCurText.Len() )
-        pCtx = new SfxMatchContext_Impl( this, aCurText, bForward );
+        pCtx = new SfxMatchContext_Impl( this, aCurText );
 }
 
 SfxURLBox::SfxURLBox( Window* pParent, INetProtocol eSmart )
@@ -565,6 +609,9 @@ SfxURLBox::SfxURLBox( Window* pParent, INetProtocol eSmart )
         pCtx( 0 ),
         eSmartProtocol( eSmart )
 {
+    pImp = new SfxURLBox_Impl();
+    pImp->pURLs = NULL;
+    pImp->pCompletions = NULL;
     SetHelpId( SID_OPENURL );
     EnableAutocomplete( FALSE );
     EnableDrop();
@@ -587,6 +634,9 @@ SfxURLBox::SfxURLBox( Window* pParent, const ResId& _rResId, INetProtocol eSmart
         pCtx( 0 ),
         eSmartProtocol( eSmart )
 {
+    pImp = new SfxURLBox_Impl();
+    pImp->pURLs = NULL;
+    pImp->pCompletions = NULL;
     SetHelpId( SID_OPENURL );
     EnableAutocomplete( FALSE );
     EnableDrop();
@@ -595,6 +645,13 @@ SfxURLBox::SfxURLBox( Window* pParent, const ResId& _rResId, INetProtocol eSmart
 
     GetSubEdit()->SetAutocompleteHdl( LINK( this, SfxURLBox, AutoCompleteHdl_Impl ) );
     UpdatePicklistForSmartProtocol_Impl();
+}
+
+SfxURLBox::~SfxURLBox()
+{
+    delete pImp->pURLs;
+    delete pImp->pCompletions;
+    delete pImp;
 }
 
 void SfxURLBox::SetSmartProtocol( INetProtocol eProt )
@@ -698,7 +755,7 @@ void SfxURLBox::OpenURL( const String& rName, BOOL bNew ) const
 
 BOOL SfxURLBox::ProcessKey( const KeyCode& rKey )
 {
-    // laufende Completion abbrechen
+    // every key input stops the current matching thread
     if( pCtx )
     {
         pCtx->Stop();
@@ -708,11 +765,12 @@ BOOL SfxURLBox::ProcessKey( const KeyCode& rKey )
     KeyCode aCode( rKey.GetCode() );
     if ( aCode == KEY_RETURN && GetText().Len() )
     {
-        // warten bis Thread beendet (OS/2 stuerzt uns sonst ab...)
+        // wait for completion of matching thread
         ::vos::OGuard aGuard( SfxMatchContext_Impl::GetMutex() );
 
         if ( bAutoCompleteMode )
         {
+            // reset picklist
             bAutoCompleteMode = FALSE;
             Selection aSelection( GetSelection() );
             SetSelection( Selection( aSelection.Min(), aSelection.Min() ) );
@@ -722,10 +780,6 @@ BOOL SfxURLBox::ProcessKey( const KeyCode& rKey )
                 UpdatePicklistForSmartProtocol_Impl();
             Resize();
         }
-
-        String aInput = GetText();
-        aInput.EraseLeadingChars();
-        aInput.EraseTrailingChars();
 
         bCtrlClick = rKey.IsMod1();
         BOOL bHandled = FALSE;
@@ -747,7 +801,7 @@ BOOL SfxURLBox::ProcessKey( const KeyCode& rKey )
     }
     else if ( aCode == KEY_RETURN && !GetText().Len() && GetOpenHdl().IsSet() )
     {
-        // FileDialog: LeerString + Enter behandeln
+        // for file dialog
         bAutoCompleteMode = FALSE;
         GetOpenHdl().Call(this);
         return TRUE;
@@ -797,6 +851,7 @@ long SfxURLBox::PreNotify( NotifyEvent& rNEvt )
 {
     if( rNEvt.GetWindow() == GetSubEdit() && rNEvt.GetType() == EVENT_KEYINPUT )
     {
+
         const KeyEvent& rEvent = *rNEvt.GetKeyEvent();
         const KeyCode& rKey = rEvent.GetKeyCode();
         KeyCode aCode( rKey.GetCode() );
@@ -831,10 +886,6 @@ IMPL_LINK( SfxURLBox, AutoCompleteHdl_Impl, void*, pVoid )
 // **************************************************************************
 
 long SfxURLBox::Notify( NotifyEvent &rEvt )
-/*
-    [Beschreibung]
-    Aktualisierung der Combobox mit dem aktuellen Picklisteninhalt
-*/
 {
     if ( EVENT_GETFOCUS == rEvt.GetType() )
     {
@@ -857,10 +908,6 @@ long SfxURLBox::Notify( NotifyEvent &rEvt )
 // **************************************************************************
 
 void SfxURLBox::Select()
-/*
-    [Beschreibung]
-    Die Methode laedt das selektierte Element ein.
-*/
 {
     ComboBox::Select();
     ClearModifyFlag();
@@ -869,13 +916,6 @@ void SfxURLBox::Select()
 // **************************************************************************
 
 void SfxURLBox::SetOnlyDirectories( BOOL bDir )
-
-/*  [Beschreibung]
-
-    Die Methode setzt das Flag, ob nur auf Verzeichnisse ergänzt werden soll.
-    Wenn das Flag auf TRUE gesetzt wird, wird die Liste gel"oscht.
-*/
-
 {
     bOnlyDirectories = bDir;
     if ( bOnlyDirectories )
@@ -894,7 +934,6 @@ SfxURLToolBoxControl_Impl::SfxURLToolBoxControl_Impl( USHORT nId ,
         : SfxToolBoxControl( nId , rBox , rBindings )
         , aURLForwarder( SID_CURRENT_URL, *this )
 {
-//    Application::EnterMultiThread();
 }
 
 SfxURLBox* SfxURLToolBoxControl_Impl::GetURLBox() const
@@ -906,13 +945,9 @@ SfxURLBox* SfxURLToolBoxControl_Impl::GetURLBox() const
 
 Window* SfxURLToolBoxControl_Impl::CreateItemWindow( Window* pParent )
 {
-    DBG_ASSERT( pParent , "CreateItemWindow:invalider Parentpointer" );
-
     SfxURLBox* pURLBox = new SfxURLBox( pParent );
     pURLBox->SetOpenHdl( LINK( this, SfxURLToolBoxControl_Impl, OpenHdl ) );
     pURLBox->SetSelectHdl( LINK( this, SfxURLToolBoxControl_Impl, SelectHdl ) );
-
-    DBG_ASSERT( pURLBox , "CreateItemWindow:Itemwindow nicht erstellt" );
     return pURLBox;
 }
 
@@ -948,8 +983,24 @@ IMPL_LINK( SfxURLToolBoxControl_Impl, OpenHdl, void*, pVoid )
 
 String SfxURLBox::GetURL()
 {
-    String aURL;
-    INetURLObject aObj( GetText() );
+    // wait for end of autocompletion
+    ::vos::OGuard aGuard( SfxMatchContext_Impl::GetMutex() );
+
+    String aText( GetText() );
+    // try to get the right case preserving URL from the list of URLs
+    if ( pImp->pCompletions && pImp->pURLs )
+    {
+        for( USHORT nPos=0; nPos<pImp->pCompletions->Count(); nPos++ )
+        {
+#ifdef DBG_UTIL
+            String aTmp( *(*pImp->pCompletions)[ nPos ] );
+#endif
+            if( *(*pImp->pCompletions)[ nPos ] == aText )
+                return *(*pImp->pURLs)[nPos];
+        }
+    }
+
+    INetURLObject aObj( aText );
     if ( aObj.GetProtocol() == INET_PROT_NOT_VALID )
     {
         String aName = ParseSmart( GetText(), aBaseURL, SvtPathOptions().GetWorkPath() );
@@ -975,12 +1026,6 @@ void SfxURLToolBoxControl_Impl::StateChanged
     SfxItemState        eState,
     const SfxPoolItem*  pState
 )
-
-/*  [Beschreibung]
-
-    Hier wird die URL des aktiven Dokuments angezeigt.
-*/
-
 {
     if( nSID == SID_FOCUSURLBOX )
     {
@@ -991,7 +1036,6 @@ void SfxURLToolBoxControl_Impl::StateChanged
     {
         SfxURLBox* pURLBox = GetURLBox();
 
-        // in VCL hier die URLBox updaten
         SfxPickList_Impl* pPickList = SfxPickList_Impl::Get();
         DBG_ASSERT( pPickList , "Pickliste invalid" );
         pURLBox->Clear();
@@ -1042,7 +1086,6 @@ SfxPopupWindowType SfxCancelToolBoxControl_Impl::GetPopupWindowType() const
 
 SfxPopupWindow* SfxCancelToolBoxControl_Impl::CreatePopupWindow()
 {
-    // Menu erzeugen und mit allen cancellables fuellen
     PopupMenu aMenu;
     BOOL bExecute = FALSE, bSeparator = FALSE;
     USHORT nIndex = 1;
@@ -1069,7 +1112,6 @@ SfxPopupWindow* SfxCancelToolBoxControl_Impl::CreatePopupWindow()
         }
     }
 
-    // Menu ausfuehren
     ToolBox& rToolBox = GetToolBox();
     USHORT nId = bExecute ? nId = aMenu.Execute( &rToolBox, rToolBox.GetPointerPosPixel() ) : 0;
     GetToolBox().EndSelection();
@@ -1077,7 +1119,6 @@ SfxPopupWindow* SfxCancelToolBoxControl_Impl::CreatePopupWindow()
     UpdateSlot();
     if ( nId )
     {
-        // den selektierten canceln
         String aSearchText = aMenu.GetItemText(nId);
         for ( SfxCancelManager *pCancelMgr = SfxViewFrame::Current()->GetTopViewFrame()->GetCancelManager();
               pCancelMgr;
@@ -1114,16 +1155,8 @@ void SfxCancelToolBoxControl_Impl::StateChanged
     SfxItemState        eState,
     const SfxPoolItem*  pState
 )
-
-/*  [Beschreibung]
-
-    Hier wird angezeigt, ob cancelbare Jobs laufen.
-*/
-
 {
     SfxVoidItem aVoidItem( nSID );
     //SfxToolBoxControl::StateChanged( nSID, eState, pState ? &aVoidItem : 0 );
     SfxToolBoxControl::StateChanged( nSID, eState, pState );
 }
-
-
