@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javatype.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-10 14:16:41 $
+ *  last change: $Author: jsc $ $Date: 2001-08-02 12:53:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -877,7 +877,7 @@ sal_Bool InterfaceType::dumpFile(FileStream& o)
     else
         o << "null;\n";
 
-    o << "\n" << indent() << "public static Object UNORUNTIMEDATA = null;\n";
+//      o << "\n" << indent() << "public static Object UNORUNTIMEDATA = null;\n";
 
     dec();
     o << "}\n\n";
@@ -1502,7 +1502,7 @@ sal_Bool StructureType::dumpFile(FileStream& o)
         o << " };\n";
     }
 
-    o << "\n" << indent() << "public static Object UNORUNTIMEDATA = null;\n";
+//      o << "\n" << indent() << "public static Object UNORUNTIMEDATA = null;\n";
 
     dec();
     o << "}\n";
@@ -1664,7 +1664,7 @@ sal_Bool ExceptionType::dumpFile(FileStream& o)
         o << " };\n";
     }
 
-    o << "\n" << indent() << "public static Object UNORUNTIMEDATA = null;\n";
+//      o << "\n" << indent() << "public static Object UNORUNTIMEDATA = null;\n";
 
     dec();
     o << "}\n";
@@ -1817,7 +1817,7 @@ sal_Bool EnumType::dumpFile(FileStream& o)
     dec();
     o << indent() << "}\n";
 
-    o << "\n" << indent() << "public static Object UNORUNTIMEDATA = null;\n";
+//      o << "\n" << indent() << "public static Object UNORUNTIMEDATA = null;\n";
 
     dec();
     o << "}\n";
