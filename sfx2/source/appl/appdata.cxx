@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appdata.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-10 16:37:27 $
+ *  last change: $Author: mba $ $Date: 2001-09-13 11:41:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,12 +169,16 @@ SfxAppData_Impl::SfxAppData_Impl( SfxApplication* pApp ) :
 
 SfxAppData_Impl::~SfxAppData_Impl()
 {
-#ifdef DBG_UTIL
+//#ifdef DBG_UTIL
+    delete pTriggerTopic;
+    delete pDdeService2;
+    delete pDdeService;
+    delete pDocTopics;
     delete pTopFrames;
     delete pCancelMgr;
     delete pFilterIni;
     delete pSecureURLs;
-#endif
+//#endif
 }
 
 IMPL_STATIC_LINK( SfxAppData_Impl, CreateDocumentTemplates, void*, EMPTYARG)
