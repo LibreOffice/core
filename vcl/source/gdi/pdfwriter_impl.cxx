@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:05:43 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 15:22:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1256,10 +1256,14 @@ sal_Int32 PDFWriterImpl::emitBuiltinFont( ImplFontData* pFont )
     return nFontObject;
 }
 
-sal_Int32 PDFWriterImpl::emitEmbeddedFont( ImplFontData* pFont )
+std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( ImplFontData* pFont, EmbedFont& rEmbed )
 {
+    std::map< sal_Int32, sal_Int32 > aRet;
     if( isBuiltinFont( pFont ) )
-        return emitBuiltinFont( pFont );
+    {
+        aRet[ rEmbed.m_nNormalFontID ] = emitBuiltinFont( pFont );
+        return aRet;
+    }
 
     sal_Int32 nFontObject = 0;
     sal_Int32 nStreamObject = 0;
@@ -1326,8 +1330,20 @@ sal_Int32 PDFWriterImpl::emitEmbeddedFont( ImplFontData* pFont )
         {
             for( it = aSections.begin(); it != aSections.end() && (nIndex < *it || nIndex > ((*it) + 5) ); ++it )
                 ;
-            if( it == aSections.end() && pFontData[nIndex] == '0' )
-                nFound++;
+            if( it == aSections.end() )
+            {
+                // inside the 512 '0' block there may only be whitespace
+                // according to T1 spec; probably it would be to simple
+                // if all fonts complied
+                if( pFontData[nIndex] == '0' )
+                    nFound++;
+                else if( nFound > 0                 &&
+                         pFontData[nIndex] != '\r'      &&
+                         pFontData[nIndex] != '\t'      &&
+                         pFontData[nIndex] != '\n'      &&
+                         pFontData[nIndex] != ' ' )
+                    break;
+            }
             nIndex--;
         }
         if( nIndex < 1 || nIndex <= nEndAsciiIndex )
@@ -1575,10 +1591,31 @@ sal_Int32 PDFWriterImpl::emitEmbeddedFont( ImplFontData* pFont )
 
     if( nFontDescriptor )
     {
+        const std::map< sal_Unicode, sal_Int32 >* pEncoding = m_pReferenceDevice->mpGraphics->GetFontEncodingVector( pFont, NULL );
+        sal_Int32 nToUnicodeStream = 0;
+        sal_uInt8 nEncoding[256];
+        sal_Unicode nEncodedCodes[256];
+        if( pEncoding )
+        {
+            memset( nEncodedCodes, 0, sizeof(nEncodedCodes) );
+            memset( nEncoding, 0, sizeof(nEncoding) );
+            for( std::map< sal_Unicode, sal_Int32 >::const_iterator it = pEncoding->begin(); it != pEncoding->end(); ++it )
+            {
+                if( it->second != -1 )
+                {
+                    sal_Int32 nCode = (sal_Int32)(it->second & 0x000000ff);
+                    nEncoding[ nCode ] = nCode;
+                    nEncodedCodes[ nCode ] = it->first;
+                }
+            }
+            nToUnicodeStream = createToUnicodeCMap( nEncoding, nEncodedCodes, sizeof(nEncoding)/sizeof(nEncoding[0]) );
+        }
+
         // write font object
         sal_Int32 nObject = createObject();
         if( ! updateObject( nObject ) )
             goto streamend;
+
         OStringBuffer aLine( 1024 );
         aLine.append( nObject );
         aLine.append( " 0 obj\r\n"
@@ -1587,8 +1624,14 @@ sal_Int32 PDFWriterImpl::emitEmbeddedFont( ImplFontData* pFont )
                       "   /BaseFont /" );
         aLine.append( OUStringToOString( aInfo.m_aPSName, osl_getThreadTextEncoding() ) );
         aLine.append( "\r\n" );
-        if( pFont->meCharSet != RTL_TEXTENCODING_SYMBOL )
+        if( pFont->meCharSet != RTL_TEXTENCODING_SYMBOL &&  pEncoding == 0 )
             aLine.append( "   /Encoding /WinAnsiEncoding\r\n" );
+        if( nToUnicodeStream )
+        {
+            aLine.append( "   /ToUnicode " );
+            aLine.append( nToUnicodeStream );
+            aLine.append( " 0 R\r\n" );
+        }
         aLine.append( "   /FirstChar 0\r\n"
                       "   /LastChar 255\r\n"
                       "   /Widths [ " );
@@ -1607,13 +1650,103 @@ sal_Int32 PDFWriterImpl::emitEmbeddedFont( ImplFontData* pFont )
             goto streamend;
 
         nFontObject = nObject;
+
+        aRet[ rEmbed.m_nNormalFontID ] = nObject;
+
+        // write additional encodings
+        for( std::list< EmbedEncoding >::iterator enc_it = rEmbed.m_aExtendedEncodings.begin(); enc_it != rEmbed.m_aExtendedEncodings.end(); ++enc_it )
+        {
+            sal_Int32 aEncWidths[ 256 ];
+            // emit encoding dict
+            sal_Int32 nEncObject = createObject();
+            if( ! updateObject( nEncObject ) )
+                goto streamend;
+
+            OutputDevice* pRef = getReferenceDevice();
+            pRef->Push( PUSH_FONT | PUSH_MAPMODE );
+            pRef->SetMapMode( MapMode( MAP_POINT ) );
+            Font aFont( pFont->maName, pFont->maStyleName, Size( 0, 100 ) );
+            pRef->SetFont( aFont );
+            pRef->ImplNewFont();
+
+            aLine.setLength( 0 );
+            aLine.append( nEncObject );
+            aLine.append( " 0 obj\r\n"
+                          "<< /Type /Encoding\r\n"
+                          "   /Differences [ 0\r\n" );
+            int nEncoded = 0;
+            for( std::vector< EmbedCode >::iterator str_it = enc_it->m_aEncVector.begin(); str_it != enc_it->m_aEncVector.end(); ++str_it )
+            {
+                String aStr( str_it->m_aUnicode );
+                aEncWidths[nEncoded] = pRef->GetTextWidth( aStr ) * 10;
+                nEncodedCodes[nEncoded] = str_it->m_aUnicode;
+                nEncoding[nEncoded] = nEncoded;
+
+                aLine.append( " /" );
+                aLine.append( str_it->m_aName );
+                if( !((++nEncoded) & 7) )
+                    aLine.append( "\r\n" );
+            }
+            aLine.append( " ]\r\n"
+                          ">>\r\n"
+                          "endobj\r\n\r\n" );
+
+            pRef->Pop();
+
+            if( ! writeBuffer( aLine.getStr(), aLine.getLength() ) )
+                goto streamend;
+
+            nToUnicodeStream = createToUnicodeCMap( nEncoding, nEncodedCodes, nEncoded );
+
+            nObject = createObject();
+            if( ! updateObject( nObject ) )
+                goto streamend;
+
+            aLine.setLength( 0 );
+            aLine.append( nObject );
+            aLine.append( " 0 obj\r\n"
+                          "<< /Type /Font\r\n"
+                          "   /Subtype /Type1\r\n"
+                          "   /BaseFont /" );
+            aLine.append( OUStringToOString( aInfo.m_aPSName, osl_getThreadTextEncoding() ) );
+            aLine.append( "\r\n" );
+            aLine.append( "   /Encoding " );
+            aLine.append( nEncObject );
+            aLine.append( " 0 R\r\n" );
+            if( nToUnicodeStream )
+            {
+                aLine.append( "   /ToUnicode " );
+                aLine.append( nToUnicodeStream );
+                aLine.append( " 0 R\r\n" );
+            }
+            aLine.append( "   /FirstChar 0\r\n"
+                          "   /LastChar " );
+            aLine.append( (sal_Int32)(nEncoded-1) );
+            aLine.append( "\r\n"
+                          "   /Widths [ " );
+            for( int i = 0; i < nEncoded; i++ )
+            {
+                aLine.append( aEncWidths[i] );
+                aLine.append( ((i&7) == 7) ? "\r\n     " : " " );
+            }
+            aLine.append( " ]\r\n"
+                          "   /FontDescriptor " );
+            aLine.append( nFontDescriptor );
+            aLine.append( " 0 R\r\n"
+                          ">>\r\n"
+                          "endobj\r\n\r\n" );
+            if( ! writeBuffer( aLine.getStr(), aLine.getLength() ) )
+                goto streamend;
+
+            aRet[ enc_it->m_nFontID ] = nObject;
+        }
     }
 
   streamend:
     if( pFontData )
         m_pReferenceDevice->mpGraphics->FreeEmbedFontData( pFontData, nFontLen );
 
-    return nFontObject;
+    return aRet;
 }
 
 static void appendSubsetName( int nSubsetID, const OUString& rPSName, OStringBuffer& rBuffer )
@@ -1657,7 +1790,7 @@ sal_Int32 PDFWriterImpl::createToUnicodeCMap( sal_uInt8* pEncoding, sal_Unicode*
                      "/CMapName /Adobe-Identity-UCS def\r\n"
                      "/CMapType 2 def\r\n"
                      "1 begincodespacerange\r\n"
-                     "<0000> <FFFF>\r\n"
+                     "<00> <FF>\r\n"
                      "endcodespacerange\r\n"
                      );
     int nCount = 0;
@@ -1964,11 +2097,14 @@ sal_Int32 PDFWriterImpl::emitFonts()
     osl_removeFile( aTmpName.pData );
 
     // emit embedded fonts
-    for( std::map< ImplFontData*, sal_Int32 >::iterator eit = m_aEmbeddedFonts.begin(); eit != m_aEmbeddedFonts.end(); ++eit )
+    for( FontEmbedData::iterator eit = m_aEmbeddedFonts.begin(); eit != m_aEmbeddedFonts.end(); ++eit )
     {
-        sal_Int32 nObject = emitEmbeddedFont( eit->first );
-        CHECK_RETURN( nObject );
-        aFontIDToObject[ eit->second ] = nObject;
+        std::map< sal_Int32, sal_Int32 > aObjects = emitEmbeddedFont( eit->first, eit->second );
+        for( std::map< sal_Int32, sal_Int32 >::iterator fit = aObjects.begin(); fit != aObjects.end(); ++fit )
+        {
+            CHECK_RETURN( fit->second );
+            aFontIDToObject[ fit->first ] = fit->second;
+        }
     }
 
     nFontDict = createObject();
@@ -2341,28 +2477,89 @@ void PDFWriterImpl::registerGlyphs(
     else
     {
         sal_Int32 nFontID = 0;
-        std::map< ImplFontData*, sal_Int32 >::iterator it = m_aEmbeddedFonts.find( pCurrentFont );
+        FontEmbedData::iterator it = m_aEmbeddedFonts.find( pCurrentFont );
         if( it != m_aEmbeddedFonts.end() )
-            nFontID = it->second;
+            nFontID = it->second.m_nNormalFontID;
         else
-            nFontID = m_aEmbeddedFonts[ pCurrentFont ] = m_nNextFID++;
+        {
+            nFontID = m_nNextFID++;
+            m_aEmbeddedFonts[ pCurrentFont ] = EmbedFont();
+            m_aEmbeddedFonts[ pCurrentFont ].m_nNormalFontID = nFontID;
+        }
+        EmbedFont& rEmbedFont = m_aEmbeddedFonts[pCurrentFont];
+
+        const std::map< sal_Unicode, sal_Int32 >* pEncoding = NULL;
+        const std::map< sal_Unicode, rtl::OString >* pNonEncoded = NULL;
+#ifndef REMOTE_APPSERVER
+        getReferenceDevice()->ImplGetGraphics();
+        pEncoding = m_pReferenceDevice->mpGraphics->GetFontEncodingVector( pCurrentFont, &pNonEncoded );
+#endif
+
+        std::map< sal_Unicode, sal_Int32 >::const_iterator enc_it;
+        std::map< sal_Unicode, rtl::OString >::const_iterator nonenc_it;
         for( int i = 0; i < nGlyphs; i++ )
         {
+            sal_Int32 nCurFontID = nFontID;
             sal_Unicode cChar = pUnicodes[i];
-            if( cChar & 0xff00 )
+            if( pEncoding )
             {
-                // some characters can be used by conversion
-                if( cChar >= 0xf000 && cChar <= 0xf0ff ) // symbol encoding in private use area
-                    cChar -= 0xf000;
-                else
+                enc_it = pEncoding->find( cChar );
+                if( enc_it != pEncoding->end() && enc_it->second > 0 )
                 {
-                    String aString( cChar);
-                    ByteString aChar( aString, RTL_TEXTENCODING_MS_1252 );
-                    cChar = ((sal_Unicode)aChar.GetChar( 0 )) & 0x00ff;
+                    DBG_ASSERT( (enc_it->second & 0xffffff00) == 0, "Invalid character code" );
+                    cChar = (sal_Unicode)enc_it->second;
+                }
+                else if( (enc_it == pEncoding->end() || enc_it->second == -1) &&
+                         pNonEncoded &&
+                         (nonenc_it = pNonEncoded->find( cChar )) != pNonEncoded->end() )
+                {
+                    nCurFontID = 0;
+                    // find non encoded glyph
+                    for( std::list< EmbedEncoding >::iterator nec_it = rEmbedFont.m_aExtendedEncodings.begin(); nec_it != rEmbedFont.m_aExtendedEncodings.end(); ++nec_it )
+                    {
+                        if( nec_it->m_aCMap.find( cChar ) != nec_it->m_aCMap.end() )
+                        {
+                            nCurFontID = nec_it->m_nFontID;
+                            cChar = (sal_Unicode)nec_it->m_aCMap[ cChar ];
+                            break;
+                        }
+                    }
+                    if( nCurFontID == 0 ) // new nonencoded glyph
+                    {
+                        if( rEmbedFont.m_aExtendedEncodings.empty() || rEmbedFont.m_aExtendedEncodings.back().m_aEncVector.size() == 255 )
+                        {
+                            rEmbedFont.m_aExtendedEncodings.push_back( EmbedEncoding() );
+                            rEmbedFont.m_aExtendedEncodings.back().m_nFontID = m_nNextFID++;
+                        }
+                        EmbedEncoding& rEncoding = rEmbedFont.m_aExtendedEncodings.back();
+                        rEncoding.m_aEncVector.push_back( EmbedCode() );
+                        rEncoding.m_aEncVector.back().m_aUnicode = cChar;
+                        rEncoding.m_aEncVector.back().m_aName = nonenc_it->second;
+                        rEncoding.m_aCMap[ cChar ] = (sal_Int8)(rEncoding.m_aEncVector.size()-1);
+                        nCurFontID = rEncoding.m_nFontID;
+                        cChar = (sal_Unicode)rEncoding.m_aCMap[ cChar ];
+                    }
+                }
+                else
+                    cChar = 0;
+            }
+            else
+            {
+                if( cChar & 0xff00 )
+                {
+                    // some characters can be used by conversion
+                    if( cChar >= 0xf000 && cChar <= 0xf0ff ) // symbol encoding in private use area
+                        cChar -= 0xf000;
+                    else
+                    {
+                        String aString( cChar);
+                        ByteString aChar( aString, RTL_TEXTENCODING_MS_1252 );
+                        cChar = ((sal_Unicode)aChar.GetChar( 0 )) & 0x00ff;
+                    }
                 }
             }
             pMappedGlyphs[ i ] = (sal_Int8)cChar;
-            pMappedFontObjects[ i ] = nFontID;
+            pMappedFontObjects[ i ] = nCurFontID;
         }
     }
 }
@@ -2614,8 +2811,8 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
                     aLine.append( " /F" );
                     aLine.append( pMappedFontObjects[n] );
                     aLine.append( ' ' );
-                    aLine.append( " Tf" );
                     m_aPages.back().appendMappedLength( nFontHeight, aLine, true );
+                    aLine.append( " Tf" );
                 }
                 aLine.append( " <" );
                 appendHex( (sal_Int8)pMappedGlyphs[n], aLine );
