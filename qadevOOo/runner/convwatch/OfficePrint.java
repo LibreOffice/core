@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OfficePrint.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Date: 2004-11-02 11:20:33 $
+ *  last change: $Date: 2004-12-10 16:58:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,8 @@ import com.sun.star.bridge.XUnoUrlResolver;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XMultiServiceFactory;
-
+import com.sun.star.document.XTypeDetection;
+import com.sun.star.container.XNameAccess;
 import com.sun.star.frame.XDesktop;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.frame.XComponentLoader;
@@ -76,6 +77,7 @@ import com.sun.star.lang.XComponent;
 import com.sun.star.frame.XStorable;
 import com.sun.star.view.XPrintable;
 import com.sun.star.lang.XServiceInfo;
+import com.sun.star.frame.XModel;
 
 import helper.URLHelper;
 import convwatch.FileHelper;
@@ -101,6 +103,25 @@ public class OfficePrint {
         }
 
     /**
+     * shows the FilterName and MediaType from the given XComponent
+     */
+    static void showDocumentType( XComponent _aDoc )
+        {
+            XModel xModel = (XModel) UnoRuntime.queryInterface( XModel.class, _aDoc);
+            PropertyValue[] aArgs = xModel.getArgs();
+            for (int i=0;i<aArgs.length;i++)
+            {
+                PropertyValue aValue = aArgs[i];
+                // System.out.print("Property: '" + aValue.Name);
+                // System.out.println("' := '" + aValue.Value + "'");
+                if (aValue.Name.equals("FilterName") ||
+                    aValue.Name.equals("MediaType"))
+                {
+                    System.out.println("  Property: '" + aValue.Name + "' := '" + aValue.Value + "'");
+                }
+            }
+        }
+    /**
      * load a OpenOffice.org document from a given URL (_sInputURL)
      * the GraphicalTestArguments must contain a living MultiServiceFactory object
      * or we crash here.
@@ -110,7 +131,8 @@ public class OfficePrint {
                                          String _sInputURL)
         {
             XComponent aDoc = null;
-            try {
+            try
+            {
                 if (_aGTA.getMultiServiceFactory() == null)
                 {
                     System.out.println("MultiServiceFactory in GraphicalTestArgument not set.");
@@ -121,7 +143,7 @@ public class OfficePrint {
 
                 if (aDesktop != null)
                 {
-                    System.out.println("Desktop.");
+                    System.out.println("com.sun.star.frame.Desktop created.");
                     // String sInputURL = aCurrentParameter.sInputURL;
                     // String sOutputURL = aCurrentParameter.sOutputURL;
                     // String sPrintFileURL = aCurrentParameter.sPrintToFileURL;
@@ -131,18 +153,40 @@ public class OfficePrint {
                     // set here the loadComponentFromURL() properties
                     // at the moment only 'Hidden' is set, so no window is opened at work
                     PropertyValue [] aProps;
+                    int nPropertyCount = 0;
+
+                    // check which properties should set and count it.
                     if (_aGTA.isHidden())
                     {
-                        aProps = new PropertyValue[1];
+                        nPropertyCount ++;
+                    }
+                    if (_aGTA.getImportFilterName() != null && _aGTA.getImportFilterName().length() > 0)
+                    {
+                        nPropertyCount ++;
+                    }
+
+                    // initialize the propertyvalue
+                    int nPropertyIndex = 0;
+                    aProps = new PropertyValue[ nPropertyCount ];
+
+                    // set all property values
+                    if (_aGTA.isHidden())
+                    {
                         PropertyValue Arg = new PropertyValue();
                         Arg.Name = "Hidden";
                         Arg.Value = Boolean.TRUE;
-                        aProps[0] = Arg;
+                        aProps[ nPropertyIndex ++ ] = Arg;
                     }
-                    else
+                    if (_aGTA.getImportFilterName() != null && _aGTA.getImportFilterName().length() > 0)
                     {
-                        aProps = new PropertyValue [0];
+                        PropertyValue Arg = new PropertyValue();
+                        Arg.Name = "FilterName";
+                        Arg.Value = _aGTA.getImportFilterName();
+                        aProps[ nPropertyIndex ++ ] = Arg;
                     }
+
+                    System.out.print("Load document");
+                    System.out.flush();
 
                     XComponentLoader aCompLoader = (XComponentLoader) UnoRuntime.queryInterface( XComponentLoader.class, aDesktop);
 
@@ -151,12 +195,22 @@ public class OfficePrint {
                     aDoc = aCompLoader.loadComponentFromURL(_sInputURL, "_blank", 0, aProps );
                     if (aDoc != null)
                     {
-                        System.out.println("Document loaded.");
+                        System.out.println(" done.");
+                        showDocumentType(aDoc);
+                    }
+                    else
+                    {
+                        System.out.print(" failed.");
+                        if (_aGTA.getImportFilterName() != null && _aGTA.getImportFilterName().length() > 0)
+                        {
+                            System.out.print(" Please check FilterName := '" + _aGTA.getImportFilterName() + "'");
+                        }
+                        System.out.println();
                     }
                 }
                 else
                 {
-                    System.out.println("Can't open Desktop.");
+                    System.out.println("com.sun.star.frame.Desktop failed.");
                 }
             }
             catch ( com.sun.star.uno.Exception e )
@@ -178,7 +232,7 @@ public class OfficePrint {
             PropertyValue[] PDFArgs = new com.sun.star.beans.PropertyValue[1];
             PDFArgs[0] = new com.sun.star.beans.PropertyValue();
             PDFArgs[0].Name = "FilterName";
-            PDFArgs[0].Value = getFilterName(xServiceInfo);
+            PDFArgs[0].Value = getFilterName_forPDF(xServiceInfo);
 
             boolean bWorked = true;
 
@@ -198,7 +252,7 @@ public class OfficePrint {
             return bWorked;
         }
 
-    static String getFilterName(XServiceInfo xServiceInfo)
+    static String getFilterName_forPDF(XServiceInfo xServiceInfo)
         {
             String filterName = "";
 
@@ -303,17 +357,18 @@ public class OfficePrint {
                 {
                     // don't store document
                     // input and output are equal OR
-                    System.out.println("Inputpath and Outputpath are equal.");
+                    System.out.println("Warning: Inputpath and Outputpath are equal. Document will not stored again.");
+                    _aGTA.disallowStore();
                 }
-                else
-                {
                     bBack = printToFileWithOOo(_aGTA, aDoc, _sOutputURL, _sPrintFileURL);
-                }
 
                 System.out.println("close document.");
                 aDoc.dispose();
             }
-
+            else
+            {
+                System.out.println("loadDocumentFromURL() failed with document: " + _sInputURL);
+            }
             return bBack;
         }
 
@@ -452,6 +507,8 @@ public class OfficePrint {
 
                     if (_sOutputURL != null)
                     {
+                        if (_aGTA.isStoreAllowed())
+                        {
                         // store the document in an other directory
                         XStorable aStorable = (XStorable) UnoRuntime.queryInterface( XStorable.class, _aDoc);
                         if (aStorable != null)
@@ -461,6 +518,7 @@ public class OfficePrint {
                             System.out.println("Document stored.");
                             aStorable.storeAsURL(_sOutputURL, szEmptyArgs);
                         }
+                    }
                     }
 
                     System.out.println("Wait until document is printed.");
@@ -507,6 +565,52 @@ public class OfficePrint {
         }
 
 
+    /**
+     * @return true, if the reference (*.prrn file) based on given output path and given input path exist.
+     *               If OVERWRITE_REFERENCE is set, always return false.
+     */
+    public static boolean isReferenceExists(GraphicalTestArguments _aGTA,
+                                            String _sAbsoluteOutputPath,
+                                            String _sAbsoluteInputFile)
+        {
+            if (! FileHelper.exists(_sAbsoluteInputFile))
+            {
+                // throw new ConvWatchCancelException("Input file: " + _sAbsoluteInputFile + " does not exist.");
+                return false;
+            }
+
+            String fs = System.getProperty("file.separator");
+
+            // String sInputFileURL = URLHelper.getFileURLFromSystemPath(_sAbsoluteInputFile);
+
+            String sInputFileBasename = FileHelper.getBasename(_sAbsoluteInputFile);
+            // String sOutputFileURL = null;
+            String sOutputPath;
+            if (_sAbsoluteOutputPath != null)
+            {
+                sOutputPath    = _sAbsoluteOutputPath;
+                // FileHelper.makeDirectories("", sOutputPath);
+            }
+            else
+            {
+                String sInputPath = FileHelper.getPath(_sAbsoluteInputFile);
+                sOutputPath    = sInputPath;
+            }
+            // sOutputFileURL = URLHelper.getFileURLFromSystemPath(sOutputPath + fs + sInputFileBasename);
+            // sOutputFileURL = null;
+
+            String sPrintFilename = FileHelper.getNameNoSuffix(sInputFileBasename);
+            // String sPrintFileURL;
+
+            String sAbsolutePrintFilename = sOutputPath + fs + sPrintFilename + ".prn";
+            if (FileHelper.exists(sAbsolutePrintFilename) && _aGTA.getOverwrite() == false)
+            {
+                System.out.println("Reference already exist, don't overwrite. Set " + PropertyName.DOC_COMPARATOR_OVERWRITE_REFERENCE + "=true to force overwrite.");
+                return true;
+            }
+            return false;
+        }
+
     // -----------------------------------------------------------------------------
     /**
      * create a reference file
@@ -552,7 +656,7 @@ public class OfficePrint {
             String sAbsolutePrintFilename = sOutputPath + fs + sPrintFilename + ".prn";
             if (FileHelper.exists(sAbsolutePrintFilename) && _aGTA.getOverwrite() == false)
             {
-                System.out.println("Reference already exist, don't overwrite. Set " + PropertyName.OVERWRITE_REFERENCE + "=true to force overwrite.");
+                System.out.println("Reference already exist, don't overwrite. Set " + PropertyName.DOC_COMPARATOR_OVERWRITE_REFERENCE + "=true to force overwrite.");
                 return true;
             }
 
@@ -630,4 +734,442 @@ public class OfficePrint {
             }
             return bBack;
         }
+
+    // -----------------------------------------------------------------------------
+    // TODO: move this away!
+    // -----------------------------------------------------------------------------
+    static void showType(String _sInputURL, XMultiServiceFactory _xMSF)
+        {
+            if (_sInputURL.length() == 0)
+            {
+                return;
+            }
+
+            if (_xMSF == null)
+            {
+                System.out.println("MultiServiceFactory not set.");
+                return;
+            }
+            XTypeDetection aTypeDetection = null;
+            try
+            {
+                Object oObj = _xMSF.createInstance("com.sun.star.document.TypeDetection");
+                aTypeDetection = (XTypeDetection)UnoRuntime.queryInterface(XTypeDetection.class, oObj);
+            }
+            catch(com.sun.star.uno.Exception e)
+            {
+                System.out.println("Can't get com.sun.star.document.TypeDetection.");
+                return;
+            }
+            if (aTypeDetection != null)
+            {
+                String sType = aTypeDetection.queryTypeByURL(_sInputURL);
+                System.out.println("Type is: " + sType);
+            }
+        }
+
+
+    // -----------------------------------------------------------------------------
+    public static String getInternalFilterName(String _sFilterName, XMultiServiceFactory _xMSF)
+        {
+            if (_sFilterName.length() == 0)
+            {
+                // System.out.println("No FilterName set.");
+                return null;
+            }
+
+            if (_xMSF == null)
+            {
+                System.out.println("MultiServiceFactory not set.");
+                return null;
+            }
+            // XFilterFactory aFilterFactory = null;
+            Object aObj = null;
+            try
+            {
+                aObj = _xMSF.createInstance("com.sun.star.document.FilterFactory");
+            }
+            catch(com.sun.star.uno.Exception e)
+            {
+                System.out.println("Can't get com.sun.star.document.FilterFactory.");
+                return null;
+            }
+            if (aObj != null)
+            {
+                XNameAccess aNameAccess = (XNameAccess)UnoRuntime.queryInterface(XNameAccess.class, aObj);
+                if (aNameAccess != null)
+                {
+
+                    // System.out.println("Show ElementNames" );
+                    // String[] aElementNames = aNameAccess.getElementNames();
+                    // for (int i = 0; i<aElementNames.length; i++)
+                    // {
+                    //     System.out.println(aElementNames[i]);
+                    // }
+
+                    if (! aNameAccess.hasByName(_sFilterName))
+                    {
+                        System.out.println("FilterFactory.hasByName() says there exist no '" + _sFilterName + "'" );
+                        return null;
+                    }
+
+                    Object[] aElements = null;
+                    String[] aExtensions;
+                    try
+                    {
+                        aElements = (Object[]) aNameAccess.getByName(_sFilterName);
+                        if (aElements != null)
+                        {
+                            String sInternalFilterName = null;
+                            // System.out.println("getByName().length: " + String.valueOf(aElements.length));
+                            for (int i=0;i<aElements.length; i++)
+                            {
+                                PropertyValue aPropertyValue = (PropertyValue)aElements[i];
+                                // System.out.println("PropertyValue.Name: " + aPropertyValue.Name);
+                                if (aPropertyValue.Name.equals("Type"))
+                                {
+                                    String sValue = (String)aPropertyValue.Value;
+                                    // System.out.println("Type: " + sValue);
+                                    sInternalFilterName = sValue;
+                                }
+                            }
+                            return sInternalFilterName;
+                        }
+                        else
+                        {
+                            System.out.println("There are no elements for FilterName '" + _sFilterName + "'");
+                            return null;
+                        }
+                    }
+                    catch (com.sun.star.container.NoSuchElementException e)
+                    {
+                        System.out.println("NoSuchElementException caught. " + e.getMessage());
+                    }
+                    catch (com.sun.star.lang.WrappedTargetException e)
+                    {
+                        System.out.println("WrappedTargetException caught. " + e.getMessage());
+                    }
+                }
+            }
+            return null;
+        }
+
+    // -----------------------------------------------------------------------------
+
+    static String getServiceNameFromFilterName(String _sFilterName, XMultiServiceFactory _xMSF)
+        {
+            if (_sFilterName.length() == 0)
+            {
+                // System.out.println("No FilterName set.");
+                return null;
+            }
+
+            if (_xMSF == null)
+            {
+                System.out.println("MultiServiceFactory not set.");
+                return null;
+            }
+            // XFilterFactory aFilterFactory = null;
+            Object aObj = null;
+            try
+            {
+                aObj = _xMSF.createInstance("com.sun.star.document.FilterFactory");
+            }
+            catch(com.sun.star.uno.Exception e)
+            {
+                System.out.println("Can't get com.sun.star.document.FilterFactory.");
+                return null;
+            }
+            if (aObj != null)
+            {
+                XNameAccess aNameAccess = (XNameAccess)UnoRuntime.queryInterface(XNameAccess.class, aObj);
+                if (aNameAccess != null)
+                {
+                    if (! aNameAccess.hasByName(_sFilterName))
+                    {
+                        System.out.println("FilterFactory.hasByName() says there exist no '" + _sFilterName + "'" );
+                        return null;
+                    }
+
+                    Object[] aElements = null;
+                    String[] aExtensions;
+                    try
+                    {
+                        aElements = (Object[]) aNameAccess.getByName(_sFilterName);
+                        if (aElements != null)
+                        {
+                            String sServiceName = null;
+                            // System.out.println("getByName().length: " + String.valueOf(aElements.length));
+                            for (int i=0;i<aElements.length; i++)
+                            {
+                                PropertyValue aPropertyValue = (PropertyValue)aElements[i];
+                                if (aPropertyValue.Name.equals("DocumentService"))
+                                {
+                                    String sValue = (String)aPropertyValue.Value;
+                                    // System.out.println("DocumentService: " + sValue);
+                                    sServiceName = sValue;
+                                    break;
+                                }
+                            }
+                            return sServiceName;
+                        }
+                        else
+                        {
+                            System.out.println("There are no elements for FilterName '" + _sFilterName + "'");
+                            return null;
+                        }
+                    }
+                    catch (com.sun.star.container.NoSuchElementException e)
+                    {
+                        System.out.println("NoSuchElementException caught. " + e.getMessage());
+                    }
+                    catch (com.sun.star.lang.WrappedTargetException e)
+                    {
+                        System.out.println("WrappedTargetException caught. " + e.getMessage());
+                    }
+                }
+            }
+            return null;
+        }
+    // -----------------------------------------------------------------------------
+
+    public static String getFileExtension(String _sInternalFilterName, XMultiServiceFactory _xMSF)
+        {
+            if (_sInternalFilterName.length() == 0)
+            {
+                // System.out.println("No FilterName set.");
+                return null;
+            }
+
+            if (_xMSF == null)
+            {
+                System.out.println("MultiServiceFactory not set.");
+                return null;
+            }
+            XTypeDetection aTypeDetection = null;
+            try
+            {
+                Object oObj = _xMSF.createInstance("com.sun.star.document.TypeDetection");
+                aTypeDetection = (XTypeDetection)UnoRuntime.queryInterface(XTypeDetection.class, oObj);
+            }
+            catch(com.sun.star.uno.Exception e)
+            {
+                System.out.println("Can't get com.sun.star.document.TypeDetection.");
+                return null;
+            }
+            if (aTypeDetection != null)
+            {
+                XNameAccess aNameAccess = (XNameAccess)UnoRuntime.queryInterface(XNameAccess.class, aTypeDetection);
+                if (aNameAccess != null)
+                {
+
+                    // System.out.println("Show ElementNames" );
+                    // String[] aElementNames = aNameAccess.getElementNames();
+                    // for (int i = 0; i<aElementNames.length; i++)
+                    // {
+                    //     System.out.println(aElementNames[i]);
+                    // }
+
+                    if (! aNameAccess.hasByName(_sInternalFilterName))
+                    {
+                        System.out.println("TypeDetection.hasByName() says there exist no '" + _sInternalFilterName + "'" );
+                        return null;
+                    }
+
+                    Object[] aElements = null;
+                    String[] aExtensions;
+                    try
+                    {
+                        aElements = (Object[]) aNameAccess.getByName(_sInternalFilterName);
+                        if (aElements != null)
+                        {
+                            String sExtension = null;
+                            // System.out.println("getByName().length: " + String.valueOf(aElements.length));
+                            for (int i=0;i<aElements.length; i++)
+                            {
+                                PropertyValue aPropertyValue = (PropertyValue)aElements[i];
+                                // System.out.println("PropertyValue.Name: " + aPropertyValue.Name);
+                                if (aPropertyValue.Name.equals("Extensions"))
+                                {
+                                    aExtensions = (String[])aPropertyValue.Value;
+                                    System.out.print("   Possible extensions are: " + String.valueOf(aExtensions.length));
+                                    if (aExtensions.length > 0)
+                                    {
+                                        for (int j=0;j<aExtensions.length;j++)
+                                        {
+                                            System.out.print(" " + aExtensions[j]);
+                                        }
+                                        sExtension = aExtensions[0];
+                                        System.out.println();
+                                    }
+                                }
+                            }
+                            return sExtension;
+                        }
+                        else
+                        {
+                            System.out.println("There are no elements for FilterName '" + _sInternalFilterName + "'");
+                            return null;
+                        }
+                    }
+                    catch (com.sun.star.container.NoSuchElementException e)
+                    {
+                        System.out.println("NoSuchElementException caught. " + e.getMessage());
+                    }
+                    catch (com.sun.star.lang.WrappedTargetException e)
+                    {
+                        System.out.println("WrappedTargetException caught. " + e.getMessage());
+                    }
 }
+            }
+            return null;
+        }
+
+    // -----------------------------------------------------------------------------
+    public static void convertDocument(String _sInputFile, String _sOutputPath, GraphicalTestArguments _aGTA) throws ConvWatchCancelException
+        {
+            XMultiServiceFactory xMSF = _aGTA.getMultiServiceFactory();
+            if (xMSF == null)
+            {
+                System.out.println("MultiServiceFactory in GraphicalTestArgument not set.");
+                return;
+            }
+
+            String sInputURL = URLHelper.getFileURLFromSystemPath(_sInputFile);
+            // showType(sInputURL, xMSF);
+            XComponent aDoc = loadFromURL( _aGTA, sInputURL);
+            if (aDoc == null)
+            {
+                System.out.println("Can't load document '"+ sInputURL + "'");
+                return;
+            }
+
+            if (_sOutputPath == null)
+            {
+                System.out.println("Outputpath not set.");
+                return;
+            }
+
+            if (! _aGTA.isStoreAllowed())
+            {
+                System.out.println("It's not allowed to store, check Input/Output path.");
+                return;
+            }
+//  TODO: Do we need to wait?
+            waitInSeconds(1);
+
+            XServiceInfo xServiceInfo = (XServiceInfo) UnoRuntime.queryInterface( XServiceInfo.class, aDoc );
+            // String sFilter = getFilterName_forExcel(xServiceInfo);
+            // System.out.println("Filter is " + sFilter);
+
+            // store the document in an other directory
+            XStorable xStorable = (XStorable) UnoRuntime.queryInterface( XStorable.class, aDoc);
+            if (xStorable == null)
+            {
+                System.out.println("com.sun.star.frame.XStorable is null");
+                return;
+            }
+
+            String sFilterName = _aGTA.getExportFilterName();
+
+            // check how many Properties should initialize
+            int nPropertyCount = 0;
+            if (sFilterName != null && sFilterName.length() > 0)
+            {
+                nPropertyCount ++;
+            }
+
+            // initialize PropertyArray
+            PropertyValue [] aStoreProps = new PropertyValue[ nPropertyCount ];
+            int nPropertyIndex = 0;
+
+            String sExtension = "";
+
+            if (sFilterName != null && sFilterName.length() > 0)
+            {
+                String sInternalFilterName = getInternalFilterName(sFilterName, xMSF);
+                String sServiceName = getServiceNameFromFilterName(sFilterName, xMSF);
+
+                System.out.println("Filter detection:");
+                // check if service name from file filter is the same as from the loaded document
+                boolean bServiceFailed = false;
+                if (sServiceName == null || sInternalFilterName == null)
+                {
+                    System.out.println("Given FilterName '" + sFilterName + "' seems to be unknown.");
+                    bServiceFailed = true;
+                }
+                if (! xServiceInfo.supportsService(sServiceName))
+                {
+                    System.out.println("Service from FilterName '" + sServiceName + "' is not supported by loaded document.");
+                    bServiceFailed = true;
+                }
+                if (bServiceFailed == true)
+                {
+                    System.out.println("Please check '" + PropertyName.DOC_CONVERTER_EXPORT_FILTER_NAME + "' in the property file.");
+                    return;
+                }
+
+                if (sInternalFilterName != null && sInternalFilterName.length() > 0)
+                {
+                    // get the FileExtension, by the filter name, if we don't get a file extension
+                    // we assume the is also no right filter name.
+                    sExtension = getFileExtension(sInternalFilterName, xMSF);
+                    if (sExtension == null)
+                    {
+                        System.out.println("Can't found an extension for filtername, take it from the source.");
+                    }
+                }
+
+                PropertyValue Arg = new PropertyValue();
+                Arg.Name = "FilterName";
+                Arg.Value = sFilterName;
+                aStoreProps[nPropertyIndex ++] = Arg;
+                System.out.println("FilterName is set to: " + sFilterName);
+            }
+
+            String sOutputURL = "";
+            try
+            {
+                // create the new filename with the extension, which is ok to the file format
+                String sInputFileBasename = FileHelper.getBasename(_sInputFile);
+                // System.out.println("InputFileBasename " + sInputFileBasename);
+                String sInputFileNameNoSuffix = FileHelper.getNameNoSuffix(sInputFileBasename);
+                // System.out.println("InputFilename no suffix " + sInputFileNameNoSuffix);
+                String fs = System.getProperty("file.separator");
+                String sOutputFile = _sOutputPath;
+                if (! sOutputFile.endsWith(fs))
+                {
+                    sOutputFile += fs;
+                }
+                if (sExtension != null && sExtension.length() > 0)
+                {
+                    sOutputFile += sInputFileNameNoSuffix + "." + sExtension;
+                }
+                else
+                {
+                    sOutputFile += sInputFileBasename;
+                }
+
+                if (FileHelper.exists(sOutputFile) && _aGTA.getOverwrite() == false)
+                {
+                    System.out.println("File already exist, don't overwrite. Set " + PropertyName.DOC_COMPARATOR_OVERWRITE_REFERENCE + "=true to force overwrite.");
+                    return;
+                }
+
+                sOutputURL = URLHelper.getFileURLFromSystemPath(sOutputFile);
+
+                System.out.println("Store document as '" + sOutputURL + "'");
+                xStorable.storeAsURL(sOutputURL, aStoreProps);
+                System.out.println("Document stored.");
+            }
+            catch (com.sun.star.io.IOException e)
+            {
+                System.out.println("Can't store document '" + sOutputURL + "'. Message is :'" + e.getMessage() + "'");
+            }
+//  TODO: Do we need to wait?
+            waitInSeconds(1);
+
+        }
+
+}
+
