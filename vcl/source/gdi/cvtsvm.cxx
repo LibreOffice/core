@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cvtsvm.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 13:35:38 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 12:15:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -719,7 +719,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 case( GDI_TEXTARRAY_ACTION ):
                 {
                     ByteString  aByteStr;
-                    long*       pDXAry = NULL;
+                    sal_Int32*  pDXAry = NULL;
                     INT32       nIndex, nLen, nAryLen;
 
                     rIStm >> aPt >> nIndex >> nLen >> nTmp >> nAryLen;
@@ -730,7 +730,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     {
                         INT32 nStrLen( aStr.Len() );
 
-                        pDXAry = new long[ Max( nAryLen, nStrLen ) ];
+                        pDXAry = new sal_Int32[ Max( nAryLen, nStrLen ) ];
 
                         for( long i = 0L; i < nAryLen; i++ )
                             rIStm >> nTmp, pDXAry[ i ] = nTmp;
@@ -740,7 +740,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                         {
                             if( nAryLen+1 == nStrLen )
                             {
-                                long* pTmpAry = new long[nStrLen];
+                                sal_Int32* pTmpAry = new sal_Int32[nStrLen];
 
                                 aFontVDev.GetTextArray( aStr, pTmpAry, (USHORT) nIndex, (USHORT) nLen );
 
@@ -1459,7 +1459,7 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 ULONG                   nAryLen;
                 ULONG                   nLen = pAct->GetLen();
                 const ULONG             nTextLen = aText.Len();
-                long*                   pDXArray = pAct->GetDXArray();
+                sal_Int32*              pDXArray = pAct->GetDXArray();
 
                 if ( ImplWriteUnicodeComment( rOStm, aUniText ) )
                     nCount++;
