@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:13:49 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 17:29:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,6 +218,7 @@ struct MenuItemData
     XubString       aHelpText;              // Help-String
     XubString       aTipHelpText;           // TipHelp-String (eg, expanded filenames)
     XubString       aCommandStr;            // CommandString
+    XubString       aHelpCommandStr;        // Help command string (to reference external help)
     ULONG           nHelpId;                // Help-Id
     ULONG           nUserValue;             // User value
     Image           aImage;                 // Image
@@ -760,7 +761,6 @@ static BOOL ImplHandleHelpEvent( Window* pMenuWindow, Menu* pMenu, USHORT nHighl
     return bDone;
 }
 
-
 Menu::Menu()
 {
     DBG_CTOR( Menu, NULL );
@@ -1237,6 +1237,7 @@ void ImplCopyItem( Menu* pThis, const Menu& rMenu, USHORT nPos, USHORT nNewPos,
         pThis->SetHelpText( nId, pData->aHelpText );
         pThis->SetAccelKey( nId, pData->aAccelKey );
         pThis->SetItemCommand( nId, pData->aCommandStr );
+        pThis->SetHelpCommand( nId, pData->aHelpCommandStr );
 
         PopupMenu* pSubMenu = rMenu.GetPopupMenu( nId );
         if ( pSubMenu )
@@ -1602,6 +1603,15 @@ void Menu::SetItemText( USHORT nItemId, const XubString& rStr )
         if( ImplGetSalMenu() && pData->pSalMenuItem )
             ImplGetSalMenu()->SetItemText( nPos, pData->pSalMenuItem, rStr );
 
+        Window* pWin = ImplGetWindow();
+        delete mpLayoutData, mpLayoutData = NULL;
+        if ( pWin && IsMenuBar() )
+        {
+            ImplCalcSize( pWin );
+            if ( pWin->IsVisible() )
+                pWin->Invalidate();
+        }
+
         ImplCallEventListeners( VCLEVENT_MENU_ITEMTEXTCHANGED, nPos );
     }
 }
@@ -1762,6 +1772,24 @@ const XubString& Menu::GetItemCommand( USHORT nItemId ) const
 
     if ( pData )
         return pData->aCommandStr;
+    else
+        return ImplGetSVEmptyStr();
+}
+
+void Menu::SetHelpCommand( USHORT nItemId, const XubString& rStr )
+{
+    MenuItemData* pData = pItemList->GetData( nItemId );
+
+    if ( pData )
+        pData->aHelpCommandStr = rStr;
+}
+
+const XubString& Menu::GetHelpCommand( USHORT nItemId ) const
+{
+    MenuItemData* pData = pItemList->GetData( nItemId );
+
+    if ( pData )
+        return pData->aHelpCommandStr;
     else
         return ImplGetSVEmptyStr();
 }
