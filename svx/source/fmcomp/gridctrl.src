@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 20:32:46 $
+ *  last change: $Author: kz $ $Date: 2001-03-28 12:29:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,7 +179,7 @@ Menu RID_SVXMNU_COLS
                         HelpID = SID_FM_EDIT ;
                         Text = "Textfeld" ;
                         Text [ ENGLISH ] = "TextField" ;
-                        Text [ portuguese ] = "Campo de texto" ;
+                        Text [ portuguese ] = "Caixa de texto" ;
                         Text [ english_us ] = "Text Box" ;
                         Text [ portuguese_brazilian ] = "Edit" ;
                         Text [ swedish ] = "Textfält" ;
@@ -408,7 +408,7 @@ Menu RID_SVXMNU_COLS
                         Text[ russian ] = "Ïîëå îáğàçöà";
                         Text[ polish ] = "Pole wzorca";
                         Text[ japanese ] = "ÊßÀ°İÌ¨°ÙÄŞ";
-                        Text[ chinese_traditional ] = "±»½XÄæ¦ì";
+                        Text[ chinese_traditional ] = "¾B¸nÄæ¦ì";
                         Text[ dutch ] = "Patroonveld";
                         Text[ chinese_simplified ] = "ÑÚÂëÇø";
                         Text[ greek ] = "Êáëõììİíï ğåäßï";
@@ -504,7 +504,7 @@ Menu RID_SVXMNU_COLS
             Text[ dutch ] = "~Vervangen door";
             Text[ chinese_simplified ] = "Ìæ»»³É(~R)";
             Text[ greek ] = "ÁíôéêáôÜóôáóç ì~å";
-            Text[ korean ] = "¹Ù²Ù±â";
+            Text[ korean ] = "¹Ù²Ù±â(~R)";
             Text[ arabic ] = "ÇÓÊÈÏÇá ÈÜ";
             Text[ turkish ] = "Şununla değiştir...";
         };
