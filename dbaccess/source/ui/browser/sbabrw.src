@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-08 08:51:16 $
+ *  last change: $Author: oj $ $Date: 2002-03-27 12:49:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,7 @@ ImageList RID_DEFAULTIMAGELIST_SC
 {
     ImageBitmap = Bitmap
     {
-        File = "scqrtl.bmp";
+        File = "sc_qrtl.bmp";
     };
     IL_TOOL ;
 };
@@ -146,7 +146,7 @@ ImageList RID_DEFAULTIMAGELIST_LC
 {
     ImageBitmap = Bitmap
     {
-        File = "lcqrtl.bmp" ;
+        File = "lc_qrtl.bmp" ;
     };
     IL_TOOL ;
 };
