@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 18:20:08 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:37:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,6 +220,16 @@ namespace
                 xNameCont->dropByName(_sTableName);
         }
     }
+    //------------------------------------------------------------------------------
+    struct OTableRowCompare : public ::std::binary_function< OTableRow*, ::rtl::OUString, bool>
+    {
+        bool operator() (const OTableRow* lhs, const ::rtl::OUString& rhs) const
+        {
+            OFieldDescription* pField = lhs->GetActFieldDescr();
+            return pField && pField->GetName() == rhs;
+        }
+    };
+
 }
 
 //------------------------------------------------------------------------------
@@ -1184,6 +1194,7 @@ void OTableController::alterColumns()
     OSL_ENSURE(xColSup.is(),"What happen here?!");
 
     Reference<XNameAccess> xColumns = xColSup->getColumns();
+    Reference<XIndexAccess> xIdxColumns(xColumns,UNO_QUERY);
     OSL_ENSURE(xColumns.is(),"No columns");
     Reference<XAlterTable> xAlter(m_xTable,UNO_QUERY);  // can be null
 
@@ -1639,6 +1650,21 @@ void OTableController::reload()
     static_cast<OTableDesignView*>(getView())->Invalidate();
 }
 // -----------------------------------------------------------------------------
-
+sal_Int32 OTableController::getFirstEmptyRowPosition() const
+{
+    sal_Int32 nRet = -1;
+    ::std::vector<OTableRow*>::const_iterator aIter = m_vRowList.begin();
+    ::std::vector<OTableRow*>::const_iterator aEnd = m_vRowList.end();
+    for(;aIter != aEnd;++aIter)
+    {
+        if ( !*aIter || !(*aIter)->GetActFieldDescr() || !(*aIter)->GetActFieldDescr()->GetName().getLength() )
+        {
+            nRet = aIter - m_vRowList.begin();
+            break;
+        }
+    }
+    return nRet;
+}
+// -----------------------------------------------------------------------------
 
 
