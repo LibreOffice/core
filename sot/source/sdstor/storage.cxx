@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storage.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:47:57 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 13:25:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@
 #include <stg.hxx>
 #include <storinfo.hxx>
 #include <storage.hxx>
+#include <exchange.hxx>
 
 #ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
 #include <unotools/ucbstreamhelper.hxx>
@@ -1298,6 +1299,15 @@ BOOL SotStorage::GetProperty( const String& rName, ::com::sun::star::uno::Any& r
     if ( pStg )
     {
         return pStg->GetProperty( rName, rValue );
+    }
+    else if ( rName.CompareToAscii("MediaType") == COMPARE_EQUAL )
+    {
+        String aStr = SotExchange::GetFormatMimeType( GetFormat() );
+        USHORT nPos = aStr.Search(';');
+        if ( nPos != STRING_NOTFOUND )
+            aStr = aStr.Copy( 0, nPos );
+        rValue <<= (::rtl::OUString) aStr;
+        return TRUE;
     }
     else
     {
