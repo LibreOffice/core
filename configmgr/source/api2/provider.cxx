@@ -2,9 +2,9 @@
  *
  *  $RCSfile: provider.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-01 13:56:49 $
+ *  last change: $Author: fs $ $Date: 2000-12-08 17:15:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@ namespace configmgr
     {
         if (isConnected())
         {
-            ::osl::MutexGuard aGuard(m_aMutex);
+            ::osl::MutexGuard aGuard(m_aProviderMutex);
             if (isConnected())
                 disconnect();
         }

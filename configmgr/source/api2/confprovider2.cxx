@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confprovider2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dg $ $Date: 2000-12-07 15:05:16 $
+ *  last change: $Author: fs $ $Date: 2000-12-08 17:14:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,7 +219,7 @@ namespace configmgr
     uno::Reference< uno::XInterface > SAL_CALL OConfigurationProvider::createInstance( const OUString& aServiceSpecifier )
         throw(uno::Exception, uno::RuntimeException)
     {
-        MutexGuard aGuard(m_aMutex);
+        MutexGuard aGuard(m_aProviderMutex);
 
         CFG_TRACE_INFO("going to create a read access instance for %s", "missing unicode conversion");
 
@@ -245,7 +245,7 @@ namespace configmgr
         OConfigurationProvider::createInstanceWithArguments( const ::rtl::OUString& aServiceSpecifier, const uno::Sequence< uno::Any >& aArguments )
             throw(uno::Exception, uno::RuntimeException)
     {
-        MutexGuard aGuard(m_aMutex);
+        MutexGuard aGuard(m_aProviderMutex);
 
         if (ServiceCreationInfo const* pInfo = findCreationInfo(aServiceSpecifier))
         {
@@ -269,13 +269,13 @@ namespace configmgr
     uno::Sequence< OUString > SAL_CALL OConfigurationProvider::getAvailableServiceNames(  )
         throw(uno::RuntimeException)
     {
-        MutexGuard aGuard(m_aMutex);
+        MutexGuard aGuard(m_aProviderMutex);
 
         sal_Int32 nCount = 0;
 
         {
             for (int i= 0; i<getCreateServiceDataCount(); ++i)
-                nCount += countServices(getCreateServiceData()[i].info);
+                nCount += ServiceComponentImpl::countServices(getCreateServiceData()[i].info);
         }
 
         uno::Sequence< OUString > aNames(nCount);
