@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.104 $
+#   $Revision: 1.105 $
 #
-#   last change: $Author: hjs $ $Date: 2002-03-28 16:50:41 $
+#   last change: $Author: hjs $ $Date: 2002-04-03 09:48:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1082,7 +1082,7 @@ SVIDL=svidl.exe
 LDUMP=ldump -Gy
 .ENDIF
 .ELSE
-.IF "$(USE_SHELL)"=="4nt"
+.IF "$(USE_SHELL)"!="4nt"
 LDUMP=ldump_w
 LDUMP2=ldump_w
 .ELSE
