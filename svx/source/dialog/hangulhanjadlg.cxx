@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hangulhanjadlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 15:46:27 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 15:48:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,7 +314,7 @@ namespace svx
         HideFocus();
 
         // calculate the size of the radio image - we're to paint our text _after_ this image
-        DBG_ASSERT( !GetImage(), "RubyRadioButton::Paint: images not supported!" );
+        DBG_ASSERT( !GetModeRadioImage(), "RubyRadioButton::Paint: images not supported!" );
         Size aImageSize = GetRadioImage( GetSettings(), 0 ).GetSizePixel();
         aImageSize.Width()  = CalcZoom( aImageSize.Width() );
         aImageSize.Height()  = CalcZoom( aImageSize.Height() );
