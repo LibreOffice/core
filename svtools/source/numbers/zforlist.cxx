@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforlist.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: er $ $Date: 2000-10-23 16:09:31 $
+ *  last change: $Author: er $ $Date: 2000-10-26 17:17:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1324,13 +1324,24 @@ SvNumberformat* SvNumberFormatter::ImpInsertFormat(
                                                  ActLnge);
     if ( !pFormat || nCheckPos > 0 )
     {
-        DBG_ERROR
-            ("SvNumberFormatter:: Unbekanntes oder falsches Zahlformat");
+#ifndef PRODUCT
+        ByteString aMsg( "ImpInsertFormat: bad numberformat code: " );
+        aMsg += ByteString( String( rCode.Code ), RTL_TEXTENCODING_UTF8 );
+        DBG_ERRORFILE( aMsg.GetBuffer() );
+#endif
         delete pFormat;
         return NULL;;
     }
     if ( !aFTable.Insert( nPos, pFormat ) )
     {
+#ifndef PRODUCT
+        ByteString aMsg( "ImpInsertFormat: can't insert number format key: " );
+        aMsg += ByteString::CreateFromInt32( nPos );
+        aMsg.Append( RTL_CONSTASCII_STRINGPARAM( ": " ) );
+        aMsg += ByteString( String( rCode.Code ), RTL_TEXTENCODING_UTF8 );
+        aMsg += ByteString::CreateFromInt32( nPos );
+        DBG_ERRORFILE( aMsg.GetBuffer() );
+#endif
         delete pFormat;
         return NULL;
     }
@@ -1348,15 +1359,7 @@ void SvNumberFormatter::ImpInsertNewStandardFormat(
     SvNumberformat* pNewFormat = ImpInsertFormat( rCode, nPos );
     if (pNewFormat)
         pNewFormat->SetNewStandardDefined( nVersion );
-        // damit es gespeichert, richtig angezeigt und von alten Versionen konvertiert wird
-#ifndef PRODUCT
-    else
-    {
-        ByteString aErr( "New standard format not inserted: " );
-        aErr += ByteString( String( rCode.Code ), RTL_TEXTENCODING_UTF8 );
-        DBG_ERRORFILE( aErr.GetBuffer() );
-    }
-#endif
+        // so that it gets saved, displayed properly, and converted by old versions
 }
 
 void SvNumberFormatter::GetFormatSpecialInfo(ULONG nFormat,
@@ -1433,17 +1436,49 @@ sal_Int32 SvNumberFormatter::GetFormatCodeIndex(
             const NfIndexTableOffset nTabOff )
 {
     const sal_Int32 nLen = rSeq.getLength();
-    for ( sal_Int16 j=0; j<nLen; j++ )
+    for ( sal_Int32 j=0; j<nLen; j++ )
     {
         if ( rSeq[j].Index == nTabOff )
             return j;
     }
 #ifndef PRODUCT
-    ByteString aMsg( RTL_CONSTASCII_STRINGPARAM( "GetFormatCodeIndex: not found: " ) );
-    aMsg += ByteString::CreateFromInt32( nTabOff );
-    DBG_ERRORFILE( aMsg.GetBuffer() );
+    if ( nTabOff < NF_CURRENCY_START || NF_CURRENCY_END < nTabOff
+      || nTabOff == NF_CURRENCY_1000INT || nTabOff == NF_CURRENCY_1000INT_RED
+      || nTabOff == NF_CURRENCY_1000DEC2_CCC )
+    {   // currency entries with decimals might not exist, e.g. Italian Lira
+        ByteString aMsg( RTL_CONSTASCII_STRINGPARAM( "GetFormatCodeIndex: not found: " ) );
+        aMsg += ByteString::CreateFromInt32( nTabOff );
+        DBG_ERRORFILE( aMsg.GetBuffer() );
+    }
 #endif
-    if ( !nLen )
+    if ( nLen )
+    {
+        sal_Int32 j;
+        // look for a preset default
+        for ( j=0; j<nLen; j++ )
+        {
+            if ( rSeq[j].Default )
+                return j;
+        }
+        // currencies are special, not all format codes must exist, but all
+        // builtin number format key index positions must have a format assigned
+        if ( NF_CURRENCY_START <= nTabOff && nTabOff <= NF_CURRENCY_END )
+        {
+            // look for a format with decimals
+            for ( j=0; j<nLen; j++ )
+            {
+                if ( rSeq[j].Index == NF_CURRENCY_1000DEC2 )
+                    return j;
+            }
+            // last resort: look for a format without decimals
+            for ( j=0; j<nLen; j++ )
+            {
+                if ( rSeq[j].Index == NF_CURRENCY_1000INT )
+                    return j;
+            }
+        }
+    }
+    else
     {   // we need at least _some_ format
         rSeq.realloc(1);
         rSeq[0] = ::com::sun::star::lang::NumberFormatCode();
@@ -1477,6 +1512,7 @@ void SvNumberFormatter::ImpGenerateFormats(ULONG CLOffset)
     SvNumberformat* pNewFormat = NULL;
     String aFormatCode;
     sal_Int32 nIdx;
+    sal_Bool bDefault;
 
     // Counter for additional builtin formats not fitting into the first 10
     // of a category (TLOT:=The Legacy Of Templin), altogether about 20 formats.
@@ -1572,43 +1608,55 @@ void SvNumberFormatter::ImpGenerateFormats(ULONG CLOffset)
 
     // #,##0
     nIdx = GetFormatCodeIndex( aFormatSeq, NF_CURRENCY_1000INT );
+    bDefault = aFormatSeq[nIdx].Default;
     aFormatSeq[nIdx].Default = sal_False;
     ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_CURRENCY_1000INT, ZF_STANDARD_CURRENCY ));
+    aFormatSeq[nIdx].Default = bDefault;
 
     // #,##0.00
     nIdx = GetFormatCodeIndex( aFormatSeq, NF_CURRENCY_1000DEC2 );
+    bDefault = aFormatSeq[nIdx].Default;
     aFormatSeq[nIdx].Default = sal_False;
     ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_CURRENCY_1000DEC2, ZF_STANDARD_CURRENCY+1 ));
         //! MUST be ZF_STANDARD_CURRENCY+1 for Calc currency function, e.g. DM()
+    aFormatSeq[nIdx].Default = bDefault;
 
     // #,##0 negative red
     nIdx = GetFormatCodeIndex( aFormatSeq, NF_CURRENCY_1000INT_RED );
+    bDefault = aFormatSeq[nIdx].Default;
     aFormatSeq[nIdx].Default = sal_False;
     ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_CURRENCY_1000INT_RED, ZF_STANDARD_CURRENCY+2 ));
+    aFormatSeq[nIdx].Default = bDefault;
 
     // #,##0.00 negative red
     nIdx = GetFormatCodeIndex( aFormatSeq, NF_CURRENCY_1000DEC2_RED );
+    bDefault = aFormatSeq[nIdx].Default;
     aFormatSeq[nIdx].Default = sal_False;
     ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_CURRENCY_1000DEC2_RED, ZF_STANDARD_CURRENCY+3 ));
+    aFormatSeq[nIdx].Default = bDefault;
 
     // #,##0.00 USD   since number formatter version 3
     nIdx = GetFormatCodeIndex( aFormatSeq, NF_CURRENCY_1000DEC2_CCC );
+    bDefault = aFormatSeq[nIdx].Default;
     aFormatSeq[nIdx].Default = sal_False;
     pNewFormat = ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_CURRENCY_1000DEC2_CCC, ZF_STANDARD_CURRENCY+4 ));
     if ( pNewFormat )
         pNewFormat->SetUsed(TRUE);      // must be saved for older versions
+    aFormatSeq[nIdx].Default = bDefault;
 
     // #.##0,--   since number formatter version 6
     nIdx = GetFormatCodeIndex( aFormatSeq, NF_CURRENCY_1000DEC2_DASHED );
+    bDefault = aFormatSeq[nIdx].Default;
     aFormatSeq[nIdx].Default = sal_False;
     ImpInsertNewStandardFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_CURRENCY_1000DEC2_DASHED, ZF_STANDARD_CURRENCY+5 ),
         SV_NUMBERFORMATTER_VERSION_NEWSTANDARD );
+    aFormatSeq[nIdx].Default = bDefault;
 
 //! TODO: where to build the CurrencyTable now?
 #if 0   // erDEBUG
