@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldrani.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2001-04-23 17:27:57 $
+ *  last change: $Author: sab $ $Date: 2001-05-02 10:31:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,8 @@ class ScXMLDatabaseRangeContext : public SvXMLImportContext
     sal_Int32       nRefresh;
     sal_Int16       nSubTotalsUserListIndex;
     sal_Int16       nSubTotalRuleGroupFieldNumber;
+    sal_Bool        bContainsSort : 1;
+    sal_Bool        bContainsSubTotal : 1;
     sal_Bool        bNative : 1;
     sal_Bool        bIsSelection : 1;
     sal_Bool        bKeepFormats : 1;
