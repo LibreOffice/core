@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MenuItemStyle.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:37 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 08:49:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,30 +68,27 @@
 
 //=============================================================================
 
-// DocMerge from idl: constants com::sun::star::awt::MenuItemStyle
 /** These values are used to specify the properties of a menu item.
 
-        <p>They may be expanded in future versions.
+    <p>They may be expanded in future versions.</p>
  */
 constants MenuItemStyle
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::MenuItemStyle::CHECKABLE
     /** specifies an item which can be checked independently.
      */
     const short CHECKABLE = 1;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::MenuItemStyle::RADIOCHECK
-    /** specifies an item which can be checked dependent on the neighbouring items.
+    /** specifies an item which can be checked dependent on the neighbouring
+        items.
      */
     const short RADIOCHECK = 2;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::MenuItemStyle::AUTOCHECK
     /** specifies to check this item automatically on select.
      */
     const short AUTOCHECK = 4;
