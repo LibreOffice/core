@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-23 12:25:52 $
+ *  last change: $Author: as $ $Date: 2002-06-24 10:29:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,9 +221,6 @@
 #endif
 #ifndef DBAUI_QUERYORDER_HXX
 #include "queryorder.hxx"
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XTASK_HPP_
-#include <com/sun/star/frame/XTask.hpp>
 #endif
 
 using namespace ::com::sun::star::uno;
@@ -592,8 +589,7 @@ void SAL_CALL SbaXDataBrowserController::attachFrame(const Reference< ::com::sun
     // 22.05.2002 - 99030 - fs@openoffice.org
     if ( m_xCurrentFrame.is() && getView() && getView()->getToolBox() )
     {
-        Reference< XTask > xTask( m_xCurrentFrame, UNO_QUERY );
-        sal_Bool bToplevelFrame = xTask.is();
+        sal_Bool bToplevelFrame = m_xCurrentFrame.isTop();
 
         getView()->getToolBox()->ShowItem( SID_CUT, bToplevelFrame );
         getView()->getToolBox()->ShowItem( SID_COPY, bToplevelFrame );

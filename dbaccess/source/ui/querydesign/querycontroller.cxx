@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: hr $ $Date: 2002-05-15 10:15:12 $
+ *  last change: $Author: as $ $Date: 2002-06-24 10:28:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,9 +117,6 @@
 #endif
 #ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
 #include <com/sun/star/sdb/CommandType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XTASK_HPP_
-#include <com/sun/star/frame/XTask.hpp>
 #endif
 #ifndef DBAUI_DLGSAVE_HXX
 #include "dlgsave.hxx"

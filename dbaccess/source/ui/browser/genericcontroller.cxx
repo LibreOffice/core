@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: fs $ $Date: 2002-06-05 08:15:05 $
+ *  last change: $Author: as $ $Date: 2002-06-24 10:29:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,9 +111,6 @@
 #endif
 #ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
 #include <com/sun/star/task/XInteractionHandler.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XTASK_HPP_
-#include <com/sun/star/frame/XTask.hpp>
 #endif
 #ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
@@ -975,9 +972,12 @@ IMPL_LINK(OGenericUnoController, OnAsyncCloseTask, void*, EMPTYARG)
 {
     if(!OGenericUnoController_COMPBASE::rBHelper.bInDispose)
     {
-        Reference<XTask> xTask(m_xCurrentFrame,UNO_QUERY);
-        if(xTask.is())
-            xTask->close();
+        try
+        {
+            Reference< ::com::sun::star::util::XCloseable > xCloseable(m_xCurrentFrame,UNO_QUERY);
+            if(xCloseable.is())
+                xCloseable->close(sal_False); // false - holds the owner ship for this frame inside this object!
+        } catch(CloseVetoException&) {}
     }
     return 0L;
 }
