@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hints.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2002-07-24 13:07:44 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 12:22:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,7 +299,8 @@ public:
 
     // erzeuge die Liste aller Nodes der NumRule in dem angegebenem Doc
     // Der Code steht im docnum.cxx
-    void MakeList( SwDoc& rDoc );
+    // #111955#
+    void MakeList( SwDoc& rDoc, BOOL bOutline = FALSE );
     SwTxtNodeTable& GetList() const { return (SwTxtNodeTable&)aList; }
 };
 
