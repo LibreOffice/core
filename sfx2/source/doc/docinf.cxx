@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docinf.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 18:23:41 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 12:35:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,19 +296,21 @@ ULONG SfxPSStringProperty_Impl::Len()
 class SfxDocumentInfo_Impl
 {
 public:
-    String  aCopiesTo;
-    String  aOriginal;
-    String  aReferences;
-    String  aRecipient;
-    String  aReplyTo;
-    String  aBlindCopies;
-    String  aInReplyTo;
-    String  aNewsgroups;
-    String  aSpecialMimeType;
-    USHORT  nPriority;
-    BOOL    bUseUserData;
+    String      aCopiesTo;
+    String      aOriginal;
+    String      aReferences;
+    String      aRecipient;
+    String      aReplyTo;
+    String      aBlindCopies;
+    String      aInReplyTo;
+    String      aNewsgroups;
+    String      aSpecialMimeType;
+    USHORT      nPriority;
+    BOOL        bUseUserData;
+    // --> PB 2004-08-23 #i33095#
+    sal_Bool    bLoadReadonly;
 
-    SfxDocumentInfo_Impl() : nPriority( 0 ), bUseUserData( 1 ) {}
+    SfxDocumentInfo_Impl() : nPriority( 0 ), bUseUserData( 1 ), bLoadReadonly( sal_False ) {}
 };
 
 //=========================================================================
@@ -1661,3 +1663,15 @@ void SfxDocumentInfo::DeleteUserData( BOOL bUseAuthor )
     SetTime( 0L );
     SetDocumentNumber( 1 );
 }
+
+// --> PB 2004-08-23 #i33095#
+sal_Bool SfxDocumentInfo::IsLoadReadonly() const
+{
+    return pImp->bLoadReadonly;
+}
+void SfxDocumentInfo::SetLoadReadonly( sal_Bool _bReadonly )
+{
+    pImp->bLoadReadonly = _bReadonly;
+}
+// <--
+
