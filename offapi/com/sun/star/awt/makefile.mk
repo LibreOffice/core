@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: obr $ $Date: 2001-02-19 11:04:22 $
+#   last change: $Author: fs $ $Date: 2001-02-20 14:04:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -137,6 +137,7 @@ IDLFILES=\
     UnoControlEditModel.idl\
     UnoControlFileControlModel.idl\
     UnoControlFixedTextModel.idl\
+    UnoControlFormattedFieldModel.idl\
     UnoControlGroupBoxModel.idl\
     UnoControlImageControlModel.idl\
     UnoControlListBoxModel.idl\
