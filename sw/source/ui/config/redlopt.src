@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlopt.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2000-10-27 17:43:05 $
+ *  last change: $Author: kz $ $Date: 2000-11-27 08:16:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ TabPage TP_REDLINE_OPT
         Text[ japanese ] = "‘}“ü(~I)";
         Text[ chinese_traditional ] = "´¡¤J(~I)";
         Text[ arabic ] = "ÅÏÑÇÌ";
-        Text[ greek ] = "ÅéóáãùãŞ";
+        Text[ greek ] = "~ÅéóáãùãŞ";
         Text[ korean ] = "»ğÀÔ(~I)";
         Text[ turkish ] = "~Ekle";
         Text[ language_user1 ] = " ";
@@ -1388,7 +1388,7 @@ TabPage TP_REDLINE_OPT
         Text[ chinese_simplified ] = "°´×÷Õß";
         Text[ russian ] = "Ïî àâòîğó";
         Text[ polish ] = "Wed³ug autora";
-        Text[ japanese ] = "ì¬Ò‚É]‚Á‚Ä";
+        Text[ japanese ] = "ì¬Ò‚×‚Â";
         Text[ chinese_traditional ] = "«ö·Ó§@ªÌ";
         Text[ arabic ] = "ÍÓÈ ÇáãÄáİ";
         Text[ greek ] = "ÊáôÜ óõíôÜêôç";
