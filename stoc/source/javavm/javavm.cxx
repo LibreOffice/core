@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javavm.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kr $ $Date: 2000-12-19 10:20:57 $
+ *  last change: $Author: kr $ $Date: 2001-01-31 16:43:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,7 @@ namespace stoc_javavm {
 
     static void JNICALL vm_abort() {
         OSL_TRACE("vm_abort\n");
+        abort();
     }
 
     typedef ::std::hash_map<sal_uInt32, sal_uInt32> UINT32_UINT32_HashMap;
