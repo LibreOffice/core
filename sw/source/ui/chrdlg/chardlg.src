@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-29 10:44:14 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 08:24:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,6 +153,24 @@ TabDialog DLG_CHAR
                 PageResID = TP_CHAR_POS ;
                 Text = "Position" ;
                 Text [ ENGLISH ] = "Position" ;
+                Text[ english_us ] = "Position";
+                Text[ portuguese ] = "Position";
+                Text[ russian ] = "Position";
+                Text[ greek ] = "ИЭуз";
+                Text[ dutch ] = "Position";
+                Text[ french ] = "Position";
+                Text[ spanish ] = "Position";
+                Text[ italian ] = "Position";
+                Text[ danish ] = "Position";
+                Text[ swedish ] = "Position";
+                Text[ polish ] = "Position";
+                Text[ portuguese_brazilian ] = "Position";
+                Text[ japanese ] = "Position";
+                Text[ korean ] = "Position";
+                Text[ chinese_simplified ] = "Position";
+                Text[ chinese_traditional ] = "Position";
+                Text[ turkish ] = "Position";
+                Text[ arabic ] = "Position";
             };
             PageItem
             {
@@ -160,6 +178,24 @@ TabDialog DLG_CHAR
                 PageResID = TP_CHAR_TWOLN;
                 Text = "Asiatisches Layout" ;
                 Text [ ENGLISH ] = "Asian layout" ;
+                Text[ english_us ] = "Asian layout";
+                Text[ portuguese ] = "Asian layout";
+                Text[ russian ] = "Asian layout";
+                Text[ greek ] = "Asian layout";
+                Text[ dutch ] = "Asian layout";
+                Text[ french ] = "Asian layout";
+                Text[ spanish ] = "Asian layout";
+                Text[ italian ] = "Asian layout";
+                Text[ danish ] = "Asian layout";
+                Text[ swedish ] = "Asiatisk layout";
+                Text[ polish ] = "Asian layout";
+                Text[ portuguese_brazilian ] = "Asian layout";
+                Text[ japanese ] = "Asian layout";
+                Text[ korean ] = "Asian layout";
+                Text[ chinese_simplified ] = "Asian layout";
+                Text[ chinese_traditional ] = "Asian layout";
+                Text[ turkish ] = "Asian layout";
+                Text[ arabic ] = "Asian layout";
             };
             PageItem
             {
