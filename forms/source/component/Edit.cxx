@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Edit.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-19 13:08:24 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 08:56:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,7 @@ using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
+using namespace ::drafts::com::sun::star::form;
 
 //------------------------------------------------------------------
 InterfaceRef SAL_CALL OEditControl_CreateInstance(const Reference< XMultiServiceFactory > & _rxFactory)
@@ -337,8 +338,6 @@ IMPL_LINK(OEditControl, OnKeyPressed, void*, EMPTYARG)
 }
 
 /*************************************************************************/
-sal_Int32 OEditModel::nTextHandle = -1;
-
 //------------------------------------------------------------------
 InterfaceRef SAL_CALL OEditModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
@@ -355,7 +354,7 @@ Sequence<Type> OEditModel::_getTypes()
 DBG_NAME(OEditModel);
 //------------------------------------------------------------------
 OEditModel::OEditModel(const Reference<XMultiServiceFactory>& _rxFactory)
-             :OEditBaseModel( _rxFactory, VCL_CONTROLMODEL_EDIT, FRM_CONTROL_EDIT )
+             :OEditBaseModel( _rxFactory, VCL_CONTROLMODEL_EDIT, FRM_CONTROL_EDIT, sal_True )
                                     // use the old control name for compytibility reasons
     ,m_bMaxTextLenModified(sal_False)
     ,m_nKeyType(NumberFormat::UNDEFINED)
@@ -368,9 +367,7 @@ OEditModel::OEditModel(const Reference<XMultiServiceFactory>& _rxFactory)
     DBG_CTOR(OEditModel,NULL);
 
     m_nClassId = FormComponentType::TEXTFIELD;
-    m_sDataFieldConnectivityProperty = PROPERTY_TEXT;
-    if (OEditModel::nTextHandle == -1)
-        OEditModel::nTextHandle = getOriginalHandle(PROPERTY_ID_TEXT);
+    initValueProperty( PROPERTY_TEXT, PROPERTY_ID_TEXT );
 }
 
 //------------------------------------------------------------------
@@ -388,7 +385,7 @@ OEditModel::OEditModel( const OEditModel* _pOriginal, const Reference<XMultiServ
 
     // Note that most of the properties are not clone from the original object:
     // Things as the format key, it's type, and such, depend on the field being part of a loaded form
-    // (they're initialized in _loaded). Even if the original object _is_ part of such a form, we ourself
+    // (they're initialized in onConnectedDbColumn). Even if the original object _is_ part of such a form, we ourself
     // certainly aren't, so these members are defaulted. If we're inserted into a form which is already loaded,
     // they will be set to new values, anyway ....
 }
@@ -427,11 +424,12 @@ void OEditModel::disposing()
 StringSequence SAL_CALL OEditModel::getSupportedServiceNames() throw()
 {
     StringSequence aSupported = OBoundControlModel::getSupportedServiceNames();
-    aSupported.realloc(aSupported.getLength() + 2);
+    aSupported.realloc(aSupported.getLength() + 3);
 
     ::rtl::OUString*pArray = aSupported.getArray();
     pArray[aSupported.getLength()-1] = FRM_SUN_COMPONENT_DATABASE_TEXTFIELD;
     pArray[aSupported.getLength()-2] = FRM_SUN_COMPONENT_TEXTFIELD;
+    pArray[aSupported.getLength()-3] = FRM_SUN_COMPONENT_BINDDB_TEXTFIELD;
     return aSupported;
 }
 
@@ -552,9 +550,8 @@ sal_Int16 OEditModel::getPersistenceFlags() const
     return nFlags;
 }
 
-// XLoadListener
 //------------------------------------------------------------------------------
-void OEditModel::_loaded(const EventObject& rEvent)
+void OEditModel::onConnectedDbColumn( const Reference< XInterface >& _rxForm )
 {
     m_bNumericField = sal_False;
     Reference<XPropertySet> xField = getField();
@@ -586,8 +583,8 @@ void OEditModel::_loaded(const EventObject& rEvent)
         }
 
         // XNumberFormatter besorgen
-        Reference<XRowSet>  xRowSet(rEvent.Source, UNO_QUERY);
-        DBG_ASSERT(xRowSet.is(), "OEditModel::_loaded : source is not a row set ?");
+        Reference< XRowSet >  xRowSet( _rxForm, UNO_QUERY );
+        DBG_ASSERT(xRowSet.is(), "OEditModel::onConnectedDbColumn : source is not a row set ?");
         Reference<XNumberFormatsSupplier>  xSupplier = getNumberFormats(getConnection(xRowSet), sal_False, m_xServiceFactory);
         if (xSupplier.is())
         {
@@ -625,15 +622,15 @@ void OEditModel::_loaded(const EventObject& rEvent)
 }
 
 //------------------------------------------------------------------------------
-void OEditModel::_unloaded()
+void OEditModel::onDisconnectedDbColumn()
 {
-    OEditBaseModel::_unloaded();
+    OEditBaseModel::onDisconnectedDbColumn();
     if (getField().is())
     {
         if ( m_bMaxTextLenModified )
         {
             Any aVal;
-            aVal <<= (sal_Int16)0;  // nur wenn es 0 war, habe ich es in _loaded umgesetzt
+            aVal <<= (sal_Int16)0;  // nur wenn es 0 war, habe ich es in onConnectedDbColumn umgesetzt
             m_xAggregateSet->setPropertyValue(PROPERTY_MAXTEXTLEN, aVal);
             m_bMaxTextLenModified = sal_False;
         }
@@ -647,10 +644,20 @@ void OEditModel::_unloaded()
 }
 
 //------------------------------------------------------------------------------
-sal_Bool OEditModel::_commit()
+sal_Bool OEditModel::approveValueBinding( const Reference< XValueBinding >& _rxBinding )
+{
+    OSL_PRECOND( _rxBinding.is(), "OEditModel::approveValueBinding: invalid binding!" );
+
+    // only strings are accepted for simplicity
+    return  _rxBinding.is()
+        &&  _rxBinding->supportsType( ::getCppuType( static_cast< ::rtl::OUString* >( NULL ) ) );
+}
+
+//------------------------------------------------------------------------------
+sal_Bool OEditModel::commitControlValueToDbColumn( bool _bPostReset )
 {
     ::rtl::OUString sNewValue;
-    m_xAggregateFastSet->getFastPropertyValue(OEditModel::nTextHandle) >>= sNewValue;
+    m_xAggregateFastSet->getFastPropertyValue( getValuePropertyAggHandle() ) >>= sNewValue;
     if (sNewValue != m_aSaveValue)
     {
         if (!sNewValue.getLength() && !m_bRequired && m_bEmptyIsNull)
@@ -674,46 +681,28 @@ sal_Bool OEditModel::_commit()
     return sal_True;
 }
 
-// XPropertyChangeListener
 //------------------------------------------------------------------------------
-void OEditModel::_onValueChanged()
+Any OEditModel::translateDbColumnToControlValue()
 {
-
-    // release our mutex once (it's acquired in the calling method !), as setting aggregate properties
-    // may cause any uno controls belonging to us to lock the solar mutex, which is potentially dangerous with
-    // our own mutex locked
-    // and in this special case do it before calling DBTypeConversion::getValue, as this uses the number formatter
-    // which's implementation locks the SM, too :(
-    // FS - 72451 - 31.01.00
-    MutexRelease aRelease(m_aMutex);
-    m_aSaveValue = DBTypeConversion::getValue(m_xColumn,
-                                              m_xFormatter,
-                                              m_aNullDate,
-                                              m_nFormatKey,
-                                              m_nKeyType);
+    m_aSaveValue = DBTypeConversion::getValue(
+        m_xColumn, m_xFormatter, m_aNullDate, m_nFormatKey, m_nKeyType
+    );
 
     // #i2817# OJ
-    sal_uInt16 nMaxTextLen = getINT16(m_xAggregateSet->getPropertyValue(PROPERTY_MAXTEXTLEN));
+    sal_uInt16 nMaxTextLen = getINT16( m_xAggregateSet->getPropertyValue( PROPERTY_MAXTEXTLEN ) );
     if ( nMaxTextLen && m_aSaveValue.getLength() > nMaxTextLen )
     {
         sal_Int32 nDiff = m_aSaveValue.getLength() - nMaxTextLen;
-        m_aSaveValue = m_aSaveValue.replaceAt(nMaxTextLen,nDiff,::rtl::OUString());
+        m_aSaveValue = m_aSaveValue.replaceAt( nMaxTextLen, nDiff, ::rtl::OUString() );
     }
 
-    m_xAggregateFastSet->setFastPropertyValue(OEditModel::nTextHandle, makeAny(m_aSaveValue));
+    return makeAny( m_aSaveValue );
 }
 
-// XReset
 //------------------------------------------------------------------------------
-void OEditModel::_reset()
+Any OEditModel::getDefaultForReset() const
 {
-    {   // release our mutex once (it's acquired in the calling method !), as setting aggregate properties
-        // may cause any uno controls belonging to us to lock the solar mutex, which is potentially dangerous with
-        // our own mutex locked
-        // FS - 72451 - 31.01.00
-        MutexRelease aRelease(m_aMutex);
-        m_xAggregateFastSet->setFastPropertyValue(OEditModel::nTextHandle, makeAny(m_aDefaultText));
-    }
+    return makeAny( m_aDefaultText );
 }
 
 //.........................................................................
