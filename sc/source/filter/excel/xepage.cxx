@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xepage.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:46:11 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 16:19:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,12 +274,12 @@ XclExpPageSettings::XclExpPageSettings( const XclExpRoot& rRoot ) :
 
         // *** page settings ***
 
-        maData.mbPrintInRows   = !GETITEMVALUE( rItemSet, SfxBoolItem, ATTR_PAGE_TOPDOWN,   bool );
-        maData.mbHorCenter     =  GETITEMVALUE( rItemSet, SfxBoolItem, ATTR_PAGE_HORCENTER, bool );
-        maData.mbVerCenter     =  GETITEMVALUE( rItemSet, SfxBoolItem, ATTR_PAGE_VERCENTER, bool );
-        maData.mbPrintHeadings =  GETITEMVALUE( rItemSet, SfxBoolItem, ATTR_PAGE_HEADERS,   bool );
-        maData.mbPrintGrid     =  GETITEMVALUE( rItemSet, SfxBoolItem, ATTR_PAGE_GRID,      bool );
-        maData.mbPrintNotes    =  GETITEMVALUE( rItemSet, SfxBoolItem, ATTR_PAGE_NOTES,     bool );
+        maData.mbPrintInRows   = !GETITEMBOOL( rItemSet, ATTR_PAGE_TOPDOWN   );
+        maData.mbHorCenter     =  GETITEMBOOL( rItemSet, ATTR_PAGE_HORCENTER );
+        maData.mbVerCenter     =  GETITEMBOOL( rItemSet, ATTR_PAGE_VERCENTER );
+        maData.mbPrintHeadings =  GETITEMBOOL( rItemSet, ATTR_PAGE_HEADERS   );
+        maData.mbPrintGrid     =  GETITEMBOOL( rItemSet, ATTR_PAGE_GRID      );
+        maData.mbPrintNotes    =  GETITEMBOOL( rItemSet, ATTR_PAGE_NOTES     );
 
         maData.mnStartPage     = GETITEMVALUE( rItemSet, SfxUInt16Item, ATTR_PAGE_FIRSTPAGENO, sal_uInt16 );
         maData.mbManualStart   = maData.mnStartPage && (!nScTab || rDoc.NeedPageResetAfterTab( nScTab - 1 ));
@@ -326,21 +326,37 @@ XclExpPageSettings::XclExpPageSettings( const XclExpRoot& rRoot ) :
 
         // header
         const SfxItemSet& rHdrItemSet = GETITEM( rItemSet, SvxSetItem, ATTR_PAGE_HEADERSET ).GetItemSet();
-        if( GETITEMVALUE( rHdrItemSet, SfxBoolItem, ATTR_PAGE_ON, bool ) )
+        if( GETITEMBOOL( rHdrItemSet, ATTR_PAGE_ON ) )
         {
             const ScPageHFItem& rHFItem = GETITEM( rItemSet, ScPageHFItem, ATTR_PAGE_HEADERRIGHT );
-            maData.maHeader = aHFConv.GenerateString( rHFItem.GetLeftArea(), rHFItem.GetCenterArea(), rHFItem.GetRightArea() );
+            aHFConv.GenerateString( rHFItem.GetLeftArea(), rHFItem.GetCenterArea(), rHFItem.GetRightArea() );
+            maData.maHeader = aHFConv.GetHFString();
+            // header height (Excel excludes header from top margin)
+            sal_Int32 nHdrHeight = GETITEMBOOL( rHdrItemSet, ATTR_PAGE_DYNAMIC ) ?
+                // dynamic height: calculate header height, add header <-> sheet area distance
+                (aHFConv.GetTotalHeight() + GETITEM( rHdrItemSet, SvxULSpaceItem, ATTR_ULSPACE ).GetLower()) :
+                // static height: ATTR_PAGE_SIZE already includes header <-> sheet area distance
+                static_cast< sal_Int32 >( GETITEM( rHdrItemSet, SvxSizeItem, ATTR_PAGE_SIZE ).GetSize().Height() );
+            maData.mfHeaderMargin = maData.mfTopMargin;
+            maData.mfTopMargin += XclTools::GetInchFromTwips( nHdrHeight );
         }
-        maData.mfHeaderMargin = XclTools::GetInchFromTwips( GETITEM( rHdrItemSet, SvxULSpaceItem, ATTR_ULSPACE ).GetLower() );
 
         // footer
         const SfxItemSet& rFtrItemSet = GETITEM( rItemSet, SvxSetItem, ATTR_PAGE_FOOTERSET ).GetItemSet();
-        if( GETITEMVALUE( rFtrItemSet, SfxBoolItem, ATTR_PAGE_ON, bool ) )
+        if( GETITEMBOOL( rFtrItemSet, ATTR_PAGE_ON ) )
         {
             const ScPageHFItem& rHFItem = GETITEM( rItemSet, ScPageHFItem, ATTR_PAGE_FOOTERRIGHT );
-            maData.maFooter = aHFConv.GenerateString( rHFItem.GetLeftArea(), rHFItem.GetCenterArea(), rHFItem.GetRightArea() );
+            aHFConv.GenerateString( rHFItem.GetLeftArea(), rHFItem.GetCenterArea(), rHFItem.GetRightArea() );
+            maData.maFooter = aHFConv.GetHFString();
+            // footer height (Excel excludes footer from bottom margin)
+            sal_Int32 nFtrHeight = GETITEMBOOL( rFtrItemSet, ATTR_PAGE_DYNAMIC ) ?
+                // dynamic height: calculate footer height, add sheet area <-> footer distance
+                (aHFConv.GetTotalHeight() + GETITEM( rFtrItemSet, SvxULSpaceItem, ATTR_ULSPACE ).GetUpper()) :
+                // static height: ATTR_PAGE_SIZE already includes sheet area <-> footer distance
+                static_cast< sal_Int32 >( GETITEM( rFtrItemSet, SvxSizeItem, ATTR_PAGE_SIZE ).GetSize().Height() );
+            maData.mfFooterMargin = maData.mfBottomMargin;
+            maData.mfBottomMargin += XclTools::GetInchFromTwips( nFtrHeight );
         }
-        maData.mfFooterMargin = XclTools::GetInchFromTwips( GETITEM( rFtrItemSet, SvxULSpaceItem, ATTR_ULSPACE ).GetUpper() );
     }
 
     // *** page breaks ***
