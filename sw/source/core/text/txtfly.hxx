@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfly.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-12 08:11:40 $
+ *  last change: $Author: fme $ $Date: 2001-12-06 15:54:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,8 +124,8 @@ class SwContourCache
     MSHORT nObjCnt;
 #ifdef VERTICAL_LAYOUT
     const SwRect ContourRect( const SwFmt* pFmt, const SdrObject* pObj,
-        const SwRect &rLine, const long nXPos, const sal_Bool bRight,
-        const sal_Bool bRot = sal_False );
+        const SwTxtFrm* pFrm, const SwRect &rLine, const long nXPos,
+        const sal_Bool bRight );
 #else
     const SwRect ContourRect( const SwFmt* pFmt, const SdrObject* pObj,
         const SwRect &rLine, const long nXPos, const sal_Bool bRight );
@@ -139,8 +139,8 @@ public:
     void ClrObject( MSHORT nPos );
 #ifdef VERTICAL_LAYOUT
     static const SwRect CalcBoundRect( const SdrObject* pObj,
-        const SwRect &rLine, const long nXPos, const sal_Bool bRight,
-        const SwTxtFrm* pFrm, const SwRect* pRotRect = 0 );
+        const SwRect &rLine, const SwTxtFrm* pFrm, const long nXPos,
+        const sal_Bool bRight );
 #else
     static const SwRect CalcBoundRect( const SdrObject* pObj,
         const SwRect &rLine, const long nXPos, const sal_Bool bRight );
@@ -168,10 +168,6 @@ class SwTxtFly
 
     const SwCntntFrm    *pMaster;
     SwFlyList           *pFlyList;
-
-#ifdef VERTICAL_LAYOUT
-    SwRotRectList       *pRotRectList;
-#endif
 
     long nMinBottom;
     long nNextTop; // Hier wird die Oberkante des "naechsten" Rahmens gespeichert
@@ -228,12 +224,7 @@ public:
 
     // Liefert zu einem SdrObject das von ihm _beanspruchte_ Rect
     // (unter Beruecksichtigung der Order) zurueck.
-#ifdef VERTICAL_LAYOUT
-    SwRect FlyToRect( const SdrObject *pObj, const SwRect &rRect,
-                      const SwRect* pRotRect ) const;
-#else
     SwRect FlyToRect( const SdrObject *pObj, const SwRect &rRect ) const;
-#endif
 
     // Die Drawmethoden stellen sicher, dass ueberlappende Frames
     // (ausser bei transparenten Frames) nicht uebergepinselt werden.
@@ -274,6 +265,9 @@ inline SwRect SwTxtFly::GetFrm( const SwRect &rRect, sal_Bool bTop ) const
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2001/10/12 08:11:40  fme
+      Fix #93009#: Frames anchored at page should not affect text in footer or header
+
       Revision 1.2  2001/08/31 06:19:23  fme
       New: Vertical text formatting
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfly.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fme $ $Date: 2001-12-06 15:49:17 $
+ *  last change: $Author: fme $ $Date: 2001-12-06 15:54:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1502,8 +1502,8 @@ void ClrContourCache()
 
 #ifdef VERTICAL_LAYOUT
 const SwRect SwContourCache::CalcBoundRect( const SdrObject* pObj,
-        const SwRect &rLine, const long nXPos, const sal_Bool bRight,
-        const SwTxtFrm* pFrm )
+        const SwRect &rLine, const SwTxtFrm* pFrm, const long nXPos,
+        const sal_Bool bRight )
 #else
 const SwRect SwContourCache::CalcBoundRect( const SdrObject* pObj,
         const SwRect &rLine, const long nXPos, const sal_Bool bRight )
@@ -1973,7 +1973,7 @@ void SwTxtFly::CalcRightMargin( SwRect &rFly, MSHORT nFlyPos,
 
 #ifdef VERTICAL_LAYOUT
         const SwRect aTmp( SwContourCache::CalcBoundRect
-                ( pNext, aLine, nFlyRight, sal_True, pCurrFrm ) );
+                ( pNext, aLine, pCurrFrm, nFlyRight, sal_True ) );
         SwTwips nTmpRight = (aTmp.*fnRect->fnGetRight)();
 #else
         const SwRect aTmp( SwContourCache::CalcBoundRect
@@ -2114,7 +2114,7 @@ void SwTxtFly::CalcLeftMargin( SwRect &rFly, MSHORT nFlyPos,
 
 #ifdef VERTICAL_LAYOUT
         const SwRect aTmp( SwContourCache::CalcBoundRect
-                ( pNext, aLine, nFlyLeft, sal_False, pCurrFrm ) );
+                ( pNext, aLine, pCurrFrm, nFlyLeft, sal_False ) );
 
         if( (aTmp.*fnRect->fnGetLeft)() < nFlyLeft && aTmp.IsOver( aLine ) )
         {
@@ -2154,8 +2154,8 @@ SwRect SwTxtFly::FlyToRect( const SdrObject *pObj, const SwRect &rLine ) const
 {
 #ifdef VERTICAL_LAYOUT
     SWRECTFN( pCurrFrm )
-    SwRect aFly = SwContourCache::CalcBoundRect( pObj, rLine,
-        (rLine.*fnRect->fnGetLeft)(), sal_True, pCurrFrm );
+    SwRect aFly = SwContourCache::CalcBoundRect( pObj, rLine, pCurrFrm,
+        (rLine.*fnRect->fnGetLeft)(), sal_True );
 #else
     SwRect aFly = SwContourCache::CalcBoundRect( pObj, rLine,
         rLine.Left(), sal_True );
