@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XProxySettings.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-06-28 13:35:27 $
+ *  last change: $Author: mi $ $Date: 2001-11-15 16:57:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,70 +85,70 @@ interface XProxySettings: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
     /**
         @returns
-        the address of the ftp proxy server if any has been specified
+        the address of the ftp proxy server, if any has been specified
     */
     string getFtpProxyAddress( );
 
     //-------------------------------------------------------------------------
     /**
         @returns
-        the port of the ftp proxy server if any has been specified
+        the port of the ftp proxy server, if any has been specified
     */
     string getFtpProxyPort( );
 
     //-------------------------------------------------------------------------
     /**
         @returns
-        the address of the gopher proxy server if any has been specified
+        the address of the gopher proxy server, if any has been specified
     */
     string getGopherProxyAddress( );
 
     //-------------------------------------------------------------------------
     /**
         @returns
-        the port of the gopher proxy server if any has been specified
+        the port of the gopher proxy server, if any has been specified
     */
     string getGopherProxyPort( );
 
     //-------------------------------------------------------------------------
     /**
         @returns
-        the address of the http proxy server if any has been specified
+        the address of the http proxy server, if any has been specified
     */
     string getHttpProxyAddress( );
 
     //-------------------------------------------------------------------------
     /**
         @returns
-        the port of the http proxy server if any has been specified
+        the port of the http proxy server, if any has been specified
     */
     string getHttpProxyPort( );
 
     //-------------------------------------------------------------------------
     /**
         @returns
-        the address of the https proxy server if any has been specified
+        the address of the https proxy server, if any has been specified
     */
     string getHttpsProxyAddress( );
 
     //-------------------------------------------------------------------------
     /**
         @returns
-        the port of the https proxy server if any has been specified
+        the port of the https proxy server, if any has been specified
     */
     string getHttpsProxyPort( );
 
     //-------------------------------------------------------------------------
     /**
         @returns
-        the address of the socks proxy server if any has been specified
+        the address of the socks proxy server, if any has been specified
     */
     string getSocksProxyAddress( );
 
     //-------------------------------------------------------------------------
     /**
         @returns
-        the port of the socks proxy server if any has been specified
+        the port of the socks proxy server, if any has been specified
     */
     string getSocksProxyPort( );
 
