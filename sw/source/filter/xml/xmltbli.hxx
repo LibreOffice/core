@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltbli.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dvo $ $Date: 2002-06-07 12:48:54 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:52:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,8 +131,8 @@ class SwXMLTableContext : public XMLTextTableContext
 
     sal_Bool            bFirstSection : 1;
     sal_Bool            bRelWidth : 1;
-    sal_Bool            bHasHeading : 1;
 
+    USHORT              nHeaderRows;
     sal_uInt32          nCurRow;
     sal_uInt32          nCurCol;
     sal_Int32           nWidth;
