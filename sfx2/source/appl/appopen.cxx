@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dv $ $Date: 2001-05-10 13:03:56 $
+ *  last change: $Author: mba $ $Date: 2001-05-17 13:21:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -410,8 +410,17 @@ ULONG CheckPasswd_Impl
         SvStorageRef aRef = pFile->GetStorage();
         if(aRef.Is())
         {
-            SfxDocumentInfo *pInfo = new SfxDocumentInfo;
-            if(pInfo->Load(aRef) && pInfo->IsPasswd())
+            sal_Bool bIsEncrypted = sal_False;
+            ::com::sun::star::uno::Any aAny;
+            if ( aRef->GetProperty( ::rtl::OUString::createFromAscii("HasEncryptedEntries"), aAny ) )
+                aAny >>= bIsEncrypted;
+            else
+            {
+                SfxDocumentInfo aInfo;
+                bIsEncrypted = ( aInfo.Load(aRef) && aInfo.IsPasswd() );
+            }
+
+            if ( bIsEncrypted )
             {
                 SfxPasswordDialog *pDlg = new SfxPasswordDialog(pWin);
                 String aTitle( pDlg->GetText() );
@@ -429,13 +438,13 @@ ULONG CheckPasswd_Impl
                                 SID_PASSWORD, SID_PASSWORD, 0 );
                         pFile->SetItemSet(pSet);
                     }
+
                     pSet->Put(SfxStringItem(SID_PASSWORD, pDlg->GetPassword()));
                 }
                 else
                     nRet=ERRCODE_IO_ABORT;
                 delete pDlg;
             }
-            delete pInfo;
         }
     }
     return nRet;
