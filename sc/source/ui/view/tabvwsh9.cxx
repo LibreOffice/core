@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh9.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:32:35 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 09:31:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,9 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <sfx2/dispatch.hxx>
 #include <svtools/whiter.hxx>
+#include <avmedia/mediaplayer.hxx>
 
 #include "tabvwsh.hxx"
 #include "viewdata.hxx"
@@ -116,6 +118,15 @@ void ScTabViewShell::ExecChildWin(SfxRequest& rReq)
             rReq.Ignore();
         }
         break;
+
+        case SID_AVMEDIA_PLAYER:
+        {
+            SfxViewFrame* pThisFrame = GetViewFrame();
+            pThisFrame->ToggleChildWindow( ::avmedia::MediaPlayer::GetChildWindowId() );
+            pThisFrame->GetBindings().Invalidate( SID_AVMEDIA_PLAYER );
+            rReq.Ignore();
+        }
+        break;
     }
 }
 
@@ -125,6 +136,11 @@ void ScTabViewShell::GetChildWinState( SfxItemSet& rSet )
     {
         USHORT nId = GalleryChildWindow::GetChildWindowId();
         rSet.Put( SfxBoolItem( SID_GALLERY, GetViewFrame()->HasChildWindow( nId ) ) );
+    }
+    else if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_AVMEDIA_PLAYER ) )
+    {
+        USHORT nId = ::avmedia::MediaPlayer::GetChildWindowId();
+        rSet.Put( SfxBoolItem( SID_AVMEDIA_PLAYER, GetViewFrame()->HasChildWindow( nId ) ) );
     }
 }
 
@@ -169,8 +185,8 @@ void ScTabViewShell::ExecGallery( SfxRequest& rReq )
                 GalleryExplorer* pGal = SVX_GALLERY();
                 if ( pGal )
                 {
-                    String aURL( pGal->GetURL().GetMainURL( INetURLObject::NO_DECODE ) );
-                    InsertURL( aURL, aURL, EMPTY_STRING, HLINK_BUTTON );
+                    const SfxStringItem aMediaURLItem( SID_INSERT_AVMEDIA, pGal->GetURL().GetMainURL( INetURLObject::NO_DECODE ) );
+                       GetViewFrame()->GetDispatcher()->Execute( SID_INSERT_AVMEDIA, SFX_CALLMODE_SYNCHRON, &aMediaURLItem, 0L );
                 }
             }
         }
