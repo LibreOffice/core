@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.h,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 13:15:31 $
+ *  last change: $Author: rt $ $Date: 2004-10-28 16:24:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -421,6 +421,15 @@ sal_uInt32 SAL_CALL osl_getCommandArgCount(void);
     @see osl_executeProcess
 */
 oslProcessError SAL_CALL osl_getCommandArg(sal_uInt32 nArg, rtl_uString **strCommandArg);
+
+/** Set the command-line arguments as passed to the main-function of this process.
+    @param argc [in] The number of elements in the argv array.
+    @param argv [in] The array of command-line arguments.
+    @see osl_getExecutableFile
+    @see osl_getCommandArgCount
+    @see osl_getCommandArg
+*/
+void SAL_CALL osl_setCommandArgs (int argc, char **argv);
 
 /** Get the value of one enviroment variable.
     @param strVar [in] denotes the name of the variable to get.
