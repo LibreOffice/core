@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OImageButtonModel.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 12:44:05 $
+ *  last change:$Date: 2003-09-08 11:49:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,20 +58,24 @@
  *
  *
  ************************************************************************/
-
 package mod._forms;
 
-import com.sun.star.drawing.XControlShape;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.lang.XComponent;
-import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
+
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 import util.FormTools;
 import util.SOfficeFactory;
+
+import com.sun.star.drawing.XControlShape;
+import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
+import com.sun.star.util.XCloseable;
+
 
 /**
 * Test for object which is represented by service
@@ -122,32 +126,40 @@ import util.SOfficeFactory;
 * @see ifc.lang._XComponent
 */
 public class OImageButtonModel extends TestCase {
-
     XComponent xDrawDoc;
 
     /**
     * Creates Draw document.
     */
-    protected void initialize( TestParameters tParam, PrintWriter log ) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
+    protected void initialize(TestParameters tParam, PrintWriter log) {
+        SOfficeFactory SOF = SOfficeFactory.getFactory(((XMultiServiceFactory) tParam.getMSF()));
 
         try {
-            log.println( "creating a draw document" );
-            xDrawDoc = SOF.createDrawDoc(null);;
-        } catch ( com.sun.star.uno.Exception e ) {
+            log.println("creating a draw document");
+            xDrawDoc = SOF.createDrawDoc(null);
+            ;
+        } catch (com.sun.star.uno.Exception e) {
             // Some exception occures.FAILED
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't create document", e );
+            e.printStackTrace(log);
+            throw new StatusException("Couldn't create document", e);
         }
-
     }
 
     /**
     * Disposes Draw document.
     */
-    protected void cleanup( TestParameters tParam, PrintWriter log ) {
-        log.println( "    disposing xDrawDoc " );
-        xDrawDoc.dispose();
+    protected void cleanup(TestParameters tParam, PrintWriter log) {
+        log.println("    disposing xDrawDoc ");
+
+        try {
+            XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
+                                        XCloseable.class, xDrawDoc);
+            closer.close(true);
+        } catch (com.sun.star.util.CloseVetoException e) {
+            log.println("couldn't close document");
+        } catch (com.sun.star.lang.DisposedException e) {
+            log.println("couldn't close document");
+        }
     }
 
     /**
@@ -159,33 +171,34 @@ public class OImageButtonModel extends TestCase {
     *    represented by this object. </li>
     * </ul>
     */
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
-
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
+                                                                 PrintWriter log) {
         XInterface oObj = null;
+
 
         // creation of testobject here
         // first we write what we are intend to do to log file
-        log.println( "creating a test environment" );
+        log.println("creating a test environment");
 
-        // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF());
         String objName = "ImageButton";
+
         //get ImageButtonModel
+        XControlShape shape = FormTools.insertControlShape(xDrawDoc, 5000,
+                                                           7000, 2000, 2000,
+                                                           objName);
+        oObj = shape.getControl();
 
-        XControlShape shape = FormTools.insertControlShape
-            (xDrawDoc, 5000, 7000, 2000, 2000, objName) ;
-        oObj = shape.getControl() ;
+        log.println("creating a new environment for drawpage object");
 
-        log.println( "creating a new environment for drawpage object" );
-        TestEnvironment tEnv = new TestEnvironment( oObj );
+        TestEnvironment tEnv = new TestEnvironment(oObj);
 
-        tEnv.addObjRelation("OBJNAME", "stardiv.one.form.component." + objName);
+        tEnv.addObjRelation("OBJNAME", "stardiv.one.form.component." +
+                            objName);
+
 
         //adding ObjRelation for XPersistObject
         tEnv.addObjRelation("PSEUDOPERSISTENT", new Boolean(true));
 
         return tEnv;
     } // finish method getTestEnvironment
-
-}    // finish class OImageButtonModel
-
+} // finish class OImageButtonModel
