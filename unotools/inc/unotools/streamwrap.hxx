@@ -2,9 +2,9 @@
  *
  *  $RCSfile: streamwrap.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-30 11:31:54 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 10:43:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,8 @@ typedef ::cppu::WeakImplHelper1<stario::XOutputStream> OutputStreamWrapper_Base;
     // needed for some compilers
 class OOutputStreamWrapper : public OutputStreamWrapper_Base
 {
+protected:
+    // TODO: thread safety!
     SvStream&       rStream;
 
 public:
@@ -172,6 +174,36 @@ public:
     virtual void SAL_CALL writeBytes(const staruno::Sequence< sal_Int8 >& aData) throw(stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException);
     virtual void SAL_CALL flush() throw(stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException);
     virtual void SAL_CALL closeOutput() throw(stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException);
+
+protected:
+    /// throws an exception according to the error flag of m_pSvStream
+    void checkError() const;
+};
+
+//==================================================================
+//= OSeekableOutputStreamWrapper
+//==================================================================
+typedef ::cppu::ImplHelper1 <   ::com::sun::star::io::XSeekable
+                            >   OSeekableOutputStreamWrapper_Base;
+/** helper class for wrapping an SvStream into an <type scope="com.sun.star.io">XOutputStream</type>
+    which is seekable (i.e. supports the <type scope="com.sun.star.io">XSeekable</type> interface).
+*/
+class OSeekableOutputStreamWrapper
+                :public OOutputStreamWrapper
+                ,public OSeekableOutputStreamWrapper_Base
+{
+public:
+    OSeekableOutputStreamWrapper(SvStream& _rStream);
+
+    // disambiguate XInterface
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& _rType ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL acquire(  ) throw ();
+    virtual void SAL_CALL release(  ) throw ();
+
+    // XSeekable
+    virtual void SAL_CALL seek( sal_Int64 _nLocation ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+    virtual sal_Int64 SAL_CALL getPosition(  ) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+    virtual sal_Int64 SAL_CALL getLength(  ) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 };
 
 }   // namespace utl
