@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ssa $ $Date: 2002-10-21 14:03:17 $
+ *  last change: $Author: pl $ $Date: 2002-11-07 18:45:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -734,6 +734,9 @@ void Dialog::EndDialog( long nResult )
             }
             pExeDlg = pExeDlg->mpPrevExecuteDlg;
         }
+        // set focus to previous modal dialogue
+        if( mpPrevExecuteDlg )
+            mpPrevExecuteDlg->GrabFocus();
         mpPrevExecuteDlg = NULL;
 
         Hide();
@@ -806,11 +809,17 @@ void Dialog::SetModalInputMode( BOOL bModal )
     {
         pSVData->maAppData.mnModalDialog--;
 
-         if ( mpDialogParent )
-             mpDialogParent->EnableInput( TRUE, TRUE, TRUE, this );
+        if ( mpDialogParent )
+            mpDialogParent->EnableInput( TRUE, TRUE, TRUE, this );
         // Enable the prev Modal Dialog
         if ( mpPrevExecuteDlg && !mpPrevExecuteDlg->IsWindowOrChild( this, TRUE ) )
+        {
             mpPrevExecuteDlg->EnableInput( TRUE, TRUE, TRUE, this );
+            // ensure continued modality of prev dialog
+            // do not change modality counter
+            mpPrevExecuteDlg->SetModalInputMode( FALSE );
+            mpPrevExecuteDlg->SetModalInputMode( TRUE );
+        }
     }
 }
 
