@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctemplates.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dv $ $Date: 2001-04-03 06:38:42 $
+ *  last change: $Author: dv $ $Date: 2001-04-05 14:30:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,10 @@
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #endif
 
+#ifndef  _COM_SUN_STAR_DOCUMENT_XTYPEDETECTION_HPP_
+#include <com/sun/star/document/XTypeDetection.hpp>
+#endif
+
 #ifndef  _COM_SUN_STAR_IO_XPERSIST_HPP_
 #include <com/sun/star/io/XPersist.hpp>
 #endif
@@ -134,6 +138,8 @@
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #endif
 
+
+
 #include "sfxresid.hxx"
 #include "doc.hrc"
 
@@ -144,9 +150,10 @@
 #define TEMPLATE_SERVICE_NAME               "com.sun.star.frame.DocumentTemplates"
 #define TEMPLATE_IMPLEMENTATION_NAME        "com.sun.star.comp.sfx2.DocumentTemplates"
 
-#define HIERARCHIE_ROOT_URL     "vnd.sun.star.hier:/"
+#define SERVICENAME_TYPEDETECTION           "com.sun.star.document.TypeDetection"
+#define SERVICENAME_DOCINFO                 "com.sun.star.document.DocumentProperties"
+
 #define TEMPLATE_ROOT_URL       "vnd.sun.star.hier:/templates"
-#define TEMPLATE_DIR_NAME       "templates"
 #define TITLE                   "Title"
 #define IS_FOLDER               "IsFolder"
 #define TARGET_URL              "TargetURL"
@@ -163,18 +170,12 @@
 
 #define STANDARD_FOLDER         "standard"
 
-#define SERVICENAME_TYPEDETECTION       "com.sun.star.document.TypeDetection"
-#define TYPEDETECTION_PARAMETER         "FileName"
-#define SERVICENAME_OLD_TYPEDETECTION   "com.sun.star.frame.FrameLoaderFactory"
-#define PARAMETER_OLD_TYPEDETECTION     "DeepDetection"
-#define SERVICENAME_DOCINFO             "com.sun.star.document.DocumentProperties"
-
-
 #define C_DELIM                 ';'
 
 //=============================================================================
 
 using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
@@ -221,9 +222,10 @@ class GroupData_Impl;
 class SfxDocTplService_Impl
 {
     Reference< XMultiServiceFactory >   mxFactory;
-    Reference < XCommandEnvironment >   maCmdEnv;
+    Reference< XCommandEnvironment >    maCmdEnv;
+    Reference< XPersist >               mxInfo;
+    Reference< XTypeDetection >         mxType;
 
-    Reference< XPersist >       mxInfo;
     ::osl::Mutex                maMutex;
     Sequence< OUString >        maTemplateDirs;
     OUString                    maRootURL;
@@ -439,14 +441,16 @@ void SfxDocTplService_Impl::init_Impl()
     if ( mbIsInitialized )
     {
         OUString aService( RTL_CONSTASCII_USTRINGPARAM( SERVICENAME_DOCINFO ) );
-        Reference< XPersist > xInfo( mxFactory->createInstance( aService ), UNO_QUERY );
-        mxInfo = xInfo;
+        mxInfo = Reference< XPersist > ( mxFactory->createInstance( aService ), UNO_QUERY );
+
+        aService = OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICENAME_TYPEDETECTION ) );
+        mxType = Reference< XTypeDetection > ( mxFactory->createInstance( aService ), UNO_QUERY );
 
         getDirList();
         readFolderList();
 
         if ( bRootExists )
-            update( sal_False );
+            ;   // update( sal_False );
         else
         {
             WaitWindow_Impl aMsgWin;
@@ -535,14 +539,14 @@ void SfxDocTplService_Impl::getDirList()
 
     maTemplateDirs = Sequence< OUString >( nCount );
 
-    OUString* pDirs = maTemplateDirs.getArray();
-
     for ( USHORT i=0; i<nCount; i++ )
     {
         aURL.SetSmartProtocol( INET_PROT_FILE );
         aURL.SetURL( aDirs.GetToken( i, C_DELIM ) );
-        pDirs[i] = aURL.GetMainURL();
+        maTemplateDirs[i] = aURL.GetMainURL();
     }
+
+    aValue <<= maTemplateDirs;
 
     // Store the template dir list
     setProperty( maRootContent, aPropName, aValue );
@@ -574,6 +578,11 @@ void SfxDocTplService_Impl::getTitleFromURL( const OUString& rURL, OUString& aTi
         catch ( Exception& ) {}
     }
 
+    if ( ! aType.len() && mxType.is() )
+    {
+        aType = mxType->queryTypeByURL( rURL );
+    }
+
     if ( ! aTitle.len() )
     {
         INetURLObject aURL( rURL );
@@ -602,16 +611,14 @@ sal_Bool SfxDocTplService_Impl::addEntry( Content& rParentFolder,
     if ( ! Content::create( aLinkURL, maCmdEnv, aLink ) )
     {
         Sequence< OUString > aNames(3);
-        OUString* pNames = aNames.getArray();
-        pNames[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( TITLE ) );
-        pNames[1] = OUString( RTL_CONSTASCII_USTRINGPARAM( IS_FOLDER ) );
-        pNames[2] = OUString( RTL_CONSTASCII_USTRINGPARAM( TARGET_URL ) );
+        aNames[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( TITLE ) );
+        aNames[1] = OUString( RTL_CONSTASCII_USTRINGPARAM( IS_FOLDER ) );
+        aNames[2] = OUString( RTL_CONSTASCII_USTRINGPARAM( TARGET_URL ) );
 
         Sequence< Any > aValues(3);
-        Any* pValues = aValues.getArray();
-        pValues[0] = makeAny( rTitle );
-        pValues[1] = makeAny( sal_Bool( sal_False ) );
-        pValues[2] = makeAny( rTargetURL );
+        aValues[0] = makeAny( rTitle );
+        aValues[1] = makeAny( sal_Bool( sal_False ) );
+        aValues[2] = makeAny( rTargetURL );
 
         OUString aType( RTL_CONSTASCII_USTRINGPARAM( TYPE_LINK ) );
         OUString aAdditionalProp( RTL_CONSTASCII_USTRINGPARAM( PROPERTY_TYPE ) );
@@ -657,14 +664,12 @@ sal_Bool SfxDocTplService_Impl::createFolder( const OUString& rNewFolderURL,
         try
         {
             Sequence< OUString > aNames(2);
-            OUString* pNames = aNames.getArray();
-            pNames[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( TITLE ) );
-            pNames[1] = OUString( RTL_CONSTASCII_USTRINGPARAM( IS_FOLDER ) );
+            aNames[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( TITLE ) );
+            aNames[1] = OUString( RTL_CONSTASCII_USTRINGPARAM( IS_FOLDER ) );
 
             Sequence< Any > aValues(2);
-            Any* pValues = aValues.getArray();
-            pValues[0] = makeAny( aFolderName );
-            pValues[1] = makeAny( sal_Bool( sal_True ) );
+            aValues[0] = makeAny( aFolderName );
+            aValues[1] = makeAny( sal_Bool( sal_True ) );
 
             OUString aType;
 
@@ -851,6 +856,8 @@ void SfxDocTplService_Impl::setLocale( const Locale &rLocale )
 //-----------------------------------------------------------------------------
 void SfxDocTplService_Impl::update( sal_Bool bUpdateNow )
 {
+    ::osl::MutexGuard aGuard( maMutex );
+
     if ( bUpdateNow )
         doUpdate();
     else
@@ -1548,10 +1555,9 @@ void SfxDocTplService_Impl::addHierGroup( GroupList_Impl& rList,
     Reference< XResultSet > xResultSet;
     Sequence< OUString >    aProps(3);
 
-    OUString* pProps = aProps.getArray();
-    pProps[0] = OUString::createFromAscii( TITLE );
-    pProps[1] = OUString::createFromAscii( TARGET_URL );
-    pProps[2] = OUString::createFromAscii( PROPERTY_TYPE );
+    aProps[0] = OUString::createFromAscii( TITLE );
+    aProps[1] = OUString::createFromAscii( TARGET_URL );
+    aProps[2] = OUString::createFromAscii( PROPERTY_TYPE );
 
     try
     {
@@ -1641,8 +1647,7 @@ void SfxDocTplService_Impl::addFsysGroup( GroupList_Impl& rList,
     Content                 aContent;
     Reference< XResultSet > xResultSet;
     Sequence< OUString >    aProps(1);
-    OUString* pProps = aProps.getArray();
-    pProps[0] = OUString::createFromAscii( TITLE );
+    aProps[0] = OUString::createFromAscii( TITLE );
 
     try
     {
@@ -1701,8 +1706,7 @@ void SfxDocTplService_Impl::createFromContent( GroupList_Impl& rList,
 
     Reference< XResultSet > xResultSet;
     Sequence< OUString > aProps(1);
-    OUString* pProps = aProps.getArray();
-    pProps[0] = OUString::createFromAscii( TITLE );
+    aProps[0] = OUString::createFromAscii( TITLE );
 
     try
     {
