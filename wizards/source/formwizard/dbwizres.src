@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbwizres.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: bc $ $Date: 2002-06-07 09:11:28 $
+ *  last change: $Author: bc $ $Date: 2002-06-12 10:21:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1560,8 +1560,8 @@ String RID_DB_FORM_WIZARD_START + 12
 
 String RID_DB_FORM_WIZARD_START + 13
 {
-    Text = "~Felder im Bericht";
-    Text [ english_us ] = "~Fields in report";
+    Text = "~Felder im Formular";
+    Text [ english_us ] = "~Fields in formular";
     Text[ portuguese ] = "Campos no ~formulбrio";
     Text[ russian ] = "Поля в ~формуляре";
     Text[ dutch ] = "Velden in ~formulier";
@@ -3928,6 +3928,13 @@ String RID_DB_REPORT_WIZARD_START + 8
     Text[ thai ] = "(а№„аёЎа№€аёЎаёµ)";
 };
 
+String RID_DB_REPORT_WIZARD_START + 9
+{
+    Text = "~Felder im Bericht";
+    Text [ english_us ] = "~Fields in report";
+};
+
+
 
 String RID_DB_REPORT_WIZARD_START + 11
 {
@@ -4025,7 +4032,7 @@ String RID_DB_REPORT_WIZARD_START + 14
 String RID_DB_REPORT_WIZARD_START + 15
 {
     Text = "Layout der Daten";
-    Text [ english_us ] = ": Layout of data";
+    Text [ english_us ] = "Layout of data";
     Text[ portuguese ] = ": Estilos";
     Text[ russian ] = ":Стили формата";
     Text[ dutch ] = ": opmaakprofielen";
@@ -4053,7 +4060,7 @@ String RID_DB_REPORT_WIZARD_START + 15
 String RID_DB_REPORT_WIZARD_START + 16
 {
     Text = "Layout der Kopf- und FuЯzeilen";
-    Text [ english_us ] = ": Layout of headers and footers";
+    Text [ english_us ] = "Layout of headers and footers";
     Text[ portuguese ] = ": Criar";
     Text[ russian ] = ": Готово";
     Text[ dutch ] = ": voltooien";
