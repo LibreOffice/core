@@ -2,9 +2,9 @@
  *
  *  $RCSfile: time.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mfe $ $Date: 2001-02-27 15:49:56 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 13:35:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,7 +230,7 @@ sal_Bool SAL_CALL osl_getSystemTimeFromLocalTime( TimeValue* pLocalTimeVal, Time
 static struct _timeb startTime;
 static sal_Bool bGlobalTimer = sal_False;
 
-sal_uInt32 SAL_CALL osl_getGlobalTimer()
+sal_uInt32 SAL_CALL osl_getGlobalTimer(void)
 {
   struct _timeb currentTime;
   sal_uInt32 nSeconds;
