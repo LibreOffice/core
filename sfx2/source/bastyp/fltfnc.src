@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:28 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 18:59:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,7 +179,7 @@ String STR_FILTER_CONSULT_SERVICE
     Text[ chinese_simplified ] = "ΥβΈφ°ζ±Ύ»ΉΓ»ΣΠΜαΉ©ΔϊΛωΡ΅ΤρµΔΉύΒΛΖχ $(FILTER)΅£\nΔϊ²ΞΤΔΞÒΓΗΉ«ΛΎµΔΝψÒ³ΜαΉ©¶¨ΉΊΘνΌώµΔΠΕΟΆ΅£";
     Text[ chinese_traditional ] = "³o­Σª©¥»ΑΩ¨S¦³΄£¨Ρ±z©ÒΏοΎάªΊΉLΒoΎΉ $(FILTER)΅C\n½Π°ΡΎ\\§Ϊ­ΜªΊΊτ­¶΄£¨ΡªΊ©wΑΚ³nΕιªΊΈκ°T΅C";
     Text[ arabic ] = "αΗ ΚΝΚζν δΣΞΚί Ϊαμ ΗαέαΚΡ $(FILTER)΅ ΗαΠν Κγ ΗΞΚνΗΡε.\nνγίδί ΗαΝΥζα Ϊαμ γΪαζγΗΚ Ϊδ ΕγίΗδνΙ ΨαΘ ΗαέαΚΡ έν γζήΪδΗ Ϊαμ ΗαΕδΚΡδΚ.";
-    Text[ greek ] = "Το επιλεγμένο φίλτρο $(FILTER) δεν περιέχεται στην έκδοσή σας.\nΠληροφορίες για δυνατότητες παραγγελίας θα βρείτε στην κεντρική μας σελίδα.";
+    Text[ greek ] = "Το επιλεγμένο φίλτρο $(FILTER) δεν περιέχεται στην έκδοσή σας.\nΠληροφορίες για δυνατότητες παραγγελίας θα βρείτε στην αρχική μας σελίδα.";
     Text[ korean ] = "Ό±ΕΓΗΡ ΗΚΕΝ$(FILTER)΄Β ΐΜ ΉφΐόΏ΅ µιΎξ ΐΦΑφ ΎΚ½ΐ΄Ο΄Ω.\nΑΦΉ® ½ΕΓ» °΅΄ΙΌΊΏ΅ ΄λΗΡ Α¤ΊΈΈ¦ ΎςΐΈ·ΑΈι ΐϊΘρ Θ¨ΖδΐΜΑφΈ¦ ΊΈ½Κ½ΓΏΐ.";
     Text[ turkish ] = "Seηilen $(FILTER) filtresi sόrόmόnόzde bulunmuyor.\nSipariώ etmek iηin gereken bilgileri web sitemizde bulabilirsiniz.";
     Text[ language_user1 ] = " ";
