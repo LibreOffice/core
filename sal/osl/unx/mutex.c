@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mutex.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mfe $ $Date: 2001-02-01 13:39:58 $
+ *  last change: $Author: mfe $ $Date: 2001-02-07 13:05:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,38 +82,9 @@ static pthread_t _pthread_none_ = PTHREAD_NONE_INIT;
 
 /*
  *  mfe: if a Unix supports the recursive pthread mutex
- *       it can use the implementation above ...
+ *       it can use the implementation beneath ...
  */
 
-
-#if defined(SOLARIS)
-
-
-/*
- *   mfe: Hack for Solaris 2.5.1
- *        never call pthread_self before main() there!
- *        Can be removed if Solaris 2.5.1 supported has gone
- */
-
-
-volatile int GlobalInit = 55;
-
-void ChangeGlobalInit()
-{
-    GlobalInit = 0;
-}
-
-pthread_t faked_pthread_self ()
-{
-    if (GlobalInit == 55)
-        return (pthread_t)0;
-    else
-        return pthread_self();
-}
-
-/*#define pthread_self() faked_pthread_self()*/
-
-#endif /* SOLARIS */
 
 /*
  *  mfe: Default implementation of recursive mutexes
@@ -170,14 +141,9 @@ void SAL_CALL osl_destroyMutex(oslMutex Mutex)
     if ( pMutex != NULL )
     {
         int nRet=0;
-#if defined(SOLARIS)
-        if ( GlobalInit != 55 )
-        {
-#endif
-            OSL_ASSERT( pthread_equal(pMutex->owner, PTHREAD_NONE) );
-#if defined(SOLARIS)
-        }
-#endif
+
+        OSL_ASSERT( pthread_equal(pMutex->owner, PTHREAD_NONE) );
+
         nRet = pthread_mutex_destroy(&(pMutex->mutex));
         if ( nRet != 0 )
         {
@@ -261,14 +227,7 @@ sal_Bool SAL_CALL osl_tryToAcquireMutex(oslMutex Mutex)
                 return sal_False;
             }
 
-#if defined(SOLARIS)
-            if ( GlobalInit != 55 )
-            {
-#endif
-                OSL_ASSERT( pthread_equal(pMutex->owner, PTHREAD_NONE) );
-#if defined(SOLARIS)
-            }
-#endif
+            OSL_ASSERT( pthread_equal(pMutex->owner, PTHREAD_NONE) );
 
             OSL_ASSERT( pMutex->locks ==  0 );
 
