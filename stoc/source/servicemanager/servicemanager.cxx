@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicemanager.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-11 11:34:36 $
+ *  last change: $Author: dbo $ $Date: 2001-05-11 13:43:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -995,7 +995,6 @@ protected:
     //OServiceManager
     Reference< XInterface > queryServiceFactory(const OUString& aServiceName);
 private:
-
     Reference<XRegistryKey >        getRootKey();
     Reference<XInterface > loadWithImplementationName( const OUString & rImplName );
     Sequence<OUString>          getFromServiceName(const OUString& serviceName);
@@ -1005,6 +1004,10 @@ private:
     sal_Bool                    m_searchedRegistry;
     Reference<XSimpleRegistry > m_xRegistry;    // readonly property Registry
     Reference<XRegistryKey >    m_xRootKey;
+
+#ifdef _DEBUG
+    bool m_init;
+#endif
 };
 
 /**
@@ -1013,6 +1016,9 @@ private:
 ORegistryServiceManager::ORegistryServiceManager( Reference< XComponentContext > const & xContext )
     : OServiceManager( xContext )
     , m_searchedRegistry(sal_False)
+#ifdef _DEBUG
+    , m_init( false )
+#endif
 {
 }
 
@@ -1234,10 +1240,11 @@ void ORegistryServiceManager::initialize(const Sequence< Any >& Arguments)
         Arguments[ 1 ] >>= m_xContext;
     }
 
+#ifdef _DEBUG
     // to find all bootstrapping processes to be fixed...
-    static bool s_init = false;
-    OSL_ENSURE( !s_init, "### second init of service manager!" );
-    s_init = true;
+    OSL_ENSURE( !m_init, "### second init of service manager instance!" );
+    m_init = true;
+#endif
 }
 
 // XMultiServiceFactory, XContentEnumeration
