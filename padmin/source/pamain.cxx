@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pamain.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-18 12:13:00 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:48:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #include <stdio.h>
 #include <unistd.h>
 
+#ifndef _TOOLS_TESTTOOLLOADER_HXX_
+#include <tools/testtoolloader.hxx>
+#endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
@@ -134,6 +137,8 @@ void MyApp::Main()
 {
     PADialog* pPADialog;
 
+    EnableAutoHelpId();
+
     //-------------------------------------------------
     // create the global service-manager
     //-------------------------------------------------
@@ -176,10 +181,15 @@ void MyApp::Main()
 #endif
 
 
+    // initialize test-tool library (if available)
+    tools::InitTestToolLib();
+
     pPADialog = PADialog::Create( NULL , FALSE );
     Application::SetDisplayName( pPADialog->GetText() );
     pPADialog->Execute();
     delete pPADialog;
+
+    tools::DeInitTestToolLib();
 
     /*
      *  clean up UCB
