@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolboxlayoutdocumenthandler.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 16:55:50 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 14:11:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,9 +90,7 @@
 #include <cppuhelper/weak.hxx>
 #endif
 
-#ifndef __SGI_STL_HASH_MAP
 #include <hash_map>
-#endif
 
 #ifndef __FRAMEWORK_STDTYPES_H_
 #include <stdtypes.h>
