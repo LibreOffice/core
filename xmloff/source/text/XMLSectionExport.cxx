@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionExport.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: dvo $ $Date: 2002-10-08 14:05:02 $
+ *  last change: $Author: mib $ $Date: 2002-12-05 09:58:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,9 @@
 #ifndef _COM_SUN_STAR_TEXT_XTEXTFIELDSSUPPLIER_HPP_
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #endif
+#ifndef _COM_SUN_STAR_TEXT_XCHAPTERNUMBERINGSUPPLIER_HPP_
+#include <com/sun/star/text/XChapterNumberingSupplier.hpp>
+#endif
 
 #ifndef _XMLOFF_XMLKYWD_HXX
 #include "xmlkywd.hxx"
@@ -265,7 +268,9 @@ XMLSectionExport::XMLSectionExport(
         sLocale(RTL_CONSTASCII_USTRINGPARAM("Locale")),
         sUserIndexName(RTL_CONSTASCII_USTRINGPARAM("UserIndexName")),
         sIsCurrentlyVisible(RTL_CONSTASCII_USTRINGPARAM("IsCurrentlyVisible")),
-        sEmpty()
+        sHeadingStyleName(RTL_CONSTASCII_USTRINGPARAM("HeadingStyleName")),
+        sEmpty(),
+        bHeadingDummiesExported( sal_False )
 {
 }
 
@@ -1876,4 +1881,51 @@ sal_Bool XMLSectionExport::IsInSection(
     // else: no XPropertySet -> return default
 
     return bRet;
+}
+
+
+void XMLSectionExport::ExportMasterDocHeadingDummies()
+{
+    if( bHeadingDummiesExported )
+        return;
+
+    Reference< XChapterNumberingSupplier > xCNSupplier( rExport.GetModel(),
+                                                        UNO_QUERY );
+
+    Reference< XIndexReplace > xChapterNumbering;
+    if( xCNSupplier.is() )
+        xChapterNumbering = xCNSupplier->getChapterNumberingRules();
+
+    if( !xChapterNumbering.is() )
+        return;
+
+    sal_Int32 nCount = xChapterNumbering->getCount();
+    for( sal_Int32 nLevel = 0; nLevel < nCount; nLevel++ )
+    {
+        OUString sStyle;
+        Sequence<PropertyValue> aProperties;
+        xChapterNumbering->getByIndex( nLevel ) >>= aProperties;
+        for( sal_Int32 i = 0; i < aProperties.getLength(); i++ )
+        {
+            if( aProperties[i].Name == sHeadingStyleName )
+            {
+                aProperties[i].Value >>= sStyle;
+                break;
+            }
+        }
+        if( sStyle.getLength() > 0 )
+        {
+            GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_STYLE_NAME,
+                                      sStyle );
+
+            OUStringBuffer sTmp;
+            sTmp.append( nLevel+1L );
+            GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_LEVEL,
+                                        sTmp.makeStringAndClear() );
+            SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT, XML_H,
+                                        sal_True, sal_False );
+        }
+    }
+
+    bHeadingDummiesExported  = sal_True;
 }

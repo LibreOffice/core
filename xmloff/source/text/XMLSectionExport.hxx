@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionExport.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dvo $ $Date: 2002-10-08 14:05:02 $
+ *  last change: $Author: mib $ $Date: 2002-12-05 09:58:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,11 +182,14 @@ class XMLSectionExport
     const ::rtl::OUString sUserIndexName;
 
     const ::rtl::OUString sIsCurrentlyVisible;
+    const ::rtl::OUString sHeadingStyleName;
 
     const ::rtl::OUString sEmpty;
 
     SvXMLExport& rExport;
     XMLTextParagraphExport& rParaExport;
+
+    sal_Bool bHeadingDummiesExported;
 
 public:
     XMLSectionExport(SvXMLExport& rExp,
@@ -248,6 +251,14 @@ public:
      */
     static void ExportBibliographyConfiguration(SvXMLExport& rExport);
 
+    /** export a heading for every level. This is used by master documents
+     *  to not loose the heading information if master documents are exported
+     *  without section contents
+     */
+    void ExportMasterDocHeadingDummies();
+
+
+
 protected:
 
     inline SvXMLExport& GetExport() { return rExport; }
@@ -304,7 +315,6 @@ protected:
     void ExportBibliographyStart(
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::beans::XPropertySet > & rIndex);
-
 
     // helper methods:
 

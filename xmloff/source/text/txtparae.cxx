@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: mib $ $Date: 2002-10-10 12:27:38 $
+ *  last change: $Author: mib $ $Date: 2002-12-05 09:58:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1598,6 +1598,10 @@ sal_Bool XMLTextParagraphExport::exportTextContentEnumeration(
             // if we found a mute section: skip all section content
             if (pSectionExport->IsMuteSection(xCurrentTextSection))
             {
+                // Make sure headings are exported anyway.
+                if( !bAutoStyles )
+                    pSectionExport->ExportMasterDocHeadingDummies();
+
                 while (rContEnum->hasMoreElements() &&
                        pSectionExport->IsInSection( xCurrentTextSection,
                                                     xTxtCntnt, sal_True ))
@@ -1638,6 +1642,11 @@ sal_Bool XMLTextParagraphExport::exportTextContentEnumeration(
 
                 if ((! bAutoStyles) && (NULL != pRedlineExport))
                     pRedlineExport->ExportStartOrEndRedline(xTxtCntnt, sal_False);
+            }
+            else if( !bAutoStyles )
+            {
+                // Make sure headings are exported anyway.
+                pSectionExport->ExportMasterDocHeadingDummies();
             }
 
             bHasContent = sal_True;
