@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hjs $ $Date: 2004-06-25 16:46:24 $
+#   last change: $Author: kz $ $Date: 2005-01-21 11:19:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,7 +69,14 @@ TARGET=desktopshare
 
 .INCLUDE :  settings.mk
 
+# --- Product Version Information ----------------------------------
+
+.INCLUDE :  ../productversion.mk
+
 # --- Files --------------------------------------------------------
+
+# GNOME does not like icon names with more than one '.'
+ICONPREFIX = $(UNIXFILENAME:s/.//g)
 
 ULFFILES= \
     documents.ulf \
@@ -78,12 +85,33 @@ ULFFILES= \
 
 DESTULFFILES=$(foreach,i,$(ULFFILES) $(COMMONMISC)$/$(TARGET)$/$i)
 
+LAUNCHERLIST = writer calc draw impress math base printeradmin
+LAUNCHERDEPN = ../menus/{$(LAUNCHERLIST)}.desktop
+
+LAUNCHERFLAGFILE = $(COMMONMISC)/$(TARGET)/xdg.flag
+
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
 
 .IF "$(GUI)"=="UNX"
-ALLTAR : $(DESTULFFILES)
+ALLTAR : $(LAUNCHERFLAGFILE) $(DESTULFFILES)
 .ENDIF          # "$(GUI)"=="UNIX"
 
+#
+# Copy/patch the .desktop files to the output tree and 
+# merge-in the translations. 
+#
+$(LAUNCHERFLAGFILE) : $(LAUNCHERDEPN) ../productversion.mk brand.pl translate.pl $(COMMONMISC)$/$(TARGET)$/launcher_name.ulf $(COMMONMISC)$/$(TARGET)$/launcher_comment.ulf
+    @touch $@
+    @$(MKDIRHIER) $(@:db).$(INPATH)
+    @echo Creating desktop entries ..
+    @echo ---------------------------------
+    @$(PERL) brand.pl -p "$(LONGPRODUCTNAME)" -u $(UNIXFILENAME) --iconprefix "$(ICONPREFIX)-" $(LAUNCHERDEPN) $(@:db).$(INPATH)
+    @$(PERL) translate.pl -p "$(LONGPRODUCTNAME)" -d $(@:db).$(INPATH) --ext "desktop" --key "Name" $(COMMONMISC)$/$(TARGET)$/launcher_name.ulf
+    @$(PERL) translate.pl -p "$(LONGPRODUCTNAME)" -d $(@:db).$(INPATH) --ext "desktop" --key "Comment" $(COMMONMISC)$/$(TARGET)$/launcher_comment.ulf
+.IF "$(WITH_LIBSN)"=="YES"
+    @$(foreach,i,$(LAUNCHERLIST) $(shell echo "StartupNotify=true" >> $(@:db).$(INPATH)/$i.desktop))
+.ENDIF
+    @mv -f $(@:db).$(INPATH)/* $(@:d)
 
