@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-07 15:44:29 $
+ *  last change: $Author: kz $ $Date: 2001-08-10 20:39:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3778,7 +3778,7 @@ TabPage TP_TOX_ENTRY
         Text[ polish ] = "Sortuj wed�ug";
         Text[ portuguese_brazilian ] = "Sort by ...";
         Text[ japanese ] = "表示順序";
-        Text[ korean ] = "에　의한 정렬 ...";
+        Text[ korean ] = "에 의한 정렬 ...";
         Text[ chinese_simplified ] = "排序按照";
         Text[ chinese_traditional ] = "編排按照";
         Text[ arabic ] = "����� ���";
@@ -4805,6 +4805,7 @@ ModalDialog DLG_CREATE_AUTOMARK
     Text[ catalan ] = "Editar archivo de concordancia";
     Text[ finnish ] = "Muokkaa vastaavuustiedostoa";
 };
+
 
 
 
