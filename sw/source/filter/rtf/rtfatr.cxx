@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfatr.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-01 12:37:08 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 14:13:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1558,6 +1558,7 @@ static Writer& OutRTF_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
     xub_StrLen nChrCnt = 0;
     for( ; nStrPos <= nEnde; nStrPos++ )
     {
+        rRTFWrt.bOutFmtAttr = FALSE;
         if( nStrPos != nEnde && aEndPosLst.Count() )
             aEndPosLst.EndAttrs( nStrPos );
 
@@ -1569,7 +1570,6 @@ static Writer& OutRTF_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
         }
 
         rRTFWrt.bTxtAttr = TRUE;
-        rRTFWrt.bOutFmtAttr = FALSE;
 
         HandleHyperlinks(rWrt, pNd->GetpSwpHints(), nStrPos);
 
@@ -1610,9 +1610,11 @@ static Writer& OutRTF_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
 
         rRTFWrt.OutBookmarks( nStrPos );
 
-        if( nStrPos != nEnde )
-            RTFOutFuncs::Out_Char( rWrt.Strm(), rStr.GetChar( nStrPos ),
-                                    DEF_ENCODING, rRTFWrt.bWriteHelpFmt );
+        if (nStrPos != nEnde)
+        {
+            RTFOutFuncs::Out_String(rWrt.Strm(), String(rStr.GetChar(nStrPos)),
+                DEF_ENCODING, rRTFWrt.bWriteHelpFmt);
+        }
     }
 
     // noch eine schliesende Klammer da ??
@@ -2465,7 +2467,12 @@ static Writer& OutRTF_SwUnderline( Writer& rWrt, const SfxPoolItem& rHt )
 
         rRTFWrt.Strm() << pStr;
         rRTFWrt.bOutFmtAttr = TRUE;
+
+        rWrt.Strm() << sRTF_ULC;
+        rWrt.OutULong( rRTFWrt.GetId(((const SvxUnderlineItem&)rHt).GetColor()) );
+
     }
+
     return rWrt;
 }
 
@@ -2885,8 +2892,9 @@ static Writer& OutRTF_SwFtn( Writer& rWrt, const SfxPoolItem& rHt )
 
 static Writer& OutRTF_SwHardBlank( Writer& rWrt, const SfxPoolItem& rHt)
 {
-    RTFOutFuncs::Out_Char( rWrt.Strm(), ((SwFmtHardBlank&)rHt).GetChar(),
-                        DEF_ENCODING, ((SwRTFWriter&)rWrt).bWriteHelpFmt );
+    RTFOutFuncs::Out_String(rWrt.Strm(),
+        String(((SwFmtHardBlank&)rHt).GetChar()), DEF_ENCODING,
+        ((SwRTFWriter&)rWrt).bWriteHelpFmt);
     return rWrt;
 }
 
