@@ -150,6 +150,13 @@ public abstract class SpreadsheetDecoder {
      */
     public abstract String getCellContents();
 
+    /**
+     *  Return the value of the active cell. Used in the case of Formula where
+     *  the cell contents and the cell value are not the same thing.
+     *
+     *  @return  The cell value.
+     */
+    public abstract String getCellValue();
 
     /**
      *  Return the data type of the active cell.
