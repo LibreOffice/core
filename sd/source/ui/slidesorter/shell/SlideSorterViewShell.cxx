@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideSorterViewShell.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 15:08:13 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 15:12:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,8 +187,8 @@ SlideSorterViewShell::~SlideSorterViewShell (void)
 
     // Reset the auto pointers explicitly to control the order of destruction.
     mpSlideSorterController.reset();
-    mpSlideSorterModel.reset();
     mpSlideSorterView.reset();
+    mpSlideSorterModel.reset();
 }
 
 
