@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: dr $ $Date: 2002-09-12 09:53:50 $
+ *  last change: $Author: cl $ $Date: 2002-09-23 15:54:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1086,9 +1086,9 @@ SvxParaAlignTabPage::SvxParaAlignTabPage( Window* pParent, const SfxItemSet& rSe
         SvtLanguageOptions  aLangOptions;
         if( aLangOptions.IsCTLFontEnabled() )
         {
-            aTextDirectionLB.InsertEntry( SVX_RESSTR( RID_SVXSTR_FRAMEDIR_LTR ), FRMDIR_HORI_LEFT_TOP );
-            aTextDirectionLB.InsertEntry( SVX_RESSTR( RID_SVXSTR_FRAMEDIR_RTL ), FRMDIR_HORI_RIGHT_TOP );
-            aTextDirectionLB.InsertEntry( SVX_RESSTR( RID_SVXSTR_FRAMEDIR_SUPER ), FRMDIR_ENVIRONMENT );
+            aTextDirectionLB.InsertEntryValue( SVX_RESSTR( RID_SVXSTR_FRAMEDIR_LTR ), FRMDIR_HORI_LEFT_TOP );
+            aTextDirectionLB.InsertEntryValue( SVX_RESSTR( RID_SVXSTR_FRAMEDIR_RTL ), FRMDIR_HORI_RIGHT_TOP );
+            aTextDirectionLB.InsertEntryValue( SVX_RESSTR( RID_SVXSTR_FRAMEDIR_SUPER ), FRMDIR_ENVIRONMENT );
 
             aPropertiesFL.Show();
             aTextDirectionFT.Show();
