@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drformsh.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 13:08:07 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:43:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,18 @@
 #include "shells.hrc"
 #include "drwbassh.hxx"
 #include "drformsh.hxx"
-#include "view.hxx"
+#ifndef SVTOOLS_URIHELPER_HXX
+#include <svtools/urihelper.hxx>
+#endif
+#ifndef _VIEW_HXX
+#include <view.hxx>
+#endif
+#ifndef _SFXDOCFILE_HXX
+#include <sfx2/docfile.hxx>
+#endif
+#ifndef _SWDOCSH_HXX
+#include <docsh.hxx>
+#endif
 
 #define SwDrawFormShell
 #include "itemdef.hxx"
@@ -194,7 +205,11 @@ void SwDrawFormShell::Execute(SfxRequest &rReq)
                                 aTmp <<= OUString(rHLinkItem.GetName());
                                 xPropSet->setPropertyValue(C2U("Label"), aTmp );
 
-                                aTmp <<=  OUString(INetURLObject::RelToAbs(rHLinkItem.GetURL()));
+                                SfxMedium* pMedium = GetView().GetDocShell()->GetMedium();
+                                INetURLObject aAbs;
+                                if( pMedium )
+                                    aAbs = pMedium->GetURLObject();
+                                aTmp <<=  OUString(URIHelper::SmartRel2Abs(aAbs, rHLinkItem.GetURL()));
                                 xPropSet->setPropertyValue( sTargetURL, aTmp );
 
                                 if( rHLinkItem.GetTargetFrame().Len() )
