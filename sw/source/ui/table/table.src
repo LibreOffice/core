@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:04:20 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:16:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,10 @@ InfoBox MSG_ERR_TABLE_MERGE
     MESSAGE[ hebrew ] = "Selektierte Zellen der Tabelle sind zu komplex zum Verbinden.";
     MESSAGE[ hindi ] = "चुने हुए सारणी कोष्ठों को मिलाना असंभव है ।";
     MESSAGE[ slovak ] = "Vybrané bunky tabuľky sú príliš komplexné na zlúčenie.";
+    MESSAGE[ hungarian ] = "A kijelölt cellák túl összetettek az egyesítés végrehajtásához.";
+    MESSAGE[ slovenian ] = "Izbrane celice so preveč zapletene za spajanje.";
 };
+
 
 
 
