@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlconst.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-23 17:31:18 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:39:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -369,11 +369,23 @@ const sal_uInt16 EXC_XF8_MERGE              = 0x0020;
 const sal_uInt8 EXC_XF8_STACKED             = 0xFF;     /// Special rotation angle.
 
 
+// (0x0055) DEFCOLWIDTH -------------------------------------------------------
+
+const sal_uInt16 EXC_ID_DEFCOLWIDTH         = 0x0055;
+
+
 // (0x0059, 0x005A) XCT, CRN --------------------------------------------------
 
 const sal_uInt16 EXC_ID_XCT                 = 0x0059;
 const sal_uInt16 EXC_ID_CRN                 = 0x005A;
 
+
+// (0x007D) COLINFO -----------------------------------------------------------
+
+const sal_uInt16 EXC_ID_COLINFO             = 0x007D;
+
+const sal_uInt16 EXC_COLINFO_HIDDEN         = 0x0001;
+const sal_uInt16 EXC_COLINFO_COLLAPSED      = 0x1000;
 
 // (0x007E) RK ----------------------------------------------------------------
 
