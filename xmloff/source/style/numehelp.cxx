@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numehelp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-23 11:36:01 $
+ *  last change: $Author: sab $ $Date: 2001-06-08 07:13:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,7 @@ sal_Int16 XMLNumberFormatAttributesExportHelper::GetCellType(const sal_Int32 nNu
     if (aItr != aNumberFormats.end())
     {
         bIsStandard = aItr->bIsStandard;
+        sCurrency = aItr->sCurrency;
         return aItr->nType;
     }
     else
