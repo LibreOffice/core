@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsize.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-04 20:00:22 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 05:54:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
  // JN
  //
  // Letzte Aenderung:
- // $Author: rt $ $Date: 2001-05-04 20:00:22 $ $Revision: 1.5 $
+ // $Author: kz $ $Date: 2001-05-10 05:54:26 $ $Revision: 1.6 $
  //
  //---------------------------------------------------------------------------
 
@@ -115,6 +115,7 @@ ModalDialog DLG_ROWHEIGHT
         Text[ korean ] = "³ôÀÌ(~H)";
         Text[ turkish ] = "Yükseklik";
         Text[ catalan ] = "~Altura";
+        Text[ finnish ] = "H~öhe";
     };
     MetricField MF_VALUE
     {
@@ -155,6 +156,7 @@ ModalDialog DLG_ROWHEIGHT
         Text[ arabic ] = "ÊáÞÇÆí";
         Text[ turkish ] = "Otomatik";
         Text[ catalan ] = "~Automático";
+        Text[ finnish ] = "~Automatisch";
     };
     OKButton PB_OK
     {
@@ -194,6 +196,7 @@ ModalDialog DLG_ROWHEIGHT
     Text[ korean ] = "Çà ³ôÀÌ";
     Text[ turkish ] = "Satýr yüksekliði";
     Text[ catalan ] = "Altura de fila";
+    Text[ finnish ] = "Zeilenhöhe";
 };
 ModalDialog DLG_COLWIDTH
 {
@@ -230,6 +233,7 @@ ModalDialog DLG_COLWIDTH
         Text[ korean ] = "³Êºñ(~W)";
         Text[ turkish ] = "Geniþlik";
         Text[ catalan ] = "An~cho";
+        Text[ finnish ] = "~Breite";
     };
     MetricField MF_VALUE
     {
@@ -270,6 +274,7 @@ ModalDialog DLG_COLWIDTH
         Text[ arabic ] = "ÊáÞÇÆí";
         Text[ turkish ] = "Otomatik";
         Text[ catalan ] = "~Automático";
+        Text[ finnish ] = "~Automatisch";
     };
     OKButton PB_OK
     {
@@ -309,4 +314,5 @@ ModalDialog DLG_COLWIDTH
     Text[ korean ] = "¿­ ³Êºñ";
     Text[ turkish ] = "Sütun geniþliði";
     Text[ catalan ] = "Ancho de columna";
+    Text[ finnish ] = "Spaltenbreite";
 };
