@@ -2,9 +2,9 @@
  *
  *  $RCSfile: intercept.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: abi $ $Date: 2003-04-04 09:31:55 $
+ *  last change: $Author: abi $ $Date: 2003-04-04 09:47:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,7 +261,7 @@ Interceptor::addStatusListener(
         aStateEvent.Requery = sal_False;
         aStateEvent.State <<= (rtl::OUString(
             RTL_CONSTASCII_USTRINGPARAM("($2) ")) +
-                               m_pDocH->getContainerName());
+                               m_pDocH->getTitle());
         Control->statusChanged(aStateEvent);
 
 
