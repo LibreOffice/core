@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iahndl.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sb $ $Date: 2001-08-08 09:14:22 $
+ *  last change: $Author: sb $ $Date: 2001-08-09 06:39:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -451,11 +451,12 @@ void UUIInteractionHandler::executeLoginDialog(LoginErrorInfo & rInfo,
 
         std::auto_ptr< ResMgr >
             xManager(ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
+        UniString aRealm(rRealm); // Forte compiler needs it spelled out...
         std::auto_ptr< LoginDialog >
             xDialog(new LoginDialog(0,
                                     nFlags,
                                     rInfo.GetServer(),
-                                    &UniString(rRealm),
+                                    &aRealm,
                                     xManager.get()));
         if (rInfo.GetErrorText().Len() != 0)
             xDialog->SetErrorText(rInfo.GetErrorText());
