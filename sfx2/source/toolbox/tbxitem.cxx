@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxitem.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2001-09-06 11:15:36 $
+ *  last change: $Author: pl $ $Date: 2001-10-25 14:52:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -804,9 +804,7 @@ IMPL_LINK( SfxHistoryToolBoxControl_Impl, Timeout, Timer *, pTimer )
 {
     ToolBox& rBox = GetToolBox();
 
-#ifdef VCL
     rBox.SetItemDown( GetId(), TRUE );
-#endif
 
     SfxApplication* pApp = SFX_APP();
     Rectangle aRect(  rBox.GetItemRect( GetId() ) );
