@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpputype.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-01-02 15:33:07 $
+ *  last change: $Author: jsc $ $Date: 2001-03-13 12:04:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -595,12 +595,12 @@ void CppuType::dumpLGetCppuType(FileStream& o)
 
     if (m_reader.getTypeClass() == RT_TYPE_TYPEDEF)
     {
-        o << "inline const ::com::sun::star::uno::Type& SAL_CALL get_" << typeName << "_Type( ) throw()\n{\n";
+        o << "inline const ::com::sun::star::uno::Type& SAL_CALL get_" << typeName << "_Type( ) SAL_THROW( () )\n{\n";
     } else
     {
         o << "inline const ::com::sun::star::uno::Type& SAL_CALL getCppuType( ";
         dumpType(o, m_typeName, sal_True, sal_False);
-        o << "* ) throw()\n{\n";
+        o << "* ) SAL_THROW( () )\n{\n";
     }
     inc();
 
@@ -646,7 +646,7 @@ void CppuType::dumpGetCppuType(FileStream& o)
 
     o << "inline const ::com::sun::star::uno::Type& SAL_CALL getCppuType( ";
     dumpType(o, m_typeName, sal_True, sal_False);
-    o << "* ) throw()\n{\n";
+    o << "* ) SAL_THROW( () )\n{\n";
     inc();
 
     if ( m_typeName.equals("com/sun/star/uno/Exception") )
@@ -769,7 +769,7 @@ void CppuType::dumpCGetCppuType(FileStream& o)
         o << "inline";
     o << " const ::com::sun::star::uno::Type& SAL_CALL getCppuType( ";
     dumpType(o, m_typeName, sal_True, sal_False);
-    o << "* ) throw()\n{\n";
+    o << "* ) SAL_THROW( () )\n{\n";
     inc();
 
     o << "#if ! ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__)))\n"
@@ -1514,7 +1514,7 @@ sal_Bool InterfaceType::dumpHFile(FileStream& o)
         o << "inline";
     o << " const ::com::sun::star::uno::Type& SAL_CALL getCppuType( ";
     dumpType(o, m_typeName, sal_True, sal_False);
-    o << "* ) throw();\n\n";
+    o << "* ) SAL_THROW( () );\n\n";
 
     if (getNestedTypeNames().getLength() > 0)
     {
@@ -1536,7 +1536,7 @@ sal_Bool InterfaceType::dumpHFile(FileStream& o)
 
                 o << " const ::com::sun::star::uno::Type& SAL_CALL getCppuType( ";
                 dumpType(o, nestedName, sal_True, sal_False);
-                o << "* ) throw();\n\n";
+                o << "* ) SAL_THROW( () );\n\n";
             }
         }
     }
@@ -1728,7 +1728,7 @@ void InterfaceType::dumpAttributes(FileStream& o)
 
         o << indent() << "virtual ";
         dumpType(o, fieldType);
-        o << " SAL_CALL get" << fieldName << "() throw(::com::sun::star::uno::RuntimeException) = 0;\n";
+        o << " SAL_CALL get" << fieldName << "() throw (::com::sun::star::uno::RuntimeException) = 0;\n";
 
         if (access != RT_ACCESS_READONLY)
         {
@@ -1749,7 +1749,7 @@ void InterfaceType::dumpAttributes(FileStream& o)
 
             o << indent() << "virtual void SAL_CALL set" << fieldName << "( ";
             dumpType(o, fieldType, bConst, bRef);
-            o << " _" << fieldName.toLowerCase() << " ) throw(::com::sun::star::uno::RuntimeException) = 0;\n";
+            o << " _" << fieldName.toLowerCase() << " ) throw (::com::sun::star::uno::RuntimeException) = 0;\n";
         }
     }
 }
@@ -1829,7 +1829,7 @@ void InterfaceType::dumpMethods(FileStream& o)
         }
         o << " )";
 
-        o << " throw(";
+        o << " throw (";
         OString excpName;
         for (j=0; j < excCount; j++)
         {
@@ -1873,7 +1873,7 @@ void InterfaceType::dumpGetCppuType(FileStream& o)
 
     o << "inline const ::com::sun::star::uno::Type& SAL_CALL getCppuType( ";
     dumpType(o, m_typeName, sal_True, sal_False);
-    o << "* ) throw()\n{\n";
+    o << "* ) SAL_THROW( () )\n{\n";
     inc();
 
     if ( m_typeName.equals("com/sun/star/uno/XInterface") )
@@ -1934,7 +1934,7 @@ void InterfaceType::dumpCGetCppuType(FileStream& o)
         o << "inline";
     o << " const ::com::sun::star::uno::Type& SAL_CALL getCppuType( ";
     dumpType(o, m_typeName, sal_True, sal_False);
-    o << "* ) throw()\n{\n";
+    o << "* ) SAL_THROW( () )\n{\n";
     inc();
 
     o << "#if ! ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__)))\n"
@@ -2779,7 +2779,7 @@ sal_Bool StructureType::dumpHFile(FileStream& o)
         o << "inline";
     o << " const ::com::sun::star::uno::Type& SAL_CALL getCppuType( ";
     dumpType(o, m_typeName, sal_True, sal_False);
-    o << "* ) throw();\n\n";
+    o << "* ) SAL_THROW( () );\n\n";
 
     o << "#endif // "<< headerDefine << endl;
 
@@ -2803,7 +2803,7 @@ sal_Bool StructureType::dumpDeclaration(FileStream& o)
 
     o << "\n{\n";
     inc();
-    o << indent() << "inline " << m_name << "();\n\n";
+    o << indent() << "inline " << m_name << "() SAL_THROW( () );\n\n";
 
     sal_uInt32      fieldCount = m_reader.getFieldCount();
     RTFieldAccess   access = RT_ACCESS_INVALID;
@@ -2834,7 +2834,7 @@ sal_Bool StructureType::dumpDeclaration(FileStream& o)
             dumpType(o, fieldType, sal_True, sal_True);
             o << " __" << fieldName;
         }
-        o << ");\n\n";
+        o << ") SAL_THROW( () );\n\n";
     }
 
     for (i=0; i < fieldCount; i++)
@@ -2882,7 +2882,7 @@ sal_Bool StructureType::dumpHxxFile(FileStream& o)
     dumpNameSpace(o);
     o << endl;
 
-    o << "inline " << m_name << "::" << m_name << "()\n";
+    o << "inline " << m_name << "::" << m_name << "() SAL_THROW( () )\n";
     inc();
     OString superType(m_reader.getSuperTypeName());
     sal_Bool first = sal_True;
@@ -2946,7 +2946,7 @@ sal_Bool StructureType::dumpHxxFile(FileStream& o)
             dumpType(o, fieldType, sal_True, sal_True);
             o << " __" << fieldName;
         }
-        o << ")\n";
+        o << ") SAL_THROW( () )\n";
 
         inc();
         sal_Bool first = sal_True;
@@ -3130,7 +3130,7 @@ sal_Bool ExceptionType::dumpHFile(FileStream& o)
         o << "inline";
     o << " const ::com::sun::star::uno::Type& SAL_CALL getCppuType( ";
     dumpType(o, m_typeName, sal_True, sal_False);
-    o << "* ) throw();\n\n";
+    o << "* ) SAL_THROW( () );\n\n";
 
     o << "#endif // "<< headerDefine << endl;
 
@@ -3148,8 +3148,7 @@ sal_Bool ExceptionType::dumpDeclaration(FileStream& o)
 
     o << "\n{\npublic:\n";
     inc();
-    o << indent() << "inline " << m_name << "();\n\n";
-//  o << indent() << "inline " << m_name << "() { }\n\n";
+    o << indent() << "inline " << m_name << "() SAL_THROW( () );\n\n";
 
     sal_uInt32      fieldCount = m_reader.getFieldCount();
     RTFieldAccess   access = RT_ACCESS_INVALID;
@@ -3181,7 +3180,7 @@ sal_Bool ExceptionType::dumpDeclaration(FileStream& o)
             dumpType(o, fieldType, sal_True, sal_True);
             o << " __" << fieldName;
         }
-        o << ");\n\n";
+        o << ") SAL_THROW( () );\n\n";
     }
 
     for (i=0; i < fieldCount; i++)
@@ -3224,7 +3223,7 @@ sal_Bool ExceptionType::dumpHxxFile(FileStream& o)
     dumpNameSpace(o);
     o << endl;
 
-    o << "inline " << m_name << "::" << m_name << "()\n";
+    o << "inline " << m_name << "::" << m_name << "() SAL_THROW( () )\n";
     inc();
     OString superType(m_reader.getSuperTypeName());
     sal_Bool first = sal_True;
@@ -3298,7 +3297,7 @@ sal_Bool ExceptionType::dumpHxxFile(FileStream& o)
             dumpType(o, fieldType, sal_True, sal_True);
             o << " __" << fieldName;
         }
-        o << ")\n";
+        o << ") SAL_THROW( () )\n";
 
         inc();
         sal_Bool first = sal_True;
@@ -3489,7 +3488,7 @@ sal_Bool EnumType::dumpHFile(FileStream& o)
         o << "inline";
     o << " const ::com::sun::star::uno::Type& SAL_CALL getCppuType( ";
     dumpType(o, m_typeName, sal_True, sal_False);
-    o << "* ) throw();\n\n";
+    o << "* ) SAL_THROW( () );\n\n";
 
     o << "#endif // "<< headerDefine << endl;
 
@@ -3572,7 +3571,7 @@ void EnumType::dumpGetCppuType(FileStream& o)
 
     o << "inline const ::com::sun::star::uno::Type& SAL_CALL getCppuType( ";
     dumpType(o, m_typeName, sal_True, sal_False);
-    o << "* ) throw()\n{\n";
+    o << "* ) SAL_THROW( () )\n{\n";
     inc();
 
     o << indent() << "#if ! ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__)))\n"
@@ -3611,7 +3610,7 @@ void EnumType::dumpCGetCppuType(FileStream& o)
         o << "inline";
     o << " const ::com::sun::star::uno::Type& SAL_CALL getCppuType( ";
     dumpType(o, m_typeName, sal_True, sal_False);
-    o << "* ) throw()\n{\n";
+    o << "* ) SAL_THROW( () )\n{\n";
     inc();
 
     o << "#if ! ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__)))\n"
@@ -3734,7 +3733,7 @@ sal_Bool TypeDefType::dumpHFile(FileStream& o)
 //  o << "\nnamespace com { namespace sun { namespace star { namespace uno {\n"
 //    << "class Type;\n} } } }\n\n";
 //  o << "inline const ::com::sun::star::uno::Type& SAL_CALL get_" << m_typeName.replace('/', '_')
-//    <<  "_Type( ) throw();\n\n";
+//    <<  "_Type( ) SAL_THROW( () );\n\n";
 
     o << "#endif // "<< headerDefine << endl;
 
@@ -3799,7 +3798,7 @@ void TypeDefType::dumpCGetCppuType(FileStream& o)
       <<  "static ::com::sun::star::uno::Type * pType_" << typeName << " = 0;\n"
       << "#endif\n\n";
 
-    o << "inline const ::com::sun::star::uno::Type& SAL_CALL get_" << typeName << "_Type( ) throw()\n{\n";
+    o << "inline const ::com::sun::star::uno::Type& SAL_CALL get_" << typeName << "_Type( ) SAL_THROW( () )\n{\n";
     inc();
 
     o << "#if ! ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__)))\n"
@@ -3879,7 +3878,7 @@ void TypeDefType::dumpLGetCppuType(FileStream& o)
       << "static typelib_TypeDescriptionReference * s_pType_" << typeName << " = 0;\n"
       << "#endif\n\n";
 
-    o << "inline const ::com::sun::star::uno::Type& SAL_CALL get_" << typeName << "_Type( ) throw()\n{\n";
+    o << "inline const ::com::sun::star::uno::Type& SAL_CALL get_" << typeName << "_Type( ) SAL_THROW( () )\n{\n";
     inc();
 
     o << indent() << "#if ! ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__)))\n"

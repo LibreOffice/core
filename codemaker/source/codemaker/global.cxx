@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: svesik $ $Date: 2001-01-30 10:22:31 $
+ *  last change: $Author: jsc $ $Date: 2001-03-13 12:04:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,8 @@
  *
  *
  ************************************************************************/
-#ifndef     _VOS_PROCESS_HXX_
-#include    <vos/process.hxx>
+#ifndef     _OSL_PROCESS_H_
+#include    <osl/process.h>
 #endif
 #ifndef     _RTL_OSTRINGBUFFER_HXX_
 #include    <rtl/strbuf.hxx>
@@ -86,7 +86,6 @@
 #include    <codemaker/global.hxx>
 #endif
 
-using namespace vos;
 using namespace rtl;
 
 OString makeTempName(sal_Char* prefix)
@@ -103,13 +102,11 @@ OString makeTempName(sal_Char* prefix)
     if (prefix)
         pPrefix = prefix;
 
-    OStartupInfo StartupInfo;
-
-    if (StartupInfo.getEnvironment(uTMP, uPattern) != OStartupInfo::E_None)
+    if ( osl_getEnvironment(uTMP.pData, &uPattern.pData) != osl_Process_E_None )
     {
-        if (StartupInfo.getEnvironment(uTEMP, uPattern) != OStartupInfo::E_None)
+        if ( osl_getEnvironment(uTEMP.pData, &uPattern.pData) != osl_Process_E_None )
         {
-#if defined(WIN32) || defined(WNT) || defined(OS2)
+#if defined(SAL_W32) || defined(SAL_OS2)
             strcpy(tmpPattern, ".");
 #else
             strcpy(tmpPattern, "/tmp");

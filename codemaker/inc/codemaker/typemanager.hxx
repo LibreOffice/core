@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typemanager.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-08 14:04:42 $
+ *  last change: $Author: jsc $ $Date: 2001-03-13 12:04:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,22 +59,22 @@
  *
  ************************************************************************/
 
-#include    <hash_map>
+#include <hash_map>
 
 #ifndef _CODEMAKER_TYPEMANAGER_HXX_
 #define _CODEMAKER_TYPEMANAGER_HXX_
 
 #ifndef _CODEMAKER_REGISTRY_HXX_
-#include    <codemaker/registry.hxx>
+#include <codemaker/registry.hxx>
 #endif
 
 RegistryTypeReaderLoader & getRegistryTypeReaderLoader();
 
 
-typedef NAMESPACE_STD(list) <Registry*>     RegistryList;
+typedef ::std::list< Registry* >    RegistryList;
 
 #if defined( _MSC_VER ) && ( _MSC_VER < 1200 )
-typedef NAMESPACE_STD(__hash_map__)
+typedef ::std::__hash_map__
 <
     ::rtl::OString, // Typename
     RTTypeClass,    // TypeClass
@@ -83,7 +83,7 @@ typedef NAMESPACE_STD(__hash_map__)
     NewAlloc
 > T2TypeClassMap;
 #else
-typedef NAMESPACE_STD(hash_map)
+typedef ::std::hash_map
 <
     ::rtl::OString, // Typename
     RTTypeClass,    // TypeClass

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: ts $ $Date: 2000-12-11 14:20:04 $
+#   last change: $Author: jsc $ $Date: 2001-03-13 12:04:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,7 +90,7 @@ APP1OBJS=   $(OBJ)$/corbamaker.obj	\
 
 APP1STDLIBS=\
             $(SALLIB) \
-            $(VOSLIB) \
+            $(SALHELPERLIB) \
             $(REGLIB) \
             $(STDLIBCPP)
 

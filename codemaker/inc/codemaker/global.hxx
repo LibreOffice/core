@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:25:26 $
+ *  last change: $Author: jsc $ $Date: 2001-03-13 12:04:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,20 +62,15 @@
 #ifndef _CODEMAKER_GLOBAL_HXX_
 #define _CODEMAKER_GLOBAL_HXX_
 
-#include    <list>
-#include    <vector>
-#include    <set>
+#include <list>
+#include <vector>
+#include <set>
 
-#include    <fstream.h>
+#include <fstream.h>
 
 #ifndef _RTL_USTRING_HXX_
-#include    <rtl/ustring.hxx>
+#include <rtl/ustring.hxx>
 #endif
-
-#ifndef _VOS_MACROS_HXX_
-#include    <vos/macros.hxx>
-#endif
-
 
 struct EqualString
 {
@@ -102,13 +97,13 @@ struct LessString
 };
 
 #if defined(_MSC_VER) &&  _MSC_VER < 1200
-typedef NAMESPACE_STD(new_alloc) NewAlloc;
+typedef ::std::new_alloc NewAlloc;
 #endif
 
 
-typedef NAMESPACE_STD(list) < ::rtl::OString >              StringList;
-typedef NAMESPACE_STD(vector)< ::rtl::OString >             StringVector;
-typedef NAMESPACE_STD(set) < ::rtl::OString, LessString >   StringSet;
+typedef ::std::list< ::rtl::OString >               StringList;
+typedef ::std::vector< ::rtl::OString >             StringVector;
+typedef ::std::set< ::rtl::OString, LessString >    StringSet;
 
 ::rtl::OString makeTempName(sal_Char* prefix);
 

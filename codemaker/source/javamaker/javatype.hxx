@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javatype.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:25:28 $
+ *  last change: $Author: jsc $ $Date: 2001-03-13 12:04:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,18 +154,7 @@ inline int operator < (const UnoInfo& u1, const UnoInfo& u2)
         return (u1.m_name < u2.m_name);
 }
 
-/*
-struct LessUnoInfo
-{
-    bool operator()(const UnoInfo& unoInfo1, const UnoInfo& unoInfo2) const
-    {
-        return (unoInfo1.m_name < unoInfo2.m_name);
-    }
-};
-
-typedef NAMESPACE_STD(set) <UnoInfo, LessUnoInfo> UnoInfoSet;
-*/
-typedef NAMESPACE_STD(list) <UnoInfo> UnoInfoList;
+typedef ::std::list< UnoInfo > UnoInfoList;
 
 class JavaOptions;
 class FileStream;
