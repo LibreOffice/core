@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 16:12:52 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:57:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,8 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
     BOOL bEditable = pTabViewShell->SelectionEditable( &bOnlyNotBecauseOfMatrix );
     ScDocument* pDoc = GetViewData()->GetDocument();
     ScMarkData& rMark = GetViewData()->GetMarkData();
-    USHORT nCol1, nCol2, nRow1, nRow2;
+    SCCOL nCol1, nCol2;
+    SCROW nRow1, nRow2;
     nCol1 = aMarkRange.aStart.Col();
     nRow1 = aMarkRange.aStart.Row();
     nCol2 = aMarkRange.aEnd.Col();
@@ -452,9 +453,9 @@ void __EXPORT ScCellShell::GetClipState( SfxItemSet& rSet )
 
     if (!bDisable)
     {
-        USHORT nCol = GetViewData()->GetCurX();
-        USHORT nRow = GetViewData()->GetCurY();
-        USHORT nTab = GetViewData()->GetTabNo();
+        SCCOL nCol = GetViewData()->GetCurX();
+        SCROW nRow = GetViewData()->GetCurY();
+        SCTAB nTab = GetViewData()->GetTabNo();
         ScDocument* pDoc = GetViewData()->GetDocShell()->GetDocument();
         if (!pDoc->IsBlockEditable( nTab, nCol,nRow, nCol,nRow ))
             bDisable = TRUE;
@@ -504,13 +505,13 @@ void ScCellShell::GetState(SfxItemSet &rSet)
     ScViewData* pViewData   = GetViewData();
     ScDocument* pDoc        = pViewData->GetDocument();
     ScMarkData& rMark       = pViewData->GetMarkData();
-    USHORT      nPosX       = pViewData->GetCurX();
-    USHORT      nPosY       = pViewData->GetCurY();
-    USHORT      nTab        = pViewData->GetTabNo();
+    SCCOL       nPosX       = pViewData->GetCurX();
+    SCROW       nPosY       = pViewData->GetCurY();
+    SCTAB       nTab        = pViewData->GetTabNo();
     USHORT      nMyId       = 0;
 
-    USHORT nTabCount = pDoc->GetTableCount();
-    USHORT nTabSelCount = rMark.GetSelectCount();
+    SCTAB nTabCount = pDoc->GetTableCount();
+    SCTAB nTabSelCount = rMark.GetSelectCount();
 
 
 
@@ -545,7 +546,9 @@ void ScCellShell::GetState(SfxItemSet &rSet)
 
             case SID_RANGE_NOTETEXT:
                 {
-                    USHORT nNoteCol, nNoteRow, nNoteTab;
+                    SCCOL nNoteCol;
+                    SCROW nNoteRow;
+                    SCTAB nNoteTab;
 
                     //  #43343# immer Cursorposition
 #if 0
@@ -574,15 +577,15 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                 break;
 
             case SID_RANGE_ROW:
-                rSet.Put( SfxUInt16Item( nWhich, nPosY+1 ) );
+                rSet.Put( SfxInt32Item( nWhich, nPosY+1 ) );
                 break;
 
             case SID_RANGE_COL:
-                rSet.Put( SfxUInt16Item( nWhich, nPosX+1 ) );
+                rSet.Put( SfxInt16Item( nWhich, nPosX+1 ) );
                 break;
 
             case SID_RANGE_TABLE:
-                rSet.Put( SfxUInt16Item( nWhich, nTab+1 ) );
+                rSet.Put( SfxInt16Item( nWhich, nTab+1 ) );
                 break;
 
             case SID_RANGE_VALUE:
@@ -736,7 +739,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
             case SID_SELECT_SCENARIO:
                 {
                     ScDocument* pDoc = GetViewData()->GetDocument();
-                    USHORT      nTab = GetViewData()->GetTabNo();
+                    SCTAB       nTab = GetViewData()->GetTabNo();
                     List        aList;
 
                     Color   aDummyCol;
@@ -745,7 +748,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                     {
                         String aStr;
                         USHORT nFlags;
-                        USHORT nScTab = nTab + 1;
+                        SCTAB nScTab = nTab + 1;
                         String aProtect;
                         bool bSheetProtected = pDoc->IsTabProtected(nTab);
 
