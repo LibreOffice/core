@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-21 11:38:16 $
+ *  last change: $Author: mt $ $Date: 2001-08-28 09:58:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,16 +109,20 @@
 #endif
 #endif
 
-#ifndef _COM_SUN_STAR_TEXT_CHARACTERITERATORMODE_HPP_
+#ifndef _COM_SUN_STAR_I18N_CHARACTERITERATORMODE_HPP_
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_TEXT_WORDTYPE_HPP_
+#ifndef _COM_SUN_STAR_I18N_WORDTYPE_HPP_
 #include <com/sun/star/i18n/WordType.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_TEXT_SCRIPTTYPE_HPP_
+#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HPP_
 #include <com/sun/star/i18n/ScriptType.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_TEXT_CHARACTERCOMPRESSIONTYPE_HPP_
+#include <com/sun/star/text/CharacterCompressionType.hpp>
 #endif
 
 #include <comphelper/processfactory.hxx>
@@ -195,7 +199,7 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
     eDefLanguage        = LANGUAGE_DONTKNOW;
     maBackgroundColor   = COL_AUTO;
 
-    nAsianCompressionMode = EE_ASIANCOMPRESSION_NONE;
+    nAsianCompressionMode = text::CharacterCompressionType::NONE;
 
 
     aStatus.GetControlWord() =  EE_CNTRL_USECHARATTRIBS | EE_CNTRL_DOIDLEFORMAT |
@@ -1291,7 +1295,7 @@ void ImpEditEngine::InitScriptTypes( USHORT nPara )
                     {
                         if ( nPrevState != CHAR_NORMAL )
                         {
-                            if ( ( nPrevState != CHAR_KANA ) || ( GetAsianCompressionMode() == EE_ASIANCOMPRESSION_PUNCTIONANDKANA ) )
+                            if ( ( nPrevState != CHAR_KANA ) || ( GetAsianCompressionMode() == text::CharacterCompressionType::PUNCTUATION_AND_KANA ) )
                             {
                                 pParaPortion->aExtraCharInfos.Insert( ExtraCharInfo( nPrevChg, nP, nPrevState ), pParaPortion->aExtraCharInfos.Count() );
                             }

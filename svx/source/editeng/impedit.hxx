@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-20 12:30:55 $
+ *  last change: $Author: mt $ $Date: 2001-08-28 09:58:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,11 +122,6 @@ DBG_NAMEEX( EditEngine );
 #define DEL_RIGHT   2
 #define TRAVEL_X_DONTKNOW   0xFFFFFFFF
 #define MAXCHARSINPARA      0x3FFF-CHARPOSGROW  // Max 16K, because WYSIWYG array
-
-// Remove when defined in OFFAPI
-#define EE_ASIANCOMPRESSION_NONE                0
-#define EE_ASIANCOMPRESSION_PUNCTUATION         1
-#define EE_ASIANCOMPRESSION_PUNCTIONANDKANA     2
 
 #define ATTRSPECIAL_WHOLEWORD   1
 #define ATTRSPECIAL_EDGE        2

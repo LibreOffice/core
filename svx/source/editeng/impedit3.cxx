@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-21 11:00:40 $
+ *  last change: $Author: mt $ $Date: 2001-08-28 09:58:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,9 +111,14 @@
 #include <vcl/metric.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_TEXT_SCRIPTTYPE_HPP_
+#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HPP_
 #include <com/sun/star/i18n/ScriptType.hpp>
 #endif
+
+#ifndef _COM_SUN_STAR_TEXT_CHARACTERCOMPRESSIONTYPE_HPP_
+#include <com/sun/star/text/CharacterCompressionType.hpp>
+#endif
+
 
 #include <comphelper/processfactory.hxx>
 
@@ -3403,7 +3408,7 @@ BOOL ImpEditEngine::ImplCalcAsianCompression( ContentNode* pNode, TextPortion* p
             BYTE nType = GetCharTypeForCompression( pNode->GetChar( n+nStartPos ) );
 
             BOOL bCompressPunctuation = ( nType == CHAR_PUNCTUATIONLEFT ) || ( nType == CHAR_PUNCTUATIONRIGHT );
-            BOOL bCompressKana = ( nType == CHAR_KANA ) && ( GetAsianCompressionMode() == EE_ASIANCOMPRESSION_PUNCTIONANDKANA );
+            BOOL bCompressKana = ( nType == CHAR_KANA ) && ( GetAsianCompressionMode() == text::CharacterCompressionType::PUNCTUATION_AND_KANA );
 
             // create Extra infos only if needed...
             if ( bCompressPunctuation || bCompressKana )
