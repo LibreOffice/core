@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shutdownicon.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:34:36 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 10:24:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -471,6 +471,7 @@ void ShutdownIcon::terminateDesktop()
         // always remove ourselves as listener
         getInstance()->m_xDesktop->removeTerminateListener( getInstance() );
 
+
         // terminate desktop only if no tasks exist
         Reference < XFramesSupplier > xSupplier( getInstance()->m_xDesktop, UNO_QUERY );
         if( xSupplier.is() )
@@ -482,6 +483,9 @@ void ShutdownIcon::terminateDesktop()
                     getInstance()->m_xDesktop->terminate();
             }
         }
+
+        // remove the instance pointer
+        ShutdownIcon::pShutdownIcon = 0;
     }
 }
 
@@ -492,6 +496,7 @@ ShutdownIcon* ShutdownIcon::getInstance()
     OSL_ASSERT( pShutdownIcon );
     return pShutdownIcon;
 }
+
 
 // ---------------------------------------------------------------------------
 
