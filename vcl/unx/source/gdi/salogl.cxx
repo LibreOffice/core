@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salogl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-24 16:32:21 $
+ *  last change: $Author: kr $ $Date: 2001-11-07 17:20:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -413,4 +413,6 @@ void SalOpenGL::MakeVisualWeights( Display* pDisplay,
             }
         }
     }
+
+    ImplFreeLib();
 }
