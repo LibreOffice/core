@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.src,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 13:42:22 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:20:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,8 +322,8 @@ ModelessDialog RID_SCDLG_FILTER
     };
     StringList [ greek ] =
     {
-            < "ΚΑΙ" ; Default ; > ;
-        < "Ή" ; Default ; > ;
+            < "AND" ; Default ; > ;
+        < "OR" ; Default ; > ;
     };
     StringList [ korean ] =
     {
@@ -475,8 +475,8 @@ ModelessDialog RID_SCDLG_FILTER
     };
     StringList [ greek ] =
     {
-            < "ΚΑΙ" ; Default ; > ;
-        < "Ή" ; Default ; > ;
+            < "AND" ; Default ; > ;
+        < "OR" ; Default ; > ;
     };
     StringList [ korean ] =
     {
@@ -1729,7 +1729,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ language_user1 ] = " ";
         Text[ chinese_traditional ] = "ε¤§ε°ε―«(~S)";
         Text[ arabic ] = "ΗαίΚΗΘΙ ΘΓΝΡέ ίΘνΡΙ Γζ ΥΫνΡΙ";
-        Text[ greek ] = "Κεφαλαία/Πεζά";
+        Text[ greek ] = "Διάκριση πεζών - κεφαλαίων";
         Text[ korean ] = "λ€λ¬Έμ λ° μ†λ¬Έμ κµ¬λ¶„(~S)";
         Text[ turkish ] = "~Bόyόk/Kόηόk harf duyarlύ";
         Text[ catalan ] = "Distingeix entre ~majϊscules i minϊscules";
@@ -2253,7 +2253,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text[ language_user1 ] = " ";
         Text[ chinese_traditional ] = "ε¤§ε°ε―«(~C)";
         Text[ arabic ] = "ΗαίΚΗΘΙ ΘΓΝΡέ ίΘνΡΙ Γζ ΥΫνΡΙ";
-        Text[ greek ] = "Πεζά-Κεφαλαία";
+        Text[ greek ] = "Διάκριση πεζών - κεφαλαίων";
         Text[ korean ] = "λ€λ¬Έμ λ° μ†λ¬Έμ κµ¬λ¶„(~C)";
         Text[ turkish ] = "~Bόyόk/Kόηόk harf duyarlύ";
         Text[ catalan ] = "Distingeix entre ~majϊscules i minϊscules";
@@ -2907,8 +2907,8 @@ ModalDialog RID_SCDLG_PIVOTFILTER
     };
     StringList [ greek ] =
     {
-            < "ΚΑΙ" ; Default ; > ;
-        < "Ή" ; Default ; > ;
+            < "AND" ; Default ; > ;
+        < "OR" ; Default ; > ;
     };
     StringList [ korean ] =
     {
@@ -3060,8 +3060,8 @@ ModalDialog RID_SCDLG_PIVOTFILTER
     };
     StringList [ greek ] =
     {
-            < "ΚΑΙ" ; Default ; > ;
-        < "Ή" ; Default ; > ;
+            < "AND" ; Default ; > ;
+        < "OR" ; Default ; > ;
     };
     StringList [ korean ] =
     {
@@ -4019,7 +4019,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text[ language_user1 ] = " ";
         Text[ chinese_traditional ] = "ε¤§ε°ε―«(~C)";
         Text[ arabic ] = "ΗαίΚΗΘΙ ΘΓΝΡέ ίΘνΡΙ Γζ ΥΫνΡΙ";
-        Text[ greek ] = "Πεζά-Κεφαλαία";
+        Text[ greek ] = "Διάκριση πεζών - κεφαλαίων";
         Text[ korean ] = "λ€λ¬Έμ λ° μ†λ¬Έμ κµ¬λ¶„(~C)";
         Text[ turkish ] = "~Bόyόk/Kόηόk harf duyarlύ";
         Text[ catalan ] = "Distingeix entre ~majϊscules i minϊscules";
@@ -4251,6 +4251,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
     Text[ hindi ] = "ΰ¤«ΰ¤Ώΰ¤²ΰ¥ΰ¤ΰ¤°";
     Text[ slovak ] = "Filter";
 };
+
 
 
 
