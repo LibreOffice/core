@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XUIConfigurationManager.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Date: 2005-02-24 17:34:14 $
+ *  last change: $Date: 2005-03-01 20:20:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,10 +73,10 @@ import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.uno.XInterface;
-import drafts.com.sun.star.ui.UIElementType;
-import drafts.com.sun.star.ui.XImageManager;
-import drafts.com.sun.star.ui.XModuleUIConfigurationManagerSupplier;
-import drafts.com.sun.star.ui.XUIConfigurationManager;
+import com.sun.star.ui.UIElementType;
+import com.sun.star.ui.XImageManager;
+import com.sun.star.ui.XModuleUIConfigurationManagerSupplier;
+import com.sun.star.ui.XUIConfigurationManager;
 import java.io.PrintWriter;
 import lib.MultiMethodTest;
 
