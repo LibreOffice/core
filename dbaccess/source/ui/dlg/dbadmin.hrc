@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-12 16:20:42 $
+ *  last change: $Author: fs $ $Date: 2000-10-20 09:53:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,10 +80,12 @@
 #define FT_EXTENSION            13
 #define FT_TABLESUBSCRIPTION    14
 #define FT_SPECIAL_MESSAGE      15
+#define FT_LOGINTIMEOUT         16
 
 #define LB_DATATYPE             1
 #define LB_DATASOURCES          2
 #define LB_CHARSET              3
+#define LB_TIMEOUT_UNIT         4
 
 #define ET_CONNECTURL           1
 #define ET_DATASOURCENAME       2
@@ -91,6 +93,7 @@
 #define ET_PASSWORD             4
 #define ET_OPTIONS              5
 #define ET_JDBCDRIVERCLASS      6
+#define ET_TIMEOUT_NUMBER       7
 
 #define PB_BROWSECONNECTION     1
 #define PB_INDICIES             2
@@ -99,11 +102,13 @@
 
 #define GB_CONNECTION           1
 #define GB_DBASE_MAIN           2
+#define GB_TABLESUBSCRIPTION    3
 
 #define CB_PASSWORD_REQUIRED    1
 #define CB_SHOWDELETEDROWS      2
 #define CB_ALLOWLONGNAMES       3
 #define CB_HEADER               4
+#define CB_SUPPRESVERSIONCL     5
 
 #define FL_SEPARATOR1           1
 #define FL_SEPARATOR2           2
@@ -152,6 +157,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2000/10/12 16:20:42  fs
+ *  new implementations ... still under construction
+ *
  *  Revision 1.3  2000/10/11 11:31:03  fs
  *  new implementations - still under construction
  *

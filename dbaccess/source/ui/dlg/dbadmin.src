@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-12 16:20:42 $
+ *  last change: $Author: fs $ $Date: 2000-10-20 09:53:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,25 +272,7 @@ TabDialog DLG_DATABASE_ADMINISTRATION
     {
         Text = "Tabellen" ;
         Text [ ENGLISH ] = "Tables" ;
-        Text [ portuguese ] = "Tabelas" ;
         Text [ english_us ] = "Tables" ;
-        Text [ portuguese_brazilian ] = "Tabellen" ;
-        Text [ swedish ] = "Tabeller" ;
-        Text [ danish ] = "Tabeller" ;
-        Text [ italian ] = "Tabelle" ;
-        Text [ spanish ] = "Tablas" ;
-        Text [ french ] = "Tables" ;
-        Text [ dutch ] = "Tabellen" ;
-        Text[ chinese_simplified ] = "±Ì∏Ò";
-        Text[ russian ] = "“‡·ÎËˆ˚";
-        Text[ polish ] = "Tabele";
-        Text[ japanese ] = "√∞ÃﬁŸ";
-        Text[ chinese_traditional ] = "™ÌÆÊ";
-        Text[ arabic ] = "Ãœ«Ê·";
-        Text[ greek ] = "–ﬂÌ·ÍÂÚ";
-        Text[ korean ] = "≈◊¿Ã∫Ì";
-        Text[ turkish ] = "Tablolar";
-        Text[ language_user1 ] = " ";
     };
 };
 
@@ -342,7 +324,7 @@ TabPage PAGE_GENERAL
 
     GroupBox GB_CONNECTION
     {
-        Pos = MAP_APPFONT ( 6 , 24 ) ;
+        Pos = MAP_APPFONT ( 6 , 23 ) ;
         Size = MAP_APPFONT ( 248 , 48 ) ;
         Text = "Verbindung" ;
         Text [ english ] = "Connection" ;
@@ -377,9 +359,9 @@ TabPage PAGE_GENERAL
     };
     ListBox LB_DATATYPE
     {
-        Border = TRUE ;
         Pos = MAP_APPFONT ( 90, 33 ) ;
         Size = MAP_APPFONT ( 60, 60 ) ;
+        Border = TRUE ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
@@ -394,36 +376,41 @@ TabPage PAGE_GENERAL
     Edit ET_CONNECTURL
     {
         Pos = MAP_APPFONT ( 90 , 52 ) ;
-        Size = MAP_APPFONT ( 104 , 12 ) ;
+        Size = MAP_APPFONT ( 142 , 12 ) ;
         TabStop = TRUE ;
         Border = TRUE ;
     };
     PushButton PB_BROWSECONNECTION
     {
         TabStop = TRUE ;
-        Pos = MAP_APPFONT ( 198 , 51 ) ;
+        Pos = MAP_APPFONT ( 236 , 51 ) ;
+        Size = MAP_APPFONT ( 12 , 14 ) ;
+        Text = "..." ;
+        Text [ english ] = "..." ;
+        Text [ english_us ] = "..." ;
+    };
+    FixedText FT_LOGINTIMEOUT
+    {
+        Pos = MAP_APPFONT ( 10 , 69 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Text = "Abfallzeit:";
+        Text [ english ] = "Timeout:" ;
+        Text [ english_us ] = "Timeout:" ;
+    };
+    Edit ET_TIMEOUT_NUMBER
+    {
+        Pos = MAP_APPFONT ( 90 , 68 ) ;
+        Size = MAP_APPFONT ( 30 , 12 ) ;
+        TabStop = TRUE ;
+        Border = TRUE ;
+    };
+    ListBox LB_TIMEOUT_UNIT
+    {
+        Pos = MAP_APPFONT ( 123 , 68 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text = "D~urchsuchen..." ;
-        Text [ english ] = "~Search..." ;
-        Text [ english_us ] = "~Browse..." ;
-        Text [ italian ] = "S~foglia..." ;
-        Text [ spanish ] = "E~xaminar..." ;
-        Text [ french ] = "Parcourir..." ;
-        Text [ dutch ] = "~Doorzoeken..." ;
-        Text [ swedish ] = "Geno~msˆk..." ;
-        Text [ danish ] = "Gennemse..." ;
-        Text [ portuguese_brazilian ] = "Durchsuchen..." ;
-        Text [ portuguese ] = "~Pesquisar..." ;
-        Text [ chinese_simplified ] = "‰Ø¿¿...";
-        Text [ russian ] = "Œ·ÁÓ...";
-        Text [ polish ] = "Przeglπdaj...";
-        Text [ japanese ] = "åüçı...";
-        Text [ chinese_traditional ] = "¬sƒ˝...";
-        Text [ arabic ] = "«” ⁄—«÷...";
-        Text [ greek ] = "¡Ì·ÊﬁÙÁÛÁ...";
-        Text [ korean ] = "≈Ωªˆ...";
-        Text [ turkish ] = "Tara...";
-        Text [ language_user1 ] = " ";
+        Border = TRUE ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
     };
     FixedText FT_SPECIAL_MESSAGE
     {
@@ -1338,36 +1325,17 @@ TabPage PAGE_TABLESUBSCRIPTION
     Hide = TRUE;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( 260 , 135 ) ;
-    FixedText FT_TABLESUBSCRIPTION
+    GroupBox GB_TABLESUBSCRIPTION
     {
-        TabStop = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 248 , 12 ) ;
-        Text = "~W‰hlen Sie die Tabellen aus, die angezeigt werden sollen:" ;
-        Text [ ENGLISH ] = "Choose the tables that should be displayed:" ;
-        Text [ english_us ] = "Select the tables to be displayed:" ;
-        Text [ portuguese_brazilian ] = "W‰hlen Sie die Tabellen aus, die angezeigt werden sollen:" ;
-        Text [ swedish ] = "V‰~lj ut tabellerna som skall visas:" ;
-        Text [ danish ] = "VÊlg de tabeller, som skal vises:" ;
-        Text [ italian ] = "Scegliere le tabelle da visualizzare:" ;
-        Text [ spanish ] = "Seleccione las tablas q~ue deban verse:" ;
-        Text [ french ] = "SÈlectionnez les tables ‡ afficher :" ;
-        Text [ dutch ] = "~Kies de tabellen die moeten worden weergegeven:" ;
-        Text [ portuguese ] = "~Seleccione as tabelas a visualizar:" ;
-        Text[ chinese_simplified ] = "«Îƒ˙—°‘Ò“™œ‘ æµƒ±Ì∏Ò£∫";
-        Text[ russian ] = "¬˚·ÂËÚÂ Ú‡·ÎËˆ˚, ÌÂÓ·ıÓ‰ËÏ˚Â ‰Îˇ ÔÓÍ‡Á‡:";
-        Text[ polish ] = "Wybierz tabele, ktÛre majπ byÊ wyúwietlone:";
-        Text[ japanese ] = "ï\\é¶Ç∑ÇÈ√∞ÃﬁŸÇëIëÇµÇƒÇ≠ÇæÇ≥Ç¢:";
-        Text[ chinese_traditional ] = "Ω–±zøÔæ‹§@≠”≠n≈„•‹™∫™ÌÆÊ°G";
-        Text[ arabic ] = "«Œ — «·Ãœ«Ê· «· Ì  —Ìœ ≈ŸÂ«—Â«:";
-        Text[ greek ] = "≈ÈÎÔ„ﬁ ÈÌ‹Í˘Ì ÒÔÚ ÂÏˆ‹ÌÈÛÁ:";
-        Text[ korean ] = "∫∏ø©¡˙ ≈◊¿Ã∫Ì º±≈√:";
-        Text[ turkish ] = "Gˆr¸nt¸lenecek tablolar˝ seÁin:";
-        Text[ language_user1 ] = " ";
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 91 ) ;
+        Text = "Filter";
+        Text [ english ] = "Filter";
+        Text [ english_us ] = "Filter";
     };
     RadioButton RB_INCLUDEALL
     {
-        Pos     = MAP_APPFONT ( 6 , 20 ) ;
+        Pos     = MAP_APPFONT ( 12 , 15 ) ;
         Size    = MAP_APPFONT ( 60 , 12 ) ;
         Group   = TRUE;
         Text = "~Alle";
@@ -1376,7 +1344,7 @@ TabPage PAGE_TABLESUBSCRIPTION
     };
     RadioButton RB_INCLUDENONE
     {
-        Pos     = MAP_APPFONT ( 6 , 35 ) ;
+        Pos     = MAP_APPFONT ( 12 , 30 ) ;
         Size    = MAP_APPFONT ( 60 , 12 ) ;
         Text = "~Keine";
         Text [ english ] = "~None";
@@ -1384,7 +1352,7 @@ TabPage PAGE_TABLESUBSCRIPTION
     };
     RadioButton RB_INCLUDESPECIFIC
     {
-        Pos     = MAP_APPFONT ( 6 , 50 ) ;
+        Pos     = MAP_APPFONT ( 12 , 45 ) ;
         Size    = MAP_APPFONT ( 60 , 12 ) ;
         Text = "Aus~wahl";
         Text [ english ] = "~Selection";
@@ -1392,11 +1360,21 @@ TabPage PAGE_TABLESUBSCRIPTION
     };
     Control CTL_TABLESUBSCRIPTION
     {
+        Pos     = MAP_APPFONT ( 75 , 15 ) ;
+        Size    = MAP_APPFONT ( 173 , 72 ) ;
         Group   = TRUE;
-        Pos     = MAP_APPFONT ( 69 , 20 ) ;
-        Size    = MAP_APPFONT ( 185 , 109 ) ;
         Border  = TRUE ;
         TabStop = TRUE ;
+    };
+    CheckBox CB_SUPPRESVERSIONCL
+    {
+        Pos     = MAP_APPFONT ( 6 , 102 ) ;
+        Size    = MAP_APPFONT ( 200 , 12 ) ;
+        Group   = TRUE ;
+        TabStop = TRUE ;
+        Text = "Versionsspalten unterdr¸cken";
+        Text [ english ] = "Suppress version columns";
+        Text [ english ] = "Suppress version columns";
     };
 };
 
@@ -1458,6 +1436,9 @@ Menu MENU_DATASOURCELIST_POPUP
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2000/10/12 16:20:42  fs
+ *  new implementations ... still under construction
+ *
  *  Revision 1.3  2000/10/11 11:31:03  fs
  *  new implementations - still under construction
  *

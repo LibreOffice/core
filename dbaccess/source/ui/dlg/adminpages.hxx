@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adminpages.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-13 16:03:34 $
+ *  last change: $Author: fs $ $Date: 2000-10-20 09:53:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,6 +166,10 @@ private:
     FixedText           m_aConnectionLabel;
     OConnectionURLEdit  m_aConnection;
     PushButton          m_aBrowseConnection;
+//  FixedText           m_aTimeoutLabel;
+//  Edit                m_aTimeoutNumber;
+//  ListBox             m_aTimeoutUnit;
+
     FixedText           m_aSpecialMessage;
 
     ODsnTypeCollection* m_pCollection;  /// the DSN type collection instance
@@ -394,11 +398,12 @@ class OTableSubscriptionPage : public OGenericAdministrationPage
     friend class ODbAdminDialog;
 
 private:
+    GroupBox                m_aTables;
     RadioButton             m_aIncludeAll;
     RadioButton             m_aIncludeNone;
     RadioButton             m_aIncludeSelected;
     OTableTreeListBox       m_aTablesList;
-    FixedText               m_aTablesListLabel;
+    CheckBox                m_aSuppressVersionColumns;
     sal_Bool                m_bCheckedAll : 1;
     sal_Bool                m_bCatalogAtStart : 1;
     sal_Bool                m_bInitializingControls : 1;
@@ -452,6 +457,9 @@ private:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2000/10/13 16:03:34  fs
+ *  Separator changed to string / getDetailIds
+ *
  *  Revision 1.4  2000/10/12 16:20:42  fs
  *  new implementations ... still under construction
  *

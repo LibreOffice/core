@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adminpages.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2000-10-18 08:48:16 $
+ *  last change: $Author: fs $ $Date: 2000-10-20 09:53:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,6 +199,9 @@ OGeneralPage::OGeneralPage(Window* pParent, const SfxItemSet& _rItems)
     ,m_aConnectionLabel     (this, ResId(FT_CONNECTURL))
     ,m_aConnection          (this, ResId(ET_CONNECTURL))
     ,m_aBrowseConnection    (this, ResId(PB_BROWSECONNECTION))
+//  ,m_aTimeoutLabel        (this, ResId(FT_LOGINTIMEOUT))
+//  ,m_aTimeoutNumber       (this, ResId(ET_TIMEOUT_NUMBER))
+//  ,m_aTimeoutUnit         (this, ResId(LB_TIMEOUT_UNIT))
     ,m_aSpecialMessage      (this, ResId(FT_SPECIAL_MESSAGE))
     ,m_pCollection(NULL)
     ,m_eCurrentSelection(DST_UNKNOWN)
@@ -1252,11 +1255,12 @@ void OTextDetailsPage::SetSeparator( ComboBox& rBox, const String& rList, const 
 //------------------------------------------------------------------------
 OTableSubscriptionPage::OTableSubscriptionPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
     :OGenericAdministrationPage( pParent, ModuleRes(PAGE_TABLESUBSCRIPTION), _rCoreAttrs )
+    ,m_aTables              (this, ResId(GB_TABLESUBSCRIPTION))
     ,m_aIncludeAll          (this, ResId(RB_INCLUDEALL))
     ,m_aIncludeNone         (this, ResId(RB_INCLUDENONE))
     ,m_aIncludeSelected     (this, ResId(RB_INCLUDESPECIFIC))
-    ,m_aTablesListLabel     (this, ResId(FT_TABLESUBSCRIPTION))
     ,m_aTablesList          (this, ResId(CTL_TABLESUBSCRIPTION))
+    ,m_aSuppressVersionColumns(this, ResId(CB_SUPPRESVERSIONCL))
     ,m_bCheckedAll          (sal_True)
     ,m_bCatalogAtStart      (sal_True)
     ,m_bInitializingControls(sal_False)
@@ -1267,6 +1271,7 @@ OTableSubscriptionPage::OTableSubscriptionPage( Window* pParent, const SfxItemSe
     m_aIncludeNone.SetClickHdl(LINK(this, OTableSubscriptionPage, OnRadioButtonClicked));
     m_aIncludeSelected.SetClickHdl(LINK(this, OTableSubscriptionPage, OnRadioButtonClicked));
     m_aTablesList.SetCheckHandler(getControlModifiedLink());
+    m_aSuppressVersionColumns.SetClickHdl(getControlModifiedLink());
 
     // initialize the TabListBox
     m_aTablesList.SetSelectionMode( MULTIPLE_SELECTION );
@@ -1350,18 +1355,23 @@ void OTableSubscriptionPage::implInitControls(const SfxItemSet& _rSet, sal_Bool 
     bValid = bValid && m_xCurrentConnection.is();
     bReadonly = bReadonly || !bValid;
 
+    m_aTables.Enable(!bReadonly);
     m_aTablesList.Enable(!bReadonly);
-    m_aTablesListLabel.Enable(!bReadonly);
     m_aIncludeAll.Enable(!bReadonly);
     m_aIncludeNone.Enable(!bReadonly);
     m_aIncludeSelected.Enable(!bReadonly);
+    m_aSuppressVersionColumns.Enable(!bReadonly);
 
     m_bCheckedAll = sal_True;
     // get the current table filter
     SFX_ITEMSET_GET(_rSet, pTableFilter, OStringListItem, DSID_TABLEFILTER, sal_True);
+    SFX_ITEMSET_GET(_rSet, pSuppress, SfxBoolItem, DSID_SUPPRESSVERSIONCL, sal_True);
     Sequence< ::rtl::OUString > aTableFilter;
+    sal_Bool bSuppressVersionColumns = sal_True;
     if (pTableFilter)
         aTableFilter = pTableFilter->getList();
+    if (pSuppress)
+        bSuppressVersionColumns = pSuppress->GetValue();
 
     m_bInitializingControls = sal_True;
     if (!aTableFilter.getLength())
@@ -1386,6 +1396,11 @@ void OTableSubscriptionPage::implInitControls(const SfxItemSet& _rSet, sal_Bool 
         }
     }
     m_bInitializingControls = sal_False;
+
+    if (!bValid)
+        m_aSuppressVersionColumns.Check(bSuppressVersionColumns);
+    if (_bSaveValue)
+        m_aSuppressVersionColumns.SaveValue();
 
     if (!bValid)
     {
@@ -1465,9 +1480,9 @@ void OTableSubscriptionPage::ActivatePage(const SfxItemSet& _rSet)
             // establishing the connection failed. Show an error window and exit.
             OSQLMessageBox aMessageBox(GetParent(), aErrorInfo, WB_OK | WB_DEF_OK, OSQLMessageBox::Error);
             aMessageBox.Execute();
-//          OSQLMessageBox(GetParent(), aErrorInfo, WB_OK | WB_DEF_OK, OSQLMessageBox::Error).Execute();
             m_aTablesList.Enable(sal_False);
-            m_aTablesListLabel.Enable(sal_False);
+            m_aTables.Enable(sal_False);
+            m_aSuppressVersionColumns.Enable(sal_False);
             m_aTablesList.Clear();
         }
         else
@@ -1568,10 +1583,11 @@ sal_Bool OTableSubscriptionPage::FillItemSet( SfxItemSet& _rCoreAttrs )
     {
         aTableFilter = collectDetailedSelection();
     }
-
-    //////////////////////////////////////////////////////////////////////
-    // put this string into the set
     _rCoreAttrs.Put( OStringListItem(DSID_TABLEFILTER, aTableFilter) );
+
+    if (m_aSuppressVersionColumns.IsChecked() != m_aSuppressVersionColumns.GetSavedValue())
+        _rCoreAttrs.Put( SfxBoolItem(DSID_SUPPRESSVERSIONCL, m_aSuppressVersionColumns.IsChecked()) );
+
     return sal_True;
 }
 
@@ -1607,6 +1623,9 @@ IMPL_LINK( OTableSubscriptionPage, OnRadioButtonClicked, Button*, pButton )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2000/10/18 08:48:16  obo
+ *  Syntax error with linux compiler #65293#
+ *
  *  Revision 1.5  2000/10/13 16:04:22  fs
  *  Separator changed to string / getDetailIds
  *
