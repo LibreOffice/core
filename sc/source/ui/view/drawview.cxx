@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 09:15:52 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:58:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svdvmark.hxx>
+#include <svx/svdocapt.hxx>
 #include <svx/xoutx.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/ipfrm.hxx>
@@ -94,6 +95,7 @@
 #include "drwlayer.hxx"
 #include "docsh.hxx"
 #include "viewuno.hxx"
+#include "userdat.hxx"
 
 #include "sc.hrc"
 
@@ -544,6 +546,10 @@ void __EXPORT ScDrawView::MarkListHasChanged()
         SdrLayer* pLayer = GetModel()->GetLayerAdmin().GetLayerPerID(SC_LAYER_BACK);
         if ( pLayer && !IsLayerLocked( pLayer->GetName() ) )
             SetLayerLocked( pLayer->GetName(), TRUE );
+        // re-lock this internal note object.
+        pLayer = GetModel()->GetLayerAdmin().GetLayerPerID(SC_LAYER_INTERN);
+        if ( pLayer && !IsLayerLocked( pLayer->GetName() ) )
+            SetLayerLocked( pLayer->GetName(), TRUE );
     }
 
     BOOL bSubShellSet = FALSE;
@@ -882,5 +888,63 @@ void ScDrawView::MarkDropObj( SdrObject* pObj )
     }
 }
 
+void ScDrawView::StoreCaptionAttribs()
+{
+    SdrObject* pObj = NULL;
+    const SdrMarkList&  rMarkList   = GetMarkedObjectList();
 
+    if( rMarkList.GetMarkCount() == 1 )
+        pObj = rMarkList.GetMark(0)->GetObj();
 
+    if ( pObj && pObj->GetLayer() == SC_LAYER_INTERN && pObj->ISA(SdrCaptionObj) )
+    {
+        ScAddress aTabPos;
+        ScDrawObjData* pData = ScDrawLayer::GetObjData( pObj );
+        if( pData )
+            aTabPos = pData->aStt;
+        ScPostIt aNote(pDoc);
+        if(pDoc->GetNote( aTabPos.Col(), aTabPos.Row(), aTabPos.Tab(), aNote ))
+        {
+            aNote.SetItemSet(pObj->GetMergedItemSet());
+            pDoc->SetNote( aTabPos.Col(), aTabPos.Row(), aTabPos.Tab(), aNote );
+        }
+    }
+}
+
+void ScDrawView::StoreCaptionDimensions()
+{
+    SdrObject* pObj = NULL;
+    const SdrMarkList&  rMarkList   = GetMarkedObjectList();
+
+    if( rMarkList.GetMarkCount() == 1 )
+        pObj = rMarkList.GetMark(0)->GetObj();
+
+    if ( pObj && pObj->GetLayer() == SC_LAYER_INTERN && pObj->ISA(SdrCaptionObj) )
+    {
+        ScAddress aTabPos;
+        ScDrawObjData* pData = ScDrawLayer::GetObjData( pObj );
+        if( pData )
+            aTabPos = pData->aStt;
+        ScPostIt aNote(pDoc);
+        if(pDoc->GetNote( aTabPos.Col(), aTabPos.Row(), aTabPos.Tab(), aNote ))
+        {
+            Rectangle aOldRect = aNote.GetRectangle();
+            Rectangle aNewRect = pObj->GetLogicRect();
+            if(aOldRect != aNewRect)
+            {
+                aNote.SetRectangle(aNewRect);
+                // The new height is honoured if property item is reset.
+                if(aNewRect.Bottom() - aNewRect.Top() > aOldRect.Bottom() - aOldRect.Top())
+                {
+                    SdrCaptionObj* pCaption = static_cast<SdrCaptionObj*>(pObj);
+                    if(pCaption && pCaption->IsAutoGrowHeight())
+                    {
+                        pCaption->SetMergedItem( SdrTextAutoGrowHeightItem( false ) );
+                        aNote.SetItemSet(pCaption->GetMergedItemSet());
+                    }
+                }
+                pDoc->SetNote( aTabPos.Col(), aTabPos.Row(), aTabPos.Tab(), aNote );
+            }
+        }
+    }
+}
