@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-07 14:50:48 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 20:02:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ class IntroWindow_Impl;
 class CommandLineArgs;
 class Lockfile;
 class AcceptorMap : public std::map< OUString, Reference<XInitialization> > {};
-
+struct ConvertData;
 class Desktop : public Application
 {
     public:
@@ -189,6 +189,7 @@ class Desktop : public Application
         void                    CloseSplashScreen();
 
         void                    EnableOleAutomation();
+                                DECL_LINK( ImplInitFilterHdl, ConvertData* );
         DECL_LINK(          AsyncInitFirstRun, void* );
         /** checks if the office is run the first time
             <p>If so, <method>DoFirstRunInitializations</method> is called (asynchronously and delayed) and the
