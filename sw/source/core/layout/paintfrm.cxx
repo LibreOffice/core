@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: ama $ $Date: 2002-07-12 12:30:53 $
+ *  last change: $Author: fme $ $Date: 2002-07-31 08:24:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,9 +347,6 @@ static FASTBOOL bTableHack = FALSE;
 
 //Um das teure Ermitteln der RetoucheColor zu optimieren
 Color aGlobalRetoucheColor;
-
-Color aBlackColor;
-Color aWhiteColor;
 
 //Statics fuer Umrandungsalignment setzen.
 void SwCalcPixStatics( OutputDevice *pOut )
@@ -871,7 +868,14 @@ void SwLineRects::PaintLines( OutputDevice *pOut )
                 if ( !pLast || *pLast != *rLRect.GetColor() )
                 {
                     pLast = rLRect.GetColor();
+
+                    ULONG nOldDrawMode = pOut->GetDrawMode();
+                    if( pGlobalShell->GetWin() &&
+                        Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
+                        pOut->SetDrawMode( 0 );
+
                     pOut->SetFillColor( *pLast );
+                    pOut->SetDrawMode( nOldDrawMode );
                 }
                 if( !rLRect.IsEmpty() )
                     pOut->DrawRect( rLRect.SVRect() );
@@ -896,7 +900,14 @@ void SwLineRects::PaintLines( OutputDevice *pOut )
                 if ( !pLast || *pLast != *rLRect.GetColor() )
                 {
                     pLast = rLRect.GetColor();
+
+                    ULONG nOldDrawMode = pOut->GetDrawMode();
+                    if( pGlobalShell->GetWin() &&
+                        Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
+                        pOut->SetDrawMode( 0 );
+
                     pOut->SetFillColor( *pLast );
+                    pOut->SetDrawMode( nOldDrawMode );
                 }
                 if( !rLRect.IsEmpty() )
                     pOut->DrawRect( rLRect.SVRect() );
@@ -1581,11 +1592,6 @@ void SwRootFrm::Paint( const SwRect& rRect ) const
 
     ::SwCalcPixStatics( pSh->GetOut() );
     aGlobalRetoucheColor = pSh->Imp()->GetRetoucheColor();
-    if( pGlobalShell->GetViewOptions()->IsUseAutomaticBorderColor() )
-    {
-        aWhiteColor = Color( COL_WHITE );
-        aBlackColor = Color( COL_BLACK );
-    }
 
     //Ggf. eine Action ausloesen um klare Verhaeltnisse zu schaffen.
     //Durch diesen Kunstgriff kann in allen Paints davon ausgegangen werden,
@@ -2290,14 +2296,28 @@ void SwFrm::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
 
     OutputDevice *pOut = pGlobalShell->GetOut();
 
+    ULONG nOldDrawMode = pOut->GetDrawMode();
     Color aShadowColor( rShadow.GetColor() );
     if( aRegion.Count() && pGlobalShell->GetWin() &&
-        pGlobalShell->GetViewOptions()->IsUseAutomaticBorderColor() )
-        aShadowColor = pGlobalShell->GetWin()->GetSettings().
-                       GetStyleSettings().GetFieldTextColor();
+        Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
+    {
+        // Is heigh contrast mode, the output device has already set the
+        // DRAWMODE_SETTINGSFILL flag. This causes the SetFillColor function
+        // to ignore the setting of a new color. Therefore we have to reset
+        // the drawing mode
+        pOut->SetDrawMode( 0 );
+        if ( pGlobalShell->GetViewOptions()->IsUseAutomaticBorderColor() )
+        {
+            aShadowColor = pGlobalShell->GetWin()->GetSettings().
+                           GetStyleSettings().GetWindowTextColor();
+        }
+    }
 
     if ( pOut->GetFillColor() != aShadowColor )
         pOut->SetFillColor( aShadowColor );
+
+    pOut->SetDrawMode( nOldDrawMode );
+
     for ( USHORT i = 0; i < aRegion.Count(); ++i )
     {
         SwRect &rOut = aRegion[i];
@@ -2336,9 +2356,11 @@ void SwFrm::PaintBorderLine( const SwRect& rRect,
                    ( IsInSct() ? SUBCOL_SECT :
                    ( IsInFly() ? SUBCOL_FLY : SUBCOL_PAGE ) );
     if( pColor && pGlobalShell->GetWin() &&
+        Application::GetSettings().GetStyleSettings().GetHighContrastMode() &&
         pGlobalShell->GetViewOptions()->IsUseAutomaticBorderColor() )
-        pColor = &pGlobalShell->GetWin()->GetSettings().GetStyleSettings().
-                                               GetFieldTextColor();
+        pColor = &pGlobalShell->GetWin()->GetSettings().GetStyleSettings()
+                                                       .GetWindowTextColor();
+
     if ( pPage->GetSortedObjs() )
     {
         SwRegionRects aRegion( aOut, 4, 1 );
