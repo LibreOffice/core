@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Security.xcu,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-27 11:38:40 $
+ *  last change: $Author: rt $ $Date: 2005-01-07 10:02:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,11 +235,6 @@
         <node oor:name="m35" oor:op="replace">
             <prop oor:name="Extension" oor:type="xs:string">
                 <value>fdf</value>
-            </prop>
-        </node>
-        <node oor:name="m36" oor:op="replace">
-            <prop oor:name="Extension" oor:type="xs:string">
-                <value>html</value>
             </prop>
         </node>
         <node oor:name="m36" oor:op="replace">
