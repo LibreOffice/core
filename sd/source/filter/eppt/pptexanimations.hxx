@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptexanimations.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:50:33 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 16:06:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,23 +97,6 @@ typedef sal_uInt32 TranslateMode;
 #define TRANSLATE_ATTRIBUTE         2
 #define TRANSLATE_MEASURE           4
 #define TRANSLATE_NUMBER_TO_STRING  8
-
-struct ExContainer
-{
-    sal_uInt32  nContPos;
-    SvStream&   rStrm;
-
-    ExContainer( SvStream& rSt, const sal_uInt16 nRecType, const sal_uInt16 nInstance = 0 );
-    ~ExContainer();
-};
-struct ExAtom
-{
-    sal_uInt32  nContPos;
-    SvStream&   rStrm;
-
-    ExAtom( SvStream& rSt, const sal_uInt16 nRecType, const sal_uInt16 nInstance = 0, const sal_uInt8 nVersion = 0 );
-    ~ExAtom();
-};
 
 class AnimationExporter
 {
