@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-05 13:47:41 $
+ *  last change: $Author: os $ $Date: 2001-02-12 08:35:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -878,12 +878,45 @@ try
         rtl::OUString aCurrentColName= pFields[i];
 
         aElement = xFields->getByName(aCurrentColName);
-        xField = *(Reference< XPropertySet > *)aElement.getValue();
+        aElement >>= xField;
 
-        sal_Int32 nFormatKey = *(sal_Int32*)xField->getPropertyValue(FM_PROP_FORMATKEY).getValue();
+        OUString sCurrentModelType;
+        const OUString sType(C2U("Type"));
+        sal_Int32 nType = 0;
+        sal_Bool bIsFormatted           = sal_False;
+        sal_Bool bFormattedIsNumeric    = sal_True;
+        xField->getPropertyValue(sType) >>= nType;
+        switch(nType)
+        {
+            case DataType::BIT:
+                sCurrentModelType = C2U("CheckBox");
+                break;
 
-        Reference< XPropertySet >  xCurrentCol = xColFactory->createColumn(getControlName(nFormatKey));
+            case DataType::BINARY:
+            case DataType::VARBINARY:
+            case DataType::LONGVARBINARY:
+                sCurrentModelType = C2U("TextField");
+                break;
 
+            case DataType::VARCHAR:
+            case DataType::LONGVARCHAR:
+            case DataType::CHAR:
+                bFormattedIsNumeric = sal_False;
+                // _NO_ break !
+            default:
+                sCurrentModelType = C2U("FormattedField");
+                bIsFormatted = sal_True;
+                break;
+        }
+
+        Reference< XPropertySet >  xCurrentCol = xColFactory->createColumn(sCurrentModelType);
+        if (bIsFormatted)
+        {
+            OUString sFormatKey(C2U("FormatKey"));
+            xCurrentCol->setPropertyValue(sFormatKey, xField->getPropertyValue(sFormatKey));
+            Any aFormatted(&bFormattedIsNumeric, ::getBooleanCppuType());
+            xCurrentCol->setPropertyValue(C2U("TreatAsNumber"), aFormatted);
+        }
         Any aColName; aColName <<= aCurrentColName;
         xCurrentCol->setPropertyValue(FM_PROP_CONTROLSOURCE,    aColName);
         xCurrentCol->setPropertyValue(FM_PROP_LABEL, aColName);
