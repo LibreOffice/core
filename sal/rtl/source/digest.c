@@ -2,9 +2,9 @@
  *
  *  $RCSfile: digest.c,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:24 $
+ *  last change: $Author: mhu $ $Date: 2000-12-17 23:51:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,15 +54,19 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): Matthias Huetsch <matthias.huetsch@sun.com>
  *
  *
  ************************************************************************/
 
-#define _RTL_DIGEST_C_ "$Revision: 1.1.1.1 $"
+#define _RTL_DIGEST_C_ "$Revision: 1.2 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
+#endif
+
+#ifndef _OSL_TYPES_H_
+#include <osl/types.h>
 #endif
 
 #ifndef _RTL_ALLOC_H_
@@ -123,6 +127,21 @@ typedef struct digest_impl_st
     Digest_update_t    *m_update;
     Digest_get_t       *m_get;
 } Digest_Impl;
+
+/*
+ * __rtl_digest_swapLong.
+ */
+static void __rtl_digest_swapLong (sal_uInt32 *pData, sal_uInt32 nDatLen)
+{
+    register sal_uInt32 *X;
+    register int         i, n;
+
+    X = pData;
+    n = nDatLen;
+
+    for (i = 0; i < n; i++)
+        X[i] = RTL_DIGEST_SWAPLONG(X[i]);
+}
 
 /*========================================================================
  *
@@ -673,6 +692,10 @@ static void __rtl_digest_endMD5 (DigestContextMD5 *ctx)
     X = ctx->m_pData;
     i = (ctx->m_nDatLen >> 2);
 
+#ifdef OSL_BIGENDIAN
+    __rtl_digest_swapLong (X, i + 1);
+#endif /* OSL_BIGENDIAN */
+
     switch (ctx->m_nDatLen & 0x03)
     {
         case 0: X[i]  = ((sal_uInt32)(*(p++))) <<  0L;
@@ -680,6 +703,7 @@ static void __rtl_digest_endMD5 (DigestContextMD5 *ctx)
         case 2: X[i] |= ((sal_uInt32)(*(p++))) << 16L;
         case 3: X[i] |= ((sal_uInt32)(*(p++))) << 24L;
     }
+
     i += 1;
 
     if (i >= (DIGEST_LBLOCK_MD5 - 2))
@@ -789,6 +813,10 @@ rtlDigestError SAL_CALL rtl_digest_updateMD5 (
         d       += n;
         nDatLen -= n;
 
+#ifdef OSL_BIGENDIAN
+        __rtl_digest_swapLong (ctx->m_pData, DIGEST_LBLOCK_MD5);
+#endif /* OSL_BIGENDIAN */
+
         __rtl_digest_updateMD5 (ctx);
         ctx->m_nDatLen = 0;
     }
@@ -798,6 +826,10 @@ rtlDigestError SAL_CALL rtl_digest_updateMD5 (
         rtl_copyMemory (ctx->m_pData, d, DIGEST_CBLOCK_MD5);
         d       += DIGEST_CBLOCK_MD5;
         nDatLen -= DIGEST_CBLOCK_MD5;
+
+#ifdef OSL_BIGENDIAN
+        __rtl_digest_swapLong (ctx->m_pData, DIGEST_LBLOCK_MD5);
+#endif /* OSL_BIGENDIAN */
 
         __rtl_digest_updateMD5 (ctx);
     }
@@ -888,8 +920,6 @@ static void __rtl_digest_initSHA (
 
 static void __rtl_digest_updateSHA (DigestContextSHA *ctx);
 static void __rtl_digest_endSHA    (DigestContextSHA *ctx);
-
-static void __rtl_digest_swapLong (sal_uInt32 *pData, sal_uInt32 nDatLen);
 
 #define K_00_19 0x5a827999L
 #define K_20_39 0x6ed9eba1L
@@ -1075,6 +1105,10 @@ static void __rtl_digest_endSHA (DigestContextSHA *ctx)
     X = ctx->m_pData;
     i = (ctx->m_nDatLen >> 2);
 
+#ifdef OSL_BIGENDIAN
+    __rtl_digest_swapLong (X, i + 1);
+#endif /* OSL_BIGENDIAN */
+
     switch (ctx->m_nDatLen & 0x03)
     {
         case 0: X[i]  = ((sal_uInt32)(*(p++))) <<  0L;
@@ -1082,9 +1116,10 @@ static void __rtl_digest_endSHA (DigestContextSHA *ctx)
         case 2: X[i] |= ((sal_uInt32)(*(p++))) << 16L;
         case 3: X[i] |= ((sal_uInt32)(*(p++))) << 24L;
     }
-    i += 1;
 
-    __rtl_digest_swapLong (X, i);
+    __rtl_digest_swapLong (X, i + 1);
+
+    i += 1;
 
     if (i >= (DIGEST_LBLOCK_SHA - 2))
     {
@@ -1101,21 +1136,6 @@ static void __rtl_digest_endSHA (DigestContextSHA *ctx)
     X[DIGEST_LBLOCK_SHA - 1] = ctx->m_nL;
 
     __rtl_digest_updateSHA (ctx);
-}
-
-/*
- * __rtl_digest_swapLong.
- */
-static void __rtl_digest_swapLong (sal_uInt32 *pData, sal_uInt32 nDatLen)
-{
-    register sal_uInt32 *X;
-    register int         i, n;
-
-    X = pData;
-    n = nDatLen;
-
-    for (i = 0; i < n; i++)
-        X[i] = RTL_DIGEST_SWAPLONG(X[i]);
 }
 
 /*========================================================================
@@ -1461,4 +1481,3 @@ void SAL_CALL rtl_digest_destroySHA1 (rtlDigest Digest)
             rtl_freeMemory (pImpl);
     }
 }
-
