@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuhhconv.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 16:02:48 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 13:51:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,7 @@ void FuHangulHanjaConversion::StartConversion( INT16 nLanguage )
 
     ViewShellBase* pBase = PTR_CAST(ViewShellBase, SfxViewShell::Current());
     if (pBase != NULL)
-        pViewShell = pBase->GetSubShellManager().GetMainSubShell();
+        pViewShell = pBase->GetMainViewShell();
 
     if( pViewShell )
     {
