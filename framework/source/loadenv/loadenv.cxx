@@ -2,9 +2,9 @@
  *
  *  $RCSfile: loadenv.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:32:02 $
+ *  last change: $Author: rt $ $Date: 2005-02-02 13:54:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,10 @@
 
 #ifndef __FRAMEWORK_CONSTANT_FILTER_HXX_
 #include <constant/filter.hxx>
+#endif
+
+#ifndef __FRAMEWORK_DISPATCH_INTERACTION_HXX_
+#include <dispatch/interaction.hxx>
 #endif
 
 #ifndef __FRAMEWORK_CONSTANT_FRAMELOADER_HXX_
@@ -938,7 +942,15 @@ void LoadEnv::impl_detectTypeAndFilter()
     throw(LoadEnvException, css::uno::RuntimeException)
 {
     // SAFE ->
-    WriteGuard aWriteLock(m_aLock);
+    ReadGuard aReadLock(m_aLock);
+
+    css::uno::Sequence< css::beans::PropertyValue > lDescriptor;
+    m_lMediaDescriptor >> lDescriptor;
+
+    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
+
+    aReadLock.unlock();
+    // <- SAFE
 
     // start combined flat/deep detection
     // It can agree with the current preselection or return any
@@ -947,21 +959,20 @@ void LoadEnv::impl_detectTypeAndFilter()
     // Attention: Because our stl media descriptor is a copy of an uno sequence
     // we cant use as an in/out parameter here. Copy it before and dont forget to
     // actualize structure afterwards again!
-    css::uno::Reference< css::document::XTypeDetection > xDetect(m_xSMGR->createInstance(SERVICENAME_TYPEDETECTION), css::uno::UNO_QUERY);
+    ::rtl::OUString sDetectedType;
+    css::uno::Reference< css::document::XTypeDetection > xDetect(xSMGR->createInstance(SERVICENAME_TYPEDETECTION), css::uno::UNO_QUERY);
+    if (xDetect.is())
+        sDetectedType = xDetect->queryTypeByDescriptor(lDescriptor, sal_True); /*TODO should deep detection be able for enable/disable it from outside? */
 
-    css::uno::Sequence< css::beans::PropertyValue > lDescriptor;
-    m_lMediaDescriptor >> lDescriptor;
-    ::rtl::OUString sDetectedType = xDetect->queryTypeByDescriptor(lDescriptor, sal_True); /*TODO should deep detection be able for enable/disable it from outside? */
-    m_lMediaDescriptor << lDescriptor;
-
-    // a) content couldn't be detected successfully => return immediatly
-    //    MediaDescriptor should be already up-to-date here!
+    // no valid content -> loading not possible
     if (!sDetectedType.getLength())
         throw LoadEnvException(LoadEnvException::ID_UNSUPPORTED_CONTENT);
 
-    // b) if detection was successfully => update the descriptor
+    // detection was successfully => update the descriptor
+    // SAFE ->
+    WriteGuard aWriteLock(m_aLock);
+    m_lMediaDescriptor << lDescriptor;
     m_lMediaDescriptor[::comphelper::MediaDescriptor::PROP_TYPENAME()] <<= sDetectedType;
-
     aWriteLock.unlock();
     // <- SAFE
 }
@@ -1362,24 +1373,26 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
     // SAFE -> ..................................
     ReadGuard aReadLock(m_aLock);
 
-    // such search is allowed for special requests only ...
-    // or better its not allowed for some requests in general :-)
+    // The special backing mode frame will be recycled by definition!
+    // It does'nt matter if somehwere whish to create a new view
+    // or open a new untitled document ...
+    // The only exception form that - hidden frames!
+    if (m_lMediaDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_HIDDEN(), sal_False) == sal_True)
+        return css::uno::Reference< css::frame::XFrame >();
+
+    css::uno::Reference< css::frame::XFramesSupplier > xSupplier(m_xSMGR->createInstance(SERVICENAME_DESKTOP), css::uno::UNO_QUERY);
+    FrameListAnalyzer aTasksAnalyzer(xSupplier, css::uno::Reference< css::frame::XFrame >(), FrameListAnalyzer::E_BACKINGCOMPONENT);
+    if (aTasksAnalyzer.m_xBackingComponent.is())
+        return aTasksAnalyzer.m_xBackingComponent;
+
+    // These states indicates the wishing for creation of a new view in general.
     if (
-//        (m_lMediaDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_ASTEMPLATE() , sal_False) == sal_True) ||
-        (m_lMediaDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_HIDDEN()     , sal_False) == sal_True) ||
+        (m_lMediaDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_ASTEMPLATE() , sal_False) == sal_True) ||
         (m_lMediaDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_OPENNEWVIEW(), sal_False) == sal_True)
        )
     {
         return css::uno::Reference< css::frame::XFrame >();
     }
-
-    // get access to the list of possible open tasks
-    css::uno::Reference< css::frame::XFramesSupplier > xSupplier(m_xSMGR->createInstance(SERVICENAME_DESKTOP), css::uno::UNO_QUERY);
-
-    // The special backing mode frame will be recycled everytimes!
-    FrameListAnalyzer aTasksAnalyzer(xSupplier, css::uno::Reference< css::frame::XFrame >(), FrameListAnalyzer::E_BACKINGCOMPONENT);
-    if (aTasksAnalyzer.m_xBackingComponent.is())
-        return aTasksAnalyzer.m_xBackingComponent;
 
     // On the other side some special URLs will open a new frame everytimes (expecting
     // they can use the backing-mode frame!)
