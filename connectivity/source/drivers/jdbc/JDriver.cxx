@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JDriver.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 14:39:33 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 13:26:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,11 +95,9 @@ using namespace ::com::sun::star::lang;
 
 // -------------------------------------------------------------------------
 java_sql_Driver::java_sql_Driver(const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory)
-    : java_lang_Object(_rxFactory)
+    : m_xORB(_rxFactory)
 {
 }
-// --------------------------------------------------------------------------------
-jclass java_sql_Driver::theClass = 0;
 // --------------------------------------------------------------------------------
 java_sql_Driver::~java_sql_Driver()
 {}
@@ -146,80 +144,6 @@ Sequence< ::rtl::OUString > SAL_CALL java_sql_Driver::getSupportedServiceNames( 
 {
     return getSupportedServiceNames_Static();
 }
-
-// --------------------------------------------------------------------------------
-jclass java_sql_Driver::getMyClass()
-{
-    // die Klasse muss nur einmal geholt werden, daher statisch
-    if( !theClass )
-    {
-        SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
-        if( t.pEnv )
-        {
-            jclass tempClass = t.pEnv->FindClass("java/sql/Driver");
-            OSL_ENSURE(tempClass,"Java : FindClass nicht erfolgreich!");
-            jclass globClass = (jclass)t.pEnv->NewGlobalRef( tempClass );
-            t.pEnv->DeleteLocalRef( tempClass );
-            saveClassRef( globClass );
-        }
-    }
-    return theClass;
-}
-// --------------------------------------------------------------------------------
-void java_sql_Driver::saveClassRef( jclass pClass )
-{
-    if( SDBThreadAttach::IsJavaErrorOccured() || pClass==0  )
-        return;
-    // der uebergebe Klassen-Handle ist schon global, daher einfach speichern
-    theClass = pClass;
-}
-// -----------------------------------------------------------------------------
-void java_sql_Driver::loadDriverFromProperties(const Sequence< PropertyValue >& info,::rtl::OUString& _rsGeneratedValueStatement,sal_Bool& _rbAutoRetrievingEnabled,sal_Bool& _bParameterSubstitution,sal_Bool& _bIgnoreDriverPrivileges)
-{
-    // first try if the jdbc driver is alraedy registered at the driver manager
-    SDBThreadAttach t(getORB()); OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
-    try
-    {
-        const PropertyValue* pBegin = info.getConstArray();
-        const PropertyValue* pEnd   = pBegin + info.getLength();
-        for(jsize i=0;pBegin != pEnd;++pBegin)
-        {
-            if ( !object && !pBegin->Name.compareToAscii("JavaDriverClass") )
-            {
-                // here I try to find the class for jdbc driver
-                java_sql_SQLException_BASE::getMyClass();
-                java_lang_Throwable::getMyClass();
-
-                ::rtl::OUString aStr;
-                pBegin->Value >>= aStr;
-                // the driver manager holds the class of the driver for later use
-                // if forName didn't find the class it will throw an exception
-                java_lang_Class *pDrvClass = java_lang_Class::forName(aStr);
-                if(pDrvClass)
-                {
-                    saveRef(t.pEnv, pDrvClass->newInstanceObject());
-                    jclass tempClass = t.pEnv->GetObjectClass(object);
-                    if(object)
-                    {
-                        jclass globClass = (jclass)t.pEnv->NewGlobalRef( tempClass );
-                        t.pEnv->DeleteLocalRef( tempClass );
-                        saveClassRef( globClass );
-                    }
-                    delete pDrvClass;
-                }
-            }
-            else if(!pBegin->Name.compareToAscii("IsAutoRetrievingEnabled"))
-            {
-                pBegin->Value >>= _rbAutoRetrievingEnabled;
-            }
-            else if(!pBegin->Name.compareToAscii("AutoRetrievingStatement"))
-            {
-                pBegin->Value >>= _rsGeneratedValueStatement;
-            }
-            else if(!pBegin->Name.compareToAscii("ParameterNameSubstitution"))
-            {
-                pBegin->Value >>= _bParameterSubstitution;
-            }
             else if(!pBegin->Name.compareToAscii("IgnoreDriverPrivileges"))
             {
                 pBegin->Value >>= _bIgnoreDriverPrivileges;
@@ -245,78 +169,16 @@ void java_sql_Driver::loadDriverFromProperties(const Sequence< PropertyValue >& 
         ::dbtools::throwGenericSQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("The specified driver could not be loaded!")) ,*this);
     }
 }
+=======
+>>>>>>> 1.25.54.1
 // -------------------------------------------------------------------------
 Reference< XConnection > SAL_CALL java_sql_Driver::connect( const ::rtl::OUString& url, const
                                                          Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
 {
-    SDBThreadAttach t(getORB()); OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
-    if(!t.pEnv)
-        throw SQLException(::rtl::OUString::createFromAscii("No Java installed!"),*this,::rtl::OUString::createFromAscii("S1000"),1000 ,Any());
-    Reference< XConnection > xRet;
-
-
-    ::rtl::OUString     sGeneratedValueStatement; // contains the statement which should be used when query for automatically generated values
-    sal_Bool            bAutoRetrievingEnabled = sal_False; // set to <TRUE/> when we should allow to query for generated values
-    sal_Bool            bParameterSubstitution = sal_False; // set to <TRUE/> when we should subsitute named paramteres
-    sal_Bool            bIgnoreDriverPrivileges= sal_False;
-    loadDriverFromProperties(info,sGeneratedValueStatement,bAutoRetrievingEnabled,bParameterSubstitution,bIgnoreDriverPrivileges);
-    jobject out(0);
-
-    if( t.pEnv )
-    {
-        // temporaere Variable initialisieren
-        char * cSignature = "(Ljava/lang/String;Ljava/util/Properties;)Ljava/sql/Connection;";
-        char * cMethodName = "connect";
-        // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
-        ThrowSQLException(t.pEnv,*this);
-        if( mID )
-        {
-            jvalue args[2];
-            // Parameter konvertieren
-            args[0].l = convertwchar_tToJavaString(t.pEnv,url);
-            java_util_Properties* pProps = createStringPropertyArray(t.pEnv,info);
-            args[1].l = pProps->getJavaObject();
-
-            out = t.pEnv->CallObjectMethod( object, mID, args[0].l,args[1].l );
-            try
-            {
-                ThrowSQLException(t.pEnv,*this);
-            }
-            catch(const SQLException& )
-            {
-                t.pEnv->DeleteLocalRef((jstring)args[0].l);
-                delete pProps;
-                if( object )
-                {
-                    t.pEnv->DeleteGlobalRef( object );
-                    object = NULL;
-                }
-                throw;
-            }
-            // und aufraeumen
-            t.pEnv->DeleteLocalRef((jstring)args[0].l);
-            delete pProps;
-            if( object )
-            {
-                t.pEnv->DeleteGlobalRef( object );
-                object = NULL;
-            }
-            ThrowSQLException(t.pEnv,*this);
-
-        } //mID
-        if( object )
-        {
-            t.pEnv->DeleteGlobalRef( theClass );
-            theClass = NULL;
-            t.pEnv->DeleteGlobalRef( object );
-            object = NULL;
-        }
-    } //t.pEnv
-    // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
-    Reference< XConnection > xOut;
-    return out==0 ? 0 : new java_sql_Connection( t.pEnv, out,this,sGeneratedValueStatement,bAutoRetrievingEnabled,bParameterSubstitution ,bIgnoreDriverPrivileges);
-    //  return xOut;
+    java_sql_Connection* pConnection = new java_sql_Connection(this );
+    Reference< XConnection > xOut = pConnection;
+    pConnection->construct(url,info);
+    return xOut;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL java_sql_Driver::acceptsURL( const ::rtl::OUString& url ) throw(SQLException, RuntimeException)
@@ -330,94 +192,17 @@ sal_Bool SAL_CALL java_sql_Driver::acceptsURL( const ::rtl::OUString& url ) thro
 Sequence< DriverPropertyInfo > SAL_CALL java_sql_Driver::getPropertyInfo( const ::rtl::OUString& url,
                                                                          const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
 {
-    if ( ! acceptsURL(url) )
-        ::dbtools::throwGenericSQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid URL!")) ,*this);
-
-    SDBThreadAttach t(getORB()); OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
-
-    if ( !object )
-    {
-        // driver was not loaded so far, load it by name
-        ::rtl::OUString     sGeneratedValueStatement; // contains the statement which should be used when query for automatically generated values
-        sal_Bool            bAutoRetrievingEnabled = sal_False; // set to when we should allow to query for generated values
-        sal_Bool            bParameterSubstitution = sal_False; // set to <TRUE/> when we should subsitute named paramteres
-        sal_Bool            bIgnoreDriverPrivileges= sal_False;
-        loadDriverFromProperties(info,sGeneratedValueStatement,bAutoRetrievingEnabled,bParameterSubstitution,bIgnoreDriverPrivileges);
-    }
-
-    if(!object)
-    {
-        // one of these must throw an exception
-        ThrowSQLException(t.pEnv,*this);
-        ::dbtools::throwGenericSQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("The specified driver could not be loaded!")) ,*this);
-    }
-
-    jobjectArray out(0);
-
-    if( t.pEnv )
-    {
-        // temporaere Variable initialisieren
-        char * cSignature = "(Ljava/lang/String;Ljava/util/Properties;)[Ljava/sql/DriverPropertyInfo;";
-        char * cMethodName = "getPropertyInfo";
-        // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
-        if( mID )
-        {
-            jvalue args[2];
-            // Parameter konvertieren
-            args[0].l = convertwchar_tToJavaString(t.pEnv,url);
-            java_util_Properties* pProps = createStringPropertyArray(t.pEnv,info);
-            args[1].l = pProps->getJavaObject();
-
-            out = (jobjectArray)t.pEnv->CallObjectMethodA( object, mID, args );
-            ThrowSQLException(t.pEnv,*this);
-            // und aufraeumen
-            t.pEnv->DeleteLocalRef((jstring)args[0].l);
-            delete pProps;
-        } //mID
-    } //t.pEnv
-    // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
-    return copyArrayAndDelete( t.pEnv, out, DriverPropertyInfo(),java_sql_DriverPropertyInfo(NULL,NULL));
+    return Sequence< DriverPropertyInfo >();
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL java_sql_Driver::getMajorVersion(  ) throw(RuntimeException)
 {
-    if(!object)
-        return 1;
-    jint out(0);
-    SDBThreadAttach t(getORB()); OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
-    if( t.pEnv ){
-
-        // temporaere Variable initialisieren
-        char * cSignature = "()I";
-        char * cMethodName = "getMajorVersion";
-        // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
-        if( mID )
-            out = t.pEnv->CallIntMethod( object, mID);
-            ThrowSQLException(t.pEnv,*this);
-    } //t.pEnv
-    return out;
+    return 1;
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL java_sql_Driver::getMinorVersion(  ) throw(RuntimeException)
 {
-    if(!object)
-        return 0;
-    jint out(0);
-    SDBThreadAttach t(getORB()); OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
-    if( t.pEnv ){
-
-        // temporaere Variable initialisieren
-        char * cSignature = "()I";
-        char * cMethodName = "getMinorVersion";
-        // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
-        if( mID )
-            out = t.pEnv->CallIntMethod( object, mID);
-            ThrowSQLException(t.pEnv,*this);
-    } //t.pEnv
-    return out;
+    return 0;
 }
 // -------------------------------------------------------------------------
 
