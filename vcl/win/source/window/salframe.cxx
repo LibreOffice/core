@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: ssa $ $Date: 2001-12-19 12:15:21 $
+ *  last change: $Author: ssa $ $Date: 2002-01-07 12:07:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -903,6 +903,20 @@ void SalFrame::SetIcon( USHORT nIcon )
 
 // -----------------------------------------------------------------------
 
+HWND ImplGetParentHwnd( HWND hWnd )
+{
+    SalFrame* pFrame = GetWindowPtr( hWnd );
+    if( !pFrame )
+        return ::GetParent( hWnd );
+    Window *pRealParent = ((Window*)pFrame->maFrameData.mpInst)->mpRealParent;
+    if( pRealParent )
+        return pRealParent->mpFrame->maFrameData.mhWnd;
+    else
+        return ::GetParent( hWnd );
+}
+
+// -----------------------------------------------------------------------
+
 static void ImplSalShow( HWND hWnd, BOOL bVisible )
 {
     SalFrame* pFrame = GetWindowPtr( hWnd );
@@ -1066,7 +1080,7 @@ void SalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
             POINT aPt;
             aPt.x = nX;
             aPt.y = nY;
-            ClientToScreen( ::GetParent( maFrameData.mhWnd ), &aPt );
+            ClientToScreen( ImplGetParentHwnd( maFrameData.mhWnd ), &aPt );
             nX = aPt.x;
             nY = aPt.y;
     }
