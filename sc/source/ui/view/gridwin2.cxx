@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2002-10-21 17:48:00 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:55:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1135,7 +1135,7 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, BOOL bUp )
             else if (!bHide)
                 aPagebreakDrag.Format( aNewRanges, SCA_VALID );
 
-            pViewFunc->SetPrintRanges( &aNewRanges, NULL, NULL, FALSE );
+            pViewFunc->SetPrintRanges( pDoc->IsPrintEntireSheet( nTab ), &aNewRanges, NULL, NULL, FALSE );
         }
     }
 
