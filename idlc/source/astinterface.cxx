@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astinterface.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jsc $ $Date: 2001-08-30 07:22:03 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 11:58:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,21 +71,45 @@
 using namespace ::rtl;
 
 AstInterface::AstInterface(const ::rtl::OString& name,
-                           DeclList* pInherits,
-                           sal_Bool bIsDefined,
+                           AstDeclaration* pInherits,
                            AstScope* pScope)
     : AstType(NT_interface, name, pScope)
     , AstScope(NT_interface)
-    , m_bIsDefined(bIsDefined)
+    , m_bIsDefined(false)
     , m_bForwarded(sal_False)
     , m_bForwardedInSameFile(sal_False)
+    , m_bSingleInheritance(pInherits != 0)
 {
     if ( pInherits )
-        m_inheritedInterfaces = *pInherits;
+        m_inheritedInterfaces.push_back(pInherits);
 }
 
 AstInterface::~AstInterface()
 {
+}
+
+bool AstInterface::addInheritedInterface(AstInterface * pInherits)
+{
+    for (DeclList::iterator i(m_inheritedInterfaces.begin());
+         i != m_inheritedInterfaces.end(); ++i)
+    {
+        if ((*i)->getScopedName() == pInherits->getScopedName()) {
+            return false;
+        }
+    }
+    m_inheritedInterfaces.push_back(pInherits);
+    return true;
+}
+
+void AstInterface::forwardDefined(AstInterface const & def)
+{
+    setImported(def.isImported());
+    setInMainfile(def.isInMainfile());
+    setLineNumber(def.getLineNumber());
+    setFileName(def.getFileName());
+    setDocumentation(def.getDocumentation());
+    m_inheritedInterfaces = def.m_inheritedInterfaces;
+    m_bIsDefined = true;
 }
 
 sal_Bool AstInterface::dump(RegistryKey& rKey, RegistryTypeWriterLoader* pLoader)
@@ -102,17 +126,17 @@ sal_Bool AstInterface::dump(RegistryKey& rKey, RegistryTypeWriterLoader* pLoader
         return sal_False;
     }
 
+    if (m_inheritedInterfaces.size() > SAL_MAX_UINT16) {
+        //TODO
+    }
+    sal_uInt16 nBaseTypes = static_cast< sal_uInt16 >(
+        m_inheritedInterfaces.size());
     sal_uInt16 nAttributes = getNodeCount(NT_attribute);
     sal_uInt16 nMethods = getNodeCount(NT_operation);
-    OUString uBaseTypeName;
-    if ( m_inheritedInterfaces.size() )
-        uBaseTypeName = OStringToOUString(
-                            m_inheritedInterfaces.front()->getRelativName(),
-                            RTL_TEXTENCODING_UTF8);
 
     RegistryTypeWriter aBlob(pLoader->getApi(), RT_TYPE_INTERFACE,
                              OStringToOUString(getRelativName(), RTL_TEXTENCODING_UTF8),
-                             uBaseTypeName, nAttributes, nMethods, 0);
+                             nBaseTypes, nAttributes, nMethods, 0);
 
     aBlob.setDoku( getDocumentation() );
     aBlob.setFileName( OStringToOUString(getFileName(), RTL_TEXTENCODING_UTF8));
@@ -124,6 +148,15 @@ sal_Bool AstInterface::dump(RegistryKey& rKey, RegistryTypeWriterLoader* pLoader
     aUik.m_Data4 = 0;
     aUik.m_Data5 = 0;
     aBlob.setUik(aUik);
+
+    sal_uInt16 superTypeIndex = 0;
+    for (DeclList::iterator i = m_inheritedInterfaces.begin();
+         i != m_inheritedInterfaces.end(); ++i)
+    {
+        aBlob.setMISuperTypeData(
+            superTypeIndex++,
+            OStringToOUString((*i)->getRelativName(), RTL_TEXTENCODING_UTF8));
+    }
 
     DeclList::iterator iter = getIteratorBegin();
     DeclList::iterator end = getIteratorEnd();
