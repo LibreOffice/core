@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NumberFormatIndex.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:05:46 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 10:07:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ module com { module sun { module star { module i18n {
     <b>MUST</b> support some predefined format codes. These predefined
     format codes are accessed through indices as the following, and
     the locale data format code definitions in
-    i18npool/source/localedata/data/*.xml <b>MUST</b> have matching
+    i18npool\source\localedata\data\*.xml <b>MUST</b> have matching
     entries in the form <br/>
 
     <code>&lt;FormatElement formatindex="0"&gt;</code> <br/>
@@ -115,7 +115,7 @@ module com { module sun { module star { module i18n {
         order to provide the same functionality and document layout on
         every platform. Like all other formats these formats are now
         defined in the i18n framework locale data files under
-        i18npool/source/localedata/data/*.xml </dd>
+        i18npool\source\localedata\data\*.xml </dd>
 
     <dt> <a name="SYS"> DATE_SYS_... </a> </dt>
         <dd> On Windows platforms these formats used separators and
