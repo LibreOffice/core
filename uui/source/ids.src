@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ids.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-19 20:13:54 $
+ *  last change: $Author: kz $ $Date: 2001-03-28 12:00:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 //
 //  Miscellaneous Resources
 //
-// $Author: kz $ $Date: 2001-01-19 20:13:54 $ $Revision: 1.6 $
+// $Author: kz $ $Date: 2001-03-28 12:00:21 $ $Revision: 1.7 $
 //============================================================================
 
 #ifndef UUI_IDS_HRC
@@ -85,7 +85,7 @@ String RID_KEEP_PASSWORD
     Text[ greek ] = "Áğï~ìíçìüíåõóç êùäéêïı İùò ôï ôİëïò ôçò åöáñìïãŞò";
     Text[ italian ] = "An~nota password fino alla fine dell'applicazione";
     Text[ japanese ] = "Êß½Ü°ÄŞ‚Í±ÌßØ¹°¼®İI—¹‚Ü‚Å‹L‰¯‚µ‚Ä‚¨‚­(~R)";
-    Text[ korean ] = "ÀÀ¿ëÇÁ·Î±×·¥À» Á¾·áÇÒ ¶§±îÁö ÆĞ½º¿öµå ±â¾ï";
+    Text[ korean ] = "ÀÀ¿ëÇÁ·Î±×·¥À» Á¾·áÇÒ ¶§±îÁö ÆĞ½º¿öµå ±â¾ï(~R)";
     Text[ polish ] = "Zapamiêtaj has³o do koñca aplikacji";
     Text[ portuguese ] = "~Lembrar senha até terminar a aplicação";
     Text[ portuguese_brazilian ] = "Passwort ~merken";
@@ -100,9 +100,9 @@ String RID_SAVE_PASSWORD
     Text = "Passwort dauerhaft ~speichern";
     Text[ english ] = "~Save password permanently";
     Text[ arabic ] = "ÍİÙ ÏÇÆã áßáãÉ ÇáÓÑ";
-    Text[ chinese_simplified ] = "±£´æÃÜÂë(~S)";
-    Text[ chinese_simplified ] = "±£´æÃÜÂë(~S)";
-    Text[ chinese_traditional ] = "Àx¦s±K½X(~S)";
+    Text[ chinese_simplified ] = "±£´æÃÜÂë(~R)";
+    Text[ chinese_simplified ] = "±£´æÃÜÂë(~R)";
+    Text[ chinese_traditional ] = "Àx¦s±K½X(~R)";
     Text[ danish ] = "Gem adgangskoden permanent";
     Text[ dutch ] = "Wachtwoord ~opslaan";
     Text[ dutch ] = "Wachtwoord ~opslaan";
@@ -110,8 +110,8 @@ String RID_SAVE_PASSWORD
     Text[ french ] = "~Enregistrer le mot de passe";
     Text[ greek ] = "ÁğïèŞêåõ~óç êùäéêïı ğñüóâáóçò";
     Text[ italian ] = "Salva pa~ssword ";
-    Text[ japanese ] = "Êß½Ü°ÄŞ‚Ì’·Šú•Û‘¶(~S)";
-    Text[ korean ] = "ÆĞ½º¿öµå ¿µ±¸ ÀúÀå";
+    Text[ japanese ] = "Êß½Ü°ÄŞ‚Ì’·Šú•Û‘¶(~R)";
+    Text[ korean ] = "ÆĞ½º¿öµå ¿µ±¸ ÀúÀå(~R)";
     Text[ polish ] = "Zapisz has³o na sta³e";
     Text[ portuguese ] = "~Guardar senha";
     Text[ portuguese_brazilian ] = "Passwort ~speichern";
