@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexdialog.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-02 09:25:19 $
+ *  last change: $Author: fs $ $Date: 2001-04-02 12:05:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,7 +351,7 @@ ModalDialog DLG_INDEXDESIGN
     };
     PushButton PB_CLOSE
     {
-        Pos = MAP_APPFONT ( DIALOG_SIZE_X - BUTTON_SIZE_X - 6, DIALOG_SIZE_Y - BUTTON_SIZE_Y - 6 ) ;
+        Pos = MAP_APPFONT ( DIALOG_SIZE_X - BUTTON_SIZE_X - 6 - BUTTON_SIZE_X - 6, DIALOG_SIZE_Y - BUTTON_SIZE_Y - 6 ) ;
         Size = MAP_APPFONT ( BUTTON_SIZE_X, BUTTON_SIZE_Y );
         SVLook = TRUE;
         DefButton = TRUE;
@@ -375,6 +375,11 @@ ModalDialog DLG_INDEXDESIGN
         Text[ chinese_traditional ] = "~Close";
         Text[ turkish ] = "~Close";
         Text[ arabic ] = "~Close";
+    };
+    HelpButton HB_HELP
+    {
+        Pos = MAP_APPFONT ( DIALOG_SIZE_X - BUTTON_SIZE_X - 6, DIALOG_SIZE_Y - BUTTON_SIZE_Y - 6 ) ;
+        Size = MAP_APPFONT ( BUTTON_SIZE_X, BUTTON_SIZE_Y );
     };
     Text[ portuguese ] = "Índices";
     Text[ russian ] = "Èíäåêñû";
@@ -652,6 +657,9 @@ String STR_INDEXDESIGN_DOUBLE_COLUMN_NAME
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2001/04/02 09:25:19  fs
+ *  no translation for the logical index name
+ *
  *  Revision 1.4  2001/03/29 09:09:53  fs
  *  english texts
  *

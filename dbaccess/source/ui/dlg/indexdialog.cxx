@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexdialog.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-30 14:10:22 $
+ *  last change: $Author: fs $ $Date: 2001-04-02 12:05:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,6 +221,7 @@ namespace dbaui
         ,m_aFieldsLabel                     (this, ResId(FT_FIELDS))
         ,m_pFields(new IndexFieldsControl   (this, ResId(CTR_FIELDS),_nMaxColumnsInIndex))
         ,m_aClose                           (this, ResId(PB_CLOSE))
+        ,m_aHelp                            (this, ResId(HB_HELP))
         ,m_pIndexes(NULL)
         ,m_pPreviousSelection(NULL)
         ,m_xORB(_rxORB)
@@ -829,6 +830,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2001/03/30 14:10:22  oj
+ *  #85298##85297# correct index impl
+ *
  *  Revision 1.4  2001/03/29 10:04:47  fs
  *  corrected some minor issues
  *

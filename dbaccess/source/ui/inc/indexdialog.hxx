@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexdialog.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-30 14:10:22 $
+ *  last change: $Author: fs $ $Date: 2001-04-02 12:04:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,7 @@ namespace dbaui
         FixedText               m_aFieldsLabel;
         IndexFieldsControl*     m_pFields;
         PushButton              m_aClose;
+        HelpButton              m_aHelp;
 
         OIndexCollection*       m_pIndexes;
         SvLBoxEntry*            m_pPreviousSelection;
@@ -203,6 +204,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/03/30 14:10:22  oj
+ *  #85298##85297# correct index impl
+ *
  *  Revision 1.2  2001/03/19 06:02:09  fs
  *  +implCheckPlausibility
  *
