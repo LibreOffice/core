@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docuno.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2001-01-22 17:06:39 $
+ *  last change: $Author: sab $ $Date: 2001-02-14 15:28:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,6 +273,20 @@ ScDocument* ScModelObj::GetDocument() const
     if (pDocShell)
         return pDocShell->GetDocument();
     return NULL;
+}
+
+SvEmbeddedObject* ScModelObj::GetEmbeddedObject() const
+{
+    return pDocShell;
+}
+
+BOOL ScModelObj::IsEmbedded() const
+{
+    if (pDocShell)
+    {
+        return pDocShell->IsOle();
+    }
+    return FALSE;
 }
 
 uno::Any SAL_CALL ScModelObj::queryInterface( const uno::Type& rType )
