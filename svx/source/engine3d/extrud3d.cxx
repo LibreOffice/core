@@ -2,9 +2,9 @@
  *
  *  $RCSfile: extrud3d.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 14:06:29 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 11:32:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,29 +206,11 @@ PolyPolygon3D E3dExtrudeObj::GetFrontSide()
     // Start- und Endpunkte verhindern
     aPolyPoly3D.RemoveDoublePoints();
 
-    // THB: Temporary fix for SJ's flipping problem
-    // TODO: Clarify with AW
-    // Check whether matrix mirrors (then, polygon flipping must happen the other way around)
-    Matrix4D aTrans;
-    GetFullTransform( aTrans );
-    const sal_Bool bMirror( aTrans.Determinant() < 0.0 );
-
     // Normale holen
     Vector3D aNormal = aPolyPoly3D.GetNormal();
 
-    // THB: Temporary fix for SJ's flipping problem
-    // TODO: Clarify with AW
-    if( bMirror )
-    {
-        // for mirroring transforms, the condition for polygon flip is inverted
-        if( (aNormal.Z() > 0.0) == (GetExtrudeDepth() != 0) )
-            aPolyPoly3D.FlipDirections();
-    }
-    else
-    {
-        if( (aNormal.Z() > 0.0) != (GetExtrudeDepth() != 0) )
-            aPolyPoly3D.FlipDirections();
-    }
+    if( (aNormal.Z() > 0.0) != (GetExtrudeDepth() != 0) )
+        aPolyPoly3D.FlipDirections();
 
     // Orientierung evtl. vorhandener Loecher in einen definierten
     // Ausgangszustand bringen
@@ -316,6 +298,11 @@ void E3dExtrudeObj::CreateGeometry()
                 fSurroundFactor = 1.0;
         }
 
+        // #i28528#
+        PolyPolygon3D aFrontLines;
+        PolyPolygon3D aBackLines;
+        PolyPolygon3D aInBetweenLines;
+
         // Segment erzeugen
         ImpCreateSegment(
             aFrontSide,
@@ -336,7 +323,15 @@ void E3dExtrudeObj::CreateGeometry()
             GetCharacterMode(), // #107245# bExtrudeCharacterMode,
             FALSE,
             // #78972#
-            &maLinePolyPolygon);
+            &aFrontLines,
+            &aBackLines,
+            &aInBetweenLines);
+
+        // #78972#
+        // Simply add them for Extrudes
+        maLinePolyPolygon.Insert(aFrontLines);
+        maLinePolyPolygon.Insert(aInBetweenLines);
+        maLinePolyPolygon.Insert(aBackLines);
     }
     else
     {
@@ -358,8 +353,15 @@ void E3dExtrudeObj::CreateGeometry()
         maLinePolyPolygon.Insert(aFrontSide);
     }
 
-    // #78972#
-    ImpCompleteLinePolygon(maLinePolyPolygon, aFrontSide.Count(), FALSE);
+    // #i28528#
+    if(!GetReducedLineGeometry())
+    {
+        PolyPolygon3D aNewPolyPoly = ImpCompleteLinePolygon(maLinePolyPolygon, aFrontSide.Count(), sal_False);
+        // append horizontal lines
+        maLinePolyPolygon.Insert(aNewPolyPoly);
+    }
+
+    ImpCorrectLinePolygon(maLinePolyPolygon, aFrontSide.Count());
 
     // call parent
     E3dCompoundObject::CreateGeometry();
