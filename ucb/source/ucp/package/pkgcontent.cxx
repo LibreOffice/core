@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontent.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 09:36:25 $
+ *  last change: $Author: vg $ $Date: 2003-07-02 15:00:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,12 +64,12 @@
  **************************************************************************
  *************************************************************************/
 
-#include "osl/getglobalmutex.hxx"
-#include "rtl/instance.hxx"
-
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
+
+#include "osl/doublecheckedlocking.h"
+
 #ifndef _RTL_USTRING_H_
 #include <rtl/ustring.h>
 #endif
@@ -405,14 +405,25 @@ uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType )
 XTYPEPROVIDER_COMMON_IMPL( Content );
 
 //=========================================================================
-
-namespace
+// virtual
+uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
+    throw( uno::RuntimeException )
 {
-    struct InitFolderTypes
+    cppu::OTypeCollection * pCollection = 0;
+
+    if ( isFolder() )
     {
-        cppu::OTypeCollection * operator()()
+        static cppu::OTypeCollection* pFolderTypes = 0;
+
+        pCollection = pFolderTypes;
+        if ( !pCollection )
         {
-            static cppu::OTypeCollection aInstance(
+            osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
+
+            pCollection = pFolderTypes;
+            if ( !pCollection )
+            {
+                static cppu::OTypeCollection aCollection(
                     CPPU_TYPE_REF( lang::XTypeProvider ),
                     CPPU_TYPE_REF( lang::XServiceInfo ),
                     CPPU_TYPE_REF( lang::XComponent ),
@@ -424,15 +435,27 @@ namespace
                     CPPU_TYPE_REF( beans::XPropertySetInfoChangeNotifier ),
                     CPPU_TYPE_REF( container::XChild ),
                     CPPU_TYPE_REF( star::ucb::XContentCreator ) ); // !!
-            return &aInstance;
+                pCollection = &aCollection;
+                OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
+                pFolderTypes = pCollection;
+            }
         }
-    };
-
-    struct InitDocTypes
+        else
+            OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
+    }
+    else
     {
-        cppu::OTypeCollection * operator()()
+        static cppu::OTypeCollection* pDocumentTypes = 0;
+
+        pCollection = pDocumentTypes;
+        if ( !pCollection )
         {
-            static cppu::OTypeCollection aInstance(
+            osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
+
+            pCollection = pDocumentTypes;
+            if ( !pCollection )
+            {
+                static cppu::OTypeCollection aCollection(
                     CPPU_TYPE_REF( lang::XTypeProvider ),
                     CPPU_TYPE_REF( lang::XServiceInfo ),
                     CPPU_TYPE_REF( lang::XComponent ),
@@ -443,34 +466,16 @@ namespace
                     CPPU_TYPE_REF( beans::XPropertyContainer ),
                     CPPU_TYPE_REF( beans::XPropertySetInfoChangeNotifier ),
                     CPPU_TYPE_REF( container::XChild ) );
-            return &aInstance;
+                pCollection = &aCollection;
+                OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
+                pDocumentTypes = pCollection;
+            }
         }
-    };
-}
+        else
+            OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
+    }
 
-//=========================================================================
-// virtual
-uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
-    throw( uno::RuntimeException )
-{
-    if ( isFolder() )
-    {
-        return (*rtl_Instance< cppu::OTypeCollection,
-                               InitFolderTypes,
-                               ::osl::MutexGuard,
-                               ::osl::GetGlobalMutex >::create(
-                                    InitFolderTypes(),
-                                    ::osl::GetGlobalMutex() ) ).getTypes();
-    }
-    else
-    {
-        return (*rtl_Instance< cppu::OTypeCollection,
-                               InitDocTypes,
-                               ::osl::MutexGuard,
-                               ::osl::GetGlobalMutex >::create(
-                                    InitDocTypes(),
-                                    ::osl::GetGlobalMutex() ) ).getTypes();
-    }
+    return (*pCollection).getTypes();
 }
 
 //=========================================================================
