@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgass.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 08:22:59 $
+ *  last change: $Author: af $ $Date: 2001-05-17 13:43:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,15 +76,15 @@ ModalDialog DLG_ASS
     Control CT_PREVIEW
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 144 , 40 ) ;
-        Size = MAP_APPFONT ( 120 , 98 ) ;
+        Pos = MAP_APPFONT ( 144 , 40  ) ;
+        Size = MAP_APPFONT ( 122 , 96 ) ;
         SVLook = FALSE ;
     };
 
     CheckBox CB_PREVIEW
     {
-        Pos = MAP_APPFONT( 144, 141 );
-        Size = MAP_APPFONT( 92, 10 );
+        Pos = MAP_APPFONT ( 144 , 140  );
+        Size = MAP_APPFONT ( 92 , 10 );
         TabStop = TRUE;
         Text = "~Vorschau";
         Text [ ENGLISH ] = "Pre~view";
@@ -113,8 +113,8 @@ ModalDialog DLG_ASS
 
     CheckBox CB_STARTWITH
     {
-        Pos = MAP_APPFONT( 144, 154 );
-        Size = MAP_APPFONT( 120, 10 );
+        Pos = MAP_APPFONT ( 144 , 154  );
+        Size = MAP_APPFONT ( 122 , 10 );
         TabStop = TRUE;
         Text = "Diesen Dialog ~nicht mehr zeigen" ;
         Text [ ENGLISH ] = "Do not ~show this dialog again" ;
@@ -148,16 +148,16 @@ ModalDialog DLG_ASS
         OutputSize = TRUE ;
         Scale = TRUE;
         Border = TRUE;
-        Pos = MAP_APPFONT ( 6 , 4 ) ;
-        Size = MAP_APPFONT ( 256 , 29 ) ;
+        Pos = MAP_APPFONT ( 6 , 4  ) ;
+        Size = MAP_APPFONT ( 258 , 29 ) ;
         Fixed = Bitmap { File = "dlgass1.bmp" ; };
     };
 
-    GroupBox RB_PAGE1_ARTGROUP
+    FixedLine FL_PAGE1_ARTGROUP
     {
         OutputSize = TRUE;
-        Pos = MAP_APPFONT( 6, 36 );
-        Size =MAP_APPFONT( 134, 128 );
+        Pos = MAP_APPFONT ( 6 , 37  );
+        Size =MAP_APPFONT ( 134 , 8 );
         Text = "Art";
         Text [ ENGLISH ] = "Type";
         Text [ ENGLISH_US ] = "Type";
@@ -185,8 +185,8 @@ ModalDialog DLG_ASS
 
     RadioButton RB_PAGE1_EMPTY
     {
-        Pos = MAP_APPFONT( 12, 47 );
-        Size = MAP_APPFONT( 125, 10 );
+        Pos = MAP_APPFONT ( 12 , 48  );
+        Size = MAP_APPFONT ( 122 , 10 );
         Text = "~Leere Präsentation";
         Text [ ENGLISH ] = "~Empty presentation";
         TabStop = TRUE;
@@ -215,8 +215,8 @@ ModalDialog DLG_ASS
 
     RadioButton RB_PAGE1_TEMPLATE
     {
-        Pos = MAP_APPFONT( 12, 60 );
-        Size = MAP_APPFONT( 125, 10 );
+        Pos = MAP_APPFONT ( 12 , 62  );
+        Size = MAP_APPFONT ( 122 , 10 );
         Text = "~Aus Vorlage";
         Text [ ENGLISH ] = "From ~template";
         Text[ english_us ] = "~From template";
@@ -244,8 +244,8 @@ ModalDialog DLG_ASS
 
     RadioButton RB_PAGE1_OPEN
     {
-        Pos = MAP_APPFONT( 12, 73 );
-        Size = MAP_APPFONT( 125, 10 );
+        Pos = MAP_APPFONT ( 12 , 76  );
+        Size = MAP_APPFONT ( 122 , 10 );
         Text = "~Öffnen einer vorhandenen Präsentation";
         Text [ ENGLISH ] = "~Open existing presentation";
         Text[ english_us ] = "~Open existing presentation";
@@ -273,8 +273,8 @@ ModalDialog DLG_ASS
 
     ListBox LB_PAGE1_REGION
     {
-        Pos = MAP_APPFONT( 12, 89 );
-        Size = MAP_APPFONT( 123, 12 );
+        Pos = MAP_APPFONT ( 12 , 90  );
+        Size = MAP_APPFONT ( 122 , 12 );
         TabStop = TRUE ;
         Border = TRUE ;
         DropDown = TRUE ;
@@ -284,15 +284,15 @@ ModalDialog DLG_ASS
     ListBox LB_PAGE1_TEMPLATES
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 104 ) ;
-        Size = MAP_APPFONT ( 123 , 55 ) ;
+        Pos = MAP_APPFONT ( 12 , 106  ) ;
+        Size = MAP_APPFONT ( 122 , 56 ) ;
         HelpId = HID_SD_AUTOPILOT_TEMPLATES ;
     };
 
     ListBox LB_PAGE1_OPEN
     {
-        Pos = MAP_APPFONT( 12, 89 );
-        Size = MAP_APPFONT( 123, 70 );
+        Pos = MAP_APPFONT ( 12 , 90  );
+        Size = MAP_APPFONT ( 122 , 72 );
         TabStop = TRUE;
         Border = TRUE;
         HelpId = HID_SD_AUTOPILOT_OPEN ;
@@ -304,16 +304,16 @@ ModalDialog DLG_ASS
         OutputSize = TRUE ;
         Scale = TRUE;
         Border = TRUE;
-        Pos = MAP_APPFONT ( 6 , 4 ) ;
-        Size = MAP_APPFONT ( 256 , 29 ) ;
+        Pos = MAP_APPFONT ( 6 , 4  ) ;
+        Size = MAP_APPFONT ( 258 , 29 ) ;
         Fixed = Bitmap { File = "dlgass2.bmp" ; };
     };
 
-    GroupBox GRP_PAGE2_LAYOUT
+    FixedLine FL_PAGE2_LAYOUT
     {
         OutputSize = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 36 ) ;
-        Size = MAP_APPFONT ( 132 , 75 ) ;
+        Pos = MAP_APPFONT ( 6 , 37  ) ;
+        Size = MAP_APPFONT ( 134 , 8 ) ;
         Text = "Wählen Sie eine ~Seitenvorlage" ;
         Text [ ENGLISH ] = "Choose a ~page template" ;
         Text [ english_us ] = "~Select a Page Style" ;
@@ -341,8 +341,8 @@ ModalDialog DLG_ASS
 
     ListBox LB_PAGE2_REGION
     {
-        Pos = MAP_APPFONT( 12, 47 );
-        Size = MAP_APPFONT( 120, 12 );
+        Pos = MAP_APPFONT ( 12 , 48  );
+        Size = MAP_APPFONT ( 120 , 12 );
         TabStop = TRUE ;
         Border = TRUE ;
         DropDown = TRUE ;
@@ -352,15 +352,15 @@ ModalDialog DLG_ASS
     ListBox LB_PAGE2_LAYOUT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 65 ) ;
+        Pos = MAP_APPFONT ( 12 , 64  ) ;
         Size = MAP_APPFONT ( 120 , 40 ) ;
     };
 
-    GroupBox GRP_PAGE2_OUTPUTTYPES
+    FixedLine FL_PAGE2_OUTPUTTYPES
     {
         OutputSize = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 114 ) ;
-        Size = MAP_APPFONT ( 132 , 51 ) ;
+        Pos = MAP_APPFONT ( 6 , 110  ) ;
+        Size = MAP_APPFONT ( 134 , 8 ) ;
         Text = "Wählen Sie ein Ausgabemedium" ;
         Text [ ENGLISH ] = "Choose Your presentationoutput" ;
         Text [ dutch ] = "Kies een presentatiemedium" ;
@@ -389,8 +389,8 @@ ModalDialog DLG_ASS
     RadioButton RB_PAGE2_MEDIUM5
     {
         OutputSize = TRUE;
-        Pos = MAP_APPFONT ( 12, 127 );
-        Size = MAP_APPFONT ( 60, 10 );
+        Pos = MAP_APPFONT ( 12 , 121  );
+        Size = MAP_APPFONT ( 59 , 10 );
         Text = "~Original";
         Text [ ENGLISH ] = "~Original";
         Text [ ENGLISH_US ] = "~Original";
@@ -419,8 +419,8 @@ ModalDialog DLG_ASS
     RadioButton RB_PAGE2_MEDIUM1
     {
         OutputSize = TRUE ;
-        Pos = MAP_APPFONT ( 75 , 127 ) ;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Pos = MAP_APPFONT ( 75 , 121  ) ;
+        Size = MAP_APPFONT ( 59 , 10 ) ;
         Text = "~Bildschirm";
         Text [ ENGLISH ] = "S~creen";
         Text [ ENGLISH_US ] = "Sc~reen";
@@ -449,8 +449,8 @@ ModalDialog DLG_ASS
     RadioButton RB_PAGE2_MEDIUM2
     {
         OutputSize = TRUE ;
-        Pos = MAP_APPFONT ( 75 , 140 ) ;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Pos = MAP_APPFONT ( 75 , 135  ) ;
+        Size = MAP_APPFONT ( 59 , 10 ) ;
         TabStop = TRUE ;
         Text = "~Dia" ;
         Text [ ENGLISH ] = "~Slide" ;
@@ -480,8 +480,8 @@ ModalDialog DLG_ASS
     RadioButton RB_PAGE2_MEDIUM3
     {
         OutputSize = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 140 ) ;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 135  ) ;
+        Size = MAP_APPFONT ( 59 , 10 ) ;
         TabStop = TRUE ;
         Text = "F~olie" ;
         Text [ ENGLISH ] = "~Overhead" ;
@@ -511,8 +511,8 @@ ModalDialog DLG_ASS
     RadioButton RB_PAGE2_MEDIUM4
     {
         OutputSize = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 153 ) ;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 149  ) ;
+        Size = MAP_APPFONT ( 59 , 10 ) ;
         Text = "~Papier" ;
         Text [ ENGLISH ] = "~Paper" ;
         TabStop = TRUE ;
@@ -545,16 +545,16 @@ ModalDialog DLG_ASS
         OutputSize = TRUE ;
         Scale = TRUE;
         Border = TRUE;
-        Pos = MAP_APPFONT ( 6 , 4 ) ;
-        Size = MAP_APPFONT ( 256 , 29 ) ;
+        Pos = MAP_APPFONT ( 6 , 4  ) ;
+        Size = MAP_APPFONT ( 258 , 29 ) ;
         Fixed = Bitmap { File = "dlgass3.bmp" ; };
     };
 
-    GroupBox GRP_PAGE3_EFFECT
+    FixedLine FL_PAGE3_EFFECT
     {
         OutputSize = TRUE ;
-        Pos = MAP_APPFONT( 6, 36 );
-        Size = MAP_APPFONT( 132, 40 );
+        Pos = MAP_APPFONT ( 6 , 37  );
+        Size = MAP_APPFONT ( 134 , 8 );
         Text = "Wählen Sie einen Diawechsel";
         Text [ ENGLISH ] = "Choose your slide change";
         Text[ english_us ] = "Transition type selection";
@@ -583,8 +583,8 @@ ModalDialog DLG_ASS
     FixedText FT_PAGE3_EFFECT
     {
         OutputSize = TRUE ;
-        Pos = MAP_APPFONT( 12, 47 );
-        Size = MAP_APPFONT( 60, 10 );
+        Pos = MAP_APPFONT ( 12 , 49  );
+        Size = MAP_APPFONT ( 60 , 10 );
         Text = "~Effekt:";
         Text [ ENGLISH ] = "~Effect:";
         Text[ english_us ] = "~Effect:";
@@ -613,8 +613,8 @@ ModalDialog DLG_ASS
     ListBox LB_PAGE3_EFFECT
     {
         OutputSize = TRUE ;
-        Pos = MAP_APPFONT( 72, 46 );
-        Size = MAP_APPFONT( 60, 12 );
+        Pos = MAP_APPFONT ( 72 , 48  );
+        Size = MAP_APPFONT ( 60 , 12 );
         TabStop = TRUE;
         Border = TRUE;
         DropDown = TRUE;
@@ -623,8 +623,8 @@ ModalDialog DLG_ASS
     FixedText FT_PAGE3_SPEED
     {
         OutputSize = TRUE ;
-        Pos = MAP_APPFONT( 12, 62 );
-        Size = MAP_APPFONT( 60, 10 );
+        Pos = MAP_APPFONT ( 12 , 65  );
+        Size = MAP_APPFONT ( 60 , 10 );
         Text = "~Geschwindigkeit:";
         Text [ ENGLISH ] = "~Speed:";
         Text[ english_us ] = "~Speed:";
@@ -653,18 +653,18 @@ ModalDialog DLG_ASS
     ListBox LB_PAGE3_SPEED
     {
         OutputSize = TRUE ;
-        Pos = MAP_APPFONT( 72, 61 );
-        Size = MAP_APPFONT( 60, 12 );
+        Pos = MAP_APPFONT ( 72 , 64  );
+        Size = MAP_APPFONT ( 60 , 12 );
         TabStop = TRUE;
         Border = TRUE;
         DropDown = TRUE;
     };
 
-    GroupBox GRP_PAGE3_PRESTYPE
+    FixedLine FL_PAGE3_PRESTYPE
     {
         OutputSize = TRUE;
-        Pos = MAP_APPFONT( 6, 80 );
-        Size = MAP_APPFONT( 132, 84 );
+        Pos = MAP_APPFONT ( 6 , 83  );
+        Size = MAP_APPFONT ( 134 , 8 );
         Text = "Wählen Sie die Art der Präsentation";
         Text [ ENGLISH ] = "Choose the presentation kind";
         Text[ english_us ] = "Presentation type selection";
@@ -693,8 +693,8 @@ ModalDialog DLG_ASS
     RadioButton RB_PAGE3_LIVE
     {
         OutputSize = TRUE;
-        Pos = MAP_APPFONT( 14, 92 );
-        Size = MAP_APPFONT( 120, 10 );
+        Pos = MAP_APPFONT ( 12 , 94  );
+        Size = MAP_APPFONT ( 122 , 10 );
         Text = "~Standard";
         Text [ ENGLISH ] = "~Standard";
         Text[ english_us ] = "~Default";
@@ -723,8 +723,8 @@ ModalDialog DLG_ASS
     RadioButton RB_PAGE3_KIOSK
     {
         OutputSize = TRUE;
-        Pos = MAP_APPFONT( 14, 105 );
-        Size = MAP_APPFONT( 120, 10 );
+        Pos = MAP_APPFONT ( 12 , 108  );
+        Size = MAP_APPFONT ( 122 , 10 );
         Text = "~Automatisch";
         Text [ ENGLISH ] = "~Auto";
         Text[ english_us ] = "~Automatic";
@@ -753,8 +753,8 @@ ModalDialog DLG_ASS
     FixedText FT_PAGE3_TIME
     {
         OutputSize = TRUE;
-        Pos = MAP_APPFONT ( 23, 119 );
-        Size = MAP_APPFONT ( 51, 10 );
+        Pos = MAP_APPFONT ( 18 , 123  );
+        Size = MAP_APPFONT ( 55 , 10 );
         Text = "Stand~dauer";
         Text [ ENGLISH ] = "~Duration of page";
         Text[ english_us ] = "D~uration of page";
@@ -783,8 +783,8 @@ ModalDialog DLG_ASS
     TimeField TMF_PAGE3_TIME
     {
         OutputSize = TRUE;
-        Pos = MAP_APPFONT ( 77, 118 ) ;
-        Size = MAP_APPFONT ( 55, 12 ) ;
+        Pos = MAP_APPFONT ( 77 , 122  ) ;
+        Size = MAP_APPFONT ( 57 , 12 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -808,8 +808,8 @@ ModalDialog DLG_ASS
     FixedText FT_PAGE3_BREAK
     {
         OutputSize = TRUE;
-        Pos = MAP_APPFONT ( 23, 136 );
-        Size = MAP_APPFONT ( 51, 10 );
+        Pos = MAP_APPFONT ( 18 , 139  );
+        Size = MAP_APPFONT ( 55 , 10 );
         Text = "~Pausendauer";
         Text [ ENGLISH ] = "~Duration of pause";
         Text[ english_us ] = "Du~ration of pause";
@@ -838,8 +838,8 @@ ModalDialog DLG_ASS
     TimeField TMF_PAGE3_BREAK
     {
         OutputSize = TRUE;
-        Pos = MAP_APPFONT ( 77, 135 ) ;
-        Size = MAP_APPFONT ( 55, 12 ) ;
+        Pos = MAP_APPFONT ( 77 , 138  ) ;
+        Size = MAP_APPFONT ( 57 , 12 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -863,8 +863,8 @@ ModalDialog DLG_ASS
     CheckBox CB_PAGE3_LOGO
     {
         OutputSize = TRUE;
-        Pos = MAP_APPFONT( 23, 152 );
-        Size = MAP_APPFONT( 110, 10 );
+        Pos = MAP_APPFONT ( 18 , 154  );
+        Size = MAP_APPFONT ( 116 , 10 );
         TabStop = TRUE;
         Text = "~Logo einblenden";
         Text [ ENGLISH ] = "Show ~logo";
@@ -897,16 +897,16 @@ ModalDialog DLG_ASS
         OutputSize = TRUE ;
         Scale = TRUE;
         Border = TRUE;
-        Pos = MAP_APPFONT ( 6 , 4 ) ;
-        Size = MAP_APPFONT ( 256 , 29 ) ;
+        Pos = MAP_APPFONT ( 6 , 4  ) ;
+        Size = MAP_APPFONT ( 258 , 29 ) ;
         Fixed = Bitmap { File = "dlgass4.bmp" ; };
     };
 
-    GroupBox GRP_PAGE4_PERSONAL
+    FixedLine FL_PAGE4_PERSONAL
     {
         OutputSize = TRUE ;
-        Pos = MAP_APPFONT( 6, 36 );
-        Size = MAP_APPFONT( 258, 128 );
+        Pos = MAP_APPFONT ( 6 , 37  );
+        Size = MAP_APPFONT ( 260 , 8 );
         Text = "Nennen Sie Ihre Grundgedanken" ;
         Text [ ENGLISH ] = "Explain Your ideas" ;
         Text [ dutch ] = "Beschrijf eerst uw basisidee" ;
@@ -935,8 +935,8 @@ ModalDialog DLG_ASS
     FixedText FT_PAGE4_ASKNAME
     {
         OutputSize = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 47 ) ;
-        Size = MAP_APPFONT ( 244 , 10 ) ;
+        Pos = MAP_APPFONT ( 13 , 48  ) ;
+        Size = MAP_APPFONT ( 247 , 10 ) ;
         Text = "Wie ist Ihr Name oder der Name Ihrer Firma?" ;
         Text [ ENGLISH ] = "What is Your name or the of Your company?" ;
         Text [ dutch ] = "Hoe is uw naam of de naam van uw bedrijf?" ;
@@ -966,15 +966,15 @@ ModalDialog DLG_ASS
     {
         OutputSize = TRUE ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 15 , 60 ) ;
-        Size = MAP_APPFONT ( 239 , 12 ) ;
+        Pos = MAP_APPFONT ( 13 , 61  ) ;
+        Size = MAP_APPFONT ( 247 , 12 ) ;
         TabStop = TRUE ;
     };
     FixedText FT_PAGE4_ASKTOPIC
     {
         OutputSize = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 78 ) ;
-        Size = MAP_APPFONT ( 244 , 10 ) ;
+        Pos = MAP_APPFONT ( 13 , 77  ) ;
+        Size = MAP_APPFONT ( 247 , 10 ) ;
         Text = "Was ist der Themenbereich Ihrer Präsentation?" ;
         Text [ ENGLISH ] = "What is the topic of Your presentation?" ;
         Text [ dutch ] = "Wat is het onderwerp van uw presentatie ?" ;
@@ -1003,15 +1003,15 @@ ModalDialog DLG_ASS
     {
         OutputSize = TRUE ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 15 , 91 ) ;
-        Size = MAP_APPFONT ( 239 , 12 ) ;
+        Pos = MAP_APPFONT ( 13 , 90  ) ;
+        Size = MAP_APPFONT ( 247 , 12 ) ;
         TabStop = TRUE ;
     };
     FixedText FT_PAGE4_ASKINFORMATION
     {
         OutputSize = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 109 ) ;
-        Size = MAP_APPFONT ( 244 , 10 ) ;
+        Pos = MAP_APPFONT ( 13 , 106  ) ;
+        Size = MAP_APPFONT ( 247 , 10 ) ;
         Text = "Weitere darzustellende Gedanken?" ;
         Text [ ENGLISH ] = "Further things to be mentioned?" ;
         Text [ dutch ] = "Verdere ideeën die u wilt realiseren?" ;
@@ -1040,8 +1040,8 @@ ModalDialog DLG_ASS
     {
         OutputSize = TRUE ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 15 , 122 ) ;
-        Size = MAP_APPFONT ( 239 , 34 ) ;
+        Pos = MAP_APPFONT ( 13 , 119  ) ;
+        Size = MAP_APPFONT ( 247 , 34 ) ;
         TabStop = TRUE ;
         VSCROLL = TRUE ;
     };
@@ -1052,16 +1052,16 @@ ModalDialog DLG_ASS
         OutputSize = TRUE ;
         Scale = TRUE;
         Border = TRUE;
-        Pos = MAP_APPFONT ( 6 , 4 ) ;
-        Size = MAP_APPFONT ( 256 , 29 ) ;
+        Pos = MAP_APPFONT ( 6 , 4  ) ;
+        Size = MAP_APPFONT ( 258 , 29 ) ;
         Fixed = Bitmap { File = "dlgass5.bmp" ; };
     };
 
     FixedText FT_PAGE5_PAGELIST
     {
         OutputSize = TRUE ;
-        Pos = MAP_APPFONT( 6, 38);
-        Size = MAP_APPFONT( 132, 10 );
+        Pos = MAP_APPFONT ( 6 , 39  );
+        Size = MAP_APPFONT ( 132 , 10 );
         Text = "~Wählen Sie die gewünschten Seiten";
         Text [ ENGLISH ] = "~Choose your pages";
         Text[ english_us ] = "Ch~oose your pages";
@@ -1090,16 +1090,16 @@ ModalDialog DLG_ASS
     Control CT_PAGE5_PAGELIST
     {
         OutputSize = TRUE ;
-        Pos = MAP_APPFONT( 6, 51 );
-        Size = MAP_APPFONT( 132, 100 );
+        Pos = MAP_APPFONT ( 6 , 52  );
+        Size = MAP_APPFONT ( 132 , 97 );
         Border = TRUE;
     };
 
     CheckBox CB_PAGE5_SUMMARY
     {
         OutputSize = TRUE;
-        Pos = MAP_APPFONT( 6, 157 );
-        Size = MAP_APPFONT( 132, 10 );
+        Pos = MAP_APPFONT ( 6 , 154  );
+        Size = MAP_APPFONT ( 132 , 10 );
         Text = "~Zusammenfassung erstellen";
         Text [ ENGLISH ] = "~Create summary";
         Text[ english_us ] = "C~reate summary";
@@ -1257,5 +1257,11 @@ ModalDialog DLG_ASS
     Text[ catalan ] = "AutoPiloto Presentación";
     Text[ finnish ] = "Automaattinen esityksen ohjaus";
 };
+
+
+
+
+
+
 
 
