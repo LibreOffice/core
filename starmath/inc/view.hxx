@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:21:21 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:29:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ class SmGraphicWindow : public ScrollableWindow
     Rectangle       aCursorRect;
 
     ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessible >  xAccessible;
+        ::com::sun::star::accessibility::XAccessible >  xAccessible;
     SmGraphicAccessible *                                       pAccessible;
 
     SmViewShell    *pViewShell;
@@ -156,7 +156,7 @@ public:
     void ApplyColorConfigValues( const svtools::ColorConfig &rColorCfg );
 
     // for Accessibility
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > CreateAccessible();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
     SmGraphicAccessible *   GetAccessible()  { return pAccessible; }
 };
