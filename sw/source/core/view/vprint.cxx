@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vprint.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 18:20:40 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 11:22:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1482,6 +1482,8 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress,
                         }
                         SwPaintQueue::Repaint();
 
+#ifdef LONG_TABLE_HACK
+
                         // OD 03.03.2003 #103602# - printing contents of table,
                         // which doesn't fit on the page on an extra page, doesn't
                         // work as excepted for PDF export. Thus, do *not*
@@ -1562,6 +1564,8 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress,
                             }
                         }
                         } // END OF If ( !pPDFOut ); OD 03.03.2003 #103602#
+
+#endif
 
                         // Wenn PostIts nach Seite gedruckt werden sollen ...
                         if( (!rOptions.bPrintReverse) &&
