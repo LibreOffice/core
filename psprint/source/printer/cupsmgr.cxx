@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cupsmgr.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 17:47:03 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 08:53:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -414,7 +414,7 @@ void CUPSManager::initialize()
     // if not behave like old printing system
     osl::MutexGuard aGuard( m_aCUPSMutex );
 
-    if( ! (m_nDests && m_pDests ) )
+    if( ! m_bNewDests )
         return;
 
     // dest thread has run, clean up
@@ -424,11 +424,13 @@ void CUPSManager::initialize()
         osl_destroyThread( m_aDestThread );
         m_aDestThread = NULL;
     }
+    m_bNewDests = false;
 
     // clear old stuff
     m_aCUPSDestMap.clear();
 
-    m_bNewDests = false;
+    if( ! (m_nDests && m_pDests ) )
+        return;
 
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
     int nPrinter = m_nDests;
