@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AdabasStat.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:21:33 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:51:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,7 @@ ModalDialog DLG_ADABASSTAT
         Text[ czech ] = "Databázové soubory";
         Text[ hebrew ] = "Datenbankdateien";
         Text[ hindi ] = "लेखासंचय फाइलें";
+        Text[ slovak ] = "Databázové súbory";
     };
 
     FixedText FT_SYSDEVSPACE
@@ -139,6 +140,7 @@ ModalDialog DLG_ADABASSTAT
         Text[ hebrew ] = "S~YSDEVSPACE:";
         Text[ thai ] = "S~YSDEVSPACE:";
         Text[ hindi ] = "S~YSDEVSPACE:";
+        Text[ slovak ] = "S~YSDEVSPACE:";
     };
 
     Edit ET_SYSDEVSPACE
@@ -180,6 +182,7 @@ ModalDialog DLG_ADABASSTAT
         Text[ hebrew ] = "~TRANSACTIONLOG:";
         Text[ thai ] = "~TRANSACTIONLOG:";
         Text[ hindi ] = "~TRANSACTIONLOG:";
+        Text[ slovak ] = "~TRANSACTIONLOG:";
     };
 
     Edit ET_TRANSACTIONLOG
@@ -221,6 +224,7 @@ ModalDialog DLG_ADABASSTAT
         Text[ hebrew ] = "DATAD~EVSPACE:";
         Text[ thai ] = "DATAD~EVSPACE:";
         Text[ hindi ] = "DATAD~EVSPACE:";
+        Text[ slovak ] = "DATAD~EVSPACE:";
     };
 
     ListBox LB_DATADEVS
@@ -263,6 +267,7 @@ ModalDialog DLG_ADABASSTAT
         Text[ czech ] = "Velikosti databáze";
         Text[ hebrew ] = "Datenbankgrößen";
         Text[ hindi ] = "लेखासंचय परिमाण";
+        Text[ slovak ] = "Veľkosť databázy";
     };
 
     FixedText FT_SIZE
@@ -295,6 +300,7 @@ ModalDialog DLG_ADABASSTAT
         Text[ czech ] = "Velikost (MB):";
         Text[ hebrew ] = "~Gesamtgröße (MB):";
         Text[ hindi ] = "~परिमाण (MB):";
+        Text[ slovak ] = "V~eľkosť (MB):";
     };
 
     Edit ET_SIZE
@@ -336,6 +342,7 @@ ModalDialog DLG_ADABASSTAT
         Text[ czech ] = "Volné místo v paměti (MB):";
         Text[ hebrew ] = "~Freier Speicher (MB):";
         Text[ hindi ] = "~खाली मेमरी जगह (MB):";
+        Text[ slovak ] = "Voľné mi~esto v pamäti (MB):";
     };
 
     Edit ET_FREESIZE
@@ -377,6 +384,7 @@ ModalDialog DLG_ADABASSTAT
         Text[ czech ] = "Využití paměti (v %):";
         Text[ hebrew ] = "S~peicherausnutzung (in %):";
         Text[ hindi ] = "~मेमरी उपयोग (% में):";
+        Text[ slovak ] = "Využitie pa~mäti (v %):";
     };
 
     NumericField ET_MEMORYUSING
@@ -422,6 +430,7 @@ ModalDialog DLG_ADABASSTAT
     Text[ czech ] = "Statistiky databáze";
     Text[ hebrew ] = "Datenbank Statistiken";
     Text[ hindi ] = "लेखासंचय अँकडे";
+    Text[ slovak ] = "Databázová štatistika";
 };
 
 String STR_ADABAS_HELP_SYSDEVSPACE
@@ -452,6 +461,7 @@ String STR_ADABAS_HELP_SYSDEVSPACE
     Text[ czech ] = "Obsahuje systémové tabulky";
     Text[ hebrew ] = "Enthält die Systemtabellen";
     Text[ hindi ] = "सिस्टम् सारणियाँ सम्मिलित है";
+    Text[ slovak ] = "Obsahuje systémové tabuľky";
 };
 
 String STR_ADABAS_HELP_TRANSACT
@@ -482,6 +492,7 @@ String STR_ADABAS_HELP_TRANSACT
     Text[ czech ] = "Obsahuje informace o transakci";
     Text[ hebrew ] = "Enthält Information über Transaktion";
     Text[ hindi ] = "व्यवहार के बारे में जानकारी सम्मिलित है";
+    Text[ slovak ] = "Obsahuje informácie o transakciách";
 };
 
 String STR_ADABAS_HELP_DATADEVSPACES
@@ -512,6 +523,7 @@ String STR_ADABAS_HELP_DATADEVSPACES
     Text[ czech ] = "Obsahuje všechny datové soubory";
     Text[ hebrew ] = "Enthält alle Daten Dateien";
     Text[ hindi ] = "सभी ड़ॉटा फाइलें सम्मिलित है";
+    Text[ slovak ] = "Obsahuje všetky dátové súbory";
 };
 
 String STR_ADABAS_HELP_SIZE
@@ -542,6 +554,7 @@ String STR_ADABAS_HELP_SIZE
     Text[ czech ] = "Celková velikost databázových souborů";
     Text[ hebrew ] = "Gesamt Größe der Datenbank Dateien";
     Text[ hindi ] = "लेखासंचय फाइलों का कुल परिमाण";
+    Text[ slovak ] = "Celková veľkosť databázových súborov";
 };
 
 String STR_ADABAS_HELP_FREESIZE
@@ -572,6 +585,7 @@ String STR_ADABAS_HELP_FREESIZE
     Text[ czech ] = "Volné místo před vytvořením nového datového souboru.";
     Text[ hebrew ] = "Noch zur Verfügung stehender Speicher bevor eine neue Datadev Datei erzeugt wird.";
     Text[ hindi ] = "वर्तमान में नया datadev फाइल उत्पन्न करने से पहिले का उपलब्ध जगह ।";
+    Text[ slovak ] = "Voľné miesto pred vytvorením nového dátového súboru.";
 };
 
 String STR_ADABAS_HELP_MEMORYUSING
@@ -602,6 +616,7 @@ String STR_ADABAS_HELP_MEMORYUSING
     Text[ czech ] = "Právě používaná paměť";
     Text[ hebrew ] = "Zur Zeit verbrauchter Speicherplatz";
     Text[ hindi ] = "वर्तमान में उपयोग की हुयी मेमरी";
+    Text[ slovak ] = "Práve používaná pamäť";
 };
 
 String STR_ADABAS_ERROR_SYSTEMTABLES
@@ -632,7 +647,10 @@ String STR_ADABAS_ERROR_SYSTEMTABLES
     Text[ czech ] = "Nebylo možno zobrazit žádné informace, protože nemáte přístupová práva k potřebným systémovým tabulkám.";
     Text[ hebrew ] = "Es können keine Informationen angezeigt werden, da keine Zugriffsberechtigung auf die benötigten Systemtabellen besteht";
     Text[ hindi ] = "सिस्टम सारणी केलिए प्रवेश अधिकार न होने के कारण कोई जानकारी को नहीं दिखा सकते है ।";
+    Text[ slovak ] = "Nebola zobrazená žiadna informácia, pretože neexistujú prístupové práva k požadovaným systémovým tabuľkám.";
 };
+
+
 
 
 
