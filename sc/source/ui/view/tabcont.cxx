@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabcont.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-04 14:32:15 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 20:10:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -400,7 +400,8 @@ void __EXPORT ScTabControl::Command( const CommandEvent& rCEvt )
             }
             */
             //  Popup-Menu:
-            pViewSh->GetDispatcher()->ExecutePopup( ScResId(RID_POPUP_TAB) );
+            //  get Dispatcher from ViewData (ViewFrame) instead of Shell (Frame), so it can't be null
+            pViewData->GetDispatcher().ExecutePopup( ScResId(RID_POPUP_TAB) );
         }
     }
 }
