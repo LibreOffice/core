@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hangulhanjadlg.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 17:41:58 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 15:46:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,9 +58,12 @@
  *
  *
  ************************************************************************/
-
 #ifndef SVX_HANGUL_HANJA_DLG_HRC
 #define SVX_HANGUL_HANJA_DLG_HRC
+
+#ifndef _SVT_CONTROLDIMS_HRC_
+#include <svtools/controldims.hrc>
+#endif
 
 // PushButton
 #define PB_FIND         1
@@ -90,5 +93,127 @@
 // String
 #define STR_HANGUL                  1
 #define STR_HANJA                   2
+
+
+// Hangul / Hanja Options Dialog
+
+#define FT_USERDEFDICT              1
+#define FL_OPTIONS                  2
+
+#define LB_DICTS                    1
+
+#define CB_IGNOREPOST               1
+#define CB_AUTOCLOSE                2
+#define CB_SHOWRECENTLYFIRST        3
+#define CB_AUTOREPLACEUNIQUE        4
+
+#define PB_HHO_NEW                  1
+#define PB_HHO_EDIT                 2
+#define PB_HHO_DELETE               3
+#define PB_HHO_OK                   4
+#define PB_HHO_CANCEL               5
+#define PB_HHO_HELP                 6
+
+// metrics
+
+#define HHO_DLGWIDTH                287
+#define HHx_DLGHIGHT                195
+#define HHO_COL_1                   RSC_SP_DLG_INNERBORDER_LEFT
+#define HHO_COL_1a                  (HHO_COL_1+3)
+#define HHO_COL_6                   (HHO_DLGWIDTH-6)
+#define HHO_COL_5                   (HHO_COL_6-50)
+#define HHO_COL_4                   (HHO_COL_5-12)
+#define HHO_COL_3                   (HHO_COL_4-50)
+#define HHO_COL_2                   (HHO_COL_3-6)
+
+#define HHO_ROW_1                   RSC_SP_DLG_INNERBORDER_TOP
+#define HHO_ROW_2                   (HHO_ROW_1+8+2)
+#define HHO_ROW_3                   (HHO_ROW_2+14)
+#define HHO_ROW_4                   (HHO_ROW_3+2)
+#define HHO_ROW_5                   (HHO_ROW_4+14)
+#define HHO_ROW_6                   (HHO_ROW_5+2)
+#define HHO_ROW_7                   (HHO_ROW_6+14)
+#define HHO_ROW_8                   (HHO_ROW_7+4)
+#define HHO_ROW_9                   (HHO_ROW_8+8+4)
+#define HHO_ROW_10                  (HHO_ROW_9+8+4)
+#define HHO_ROW_11                  (HHO_ROW_10+8+4)
+#define HHO_ROW_12                  (HHO_ROW_11+8+4)
+
+#define HHO_ROW_a1                  HHO_ROW_1
+#define HHO_ROW_a2                  (HHO_ROW_a1+14)
+#define HHO_ROW_a3                  (HHO_ROW_a2+2)
+#define HHO_ROW_a4                  (HHO_ROW_a3+14)
+#define HHO_ROW_a5                  (HHO_ROW_a4+4)
+#define HHO_ROW_a6                  (HHO_ROW_a5+14)
+
+
+// Hangul / Hanja New Dictonary Dialog
+#define FL_NEWDICT                  1
+
+#define FT_DICTNAME                 1
+
+#define ED_DICTNAME                 1
+
+#define PB_NEWDICT_OK               1
+#define PB_NEWDICT_ESC              2
+#define PB_NEWDICT_HLP              3
+
+
+// Hangul Hanja Edit Custom Dictionary Dialog
+#define MAXNUM_SUGGESTIONS          50
+
+#define STR_EDITHINT                1
+
+#define FT_BOOK                     1
+#define FT_ORIGINAL                 2
+#define FT_SUGGESTIONS              3
+
+#define LB_BOOK                     1
+#define LB_ORIGINAL                 2
+
+#define CB_REPLACEBYCHAR            1
+
+#define PB_HHE_NEW                  1
+#define PB_HHE_DELETE               2
+#define PB_HHE_HELP                 3
+#define PB_HHE_CLOSE                4
+
+#define SB_SCROLL                   1
+
+#define ED_1                        1
+#define ED_2                        2
+#define ED_3                        3
+#define ED_4                        4
+
+// metrics
+
+#define RSC_CD_VSCRLWIDTH           8       // vertical scroll bar width
+#define HHE_DLGWIDTH                HHO_DLGWIDTH
+#define HHE_COL_1                   RSC_SP_DLG_INNERBORDER_LEFT
+#define HHE_COL_6                   (HHE_DLGWIDTH-RSC_SP_DLG_INNERBORDER_RIGHT)
+#define HHE_COL_5                   (HHE_COL_6-RSC_CD_PUSHBUTTON_WIDTH)
+#define HHE_COL_4                   (HHE_COL_5-6)
+#define HHE_COL_3_2                 (HHE_COL_4-RSC_CD_VSCRLWIDTH)
+#define HHE_COL_3_1                 (HHE_COL_3_2-RSC_SP_CTRL_GROUP_X)
+#define HHE_COL_3_0                 (HHE_COL_3_2-RSC_CD_PUSHBUTTON_WIDTH)
+#define HHE_COL_2                   (HHE_COL_1+50)
+#define HHE_COL_3                   (HHE_COL_2+1)
+
+#define HHE_ROW_1                   RSC_SP_DLG_INNERBORDER_TOP
+#define HHE_ROW_2                   (HHE_ROW_1+2)
+#define HHE_ROW_3                   (HHE_ROW_2+12)
+#define HHE_ROW_4                   (HHE_ROW_3+12)
+#define HHE_ROW_5                   (HHE_ROW_4+8+2)
+#define HHE_ROW_6                   (HHE_ROW_5+12)
+#define HHE_ROW_7                   (HHE_ROW_6+2)
+#define HHE_ROW_8                   (HHE_ROW_7+2)
+#define HHE_ROW_9                   (HHE_ROW_6+12)
+#define HHE_ROW_10                  (HHE_ROW_8+RSC_CD_FIXEDTEXT_HEIGHT+RSC_SP_CTRL_GROUP_Y)
+#define HHE_ROW_11                  (HHE_ROW_10+8+2)
+#define HHE_ROW_12                  (HHE_ROW_11+4*12)
+#define HHE_ROW_14                  (HHx_DLGHIGHT-RSC_SP_DLG_INNERBORDER_BOTTOM)
+#define HHE_ROW_13                  (HHE_ROW_14-RSC_CD_PUSHBUTTON_HEIGHT)
+#define HHE_ROW_a1                  (HHE_ROW_5)
+#define HHE_ROW_a3                  (HHE_ROW_a1+RSC_CD_PUSHBUTTON_HEIGHT+2)
 
 #endif // SVX_HANGUL_HANJA_DLG_HRC
