@@ -2,9 +2,9 @@
  *
  *  $RCSfile: combobox.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: pl $ $Date: 2002-04-19 12:11:57 $
+ *  last change: $Author: mt $ $Date: 2002-04-24 14:49:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -641,7 +641,7 @@ void ComboBox::StateChanged( StateChangedType nType )
 {
     Edit::StateChanged( nType );
 
-    if ( ( nType == STATE_CHANGE_ENABLE ) || ( nType == STATE_CHANGE_READONLY ) )
+    if ( nType == STATE_CHANGE_READONLY )
     {
         mpImplLB->SetReadOnly( IsReadOnly() );
         if ( mpBtn )
