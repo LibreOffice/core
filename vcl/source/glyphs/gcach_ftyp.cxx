@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.73 $
- *  last change: $Author: hdu $ $Date: 2002-07-30 12:09:13 $
+ *  $Revision: 1.74 $
+ *  last change: $Author: hdu $ $Date: 2002-08-13 08:10:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -646,14 +646,17 @@ void FreetypeServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor
 
 int SetVerticalFlags( sal_Unicode nChar )
 {
-    if ( (nChar >= 0x1100 && nChar <= 0x11f9)   // Hangul Jamo
-    ||   (nChar >= 0x3000 && nChar <= 0xfaff) ) // other CJK
+    if( (nChar >= 0x1100 && nChar <= 0x11f9)   // Hangul Jamo
+    ||  (nChar >= 0x3000 && nChar <= 0xfaff) ) // other CJK
     {
         if( nChar == 0x2010 || nChar == 0x2015
         ||  nChar == 0x2016 || nChar == 0x2026
-        || (nChar >= 0x3008 && nChar <= 0x3017) )
+        || (nChar >= 0x3008 && nChar <= 0x301C && nChar != 0x3012)
+        ||  nChar == 0xFF3B || nChar == 0xFF3D
+        || (nChar >= 0xFF5B && nChar <= 0xFF63)
+        ||  nChar == 0xFFE3 )
             return GF_NONE;   // not rotated
-        else if ( nChar == 0x30fc )
+        else if( nChar == 0x30fc )
             return GF_ROTR;  // right
         return GF_ROTL;      // left
     }
@@ -675,9 +678,11 @@ static inline void SplitGlyphFlags( int& nGlyphIndex, int& nGlyphFlags )
 int FreetypeServerFont::ApplyGlyphTransform( int nGlyphFlags, FT_GlyphRec_* pGlyphFT ) const
 {
     int nAngle = GetFontSelData().mnOrientation;
+    // shortcut most common case
+    if( !nAngle && !nGlyphFlags )
+        return nAngle;
+
     const FT_Size_Metrics& rMetrics = maFaceFT->size->metrics;
-
-
     FT_Vector aVector;
     FT_Matrix aMatrix;
 
@@ -790,17 +795,20 @@ int FreetypeServerFont::FixupGlyphIndex( int nGlyphIndex, sal_Unicode aChar ) co
     int nGlyphFlags = GF_NONE;
 
     // do glyph substitution if necessary
-    GlyphSubstitution::const_iterator it = maGlyphSubstitution.find( nGlyphIndex );
-    // use OpenType substitution if available
-    if( it != maGlyphSubstitution.end() )
-    {
-        nGlyphIndex = (*it).second;
-        nGlyphFlags |= GF_GSUB;
-    }
-
     // CJK vertical writing needs special treatment
     if( GetFontSelData().mbVertical )
-        nGlyphFlags |= SetVerticalFlags( aChar );
+    {
+        // TODO: rethink when GSUB is used for non-vertical case
+        GlyphSubstitution::const_iterator it = maGlyphSubstitution.find( nGlyphIndex );
+        if( it == maGlyphSubstitution.end() )
+          nGlyphFlags |= SetVerticalFlags( aChar );
+        else
+        {
+            // for vertical GSUB also compensate for nOrientation=2700
+            nGlyphIndex = (*it).second;
+            nGlyphFlags |= GF_GSUB | GF_ROTL;
+        }
+    }
 
 #if !defined(TT_CONFIG_OPTION_BYTECODE_INTERPRETER)
     // #95556# autohinting not yet optimized for non-western glyph styles
@@ -1223,29 +1231,32 @@ ULONG FreetypeServerFont::GetKernPairs( ImplKernPairData** ppKernPairs ) const
     ImplKernPairData aKernPair;
 
     const FT_Byte* pBuffer = pKern;
-    USHORT nVersion = NEXT_UShort( pBuffer );
-    USHORT nTableCnt = NEXT_UShort( pBuffer );
+    USHORT nVersion = GetUShort( pBuffer+0 );
+    USHORT nTableCnt = GetUShort( pBuffer+2 );
+    pBuffer += 4;
     if( nVersion != 0 )     // ignore Apple's versions for now
         nTableCnt = 0;
     for( USHORT nTableIdx = 0; nTableIdx < nTableCnt; ++nTableIdx )
     {
-        USHORT nSubVersion  = NEXT_UShort( pBuffer );
-        USHORT nSubLength   = NEXT_UShort( pBuffer );
-        USHORT nSubCoverage = NEXT_UShort( pBuffer );
+        USHORT nSubVersion  = GetUShort( pBuffer+0 );
+        USHORT nSubLength   = GetUShort( pBuffer+2 );
+        USHORT nSubCoverage = GetUShort( pBuffer+4 );
+        pBuffer += 6;
         if( (nSubCoverage&0x03) != 0x01 )   // no interest in minimum info here
             continue;
         switch( nSubCoverage >> 8 )
         {
             case 0: // version 0, kerning format 0
             {
-                USHORT nPairs = NEXT_UShort( pBuffer );
-                pBuffer += 6;   // skip search hints
+                USHORT nPairs = GetUShort( pBuffer );
+                pBuffer += 8;   // skip search hints
                 aKernGlyphVector.reserve( aKernGlyphVector.size() + nPairs );
                 for( int i = 0; i < nPairs; ++i )
                 {
-                    aKernPair.mnChar1 = NEXT_UShort( pBuffer );
-                    aKernPair.mnChar2 = NEXT_UShort( pBuffer );
-                    /*long nUnscaledKern=*/ NEXT_Short( pBuffer );
+                    aKernPair.mnChar1 = GetUShort( pBuffer+0 );
+                    aKernPair.mnChar2 = GetUShort( pBuffer+2 );
+                    //long nUnscaledKern= GetSShort( pBuffer );
+                    pBuffer += 6;
                     aKernGlyphVector.push_back( aKernPair );
                 }
             }
@@ -1254,18 +1265,19 @@ ULONG FreetypeServerFont::GetKernPairs( ImplKernPairData** ppKernPairs ) const
             case 2: // version 0, kerning format 2
             {
                 const FT_Byte* pSubTable = pBuffer;
-                /*USHORT nRowWidth  =*/ NEXT_UShort( pBuffer );
-                USHORT nOfsLeft     = NEXT_UShort( pBuffer );
-                USHORT nOfsRight    = NEXT_UShort( pBuffer );
-                USHORT nOfsArray    = NEXT_UShort( pBuffer );
+                //USHORT nRowWidth  = GetUShort( pBuffer+0 );
+                USHORT nOfsLeft     = GetUShort( pBuffer+2 );
+                USHORT nOfsRight    = GetUShort( pBuffer+4 );
+                USHORT nOfsArray    = GetUShort( pBuffer+6 );
+                pBuffer += 8;
 
                 const FT_Byte* pTmp = pSubTable + nOfsLeft;
-                USHORT nFirstLeft   = NEXT_UShort( pTmp );
-                USHORT nLastLeft    = NEXT_UShort( pTmp ) + nFirstLeft - 1;
+                USHORT nFirstLeft   = GetUShort( pTmp+0 );
+                USHORT nLastLeft    = GetUShort( pTmp+2 ) + nFirstLeft - 1;
 
                 pTmp = pSubTable + nOfsRight;
-                USHORT nFirstRight  = NEXT_UShort( pTmp );
-                USHORT nLastRight   = NEXT_UShort( pTmp ) + nFirstRight - 1;
+                USHORT nFirstRight  = GetUShort( pTmp+0 );
+                USHORT nLastRight   = GetUShort( pTmp+2 ) + nFirstRight - 1;
 
                 ULONG nPairs = (ULONG)(nLastLeft - nFirstLeft + 1) * (nLastRight - nFirstRight + 1);
                 aKernGlyphVector.reserve( aKernGlyphVector.size() + nPairs );
@@ -1276,11 +1288,12 @@ ULONG FreetypeServerFont::GetKernPairs( ImplKernPairData** ppKernPairs ) const
                     aKernPair.mnChar1 = nLeft;
                     for( int nRight = 0; nRight < nLastRight; ++nRight )
                     {
-                        if( NEXT_Short( pTmp ) != 0 )
+                        if( GetUShort( pTmp ) != 0 )
                         {
                             aKernPair.mnChar2 = nRight;
                             aKernGlyphVector.push_back( aKernPair );
                         }
+                        pTmp += 2;
                     }
                 }
             }
@@ -1386,8 +1399,8 @@ PolyArgs::PolyArgs( PolyPolygon& rPolyPoly, USHORT nMaxPoints )
     mnPoly(0),
     bHasOffline(false)
 {
-    mpPointAry  = new Point [ mnMaxPoints ];
-    mpFlagAry   = new BYTE  [ mnMaxPoints ];
+    mpPointAry  = new Point[ mnMaxPoints ];
+    mpFlagAry   = new BYTE [ mnMaxPoints ];
 }
 
 // -----------------------------------------------------------------------
@@ -1437,7 +1450,6 @@ void PolyArgs::ClosePolygon()
 // -----------------------------------------------------------------------
 
 // TODO: wait till all compilers accept that calling conventions
-
 // for functions are the same independent of implementation constness,
 // then uncomment the const-tokens in the function interfaces below
 static int FT_move_to( FT_Vector* /*const*/ p0, void* vpPolyArgs )
@@ -1556,10 +1568,11 @@ bool FreetypeServerFont::ApplyGSUB( const ImplFontSelectData& rFSD )
 
     // parse GSUB header
     const FT_Byte* pGsubHeader = pGsubBase;
-    const ULONG nVersion            = NEXT_Long( pGsubHeader );
-    const USHORT nOfsScriptList     = NEXT_UShort( pGsubHeader );
-    const USHORT nOfsFeatureTable   = NEXT_UShort( pGsubHeader );
-    const USHORT nOfsLookupList     = NEXT_UShort( pGsubHeader );
+    const ULONG nVersion            = GetUInt( pGsubHeader+0 );
+    const USHORT nOfsScriptList     = GetUShort( pGsubHeader+4 );
+    const USHORT nOfsFeatureTable   = GetUShort( pGsubHeader+6 );
+    const USHORT nOfsLookupList     = GetUShort( pGsubHeader+8 );
+    pGsubHeader += 10;
 
     typedef std::vector<USHORT> UshortList;
     UshortList aFeatureIndexList;
@@ -1567,22 +1580,26 @@ bool FreetypeServerFont::ApplyGSUB( const ImplFontSelectData& rFSD )
 
     // parse Script Table
     const FT_Byte* pScriptHeader = pGsubBase + nOfsScriptList;
-    const USHORT nCntScript = NEXT_UShort( pScriptHeader );
+    const USHORT nCntScript = GetUShort( pScriptHeader+0 );
+    pScriptHeader += 2;
     for( USHORT nScriptIndex = 0; nScriptIndex < nCntScript; ++nScriptIndex )
     {
-        const ULONG nTag            = NEXT_Long( pScriptHeader ); // e.g. hani/arab/kana/hang
-        const USHORT nOfsScriptTable= NEXT_UShort( pScriptHeader );
+        const ULONG nTag            = GetUInt( pScriptHeader+0 ); // e.g. hani/arab/kana/hang
+        const USHORT nOfsScriptTable= GetUShort( pScriptHeader+4 );
+        pScriptHeader += 6; //###
         if( (nTag != nRequestedScript) && (nRequestedScript != 0) )
             continue;
 
         const FT_Byte* pScriptTable     = pGsubBase + nOfsScriptList + nOfsScriptTable;
-        const USHORT nDefaultLangsysOfs = NEXT_UShort( pScriptTable );
-        const USHORT nCntLangSystem     = NEXT_UShort( pScriptTable );
+        const USHORT nDefaultLangsysOfs = GetUShort( pScriptTable+0 );
+        const USHORT nCntLangSystem     = GetUShort( pScriptTable+2 );
+        pScriptTable += 4;
         USHORT nLangsysOffset = 0;
         for( USHORT nLangsysIndex = 0; nLangsysIndex < nCntLangSystem; ++nLangsysIndex )
         {
-            const ULONG nTag    = NEXT_Long( pScriptTable );    // e.g. KOR/ZHS/ZHT/JAN
-            const USHORT nOffset= NEXT_UShort( pScriptTable );
+            const ULONG nTag    = GetUInt( pScriptTable+0 );    // e.g. KOR/ZHS/ZHT/JAN
+            const USHORT nOffset= GetUShort( pScriptTable+4 );
+            pScriptTable += 6;
             if( (nTag != nRequestedLangsys) && (nRequestedLangsys != 0) )
                 continue;
             nLangsysOffset = nOffset;
@@ -1592,13 +1609,15 @@ bool FreetypeServerFont::ApplyGSUB( const ImplFontSelectData& rFSD )
         if( (nDefaultLangsysOfs != 0) && (nDefaultLangsysOfs != nLangsysOffset) )
         {
             const FT_Byte* pLangSys = pGsubBase + nOfsScriptList + nOfsScriptTable + nDefaultLangsysOfs;
-            const USHORT nLookupOrder   = NEXT_UShort( pLangSys );
-            const USHORT nReqFeatureIdx = NEXT_UShort( pLangSys );
-            const USHORT nCntFeature    = NEXT_UShort( pLangSys );
+            const USHORT nLookupOrder   = GetUShort( pLangSys+0 );
+            const USHORT nReqFeatureIdx = GetUShort( pLangSys+2 );
+            const USHORT nCntFeature    = GetUShort( pLangSys+4 );
+            pLangSys += 6;
             aFeatureIndexList.push_back( nReqFeatureIdx );
             for( USHORT i = 0; i < nCntFeature; ++i )
             {
-                const USHORT nFeatureIndex = NEXT_UShort( pLangSys );
+                const USHORT nFeatureIndex = GetUShort( pLangSys );
+                pLangSys += 2;
                 aFeatureIndexList.push_back( nFeatureIndex );
             }
         }
@@ -1606,13 +1625,15 @@ bool FreetypeServerFont::ApplyGSUB( const ImplFontSelectData& rFSD )
         if( nLangsysOffset != 0 )
         {
             const FT_Byte* pLangSys = pGsubBase + nOfsScriptList + nOfsScriptTable + nLangsysOffset;
-            const USHORT nLookupOrder   = NEXT_UShort( pLangSys );
-            const USHORT nReqFeatureIdx = NEXT_UShort( pLangSys );
-            const USHORT nCntFeature    = NEXT_UShort( pLangSys );
+            const USHORT nLookupOrder   = GetUShort( pLangSys+0 );
+            const USHORT nReqFeatureIdx = GetUShort( pLangSys+2 );
+            const USHORT nCntFeature    = GetUShort( pLangSys+4 );
+            pLangSys += 6;
             aFeatureIndexList.push_back( nReqFeatureIdx );
             for( USHORT i = 0; i < nCntFeature; ++i )
             {
-                const USHORT nFeatureIndex = NEXT_UShort( pLangSys );
+                const USHORT nFeatureIndex = GetUShort( pLangSys );
+                pLangSys += 2;
                 aFeatureIndexList.push_back( nFeatureIndex );
             }
         }
@@ -1626,11 +1647,13 @@ bool FreetypeServerFont::ApplyGSUB( const ImplFontSelectData& rFSD )
 
     // parse Feature Table
     const FT_Byte* pFeatureHeader = pGsubBase + nOfsFeatureTable;
-    const USHORT nCntFeature = NEXT_UShort( pFeatureHeader );
+    const USHORT nCntFeature = GetUShort( pFeatureHeader );
+    pFeatureHeader += 2;
     for( USHORT nFeatureIndex = 0; nFeatureIndex < nCntFeature; ++nFeatureIndex )
     {
-        const ULONG nTag    = NEXT_Long( pFeatureHeader ); // e.g. locl/vert/trad/smpl/liga/fina/...
-        const USHORT nOffset= NEXT_UShort( pFeatureHeader );
+        const ULONG nTag    = GetUInt( pFeatureHeader+0 ); // e.g. locl/vert/trad/smpl/liga/fina/...
+        const USHORT nOffset= GetUShort( pFeatureHeader+4 );
+        pFeatureHeader += 6;
 
         // feature (required && (requested || available))?
         if( (aFeatureIndexList[0] != nFeatureIndex)
@@ -1639,10 +1662,12 @@ bool FreetypeServerFont::ApplyGSUB( const ImplFontSelectData& rFSD )
             continue;
 
         const FT_Byte* pFeatureTable = pGsubBase + nOfsFeatureTable + nOffset;
-        const USHORT nCntLookups = NEXT_UShort( pFeatureTable );
+        const USHORT nCntLookups = GetUShort( pFeatureTable+0 );
+        pFeatureTable += 2;
         for( USHORT i = 0; i < nCntLookups; ++i )
         {
-            const USHORT nLookupIndex = NEXT_UShort( pFeatureTable );
+            const USHORT nLookupIndex = GetUShort( pFeatureTable );
+            pFeatureTable += 2;
             aLookupIndexList.push_back( nLookupIndex );
         }
         if( nCntLookups == 0 ) //### hack needed by Mincho/Gothic/Mingliu/Simsun/...
@@ -1651,10 +1676,12 @@ bool FreetypeServerFont::ApplyGSUB( const ImplFontSelectData& rFSD )
 
     // parse Lookup List
     const FT_Byte* pLookupHeader = pGsubBase + nOfsLookupList;
-    const USHORT nCntLookupTable = NEXT_UShort( pLookupHeader );
+    const USHORT nCntLookupTable = GetUShort( pLookupHeader );
+    pLookupHeader += 2;
     for( USHORT nLookupIdx = 0; nLookupIdx < nCntLookupTable; ++nLookupIdx )
     {
-        const USHORT nOffset = NEXT_UShort( pLookupHeader );
+        const USHORT nOffset = GetUShort( pLookupHeader );
+        pLookupHeader += 2;
         if( std::count( aLookupIndexList.begin(), aLookupIndexList.end(), nLookupIdx ) )
             aLookupOffsetList.push_back( nOffset );
     }
@@ -1664,9 +1691,10 @@ bool FreetypeServerFont::ApplyGSUB( const ImplFontSelectData& rFSD )
     {
         const USHORT nOfsLookupTable = *it;
         const FT_Byte* pLookupTable = pGsubBase + nOfsLookupList + nOfsLookupTable;
-        const USHORT eLookupType        = NEXT_UShort( pLookupTable );
-        const USHORT eLookupFlag        = NEXT_UShort( pLookupTable );
-        const USHORT nCntLookupSubtable = NEXT_UShort( pLookupTable );
+        const USHORT eLookupType        = GetUShort( pLookupTable+0 );
+        const USHORT eLookupFlag        = GetUShort( pLookupTable+2 );
+        const USHORT nCntLookupSubtable = GetUShort( pLookupTable+4 );
+        pLookupTable += 6;
 
         // TODO: switch( eLookupType )
         if( eLookupType != 1 )  // TODO: once we go beyond SingleSubst
@@ -1674,28 +1702,32 @@ bool FreetypeServerFont::ApplyGSUB( const ImplFontSelectData& rFSD )
 
         for( USHORT nSubTableIdx = 0; nSubTableIdx < nCntLookupSubtable; ++nSubTableIdx )
         {
-            const USHORT nOfsSubLookupTable = NEXT_UShort( pLookupTable );
+            const USHORT nOfsSubLookupTable = GetUShort( pLookupTable );
+            pLookupTable += 2;
             const FT_Byte* pSubLookup = pGsubBase + nOfsLookupList + nOfsLookupTable + nOfsSubLookupTable;
 
-
-            const USHORT nFmtSubstitution   = NEXT_UShort( pSubLookup );
-            const USHORT nOfsCoverage       = NEXT_UShort( pSubLookup );
+            const USHORT nFmtSubstitution   = GetUShort( pSubLookup+0 );
+            const USHORT nOfsCoverage       = GetUShort( pSubLookup+2 );
+            pSubLookup += 4;
 
             typedef std::pair<USHORT,USHORT> GlyphSubst;
             typedef std::vector<GlyphSubst> SubstVector;
             SubstVector aSubstVector;
 
             const FT_Byte* pCoverage    = pGsubBase + nOfsLookupList + nOfsLookupTable + nOfsSubLookupTable + nOfsCoverage;
-            const USHORT nFmtCoverage   = NEXT_UShort( pCoverage );
+            const USHORT nFmtCoverage   = GetUShort( pCoverage+0 );
+            pCoverage += 2;
             switch( nFmtCoverage )
             {
                 case 1:         // Coverage Format 1
                     {
-                        const USHORT nCntGlyph = NEXT_UShort( pCoverage );
+                        const USHORT nCntGlyph = GetUShort( pCoverage );
+                        pCoverage += 2;
                         aSubstVector.reserve( nCntGlyph );
                         for( USHORT i = 0; i < nCntGlyph; ++i )
                         {
-                            const USHORT nGlyphId = NEXT_UShort( pCoverage );
+                            const USHORT nGlyphId = GetUShort( pCoverage );
+                            pCoverage += 2;
                             aSubstVector.push_back( GlyphSubst( nGlyphId, 0 ) );
                         }
                     }
@@ -1703,12 +1735,14 @@ bool FreetypeServerFont::ApplyGSUB( const ImplFontSelectData& rFSD )
 
                 case 2:         // Coverage Format 2
                     {
-                        const USHORT nCntRange = NEXT_UShort( pCoverage );
+                        const USHORT nCntRange = GetUShort( pCoverage );
+                        pCoverage += 2;
                         for( int i = nCntRange; --i >= 0; )
                         {
-                            const USHORT nGlyph0 = NEXT_UShort( pCoverage );
-                            const USHORT nGlyph1 = NEXT_UShort( pCoverage );
-                            const USHORT nCovIdx = NEXT_UShort( pCoverage );
+                            const USHORT nGlyph0 = GetUShort( pCoverage+0 );
+                            const USHORT nGlyph1 = GetUShort( pCoverage+2 );
+                            const USHORT nCovIdx = GetUShort( pCoverage+4 );
+                            pCoverage += 6;
                             for( USHORT j = nGlyph0; j <= nGlyph1; ++j )
                                 aSubstVector.push_back( GlyphSubst( j + nCovIdx, 0 ) );
                         }
@@ -1722,7 +1756,8 @@ bool FreetypeServerFont::ApplyGSUB( const ImplFontSelectData& rFSD )
             {
                 case 1:     // Single Substitution Format 1
                     {
-                        const USHORT nDeltaGlyphId = NEXT_UShort( pSubLookup );
+                        const USHORT nDeltaGlyphId = GetUShort( pSubLookup );
+                        pSubLookup += 2;
                         for(; it != aSubstVector.end(); ++it )
                             (*it).second = (*it).first + nDeltaGlyphId;
                     }
@@ -1730,10 +1765,12 @@ bool FreetypeServerFont::ApplyGSUB( const ImplFontSelectData& rFSD )
 
                 case 2:     // Single Substitution Format 2
                     {
-                        const USHORT nCntGlyph = NEXT_UShort( pSubLookup );
+                        const USHORT nCntGlyph = GetUShort( pSubLookup );
+                        pSubLookup += 2;
                         for( int i = nCntGlyph; (it != aSubstVector.end()) && (--i>=0); ++it )
                         {
-                            const USHORT nGlyphId = NEXT_UShort( pSubLookup );
+                            const USHORT nGlyphId = GetUShort( pSubLookup );
+                            pSubLookup += 2;
                             (*it).second = nGlyphId;
                         }
                     }
