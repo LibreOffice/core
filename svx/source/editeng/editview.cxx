@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editview.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mt $ $Date: 2001-12-07 13:27:40 $
+ *  last change: $Author: mt $ $Date: 2002-07-01 15:03:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -682,6 +682,21 @@ void EditView::InsertText( const EditTextObject& rTextObject )
 
     PIMPEE->UndoActionStart( EDITUNDO_INSERT );
     EditSelection aTextSel( PIMPEE->InsertText( rTextObject, pImpEditView->GetEditSelection() ) );
+    PIMPEE->UndoActionEnd( EDITUNDO_INSERT );
+
+    aTextSel.Min() = aTextSel.Max();    // Selektion nicht behalten.
+    pImpEditView->SetEditSelection( aTextSel );
+    PIMPEE->FormatAndUpdate( this );
+}
+
+void EditView::InsertText( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > xDataObj, BOOL bUseSpecial )
+{
+    DBG_CHKTHIS( EditView, 0 );
+    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
+
+    PIMPEE->UndoActionStart( EDITUNDO_INSERT );
+    pImpEditView->DeleteSelected();
+    EditSelection aTextSel( PIMPEE->InsertText( xDataObj, pImpEditView->GetEditSelection().Max(), bUseSpecial ) );
     PIMPEE->UndoActionEnd( EDITUNDO_INSERT );
 
     aTextSel.Min() = aTextSel.Max();    // Selektion nicht behalten.
