@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: smoketest.pl,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2005-01-05 15:33:26 $
+#   last change: $Author: kz $ $Date: 2005-01-21 11:36:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -280,7 +280,7 @@ if ( $ARGV[0] ) {
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.9 $ ';
+$id_str = ' $Revision: 1.10 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -383,6 +383,8 @@ sub prepare {
     my ($Command);
     if ($gui eq "UNX") {
         $ENV{ignore_patch_check}="t";
+        $ENV{OOO_FORCE_DESKTOP}="none";
+        delete $ENV{LD_LIBRARY_PATH};
     }
 
 }
@@ -563,7 +565,7 @@ sub doInstall {
                             print_error ("Installationset in $installsetpath is incomplete", 2);
             }
             foreach $file (@DirArray) {
-                if ( ($file =~ /-menus-/) or ($file =~ /^adabas/) or (/^j2re-/) ) {
+                if ( ($file =~ /-menus-/) or ($file =~ /^adabas/) or (/^j2re-/) or ($file =~ /-gnome-/) ) {
                     next;
                 }
                 $olddir = "/opt";
@@ -598,7 +600,7 @@ sub doInstall {
                             print_error ("Installationset in $installsetpath is incomplete", 2);
             }
             foreach $file (@DirArray) {
-                if ( ($file =~ /-gnome/) or ($file =~ /-cde/) or ($file =~ /adabas/) or ($file =~ /j3/) ) {
+                if ( ($file =~ /-gnome/) or ($file =~ /-cde/) or ($file =~ /adabas/) or ($file =~ /j3/) or ($file =~ /-desktop-/) ) {
                     next;
                 }
                 $Command = "pkgparam -d $installsetpath $file BASEDIR";
