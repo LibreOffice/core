@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-23 09:44:20 $
+#   last change: $Author: pjunck $ $Date: 2004-11-03 09:22:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -155,9 +155,9 @@ $(MISC)$/$(TARGET)-common : makefile.mk
 .IF "$(COMNAME)" == "sunpro5"
     @-+echo $(DLLPRE)stlport_sunpro$(DLLPOST) >> $@
 .ENDIF # sunpro5
-    @-+echo $(DLLPRE)sal$(UDKDLLPOST)   >>  $@
-    @-+echo $(DLLPRE)cppu$(UDKDLLPOST)  >> $@
-    @-+echo $(DLLPRE)cppuhelper$(COMID)$(UDKDLLPOST)               >> $@
+    @-+echo $(DLLPRE)uno_sal$(UDKDLLPOST)   >>  $@
+    @-+echo $(DLLPRE)uno_cppu$(UDKDLLPOST)  >> $@
+    @-+echo $(DLLPRE)uno_cppuhelper$(COMID)$(UDKDLLPOST)           >> $@
     @-+echo $(DLLPRE)ucbhelper$(UCBHELPER_MAJOR)$(COMID)$(DLLPOST) >> $@
     @-+echo $(DLLPRE)comphelp$(COMPHLP_MAJOR)$(COMID)$(DLLPOST)    >> $@
     @-+echo $(DLLPRE)tl$(UPDDLLPOST)    >> $@
