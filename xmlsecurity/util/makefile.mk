@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: gt $ $Date: 2004-07-14 11:38:07 $
+#   last change: $Author: mmi $ $Date: 2004-07-15 08:25:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,7 +66,7 @@ PRJNAME=xmlsecurity
 TARGET=xmlsecurity
 
 # Disable '-z defs' due to broken libxpcom.
-LINKFLAGSDEFS=$(0)
+#LINKFLAGSDEFS=$(0)
 
 # --- Settings -----------------------------------------------------
 
@@ -178,11 +178,7 @@ SHL4STDLIBS=\
 .IF "$(GUI)"=="WNT"
 SHL4STDLIBS+= "xmlsec.lib" "xsec_xmlsec.lib"
 .ELSE
-<<<<<<< makefile.mk
 SHL4STDLIBS+= "-lxmlsec" "-lxsec_xmlsec"
-=======
-SHL4STDLIBS+= "-lxmlsec" "-lxsec_xmlsec" 
->>>>>>> 1.2
 .ENDIF
                 
         
