@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: kz $ $Date: 2002-01-04 17:58:40 $
+#   last change: $Author: kz $ $Date: 2002-01-10 09:35:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,5 +80,4 @@ ALLTAR : $(SRS)$/hidother.hid
 $(MISC)$/$(PRJNAME).hid : $(SRS)$/hidother.hid
 
 $(SRS)$/hidother.hid: hidother.src
-    @+-mhids hidother.src $(SRS) $(PRJNAME)
-
+    @+-mhids hidother.src $(SRS) $(PRJNAME) dummy $(INCLUDE)
