@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sta_list.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 16:52:26 $
+ *  last change: $Author: rt $ $Date: 2004-12-10 17:13:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -476,8 +476,9 @@ BOOL SearchUID::IsWinOK( Window *pWin )
                         // Same as above.
                     if ( ( pItemWin->IsEnabled() || HasSearchFlag( SEARCH_FIND_DISABLED ) ) && pItemWin->IsVisible() )
                     {
-                        pAlternateResult = pItemWin;    // since we cannot return a Window here
-                        return TRUE;
+                        if ( !pAlternateResult )    // only take the first found ItemWindow #i35365
+                            pAlternateResult = pItemWin;    // since we cannot return a Window here
+                        return FALSE;   // continue searching to prefer a window with the right ID #i32292
                     }
                     else if ( !pMaybeResult )
                     {
@@ -498,12 +499,12 @@ Window* StatementList::SearchTree( SmartId aUId ,BOOL bSearchButtonOnToolbox )
     SearchUID aSearch(aUId,bSearchButtonOnToolbox);
 
     Window *pResult = SearchAllWin( NULL, aSearch );
-    if ( !pResult )
-        return aSearch.GetMaybeWin();
+    if ( pResult )
+        return pResult;
     else if ( aSearch.GetAlternateResultWin() )
         return aSearch.GetAlternateResultWin();
     else
-        return pResult;
+        return aSearch.GetMaybeWin();
 }
 
 
