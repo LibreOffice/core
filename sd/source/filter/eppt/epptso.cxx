@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sj $ $Date: 2000-12-02 17:30:28 $
+ *  last change: $Author: sj $ $Date: 2000-12-04 16:07:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -550,8 +550,9 @@ sal_uInt32 ConnectorListEntry::GetConnectorRule( sal_Bool bFirst )
         aPoly[ 3 ] = Point( aRect.Right(), aCenter.Y() );
 
         sal_Int32 nAngle = ( PropValue::GetPropertyValue( aAny,
-                                aPropertySet, String( RTL_CONSTASCII_USTRINGPARAM( "RotateAngle" ) ) ) )
-            ? *((sal_Int32*)aAny.getValue() ) : 0;
+            aPropertySet, String( RTL_CONSTASCII_USTRINGPARAM( "RotateAngle" ) ), sal_True ) )
+                ? *((sal_Int32*)aAny.getValue() )
+                : 0;
         if ( nAngle )
             aPoly.Rotate( aRect.TopLeft(), ( nAngle + 5 ) / 10 );
         nRule = GetClosestPoint( aPoly, aRefPoint );
@@ -1098,24 +1099,67 @@ sal_Bool PPTWriter::ImplCloseDocument()
 
 // ---------------------------------------------------------------------------------------------
 
-sal_Bool PropValue::GetPropertyValue( ::com::sun::star::uno::Any& rAny,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & aXPropSet,
-                const String& rString )
+sal_Bool PropValue::GetPropertyValue(
+    ::com::sun::star::uno::Any& rAny,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
+            const String& rString,
+                    sal_Bool bTestPropertyAvailability )
 {
-    sal_Bool bRetValue = TRUE;
-    TRY
-    {
-        rAny = aXPropSet->getPropertyValue( rString );
-        if ( !rAny.hasValue() )
-            bRetValue = FALSE;
-    }
-    CATCH_ALL()
-    {
-        bRetValue = FALSE;
-    }
-    END_CATCH;
+    sal_Bool bRetValue = sal_True;
 
+#ifdef UNX
+    bTestPropertyAvailability = sal_True;
+#endif
+    if ( bTestPropertyAvailability )
+    {
+        bRetValue = sal_False;
+        try
+        {
+            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
+                aXPropSetInfo( rXPropSet->getPropertySetInfo() );
+            if ( aXPropSetInfo.is() )
+                bRetValue = aXPropSetInfo->hasPropertyByName( rString );
+        }
+        catch(...)
+        {
+            //...
+        }
+    }
+    if ( bRetValue )
+    {
+        try
+        {
+            rAny = rXPropSet->getPropertyValue( rString );
+            if ( !rAny.hasValue() )
+                bRetValue = sal_False;
+        }
+        catch(...)
+        {
+            bRetValue = sal_False;
+        }
+    }
     return bRetValue;
+}
+
+// ---------------------------------------------------------------------------------------------
+
+::com::sun::star::beans::PropertyState PropValue::GetPropertyState(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
+        const String& rPropertyName )
+{
+    ::com::sun::star::beans::PropertyState eRetValue = ::com::sun::star::beans::PropertyState_AMBIGUOUS_VALUE;
+    try
+    {
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState > aXPropState
+                ( rXPropSet, ::com::sun::star::uno::UNO_QUERY );
+        if ( aXPropState.is() )
+            eRetValue = aXPropState->getPropertyState( rPropertyName );
+    }
+    catch(...)
+    {
+        //...
+    }
+    return eRetValue;
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -1138,7 +1182,13 @@ sal_Bool PropStateValue::ImplGetPropertyValue( const String& rString, sal_Bool b
 {
     ePropState = ::com::sun::star::beans::PropertyState_AMBIGUOUS_VALUE;
     sal_Bool bRetValue = TRUE;
-    TRY
+#ifdef UNX
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
+            aXPropSetInfo( mXPropSet->getPropertySetInfo() );
+        if ( !aXPropSetInfo.is() )
+            return sal_False;
+#endif
+    try
     {
         mAny = mXPropSet->getPropertyValue( rString );
         if ( !mAny.hasValue() )
@@ -1148,7 +1198,7 @@ sal_Bool PropStateValue::ImplGetPropertyValue( const String& rString, sal_Bool b
         else
             ePropState = ::com::sun::star::beans::PropertyState_DIRECT_VALUE;
     }
-    CATCH_ALL()
+    catch(...)
     {
         bRetValue = FALSE;
     }
@@ -1287,8 +1337,10 @@ sal_Bool PPTWriter::ImplGetShapeByIndex( sal_uInt32 nIndex, sal_Bool bGroup )
         if ( mbPresObj && ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "IsEmptyPresentationObject" ) ) ) )
             mAny >>= mbEmptyPresObj;
 
-        mnAngle = ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "RotateAngle" ) ) ) )
-                        ? *( (sal_Int32*)mAny.getValue() ) : 0;
+        mnAngle = ( PropValue::GetPropertyValue( aAny,
+            mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "RotateAngle" ) ), sal_True ) )
+                ? *((sal_Int32*)aAny.getValue() )
+                : 0;
 
         return TRUE;
     }
@@ -1726,37 +1778,46 @@ sal_Bool PPTWriter::ImplGetStyleSheets()
                         TRY
                         {
                             ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >xNameAccess;
-                            ::com::sun::star::uno::Any aAny( aXNameAccess->getByName( aXNamed->getName() ) );
-                            if( aAny.getValue() && ::cppu::extractInterface( xNameAccess, aAny ) )
+                            if ( aXNameAccess->hasByName( aXNamed->getName() ) )
                             {
-                                ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > aXFamily;
-                                if ( aAny >>= aXFamily )
+                                ::com::sun::star::uno::Any aAny( aXNameAccess->getByName( aXNamed->getName() ) );
+                                if( aAny.getValue() && ::cppu::extractInterface( xNameAccess, aAny ) )
                                 {
-                                    ::com::sun::star::uno::Reference< ::com::sun::star::style::XStyle > xStyle;
-                                    aAny = aXFamily->getByName( aStyle );
-                                    if( aAny.getValue() && ::cppu::extractInterface( xStyle, aAny ) )
+                                    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > aXFamily;
+                                    if ( aAny >>= aXFamily )
                                     {
-                                        ::com::sun::star::uno::Reference< ::com::sun::star::style::XStyle > aXStyle;
-                                        aAny >>= aXStyle;
-                                        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-                                            xPropSet( aXStyle, ::com::sun::star::uno::UNO_QUERY );
-                                        if( xPropSet.is() )
-                                            mpStyleSheet->SetStyleSheet( xPropSet, maFontCollection, nInstance, 0 );
-                                        if ( nInstance == EPP_TEXTTYPE_Body )
+                                        if ( aXFamily->hasByName( aStyle ) )
                                         {
-                                            for ( nLevel = 1; nLevel < 5; nLevel++ )
+                                            ::com::sun::star::uno::Reference< ::com::sun::star::style::XStyle > xStyle;
+                                            aAny = aXFamily->getByName( aStyle );
+                                            if( aAny.getValue() && ::cppu::extractInterface( xStyle, aAny ) )
                                             {
-                                                sal_Unicode cTemp = aStyle.GetChar( aStyle.Len() - 1 );
-                                                aStyle.SetChar( aStyle.Len() - 1, ++cTemp );
-                                                aAny = aXFamily->getByName( aStyle );
-                                                if( aAny.getValue() && ::cppu::extractInterface( xStyle, aAny ) )
+                                                ::com::sun::star::uno::Reference< ::com::sun::star::style::XStyle > aXStyle;
+                                                aAny >>= aXStyle;
+                                                ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+                                                    xPropSet( aXStyle, ::com::sun::star::uno::UNO_QUERY );
+                                                if( xPropSet.is() )
+                                                    mpStyleSheet->SetStyleSheet( xPropSet, maFontCollection, nInstance, 0 );
+                                                if ( nInstance == EPP_TEXTTYPE_Body )
                                                 {
-                                                    ::com::sun::star::uno::Reference< ::com::sun::star::style::XStyle > aXStyle;
-                                                    aAny >>= aXStyle;
-                                                    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-                                                        xPropSet( aXStyle, ::com::sun::star::uno::UNO_QUERY );
-                                                    if ( xPropSet.is() )
-                                                        mpStyleSheet->SetStyleSheet( xPropSet, maFontCollection, nInstance, nLevel );
+                                                    for ( nLevel = 1; nLevel < 5; nLevel++ )
+                                                    {
+                                                        sal_Unicode cTemp = aStyle.GetChar( aStyle.Len() - 1 );
+                                                        aStyle.SetChar( aStyle.Len() - 1, ++cTemp );
+                                                        if ( aXFamily->hasByName( aStyle ) )
+                                                        {
+                                                            aAny = aXFamily->getByName( aStyle );
+                                                            if( aAny.getValue() && ::cppu::extractInterface( xStyle, aAny ) )
+                                                            {
+                                                                ::com::sun::star::uno::Reference< ::com::sun::star::style::XStyle > aXStyle;
+                                                                aAny >>= aXStyle;
+                                                                ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+                                                                    xPropSet( aXStyle, ::com::sun::star::uno::UNO_QUERY );
+                                                                if ( xPropSet.is() )
+                                                                    mpStyleSheet->SetStyleSheet( xPropSet, maFontCollection, nInstance, nLevel );
+                                                            }
+                                                        }
+                                                    }
                                                 }
                                             }
                                         }
@@ -2967,15 +3028,22 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
 
 void ParagraphObj::ImplGetParagraphValues( PPTExBulletProvider& rBuProv, sal_Bool bGetPropStateValue )
 {
+    static String sIsNumbering      ( RTL_CONSTASCII_USTRINGPARAM( "IsNumbering" ) );
+    static String sNumberingLevel   ( RTL_CONSTASCII_USTRINGPARAM( "NumberingLevel" ) );
+
+    ::com::sun::star::uno::Any aAny;
     meBullet = ::com::sun::star::beans::PropertyState_DIRECT_VALUE;
-    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "IsNumbering" ) ), bGetPropStateValue ) )
+    if ( GetPropertyValue( aAny, mXPropSet, sIsNumbering, sal_True ) )
     {
-        meBullet = ePropState;
-        mAny >>= mbIsBullet;
-        if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "NumberingLevel" ) ), bGetPropStateValue ) )
+        if  ( bGetPropStateValue )
+            meBullet = GetPropertyState( mXPropSet, sIsNumbering );
+        aAny >>= mbIsBullet;
+
+        if ( GetPropertyValue( aAny, mXPropSet, sNumberingLevel, sal_True ) )
         {
-            meBullet = ePropState;
-            nDepth = *( (sal_Int16*)mAny.getValue() );
+            if ( bGetPropStateValue )
+                meBullet = GetPropertyState( mXPropSet, sNumberingLevel );
+            nDepth = *( (sal_Int16*)aAny.getValue() );
             if ( nDepth > 4 )
                 nDepth = 4;
             bDepth = TRUE;
@@ -4690,8 +4758,9 @@ void PPTWriter::ImplWritePage( SolverContainer& aSolverContainer, PageType ePage
                 else
                 {
                     sal_Bool bIsFontwork = FALSE;
-                    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "IsFontwork" ) ) ) )
-                        mAny >>= bIsFontwork;
+                    ::com::sun::star::uno::Any aAny;
+                    if ( GetPropertyValue( aAny, mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "IsFontwork" ) ), sal_True ) )
+                        aAny >>= bIsFontwork;
                     if ( bIsFontwork || ( mType == "drawing.Measure" ) || ( mType == "drawing.Caption" ) )
                     {
                         if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "BoundRect" ) ) ) )
@@ -5565,11 +5634,11 @@ void PPTWriter::ImplWritePage( SolverContainer& aSolverContainer, PageType ePage
             }
             if ( mnShadow ) // shadow wird nur ausgegeben, wenn es mindestens einen LinesStyle oder FillStyle gibt
             {
-                if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "Shadow" ) ) ) )
+                ::com::sun::star::uno::Any aAny;
+                if ( GetPropertyValue( aAny, mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Shadow" ) ), sal_True ) )
                 {
                     sal_Bool bBool;
-                    mAny >>= bBool;
-                    if ( bBool )
+                    if ( aAny >>= bBool )
                     {
                         mp_EscherEx->AddOpt( ESCHER_Prop_fshadowObscured, 0x20002 );
                         if ( ImplGetPropertyValue(  String( RTL_CONSTASCII_USTRINGPARAM( "ShadowColor" ) ) ) )
@@ -5754,8 +5823,11 @@ void PPTWriter::ImplWritePage( SolverContainer& aSolverContainer, PageType ePage
         {
             bAdditionalText = FALSE;
 
-            mnAngle = ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "RotateAngle" ) )) )
-                            ? *( (sal_Int32*)mAny.getValue() ) : 0;
+            ::com::sun::star::uno::Any aAny;
+            mnAngle = ( PropValue::GetPropertyValue( aAny,
+                mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "RotateAngle" ) ), sal_True ) )
+                    ? *((sal_Int32*)aAny.getValue() )
+                    : 0;
 
             if ( mType == "drawing.Line" )
             {
@@ -5891,7 +5963,7 @@ sal_Bool PPTWriter::ImplGetGraphic( ::com::sun::star::uno::Reference< ::com::sun
                 mpPicStrm = mrStg->OpenStream( String( RTL_CONSTASCII_USTRINGPARAM( "Pictures" ) ) );
             if ( mpPicStrm )
             {
-                if ( GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "IsMirrored" ) ) ) )
+                if ( GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "IsMirrored" ) ), sal_True ) )
                     aAny >>= bMirrored;
                 if ( rSource == String( RTL_CONSTASCII_USTRINGPARAM( "FillBitmap" ) ) )
                 {
