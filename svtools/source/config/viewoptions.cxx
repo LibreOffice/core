@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewoptions.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: as $ $Date: 2001-10-12 13:26:23 $
+ *  last change: $Author: kz $ $Date: 2001-10-17 13:38:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -599,6 +599,7 @@ void SvtViewOptionsBase_Impl::Notify( const css::uno::Sequence< ::rtl::OUString 
 *//*-*************************************************************************************************************/
 void SvtViewOptionsBase_Impl::Commit()
 {
+    /*
     const IMPL_TStringList& rAddedList   = m_aList.GetAddedList  ();
     const IMPL_TStringList& rChangedList = m_aList.GetChangedList();
     const IMPL_TStringList& rDeletedList = m_aList.GetDeletedList();
@@ -733,6 +734,7 @@ void SvtViewOptionsBase_Impl::Commit()
         }
         ConfigItem::SetSetProperties( ::rtl::OUString(), lChanged );
     }
+    */
 }
 
 /*-************************************************************************************************************//**
@@ -918,6 +920,7 @@ void SvtViewOptionsBase_Impl::SetVisible( const ::rtl::OUString& sName    ,
 *//*-*************************************************************************************************************/
 void SvtViewOptionsBase_Impl::impl_ReadWholeList()
 {
+    /*
     // Clear internal cache
     m_aList.Free();
 
@@ -1039,6 +1042,7 @@ void SvtViewOptionsBase_Impl::impl_ReadWholeList()
 
         m_aList.Add( sEntryName, aEntry );
     }
+    */
 }
 
 //_________________________________________________________________________________________________________________
