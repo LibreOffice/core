@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pb $ $Date: 2001-04-18 05:22:37 $
+ *  last change: $Author: pb $ $Date: 2001-04-23 12:02:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,17 @@
 #ifndef INCLUDED_SFX_NEWHELP_HXX
 #define INCLUDED_SFX_NEWHELP_HXX
 
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
+#endif
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XSTATUSLISTENER_HPP_
+#include <com/sun/star/frame/XStatusListener.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XDISPATCH_HPP_
+#include <com/sun/star/frame/XDispatch.hpp>
 #endif
 
 namespace com { namespace sun { namespace star { namespace frame { class XFrame; } } } };
@@ -78,6 +87,33 @@ namespace com { namespace sun { namespace star { namespace awt { class XWindow; 
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
 #include <vcl/lstbox.hxx>
+
+// class OpenStatusListener_Impl -----------------------------------------
+
+class OpenStatusListener_Impl : public ::cppu::WeakImplHelper1< ::com::sun::star::frame::XStatusListener >
+{
+private:
+    sal_Bool    m_bFinished;
+    sal_Bool    m_bSuccess;
+    Link        m_aOpenLink;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >
+                m_xDispatch;
+
+public:
+    OpenStatusListener_Impl() : m_bFinished( FALSE ),   m_bSuccess( FALSE ) {}
+
+    virtual void SAL_CALL
+                statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL
+                disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
+
+    void        AddListener( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >& xDispatch,
+                             const ::com::sun::star::util::URL& aURL );
+
+    sal_Bool    IsFinished() const { return m_bFinished; }
+    sal_Bool    IsSuccessful() const { return m_bSuccess; }
+    void        SetOpenHdl( const Link& rLink ) { m_aOpenLink = rLink; }
+};
 
 // class ContentTabPage_Impl ---------------------------------------------
 
@@ -110,6 +146,7 @@ private:
     void                ClearIndex();
 
     DECL_LINK(          OpenHdl, PushButton* );
+    DECL_LINK(          ModifyHdl, Edit* );
     DECL_LINK(          FactoryHdl, Timer* );
 
 public:
@@ -132,9 +169,10 @@ private:
 
 public:
     SearchBox_Impl( Window* pParent, const ResId& rResId ) :
-        ComboBox( pParent, rResId ) {}
+        ComboBox( pParent, rResId ) { SetDropDownLineCount( 5 ); }
 
     virtual long        PreNotify( NotifyEvent& rNEvt );
+    virtual void        Select();
 
     void                SetSearchLink( const Link& rLink ) { aSearchLink = rLink; }
 };
@@ -147,17 +185,20 @@ private:
     PushButton          aSearchBtn;
     ListBox             aResultsLB;
     PushButton          aOpenBtn;
+    CheckBox            aScopeCB;
 
     Size                aMinSize;
     String              aFactory;
 
     void                ClearSearchResults();
+    void                RememberSearchText( const String& rSearchText );
 
     DECL_LINK(          SearchHdl, PushButton* );
     DECL_LINK(          OpenHdl, PushButton* );
 
 public:
     SearchTabPage_Impl( Window* pParent );
+    ~SearchTabPage_Impl();
 
     virtual void        Resize();
 
@@ -240,6 +281,7 @@ private:
     SfxHelpTextWindow_Impl*     pTextWin;
     HelpInterceptor_Impl*       pHelpInterceptor;
     HelpListener_Impl*          pHelpListener;
+    OpenStatusListener_Impl*    pOpenListener;
 
     sal_Int32           nExpandWidth;
     sal_Int32           nCollapseWidth;
@@ -260,6 +302,7 @@ private:
     DECL_LINK(          SelectHdl, ToolBox* );
     DECL_LINK(          OpenHdl, ListBox* );
     DECL_LINK(          ChangeHdl, HelpListener_Impl* );
+    DECL_LINK(          OpenDoneHdl, OpenStatusListener_Impl* );
 
 public:
     SfxHelpWindow_Impl( const ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame >& rFrame,
@@ -270,6 +313,7 @@ public:
                             ::com::sun::star::uno::Reference < ::com::sun::star::awt::XWindow > xWin );
     void                SetFactory( const String& rFactory, sal_Bool bStart );
     void                DoAction( USHORT nActionId );
+    void                FirstOpenMessage();
 };
 
 #endif // #ifndef INCLUDED_SFX_NEWHELP_HXX

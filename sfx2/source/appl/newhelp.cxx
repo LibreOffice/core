@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: pb $ $Date: 2001-04-18 05:22:37 $
+ *  last change: $Author: pb $ $Date: 2001-04-23 12:02:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,12 @@
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
+#ifndef _CACHESTR_HXX
+#include <tools/cachestr.hxx>
+#endif
+#ifndef _UNOTOOLS_STREAMHELPER_HXX_
+#include <unotools/streamhelper.hxx>
+#endif
 #include <ucbhelper/content.hxx>
 
 using namespace ::ucb;
@@ -149,7 +155,9 @@ extern void AppendConfigToken_Impl( String& rURL, sal_Bool bQuestionMark ); // s
 #define TBI_PRINT           1006
 #define TBI_SOURCEVIEW      1007
 
-#define HELPWIN_CONFIGNAME      String(DEFINE_CONST_UNICODE("OfficeHelp"))
+#define CONFIGNAME_HELPWIN      String(DEFINE_CONST_UNICODE("OfficeHelp"))
+#define CONFIGNAME_INDEXWIN     String(DEFINE_CONST_UNICODE("OfficeHelpIndex"))
+#define CONFIGNAME_SEARCHPAGE   String(DEFINE_CONST_UNICODE("OfficeHelpSearch"))
 #define PROPERTY_KEYWORDLIST    ::rtl::OUString(DEFINE_CONST_UNICODE("KeywordList"))
 #define PROPERTY_KEYWORDREF     ::rtl::OUString(DEFINE_CONST_UNICODE("KeywordRef"))
 #define HELP_URL                ::rtl::OUString(DEFINE_CONST_UNICODE("vnd.sun.star.help://"))
@@ -162,6 +170,32 @@ extern void AppendConfigToken_Impl( String& rURL, sal_Bool bQuestionMark ); // s
 
 #define GET_SLOT_NAME( nId ) \
     SFX_SLOTPOOL().GetSlotName_Impl( nId )
+
+// class OpenStatusListener_Impl -----------------------------------------
+
+void SAL_CALL OpenStatusListener_Impl::statusChanged( const FeatureStateEvent& Event ) throw(RuntimeException)
+{
+    m_bSuccess = Event.IsEnabled;
+    m_bFinished = sal_True;
+    m_aOpenLink.Call( this );
+    m_xDispatch->removeStatusListener( this, ::com::sun::star::util::URL() );
+}
+
+// -----------------------------------------------------------------------
+
+void SAL_CALL OpenStatusListener_Impl::disposing( const EventObject& Source ) throw(RuntimeException)
+{
+    m_xDispatch->removeStatusListener( this, ::com::sun::star::util::URL() );
+}
+
+// -----------------------------------------------------------------------
+
+void OpenStatusListener_Impl::AddListener( Reference< XDispatch >& xDispatch,
+                                           const ::com::sun::star::util::URL& aURL )
+{
+    m_xDispatch = xDispatch;
+    m_xDispatch->addStatusListener( this, aURL );
+}
 
 // class ContentTabPage_Impl ---------------------------------------------
 
@@ -203,6 +237,7 @@ IndexTabPage_Impl::IndexTabPage_Impl( Window* pParent ) :
     FreeResource();
 
     aOpenBtn.SetClickHdl( LINK( this, IndexTabPage_Impl, OpenHdl ) );
+    aExpressionED.SetModifyHdl( LINK( this, IndexTabPage_Impl, ModifyHdl ) );
     aFactoryTimer.SetTimeoutHdl( LINK( this, IndexTabPage_Impl, FactoryHdl ) );
     aFactoryTimer.SetTimeout( 200 );
 
@@ -220,6 +255,8 @@ IndexTabPage_Impl::~IndexTabPage_Impl()
 
 void IndexTabPage_Impl::InitializeIndex()
 {
+    EnterWait();
+
     try
     {
         ::rtl::OUString aURL = HELP_URL;
@@ -300,10 +337,12 @@ void IndexTabPage_Impl::InitializeIndex()
     {
         DBG_ERRORFILE( "runtime exception" );
     }
-    catch( ... )
+    catch( ::com::sun::star::uno::Exception& )
     {
         DBG_ERRORFILE( "Any other exception" );
     }
+
+    LeaveWait();
 }
 
 // -----------------------------------------------------------------------
@@ -314,6 +353,7 @@ void IndexTabPage_Impl::ClearIndex()
     for ( USHORT i = 0; i < nCount; ++i )
         delete (String*)(ULONG)aResultsLB.GetEntryData(i);
     aResultsLB.Clear();
+    aResultsLB.Update();
 }
 
 // -----------------------------------------------------------------------
@@ -321,6 +361,14 @@ void IndexTabPage_Impl::ClearIndex()
 IMPL_LINK( IndexTabPage_Impl, OpenHdl, PushButton*, EMPTYARG )
 {
     aResultsLB.GetDoubleClickHdl().Call( &aResultsLB );
+    return 0;
+}
+
+// -----------------------------------------------------------------------
+
+IMPL_LINK( IndexTabPage_Impl, ModifyHdl, Edit*, pEdit )
+{
+    aResultsLB.SelectEntry( pEdit->GetText() );
     return 0;
 }
 
@@ -391,13 +439,23 @@ void IndexTabPage_Impl::SetFactory( const String& rFactory )
 long SearchBox_Impl::PreNotify( NotifyEvent& rNEvt )
 {
     sal_Bool bHandled = sal_False;
-    if ( rNEvt.GetWindow() == GetSubEdit() && rNEvt.GetType() == EVENT_KEYINPUT &&
+    if ( !IsInDropDown() &&
+         rNEvt.GetWindow() == GetSubEdit() &&
+         rNEvt.GetType() == EVENT_KEYINPUT &&
          KEY_RETURN == rNEvt.GetKeyEvent()->GetKeyCode().GetCode() )
     {
         aSearchLink.Call( NULL );
         bHandled = sal_True;
     }
     return bHandled ? 1 : ComboBox::PreNotify( rNEvt );
+}
+
+// -----------------------------------------------------------------------
+
+void SearchBox_Impl::Select()
+{
+    if ( !IsTravelSelect() )
+        aSearchLink.Call( NULL );
 }
 
 // class SearchTabPage_Impl ----------------------------------------------
@@ -410,7 +468,8 @@ SearchTabPage_Impl::SearchTabPage_Impl( Window* pParent ) :
     aSearchED   ( this, ResId( ED_SEARCH ) ),
     aSearchBtn  ( this, ResId( PB_SEARCH ) ),
     aResultsLB  ( this, ResId( LB_RESULT ) ),
-    aOpenBtn    ( this, ResId( PB_OPEN_SEARCH ) )
+    aOpenBtn    ( this, ResId( PB_OPEN_SEARCH ) ),
+    aScopeCB    ( this, ResId( CB_SCOPE ) )
 
 {
     FreeResource();
@@ -421,6 +480,46 @@ SearchTabPage_Impl::SearchTabPage_Impl( Window* pParent ) :
     aOpenBtn.SetClickHdl( LINK( this, SearchTabPage_Impl, OpenHdl ) );
 
     aMinSize = GetSizePixel();
+
+    SvtViewOptions aViewOpt( E_TABPAGE, CONFIGNAME_SEARCHPAGE );
+    if ( aViewOpt.Exists() )
+    {
+        String aUserData = aViewOpt.GetUserData();
+        BOOL bChecked = ( 1 == aUserData.GetToken(0).ToInt32() ) ? TRUE : FALSE;
+        aScopeCB.Check( bChecked );
+
+        for ( USHORT i = 1; i < aUserData.GetTokenCount(); ++i )
+        {
+            String aToken = aUserData.GetToken(i);
+            aSearchED.InsertEntry( INetURLObject::decode(
+                aToken, '%', INetURLObject::DECODE_WITH_CHARSET ) );
+        }
+    }
+
+    if ( aSearchED.GetEntryCount() )
+        aSearchED.SetText( aSearchED.GetEntry(0) );
+}
+
+// -----------------------------------------------------------------------
+
+SearchTabPage_Impl::~SearchTabPage_Impl()
+{
+    SvtViewOptions aViewOpt( E_TABPAGE, CONFIGNAME_SEARCHPAGE );
+    sal_Int32 nChecked = aScopeCB.IsChecked() ? 1 : 0;
+    String aUserData = String::CreateFromInt32( nChecked );
+    aUserData += ';';
+    USHORT nCount = Min( aSearchED.GetEntryCount(), (USHORT)10 );  // save only 10 entries
+
+    for ( USHORT i = 0; i < nCount; ++i )
+    {
+        String aText = aSearchED.GetEntry(i);
+        aUserData += INetURLObject::encode(
+            aText, INetURLObject::PART_UNO_PARAM_VALUE, '%', INetURLObject::ENCODE_ALL );
+        aUserData += ';';
+    }
+
+    aUserData.EraseTrailingChars(';');
+    aViewOpt.SetUserData( aUserData );
 }
 
 // -----------------------------------------------------------------------
@@ -431,18 +530,41 @@ void SearchTabPage_Impl::ClearSearchResults()
     for ( USHORT i = 0; i < nCount; ++i )
         delete (String*)(ULONG)aResultsLB.GetEntryData(i);
     aResultsLB.Clear();
+    aResultsLB.Update();
+}
+
+// -----------------------------------------------------------------------
+
+void SearchTabPage_Impl::RememberSearchText( const String& rSearchText )
+{
+    for ( USHORT i = 0; i < aSearchED.GetEntryCount(); ++i )
+    {
+        if ( rSearchText == aSearchED.GetEntry(i) )
+        {
+            aSearchED.RemoveEntry(i);
+            break;
+        }
+    }
+
+    aSearchED.InsertEntry( rSearchText, 0 );
 }
 
 // -----------------------------------------------------------------------
 
 IMPL_LINK( SearchTabPage_Impl, SearchHdl, PushButton*, EMPTYARG )
 {
+    EnterWait();
     ClearSearchResults();
+
+    String aSearchText = aSearchED.GetText();
+    RememberSearchText( aSearchText );
     String aSearchURL = HELP_URL;
     aSearchURL += aFactory;
     aSearchURL += String( HELP_SEARCH_TAG );
-    aSearchURL += aSearchED.GetText();
+    aSearchURL += aSearchText;
     AppendConfigToken_Impl( aSearchURL, sal_False );
+    if ( aScopeCB.IsChecked() )
+        aSearchURL += DEFINE_CONST_UNICODE("&Scope=Heading");
 
     Sequence< ::rtl::OUString > aFactories = SfxContentHelper::GetResultSet( aSearchURL );
     const ::rtl::OUString* pFacs  = aFactories.getConstArray();
@@ -458,6 +580,8 @@ IMPL_LINK( SearchTabPage_Impl, SearchHdl, PushButton*, EMPTYARG )
         USHORT nPos = aResultsLB.InsertEntry( aTitle );
         aResultsLB.SetEntryData( nPos, (void*)(ULONG)pURL );
     }
+
+    LeaveWait();
     return 0;
 }
 
@@ -483,6 +607,8 @@ void SearchTabPage_Impl::Resize()
         aSearchFT.SetSizePixel( aNewSize );
         aNewSize.Height() = aResultsLB.GetSizePixel().Height();
         aResultsLB.SetSizePixel( aNewSize );
+        aNewSize.Height() = aScopeCB.GetSizePixel().Height();
+        aScopeCB.SetSizePixel( aNewSize );
 
         aNewSize = aSearchED.GetSizePixel();
         aNewSize.Width() = aSize.Width() - ( aPnt.X() * 2 ) -
@@ -496,17 +622,23 @@ void SearchTabPage_Impl::Resize()
     if ( aSize.Height() > aMinSize.Height() )
     {
         Size a6Size = LogicToPixel( Size( 6, 6 ), MAP_APPFONT );
+        long n3Height = a6Size.Height() / 2;
         Size aBtnSize = aOpenBtn.GetSizePixel();
+        long nExtraHeight = aBtnSize.Height() + aScopeCB.GetSizePixel().Height() + n3Height;
 
         Point aPnt = aResultsLB.GetPosPixel();
         Size aNewSize = aResultsLB.GetSizePixel();
         aNewSize.Height() = aSize.Height() - aPnt.Y();
-        aNewSize.Height() -= ( aBtnSize.Height() + ( a6Size.Height() * 3 / 2 ) );
+        aNewSize.Height() -= ( nExtraHeight + ( a6Size.Height() * 3 / 2 ) );
         aResultsLB.SetSizePixel( aNewSize );
 
         aPnt.X() += ( aNewSize.Width() - aBtnSize.Width() );
         aPnt.Y() += aNewSize.Height() + ( a6Size.Height() / 2 );
         aOpenBtn.SetPosPixel( aPnt );
+
+        Point aNewPnt = aScopeCB.GetPosPixel();
+        aNewPnt.Y() = aPnt.Y() + aBtnSize.Height() + n3Height;
+        aScopeCB.SetPosPixel( aNewPnt );
     }
 }
 
@@ -536,7 +668,12 @@ SfxHelpIndexWindow_Impl::SfxHelpIndexWindow_Impl( Window* pParent ) :
 
     aTabCtrl.SetActivatePageHdl( LINK( this, SfxHelpIndexWindow_Impl, ActivatePageHdl ) );
     aTabCtrl.Show();
-    aTabCtrl.SetCurPageId( 1 );
+
+    sal_Int32 nPageId = HELP_INDEX_PAGE_INDEX;
+    SvtViewOptions aViewOpt( E_TABDIALOG, CONFIGNAME_INDEXWIN );
+    if ( aViewOpt.Exists() )
+        nPageId = aViewOpt.GetPageID();
+    aTabCtrl.SetCurPageId( (USHORT)nPageId );
     ActivatePageHdl( &aTabCtrl );
     aActiveLB.SetSelectHdl( LINK( this, SfxHelpIndexWindow_Impl, SelectHdl ) );
     nMinWidth = aActiveLB.GetSizePixel().Width();
@@ -556,6 +693,9 @@ SfxHelpIndexWindow_Impl::~SfxHelpIndexWindow_Impl()
 
     for ( USHORT i = 0; i < aActiveLB.GetEntryCount(); ++i )
         delete (String*)(ULONG)aActiveLB.GetEntryData(i);
+
+    SvtViewOptions aViewOpt( E_TABDIALOG, CONFIGNAME_INDEXWIN );
+    aViewOpt.SetPageID( (sal_Int32)aTabCtrl.GetCurPageId() );
 }
 
 // -----------------------------------------------------------------------
@@ -913,7 +1053,7 @@ void SfxHelpWindow_Impl::InitSizes()
 void SfxHelpWindow_Impl::LoadConfig()
 {
     sal_Int32 nWidth;
-     SvtViewOptions aViewOpt( E_WINDOW, HELPWIN_CONFIGNAME );
+     SvtViewOptions aViewOpt( E_WINDOW, CONFIGNAME_HELPWIN );
     if ( aViewOpt.Exists() )
     {
         aViewOpt.GetSize( nWidth, nHeight );
@@ -940,7 +1080,7 @@ void SfxHelpWindow_Impl::LoadConfig()
 
 void SfxHelpWindow_Impl::SaveConfig()
 {
-    SvtViewOptions aViewOpt( E_WINDOW, HELPWIN_CONFIGNAME );
+    SvtViewOptions aViewOpt( E_WINDOW, CONFIGNAME_HELPWIN );
 
     if ( xWindow.is() )
     {
@@ -987,7 +1127,12 @@ IMPL_LINK( SfxHelpWindow_Impl, OpenHdl, ListBox* , pBox )
         PARSE_URL( aURL );
         Reference < XDispatch > xDisp = pHelpInterceptor->queryDispatch( aURL, String(), 0 );
         if ( xDisp.is() )
+        {
+            if ( !IsWait() )
+                EnterWait();
+            pOpenListener->AddListener( xDisp, aURL );
             xDisp->dispatch( aURL, Sequence < PropertyValue >() );
+        }
     }
 
     return 0;
@@ -1003,6 +1148,15 @@ IMPL_LINK( SfxHelpWindow_Impl, ChangeHdl, HelpListener_Impl*, pListener )
 
 // -----------------------------------------------------------------------
 
+IMPL_LINK( SfxHelpWindow_Impl, OpenDoneHdl, OpenStatusListener_Impl*, pListener )
+{
+    if ( IsWait() )
+        LeaveWait();
+    return 0;
+}
+
+// -----------------------------------------------------------------------
+
 SfxHelpWindow_Impl::SfxHelpWindow_Impl(
     const ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame >& rFrame,
     Window* pParent, WinBits nBits ) :
@@ -1013,6 +1167,7 @@ SfxHelpWindow_Impl::SfxHelpWindow_Impl(
     pTextWin        ( NULL ),
     pHelpInterceptor( new HelpInterceptor_Impl() ),
     pHelpListener   ( new HelpListener_Impl( pHelpInterceptor ) ),
+    pOpenListener   ( new OpenStatusListener_Impl ),
     nExpandWidth    ( 0 ),
     nCollapseWidth  ( 0 ),
     nHeight         ( 0 ),
@@ -1021,6 +1176,7 @@ SfxHelpWindow_Impl::SfxHelpWindow_Impl(
     bIndex          ( sal_True )
 
 {
+    pHelpInterceptor->InitWaiter( pOpenListener, this );
     pIndexWin = new SfxHelpIndexWindow_Impl( this );
     pIndexWin->SetDoubleClickHdl( LINK( this, SfxHelpWindow_Impl, OpenHdl ) );
     pIndexWin->Show();
@@ -1032,7 +1188,7 @@ SfxHelpWindow_Impl::SfxHelpWindow_Impl(
     pTextWin->Show();
     pHelpInterceptor->setInterception( pTextWin->getFrame() );
     pHelpListener->SetChangeHdl( LINK( this, SfxHelpWindow_Impl, ChangeHdl ) );
-
+    pOpenListener->SetOpenHdl( LINK( this, SfxHelpWindow_Impl, OpenDoneHdl ) );
     LoadConfig();
 }
 
@@ -1098,6 +1254,9 @@ void SfxHelpWindow_Impl::DoAction( USHORT nActionId )
                 aArgs[0].Name = String( DEFINE_CONST_UNICODE("ReadOnly") );
                 BOOL bReadOnly = TRUE;
                 aArgs[0].Value <<= bReadOnly;
+                if ( !IsWait() )
+                    EnterWait();
+                pOpenListener->AddListener( xDisp, aURL );
                 xDisp->dispatch( aURL, aArgs );
             }
             break;
@@ -1136,6 +1295,37 @@ void SfxHelpWindow_Impl::DoAction( USHORT nActionId )
             }
             break;
         }
+    }
+}
+
+// -----------------------------------------------------------------------
+
+void SfxHelpWindow_Impl::FirstOpenMessage()
+{
+    Update();
+    URL aURL;
+    aURL.Complete = DEFINE_CONST_UNICODE("file:////dummy/dummy.htm");
+    PARSE_URL( aURL );
+    Reference < XDispatch > xDisp = pHelpInterceptor->queryDispatch( aURL, String(), 0 );
+    if ( xDisp.is() )
+    {
+        Sequence < PropertyValue > aArgs( 2 );
+        aArgs[0].Name = String( DEFINE_CONST_UNICODE("ReadOnly") );
+        BOOL bReadOnly = TRUE;
+        aArgs[0].Value <<= bReadOnly;
+
+        SvStream* pStream = new SvCacheStream;
+        String aMsg( SfxResId( STR_HELP_FIRST_MESSAGE ) );
+        String aHtml( SfxResId( STR_HELP_FIRST_HTML ) );
+        aHtml.SearchAndReplace( DEFINE_CONST_UNICODE("%1"), aMsg );
+        ByteString aHtmlStr( aHtml, RTL_TEXTENCODING_UTF8 );
+        *pStream << aHtmlStr.GetBuffer();
+        SvLockBytesRef xLockBytes = new SvLockBytes( pStream );
+        Reference < ::com::sun::star::io::XInputStream > xStream = new ::utl::OInputStreamHelper( xLockBytes, 8192 );
+        aArgs[1].Name = String( DEFINE_CONST_UNICODE("InputStream") );
+        aArgs[1].Value <<= xStream;
+
+        xDisp->dispatch( aURL, aArgs );
     }
 }
 
