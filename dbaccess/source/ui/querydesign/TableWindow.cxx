@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindow.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-26 07:46:12 $
+ *  last change: $Author: oj $ $Date: 2002-11-26 12:44:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,12 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
 #include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
+#endif
 #ifndef DBAUI_QUERYCONTROLLER_HXX
 #include "querycontroller.hxx"
 #endif
@@ -240,7 +245,6 @@ void OTableWindow::SetPosSizePixel( const Point& rNewPos, const Size& rNewSize )
     SetPosPixel( rNewPos );
     SetSizePixel( rNewSize );
 }
-
 //------------------------------------------------------------------------------
 OTableWindowListBox* OTableWindow::CreateListBox()
 {
@@ -273,16 +277,19 @@ BOOL OTableWindow::FillListBox()
         for(sal_Int32 i=0;i< xKeyIndex->getCount();++i)
         {
             Reference<XPropertySet> xProp;
-            ::cppu::extractInterface(xProp,xKeyIndex->getByIndex(i));
-            sal_Int32 nKeyType = 0;
-            xProp->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
-            if(KeyType::PRIMARY == nKeyType)
+            xKeyIndex->getByIndex(i) >>= xProp;
+            if ( xProp.is() )
             {
-                xColumnsSupplier = Reference<XColumnsSupplier>(xProp,UNO_QUERY);
-                break;
+                sal_Int32 nKeyType = 0;
+                xProp->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
+                if(KeyType::PRIMARY == nKeyType)
+                {
+                    xColumnsSupplier = Reference<XColumnsSupplier>(xProp,UNO_QUERY);
+                    break;
+                }
             }
         }
-        if(xColumnsSupplier.is())
+        if ( xColumnsSupplier.is() )
             xPKeyColumns = xColumnsSupplier->getColumns();
     }
     if(m_xColumns.is())
