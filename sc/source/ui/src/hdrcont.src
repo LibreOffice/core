@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hdrcont.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:49:25 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 11:37:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,7 +238,7 @@ Menu RID_POPUP_ROWHEADER
             Text [ italian ] = "Altezza riga..." ;
             Text [ portuguese ] = "Altu~ra da linha..." ;
             Text [ portuguese_brazilian ] = "Al~tura..." ;
-            Text[ chinese_simplified ] = "иЎЊй«(~G)...";
+            Text[ chinese_simplified ] = "иЎЊй«...";
             Text[ russian ] = "Высота строки...";
             Text[ polish ] = "Wyso~koњж...";
             Text[ japanese ] = "иЎЊгЃ®й«гЃ•(~G)...";
