@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerexport.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-28 14:59:18 $
+ *  last change: $Author: fs $ $Date: 2001-05-29 15:37:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,6 @@ namespace xmloff
 
     public:
         OFormLayerXMLExport_Impl(SvXMLExport& _rContext);
-        ~OFormLayerXMLExport_Impl();
 
     protected:
         /** exports one single grid column
@@ -305,6 +304,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.10  2001/05/28 14:59:18  fs
+ *  #86712# added control number style related functionality
+ *
  *  Revision 1.9  2001/02/01 09:46:47  fs
  *  no own style handling anymore - the shape exporter is responsible for our styles now
  *
