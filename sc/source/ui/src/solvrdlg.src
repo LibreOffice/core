@@ -2,9 +2,9 @@
  *
  *  $RCSfile: solvrdlg.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-27 08:39:18 $
+ *  last change: $Author: kz $ $Date: 2000-11-29 12:45:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
  //
  // $Workfile:   solvrdlg.src  $
  //   $Author: kz $
- //     $Date: 2000-11-27 08:39:18 $
- // $Revision: 1.4 $
+ //     $Date: 2000-11-29 12:45:17 $
+ // $Revision: 1.5 $
  //  $Logfile:   T:/sc/source/ui/src/solvrdlg.srv  $
  //----------------------------------------------------------------------------
 
@@ -320,7 +320,7 @@ ModelessDialog RID_SCDLG_SOLVER
         Text[ chinese_simplified ] = "ΔΏ±κΚύΦµΞήΠ§£΅";
         Text[ russian ] = "Νεδξοσρςθμξε κξνεχνξε ηνΰχενθε!";
         Text[ polish ] = "Nieprawid³owa wartoζ docelowa!";
-        Text[ japanese ] = "‚±‚Μ–Ϊ•W’l‚Ν–³ψ‚Ε‚·B";
+        Text[ japanese ] = "‚±‚Μΐ°Ήή―Δ’l‚Ν–³ψ‚Ε‚·B";
         Text[ chinese_traditional ] = "¥ΨΌΠΌΖ­ΘµL®Δ΅I";
         Text[ arabic ] = "ήνγΙ εΟέ ΫνΡ ΥΗαΝΙ!";
         Text[ greek ] = "Μη έγκυρη τιμή προορισμού!";
@@ -346,7 +346,7 @@ ModelessDialog RID_SCDLG_SOLVER
         Text[ chinese_simplified ] = "Ξ΄¶¨ÒεµΔΓϋ³Ζµ±ΧχΏΙ±δΑΏµΔµ¥ΤªΈρ£΅";
         Text[ russian ] = "Νεξοπεδελεννξε θμÿ δλÿ θημενÿεμξι ÿχεικθ!";
         Text[ polish ] = "Nie zdefiniowana nazwa jako komσrka zmienna!";
-        Text[ japanese ] = "•Ο‰»‚³‚Ή‚ιΎΩ‚ªw’θ‚³‚κ‚Δ‚Ά‚ά‚Ή‚ρ!";
+        Text[ japanese ] = "•Ο‰»‚³‚Ή‚ιΎΩ‚ªw’θ‚³‚κ‚Δ‚Ά‚ά‚Ή‚ρB";
         Text[ chinese_traditional ] = "¥Ό©wΈqªΊ¦WΊΩ³Q·ν§@¥iΕά¶qªΊΐx¦s®ζ΅I";
         Text[ arabic ] = "ΗΣγ ΫνΡ γυΪΡψέ ίΞανΙ γΚΫνΡΙ!";
         Text[ greek ] = "Αόριστο όνομα ως μεταβλητό κελί!";
@@ -372,7 +372,7 @@ ModelessDialog RID_SCDLG_SOLVER
         Text[ chinese_simplified ] = "Ξ΄¶¨ÒεµΔΓϋ³Ζµ±ΧχΉ«Κ½µ¥ΤªΈρ£΅";
         Text[ russian ] = "Νεξοπεδελεννξε θμÿ δλÿ ÿχεικθ τξπμσλϋ!";
         Text[ polish ] = "Nie zdefiniowana nazwa jako formu³a komσrek!";
-        Text[ japanese ] = "”®ΎΩ‚ªw’θ‚³‚κ‚Δ‚Ά‚ά‚Ή‚ρ!";
+        Text[ japanese ] = "”®ΎΩ‚ªw’θ‚³‚κ‚Δ‚Ά‚ά‚Ή‚ρB";
         Text[ chinese_traditional ] = "¥Ό©wΈqªΊ¦WΊΩ³Q·ν§@¤½¦΅ΐx¦s®ζ΅I";
         Text[ arabic ] = "ΗΣγ ΫνΡ γυΪΡψέ ίΞανΙ ΥνΫΙ!";
         Text[ greek ] = "Αόριστο όνομα ως κελί τύπου!";
@@ -399,7 +399,7 @@ ModelessDialog RID_SCDLG_SOLVER
         Text[ chinese_simplified ] = "µ¥ΤªΈρΔΪ±ΨΠλΊ¬ΣΠÒ»ΈφΉ«Κ½£΅";
         Text[ russian ] = "ίχεικΰ δξλζνΰ ρξδεπζςό τξπμσλσ!";
         Text[ polish ] = "Komσrka musi zawieraζ formu³κ!";
-        Text[ japanese ] = "ΎΩ‚Ν”®‚πά‚ρ‚Ε‚Ά‚Θ‚―‚κ‚Ξ‚Θ‚θ‚ά‚Ή‚ρ!";
+        Text[ japanese ] = "ΎΩ‚Ι”®‚ªά‚ά‚κ‚Δ‚Ά‚ι•K—v‚ª‚ ‚θ‚ά‚·B";
         Text[ chinese_traditional ] = "ΐx¦s®ζ¥²¶·§t¦³¤@­Σ¤½¦΅΅I";
         Text[ arabic ] = "νΜΘ Γδ ΚΝΚζν ΗαΞανΙ Ϊαμ ΥνΫΙ.";
         Text[ greek ] = "Το κελί πρέπει να περιέχει έναν τύπο!";
