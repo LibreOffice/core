@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoDocumentSettings.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-28 16:35:25 $
+ *  last change: $Author: cl $ $Date: 2001-06-25 15:57:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,7 +225,7 @@ enum SdDocumentSettingsPropertyHandles
     HANDLE_PRINTHIDENPAGES, HANDLE_PRINTFITPAGE, HANDLE_PRINTTILEPAGE, HANDLE_PRINTBOOKLET, HANDLE_PRINTBOOKLETFRONT,
     HANDLE_PRINTBOOKLETBACK, HANDLE_PRINTQUALITY, HANDLE_COLORTABLEURL, HANDLE_DASHTABLEURL, HANDLE_LINEENDTABLEURL, HANDLE_HATCHTABLEURL,
     HANDLE_GRADIENTTABLEURL, HANDLE_BITMAPTABLEURL, HANDLE_FORBIDDENCHARS, HANDLE_APPLYUSERDATA, HANDLE_PAGENUMFMT,
-    HANDLE_PRINTERNAME, HANDLE_PRINTERJOB, HANDLE_PARAGRAPHSUMMATION
+    HANDLE_PRINTERNAME, HANDLE_PRINTERJOB, HANDLE_PARAGRAPHSUMMATION, HANDLE_CHARCOMPRESS
 };
 
 #define MID_PRINTER 1
@@ -281,6 +281,7 @@ enum SdDocumentSettingsPropertyHandles
 
             { MAP_LEN("PageNumberFormat"),      HANDLE_PAGENUMFMT,          &::getCppuType((const sal_Int32*)0),    0,  0 },
             { MAP_LEN("ParagraphSummation"),    HANDLE_PARAGRAPHSUMMATION,  &::getBooleanCppuType(),                0,  0 },
+            { MAP_LEN("CharacterCompressionType"),HANDLE_CHARCOMPRESS,      &::getCppuType((sal_Int16*)0),          0,  0 },
             { NULL, 0, 0, NULL, 0, 0 }
         };
 
@@ -745,6 +746,30 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
             }
             break;
 
+            case HANDLE_CHARCOMPRESS:
+            {
+                sal_Int16 nCharCompressType;
+                if( *pValues >>= nCharCompressType )
+                {
+                    bOk = sal_True;
+
+                    pDoc->SetCharCompressType( (UINT16)nCharCompressType );
+                    SdDrawDocument* pDocument = pDocSh->GetDoc();
+                    SdrOutliner& rOutl = pDocument->GetDrawOutliner( FALSE );
+                    rOutl.SetAsianCompressionMode( (UINT16)nCharCompressType );
+                    SdOutliner* pOutl = pDocument->GetOutliner( FALSE );
+                    if( pOutl )
+                    {
+                        pOutl->SetAsianCompressionMode( (UINT16)nCharCompressType );
+                    }
+                    pOutl = pDocument->GetInternalOutliner( FALSE );
+                    if( pOutl )
+                    {
+                        pOutl->SetAsianCompressionMode( (UINT16)nCharCompressType );
+                    }
+                }
+
+            }
             default:
                 throw UnknownPropertyException();
 
@@ -971,6 +996,10 @@ void DocumentSettings::_getPropertyValues( const PropertyMapEntry** ppEntries, A
             }
             break;
 
+            case HANDLE_CHARCOMPRESS:
+            {
+                *pValue <<= pDoc->GetCharCompressType();
+            }
             default:
                 throw UnknownPropertyException();
         }
