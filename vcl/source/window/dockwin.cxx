@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dockwin.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:38:10 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:11:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,10 +59,11 @@
  *
  ************************************************************************/
 
-#define _SV_DOCKWIN_CXX
-
+#ifndef _SV_SVSYS_HXX
+#include <svsys.h>
+#endif
 #ifndef _SV_RC_H
-#include <rc.h>
+#include <tools/rc.h>
 #endif
 #ifndef _SV_EVENT_HXX
 #include <event.hxx>
@@ -81,9 +82,6 @@
 #endif
 #ifndef _SV_SVDATA_HXX
 #include <svdata.hxx>
-#endif
-#ifndef _SV_SVSYS_HXX
-#include <svsys.h>
 #endif
 #ifndef _SV_TIMER_HXX
 #include <timer.hxx>
