@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableConnection.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:22:38 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 12:46:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,16 +93,18 @@ namespace dbaui
     DBG_NAME(OTableConnection)
     //------------------------------------------------------------------------
     OTableConnection::OTableConnection( OJoinTableView* _pContainer, OTableConnectionData* _pTabConnData )
-        :m_bSelected( FALSE )
+        :Window(_pContainer)
+        ,m_bSelected( FALSE )
         ,m_pParent( _pContainer )
         ,m_pData( _pTabConnData )
     {
         DBG_CTOR(OTableConnection,NULL);
         Init();
+        Hide();
     }
 
     //------------------------------------------------------------------------
-    OTableConnection::OTableConnection( const OTableConnection& _rConn )
+    OTableConnection::OTableConnection( const OTableConnection& _rConn ) : Window(_rConn.m_pParent)
     {
         DBG_CTOR(OTableConnection,NULL);
         m_pData = _rConn.GetData()->NewInstance();
