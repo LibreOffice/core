@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-23 15:08:25 $
+ *  last change: $Author: th $ $Date: 2000-11-30 16:15:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2509,12 +2509,11 @@ int OutputDevice::ImplNewFont()
     }
     else if ( eAlign == ALIGN_TOP )
     {
-        long nOrientation = pFontEntry->mnOrientation;
-        if ( nOrientation )
+        if ( pFontEntry->mnOrientation )
         {
             mnTextOffX = 0;
             mnTextOffY = pFontEntry->maMetric.mnAscent;
-            ImplRotatePos( 0, 0, mnTextOffX, mnTextOffY, nOrientation );
+            ImplRotatePos( 0, 0, mnTextOffX, mnTextOffY, pFontEntry->mnOrientation );
         }
         else
         {
@@ -2524,12 +2523,11 @@ int OutputDevice::ImplNewFont()
     }
     else // eAlign == ALIGN_BOTTOM
     {
-        long nOrientation = pFontEntry->mnOrientation;
-        if ( nOrientation )
+        if ( pFontEntry->mnOrientation )
         {
             mnTextOffX = 0;
             mnTextOffY = -pFontEntry->maMetric.mnDescent;
-            ImplRotatePos( 0, 0, mnTextOffX, mnTextOffY, nOrientation );
+            ImplRotatePos( 0, 0, mnTextOffX, mnTextOffY, pFontEntry->mnOrientation );
         }
         else
         {
@@ -3280,6 +3278,9 @@ void OutputDevice::ImplDrawTextLine( long nBaseX,
                                      FontStrikeout eStrikeout,
                                      FontUnderline eUnderline )
 {
+    if ( !nWidth )
+        return;
+
     ImplFontEntry*  pFontEntry = mpFontEntry;
     Color           aTextLineColor = GetTextLineColor();
     long            nBaseY = nY;
@@ -3646,6 +3647,18 @@ void OutputDevice::ImplDrawTextLine( long nBaseX,
 
 // -----------------------------------------------------------------------
 
+static BOOL ImplIsLineCharacter( sal_Unicode c )
+{
+    // !(Control+Space, C1-Control+HardSpace, General Space Punctuation)
+    if ( ((c > 0x0020) && (c < 0x0080)) ||
+         ((c > 0x00A0) && (c < 0x2000)) ||
+         ((c > 0x200F) && (c < 0x00FE)) )
+        return TRUE;
+    return FALSE;
+}
+
+// -----------------------------------------------------------------------
+
 void OutputDevice::ImplDrawTextLines( long nX, long nY,
                                       const sal_Unicode* pStr, xub_StrLen nLen,
                                       const long* pDXAry,
@@ -3655,33 +3668,46 @@ void OutputDevice::ImplDrawTextLines( long nX, long nY,
 {
     if ( bWordLine )
     {
-        ::rtl::OUString aText( pStr, nLen );
-        uno::Reference < i18n::XBreakIterator > xBI = vcl::unohelper::CreateBreakIterator();
-        uno::Reference< linguistic2::XHyphenator > xHyph;
-        i18n::LineBreakHyphenationOptions aHyphOptions( xHyph, 1 );
-        i18n::LineBreakUserOptions aUserOptions;
-
-        i18n::Boundary aBoundary = xBI->getWordBoundary( aText, 0, GetSettings().GetLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES, TRUE );
-        while ( ( aBoundary.startPos >= 0 ) && ( aBoundary.startPos < nLen ) )
+        BOOL        bLine = FALSE;
+        xub_StrLen  nLineStart = 0;
+        xub_StrLen  nLineEnd = 0;
+        while ( nLineEnd < nLen )
         {
-            xub_StrLen nWordEnd = Max( (xub_StrLen)aBoundary.endPos, nLen );
-            long nTempX = ImplGetTextWidth( pStr, aBoundary.startPos, pDXAry );
-            long nWidth = ImplGetTextWidth( pStr+aBoundary.startPos, aBoundary.endPos-aBoundary.startPos, pDXAry );
-            ImplDrawTextLine( nX, nX + nTempX, nY, nWidth, eStrikeout, eUnderline );
-            aBoundary = xBI->nextWord( aText, aBoundary.endPos, GetSettings().GetLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES );
+            BOOL bCurLine = ImplIsLineCharacter( *(pStr+nLineEnd) );
+
+            // draw a new line?
+            if ( bLine && !bCurLine )
+            {
+                // Query Size to text start and draw the Line to text end
+                long nStartX = ImplGetTextWidth( pStr, nLineStart, pDXAry );
+                long nEndX = ImplGetTextWidth( pStr, nLineEnd, pDXAry );
+                ImplDrawTextLine( nX, nX+nStartX, nY, nEndX-nStartX, eStrikeout, eUnderline );
+            }
+            if ( bLine != bCurLine )
+            {
+                bLine = bCurLine;
+                nLineStart = nLineEnd;
+            }
+            nLineEnd++;
+        }
+
+        if ( bLine && nLen )
+        {
+            // Query Size to text start and draw the Line to text end
+            long nStartX = ImplGetTextWidth( pStr, nLineStart, pDXAry );
+            long nEndX = ImplGetTextWidth( pStr, nLineEnd, pDXAry );
+            ImplDrawTextLine( nX, nX+nStartX, nY, nEndX-nStartX, eStrikeout, eUnderline );
         }
     }
     else
-    {
         ImplDrawTextLine( nX, nX, nY, ImplGetTextWidth( pStr, nLen, pDXAry ), eStrikeout, eUnderline );
-    }
 }
 
 // -----------------------------------------------------------------------
 
 void OutputDevice::ImplDrawMnemonicLine( long nX, long nY, xub_Unicode c )
 {
-    ImplDrawTextLines( nX, nY, &c, 1, NULL, STRIKEOUT_NONE, UNDERLINE_SINGLE, FALSE );
+    ImplDrawTextLine( nX, nX, nY, ImplGetTextWidth( &c, 1, NULL ), STRIKEOUT_NONE, UNDERLINE_SINGLE );
 }
 
 // -----------------------------------------------------------------------
@@ -3977,7 +4003,7 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
 
     long nMaxLineWidth  = 0;
     rLineInfo.Clear();
-    if ( rStr.Len() && ( nWidth > 0 ) )
+    if ( rStr.Len() && (nWidth > 0) )
     {
         ::rtl::OUString aText( rStr );
         uno::Reference < i18n::XBreakIterator > xBI;
@@ -3985,8 +4011,8 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
         i18n::LineBreakHyphenationOptions aHyphOptions( xHyph, 1 );
         i18n::LineBreakUserOptions aUserOptions;
 
-        USHORT nPos = 0;
-        USHORT nLen = rStr.Len();
+        xub_StrLen nPos = 0;
+        xub_StrLen nLen = rStr.Len();
         while ( nPos < nLen )
         {
             xub_StrLen nBreakPos = nPos;
