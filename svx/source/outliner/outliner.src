@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outliner.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:04:13 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:44:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,9 @@ String RID_OUTLUNDO_HEIGHT
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Mou";
     TEXT[ thai ] = "ย้าย";
+    TEXT[ czech ] = "Přesunout";
+    TEXT[ hebrew ] = "‮הזזה‬";
+    TEXT[ hindi ] = "स्थानान्तर";
 };
 String RID_OUTLUNDO_DEPTH
 {
@@ -104,7 +107,7 @@ String RID_OUTLUNDO_DEPTH
     Text [ swedish ] = "Dra in" ;
     Text [ danish ] = "Indryk" ;
     Text [ portuguese ] = "Avan�ar" ;
-    Text [ portuguese_brazilian ] = "Einr?ken" ;
+    Text [ portuguese_brazilian ] = "Recuo" ;
     Text[ chinese_simplified ] = "缩进";
     Text[ russian ] = "������";
     Text[ polish ] = "Wci�cie";
@@ -120,6 +123,9 @@ String RID_OUTLUNDO_DEPTH
     Text[ catalan ] = "Sagnat";
     Text[ finnish ] = "Sisenn�";
     Text[ thai ] = "ระยะเยื้อง";
+    Text[ czech ] = "Odsadit";
+    Text[ hebrew ] = "‮כניסה‬";
+    Text[ hindi ] = "इन्डेन्ट";
 };
 String RID_OUTLUNDO_EXPAND
 {
@@ -135,10 +141,10 @@ String RID_OUTLUNDO_EXPAND
     Text [ swedish ] = "Visa understycken" ;
     Text [ danish ] = "Vis underafsnit" ;
     Text [ portuguese ] = "Mostrar subpar�grafos" ;
-    Text [ portuguese_brazilian ] = "Unterabs?tze zeigen" ;
+    Text [ portuguese_brazilian ] = "Mostrar sub pontos" ;
     Text[ chinese_simplified ] = "显示分段落";
     Text[ russian ] = "���������� ���������";
-    Text[ polish ] = "Poka� akapity podrz�dne";
+    Text[ polish ] = "Poka� podpunkty";
     Text[ japanese ] = "下位段落の表示";
     Text[ chinese_traditional ] = "顯示分段落";
     Text[ arabic ] = "����� ������� �������";
@@ -151,6 +157,9 @@ String RID_OUTLUNDO_EXPAND
     Text[ catalan ] = "Mostra els subpunts";
     Text[ finnish ] = "N�yt� alipisteet";
     Text[ thai ] = "แสดงจุดย่อย";
+    Text[ czech ] = "Zobrazit podbody";
+    Text[ hebrew ] = "‮הצגת תת נקודות‬";
+    Text[ hindi ] = "अधीनबिन्दुओं को दिखाओ";
 };
 String RID_OUTLUNDO_COLLAPSE
 {
@@ -166,7 +175,7 @@ String RID_OUTLUNDO_COLLAPSE
     Text [ swedish ] = "D�lj understycken" ;
     Text [ danish ] = "Skjul underafsnit" ;
     Text [ portuguese ] = "Ocultar subpar�grafos" ;
-    Text [ portuguese_brazilian ] = "Unterabs?tze verstecken" ;
+    Text [ portuguese_brazilian ] = "Contrair" ;
     Text[ chinese_simplified ] = "隐入分段落";
     Text[ russian ] = "�������� ���������";
     Text[ polish ] = "Zwi� akapity podrz�dne";
@@ -182,6 +191,9 @@ String RID_OUTLUNDO_COLLAPSE
     Text[ catalan ] = "Redueix";
     Text[ finnish ] = "Pienenn�";
     Text[ thai ] = "ยุบ";
+    Text[ czech ] = "Srolovat";
+    Text[ hebrew ] = "‮כיווץ‬";
+    Text[ hindi ] = "दबाओ";
 };
 String RID_OUTLUNDO_ATTR
 {
@@ -212,6 +224,9 @@ String RID_OUTLUNDO_ATTR
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Aplica els atributs";
     TEXT[ thai ] = "ใช้คุณลักษณะ";
+    TEXT[ czech ] = "Použít atributy";
+    TEXT[ hebrew ] = "‮יישום תכונות‬";
+    TEXT[ hindi ] = "ऐट्रिब्यूट्स लागू करो";
 };
 String RID_OUTLUNDO_INSERT
 {
@@ -244,7 +259,23 @@ String RID_OUTLUNDO_INSERT
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Insereix";
     TEXT[ thai ] = "แทรก";
+    TEXT[ czech ] = "Vložit";
+    TEXT[ hebrew ] = "‮הוספה‬";
+    TEXT[ hindi ] = "जोड़ो";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
