@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mnumgr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cd $ $Date: 2001-08-03 18:21:14 $
+ *  last change: $Author: mba $ $Date: 2001-08-15 15:12:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -670,7 +670,7 @@ void SfxMenuManager::ConstructSvMenu( Menu* pSuper, SvStream& rStream,
                 {
                     SfxMacroInfo aInfo;
                     rStream >> aInfo;
-                    nId = aInfo.GetSlotId();
+//                    nId = aInfo.GetSlotId();
                 }
 
                 pSuper->InsertItem( nId, aTitle );
