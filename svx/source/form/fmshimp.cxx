@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 16:58:17 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:36:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1010,7 +1010,7 @@ void FmXFormShell::ForceUpdateSelection(sal_Bool bAllowInvalidation)
         if (!bAllowInvalidation)
             LockSlotInvalidation(sal_True);
 
-        SetSelection(m_pShell->GetFormView()->GetMarkList());
+        SetSelection(m_pShell->GetFormView()->GetMarkedObjectList());
 
         if (!bAllowInvalidation)
             LockSlotInvalidation(sal_False);
@@ -2531,7 +2531,7 @@ IMPL_LINK(FmXFormShell, OnTimeOut, void*, EMPTYTAG)
 {
     OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     if (m_pShell->IsDesignMode() && m_pShell->GetFormView())
-        SetSelection(m_pShell->GetFormView()->GetMarkList());
+        SetSelection(m_pShell->GetFormView()->GetMarkedObjectList());
 
     return 0;
 }
