@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scstring.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:57:30 $
+ *  last change: $Author: kz $ $Date: 2001-07-17 20:57:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1809,11 +1809,11 @@ String SCSTR_HOR_JUSTIFY_REPEAT
     Text [ dutch ] = "Uitlijnen herhalen" ;
     Text [ spanish ] = "Repetir alineación" ;
     Text [ english_us ] = "Repeat alignment" ;
-    Text[ chinese_simplified ] = "ÖØ¸´¶ÔÆë";
+    Text[ chinese_simplified ] = "ÖØĞÂ¶ÔÆë";
     Text[ russian ] = "Ïîâòîğèòü âûğàâíèâàíèå";
     Text[ polish ] = "Powtórz wyrównanie";
     Text[ japanese ] = "”z’u‚ÌØËß°Ä";
-    Text[ chinese_traditional ] = "­«½Æ¹ï»ô";
+    Text[ chinese_traditional ] = "­«·s¹ï»ô";
     Text[ arabic ] = "ÊßÑÇÑ ÇáãÍÇĞÇÉ";
     Text[ greek ] = "ÅğáíÜëçøç óôïß÷éóçò";
     Text[ korean ] = "¸ÂÃã ¹İº¹";
@@ -3117,6 +3117,7 @@ String SCSTR_UNDO_GRAFFILTER
     Text[ catalan ] = "Filtro de imagen";
     Text[ finnish ] = "Grafiikkasuodatin";
 };
+
 
 
 
