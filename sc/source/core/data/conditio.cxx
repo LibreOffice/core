@@ -2,9 +2,9 @@
  *
  *  $RCSfile: conditio.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: er $ $Date: 2001-03-14 18:05:33 $
+ *  last change: $Author: dr $ $Date: 2001-05-02 15:05:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,7 @@
 #include "rechead.hxx"
 #include "rangelst.hxx"
 #include "stlpool.hxx"
+#include "rangenam.hxx"
 
 //------------------------------------------------------------------------
 
@@ -92,23 +93,34 @@ SV_IMPL_OP_PTRARR_SORT( ScConditionalFormats_Impl, ScConditionalFormatPtr );
 
 //------------------------------------------------------------------------
 
-BOOL lcl_HasRelRef( ScTokenArray* pFormula )
+BOOL lcl_HasRelRef( ScDocument* pDoc, ScTokenArray* pFormula, USHORT nRecursion = 0 )
 {
     if (pFormula)
     {
         pFormula->Reset();
         ScToken* t;
-        for( t = pFormula->GetNextReference(); t; t = pFormula->GetNextReference() )
+        for( t = pFormula->GetNextReferenceOrName(); t; t = pFormula->GetNextReferenceOrName() )
         {
-            SingleRefData& rRef1 = t->GetSingleRef();
-            if ( rRef1.IsColRel() || rRef1.IsRowRel() || rRef1.IsTabRel() )
-                return TRUE;
-            if ( t->GetType() == svDoubleRef )
+            if( t->GetType() == svIndex )
             {
-                SingleRefData& rRef2 = t->GetDoubleRef().Ref2;
-                if ( rRef2.IsColRel() || rRef2.IsRowRel() || rRef2.IsTabRel() )
+                ScRangeData* pRangeData = pDoc->GetRangeName()->FindIndex( t->GetIndex() );
+                if( (t->GetOpCode() == ocName) && (nRecursion < 42) && pRangeData &&
+                    lcl_HasRelRef( pDoc, pRangeData->GetCode(), nRecursion + 1 ) )
                     return TRUE;
             }
+            else
+            {
+                SingleRefData& rRef1 = t->GetSingleRef();
+                if ( rRef1.IsColRel() || rRef1.IsRowRel() || rRef1.IsTabRel() )
+                    return TRUE;
+                if ( t->GetType() == svDoubleRef )
+                {
+                    SingleRefData& rRef2 = t->GetDoubleRef().Ref2;
+                    if ( rRef2.IsColRel() || rRef2.IsRowRel() || rRef2.IsTabRel() )
+                        return TRUE;
+                }
+            }
+
         }
     }
     return FALSE;
@@ -239,7 +251,7 @@ ScConditionEntry::ScConditionEntry( ScConditionMode eOper,
                 }
             }
         }
-        bRelRef1 = lcl_HasRelRef( pFormula1 );
+        bRelRef1 = lcl_HasRelRef( pDoc, pFormula1 );
     }
     if ( pArr2 )
     {
@@ -263,7 +275,7 @@ ScConditionEntry::ScConditionEntry( ScConditionMode eOper,
                 }
             }
         }
-        bRelRef2 = lcl_HasRelRef( pFormula2 );
+        bRelRef2 = lcl_HasRelRef( pDoc, pFormula2 );
     }
 
     //  formula cells are created at IsValid
@@ -312,7 +324,7 @@ ScConditionEntry::ScConditionEntry( SvStream& rStream, ScMultipleReadHeader& rHd
         rStream >> aPos;
         pFormula1 = new ScTokenArray;
         pFormula1->Load( rStream, nVer, aPos );
-        bRelRef1 = lcl_HasRelRef( pFormula1 );
+        bRelRef1 = lcl_HasRelRef( pDoc, pFormula1 );
     }
     else if ( eType == SC_VAL_VALUE )
         rStream >> nVal1;
@@ -331,7 +343,7 @@ ScConditionEntry::ScConditionEntry( SvStream& rStream, ScMultipleReadHeader& rHd
             rStream >> aPos;
             pFormula2 = new ScTokenArray;
             pFormula2->Load( rStream, nVer, aPos );
-            bRelRef2 = lcl_HasRelRef( pFormula2 );
+            bRelRef2 = lcl_HasRelRef( pDoc, pFormula2 );
         }
         else if ( eType == SC_VAL_VALUE )
             rStream >> nVal2;
@@ -425,7 +437,7 @@ void ScConditionEntry::Compile( const String& rExpr1, const String& rExpr2,
                     }
                 }
             }
-            bRelRef1 = lcl_HasRelRef( pFormula1 );
+            bRelRef1 = lcl_HasRelRef( pDoc, pFormula1 );
         }
 
         if ( rExpr2.Len() )
@@ -450,7 +462,7 @@ void ScConditionEntry::Compile( const String& rExpr1, const String& rExpr2,
                     }
                 }
             }
-            bRelRef2 = lcl_HasRelRef( pFormula2 );
+            bRelRef2 = lcl_HasRelRef( pDoc, pFormula2 );
         }
     }
 }
