@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTabPage.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-04-28 11:22:14 $
+ *  last change:$Date: 2003-05-27 13:59:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package mod._toolkit;
 
 import java.io.PrintWriter;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.awt.XWindow;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.frame.XController;
@@ -126,7 +127,7 @@ public class AccessibleTabPage extends TestCase {
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
         the_Desk = (XDesktop) UnoRuntime.queryInterface(
-                    XDesktop.class, DesktopTools.createDesktop(Param.getMSF()));
+                    XDesktop.class, DesktopTools.createDesktop((XMultiServiceFactory)Param.getMSF()));
     }
 
     /**
@@ -189,7 +190,7 @@ public class AccessibleTabPage extends TestCase {
         if (xTextDoc != null) xTextDoc.dispose();
 
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF());
 
         try {
             log.println( "creating a text document" );
@@ -213,7 +214,7 @@ public class AccessibleTabPage extends TestCase {
         XURLTransformer urlTransf = null;
 
         try {
-            XInterface transf = (XInterface)tParam.getMSF().createInstance
+            XInterface transf = (XInterface)((XMultiServiceFactory)tParam.getMSF()).createInstance
                 ("com.sun.star.util.URLTransformer");
             urlTransf = (XURLTransformer)UnoRuntime.queryInterface
                 (XURLTransformer.class, transf);
@@ -236,7 +237,7 @@ public class AccessibleTabPage extends TestCase {
 
         XInterface oObj = null;
         try {
-            oObj = (XInterface) tParam.getMSF().createInstance
+            oObj = (XInterface) ((XMultiServiceFactory)tParam.getMSF()).createInstance
                 ("com.sun.star.awt.Toolkit") ;
         } catch (com.sun.star.uno.Exception e) {
             log.println("Couldn't get toolkit");
