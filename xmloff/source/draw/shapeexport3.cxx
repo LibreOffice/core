@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport3.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-13 15:00:56 $
+ *  last change: $Author: cl $ $Date: 2001-03-28 09:47:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,19 +143,23 @@ void XMLShapeExport::ImpExport3DSceneShape( const uno::Reference< drawing::XShap
     uno::Reference< drawing::XShapes > xShapes(xShape, uno::UNO_QUERY);
     if(xShapes.is() && xShapes->getCount())
     {
-        // prepare write 3DScene
-        ImpPrepareExport3DScene( xShape, XmlShapeTypeDraw3DSceneObject, nFeatures, pRefPoint);
-
-        // write 3DScene shape
-        SvXMLElementExport aOBJ( rExport, XML_NAMESPACE_DR3D, sXML_scene, sal_True, sal_True);
-
-        ImpExportEvents( xShape );
-
         uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
+        DBG_ASSERT( xPropSet.is(), "XMLShapeExport::ImpExport3DSceneShape can't export a scene without a propertyset" );
         if( xPropSet.is() )
         {
+            // Transformation
+            ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
+
+            // 3d attributes
+            export3DSceneAttributes( xPropSet );
+
+            // write 3DScene shape
+            SvXMLElementExport aOBJ( rExport, XML_NAMESPACE_DR3D, sXML_scene, sal_True, sal_True);
+
+            ImpExportEvents( xShape );
+
             // write 3DSceneLights
-            ImpExport3DLamps( xPropSet );
+            export3DLamps( xPropSet );
         }
 
         // write members
@@ -375,135 +379,125 @@ void XMLShapeExport::ImpExport3DShape(
 
 //////////////////////////////////////////////////////////////////////////////
 
-void XMLShapeExport::ImpPrepareExport3DScene(
-    const uno::Reference< drawing::XShape >& xShape,
-    XmlShapeType eShapeType, sal_Int32 nFeatures, awt::Point* pRefPoint)
+/** helper for chart that adds all attributes of a 3d scene element to the export */
+void XMLShapeExport::export3DSceneAttributes( const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet >& xPropSet )
 {
-    // write 3DScene attributes
-    const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
-    if(xPropSet.is())
+    OUString aStr;
+    OUStringBuffer sStringBuffer;
+
+    // world transformation (UNO_NAME_3D_TRANSFORM_MATRIX == "D3DTransformMatrix")
+    uno::Any aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DTransformMatrix")));
+    drawing::HomogenMatrix xHomMat;
+    aAny >>= xHomMat;
+    SdXMLImExTransform3D aTransform;
+    aTransform.AddHomogenMatrix(xHomMat);
+    if(aTransform.NeedsAction())
+        rExport.AddAttribute(XML_NAMESPACE_DR3D, sXML_transform, aTransform.GetExportString(rExport.GetMM100UnitConverter()));
+
+    // VRP, VPN, VUP
+    aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DCameraGeometry")));
+    drawing::CameraGeometry aCamGeo;
+    aAny >>= aCamGeo;
+
+    Vector3D aVRP(aCamGeo.vrp.PositionX, aCamGeo.vrp.PositionY, aCamGeo.vrp.PositionZ);
+    if(aVRP != Vector3D(0.0, 0.0, 1.0)) // write only when not default
     {
-        OUString aStr;
-        OUStringBuffer sStringBuffer;
-
-        // Transformation
-        ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
-
-        // world transformation (UNO_NAME_3D_TRANSFORM_MATRIX == "D3DTransformMatrix")
-        uno::Any aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DTransformMatrix")));
-        drawing::HomogenMatrix xHomMat;
-        aAny >>= xHomMat;
-        SdXMLImExTransform3D aTransform;
-        aTransform.AddHomogenMatrix(xHomMat);
-        if(aTransform.NeedsAction())
-            rExport.AddAttribute(XML_NAMESPACE_DR3D, sXML_transform, aTransform.GetExportString(rExport.GetMM100UnitConverter()));
-
-        // VRP, VPN, VUP
-        aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DCameraGeometry")));
-        drawing::CameraGeometry aCamGeo;
-        aAny >>= aCamGeo;
-
-        Vector3D aVRP(aCamGeo.vrp.PositionX, aCamGeo.vrp.PositionY, aCamGeo.vrp.PositionZ);
-        if(aVRP != Vector3D(0.0, 0.0, 1.0)) // write only when not default
-        {
-            rExport.GetMM100UnitConverter().convertVector3D(sStringBuffer, aVRP);
-            aStr = sStringBuffer.makeStringAndClear();
-            rExport.AddAttribute(XML_NAMESPACE_DR3D, sXML_vrp, aStr);
-        }
-
-        Vector3D aVPN(aCamGeo.vpn.DirectionX, aCamGeo.vpn.DirectionY, aCamGeo.vpn.DirectionZ);
-        if(aVPN != Vector3D(0.0, 0.0, 1.0)) // write only when not default
-        {
-            rExport.GetMM100UnitConverter().convertVector3D(sStringBuffer, aVPN);
-            aStr = sStringBuffer.makeStringAndClear();
-            rExport.AddAttribute(XML_NAMESPACE_DR3D, sXML_vpn, aStr);
-        }
-
-        Vector3D aVUP(aCamGeo.vup.DirectionX, aCamGeo.vup.DirectionY, aCamGeo.vup.DirectionZ);
-        if(aVUP != Vector3D(0.0, 1.0, 0.0)) // write only when not default
-        {
-            rExport.GetMM100UnitConverter().convertVector3D(sStringBuffer, aVUP);
-            aStr = sStringBuffer.makeStringAndClear();
-            rExport.AddAttribute(XML_NAMESPACE_DR3D, sXML_vup, aStr);
-        }
-
-        // projection "D3DScenePerspective" drawing::ProjectionMode
-        aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DScenePerspective")));
-        drawing::ProjectionMode xPrjMode;
-        aAny >>= xPrjMode;
-        if(xPrjMode == drawing::ProjectionMode_PARALLEL)
-            aStr = OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_parallel));
-        else
-            aStr = OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_perspective));
-        rExport.AddAttribute(XML_NAMESPACE_DR3D, sXML_projection, aStr);
-
-        // distance
-        aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneDistance")));
-        sal_Int32 nDistance;
-        aAny >>= nDistance;
-        rExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, nDistance);
+        rExport.GetMM100UnitConverter().convertVector3D(sStringBuffer, aVRP);
         aStr = sStringBuffer.makeStringAndClear();
-        rExport.AddAttribute(XML_NAMESPACE_DR3D, sXML_distance, aStr);
-
-        // focalLength
-        aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneFocalLength")));
-        sal_Int32 nFocalLength;
-        aAny >>= nFocalLength;
-        rExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, nFocalLength);
-        aStr = sStringBuffer.makeStringAndClear();
-        rExport.AddAttribute(XML_NAMESPACE_DR3D, sXML_focal_length, aStr);
-
-        // shadowSlant
-        aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneShadowSlant")));
-        sal_Int16 nShadowSlant;
-        aAny >>= nShadowSlant;
-        rExport.GetMM100UnitConverter().convertNumber(sStringBuffer, (sal_Int32)nShadowSlant);
-        aStr = sStringBuffer.makeStringAndClear();
-        rExport.AddAttribute(XML_NAMESPACE_DR3D, sXML_shadow_slant, aStr);
-
-        // shadeMode
-        aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneShadeMode")));
-        drawing::ShadeMode xShadeMode;
-        if(aAny >>= xShadeMode)
-        {
-            if(xShadeMode == drawing::ShadeMode_FLAT)
-                aStr = OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_flat));
-            else if(xShadeMode == drawing::ShadeMode_PHONG)
-                aStr = OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_phong));
-            else if(xShadeMode == drawing::ShadeMode_SMOOTH)
-                aStr = OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_gouraud));
-            else
-                aStr = OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_draft));
-        }
-        else
-        {
-            // ShadeMode enum not there, write default
-            aStr = OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_gouraud));
-        }
-        rExport.AddAttribute(XML_NAMESPACE_DR3D, sXML_shade_mode, aStr);
-
-        // ambientColor
-        aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneAmbientColor")));
-        sal_Int32 aColTemp;
-        Color aAmbientColor;
-        aAny >>= aColTemp; aAmbientColor.SetColor(aColTemp);
-        rExport.GetMM100UnitConverter().convertColor(sStringBuffer, aAmbientColor);
-        aStr = sStringBuffer.makeStringAndClear();
-        rExport.AddAttribute(XML_NAMESPACE_DR3D, sXML_ambient_color, aStr);
-
-        // lightingMode
-        aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneTwoSidedLighting")));
-        sal_Bool bTwoSidedLighting;
-        aAny >>= bTwoSidedLighting;
-        rExport.GetMM100UnitConverter().convertBool(sStringBuffer, bTwoSidedLighting);
-        aStr = sStringBuffer.makeStringAndClear();
-        rExport.AddAttribute(XML_NAMESPACE_DR3D, sXML_lighting_mode, aStr);
+        rExport.AddAttribute(XML_NAMESPACE_DR3D, sXML_vrp, aStr);
     }
+
+    Vector3D aVPN(aCamGeo.vpn.DirectionX, aCamGeo.vpn.DirectionY, aCamGeo.vpn.DirectionZ);
+    if(aVPN != Vector3D(0.0, 0.0, 1.0)) // write only when not default
+    {
+        rExport.GetMM100UnitConverter().convertVector3D(sStringBuffer, aVPN);
+        aStr = sStringBuffer.makeStringAndClear();
+        rExport.AddAttribute(XML_NAMESPACE_DR3D, sXML_vpn, aStr);
+    }
+
+    Vector3D aVUP(aCamGeo.vup.DirectionX, aCamGeo.vup.DirectionY, aCamGeo.vup.DirectionZ);
+    if(aVUP != Vector3D(0.0, 1.0, 0.0)) // write only when not default
+    {
+        rExport.GetMM100UnitConverter().convertVector3D(sStringBuffer, aVUP);
+        aStr = sStringBuffer.makeStringAndClear();
+        rExport.AddAttribute(XML_NAMESPACE_DR3D, sXML_vup, aStr);
+    }
+
+    // projection "D3DScenePerspective" drawing::ProjectionMode
+    aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DScenePerspective")));
+    drawing::ProjectionMode xPrjMode;
+    aAny >>= xPrjMode;
+    if(xPrjMode == drawing::ProjectionMode_PARALLEL)
+        aStr = OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_parallel));
+    else
+        aStr = OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_perspective));
+    rExport.AddAttribute(XML_NAMESPACE_DR3D, sXML_projection, aStr);
+
+    // distance
+    aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneDistance")));
+    sal_Int32 nDistance;
+    aAny >>= nDistance;
+    rExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, nDistance);
+    aStr = sStringBuffer.makeStringAndClear();
+    rExport.AddAttribute(XML_NAMESPACE_DR3D, sXML_distance, aStr);
+
+    // focalLength
+    aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneFocalLength")));
+    sal_Int32 nFocalLength;
+    aAny >>= nFocalLength;
+    rExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, nFocalLength);
+    aStr = sStringBuffer.makeStringAndClear();
+    rExport.AddAttribute(XML_NAMESPACE_DR3D, sXML_focal_length, aStr);
+
+    // shadowSlant
+    aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneShadowSlant")));
+    sal_Int16 nShadowSlant;
+    aAny >>= nShadowSlant;
+    rExport.GetMM100UnitConverter().convertNumber(sStringBuffer, (sal_Int32)nShadowSlant);
+    aStr = sStringBuffer.makeStringAndClear();
+    rExport.AddAttribute(XML_NAMESPACE_DR3D, sXML_shadow_slant, aStr);
+
+    // shadeMode
+    aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneShadeMode")));
+    drawing::ShadeMode xShadeMode;
+    if(aAny >>= xShadeMode)
+    {
+        if(xShadeMode == drawing::ShadeMode_FLAT)
+            aStr = OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_flat));
+        else if(xShadeMode == drawing::ShadeMode_PHONG)
+            aStr = OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_phong));
+        else if(xShadeMode == drawing::ShadeMode_SMOOTH)
+            aStr = OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_gouraud));
+        else
+            aStr = OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_draft));
+    }
+    else
+    {
+        // ShadeMode enum not there, write default
+        aStr = OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_gouraud));
+    }
+    rExport.AddAttribute(XML_NAMESPACE_DR3D, sXML_shade_mode, aStr);
+
+    // ambientColor
+    aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneAmbientColor")));
+    sal_Int32 aColTemp;
+    Color aAmbientColor;
+    aAny >>= aColTemp; aAmbientColor.SetColor(aColTemp);
+    rExport.GetMM100UnitConverter().convertColor(sStringBuffer, aAmbientColor);
+    aStr = sStringBuffer.makeStringAndClear();
+    rExport.AddAttribute(XML_NAMESPACE_DR3D, sXML_ambient_color, aStr);
+
+    // lightingMode
+    aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneTwoSidedLighting")));
+    sal_Bool bTwoSidedLighting;
+    aAny >>= bTwoSidedLighting;
+    rExport.GetMM100UnitConverter().convertBool(sStringBuffer, bTwoSidedLighting);
+    aStr = sStringBuffer.makeStringAndClear();
+    rExport.AddAttribute(XML_NAMESPACE_DR3D, sXML_lighting_mode, aStr);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
-void XMLShapeExport::ImpExport3DLamps( const uno::Reference< beans::XPropertySet >& xPropSet )
+/** helper for chart that exports all lamps from the propertyset */
+void XMLShapeExport::export3DLamps( const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet >& xPropSet )
 {
     // write lamps 1..8 as content
     OUString aStr;
