@@ -2,9 +2,9 @@
  *
  *  $RCSfile: IdPropArrayHelper.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-16 17:26:54 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 19:43:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,8 +129,6 @@ namespace comphelper
     };
 
     //------------------------------------------------------------------
-// do NOT compile these on Mac OS X with gcc 2.95, but DO compile for all others
-#if !defined( MACOSX ) || (defined(MACOSX) && (__GNUC__ >= 3))
     template<class TYPE>
     sal_Int32                       OIdPropertyArrayUsageHelper< TYPE >::s_nRefCount    = 0;
 
@@ -139,7 +137,6 @@ namespace comphelper
 
     template<class TYPE>
     ::osl::Mutex                    OIdPropertyArrayUsageHelper< TYPE >::s_aMutex;
-#endif
     //------------------------------------------------------------------
     template <class TYPE>
     OIdPropertyArrayUsageHelper<TYPE>::OIdPropertyArrayUsageHelper()
