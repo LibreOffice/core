@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlmessage.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-05 09:48:50 $
+ *  last change: $Author: fs $ $Date: 2001-03-02 17:04:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,7 @@ class OExceptionChainDialog : public ModalDialog
     OKButton        m_aOK;
 
 public:
-    OExceptionChainDialog(Window* pParent, const ::com::sun::star::uno::Any& _rStart);
+    OExceptionChainDialog(Window* pParent, const Any& _rStart);
     ~OExceptionChainDialog();
 
 protected:
@@ -139,7 +139,7 @@ protected:
 };
 
 //------------------------------------------------------------------------------
-OExceptionChainDialog::OExceptionChainDialog(Window* pParent, const ::com::sun::star::uno::Any& _rStart)
+OExceptionChainDialog::OExceptionChainDialog(Window* pParent, const Any& _rStart)
     :ModalDialog(pParent, ModuleRes(DLG_SQLEXCEPTIONCHAIN))
     ,m_aFrame           (this, ResId(GB_DETAILS))
     ,m_aListLabel       (this, ResId(FT_ERRORLIST))
@@ -177,53 +177,54 @@ OExceptionChainDialog::OExceptionChainDialog(Window* pParent, const ::com::sun::
 
     SQLExceptionInfo aInfo(_rStart);
     DBG_ASSERT(aInfo.isValid(), "OExceptionChainDialog::OExceptionChainDialog : invalid chain start !");
-    SQLExceptionIteratorHelper aIter(( const ::com::sun::star::sdbc::SQLException*)aInfo);
+    SQLExceptionIteratorHelper aIter(aInfo);
 
     Image   aErrorImage(ModuleRes(BMP_EXCEPTION_ERROR)),
             aWarningImage(ModuleRes(BMP_EXCEPTION_WARNING)),
             m_aInfoImage(ModuleRes(BMP_EXCEPTION_INFO));
 
+    SQLExceptionInfo aCurrent;
     while (aIter.hasMoreElements())
     {
-        SQLExceptionInfo aCurrent(*aIter.next());
+        aIter.next(aCurrent);
         if (aCurrent.isValid())
         {
-            const ::com::sun::star::sdbc::SQLException* pCurrentException = (const ::com::sun::star::sdbc::SQLException*)aCurrent;
+            const SQLException* pCurrentException = (const SQLException*)aCurrent;
             SvLBoxEntry* pListEntry = NULL;
-            ::com::sun::star::sdbc::SQLException* pUserData;
+            void* pUserData = new SQLExceptionInfo(aCurrent);
             switch (aCurrent.getType())
             {
                 case SQLExceptionInfo::SQL_EXCEPTION:
+                {
                     pListEntry = m_aExceptionList.InsertEntry(sErrorLabel, aErrorImage, aErrorImage);
-                    pUserData = new ::com::sun::star::sdbc::SQLException(*(const ::com::sun::star::sdbc::SQLException*)aCurrent);
-                    if (pUserData->SQLState.getLength())
+                    const SQLException* pException = (const SQLException*)aCurrent;
+                    if (pException->SQLState.getLength())
                     {
                         UniString sTitle(sStatusLabel);
                         sTitle.AppendAscii(" : ");
-                        sTitle += pUserData->SQLState.getStr();
+                        sTitle += pException->SQLState.getStr();
                         SvLBoxEntry* pSQLstateEntry = m_aExceptionList.InsertEntry(sTitle, aErrorImage, aErrorImage, pListEntry);
                         pSQLstateEntry->SetUserData(pUserData);
-                        m_aExceptionList.Expand(pListEntry);
+//                      m_aExceptionList.Expand(pListEntry);
                     }
-                    if (pUserData->ErrorCode != 0)
+                    if (pException->ErrorCode != 0)
                     {
                         UniString sTitle(sErrorCodeLabel);
                         sTitle.AppendAscii(" : ");
-                        sTitle += String::CreateFromInt32(pUserData->ErrorCode);
+                        sTitle += String::CreateFromInt32(pException->ErrorCode);
                         SvLBoxEntry* pErrorCodeEntry = m_aExceptionList.InsertEntry(sTitle, aErrorImage, aErrorImage, pListEntry);
                         pErrorCodeEntry->SetUserData(pUserData);
-                        m_aExceptionList.Expand(pListEntry);
+//                      m_aExceptionList.Expand(pListEntry);
                     }
-                    break;
+                }   break;
                 case SQLExceptionInfo::SQL_WARNING:
                     pListEntry = m_aExceptionList.InsertEntry(sWarningLabel, aWarningImage, aWarningImage);
-                    pUserData = new ::com::sun::star::sdbc::SQLWarning(*(const ::com::sun::star::sdbc::SQLWarning*)aCurrent);
                     break;
                 case SQLExceptionInfo::SQL_CONTEXT:
                 {
                     pListEntry = m_aExceptionList.InsertEntry(sInfoLabel, m_aInfoImage, m_aInfoImage);
-                    pUserData = new SQLContext(*(const SQLContext*)aCurrent);
-                    if (((const SQLContext*)aCurrent)->Details.getLength())
+                    const SQLContext* pContext = (const SQLContext*)aCurrent;
+                    if (pContext->Details.getLength())
                     {
                         SvLBoxEntry* pDetailsEntry = m_aExceptionList.InsertEntry(sDetailsLabel, m_aInfoImage, m_aInfoImage, pListEntry);
                         pDetailsEntry->SetUserData(pUserData);
@@ -232,7 +233,7 @@ OExceptionChainDialog::OExceptionChainDialog(Window* pParent, const ::com::sun::
                 }
                 break;
                 default:
-                    DBG_ERROR("OExceptionChainDialog::OExceptionChainDialog : valid ::com::sun::star::sdbc::SQLException but unknown type !");
+                    DBG_ERROR("OExceptionChainDialog::OExceptionChainDialog : valid SQLException but unknown type !");
                     break;
             }
             if (pListEntry)
@@ -249,7 +250,7 @@ OExceptionChainDialog::~OExceptionChainDialog()
     {
         if (!m_aExceptionList.GetParent(pLoop))
             // it's not the "details" entry for an SQLContext object
-            delete (::com::sun::star::sdbc::SQLException*)pLoop->GetUserData();
+            delete static_cast<SQLExceptionInfo*>(pLoop->GetUserData());
         pLoop = m_aExceptionList.Next(pLoop);
     }
 }
@@ -264,8 +265,8 @@ IMPL_LINK(OExceptionChainDialog, OnExceptionSelected, void*, EMPTYARG)
         m_aExceptionText.SetText(UniString());
     else
     {
-        SQLExceptionInfo aInfo(*(const ::com::sun::star::sdbc::SQLException*)pSelected->GetUserData());
-        ::rtl::OUString aText = ((const ::com::sun::star::sdbc::SQLException*)aInfo)->Message;
+        SQLExceptionInfo aInfo(*(const SQLExceptionInfo*)pSelected->GetUserData());
+        ::rtl::OUString aText = ((const SQLException*)aInfo)->Message;
 
         if (m_aExceptionList.GetParent(pSelected))
             if (aInfo.isKindOf(SQLExceptionInfo::SQL_CONTEXT))
@@ -273,7 +274,7 @@ IMPL_LINK(OExceptionChainDialog, OnExceptionSelected, void*, EMPTYARG)
                 aText = ((const SQLContext*)aInfo)->Details;
             else
                 // all other children get the text of the parent
-                aText = ((const ::com::sun::star::sdbc::SQLException*)aInfo)->Message;
+                aText = ((const SQLException*)aInfo)->Message;
 
         m_aExceptionText.SetText(aText);
     }
@@ -434,7 +435,7 @@ void OSQLMessageBox::Construct(const UniString& rTitle,
         AddButton(BUTTON_OK,BUTTONID_OK,BUTTONDIALOG_DEFBUTTON|BUTTONDIALOG_FOCUSBUTTON);
     }
 
-    sal_Bool bAtLeastTwo = m_aNextChainElement.hasValue() && ((::com::sun::star::sdbc::SQLException*)m_aNextChainElement.getValue())->NextException.getValue();
+    sal_Bool bAtLeastTwo = m_aNextChainElement.hasValue() && ((SQLException*)m_aNextChainElement.getValue())->NextException.getValue();
     if (bAtLeastTwo)
     {
         m_pInfoButton = new PushButton(this);
@@ -505,7 +506,7 @@ void OSQLMessageBox::Construct(const SQLExceptionInfo& _rException, WinBits _nSt
 }
 
 //------------------------------------------------------------------------------
-OSQLMessageBox::OSQLMessageBox(Window* _pParent, const UniString& _rTitle, const ::com::sun::star::sdbc::SQLException& _rError, WinBits _nStyle,
+OSQLMessageBox::OSQLMessageBox(Window* _pParent, const UniString& _rTitle, const SQLException& _rError, WinBits _nStyle,
                         MessageType _eImage)
     :ButtonDialog(_pParent,WB_HORZ | WB_STDDIALOG)
     ,m_aInfoImage(this)
@@ -518,7 +519,7 @@ OSQLMessageBox::OSQLMessageBox(Window* _pParent, const UniString& _rTitle, const
 }
 
 //------------------------------------------------------------------------------
-OSQLMessageBox::OSQLMessageBox(Window* _pParent, const ::com::sun::star::sdbc::SQLException& _rError, WinBits _nStyle, MessageType _eImage)
+OSQLMessageBox::OSQLMessageBox(Window* _pParent, const SQLException& _rError, WinBits _nStyle, MessageType _eImage)
     :ButtonDialog(_pParent,WB_HORZ | WB_STDDIALOG)
     ,m_aInfoImage(this)
     ,m_aTitle(this,WB_WORDBREAK | WB_LEFT)
@@ -575,6 +576,9 @@ IMPL_LINK( OSQLMessageBox, ButtonClickHdl, Button *, pButton )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2001/02/05 09:48:50  fs
+ *  unique id for the 'more' button
+ *
  *  Revision 1.6  2001/01/29 13:21:19  oj
  *  use second exception for message text
  *
