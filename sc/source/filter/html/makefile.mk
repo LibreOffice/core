@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:45:12 $
+#   last change: $Author: rt $ $Date: 2004-09-08 15:25:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,6 +86,8 @@ CXXFILES =					\
         htmlimp.cxx			\
         htmlpars.cxx
 
+EXCEPTIONSFILES = \
+        $(SLO)$/htmlpars.obj
 
 SLOFILES =					\
         $(SLO)$/htmlexp.obj	\
