@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-30 17:46:45 $
+ *  last change: $Author: thb $ $Date: 2001-08-06 15:15:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2248,6 +2248,7 @@ void ImpEditEngine::TransliterateText( const EditSelection& rSelection, sal_Int3
         } while( nCurrentEnd < nEndPos );
     }
 
+#ifndef SVX_LIGHT
     if ( pUndo )
     {
         if ( bChanges )
@@ -2263,6 +2264,7 @@ void ImpEditEngine::TransliterateText( const EditSelection& rSelection, sal_Int3
             delete pUndo;
         }
     }
+#endif
 
     if ( bChanges )
     {
