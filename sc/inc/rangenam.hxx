@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rangenam.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2002-11-28 16:15:14 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:13:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 
 #ifndef SC_SCGLOB_HXX
 #include "global.hxx" // -> enum UpdateRefMode
+#endif
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
 #endif
 #ifndef SC_COLLECT_HXX
 #include "collect.hxx"
@@ -173,27 +176,27 @@ public:
                                     BOOL bEnglish = FALSE, BOOL bCompileXML = FALSE );
     void            UpdateReference( UpdateRefMode eUpdateRefMode,
                              const ScRange& r,
-                             short nDx, short nDy, short nDz );
+                             SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
     BOOL            IsModified() const              { return bModified; }
 
     void            GuessPosition();
 
     void            UpdateTranspose( const ScRange& rSource, const ScAddress& rDest );
-    void            UpdateGrow( const ScRange& rArea, USHORT nGrowX, USHORT nGrowY );
+    void            UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY );
 
     BOOL            IsReference( ScRange& rRef ) const;
 
     BOOL            IsRangeAtCursor( const ScAddress&, BOOL bStartOnly ) const;
     BOOL            IsRangeAtBlock( const ScRange& ) const;
 
-    void            UpdateTabRef(USHORT nOldTable, USHORT nFlag, USHORT nNewTable);
-    void            TransferTabRef( USHORT nOldTab, USHORT nNewTab );
+    void            UpdateTabRef(SCTAB nOldTable, USHORT nFlag, SCTAB nNewTable);
+    void            TransferTabRef( SCTAB nOldTab, SCTAB nNewTab );
 
     void            ValidateTabRefs();
 
     void            ReplaceRangeNamesInUse( const ScIndexMap& rMap );
 
-    BOOL            IsBeyond( USHORT nMaxRow ) const;
+    BOOL            IsBeyond( SCROW nMaxRow ) const;
 
     static void     MakeValidName( String& rName );
     static BOOL     IsNameValid( const String& rName, ScDocument* pDoc );
@@ -245,10 +248,10 @@ public:
     BOOL                    SearchName( const String& rName, USHORT& rPos ) const;
     void                    UpdateReference(UpdateRefMode eUpdateRefMode,
                                 const ScRange& rRange,
-                                short nDx, short nDy, short nDz );
-    void                    UpdateTabRef(USHORT nTable, USHORT nFlag, USHORT nNewTable = 0);
+                                SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
+    void                    UpdateTabRef(SCTAB nTable, USHORT nFlag, SCTAB nNewTable = 0);
     void                    UpdateTranspose( const ScRange& rSource, const ScAddress& rDest );
-    void                    UpdateGrow( const ScRange& rArea, USHORT nGrowX, USHORT nGrowY );
+    void                    UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY );
     virtual BOOL            Insert(DataObject* pDataObject);
     ScRangeData*            FindIndex(USHORT nIndex);
     USHORT                  GetSharedMaxIndex()             { return nSharedMaxIndex; }
