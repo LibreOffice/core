@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlopt.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:29:47 $
+ *  last change: $Author: kz $ $Date: 2001-07-17 20:47:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -416,7 +416,7 @@ TabPage TP_REDLINE_OPT
         < "大写字母" ; > ;
         < "小写字母" ; > ;
         < "小型大写字体" ; > ;
-        < "标题字体" ; > ;
+        < "标题文字" ; > ;
         < "背景颜色" ; > ;
     };
     StringList [ chinese_traditional ] =
@@ -430,7 +430,7 @@ TabPage TP_REDLINE_OPT
         < "糶ダ" ; > ;
         < "糶ダ" ; > ;
         < "糶ダ" ; > ;
-        < "夹肈" ; > ;
+        < "夹肈ゅ" ; > ;
         < "璉春肅︹" ; > ;
     };
     StringList [ turkish ] =
@@ -1138,6 +1138,7 @@ TabPage TP_REDLINE_OPT
         Text[ finnish ] = "[Ei mit滗n]";
     };
 };
+
 
 
 
