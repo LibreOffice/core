@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakiterator_unicode.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2002-03-26 16:55:00 $
+ *  last change: $Author: khong $ $Date: 2002-04-16 00:05:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,62 +156,26 @@ sal_Int32 SAL_CALL BreakIterator_Unicode::previousCharacters( const OUString& Te
     return nStartPos;
 }
 
-// Since ICU breakiterator does not handle CTL script properly, we have to seperate script segment
-// to insure CTL script will be handled by our Breakiterator.
-sal_Int32 SAL_CALL BreakIterator_Unicode::setTextByScriptBoundary(const OUString& Text,
-    sal_Int32 nPos)
-{
-    if (cachedText != Text)
-        cachedText = Text;
-    else if ( nPos >= scriptStart && nPos < scriptStart + scriptLength) {
-        wordBreak->setText(UnicodeString(Text.getStr() + scriptStart, scriptLength));
-        return scriptStart;
-    }
-
-    sal_Int16 type, sType = getScriptClass(Text[nPos]);
-
-    for (scriptStart = nPos - 1; scriptStart >= 0; scriptStart--) {
-        type = getScriptClass(Text[scriptStart]);
-        if (sType != type && type != ScriptType::WEAK)
-        break;
-    }
-    scriptStart++;
-
-    sal_Int32 len = Text.getLength();
-    if (nPos < len) {
-        for(nPos++; nPos < len; nPos++ ) {
-        type = getScriptClass(Text[nPos]);
-        if(sType != type && type != ScriptType::WEAK)
-            break;
-        }
-    }
-    scriptLength = nPos - scriptStart;
-    wordBreak->setText(UnicodeString(Text.getStr() + scriptStart, scriptLength));
-    return scriptStart;
-}
-
 Boundary SAL_CALL BreakIterator_Unicode::nextWord( const OUString& Text, sal_Int32 nStartPos,
     const lang::Locale& rLocale, sal_Int16 rWordType ) throw(RuntimeException)
 {
     if (!wordBreak) wordBreak = loadICUBreakIterator(rLocale, LOAD_WORD_BREAKITERATOR);
 
-    nStartPos -= setTextByScriptBoundary(Text, nStartPos);
+    wordBreak->setText(UnicodeString(Text.getStr(), Text.getLength()));
 
     result.startPos = wordBreak->following(nStartPos);
-    if( result.startPos >= scriptLength || result.startPos == BreakIterator::DONE )
+    if( result.startPos >= Text.getLength() || result.startPos == BreakIterator::DONE )
         result.endPos = result.startPos;
     else {
         if ( (rWordType == WordType::ANYWORD_IGNOREWHITESPACES ||
             rWordType == WordType::DICTIONARY_WORD ) &&
-            unicode::isWhiteSpace(Text[result.startPos + scriptStart]) )
+            unicode::isWhiteSpace(Text[result.startPos]) )
         result.startPos = wordBreak->following(result.startPos);
 
         result.endPos = wordBreak->following(result.startPos);
         if(result.endPos == BreakIterator::DONE)
         result.endPos = result.startPos;
     }
-    result.startPos += scriptStart;
-    result.endPos += scriptStart;
     return result;
 }
 
@@ -221,7 +185,7 @@ Boundary SAL_CALL BreakIterator_Unicode::previousWord(const OUString& Text, sal_
 {
     if (!wordBreak) wordBreak = loadICUBreakIterator(rLocale, LOAD_WORD_BREAKITERATOR);
 
-    nStartPos -= setTextByScriptBoundary(Text, nStartPos > 0 ? nStartPos-1 : nStartPos);
+    wordBreak->setText(UnicodeString(Text.getStr(), Text.getLength()));
 
     result.startPos = wordBreak->preceding(nStartPos);
     if( result.startPos < 0 || result.startPos == BreakIterator::DONE)
@@ -229,15 +193,13 @@ Boundary SAL_CALL BreakIterator_Unicode::previousWord(const OUString& Text, sal_
     else {
         if ( (rWordType == WordType::ANYWORD_IGNOREWHITESPACES ||
             rWordType == WordType::DICTIONARY_WORD) &&
-            unicode::isWhiteSpace(Text[result.startPos + scriptStart]) )
+            unicode::isWhiteSpace(Text[result.startPos]) )
         result.startPos = wordBreak->preceding(result.startPos);
 
         result.endPos = wordBreak->following(result.startPos);
         if(result.endPos == BreakIterator::DONE)
         result.endPos = result.startPos;
     }
-    result.startPos += scriptStart;
-    result.endPos += scriptStart;
     return result;
 }
 
@@ -247,21 +209,22 @@ Boundary SAL_CALL BreakIterator_Unicode::getWordBoundary( const OUString& Text, 
 {
     if (!wordBreak) wordBreak = loadICUBreakIterator(rLocale, LOAD_WORD_BREAKITERATOR);
 
-    nPos -= setTextByScriptBoundary(Text, nPos);
+    sal_Int32 len = Text.getLength();
+    wordBreak->setText(UnicodeString(Text.getStr(), len));
 
     if(wordBreak->isBoundary(nPos)) {
         result.startPos = result.endPos = nPos;
-        if((bDirection || nPos == 0) && nPos < scriptLength) //forward
+        if((bDirection || nPos == 0) && nPos < len) //forward
         result.endPos = wordBreak->following(nPos);
         else
         result.startPos = wordBreak->preceding(nPos);
     } else {
         if(nPos <= 0) {
         result.startPos = 0;
-        result.endPos = scriptLength ? wordBreak->following((sal_Int32)0) : 0;
-        } else if(nPos >= scriptLength) {
-        result.startPos = wordBreak->preceding(scriptLength);
-        result.endPos = scriptLength;
+        result.endPos = len ? wordBreak->following((sal_Int32)0) : 0;
+        } else if(nPos >= len) {
+        result.startPos = wordBreak->preceding(len);
+        result.endPos = len;
         } else {
         result.startPos = wordBreak->preceding(nPos);
         result.endPos = wordBreak->following(nPos);
@@ -272,8 +235,6 @@ Boundary SAL_CALL BreakIterator_Unicode::getWordBoundary( const OUString& Text, 
     else if (result.endPos == BreakIterator::DONE)
         result.endPos = result.startPos;
 
-    result.startPos += scriptStart;
-    result.endPos += scriptStart;
     return result;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakiteratorImpl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2002-03-27 12:09:19 $
+ *  last change: $Author: khong $ $Date: 2002-04-16 00:05:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,51 +86,7 @@ BreakIteratorImpl::~BreakIteratorImpl()
     lookupTable.Clear();
 }
 
-static ScriptTypeList CTLlist[] = {
-    { UnicodeScript_kHebrew,        UnicodeScript_kHebrew },    // 10,
-    { UnicodeScript_kArabic,        UnicodeScript_kArabic },    // 11,
-    { UnicodeScript_kDevanagari,        UnicodeScript_kDevanagari },    // 14,
-    { UnicodeScript_kThai,          UnicodeScript_kThai },      // 24,
-
-    { UnicodeScript_kScriptCount,       UnicodeScript_kScriptCount }    // 88
-};
-
-// This method is a tmporary solution for CTL implementation, since writer is not passing right rLocale ye
-// Unising the method has performance drawback, since it has to convert script type to Locale for every call.
-const Locale& SAL_CALL
-BreakIteratorImpl::getLocaleByScriptType(const Locale& rLocale, const OUString& Text,
-    sal_Int32 nStartPos, sal_Bool forward, sal_Bool skipWhiteSpace) throw(RuntimeException)
-{
-    sal_Int32 len = Text.getLength();
-    sal_Char* language = NULL;
-
-    if (rLocale.Language.getLength() == 0)
-        language = "en";
-
-    if (!forward) nStartPos--;
-
-    if (skipWhiteSpace) {
-        if (forward)
-        while(nStartPos < len && unicode::isWhiteSpace(Text[nStartPos])) nStartPos++;
-        else
-        while(nStartPos >= 0 && unicode::isWhiteSpace(Text[nStartPos])) nStartPos--;
-    }
-    if (nStartPos >= 0 && nStartPos < len) {
-        switch(unicode::getUnicodeScriptType(Text[nStartPos], CTLlist )) {
-        case UnicodeScript_kThai:       language = "th"; break;
-        case UnicodeScript_kArabic:         language = "ar"; break;
-        case UnicodeScript_kHebrew:         language = "he"; break;
-        case UnicodeScript_kDevanagari:     language = "hi"; break;
-        }
-    }
-
-    if (language) {
-        static Locale locale;
-        locale.Language = OUString::createFromAscii(language);
-        return locale;
-    } else
-        return rLocale;
-}
+#define LBI getLocaleSpecificBreakIterator(rLocale)
 
 sal_Int32 SAL_CALL BreakIteratorImpl::nextCharacters( const OUString& Text, sal_Int32 nStartPos,
     const Locale &rLocale, sal_Int16 nCharacterIteratorMode, sal_Int32 nCount, sal_Int32& nDone )
@@ -138,8 +94,7 @@ sal_Int32 SAL_CALL BreakIteratorImpl::nextCharacters( const OUString& Text, sal_
 {
         if (nCount < 0) throw RuntimeException();
 
-    return getLocaleSpecificBreakIterator(getLocaleByScriptType(rLocale, Text, nStartPos, sal_True,
-        sal_False))->nextCharacters( Text, nStartPos, rLocale, nCharacterIteratorMode, nCount, nDone);
+    return LBI->nextCharacters( Text, nStartPos, rLocale, nCharacterIteratorMode, nCount, nDone);
 }
 
 sal_Int32 SAL_CALL BreakIteratorImpl::previousCharacters( const OUString& Text, sal_Int32 nStartPos,
@@ -148,23 +103,20 @@ sal_Int32 SAL_CALL BreakIteratorImpl::previousCharacters( const OUString& Text, 
 {
     if (nCount < 0) throw RuntimeException();
 
-    return getLocaleSpecificBreakIterator(getLocaleByScriptType(rLocale, Text, nStartPos, sal_False,
-        sal_False))->previousCharacters( Text, nStartPos, rLocale, nCharacterIteratorMode, nCount, nDone);
+    return LBI->previousCharacters( Text, nStartPos, rLocale, nCharacterIteratorMode, nCount, nDone);
 }
 
 Boundary SAL_CALL BreakIteratorImpl::nextWord( const OUString& Text, sal_Int32 nStartPos,
     const Locale& rLocale, sal_Int16 rWordType ) throw(RuntimeException)
 {
     sal_Int32 len = Text.getLength();
-    if( nStartPos < 0 || len == 0 ) {
+    if( nStartPos < 0 || len == 0 )
         result.endPos = result.startPos = 0;
-        return result;
-    } else if (nStartPos >= len) {
+    else if (nStartPos >= len)
         result.endPos = result.startPos = len;
-        return result;
-    }
-    return getLocaleSpecificBreakIterator(getLocaleByScriptType(rLocale, Text, nStartPos, sal_True,
-        rWordType == WordType::ANYWORD_IGNOREWHITESPACES))->nextWord(Text, nStartPos, rLocale, rWordType);
+    else
+        result = LBI->nextWord(Text, nStartPos, rLocale, rWordType);
+    return result;
 }
 
 static inline sal_Bool SAL_CALL isCJK( const Locale& rLocale ) {
@@ -182,6 +134,7 @@ Boundary SAL_CALL BreakIteratorImpl::previousWord( const OUString& Text, sal_Int
         result.endPos = result.startPos = len;
         return result;
     }
+
     if(rWordType == WordType::ANYWORD_IGNOREWHITESPACES || rWordType == WordType::DICTIONARY_WORD) {
 
         sal_Int32 oPos = nStartPos;
@@ -202,8 +155,7 @@ Boundary SAL_CALL BreakIteratorImpl::previousWord( const OUString& Text, sal_Int
         }
     }
 
-    return getLocaleSpecificBreakIterator(getLocaleByScriptType(rLocale, Text, nStartPos, sal_False,
-        sal_False))->previousWord(Text, nStartPos, rLocale, rWordType);
+    return LBI->previousWord(Text, nStartPos, rLocale, rWordType);
 }
 
 
@@ -211,16 +163,13 @@ Boundary SAL_CALL BreakIteratorImpl::getWordBoundary( const OUString& Text, sal_
     sal_Int16 rWordType, sal_Bool bDirection ) throw(RuntimeException)
 {
     sal_Int32 len = Text.getLength();
-    if( nPos < 0 || len == 0 ) {
+    if( nPos < 0 || len == 0 )
         result.endPos = result.startPos = 0;
-        return result;
-    } else if (nPos > len) {
+    else if (nPos > len)
         result.endPos = result.startPos = len;
-        return result;
-    }
-
-    return getLocaleSpecificBreakIterator(getLocaleByScriptType(rLocale, Text, nPos, sal_True,
-        rWordType == WordType::ANYWORD_IGNOREWHITESPACES))->getWordBoundary(Text, nPos, rLocale, rWordType, bDirection);
+    else
+        result = LBI->getWordBoundary(Text, nPos, rLocale, rWordType, bDirection);
+    return result;
 }
 
 sal_Bool SAL_CALL BreakIteratorImpl::isBeginWord( const OUString& Text, sal_Int32 nPos,
@@ -253,24 +202,21 @@ sal_Bool SAL_CALL BreakIteratorImpl::isEndWord( const OUString& Text, sal_Int32 
 sal_Int32 SAL_CALL BreakIteratorImpl::beginOfSentence( const OUString& Text, sal_Int32 nStartPos,
     const Locale &rLocale ) throw(RuntimeException)
 {
-    return getLocaleSpecificBreakIterator(rLocale)->beginOfSentence(Text, nStartPos, rLocale);
+    return LBI->beginOfSentence(Text, nStartPos, rLocale);
 }
 
 sal_Int32 SAL_CALL BreakIteratorImpl::endOfSentence( const OUString& Text, sal_Int32 nStartPos,
     const Locale &rLocale ) throw(RuntimeException)
 {
-    return getLocaleSpecificBreakIterator(rLocale)->endOfSentence(Text, nStartPos, rLocale);
+    return LBI->endOfSentence(Text, nStartPos, rLocale);
 }
 
 LineBreakResults SAL_CALL BreakIteratorImpl::getLineBreak( const OUString& Text, sal_Int32 nStartPos,
     const Locale& rLocale, sal_Int32 nMinBreakPos, const LineBreakHyphenationOptions& hOptions,
     const LineBreakUserOptions& bOptions ) throw(RuntimeException)
 {
-    return getLocaleSpecificBreakIterator(rLocale)->getLineBreak(Text, nStartPos, rLocale,
-        nMinBreakPos, hOptions, bOptions);
+    return LBI->getLineBreak(Text, nStartPos, rLocale, nMinBreakPos, hOptions, bOptions);
 }
-
-
 
 sal_Int16 SAL_CALL BreakIteratorImpl::getScriptType( const OUString& Text, sal_Int32 nPos )
     throw(RuntimeException)

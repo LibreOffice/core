@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xdictionary.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2002-03-26 16:55:00 $
+ *  last change: $Author: khong $ $Date: 2002-04-16 00:05:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,7 +261,7 @@ Boundary SAL_CALL xdictionary::getWordBoundary(const sal_Unicode *text, sal_Int3
     Boundary boundary;
 
     if (anyPos >= len || anyPos < 0) {
-        boundary.startPos = boundary.endPos = -1;
+        boundary.startPos = boundary.endPos = anyPos < 0 ? 0 : len;
     } else if (seekSegment(text, anyPos, len, boundary)) {      // character in dict
         WordBreakCache& aCache = getCache(text, boundary);
         sal_Int32 i = 0;

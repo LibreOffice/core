@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakiterator_ctl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2002-03-26 16:55:00 $
+ *  last change: $Author: khong $ $Date: 2002-04-16 00:05:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,7 @@ sal_Int32 SAL_CALL BreakIterator_CTL::previousCharacters( const OUString& Text,
         makeIndex(Text, nStartPos);
 
         if (nextCellIndex[nStartPos-1] == 0) // not a CTL character
-            BreakIterator_Unicode::previousCharacters(Text, nStartPos, rLocale,
+            return BreakIterator_Unicode::previousCharacters(Text, nStartPos, rLocale,
                 nCharacterIteratorMode, nCount, nDone);
         else while (nCount > 0 && nextCellIndex[nStartPos - 1] > 0) {
             nCount--; nDone++;
@@ -131,7 +131,7 @@ sal_Int32 SAL_CALL BreakIterator_CTL::nextCharacters(const OUString& Text,
         makeIndex(Text, nStartPos);
 
         if (nextCellIndex[nStartPos] == 0) // not a CTL character
-            BreakIterator_Unicode::nextCharacters(Text, nStartPos, rLocale,
+            return BreakIterator_Unicode::nextCharacters(Text, nStartPos, rLocale,
                 nCharacterIteratorMode, nCount, nDone);
         else while (nCount > 0 && nextCellIndex[nStartPos] > 0) {
             nCount--; nDone++;
