@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propcontroller.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-15 09:02:28 $
+ *  last change: $Author: fs $ $Date: 2001-03-20 08:37:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -850,7 +850,8 @@ namespace pcr
                 Reference< XIntrospectionAccess >  xAccess;
                 if( xMVCIntrospection.is() )
                     xAccess = xMVCIntrospection->inspect(aControl);
-                aControlListeners = xAccess->getSupportedListeners();
+                if (xAccess.is())
+                    aControlListeners = xAccess->getSupportedListeners();
             }
             // dispose the temporary control
             if (xTemporaryControl.is())
@@ -969,6 +970,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.10  2001/03/15 09:02:28  fs
+ *  cppuhelper/extract -> comphelper/extract
+ *
  *  Revision 1.9  2001/02/23 15:08:45  tbe
  *  AnyToString didn't get property id
  *
