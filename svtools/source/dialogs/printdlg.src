@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printdlg.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-12 08:25:00 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 08:29:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -471,7 +471,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text [ portuguese ] = "~Selecção" ;
         Text [ english_us ] = "Selection" ;
         Text [ portuguese_brazilian ] = "A~uswahl" ;
-        Text [ swedish ] = "~Urval" ;
+        Text [ swedish ] = "~Markering" ;
         Text [ danish ] = "Udvalg" ;
         Text [ italian ] = "Scelta" ;
         Text [ spanish ] = "~Selección" ;
@@ -692,4 +692,5 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     Text[ catalan ] = "Imprimir";
     Text[ finnish ] = "Tulosta";
 };
+
 
