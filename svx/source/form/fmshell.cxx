@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshell.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-07 13:16:50 $
+ *  last change: $Author: oj $ $Date: 2000-11-09 16:06:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -702,23 +702,6 @@ void FmFormShell::Execute(SfxRequest &rReq)
     switch( nSlot )
     {
         case SID_FM_PUSHBUTTON:
-            {
-                sal_Int32 nSearchFlags =    ::com::sun::star::frame::FrameSearchFlag::SELF      |
-                                            ::com::sun::star::frame::FrameSearchFlag::PARENT    |
-                                            ::com::sun::star::frame::FrameSearchFlag::CREATE;
-
-                ::com::sun::star::util::URL aWantToDispatch;
-                aWantToDispatch.Complete = ::rtl::OUString::createFromAscii(".component:DB/DatasourceBrowser");
-
-                ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider> xProv(m_pImpl->m_xAttachedFrame, ::com::sun::star::uno::UNO_QUERY);
-                ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch> xDisp;
-                if (xProv.is())
-                    xDisp = xProv->queryDispatch(aWantToDispatch, ::rtl::OUString::createFromAscii("_blank"), nSearchFlags);
-                // create the new frame
-                if (xDisp.is())
-                    xDisp->dispatch(aWantToDispatch, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>());
-            }
-            break;
         case SID_FM_RADIOBUTTON:
         case SID_FM_CHECKBOX:
         case SID_FM_FIXEDTEXT:
