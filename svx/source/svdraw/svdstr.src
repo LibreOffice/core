@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-07 16:02:58 $
+ *  last change: $Author: kz $ $Date: 2000-12-08 17:48:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1168,7 +1168,7 @@ String STR_ObjNamePluralSECTE
     Text[ dutch ] = "Ellipssectoren";
     Text[ chinese_simplified ] = "ÍÖÔ²²¿·Ö";
     Text[ greek ] = "Ôïìİáò İëëåéøçò";
-    Text[ korean ] = "Å¸¿øÇü ºÎÃ¤²Ã";
+    Text[ korean ] = "Å¸¿ø ºÎÃ¤²Ã";
     Text[ turkish ] = "Elips pastalar";
     Text[ language_user1 ] = " ";
 };
@@ -3425,7 +3425,7 @@ String STR_ObjNameSingulCube3d
     Text[ polish ] = "kostka 3-W";
     Text[ portuguese_brazilian ] = "3D cube";
     Text[ japanese ] = "3D —§•û‘Ì";
-    Text[ korean ] = "3D Á¤À°¸éÃ¼";
+    Text[ korean ] = "3Â÷¿ø Á¤À°¸éÃ¼";
     Text[ chinese_simplified ] = "ÈıÎ¬Á¢·½Ìå";
     Text[ chinese_traditional ] = "3 ºû¥ß¤è";
     Text[ arabic ] = "ãßÚÈ ËáÇËí ÇáÃÈÚÇÏ";
@@ -3450,7 +3450,7 @@ String STR_ObjNamePluralCube3d
     Text[ polish ] = "kostki 3-W";
     Text[ portuguese_brazilian ] = "3D cubes";
     Text[ japanese ] = "3D —§•û‘Ì";
-    Text[ korean ] = "3D Á¤À°¸éÃ¼";
+    Text[ korean ] = "3Â÷¿ø Á¤À°¸éÃ¼";
     Text[ chinese_simplified ] = "ÈıÎ¬Á¢·½Ìå";
     Text[ chinese_traditional ] = "3 ºû¥ß¤è";
     Text[ arabic ] = "ãßÚÈÇÊ ËáÇËíÉ ÇáÃÈÚÇÏ";
@@ -3523,7 +3523,7 @@ String STR_ObjNameSingulLabel3d
     Text[ polish ] = "tekst 3-W";
     Text[ portuguese_brazilian ] = "3D text";
     Text[ japanese ] = "3D ‘Ì•¶š—ñ";
-    Text[ korean ] = "3D ÅØ½ºÆ®";
+    Text[ korean ] = "3Â÷¿ø ÅØ½ºÆ®";
     Text[ chinese_simplified ] = "3 Î¬ÎÄ×Ö";
     Text[ chinese_traditional ] = "3 ºû¤å¦r";
     Text[ arabic ] = "äÕ ËáÇËí ÇáÃÈÚÇÏ";
@@ -3548,7 +3548,7 @@ String STR_ObjNamePluralLabel3d
     Text[ polish ] = "tekst 3-W";
     Text[ portuguese_brazilian ] = "3D texts";
     Text[ japanese ] = "3D ‘Ì•¶š—ñ";
-    Text[ korean ] = "3D ÅØ½ºÆ®";
+    Text[ korean ] = "3Â÷¿ø ÅØ½ºÆ®";
     Text[ chinese_simplified ] = "3 Î¬ÎÄ×Ö";
     Text[ chinese_traditional ] = "3 ºû¤å¦r";
     Text[ arabic ] = "äÕæÕ ËáÇËíÉ ÇáÃÈÚÇÏ";
@@ -3621,7 +3621,7 @@ String STR_ObjNameSingulObj3d
     Text[ polish ] = "obiekt 3-W";
     Text[ portuguese_brazilian ] = "3D object";
     Text[ japanese ] = "3D ‘ÌµÌŞ¼Şª¸Ä";
-    Text[ korean ] = "3D °³Ã¼";
+    Text[ korean ] = "3Â÷¿ø °³Ã¼";
     Text[ chinese_simplified ] = "3 Î¬¶ÔÏó";
     Text[ chinese_traditional ] = "3 ºûª«¥ó";
     Text[ arabic ] = "ßÇÆä ËáÇËí ÇáÃÈÚÇÏ";
@@ -3646,7 +3646,7 @@ String STR_ObjNamePluralObj3d
     Text[ polish ] = "obiekty 3-W";
     Text[ portuguese_brazilian ] = "3D objects";
     Text[ japanese ] = "3D ‘ÌµÌŞ¼Şª¸Ä";
-    Text[ korean ] = "3D °³Ã¼";
+    Text[ korean ] = "3Â÷¿ø °³Ã¼";
     Text[ chinese_simplified ] = "3 Î¬¶ÔÏó";
     Text[ chinese_traditional ] = "3 ºûª«¥ó";
     Text[ arabic ] = "ßÇÆäÇÊ ËáÇËíÉ ÇáÃÈÚÇÏ";
@@ -3671,7 +3671,7 @@ String STR_ObjNameSingulPoly3d
     Text[ polish ] = "wielok¹t 3-W";
     Text[ portuguese_brazilian ] = "3D polygon";
     Text[ japanese ] = "3D ‘½ŠpŒ`";
-    Text[ korean ] = "3D ´Ù°¢Çü";
+    Text[ korean ] = "3Â÷¿ø ´Ù°¢Çü";
     Text[ chinese_simplified ] = "3 Î¬¶à±ßĞÎ";
     Text[ chinese_traditional ] = "3 ºû¦hÃä§Î";
     Text[ arabic ] = "ãÖáÚ ËáÇËí ÇáÃÈÚÇÏ";
@@ -3696,7 +3696,7 @@ String STR_ObjNamePluralPoly3d
     Text[ polish ] = "wielok¹ty 3-W";
     Text[ portuguese_brazilian ] = "3D polygons";
     Text[ japanese ] = "3D ‘½ŠpŒ`";
-    Text[ korean ] = "3D ´Ù°¢Çü";
+    Text[ korean ] = "3Â÷¿ø ´Ù°¢Çü";
     Text[ chinese_simplified ] = "3 Î¬¶à±ßĞÎ";
     Text[ chinese_traditional ] = "3 ºû¦hÃä§Î";
     Text[ arabic ] = "ãÖáÚÇÊ ËáÇËíÉ ÇáÃÈÚÇÏ";
@@ -3721,7 +3721,7 @@ String STR_ObjNameSingulScene3d
     Text[ polish ] = "scena 3-W";
     Text[ portuguese_brazilian ] = "3D scene";
     Text[ japanese ] = "3D ¼°İ";
-    Text[ korean ] = "3D Àå¸é";
+    Text[ korean ] = "3Â÷¿ø Àå¸é";
     Text[ chinese_simplified ] = "3 Î¬Í¼°¸";
     Text[ chinese_traditional ] = "3 ºû¹Ï®×";
     Text[ arabic ] = "ãÔåÏ ËáÇËí ÇáÃÈÚÇÏ";
@@ -3746,7 +3746,7 @@ String STR_ObjNamePluralScene3d
     Text[ polish ] = "sceny 3-W";
     Text[ portuguese_brazilian ] = "3D scenes";
     Text[ japanese ] = "3D ¼°İ";
-    Text[ korean ] = "3D Àå¸é";
+    Text[ korean ] = "3Â÷¿ø Àå¸é";
     Text[ chinese_simplified ] = "3 Î¬Í¼°¸";
     Text[ chinese_traditional ] = "3 ºû¹Ï®×";
     Text[ arabic ] = "ãÔÇåÏ ËáÇËíÉ ÇáÃÈÚÇÏ";
@@ -4892,7 +4892,7 @@ String STR_EditAlignVTop
     Text[ dutch ] = "%O op bovenkant uitlijnen";
     Text[ chinese_simplified ] = "%O ÏòÉÏ¶ÔÆë";
     Text[ greek ] = "Óôïß÷éóç %O ğñïò ôá ğÜíù";
-    Text[ korean ] = "%O À§·Î ¸ÂÃã";
+    Text[ korean ] = "%O À§ ¸ÂÃã";
     Text[ turkish ] = "Yukarı doğru hizala: %O";
     Text[ language_user1 ] = " ";
 };
@@ -4922,7 +4922,7 @@ String STR_EditAlignVBottom
     Text[ dutch ] = "%O op onderkant uitlijnen";
     Text[ chinese_simplified ] = "%O ÏòÏÂ¶ÔÆë";
     Text[ greek ] = "Óôïß÷éóç %O ğñïò ôá êÜôù";
-    Text[ korean ] = "%O ¾Æ·¡·Î ¸ÂÃã";
+    Text[ korean ] = "%O ¾Æ·¡ ¸ÂÃã";
     Text[ turkish ] = "Aşağı doğru hizala: %O";
     Text[ language_user1 ] = " ";
 };
@@ -8529,7 +8529,7 @@ String STR_ItemNam_SHADOW3D
     Text[ dutch ] = "3D-schaduw";
     Text[ chinese_simplified ] = "3 Î¬ÒõÓ°";
     Text[ greek ] = "ÓêéÜ 3Ä";
-    Text[ korean ] = "3D À½¿µ";
+    Text[ korean ] = "3Â÷¿ø À½¿µ";
     Text[ turkish ] = "3B gölge";
     Text[ language_user1 ] = " ";
 };
@@ -11831,7 +11831,7 @@ String SIP_SA_SHADOW3D
     Text[ dutch ] = "3D-schaduw";
     Text[ chinese_simplified ] = "3 Î¬ÒõÓ°";
     Text[ greek ] = "ÓêéÜ 3Ä";
-    Text[ korean ] = "3D À½¿µ";
+    Text[ korean ] = "3Â÷¿ø À½¿µ";
     Text[ turkish ] = "3B gölge";
     Text[ language_user1 ] = " ";
 };
@@ -12959,7 +12959,7 @@ String SIP_SA_TEXT_ANICOUNT
     Text[ dutch ] = "Snelheid tekstanimatie";
     Text[ chinese_simplified ] = "»î¶¯±êÌâµÄÊıÄ¿";
     Text[ greek ] = "Áñéèìüò åğáíáëŞøåùí êéíïıìåíïõ êåéìİíïõ";
-    Text[ korean ] = "¼øÈ¯ ¹®ÀÚ  °³¼ö";
+    Text[ korean ] = "¼øÈ¯ ¹®ÀÚ  ¼ö";
     Text[ turkish ] = "Hareketli yazı hareket sayısı";
 };
 
@@ -15579,7 +15579,7 @@ String SIP_EE_PARA_BULLETSTATE
     Text[ dutch ] = "Opsommingsteken weergeven";
     Text[ chinese_simplified ] = "ÏÔÊ¾±àºÅ";
     Text[ greek ] = "ÅìöÜíéóç óõìâüëùí áñßèìçóçò";
-    Text[ korean ] = "±Û¸Ó¸®Ç¥ Ç¥½Ã";
+    Text[ korean ] = "±Û¸Ó¸®±âÈ£  Ç¥½Ã";
     Text[ turkish ] = "Madde işaretlerini göster";
     Text[ language_user1 ] = " ";
 };
@@ -16006,7 +16006,7 @@ String SIP_EE_CHAR_ITALIC
     Text[ dutch ] = "Cursief";
     Text[ chinese_simplified ] = "Ğ±Ìå";
     Text[ greek ] = "ĞëÜãéá";
-    Text[ korean ] = "±â¿ïÀÓ²Ã";
+    Text[ korean ] = "ÀÌÅÅ¸¯Ã¼";
     Text[ turkish ] = "İtalik";
     Text[ language_user1 ] = " ";
 };
