@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-10 16:37:27 $
+ *  last change: $Author: mba $ $Date: 2001-10-02 07:26:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,6 +203,30 @@ using namespace ::rtl;
 
 #define FRAMELOADER_SERVICENAME     "com.sun.star.frame.FrameLoader"
 
+static const String sTemplateRegionName   = String::CreateFromAscii( "TemplateRegionName"   );
+static const String sTemplateName   = String::CreateFromAscii( "TemplateName"   );
+static const String sAsTemplate     = String::CreateFromAscii( "AsTemplate"     );
+static const String sOpenNewView    = String::CreateFromAscii( "OpenNewView"    );
+static const String sViewId         = String::CreateFromAscii( "ViewId"         );
+static const String sPluginMode     = String::CreateFromAscii( "PluginMode"     );
+static const String sReadOnly       = String::CreateFromAscii( "ReadOnly"       );
+static const String sFrameName      = String::CreateFromAscii( "FrameName"      );
+static const String sContentType    = String::CreateFromAscii( "ContentType"    );
+static const String sPostData       = String::CreateFromAscii( "PostData"       );
+static const String sPosSize        = String::CreateFromAscii( "PosSize"        );
+static const String sCharacterSet   = String::CreateFromAscii( "CharacterSet"   );
+static const String sInputStream    = String::CreateFromAscii( "InputStream"    );
+static const String sHidden         = String::CreateFromAscii( "Hidden"         );
+static const String sPreview        = String::CreateFromAscii( "Preview"        );
+static const String sSilent         = String::CreateFromAscii( "Silent"         );
+static const String sJumpMark       = String::CreateFromAscii( "JumpMark"       );
+static const String sURL            = String::CreateFromAscii( "URL"            );
+static const String sOrigURL        = String::CreateFromAscii( "OriginalURL"    );
+static const String sSalvageURL     = String::CreateFromAscii( "SalvagedFile"   );
+static const String sStatusInd      = String::CreateFromAscii( "StatusIndicator" );
+static const String sModel          = String::CreateFromAscii( "Model" );
+static const String sFrame          = String::CreateFromAscii("Frame");
+
 void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rArgs, SfxAllItemSet& rSet, const SfxSlot* pSlot )
 {
     if ( !pSlot )
@@ -249,41 +273,29 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
             }
         }
 
-        if ( nArgs >= pSlot->nArgDefCount && nSlotId == SID_OPENDOC )
+        if ( nArgs >= pSlot->nArgDefCount && nSlotId == SID_NEWWINDOW )
         {
-            static const String sTemplateRegionName   = String::CreateFromAscii( "TemplateRegionName"   );
-            static const String sTemplateName   = String::CreateFromAscii( "TemplateName"   );
-            static const String sAsTemplate     = String::CreateFromAscii( "AsTemplate"     );
-            static const String sOpenNewView    = String::CreateFromAscii( "OpenNewView"    );
-            static const String sViewId         = String::CreateFromAscii( "ViewId"         );
-            static const String sPluginMode     = String::CreateFromAscii( "PluginMode"     );
-            static const String sReadOnly       = String::CreateFromAscii( "ReadOnly"       );
-            static const String sFrameName      = String::CreateFromAscii( "FrameName"      );
-            static const String sContentType    = String::CreateFromAscii( "ContentType"    );
-            static const String sPostData       = String::CreateFromAscii( "PostData"       );
-            static const String sPosSize        = String::CreateFromAscii( "PosSize"        );
-            static const String sCharacterSet   = String::CreateFromAscii( "CharacterSet"   );
-            static const String sInputStream    = String::CreateFromAscii( "InputStream"    );
-            static const String sHidden         = String::CreateFromAscii( "Hidden"         );
-            static const String sPreview        = String::CreateFromAscii( "Preview"        );
-            static const String sSilent         = String::CreateFromAscii( "Silent"         );
-            static const String sJumpMark       = String::CreateFromAscii( "JumpMark"       );
-            static const String sURL            = String::CreateFromAscii( "URL"            );
-            static const String sOrigURL        = String::CreateFromAscii( "OriginalURL"    );
-            static const String sSalvageURL     = String::CreateFromAscii( "SalvagedFile"   );
-            static const String sStatusInd      = String::CreateFromAscii( "StatusIndicator" );
+            if ( aName == sFrame )
+                rSet.Put( SfxUnoAnyItem( SID_FILLFRAME, rProp.Value ) );
+            else if ( aName == sHidden && rProp.Value.getValueType() == ::getBooleanCppuType() )
+                rSet.Put( SfxBoolItem( SID_HIDDEN, *((sal_Bool*)rProp.Value.getValue()) ) );
+        }
+        else if ( nArgs >= pSlot->nArgDefCount && nSlotId == SID_OPENDOC )
+        {
+            if ( aName == sModel )
+                rSet.Put( SfxUnoAnyItem( SID_DOCUMENT, rProp.Value ) );
 
-            if ( aName == sStatusInd )
+            else if ( aName == sStatusInd )
                 rSet.Put( SfxUnoAnyItem( SID_PROGRESS_STATUSBAR_CONTROL, rProp.Value ) );
 
-            if ( aName == sInputStream && rProp.Value.getValueType() == ::getCppuType( (Reference < XInputStream >*)0 ) )
+            else if ( aName == sInputStream && rProp.Value.getValueType() == ::getCppuType( (Reference < XInputStream >*)0 ) )
                 rSet.Put( SfxUnoAnyItem( SID_INPUTSTREAM, rProp.Value ) );
 
-            if ( aName == sPostData && rProp.Value.getValueType() == ::getCppuType( (Reference < XInputStream >*)0 ) )
+            else if ( aName == sPostData && rProp.Value.getValueType() == ::getCppuType( (Reference < XInputStream >*)0 ) )
                 rSet.Put( SfxUnoAnyItem( SID_POSTDATA, rProp.Value ) );
 
             // AsTemplate-Property?
-            if ( aName == sAsTemplate && rProp.Value.getValueType() == ::getBooleanCppuType() )
+            else if ( aName == sAsTemplate && rProp.Value.getValueType() == ::getBooleanCppuType() )
                 rSet.Put( SfxBoolItem( SID_TEMPLATE, *((sal_Bool*)rProp.Value.getValue()) ) );
 
             // OpenNewView-Parameter ?
@@ -415,6 +427,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             nItems++;
         if ( rSet.GetItemState( SID_JUMPMARK ) == SFX_ITEM_SET )
             nItems++;
+        if ( rSet.GetItemState( SID_DOCUMENT ) == SFX_ITEM_SET )
+            nItems++;
     }
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue> aSequ( nItems );
@@ -432,32 +446,15 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
 
     if ( nSlotId == SID_OPENDOC )
     {
-        static const String sTemplateRegionName   = String::CreateFromAscii( "TemplateRegionName"   );
-        static const String sTemplateName   = String::CreateFromAscii( "TemplateName"   );
-        static const String sAsTemplate     = String::CreateFromAscii( "AsTemplate"     );
-        static const String sOpenNewView    = String::CreateFromAscii( "OpenNewView"    );
-        static const String sViewId         = String::CreateFromAscii( "ViewId"         );
-        static const String sPluginMode     = String::CreateFromAscii( "PluginMode"     );
-        static const String sReadOnly       = String::CreateFromAscii( "ReadOnly"       );
-        static const String sFrameName      = String::CreateFromAscii( "FrameName"      );
-        static const String sContentType    = String::CreateFromAscii( "ContentType"    );
-        static const String sPostData       = String::CreateFromAscii( "PostData"       );
-        static const String sPosSize        = String::CreateFromAscii( "PosSize"        );
-        static const String sCharacterSet   = String::CreateFromAscii( "CharacterSet"   );
-        static const String sInputStream    = String::CreateFromAscii( "InputStream"    );
-        static const String sHidden         = String::CreateFromAscii( "Hidden"         );
-        static const String sPreview        = String::CreateFromAscii( "Preview"        );
-        static const String sSilent         = String::CreateFromAscii( "Silent"         );
-        static const String sJumpMark       = String::CreateFromAscii( "JumpMark"       );
-        static const String sURL            = String::CreateFromAscii( "URL"            );
-        static const String sOrigURL        = String::CreateFromAscii( "OriginalURL"    );
-        static const String sSalvageURL     = String::CreateFromAscii( "SalvagedFile"   );
-        static const String sStatusInd      = String::CreateFromAscii( "StatusIndicator" );
-
         const SfxPoolItem *pItem=0;
         if ( rSet.GetItemState( SID_PROGRESS_STATUSBAR_CONTROL, sal_False, &pItem ) == SFX_ITEM_SET )
         {
             pValue[nItems].Name = sStatusInd;
+            pValue[nItems++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
+        }
+        if ( rSet.GetItemState( SID_DOCUMENT, sal_False, &pItem ) == SFX_ITEM_SET )
+        {
+            pValue[nItems].Name = sModel;
             pValue[nItems++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
         }
         if ( rSet.GetItemState( SID_INPUTSTREAM, sal_False, &pItem ) == SFX_ITEM_SET )
