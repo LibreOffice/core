@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldSelection.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 14:04:38 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 16:24:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,20 +273,18 @@ public class FieldSelection {
             Object btnmovedown = CurUnoDialog.insertButton("cmdMoveDown" + sIncSuffix, SOCMDMOVEDOWN, new ActionListenerImpl(),
                                     new String[] { "Enabled", "FontDescriptor", "Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width" },
                                     new Object[] { Boolean.FALSE, oFontDesc, new Integer(14), "HID:" + Integer.toString(_FirstHelpIndex++), String.valueOf((char) 8744), cmdMoveButtonPosX, MoveButtonPosY[1], IStep, new Short(curtabindex++), CmdButtonWidth });
-
-            PeerConfig oselfieldspeerconfig = new PeerConfig(CurUnoDialog.xWindow);
-            oselfieldspeerconfig.setAccessiblityName(btnmoveselected, AccessTextMoveSelected);
-            oselfieldspeerconfig.setAccessiblityName(btnremoveselected, AccessTextMoveSelected);
-            oselfieldspeerconfig.setAccessiblityName(xFieldsListBox, JavaTools.replaceSubString(slblFields, "", "~"));
-            oselfieldspeerconfig.setAccessiblityName(xSelFieldsListBox, JavaTools.replaceSubString(slblSelFields, "", "~"));
+            CurUnoDialog.getPeerConfiguration().setAccessiblityName(btnmoveselected, AccessTextMoveSelected);
+            CurUnoDialog.getPeerConfiguration().setAccessiblityName(btnremoveselected, AccessTextMoveSelected);
+            CurUnoDialog.getPeerConfiguration().setAccessiblityName(xFieldsListBox, JavaTools.replaceSubString(slblFields, "", "~"));
+            CurUnoDialog.getPeerConfiguration().setAccessiblityName(xSelFieldsListBox, JavaTools.replaceSubString(slblSelFields, "", "~"));
             if (btnmoveall != null)
-                oselfieldspeerconfig.setAccessiblityName(btnmoveall, AccessTextMoveAll);
+                CurUnoDialog.getPeerConfiguration().setAccessiblityName(btnmoveall, AccessTextMoveAll);
             if (btnremoveall != null)
-                oselfieldspeerconfig.setAccessiblityName(btnremoveall, AccessTextRemoveAll);
+                CurUnoDialog.getPeerConfiguration().setAccessiblityName(btnremoveall, AccessTextRemoveAll);
             if (btnmoveup != null)
-                oselfieldspeerconfig.setAccessiblityName(btnmoveup, AccessMoveFieldUp);
+                CurUnoDialog.getPeerConfiguration().setAccessiblityName(btnmoveup, AccessMoveFieldUp);
             if (btnmovedown != null)
-                oselfieldspeerconfig.setAccessiblityName(btnmovedown, AccessMoveFieldDown );
+                CurUnoDialog.getPeerConfiguration().setAccessiblityName(btnmovedown, AccessMoveFieldDown );
 
         } catch (Exception exception) {
             exception.printStackTrace(System.out);
