@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrlbox.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: fme $ $Date: 2002-08-23 08:42:46 $
+ *  last change: $Author: fme $ $Date: 2002-08-28 07:35:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -411,67 +411,79 @@ String STR_SVT_COLLATE_PHONEBOOK
 
 String STR_SVT_COLLATE_PHONETIC_F
 {
-    Text = "Phonetic (alphanumeric first)";
+    Text = "Phonetisch (alphanumerisch zuerst)";
+    Text[ english_us ] = "Phonetic (alphanumeric first)";
 };
 
 String STR_SVT_COLLATE_PHONETIC_L
 {
-    Text = "Phonetic (alphanumeric last)";
+    Text = "Phonetisch (alphanumerisch zuletzt)";
+    Text[ english_us ] = "Phonetic (alphanumeric last)";
 };
 
 String STR_SVT_INDEXENTRY_ALPHANUMERIC
 {
     /* alphanumeric indexentry algorithm */
     Text = "Alphanumerisch" ;
+    Text[ english_us ] = "Alphanumeric";
 };
 
 String STR_SVT_INDEXENTRY_DICTIONARY
 {
     /* korean dictionary indexentry algorithm */
     Text = "Wörterbuch" ;
+    Text[ english_us ] = "Dictionary";
 };
 
 String STR_SVT_INDEXENTRY_PINYIN
 {
     /* chinese sorting algorithm */
     Text = "Pinyin" ;
+    Text[ english_us ] = "Pinyin";
 };
 
 String STR_SVT_INDEXENTRY_RADICAL
 {
     /* chinese indexentry algorithm */
     Text = "Radical" ;
+    Text[ english_us ] = "Radical";
 };
 
 String STR_SVT_INDEXENTRY_STROKE
 {
     /* chinese indexentry algorithm */
     Text = "Stroke" ;
+    Text[ english_us ] = "Stroke";
 };
 
 String STR_SVT_INDEXENTRY_ZHUYIN
 {
     /* chinese indexentry algorithm */
     Text = "Zhuyin" ;
+    Text[ english_us ] = "Zhuyin";
 };
 
 String STR_SVT_INDEXENTRY_PHONETIC_FS
 {
-    Text = "Phonetic (alphanumeric first) (grouped by syllable)";
+    Text = "Phonetisch (alphanumerisch zuerst, nach Silben gruppiert)";
+    Text[ english_us ] = "Phonetic (alphanumeric first, grouped by syllables)";
 };
 
 String STR_SVT_INDEXENTRY_PHONETIC_FC
 {
-    Text = "Phonetic (alphanumeric first) (grouped by consonant)";
+    Text = "Phonetisch (alphanumerisch zuerst, nach  Konsonanten gruppiert)";
+    Text[ english_us ] = "Phonetic (alphanumeric first, grouped by consonants)";
 };
 
 String STR_SVT_INDEXENTRY_PHONETIC_LS
 {
-    Text = "Phonetic (alphanumeric last) (grouped by syllable)";
+    Text = "Phonetisch (alphanumerisch zuletzt, nach Silben gruppiert)";
+    Text[ english_us ] = "Phonetic (alphanumeric last, grouped by syllables)";
 };
 
 String STR_SVT_INDEXENTRY_PHONETIC_LC
 {
-    Text = "Phonetic (alphanumeric last) (grouped by consonant)";
+    Text = "Phonetisch (alphanumerisch zuletzt, nach Konsonanten gruppiert)";
+    Text[ english_us ] = "Phonetic (alphanumeric last, grouped by consonants)";
 };
 
