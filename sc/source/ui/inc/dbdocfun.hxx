@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbdocfun.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:58 $
+ *  last change: $Author: nn $ $Date: 2000-11-10 19:02:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@ struct ScQueryParam;
 struct ScSortParam;
 struct ScSubTotalParam;
 
+class SfxViewFrame;
 class SbaSelectionList;
 class ScDBData;
 class ScDocShell;
@@ -99,6 +100,8 @@ public:
     BOOL            DoImport( USHORT nTab, const ScImportParam& rParam,
                                         const SbaSelectionList* pSelection,
                                         BOOL bRecord, BOOL bAddrInsert = FALSE );
+
+    static void     ShowInBeamer( const ScImportParam& rParam, SfxViewFrame* pFrame );
 
     BOOL            Sort( USHORT nTab, const ScSortParam& rSortParam,
                             BOOL bRecord, BOOL bPaint, BOOL bApi );

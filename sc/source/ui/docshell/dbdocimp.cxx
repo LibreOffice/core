@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbdocimp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-26 19:08:47 $
+ *  last change: $Author: nn $ $Date: 2000-11-10 19:04:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/frame/XDispatchProvider.hpp>
 
 #include "dbdocfun.hxx"
 #include "docsh.hxx"
@@ -100,6 +101,49 @@ using namespace com::sun::star;
 #define SC_DBPROP_DATASOURCENAME    "DataSourceName"
 #define SC_DBPROP_COMMAND           "Command"
 #define SC_DBPROP_COMMANDTYPE       "CommandType"
+
+// -----------------------------------------------------------------
+
+// static
+void ScDBDocFunc::ShowInBeamer( const ScImportParam& rParam, SfxViewFrame* pFrame )
+{
+    if (!pFrame)
+        return;
+
+    uno::Reference<frame::XFrame> xFrame = pFrame->GetFrame()->GetFrameInterface();
+    uno::Reference<frame::XDispatchProvider> xDP(xFrame, uno::UNO_QUERY);
+     util::URL aURL;
+    aURL.Complete = rtl::OUString::createFromAscii(".component:DB/DataSourceBrowser");
+    uno::Reference<frame::XDispatch> xD = xDP->queryDispatch(aURL,
+                                        rtl::OUString::createFromAscii("_beamer"),
+                                         0x0C);
+    if (xD.is())
+    {
+        uno::Sequence<beans::PropertyValue> aProperties;
+
+        if (rParam.bImport)         // called for a range with imported data?
+        {
+            sal_Int32 nType = rParam.bSql ? sdb::CommandType::COMMAND :
+                        ( (rParam.nType == ScDbQuery) ? sdb::CommandType::QUERY :
+                                                        sdb::CommandType::TABLE );
+
+            aProperties.realloc(3);
+            beans::PropertyValue* pProperties = aProperties.getArray();
+            pProperties[0].Name = rtl::OUString::createFromAscii( SC_DBPROP_DATASOURCENAME );
+            pProperties[0].Value <<= rtl::OUString( rParam.aDBName );
+            pProperties[1].Name = rtl::OUString::createFromAscii( SC_DBPROP_COMMAND );
+            pProperties[1].Value <<= rtl::OUString( rParam.aStatement );
+            pProperties[2].Name = rtl::OUString::createFromAscii( SC_DBPROP_COMMANDTYPE );
+            pProperties[2].Value <<= nType;
+        }
+        //! else address book?
+
+        xD->dispatch(aURL, aProperties);
+    }
+    else
+        DBG_ERROR("no dispatcher for the database URL!");
+}
+
 
 // -----------------------------------------------------------------
 
