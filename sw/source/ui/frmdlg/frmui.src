@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmui.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-02 16:54:43 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 20:45:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ String STR_TOP
     TEXT[ chinese_traditional ] = "¤W(~T)";
     TEXT[ arabic ] = "ΓΪαμ";
     TEXT[ greek ] = "Πάνω";
-    TEXT[ korean ] = "ΐ§(~T)";
+    TEXT[ korean ] = "ΐ§";
     TEXT[ turkish ] = "~άst";
     TEXT[ language_user1 ] = " ";
 };
@@ -111,7 +111,7 @@ String STR_BOTTOM
     TEXT[ chinese_traditional ] = "¤U(~B)";
     TEXT[ arabic ] = "ΓΣέα";
     TEXT[ greek ] = "Κάτω";
-    TEXT[ korean ] = "ΎΖ·΅(~B)";
+    TEXT[ korean ] = "ΎΖ·΅";
     TEXT[ turkish ] = "A~ltta";
     TEXT[ language_user1 ] = " ";
 };
@@ -137,7 +137,7 @@ String STR_CENTER_HORI
     TEXT[ chinese_traditional ] = "Έm¤¤(~C)";
     TEXT[ arabic ] = "ΚζΣνΨ";
     TEXT[ greek ] = "Κεντραρισμένα";
-    TEXT[ korean ] = "°΅Ώξµ¥(~C)";
+    TEXT[ korean ] = "°΅Ώξµ¥";
     TEXT[ turkish ] = "~Ortala";
     TEXT[ language_user1 ] = " ";
 };
@@ -340,7 +340,7 @@ String STR_CENTER_VERT
     Text[ chinese_traditional ] = "Έm¤¤(~E)";
     Text[ arabic ] = "ΗαζΣΨ";
     Text[ greek ] = "Κέντρο";
-    Text[ korean ] = "°΅Ώξµ¥(~E)";
+    Text[ korean ] = "°΅Ώξµ¥";
     Text[ turkish ] = "O~rta";
     Text[ language_user1 ] = " ";
 };
@@ -686,7 +686,7 @@ String STR_REL_PG_LEFT
     Text[ chinese_traditional ] = "¥ªΓδ¬Ι";
     Text[ arabic ] = "εΗγΤ ΗαΥέΝΙ ΗαΓνΣΡ";
     Text[ greek ] = "Περιθώριο σελίδας - αριστερά";
-    Text[ korean ] = "ΏήΒΚ ΖδΐΜΑφ Ώά°ϋΌ±";
+    Text[ korean ] = "ΒΚΏ©Ήι£¬ΏήΒΚ";
     Text[ turkish ] = "Sol sayfa kenarύ";
     Text[ language_user1 ] = " ";
 };
@@ -710,7 +710,7 @@ String STR_MIR_REL_PG_LEFT
     Text[ chinese_traditional ] = "Γδ¬Ι¤Ί°Ό";
     Text[ arabic ] = "εΗγΤ ΗαΥέΝΙ ΗαΟΗΞαν";
     Text[ greek ] = "Περιθώριο σελίδας - εσωτερικά";
-    Text[ korean ] = "³»ΊΞ ΖδΐΜΑφ Ώά°ϋΌ±";
+    Text[ korean ] = "ΒΚΏ©Ήι£¬ΎΘΒΚ";
     Text[ turkish ] = "Sayfa kenarύ (iη)";
     Text[ language_user1 ] = " ";
 };
@@ -734,7 +734,7 @@ String STR_REL_PG_RIGHT
     Text[ chinese_traditional ] = "¥k­¶­±ªΕ¥Υ";
     Text[ arabic ] = "εΗγΤ ΗαΥέΝΙ ΗαΓνγδ";
     Text[ greek ] = "Περιθώριο σελίδας - δεξιά";
-    Text[ korean ] = "ΏΐΈ¥ΒΚ ΖδΐΜΑφ Ώά°ϋΌ±";
+    Text[ korean ] = "ΒΚΏ©Ήι£¬ΏΐΈ¥ΒΚ";
     Text[ turkish ] = "Saπ sayfa kenarύ";
     Text[ language_user1 ] = " ";
 };
@@ -758,7 +758,7 @@ String STR_MIR_REL_PG_RIGHT
     Text[ chinese_traditional ] = "Γδ¬Ι¥~°Ό";
     Text[ arabic ] = "εΗγΤ ΗαΥέΝΙ ΗαΞΗΡΜν";
     Text[ greek ] = "Περιθώριο σελίδας - εξωτερικά";
-    Text[ korean ] = "ΏάΊΞ ΖδΐΜΑφ Ώά°ϋΌ±";
+    Text[ korean ] = "ΒΚΏ©Ήι£¬ΉΩ±ωΒΚ";
     Text[ turkish ] = "Sayfa kenarύ (dύώ)";
     Text[ language_user1 ] = " ";
 };
@@ -782,7 +782,7 @@ String STR_REL_FRM_LEFT
     Text[ chinese_traditional ] = "¥ª¬qΈ¨­¶Γδ";
     Text[ arabic ] = "εΗγΤ ΗαέήΡΙ ΗαΓνΣΡ";
     Text[ greek ] = "Περιθώριο παραγράφου - αριστερά";
-    Text[ korean ] = "ΏήΒΚ ΄ά¶τ Ώά°ϋΌ±";
+    Text[ korean ] = "΄ά¶τΏ©Ήι£¬ΏήΒΚ";
     Text[ turkish ] = "Paragraf kenarύ (sol)";
     Text[ language_user1 ] = " ";
 };
@@ -806,7 +806,7 @@ String STR_MIR_REL_FRM_LEFT
     Text[ chinese_traditional ] = "¶΅Ήj¤ΊΓδ";
     Text[ arabic ] = "εΗγΤ ΗαέήΡΙ ΗαΟΗΞαν";
     Text[ greek ] = "Περιθώριο παραγράφου - εσωτερικά";
-    Text[ korean ] = "³»ΊΞ ΄ά¶τ °ζ°θΌ±";
+    Text[ korean ] = "΄ά¶τΏ©Ήι£¬ΎΘΒΚ";
     Text[ turkish ] = "Paragraf kenarύ (iη)";
     Text[ language_user1 ] = " ";
 };
@@ -830,7 +830,7 @@ String STR_REL_FRM_RIGHT
     Text[ chinese_traditional ] = "¥k¬qΈ¨­¶Γδ";
     Text[ arabic ] = "εΗγΤ ΗαέήΡΙ ΗαΓνγδ";
     Text[ greek ] = "Περιθώριο παραγράφου - δεξιά";
-    Text[ korean ] = "ΏΐΈ¥ΒΚ ΄ά¶τ Ώά°ϋΌ±";
+    Text[ korean ] = "΄ά¶τΏ©Ήι£¬ΏΐΈ¥ΒΚ";
     Text[ turkish ] = "Paragraf kenarύ (saπ)";
     Text[ language_user1 ] = " ";
 };
@@ -854,7 +854,7 @@ String STR_MIR_REL_FRM_RIGHT
     Text[ chinese_traditional ] = "¬qΈ¨¶΅Ήj¥~°Ό";
     Text[ arabic ] = "εΗγΤ ΗαέήΡΙ ΗαΞΗΡΜν";
     Text[ greek ] = "Περιθώριο παραγράφου - εξωτερικά";
-    Text[ korean ] = "ΏάΊΞ ΄ά¶τ Ώά°ϋΌ±";
+    Text[ korean ] = "΄ά¶τΏ©Ήι£¬ΉΩ±ωΒΚ";
     Text[ turkish ] = "Paragraf kenarύ (dύώ)";
     Text[ language_user1 ] = " ";
 };
@@ -878,7 +878,7 @@ String STR_REL_PG_FRAME
     Text[ chinese_traditional ] = "Ύγ­¶";
     Text[ arabic ] = "ΗαΥέΝΙ ΘΓίγαεΗ";
     Text[ greek ] = "Ολόκληρη σελίδα";
-    Text[ korean ] = "ΐόΓΌ ΖδΐΜΑφ";
+    Text[ korean ] = "ΐόΓΌ ΒΚ";
     Text[ turkish ] = "Sayfanύn tόmό";
     Text[ language_user1 ] = " ";
 };
@@ -902,7 +902,7 @@ String STR_REL_PG_PRTAREA
     Text[ chinese_traditional ] = "­¶­±¤ε¦r°Ο°μ";
     Text[ arabic ] = "δΨΗή δΥ ΗαΥέΝΙ";
     Text[ greek ] = "Περιοχή κειμένου σελίδας";
-    Text[ korean ] = "ΖδΐΜΑφ ΕΨ½ΊΖ® ΏµΏª";
+    Text[ korean ] = "ΒΚ ΕΨ½ΊΖ® ΏµΏª";
     Text[ turkish ] = "Sayfa metin alanύ";
     Text[ language_user1 ] = " ";
 };
@@ -1004,7 +1004,7 @@ String STR_TOP_BASE
     Text[ chinese_traditional ] = "°ς½u¤W¤θ(~T)";
     Text[ arabic ] = "ΓΪαμ ΗαΞΨ ΗαΓΣΗΣν";
     Text[ greek ] = "Βασική γραμμή - άνω";
-    Text[ korean ] = "±βΑΨΌ±ΐΗ ΐ§(~T)";
+    Text[ korean ] = "±βΑΨΌ± ΐ§(~T)";
     Text[ turkish ] = "Taban ηizgisi ~όstό";
     Text[ language_user1 ] = " ";
 };
@@ -1028,7 +1028,7 @@ String STR_BOTTOM_BASE
     Text[ chinese_traditional ] = "°ς½u¤U¤θ(~B)";
     Text[ arabic ] = "ΓΣέα ΗαΞΨ ΗαΓΣΗΣν";
     Text[ greek ] = "Βασική γραμμή - κάτω";
-    Text[ korean ] = "±βΑΨΌ±ΐΗ ΎΖ·΅(~B)";
+    Text[ korean ] = "±βΑΨΌ± ΎΖ·΅";
     Text[ turkish ] = "Alt ~taban ηizgisi";
     Text[ language_user1 ] = " ";
 };
@@ -1052,7 +1052,7 @@ String STR_CENTER_BASE
     Text[ chinese_traditional ] = "°ς½uΈm¤¤(~C)";
     Text[ arabic ] = "ζΣΨ ΗαΞΨ ΗαΓΣΗΣν";
     Text[ greek ] = "Βασική γραμμή - κεντραρισμένα";
-    Text[ korean ] = "±βΑΨΌ±ΐΗ °΅Ώξµ¥(~C)";
+    Text[ korean ] = "±βΑΨΌ± °΅Ώξµ¥";
     Text[ turkish ] = "Taban ηizgisini ~ortala";
     Text[ language_user1 ] = " ";
 };
@@ -1076,7 +1076,7 @@ String STR_LINE_TOP
     Text[ chinese_traditional ] = "¦ζ¦V¤W";
     Text[ arabic ] = "ΓΪαμ ΗαΣΨΡ";
     Text[ greek ] = "Γραμμή - άνω";
-    Text[ korean ] = "Ό± ΐ§";
+    Text[ korean ] = "ΑΩ ΐ§";
     Text[ turkish ] = "Satύr όstό";
     Text[ language_user1 ] = " ";
 };
@@ -1100,7 +1100,7 @@ String STR_LINE_BOTTOM
     Text[ chinese_traditional ] = "¤U¤@¦ζ";
     Text[ arabic ] = "ΓΣέα ΗαΣΨΡ";
     Text[ greek ] = "Γραμμή - κάτω";
-    Text[ korean ] = "Ό±ΐΗ ΎΖ·΅";
+    Text[ korean ] = "ΑΩ ΎΖ·΅";
     Text[ turkish ] = "Satύr altύ";
     Text[ language_user1 ] = " ";
 };
@@ -1124,7 +1124,7 @@ String STR_LINE_CENTER
     Text[ chinese_traditional ] = "¦ζΈm¤¤";
     Text[ arabic ] = "ζΣΨ ΗαΣΨΡ";
     Text[ greek ] = "Γραμμή κεντραρισμένη";
-    Text[ korean ] = "Ό± °΅Ώξµ¥";
+    Text[ korean ] = "ΑΩ °΅Ώξµ¥";
     Text[ turkish ] = "Satύrύ ortala";
     Text[ language_user1 ] = " ";
 };
@@ -1148,7 +1148,7 @@ String STR_CHAR_TOP
     Text[ chinese_traditional ] = "¦r¤Έ¦V¤W";
     Text[ arabic ] = "ΓΪαμ ΗαΝΡέ";
     Text[ greek ] = "Χαρακτήρας - άνω";
-    Text[ korean ] = "Ή®ΐΪΐΗ ΐ§Ώ΅";
+    Text[ korean ] = "Ή®ΐΪ ΐ§Ώ΅";
     Text[ turkish ] = "Karakter όstό";
     Text[ language_user1 ] = " ";
 };
@@ -1172,7 +1172,7 @@ String STR_CHAR_BOTTOM
     Text[ chinese_traditional ] = "¦r¤Έ¦V¤U";
     Text[ arabic ] = "ΓΣέα ΗαΝΡέ";
     Text[ greek ] = "Χαρακτήρας - κάτω";
-    Text[ korean ] = "Ή®ΐΪΐΗ ΎΖ·΅";
+    Text[ korean ] = "Ή®ΐΪ ΎΖ·΅";
     Text[ turkish ] = "Karakter altύ";
     Text[ language_user1 ] = " ";
 };
@@ -1196,7 +1196,7 @@ String STR_CHAR_CENTER
     Text[ chinese_traditional ] = "¦r¤ΈΈm¤¤";
     Text[ arabic ] = "ζΣΨ ΗαΝΡέ";
     Text[ greek ] = "Χαρακτήρας - κεντραρισμένα";
-    Text[ korean ] = "Ή®ΐΪΐΗ °΅Ώξµ¥";
+    Text[ korean ] = "Ή®ΐΪ °΅Ώξµ¥";
     Text[ turkish ] = "Karakteri ortala";
     Text[ language_user1 ] = " ";
 };
@@ -1301,7 +1301,7 @@ String STR_FRMUI_BORDER
     Text[ chinese_traditional ] = "Γδ®Ψ";
     Text[ arabic ] = "ΗαΝΟζΟ";
     Text[ greek ] = "Περίγραμμα";
-    Text[ korean ] = "Ώά°ϋΌ±";
+    Text[ korean ] = "ΕΧµΞΈ®";
     Text[ turkish ] = "Kenarlύk";
     Text[ language_user1 ] = " ";
 };
@@ -1353,7 +1353,7 @@ String STR_FRMUI_WRAP
     Text[ chinese_traditional ] = "΄«¦ζ";
     Text[ arabic ] = "ΗαΚέΗέ";
     Text[ greek ] = "Αναδίπλωση";
-    Text[ korean ] = "ΌψΘ―";
+    Text[ korean ] = "Ή®ΐΪΏ­΅΅ΉθΔ΅";
     Text[ turkish ] = "Metin daπύlύmύ";
     Text[ language_user1 ] = " ";
 };
