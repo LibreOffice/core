@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.3 $
+#*  $Revision: 1.4 $
 #*
-#*  last change: $Author: bustamam $ $Date: 2002-04-24 17:10:09 $
+#*  last change: $Author: hr $ $Date: 2003-11-07 15:14:05 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -74,6 +74,13 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 
+MY_MISC_CXXFILES = \
+        $(MISC)$/dict_word_brk.c \
+        $(MISC)$/dict_word_ca_brk.c \
+        $(MISC)$/edit_word_brk.c \
+        $(MISC)$/count_word_brk.c \
+        $(MISC)$/line_brk.c
+
 SLOFILES=   \
         $(SLO)$/breakiteratorImpl.obj \
         $(SLO)$/breakiterator_cjk.obj \
@@ -81,7 +88,12 @@ SLOFILES=   \
         $(SLO)$/breakiterator_th.obj \
         $(SLO)$/breakiterator_hi.obj \
         $(SLO)$/breakiterator_unicode.obj \
-        $(SLO)$/xdictionary.obj
+        $(SLO)$/xdictionary.obj \
+        $(SLO)$/dict_word_brk.obj \
+        $(SLO)$/dict_word_ca_brk.obj \
+        $(SLO)$/edit_word_brk.obj \
+        $(SLO)$/count_word_brk.obj \
+        $(SLO)$/line_brk.obj
 
 APP1TARGET = gendict
 
@@ -95,4 +107,7 @@ APP1STDLIBS = $(SALLIB) \
 .INCLUDE :	target.mk
 
 
-
+# 'genbrk' and 'genccode' are tools generated and delivered by icu project to process icu breakiterator rules.
+$(MISC)$/%_brk.c : data/%.txt
+    +$(WRAPCMD) $(SOLARBINDIR)$/genbrk -r $< -o $(MISC)$/$*.brk
+    +$(WRAPCMD) $(SOLARBINDIR)$/genccode -d $(MISC)$ $(MISC)$/$*.brk
