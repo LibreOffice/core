@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:27:46 $
+ *  last change: $Author: kz $ $Date: 2004-12-09 16:41:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2553,6 +2553,12 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
     SwDoc *pDoc = GetRenderDoc( pView, rSelection );
     if (!pDoc)
         throw RuntimeException();
+
+        // #i38289
+        if(pDoc->IsBrowseMode()) {
+            SwDocShell *pDocShell = pDoc->GetDocShell();
+            pDocShell->ToggleBrowserMode(false,NULL);
+        }
 
     SwWrtShell *pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
