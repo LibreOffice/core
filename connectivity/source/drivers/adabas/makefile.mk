@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: oj $ $Date: 2000-11-22 16:03:23 $
+#   last change: $Author: oj $ $Date: 2001-01-22 07:19:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -157,6 +157,9 @@ SLOFILES=\
         $(SLO)$/BTables.obj						\
         $(SLO)$/Bservices.obj					\
         $(SLO)$/BDatabaseMetaData.obj			\
+        $(SLO)$/BPreparedStatement.obj			\
+        $(SLO)$/BStatement.obj					\
+        $(SLO)$/BResultSet.obj					\
         $(SLO)$/OPreparedStatement.obj			\
         $(SLO)$/OStatement.obj					\
         $(SLO)$/OResultSetMetaData.obj			\
