@@ -2,9 +2,9 @@
  *
  *  $RCSfile: preview.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2002-04-16 18:02:46 $
+ *  last change: $Author: nn $ $Date: 2002-04-18 17:06:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -343,8 +343,9 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
     MapMode aMMMode( MAP_100TH_MM, Point(), aHorPrevZoom, aPreviewZoom );
 
     BOOL bDoPrint = ( pFillLocation == NULL );
+    BOOL bValidPage = ( nPageNo < nTotalPages );
 
-    if ( bDoPrint && ( aOffset.X() < 0 || aOffset.Y() < 0 ) )
+    if ( bDoPrint && ( aOffset.X() < 0 || aOffset.Y() < 0 ) && bValidPage )
     {
         SetMapMode( aMMMode );
         SetLineColor();
@@ -358,7 +359,7 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
     }
 
     Size aPageSize;
-    if ( nPageNo < nTotalPages )
+    if ( bValidPage )
     {
         ScPrintOptions aOptions = SC_MOD()->GetPrintOptions();
 
@@ -408,6 +409,9 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
     {
         long nPageEndX = aPageSize.Width()  - aOffset.X();
         long nPageEndY = aPageSize.Height() - aOffset.Y();
+        if ( !bValidPage )
+            nPageEndX = nPageEndY = 0;
+
         Size aWinSize = GetOutputSize();
         Point aWinEnd( aWinSize.Width(), aWinSize.Height() );
         BOOL bRight  = nPageEndX <= aWinEnd.X();
@@ -427,37 +431,40 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
             }
         }
 
-        //  draw border
-
-        if ( aOffset.X() <= 0 || aOffset.Y() <= 0 || bRight || bBottom )
+        if ( bValidPage )
         {
-            SetLineColor( COL_BLACK );      //! from settings
-            SetFillColor();
+            //  draw border
 
-            Rectangle aPixel( LogicToPixel( Rectangle( -aOffset.X(), -aOffset.Y(), nPageEndX, nPageEndY ) ) );
-            --aPixel.Right();
-            --aPixel.Bottom();
+            if ( aOffset.X() <= 0 || aOffset.Y() <= 0 || bRight || bBottom )
+            {
+                SetLineColor( COL_BLACK );      //! from settings
+                SetFillColor();
+
+                Rectangle aPixel( LogicToPixel( Rectangle( -aOffset.X(), -aOffset.Y(), nPageEndX, nPageEndY ) ) );
+                --aPixel.Right();
+                --aPixel.Bottom();
+                DrawRect( PixelToLogic( aPixel ) );
+            }
+
+            //  draw shadow
+
+            SetLineColor();
+            SetFillColor( COL_BLACK );          //! from settings
+
+            Rectangle aPixel;
+
+            aPixel = LogicToPixel( Rectangle( nPageEndX, -aOffset.Y(), nPageEndX, nPageEndY ) );
+            aPixel.Top() += SC_PREVIEW_SHADOWSIZE;
+            aPixel.Right() += SC_PREVIEW_SHADOWSIZE - 1;
+            aPixel.Bottom() += SC_PREVIEW_SHADOWSIZE - 1;
+            DrawRect( PixelToLogic( aPixel ) );
+
+            aPixel = LogicToPixel( Rectangle( -aOffset.X(), nPageEndY, nPageEndX, nPageEndY ) );
+            aPixel.Left() += SC_PREVIEW_SHADOWSIZE;
+            aPixel.Right() += SC_PREVIEW_SHADOWSIZE - 1;
+            aPixel.Bottom() += SC_PREVIEW_SHADOWSIZE - 1;
             DrawRect( PixelToLogic( aPixel ) );
         }
-
-        //  draw shadow
-
-        SetLineColor();
-        SetFillColor( COL_BLACK );          //! from settings
-
-        Rectangle aPixel;
-
-        aPixel = LogicToPixel( Rectangle( nPageEndX, -aOffset.Y(), nPageEndX, nPageEndY ) );
-        aPixel.Top() += SC_PREVIEW_SHADOWSIZE;
-        aPixel.Right() += SC_PREVIEW_SHADOWSIZE - 1;
-        aPixel.Bottom() += SC_PREVIEW_SHADOWSIZE - 1;
-        DrawRect( PixelToLogic( aPixel ) );
-
-        aPixel = LogicToPixel( Rectangle( -aOffset.X(), nPageEndY, nPageEndX, nPageEndY ) );
-        aPixel.Left() += SC_PREVIEW_SHADOWSIZE;
-        aPixel.Right() += SC_PREVIEW_SHADOWSIZE - 1;
-        aPixel.Bottom() += SC_PREVIEW_SHADOWSIZE - 1;
-        DrawRect( PixelToLogic( aPixel ) );
     }
 }
 
@@ -555,10 +562,17 @@ void ScPreview::SetZoom(USHORT nNewZoom)
     {
         double nFact = nNewZoom / (double) nZoom;
         nZoom = nNewZoom;
-        aOffset.X() = (long) ( aOffset.X() * nFact );
-        aOffset.Y() = (long) ( aOffset.Y() * nFact );
 
-//      DataChanged();
+        //  apply new MapMode and call UpdateScrollBars to update aOffset
+
+        Fraction aPreviewZoom( nZoom, 100 );
+        Fraction aHorPrevZoom( (long)( 100 * nZoom / pDocShell->GetOutputFactor() ), 10000 );
+        MapMode aMMMode( MAP_100TH_MM, Point(), aHorPrevZoom, aPreviewZoom );
+        SetMapMode( aMMMode );
+
+        bInPaint = TRUE;                // don't scroll during SetYOffset in UpdateScrollBars
+        pViewShell->UpdateScrollBars();
+        bInPaint = FALSE;
 
         bStateValid = FALSE;
         InvalidateLocationData();
@@ -662,7 +676,7 @@ void ScPreview::SetXOffset( long nX )
     {
         long nDif = LogicToPixel(aOffset).X() - LogicToPixel(Point(nX,0)).X();
         aOffset.X() = nX;
-        if (!bInPaint)
+        if (nDif && !bInPaint)
         {
             MapMode aOldMode = GetMapMode(); SetMapMode(MAP_PIXEL);
             Scroll( nDif, 0 );
@@ -685,7 +699,7 @@ void ScPreview::SetYOffset( long nY )
     {
         long nDif = LogicToPixel(aOffset).Y() - LogicToPixel(Point(0,nY)).Y();
         aOffset.Y() = nY;
-        if (!bInPaint)
+        if (nDif && !bInPaint)
         {
             MapMode aOldMode = GetMapMode(); SetMapMode(MAP_PIXEL);
             Scroll( 0, nDif );

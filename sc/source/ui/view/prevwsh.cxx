@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prevwsh.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2002-04-16 17:43:26 $
+ *  last change: $Author: nn $ $Date: 2002-04-18 17:06:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,6 +300,8 @@ void __EXPORT ScPreviewShell::AdjustPosSizePixel( const Point &rPos, const Size 
         pPreview->SetZoom( pPreview->GetOptimalZoom(FALSE) );
     else if ( SVX_ZOOM_PAGEWIDTH == eZoom )
         pPreview->SetZoom( pPreview->GetOptimalZoom(TRUE) );
+
+    UpdateScrollBars();
 }
 
 void __EXPORT ScPreviewShell::InnerResizePixel( const Point &rOfs, const Size &rSize )
@@ -424,18 +426,6 @@ BOOL ScPreviewShell::ScrollCommand( const CommandEvent& rCEvt )
     else
     {
         bDone = pPreview->HandleScrollCommand( rCEvt, pHorScroll, pVerScroll );
-
-        //! ist das noetig ????
-        if ( bDone )
-        {
-            Point aOld = pPreview->GetOffset();
-            long nHorThumb = pHorScroll->GetThumbPos();
-            if ( nHorThumb != aOld.X() )
-                pPreview->SetXOffset( nHorThumb );
-            long nVerThumb = pVerScroll->GetThumbPos();
-            if ( nVerThumb != aOld.Y() )
-                pPreview->SetYOffset( nVerThumb );
-        }
     }
 
     return bDone;
@@ -663,6 +653,7 @@ void __EXPORT ScPreviewShell::Execute( SfxRequest& rReq )
             }
             break;
         case SID_PRINTPREVIEW:
+        case SID_PREVIEW_CLOSE:
             //  print preview is now always in the same frame as the tab view
             //  -> always switch this frame back to normal view
             //  (ScTabViewShell ctor reads stored view data)
