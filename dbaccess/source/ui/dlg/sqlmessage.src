@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlmessage.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:47:24 $
+ *  last change: $Author: kz $ $Date: 2002-11-27 16:59:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -339,7 +339,7 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text[ portuguese ] = "Estado SQL";
         Text[ russian ] = "Ρξρςξÿνθε SQL";
         Text[ greek ] = "Κατάσταση SQL";
-        Text[ dutch ] = "SQL status";
+        Text[ dutch ] = "SQL-status";
         Text[ french ] = "Statut SQL";
         Text[ spanish ] = "Estado SQL";
         Text[ italian ] = "Stato SQL";
@@ -365,7 +365,7 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text[ portuguese ] = "Cσdigo de erro";
         Text[ russian ] = "Κξδ ξψθακθ";
         Text[ greek ] = "Κωδικός σφάλματος";
-        Text[ dutch ] = "Errorcode";
+        Text[ dutch ] = "Foutcode";
         Text[ french ] = "Code d'erreur";
         Text[ spanish ] = "Cσdigo de error";
         Text[ italian ] = "Codice di errore";
@@ -409,6 +409,9 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.34  2002/08/19 07:47:24  oj
+ *  #99473# change string resource files
+ *
  *  Revision 1.33  2002/05/02 23:14:37  kz
  *  Merge SRX642: 03.05.02 - 01:13:35
  *
