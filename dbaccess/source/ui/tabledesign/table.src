@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-29 14:21:39 $
+ *  last change: $Author: oj $ $Date: 2001-04-11 11:34:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1732,5 +1732,59 @@ QueryBox QUERY_SAVE_TABLE_EDIT_INDEXES
     Message[ turkish ] = "Before you can edit the indexes of a table, it must be saved.\nDo you want to save your changes now?";
     Message[ arabic ] = "Before you can edit the indexes of a table, it must be saved.\nDo you want to save your changes now?";
 };
-
+String STR_TABLEDESIGN_NO_PRIM_KEY_HEAD
+{
+    Text = "Kein Primärschlüssel" ;
+    Text [ ENGLISH ] = "No primary key" ;
+    Text [ english_us ] = "No primary key" ;
+    Text [ portuguese_brazilian ] = "Kein Primärschlüssel" ;
+    Text [ swedish ] = "Ingen primärnyckel" ;
+    Text [ danish ] = "Ingen primærnøgle" ;
+    Text [ italian ] = "Nessuna chiave primaria" ;
+    Text [ spanish ] = "Ninguna llave primaria" ;
+    Text [ french ] = "Pas de clé primaire" ;
+    Text [ dutch ] = "Geen primaire sleutel" ;
+    Text [ portuguese ] = "Sem chave primária" ;
+    Text[ chinese_simplified ] = "Ã»ÓĞÖ÷¹Ø¼ü×Ö";
+    Text[ russian ] = "Áåç îñíîâíîãî êëş÷à";
+    Text[ polish ] = "Brak klucza g³ównego";
+    Text[ japanese ] = "Ìß×²ÏØ°·°‚ª‚ ‚è‚Ü‚¹‚ñB";
+    Text[ chinese_traditional ] = "µL¥DÃöÁä¦r";
+    Text[ arabic ] = "ÈÏæä ãİÊÇÍ ÃÓÇÓí";
+    Text[ dutch ] = "Geen primaire sleutel";
+    Text[ chinese_simplified ] = "Ã»ÓĞÖ÷¹Ø¼ü×Ö";
+    Text[ greek ] = "Êáíİíá ğñùôåıïí êëåéäß";
+    Text[ korean ] = "±âº»Å° ¾øÀ½";
+    Text[ turkish ] = "Birinci anahtar yok";
+};
+String STR_TABLEDESIGN_NO_PRIM_KEY
+{
+    Text = "In dieser Datenbank wird zur Datensatz-Identifizierung ein eindeutiger Index oder ein Primärschlüssel benötigt.\nSie werden erst dann Daten in die Tabelle eingeben können, wenn sie eine dieser beiden Struktur-Bedingungen erfüllt.\n\nSoll jetzt ein Primärschlüssel erzeugt werden ?" ;
+    Text [ ENGLISH ] = "The table has no primary key.\nShould Starbase create a key for you?" ;
+    Text [ english_us ] = "A unique index or primary key is required for data record identification in this database.\nYou can only enter data into this table if one of these two structural conditions has been met.\n\nShould a primary key be created now?" ;
+    Text [ portuguese_brazilian ] = "Beim Anlegen der Tabelle wurde kein Primärschlüssel angegeben.\nSoll jetzt ein Primärschlüssel erzeugt werden?" ;
+    Text [ swedish ] = "Ett entydigt index eller en primärnyckel krävs för identifiering av dataposter i den här databasen.\nData kan först matas in i tabellen om de uppfyller en av dessa båda strukturvillkor.\n\nSkall en primärnyckel skapas nu?" ;
+    Text [ danish ] = "Denne database kræver et entydigt indeks eller en primærnøgle til datapost-identifikation.\nDu kan først indtaste data i tabellen, når disse to strukturbetingelser er opfyldt.\n\nVil du oprette en primærnøgle nu?" ;
+    Text [ italian ] = "Per l'identificazione del record di dati nel database attuale è necessario un indice univoco o una chaive primaria.\nSolo dopo aver soddisfatto una di queste condizioni sarà possibile introdurre dati nella tabella.\n\nVolete creare adesso una chiave primaria?" ;
+    Text [ spanish ] = "Para la identificación de registros en esta base de datos se necesita un índice unívoco o una llave primaria.\nSolo cuando haya cumplido una de estas condiciones podrá introducir datos en la tabla.\n\n¿Desea crear ahora una llave primaria?" ;
+    Text [ french ] = "Un index univoque ou une clé primaire est nécessaire pour l'identification d'enregistrement dans cette base de données.\nVous ne pourrez saisir des données dans la table que si celle-ci remplit une de ces deux conditions de structure.\n\nSouhaitez-vous créer une clé primaire maintenant ?" ;
+    Text [ dutch ] = "In deze database wordt een index of een primaire sleutel verlangd ter identificatie van records.\nU kunt alleen gegevens invoeren in de tabel als u voldoet aan een van deze beide criteria.\nWilt u nu een primaire sleutel definiëren?" ;
+    Text [ portuguese ] = "Esta base de dados precisa de um índice único ou de uma chave primária para identificação do registo de dados.\nSó poderá introduzir os dados na tabela depois de esta preencher uma destas condições de estrutura.\n\nCriar agora uma chave primária?" ;
+    Text[ chinese_simplified ] = "ÒªÊ¶±ğÊı¾İ¿âÖĞµÄÊı¾İÌõÄ¿£¬Äú±ØĞë¸øÊı¾İÌõÄ¿Ò»¸ö±êÖ¾»òÖ÷¹Ø¼ü×Ö£¬\nÈ»ºóÄú²ÅÄÜÍù±í¸ñÖĞÊäÈëÊı¾İ¡£\nÏÖÔÚÒªÉú³ÉÒ»¸öÖ÷¹Ø¼ü×ÖÂğ£¿";
+    Text[ russian ] = "Äëÿ èäåíòèôèêàöèè çàïèñè äàííûõ èç ıòîé áàçû äàííûõ íåáõîäèì îäíîçíà÷íûé èíäåêñ èëè îñíîâíîé êëş÷.\nÂû ñìîæåòå ââåñòè äàííûå â òàáëèöó ëèøü òîãäà, êîãäà çàäàäèòå èíäåêñ èëè êëş÷.\n\nÑîçäàòü ñåé÷àñ îñíîâíîé êëş÷?";
+    Text[ polish ] = "W tej bazie danych wymagany jest w celu identyfikacji rekordu jednoznaczny indeks lub klucz g³ówny.\nDane bêdziesz móg³ dopiero wtedy wpisaæ do tabeli, gdy bêdzie ona spe³niaæ jedno z tych dwóch kryteriów.\n\nCzy utworzyæ teraz klucz g³ówny?";
+    Text[ japanese ] = "‚±‚ÌÃŞ°ÀÍŞ°½‚Å‚ÍÚº°ÄŞŠm”F‚Ì‚½‚ß‚É–¾Šm‚È²İÃŞ¯¸½‚Ü‚½‚ÍÌß×²ÏØ°·°‚ª•K—v‚Å‚·B\n‚±‚Ì2‚Â‚Ì\\‘¢ğŒ‚Ì1‚Â‚ª–‚½‚³‚ê‚ê‚Î¤Úº°ÄŞ‚ÉÃŞ°À‚ª“ü—Í‚Å‚«‚Ü‚·B\n\n¡‚·‚®Ìß×²ÏØ°·°‚ğì¬‚µ‚Ü‚·‚©?";
+    Text[ chinese_traditional ] = "¦b³o­Ó¼ÆÕu®wÃÑ§O¼ÆÕu¥²¶·­n¾Ì­É¤@­Ó¯Á¤Ş±ø¥Ø©M¥DÃöÁä¦r¡C\n¥u¦³º¡¨¬³o­Ó±ø¥ó®É±z¤~¯à¦bªí®æ¤º¿é¤J¼ÆÕu¡C\n²{¦b­n¥Í¦¨¤@­Ó¥DÃöÁä¦r¡S";
+    Text[ arabic ] = "ááÊÚÑİ Úáì ÓÌá İí ŞÇÚÏÉ ÇáÈíÇäÇÊ åĞå¡ ãØáæÈ İåÑÓ æÇÖÍ Ãæ ãİÊÇÍ ÃÓÇÓí.\náä íãßäß ÅÏÎÇá ÈíÇäÇÊ İí ÇáÌÏæá ÅáÇ ÅĞÇ ßäÊ Êİí ÈÃÍÏ ÇáÔÑØíä.\n\nåá ÊÑíÏ ÅäÔÇÁ ãİÊÇÍ ÃÓÇÓí ÇáÂä ¿";
+    Text[ dutch ] = "In deze database wordt een index of een primaire sleutel verlangd ter identificatie van records.\nU kunt alleen gegevens invoeren in de tabel als u voldoet aan een van deze beide criteria.\nWilt u nu een primaire sleutel definiëren?";
+    Text[ chinese_simplified ] = "ÒªÊ¶±ğÊı¾İ¿âÖĞµÄÊı¾İÌõÄ¿£¬Äú±ØĞë¸øÊı¾İÌõÄ¿Ò»¸ö±êÖ¾»òÖ÷¹Ø¼ü×Ö£¬\nÈ»ºóÄú²ÅÄÜÍù±í¸ñÖĞÊäÈëÊı¾İ¡£\nÏÖÔÚÒªÉú³ÉÒ»¸öÖ÷¹Ø¼ü×ÖÂğ£¿";
+    Text[ greek ] = "Ãéá ôçí áíáãíşñéóç ôçò åããñáöŞò óå áõôŞ ôç âÜóç äåäïìİíùí áğáéôåßôáé İíá ìïíáäéêü åõñåôŞñéï Ş İíá ğñùôåıïí êëåéäß.\nÌğïñåßôå íá åéóÜãåôå ôá äåäïìİíá óôïí ğßíáêá ìüíïí åöüóïí åêğëçñùèåß ìéá áğü ôéò äıï áõôİò óõíèŞêåò äïìŞò.\n\nÈİëåôå íá äçìéïõñãçèåß ôşñá İíá ğñùôåıïí êëåéäß;";
+    Text[ korean ] = "ÀÌ µ¥ÀÌÅÍº£ÀÌ½º¿¡¼­´Â µ¥ÀÌÅÍ ·¹ÄÚµå ½Äº°À» À§ÇØ ´ÜÀÏ ÀÎµ¦½º³ª ±âº»Å°°¡ ÇÊ¿äÇÕ´Ï´Ù.\nÀÌ µÎ Á¶°Ç °¡¿îµ¥ ÇÑ °¡Áö´Â ÃæÁ·µÇ¾î¾ß¸¸ µ¥ÀÌÅÍ¸¦ Å×ÀÌºí¿¡ ÀÔ·ÂÇÒ ¼ö ÀÖ½À´Ï´Ù.\n\nÁö±İ ±âº»Å°¸¦ ¸¸µå½Ã°Ú½À´Ï±î?";
+    Text[ turkish ] = "Bu veritabanında, kayıt tanımlama için benzersiz bir dizin ya da birinci anahtarı gerekiyor.\nBu tabloya veri girişi yapabilmek için bu yapısal koşullardan en az biri yerine getirilmelidir.\n\nŞimdi bir birinci anahtar oluşturulsun mu?";
+};
+String STR_TABLEDESIGN_TITLE
+{
+    Text = "Tabellen Entwurf";
+    Text [ ENGLISH ] = "table design";
+};
 

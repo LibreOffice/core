@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-03 14:14:23 $
+ *  last change: $Author: oj $ $Date: 2001-04-11 11:34:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,6 +295,10 @@ void OTableController::disposing()
     if(m_bOwnConnection)
         ::comphelper::disposeComponent(m_xConnection);
     m_xConnection = NULL;
+
+    ::std::vector<OTableRow*>::iterator aIter = m_vRowList.begin();
+    for(;aIter != m_vRowList.end();++aIter)
+        delete *aIter;
 }
 // -----------------------------------------------------------------------------
 FeatureState OTableController::GetState(sal_uInt16 _nId)
@@ -309,7 +313,7 @@ FeatureState OTableController::GetState(sal_uInt16 _nId)
             break;
         case ID_BROWSER_EDITDOC:
             aReturn.aState = ::cppu::bool2any(m_bEditable);
-            aReturn.bEnabled = m_bNew || m_bEditable;
+            aReturn.bEnabled = m_bNew || m_bEditable || isAddAllowed() || isDropAllowed() || isAlterAllowed();
             break;
         case ID_BROWSER_SAVEASDOC:
             aReturn.bEnabled = m_xConnection.is();
@@ -451,7 +455,7 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
     try
     {
         // check the columns for double names
-        checkColumns();
+        checkColumns(bNew || !xTables->hasByName(m_sName));
 
         Reference<XPropertySet> xTable;
         if(bNew || !xTables->hasByName(m_sName)) // just to make sure the table already exists
@@ -667,6 +671,15 @@ void SAL_CALL OTableController::initialize( const Sequence< Any >& aArguments ) 
         getView()->initialize();    // show the windows and fill with our informations
         getUndoMgr()->Clear();      // clear all undo redo things
         setModified(sal_False);     // and we are not modified yet
+        // set the title of the beamer
+        Reference<XPropertySet> xProp(m_xCurrentFrame,UNO_QUERY);
+        if(xProp.is() && xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_TITLE))
+        {
+            ::rtl::OUString sName = String(ModuleRes(STR_TABLEDESIGN_TITLE));
+            sName += ::rtl::OUString::createFromAscii(" ");
+            sName += m_sDataSourceName;
+            xProp->setPropertyValue(PROPERTY_TITLE,makeAny(sName));
+        }
     }
     catch(SQLException&)
     {
@@ -1247,8 +1260,9 @@ Reference<XNameAccess> OTableController::getKeyColumns() const
     return xKeyColumns;
 }
 // -----------------------------------------------------------------------------
-void OTableController::checkColumns() throw(::com::sun::star::sdbc::SQLException)
+void OTableController::checkColumns(sal_Bool _bNew) throw(::com::sun::star::sdbc::SQLException)
 {
+    sal_Bool bFoundPKey = sal_False;
     Reference< XDatabaseMetaData> xMetaData = m_xConnection.is() ? m_xConnection->getMetaData() : Reference< XDatabaseMetaData>();
 
     ::comphelper::UStringMixEqual bCase(xMetaData.is() ? xMetaData->storesMixedCaseQuotedIdentifiers() : sal_True);
@@ -1258,6 +1272,7 @@ void OTableController::checkColumns() throw(::com::sun::star::sdbc::SQLException
         OFieldDescription* pFieldDesc = (*aIter)->GetActFieldDescr();
         if (pFieldDesc && pFieldDesc->GetName().getLength())
         {
+            bFoundPKey |=  (*aIter)->IsPrimaryKey();
             sal_uInt16 nErrorRes = sal_uInt16(-1);
             sal_uInt16 nFieldPos = sal_uInt16(-1);
             // first check for duplicate names
@@ -1271,6 +1286,50 @@ void OTableController::checkColumns() throw(::com::sun::star::sdbc::SQLException
                     strMessage.SearchAndReplaceAscii("$column$", pFieldDesc->GetName());
                     throw SQLException(strMessage,*this,::rtl::OUString::createFromAscii("HY0000"),1000,Any());
                 }
+            }
+        }
+    }
+    if(!bFoundPKey)
+    {
+        if(_bNew && xMetaData.is() && xMetaData->supportsCoreSQLGrammar())
+        {
+            String sTitle(ModuleRes(STR_TABLEDESIGN_NO_PRIM_KEY_HEAD));
+            String sMsg(ModuleRes(STR_TABLEDESIGN_NO_PRIM_KEY));
+            OSQLMessageBox aBox(getView(), sTitle,sMsg, WB_YES_NO_CANCEL | WB_DEF_YES);
+
+            INT16 nReturn = aBox.Execute();
+
+            if (nReturn == RET_YES)
+            {
+                OTableRow* pNewRow = new OTableRow();
+                const OTypeInfo* pTypeInfo = NULL;
+                // first we search for a type which supports autoIncrement
+                OTypeInfoMap::const_iterator aIter = m_aTypeInfo.begin();
+                for(;aIter != m_aTypeInfo.end();++aIter)
+                {
+                    if(aIter->second->bAutoIncrement)
+                    {   // therefor we have searched
+                        pTypeInfo = aIter->second;
+                        break;
+                    }
+                    else if(aIter->second->nType == DataType::INTEGER)
+                        pTypeInfo = aIter->second; // alternative
+                }
+                if(!pTypeInfo) // just a fallback
+                    pTypeInfo = getTypeInfoByType(DataType::VARCHAR);
+
+                pNewRow->SetFieldType( pTypeInfo );
+                OFieldDescription* pActFieldDescr = pNewRow->GetActFieldDescr();
+
+                pActFieldDescr->SetAutoIncrement(pTypeInfo->bAutoIncrement);
+                pActFieldDescr->SetIsNullable(ColumnValue::NO_NULLS);
+
+
+                pActFieldDescr->SetName( createUniqueName(::rtl::OUString::createFromAscii("ID") ));
+                pActFieldDescr->SetPrimaryKey( sal_True );
+                m_vRowList.insert(m_vRowList.begin(),pNewRow);
+
+                static_cast<OTableDesignView*>(getView())->GetEditorCtrl()->DisplayData(0);
             }
         }
     }
@@ -1625,6 +1684,26 @@ void OTableController::reSyncRows()
 
     getUndoMgr()->Clear();      // clear all undo redo things
     setModified(sal_False);     // and we are not modified yet
+}
+// -----------------------------------------------------------------------------
+::rtl::OUString OTableController::createUniqueName(const ::rtl::OUString& _rName)
+{
+    ::rtl::OUString sName = _rName;
+    Reference< XDatabaseMetaData> xMetaData = m_xConnection.is() ? m_xConnection->getMetaData() : Reference< XDatabaseMetaData>();
+
+    ::comphelper::UStringMixEqual bCase(xMetaData.is() ? xMetaData->storesMixedCaseQuotedIdentifiers() : sal_True);
+
+    ::std::vector<OTableRow*>::const_iterator aIter = m_vRowList.begin();
+    for(sal_Int32 i=0;aIter != m_vRowList.end();++aIter)
+    {
+        OFieldDescription* pFieldDesc = (*aIter)->GetActFieldDescr();
+        if (pFieldDesc && pFieldDesc->GetName().getLength() && bCase(sName,pFieldDesc->GetName()))
+        { // found a second name of _rName so we need another
+            sName = _rName + ::rtl::OUString::valueOf(++i);
+            aIter = m_vRowList.begin(); // and retry
+        }
+    }
+    return sName;
 }
 // -----------------------------------------------------------------------------
 
