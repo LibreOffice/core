@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EnhancedCustomShape2d.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 19:04:45 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:07:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@
 #ifndef _COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEPARAMETER_HPP_
 #include <com/sun/star/drawing/EnhancedCustomShapeParameter.hpp>
 #endif
-#ifndef __com_sun_star_drawing_EnhancedCustomShapeTextFrame_hpp__
+#ifndef __COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPETEXTFRAME_HPP__
 #include <com/sun/star/drawing/EnhancedCustomShapeTextFrame.hpp>
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEADJUSTMENTVALUE_HPP_
