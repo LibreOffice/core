@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-20 17:52:32 $
+ *  last change: $Author: mt $ $Date: 2001-02-12 12:57:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,28 @@
 #include <com/sun/star/i18n/WordType.hpp>
 #endif
 
+
+#ifndef _CPPUHELPER_WEAK_HXX_
+#include <cppuhelper/weak.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_DATATRANSFER_XTRANSFERABLE_HPP_
+#include <com/sun/star/datatransfer/XTransferable.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_DATATRANSFER_CLIPBOARD_XCLIPBOARD_HPP_
+#include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+
+#include <sot/exchange.hxx>
+#include <sot/formats.hxx>
+
+#include <comphelper/processfactory.hxx>
+
 #include <unohelp.hxx>
 
 
@@ -125,6 +147,73 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::rtl;
+
+
+class TextDataObject :  public ::com::sun::star::datatransfer::XTransferable,
+                        public ::cppu::OWeakObject
+
+{
+private:
+    String          maText;
+
+public:
+                    TextDataObject( const String& rText );
+                    ~TextDataObject();
+
+    String&         GetString() { return maText; }
+
+    // ::com::sun::star::uno::XInterface
+    ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+    void                                        SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException)   { OWeakObject::acquire(); }
+    void                                        SAL_CALL release() throw(::com::sun::star::uno::RuntimeException)   { OWeakObject::release(); }
+
+    // ::com::sun::star::datatransfer::XTransferable
+    ::com::sun::star::uno::Any SAL_CALL getTransferData( const ::com::sun::star::datatransfer::DataFlavor& aFlavor ) throw(::com::sun::star::datatransfer::UnsupportedFlavorException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< ::com::sun::star::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors(  ) throw(::com::sun::star::uno::RuntimeException);
+    sal_Bool SAL_CALL isDataFlavorSupported( const ::com::sun::star::datatransfer::DataFlavor& aFlavor ) throw(::com::sun::star::uno::RuntimeException);
+};
+
+TextDataObject::TextDataObject( const String& rText ) : maText( rText )
+{
+}
+
+TextDataObject::~TextDataObject()
+{
+}
+
+// uno::XInterface
+uno::Any TextDataObject::queryInterface( const uno::Type & rType ) throw(uno::RuntimeException)
+{
+    uno::Any aRet = ::cppu::queryInterface( rType, SAL_STATIC_CAST( datatransfer::XTransferable*, this ) );
+    return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ));
+}
+
+// datatransfer::XTransferable
+uno::Any TextDataObject::getTransferData( const datatransfer::DataFlavor& rFlavor ) throw(datatransfer::UnsupportedFlavorException, io::IOException, uno::RuntimeException)
+{
+    uno::Any aAny;
+
+    ULONG nT = SotExchange::GetFormat( rFlavor );
+    if ( nT == SOT_FORMAT_STRING )
+    {
+        aAny <<= (::rtl::OUString)GetString();
+    }
+    return aAny;
+}
+
+uno::Sequence< datatransfer::DataFlavor > TextDataObject::getTransferDataFlavors(  ) throw(uno::RuntimeException)
+{
+    uno::Sequence< datatransfer::DataFlavor > aDataFlavors(1);
+    SotExchange::GetFormatDataFlavor( SOT_FORMAT_STRING, aDataFlavors.getArray()[0] );
+    return aDataFlavors;
+}
+
+sal_Bool TextDataObject::isDataFlavorSupported( const datatransfer::DataFlavor& rFlavor ) throw(uno::RuntimeException)
+{
+    ULONG nT = SotExchange::GetFormat( rFlavor );
+    return ( nT == SOT_FORMAT_RTF );
+}
+
 
 // - Redo
 // - Bei Tracking-Cancel DefaultSelection wieder herstellen
@@ -148,12 +237,23 @@ static FncGetSpecialChars pImplFncGetSpecialChars = NULL;
 
 // =======================================================================
 
-uno::Reference < i18n::XBreakIterator > ImplGetBreakIterator()
+static uno::Reference < i18n::XBreakIterator > ImplGetBreakIterator()
 {
     static uno::Reference < i18n::XBreakIterator > xB;
     if ( !xB.is() )
         xB = vcl::unohelper::CreateBreakIterator();
     return xB;
+}
+
+static uno::Reference< datatransfer::clipboard::XClipboard > ImplGetClipboard()
+{
+    static uno::Reference< datatransfer::clipboard::XClipboard > xClipboard;
+    if ( !xClipboard.is() )
+    {
+        uno::Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
+        xClipboard = uno::Reference< datatransfer::clipboard::XClipboard >( xMSF->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboard" ) ), uno::UNO_QUERY );
+    }
+    return xClipboard;
 }
 
 // =======================================================================
@@ -1383,8 +1483,19 @@ void Edit::Command( const CommandEvent& rCEvt )
         else
         {
             // Paste nur, wenn Text im Clipboard
-            if ( !VclClipboard::HasFormat( FORMAT_STRING ) )
-                pPopup->EnableItem( SV_MENU_EDIT_PASTE, FALSE );
+            BOOL bData = FALSE;
+            uno::Reference< datatransfer::clipboard::XClipboard > xClipboard = ImplGetClipboard();
+            if ( xClipboard.is() )
+            {
+                uno::Reference< datatransfer::XTransferable > xDataObj = xClipboard->getContents();
+                if ( xDataObj.is() )
+                {
+                    datatransfer::DataFlavor aFlavor;
+                    SotExchange::GetFormatDataFlavor( SOT_FORMAT_STRING, aFlavor );
+                    bData = xDataObj->isDataFlavorSupported( aFlavor );
+                }
+            }
+            pPopup->EnableItem( SV_MENU_EDIT_PASTE, bData );
         }
 
         if ( maUndoText == maText )
@@ -2009,8 +2120,12 @@ void Edit::Copy()
 {
     if ( !(GetStyle() & WB_PASSWORD ) )
     {
-        SotDataObjectRef xData = new StringDataObject( GetSelected() );
-        VclClipboard::Copy( xData );
+        uno::Reference< datatransfer::clipboard::XClipboard > xClipboard = ImplGetClipboard();
+        if ( xClipboard.is() )
+        {
+            TextDataObject* pDataObj = new TextDataObject( GetSelected() );
+            xClipboard->setContents( pDataObj, NULL );
+        }
     }
 }
 
@@ -2018,14 +2133,22 @@ void Edit::Copy()
 
 void Edit::Paste()
 {
-    // Daten holen
-    SotDataObjectRef xDataObj = VclClipboard::Paste();
-    SvData aData( FORMAT_STRING );
-    if( xDataObj.Is() && xDataObj->GetData( &aData ) )
+    uno::Reference< datatransfer::clipboard::XClipboard > xClipboard = ImplGetClipboard();
+    if ( xClipboard.is() )
     {
-        XubString aStr;
-        aData.GetData( aStr );
-        ReplaceSelected( aStr );
+        uno::Reference< datatransfer::XTransferable > xDataObj = xClipboard->getContents();
+        if ( xDataObj.is() )
+        {
+            datatransfer::DataFlavor aFlavor;
+            SotExchange::GetFormatDataFlavor( SOT_FORMAT_STRING, aFlavor );
+            if ( xDataObj->isDataFlavorSupported( aFlavor ) )
+            {
+                uno::Any aData = xDataObj->getTransferData( aFlavor );
+                ::rtl::OUString aText;
+                aData >>= aText;
+                ReplaceSelected( aText );
+            }
+        }
     }
 }
 
