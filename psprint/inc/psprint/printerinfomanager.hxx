@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerinfomanager.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:53:13 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:48:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,7 @@
 #ifndef _PSPRINT_HELPER_HXX_
 #include <psprint/helper.hxx>
 #endif
+#include <cstdio>
 
 #ifdef MACOSX
 /* MacOS X print system discovery constants:
@@ -118,16 +119,16 @@ class SystemQueueInfo;
 struct PrinterInfo : JobData
 {
     // basename of PPD
-    ::rtl::OUString             m_aDriverName;
+    rtl::OUString             m_aDriverName;
     // can be the queue
-    ::rtl::OUString             m_aLocation;
+    rtl::OUString             m_aLocation;
     // a user defined comment
-    ::rtl::OUString             m_aComment;
+    rtl::OUString             m_aComment;
     // a command line to pipe a PS-file to
-    ::rtl::OUString             m_aCommand;
+    rtl::OUString             m_aCommand;
     // a list of special features separated by ',' not used by psprint
     // but assigned from the outside (currently only for "fax")
-    ::rtl::OUString             m_aFeatures;
+    rtl::OUString             m_aFeatures;
     // a mapping of fonts to other fonts.
     // this provides a method for the user
     // to replace arbitrary fonts by printer builtin fonts
@@ -138,20 +139,24 @@ struct PrinterInfo : JobData
     // this vector is currently implicitly given by the adobe
     // standard encoding
     bool                        m_bPerformFontSubstitution;
-    ::std::hash_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash >
+    std::hash_map< rtl::OUString, rtl::OUString, rtl::OUStringHash >
     m_aFontSubstitutes;
-    ::std::hash_map< fontID, fontID >
+    std::hash_map< fontID, fontID >
     m_aFontSubstitutions;
 };
 
 class PrinterInfoManager
 {
+public:
+    enum Type { Default = 0, CUPS = 1 };
+
+protected:
     // needed for checkPrintersChanged: files (not necessarily existant)
     // and their last known modification time
     struct WatchFile
     {
         // the file in question
-        ::rtl::OUString         m_aFilePath;
+        rtl::OUString         m_aFilePath;
         // the last know modification time or 0, if file did not exist
         TimeValue               m_aModified;
     };
@@ -161,33 +166,35 @@ class PrinterInfoManager
     {
         // configuration file containing this printer
         // empty means a freshly added printer that has to be saved yet
-        ::rtl::OUString         m_aFile;
+        rtl::OUString         m_aFile;
         // details other config files that have this printer
         // in case of removal all have to be removed
-        ::std::list< ::rtl::OUString > m_aAlternateFiles;
+        std::list< rtl::OUString > m_aAlternateFiles;
         // group in m_aFile containing the printer
         // this must be unique over all configuration files
         // it usually should be the printer name
-        ::rtl::OString          m_aGroup;
+        rtl::OString          m_aGroup;
         // whether changes need to be saved
         bool                    m_bModified;
         // the corresponding info and job data
         PrinterInfo             m_aInfo;
     };
 
-    ::std::hash_map< ::rtl::OUString, Printer, ::rtl::OUStringHash > m_aPrinters;
+    std::hash_map< rtl::OUString, Printer, rtl::OUStringHash > m_aPrinters;
     PrinterInfo                         m_aGlobalDefaults;
-    ::std::list< WatchFile >            m_aWatchFiles;
-    ::rtl::OUString                     m_aDefaultPrinter;
-    ::rtl::OUString                     m_aSystemPrintCommand;
-    ::std::list< ::rtl::OUString >      m_aSystemPrintQueues;
+    std::list< WatchFile >            m_aWatchFiles;
+    rtl::OUString                     m_aDefaultPrinter;
+    rtl::OUString                     m_aSystemPrintCommand;
+    std::list< rtl::OUString >      m_aSystemPrintQueues;
 
     SystemQueueInfo*                    m_pQueueInfo;
 
-    PrinterInfoManager();
-    ~PrinterInfoManager();
+    Type                                m_eType;
 
-    void initialize();
+    PrinterInfoManager( Type eType = Default );
+    virtual ~PrinterInfoManager();
+
+    virtual void initialize();
 
     // fill in font substitutions
     // the resulting hash_map maps from source to target font ids
@@ -197,52 +204,65 @@ public:
     // there can only be one
     static PrinterInfoManager& get();
 
+    // get PrinterInfoManager type
+    Type getType() const { return m_eType; }
+
     // lists the names of all known printers
-    void listPrinters( ::std::list< ::rtl::OUString >& rList ) const;
+    void listPrinters( std::list< rtl::OUString >& rList ) const;
 
     // gets the number of known printers
     int countPrinters() const { return m_aPrinters.size(); }
 
     // gets info about a named printer
-    const PrinterInfo& getPrinterInfo( const ::rtl::OUString& rPrinter ) const;
+    const PrinterInfo& getPrinterInfo( const rtl::OUString& rPrinter ) const;
 
     // gets the name of the default printer
-    const ::rtl::OUString& getDefaultPrinter() const { return m_aDefaultPrinter; }
+    const rtl::OUString& getDefaultPrinter() const { return m_aDefaultPrinter; }
+
+    virtual void setupJobContextData( JobData& rData );
 
     // changes the info about a named printer
-    void changePrinterInfo( const ::rtl::OUString& rPrinter, const PrinterInfo& rNewInfo );
+    virtual void changePrinterInfo( const rtl::OUString& rPrinter, const PrinterInfo& rNewInfo );
 
     // check if the printer configuration has changed
-    bool checkPrintersChanged();
+    virtual bool checkPrintersChanged();
 
     // members for administration (->padmin)
 
     // add a named printer
     // addPrinter fails if a printer with the same name already exists
     // or the driver does not exist
-    bool addPrinter( const ::rtl::OUString& rPrinterName, const ::rtl::OUString& rDriverName );
+    virtual bool addPrinter( const rtl::OUString& rPrinterName, const rtl::OUString& rDriverName );
 
     // remove a named printer
     // this fails if the config file belonging to this printer
     // is not writeable
     // if bCheckOnly is true, the printer is not really removed;
     // this is for checking if the removal would fail
-    bool removePrinter( const ::rtl::OUString& rPrinterName, bool bCheckOnly = false );
+    virtual bool removePrinter( const rtl::OUString& rPrinterName, bool bCheckOnly = false );
 
     // save the changes to all printers. this fails if there
     // is no writable config file at all
-    bool writePrinterConfig();
+    virtual bool writePrinterConfig();
 
     // set a new default printer
     // fails if the specified printer does not exist
-    bool setDefaultPrinter( const ::rtl::OUString& rPrinterName );
+    virtual bool setDefaultPrinter( const rtl::OUString& rPrinterName );
 
     // primarily used internally but also by padmin
     // returns the printer queue names
-    const ::std::list< ::rtl::OUString >& getSystemPrintQueues();
+    virtual const std::list< rtl::OUString >& getSystemPrintQueues();
 
     // similar but returnse whole commandlines
-    void getSystemPrintCommands( ::std::list< ::rtl::OUString >& rCommands );
+    virtual void getSystemPrintCommands( std::list< rtl::OUString >& rCommands );
+
+    // abstract print command
+    // returns a stdio FILE* that a postscript file may be written to
+    // this may either be a regular file or the result of popen()
+    virtual FILE* startSpool( const rtl::OUString& rPrinterName );
+    // close the FILE* returned by startSpool and does the actual spooling
+    // returns a numerical job id
+    virtual int endSpool( const rtl::OUString& rPrinterName, const rtl::OUString& rJobTitle, FILE* pFile );
 };
 
 } // namespace
