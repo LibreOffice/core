@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedxv.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cl $ $Date: 2002-02-25 15:48:43 $
+ *  last change: $Author: ka $ $Date: 2002-03-06 11:09:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -389,8 +389,7 @@ void SdrObjEditView::ImpPaintOutlinerView(OutlinerView& rOutlView, const Rectang
         BOOL bMerk=pWin->IsMapModeEnabled();
         pWin->EnableMapMode(FALSE);
 
-        Color aGrayColor( COL_GRAY );
-        pWin->SetFillColor( aGrayColor );
+        pWin->SetFillColor( Application::GetSettings().GetStyleSettings().GetWindowTextColor() );
         pWin->SetLineColor();
         pWin->DrawRect(Rectangle(aOuterPix.Left(),aOuterPix.Top()  ,aPixRect.Left()  ,aOuterPix.Bottom()));
         pWin->DrawRect(Rectangle(aOuterPix.Left(),aOuterPix.Top()  ,aOuterPix.Right(),aPixRect.Top()    ));

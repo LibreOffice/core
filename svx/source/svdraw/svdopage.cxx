@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdopage.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2001-09-06 09:22:12 $
+ *  last change: $Author: ka $ $Date: 2002-03-06 11:09:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,8 +272,8 @@ FASTBOOL SdrPageObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
     if(bPaintArea)
     {
         OutputDevice& rOut=*rXOut.GetOutDev();
-        rOut.SetFillColor( Color( COL_LIGHTGRAY ) );
-        rOut.SetLineColor( Color(COL_GRAY ) );
+        rOut.SetFillColor( Application::GetSettings().GetStyleSettings().GetWindowColor() );
+        rOut.SetLineColor( Application::GetSettings().GetStyleSettings().GetWindowTextColor() );
         rOut.DrawRect(aOutRect);
     }
 
@@ -419,7 +419,7 @@ FASTBOOL SdrPageObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
     {
         OutputDevice& rOut=*rXOut.GetOutDev();
         rOut.SetFillColor();
-        rOut.SetLineColor( Color( COL_GRAY ) );
+        rOut.SetLineColor( Application::GetSettings().GetStyleSettings().GetWindowTextColor() );
         rOut.DrawRect(aOutRect);
     }
 

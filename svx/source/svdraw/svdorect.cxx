@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdorect.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dl $ $Date: 2001-03-28 08:07:02 $
+ *  last change: $Author: ka $ $Date: 2002-03-06 11:09:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,12 +281,12 @@ FASTBOOL SdrRectObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
     if((rInfoRec.nPaintMode & SDRPAINTMODE_MASTERPAGE) && bNotVisibleAsMaster)
         return TRUE;
 
-    // Im Graustufenmodus soll die Hintergrundseite NICHT angezeigt werden
+    // Im Graustufenmodus/Kontrastmodus soll die Hintergrundseite NICHT angezeigt werden
     ULONG nMode = rXOut.GetOutDev()->GetDrawMode();
-    FASTBOOL bGrayscale =
-       nMode == (DRAWMODE_GRAYLINE | DRAWMODE_GRAYFILL |
-                 DRAWMODE_BLACKTEXT | DRAWMODE_GRAYBITMAP | DRAWMODE_GRAYGRADIENT);
-    if( bGrayscale && pPage && pPage->IsMasterPage() )
+    FASTBOOL bGrayscaleMode = ( nMode == (DRAWMODE_GRAYLINE | DRAWMODE_GRAYFILL | DRAWMODE_BLACKTEXT | DRAWMODE_GRAYBITMAP | DRAWMODE_GRAYGRADIENT ) );
+    FASTBOOL bSettingsMode = ( nMode == (DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT ) );
+
+    if( ( bGrayscaleMode || bSettingsMode ) && pPage && pPage->IsMasterPage() )
     {
         Size aPageSize = pPage->GetSize();
         long aRectWidth = aRect.GetSize().Width() - 1;

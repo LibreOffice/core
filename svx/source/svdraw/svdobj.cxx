@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: aw $ $Date: 2002-03-01 16:53:22 $
+ *  last change: $Author: ka $ $Date: 2002-03-06 11:09:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2084,20 +2084,25 @@ void SdrObject::ImpDrawColorLineGeometry(
 
 void SdrObject::ImpDrawLineGeometry(
     ExtOutputDevice& rXOut,
-    Color& rColor,
+     Color& rColor,
     sal_uInt16 nTransparence,
     ImpLineGeometry& rLineGeometry) const
 {
-    // #72796# black/white option active?
-    UINT32 nOldDrawMode(rXOut.GetOutDev()->GetDrawMode());
-    BOOL bDrawModePatched(FALSE);
+    Color aLineColor( rColor );
 
-    // #72796# if yes, force to DRAWMODE_BLACKFILL for these are LINES to be drawn
-    // as polygons
-    if((nOldDrawMode & DRAWMODE_WHITEFILL) && (nOldDrawMode && DRAWMODE_BLACKLINE))
+    // #72796# black/white option active?
+    const UINT32 nOldDrawMode(rXOut.GetOutDev()->GetDrawMode());
+
+    // #72796# if yes, force to DRAWMODE_BLACKFILL for these are LINES to be drawn as polygons
+    if( ( nOldDrawMode & DRAWMODE_WHITEFILL ) && ( nOldDrawMode & DRAWMODE_BLACKLINE ) )
     {
-        rXOut.GetOutDev()->SetDrawMode(nOldDrawMode|DRAWMODE_BLACKFILL);
-        bDrawModePatched = TRUE;
+        aLineColor = Color( COL_BLACK );
+        rXOut.GetOutDev()->SetDrawMode( nOldDrawMode & (~DRAWMODE_WHITEFILL) );
+    }
+    else if( ( nOldDrawMode & DRAWMODE_SETTINGSFILL ) && ( nOldDrawMode & DRAWMODE_SETTINGSLINE ) )
+    {
+        aLineColor = Application::GetSettings().GetStyleSettings().GetWindowTextColor();
+        rXOut.GetOutDev()->SetDrawMode( nOldDrawMode & (~DRAWMODE_SETTINGSFILL) );
     }
 
     if(nTransparence)
@@ -2154,8 +2159,8 @@ void SdrObject::ImpDrawLineGeometry(
             aVDev.EnableOutput(FALSE);
             aVDev.SetMapMode(rXOut.GetOutDev()->GetMapMode());
             aMetaFile.Record(&aVDev);
-            aVDev.SetLineColor(rColor);
-            aVDev.SetFillColor(rColor);
+            aVDev.SetLineColor(aLineColor);
+            aVDev.SetFillColor(aLineColor);
             aVDev.SetFont(rXOut.GetOutDev()->GetFont());
             aVDev.SetDrawMode(rXOut.GetOutDev()->GetDrawMode());
             aVDev.SetRefPoint(rXOut.GetOutDev()->GetRefPoint());
@@ -2219,7 +2224,7 @@ void SdrObject::ImpDrawLineGeometry(
             PolyPolygon aPolyPoly = rLineGeometry.GetPolyPoly3D().GetPolyPolygon();
 
             rXOut.GetOutDev()->SetLineColor();
-            rXOut.GetOutDev()->SetFillColor(rColor);
+            rXOut.GetOutDev()->SetFillColor(aLineColor);
 
             for(UINT16 a=0;a<aPolyPoly.Count();a++)
                 rXOut.GetOutDev()->DrawPolygon(aPolyPoly[a]);
@@ -2229,7 +2234,7 @@ void SdrObject::ImpDrawLineGeometry(
         {
             PolyPolygon aLinePoly = rLineGeometry.GetLinePoly3D().GetPolyPolygon();
 
-            rXOut.GetOutDev()->SetLineColor(rColor);
+            rXOut.GetOutDev()->SetLineColor(aLineColor);
             rXOut.GetOutDev()->SetFillColor();
 
             if(rLineGeometry.DoForceTwoPixel())
@@ -2294,9 +2299,7 @@ void SdrObject::ImpDrawLineGeometry(
         }
     }
 
-    // #72796# restore DrawMode
-    if(bDrawModePatched)
-        rXOut.GetOutDev()->SetDrawMode(nOldDrawMode);
+    rXOut.GetOutDev()->SetDrawMode( nOldDrawMode );
 }
 
 BOOL SdrObject::LineGeometryUsageIsNecessary() const

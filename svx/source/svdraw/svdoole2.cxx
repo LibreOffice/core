@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: ka $ $Date: 2001-11-22 17:41:29 $
+ *  last change: $Author: ka $ $Date: 2002-03-06 11:09:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -652,7 +652,7 @@ FASTBOOL SdrOle2Obj::Paint(ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoRe
                 pGraphic->Draw(pOutDev,aPos, aDstSize);
 
             pOutDev->SetFillColor();
-            pOutDev->SetLineColor( Color( COL_GRAY ) );
+            pOutDev->SetLineColor( Application::GetSettings().GetStyleSettings().GetWindowTextColor() );
             pOutDev->DrawRect(aRect);
         }
         else

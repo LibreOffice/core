@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: cl $ $Date: 2002-02-25 15:51:08 $
+ *  last change: $Author: ka $ $Date: 2002-03-06 11:09:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1220,7 +1220,7 @@ FASTBOOL SdrTextObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
         {
             // leere Praesentationsobjekte bekommen einen grauen Rahmen
             rXOut.GetOutDev()->SetFillColor();
-            rXOut.GetOutDev()->SetLineColor( Color( COL_GRAY ) );
+            rXOut.GetOutDev()->SetLineColor( Application::GetSettings().GetStyleSettings().GetWindowTextColor() );
 
             if (aGeo.nDrehWink!=0 || aGeo.nShearWink!=0)
             {
