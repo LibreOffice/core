@@ -2,9 +2,9 @@
  *
  *  $RCSfile: progress.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-03 16:31:08 $
+ *  last change: $Author: as $ $Date: 2002-07-22 07:05:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -565,11 +565,12 @@ BOOL SfxProgress::SetState
                         // recycling frame
                         pImp->pView = pFrame->GetCurrentViewFrame();
                     }
-                    else if ( pFrame )
+                    else
                     {
-                        Reference < XStatusIndicatorFactory > xFact( pFrame->GetFrameInterface(), UNO_QUERY );
-                        if ( xFact.is() )
-                            pImp->xStatusInd = xFact->createStatusIndicator();
+                        SFX_ITEMSET_ARG( pMedium->GetItemSet(), pIndicatorItem, SfxUnoAnyItem, SID_PROGRESS_STATUSBAR_CONTROL, FALSE );
+                        Reference< XStatusIndicator > xInd;
+                        if ( pIndicatorItem && (pIndicatorItem->GetValue()>>=xInd) )
+                            pImp->xStatusInd = xInd;
                     }
                 }
             }
