@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtffly.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 16:49:58 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 11:51:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -765,7 +765,7 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
                         nDropCapAnchor = 1;
                 }
                 break;
-        case RTF_DROPCAPLT:
+        case RTF_DROPCAPT:
                 if( bChkDropCap )
                 {
                     nDropCapAnchor = USHORT( nTokenValue );
