@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpinterceptor.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pb $ $Date: 2001-04-23 11:55:29 $
+ *  last change: $Author: pb $ $Date: 2001-06-27 08:26:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,7 @@ void HelpInterceptor_Impl::addURL( const String& rURL )
             delete m_pHistory->Remove(i);
     }
 
+    m_aCurrentURL = rURL;
     m_pHistory->Insert( new HelpHistoryEntry_Impl( rURL ), LIST_APPEND );
     m_nCurPos = m_pHistory->Count() - 1;
 
@@ -287,6 +288,7 @@ void SAL_CALL HelpInterceptor_Impl::dispatch(
                                 m_pWindow->EnterWait();
                             m_pOpenListener->AddListener( xDisp, aURL );
                         }
+                        m_aCurrentURL = aURL.Complete;
                         xDisp->dispatch( aURL, Sequence < PropertyValue >() );
                     }
                 }

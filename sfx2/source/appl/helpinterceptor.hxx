@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpinterceptor.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pb $ $Date: 2001-04-23 11:55:29 $
+ *  last change: $Author: pb $ $Date: 2001-06-27 08:26:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,7 @@ private:
     OpenStatusListener_Impl*    m_pOpenListener;
     Window*                     m_pWindow;
     ULONG                       m_nCurPos;
+    String                      m_aCurrentURL;
 
     void                    addURL( const String& rURL );
 
@@ -136,6 +137,7 @@ public:
 
     void                    setInterception( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame );
     void                    SetFactory( const String& rFactory );
+    String                  GetCurrentURL() const { return m_aCurrentURL; }
 
     // XDispatchProvider
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > SAL_CALL
