@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iosys.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ab $ $Date: 2001-05-23 08:47:19 $
+ *  last change: $Author: ab $ $Date: 2001-05-30 10:44:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -745,7 +745,7 @@ SbError SbiStream::Open
 #ifdef _OLD_FILE_IMPL
         pStrm = new SvFileStream( aNameStr, nStrmMode );
 #else
-        pStrm = new OslStream( getFullPathUNC( aNameStr ), nStrmMode );
+        pStrm = new OslStream( aNameStr, nStrmMode );
 #endif
     }
     if( IsAppend() )
