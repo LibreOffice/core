@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: os $ $Date: 2002-05-30 10:14:56 $
+ *  last change: $Author: ama $ $Date: 2002-06-17 14:37:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -860,9 +860,13 @@ void ViewShell::Reformat()
     pFntCache->Flush( );
 #endif
 
-    StartAction();
-    GetLayout()->InvalidateAllCntnt();
-    EndAction();
+    if( GetLayout()->IsCallbackActionEnabled() )
+    {
+
+        StartAction();
+        GetLayout()->InvalidateAllCntnt();
+        EndAction();
+    }
 }
 
 /******************************************************************************
