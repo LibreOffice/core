@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nlsupport.c,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obr $ $Date: 2001-04-11 11:25:20 $
+ *  last change: $Author: tra $ $Date: 2001-05-15 12:10:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,26 +80,36 @@ static DWORD g_dwTLSLocaleEncId = (DWORD) -1;
 
 /*****************************************************************************/
 /* callback function test
+/*
+/* osl_getTextEncodingFromLocale calls EnumSystemLocalesA, so that we don't
+/* need to provide a unicode wrapper for this function under Win9x
+/* that means the callback function has an ansi prototype and receives
+/* the locale strings as ansi strings
 /*****************************************************************************/
 
-BOOL CALLBACK EnumLocalesProc( LPWSTR lpLocaleString )
+BOOL CALLBACK EnumLocalesProcA( LPSTR lpLocaleStringA )
 {
     struct EnumLocalesParams * params;
 
     LCID  localeId;
-    WCHAR *pwcEnd;
+    LPSTR pszEndA;
 
     WCHAR langCode[4];
 
     /* convert hex-string to LCID */
-    localeId = wcstol( lpLocaleString, &pwcEnd, 16 );
+    localeId = strtol( lpLocaleStringA, &pszEndA, 16 );
 
     /* check params received via TLS */
     params = (struct EnumLocalesParams *) TlsGetValue( g_dwTLSLocaleEncId );
     if( NULL == params || '\0' == params->Language[0] )
         return FALSE;
 
-    /* get the ISO language code for this locale */
+    // get the ISO language code for this locale
+    //
+    // remeber: we call the GetLocaleInfoW function
+    // because the ansi version of this function returns
+    // an error under WinNT/2000 when called with an
+    // unicode only lcid
     if( GetLocaleInfo( localeId, LOCALE_SISO639LANGNAME , langCode, 4 ) )
 
     {
@@ -268,7 +278,7 @@ rtl_TextEncoding SAL_CALL osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
         TlsSetValue( g_dwTLSLocaleEncId, &params );
 
         /* enum all locales known to Windows */
-        EnumSystemLocales( EnumLocalesProc, LCID_SUPPORTED );
+        EnumSystemLocalesA( EnumLocalesProcA, LCID_SUPPORTED );
 
         /* use the LCID found in iteration */
         return GetTextEncodingFromLCID( params.Locale );
