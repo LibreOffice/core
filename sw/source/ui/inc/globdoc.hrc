@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globdoc.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2002-04-19 09:38:00 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 13:06:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,16 +84,6 @@
 #define MN_GLOBALFORMAT_PORT                       (RC_GLOBDOC_BEGIN + 51)
 #define MN_GLOBALEXTRA_PORT                        (RC_GLOBDOC_BEGIN + 52)
 #define MN_GLOBALWIN_PORT                          (RC_GLOBDOC_BEGIN + 53)
-
-#define MN_OBJECTMENU_GLOBALTEXT               (RC_GLOBDOC_BEGIN + 54)
-#define MN_OBJECTMENU_GLOBALLIST               (RC_GLOBDOC_BEGIN + 55)
-#define MN_OBJECTMENU_GLOBALTABLE              (RC_GLOBDOC_BEGIN + 56)
-#define MN_OBJECTMENU_GLOBALFRAME              (RC_GLOBDOC_BEGIN + 57)
-#define MN_OBJECTMENU_GLOBALGRAFIK             (RC_GLOBDOC_BEGIN + 58)
-#define MN_OBJECTMENU_GLOBALDRAW               (RC_GLOBDOC_BEGIN + 59)
-#define MN_OBJECTMENU_GLOBALDRWTXT             (RC_GLOBDOC_BEGIN + 60)
-#define MN_OBJECTMENU_GLOBALOLE                (RC_GLOBDOC_BEGIN + 61)
-#define MN_OBJECTMENU_GLOBALDRAWCONTROL        (RC_GLOBDOC_BEGIN + 62)
 
 #define MN_GLOBAL_TEXT_POPUPMENU                  (RC_GLOBDOC_BEGIN + 63)
 // ------------------------------------------------------------------------
