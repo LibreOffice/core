@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: vg $ $Date: 2003-06-12 10:33:09 $
+#   last change: $Author: hjs $ $Date: 2003-06-17 15:31:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,10 +85,10 @@ ADDITIONAL_FILES=source$/data$/brkitr$/edit_word.txt \
 
 .IF "$(GUI)"=="UNX"
 .IF "$(COMNAME)"=="sunpro5"
-.IF "$(BUILD_TOOLS)$/cc"=="$(shell +which cc)"
+.IF "$(BUILD_TOOLS)$/cc"=="$(shell +-which cc)"
 CC:=$(COMPATH)$/bin$/cc
 CXX:=$(COMPATH)$/bin$/CC
-.ENDIF          # "$(BUILD_TOOLS)$/cc"=="$(shell which cc)"
+.ENDIF          # "$(BUILD_TOOLS)$/cc"=="$(shell +-which cc)"
 .ENDIF          # "$(COMNAME)"=="sunpro5"
 
 CONFIGURE_DIR=source
