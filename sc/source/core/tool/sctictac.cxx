@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sctictac.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 13:33:38 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:39:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -423,7 +423,9 @@ void ScTicTacToe::DrawBoard()
 // -1 == Fehler/Redraw, 0 == keine Aenderung, >0 == UserMoveSquare+1
 int ScTicTacToe::GetStatus()
 {
-    USHORT nCol, nRow, nTab;
+    SCCOL nCol;
+    SCROW nRow;
+    SCTAB nTab;
     nCol = aPos.Col();
     nRow = aPos.Row();
     nTab = aPos.Tab();
