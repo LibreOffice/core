@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cell.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-28 16:50:02 $
+ *  last change: $Author: kz $ $Date: 2004-09-07 10:38:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,11 +92,6 @@
 // set (in nScriptType) if type has not been determined yet
 #define SC_SCRIPTTYPE_UNKNOWN   0x08
 
-// For StartListeningTo()/EndListeningTo() restricted to absolute/relative names
-#define SC_LISTENING_NAMES_REL  0x01
-#define SC_LISTENING_NAMES_ABS  0x02
-#define SC_LISTENING_EXCEPT     0x04
-
 class ScDocument;
 class EditTextObject;
 class ScMatrix;
@@ -151,10 +146,8 @@ public:
     static ScBaseCell* CreateTextCell( const String& rString, ScDocument* );
 
     // nOnlyNames may be one or more of SC_LISTENING_NAMES_*
-    void            StartListeningTo( ScDocument* pDoc,
-                                      USHORT nOnlyNames = 0 );
+    void            StartListeningTo( ScDocument* pDoc );
     void            EndListeningTo( ScDocument* pDoc,
-                                    USHORT nOnlyNames = 0,
                                     ScTokenArray* pArr = NULL,
                                     ScAddress aPos = ScAddress() );
 
@@ -289,15 +282,16 @@ private:
     SCCOL           nMatCols;           // wenn MM_FORMULA Matrixzelle
     SCROW           nMatRows;           // belegte Area
     short           nFormatType;
-    BOOL            bIsValue    : 1;    // Ergebnis ist numerisches
-    BOOL            bDirty      : 1;    // muss berechnet werden
-    BOOL            bChanged    : 1;    // hat sich fuer die Darstellung was geaendert
-    BOOL            bRunning    : 1;    // wird gerade interpretiert
-    BOOL            bCompile    : 1;    // muss compiliert werden
-    BOOL            bSubTotal   : 1;    // ist ein SubTotal
-    BOOL            bIsIterCell : 1;    // kennzeichnet Zellen mit cirk. Refs.
-    BOOL            bInChangeTrack: 1;  // Zelle ist im ChangeTrack
-    BOOL            bTableOpDirty : 1;  // dirty for TableOp
+    BOOL            bIsValue    : 1;    // Result is numerical, not textual
+    BOOL            bDirty      : 1;    // Must be (re)calculated
+    BOOL            bChanged    : 1;    // Whether something changed regarding display/representation
+    BOOL            bRunning    : 1;    // Already interpreting right now
+    BOOL            bCompile    : 1;    // Must be (re)compiled
+    BOOL            bSubTotal   : 1;    // Cell is part of or contains a SubTotal
+    BOOL            bIsIterCell : 1;    // Cell is part of a circular reference
+    BOOL            bInChangeTrack: 1;  // Cell is in ChangeTrack
+    BOOL            bTableOpDirty : 1;  // Dirty flag for TableOp
+    BOOL            bNeedListening : 1; // Listeners need to be re-established after UpdateReference
     BYTE            cMatrixFlag;        // 1 = links oben, 2 = Restmatrix, 0 = keine
 
 public:
@@ -340,6 +334,8 @@ public:
     void            SetTableOpDirty();
     BOOL            IsDirtyOrInTableOpDirty();
     BOOL            GetDirty() const { return bDirty; }
+    BOOL            NeedsListening() const { return bNeedListening; }
+    void            SetNeedsListening( BOOL bVar ) { bNeedListening = bVar; }
     void            Compile(const String& rFormula, BOOL bNoListening = FALSE );
     void            CompileTokenArray( BOOL bNoListening = FALSE );
     void            CompileXML( ScProgress& rProgress );        // compile temporary string tokens
