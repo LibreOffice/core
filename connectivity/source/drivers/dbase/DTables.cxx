@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTables.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-12 11:46:05 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:01:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,22 +159,18 @@ void ODbaseTables::appendObject( const Reference< XPropertySet >& descriptor )
 // XDrop
 void ODbaseTables::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
 {
-    ObjectIter aIter = m_aElements[_nPos];
-    if(!aIter->second.is())
-    {// we want to drop a object which isn't loaded yet so we must load it
-        try
-        {
-            aIter->second = createObject(_sElementName);
-        }
-        catch(const Exception&)
-        {
-            if(ODbaseTable::Drop_Static(ODbaseTable::getEntry(static_cast<OFileCatalog&>(m_rParent).getConnection(),_sElementName),sal_False,NULL))
-                return;
-        }
+    Reference< XUnoTunnel> xTunnel;
+    try
+    {
+        xTunnel.set(getObject(_nPos),UNO_QUERY);
+    }
+    catch(const Exception&)
+    {
+        if(ODbaseTable::Drop_Static(ODbaseTable::getEntry(static_cast<OFileCatalog&>(m_rParent).getConnection(),_sElementName),sal_False,NULL))
+            return;
     }
 
-    Reference< XUnoTunnel> xTunnel(aIter->second.get(),UNO_QUERY);
-    if(xTunnel.is())
+    if ( xTunnel.is() )
     {
         ODbaseTable* pTable = (ODbaseTable*)xTunnel->getSomething(ODbaseTable::getUnoTunnelImplementationId());
         if(pTable)
