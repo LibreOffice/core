@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.126 $
+#   $Revision: 1.127 $
 #
-#   last change: $Author: hjs $ $Date: 2002-09-13 14:30:49 $
+#   last change: $Author: jbu $ $Date: 2002-10-01 16:21:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1131,7 +1131,7 @@ COMPRDB*:=$(UNOUCRRDB)
 .IF "$(UDKSTAMP)"==""
 COMPRDB*:=$(SOLARBINDIR)$/udkapi.rdb
 .ELSE           # "$(UDKSTAMP)"==""
-COMPRDB*:=$(SOLARBINDIR)$/applicat.rdb
+COMPRDB*:=$(SOLARBINDIR)$/types.rdb
 .ENDIF          # "$(UDKSTAMP)"==""
 .ENDIF			# "$(UNOUCRRDB)"!=""
 .ENDIF          # "$(COMP1TYPELIST)$(COMP2TYPELIST)$(COMP3TYPELIST)$(COMP4TYPELIST)$(COMP5TYPELIST)$(COMP6TYPELIST)$(COMP7TYPELIST)$(COMP8TYPELIST)$(COMP9TYPELIST)"!=""
@@ -2122,7 +2122,7 @@ $(UNIXTEXT) : $(UNIXTEXT:f)
     @+echo Making $@
     @+-$(RM) -f $@ >& $(NULLDEV)
     @+tr -d "\015" < $(@:f) > $@
-    
+
 .ENDIF			# "$(UNIXTEXT)"!=""
 
 .IF "$(GUI)$(UPDATER)"=="WNTYES"
