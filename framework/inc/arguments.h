@@ -2,9 +2,9 @@
  *
  *  $RCSfile: arguments.h,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-24 18:02:44 $
+ *  last change: $Author: vg $ $Date: 2002-07-25 12:59:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,7 +197,7 @@ enum EArgument
     E_INTERACTIONHANDLER    = ARGUMENTLAYER_2 | ARGUMENTFLAG_7  ,
     E_MACROEXECUTIONMODE    = ARGUMENTLAYER_2 | ARGUMENTFLAG_8  ,
     E_UPDATEDOCMODE         = ARGUMENTLAYER_2 | ARGUMENTFLAG_9,
-    E_MINIMIZED             = ARGUMENTLAYER_2 | ARGUMENTFLAG_10 ,
+    E_MINIMIZED             = ARGUMENTLAYER_2 | ARGUMENTFLAG_10
 };
 
 }       //  namespace framework
