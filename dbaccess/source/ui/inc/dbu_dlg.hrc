@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_dlg.hrc,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:18:08 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 12:45:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,7 +141,10 @@
 #define STR_NO_ADABASE_DATASOURCES          RID_STR_DLG_START + 55
 #define STR_NO_ADDITIONAL_SETTINGS          RID_STR_DLG_START + 56
 #define STR_HOSTNAME                        RID_STR_DLG_START + 57
-#define STR_EXPLAN_STRINGCONVERSION_ERROR   RID_STR_DLG_START + 58
+#define STR_ADDRESSBOOK_THUNDERBIRD         RID_STR_DLG_START + 58
+#define STR_MOZILLA_PROFILE_NAME            RID_STR_DLG_START + 59
+#define STR_THUNDERBIRD_PROFILE_NAME        RID_STR_DLG_START + 60
+#define STR_EXPLAN_STRINGCONVERSION_ERROR   RID_STR_DLG_START + 61
 
 
 // please adjust checking before insert new strings
