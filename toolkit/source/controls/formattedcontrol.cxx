@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formattedcontrol.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:03:19 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 14:06:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,10 +134,18 @@ namespace toolkit
     {
         if ( BASEPROPERTY_EFFECTIVE_DEFAULT == nPropId )
         {
+            sal_Bool bStreamed;
             double dVal = 0;
             sal_Int32  nVal = 0;
             ::rtl::OUString sVal;
-            if ( ( rValue >>= dVal ) || ( rValue >>= nVal ) || ( rValue >>= sVal ) )
+            if ( bStreamed = (rValue >>= dVal) )
+                rConvertedValue <<= dVal;
+            else if ( bStreamed = (rValue >>= nVal) )
+                rConvertedValue <<= static_cast<double>(nVal);
+            else if ( bStreamed = (rValue >>= sVal) )
+                rConvertedValue <<= sVal;
+
+            if ( bStreamed )
             {
                 getFastPropertyValue( rOldValue, nPropId );
                 return !CompareProperties( rConvertedValue, rOldValue );
