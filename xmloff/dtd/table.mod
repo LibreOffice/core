@@ -1,5 +1,5 @@
 <!--
-	$Id: table.mod,v 1.29 2001-04-03 06:14:31 sab Exp $
+	$Id: table.mod,v 1.30 2001-04-04 13:43:59 dr Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -357,6 +357,7 @@
 	table:filter-options %string; #IMPLIED
 	table:last-column-spanned %positiveInteger; #REQUIRED
 	table:last-row-spanned %positiveInteger; #REQUIRED
+	table:refresh-delay %timeDuration; #IMPLIED
 >
 <!ELEMENT table:detective (table:highlighted-range*, table:operation*)>
 <!ELEMENT table:highlighted-range EMPTY>
