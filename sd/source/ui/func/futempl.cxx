@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futempl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dl $ $Date: 2001-04-24 15:23:03 $
+ *  last change: $Author: dl $ $Date: 2001-04-26 11:50:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,8 +92,15 @@
 #ifndef _SVX_LRSPITEM_HXX //autogen
 #include <svx/lrspitem.hxx>
 #endif
+#ifndef _SVDOPAGE_HXX
+#include <svx/svdopage.hxx>
+#endif
+#ifndef _SVDITER_HXX
+#include <svx/svditer.hxx>
+#endif
 
 #include "stlsheet.hxx"
+#include "sdpage.hxx"
 #include "stlpool.hxx"
 #include "app.hxx"
 #include "sdview.hxx"
@@ -450,6 +457,30 @@ FuTemplate::FuTemplate( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
                         }
 
                         ( (SfxStyleSheet*) pStyleSheet )->Broadcast( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
+
+                        if ( pViewSh->ISA( SdDrawViewShell ) )
+                        {
+                            PageKind ePageKind = ( (SdDrawViewShell*) pViewShell )->GetPageKind();
+                            if( ePageKind == PK_NOTES || ePageKind == PK_HANDOUT )
+                            {
+                                SdPage* pPage = pViewSh->GetActualPage();
+
+                                if( ( (SdDrawViewShell*) pViewShell )->GetEditMode() == EM_MASTERPAGE )
+                                    pPage = (SdPage*) pPage->GetMasterPage( 0 );
+
+                                if( pPage )
+                                {
+                                    SdrObjListIter aIter( *pPage );
+                                    while( aIter.IsMore() )
+                                    {
+                                        SdrObject* pObj = aIter.Next();
+                                        if( pObj->ISA(SdrPageObj) )
+                                            pObj->SendRepaintBroadcast();
+                                    }
+                                }
+                            }
+                        }
+
                         pDoc->SetChanged(TRUE);
                     }
                     break;
