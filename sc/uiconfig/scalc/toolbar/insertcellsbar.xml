@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE toolbar:toolbar PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "toolbar.dtd">
+<toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
+ <toolbar:toolbaritem xlink:href=".uno:InsertCellsDown" toolbar:helpid="helpid:26278" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:InsertCellsRight" toolbar:helpid="helpid:26279" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:InsertRows" toolbar:helpid="helpid:26267" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:InsertColumns" toolbar:helpid="helpid:26268" toolbar:text="" />
+</toolbar:toolbar>
