@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tempfile.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mba $ $Date: 2002-03-18 13:11:06 $
+ *  last change: $Author: mav $ $Date: 2002-09-09 10:25:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -390,6 +390,9 @@ SvStream* TempFile::GetStream( StreamMode eMode )
 
 String TempFile::SetTempNameBaseDirectory( const String &rBaseName )
 {
+    if( !rBaseName.Len() )
+        return String();
+
     rtl::OUString aUnqPath( rBaseName );
 
     // remove trailing slash
