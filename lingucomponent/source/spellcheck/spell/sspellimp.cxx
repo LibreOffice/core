@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sspellimp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: khendricks $ $Date: 2001-09-10 23:56:32 $
+ *  last change: $Author: khendricks $ $Date: 2001-09-24 18:40:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -331,7 +331,6 @@ Reference< XSpellAlternatives >
             char ** suglst = NULL;
                 int count = pMS->suggest(&suglst, (const char *)OU2ISO_1(rWord));
 
-                if (count){
                Sequence< OUString > aStr( count );
                OUString *pStr = aStr.getArray();
                    for (int i=0; i < count; i++)
@@ -350,7 +349,6 @@ Reference< XSpellAlternatives >
 
                xRes = pAlt;
 
-        }
         }
     }
         return xRes;
