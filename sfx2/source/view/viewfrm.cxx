@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-10 16:37:28 $
+ *  last change: $Author: mba $ $Date: 2001-10-02 07:32:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2886,9 +2886,21 @@ void SfxViewFrame::ExecView_Impl
             GetViewShell()->WriteUserData( aUserData, sal_True );
             if ( !GetViewShell()->NewWindowAllowed() )
             {
-                SfxFrame *pFrame = SfxTopFrame::Create();
-                SfxApplication* pApp = SFX_APP();
-                SfxAllItemSet aSet( pApp->GetPool() );
+                SFX_REQUEST_ARG( rReq, pFrameItem, SfxUsrAnyItem, SID_FILLFRAME, sal_False );
+                SfxFrame *pFrame = NULL;
+                Reference < XFrame > xFrame;
+                if ( pFrameItem )
+                {
+                    pFrameItem->GetValue() >>= xFrame;
+                    pFrame = SfxTopFrame::Create( xFrame );
+                }
+                else
+                    pFrame = SfxTopFrame::Create();
+
+                SfxAllItemSet aSet( SFX_APP()->GetPool() );
+                SFX_REQUEST_ARG( rReq, pHiddenItem, SfxBoolItem, SID_HIDDEN, sal_False );
+                if ( pHiddenItem )
+                    aSet.Put( *pHiddenItem );
 
                 SFX_ITEMSET_ARG( pMed->GetItemSet(), pRefererItem, SfxStringItem, SID_REFERER, sal_False );
                 SfxStringItem aReferer( SID_REFERER, DEFINE_CONST_UNICODE( "private:user" ) );
@@ -2903,14 +2915,35 @@ void SfxViewFrame::ExecView_Impl
                 if( pMed->GetFilter() )
                     aSet.Put( SfxStringItem( SID_FILTER_NAME, pMed->GetFilter()->GetName()) );
                 aSet.Put( SfxFrameItem ( SID_DOCFRAME, pFrame ) );
-                GetDispatcher()->Execute( SID_OPENDOC, SFX_CALLMODE_ASYNCHRON, aSet );
+                if ( xFrame.is() )
+                    GetDispatcher()->Execute( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, aSet );
+                else
+                    GetDispatcher()->Execute( SID_OPENDOC, SFX_CALLMODE_ASYNCHRON, aSet );
             }
             else
             {
                 pMed->GetItemSet()->Put( SfxStringItem( SID_USER_DATA, aUserData ) );
-                pMed->GetItemSet()->Put( SfxFrameDescriptorItem(
-                    GetFrame()->GetDescriptor(), SID_FRAMEDESCRIPTOR ) );
-                SfxFrame *pNew = SfxTopFrame::Create( GetObjectShell(), GetCurViewId() );
+                pMed->GetItemSet()->Put( SfxFrameDescriptorItem( GetFrame()->GetDescriptor(), SID_FRAMEDESCRIPTOR ) );
+
+                SFX_REQUEST_ARG( rReq, pFrameItem, SfxUsrAnyItem, SID_FILLFRAME, sal_False );
+                if ( pFrameItem )
+                {
+                    Reference < XFrame > xFrame;
+                    pFrameItem->GetValue() >>= xFrame;
+                    SfxFrame* pFrame = SfxTopFrame::Create( xFrame );
+                    pMed->GetItemSet()->ClearItem( SID_HIDDEN );
+                    pFrame->InsertDocument( GetObjectShell() );
+                }
+                else
+                {
+                    BOOL bHidden = FALSE;
+                    SFX_REQUEST_ARG( rReq, pHiddenItem, SfxBoolItem, SID_HIDDEN, sal_False );
+                    if ( pHiddenItem )
+                        bHidden = pHiddenItem->GetValue();
+                    SfxFrame* pFrame = SfxTopFrame::Create( GetObjectShell(), GetCurViewId(), bHidden );
+                    if ( bHidden )
+                        pFrame->GetCurrentViewFrame()->LockObjectShell_Impl( TRUE );
+                }
             }
 
             rReq.Done();
