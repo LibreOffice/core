@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: mt $ $Date: 2002-11-20 15:38:42 $
+ *  last change: $Author: cl $ $Date: 2002-12-05 23:10:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,10 @@
  ************************************************************************/
 
 #include <eeng_pch.hxx>
+
+#ifndef _SV_GDIMTF_HXX
+#include <vcl/gdimtf.hxx>
+#endif
 
 #define _SVSTDARR_USHORTS
 #include <svtools/svstdarr.hxx>
@@ -2936,6 +2940,21 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                     }
                                     else
                                         pDXArray = 0;
+
+                                    // add a meta file comment if we record to a metafile
+                                    GDIMetaFile* pMtf = pOutDev->GetConnectMetaFile();
+                                    if( pMtf )
+                                    {
+                                        SvxFieldItem* pFieldItem = PTR_CAST( SvxFieldItem, pAttr->GetItem() );
+
+                                        if( pFieldItem )
+                                        {
+                                            const SvxFieldData* pFieldData = pFieldItem->GetField();
+                                            if( pFieldData )
+                                                pMtf->AddAction( pFieldData->createBeginComment() );
+                                        }
+                                    }
+
                                 }
                                 else if ( pTextPortion->GetKind() == PORTIONKIND_HYPHENATOR )
                                 {
@@ -3090,6 +3109,29 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
 // R2L                                {
 // R2L                                    nR2LWidth += nTxtWidth;
 // R2L                                }
+
+                                if ( pTextPortion->GetKind() == PORTIONKIND_FIELD )
+                                {
+                                    EditCharAttrib* pAttr = pPortion->GetNode()->GetCharAttribs().FindFeature( nIndex );
+                                    DBG_ASSERT( pAttr, "Feld nicht gefunden" );
+                                    DBG_ASSERT( pAttr && pAttr->GetItem()->ISA( SvxFieldItem ), "Feld vom falschen Typ!" );
+
+                                    // add a meta file comment if we record to a metafile
+                                    GDIMetaFile* pMtf = pOutDev->GetConnectMetaFile();
+                                    if( pMtf )
+                                    {
+                                        SvxFieldItem* pFieldItem = PTR_CAST( SvxFieldItem, pAttr->GetItem() );
+
+                                        if( pFieldItem )
+                                        {
+                                            const SvxFieldData* pFieldData = pFieldItem->GetField();
+                                            if( pFieldData )
+                                                pMtf->AddAction( pFieldData->createEndComment() );
+                                        }
+                                    }
+
+                                }
+
                             }
                             break;
 //                          case PORTIONKIND_EXTRASPACE:

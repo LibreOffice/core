@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flditem.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sj $ $Date: 2002-11-20 12:45:34 $
+ *  last change: $Author: cl $ $Date: 2002-12-05 23:13:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,9 @@
  *
  ************************************************************************/
 
+#ifndef _SV_METAACT_HXX
+#include <vcl/metaact.hxx>
+#endif
 #ifndef _ZFORLIST_HXX
 #include <svtools/zforlist.hxx>
 #endif
@@ -134,6 +137,17 @@ void SvxFieldData::Load( SvPersistStream & rStm )
 
 void SvxFieldData::Save( SvPersistStream & rStm )
 {
+}
+
+
+MetaAction* SvxFieldData::createBeginComment() const
+{
+    return new MetaCommentAction( "FIELD_SEQ_BEGIN" );
+}
+
+MetaAction* SvxFieldData::createEndComment() const
+{
+    return new MetaCommentAction( "FIELD_SEQ_END" );
 }
 
 // -----------------------------------------------------------------------
@@ -452,6 +466,10 @@ XubString SvxDateField::GetFormatted( LanguageType eLanguage, LanguageType eFmt 
     return aInter.GetDate( aDate );
 }
 
+MetaAction* SvxDateField::createBeginComment() const
+{
+    return new MetaCommentAction( "FIELD_SEQ_BEGIN" );
+}
 
 SV_IMPL_PERSIST1( SvxURLField, SvxFieldData );
 
@@ -568,6 +586,11 @@ void SvxURLField::Save( SvPersistStream & rStm )
     rStm << (USHORT)GetSOStoreTextEncoding(gsl_getSystemTextEncoding(), (sal_uInt16)rStm.GetVersion());
 }
 
+MetaAction* SvxURLField::createBeginComment() const
+{
+    return new MetaCommentAction( "FIELD_SEQ_BEGIN" );
+}
+
 // =================================================================
 // Die Felder, die aus Calc ausgebaut wurden:
 // =================================================================
@@ -591,6 +614,12 @@ void __EXPORT SvxPageField::Load( SvPersistStream & rStm )
 void __EXPORT SvxPageField::Save( SvPersistStream & rStm )
 {
 }
+
+MetaAction* SvxPageField::createBeginComment() const
+{
+    return new MetaCommentAction( "FIELD_SEQ_BEGIN;PageField" );
+}
+
 
 SV_IMPL_PERSIST1( SvxPagesField, SvxFieldData );
 
@@ -630,6 +659,11 @@ void __EXPORT SvxTimeField::Load( SvPersistStream & rStm )
 
 void __EXPORT SvxTimeField::Save( SvPersistStream & rStm )
 {
+}
+
+MetaAction* SvxTimeField::createBeginComment() const
+{
+    return new MetaCommentAction( "FIELD_SEQ_BEGIN" );
 }
 
 SV_IMPL_PERSIST1( SvxFileField, SvxFieldData );
@@ -862,6 +896,11 @@ XubString SvxExtTimeField::GetFormatted( LanguageType eLanguage, LanguageType eF
     }
 
     return( aStrTime );
+}
+
+MetaAction* SvxExtTimeField::createBeginComment() const
+{
+    return new MetaCommentAction( "FIELD_SEQ_BEGIN" );
 }
 
 //----------------------------------------------------------------------------
