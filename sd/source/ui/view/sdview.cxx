@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-13 12:49:54 $
+ *  last change: $Author: ka $ $Date: 2001-08-21 14:57:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,6 +178,9 @@ SdView::SdView(SdDrawDocument* pDrawDoc, OutputDevice* pOutDev,
 
 __EXPORT SdView::~SdView()
 {
+    // release content of selection clipboard, if we own the content
+    UpdateSelectionClipboard( TRUE );
+
     aDropErrorTimer.Stop();
     aDropInsertFileTimer.Stop();
 
