@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ThreadId.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2002-06-25 07:16:52 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:22:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,140 +61,69 @@
 
 package com.sun.star.lib.uno.environments.remote;
 
-
-import java.io.UnsupportedEncodingException;
-
-
 import com.sun.star.uno.UnoRuntime;
+import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
+import java.util.Arrays;
 
-
-
-/**
- * This is the global thread id.
- * <p>
- * @version     $Revision: 1.2 $ $ $Date: 2002-06-25 07:16:52 $
- * @author      Joerg Budischewski
- * @see         com.sun.star.lib.uno.environments.remote.ThreadPool
- * @see         com.sun.star.lib.uno.environments.remote.IThreadPool
- * @see         com.sun.star.lib.uno.environments.remote.Job
- */
-public class ThreadId {
-    static protected byte __async_count;
-
-    protected byte   _threadId[];
-    protected int    _hashCode;
-    protected String _string;
-
-
-    /**
-     * Constructs a new thread id
-     * <p>
-     */
-    public ThreadId() {
-        init(UnoRuntime.generateOid(new Object()));
-    }
-
-    /** Use this ctor only as long as the string
-        contains only ascii characters. Otherwise,
-        use the byte [] ctor.
-     */
-    public ThreadId(String threadId ) {
-        init( threadId );
-    }
-
-    /**
-     * Constructs a new thread id from the given byte array
-     * <p>
-     * @param  threadID     a byte array describing a thread id
-     */
-    public ThreadId(byte threadId[]) {
-        init(threadId);
-    }
-
-    /**
-     * Initializes a thread id with a byte array
-     * <p>
-     * @param  threadID     a byte array describing a thread id
-     */
-    private void init(String threadId)
-    {
+public final class ThreadId {
+    static ThreadId createFresh() {
+        BigInteger c;
+        synchronized (PREFIX) {
+            c = count;
+            count = count.add(BigInteger.ONE);
+        }
         try {
-            _string = threadId;
-            _threadId = _string.getBytes( "UTF8" );
-        }
-        catch(UnsupportedEncodingException unsupportedEncodingException) {
-            throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".<init> - unexpected: " + unsupportedEncodingException.toString());
+            return new ThreadId((PREFIX + c).getBytes("UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException("this cannot happen: " + e);
         }
     }
 
-    /**
-     * Initializes a thread id with a byte array
-     * <p>
-     * @param  threadID     a byte array describing a thread id
-     */
-    private void init(byte threadId[])
-    {
-        _threadId = threadId;
-
-        // in case the deprecated String( byte [] , byte ) ctor
-        // once vanishes, replace it with this  code
-//         char [] a = new char[threadId.length];
-//         int nMax = threadId.length;
-//         for( int i = 0 ; i < nMax ; i ++ )
-//             a[i] = (char) threadId[i];
-//         _string = new String( a );
-
-        // fast but deprecated
-        _string = new String(threadId, (byte) 0 );
-
+    public ThreadId(byte[] id) {
+        this.id = id;
     }
 
-    /**
-     * Gives a hashcode.
-     * <p>
-     */
+    public boolean equals(Object obj) {
+        return obj instanceof ThreadId
+            && Arrays.equals(id, ((ThreadId) obj).id);
+    }
+
     public int hashCode() {
-        //              return _hashCode;
-          return _string.hashCode();
-    }
-
-    /**
-     * Gives a thread id described by a byte array
-     * <p>
-     * @return   a byte array
-     */
-    public byte[] getBytes() {
-        return _threadId;
-    }
-
-    /**
-     * Indicates whether two thread ids describe the same threadid
-     * <p>
-     * @return   <code>true</code>, if the thread ids are equal
-     * @param   othreadID    the other thread id
-     */
-    public boolean equals(Object othreadId) {
-          return _string.equals(((ThreadId)othreadId)._string);
-    }
-
-    /**
-     * Gives a descriptive string
-     * <p>
-     * @return   the descriptive string
-     */
-    public String toString() {
-        String result = "id:";
-
-        for(int i = 0; i < _threadId.length; ++ i) {
-            String tmp = Integer.toHexString(_threadId[i]);
-            if(tmp.length() < 2)
-                result += "0" + tmp;
-            else
-                result += tmp.substring(tmp.length() - 2);
+        int h = hash;
+        if (h == 0) {
+            // Same algorithm as java.util.List.hashCode (also see Java 1.5
+            // java.util.Arrays.hashCode(byte[])):
+            h = 1;
+            for (int i = 0; i < id.length; ++i) {
+                h = 31 * h + id[i];
+            }
+            hash = h;
         }
-
-        return result;
+        return h;
     }
+
+    public String toString() {
+        StringBuffer b = new StringBuffer("[ThreadId:");
+        for (int i = 0; i < id.length; ++i) {
+            String n = Integer.toHexString(id[i] & 0xFF);
+            if (n.length() == 1) {
+                b.append('0');
+            }
+            b.append(n);
+        }
+        b.append(']');
+        return b.toString();
+    }
+
+    public byte[] getBytes() {
+        return id;
+    }
+
+    private static final String PREFIX
+    = "java:" + UnoRuntime.getUniqueKey() + ":";
+    private static BigInteger count = BigInteger.ZERO;
+
+    private byte[] id;
+    private int hash = 0;
 }
-
-
