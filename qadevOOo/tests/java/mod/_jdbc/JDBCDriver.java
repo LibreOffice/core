@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JDBCDriver.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 12:53:30 $
+ *  last change:$Date: 2003-09-08 11:58:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,16 +61,18 @@
 
 package mod._jdbc;
 
-import lib.TestCase;
-import com.sun.star.lang.XMultiServiceFactory;
-import lib.TestParameters;
 import java.io.PrintWriter;
-import lib.TestEnvironment;
-import lib.StatusException;
+
 import lib.Status;
-import com.sun.star.uno.XInterface;
-import com.sun.star.beans.PropertyValue;
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
 import util.DBTools;
+
+import com.sun.star.beans.PropertyValue;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.uno.XInterface;
 
 
 /**

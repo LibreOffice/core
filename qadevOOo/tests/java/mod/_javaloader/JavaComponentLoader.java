@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JavaComponentLoader.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 12:52:45 $
+ *  last change:$Date: 2003-09-08 11:57:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,14 +61,16 @@
 
 package mod._javaloader;
 
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
+
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 import util.utils;
+
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.uno.XInterface;
 
 /**
 * Test for <code>com.sun.star.comp.stoc.Java2</code> service <p>
@@ -121,7 +123,6 @@ public class JavaComponentLoader extends TestCase {
         tEnv.addObjRelation("ImplementationLoader",
                                 "com.sun.star.loader.JavaComponentLoader") ;
 
-        String jarname = "MyPersistentObjectImpl.jar";
         String implURL = utils.getFullTestURL("qadevlibs/MyPersistObjectImpl.jar");
         tEnv.addObjRelation("ImplementationUrl", implURL) ;
         log.println("looking for shared lib: " + implURL);
