@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: sab $ $Date: 2001-12-04 18:31:32 $
+ *  last change: $Author: sab $ $Date: 2002-08-23 17:27:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,11 @@ class ScXMLTableRowCellContext : public SvXMLImportContext
 
     void LockSolarMutex();
     void UnlockSolarMutex();
+
+    sal_Bool CellExists(const com::sun::star::table::CellAddress& aCellPos) const
+    {
+        return (aCellPos.Column <= MAXCOL && aCellPos.Row <= MAXROW);
+    }
 
 public:
 

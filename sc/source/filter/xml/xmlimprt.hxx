@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: sab $ $Date: 2002-05-03 13:05:33 $
+ *  last change: $Author: sab $ $Date: 2002-08-23 17:29:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -779,9 +779,10 @@ class ScXMLImport: public SvXMLImport
     sal_uInt32              nSolarMutexLocked;
     sal_uInt16              nStyleFamilyMask;// Mask of styles to load
     sal_Int16               nPrevCellType;
-    sal_Bool                bLoadDoc : 1;   // Load doc or styles only
-    sal_Bool                bRemoveLastChar : 1;
-    sal_Bool                bNullDateSetted : 1;
+    sal_Bool                bLoadDoc;   // Load doc or styles only
+    sal_Bool                bRemoveLastChar;
+    sal_Bool                bNullDateSetted;
+    sal_Bool                bHasRangeOverflow;
 
 
 protected:
@@ -970,6 +971,9 @@ public:
 
     void LockSolarMutex();
     void UnlockSolarMutex();
+
+    void SetHasRangeOverflow() { bHasRangeOverflow = sal_True; }
+    sal_Bool HasRangeOverflow() const { return bHasRangeOverflow; }
 };
 
 #endif

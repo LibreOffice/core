@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: sab $ $Date: 2002-05-03 13:05:33 $
+ *  last change: $Author: sab $ $Date: 2002-08-23 17:29:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1483,7 +1483,8 @@ ScXMLImport::ScXMLImport(const sal_uInt16 nImportFlag) :
     sPrevCurrency(),
     nPrevCellType(0),
     nSolarMutexLocked(0),
-    pScUnoGuard(NULL)
+    pScUnoGuard(NULL),
+    bHasRangeOverflow(sal_False)
 
 //  pParaItemMapper( 0 ),
 {

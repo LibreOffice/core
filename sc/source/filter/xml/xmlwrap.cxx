@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlwrap.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: sab $ $Date: 2002-07-22 14:02:43 $
+ *  last change: $Author: sab $ $Date: 2002-08-23 17:29:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,9 +280,9 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
             uno::Reference< io::XInputStream >( xPipe, uno::UNO_QUERY );
     }*/
     else
-        return sal_False;
+        return SCERR_IMPORT_UNKNOWN;
 
-    sal_Bool bRet(sal_True);
+    sal_uInt32 nReturn(0);
     uno::Reference<xml::sax::XDocumentHandler> xDocHandler(
         xServiceFactory->createInstanceWithArguments(
             sComponentName, aArgs ),
@@ -313,69 +313,83 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
     catch( xml::sax::SAXParseException& r )
     {
         if( bEncrypted )
-            return ERRCODE_SFX_WRONGPASSWORD;
-
-#ifdef DEBUG
-        ByteString aError( "SAX parse exception catched while importing:\n" );
-        aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
-        DBG_ERROR( aError.GetBuffer() );
-#endif
-
-        String sErr( String::CreateFromInt32( r.LineNumber ));
-        sErr += ',';
-        sErr += String::CreateFromInt32( r.ColumnNumber );
-
-        if( sDocName.getLength() )
-        {
-            return *new TwoStringErrorInfo(
-                            (bMustBeSuccessfull ? SCERR_IMPORT_FILE_ROWCOL
-                                                    : SCWARN_IMPORT_FILE_ROWCOL),
-                            sDocName, sErr,
-                            ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR );
-        }
+            nReturn = ERRCODE_SFX_WRONGPASSWORD;
         else
         {
-            DBG_ASSERT( bMustBeSuccessfull, "Warnings are not supported" );
-            return *new StringErrorInfo( SCERR_IMPORT_FORMAT_ROWCOL, sErr,
-                             ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR );
+
+#ifdef DBG_UTIL
+            ByteString aError( "SAX parse exception catched while importing:\n" );
+            aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
+            DBG_ERROR( aError.GetBuffer() );
+#endif
+
+            String sErr( String::CreateFromInt32( r.LineNumber ));
+            sErr += ',';
+            sErr += String::CreateFromInt32( r.ColumnNumber );
+
+            if( sDocName.getLength() )
+            {
+                nReturn = *new TwoStringErrorInfo(
+                                (bMustBeSuccessfull ? SCERR_IMPORT_FILE_ROWCOL
+                                                        : SCWARN_IMPORT_FILE_ROWCOL),
+                                sDocName, sErr,
+                                ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR );
+            }
+            else
+            {
+                DBG_ASSERT( bMustBeSuccessfull, "Warnings are not supported" );
+                nReturn = *new StringErrorInfo( SCERR_IMPORT_FORMAT_ROWCOL, sErr,
+                                 ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR );
+            }
         }
     }
     catch( xml::sax::SAXException& r )
     {
         if( bEncrypted )
-            return ERRCODE_SFX_WRONGPASSWORD;
+            nReturn = ERRCODE_SFX_WRONGPASSWORD;
+        else
+        {
 
-#ifdef DEBUG
-        ByteString aError( "SAX exception catched while importing:\n" );
-        aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
-        DBG_ERROR( aError.GetBuffer() );
+#ifdef DBG_UTIL
+            ByteString aError( "SAX exception catched while importing:\n" );
+            aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
+            DBG_ERROR( aError.GetBuffer() );
 #endif
-        return SCERR_IMPORT_FORMAT;
+            nReturn = SCERR_IMPORT_FORMAT;
+        }
     }
     catch( io::IOException& r )
     {
-#ifdef DEBUG
+#ifdef DBG_UTIL
         ByteString aError( "IO exception catched while importing:\n" );
         aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
         DBG_ERROR( aError.GetBuffer() );
 #endif
-        return SCERR_IMPORT_OPEN;
+        nReturn = SCERR_IMPORT_OPEN;
     }
     catch( uno::Exception& r )
     {
-#ifdef DEBUG
+#ifdef DBG_UTIL
         ByteString aError( "uno exception catched while importing:\n" );
         aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
         DBG_ERROR( aError.GetBuffer() );
 #endif
-        return SCERR_IMPORT_UNKNOWN;
+        nReturn = SCERR_IMPORT_UNKNOWN;
+    }
+
+    if ( xDocHandler.is() )
+    {
+        ScXMLImport* pImport = static_cast<ScXMLImport*>(SvXMLImport::getImplementation(xDocHandler));
+
+        if (pImport && pImport->HasRangeOverflow() && !nReturn)
+            nReturn = SCWARN_IMPORT_RANGE_OVERFLOW;
     }
 
     // free the component
     xParser->setDocumentHandler( NULL );
 
     // success!
-    return 0;
+    return nReturn;
 }
 
 sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly)
@@ -542,7 +556,11 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly)
         else
         {
             if (nDocRetval)
+            {
                 pStorage->SetError(nDocRetval);
+                if (nDocRetval == SCWARN_IMPORT_RANGE_OVERFLOW)
+                    bRet = sal_True;
+            }
             else if (nStylesRetval)
                 pStorage->SetError(nStylesRetval);
             else if (nMetaRetval)
