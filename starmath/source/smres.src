@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-01 20:21:34 $
+ *  last change: $Author: kz $ $Date: 2002-08-05 20:34:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,7 @@ ModalDialog RID_FONTDIALOG
         Text[ chinese_traditional ] = "字型(~F)";
         Text[ turkish ] = "Yaz�tipi:";
         Text[ arabic ] = ":��� ����";
-        Text[ catalan ] = "~Fuente:";
+        Text[ catalan ] = "~Tipus de lletra:";
         Text[ thai ] = "~ตัวอักษร";
     };
     ComboBox 1
@@ -158,7 +158,7 @@ ModalDialog RID_FONTDIALOG
         Text[ korean ] = "굵게(~B)";
         Text[ turkish ] = "Kal�n";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Negrita";
+        Text[ catalan ] = "~Negreta";
         Text[ thai ] = "~หนา";
     };
     CheckBox 2
@@ -239,7 +239,7 @@ ModalDialog RID_FONTDIALOG
         Text[ korean ] = "속성";
         Text[ turkish ] = "�znitelikler";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Atributos";
+        Text[ catalan ] = "Atributs";
         Text[ thai ] = "คุณลักษณะ";
     };
     Text[ chinese_simplified ] = "字体";
@@ -252,7 +252,7 @@ ModalDialog RID_FONTDIALOG
     Text[ korean ] = "글꼴";
     Text[ turkish ] = "Yaz�tipleri";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Fuentes";
+    Text[ catalan ] = "Tipus de lletra";
     Text[ thai ] = "ตัวอักษร";
 };
 
@@ -304,7 +304,7 @@ ModalDialog RID_FONTSIZEDIALOG
         Text[ chinese_traditional ] = "基本大小(~S)";
         Text[ turkish ] = "Temel boyut:";
         Text[ arabic ] = "��� �������:";
-        Text[ catalan ] = "~Tama�o de base:";
+        Text[ catalan ] = "Mida de la ~base:";
         Text[ thai ] = "~ขนาดฐาน";
     };
     MetricField 1
@@ -346,7 +346,7 @@ ModalDialog RID_FONTSIZEDIALOG
         Text[ chinese_traditional ] = "文字(~T)";
         Text[ turkish ] = "Metin:";
         Text[ arabic ] = ":����";
-        Text[ catalan ] = "~Texto:";
+        Text[ catalan ] = "~Text:";
         Text[ thai ] = "~ข้อความ";
     };
     MetricField 4
@@ -389,7 +389,7 @@ ModalDialog RID_FONTSIZEDIALOG
         Text[ chinese_traditional ] = "標誌(~I)";
         Text[ turkish ] = "�ndisler:";
         Text[ arabic ] = ":�����";
-        Text[ catalan ] = "�~ndices:";
+        Text[ catalan ] = "�~ndex:";
         Text[ thai ] = "~ดัชนี";
     };
     MetricField 5
@@ -432,7 +432,7 @@ ModalDialog RID_FONTSIZEDIALOG
         Text[ chinese_traditional ] = "函數(~F)";
         Text[ turkish ] = "Fonksiyonlar:";
         Text[ arabic ] = ":�����";
-        Text[ catalan ] = "~Funciones:";
+        Text[ catalan ] = "~Funcions:";
         Text[ thai ] = "~ฟังก์ชั่น";
     };
     MetricField 6
@@ -475,7 +475,7 @@ ModalDialog RID_FONTSIZEDIALOG
         Text[ chinese_traditional ] = "運算符(~O)";
         Text[ turkish ] = "��le�ler:";
         Text[ arabic ] = "����� �������:";
-        Text[ catalan ] = "~Operadores:";
+        Text[ catalan ] = "~Operadors:";
         Text[ thai ] = "~ตัวปฏิบัติการ";
     };
     MetricField 7
@@ -518,7 +518,7 @@ ModalDialog RID_FONTSIZEDIALOG
         Text[ chinese_traditional ] = "限度(~L)";
         Text[ turkish ] = "Limitler:";
         Text[ arabic ] = ":����";
-        Text[ catalan ] = "~L�mites:";
+        Text[ catalan ] = "~L�mits:";
         Text[ thai ] = "~ข้อจำกัด";
     };
     MetricField 8
@@ -563,7 +563,7 @@ ModalDialog RID_FONTSIZEDIALOG
         Text[ korean ] = "상대적 크기";
         Text[ turkish ] = "G�receli boyutlar";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Tama�os relativos";
+        Text[ catalan ] = "Mides relatives";
         Text[ thai ] = "ขนาดสัมพัทธ์";
     };
     OKButton 1
@@ -605,7 +605,7 @@ ModalDialog RID_FONTSIZEDIALOG
         Text[ korean ] = "기본 값(~D)";
         Text[ turkish ] = "Standart";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Predeterminado";
+        Text[ catalan ] = "Per ~defecte";
         Text[ finnish ] = "~Oletusarvo";
         Text[ thai ] = "~ค่าเริ่มต้น";
     };
@@ -619,7 +619,7 @@ ModalDialog RID_FONTSIZEDIALOG
     Text[ korean ] = "글꼴 크기";
     Text[ turkish ] = "Yaz�tipi boyutu";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Tama�os de fuente";
+    Text[ catalan ] = "Mides de lletra";
     Text[ thai ] = "ขนาดตัวอักษร";
 };
 
@@ -676,7 +676,7 @@ ModalDialog RID_FONTTYPEDIALOG
         Text[ korean ] = "수식 글꼴";
         Text[ turkish ] = "Form�l yaz�tipleri";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Fuentes de f�rmula";
+        Text[ catalan ] = "Lletres de f�rmula";
         Text[ thai ] = "ตัวอักษรของสูตรคำนวณ";
     };
     FixedLine 2
@@ -706,7 +706,7 @@ ModalDialog RID_FONTTYPEDIALOG
         Text[ korean ] = "사용자 글꼴";
         Text[ turkish ] = "Kullan�c� yaz�tipleri";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Fuentes del usuario";
+        Text[ catalan ] = "Tipus de lletra d'usuari";
         Text[ thai ] = "ตัวอักษรกำหนดเอง";
     };
     FixedText 1
@@ -772,7 +772,7 @@ ModalDialog RID_FONTTYPEDIALOG
         Text[ chinese_traditional ] = "函數(~F)";
         Text[ turkish ] = "Fonksiyonlar:";
         Text[ arabic ] = ":�����";
-        Text[ catalan ] = "~Funciones:";
+        Text[ catalan ] = "~Funcions:";
         Text[ thai ] = "~ฟังก์ชั่น";
     };
     ListBox 2
@@ -846,7 +846,7 @@ ModalDialog RID_FONTTYPEDIALOG
         Text[ chinese_traditional ] = "文字(~T)";
         Text[ turkish ] = "Metin:";
         Text[ arabic ] = ":��";
-        Text[ catalan ] = "~Texto:";
+        Text[ catalan ] = "~Text:";
         Text[ thai ] = "~ข้อความ";
     };
     ListBox 4
@@ -1010,7 +1010,7 @@ ModalDialog RID_FONTTYPEDIALOG
         Text[ korean ] = "변경(~M)";
         Text[ turkish ] = "De�i�tir";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Modificar";
+        Text[ catalan ] = "~Modifica";
         Text[ thai ] = "~ดัดแปลงแก้ไข";
     };
     PushButton 2
@@ -1039,7 +1039,7 @@ ModalDialog RID_FONTTYPEDIALOG
         Text[ korean ] = "기본 값(~D)";
         Text[ turkish ] = "Standart";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Predeterminado";
+        Text[ catalan ] = "Per ~defecte";
         Text[ finnish ] = "~Oletusarvo";
         Text[ thai ] = "~ค่าเริ่มต้น";
     };
@@ -1047,7 +1047,7 @@ ModalDialog RID_FONTTYPEDIALOG
     Text[ korean ] = "글꼴 유형";
     Text[ turkish ] = "Yaz�tipleri";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Fuentes";
+    Text[ catalan ] = "Tipus de lletra";
     Text[ thai ] = "ตัวอักษร";
 };
 
@@ -1180,7 +1180,7 @@ ModalDialog RID_DISTANCEDIALOG
         Text[ korean ] = "모든 괄호의 배율 조정";
         Text[ turkish ] = "T�m ayra�lar� �l�ekle";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Dimensionar todos los par�ntesis";
+        Text[ catalan ] = "Dimensiona tots els par�ntesi";
         Text[ finnish ] = "Skaalaa kaikki sulkeet";
         Text[ thai ] = "สเกลวงเล็บก้ามปูทั้งหมด";
     };
@@ -1285,7 +1285,7 @@ ModalDialog RID_DISTANCEDIALOG
         Text[ korean ] = "기본 값(~D)";
         Text[ turkish ] = "Standart";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Predeterminado";
+        Text[ catalan ] = "Per ~defecte";
         Text[ finnish ] = "~Oletusarvo";
         Text[ thai ] = "~ค่าเริ่มต้น";
     };
@@ -1318,7 +1318,7 @@ ModalDialog RID_DISTANCEDIALOG
         Text[ korean ] = "범주(~C)";
         Text[ turkish ] = "Kategori";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Categor�a";
+        Text[ catalan ] = "~Categoria";
         Text[ thai ] = "~ประเภท";
     };
     FixedBitmap 1
@@ -1354,7 +1354,7 @@ ModalDialog RID_DISTANCEDIALOG
         Text[ korean ] = "범주";
         Text[ turkish ] = "Kategori";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Categor�a";
+        Text[ catalan ] = "Categoria";
         Text[ thai ] = "ประเภท";
     };
     Resource 1
@@ -1385,7 +1385,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ korean ] = "간격";
             Text[ turkish ] = "Aral�klar";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Espacios";
+            Text[ catalan ] = "Espaiat";
             Text[ thai ] = "ระยะห่าง";
         };
         String 2
@@ -1411,7 +1411,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ chinese_traditional ] = "間隔(~S)";
             Text[ turkish ] = "Aral�k:";
             Text[ arabic ] = ":�����";
-            Text[ catalan ] = "~Espacio:";
+            Text[ catalan ] = "~Espaiat";
             Text[ thai ] = "~ระยะห่าง";
         };
         Bitmap 20
@@ -1445,7 +1445,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ chinese_traditional ] = "行距(~L)";
             Text[ turkish ] = "Sat�r aral���:";
             Text[ arabic ] = ":����� ������";
-            Text[ catalan ] = "~Interlineado:";
+            Text[ catalan ] = "~Interlineat:";
             Text[ thai ] = "ระยะห่าง~บรรทัด";
         };
         Bitmap 30
@@ -1479,7 +1479,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ chinese_traditional ] = "根式間隔(~R)";
             Text[ turkish ] = "K�k aral���:";
             Text[ arabic ] = ":����� ������";
-            Text[ catalan ] = "Intervalo de ~ra�z:";
+            Text[ catalan ] = "Espaiat de l'a~rrel";
             Text[ thai ] = "ระยะห่าง~ราก";
         };
         Bitmap 40
@@ -1516,7 +1516,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ chinese_traditional ] = "標誌";
             Text[ turkish ] = "�ndisler";
             Text[ arabic ] = "���� (����)";
-            Text[ catalan ] = "�ndices";
+            Text[ catalan ] = "�ndex";
             Text[ thai ] = "ดัชนี";
         };
         String 2
@@ -1542,7 +1542,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ chinese_traditional ] = "上標(~S)";
             Text[ turkish ] = "�st simge:";
             Text[ arabic ] = ":�����";
-            Text[ catalan ] = "~Super�ndice:";
+            Text[ catalan ] = "~Super�ndex:";
             Text[ thai ] = "~ตัวยก";
         };
         Bitmap 20
@@ -1576,7 +1576,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ chinese_traditional ] = "下標(~U)";
             Text[ turkish ] = "Alt simge:";
             Text[ arabic ] = ":�����";
-            Text[ catalan ] = "S~ub�ndice:";
+            Text[ catalan ] = "S~ub�ndex:";
             Text[ thai ] = "ตั~วห้อย";
         };
         Bitmap 30
@@ -1616,7 +1616,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ korean ] = "분수";
             Text[ turkish ] = "Kesirler";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Fracciones";
+            Text[ catalan ] = "Fraccions";
             Text[ thai ] = "เศษส่วน";
         };
         String 2
@@ -1643,7 +1643,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ chinese_traditional ] = "分子(~N)";
             Text[ turkish ] = "B�l�nen aral���:";
             Text[ arabic ] = ":��� �����";
-            Text[ catalan ] = "Altura del ~numerador:";
+            Text[ catalan ] = "~Numerador:";
             Text[ thai ] = "เ~ศษ";
         };
         Bitmap 20
@@ -1677,7 +1677,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ chinese_traditional ] = "分母(~D)";
             Text[ turkish ] = "B�len aral���:";
             Text[ arabic ] = ":���� �����";
-            Text[ catalan ] = "~Altura del denominador:";
+            Text[ catalan ] = "~Denominador:";
             Text[ thai ] = "~ส่วน";
         };
         Bitmap 30
@@ -1716,7 +1716,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ korean ] = "분수 줄";
             Text[ turkish ] = "Kesir �izgisi";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "L�neas de fracci�n";
+            Text[ catalan ] = "Barra de fraccions";
             Text[ thai ] = "ขีดเศษส่วน";
         };
         String 2
@@ -1743,7 +1743,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ chinese_traditional ] = "超長度(~E)";
             Text[ turkish ] = "Ta�ma uzunlu�u:";
             Text[ arabic ] = ":��� ����";
-            Text[ catalan ] = "Longitud ~excesiva:";
+            Text[ catalan ] = "Longitud ~excessiva:";
             Text[ thai ] = "ความยาวเ~กิน";
         };
         Bitmap 20
@@ -1778,7 +1778,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ chinese_traditional ] = "線粗(~W)";
             Text[ turkish ] = "�izgi kal�nl���:";
             Text[ arabic ] = "���� ����:";
-            Text[ catalan ] = "Espesor del ~trazo:";
+            Text[ catalan ] = "~Pes:";
             Text[ thai ] = "~น้ำหนัก";
         };
         Bitmap 30
@@ -1817,7 +1817,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ korean ] = "극한";
             Text[ turkish ] = "Limitler";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "L�mites";
+            Text[ catalan ] = "L�mits";
             Text[ thai ] = "ขีดจำกัด";
         };
         String 2
@@ -1917,7 +1917,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ korean ] = "괄호";
             Text[ turkish ] = "Ayra�lar";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Par�ntesis";
+            Text[ catalan ] = "Par�ntesi";
             Text[ thai ] = "วงเล็บก้ามปู";
         };
         String 2
@@ -1943,7 +1943,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ chinese_traditional ] = "左右超大(~E)";
             Text[ turkish ] = "Sol/sa� ta�ma:";
             Text[ arabic ] = ":��� ���� ����/����";
-            Text[ catalan ] = "~Sobredimensi�n izq./der.:";
+            Text[ catalan ] = "Mida ~excessiva (esquerra/dreta):";
             Text[ thai ] = "ขนาดเ~กิน (ซ้าย/ขวา)";
         };
         Bitmap 20
@@ -1977,7 +1977,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ chinese_traditional ] = "間隔(~S)";
             Text[ turkish ] = "Aral�k:";
             Text[ arabic ] = ":�����";
-            Text[ catalan ] = "~Espacio:";
+            Text[ catalan ] = "E~spaiat:";
             Text[ thai ] = "~ระยะห่าง";
         };
         Bitmap 30
@@ -2011,7 +2011,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ chinese_traditional ] = "超大(~E)";
             Text[ turkish ] = "Ta�ma:";
             Text[ arabic ] = ":��� ����";
-            Text[ catalan ] = "~Sobredimensi�n:";
+            Text[ catalan ] = "Mida ~excessiva:";
             Text[ thai ] = "ขนาดเ~กิน";
         };
         Bitmap 50
@@ -2050,7 +2050,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ korean ] = "행렬";
             Text[ turkish ] = "Matrisler";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Matrices";
+            Text[ catalan ] = "Matriu";
             Text[ thai ] = "เมตริกซ์";
         };
         String 2
@@ -2076,7 +2076,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ chinese_traditional ] = "行距(~L)";
             Text[ turkish ] = "Sat�r aral���:";
             Text[ arabic ] = ":����� ������";
-            Text[ catalan ] = "~Interlineado:";
+            Text[ catalan ] = "~Interlineat:";
             Text[ thai ] = "ระยะห่าง~บรรทัด";
         };
         Bitmap 20
@@ -2110,7 +2110,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ chinese_traditional ] = "列間隔(~C)";
             Text[ turkish ] = "S�tun aral���:";
             Text[ arabic ] = ":����� �������";
-            Text[ catalan ] = "Distancia entre ~columnas:";
+            Text[ catalan ] = "Espaiat de la ~columna:";
             Text[ thai ] = "ระยะห่าง~คอลัมน์";
         };
         Bitmap 30
@@ -2149,7 +2149,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ korean ] = "장식 기호";
             Text[ turkish ] = "Simgeler";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Ornamentos";
+            Text[ catalan ] = "Ornaments";
             Text[ thai ] = "สัญลักษณ์";
         };
         String 2
@@ -2176,7 +2176,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ chinese_traditional ] = "主高度(~P)";
             Text[ turkish ] = "Birincil y�kseklik:";
             Text[ arabic ] = ":�������� �������";
-            Text[ catalan ] = "Altura ~primaria:";
+            Text[ catalan ] = "Al�ada ~prim�ria:";
             Text[ thai ] = "ความสูง~ปฐมภูมิ";
         };
         Bitmap 20
@@ -2210,7 +2210,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ chinese_traditional ] = "最小間隔(~M)";
             Text[ turkish ] = "Asgari aral�k:";
             Text[ arabic ] = ":��� �����";
-            Text[ catalan ] = "Distancia ~m�nima:";
+            Text[ catalan ] = "Dist�ncia ~m�nima:";
             Text[ thai ] = "ระยะห่าง~น้อยที่สุด";
         };
         Bitmap 30
@@ -2249,7 +2249,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ korean ] = "연산자";
             Text[ turkish ] = "��le�ler";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Operadores";
+            Text[ catalan ] = "Operadors";
             Text[ thai ] = "ตัวปฏิบัติการ";
         };
         String 2
@@ -2276,7 +2276,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ chinese_traditional ] = "超大(~E)";
             Text[ turkish ] = "Ta�ma:";
             Text[ arabic ] = ":��� ����";
-            Text[ catalan ] = "~Sobredimensi�n:";
+            Text[ catalan ] = "Mida ~excessiva:";
             Text[ thai ] = "ขนาดเ~กิน";
         };
         Bitmap 20
@@ -2310,7 +2310,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ chinese_traditional ] = "間隔(~S)";
             Text[ turkish ] = "Aral�k:";
             Text[ arabic ] = ":�������";
-            Text[ catalan ] = "~Espacio:";
+            Text[ catalan ] = "E~spaiat";
             Text[ thai ] = "~ระยะห่าง";
         };
         Bitmap 30
@@ -2347,7 +2347,7 @@ ModalDialog RID_DISTANCEDIALOG
             TEXT[ korean ] = "테두리";
             TEXT[ turkish ] = "Kenarlar";
             TEXT[ language_user1 ] = " ";
-            TEXT[ catalan ] = "M�rgenes";
+            TEXT[ catalan ] = "Vores";
             TEXT[ finnish ] = "Reunat";
             TEXT[ thai ] = "เส้นขอบ";
         };
@@ -2374,7 +2374,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ chinese_traditional ] = "左(~L)";
             Text[ turkish ] = "Sol:";
             Text[ arabic ] = ":����";
-            Text[ catalan ] = "~Izquierda:";
+            Text[ catalan ] = "~Esquerra:";
             Text[ thai ] = "~ซ้าย";
         };
         Bitmap 20
@@ -2408,7 +2408,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ chinese_traditional ] = "右(~R)";
             Text[ turkish ] = "Sa�:";
             Text[ arabic ] = ":����";
-            Text[ catalan ] = "~Derecha:";
+            Text[ catalan ] = "D~reta:";
             Text[ thai ] = "~ขวา";
         };
         Bitmap 30
@@ -2442,7 +2442,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ chinese_traditional ] = "上(~T)";
             Text[ turkish ] = "�st:";
             Text[ arabic ] = ":����";
-            Text[ catalan ] = "~Arriba:";
+            Text[ catalan ] = "~Superior:";
             Text[ thai ] = "~บน";
         };
         Bitmap 40
@@ -2476,7 +2476,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ chinese_traditional ] = "下(~B)";
             Text[ turkish ] = "Alt:";
             Text[ arabic ] = ":����";
-            Text[ catalan ] = "~Abajo:";
+            Text[ catalan ] = "Part ~inferior";
             Text[ thai ] = "~ล่าง";
         };
         Bitmap 50
@@ -2498,7 +2498,7 @@ ModalDialog RID_DISTANCEDIALOG
     Text[ korean ] = "간격";
     Text[ turkish ] = "Aral�klar";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Espacios";
+    Text[ catalan ] = "Espaiat";
     Text[ thai ] = "ระยะห่าง";
 };
 
@@ -2551,7 +2551,7 @@ ModalDialog RID_ALIGNDIALOG
         Text[ korean ] = "왼쪽(~L)";
         Text[ turkish ] = "Sol";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Izquierda";
+        Text[ catalan ] = "~Esquerra";
         Text[ thai ] = "~ซ้าย";
     };
     RadioButton 2
@@ -2582,7 +2582,7 @@ ModalDialog RID_ALIGNDIALOG
         Text[ korean ] = "가운데(~C)";
         Text[ turkish ] = "Orta";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Centrado";
+        Text[ catalan ] = "~Centrat";
         Text[ thai ] = "~ตรงกลาง";
     };
     RadioButton 3
@@ -2613,7 +2613,7 @@ ModalDialog RID_ALIGNDIALOG
         Text[ korean ] = "오른쪽(~R)";
         Text[ turkish ] = "Sa�";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Derecha";
+        Text[ catalan ] = "D~reta";
         Text[ thai ] = "~ขวา";
     };
     FixedLine 1
@@ -2641,7 +2641,7 @@ ModalDialog RID_ALIGNDIALOG
         Text[ korean ] = "수평";
         Text[ turkish ] = "Yatay";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Horitzontal";
+        Text[ catalan ] = "Horizontal";
         Text[ finnish ] = "Vaakataso";
         Text[ thai ] = "แนวนอน";
     };
@@ -2684,7 +2684,7 @@ ModalDialog RID_ALIGNDIALOG
         Text[ korean ] = "기본 값(~D)";
         Text[ turkish ] = "Standart";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Predeterminado";
+        Text[ catalan ] = "Per ~defecte";
         Text[ finnish ] = "~Oletusarvo";
         Text[ thai ] = "~ค่าเริ่มต้น";
     };
@@ -2698,7 +2698,7 @@ ModalDialog RID_ALIGNDIALOG
     Text[ korean ] = "맞춤";
     Text[ turkish ] = "Hizalama";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Alineaci�n";
+    Text[ catalan ] = "Aliniament";
     Text[ thai ] = "จัดตำแหน่ง";
 };
 
@@ -2751,7 +2751,7 @@ TabPage RID_PRINTOPTIONPAGE
         Text[ korean ] = "인쇄 옵션";
         Text[ turkish ] = "Yazd�rma se�enekleri";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Opciones de impresi�n";
+        Text[ catalan ] = "Opcions d'impressi�";
         Text[ finnish ] = "Tulostusasetukset";
         Text[ thai ] = "ตัวเลือกการพิมพ์";
     };
@@ -2781,7 +2781,7 @@ TabPage RID_PRINTOPTIONPAGE
         Text[ korean ] = "제목 행(~T)";
         Text[ turkish ] = "Ba�l�k sat�r�";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Fila del t�tulo";
+        Text[ catalan ] = "~Fila del t�tol";
         Text[ finnish ] = "~Otsikkorivi";
         Text[ thai ] = "~ชื่อแถว";
     };
@@ -2811,7 +2811,7 @@ TabPage RID_PRINTOPTIONPAGE
         Text[ korean ] = "수식 텍스트(~F)";
         Text[ turkish ] = "Form�l metni";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Texto de la f�rmula";
+        Text[ catalan ] = "~Text de la f�rmula";
         Text[ finnish ] = "~Kaavan teksti";
         Text[ thai ] = "ข้อความ~สูตรคำนวณ";
     };
@@ -2841,7 +2841,7 @@ TabPage RID_PRINTOPTIONPAGE
         Text[ korean ] = "테두리(~O)";
         Text[ turkish ] = "�er�eve";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Marco";
+        Text[ catalan ] = "V~ores";
         Text[ finnish ] = "~Reunus";
         Text[ thai ] = "เส้~นขอบ";
     };
@@ -2872,7 +2872,7 @@ TabPage RID_PRINTOPTIONPAGE
         Text[ korean ] = "인쇄 서식";
         Text[ turkish ] = "Yazd�rma format�";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Formato de impresi�n";
+        Text[ catalan ] = "Format d'impressi�";
         Text[ thai ] = "รูปแบบการพิมพ์";
     };
     RadioButton RB_ORIGINAL_SIZE
@@ -2903,7 +2903,7 @@ TabPage RID_PRINTOPTIONPAGE
         Text[ korean ] = "원래대로(~R)";
         Text[ turkish ] = "Ger�ek boyut";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "T~ama�o original";
+        Text[ catalan ] = "Mida o~riginal";
         Text[ thai ] = "ขนาดต้~นฉบับ";
     };
     RadioButton RB_FIT_TO_PAGE
@@ -2934,7 +2934,7 @@ TabPage RID_PRINTOPTIONPAGE
         Text[ korean ] = "페이지 조정(~P)";
         Text[ turkish ] = "Sayfaya s��d�r";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Ajustar ~p�gina";
+        Text[ catalan ] = "Ajusta ~p�gina";
         Text[ thai ] = "จัดพอดี~หน้า";
     };
     RadioButton RB_ZOOM
@@ -2965,7 +2965,7 @@ TabPage RID_PRINTOPTIONPAGE
         Text[ korean ] = "확대(~S)";
         Text[ turkish ] = "�l�eklendirme";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Escala";
+        Text[ catalan ] = "Redimen~sionament";
         Text[ thai ] = "~สเกล";
     };
     MetricField MF_ZOOM
@@ -3007,7 +3007,7 @@ TabPage RID_PRINTOPTIONPAGE
         Text[ korean ] = "기타 옵션";
         Text[ turkish ] = "Di�er se�enekler";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Otras opciones";
+        Text[ catalan ] = "Altres opcions";
         Text[ finnish ] = "Sekalaiset valinnat";
         Text[ thai ] = "ตัวเลือกเบ็ดเตล็ด";
     };
@@ -3037,11 +3037,11 @@ TabPage RID_PRINTOPTIONPAGE
         Text[ korean ] = "~~와 `는 줄의 마지막에서 무시(~N)";
         Text[ turkish ] = "Sat�r sonundaki ~~ ve ` i�aretlerini dikkate alma";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Ignorar ~~ y ` al ~final de l�nea";
+        Text[ catalan ] = "Ignora ~~ i ` al ~final de l�nia";
         Text[ finnish ] = "Ohita merkit ~~ ja ` rivin lopussa";
         Text[ thai ] = "เพิกเ~ฉย ~~ และ ` ที่จุดสิ้นสุดของบรรทัด";
     };
-    Text[ catalan ] = "Opciones de f�rmulas: Configuraci�n";
+    Text[ catalan ] = "Opcions de f�rmules: Configuraci�";
     Text[ finnish ] = "Kaavavalinnat:Asetukset";
     Text[ thai ] = "ตัวเลือกสูตรคำนวณ:กำหนดค่าติดตั้ง";
 };
@@ -3092,7 +3092,7 @@ ModalDialog RID_SYMBOLDIALOG
         Text[ chinese_traditional ] = "圖示集(~S)";
         Text[ turkish ] = "Simge k�mesi:";
         Text[ arabic ] = ":������ ����";
-        Text[ catalan ] = "Conjunto de ~s�mbolos:";
+        Text[ catalan ] = "Conjunt de ~s�mbols:";
         Text[ thai ] = "ชุด~สัญลักษณ์";
     };
     ListBox 1
@@ -3146,7 +3146,7 @@ ModalDialog RID_SYMBOLDIALOG
         Text[ korean ] = "알려져 있지 않음";
         Text[ turkish ] = "Bilinmiyor";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Desconocido";
+        Text[ catalan ] = "Desconegut";
         Text[ thai ] = "ไม่รู้จัก";
     };
     PushButton 2
@@ -3181,7 +3181,7 @@ ModalDialog RID_SYMBOLDIALOG
         Text[ korean ] = "적용(~I)";
         Text[ turkish ] = "Kullan";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Aplicar";
+        Text[ catalan ] = "~Insereix";
         Text[ finnish ] = "~Lis��";
         Text[ thai ] = "แ~ทรก";
     };
@@ -3212,7 +3212,7 @@ ModalDialog RID_SYMBOLDIALOG
         Text[ korean ] = "닫기(~C)";
         Text[ turkish ] = "Kapat";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Cerrar";
+        Text[ catalan ] = "~Tanca";
         Text[ finnish ] = "~Sulje";
         Text[ thai ] = "~ปิด";
     };
@@ -3244,7 +3244,7 @@ ModalDialog RID_SYMBOLDIALOG
         Text[ korean ] = "편집(~E)...";
         Text[ turkish ] = "D�zenle...";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Editar...";
+        Text[ catalan ] = "~Edita...";
         Text[ thai ] = "แ~ก้ไข...";
     };
     Text[ chinese_simplified ] = "图标";
@@ -3257,7 +3257,7 @@ ModalDialog RID_SYMBOLDIALOG
     Text[ korean ] = "기호";
     Text[ turkish ] = "Simgeler";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "S�mbolos";
+    Text[ catalan ] = "S�mbols";
     Text[ thai ] = "สัญลักษณ์";
 };
 
@@ -3290,7 +3290,7 @@ ModalDialog RID_SYMDEFINEDIALOG
     Text[ korean ] = "기호 편집";
     Text[ turkish ] = "Simgeleri d�zenle";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Editar s�mbolos";
+    Text[ catalan ] = "Edita s�mbols";
     FixedText 1
     {
         Pos = MAP_APPFONT ( 6 , 8 ) ;
@@ -3317,7 +3317,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text[ chinese_traditional ] = "舊圖示(~O)";
         Text[ turkish ] = "Eski simge:";
         Text[ arabic ] = ":��� ����";
-        Text[ catalan ] = "~S�mbolo anterior:";
+        Text[ catalan ] = "~S�mbol anterior:";
         Text[ thai ] = "สัญลักษณ์เ~ก่า";
     };
     ComboBox 1
@@ -3354,7 +3354,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text[ chinese_traditional ] = "舊圖示集(~L)";
         Text[ turkish ] = "Eski simge k�mesi:";
         Text[ arabic ] = ":������ ���� �����";
-        Text[ catalan ] = "Conjunto ~anterior:";
+        Text[ catalan ] = "Conjunt ~anterior:";
         Text[ thai ] = "ชุดสัญลักษณ์เ~ก่า";
     };
     ComboBox 2
@@ -3399,7 +3399,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text[ chinese_traditional ] = "圖示(~S)";
         Text[ turkish ] = "Simge:";
         Text[ arabic ] = ":���";
-        Text[ catalan ] = "S�m~bolo:";
+        Text[ catalan ] = "S�m~bol:";
         Text[ thai ] = "~สัญลักษณ์";
     };
     ComboBox 4
@@ -3436,7 +3436,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text[ chinese_traditional ] = "圖示集(~E)";
         Text[ turkish ] = "Simge k�mesi:";
         Text[ arabic ] = ":������ ����";
-        Text[ catalan ] = "Con~junto de s�mbolos:";
+        Text[ catalan ] = "Con~junt de s�mbols:";
         Text[ thai ] = "ชุ~ดสัญลักษณ์";
     };
     ComboBox 5
@@ -3473,7 +3473,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text[ chinese_traditional ] = "字型(~F)";
         Text[ turkish ] = "Yaz�tipi:";
         Text[ arabic ] = ":��� ����";
-        Text[ catalan ] = "~Fuente:";
+        Text[ catalan ] = "~Tipus de lletra:";
         Text[ thai ] = "~ตัวอักษร";
     };
     ListBox 1
@@ -3510,7 +3510,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text[ chinese_traditional ] = "子集(~S)";
         Text[ turkish ] = "~Subset";
         Text[ arabic ] = "������ �����";
-        Text[ catalan ] = "~�rea";
+        Text[ catalan ] = "~�rea";
         Text[ finnish ] = "~Alijoukko";
         Text[ thai ] = "~สับเซต";
     };
@@ -3549,7 +3549,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text[ chinese_traditional ] = "字型形狀：(~T)";
         Text[ turkish ] = "Yaz�tipi varyant�:";
         Text[ arabic ] = "��� ����:";
-        Text[ catalan ] = "~Estilo:";
+        Text[ catalan ] = "T~ipografia:";
         Text[ thai ] = "~รูปร่างตัวพิมพ์";
     };
     ComboBox 3
@@ -3636,7 +3636,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text[ korean ] = "추가(~A)";
         Text[ turkish ] = "Ekle";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~A�adir";
+        Text[ catalan ] = "~Afegeix";
         Text[ thai ] = "เ~พิ่ม";
     };
     PushButton 2
@@ -3667,7 +3667,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text[ korean ] = "수정(~M)";
         Text[ turkish ] = "De�i�tir";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Modificar";
+        Text[ catalan ] = "~Modifica";
         Text[ thai ] = "~ดัดแปลงแก้ไข";
     };
     PushButton 3
@@ -3698,7 +3698,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text[ korean ] = "삭제(~D)";
         Text[ turkish ] = "Sil";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Eliminar";
+        Text[ catalan ] = "~Suprimeix";
         Text[ thai ] = "~ลบ";
     };
     OKButton 1
@@ -3742,7 +3742,7 @@ WarningBox RID_NOMATHTYPEFACEWARNING
     Message[ korean ] = "\"StarMath\" 글꼴이 설치되어 있지 않습니다!\n이 글꼴이 없으면%PRODUCTNAME Math가 제대로 작업을 할 수 없습니다...\n글꼴을 설치한 다음, %PRODUCTNAME Math를 다시 시작하십시오.";
     Message[ turkish ] = "\"StarMath\" yaz�tipi y�klenmedi!\nBu yaz�tipi olmadan StarMath program� do�ru bir bi�imde �al��maz...\nYaz�tipini y�kleyin ve StarMath program�n� yeniden ba�lat�n.";
     Message[ language_user1 ] = " ";
-    Message[ catalan ] = "�La fuente \"StarMath\" no est� instalada!\nSin esta fuente StarMath no funcionar� correctamente...\nInstale la fuente y reinicie StarMath.";
+    Message[ catalan ] = "El tipus de lletra \"StarMath\" no est� instal.lat!\nSense aquesta StarMath no funcionar� correctament...\nInstal.leu el tipus de lletra i reinicieu StarMath.";
     Message[ thai ] = "ยังไม่ได้ติดตั้งตัวอักษร \"StarMath\" \nไม่มีตัวอักษรคณิตศาสตร์ %PRODUCTNAME นี้  ไม่สามารถทำหน้าที่ได้ถูกต้อง.\nกรุณาติดตั้งตัวอักษรนี้และเริ่มคณิตศาสตร์ %PRODUCTNAME อีกครั้ง";
 };
 
@@ -3774,7 +3774,7 @@ QueryBox RID_DEFAULTSAVEQUERY
     Message[ korean ] = "변경 사항을 기본으로 저장하겠습니까?\n\n이 변경 사항들은 모든 새 수식에 영향을 미칩니다.";
     Message[ turkish ] = "De�i�iklikler standart de�erler olarak kaydedilsin mi?\n\nBu de�i�iklikler t�m yeni form�lleri etkileyecektir.";
     Message[ language_user1 ] = " ";
-    Message[ catalan ] = "�Desea guardar los cambios como predeterminados?\n\nEstos cambios tendr�n efecto en todas las nuevas f�rmulas.";
+    Message[ catalan ] = "Voleu desar aquests canvis com a predeterminats?\n\nAquests canvis tindran efecte en totes les noves f�rmules.";
     Message[ thai ] = "ต้องการบันทึกการเปลี่ยนแปลงเป็นค่าเริ่มต้นหรือไม่?\n\nการเปลี่ยนแปลงเหล่านี้จะใช้สำหรับสูตรคำนวณใหม่ทั้งหมด";
 };
 
@@ -3803,7 +3803,7 @@ String RID_FONTREGULAR
     Text[ korean ] = ", 보통";
     Text[ turkish ] = ", standart";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = ", Est�ndar";
+    Text[ catalan ] = ", Est�ndard";
     Text[ thai ] = ", มาตรฐาน";
 };
 String RID_FONTITALIC
@@ -3831,7 +3831,7 @@ String RID_FONTITALIC
     Text[ korean ] = "이탤릭체";
     Text[ turkish ] = ", italik";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = ", Cursiva";
+    Text[ catalan ] = ", cursiva";
     Text[ thai ] = ", เอียง";
 };
 String RID_FONTBOLD
@@ -3859,7 +3859,7 @@ String RID_FONTBOLD
     Text[ korean ] = ", 굵게";
     Text[ turkish ] = ", kal�n";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = ", Negrita";
+    Text[ catalan ] = ", negreta";
     Text[ thai ] = ", หนา";
 };
 String RID_APPLICATION
@@ -4008,7 +4008,7 @@ Menu RID_VIEWMENU
             Text[ korean ] = "확대(~Z)";
             Text[ turkish ] = "B�y�t";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Aumentar";
+            Text[ catalan ] = "Amplia el ~zoom";
             Text[ thai ] = "~ย่อเข้า";
         };
         MenuItem
@@ -4038,7 +4038,7 @@ Menu RID_VIEWMENU
             Text[ korean ] = "축소(~O)";
             Text[ turkish ] = "K���lt";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Reducir";
+            Text[ catalan ] = "Redueix el z~oom";
             Text[ thai ] = "ขยาย~ออก";
         };
         MenuItem
@@ -4068,7 +4068,7 @@ Menu RID_VIEWMENU
             Text[ korean ] = "모두 표시(~D)";
             Text[ turkish ] = "T�m�n� g�r�nt�le";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Mostrar ~todo";
+            Text[ catalan ] = "Visual~itza-ho tot";
             Text[ thai ] = "แ~สดงทั้งหมด";
         };
         MenuItem
@@ -4102,7 +4102,7 @@ Menu RID_VIEWMENU
             Text[ korean ] = "업데이트(~P)";
             Text[ turkish ] = "G�ncelle";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "A~ctualizar";
+            Text[ catalan ] = "Act~ualitza";
             Text[ thai ] = "ป~รับปรุง";
         };
     };
@@ -4165,7 +4165,7 @@ Menu RID_DISTANCEMENU
             Text[ greek ] = "�������";
             Text[ korean ] = "색인";
             Text[ turkish ] = "�ndisler";
-            Text[ catalan ] = "�ndices";
+            Text[ catalan ] = "�ndex";
             Text[ thai ] = "ดัชนี";
         };
         MenuItem
@@ -4222,7 +4222,7 @@ Menu RID_DISTANCEMENU
             Text[ greek ] = "������� ���������";
             Text[ korean ] = "분수 표시줄";
             Text[ turkish ] = "Kesir �izgisi";
-            Text[ catalan ] = "L�neas de fracci�n";
+            Text[ catalan ] = "Barres de fraccions";
             Text[ thai ] = "ขีดเศษส่วน";
         };
         MenuItem
@@ -4250,7 +4250,7 @@ Menu RID_DISTANCEMENU
             Text[ greek ] = "����";
             Text[ korean ] = "극한";
             Text[ turkish ] = "Limitler";
-            Text[ catalan ] = "L�mites";
+            Text[ catalan ] = "L�mits";
             Text[ thai ] = "ขีดจำกัด";
         };
         MenuItem
@@ -4279,7 +4279,7 @@ Menu RID_DISTANCEMENU
             Text[ korean ] = "괄호";
             Text[ turkish ] = "Ayra�lar";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Par�ntesis";
+            Text[ catalan ] = "Par�ntesi";
             Text[ thai ] = "วงเล็บก้ามปู";
         };
         MenuItem
@@ -4307,7 +4307,7 @@ Menu RID_DISTANCEMENU
             Text[ greek ] = "������";
             Text[ korean ] = "행렬";
             Text[ turkish ] = "Matrisler";
-            Text[ catalan ] = "Matrices";
+            Text[ catalan ] = "Matrius";
             Text[ thai ] = "เมตริกซ์";
         };
         MenuItem
@@ -4335,7 +4335,7 @@ Menu RID_DISTANCEMENU
             Text[ greek ] = "����������";
             Text[ korean ] = "기호";
             Text[ turkish ] = "Simgeler";
-            Text[ catalan ] = "Ornamentos";
+            Text[ catalan ] = "Ornaments";
             Text[ thai ] = "สัญลักษณ์";
         };
         MenuItem
@@ -4363,7 +4363,7 @@ Menu RID_DISTANCEMENU
             Text[ greek ] = "��������";
             Text[ korean ] = "연산자";
             Text[ turkish ] = "��le�ler";
-            Text[ catalan ] = "Operadores";
+            Text[ catalan ] = "Operadors";
             Text[ thai ] = "ตัวปฏิบัติการ";
         };
         MenuItem
@@ -4453,7 +4453,7 @@ Menu RID_FONTMENU
             Text[ greek ] = "�����������";
             Text[ korean ] = "함수";
             Text[ turkish ] = "Fonksiyon";
-            Text[ catalan ] = "Funciones";
+            Text[ catalan ] = "Funcions";
             Text[ thai ] = "ฟังก์ชั่น";
         };
         MenuItem
@@ -4510,7 +4510,7 @@ Menu RID_FONTMENU
             Text[ korean ] = "텍스트";
             Text[ turkish ] = "Metin";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Texto";
+            Text[ catalan ] = "Text";
             Text[ thai ] = "ข้อความ";
         };
         MenuItem
@@ -4594,7 +4594,7 @@ Menu RID_FONTMENU
             Text[ greek ] = "�������";
             Text[ korean ] = "고정됨";
             Text[ turkish ] = "Sabit";
-            Text[ catalan ] = "Fijo";
+            Text[ catalan ] = "Fix";
             Text[ thai ] = "คงที่";
         };
     };
@@ -4625,7 +4625,7 @@ ErrorBox RID_WRITESYMBOLERROR
     Message[ korean ] = "기호 파일'%FILE%'을(를) 저장할 수 없습니다!";
     Message[ turkish ] = "Simge dosyas� '%FILE%' kaydedilemiyor!";
     Message[ language_user1 ] = " ";
-    Message[ catalan ] = "�No se puede guardar el archivo de s�mbolos '%FILE%'!";
+    Message[ catalan ] = "No es pot desar el fitxer de s�mbols '%FILE%'!";
     Message[ thai ] = "ไม่สามารถบันทึกแฟ้มสัญลักษณ์ '%FILE%' ได้";
 };
 ErrorBox RID_READSYMBOLERROR
@@ -4653,7 +4653,7 @@ ErrorBox RID_READSYMBOLERROR
     Message[ korean ] = "기호 파일'%FILE%'을(를) 로드할 수 없습니다!";
     Message[ turkish ] = "Simge dosyas� '%FILE%' y�klenemiyor!";
     Message[ language_user1 ] = " ";
-    Message[ catalan ] = "�No se puede cargar el archivo de s�mbolos '%FILE%'!";
+    Message[ catalan ] = "No es pot carregar el fitxer de s�mbols '%FILE%'!";
     Message[ thai ] = "ไม่สามารถโหลดแฟ้มสัญลักษณ์ '%FILE%' ได้";
 };
 
@@ -4706,7 +4706,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "+ 기호";
                 Text[ turkish ] = "+ i�areti";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Signo +";
+                Text[ catalan ] = "+ signe";
                 Text[ finnish ] = "Plusmerkki (+)";
                 Text[ thai ] = "เครื่องหมาย+ ";
             };
@@ -4735,7 +4735,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "- 부호";
                 Text[ turkish ] = "- i�areti";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Signo -";
+                Text[ catalan ] = "- signe";
                 Text[ finnish ] = "Miinusmerkki (-)";
                 Text[ thai ] = "เครื่องหมาย- ";
             };
@@ -4764,7 +4764,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "+- 부호";
                 Text[ turkish ] = "+- i�areti";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Signo +-";
+                Text[ catalan ] = "+- signe";
                 Text[ finnish ] = "Plusmiinusmerkki (+-)";
                 Text[ thai ] = "เครื่องหมาย+-";
             };
@@ -4793,7 +4793,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "-+ 부호";
                 Text[ turkish ] = "-+ i�areti";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Signo -+";
+                Text[ catalan ] = "-+ signe";
                 Text[ finnish ] = "Miinusplusmerkki (-+)";
                 Text[ thai ] = "เครื่องหมาย-+ ";
             };
@@ -4822,7 +4822,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "불리언 NOT";
                 Text[ turkish ] = "Mant�ksal DE��L";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "NO l�gico";
+                Text[ catalan ] = "NO l�gic";
                 Text[ finnish ] = "Boolen arvo NOT (ei)";
                 Text[ thai ] = "บูลีน NOT";
             };
@@ -4855,7 +4855,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "덧셈 +";
                 Text[ turkish ] = "Toplama +";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "+ de suma";
+                Text[ catalan ] = "Suma +";
                 Text[ finnish ] = "Yhteenlasku +";
                 Text[ thai ] = "บวก +";
             };
@@ -4884,7 +4884,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "곱셈(. )";
                 Text[ turkish ] = "�arp�m (.)";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Multiplicaci�n (Punto)";
+                Text[ catalan ] = "Multiplicaci� (Punt)";
                 Text[ finnish ] = "Kertolasku (Piste )";
                 Text[ thai ] = "คูณ (จุด )";
             };
@@ -4913,7 +4913,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "곱셈";
                 Text[ turkish ] = "�arp�m (x)";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Multiplicaci�n (cruz)";
+                Text[ catalan ] = "Multiplicaci� (creu)";
                 Text[ finnish ] = "Kertolasku (x)";
                 Text[ thai ] = "คูณ (x)";
             };
@@ -4942,7 +4942,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "곱셈 (*)";
                 Text[ turkish ] = "�arp�m (*)";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Multiplicaci�n (asterisco)";
+                Text[ catalan ] = "Multiplicaci� (asterisc)";
                 Text[ finnish ] = "Kertolasku (*)";
                 Text[ thai ] = "คูณ (*)";
             };
@@ -4971,7 +4971,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "불리언 AND";
                 Text[ turkish ] = "Mant�ksal VE";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Y l�gico";
+                Text[ catalan ] = "Y l�gic";
                 Text[ finnish ] = "Boolen arvo AND (ja)";
                 Text[ thai ] = "บูลีน AND";
             };
@@ -5004,7 +5004,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "뺄셈 -";
                 Text[ turkish ] = "��karma -";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Restas -";
+                Text[ catalan ] = "Resta -";
                 Text[ finnish ] = "V�hennyslasku -";
                 Text[ thai ] = "ลบ -";
             };
@@ -5033,7 +5033,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "나눗셈 (분수)";
                 Text[ turkish ] = "B�lme (kesir)";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Divisi�n (fracci�n)";
+                Text[ catalan ] = "Divisi� (fracci�)";
                 Text[ finnish ] = "Jakolasku (Murtoluku)";
                 Text[ thai ] = "หาร (เศษส่วน)";
             };
@@ -5062,7 +5062,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "나눗셈 ";
                 Text[ turkish ] = "B�lme (�)";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Divisi�n (dos puntos-raya)";
+                Text[ catalan ] = "Divisi� (dos punts-ratlla)";
                 Text[ finnish ] = "Jakolasku (�)";
                 Text[ thai ] = "หาร (๗)";
             };
@@ -5091,7 +5091,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "나눗셈 (/)";
                 Text[ turkish ] = "B�lme (/)";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Divisi�n (barra oblicua)";
+                Text[ catalan ] = "Divisi� (barra obliqua)";
                 Text[ finnish ] = "Jakolasku (Kauttaviiva)";
                 Text[ thai ] = "หาร (/)";
             };
@@ -5120,7 +5120,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "불리언 OR";
                 Text[ turkish ] = "Mant�ksal VEYA";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "O l�gico";
+                Text[ catalan ] = "O l�gic";
                 Text[ finnish ] = "Boolen arvo OR (tai)";
                 Text[ thai ] = "บูลีน OR";
             };
@@ -5153,7 +5153,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ korean ] = "연결";
                 TEXT[ turkish ] = "Zincirleme";
                 TEXT[ language_user1 ] = " ";
-                TEXT[ catalan ] = "Encadenamiento";
+                TEXT[ catalan ] = "Concatenat";
                 TEXT[ finnish ] = "Yhdist�";
                 TEXT[ thai ] = "เชื่อม";
             };
@@ -5195,7 +5195,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "등가입니다";
                 Text[ turkish ] = "E�ittir";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "es igual";
+                Text[ catalan ] = "�s igual";
                 Text[ finnish ] = "On yht�suuri";
                 Text[ thai ] = "เท่ากับ";
             };
@@ -5224,7 +5224,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "같지 않다.";
                 Text[ turkish ] = "E�it de�il";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "no es igual";
+                Text[ catalan ] = "no �s igual";
                 Text[ finnish ] = "Ei ole yht�suuri";
                 Text[ thai ] = "ไม่เท่ากับ";
             };
@@ -5253,7 +5253,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "거의 같다";
                 Text[ turkish ] = "Yakla��k olarak e�it";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "es aprox. igual";
+                Text[ catalan ] = "�s aprox. igual";
                 Text[ finnish ] = "On suunnilleen yht�suuri";
                 Text[ thai ] = "เท่ากันโดยประมาณ";
             };
@@ -5282,7 +5282,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ korean ] = "나누기";
                 TEXT[ turkish ] = "B�ler";
                 TEXT[ language_user1 ] = " ";
-                TEXT[ catalan ] = "divide";
+                TEXT[ catalan ] = "Divideix";
                 TEXT[ finnish ] = "Jakaa";
                 TEXT[ thai ] = "หาร";
             };
@@ -5311,7 +5311,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ korean ] = "나누어지지 않음";
                 TEXT[ turkish ] = "B�lmez";
                 TEXT[ language_user1 ] = " ";
-                TEXT[ catalan ] = "no divide";
+                TEXT[ catalan ] = "No divideix";
                 TEXT[ finnish ] = "Ei jaa";
                 TEXT[ thai ] = "ไม่หาร";
             };
@@ -5344,7 +5344,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "미만";
                 Text[ turkish ] = "K���kt�r";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "es menor que";
+                Text[ catalan ] = "�s menor que";
                 Text[ finnish ] = "On pienempi kuin";
                 Text[ thai ] = "น้อยกว่า";
             };
@@ -5373,7 +5373,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "초과";
                 Text[ turkish ] = "B�y�kt�r";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "es mayor que";
+                Text[ catalan ] = "�s major que";
                 Text[ finnish ] = "On suurempi kuin";
                 Text[ thai ] = "มากกว่า";
             };
@@ -5403,7 +5403,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "유사하거나 같다";
                 Text[ turkish ] = "Benzer ya da e�ittir";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "es parecido o igual";
+                Text[ catalan ] = "�s semblant o igual";
                 Text[ finnish ] = "On samanlainen tai yht�suuri";
                 Text[ thai ] = "คล้ายหรือเท่ากัน";
             };
@@ -5432,7 +5432,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "에 평행으로";
                 Text[ turkish ] = "Paraleldir";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "es paralelo a";
+                Text[ catalan ] = "�s paral.lel a";
                 Text[ finnish ] = "On samansuuntainen kuin";
                 Text[ thai ] = "ขนานกับ";
             };
@@ -5461,7 +5461,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "에 직각으로";
                 Text[ turkish ] = "dikgen";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "es ortogonal a";
+                Text[ catalan ] = "�s ortogonal a";
                 Text[ finnish ] = "On ortogonaalinen suhteessa kohteeseen";
                 Text[ thai ] = "ตั้งฉากกับ";
             };
@@ -5495,7 +5495,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "이하";
                 Text[ turkish ] = "K���kt�r ya da e�ittir";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "es menor que o igual a (oblicuo)";
+                Text[ catalan ] = "�s menor que o igual a (obliquo)";
                 Text[ finnish ] = "On pienempi tai yht�suuri kuin";
                 Text[ thai ] = "น้อยกว่าหรือเท่ากับ";
             };
@@ -5524,7 +5524,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "크거나 같다";
                 Text[ turkish ] = "B�y�kt�r ya da e�ittir";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "es mayor que o igual a (oblicuo)";
+                Text[ catalan ] = "�s major que o igual a (obliquo)";
                 Text[ finnish ] = "On suurempi tai yht�suuri kuin";
                 Text[ thai ] = "มากกว่าหรือเท่ากับ";
             };
@@ -5553,7 +5553,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "에 유사";
                 Text[ turkish ] = "Benzerdir";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "es parecido a";
+                Text[ catalan ] = "�s semblant a";
                 Text[ finnish ] = "On samanlainen kuin";
                 Text[ thai ] = "คล้ายกับ";
             };
@@ -5582,7 +5582,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "에 합동";
                 Text[ turkish ] = "�rt���r";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "es congruente con";
+                Text[ catalan ] = "�s congruent amb";
                 Text[ finnish ] = "On yht�pit�v� suhteessa kohteeseen";
                 Text[ thai ] = "สมมูลกับ";
             };
@@ -5619,7 +5619,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "이하";
                 Text[ turkish ] = "K���kt�r ya da e�ittir";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "es menor que o igual a";
+                Text[ catalan ] = "�s menor que o igual a";
                 Text[ finnish ] = "On pienempi tai yht�suuri kuin";
                 Text[ thai ] = "น้อยกว่าหรือเท่ากับ";
             };
@@ -5648,7 +5648,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "크거나 같다";
                 Text[ turkish ] = "B�y�k ya da e�ittir";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "es mayor que o igual a";
+                Text[ catalan ] = "�s mayor que o igual a";
                 Text[ finnish ] = "On suurempi tai yht�suuri kuin";
                 Text[ thai ] = "มากกว่าหรือเท่ากับ";
             };
@@ -5677,7 +5677,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "에 비례";
                 Text[ turkish ] = "Orant�l�d�r";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "es proporcional a";
+                Text[ catalan ] = "�s proporcional a";
                 Text[ finnish ] = "On suhteessa objektiin";
                 Text[ thai ] = "เป็นสัดส่วนกับ";
             };
@@ -5706,7 +5706,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "진행 방향";
                 Text[ turkish ] = "Y�n�";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "tiende a";
+                Text[ catalan ] = "Cap a";
                 Text[ finnish ] = "Kohti";
                 Text[ thai ] = "ต่อ";
             };
@@ -5743,7 +5743,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ korean ] = "2중 화살표, 왼쪽으로";
                 TEXT[ turkish ] = "Sola �ift ok";
                 TEXT[ language_user1 ] = " ";
-                TEXT[ catalan ] = "Flecha doble hacia la izquierda";
+                TEXT[ catalan ] = "Fletxa doble esquerra";
                 TEXT[ finnish ] = "Kaksi nuolta vasemmalle";
                 TEXT[ thai ] = "ลูกศรซ้ายคู่";
             };
@@ -5772,7 +5772,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ korean ] = "2중 화살표 왼쪽과 오른쪽으로";
                 TEXT[ turkish ] = "Sola ve sa�a �ift ok";
                 TEXT[ language_user1 ] = " ";
-                TEXT[ catalan ] = "Flecha doble hacia izquierda y derecha";
+                TEXT[ catalan ] = "Fletxa doble esquerra i dreta";
                 TEXT[ finnish ] = "Kaksi nuolta vasemmalle ja oikealle";
                 TEXT[ thai ] = "ลูกศรคู่ซ้ายและขวา";
             };
@@ -5801,7 +5801,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ korean ] = "2중 화살표 오른쪽으로";
                 TEXT[ turkish ] = "Sa�a �ift ok";
                 TEXT[ language_user1 ] = " ";
-                TEXT[ catalan ] = "Flecha doble hacia la derecha";
+                TEXT[ catalan ] = "Fletxa doble dreta";
                 TEXT[ finnish ] = "Kaksi nuolta oikealle";
                 TEXT[ thai ] = "ลูกศรคู่ขวา";
             };
@@ -5843,7 +5843,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "다음에 포함되어 있음";
                 Text[ turkish ] = "��erir";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "est� contenido en";
+                Text[ catalan ] = "est� contingut a";
                 Text[ finnish ] = "Mukana";
                 Text[ thai ] = "อยู่ใน";
             };
@@ -5872,7 +5872,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "포함되어 있지 않음";
                 Text[ turkish ] = "Elemand�r";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "no contenido en";
+                Text[ catalan ] = "no contingut a";
                 Text[ finnish ] = "Ei mukana";
                 Text[ thai ] = "ไม่อยู่ใน";
             };
@@ -5901,7 +5901,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "포함";
                 Text[ turkish ] = "��erir";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "contiene";
+                Text[ catalan ] = "Posseeix";
                 Text[ finnish ] = "Omistaja";
                 Text[ thai ] = "เป็นเจ้าของ";
             };
@@ -5934,7 +5934,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ greek ] = "���� ������";
                 TEXT[ korean ] = "공집합";
                 TEXT[ turkish ] = "Bo� k�me";
-                TEXT[ catalan ] = "Conjunto vac�o";
+                TEXT[ catalan ] = "Conjunt buit";
                 TEXT[ finnish ] = "Tyhjenn� joukko";
                 TEXT[ thai ] = "เซตว่าง";
             };
@@ -5967,7 +5967,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "교집합";
                 Text[ turkish ] = "Kesi�me";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Promedio";
+                Text[ catalan ] = "Promig";
                 Text[ finnish ] = "Leikkauspiste";
                 Text[ thai ] = "จุดตัดประสานกัน";
             };
@@ -5996,7 +5996,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "합집합";
                 Text[ turkish ] = "Birle�me";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Uni�n";
+                Text[ catalan ] = "Uni�";
                 Text[ finnish ] = "Unioni";
                 Text[ thai ] = "รวมกัน";
             };
@@ -6025,7 +6025,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "차집합";
                 Text[ turkish ] = "Fark";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Diferencia";
+                Text[ catalan ] = "Difer�ncia";
                 Text[ finnish ] = "Erotus";
                 Text[ thai ] = "แตกต่าง";
             };
@@ -6054,7 +6054,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "상집합";
                 Text[ turkish ] = "B�l�m k�mesi ";
                 Text[ language_user1 ] = "Bitte das Leerzeichen am Ende entfernen";
-                Text[ catalan ] = "Conjunto cociente ";
+                Text[ catalan ] = "Conjunt de quocients";
                 Text[ finnish ] = "Osam��r�joukko ";
                 Text[ thai ] = "เซตผลหาร ";
             };
@@ -6116,7 +6116,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "부분 집합";
                 Text[ turkish ] = "Alt k�me";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Conjunto parcial";
+                Text[ catalan ] = "Subconjunt";
                 Text[ finnish ] = "Alijoukko";
                 Text[ thai ] = "สับเซต";
             };
@@ -6145,7 +6145,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "부분 집합이거나 같다";
                 Text[ turkish ] = "Alt k�mesi ya da e�ittir";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Conjunto parcial o igual";
+                Text[ catalan ] = "Subconjunt o igual a";
                 Text[ finnish ] = "Alijoukko tai yht�suuri kuin";
                 Text[ thai ] = "สับเซตหรือเท่ากับ";
             };
@@ -6174,7 +6174,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "초집합";
                 Text[ turkish ] = "�st k�me";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Conjunto superior";
+                Text[ catalan ] = "Superconjunt";
                 Text[ finnish ] = "Ylijoukko";
                 Text[ thai ] = "ซุปเปอร์เซต";
             };
@@ -6203,7 +6203,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "초집합이거나 같다";
                 Text[ turkish ] = "�st k�mesi ya da e�ittir";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Conjunto superior o igual";
+                Text[ catalan ] = "Superconjunt o igual a";
                 Text[ finnish ] = "Ylijoukko tai yht�suuri kuin";
                 Text[ thai ] = "ซุปเปอร์เซตหรือเท่ากับ";
             };
@@ -6240,7 +6240,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "부분집합이 아니다.";
                 Text[ turkish ] = "Alt k�mesi de�il";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Conjunto no parcial";
+                Text[ catalan ] = "Conjunt no parcial";
                 Text[ finnish ] = "Ei alijoukko";
                 Text[ thai ] = "ไม่เป็นสับเซต";
             };
@@ -6298,7 +6298,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "초집합이 아니다";
                 Text[ turkish ] = "�st k�mesi de�il";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Conjunto no superior";
+                Text[ catalan ] = "Conjunt no superior";
                 Text[ finnish ] = "Ei ylijoukko";
                 Text[ thai ] = "ไม่เป็นซุปเปอร์เซต";
             };
@@ -6327,7 +6327,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "초집합이 아니거나 같다";
                 Text[ turkish ] = "�st k�mesi ya da e�it de�il";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Conjunto no superior o igual";
+                Text[ catalan ] = "Conjunt no superior o igual";
                 Text[ finnish ] = "Ei ylijoukko tai yht�suuri kuin";
                 Text[ thai ] = "ไม่เป็นซุปเปอร์เซตหรือเท่ากับ";
             };
@@ -6364,7 +6364,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ korean ] = "자연수 집합";
                 TEXT[ turkish ] = "Do�al say�lar k�mesi";
                 TEXT[ language_user1 ] = " ";
-                TEXT[ catalan ] = "Conjunto de n�meros naturales";
+                TEXT[ catalan ] = "Conjunt dels nombres naturals";
                 TEXT[ finnish ] = "Luonnollisten lukujen joukko";
                 TEXT[ thai ] = "เซตจำนวนธรรมชาติ";
             };
@@ -6393,7 +6393,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ korean ] = "정수 집합";
                 TEXT[ turkish ] = "Tamsay�lar k�mesi";
                 TEXT[ language_user1 ] = " ";
-                TEXT[ catalan ] = "Conjunto de n�meros enteros";
+                TEXT[ catalan ] = "Conjunt d'enters";
                 TEXT[ finnish ] = "Muuttujajoukko";
                 TEXT[ thai ] = "เซตจำนวนเต็ม";
             };
@@ -6422,7 +6422,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ korean ] = "유리수 집합";
                 TEXT[ turkish ] = "Rasyonel say�lar k�mesi";
                 TEXT[ language_user1 ] = " ";
-                TEXT[ catalan ] = "Conjunto de n�meros racionales";
+                TEXT[ catalan ] = "Conjunt dels nombres relacionals";
                 TEXT[ finnish ] = "Suhdelukujoukko";
                 TEXT[ thai ] = "เซตจำนวนที่สัมพันธ์กัน";
             };
@@ -6450,7 +6450,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ greek ] = "������ ����������� �������";
                 TEXT[ korean ] = "실수 집합";
                 TEXT[ language_user1 ] = " ";
-                TEXT[ catalan ] = "Conjunto de n�meros reales";
+                TEXT[ catalan ] = "Conjunt dels nombres reals";
                 TEXT[ finnish ] = "Reaalilukujoukko";
                 TEXT[ turkish ] = " ";
                 TEXT[ thai ] = "เชตจำนวนจริง";
@@ -6480,7 +6480,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ korean ] = "복소수 집합";
                 TEXT[ turkish ] = "Karma��k say�lar k�mesi";
                 TEXT[ language_user1 ] = " ";
-                TEXT[ catalan ] = "Conjunto de n�meros complejos";
+                TEXT[ catalan ] = "Conjunt dels nombres complexos";
                 TEXT[ finnish ] = "Kompleksilukujoukko";
                 TEXT[ thai ] = "เซตจำนวนเชิงซ้อน";
             };
@@ -6523,7 +6523,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "지수 함수";
                 Text[ turkish ] = "�stel i�lev";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Funci�n exponencial";
+                Text[ catalan ] = "Funci� exponencial";
                 Text[ finnish ] = "Eksponentiaalifunktio";
                 Text[ thai ] = "ฟังก์ชั่นเอ็กซ์โปเนนเชียล";
             };
@@ -6552,7 +6552,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "자연 로그";
                 Text[ turkish ] = "Do�al logaritma";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Logaritmo natural";
+                Text[ catalan ] = "Logaritme natural";
                 Text[ finnish ] = "Luonnollinen logaritmi";
                 Text[ thai ] = "ลอการิธึมธรรมชาติ";
             };
@@ -6581,7 +6581,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "지수 함수";
                 Text[ turkish ] = "�stel i�lev";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Funci�n exponencial";
+                Text[ catalan ] = "Funci� exponencial";
                 Text[ finnish ] = "Eksponentiaalifunktio";
                 Text[ thai ] = "ฟังก์ชั่นเอ็กซ์โปเนนเชียล";
             };
@@ -6610,7 +6610,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "로그";
                 Text[ turkish ] = "Logaritma";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Logaritmo";
+                Text[ catalan ] = "Logaritme";
                 Text[ finnish ] = "Logaritmi";
                 Text[ thai ] = "ลอการิธึม";
             };
@@ -6639,7 +6639,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ korean ] = "거듭제곱";
                 TEXT[ turkish ] = "�s";
                 TEXT[ language_user1 ] = " ";
-                TEXT[ catalan ] = "Potencia";
+                TEXT[ catalan ] = "Pot�ncia";
                 TEXT[ finnish ] = "Potenssim��ritys";
                 TEXT[ thai ] = "ยกกำลัง";
             };
@@ -6672,7 +6672,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "사인";
                 Text[ turkish ] = "Sin�s";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Seno";
+                Text[ catalan ] = "Sinus";
                 Text[ finnish ] = "Sini";
                 Text[ thai ] = "Sine";
             };
@@ -6701,7 +6701,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "코사인";
                 Text[ turkish ] = "Kosin�s";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Coseno";
+                Text[ catalan ] = "Cosinus";
                 Text[ finnish ] = "Kosini";
                 Text[ thai ] = "Cosine";
             };
@@ -6730,7 +6730,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "탄젠트";
                 Text[ turkish ] = "Tanjant";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Tangente";
+                Text[ catalan ] = "Tangent";
                 Text[ finnish ] = "Tangentti";
                 Text[ thai ] = "Tangent";
             };
@@ -6759,7 +6759,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "코탄젠트";
                 Text[ turkish ] = "Kotanjant";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Cotangente";
+                Text[ catalan ] = "Cotangent";
                 Text[ finnish ] = "Kotangentti";
                 Text[ thai ] = "Cotangent";
             };
@@ -6788,7 +6788,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "제곱근";
                 Text[ turkish ] = "Karek�k";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Ra�z cuadrada";
+                Text[ catalan ] = "Arrel quadrada";
                 Text[ finnish ] = "Neli�juuri";
                 Text[ thai ] = "รากที่สอง";
             };
@@ -6821,7 +6821,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "아크 사인";
                 Text[ turkish ] = "Arksin�s";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Seno de arco";
+                Text[ catalan ] = "Arcsinus";
                 Text[ finnish ] = "Arkussini";
                 Text[ thai ] = "Arcsine";
             };
@@ -6850,7 +6850,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "아크 코사인";
                 Text[ turkish ] = "Arkkosin�s";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Coseno de arco";
+                Text[ catalan ] = "Arccosinus";
                 Text[ finnish ] = "Arkuskosini";
                 Text[ thai ] = "Arccosine";
             };
@@ -6879,7 +6879,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "아크 탄젠트";
                 Text[ turkish ] = "Arktanjant";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Arcotangente";
+                Text[ catalan ] = "Arctangent";
                 Text[ finnish ] = "Arkustangentti";
                 Text[ thai ] = "Arctangent";
             };
@@ -6908,7 +6908,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "아크 코탄젠트";
                 Text[ turkish ] = "Arkkotanjant";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Arcocotangente";
+                Text[ catalan ] = "Arccotangent";
                 Text[ finnish ] = "Arkuskotangentti";
                 Text[ thai ] = "Arccotangent";
             };
@@ -6937,7 +6937,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "n차 근";
                 Text[ turkish ] = "K�k n";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Ra�z n";
+                Text[ catalan ] = "Arrel n";
                 Text[ finnish ] = "N:s juuri";
                 Text[ thai ] = "รากที่ N";
             };
@@ -6970,7 +6970,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "쌍곡선 사인";
                 Text[ turkish ] = "Hiperbolik sin�s";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Seno hiperb�lico";
+                Text[ catalan ] = "Sinus hiperb�lic";
                 Text[ finnish ] = "Hyberbolinen sini";
                 Text[ thai ] = "Sine แบบไฮเปอร์โบลา";
             };
@@ -6999,7 +6999,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "쌍곡선 코사인 ";
                 Text[ turkish ] = "Hiperbolik kosin�s";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Coseno hiperb�lico";
+                Text[ catalan ] = "Cosinus hiperb�lic";
                 Text[ finnish ] = "Hyberbolinen kosini";
                 Text[ thai ] = "Cosine แบบไฮเปอร์โบลา";
             };
@@ -7028,7 +7028,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "쌍곡선 탄젠트 ";
                 Text[ turkish ] = "Hiperbolik tanjant";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Tangente hiperb�lica";
+                Text[ catalan ] = "Tangent hiperb�lica";
                 Text[ finnish ] = "Hyberbolinen tangentti";
                 Text[ thai ] = "Tangent แบบไฮเปอร์โบลา";
             };
@@ -7057,7 +7057,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "쌍곡선 코탄젠트 ";
                 Text[ turkish ] = "Hiperbolik kotanjant";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Cotangente hiperb�lica";
+                Text[ catalan ] = "Cotangent hiperb�lica";
                 Text[ finnish ] = "Hyberbolinen kotangentti";
                 Text[ thai ] = "Cotangent แบบไฮเปอร์โบลา";
             };
@@ -7086,7 +7086,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "절대값";
                 Text[ turkish ] = "Mutlak de�er";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Valor absoluto";
+                Text[ catalan ] = "Valor absolut";
                 Text[ finnish ] = "Itseisarvo";
                 Text[ thai ] = "ค่าสัมบูรณ์";
             };
@@ -7119,7 +7119,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "면적 쌍곡선 사인";
                 Text[ turkish ] = "Alan hiperbolik sin�s";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Seno hiperb�lico de �rea";
+                Text[ catalan ] = "Sinus hiperb�lic d'�rea";
                 Text[ finnish ] = "Alueen hyberbolinen sini";
                 Text[ thai ] = "พื้นที่ Sine แบบไฮเปอร์โบลา";
             };
@@ -7148,7 +7148,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "면적 쌍곡선 코사인";
                 Text[ turkish ] = "Alan hiperbolik kosin�s";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Coseno hiperb�lico de �rea";
+                Text[ catalan ] = "Cosinus hiperb�lic d'�rea";
                 Text[ finnish ] = "Alueen hyberbolinen kosini";
                 Text[ thai ] = "พื้นที่ Cosine แบบไฮเปอร์โบลา";
             };
@@ -7177,7 +7177,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "면적쌍곡선 탄젠트";
                 Text[ turkish ] = "Alan hiperbolik tanjant";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Tangente hiperb�lica de �rea";
+                Text[ catalan ] = "Tangent hiperb�lica d'�rea";
                 Text[ finnish ] = "Alueen hyberbolinen tangentti";
                 Text[ thai ] = "พื้นที่ Tangent แบบไฮเปอร์โบลา";
             };
@@ -7206,7 +7206,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "면적쌍곡선 코탄젠트";
                 Text[ turkish ] = "Alan hiperbolik kotanjant";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Cotangente hiperb�lica de �rea";
+                Text[ catalan ] = "Cotangent hiperb�lica d'�rea";
                 Text[ finnish ] = "Alueen hyberbolinen kotangentti";
                 Text[ thai ] = "พื้นที่ Cotangent แบบไฮเปอร์โบลา";
             };
@@ -7277,7 +7277,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "라임";
                 Text[ turkish ] = "Lim";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "L�mites";
+                Text[ catalan ] = "L�mits";
                 Text[ finnish ] = "Limes";
                 Text[ thai ] = "Limes";
             };
@@ -7335,7 +7335,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "곱";
                 Text[ turkish ] = "�arp�m";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Producto";
+                Text[ catalan ] = "Producte";
                 Text[ finnish ] = "Tuote";
                 Text[ thai ] = "ผลผลิต";
             };
@@ -7364,7 +7364,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "쌍대곱";
                 Text[ turkish ] = "Yan sonu�";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Coproducto";
+                Text[ catalan ] = "Coproducte";
                 Text[ finnish ] = "Oheistuote";
                 Text[ thai ] = "ผลผลิตร่วม";
             };
@@ -7393,7 +7393,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "하한과 상한";
                 Text[ turkish ] = "Alt ve �st limit";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "L�mites superior e inferior";
+                Text[ catalan ] = "L�mits superior i inferior";
                 Text[ finnish ] = "Yl�- ja alaraja";
                 Text[ thai ] = "ขีดจำกัดบนและล่าง";
             };
@@ -7517,7 +7517,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "하한";
                 Text[ turkish ] = "Alt limit";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "L�mite inferior";
+                Text[ catalan ] = "L�mit inferior";
                 Text[ finnish ] = "Alaraja";
                 Text[ thai ] = "ขีดจำกัดล่าง";
             };
@@ -7550,7 +7550,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "선적분";
                 Text[ turkish ] = "E�ri integrali";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Integral curvil�nea";
+                Text[ catalan ] = "Integral corba";
                 Text[ finnish ] = "K�yr�integraali";
                 Text[ thai ] = "อินทิเกรตแบบเส้นโค้ง";
             };
@@ -7579,7 +7579,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "2중 선적분";
                 Text[ turkish ] = "�ift e�ri integrali";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Doble integral curvil�nea";
+                Text[ catalan ] = "Integral de corba doble";
                 Text[ finnish ] = "Kaksinkertainen k�yr�integraali";
                 Text[ thai ] = "อินทิเกรตแบบเส้นโค้งสองชั้น";
             };
@@ -7608,7 +7608,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "3중 선적분";
                 Text[ turkish ] = "��l� e�ri integrali";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Triple integral curvil�nea";
+                Text[ catalan ] = "Integral de corba triple";
                 Text[ finnish ] = "Kolminkertainen k�yr�integraali";
                 Text[ thai ] = "อินทิเกรตแบบเส้นโค้งสามชั้น";
             };
@@ -7641,7 +7641,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "상한";
                 Text[ turkish ] = "�st limit";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "L�mite superior";
+                Text[ catalan ] = "L�mit superior";
                 Text[ finnish ] = "Yl�raja";
                 Text[ thai ] = "ขีดจำกัดบน";
             };
@@ -7683,7 +7683,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_traditional ] = "右向重音字母";
                 Text[ turkish ] = "Sa�a vurgu";
                 Text[ arabic ] = "������� ������� ��� ������";
-                Text[ catalan ] = "Acento hacia la derecha";
+                Text[ catalan ] = "Accent a la dreta";
                 Text[ thai ] = "แถบเน้นถึงด้านขวา";
             };
             ToolBoxItem
@@ -7711,7 +7711,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_traditional ] = "左向重音符號";
                 Text[ turkish ] = "Sola vurgu";
                 Text[ arabic ] = "������� ������� ��� ������";
-                Text[ catalan ] = "Acento hacia la izquierda";
+                Text[ catalan ] = "Accent a l'esquerra";
                 Text[ thai ] = "แถบเน้นถึงด้านซ้าย";
             };
             ToolBoxItem
@@ -7739,7 +7739,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "강조기호를 역으로";
                 Text[ turkish ] = "Ters �apka";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "circunflejo inverso";
+                Text[ catalan ] = "Circumflex invers";
                 Text[ finnish ] = "K��nteinen sirkumfleksi";
                 Text[ thai ] = "สลับเครื่องหมายกำกับเสียง";
             };
@@ -7768,7 +7768,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "약하게 표시";
                 Text[ turkish ] = "K�saltma i�areti";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Breve";
+                Text[ catalan ] = "Breu";
                 Text[ finnish ] = "Yl�kaari";
                 Text[ thai ] = "เครื่องหมายการออก";
             };
@@ -7797,7 +7797,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "원";
                 Text[ turkish ] = "Daire";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "C�rculo";
+                Text[ catalan ] = "Cercle";
                 Text[ finnish ] = "Ympyr�";
                 Text[ thai ] = "วงกลม";
             };
@@ -7830,7 +7830,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "벡터 화살표";
                 Text[ turkish ] = "Vekt�r oku";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Flecha vectorial";
+                Text[ catalan ] = "Fletxa vectorial";
                 Text[ finnish ] = "Vektorinuoli";
                 Text[ thai ] = "ลูกศรเวกเตอร์";
             };
@@ -7859,7 +7859,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "반복 기호";
                 Text[ turkish ] = "Tilde";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Tilde";
+                Text[ catalan ] = "Titlla";
                 Text[ finnish ] = "Tilde";
                 Text[ thai ] = "เครื่องหมายลักษณะเพดานบน";
             };
@@ -7888,7 +7888,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "강조기호";
                 Text[ turkish ] = "�apka";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Circunflejo";
+                Text[ catalan ] = "Circumflex";
                 Text[ finnish ] = "Sirkumfleksi";
                 Text[ thai ] = "เครื่องหมายกำกับเสียง";
             };
@@ -7917,7 +7917,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "상위 선";
                 Text[ turkish ] = "�st �izgi";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "L�nea superior";
+                Text[ catalan ] = "L�nia superior";
                 Text[ finnish ] = "Yl�puolinen rivi";
                 Text[ thai ] = "บรรทัดบน";
             };
@@ -7946,7 +7946,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "점";
                 Text[ turkish ] = "Nokta";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Punto";
+                Text[ catalan ] = "Punt";
                 Text[ finnish ] = "Pilkku";
                 Text[ thai ] = "จุด";
             };
@@ -7979,7 +7979,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ korean ] = "큰 벡터 화살표";
                 TEXT[ turkish ] = "Geni� vekt�r oku";
                 TEXT[ language_user1 ] = " ";
-                TEXT[ catalan ] = "Flecha vectorial ancha";
+                TEXT[ catalan ] = "Fletxa vectorial gran";
                 TEXT[ finnish ] = "Suuri vektorinuoli";
                 TEXT[ thai ] = "ลูกศรเวกเตอร์ใหญ่";
             };
@@ -8008,7 +8008,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ korean ] = "큰 반복 기호";
                 TEXT[ turkish ] = "Geni� tilde";
                 TEXT[ language_user1 ] = " ";
-                TEXT[ catalan ] = "Tilde ancha";
+                TEXT[ catalan ] = "Titlla gran";
                 TEXT[ finnish ] = "Suuri tilde";
                 TEXT[ thai ] = "เครื่องหมายลักษณะเพดานบน";
             };
@@ -8037,7 +8037,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ korean ] = "큰 강조 기호";
                 TEXT[ turkish ] = "Geni� �apka";
                 TEXT[ language_user1 ] = " ";
-                TEXT[ catalan ] = "Circunflejo ancho";
+                TEXT[ catalan ] = "Circumflex gran";
                 TEXT[ finnish ] = "Suuri sirkumfleksi";
                 TEXT[ thai ] = "เครื่องหมายกำกับเสียงใหญ่";
             };
@@ -8070,7 +8070,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "이중 점";
                 Text[ turkish ] = "�ift nokta";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "punto doble";
+                Text[ catalan ] = "Punt doble";
                 Text[ finnish ] = "Kaksi pistett�";
                 Text[ thai ] = "สองจุด";
             };
@@ -8103,7 +8103,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "윗선";
                 Text[ turkish ] = "�zerinde �izgi";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "L�nea sobre";
+                Text[ catalan ] = "L�nia sobre";
                 Text[ finnish ] = "Yl�viiva";
                 Text[ thai ] = "สิ้นสุดบรรทัด";
             };
@@ -8132,7 +8132,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "아래 선";
                 Text[ turkish ] = "Alt�nda �izgi";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "L�nea debajo";
+                Text[ catalan ] = "L�nia sota";
                 Text[ finnish ] = "Alaviiva";
                 Text[ thai ] = "บรรทัดล่าง";
             };
@@ -8161,7 +8161,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "통과선";
                 Text[ turkish ] = "�st� �izili";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "L�nea a trav�s";
+                Text[ catalan ] = "L�nia a trav�s";
                 Text[ finnish ] = "Yliviivaus";
                 Text[ thai ] = "ตลอดบรรทัด";
             };
@@ -8194,7 +8194,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "3중 점";
                 Text[ turkish ] = "�� nokta";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Punto triple";
+                Text[ catalan ] = "Punt triple";
                 Text[ finnish ] = "Kolme pistett�";
                 Text[ thai ] = "สามจุด";
             };
@@ -8227,7 +8227,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "투명";
                 Text[ turkish ] = "Saydam";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "transparente";
+                Text[ catalan ] = "Transparent";
                 Text[ finnish ] = "L�pin�kyv�";
                 Text[ thai ] = "โปร่งแสง";
             };
@@ -8256,7 +8256,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "굵게";
                 Text[ turkish ] = "Kal�n yaz�tipi";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Negrita";
+                Text[ catalan ] = "Lletra negreta";
                 Text[ finnish ] = "Lihavoitu fontti";
                 Text[ thai ] = "ตัวอักษรหนา";
             };
@@ -8285,7 +8285,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "이탤릭체";
                 Text[ turkish ] = "�talik yaz�tipi";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Cursiva";
+                Text[ catalan ] = "Tipus de lletra cursiva";
                 Text[ finnish ] = "Kursivoitu fontti";
                 Text[ thai ] = "ตัวอักษรเอียง";
             };
@@ -8314,7 +8314,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "크기 조정";
                 Text[ turkish ] = "Boyutu de�i�tir";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Modificar tama�o";
+                Text[ catalan ] = "Canvia la mida";
                 Text[ finnish ] = "Muuta kokoa";
                 Text[ thai ] = "ปรับขนาด";
             };
@@ -8343,7 +8343,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "글꼴 수정";
                 Text[ turkish ] = "Yaz�tipini de�i�tir";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Cambiar fuente";
+                Text[ catalan ] = "Canvia el tipus de lletra";
                 Text[ finnish ] = "Muuta fontti";
                 Text[ thai ] = "เปลี่ยนตัวอักษร";
             };
@@ -8385,7 +8385,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "둥근 괄호";
                 Text[ turkish ] = "Yuvarlak ayra�";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "par�ntesis";
+                Text[ catalan ] = "Par�ntesi";
                 Text[ finnish ] = "Kaarisulkeet";
                 Text[ thai ] = "วงเล็บมน";
             };
@@ -8472,7 +8472,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "단일선";
                 Text[ turkish ] = "Tek �izgiler";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "L�neas simples";
+                Text[ catalan ] = "L�nies simples";
                 Text[ finnish ] = "Yksitt�iset rivit";
                 Text[ thai ] = "บรรทัดเดียว";
             };
@@ -8501,7 +8501,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "이중 선";
                 Text[ turkish ] = "�ift �izgiler";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "L�neas dobles";
+                Text[ catalan ] = "L�nies dobles";
                 Text[ finnish ] = "Kaksoisviivat";
                 Text[ thai ] = "สองบรรทัด";
             };
@@ -8534,7 +8534,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "중괄호";
                 Text[ turkish ] = "Kavisli ayra�";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Llaves";
+                Text[ catalan ] = "Claus";
                 Text[ finnish ] = "Aaltosulkeet";
                 Text[ thai ] = "ปีกกา";
             };
@@ -8563,7 +8563,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "꺽쇠 괄호";
                 Text[ turkish ] = "Sivri ayra�";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Par�ntesis angulares";
+                Text[ catalan ] = "Par�ntesi angulars";
                 Text[ finnish ] = "Kulmasulkeet";
                 Text[ thai ] = "วงเล็บเหลี่ยม";
             };
@@ -8592,7 +8592,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "연산자 괄호";
                 Text[ turkish ] = "��le� ayra�lar�";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Par�ntesis de operador";
+                Text[ catalan ] = "Par�ntesi d'operador";
                 Text[ finnish ] = "Operaattorisulkeet";
                 Text[ thai ] = "วงเล็บตัวปฏิบัติการ";
             };
@@ -8625,7 +8625,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "포괄 괄호";
                 Text[ turkish ] = "Gruplama ayra�lar�";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Par�ntesis de agrupamiento";
+                Text[ catalan ] = "Par�ntesi d'agrupament";
                 Text[ finnish ] = "Ryhm�sulkeet";
                 Text[ thai ] = "กลุ่มวงเล็บ";
             };
@@ -8658,7 +8658,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "소괄호(배율 조정 가능)";
                 Text[ turkish ] = "Yuvarlak ayra� (�l�eklendirilebilir)";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "par�ntesis (graduables)";
+                Text[ catalan ] = "par�ntesis (graduables)";
                 Text[ finnish ] = "Kaarisulkeet (skaalattavat)";
                 Text[ thai ] = "วงเล็บมน (ปรับอัตราส่วนได้)";
             };
@@ -8745,7 +8745,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "단일선(배율 조정 가능)";
                 Text[ turkish ] = "Tek �izgiler (�l�eklendirilebilir)";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "l�neas simples (graduables)";
+                Text[ catalan ] = "l�nies simples (graduables)";
                 Text[ finnish ] = "Yksitt�iset rivit (skaalattavat)";
                 Text[ thai ] = "บรรทัดเดียว (ปรับอัตราส่วนได้)";
             };
@@ -8774,7 +8774,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "이중선(배율 조정 가능)";
                 Text[ turkish ] = "�ift �izgiler (�l�eklendirilebilir)";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "l�neas dobles (graduables)";
+                Text[ catalan ] = "l�nies dobles (graduables)";
                 Text[ finnish ] = "Kaksoisviivat (skaalattava)";
                 Text[ thai ] = "สองบรรทัด (ปรับอัตราส่วนได้)";
             };
@@ -8807,7 +8807,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "중괄호(배율 조정 가능)";
                 Text[ turkish ] = "Kavisli ayra� (�l�eklendirilebilir)";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Llaves (graduables)";
+                Text[ catalan ] = "Claus (graduables)";
                 Text[ finnish ] = "Aaltosulkeet (skaalattavat)";
                 Text[ thai ] = "ปีกกา (ปรับอัตราส่วนได้)";
             };
@@ -8836,7 +8836,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "꺽쇠 괄호(배율 조정 가능)";
                 Text[ turkish ] = "Sivri ayra� (�l�eklendirilebilir)";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Par�ntesis angulares (graduables)";
+                Text[ catalan ] = "Par�ntesi angulars (graduables)";
                 Text[ finnish ] = "Kulmasulkeet (skaalattavat)";
                 Text[ thai ] = "วงเล็บเหลี่ยม (ปรับอัตราส่วนได้)";
             };
@@ -8865,7 +8865,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "연산자 괄호(배율 가능）";
                 Text[ turkish ] = "��le� ayra�lar� (�l�eklendirilebilir)";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Par�ntesis de operador (graduables)";
+                Text[ catalan ] = "Par�ntesi d'operador (graduables)";
                 Text[ finnish ] = "Operaattorisulkeet (skaalattavat)";
                 Text[ thai ] = "วงเล็บตัวปฏิบัติการ (ปรับอัตราส่วนได้)";
             };
@@ -8898,7 +8898,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ arabic ] = "����� ������ ������� (����� ���� �������)";
                 Text[ turkish ] = "�st kavisli ayra� (�l�eklendirilebilir)";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "llaves arriba (graduables)";
+                Text[ catalan ] = "Part superior de les claus (graduables)";
                 Text[ finnish ] = "Aaltosulkeet ylh��ll� (skaalattavat)";
                 Text[ thai ] = "ปีกกาบน (ปรับอัตราส่วนได้)";
             };
@@ -8927,7 +8927,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ arabic ] = "����� ������ ������� (����� ���� �������)";
                 Text[ turkish ] = "Alt kavisli ayra� (�l�eklendirilebilir)";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "llaves abajo (graduables)";
+                Text[ catalan ] = "Part inferior de les claus (graduables)";
                 Text[ finnish ] = "Aaltosulkeet alhaalla (skaalattavat)";
                 Text[ thai ] = "ปีกกาล่าง (ปรับอัตราส่วนได้)";
             };
@@ -8969,7 +8969,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "위첨자를 왼쪽에";
                 Text[ turkish ] = "�st simge (sol)";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Super�ndice a la izquierda";
+                Text[ catalan ] = "Super�ndex a l'esquerra";
                 Text[ finnish ] = "Yl�indeksi vasemmalle";
                 Text[ thai ] = "ตัวยกด้านซ้าย";
             };
@@ -8998,7 +8998,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ korean ] = "위첨자를 위에";
                 TEXT[ turkish ] = "�st simge (�st)";
                 TEXT[ language_user1 ] = " ";
-                TEXT[ catalan ] = "Super�ndice arriba";
+                TEXT[ catalan ] = "Super�ndex amunt";
                 TEXT[ finnish ] = "Yl�indeksi p��lle";
                 TEXT[ thai ] = "ตัวยกด้านบน";
             };
@@ -9027,7 +9027,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "위첨자를 오른쪽에";
                 Text[ turkish ] = "�st simge (sa�)";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Super�ndice derecha";
+                Text[ catalan ] = "Super�ndex dreta";
                 Text[ finnish ] = "Yl�indeksi oikealle";
                 Text[ thai ] = "ตัวยกด้านขวา";
             };
@@ -9056,7 +9056,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "수직 배열 (2 요소)";
                 Text[ turkish ] = "Dikey s�ralama (2 ��e)";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "disposici�n vertical (2 elementos)";
+                Text[ catalan ] = "Pila vertical (2 elements)";
                 Text[ finnish ] = "Pystypino (2 elementti�)";
                 Text[ thai ] = "กองซ้อนแนวตั้ง (2 องค์ประกอบ)";
             };
@@ -9085,7 +9085,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "새로운 행 시작";
                 Text[ turkish ] = "Yeni sat�r";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Empezar l�nea nueva";
+                Text[ catalan ] = "Inici nova l�nia";
                 Text[ finnish ] = "Uusi viiva";
                 Text[ thai ] = "บรรทัดใหม่";
             };
@@ -9118,7 +9118,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "아래첨자를 왼쪽에";
                 Text[ turkish ] = "Alt simge (sol)";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Sub�ndice izquierda";
+                Text[ catalan ] = "Sub�ndex esquerra";
                 Text[ finnish ] = "Alaindeksi vasemmalle";
                 Text[ thai ] = "ตัวห้อยด้านซ้าย";
             };
@@ -9147,7 +9147,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ korean ] = "아래첨자를 밑에";
                 TEXT[ turkish ] = "Alt simge (alt)";
                 TEXT[ language_user1 ] = " ";
-                TEXT[ catalan ] = "Sub�ndice abajo";
+                TEXT[ catalan ] = "Sub�ndex avall";
                 TEXT[ finnish ] = "Alaindeksi alhaalle";
                 TEXT[ thai ] = "ตัวห้อยด้านล่าง";
             };
@@ -9176,7 +9176,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "아래첨자를 오른쪽에";
                 Text[ turkish ] = "Alt simge (sa�)";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Sub�ndice derecha";
+                Text[ catalan ] = "Sub�ndex dreta";
                 Text[ finnish ] = "Alaindeksi oikealle";
                 Text[ thai ] = "ตัวห้อยด้านขวา";
             };
@@ -9205,7 +9205,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "수직 배열";
                 Text[ turkish ] = "Dikey s�ralama";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Disposici�n vertical";
+                Text[ catalan ] = "Pila vertical";
                 Text[ finnish ] = "Pystypino";
                 Text[ thai ] = "กองซ้อนแนวตั้ง";
             };
@@ -9234,7 +9234,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "작은 간격";
                 Text[ turkish ] = "K���k aral�k";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Espacio peque�o";
+                Text[ catalan ] = "Espai petit";
                 Text[ finnish ] = "Pieni v�li";
                 Text[ thai ] = "ช่องว่างเล็ก";
             };
@@ -9267,7 +9267,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "왼쪽에 맞춤";
                 Text[ turkish ] = "Sola hizala";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "alinear a la izquierda";
+                Text[ catalan ] = "Alinea a l'esquerra";
                 Text[ finnish ] = "Tasaa vasemmalle";
                 Text[ thai ] = "จัดชิดซ้าย";
             };
@@ -9297,7 +9297,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "가운데 맞춤";
                 Text[ turkish ] = "Ortala";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "alinear al centro";
+                Text[ catalan ] = "Alinea al centre";
                 Text[ finnish ] = "Tasaa keskitys";
                 Text[ thai ] = "จัดตรงกลาง";
             };
@@ -9326,7 +9326,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "오른쪽에 맞춤";
                 Text[ turkish ] = "Sa�a hizala";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "alinear a la derecha";
+                Text[ catalan ] = "Alinea a la dreta";
                 Text[ finnish ] = "Tasaa oikealle";
                 Text[ thai ] = "จัดชิดขวา";
             };
@@ -9355,7 +9355,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "행렬 배열";
                 Text[ turkish ] = "Matris s�ralamas�";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Disposici�n matriz";
+                Text[ catalan ] = "Pila de la matriu";
                 Text[ finnish ] = "Matriisipino";
                 Text[ thai ] = "กองซ้อนแบบเมตริกซ์";
             };
@@ -9384,7 +9384,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "간격";
                 Text[ turkish ] = "Aral�k";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Espacio";
+                Text[ catalan ] = "Espai";
                 Text[ finnish ] = "V�li";
                 Text[ thai ] = "ช่องว่าง";
             };
@@ -9426,7 +9426,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ korean ] = "무한대";
                 TEXT[ turkish ] = "Sonsuz";
                 TEXT[ language_user1 ] = " ";
-                TEXT[ catalan ] = "infinito";
+                TEXT[ catalan ] = "infinit";
                 TEXT[ finnish ] = "p��ttym�t�n";
                 TEXT[ thai ] = "ไม่จำกัด";
             };
@@ -9455,7 +9455,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ korean ] = "편미분 기호";
                 TEXT[ turkish ] = "K�smi";
                 TEXT[ language_user1 ] = " ";
-                TEXT[ catalan ] = "parcial";
+                TEXT[ catalan ] = "Parcial";
                 TEXT[ finnish ] = "Osittainen";
                 TEXT[ thai ] = "บางส่วน";
             };
@@ -9542,7 +9542,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ korean ] = "모든 ..에 대해";
                 TEXT[ turkish ] = "T�m� i�in";
                 TEXT[ language_user1 ] = " ";
-                TEXT[ catalan ] = "Para todos";
+                TEXT[ catalan ] = "Per a tots";
                 TEXT[ finnish ] = "Kaikille";
                 TEXT[ thai ] = "สำหรับทั้งหมด";
             };
@@ -9575,7 +9575,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ korean ] = "플랑크 상수";
                 TEXT[ turkish ] = "h yatay";
                 TEXT[ language_user1 ] = " ";
-                TEXT[ catalan ] = "h barra";
+                TEXT[ catalan ] = "Barra h";
                 TEXT[ finnish ] = "vaakapalkki";
                 TEXT[ thai ] = "แถบ h ";
             };
@@ -9603,7 +9603,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ greek ] = "������ �";
                 TEXT[ korean ] = "람다, 가로";
                 TEXT[ language_user1 ] = " ";
-                TEXT[ catalan ] = "lambda barra";
+                TEXT[ catalan ] = "Barra de lambda";
                 TEXT[ finnish ] = "Lambda-viiva";
                 TEXT[ turkish ] = " ";
                 TEXT[ thai ] = "แถบแลมบ์ด้า";
@@ -9633,7 +9633,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ korean ] = "실수부";
                 TEXT[ turkish ] = "Ger�ek k�s�m";
                 TEXT[ language_user1 ] = " ";
-                TEXT[ catalan ] = "Parte real";
+                TEXT[ catalan ] = "Part real";
                 TEXT[ finnish ] = "Reaaliosa";
                 TEXT[ thai ] = "ส่วนจริง";
             };
@@ -9662,7 +9662,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ korean ] = "허수부";
                 TEXT[ turkish ] = "Sanal k�s�m";
                 TEXT[ language_user1 ] = " ";
-                TEXT[ catalan ] = "Parte imaginaria";
+                TEXT[ catalan ] = "Part imagin�ria";
                 TEXT[ finnish ] = "Imaginaariosa";
                 TEXT[ thai ] = "ส่วนจินตนาการ";
             };
@@ -9724,7 +9724,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ korean ] = "왼쪽 화살표";
                 TEXT[ turkish ] = "Sola ok";
                 TEXT[ language_user1 ] = " ";
-                TEXT[ catalan ] = "Flecha hacia la izquierda";
+                TEXT[ catalan ] = "Fletxa esquerra";
                 TEXT[ finnish ] = "Nuoli vasemmalle";
                 TEXT[ thai ] = "ลูกศรซ้าย";
             };
@@ -9753,7 +9753,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ korean ] = "오른쪽 화살표";
                 TEXT[ turkish ] = "Sa�a ok";
                 TEXT[ language_user1 ] = " ";
-                TEXT[ catalan ] = "Flecha hacia la derecha";
+                TEXT[ catalan ] = "Fletxa dreta";
                 TEXT[ finnish ] = "Nuoli oikealle";
                 TEXT[ thai ] = "ลูกศรขวา";
             };
@@ -9782,7 +9782,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ korean ] = "위로 화살표";
                 TEXT[ turkish ] = "Yukar� ok";
                 TEXT[ language_user1 ] = " ";
-                TEXT[ catalan ] = "Flecha hacia arriba";
+                TEXT[ catalan ] = "Fletxa amunt";
                 TEXT[ finnish ] = "Yl�nuoli";
                 TEXT[ thai ] = "ลูกศรขึ้น";
             };
@@ -9811,7 +9811,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ korean ] = "아래로 화살표";
                 TEXT[ turkish ] = "A�a�� ok";
                 TEXT[ language_user1 ] = " ";
-                TEXT[ catalan ] = "Flecha hacia abajo";
+                TEXT[ catalan ] = "Fletxa avall";
                 TEXT[ finnish ] = "Alanuoli";
                 TEXT[ thai ] = "ลูกศรลง";
             };
@@ -9848,7 +9848,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ korean ] = "점 아래";
                 TEXT[ turkish ] = "Noktalar (alt)";
                 TEXT[ language_user1 ] = " ";
-                TEXT[ catalan ] = "Puntos abajo";
+                TEXT[ catalan ] = "Punts a la part inferior";
                 TEXT[ finnish ] = "Pisteet alhaalla";
                 TEXT[ thai ] = "จุดด้านล่าง";
             };
@@ -9877,7 +9877,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ korean ] = "가운데 점";
                 TEXT[ turkish ] = "Noktalar (orta)";
                 TEXT[ language_user1 ] = " ";
-                TEXT[ catalan ] = "Puntos en el medio";
+                TEXT[ catalan ] = "Punts a la meitat";
                 TEXT[ finnish ] = "Pisteet keskell�";
                 TEXT[ thai ] = "จุดตรงกลาง";
             };
@@ -9906,7 +9906,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ korean ] = "점을 수직으로";
                 TEXT[ turkish ] = "Noktalar (dikey)";
                 TEXT[ language_user1 ] = " ";
-                TEXT[ catalan ] = "Puntos verticalmente";
+                TEXT[ catalan ] = "Punts verticalment";
                 TEXT[ finnish ] = "Pisteet pystysuunnassa";
                 TEXT[ thai ] = "จุดแนวตั้ง";
             };
@@ -9935,7 +9935,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ korean ] = "점을 위로";
                 TEXT[ turkish ] = "Noktalar (�st)";
                 TEXT[ language_user1 ] = " ";
-                TEXT[ catalan ] = "Puntos hacia arriba";
+                TEXT[ catalan ] = "Punts a la part superior";
                 TEXT[ finnish ] = "Pisteet yl�s";
                 TEXT[ thai ] = "จุดด้านบน";
             };
@@ -9964,7 +9964,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ korean ] = "점을 아래로";
                 TEXT[ turkish ] = "Noktalar (alt)";
                 TEXT[ language_user1 ] = " ";
-                TEXT[ catalan ] = "Puntos hacia abajo";
+                TEXT[ catalan ] = "Punts a la part inferior";
                 TEXT[ finnish ] = "Pisteet alas";
                 TEXT[ thai ] = "จุดด้านล่าง";
             };
@@ -10005,7 +10005,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "단항/이항 연산자";
                 Text[ turkish ] = "Birli/ikili i�le�ler";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Operadores unarios/binarios";
+                Text[ catalan ] = "Operadors unaris/binaris";
                 Text[ finnish ] = "Unaari-/bin��rioperaattorit";
                 Text[ thai ] = "ตัวปฏิบัติการ Unary/Binary ";
             };
@@ -10034,7 +10034,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "관계";
                 Text[ turkish ] = "�li�kiler";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Relaciones";
+                Text[ catalan ] = "Relacions";
                 Text[ finnish ] = "Suhteet";
                 Text[ thai ] = "ความสัมพันธ์";
             };
@@ -10063,7 +10063,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "집합 연산";
                 Text[ turkish ] = "K�me i�lemleri";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Operaciones de conjuntos";
+                Text[ catalan ] = "Defineix les operacions";
                 Text[ finnish ] = "M��rit� toiminnot";
                 Text[ thai ] = "กำหนดความสัมพันธ์";
             };
@@ -10092,7 +10092,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "함수";
                 Text[ turkish ] = "��levler";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Funciones";
+                Text[ catalan ] = "Funcions";
                 Text[ finnish ] = "Toiminnot";
                 Text[ thai ] = "ฟังก์ชั่น";
             };
@@ -10121,7 +10121,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "연산자";
                 Text[ turkish ] = "��le�ler";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Operadores";
+                Text[ catalan ] = "Operadors";
                 Text[ finnish ] = "Operaattorit";
                 Text[ thai ] = "ตัวปฏิบัติการ";
             };
@@ -10154,7 +10154,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "속성";
                 Text[ turkish ] = "�znitelikler";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Atributos";
+                Text[ catalan ] = "Atributs";
                 Text[ finnish ] = "M��ritteet";
                 Text[ thai ] = "คุณลักษณะ";
             };
@@ -10183,7 +10183,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ korean ] = "기타";
                 TEXT[ turkish ] = "Di�er";
                 TEXT[ language_user1 ] = " ";
-                TEXT[ catalan ] = "Otros";
+                TEXT[ catalan ] = "Altres";
                 TEXT[ finnish ] = "Muut";
                 TEXT[ thai ] = "อื่น ๆ";
             };
@@ -10216,7 +10216,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "괄호";
                 Text[ turkish ] = "Ayra�lar";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Par�ntesis";
+                Text[ catalan ] = "Par�ntesi";
                 Text[ finnish ] = "Sulkeet";
                 Text[ thai ] = "วงเล็บก้ามปู";
             };
@@ -10245,7 +10245,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ korean ] = "서식 지정";
                 Text[ turkish ] = "Format";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Formatos";
+                Text[ catalan ] = "Formats";
                 Text[ finnish ] = "Muodot";
                 Text[ thai ] = "รูปแบบ";
             };
@@ -10270,7 +10270,7 @@ FloatingWindow RID_TOOLBOXWINDOW
     Text[ greek ] = "�������";
     Text[ korean ] = "선택";
     Text[ turkish ] = "Se�im";
-    Text[ catalan ] = "Selecci�n";
+    Text[ catalan ] = "Selecci�";
     Text[ finnish ] = "Valinta";
     Text[ thai ] = "เลือก";
 
@@ -10842,7 +10842,7 @@ String STR_STATSTR_READING
     Text[ greek ] = "�� ������� ����������...";
     Text[ korean ] = "문서 로드 중...";
     Text[ turkish ] = "Belge y�kleniyor...";
-    Text[ catalan ] = "Cargando el documento...";
+    Text[ catalan ] = "S'est� carregant el document...";
     Text[ thai ] = "กำลังโหลดเอกสาร...";
 };
 
@@ -10874,7 +10874,7 @@ String STR_STATSTR_WRITING
     Text[ korean ] = "문서 저장 중...";
     Text[ turkish ] = "Belge kaydediliyor...";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Guardando el documento...";
+    Text[ catalan ] = "S'est� desant el document...";
     Text[ thai ] = "กำลังบันทึกเอกสาร...";
 };
 
@@ -11011,7 +11011,7 @@ String RID_SYMBOLFILESSTR
     Text[ greek ] = "������ �������� (*.sms)";
     Text[ korean ] = "기호 파일 (*.sms)";
     Text[ turkish ] = "Simge dosyalar� (*.sms)";
-    Text[ catalan ] = "Archivos de s�mbolos (*.sms)";
+    Text[ catalan ] = "Fitxer de s�mbols (*.sms)";
     Text[ finnish ] = "Symbolitiedostot (*.sms)";
     Text[ thai ] = "แฟ้มสัญลักษณ์ (*.sms)";
 };
@@ -11039,7 +11039,7 @@ String RID_ALLFILESSTR
     Text[ korean ] = "모든 파일 (*.*)";
     Text[ turkish ] = "T�m dosyalar (*.*)";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Todos los archivos (*.*)";
+    Text[ catalan ] = "Tots els fitxers (*.*)";
     Text[ finnish ] = "Kaikki tiedostot (*.*)";
     Text[ thai ] = "แฟ้มทั้งหมด (*.*)";
 };
@@ -11067,7 +11067,7 @@ String RID_ERR_IDENT
     Text[ korean ] = "오류: ";
     Text[ turkish ] = "HATA : ";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "ERROR :  ";
+    Text[ catalan ] = "ERROR : ";
     Text[ finnish ] = "VIRHE: ";
     Text[ thai ] = "ผิดพลาด : ";
 };
@@ -11095,7 +11095,7 @@ String RID_ERR_UNKOWN
     Text[ korean ] = "알려져 있지 않은 오류 발생";
     Text[ turkish ] = "Bilinmeyen bir hata olu�tu";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Se ha producido un error desconocido";
+    Text[ catalan ] = "S'ha produ�t un error desconegut";
     Text[ finnish ] = "Tuntematon virhe ilmeni";
     Text[ thai ] = "ไม่รู้จักข้อผิดพลาดที่เกิดขึ้น";
 };
@@ -11123,7 +11123,7 @@ String RID_ERR_UNEXPECTEDCHARACTER
     Text[ korean ] = "예상치 않은 문자";
     Text[ turkish ] = "Beklenmeyen karakter";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Car�cter no esperado";
+    Text[ catalan ] = "Car�cter no esperat";
     Text[ finnish ] = "Odottamaton merkki";
     Text[ thai ] = "ตัวอักขระที่ไม่คาดคิด";
 };
@@ -11151,7 +11151,7 @@ String RID_ERR_OVERFLOW
     Text[ korean ] = "입력한 수식이 너무 광범위함";
     Text[ turkish ] = "Form�l giri�i �ok karma��k";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "La f�rmula es muy compleja";
+    Text[ catalan ] = "La f�rmula �s molt complexa";
     Text[ finnish ] = "Kaavamerkint� liian monimutkainen";
     Text[ thai ] = "ป้อนสูตรคำนวณซับซ้อนเกินไป";
 };
@@ -11179,7 +11179,7 @@ String RID_ERR_LGROUPEXPECTED
     Text[ korean ] = "'{' 필요함";
     Text[ turkish ] = "'{' gerekli";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Se requiere '{'";
+    Text[ catalan ] = "Es necessita '{'";
     Text[ finnish ] = "'{' oletuksena";
     Text[ thai ] = "'{' คาดคิด";
 };
@@ -11207,7 +11207,7 @@ String RID_ERR_RGROUPEXPECTED
     Text[ korean ] = "'}' 가 필요함";
     Text[ turkish ] = "'}' gerekli";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Se requiere '}'";
+    Text[ catalan ] = "Es necessita '}'";
     Text[ finnish ] = "'}' oletuksena";
     Text[ thai ] = "'}' คาดคิด";
 };
@@ -11235,7 +11235,7 @@ String RID_ERR_LBRACEEXPECTED
     Text[ korean ] = "'(' 필요함";
     Text[ turkish ] = "'(' gerekli";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Se requiere '(' ";
+    Text[ catalan ] = "Es necessita '(' ";
     Text[ finnish ] = "'(' oletuksena";
     Text[ thai ] = "'(' คาดคิด";
 };
@@ -11263,7 +11263,7 @@ String RID_ERR_RBRACEEXPECTED
     Text[ korean ] = "')' 필요함";
     Text[ turkish ] = "')' gerekli";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Se requiere ')'";
+    Text[ catalan ] = "Es necessita ')'";
     Text[ finnish ] = "')' oletuksena";
     Text[ thai ] = "')' คาดคิด";
 };
@@ -11291,7 +11291,7 @@ String RID_ERR_FUNCEXPECTED
     Text[ korean ] = "함수 필요함";
     Text[ turkish ] = "��lev gerekli";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Se requiere una funci�n";
+    Text[ catalan ] = "Es necessita una funci�";
     Text[ finnish ] = "Toiminto oletuksena";
     Text[ thai ] = "ฟังก์ชั่นที่คาดคิด";
 };
@@ -11320,7 +11320,7 @@ String RID_ERR_UNOPEREXPECTED
     Text[ korean ] = "단항 연산자 필요함";
     Text[ turkish ] = "Birli i�le� gerekli";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Se espera un operador unario";
+    Text[ catalan ] = "S'esperava un operador unari";
     Text[ finnish ] = "Unaarioperattori oletuksena";
     Text[ thai ] = "ตัวปฏิบัติการ Unary ที่คาดคิด";
 };
@@ -11349,7 +11349,7 @@ String RID_ERR_BINOPEREXPECTED
     Text[ korean ] = "이항 연산자 필요함";
     Text[ turkish ] = "�kili i�le� gerekli";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Se espera un operador binario";
+    Text[ catalan ] = "S'esperava un operador binari";
     Text[ finnish ] = "Bin��rioperattori oletuksena";
     Text[ thai ] = "ตัวปฏิบัติการ Binary ที่คาดคิด";
 };
@@ -11377,7 +11377,7 @@ String RID_ERR_SYMBOLEXPECTED
     Text[ korean ] = "기호 필요함";
     Text[ turkish ] = "Simge gerekli";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Se necesita un s�mbolo";
+    Text[ catalan ] = "Es necessita un s�mbol";
     Text[ finnish ] = "Symboli oletuksena";
     Text[ thai ] = "สัญลักษณ์ที่คาดคิด";
 };
@@ -11405,7 +11405,7 @@ String RID_ERR_IDENTEXPECTED
     Text[ korean ] = "확인자 필요함";
     Text[ turkish ] = "Tan�t�c� bekleniyor";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Se requiere un identificador";
+    Text[ catalan ] = "S'esperava un identificador";
     Text[ finnish ] = "Tunnus oletuksena";
     Text[ thai ] = "ตัวบ่งชี้ที่คาดคิด";
 };
@@ -11433,7 +11433,7 @@ String RID_ERR_POUNDEXPECTED
     Text[ korean ] = "'#' 필요함";
     Text[ turkish ] = "'#' gerekli";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Se requiere '#'";
+    Text[ catalan ] = "Es necessita '#'";
     Text[ finnish ] = "'#' oletuksena";
     Text[ thai ] = "'#'คาดคิด";
 };
@@ -11461,7 +11461,7 @@ String RID_ERR_COLOREXPECTED
     Text[ korean ] = "색상,  필요한";
     Text[ turkish ] = "Renk gerekli";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Se requiere un color";
+    Text[ catalan ] = "Es necessita un color";
     Text[ finnish ] = "Vaadittu v�ri";
     Text[ thai ] = "สีที่ต้องการ";
 };
@@ -11489,7 +11489,7 @@ String RID_ERR_LPARENTEXPECTED
     Text[ korean ] = "왼쪽 경계 필요함";
     Text[ turkish ] = "Sol s�n�rlay�c� gerekli";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Se requiere el l�mite izquierdo";
+    Text[ catalan ] = "Es necessita el l�mit esquerra";
     Text[ finnish ] = "Vasen raja oletuksena";
     Text[ thai ] = "ขีดจำกัดซ้ายที่คาดคิด";
 };
@@ -11517,7 +11517,7 @@ String RID_ERR_RPARENTEXPECTED
     Text[ korean ] = "오른쪽 경계 필요함";
     Text[ turkish ] = "Sa� s�n�rlama gerekli";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Se requiere el l�mite derecho";
+    Text[ catalan ] = "Es necessita el l�mit dret";
     Text[ finnish ] = "Oikea raja oletuksena";
     Text[ thai ] = "ขีดจำกัดขวาที่คาดคิด";
 };
@@ -11545,7 +11545,7 @@ String RID_ERR_RIGHTEXPECTED
     Text[ korean ] = "'RIGHT' 필요함";
     Text[ turkish ] = "'RIGHT' gerekli";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Se requiere 'RIGHT'";
+    Text[ catalan ] = "S'esperava 'RIGHT'";
     Text[ finnish ] = "'RIGHT' oletuksena";
     Text[ thai ] = "'RIGHT' ที่คาดคิด";
 };
@@ -11573,7 +11573,7 @@ String RID_PLUGINTOOLBOX
     Text[ korean ] = "플러그인 모음";
     Text[ turkish ] = "Plug-in �ubu�u";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Barra de Plug-ins";
+    Text[ catalan ] = "Barra de connectors";
     Text[ finnish ] = "Lis�osapalkki";
     Text[ thai ] = "แถบปลั๊กอิน";
 };
@@ -11626,7 +11626,7 @@ ToolBox RID_MATH_TOOLBOX
             Text[ korean ] = "확대";
             Text[ turkish ] = "B�y�t";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Aumentar";
+            Text[ catalan ] = "Amplia el zoom";
             Text[ finnish ] = "L�henn�";
             Text[ thai ] = "ย่อเข้า";
         };
@@ -11655,7 +11655,7 @@ ToolBox RID_MATH_TOOLBOX
             Text[ korean ] = "축소";
             Text[ turkish ] = "K���lt";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Reducir";
+            Text[ catalan ] = "Redueix el zoom";
             Text[ finnish ] = "Loitonna";
             Text[ thai ] = "ขยายออก";
         };
@@ -11749,7 +11749,7 @@ ToolBox RID_MATH_TOOLBOX
             Text[ korean ] = "새로 고침";
             Text[ turkish ] = "G�ncelle";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Actualizar";
+            Text[ catalan ] = "Refresca";
             Text[ thai ] = "ฟื้นฟู";
         };
         ToolBoxItem
@@ -11809,7 +11809,7 @@ ToolBox RID_MATH_TOOLBOX
             Text[ korean ] = "기호";
             Text[ turkish ] = "Simgeler";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "S�mbolos";
+            Text[ catalan ] = "S�mbols";
             Text[ thai ] = "สัญลักษณ์";
         };
     };
@@ -11838,7 +11838,7 @@ String RID_MATH_TOOLBOX
     Text[ korean ] = "주 도구모음";
     Text[ turkish ] = "Ana ara� �ubu�u";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Barra de herramientas";
+    Text[ catalan ] = "Barra d'eines principal";
     Text[ finnish ] = "P��ty�kalurivi";
     Text[ thai ] = "แถบเครื่องมือหลัก";
 };
