@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: er $ $Date: 2000-12-11 19:06:35 $
+ *  last change: $Author: er $ $Date: 2000-12-12 15:31:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1235,50 +1235,59 @@ BOOL SvNumberformat::GetNewCurrencySymbol( String& rSymbol,
 }
 
 
-void SvNumberformat::Build50Formatstring( String& rStr ) const
+// static
+String SvNumberformat::StripNewCurrencyDelimiters( const String& rStr,
+            BOOL bQuoteSymbol )
 {
-    rStr.Erase();
+    String aTmp;
     xub_StrLen nStartPos, nPos, nLen;
-    nLen = sFormatstring.Len();
+    nLen = rStr.Len();
     nStartPos = 0;
-    while ( (nPos = sFormatstring.SearchAscii( "[$", nStartPos )) != STRING_NOTFOUND  )
+    while ( (nPos = rStr.SearchAscii( "[$", nStartPos )) != STRING_NOTFOUND )
     {
         xub_StrLen nEnd;
-        if ( (nEnd = GetQuoteEnd( sFormatstring, nPos )) < nLen )
+        if ( (nEnd = GetQuoteEnd( rStr, nPos )) < nLen )
         {
-            rStr += sFormatstring.Copy( nStartPos, ++nEnd - nStartPos );
+            aTmp += rStr.Copy( nStartPos, ++nEnd - nStartPos );
             nStartPos = nEnd;
         }
         else
         {
-            rStr += sFormatstring.Copy( nStartPos, nPos - nStartPos );
+            aTmp += rStr.Copy( nStartPos, nPos - nStartPos );
             nStartPos = nPos + 2;
             xub_StrLen nDash;
             nEnd = nStartPos - 1;
             do
             {
-                nDash = sFormatstring.Search( '-', ++nEnd );
-            } while ( (nEnd = GetQuoteEnd( sFormatstring, nDash )) < nLen );
+                nDash = rStr.Search( '-', ++nEnd );
+            } while ( (nEnd = GetQuoteEnd( rStr, nDash )) < nLen );
             xub_StrLen nClose;
             nEnd = nStartPos - 1;
             do
             {
-                nClose = sFormatstring.Search( ']', ++nEnd );
-            } while ( (nEnd = GetQuoteEnd( sFormatstring, nClose )) < nLen );
+                nClose = rStr.Search( ']', ++nEnd );
+            } while ( (nEnd = GetQuoteEnd( rStr, nClose )) < nLen );
             nPos = ( nDash < nClose ? nDash : nClose );
-            if ( sFormatstring.GetChar( nStartPos ) == '"' )
-                rStr += sFormatstring.Copy( nStartPos, nPos - nStartPos );
+            if ( !bQuoteSymbol || rStr.GetChar( nStartPos ) == '"' )
+                aTmp += rStr.Copy( nStartPos, nPos - nStartPos );
             else
             {
-                rStr += '"';
-                rStr += sFormatstring.Copy( nStartPos, nPos - nStartPos );
-                rStr += '"';
+                aTmp += '"';
+                aTmp += rStr.Copy( nStartPos, nPos - nStartPos );
+                aTmp += '"';
             }
             nStartPos = nClose + 1;
         }
     }
     if ( nLen > nStartPos )
-        rStr += sFormatstring.Copy( nStartPos, nLen - nStartPos );
+        aTmp += rStr.Copy( nStartPos, nLen - nStartPos );
+    return aTmp;
+}
+
+
+void SvNumberformat::Build50Formatstring( String& rStr ) const
+{
+    rStr = StripNewCurrencyDelimiters( sFormatstring, TRUE );
 }
 
 
