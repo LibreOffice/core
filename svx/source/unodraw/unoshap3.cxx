@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap3.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: aw $ $Date: 2000-12-01 13:19:42 $
+ *  last change: $Author: aw $ $Date: 2000-12-07 15:24:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -374,6 +374,16 @@ sal_Bool SAL_CALL Svx3DSceneObject::hasElements()
     return uno::Any( &aHomMat, ::getCppuType((const drawing::HomogenMatrix*)0) );
 
 //----------------------------------------------------------------------
+#ifndef _SVDITER_HXX
+#include <svditer.hxx>
+#endif
+
+struct ImpRememberTransAndRect
+{
+    Matrix4D                    maMat;
+    Rectangle                   maRect;
+};
+
 void SAL_CALL Svx3DSceneObject::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue )
     throw( beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
@@ -398,9 +408,70 @@ void SAL_CALL Svx3DSceneObject::setPropertyValue( const OUString& aPropertyName,
             Vector3D aVPN(aCamGeo.vpn.DirectionX, aCamGeo.vpn.DirectionY, aCamGeo.vpn.DirectionZ);
             Vector3D aVUP(aCamGeo.vup.DirectionX, aCamGeo.vup.DirectionY, aCamGeo.vup.DirectionZ);
 
+            // rescue scene transformation
+            ImpRememberTransAndRect aSceneTAR;
+            aSceneTAR.maMat = pScene->GetTransform();
+            aSceneTAR.maRect = pScene->GetSnapRect();
+
+            // rescue object transformations
+            SdrObjListIter aIter(*pScene->GetSubList(), IM_DEEPWITHGROUPS);
+            List aObjTrans;
+            while(aIter.IsMore())
+            {
+                E3dObject* p3DObj = (E3dObject*)aIter.Next();
+                Matrix4D* pNew = new Matrix4D;
+                *pNew = p3DObj->GetTransform();
+                aObjTrans.Insert(pNew, LIST_APPEND);
+            }
+
+            // reset object transformations
+            aIter.Reset();
+            while(aIter.IsMore())
+            {
+                E3dObject* p3DObj = (E3dObject*)aIter.Next();
+                p3DObj->NbcResetTransform();
+            }
+
+            // reset scene transformation and make a complete recalc
+            pScene->NbcResetTransform();
+
+            // fill old camera from new parameters
+            Camera3D aCam(pScene->GetCamera());
+            const Volume3D& rVolume = pScene->GetBoundVolume();
+            double fW = rVolume.GetWidth();
+            double fH = rVolume.GetHeight();
+            double fCamPosZ =
+                (double)((const SfxUInt32Item&)pScene->GetItem(SDRATTR_3DSCENE_DISTANCE)).GetValue();
+            double fCamFocal =
+                (double)((const SfxUInt32Item&)pScene->GetItem(SDRATTR_3DSCENE_FOCAL_LENGTH)).GetValue();
+
+            aCam.SetAutoAdjustProjection(FALSE);
+            aCam.SetViewWindow(- fW / 2, - fH / 2, fW, fH);
+            Vector3D aLookAt;
+            Vector3D aCamPos(0.0, 0.0, fCamPosZ);
+            aCam.SetPosAndLookAt(aCamPos, aLookAt);
+            aCam.SetFocalLength(fCamFocal / 100.0);
+            aCam.SetDefaults(Vector3D(0.0, 0.0, fCamPosZ), aLookAt, fCamFocal / 100.0);
+            aCam.SetDeviceWindow(Rectangle(0, 0, fW, fH));
+
             // set at scene
-            B3dCamera& aCameraSet = pScene->GetCameraSet();
-            aCameraSet.SetViewportValues(aVRP, aVPN, aVUP);
+            pScene->SetCamera(aCam);
+
+            // set object transformations again at objects
+            aIter.Reset();
+            sal_uInt32 nIndex(0L);
+            while(aIter.IsMore())
+            {
+                E3dObject* p3DObj = (E3dObject*)aIter.Next();
+                Matrix4D* pMat = (Matrix4D*)aObjTrans.GetObject(nIndex++);
+                p3DObj->NbcSetTransform(*pMat);
+                delete pMat;
+            }
+
+            // set scene transformation again at scene
+            pScene->NbcSetTransform(aSceneTAR.maMat);
+            pScene->FitSnapRectToBoundVol();
+            pScene->NbcSetSnapRect(aSceneTAR.maRect);
         }
     }
     else

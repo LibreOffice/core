@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: aw $ $Date: 2000-12-06 11:45:47 $
+ *  last change: $Author: aw $ $Date: 2000-12-07 15:24:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,10 @@
 #include <tools/shl.hxx>    //
 #include "dialmgr.hxx"      // not nice, we need our own resources some day
 #include "dialogs.hrc"      //
+
+#ifndef _E3D_OBJ3D_HXX
+#include <obj3d.hxx>
+#endif
 
 using namespace ::osl;
 using namespace ::vos;
@@ -774,20 +778,25 @@ void SAL_CALL SvxShape::setPosition( const awt::Point& Position ) throw(uno::Run
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    if( pObj && pModel)
+    if( pObj && pModel )
     {
-        Rectangle aRect( getLogicRectHack(pObj) );
-        Point aLocalPos( Position.X, Position.Y );
-        ForceMetricToItemPoolMetric(aLocalPos);
+        // do NOT move 3D objects, this would change the homogen
+        // transformation matrix
+        if(!pObj->ISA(E3dCompoundObject))
+        {
+            Rectangle aRect( getLogicRectHack(pObj) );
+            Point aLocalPos( Position.X, Position.Y );
+            ForceMetricToItemPoolMetric(aLocalPos);
 
-        // Position ist absolut, relativ zum Anker stellen
-        aLocalPos -= pObj->GetAnchorPos();
+            // Position ist absolut, relativ zum Anker stellen
+            aLocalPos -= pObj->GetAnchorPos();
 
-        long nDX = aLocalPos.X() - aRect.Left();
-        long nDY = aLocalPos.Y() - aRect.Top();
+            long nDX = aLocalPos.X() - aRect.Left();
+            long nDY = aLocalPos.Y() - aRect.Top();
 
-        pObj->Move( Size( nDX, nDY ) );
-        pModel->SetChanged();
+            pObj->Move( Size( nDX, nDY ) );
+            pModel->SetChanged();
+        }
     }
 
     aPosition = Position;
