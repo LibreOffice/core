@@ -2,9 +2,9 @@
  #
  #  $RCSfile: makefile.mk,v $
  #
- #  $Revision: 1.17 $
+ #  $Revision: 1.18 $
  #
- #  last change: $Author: fs $ $Date: 2001-05-29 10:02:53 $
+ #  last change: $Author: fs $ $Date: 2001-06-19 11:00:02 $
  #
  #  The Contents of this file are made available subject to the terms of
  #  either of the following licenses
@@ -75,6 +75,7 @@ TARGET=uidlg
 BMP_IN=$(PRJ)$/res
 
 SRCFILES =	\
+        directsql.src	\
         missingdocdlg.src	\
         doclinkdialog.src	\
         AdabasStat.src	\
@@ -82,7 +83,6 @@ SRCFILES =	\
         indexdialog.src	\
         RelationDlg.src	\
         adtabdlg.src	\
-        dlgtext.src		\
         dlgsave.src		\
         queryorder.src	\
         queryfilter.src	\
@@ -97,6 +97,7 @@ SRCFILES =	\
 # ... object files ............................
 
 SLOFILES=	\
+        $(SLO)$/directsql.obj	\
         $(SLO)$/generalpage.obj	\
         $(SLO)$/tablespage.obj	\
         $(SLO)$/missingdocdlg.obj	\
@@ -107,7 +108,6 @@ SLOFILES=	\
         $(SLO)$/indexdialog.obj	\
         $(SLO)$/RelationDlg.obj	\
         $(SLO)$/adtabdlg.obj	\
-        $(SLO)$/dlgtext.obj		\
         $(SLO)$/dlgsave.obj		\
         $(SLO)$/dlgsize.obj		\
         $(SLO)$/dlgattr.obj		\
@@ -124,6 +124,7 @@ SLOFILES=	\
         $(SLO)$/dbfindex.obj
 
 EXCEPTIONSFILES=	\
+        $(SLO)$/directsql.obj	\
         $(SLO)$/generalpage.obj	\
         $(SLO)$/tablespage.obj	\
         $(SLO)$/doclinkdialog.obj	\
@@ -151,55 +152,6 @@ EXCEPTIONSFILES=	\
  #########################################################################
  # history:
  #	$Log: not supported by cvs2svn $
- #	Revision 1.16  2001/05/23 14:16:42  oj
- #	#87149# new helpids
- #	
- #	Revision 1.15  2001/04/26 11:40:21  fs
- #	file is alive, again - added support for data source associated bookmarks
- #	
- #	Revision 1.14  2001/03/27 08:05:56  oj
- #	impl new page for adabas
- #	
- #	Revision 1.13  2001/03/16 16:23:07  fs
- #	added index design related files
- #	
- #	Revision 1.12  2001/02/28 10:03:45  oj
- #	new relation dialog
- #	
- #	Revision 1.11  2001/02/05 09:50:30  fs
- #	dlgerr is obsolete - sqlmessage already covers this
- #	
- #	Revision 1.10  2001/02/05 09:15:31  oj
- #	one new file
- #	
- #	Revision 1.9  2001/01/26 16:14:29  fs
- #	+commonpages / +detailpages
- #	
- #	Revision 1.8  2001/01/09 16:06:51  oj
- #	#81232#
- #	
- #	Revision 1.7  2000/12/12 12:47:56  oj
- #	#80933# some new files
- #	
- #	Revision 1.6  2000/11/10 16:12:36  oj
- #	new files
- #	
- #	Revision 1.5  2000/10/26 18:07:11  fs
- #	added parameterdialog source/resource
- #	
- #	Revision 1.4  2000/10/25 13:01:00  fs
- #	moved three files to ..\uno
- #	
- #	Revision 1.3  2000/10/24 13:03:00  fs
- #	some new file - added functionality for browsing system data sources
- #	
- #	Revision 1.2  2000/10/09 12:39:29  fs
- #	some (a lot of) new imlpementations - still under development
- #	
- #	Revision 1.1  2000/10/05 10:06:31  fs
- #	initial checkin
- #	
- #
  #	Revision 1.0 20.09.00 10:58:55  fs
  ########################################################################/
 
