@@ -2,9 +2,9 @@
  *
  *  $RCSfile: padialog.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:22:07 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:45:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,18 +129,14 @@ PADialog* PADialog::Create( Window* pParent, BOOL bAdmin )
 
 PADialog::PADialog( Window* pParent, BOOL bAdmin ) :
         ModalDialog( pParent, PaResId( RID_PADIALOG ) ),
-        m_aAddPB( this, PaResId( RID_PA_BTN_ADD ) ),
-        m_aCancelButton( this, PaResId( RID_PA_BTN_CANCEL ) ),
         m_aDevicesLB( this, PaResId( RID_PA_LB_DEV ) ),
-        m_aStdPB( this, PaResId( RID_PA_BTN_STD ) ),
-        m_aRemPB( this, PaResId( RID_PA_BTN_DEL ) ),
-        m_aPrintersFL( this, PaResId( RID_PA_FL_PRINTERS ) ),
-        m_aFontsPB( this, PaResId( RID_PA_BTN_FONTS ) ),
         m_aConfPB( this, PaResId( RID_PA_BTN_CONF ) ),
         m_aRenamePB( this, PaResId( RID_PA_BTN_RENAME ) ),
+        m_aStdPB( this, PaResId( RID_PA_BTN_STD ) ),
+        m_aRemPB( this, PaResId( RID_PA_BTN_DEL ) ),
         m_aTestPagePB( this, PaResId( RID_PA_TESTPAGE ) ),
+        m_aPrintersFL( this, PaResId( RID_PA_FL_PRINTERS ) ),
         m_aDriverTxt( this, PaResId( RID_PA_TXT_DRIVER ) ),
-        m_aSepButtonFL( this, PaResId( RID_PA_FL_SEPBUTTON ) ),
         m_aDriver( this, PaResId( RID_PA_TXT_DRIVER_STRING ) ),
         m_aLocationTxt( this, PaResId( RID_PA_TXT_LOCATION ) ),
         m_aLocation( this, PaResId( RID_PA_TXT_LOCATION_STRING ) ),
@@ -148,13 +144,17 @@ PADialog::PADialog( Window* pParent, BOOL bAdmin ) :
         m_aCommand( this, PaResId( RID_PA_TXT_COMMAND_STRING ) ),
         m_aCommentTxt( this, PaResId( RID_PA_TXT_COMMENT ) ),
         m_aComment( this, PaResId( RID_PA_TXT_COMMENT_STRING ) ),
+        m_aSepButtonFL( this, PaResId( RID_PA_FL_SEPBUTTON ) ),
+        m_aAddPB( this, PaResId( RID_PA_BTN_ADD ) ),
+        m_aFontsPB( this, PaResId( RID_PA_BTN_FONTS ) ),
+        m_aCancelButton( this, PaResId( RID_PA_BTN_CANCEL ) ),
         m_aDefPrt( PaResId( RID_PA_STR_DEFPRT ) ),
         m_aRenameStr( PaResId( RID_PA_STR_RENAME ) ),
+        m_pPrinter( 0 ),
+        m_rPIManager( PrinterInfoManager::get() ),
         m_aPrinterImg( Bitmap( PaResId( RID_BMP_SMALL_PRINTER ) ), Color( 0xff, 0x00, 0xff ) ),
         m_aFaxImg( Bitmap( PaResId( RID_BMP_SMALL_FAX ) ), Color( 0xff, 0x00, 0xff ) ),
-        m_aPdfImg( Bitmap( PaResId( RID_BMP_SMALL_PDF ) ), Color( 0xff, 0x00, 0xff ) ),
-        m_pPrinter( 0 ),
-        m_rPIManager( PrinterInfoManager::get() )
+        m_aPdfImg( Bitmap( PaResId( RID_BMP_SMALL_PDF ) ), Color( 0xff, 0x00, 0xff ) )
 {
     Init();
     FreeResource();
@@ -293,7 +293,7 @@ static Point project( const Point& rPoint )
     // transform planar coordinates to 3d
     double x = rPoint.X();
     double y = rPoint.Y();
-    double z = 0;
+    //double z = 0;
 
     // rotate around X axis
     double x1 = x;
@@ -302,10 +302,10 @@ static Point project( const Point& rPoint )
 
     // rotate around Z axis
     double x2 = x1 * cos( angle_z ) + y1 * sin( angle_z );
-    double y2 = y1 * cos( angle_z ) - x1 * sin( angle_z );
+    //double y2 = y1 * cos( angle_z ) - x1 * sin( angle_z );
     double z2 = z1;
 
-    return Point( x2, z2 );
+    return Point( (sal_Int32)x2, (sal_Int32)z2 );
 }
 
 static Color approachColor( const Color& rFrom, const Color& rTo )
@@ -362,8 +362,6 @@ void PADialog::PrintTestPage()
 {
     if( m_pPrinter ) // already printing; user pressed button twice
         return;
-
-    rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
 
     String sPrinter( getSelectedDevice() );
 
@@ -542,11 +540,11 @@ void PADialog::PrintTestPage()
         m_pPrinter->DrawLine( project( aP1 ) + aCenter,
                              project( aP2 ) + aCenter,
                              aLineInfo );
-        aPoint.X() = (((double)aP1.X())*cosd - ((double)aP1.Y())*sind)*factor;
-        aPoint.Y() = (((double)aP1.Y())*cosd + ((double)aP1.X())*sind)*factor;
+        aPoint.X() = (int)((((double)aP1.X())*cosd - ((double)aP1.Y())*sind)*factor);
+        aPoint.Y() = (int)((((double)aP1.Y())*cosd + ((double)aP1.X())*sind)*factor);
         aP1 = aPoint;
-        aPoint.X() = (((double)aP2.X())*cosd - ((double)aP2.Y())*sind)*factor;
-        aPoint.Y() = (((double)aP2.Y())*cosd + ((double)aP2.X())*sind)*factor;
+        aPoint.X() = (int)((((double)aP2.X())*cosd - ((double)aP2.Y())*sind)*factor);
+        aPoint.Y() = (int)((((double)aP2.Y())*cosd + ((double)aP2.X())*sind)*factor);
         aP2 = aPoint;
     }
 #if (OSL_DEBUG_LEVEL > 1) || defined DBG_UTIL
@@ -617,11 +615,8 @@ void PADialog::ConfigureDevice()
 
 void PADialog::RenameDevice()
 {
-    rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
-
     String aPrinter( getSelectedDevice() );
     OUString aOldPrinter( aPrinter );
-    int nSelectEntryPos = m_aDevicesLB.GetSelectEntryPos();
 
     if( ! aPrinter.Len() )
         return;
@@ -656,8 +651,6 @@ void PADialog::RenameDevice()
 
 void PADialog::UpdateDevice()
 {
-    rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
-
     m_aDevicesLB.Clear();
 
     m_rPIManager.listPrinters( m_aPrinters );
