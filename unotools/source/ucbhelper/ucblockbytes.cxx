@@ -130,9 +130,10 @@ public:
 
 class CommandThread_Impl : public ::vos::OThread
 {
+    Reference< XContent >               m_xContent;
     Reference< XInteractionHandler >    m_xInteract;
     Reference< XProgressHandler >       m_xProgress;
-    ::ucb::Content          m_aContent;
+    ::ucb::Content*         m_pContent;
 
     OpenCommandArgument2    m_aArgument;
     UcbLockBytesRef         m_xLockBytes;
@@ -148,14 +149,28 @@ public:
                                         Reference < XProgressHandler > xProgress,
                                         UCB_Link_HelperRef xLink )
                         : m_xInteract( xInteract )
+                        , m_xContent( xContent )
                         , m_xProgress( xProgress )
-                        , m_aContent( xContent, new UcbTaskEnvironment( m_xInteract, m_xProgress ) )
                         , m_aArgument( rArg )
                         , m_xLink( xLink )
                         , m_bCanceled( sal_False )
                         , m_bRunning( sal_False )
                         , m_bSimple( sal_False )
+                    {
+                        m_pContent = new ::ucb::Content( xContent, new UcbTaskEnvironment( m_xInteract, m_xProgress ) );
+                    }
+
+                    CommandThread_Impl( UcbLockBytesRef xLockBytes )
+                        : m_xLockBytes( xLockBytes )
+                        , m_bCanceled( sal_False )
+                        , m_bRunning( sal_False )
+                        , m_bSimple( sal_True )
                     {}
+
+                    ~CommandThread_Impl()
+                    {
+                        delete m_pContent;
+                    }
 
     virtual void SAL_CALL   onTerminated();
     virtual void SAL_CALL   run();
@@ -183,9 +198,11 @@ void CommandThread_Impl::run()
         bool bException = false;
         bool bAborted = false;
 
+        m_pContent = new ::ucb::Content( m_xContent, new UcbTaskEnvironment( m_xInteract, m_xProgress ) );
+
         try
         {
-            aResult = m_aContent.executeCommand( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("open") ), aParam );
+            aResult = m_pContent->executeCommand( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("open") ), aParam );
         }
         catch ( CommandAbortedException )
         {
@@ -227,7 +244,7 @@ void CommandThread_Impl::Cancel()
 
     if ( m_bRunning && !m_bSimple )
     {
-        m_aContent.abortCommand();
+        m_pContent->abortCommand();
         m_bRunning = sal_False;
     }
 }
@@ -477,7 +494,7 @@ UcbTaskEnvironment::UcbTaskEnvironment( const Reference< XInteractionHandler >& 
 {
 }
 
-UcbLockBytesRef UcbLockBytes::CreateInputLockBytes( Reference < XContent > xContent, UCB_Link_HelperRef xLink )
+UcbLockBytesRef UcbLockBytes::CreateInputLockBytes( const Reference < XContent > xContent, UCB_Link_HelperRef xLink )
 {
     if( !xContent.is() )
         return NULL;;
@@ -511,6 +528,92 @@ UcbLockBytesRef UcbLockBytes::CreateInputLockBytes( Reference < XContent > xCont
     xLockBytes->setCommandThread_Impl( (CommandThread_Impl*) pThread );
     pThread->create();
 
-    return UcbLockBytesRef( xLockBytes );
+    return xLockBytes;
 }
+
+UcbLockBytesRef UcbLockBytes::CreateInputLockBytes( const Reference< XInputStream > xInputStream,
+                                                 UCB_Link_HelperRef xLink )
+{
+    if( !xInputStream.is() )
+        return NULL;;
+
+    String aCmd( RTL_CONSTASCII_USTRINGPARAM( "Open" ) );
+    UcbLockBytesRef xLockBytes = new UcbLockBytes( xLink );
+    Reference < XActiveDataSink > xSink = new UcbDataSink_Impl( xLockBytes );
+
+    xLockBytes->setDontClose_Impl();
+    xLockBytes->setInputStream_Impl( xInputStream );
+
+    // we have to create a thread here so ::terminate() will be called
+    // asynchronously
+    ::vos::OThread *pThread = new CommandThread_Impl( xLockBytes );
+    pThread->create();
+
+    return xLockBytes;
+}
+
+void UCB_Link_Helper::SetDoneLink( const Link& rLink )
+{
+    ::vos::OGuard aGuard( maMutex );
+    mbSet = TRUE;
+    maDoneLink = rLink;
+}
+
+//----------------------------------------------------------------------------
+void UCB_Link_Helper::SetDataAvailLink( const Link& rLink )
+{
+    ::vos::OGuard aGuard( maMutex );
+    mbSet = TRUE;
+    maDataAvailLink = rLink;
+}
+
+//----------------------------------------------------------------------------
+void UCB_Link_Helper::SetCancelLink( const Link& rLink )
+{
+    ::vos::OGuard aGuard( maMutex );
+    mbSet = TRUE;
+    maCancelLink = rLink;
+}
+
+//----------------------------------------------------------------------------
+void UCB_Link_Helper::Done()
+{
+    ::vos::OGuard aGuard( maMutex );
+
+    if ( maDoneLink.IsSet() )
+        maDoneLink.Call( 0 );
+}
+
+//----------------------------------------------------------------------------
+void UCB_Link_Helper::DataAvail()
+{
+    ::vos::OGuard aGuard( maMutex );
+
+    if ( maDataAvailLink.IsSet() )
+        maDataAvailLink.Call( 0 );
+}
+
+//----------------------------------------------------------------------------
+void UCB_Link_Helper::Cancel()
+{
+    ::vos::OGuard aGuard( maMutex );
+
+    if ( maCancelLink.IsSet() )
+        maCancelLink.Call( 0 );
+}
+
+//----------------------------------------------------------------------------
+void UCB_Link_Helper::Clear()
+{
+    ::vos::OGuard aGuard( maMutex );
+
+    if ( mbSet )
+    {
+        maDoneLink = Link();
+        maDataAvailLink = Link();
+        maCancelLink = Link();
+        mbSet = FALSE;
+    }
+}
+
 

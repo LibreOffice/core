@@ -76,7 +76,8 @@ protected:
 
 public:
 
-    static UcbLockBytesRef  CreateInputLockBytes( NS_UNO::Reference < NS_UCB::XContent > xContent, UCB_Link_HelperRef xLinkList );
+    static UcbLockBytesRef  CreateInputLockBytes( const NS_UNO::Reference < NS_UCB::XContent > xContent, UCB_Link_HelperRef xLinkList );
+    static UcbLockBytesRef  CreateInputLockBytes( const NS_UNO::Reference < NS_IO::XInputStream > xContent, UCB_Link_HelperRef xLinkList );
 
                             UcbLockBytes( UCB_Link_HelperRef xLink )
                                 : m_xInputStream (NULL)
