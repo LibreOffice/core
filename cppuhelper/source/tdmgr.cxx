@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdmgr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-30 09:03:53 $
+ *  last change: $Author: dbo $ $Date: 2001-05-31 08:41:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -639,7 +639,7 @@ static void SAL_CALL typelib_callback(
             {
             }
         }
-#ifdef DEBUG
+#ifdef _DEBUG
         if (! *ppRet)
         {
             OString aTypeName( OUStringToOString( pTypeName, RTL_TEXTENCODING_ASCII_US ) );
@@ -693,3 +693,4 @@ sal_Bool SAL_CALL installTypeDescriptionManager(
 }
 
 } // end namespace cppu
+
