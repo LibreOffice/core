@@ -1,0 +1,212 @@
+/*************************************************************************
+ *
+ *  $RCSfile: relation.src,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: oj $ $Date: 2001-02-28 10:06:13 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the License); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an AS IS basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef _DBU_RESOURCE_HRC_
+#include "dbu_resource.hrc"
+#endif
+#ifndef _GLOBLMN_HRC
+#include <svx/globlmn.hrc>
+#endif
+#ifndef _CNTIDS_HRC
+#include <sfx2/cntids.hrc>
+#endif
+#ifndef DBACCESS_UI_BROWSER_ID_HXX
+#include "browserids.hxx"
+#endif
+#ifndef _DBA_DBACCESS_HELPID_HRC_
+#include "dbaccess_helpid.hrc"
+#endif
+#ifndef DBAUI_TOOLBOX_HXX
+#include "toolbox.hrc"
+#endif
+
+
+ToolBox RID_BRW_REALTIONDESIGN_TOOLBOX
+{
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( 3 , 1 ) ;
+    Size = MAP_APPFONT ( 200 , 14 ) ;
+    OutputSize = TRUE ;
+    Align = BOXALIGN_TOP ;
+    ItemImageList = RID_DEFAULTIMAGELIST_SC ;
+    HideWhenDeactivate = TRUE ;
+    HelpId = HID_TLB_RELATIONDESIGN ;
+
+    ItemList =
+    {
+        ToolBoxItem
+        {
+            Identifier = ID_BROWSER_EDITDOC ;
+            HelpId = ID_BROWSER_EDITDOC ;
+            Text = "Bearbeiten" ;
+            Text [ ENGLISH ] = "Edit" ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = ID_BROWSER_SAVEDOC ;
+            HelpId = ID_BROWSER_SAVEDOC ;
+            Text = "Speichern" ;
+            Text [ ENGLISH ] = "Save" ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_PRINTDOCDIRECT ;
+            HelpId = SID_PRINTDOCDIRECT ;
+            Hide = TRUE;
+            Text = "Drucken" ;
+            Text [ ENGLISH ] = "Print" ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = ID_BROWSER_UNDO ;
+            HelpId = ID_BROWSER_UNDO ;
+            Text = "R¸ckg‰ngig" ;
+            Text [ ENGLISH ] = "Undo" ;
+        };
+        ToolBoxItem
+        {
+            Identifier = ID_BROWSER_REDO ;
+            HelpId = ID_BROWSER_REDO ;
+            Text = "Wiederherstellen" ;
+            Text [ ENGLISH ] = "Redo" ;
+
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = ID_BROWSER_ADDTABLE;
+            HelpId = ID_BROWSER_ADDTABLE ;
+            Text = "Tabellen hinzuf¸gen ..." ;
+            Text [ ENGLISH ] = "Add tables ..." ;
+        };
+        ToolboxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR;
+        };
+        ToolboxItem
+        {
+            Identifier = ID_REALTION_ADD_RELATION ;
+            HelpId = ID_REALTION_ADD_RELATION ;
+            Text = "neue Relation ..." ;
+            Text [ ENGLISH ] = "new relation ..." ;
+        };
+/*      ToolBoxItem
+        {
+            Identifier = SID_ZOOM_OUT ;
+            HelpId = SID_ZOOM_OUT ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ZOOM_IN ;
+            HelpId = SID_ZOOM_IN ;
+        };
+*/
+    };
+};
+
+String STR_QUERY_REL_EDIT_RELATION
+{
+    Text = "Diese Relation existiert bereits. Mˆchten Sie sie bearbeiten?" ;
+    Text [ ENGLISH ] = "This relation already exsits. Do you want to edit it?" ;
+    Text [ english_us ] = "This relation already exsits. Do you want to edit it?" ;
+    Text[ portuguese ] = "Esta relaÁ„o j· existe. Editar?";
+    Text[ russian ] = "›ÚÓ ÓÚÌÓ¯ÂÌËÂ ÛÊÂ ÒÛ˘ÂÒÚ‚ÛÂÚ. ¬˚ ıÓÚËÚÂ Â„Ó ËÁÏÂÌËÚ¸?";
+    Text[ greek ] = "« Û˜›ÛÁ ·ıÙﬁ ı‹Ò˜ÂÈ ﬁ‰Á. »›ÎÂÙÂ Ì· ÙÁÌ ÂÂÓÂÒ„·ÛÙÂﬂÙÂ;";
+    Text[ dutch ] = "Deze relatie bestaat reeds. Wilt u deze bewerken.";
+    Text[ french ] = "Cette relation existe dÈj‡. Souhaitez-vous l'Èditer ?";
+    Text[ spanish ] = "Ya existe esta relaciÛn. øDesea editarla?";
+    Text[ italian ] = "Questa relazione esiste gi‡. Volete modificarla?";
+    Text[ danish ] = "Denne ralation eksisterer allerede. Vil du redigere den?";
+    Text[ swedish ] = "Den h‰r relationen finns redan. Vill Du bearbeta den?";
+    Text[ polish ] = "Relacja juø istnieje. Czy chcesz jπ edytowaÊ?";
+    Text[ portuguese_brazilian ] = "This relation already exsits. Do you want to edit it?";
+    Text[ japanese ] = "Ç±ÇÃÿ⁄∞ºÆ›ÇÕÇ∑Ç≈Ç…Ç†ÇËÇ‹Ç∑ÅBÇ±ÇÍÇï“èWÇµÇ‹Ç∑Ç©?";
+    Text[ korean ] = "¿Ã ∞¸∞Ë¥¬ ¿ÃπÃ ¿÷Ω¿¥œ¥Ÿ. ¿Ã∞Õ¿ª ∆Ì¡˝«œΩ√∞⁄Ω¿¥œ±Ó ?";
+    Text[ chinese_simplified ] = "’‚∏ˆπÿœµ“—æ≠¥Ê‘⁄°£ƒ˙œÎ±‡º≠À¸¬£ø";
+    Text[ chinese_traditional ] = "≥o≠”√ˆ´Y§w∏g¶s¶b°C≠nΩsøË•¶°H";
+    Text[ arabic ] = "Â–Â «·⁄·«ﬁ… „ÊÃÊœ… »«·›⁄·. Â·  —Ìœ  Õ—Ì—Â«ø";
+    Text[ turkish ] = "Bu ili˛ki mevcut durumda. D¸zenlemek istiyor musunuz?";
+};
+String STR_RELATIONDESIGN
+{
+    Text = "Relationenentwurf" ;
+    Text [ English ] = "Relation design" ;
+    Text [ english_us ] = "Relation design" ;
+};
+String STR_RELATIONDESIGN_NOT_AVAILABLE
+{
+    Text = "Die Datenbank unterst¸tzt keine Relationen. Der Relationenenwurf wird wieder geschlossen!" ;
+    Text [ English ] = "The database doesn't support any relations. The relation design will be closed!" ;
+    Text [ english_us ] = "The database doesn't support any relations. The relation design will be closed!" ;
+};
+
+
+
