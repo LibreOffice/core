@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapdlg.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2002-07-05 14:53:32 $
+ *  last change: $Author: cl $ $Date: 2002-07-11 10:56:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,6 +176,8 @@ class SvxIMapDlg : public SfxModelessDialog // SfxFloatingWindow
     FixedText           maFtTarget;
     ComboBox            maCbbTarget;
     StatusBar           aStbStatus;
+    ImageList           maImageList;
+    ImageList           maImageListH;
 
     Size                aLastSize;
     IMapWindow*         pIMapWnd;
@@ -229,6 +231,8 @@ public:
 
     virtual void        KeyInput( const KeyEvent& rKEvt );
 
+    virtual void DataChanged( const DataChangedEvent& rDCEvt );
+    void ApplyImageList();
 };
 
 
