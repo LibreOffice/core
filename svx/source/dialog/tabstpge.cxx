@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabstpge.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2002-04-29 13:27:18 $
+ *  last change: $Author: os $ $Date: 2002-05-27 10:44:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,9 @@
 
 #ifndef _SFXMODULE_HXX
 #include <sfx2/module.hxx>
+#endif
+#ifndef _SVTOOLS_CJKOPTIONS_HXX
+#include <svtools/cjkoptions.hxx>
 #endif
 
 #ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
@@ -185,6 +188,13 @@ SvxTabulatorTabPage::SvxTabulatorTabPage( Window* pParent,
     bCheck      ( FALSE )
 
 {
+    SvtCJKOptions aCJKOptions;
+    if(aCJKOptions.IsAsianTypographyEnabled())
+    {
+        aLeftTab  .SetText(String(ResId(   ST_LEFTTAB_ASIAN )));
+        aRightTab .SetText(String(ResId(   ST_RIGHTTAB_ASIAN )));
+    }
+
     // diese Page braucht ExchangeSupport
     SetExchangeSupport();
 
