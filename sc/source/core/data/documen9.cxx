@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen9.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 09:20:02 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:44:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
 #include <com/sun/star/uno/Reference.hxx>
 #endif
@@ -238,7 +237,8 @@ void ScDocument::TransferDrawPage(ScDocument* pSrcDoc, SCTAB nSrcPos, SCTAB nDes
                         {
                             ScChartArray aArray( this, *pChartData );   // parses range description
                             ScRangeListRef xRanges = aArray.GetRangeList();
-                            if ( xRanges.Is() )
+                            // #i37941# have to check IsValid, to skip a chart with its own data
+                            if ( aArray.IsValid() && xRanges.Is() )
                             {
                                 ScRangeListRef xNewRanges = new ScRangeList( *xRanges );
                                 if ( lcl_AdjustRanges( *xNewRanges,
