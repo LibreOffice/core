@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendar_gregorian.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: khong $ $Date: 2002-08-06 19:11:48 $
+ *  last change: $Author: er $ $Date: 2002-08-06 19:27:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@
 #include <comphelper/processfactory.hxx>
 
 #include <stdio.h>
-#include <strings.h>
+#include <string.h>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
