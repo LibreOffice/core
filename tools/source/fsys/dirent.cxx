@@ -2,8 +2,8 @@
  *
  *  $RCSfile: dirent.cxx,v $
  *
- *  $Revision: 1.14 $
- *  last change: $Author: vg $ $Date: 2004-01-06 18:32:58 $
+ *  $Revision: 1.15 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 13:19:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2905,7 +2905,7 @@ BOOL DirEntry::MakeShortName( const String& rLongName, DirEntryKind eKind,
             {
                 // Name zusammensetzen
                 ByteString aTmpStr( aSName );
-                aTmpStr += n;
+                aTmpStr += ByteString::CreateFromInt32(n);
                 if ( aExt.Len() )
                     ( aTmpStr += '.' ) += aExt;
 
