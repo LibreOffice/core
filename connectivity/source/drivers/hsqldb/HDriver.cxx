@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HDriver.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:08:01 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:39:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,8 @@
 #ifndef CONNECTIVITY_HSQLDB_DRIVER_HXX
 #include "hsqldb/HDriver.hxx"
 #endif
+#include "hsqldb/HConnection.hxx"
+
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
@@ -78,6 +80,15 @@
 #include "TConnection.hxx"
 #endif
 #include "hsqldb/HStorageMap.hxx"
+#ifndef _COM_SUN_STAR_REFLECTION_XPROXYFACTORY_HPP_
+#include <com/sun/star/reflection/XProxyFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XDESKTOP_HPP_
+#include <com/sun/star/frame/XDesktop.hpp>
+#endif
+#ifndef CONNECTIVITY_HSQLDB_TERMINATELISTENER_HXX
+#include "HTerminateListener.hxx"
+#endif
 
 #ifndef _OSL_FILE_H_
 #include <osl/file.h>
@@ -91,8 +102,10 @@ namespace connectivity
     using namespace ::com::sun::star::sdbc;
     using namespace ::com::sun::star::sdbcx;
     using namespace ::com::sun::star::beans;
+    using namespace ::com::sun::star::frame;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::embed;
+    using namespace ::com::sun::star::reflection;
 
     namespace hsqldb
     {
@@ -226,21 +239,41 @@ namespace connectivity
 
                 ::rtl::OUString sConnectURL(RTL_CONSTASCII_USTRINGPARAM("jdbc:hsqldb:"));
                 sConnectURL += sSystemPath.copy(0,nIndex);
-                xConnection = xDriver->connect( sConnectURL, aConvertedProperties );
-                if ( xConnection.is() )
+
+
+                Reference<XConnection> xOrig = xDriver->connect( sConnectURL, aConvertedProperties );
+
+                if ( xOrig.is() )
                 {
                     OMetaConnection* pMetaConnection = NULL;
                     // now we have to set the URL to get the correct answer for metadata()->getURL()
-                    Reference< XUnoTunnel> xTunnel(xConnection,UNO_QUERY);
+                    Reference< XUnoTunnel> xTunnel(xOrig,UNO_QUERY);
                     if ( xTunnel.is() )
                     {
                         pMetaConnection = reinterpret_cast<OMetaConnection*>(xTunnel->getSomething( OMetaConnection::getUnoTunnelImplementationId() ));
                         if ( pMetaConnection )
                             pMetaConnection->setURL(url);
                     }
-                    Reference<XComponent> xComp(xConnection,UNO_QUERY);
-                    xComp->addEventListener(this);
-                    m_aConnections.push_back(TWeakPair(WeakReferenceHelper(xConnection),TWeakConnectionPair(sKey,pMetaConnection)));
+
+                    Reference<XComponent> xComp(xOrig,UNO_QUERY);
+                    if ( xComp.is() )
+                        xComp->addEventListener(this);
+                    m_aConnections.push_back(TWeakPair(WeakReferenceHelper(xOrig),TWeakConnectionPair(sKey,pMetaConnection)));
+
+                    // we want to close all connections when the office shuts down
+                    static Reference< XTerminateListener> s_xTerminateListener;
+                    if( !s_xTerminateListener.is() )
+                    {
+                        Reference< XDesktop > xDesktop( m_xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ), UNO_QUERY );
+
+                        if( xDesktop.is() )
+                        {
+                            s_xTerminateListener = new OConnectionController(this);
+                            xDesktop->addTerminateListener(s_xTerminateListener);
+                        }
+                    }
+                    Reference< XComponent> xIfc = new OConnectionWeakWrapper(xOrig,m_xFactory);
+                    xConnection.set(xIfc,UNO_QUERY);
                 }
             }
         }
@@ -250,6 +283,11 @@ namespace connectivity
     //--------------------------------------------------------------------
     sal_Bool SAL_CALL ODriverDelegator::acceptsURL( const ::rtl::OUString& url ) throw (SQLException, RuntimeException)
     {
+        { // initialize the java vm
+            ::rtl::Reference< jvmaccess::VirtualMachine > xTest = ::connectivity::getJavaVM(m_xFactory);
+            if ( !xTest.is() )
+                return sal_False;
+        }
         return url.compareToAscii("sdbc:embedded:hsqldb",sizeof("sdbc:embedded:hsqldb")) == 0;
     }
 
@@ -378,10 +416,35 @@ namespace connectivity
                 {
                 }
                 StorageContainer::revokeStorage(i->second.first);
+                m_aConnections.erase(i);
                 break;
             }
         }
     }
+    //------------------------------------------------------------------
+    void ODriverDelegator::shutdownConnections()
+    {
+        TWeakPairVector::iterator aEnd = m_aConnections.end();
+        for (TWeakPairVector::iterator i = m_aConnections.begin(); aEnd != i; ++i)
+        {
+            try
+            {
+                Reference<XConnection> xCon(i->first,UNO_QUERY);
+                if ( xCon.is() )
+                {
+                    Reference<XStatement> xStmt = xCon->createStatement();
+                    if ( xStmt.is() )
+                        xStmt->execute(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("shutdown")));
+                }
+            }
+            catch(Exception&)
+            {
+            }
+            StorageContainer::revokeStorage(i->second.first);
+        }
+        m_aConnections.clear();
+    }
+    //------------------------------------------------------------------
 //........................................................................
 }   // namespace connectivity
 //........................................................................
