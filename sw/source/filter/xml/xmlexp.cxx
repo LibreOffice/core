@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-18 12:39:02 $
+ *  last change: $Author: dvo $ $Date: 2001-01-19 19:58:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -376,7 +376,7 @@ void SwXMLExport::_ExportContent()
 
     } while( bContinue );
 #else
-    GetTextParagraphExport()->exportTrackedChanges();
+    GetTextParagraphExport()->exportTrackedChanges( sal_False );
     GetTextParagraphExport()->exportTextDeclarations();
     Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
     Reference < XText > xText = xTextDoc->getText();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexti.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-10 21:01:48 $
+ *  last change: $Author: dvo $ $Date: 2001-01-19 19:58:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ public:
 
 
     // redlining helper methods
-    // (override to provide the real implementation)
+    // (here is the real implementation)
     virtual void RedlineAdd(
         const ::rtl::OUString& rType,       /// redline type (insert, del,... )
         const ::rtl::OUString& rId,         /// use to identify this redline
@@ -107,14 +107,14 @@ public:
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::text::XTextCursor> RedlineCreateText(
             ::com::sun::star::uno::Reference<   /// needed to get the document
-                    ::com::sun::star::text::XTextCursor> xOldCursor,
+                    ::com::sun::star::text::XTextCursor> & rOldCursor,
             const ::rtl::OUString& rId);    /// ID used to RedlineAdd() call
     virtual void RedlineSetCursor(
-        const ::rtl::OUString& rId,     /// ID used to RedlineAdd() call
-        sal_Bool bStart,                /// start or end Cursor
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::text::XTextRange> & rRange);
-
+        const ::rtl::OUString& rId,         /// ID used to RedlineAdd() call
+        sal_Bool bStart,                    /// start or end Cursor
+        sal_Bool bIsOutsideOfParagraph);
+    virtual void RedlineAdjustStartNodeCursor(
+        sal_Bool bStart);
 };
 
 #endif  //  _XMLTEXTI_HXX

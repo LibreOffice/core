@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexti.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-10 21:01:48 $
+ *  last change: $Author: dvo $ $Date: 2001-01-19 19:58:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,23 +233,23 @@ void SwXMLTextImportHelper::RedlineAdd(
     const OUString& rComment,
     const util::DateTime& rDateTime)
 {
+    // create redline helper on demand
     if (NULL == pRedlineHelper)
-        pRedlineHelper = new XMLRedlineImportHelper();
+        pRedlineHelper = new XMLRedlineImportHelper(IsInsertMode());
 
     pRedlineHelper->Add(rType, rId, rAuthor, rComment, rDateTime);
 }
 
 Reference<XTextCursor> SwXMLTextImportHelper::RedlineCreateText(
-    Reference<XTextCursor> xOldCursor,
+    Reference<XTextCursor> & rOldCursor,
     const OUString& rId)
 {
     Reference<XTextCursor> xRet;
 
     if (NULL != pRedlineHelper)
     {
-        xRet = pRedlineHelper->CreateRedlineTextSection(xOldCursor, rId);
+        xRet = pRedlineHelper->CreateRedlineTextSection(rOldCursor, rId);
     }
-    // else: NOOP
 
     return xRet;
 }
@@ -257,13 +257,23 @@ Reference<XTextCursor> SwXMLTextImportHelper::RedlineCreateText(
 void SwXMLTextImportHelper::RedlineSetCursor(
     const OUString& rId,
     sal_Bool bStart,
-    Reference<XTextRange> & rRange)
+    sal_Bool bIsOutsideOfParagraph)
 {
     if (NULL != pRedlineHelper)
+        pRedlineHelper->SetCursor(rId, bStart, GetCursor()->getStart(),
+                                  bIsOutsideOfParagraph);
+    // else: ignore redline (wasn't added before, else we'd have a helper)
+}
+
+void SwXMLTextImportHelper::RedlineAdjustStartNodeCursor(
+    sal_Bool bStart)
+{
+    OUString& rId = GetOpenRedlineId();
+    if ((NULL != pRedlineHelper) && (rId.getLength() > 0))
     {
-        pRedlineHelper->SetCursor(rId, bStart, rRange);
+        pRedlineHelper->AdjustStartNodeCursor(rId, bStart,
+                                              GetCursor()->getStart());
+        ResetOpenRedlineId();
     }
-    // else: NOOP
-    // (redline needs to be RedlineAdd() (which creates the pRedlineHelper)
-    // before, so without pRedlineHelper this is a NOOP anyway
+    // else: ignore redline (wasn't added before, or no open redline ID
 }

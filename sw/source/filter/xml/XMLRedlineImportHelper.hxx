@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLRedlineImportHelper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-10 21:01:48 $
+ *  last change: $Author: dvo $ $Date: 2001-01-19 19:58:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@ class SwDoc;
 namespace com { namespace sun { namespace star {
     namespace text { class XTextCursor; }
     namespace text { class XTextRange; }
+    namespace frame { class XModel; }
 } } }
 
 
@@ -104,9 +105,17 @@ class XMLRedlineImportHelper
 
     RedlineMapType aRedlineMap;
 
+    /// if sal_True, no redlines should be inserted into document
+    /// (This typically happen when a document is loaded in 'insert'-mode.)
+    sal_Bool bIgnoreRedlines;
+
+    /// save the document (for destructor)
+    SwDoc* pSaveDoc;
+
 public:
 
-    XMLRedlineImportHelper();
+    XMLRedlineImportHelper(
+        sal_Bool bIgnoreRedlines);      /// ignore redlines mode
     virtual ~XMLRedlineImportHelper();
 
     /// create a redline object
@@ -130,9 +139,27 @@ public:
     /// Set start or end position for a redline in the text body.
     /// Accepts XTextRange objects.
     void SetCursor(
-        const ::rtl::OUString& rId,     /// ID used to RedlineAdd() call
+        const ::rtl::OUString& rId,     /// ID used in RedlineAdd() call
         sal_Bool bStart,                /// start or end Range
         ::com::sun::star::uno::Reference<   /// the actual XTextRange
+            ::com::sun::star::text::XTextRange> & rRange,
+        /// text range is (from an XML view) outside of a paragraph
+        /// (i.e. before a table)
+        sal_Bool bIsOusideOfParagraph);
+
+    /**
+     * Adjust the start (end) position for a redline that begins in a
+     * start node. It takes the cursor positions _inside_ the redlined
+     * element (e.g. section or table).
+     *
+     * We will do sanity checking of the given text range: It will
+     * only be considered valid if it points to the next text node
+     * after the position given in a previous SetCursor */
+    void AdjustStartNodeCursor(
+         const ::rtl::OUString& rId,        /// ID used in RedlineAdd() call
+        sal_Bool bStart,
+        /// XTextRange _inside_ a table/section
+        ::com::sun::star::uno::Reference<
             ::com::sun::star::text::XTextRange> & rRange);
 
 private:

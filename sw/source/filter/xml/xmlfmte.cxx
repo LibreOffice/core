@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfmte.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-08 09:44:55 $
+ *  last change: $Author: dvo $ $Date: 2001-01-19 19:58:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,6 +244,7 @@ void SwXMLExport::_ExportAutoStyles()
     GetPageExport()->collectAutoStyles( sal_False );
 
     // exported in _ExportContent
+    GetTextParagraphExport()->exportTrackedChanges( sal_True );
     Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
     Reference < XText > xText = xTextDoc->getText();
 

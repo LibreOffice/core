@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLRedlineImportHelper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-10 21:01:48 $
+ *  last change: $Author: dvo $ $Date: 2001-01-19 19:58:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,19 +106,162 @@
 #include <com/sun/star/text/XWordCursor.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
+#include <com/sun/star/frame/XModel.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_TEXT_XTEXTDOCUMENT_HPP_
+#include <com/sun/star/text/XTextDocument.hpp>
+#endif
+
 
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 using ::rtl::OUString;
+using ::com::sun::star::frame::XModel;
 using ::com::sun::star::text::XTextCursor;
 using ::com::sun::star::text::XTextRange;
 using ::com::sun::star::text::XText;
+using ::com::sun::star::text::XTextDocument;
 using ::com::sun::star::text::XWordCursor;
 using ::com::sun::star::lang::XUnoTunnel;
 // collision with tools/DateTime: use UNO DateTime as util::DateTime
 // using ::com::sun::star::util::DateTime;
+
+
+//
+// a few helper functions
+//
+
+SwDoc* lcl_GetDocViaTunnel( Reference<XTextCursor> & rCursor )
+{
+    Reference<XUnoTunnel> xTunnel( rCursor, UNO_QUERY);
+    DBG_ASSERT( xTunnel.is(), "missing XUnoTunnel for Cursor" );
+    SwXTextCursor* pSwXCursor =
+        (SwXTextCursor*)xTunnel->getSomething(SwXTextCursor::getUnoTunnelId());
+    DBG_ASSERT( NULL != pSwXCursor, "SwXTextCursor missing" );
+    return pSwXCursor->GetDoc();
+}
+
+SwDoc* lcl_GetDocViaTunnel( Reference<XTextRange> & rRange )
+{
+    Reference<XUnoTunnel> xTunnel(rRange, UNO_QUERY);
+    DBG_ASSERT(xTunnel.is(), "Can't tunnel XTextRange");
+    SwXTextRange *pRange =
+        (SwXTextRange*)xTunnel->getSomething(SwXTextRange::getUnoTunnelId());
+    DBG_ASSERT( NULL != pRange, "SwXTextRange missing" );
+    return pRange->GetDoc();
+}
+
+
+//
+// XTextRangeOrNodeIndexPosition: store a position into the text
+// *either* as an XTextRange or as an SwNodeIndex. The reason is that
+// me must store either pointers to StartNodes (because redlines may
+// start on start nodes) or to a text position, and there appears to
+// be no existing type that could do both. Things are complicated by
+// the matter that (e.g in section import) we delete a few characters,
+// which may cause bookmarks (as used by XTextRange) to be deleted.
+//
+
+class XTextRangeOrNodeIndexPosition
+{
+    Reference<XTextRange> xRange;
+    SwNodeIndex* pIndex;
+
+public:
+    XTextRangeOrNodeIndexPosition();
+    ~XTextRangeOrNodeIndexPosition();
+
+    void Set( Reference<XTextRange> & rRange );
+    void Set( SwNodeIndex& rIndex );
+    void SetAsNodeIndex( Reference<XTextRange> & rRange );
+
+    void GetPosition(SwPosition& rPos);
+    SwDoc* GetDoc();
+
+    sal_Bool IsValid();
+};
+
+XTextRangeOrNodeIndexPosition::XTextRangeOrNodeIndexPosition() :
+    xRange(NULL),
+    pIndex(NULL)
+{
+}
+
+XTextRangeOrNodeIndexPosition::~XTextRangeOrNodeIndexPosition()
+{
+    delete pIndex;
+}
+
+void XTextRangeOrNodeIndexPosition::Set( Reference<XTextRange> & rRange )
+{
+    xRange = rRange;
+    if (NULL != pIndex)
+    {
+        delete pIndex;
+        pIndex = NULL;
+    }
+}
+
+void XTextRangeOrNodeIndexPosition::Set( SwNodeIndex& rIndex )
+{
+    if (NULL != pIndex)
+        delete pIndex;
+
+    pIndex = new SwNodeIndex(rIndex);
+    xRange = NULL;
+}
+
+void XTextRangeOrNodeIndexPosition::SetAsNodeIndex(
+    Reference<XTextRange> & rRange )
+{
+    // XTextRange -> XTunnel -> SwXTextRange
+    SwDoc* pDoc = lcl_GetDocViaTunnel(rRange);
+
+    // SwXTextRange -> PaM
+    SwUnoInternalPaM aPaM(*pDoc);
+    sal_Bool bSuccess = SwXTextRange::XTextRangeToSwPaM( aPaM, rRange);
+    DBG_ASSERT(bSuccess, "illegal range");
+
+    // PaM -> Index
+    Set(aPaM.GetPoint()->nNode);
+}
+
+void XTextRangeOrNodeIndexPosition::GetPosition(SwPosition& rPos)
+{
+    DBG_ASSERT(IsValid(), "Can't get Position");
+
+    // create PAM from start cursor (if no node index is present)
+    if (NULL == pIndex)
+    {
+        SwUnoInternalPaM aUnoPaM(*GetDoc());
+        sal_Bool bSuccess = SwXTextRange::XTextRangeToSwPaM(aUnoPaM, xRange);
+        DBG_ASSERT(bSuccess, "illegal range");
+
+        rPos = *aUnoPaM.GetPoint();
+    }
+    else
+    {
+        rPos.nNode = *pIndex;
+        rPos.nContent.Assign( rPos.nNode.GetNode().GetCntntNode(), 0 );
+    }
+}
+
+SwDoc* XTextRangeOrNodeIndexPosition::GetDoc()
+{
+    DBG_ASSERT(IsValid(), "Can't get Doc");
+
+    return (NULL != pIndex) ? pIndex->GetNodes().GetDoc() : lcl_GetDocViaTunnel(xRange);
+}
+
+sal_Bool XTextRangeOrNodeIndexPosition::IsValid()
+{
+    return ( xRange.is() || (pIndex != NULL) );
+}
+
 
 
 //
@@ -139,10 +282,13 @@ public:
     OUString sComment;              /// change comment string
     util::DateTime aDateTime;       /// change DateTime
 
-    /// start pos of anchor (may be empty)
-    Reference<XTextRange> xAnchorStartPos;
-    /// end pos of anchor (may be empty)
-    Reference<XTextRange> xAnchorEndPos;
+    // each position can may be either empty, an XTextRange, or an SwNodeIndex
+
+    // start pos of anchor (may be empty)
+    XTextRangeOrNodeIndexPosition aAnchorStart;
+
+    // end pos of anchor (may be empty)
+    XTextRangeOrNodeIndexPosition aAnchorEnd;
 
     /// index of content node (maybe NULL)
     SwNodeIndex* pContentIndex;
@@ -156,8 +302,8 @@ RedlineInfo::RedlineInfo() :
     sAuthor(),
     sComment(),
     aDateTime(),
-    xAnchorStartPos(),
-    xAnchorEndPos(),
+    aAnchorStart(),
+    aAnchorEnd(),
     pContentIndex(NULL),
     pNextRedline(NULL)
 {
@@ -170,17 +316,19 @@ RedlineInfo::~RedlineInfo()
 }
 
 
-
 //
 // XMLRedlineImportHelper
 //
 
-XMLRedlineImportHelper::XMLRedlineImportHelper() :
-    sEmpty(),
-    sInsertion(RTL_CONSTASCII_USTRINGPARAM(sXML_insertion)),
-    sDeletion(RTL_CONSTASCII_USTRINGPARAM(sXML_deletion)),
-    sFormatChange(RTL_CONSTASCII_USTRINGPARAM(sXML_format_change)),
-    aRedlineMap()
+XMLRedlineImportHelper::XMLRedlineImportHelper(
+    sal_Bool bNoRedlinesPlease) :
+        sEmpty(),
+        sInsertion(RTL_CONSTASCII_USTRINGPARAM(sXML_insertion)),
+        sDeletion(RTL_CONSTASCII_USTRINGPARAM(sXML_deletion)),
+        sFormatChange(RTL_CONSTASCII_USTRINGPARAM(sXML_format_change)),
+        aRedlineMap(),
+        bIgnoreRedlines(bNoRedlinesPlease),
+        pSaveDoc(NULL)
 {
 }
 
@@ -196,6 +344,17 @@ XMLRedlineImportHelper::~XMLRedlineImportHelper()
         delete pInfo;
     }
     aRedlineMap.clear();
+
+    // set redline mode; first set bogus redline mode with
+    // SetRedlineMode_intern(), so that the subsequent
+    // SetRedlineMode() is forced to update the data structures
+    if (NULL != pSaveDoc)
+    {
+        // TODO: get "real" Redline mode from the saved document
+        sal_uInt16 nRedlineMode = REDLINE_ON | REDLINE_SHOW_MASK;
+        pSaveDoc->SetRedlineMode_intern(~nRedlineMode);
+        pSaveDoc->SetRedlineMode(nRedlineMode);
+    }
 }
 
 void XMLRedlineImportHelper::Add(
@@ -275,12 +434,7 @@ Reference<XTextCursor> XMLRedlineImportHelper::CreateRedlineTextSection(
     if (aRedlineMap.end() != aFind)
     {
         // get document from old cursor (via tunnel)
-        Reference<XUnoTunnel> xTunnel( xOldCursor, UNO_QUERY);
-        DBG_ASSERT( xTunnel.is(), "missing XUnoTunnel for Cursor" );
-        SwXTextCursor* pOldCursor = (SwXTextCursor*)xTunnel->getSomething(
-                                            SwXTextCursor::getUnoTunnelId());
-        DBG_ASSERT( NULL != pOldCursor, "SwXTextCursor missing" );
-        SwDoc* pDoc = pOldCursor->GetDoc();
+        SwDoc* pDoc = lcl_GetDocViaTunnel(xOldCursor);
 
         // create text section for redline
         SwTxtFmtColl *pColl = pDoc->GetTxtCollFromPool(RES_POOLCOLL_STANDARD);
@@ -313,20 +467,29 @@ Reference<XTextCursor> XMLRedlineImportHelper::CreateRedlineTextSection(
 void XMLRedlineImportHelper::SetCursor(
     const OUString& rId,
     sal_Bool bStart,
-    Reference<XTextRange> & rRange)
+    Reference<XTextRange> & rRange,
+    sal_Bool bIsOutsideOfParagraph)
 {
     RedlineMapType::iterator aFind = aRedlineMap.find(rId);
     if (aRedlineMap.end() != aFind)
     {
         // RedlineInfo found; now set Cursor
         RedlineInfo* pInfo = aFind->second;
-        if (bStart)
+        if (bIsOutsideOfParagraph)
         {
-            pInfo->xAnchorStartPos = rRange;
+            // outside of paragraph: remember SwNodeIndex
+            if (bStart)
+                pInfo->aAnchorStart.SetAsNodeIndex(rRange);
+            else
+                pInfo->aAnchorEnd.SetAsNodeIndex(rRange);
         }
         else
         {
-            pInfo->xAnchorEndPos = rRange;
+            // inside of a paragraph: use regular XTextRanges (bookmarks)
+            if (bStart)
+                pInfo->aAnchorStart.Set(rRange);
+            else
+                pInfo->aAnchorEnd.Set(rRange);
         }
 
         // if this Cursor was the last missing info, we insert the
@@ -342,9 +505,78 @@ void XMLRedlineImportHelper::SetCursor(
     // else: unknown Id -> ignore
 }
 
+void XMLRedlineImportHelper::AdjustStartNodeCursor(
+    const OUString& rId,        /// ID used in RedlineAdd() call
+    sal_Bool bStart,
+    Reference<XTextRange> & rRange)
+{
+    DBG_ASSERT(bStart,"End nodes not supported. Can't happen anyway, can it?");
+    if (!bStart)
+        return;
+
+    RedlineMapType::iterator aFind = aRedlineMap.find(rId);
+    if (aRedlineMap.end() != aFind)
+    {
+        // RedlineInfo found; now set Cursor
+        RedlineInfo* pInfo = aFind->second;
+
+        DBG_ASSERT(pInfo->aAnchorStart.IsValid(),
+                   "AdjustStartNodeCursor may only be called after SetCursor");
+        if (!pInfo->aAnchorStart.IsValid())
+            return;
+
+        SwDoc* pDoc = pInfo->aAnchorStart.GetDoc();
+
+
+        // OK, we have the redline. Now find the proper start node for
+        // the range and do the necessary sanity checking. If
+        // successful, set the start node as the new redline start.
+        SwUnoInternalPaM aUnoPaM(*pDoc);
+        sal_Bool bSuccess = SwXTextRange::XTextRangeToSwPaM(aUnoPaM, rRange);
+        DBG_ASSERT(bSuccess, "illegal range");
+
+        // adjustment only supported for tables and sections
+        SwNode& rNode = aUnoPaM.GetPoint()->nNode.GetNode();
+        SwNode* pTblNode = rNode.FindTableNode();
+        SwNode* pSctnNode = rNode.FindSectionNode();
+        if ((NULL != pTblNode) || (NULL != pSctnNode))
+        {
+            // find the closest
+            SwNode* pStartNode = NULL;
+            if (pTblNode == NULL)
+            {
+                pStartNode = pSctnNode;
+            }
+            else if (pSctnNode == NULL)
+            {
+                pStartNode = pTblNode;
+            }
+            else
+            {
+                pStartNode = (pSctnNode->GetIndex() > pTblNode->GetIndex()) ?
+                    pSctnNode : pTblNode;
+            }
+
+            // pStartNode is our start node candidate. Now check for distance
+            // between previous start node
+            // ...skip for now
+
+            SwNodeIndex aIndex(pStartNode->GetDoc()->GetNodes(),
+                               pStartNode->GetIndex());
+            pInfo->aAnchorStart.Set(aIndex);
+        }
+        // else: we are neither inside a table nor a section -> ignore
+
+
+    }
+    // else: can't find redline -> ignore
+}
+
+
 inline sal_Bool XMLRedlineImportHelper::IsReady(RedlineInfo* pRedline)
 {
-    return pRedline->xAnchorEndPos.is() && pRedline->xAnchorStartPos.is();
+    return ( pRedline->aAnchorEnd.IsValid() &&
+             pRedline->aAnchorStart.IsValid()   );
 }
 
 void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
@@ -352,55 +584,57 @@ void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
     DBG_ASSERT(NULL != pRedlineInfo, "need redline info");
     DBG_ASSERT(IsReady(pRedlineInfo), "redline info not complete yet!");
 
-    // get the document (from the XTextRange implementation object)
-    Reference<XUnoTunnel> xTunnel(pRedlineInfo->xAnchorStartPos, UNO_QUERY);
-    DBG_ASSERT(xTunnel.is(), "Can't tunnel -> can't get document");
-    SwXTextRange *pRange = (SwXTextRange*)xTunnel->getSomething(
-        SwXTextRange::getUnoTunnelId());
-    SwDoc *pDoc = pRange->GetDoc();
+    // Insert the Redline as described by pRedlineInfo into the
+    // document.  If we are in insert mode, don't insert any redlines
+    // (and delete 'deleted' inline redlines)
 
-    // create PAM from start+end cursors
-    SwUnoInternalPaM aStartPaM(*pDoc);
-    sal_Bool bSuccess =
-        SwXTextRange::XTextRangeToSwPaM( aStartPaM,
-                                         pRedlineInfo->xAnchorStartPos);
-    DBG_ASSERT(bSuccess, "illegal range");
-    SwUnoInternalPaM aEndPaM(*pDoc);
-    bSuccess =
-        SwXTextRange::XTextRangeToSwPaM( aEndPaM,
-                                         pRedlineInfo->xAnchorEndPos);
-    DBG_ASSERT(bSuccess, "illegal range");
+    // get the document (from one of the positions)
+    SwDoc* pDoc = pRedlineInfo->aAnchorStart.GetDoc();
 
     // now create the PaM for the redline
-    SwPaM aPaM(*aStartPaM.GetPoint(), *aEndPaM.GetPoint());
+    SwPaM aPaM(pDoc->GetNodes().GetEndOfContent());
+    pRedlineInfo->aAnchorStart.GetPosition(*aPaM.GetPoint());
+    aPaM.SetMark();
+    pRedlineInfo->aAnchorEnd.GetPosition(*aPaM.GetPoint());
 
-    // create redline (using redline data, which gets copied in SwRedline())
-    SwRedlineData* pRedlineData = ConvertRedline(pRedlineInfo, pDoc);
-    SwRedline* pRedline = new SwRedline(*pRedlineData, aPaM);
-    delete pRedlineData;
-
-    // set content node (if necessary)
-    if (NULL != pRedlineInfo->pContentIndex)
+    // check for:
+    // a) bIgnoreRedline (e.g. insert mode)
+    // b) illegal PaM range (CheckNodesRange())
+    if ( bIgnoreRedlines ||
+         !CheckNodesRange( aPaM.GetPoint()->nNode,
+                           aPaM.GetMark()->nNode,
+                           sal_True ) )
     {
-        pRedline->SetContentIdx(pRedlineInfo->pContentIndex);
+        // ignore redline (e.g. file loaded in insert mode):
+        // delete 'deleted' redlines and forget about the whole thing
+        if (REDLINE_DELETE == pRedlineInfo->eType)
+        {
+            pDoc->Delete(aPaM);
+        }
     }
+    else
+    {
+        // regular file loading: insert redline
 
-// HACK: DO NOT COMMIT!
-// HACK: DO NOT COMMIT!
-// HACK: DO NOT COMMIT!
-// HACK: DO NOT COMMIT!
-// HACK: DO NOT COMMIT!
-// HACK: DO NOT COMMIT!
-// HACK: DO NOT COMMIT!
-// HACK: DO NOT COMMIT!
-// HACK: DO NOT COMMIT!
-    pDoc->SetRedlineMode(REDLINE_ON);
-    pDoc->AppendRedline(pRedline);
-    pDoc->SetRedlineMode(REDLINE_IGNORE);
+        // create redline (using pRedlineData which gets copied in SwRedline())
+        SwRedlineData* pRedlineData = ConvertRedline(pRedlineInfo, pDoc);
+        SwRedline* pRedline = new SwRedline(*pRedlineData, aPaM);
+        delete pRedlineData;
 
-// instead of:
-    // and insert into document
-    // pDoc->AppendRedline(pRedline);
+        // set content node (if necessary)
+        if (NULL != pRedlineInfo->pContentIndex)
+        {
+            pRedline->SetContentIdx(pRedlineInfo->pContentIndex);
+        }
+
+        // set redline mode (withou doing the associated book-keeping)
+        pDoc->SetRedlineMode_intern(REDLINE_ON);
+        pDoc->AppendRedline(pRedline);
+        pDoc->SetRedlineMode_intern(REDLINE_NONE);
+
+        // also: save document
+        pSaveDoc = pDoc;
+    }
 }
 
 SwRedlineData* XMLRedlineImportHelper::ConvertRedline(

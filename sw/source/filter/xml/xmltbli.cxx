@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltbli.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2001-01-12 16:15:12 $
+ *  last change: $Author: dvo $ $Date: 2001-01-19 19:58:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1181,6 +1181,9 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
         Reference < XText> xText( xCell, UNO_QUERY );
         xOldCursor = GetImport().GetTextImport()->GetCursor();
         GetImport().GetTextImport()->SetCursor( xText->createTextCursor() );
+
+        // take care of open redlines for tables
+        GetImport().GetTextImport()->RedlineAdjustStartNodeCursor(sal_True);
     }
     if( pXTable )
     {
