@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmod.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-27 15:07:24 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:20:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,7 +153,7 @@ struct ScClipData
 //==================================================================
 
 
-class ScModule: public ScModuleDummy, public SfxListener
+class ScModule: public SfxModule, public SfxListener
 {
     Timer               aIdleTimer;
     Timer               aSpellTimer;
@@ -186,11 +186,8 @@ public:
                     ScModule( SfxObjectFactory* pFact );
     virtual         ~ScModule();
 
-    virtual SfxModule*  Load();
     virtual void        FillStatusBar(StatusBar &rBar);
-
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
-
     void                DeleteCfg();
     void                CloseDialogs();
 
