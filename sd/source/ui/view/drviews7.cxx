@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: ka $ $Date: 2001-08-16 10:49:31 $
+ *  last change: $Author: sj $ $Date: 2001-08-31 12:56:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -587,24 +587,38 @@ void __EXPORT SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
                 ::com::sun::star::datatransfer::DataFlavor  aFlavor;
                 const SotFormatStringId                     nTestFormat = aDataHelper.GetFormat( i );
 
-                for( sal_uInt32 n = 0, nCount = sizeof( aSupportedFormats ) / sizeof( SotFormatStringId ); n < nCount; n++ )
+                sal_uInt32  j;
+                sal_Bool    bDouble = sal_False;
+                for ( j = 0; j < i; j++ )
                 {
-                    if( nTestFormat == aSupportedFormats[ n ] )
+                    const SotFormatStringId nF = aDataHelper.GetFormat( j );
+                    if (  nTestFormat == nF )
                     {
-                        String aName;
-
-                        if( SOT_FORMATSTR_ID_EMBED_SOURCE == nTestFormat )
+                        bDouble = sal_True;
+                        break;
+                    }
+                }
+                if ( bDouble == sal_False )
+                {
+                    for( sal_uInt32 n = 0, nCount = sizeof( aSupportedFormats ) / sizeof( SotFormatStringId ); n < nCount; n++ )
+                    {
+                        if( nTestFormat == aSupportedFormats[ n ] )
                         {
-                            TransferableObjectDescriptor aDesc;
+                            String aName;
 
-                            if( aDataHelper.GetTransferableObjectDescriptor( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR, aDesc ) )
-                                aName = aDesc.maTypeName;
+                            if( SOT_FORMATSTR_ID_EMBED_SOURCE == nTestFormat )
+                            {
+                                TransferableObjectDescriptor aDesc;
+
+                                if( aDataHelper.GetTransferableObjectDescriptor( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR, aDesc ) )
+                                    aName = aDesc.maTypeName;
+                            }
+
+                            if( aName.Len() )
+                                aItem.AddClipbrdFormat( nTestFormat, aName );
+                            else
+                                aItem.AddClipbrdFormat( nTestFormat );
                         }
-
-                        if( aName.Len() )
-                            aItem.AddClipbrdFormat( nTestFormat, aName );
-                        else
-                            aItem.AddClipbrdFormat( nTestFormat );
                     }
                 }
             }
