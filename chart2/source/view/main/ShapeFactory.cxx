@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ShapeFactory.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-10 17:56:05 $
+ *  last change: $Author: iha $ $Date: 2003-11-12 18:05:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1422,7 +1422,7 @@ drawing::PolyPolygonShape3D createPolyPolygon_Symbol( const drawing::Position3D&
 
     switch(eSymbolType)
     {
-        case SYMBOL_ARROW_DOWN:
+        case SYMBOL_ARROW_UP:
         {
             *pInnerSequenceX++ = fX-fWidthH;
             *pInnerSequenceY++ = fY+fHeightH;
@@ -1437,7 +1437,7 @@ drawing::PolyPolygonShape3D createPolyPolygon_Symbol( const drawing::Position3D&
             *pInnerSequenceY++ = fY+fHeightH;
             break;
         }
-        case SYMBOL_ARROW_UP:
+        case SYMBOL_ARROW_DOWN:
         {
             *pInnerSequenceX++ = fX-fWidthH;
             *pInnerSequenceY++ = fY-fHeightH;
@@ -1563,8 +1563,9 @@ drawing::PolyPolygonShape3D createPolyPolygon_Symbol( const drawing::Position3D&
 uno::Reference< drawing::XShape >
         ShapeFactory::createSymbol2D(
                       const uno::Reference< drawing::XShapes >& xTarget
-                    , const DataPointGeometry& rGeometry
-                    , const ShapeAppearance& rAppearance )
+                    , const drawing::Position3D& rPosition
+                    , const drawing::Direction3D& rSize
+                    , const SymbolType& eSymbolType )
 {
     //create shape
     uno::Reference< drawing::XShape > xShape(
@@ -1580,15 +1581,11 @@ uno::Reference< drawing::XShape >
         try
         {
             drawing::PointSequenceSequence aPoints( PolyToPointSequence(
-                createPolyPolygon_Symbol( rGeometry.m_aPosition
-                                        , rGeometry.m_aSize
-                                        , rAppearance.m_eSymbolType ) ));
+                createPolyPolygon_Symbol( rPosition, rSize, eSymbolType ) ));
 
             //Polygon
             xProp->setPropertyValue( C2U( UNO_NAME_POLYPOLYGON )
                 , uno::makeAny( aPoints ) );
-
-            ShapeFactory::setShapeAppearance( rAppearance, xProp, sal_False );
         }
         catch( uno::Exception& e )
         {
@@ -1600,8 +1597,9 @@ uno::Reference< drawing::XShape >
 
 uno::Reference< drawing::XShape >
         ShapeFactory::createSymbol3D( const uno::Reference< drawing::XShapes >& xTarget
-                    , const DataPointGeometry& rGeometry
-                    , const ShapeAppearance& rAppearance )
+                    , const drawing::Position3D& rPosition
+                    , const drawing::Direction3D& rSize
+                    , const SymbolType& eSymbolType )
 {
     //create shape
     uno::Reference< drawing::XShape > xShape(
@@ -1618,7 +1616,7 @@ uno::Reference< drawing::XShape >
         {
             //depth
             xProp->setPropertyValue( C2U( UNO_NAME_3D_EXTRUDE_DEPTH )
-                , uno::makeAny((sal_Int32)rGeometry.m_aSize.DirectionZ) );
+                , uno::makeAny((sal_Int32)rSize.DirectionZ) );
 
             //PercentDiagonal
             sal_Int16 nPercentDiagonal = 0;
@@ -1627,11 +1625,7 @@ uno::Reference< drawing::XShape >
 
             //Polygon
             xProp->setPropertyValue( C2U( UNO_NAME_3D_POLYPOLYGON3D )
-                , uno::makeAny( createPolyPolygon_Symbol( rGeometry.m_aPosition
-                                        , rGeometry.m_aSize
-                                        , rAppearance.m_eSymbolType ) ) );
-
-            ShapeFactory::setShapeAppearance( rAppearance, xProp );
+                , uno::makeAny( createPolyPolygon_Symbol( rPosition, rSize, eSymbolType ) ) );
         }
         catch( uno::Exception& e )
         {

@@ -636,14 +636,14 @@ void AreaChart::createShapes()
                         if(m_nDimension==3)
                         {
                             m_pShapeFactory->createSymbol3D( xPointGroupShape_Shapes
-                                    , aTransformedGeom
-                                    , (*aSeriesIter)->getAppearanceOfPoint( nIndex ) );
+                                    , aTransformedGeom.m_aPosition, aTransformedGeom.m_aSize
+                                    , (*aSeriesIter)->getSymbolTypeOfPoint( nIndex ) );
                         }
                         else //m_nDimension!=3
                         {
                             m_pShapeFactory->createSymbol2D( xPointGroupShape_Shapes
-                                    , aTransformedGeom
-                                    , (*aSeriesIter)->getAppearanceOfPoint( nIndex ) );
+                                    , aTransformedGeom.m_aPosition, aTransformedGeom.m_aSize
+                                    , (*aSeriesIter)->getSymbolTypeOfPoint( nIndex ) );
                         }
                     }
                 }
