@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flylay.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-29 08:09:02 $
+ *  last change: $Author: hjs $ $Date: 2004-06-30 15:20:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,7 +147,7 @@ SwFlyFreeFrm::~SwFlyFreeFrm()
             const bool bRemoveFromPage =
                     GetPage()->GetSortedObjs() &&
                     ( IsFlyAtCntFrm() ||
-                      ( GetAnchor() && GetAnchor()->IsFlyFrm() ) );
+                      ( GetAnchorFrm() && GetAnchorFrm()->IsFlyFrm() ) );
             if ( bRemoveFromPage )
             {
                 GetPage()->GetSortedObjs()->Remove( GetVirtDrawObj() );
