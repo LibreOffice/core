@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpp1.c,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 19:12:59 $
+ *  last change: $Author: hr $ $Date: 2004-10-13 08:25:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,12 +272,11 @@ void InitCpp1()
     /* BP */
 }
 
-MAIN(argc, argv)
+int MAIN(argc, argv)
 int             argc;
 char            *argv[];
 {
         register int    i;
-        int j;
         char **useargv, **pfargv;
 
 
@@ -442,7 +441,7 @@ nRunde++;
 }
 
 FILE_LOCAL
-cppmain()
+void cppmain()
 /*
  * Main process for cpp -- copies tokens from the current input
  * stream (main file, include file, or a macro) to the output
@@ -452,12 +451,6 @@ cppmain()
         register int            c;              /* Current character    */
         register int            counter;        /* newlines and spaces  */
 
-#ifndef ZTC /* BP */
-        extern int              output();       /* Output one character */
-#ifdef EVALDEFS
-        extern int              outputEval();       /* Output one character */
-#endif
-#endif
         /*
          * Explicitly output a #line at the start of cpp output so
          * that lint (etc.) knows the name of the original source
@@ -599,7 +592,7 @@ end_line:   if (c == '\n') {                    /* Compiling at EOL?    */
 #endif
 }
 
-output(c)
+void output(c)
 int             c;
 /*
  * Output one character to stdout -- output() is passed as an
@@ -639,7 +632,7 @@ int             c;
 
 
 FILE_LOCAL
-sharp()
+void sharp()
 /*
  * Output a line number line.
  */
@@ -653,7 +646,7 @@ sharp()
             name = (infile->progname != NULL)
                 ? infile->progname : infile->filename;
             if (sharpfilename == NULL
-             || sharpfilename != NULL && !streq(name, sharpfilename)) {
+                || (sharpfilename != NULL && !streq(name, sharpfilename)) ) {
                 if (sharpfilename != NULL)
                     free(sharpfilename);
                 sharpfilename = savestring(name);
