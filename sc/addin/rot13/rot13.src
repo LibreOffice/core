@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rot13.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:48:54 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 19:57:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,110 +65,23 @@ Resource RID_SC_ADDIN_ROT13
 {
     String ROT13_DESC // Description
     {
-        Text = "ROT13 Algorithmus, jedes alphabetische Zeichen des Textes wird um 13 im Alphabet rotiert." ;
-        Text [ english ] = "ROT13 Algorithm, each alphabetical character of the text is rotated by 13 in the alphabet" ;
-        Text[ english_us ] = "ROT13 Algorithm, each alphabetical character of the text is rotated by 13 in the alphabet";
-        Text[ portuguese ] = "ROT13 Algoritmo: rotação de 13 caracteres no alfabeto para cada um dos caracteres alfabéticos do texto.";
-        Text[ russian ] = "Àëãîğèòì ROT13: çàìåíà êàæäîãî àëôàâèòíîãî ñèìâîëà òåêñòà íà äğóãîé, ñäâèíóòûé â àëôàâèòå íà 13 ïîçèöèé.";
-        Text[ dutch ] = "ROT13 Algoritme, ieder alfabetisch teken van de tekst roteert met het 13e in het alfabet.";
-        Text[ french ] = "ROT13 Algorythme, remplacement de chaque caractère alphabétique du texte par rotation de 13 caractères dans l'alphabet.";
-        Text[ spanish ] = "Algoritmo ROT13, cada carácter alfabético del texto rodará 13 espacios en el alfabeto.";
-        Text[ italian ] = "ROT13 algoritmo, ogni carattere alfabetico del testo viene ruotato di 13 nell'alfabeto.";
-        Text[ danish ] = "ROT13 algoritme: Hvert bogstav forskydes med 13 pladser i alfabetet.";
-        Text[ swedish ] = "ROT13 algoritm, varje alfabetiskt tecken i texten roteras med 13 i alfabetet.";
-        Text[ polish ] = "Algorytm ROT13, ka¿dy alfabetyczny znak tekstu zostanie obrócony o 13 w alfabecie.";
-        Text[ portuguese_brazilian ] = "Algoritmo ROT13, rotação de 13 caracteres no alfabeto para cada um dos caracteres alfabéticos do texto ";
-        Text[ japanese ] = "ROT13 ã‚¢ãƒ«ã‚´ãƒªã‚ºãƒ ã€ã‚¢ãƒ«ãƒ•ã‚¡ãƒ™ãƒƒãƒˆæ–‡å­—ã‚’13å­—ãšã‚‰ã—ã¦æ–‡å­—åˆ—ã‚’æš—å·åŒ–ã—ã¾ã™ã€‚";
-        Text[ chinese_simplified ] = "ROT13 æ³•åˆ™ï¼Œæ–‡æœ¬å†…æ¯ä¸ªå­—æ¯å°†æ²¿å­—æ¯è¡¨çš„ç¬¬13ä¸ªå­—æ¯å¾ªç¯æ—‹è½¬ã€‚";
-        Text[ chinese_traditional ] = "ROT13 æ³•å‰‡ï¼Œæœ¬æ–‡å…§æ¯å€‹å­—æ¯å°‡æ²¿å­—æ¯è¡¨çš„ç¬¬13å€‹å­—æ¯å¾ªç’°æ—‹è½‰ã€‚";
-        Text[ arabic ] = "äÙÇã ÇáÚÏ ROT13¡ íÊã ÊÏæíÑ ßá ÍÑİ ÃÈÌÏí İí ÇáäÕ äÍæ 13 ÍÑİÇğ ãä ÍÑæİ ÇáÃáİÈÇÁ.";
-        Text[ dutch ] = "ROT13 Algoritme, ieder alfabetisch teken van de tekst roteert met het 13e in het alfabet.";
-        Text[ chinese_simplified ] = "ROT13 æ³•åˆ™ï¼Œæ–‡æœ¬å†…æ¯ä¸ªå­—æ¯å°†æ²¿å­—æ¯è¡¨çš„ç¬¬13ä¸ªå­—æ¯å¾ªç¯æ—‹è½¬ã€‚";
-        Text[ greek ] = "Áëãüñéèìïò ROT13, êÜèå áëöáâçôéêüò ÷áñáêôŞñáò ôïõ êåéìİíïõ ğåñéóôñİöåôáé êáôÜ 13 èİóåéò óôï áëöÜâçôï";
-        Text[ korean ] = "ROT13 ì•Œê³ ë¦¬ì¦˜, í…ìŠ¤íŠ¸ì˜ ëª¨ë“  ì•ŒíŒŒë²³ ë¬¸ìëŠ” ì•ŒíŒŒë²³ì—ì„œ 13  ìë¦¬ì”© ì´ë™í•©ë‹ˆë‹¤.";
-        Text[ turkish ] = "ROT13 Algoritmi, metnin her alfabetik karakteri alfabe içinde 13 sıra döndürülür.";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Algorisme ROT13, cada caràcter alfabètic del text es desplaça 13 posicions dins de l'alfabet";
-        Text[ finnish ] = "ROT13-koodaus; jokaista tekstin aakkosnumeerista merkkiä siirretään aakkosissa 13 askelta";
-        Text[ thai ] = "à¸­à¸±à¸¥à¸à¸­à¸£à¸´à¸˜à¸¶à¸¡ ROT13 , à¹à¸•à¹ˆà¸¥à¸°à¸•à¸±à¸§à¸­à¸±à¸à¸©à¸£à¸‚à¸­à¸‡à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡à¸«à¸¡à¸¸à¸™à¹‚à¸”à¸¢ 13 à¹ƒà¸™à¸•à¸±à¸§à¸­à¸±à¸à¸©à¸£";
-        Text[ czech ] = "Algoritmus ROT13, kaÅ¾dÃ© pÃ­smeno textu je odrotovÃ¡no o 13 pozic vpravo";
-        Text[ hebrew ] = "ROT13 Algorithmus, jedes alphabetische Zeichen des Textes wird um 13 im Alphabet rotiert.";
-        Text[ hindi ] = "ROT13 à¤…à¤²à¥à¤—à¥‹à¤°à¤¿à¤¤à¤®à¥, à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥ à¤•à¤¾ à¤¹à¤°à¥‡à¤• à¤µà¤°à¥à¤£à¤®à¤¾à¤²à¤¾ à¤…à¤•à¥à¤·à¤° à¤•à¥‹ à¤µà¤°à¥à¤£à¤®à¤¾à¤²à¤¾ à¤®à¥‡à¤‚ 13 à¤¬à¤¾à¤° à¤˜à¥à¤®à¤¾à¤¤à¤¾ à¤¹à¥ˆ";
-        Text[ slovak ] = "ROT13 algoritmus, kaÅ¾dÃ½ abecednÃ½ znak v texte je posunutÃ½ o 13 pozÃ­ciÃ­ v abecede";
-        Text[ hungarian ] = "ROT13 Algoritmus, a szÃ¶veg minden betÅ±jÃ©t az Ã¡bÃ©cÃ©ben 13 egysÃ©ggel eltolja.";
-        Text[ slovenian ] = "Algoritem ROT13, vsak abecedni znak v besedilu premakne za 13 mest v abecedi";
+        Text [ de ] = "ROT13 Algorithmus, jedes alphabetische Zeichen des Textes wird um 13 im Alphabet rotiert." ;
+        Text [ en-US ] = "ROT13 Algorithm, each alphabetical character of the text is rotated by 13 in the alphabet";
+        Text [ x-comment ] = " ";
     };
 
     String ROT13_PAR1_NAME // Name of Parameter 1
     {
-        Text = "Text" ;
-        Text [ english ] = "Text" ;
-        Text[ english_us ] = "Text";
-        Text[ portuguese ] = "Texto";
-        Text[ russian ] = "Òåêñò";
-        Text[ dutch ] = "Tekst";
-        Text[ french ] = "Texte";
-        Text[ spanish ] = "Texto";
-        Text[ italian ] = "Testo";
-        Text[ danish ] = "Tekst";
-        Text[ swedish ] = "Text";
-        Text[ polish ] = "Tekst";
-        Text[ portuguese_brazilian ] = "Texto";
-        Text[ japanese ] = "æ–‡å­—åˆ—";
-        Text[ chinese_simplified ] = "text";
-        Text[ chinese_traditional ] = "æ–‡å­—";
-        Text[ arabic ] = "ÇáäÕ";
-        Text[ dutch ] = "Tekst";
-        Text[ chinese_simplified ] = "text";
-        Text[ greek ] = "Êåßìåíï";
-        Text[ korean ] = "í…ìŠ¤íŠ¸";
-        Text[ turkish ] = "Metin";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Text";
-        Text[ finnish ] = "Teksti";
-        Text[ thai ] = "à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
-        Text[ czech ] = "Text";
-        Text[ hebrew ] = "â€®×˜×§×¡×˜â€¬";
-        Text[ hindi ] = "à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥";
-        Text[ slovak ] = "Text";
-        Text[ hungarian ] = "SzÃ¶veg";
-        Text[ slovenian ] = "Besedilo";
+        Text [ de ] = "Text" ;
+        Text [ en-US ] = "Text";
+        Text [ x-comment ] = " ";
     };
 
     String ROT13_PAR1_DESC // Description of Parameter 1
     {
-        Text = "Der Text der rotiert werden soll" ;
-        Text [ english ] = "the text which should be rotated" ;
-        Text[ english_us ] = "The text that is to be rotated";
-        Text[ portuguese ] = "é o texto de rotação";
-        Text[ russian ] = "Òåêñò, êîòîğûé äîëæåí âğàùàòüñÿ";
-        Text[ dutch ] = "de tekst die roteert";
-        Text[ french ] = "Le texte de rotation";
-        Text[ spanish ] = "Texto que debe rodar";
-        Text[ italian ] = "Il testo da ruotare";
-        Text[ danish ] = "Teksten, som skal roteres";
-        Text[ swedish ] = "Texten som skall roteras";
-        Text[ polish ] = "Tekst, który ma zostaæ obrócony";
-        Text[ portuguese_brazilian ] = "O texto a ser girado";
-        Text[ japanese ] = "13å­—ãšã‚‰ã—ã¦æš—å·åŒ–ã™ã‚‹æ–‡å­—åˆ—ã€‚";
-        Text[ chinese_simplified ] = "è¦æ—‹è½¬çš„æ–‡å­—";
-        Text[ chinese_traditional ] = "è¦æ—‹è½‰çš„æœ¬æ–‡";
-        Text[ arabic ] = "ÇáäÕ ÇáæÇÌÈ ÇÓÊÏÇÑÊå";
-        Text[ dutch ] = "de tekst die roteert";
-        Text[ chinese_simplified ] = "è¦æ—‹è½¬çš„æ–‡å­—";
-        Text[ greek ] = "Ôï êåßìåíï ğïõ ğñüêåéôáé íá ğåñéóôñáöåß";
-        Text[ korean ] = "íšŒì „ë  í…ìŠ¤íŠ¸";
-        Text[ turkish ] = "Döndürülecek metin";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Text que s'ha de desplaçar";
-        Text[ finnish ] = "Kierrettävä teksti";
-        Text[ thai ] = "à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡à¸—à¸µà¹ˆà¸–à¸¹à¸à¸«à¸¡à¸¸à¸™";
-        Text[ czech ] = "Text, kterÃ½ bude rotovÃ¡n";
-        Text[ hebrew ] = "Der Text der rotiert werden soll";
-        Text[ hindi ] = "à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥ à¤œà¤¿à¤¸à¤•à¥‹ à¤˜à¥à¤®à¤¾à¤¨à¤¾ à¤¹à¥ˆ";
-        Text[ slovak ] = "Text ktorÃ½ mÃ¡ byÅ¥ posunutÃ½";
-        Text[ hungarian ] = "Az elforgatandÃ³ szÃ¶veg";
-        Text[ slovenian ] = "Besedilo, ki ga je potrebno premakniti";
+        Text [ de ] = "Der Text der rotiert werden soll" ;
+        Text [ en-US ] = "The text that is to be rotated";
+        Text [ x-comment ] = " ";
     };
 };
 
