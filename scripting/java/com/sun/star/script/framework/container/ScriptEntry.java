@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptEntry.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-19 23:06:37 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 08:22:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,10 @@ public class ScriptEntry implements Cloneable {
     private String languagename;
     private String location;
     private String logicalname = "";
+    private String description = "";
+
     private Map languagedepprops;
+
     public ScriptEntry(String language, String languagename,
                        String logicalname, String location) {
         this.language = language;
@@ -82,10 +85,28 @@ public class ScriptEntry implements Cloneable {
         this.languagedepprops =  new HashMap();
     }
 
+    public ScriptEntry(ScriptEntry entry)
+    {
+        this.language = entry.language;
+        this.languagename = entry.languagename;
+        this.logicalname = entry.languagename;
+        this.location = entry.location;
+        this.languagedepprops = entry.languagedepprops;
+        this.description = entry.description;
+    }
+
     public ScriptEntry(String language, String languagename,
                        String logicalname, String location, Map languagedepprops) {
         this( language, languagename, logicalname, location );
         this.languagedepprops = languagedepprops;
+    }
+
+    public ScriptEntry(String language, String languagename,
+                       String logicalname, String location,
+                       Map languagedepprops, String description) {
+        this( language, languagename, logicalname, location );
+        this.languagedepprops = languagedepprops;
+        this.description = description;
     }
 
     public ScriptEntry(String languagename, String location) {
@@ -129,6 +150,10 @@ public class ScriptEntry implements Cloneable {
 
     public String getLocation() {
         return location;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public String toString() {
