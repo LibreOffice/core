@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tracer.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-13 15:26:48 $
+ *  last change: $Author: lla $ $Date: 2001-05-14 08:50:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,6 +256,7 @@ void OConfigTracer::traceInfo(const sal_Char* _pFormat, ...)
 {
     ::osl::MutexGuard aGuard(s_aMutex);
     ensureData();
+    ensureInitalized();
     if (s_pImpl->isTracing(OTracerSetup::INFO) )
     {
 
@@ -272,6 +273,7 @@ void OConfigTracer::traceWarning(const sal_Char* _pFormat, ...)
 {
     ::osl::MutexGuard aGuard(s_aMutex);
     ensureData();
+    ensureInitalized();
     if (s_pImpl->isTracing(OTracerSetup::WARNING))
     {
         va_list args;
@@ -286,6 +288,7 @@ void OConfigTracer::traceError(const sal_Char* _pFormat, ...)
 {
     ::osl::MutexGuard aGuard(s_aMutex);
     ensureData();
+    ensureInitalized();
     if (s_pImpl->isTracing(OTracerSetup::ERROR))
     {
         va_list args;
@@ -536,6 +539,9 @@ void OConfigTracer::implTrace(const sal_Char* _pType, const sal_Char* _pFormat, 
 //**************************************************************************
 // history:
 //  $Log: not supported by cvs2svn $
+//  Revision 1.8  2001/03/13 15:26:48  kz
+//  use ftime() for windows
+//
 //  Revision 1.7  2001/03/11 02:16:13  pluby
 //  Replaced ftime() calls with gettimeofday() since ftime() is obsolete on Linux and Mac OS X
 //
