@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscarray.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 11:48:40 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 20:23:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,14 +105,11 @@ protected:
     USHORT          nSize;      // Groesse der Instanzdaten dieser Klasse
                                 // mit Superklassen
     USHORT          nOffInstData;// Offset auf eigen Instanzdaten
-    USHORT *        pWriteTypeValue;// Was soll geschrieben werden
-    USHORT *        pWriteDfltTypeValue; // fallback fuer WriteTypeValue
     void            WriteSrcArray( const RSCINST & rInst, FILE * fOutput,
                                   RscTypCont * pTC, USHORT nTab, const char * );
 public:
                     RscArray( HASHID nId, USHORT nTypId,
-                                RscTop * pSuper, RscEnum * pTypeClass,
-                                USHORT * pTypeValue, USHORT * pFallBackType );
+                                RscTop * pSuper, RscEnum * pTypeClass );
                     ~RscArray();
     virtual RSCCLASS_TYPE   GetClassType() const;
 
@@ -153,8 +150,7 @@ class RscClassArray : public RscArray
 {
 public:
                     RscClassArray( HASHID nId, USHORT nTypId,
-                                RscTop * pSuper, RscEnum * pTypeClass,
-                                USHORT * pTypeValue, USHORT * pFallBackType );
+                                RscTop * pSuper, RscEnum * pTypeClass );
                     ~RscClassArray();
     virtual void    WriteSrcHeader( const RSCINST & rInst, FILE * fOutput,
                                     RscTypCont * pTC, USHORT nTab,
@@ -171,8 +167,7 @@ class RscLangArray : public RscArray
 {
 public:
                     RscLangArray( HASHID nId, USHORT nTypId,
-                                RscTop * pSuper, RscEnum * pTypeClass,
-                                USHORT * pTypeValue, USHORT * pFallBackType );
+                                RscTop * pSuper, RscEnum * pTypeClass );
     virtual RSCCLASS_TYPE   GetClassType() const;
 };
 
