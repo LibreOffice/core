@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdattr.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: er $ $Date: 2001-11-23 19:25:50 $
+ *  last change: $Author: cl $ $Date: 2002-02-05 14:46:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1694,7 +1694,13 @@ sal_Bool SdrTextFitToSizeTypeItem::PutValue( const uno::Any& rVal, BYTE nMemberI
 {
     drawing::TextFitToSizeType eFS;
     if(!(rVal >>= eFS))
-        return sal_False;
+    {
+        sal_Int32 nEnum;
+        if(!(rVal >>= nEnum))
+            return sal_False;
+
+        eFS = (drawing::TextFitToSizeType) nEnum;
+    }
 
     SetValue( (SdrFitToSizeType)eFS );
 
@@ -1738,7 +1744,13 @@ sal_Bool SdrTextVertAdjustItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
     drawing::TextVerticalAdjust eAdj;
     if(!(rVal >>= eAdj))
-        return sal_False;
+    {
+        sal_Int32 nEnum;
+        if(!(rVal >>= nEnum))
+            return sal_False;
+
+        eAdj = (drawing::TextVerticalAdjust)nEnum;
+    }
 
     SetValue( (SdrTextVertAdjust)eAdj );
 
@@ -1782,7 +1794,13 @@ sal_Bool SdrTextHorzAdjustItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
     drawing::TextHorizontalAdjust eAdj;
     if(!(rVal >>= eAdj))
-        return sal_False;
+    {
+        sal_Int32 nEnum;
+        if(!(rVal >>= nEnum))
+            return sal_False;
+
+        eAdj = (drawing::TextHorizontalAdjust)nEnum;
+    }
 
     SetValue( (SdrTextHorzAdjust)eAdj );
 
@@ -1826,7 +1844,12 @@ sal_Bool SdrTextAniKindItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
     drawing::TextAnimationKind eKind;
     if(!(rVal >>= eKind))
-        return sal_False;
+    {
+        sal_Int32 nEnum;
+        if(!(rVal >>= nEnum))
+            return sal_False;
+        eKind = (drawing::TextAnimationKind)nEnum;
+    }
 
     SetValue( (SdrTextAniKind)eKind );
 
@@ -1870,7 +1893,13 @@ sal_Bool SdrTextAniDirectionItem::PutValue( const uno::Any& rVal, BYTE nMemberId
 {
     drawing::TextAnimationDirection eDir;
     if(!(rVal >>= eDir))
-        return sal_False;
+    {
+        sal_Int32 nEnum;
+        if(!(rVal >>= nEnum))
+            return sal_False;
+
+        eDir = (drawing::TextAnimationDirection)nEnum;
+    }
 
     SetValue( (SdrTextAniDirection)eDir );
 
@@ -2214,7 +2243,13 @@ sal_Bool SdrEdgeKindItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
     drawing::ConnectorType eCT;
     if(!(rVal >>= eCT))
-        return sal_False;
+    {
+        sal_Int32 nEnum;
+        if(!(rVal >>= nEnum))
+            return sal_False;
+
+        eCT = (drawing::ConnectorType)nEnum;
+    }
 
     SdrEdgeKind eEK = SDREDGE_ORTHOLINES;
     switch( eCT )
@@ -2404,7 +2439,13 @@ sal_Bool SdrMeasureKindItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
     drawing::MeasureKind eKind;
     if(!(rVal >>= eKind))
-        return sal_False;
+    {
+        sal_Int32 nEnum;
+        if(!(rVal >>= nEnum))
+            return sal_False;
+
+        eKind = (drawing::MeasureKind)nEnum;
+    }
 
     SetValue( (SdrMeasureKind)eKind );
     return sal_True;
@@ -2447,7 +2488,13 @@ sal_Bool SdrMeasureTextHPosItem::PutValue( const uno::Any& rVal, BYTE nMemberId 
 {
     drawing::MeasureTextHorzPos ePos;
     if(!(rVal >>= ePos))
-        return sal_False;
+    {
+        sal_Int32 nEnum;
+        if(!(rVal >>= nEnum))
+            return sal_False;
+
+        ePos = (drawing::MeasureTextHorzPos)nEnum;
+    }
 
     SetValue( (SdrMeasureTextHPos)ePos );
     return sal_True;
@@ -2490,7 +2537,13 @@ sal_Bool SdrMeasureTextVPosItem::PutValue( const uno::Any& rVal, BYTE nMemberId 
 {
     drawing::MeasureTextVertPos ePos;
     if(!(rVal >>= ePos))
-        return sal_False;
+    {
+        sal_Int32 nEnum;
+        if(!(rVal >>= nEnum))
+            return sal_False;
+
+        ePos = (drawing::MeasureTextVertPos)nEnum;
+    }
 
     SetValue( (SdrMeasureTextHPos)ePos );
     return sal_True;
@@ -2612,7 +2665,13 @@ sal_Bool SdrCircKindItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
     drawing::CircleKind eKind;
     if(!(rVal >>= eKind))
-        return sal_False;
+    {
+        sal_Int32 nEnum;
+        if(!(rVal >>= nEnum))
+            return sal_False;
+
+        eKind = (drawing::CircleKind)nEnum;
+    }
 
     SetValue( (SdrCircKind)eKind );
     return sal_True;
