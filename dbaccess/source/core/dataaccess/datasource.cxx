@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-15 11:24:21 $
+ *  last change: $Author: fs $ $Date: 2001-05-15 15:20:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -493,8 +493,8 @@ void ODatabaseSource::disposing()
 
     MutexGuard aGuard(m_aMutex);
 
-//  if (m_aConfigurationNode.isValid())
-//      flush();
+    if (m_aConfigurationNode.isValid())
+        flush();
         // TODO : we need a mechanism for determining wheter we're modified and need that call or not
 
     Reference< XConnection > xConn;
