@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfunc.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:52:46 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:48:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,6 +293,7 @@ public:
                                 double fStart, double fStep, double fMax, BOOL bRecord = TRUE );
     void            FillAuto( FillDir eDir, SCCOL nStartCol, SCROW nStartRow,
                                 SCCOL nEndCol, SCROW nEndRow, ULONG nCount, BOOL bRecord = TRUE );
+    void            FillCrossDblClick();
 
     void            TransliterateText( sal_Int32 nType );
 
