@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optasian.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:23:18 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:44:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,7 +146,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ english_us ] = "Western ~text and Asian punctuation";
         Text[ portuguese ] = "~Texto ocidental e pontuaηγo";
         Text[ russian ] = "Ηΰοΰδνϋι ςεκρς θ ΰηθΰςρκΰÿ οσνκςσΰφθÿ";
-        Text[ greek ] = "Δυτικό κείμενο και σημεία στίξης";
+        Text[ greek ] = "Δυτικό κεί~μενο και ασιατική στίξη";
         Text[ dutch ] = "~Westerse tekst en Aziatische interpunctie";
         Text[ french ] = "Caractθres ~occidentaux et ponctuation asiatique";
         Text[ spanish ] = "Texto occidental y puntuaciσn asiαtica";
@@ -274,7 +274,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ english_us ] = "Compress ~punctuation and Japanese Kana";
         Text[ portuguese ] = "Co~mprimir pontuaηγo e Kana japonκs";
         Text[ russian ] = "Ρζΰςό οσνκςσΰφθώ θ ÿοξνρκσώ κΰνσ";
-        Text[ greek ] = "Συμπίεση σημείων στίξης και ~ιαπωνέζικης Kana";
+        Text[ greek ] = "Συμπίεση στί~ξης και ιαπωνικής κάνα";
         Text[ dutch ] = "Interpunctie en ~Japanse Kana comprimeren";
         Text[ french ] = "Compression pour la ponctuation et les kana japonais";
         Text[ spanish ] = "Comprimir puntuaciσn y Kana japonιs";
@@ -377,7 +377,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ english_us ] = "~Default";
         Text[ portuguese ] = "~Padrγo";
         Text[ russian ] = "Οξ σμξλχΰνθώ";
-        Text[ greek ] = "Προεπιλογή";
+        Text[ greek ] = "Προεπι~λογή";
         Text[ dutch ] = "~Standaard";
         Text[ french ] = "Par dιfaut";
         Text[ spanish ] = "Predeterminado";
@@ -409,7 +409,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ english_us ] = "Not at start of line:";
         Text[ portuguese ] = "Nγo no ~inνcio de linha:";
         Text[ russian ] = "Νε β νΰχΰλε ρςπξκθ:";
-        Text[ greek ] = "&#908;&#967;&#953; &#963;&#964;&#951;&#957; &#945;&#961;&#967;&#942; &#956;&#953;&#945;&#962; &#963;&#949;&#953;&#961;&#940;&#962;:";
+        Text[ greek ] = "Όχι στην αρχή μιας σειράς:";
         Text[ dutch ] = "Niet aan ~regelbegin";
         Text[ french ] = "Pas en dι~but de ligne :";
         Text[ spanish ] = "Sin inicio de fila:";
@@ -424,7 +424,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ chinese_traditional ] = "θ΅ι¦–η¦ζ­Άδ½Ώη”¨ε­—ε…ƒοΌ";
         Text[ turkish ] = "Satύrύn baώύnda deπil:";
         Text[ arabic ] = "ΘΟζδ ΘΟΗνΙ ΗαΣΨΡ:";
-        Text[ language_user1 ] = "EM22.3.01: Dt soll eigtl \"nicht am Z...\" heissen.";
+        Text[ language_user1 ] = "; EM22.3.01: Dt soll eigtl \"nicht am Z...\" heissen.";
         Text[ catalan ] = "Sense inici de fila:";
         Text[ finnish ] = "Ei rivin alussa:";
         Text[ thai ] = "ΰΉ„ΰΈ΅ΰΉΰΉƒΰΈΰΉΰΈΰΈΈΰΈ”ΰΉ€ΰΈ£ΰΈ΄ΰΉΰΈ΅ΰΈ‚ΰΈ­ΰΈ‡ΰΈΰΈ£ΰΈ£ΰΈ—ΰΈ±ΰΈ”:";
@@ -463,7 +463,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ chinese_traditional ] = "θ΅ζ«η¦ζ­Άδ½Ώη”¨ε­—ε…ƒοΌ";
         Text[ turkish ] = "Satύrύn sonunda deπil:";
         Text[ arabic ] = "ΘΟζδ δεΗνΙ ΣΨΡ:";
-        Text[ language_user1 ] = "EM22.3.01: Dt soll eigtl \"nicht am Z...\" heissen.";
+        Text[ language_user1 ] = "; EM22.3.01: Dt soll eigtl \"nicht am Z...\" heissen.";
         Text[ catalan ] = "Sense final de lνnia:";
         Text[ finnish ] = "Ei rivin lopussa:";
         Text[ thai ] = "ΰΉ„ΰΈ΅ΰΉΰΉƒΰΈΰΉΰΈΰΈΈΰΈ”ΰΈªΰΈ΄ΰΉ‰ΰΈ™ΰΈªΰΈΈΰΈ”ΰΈΰΈ£ΰΈ£ΰΈ—ΰΈ±ΰΈ”:";
@@ -536,6 +536,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
     Text[ hindi ] = "ΰ¤ªΰ¥ΰ¤°ΰ¥‰ΰ¤•ΰ¥ΰ¤Έΰ¥€";
     Text[ slovak ] = "Proxy";
 };
+
 
 
 
