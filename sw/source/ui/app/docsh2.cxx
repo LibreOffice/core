@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-19 13:16:35 $
+ *  last change: $Author: jp $ $Date: 2000-10-23 18:12:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1194,7 +1194,10 @@ void SwDocShell::Execute(SfxRequest& rReq)
                                         FN_INSERT_FOOTER, /*21406*/
                                         0
                                     };
-                pWrtShell->GetView().GetViewFrame()->GetBindings().Invalidate( aInva );
+                // the view must not exist!
+                SfxViewFrame *pTmpFrm = SfxViewFrame::GetFirst( this );
+                if( pTmpFrm )
+                    pTmpFrm->GetBindings().Invalidate( aInva );
             }
             break;
 
@@ -1632,11 +1635,11 @@ IMPL_LINK( SwDocShell, SelTemplateHdl, PushButton *, pBtn )
 void    SwDocShell::ToggleBrowserMode(BOOL bSet, SwView* pView )
 {
     GetDoc()->SetBrowseMode( bSet );
-    SwView* pTempView = pView ? pView : (SwView*)GetView();
-    pTempView->GetViewFrame()->GetBindings().Invalidate(FN_SHADOWCURSOR);
     UpdateFontList();
+    SwView* pTempView = pView ? pView : (SwView*)GetView();
     if( pTempView )
     {
+        pTempView->GetViewFrame()->GetBindings().Invalidate(FN_SHADOWCURSOR);
         if( !GetDoc()->GetPrt( FALSE ) )
             pTempView->SetPrinter( GetDoc()->GetPrt( TRUE ),
                     SFX_PRINTER_PRINTER|SFX_PRINTER_JOBSETUP );
@@ -1644,8 +1647,8 @@ void    SwDocShell::ToggleBrowserMode(BOOL bSet, SwView* pView )
         //Wenn wir die BrowseView einschalten, darf es nur diese eine
         //Sicht auf das Dokument geben, alle anderen werden geschlossen.
         SfxViewFrame *pTmpFrm = SfxViewFrame::GetFirst(this, 0, FALSE);
-        do
-        {   if ( pTmpFrm != pTempView->GetViewFrame() )
+        do {
+            if( pTmpFrm != pTempView->GetViewFrame() )
             {
                 pTmpFrm->DoClose();
                 pTmpFrm = SfxViewFrame::GetFirst(this, 0, FALSE);
@@ -1659,9 +1662,9 @@ void    SwDocShell::ToggleBrowserMode(BOOL bSet, SwView* pView )
         pTempView->CheckVisArea();
 
         SvxZoomType eType;
-        if ( GetDoc()->IsBrowseMode() &&
-                SVX_ZOOM_PERCENT !=
-                (eType = (SvxZoomType)pTempView->GetWrtShell().GetViewOptions()->GetZoomType()) )
+        if( GetDoc()->IsBrowseMode() &&
+              SVX_ZOOM_PERCENT != (eType = (SvxZoomType)pTempView->
+                            GetWrtShell().GetViewOptions()->GetZoomType()) )
         {
             ((SwView*)GetView())->SetZoom( eType );
         }
@@ -1672,6 +1675,9 @@ void    SwDocShell::ToggleBrowserMode(BOOL bSet, SwView* pView )
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/10/19 13:16:35  jp
+    DocSh:Execute: call DoClose after the new load is call
+
     Revision 1.3  2000/10/06 13:31:28  jp
     should changes: don't use IniManager
 
