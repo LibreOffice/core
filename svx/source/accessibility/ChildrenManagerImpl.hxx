@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChildrenManagerImpl.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 15:24:16 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:56:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,8 +91,8 @@
 #ifndef _COM_SUN_STAR_DOCUMENT_XSELECTIONCHANGELISTENER_HPP_
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBLE_XACCESSIBLE_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessible.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBLE_XACCESSIBLE_HPP_
+#include <com/sun/star/accessibility/XAccessible.hpp>
 #endif
 #include <vector>
 
@@ -165,7 +165,7 @@ public:
             listeners to be informed.
     */
     ChildrenManagerImpl (const ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::accessibility::XAccessible>& rxParent,
+            ::com::sun::star::accessibility::XAccessible>& rxParent,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::drawing::XShapes>& rxShapeList,
         const AccessibleShapeTreeInfo& rShapeTreeInfo,
@@ -201,7 +201,7 @@ public:
             Throws an IndexOutOfBoundsException if the index is not valid.
     */
     ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::accessibility::XAccessible>
+            ::com::sun::star::accessibility::XAccessible>
         GetChild (long nIndex)
         throw (::com::sun::star::uno::RuntimeException);
 
@@ -217,7 +217,7 @@ public:
             accessible object of the corresponding shape.
     */
     ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::accessibility::XAccessible>
+            ::com::sun::star::accessibility::XAccessible>
         GetChild (ChildDescriptor& aChildDescriptor,sal_Int32 _nIndex)
         throw (::com::sun::star::uno::RuntimeException);
 
@@ -234,7 +234,7 @@ public:
             associates the shape with an accessible object.
     */
     ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::accessibility::XAccessible>
+            ::com::sun::star::accessibility::XAccessible>
         GetChild (const ::com::sun::star::uno::Reference<
             ::com::sun::star::drawing::XShape>& xShape)
         throw (::com::sun::star::uno::RuntimeException);
@@ -386,7 +386,7 @@ protected:
         created by the shape factory.
     */
     typedef std::vector< ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessible> > AccessibleShapeList;
+        ::com::sun::star::accessibility::XAccessible> > AccessibleShapeList;
     AccessibleShapeList maAccessibleShapes;
 
     /** Rectangle that describes the visible area in which a shape has to lie
@@ -399,7 +399,7 @@ protected:
         objects for given shapes.
     */
     ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessible> mxParent;
+        ::com::sun::star::accessibility::XAccessible> mxParent;
 
     /** Bundel of information passed down the shape tree.
     */
@@ -423,7 +423,7 @@ protected:
             child is unknown.
     */
     long GetChildIndex (const ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessible>& xChild) const
+        ::com::sun::star::accessibility::XAccessible>& xChild) const
         throw (::com::sun::star::uno::RuntimeException);
 
 private:
@@ -545,7 +545,7 @@ public:
         requested from the outside.
     */
     ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessible> mxAccessibleShape;
+        ::com::sun::star::accessibility::XAccessible> mxAccessibleShape;
 
     /** Return a pointer to the implementation object of the accessible
         shape of this descriptor.
@@ -580,7 +580,7 @@ public:
         to the original shape.
     */
     explicit ChildDescriptor (const ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessible>& rxAccessibleShape);
+        ::com::sun::star::accessibility::XAccessible>& rxAccessibleShape);
 
     ~ChildDescriptor (void);
 
