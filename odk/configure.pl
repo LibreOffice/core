@@ -16,20 +16,29 @@ $main::OO_SDK_HOME_SUGGESTION = $main::currentWorkingDir;
 
 $main::OFFICE_HOME = "";
 $main::OFFICE_HOME_SUGGESTION = searchprog("soffice");
-$main::tmpOffice = readlink "$main::OFFICE_HOME_SUGGESTION/soffice";
-if ( ! $main::tmpOffice eq "" )
+if ( ! $main::OFFICE_HOME_SUGGESTION eq "" )
 {
-    my $offset = rindex($main::tmpOffice, "/program/soffice");
-    if ( $main::offset != -1 )
+    my $tmpOffice = readlink "$main::OFFICE_HOME_SUGGESTION/soffice";
+
+    if ( $tmpOffice eq "" )
     {
-    $main::OFFICE_HOME_SUGGESTION = substr($main::tmpOffice, 0, $offset);
+        $tmpOffice = "$main::OFFICE_HOME_SUGGESTION/soffice";
+    }
+
+    my $offset = rindex($tmpOffice, "/program/soffice");
+    if ( $offset != -1 )
+    {
+        $main::OFFICE_HOME_SUGGESTION = substr($tmpOffice, 0, $offset);
     } else
     {
-    $offset = rindex($main::tmpOffice, "/soffice");
-    if ( $main::offset != -1 )
-    {
-        $main::OFFICE_HOME_SUGGESTION = substr($main::tmpOffice, 0, $offset);
-    }
+        $offset = rindex($tmpOffice, "/soffice");
+        if ( $offset != -1 )
+        {
+            $main::OFFICE_HOME_SUGGESTION = substr($tmpOffice, 0, $offset);
+        } else
+        {
+            $main::OFFICE_HOME_SUGGESTION = "";
+        }
     }
 }
 
@@ -37,6 +46,10 @@ $main::OO_SDK_MAKE_HOME = "";
 $main::OO_SDK_MAKE_HOME_SUGGESTION = searchprog("make");
 $main::makeVersion = "3.79.1";
 $main::correctVersion = 0;
+
+$main::OO_SDK_ZIP_HOME = "";
+$main::OO_SDK_ZIP_HOME_SUGGESTION = searchprog("zip");
+$main::zipVersion = "2.3";
 
 $main::OO_SDK_CPP_HOME = "";
 $main::cppName = "gcc";
@@ -46,7 +59,7 @@ if ( $main::operatingSystem eq "SunOS" )
     $main::cppName = "CC";
     $main::cppVersion = "5.2";
 }
-
+$main::OO_SDK_CC_55_OR_HIGHER = "";
 $main::OO_SDK_CPP_HOME_SUGGESTION = searchprog($main::cppName);
 
 $main::OO_SDK_JAVA_HOME = "";
@@ -144,12 +157,6 @@ while ( (!$main::correctVersion) &&
         my $testVersion = `$OO_SDK_MAKE_HOME/make --version`;
         if ( $testVersion eq "")
         {
-        $main::offset = rindex($main::OO_SDK_JAVA_HOME_SUGGESTION, "/bin");
-if ( $main::offset != -1 )
-{
-    $main::OO_SDK_JAVA_HOME_SUGGESTION = substr($main::OO_SDK_JAVA_HOME_SUGGESTION, 0, $main::offset);
-}
-    print " The 'make' command found at $main::OO_SDK_MAKE_HOME/make is not GNU Make\n";
             print " Set the environment variable OO_SDK_MAKE_HOME to your GNU build tools directory.\n";
             print " GNU make version $main::makeVersion can be obtained at ftp://ftp.gnu.org/gnu/make/\n";
         } else
@@ -158,11 +165,54 @@ if ( $main::offset != -1 )
             {
                 $testVersion = $1;
             }
-            $main::correctVersion = testVersion($main::makeVersion, $testVersion, "$main::OO_SDK_MAKE_HOME/make");
+            $main::correctVersion = testVersion($main::makeVersion, $testVersion, "$main::OO_SDK_MAKE_HOME/make", 1);
             if ( !$main::correctVersion )
             {
                 print " The 'make' command found at '$main::OO_SDK_MAKE_HOME' has a wrong version\n";
                 $main::OO_SDK_MAKE_HOME = "";
+            }
+        }
+    }
+}
+
+# prepare zip path
+$main::correctVersion = 0;
+while ( (!$main::correctVersion) &&
+        ((! -d "$main::OO_SDK_ZIP_HOME" ) ||
+         ((-d "$main::OO_SDK_ZIP_HOME") && (! -e "$main::OO_SDK_ZIP_HOME/zip"))) )
+{
+    print " Enter zip ($main::zipVersion or higher) tool directory [$main::OO_SDK_ZIP_HOME_SUGGESTION]: ";
+    $main::OO_SDK_ZIP_HOME = readStdIn();
+    chop($main::OO_SDK_ZIP_HOME);
+    if ( $main::OO_SDK_ZIP_HOME eq "" )
+    {
+        $main::OO_SDK_ZIP_HOME = $main::OO_SDK_ZIP_HOME_SUGGESTION;
+    }
+    if ( (! -d "$main::OO_SDK_ZIP_HOME") ||
+         ((-d "$main::OO_SDK_ZIP_HOME") && (! -e "$main::OO_SDK_ZIP_HOME/zip")) )
+    {
+        $main::OO_SDK_ZIP_HOME = "";
+        print " Error: zip tool is required, please specify a zip tool directory.\n";
+    } else
+    {
+        #check version
+        my $testVersion = `$OO_SDK_ZIP_HOME/zip -h 2>&1 | egrep Zip | head -n 1`;
+        $testVersion =~ s#Zip ([\d.]+) .*#$1#go;
+        if ( $testVersion eq "")
+        {
+            print " Set the environment variable OO_SDK_ZIP_HOME to your zip tool directory.\n";
+            print " zip version $main::zipVersion can be obtained at ftp://www.info-zip.org/\n";
+        } else
+        {
+            if ($testVersion =~ m#((\d+\.)+\d+)# )
+            {
+                $testVersion = $1;
+            }
+            $main::correctVersion = testVersion($main::zipVersion, $testVersion, "$main::OO_SDK_MAKE_HOME/zip", 1);
+            if ( !$main::correctVersion )
+            {
+                print " The 'zip' command found at '$main::OO_SDK_ZIP_HOME' has a wrong version\n";
+                $main::OO_SDK_ZIP_HOME = "";
             }
         }
     }
@@ -185,11 +235,7 @@ while ( (!$main::correctVersion) &&
     if ( $main::OO_SDK_CPP_HOME eq "" )
     {
         $main::OO_SDK_CPP_HOME = $main::OO_SDK_CPP_HOME_SUGGESTION;
-    }$main::offset = rindex($main::OO_SDK_JAVA_HOME_SUGGESTION, "/bin");
-if ( $main::offset != -1 )
-{
-    $main::OO_SDK_JAVA_HOME_SUGGESTION = substr($main::OO_SDK_JAVA_HOME_SUGGESTION, 0, $main::offset);
-}
+    }
 
     if ( ! $main::OO_SDK_CPP_HOME eq "" )
     {
@@ -216,7 +262,7 @@ if ( $main::offset != -1 )
                     print " ftp://ftp.gnu.org/gnu/gcc/\n";
                 } else
                 {
-                    $main::correctVersion = testVersion($main::cppVersion, $testVersion, "$main::OO_SDK_CPP_HOME/$main::cppName");
+                    $main::correctVersion = testVersion($main::cppVersion, $testVersion, "$main::OO_SDK_CPP_HOME/$main::cppName", 1);
                     if ( !$main::correctVersion )
                     {
                         print " The '$main::cppName' command found at '$main::OO_SDK_CPP_HOME' has a wrong version\n";
@@ -244,7 +290,7 @@ if ( $main::offset != -1 )
                     {
                         $testVersion = $1;
                     }
-                    $main::correctVersion = testVersion($main::cppVersion, $testVersion, "$main::OO_SDK_CPP_HOME/$main::cppName");
+                    $main::correctVersion = testVersion($main::cppVersion, $testVersion, "$main::OO_SDK_CPP_HOME/$main::cppName", 1);
                     if ( !$main::correctVersion )
                     {
                         print " The '$main::cppName' command found at '$main::OO_SDK_CPP_HOME' has a wrong version\n";
@@ -254,6 +300,11 @@ if ( $main::offset != -1 )
                         }
 
                         $main::OO_SDK_CPP_HOME = "";
+                    } else {
+                        $main::correctVersion = testVersion("5.5", $testVersion, "$main::OO_SDK_CPP_HOME/$main::cppName", 2);
+                        if ( $main::correctVersion ) {
+                            $main::OO_SDK_CC_55_OR_HIGHER = $testVersion;
+                        }
                     }
                 }
             }
@@ -279,29 +330,44 @@ while ( (!$main::correctVersion) &&
          ((! -d "$main::OO_SDK_JAVA_HOME" ) ||
           ((-d "$main::OO_SDK_JAVA_HOME") && (! -e "$main::OO_SDK_JAVA_HOME/bin/javac"))) )
 {
-    print " Enter JAVA SDK (1.4.1_01 or higher) installation directory [$Main::OO_SDK_JAVA_HOME_SUGGESTION]: ";
+    print " Enter Java SDK (1.4.1_01 or higher) installation directory  (optional) [$Main::OO_SDK_JAVA_HOME_SUGGESTION]: ";
     $main::OO_SDK_JAVA_HOME = readStdIn();
     chop($main::OO_SDK_JAVA_HOME);
     if ( $main::OO_SDK_JAVA_HOME eq "" )
     {
         $main::OO_SDK_JAVA_HOME = $main::OO_SDK_JAVA_HOME_SUGGESTION;
     }
-    if ( (! -d "$main::OO_SDK_JAVA_HOME") ||
-         ((-d "$main::OO_SDK_JAVA_HOME") && (! -e "$main::OO_SDK_JAVA_HOME/bin/javac")) )
+    if ( ! $main::OO_SDK_JAVA_HOME eq "" )
     {
-        $main::OO_SDK_JAVA_HOME = "";
-        print " Error: A Java SDK is required, please specify a valid Java SDK directory.\n";
-    } else
-    {
-        #check version
-        my $testVersion = `$main::OO_SDK_JAVA_HOME/bin/java -version 2>&1 | egrep "java version" | head -1 | sed -e 's#.*version "##' | sed -e 's#".*##'`;
-        $testVersion =~ s#([^\n]+)\n#$1#go;
-
-        $main::correctVersion = testVersion($main::javaVersion, $testVersion, "$main::OO_SDK_JAVA_HOME/bin/java");
-        if ( !$main::correctVersion )
+        if ( (! -d "$main::OO_SDK_JAVA_HOME") ||
+             ((-d "$main::OO_SDK_JAVA_HOME") && (! -e "$main::OO_SDK_JAVA_HOME/bin/javac")) )
         {
+            print " Error: Could not find directory '$main::OO_SDK_JAVA_HOME' or '$main::OO_SDK_JAVA_HOME/bin/javac'.\n";
+            if ( skipChoice("JAVA SDK") == 1 )
+            {
+                $main::correctVersion = 1;
+            }
             $main::OO_SDK_JAVA_HOME = "";
+        } else
+        {
+            #check version
+            my $testVersion = `$main::OO_SDK_JAVA_HOME/bin/java -version 2>&1 | egrep "java version" | head -n 1 | sed -e 's#.*version "##' | sed -e 's#".*##'`;
+            $testVersion =~ s#([^\n]+)\n#$1#go;
+
+            $main::correctVersion = testVersion($main::javaVersion, $testVersion, "$main::OO_SDK_JAVA_HOME/bin/java", 1);
+            if ( !$main::correctVersion )
+            {
+                if ( skipChoice("JAVA SDK") == 1 )
+                {
+                    $main::correctVersion = 1;
+                }
+                $main::OO_SDK_JAVA_HOME = "";
+            }
         }
+    }else
+    {
+        # the Java SDK is optional
+        $main::correctVersion = 1;
     }
 }
 
@@ -351,34 +417,21 @@ while ( $main::SDK_AUTO_DEPLOYMENT eq "" ||
     }
 }
 
+prepareScriptFile("setsdkenv_unix.sh.in", "setsdkenv_unix.sh", 1);
+chmod 0644, "$main::currentWorkingDir/setsdkenv_unix.sh";
 
-open ( FILEIN, "$main::currentWorkingDir/setsdkenv_unix.in" ) || die "\nERROR: could not open '$main::currentWorkingDir/setsdkenv_unix.in' for reading";
-open ( FILEOUT, ">$main::currentWorkingDir/setsdkenv_unix" ) || die "\nERROR: could not open '$main::currentWorkingDir/setsdkenv_unix' for writing";
-
-while ( <FILEIN> )
-{
-    $_ =~ s#\@OO_SDK_NAME\@#$main::OO_SDK_NAME#go;
-    $_ =~ s#\@OO_SDK_HOME\@#$main::OO_SDK_HOME#go;
-    $_ =~ s#\@OFFICE_HOME\@#$main::OFFICE_HOME#go;
-    $_ =~ s#\@OO_SDK_MAKE_HOME\@#$main::OO_SDK_MAKE_HOME#go;
-    $_ =~ s#\@OO_SDK_CPP_HOME\@#$main::OO_SDK_CPP_HOME#go;
-    $_ =~ s#\@OO_SDK_JAVA_HOME\@#$main::OO_SDK_JAVA_HOME#go;
-    $_ =~ s#\@SDK_AUTO_DEPLOYMENT\@#$main::SDK_AUTO_DEPLOYMENT#go;
-    $_ =~ s#\@OO_SDK_OUTPUT_DIR\@#$main::OO_SDK_OUTPUT_DIR#go;
-
-    print FILEOUT $_;
-}
-
-close FILEIN;
-close FILEOUT;
-chmod 0755, "$main::currentWorkingDir/setsdkenv_unix";
+prepareScriptFile("setsdkenv_unix.csh.in", "setsdkenv_unix.csh", 2);
+chmod 0644, "$main::currentWorkingDir/setsdkenv_unix.csh";
 
 print "\n";
-print " *****************************************************************\n";
-print " * ... \"setsdkenv_unix\" has been prepared.                       *\n";
-print " * For each time you want to use this configured SDK environment *\n";
-print " * environment, please run the \"setsdkenv_unix\" script file!     *\n";
-print " *****************************************************************\n\n";
+print " *********************************************************************\n";
+print " * ... your SDK environment has been prepared.\n";
+print " * For each time you want to use this configured SDK environment, you\n";
+print " * have to run the \"setsdkenv_unix\" script file!\n";
+print " * Alternatively can you source one of the scripts \"setsdkenv_unix.sh\"\n";
+print " * or \"setsdkenv_unix.csh\" to get an environment without starting\n";
+print " * a new shell.\n";
+print " *********************************************************************\n\n";
 
 exit $return;
 
@@ -430,6 +483,8 @@ sub testVersion
     my $tmpMustBeVersion = shift;
     my $tmpTestVersion = shift;
     my $toolName = shift;
+    # 1=check + message 2=check only
+    my $checkOnly = shift;
     my @mustBeVersion = split(/\.|_|-/,$tmpMustBeVersion);
     my @testVersion = split(/\.|_|-/,$tmpTestVersion);
     my $length = $#mustBeVersion;
@@ -442,8 +497,10 @@ sub testVersion
     {
         if ( @testVersion->[$i] < @mustBeVersion->[$i] )
         {
-            print " The command '$toolName' has the version $tmpTestVersion.\n";
-            print " The SDK requires at least the version $tmpMustBeVersion.\n";
+            if ( $#checkOnly == 1 ) {
+                print " The command '$toolName' has the version $tmpTestVersion.\n";
+                print " The SDK requires at least the version $tmpMustBeVersion.\n";
+            }
             return 0;
         } else {
             if ( @testVersion->[$i] > @mustBeVersion->[$i] )
@@ -465,7 +522,7 @@ sub readSDKName
     close( FILEIN );
     foreach $_ (@lines)
     {
-        if( s#(SDKNAME=([\w]+)\n)#$1#go )
+        if( s#(SDKNAME=([\w\._]+)\n)#$1#go )
         {
             return $2;
             break;
@@ -484,4 +541,35 @@ sub readStdIn
     }
 
     return $tmpstdin;
+}
+
+sub prepareScriptFile()
+{
+    my $inputFile = shift;
+    my $outputFile = shift;
+    # shell mode 1 = sh
+    #            2 = csh
+    my $shellMode = shift;
+
+    open ( FILEIN, "$main::currentWorkingDir/$inputFile" ) || die "\nERROR: could not open '$main::currentWorkingDir/$inputFile' for reading";
+    open ( FILEOUT, ">$main::currentWorkingDir/$outputFile" ) || die "\nERROR: could not open '$main::currentWorkingDir/$outputFile' for writing";
+
+    while ( <FILEIN> )
+    {
+        $_ =~ s#\@OO_SDK_NAME\@#$main::OO_SDK_NAME#go;
+        $_ =~ s#\@OO_SDK_HOME\@#$main::OO_SDK_HOME#go;
+        $_ =~ s#\@OFFICE_HOME\@#$main::OFFICE_HOME#go;
+        $_ =~ s#\@OO_SDK_MAKE_HOME\@#$main::OO_SDK_MAKE_HOME#go;
+        $_ =~ s#\@OO_SDK_ZIP_HOME\@#$main::OO_SDK_ZIP_HOME#go;
+        $_ =~ s#\@OO_SDK_CPP_HOME\@#$main::OO_SDK_CPP_HOME#go;
+        $_ =~ s#\@OO_SDK_CC_55_OR_HIGHER\@#$main::OO_SDK_CC_55_OR_HIGHER#go;
+        $_ =~ s#\@OO_SDK_JAVA_HOME\@#$main::OO_SDK_JAVA_HOME#go;
+        $_ =~ s#\@SDK_AUTO_DEPLOYMENT\@#$main::SDK_AUTO_DEPLOYMENT#go;
+        $_ =~ s#\@OO_SDK_OUTPUT_DIR\@#$main::OO_SDK_OUTPUT_DIR#go;
+
+        print FILEOUT $_;
+    }
+
+    close FILEIN;
+    close FILEOUT;
 }
