@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlescher.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:27:55 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:45:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,9 @@ const sal_uInt16 EXC_OBJ_CMO_COMBOBOX       = 0x0014;
 const sal_uInt16 EXC_OBJ_CMO_NOTE           = 0x0019;
 const sal_uInt16 EXC_OBJ_CMO_DRAWING        = 0x001E;
 const sal_uInt16 EXC_OBJ_CMO_UNKNOWN        = 0xFFFF;   /// For internal use only.
+
+// ftCmoGrbit: flags
+const sal_uInt16 EXC_OBJ_CMO_PRINTABLE      = 0x0010;   /// Object printable
 
 // ftPioGrbit: flags
 const sal_uInt16 EXC_OBJ_PIO_LINKED         = 0x0002;
