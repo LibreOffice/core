@@ -2,9 +2,9 @@
  *
  *  $RCSfile: portxt.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-28 16:20:44 $
+ *  last change: $Author: fme $ $Date: 2002-02-28 12:42:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,9 @@ public:
 
     sal_Bool CreateHyphen( SwTxtFormatInfo &rInf, SwTxtGuess &rGuess );
 
+    // Accessibility: pass information about this portion to the PortionHandler
+    virtual void HandlePortion( SwPortionHandler& rPH ) const;
+
     OUTPUT_OPERATOR
     DECL_FIXEDMEMPOOL_NEWDEL(SwTxtPortion)
 };
@@ -119,6 +122,10 @@ public:
     virtual SwLinePortion *Compress();
     virtual sal_Bool Format( SwTxtFormatInfo &rInf );
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
+
+    // Accessibility: pass information about this portion to the PortionHandler
+    virtual void HandlePortion( SwPortionHandler& rPH ) const;
+
     OUTPUT_OPERATOR
     DECL_FIXEDMEMPOOL_NEWDEL(SwHolePortion)
 };

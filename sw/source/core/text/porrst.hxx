@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porrst.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-27 13:10:15 $
+ *  last change: $Author: fme $ $Date: 2002-02-28 12:42:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,10 @@ public:
     virtual KSHORT GetViewWidth( const SwTxtSizeInfo &rInf ) const;
     USHORT GetRestWidth() const { return nRestWidth; }
     virtual xub_StrLen GetCrsrOfst( const MSHORT nOfst ) const;
+
+    // Accessibility: pass information about this portion to the PortionHandler
+    virtual void HandlePortion( SwPortionHandler& rPH ) const;
+
     OUTPUT_OPERATOR
 };
 
@@ -138,7 +142,6 @@ public:
 
     virtual void FormatEOL( SwTxtFormatInfo &rInf );
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
-    virtual void HandlePortion( SwPortionHandler& rPH ) const;
 
     OUTPUT_OPERATOR
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlin.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-19 15:01:28 $
+ *  last change: $Author: fme $ $Date: 2002-02-28 12:42:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,9 +144,6 @@ public:
     // liefert 0 zurueck, wenn keine Nutzdaten enthalten sind.
     virtual SwLinePortion *Compress();
 
-    // Accessibility: call functions at the SwPortionHandler
-    virtual void HandlePortion( SwPortionHandler& rPH ) const;
-
     inline void SetWhichPor( const MSHORT nNew )    { nWhichPor = nNew; }
     inline const MSHORT GetWhichPor( ) const        { return nWhichPor; }
 
@@ -225,6 +222,9 @@ public:
 
     // for text- and multi-portions
     virtual long CalcSpacing( short nSpaceAdd, const SwTxtSizeInfo &rInf ) const;
+
+    // Accessibility: pass information about this portion to the PortionHandler
+    virtual void HandlePortion( SwPortionHandler& rPH ) const;
 
     OUTPUT_OPERATOR
 };

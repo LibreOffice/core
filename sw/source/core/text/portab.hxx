@@ -2,9 +2,9 @@
  *
  *  $RCSfile: portab.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-28 16:20:44 $
+ *  last change: $Author: fme $ $Date: 2002-02-28 12:42:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,10 @@ public:
     sal_Bool PostFormat( SwTxtFormatInfo &rInf );
     inline  sal_Bool IsFilled() const { return 0 != cFill; }
     inline  KSHORT GetTabPos() const { return nTabPos; }
+
+    // Accessibility: pass information about this portion to the PortionHandler
+    virtual void HandlePortion( SwPortionHandler& rPH ) const;
+
     OUTPUT_OPERATOR
 };
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-31 14:29:52 $
+ *  last change: $Author: fme $ $Date: 2002-02-28 12:42:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,9 @@ class SwFont;
 #define SW_MC_DOUBLE    0
 #define SW_MC_RUBY      1
 #define SW_MC_ROTATE    2
+#ifdef BIDI
+#define SW_MC_BIDI      3
+#endif
 
 struct SwMultiCreator
 {
@@ -129,6 +132,9 @@ class SwMultiPortion : public SwLinePortion
     sal_Bool bTab2      :1; // Second line includes tabulator
     sal_Bool bDouble    :1; // Double line
     sal_Bool bRuby      :1; // Phonetics
+#ifdef BIDI
+    sal_Bool bBidi      :1;
+#endif
     sal_Bool bTop       :1; // Phonetic position
     sal_Bool bFormatted :1; // Already formatted
     sal_Bool bFollowFld :1; // Field follow inside
@@ -136,12 +142,21 @@ class SwMultiPortion : public SwLinePortion
     sal_Bool bFlyInCntnt:1; // Fly as character inside
 protected:
     SwMultiPortion( xub_StrLen nEnd ) : pFldRest( 0 ), bTab1( sal_False ),
+#ifdef BIDI
+        bTab2( sal_False ), bDouble( sal_False ), bRuby( sal_False ),
+        bBidi( sal_False ), bFormatted( sal_False ), bFollowFld( sal_False ),
+        nDirection( 0 ), bFlyInCntnt( sal_False )
+#else
         bTab2( sal_False ), bDouble( sal_False ), bRuby( sal_False ),
         bFormatted( sal_False ), bFollowFld( sal_False ), nDirection( 0 ),
         bFlyInCntnt( sal_False )
+#endif
         { SetWhichPor( POR_MULTI ); SetLen( nEnd ); }
     inline void SetDouble() { bDouble = sal_True; }
     inline void SetRuby() { bRuby = sal_True; }
+#ifdef BIDI
+    inline void SetBidi() { bBidi = sal_True; }
+#endif
     inline void SetTop( sal_Bool bNew ) { bTop = bNew; }
     inline void SetTab1( sal_Bool bNew ) { bTab1 = bNew; }
     inline void SetTab2( sal_Bool bNew ) { bTab2 = bNew; }
@@ -164,6 +179,9 @@ public:
     inline void SetFlyInCntnt( sal_Bool bNew ) { bFlyInCntnt = bNew; }
     inline sal_Bool IsDouble() const { return bDouble; }
     inline sal_Bool IsRuby() const { return bRuby; }
+#ifdef BIDI
+    inline sal_Bool IsBidi() const { return bBidi; }
+#endif
     inline sal_Bool OnTop() const { return bTop; }
     void ActualizeTabulator();
 
@@ -180,6 +198,10 @@ public:
     inline sal_uInt8 GetDirection() const { return nDirection; }
     inline USHORT GetFontRotation() const
         { return ( HasRotation() ? ( IsRevers() ? 2700 : 900 ) : 0 ); }
+
+    // Accessibility: pass information about this portion to the PortionHandler
+    virtual void HandlePortion( SwPortionHandler& rPH ) const;
+
     OUTPUT_OPERATOR
 };
 
@@ -249,6 +271,16 @@ public:
     SwRotatedPortion( xub_StrLen nEnd, sal_uInt8 nDir = 1 )
         : SwMultiPortion( nEnd ) { SetDirection( nDir ); }
 };
+
+#ifdef BIDI
+class SwBidiPortion : public SwMultiPortion
+{
+public:
+    SwBidiPortion( const SwMultiCreator& rCreate, xub_StrLen nEnd );
+    SwBidiPortion( xub_StrLen nEnd )
+        : SwMultiPortion( nEnd ) { SetBidi(); }
+};
+#endif
 
 // For cursor travelling in multiportions
 

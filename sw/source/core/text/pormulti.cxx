@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-07 11:18:13 $
+ *  last change: $Author: fme $ $Date: 2002-02-28 12:42:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,13 @@
 #ifndef _SVX_CHARROTATEITEM_HXX
 #include <svx/charrotateitem.hxx>
 #endif
+
+#ifdef BIDI
+#ifndef _SV_OUTDEV_HXX //autogen
+#include <vcl/outdev.hxx>
+#endif
+#endif
+
 #ifndef _TXATBASE_HXX //autogen
 #include <txatbase.hxx>
 #endif
@@ -98,6 +105,9 @@
 #endif
 #ifndef _LAYFRM_HXX
 #include <layfrm.hxx>       // GetUpper()
+#endif
+#ifndef _SW_PORTIONHANDLER_HXX
+#include <SwPortionHandler.hxx>
 #endif
 #ifndef _PORMULTI_HXX
 #include <pormulti.hxx>     // SwMultiPortion
@@ -218,6 +228,15 @@ long SwMultiPortion::CalcSpacing( short nSpaceAdd, const SwTxtSizeInfo &rInf )
     return 0;
 }
 
+/*************************************************************************
+ *              virtual SwMultiPortion::HandlePortion()
+ *************************************************************************/
+
+void SwMultiPortion::HandlePortion( SwPortionHandler& rPH ) const
+{
+    rPH.Text( GetLen(), GetWhichPor() );
+}
+
 /*-----------------01.11.00 14:21-------------------
  * SwMultiPortion::ActualizeTabulator()
  * sets the tabulator-flag, if there's any tabulator-portion inside.
@@ -275,6 +294,14 @@ SwRotatedPortion::SwRotatedPortion( const SwMultiCreator& rCreate,
     if( pRot )
         SetDirection( pRot->IsBottomToTop() ? 1 : 3 );
 }
+
+#ifdef BIDI
+SwBidiPortion::SwBidiPortion( const SwMultiCreator& rCreate,
+    xub_StrLen nEnd ) : SwMultiPortion( nEnd )
+{
+    SetBidi();
+}
+#endif
 
 /*-----------------01.11.00 14:22-------------------
  * SwDoubleLinePortion::SwDoubleLinePortion(..)
@@ -903,6 +930,29 @@ sal_Bool lcl_HasRotation( const SwTxtAttr& rAttr,
 
 SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos ) const
 {
+#ifdef BIDI
+    // do we have a script change?
+    const SwScriptInfo& rSI =
+            ((SwParaPortion*)GetParaPortion())->GetScriptInfo();
+    // create a bidi portion if frame is
+    // a) LTR and next script is CTL or
+    // b) RTL and next script is not CTL
+    if ( GetTxt().Len() != rPos &&
+         ( GetTxtFrm()->IsRightToLeft() &&
+           0 == rSI.DirType( rPos ) ) ||
+         ( ! GetTxtFrm()->IsRightToLeft() &&
+           1 == rSI.DirType( rPos ) ) )
+    {
+        rPos = rSI.NextDirChg( rPos );
+        if ( STRING_LEN == rPos )
+            return NULL;
+        SwMultiCreator *pRet = new SwMultiCreator;
+        pRet->pItem = NULL;
+        pRet->pAttr = NULL;
+        pRet->nId = SW_MC_BIDI;
+        return pRet;
+    }
+#endif
     const SvxCharRotateItem* pRotate = NULL;
     const SfxPoolItem* pRotItem;
     if( SFX_ITEM_SET == pFrm->GetTxtNode()->GetSwAttrSet().
@@ -1420,6 +1470,13 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
             nOfst = nTmpX;
         }
     }
+#ifdef BIDI
+    else if ( rMulti.IsBidi() )
+    {
+        GetInfo().X( GetInfo().X() + rMulti.Width() );
+        nOfst = nOldY - rMulti.GetAscent();
+    }
+#endif
     else
         nOfst = nOldY - rMulti.GetAscent();
 
@@ -1530,14 +1587,44 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
                  GetInfo().GetUnderFnt()->SetProportion( 50 );
         }
 
+#ifdef BIDI
+        // !!! should be moved !!!
+        const ULONG nOldLayoutMode = GetInfo().GetOut()->GetLayoutMode();
+        if ( rMulti.IsBidi() )
+        {
+            if ( GetInfo().GetTxtFrm()->IsRightToLeft() )
+                GetInfo().GetOut()->SetLayoutMode( TEXT_LAYOUT_COMPLEX_DISABLED );
+            else
+                GetInfo().GetOut()->SetLayoutMode( TEXT_LAYOUT_BIDI_STRONG |
+                                                   TEXT_LAYOUT_BIDI_RTL );
+        }
+#endif
+
         pPor->Paint( GetInfo() );
+
+#ifdef BIDI
+        GetInfo().GetOut()->SetLayoutMode( nOldLayoutMode );
+#endif
 
         if( GetFnt()->IsURL() && pPor->InTxtGrp() )
             GetInfo().NotifyURL( *pPor );
 
         bFirst &= !pPor->GetLen();
         if( pNext || !pPor->IsMarginPortion() )
+#ifdef BIDI
+        {
+            BYTE nOldInfoDir = GetInfo().GetDirection();
+            if ( rMulti.IsBidi() )
+                // DIR_RIGHT2LEFT is only set to indicate that Move should
+                // subtract the portion width
+                GetInfo().SetDirection( DIR_RIGHT2LEFT );
+
             pPor->Move( GetInfo() );
+            GetInfo().SetDirection( nOldInfoDir );
+        }
+#else
+            pPor->Move( GetInfo() );
+#endif
 
         pPor = pNext;
 
@@ -1807,7 +1894,11 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
 
         rMulti.CalcSize( *this, aInf );
         pCurr->SetRealHeight( pCurr->Height() );
+#ifdef BIDI
+        if( rMulti.HasRotation() || rMulti.IsBidi() )
+#else
         if( rMulti.HasRotation() && !rMulti.IsDouble() )
+#endif
             break;
         // second line has to be formatted
         else if( pCurr->GetLen()<nMultiLen || rMulti.IsRuby() || aInf.GetRest())
@@ -1953,6 +2044,10 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
         bRet = ( rInf.GetPos().X() + rMulti.Width() > rInf.Width() ) &&
                  nStartIdx != rInf.GetLineStart();
     }
+#ifdef BIDI
+    else if ( rMulti.IsBidi() )
+        bRet = rMulti.GetLen() < nMultiLen;
+#endif
 
     // line break has to be performed!
     if( bRet )
@@ -2013,6 +2108,10 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
             pTmp = new SwRotatedPortion( nMultiLen + rInf.GetIdx(),
                                          rMulti.GetDirection() );
         }
+#ifdef BIDI
+        else if( rMulti.IsBidi() )
+            pTmp = new SwBidiPortion( nMultiLen + rInf.GetIdx() );
+#endif
         else
             pTmp = NULL;
         if( pNextFirst && pTmp )

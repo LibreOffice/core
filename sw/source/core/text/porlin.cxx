@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlin.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-19 15:01:28 $
+ *  last change: $Author: fme $ $Date: 2002-02-28 12:42:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -421,6 +421,10 @@ void SwLinePortion::Move( SwTxtPaintInfo &rInf )
         }
         if( rInf.IsRotated() )
             rInf.Y( rInf.Y() + ( bB2T ? -PrtWidth() : PrtWidth() ) );
+#ifdef BIDI
+        else if ( DIR_RIGHT2LEFT == rInf.GetDirection() )
+            rInf.X( rInf.X() - PrtWidth() );
+#endif
         else
             rInf.X( rInf.X() + PrtWidth() );
     }
@@ -454,6 +458,7 @@ sal_Bool SwLinePortion::GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt ) 
 
 void SwLinePortion::HandlePortion( SwPortionHandler& rPH ) const
 {
-    rPH.Text( GetLen() );
+    String aString;
+    rPH.Special( GetLen(), aString, GetWhichPor() );
 }
 

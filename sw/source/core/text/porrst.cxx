@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porrst.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-27 13:09:41 $
+ *  last change: $Author: fme $ $Date: 2002-02-28 12:42:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,6 +258,16 @@ sal_Bool SwBreakPortion::Format( SwTxtFormatInfo &rInf )
     return sal_True;
 }
 
+/*************************************************************************
+ *              virtual SwBreakPortion::HandlePortion()
+ *************************************************************************/
+
+void SwBreakPortion::HandlePortion( SwPortionHandler& rPH ) const
+{
+    rPH.Text( GetLen(), GetWhichPor() );
+}
+
+
 #ifdef VERTICAL_LAYOUT
 SwKernPortion::SwKernPortion( SwLinePortion &rPortion, short nKrn,
                               sal_Bool bBG, sal_Bool bGK ) :
@@ -330,12 +340,6 @@ void SwKernPortion::FormatEOL( SwTxtFormatInfo &rInf )
     else
         Width( 0 );
     rInf.GetLast()->FormatEOL( rInf );
-}
-
-void SwKernPortion::HandlePortion( SwPortionHandler& rPH ) const
-{
-    String aString;
-    rPH.Special( GetLen(), aString, GetWhichPor() );
 }
 
 SwArrowPortion::SwArrowPortion( const SwLinePortion &rPortion ) :

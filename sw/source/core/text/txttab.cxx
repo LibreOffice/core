@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txttab.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-16 09:50:11 $
+ *  last change: $Author: fme $ $Date: 2002-02-28 12:42:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,10 @@
 #ifndef _FRMATR_HXX
 #include <frmatr.hxx>
 #endif
+#ifndef _SW_PORTIONHANDLER_HXX
+#include <SwPortionHandler.hxx>
+#endif
+
 #include "viewopt.hxx"  // SwViewOptions
 #include "txtcfg.hxx"
 #include "portab.hxx"
@@ -499,3 +503,13 @@ void SwTabPortion::Paint( const SwTxtPaintInfo &rInf ) const
         }
     }
 }
+
+/*************************************************************************
+ *              virtual SwTabPortion::HandlePortion()
+ *************************************************************************/
+
+void SwTabPortion::HandlePortion( SwPortionHandler& rPH ) const
+{
+    rPH.Text( GetLen(), GetWhichPor() );
+}
+

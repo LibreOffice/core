@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porglue.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-19 14:57:27 $
+ *  last change: $Author: fme $ $Date: 2002-02-28 12:42:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,16 +128,6 @@ sal_Bool SwGluePortion::GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt ) 
         return sal_True;
     }
     return sal_False;
-}
-
-/*************************************************************************
- *              virtual SwGluePortion::HandlePortion()
- *************************************************************************/
-
-void SwGluePortion::HandlePortion( SwPortionHandler& rPH ) const
-{
-    String aString;
-    rPH.Special( GetLen(), aString, GetWhichPor() );
 }
 
 /*************************************************************************

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: portxt.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-07 11:18:13 $
+ *  last change: $Author: fme $ $Date: 2002-02-28 12:42:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #endif
 #ifndef _ERRHDL_HXX
 #include <errhdl.hxx>   // ASSERT
+#endif
+#ifndef _SW_PORTIONHANDLER_HXX
+#include <SwPortionHandler.hxx>
 #endif
 #ifndef _TXTCFG_HXX
 #include <txtcfg.hxx>
@@ -685,6 +688,15 @@ long SwTxtPortion::CalcSpacing( short nSpaceAdd, const SwTxtSizeInfo &rInf ) con
 }
 
 /*************************************************************************
+ *              virtual SwTxtPortion::HandlePortion()
+ *************************************************************************/
+
+void SwTxtPortion::HandlePortion( SwPortionHandler& rPH ) const
+{
+    rPH.Text( GetLen(), GetWhichPor() );
+}
+
+/*************************************************************************
  *                      class SwHolePortion
  *************************************************************************/
 
@@ -720,5 +732,14 @@ void SwHolePortion::Paint( const SwTxtPaintInfo &rInf ) const
 sal_Bool SwHolePortion::Format( SwTxtFormatInfo &rInf )
 {
     return rInf.IsFull() || rInf.X() >= rInf.Width();
+}
+
+/*************************************************************************
+ *              virtual SwHolePortion::HandlePortion()
+ *************************************************************************/
+
+void SwHolePortion::HandlePortion( SwPortionHandler& rPH ) const
+{
+    rPH.Text( GetLen(), GetWhichPor() );
 }
 
