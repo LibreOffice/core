@@ -2,9 +2,9 @@
  *
  *  $RCSfile: w1filter.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:57 $
+ *  last change: $Author: mtg $ $Date: 2001-02-02 11:20:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,6 +186,9 @@
 #endif
 #ifndef _STATSTR_HRC
 #include <statstr.hrc>
+#endif
+#ifdef DEBUG
+#include <stdio.h>
 #endif
 
 #define MAX_FIELDLEN 64000
@@ -2338,11 +2341,14 @@ void Ww1HeaderFooter::Stop(Ww1Shell& rOut, Ww1Manager& rMan, sal_Unicode&)
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww1/w1filter.cxx,v 1.1.1.1 2000-09-18 17:14:57 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww1/w1filter.cxx,v 1.2 2001-02-02 11:20:58 mtg Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:57  hr
+      initial import
+
       Revision 1.29  2000/09/18 16:04:56  willem.vandorp
       OpenOffice header added.
 
