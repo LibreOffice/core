@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawvie4.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-08 16:02:22 $
+ *  last change: $Author: nn $ $Date: 2001-02-14 19:27:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -550,12 +550,6 @@ BOOL ScDrawView::BeginDrag( Window* pWindow, const Point& rStartPos )
 
 void ScDrawView::DoCopy()
 {
-    {
-        // release clipboard
-        SvDataObjectRef pDummyObj = new SvDataObject;
-        pDummyObj->CopyClipboard();
-    }
-
     BOOL bAnyOle, bOneOle;
     const SdrMarkList& rMarkList = GetMarkList();
     lcl_CheckOle( rMarkList, bAnyOle, bOneOle );
@@ -574,13 +568,10 @@ void ScDrawView::DoCopy()
         ScGlobal::pDrawClipDocShellRef = NULL;
         ScDrawLayer::SetGlobalDrawPersist(NULL);
     }
+    //---------------------------------------------------------
 
     SdrModel* pModel = GetAllMarkedModel();
     ScDrawLayer::SetGlobalDrawPersist(NULL);
-
-//  ScGlobal::SetClipDraw(pModel);
-//  SvDataObjectRef pData = new ScDataObject( pModel, pViewData->GetDocShell(), bOneOle );
-//  pData->CopyClipboard();
 
     ScDocShell* pDocSh = pViewData->GetDocShell();
 
@@ -592,7 +583,8 @@ void ScDrawView::DoCopy()
     ScDrawTransferObj* pTransferObj = new ScDrawTransferObj( pModel, pDocSh, aObjDesc );
     uno::Reference<datatransfer::XTransferable> xTransferable( pTransferObj );
 
-    pTransferObj->CopyToClipboard();
+    pTransferObj->CopyToClipboard();                    // system clipboard
+    SC_MOD()->SetClipObject( NULL, pTransferObj );      // internal clipboard
 }
 
 //  Korrektur fuer 100% berechnen, unabhaengig von momentanen Einstellungen
