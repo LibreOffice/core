@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docuno.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-20 09:36:04 $
+ *  last change: $Author: nn $ $Date: 2000-10-24 12:08:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,7 +210,7 @@ ScModelObj::ScModelObj( ScDocShell* pDocSh ) :
 
         // setDelegator veraendert den RefCount, darum eine Referenz selber halten
         // (direkt am m_refCount, um sich beim release nicht selbst zu loeschen)
-        utl::increment( m_refCount );
+        comphelper::increment( m_refCount );
 
         // waehrend des queryInterface braucht man ein Ref auf das
         // SvNumberFormatsSupplierObj, sonst wird es geloescht.
@@ -224,7 +224,7 @@ ScModelObj::ScModelObj( ScDocShell* pDocSh ) :
         if (xNumberAgg.is())
             xNumberAgg->setDelegator( (cppu::OWeakObject*)this );
 
-        utl::decrement( m_refCount );
+        comphelper::decrement( m_refCount );
     }
 }
 
