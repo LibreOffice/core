@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews2.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 15:01:17 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 13:25:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -362,27 +362,32 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     {
                         SfxItemSet aAttr(GetDoc()->GetPool());
                         pObj = rMarkList.GetMark(i)->GetObj();
-                        aAttr.Put(pObj->GetMergedItemSet());
 
-                        const XFillStyleItem& rFillStyle =
-                         (const XFillStyleItem&) aAttr.Get(XATTR_FILLSTYLE);
-
-                        if (rFillStyle.GetValue() == XFILL_NONE)
+                        // #i25616#
+                        if(!pObj->ISA(SdrGrafObj))
                         {
-                            // Vorlage hat keine Fuellung,
-                            // daher hart attributieren: Fuellung setzen
-                            if (!bMergeUndo)
+                            aAttr.Put(pObj->GetMergedItemSet());
+
+                            const XFillStyleItem& rFillStyle =
+                            (const XFillStyleItem&) aAttr.Get(XATTR_FILLSTYLE);
+
+                            if (rFillStyle.GetValue() == XFILL_NONE)
                             {
-                                bMergeUndo = TRUE;
-                                pUndoMgr->EnterListAction( String(), String() );
-                                pDrView->BegUndo();
+                                // Vorlage hat keine Fuellung,
+                                // daher hart attributieren: Fuellung setzen
+                                if (!bMergeUndo)
+                                {
+                                    bMergeUndo = TRUE;
+                                    pUndoMgr->EnterListAction( String(), String() );
+                                    pDrView->BegUndo();
+                                }
+                                pDrView->AddUndo(new SdrUndoAttrObj(*pObj));
+
+                                aAttr.Put(XFillStyleItem(XFILL_SOLID));
+                                aAttr.Put(XFillColorItem(String(), COL_WHITE));
+
+                                pObj->SetMergedItemSet(aAttr);
                             }
-                            pDrView->AddUndo(new SdrUndoAttrObj(*pObj));
-
-                            aAttr.Put(XFillStyleItem(XFILL_SOLID));
-                            aAttr.Put(XFillColorItem(String(), COL_WHITE));
-
-                            pObj->SetMergedItemSet(aAttr);
                         }
                     }
 
