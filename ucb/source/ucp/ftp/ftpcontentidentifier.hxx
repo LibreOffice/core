@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpcontentidentifier.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: abi $ $Date: 2002-10-15 09:21:16 $
+ *  last change: $Author: abi $ $Date: 2002-10-29 12:43:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,11 +73,11 @@
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <com/sun/star/ucb/XContentIdentifier.hpp>
-#include <com/sun/star/io/XOutputStream.hpp>
-
+#include <com/sun/star/lang/XTypeProvider.hpp>
 
 #include "ftpdirp.hxx"
 #include "ftpurl.hxx"
+
 
 namespace ftp {
 
@@ -87,12 +87,12 @@ namespace ftp {
 
     class FTPContentIdentifier
         : public cppu::OWeakObject,
+          public com::sun::star::lang::XTypeProvider,
           public com::sun::star::ucb::XContentIdentifier
     {
     public:
 
-        FTPContentIdentifier(const rtl::OUString& ident,
-                             FTPContentProvider* pFCP = 0);
+        FTPContentIdentifier(const rtl::OUString& ident);
 
         ~FTPContentIdentifier();
 
@@ -106,6 +106,23 @@ namespace ftp {
 
         virtual void SAL_CALL release( void ) throw();
 
+        // XTypeProvider
+
+        virtual
+        com::sun::star::uno::Sequence<com::sun::star::uno::Type> SAL_CALL
+        getTypes(
+        )
+            throw(
+                com::sun::star::uno::RuntimeException
+            );
+
+        virtual com::sun::star::uno::Sequence<sal_Int8> SAL_CALL
+        getImplementationId(
+        )
+            throw(
+                com::sun::star::uno::RuntimeException
+            );
+
 
         // XContentIdentifier
 
@@ -113,7 +130,7 @@ namespace ftp {
         getContentIdentifier(
         )
             throw (
-                ::com::sun::star::uno::RuntimeException
+                com::sun::star::uno::RuntimeException
             );
 
         virtual ::rtl::OUString SAL_CALL
@@ -126,7 +143,7 @@ namespace ftp {
 
     private:
 
-        FTPURL m_pURL;
+        rtl::OUString m_ident;
     };
 
 }

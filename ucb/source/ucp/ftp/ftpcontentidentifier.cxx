@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpcontentidentifier.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: abi $ $Date: 2002-10-15 09:21:16 $
+ *  last change: $Author: abi $ $Date: 2002-10-29 12:43:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,13 +70,13 @@
 using namespace ftp;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::ucb;
+using namespace com::sun::star::lang;
 
 
 FTPContentIdentifier::FTPContentIdentifier(
-    const rtl::OUString& aIdent,
-    FTPContentProvider* pFCP
+    const rtl::OUString& ident
 )
-    : m_pURL(aIdent,pFCP)
+    : m_ident(ident)
 {
 }
 
@@ -96,11 +96,11 @@ FTPContentIdentifier::queryInterface(
 {
     Any aRet =
         ::cppu::queryInterface(rType,
+                               SAL_STATIC_CAST(XTypeProvider*,this),
                                SAL_STATIC_CAST(XContentIdentifier*,this));
 
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
-
 
 
 void SAL_CALL FTPContentIdentifier::acquire( void ) throw() {
@@ -108,28 +108,67 @@ void SAL_CALL FTPContentIdentifier::acquire( void ) throw() {
 }
 
 
-
 void SAL_CALL FTPContentIdentifier::release( void ) throw() {
     OWeakObject::release();
 }
 
 
-::rtl::OUString SAL_CALL
-FTPContentIdentifier::getContentIdentifier(
-)
-    throw (
-        ::com::sun::star::uno::RuntimeException
-    )
+Sequence<sal_Int8> SAL_CALL
+FTPContentIdentifier::getImplementationId()
+    throw(RuntimeException)
 {
-    return m_pURL.ident(false,false);
+    static cppu::OImplementationId* pId = NULL;
+    if(!pId)
+    {
+        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
+        if ( !pId )
+        {
+            static cppu::OImplementationId id( sal_False );
+            pId = &id;
+        }
+    }
+    return (*pId).getImplementationId();
 }
 
 
-::rtl::OUString SAL_CALL
+Sequence<Type> SAL_CALL
+FTPContentIdentifier::getTypes(
+    void )
+    throw(RuntimeException)
+{
+    static cppu::OTypeCollection* pCollection = NULL;
+    if ( !pCollection ) {
+        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
+        if ( !pCollection )
+        {
+            static cppu::OTypeCollection collection(
+                getCppuType(
+                    static_cast<Reference<XTypeProvider>*>(0)),
+                getCppuType(
+                    static_cast<Reference<XContentIdentifier>*>(0)));
+            pCollection = &collection;
+        }
+    }
+    return (*pCollection).getTypes();
+}
+
+
+rtl::OUString SAL_CALL
+FTPContentIdentifier::getContentIdentifier(
+)
+    throw (
+        com::sun::star::uno::RuntimeException
+    )
+{
+    return m_ident;
+}
+
+
+rtl::OUString SAL_CALL
 FTPContentIdentifier::getContentProviderScheme(
 )
     throw (
-        ::com::sun::star::uno::RuntimeException
+        com::sun::star::uno::RuntimeException
     )
 {
     return rtl::OUString::createFromAscii("ftp");

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpcontentprovider.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: abi $ $Date: 2002-10-23 08:00:05 $
+ *  last change: $Author: abi $ $Date: 2002-10-29 12:43:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,8 @@ using namespace com::sun::star::beans;
 
 FTPContentProvider::FTPContentProvider(const Reference< XMultiServiceFactory >& rSMgr)
     : ::ucb::ContentProviderImplHelper(rSMgr),
-             m_ftpLoaderThread(NULL)
+             m_ftpLoaderThread(0),
+             m_pProxyDecider(0)
 {
 }
 
@@ -102,6 +103,7 @@ FTPContentProvider::FTPContentProvider(const Reference< XMultiServiceFactory >& 
 FTPContentProvider::~FTPContentProvider()
 {
     delete m_ftpLoaderThread;
+    delete m_pProxyDecider;
 }
 
 //=========================================================================
@@ -110,13 +112,10 @@ FTPContentProvider::~FTPContentProvider()
 //
 //=========================================================================
 
-XINTERFACE_IMPL_6(FTPContentProvider,
+XINTERFACE_IMPL_3(FTPContentProvider,
                   XTypeProvider,
                   XServiceInfo,
-                  XContentProvider,
-                  XComponent,
-                  XEventListener,
-                  XContainerListener);
+                  XContentProvider)
 
 //=========================================================================
 //
@@ -124,13 +123,10 @@ XINTERFACE_IMPL_6(FTPContentProvider,
 //
 //=========================================================================
 
-XTYPEPROVIDER_IMPL_6(FTPContentProvider,
+XTYPEPROVIDER_IMPL_3(FTPContentProvider,
                      XTypeProvider,
                      XServiceInfo,
-                     XContentProvider,
-                     XComponent,
-                     XEventListener,
-                     XContainerListener);
+                     XContentProvider)
 
 //=========================================================================
 //
@@ -177,10 +173,15 @@ FTPContentProvider::queryContent(
     {
         // Initialize
         osl::MutexGuard aGuard( m_aMutex );
-        if(!m_ftpLoaderThread)
+        if(!m_ftpLoaderThread || !m_pProxyDecider)
         {
-            init();
-            if(!m_ftpLoaderThread)
+            try {
+                init();
+            } catch( ... ) {
+                throw RuntimeException();
+            }
+
+            if(!m_ftpLoaderThread || !m_pProxyDecider)
                 throw RuntimeException();
         }
     }
@@ -188,7 +189,11 @@ FTPContentProvider::queryContent(
     try {
         FTPURL aURL(xCanonicId->getContentIdentifier(),
                     this);
-        if(!ShouldUseFtpProxy(aURL))
+
+        if(!m_pProxyDecider->shouldUseProxy(
+            rtl::OUString::createFromAscii("ftp"),
+            aURL.host(),
+            aURL.port().toInt32()))
             xContent = new FTPContent(m_xSMgr,this,xCanonicId,aURL);
         else {
             Reference<XContentProvider>
@@ -208,134 +213,10 @@ FTPContentProvider::queryContent(
 
 
 
-// from inetoptions
-
-
-enum ProxyType { NONE, AUTOMATIC, MANUAL };
-
-
-bool FTPContentProvider::ShouldUseFtpProxy(const FTPURL& aURL) const
-{
-    // Check URL.
-    if(m_eType == NONE)
-        return false;
-
-    if(! m_aFtpProxy.getLength())
-        return false;
-
-    if(m_aNoProxyList.getLength())
-    {
-        // Setup Endpoint.
-        rtl::OUString host(aURL.host());
-        if(!host.getLength())
-            return false;
-
-        osl::SocketAddr aAddr(host,21);  // port does not matter here
-        host = aAddr.getHostname().toAsciiLowerCase();
-        sal_Int32 port = aURL.port().toInt32();
-
-        // Match NoProxyList.
-        sal_Int32 nIndex = 0;
-        do {
-            rtl::OUString aDomain =
-                m_aNoProxyList.getToken(0,';',nIndex).toAsciiLowerCase();
-            rtl::OUString aPort;
-
-            sal_Int32 i(aDomain.indexOf(':',0));
-            if(i != -1) {
-                aPort = aDomain.copy(1+i);
-                aDomain = aDomain.copy(0,i).trim();
-            }
-
-            if(!aDomain.getLength())
-                continue;
-
-            if(host == aDomain)
-                if(aPort.getLength() == 0 || port == aPort.toInt32())
-                    return false;
-                else
-                    return true;
-
-            i = host.lastIndexOf(aDomain);
-            if(i!=-1 &&
-               // i == 0 not possible here anymore!
-               // really last part of string of the string?:
-               host.getLength() == i+aDomain.getLength() &&
-               // ensure not to match "xy.z" on "x.z" or ".x.z"
-               (aDomain.getStr()[0] == '.' || host.getStr()[i-1] == '.') &&
-               // does the port match?
-               (aPort.getLength() == 0 || port == aPort.toInt32()))
-                return false;
-        }
-        while ( nIndex != -1 );
-    }
-
-    return true;
-}
-
-
-void SAL_CALL
-FTPContentProvider::elementReplaced(const ContainerEvent& Event)
-    throw(RuntimeException)
-{
-    rtl::OUString accessor;
-    Event.Accessor >>= accessor;
-    if(accessor.compareToAscii("ooInetFTPProxyName") == 0) {
-        rtl::OUString replacedElement,element;
-        if((Event.ReplacedElement >>= replacedElement) &&
-           (Event.Element >>= element) )
-        {
-            osl::MutexGuard aGuard(m_aMutex);
-            m_aFtpProxy = element;
-        }
-    } else if(accessor.compareToAscii("ooInetNoProxy") == 0) {
-        rtl::OUString replacedElement,element;
-        if((Event.ReplacedElement >>= replacedElement) &&
-           (Event.Element >>= element))
-        {
-            osl::MutexGuard aGuard(m_aMutex);
-            m_aNoProxyList = element;
-        }
-    }
-    else if(accessor.compareToAscii("ooInetProxyType") == 0) {
-        sal_Int32 replacedElement,element;
-        if((Event.ReplacedElement >>= replacedElement) &&
-           (Event.Element >>= element))
-        {
-            osl::MutexGuard aGuard(m_aMutex);
-            m_eType = element;
-        }
-    }
-}
-
 
 void FTPContentProvider::init() {
     m_ftpLoaderThread = new FTPLoaderThread();
-
-    Reference< XMultiServiceFactory >  sProvider( getConfiguration());
-    Reference< XHierarchicalNameAccess > xHierAccess(
-        getHierAccess(sProvider,"org.openoffice.Inet"));
-
-    m_aFtpProxy = getKey(xHierAccess,
-                         "Settings/ooInetFTPProxyName");
-    m_aNoProxyList = getKey(xHierAccess,
-                            "Settings/ooInetNoProxy");
-    m_eType = getIntKey(xHierAccess,
-                        "Settings/ooInetProxyType");
-
-    try
-    {
-        // add as configuration change listener for the proxy settings
-        Reference<XNameAccess> xAccess(xHierAccess,UNO_QUERY);
-        Any aAny =
-            xAccess->getByName(rtl::OUString::createFromAscii("Settings"));
-        aAny >>= m_xContainer;
-        if(m_xContainer.is())
-            m_xContainer->addContainerListener(this);
-    }
-    catch(const com::sun::star::uno::Exception& )
-    {
-    }
+    m_pProxyDecider = new ucbhelper::InternetProxyDecider(m_xSMgr);
 }
 
 
@@ -401,154 +282,28 @@ bool  FTPContentProvider::setHost(
 }
 
 
-Reference<XMultiServiceFactory>
-FTPContentProvider::getConfiguration() const
-{
-    Reference< XMultiServiceFactory > sProvider;
-    if(m_xSMgr.is())
-    {
-        Any aAny;
-        aAny <<= rtl::OUString::createFromAscii( "plugin" );
-        PropertyValue aProp(
-            rtl::OUString::createFromAscii( "servertype" ),
-            -1,
-            aAny,
-            PropertyState_DIRECT_VALUE );
-
-        Sequence<Any> seq(1);
-        seq[0] <<= aProp;
-
-        try
-        {
-            rtl::OUString sProviderService =
-                rtl::OUString::createFromAscii(
-                    "com.sun.star.configuration.ConfigurationProvider" );
-            sProvider =
-                Reference<XMultiServiceFactory>(
-                    m_xSMgr->createInstanceWithArguments(
-                        sProviderService,seq ),
-                    UNO_QUERY );
-        }
-        catch( const com::sun::star::uno::Exception& )
-        {
-            OSL_ENSURE( sProvider.is(),"cant instantiate configuration" );
-        }
-    }
-
-    return sProvider;
-}
-
-
-Reference<XHierarchicalNameAccess>
-FTPContentProvider::getHierAccess(
-    const Reference<XMultiServiceFactory >& sProvider,
-    const char* file ) const
-{
-    Reference<XHierarchicalNameAccess>
-        xHierAccess;
-
-    if( sProvider.is() )
-    {
-        Sequence<Any> seq(1);
-        rtl::OUString sReaderService =
-            rtl::OUString::createFromAscii(
-                "com.sun.star.configuration.ConfigurationAccess" );
-
-        seq[0] <<= rtl::OUString::createFromAscii(file);
-
-        try
-        {
-            xHierAccess =
-                Reference<
-                XHierarchicalNameAccess >(
-                    sProvider->createInstanceWithArguments(
-                        sReaderService,seq ),
-                    UNO_QUERY );
-        }
-        catch( const Exception& )
-        {
-        }
-    }
-
-    return xHierAccess;
-}
-
-
-rtl::OUString
-FTPContentProvider::getKey(
-    const Reference<XHierarchicalNameAccess>& xHierAccess,
-    const char* key ) const
-{
-    rtl::OUString val;
-    if( xHierAccess.is() )
-    {
-        Any aAny;
-        try
-        {
-            aAny =
-                xHierAccess->getByHierarchicalName(
-                    rtl::OUString::createFromAscii(key));
-        }
-        catch( const NoSuchElementException& )
-        {
-        }
-        aAny >>= val;
-    }
-    return val;
-}
-
-
-sal_Int32
-FTPContentProvider::getIntKey(
-    const Reference<XHierarchicalNameAccess>& xHierAccess,
-    const char* key ) const
-{
-    sal_Int32 val = 0;
-    if( xHierAccess.is() )
-    {
-        Any aAny;
-        try
-        {
-            aAny =
-                xHierAccess->getByHierarchicalName(
-                    rtl::OUString::createFromAscii(key));
-        }
-        catch( const NoSuchElementException& )
-        {
-        }
-        aAny >>= val;
-    }
-    return val;
-}
-
-
 
 Reference<XContentProvider>
 FTPContentProvider::getHttpProvider()
     throw(RuntimeException)
 {
-    osl::MutexGuard aGuard(m_aMutex);
-    if (!m_xManager.is())
-    {
-        if (!m_xManager.is())
-        {
-            ucb::ContentBroker * pBroker = ucb::ContentBroker::get();
-            if (pBroker)
-            {
-                m_xManager = pBroker->getContentProviderManagerInterface();
-                if (!m_xManager.is())
-                    throw RuntimeException(
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                            "bad ucb::ContentBroker")),
-                        *this);
-            }
-            if (!m_xManager.is())
-                return 0;
-        }
-    }
+    // used for access to ftp-proxy
+    ucb::ContentBroker *pBroker = ucb::ContentBroker::get();
 
-    return m_xManager->
-        queryContentProvider(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "http:")));
-    //TODO! input ok?
+    if(pBroker) {
+        Reference<XContentProviderManager > xManager(
+            pBroker->getContentProviderManagerInterface());
+
+        if(xManager.is())
+            return
+                xManager->queryContentProvider(
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("http:")));
+        else
+            throw RuntimeException(
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "bad ucb::ContentBroker")),
+                *this);
+    } else
+        return 0;
+
 }

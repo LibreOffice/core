@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpcontent.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: abi $ $Date: 2002-10-25 08:53:17 $
+ *  last change: $Author: abi $ $Date: 2002-10-29 12:43:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,6 +317,7 @@ enum ACTION { NOACTION,
               THROWINTERACTIVECONNECT,
               THROWRESOLVENAME,
               THROWQUOTE,
+              THROWNOFILE,
               THROWGENERAL };
 
 
@@ -427,6 +428,19 @@ Any SAL_CALL FTPContent::execute(
                 aRet <<= excep;
                 ucbhelper::cancelCommandExecution(
                     aRet,
+                    Environment);
+            } else if(action == THROWNOFILE) {
+                Sequence<Any> seq(1);
+                PropertyValue value;
+                value.Name =
+                    rtl::OUString::createFromAscii("Uri");
+                value.Handle = -1;
+                value.Value <<= m_aFTPURL.ident(false,false);
+                value.State = PropertyState_DIRECT_VALUE;
+                seq[0] <<= value;
+                ucbhelper::cancelCommandExecution(
+                    IOErrorCode_NO_FILE,
+                    seq,
                     Environment);
             } else if(action == THROWQUOTE ||
                       action == THROWGENERAL) {
@@ -580,6 +594,8 @@ Any SAL_CALL FTPContent::execute(
                 action = THROWACCESSDENIED;
             else if(e.code() == CURLE_FTP_QUOTE_ERROR)
                 action = THROWQUOTE;
+            else if(e.code() == CURLE_FTP_COULDNT_RETR_FILE)
+                action = THROWNOFILE;
             else
                 // nothing known about the course of the error
                 action = THROWGENERAL;
@@ -647,7 +663,7 @@ FTPContent::getParent(  )
     throw (RuntimeException)
 {
     Reference<XContentIdentifier>
-        xIdent(new FTPContentIdentifier(m_aFTPURL.parent(),m_pFCP));
+        xIdent(new FTPContentIdentifier(m_aFTPURL.parent(false)));
     Reference<XContent> xContent(m_xProvider->queryContent(xIdent));
     return Reference<XInterface>(xContent,UNO_QUERY);
 }
@@ -861,7 +877,11 @@ Sequence<Any> FTPContent::setPropertyValues(
         }
     }
 
-    if(evt.getLength())
+    if(evt.getLength()) {
+        // title has changed
         notifyPropertiesChange(evt);
+        exchange(new FTPContentIdentifier(m_aFTPURL.ident(false,false)));
+    }
+
     return ret;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpurl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: abi $ $Date: 2002-10-25 12:09:11 $
+ *  last change: $Author: abi $ $Date: 2002-10-29 12:43:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -460,6 +460,9 @@ extern "C" int  no_func(void  *client,  char  *prompt, char*
 FILE* FTPURL::open()
     throw(curl_exception)
 {
+    if(!m_aPathSegmentVec.size())
+        throw curl_exception(CURLE_FTP_COULDNT_RETR_FILE);
+
     CURL *curl = m_pFCP->handle();
 
     SET_CONTROL_CONTAINER;
