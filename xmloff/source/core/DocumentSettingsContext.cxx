@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentSettingsContext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-19 13:25:57 $
+ *  last change: $Author: sab $ $Date: 2001-03-22 09:09:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -397,13 +397,9 @@ void XMLDocumentSettingsContext::EndElement()
     uno::Sequence<beans::PropertyValue> aSeqViewProps;
     if (aViewProps >>= aSeqViewProps)
         GetImport().SetViewSettings(aSeqViewProps);
-    else
-        DBG_ERROR("the any does not contain a sequence");
     uno::Sequence<beans::PropertyValue> aSeqConfigProps;
     if (aConfigProps >>= aSeqConfigProps)
         GetImport().SetConfigurationSettings(aSeqConfigProps);
-    else
-        DBG_ERROR("the any does not contain a sequence");
 }
 
 //=============================================================================
