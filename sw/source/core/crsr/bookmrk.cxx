@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bookmrk.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 09:33:14 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:01:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@ SwBookmark::~SwBookmark()
     {
         if( DDE_BOOKMARK == eMarkType && refObj->HasDataLinks() )
         {
-            ::so3::SvLinkSource* p = &refObj;
+            ::sfx2::SvLinkSource* p = &refObj;
             p->SendDataChanged();
         }
         refObj->SetNoServer();
