@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfexporter.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-21 14:58:02 $
+ *  last change: $Author: cl $ $Date: 2002-11-22 14:22:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,9 @@
 #ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATORFACTORY_HPP_
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#endif
 
 #ifndef _SV_GDIMTF_HXX
 #include <vcl/gdimtf.hxx>
@@ -136,6 +139,7 @@ using com::sun::star::lang::IllegalArgumentException;
 using com::sun::star::document::XExporter;
 using com::sun::star::document::XFilter;
 using com::sun::star::frame::XModel;
+using com::sun::star::lang::XServiceInfo;
 
 // -----------------------------------------------------------------------------
 
@@ -175,7 +179,7 @@ void PageInfo::addShape( ShapeInfo* pShapeInfo )
 // -----------------------------------------------------------------------------
 
 FlashExporter::FlashExporter(const Reference< XMultiServiceFactory > &rxMSF, sal_Int32 nJPEGCompressMode, sal_Bool bExportOLEAsJPEG)
-:   mxMSF( rxMSF ), mpWriter( NULL ), mnJPEGcompressMode(nJPEGCompressMode), mbExportOLEAsJPEG(bExportOLEAsJPEG)
+:   mxMSF( rxMSF ), mpWriter( NULL ), mnJPEGcompressMode(nJPEGCompressMode), mbExportOLEAsJPEG(bExportOLEAsJPEG), mbPresentation(true)
 {
 }
 
@@ -203,6 +207,10 @@ const sal_uInt16 cWaitButtonDepth = 10;
 
 sal_Bool FlashExporter::exportAll( Reference< XComponent > xDoc, Reference< XOutputStream > &xOutputStream, Reference< XStatusIndicator> &xStatusIndicator )
 {
+    Reference< XServiceInfo > xDocServInfo( xDoc, UNO_QUERY );
+    if( xDocServInfo.is() )
+        mbPresentation = xDocServInfo->supportsService( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.PresentationDocument"))) ;
+
     Reference< XDrawPagesSupplier > xDrawPagesSupplier(xDoc, UNO_QUERY);
     if(!xDrawPagesSupplier.is())
         return sal_False;
@@ -220,17 +228,20 @@ sal_Bool FlashExporter::exportAll( Reference< XComponent > xDoc, Reference< XOut
         xProp->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("Width") ) ) >>= mnDocWidth;
         xProp->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("Height") ) ) >>= mnDocHeight;
 
+        sal_Int32 nOutputWidth = 14400;
+        sal_Int32 nOutputHeight = (nOutputWidth * mnDocHeight ) / mnDocWidth;
         delete mpWriter;
-        mpWriter = new Writer( 14400, 10800, mnDocWidth, mnDocHeight, mnJPEGcompressMode  );
+        mpWriter = new Writer( nOutputWidth, nOutputHeight, mnDocWidth, mnDocHeight, mnJPEGcompressMode  );
     }
     catch( exception& )
     {
         OSL_ASSERT( false );
+        return false; // no writer, no cookies
     }
 
     const sal_Int32 nPageCount = xDrawPages->getCount();
     sal_uInt16 nPage;
-    xStatusIndicator->start(OUString( RTL_CONSTASCII_USTRINGPARAM( "Saving :" )), nPageCount);
+    xStatusIndicator->start(OUString( RTL_CONSTASCII_USTRINGPARAM( "Macromedia Flash (SWF)" )), nPageCount);
     for( nPage = 0; nPage < nPageCount; nPage++)
     {
         xStatusIndicator->setValue( nPage );
@@ -240,10 +251,13 @@ sal_Bool FlashExporter::exportAll( Reference< XComponent > xDoc, Reference< XOut
             continue;
 
         Reference< XPropertySet > xPropSet( xDrawPage, UNO_QUERY );
-        sal_Bool bVisible;
-        xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("Visible") ) ) >>= bVisible;
-        if( !bVisible )
-            continue;
+        if( mbPresentation )
+        {
+            sal_Bool bVisible;
+            xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("Visible") ) ) >>= bVisible;
+            if( !bVisible )
+                continue;
+        }
 
         exportBackgrounds( xDrawPage, nPage, false );
         exportBackgrounds( xDrawPage, nPage, true );
@@ -311,10 +325,13 @@ sal_Bool FlashExporter::exportSlides( Reference< XDrawPage > xDrawPage, Referenc
             mpWriter = new Writer( 14400, 10800, mnDocWidth, mnDocHeight, mnJPEGcompressMode );
         }
 
-        sal_Bool bVisible;
-        xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("Visible") ) ) >>= bVisible;
-        if( !bVisible )
-            return sal_False;
+        if( mbPresentation )
+        {
+            sal_Bool bVisible;
+            xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("Visible") ) ) >>= bVisible;
+            if( !bVisible )
+                return sal_False;
+        }
     }
     catch( exception& )
     {
@@ -363,16 +380,13 @@ sal_uInt16 FlashExporter::exportBackgrounds( Reference< XDrawPage > xDrawPage, s
     if( !xDrawPage.is() || !xPropSet.is() )
         return sal_False;
 
-    sal_Bool bBackgroundVisible, bBackgroundObjectsVisible;
+    sal_Bool bBackgroundVisible = true;
+    sal_Bool bBackgroundObjectsVisible = true;
 
-    try
+    if( mbPresentation )
     {
         xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("IsBackgroundVisible") ) ) >>= bBackgroundVisible;
         xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("IsBackgroundObjectsVisible") ) ) >>= bBackgroundObjectsVisible;
-    }
-    catch( exception& )
-    {
-        OSL_ASSERT( false );
     }
 
 
@@ -596,17 +610,20 @@ void FlashExporter::exportShape( Reference< XShape >& xShape)
     if( !xPropSet.is() )
         return;
 
-    try
+    if( mbPresentation )
     {
-        // skip empty presentation objects
-        sal_Bool bEmpty;
-        xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("IsEmptyPresentationObject") ) ) >>= bEmpty;
-        if( bEmpty )
-            return;
-    }
-    catch( Exception& )
-    {
-        // TODO: If we are exporting a draw, this property is not available
+        try
+        {
+            // skip empty presentation objects
+            sal_Bool bEmpty;
+            xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("IsEmptyPresentationObject") ) ) >>= bEmpty;
+            if( bEmpty )
+                return;
+        }
+        catch( Exception& )
+        {
+            // TODO: If we are exporting a draw, this property is not available
+        }
     }
 
     try
@@ -623,18 +640,21 @@ void FlashExporter::exportShape( Reference< XShape >& xShape)
             pShapeInfo->mnWidth = aBoundRect.Width;
             pShapeInfo->mnHeight = aBoundRect.Height;
 
-            xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("Bookmark") ) ) >>= pShapeInfo->maBookmark;
-            xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("DimColor") ) ) >>= pShapeInfo->mnDimColor;
-            xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("DimHide") ) ) >>= pShapeInfo->mbDimHide;
-            xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("DimPrevious") ) ) >>= pShapeInfo->mbDimPrev;
-            xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("Effect") ) ) >>= pShapeInfo->meEffect;
-            xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("PlayFull") ) ) >>= pShapeInfo->mbPlayFull;
-            xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("PresentationOrder") ) ) >>= pShapeInfo->mnPresOrder;
-            xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("Sound") ) ) >>= pShapeInfo->maSoundURL;
-            xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("SoundOn") ) ) >>= pShapeInfo->mbSoundOn;
-            xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("Speed") ) ) >>= pShapeInfo->meEffectSpeed;
-            xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("TextEffect") ) ) >>= pShapeInfo->meTextEffect;
-            xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("TransparentColor") ) ) >>= pShapeInfo->mnBlueScreenColor;
+            if( mbPresentation )
+            {
+                xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("Bookmark") ) ) >>= pShapeInfo->maBookmark;
+                xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("DimColor") ) ) >>= pShapeInfo->mnDimColor;
+                xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("DimHide") ) ) >>= pShapeInfo->mbDimHide;
+                xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("DimPrevious") ) ) >>= pShapeInfo->mbDimPrev;
+                xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("Effect") ) ) >>= pShapeInfo->meEffect;
+                xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("PlayFull") ) ) >>= pShapeInfo->mbPlayFull;
+                xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("PresentationOrder") ) ) >>= pShapeInfo->mnPresOrder;
+                xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("Sound") ) ) >>= pShapeInfo->maSoundURL;
+                xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("SoundOn") ) ) >>= pShapeInfo->mbSoundOn;
+                xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("Speed") ) ) >>= pShapeInfo->meEffectSpeed;
+                xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("TextEffect") ) ) >>= pShapeInfo->meTextEffect;
+                xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("TransparentColor") ) ) >>= pShapeInfo->mnBlueScreenColor;
+            }
 
 //          long ZOrder;
 //          xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("ZOrder") ) ) >>= ZOrder;
@@ -696,11 +716,11 @@ bool FlashExporter::getMetaFile( Reference< XComponent >&xComponent, GDIMetaFile
     utl::TempFile aFile;
     aFile.EnableKillingFile();
 
-    Sequence< PropertyValue > aFilterData( false && bExportAsJPEG ? 2 : 1);
+    Sequence< PropertyValue > aFilterData(bExportAsJPEG ? 2 : 1);
     aFilterData[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("Version") );
     aFilterData[0].Value <<= (sal_Int32)6000;
 
-    if (false && bExportAsJPEG)
+    if(bExportAsJPEG)
     {
         aFilterData[1].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("Translucent") );
         aFilterData[1].Value <<= (sal_Bool)sal_True;
