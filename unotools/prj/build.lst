@@ -6,4 +6,5 @@ ut	unotools\source\config					nmake	-	all	ut_config NULL
 ut	unotools\source\ucbhelper				nmake	-	all	ut_ucbhelper NULL
 ut	unotools\source\processfactory			nmake	-	all	ut_procfact NULL
 ut	unotools\source\i18n					nmake	-	all	ut_i18n NULL
-ut	unotools\util							nmake	-	all	ut_util ut_config ut_i18n ut_misc ut_procfact ut_streaming ut_ucbhelper NULL
+ut	unotools\source\property				nmake	-	all	ut_property NULL
+ut	unotools\util							nmake	-	all	ut_util ut_config ut_i18n ut_misc ut_procfact ut_streaming ut_ucbhelper ut_property NULL

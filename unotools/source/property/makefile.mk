@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: cl $ $Date: 2001-03-04 21:44:58 $
+#   last change: $Author: cl $ $Date: 2001-03-04 21:47:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,67 +60,37 @@
 #
 #*************************************************************************
 
-PRJ=..
+PRJ=..$/..
+PRJINC=..$/..$/inc
 PRJNAME=unotools
-TARGET=utl
-TARGETTYPE=CUI
-USE_LDUMP2=TRUE
+TARGET=property
 
-USE_DEFFILE=TRUE
+ENABLE_EXCEPTIONS=TRUE
+
+# --- Settings common for the whole project -----
+
+#UNOTYPES=
+#.INCLUDE : $(PRJINC)$/unotools$/unotools.mk
 
 # --- Settings ----------------------------------
 
-.INCLUDE :	settings.mk
+.INCLUDE : settings.mk
 
-LDUMP=ldump2.exe
+# --- Types -------------------------------------
 
-# --- Library -----------------------------------
+UNOUCRDEP=$(SOLARBINDIR)$/applicat.rdb
+UNOUCRRDB=$(SOLARBINDIR)$/applicat.rdb
 
-LIB1TARGET=$(SLB)$/untools.lib
-LIB1FILES=\
-        $(SLB)$/i18n.lib \
-        $(SLB)$/misc.lib \
-        $(SLB)$/streaming.lib \
-        $(SLB)$/config.lib \
-        $(SLB)$/ucbhelp.lib \
-        $(SLB)$/procfact.lib \
-        $(SLB)$/property.lib
+UNOUCROUT=$(OUT)$/inc
 
-SHL1TARGET=$(TARGET)$(UPD)$(DLLPOSTFIX)
+# --- Types -------------------------------------
 
-SHL1IMPLIB=iutl
+# --- Files -------------------------------------
 
-SHL1STDLIBS= \
-        $(SALLIB) \
-        $(OSLLIB) \
-        $(VOSLIB) \
-        $(CPPULIB) \
-        $(CPPUHELPERLIB) \
-        $(COMPHELPERLIB) \
-        $(UCBHELPERLIB) \
-        $(TOOLSLIB)
-
-SHL1LIBS=$(LIB1TARGET)
-SHL1DEF=$(MISC)$/$(SHL1TARGET).def
-
-SHL1DEPN=$(LIB1TARGET)
-
-DEF1NAME	=$(SHL1TARGET)
-DEF1DEPN        =$(MISC)$/$(SHL1TARGET).flt
-DEFLIB1NAME     =untools
-DEF1DES         =unotools
+SLOFILES=	$(SLO)$/propertysetinfo.obj \
+            $(SLO)$/propertysethelper.obj
 
 # --- Targets ----------------------------------
 
 .INCLUDE : target.mk
-
-# --- Filter-Datei ---
-
-$(MISC)$/$(SHL1TARGET).flt: makefile.mk
-    @echo ------------------------------
-    @echo Making: $@
-    @echo CLEAR_THE_FILE		> $@
-    @echo _TI					>> $@
-    @echo _real					>> $@
-        @echo _Impl >> $@
 
