@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XAccessibleAction.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-03-19 12:42:20 $
+ *  last change:$Date: 2003-03-25 14:31:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@ public class _XAccessibleAction extends lib.MultiMethodTest {
      */
 
     public void _doAccessibleAction() {
-        requiredMethod("getAccessibleKeyBinding()");
+        requiredMethod("getAccessibleActionCount()");
         boolean res = true;
 
         log.println("Calling method with wrong argument");
@@ -110,7 +110,12 @@ public class _XAccessibleAction extends lib.MultiMethodTest {
         }
 
         try {
-            boolean act = oObj.doAccessibleAction(0);
+            boolean act = false;
+            for (int i = 0; i< count; i++) {
+                log.println("do Action "+ oObj.getAccessibleActionDescription(i));
+                act = oObj.doAccessibleAction(i);
+                log.println("Worked: "+act);
+            }
             log.println("Did action: "+act);
             res &= act ;
         } catch (com.sun.star.lang.IndexOutOfBoundsException ioe) {
