@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ssfrm.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-04 13:22:57 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:07:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,7 +332,7 @@ void SwFrm::CheckDirChange()
                         for ( USHORT i = 0; i < nCnt; ++i )
                         {
                             SdrObject *pObj = (*pObjs)[i];
-                            if ( pObj->IsWriterFlyFrame() )
+                            if ( pObj->ISA(SwVirtFlyDrawObj) )
                             {
                                 SwFlyFrm *pFly =
                                          ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
@@ -383,7 +383,7 @@ void SwFrm::CheckDirChange()
             for ( USHORT i = 0; i < nCnt; ++i )
             {
                 SdrObject *pObj = (*pObjs)[i];
-                if( pObj->IsWriterFlyFrame() )
+                if( pObj->ISA(SwVirtFlyDrawObj) )
                     ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm()->CheckDirChange();
                 else
                 {
@@ -478,7 +478,7 @@ SwFrm::~SwFrm()
         for ( USHORT i = pDrawObjs->Count(); i; )
         {
             SdrObject *pObj = (*pDrawObjs)[--i];
-            if ( pObj->IsWriterFlyFrame() )
+            if ( pObj->ISA(SwVirtFlyDrawObj) )
                 delete ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
             else
             // OD 23.06.2003 #108784# - consider 'virtual' drawing objects
@@ -607,7 +607,7 @@ SwLayoutFrm::~SwLayoutFrm()
             {
                 nCnt = pFrm->GetDrawObjs()->Count();
                 SdrObject *pObj = (*pFrm->GetDrawObjs())[0];
-                if ( pObj->IsWriterFlyFrame() )
+                if ( pObj->ISA(SwVirtFlyDrawObj) )
                     delete ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
                 else if ( pObj->GetUserCall() )
                 {
@@ -632,7 +632,7 @@ SwLayoutFrm::~SwLayoutFrm()
         {
             nCnt = GetDrawObjs()->Count();
             SdrObject *pObj = (*GetDrawObjs())[0];
-            if ( pObj->IsWriterFlyFrame() )
+            if ( pObj->ISA(SwVirtFlyDrawObj) )
                 delete ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
             else if ( pObj->GetUserCall() )
             {
