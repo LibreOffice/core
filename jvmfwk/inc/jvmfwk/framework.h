@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framework.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jl $ $Date: 2004-05-04 08:43:41 $
+ *  last change: $Author: jl $ $Date: 2004-05-07 14:49:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,8 @@ typedef enum
     JFW_E_NO_PLUGIN,
     JFW_E_NOT_RECOGNIZED,
     JFW_E_FAILED_VERSION,
-    JFW_E_NO_JAVA_FOUND
+    JFW_E_NO_JAVA_FOUND,
+    JFW_E_VM_CREATION_FAILED
 } javaFrameworkError;
 
 /** an instance of this struct represents an installation of a Java
@@ -413,6 +414,11 @@ javaFrameworkError SAL_CALL jfw_getJavaInfoByPath(
     JFW_E_NEED_RESTART in the current process a different JRE has been selected
     which needs a prepared environment, which has to be done before the office
     process. Therefore the new JRE may not be used until the office was restarted.<br/>
+    JFW_E_NEED_RESTART is also returned when Java was disabled at the beginning and
+    then the user enabled it. If then the selected  JRE has the requirement
+    JFW_REQUIRE_NEEDRESTART then this error is returned. </br>
+    JFW_E_VM_CREATION_FAILED the creation of the JVM failed. The creation is performed
+    by a plug-in library and not by this API.
  */
 javaFrameworkError SAL_CALL jfw_startVM(JavaVMOption *arOptions,
                                  sal_Int32 nSize, JavaVM **ppVM,

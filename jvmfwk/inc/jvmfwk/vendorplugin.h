@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vendorplugin.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2004-05-05 14:11:17 $
+ *  last change: $Author: jl $ $Date: 2004-05-07 14:49:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,8 @@ typedef enum
     JFW_PLUGIN_E_WRONG_VERSION_FORMAT,
     JFW_PLUGIN_E_FAILED_VERSION,
     JFW_PLUGIN_E_NO_JRE,
-    JFW_PLUGIN_E_WRONG_VENDOR
+    JFW_PLUGIN_E_WRONG_VENDOR,
+    JFW_PLUGIN_E_VM_CREATION_FAILED
 } javaPluginError;
 
 
@@ -135,6 +136,7 @@ javaPluginError getJavaInfoByPath(
     JFW_PLUGIN_E_ERROR,
     JFW_PLUGIN_E_WRONG_VENDOR
     JFW_PLUGIN_E_INVALID_ARG,
+    JFW_PLUGIN_E_VM_CREATION_FAILED
 
  */
 javaPluginError startJavaVirtualMachine(

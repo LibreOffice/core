@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javaldx.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2004-05-04 10:44:06 $
+ *  last change: $Author: jl $ $Date: 2004-05-07 14:49:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,10 @@ int main(int argc, char **argv)
     }
 
     if (bEnabled == sal_False)
+    {
+        //Do not do any preparation because that may only slow startup time.
         return 0;
+    }
 
     JavaInfo * pInfo = NULL;
     javaFrameworkError errcode = JFW_E_NONE;
@@ -130,6 +133,12 @@ int main(int argc, char **argv)
             return -1;
         }
     }
+
+    //Only do something if the sunjavaplugin created this JavaInfo
+    rtl::OUString sSunVendor(RTL_CONSTASCII_USTRINGPARAM("Sun Microsystems Inc."));
+    if (sSunVendor.equals(pInfo->sVendor) == sal_False)
+        return 0;
+
     rtl::OString sPaths = getLD_LIBRARY_PATH(pInfo->arVendorData);
     fprintf(stdout, "%s\n", sPaths.getStr());
     jfw_freeJavaInfo(pInfo);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fwkutil.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jl $ $Date: 2004-04-28 09:11:38 $
+ *  last change: $Author: jl $ $Date: 2004-05-07 14:49:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,7 @@ namespace jfw
 {
 
 bool  g_bJavaSet = false;
+
 struct Init
 {
     osl::Mutex * operator()()
@@ -732,6 +733,8 @@ void setJavaSelected()
 {
     g_bJavaSet = true;
 }
+
+
 
 /** Determines if the currently selected Java was set in this process.
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sunjavaplugin.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jl $ $Date: 2004-05-06 11:44:47 $
+ *  last change: $Author: jl $ $Date: 2004-05-07 14:49:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -398,7 +398,7 @@ javaPluginError startJavaVirtualMachine(
             sSymbolCreateJava, osl_getThreadTextEncoding());
         fprintf(stderr,"Java runtime library: %s does not export symbol %s !",
                 sLib.getStr(), sSymbol.getStr());
-        return JFW_PLUGIN_E_ERROR;
+        return JFW_PLUGIN_E_VM_CREATION_FAILED;
     }
 
     // The office sets a signal handler at startup. That causes a crash
@@ -496,12 +496,12 @@ javaPluginError startJavaVirtualMachine(
         if( err < 0)
         {
             fprintf(stderr,"Can not create Java Virtual Machine");
-            errcode = JFW_PLUGIN_E_ERROR;
+            errcode = JFW_PLUGIN_E_VM_CREATION_FAILED;
         }
         else if( err > 0)
         {
             fprintf(stderr,"Can not create JavaVirtualMachine, abort handler was called");
-            errcode = JFW_PLUGIN_E_ERROR;
+            errcode = JFW_PLUGIN_E_VM_CREATION_FAILED;
         }
     }
         else

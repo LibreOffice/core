@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framework.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jl $ $Date: 2004-05-04 08:43:42 $
+ *  last change: $Author: jl $ $Date: 2004-05-07 14:49:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,8 @@
 
 namespace {
 JavaVM * g_pJavaVM = NULL;
+
+bool g_bEnabledSwitchedOn = false;
 
 sal_Bool areEqualJavaInfo(
     JavaInfo const * pInfoA,JavaInfo const * pInfoB)
@@ -316,6 +318,16 @@ javaFrameworkError SAL_CALL jfw_startVM(JavaVMOption *arOptions, sal_Int32 cOpti
     if (sVendorUpdate != javaSettings.getJavaInfoAttrVendorUpdate())
         return JFW_E_INVALID_SETTINGS;
 
+    //check if JAVA is disabled
+    //If Java is enabled, but it was disabled when this process was started
+    // then no preparational work, such as setting the LD_LIBRARY_PATH, was
+    //done. Therefore if a JRE needs it it must not be started.
+    if (javaSettings.getEnabled() == sal_False)
+        return JFW_E_JAVA_DISABLED;
+    else if (g_bEnabledSwitchedOn &&
+             (aInfo->nRequirements & JFW_REQUIRE_NEEDRESTART))
+        return JFW_E_NEED_RESTART;
+
     //Check if the selected Java was set in this process. If so it
     //must not have the requirments flag JFW_REQUIRE_NEEDRESTART
     if ((aInfo->nRequirements & JFW_REQUIRE_NEEDRESTART)
@@ -411,7 +423,11 @@ javaFrameworkError SAL_CALL jfw_startVM(JavaVMOption *arOptions, sal_Int32 cOpti
     //start Java
     JavaVM *pVm = NULL;
     javaPluginError plerr = (*pFunc)(aInfo, arOpt, index, & pVm, ppEnv);
-    if (plerr != JFW_PLUGIN_E_NONE)
+    if (plerr == JFW_PLUGIN_E_VM_CREATION_FAILED)
+    {
+        errcode = JFW_E_VM_CREATION_FAILED;
+    }
+    else if (plerr != JFW_PLUGIN_E_NONE )
     {
         errcode = JFW_E_ERROR;
     }
@@ -420,7 +436,8 @@ javaFrameworkError SAL_CALL jfw_startVM(JavaVMOption *arOptions, sal_Int32 cOpti
         g_pJavaVM = pVm;
         *ppVM = pVm;
     }
-    return JFW_E_NONE;
+    OSL_ASSERT(plerr != JFW_PLUGIN_E_WRONG_VENDOR);
+    return errcode;
 }
 
 /** We do not use here jfw_findAllJREs and then check if a JavaInfo
@@ -621,6 +638,8 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
         {
             //copy to out param
             *pInfo = aCurrentInfo.cloneJavaInfo();
+            //remember that this JRE was selected in this process
+            jfw::setJavaSelected();
         }
     }
     else
@@ -800,6 +819,8 @@ javaFrameworkError SAL_CALL jfw_setSelectedJRE(JavaInfo const *pInfo)
     errcode = node.writeSettings();
     if (errcode != JFW_E_NONE)
         return errcode;
+    //remember that the JRE was selected in this process
+    jfw::setJavaSelected();
     return errcode;
 }
 javaFrameworkError SAL_CALL jfw_setEnabled(sal_Bool bEnabled)
@@ -807,10 +828,27 @@ javaFrameworkError SAL_CALL jfw_setEnabled(sal_Bool bEnabled)
     osl::MutexGuard guard(jfw::getFwkMutex());
     javaFrameworkError errcode = JFW_E_NONE;
     jfw::CNodeJava node;
+
+    if (g_bEnabledSwitchedOn == false && bEnabled == sal_True)
+    {
+        //When the process started then Enabled was false.
+        //This is first time enabled is set to true.
+        //That means, no preparational work has been done, such as setting the
+        //LD_LIBRARY_PATH, etc.
+
+        //check if Enabled is false;
+        errcode = node.loadFromSettings();
+        if (errcode != JFW_E_NONE)
+            return errcode;
+        if (node.getEnabled() == sal_False)
+            g_bEnabledSwitchedOn = true;
+    }
     node.setEnabled(bEnabled);
     errcode = node.writeSettings();
     if (errcode != JFW_E_NONE)
         return errcode;
+    //remember if the enabled was false at the beginning and has
+    //been changed to true.
     return errcode;
 }
 
