@@ -15,8 +15,6 @@ Public sQueryName as String
 Public NumberofStyles as Integer
 Public oDBConnection as Object
 Public bWithBackGraphic as Boolean
-
-
 Public bNeedFieldRefresh as Boolean
 Public oDBForm as Object
 Public oColumns() as Object
@@ -32,8 +30,9 @@ Public WidthList(15,3)
 Public ImgWidthList(3,3)
 Public sDBName as String
 Public Tablename as String
-Public Const SBSIZETEXT = &quot;The quick brown fox jumps over the lazy dog.The quick brown fox jumps over the lazy dog.&quot;
+Public Const SBSIZETEXT = &quot;The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog.&quot;
 Public bDisposeDoc as Boolean
+Public bDebug as Boolean
 &apos; Todo: Mit FS abschnacken, dass als CommandType Nur Queries und Tables zugelassen sind. Dabei müsste noch abgklärt werden
 &apos; wann ein Content ein &apos;Command&apos; ist.
 
@@ -72,6 +71,10 @@ Dim SelCount as Integer
 &apos;On Local Error Goto GlobalError
 	BasicLibraries.LoadLibrary(&quot;Tools&quot;)
 	BasicLibraries.LoadLibrary(&quot;WebWizard&quot;)
+	bDebug = True
+	If Not bDebug Then
+		On Local Error GoTo WIZARDERROR
+	End If
 &apos; Todo: Variable is initialized due to Bug#88329
 	CurArrangement = 0
 	bControlsareCreated = False
@@ -149,20 +152,23 @@ Dim SelCount as Integer
 	oDialogModel.imgTheme.ImageURL = FormPath &amp; &quot;FormWizard_1.bmp&quot;
 	oDialogModel.cmdBack.Enabled = False
 	oDialogModel.cmdGoOn.Enabled = False
-
+	DlgFormDB.GetControl(&quot;lstDatabases&quot;).SetFocus()
 	DlgFormDB.Execute()
 	DlgFormDB.Dispose
 	If Not IsNull(oDBConnection) Then
 		oDBConnection.Dispose()
 	End If
-&apos;	If bDisposeDoc Then
-&apos;		oDocument.Dispose
-&apos;	End If
+	If bDisposeDoc Then
+		oDocument.Dispose
+	End If
+
 	Exit Sub
-GlobalError:
-	MsgBox(sMsgErrMsg , 16, sMsgWizardName)
-	ToggleWindow(True)
-	DlgFormDB.EndExecute()
+WIZARDERROR:
+	If Err &lt;&gt; 0 Then
+		Msgbox(sMsgErrMsg, 16, GetProductName())
+		ToggleWindow(True)
+		DlgFormDB.EndExecute()
+	End If
 End Sub
 
 
@@ -196,7 +202,7 @@ Dim QueryIndex as Integer
 		ToggleListboxControls(oDialogModel, True)
 	End If
 	Exit Sub
-&apos;TODO: Diese Fehlermarke sinnvoll einbinden	
+&apos;TODO: Diese Fehlermarke sinnvoll einbinden
 NOFIELDS:
 	MsgBox sMsgErrCouldNotOpenObject, 16, sMsgWizardName
 End Sub
@@ -208,20 +214,31 @@ End Sub
 
 
 Sub PreviousStep()
+	If Not bDebug Then
+		On Local Error GoTo WIZARDERROR
+	End If
+
 	With oDialogModel
 		.Step = 1
 		.cmdBack.Enabled = False
 		.cmdGoOn.Enabled = True
 		.lstSelFields.Tag = Not bControlsareCreated
 		.cmdGoOn.Label = sGoOn
-		.imgTheme.ImageUrl = FormPath &amp; &quot;FormWizard_1.bmp&quot;	
+		.imgTheme.ImageUrl = FormPath &amp; &quot;FormWizard_1.bmp&quot;
 	End With
-	DlgFormDB.Title = WizardTitle(1)
+WIZARDERROR:
+	If Err &lt;&gt; 0 Then	
+		Msgbox(sMsgErrMsg, 16, GetProductName())
+	End If
 End Sub
 
 
 Sub NextStep()
 Dim bOldVisible as Boolean
+	If Not bDebug Then
+		On Local Error GoTo WIZARDERROR
+	End If
+
 	&apos; Note: Unfortunately it is not possible to query the visibility of the imagecontrol directly
 	bOldVisible = oDialogModel.Height &gt; 40
 	Select Case oDialogModel.Step
@@ -237,12 +254,18 @@ Dim bOldVisible as Boolean
 			oDialogModel.cmdGoOn.Label = sReady
 			oDialogModel.cmdBack.Enabled = True
 			oDialogModel.Step = 2
+			bDisposeDoc = False
 		Case 2
 			StoreForm()
 	End Select
 	DlgFormDB.GetControl(&quot;imgTheme&quot;).Visible = bOldVisible
 	oDialogModel.imgTheme.ImageUrl = FormPath &amp; &quot;FormWizard_&quot; &amp; oDialogModel.Step &amp; &quot;.bmp&quot;
 	DlgFormDB.Title = WizardTitle(oDialogModel.Step)
+WIZARDERROR:
+	If Err &lt;&gt; 0 Then	
+		Msgbox(sMsgErrMsg, 16, GetProductName())
+	End If
+	
 End Sub
 
 
@@ -277,7 +300,7 @@ End Sub
 
 Sub StoreForm()
 Dim bDocIsStored as Boolean
-Dim FilterNames(1,2) as String
+Dim FilterNames(0,2) as String
 Dim oMasterKey as Object
 Dim oFilters() as Object
 Dim sTargetPath as String
@@ -287,14 +310,14 @@ Dim bLinkExists as Boolean
 Dim i as Integer	
 Dim sBaseBookmarkName as String
 	oMasterKey = GetRegistryKeyContent(&quot;org.openoffice.Office.TypeDetection/&quot;)
-	oFilters() = oMasterKey.Types
+	oFilters() = oMasterKey.Filters
 	FilterNames(0,0) = oFilters.GetByName(&quot;writer_StarOffice_XML_Writer&quot;).UIName
 	FilterNames(0,1) = &quot;*.sxw&quot;
 	FilterNames(0,2) = &quot;&quot;
-	FilterNames(1,0) = oFilters.GetByName(&quot;writer_StarOffice_XML_Writer_Template&quot;).UIName
-	FilterNames(1,1) = &quot;*.stw&quot;
-	FilterNames(1,2) = &quot;swriter: writer_StarOffice_XML_Writer_Template&quot;
-	sTargetPath = StoreDocument(oDocument, FilterNames(), &quot;Form_&quot; &amp; sDBName &amp; &quot;.&quot; &amp; TableName, WorkPath)
+&apos;	FilterNames(1,0) = oFilters.GetByName(&quot;writer_StarOffice_XML_Writer_Template&quot;).UIName
+&apos;	FilterNames(1,1) = &quot;*.stw&quot;
+&apos;	FilterNames(1,2) = &quot;swriter: writer_StarOffice_XML_Writer_Template&quot;
+	sTargetPath = StoreDocument(oDocument, FilterNames(), &quot;Form_&quot; &amp; sDBName &amp; &quot;_&quot; &amp; TableName, WorkPath)
 	If sTargetPath &lt;&gt; &quot;&quot; Then
 		sBookmarkName = GetFileNamewithoutExtension(FileNameoutofPath(sTargetPath))
 		sBaseBookmarkName = sBookmarkName

@@ -48,6 +48,7 @@ End Function
 Function GetPeerSize(oModel as Object, oControl as Object, Optional LocText)	
 Dim oPeer as Object
 Dim aPeerSize as new com.sun.star.awt.Size
+Dim NullValue
 	oControl = oController.GetControl(oModel)
 	oPeer = oControl.GetPeer()
 	If oControl.Model.PropertySetInfo.HasPropertybyName(&quot;EffectiveMax&quot;) Then
@@ -57,22 +58,27 @@ Dim aPeerSize as new com.sun.star.awt.Size
 		Else
 			oControl.Model.EffectiveValue = oControl.Model.EffectiveMax
 		End If
+		GetPeerSize() = oPeer.PreferredSize()	
+		oControl.Model.EffectiveValue = NullValue
+
 	ElseIf CurFieldType = com.sun.star.sdbc.DataType.BIT Then
-		aPeerSize = oPeer.PreferredSize
+		GetPeerSize() = oPeer.PreferredSize()	
 	ElseIf Not IsMissing(LocText) Then
 		oControl.Text = LocText
+		GetPeerSize() = oPeer.PreferredSize()	
 	ElseIf CurFieldType = com.sun.star.sdbc.DataType.DATE Then
 		oControl.Model.Date = Date
+		GetPeerSize() = oPeer.PreferredSize()
+		oControl.Model.Date = NullValue
 	ElseIf CurFieldType = com.sun.star.sdbc.DataType.TIME Then
 		oControl.Time = Time
+		GetPeerSize() = oPeer.PreferredSize()
+		oControl.Time = NullValue
 	Else
-&apos;		oControl.Text = Mid(SBSIZETEXT,1,CurFieldLength)
-		aPeerSize = oPeer.PreferredSize()	
-		GetPeerSize() = aPeerSize
-		Exit Function
+		oControl.Text = Mid(SBSIZETEXT,1,oControl.MaxTextLen)
+		GetPeerSize() = oPeer.PreferredSize()
+		oControl.Text = &quot;&quot;
 	End If
-	aPeerSize = oPeer.PreferredSize()	
-	GetPeerSize = aPeerSize
 End Function
 
 
@@ -126,6 +132,10 @@ End Function
 Sub	ImportStyles()
 Dim CurIndex as Integer
 Dim sImportPath as String
+	If Not bDebug Then
+		On Local Error GoTo WIZARDERROR
+	End If
+
 	ToggleLayoutPage(False)
 	oDocument.LockControllers
 	CurIndex = GetCurIndex(oDialogModel.lstStyles, Styles(), NumberofStyles,8)
@@ -134,6 +144,11 @@ Dim sImportPath as String
 	ControlCaptionsToStandardLayout()
 	ToggleOptionButtons(oDialogModel, bWithBackGraphic)	
 	ConfigurePageStyle()	
+WIZARDERROR:
+	If Err &lt;&gt; 0 Then	
+		Msgbox(sMsgErrMsg, 16, GetProductName())
+	End If	
+
 	oDocument.UnlockControllers
 	ToggleLayoutPage(True, &quot;lstStyles&quot;)	
 End Sub
@@ -153,11 +168,9 @@ Function SetNumerics(ByVal oLocObject as Object, iLocFieldType as Integer) as Ob
 		Case  com.sun.star.sdbc.DataType.SMALLINT
 			oLocObject.EffectiveMax = 32767 
 			oLocObject.EffectiveMin = -32768
-			oLocObject.DecimalAccuracy = 0
 		Case com.sun.star.sdbc.DataType.TINYINT
 			oLocObject.EffectiveMax = 127
 			oLocObject.EffectiveMin = -128
-			oLocObject.DecimalAccuracy = 0
 		Case com.sun.star.sdbc.DataType.FLOAT, com.sun.star.sdbc.DataType.REAL, com.sun.star.sdbc.DataType.DOUBLE, com.sun.star.sdbc.DataType.DECIMAL, com.sun.star.sdbc.DataType.NUMERIC
 &apos;		oLocObject.Scale = 0
 		&apos; Todo: Hier sollte die Property &quot;Scale&quot; zusammen mit der Precision abgefragt werden, um die Nachkommastellen richtig darzustellen,
@@ -170,9 +183,9 @@ Function SetNumerics(ByVal oLocObject as Object, iLocFieldType as Integer) as Ob
 			Else
 				oLocObject.MaxTextLen = CurFieldLength			
 			End If
-			oLocObject.DefaultText = Mid(SBSIZETEXT,1,CurFieldLength)
+&apos;			oLocObject.DefaultText = Mid(SBSIZETEXT,1,CurFieldLength)
 		Case com.sun.star.sdbc.DataType.DATE, com.sun.star.sdbc.DataType.TIME
-			oLocObject.MaxTextLen = CurFieldLength
+&apos;			oLocObject.MaxTextLen = CurFieldLength
 	End Select
 	
 End Function
@@ -249,5 +262,4 @@ Function GetDBHeight(oDBModel as Object)
 		End If
 	End If
 	GetDBHeight() = nDBHeight
-End Function
-</script:module>
+End Function</script:module>

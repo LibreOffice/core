@@ -259,20 +259,32 @@ Dim aSize as New com.sun.star.awt.Size
 Dim nDateWidth as Long
 Dim nTimeWidth as Long
 Dim oGroupShape as Object
-
-&apos;	aPoint = GetPoint(nXDBPos, nYDBPos)
-	oGroupShape = oDocument.CreateInstance(&quot;com.sun.star.drawing.GroupShape&quot;)
-&apos;	aSize = GetSize(2000, 600)
-&apos;	oGroupShape.Size = aSize
-&apos;	oGroupShape.Position = (aPoint) &apos;oFirstShape.Position
-&apos;	oGroupShape.AnchorType = com.sun.star.text.TextContentAnchorType.AT_PARAGRAPH
+&apos;	oGroupShape = oDocument.CreateInstance(&quot;com.sun.star.drawing.GroupShape&quot;)
+&apos;	oDrawPage.Add(oGroupShape)
 &apos;	aSize = GetSize(1000, 600)
-&apos;	aPoint = GetPoint(0,0)
+&apos;
+&apos;	oDateModel = CreateUnoService(&quot;com.sun.star.form.component.DateField&quot;)
+&apos;	oDateShape = InsertControl(oGroupShape, oDateModel, aPoint, aSize)
+&apos;
+&apos;	oTimeModel = CreateUnoService(&quot;com.sun.star.form.component.TimeField&quot;)
+&apos;	oTimeShape = InsertControl(oGroupShape, oTimeModel, aPoint, aSize)
+&apos;	InsertTimeStampShape() = oGroupShape
 
+	aPoint = GetPoint(nXDBPos, nYDBPos)
+	oGroupShape = oDocument.CreateInstance(&quot;com.sun.star.drawing.GroupShape&quot;)
+	oGroupShape.AnchorType = com.sun.star.text.TextContentAnchorType.AT_PARAGRAPH
+	oGroupShape.Position = aPoint
+	oDrawPage.Add(oGroupShape)
+	aSize = GetSize(2000, 600)
+
+&apos;	oGroupShape.Size = aSize
+&apos;	oGroupShape.Position = aPoint
+
+	aSize = GetSize(1000, 600)
 	CurFieldType = com.sun.star.sdbc.DataType.DATE
 	oDateModel = CreateUnoService(&quot;com.sun.star.form.component.DateField&quot;)
 	oDateModel.DataField = CurFieldName
-	oDateShape = InsertControl(oDrawPage, oDateModel, aPoint, aSize)
+	oDateShape = InsertControl(oGroupShape, oDateModel, aPoint, aSize)
 	SetNumerics(oDateModel, CurFieldType)
 	nDBHeight = GetDBHeight(oDateModel)
 	nDateWidth = GetPreferredWidth(oDateModel,True)
@@ -288,10 +300,9 @@ Dim oGroupShape as Object
 	aSize = GetSize(nTimeWidth,nDBHeight)
 	oTimeShape.SetSize(aSize)
 	Set oDBShapeList(i)= oDateTimeShape
-	oGroupShape.Add(oTimeShape)
 	nDBWidth = nDateWidth + nTimeWidth
 	CheckOuterPoints(nXDBPos, nDBWidth, nYDBPos, nDBHeight, True)
-	InsertTimeStampShape() = oGroupShape	
+	InsertTimeStampShape() = oGroupShape
 End Function
 
 
@@ -518,28 +529,4 @@ Dim iStandardColor as Long
 			oCurModel.TextColor = iStandardColor
 		Next i
 	End If 
-End Sub
-
-
-&apos;Function CreateDateTimeShapeCollection(oDrawPage as Object, oFirstShape as Object, oSecShape as Object) as Object
-&apos;Dim oGroupShape as Object
-&apos;Dim aSize As New com.sun.star.awt.Size
-&apos;	oGroupShape = oDocument.CreateInstance(&quot;com.sun.star.drawing.GroupShape&quot;)
-&apos;	aSize = GetSize(oFirstShape.Size.Width + oSecShape.Size.Width, oFirstShape.Size.Height)
-&apos;	oGroupShape.Size = aSize
-&apos;	oGroupShape.Position = oFirstShape.Position
-&apos;	oGroupShape.AnchorType = com.sun.star.text.TextContentAnchorType.AT_PARAGRAPH
-&apos;	oDrawPage.Add(oGroupShape)
-&apos;	oGroupShape.Add(oFirstShape)
-&apos;	oGroupShape.Add(oSecShape)
-&apos;	CreateDateTimeShapeCollection() = oGroupShape
-&apos;End Function
-
-
-&apos;Sub GroupShapes(oDrawPage as Object, oLocTextShape as Object, oLocDBShape as Object)
-&apos;Dim oShapes as Object
-&apos;	oShapes = createUnoService(&quot;com.sun.star.drawing.ShapeCollection&quot;)
-&apos;	oShapes.Add(oLocTextShape)
-&apos;	oShapes.Add(oLocDBShape)
-&apos;	oDrawPage.Group(oShapes)
-&apos;End Sub</script:module>
+End Sub</script:module>

@@ -112,9 +112,9 @@ Dim i as Integer
 		Case cTabled
 			PositionGridControl(MaxIndex)
 		Case Else
-			oDocument.LockControllers()
+&apos;			oDocument.LockControllers()
 			PositionControls(MaxIndex)
-			oDocument.UnlockControllers()
+&apos;			oDocument.UnlockControllers()
 	End Select
 	ToggleLayoutPage(True)
 	oProgressbar.End
@@ -169,6 +169,10 @@ Dim oModel as Object
 Dim i as Integer
 Dim oCurModel as Object
 Dim sLocText as String
+	If Not bDebug Then
+		On Local Error GoTo WIZARDERROR
+	End If
+
 	oModel = oEvent.Source.Model
 	SwitchBorderMode(Val(Right(oModel.Name,1)))	
 	ToggleLayoutPage(False)
@@ -185,6 +189,12 @@ Dim sLocText as String
 			Next i
 		End If
 	End If
+
+WIZARDERROR:
+	If Err &lt;&gt; 0 Then	
+		Msgbox(sMsgErrMsg, 16, GetProductName())
+	End If	
+	
 	oDocument.UnlockControllers
 	ToggleLayoutPage(True)
 End Sub
@@ -192,7 +202,12 @@ End Sub
 
 Sub ChangeLabelAlignments(oEvent as Object)
 Dim i as Integer
+Dim oSize as New com.sun.star.awt.Size
 Dim oModel as Object
+	If Not bDebug Then
+		On Local Error GoTo WIZARDERROR
+	End If
+
 	oModel = oEvent.Source.Model
 	SwitchAlignMode(Val(Right(oModel.Name,1)))
 	ToggleLayoutPage(False)
@@ -202,6 +217,18 @@ Dim oModel as Object
 			oTCShapeList(i).GetControl.Align = CurAlignmode
 		Next i
 	End If
+	If CurAlignmode = com.sun.star.awt.TextAlign.RIGHT Then
+		For i = 0 To Ubound(oTCShapeList())
+			oSize = oTCShapeList(i).Size
+			oSize.Width = oDBShapeList(i).Position.X - oTCShapeList(i).Position.X - cHoriDistance
+			oTCShapeList(i).Size = oSize
+		Next i
+	End If	
+WIZARDERROR:
+	If Err &lt;&gt; 0 Then	
+		Msgbox(sMsgErrMsg, 16, GetProductName())
+	End If	
+
 	oDocument.UnlockControllers()
 	ToggleLayoutPage(True)
 End Sub
@@ -209,6 +236,10 @@ End Sub
 
 Sub ChangeArrangemode(oEvent as Object)
 Dim oModel as Object
+	If Not bDebug Then
+		On Local Error GoTo WIZARDERROR
+	End If
+
 	oModel = oEvent.Source.Model
 	SwitchArrangementButtons(Val(Right(oModel.Name,1)))
 	oModel.State = 1
@@ -232,6 +263,10 @@ Dim oModel as Object
 				oDBForm.Load
 		End Select
 	End If
+WIZARDERROR:
+	If Err &lt;&gt; 0 Then	
+		Msgbox(sMsgErrMsg, 16, GetProductName())
+	End If	
 End Sub
 
 

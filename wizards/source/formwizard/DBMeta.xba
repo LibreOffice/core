@@ -20,24 +20,22 @@ End Sub
 Sub GetSelectedDBMetaData()
 Dim NullList()
 Dim OldsDBname as String
-Dim bGetMetaData as Boolean
 Dim DBIndex as Integer
 	If Ubound(oDialogModel.lstDatabases.SelectedItems()) &gt; -1 Then
 		ToggleDatabasePage(False)
 		DBIndex = oDialogModel.lstDatabases.SelectedItems(0)
 		sDBName = sDatabaseList(DBIndex)
 		If GetConnection(sDBName) Then
-			bGetMetaData = GetDBMetaData()
-		End If
-		If bGetMetaData Then
-			With oDialogModel
-				.lstTables.Enabled = True
-				.lblTables.Enabled = True
-				.lstTables.StringItemList() = AddListToList(TableNames(), QueryNames())
-				iCommandTypes() = CreateCommandTypeList()
-				.lstFields.StringItemList() = NullList()
-				.lstSelFields.StringItemList() = NullList()
-			End With
+			If GetDBMetaData() Then
+				With oDialogModel
+					.lstTables.Enabled = True
+					.lblTables.Enabled = True
+					.lstTables.StringItemList() = AddListToList(TableNames(), QueryNames())
+					iCommandTypes() = CreateCommandTypeList()
+					.lstFields.StringItemList() = NullList()
+					.lstSelFields.StringItemList() = NullList()
+				End With
+			End If
 		End If
 		ToggleDatabasePage(True)
 	End If
@@ -206,6 +204,10 @@ Dim OldMaxIndex as Integer
 Dim s as Integer
 Dim n as Integer
 Dim m as Integer
+	If Not bDebug Then
+		On Local Error GoTo WIZARDERROR
+	End If
+
 &apos; Todo: Die folgenden Zeilen könnten in einer allgemeinen Routine 
 &apos; bearbeitet werden, z. B. durch Umschreiben von AddListToList, wobei
 &apos; beim Abfragen des Ubounds der zweiten Dimension eine Fehlerabfrage nötig wäre.
@@ -225,24 +227,32 @@ Dim m as Integer
 		ReDim Preserve WidthList(15, 4)
 		RemoveListItems(oDialogModel.lstFields(), oDialogModel.lstSelFields(), ImgFieldNames())
 	End If
+WIZARDERROR:
+	If Err &lt;&gt; 0 Then
+		Msgbox(&quot;Blabla&quot;,16, GetProductName())
+	End If	
 End Sub
 
 
 Function CreateCommandTypeList()
 Dim MaxTableIndex as Integer
 Dim MaxQueryIndex as Integer
+Dim MaxIndex as Integer
 Dim i as Integer
 Dim a as Integer
 	MaxTableIndex = Ubound(TableNames()
 	MaxQueryIndex = Ubound(QueryNames()
-Dim LocCommandTypes(MaxTableIndex + MaxQueryIndex + 1) as Integer
-	For i = 0 To MaxTableIndex
-		LocCommandTypes(i) = com.sun.star.sdb.CommandType.TABLE
-	Next i
-	a = i
-	For i = 0 To MaxQueryIndex
-		LocCommandTypes(a) = com.sun.star.sdb.CommandType.QUERY
-	Next i
+	MaxIndex = MaxTableIndex + MaxQueryIndex + 1
+	If MaxIndex &gt; -1 Then
+		Dim LocCommandTypes(MaxIndex) as Integer
+		For i = 0 To MaxTableIndex
+			LocCommandTypes(i) = com.sun.star.sdb.CommandType.TABLE
+		Next i
+		a = i
+		For i = 0 To MaxQueryIndex
+			LocCommandTypes(a) = com.sun.star.sdb.CommandType.QUERY
+		Next i
+	End If
 	CreateCommandTypeList() = LocCommandTypes()
 End Function
 
