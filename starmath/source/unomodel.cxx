@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 14:45:29 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 16:09:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -427,7 +427,7 @@ OUString SmModel::getImplementationName(void) throw( uno::RuntimeException )
     return rtl::OUString::createFromAscii("com.sun.star.comp.math.FormulaDocument");
 }
 
-/*-- 05.11.03 12:57:00---------------------------------------------------
+/*-- 20.01.04 11:21:00---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 sal_Bool SmModel::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
@@ -437,7 +437,7 @@ sal_Bool SmModel::supportsService(const OUString& rServiceName) throw( uno::Runt
             rServiceName == C2U("com.sun.star.formula.FormulaProperties")
            );
 }
-/*-- 07.02.00 13:24:09---------------------------------------------------
+/*-- 20.01.04 11:21:00---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 uno::Sequence< OUString > SmModel::getSupportedServiceNames(void) throw( uno::RuntimeException )
@@ -449,9 +449,10 @@ uno::Sequence< OUString > SmModel::getSupportedServiceNames_Static(void)
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
 
-    uno::Sequence< OUString > aRet(1);
+    uno::Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.formula.FormulaProperties");
+    pArray[0] = C2U("com.sun.star.document.OfficeDocument");
+    pArray[1] = C2U("com.sun.star.formula.FormulaProperties");
     return aRet;
 }
 
