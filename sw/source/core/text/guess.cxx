@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guess.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-08 10:50:59 $
+ *  last change: $Author: ama $ $Date: 2001-03-13 10:12:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,7 +277,14 @@ sal_Bool SwTxtGuess::Guess( const SwTxtFormatInfo &rInf, const KSHORT nPorHeight
         LineBreakResults aResult = pBreakIt->xBreak->getLineBreak(
                 rInf.GetTxt(), nCutPos, pBreakIt->GetLocale(aLang),
                 rInf.GetLineStart(), aHyphOpt, aUserOpt );
-        nBreakPos = nBreakStart = (xub_StrLen)aResult.breakIndex;
+        nBreakPos = (xub_StrLen)aResult.breakIndex;
+
+        // if we are formatting multi portions we want to allow line breaks
+        // at the border between single line and multi line portion
+        if ( nBreakPos < rInf.GetLineStart() && rInf.IsFirstMulti() )
+            nBreakPos = rInf.GetLineStart();
+
+        nBreakStart = nBreakPos;
 
         bHyph = aResult.breakType == BreakType::HYPHENATION;
 
