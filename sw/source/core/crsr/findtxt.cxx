@@ -2,9 +2,9 @@
  *
  *  $RCSfile: findtxt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-22 14:11:32 $
+ *  last change: $Author: jp $ $Date: 2000-12-02 18:09:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,6 +260,10 @@ BYTE SwPaM::Find( const utl::SearchParam& rParam, utl::TextSearch& rSTxt,
                 // setze den Bereich richtig
                 *GetPoint() = *pPam->GetPoint();
                 SetMark();
+
+                if( !bSrchForward )     // move the "correct" positions, because
+                    ++nStart, ++nEnde;  // start is inclusiv, end is exclusiv
+
                 // Start und Ende wieder korrigieren !!
                 if( aFltArr.Count() )
                 {
@@ -273,7 +277,7 @@ BYTE SwPaM::Find( const utl::SearchParam& rParam, utl::TextSearch& rSTxt,
                         ;
                     nStart = nNew;
                     for( n = 0, nNew = nEnde;
-                        n < aFltArr.Count() && aFltArr[ n ] <= nEnde;
+                        n < aFltArr.Count() && aFltArr[ n ] < nEnde;
                         ++n, ++nNew )
                         ;
                     nEnde = nNew;
@@ -285,7 +289,7 @@ BYTE SwPaM::Find( const utl::SearchParam& rParam, utl::TextSearch& rSTxt,
 
                 // kein Bereich selektiert und am Anfng/Ende ? ueber den
                 // Absatz selektieren
-                if( (!nStart && !((USHORT)(nEnde+1))) ||    // fuer 0 und -1 !
+/*              if( (!nStart && !((USHORT)(nEnde+1))) ||    // fuer 0 und -1 !
                     ( nStart > nEnde ))
                 {
                     // nicht von der Start Position entfernt
@@ -299,11 +303,8 @@ BYTE SwPaM::Find( const utl::SearchParam& rParam, utl::TextSearch& rSTxt,
                         continue;
                 }
                 else
-                {
-                    GetPoint()->nContent = nEnde;
-                    if( !Move( fnMoveForward, fnGoCntnt ) )
-                        GetPoint()->nContent = nTxtLen;
-                }
+*/                  GetPoint()->nContent = nEnde;
+
                 if( utl::SearchParam::SRCH_REGEXP == rParam.GetSrchType() &&
                     1 < Abs( (int)(GetPoint()->nNode.GetIndex() - GetMark()->nNode.GetIndex())))
                     // Fehler: es koennen maximal 2 Nodes selektiert werden !!
