@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table2.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:20:54 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 16:08:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1434,13 +1434,53 @@ BOOL ScTable::HasSelectionMatrixFragment( const ScMarkData& rMark ) const
 BOOL ScTable::IsBlockEditable( USHORT nCol1, USHORT nRow1, USHORT nCol2,
             USHORT nRow2, BOOL* pOnlyNotBecauseOfMatrix /* = NULL */ ) const
 {
-    BOOL bIsEditable;
+    BOOL bIsEditable = TRUE;
     if ( nLockCount )
         bIsEditable = FALSE;
-    else if ( bProtected )
-        bIsEditable = !HasAttrib( nCol1, nRow1, nCol2, nRow2, HASATTR_PROTECTED );
-    else
-        bIsEditable = TRUE;
+    else if ( bProtected && !pDocument->IsScenario(nTab) )
+    {
+        if((bIsEditable = !HasAttrib( nCol1, nRow1, nCol2, nRow2, HASATTR_PROTECTED )))
+        {
+            // If Sheet is protected and cells are not protected then
+            // check the active scenario protect flag if this range is
+            // on the active scenario range. Note the 'copy back' must also
+            // be set to apply protection.
+            USHORT nScenTab = nTab+1;
+            while(pDocument->IsScenario(nScenTab))
+            {
+                ScRange aEditRange(nCol1, nRow1, nScenTab, nCol2, nRow2, nScenTab);
+                if(pDocument->IsActiveScenario(nScenTab) && pDocument->HasScenarioRange(nScenTab, aEditRange))
+                {
+                    USHORT nFlags;
+                    pDocument->GetScenarioFlags(nScenTab,nFlags);
+                    bIsEditable = !((nFlags & SC_SCENARIO_PROTECT) && (nFlags & SC_SCENARIO_TWOWAY));
+                    break;
+                }
+                nScenTab++;
+            }
+        }
+    }
+    else if (pDocument->IsScenario(nTab))
+    {
+        // Determine if the preceding sheet is protected
+        USHORT nActualTab = nTab;
+        do
+        {
+            nActualTab--;
+        }
+        while(pDocument->IsScenario(nActualTab));
+
+        if(pDocument->IsTabProtected(nActualTab))
+        {
+            ScRange aEditRange(nCol1, nRow1, nTab, nCol2, nRow2, nTab);
+            if(pDocument->HasScenarioRange(nTab, aEditRange))
+            {
+                USHORT nFlags;
+                pDocument->GetScenarioFlags(nTab,nFlags);
+                bIsEditable = !(nFlags & SC_SCENARIO_PROTECT);
+            }
+        }
+    }
     if ( bIsEditable )
     {
         if ( HasBlockMatrixFragment( nCol1, nRow1, nCol2, nRow2 ) )
@@ -1461,13 +1501,66 @@ BOOL ScTable::IsBlockEditable( USHORT nCol1, USHORT nRow1, USHORT nCol2,
 BOOL ScTable::IsSelectionEditable( const ScMarkData& rMark,
             BOOL* pOnlyNotBecauseOfMatrix /* = NULL */ ) const
 {
-    BOOL bIsEditable;
+    BOOL bIsEditable = TRUE;
     if ( nLockCount )
         bIsEditable = FALSE;
-    else if ( bProtected )
-         bIsEditable = !HasAttribSelection( rMark, HASATTR_PROTECTED );
-    else
-        bIsEditable = TRUE;
+    else if ( bProtected && !pDocument->IsScenario(nTab))
+    {
+        if((bIsEditable = !HasAttribSelection( rMark, HASATTR_PROTECTED )))
+        {
+            // If Sheet is protected and cells are not protected then
+            // check the active scenario protect flag if this area is
+            // in the active scenario range.
+            ScRangeList aRanges;
+            rMark.FillRangeListWithMarks( &aRanges, FALSE );
+            ULONG nRangeCount = aRanges.Count();
+            USHORT nScenTab = nTab+1;
+            while(pDocument->IsScenario(nScenTab) && bIsEditable)
+            {
+                if(pDocument->IsActiveScenario(nScenTab))
+                {
+                    for (ULONG i=0; i<nRangeCount && bIsEditable; i++)
+                    {
+                        ScRange aRange = *aRanges.GetObject(i);
+                        if(pDocument->HasScenarioRange(nScenTab, aRange))
+                        {
+                            USHORT nFlags;
+                            pDocument->GetScenarioFlags(nScenTab,nFlags);
+                            bIsEditable = !((nFlags & SC_SCENARIO_PROTECT) && (nFlags & SC_SCENARIO_TWOWAY));
+                        }
+                    }
+                }
+                nScenTab++;
+            }
+        }
+    }
+    else if (pDocument->IsScenario(nTab))
+    {
+        // Determine if the preceding sheet is protected
+        USHORT nActualTab = nTab;
+        do
+        {
+            nActualTab--;
+        }
+        while(pDocument->IsScenario(nActualTab));
+
+        if(pDocument->IsTabProtected(nActualTab))
+        {
+            ScRangeList aRanges;
+            rMark.FillRangeListWithMarks( &aRanges, FALSE );
+            ULONG nRangeCount = aRanges.Count();
+            for (ULONG i=0; i<nRangeCount && bIsEditable; i++)
+            {
+                ScRange aRange = *aRanges.GetObject(i);
+                if(pDocument->HasScenarioRange(nTab, aRange))
+                {
+                    USHORT nFlags;
+                    pDocument->GetScenarioFlags(nTab,nFlags);
+                    bIsEditable = !(nFlags & SC_SCENARIO_PROTECT);
+                }
+            }
+        }
+    }
     if ( bIsEditable )
     {
         if ( HasSelectionMatrixFragment( rMark ) )
