@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforscan.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 19:33:27 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:27:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,7 +214,6 @@ public:
 
 
 private:                            // ---- privater Teil
-    static String theEnglishColors[SC_MAX_ANZ_STANDARD_FARBEN];
     NfKeywordTable sKeyword;                    // Schluesselworte der Syntax
     Color StandardColor[SC_MAX_ANZ_STANDARD_FARBEN];
                                                 // Array der Standardfarben
