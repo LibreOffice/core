@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: hr $ $Date: 2003-12-01 13:00:46 $
+#   last change: $Author: vg $ $Date: 2003-12-17 17:42:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,7 @@ TARGET=so_stlport
 .EXPORT : CC CXX
 .IF "$(COMID)"=="gcc3"
     TARFILE_NAME=STLport-4.5
-    PATCH_FILE_NAME=$(MISC)$/STLport-4.5.patch
+    PATCH_FILE_NAME=STLport-4.5.patch
 .ELSE			# "$(COMID)"=="gcc3"
     .IF "$(OS)"=="MACOSX"
         # [ed] For gcc2, we need to use STLport 4.0.  4.5 will not compile with gcc2 on OS X.
@@ -155,7 +155,7 @@ OUT2INC= \
 
 .IF "$(OS)"=="IRIX"
 TARFILE_NAME=STLport-4.5
-PATCH_FILE_NAME=$(MISC)$/STLport-4.5.patch
+PATCH_FILE_NAME=STLport-4.5.patch
 BUILD_ACTION=gmake
 BUILD_FLAGS=-f gcc-3.0.mak
 BUILD_FLAGS+= -j$(MAXPROCESS)
@@ -192,11 +192,6 @@ all :
 .INCLUDE : set_ext.mk
 .INCLUDE :	target.mk
 .INCLUDE :	tg_ext.mk
-
-$(PACKAGE_DIR)$/$(PATCH_FLAG_FILE) : $(MISC)$/STLport-4.5.patch
-
-$(MISC)$/STLport-4.5.patch : STLport-4.5.patch
-    +$(SED)	-e 's#GXX_INCLUDE_PATH#$(GXX_INCLUDE_PATH)#g' < STLport-4.5.patch > $(MISC)$/STLport-4.5.patch
 
 .IF "$(GUI)"=="WNT"
 .IF "$(CCNUMVER)"<="001300000000"
