@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblecomponenthelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-08 15:38:36 $
+ *  last change: $Author: tbe $ $Date: 2002-09-03 12:16:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,8 +102,8 @@ namespace comphelper
         Rectangle aBounds( implGetBounds() );
         return  ( _rPoint.X >= 0 )
             &&  ( _rPoint.Y >= 0 )
-            &&  ( _rPoint.X < aBounds.Width - aBounds.X )
-            &&  ( _rPoint.Y < aBounds.Height - aBounds.Y );
+            &&  ( _rPoint.X < aBounds.Width )
+            &&  ( _rPoint.Y < aBounds.Height );
     }
 
     //--------------------------------------------------------------------
@@ -255,6 +255,9 @@ namespace comphelper
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2002/05/08 15:38:36  fs
+ *  #99218# allow abstract external locks in addition to the own mutex
+ *
  *  Revision 1.2  2002/04/26 11:03:48  fs
  *  #98750# corrected size calculation
  *
