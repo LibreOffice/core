@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 17:26:49 $
+#   last change: $Author: vg $ $Date: 2003-07-25 11:38:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -91,6 +91,7 @@ SLOFILES1=\
     $(SLO)$/ftpresultsetbase.obj \
     $(SLO)$/ftpresultsetI.obj \
     $(SLO)$/ftploaderthread.obj  \
+    $(SLO)$/ftpdownloadthread.obj  \
     $(SLO)$/ftpinpstr.obj	\
     $(SLO)$/ftpdirp.obj     \
     $(SLO)$/ftpcfunc.obj     \
