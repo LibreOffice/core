@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeySet.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 15:57:54 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:30:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,11 +265,12 @@ void OKeySet::construct(const Reference< XResultSet>& _xDriverSet)
             aFilter += aAnd;
     }
 
-    ::rtl::OUString sOldFilter = m_xComposer->getFilter();
-    Reference<XSingleSelectQueryComposer> xQu(m_xComposer,UNO_QUERY);
-    xQu->setFilter(aFilter);
-    m_xStatement = m_xConnection->prepareStatement(m_xComposer->getQuery());
-    xQu->setFilter(sOldFilter);
+    Reference< XMultiServiceFactory >  xFactory(m_xConnection, UNO_QUERY_THROW);
+    Reference<XSingleSelectQueryComposer> xAnalyzer(xFactory->createInstance(SERVICE_NAME_SINGLESELECTQUERYCOMPOSER),UNO_QUERY);
+    xAnalyzer->setQuery(m_xComposer->getQuery());
+    xAnalyzer->setFilter(aFilter);
+    m_xStatement = m_xConnection->prepareStatement(xAnalyzer->getQuery());
+    ::comphelper::disposeComponent(xAnalyzer);
 }
 // -------------------------------------------------------------------------
 Any SAL_CALL OKeySet::getBookmark( const ORowSetRow& _rRow ) throw(SQLException, RuntimeException)
