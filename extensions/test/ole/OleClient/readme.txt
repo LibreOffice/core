@@ -1,4 +1,4 @@
-The program tests the OleClient service which enables to use COM components
+The program tests the OleObjectFactory service which enables to use COM components
 through XInvocation.
 
 Requirements:
