@@ -2,9 +2,9 @@
  *
  *  $RCSfile: measure.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:20:20 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:09:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,8 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ hebrew ] = "Linie";
         Text[ hindi ] = "रेखा";
         Text[ slovak ] = "Čiara";
+        Text[ hungarian ] = "Vonal";
+        Text[ slovenian ] = "Vrstica";
     };
     FixedText FT_LINE_DIST
     {
@@ -127,7 +129,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text [ french ] = "�cart des l~ignes" ;
         Text [ dutch ] = "~Lijnafstand" ;
         Text [ swedish ] = "L~injeavst�nd" ;
-        Text [ danish ] = "Linjeafstand" ;
+        Text [ danish ] = "~Linjeafstand" ;
         Text [ portuguese_brazilian ] = "~Dist�ncia entre linhas" ;
         Text [ portuguese ] = "~Espa�o entre linhas" ;
         Text[ chinese_simplified ] = "线条间隔(~D)";
@@ -147,6 +149,8 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ hebrew ] = "L~iniendistanz";
         Text[ hindi ] = "~रेखा की दूरी";
         Text[ slovak ] = "Vz~dialenosť čiary";
+        Text[ hungarian ] = "Vonal ~távolsága";
+        Text[ slovenian ] = "~Razdalja med vrsticami";
     };
     MetricField MTR_LINE_DIST
     {
@@ -196,6 +200,8 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ hebrew ] = "Hilfslinien~überhang";
         Text[ hindi ] = "सहायक ~ऊपर लटकाओ";
         Text[ slovak ] = "Previs v~odítka";
+        Text[ hungarian ] = "Vezetővonalak ~túlnyúlása";
+        Text[ slovenian ] = "~Previs vodnika";
     };
     MetricField MTR_FLD_HELPLINE_OVERHANG
     {
@@ -245,6 +251,8 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ hebrew ] = "Hilfslinien~distanz";
         Text[ hindi ] = "~सहायक दूरी";
         Text[ slovak ] = "~Vzdialenosť vodítka";
+        Text[ hungarian ] = "~Vezetővonalak távolsága";
+        Text[ slovenian ] = "Razdalja ~vodnika";
     };
     MetricField MTR_FLD_HELPLINE_DIST
     {
@@ -274,7 +282,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text [ french ] = "Rep�re ~gauche" ;
         Text [ dutch ] = "Linkerh~ulplijn" ;
         Text [ swedish ] = "V�nster hj�lp~linje" ;
-        Text [ danish ] = "Venstre hj�lpelinje" ;
+        Text [ danish ] = "~Venstre hj�lpelinje" ;
         Text [ portuguese_brazilian ] = "Guia ~esquerda" ;
         Text [ portuguese ] = "Guia ~esquerda" ;
         Text[ chinese_simplified ] = "左辅助线(~L)";
@@ -294,6 +302,8 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ hebrew ] = "~Linke Hilfslinie";
         Text[ hindi ] = "~बायाँ सहायक";
         Text[ slovak ] = "Ľ~avé vodítko";
+        Text[ hungarian ] = "~Bal oldali vezetővonal";
+        Text[ slovenian ] = "~Levi vodnik";
     };
     MetricField MTR_FLD_HELPLINE1_LEN
     {
@@ -343,6 +353,8 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ hebrew ] = "~Rechte Hilfslinie";
         Text[ hindi ] = "~दाहिना सहायक";
         Text[ slovak ] = "P~ravé vodítko";
+        Text[ hungarian ] = "~Jobb oldali vezetővonal";
+        Text[ slovenian ] = "~Desni vodnik";
     };
     MetricField MTR_FLD_HELPLINE2_LEN
     {
@@ -392,6 +404,8 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ hebrew ] = "Maßlinie u~nterhalb des Objekts";
         Text[ hindi ] = "~माप यूनिटों को दिखाओ";
         Text[ slovak ] = "Merať ~pod objektom";
+        Text[ hungarian ] = "Mérték az ~objektum alatt";
+        Text[ slovenian ] = "Izmeri ~pod predmetom";
     };
     FixedText FT_DECIMALPLACES
     {
@@ -425,6 +439,8 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ hebrew ] = "Nachkommastellen";
         Text[ hindi ] = "दशांश शुद्धता";
         Text[ slovak ] = "Desatinné miesta";
+        Text[ hungarian ] = "Tizedeshelyek";
+        Text[ slovenian ] = "Decimalna mesta";
     };
     MetricField MTR_FLD_DECIMALPLACES
     {
@@ -461,7 +477,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ spanish ] = "Etiqueta";
         Text[ finnish ] = "Selite";
         Text[ italian ] = "Dicitura";
-        Text[ danish ] = "Etiket";
+        Text[ danish ] = "Forklaring";
         Text[ swedish ] = "Etikett";
         Text[ polish ] = "Legenda";
         Text[ portuguese_brazilian ] = "Legenda";
@@ -477,6 +493,8 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ hebrew ] = "Beschriftung";
         Text[ hindi ] = "लेजन्ड";
         Text[ slovak ] = "Legenda";
+        Text[ hungarian ] = "Jelmagyarázat";
+        Text[ slovenian ] = "Legenda";
     };
     FixedText FT_POSITION
     {
@@ -490,7 +508,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text [ spanish ] = "Posici�n del texto" ;
         Text [ french ] = "Position du ~texte" ;
         Text [ swedish ] = "~Textposition" ;
-        Text [ danish ] = "Te~kstplacering" ;
+        Text [ danish ] = "~Tekstplacering" ;
         Text [ portuguese_brazilian ] = "~Posi��o do texto" ;
         Text [ portuguese ] = "~Posi��o do texto" ;
         Text[ chinese_simplified ] = "文字位置(~T)";
@@ -510,6 +528,8 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ hebrew ] = "~Textposition";
         Text[ hindi ] = "~टेक्स्ट् स्थान";
         Text[ slovak ] = "Umiestnenie ~textu";
+        Text[ hungarian ] = "~Szövegpozíció";
+        Text[ slovenian ] = "Položaj ~besedila";
     };
     Control CTL_POSITION
     {
@@ -552,6 +572,8 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ hebrew ] = "Automatisch ~Vertikal";
         Text[ hindi ] = "स्व~चालित लंबरूप";
         Text[ slovak ] = "~Automaticky zvisle";
+        Text[ hungarian ] = "~Automatikus függőleges elhelyezés";
+        Text[ slovenian ] = "S~amodejno navpično";
     };
     TriStateBox TSB_AUTOPOSH
     {
@@ -586,6 +608,8 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ hebrew ] = "Automatisch ~Horizontal";
         Text[ hindi ] = "स्वचालि~त समतल";
         Text[ slovak ] = "A~utomaticky vodorovne";
+        Text[ hungarian ] = "A~utomatikus vízszintes elhelyezés";
+        Text[ slovenian ] = "Sa~modejno vodoravno";
     };
     TriStateBox TSB_SHOW_UNIT
     {
@@ -600,7 +624,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text [ spanish ] = "~Mostrar unidad" ;
         Text [ french ] = "Afficher l'~unit�" ;
         Text [ swedish ] = "Visa ~enhet" ;
-        Text [ danish ] = "Vis ~enhed" ;
+        Text [ danish ] = "Vis m�le~enheder" ;
         Text [ portuguese ] = "Mostrar ~unidade" ;
         Text [ portuguese_brazilian ] = "~Mostrar unid. de medida" ;
         Text[ chinese_simplified ] = "显示定量单位(~M)";
@@ -620,6 +644,8 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ hebrew ] = "~Einheit anzeigen";
         Text[ hindi ] = "~माप यूनिटों को दिखाओ";
         Text[ slovak ] = "~Merné jednotky";
+        Text[ hungarian ] = "~Mértékegység";
+        Text[ slovenian ] = "Pokaži ~merske enote";
     };
     ListBox LB_UNIT
     {
@@ -662,6 +688,8 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ hebrew ] = "~Parallel zur Hilfslinie";
         Text[ hindi ] = "रेखा केलिए समा~नान्तर";
         Text[ slovak ] = "~Rovnobežne s čiarou";
+        Text[ hungarian ] = "~Vonallal párhuzamosan";
+        Text[ slovenian ] = "~Vzporedno z vrstico";
     };
     Control CTL_PREVIEW
     {
@@ -700,6 +728,8 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ hebrew ] = "‮אוטומטי‬";
         Text[ hindi ] = "स्वचालित";
         Text[ slovak ] = "Automaticky";
+        Text[ hungarian ] = "Automatikus";
+        Text[ slovenian ] = "Samodejno";
     };
     Text[ chinese_simplified ] = "定尺寸";
     Text[ russian ] = "��������� �����";
@@ -718,8 +748,11 @@ TabPage RID_SVXPAGE_MEASURE
     Text[ hebrew ] = "Bemaßung";
     Text[ hindi ] = "परिमाण देना";
     Text[ slovak ] = "Zmena rozmerov";
+    Text[ hungarian ] = "Méretvonal";
+    Text[ slovenian ] = "Dimenzioniranje";
 };
  // ********************************************************************** EOF
+
 
 
 
