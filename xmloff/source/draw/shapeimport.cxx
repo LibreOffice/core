@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeimport.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 13:53:21 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:52:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -685,7 +685,7 @@ const SvXMLTokenMap& XMLShapeImportHelper::GetGraphicObjectShapeAttrTokenMap()
 */
 //////////////////////////////////////////////////////////////////////////////
 
-SvXMLImportContext* XMLShapeImportHelper::Create3DSceneChildContext(
+SvXMLShapeContext* XMLShapeImportHelper::Create3DSceneChildContext(
     SvXMLImport& rImport,
     USHORT nPrefix,
     const OUString& rLocalName,
@@ -774,7 +774,7 @@ void XMLShapeImportHelper::SetAutoStylesContext(SvXMLStylesContext* pNew)
 
 //////////////////////////////////////////////////////////////////////////////
 
-SvXMLImportContext* XMLShapeImportHelper::CreateGroupChildContext(
+SvXMLShapeContext* XMLShapeImportHelper::CreateGroupChildContext(
     SvXMLImport& rImport,
     USHORT nPrefix,
     const OUString& rLocalName,
@@ -914,7 +914,7 @@ SvXMLImportContext* XMLShapeImportHelper::CreateGroupChildContext(
         }
         // add other shapes here...
         default:
-            return new SvXMLImportContext( rImport, nPrefix, rLocalName );
+            return new SvXMLShapeContext( rImport, nPrefix, rLocalName );
     }
 
     // now parse the attribute list and call the child context for each unknown attribute
