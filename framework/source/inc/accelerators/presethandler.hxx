@@ -2,9 +2,9 @@
  *
  *  $RCSfile: presethandler.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 10:08:05 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 14:53:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,7 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
         static ::rtl::OUString RESOURCETYPE_MENUBAR();
         static ::rtl::OUString RESOURCETYPE_TOOLBAR();
         static ::rtl::OUString RESOURCETYPE_ACCELERATOR();
+        static ::rtl::OUString RESOURCETYPE_STATUSBAR();
 
     //-------------------------------------------
     // types
@@ -515,6 +516,60 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
         /** TODO */
         void addStorageListener(IStorageListener* pListener);
         void removeStorageListener(IStorageListener* pListener);
+
+    //-------------------------------------------
+    // helper
+
+    private:
+
+        //---------------------------------------
+        /** @short  open a config path ignoring errors (catching exceptions).
+
+            @descr  We catch only normal exceptions here - no runtime exceptions.
+
+            @param  sPath
+                    the configuration path, which should be opened.
+
+            @param  eMode
+                    the open mode (READ/READWRITE)
+
+            @param  bShare
+                    force using of the share layer instead of the user layer.
+
+            @return An opened storage in case method was successfully - null otherwise.
+         */
+        css::uno::Reference< css::embed::XStorage > impl_openPathIgnoringErrors(const ::rtl::OUString& sPath ,
+                                                                                      sal_Int32        eMode ,
+                                                                                      sal_Bool         bShare);
+
+        //---------------------------------------
+        /** @short  open a config path ignoring errors (catching exceptions).
+
+            @descr  We catch only normal exceptions here - no runtime exceptions.
+                    Further the path itself is tries in different versions (using locale
+                    specific attributes).
+                    e.g. "path/e-US" => "path/en" => "path/de"
+
+            @param  sPath
+                    the configuration path, which should be opened.
+                    Its further used as out parameter too, so we can return the localized
+                    path to the calli!
+
+            @param  eMode
+                    the open mode (READ/READWRITE)
+
+            @param  bShare
+                    force using of the share layer instead of the user layer.
+
+            @param  aLocale
+                    the start locale ...
+
+            @return An opened storage in case method was successfully - null otherwise.
+         */
+        css::uno::Reference< css::embed::XStorage > impl_openLocalizedPathIgnoringErrors(      ::rtl::OUString&      sPath  ,
+                                                                                               sal_Int32             eMode  ,
+                                                                                               sal_Bool              bShare ,
+                                                                                         const ::comphelper::Locale& aLocale);
 };
 
 } // namespace framework
