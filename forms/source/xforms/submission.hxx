@@ -2,9 +2,9 @@
  *
  *  $RCSfile: submission.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:57:00 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:38:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,8 +92,6 @@ namespace com { namespace sun { namespace star {
                      class WrappedTargetException; }
 } } }
 namespace xforms { class Model; }
-namespace comphelper { class PropertySetInfo; }
-
 
 
 namespace xforms
@@ -137,6 +135,8 @@ private:
     com::sun::star::uno::Reference< com::sun::star::xml::dom::XDocumentFragment >
         createSubmissionDocument(const com::sun::star::uno::Reference< com::sun::star::xml::xpath::XXPathObject >& aObject,
                                  sal_Bool bRemoveWSNodes = sal_False);
+    com::sun::star::uno::Reference< com::sun::star::xml::dom::XDocument >
+        getInstanceDocument(const com::sun::star::uno::Reference< com::sun::star::xml::xpath::XXPathObject >& aObject);
 
     com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory > m_aFactory;
 public:
@@ -198,7 +198,7 @@ public:
     void setSeparator( const rtl::OUString& );
 
     com::sun::star::uno::Sequence< rtl::OUString > getIncludeNamespacePrefixes() const;
-    void setIncludeNamespacePrefixes( const rtl::OUString& );
+    void setIncludeNamespacePrefixes( const com::sun::star::uno::Sequence< rtl::OUString >& );
 
 
     /** perform the submission
@@ -236,22 +236,15 @@ protected:
     //   implement abstract methods from PropertySetHelper
     //
 
-    virtual void _setPropertyValues(
-        const comphelper::PropertyMapEntry** ppEntries,
-        const com::sun::star::uno::Any* pValues )
-        throw( com::sun::star::beans::UnknownPropertyException,
-               com::sun::star::beans::PropertyVetoException,
-               com::sun::star::lang::IllegalArgumentException,
-               com::sun::star::lang::WrappedTargetException );
-
-    virtual void _getPropertyValues(
-        const comphelper::PropertyMapEntry** ppEntries,
-        com::sun::star::uno::Any* pValue )
-        throw( com::sun::star::beans::UnknownPropertyException,
-               com::sun::star::lang::WrappedTargetException );
+    virtual sal_Bool SAL_CALL convertFastPropertyValue(
+        com::sun::star::uno::Any& rConvertedValue,
+        com::sun::star::uno::Any& rOldValue,
+        sal_Int32 nHandle,
+        const com::sun::star::uno::Any& rValue )
+        throw ( com::sun::star::lang::IllegalArgumentException );
 
 private:
-    static comphelper::PropertySetInfo* _getPropertySetInfo();
+    void initializePropertySet();
 
 
 public:
