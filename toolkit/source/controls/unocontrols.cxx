@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 10:52:09 $
+ *  last change: $Author: vg $ $Date: 2003-06-06 10:55:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1189,8 +1189,31 @@ void UnoRadioButtonControl::itemStateChanged( const awt::ItemEvent& rEvent ) thr
     aAny <<= (sal_Int16)rEvent.Selected;
     ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STATE ), aAny, sal_False );
 
-    if ( maItemListeners.getLength() )
-        maItemListeners.itemStateChanged( rEvent );
+    // compatibility:
+    // in OOo 1.0.x, when the user clicked a radio button in a group of buttons, this resulted
+    // in _one_ itemStateChanged call for exactly the radio button which's state changed from
+    // "0" to "1".
+    // Nowadays, since the listener handling changed a lot towards 1.1 (the VCLXWindow reacts on more
+    // basic events from the VCL-windows, not anymore on the Link-based events like in 1.0.x), this
+    // isn't the case anymore: For instance, this method here gets called for the radio button
+    // which is being implicitily _de_selected, too. This is pretty bad for compatibility.
+    // Thus, we suppress all events with a new state other than "1". This is unlogical, and weird, when looking
+    // from a pure API perspective, but it's _compatible_ with older product versions, and this is
+    // all which matters here.
+    // #i14703# - 2003-05-23 - fs@openoffice.org
+    if ( 1 == rEvent.Selected )
+    {
+        if ( maItemListeners.getLength() )
+            maItemListeners.itemStateChanged( rEvent );
+    }
+        // note that speaking stricly, this is wrong: When in 1.0.x, the user would have de-selected
+        // a radio button _without_ selecing another one, this would have caused a notification.
+        // With the change done here, this today won't cause a notification anymore.
+        //
+        // Fortunately, it's not possible for the user to de-select a radio button without selecting another on,
+        // at least not via the regular UI. It _would_ be possible via the Accessibility API, which
+        // counts as "user input", too. But in 1.0.x, there was no Accessibility API, so there is nothing
+        // to be inconsistent with.
 }
 
 awt::Size UnoRadioButtonControl::getMinimumSize(  ) throw(uno::RuntimeException)
