@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Time.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-23 15:12:14 $
+ *  last change: $Author: vg $ $Date: 2001-09-12 17:54:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,7 +185,7 @@ OTimeModel::~OTimeModel()
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OTimeModel::getServiceName()
+::rtl::OUString SAL_CALL OTimeModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
 {
     return FRM_COMPONENT_TIMEFIELD; // old (non-sun) name for compatibility !
 }
@@ -252,7 +252,7 @@ sal_Bool SAL_CALL OTimeModel::convertFastPropertyValue(Any& _rConvertedValue, An
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OTimeModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const Any& _rValue)
+void SAL_CALL OTimeModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const Any& _rValue) throw ( ::com::sun::star::uno::Exception)
 {
     if (PROPERTY_ID_FORMATKEY == _nHandle)
         setFormatKeyPropertyValue(_rValue);
