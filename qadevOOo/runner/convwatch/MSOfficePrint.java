@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MSOfficePrint.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Date: 2004-11-02 11:16:09 $
+ *  last change: $Date: 2004-12-10 16:58:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@ import convwatch.GraphicalTestArguments;
 import helper.ProcessHandler;
 import convwatch.StringHelper;
 import convwatch.ConvWatchException;
+import java.util.ArrayList;
 
 /**
  * This object gives all functionallity to print msoffice documents.
@@ -76,6 +77,11 @@ import convwatch.ConvWatchException;
  * *.xls as excel
  * *.ppt as powerpoint
  */
+
+class ProcessHelper
+{
+    ArrayList m_aArray;
+}
 
 public class MSOfficePrint
 {
@@ -133,6 +139,62 @@ public class MSOfficePrint
         if (sDocumentSuffix.toLowerCase().endsWith(".xml")) return true;
         return false;
     }
+
+    public void storeToFileWithMSOffice( GraphicalTestArguments _aGTA,
+                                         String _sInputFile,
+                                         String _sOutputFile) throws ConvWatchCancelException, java.io.IOException
+        {
+            String sDocumentSuffix = FileHelper.getSuffix(_sInputFile);
+            String sFilterName = _aGTA.getExportFilterName();
+            ArrayList aStartCommand = new ArrayList();
+            if (isWordDocument(sDocumentSuffix))
+            {
+                aStartCommand = createWordStoreHelper();
+            }
+            else if (isExcelDocument(sDocumentSuffix))
+            {
+                aStartCommand = createExcelStoreHelper();
+            }
+            else if (isPowerPointDocument(sDocumentSuffix))
+            {
+            }
+            else if (sDocumentSuffix.toLowerCase().equals(".xml"))
+            {
+                // special case, if xml we prefer word, but with DEFAULT_XML_FORMAT_APP=excel it's changeable.
+                if (_aGTA.getDefaultXMLFormatApp().toLowerCase().equals("excel"))
+                {
+                    aStartCommand = createExcelStoreHelper();
+                }
+                // else
+                // {
+                // }
+            }
+            else
+            {
+                System.out.println("No MSOfficeDocument format found.");
+// TODO: use a better Exception!!!
+                throw new ConvWatchCancelException/*WrongSuffixException*/("No MS office document format found.");
+            }
+            if (aStartCommand != null)
+            {
+                if (sFilterName == null)
+                {
+// TODO: hardcoded FilterName in perl script
+                    sFilterName = ""; // xlXMLSpreadsheet";
+                }
+
+                // String sCommand = sStartCommand + " " +
+                //     _sInputFile + " " +
+                //     StringHelper.doubleQuote(sFilterName) + " " +
+                //     _sOutputFile;
+
+                aStartCommand.add(_sInputFile);
+                aStartCommand.add(sFilterName);
+                aStartCommand.add(_sOutputFile);
+                realStartCommand(aStartCommand);
+            }
+        }
+
     // -----------------------------------------------------------------------------
     /**
      * print the given file (_sInputFile) to the file name (_sPrintFile)
@@ -145,29 +207,29 @@ public class MSOfficePrint
 
             setPrinterName(_aGTA.getPrinterName());
 
-            String sStartCommand = null;
+            ArrayList aStartCommand = new ArrayList();
             if (isWordDocument(sDocumentSuffix))
             {
-                sStartCommand = createWordPrintHelper();
+                aStartCommand = createWordPrintHelper();
             }
             else if (isExcelDocument(sDocumentSuffix))
             {
-                sStartCommand = createExcelPrintHelper();
+                aStartCommand = createExcelPrintHelper();
             }
             else if (isPowerPointDocument(sDocumentSuffix))
             {
-                sStartCommand = createPowerPointPrintHelper();
+                aStartCommand = createPowerPointPrintHelper();
             }
             else if (sDocumentSuffix.toLowerCase().equals(".xml"))
             {
                 // special case, if xml we prefer word, but with DEFAULT_XML_FORMAT_APP=excel it's changeable.
                 if (_aGTA.getDefaultXMLFormatApp().toLowerCase().equals("excel"))
                 {
-                    sStartCommand = createExcelPrintHelper();
+                    aStartCommand = createExcelPrintHelper();
                 }
                 else
                 {
-                    sStartCommand = createWordPrintHelper();
+                    aStartCommand = createWordPrintHelper();
                 }
             }
             else
@@ -177,7 +239,7 @@ public class MSOfficePrint
                 throw new ConvWatchCancelException/*WrongSuffixException*/("No MS office document format found.");
             }
 
-            if (sStartCommand != null)
+            if (aStartCommand.isEmpty() == false)
             {
                 String sPrinterName = m_sPrinterName;
                 if (sPrinterName == null)
@@ -185,32 +247,69 @@ public class MSOfficePrint
                     sPrinterName = "";
                 }
 
-                String sCommand = sStartCommand + " " +
-                    _sInputFile + " " +
-                    StringHelper.doublequote(m_sPrinterName) + " " +
-                    _sPrintFilename;
+                // String sCommand = sStartCommand + " " +
+                //     _sInputFile + " " +
+                //     StringHelper.doubleQuote(m_sPrinterName) + " " +
+                //     _sPrintFilename;
+                aStartCommand.add(_sInputFile);
+                aStartCommand.add(m_sPrinterName);
+                aStartCommand.add(_sPrintFilename);
 
-                // This is really the latest point where we can check if we are running within windows environment
-                if (! OSHelper.isWindows())
-                {
-// TODO: use a better Exception!!!
-                    throw new ConvWatchCancelException/*WrongEnvironmentException*/("We doesn't work within windows environment.");
-                }
-
-                ProcessHandler aHandler = new ProcessHandler(sCommand);
-                boolean bBackValue = aHandler.executeSynchronously();
-                // return aHandler.getExitCode();
+                realStartCommand(aStartCommand);
             }
         }
 
-    String createWordPrintHelper() throws java.io.IOException
+    public void realStartCommand(ArrayList _aStartCommand) throws ConvWatchCancelException
+        {
+            // This is really the latest point where we can check if we are running within windows environment
+            if (! OSHelper.isWindows())
+            {
+// TODO: use a better Exception!!!
+                throw new ConvWatchCancelException/*WrongEnvironmentException*/("We doesn't work within windows environment.");
+            }
+
+            if (_aStartCommand.isEmpty())
+            {
+                throw new ConvWatchCancelException/*WrongEnvironmentException*/("Given list is empty.");
+            }
+
+
+            try
+            {
+                String[] aList = new String[_aStartCommand.size()];
+                for (int i=0;i<_aStartCommand.size();i++)
+                {
+                    aList[i] = new String((String) _aStartCommand.get(i));
+                }
+
+                ProcessHandler aHandler = new ProcessHandler(aList);
+                boolean bBackValue = aHandler.executeSynchronously();
+            }
+            catch (IndexOutOfBoundsException e)
+            {
+                throw new ConvWatchCancelException/*WrongEnvironmentException*/("Given list is too short.");
+            }
+
+            // return aHandler.getExitCode();
+        }
+
+
+    ArrayList createWordPrintHelper() throws java.io.IOException
         {
             // create a program in tmp file
             String sTmpPath = System.getProperty("java.io.tmpdir");
             String ls = System.getProperty("line.separator");
             String fs = System.getProperty("file.separator");
 
-            String sName = sTmpPath + fs + "printViaWord.pl";
+            String sPrintViaWord = "printViaWord.pl";
+
+            ArrayList aList = searchLocalFile(sPrintViaWord);
+            if (aList.isEmpty() == false)
+            {
+                return aList;
+            }
+
+            String sName = sTmpPath + fs + sPrintViaWord;
             File aFile = new File(sName);
             FileWriter out = new FileWriter(aFile.toString());
 
@@ -270,17 +369,125 @@ public class MSOfficePrint
             out.write( "$Word->Quit();                                                                               " + ls );
             out.close();
 
-            return "perl " + sName;
+            aList.add("perl");
+            aList.add(sName);
+            return aList;
         }
 
-    String createExcelPrintHelper() throws java.io.IOException
+    // TODO: Maybe give a possibility to say where search the script from outside
+
+    ArrayList searchLocalFile(String _sScriptName)
+        {
+            String userdir = System.getProperty("user.dir");
+            String fs = System.getProperty("file.separator");
+
+            ArrayList aList = new ArrayList();
+            File aPerlScript = new File(userdir + fs + _sScriptName);
+            System.out.println("Search for " + aPerlScript.getAbsolutePath());
+            if (aPerlScript.exists())
+            {
+                System.out.println("OK, found it, use this instead the internal one.");
+                String sName = aPerlScript.getAbsolutePath();
+                // String sCommand = "perl " + sName;
+                // System.out.println(sCommand);
+                aList.add("perl");
+                aList.add(sName);
+                return aList;
+            }
+            return aList;
+        }
+
+    ArrayList createWordStoreHelper() throws java.io.IOException
         {
             // create a program in tmp file
             String sTmpPath = System.getProperty("java.io.tmpdir");
             String ls = System.getProperty("line.separator");
             String fs = System.getProperty("file.separator");
 
-            String sName = sTmpPath + fs + "printViaExcel.pl";
+            // ArrayList aList = new ArrayList();
+            String sSaveViaWord = "saveViaWord.pl";
+
+            ArrayList aList = searchLocalFile(sSaveViaWord);
+            if (aList.isEmpty() == false)
+            {
+                return aList;
+            }
+
+            String sName = sTmpPath + fs + sSaveViaWord;
+            File aFile = new File(sName);
+            FileWriter out = new FileWriter(aFile.toString());
+
+            out.write( "eval 'exec perl -wS $0 ${1+\"$@\"}'                                                          " + ls );
+            out.write( "   if 0;                                                                                     " + ls );
+            out.write( "use strict;                                                                                  " + ls );
+            out.write( "                                                                                             " + ls );
+            out.write( "if ( $^O ne \"MSWin32\")                                                                     " + ls );
+            out.write( "{                                                                                            " + ls );
+            out.write( "   print 'Windows only.\\n';                                                                  " + ls );
+            out.write( "   print_usage();                                                                            " + ls );
+            out.write( "   exit(1);                                                                                  " + ls );
+            out.write( "}                                                                                            " + ls );
+            out.write( "                                                                                             " + ls );
+            out.write( "use Win32::OLE;                                                                              " + ls );
+            out.write( "use Win32::OLE::Const 'Microsoft Word';                                                      " + ls );
+            out.write( "                                                                                             " + ls );
+            out.write( "# ------ usage ------                                                                        " + ls );
+            out.write( "sub print_usage()                                                                            " + ls );
+            out.write( "{                                                                                            " + ls );
+            out.write( "    print STDERR \"Usage: storeViaWord.pl  <Word file> <output filer> <output file> \\n\"     " + ls );
+            out.write( "}                                                                                            " + ls );
+            out.write( "                                                                                             " + ls );
+            out.write( "                                                                                             " + ls );
+            out.write( "if ($#ARGV != 2)                                                                             " + ls );
+            out.write( "{                                                                                            " + ls );
+            out.write( "   print 'Too less arguments.\\n';                                                            " + ls );
+            out.write( "   print_usage();                                                                            " + ls );
+            out.write( "   exit(1);                                                                                  " + ls );
+            out.write( "}                                                                                            " + ls );
+            out.write( "                                                                                             " + ls );
+            out.write( "                                                                                             " + ls );
+            out.write( "my $Word = Win32::OLE->new('Word.Application');                                              " + ls );
+            out.write( "# $Word->{'Visible'} = 1;         # if you want to see what's going on                       " + ls );
+            out.write( "my $Book = $Word->Documents->Open($ARGV[0])                                                             " + ls );
+            out.write( "    || die('Unable to open document ', Win32::OLE->LastError());                             " + ls );
+            out.write( "# my $oldActivePrinte = $Word->{ActivePrinter} ;                                               " + ls );
+            out.write( "# $Word->{ActivePrinter} = $ARGV[1];                                                           " + ls );
+            out.write( "# $Word->ActiveDocument->PrintOut({                                                            " + ls );
+            out.write( "#                                  Background => 1,                                            " + ls );
+            out.write( "#                                  Append     => 0,                                            " + ls );
+            out.write( "#                                  Range      => wdPrintAllDocument,                           " + ls );
+            out.write( "#                                  Item       => wdPrintDocumentContent,                       " + ls );
+            out.write( "#                                  Copies     => 1,                                            " + ls );
+            out.write( "#                                  PageType   => wdPrintAllPages,                              " + ls );
+            out.write( "#                                  PrintToFile => 1,                                           " + ls );
+            out.write( "#                                  OutputFileName => $ARGV[2]                                  " + ls );
+            out.write( "#   });                                                                                        " + ls );
+            out.write( "# $Word->{ActivePrinter} = $oldActivePrinte;                                                   " + ls );
+            out.write( "$Book->savaAs($ARGV[2], $ARGV[1]);                                                             " + ls );
+            out.write( "$Word->Quit();                                                                               " + ls );
+            out.close();
+
+            aList.add("perl");
+            aList.add(sName);
+            return aList;
+        }
+
+
+    ArrayList createExcelPrintHelper() throws java.io.IOException
+        {
+            // create a program in tmp file
+            String sTmpPath = System.getProperty("java.io.tmpdir");
+            String ls = System.getProperty("line.separator");
+            String fs = System.getProperty("file.separator");
+
+            String sPrintViaExcel = "printViaExcel.pl";
+
+            ArrayList aList = searchLocalFile(sPrintViaExcel);
+            if (aList.isEmpty() == false)
+            {
+                return aList;
+            }
+            String sName = sTmpPath + fs + sPrintViaExcel;
             File aFile = new File(sName);
             FileWriter out = new FileWriter(aFile.toString());
 
@@ -338,16 +545,109 @@ public class MSOfficePrint
             out.write( "$Excel->Quit                                                                                                     " + ls );
             out.close();
 
-            return "perl " + sName;
+            aList.add("perl");
+            aList.add(sName);
+            return aList;
         }
-    String createPowerPointPrintHelper() throws java.io.IOException
+
+    ArrayList createExcelStoreHelper() throws java.io.IOException
         {
             // create a program in tmp file
             String sTmpPath = System.getProperty("java.io.tmpdir");
             String ls = System.getProperty("line.separator");
             String fs = System.getProperty("file.separator");
 
-            String sName = sTmpPath + fs + "printViaPowerPoint.pl";
+            String sSaveViaExcel = "saveViaExcel.pl";
+
+            ArrayList aList = searchLocalFile(sSaveViaExcel);
+            if (aList.isEmpty() == false)
+            {
+                return aList;
+            }
+            String sName = sTmpPath + fs + sSaveViaExcel;
+            File aFile = new File(sName);
+            FileWriter out = new FileWriter(aFile.toString());
+
+            out.write( "eval 'exec perl -wS $0 ${1+\"$@\"}'                                                                                " + ls );
+            out.write( "   if 0;                                                                                                         " + ls );
+            out.write( "use strict;                                                                                                      " + ls );
+            out.write( "# This script is automatically created.                                                                          " + ls );
+            out.write( "                                                                                                                 " + ls );
+            out.write( "use Win32::OLE qw(in with);                                                                                      " + ls );
+            out.write( "use Win32::OLE::Const 'Microsoft Excel';                                                                         " + ls );
+            out.write( "                                                                                                                 " + ls );
+            out.write( "# ------ usage ------                                                                                            " + ls );
+            out.write( "sub print_usage()                                                                                                " + ls );
+            out.write( "{                                                                                                                " + ls );
+            out.write( "    print STDERR \"Usage: excel_print.pl  <Excel file> <filefilter> <output file> .\\n                       " + ls );
+            out.write( "                  execl_print.pl  c:\\book1.xls Apple LaserWriter II NT v47.0 c:\\output\\book1.ps \\n\";     " + ls );
+            out.write( "}                                                                                                                " + ls );
+            out.write( "                                                                                                                 " + ls );
+            out.write( "                                                                                                                 " + ls );
+            out.write( "                                                                                                                 " + ls );
+            out.write( "$Win32::OLE::Warn = 3;                                # die on errors...                                         " + ls );
+            out.write( "                                                                                                                 " + ls );
+            out.write( "                                                                                                                 " + ls );
+            out.write( "if ($#ARGV != 2)                                                                                                 " + ls );
+            out.write( "{                                                                                                                " + ls );
+            out.write( "   print \"Too less arguments.\\n\";                                                                              " + ls );
+            out.write( "   print_usage();                                                                                                " + ls );
+            out.write( "   exit(1);                                                                                                      " + ls );
+            out.write( "}                                                                                                                " + ls );
+            out.write( "                                                                                                                 " + ls );
+            out.write( "my $Excel = Win32::OLE->GetActiveObject('Excel.Application')                                                     " + ls );
+            out.write( "    || Win32::OLE->new('Excel.Application', 'Quit');  # get already active Excel                                 " + ls );
+            out.write( "                                                      # application or open new                                  " + ls );
+            out.write( "my $sFilterParameter = $ARGV[1];                                                                                                                 " + ls );
+            out.write( "my $sFilterName = xlHTML;                                                                                                                 " + ls );
+            out.write( "if ($sFilterParameter eq 'xlXMLSpreadsheet')                                                                                                                 " + ls );
+            out.write( "{                                                                                                                 " + ls );
+            out.write( "    $sFilterName = xlXMLSpreadsheet;                                                                                                                " + ls );
+            out.write( "}                                                                                                                 " + ls );
+            out.write( "elsif ($sFilterParameter eq 'xlHTML')                                                                                                                 " + ls );
+            out.write( "{                                                                                                                 " + ls );
+            out.write( "    $sFilterName = xlHTML;                                                                                                                 " + ls );
+            out.write( "}                                                                                                                 " + ls );
+            out.write( "else                                                                                                                 " + ls );
+            out.write( "{                                                                                                                 " + ls );
+            out.write( "    my $undefined;                                                                                                " + ls);
+            out.write( "    $sFilterName = $undefined;                                                                                                              " + ls );
+            out.write( "}                                                                                                                 " + ls );
+            out.write( "                                                                                                                 " + ls );
+            out.write( "my $Book = $Excel->Workbooks->Open( $ARGV[0] );                                                                  " + ls );
+            out.write( "$Excel->{DisplayAlerts} = 0;                                                                                     " + ls );
+            out.write( "$Book->saveAs($ARGV[2],                                                                                          " + ls );
+            out.write( "              $sFilterName,                                                                                   " + ls );
+            out.write( "              '',                                                                                                " + ls );
+            out.write( "              '',                                                                                                " + ls );
+            out.write( "              0,                                                                                                 " + ls );
+            out.write( "              0,                                                                                                 " + ls );
+            out.write( "              xlNoChange,                                                                                        " + ls );
+            out.write( "              xlLocalSessionChanges,                                                                             " + ls );
+            out.write( "              1);                                                                                                " + ls );
+            out.write( "$Excel->Quit                                                                                                     " + ls );
+            out.close();
+
+            aList.add("perl");
+            aList.add(sName);
+            return aList;
+        }
+
+    ArrayList createPowerPointPrintHelper() throws java.io.IOException
+        {
+            // create a program in tmp file
+            String sTmpPath = System.getProperty("java.io.tmpdir");
+            String ls = System.getProperty("line.separator");
+            String fs = System.getProperty("file.separator");
+
+            String sPrintViaPowerPoint = "printViaPowerPoint.pl";
+
+            ArrayList aList = searchLocalFile(sPrintViaPowerPoint);
+            if (aList.isEmpty() == false)
+            {
+                return aList;
+            }
+            String sName = sTmpPath + fs + sPrintViaPowerPoint;
             File aFile = new File(sName);
             FileWriter out = new FileWriter(aFile.toString());
 
@@ -411,7 +711,9 @@ public class MSOfficePrint
             out.write( "$PowerPoint->Quit                                                                                                      " + ls );
             out.close();
 
-            return "perl " + sName;
+            aList.add("perl");
+            aList.add(sName);
+            return aList;
         }
 
 }
