@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: dbo $ $Date: 2002-06-14 13:20:19 $
+#   last change: $Author: mhu $ $Date: 2002-09-01 18:48:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,9 +63,14 @@ PRJ=..
 
 PRJNAME=cppuhelper
 TARGET=cppuhelper
+
 NO_BSYMBOLIC=TRUE
 ENABLE_EXCEPTIONS=TRUE
 USE_DEFFILE=TRUE
+
+.IF "$(OS)" != "WNT"
+UNIXVERSIONNAMES=UDK
+.ENDIF # WNT
 
 # --- Settings -----------------------------------------------------
 
@@ -156,7 +161,11 @@ SLOFILES= \
         $(SLO)$/access_control.obj	\
         $(SLO)$/macro_expander.obj
 
+.IF "$(UNIXVERSIONNAMES)" != ""
+SHL1TARGET=$(TARGET)$(COMID)
+.ELSE
 SHL1TARGET=$(TARGET)$(UDK_MAJOR)$(COMID)
+.ENDIF # UNIXVERSIONNAMES
 
 SHL1STDLIBS= \
         $(CPPULIB)		\
@@ -192,4 +201,3 @@ CFLAGS += -D__DIAGNOSE=$(diag)
 .ENDIF
 
 .INCLUDE :	target.mk
-
