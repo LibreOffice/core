@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox2.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-30 16:35:41 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:22:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,9 @@
 #ifndef _SV_MENU_HXX
 #include <menu.hxx>
 #endif
+#ifndef _SV_BRDWIN_HXX
+#include <brdwin.hxx>
+#endif
 
 using namespace vcl;
 
@@ -120,6 +123,7 @@ ImplToolBoxPrivateData::ImplToolBoxPrivateData() : m_pLayoutData( NULL )
     mbAssumeDocked = FALSE;
     mbAssumeFloating = FALSE;
     mbKeyInputDisabled = FALSE;
+    mbPageScroll = FALSE;
 
     m_nUpdateAutoSizeTries = 0;
 }
@@ -1065,6 +1069,18 @@ void ToolBox::SetLineCount( USHORT nNewLines )
 
 // -----------------------------------------------------------------------
 
+void ToolBox::SetPageScroll( BOOL b )
+{
+    mpData->mbPageScroll = b;
+}
+
+BOOL ToolBox::GetPageScroll()
+{
+    return mpData->mbPageScroll;
+}
+
+// -----------------------------------------------------------------------
+
 void ToolBox::SetNextToolBox( const XubString& rStr )
 {
     BOOL bCalcNew = (!maNextToolBoxStr.Len() != !rStr.Len());
@@ -1269,6 +1285,19 @@ Rectangle ToolBox::GetMenubuttonRect() const
     return mpData->maMenubuttonItem.maRect;
 }
 
+BOOL ToolBox::ImplHasExternalMenubutton()
+{
+    // check if the borderwindow (i.e. the decoration) provides the menu button
+    BOOL bRet = FALSE;
+    if( ImplIsFloatingMode() )
+    {
+        // custom menu is placed in the decoration
+        ImplBorderWindow *pBorderWin = dynamic_cast<ImplBorderWindow*>( GetWindow( WINDOW_BORDER ) );
+        if( pBorderWin && !pBorderWin->GetMenuRect().IsEmpty() )
+            bRet = TRUE;
+    }
+    return bRet;
+}
 // -----------------------------------------------------------------------
 
 void ToolBox::SetItemBits( USHORT nItemId, ToolBoxItemBits nBits )
@@ -2192,8 +2221,25 @@ void ToolBox::ImplExecuteCustomMenu()
         // toolbox might be destroyed during execute
         ImplDelData aDelData;
         ImplAddDel( &aDelData );
+        ImplDelData aBorderDel;
+        bool bBorderDel = false;
 
-        GetMenu()->Execute( this, Rectangle( ImplGetPopupPosition( mpData->maMenubuttonItem.maRect, Size() ), Size() ),
+        Window *pWin = this;
+        Rectangle aMenuRect = mpData->maMenubuttonItem.maRect;
+        if( IsFloatingMode() )
+        {
+            // custom menu is placed in the decoration
+            ImplBorderWindow *pBorderWin = dynamic_cast<ImplBorderWindow*>( GetWindow( WINDOW_BORDER ) );
+            if( pBorderWin && !pBorderWin->GetMenuRect().IsEmpty() )
+            {
+                pWin = pBorderWin;
+                aMenuRect = pBorderWin->GetMenuRect();
+                pWin->ImplAddDel( &aBorderDel );
+                bBorderDel = true;
+            }
+        }
+
+        GetMenu()->Execute( pWin, Rectangle( ImplGetPopupPosition( aMenuRect, Size() ), Size() ),
                                 POPUPMENU_EXECUTE_DOWN | POPUPMENU_NOMOUSEUPCLOSE );
 
         if ( aDelData.IsDelete() )
@@ -2202,8 +2248,25 @@ void ToolBox::ImplExecuteCustomMenu()
 
         if( GetMenu() )
             GetMenu()->RemoveEventListener( LINK( this, ToolBox, ImplCustomMenuListener ) );
+        if( bBorderDel )
+        {
+            if( aBorderDel.IsDelete() )
+                return;
+            pWin->ImplRemoveDel( &aBorderDel );
+        }
 
-        Invalidate( mpData->maMenubuttonItem.maRect );
+        pWin->Invalidate( aMenuRect );
+    }
+}
+
+void ToolBox::ExecuteCustomMenu()
+{
+    if( IsMenuEnabled() )
+    {
+        // handle custom menu asynchronously
+        // to avoid problems if the toolbox is closed during menu execute
+        ImplUpdateCustomMenu();
+        Application::PostUserEvent( mpData->mnEventId, LINK( this, ToolBox, ImplCallExecuteCustomMenu ) );
     }
 }
 
@@ -2225,19 +2288,6 @@ BOOL ToolBox::ImplIsFloatingMode() const
 
 // -----------------------------------------------------------------------
 
-void ToolBox::SetHelpIdAsString( const XubString& rHelpIdString )
-{
-    mpData->maHelpIdStr = rHelpIdString;
-}
-
-const XubString& ToolBox::GetHelpIdAsString() const
-{
-    return mpData->maHelpIdStr;
-}
-
-
-// -----------------------------------------------------------------------
-
 void ToolBox::Lock( BOOL bLock )
 {
     ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( this );
@@ -2255,3 +2305,6 @@ void ToolBox::Lock( BOOL bLock )
         }
     }
 }
+
+// -----------------------------------------------------------------------
+
