@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table5.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 07:58:17 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:31:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,12 +58,6 @@
  *
  *
  ************************************************************************/
-
-#ifdef PCH
-#include "core_pch.hxx"
-#endif
-
-#pragma hdrstop
 
 // INCLUDE ---------------------------------------------------------------
 
@@ -207,22 +201,29 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
         nSizeX += nThisX;
     }
 
+    // Remove all page breaks in range.
+    pRowFlags->AndValue( nStartRow+1, nEndRow, ~CR_PAGEBREAK);
+    // And set new page breaks.
     BOOL bRepeatRow = ( nRepeatStartY != SCROW_REPEAT_NONE );
     BOOL bRowFound = FALSE;
     long nSizeY = 0;
-    for (nY=nStartRow; nY<=nEndRow; nY++)
+    ScCompressedArrayIterator< SCROW, BYTE> aFlagsIter( *pRowFlags, nStartRow, nEndRow);
+    ScCompressedArrayIterator< SCROW, USHORT> aHeightIter( *pRowHeight, nStartRow, nEndRow);
+    for ( ; aFlagsIter; ++aFlagsIter, ++aHeightIter)
     {
+        nY = aFlagsIter.GetPos();
         BOOL bStartOfPage = FALSE;
-        BYTE nFlags = pRowFlags->GetValue(nY);
-        long nThisY = ( nFlags & CR_HIDDEN ) ? 0 : pRowHeight->GetValue(nY);
+        BYTE nFlags = *aFlagsIter;
+        long nThisY = (nFlags & CR_HIDDEN) ? 0 : *aHeightIter;
         if ( (nSizeY+nThisY > nPageSizeY) || ((nFlags & CR_MANUALBREAK) && !bSkipBreaks) )
         {
             pRowFlags->SetValue( nY, nFlags | CR_PAGEBREAK);
+            aFlagsIter.Resync( nY);
             nSizeY = 0;
             bStartOfPage = TRUE;
         }
         else if (nY != nStartRow)
-            pRowFlags->SetValue( nY, nFlags & ~CR_PAGEBREAK);
+            ; // page break already removed
         else
             bStartOfPage = TRUE;
 
@@ -240,6 +241,8 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
             {
                 pRowFlags->AndValue( nY, nRepeatEndY, ~CR_PAGEBREAK);
                 nY = nRepeatEndY + 1;
+                aFlagsIter.Resync( nY);
+                aHeightIter.Resync( nY);
             }
             bRowFound = TRUE;
         }
