@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: tbe $ $Date: 2002-04-29 15:10:31 $
+ *  last change: $Author: tbe $ $Date: 2002-05-08 16:38:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@
 #define BasicIDEShell
 #define SFX_TYPEMAP
 #include <idetemp.hxx>
-#include <baside.hxx>
+#include <basslots.hxx>
 #include <iderdll.hxx>
 #include <svx/pszctrl.hxx>
 #include <svx/insctrl.hxx>

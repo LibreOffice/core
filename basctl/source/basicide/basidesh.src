@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.src,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-03 01:08:47 $
+ *  last change: $Author: tbe $ $Date: 2002-05-08 16:39:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1986,7 +1986,7 @@ ImageList RID_DEFAULTIMAGELIST_SC
         SID_INSERT_SPINBUTTON ;
         SID_INSERT_HSCROLLBAR ;
         SID_INSERT_VSCROLLBAR ;
-        SID_OBJECT_SELECT ;
+        SID_INSERT_SELECT ;
         SID_BASICIDE_MATCHGROUP ;
         SID_INSERT_PREVIEW ;
         SID_BASICIDE_CHOOSEMACRO ;
@@ -2040,7 +2040,7 @@ ImageList RID_DEFAULTIMAGELIST_LC
         SID_INSERT_SPINBUTTON ;
         SID_INSERT_HSCROLLBAR ;
         SID_INSERT_VSCROLLBAR ;
-        SID_OBJECT_SELECT ;
+        SID_INSERT_SELECT ;
         SID_BASICIDE_MATCHGROUP ;
         SID_INSERT_PREVIEW ;
         SID_BASICIDE_CHOOSEMACRO ;

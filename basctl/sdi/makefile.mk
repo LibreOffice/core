@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: mh $ $Date: 2000-09-29 11:02:35 $
+#   last change: $Author: tbe $ $Date: 2002-05-08 16:35:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,7 +65,6 @@ PRJ=..
 
 PRJNAME=basctl
 TARGET=basslots
-#SDIEXPORT=svxnew
 
 # --- Settings -----------------------------------------------------
 
@@ -74,13 +73,13 @@ TARGET=basslots
 .INCLUDE :  sv.mk
 
 SDINAME=$(TARGET)
-SDI1NAME=baside
+SDIEXPORT=basctl
 
 # --- Files --------------------------------------------------------
 
-#SRS1NAME=enumslot
-#SRC1FILES=enumslot.src
-
+SVSDIDEPEND= \
+    $(SOLARINCXDIR)$/basslots.ilb	\
+    baside.sdi
 
 # --- Targets -------------------------------------------------------
 

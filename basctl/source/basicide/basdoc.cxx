@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basdoc.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2001-07-20 10:49:36 $
+ *  last change: $Author: tbe $ $Date: 2002-05-08 16:36:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@
 #include <basidesh.hrc>
 
 #define BasicDocShell
-#include <baside.hxx>
+#include <basslots.hxx>
 
 #include "basicmod.hxx"
 
