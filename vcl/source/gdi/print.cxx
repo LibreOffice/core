@@ -2,9 +2,9 @@
  *
  *  $RCSfile: print.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-25 09:23:25 $
+ *  last change: $Author: pl $ $Date: 2001-10-25 12:08:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,8 +176,7 @@ static const char* pLines[] =
     "Testversion",
     "Version d\'évaluation",
     "Versión de prueba",
-    "Versione per valutazione",
-    "Testversion"
+    "Versione per valutazione"
 };
 
 static void doTab( Printer* pPrinter )
@@ -243,8 +242,8 @@ static void doTab( Printer* pPrinter )
         nWidth += 100;
         nHeight += nNormHeigth * (sizeof(pLines)/sizeof( pLines[0] ) + 1);
 
-        Point aTopLeft( aPaperSize.Width() - nWidth - 100,
-                        aPaperSize.Height() - nHeight - 100 );
+        Point aTopLeft( aPaperSize.Width() - nWidth - 50,
+                        aPaperSize.Height() - nHeight - 50 );
         pPrinter->DrawRect( Rectangle( aTopLeft, Size( nWidth, nHeight ) ) );
         pPrinter->DrawLine( Point( aTopLeft.X(), aTopLeft.Y() + (3*nBigHeight/2) ),
                             Point( aTopLeft.X()+nWidth-1, aTopLeft.Y() + (3*nBigHeight/2) ) );
