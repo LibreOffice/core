@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScViewPaneObj.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-09-08 12:18:43 $
+ *  last change:$Date: 2003-12-11 12:13:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,6 +164,10 @@ public class ScViewPaneObj extends TestCase {
         }
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
+
+        //Relation for XControlAccess
+        tEnv.addObjRelation("DOCUMENT", UnoRuntime.queryInterface(XComponent.class,xSpreadsheetDoc));
+        tEnv.addObjRelation("XControlAccess.isSheet", Boolean.TRUE);
 
         XViewPane VP = (XViewPane)
             UnoRuntime.queryInterface(XViewPane.class, oObj);
