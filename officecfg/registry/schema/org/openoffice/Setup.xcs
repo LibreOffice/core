@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Setup.xcs,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 12:43:58 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 16:02:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,7 +220,14 @@
 			</prop>
 			<prop oor:name="ooXMLFileFormatVersion" oor:type="xs:string">
 				<info>
-					<desc>Specifies the version of the xml file format of our documents</desc>
+					<desc>Specifies the version of the SO 6/7 or OOo 1.0 xml file formats.</desc>
+				</info>
+				<value/>
+				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+			</prop>
+			<prop oor:name="ooXMLFileFormatName" oor:type="xs:string">
+				<info>
+					<desc>Specifies the name of the SO6/7 or OOo1.0 xml file formats.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
