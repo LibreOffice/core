@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: sw_SwXCellRange.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 18:03:26 $ 
+'*  last change:$Date: 2003-02-28 15:45:13 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -97,12 +97,13 @@ On Error Goto ErrHndl
     oObj = oTable.getCellRangeByPosition(0,0,3,4)
 
     'Required for XCellRangeData
-    newData() = Array(_
+    newData = Array(_
                 Array(2.5, 5.0, 2.5, 5.0),_
                 Array(4.0, 9.0, 2.5, 5.0),_
                 Array(2.5, 5.0, 2.5, 5.0),_
                 Array(2.5, 5.0, 2.5, 5.0),_
-                Array(4.0, 9.0, 2.5, 5.0))
+                Array(4.0, 9.0, 2.5, 5.0))_
+
 Exit Sub
 ErrHndl:
     Test.Exception()
