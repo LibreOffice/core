@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2005-03-01 09:38:16 $
+dnl * Date: $Date: 2005-03-01 16:38:47 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.101 $ )
+AC_REVISION( $Revision: 1.102 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -1678,7 +1678,7 @@ if test "$SOLAR_JAVA" != ""; then
         AC_MSG_RESULT([checked (gcj)]) 
         AC_MSG_WARN([EXPERIMENTAL: gij/gcj is not a full JDK replacement - some projects will fail to compile])
         echo "EXPERIMENTAL: gij/gcj is not a full JDK replacement - some projects will fail to compile" >>warn
-        JAVA_HOME=`echo $JAVAINTERPRETER | $SED -n "s,//*bin//*gij,,p"`
+        JAVA_HOME=`echo $JAVAINTERPRETER | $SED -n "s,//*bin//*$WITH_JAVA,,p"`
       else
         dnl SUN JDK specific tests
         _jdk=`$JAVAINTERPRETER -version 2>&1 | $AWK -F'"' '{ print \$2 }' | $SED s/[[-A-Za-z]]*//`
@@ -1702,8 +1702,8 @@ dnl ===================================================================
 dnl Checks for javac
 dnl ===================================================================
 if test "$SOLAR_JAVA" != ""; then
-    if test "$JDK" = "gcj"; then 
-        javacompiler="gcj"
+    if test "$JDK" == "gcj"; then 
+        javacompiler=`echo $WITH_JAVA | $SED -e "s/gij/gcj/g" | $SED -e "s/java/javac/g"`
     else
         javacompiler="javac"
     fi
@@ -1746,12 +1746,12 @@ if test "$SOLAR_JAVA" != ""; then
       # check if JAVA_HOME was (maybe incorrectly?) set automatically to /usr
       if test "$JAVA_HOME" = "/usr" -a "x$with_jdk_home" = "x"; then
 
-         if basename $(readlink $(readlink $JAVAC)) >/dev/null 2>/dev/null; then
+         if basename $(readlink $(readlink $JAVACOMPILER)) >/dev/null 2>/dev/null; then
           # try to recover first by looking whether we have a alternatives 
           # system as in Debian or newer SuSEs where following /usr/bin/javac
           # over /etc/alternatives/javac leads to the right bindir where we
           # just need to strip a bit away to get a valid JAVA_HOME
-          JAVA_HOME=$(readlink $(readlink $JAVAC) | $SED -e s,/bin/javac$,,)
+          JAVA_HOME=$(readlink $(readlink $JAVACOMPILER) | $SED -e s,/bin/javac$,,)
          else
           # else warn
           AC_MSG_WARN([JAVA_HOME is set to /usr - this is very likely to be incorrect])
@@ -1786,35 +1786,6 @@ else
       AC_MSG_ERROR([xsltproc is required])
    fi
 fi
-# check if JAVA_HOME was (maybe incorrectly?) set automatically to /usr
-if test "$JAVA_HOME" = "/usr" -a "x$with_jdk_home" = "x"; then
-
-   if basename $(readlink $(readlink $JAVAC)) >/dev/null 2>/dev/null; then
-	# try to recover first by looking whether we have a alternatives 
-	# system as in Debian or newer SuSEs where following /usr/bin/javac
-	# over /etc/alternatives/javac leads to the right bindir where we
-	# just need to strip a bit away to get a valid JAVA_HOME
-	JAVA_HOME=$(readlink $(readlink $JAVAC) | $SED -e s,/bin/javac$,,)
-   else
-	# else warn
-   	AC_MSG_WARN([JAVA_HOME is set to /usr - this is very likely to be incorrect])
-   	AC_MSG_WARN([if this is the case, please inform the correct JAVA_HOME with --with-jdk-home])
-   	echo "JAVA_HOME is set to /usr - this is very likely to be incorrect" >> warn
-   	echo "if this is the case, please inform the correct JAVA_HOME with --with-jdk-home" >> warn
-    fi
-fi
-# now check if $JAVA_HOME is really valid
-if test ! -d "$JAVA_HOME/jre" -a "x$with_jdk_home" = "x" && \
-	test "$XSLTPROC" = "NO_XSLTPROC"; then
-   AC_MSG_WARN([JAVA_HOME was not explicitly informed with --with-jdk-home. the configure script])
-   AC_MSG_WARN([attempted to find JAVA_HOME automatically, but apparently it failed])
-   AC_MSG_WARN([in case JAVA_HOME is incorrectly set, some projects with not be built correctly])
-   echo "JAVA_HOME was not explicitly informed with --with-jdk-home. the configure script" >> warn
-   echo "attempted to find JAVA_HOME automatically, but apparently it failed" >> warn
-   echo "in case JAVA_HOME is incorrectly set, some projects with not be built correctly" >> warn
-fi
-AC_SUBST(JAVA_HOME)
-AC_SUBST(JDK)
 AC_SUBST(XSLTPROC)
 
 dnl ===================================================================
