@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textattr.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: af $ $Date: 2002-10-18 14:22:49 $
+ *  last change: $Author: aw $ $Date: 2002-11-07 12:32:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,70 +306,81 @@ void __EXPORT SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
         aTsbAutoGrowWidth.SetState( STATE_DONTKNOW );
     aTsbAutoGrowWidth.SaveValue();
 
-    // zentriert
-    if ( rAttrs.GetItemState( SDRATTR_TEXT_VERTADJUST ) != SFX_ITEM_DONTCARE )
+    // #103516# Do the setup based on states of hor/ver adjust
+    // Setup center field and FullWidth
+    SfxItemState eVState = rAttrs.GetItemState( SDRATTR_TEXT_VERTADJUST );
+    SfxItemState eHState = rAttrs.GetItemState( SDRATTR_TEXT_HORZADJUST );
+
+    if(SFX_ITEM_DONTCARE != eVState && SFX_ITEM_DONTCARE != eHState)
     {
-        SdrTextVertAdjust eTVA = (SdrTextVertAdjust)
-                    ( ( const SdrTextVertAdjustItem& )rAttrs.Get( SDRATTR_TEXT_VERTADJUST ) ).GetValue();
+        // VertAdjust and HorAdjust are unequivocal, thus
+        SdrTextVertAdjust eTVA = (SdrTextVertAdjust)((const SdrTextVertAdjustItem&)rAttrs.Get(SDRATTR_TEXT_VERTADJUST)).GetValue();
+        SdrTextHorzAdjust eTHA = (SdrTextHorzAdjust)((const SdrTextHorzAdjustItem&)rAttrs.Get(SDRATTR_TEXT_HORZADJUST)).GetValue();
+        RECT_POINT eRP;
+
+        aTsbFullWidth.EnableTriState( FALSE );
+
+        // Translate item values into local anchor position.
+        switch (eTVA)
         {
-            if ( rAttrs.GetItemState( SDRATTR_TEXT_HORZADJUST ) != SFX_ITEM_DONTCARE )
+            case SDRTEXTVERTADJUST_TOP:
             {
-                aTsbFullWidth.EnableTriState( FALSE );
-
-                SdrTextHorzAdjust eTHA = (SdrTextHorzAdjust)
-                            ( ( const SdrTextHorzAdjustItem& )rAttrs.Get( SDRATTR_TEXT_HORZADJUST ) ).GetValue();
-                RECT_POINT eRP;
-
-                // Translate item values into local anchor position.
-                switch (eTVA)
+                switch (eTHA)
                 {
-                    case SDRTEXTVERTADJUST_TOP:
-                        switch (eTHA)
-                        {
-                            case SDRTEXTHORZADJUST_LEFT: eRP = RP_LT; break;
-                            case SDRTEXTHORZADJUST_BLOCK:
-                            case SDRTEXTHORZADJUST_CENTER: eRP = RP_MT; break;
-                            case SDRTEXTHORZADJUST_RIGHT: eRP = RP_RT; break;
-                        }
-                        break;
-                    case SDRTEXTVERTADJUST_BLOCK:
-                    case SDRTEXTVERTADJUST_CENTER:
-                        switch (eTHA)
-                        {
-                            case SDRTEXTHORZADJUST_LEFT: eRP = RP_LM; break;
-                            case SDRTEXTHORZADJUST_BLOCK:
-                            case SDRTEXTHORZADJUST_CENTER: eRP = RP_MM; break;
-                            case SDRTEXTHORZADJUST_RIGHT: eRP = RP_RM; break;
-                        }
-                        break;
-                    case SDRTEXTVERTADJUST_BOTTOM:
-                        switch (eTHA)
-                        {
-                            case SDRTEXTHORZADJUST_LEFT: eRP = RP_LB; break;
-                            case SDRTEXTHORZADJUST_BLOCK:
-                            case SDRTEXTHORZADJUST_CENTER: eRP = RP_MB; break;
-                            case SDRTEXTHORZADJUST_RIGHT: eRP = RP_RB; break;
-                        }
+                    case SDRTEXTHORZADJUST_LEFT: eRP = RP_LT; break;
+                    case SDRTEXTHORZADJUST_BLOCK:
+                    case SDRTEXTHORZADJUST_CENTER: eRP = RP_MT; break;
+                    case SDRTEXTHORZADJUST_RIGHT: eRP = RP_RT; break;
                 }
-
-                // See if we have to check the "full width" check button.
-                bool bLeftToRight = IsTextDirectionLeftToRight();
-                if ( (bLeftToRight && (eTHA==SDRTEXTHORZADJUST_BLOCK))
-                    || (!bLeftToRight && (eTVA==SDRTEXTVERTADJUST_BLOCK)))
+                break;
+            }
+            case SDRTEXTVERTADJUST_BLOCK:
+            case SDRTEXTVERTADJUST_CENTER:
+            {
+                switch (eTHA)
                 {
-                    // Move anchor to valid position.
-                    ClickFullWidthHdl_Impl(NULL);
-                    aTsbFullWidth.SetState( STATE_CHECK );
+                    case SDRTEXTHORZADJUST_LEFT: eRP = RP_LM; break;
+                    case SDRTEXTHORZADJUST_BLOCK:
+                    case SDRTEXTHORZADJUST_CENTER: eRP = RP_MM; break;
+                    case SDRTEXTHORZADJUST_RIGHT: eRP = RP_RM; break;
                 }
-
-                aCtlPosition.SetActualRP( eRP );
+                break;
+            }
+            case SDRTEXTVERTADJUST_BOTTOM:
+            {
+                switch (eTHA)
+                {
+                    case SDRTEXTHORZADJUST_LEFT: eRP = RP_LB; break;
+                    case SDRTEXTHORZADJUST_BLOCK:
+                    case SDRTEXTHORZADJUST_CENTER: eRP = RP_MB; break;
+                    case SDRTEXTHORZADJUST_RIGHT: eRP = RP_RB; break;
+                }
             }
         }
+
+        // See if we have to check the "full width" check button.
+        sal_Bool bLeftToRight(IsTextDirectionLeftToRight());
+
+        if((bLeftToRight && (SDRTEXTHORZADJUST_BLOCK == eTHA)) || (!bLeftToRight && (SDRTEXTVERTADJUST_BLOCK == eTVA)))
+        {
+            // Move anchor to valid position.
+            ClickFullWidthHdl_Impl(NULL);
+            aTsbFullWidth.SetState(STATE_CHECK);
+        }
+
+        aCtlPosition.SetActualRP( eRP );
     }
     else
     {
+        // VertAdjust or HorAdjust is not unequivocal
         aCtlPosition.Reset();
-        aTsbFullWidth.SetState( STATE_DONTKNOW );
+
+        aCtlPosition.SetState(STATE_DONTKNOW);
+        aCtlPosition.DoCompletelyDisable(sal_True);
+
+        aTsbFullWidth.SetState(STATE_DONTKNOW);
+        aTsbFullWidth.Enable( sal_False );
+        aFlPosition.Enable( sal_False );
     }
 
     // Am Rahmen anpassen
@@ -495,31 +506,38 @@ BOOL SvxTextAttrPage::FillItemSet( SfxItemSet& rAttrs)
         case RP_RB: eTVA = SDRTEXTVERTADJUST_BOTTOM;
                     eTHA = SDRTEXTHORZADJUST_RIGHT; break;
     }
-    if( aTsbFullWidth.GetState() == STATE_CHECK )
-        if (IsTextDirectionLeftToRight())
-            eTHA = SDRTEXTHORZADJUST_BLOCK;
+
+    // #103516# Do not change values if adjust controls were disabled.
+    sal_Bool bIsDisabled(aCtlPosition.IsCompletelyDisabled());
+
+    if(!bIsDisabled)
+    {
+        if( aTsbFullWidth.GetState() == STATE_CHECK )
+            if (IsTextDirectionLeftToRight())
+                eTHA = SDRTEXTHORZADJUST_BLOCK;
+            else
+                eTVA = SDRTEXTVERTADJUST_BLOCK;
+
+        if ( rOutAttrs.GetItemState( SDRATTR_TEXT_VERTADJUST ) != SFX_ITEM_DONTCARE )
+        {
+            eOldTVA = (SdrTextVertAdjust)
+                        ( ( const SdrTextVertAdjustItem& )rOutAttrs.Get( SDRATTR_TEXT_VERTADJUST ) ).GetValue();
+            if( eOldTVA != eTVA )
+                rAttrs.Put( SdrTextVertAdjustItem( eTVA ) );
+        }
         else
-            eTVA = SDRTEXTVERTADJUST_BLOCK;
-
-    if ( rOutAttrs.GetItemState( SDRATTR_TEXT_VERTADJUST ) != SFX_ITEM_DONTCARE )
-    {
-        eOldTVA = (SdrTextVertAdjust)
-                    ( ( const SdrTextVertAdjustItem& )rOutAttrs.Get( SDRATTR_TEXT_VERTADJUST ) ).GetValue();
-        if( eOldTVA != eTVA )
             rAttrs.Put( SdrTextVertAdjustItem( eTVA ) );
-    }
-    else
-        rAttrs.Put( SdrTextVertAdjustItem( eTVA ) );
 
-    if ( rOutAttrs.GetItemState( SDRATTR_TEXT_HORZADJUST ) != SFX_ITEM_DONTCARE )
-    {
-        eOldTHA = (SdrTextHorzAdjust)
-                    ( ( const SdrTextHorzAdjustItem& )rOutAttrs.Get( SDRATTR_TEXT_HORZADJUST ) ).GetValue();
-        if( eOldTHA != eTHA )
+        if ( rOutAttrs.GetItemState( SDRATTR_TEXT_HORZADJUST ) != SFX_ITEM_DONTCARE )
+        {
+            eOldTHA = (SdrTextHorzAdjust)
+                        ( ( const SdrTextHorzAdjustItem& )rOutAttrs.Get( SDRATTR_TEXT_HORZADJUST ) ).GetValue();
+            if( eOldTHA != eTHA )
+                rAttrs.Put( SdrTextHorzAdjustItem( eTHA ) );
+        }
+        else
             rAttrs.Put( SdrTextHorzAdjustItem( eTHA ) );
     }
-    else
-        rAttrs.Put( SdrTextHorzAdjustItem( eTHA ) );
 
     return( TRUE );
 }
@@ -728,10 +746,15 @@ IMPL_LINK( SvxTextAttrPage, ClickHdl_Impl, void *, p )
         aMtrFldBottom.SetValue( 0 );
     }
 
+    // #103516# Do the setup based on states of hor/ver adjust
+    SfxItemState eVState = rOutAttrs.GetItemState( SDRATTR_TEXT_VERTADJUST );
+    SfxItemState eHState = rOutAttrs.GetItemState( SDRATTR_TEXT_HORZADJUST );
+    sal_Bool bHorAndVer(SFX_ITEM_DONTCARE == eVState || SFX_ITEM_DONTCARE == eHState);
+
     // #83698# enable/disable text anchoring dependent of contour
-    aCtlPosition.Enable(!bContour);
-    aTsbFullWidth.Enable(!bContour);
-    aFlPosition.Enable(!bContour);
+    aCtlPosition.Enable(!bContour && !bHorAndVer);
+    aTsbFullWidth.Enable(!bContour && !bHorAndVer);
+    aFlPosition.Enable(!bContour && !bHorAndVer);
 
 /*
     // Am Rahmen anpassen
@@ -830,7 +853,9 @@ bool SvxTextAttrPage::IsTextDirectionLeftToRight (void) const
 {
     // Determine the text writing direction with left to right as default.
     bool bLeftToRightDirection = true;
-    if (rOutAttrs.GetItemState (SDRATTR_TEXTDIRECTION) != SFX_ITEM_DONTCARE)
+    SfxItemState eState = rOutAttrs.GetItemState(SDRATTR_TEXTDIRECTION);
+
+    if(SFX_ITEM_DONTCARE != eState)
     {
         const SvxWritingModeItem& rItem = static_cast<const SvxWritingModeItem&> (
             rOutAttrs.Get (SDRATTR_TEXTDIRECTION));
