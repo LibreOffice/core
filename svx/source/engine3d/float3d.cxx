@@ -2,9 +2,9 @@
  *
  *  $RCSfile: float3d.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-09 11:58:09 $
+ *  last change: $Author: pb $ $Date: 2000-10-23 09:40:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -303,7 +303,7 @@ __EXPORT Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
     FreeResource();
 
     // Metrik einstellen
-    eFUnit = GetModuleFieldUnit();
+    eFUnit = GetModuleFieldUnit( NULL );
     aMtrDepth.SetUnit( eFUnit );
     aMtrDistance.SetUnit( eFUnit );
     aMtrFocalLength.SetUnit( eFUnit );
@@ -551,7 +551,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         DBG_ASSERT( pPool, "Wo ist der Pool?" );
         ePoolUnit = pPool->GetMetric( SID_ATTR_LINE_WIDTH );
     }
-    eFUnit = GetModuleFieldUnit();
+    eFUnit = GetModuleFieldUnit( &rAttrs );
 
 
 // Segmentanzahl aenderbar ? und andere Stati
@@ -1780,7 +1780,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
         DBG_ASSERT( pPool, "Wo ist der Pool?" );
         ePoolUnit = pPool->GetMetric( SID_ATTR_LINE_WIDTH );
 
-        eFUnit = GetModuleFieldUnit();
+        eFUnit = GetModuleFieldUnit( &rAttrs );
     }
 
     // Anzahl Segmente (horizontal)
