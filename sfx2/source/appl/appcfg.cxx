@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appcfg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-16 15:30:58 $
+ *  last change: $Author: mba $ $Date: 2000-11-20 13:14:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,6 +164,8 @@
 #include <macrconf.hxx>
 #include "appimp.hxx"
 #include "helper.hxx"   // SfxContentHelper::...
+#include "app.hrc"
+#include "sfxresid.hxx"
 
 //-------------------------------------------------------------------------
 
@@ -568,159 +570,51 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
                 {
                     SfxAllEnumItem aNames(rPool.GetWhich(SID_ATTR_PATHGROUP));
                     SfxAllEnumItem aValues(rPool.GetWhich(SID_ATTR_PATHNAME));
-                    SvtPathOptions aPathCFG;
-                    sal_uInt32 nCount   = aNames.GetValueCount();
-                    sal_uInt32 nPosition= 0;
-                    for( nPosition=0; nPosition<nCount; ++nPosition )
+                    SvtPathOptions aPathCfg;
+                    for ( int nProp = SvtPathOptions::PATH_ADDIN; nProp < SvtPathOptions::PATH_WORK; nProp++ )
                     {
-                        String sPathType    = aNames.GetValueTextByPos(nPosition);
-                        String sValue;
-                        if( sPathType.CompareToAscii("Addin") )
-                        {
-                            sValue = aPathCFG.GetAddinPath();
-                        }
-                        else
-                        if( sPathType.CompareToAscii("AutoCorrect") )
-                        {
-                            sValue = aPathCFG.GetAutoCorrectPath();
-                        }
-                        else
-                        if( sPathType.CompareToAscii("AutoPilot") )
-                        {
-                            sValue = aPathCFG.GetAutoPilotPath();
-                        }
-                        else
-                        if( sPathType.CompareToAscii("Backup") )
-                        {
-                            sValue = aPathCFG.GetBackupPath();
-                        }
-                        else
-                        if( sPathType.CompareToAscii("Basic") )
-                        {
-                            sValue = aPathCFG.GetBasicPath();
-                        }
-                        else
-                        if( sPathType.CompareToAscii("Bitmap") )
-                        {
-                            sValue = aPathCFG.GetBitmapPath();
-                        }
-                        else
-                        if( sPathType.CompareToAscii("Config") )
-                        {
-                            sValue = aPathCFG.GetConfigPath();
-                        }
-                        else
-                        if( sPathType.CompareToAscii("Database") )
-                        {
-                            sValue = aPathCFG.GetDatabasePath();
-                        }
-                        else
-                        if( sPathType.CompareToAscii("Dictionary") )
-                        {
-                            sValue = aPathCFG.GetDictionaryPath();
-                        }
-                        else
-                        if( sPathType.CompareToAscii("Favorites") )
-                        {
-                            sValue = aPathCFG.GetFavoritesPath();
-                        }
-                        else
-                        if( sPathType.CompareToAscii("Filter") )
-                        {
-                            sValue = aPathCFG.GetFilterPath();
-                        }
-                        else
-                        if( sPathType.CompareToAscii("Gallery") )
-                        {
-                            sValue = aPathCFG.GetGalleryPath();
-                        }
-                        else
-                        if( sPathType.CompareToAscii("AutoText") )
-                        {
-                            sValue = aPathCFG.GetAutoTextPath();
-                        }
-                        else
-                        if( sPathType.CompareToAscii("Graphic") )
-                        {
-                            sValue = aPathCFG.GetGraphicPath();
-                        }
-                        else
-                        if( sPathType.CompareToAscii("Help") )
-                        {
-                            sValue = aPathCFG.GetHelpPath();
-                        }
-                        else
-                        if( sPathType.CompareToAscii("Linguistic") )
-                        {
-                            sValue = aPathCFG.GetLinguisticPath();
-                        }
-                        else
-                        if( sPathType.CompareToAscii("Module") )
-                        {
-                            sValue = aPathCFG.GetModulePath();
-                        }
-                        else
-                        if( sPathType.CompareToAscii("NewMenu") )
-                        {
-                            sValue = aPathCFG.GetNewMenuPath();
-                        }
-                        else
-                        if( sPathType.CompareToAscii("Palette") )
-                        {
-                            sValue = aPathCFG.GetPalettePath();
-                        }
-                        else
-                        if( sPathType.CompareToAscii("Plugin") )
-                        {
-                            sValue = aPathCFG.GetPluginPath();
-                        }
-                        else
-                        if( sPathType.CompareToAscii("Storage") )
-                        {
-                            sValue = aPathCFG.GetStoragePath();
-                        }
-                        else
-                        if( sPathType.CompareToAscii("Temp") )
-                        {
-                            sValue = aPathCFG.GetTempPath();
-                        }
-                        else
-                        if( sPathType.CompareToAscii("Template") )
-                        {
-                            sValue = aPathCFG.GetTemplatePath();
-                        }
-                        else
-                        if( sPathType.CompareToAscii("Trash") )
-                        {
-                            sValue = aPathCFG.GetTrashPath();
-                        }
-                        else
-                        if( sPathType.CompareToAscii("UserConfig") )
-                        {
-                            sValue = aPathCFG.GetUserConfigPath();
-                        }
-                        else
-                        if( sPathType.CompareToAscii("UserDictionary") )
-                        {
-                            sValue = aPathCFG.GetUserDictionaryPath();
-                        }
-                        else
-                        if( sPathType.CompareToAscii("Work") )
-                        {
-                            sValue = aPathCFG.GetWorkPath();
-                        }
+                        if ( nProp == 21 )
+                            aNames.InsertValue( nProp, String() );
                         else
                         {
-#ifdef ENABLE_MISSINGKEYASSERTIONS//MUSTINI
-                            DBG_ASSERT(sal_False,"SfxApplication::GetOptions()\nUnsupported path name detected!\n");
-#endif
+                            const String aName( SfxResId( CONFIG_PATH_START + nProp ) );
+                            aNames.InsertValue( nProp, aName );
                         }
-                        aValues.InsertValue(nPosition,sValue);
-                    }
 
-                    if ( rSet.Put(aNames) || rSet.Put(aValues) )
-                        bRet = TRUE;
-                    break;
+                        String aValue;
+                        switch ( nProp )
+                        {
+                            case SvtPathOptions::PATH_ADDIN:        aValue = aPathCfg.GetAddinPath(); break;
+                            case SvtPathOptions::PATH_AUTOCORRECT:  aValue = aPathCfg.GetAutoCorrectPath(); break;
+                            case SvtPathOptions::PATH_AUTOPILOT:    aValue = aPathCfg.GetAutoPilotPath(); break;
+                            case SvtPathOptions::PATH_AUTOTEXT:     aValue = aPathCfg.GetAutoTextPath(); break;
+                            case SvtPathOptions::PATH_BACKUP:       aValue = aPathCfg.GetBackupPath(); break;
+                            case SvtPathOptions::PATH_BASIC:        aValue = aPathCfg.GetBasicPath(); break;
+                            case SvtPathOptions::PATH_BITMAP:       aValue = aPathCfg.GetBitmapPath(); break;
+                            case SvtPathOptions::PATH_CONFIG:       aValue = aPathCfg.GetConfigPath(); break;
+                            case SvtPathOptions::PATH_DATABASE:     aValue = aPathCfg.GetDatabasePath(); break;
+                            case SvtPathOptions::PATH_DICTIONARY:   aValue = aPathCfg.GetDictionaryPath(); break;
+                            case SvtPathOptions::PATH_FAVORITES:    aValue = aPathCfg.GetFavoritesPath(); break;
+                            case SvtPathOptions::PATH_FILTER:       aValue = aPathCfg.GetFilterPath(); break;
+                            case SvtPathOptions::PATH_GALLERY:      aValue = aPathCfg.GetGalleryPath(); break;
+                            case SvtPathOptions::PATH_GRAPHIC:      aValue = aPathCfg.GetGraphicPath(); break;
+                            case SvtPathOptions::PATH_HELP:         aValue = aPathCfg.GetHelpPath(); break;
+                            case SvtPathOptions::PATH_LINGUISTIC:   aValue = aPathCfg.GetLinguisticPath(); break;
+                            case SvtPathOptions::PATH_MODULE:       aValue = aPathCfg.GetModulePath(); break;
+                            case SvtPathOptions::PATH_NEWMENU:      aValue = aPathCfg.GetNewMenuPath(); break;
+                            case SvtPathOptions::PATH_PALETTE:      aValue = aPathCfg.GetPalettePath(); break;
+                            case SvtPathOptions::PATH_PLUGIN:       aValue = aPathCfg.GetPluginPath(); break;
+                            case SvtPathOptions::PATH_STORAGE:      aValue = aPathCfg.GetStoragePath(); break;
+                            case SvtPathOptions::PATH_TEMP:         aValue = aPathCfg.GetTempPath(); break;
+                            case SvtPathOptions::PATH_TEMPLATE:     aValue = aPathCfg.GetTemplatePath(); break;
+                            case SvtPathOptions::PATH_TRASH:        aValue = aPathCfg.GetTrashPath(); break;
+                            case SvtPathOptions::PATH_USERCONFIG:   aValue = aPathCfg.GetUserConfigPath(); break;
+                            case SvtPathOptions::PATH_USERDICTIONARY: aValue = aPathCfg.GetUserDictionaryPath(); break;
+                            case SvtPathOptions::PATH_WORK:         aValue = aPathCfg.GetWorkPath(); break;
+                        }
+
+                        aValues.InsertValue( nProp, aValue );
+                    }
                 }
                 default:
                     DBG_WARNING( "W1:Wrong ID while getting Options!" );
@@ -1329,9 +1223,6 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
     if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_PATHNAME), TRUE, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxAllEnumItem), "AllEnumItem expected");
-#if SUPD<613//MUSTINI
-        GetAppIniManager()->Set(SFX_GROUP_DIR, *(const SfxAllEnumItem *)pItem);
-#else
         const SfxAllEnumItem* pEnumItem = (const SfxAllEnumItem *)pItem;
         sal_uInt32 nCount = pEnumItem->GetValueCount();
         for( sal_uInt32 nPath=0; nPath<nCount; ++nPath )
@@ -1339,8 +1230,6 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
             String sValue = pEnumItem->GetValueTextByPos(nPath);
             switch( nPath )
             {
-            case 50 :   aPathOptions.SetSubIniPath( sValue );
-                        break;
             case 51 :   aPathOptions.SetConfigPath( sValue );
                         break;
             case 52 :   aPathOptions.SetWorkPath( sValue );
@@ -1406,7 +1295,7 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
 #endif
             }
         }
-#endif
+
         aSendSet.ClearItem( rPool.GetWhich( SID_ATTR_PATHNAME ) );
     }
 
