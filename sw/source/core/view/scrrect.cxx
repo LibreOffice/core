@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scrrect.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-01 11:15:24 $
+ *  last change: $Author: ama $ $Date: 2001-06-08 13:03:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,9 +101,6 @@
 #include "doc.hxx"
 
 DBG_NAME(RefreshTimer);
-
-//TODO: Why BRUSH_SIZE?
-#define SW_SV_BRUSH_SIZE 8
 
 SV_IMPL_VARARR(SwStripeArr,SwStripe);
 SV_IMPL_OP_PTRARR_SORT(SwScrollStripes, SwStripesPtr);
@@ -595,7 +592,7 @@ void SwViewImp::_RefreshScrolledArea( const SwRect &rRect )
     //unten in der Schleife lassen wir die Rechtecke ein wenig ueberlappen,
     //das muss auch bei der Groesse beruecksichtigt werden.
     aSize = pOld->LogicToPixel( aSize );
-    aSize.Width() += SW_SV_BRUSH_SIZE + 4; aSize.Height() += SW_SV_BRUSH_SIZE + 4;
+    aSize.Width() += 4; aSize.Height() += 4;
     aSize = pOld->PixelToLogic( aSize );
 
     const SwRootFrm* pLayout = GetShell()->GetLayout();
@@ -622,10 +619,16 @@ void SwViewImp::_RefreshScrolledArea( const SwRect &rRect )
                         aTmp.Bottom() = nTmp;
 
                     aTmp = pOld->LogicToPixel( aTmp );
-                    aTmp.Top()  -= 2; aTmp.Bottom() += 2;
-                    aTmp.Left() -= 2; aTmp.Right()  += 2;
-                    aTmp.Left() -= aTmp.Left() % SW_SV_BRUSH_SIZE;
-                    aTmp.Top()  -= aTmp.Top()  % SW_SV_BRUSH_SIZE;
+                    if( aRect.Top() > pPg->Frm().Top() )
+                        aTmp.Top()  -= 2;
+                    if( aRect.Top() + aRect.Height() < pPg->Frm().Top()
+                                                     + pPg->Frm().Height() )
+                        aTmp.Bottom() += 2;
+                    if( aRect.Left() > pPg->Frm().Left() )
+                        aTmp.Left() -= 2;
+                    if( aRect.Left() + aRect.Width() < pPg->Frm().Left()
+                                                     + pPg->Frm().Width() )
+                        aTmp.Right() += 2;
                     aTmp = pOld->PixelToLogic( aTmp );
                     SwRect aTmp2( aTmp );
 
@@ -902,6 +905,9 @@ void SwScrollArea::SmartInsert( SwStripes* pStripes )
 /************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2001/03/01 11:15:24  ama
+      Fix #84455#: memory leak
+
       Revision 1.1.1.1  2000/09/19 00:08:29  hr
       initial import
 
