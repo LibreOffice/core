@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querydlg.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-16 15:27:49 $
+ *  last change: $Author: kz $ $Date: 2001-05-30 19:40:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,7 +272,7 @@ ModalDialog DLG_QRY_JOIN
     Text[ italian ] = "Proprietà relazioni";
     Text[ danish ] = "Forbindelsesegenskaber";
     Text[ swedish ] = "Egenskaper för sammanslagning (join)";
-    Text[ polish ] = "W³a?ciowo?ci po³¹czenia";
+    Text[ polish ] = "W³aœciowoœci po³¹czenia";
     Text[ portuguese_brazilian ] = "Join properties";
     Text[ japanese ] = "Œ‹‡‘®«";
     Text[ chinese_simplified ] = "Á¬½áÊôĞÔ";
@@ -301,7 +301,7 @@ String STR_QUERY_INNER_JOIN
     Text[ italian ] = "Contiene solamente i record di dati in cui i contenuti dei campi collegati di entrambe le tabelle sono uguali.";
     Text[ danish ] = "Indeholder kun dataposter for hvilke indholdet af de sammenkædede felter i begge tabeller er ens.";
     Text[ swedish ] = "Innehåller bara de dataposter där innehållet i de länkade fälten är lika i båda tabellerna.";
-    Text[ polish ] = "Zawiera tylko te rekordy, których zawarto?ci w po³¹czonych polach s¹ takie same w obydwu tabelach.";
+    Text[ polish ] = "Zawiera tylko te rekordy, których zawartoœci w po³¹czonych polach s¹ takie same w obydwu tabelach.";
     Text[ portuguese_brazilian ] = "(no function);Average;Count;Maximum;Minimum;Sum;Grouping";
     Text[ japanese ] = "—¼•û‚ÌÃ°ÌŞÙ‚ÅØİ¸‚³‚ê‚½Ì¨°ÙÄŞ‚Ì“à—e‚ªˆê’v‚·‚éÚº°ÄŞ‚¾‚¯‚ğŠÜ‚İ‚Ü‚·B";
     Text[ chinese_simplified ] = "Ö»°üº¬Á½¸ö±í¸ñÖĞÒıÓÃ×Ö¶ÎÏàÍ¬µÄÊı¾İÌõÄ¿¡£";
@@ -330,7 +330,7 @@ String STR_QUERY_LEFTRIGHT_JOIN
     Text[ italian ] = "Contiene TUTTI i record di dati da '%1' e soltanto i record di dati da '%2' in cui i campi collegati di entrambe le caselle sono uguali.";
     Text[ danish ] = "Indeholder alle dataposter fra '%1' og kun de dataposter fra '%2', for hvilke indholdet af de sammenkædede felter i begge tabeller ens.";
     Text[ swedish ] = "Innehåller ALLA dataposter från '%1' och bara de dataposter från '%2' där innehållet i de länkade fälten är lika i båda tabellerna.";
-    Text[ polish ] = "Zawiera WSZYSTKIE rekordy z %1 i tylko te rekordy z %2, których zawarto?ci po³¹czonych pól w obu tabelach s¹ równe.";
+    Text[ polish ] = "Zawiera WSZYSTKIE rekordy z %1 i tylko te rekordy z %2, których zawartoœci po³¹czonych pól w obu tabelach s¹ równe.";
     Text[ portuguese_brazilian ] = "(no function);Average;Count;Maximum;Minimum;Sum;Grouping";
     Text[ japanese ] = "'%1' ‚Ì‚·‚×‚Ä‚ÌÚº°ÄŞA‚¨‚æ‚Ñ—¼•û‚ÌÃ°ÌŞÙ‚ÅØİ¸‚³‚ê‚½Ì¨°ÙÄŞ‚Ì“à—e‚ªˆê’v‚·‚é '%2' ‚ÌÚº°ÄŞ‚¾‚¯‚ğŠÜ‚İ‚Ü‚·B";
     Text[ chinese_simplified ] = "º¬ÓĞ'%1'ÖĞµÄËùÓĞÊı¾İÌõÄ¿ºÍ'%2'ÖĞÁ½¸ö±í¸ñÒıÓÃ×Ö¶ÎÏàÍ¬µÄÊı¾İÌõÄ¿¡£";
