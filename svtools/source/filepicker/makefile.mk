@@ -2,9 +2,9 @@
 #
 #	$RCSfile: makefile.mk,v $
 #
-#	$Revision: 1.8 $
+#	$Revision: 1.9 $
 #
-#	last change: $Author: rt $ $Date: 2004-05-21 11:39:49 $
+#	last change: $Author: pjunck $ $Date: 2004-10-22 12:37:03 $
 #
 #	The Contents of this file are made available subject to the terms of
 #	either of the following licenses
@@ -85,7 +85,9 @@ SLOFILES =\
         $(SLO)$/asynclink.obj		\
         $(SLO)$/controlaccess.obj	\
         $(SLO)$/commonpicker.obj	\
-        $(SLO)$/fpinteraction.obj
+        $(SLO)$/fpinteraction.obj   \
+        $(SLO)$/asyncfilepicker.obj \
+        $(SLO)$/fpsmartcontent.obj
 
 SRS1NAME=$(TARGET)
 SRC1FILES =	iodlg.src	 \
