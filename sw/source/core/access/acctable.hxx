@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acctable.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 16:13:45 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 12:51:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,7 +272,7 @@ public:
     virtual void SAL_CALL clearAccessibleSelection(  )
         throw ( ::com::sun::star::uno::RuntimeException );
 
-    virtual void SAL_CALL selectAllAccessible(  )
+    virtual void SAL_CALL selectAllAccessibleChildren(  )
         throw ( ::com::sun::star::uno::RuntimeException );
 
     virtual sal_Int32 SAL_CALL getSelectedAccessibleChildCount(  )
