@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output2.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2003-10-15 09:45:13 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 19:04:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1619,16 +1619,6 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
                                 aClipRect.Bottom() = nScrY+nScrH;
                             }
 
-/*                          //! Test
-                            if ( pDev->GetOutDevType() != OUTDEV_PRINTER )
-                            {
-                                pDev->SetPen(PEN_NULL);
-                                pDev->SetFillInBrush(Brush(Color(COL_LIGHTRED)));
-                                pDev->DrawRect( aClipRect );
-                            }
-                            //! Test
-*/
-
                             //  aClipRect is not used after SetClipRegion/IntersectClipRegion,
                             //  so it can be modified here
                             if (bPixelToLogic)
@@ -2494,20 +2484,6 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                                                         Point(nClipStartX,nClipStartY), aClipSize ) );
                                     else
                                         aClipRect = Rectangle(Point(nClipStartX, nClipStartY), aClipSize);
-
-#if 0
-                                    //! Test
-                                    if ( pDev->GetOutDevType() != OUTDEV_PRINTER )
-                                    {
-                                        pDev->SetPen(PEN_NULL);
-                                        if (bClip)
-                                            pDev->SetFillInBrush(Brush(Color(COL_LIGHTGREEN)));
-                                        else
-                                            pDev->SetFillInBrush(Brush(Color(COL_LIGHTRED)));
-                                        pDev->DrawRect( aClipRect );
-                                    }
-                                    //! Test
-#endif
 
                                     if (bClip)  // bei bSimClip nur aClipRect initialisieren
                                     {
