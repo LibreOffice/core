@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globals.hrc,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 14:50:43 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:03:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -307,6 +307,7 @@
 #define TP_TEXTGRID_PAGE            (RC_GLOBALS_BEGIN +  101)
 #define TP_SECTION_INDENTS          (RC_GLOBALS_BEGIN +  102)
 #define TP_OPTCOMPATIBILITY_PAGE    (RC_GLOBALS_BEGIN +  103)
+#define TP_MAILCONFIG               (RC_GLOBALS_BEGIN +  104)
 //maximum: RC_GLOBALS_BEGIN +  119
 
 // Kontext-Menues (Format-Menue) --------------------------------------------
