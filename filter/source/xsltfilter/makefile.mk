@@ -2,9 +2,9 @@
 # 
 #   $RCSfile: makefile.mk,v $ 
 # 
-#   $Revision: 1.9 $ 
+#   $Revision: 1.10 $ 
 #
-#   last change: $Author: obo $ $Date: 2005-03-15 09:09:27 $ 
+#   last change: $Author: rt $ $Date: 2005-03-29 12:24:34 $ 
 # 
 #   The Contents of this file are made available subject to the terms of 
 #   either of the following licenses 
@@ -96,7 +96,7 @@ SHL1STDLIBS= \
 
 #USE_UDK_EXTENDED_MANIFESTFILE=TRUE
 #USE_EXTENDED_MANIFESTFILE=TRUE
-JARFILES 		= ridl.jar unoil.jar jurt.jar juh.jar 
+JARFILES 		= ridl.jar unoil.jar jurt.jar juh.jar xalan.jar
 JAVAFILES		= $(subst,$(CLASSDIR)$/, $(subst,.class,.java $(JAVACLASSFILES))) 
 CUSTOMMANIFESTFILE = Manifest  
 #JARMANIFEST = Manifest
@@ -104,12 +104,14 @@ CUSTOMMANIFESTFILE = Manifest
 #JARDIR=$(CLASSDIR)
 
 JARCOMPRESS		= TRUE  
-JARCLASSDIRS	= XSLTFilter*.class XSLTransformer*.class
+JARCLASSDIRS	= XSLTFilter*.class XSLTransformer*.class XSLTFilterOLEExtracter*.class
 JARTARGET		= $(TARGET).jar
-
+JARCLASSDIRS 	+= XSLTXalanOLEExtracter*.class
 
 # --- Files --------------------------------------------------------  
-JAVACLASSFILES=$(CLASSDIR)$/XSLTFilter.class  $(CLASSDIR)$/XSLTransformer.class     
+JAVACLASSFILES=$(CLASSDIR)$/XSLTFilter.class  $(CLASSDIR)$/XSLTransformer.class  $(CLASSDIR)$/XSLTFilterOLEExtracter.class
+#this class we need xalan.jar. 
+JAVACLASSFILES+=$(CLASSDIR)$/XSLTXalanOLEExtracter.class
 .ENDIF
     
 # --- Targets ------------------------------------------------------  
