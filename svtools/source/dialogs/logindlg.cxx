@@ -2,9 +2,9 @@
  *
  *  $RCSfile: logindlg.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-09 06:50:10 $
+ *  last change: $Author: pluby $ $Date: 2000-10-19 22:47:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  ************************************************************************/
 
 #ifndef _SVT_FILEDLG_HXX
-#include <svtools/filedlg.hxx>
+#include <filedlg.hxx>
 #endif
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
