@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TestFactory.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:37:10 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:33:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ module com { module sun { module star { module test {
     @version    0.1
     @deprecated
 */
-service TestFactory
+published service TestFactory
 {
     service com::sun::star::lang::MultiServiceFactory;
 
