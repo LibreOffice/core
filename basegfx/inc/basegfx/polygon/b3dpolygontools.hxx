@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dpolygontools.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2004-02-16 17:03:06 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 13:30:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,9 @@ namespace basegfx
 
         // Apply Line Dashing. This cuts the Polygon into line pieces
         // which are inserted as single polygons into the result.
-        ::basegfx::B3DPolyPolygon applyLineDashing(const ::basegfx::B3DPolygon& rCandidate, const ::std::vector<double>& raDashDotArray, double fFullDashDotLen);
+        // If fFullDashDotLen is not given it will be calculated from the given
+        // raDashDotArray.
+        ::basegfx::B3DPolyPolygon applyLineDashing(const ::basegfx::B3DPolygon& rCandidate, const ::std::vector<double>& raDashDotArray, double fFullDashDotLen = 0.0);
 
     } // end of namespace tools
 } // end of namespace basegfx

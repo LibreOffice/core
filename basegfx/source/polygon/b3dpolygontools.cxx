@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dpolygontools.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2004-01-16 10:34:34 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 13:31:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,8 @@
 #ifndef _BGFX_RANGE_B3DRANGE_HXX
 #include <basegfx/range/b3drange.hxx>
 #endif
+
+#include <numeric>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -351,6 +353,12 @@ namespace basegfx
         ::basegfx::B3DPolyPolygon applyLineDashing(const ::basegfx::B3DPolygon& rCandidate, const ::std::vector<double>& raDashDotArray, double fFullDashDotLen)
         {
             ::basegfx::B3DPolyPolygon aRetval;
+
+            if(0.0 == fFullDashDotLen && raDashDotArray.size())
+            {
+                // calculate fFullDashDotLen from raDashDotArray
+                fFullDashDotLen = ::std::accumulate(raDashDotArray.begin(), raDashDotArray.end(), 0.0);
+            }
 
             if(rCandidate.count() && fFullDashDotLen > 0.0)
             {
