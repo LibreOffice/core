@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 16:51:53 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 14:09:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -328,7 +328,7 @@ class SwRTFParser : public SvxRTFParser
     DocPageInformation maPageDefaults;
     rtfSections maSegments;
 
-    std::map<SwTableNode *, SwNodeIndex *> maTables;
+    sw::util::InsertedTablesManager maInsertedTables;
     SwRTFStyleTbl aTxtCollTbl;
     SwRTFCharStyleTbl aCharFmtTbl;
     SwFlySaveArr aFlyArr;               // Flys als Letzes im Doc setzen
