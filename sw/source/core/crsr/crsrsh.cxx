@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:44:28 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:04:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,6 +295,7 @@ void SwCrsrShell::StartAction()
         nAktNode = rNd.GetIndex();
         nAktCntnt = pCurCrsr->GetPoint()->nContent.GetIndex();
         nAktNdTyp = rNd.GetNodeType();
+        bAktSelection = *pCurCrsr->GetPoint() != *pCurCrsr->GetMark();
         if( ND_TEXTNODE & nAktNdTyp )
             nLeftFrmPos = SwCallLink::GetFrm( (SwTxtNode&)rNd, nAktCntnt, TRUE );
         else
@@ -373,7 +374,7 @@ if( GetWin() )
                 // Crsr-Moves ueberwachen, evt. Link callen
                 // der DTOR ist das interressante!!
                 SwCallLink aLk( *this, nAktNode, nAktCntnt, (BYTE)nAktNdTyp,
-                                nLeftFrmPos );
+                                nLeftFrmPos, bAktSelection );
 
             }
             if( bCallChgLnk && bChgCallFlag && aChgLnk.IsSet() )
@@ -737,6 +738,12 @@ void SwCrsrShell::ClearMark()
     }
 }
 
+
+void SwCrsrShell::NormalizePam(BOOL bPointFirst)
+{
+    SwCallLink aLk( *this );        // Crsr-Moves ueberwachen, evt. Link callen
+    pCurCrsr->Normalize(bPointFirst);
+}
 
 void SwCrsrShell::SwapPam()
 {
@@ -1826,7 +1833,7 @@ void SwCrsrShell::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
 // also, ob GetMark gesetzt und SPoint und GetMark unterschiedlich sind.
 
 
-FASTBOOL SwCrsrShell::HasSelection()
+FASTBOOL SwCrsrShell::HasSelection() const
 {
     SwPaM* pCrsr = IsTableMode() ? pTblCrsr : pCurCrsr;
     return( IsTableMode() || ( pCurCrsr->HasMark() &&
