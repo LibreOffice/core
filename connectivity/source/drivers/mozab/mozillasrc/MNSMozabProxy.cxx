@@ -1,3 +1,63 @@
+/*************************************************************************
+ *
+ *  $RCSfile: MNSMozabProxy.cxx,v $
+ *
+ *  $Revision: 1.3 $
+ *
+ *  last change: $Author: vg $ $Date: 2005-02-21 12:31:43 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
 #ifndef _CONNECTIVITY_MAB_MOZABHELPER_HXX_
 #include "MNSMozabProxy.hxx"
 #endif
@@ -32,6 +92,15 @@
 #ifndef _CONNECTIVITY_MAB_QUERYHELPER_HXX_
 #include <MQueryHelper.hxx>
 #endif
+#include <com/sun/star/uno/Reference.hxx>
+#include <unotools/processfactory.hxx>
+#ifndef _COM_SUN_STAR_MOZILLA_XPROXYRUNNER_HPP_
+#include "com/sun/star/mozilla/XProxyRunner.hpp"
+#endif
+
+using namespace com::sun::star::uno;
+using namespace com::sun::star::lang;
+using namespace com::sun::star::mozilla;
 
 
 #define TYPEASSERT(value,type) if (value != type) return !NS_OK;
@@ -39,47 +108,41 @@
 using namespace connectivity::mozab;
 
 /* Implementation file */
-NS_IMPL_ISUPPORTS1(MNSMozabProxy, nsIRunnable)
 
 static ::osl::Mutex m_aThreadMutex;
 extern nsresult NewAddressBook(const ::rtl::OUString * aName);
 
-nsIRunnable * MNSMozabProxy::ProxiedObject()
-{
-    if (!_ProxiedObject)
-    {
-
-        nsresult rv = NS_GetProxyForObject(NS_UI_THREAD_EVENTQ,
-                NS_GET_IID(nsIRunnable),
-                this,
-                PROXY_SYNC,
-                (void**)&_ProxiedObject);
-
-        _ProxiedObject->AddRef();
-    }
-    return _ProxiedObject;
-}
 
 MNSMozabProxy::MNSMozabProxy()
 {
-  NS_INIT_ISUPPORTS();
-  _ProxiedObject=NULL;
   m_Args = NULL;
 #if OSL_DEBUG_LEVEL > 0
   m_oThreadID = osl_getThreadIdentifier(NULL);
 #endif
-  AddRef();
+  acquire();
 }
 
 MNSMozabProxy::~MNSMozabProxy()
 {
 }
-sal_Int32 MNSMozabProxy::StartProxy(RunArgs * args)
+
+sal_Int32 MNSMozabProxy::StartProxy(RunArgs * args,::com::sun::star::mozilla::MozillaProductType aProduct,const ::rtl::OUString &aProfile)
 {
     OSL_TRACE( "IN : MNSMozabProxy::StartProxy() \n" );
     ::osl::MutexGuard aGuard(m_aThreadMutex);
+    m_Product = aProduct;
+    m_Profile = aProfile;
     m_Args = args;
-    return ProxiedObject()->Run();
+    if (!xRunner.is())
+    {
+        Reference<XMultiServiceFactory> xFactory = ::comphelper::getProcessServiceFactory();
+        OSL_ENSURE( xFactory.is(), "can't get service factory" );
+        ::com::sun::star::uno::Reference<XInterface> xInstance = xFactory->createInstance(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.mozilla.MozillaBootstrap")) );
+        OSL_ENSURE( xInstance.is(), "failed to create instance" );
+        xRunner = ::com::sun::star::uno::Reference< ::com::sun::star::mozilla::XProxyRunner >(xInstance,UNO_QUERY);
+    }
+    const ::com::sun::star::uno::Reference< ::com::sun::star::mozilla::XCodeProxy > aCode(this);
+    return xRunner->Run(aCode);
 }
 
 extern nsresult getTableStringsProxied(const sal_Char* sAbURI, sal_Int32 *nDirectoryType,MNameMapper *nmap,
@@ -87,7 +150,16 @@ extern nsresult getTableStringsProxied(const sal_Char* sAbURI, sal_Int32 *nDirec
                         ::std::vector< ::rtl::OUString >*   _rTypes,
                         rtl::OUString * sError);
 
-NS_IMETHODIMP MNSMozabProxy::Run()
+::com::sun::star::mozilla::MozillaProductType SAL_CALL MNSMozabProxy::getProductType(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    return m_Product;
+}
+::rtl::OUString SAL_CALL MNSMozabProxy::getProfileName(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    return m_Profile;
+}
+
+sal_Int32 SAL_CALL MNSMozabProxy::run(  ) throw (::com::sun::star::uno::RuntimeException)
 {
 #if OSL_DEBUG_LEVEL > 0
     OSL_TRACE( "IN : MNSMozabProxy::Run() Caller thread :%4d \n" , m_oThreadID );
