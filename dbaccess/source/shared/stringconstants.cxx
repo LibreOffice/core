@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stringconstants.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-31 09:53:45 $
+ *  last change: $Author: fs $ $Date: 2000-11-19 10:56:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,6 @@ IMPLEMENT_CONSTASCII_USTRING(PROPERTY_PASSWORD, "Password");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_COMMANDTYPE, "CommandType");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_ACTIVECOMMAND, "ActiveCommand");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_ACTIVECONNECTION, "ActiveConnection");
-IMPLEMENT_CONSTASCII_USTRING(PROPERTY_ISINSERTONLY, "IsInsertOnly");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_FILTER, "Filter");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_APPLYFILTER, "ApplyFilter");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_ORDER, "Order");

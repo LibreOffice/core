@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-17 07:50:17 $
+ *  last change: $Author: fs $ $Date: 2000-11-19 10:57:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,9 +309,7 @@ ORowSet::ORowSet(const Reference< ::com::sun::star::lang::XMultiServiceFactory >
     registerProperty(PROPERTY_MAXFIELDSIZE,         PROPERTY_ID_MAXFIELDSIZE,           PropertyAttribute::TRANSIENT,   &m_nMaxFieldSize,       ::getCppuType(reinterpret_cast< sal_Int32*>(NULL)));
     registerProperty(PROPERTY_MAXROWS,              PROPERTY_ID_MAXROWS,                0,                              &m_nMaxRows,            ::getCppuType(reinterpret_cast< sal_Int32*>(NULL)) );
     registerProperty(PROPERTY_USER,                 PROPERTY_ID_USER,                   PropertyAttribute::TRANSIENT,   &m_aUser,               ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
-    registerProperty(PROPERTY_PASSWORD,             PROPERTY_ID_PASSWORD,               0,                              &m_aPassword,           ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
-
-    registerProperty(PROPERTY_ISINSERTONLY,         PROPERTY_ID_ISINSERTONLY,           PropertyAttribute::BOUND,       &m_bIgnoreResult,       ::getBooleanCppuType());
+    registerProperty(PROPERTY_PASSWORD,             PROPERTY_ID_PASSWORD,               PropertyAttribute::TRANSIENT,   &m_aPassword,           ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
 }
 // -------------------------------------------------------------------------
 //  typedef ::comphelper::OPropertyArrayUsageHelper<ORowSet> ORowSet_Prop;

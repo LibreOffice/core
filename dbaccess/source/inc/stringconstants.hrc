@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stringconstants.hrc,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-31 09:53:51 $
+ *  last change: $Author: fs $ $Date: 2000-11-19 10:56:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,35 +158,34 @@ struct _ConstAsciiString_
 #define PROPERTY_ID_ISNEW                   62
 #define PROPERTY_ID_ROWCOUNT                63
 #define PROPERTY_ID_ISROWCOUNTFINAL         64
-#define PROPERTY_ID_ISINSERTONLY            65
-#define PROPERTY_ID_HELPFILENAME            66
-#define PROPERTY_ID_REALNAME                67
-#define PROPERTY_ID_HIDDEN                  68
-#define PROPERTY_ID_ALIGN                   69
-#define PROPERTY_ID_WIDTH                   70
-#define PROPERTY_ID_TABLETYPEFILTER         71
-#define PROPERTY_ID_DOCUMENTLOCATION        72
-#define PROPERTY_ID_FONT                    73
-#define PROPERTY_ID_ROW_HEIGHT              74
-#define PROPERTY_ID_TEXTCOLOR               75
-#define PROPERTY_ID_UPDATE_TABLENAME        76
-#define PROPERTY_ID_UPDATE_SCHEMANAME       77
-#define PROPERTY_ID_UPDATE_CATALOGNAME      78
-#define PROPERTY_ID_CONTROLMODEL            79
-#define PROPERTY_ID_RELATIVEPOSITION        80
-#define PROPERTY_ID_ISASCENDING             81
-#define PROPERTY_ID_RELATEDCOLUMN           82
-#define PROPERTY_ID_ISUNIQUE                83
-#define PROPERTY_ID_ISPRIMARYKEYINDEX       84
-#define PROPERTY_ID_IGNORERESULT            85
-#define PROPERTY_ID_DELETERULE              86
-#define PROPERTY_ID_UPDATERULE              87
-#define PROPERTY_ID_REFERENCEDTABLE         88
-#define PROPERTY_ID_REFERENCEDCOLUMN        89
-#define PROPERTY_ID_PARENTWINDOW            90
-#define PROPERTY_ID_SQLEXCEPTION            91
-#define PROPERTY_ID_ISHIDDEN                92
-#define PROPERTY_ID_SUPPRESSVERSIONCL       93
+#define PROPERTY_ID_HELPFILENAME            65
+#define PROPERTY_ID_REALNAME                66
+#define PROPERTY_ID_HIDDEN                  67
+#define PROPERTY_ID_ALIGN                   68
+#define PROPERTY_ID_WIDTH                   69
+#define PROPERTY_ID_TABLETYPEFILTER         70
+#define PROPERTY_ID_DOCUMENTLOCATION        71
+#define PROPERTY_ID_FONT                    72
+#define PROPERTY_ID_ROW_HEIGHT              73
+#define PROPERTY_ID_TEXTCOLOR               74
+#define PROPERTY_ID_UPDATE_TABLENAME        75
+#define PROPERTY_ID_UPDATE_SCHEMANAME       76
+#define PROPERTY_ID_UPDATE_CATALOGNAME      77
+#define PROPERTY_ID_CONTROLMODEL            78
+#define PROPERTY_ID_RELATIVEPOSITION        79
+#define PROPERTY_ID_ISASCENDING             80
+#define PROPERTY_ID_RELATEDCOLUMN           81
+#define PROPERTY_ID_ISUNIQUE                82
+#define PROPERTY_ID_ISPRIMARYKEYINDEX       83
+#define PROPERTY_ID_IGNORERESULT            84
+#define PROPERTY_ID_DELETERULE              85
+#define PROPERTY_ID_UPDATERULE              86
+#define PROPERTY_ID_REFERENCEDTABLE         87
+#define PROPERTY_ID_REFERENCEDCOLUMN        88
+#define PROPERTY_ID_PARENTWINDOW            89
+#define PROPERTY_ID_SQLEXCEPTION            90
+#define PROPERTY_ID_ISHIDDEN                91
+#define PROPERTY_ID_SUPPRESSVERSIONCL       92
 
 //============================================================
 //= property names
@@ -255,7 +254,6 @@ DECLARE_CONSTASCII_USTRING(PROPERTY_ISMODIFIED);
 DECLARE_CONSTASCII_USTRING(PROPERTY_ISNEW);
 DECLARE_CONSTASCII_USTRING(PROPERTY_ROWCOUNT);
 DECLARE_CONSTASCII_USTRING(PROPERTY_ISROWCOUNTFINAL);
-DECLARE_CONSTASCII_USTRING(PROPERTY_ISINSERTONLY);
 DECLARE_CONSTASCII_USTRING(PROPERTY_HELPFILENAME);
 DECLARE_CONSTASCII_USTRING(PROPERTY_WIDTH);
 DECLARE_CONSTASCII_USTRING(PROPERTY_ROW_HEIGHT);
