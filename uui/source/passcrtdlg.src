@@ -2,9 +2,9 @@
  *
  *  $RCSfile: passcrtdlg.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2001-10-12 20:31:39 $
+ *  last change: $Author: vg $ $Date: 2001-10-17 20:40:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ ModalDialog DLG_UUI_PASSWORD_CRT
         Text [ English ] = "Master ~password" ;
         Text[ english_us ] = "Master password";
         Text[ portuguese ] = "Senha principal";
-        Text[ russian ] = "Главный пароль";
+        Text[ russian ] = "Основной пароль";
         Text[ greek ] = "Master ~password";
         Text[ dutch ] = "Hoofd~wachtwoord";
         Text[ french ] = "Mot de passe principal";
@@ -120,10 +120,10 @@ ModalDialog DLG_UUI_PASSWORD_CRT
         Text [ English ] = "~Confirm master password" ;
         Text[ english_us ] = "~Confirm master password";
         Text[ portuguese ] = "~Confirmar senha principal";
-        Text[ russian ] = "~Подтвердить главный пароль";
+        Text[ russian ] = "~Подтвердить основной пароль";
         Text[ greek ] = "~Confirm master password";
         Text[ dutch ] = "~Hoofdwachtwoord bevestigen";
-        Text[ french ] = "Confirmer le mot de passe principal";
+        Text[ french ] = "~Confirmer le mot de passe principal";
         Text[ spanish ] = "~Confirmar contraseсa principal";
         Text[ finnish ] = "~Confirm master password";
         Text[ italian ] = "~Conferma password principale";
@@ -165,11 +165,11 @@ ModalDialog DLG_UUI_PASSWORD_CRT
     };
     Text[ english_us ] = "Enter Master Password";
     Text[ portuguese ] = "Indique a senha principal.";
-    Text[ russian ] = "Введите главный пароль";
+    Text[ russian ] = "Ввести основной пароль";
     Text[ greek ] = "Please enter master password";
     Text[ dutch ] = "Hoofwachtwoord invoeren";
-    Text[ french ] = "Saisissez un mot de passe principal.";
-    Text[ spanish ] = "Introduzca la contraseсa principal";
+    Text[ french ] = "Dйfinition du mot de passe principal";
+    Text[ spanish ] = "Determinar la contraseсa principal";
     Text[ finnish ] = "Please enter master password";
     Text[ italian ] = "Digitate la password principale";
     Text[ danish ] = "Please enter master password";
@@ -210,5 +210,6 @@ String STR_ERROR_PASSWORDS_NOT_IDENTICAL
     Text[ arabic ] = "Passwords are different, please enter again!";
     Text[ catalan ] = "Passwords are different, please enter again!";
 };
+
 
 
