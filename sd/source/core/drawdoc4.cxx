@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc4.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-14 12:38:44 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:08:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -958,7 +958,7 @@ void SdDrawDocument::SpellObject(SdrTextObj* pObj)
                 BOOL bModified = IsChanged();
                 ((SdrTextObj*) pObj)->SetOutlinerParaObject( pOutl->CreateParaObject() );
                 SetChanged(bModified);
-                pObj->SendRepaintBroadcast();
+                pObj->BroadcastObjectChange();
             }
         }
 
@@ -1056,7 +1056,7 @@ void SdDrawDocument::ImpOnlineSpellCallback(SpellCallbackInfo* pInfo, SdrObject*
             BOOL bModified(IsChanged());
             ((SdrTextObj*)pObj)->SetOutlinerParaObject(pOutl->CreateParaObject());
             SetChanged(bModified);
-            pObj->SendRepaintBroadcast();
+            pObj->BroadcastObjectChange();
         }
 
         pOnlineSearchItem = new SvxSearchItem();
