@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdoc_provider.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 12:32:36 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 15:34:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -463,13 +463,11 @@ ContentProvider::queryInputStream( const rtl::OUString & rUri,
         {
             OSL_ENSURE( false, "Caught embed::StorageWrappedTargetException!" );
         }
-/*
-        catch ( packages::WrongPasswordException const & )
-        {
-            // the key provided is wrong; rethrow; to be handled by caller.
-            throw;
-        }
-*/
+//        catch ( packages::WrongPasswordException const & )
+//        {
+//            // the key provided is wrong; rethrow; to be handled by caller.
+//            throw;
+//        }
     }
     return uno::Reference< io::XInputStream >();
 }
@@ -505,13 +503,11 @@ ContentProvider::queryOutputStream( const rtl::OUString & rUri,
         {
             OSL_ENSURE( false, "Caught embed::StorageWrappedTargetException!" );
         }
-/*
-        catch ( packages::WrongPasswordException const & )
-        {
-            // the key provided is wrong; rethrow; to be handled by caller.
-            throw;
-        }
-*/
+//        catch ( packages::WrongPasswordException const & )
+//        {
+//            // the key provided is wrong; rethrow; to be handled by caller.
+//            throw;
+//        }
     }
     return uno::Reference< io::XOutputStream >();
 }
@@ -546,13 +542,11 @@ ContentProvider::queryStream( const rtl::OUString & rUri,
         {
             OSL_ENSURE( false, "Caught embed::StorageWrappedTargetException!" );
         }
-/*
-        catch ( packages::WrongPasswordException const & )
-        {
-            // the key provided is wrong; rethrow; to be handled by caller.
-            throw;
-        }
-*/
+//        catch ( packages::WrongPasswordException const & )
+//        {
+//            // the key provided is wrong; rethrow; to be handled by caller.
+//            throw;
+//        }
     }
     return uno::Reference< io::XStream >();
 }
@@ -591,24 +585,6 @@ bool ContentProvider::queryNamesOfChildren(
                     if ( xNA.is() )
                     {
                         rNames = xNA->getElementNames();
-#if 1
-                        // Special folder that is always kept open by SFX
-                        // in read-write mode => never accessible
-                        for ( sal_Int32 n = 0; n < rNames.getLength(); ++n )
-                        {
-                            if ( rNames[ n ].equalsAscii( "Configurations2" ) )
-                            {
-                                for ( sal_Int32 nn = n;
-                                      nn < rNames.getLength() - 1;
-                                      ++nn )
-                                {
-                                    rNames[ nn ] = rNames[ nn + 1 ];
-                                }
-                                rNames.realloc( rNames.getLength() - 1 );
-                                break;
-                            }
-                        }
-#endif
                         return true;
                     }
                 }
@@ -623,12 +599,13 @@ bool ContentProvider::queryNamesOfChildren(
             }
             catch ( io::IOException const & )
             {
-                // Okay to happen, for instance when the storage does not exist.
+                // Okay to happen, for instance if the storage does not exist.
                 //OSL_ENSURE( false, "Caught IOException!" );
             }
             catch ( embed::StorageWrappedTargetException const & )
             {
-                OSL_ENSURE( false, "Caught embed::StorageWrappedTargetException!" );
+                OSL_ENSURE( false,
+                            "Caught embed::StorageWrappedTargetException!" );
             }
         }
     }
