@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fme $ $Date: 2001-11-23 14:45:58 $
+ *  last change: $Author: fme $ $Date: 2001-11-26 14:11:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -453,7 +453,7 @@ static sal_Char __READONLY_DATA sStandardString[] = "Dies ist der Teststring";
                         nPWidth /= nOWidth;
                         // if the screen font is too wide, we try to reduce
                         // the font height and get a smaller one
-                        if( nPWidth > 15 )
+                        if( nPWidth > 25 )
                         {
                             if( nPWidth > 80 )
                                 nPWidth = 80;
