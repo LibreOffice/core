@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opengrf.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: thb $ $Date: 2001-08-20 20:35:46 $
+ *  last change: $Author: fs $ $Date: 2001-10-26 14:20:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,16 +202,6 @@ SvxOpenGraphicDialog::SvxOpenGraphicDialog( const String& rTitle ) :
     mpImpl( new SvxOpenGrf_Impl )
 {
     mpImpl->maFileDlg.SetTitle(rTitle);
-
-    // supply default path
-    SvtPathOptions aPathOpt;
-
-    String aStartPath = aPathOpt.GetGraphicPath();
-    sal_Bool bGrfPath = ( aStartPath.Len() > 0 );
-    if( !aStartPath.Len() )
-        aStartPath = aPathOpt.GetWorkPath();
-
-    SetPath( aStartPath );
 }
 
 
