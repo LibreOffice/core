@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Jobs.xcs,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:50:08 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:08:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,57 +67,38 @@
 	</info>
 	<templates>
 		<group oor:name="Job">
-			<info>
-				<desc xml:lang="en-US">Describes an UNO service, which is registered for a special event.</desc>
-			</info>
-			<prop oor:name="AdminTime" oor:type="xs:string">
-				<info>
-					<desc xml:lang="en-US">Contains a time stamp of the admin layer.  If it is newer than UserTime, the job will be reactivated.</desc>
-				</info>
-			</prop>
-			<prop oor:name="UserTime" oor:type="xs:string">
-				<info>
-					<desc xml:lang="en-US">Contains a time stamp of the user layer.  If it older then AdminTime, the job will be reactivated.</desc>
-				</info>
-			</prop>
-			<prop oor:name="Service" oor:type="xs:string">
-				<info>
-					<desc xml:lang="en-US">Specifies the UNO service name of the job implementation.</desc>
-				</info>
-			</prop>
-			<prop oor:name="Async" oor:type="xs:boolean">
-				<info>
-					<desc xml:lang="en-US">Marks job as asynchronous.</desc>
-				</info>
-				<value>false</value>
-			</prop>
-			<group oor:name="Arguments" oor:extensible="true">
-				<info>
-					<desc xml:lang="en-US">Specifies own configuration data of a job.</desc>
-				</info>
-			</group>
-		</group>
-		<group oor:name="Event">
-			<info>
-				<desc xml:lang="en-US">Describes the event for which a UNO service can be registered as a job.</desc>
-			</info>
-			<prop oor:name="Joblist" oor:type="oor:string-list">
-				<info>
-					<desc xml:lang="en-US">Specifies whether jobs can be registered for events.</desc>
-				</info>
-			</prop>
-		</group>
+            <info><desc xml:lang="en-US">Describes an UNO service, which is registered for a special event.</desc></info>
+            <prop oor:name="Service" oor:type="xs:string">
+                <info><desc xml:lang="en-US">Must contain an UNO implementation(!) name of the implemented job component.</desc></info>
+            </prop>
+            <group oor:name="Arguments" oor:extensible="true">
+                <info><desc xml:lang="en-US">Can be filled with any argument, which is under control of the job component.</desc></info>
+            </group>
+        </group>
+        <group oor:name="TimeStamp">
+            <info><desc xml:lang="en-US">Is used to enable/disable a job execution related to a triggered event.</desc></info>
+            <prop oor:name="AdminTime" oor:type="xs:string">
+                <info><desc xml:lang="en-US">If it's newer then UserTime, the job will be reactivated next time.</desc></info>
+                <value>2003-01-01T00:00:00+00:00</value>
+            </prop>
+            <prop oor:name="UserTime" oor:type="xs:string">
+                <info><desc xml:lang="en-US">If it's newer then AdminTime, the job is deactivated for execution.</desc></info>
+                <value>2003-01-01T00:00:00+00:00</value>
+            </prop>
+        </group>
+        <group oor:name="Event">
+            <info><desc xml:lang="en-US">Describe a state, which can be detected at runtime and will be used to start jobs, which are registered for it.</desc></info>
+            <set oor:name="JobList" oor:node-type="TimeStamp">
+                <info><desc xml:lang="en-US">This list contains all registered jobs, which wish to be executed, if the coressponding event was triggered.</desc></info>
+            </set>
+        </group>
 	</templates>
 	<component>
 		<set oor:name="Jobs" oor:node-type="Job">
-			<info>
-				<desc xml:lang="en-US">Contains a list of all registered jobs.</desc>
-			</info>
+            <info><desc xml:lang="en-US">This list contains all well known job components and it's properties.</desc></info>
 		</set>
 		<set oor:name="Events" oor:node-type="Event">
-			<info>
-				<desc xml:lang="en-US">Contains a list of all possible events.</desc>
-			</info>
+            <info><desc xml:lang="en-US">Here jobs can be bound to events and can be enabled/disable by using TimeStamp values.</desc></info>
 		</set>
 	</component>
 </oor:component-schema>
