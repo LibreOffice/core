@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontainerwindow.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-23 14:39:40 $
+ *  last change: $Author: fs $ $Date: 2001-09-07 10:05:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ namespace dbaui
     //=====================================================================
     //= OQueryContainerWindow
     //=====================================================================
-    DBG_NAME(OQueryContainerWindow);
+    DBG_NAME(OQueryContainerWindow)
     OQueryContainerWindow::OQueryContainerWindow(Window* pParent, OQueryController* _pController,const Reference< XMultiServiceFactory >& _rFactory)
         :ODataView(pParent, _rFactory)
         ,m_pBeamerSeparator( NULL )
@@ -280,6 +280,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/08/23 14:39:40  fs
+ *  initial checkin - outsourced from QueryTextView.hxx (the container window for the query design)
+ *
  *
  *  Revision 1.0 23.08.01 12:15:26  fs
  ************************************************************************/
