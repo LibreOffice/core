@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfindex.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 02:12:41 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:04:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,10 +110,10 @@ ModalDialog DLG_DBASE_INDEXES
         Text [ english ] = "Table" ;
         Text[ english_us ] = "~Table";
         Text[ portuguese ] = "~Tabela:";
-        Text[ russian ] = "Òΰαλθφΰ:";
+        Text[ russian ] = "Òΰαλθφΰ";
         Text[ greek ] = "Πίνακας:";
         Text[ dutch ] = "~Tabel";
-        Text[ french ] = "~Table :";
+        Text[ french ] = "Table";
         Text[ spanish ] = "~Tabla";
         Text[ finnish ] = "~Taulukko:";
         Text[ italian ] = "~Tabella";
@@ -122,7 +122,7 @@ ModalDialog DLG_DBASE_INDEXES
         Text[ polish ] = "Tabela";
         Text[ portuguese_brazilian ] = "Tabelle:";
         Text[ japanese ] = "Γ°ΜήΩ(~T)";
-        Text[ korean ] = "Η₯(~T):";
+        Text[ korean ] = "ΕΧΐΜΊν(~T):";
         Text[ chinese_simplified ] = "±νΈρ(~T)";
         Text[ chinese_traditional ] = "ͺν®ζ(~T)";
         Text[ turkish ] = "Tablo:";
@@ -146,7 +146,7 @@ ModalDialog DLG_DBASE_INDEXES
         Text [ english ] = "Assignment" ;
         Text [ english_us ] = "Assignment" ;
         Text[ portuguese ] = "Atribuiηγo";
-        Text[ russian ] = "Νΰηνΰχενθε";
+        Text[ russian ] = "Οπθρβξενθε";
         Text[ greek ] = "Αντιστοίχιση";
         Text[ dutch ] = "Toewijzing ";
         Text[ french ] = "Assignation";
@@ -173,10 +173,10 @@ ModalDialog DLG_DBASE_INDEXES
         Text [ english ] = "Table indexes" ;
         Text[ english_us ] = "T~able indexes";
         Text[ portuguese ] = "~Νndices de tabelas:";
-        Text[ russian ] = "Θνδεκρϋ ςΰαλθφϋ:";
+        Text[ russian ] = "Θνδεκρϋ ςΰαλθφϋ";
         Text[ greek ] = "Ευρετήρι~α πινάκων:";
         Text[ dutch ] = "Tabel~indices";
-        Text[ french ] = "~Index de table :";
+        Text[ french ] = "Index de table";
         Text[ spanish ] = "Νndices de ta~bla";
         Text[ finnish ] = "T~aulukkohakemistot:";
         Text[ italian ] = "Indici t~abella";
@@ -208,10 +208,10 @@ ModalDialog DLG_DBASE_INDEXES
         Text [ english ] = "Free Indexes" ;
         Text[ english_us ] = "~Free indexes";
         Text[ portuguese ] = "Νndices ~livres:";
-        Text[ russian ] = "Ρβξαξδνϋε θνδεκρϋ:";
+        Text[ russian ] = "Ρβξαξδνϋε θνδεκρϋ";
         Text[ greek ] = "Ελεύ~θερα ευρετήρια";
         Text[ dutch ] = "~Vrije indices";
-        Text[ french ] = "Index ~libres :";
+        Text[ french ] = "Index libres";
         Text[ spanish ] = "Νndices lib~res";
         Text[ finnish ] = "~Vapaat hakemistot:";
         Text[ italian ] = "Indici li~beri";
@@ -331,6 +331,9 @@ ModalDialog DLG_DBASE_INDEXES
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.10  2001/06/29 02:12:41  kz
+ *  Merge SRC633: 29.06.01 - 04:12:23
+ *
  *  Revision 1.9  2001/06/21 15:07:11  fme
  *  Fix #86988#: Redesign of dialogs
  *
@@ -361,6 +364,7 @@ ModalDialog DLG_DBASE_INDEXES
  *
  *  Revision 1.0 26.09.00 17:03:30  fs
  ************************************************************************/
+
 
 
 
