@@ -44,6 +44,9 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTY_HPP_
 #include <com/sun/star/beans/Property.hpp>
 #endif
+#ifndef _COM_SUN_STAR_PACKAGES_MANIFEST_XMANIFESTWRITER_HPP_
+#include <com/sun/star/packages/manifest/XManifestWriter.hpp>
+#endif
 
 #include <tools/ref.hxx>
 #include <tools/debug.hxx>
@@ -51,6 +54,8 @@
 #include <unotools/ucbhelper.hxx>
 #include <tools/list.hxx>
 #include <tools/urlobj.hxx>
+#include <unotools/streamwrap.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include "stg.hxx"
 #include "storinfo.hxx"
@@ -217,6 +222,8 @@ public:
     sal_Int16                   Commit();
     BOOL                        Revert();
     BOOL                        Insert( ::ucb::Content *pContent );
+    sal_Int32                   GetProps( Sequence < Sequence < PropertyValue > > *pSequence );
+    sal_Int32                   GetObjectCount();
 };
 
 SV_DECL_IMPL_REF( UCBStorage_Impl );
@@ -761,7 +768,6 @@ UCBStorage::UCBStorage( SvStream& rStrm, BOOL bDirect )
 
         ::ucb::Content aContent( aURL, Reference < XCommandEnvironment >() );
         pImp = new UCBStorage_Impl( aContent, aURL, nMode, this, bDirect, TRUE );
-        pImp->m_bIsLinked = TRUE;
     }
     else
     {
@@ -825,7 +831,7 @@ UCBStorage_Impl::UCBStorage_Impl( const ::ucb::Content& rContent, const String& 
     , m_bModified( FALSE )
     , m_bCommited( FALSE )
     , m_bDirty( FALSE )
-    , m_bIsLinked( FALSE )
+    , m_bIsLinked( TRUE )
     , m_aClassId( SvGlobalName() )
 {
     String aName( rName );
@@ -951,6 +957,7 @@ void UCBStorage_Impl::Init()
     {
         Any aAny = m_pContent->getPropertyValue( ::rtl::OUString::createFromAscii( "MediaType" ) );
         rtl::OUString aTmp;
+        sal_Bool bIsOfficeDocument = sal_False;
         if ( ( aAny >>= aTmp ) && aTmp.getLength() )
         {
             m_aContentType = m_aOriginalContentType = aTmp;
@@ -964,6 +971,7 @@ void UCBStorage_Impl::Init()
 
                 // get the ClassId using the clipboard format ( internal table )
                 m_aClassId = GetClassId_Impl( m_nFormat );
+                bIsOfficeDocument = ( m_aClassId != SvGlobalName() );
 
                 // get human presentable name using the clipboard format
                 SotExchange::GetFormatDataFlavor( m_nFormat, aDataFlavor );
@@ -996,7 +1004,7 @@ void UCBStorage_Impl::Init()
                     UCBStorageElement_Impl* pElement = new UCBStorageElement_Impl( aTitle, aContentType, bIsFolder, (ULONG) nSize );
                     m_aChildrenList.Insert( pElement, LIST_APPEND );
 
-                    if ( !bIsFolder )
+                    if ( !bIsFolder && bIsOfficeDocument )
                     {
                         // will be replaced by a detection using the MediaType
                         String aName( m_aURL );
@@ -1043,6 +1051,23 @@ void UCBStorage_Impl::Init()
         }
     }
 }
+
+/*
+sal_Int32 nProps UCBStorage_Impl::GetProps( Sequence < PropertyValue > *pSequence )
+{
+    UCBStorageElement_Impl* pElement = m_aChildrenList.First();
+    sal_Int32 nProps = 0;
+    while ( pElement )
+    {
+        Sequence < PropertyValue > aProps(2);
+        aProps[0].Name = ::rtl::OUString::createFromAscii("Title");
+        aProps[0].Value = pElement->m_aName;
+        aProps[1].Name = ::rtl::OUString::createFromAscii("MediaType");
+        aProps[1].Value = pElement->m_aContentType;
+        pSequence[ nProps++ ] = aProps;
+    }
+}
+*/
 
 UCBStorage_Impl::~UCBStorage_Impl()
 {
@@ -1257,7 +1282,43 @@ sal_Int16 UCBStorage_Impl::Commit()
                     aType <<= (rtl::OUString) m_aContentType;
                     m_pContent->setPropertyValue( ::rtl::OUString::createFromAscii( "MediaType" ), aType );
 
-                    if (  !m_bIsLinked )
+                    if (  m_bIsLinked )
+                    {
+/*
+                        // write a manifest file
+                        // first create a subfolder "Meta-inf"
+                        Content aNewSubFolder;
+                        BOOL bRet = ::utl::UCBContentHelper::MakeFolder( *m_pContent, String::CreateFromAscii("Meta-inf"), aNewSubFolder );
+                        if ( bRet )
+                        {
+                            // create a stream to write the manifest file - use a temp file
+                            String aURL( aNewSubFolder.getURL() );
+                            ::utl::TempFile aTempFile( &aURL );
+                            aTempFile.EnableKillingFile( TRUE );
+
+                            // get the stream from the temp file and create an output stream wrapper
+                            SvStream* pStream = aTempFile.GetStream( STREAM_STD_READWRITE );
+                            ::utl::OOutputStreamWrapper* pHelper = new ::utl::OOutputStreamWrapper( *pStream );
+                            com::sun::star::uno::Reference < ::com::sun::star::io::XOutputStream > xOutputStream( pHelper );
+
+                            // create a manifest writer object that will fill the stream
+                            Reference < ::com::sun::star::packages::manifest::XManifestWriter > xWriter =
+                                Reference< ::com::sun::star::packages::manifest::XManifestWriter >
+                                    ( ::comphelper::getProcessServiceFactory()->createInstance(
+                                        ::rtl::OUString::createFromAscii( "com.sun.star.packages.manifest.ManifestWriter" )), UNO_QUERY) ;
+                            sal_Int32 nCount = GetObjectCount() + 1;
+                            Sequence < Sequence < PropertyValue > > aProps( nCount );
+                            GetProps( aProps.getArray() );
+                            xWriter->writeManifestSequence( xOutputStream, aProps );
+
+                            // move the stream to its desired location
+                            Content aSource( aTempFile.GetURL(), Reference < XCommandEnvironment >() );
+                            aNewSubFolder.transferContent( aSource, InsertOperation_MOVE, ::rtl::OUString::createFromAscii("manifest.xml"), NameClash::OVERWRITE );
+                            delete pHelper;
+                        }
+*/
+                    }
+                    else
                     {
                         Any aAny;
                         m_pContent->executeCommand( ::rtl::OUString::createFromAscii("flush"), aAny );
@@ -2020,35 +2081,64 @@ String UCBStorage::GetLinkedFile( SvStream &rStream )
 
 String UCBStorage::CreateLinkFile( const String& rName )
 {
-    SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( rName, STREAM_STD_READWRITE | STREAM_TRUNC );
+    // create a stream to write the link file - use a temp file, because it may be no file content
+    INetURLObject aFolderObj( rName );
+    String aName = aFolderObj.GetName();
+    aFolderObj.removeSegment();
+    String aFolderURL( aFolderObj.GetMainURL( INetURLObject::NO_DECODE ) );
+    ::utl::TempFile aTempFile( &aFolderURL );
+    aTempFile.EnableKillingFile( TRUE );
+
+    // get the stream from the temp file
+    SvStream* pStream = aTempFile.GetStream( STREAM_STD_READWRITE | STREAM_TRUNC );
+
+    // write header
     *pStream << ( UINT32 ) 0x04034b50;
 
+    // assemble a new folder name in the destination folder
     INetURLObject aObj( rName );
     String aTmp = aObj.GetName();
-    String aURL = String::CreateFromAscii( "content." );
-    aURL += aTmp;
-    aObj.SetName( aURL );
-    aURL = aObj.GetMainURL();
-    BOOL bRet = ::utl::UCBContentHelper::MakeFolder( aURL );
+    String aTitle = String::CreateFromAscii( "content." );
+    aTitle += aTmp;
+
+    // create a folder and store its URL
+    Content aFolder( aFolderURL, Reference < XCommandEnvironment >() );
+    Content aNewFolder;
+    BOOL bRet = ::utl::UCBContentHelper::MakeFolder( aFolder, aTitle, aNewFolder );
     if ( !bRet )
     {
-        aURL += '.';
+        // append a number until the name can be used for a new folder
+        aTitle += '.';
         for ( sal_Int32 i=0; !bRet; i++ )
         {
-            String aTmp( aURL );
+            String aTmp( aTitle );
             aTmp += String::CreateFromInt32( i );
-            bRet = ::utl::UCBContentHelper::MakeFolder( aTmp );
+            bRet = ::utl::UCBContentHelper::MakeFolder( aFolder, aTmp, aNewFolder );
             if ( bRet )
-                aURL = aTmp;
+                aTitle = aTmp;
         }
     }
 
-    String aLink = String::CreateFromAscii("ContentURL=");
-    aLink += aURL;
-    pStream->WriteByteString( aLink, RTL_TEXTENCODING_UTF8 );
-    pStream->Flush();
-    delete pStream;
-    return aURL;
+    if ( bRet )
+    {
+        // get the URL
+        aObj.SetName( aTitle );
+        String aURL = aObj.GetMainURL( INetURLObject::NO_DECODE );
+
+        // store it as key/value pair
+        String aLink = String::CreateFromAscii("ContentURL=");
+        aLink += aURL;
+        pStream->WriteByteString( aLink, RTL_TEXTENCODING_UTF8 );
+        pStream->Flush();
+
+        // move the stream to its desired location
+        Content aSource( aTempFile.GetURL(), Reference < XCommandEnvironment >() );
+        aFolder.transferContent( aSource, InsertOperation_MOVE, aName, NameClash::OVERWRITE );
+
+        return aURL;
+    }
+
+    return String();
 }
 
 BOOL UCBStorage::SetProperty( const String& rName, const ::com::sun::star::uno::Any& rValue )
