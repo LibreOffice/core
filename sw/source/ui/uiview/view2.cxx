@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: gt $ $Date: 2002-10-16 09:41:11 $
+ *  last change: $Author: mba $ $Date: 2002-11-26 09:12:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -473,15 +473,19 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
             GetViewFrame()->ShowChildWindow(FN_SYNC_LABELS, TRUE);
             break;
         case FN_ESCAPE:
+        {
+            BOOL bDone = FALSE;
             if ( pWrtShell->HasDrawView() && pWrtShell->GetDrawView()->IsDragObj() )
             {
                 pWrtShell->BreakDrag();
                 pWrtShell->EnterSelFrmMode();
+                bDone = TRUE;
             }
             else if ( pWrtShell->IsDrawCreate() )
             {
                 GetDrawFuncPtr()->BreakCreate();
                 AttrChangedNotify(pWrtShell); // ggf Shellwechsel...
+                bDone = TRUE;
             }
             else if ( pWrtShell->HasSelection() || IsDrawMode() )
             {
@@ -503,22 +507,28 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
                     pWrtShell->EnterStdMode();
                     AttrChangedNotify(pWrtShell); // ggf Shellwechsel...
                 }
+
+                bDone = TRUE;
             }
             else if ( GetEditWin().GetApplyTemplate() )
+            {
                 GetEditWin().SetApplyTemplate(SwApplyTemplate());
+                bDone = TRUE;
+            }
             else if( ((SfxObjectShell*)GetDocShell())->GetInPlaceObject() &&
                         ((SfxObjectShell*)GetDocShell())->GetInPlaceObject()->GetIPClient() )
             {
                 ErrCode nErr = GetDocShell()->DoInPlaceActivate( FALSE );
                 if ( nErr )
                     ErrorHandler::HandleError( nErr );
+                bDone = TRUE;
             }
             else if ( GetEditWin().IsChainMode() )
+            {
                 GetEditWin().SetChainMode( FALSE );
-//JP 10.06.99: warten auf SLOT von MBA
-//          else if(Application::GetAppWindow()->IsFullScreenView())
-//              GetViewFrame()->GetDispatcher()->Execute(SID_WIN_FULLSCREEN);
-            else if(pWrtShell->GetFlyFrmFmt() )
+                bDone = TRUE;
+            }
+            else if( pWrtShell->GetFlyFrmFmt() )
             {
                 const SwFrmFmt* pFmt = pWrtShell->GetFlyFrmFmt();
                 if(pWrtShell->GotoFly( pFmt->GetName(), FLYCNTTYPE_FRM ))
@@ -526,7 +536,20 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
                     pWrtShell->HideCrsr();
                     pWrtShell->EnterSelFrmMode();
                 }
+
+                bDone = TRUE;
             }
+            else
+            {
+                SfxBoolItem aItem( SID_WIN_FULLSCREEN, FALSE );
+                GetViewFrame()->GetDispatcher()->Execute( SID_WIN_FULLSCREEN, SFX_CALLMODE_RECORD, &aItem, 0L );
+            }
+
+            if ( bDone )
+                rReq.Done();
+            else
+                rReq.Ignore();
+        }
         break;
         case SID_ATTR_BORDER_INNER:
         case SID_ATTR_BORDER_OUTER:
