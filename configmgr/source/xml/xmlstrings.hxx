@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstrings.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:20:14 $
+ *  last change: $Author: vg $ $Date: 2003-05-27 11:43:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@ namespace configmgr
         // tag names
         DECLARE_CONSTASCII_USTRING(TAG_SCHEMA);
         DECLARE_CONSTASCII_USTRING(TAG_LAYER);
+        DECLARE_CONSTASCII_USTRING(DEPRECATED_TAG_LAYER);
 
         DECLARE_CONSTASCII_USTRING(TAG_COMPONENT);
         DECLARE_CONSTASCII_USTRING(TAG_TEMPLATES);
