@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblecontexthelper.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obr $ $Date: 2002-08-14 12:00:00 $
+ *  last change: $Author: tbe $ $Date: 2002-11-22 13:52:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,7 +265,7 @@ namespace comphelper
     }
 
     //---------------------------------------------------------------------
-    void SAL_CALL OAccessibleContextHelper::NotifyAccessibleEvent( const sal_Int16 _nEventId,
+    void SAL_CALL OAccessibleContextHelper::BufferAccessibleEvent( const sal_Int16 _nEventId,
         const Any& _rOldValue, const Any& _rNewValue,
         AccessibleEventBuffer & _rBuffer )
     {
@@ -279,7 +279,7 @@ namespace comphelper
         {
             AccessibleEventObject aEvent;
             aEvent.Source = *this;
-            OSL_ENSURE( aEvent.Source.is(), "OAccessibleContextHelper::NotifyAccessibleEvent: invalid creator!" );
+            OSL_ENSURE( aEvent.Source.is(), "OAccessibleContextHelper::BufferAccessibleEvent: invalid creator!" );
             aEvent.EventId = _nEventId;
             aEvent.OldValue = _rOldValue;
             aEvent.NewValue = _rNewValue;
@@ -402,6 +402,9 @@ namespace comphelper
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9  2002/08/14 12:00:00  obr
+ *  #100201# removed state change event to DEFUNC
+ *
  *  Revision 1.8  2002/07/22 07:00:37  sb
  *  #100004# Added second NotifyAccessibleEvent with AccessibleEventBuffer.
  *

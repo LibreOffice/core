@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblecontexthelper.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tbe $ $Date: 2002-09-23 10:31:41 $
+ *  last change: $Author: tbe $ $Date: 2002-11-22 13:48:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,7 +261,7 @@ namespace comphelper
         @param  _rNewValue
             the new value to be notified
         */
-        void SAL_CALL   NotifyAccessibleEvent(
+        virtual void SAL_CALL   NotifyAccessibleEvent(
                     const sal_Int16 _nEventId,
                     const ::com::sun::star::uno::Any& _rOldValue,
                     const ::com::sun::star::uno::Any& _rNewValue
@@ -281,7 +281,7 @@ namespace comphelper
         @param  _rBuffer
             the buffer that records the event
         */
-        void SAL_CALL   NotifyAccessibleEvent(
+        virtual void SAL_CALL   BufferAccessibleEvent(
                     const sal_Int16 _nEventId,
                     const ::com::sun::star::uno::Any& _rOldValue,
                     const ::com::sun::star::uno::Any& _rNewValue,
@@ -417,6 +417,9 @@ namespace comphelper
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2002/09/23 10:31:41  tbe
+ *  #102438# OExternalLockGuard: only lock the external mutex
+ *
  *  Revision 1.6  2002/07/22 07:01:31  sb
  *  #100004# Added second NotifyAccessibleEvent with AccessibleEventBuffer.
  *
