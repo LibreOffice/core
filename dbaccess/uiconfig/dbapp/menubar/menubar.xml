@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<menu:menubar xmlns:menu="http://openoffice.org/2001/menu" menu:id="menubar">
+    <menu:menu menu:id=".uno:PickList" menu:label="" >
+        <menu:menupopup>
+            <menu:menuitem menu:id=".uno:AddDirect" menu:helpid="5537" menu:label="" />
+            <menu:menuitem menu:id=".uno:Open" menu:helpid="5501" menu:label="" />
+            <menu:menuitem menu:id=".uno:AutoPilotMenu" menu:helpid="6381" menu:label="" />
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:CloseDoc" menu:helpid="5503" menu:label="" />
+            <menu:menuitem menu:id=".uno:SaveAll" menu:helpid="5309" menu:label="" />
+            <menu:menuitem menu:id=".uno:Save" menu:helpid="5505" menu:label="" />
+            <menu:menuitem menu:id=".uno:SaveAs" menu:helpid="5502" menu:label="" />
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:ExportTo" menu:helpid="5829" menu:label="" />
+            <menu:menu menu:id=".uno:SendToMenu" menu:label="" >
+                <menu:menupopup>
+                    <menu:menuitem menu:id=".uno:SendMail" menu:helpid="5331" menu:label="" />
+                    <menu:menuitem menu:id=".uno:DB/SendReportAsMail" menu:helpid="5331" menu:label="" />
+                    <menu:menuseparator/>
+                    <menu:menuitem menu:id=".uno:DB/SendReportToWriter" menu:helpid="0" menu:label="" />
+                </menu:menupopup>
+            </menu:menu>
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:Quit" menu:helpid="5300" menu:label="" />
+        </menu:menupopup>
+    </menu:menu>
+    <menu:menu menu:id=".uno:EditMenu" menu:label="" >
+        <menu:menupopup>
+            <menu:menuitem menu:id=".uno:Copy" menu:helpid="5711" menu:label="" />
+            <menu:menuitem menu:id=".uno:Paste" menu:helpid="5712" menu:label="" />
+            <menu:menuitem menu:id=".uno:DB/PasteSpecial" menu:helpid="0" menu:label="" />
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:DB/Delete" menu:helpid="0" menu:label="" />
+            <menu:menuitem menu:id=".uno:DB/Rename" menu:helpid="0" menu:label="" />
+            <menu:menuitem menu:id=".uno:DB/Edit" menu:helpid="0" menu:label="" />
+            <menu:menuitem menu:id=".uno:DB/Open" menu:helpid="0" menu:label="" />
+            <menu:menuitem menu:id=".uno:DB/ConvertToView" menu:helpid="0" menu:label="" />
+            <menu:menuitem menu:id=".uno:DB/NewFormAutoPilotWithPreSelection" menu:helpid="0" menu:label="" />
+            <menu:menuitem menu:id=".uno:DB/NewReportAutoPilotWithPreSelection" menu:helpid="0" menu:label="" />
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:DB/SelectAll" menu:helpid="0" menu:label="" />
+            <menu:menuseparator/>
+            <menu:menu menu:id=".uno:DB/DatabasePropertiesMenu" menu:label="" >
+                <menu:menupopup>
+                    <menu:menuitem menu:id=".uno:DB/DSProperties" menu:helpid="0" menu:label="" />
+                    <menu:menuitem menu:id=".uno:DB/DSConnectionType" menu:helpid="0" menu:label="" />
+                    <menu:menuitem menu:id=".uno:DB/DSAdvancedSettings" menu:helpid="0" menu:label="" />
+                </menu:menupopup>
+            </menu:menu>
+        </menu:menupopup>
+    </menu:menu>
+    <menu:menu menu:id=".uno:ViewMenu" menu:label="" >
+        <menu:menupopup>
+            <menu:menu menu:id=".uno:DB/DatabaseObjectsMenu" menu:label="" >
+                <menu:menupopup>
+                    <menu:menuitem menu:id=".uno:DB/ViewTables" menu:helpid="0" menu:label="" />
+                    <menu:menuitem menu:id=".uno:DB/ViewQueries" menu:helpid="0" menu:label="" />
+                    <menu:menuitem menu:id=".uno:DB/ViewForms" menu:helpid="0" menu:label="" />
+                    <menu:menuitem menu:id=".uno:DB/ViewReports" menu:helpid="0" menu:label="" />
+                </menu:menupopup>
+            </menu:menu>
+            <menu:menuseparator/>
+            <menu:menu menu:id=".uno:DB/Sort" menu:label="" >
+                <menu:menupopup>
+                    <menu:menuitem menu:id=".uno:Sortup" menu:helpid="0" menu:label="" />
+                    <menu:menuitem menu:id=".uno:SortDown" menu:helpid="0" menu:label="" />
+                </menu:menupopup>
+            </menu:menu>
+            <menu:menuseparator/>
+            <menu:menu menu:id=".uno:DB/Preview" menu:label="" >
+                <menu:menupopup>
+                    <menu:menuitem menu:id=".uno:DB/DisablePreview" menu:helpid="0" menu:label="" />
+                    <menu:menuitem menu:id=".uno:DB/ShowDocInfoPreview" menu:helpid="0" menu:label="" />
+                    <menu:menuitem menu:id=".uno:DB/ShowDocPreview" menu:helpid="0" menu:label="" />
+                </menu:menupopup>
+            </menu:menu>
+            <menu:menuitem menu:id=".uno:DB/RefreshTables" menu:helpid="0" menu:label="" />
+        </menu:menupopup>
+    </menu:menu>
+    <menu:menu menu:id=".uno:InsertMenu" menu:label="" >
+        <menu:menupopup>
+            <menu:menuitem menu:id=".uno:DB/NewForm" menu:helpid="0" menu:label="" />
+            <menu:menuitem menu:id=".uno:DB/NewReportAutoPilot" menu:helpid="38995" menu:label="" />
+            <menu:menuitem menu:id=".uno:DB/NewQuery" menu:helpid="38873" menu:label="" />
+            <menu:menuitem menu:id=".uno:DB/NewQuerySql" menu:helpid="38841" menu:label="" />
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:DB/NewTable" menu:helpid="38906" menu:label="" />
+            <menu:menuitem menu:id=".uno:DB/NewView" menu:helpid="38930" menu:label="" />
+            <menu:menuitem menu:id=".uno:DB/NewViewSQL" menu:helpid="0" menu:label="" />
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:DB/NewFolder" menu:helpid="0" menu:label="" />
+        </menu:menupopup>
+    </menu:menu>
+    <menu:menu menu:id=".uno:ToolsMenu" menu:label="" >
+        <menu:menupopup>
+            <menu:menuitem menu:id=".uno:DB/RelationDesign" menu:helpid="0" menu:label="" />
+            <menu:menuitem menu:id=".uno:DB/UserAdmin" menu:helpid="0" menu:label="" />
+            <menu:menuitem menu:id=".uno:DB/TableFilter" menu:helpid="0" menu:label="" />
+            <menu:menuitem menu:id=".uno:DB/DirectSQL" menu:helpid="38954" menu:label="" />
+            <menu:menuseparator/>
+            <menu:menu menu:id=".uno:MacrosMenu" menu:label="" >
+                <menu:menupopup>
+                    <menu:menuitem menu:id=".uno:MacroDialog" menu:helpid="5959" menu:label="" />
+                </menu:menupopup>
+            </menu:menu>
+
+            <menu:menuseparator/>
+            <menu:menuitem menu:id="service:com.sun.star.deployment.ui.PackageManagerDialog" menu:helpid="42772" />
+            <menu:menuseparator/>
+
+            <menu:menuitem menu:id=".uno:OptionsTreeDialog" menu:helpid="31630" menu:label="" />
+        </menu:menupopup>
+    </menu:menu>
+    <menu:menu menu:id=".uno:WindowList" menu:label="" >
+        <menu:menupopup>
+            <menu:menuitem menu:id=".uno:CloseWin" menu:helpid="5621" menu:label="" />
+        </menu:menupopup>
+    </menu:menu>
+    <menu:menu menu:id=".uno:HelpMenu" menu:label="" >
+        <menu:menupopup>
+            <menu:menuitem menu:id=".uno:HelpIndex" menu:helpid="5401" menu:label="" />
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:HelperDialog" menu:helpid="5962" menu:label="" />
+            <menu:menuitem menu:id=".uno:HelpTip" menu:helpid="5404" menu:label="" />
+            <menu:menuitem menu:id=".uno:ActiveHelp" menu:helpid="5403" menu:label="" />
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:HelpSupport" menu:helpid="6683" menu:label="" />
+            <menu:menuitem menu:id=".uno:OnlineRegistrationDlg" menu:helpid="6537" menu:label="" />
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:About" menu:helpid="5301" menu:label="" />
+        </menu:menupopup>
+    </menu:menu>
+</menu:menubar>
