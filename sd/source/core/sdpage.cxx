@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dl $ $Date: 2001-02-26 10:16:28 $
+ *  last change: $Author: dl $ $Date: 2001-03-08 11:40:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1689,6 +1689,71 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit)
         }
         break;
 
+        case AUTOLAYOUT_VERTICAL_TITLE_TEXT_CHART:
+        {
+            Size aSize( aRect0.GetSize().Height(), aRect1.BottomLeft().Y() - aRect0.TopLeft().Y() );
+            aRect0.SetSize( aSize );
+            aRect0.SetPos( aTitleRect.TopRight() - Point( aSize.Width(), 0 ) );
+            nObjKind[0] = PRESOBJ_TITLE;
+            pObj = GetPresObject(nObjKind[0], TRUE);
+            InsertPresObj(pObj, nObjKind[0], TRUE, aRect0, bInit, aObjList);
+            pObj = GetPresObject(nObjKind[0], TRUE);
+            pObj->SetItem( SdrTextAutoGrowWidthItem(TRUE) );
+            pObj->SetItem( SdrTextAutoGrowHeightItem(FALSE) );
+
+            Size aLayoutSize ( GetSize() );
+            aLayoutSize.Height() -= GetUppBorder() + GetLwrBorder();
+            aSize.Height() = long ( aRect0.GetSize().Height() * 0.47 );
+            aSize.Width() = long( aLayoutSize.Width() * 0.7 );
+            aRect1.SetPos( aTitleRect.TopLeft() );
+            aRect1.SetSize( aSize );
+            nObjKind[1] = PRESOBJ_OUTLINE;
+            pObj = GetPresObject(nObjKind[1], TRUE);
+            InsertPresObj(pObj, nObjKind[1], TRUE, aRect1, bInit, aObjList);
+            pObj = GetPresObject(nObjKind[1], TRUE);
+            pObj->SetItem( SdrTextAutoGrowWidthItem(TRUE) );
+            pObj->SetItem( SdrTextAutoGrowHeightItem(FALSE) );
+            pObj->SetLogicRect( aRect1 );
+
+            aSize.Height() = aRect0.GetSize().Height();
+            Point aPos( aTitleRect.TopLeft() );
+            aPos.Y() += long ( aSize.Height() * 0.53 );
+            aRect2.SetPos( aPos );
+            aSize.Height() = long ( aRect0.GetSize().Height() * 0.47 );
+            aRect2.SetSize( aSize );
+            nObjKind[2] = PRESOBJ_CHART;
+            pObj = GetPresObject(nObjKind[2], FALSE);
+            InsertPresObj(pObj, nObjKind[2], FALSE, aRect2, bInit, aObjList);
+        }
+        break;
+
+        case AUTOLAYOUT_VERTICAL_TITLE_VERTICAL_OUTLINE:
+        {
+            Size aSize( aRect0.GetSize().Height(), aRect1.BottomLeft().Y() - aRect0.TopLeft().Y() );
+            aRect0.SetSize( aSize );
+            aRect0.SetPos( aTitleRect.TopRight() - Point( aSize.Width(), 0 ) );
+            nObjKind[0] = PRESOBJ_TITLE;
+            pObj = GetPresObject(nObjKind[0], TRUE);
+            InsertPresObj(pObj, nObjKind[0], TRUE, aRect0, bInit, aObjList);
+            pObj = GetPresObject(nObjKind[0], TRUE);
+            pObj->SetItem( SdrTextAutoGrowWidthItem(TRUE) );
+            pObj->SetItem( SdrTextAutoGrowHeightItem(FALSE) );
+
+            Size aLayoutSize ( GetSize() );
+            aLayoutSize.Height() -= GetUppBorder() + GetLwrBorder();
+            aSize.Height() = aRect0.GetSize().Height();
+            aSize.Width() = long( aLayoutSize.Width() * 0.7 );
+            aRect1.SetPos( aTitleRect.TopLeft() );
+            aRect1.SetSize( aSize );
+            nObjKind[1] = PRESOBJ_OUTLINE;
+            pObj = GetPresObject(nObjKind[1], TRUE);
+            InsertPresObj(pObj, nObjKind[1], TRUE, aRect1, bInit, aObjList);
+            pObj = GetPresObject(nObjKind[1], TRUE);
+            pObj->SetItem( SdrTextAutoGrowWidthItem(TRUE) );
+            pObj->SetItem( SdrTextAutoGrowHeightItem(FALSE) );
+        }
+        break;
+
         case AUTOLAYOUT_TITLE_VERTICAL_OUTLINE:
         {
             nObjKind[0] = PRESOBJ_TITLE;
@@ -1698,12 +1763,11 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit)
             nObjKind[1] = PRESOBJ_OUTLINE;
             pObj = GetPresObject(nObjKind[1], TRUE);
             InsertPresObj(pObj, nObjKind[1], TRUE, aRect1, bInit, aObjList);
+            pObj = GetPresObject(nObjKind[1], TRUE);
+            pObj->SetItem( SdrTextAutoGrowWidthItem(TRUE) );
+            pObj->SetItem( SdrTextAutoGrowHeightItem(FALSE) );
         }
         break;
-
-
-//  AUTOLAYOUT_VERTICAL_TITLE_TEXT_CHART,
-//  AUTOLAYOUT_VERTICAL_TITLE_VERTICAL_OUTLINE,
 
         case AUTOLAYOUT_TITLE_VERTICAL_OUTLINE_CLIPART:
         {
@@ -1724,6 +1788,9 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit)
             nObjKind[2] = PRESOBJ_OUTLINE;
             pObj = GetPresObject(nObjKind[2], TRUE);
             InsertPresObj(pObj, nObjKind[2], TRUE, aRect2, bInit, aObjList);
+            pObj = GetPresObject(nObjKind[2], TRUE);
+            pObj->SetItem( SdrTextAutoGrowWidthItem(TRUE) );
+            pObj->SetItem( SdrTextAutoGrowHeightItem(FALSE) );
         }
         break;
 
