@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _ServiceManager.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-02-04 12:48:03 $
+ *  last change:$Date: 2003-09-08 10:44:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,10 +61,11 @@
 
 package ifc.lang;
 
-import com.sun.star.uno.XComponentContext;
+import lib.MultiPropertyTest;
+
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
-import lib.MultiPropertyTest;
+import com.sun.star.uno.XComponentContext;
 
 public class _ServiceManager extends MultiPropertyTest {
 
@@ -85,7 +86,7 @@ public class _ServiceManager extends MultiPropertyTest {
             wte.printStackTrace(log);
             res = false;
         }
-        tRes.tested("DefaultContext", get != null);
+        tRes.tested("DefaultContext", res);
 
     }
 
