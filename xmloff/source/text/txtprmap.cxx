@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 13:33:55 $
+ *  last change: $Author: hr $ $Date: 2004-08-04 12:41:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -424,7 +424,7 @@ XMLPropertyMapEntry aXMLParaPropMap[] =
     MG_ED( "CollapsingBorders", TABLE, BORDER_MODEL, XML_TYPE_BORDER_MODEL | MID_FLAG_NO_PROPERTY_IMPORT, CTF_BORDER_MODEL ),
 
     // OD 2004-05-05 #i28701# - RES_WRAP_INFLUENCE_ON_OBJPOS
-    M_ED( "WrapInfluenceOnPosition", DRAW, WRAP_INFLUENCE_ON_POSITION, XML_TYPE_WRAP_INFLUENCE_ON_POSITION, 0 ),
+    MG_ED( "WrapInfluenceOnPosition", DRAW, WRAP_INFLUENCE_ON_POSITION, XML_TYPE_WRAP_INFLUENCE_ON_POSITION, 0 ),
 
 M_END()
 };
