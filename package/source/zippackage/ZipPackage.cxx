@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: cl $ $Date: 2002-09-25 09:51:21 $
+ *  last change: $Author: mav $ $Date: 2002-09-25 10:34:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -429,9 +429,10 @@ void ZipPackage::getZipFileContents()
                 }
             }
             else
-                VOS_ENSURE ( 0, "Couldn't get a ManifestReader!" );
+                VOS_ENSURE ( 0, "Couldn't get a ManifestReader!" ); // throw RuntimeException?
         }
     }
+
     const OUString sMeta ( RTL_CONSTASCII_USTRINGPARAM ( "META-INF" ) );
     if ( xRootFolder->hasByName( sMeta ) )
         xRootFolder->removeByName( sMeta );
@@ -524,10 +525,16 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
             {
                 bBadZipFile = sal_True;
             }
+            catch ( Exception & )
+            {
+                if( pZipFile ) { delete pZipFile; pZipFile = NULL; }
+                throw;
+            }
+
             if ( bBadZipFile )
             {
                 // clean up the memory, and tell the UCB about the error
-                delete pZipFile; pZipFile = NULL;
+                if( pZipFile ) { delete pZipFile; pZipFile = NULL; }
                 throw com::sun::star::uno::Exception ( OUString( RTL_CONSTASCII_USTRINGPARAM ( "Bad Zip File." ) ),
                     static_cast < ::cppu::OWeakObject * > ( this ) );
             }
