@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 16:39:21 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:54:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -385,6 +385,7 @@ BOOL lcl_HasRowOutline( const ScViewData& rViewData )
             nTipVisible( 0 ),                                               \
             pDrawView( NULL ),                                              \
             bDrawSelMode( FALSE ),                                          \
+            mfPendingTabBarWidth( -1.0 ),                                   \
             bMinimized( FALSE ),                                            \
             pTimerWindow( NULL ),                                           \
             pSelEngine( NULL ),                                             \
@@ -608,6 +609,13 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, BOOL bInner )
             long nTabSize = 0;
             if (bTabControl)
             {
+                // pending relative tab bar width from extended document options
+                if( mfPendingTabBarWidth >= 0.0 )
+                {
+                    SetRelTabBarWidth( mfPendingTabBarWidth );
+                    mfPendingTabBarWidth = -1.0;
+                }
+
                 nTabSize = pTabControl->GetSizePixel().Width()-nOverlap;
 
                 if ( aViewData.GetHSplitMode() != SC_SPLIT_FIX )    // bei linkem Scrollbar
@@ -1028,9 +1036,34 @@ void ScTabView::SetTabBarWidth( long nNewWidth )
     }
 }
 
-long ScTabView::GetTabBarWidth()
+void ScTabView::SetRelTabBarWidth( double fRelTabBarWidth )
+{
+    if( (0.0 <= fRelTabBarWidth) && (fRelTabBarWidth <= 1.0) )
+        if( long nFrameWidth = pFrameWin->GetSizePixel().Width() )
+            SetTabBarWidth( static_cast< long >( fRelTabBarWidth * nFrameWidth + 0.5 ) );
+}
+
+void ScTabView::SetPendingRelTabBarWidth( double fRelTabBarWidth )
+{
+    mfPendingTabBarWidth = fRelTabBarWidth;
+    SetRelTabBarWidth( fRelTabBarWidth );
+}
+
+long ScTabView::GetTabBarWidth() const
 {
     return pTabControl->GetSizePixel().Width();
+}
+
+double ScTabView::GetRelTabBarWidth() const
+{
+    if( long nFrameWidth = pFrameWin->GetSizePixel().Width() )
+        return static_cast< double >( GetTabBarWidth() ) / nFrameWidth;
+    return 0.0;
+}
+
+double ScTabView::GetPendingRelTabBarWidth() const
+{
+    return mfPendingTabBarWidth;
 }
 
 Window* ScTabView::GetActiveWin()
