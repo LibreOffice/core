@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rubydialog.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-09 23:25:41 $
+ *  last change: $Author: kz $ $Date: 2001-04-12 07:44:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,11 +86,11 @@ ModelessDialog RID_SVXDLG_RUBY
         Text[ russian ] = "јвтоматическое распознание";
         Text[ greek ] = "Ѕхфьмбфз бнбгнюсйуз";
         Text[ dutch ] = "Automatische herkenning";
-        Text[ french ] = "Auto detection";
+        Text[ french ] = "Dйtection automatique";
         Text[ spanish ] = "Reconocimiento automбtico";
         Text[ italian ] = "Auto detection";
         Text[ danish ] = "Auto detection";
-        Text[ swedish ] = "Automatiskt igenkдnnande";
+        Text[ swedish ] = "Automatisk igenkдnning";
         Text[ polish ] = "Automatyczne rozpoznanie";
         Text[ portuguese_brazilian ] = "Auto detection";
         Text[ japanese ] = "О©УЃФFОѓ";
@@ -172,7 +172,7 @@ ModelessDialog RID_SVXDLG_RUBY
         Text[ russian ] = "¬ыравнивание";
         Text[ greek ] = "”фпячйуз";
         Text[ dutch ] = "Uitlijning";
-        Text[ french ] = "Adjust";
+        Text[ french ] = "Alignement";
         Text[ spanish ] = "Alineaciуn";
         Text[ italian ] = "Adjust";
         Text[ danish ] = "Adjust";
@@ -258,9 +258,9 @@ ModelessDialog RID_SVXDLG_RUBY
     };
     StringList [ french ] =
     {
-            "Links" ;
+            "ј gauche" ;
             "Zentriert" ;
-            "Rechts" ;
+            "ј droite" ;
             "0 1 0" ;
             "1 2 1" ;
     };
@@ -372,7 +372,7 @@ ModelessDialog RID_SVXDLG_RUBY
         Text[ russian ] = "—тиль знаков текста транслитерации";
         Text[ greek ] = "”фхл чбсбкфёсщн гйб кеяменп 'Ruby'";
         Text[ dutch ] = "Tekensjabloon voor ruby text";
-        Text[ french ] = "Character style for ruby text";
+        Text[ french ] = "Style de caractиres pour le texte Ruby";
         Text[ spanish ] = "Estilo de carбcter para texto ruby";
         Text[ italian ] = "Character style for ruby text";
         Text[ danish ] = "Character style for ruby text";
@@ -422,7 +422,7 @@ ModelessDialog RID_SVXDLG_RUBY
     };
     StringList [ french ] =
     {
-             < "<Keine>" ; > ;
+             < "<Aucun>" ; > ;
     };
     StringList [ spanish ] =
     {
@@ -484,7 +484,7 @@ ModelessDialog RID_SVXDLG_RUBY
         Text[ russian ] = "—тилист";
         Text[ greek ] = "”фхляуфбт";
         Text[ dutch ] = "Stylist";
-        Text[ french ] = "Stylist";
+        Text[ french ] = "Styliste";
         Text[ spanish ] = "Estilista";
         Text[ italian ] = "Stylist";
         Text[ danish ] = "Stylist";
@@ -509,7 +509,7 @@ ModelessDialog RID_SVXDLG_RUBY
         Text[ russian ] = "ѕросмотр:";
         Text[ greek ] = "–сперйукьрзуз:";
         Text[ dutch ] = "Voorbeeld:";
-        Text[ french ] = "Preview:";
+        Text[ french ] = "Aperзu";
         Text[ spanish ] = "Previsualizaciуn:";
         Text[ italian ] = "Preview:";
         Text[ danish ] = "Preview:";
@@ -539,7 +539,7 @@ ModelessDialog RID_SVXDLG_RUBY
         Text[ russian ] = "ѕрин€ть";
         Text[ greek ] = "≈цбсмпгё";
         Text[ dutch ] = "Overnemen";
-        Text[ french ] = "Apply";
+        Text[ french ] = "Appliquer";
         Text[ spanish ] = "Aplicar";
         Text[ italian ] = "Apply";
         Text[ danish ] = "Apply";
@@ -564,7 +564,7 @@ ModelessDialog RID_SVXDLG_RUBY
         Text[ russian ] = "«акрыть";
         Text[ greek ] = " леяуймп";
         Text[ dutch ] = "Sluiten";
-        Text[ french ] = "Close";
+        Text[ french ] = "Fermer";
         Text[ spanish ] = "Cerrar";
         Text[ italian ] = "Close";
         Text[ danish ] = "Close";
@@ -592,7 +592,7 @@ ModelessDialog RID_SVXDLG_RUBY
         Text[ russian ] = "ќсновной текст";
         Text[ greek ] = "¬буйкь кеяменп";
         Text[ dutch ] = "Basistekst";
-        Text[ french ] = "Basis text";
+        Text[ french ] = "Texte de base";
         Text[ spanish ] = "Texto base";
         Text[ italian ] = "Basis text";
         Text[ danish ] = "Basis text";
@@ -615,7 +615,7 @@ ModelessDialog RID_SVXDLG_RUBY
         Text[ russian ] = "“ранслитераци€";
         Text[ greek ] = " еяменп Ruby";
         Text[ dutch ] = "Ruby-tekst";
-        Text[ french ] = "Ruby text";
+        Text[ french ] = "Texte Ruby";
         Text[ spanish ] = "Texto ruby";
         Text[ italian ] = "Ruby text";
         Text[ danish ] = "Ruby text";
