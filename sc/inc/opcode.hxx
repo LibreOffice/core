@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opcode.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-28 16:50:32 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 18:05:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,7 +275,7 @@ enum OpCodeEnum
         ocKumKapZ           = SC_OPCODE_KUM_KAP_Z,
         ocEffektiv          = SC_OPCODE_EFFEKTIV,
         ocNominal           = SC_OPCODE_NOMINAL,
-    // Spezialfunktion für Teilergebnisse
+    // Spezialfunktion fuer Teilergebnisse
         ocSubTotal          = SC_OPCODE_SUB_TOTAL,
     // Datenbankfunktionen
         ocDBSum             = SC_OPCODE_DB_SUM,
