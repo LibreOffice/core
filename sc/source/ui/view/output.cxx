@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2002-04-24 14:44:26 $
+ *  last change: $Author: nn $ $Date: 2002-04-25 18:26:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2550,7 +2550,13 @@ void ScOutputData::DrawNoteMarks()
                     if (bFirst)
                     {
                         pDev->SetLineColor();
-                        pDev->SetFillColor(COL_LIGHTRED);
+
+                        const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+                        if ( bUseStyleColor && rStyleSettings.GetHighContrastMode() )
+                            pDev->SetFillColor( rStyleSettings.GetWindowTextColor() );
+                        else
+                            pDev->SetFillColor(COL_LIGHTRED);
+
                         bFirst = FALSE;
                     }
 
@@ -2639,6 +2645,14 @@ void ScOutputData::DrawClipMarks()
     if (!bAnyClipped)
         return;
 
+    ULONG nOldDrawMode = pDev->GetDrawMode();
+    if ( bUseStyleColor && Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
+    {
+        // force SvxFont::DrawArrow to draw in a way suitable for high contrast mode
+        pDev->SetDrawMode( nOldDrawMode | DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL |
+                            DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT );
+    }
+
     long nPosY = nScrY;
     for (USHORT nArrY=1; nArrY+1<nArrCount; nArrY++)
     {
@@ -2699,6 +2713,8 @@ void ScOutputData::DrawClipMarks()
         }
         nPosY += pThisRowInfo->nHeight;
     }
+
+    pDev->SetDrawMode(nOldDrawMode);
 }
 
 
