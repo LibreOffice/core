@@ -7,7 +7,7 @@
         <prop oor:name="FilterService"/>
         <prop oor:name="TemplateName"/>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">PFS Professional Write Plus</value>
+            <value>PFS Professional Write Plus</value>
         </prop>
         <prop oor:name="Flags"><value>IMPORT ALIEN</value></prop>
     </node>

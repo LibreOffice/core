@@ -7,36 +7,7 @@
         <prop oor:name="FilterService"><value>com.sun.star.comp.Writer.XmlFilterAdaptor</value></prop>
         <prop oor:name="TemplateName"/>
         <prop oor:name="UIName">
-            <value xml:lang="pl">PocketWord File</value>
-            <value xml:lang="hu">Pocket Word</value>
-            <value xml:lang="ja">Pocket Word</value>
-            <value xml:lang="es">Pocket Word </value>
-            <value xml:lang="tr">Pocket Word</value>
-            <value xml:lang="ru">PocketWord File</value>
-            <value xml:lang="th">PocketWord File</value>
-            <value xml:lang="x-comment">PocketWord File</value>
-            <value xml:lang="ca">PocketWord File</value>
-            <value xml:lang="el">Pocket Word</value>
-            <value xml:lang="zh-CN">Pocket Word</value>
-            <value xml:lang="pt">PocketWord File</value>
-            <value xml:lang="cs">Pocket Word</value>
-            <value xml:lang="fr">Pocket Word</value>
-            <value xml:lang="ar">PocketWord File</value>
-            <value xml:lang="zh-TW">Pocket Word</value>
-            <value xml:lang="sl">Pocket Word</value>
-            <value xml:lang="fi">PocketWord File</value>
-            <value xml:lang="hi-IN">Pocket Word</value>
-            <value xml:lang="en-US">Pocket Word</value>
-            <value xml:lang="sk">Pocket Word</value>
-            <value xml:lang="he">Pocket Word</value>
-            <value xml:lang="sv">Pocket Word</value>
-            <value xml:lang="da">Pocket Word</value>
-            <value xml:lang="de">Pocket Word</value>
-            <value xml:lang="ko">Pocket Word</value>
-            <value xml:lang="nl">PocketWord File</value>
-            <value xml:lang="pt-BR">PocketWord File</value>
-            <value xml:lang="it">Pocket Word</value>
-            <value xml:lang="x-translate">Pocket Word</value>
+            <value>Pocket Word</value>
         </prop>
         <prop oor:name="Flags"><value>IMPORT EXPORT ALIEN 3RDPARTYFILTER</value></prop>
     </node>
