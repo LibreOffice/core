@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prntopts.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2001-05-10 07:16:45 $
+ *  last change: $Author: kz $ $Date: 2001-05-12 07:21:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ TabPage TP_PRINT_OPTIONS
         Text [ italian ] = "Contenuto" ;
         Text [ portuguese_brazilian ] = "Conteúdo" ;
         Text [ portuguese ] = "Conteúdo" ;
-        Text [ finnish ] = "Inhalt" ;
+        Text [ finnish ] = "Sisältö" ;
         Text [ danish ] = "Indhold" ;
         Text [ french ] = "Contenu" ;
         Text [ swedish ] = "Innehåll" ;
@@ -255,7 +255,7 @@ TabPage TP_PRINT_OPTIONS
         Text[ korean ] = "Ãâ·Â¡¡Ç°Áú";
         Text[ turkish ] = "Çýktý kalitesi";
         Text[ language_user1 ] = " ";
-        Text[ finnish ] = "Ausgabequalität";
+        Text[ finnish ] = "Laatu";
         Text[ catalan ] = "Calidad de impresión";
     };
     RadioButton RBT_COLOR
@@ -355,7 +355,7 @@ TabPage TP_PRINT_OPTIONS
         Text [ italian ] = "Stampa di" ;
         Text [ portuguese_brazilian ] = "Imprimir" ;
         Text [ portuguese ] = "Imprimir" ;
-        Text [ finnish ] = "Drucken von" ;
+        Text [ finnish ] = "Tulosta" ;
         Text [ danish ] = "Udskriv" ;
         Text [ french ] = "Imprimer" ;
         Text [ swedish ] = "Skriv ut" ;
@@ -509,7 +509,7 @@ TabPage TP_PRINT_OPTIONS
         Text [ italian ] = "Opzioni pagina" ;
         Text [ portuguese_brazilian ] = "Opções da página" ;
         Text [ portuguese ] = "Opções da página" ;
-        Text [ finnish ] = "Seitenoptionen" ;
+        Text [ finnish ] = "Sivuasetukset" ;
         Text [ danish ] = "Sideindstillinger" ;
         Text [ french ] = "Options de la page" ;
         Text [ swedish ] = "Sidalternativ" ;
