@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LTables.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-02 07:58:46 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 15:27:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ namespace connectivity
         class OEvoabTables : public OEvoabTables_BASE
         {
         protected:
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > createObject(const ::rtl::OUString& _rName);
+            virtual sdbcx::ObjectType createObject(const ::rtl::OUString& _rName);
         public:
             OEvoabTables(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rMetaData,::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
                 const TStringVector &_rVector) : OEvoabTables_BASE(_rMetaData,_rParent,_rMutex,_rVector)
