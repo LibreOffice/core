@@ -2,9 +2,9 @@
  *
  *  $RCSfile: getfilenamewrapper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tra $ $Date: 2002-03-28 08:57:33 $
+ *  last change: $Author: hro $ $Date: 2002-08-15 08:44:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,13 @@
 // includes
 //------------------------------------------------------------------------
 
-#include <systools/win32/comdlg9x.h>
+#ifndef _SAL_TYPES_H_
+#include <sal/types.h>
+#endif
+
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#include <commdlg.h>
 
 /*
     A simple wrapper around the GetOpenFileName/GetSaveFileName API.

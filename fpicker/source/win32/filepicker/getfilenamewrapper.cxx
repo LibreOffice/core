@@ -2,9 +2,9 @@
  *
  *  $RCSfile: getfilenamewrapper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tra $ $Date: 2002-03-28 08:57:33 $
+ *  last change: $Author: hro $ $Date: 2002-08-15 08:44:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 #include "getfilenamewrapper.hxx"
 #endif
 
+#include <objbase.h>
 #include <process.h>
 
 

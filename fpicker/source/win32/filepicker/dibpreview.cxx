@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dibpreview.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tra $ $Date: 2002-03-21 07:37:13 $
+ *  last change: $Author: hro $ $Date: 2002-08-15 08:41:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,8 +81,6 @@
 
 #include <stdexcept>
 #include <string>
-
-#include <systools/win32/user9x.h>
 
 //------------------------------------------------------------------------
 //

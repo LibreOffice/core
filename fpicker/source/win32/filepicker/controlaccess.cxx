@@ -2,9 +2,9 @@
  *
  *  $RCSfile: controlaccess.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tra $ $Date: 2002-03-21 07:40:13 $
+ *  last change: $Author: hro $ $Date: 2002-08-15 08:41:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,8 +74,6 @@
 #ifndef _WINIMPLHELPER_HXX_
 #include "..\misc\WinImplHelper.hxx"
 #endif
-
-#include <systools/win32/user9x.h>
 
 //------------------------------------------------------------
 // we are using a table based algorithm to dispatch control

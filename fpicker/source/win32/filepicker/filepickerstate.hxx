@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filepickerstate.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-08-10 12:09:20 $
+ *  last change: $Author: hro $ $Date: 2002-08-15 08:41:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,8 +86,8 @@
 #include <rtl/ustring.hxx>
 #endif
 
-#include <systools/win32/user9x.h>
-
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
 //---------------------------------------------
 //
 //---------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinFileOpenImpl.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: tra $ $Date: 2002-03-28 08:57:33 $
+ *  last change: $Author: hro $ $Date: 2002-08-15 08:41:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,9 +114,6 @@
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
-
-#include <systools/win32/comdlg9x.h>
-#include <systools/win32/user9x.h>
 
 #ifndef _RESOURCEPROVIDER_HXX_
 #include "..\misc\resourceprovider.hxx"

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helppopupwindow.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tra $ $Date: 2001-09-05 13:32:17 $
+ *  last change: $Author: hro $ $Date: 2002-08-15 08:42:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,8 @@
 #include <osl/mutex.hxx>
 #endif
 
-#include <systools/win32/user9x.h>
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
 
 //---------------------------------------------
 // declaration
