@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2004-03-04 14:11:42 $
+#   last change: $Author: hjs $ $Date: 2004-06-25 16:27:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,11 +85,11 @@ PARFILES += \
         folderitem_writer.par
 .ENDIF
 
-LNGFILES= \
-        module_writer.lng              \
-        registryitem_writer.lng        \
-        folderitem_writer.lng          \
-        configurationitem_writer.lng
+ULFFILES= \
+        module_writer.ulf              \
+        registryitem_writer.ulf        \
+        folderitem_writer.ulf          \
+        configurationitem_writer.ulf
 
 # --- File ---------------------------------------------------------
 .INCLUDE :  target.mk
