@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undopage.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 11:25:06 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:09:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,7 @@ void SdPageFormatUndoAction::Undo()
 
     pPage->SetBackgroundFullSize( bOldFullSize );
     if( !pPage->IsMasterPage() )
-        ( (SdPage*) pPage->GetMasterPage(0) )->SetBackgroundFullSize( bOldFullSize );
+        ( (SdPage&) pPage->TRG_GetMasterPage() ).SetBackgroundFullSize( bOldFullSize );
 
     SfxViewShell* pViewShell = SfxViewShell::Current();
 
@@ -168,7 +168,7 @@ void SdPageFormatUndoAction::Redo()
 
     pPage->SetBackgroundFullSize( bNewFullSize );
     if( !pPage->IsMasterPage() )
-        ( (SdPage*) pPage->GetMasterPage(0) )->SetBackgroundFullSize( bNewFullSize );
+        ( (SdPage&) pPage->TRG_GetMasterPage() ).SetBackgroundFullSize( bNewFullSize );
 
     SfxViewShell* pViewShell = SfxViewShell::Current();
 
