@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: pb $ $Date: 2002-06-26 11:26:56 $
+ *  last change: $Author: pb $ $Date: 2002-08-22 11:14:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,9 +317,6 @@ private:
     sal_Bool                mbResizeDisabled        : 1;
     sal_Bool                mbAutoResize            : 1;
     sal_Bool                mbEnableDelete          : 1;
-
-    DECL_LINK( HeaderSelect_Impl, HeaderBar * );
-    DECL_LINK( HeaderEndDrag_Impl, HeaderBar * );
 
     void            DeleteEntries();
     void            DoQuickSearch( const xub_Unicode& rChar );
@@ -840,9 +837,6 @@ ViewTabListBox_Impl::ViewTabListBox_Impl( Window* pParentWin,
     else
         mpHeaderBar->InsertItem( COLUMN_TITLE, String( SvtResId( STR_SVT_FILEVIEW_COLUMN_TITLE ) ), 600, nBits );
 
-    mpHeaderBar->SetSelectHdl( LINK( this, ViewTabListBox_Impl, HeaderSelect_Impl ) );
-    mpHeaderBar->SetEndDragHdl( LINK( this, ViewTabListBox_Impl, HeaderEndDrag_Impl ) );
-
     Size aHeadSize = mpHeaderBar->GetSizePixel();
     SetPosSizePixel( Point( 0, aHeadSize.Height() ),
                      Size( aBoxSize.Width(), aBoxSize.Height() - aHeadSize.Height() ) );
@@ -872,63 +866,6 @@ ViewTabListBox_Impl::~ViewTabListBox_Impl()
     maResetQuickSearch.Stop();
 
     delete mpHeaderBar;
-}
-
-// -----------------------------------------------------------------------
-
-IMPL_LINK( ViewTabListBox_Impl, HeaderSelect_Impl, HeaderBar*, pBar )
-{
-    USHORT nItemID = pBar ? pBar->GetCurItemId() : 0;
-
-/*    if ( pBar && pBar->GetCurItemId() != ITEMID_TYPE )
-*/      return 0;
-
-//  HeaderBarItemBits nBits = mpHeaderBar->GetItemBits( ITEMID_TYPE );
-    HeaderBarItemBits nBits = mpHeaderBar->GetItemBits( nItemID );
-    BOOL bUp = ( ( nBits & HIB_UPARROW ) == HIB_UPARROW );
-    SvSortMode eMode = SortAscending;
-
-    if ( bUp )
-    {
-        nBits &= ~HIB_UPARROW;
-        nBits |= HIB_DOWNARROW;
-        eMode = SortDescending;
-    }
-    else
-    {
-        nBits &= ~HIB_DOWNARROW;
-        nBits |= HIB_UPARROW;
-    }
-    mpHeaderBar->SetItemBits( nItemID, nBits );
-/*  mpHeaderBar->SetItemBits( ITEMID_TYPE, nBits );
-    SvTreeList* pModel = pPathBox->GetModel();
-    pModel->SetSortMode( eMode );
-    pModel->Resort();
-*/  return 1;
-}
-
-// -----------------------------------------------------------------------
-
-IMPL_LINK( ViewTabListBox_Impl, HeaderEndDrag_Impl, HeaderBar*, pBar )
-{
-    if ( pBar && !pBar->GetCurItemId() )
-        return 0;
-
-    if ( !mpHeaderBar->IsItemMode() )
-    {
-        Size aSize;
-        USHORT nTabs = mpHeaderBar->GetItemCount();
-        long nTmpSize = 0;
-
-        for ( USHORT i = 1; i <= nTabs; ++i )
-        {
-            long nWidth = mpHeaderBar->GetItemSize(i);
-            aSize.Width() =  nWidth + nTmpSize;
-            nTmpSize += nWidth;
-            SetTab( i, aSize.Width(), MAP_PIXEL );
-        }
-    }
-    return 0;
 }
 
 // -----------------------------------------------------------------------
@@ -1240,8 +1177,9 @@ SvtFileView::SvtFileView( Window* pParent, const ResId& rResId,
     if ( bMultiSelection )
         mpImp->mpView->SetSelectionMode( MULTIPLE_SELECTION );
 
-    HeaderBar *pHeaderBar = mpImp->mpView->GetHeaderBar();
+    HeaderBar* pHeaderBar = mpImp->mpView->GetHeaderBar();
     pHeaderBar->SetSelectHdl( LINK( this, SvtFileView, HeaderSelect_Impl ) );
+    pHeaderBar->SetEndDragHdl( LINK( this, SvtFileView, HeaderEndDrag_Impl ) );
 }
 
 SvtFileView::SvtFileView( Window* pParent, const ResId& rResId, sal_Int8 nFlags ) :
@@ -1269,6 +1207,7 @@ SvtFileView::SvtFileView( Window* pParent, const ResId& rResId, sal_Int8 nFlags 
 
     HeaderBar *pHeaderBar = mpImp->mpView->GetHeaderBar();
     pHeaderBar->SetSelectHdl( LINK( this, SvtFileView, HeaderSelect_Impl ) );
+    pHeaderBar->SetEndDragHdl( LINK( this, SvtFileView, HeaderEndDrag_Impl ) );
 }
 
 // -----------------------------------------------------------------------
@@ -1584,12 +1523,9 @@ void SvtFileView::EnableNameReplacing( sal_Bool bEnable )
 }
 
 // -----------------------------------------------------------------------
-// -----------------------------------------------------------------------
 IMPL_LINK( SvtFileView, HeaderSelect_Impl, HeaderBar*, pBar )
 {
-    if ( !pBar )
-        return 0;
-
+    DBG_ASSERT( pBar, "no headerbar" );
     USHORT nItemID = pBar->GetCurItemId();
 
     HeaderBarItemBits nBits;
@@ -1597,6 +1533,13 @@ IMPL_LINK( SvtFileView, HeaderSelect_Impl, HeaderBar*, pBar )
     // clear the arrow of the recently used column
     if ( nItemID != mpImp->mnSortColumn )
     {
+        if ( !nItemID )
+        {
+            // first call -> remove arrow from title column,
+            // because another column is the sort column
+            nItemID = mpImp->mnSortColumn;
+            mpImp->mnSortColumn = COLUMN_TITLE;
+        }
         nBits = pBar->GetItemBits( mpImp->mnSortColumn );
         nBits &= ~( HIB_UPARROW | HIB_DOWNARROW );
         pBar->SetItemBits( mpImp->mnSortColumn, nBits );
@@ -1618,19 +1561,99 @@ IMPL_LINK( SvtFileView, HeaderSelect_Impl, HeaderBar*, pBar )
     }
 
     pBar->SetItemBits( nItemID, nBits );
-
     mpImp->Resort_Impl( nItemID, !bUp );
-
     return 1;
 }
 
+// -----------------------------------------------------------------------
+IMPL_LINK( SvtFileView, HeaderEndDrag_Impl, HeaderBar*, pBar )
+{
+    if ( !pBar->IsItemMode() )
+    {
+        Size aSize;
+        USHORT nTabs = pBar->GetItemCount();
+        long nTmpSize = 0;
+
+        for ( USHORT i = 1; i <= nTabs; ++i )
+        {
+            long nWidth = pBar->GetItemSize(i);
+            aSize.Width() =  nWidth + nTmpSize;
+            nTmpSize += nWidth;
+            mpImp->mpView->SetTab( i, aSize.Width(), MAP_PIXEL );
+        }
+    }
+
+    return 0;
+}
 
 // -----------------------------------------------------------------------
-// -----------------------------------------------------------------------
-// -----------------------------------------------------------------------
-// -----------------------------------------------------------------------
+String SvtFileView::GetConfigString() const
+{
+    String sRet;
+    HeaderBar* pBar = mpImp->mpView->GetHeaderBar();
+    DBG_ASSERT( pBar, "invalid headerbar" );
 
-// class SvtFileView_Impl ---------------------------------------------
+    // sort order
+    sRet += String::CreateFromInt32( mpImp->mnSortColumn );
+    sRet += ';';
+    HeaderBarItemBits nBits = pBar->GetItemBits( mpImp->mnSortColumn );
+    BOOL bUp = ( ( nBits & HIB_UPARROW ) == HIB_UPARROW );
+    sRet += bUp ? '1' : '0';
+    sRet += ';';
+
+    USHORT nCount = pBar->GetItemCount();
+    for ( USHORT i = 0; i < nCount; ++i )
+    {
+        USHORT nId = pBar->GetItemId(i);
+        sRet += String::CreateFromInt32( nId );
+        sRet += ';';
+        sRet += String::CreateFromInt32( pBar->GetItemSize( nId ) );
+        sRet += ';';
+    }
+
+    sRet.EraseTrailingChars( ';' );
+    return sRet;
+}
+
+// -----------------------------------------------------------------------
+void SvtFileView::SetConfigString( const String& rCfgStr )
+{
+    HeaderBar* pBar = mpImp->mpView->GetHeaderBar();
+    DBG_ASSERT( pBar, "invalid headerbar" );
+
+    USHORT nTokenCount = rCfgStr.GetTokenCount();
+    DBG_ASSERT( pBar->GetItemCount() == ( nTokenCount / 2 - 1 ), "invalid config string" );
+
+    USHORT nIdx = 0;
+    mpImp->mnSortColumn = (USHORT)rCfgStr.GetToken( 0, ';', nIdx ).ToInt32();
+    BOOL bUp = (BOOL)(USHORT)rCfgStr.GetToken( 0, ';', nIdx ).ToInt32();
+    HeaderBarItemBits nBits = pBar->GetItemBits( mpImp->mnSortColumn );
+
+    if ( bUp )
+    {
+        nBits &= ~HIB_UPARROW;
+        nBits |= HIB_DOWNARROW;
+    }
+    else
+    {
+        nBits &= ~HIB_DOWNARROW;
+        nBits |= HIB_UPARROW;
+    }
+    pBar->SetItemBits( mpImp->mnSortColumn, nBits );
+
+    while ( nIdx != STRING_NOTFOUND )
+    {
+        USHORT nItemId = (USHORT)rCfgStr.GetToken( 0, ';', nIdx ).ToInt32();
+        pBar->SetItemSize( nItemId, rCfgStr.GetToken( 0, ';', nIdx ).ToInt32() );
+    }
+
+    HeaderSelect_Impl( pBar );
+    HeaderEndDrag_Impl( pBar );
+}
+
+// -----------------------------------------------------------------------
+// class NameTranslator_Impl
+// -----------------------------------------------------------------------
 
 NameTranslator_Impl::NameTranslator_Impl( void ) :
     mpActFolder( NULL )
@@ -1692,10 +1715,12 @@ const String* NameTranslator_Impl::GetTransTableFileName() const
     return mpActFolder? &mpActFolder->GetTransTableFileName() : NULL;
 }
 
-// class SvtFileView_Impl ---------------------------------------------
-SvtFileView_Impl::SvtFileView_Impl( Window* pParent,
-                                    sal_Int16 nFlags,
-                                    sal_Bool bOnlyFolder )
+// -----------------------------------------------------------------------
+// class SvtFileView_Impl
+// -----------------------------------------------------------------------
+
+SvtFileView_Impl::SvtFileView_Impl( Window* pParent, sal_Int16 nFlags, sal_Bool bOnlyFolder )
+
     :mnSortColumn               ( COLUMN_TITLE )
     ,mbAscending                ( sal_True )
     ,mbOnlyFolder               ( bOnlyFolder )
@@ -1704,9 +1729,9 @@ SvtFileView_Impl::SvtFileView_Impl( Window* pParent,
     ,maFolderImage              ( SvtResId( IMG_SVT_FOLDER ) )
     ,mpNameTrans                ( NULL )
     ,mbSuspendSelectCallback    ( sal_False )
+
 {
     maAllFilter = String::CreateFromAscii( "*.*" );
-
     mpView = new ViewTabListBox_Impl( pParent, this, nFlags );
 }
 
