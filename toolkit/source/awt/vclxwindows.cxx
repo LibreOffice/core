@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 15:55:36 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 11:36:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -637,7 +637,7 @@ void VCLXButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         {
             ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > xKeepAlive( this );
                 // since we call listeners below, there is a potential that we will be destroyed
-                // in during the listener call. To prevent the resulting crashs, we keep us
+                // during the listener call. To prevent the resulting crashs, we keep us
                 // alive as long as we're here
                 // #20178# - 2003-10-01 - fs@openoffice.org
 
@@ -3076,7 +3076,7 @@ void VCLXEdit::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         {
             ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > xKeepAlive( this );
                 // since we call listeners below, there is a potential that we will be destroyed
-                // in during the listener call. To prevent the resulting crashs, we keep us
+                // during the listener call. To prevent the resulting crashs, we keep us
                 // alive as long as we're here
                 // #20178# - 2003-10-01 - fs@openoffice.org
 
@@ -3367,7 +3367,7 @@ void VCLXComboBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > xKeepAlive( this );
         // since we call listeners below, there is a potential that we will be destroyed
-        // in during the listener call. To prevent the resulting crashs, we keep us
+        // during the listener call. To prevent the resulting crashs, we keep us
         // alive as long as we're here
         // #20178# - 2003-10-01 - fs@openoffice.org
 
