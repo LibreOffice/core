@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChildrenManagerImpl.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 15:24:01 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:46:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -512,10 +512,6 @@ void ChildrenManagerImpl::RemoveShape (const Reference<drawing::XShape>& rxShape
         {
             // Remove descriptor from that list.
             Reference<XAccessible> xAccessibleShape (I->mxAccessibleShape);
-            I->mxAccessibleShape = NULL;
-            maVisibleChildren.erase (I);
-
-            adjustIndexInParentOfShapes(maVisibleChildren);
 
             UnregisterAsDisposeListener (I->mxShape);
             // Dispose the accessible object.
@@ -524,6 +520,8 @@ void ChildrenManagerImpl::RemoveShape (const Reference<drawing::XShape>& rxShape
             // Now we can safely remove the child descriptor and thus
             // invalidate the iterator.
             maVisibleChildren.erase (I);
+
+            adjustIndexInParentOfShapes(maVisibleChildren);
         }
     }
 }
@@ -575,6 +573,10 @@ void ChildrenManagerImpl::ClearAccessibleShapeList (void)
             ::comphelper::disposeComponent(*J);
         }
     maAccessibleShapes.clear ();
+
+    // Now that no accessible shapes remain we can reset the index assigned
+    // to new accessible shapes.
+    mnNewNameIndex = 1;
 }
 
 
