@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmpacc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-21 16:22:54 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 12:15:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,7 +284,7 @@ void BitmapReadAccess::ImplZeroInitUnusedBits()
             sal_uInt32  nMask = 0xffffffff << ( ( nScanSize << 3 ) - nBits );
             BYTE*       pLast4Bytes = (BYTE*) GetBuffer() + ( nScanSize - 4 );
 
-#ifdef __LITTLEENDIAN
+#ifdef OSL_LITENDIAN
             nMask = SWAPLONG( nMask );
 #endif
             for( long i = 0; i < nHeight; i++, pLast4Bytes += nScanSize )
