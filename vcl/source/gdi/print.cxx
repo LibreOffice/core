@@ -2,9 +2,9 @@
  *
  *  $RCSfile: print.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cd $ $Date: 2000-11-17 13:38:58 $
+ *  last change: $Author: th $ $Date: 2001-04-06 12:47:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -653,7 +653,6 @@ void Printer::ImplInit( SalPrinterQueueInfo* pInfo )
     mpFontList = new ImplDevFontList;
     mpFontCache = new ImplFontCache( TRUE );
     mpGraphics->GetDevFontList( mpFontList );
-    mpFontList->InitStdFonts();
 }
 
 // -----------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: th $ $Date: 2001-03-28 10:25:24 $
+ *  last change: $Author: th $ $Date: 2001-04-06 12:47:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,8 +156,6 @@
 #define GLYPH_FONT_HEIGHT   256
 #endif
 
-#define WSstrcmp strcmp
-
 // =======================================================================
 
 DBG_NAMEEX( OutputDevice );
@@ -165,14 +163,11 @@ DBG_NAMEEX( Font );
 
 // =======================================================================
 
-#define OUTDEV_CHARCONVERT_REPLACE          FALSE
-
 using namespace ::com::sun::star;
 using namespace ::rtl;
 
 // =======================================================================
 
-#define MAX_DX_WORDS        120
 #define TEXT_DRAW_ELLIPSIS  (TEXT_DRAW_ENDELLIPSIS | TEXT_DRAW_PATHELLIPSIS | TEXT_DRAW_NEWSELLIPSIS)
 
 // =======================================================================
@@ -269,7 +264,6 @@ void OutputDevice::ImplUpdateFontData( BOOL bNewFontLists )
             {
                 mpFontList->Clear();
                 mpGraphics->GetDevFontList( mpFontList );
-                mpFontList->InitStdFonts();
             }
         }
     }
@@ -338,121 +332,221 @@ void OutputDevice::ImplUpdateAllFontData( BOOL bNewFontLists )
 #ifndef REMOTE_APPSERVER
             if ( pFrame->ImplGetGraphics() )
 #endif
-            {
                 pFrame->mpGraphics->GetDevFontList( pFrame->mpFrameData->mpFontList );
-                pFrame->mpFrameData->mpFontList->InitStdFonts();
-            }
         }
     }
 }
 
 // =======================================================================
 
-struct ImplFontSubstEntry
+struct ImplLocaliziedFontName
 {
-    XubString               maName;
-    XubString               maReplaceName;
-    XubString               maMatchName;
-    XubString               maMatchReplaceName;
-    USHORT                  mnFlags;
-    ImplFontSubstEntry*     mpNext;
+    const char*         mpEnglishName;
+    const sal_Unicode*  mpLocaliziedNames;
+};
+
+static sal_Unicode const aBatang[] = { 0xBC14, 0xD0D5, 0, 0 };
+static sal_Unicode const aBatangChe[] = { 0xBC14, 0xD0D5, 0xCCB4, 0, 0 };
+static sal_Unicode const aGungsuh[] = { 0xAD81, 0xC11C, 0, 0 };
+static sal_Unicode const aGungsuhChe[] = { 0xAD81, 0xC11C, 0xCCB4, 0, 0 };
+static sal_Unicode const aGulim[] = { 0xAD74, 0xB9BC, 0, 0 };
+static sal_Unicode const aGulimChe[] = { 0xAD74, 0xB9BC, 0xCCB4, 0, 0 };
+static sal_Unicode const aDotum[] = { 0xB3CB, 0xC6C0, 0, 0 };
+static sal_Unicode const aDotumChe[] = { 0xB3CB, 0xC6C0, 0xCCB4, 0, 0 };
+static sal_Unicode const aSimSun[] = { 0x5B8B, 0x4F53, 0, 0 };
+static sal_Unicode const aNSimSun[] = { 0x65B0, 0x5B8B, 0x4F53, 0, 0 };
+static sal_Unicode const aMingLiU[] = { 0x7D30, 0x660E, 0x9AD4, 0, 0 };
+static sal_Unicode const aPMingLiU[] = { 0x65B0, 0x7D30, 0x660E, 0x9AD4, 0, 0 };
+static sal_Unicode const aMSGothic[] = { 'm', 's', 0x30B4, 0x30B7, 0x30C3, 0x30AF, 0, 0 };
+static sal_Unicode const aMSPGothic[] = { 'm', 's', 'p', 0x30B4, 0x30B7, 0x30C3, 0x30AF, 0, 0 };
+static sal_Unicode const aMSMincho[] = { 'm', 's', 0x660E, 0x671D, 0, 0 };
+static sal_Unicode const aMSPMincho[] = { 'm', 's', 'p', 0x660E, 0x671D, 0, 0 };
+
+static ImplLocaliziedFontName const aImplLocaliziedNamesList[] =
+{
+{   "batang",               aBatang },
+{   "batangche",            aBatangChe },
+{   "gungshu",              aGungsuh },
+{   "gungshuche",           aGungsuhChe },
+{   "gulim",                aGulim },
+{   "gulimche",             aGulimChe },
+{   "dotum",                aDotum },
+{   "dotumche",             aDotumChe },
+{   "simsun",               aSimSun },
+{   "nsimsun",              aNSimSun },
+{   "mingliu",              aMingLiU },
+{   "pmingliu",             aPMingLiU },
+{   "msgothic",             aMSGothic },
+{   "mspgothic",            aMSPGothic },
+{   "msmincho",             aMSMincho },
+{   "mspmincho",            aMSPMincho },
+{   NULL,                   NULL },
+};
+
+// -----------------------------------------------------------------------
+
+static void ImplGetEnglishSearchName( String& rName,
+                                      BOOL bDelScript = TRUE,
+                                      BOOL* pbScript = NULL  )
+{
+    BOOL        bTranslate = FALSE;
+    xub_StrLen  i;
+    xub_StrLen  nLen = rName.Len();
+
+    // Remove trailing whitespaces
+    i = nLen;
+    while ( i && (rName.GetChar( i-1 ) < 32) )
+        i--;
+    if ( i != nLen )
+        rName.Erase( i );
+
+    // Remove Script at the end
+    // Scriptname must be the last part of the fontname and
+    // looks like "fontname (scriptname)". So there can only be a
+    // script name at the and of the fontname, when the last char is ')'
+    if ( (nLen >= 3) && rName.GetChar( nLen-1 ) == ')' )
+    {
+        int nOpen = 1;
+        xub_StrLen nTempLen = nLen-2;
+        while ( nTempLen )
+        {
+            if ( rName.GetChar( nTempLen ) == '(' )
+            {
+                nOpen--;
+                if ( !nOpen )
+                {
+                    // Remove Space at the end
+                    if ( nTempLen && (rName.GetChar( nTempLen-1 ) == ' ') )
+                        nTempLen--;
+                    rName.Erase( nTempLen );
+                    nLen = nTempLen;
+                    break;
+                }
+            }
+            if ( rName.GetChar( nTempLen ) == ')' )
+                nOpen++;
+            nTempLen--;
+        }
+    }
+
+    // This function removes all whitespaces, convert to Lowercase-ASCII
+    i = 0;
+    while ( i < nLen )
+    {
+        sal_Unicode c = rName.GetChar( i );
+        if ( c > 127 )
+        {
+            // Translate to Lowercase-ASCII
+            // FullWidth-ASCII to half ASCII
+            if ( (c >= 0xFF00) && (c <= 0xFF5E) )
+            {
+                c -= 0xFF00-0x0020;
+                // Upper to Lower
+                if ( (c >= 0x0041) && (c <= 0x005A) )
+                    c += 0x0020;
+                rName.SetChar( i, c );
+            }
+            else
+            {
+                // Only Fontnames with None-Ascii-Characters must be translated
+                bTranslate = TRUE;
+            }
+        }
+        // not lowercase Ascii
+        else if ( !((c >= 0x0061) && (c <= 0x007A)) )
+        {
+            // To Lowercase-Ascii
+            if ( (c >= 0x0041) && (c <= 0x005A) )
+            {
+                c += 0x0020;
+                rName.SetChar( i, c );
+            }
+            else if ( !((c >= 0x0030) && (c <= 0x0039)) ) // not 0-9
+            {
+                // Remove white spaces and special characters
+                rName.Erase( i, 1 );
+                nLen--;
+                continue;
+            }
+        }
+
+        i++;
+    }
+
+    // Translate localizied name to English ASCII name
+    const ImplLocaliziedFontName* pTranslateNames = aImplLocaliziedNamesList;
+    while ( bTranslate && pTranslateNames->mpEnglishName )
+    {
+        const sal_Unicode* pLocaliziedName = pTranslateNames->mpLocaliziedNames;
+        while ( *pLocaliziedName )
+        {
+            if ( rName.Equals( pLocaliziedName ) )
+            {
+                rName.AssignAscii( pTranslateNames->mpEnglishName );
+                bTranslate = FALSE;
+                break;
+            }
+
+            // Run to the end of the Token (\0\0 is the end mark)
+            while ( *pLocaliziedName )
+                pLocaliziedName++;
+            pLocaliziedName++;
+        }
+
+        pTranslateNames++;
+    }
 };
 
 // =======================================================================
 
-static void ImplStrEraseAllSymbols( XubString& rStr )
+static const char* const aImplKillTrailingList[] =
 {
-    xub_StrLen  i = 0;
-    xub_Unicode c = rStr.GetChar( i );
-    while ( c )
-    {
-        // Alle Zeichen kleiner 0 zwischen 9-A, Z-a und z-127 loeschen
-        if ( (c < 48) || ((c > 57) && (c < 65)) || ((c > 90) && (c < 97)) ||
-             ((c > 122) && (c <= 127)) )
-            rStr.Erase( i, 1 );
-        else
-            i++;
-        c = rStr.GetChar( i );
-    }
-}
+    "ms",
+    "monotype",
+    "mt",
+    "itc",
+    "adobe",
+    "sun",
+    "cg",
+    "hg",
+    NULL,
+};
 
 // -----------------------------------------------------------------------
 
-static xub_StrLen ImplStrMatch( const XubString& rStr1, const XubString& rStr2 )
+static const char* const aImplKillLeadingList[] =
 {
-    xub_StrLen          nMatch = 0;
-    const xub_Unicode*  pStr1 = rStr1.GetBuffer();
-    const xub_Unicode*  pStr2 = rStr2.GetBuffer();
-    while ( (*pStr1 == *pStr2) && *pStr1 )
-    {
-        pStr1++;
-        pStr2++;
-        nMatch++;
-    }
-    return nMatch;
-}
+    "ms",
+    "monotype",
+    "mt",
+    "itc",
+    "adobe",
+    "sun",
+    // Scripts, for compatibility with older versions
+    "ce",
+    "we",
+    "cyr",
+    "tur",
+    "wt",
+    "greek",
+    "wl",
+    NULL,
+};
 
 // -----------------------------------------------------------------------
 
-static int ImplStrFullMatch( const XubString& rStr1, const char* pStr2 )
+static const char* const aImplKillList[] =
 {
-    const xub_Unicode*  pStr1 = rStr1.GetBuffer();
-    while ( (*pStr1 == (xub_Unicode)(unsigned char)*pStr2) && *pStr1 )
-    {
-        pStr1++;
-        pStr2++;
-    }
-    return !(*pStr2);
-}
-
-// =======================================================================
-
-#if 0
-
-#define FONT_ATTR_SYMBOL        ((ULONG)0x00000001)
-#define FONT_ATTR_FIXED         ((ULONG)0x00000002)
-#define FONT_ATTR_ITALIC        ((ULONG)0x00000004)
-#define FONT_ATTR_NORMAL        ((ULONG)0x00000008)
-#define FONT_ATTR_STANDARD      ((ULONG)0x00000010)
-#define FONT_ATTR_SPECIAL       ((ULONG)0x00000020)
-#define FONT_ATTR_TITLING       ((ULONG)0x00000040)
-#define FONT_ATTR_SERIF         ((ULONG)0x00000080)
-#define FONT_ATTR_NONSERIF      ((ULONG)0x00000100)
-#define FONT_ATTR_ROUNDED       ((ULONG)0x00000200)
-#define FONT_ATTR_OUTLINE       ((ULONG)0x00000400)
-#define FONT_ATTR_SHADOW        ((ULONG)0x00000800)
-#define FONT_ATTR_SCRIPT        ((ULONG)0x00001000)
-#define FONT_ATTR_HANDWRITING   ((ULONG)0x00002000)
-#define FONT_ATTR_DECORATION    ((ULONG)0x00004000)
-#define FONT_ATTR_CHARSCRIPT    ((ULONG)0x00008000)
-#define FONT_ATTR_CHANCERY      ((ULONG)0x00010000)
-#define FONT_ATTR_OLDSTYLE      ((ULONG)0x00020000)
-#define FONT_ATTR_FAVOR1        ((ULONG)0x01000000)
-#define FONT_ATTR_FAVOR2        ((ULONG)0x02000000)
-#define FONT_ATTR_FAVOR3        ((ULONG)0x04000000)
-#define FONT_ATTR_FAVOR4        ((ULONG)0x08000000)
-#define FONT_ATTR_FOUND         ((ULONG)0x80000000)
-
-struct ImplFontAttrWidthSearchData
-{
-    const char*             mpStr;
-    FontWidth               meWidth;
+    "ms",
+    "monotype",
+    "mt",
+    "itc",
+    "adobe",
+    "sun",
+    NULL,
 };
 
-static ImplFontAttrWidthSearchData const aImplWidthAttrSearchList[] =
-{
-{   "narrow",               WIDTH_CONDENSED },
-{   "semicondensed",        WIDTH_SEMI_CONDENSED },
-{   "ultracondensed",       WIDTH_ULTRA_CONDENSED },
-{   "semiexpanded",         WIDTH_SEMI_EXPANDED },
-{   "ultraexpanded",        WIDTH_ULTRA_EXPANDED },
-{   "expanded",             WIDTH_EXPANDED },
-{   "wide",                 WIDTH_ULTRA_EXPANDED },
-{   "condensed",            WIDTH_CONDENSED },
-{   "cond",                 WIDTH_CONDENSED },
-{   "cn",                   WIDTH_CONDENSED },
-{   NULL,                   WIDTH_DONTKNOW },
-};
+// -----------------------------------------------------------------------
 
 struct ImplFontAttrWeightSearchData
 {
@@ -477,6 +571,78 @@ static ImplFontAttrWeightSearchData const aImplWeightAttrSearchList[] =
 {   NULL,                   WEIGHT_DONTKNOW },
 };
 
+// -----------------------------------------------------------------------
+
+struct ImplFontAttrWidthSearchData
+{
+    const char*             mpStr;
+    FontWidth               meWidth;
+};
+
+static ImplFontAttrWidthSearchData const aImplWidthAttrSearchList[] =
+{
+{   "narrow",               WIDTH_CONDENSED },
+{   "semicondensed",        WIDTH_SEMI_CONDENSED },
+{   "ultracondensed",       WIDTH_ULTRA_CONDENSED },
+{   "semiexpanded",         WIDTH_SEMI_EXPANDED },
+{   "ultraexpanded",        WIDTH_ULTRA_EXPANDED },
+{   "expanded",             WIDTH_EXPANDED },
+{   "wide",                 WIDTH_ULTRA_EXPANDED },
+{   "condensed",            WIDTH_CONDENSED },
+{   "cond",                 WIDTH_CONDENSED },
+{   "cn",                   WIDTH_CONDENSED },
+{   NULL,                   WIDTH_DONTKNOW },
+};
+
+// -----------------------------------------------------------------------
+
+// IMPL_FONT_ATTR_STANDARD      - Standard-Font like Arial, Times, Courier, ...
+// IMPL_FONT_ATTR_NORMAL        - normal Font for writing text like Arial, Verdana, Arial Narrow, Trebuchet, Times, Courier, ...
+// IMPL_FONT_ATTR_SYMBOL        - Font with symbols
+// IMPL_FONT_ATTR_DECORATIVE    - Readable and normally used for drawings
+// IMPL_FONT_ATTR_SPECIAL       - very special design
+// IMPL_FONT_ATTR_TITLING       - only uppercase characters
+// IMPL_FONT_ATTR_FULL          - Font with normally all characters
+// IMPL_FONT_ATTR_CAPTITALS     - only uppercase characters, but lowercase characters smaller as the uppercase characters
+// IMPL_FONT_ATTR_TYPEWRITER    - like a typewriter: Courier, ...
+// IMPL_FONT_ATTR_SCRIPT        - Handwriting or Script
+// IMPL_FONT_ATTR_HANDWRITING   - More Handwriting with normal letters
+// IMPL_FONT_ATTR_CHANCERY      - Like Zapf Chancery
+// IMPL_FONT_ATTR_COMIC         - Like Comic Sans MS
+// IMPL_FONT_ATTR_BRUSHSCRIPT   - More Script
+#define IMPL_FONT_ATTR_STANDARD      ((ULONG)0x00000001)
+#define IMPL_FONT_ATTR_NORMAL        ((ULONG)0x00000002)
+#define IMPL_FONT_ATTR_SYMBOL        ((ULONG)0x00000004)
+#define IMPL_FONT_ATTR_FIXED         ((ULONG)0x00000008)
+#define IMPL_FONT_ATTR_SANSSERIF     ((ULONG)0x00000010)
+#define IMPL_FONT_ATTR_SERIF         ((ULONG)0x00000020)
+#define IMPL_FONT_ATTR_DECORATIVE    ((ULONG)0x00000040)
+#define IMPL_FONT_ATTR_SPECIAL       ((ULONG)0x00000080)
+#define IMPL_FONT_ATTR_CJK           ((ULONG)0x00000100)
+#define IMPL_FONT_ATTR_CJK_JP        ((ULONG)0x00000200)
+#define IMPL_FONT_ATTR_CJK_ZH        ((ULONG)0x00000400)
+#define IMPL_FONT_ATTR_CJK_TW        ((ULONG)0x00000800)
+#define IMPL_FONT_ATTR_CJK_KR        ((ULONG)0x00001000)
+#define IMPL_FONT_ATTR_ARABIC        ((ULONG)0x00002000)
+#define IMPL_FONT_ATTR_NONELATIN     ((ULONG)0x00004000)
+#define IMPL_FONT_ATTR_FULL          ((ULONG)0x00008000)
+#define IMPL_FONT_ATTR_ITALIC        ((ULONG)0x00010000)
+#define IMPL_FONT_ATTR_TITLING       ((ULONG)0x00020000)
+#define IMPL_FONT_ATTR_CAPITALS      ((ULONG)0x00040000)
+#define IMPL_FONT_ATTR_OUTLINE       ((ULONG)0x00080000)
+#define IMPL_FONT_ATTR_SHADOW        ((ULONG)0x00100000)
+#define IMPL_FONT_ATTR_ROUNDED       ((ULONG)0x00200000)
+#define IMPL_FONT_ATTR_TYPEWRITER    ((ULONG)0x00400000)
+#define IMPL_FONT_ATTR_SCRIPT        ((ULONG)0x00800000)
+#define IMPL_FONT_ATTR_HANDWRITING   ((ULONG)0x01000000)
+#define IMPL_FONT_ATTR_CHANCERY      ((ULONG)0x02000000)
+#define IMPL_FONT_ATTR_COMIC         ((ULONG)0x04000000)
+#define IMPL_FONT_ATTR_BRUSHSCRIPT   ((ULONG)0x08000000)
+#define IMPL_FONT_ATTR_OLDSTYLE      ((ULONG)0x10000000)
+#define IMPL_FONT_ATTR_NEWSTYLE      ((ULONG)0x20000000)
+#define IMPL_FONT_ATTR_GOTHIC        ((ULONG)0x40000000)
+#define IMPL_FONT_ATTR_SCHOOLBOOK    ((ULONG)0x80000000)
+
 struct ImplFontAttrTypeSearchData
 {
     const char*             mpStr;
@@ -485,414 +651,349 @@ struct ImplFontAttrTypeSearchData
 
 static ImplFontAttrTypeSearchData const aImplTypeAttrSearchList[] =
 {
-{   "titling",              FONT_ATTR_TITLING },
-{   "outline",              FONT_ATTR_OUTLINE },
-{   "shadow",               FONT_ATTR_SHADOW },
+{   "titling",              IMPL_FONT_ATTR_TITLING },
+{   "captitals",            IMPL_FONT_ATTR_CAPITALS },
+{   "captital",             IMPL_FONT_ATTR_CAPITALS },
+{   "italic",               IMPL_FONT_ATTR_ITALIC },
+{   "oblique",              IMPL_FONT_ATTR_ITALIC },
+{   "rounded",              IMPL_FONT_ATTR_ROUNDED },
+{   "outline",              IMPL_FONT_ATTR_OUTLINE },
+{   "shadow",               IMPL_FONT_ATTR_SHADOW },
+{   "handwriting",          IMPL_FONT_ATTR_HANDWRITING | IMPL_FONT_ATTR_SCRIPT },
+{   "hand",                 IMPL_FONT_ATTR_HANDWRITING | IMPL_FONT_ATTR_SCRIPT },
+{   "signet",               IMPL_FONT_ATTR_HANDWRITING | IMPL_FONT_ATTR_SCRIPT },
+{   "script",               IMPL_FONT_ATTR_BRUSHSCRIPT | IMPL_FONT_ATTR_SCRIPT },
+{   "calligraphy",          IMPL_FONT_ATTR_CHANCERY | IMPL_FONT_ATTR_SCRIPT },
+{   "chancery",             IMPL_FONT_ATTR_CHANCERY | IMPL_FONT_ATTR_SCRIPT },
+{   "oldstyle",             IMPL_FONT_ATTR_OLDSTYLE },
+{   "oldface",              IMPL_FONT_ATTR_OLDSTYLE },
+{   "old",                  IMPL_FONT_ATTR_OLDSTYLE },
+{   "new",                  IMPL_FONT_ATTR_NEWSTYLE },
+{   "gothic",               IMPL_FONT_ATTR_GOTHIC },
+{   "schoolbook",           IMPL_FONT_ATTR_SCHOOLBOOK },
+{   "typewriter",           IMPL_FONT_ATTR_TYPEWRITER | IMPL_FONT_ATTR_FIXED },
+{   "lineprinter",          IMPL_FONT_ATTR_TYPEWRITER | IMPL_FONT_ATTR_FIXED },
+{   "monospaced",           IMPL_FONT_ATTR_FIXED },
+{   "monospace",            IMPL_FONT_ATTR_FIXED },
+{   "fixed",                IMPL_FONT_ATTR_FIXED },
+{   "sansserif",            IMPL_FONT_ATTR_SANSSERIF },
+{   "sans",                 IMPL_FONT_ATTR_SANSSERIF },
+{   "swiss",                IMPL_FONT_ATTR_SANSSERIF },
+{   "serif",                IMPL_FONT_ATTR_SERIF },
+{   "roman",                IMPL_FONT_ATTR_SERIF },
+{   "bright",               IMPL_FONT_ATTR_SERIF },
+{   "symbols",              IMPL_FONT_ATTR_SYMBOL },
+{   "symbol",               IMPL_FONT_ATTR_SYMBOL },
+{   "dingbats",             IMPL_FONT_ATTR_SYMBOL },
+{   "bats",                 IMPL_FONT_ATTR_SYMBOL },
+{   "math",                 IMPL_FONT_ATTR_SYMBOL },
 {   NULL,                   0 },
 };
 
+// -----------------------------------------------------------------------
+
+static BOOL ImplKillTrailing( String& rName, const char* pStr )
+{
+    const xub_Unicode* pNameStr = rName.GetBuffer();
+    while ( (*pNameStr == (xub_Unicode)(unsigned char)*pStr) && *pStr )
+    {
+        pNameStr++;
+        pStr++;
+    }
+    if ( *pStr )
+        return FALSE;
+
+    rName.Erase( 0, (xub_StrLen)(pNameStr-rName.GetBuffer()) );
+    return TRUE;
+}
+
+// -----------------------------------------------------------------------
+
+static BOOL ImplKillLeading( String& rName, const char* pStr )
+{
+    const char* pTempStr = pStr;
+    while ( *pTempStr )
+        pTempStr++;
+
+    xub_StrLen nStrLen = (xub_StrLen)(pTempStr-pStr);
+    const xub_Unicode* pNameStr = rName.GetBuffer();
+    pNameStr += rName.Len()-nStrLen;
+    while ( (*pNameStr == (xub_Unicode)(unsigned char)*pStr) && *pStr )
+    {
+        pNameStr++;
+        pStr++;
+    }
+    if ( *pStr )
+        return FALSE;
+
+    rName.Erase( rName.Len()-nStrLen );
+    return TRUE;
+}
+
+// -----------------------------------------------------------------------
+
+static BOOL ImplFindAndErase( String& rName, const char* pStr )
+{
+    xub_StrLen nPos = rName.SearchAscii( pStr );
+    if ( nPos == STRING_NOTFOUND )
+        return FALSE;
+
+    const char* pTempStr = pStr;
+    while ( *pTempStr )
+        pTempStr++;
+    rName.Erase( nPos, (xub_StrLen)(pTempStr-pStr) );
+    return TRUE;
+}
+
+// -----------------------------------------------------------------------
+
+static void ImplGetMapName( const String& rOrgName,
+                            String& rShortName, String& rFamilyName,
+                            FontWeight& rWeight, FontWidth& rWidth,
+                            ULONG& rType )
+{
+    const char* const* ppStr;
+
+    rShortName = rOrgName;
+
+    // Kill trailing vendor names and other unimportant data
+    ppStr = aImplKillTrailingList;
+    while ( *ppStr )
+    {
+        if ( ImplKillTrailing( rShortName, *ppStr ) )
+            break;
+        ppStr++;
+    }
+
+    // Kill leading vendor names and other unimportant data
+    ppStr = aImplKillLeadingList;
+    while ( *ppStr )
+    {
+        if ( ImplKillLeading( rShortName, *ppStr ) )
+            break;
+        ppStr++;
+    }
+
+    rFamilyName = rShortName;
+
+    // Kill attributes from the name and update the data
+    // Weight
+    const ImplFontAttrWeightSearchData* pWeightList = aImplWeightAttrSearchList;
+    while ( pWeightList->mpStr )
+    {
+        if ( ImplFindAndErase( rFamilyName, pWeightList->mpStr ) )
+        {
+            if ( (rWeight == WEIGHT_DONTKNOW) || (rWeight == WEIGHT_NORMAL) )
+                rWeight = pWeightList->meWeight;
+            break;
+        }
+        pWeightList++;
+    }
+
+    // Width
+    const ImplFontAttrWidthSearchData* pWidthList = aImplWidthAttrSearchList;
+    while ( pWidthList->mpStr )
+    {
+        if ( ImplFindAndErase( rFamilyName, pWidthList->mpStr ) )
+        {
+            if ( (rWidth == WIDTH_DONTKNOW) || (rWidth == WIDTH_NORMAL) )
+                rWidth = pWidthList->meWidth;
+            break;
+        }
+        pWidthList++;
+    }
+
+    // Type
+    rType = 0;
+    const ImplFontAttrTypeSearchData* pTypeList = aImplTypeAttrSearchList;
+    while ( pTypeList->mpStr )
+    {
+        if ( ImplFindAndErase( rFamilyName, pTypeList->mpStr ) )
+            rType |= pTypeList->mnType;
+        pTypeList++;
+    }
+
+    // Other unimportant data (vendor names)
+    ppStr = aImplKillList;
+    while ( *ppStr )
+    {
+        if ( ImplFindAndErase( rFamilyName, *ppStr ) )
+            break;
+        ppStr++;
+    }
+}
+
 // =======================================================================
+
+static char const aImplSubsSerif[] = "thorndale;timesnewroman;times;roman;lucidaserif;lucidabright;bookman;garamond;timmons;serif";
+static char const aImplSubsSans[] = "albany;arial;helvetica;lucidasans;lucida;geneva;helmet;sansserif";
+static char const aImplSubsFixed[] = "cumberland;couriernew;courier;lucidatypewriter;lucidasanstypewriter;monospaced";
+static char const aImplSubsSymbol[] = "starbats;wingdings;zapfdingbats;symbol;lucidadingbats;lucidasansdingbats";
+static char const aImplSubsBrushScript[] = "palacescript;arioso;monotypecorsiva;corsiva;zapfchancery;lucidacalligraphy;lucidahandwriting";
+static char const aImplSubsOutline[] = "monotypeoldstyleboldoutline;imprint;imprintmtshadow;chevaraoutline;chevara;gallia;colonnamt;algerian;castellar";
+static char const aImplSubsBroadway[] = "broadway;mtbroadway;latinwide;falstaff;impact";
+static char const aImplSubsSheffield[] = "sheffield;conga;centurygothic;copperlategothic;felixtitling";
+static char const aImplSubsSansNarrow[] = "arialnarrow;helveticanarrow;helmetcondensed";
+static char const aImplSubsSansUnicode[] = "andalewtui;arialunicodems;lucidaunicode";
+static char const aImplSubsJPGothic[] = "msgothic;mspgothic;andalewtui";
+static char const aImplSubsJPMincho[] = "msmincho;mspmincho;hgminchoj;hgminchol;minchol;mincho;andalewtui";
+static char const aImplSubsZH[] = "simsun;nsimsun;andalewtui";
+static char const aImplSubsTW[] = "mingliu;pmingliu;andalewtui";
+static char const aImplSubsKR[] = "batang;batangche;gulim;gulimche;dotum;dotumche;gungsuh;gungsuhche;myeomjo;andalewtui";
+
+// -----------------------------------------------------------------------
 
 struct ImplFontNameAttr
 {
     const char*             mpName;
-    FontFamily              meFamily;
+    const char*             mpSubstitution1;
+    const char*             mpSubstitution2;
+    const char*             mpSubstitution3;
     FontWeight              meWeight;
     FontWidth               meWidth;
     ULONG                   mnType;
 };
 
-static const ImplFontNameAttr aImplFullList[] =
+// List is sorted alphabetic
+static ImplFontNameAttr const aImplFontNameList[] =
 {
-{   "Bookman",              FAMILY_ROMAN,   WEIGHT_NORMAL,  WIDTH_NORMAL,   FONT_ATTR_NORMAL | FONT_ATTR_STANDARD | FONT_ATTR_SERIF },
-{   NULL,                   FAMILY_DONTKNOW,WEIGHT_DONTKNOW,WIDTH_DONTKNOW, 0 }
-};
-
-static const ImplFontNameAttr aImplMatchList[] =
-{
-{   "bookman",              FAMILY_ROMAN,   WEIGHT_NORMAL,  WIDTH_NORMAL,   FONT_ATTR_NORMAL | FONT_ATTR_STANDARD | FONT_ATTR_SERIF },
-{   "comicsansms",          FAMILY_SCRIPT,  WEIGHT_NORMAL,  WIDTH_NORMAL,   FONT_ATTR_NONSERIF | FONT_ATTR_SCRIPT | FONT_ATTR_CHARSCRIPT | FONT_ATTR_FAVOR3 },
-{   "kristenitc",           FAMILY_SCRIPT,  WEIGHT_NORMAL,  WIDTH_NORMAL,   FONT_ATTR_NONSERIF | FONT_ATTR_SCRIPT | FONT_ATTR_CHARSCRIPT | FONT_ATTR_FAVOR3 },
-{   "maiandragd",           FAMILY_SCRIPT,  WEIGHT_NORMAL,  WIDTH_NORMAL,   FONT_ATTR_NONSERIF | FONT_ATTR_SCRIPT | FONT_ATTR_CHARSCRIPT | FONT_ATTR_FAVOR3 },
-{   "arioso",               FAMILY_SCRIPT,  WEIGHT_NORMAL,  WIDTH_NORMAL,   FONT_ATTR_NONSERIF | FONT_ATTR_SCRIPT | FONT_ATTR_ITALIC | FONT_ATTR_DECORATION | FONT_ATTR_OLDSTYLE | FONT_ATTR_FAVOR3 },
-{   "tempussansitc",        FAMILY_SCRIPT,  WEIGHT_LIGHT,   WIDTH_NORMAL,   FONT_ATTR_NONSERIF | FONT_ATTR_SCRIPT | FONT_ATTR_CHARSCRIPT },
-{   "papyrus",              FAMILY_SCRIPT,  WEIGHT_LIGHT,   WIDTH_NORMAL,   FONT_ATTR_NONSERIF | FONT_ATTR_SCRIPT | FONT_ATTR_CHARSCRIPT },
-{   "lucidashadowtitling",  FAMILY_ROMAN,   WEIGHT_NORMAL,  WIDTH_NORMAL,   FONT_ATTR_SERIF | FONT_ATTR_TITLING | FONT_ATTR_OUTLINE | FONT_ATTR_SHADOW },
-{   "lucidaopenboldtitling",FAMILY_ROMAN,   WEIGHT_NORMAL,  WIDTH_NORMAL,   FONT_ATTR_SERIF | FONT_ATTR_TITLING | FONT_ATTR_OUTLINE },
-{   "lucidaopentitling",    FAMILY_ROMAN,   WEIGHT_NORMAL,  WIDTH_NORMAL,   FONT_ATTR_SERIF | FONT_ATTR_TITLING | FONT_ATTR_OUTLINE },
-{   "lucidaopen",           FAMILY_ROMAN,   WEIGHT_NORMAL,  WIDTH_NORMAL,   FONT_ATTR_SERIF | FONT_ATTR_OUTLINE },
-{   "lucidashadow",         FAMILY_ROMAN,   WEIGHT_NORMAL,  WIDTH_NORMAL,   FONT_ATTR_SERIF | FONT_ATTR_OUTLINE | FONT_ATTR_SHADOW },
-{   "chevara",              FAMILY_ROMAN,   WEIGHT_NORMAL,  WIDTH_EXPANDED, FONT_ATTR_SERIF | FONT_ATTR_TITLING | FONT_ATTR_OUTLINE },
-{   "colonnamt",            FAMILY_ROMAN,   WEIGHT_NORMAL,  WIDTH_NORMAL,   FONT_ATTR_SERIF | FONT_ATTR_SPECIAL | FONT_ATTR_OUTLINE },
-{   "imprintmtshadow",      FAMILY_ROMAN,   WEIGHT_NORMAL,  WIDTH_NORMAL,   FONT_ATTR_SERIF | FONT_ATTR_OUTLINE | FONT_ATTR_SHADOW },
-{   "castellar",            FAMILY_ROMAN,   WEIGHT_NORMAL,  WIDTH_NORMAL,   FONT_ATTR_SERIF | FONT_ATTR_TITLING | FONT_ATTR_OUTLINE },
-{   "algerian",             FAMILY_ROMAN,   WEIGHT_NORMAL,  WIDTH_NORMAL,   FONT_ATTR_SERIF | FONT_ATTR_SPECIAL | FONT_ATTR_TITLING | FONT_ATTR_OUTLINE | FONT_ATTR_SHADOW | FONT_ATTR_OLDSTYLE },
-{   NULL,                   FAMILY_DONTKNOW,WEIGHT_DONTKNOW,WIDTH_DONTKNOW, 0 }
-};
-
-#endif
-
-static const char* aImplSwissMatchList[] =
-{
-    "arial",
-    "avantgarde",
-    "cgomega",
-    "centurygothic",
-    "charcoal",
-    "chicago",
-    "frutiger",
-    "geneva",
-    "haettenschweiler",
-    "helmet",
-    "helv",
-    "lucida",
-    "impact",
-    "tahoma",
-    "univers",
-    "vagrounded",
-    "verdana",
-    NULL
-};
-
-static const char* aImplSwissSearchList[] =
-{
-    "sansserif",
-    "swiss",
-    NULL
-};
-
-static const char* aImplRomanMatchList[] =
-{
-    "algerian",
-    "antiqua",
-    "caliso",
-    "clarendon",
-    "colonna",
-    "garamond",
-    "newyork",
-    "palatino",
-    "timmons",
-    "serif",
-    NULL
-};
-
-static const char* aImplRomanSearchList[] =
-{
-    "book",
-    "times",
-    "roman",
-    "bright",
-    NULL
-};
-
-static const char* aImplFixedMatchList[] =
-{
-    "lineprinter",
-    "monaco",
-    "typewriter",
-    NULL
-};
-
-static const char* aImplFixedSearchList[] =
-{
-    "console",
-    "courier",
-    "fixed",
-    "letter",
-    "monospace",
-    "terminal",
-    NULL
-};
-
-static const char* aImplScriptMatchList[] =
-{
-    "arioso",
-    "coronet",
-    "cursive",
-    "marigold",
-    "zapfchancery",
-    NULL
-};
-
-static const char* aImplScriptSearchList[] =
-{
-    "script",
-    "signet",
-    "handwriting",
-    "calligraphy",
-    NULL
-};
-
-static const char* aImplSymbolMatchList[] =
-{
-    "marlett",
-    "monotypesorts",
-    "msoutlook",
-    NULL
-};
-
-static const char* aImplSymbolSearchList[] =
-{
-    "symbol",
-    "bats",
-    "dings",
-    "math",
-    NULL
-};
-
-static const char* aImplTypeList[] =
-{
-    "black",
-    "bold",
-    "condensed",
-    "expanded",
-    "narrow",
-    "outline",
-    NULL
-};
-
-// =======================================================================
-
-static const char* aImplSearchScriptList[] =
-{
-  "ce",
-  "we",
-  "cyr",
-  "tur",
-  "wt",
-  "greek",
-  "wl",
-  NULL
+{   "albany",               aImplSubsSans, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_STANDARD },
+{   "algerian",             aImplSubsOutline, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_OUTLINE | IMPL_FONT_ATTR_SHADOW | IMPL_FONT_ATTR_DECORATIVE | IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_TITLING },
+{   "almanac",              aImplSubsSymbol, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "andalesans",           aImplSubsSans, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_STANDARD },
+{   "arial",                aImplSubsSans, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_STANDARD },
+{   "arialnarrow",          aImplSubsSansNarrow, aImplSubsSans, aImplSubsSansUnicode, WEIGHT_NORMAL, WIDTH_CONDENSED, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_STANDARD },
+{   "arialunicode",         aImplSubsSansUnicode,aImplSubsSans, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_STANDARD | IMPL_FONT_ATTR_FULL },
+{   "arioso",               aImplSubsBrushScript, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_BRUSHSCRIPT | IMPL_FONT_ATTR_ITALIC },
+{   "batang",               aImplSubsKR, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_KR },
+{   "batangche",            aImplSubsKR, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_KR },
+{   "bookman",              aImplSubsSerif, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF },
+{   "bookmanoldstyle",      aImplSubsSerif, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF | IMPL_FONT_ATTR_OLDSTYLE },
+{   "broadway",             aImplSubsBroadway, NULL, NULL, WEIGHT_BOLD, WIDTH_NORMAL, IMPL_FONT_ATTR_DECORATIVE },
+{   "castellar",            aImplSubsOutline, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_OUTLINE | IMPL_FONT_ATTR_SHADOW | IMPL_FONT_ATTR_DECORATIVE | IMPL_FONT_ATTR_TITLING },
+{   "century",              aImplSubsSerif, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF },
+{   "centuryschoolbook",    aImplSubsSerif, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF | IMPL_FONT_ATTR_SCHOOLBOOK },
+{   "cgtimes",              aImplSubsSerif, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF },
+{   "chevara",              aImplSubsOutline, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_OUTLINE | IMPL_FONT_ATTR_SHADOW | IMPL_FONT_ATTR_DECORATIVE | IMPL_FONT_ATTR_CAPITALS },
+{   "chevaraoutline",       aImplSubsOutline, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_OUTLINE | IMPL_FONT_ATTR_SHADOW | IMPL_FONT_ATTR_DECORATIVE | IMPL_FONT_ATTR_CAPITALS },
+{   "colonna",              aImplSubsOutline, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_OUTLINE | IMPL_FONT_ATTR_SHADOW | IMPL_FONT_ATTR_DECORATIVE },
+{   "courier",              aImplSubsFixed, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_FIXED | IMPL_FONT_ATTR_STANDARD },
+{   "couriernew",           aImplSubsFixed, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_FIXED | IMPL_FONT_ATTR_STANDARD },
+{   "cumberland",           aImplSubsFixed, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_FIXED | IMPL_FONT_ATTR_STANDARD },
+{   "dotum",                aImplSubsKR, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_KR },
+{   "dotumche",             aImplSubsKR, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_KR },
+{   "extra",                aImplSubsSymbol, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "frutiger",             aImplSubsSans, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
+{   "garamond",             aImplSubsSerif, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF },
+{   "gothic",               aImplSubsJPGothic, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
+{   "gulim",                aImplSubsKR, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_KR },
+{   "gulimche",             aImplSubsKR, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_KR },
+{   "gungsuh",              aImplSubsKR, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_KR },
+{   "gungsuhche",           aImplSubsKR, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_KR },
+{   "helmet",               aImplSubsSans, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
+{   "helmetcondensed",      aImplSubsSansNarrow, aImplSubsSans, aImplSubsSansUnicode, WEIGHT_NORMAL, WIDTH_CONDENSED, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
+{   "helvetica",            aImplSubsSans, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_STANDARD },
+{   "helveticanarrow",      aImplSubsSansNarrow, aImplSubsSans, NULL, WEIGHT_NORMAL, WIDTH_CONDENSED, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_STANDARD },
+{   "holidays",             aImplSubsSymbol, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "imprintmtshadow",      aImplSubsOutline, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_OUTLINE | IMPL_FONT_ATTR_SHADOW | IMPL_FONT_ATTR_DECORATIVE },
+{   "marlett",              aImplSubsSymbol, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "mincho",               aImplSubsJPMincho, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
+{   "minchoj",              aImplSubsJPMincho, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
+{   "minchol",              aImplSubsJPMincho, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
+{   "mingliu",              aImplSubsTW, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_TW },
+{   "monospace",            aImplSubsFixed, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_FIXED },
+{   "monospaced",           aImplSubsFixed, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_FIXED },
+{   "myeomjo",              aImplSubsKR, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_KR },
+{   "nsimsun",              aImplSubsZH, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_ZH },
+{   "ocean",                aImplSubsSans, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_STANDARD },
+{   "omega",                aImplSubsSans, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
+{   "outlook",              aImplSubsSymbol, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "palacescript",         aImplSubsBrushScript, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_BRUSHSCRIPT | IMPL_FONT_ATTR_ITALIC },
+{   "palatino",             aImplSubsSerif, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF },
+{   "pgothic",              aImplSubsJPGothic, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
+{   "pmincho",              aImplSubsJPMincho, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
+{   "pmingliu",             aImplSubsTW, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_TW },
+{   "sansserif",            aImplSubsSans, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
+{   "segoe",                aImplSubsSans, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_STANDARD },
+{   "serif",                aImplSubsSerif, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF },
+{   "sheffield",            aImplSubsSheffield, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL },
+{   "simsun",               aImplSubsZH, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_ZH },
+{   "sorts",                aImplSubsSymbol, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "sorts2",               aImplSubsSymbol, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "starbats",             aImplSubsSymbol, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "starmath",             aImplSubsSymbol, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "symbol",               aImplSubsSymbol, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "tahoma",               aImplSubsSans, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
+{   "thorndale",            aImplSubsSerif, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF | IMPL_FONT_ATTR_STANDARD },
+{   "times",                aImplSubsSerif, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF | IMPL_FONT_ATTR_STANDARD },
+{   "timesnewroman",        aImplSubsSerif, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF | IMPL_FONT_ATTR_STANDARD },
+{   "timmons",              aImplSubsSerif, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF },
+{   "trebuchet",            aImplSubsSans, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
+{   "univers",              aImplSubsSans, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
+{   "utah",                 aImplSubsSans, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_STANDARD },
+{   "vacation",             aImplSubsSymbol, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "verdana",              aImplSubsSans, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
+{   "webdings",             aImplSubsSymbol, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "webdings2",            aImplSubsSymbol, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "wingdings",            aImplSubsSymbol, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "wingdings2",           aImplSubsSymbol, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "wingdings3",           aImplSubsSymbol, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "zapfdingbats",         aImplSubsSymbol, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
 };
 
 // -----------------------------------------------------------------------
 
-struct ImplScriptSearchList
+static int ImplStrMatchCompare( const String& rStr1, const char* pStr2 )
 {
-    const char*     mpScript;
-    rtl_Script      meScript;
-};
-
-static void ImplCutScriptAndSpaces( XubString& rName )
-{
-    rName.EraseLeadingAndTrailingChars( ' ' );
-
-    USHORT nLen = rName.Len();
-    if ( nLen < 3 )
-        return;
-
-    // Scriptname must be the last part of the fontname and
-    // looks like "fontname (scriptname)". So there can only be a
-    // script name at the and of the fontname, when the last char is
-    // ')'.
-    if ( rName.GetChar( nLen-1 ) == ')' )
+    const sal_Unicode* pStr1 = rStr1.GetBuffer();
+    while ( (*pStr1 == (xub_Unicode)(unsigned char)*pStr2) && *pStr1 )
     {
-        int nOpen = 1;
-        nLen -= 2;
-        while ( nLen )
-        {
-            if ( rName.GetChar( nLen ) == '(' )
-            {
-                nOpen--;
-                if ( !nOpen && nLen && (rName.GetChar( nLen-1 ) == ' ') )
-                {
-                    XubString aScript = rName.Copy( nLen+1, rName.Len()-1-nLen-1 );
-                    rName.Erase( nLen-1 );
-                    return;
-                }
-            }
-            if ( rName.GetChar( nLen ) == ')' )
-                nOpen++;
-            nLen--;
-        }
+        pStr1++;
+        pStr2++;
     }
 
-    // For compatibility with older version we must search for a
-    // script name at the end of a fontname without brakets
-    USHORT nSpacePos = rName.SearchBackward( ' ' );
-    if ( nSpacePos && (nSpacePos != STRING_NOTFOUND) )
-    {
-        XubString aScript = rName.Copy( nSpacePos+1 );
-        const char** pScript = aImplSearchScriptList;
-        while ( *pScript )
-        {
-            if ( aScript.EqualsAscii( *pScript ) )
-            {
-                rName.Erase( nSpacePos );
-                break;
-            }
-            pScript++;
-        }
-    }
+    if ( !(*pStr1) )
+        return 0;
+    else
+        return *pStr1-((xub_Unicode)(unsigned char)*pStr2);
 }
 
-// =======================================================================
+// -----------------------------------------------------------------------
 
-#if 0
-
-static const ImplFontNameAttr* ImplFindFontAttr( const XubString& rFontName )
+static const ImplFontNameAttr* ImplGetFontNameAttr( const String& rName )
 {
-    const ImplFontNameAttr* pList;
-
-    pList = aImplFullList;
-    while ( pList->mpName )
+    int nCount = sizeof( aImplFontNameList ) / sizeof( ImplFontNameAttr );
+    for( int nLower = 0, nUpper = nCount-1; nLower <= nUpper; )
     {
-        if ( rFontName.EqualsAscii( pList->mpName ) )
-            return pList;
-        pList++;
-    }
-
-    pList = aImplMatchList;
-    while ( pList->mpName )
-    {
-        if ( ImplStrFullMatch( rFontName, pList->mpName ) )
-            return pList;
-        pList++;
+        long nMid = (nUpper + nLower) >> 1;
+        int nComp = ImplStrMatchCompare( rName, aImplFontNameList[nMid].mpName );
+        if ( !nComp )
+        {
+            // Find shortest match
+            while ( nMid &&
+                    (ImplStrMatchCompare( rName, aImplFontNameList[nMid-1].mpName ) == 0) )
+                nMid--;
+            return &(aImplFontNameList[nMid]);
+        }
+        else if ( nComp < 0 )
+            nUpper = nMid-1;
+        else /* ( nComp > 0 ) */
+            nLower = nMid+1;
     }
 
     return NULL;
 }
 
-// -----------------------------------------------------------------------
-
-static void ImplGetFontAttr( const XubString& rFontName,
-                             FontFamily& rFamily, CharSet& rCharSet,
-                             FontPitch& rPitch )
-{
-    if ( (rFamily == FAMILY_DONTKNOW) || (rPitch == PITCH_DONTKNOW) ||
-         (rCharSet == CHARSET_DONTKNOW) )
-    {
-    }
-}
-
-#endif
-
 // =======================================================================
 
-BOOL ImplTestFontName( const XubString& rName,
-                       const sal_Char** pMatchList,
-                       const sal_Char** pSearchList )
+struct ImplFontSubstEntry
 {
-    const char** pAlias;
-
-    pAlias = pMatchList;
-    while ( *pAlias )
-    {
-        if ( ImplStrFullMatch( rName, *pAlias ) )
-            return TRUE;
-        pAlias++;
-    }
-
-    pAlias = pSearchList;
-    while ( *pAlias )
-    {
-        if ( rName.SearchAscii( *pAlias ) != STRING_NOTFOUND )
-            return TRUE;
-        pAlias++;
-    }
-
-    return FALSE;
-}
-
-// =======================================================================
-
-static void ImplFontAttrFromName( const XubString& rFontName,
-                                  FontFamily& rFamily, CharSet& rCharSet,
-                                  FontPitch& rPitch )
-{
-    if ( rFamily == FAMILY_DONTKNOW )
-    {
-        if ( ImplTestFontName( rFontName, aImplRomanMatchList, aImplRomanSearchList ) )
-            rFamily = FAMILY_ROMAN;
-        else if ( ImplTestFontName( rFontName, aImplSwissMatchList, aImplSwissSearchList ) )
-            rFamily = FAMILY_SWISS;
-        else if ( ImplTestFontName( rFontName, aImplScriptMatchList, aImplScriptSearchList ) )
-            rFamily = FAMILY_SCRIPT;
-    }
-
-    if ( rPitch == PITCH_DONTKNOW )
-    {
-        if ( ImplTestFontName( rFontName, aImplFixedMatchList, aImplFixedSearchList ) )
-            rPitch = PITCH_FIXED;
-    }
-
-    if ( rCharSet == RTL_TEXTENCODING_DONTKNOW )
-    {
-        if ( ImplTestFontName( rFontName, aImplSymbolMatchList, aImplSymbolSearchList ) )
-            rCharSet = RTL_TEXTENCODING_SYMBOL;
-    }
-}
-
-// =======================================================================
-
-static const char* aImplStdSwissList[] =
-{
-    "helvetica",
-    "arial",
-    "lucida sans",
-    "lucidasans",
-    "lucida",
-    "geneva",
-    "helmet",
-    "sansserif",
-    NULL
-};
-
-static const char* aImplStdRomanList[] =
-{
-    "times",
-    "times new roman",
-    "timesnewroman",
-    "roman",
-    "lucida serif",
-    "lucidaserif",
-    "lucida bright",
-    "lucidabright",
-    "bookman",
-    "garamond",
-    "timmons",
-    "serif",
-    NULL
-};
-
-static const char* aImplStdFixedList[] =
-{
-    "courier",
-    "courier new",
-    "lucida typewriter",
-    "lucidatypewriter",
-    "lucida sans typewriter",
-    "lucidasanstypewriter",
-    "monospaced",
-    NULL
-};
-
-static const char* aImplStdScriptList[] =
-{
-    "zapf chancery",
-    "zapfchancery",
-    "lucida calligraphy",
-    "lucidacalligraphy",
-    "lucida handwriting",
-    "lucidahandwriting",
-    "arioso",
-    "script",
-    "marigold",
-    NULL
-};
-
-static const char* aImplStdSymbolList[] =
-{
-    "starbats",
-    "symbol",
-    "zapf dingbats",
-    "zapfdingbats",
-    "wingdings",
-    "lucida dingbats",
-    "lucidadingbats",
-    "lucida sans dingbats",
-    "lucidasansdingbats",
-    NULL
+    String                  maName;
+    String                  maReplaceName;
+    String                  maSearchName;
+    String                  maSearchReplaceName;
+    USHORT                  mnFlags;
+    ImplFontSubstEntry*     mpNext;
 };
 
 // =======================================================================
@@ -908,69 +1009,6 @@ void ImplFreeOutDevFontData()
         pEntry = pNext;
     }
 }
-
-// =======================================================================
-
-static ImplFontData* ImplFindScript( ImplDevFontListData* pData,
-                                     rtl_Script eScript )
-{
-    // Testen, ob ein Font mit einem entsprechendem
-    // Script vorhanden ist
-    ImplFontData* pCurFontData = pData->mpFirst;
-    while ( pCurFontData )
-    {
-        // Detect Unicode Font !!!
-        if ( pData->maMatchName.EqualsAscii( "arial unicode ms" ) ||
-             pData->maMatchName.EqualsAscii( "andale wt ui" ) )
-            return pCurFontData;
-        if ( eScript == pCurFontData->meScript )
-            return pCurFontData;
-        pCurFontData = pCurFontData->mpNext;
-    }
-
-    return NULL;
-}
-
-// -----------------------------------------------------------------------
-
-/* !!! UNICODE - Duerfte nicht mehr gebraucht werden !!!
-static rtl_TextEncoding ImplGetFakeEncoding( rtl_TextEncoding eEncoding )
-{
-    rtl_TextEncoding eSystemEncoding = GetSystemCharSet();
-    // MS_1252 und 8859_1 sind kompatible
-    if ( ((eEncoding == RTL_TEXTENCODING_MS_1252) ||
-          (eEncoding == RTL_TEXTENCODING_ISO_8859_1)) &&
-         ((eSystemEncoding == RTL_TEXTENCODING_MS_1252) ||
-          (eSystemEncoding == RTL_TEXTENCODING_ISO_8859_1)) )
-        return eEncoding;
-    else
-    {
-        // Wir testen, ob beide Zeichensaetze dem gleichem Script
-        // entsprechen, um so der Applikation das gleiche Encoding
-        // vorzugaukeln. Dies ist beispielsweise bei Russisch wichtig
-        // da hier Fonts mit unterschiedlichem Encoding auftauchen
-        // koennen.
-        rtl_Script eSrcScript;
-        rtl_Script eSystemScript;
-        rtl_TextEncodingInfo    aTEncInfo;
-        aTEncInfo.StructSize    = sizeof( aTEncInfo );
-        aTEncInfo.Script        = SCRIPT_DONTKNOW;
-        if ( !rtl_getTextEncodingInfo( eEncoding, &aTEncInfo ) )
-            return eEncoding;
-        else
-            eSrcScript = aTEncInfo.Script;
-        aTEncInfo.Script        = SCRIPT_DONTKNOW;
-        if ( !rtl_getTextEncodingInfo( eSystemEncoding, &aTEncInfo ) )
-            return eEncoding;
-        else
-            eSystemScript = aTEncInfo.Script;
-        if ( eSrcScript == eSystemScript )
-            eEncoding = eSystemEncoding;
-    }
-
-    return eEncoding;
-}
-*/
 
 // =======================================================================
 
@@ -1008,14 +1046,13 @@ void OutputDevice::AddFontSubstitute( const XubString& rFontName,
 
     pEntry->maName              = rFontName;
     pEntry->maReplaceName       = rReplaceFontName;
-    pEntry->maMatchName         = rFontName;
-    pEntry->maMatchReplaceName  = rReplaceFontName;
+    pEntry->maSearchName        = rFontName;
+    pEntry->maSearchReplaceName = rReplaceFontName;
     pEntry->mnFlags             = nFlags;
     pEntry->mpNext              = pSVData->maGDIData.mpFirstFontSubst;
-    pEntry->maMatchName.ToLowerAscii();
-    pEntry->maMatchReplaceName.ToLowerAscii();
-    ImplCutScriptAndSpaces( pEntry->maMatchName );
-    ImplCutScriptAndSpaces( pEntry->maMatchReplaceName );
+    ImplGetEnglishSearchName( pEntry->maSearchName );
+    ImplGetEnglishSearchName( pEntry->maSearchReplaceName );
+
     pSVData->maGDIData.mpFirstFontSubst = pEntry;
     pSVData->maGDIData.mbFontSubChanged = TRUE;
 }
@@ -1093,14 +1130,20 @@ void OutputDevice::GetFontSubstitute( USHORT n,
 static BOOL ImplFontSubstitute( XubString& rFontName,
                                 USHORT nFlags1, USHORT nFlags2 )
 {
+#ifdef DBG_UTIL
+    String aTempName = rFontName;
+    ImplGetEnglishSearchName( aTempName );
+    DBG_ASSERT( aTempName == rFontName, "ImplFontSubstitute() called without a searchname" );
+#endif
+
     ImplSVData*         pSVData = ImplGetSVData();
     ImplFontSubstEntry* pEntry = pSVData->maGDIData.mpFirstFontSubst;
     while ( pEntry )
     {
         if ( ((pEntry->mnFlags & nFlags1) == nFlags2) &&
-             (pEntry->maMatchName == rFontName) )
+             (pEntry->maSearchName == rFontName) )
         {
-            rFontName = pEntry->maMatchReplaceName;
+            rFontName = pEntry->maSearchReplaceName;
             return TRUE;
         }
 
@@ -1112,12 +1155,228 @@ static BOOL ImplFontSubstitute( XubString& rFontName,
 
 // =======================================================================
 
+static char const aImplDefSansUnicode[] = "Andale WT UI;Arial Unicode MS;Lucida Sans Unicode";
+static char const aImplDefSansUI[] = "WarpSans;MS Sans Serif;Geneva;Helv;Dialog;Albany;Lucida;Helvetica;Charcoal;Chicago;Tahoma;Arial;Helmet;Interface System;Sans Serif";
+static char const aImplDefSans[] = "Albany;Arial;Helvetica;Lucida;Helmet;SansSerif";
+static char const aImplDefSerif[] = "Thorndale;Times New Roman;Times;Lucida Serif;Lucida Bright;Timmons;Serif";
+static char const aImplDefFixed[] = "Cumberland;Courier New;Courier;Lucida Typewriter;Lucida Sans Typewriter;Monospaced";
+static char const aImplDefSymbol[] = "StarBats;WingDings;Zapf Dingbats;Symbol";
+static char const aImplDef_CJK_JP_Mincho[] = "MS Mincho;HG Mincho J;HG Mincho L;HG Mincho";
+static char const aImplDef_CJK_JP_Gothic[] = "MS Gothic;HG Gothic J;HG Gothic";
+static char const aImplDef_CJK_ZH[] = "SimSun";
+static char const aImplDef_CJK_TW[] = "MingLiU";
+static char const aImplDef_CJK_KR_Batang[] = "Batang";
+static char const aImplDef_CJK_KR_Gulim[] = "Gulim";
+
+// -----------------------------------------------------------------------
+
+static void ImplAddTokenFontNames( String& rName, const char* pFontNames )
+{
+    const char* pStr = pFontNames;
+    do
+    {
+        if ( !(*pStr) || (*pStr == ';') )
+        {
+            String      aName( pFontNames, pStr-pFontNames, RTL_TEXTENCODING_ASCII_US );
+            String      aTempName;
+            xub_StrLen  nIndex = 0;
+            do
+            {
+                aTempName = rName.GetToken( 0, ';', nIndex );
+                if ( aName == aTempName )
+                {
+                    aName.Erase();
+                    break;
+                }
+            }
+            while ( nIndex != STRING_NOTFOUND );
+
+            if ( aName.Len() )
+            {
+                if ( rName.Len() )
+                    rName += ';';
+                rName += aName;
+            }
+
+            if ( !(*pStr) )
+                break;
+
+            pFontNames = pStr+1;
+        }
+
+        pStr++;
+    }
+    while ( 1 );
+}
+
+// -----------------------------------------------------------------------
+
+Font OutputDevice::GetDefaultFont( USHORT nType,
+                                   LanguageType eLang,
+                                   BOOL bOnlyOne,
+                                   const OutputDevice* pOutDev )
+{
+    Font            aFont;
+    const char*     pSearch1 = NULL;
+    const char*     pSearch2 = NULL;
+    const char*     pSearch3 = NULL;
+
+    switch ( nType )
+    {
+        case FONT_DEFAULT_SANS_UNICODE:
+        case FONT_DEFAULT_UI_SANS:
+            pSearch1 = aImplDefSansUnicode;
+            if ( nType == FONT_DEFAULT_UI_SANS )
+                pSearch2 = aImplDefSansUI;
+            else
+                pSearch2 = aImplDefSans;
+            aFont.SetFamily( FAMILY_SWISS );
+            break;
+
+        case FONT_DEFAULT_SANS:
+        case FONT_DEFAULT_LATIN_HEADING:
+        case FONT_DEFAULT_LATIN_SPREADSHEET:
+        case FONT_DEFAULT_LATIN_DISPLAY:
+            pSearch1 = aImplDefSans;
+            pSearch2 = aImplDefSansUnicode;
+            aFont.SetFamily( FAMILY_SWISS );
+            break;
+
+        case FONT_DEFAULT_SERIF:
+        case FONT_DEFAULT_LATIN_TEXT:
+        case FONT_DEFAULT_LATIN_PRESENTATION:
+            pSearch1 = aImplDefSerif;
+            aFont.SetFamily( FAMILY_ROMAN );
+            break;
+
+        case FONT_DEFAULT_FIXED:
+        case FONT_DEFAULT_LATIN_FIXED:
+        case FONT_DEFAULT_UI_FIXED:
+            aFont.SetPitch( PITCH_FIXED );
+            aFont.SetFamily( FAMILY_MODERN );
+            pSearch1 = aImplDefFixed;
+            break;
+
+        case FONT_DEFAULT_SYMBOL:
+            aFont.SetCharSet( RTL_TEXTENCODING_SYMBOL );
+            pSearch1 = aImplDefSymbol;
+            break;
+
+        case FONT_DEFAULT_CJK_TEXT:
+        case FONT_DEFAULT_CJK_PRESENTATION:
+        case FONT_DEFAULT_CJK_SPREADSHEET:
+        case FONT_DEFAULT_CJK_HEADING:
+        case FONT_DEFAULT_CJK_DISPLAY:
+            if ( (eLang == LANGUAGE_CHINESE) ||
+                 (eLang == LANGUAGE_CHINESE_SIMPLIFIED) ||
+                 (eLang == LANGUAGE_CHINESE_SINGAPORE) )
+                pSearch1 = aImplDef_CJK_ZH;
+            else if ( (eLang == LANGUAGE_CHINESE_TRADITIONAL) ||
+                      (eLang == LANGUAGE_CHINESE_HONGKONG) ||
+                      (eLang == LANGUAGE_CHINESE_MACAU) )
+                pSearch1 = aImplDef_CJK_TW;
+            else if ( eLang == LANGUAGE_KOREAN )
+            {
+                if ( nType == FONT_DEFAULT_CJK_DISPLAY )
+                    pSearch1 = aImplDef_CJK_KR_Gulim;
+                else
+                    pSearch1 = aImplDef_CJK_KR_Batang;
+            }
+            else
+            {
+                if ( (nType == FONT_DEFAULT_CJK_DISPLAY) ||
+                     (nType == FONT_DEFAULT_CJK_SPREADSHEET) ||
+                     (nType == FONT_DEFAULT_CJK_PRESENTATION) )
+                    pSearch1 = aImplDef_CJK_JP_Gothic;
+                else
+                    pSearch1 = aImplDef_CJK_JP_Mincho;
+            }
+            pSearch2 = aImplDefSansUnicode;
+            break;
+
+        case FONT_DEFAULT_CTL_TEXT:
+        case FONT_DEFAULT_CTL_PRESENTATION:
+        case FONT_DEFAULT_CTL_SPREADSHEET:
+        case FONT_DEFAULT_CTL_HEADING:
+        case FONT_DEFAULT_CTL_DISPLAY:
+            pSearch1 = "Arial Unicode MS";
+            pSearch2 = aImplDefSansUnicode;
+            break;
+    }
+
+    if ( pSearch1 )
+    {
+        aFont.SetSize( Size( 0, 12 ) );
+        aFont.SetWeight( WEIGHT_NORMAL );
+        if ( aFont.GetPitch() == PITCH_DONTKNOW )
+            aFont.SetPitch ( PITCH_VARIABLE );
+        if ( aFont.GetCharSet() == RTL_TEXTENCODING_DONTKNOW )
+            aFont.SetCharSet( gsl_getSystemTextEncoding() );
+
+        // Should be found the standard font on the given device
+        if ( bOnlyOne && pOutDev )
+        {
+            // Create Token String
+            String aNames( pSearch1, RTL_TEXTENCODING_ASCII_US );
+            if ( pSearch2 )
+            {
+                aNames += ';';
+                aNames.AppendAscii( pSearch2 );
+                if ( pSearch3 )
+                {
+                    aNames += ';';
+                    aNames.AppendAscii( pSearch2 );
+                }
+            }
+
+            // Search Font in the FontList
+            String      aTempName;
+            xub_StrLen  nIndex = 0;
+            do
+            {
+                aTempName = aNames.GetToken( 0, ';', nIndex );
+                ImplGetEnglishSearchName( aTempName );
+                ImplDevFontListData* pFoundData = pOutDev->mpFontList->ImplFind( aTempName );
+                if ( pFoundData )
+                {
+                    aFont.SetName( pFoundData->mpFirst->maName );
+                    break;
+                }
+            }
+            while ( nIndex != STRING_NOTFOUND );
+        }
+
+        // No Name, than set all names
+        if ( !aFont.GetName().Len() )
+        {
+            if ( bOnlyOne )
+            {
+                const char* pStr = pSearch1;
+                while ( *pStr && (*pStr != '!') )
+                    pStr++;
+                String aName( pSearch1, pStr-pSearch1, RTL_TEXTENCODING_ASCII_US );
+                aFont.SetName( aName );
+            }
+            else
+            {
+                String aName( pSearch1, RTL_TEXTENCODING_ASCII_US );
+                if ( pSearch2 )
+                    ImplAddTokenFontNames( aName, pSearch2 );
+                if ( pSearch3 )
+                    ImplAddTokenFontNames( aName, pSearch3 );
+                aFont.SetName( aName );
+            }
+        }
+    }
+
+    return aFont;
+}
+
+// =======================================================================
+
 ImplDevFontList::ImplDevFontList() :
     List( CONTAINER_MAXBLOCKSIZE, 96, 32 )
 {
-#if 0
-    mbIsInitMatchData = FALSE;
-#endif
 }
 
 // -----------------------------------------------------------------------
@@ -1149,12 +1408,7 @@ ImplDevFontList::~ImplDevFontList()
 static StringCompare ImplCompareFontDataWithoutSize( const ImplFontData* pEntry1,
                                                      const ImplFontData* pEntry2 )
 {
-    // Vergleichen nach CharSet, Groesse, Breite, Weight, Italic, StyleName
-    if ( pEntry1->meCharSet < pEntry2->meCharSet )
-        return COMPARE_LESS;
-    else if ( pEntry1->meCharSet > pEntry2->meCharSet )
-        return COMPARE_GREATER;
-
+    // Vergleichen nach Groesse, Breite, Weight, Italic, StyleName
     if ( pEntry1->meWidthType < pEntry2->meWidthType )
         return COMPARE_LESS;
     else if ( pEntry1->meWidthType > pEntry2->meWidthType )
@@ -1200,58 +1454,86 @@ static StringCompare ImplCompareFontData( const ImplFontData* pEntry1,
 void ImplDevFontList::Add( ImplFontData* pNewData )
 {
     XubString aSearchName = pNewData->maName;
-    aSearchName.ToLowerAscii();
-
-    // Query Script for FontTest
-    rtl_TextEncodingInfo    aTEncInfo;
-    aTEncInfo.StructSize    = sizeof( aTEncInfo );
-    aTEncInfo.Script        = SCRIPT_DONTKNOW;
-    rtl_getTextEncodingInfo( pNewData->meCharSet, &aTEncInfo );
-    pNewData->meScript = aTEncInfo.Script;
+    ImplGetEnglishSearchName( aSearchName );
 
     // Add Font
     ULONG                   nIndex;
     ImplDevFontListData*    pFoundData = ImplFind( aSearchName, &nIndex );
-    BOOL                    bDelete = FALSE;
+    BOOL                    bInsert = TRUE;
 
     if ( !pFoundData )
     {
         pFoundData                  = new ImplDevFontListData;
         pFoundData->maName          = pNewData->maName;
-        pFoundData->maMatchName     = aSearchName;
-        pFoundData->maMatchName2    = aSearchName;
+        pFoundData->maSearchName    = aSearchName;
         pFoundData->mpFirst         = pNewData;
-#if 0
+        pFoundData->meFamily        = FAMILY_DONTKNOW;
+        pFoundData->mePitch         = PITCH_DONTKNOW;
         pFoundData->mbScalable      = FALSE;
-        ImplStrEraseAllSymbols( pFoundData->maMatchName2 );
-/*
-        pFoundData->meMatchFamily   = pNewData->meFamily;
-        pFoundData->meMatchPitch    = pNewData->mePitch;
-        CharSet eCharSet = pNewData->meCharSet;
-        ImplFontAttrFromName( pFoundData->maMatchName2, pFoundData->meMatchFamily,
-                              eCharSet, pFoundData->meMatchPitch );
-        pFoundData->mbSymbol        = eCharSet == RTL_TEXTENCODING_SYMBOL;
-*/
-#else
-        pFoundData->meMatchFamily   = pNewData->meFamily;
-        pFoundData->meMatchPitch    = pNewData->mePitch;
-        pFoundData->mnMatch         = 0;
-        CharSet eCharSet = pNewData->meCharSet;
-        ImplStrEraseAllSymbols( pFoundData->maMatchName2 );
-        ImplFontAttrFromName( pFoundData->maMatchName2, pFoundData->meMatchFamily,
-                              eCharSet, pFoundData->meMatchPitch );
-        pFoundData->mbSymbol        = eCharSet == RTL_TEXTENCODING_SYMBOL;
-#endif
-
+        pFoundData->mbSymbol        = FALSE;
         pNewData->mpNext            = NULL;
         Insert( pFoundData, nIndex );
+        bInsert = FALSE;
     }
-    else
-    {
-        // Name ersetzen (spart Speicherplatz)
-        pNewData->maName = pFoundData->maName;
 
-        BOOL bInsert = TRUE;
+    // set Match data
+    if ( !pFoundData->mbScalable )
+    {
+        if ( (pNewData->meType == TYPE_SCALABLE) && (pNewData->mnHeight == 0) )
+            pFoundData->mbScalable = TRUE;
+    }
+    if ( !pFoundData->mbSymbol )
+    {
+        if ( pNewData->meCharSet == RTL_TEXTENCODING_SYMBOL )
+            pFoundData->mbSymbol = TRUE;
+    }
+    if ( pFoundData->meFamily == FAMILY_DONTKNOW )
+        pFoundData->meFamily = pNewData->meFamily;
+    if ( pFoundData->mePitch == PITCH_DONTKNOW )
+        pFoundData->mePitch = pNewData->mePitch;
+
+    // Add map/alias names
+    if ( pNewData->maMapNames.Len() )
+    {
+        String      aName;
+        xub_StrLen  nIndex = 0;
+        do
+        {
+            aName = pNewData->maMapNames.GetToken( 0, ';', nIndex );
+            ImplGetEnglishSearchName( aName );
+            if ( aName != aSearchName )
+            {
+                // Test, if Alias exists already
+                String      aTempName;
+                xub_StrLen  nIndex2 = 0;
+                do
+                {
+                    aTempName = pFoundData->maMapNames.GetToken( 0, ';', nIndex2 );
+                    if ( aName == aTempName )
+                    {
+                        aName.Erase();
+                        break;
+                    }
+                }
+                while ( nIndex2 != STRING_NOTFOUND );
+
+                if ( aName.Len() )
+                {
+                    if ( pFoundData->maMapNames.Len() )
+                        pFoundData->maMapNames += ';';
+                    pFoundData->maMapNames += aName;
+                }
+            }
+        }
+        while ( nIndex != STRING_NOTFOUND );
+    }
+
+    if ( bInsert )
+    {
+        // replace Name (saves memory)
+        if ( pNewData->maName == pFoundData->maName )
+            pNewData->maName = pFoundData->maName;
+
         ImplFontData*   pPrev = NULL;
         ImplFontData*   pTemp = pFoundData->mpFirst;
         do
@@ -1277,10 +1559,7 @@ void ImplDevFontList::Add( ImplFontData* pNewData )
                         delete pTemp;
                     }
                     else
-                    {
-                        bDelete = TRUE;
                         delete pNewData;
-                    }
 
                     bInsert = FALSE;
                 }
@@ -1301,37 +1580,18 @@ void ImplDevFontList::Add( ImplFontData* pNewData )
                 pFoundData->mpFirst = pNewData;
         }
     }
-
-    // Match zusammenzaehlen
-    if ( !bDelete )
-    {
-#if 0
-        if ( (pNewData->meType == TYPE_SCALABLE) && (pNewData->mnHeight == 0) )
-            pFoundData->mbScalable = TRUE;
-#else
-        if ( (pNewData->meType == TYPE_SCALABLE) && (pNewData->mnHeight == 0) )
-        {
-            if ( pNewData->meWidthType == WIDTH_NORMAL )
-                pFoundData->mnMatch += 30;
-            else
-                pFoundData->mnMatch += 3;
-            if ( pNewData->meItalic == ITALIC_NONE )
-                pFoundData->mnMatch += 20;
-            else
-                pFoundData->mnMatch += 2;
-            if ( (pNewData->meWeight == WEIGHT_NORMAL) || (pNewData->meWeight == WEIGHT_MEDIUM) )
-                pFoundData->mnMatch += 10;
-            else
-                pFoundData->mnMatch += 1;
-        }
-#endif
-    }
 }
 
 // -----------------------------------------------------------------------
 
 ImplDevFontListData* ImplDevFontList::ImplFind( const XubString& rFontName, ULONG* pIndex ) const
 {
+#ifdef DBG_UTIL
+    String aTempName = rFontName;
+    ImplGetEnglishSearchName( aTempName );
+    DBG_ASSERT( aTempName == rFontName, "ImplDevFontList::ImplFind() called without a searchname" );
+#endif
+
     ULONG nCount = Count();
     if ( !nCount )
     {
@@ -1352,7 +1612,7 @@ ImplDevFontListData* ImplDevFontList::ImplFind( const XubString& rFontName, ULON
     {
         nMid = (nLow + nHigh) / 2;
         pCompareData = Get( nMid );
-        eCompare = rFontName.CompareTo( pCompareData->maMatchName );
+        eCompare = rFontName.CompareTo( pCompareData->maSearchName );
         if ( eCompare == COMPARE_LESS )
         {
             if ( !nMid )
@@ -1374,7 +1634,7 @@ ImplDevFontListData* ImplDevFontList::ImplFind( const XubString& rFontName, ULON
 
     if ( pIndex )
     {
-        eCompare = rFontName.CompareTo( pCompareData->maMatchName );
+        eCompare = rFontName.CompareTo( pCompareData->maSearchName );
         if ( eCompare == COMPARE_GREATER )
             *pIndex = (nMid+1);
         else
@@ -1389,69 +1649,37 @@ ImplDevFontListData* ImplDevFontList::ImplFind( const XubString& rFontName, ULON
 ImplDevFontListData* ImplDevFontList::FindFont( const XubString& rFontName ) const
 {
     XubString aName = rFontName;
-    aName.ToLowerAscii();
-    ImplCutScriptAndSpaces( aName );
+    ImplGetEnglishSearchName( aName );
     return ImplFind( aName );
 }
 
 // -----------------------------------------------------------------------
 
-ImplDevFontListData* ImplDevFontList::FindStdFont( const sal_Char** pStdFontNames,
-                                                   rtl_Script eScript ) const
+ImplDevFontListData* ImplDevFontList::ImplFindFontFromToken( const char* pStr ) const
 {
-    // We want a scalable font with a system script
-    ImplDevFontListData* pRasterFoundData = NULL;
-    ImplDevFontListData* pWrongScriptRasterData = NULL;
-    ImplDevFontListData* pWrongScriptData = NULL;
-    while ( *pStdFontNames )
+    const char* pTempStr = pStr;
+    while ( *pTempStr )
     {
-        XubString aStdName( *pStdFontNames, RTL_TEXTENCODING_ASCII_US );
-        ImplDevFontListData* pFoundData = ImplFind( aStdName );
-        if ( pFoundData )
+        if ( *pTempStr == ';' )
         {
-            if ( ((eScript != SCRIPT_LATIN) &&
-                  (eScript != SCRIPT_EASTEUROPE) &&
-                  (eScript != SCRIPT_CYRILLIC) &&
-                  (eScript != SCRIPT_BALTIC) &&
-                  (eScript != SCRIPT_TURKISH) &&
-                  (eScript != SCRIPT_GREEK) &&
-                  (eScript != SCRIPT_GEORGIEN)) ||
-                 ImplFindScript( pFoundData, eScript ) )
+            String aName( pStr, pTempStr-pStr, RTL_TEXTENCODING_ASCII_US );
+            if ( aName.Len() )
             {
-                if ( pFoundData->mpFirst->meType != TYPE_RASTER )
-                    return pFoundData;
-                else if ( !pRasterFoundData )
-                    pRasterFoundData = pFoundData;
+                ImplDevFontListData* pData = ImplFind( aName );
+                if ( pData )
+                    return pData;
             }
-            else
-            {
-                if ( pFoundData->mpFirst->meType != TYPE_RASTER )
-                {
-                    if ( !pWrongScriptData )
-                        pWrongScriptData = pFoundData;
-                }
-                else
-                {
-                    if ( !pWrongScriptRasterData )
-                        pWrongScriptRasterData = pFoundData;
-                }
-            }
+            pStr = pTempStr+1;
         }
-        pStdFontNames++;
+
+        pTempStr++;
     }
 
-    // Wenn keine passende Schrift, dann die Reihenfolge:
-    // - passender Zeichensatz
-    // - Skalierbar
-    // - eine passende Schrift die nicht skalierbar und den
-    //   falschen Zeichensatz hat
-    // - keine
-    if ( pRasterFoundData )
-        return pRasterFoundData;
-    else if ( pWrongScriptData )
-        return pWrongScriptData;
+    String aName( pStr, pTempStr-pStr, RTL_TEXTENCODING_ASCII_US );
+    if ( aName.Len() )
+        return ImplFind( aName );
     else
-        return pWrongScriptRasterData;
+        return NULL;
 }
 
 // -----------------------------------------------------------------------
@@ -1476,53 +1704,8 @@ void ImplDevFontList::Clear()
 
         pEntry = Next();
     }
+
     List::Clear();
-
-    // Standard-Fonts loeschen
-    for ( USHORT i = 0; i < IMPL_STDFONT_COUNT; i++ )
-        mpStdFontAry[i] = NULL;
-#if 0
-    mbIsInitMatchData = FALSE;
-#endif
-}
-
-// -----------------------------------------------------------------------
-
-#if 0
-void ImplDevFontList::InitMatchData()
-{
-    if ( mbIsInitMatchData )
-        return;
-    mbIsInitMatchData = TRUE;
-/*
-    // Fuer alle Eintraege die Matchdaten ermitteln
-    ImplDevFontListData* pEntry = First();
-    while ( pEntry )
-    {
-        ImplFontData* pFontData = pEntry->mpFirst;
-
-        pEntry = Next();
-    }
-*/
-}
-#endif
-
-// -----------------------------------------------------------------------
-
-void ImplDevFontList::InitStdFonts()
-{
-    rtl_Script              eSystemScript;
-    rtl_TextEncodingInfo    aTextEncInfo;
-    aTextEncInfo.StructSize = sizeof( aTextEncInfo );
-    aTextEncInfo.Script = SCRIPT_DONTKNOW;
-    rtl_getTextEncodingInfo( gsl_getSystemTextEncoding(), &aTextEncInfo );
-    eSystemScript = aTextEncInfo.Script;
-
-    mpStdFontAry[IMPL_STDFONT_SWISS]    = FindStdFont( aImplStdSwissList, eSystemScript );
-    mpStdFontAry[IMPL_STDFONT_ROMAN]    = FindStdFont( aImplStdRomanList, eSystemScript );
-    mpStdFontAry[IMPL_STDFONT_FIXED]    = FindStdFont( aImplStdFixedList, eSystemScript );
-    mpStdFontAry[IMPL_STDFONT_SCRIPT]   = FindStdFont( aImplStdScriptList, eSystemScript );
-    mpStdFontAry[IMPL_STDFONT_SYMBOL]   = FindStdFont( aImplStdSymbolList, SCRIPT_SYMBOL );
 }
 
 // =======================================================================
@@ -1557,9 +1740,6 @@ ImplFontEntry::~ImplFontEntry()
 
     if ( mpKernPairs )
         delete mpKernPairs;
-
-    if ( mpKernInfo )
-        delete mpKernInfo;
 }
 
 // =======================================================================
@@ -1591,6 +1771,32 @@ ImplFontCache::~ImplFontCache()
 ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
                                    const Font& rFont, const Size& rSize )
 {
+#ifdef DBG_UTIL
+    {
+    // Test all Fonttables for correct sorting
+    static BOOL bInit = FALSE;
+    if ( !bInit )
+    {
+        const ImplFontNameAttr* pList = aImplFontNameList;
+        int                     nCount = sizeof( aImplFontNameList ) / sizeof( ImplFontNameAttr );
+        int                     i;
+        for ( i = 1; i < nCount; i++ )
+        {
+            if ( ImplStrMatchCompare( String( pList[i].mpName, RTL_TEXTENCODING_ASCII_US ),
+                                      pList[i-1].mpName ) <= 0 )
+            {
+                ByteString aStr( "ImplFontNameList not sorted: " );
+                aStr += pList[i-1].mpName;
+                aStr.Append( " >= " );
+                aStr += pList[i].mpName;
+                DBG_ERROR( aStr.GetBuffer() );
+            }
+        }
+        bInit = TRUE;
+    }
+    }
+#endif
+
     const XubString& rName      = rFont.GetName();
     const XubString& rStyleName = rFont.GetStyleName();
     long nWidth                 = rSize.Width();
@@ -1655,72 +1861,30 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
         pEntry = pEntry->mpNext;
     }
 
-    // Wir suchen zuerst ueber den Namen den passenden Font
-    XubString               aLowerFontName = rName;
-    XubString               aFirstName;
-    XubString               aTempName;
-    XubString               aTempName2;
+    ImplFontData*           pFontData = NULL;
     ImplDevFontListData*    pFoundData;
-    ImplDevFontListData*    pTempFoundData;
-    xub_StrLen              nFirstNameIndex = 0;
-    xub_StrLen              nIndex = 0;
+    String                  aSearchName;
     USHORT                  nSubstFlags1 = FONT_SUBSTITUTE_ALWAYS;
     USHORT                  nSubstFlags2 = FONT_SUBSTITUTE_ALWAYS;
-    rtl_Script              eScript = SCRIPT_DONTKNOW;
-    rtl_Script              eCharSetScript;
-    rtl_TextEncodingInfo    aTextEncInfo;
-    aTextEncInfo.StructSize = sizeof( aTextEncInfo );
-    aTextEncInfo.Script = SCRIPT_DONTKNOW;
-    rtl_getTextEncodingInfo( eCharSet, &aTextEncInfo );
-    eCharSetScript = aTextEncInfo.Script;
+    xub_StrLen              nFirstNameIndex = 0;
+    xub_StrLen              nIndex = 0;
+    int                     nToken = 0;
+
     if ( mbPrinter )
         nSubstFlags1 |= FONT_SUBSTITUTE_SCREENONLY;
-    aLowerFontName.ToLowerAscii();
-    pTempFoundData = NULL;
+
+    // Test if one Font in the name list is available
     do
     {
-        aTempName = aLowerFontName.GetToken( 0, ';', nIndex );
-        ImplCutScriptAndSpaces( aTempName );
-        if ( !aFirstName.Len() )
-        {
-            aFirstName = aTempName;
-            nFirstNameIndex = nIndex;
-        }
-        ImplFontSubstitute( aTempName, nSubstFlags1, nSubstFlags2 );
-        pFoundData = pFontList->ImplFind( aTempName );
+        nToken++;
+        aSearchName = rName.GetToken( 0, ';', nIndex );
+        ImplGetEnglishSearchName( aSearchName );
+        ImplFontSubstitute( aSearchName, nSubstFlags1, nSubstFlags2 );
+        pFoundData = pFontList->ImplFind( aSearchName );
         if ( pFoundData )
-        {
-            if ( eCharSetScript != SCRIPT_DONTKNOW )
-            {
-                if ( !pTempFoundData )
-                {
-                    aTempName2 = aTempName;
-                    pTempFoundData = pFoundData;
-                }
-
-                // Testen, ob ein Font mit einem entsprechendem
-                // Script vorhanden ist
-                if ( ImplFindScript( pFoundData, eCharSetScript ) )
-                {
-                    aLowerFontName = aTempName;
-                    break;
-                }
-                else
-                    pFoundData = NULL;
-            }
-            else
-            {
-                aLowerFontName = aTempName;
-                break;
-            }
-        }
+            break;
     }
     while ( nIndex != STRING_NOTFOUND );
-    if ( !pFoundData && pTempFoundData )
-    {
-        pFoundData = pTempFoundData;
-        aLowerFontName = aTempName2;
-    }
 
     // Danach versuchen wir es nocheinmal unter Beruecksichtigung
     // der gloablen Fontersetzungstabelle, wobei wir jetzt auch
@@ -1733,96 +1897,125 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
         nIndex = 0;
         do
         {
-            aTempName = aLowerFontName.GetToken( 0, ';', nIndex );
-            ImplCutScriptAndSpaces( aTempName );
-            if ( ImplFontSubstitute( aTempName, nSubstFlags1, nSubstFlags2 ) )
+            if ( nToken > 1 )
             {
-                pFoundData = pFontList->ImplFind( aTempName );
-                if ( pFoundData )
-                {
-                    aLowerFontName = aTempName;
-                    break;
-                }
+                aSearchName = rName.GetToken( 0, ';', nIndex );
+                ImplGetEnglishSearchName( aSearchName );
             }
+            else
+                nIndex = STRING_NOTFOUND;
+            ImplFontSubstitute( aSearchName, nSubstFlags1, nSubstFlags2 );
+            pFoundData = pFontList->ImplFind( aSearchName );
+            if ( pFoundData )
+                break;
         }
         while ( nIndex != STRING_NOTFOUND );
     }
 
-    // Wenn kein Font mit dem entsprechenden Namen existiert, versuchen
-    // wir ueber den Namen und die Attribute einen passenden Font zu
-    // finden
     ULONG nFontCount = pFontList->Count();
     if ( !pFoundData && nFontCount )
     {
+        // Wenn kein Font mit dem entsprechenden Namen existiert, versuchen
+        // wir ueber den Namen und die Attribute einen passenden Font zu
+        // finden - wir nehmen dazu das erste Token
+        if ( nToken > 1 )
+        {
+            aSearchName = rName.GetToken( 0, ';', nIndex );
+            ImplGetEnglishSearchName( aSearchName );
+        }
+
+        const ImplFontNameAttr* pFontAttr;
+        String                  aSearchShortName;
+        String                  aSearchFamilyName;
+        ULONG                   nSearchType = 0;
+        FontWeight              eSearchWeight = eWeight;
+        FontWidth               eSearchWidth = WIDTH_DONTKNOW;
+        ImplGetMapName( aSearchName, aSearchShortName, aSearchFamilyName,
+                        eSearchWeight, eSearchWidth, nSearchType );
+
+        // Search, if ShortName is available
+        if ( aSearchShortName != aSearchName )
+            pFoundData = pFontList->ImplFind( aSearchShortName );
+
+        if ( !pFoundData && aSearchName.Len() )
+        {
+            pFontAttr = ImplGetFontNameAttr( aSearchName );
+            if ( !pFontAttr && (aSearchShortName != aSearchName) )
+                pFontAttr = ImplGetFontNameAttr( aSearchShortName );
+
+            // Try Substitution
+            if ( pFontAttr && pFontAttr->mpSubstitution1 )
+            {
+                pFoundData = pFontList->ImplFindFontFromToken( pFontAttr->mpSubstitution1 );
+                if ( !pFoundData && pFontAttr->mpSubstitution2 )
+                {
+                    pFoundData = pFontList->ImplFindFontFromToken( pFontAttr->mpSubstitution2 );
+                    if ( !pFoundData && pFontAttr->mpSubstitution3 )
+                        pFoundData = pFontList->ImplFindFontFromToken( pFontAttr->mpSubstitution3 );
+                }
+            }
+        }
+
+        if ( !pFoundData )
+        {
+            // wir versuchen zuerst einen Font zu finden, der ueber den Namen
+            // matched
+            ULONG nTestMatch;
+            ULONG nBestMatch = 0;
+            for ( ULONG i = 0; i < nFontCount; i++ )
+            {
+                ImplDevFontListData* pData = pFontList->Get( i );
+
+                nTestMatch = 0;
+
 #if 0
-        pFontList->InitMatchData();
+            // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-        // 1. Token vom Fontnamen nehmen und Sonderzeichen entfernen
-        XubString aNoSymbolName = aFirstName;
-        ImplCutScriptAndSpaces( aNoSymbolName );
-        ImplStrEraseAllSymbols( aNoSymbolName );
+                // skalierbare Schriften haben schon einen echten Vorteil
+                // gegenueber nicht skalierbaren Schriften
+                if ( pData->mbScalable )
+                    nTestMatch += 500000000;
 
-        // Script evtl. aus CharSet gewinnen, wenn nicht ueber den Fontnamen
-        // ermittelt werden konnte
-        if ( eScript == SCRIPT_DONTKNOW )
-            eScript = eCharSetScript;
+                // Wir gehen davon aus, wenn der Name groesstenteils matcht,
+                // das er schon zur richtigen Familie gehoert
 
-        // wir versuchen zuerst einen Font zu finden, der ueber den Namen
-        // matched
-        ULONG nTestMatch;
-        ULONG nBestMatch = 0;
-        for ( ULONG i = 0; i < nFontCount; i++ )
-        {
-            ImplDevFontListData* pData = pFontList->Get( i );
-
-            nTestMatch = 0;
-
-            // Wir wollen schon Zeichen erkennen
-            if ( eScript != SCRIPT_DONTKNOW )
-            {
-                if ( ImplFindScript( pData, eScript ) )
-                    nTestMatch += 1000000000;
-            }
-
-            // skalierbare Schriften haben schon einen echten Vorteil
-            // gegenueber nicht skalierbaren Schriften
-            if ( pData->mbScalable )
-                nTestMatch += 500000000;
-
-/*
-            // Wir gehen davon aus, wenn der Name groesstenteils matcht,
-            // das er schon zur richtigen Familie gehoert
-
-
-            // Beim matchen ignorieren wir alle Sonderzeichen
-            ULONG nTestMatch = ImplStrMatch( aNoSymbolName, pData->maMatchName2 );
-            if ( nTestMatch >= nBestMatch )
-            {
-                // Match nur erlaubt, wenn auch die Attribute uebereinstimmen
-                BOOL    bTestFamily = pData->meMatchFamily != FAMILY_DONTKNOW;
-                BOOL    bTestSymbol = pData->mbSymbol;
-                BOOL    bTestFixed  = pData->meMatchPitch == PITCH_FIXED;
-                if ( (bFixed == bTestFixed) && (bSymbol == bTestSymbol) &&
-                     (!bFamily || !bTestFamily || (eSearchFamily == pData->meMatchFamily)) )
+                // Beim matchen ignorieren wir alle Sonderzeichen
+                ULONG nTestMatch = ImplStrMatch( aNoSymbolName, pData->maMatchName2 );
+                if ( nTestMatch >= nBestMatch )
                 {
-                    xub_StrLen nAttrMatch = 0;
-                    // Die Anzahl der uebereinstimmenden Attribute zaehlen
-                    const char** pTypeList = aImplTypeList;
-                    while ( *pTypeList )
+                    // Match nur erlaubt, wenn auch die Attribute uebereinstimmen
+                    BOOL    bTestFamily = pData->meMatchFamily != FAMILY_DONTKNOW;
+                    BOOL    bTestSymbol = pData->mbSymbol;
+                    BOOL    bTestFixed  = pData->meMatchPitch == PITCH_FIXED;
+                    if ( (bFixed == bTestFixed) && (bSymbol == bTestSymbol) &&
+                         (!bFamily || !bTestFamily || (eSearchFamily == pData->meMatchFamily)) )
                     {
-                        if ( (aNoSymbolName.Search( *pTypeList ) != STRING_NOTFOUND) &&
-                             (pData->maMatchName2.Search( *pTypeList ) != STRING_NOTFOUND) )
-                            nAttrMatch++;
-                        pTypeList++;
-                    }
+                        xub_StrLen nAttrMatch = 0;
+                        // Die Anzahl der uebereinstimmenden Attribute zaehlen
+                        const char** pTypeList = aImplTypeList;
+                        while ( *pTypeList )
+                        {
+                            if ( (aNoSymbolName.Search( *pTypeList ) != STRING_NOTFOUND) &&
+                                 (pData->maMatchName2.Search( *pTypeList ) != STRING_NOTFOUND) )
+                                nAttrMatch++;
+                            pTypeList++;
+                        }
 
-                    // Wenn beide Matches gleich gut sind,
-                    // entscheiden die uebereinstimmenden Attribute
-                    if ( nBestMatch == nTestMatch )
-                    {
-                        if ( (nAttrMatch > nBestAttrMatch) ||
-                             ((nAttrMatch == nBestAttrMatch) &&
-                              (pData->maMatchName2.Len() < nBestStrLen)) )
+                        // Wenn beide Matches gleich gut sind,
+                        // entscheiden die uebereinstimmenden Attribute
+                        if ( nBestMatch == nTestMatch )
+                        {
+                            if ( (nAttrMatch > nBestAttrMatch) ||
+                                 ((nAttrMatch == nBestAttrMatch) &&
+                                  (pData->maMatchName2.Len() < nBestStrLen)) )
+                            {
+                                pFoundData = pData;
+                                nBestMatch = nTestMatch;
+                                nBestAttrMatch = nAttrMatch;
+                                nBestStrLen = pData->maMatchName2.Len();
+                            }
+                        }
+                        else
                         {
                             pFoundData = pData;
                             nBestMatch = nTestMatch;
@@ -1830,214 +2023,66 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
                             nBestStrLen = pData->maMatchName2.Len();
                         }
                     }
-                    else
-                    {
-                        pFoundData = pData;
-                        nBestMatch = nTestMatch;
-                        nBestAttrMatch = nAttrMatch;
-                        nBestStrLen = pData->maMatchName2.Len();
-                    }
                 }
-            }
-*/
 
-            if ( nTestMatch > nBestMatch )
-            {
-                pFoundData = pData;
-                nBestMatch = nTestMatch;
-            }
-        }
 
-        if ( !pFoundData )
+
+    // Test, if Fontname includes CJK characters --> In this case we
+    // mention that it is a CJK font
+    const sal_Unicode* pStr = rFamilyName;
+    while ( *pStr )
+    {
+        if ( ((*pStr >= 0x3000) && (*pStr <= 0xD7AF)) ||
+             ((*pStr >= 0xFF00) && (*pStr <= 0xFFEE)) )
         {
-            pFoundData = pFontList->GetStandardFont( IMPL_STDFONT_ROMAN );
-            // Wenn alles nichts hilft, nehmen wir den ersten
-            if ( !pFoundData )
-                pFoundData = pFontList->Get( 0 );
-        }
-#else
-        // 1. Token vom Fontnamen nehmen und Sonderzeichen entfernen
-        XubString aNoSymbolName = aFirstName;
-        ImplStrEraseAllSymbols( aNoSymbolName );
-
-        // Suchattribute ermitteln
-        BOOL        bFamily;
-        BOOL        bSymbol;
-        BOOL        bFixed;
-        FontFamily  eSearchFamily = eFamily;
-        CharSet     eSearchCharSet = eCharSet;
-        FontPitch   eSearchPitch = ePitch;
-        ImplFontAttrFromName( aNoSymbolName, eSearchFamily, eSearchCharSet, eSearchPitch );
-        bFamily = eSearchFamily != FAMILY_DONTKNOW;
-        bSymbol = eSearchCharSet == RTL_TEXTENCODING_SYMBOL;
-        bFixed = eSearchPitch == PITCH_FIXED;
-        // Solange in der Namesliste suchen, bis wir auswertbare
-        // Attribute gefunden haben
-        xub_StrLen nTempIndex = nFirstNameIndex;
-        while ( (nTempIndex != STRING_NOTFOUND) && !bFamily && !bFixed && !bSymbol )
-        {
-            aTempName = aLowerFontName.GetToken( 0, ';', nTempIndex );
-            ImplCutScriptAndSpaces( aTempName );
-            if ( !aTempName.Len() )
-                break;
-            ImplStrEraseAllSymbols( aTempName );
-            ImplFontAttrFromName( aTempName, eSearchFamily, eSearchCharSet, eSearchPitch );
-            bFamily = eSearchFamily != FAMILY_DONTKNOW;
-            bSymbol = eSearchCharSet == RTL_TEXTENCODING_SYMBOL;
-            bFixed = eSearchPitch == PITCH_FIXED;
-        }
-        aLowerFontName = aFirstName;
-
-        // wir versuchen zuerst einen Font zu finden, der ueber den Namen
-        // matched
-        ULONG           i;
-        xub_StrLen      nBestMatch = 5;
-        xub_StrLen      nBestAttrMatch = 0;
-        xub_StrLen      nBestStrLen = 0xFFFF;
-        for ( i = 0; i < nFontCount; i++ )
-        {
-            ImplDevFontListData* pData = pFontList->Get( i );
-            // Beim matchen ignorieren wir alle Sonderzeichen
-            xub_StrLen nTestMatch = ImplStrMatch( aNoSymbolName, pData->maMatchName2 );
-            if ( nTestMatch >= nBestMatch )
-            {
-                // Match nur erlaubt, wenn auch die Attribute uebereinstimmen
-                BOOL    bTestFamily = pData->meMatchFamily != FAMILY_DONTKNOW;
-                BOOL    bTestSymbol = pData->mbSymbol;
-                BOOL    bTestFixed  = pData->meMatchPitch == PITCH_FIXED;
-                if ( (bFixed == bTestFixed) && (bSymbol == bTestSymbol) &&
-                     (!bFamily || !bTestFamily || (eSearchFamily == pData->meMatchFamily)) )
-                {
-                    xub_StrLen nAttrMatch = 0;
-                    // Die Anzahl der uebereinstimmenden Attribute zaehlen
-                    const char** pTypeList = aImplTypeList;
-                    while ( *pTypeList )
-                    {
-                        if ( (aNoSymbolName.SearchAscii( *pTypeList ) != STRING_NOTFOUND) &&
-                             (pData->maMatchName2.SearchAscii( *pTypeList ) != STRING_NOTFOUND) )
-                            nAttrMatch++;
-                        pTypeList++;
-                    }
-
-                    // Wenn beide Matches gleich gut sind,
-                    // entscheiden die uebereinstimmenden Attribute
-                    if ( nBestMatch == nTestMatch )
-                    {
-                        if ( (nAttrMatch > nBestAttrMatch) ||
-                             ((nAttrMatch == nBestAttrMatch) &&
-                              (pData->maMatchName2.Len() < nBestStrLen)) )
-                        {
-                            pFoundData = pData;
-                            nBestMatch = nTestMatch;
-                            nBestAttrMatch = nAttrMatch;
-                            nBestStrLen = pData->maMatchName2.Len();
-                        }
-                    }
-                    else
-                    {
-                        pFoundData = pData;
-                        nBestMatch = nTestMatch;
-                        nBestAttrMatch = nAttrMatch;
-                        nBestStrLen = pData->maMatchName2.Len();
-                    }
-                }
-            }
+            rType |= IMPL_FONT_ATTR_CJK;
+            break;
         }
 
-        // Wenn wir immer noch keinen passenden Font gefunden haben, versuchen
-        // wir es ueber die Attribute
-        if ( !pFoundData )
-        {
-            if ( bFixed )
-            {
-                pFoundData = pFontList->GetStandardFont( IMPL_STDFONT_FIXED );
-                if ( !pFoundData )
-                {
-                    nBestMatch = 0;
-                    for ( i = 0; i < nFontCount; i++ )
-                    {
-                        ImplDevFontListData* pData = pFontList->Get( i );
-                        if ( (pData->meMatchPitch == PITCH_FIXED) &&
-                             !pData->mbSymbol &&
-                             (pData->meMatchFamily != FAMILY_DECORATIVE) )
-                        {
-                            if ( pData->mnMatch > nBestMatch )
-                            {
-                                pFoundData = pData;
-                                nBestMatch = pData->mnMatch;
-                            }
-                        }
-                    }
-                }
-            }
-
-            if ( bFamily && !pFoundData )
-            {
-                if ( eSearchFamily == FAMILY_SWISS )
-                    pFoundData = pFontList->GetStandardFont( IMPL_STDFONT_SWISS );
-                else if ( eSearchFamily == FAMILY_ROMAN )
-                    pFoundData = pFontList->GetStandardFont( IMPL_STDFONT_ROMAN );
-                else if ( eSearchFamily == FAMILY_SCRIPT )
-                    pFoundData = pFontList->GetStandardFont( IMPL_STDFONT_SCRIPT );
-                if ( !pFoundData )
-                {
-                    nBestMatch = 0;
-                    for ( i = 0; i < nFontCount; i++ )
-                    {
-                        ImplDevFontListData* pData = pFontList->Get( i );
-                        if ( (pData->meMatchFamily == eSearchFamily) &&
-                             !pData->mbSymbol &&
-                             (pData->meMatchPitch != PITCH_FIXED) )
-                        {
-                            if ( pData->mnMatch > nBestMatch )
-                            {
-                                pFoundData = pData;
-                                nBestMatch = pData->mnMatch;
-                            }
-                        }
-                    }
-                }
-            }
-
-            if ( bSymbol && !pFoundData )
-            {
-                pFoundData = pFontList->GetStandardFont( IMPL_STDFONT_SYMBOL );
-                if ( !pFoundData )
-                {
-                    nBestMatch = 0;
-                    for ( i = 0; i < nFontCount; i++ )
-                    {
-                        ImplDevFontListData* pData = pFontList->Get( i );
-                        if ( pData->mbSymbol )
-                        {
-                            if ( pData->mnMatch > nBestMatch )
-                            {
-                                pFoundData = pData;
-                                nBestMatch = pData->mnMatch;
-                            }
-                        }
-                    }
-                }
-            }
-
-            if ( !pFoundData )
-            {
-                pFoundData = pFontList->GetStandardFont( IMPL_STDFONT_ROMAN );
-                // Wenn alles nichts hilft, nehmen wir den ersten
-                if ( !pFoundData )
-                    pFontList->Get( 0 );
-            }
-        }
-#endif
+        pStr++;
     }
 
-    // Script evtl. aus CharSet gewinnen, wenn nicht ueber den Fontnamen
-    // ermittelt werden konnte
-    if ( eScript == SCRIPT_DONTKNOW )
-        eScript = eCharSetScript;
+#endif
 
-    // Jetzt suchen wir den Font ueber die Attribute
-    ImplFontData* pFontData = NULL;
+                if ( nTestMatch > nBestMatch )
+                {
+                    pFoundData = pData;
+                    nBestMatch = nTestMatch;
+                }
+            }
+
+            if ( !pFoundData )
+            {
+                // Try to use a Standard Font depend from the
+                // attributes
+
+
+                // Try to use a Standard Unicode or a Standard Font to get
+                // as max as possible characters
+                if ( !pFoundData )
+                {
+                    pFoundData = pFontList->ImplFindFontFromToken( aImplSubsSansUnicode );
+                    if ( !pFoundData )
+                    {
+                        pFoundData = pFontList->ImplFindFontFromToken( aImplSubsSerif );
+                        if ( !pFoundData )
+                        {
+                            pFoundData = pFontList->ImplFindFontFromToken( aImplSubsSans );
+                            if ( !pFoundData )
+                                pFoundData = pFontList->ImplFindFontFromToken( aImplSubsFixed );
+                        }
+                    }
+                }
+
+                // If nothing helps, we use the first one
+                if ( !pFoundData )
+                    pFoundData = pFontList->Get( 0 );
+            }
+        }
+    }
+
+    // We have found a useable Font, than we look with Font mapps at best
+    // with the wished attributes
     if ( pFoundData )
     {
         ULONG           nBestMatch = 0;         // Der groessere Wert ist der bessere
@@ -2048,17 +2093,11 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
         ULONG           nWidthMatch;
         ImplFontData*   pCurFontData;
 
-//          !!!!! Wegen Office-Fehler !!!!
-//        XubString       aCompareStyleName = rStyleName;
-//        aCompareStyleName.ToLowerAscii();
-
-        // Vorallem wegen OS2-System-Standard-Fonts vergleichen wir
-        // den FontNamen mit FontName + StyleName, damit
-        // WarpSans Bold auch einen fetten Font ergibt
+        // FontName+StyleName should map to FamilyName+StyleName
         const xub_Unicode* pCompareStyleName = NULL;
-        if ( (aLowerFontName.Len() > pFoundData->maMatchName.Len()) &&
-             aLowerFontName.Equals( pFoundData->maMatchName, 0, pFoundData->maMatchName.Len() ) )
-            pCompareStyleName = aLowerFontName.GetBuffer()+pFoundData->maMatchName.Len()+1;
+        if ( (aSearchName.Len() > pFoundData->maSearchName.Len()) &&
+             aSearchName.Equals( pFoundData->maSearchName, 0, pFoundData->maSearchName.Len() ) )
+            pCompareStyleName = aSearchName.GetBuffer()+pFoundData->maSearchName.Len()+1;
 
         pCurFontData = pFoundData->mpFirst;
         while ( pCurFontData )
@@ -2067,32 +2106,20 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
             nHeightMatch = 0;
             nWidthMatch = 0;
 
-//            if ( aCompareStyleName.Len() &&
-//                 aCompareStyleName.EqualsIgnoreCaseAscii( pCurFontData->maStyleName ) )
-//                nMatch += 120000;
             if ( pCompareStyleName &&
                  pCurFontData->maStyleName.EqualsIgnoreCaseAscii( pCompareStyleName ) )
                 nMatch += 120000;
 
-            if ( eCharSet != RTL_TEXTENCODING_DONTKNOW )
-            {
-                if ( eCharSet == pCurFontData->meCharSet )
-                    nMatch += 60000;
-            }
-
-            if ( eScript == pCurFontData->meScript )
-                nMatch += 30000;
-
             if ( (ePitch != PITCH_DONTKNOW) && (ePitch == pCurFontData->mePitch) )
-                nMatch += 15000;
+                nMatch += 60000;
 
             if ( (eFamily != FAMILY_DONTKNOW) && (eFamily == pCurFontData->meFamily) )
-                nMatch += 7500;
+                nMatch += 30000;
 
             // Normale Schriftbreiten bevorzugen, da wir noch keine Daten
             // von den Applikationen bekommen
             if ( pCurFontData->meWidthType == WIDTH_NORMAL )
-                nMatch += 3750;
+                nMatch += 15000;
 
             if ( eWeight != WEIGHT_DONTKNOW )
             {
@@ -2212,11 +2239,11 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
     pEntry->mbInit                  = FALSE;
     pEntry->mnRefCount              = 1;
     pEntry->mpNext                  = mpFirstEntry;
+    pEntry->mnWidthInit             = 0;
     pEntry->mnWidthAryCount         = 0;
     pEntry->mnWidthArySize          = 0;
     pEntry->mpWidthAry              = NULL;
     pEntry->mpKernPairs             = NULL;
-    pEntry->mpKernInfo              = NULL;
     pEntry->mnOwnOrientation        = 0;
     pEntry->mnOrientation           = 0;
     mpFirstEntry                    = pEntry;
@@ -2583,23 +2610,21 @@ int OutputDevice::ImplNewFont()
             pFontEntry->maMetric.mnDStrikeoutOffset2        = 0;
 #ifndef REMOTE_APPSERVER
             pGraphics->GetFontMetric( &(pFontEntry->maMetric) );
-            pFontEntry->mnWidthFactor = pGraphics->GetCharWidth( 0, CHARCACHE_STD-1, pFontEntry->maWidthAry );
+            pFontEntry->mnWidthFactor = IMPL_FACTOR_NOTINIT;
 #else
             long nFactor = 0;
-
             pGraphics->GetFontMetric(
                 pFontEntry->maMetric,
-                nFactor, 0, CHARCACHE_STD-1, pFontEntry->maWidthAry,
+                nFactor, IMPL_CACHE_A1_FIRST, IMPL_CACHE_A1_LAST,
+                pFontEntry->maWidthAry+IMPL_CACHE_A1_INDEX;
                 (maFont.GetKerning() & KERNING_FONTSPECIFIC) != 0,
-                &pKernPairs, nKernPairs
-                );
+                &pKernPairs, nKernPairs );
             pFontEntry->mnWidthFactor = nFactor;
+            if ( pFontEntry->mnWidthFactor )
+                pFontEntry->mnWidthInit |= IMPL_CACHE_A1_BIT;
+            else
+                pFontEntry->mnWidthFactor = IMPL_FACTOR_NOTINIT;
 #endif
-            if ( !pFontEntry->mnWidthFactor )
-            {
-                memset( pFontEntry->maWidthAry, 0, sizeof(long)*(CHARCACHE_STD-1) );
-                pFontEntry->mnWidthFactor = 1;
-            }
 
             pFontEntry->mbFixedFont     = pFontEntry->maMetric.mePitch == PITCH_FIXED;
             pFontEntry->mnLineHeight    = pFontEntry->maMetric.mnAscent+pFontEntry->maMetric.mnDescent;
@@ -2678,13 +2703,105 @@ int OutputDevice::ImplNewFont()
 
 // -----------------------------------------------------------------------
 
+BOOL OutputDevice::ImplGetCharWidths( sal_Unicode c1, sal_Unicode c2,
+                                      long* pAry ) const
+{
+    // Um die Zeichenbreite zu ermitteln, brauchen wir einen Graphics und der
+    // Font muss natuerlich auch selektiert sein
+#ifndef REMOTE_APPSERVER
+    // we need a graphics
+    if ( !mpGraphics )
+    {
+        if ( !((OutputDevice*)this)->ImplGetGraphics() )
+            return FALSE;
+    }
+#else
+    // Da wegen Clipping hier NULL zurueckkommen kann, koennen wir nicht
+    // den Rueckgabewert nehmen
+    ((OutputDevice*)this)->ImplGetServerGraphics();
+#endif
+
+    if ( mbNewFont )
+        ((OutputDevice*)this)->ImplNewFont();
+    if ( mbInitFont )
+        ((OutputDevice*)this)->ImplInitFont();
+
+#ifndef REMOTE_APPSERVER
+    long nWidthFactor = mpGraphics->GetCharWidth( c1, c2, pAry );
+    if ( !nWidthFactor )
+        return FALSE;
+    if ( mpFontEntry->mnWidthFactor == IMPL_FACTOR_NOTINIT )
+        mpFontEntry->mnWidthFactor = nWidthFactor;
+    DBG_ASSERT( (nWidthFactor == mpFontEntry->mnWidthFactor),
+                "OutputDevice::ImplGetCharWidths() - other WidthFactor" );
+#else
+    mpGraphics->GetCharWidth( c1, c2, pAry );
+#endif
+
+    return TRUE;
+}
+
+// -----------------------------------------------------------------------
+
 long OutputDevice::ImplGetCharWidth( sal_Unicode c ) const
 {
-    USHORT nChar = (USHORT)c;
-    if ( nChar < CHARCACHE_STD )
-        return mpFontEntry->maWidthAry[nChar];
+    ImplFontEntry*                  pFontEntry = mpFontEntry;
+    USHORT                          nChar = (USHORT)c;
+    if ( nChar < IMPL_WIDTH_CACHE_MAX )
+    {
+        ULONG   nTestBit = 0;
+        USHORT  nFirst;
+        USHORT  nLast;
+        USHORT  nIndex;
 
-    ImplFontEntry*      pFontEntry = mpFontEntry;
+        // Test Standard-Areas (Latin, Extended Latin, Greek and Cyrillic)
+        if ( (nChar >= IMPL_CACHE_A1_FIRST) && (nChar <= IMPL_CACHE_A1_LAST) )
+        {
+            nTestBit    = IMPL_CACHE_A1_BIT;
+            nFirst      = IMPL_CACHE_A1_FIRST;
+            nLast       = IMPL_CACHE_A1_LAST;
+            nIndex      = IMPL_CACHE_A1_INDEX;
+        }
+        else if ( (nChar >= IMPL_CACHE_A2_FIRST) && (nChar <= IMPL_CACHE_A2_LAST) )
+        {
+            nTestBit    = IMPL_CACHE_A2_BIT;
+            nFirst      = IMPL_CACHE_A2_FIRST;
+            nLast       = IMPL_CACHE_A2_LAST;
+            nIndex      = IMPL_CACHE_A2_INDEX;
+        }
+        else if ( (nChar >= IMPL_CACHE_A3_FIRST) && (nChar <= IMPL_CACHE_A3_LAST) )
+        {
+            nTestBit    = IMPL_CACHE_A3_BIT;
+            nFirst      = IMPL_CACHE_A3_FIRST;
+            nLast       = IMPL_CACHE_A3_LAST;
+            nIndex      = IMPL_CACHE_A3_INDEX;
+        }
+        else if ( (nChar >= IMPL_CACHE_A4_FIRST) && (nChar <= IMPL_CACHE_A4_LAST) )
+        {
+            nTestBit    = IMPL_CACHE_A4_BIT;
+            nFirst      = IMPL_CACHE_A4_FIRST;
+            nLast       = IMPL_CACHE_A4_LAST;
+            nIndex      = IMPL_CACHE_A4_INDEX;
+        }
+
+        if ( nTestBit )
+        {
+            // Characters not queried yet
+            if ( !(pFontEntry->mnWidthInit & nTestBit) )
+            {
+                if ( !ImplGetCharWidths( nFirst, nLast,
+                                         &(pFontEntry->maWidthAry[nIndex]) ) )
+                    return 0;
+                pFontEntry->mnWidthInit |= nTestBit;
+            }
+
+            nIndex += nChar-nFirst;
+            DBG_ASSERT( nIndex < IMPL_WIDTH_CACHE_COUNT,
+                        "OutputDevice::ImplGetCharWidth() - nIndex >= IMPL_WIDTH_CACHE_COUNT" );
+            return pFontEntry->maWidthAry[nIndex];
+        }
+    }
+
     ImplWidthInfoData*  pInfo;
     ImplWidthInfoData*  pWidthAry =  pFontEntry->mpWidthAry;
     USHORT              nWidthCount = pFontEntry->mnWidthAryCount;
@@ -2727,7 +2844,7 @@ long OutputDevice::ImplGetCharWidth( sal_Unicode c ) const
     }
     else
     {
-        pFontEntry->mnWidthArySize = WIDTHARY_INIT;
+        pFontEntry->mnWidthArySize = IMPL_WIDTH_ARY_INIT;
         pFontEntry->mpWidthAry = new ImplWidthInfoData[pFontEntry->mnWidthArySize];
         pWidthAry = pFontEntry->mpWidthAry;
         nInsIndex = 0;
@@ -2736,45 +2853,16 @@ long OutputDevice::ImplGetCharWidth( sal_Unicode c ) const
     if ( nWidthCount == pFontEntry->mnWidthArySize )
     {
         USHORT nOldSize = pFontEntry->mnWidthArySize;
-        pFontEntry->mnWidthArySize += WIDTHARY_RESIZE;
+        pFontEntry->mnWidthArySize += IMPL_WIDTH_ARY_RESIZE;
         pFontEntry->mpWidthAry = new ImplWidthInfoData[pFontEntry->mnWidthArySize];
         memcpy( pFontEntry->mpWidthAry, pWidthAry, nOldSize*sizeof(ImplWidthInfoData) );
         delete pWidthAry;
         pWidthAry = pFontEntry->mpWidthAry;
     }
 
-    // Um die Zeichenbreite zu ermitteln, brauchen wir einen Graphics und der
-    // Font muss natuerlich auch selektiert sein
-#ifndef REMOTE_APPSERVER
-    // we need a graphics
-    if ( !mpGraphics )
-    {
-        if ( !((OutputDevice*)this)->ImplGetGraphics() )
-            return 0;
-    }
-#else
-    // Da wegen Clipping hier NULL zurueckkommen kann, koennen wir nicht
-    // den Rueckgabewert nehmen
-    ((OutputDevice*)this)->ImplGetServerGraphics();
-#endif
-
-    if ( mbNewFont )
-        ((OutputDevice*)this)->ImplNewFont();
-    if ( mbInitFont )
-        ((OutputDevice*)this)->ImplInitFont();
-
     long nWidth;
-#ifndef REMOTE_APPSERVER
-    long nWidthFactor = mpGraphics->GetCharWidth( nChar, nChar, &nWidth );
-#else
-    long nWidthFactor = pFontEntry->mnWidthFactor;
-    mpGraphics->GetCharWidth( nChar, nChar, &nWidth );
-#endif
-    if ( !nWidthFactor )
+    if ( !ImplGetCharWidths( nChar, nChar, &nWidth ) )
         return 0;
-
-    DBG_ASSERT( (nWidthFactor == pFontEntry->mnWidthFactor),
-                "OutputDevice::ImplGetCharWidth() - other WidthFactor" );
 
     // Breite in Liste einfuegen und zurueckgeben
     pInfo = pWidthAry+nInsIndex;
@@ -2783,6 +2871,38 @@ long OutputDevice::ImplGetCharWidth( sal_Unicode c ) const
     pInfo->mnChar = nChar;
     pInfo->mnWidth = nWidth;
     return nWidth;
+}
+
+// -----------------------------------------------------------------------
+
+static void ImplSortKernPairs( ImplKernPairData* pKernPairs, ULONG l, ULONG r )
+{
+    ULONG               i = l;
+    ULONG               j = r;
+    ImplKernPairData*   pComp = pKernPairs + ((l+r) >> 1);
+    sal_uInt32          nComp = *((sal_uInt32*)pComp);
+
+    do
+    {
+        while ( *((sal_uInt32*)(pKernPairs+i)) < nComp )
+            i++;
+        while ( nComp < *((sal_uInt32*)(pKernPairs+j)) )
+            j--;
+        if ( i <= j )
+        {
+            ImplKernPairData aTemp = *(pKernPairs+i);
+            *(pKernPairs+i) = *(pKernPairs+j);
+            *(pKernPairs+j) = aTemp;
+            i++;
+            j--;
+        }
+    }
+    while ( i <= j );
+
+    if ( l < j )
+        ImplSortKernPairs( pKernPairs, l, j );
+    if ( i < r )
+        ImplSortKernPairs( pKernPairs, i, r );
 }
 
 // -----------------------------------------------------------------------
@@ -2805,64 +2925,21 @@ void OutputDevice::ImplInitKerningPairs( ImplKernPairData* pKernPairs, long nKer
         pFontEntry->mnKernPairs = mpGraphics->GetKernPairs( 0, NULL );
         if ( pFontEntry->mnKernPairs )
         {
-            ImplKernInfoData* pKernInfo     = new ImplKernInfoData;
-            pKernPairs    = new ImplKernPairData[pFontEntry->mnKernPairs];
+            pKernPairs = new ImplKernPairData[pFontEntry->mnKernPairs];
             memset( pKernPairs, 0, sizeof(ImplKernPairData)*pFontEntry->mnKernPairs );
-            pFontEntry->mnKernPairs         = mpGraphics->GetKernPairs( pFontEntry->mnKernPairs, pKernPairs );
-            pFontEntry->mpKernInfo          = pKernInfo;
-            pFontEntry->mpKernPairs         = pKernPairs;
-
-            // Wir akzeptieren erstmal nur max. 65535-Paare
-            USHORT nMaxKernPairs;
-            if ( pFontEntry->mnKernPairs > 0xFFFF )
-                nMaxKernPairs = 0xFFFF;
-            else
-                nMaxKernPairs = (USHORT)pFontEntry->mnKernPairs;
-            memset( pKernInfo->maFirstAry, 0xFF, sizeof( pKernInfo->maFirstAry ) );
-            memset( pKernInfo->maLastAry, 0, sizeof( pKernInfo->maLastAry ) );
-            for ( USHORT i = 0; i < nMaxKernPairs; i++ )
-            {
-                USHORT nFirst = pKernPairs[i].mnChar1;
-                if ( nFirst < 0xFF )
-                {
-                    if ( i < pKernInfo->maFirstAry[nFirst] )
-                        pKernInfo->maFirstAry[nFirst] = i;
-                    pKernInfo->maLastAry[nFirst] = i;
-                }
-            }
+            pFontEntry->mnKernPairs = mpGraphics->GetKernPairs( pFontEntry->mnKernPairs, pKernPairs );
+            pFontEntry->mpKernPairs = pKernPairs;
         }
 #else
-        // Wir arbeiten erstmal nur mit USHORT
-        if( ! pKernPairs )
+        if ( !pKernPairs )
             nKernPairs = mpGraphics->GetKernPairs( &pKernPairs );
         if ( nKernPairs )
-        {
-            ImplKernInfoData* pKernInfo = new ImplKernInfoData;
-            pFontEntry->mpKernInfo  = pKernInfo;
             pFontEntry->mpKernPairs = pKernPairs;
-
-            // Wir akzeptieren erstmal nur max. 65535-Paare
-            USHORT nMaxKernPairs;
-            if( ! pFontEntry->mnKernPairs )
-                pFontEntry->mnKernPairs = nKernPairs;
-            if ( pFontEntry->mnKernPairs > 0xFFFF )
-                nMaxKernPairs = 0xFFFF;
-            else
-                nMaxKernPairs = (USHORT)pFontEntry->mnKernPairs;
-            memset( pKernInfo->maFirstAry, 0xFF, sizeof( pKernInfo->maFirstAry ) );
-            memset( pKernInfo->maLastAry, 0, sizeof( pKernInfo->maLastAry ) );
-            for ( USHORT i = 0; i < nMaxKernPairs; i++ )
-            {
-                USHORT nFirst = pKernPairs[i].mnChar1;
-                if ( nFirst < 0xFF )
-                {
-                    if ( i < pKernInfo->maFirstAry[nFirst] )
-                        pKernInfo->maFirstAry[nFirst] = i;
-                    pKernInfo->maLastAry[nFirst] = i;
-                }
-            }
-        }
 #endif
+
+        // Sort Kerning Pairs
+        if ( pFontEntry->mpKernPairs )
+            ImplSortKernPairs( pFontEntry->mpKernPairs, 0, pFontEntry->mnKernPairs-1 );
     }
 }
 
@@ -2876,19 +2953,19 @@ long OutputDevice::ImplCalcKerning( const sal_Unicode* pStr, xub_StrLen nLen,
 
     ImplFontEntry* pEntry           = mpFontEntry;
     ImplKernPairData* pKernPairs    = pEntry->mpKernPairs;
-    ImplKernInfoData* pKernInfo     = pEntry->mpKernInfo;
+    ULONG nKernPairs                = pEntry->mnKernPairs;
     long nWidth                     = 0;
     xub_StrLen i;
 
-    if ( (maFont.GetKerning() & KERNING_FONTSPECIFIC) && pEntry->mnKernPairs )
+    if ( (maFont.GetKerning() & KERNING_FONTSPECIFIC) && nKernPairs )
     {
 #ifdef DBG_UTIL
         {
         ImplKernPairData    aTestPair;
 #ifdef __LITTLEENDIAN
-        ULONG               nTestComp  = ((ULONG)((USHORT)0xAABB) << 16) | (USHORT)0xCCDD;
+        sal_uInt32          nTestComp  = ((sal_uInt32)((USHORT)0xAABB) << 16) | (USHORT)0xCCDD;
 #else
-        ULONG               nTestComp  = ((ULONG)((USHORT)0xCCDD) << 16) | (USHORT)0xAABB;
+        sal_uInt32          nTestComp  = ((sal_uInt32)((USHORT)0xCCDD) << 16) | (USHORT)0xAABB;
 #endif
         aTestPair.mnChar1 = 0xCCDD;
         aTestPair.mnChar2 = 0xAABB;
@@ -2899,28 +2976,35 @@ long OutputDevice::ImplCalcKerning( const sal_Unicode* pStr, xub_StrLen nLen,
         const sal_Unicode* pTempStr = pStr;
         for ( i = 0; i < nLen-1; i++ )
         {
-            USHORT  nIndex = (USHORT)*pTempStr;
-            USHORT  nFirst = pKernInfo->maFirstAry[nIndex];
-            USHORT  nLast  = pKernInfo->maLastAry[nIndex];
-
+            USHORT nIndex = (USHORT)*pTempStr;
             pTempStr++;
 #ifdef __LITTLEENDIAN
-            ULONG   nComp  = ((ULONG)((USHORT)*pTempStr) << 16) | nIndex;
+            sal_uInt32 nComp  = ((sal_uInt32)((USHORT)*pTempStr) << 16) | nIndex;
 #else
-            ULONG   nComp  = ((ULONG)nIndex << 16) | ((USHORT)*pTempStr);
+            sal_uInt32 nComp  = ((sal_uInt32)nIndex << 16) | ((USHORT)*pTempStr);
 #endif
-            for ( USHORT j = nFirst; j <= nLast; j++ )
+
+            // Search for Kerning Pair
+            for( long nLower = 0, nUpper = (long)nKernPairs-1; nLower <= nUpper; )
             {
-                if ( nComp == *((ULONG*)&(pKernPairs[j])) )
+                long nMid = (nUpper + nLower) >> 1;
+                ImplKernPairData* pCurKernPair = pKernPairs+nMid;
+                sal_uInt32 nCurComp = *((sal_uInt32*)pCurKernPair);
+                if ( nComp == nCurComp )
                 {
-                    long nAmount = pKernPairs[j].mnKern;
+                    long nAmount = pCurKernPair->mnKern;
                     nWidth += nAmount;
                     if ( pDXAry )
                     {
-                        for ( USHORT n = i; n < nAryLen; n++ )
+                        for ( xub_StrLen n = i; n < nAryLen; n++ )
                             pDXAry[n] += nAmount;
                     }
+                    break;
                 }
+                else if ( nComp < nCurComp )
+                    nUpper = nMid-1;
+                else /* ( nComp > nCurComp ) */
+                    nLower = nMid+1;
             }
         }
     }
@@ -2958,7 +3042,6 @@ long OutputDevice::ImplGetTextWidth( const xub_Unicode* pStr, xub_StrLen nLen,
                                      const long* pDX )
 {
     ImplFontEntry*  pFontEntry = mpFontEntry;
-    long            nFactor = pFontEntry->mnWidthFactor;
     long            nWidth = 0;
 
     if ( nLen )
@@ -2967,7 +3050,7 @@ long OutputDevice::ImplGetTextWidth( const xub_Unicode* pStr, xub_StrLen nLen,
         {
             if ( nLen > 1 )
                 nWidth += pDX[nLen-2];
-            nWidth += ImplGetCharWidth( pStr[nLen-1] ) / nFactor;
+            nWidth += ImplGetCharWidth( pStr[nLen-1] ) / mpFontEntry->mnWidthFactor;
         }
         else
         {
@@ -2982,7 +3065,7 @@ long OutputDevice::ImplGetTextWidth( const xub_Unicode* pStr, xub_StrLen nLen,
                 nTempLen--;
                 pTempStr++;
             }
-            nWidth /= nFactor;
+            nWidth /= mpFontEntry->mnWidthFactor;
 
             // Kerning beruecksichtigen
             if ( mbKerning )
@@ -4382,15 +4465,15 @@ void OutputDevice::ImplDrawTextDirect( long nX, long nY,
 #ifndef REMOTE_APPSERVER
             if ( pFontEntry->mnSetFontFlags & SAL_SETFONT_USEDRAWTEXTARRAY )
             {
-                long* pCharWidthAry = pFontEntry->maWidthAry;
-                long  nFactor = pFontEntry->mnWidthFactor;
-                long  nOffset = 0;
-                long  aStackAry[128];
-                long* pTempDXAry = (long*)ImplGetStackBuffer( sizeof(long)*(nLen-1), aStackAry, sizeof( aStackAry ) );
-                for ( USHORT i = 0; i < nLen-1; i++ )
+                long                nOffset = 0;
+                long                aStackAry[128];
+                long*               pTempDXAry = (long*)ImplGetStackBuffer( sizeof(long)*(nLen-1), aStackAry, sizeof( aStackAry ) );
+                const xub_Unicode*  pTempStr = pStr;
+                for ( xub_StrLen i = 0; i < nLen-1; i++ )
                 {
-                    nOffset += ImplGetCharWidth( pStr[i] );
-                    pTempDXAry[i] = nOffset / nFactor;
+                    nOffset += ImplGetCharWidth( *pTempStr );
+                    pTempDXAry[i] = nOffset / mpFontEntry->mnWidthFactor;
+                    pTempStr++;
                 }
                 mpGraphics->DrawTextArray( nX, nY, pStr, nLen, pTempDXAry );
                 ImplReleaseStackBuffer( pTempDXAry, aStackAry );
@@ -4404,8 +4487,6 @@ void OutputDevice::ImplDrawTextDirect( long nX, long nY,
 #ifndef REMOTE_APPSERVER
             if ( pFontEntry->mnSetFontFlags & SAL_SETFONT_USEDRAWTEXT )
             {
-                long*               pCharWidthAry = pFontEntry->maWidthAry;
-                long                nFactor = pFontEntry->mnWidthFactor;
                 long                nOffset = 0;
                 long                nDiff;
                 long                nTempX = nX;
@@ -4414,12 +4495,12 @@ void OutputDevice::ImplDrawTextDirect( long nX, long nY,
                 for ( xub_StrLen i = 0; i < nLen-1; i++ )
                 {
                     nOffset += ImplGetCharWidth( pStr[i] );
-                    nDiff = (nOffset/nFactor) - pDXAry[i];
+                    nDiff = (nOffset/mpFontEntry->mnWidthFactor) - pDXAry[i];
                     if ( (nDiff < -1) || (nDiff > 0) )
                     {
                         mpGraphics->DrawText( nTempX, nY, pTempStr, nCombineChars );
                         nTempX    = nX+pDXAry[i];
-                        nOffset   = pDXAry[i]*nFactor;
+                        nOffset   = pDXAry[i]*mpFontEntry->mnWidthFactor;
                         pTempStr += nCombineChars;
                         nCombineChars = 1;
                     }
@@ -4568,9 +4649,7 @@ void OutputDevice::ImplDrawText( long nX, long nY,
 void OutputDevice::ImplFillDXAry( long* pDXAry,
                                   const xub_Unicode* pStr, xub_StrLen nLen, long nWidth )
 {
-    ImplFontEntry*  pFontEntry = mpFontEntry;
-    long*           pCharWidthAry = pFontEntry->maWidthAry;
-    long            nFactor = pFontEntry->mnWidthFactor;
+    ImplFontEntry* pFontEntry = mpFontEntry;
 
     // Breiten-Array fuer errechnete Werte mit den Breiten der einzelnen
     // Character fuellen
@@ -4580,9 +4659,9 @@ void OutputDevice::ImplFillDXAry( long* pDXAry,
     {
         // Characterbreiten ueber Array holen
         nSum += ImplGetCharWidth( pStr[i] );
-        pDXAry[i] = nSum / nFactor;
+        pDXAry[i] = nSum / mpFontEntry->mnWidthFactor;
     }
-    nSum /= nFactor;
+    nSum /= mpFontEntry->mnWidthFactor;
 
     // Differenz zwischen Soll- und Ist-Laenge errechnen
     // Zusaetzliche Pixel per Character errechnen
@@ -5150,18 +5229,18 @@ void OutputDevice::DrawText( const Point& rStartPt, const XubString& rStr,
     if ( mbKerning )
     {
         ImplFontEntry*  pFontEntry = mpFontEntry;
-        long*           pCharWidthAry = pFontEntry->maWidthAry;
-        long            nFactor = pFontEntry->mnWidthFactor;
         USHORT          i;
 
         // DX-Array berechnen
         long  nOffset = 0;
         long  aStackAry[128];
         long* pDXAry = (long*)ImplGetStackBuffer( sizeof(long)*(nLen-1), aStackAry, sizeof( aStackAry ) );
+        const sal_Unicode* pTempStr = pStr;
         for ( i = 0; i < nLen-1; i++ )
         {
-            nOffset += pCharWidthAry[(unsigned char)pStr[i]];
-            pDXAry[i] = nOffset / nFactor;
+            nOffset += ImplGetCharWidth( *pTempStr );
+            pDXAry[i] = nOffset / mpFontEntry->mnWidthFactor;
+            pTempStr++;
         }
         ImplCalcKerning( pStr, nLen, pDXAry, nLen-1 );
         ImplDrawText( aStartPt.X(), aStartPt.Y(), pStr, nLen, pDXAry );
@@ -5196,8 +5275,6 @@ long OutputDevice::GetTextWidth( const XubString& rStr,
 
         if ( nLen )
         {
-            long* pCharWidthAry = pFontEntry->maWidthAry;
-
             // Also Fixed-Fonts are calculated char by char, because
             // not every Font or in every CJK Fonts all characters have
             // the same width
@@ -5360,8 +5437,6 @@ long OutputDevice::GetTextArray( const UniString& rStr, long* pDXAry,
     }
 
     ImplFontEntry*      pFontEntry = mpFontEntry;
-    long*               pCharWidthAry = pFontEntry->maWidthAry;
-    long                nFactor = pFontEntry->mnWidthFactor;
     const sal_Unicode*  pTempStr;
     const sal_Unicode*  pStr;
     long                nOffset = 0;
@@ -5374,7 +5449,7 @@ long OutputDevice::GetTextArray( const UniString& rStr, long* pDXAry,
     for ( i = 0; i < nLen; i++ )
     {
         nOffset += ImplGetCharWidth( *pTempStr );
-        pDXAry[i] = nOffset / nFactor;
+        pDXAry[i] = nOffset / mpFontEntry->mnWidthFactor;
         pTempStr++;
     }
 
@@ -5487,8 +5562,6 @@ xub_StrLen OutputDevice::GetTextBreak( const XubString& rStr, long nTextWidth,
     }
 
     ImplFontEntry*      pFontEntry = mpFontEntry;
-    long*               pCharWidthAry = pFontEntry->maWidthAry;
-    long                nFactor = pFontEntry->mnWidthFactor;
     const sal_Unicode*  pStr;
     long                nCalcWidth = 0;
     xub_StrLen          nLastIndex;
@@ -5496,19 +5569,19 @@ xub_StrLen OutputDevice::GetTextBreak( const XubString& rStr, long nTextWidth,
     if ( mbMap )
     {
         nTextWidth = ImplLogicWidthToDevicePixel( nTextWidth*10 );
-        nTextWidth *= nFactor;
+        nTextWidth *= mpFontEntry->mnWidthFactor;
         nTextWidth /= 10;
         if ( nCharExtra )
         {
             nCharExtra = ImplLogicWidthToDevicePixel( nCharExtra*10 );
-            nCharExtra *= nFactor;
+            nCharExtra *= mpFontEntry->mnWidthFactor;
             nCharExtra /= 10;
         }
     }
     else
     {
-        nCharExtra *= nFactor;
-        nTextWidth *= nFactor;
+        nCharExtra *= mpFontEntry->mnWidthFactor;
+        nTextWidth *= mpFontEntry->mnWidthFactor;
     }
 
     // Letzte Index-Position ermitteln
@@ -5528,7 +5601,7 @@ xub_StrLen OutputDevice::GetTextBreak( const XubString& rStr, long nTextWidth,
 
         // Kerning beruecksichtigen
         if ( mbKerning )
-            nCalcWidth += ImplCalcKerning( pStr, 2, NULL, 0 )*nFactor;
+            nCalcWidth += ImplCalcKerning( pStr, 2, NULL, 0 )*mpFontEntry->mnWidthFactor;
         nCalcWidth += nCharExtra;
 
         nIndex++;
@@ -5558,8 +5631,6 @@ xub_StrLen OutputDevice::GetTextBreak( const XubString& rStr, long nTextWidth,
     }
 
     ImplFontEntry*      pFontEntry = mpFontEntry;
-    long*               pCharWidthAry = pFontEntry->maWidthAry;
-    long                nFactor = pFontEntry->mnWidthFactor;
     const sal_Unicode*  pStr;
     long                nTextWidth2;
     long                nCalcWidth = 0;
@@ -5569,19 +5640,19 @@ xub_StrLen OutputDevice::GetTextBreak( const XubString& rStr, long nTextWidth,
     if ( mbMap )
     {
         nTextWidth = ImplLogicWidthToDevicePixel( nTextWidth*10 );
-        nTextWidth *= nFactor;
+        nTextWidth *= mpFontEntry->mnWidthFactor;
         nTextWidth /= 10;
         if ( nCharExtra )
         {
             nCharExtra = ImplLogicWidthToDevicePixel( nCharExtra*10 );
-            nCharExtra *= nFactor;
+            nCharExtra *= mpFontEntry->mnWidthFactor;
             nCharExtra /= 10;
         }
     }
     else
     {
-        nCharExtra *= nFactor;
-        nTextWidth *= nFactor;
+        nCharExtra *= mpFontEntry->mnWidthFactor;
+        nTextWidth *= mpFontEntry->mnWidthFactor;
     }
 
     // Letzte Index-Position ermitteln
@@ -5616,7 +5687,7 @@ xub_StrLen OutputDevice::GetTextBreak( const XubString& rStr, long nTextWidth,
 
         // Kerning beruecksichtigen
         if ( mbKerning )
-            nCalcWidth += ImplCalcKerning( pStr, 2, NULL, 0 )*nFactor;
+            nCalcWidth += ImplCalcKerning( pStr, 2, NULL, 0 )*mpFontEntry->mnWidthFactor;
         nCalcWidth += nCharExtra;
 
         nIndex++;
@@ -5642,14 +5713,12 @@ void OutputDevice::GetCharWidth( sal_Unicode nFirstChar, sal_Unicode nLastChar,
             return;
     }
 
-    long        nFactor = mpFontEntry->mnWidthFactor;
     sal_Unicode nCharCount = nLastChar-nFirstChar+1;
-
     if ( mbMap )
     {
         while ( nCharCount )
         {
-            *pWidthAry = ImplDevicePixelToLogicWidth( ImplGetCharWidth( nFirstChar ) ) / nFactor;
+            *pWidthAry = ImplDevicePixelToLogicWidth( ImplGetCharWidth( nFirstChar ) ) / mpFontEntry->mnWidthFactor;
             pWidthAry++;
             nFirstChar++;
             nCharCount--;
@@ -5659,7 +5728,7 @@ void OutputDevice::GetCharWidth( sal_Unicode nFirstChar, sal_Unicode nLastChar,
     {
         while ( nCharCount )
         {
-            *pWidthAry = ImplGetCharWidth( nFirstChar ) / nFactor;
+            *pWidthAry = ImplGetCharWidth( nFirstChar ) / mpFontEntry->mnWidthFactor;
             pWidthAry++;
             nFirstChar++;
             nCharCount--;
@@ -6377,7 +6446,6 @@ FontInfo OutputDevice::GetDevFont( USHORT nDevFont ) const
         ImplFontData* pData = mpGetDevFontList->Get( nDevFont );
         aFontInfo.SetName( pData->maName );
         aFontInfo.SetStyleName( pData->maStyleName );
-// !!! UNICODE !!!        aFontInfo.SetCharSet( ImplGetFakeEncoding( pData->meCharSet ) );
         aFontInfo.SetCharSet( pData->meCharSet );
         aFontInfo.SetFamily( pData->meFamily );
         aFontInfo.SetPitch( pData->mePitch );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: th $ $Date: 2001-03-20 10:36:58 $
+ *  last change: $Author: th $ $Date: 2001-04-06 12:48:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -683,10 +683,7 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
                 mpGraphics->GetResolution( mpFrameData->mnDPIX, mpFrameData->mnDPIY );
                 mpGraphics->GetScreenFontResolution( mpFrameData->mnFontDPIX, mpFrameData->mnFontDPIY );
                 if ( !mpFrameData->mpFontList->Count() )
-                {
                     mpGraphics->GetDevFontList( mpFrameData->mpFontList );
-                    mpFrameData->mpFontList->InitStdFonts();
-                }
             }
         }
 #else
@@ -714,10 +711,7 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
                 mpFrameData->mnFontDPIY = aResl.FontDPIy;
                 mpGraphics->SetWindowResolution( aResl.DPIx, aResl.DPIy, aResl.Depth );
                 if ( !mpFrameData->mpFontList->Count() )
-                {
                     mpGraphics->GetDevFontList( mpFrameData->mpFontList );
-                    mpFrameData->mpFontList->InitStdFonts();
-                }
             }
         }
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:40 $
+ *  last change: $Author: th $ $Date: 2001-04-06 12:48:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1009,24 +1009,14 @@ void Window::SetZoomedPointFont( const Font& rFont )
         long       nFontDiff = Abs( GetFont().GetSize().Height()-aMetric.GetSize().Height() );
         if ( (aMetric.GetType() == TYPE_RASTER) && (nFontDiff >= 2) )
         {
-            ImplDevFontListData*    pStdFont = NULL;
-            USHORT                  nStdFont = 0xFFFF;
+            USHORT nType;
             if ( aMetric.GetPitch() == PITCH_FIXED )
-                nStdFont = PITCH_FIXED;
-            else if ( aMetric.GetFamily() == FAMILY_SWISS )
-                nStdFont = IMPL_STDFONT_SWISS;
-            else if ( aMetric.GetFamily() == FAMILY_ROMAN )
-                nStdFont = IMPL_STDFONT_ROMAN;
-            if ( nStdFont != 0xFFFF )
-            {
-                if ( mpFontList )
-                    pStdFont = mpFontList->GetStandardFont( nStdFont );
-                if ( pStdFont && (aFont.GetName() != pStdFont->maName) )
-                {
-                    aFont.SetName( pStdFont->maName );
-                    SetPointFont( aFont );
-                }
-            }
+                nType = FONT_DEFAULT_FIXED;
+            else
+                nType = FONT_DEFAULT_UI_SANS;
+            Font aTempFont = GetDefaultFont( nType, GetSettings().GetInternational().GetLanguage(), FALSE );
+            aFont.SetName( aTempFont.GetName() );
+            SetPointFont( aFont );
         }
     }
     else
