@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrfrm.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-10-25 13:04:40 $
+ *  last change: $Author: hjs $ $Date: 2000-11-07 13:38:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,9 @@
  *
  *
  ************************************************************************/
+
+#include <string>
+#include <algorithm>
 
 #ifdef PRECOMPILED
 #include "core_pch.hxx"
@@ -1154,7 +1157,7 @@ BOOL SwFmtCol::PutValue( const uno::Any& rVal, BYTE nMemberId )
             const text::TextColumn* pArray = aSetColumns.getConstArray();
             aColumns.DeleteAndDestroy(0, aColumns.Count());
             //max. Count ist hier 64K - das kann das Array aber nicht
-            sal_uInt16 nCount = min((sal_uInt16)aSetColumns.getLength(), 0x3fff);
+            sal_uInt16 nCount = std::min((sal_uInt16)aSetColumns.getLength(), (sal_uInt16) 0x3fff);
             sal_uInt16 nWidthSum = 0;
             for(sal_uInt16 i = 0; i < nCount; i++)
             {
