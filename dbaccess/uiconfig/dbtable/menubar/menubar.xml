@@ -26,14 +26,16 @@
     </menu:menu>
     <menu:menu menu:id=".uno:ToolsMenu" menu:label="" >
         <menu:menupopup>
-            <menu:menuitem menu:id=".uno:DatasourceAdministration" menu:helpid="10882" menu:label="" />
-            <menu:menuseparator/>
             <menu:menu menu:id=".uno:MacrosMenu" menu:label="" >
                 <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:MacroRecorder" menu:helpid="6669" menu:label="" />
                     <menu:menuitem menu:id=".uno:MacroDialog" menu:helpid="5959" menu:label="" />
                 </menu:menupopup>
             </menu:menu>
+
+            <menu:menuseparator/>
+            <menu:menuitem menu:id="service:com.sun.star.deployment.ui.PackageManagerDialog" menu:helpid="42772" />
+            <menu:menuseparator/>
+
             <menu:menuitem menu:id=".uno:OptionsTreeDialog" menu:helpid="31630" menu:label="" />
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:DB/IndexDesign" menu:helpid="12251" menu:label="" />
@@ -41,6 +43,7 @@
     </menu:menu>
     <menu:menu menu:id=".uno:WindowList" menu:label="" >
         <menu:menupopup>
+            <menu:menuitem menu:id=".uno:CloseWin" menu:helpid="5621" menu:label="" />
         </menu:menupopup>
     </menu:menu>
     <menu:menu menu:id=".uno:HelpMenu" menu:label="" >
