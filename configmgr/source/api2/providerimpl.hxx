@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 16:24:15 $
+ *  last change: $Author: kz $ $Date: 2004-03-23 10:23:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,6 @@ namespace configmgr
     class OProviderImpl : public ITreeManager, public IDefaultableTreeManager, public IInterface
     {
         friend class OProvider;
-        OProvider*                          m_pProvider;        /// used for ref counting, uno representation
     public:
         //==========================================================================
         //= FactoryArguments
@@ -208,9 +207,11 @@ namespace configmgr
         typedef uno::Reference< uno::XComponentContext >        CreationContext;
         typedef uno::Reference< script::XTypeConverter >        TypeConverterRef;
     private:
+        OProvider*                          m_pProvider;        /// used for ref counting, uno representation
+
         TypeConverterRef                    m_xTypeConverter;
         RequestOptions                      m_aDefaultOptions;
-        configapi::ApiProviderInstances*    m_pNewProviders;    /// order depedency - this must be after the TreeManager
+        configapi::ApiProviderInstances*    m_pNewProviders;
         mutable osl::Mutex                  m_aTreeManagerMutex;
         TreeManager*                        m_pTreeManager;     /// the tree cache. Will hold a reference to us as long as it life
 
