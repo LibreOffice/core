@@ -1,4 +1,4 @@
-lc	lingucomponent	:	pspell NULL
+lc	lingucomponent	:	linguistic pspell NULL
 lc	lingucomponent								usr1	-	all	lg_mkout NULL
 lc	lingucomponent\source\thesaurus\parser					nmake	-	all	lc_parser NULL
 lc	lingucomponent\source\thesaurus\libth					nmake	-	all	lc_libth NULL
