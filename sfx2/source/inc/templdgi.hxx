@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdgi.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:35 $
+ *  last change: $Author: pb $ $Date: 2001-06-15 10:58:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,8 +121,8 @@ public:
             { EnableDrop( TRUE ); }
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt );
-    virtual BOOL    Drop( const DropEvent& rEvt );
-    virtual BOOL    QueryDrop( DropEvent& rEvt );
+    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
+    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
 
     USHORT          GetModifier() const { return nModifier; }
     SvLBoxEntry*    GetPreDropEntry() const { return pPreDropEntry; }

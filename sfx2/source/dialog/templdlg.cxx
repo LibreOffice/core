@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-11 09:59:12 $
+ *  last change: $Author: pb $ $Date: 2001-06-15 11:00:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,8 +247,7 @@ void DropListBox_Impl::MouseButtonDown( const MouseEvent& rMEvt )
     SvTreeListBox::MouseButtonDown( rMEvt );
 }
 
-
-BOOL DropListBox_Impl::QueryDrop( DropEvent& rEvt )
+sal_Int8 DropListBox_Impl::AcceptDrop( const AcceptDropEvent& rEvt )
 
 /*  [Beschreibung ]
 
@@ -260,64 +259,75 @@ BOOL DropListBox_Impl::QueryDrop( DropEvent& rEvt )
 */
 
 {
-    SvDataObjectRef xObj = SvDataObject::PasteDragServer( rEvt );
-    SvObjectDescriptor aObj( xObj );
-    SfxObjectShell* pDocShell = pDialog->GetObjectShell();
-    if ( pDocShell && aObj.GetClassName() == pDocShell->GetFactory() )
+    if ( IsDropFormatSupported( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR ) )
     {
-        if( rEvt.IsDefaultAction() )
-            rEvt.SetAction( DROP_COPY );
-        if( rEvt.GetAction() != DROP_COPY )
-            return FALSE;
-        SvLBoxEntry *pEntry = GetEntry( rEvt.GetPosPixel(), TRUE );
-        if( pPreDropEntry && ( pEntry != pPreDropEntry || rEvt.IsLeaveWindow()) )
+        SvLBoxEntry* pEntry = GetEntry( rEvt.maPosPixel, TRUE );
+        if ( pPreDropEntry && ( pEntry != pPreDropEntry || rEvt.mbLeaving ) )
         {
             ShowTargetEmphasis( pPreDropEntry, FALSE );
             pPreDropEntry = 0;
         }
-        if( pEntry && pEntry!=pPreDropEntry && !rEvt.IsLeaveWindow() )
+        if ( pEntry && pEntry != pPreDropEntry && !rEvt.mbLeaving )
         {
             ShowTargetEmphasis( pEntry, TRUE );
-//          MakeVisible( pEntry );
             pPreDropEntry = pEntry;
         }
-        if( !pEntry && pDialog->bNewByExampleDisabled ||
-            pEntry && pDialog->bUpdateByExampleDisabled )
-            return FALSE;
+        if ( !pEntry && pDialog->bNewByExampleDisabled || pEntry && pDialog->bUpdateByExampleDisabled )
+            return DND_ACTION_NONE;
         else
-            return TRUE;
+            return DND_ACTION_COPY;
     }
-    return SvTreeListBox::QueryDrop( rEvt );
+
+    return DND_ACTION_NONE;
 }
 
 //-------------------------------------------------------------------------
 
-BOOL DropListBox_Impl::Drop( const DropEvent& rEvt )
+sal_Int8 DropListBox_Impl::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
-    BOOL bRet = TRUE;
-    SvDataObjectRef xObj = SvDataObject::PasteDragServer( rEvt );
-    SvObjectDescriptor aObj( xObj );
+    sal_Int8 nRet = DND_ACTION_NONE;
     SfxObjectShell* pDocShell = pDialog->GetObjectShell();
-    if ( pDocShell && aObj.GetClassName() == pDocShell->GetFactory() )
+    TransferableDataHelper aHelper( rEvt.maDropEvent.Transferable );
+    sal_uInt32 nFormatCount = aHelper.GetFormatCount();
+    if ( pDocShell )
     {
-        SvLBoxEntry *pEntry = GetEntry( rEvt.GetPosPixel(), TRUE );
-        if( pEntry && pEntry!=pPreDropEntry )
+        sal_Bool bFormatFound = sal_False;
+
+        for ( sal_uInt32 i = 0; i < nFormatCount; ++i )
         {
-            ShowTargetEmphasis( pEntry, FALSE );
+            SotFormatStringId nId = aHelper.GetFormat(i);
+            TransferableObjectDescriptor aDesc;
+
+            if ( aHelper.GetTransferableObjectDescriptor( nId, aDesc ) )
+            {
+                if ( pDocShell->GetFactory() == aDesc.maClassName )
+                {
+                    SvLBoxEntry* pEntry = GetEntry( rEvt.maPosPixel, TRUE );
+
+                    if ( pEntry && pEntry != pPreDropEntry )
+                        ShowTargetEmphasis( pEntry, FALSE );
+
+                    if ( pEntry )
+                    {
+                        pDialog->SelectStyle( GetEntryText( pEntry )  );
+                        pDialog->ActionSelect( SID_STYLE_UPDATE_BY_EXAMPLE );
+                    }
+                    else
+                        pDialog->ActionSelect( SID_STYLE_NEW_BY_EXAMPLE );
+
+                    bFormatFound = sal_True;
+                    nRet =  rEvt.mnAction;
+                    break;
+                }
+            }
         }
-        if( pEntry )
-        {
-            pDialog->SelectStyle( GetEntryText( pEntry)  );
-            pDialog->ActionSelect( SID_STYLE_UPDATE_BY_EXAMPLE );
-        }
-        else
-        {
-            pDialog->ActionSelect( SID_STYLE_NEW_BY_EXAMPLE );
-        }
+
+        if ( !bFormatFound )
+            ErrorHandler::HandleError( ERRCODE_IO_WRONGFORMAT );
     }
-    else
-        bRet =  SvTreeListBox::Drop( rEvt );
-    return bRet;
+
+
+    return nRet;
 }
 
 //-------------------------------------------------------------------------
@@ -2150,8 +2160,13 @@ SfxTemplateDialog_Impl::SfxTemplateDialog_Impl(
     aFilterLb.SetFont( aFont );
     aActionTbL.SetHelpId( HID_TEMPLDLG_TOOLBOX_LEFT );
 
+#if SUPD < 635
+    SFX_IMAGEMANAGER()->RegisterToolBox( &aActionTbL, SFX_TOOLBOX_CHANGEOUTSTYLE );
+    SFX_IMAGEMANAGER()->RegisterToolBox( &aActionTbR, SFX_TOOLBOX_CHANGEOUTSTYLE );
+#else
     pB->GetImageManager()->RegisterToolBox( &aActionTbL, SFX_TOOLBOX_CHANGEOUTSTYLE );
     pB->GetImageManager()->RegisterToolBox( &aActionTbR, SFX_TOOLBOX_CHANGEOUTSTYLE );
+#endif
 }
 
 // ------------------------------------------------------------------------
@@ -2206,8 +2221,13 @@ void SfxCommonTemplateDialog_Impl::InvalidateBindings()
 
 SfxTemplateDialog_Impl::~SfxTemplateDialog_Impl()
 {
+#if SUPD < 635
+    SFX_IMAGEMANAGER()->ReleaseToolBox( &aActionTbL );
+    SFX_IMAGEMANAGER()->ReleaseToolBox( &aActionTbR );
+#else
     pBindings->GetImageManager()->ReleaseToolBox( &aActionTbL );
     pBindings->GetImageManager()->ReleaseToolBox( &aActionTbR );
+#endif
 }
 
 //-------------------------------------------------------------------------
