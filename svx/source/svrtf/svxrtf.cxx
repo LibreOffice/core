@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxrtf.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jp $ $Date: 2001-11-21 16:02:33 $
+ *  last change: $Author: jp $ $Date: 2001-11-27 16:18:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1110,12 +1110,14 @@ void SvxRTFParser::AttrGroupEnd()   // den akt. Bearbeiten, vom Stack loeschen
                         // eine neue Gruppe aufmachen
                         SvxRTFItemStackType* pNew = new SvxRTFItemStackType(
                                                 *pAkt, *pInsPos, TRUE );
-                        pNew->aAttrSet.SetParent( pAkt->aAttrSet.GetParent() );
                         pNew->SetRTFDefaults( GetRTFDefaults() );
 
                         // alle bis hierher gueltigen Attribute "setzen"
                         AttrGroupEnd();
+                        pAkt = aAttrStack.Top();  // can be changed after AttrGroupEnd!
+                        pNew->aAttrSet.SetParent( pAkt ? &pAkt->aAttrSet : 0 );
                         aAttrStack.Push( pNew );
+                        pAkt = pNew;
                     }
                 }
                 else
@@ -1245,7 +1247,7 @@ SvxRTFItemStackType::SvxRTFItemStackType(
         const SvxPosition& rPos )
     : aAttrSet( rPool, pWhichRange ),
     pChildList( 0 ),
-    nStyleNo( 0)
+    nStyleNo( 0 )
 {
     pSttNd = rPos.MakeNodeIdx();
     nSttCnt = rPos.GetCntIdx();
