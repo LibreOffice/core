@@ -25,9 +25,9 @@
 <LongDateYearSeparator>.</LongDateYearSeparator>
 </Separators>
 <Markers>
-<QuotationStart>‘</QuotationStart>
-<QuotationEnd>’</QuotationEnd>
-<DoubleQuotationStart>“</DoubleQuotationStart>
+<QuotationStart>»</QuotationStart>
+<QuotationEnd>«</QuotationEnd>
+<DoubleQuotationStart>„</DoubleQuotationStart>
 <DoubleQuotationEnd>”</DoubleQuotationEnd>
 </Markers>
 <TimeAM>DE</TimeAM>
@@ -326,17 +326,17 @@
 <Eras>
 <Era>
 <EraID>bc</EraID>
-<DefaultAbbrvName>i.e.</DefaultAbbrvName>
-<DefaultFullName>i.e.</DefaultFullName>
+<DefaultAbbrvName>i. e.</DefaultAbbrvName>
+<DefaultFullName>i. e.</DefaultFullName>
 </Era>
 <Era>
 <EraID>ad</EraID>
-<DefaultAbbrvName>i.u.</DefaultAbbrvName>
-<DefaultFullName>i.u.</DefaultFullName>
+<DefaultAbbrvName>i. sz.</DefaultAbbrvName>
+<DefaultFullName>i. sz.</DefaultFullName>
 </Era>
 </Eras>
 <StartDayOfWeek>
-<DayID>sun</DayID>
+<DayID>mon</DayID>
 </StartDayOfWeek>
 <MinimalDaysInFirstWeek>1</MinimalDaysInFirstWeek>
 </Calendar>
@@ -355,10 +355,10 @@
 <ReservedWords>
 <trueWord>Igaz</trueWord>
 <falseWord>Hamis</falseWord>
-<quarter1Word>1.negyed</quarter1Word>
-<quarter2Word>2.negyed</quarter2Word>
-<quarter3Word>3.negyed</quarter3Word>
-<quarter4Word>4.negyed</quarter4Word>
+<quarter1Word>1. negyed</quarter1Word>
+<quarter2Word>2. negyed</quarter2Word>
+<quarter3Word>3. negyed</quarter3Word>
+<quarter4Word>4. negyed</quarter4Word>
 <aboveWord>felett</aboveWord>
 <belowWord>alatt</belowWord>
 <quarter1Abbreviation>N1</quarter1Abbreviation>
