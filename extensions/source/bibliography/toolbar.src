@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbar.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 02:11:39 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:03:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,7 +299,7 @@ ToolBox RID_BIB_TOOLBAR
             Text[ japanese ] = "√ﬁ∞¿ø∞Ω";
             Text[ korean ] = "µ•¿Ã≈Õ º“Ω∫(D)";
             Text[ chinese_simplified ] = " ˝æ›‘¥(D)";
-            Text[ chinese_traditional ] = "∏ÍÆ∆®”∑Ω(D)";
+            Text[ chinese_traditional ] = "∏ÍÆ∆∑Ω(D)";
             Text[ arabic ] = "„’œ— «·»Ì«‰« ";
             Text[ turkish ] = "Veri kayna˝";
             Text[ language_user1 ] = " ";
@@ -489,6 +489,7 @@ ToolBox RID_BIB_TOOLBAR
     };
     Scroll = TRUE ;
 };
+
 
 
 
