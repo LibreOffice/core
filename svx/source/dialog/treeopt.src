@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeopt.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:58:03 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 15:30:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -405,7 +405,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
     {
         ItemList [ de ] =
         {
-            < "Tabellendokument" ; 0; > ;
+            < "%PRODUCTNAME Calc" ; 0; > ;
             < "Allgemein" ;         SID_SC_TP_LAYOUT            ;> ;
             < "Ansicht" ;           SID_SC_TP_CONTENT           ;> ;
             < "International" ;     RID_OFA_TP_INTERNATIONAL    ;> ;
