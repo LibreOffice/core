@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EnhancedCustomShape3d.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 14:03:23 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 14:11:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,13 +68,16 @@
 #include <vector>
 #include <poly3d.hxx>
 #include <goodies/point3d.hxx>
+#ifndef _COM_SUN_STAR_DRAWING_PROJECTIONMODE_HPP_
+#include <com/sun/star/drawing/ProjectionMode.hpp>
+#endif
 
 class EnhancedCustomShape3d
 {
     class Transformation2D
     {
-        Point       aCenter;
-        sal_Bool    bParallel;
+        Point                                   aCenter;
+        com::sun::star::drawing::ProjectionMode eProjectionMode;
 
         // parallel projection
         double      fSkewAngle;
@@ -92,9 +95,9 @@ class EnhancedCustomShape3d
 
                         Transformation2D( const SdrObject* pCustomShape, const Rectangle& rBoundRect, const double* pMap );
 
-            void        ApplySkewSettings( Polygon3D& rPolyPoly3D );
-            Point       Transform2D( const Vector3D& rPoint );
-            sal_Bool    IsParallel() const { return bParallel; };
+            void        ApplySkewSettings( Polygon3D& rPolyPoly3D ) const;
+            Point       Transform2D( const Vector3D& rPoint ) const;
+            sal_Bool    IsParallel() const;
     };
 
     friend class Transformation2D;
