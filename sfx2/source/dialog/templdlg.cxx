@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-20 11:57:59 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 12:49:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,18 @@
 #ifndef _UNOTOOLS_INTLWRAPPER_HXX
 #include <unotools/intlwrapper.hxx>
 #endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
+#include <com/sun/star/container/XNameAccess.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
 
 #include "sfxhelp.hxx"
 #include "app.hxx"
@@ -119,7 +131,7 @@
 #include "appdata.hxx"
 #include "objshimp.hxx"
 #include "viewfrm.hxx"
-
+using namespace ::com::sun::star;
 //=========================================================================
 
 // Fenster wird ab jetzt dynamisch erstellt. Daher hier R"ander usw.
@@ -954,6 +966,11 @@ void SfxCommonTemplateDialog_Impl::ReadResource()
 //Listbox.
 //Reihenfolge aufsteigender SIDs: Niedrige SIDs werden als erstes angezeigt,
 //wenn Vorlagen mehrerer Familien aktiv sind.
+
+    // in the Writer the UpdateStyleByExample Toolbox button is removed and
+    // the NewStyle button gets a PopupMenu
+    if(nCount > 4)
+        ReplaceUpdateButtonByMenu();
 
     for( ; nCount--; )
     {
@@ -1875,6 +1892,9 @@ void SfxCommonTemplateDialog_Impl::ActionSelect(USHORT nEntry)
                     (USHORT)GetFamilyItem_Impl()->GetFamily());
             break;
         }
+        case SID_TEMPLATE_LOAD:
+            SFX_APP()->GetDispatcher_Impl()->Execute(nEntry);
+        break;
         default: DBG_ERROR("not implemented"); break;
     }
 }
@@ -2263,6 +2283,7 @@ SfxTemplateDialog_Impl::SfxTemplateDialog_Impl(
 
     m_aActionTbL.SetSelectHdl(LINK(this, SfxTemplateDialog_Impl, ToolBoxLSelect));
     m_aActionTbR.SetSelectHdl(LINK(this, SfxTemplateDialog_Impl, ToolBoxRSelect));
+    m_aActionTbR.SetClickHdl(LINK(this, SfxTemplateDialog_Impl, ToolBoxRClick));
     m_aActionTbL.Show();
     m_aActionTbR.Show();
     Font aFont=aFilterLb.GetFont();
@@ -2301,6 +2322,15 @@ void SfxTemplateDialog_Impl::InsertFamilyItem(USHORT nId,const SfxStyleFamilyIte
     }
     m_aActionTbL.InsertItem( nId, pItem->GetImage(), pItem->GetText(), 0, 0);
     m_aActionTbL.SetHelpId( nId, nHelpId );
+}
+
+// ------------------------------------------------------------------------
+
+void SfxTemplateDialog_Impl::ReplaceUpdateButtonByMenu()
+{
+    m_aActionTbR.HideItem(SID_STYLE_UPDATE_BY_EXAMPLE);
+    m_aActionTbR.SetItemBits( SID_STYLE_NEW_BY_EXAMPLE,
+            TIB_DROPDOWN|m_aActionTbR.GetItemBits( SID_STYLE_NEW_BY_EXAMPLE ));
 }
 
 // ------------------------------------------------------------------------
@@ -2530,15 +2560,97 @@ IMPL_LINK_INLINE_START( SfxTemplateDialog_Impl, ToolBoxLSelect, ToolBox *, pBox 
 IMPL_LINK_INLINE_END( SfxTemplateDialog_Impl, ToolBoxLSelect, ToolBox *, pBox )
 
 //-------------------------------------------------------------------------
+::rtl::OUString lcl_GetLabel(uno::Any& rAny)
+{
+    ::rtl::OUString sRet;
+    uno::Sequence< beans::PropertyValue >aPropSeq;
+    if ( rAny >>= aPropSeq )
+    {
+        for( sal_Int32 i = 0; i < aPropSeq.getLength(); i++ )
+        {
+            if ( aPropSeq[i].Name.equalsAscii( "Label" ))
+            {
+                aPropSeq[i].Value >>= sRet;
+                break;
+            }
+        }
+    }
+    return sRet;
+}
+//-------------------------------------------------------------------------
 
-IMPL_LINK_INLINE_START( SfxTemplateDialog_Impl, ToolBoxRSelect, ToolBox *, pBox )
+IMPL_LINK( SfxTemplateDialog_Impl, ToolBoxRSelect, ToolBox *, pBox )
 {
     const USHORT nEntry = pBox->GetCurItemId();
-    ActionSelect(nEntry);
+    if(nEntry != SID_STYLE_NEW_BY_EXAMPLE ||
+            TIB_DROPDOWN != (pBox->GetItemBits(nEntry)&TIB_DROPDOWN))
+        ActionSelect(nEntry);
     return 0;
 }
-IMPL_LINK_INLINE_END( SfxTemplateDialog_Impl, ToolBoxRSelect, ToolBox *, pBox )
+//-------------------------------------------------------------------------
+IMPL_LINK( SfxTemplateDialog_Impl, ToolBoxRClick, ToolBox *, pBox )
+{
+    const USHORT nEntry = pBox->GetCurItemId();
+    if(nEntry == SID_STYLE_NEW_BY_EXAMPLE &&
+            TIB_DROPDOWN == (pBox->GetItemBits(nEntry)&TIB_DROPDOWN))
+    {
+        //create a popup menu in Writer
+        PopupMenu *pMenu = new PopupMenu;
+        uno::Reference< container::XNameAccess > xNameAccess(
+                    ::comphelper::getProcessServiceFactory()->
+                    createInstance( ::rtl::OUString::createFromAscii(
+                            "drafts.com.sun.star.frame.UICommandDescription") ), uno::UNO_QUERY );
+        uno::Reference< container::XNameAccess > xUICommands;
+        if ( xNameAccess.is() )
+        {
+            rtl::OUString sTextDoc = ::rtl::OUString::createFromAscii("com.sun.star.text.TextDocument");
+            if(xNameAccess->hasByName(sTextDoc))
+            {
+                uno::Any a = xNameAccess->getByName( sTextDoc );
+                a >>= xUICommands;
+            }
+        }
+        if(!xUICommands.is())
+            return 0;
+        try
+        {
+            uno::Sequence< beans::PropertyValue > aPropSeq;
+            uno::Any aCommand = xUICommands->getByName(::rtl::OUString::createFromAscii(".uno:StyleNewByExample"));
+            ::rtl::OUString sLabel = lcl_GetLabel( aCommand );
+            pMenu->InsertItem( SID_STYLE_NEW_BY_EXAMPLE, sLabel );
+            pMenu->SetHelpId(SID_STYLE_NEW_BY_EXAMPLE, HID_TEMPLDLG_NEWBYEXAMPLE);
 
+            aCommand = xUICommands->getByName(::rtl::OUString::createFromAscii(".uno:StyleUpdateByExample"));
+            sLabel = lcl_GetLabel( aCommand );
+
+            pMenu->InsertItem( SID_STYLE_UPDATE_BY_EXAMPLE, sLabel );
+            pMenu->SetHelpId(SID_STYLE_NEW_BY_EXAMPLE, HID_TEMPLDLG_NEWBYEXAMPLE);
+
+            aCommand = xUICommands->getByName(::rtl::OUString::createFromAscii(".uno:LoadStyles"));
+            sLabel = lcl_GetLabel( aCommand );
+            pMenu->InsertItem( SID_TEMPLATE_LOAD, sLabel );
+            pMenu->SetHelpId(SID_STYLE_NEW_BY_EXAMPLE, SID_TEMPLATE_LOAD);
+
+            pMenu->SetSelectHdl(LINK(this, SfxTemplateDialog_Impl, MenuSelectHdl));
+            pMenu->Execute( pBox,
+                pBox->GetItemRect(nEntry).BottomLeft());
+            pBox->EndSelection();
+        }
+        catch(uno::Exception&)
+        {
+        }
+        delete pMenu;
+        pBox->Invalidate();
+    }
+    return 0;
+}
+//-------------------------------------------------------------------------
+IMPL_LINK( SfxTemplateDialog_Impl, MenuSelectHdl, Menu*, pMenu)
+{
+    USHORT nMenuId = pMenu->GetCurItemId();
+    ActionSelect(nMenuId);
+    return 0;
+}
 //-------------------------------------------------------------------------
 
 SfxTemplateCatalog_Impl::SfxTemplateCatalog_Impl( Window* pParent, SfxBindings* pB,
@@ -2809,6 +2921,10 @@ void SfxCommonTemplateDialog_Impl::UpdateFamily_Impl()
          0 != pFamilyState[ nActFamily - 1 ] )
         Execute_Impl( SID_STYLE_APPLY, GetSelectedEntry(),
                       String(), (USHORT)GetFamilyItem_Impl()->GetFamily() );
+}
+void SfxCommonTemplateDialog_Impl::ReplaceUpdateButtonByMenu()
+{
+    //does nothing
 }
 
 void SfxTemplateDialog::StateChanged( StateChangedType nStateChange )
