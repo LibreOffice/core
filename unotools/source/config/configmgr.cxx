@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configmgr.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: pb $ $Date: 2001-01-23 11:53:34 $
+ *  last change: $Author: os $ $Date: 2001-02-12 12:39:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,7 +189,7 @@ Reference< XMultiServiceFactory > ConfigManager::GetConfigurationProvider()
         sMsg += OString(rEx.Message.getStr(),
                     rEx.Message.getLength(),
                      RTL_TEXTENCODING_ASCII_US);
-        OSL_DEBUG_ONLY(sMsg.getStr());
+        OSL_ENSHURE(sal_False, sMsg.getStr());
     }
 #else
     catch(Exception&){}
@@ -225,7 +225,7 @@ Reference< XMultiServiceFactory > ConfigManager::GetLocalConfigurationProvider()
         sMsg += OString(rEx.Message.getStr(),
                     rEx.Message.getLength(),
                      RTL_TEXTENCODING_ASCII_US);
-        OSL_DEBUG_ONLY(sMsg.getStr());
+        OSL_ENSHURE(sal_False, sMsg.getStr());
     }
 #else
     catch(Exception&){}
@@ -244,13 +244,25 @@ Reference< XHierarchicalNameAccess > ConfigManager::AddConfigItem(utl::ConfigIte
     {
         ConfigItemListEntry_Impl& rEntry = *aListIter;
         if(rEntry.pConfigItem == &rCfgItem)
-            OSL_DEBUG_ONLY("AddConfigItem: already inserted!");
+            OSL_ENSHURE(sal_False, "AddConfigItem: already inserted!");
     }
 #endif
     OUString sPath = C2U(cConfigBaseURL);
     sPath += rCfgItem.GetSubTreeName();
     Sequence< Any > aArgs(1);
-    aArgs[0] <<= sPath;
+    PropertyValue aPath;
+    aPath.Name = C2U("nodepath");
+    aPath.Value <<= sPath;
+    aArgs[0] <<= aPath;
+    if(rCfgItem.GetMode()&CONFIG_MODE_DELAYED_UPDATE)
+    {
+        aArgs.realloc(2);
+        PropertyValue aUpdate;
+        aUpdate.Name = C2U("lazywrite");
+        sal_Bool bTrue = sal_True;
+        aUpdate.Value.setValue(&bTrue, ::getBooleanCppuType());
+        aArgs.getArray()[1] <<= aUpdate;
+    }
 
     Reference< XMultiServiceFactory > xCfgProvider = GetConfigurationProvider();
     Reference< XInterface > xIFace;
@@ -270,7 +282,7 @@ Reference< XHierarchicalNameAccess > ConfigManager::AddConfigItem(utl::ConfigIte
             sMsg += OString(rEx.Message.getStr(),
                         rEx.Message.getLength(),
                          RTL_TEXTENCODING_ASCII_US);
-            OSL_DEBUG_ONLY(sMsg.getStr());
+            OSL_ENSHURE(sal_False, sMsg.getStr());
         }
 #else
         catch(Exception&){}
@@ -469,7 +481,7 @@ Reference< XHierarchicalNameAccess> ConfigManager::GetHierarchyAccess(const OUSt
             sMsg += OString(rEx.Message.getStr(),
                         rEx.Message.getLength(),
                          RTL_TEXTENCODING_ASCII_US);
-            OSL_DEBUG_ONLY(sMsg.getStr());
+            OSL_ENSHURE(sal_False, sMsg.getStr());
         }
 #else
         catch(Exception&){}
@@ -503,7 +515,7 @@ Any ConfigManager::GetLocalProperty(const OUString& rProperty)
         sMsg += OString(rEx.Message.getStr(),
                     rEx.Message.getLength(),
                      RTL_TEXTENCODING_ASCII_US);
-        OSL_DEBUG_ONLY(sMsg.getStr());
+        OSL_ENSHURE(sal_False, sMsg.getStr());
     }
 #else
     catch(Exception&){}
@@ -541,7 +553,7 @@ void ConfigManager::PutLocalProperty(const OUString& rProperty, const Any& rValu
             sMsg += OString(rEx.Message.getStr(),
                         rEx.Message.getLength(),
                          RTL_TEXTENCODING_ASCII_US);
-            OSL_DEBUG_ONLY(sMsg.getStr());
+            OSL_ENSHURE(sal_False, sMsg.getStr());
         }
 #else
         catch(Exception& ){}
