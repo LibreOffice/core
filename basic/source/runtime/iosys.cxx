@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iosys.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ab $ $Date: 2001-06-13 14:35:13 $
+ *  last change: $Author: ab $ $Date: 2001-07-11 16:09:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
+#include <com/sun/star/ucb/XContentProvider.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XStream.hpp>
@@ -359,9 +360,9 @@ BOOL needSecurityRestrictions( void )
 #endif
 }
 
-// Returns TRUE if UNO is available, otherwise the old
-// file system implementation has to be used
-// (Implemented in iosys.cxx)
+// Returns TRUE if UNO is available, otherwise the old file
+// system implementation has to be used
+// #89378 New semantic: Don't just ask for UNO but for UCB
 BOOL hasUno( void )
 {
 #ifdef _USE_UNO
@@ -373,7 +374,21 @@ BOOL hasUno( void )
         bNeedInit = FALSE;
         Reference< XMultiServiceFactory > xSMgr = getProcessServiceFactory();
         if( !xSMgr.is() )
+        {
+            // No service manager at all
             bRetVal = FALSE;
+        }
+        else
+        {
+            Reference< XContentProvider > xFileProvider( xSMgr->createInstance( OUString::createFromAscii
+                    ( "com.sun.star.ucb.FileContentProvider" ) ), UNO_QUERY );
+            if( !xFileProvider.is() )
+            {
+                // No UCB
+                bRetVal = FALSE;
+            }
+
+        }
     }
     return bRetVal;
 #else
