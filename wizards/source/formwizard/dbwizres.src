@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbwizres.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: bc $ $Date: 2002-07-15 17:55:29 $
+ *  last change: $Author: bc $ $Date: 2002-07-15 18:01:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5025,7 +5025,7 @@ String RID_DB_REPORT_WIZARD_START + 60
 
 String RID_DB_REPORT_WIZARD_START + 61
 {
-    Text = "Die TextTabelle '<TABLENAME>' ist nicht vorhanden.";
+    Text = "Die Tabelle '<TABLENAME>' ist nicht vorhanden.";
     Text [ english_us ] = "The TextTable '<TABLENAME>' does not exist.";
 };
 
