@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodraw.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 10:57:15 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:56:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,17 +240,6 @@ class SwXShape : public SwXShapeBaseClass,
         @author OD
     */
     com::sun::star::awt::Point _GetAttrPosition();
-
-    /** method to convert the position (translation) of the drawing object to
-        the layout direction, the drawing object is in
-
-        OD 2004-07-27 #i31698#
-
-        @author OD
-    */
-    ::com::sun::star::awt::Point _ConvertPositionToLayoutDir(
-                            const ::com::sun::star::awt::Point _aObjPosInHoriL2R,
-                            const ::com::sun::star::awt::Size _aObjSize );
 
     /** method to convert the position (translation) of the drawing object to
         the layout direction horizontal left-to-right.
