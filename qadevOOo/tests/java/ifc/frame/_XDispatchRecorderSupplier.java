@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XDispatchRecorderSupplier.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-09-08 10:39:02 $
+ *  last change:$Date: 2003-10-06 13:30:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,23 +61,22 @@
 
 package ifc.frame;
 
-import lib.MultiMethodTest;
-import lib.StatusException;
-import util.SOfficeFactory;
-import util.utils;
-
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.frame.XDesktop;
 import com.sun.star.frame.XDispatch;
 import com.sun.star.frame.XDispatchProvider;
 import com.sun.star.frame.XDispatchRecorder;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.frame.XDispatchRecorderSupplier;
 import com.sun.star.frame.XFrame;
 import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.util.URL;
+import lib.MultiMethodTest;
+import lib.StatusException;
+import util.SOfficeFactory;
+import util.utils;
 
 /**
 * Testing <code>com.sun.star.frame.XDispatchRecorderSupplier</code>
@@ -118,14 +117,14 @@ public class _XDispatchRecorderSupplier extends MultiMethodTest {
      * service created for obtaining document's frame.
      */
     protected void before() {
-        SOfficeFactory SOF = SOfficeFactory.getFactory((XMultiServiceFactory)tParam.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory((XMultiServiceFactory) tParam.getMSF());
 
         try {
             log.println( "creating a text document" );
             xTextDoc = SOF.createTextDoc(null);
 
-            Object inst = (XInterface)((XMultiServiceFactory)tParam.getMSF())
-                            .createInstance("com.sun.star.frame.Desktop");
+            Object inst = (XInterface)((XMultiServiceFactory)tParam.getMSF()).createInstance
+                ("com.sun.star.frame.Desktop");
             desktop = (XDesktop) UnoRuntime.queryInterface
                 (XDesktop.class, inst);
         } catch ( com.sun.star.uno.Exception e ) {
@@ -207,7 +206,7 @@ public class _XDispatchRecorderSupplier extends MultiMethodTest {
         boolean res = true;
         if (recorder == null) {
             try {
-                Object inst = ((XMultiServiceFactory)tParam.getMSF()).createInstance
+                Object inst = ((XMultiServiceFactory) tParam.getMSF()).createInstance
                     ("com.sun.star.comp.framework.DispatchRecorder");
                 recorder = (XDispatchRecorder) UnoRuntime.queryInterface
                     (XDispatchRecorder.class, inst);
@@ -225,7 +224,7 @@ public class _XDispatchRecorderSupplier extends MultiMethodTest {
         XDispatchProvider xDispProv = (XDispatchProvider)
             UnoRuntime.queryInterface(XDispatchProvider.class, fr);
 
-        URL dispURL = utils.parseURL((XMultiServiceFactory)tParam.getMSF(), ".uno:InsertText");
+        URL dispURL = utils.parseURL((XMultiServiceFactory) tParam.getMSF(), ".uno:InsertText");
         XDispatch xDisp = xDispProv.queryDispatch(dispURL,"",0);
 
         PropertyValue[] args = new PropertyValue[1];
@@ -240,16 +239,6 @@ public class _XDispatchRecorderSupplier extends MultiMethodTest {
         boolean locRes = macro != null &&
             macro.indexOf("XDispatchRecorderSupplier")>-1 &&
             macro.indexOf(".uno:InsertText")>-1;
-        if (locRes) log.println("OK");
-        else log.println("FAILED");
-        res &= locRes;
-        log.println("Recorder macro :\n" + macro);
-
-        log.print("Trying to dispatch with invalid URL ...");
-        URL badURL = utils.parseURL((XMultiServiceFactory)tParam.getMSF(), ".uno:AbraCadabra");
-        oObj.dispatchAndRecord(badURL, args, xDisp);
-        macro = recorder.getRecordedMacro();
-        locRes &= macro != null && macro.indexOf(".uno:AbraCadabra")==-1;
         if (locRes) log.println("OK");
         else log.println("FAILED");
         res &= locRes;
