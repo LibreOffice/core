@@ -2,9 +2,9 @@
  *
  *  $RCSfile: YDriver.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:07:42 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 16:21:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,7 +236,8 @@ namespace connectivity
                                 ,0
                                 ,makeAny(sal_True)
                                 ,PropertyState_DIRECT_VALUE) );
-            return Sequence< PropertyValue >(aProps.begin(),aProps.size());
+            PropertyValue* pProps = aProps.empty() ? 0 : &aProps[0];
+            return Sequence< PropertyValue >(pProps, aProps.size());
         }
     }
     //--------------------------------------------------------------------
