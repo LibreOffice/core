@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autoregisterhelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: lla $ $Date: 2003-01-09 11:46:11 $
+ *  last change: $Author: lla $ $Date: 2003-01-20 11:10:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,7 @@ AutomaticRegisterHelper::AutomaticRegisterHelper(rtl::OUString const& _sDLLName,
 
         aCallback.aCallbackDispatch  = &CallbackDispatch;
 
+        // special parameter for API testing
         if (_aOptions.hasOpt("-forward"))
         {
             aCallback.psForward = _aOptions.getOpt("-forward").getStr();
@@ -128,7 +129,7 @@ AutomaticRegisterHelper::AutomaticRegisterHelper(rtl::OUString const& _sDLLName,
         else
         {
             // ERROR, the function seams not to be what we thing it's to be.
-            fprintf(stderr, "error: Internal test failed. Value Magic2 != Magic\n");
+            fprintf(stderr, "error: Internal check failed. Structure inconsistent, Value Magic2 != Magic.\nPlease recompile your test libraries.");
             exit(-1);
         }
     }

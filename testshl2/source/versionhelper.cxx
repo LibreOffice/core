@@ -2,9 +2,9 @@
  *
  *  $RCSfile: versionhelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: lla $ $Date: 2003-01-09 11:46:11 $
+ *  last change: $Author: lla $ $Date: 2003-01-20 11:10:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,12 +81,12 @@ VersionHelper::VersionHelper(rtl::OUString const& _sDLLName, GetOpt & _aOptions)
 
 void VersionHelper::print(std::ostream &stream)
 {
-    stream << m_pInfo->aTime   << std::endl;
-    stream << m_pInfo->aDate   << std::endl;
-    stream << m_pInfo->aUpd    << std::endl;
-    stream << m_pInfo->aMinor  << std::endl;
-    stream << m_pInfo->aBuild  << std::endl;
-    stream << m_pInfo->aInpath << std::endl;
+    stream << "  Time:" << m_pInfo->aTime   << std::endl;
+    stream << "  Date:" << m_pInfo->aDate   << std::endl;
+    stream << "   Upd:" << m_pInfo->aUpd    << std::endl;
+    stream << " Minor:" << m_pInfo->aMinor  << std::endl;
+    stream << " Build:" << m_pInfo->aBuild  << std::endl;
+    stream << "Inpath:" << m_pInfo->aInpath << std::endl;
 }
 
 std::ostream &
@@ -98,3 +98,5 @@ operator <<( std::ostream &stream,
 }
 
 
+// versioner gpf zu haeufig.
+// perl script um alles herum

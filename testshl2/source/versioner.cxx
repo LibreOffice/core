@@ -2,9 +2,9 @@
  *
  *  $RCSfile: versioner.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: lla $ $Date: 2003-01-09 11:46:11 $
+ *  last change: $Author: lla $ $Date: 2003-01-20 11:10:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,10 +68,6 @@
 
 #include <iostream>
 
-/**
- * display usage screen
- */
-
 // ----------------------------------- Main -----------------------------------
 #if (defined UNX) || (defined OS2)
 int main( int argc, char* argv[] )
@@ -90,6 +86,13 @@ int _cdecl main( int argc, char* argv[] )
     // someone indicates that he needs help
     if ( opt.hasOpt( "-h" ) || opt.hasOpt( "-help" ) )
     {
+        opt.showUsage();
+        exit(0);
+    }
+
+    if (opt.getParams().empty())
+    {
+        std::cerr << "error: At least a library should given." << std::endl;
         opt.showUsage();
         exit(0);
     }
