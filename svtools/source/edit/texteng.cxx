@@ -2,9 +2,9 @@
  *
  *  $RCSfile: texteng.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mt $ $Date: 2002-10-17 17:16:28 $
+ *  last change: $Author: mt $ $Date: 2002-11-20 15:43:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2180,35 +2180,39 @@ BOOL TextEngine::CreateLines( ULONG nPara )
     const USHORT nInvalidStart = pTEParaPortion->GetInvalidPosStart();
     const USHORT nInvalidEnd =  nInvalidStart + Abs( nInvalidDiff );
     BOOL bQuickFormat = FALSE;
-    if ( pTEParaPortion->IsSimpleInvalid() && ( nInvalidDiff > 0 ) )
-    {
-        bQuickFormat = TRUE;
-    }
-    else if ( ( pTEParaPortion->IsSimpleInvalid() ) && ( nInvalidDiff < 0 ) )
-    {
-        // pruefen, ob loeschen ueber Portiongrenzen erfolgte...
-        USHORT nStart = nInvalidStart;  // DOPPELT !!!!!!!!!!!!!!!
-        USHORT nEnd = nStart - nInvalidDiff;  // neg.
-        bQuickFormat = TRUE;
-        USHORT nPos = 0;
-        USHORT nPortions = pTEParaPortion->GetTextPortions().Count();
-        for ( USHORT nTP = 0; nTP < nPortions; nTP++ )
-        {
-            // Es darf kein Start/Ende im geloeschten Bereich liegen.
-            TETextPortion* const pTP = pTEParaPortion->GetTextPortions().GetObject( nTP );
-            nPos += pTP->GetLen();
-            if ( ( nPos > nStart ) && ( nPos < nEnd ) )
-            {
-                bQuickFormat = FALSE;
-                break;
-            }
-        }
-    }
 
     if ( !pTEParaPortion->GetWritingDirectionInfos().Count() )
         ImpInitWritingDirections( nPara );
 
-    if ( bQuickFormat && ( pTEParaPortion->GetWritingDirectionInfos().Count() == 1 ) )
+    if ( pTEParaPortion->GetWritingDirectionInfos().Count() == 1 )
+    {
+        if ( pTEParaPortion->IsSimpleInvalid() && ( nInvalidDiff > 0 ) )
+        {
+            bQuickFormat = TRUE;
+        }
+        else if ( ( pTEParaPortion->IsSimpleInvalid() ) && ( nInvalidDiff < 0 ) )
+        {
+            // pruefen, ob loeschen ueber Portiongrenzen erfolgte...
+            USHORT nStart = nInvalidStart;  // DOPPELT !!!!!!!!!!!!!!!
+            USHORT nEnd = nStart - nInvalidDiff;  // neg.
+            bQuickFormat = TRUE;
+            USHORT nPos = 0;
+            USHORT nPortions = pTEParaPortion->GetTextPortions().Count();
+            for ( USHORT nTP = 0; nTP < nPortions; nTP++ )
+            {
+                // Es darf kein Start/Ende im geloeschten Bereich liegen.
+                TETextPortion* const pTP = pTEParaPortion->GetTextPortions().GetObject( nTP );
+                nPos += pTP->GetLen();
+                if ( ( nPos > nStart ) && ( nPos < nEnd ) )
+                {
+                    bQuickFormat = FALSE;
+                    break;
+                }
+            }
+        }
+    }
+
+    if ( bQuickFormat )
         RecalcTextPortion( nPara, nInvalidStart, nInvalidDiff );
     else
         CreateTextPortions( nPara, nInvalidStart );
