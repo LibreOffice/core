@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scriptinfo.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:28:26 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 13:42:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef _SCRIPTINFO_HXX
 #define _SCRIPTINFO_HXX
 
@@ -234,12 +233,12 @@ public:
                 The text node.
     @param  nPos
                 The string to modify.
-    @param  pCharacter
+    @param  cChar
                 The character that should replace the hidden characters.
-                If 0, the hidden ranges will be erased.
-*/
+ */
     static USHORT MaskHiddenRanges( const SwTxtNode& rNode, XubString& rText,
-                                    const xub_Unicode* pCharacter = 0 );
+                                    const xub_StrLen nStt, const xub_StrLen nEnd,
+                                    const xub_Unicode cChar );
 
     // examines the range [ nStart, nStart + nEnd ] if there are kanas
     // returns start index of kana entry in array, otherwise USHRT_MAX
