@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: cl $ $Date: 2002-02-05 11:09:23 $
+ *  last change: $Author: aw $ $Date: 2002-06-27 11:09:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,6 +185,10 @@
 
 #ifndef _XMLOFF_EVENTIMP_HXX
 #include "eventimp.hxx"
+#endif
+
+#ifndef _XMLOFF_XMLEMBEDDEDOBJECTIMPORTCONTEXT_HXX
+#include "XMLEmbeddedObjectImportContext.hxx"
 #endif
 
 using namespace ::rtl;
@@ -2344,7 +2348,12 @@ void SdXMLObjectShapeContext::StartElement( const ::com::sun::star::uno::Referen
     // #96717# in theorie, if we don't have a url we shouldn't even
     // export this ole shape. But practical its to risky right now
     // to change this so we better dispose this on load
-    if( !mbIsPlaceholder && (maHref.getLength() == 0) )
+    //if( !mbIsPlaceholder && (maHref.getLength() == 0) )
+    //  return;
+
+    // #100592# this BugFix prevents that a shape is created. CL
+    // is thinking about an alternative.
+    if( !(GetImport().getImportFlags() & IMPORT_EMBEDDED) && !mbIsPlaceholder && (maHref.getLength() == 0) )
         return;
 
     char* pService = "com.sun.star.drawing.OLE2Shape";
@@ -2417,6 +2426,18 @@ void SdXMLObjectShapeContext::StartElement( const ::com::sun::star::uno::Referen
 
 void SdXMLObjectShapeContext::EndElement()
 {
+    // #100592#
+    if( mxBase64Stream.is() )
+    {
+        OUString aPersistName( GetImport().ResolveEmbeddedObjectURL( maHref, OUString() ) );
+        const OUString  sURL(RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.EmbeddedObject:" ));
+
+        aPersistName = aPersistName.copy( sURL.getLength() );
+
+        uno::Reference< beans::XPropertySet > xProps(mxShape, uno::UNO_QUERY);
+        if( xProps.is() )
+            xProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "PersistName" ) ), uno::makeAny( aPersistName ) );
+    }
 }
 
 // this is called from the parent group for each unparsed attribute in the attribute list
@@ -2441,6 +2462,54 @@ void SdXMLObjectShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl:
     }
 
     SdXMLShapeContext::processAttribute( nPrefix, rLocalName, rValue );
+}
+
+SvXMLImportContext* SdXMLObjectShapeContext::CreateChildContext(
+    USHORT nPrefix, const ::rtl::OUString& rLocalName,
+    const uno::Reference<xml::sax::XAttributeList>& xAttrList )
+{
+    // #100592#
+    SvXMLImportContext* pContext = NULL;
+
+    if(XML_NAMESPACE_OFFICE == nPrefix)
+    {
+        if(IsXMLToken(rLocalName, XML_BINARY_DATA))
+        {
+            maHref = OUString( RTL_CONSTASCII_USTRINGPARAM( "#Obj12345678" ) );
+            mxBase64Stream =    GetImport().ResolveEmbeddedObjectURLFromBase64( maHref );
+            if( mxBase64Stream.is() )
+                pContext = new XMLBase64ImportContext( GetImport(), nPrefix,
+                                                    rLocalName, xAttrList,
+                                                    mxBase64Stream );
+        }
+        else if(IsXMLToken(rLocalName, XML_DOCUMENT))
+        {
+            XMLEmbeddedObjectImportContext *pEContext =
+                new XMLEmbeddedObjectImportContext( GetImport(), nPrefix,
+                                                    rLocalName, xAttrList );
+            maCLSID = pEContext->GetFilterCLSID();
+            if( maCLSID.getLength() != 0 )
+            {
+                uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
+                if( xPropSet.is() )
+                {
+                    xPropSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("CLSID") ), uno::makeAny( maCLSID ) );
+
+                    uno::Reference< lang::XComponent > xComp;
+                    xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("Model") ) ) >>= xComp;
+                    DBG_ASSERT( xComp.is(), "no xModel for own OLE format" );
+                    pEContext->SetComponent( xComp );
+                }
+            }
+            pContext = pEContext;
+        }
+    }
+
+    // delegate to parent class if no context could be created
+    if(!pContext)
+        pContext = SdXMLShapeContext::CreateChildContext(nPrefix, rLocalName, xAttrList);
+
+    return pContext;
 }
 
 //////////////////////////////////////////////////////////////////////////////

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport2.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: cl $ $Date: 2002-01-18 16:36:12 $
+ *  last change: $Author: aw $ $Date: 2002-06-27 11:07:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1386,41 +1386,47 @@ void XMLShapeExport::ImpExportOLE2Shape(
             bIsEmptyPresObj = ImpExportPresentationAttributes( xPropSet, GetXMLToken(XML_PRESENTATION_TABLE) );
 
         OUString sClassId;
+        sal_Bool bInternal;
+        xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("IsInternal"))) >>= bInternal;
+
+        sal_Bool bExportEmbedded(0 != (rExport.getExportFlags() & EXPORT_EMBEDDED));
+
+        OUString sURL;
+        OUString sPersistName;
 
         if( !bIsEmptyPresObj )
         {
-            // xlink:href
-            OUString sURL;
-            OUString sPersistName;
-
             xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( "PersistName" ) ) ) >>= sPersistName;
-
             if( sPersistName.getLength() )
             {
                 sURL = OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.EmbeddedObject:" ) );
                 sURL += sPersistName;
             }
 
-            sal_Bool bInternal;
-            xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("IsInternal"))) >>= bInternal;
-
             if( !bInternal )
                 xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("CLSID"))) >>= sClassId;
 
             if( sClassId.getLength() )
                 rExport.AddAttribute(XML_NAMESPACE_DRAW, XML_CLASS_ID, sClassId );
+        }
 
-            if( sURL.getLength() )
+        if( !bIsEmptyPresObj )
+        {
+            if(!bExportEmbedded)
             {
-                // #96717# in theorie, if we don't have a url we shouldn't even
-                // export this ole shape. But practical its to risky right now
-                // to change this so we better dispose this on load
-                sURL = rExport.AddEmbeddedObject( sURL );
+                // xlink:href
+                if( sURL.getLength() )
+                {
+                    // #96717# in theorie, if we don't have a url we shouldn't even
+                    // export this ole shape. But practical its to risky right now
+                    // to change this so we better dispose this on load
+                    sURL = rExport.AddEmbeddedObject( sURL );
 
-                rExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, sURL );
-                rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
-                rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
-                rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
+                    rExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, sURL );
+                    rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
+                    rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
+                    rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
+                }
             }
         }
 
@@ -1430,6 +1436,24 @@ void XMLShapeExport::ImpExportOLE2Shape(
 
         ImpExportEvents( xShape );
         ImpExportGluePoints( xShape );
+
+        if(bExportEmbedded && !bIsEmptyPresObj)
+        {
+            // #100592#
+            if(bInternal)
+            {
+                // embedded XML
+                uno::Reference< lang::XComponent > xComp;
+                xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("Model") ) ) >>= xComp;
+                DBG_ASSERT( xComp.is(), "no xModel for own OLE format" );
+                rExport.ExportEmbeddedOwnObject( xComp );
+            }
+            else
+            {
+                // embed as Base64
+                rExport.AddEmbeddedObjectAsBase64( sURL );
+            }
+        }
     }
 }
 
