@@ -2,7 +2,7 @@
  *
  *  $RCSfile: SwAccessibleTextGraphicObject.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
  *  last change: $Author: vg $
  *
@@ -61,6 +61,7 @@
 package mod._sw;
 
 import lib.TestCase;
+import com.sun.star.lang.XMultiServiceFactory;
 import lib.TestParameters;
 import java.io.PrintWriter;
 import lib.TestEnvironment;
@@ -114,7 +115,7 @@ public class SwAccessibleTextGraphicObject extends TestCase {
 
         XInterface oObj = null;
 
-        SOfficeFactory SOF = SOfficeFactory.getFactory(Param.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory((XMultiServiceFactory)Param.getMSF());
         Object oGraphObj = SOF.createInstance(
             xTextDoc, "com.sun.star.text.GraphicObject");
 
@@ -136,7 +137,7 @@ public class SwAccessibleTextGraphicObject extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = at.getCurrentWindow(Param.getMSF(), aModel);
+        XWindow xWindow = at.getCurrentWindow((XMultiServiceFactory)Param.getMSF(), aModel);
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
         at.getAccessibleObjectForRole(xRoot, AccessibleRole.GRAPHIC);
@@ -204,7 +205,7 @@ public class SwAccessibleTextGraphicObject extends TestCase {
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
         log.println( "creating a text document" );
-        xTextDoc = WriterTools.createTextDoc(Param.getMSF());
+        xTextDoc = WriterTools.createTextDoc((XMultiServiceFactory)Param.getMSF());
     }
 }
 
