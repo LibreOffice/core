@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basides1.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 16:17:05 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:37:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -842,6 +842,7 @@ void __EXPORT BasicIDEShell::GetState(SfxItemSet &rSet)
             case SID_BASICSTEPOVER:
             case SID_BASICSTEPOUT:
             case SID_BASICIDE_TOGGLEBRKPNT:
+            case SID_BASICIDE_MANAGEBRKPNTS:
             {
                 if ( !pCurWin || !pCurWin->IsA( TYPE( ModulWindow ) ) )
                     rSet.DisableItem( nWh );
@@ -1340,7 +1341,10 @@ IMPL_LINK( BasicIDEShell, AccelSelectHdl, Accelerator*, pAccel )
                 pDispatcher->Execute( SID_BASICSTEPINTO, SFX_CALLMODE_SYNCHRON );
         break;
         case KEY_F9:
-            pDispatcher->Execute( SID_BASICIDE_TOGGLEBRKPNT, SFX_CALLMODE_SYNCHRON );
+            if ( pAccel->GetCurKeyCode().IsShift() )
+                pDispatcher->Execute( SID_BASICIDE_TOGGLEBRKPNTENABLED, SFX_CALLMODE_SYNCHRON );
+            else
+                pDispatcher->Execute( SID_BASICIDE_TOGGLEBRKPNT, SFX_CALLMODE_SYNCHRON );
         break;
         default:    bDone = FALSE;
     }
