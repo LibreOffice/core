@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dim.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 08:53:04 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 11:35:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -728,6 +728,8 @@ void SbiParser::SubFunc()
 
 // Einlesen einer Prozedur
 
+BOOL runsInSetup( void );
+
 void SbiParser::DefProc( BOOL bStatic )
 {
     USHORT l1 = nLine, l2 = nLine;
@@ -750,7 +752,8 @@ void SbiParser::DefProc( BOOL bStatic )
             pProc = NULL;
         }
         // #100027: Multiple declaration -> Error
-        else if( pProc->IsUsedForProcDecl() )
+        // #112787: Not for setup, REMOVE for 8
+        else if( !runsInSetup() && pProc->IsUsedForProcDecl() )
         {
             Error( SbERR_PROC_DEFINED, pDef->GetName() );
             delete pDef;
