@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valuenode.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jb $ $Date: 2001-03-12 14:58:00 $
+ *  last change: $Author: jb $ $Date: 2001-03-20 08:01:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@ namespace configmgr
         INode(){}
 
     public:
-        INode(configuration::Attributes);
+        explicit INode(configuration::Attributes);
         INode(rtl::OUString const& aName, configuration::Attributes);
         virtual ~INode();
         virtual INode* clone() const = 0;
@@ -228,7 +228,7 @@ namespace configmgr
     public:
         ValueNode(){}
 
-        ValueNode(configuration::Attributes _aAttrs):INode(_aAttrs){}
+        explicit ValueNode(configuration::Attributes _aAttrs):INode(_aAttrs){}
 
         ValueNode(rtl::OUString const& aName, configuration::Attributes _aAttrs)
             :INode(aName, _aAttrs)

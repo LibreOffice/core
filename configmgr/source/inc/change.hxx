@@ -2,9 +2,9 @@
  *
  *  $RCSfile: change.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jb $ $Date: 2001-03-12 14:58:00 $
+ *  last change: $Author: jb $ $Date: 2001-03-20 08:01:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,7 @@ namespace configmgr
         void swap(Change& aOther);
 
     public:
+        explicit
         Change(rtl::OUString const& _rName) : m_aName(_rName){}
         Change(Change const& _rChange):m_aName(_rChange.m_aName){}
         virtual ~Change() {}
@@ -278,6 +279,7 @@ namespace configmgr
         std::auto_ptr<INode>            m_aOwnOldNode;
 
     public:
+        explicit
         RemoveNode(rtl::OUString const& _rName);
         ~RemoveNode();
         RemoveNode(const RemoveNode&);
