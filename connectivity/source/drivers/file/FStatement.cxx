@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FStatement.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-15 12:46:56 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:03:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -487,7 +487,19 @@ void OStatement_Base::setOrderbyColumn( OSQLParseNode* pColumnRef,
         return;
     // Alles geprueft und wir haben den Namen der Column.
     // Die wievielte Column ist das?
-    m_aOrderbyColumnNumber.push_back(xColLocate->findColumn(aColumnName));
+    try
+    {
+        m_aOrderbyColumnNumber.push_back(xColLocate->findColumn(aColumnName));
+    }
+    catch(Exception)
+    {
+        ::vos::ORef<OSQLColumns> aSelectColumns = m_aSQLIterator.getSelectColumns();
+        ::comphelper::UStringMixEqual aCase;
+        OSQLColumns::const_iterator aFind = ::connectivity::find(aSelectColumns->begin(),aSelectColumns->end(),aColumnName,aCase);
+        if ( aFind == aSelectColumns->end() )
+            throw SQLException();
+        m_aOrderbyColumnNumber.push_back((aFind - aSelectColumns->begin()) + 1);
+    }
 
     // Ascending or Descending?
     m_aOrderbyAscending.push_back((SQL_ISTOKEN(pAscendingDescending,DESC)) ? SQL_DESC : SQL_ASC);
