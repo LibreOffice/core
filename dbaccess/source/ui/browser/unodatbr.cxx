@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.164 $
+ *  $Revision: 1.165 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 12:34:02 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:09:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -426,6 +426,8 @@ SbaTableQueryBrowser::SbaTableQueryBrowser(const Reference< XMultiServiceFactory
     ,m_bInSuspend(sal_False)
     ,m_bEnableBrowser(sal_True)
     ,m_nBorder(1)
+    ,m_aTableCopyHelper(this)
+    ,m_nAsyncDrop(0)
 {
     DBG_CTOR(SbaTableQueryBrowser,NULL);
 }
@@ -3391,20 +3393,26 @@ void SbaTableQueryBrowser::implAdministrate( SvLBoxEntry* _pApplyTo )
             if (pTopLevelSelected)
                 sInitialSelection = getDataSourceAcessor( pTopLevelSelected );
 
-            Reference<XModel> xDS;
             INetURLObject aURLParser( sInitialSelection );
-            if ( ( aURLParser.GetProtocol() != INET_PROT_NOT_VALID ) || m_xDatabaseContext->hasByName( sInitialSelection ) )
+            ::rtl::OUString sURL;
+            if ( aURLParser.GetProtocol() != INET_PROT_NOT_VALID )
+                sURL = aURLParser.GetMainURL( INetURLObject::NO_DECODE );
+            else if ( m_xDatabaseContext->hasByName( sInitialSelection ) )
             {
-                xDS.set(m_xDatabaseContext->getByName(sInitialSelection),UNO_QUERY);
-                if ( xDS.is() )
-                {
-                    xFrameLoader->loadComponentFromURL(
-                        xDS->getURL(),
-                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_default")),
-                        nFrameSearchFlag,
-                        Sequence<PropertyValue >()
-                    );
-                }
+                Reference< XModel > xDocumentModel =
+                    getDataSourceByName_displayError( m_xDatabaseContext, sInitialSelection, getView(), getORB(), true );
+                if ( xDocumentModel.is() )
+                    sURL = xDocumentModel->getURL();
+            }
+
+            if ( sURL.getLength() )
+            {
+                xFrameLoader->loadComponentFromURL(
+                    sURL,
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_default")),
+                    nFrameSearchFlag,
+                    Sequence<PropertyValue >()
+                );
             }
         }
     }
