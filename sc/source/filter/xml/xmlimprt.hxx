@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 15:11:56 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 16:37:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -811,7 +811,6 @@ class ScXMLImport: public SvXMLImport
     sal_Bool                bRemoveLastChar;
     sal_Bool                bNullDateSetted;
     sal_Bool                bSelfImportingXMLSet;
-    sal_uInt32              nRangeOverflowType;
 
 
 protected:
@@ -1011,9 +1010,7 @@ public:
     void LockSolarMutex();
     void UnlockSolarMutex();
 
-    void SetRangeOverflowType(sal_uInt32 nType) { nRangeOverflowType = nType; }
-    sal_Bool HasRangeOverflow() const { return nRangeOverflowType != 0; }
-    sal_uInt32 GetRangeOverflowType() const { return nRangeOverflowType; }
+    void SetRangeOverflowType(sal_uInt32 nType);
 
     sal_Int32   GetRangeType(const rtl::OUString sRangeType) const;
     void SetNamedRanges();
