@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.hxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:32:02 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:35:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -343,12 +343,10 @@ public:
     //
     // GetTxtBreak
     //
-    xub_StrLen SwTxtSizeInfo::GetTxtBreak( const long nLineWidth,
-                                           const xub_StrLen nMaxLen ) const;
-    xub_StrLen SwTxtSizeInfo::GetTxtBreak( const long nLineWidth,
+    xub_StrLen GetTxtBreak( const long nLineWidth,
                                            const xub_StrLen nMaxLen,
                                            const USHORT nComp ) const;
-    xub_StrLen SwTxtSizeInfo::GetTxtBreak( const long nLineWidth,
+    xub_StrLen GetTxtBreak( const long nLineWidth,
                                            const xub_StrLen nMaxLen,
                                            const USHORT nComp,
                                            xub_StrLen& rExtraCharPos ) const;
