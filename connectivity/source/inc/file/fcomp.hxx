@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fcomp.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-05 08:07:52 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 08:29:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ namespace connectivity
         class OOperand;
         typedef::std::vector<OCode*> OCodeList;
 
-        class OPredicateCompiler
+        class OPredicateCompiler : public ::vos::OReference
         {
             friend class OPredicateInterpreter;
             friend class OSQLAnalyzer;
@@ -117,23 +117,34 @@ namespace connectivity
             OOperand* execute_LIKE(connectivity::OSQLParseNode* pPredicateNode) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             OOperand* execute_ISNULL(connectivity::OSQLParseNode* pPredicateNode) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             OOperand* execute_Operand(connectivity::OSQLParseNode* pPredicateNode) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            OOperand* execute_Fold(OSQLParseNode* pPredicateNode) throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            OOperand* executeFunction(OSQLParseNode* pPredicateNode) throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         };
 
 
-        class OPredicateInterpreter
+        class OPredicateInterpreter : public ::vos::OReference
         {
             OCodeStack          m_aStack;
-            OPredicateCompiler& m_rCompiler;
+            ::vos::ORef<OPredicateCompiler> m_rCompiler;
 
         public:
-            OPredicateInterpreter(OPredicateCompiler& rComp) : m_rCompiler(rComp){}
+            OPredicateInterpreter(const ::vos::ORef<OPredicateCompiler>& rComp) : m_rCompiler(rComp){}
             virtual ~OPredicateInterpreter();
 
-            sal_Bool start()
+            sal_Bool    evaluate(OCodeList& rCodeList);
+            void        evaluateSelection(OCodeList& rCodeList,ORowSetValueDecoratorRef& _rVal);
+
+            inline sal_Bool start()
             {
-                return evaluate(m_rCompiler.m_aCodeList);
+                return evaluate(m_rCompiler->m_aCodeList);
             }
-            sal_Bool evaluate(OCodeList& rCodeList);
+
+            inline void startSelection(ORowSetValueDecoratorRef& _rVal)
+            {
+                return evaluateSelection(m_rCompiler->m_aCodeList,_rVal);
+            }
+
+
         };
     }
 }
