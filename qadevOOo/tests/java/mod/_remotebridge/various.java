@@ -2,9 +2,9 @@
  *
  *  $RCSfile: various.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-02-04 12:25:49 $
+ *  last change:$Date: 2003-05-27 12:57:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,7 +223,7 @@ public class various extends TestCase {
     */
     protected TestEnvironment createTestEnvironment(TestParameters tParam,
             PrintWriter log) {
-        XMultiServiceFactory xMSF = tParam.getMSF();
+        XMultiServiceFactory xMSF = (XMultiServiceFactory)tParam.getMSF();
 
         try {
             XInterface xInt = (XInterface)xMSF.createInstance(
