@@ -2,9 +2,9 @@
  *
  *  $RCSfile: general.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2002-05-08 08:50:24 $
+ *  last change: $Author: gt $ $Date: 2002-05-17 09:43:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,9 @@
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx> // helper for implementations
 #endif
+#ifndef _BIBSHORTCUTHANDLER_HXX
+#include "bibshortcuthandler.hxx"
+#endif
 
 
 class BibDataManager;
@@ -115,7 +118,7 @@ class BibDataManager;
 
 typedef cppu::WeakAggImplHelper1 < ::com::sun::star::awt::XFocusListener > BibGeneralPageBaseClass;
 
-class BibGeneralPage: public BibGeneralPageBaseClass, public TabPage
+class BibGeneralPage: public BibGeneralPageBaseClass, public BibTabPage
 {
     Window              aControlParentWin;
     FixedText           aIdentifierFT;
@@ -157,6 +160,7 @@ class BibGeneralPage: public BibGeneralPageBaseClass, public TabPage
     ScrollBar           aVertScroll;
 
     FixedText*          aFixedTexts[ FIELD_COUNT ];
+    sal_Int16           nFT2CtrlMap[ FIELD_COUNT ];
 
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >
                         aControls[ FIELD_COUNT ];
@@ -189,11 +193,12 @@ class BibGeneralPage: public BibGeneralPageBaseClass, public TabPage
     BibDataManager*     pDatMan;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >
-                                AddXControl( const String& rName, Point aPos, Size aSize, sal_uInt16 nHelpId );
+                                AddXControl( const String& rName, Point aPos, Size aSize, sal_uInt16 nHelpId,
+                                            sal_Int16& rIndex );
 
-    void                        AddControlWithError( const rtl::OUString& rColumnName,
-                                        const Point& rPos,  const Size& rSize, String& rErrorString,
-                                        String aColumnUIName, sal_uInt16 nHelpId );
+    void                        AddControlWithError( const rtl::OUString& rColumnName, const Point& rPos,
+                                            const Size& rSize, String& rErrorString, String aColumnUIName,
+                                            sal_uInt16 nHelpId, sal_uInt16 nIndexInFTArray );
 
     void                        AdjustScrollbars();
 
@@ -201,30 +206,33 @@ class BibGeneralPage: public BibGeneralPageBaseClass, public TabPage
 
 protected:
     virtual void                Resize();
+    void                        InitFixedTexts( void );     // create mnemonics and set text an all fixed texts
 
 public:
                                 BibGeneralPage(Window* pParent, BibDataManager* pDatMan);
-        virtual                 ~BibGeneralPage();
+    virtual                     ~BibGeneralPage();
 
-        inline const String&    GetErrorString() const;
+    inline const String&        GetErrorString() const;
 
-        inline const ::com::sun::star::uno::Reference< ::com::sun::star::form::XBoundComponent >&
+    inline const ::com::sun::star::uno::Reference< ::com::sun::star::form::XBoundComponent >&
                                 GetTypeListBoxModel() const;
-        inline const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >&
+    inline const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >&
                                 GetControlContainer() const;
 
-        inline BibDataManager*  GetDataManager();
+    inline BibDataManager*      GetDataManager();
 
-        void                    CommitActiveControl();
+    void                        CommitActiveControl();
 
-        virtual void SAL_CALL   disposing( const ::com::sun::star::lang::EventObject& Source ) throw( com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL       disposing( const ::com::sun::star::lang::EventObject& Source ) throw( com::sun::star::uno::RuntimeException );
 
-        void SAL_CALL           focusGained( const ::com::sun::star::awt::FocusEvent& e ) throw( com::sun::star::uno::RuntimeException );
-        void SAL_CALL           focusLost( const ::com::sun::star::awt::FocusEvent& e ) throw( com::sun::star::uno::RuntimeException );
+    void SAL_CALL               focusGained( const ::com::sun::star::awt::FocusEvent& e ) throw( com::sun::star::uno::RuntimeException );
+    void SAL_CALL               focusLost( const ::com::sun::star::awt::FocusEvent& e ) throw( com::sun::star::uno::RuntimeException );
 
-        void                    RemoveListeners();
+    void                        RemoveListeners();
 
-        virtual void            GetFocus();
+    virtual void                GetFocus();
+
+    virtual BOOL                HandleShortCutKey( const KeyEvent& rKeyEvent ); // returns true, if key was handled
 };
 
 

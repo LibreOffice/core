@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibview.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: gt $ $Date: 2002-04-25 09:27:20 $
+ *  last change: $Author: gt $ $Date: 2002-05-17 09:43:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,7 @@ namespace bib
 
     // -----------------------------------------------------------------------
     BibView::BibView( Window* _pParent, BibDataManager* _pManager, WinBits _nStyle )
-        :Window( _pParent, _nStyle )
+        :BibWindow( _pParent, _nStyle )
         ,m_pDatMan( _pManager )
         ,m_xDatMan( _pManager )
         ,m_pGeneralPage( NULL )
@@ -252,6 +252,11 @@ namespace bib
     {
         if( m_pGeneralPage )
             m_pGeneralPage->GrabFocus();
+    }
+
+    BOOL BibView::HandleShortCutKey( const KeyEvent& rKeyEvent )
+    {
+        return m_pGeneralPage? m_pGeneralPage->HandleShortCutKey( rKeyEvent ) : FALSE;
     }
 
 //.........................................................................

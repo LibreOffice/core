@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibbeam.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: gt $ $Date: 2002-04-25 09:27:20 $
+ *  last change: $Author: gt $ $Date: 2002-05-17 09:43:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,7 +281,7 @@ namespace bib
 
     //---------------------------------------------------------------------
     BibBeamer::BibBeamer( Window* _pParent, BibDataManager* _pDM, WinBits _nStyle )
-        :SplitWindow( _pParent, _nStyle | WB_NOSPLITDRAW )
+        :BibSplitWindow( _pParent, _nStyle | WB_NOSPLITDRAW )
         ,pDatMan( _pDM )
         ,pToolBar( NULL )
         ,pGridWin( NULL )

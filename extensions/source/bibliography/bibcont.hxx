@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibcont.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2002-05-08 10:12:37 $
+ *  last change: $Author: gt $ $Date: 2002-05-17 09:43:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,10 @@
 #ifndef _SV_TIMER_HXX //autogen wg. Timer
 #include <vcl/timer.hxx>
 #endif
+#ifndef _BIBSHORTCUTHANDLER_HXX
+#include "bibshortcuthandler.hxx"
+#endif
+
 #include "bibmod.hxx"
 
 #define TOP_WINDOW                          1
@@ -80,26 +84,34 @@
 
 class BibDataManager;
 
-class BibWindowContainer: public Window
+class BibWindowContainer : public BibWindow     //Window
 {
     private:
-        Window*                 pChild;
+        // !BibShortCutHandler is also always a Window!
+        BibShortCutHandler*     pChild;
 
     protected:
         virtual void            Resize();
 
     public:
-        BibWindowContainer( Window* pParent,WinBits nStyle = WB_3DLOOK);
-        BibWindowContainer( Window* pParent,Window* pChild, WinBits nStyle = WB_3DLOOK);
+        BibWindowContainer( Window* pParent, WinBits nStyle = WB_3DLOOK );
+        BibWindowContainer( Window* pParent, BibShortCutHandler* pChild, WinBits nStyle = WB_3DLOOK);
         ~BibWindowContainer();
 
-        Window*                 GetChild(){return pChild;}
-        void                    SetChild(Window* pWin);
+        inline Window*          GetChild();
 
         virtual void            GetFocus();
+
+        virtual BOOL            HandleShortCutKey( const KeyEvent& rKeyEvent ); // returns true, if key was handled
 };
 
-class BibBookContainer: public SplitWindow
+inline Window* BibWindowContainer::GetChild()
+{
+    return pChild? pChild->GetWindow() : NULL;
+}
+
+
+class BibBookContainer: public BibSplitWindow
 {
     private:
 
@@ -110,8 +122,8 @@ class BibBookContainer: public SplitWindow
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >              xBottomPeerRef;
         sal_Bool                    bFirstTime;
 
-        Window*                 pTopWin;
-        Window*                 pBottomWin;
+        BibWindowContainer*     pTopWin;
+        BibWindowContainer*     pBottomWin;
         BibDataManager*         pDatMan;
         HdlBibModul             pBibMod;
         Timer                   aTimer;
@@ -122,10 +134,9 @@ class BibBookContainer: public SplitWindow
 
         virtual void            Split();
 
-        void                    CreateTopWin();
-        void                    CreateBottomWin();
         virtual long            PreNotify( NotifyEvent& rNEvt );
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > GetTopComponentInterface( sal_Bool bCreate = sal_True );
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >
+                                GetTopComponentInterface( sal_Bool bCreate = sal_True );
         void                    SetTopComponentInterface( ::com::sun::star::awt::XWindowPeer* pIFace );
 
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > GetBottomComponentInterface( sal_Bool bCreate = sal_True );
@@ -136,18 +147,17 @@ class BibBookContainer: public SplitWindow
         BibBookContainer(Window* pParent,BibDataManager*, WinBits nStyle = WB_3DLOOK );
         ~BibBookContainer();
 
-        Window*                 GetTopWin() {return pTopWin;}
-        Window*                 GetBottomWin() {return pBottomWin;}
+        inline BibWindow*       GetTopWin() {return pTopWin;}
+        inline BibWindow*       GetBottomWin() {return pBottomWin;}
 
-        void                    createTopFrame(const rtl::OUString & rURL );
+        // !BibShortCutHandler is also always a Window!
+        void                    createTopFrame( BibShortCutHandler* pWin );
 
-        void                    createBottomFrame(const rtl::OUString & rURL );
-
-        void                    createTopFrame(Window* pWin);
-
-        void                    createBottomFrame(Window* pWin);
+        void                    createBottomFrame( BibShortCutHandler* pWin );
 
         virtual void            GetFocus();
+
+        virtual sal_Bool        HandleShortCutKey( const KeyEvent& rKeyEvent ); // returns true, if key was handled
 };
 
 #endif

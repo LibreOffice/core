@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibview.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2002-05-08 08:50:24 $
+ *  last change: $Author: gt $ $Date: 2002-05-17 09:43:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 #ifndef EXTENSIONS_BIB_FORMCONTROLCONTAINER_HXX
 #include "formcontrolcontainer.hxx"
 #endif
+#ifndef _BIBSHORTCUTHANDLER_HXX
+#include "bibshortcuthandler.hxx"
+#endif
 
 class   BibGeneralPage;
 class   BibDataManager;
@@ -91,7 +94,7 @@ namespace bib
 //.........................................................................
 
     // -----------------------------------------------------------------------
-    class BibView : public Window, public FormControlContainer
+    class BibView : public BibWindow, public FormControlContainer
     {
     private:
         BibDataManager*                                                             m_pDatMan;
@@ -121,6 +124,8 @@ namespace bib
         void                UpdatePages();
 
         virtual void        GetFocus();
+
+        virtual BOOL        HandleShortCutKey( const KeyEvent& rKeyEvent ); // returns true, if key was handled
     };
 
 //.........................................................................

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibcont.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2002-05-08 10:12:37 $
+ *  last change: $Author: gt $ $Date: 2002-05-17 09:43:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,44 @@
 #include "datman.hxx"
 #include "bibcont.hxx"
 
+
+BibShortCutHandler::~BibShortCutHandler()
+{
+}
+
+sal_Bool BibShortCutHandler::HandleShortCutKey( const KeyEvent& )
+{
+    return sal_False;
+}
+
+
+BibWindow::BibWindow( Window* pParent, WinBits nStyle ) : Window( pParent, nStyle ), BibShortCutHandler( this )
+{
+}
+
+BibWindow::~BibWindow()
+{
+}
+
+
+BibSplitWindow::BibSplitWindow( Window* pParent, WinBits nStyle ) : SplitWindow( pParent, nStyle ), BibShortCutHandler( this )
+{
+}
+
+BibSplitWindow::~BibSplitWindow()
+{
+}
+
+
+BibTabPage::BibTabPage( Window* pParent, const ResId& rResId ) : TabPage( pParent, rResId ), BibShortCutHandler( this )
+{
+}
+
+BibTabPage::~BibTabPage()
+{
+}
+
+
 using namespace osl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -102,20 +140,21 @@ using namespace ::rtl;
 #define WIN_STEP_SIZE 5
 
 BibWindowContainer::BibWindowContainer( Window* pParent, WinBits nStyle ) :
-        Window( pParent, nStyle ),
+        BibWindow( pParent, nStyle ),
         pChild( NULL )
 {
 }
 
-BibWindowContainer::BibWindowContainer( Window* pParent,Window* pWin, WinBits nStyle ) :
-        Window( pParent, nStyle ),
-        pChild( pWin )
+BibWindowContainer::BibWindowContainer( Window* pParent, BibShortCutHandler* pChildWin, WinBits nStyle ) :
+        BibWindow( pParent, nStyle ),
+        pChild( pChildWin )
 {
     if(pChild!=NULL)
     {
-        pChild->SetParent(this);
-        pChild->Show();
-        pChild->SetPosPixel(Point(0,0));
+        Window* pChildWindow = GetChild();
+        pChildWindow->SetParent(this);
+        pChildWindow->Show();
+        pChildWindow->SetPosPixel(Point(0,0));
     }
 }
 
@@ -123,7 +162,7 @@ BibWindowContainer::~BibWindowContainer()
 {
     if( pChild )
     {
-        Window* pDel = pChild;
+        Window* pDel = GetChild();
         pChild = NULL;          // prevents GetFocus for child while deleting!
         delete pDel;
     }
@@ -131,30 +170,24 @@ BibWindowContainer::~BibWindowContainer()
 
 void BibWindowContainer::Resize()
 {
-    ::Size aSize=GetOutputSizePixel();
-    if(pChild!=NULL) pChild->SetSizePixel(aSize);
-}
-
-void BibWindowContainer::SetChild(Window* pWin)
-{
-    pChild=pWin;
-    if(pChild!=NULL)
-    {
-        pChild->SetParent(this);
-        pChild->Show();
-        pChild->SetPosPixel(Point(0,0));
-    }
+    if( pChild )
+        GetChild()->SetSizePixel( GetOutputSizePixel() );
 }
 
 void BibWindowContainer::GetFocus()
 {
     if( pChild )
-        pChild->GrabFocus();
+        GetChild()->GrabFocus();
+}
+
+sal_Bool BibWindowContainer::HandleShortCutKey( const KeyEvent& rKeyEvent )
+{
+    return pChild? pChild->HandleShortCutKey( rKeyEvent ) : sal_False;
 }
 
 
 BibBookContainer::BibBookContainer(Window* pParent,BibDataManager* pDtMn, WinBits nStyle):
-    SplitWindow(pParent,nStyle),
+    BibSplitWindow(pParent,nStyle),
     pDatMan(pDtMn),
     pTopWin(NULL),
     pBottomWin(NULL),
@@ -222,129 +255,7 @@ void BibBookContainer::SetBottomComponentInterface( awt::XWindowPeer* pIFace )
     pBottomWin->SetComponentInterface(pIFace);
 }
 
-void BibBookContainer::CreateTopWin()
-{
-    if( xTopFrameRef.is() )
-        xTopFrameRef->dispose();
-
-    if( pTopWin )
-    {
-        RemoveItem( TOP_WINDOW );
-        delete pTopWin;
-    }
-
-    pTopWin = new Window( this, 0 );
-
-    BibConfig* pConfig = BibModul::GetConfig();
-    long nSize = pConfig->getBeamerSize();
-    InsertItem( TOP_WINDOW, pTopWin, nSize, 0, 0, SWIB_PERCENTSIZE );
-
-}
-
-void BibBookContainer::CreateBottomWin()
-{
-
-    if( xBottomFrameRef.is() )
-        xBottomFrameRef->dispose();
-
-    if( pBottomWin )
-    {
-        RemoveItem( BOTTOM_WINDOW );
-        delete pBottomWin;
-    }
-
-    pBottomWin = new Window( this, 0 );
-    BibConfig* pConfig = BibModul::GetConfig();
-    long nSize = pConfig->getViewSize();
-    InsertItem( BOTTOM_WINDOW, pBottomWin, nSize, 1, 0, SWIB_PERCENTSIZE );
-
-}
-
-void BibBookContainer::createTopFrame(const ::rtl::OUString & rURL )
-{
-    uno::Reference< frame::XFrame >     xNewFrame;
-
-    CreateTopWin();
-
-    xTopPeerRef=uno::Reference< awt::XWindow > (GetTopComponentInterface(), UNO_QUERY );
-
-    uno::Reference< lang::XMultiServiceFactory >  xMgr = comphelper::getProcessServiceFactory();
-
-    xNewFrame = uno::Reference< frame::XFrame > ( xMgr->createInstance( C2U("com.sun.star.frame.Frame") ), UNO_QUERY );
-    uno::Reference< frame::XDispatchProvider >  xDSP( xNewFrame, UNO_QUERY );
-    if( xDSP.is() )
-    {
-        xNewFrame->initialize( xTopPeerRef);
-
-        // optional:
-        //xFrame->setName( C2U("WhatYouWant") );
-
-        uno::Reference< util::XURLTransformer >  xTrans ( xMgr->createInstance( C2U("com.sun.star.util.URLTransformer") ), UNO_QUERY );
-        if( xTrans.is() )
-        {
-            // Datei laden
-            util::URL aURL;
-            aURL.Complete = rURL;
-
-            xTrans->parseStrict( aURL );
-
-            uno::Reference< frame::XDispatch >  xDisp = xDSP->queryDispatch( aURL, C2U("_self"), FrameSearchFlag::SELF );
-            if ( xDisp.is() )
-                xDisp->dispatch( aURL, uno::Sequence<beans::PropertyValue>() );
-        }
-    }
-
-    // set the frame
-    {
-    MutexGuard aGuard(Mutex::getGlobalMutex());
-    xTopFrameRef = xNewFrame;
-    }
-
-}
-
-void BibBookContainer::createBottomFrame(const ::rtl::OUString & rURL )
-{
-    uno::Reference< frame::XFrame >     xNewFrame;
-
-    CreateBottomWin();
-
-    xBottomPeerRef=uno::Reference< awt::XWindow > (GetBottomComponentInterface(), UNO_QUERY );
-
-    uno::Reference< lang::XMultiServiceFactory >  xMgr = comphelper::getProcessServiceFactory();
-
-    xNewFrame = uno::Reference< frame::XFrame > ( xMgr->createInstance( C2U("com.sun.star.frame.Frame") ), UNO_QUERY );
-    uno::Reference< frame::XDispatchProvider >  xDSP( xNewFrame, UNO_QUERY );
-    if( xDSP.is() )
-    {
-        xNewFrame->initialize( xBottomPeerRef);
-
-        // optional:
-        //xFrame->setName( C2U("WhatYouWant") );
-
-        uno::Reference< util::XURLTransformer >  xTrans ( xMgr->createInstance( C2U("com.sun.star.util.URLTransformer") ), UNO_QUERY );
-        if( xTrans.is() )
-        {
-            // Datei laden
-            util::URL aURL;
-            aURL.Complete = rURL;
-
-            xTrans->parseStrict( aURL );
-
-            uno::Reference< frame::XDispatch >  xDisp = xDSP->queryDispatch( aURL, ::rtl::OUString(), FrameSearchFlag::SELF );
-            if ( xDisp.is() )
-                xDisp->dispatch( aURL, uno::Sequence<beans::PropertyValue>() );
-        }
-    }
-
-    // set the frame
-    {
-    MutexGuard aGuard(Mutex::getGlobalMutex());
-    xBottomFrameRef = xNewFrame;
-    }
-
-}
-
-void BibBookContainer::createTopFrame(Window* pWin)
+void BibBookContainer::createTopFrame( BibShortCutHandler* pWin )
 {
     if ( xTopFrameRef.is() ) xTopFrameRef->dispose();
 
@@ -361,7 +272,7 @@ void BibBookContainer::createTopFrame(Window* pWin)
 
 }
 
-void BibBookContainer::createBottomFrame(Window* pWin)
+void BibBookContainer::createBottomFrame( BibShortCutHandler* pWin )
 {
     if ( xBottomFrameRef.is() ) xBottomFrameRef->dispose();
 
@@ -394,23 +305,41 @@ long BibBookContainer::PreNotify( NotifyEvent& rNEvt )
         const KeyCode aKeyCode = pKEvt->GetKeyCode();
         USHORT nKey = aKeyCode.GetCode();
         const USHORT nModifier = aKeyCode.GetModifier();
-        if(KEY_MOD2 == nModifier &&
-            (KEY_UP == nKey || KEY_DOWN == nKey))
+
+        if( KEY_MOD2 == nModifier )
         {
-            if(pTopWin && pBottomWin)
+            if( KEY_UP == nKey || KEY_DOWN == nKey )
             {
-                USHORT nFirstWinId = KEY_UP == nKey ? TOP_WINDOW : BOTTOM_WINDOW;
-                USHORT nSecondWinId = KEY_UP == nKey ? BOTTOM_WINDOW : TOP_WINDOW;
-                long nHeight = GetItemSize( nFirstWinId );
-                nHeight -= WIN_STEP_SIZE;
-                if(nHeight < WIN_MIN_HEIGHT)
-                    nHeight = WIN_MIN_HEIGHT;
-                SetItemSize( nFirstWinId, nHeight );
-                SetItemSize( nSecondWinId, 100 - nHeight );
+                if(pTopWin && pBottomWin)
+                {
+                    USHORT nFirstWinId = KEY_UP == nKey ? TOP_WINDOW : BOTTOM_WINDOW;
+                    USHORT nSecondWinId = KEY_UP == nKey ? BOTTOM_WINDOW : TOP_WINDOW;
+                    long nHeight = GetItemSize( nFirstWinId );
+                    nHeight -= WIN_STEP_SIZE;
+                    if(nHeight < WIN_MIN_HEIGHT)
+                        nHeight = WIN_MIN_HEIGHT;
+                    SetItemSize( nFirstWinId, nHeight );
+                    SetItemSize( nSecondWinId, 100 - nHeight );
+                }
+                nHandled = 1;
             }
-            nHandled = 1;
+            else if( pKEvt->GetCharCode() && HandleShortCutKey( *pKEvt ) )
+                nHandled = 1;
         }
     }
+
     return nHandled;
 }
 
+sal_Bool BibBookContainer::HandleShortCutKey( const KeyEvent& rKeyEvent )
+{
+    sal_Bool bRet = sal_False;
+
+    if( pTopWin )
+        bRet = pTopWin->HandleShortCutKey( rKeyEvent );
+
+    if( !bRet && pBottomWin )
+        bRet = pBottomWin->HandleShortCutKey( rKeyEvent );
+
+    return bRet;
+}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibbeam.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: gt $ $Date: 2002-04-24 11:54:28 $
+ *  last change: $Author: gt $ $Date: 2002-05-17 09:43:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,9 @@
 #ifndef EXTENSIONS_BIB_FORMCONTROLCONTAINER_HXX
 #include "formcontrolcontainer.hxx"
 #endif
+#ifndef _BIBSHORTCUTHANDLER_HXX
+#include "bibshortcuthandler.hxx"
+#endif
 
 class BibDataManager;
 
@@ -100,7 +103,7 @@ namespace bib
 
     class BibGridwin;
     class BibBeamer
-            :public SplitWindow
+            :public BibSplitWindow
             ,public FormControlContainer
     {
         private:
