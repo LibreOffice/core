@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:43:28 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 09:41:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1197,6 +1197,8 @@ void SwPagePreViewWin::MouseButtonDown( const MouseEvent& rMEvt )
                                                     SFX_CALLMODE_ASYNCHRON );
         }
         else if ( bIsDocPos || bPosInEmptyPage )
+        // OD 2004-03-04 #i20684# - add missing parenthesis
+        {
             // show clicked page as the selected one
             mpPgPrevwLayout->MarkNewSelectedPage( nNewSelectedPage );
             GetViewShell()->ShowPreViewSelection( nNewSelectedPage );
@@ -1212,6 +1214,7 @@ void SwPagePreViewWin::MouseButtonDown( const MouseEvent& rMEvt )
             };
             SfxBindings& rBindings = mrView.GetViewFrame()->GetBindings();
             rBindings.Invalidate( aInval );
+        }
     }
 }
 
@@ -1255,6 +1258,19 @@ sal_uInt16 SwPagePreViewWin::SelectedPage() const
 void SwPagePreViewWin::SetSelectedPage( sal_uInt16 _nSelectedPageNum )
 {
     mpPgPrevwLayout->SetSelectedPage( _nSelectedPageNum );
+}
+
+/** method to enable/disable book preview
+
+    OD 2004-03-05 #i18143#
+
+    @author OD
+*/
+bool SwPagePreViewWin::SetBookPreviewMode( const bool _bBookPreview )
+{
+    return mpPgPrevwLayout->SetBookPreviewMode( _bBookPreview,
+                                                mnSttPage,
+                                                maPaintedPreviewDocRect );
 }
 
 void SwPagePreViewWin::DataChanged( const DataChangedEvent& rDCEvt )
@@ -1406,6 +1422,34 @@ void  SwPagePreView::Execute( SfxRequest &rReq )
 
         }
         break;
+        case FN_SHOW_BOOKVIEW:
+        {
+            const SfxItemSet* pArgs = rReq.GetArgs();
+            const SfxPoolItem* pItem;
+            bool bBookPreview = GetViewShell()->GetViewOptions()->IsPagePrevBookview();
+            if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( FN_SHOW_BOOKVIEW, FALSE, &pItem ) )
+            {
+                bBookPreview = static_cast< const SfxBoolItem* >( pItem )->GetValue();
+                ( ( SwViewOption* ) GetViewShell()->GetViewOptions() )->SetPagePrevBookview( bBookPreview );
+                    // cast is not gentleman like, but it's common use in writer and in this case
+            }
+            if ( aViewWin.SetBookPreviewMode( bBookPreview ) )
+            {
+                // book preview mode changed. Thus, adjust scrollbars and
+                // invalidate corresponding states.
+                ScrollViewSzChg();
+                static USHORT __READONLY_DATA aInval[] =
+                {
+                    FN_START_OF_DOCUMENT, FN_END_OF_DOCUMENT, FN_PAGEUP, FN_PAGEDOWN,
+                    FN_STAT_PAGE, FN_SHOW_BOOKVIEW, 0
+                };
+                SfxBindings& rBindings = GetViewFrame()->GetBindings();
+                rBindings.Invalidate( aInval );
+                aViewWin.Invalidate();
+            }
+
+        }
+        break;
         case FN_SHOW_TWO_PAGES:
             aViewWin.CalcWish( nRow, 2 );
             break;
@@ -1516,6 +1560,10 @@ void  SwPagePreView::Execute( SfxRequest &rReq )
                 SfxBindings& rBindings = GetViewFrame()->GetBindings();
                 rBindings.Invalidate( aInval );
                 rReq.Done();
+            }
+            else
+            {
+                bRefresh = false;
             }
             break;
         }
@@ -1701,6 +1749,12 @@ void  SwPagePreView::GetState( SfxItemSet& rSet )
         break;
         case FN_SHOW_MULTIPLE_PAGES:
         //should never be disabled
+        break;
+        case FN_SHOW_BOOKVIEW:
+        {
+            BOOL b = GetViewShell()->GetViewOptions()->IsPagePrevBookview();
+            rSet.Put(SfxBoolItem(nWhich, b));
+        }
         break;
 
         case FN_SHOW_TWO_PAGES:
@@ -2637,7 +2691,11 @@ void SwPagePreViewWin::SetViewShell( ViewShell* pShell )
 
 void SwPagePreViewWin::RepaintCoreRect( const SwRect& rRect )
 {
-    mpPgPrevwLayout->Repaint( Rectangle( rRect.Pos(), rRect.SSize() ) );
+    // OD 2004-03-04 #i24183#
+    if ( mpPgPrevwLayout->PreviewLayoutValid() )
+    {
+        mpPgPrevwLayout->Repaint( Rectangle( rRect.Pos(), rRect.SSize() ) );
+    }
 }
 
 /** method to adjust preview to a new zoom factor
