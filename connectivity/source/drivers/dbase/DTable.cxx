@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-10 11:09:45 $
+ *  last change: $Author: oj $ $Date: 2002-07-05 07:59:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -828,9 +828,9 @@ BOOL ODbaseTable::CreateImpl()
     if ( !m_pConnection->matchesExtension( aURL.getExtension() ) )
         aURL.setExtension(m_pConnection->getExtension());
 
-    Content aContent(aURL.GetMainURL(INetURLObject::NO_DECODE),Reference<XCommandEnvironment>());
     try
     {
+        Content aContent(aURL.GetMainURL(INetURLObject::NO_DECODE),Reference<XCommandEnvironment>());
         if (aContent.isDocument())
         {
             // Hack fuer Bug #30609 , nur wenn das File existiert und die Laenge > 0 gibt es einen Fehler
@@ -856,7 +856,14 @@ BOOL ODbaseTable::CreateImpl()
 
     if (!bOk)
     {
-        aContent.executeCommand( rtl::OUString::createFromAscii( "delete" ),bool2any( sal_True ) );
+        try
+        {
+            Content aContent(aURL.GetMainURL(INetURLObject::NO_DECODE),Reference<XCommandEnvironment>());
+            aContent.executeCommand( rtl::OUString::createFromAscii( "delete" ),bool2any( sal_True ) );
+        }
+        catch(Exception&) // a execption is thrown when no file exists
+        {
+        }
         return sal_False;
     }
 
@@ -1713,7 +1720,12 @@ void ODbaseTable::alterColumn(sal_Int32 index,
 
         // construct the new table
         if(!pNewTable->CreateImpl())
-            return;
+        {
+            ::rtl::OUString sError = ::rtl::OUString::createFromAscii("Could not alter column \"");
+            sError += ::comphelper::getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)));
+            sError += ::rtl::OUString::createFromAscii("\". May be the file system is write protected.");
+            throwGenericSQLException(sError,*this );
+        }
 
         pNewTable->construct();
 
@@ -1856,7 +1868,12 @@ void ODbaseTable::addColumn(const Reference< XPropertySet >& _xNewColumn)
 
     // construct the new table
     if(!pNewTable->CreateImpl())
-        throw SQLException();
+    {
+        ::rtl::OUString sError = ::rtl::OUString::createFromAscii("Could not add new column \"");
+        sError += ::comphelper::getString(_xNewColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)));
+        sError += ::rtl::OUString::createFromAscii("\". May be the file system is write protected.");
+        throwGenericSQLException(sError,*this );
+    }
 
     BOOL bAlreadyDroped = FALSE;
     try
@@ -1923,7 +1940,10 @@ void ODbaseTable::dropColumn(sal_Int32 _nPos)
     if(!pNewTable->CreateImpl())
     {
         xHold = pNewTable = NULL;
-        throw SQLException();
+        ::rtl::OUString sError = ::rtl::OUString::createFromAscii("Could not drop column at position \"");
+        sError += ::rtl::OUString::valueOf(_nPos);
+        sError += ::rtl::OUString::createFromAscii("\". May be the file system is write protected.");
+        throwGenericSQLException(sError,*this );
     }
     pNewTable->construct();
     // copy the data

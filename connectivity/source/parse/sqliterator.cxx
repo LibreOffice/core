@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqliterator.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-26 08:04:06 $
+ *  last change: $Author: oj $ $Date: 2002-07-05 08:02:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,8 +113,9 @@ OSQLParseTreeIterator::OSQLParseTreeIterator()
     , m_xDatabaseMetaData(NULL)
     ,m_pParser(NULL)
 {
-    m_aSelectColumns    = new OSQLColumns();
-    m_aParameters       = new OSQLColumns();
+//  m_aSelectColumns    = new OSQLColumns();
+//  m_aParameters       = new OSQLColumns();
+    setParseTree(NULL);
 }
 //-----------------------------------------------------------------------------
 OSQLParseTreeIterator::OSQLParseTreeIterator(const Reference< XNameAccess>& _xTables ,
@@ -127,8 +128,8 @@ OSQLParseTreeIterator::OSQLParseTreeIterator(const Reference< XNameAccess>& _xTa
     , m_aCaseEqual(_xDatabaseMetaData->storesMixedCaseQuotedIdentifiers())
     ,m_pParser(_pParser)
 {
-    m_aSelectColumns = new OSQLColumns();// must be done because we need an empty column at zero
-    m_aParameters    = new OSQLColumns();
+//  m_aSelectColumns = new OSQLColumns();// must be done because we need an empty column at zero
+//  m_aParameters    = new OSQLColumns();
     setParseTree(pRoot);
 }
 //-----------------------------------------------------------------------------
@@ -144,19 +145,19 @@ OSQLParseTreeIterator::OSQLParseTreeIterator(const OSQLParseTreeIterator & rIter
 //-----------------------------------------------------------------------------
 OSQLParseTreeIterator::~OSQLParseTreeIterator()
 {
-    m_aTables.clear();
     m_aSelectColumns    = NULL;
     m_aParameters       = NULL;
+    m_aTables.clear();
 }
 // -----------------------------------------------------------------------------
 void OSQLParseTreeIterator::dispose()
 {
-    m_aTables.clear();
     m_aSelectColumns    = NULL;
     m_aParameters       = NULL;
     m_xTables           = NULL;
     m_xDatabaseMetaData = NULL;
     m_pParser           = NULL;
+    m_aTables.clear();
 }
 //-----------------------------------------------------------------------------
 void OSQLParseTreeIterator::setParseTree(const OSQLParseNode * pNewParseTree)
