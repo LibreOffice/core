@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basprov.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-10-29 15:00:46 $
+ *  last change: $Author: svesik $ $Date: 2004-04-19 23:14:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,6 @@ namespace basprov
         bool m_bIsUserCtx;
         ::rtl::OUString m_sCtxLocation;
 
-        ::rtl::OUString getLocationFromURI( const ::rtl::OUString& scriptURI );
 
     public:
         BasicProviderImpl(
