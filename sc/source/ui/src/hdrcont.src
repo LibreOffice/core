@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hdrcont.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:05 $
+ *  last change: $Author: obo $ $Date: 2000-10-27 15:55:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,7 +301,7 @@ Menu RID_POPUP_ROWHEADER
             Text[ japanese ] = "s‚Μν(~D)";
             Text[ chinese_traditional ] = "§R°£¦C(~D)";
             Text[ arabic ] = "ΝΠέ ΓΣΨΡ";
-            Text[ greek ] = "Διαγρα~φή γραμμών";
+            Text[ greek ] = "Διαγραφή γραμμών";
             Text[ korean ] = "Ηΰ »θΑ¦(~D)";
             Text[ turkish ] = "Satύr sil";
             Text[ language_user1 ] = " ";
