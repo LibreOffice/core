@@ -23,10 +23,10 @@ mkdir: %_DEST%\inc%_EXT%\svtools
 ..\%__SRC%\bin\dllver.exe %_DEST%\bin%_EXT%\dllver.exe
 ..\%__SRC%\bin\dllver %_DEST%\bin%_EXT%\dllver
 ..\%__SRC%\bin\svt?????.dll %_DEST%\bin%_EXT%\svt?????.dll
-..\%__SRC%\bin\svt?????.res %_DEST%\bin%_EXT%\svt?????.res
-..\%__SRC%\bin\svs?????.res %_DEST%\bin%_EXT%\svs?????.res
-..\%__SRC%\bin\bmp?????.res %_DEST%\bin%_EXT%\bmp?????.res
-..\%__SRC%\bin\san?????.res %_DEST%\bin%_EXT%\san?????.res
+..\%__SRC%\bin\svt*.res %_DEST%\bin%_EXT%\svt*.res
+..\%__SRC%\bin\svs*.res %_DEST%\bin%_EXT%\svs*.res
+..\%__SRC%\bin\bmp*.res %_DEST%\bin%_EXT%\bmp*.res
+..\%__SRC%\bin\san*.res %_DEST%\bin%_EXT%\san*.res
 ..\%__SRC%\bin\svt?????.sym %_DEST%\bin%_EXT%\svt?????.sym
 ..\%__SRC%\bin\svl?????.dll %_DEST%\bin%_EXT%\svl?????.dll
 ..\%__SRC%\bin\bmp.* %_DEST%\bin%_EXT%\bmp.*
