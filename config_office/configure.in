@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2005-03-01 17:23:02 $
+dnl * Date: $Date: 2005-03-07 17:28:33 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.104 $ )
+AC_REVISION( $Revision: 1.105 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -457,16 +457,44 @@ if test -z "$SED"; then
    AC_MSG_ERROR([install sed to run this script])
 fi
 
+AC_MSG_CHECKING([for solenv environment])
+if test -z "$with_local_solenv"; then
+   LOCAL_SOLENV="DEFAULT"
+   AC_MSG_RESULT([default])
+else
+   LOCAL_SOLENV=$with_local_solenv
+   AC_MSG_RESULT([$with_local_solenv])
+fi
+AC_SUBST(LOCAL_SOLENV)
+
+if test "$LOCAL_SOLENV" = "DEFAULT"; then 
+  _solenv="../solenv"
+else
+  _solenv="$LOCAL_SOLENV"
+fi
+
+if test -e $_solenv/inc/minor.mk; then
+   # Get UPD number from ../solenv/inc/minor.mk
+   UPD="`grep RSCVERSION= ../solenv/inc/minor.mk | $AWK -F"=" '{ print $2 }'`"
+   AC_SUBST(UPD)
+   SOURCEVERSION="`grep SOURCEVERSION= ../solenv/inc/minor.mk | $AWK -F"=" '{ print $2 }'`"
+   AC_SUBST(SOURCEVERSION)
+else
+   AC_MSG_ERROR([$_solenv/inc/minor.mk missing. Needed for proper environment script generation...])
+fi
+
 dnl ===================================================================
 dnl Checks for the operating system and processor.
 dnl ===================================================================
-dnl checking the os
-AC_MSG_CHECKING([the operating system])
-_os=`uname`
-AC_MSG_RESULT([$_os])
+AC_CONFIG_AUX_DIRS([$_solenv/bin])
+AC_CANONICAL_SYSTEM
+if test "$build" != "$host" -o "$build" != "$target" \
+  -o "$host" != "$target"; then
+	AC_MSG_WARN([cross-compiling by any means is not supported (yet)!])
+	echo "cross-compiling by any means is not supported (yet)!" >> warn
+fi
 
-if test `echo $_os | $AWK -F_ '{ print $1 }'` = "CYGWIN"; then
-   _os="WINNT"
+if echo "$build_os" | grep cygwin; then
    AC_MSG_CHECKING([Cygwin version])
    CygwinVer=`uname -r`
    AC_MSG_RESULT([$CygwinVer])
@@ -482,20 +510,19 @@ dnl The following is a list of supported systems.
 dnl Sequential to keep the logic very simple
 dnl These values may be checked and reset later.
 dnl ===================================================================
-case "$_os" in
-	"SunOS")
+case "$build_os" in
+	solaris*)
 		test_x=yes
 		test_gtk=yes
-      		test_kde=yes
-      		test_cups=yes
-
-		_machine_type=`uname -m`
+		test_kde=yes
+		test_cups=yes
+		_os=Solaris
 
 		dnl ===========================================================
 		dnl check whether we're using solaris 6,7,8 - sparc or intel.
 		dnl ===========================================================
    		AC_MSG_CHECKING([the Solaris operating system release])
-   		_os_release=`uname -r | $AWK -F. '{ print $2 }'`
+   		_os_release=`echo $build_os | $SED -e s/solaris2\.//`
 		if test "$_os_release" -lt "6"; then
       			AC_MSG_ERROR([use solaris >= 6 to build OpenOffice.org])
    		else
@@ -504,36 +531,39 @@ case "$_os" in
 
    		dnl check whether we're using a sparc or i386 processor
    		AC_MSG_CHECKING([the processor type])
-   		_processor=`uname -p`
-   		if test "$_processor" = "sparc" -o "$_processor" = "i386"; then
-      			AC_MSG_RESULT([ok ($_processor)])
+   		if test "$build_cpu" = "sparc" -o "$build_cpu" = "i386"; then
+      			AC_MSG_RESULT([ok ($build_cpu)])
    		else
       			AC_MSG_ERROR([only sparc and i386 processors are supported])
    		fi
 		;;
-	"Linux")
+	linux-gnu)
 		test_x=yes
 		test_gtk=yes
-      		test_kde=yes
-      		test_cups=yes
+		test_kde=yes
+		test_cups=yes
+		_os=Linux
 		;;
-	"GNU")
+	gnu)
 		test_x=yes
-      		test_cups=no
+		test_cups=no
+		_os=GNU
 		;;
-	"WINNT")
+	cygwin*) # Windows
 		test_x=no
-      		test_cups=no
+		test_cups=no
+		_os=WINNT
 		;;
-	"Darwin")
+	darwin) # Mac OS X
 		test_x=no
-      		test_cups=no
+		test_cups=no
+		_os=Darwin
 		;;
-	"FreeBSD")
+	freebsd)
 		test_x=yes
 		test_gtk=yes
-      		test_kde=yes
-      		test_cups=yes
+		test_kde=yes
+		test_cups=yes
 		AC_MSG_CHECKING([the FreeBSD operating system release])
 		if test -n "$with_os_version"; then
 			OSVERSION="$with_os_version"
@@ -553,32 +583,33 @@ case "$_os" in
 			PTHREAD_LIBS="-pthread"
 		fi
 		AC_MSG_RESULT([$PTHREAD_LIBS])
+		_os=FreeBSD
 		;;
-	"OSF1")
+	osf)
 		test_x=dontknow
-      		test_cups=no
+		test_cups=no
+		_os=OSF1
 		;;
-	"NetBSD")
+	netbsd)
 		test_x=yes
 		test_gtk=yes
-      		test_kde=yes
-      		test_cups=no
+		test_kde=yes
+		test_cups=no
 		PTHREAD_CFLAGS="-pthread"
 		PTHREAD_LIBS="-pthread -lpthread"
+		_os=NetBSD
 		;;
-	"IRIX")
+	irix*)
 		test_x=yes
-      		test_cups=no
+		test_cups=no
+		_os=IRIX
 		;;
-	"IRIX64")
+	aix*)
 		test_x=yes
-      		test_cups=no
-		;;
-	"AIX")
-		test_x=yes
-      		test_cups=no
-	   	PTHREAD_LIBS=-pthread
+		test_cups=no
+	   PTHREAD_LIBS=-pthread
 		echo "AIX is an alpha port --- Use at own risk" >> warn
+		_os=AIX
 		;;
    *)
    AC_MSG_ERROR([$_os operating system is not suitable to build OpenOffice.org!])
@@ -3244,7 +3275,7 @@ elif test "$_os" = "Linux" -o "$_os" = "FreeBSD"; then
       XINERAMA_LINK=dynamic
    elif test -e "$XLIB/libXinerama.a"; then
       # static version
-      if test "`uname -m`" = "i586" -o "`uname -m`" = "i686"; then
+      if echo $build_cpu | grep -E 'i[[3456]]86' 2>/dev/null >/dev/null; then
          USE_XINERAMA=YES
          XINERAMA_LINK=static
       else
@@ -3422,32 +3453,6 @@ if test -z "$COMPATH"; then
 fi
 AC_SUBST(COMPATH)
 
-AC_MSG_CHECKING([for solenv environment])
-if test -z "$with_local_solenv"; then
-   LOCAL_SOLENV="DEFAULT"
-   AC_MSG_RESULT([default])
-else
-   LOCAL_SOLENV=$with_local_solenv
-   AC_MSG_RESULT([$with_local_solenv])
-fi
-AC_SUBST(LOCAL_SOLENV)
-
-if test "$LOCAL_SOLENV" = "DEFAULT"; then 
-  _solenv="../solenv"
-else
-  _solenv="$LOCAL_SOLENV"
-fi
-
-if test -e $_solenv/inc/minor.mk; then
-   # Get UPD number from ../solenv/inc/minor.mk
-   UPD="`grep RSCVERSION= ../solenv/inc/minor.mk | $AWK -F"=" '{ print $2 }'`"
-   AC_SUBST(UPD)
-   SOURCEVERSION="`grep SOURCEVERSION= ../solenv/inc/minor.mk | $AWK -F"=" '{ print $2 }'`"
-   AC_SUBST(SOURCEVERSION)
-else
-   AC_MSG_ERROR([$_solenv/inc/minor.mk missing. Needed for proper environment script generation...])
-fi
-
 AC_MSG_CHECKING([solver path])
 if test -z "$with_local_solver"; then
    LOCAL_SOLVER="DEFAULT"
@@ -3460,9 +3465,8 @@ AC_SUBST(LOCAL_SOLVER)
 
 AC_SUBST(BUILD_TYPE)
 
-dnl ===================================================================
-dnl Bits to substitute into set_soenv.in
-dnl ===================================================================
+# make sure config.guess is +x; we execute config.guess, so it has to be so; 
+chmod +x $_solenv/bin/config.guess
 
 AC_OUTPUT([set_soenv])
 
