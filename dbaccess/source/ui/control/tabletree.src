@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabletree.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-29 08:49:48 $
+ *  last change: $Author: kz $ $Date: 2002-05-02 22:44:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,7 @@ Menu MENU_TABLETREE_POPUP
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Ordena de manera ascendent";
             Text[ finnish ] = "Nouseva lajittelu";
+            Text[ thai ] = "‡πÄ‡∏£‡∏µ‡∏¢‡∏á‡∏à‡∏≤‡∏Å‡∏ô‡πâ‡∏≠‡∏¢‡πÑ‡∏õ‡∏°‡∏≤‡∏Å";
         };
         MenuItem
         {
@@ -159,6 +160,7 @@ Menu MENU_TABLETREE_POPUP
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Ordena de manera descendent";
             Text[ finnish ] = "Laskeva lajittelu";
+            Text[ thai ] = "‡πÄ‡∏£‡∏µ‡∏¢‡∏á‡∏à‡∏≤‡∏Å‡∏°‡∏≤‡∏Å‡πÑ‡∏õ‡∏ô‡πâ‡∏≠‡∏¢";
         };
     };
 };
@@ -187,6 +189,7 @@ String STR_COULDNOTCREATE_DRIVERMANAGER
     Text[ arabic ] = " ⁄–—  √”Ì” «·« ’«· »‹ (#servicename#) SDBC Driver Manager .";
     Text[ catalan ] = "No es pot establir una connexiÛ amb el gestor del programa de control SDBC (#servicename#).";
     Text[ finnish ] = "Yhteyden muodostaminen SDBC-ajurien hallintaan ei onnistu (#servicename#).";
+    Text[ thai ] = "‡πÑ‡∏°‡πà‡∏™‡∏≤‡∏°‡∏≤‡∏£‡∏ñ‡πÄ‡∏ä‡∏∑‡πà‡∏≠‡∏°‡∏ï‡πà‡∏≠‡∏Å‡∏±‡∏ö‡∏ï‡∏±‡∏ß‡∏à‡∏±‡∏î‡∏Å‡∏≤‡∏£‡πÑ‡∏î‡∏£‡πâ‡∏ü‡πÄ‡∏ß‡∏≠‡∏£‡πå SDBC  (#servicename#) ‡πÑ‡∏î‡πâ";
 };
 
 String STR_NOREGISTEREDDRIVER
@@ -213,6 +216,7 @@ String STR_NOREGISTEREDDRIVER
     Text[ arabic ] = "·« ÌÊÃœ »—‰«„Ã  ‘€Ì· „”Ã· ··‹ URL #connurl#!";
     Text[ catalan ] = "Hi ha un programa de control que no est‡ registrat per a l'URL #connurl#.";
     Text[ finnish ] = "Ajuria ei ole rekisterˆity URL-osoitteelle #connurl#.";
+    Text[ thai ] = "‡πÑ‡∏î‡∏£‡πâ‡∏ü‡πÄ‡∏ß‡∏≠‡∏£‡πå‡πÑ‡∏°‡πà‡πÑ‡∏î‡πâ‡∏•‡∏á‡∏ó‡∏∞‡πÄ‡∏ö‡∏µ‡∏¢‡∏ô URL #connurl#";
 };
 
 String STR_COULDNOTCONNECT
@@ -239,6 +243,7 @@ String STR_COULDNOTCONNECT
     Text[ arabic ] = " ⁄–—  √”Ì” « ’«· ··‹ URL #connurl#..";
     Text[ catalan ] = "No s'ha pogut establir una connexiÛ per a l'URL #connurl#.";
     Text[ finnish ] = "Yhteyden muodostaminen URL-osoitteeseen #connurl# ei onnistunut.";
+    Text[ thai ] = "‡πÑ‡∏°‡πà‡∏™‡∏≤‡∏°‡∏≤‡∏£‡∏ñ‡∏™‡∏£‡πâ‡∏≤‡∏á‡∏Å‡∏≤‡∏£‡πÄ‡∏ä‡∏∑‡πà‡∏≠‡∏°‡∏ï‡πà‡∏≠ URL #connurl# ‡πÑ‡∏î‡πâ";
 };
 String STR_COULDNOTCONNECT_PLEASECHECK
 {
@@ -264,6 +269,7 @@ String STR_COULDNOTCONNECT_PLEASECHECK
     Text[ arabic ] = "«·—Ã«¡ ›Õ’ «·≈⁄œ«œ«  «·Õ«·Ì…° „À· «”„ «·„” Œœ„ Êﬂ·„… «·”— ⁄·Ï ”»Ì· «·„À«·.";
     Text[ catalan ] = "Si us plau, comproveu els par‡metres actuals, com ara els referents al nom d'usuari i la contrasenya.";
     Text[ finnish ] = "Tarkista, ett‰ nykyiset asetukset (esimerkiksi salasana- ja k‰ytt‰j‰tunnusasetukset) ovat oikeat.";
+    Text[ thai ] = "‡∏Å‡∏£‡∏∏‡∏ì‡∏≤‡∏ï‡∏£‡∏ß‡∏à‡∏™‡∏≠‡∏ö‡∏Å‡∏≤‡∏£‡∏ï‡∏±‡πâ‡∏á‡∏Ñ‡πà‡∏≤‡∏õ‡∏±‡∏à‡∏à‡∏∏‡∏ö‡∏±‡∏ô  ‡πÄ‡∏ä‡πà‡∏ô  ‡∏ä‡∏∑‡πà‡∏≠‡∏ú‡∏π‡πâ‡πÉ‡∏ä‡πâ‡πÅ‡∏•‡∏∞‡∏£‡∏´‡∏±‡∏™‡∏ú‡πà‡∏≤‡∏ô";
 };
 String STR_NOTABLEINFO
 {
@@ -289,6 +295,7 @@ String STR_NOTABLEINFO
     Text[ arabic ] = " „  √”Ì” «·« ’«· »‰Ã«Õ° ≈·« √‰Â  ⁄–— «·Õ’Ê· ⁄·Ï „⁄·Ê„«  »Œ’Ê’ Ãœ«Ê· ﬁ«⁄œ… «·»Ì«‰« .";
     Text[ catalan ] = "S'ha pogut establir la connexiÛ perÚ la informaciÛ sobre les taules del banc de dades no est‡ disponible.";
     Text[ finnish ] = "Yhteys on muodostettu, mutta tietokannan taulukkotiedot eiv‰t ole k‰ytett‰viss‰.";
+    Text[ thai ] = "‡πÄ‡∏ä‡∏∑‡πà‡∏≠‡∏°‡∏ï‡πà‡∏≠‡∏™‡∏≥‡πÄ‡∏£‡πá‡∏à  ‡πÅ‡∏ï‡πà‡∏Ç‡πâ‡∏≠‡∏°‡∏π‡∏•‡πÄ‡∏Å‡∏µ‡πà‡∏¢‡∏ß‡∏Å‡∏±‡∏ö‡∏ï‡∏≤‡∏£‡∏≤‡∏á‡∏ê‡∏≤‡∏ô‡∏Ç‡πâ‡∏≠‡∏°‡∏π‡∏•‡πÉ‡∏ä‡πâ‡πÑ‡∏°‡πà‡πÑ‡∏î‡πâ";
 };
 String STR_ALL_TABLES
 {
@@ -314,6 +321,7 @@ String STR_ALL_TABLES
     Text[ arabic ] = "ﬂ· «·Ãœ«Ê·";
     Text[ catalan ] = "Totes les taules";
     Text[ finnish ] = "Kaikki taulukot";
+    Text[ thai ] = "‡∏ï‡∏≤‡∏£‡∏≤‡∏á‡∏ó‡∏±‡πâ‡∏á‡∏´‡∏°‡∏î";
 };
 String STR_ALL_VIEWS
 {
@@ -339,6 +347,7 @@ String STR_ALL_VIEWS
     Text[ arabic ] = "ﬂ«›… ÿ—ﬁ ⁄—÷ «·Ãœ«Ê·";
     Text[ catalan ] = "Totes les vistes";
     Text[ finnish ] = "Kaikki n‰kym‰t";
+    Text[ thai ] = "‡∏°‡∏∏‡∏°‡∏°‡∏≠‡∏á‡∏ó‡∏±‡πâ‡∏á‡∏´‡∏°‡∏î";
 };
 String STR_ALL_TABLES_AND_VIEWS
 {
@@ -364,11 +373,15 @@ String STR_ALL_TABLES_AND_VIEWS
     Text[ arabic ] = "ﬂ«›… «·Ãœ«Ê· Êÿ—ﬁ ⁄—÷Â«";
     Text[ catalan ] = "Totes les taules i vistes";
     Text[ finnish ] = "Kaikki taulukot ja n‰kym‰t";
+    Text[ thai ] = "‡∏ï‡∏≤‡∏£‡∏≤‡∏á‡πÅ‡∏•‡∏∞‡∏°‡∏∏‡∏°‡∏°‡∏≠‡∏á‡∏ó‡∏±‡πâ‡∏á‡∏´‡∏°‡∏î";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.24  2002/04/29 08:49:48  oj
+ *  #98772# hi contrast changes
+ *
  *  Revision 1.23  2002/01/25 21:07:17  kz
  *  Merge SRC641: 25.01.02 - 22:06:46
  *
