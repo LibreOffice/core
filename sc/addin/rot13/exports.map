@@ -1,0 +1,11 @@
+SC_1_0 {
+    global:
+        GetFunctionCount;
+        GetFunctionData;
+        GetParameterDescription;
+        SetLanguage;
+        Rot13;
+
+    local:
+        *;
+};
