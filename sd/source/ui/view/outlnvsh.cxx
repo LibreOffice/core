@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-08 11:23:24 $
+ *  last change: $Author: dl $ $Date: 2001-03-12 07:54:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,9 @@
 #endif
 #ifndef _COM_SUN_STAR_LINGUISTIC2_XLINGUSERVICEMANAGER_HPP_
 #include <com/sun/star/linguistic2/XLinguServiceManager.hpp>
+#endif
+#ifndef _COM_SUN_STAR_I18N_TRANSLITERATIONMODULES_HDL_
+#include <com/sun/star/i18n/TransliterationModules.hdl>
 #endif
 #ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
@@ -663,7 +666,8 @@ void SdOutlineViewShell::FuSupport(SfxRequest &rReq)
         pDocSh->SetStyleFamily(((SfxUInt16Item&)rReq.GetArgs()->Get( SID_STYLE_FAMILY )).GetValue());
 
     BOOL bPreviewState = FALSE;
-    switch ( rReq.GetSlot() )
+    ULONG nSlot = rReq.GetSlot();
+    switch ( nSlot )
     {
         case SID_CUT:
         {
@@ -795,6 +799,48 @@ void SdOutlineViewShell::FuSupport(SfxRequest &rReq)
         {
             pDoc->SetOnlineSpell(!pDoc->GetOnlineSpell());
             rReq.Done ();
+        }
+        break;
+
+        case SID_TRANSLITERATE_UPPER:
+        case SID_TRANSLITERATE_LOWER:
+        case SID_TRANSLITERATE_HALFWIDTH:
+        case SID_TRANSLITERATE_FULLWIDTH:
+        case SID_TRANSLITERATE_HIRAGANA:
+        case SID_TRANSLITERATE_KATAGANA:
+        {
+            OutlinerView* pOLV = pOlView->GetViewByWindow( pWindow );
+            if( pOLV )
+            {
+                using namespace ::com::sun::star::i18n;
+                sal_Int32 nType = 0;
+
+                switch( nSlot )
+                {
+                    case SID_TRANSLITERATE_UPPER:
+                        nType = TransliterationModules_LOWERCASE_UPPERCASE;
+                        break;
+                    case SID_TRANSLITERATE_LOWER:
+                        nType = TransliterationModules_UPPERCASE_LOWERCASE;
+                        break;
+                    case SID_TRANSLITERATE_HALFWIDTH:
+                        nType = TransliterationModules_FULLWIDTH_HALFWIDTH;
+                        break;
+                    case SID_TRANSLITERATE_FULLWIDTH:
+                        nType = TransliterationModules_HALFWIDTH_FULLWIDTH;
+                        break;
+                    case SID_TRANSLITERATE_HIRAGANA:
+                        nType = TransliterationModules_KATAKANA_HIRAGANA;
+                        break;
+                    case SID_TRANSLITERATE_KATAGANA:
+                        nType = TransliterationModules_HIRAGANA_KATAKANA;
+                        break;
+                }
+
+                pOLV->TransliterateText( nType );
+            }
+
+            rReq.Done();
         }
         break;
 
@@ -973,10 +1019,10 @@ void SdOutlineViewShell::GetMenuState( SfxItemSet &rSet )
     Paragraph* pPara = (Paragraph*)pList->First();
 
     USHORT nDepth;
-    USHORT nTmpDepth = pOutl->GetDepth( pOutl->GetAbsPos( pPara ) );
+    USHORT nTmpDepth = pOutl->GetDepth( (USHORT) pOutl->GetAbsPos( pPara ) );
     while (pPara)
     {
-        nDepth = pOutl->GetDepth( pOutl->GetAbsPos( pPara ) );
+        nDepth = pOutl->GetDepth( (USHORT) pOutl->GetAbsPos( pPara ) );
 
         if( nDepth != nTmpDepth )
             bUnique = FALSE;
@@ -1519,10 +1565,10 @@ void SdOutlineViewShell::GetStatusBarState(SfxItemSet& rSet)
     Paragraph*      pFirstPara  = (Paragraph*)pSelList->First();
     Paragraph*      pLastPara   = (Paragraph*)pSelList->Last();
 
-    if( pOutliner->GetDepth( pOutliner->GetAbsPos( pFirstPara ) ) > 0 )
+    if( pOutliner->GetDepth( (USHORT) pOutliner->GetAbsPos( pFirstPara ) ) > 0 )
         pFirstPara = pOlView->GetPrevTitle( pFirstPara );
 
-    if( pOutliner->GetDepth( pOutliner->GetAbsPos( pLastPara ) ) > 0 )
+    if( pOutliner->GetDepth( (USHORT) pOutliner->GetAbsPos( pLastPara ) ) > 0 )
         pLastPara = pOlView->GetPrevTitle( pLastPara );
 
     delete pSelList;                // die wurde extra fuer uns erzeugt
@@ -1946,7 +1992,7 @@ String SdOutlineViewShell::GetPageRangeString()
 
     while ( pPara )
     {
-        if ( pOutl->GetDepth( pOutl->GetAbsPos( pPara ) ) > 0 )
+        if ( pOutl->GetDepth( (USHORT) pOutl->GetAbsPos( pPara ) ) > 0 )
         {
             pPara = pOlView->GetPrevTitle(pPara);
         }
@@ -2044,7 +2090,7 @@ void SdOutlineViewShell::UpdatePreview()
             delete pList;
 
             BOOL bNewPage = pPage != pLastPage;
-            BOOL bTitleObject = pOutliner->GetDepth( pOutliner->GetAbsPos( pPara ) ) == 0;
+            BOOL bTitleObject = pOutliner->GetDepth( (USHORT) pOutliner->GetAbsPos( pPara ) ) == 0;
             if( !bTitleObject )
                 pPara = pOlView->GetPrevTitle( pPara );
 
@@ -2115,7 +2161,7 @@ BOOL SdOutlineViewShell::UpdateTitleObject( SdPage* pPage, Paragraph* pPara )
 
 
         pTO  = new SdrRectObj( OBJ_TITLETEXT );
-        pOPO = pOutliner->CreateParaObject( pOutliner->GetAbsPos( pPara ), 1 );
+        pOPO = pOutliner->CreateParaObject( (USHORT) pOutliner->GetAbsPos( pPara ), 1 );
         pOPO->SetOutlinerMode( OUTLINERMODE_TITLEOBJECT );
         pTO->SetOutlinerParaObject( pOPO );
         pTO->SetEmptyPresObj( FALSE );
@@ -2137,7 +2183,7 @@ BOOL SdOutlineViewShell::UpdateTitleObject( SdPage* pPage, Paragraph* pPara )
     // Titeltext uebernehmen
     else if( pTO && bText )
     {
-        pOPO = pOutliner->CreateParaObject( pOutliner->GetAbsPos( pPara ), 1 );
+        pOPO = pOutliner->CreateParaObject( (USHORT) pOutliner->GetAbsPos( pPara ), 1 );
         pOPO->SetOutlinerMode( OUTLINERMODE_TITLEOBJECT );
         pTO->SetOutlinerParaObject( pOPO );
         pTO->SetEmptyPresObj( FALSE );
@@ -2180,7 +2226,7 @@ BOOL SdOutlineViewShell::UpdateLayoutObject( SdPage* pPage, Paragraph* pPara )
     ULONG nPara          = nTitlePara + 1;
     ULONG nParasInLayout = 0L;
     pPara = pOutliner->GetParagraph( nPara );
-    while( pPara && pOutliner->GetDepth( pOutliner->GetAbsPos( pPara ) ) != 0 )
+    while( pPara && pOutliner->GetDepth( (USHORT) pOutliner->GetAbsPos( pPara ) ) != 0 )
     {
         nParasInLayout++;
         pPara = pOutliner->GetParagraph( ++nPara );
@@ -2190,7 +2236,7 @@ BOOL SdOutlineViewShell::UpdateLayoutObject( SdPage* pPage, Paragraph* pPara )
 
     // ein OutlinerParaObject erzeugen
     pPara = pOutliner->GetParagraph( nTitlePara + 1 );
-    pOPO  = pOutliner->CreateParaObject( nTitlePara + 1, nParasInLayout );
+    pOPO  = pOutliner->CreateParaObject( (USHORT) nTitlePara + 1, (USHORT) nParasInLayout );
 
     // kein Seitenobjekt, aber Gliederung im Outliner
     if( !pTO && pOPO )
@@ -2251,7 +2297,8 @@ BOOL SdOutlineViewShell::UpdateLayoutObject( SdPage* pPage, Paragraph* pPara )
 ULONG SdOutlineViewShell::Read(SvStream& rInput, USHORT eFormat)
 {
     Outliner* pOutl = pOlView->GetOutliner();
-    BOOL bRet = pOutl->Read( rInput, eFormat, pDocSh->GetHeaderAttributes() );
+
+    ULONG bRet = pOutl->Read( rInput, eFormat, pDocSh->GetHeaderAttributes() );
 
     SdPage* pPage = pDoc->GetSdPage( pDoc->GetSdPageCount(PK_STANDARD) - 1, PK_STANDARD );;
     SfxStyleSheet* pTitleSheet = pPage->GetStyleSheetForPresObj( PRESOBJ_TITLE );
@@ -2262,7 +2309,7 @@ ULONG SdOutlineViewShell::Read(SvStream& rInput, USHORT eFormat)
     {
         for ( ULONG nPara = 0; nPara < nParaCount; nPara++ )
         {
-            USHORT nDepth = pOutl->GetDepth( nPara );
+            USHORT nDepth = pOutl->GetDepth( (USHORT) nPara );
 
             if( nDepth == 0 )
             {

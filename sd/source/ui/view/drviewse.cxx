@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dl $ $Date: 2001-02-05 11:35:03 $
+ *  last change: $Author: dl $ $Date: 2001-03-12 07:54:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_I18N_TRANSLITERATIONMODULES_HDL_
+#include <com/sun/star/i18n/TransliterationModules.hdl>
 #endif
 
 #ifndef _SV_WAITOBJ_HXX
@@ -1347,6 +1350,48 @@ void SdDrawViewShell::FuSupport(SfxRequest& rReq)
 
             pDrView->EndUndo();
             rReq.Done ();
+        }
+        break;
+
+        case SID_TRANSLITERATE_UPPER:
+        case SID_TRANSLITERATE_LOWER:
+        case SID_TRANSLITERATE_HALFWIDTH:
+        case SID_TRANSLITERATE_FULLWIDTH:
+        case SID_TRANSLITERATE_HIRAGANA:
+        case SID_TRANSLITERATE_KATAGANA:
+        {
+            OutlinerView* pOLV = pView->GetTextEditOutlinerView();
+            if( pOLV )
+            {
+                using namespace ::com::sun::star::i18n;
+                sal_Int32 nType = 0;
+
+                switch( nSId )
+                {
+                    case SID_TRANSLITERATE_UPPER:
+                        nType = TransliterationModules_LOWERCASE_UPPERCASE;
+                        break;
+                    case SID_TRANSLITERATE_LOWER:
+                        nType = TransliterationModules_UPPERCASE_LOWERCASE;
+                        break;
+                    case SID_TRANSLITERATE_HALFWIDTH:
+                        nType = TransliterationModules_FULLWIDTH_HALFWIDTH;
+                        break;
+                    case SID_TRANSLITERATE_FULLWIDTH:
+                        nType = TransliterationModules_HALFWIDTH_FULLWIDTH;
+                        break;
+                    case SID_TRANSLITERATE_HIRAGANA:
+                        nType = TransliterationModules_KATAKANA_HIRAGANA;
+                        break;
+                    case SID_TRANSLITERATE_KATAGANA:
+                        nType = TransliterationModules_HIRAGANA_KATAKANA;
+                        break;
+                }
+
+                pOLV->TransliterateText( nType );
+            }
+
+            rReq.Done();
         }
         break;
 

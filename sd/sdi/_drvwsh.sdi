@@ -1,25 +1,63 @@
 /*************************************************************************
-#*
-#*    $Workfile:   _drvwsh.sdi  $
-#*
-#*    Beschreibung      Basis fuer ViewShell-IDL
-#*
-#*    Ersterstellung    SOH 04.04.97
-#*    Letzte Aenderung  $Author: dl $ $Date: 2001-02-05 11:32:54 $
-#*    $Revision: 1.3 $
-#*
-#*    $Logfile:   T:/sd/sdi/_drvwsh.sdv  $
-#*
-#*    Copyright (c) 1989 - 1999, STAR DIVISION
-#*
-#*************************************************************************
-
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sd/sdi/_drvwsh.sdi,v 1.3 2001-02-05 11:32:54 dl Exp $
-
-*************************************************************************/
- // solange Nicht in svxslots.ilb
+ *
+ *  $RCSfile: _drvwsh.sdi,v $
+ *
+ *  $Revision: 1.4 $
+ *
+ *  last change: $Author: dl $ $Date: 2001-03-12 07:53:43 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
 enum SdrFitToSizeType
 {
     SDRTEXTFIT_NONE ,
@@ -2092,229 +2130,35 @@ interface DrawView : View
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
+    SID_TRANSLITERATE_UPPER // ole : no, status : ?
+    [
+        ExecMethod = FuSupport ;
+        StateMethod = GetCtrlState ;
+    ]
+    SID_TRANSLITERATE_LOWER // ole : no, status : ?
+    [
+        ExecMethod = FuSupport ;
+        StateMethod = GetCtrlState ;
+    ]
+    SID_TRANSLITERATE_HALFWIDTH // ole : no, status : ?
+    [
+        ExecMethod = FuSupport ;
+        StateMethod = GetCtrlState ;
+    ]
+    SID_TRANSLITERATE_FULLWIDTH // ole : no, status : ?
+    [
+        ExecMethod = FuSupport ;
+        StateMethod = GetCtrlState ;
+    ]
+    SID_TRANSLITERATE_HIRAGANA // ole : no, status : ?
+    [
+        ExecMethod = FuSupport ;
+        StateMethod = GetCtrlState ;
+    ]
+    SID_TRANSLITERATE_KATAGANA // ole : no, status : ?
+    [
+        ExecMethod = FuSupport ;
+        StateMethod = GetCtrlState ;
+    ]
 }
-
-/*************************************************************************
-
-      Source Code Control System - History
-
-      $Log: not supported by cvs2svn $
-      Revision 1.2  2001/01/24 13:21:02  dl
-      #78334# Enable SID_ATTR_TABSTOP
-
-      Revision 1.1.1.1  2000/09/18 16:48:29  hr
-      initial import
-
-      Revision 1.62  2000/08/11 12:44:21  ka
-      #77537# Gallery reanimation
-
-      Revision 1.61  2000/05/12 11:45:28  cl
-      unicode
-
-      Revision 1.60  2000/02/11 16:07:06  pw
-      #72717# New slot SID_EDIT_HYPERLINK
-
-      Revision 1.59  2000/01/17 13:48:46  aw
-      #71992# new distribute dialog and implementation
-
-      Revision 1.58  1999/12/15 12:16:17  pw
-      #70510# Add SID_JUMPTOMARK
-
-      Revision 1.57  1999/11/22 16:22:12  aw
-      changes due to Merge() - functionality
-
-      Revision 1.56  1999/11/08 15:58:36  pw
-      add slots SID_POLY_ ...
-
-      Revision 1.55  1999/11/01 15:12:07  pw
-      removed SID_INSERT_HYPERLINK
-
-      Revision 1.54  1999/10/18 15:52:28  pw
-      new slot SID_INSERT_HYPERLINK
-
-      Revision 1.53  1999/09/14 15:59:54  pw
-      #68378# Set Flag MenuCOnfig of SID_OUTLINE_BULLET, SID_OBJECT_ALIGN
-
-      Revision 1.52  1999/09/02 11:22:05  pw
-      #68378# set MenuConfig=TRUE of SID_RULER
-
-      Revision 1.51  1999/08/13 14:20:17  aw
-      support for new transparence and gradient IAOs (InterActiveObjects)
-
-
-      Rev 1.49   02 Aug 1999 12:24:14   PW
-   new slots SID_CONVERT_TO_METAFILE,SID_CONVERT_TO_BITMAP
-
-      Rev 1.48   14 Jul 1999 11:11:24   KA
-   Graphicfilters now in drgrfobj.sdi
-
-      Rev 1.47   12 Jul 1999 09:26:58   KA
-   #67438: Filter effects for graphics
-
-      Rev 1.46   09 Jul 1999 17:46:40   PW
-   #58419# :new slots: SID_INSERT_SOUND,SID_INSERT_VIDEO
-
-      Rev 1.45   25 Mar 1999 17:37:28   CL
-   #63859# ConfigName und HelpText entfernt
-
-      Rev 1.44   15 Mar 1999 20:10:44   HJS
-   Merge SRC515: 15.03.99 - 20.10.28 (NoBranch)
-
-      Rev 1.43   12 Mar 1999 20:37:14   MH
-   Merge SRC515: 12.03.99 - 20.36.55 (NoBranch)
-
-      Rev 1.42   10 Mar 1999 22:44:12   HJS
-   Merge SRC515: 10.03.99 - 22.43.54 (NoBranch)
-
-      Rev 1.41   09 Mar 1999 14:07:46   DL
-   #62286# +SID_ATTR_YEAR2000
-
-      Rev 1.40   23 Feb 1999 00:50:30   HJS
-   Merge SRC514: 23.02.99 - 00.50.03 (NoBranch)
-
-      Rev 1.39   10 Feb 1999 22:05:38   HJS
-   Merge SRC513: 10.02.99 - 22.04.53 (NoBranch)
-
-      Rev 1.38   10 Feb 1999 03:39:36   HJS
-   Merge SRC513: 10.02.99 - 03.39.06 (NoBranch)
-
-      Rev 1.37   29 Oct 1998 17:24:58   CL
-   #58507# SID_CHOOSE_CONTROLS ersetzt durch SID_OBJECT_SELECT
-
-      Rev 1.36   27 Oct 1998 16:01:26   HJS
-   merge int505 new 27.10.98
-
-      Rev 1.35   21 Oct 1998 18:50:02   HJS
-   merge int505 new 21.10.98
-
-      Rev 1.34   30 Sep 1998 18:24:10   HJS
-   merge prt505 new 30.09.98
-
-      Rev 1.33   29 Sep 1998 21:46:50   HJS
-   merge prt505 new 29.09.98
-
-      Rev 1.32   10 Sep 1998 14:28:52   HJS
-   merge prt504 new 10.09.98
-
-      Rev 1.31   08 Sep 1998 20:09:44   HJS
-   merge prt504 new 08.09.98
-
-      Rev 1.30   31 Aug 1998 19:25:24   HJS
-   merge prt503 old 31.08.98
-
-      Rev 1.29   12 Aug 1998 17:15:50   HJS
-   merge prt503 old 12.08.98
-
-      Rev 1.28   03 Jul 1998 14:02:24   DL
-   Neu: SID_MAIL_SCROLLBODY_PAGEDOWN
-
-      Rev 1.27   02 Apr 1998 16:32:36   SOH
-   3D-Dialog (Slot) entfernt
-
-      Rev 1.26   05 Mar 1998 08:58:44   AWO
-   Richtige Execute-Methode fuer SID_FM_CREATE_CONTROL
-
-      Rev 1.25   27 Feb 1998 10:09:26   AWO
-   FmControlSlots wieder entfernt
-
-      Rev 1.24   25 Feb 1998 15:05:06   SOH
-   #47223#: Tabulatoren (und Einzuege) auch ueber Lineal einstellbar
-
-      Rev 1.23   18 Feb 1998 17:47:56   SOH
-   + Slots fuer Ausgabe-Modi (SW, etc.)
-
-      Rev 1.22   17 Feb 1998 15:48:32   AWO
-   SID_FM_ADD_TABLE
-
-      Rev 1.21   16 Feb 1998 11:32:50   AWO
-   Neue FormSlots
-
-      Rev 1.20   13 Feb 1998 15:56:30   DG
-   erw.
-
-      Rev 1.19   10 Feb 1998 09:53:48   DG
-   Intergration von FormProperties
-
-      Rev 1.18   09 Feb 1998 10:39:08   AWO
-   Neu: SID_FM_CONFIG
-
-      Rev 1.17   10 Dec 1997 20:32:04   HJS
-   merge vcl364 10.12.97
-
-      Rev 1.16   01 Dec 1997 19:23:18   HJS
-   merge vcl364 01.12.97
-
-      Rev 1.15   04 Nov 1997 12:04:16   HJS
-   merge vcl364 04.11.97
-
-      Rev 1.14   07 Oct 1997 11:40:04   HJS
-   merge vcl364 07.10.97
-
-      Rev 1.13   28 Aug 1997 12:33:20   MBA
-   Neue Interface-Namen
-
-      Rev 1.12   15 Aug 1997 12:26:14   OM
-   Draw- und Controlslots Bereichsumstellung
-
-      Rev 1.11   07 Aug 1997 20:05:18   HJS
-   merge sp2364 07.08.97
-
-      Rev 1.10   31 Jul 1997 17:47:02   HJS
-   merge sp2364 31.07.97
-
-      Rev 1.9   29 Jul 1997 10:04:50   OM
-   Hyperlink Statusmethode
-
-      Rev 1.8   24 Jul 1997 14:02:54   HJS
-   merge sp2364 24.07.97
-
-      Rev 1.7   22 Jul 1997 14:23:04   HJS
-   merge sp2364 22.07.97
-
-      Rev 1.6   15 Jul 1997 16:15:58   SOH
-   + Slots fuer Feldbefehle (Dateiname und Autor)
-
-      Rev 1.5   04 Jul 1997 15:26:24   SOH
-   +/* Slots fuer fixe/variable Zeit-/Datumsfelder; + SID_MODIFY_FIELD
-
-      Rev 1.4   03 Jul 1997 12:54:22   HJS
-   merge sp2364 03.07.97
-
-      Rev 1.3   01 Jul 1997 16:37:30   SOH
-   + Slots fuer Feldbefehle (SID_INSERT_FLD_*)
-
-      Rev 1.2   20 Jun 1997 13:58:28   HJS
-   merge 364 20.06.97
-
-      Rev 1.1   30 May 1997 15:55:00   SOH
-   Neue Slots fuer 3D-Controller
-
-      Rev 1.0   09 Apr 1997 13:20:16   SOH
-   Initial revision.
-
-*************************************************************************/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
