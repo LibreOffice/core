@@ -162,7 +162,7 @@ hedabu: ..\source\search\levdis.hxx %_DEST%\inc%_EXT%\svtools\levdis.hxx
 hedabu: ..\inc\transfer.hxx %_DEST%\inc%_EXT%\svtools\transfer.hxx
 hedabu: ..\inc\txtcmp.hxx %_DEST%\inc%_EXT%\svtools\txtcmp.hxx
 hedabu: ..\inc\urlbmk.hxx %_DEST%\inc%_EXT%\svtools\urlbmk.hxx
-hedabu: ..\source\urlobj\inetimg.hxx %_DEST%\inc%_EXT%\svtools\inetimg.hxx
+hedabu: ..\inc\inetimg.hxx %_DEST%\inc%_EXT%\svtools\inetimg.hxx
 hedabu: ..\inc\svmedit.hxx %_DEST%\inc%_EXT%\svtools\svmedit.hxx
 hedabu: ..\inc\svstdarr.hxx %_DEST%\inc%_EXT%\svtools\svstdarr.hxx
 hedabu: ..\inc\extattr.hxx %_DEST%\inc%_EXT%\svtools\extattr.hxx
