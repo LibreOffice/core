@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: ssa $ $Date: 2002-10-23 13:18:26 $
+ *  last change: $Author: pl $ $Date: 2002-11-11 12:24:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -471,8 +471,6 @@ long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
     {
         pChild = pSVData->maWinData.mpCaptureWin;
 
-        DBG_ASSERT( !bMouseLeave || (pWindow != pChild->mpFrameWindow),
-                    "ImplHandleMouseEvent: MouseLeave is send and Mouse is captured" );
         DBG_ASSERT( pWindow == pChild->mpFrameWindow,
                     "ImplHandleMouseEvent: mouse event is not sent to capture window" );
 
