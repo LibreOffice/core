@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: os $ $Date: 2002-09-03 06:28:09 $
+ *  last change: $Author: os $ $Date: 2002-09-18 10:39:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2043,7 +2043,8 @@ Sequence<rtl::OUString> SwNewDBMgr::GetExistingDatabaseNames()
 
  ---------------------------------------------------------------------------*/
 void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
-                        const Sequence<PropertyValue>& rProperties)
+                        const Sequence<PropertyValue>& rProperties,
+                        BOOL bWithDataSourceBrowser)
 {
     //prevent second call
     if(pImpl->pMergeDialog)
@@ -2078,7 +2079,7 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
                     sDataTableOrQuery,
                     nCmdType,
                     xConnection,
-                    aDescriptor.has(daSelection) ? &aSelection : 0 );
+                    bWithDataSourceBrowser ? 0 : &aSelection );
 
     if(pImpl->pMergeDialog->Execute() == RET_OK)
     {

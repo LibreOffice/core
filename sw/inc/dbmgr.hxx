@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-21 12:18:40 $
+ *  last change: $Author: os $ $Date: 2002-09-18 10:39:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -298,7 +298,8 @@ public:
     void            EndMerge();
 
     void            ExecuteFormLetter(SwWrtShell& rSh,
-                        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rProperties);
+                        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rProperties,
+                        BOOL bWithDataSourceBrowser = FALSE);
 
     void            InsertText(SwWrtShell& rSh,
                         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rProperties);

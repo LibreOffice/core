@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodul1.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: os $ $Date: 2002-06-28 12:09:08 $
+ *  last change: $Author: os $ $Date: 2002-09-18 10:39:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -642,7 +642,7 @@ void SwModule::ExecDB(SfxRequest &rReq)
                 pValues[1].Value <<= aData.sCommand;
                 pValues[2].Value <<= aData.nCommandType;
                 pNewDBMgr->ExecuteFormLetter(GetView()->GetWrtShell(),
-                                            aProperties);
+                                            aProperties, TRUE);
             }
         }
         break;
