@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoexe.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-11 08:30:13 $
+ *  last change: $Author: kr $ $Date: 2001-05-28 15:31:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 #include <osl/conditn.hxx>
 #include <osl/module.h>
 
+#include <rtl/process.h>
 #include <rtl/string.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -133,25 +134,26 @@ static const char arUsingText[] =
 "    [-- Argument1 Argument2 ...]\n";
 
 //--------------------------------------------------------------------------------------------------
-static sal_Bool readOption( OUString * pValue, sal_Char const * pOpt,
-                            sal_Int32 * pnIndex, const sal_Char * argv[], sal_Int32 argc )
+static sal_Bool readOption( OUString * pValue, const sal_Char * pOpt,
+                            sal_Int32 * pnIndex, const OUString & aArg)
     throw (RuntimeException)
 {
-    const sal_Char * pArg = argv[ *pnIndex ];
-    if (pArg[ 0 ] != '-')
+    const OUString dash = OUString(RTL_CONSTASCII_USTRINGPARAM("-"));
+    if(aArg.indexOf(dash) != 0)
         return sal_False;
 
-    OString aArg( pArg +1 );
-    OString aOpt( pOpt );
+    OUString aOpt = OUString::createFromAscii( pOpt );
 
     if (aArg.getLength() < aOpt.getLength())
         return sal_False;
 
-    if (aArg.getLength() == aOpt.getLength() && aOpt.equalsIgnoreAsciiCase( aArg ))
+    if (aOpt.equalsIgnoreAsciiCase( aArg.copy(1) ))
     {
         // take next argument
         ++(*pnIndex);
-        if (*pnIndex >= argc || argv[ *pnIndex ][0] == '-')
+
+        rtl_getAppCommandArg(*pnIndex, &pValue->pData);
+        if (*pnIndex >= rtl_getAppCommandArgCount() || pValue->copy(1).equals(dash))
         {
             OUStringBuffer buf( 32 );
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("incomplete option \"-") );
@@ -161,37 +163,41 @@ static sal_Bool readOption( OUString * pValue, sal_Char const * pOpt,
         }
         else
         {
-            *pValue = OUString::createFromAscii( argv[ *pnIndex ] );
 #ifdef DEBUG
             out( "\n> identified option -" );
             out( pOpt );
             out( " = " );
-            out( argv[ *pnIndex ] );
+            OString tmp = OUStringToOString(aArg, RTL_TEXTENCODING_ASCII_US);
+              out( tmp.getStr() );
 #endif
             ++(*pnIndex);
             return sal_True;
         }
     }
-    else if (aOpt.equalsIgnoreAsciiCase( aArg.copy( 0, aOpt.getLength() ) ))
+      else if (aArg.indexOf(aOpt) == 1)
     {
-        *pValue = OUString::createFromAscii( pArg + 1 + aOpt.getLength() );
+        *pValue = aArg.copy(1 + aOpt.getLength());
 #ifdef DEBUG
         out( "\n> identified option -" );
         out( pOpt );
         out( " = " );
-        out( pArg + 1 + aOpt.getLength() );
+        OString tmp = OUStringToOString(aArg.copy(aOpt.getLength()), RTL_TEXTENCODING_ASCII_US);
+        out( tmp.getStr() );
 #endif
         ++(*pnIndex);
+
         return sal_True;
     }
     return sal_False;
 }
 //--------------------------------------------------------------------------------------------------
 static sal_Bool readOption( sal_Bool * pbOpt, const sal_Char * pOpt,
-                            sal_Int32 * pnIndex, const sal_Char * argv[], sal_Int32 argc )
+                            sal_Int32 * pnIndex, const OUString & aArg)
 {
-    const sal_Char * pArg = argv[ *pnIndex ];
-    if (pArg[0] == '-' && pArg[1] == '-' && rtl_str_compareIgnoreAsciiCase( pArg+2, pOpt ) == 0 )
+    const OUString dashdash(RTL_CONSTASCII_USTRINGPARAM("--"));
+    OUString aOpt = OUString::createFromAscii(pOpt);
+
+    if(aArg.indexOf(dashdash) == 0 && aOpt.equals(aArg.copy(2)))
     {
         ++(*pnIndex);
         *pbOpt = sal_True;
@@ -575,6 +581,7 @@ extern "C" int SAL_CALL main( int argc, const char * argv[] )
     Reference< XComponentContext > xContext;
     Reference< XSimpleRegistry > xRegistry;
 
+
     try
     {
         OUString aImplName, aLocation, aServiceName, aUnoUrl;
@@ -589,38 +596,43 @@ extern "C" int SAL_CALL main( int argc, const char * argv[] )
         bool bNewRegistryMimic = false;
         OUString aReadWriteRegistry;
 
-        sal_Int32 nPos = 1;
+        sal_Int32 nPos = 0;
         // read up to arguments
-        while (nPos < argc)
+        while (nPos < rtl_getAppCommandArgCount())
         {
-            if (rtl_str_compare( argv[nPos], "--" ) == 0)
+            OUString arg;
+
+            rtl_getAppCommandArg(nPos, &arg.pData);
+
+            const OUString dashdash = OUString(RTL_CONSTASCII_USTRINGPARAM("--"));
+            if (dashdash == arg)
             {
                 ++nPos;
                 break;
             }
 
-            if (readOption( &aImplName, "c", &nPos, argv, argc )                ||
-                readOption( &aLocation, "l", &nPos, argv, argc )                ||
-                readOption( &aServiceName, "s", &nPos, argv, argc )             ||
-                readOption( &aUnoUrl, "u", &nPos, argv, argc )                  ||
-                readOption( &bSingleAccept, "singleaccept", &nPos, argv, argc ) ||
-                readOption( &bSingleInstance, "singleinstance", &nPos, argv, argc ))
+            if (readOption( &aImplName, "c", &nPos, arg)                ||
+                readOption( &aLocation, "l", &nPos, arg)                ||
+                readOption( &aServiceName, "s", &nPos, arg)             ||
+                readOption( &aUnoUrl, "u", &nPos, arg)                  ||
+                readOption( &bSingleAccept, "singleaccept", &nPos, arg) ||
+                readOption( &bSingleInstance, "singleinstance", &nPos, arg))
             {
                 continue;
             }
             OUString aRegistry;
-            if (readOption( &aRegistry, "ro", &nPos, argv, argc ))
+            if (readOption( &aRegistry, "ro", &nPos, arg))
             {
                 aReadOnlyRegistries.push_back( aRegistry );
                 bNewRegistryMimic = true;
                 continue;
             }
-            if (readOption( &aReadWriteRegistry, "rw", &nPos, argv, argc ))
+            if (readOption( &aReadWriteRegistry, "rw", &nPos, arg))
             {
                 bNewRegistryMimic = true;
                 continue;
             }
-            if (readOption( &aRegistry, "r", &nPos, argv, argc ))
+            if (readOption( &aRegistry, "r", &nPos, arg))
             {
                 aReadOnlyRegistries.push_back( aRegistry );
                 aReadWriteRegistry = aRegistry;
@@ -632,7 +644,7 @@ extern "C" int SAL_CALL main( int argc, const char * argv[] )
             // else illegal argument
             OUStringBuffer buf( 64 );
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("unexpected parameter \"") );
-            buf.appendAscii( argv[nPos] );
+            buf.append(arg);
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\"!") );
             throw RuntimeException( buf.makeStringAndClear(), Reference< XInterface >() );
         }
