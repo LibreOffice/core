@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrolmodel.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: tbe $ $Date: 2001-05-04 09:02:58 $
+ *  last change: $Author: pl $ $Date: 2001-05-11 19:43:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -941,7 +941,7 @@ void UnoControlModel::read( const ::com::sun::star::uno::Reference< ::com::sun::
     {
         for ( n = 0; n < aProps.getLength(); n++ )
         {
-            if ( !aProps.getConstArray()[n].len() )
+            if ( !aProps.getConstArray()[n].getLength() )
             {
                 ::comphelper::removeElementAt( aProps, n );
                 ::comphelper::removeElementAt( aValues, n );

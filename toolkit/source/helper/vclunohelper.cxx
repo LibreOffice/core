@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclunohelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-15 15:48:41 $
+ *  last change: $Author: pl $ $Date: 2001-05-11 19:43:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -392,9 +392,9 @@ FontWeight VCLUnoHelper::ConvertFontWeight( float f )
 Font VCLUnoHelper::CreateFont( const ::com::sun::star::awt::FontDescriptor& rDescr, const Font& rInitFont )
 {
     Font aFont( rInitFont );
-    if ( rDescr.Name.len() )
+    if ( rDescr.Name.getLength() )
         aFont.SetName( rDescr.Name );
-    if ( rDescr.StyleName.len() )
+    if ( rDescr.StyleName.getLength() )
         aFont.SetStyleName( rDescr.StyleName );
     if ( rDescr.Height )
         aFont.SetSize( Size( rDescr.Width, rDescr.Height ) );
