@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.206 $
+ *  $Revision: 1.207 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 13:35:36 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:23:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -9212,20 +9212,72 @@ Reference< ::drafts::com::sun::star::rendering::XCanvas > Window::GetFullscreenC
     return xCanvas;
 }
 
-void Window::ImplPaintToMetaFile( GDIMetaFile* pMtf )
+void Window::ImplPaintToMetaFile( GDIMetaFile* pMtf, const Region* pOuterClip )
 {
-    Push();
-
     BOOL bRVisible = mpWindowImpl->mbReallyVisible;
-    mpWindowImpl->mbReallyVisible = TRUE;
+    mpWindowImpl->mbReallyVisible = mpWindowImpl->mbVisible;
+    BOOL bDevOutput = mbDevOutput;
+    mbDevOutput = TRUE;
 
     BOOL bOutput = IsOutputEnabled();
-    EnableOutput( FALSE );
+    EnableOutput();
+
+    DBG_ASSERT( GetMapMode().GetMapUnit() == MAP_PIXEL, "MapMode must be PIXEL based" );
+
+    // preserve graphicsstate
+    Push();
+    Region aClipRegion( GetClipRegion() );
+    SetClipRegion();
 
     GDIMetaFile* pOldMtf = GetConnectMetaFile();
     pMtf->WindEnd();
     SetConnectMetaFile( pMtf );
-    Paint( Rectangle( Point( 0, 0 ), GetOutputSizePixel() ) );
+
+    // put a push action to metafile
+    Push();
+    // copy graphics state to metafile
+    SetFont( GetFont() );
+    SetTextColor( GetTextColor() );
+    if( IsLineColor() )
+        SetLineColor( GetLineColor() );
+    else
+        SetLineColor();
+    if( IsFillColor() )
+        SetFillColor( GetFillColor() );
+    else
+        SetFillColor();
+    if( IsTextLineColor() )
+        SetTextLineColor( GetTextLineColor() );
+    else
+        SetTextLineColor();
+    if( IsTextFillColor() )
+        SetTextFillColor( GetTextFillColor() );
+    else
+        SetTextFillColor();
+    SetTextAlign( GetTextAlign() );
+    SetRasterOp( GetRasterOp() );
+    if( IsRefPoint() )
+        SetRefPoint( GetRefPoint() );
+    else
+        SetRefPoint();
+    SetLayoutMode( GetLayoutMode() );
+    SetDigitLanguage( GetDigitLanguage() );
+    Rectangle aPaintRect( Point( 0, 0 ), GetOutputSizePixel() );
+    aClipRegion.Intersect( aPaintRect );
+    if( pOuterClip )
+        aClipRegion.Intersect( *pOuterClip );
+    SetClipRegion( aClipRegion );
+
+    // do the actual paint
+
+    // background
+    if( ! IsPaintTransparent() && IsBackground() && ! (GetParentClipMode() & PARENTCLIPMODE_NOCLIP ) )
+        Erase();
+    // foreground
+    Paint( aPaintRect );
+    // put a pop action to metafile
+    Pop();
+
     SetConnectMetaFile( pOldMtf );
     EnableOutput( bOutput );
     mpWindowImpl->mbReallyVisible = bRVisible;
@@ -9234,10 +9286,14 @@ void Window::ImplPaintToMetaFile( GDIMetaFile* pMtf )
     {
         if( pChild->mpWindowImpl->mpFrame == mpWindowImpl->mpFrame && pChild->IsVisible() )
         {
+            Region aClip( aPaintRect );
+            if( pOuterClip )
+                aClip.Intersect( *pOuterClip );
             sal_Int32 nDeltaX = GetOutOffXPixel() - pChild->GetOutOffXPixel();
             sal_Int32 nDeltaY = GetOutOffYPixel() - pChild->GetOutOffYPixel();
             pMtf->Move( nDeltaX, nDeltaY );
-            pChild->ImplPaintToMetaFile( pMtf );
+            aClip.Move( nDeltaX, nDeltaY );
+            pChild->ImplPaintToMetaFile( pMtf, &aClip );
             pMtf->Move( -nDeltaX, -nDeltaY );
         }
     }
@@ -9246,15 +9302,26 @@ void Window::ImplPaintToMetaFile( GDIMetaFile* pMtf )
     {
         if( pOverlap->mpWindowImpl->mpFrame == mpWindowImpl->mpFrame && pOverlap->IsVisible() )
         {
+            Region aClip;
             sal_Int32 nDeltaX = GetOutOffXPixel() - pOverlap->GetOutOffXPixel();
             sal_Int32 nDeltaY = GetOutOffYPixel() - pOverlap->GetOutOffYPixel();
             pMtf->Move( nDeltaX, nDeltaY );
-            pOverlap->ImplPaintToMetaFile( pMtf );
+            if( pOuterClip )
+            {
+                aClip = *pOuterClip;
+                aClip.Move( nDeltaX, nDeltaY );
+            }
+            pOverlap->ImplPaintToMetaFile( pMtf, pOuterClip ? &aClip : NULL );
             pMtf->Move( -nDeltaX, -nDeltaY );
         }
     }
 
+    // restore graphics state
     Pop();
+
+    EnableOutput( bOutput );
+    mpWindowImpl->mbReallyVisible = bRVisible;
+    mbDevOutput = bDevOutput;
 }
 
 void Window::PaintToDevice( OutputDevice* pDev, const Point& rPos, const Size& rSize )
@@ -9263,8 +9330,13 @@ void Window::PaintToDevice( OutputDevice* pDev, const Point& rPos, const Size& r
     Point       aPos  = pDev->LogicToPixel( rPos );
     Size        aSize = pDev->LogicToPixel( rSize );
 
+    Window* pRealParent = NULL;
     if( ! mpWindowImpl->mbVisible )
     {
+        Window* pTempParent = ImplGetDefaultWindow();
+        pTempParent->EnableChildTransparentMode();
+        pRealParent = GetParent();
+        SetParent( pTempParent );
         // trigger correct visibility flags for children
         Show();
         Hide();
@@ -9273,9 +9345,21 @@ void Window::PaintToDevice( OutputDevice* pDev, const Point& rPos, const Size& r
     BOOL bVisible = mpWindowImpl->mbVisible;
     mpWindowImpl->mbVisible = TRUE;
 
-    ImplPaintToMetaFile( &aMF );
+    if( mpWindowImpl->mpBorderWindow )
+    {
+        sal_Int32 nDeltaX = GetOutOffXPixel() - mpWindowImpl->mpBorderWindow->GetOutOffXPixel();
+        sal_Int32 nDeltaY = GetOutOffYPixel() - mpWindowImpl->mpBorderWindow->GetOutOffYPixel();
+        aMF.Move( nDeltaX, nDeltaY );
+        mpWindowImpl->mpBorderWindow->ImplPaintToMetaFile( &aMF );
+        aMF.Move( -nDeltaX, -nDeltaY );
+    }
+    else
+        ImplPaintToMetaFile( &aMF );
 
     mpWindowImpl->mbVisible = bVisible;
+
+    if( pRealParent )
+        SetParent( pRealParent );
 
     pDev->Push();
     pDev->SetMapMode();
