@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 09:21:59 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 16:39:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2217,13 +2217,33 @@ void ScTabView::SetNewVisArea()
         aViewData.GetViewShell()->BroadcastAccessibility(SfxSimpleHint(SC_HINT_ACC_VISAREACHANGED));
 }
 
+sal_Bool ScTabView::HasPageFieldDataAtCursor() const
+{
+    ScGridWindow* pWin = pGridWin[aViewData.GetActivePart()];
+    SCCOL nCol = aViewData.GetCurX();
+    SCROW nRow = aViewData.GetCurY();
+    if (pWin)
+        return pWin->HasPageFieldData( nCol, nRow );
+
+    return sal_False;
+}
+
 void ScTabView::StartDataSelect()
 {
     ScGridWindow* pWin = pGridWin[aViewData.GetActivePart()];
     SCCOL nCol = aViewData.GetCurX();
     SCROW nRow = aViewData.GetCurY();
     if (pWin)
-        pWin->DoAutoFilterMenue( nCol, nRow, TRUE );
+    {
+        //  #i36598# If the cursor is on a page field's data cell,
+        //  no meaningful input is possible anyway, so this function
+        //  can be used to select a page field entry.
+
+        if ( pWin->HasPageFieldData( nCol, nRow ) )
+            pWin->DoPageFieldMenue( nCol, nRow );
+        else
+            pWin->DoAutoFilterMenue( nCol, nRow, TRUE );
+    }
 }
 
 void ScTabView::EnableRefInput(BOOL bFlag)
