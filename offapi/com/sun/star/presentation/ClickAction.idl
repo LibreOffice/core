@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ClickAction.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:54:46 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 21:23:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 /** This enumeration specifies the actions which can be processed when
     a user clicks on an object.
  */
-enum ClickAction
+published enum ClickAction
 {
     //-------------------------------------------------------------------------
 
