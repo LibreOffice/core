@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinFileOpenImpl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tra $ $Date: 2001-07-09 12:58:25 $
+ *  last change: $Author: tra $ $Date: 2001-07-09 13:28:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -565,7 +565,17 @@ void SAL_CALL CWinFileOpenImpl::enableControl( sal_Int16 ControlID, sal_Bool bEn
 
     if ( !hwndCtrl )
     {
+
+#pragma message( "################################" )
+#pragma message( " fix this"
+#pragma message( "################################" )
+        /*
+        will be enabled again when enableControl in offline
+        mode is ready
+
         OSL_ENSURE( sal_False, "invalid element id");
+        */
+
         return;
     }
 
@@ -583,7 +593,15 @@ void SAL_CALL CWinFileOpenImpl::setLabel( sal_Int16 aControlId, const ::rtl::OUS
 
     if ( !hwndCtrl )
     {
+#pragma message( "################################" )
+#pragma message( " fix this"
+#pragma message( "################################" )
+        /*
+        will be enabled again when setLabel in offline
+        mode is ready
+
         OSL_ENSURE( sal_False, "invalid element id");
+        */
         return;
     }
 
@@ -603,7 +621,15 @@ OUString SAL_CALL CWinFileOpenImpl::getLabel( sal_Int16 aControlId )
 
     if ( !hwndCtrl )
     {
+#pragma message( "################################" )
+#pragma message( " fix this"
+#pragma message( "################################" )
+        /*
+        will be enabled again when setLabel in offline
+        mode is ready
         OSL_ENSURE( sal_False, "invalid element id");
+        */
+
         return OUString( );
     }
 
