@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commonpagesdbp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 12:25:31 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:42:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,17 +242,22 @@ namespace dbp
         const OControlWizardContext& rContext = getContext();
         try
         {
-            Reference< XConnection > xOldConn = getFormConnection();
+            Reference< XConnection > xOldConn;
+            if ( !rContext.bEmbedded )
+            {
+                xOldConn = getFormConnection();
 
-            ::rtl::OUString sDataSource = m_aDatasource.GetSelectEntry();
+                ::rtl::OUString sDataSource = m_aDatasource.GetSelectEntry();
+                rContext.xForm->setPropertyValue( ::rtl::OUString::createFromAscii("DataSourceName"), makeAny( sDataSource ) );
+            }
             ::rtl::OUString sCommand = m_aTable.GetSelectEntry();
             sal_Int32 nCommandType = reinterpret_cast< sal_Int32 >( m_aTable.GetEntryData( m_aTable.GetSelectEntryPos() ) );
 
-            rContext.xForm->setPropertyValue( ::rtl::OUString::createFromAscii("DataSourceName"), makeAny( sDataSource ) );
             rContext.xForm->setPropertyValue( ::rtl::OUString::createFromAscii("Command"), makeAny( sCommand ) );
             rContext.xForm->setPropertyValue( ::rtl::OUString::createFromAscii("CommandType"), makeAny( nCommandType ) );
 
-            setFormConnection( xOldConn, sal_False );
+            if ( !rContext.bEmbedded )
+                setFormConnection( xOldConn, sal_False );
 
             if (!updateContext())
                 return sal_False;
@@ -276,7 +281,7 @@ namespace dbp
         OSL_ENSURE(pFilter,"Filter: StarOffice XML (Base) could not be found!");
         if ( pFilter )
         {
-            aFileDlg.AddFilter(pFilter->GetFilterName(),pFilter->GetDefaultExtension());
+            aFileDlg.AddFilter(pFilter->GetUIName(),pFilter->GetDefaultExtension());
         }
 
         if (0 == aFileDlg.Execute())
