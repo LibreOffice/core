@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FCatalog.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-04 06:36:46 $
+ *  last change: $Author: oj $ $Date: 2002-07-05 08:07:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,15 +85,6 @@ namespace connectivity
 
         public:
             OFileCatalog(OConnection* _pCon);
-            inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW( () )
-                { return ::rtl_allocateMemory( nSize ); }
-            inline static void * SAL_CALL operator new( size_t nSize,const void* _pHint ) SAL_THROW( () )
-                { return const_cast<void*>(_pHint); }
-            inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW( () )
-                { ::rtl_freeMemory( pMem ); }
-            inline static void SAL_CALL operator delete( void * pMem,const void* _pHint ) SAL_THROW( () )
-                {  }
-
             OConnection*    getConnection() { return m_pConnection; }
 
             virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);

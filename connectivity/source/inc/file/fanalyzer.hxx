@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fanalyzer.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:00:38 $
+ *  last change: $Author: oj $ $Date: 2002-07-05 08:07:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,14 @@ namespace connectivity
         public:
             OSQLAnalyzer();
             virtual ~OSQLAnalyzer();
+            inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW( () )
+                { return ::rtl_allocateMemory( nSize ); }
+            inline static void * SAL_CALL operator new( size_t nSize,void* _pHint ) SAL_THROW( () )
+                { return _pHint; }
+            inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW( () )
+                { ::rtl_freeMemory( pMem ); }
+            inline static void SAL_CALL operator delete( void * pMem,void* _pHint ) SAL_THROW( () )
+                {  }
 
             void describeParam(::vos::ORef<OSQLColumns> rParameterColumns); // genauere Beschreibung der Parameter
             ::std::vector<sal_Int32>* bindResultRow(OValueRow _pRow);                   // Anbinden einer Ergebniszeile an die Restrictions

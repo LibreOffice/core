@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSetMetaData.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-04 06:36:49 $
+ *  last change: $Author: oj $ $Date: 2002-07-05 08:07:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,15 +97,6 @@ namespace connectivity
         public:
             // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
             OResultSetMetaData(const ::vos::ORef<connectivity::OSQLColumns>& _rxColumns,const ::rtl::OUString& _aTableName,OFileTable*  _pTable);
-
-            inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW( () )
-                { return ::rtl_allocateMemory( nSize ); }
-            inline static void * SAL_CALL operator new( size_t nSize,const void* _pHint ) SAL_THROW( () )
-                { return const_cast<void*>(_pHint); }
-            inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW( () )
-                { ::rtl_freeMemory( pMem ); }
-            inline static void SAL_CALL operator delete( void * pMem,const void* _pHint ) SAL_THROW( () )
-                {  }
 
             /// Avoid ambigous cast error from the compiler.
             inline operator ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData > () throw()
