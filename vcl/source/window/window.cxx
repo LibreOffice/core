@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.122 $
+ *  $Revision: 1.123 $
  *
- *  last change: $Author: ssa $ $Date: 2002-08-13 14:19:36 $
+ *  last change: $Author: sb $ $Date: 2002-08-14 10:11:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -7865,7 +7865,8 @@ USHORT Window::GetAccessibleRole() const
             case WINDOW_TRISTATEBOX:
             case WINDOW_CHECKBOX: nRole = accessibility::AccessibleRole::CHECKBOX; break;
 
-            case WINDOW_MULTILINEEDIT:
+            case WINDOW_MULTILINEEDIT: nRole = accessibility::AccessibleRole::SCROLLPANE; break;
+
             case WINDOW_PATTERNFIELD:
             case WINDOW_NUMERICFIELD:
             case WINDOW_METRICFIELD:
