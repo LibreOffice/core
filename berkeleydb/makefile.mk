@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: kz $ $Date: 2004-07-30 13:38:43 $
+#   last change: $Author: rt $ $Date: 2004-09-08 14:03:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,6 +68,12 @@ TARGET=so_berkeleydb
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :	settings.mk
+
+.IF "$(SYSTEM_DB3)" == "YES"
+all:
+        @echo "An already available installation of db3 should exist on your system."
+    @echo "Therefore the version provided here does not need to be built in addition."
+.ENDIF
 
 # --- Files --------------------------------------------------------
 
