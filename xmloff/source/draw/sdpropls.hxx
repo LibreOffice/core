@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: cl $ $Date: 2001-04-30 09:02:17 $
+ *  last change: $Author: cl $ $Date: 2001-05-07 14:39:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,13 +202,15 @@ extern const XMLPropertyMapEntry aXMLSDPresPageProps[];
 #define CTF_SD_OLE_VIS_AREA_HEIGHT      1043
 #define CTF_SD_OLE_ISINTERNAL           1044
 
+#define CTF_SD_MOVE_PROTECT             1045
+#define CTF_SD_SIZE_PROTECT             1046
+
 //////////////////////////////////////////////////////////////////////////////
 // #FontWork# types
 #define XML_SD_TYPE_FONTWORK_STYLE                  (XML_SD_TYPES_START + 47 )
 #define XML_SD_TYPE_FONTWORK_ADJUST                 (XML_SD_TYPES_START + 48 )
 #define XML_SD_TYPE_FONTWORK_SHADOW                 (XML_SD_TYPES_START + 49 )
 #define XML_SD_TYPE_FONTWORK_FORM                   (XML_SD_TYPES_START + 50 )
-
 //////////////////////////////////////////////////////////////////////////////
 // enum maps for attributes
 

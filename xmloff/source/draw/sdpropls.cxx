@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: cl $ $Date: 2001-04-30 09:02:17 $
+ *  last change: $Author: cl $ $Date: 2001-05-07 14:39:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -375,6 +375,10 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     { "VisibleArea",                XML_NAMESPACE_DRAW, sXML_visible_area_width,        XML_TYPE_RECTANGLE_WIDTH|MID_FLAG_MERGE_PROPERTY,   CTF_SD_OLE_VIS_AREA_WIDTH },
     { "VisibleArea",                XML_NAMESPACE_DRAW, sXML_visible_area_height,       XML_TYPE_RECTANGLE_HEIGHT|MID_FLAG_MERGE_PROPERTY,  CTF_SD_OLE_VIS_AREA_HEIGHT },
     { "IsInternal",                 XML_NAMESPACE_DRAW, NULL,                           XML_TYPE_BUILDIN_CMP_ONLY,                          CTF_SD_OLE_ISINTERNAL },
+
+    // misc object properties
+    { "MoveProtect",                XML_NAMESPACE_DRAW, sXML_move_protect,              XML_TYPE_BOOL, CTF_SD_MOVE_PROTECT },
+    { "SizeProtect",                XML_NAMESPACE_DRAW, sXML_size_protect,              XML_TYPE_BOOL, CTF_SD_SIZE_PROTECT },
     { 0L }
 };
 
@@ -1125,6 +1129,23 @@ void XMLShapeExportPropertyMapper::ContextFilter(
             case CTF_SD_OLE_VIS_AREA_WIDTH:         pOLEVisAreaWidth = property;    break;
             case CTF_SD_OLE_VIS_AREA_HEIGHT:        pOLEVisAreaHeight = property;   break;
             case CTF_SD_OLE_ISINTERNAL:             pOLEIsInternal = property;      break;
+
+            case CTF_SD_MOVE_PROTECT:
+                {
+                    sal_Bool bProtected;
+                    property->maValue >>= bProtected;
+                    if( !bProtected )
+                        property->mnIndex = -1;
+                }
+                break;
+            case CTF_SD_SIZE_PROTECT:
+                {
+                    sal_Bool bProtected;
+                    property->maValue >>= bProtected;
+                    if( !bProtected )
+                        property->mnIndex = -1;
+                }
+                break;
         }
     }
 
