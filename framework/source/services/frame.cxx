@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:06:38 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 14:54:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,10 @@
 
 #ifndef __FRAMEWORK_HELPER_DOCKINGAREADEFAULTACCEPTOR_HXX_
 #include <helper/dockingareadefaultacceptor.hxx>
+#endif
+
+#ifndef __FRAMEWORK_DISPATCH_DISPATCHINFORMATIONPROVIDER_HXX_
+#include <dispatch/dispatchinformationprovider.hxx>
 #endif
 
 #ifndef __FRAMEWORK_THREADHELP_TRANSACTIONGUARD_HXX_
@@ -285,7 +289,7 @@ css::uno::WeakReference< css::frame::XFrame > Frame::m_xCloserFrame = css::uno::
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
-DEFINE_XINTERFACE_19                (   Frame                                                                   ,
+DEFINE_XINTERFACE_20                (   Frame                                                                   ,
                                         OWeakObject                                                             ,
                                         DIRECT_INTERFACE(css::lang::XTypeProvider                               ),
                                         DIRECT_INTERFACE(css::lang::XServiceInfo                                ),
@@ -294,6 +298,7 @@ DEFINE_XINTERFACE_19                (   Frame                                   
                                         DIRECT_INTERFACE(css::lang::XComponent                                  ),
                                         DIRECT_INTERFACE(css::task::XStatusIndicatorFactory                     ),
                                         DIRECT_INTERFACE(css::frame::XDispatchProvider                          ),
+                                        DIRECT_INTERFACE(css::frame::XDispatchInformationProvider               ),
                                         DIRECT_INTERFACE(css::frame::XDispatchProviderInterception              ),
                                         DIRECT_INTERFACE(css::beans::XMultiPropertySet                          ),
                                         DIRECT_INTERFACE(css::beans::XFastPropertySet                           ),
@@ -308,7 +313,7 @@ DEFINE_XINTERFACE_19                (   Frame                                   
                                         DIRECT_INTERFACE(css::frame::XComponentLoader                           )
                                     )
 
-DEFINE_XTYPEPROVIDER_18             (   Frame                                                                   ,
+DEFINE_XTYPEPROVIDER_19             (   Frame                                                                   ,
                                         css::lang::XTypeProvider                                                ,
                                         css::lang::XServiceInfo                                                 ,
                                         css::frame::XFramesSupplier                                             ,
@@ -319,6 +324,7 @@ DEFINE_XTYPEPROVIDER_18             (   Frame                                   
                                         css::beans::XFastPropertySet                                            ,
                                         css::beans::XPropertySet                                                ,
                                         css::frame::XDispatchProvider                                           ,
+                                        css::frame::XDispatchInformationProvider                                ,
                                         css::frame::XDispatchProviderInterception                               ,
                                         css::awt::XWindowListener                                               ,
                                         css::awt::XTopWindowListener                                            ,
@@ -349,6 +355,10 @@ DEFINE_INIT_SERVICE                 (   Frame,
                                             // But he is event listener on THIS instance!
                                             DispatchProvider* pDispatchHelper = new DispatchProvider( m_xFactory, this );
                                             css::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider( static_cast< ::cppu::OWeakObject* >(pDispatchHelper), css::uno::UNO_QUERY );
+
+                                            //-------------------------------------------------------------------------------------------------------------
+                                            DispatchInformationProvider* pInfoHelper = new DispatchInformationProvider(m_xFactory, this);
+                                            m_xDispatchInfoHelper = css::uno::Reference< css::frame::XDispatchInformationProvider >( static_cast< ::cppu::OWeakObject* >(pInfoHelper), css::uno::UNO_QUERY );
 
                                             //-------------------------------------------------------------------------------------------------------------
                                             // Initialize a new interception helper object to handle dispatches and implement an interceptor mechanism.
@@ -2149,6 +2159,23 @@ void SAL_CALL Frame::releaseDispatchProviderInterceptor( const css::uno::Referen
 
     css::uno::Reference< css::frame::XDispatchProviderInterception > xInterceptionHelper( m_xDispatchHelper, css::uno::UNO_QUERY );
     xInterceptionHelper->releaseDispatchProviderInterceptor( xInterceptor );
+}
+
+/*-****************************************************************************************************//**
+    @short      provides information about all possible dispatch functions
+                inside the currnt frame environment
+*//*-*****************************************************************************************************/
+css::uno::Sequence< sal_Int16 > SAL_CALL Frame::getSupportedCommandGroups()
+    throw(css::uno::RuntimeException)
+{
+    return m_xDispatchInfoHelper->getSupportedCommandGroups();
+}
+
+//*****************************************************************************************************************
+css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL Frame::getConfigurableDispatchInformation(sal_Int16 nCommandGroup)
+    throw(css::uno::RuntimeException)
+{
+    return m_xDispatchInfoHelper->getConfigurableDispatchInformation(nCommandGroup);
 }
 
 /*-****************************************************************************************************//**
