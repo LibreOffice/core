@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-01 16:31:32 $
+ *  last change: $Author: vg $ $Date: 2001-03-05 17:56:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@
 #endif
 
 #ifndef _COM_SUN_STAR_STYLE_XSTYLEFAMILIESSUPPLIER_HPP_
-#include <com/sun/star/style/XStyleFamiliesSupplier.hPP>
+#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #endif
 
 #ifndef _XEXPTRANSFORM_HXX
