@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_gui_treelb.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 14:05:44 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:11:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,6 +187,9 @@ Image NodeImpl::getIcon() const
         sal_uInt16 id;
         if (xPackageType.is() &&
             (xPackageType->getIcon(
+                // works here, because getCppuType(unsigned short) is defined
+                // for IDL UNSIGNED SHORT (not IDL CHAR),
+                // try to avoid UNSIGNED SHORT if possible:
                 m_treelb->m_hiContrastMode, true /* small */ ) >>= id))
         {
             // opt most common package bundle icon:
@@ -889,19 +892,17 @@ void DialogImpl::contentEvent( ContentEvent const & evt )
                 Reference<container::XNameAccess> xModuleConfig(
                     xModuleManager, UNO_QUERY_THROW );
                 // get the long name of the document:
-                OUString appModule( xModuleManager->identify(
-                                        xDocumentModel ) );
-                Sequence<beans::PropertyValue> moduleDescr;
-                extract_throw(
-                    &moduleDescr, xModuleConfig->getByName(appModule) );
-                beans::PropertyValue const * pmoduleDescr =
-                    moduleDescr.getConstArray();
+                const OUString appModule( xModuleManager->identify(
+                                              xDocumentModel ) );
+                const Any any_appModule( xModuleConfig->getByName(appModule) );
+                const Sequence<beans::PropertyValue> moduleDescr(
+                    any_appModule.get< Sequence<beans::PropertyValue> >() );
                 for ( sal_Int32 pos = moduleDescr.getLength(); pos--; )
                 {
-                    if (pmoduleDescr[ pos ].Name.equalsAsciiL(
+                    if (moduleDescr[ pos ].Name.equalsAsciiL(
                             RTL_CONSTASCII_STRINGPARAM(
                                 "ooSetupFactoryEmptyDocumentURL") )) {
-                        pmoduleDescr[ pos ].Value >>= factoryURL;
+                        moduleDescr[ pos ].Value >>= factoryURL;
                         break;
                     }
                 }
@@ -909,8 +910,7 @@ void DialogImpl::contentEvent( ContentEvent const & evt )
 
             m_treelb->addNode(
                 0 /* no parent */,
-                extract_throw<OUString>( ucbContent.getPropertyValue(
-                                             OUSTR("Title") ) ),
+                ucbContent.getPropertyValue( OUSTR("Title") ).get<OUString>(),
                 factoryURL,
                 m_xPkgMgrFac->getPackageManager(
                     makeURL( ucbContent.getURL(), OUSTR("uno_packages") ) ),
