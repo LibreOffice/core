@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cppumaker.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2002-07-31 12:46:37 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 03:11:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,7 @@
 #ifndef _CODEMAKER_TYPEMANAGER_HXX_
 #include <codemaker/typemanager.hxx>
 #endif
-#ifndef _CODEMAKER_DEPENDENCY_HXX_
-#include <codemaker/dependency.hxx>
-#endif
+#include "codemaker/generatedtypeset.hxx"
 
 #include "cppuoptions.hxx"
 #include "cpputype.hxx"
@@ -74,13 +72,13 @@
 using namespace rtl;
 
 sal_Bool produceAllTypes(const OString& typeName,
-                         TypeManager& typeMgr,
-                         TypeDependency& typeDependencies,
+                         TypeManager const & typeMgr,
+                         codemaker::GeneratedTypeSet & generated,
                          CppuOptions* pOptions,
                          sal_Bool bFullScope)
     throw( CannotDumpException )
 {
-    if (!produceType(typeName, typeMgr, typeDependencies, pOptions))
+    if (!produceType(typeName, typeMgr, generated, pOptions))
     {
         fprintf(stderr, "%s ERROR: %s\n",
                 pOptions->getProgramName().getStr(),
@@ -106,11 +104,12 @@ sal_Bool produceAllTypes(const OString& typeName,
 
         if (bFullScope)
         {
-            if (!produceAllTypes(tmpName, typeMgr, typeDependencies, pOptions, sal_True))
+            if (!produceAllTypes(
+                    tmpName, typeMgr, generated, pOptions, sal_True))
                 return sal_False;
         } else
         {
-            if (!produceType(tmpName, typeMgr, typeDependencies, pOptions))
+            if (!produceType(tmpName, typeMgr, generated, pOptions))
                 return sal_False;
         }
     }
@@ -140,7 +139,6 @@ int _cdecl main( int argc, char * argv[] )
     }
 
     RegistryTypeManager typeMgr;
-    TypeDependency      typeDependencies;
 
     if (!typeMgr.init(options.getInputFiles(), options.getExtraInputFiles()))
     {
@@ -159,6 +157,7 @@ int _cdecl main( int argc, char * argv[] )
         {
             OString tOption(options.getOption("-T"));
 
+            codemaker::GeneratedTypeSet generated;
             OString typeName, tmpName;
             sal_Bool ret = sal_False;
             sal_Int32 nIndex = 0;
@@ -182,11 +181,14 @@ int _cdecl main( int argc, char * argv[] )
                         else
                             tmpName.replace('.', '/');
                     }
-                    ret = produceAllTypes(tmpName, typeMgr, typeDependencies, &options, sal_False);
+                    ret = produceAllTypes(
+                        tmpName, typeMgr, generated, &options, sal_False);
                 } else
                 {
                     // produce only this type
-                    ret = produceType(typeName.replace('.', '/'), typeMgr, typeDependencies, &options);
+                    ret = produceType(
+                        typeName.replace('.', '/'), typeMgr, generated,
+                        &options);
                 }
 
                 if (!ret)
@@ -200,7 +202,8 @@ int _cdecl main( int argc, char * argv[] )
         } else
         {
             // produce all types
-            if (!produceAllTypes("/", typeMgr, typeDependencies, &options, sal_True))
+            codemaker::GeneratedTypeSet generated;
+            if (!produceAllTypes("/", typeMgr, generated, &options, sal_True))
             {
                 fprintf(stderr, "%s ERROR: %s\n",
                         options.getProgramName().getStr(),
