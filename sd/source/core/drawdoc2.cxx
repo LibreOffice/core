@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cl $ $Date: 2002-02-04 14:27:19 $
+ *  last change: $Author: ka $ $Date: 2002-04-08 14:02:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,7 +198,10 @@ SdrObject* SdDrawDocument::GetObj(const String& rObjName) const
         {
             pObj = aIter.Next();
 
-            if (pObj->GetName() == rObjName)
+            if( ( rObjName == pObj->GetName() ) ||
+                ( SdrInventor == pObj->GetObjInventor() &&
+                  OBJ_OLE2 == pObj->GetObjIdentifier() &&
+                  rObjName == static_cast< SdrOle2Obj* >( pObj )->GetPersistName() ) )
             {
                 pObjFound = pObj;
             }
@@ -222,7 +225,10 @@ SdrObject* SdDrawDocument::GetObj(const String& rObjName) const
         {
             pObj = aIter.Next();
 
-            if (pObj->GetName() == rObjName)
+            if( ( rObjName == pObj->GetName() ) ||
+                ( SdrInventor == pObj->GetObjInventor() &&
+                  OBJ_OLE2 == pObj->GetObjIdentifier() &&
+                  rObjName == static_cast< SdrOle2Obj* >( pObj )->GetPersistName() ) )
             {
                 pObjFound = pObj;
             }
