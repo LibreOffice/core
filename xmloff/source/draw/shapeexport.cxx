@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:34:42 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 08:54:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,6 +175,7 @@ XMLShapeExport::XMLShapeExport(SvXMLExport& rExp,
     msEventType( RTL_CONSTASCII_USTRINGPARAM("EventType") ),
     msPresentation( RTL_CONSTASCII_USTRINGPARAM("Presentation") ),
     msMacroName( RTL_CONSTASCII_USTRINGPARAM("MacroName") ),
+    msScript( RTL_CONSTASCII_USTRINGPARAM("Script") ),
     msLibrary( RTL_CONSTASCII_USTRINGPARAM("Library") ),
     msClickAction( RTL_CONSTASCII_USTRINGPARAM("ClickAction") ),
     msBookmark( RTL_CONSTASCII_USTRINGPARAM("Bookmark") ),
