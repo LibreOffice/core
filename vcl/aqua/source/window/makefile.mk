@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hr $ $Date: 2002-08-27 11:59:03 $
+#   last change: $Author: vg $ $Date: 2004-01-06 12:49:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,14 +88,6 @@ SLOFILES=	\
         $(SLO)/salobj.obj		\
         $(SLO)/VCLView.obj		\
         $(SLO)/VCLWindow.obj
-
-.IF "$(UPDATER)"=="YES"
-OBJFILES=	\
-        $(OBJ)/salframe.obj		\
-        $(OBJ)/salobj.obj		\
-        $(OBJ)/VCLView.obj		\
-        $(OBJ)/VCLWindow.obj
-.ENDIF
 
 .ENDIF		# "$(GUIBASE)"!="aqua"
 
