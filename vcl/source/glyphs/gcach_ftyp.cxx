@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.84 $
- *  last change: $Author: hdu $ $Date: 2002-11-21 14:02:07 $
+ *  $Revision: 1.85 $
+ *  last change: $Author: hdu $ $Date: 2002-11-29 11:01:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,15 @@ static FT_Library aLibFT = 0;
 struct EqStr{ bool operator()(const char* a, const char* b) const { return !strcmp(a,b); } };
 typedef ::std::hash_map<const char*,FtFontFile*,::std::hash<const char*>, EqStr> FontFileList;
 static FontFileList aFontFileList;
+
+// -----------------------------------------------------------------------
+
+// TODO: remove when the priorities are selected by UI
+// if (AH prio == AA prio) => antialias + autohint
+// if AH<AA => do not autohint when antialiasing
+static int nPrioEmbedded    = 2;
+static int nPrioAutoHint    = 1;
+static int nPrioAntiAlias   = 1;
 
 // =======================================================================
 // FreetypeManager
@@ -319,6 +328,18 @@ FreetypeManager::FreetypeManager()
     mnMaxFontId( 0 )
 {
     FT_Error rcFT = FT_Init_FreeType( &aLibFT );
+
+    // TODO: remove when the priorities are selected by UI
+    char* pEnv;
+    pEnv = ::getenv( "SAL_EMBEDDED_BITMAP_PRIORITY" );
+    if( pEnv )
+        nPrioEmbedded  = pEnv[0] - '0';
+    pEnv = ::getenv( "SAL_ANTIALIASED_TEXT_PRIORITY" );
+    if( pEnv )
+        nPrioAntiAlias = pEnv[0] - '0';
+    pEnv = ::getenv( "SAL_AUTOHINTING_PRIORITY" );
+    if( pEnv )
+        nPrioAutoHint  = pEnv[0] - '0';
 }
 
 // -----------------------------------------------------------------------
@@ -576,9 +597,10 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontIn
         mnLoadFlags |= FT_LOAD_NO_HINTING;
     mnLoadFlags |= FT_LOAD_IGNORE_GLOBAL_ADVANCE_WIDTH; //#88334#
 
-#if (FTVERSION < 2005) && !defined(TT_CONFIG_OPTION_BYTECODE_INTERPRETER)
-    mnLoadFlags |= FT_LOAD_NO_HINTING;  // TODO: enable when AH improves
+#if (FTVERSION >= 2005) || defined(TT_CONFIG_OPTION_BYTECODE_INTERPRETER)
+    if( nPrioAutoHint <= 0 )
 #endif
+        mnLoadFlags |= FT_LOAD_NO_HINTING;
 }
 
 // -----------------------------------------------------------------------
@@ -921,9 +943,12 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
 #if (FTVERSION >= 2002)
     // for 0/90/180/270 degree fonts enable autohinting even if not advisable
     // non-hinted and non-antialiased bitmaps just look too ugly
-    if( nCos==0 || nSin==0 )
+    if( (nCos==0 || nSin==0) && (nPrioAutoHint > 0) )
         nLoadFlags &= ~FT_LOAD_NO_HINTING;
 #endif
+
+    if( (nCos!=0 && nSin!=0) || (nPrioEmbedded <= nPrioAutoHint) )
+        nLoadFlags |= FT_LOAD_NO_BITMAP;
 
     FT_Error rc = -1;
 #if (FTVERSION <= 2008)
@@ -1010,12 +1035,11 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
     // autohinting in FT<=2.0.4 makes antialiased glyphs look worse
     nLoadFlags |= FT_LOAD_NO_HINTING;
 #else
-    if( nGlyphFlags & GF_UNHINTED )
+    if( (nGlyphFlags & GF_UNHINTED) || (nPrioAutoHint < nPrioAntiAlias) )
         nLoadFlags |= FT_LOAD_NO_HINTING;
 #endif
 
-    // #94409# do not load embedded bitmaps for non-0/90/180/270 degree fonts
-    if( nCos!=0 && nSin!=0 )
+    if( (nCos!=0 && nSin!=0) || (nPrioEmbedded <= nPrioAutoHint) )
         nLoadFlags |= FT_LOAD_NO_BITMAP;
 
     FT_Error rc = -1;
