@@ -2,9 +2,9 @@
  *
  *  $RCSfile: schedule.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-27 08:45:24 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 11:38:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,26 +113,26 @@
 
 String dlgCalTitle
 {
-Text = "StarOffice Kalender";
+Text = "%PRODUCTNAME Kalender";
 Text[ English ] = "StarOffice Calendar";
-Text[ English_us ] = "StarOffice Calendar";
-Text[ french ] = "Calendrier StarOffice";
-Text[ italian ] = "Calendario StarOffice";
-Text[ spanish ] = "Calendario de StarOffice";
-Text[ portuguese ] = "Calend·rio StarOffice";
-Text[ dutch ] = "StarOffice Kalender";
-Text[ swedish ] = "StarOffice kalender";
-    Text[ russian ] = " ‡ÎÂÌ‰‡¸ StarOffice";
-    Text[ greek ] = "«ÏÂÒÔÎ¸„ÈÔ StarOffice";
-    Text[ danish ] = "StarOffice kalender";
-    Text[ polish ] = "Kalendarz StarOffice";
-    Text[ portuguese_brazilian ] = "StarOffice Calendar";
-    Text[ japanese ] = "StarOffice ∂⁄›¿ﬁ∞";
-    Text[ korean ] = "StarOffice ¿œ¡§";
-    Text[ chinese_simplified ] = "StarOffice »’¿˙";
-    Text[ chinese_traditional ] = "StarOffice ¶Ê®∆æ‰";
-    Text[ arabic ] = " ﬁÊÌ„StarOffice ";
-    Text[ turkish ] = "StarOffice Takvimi";
+Text[ English_us ] = "%PRODUCTNAME Calendar";
+Text[ french ] = "Calendrier %PRODUCTNAME";
+Text[ italian ] = "Calendario %PRODUCTNAME";
+Text[ spanish ] = "Calendario de %PRODUCTNAME";
+Text[ portuguese ] = "Calend·rio %PRODUCTNAME";
+Text[ dutch ] = "%PRODUCTNAME Kalender";
+Text[ swedish ] = "%PRODUCTNAME kalender";
+    Text[ russian ] = " ‡ÎÂÌ‰‡¸ %PRODUCTNAME";
+    Text[ greek ] = "«ÏÂÒÔÎ¸„ÈÔ %PRODUCTNAME";
+    Text[ danish ] = "%PRODUCTNAME kalender";
+    Text[ polish ] = "Kalendarz %PRODUCTNAME";
+    Text[ portuguese_brazilian ] = "%PRODUCTNAME Calendar";
+    Text[ japanese ] = "%PRODUCTNAME ∂⁄›¿ﬁ∞";
+    Text[ korean ] = "%PRODUCTNAME ¿œ¡§";
+    Text[ chinese_simplified ] = "%PRODUCTNAME »’¿˙";
+    Text[ chinese_traditional ] = "%PRODUCTNAME ¶Ê®∆æ‰";
+    Text[ arabic ] = " ﬁÊÌ„%PRODUCTNAME ";
+    Text[ turkish ] = "%PRODUCTNAME Takvimi";
 };
 
 String  dlgCalTitleBack
