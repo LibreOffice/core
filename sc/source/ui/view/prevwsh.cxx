@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prevwsh.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: nn $ $Date: 2002-05-08 15:34:54 $
+ *  last change: $Author: nn $ $Date: 2002-06-18 13:11:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,8 +284,11 @@ Size __EXPORT ScPreviewShell::GetOptimalSizePixel() const
 
 void __EXPORT ScPreviewShell::AdjustPosSizePixel( const Point &rPos, const Size &rSize )
 {
-    long nBarW = pVerScroll->GetSizePixel().Width();
-    long nBarH = pHorScroll->GetSizePixel().Height();
+    long nBarW = GetViewFrame()->GetWindow().GetSettings().GetStyleSettings().GetScrollBarSize();
+    long nBarH = nBarW;
+//  long nBarW = pVerScroll->GetSizePixel().Width();
+//  long nBarH = pHorScroll->GetSizePixel().Height();
+
     Size aOutSize( rSize.Width()-nBarW, rSize.Height()-nBarH );
     pPreview->SetPosSizePixel( rPos, aOutSize );
     pHorScroll->SetPosSizePixel( Point( rPos.X(), rPos.Y() + aOutSize.Height() ),

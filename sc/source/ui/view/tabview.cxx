@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: nn $ $Date: 2002-04-18 09:14:38 $
+ *  last change: $Author: nn $ $Date: 2002-06-18 13:11:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -534,14 +534,17 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, BOOL bInner )
 
     if (bHScroll || bVScroll)       // Scrollbars horizontal oder vertikal
     {
+        long nScrollBarSize = pFrameWin->GetSettings().GetStyleSettings().GetScrollBarSize();
         if (bVScroll)
         {
-            nBarX = aVScrollBottom.GetSizePixel().Width();
+//          nBarX = aVScrollBottom.GetSizePixel().Width();
+            nBarX = nScrollBarSize;
             nSizeX -= nBarX - nOverlap;
         }
         if (bHScroll)
         {
-            nBarY = aHScrollLeft.GetSizePixel().Height();
+//          nBarY = aHScrollLeft.GetSizePixel().Height();
+            nBarY = nScrollBarSize;
             nSizeY -= nBarY - nOverlap;
         }
 

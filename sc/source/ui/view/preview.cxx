@@ -2,9 +2,9 @@
  *
  *  $RCSfile: preview.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: nn $ $Date: 2002-05-08 15:34:54 $
+ *  last change: $Author: nn $ $Date: 2002-06-18 13:11:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -779,10 +779,15 @@ void ScPreview::DataChanged( const DataChangedEvent& rDCEvt )
          ((rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
           (rDCEvt.GetFlags() & SETTINGS_STYLE)) )
     {
-        //! Resize, wenn Scrollbars geaendert
-
         if ( rDCEvt.GetType() == DATACHANGED_FONTS )
             pDocShell->UpdateFontList();
+
+        if ( rDCEvt.GetType() == DATACHANGED_SETTINGS &&
+              (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+        {
+            //  scroll bar size may have changed
+            pViewShell->InvalidateBorder();     // calls OuterResizePixel
+        }
 
         Invalidate();
         InvalidateLocationData();
