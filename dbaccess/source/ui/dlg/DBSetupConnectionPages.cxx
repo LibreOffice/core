@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DBSetupConnectionPages.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 12:59:12 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 14:14:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -767,6 +767,7 @@ namespace dbaui
     sal_Bool OSpreadSheetConnectionPageSetup::FillItemSet( SfxItemSet& _rSet )
     {
         sal_Bool bChangedSomething = OConnectionTabPageSetup::FillItemSet(_rSet);
+        fillBool(_rSet,&m_aCBPasswordrequired,DSID_PASSWORDREQUIRED,bChangedSomething);
         return bChangedSomething;
     }
 
