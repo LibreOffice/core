@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paraitem.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-10-16 07:21:21 $
+ *  last change: $Author: pb $ $Date: 2000-10-23 12:05:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,9 +76,7 @@
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
-#ifndef _UTL_TYPES_HXX_
-#include <unotools/types.hxx>
-#endif
+#include <comphelper/types.hxx>
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -570,7 +568,7 @@ sal_Bool SvxAdjustItem::PutValue( const uno::Any& rVal, BYTE nMemberId  )
             sal_Int32 eVal = - 1;
             try
             {
-                eVal = utl::getEnumAsINT32(rVal);
+                eVal = ::comphelper::getEnumAsINT32(rVal);
             }
             catch(...) {}
             if(eVal >= 0 && eVal <= 4)

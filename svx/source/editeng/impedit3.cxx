@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:14 $
+ *  last change: $Author: pb $ $Date: 2000-10-23 12:02:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,8 @@
 #ifndef _SV_METRIC_HXX //autogen
 #include <vcl/metric.hxx>
 #endif
+
+#include <comphelper/processfactory.hxx>
 
 using namespace ::com::sun::star;
 
@@ -3400,7 +3402,7 @@ uno::Reference < text::XBreakIterator > ImpEditEngine::ImplGetBreakIterator()
 {
     if ( !xBI.is() )
     {
-        uno::Reference< lang::XMultiServiceFactory > xMSF = ::utl::getProcessServiceFactory();
+        uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
         uno::Reference < uno::XInterface > xI = xMSF->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.text.BreakIterator" ) );
         if ( xI.is() )
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galmisc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-10-20 09:57:57 $
+ *  last change: $Author: pb $ $Date: 2000-10-23 12:08:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 #include <ucbhelper/content.hxx>
 #include <tools/resmgr.hxx>
 #include <tools/intn.hxx>
@@ -460,7 +460,7 @@ BOOL KillFile( const INetURLObject& rURL )
 GalleryProgress::GalleryProgress( GraphicFilter* pFilter ) :
     mpFilter( pFilter )
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMgr( ::utl::getProcessServiceFactory() );
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
 
     if( xMgr.is() )
     {
