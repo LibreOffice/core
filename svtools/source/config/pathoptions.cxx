@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: mav $ $Date: 2002-11-05 09:31:58 $
+ *  last change: $Author: os $ $Date: 2002-12-03 16:21:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,12 +199,12 @@ class SvtPathOptions_Impl
         std::vector< String >               m_aPathArray;
         Reference< XFastPropertySet >       m_xPathSettings;
         Reference< XStringSubstitution >    m_xSubstVariables;
-        EnumToHandleMap                     m_aMapEnumToPropHandle;
+        mutable EnumToHandleMap             m_aMapEnumToPropHandle;
         VarNameToEnumMap                    m_aMapVarNamesToEnum;
 
         LanguageType                        m_eLanguageType;
         String                              m_aEmptyString;
-        ::osl::Mutex                        m_aMutex;
+        mutable ::osl::Mutex                m_aMutex;
 
         // not const because of using a mutex
         const String&   GetPath( SvtPathOptions::Pathes );
@@ -269,6 +269,8 @@ class SvtPathOptions_Impl
         rtl::OUString   UsePathVariables( const rtl::OUString& rPath );
 
         LanguageType    GetLanguageType() const { return m_eLanguageType; }
+
+        BOOL            IsPathReadonly(SvtPathOptions::Pathes ePath)const;
 };
 
 // global ----------------------------------------------------------------
@@ -373,7 +375,24 @@ const String& SvtPathOptions_Impl::GetPath( SvtPathOptions::Pathes ePath )
 
     return m_aEmptyString;
 }
-
+// -----------------------------------------------------------------------
+BOOL SvtPathOptions_Impl::IsPathReadonly(SvtPathOptions::Pathes ePath)const
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    BOOL bReadonly = FALSE;
+    if ( ePath <= SvtPathOptions::PATH_UICONFIG )
+    {
+        sal_Int32   nHandle = m_aMapEnumToPropHandle[ (sal_Int32)ePath ];
+        Reference<XPropertySet> xPrSet(m_xPathSettings, UNO_QUERY);
+        if(xPrSet.is())
+        {
+            Reference<XPropertySetInfo> xInfo = xPrSet->getPropertySetInfo();
+            Property aProperty = xInfo->getPropertyByName(OUString::createFromAscii(aPropNames[ePath].pPropName));
+            bReadonly = 0 != aProperty.Attributes & PropertyAttribute::READONLY;
+        }
+    }
+    return bReadonly;
+}
 // -----------------------------------------------------------------------
 
 void SvtPathOptions_Impl::SetPath( SvtPathOptions::Pathes ePath, const String& rNewPath )
@@ -1048,6 +1067,11 @@ sal_Bool SvtPathOptions::SearchFile( String& rIniFile, Pathes ePath )
 LanguageType SvtPathOptions::GetLanguageType() const
 {
     return pImp->GetLanguageType();
+}
+// -----------------------------------------------------------------------
+BOOL SvtPathOptions::IsPathReadonly(Pathes ePath)const
+{
+    return pImp->IsPathReadonly(ePath);
 }
 
 // class PathService -----------------------------------------------------
