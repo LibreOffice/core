@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipFile.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: mtg $ $Date: 2001-08-02 13:01:04 $
+ *  last change: $Author: mtg $ $Date: 2001-08-08 18:23:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -526,8 +526,8 @@ Reference< XInputStream > SAL_CALL ZipFile::getRawStream( ZipEntry& rEntry,
 
 /*
     return nUncompressedSize > n_ConstMaxMemoryStreamSize ?
-               createFileStream(rEntry, rData, sal_False, nUncompressedSize, nEnd) :
-               createMemoryStream(rEntry, rData, sal_False, nUncompressedSize, nEnd);
+               createFileStream(rEntry, rData, sal_True, nUncompressedSize, nEnd) :
+               createMemoryStream(rEntry, rData, sal_True, nUncompressedSize, nEnd);
 */
     return createMemoryStream(rEntry, rData, sal_True, nUncompressedSize, nEnd);
 }
@@ -560,60 +560,38 @@ sal_Bool ZipFile::readLOC( ZipEntry &rEntry )
 sal_Int32 ZipFile::findEND( )
     throw(IOException, ZipException, RuntimeException)
 {
-    sal_Int32 nLength=0, nPos=0;
-    Sequence < sal_Int8 > aByteSeq;
+    sal_Int32 nLength, nPos, nEnd;
+    Sequence < sal_Int8 > aBuffer;
     try
     {
-        nLength = nPos = static_cast <sal_Int32 > (aGrabber.getLength());
-        if (nLength == 0)
+        nLength = static_cast <sal_Int32 > (aGrabber.getLength());
+        if (nLength == 0 || nLength < ENDHDR)
             return -1;
-            //throw (ZipException( OUString::createFromAscii("Trying to find Zip END signature in a zero length file!"), Reference < XInterface> () ));
+        nPos = nLength - ENDHDR - ZIP_MAXNAMELEN;
+        nEnd = nPos >= 0 ? nPos : 0 ;
 
-        aGrabber.seek( nLength );
+        aGrabber.seek( nEnd );
+        aGrabber.readBytes ( aBuffer, nLength - nEnd );
 
-        while (nLength - nPos < 0xFFFF)
+        const sal_Int8 *pBuffer = aBuffer.getConstArray();
+
+        nPos = nLength - nEnd - ENDHDR;
+        while ( nPos >= 0 )
         {
-            sal_uInt32 nCount = 0xFFFF - ( nLength - nPos);
-            if (nCount > ENDHDR)
-                nCount = ENDHDR;
-            nPos -= nCount;
-
-            for (sal_uInt16 i=0; i <nCount;i++)
-            {
-                sal_uInt32 nTest=0, nFoo=ENDSIG;
-                aGrabber.seek (nPos+i);
-                aGrabber >> nTest;
-                if (nTest == ENDSIG)
-                {
-                    sal_uInt16 nCommentLength;
-                    sal_Int32 nEndPos = nPos + i;
-                    aGrabber.seek(nEndPos+ENDCOM);
-                    aGrabber >> nCommentLength;
-                    /*
-                    if (nEndPos + ENDHDR + nCommentLength == nLength)
-                    {
-                        Since we don't actually use the comment ourselves, we'll just ignore it, and also skip the check
-                        below. Neither WinZip nor InfoZip's unzip perform such checking and happily open files with
-                        garbage bytes on the end, so we should do so too! I will 'assert' however that the file has garbage
-                        at the end, and hope that the file hasn't suffered any other abuse
-
-                        if (nCommentLength>0)
-                        {
-                            aByteSeq.realloc(nCommentLength+1);
-                            aGrabber.readBytes(Sequence< sal_Int8>(aByteSeq.getArray(), nCommentLength), nCommentLength);
-                            aByteSeq[nCommentLength]='\0';
-                            sComment = OUString((sal_Char*)aByteSeq.getConstArray(), nCommentLength+1, RTL_TEXTENCODING_ASCII_US);
-
-                        }
-                    }
-                    */
-                    VOS_ENSURE ( nEndPos + ENDHDR + nCommentLength == nLength, "This Zip File is potentially corrupt - it has garbage after the END descriptor! Hoping for the best...!");
-                    return nPos + i;
-                }
-            }
+            if (pBuffer[nPos] == 'P' && pBuffer[nPos+1] == 'K' && pBuffer[nPos+2] == 5 && pBuffer[nPos+3] == 6 )
+                return nPos + nEnd;
+            nPos--;
         }
     }
     catch ( IllegalArgumentException& )
+    {
+        throw ZipException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "Zip END signature not found!") ), Reference < XInterface> () );
+    }
+    catch ( NotConnectedException& )
+    {
+        throw ZipException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "Zip END signature not found!") ), Reference < XInterface> () );
+    }
+    catch ( BufferSizeExceededException& )
     {
         throw ZipException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "Zip END signature not found!") ), Reference < XInterface> () );
     }
