@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InternalLogWriter.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-03-31 17:07:17 $
+ *  last change:$Date: 2005-02-02 13:58:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,5 +146,13 @@ public class InternalLogWriter extends PrintWriter
         writer = new StringWriter();
         return message;
     }
+
+    public Object getWatcher() {
+        return null;
+    }
+
+    public void setWatcher(Object watcher) {
+    }
+
 }
 
