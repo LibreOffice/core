@@ -1,6 +1,6 @@
 io	io	:	rdbmaker NULL
 io	io										usr1	-	all	io_mkout NULL
-io	io\source\acceptor						nmake	-	all	io_acceptor NULL
+io	io\source\acceptor						nmake	-	all	io_acceptor io_connectorNULL
 io	io\source\connector						nmake	-	all	io_connector NULL
 io	io\source\stm							nmake	-	all	io_stm NULL
 io	io\source\TextInputStream				nmake	-	all	io_txtistr NULL
