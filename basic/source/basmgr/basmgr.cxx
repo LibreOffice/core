@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basmgr.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ab $ $Date: 2001-11-26 13:15:26 $
+ *  last change: $Author: ab $ $Date: 2001-11-28 10:31:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1259,72 +1259,77 @@ void BasicManager::Store( SotStorage& rStorage, BOOL bStoreLibs )
     sal_Bool bModified = mpImpl->mbModifiedByLibraryContainer || mpImpl->mbError;
 
     // #92172 Password handling
-    OldBasicPassword* pOldBasicPassword = mpImpl->mpInfo->mpOldBasicPassword;
+    OldBasicPassword* pOldBasicPassword = NULL;
     USHORT nLibs = GetLibCount();
-    for( USHORT nL = 0; nL < nLibs; nL++ )
+    if( mpImpl->mpInfo )
+        pOldBasicPassword = mpImpl->mpInfo->mpOldBasicPassword;
+    if( pOldBasicPassword )
     {
-        BasicLibInfo* pInfo = pLibs->GetObject( nL );
-        DBG_ASSERT( pInfo, "pInfo?!" );
-
-        String aLibName = pInfo->GetLibName();
-        sal_Bool bPassword = pOldBasicPassword->hasLibraryPassword( aLibName );
-        String aPassword = pOldBasicPassword->getLibraryPassword( aLibName );
-        if( pInfo->GetPassword() != aPassword )
-            bModified = sal_True;
-
-        if( bPassword && aPassword.Len() == 0 )
+        for( USHORT nL = 0; nL < nLibs; nL++ )
         {
-            String aDummySource( String::CreateFromAscii(
-                "REM This module belonged to a password protected library that was exported without\n"
-                "REM verifying the password. So the original module source could not be exported!\n"
-                "sub main\n"
-                "end sub\n" ) );
-            Any aDummySourceAny;
-            aDummySourceAny <<= OUString( aDummySource );
+            BasicLibInfo* pInfo = pLibs->GetObject( nL );
+            DBG_ASSERT( pInfo, "pInfo?!" );
 
-            Reference< XLibraryContainer > xScriptCont = mpImpl->mpInfo->mxScriptCont;
-            if( xScriptCont.is() && xScriptCont->hasByName( aLibName ) )
-            {
-                xScriptCont->loadLibrary( aLibName );
-
-                // Now the library isn't password protected any more
-                // but the modules don't contain any source
-                pOldBasicPassword->clearLibraryPassword( aLibName );
-
-                Any aLibAny = xScriptCont->getByName( aLibName );
-                Reference< XNameContainer > xLib;
-                aLibAny >>= xLib;
-
-                Sequence< OUString > aNames = xLib->getElementNames();
-                sal_Int32 nNameCount = aNames.getLength();
-                const OUString* pNames = aNames.getConstArray();
-                for( sal_Int32 i = 0 ; i < nNameCount ; i++ )
-                {
-                    OUString aElementName = pNames[ i ];
-                    xLib->replaceByName( aElementName, aDummySourceAny );
-                }
-            }
-
-            StarBASIC* pBasic = GetLib( aLibName );
-            if( pBasic )
-            {
-                SbxArray* pModules = pBasic->GetModules();
-                USHORT nModCount = pModules->Count();
-                for( USHORT j = 0; j < nModCount ; j++ )
-                {
-                    SbModule* pMod = (SbModule*)pModules->Get( j );
-                    pMod->SetSource( aDummySource );
-                    pMod->Compile();
-                }
-            }
-
-            bModified = sal_True;
-        }
-        else
-        {
-            if( pInfo->GetPassword().Len() != 0 )
+            String aLibName = pInfo->GetLibName();
+            sal_Bool bPassword = pOldBasicPassword->hasLibraryPassword( aLibName );
+            String aPassword = pOldBasicPassword->getLibraryPassword( aLibName );
+            if( pInfo->GetPassword() != aPassword )
                 bModified = sal_True;
-            pInfo->SetPassword( aPassword );
+
+            if( bPassword && aPassword.Len() == 0 )
+            {
+                String aDummySource( String::CreateFromAscii(
+                    "REM This module belonged to a password protected library that was exported without\n"
+                    "REM verifying the password. So the original module source could not be exported!\n"
+                    "sub main\n"
+                    "end sub\n" ) );
+                Any aDummySourceAny;
+                aDummySourceAny <<= OUString( aDummySource );
+
+                Reference< XLibraryContainer > xScriptCont = mpImpl->mpInfo->mxScriptCont;
+                if( xScriptCont.is() && xScriptCont->hasByName( aLibName ) )
+                {
+                    xScriptCont->loadLibrary( aLibName );
+
+                    // Now the library isn't password protected any more
+                    // but the modules don't contain any source
+                    pOldBasicPassword->clearLibraryPassword( aLibName );
+
+                    Any aLibAny = xScriptCont->getByName( aLibName );
+                    Reference< XNameContainer > xLib;
+                    aLibAny >>= xLib;
+
+                    Sequence< OUString > aNames = xLib->getElementNames();
+                    sal_Int32 nNameCount = aNames.getLength();
+                    const OUString* pNames = aNames.getConstArray();
+                    for( sal_Int32 i = 0 ; i < nNameCount ; i++ )
+                    {
+                        OUString aElementName = pNames[ i ];
+                        xLib->replaceByName( aElementName, aDummySourceAny );
+                    }
+                }
+
+                StarBASIC* pBasic = GetLib( aLibName );
+                if( pBasic )
+                {
+                    SbxArray* pModules = pBasic->GetModules();
+                    USHORT nModCount = pModules->Count();
+                    for( USHORT j = 0; j < nModCount ; j++ )
+                    {
+                        SbModule* pMod = (SbModule*)pModules->Get( j );
+                        pMod->SetSource( aDummySource );
+                        pMod->Compile();
+                    }
+                }
+
+                bModified = sal_True;
+            }
+            else
+            {
+                if( pInfo->GetPassword().Len() != 0 )
+                    bModified = sal_True;
+                pInfo->SetPassword( aPassword );
+            }
         }
     }
 
