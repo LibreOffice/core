@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97esc.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:34 $
+ *  last change: $Author: vg $ $Date: 2003-07-24 11:57:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,9 +116,7 @@
 XclEscherEx::XclEscherEx( SvStream& rStrm, UINT32 nDrawings, RootData& rRoot )
         :
         EscherEx( rStrm, nDrawings ),
-#if EXC_INCL_EXP_OCX
         aOcxConverter( *rRoot.pER ),
-#endif
         rRootData( rRoot ),
         pPicTempFile( NULL ),
         pPicStrm( NULL ),
@@ -205,6 +203,8 @@ void XclEscherEx::ReplaceCurrentOffsetInMap( ULONG nPos )
 EscherExHostAppData* XclEscherEx::StartShape( const com::sun::star::uno::Reference<
                                                 com::sun::star::drawing::XShape >& rShape )
 {
+    const XclExpRoot& rRoot = *rRootData.pER;
+
     if ( nAdditionalText )
         nAdditionalText++;
     BOOL bInGroup = ( pCurrXclObj != NULL );
@@ -221,7 +221,7 @@ EscherExHostAppData* XclEscherEx::StartShape( const com::sun::star::uno::Referen
     pCurrAppData = new XclEscherHostAppData;
     const SdrObject* pObj = GetSdrObject( rShape );
     if ( !pObj )
-        pCurrXclObj = new XclObjAny( rRootData );   // just what is it?!?
+        pCurrXclObj = new XclObjAny( rRoot );  // just what is it?!?
     else
     {
         pCurrXclObj = NULL;
@@ -236,29 +236,27 @@ EscherExHostAppData* XclEscherEx::StartShape( const com::sun::star::uno::Referen
                 SvGlobalName aObjClsId( *xObj->GetSvFactory() );
                 if ( SchModuleDummy::HasID( aObjClsId ) )
                 {   // yes, it's a chart diagram
-                    rRootData.pObjRecs->Add( new XclObjChart( rRootData, rShape ) );
+                    rRootData.pObjRecs->Add( new XclObjChart( rRoot, rShape ) );
                     pCurrXclObj = NULL;     // no metafile or whatsoever
                 }
                 else    // metafile and OLE object
-                    pCurrXclObj = new XclObjOle( rRootData, *pObj );
+                    pCurrXclObj = new XclObjOle( rRoot, *pObj );
             }
             else    // just a metafile
-                pCurrXclObj = new XclObjAny( rRootData );
+                pCurrXclObj = new XclObjAny( rRoot );
         }
         else if( nObjType == OBJ_CAPTION )  // #107540# ignore permanent note shapes
         {
             pCurrXclObj = NULL;
         }
-#if EXC_INCL_EXP_OCX
         else if( nObjType >= OBJ_FM_CONTROL )
         {
-            pCurrXclObj = aOcxConverter.CreateObjRec( rShape );
+            pCurrXclObj = aOcxConverter.CreateCtrlObj( rShape );
             if( !pCurrXclObj )
-                pCurrXclObj = new XclObjAny( rRootData );   // just a metafile
+                pCurrXclObj = new XclObjAny( rRoot );   // just a metafile
         }
-#endif
         else
-            pCurrXclObj = new XclObjAny( rRootData );   // just a metafile
+            pCurrXclObj = new XclObjAny( rRoot );   // just a metafile
     }
     if ( pCurrXclObj )
     {
@@ -494,7 +492,7 @@ void XclEscherClientAnchor::RowY( UINT16& nRow, UINT16& nY, UINT16 nStart,
     }
     long n = nPosY - nHeight;
     DBG_ASSERT( n < nH, "XclEscherClientAnchor::RowY: width?" );
-    nY = ( nH ? (UINT16) ((n * 255) / nH) : 0 );
+    nY = ( nH ? (UINT16) ((n * 256) / nH) : 0 );
 }
 
 
@@ -676,7 +674,7 @@ XclEscherClientTextbox::XclEscherClientTextbox( RootData& rRoot,
 
 void XclEscherClientTextbox::WriteData( EscherEx& rEx ) const
 {
-    pXclObj->SetText( rRootData, rTextObj );
+    pXclObj->SetText( *rRootData.pER, rTextObj );
 }
 
 
