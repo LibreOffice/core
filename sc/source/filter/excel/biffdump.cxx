@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: dr $ $Date: 2002-05-22 11:11:18 $
+ *  last change: $Author: dr $ $Date: 2002-07-18 09:27:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1052,7 +1052,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 __AddDec( t, n );
                 PRINT();
                 UINT16  nSB, nF, nL;
-                while( n )
+                while( n && rIn.IsValid() )
                 {
                     LINESTART();
                     rIn >> nSB >> nF >> nL;
@@ -1152,7 +1152,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 rIn >> nCount;
                 __AddDec( t, nCount );
                 PRINT();
-                for( UINT16 nIndex = 0; nIndex < nCount; nIndex++ )
+                for( UINT16 nIndex = 0; nIndex < nCount && rIn.IsValid(); nIndex++ )
                 {
                     LINESTART();
                     UINT16 nR1, nR2;
@@ -5558,7 +5558,7 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
 #define STARTTOKEN( name )      lcl_StartToken( t, nOp, name )
 #define STARTTOKENCLASS( name ) lcl_StartTokenClass( t, nOp, name )
 
-    while( ( pIn->GetRecPos() < nAfterPos ) && !bError )
+    while( pIn->IsValid() && ( pIn->GetRecPos() < nAfterPos ) && !bError )
     {
         *pIn >> nOp;
         bPrinted = sal_False;
