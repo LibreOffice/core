@@ -2,9 +2,9 @@
  *
  *  $RCSfile: errtxt.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-19 10:16:14 $
+ *  last change: $Author: kz $ $Date: 2001-03-28 11:58:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2707,7 +2707,7 @@ Resource RID_ERRHDL
         Text [ danish ] = "Enheden (drevet) er ikke klar." ;
         Text [ italian ] = "Apparecchio (drive) non pronto." ;
         Text [ spanish ] = "Dispositivo (unidad) no listo." ;
-        Text [ french ] = "Le périphérique (lecteur) n'est pas prêt." ;
+        Text [ french ] = "Le périphérique (unité) n'est pas prêt." ;
         Text [ dutch ] = "Apparaat (station) niet gereed." ;
         Text[ chinese_simplified ] = "Éè±¸(Çý¶¯ÅÌ)»¹Ã»ÓÐ×¼±¸¾ÍÐ÷¡£";
         Text[ russian ] = "Óñòðîéñòâî (äèñê) íå ãîòîâî.";
