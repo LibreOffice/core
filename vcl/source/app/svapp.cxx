@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: ssa $ $Date: 2002-07-18 08:03:28 $
+ *  last change: $Author: ssa $ $Date: 2002-08-13 14:04:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1307,7 +1307,7 @@ long    Application::GetTopWindowCount()
     Window *pWin = pSVData->maWinData.mpFirstFrame;
     while( pWin )
     {
-        if( pWin->IsTopWindow() )
+        if( pWin->ImplGetWindow()->IsTopWindow() )
             nRet++;
         pWin = pWin->mpFrameData->mpNextFrame;
     }
@@ -1323,9 +1323,9 @@ Window* Application::GetTopWindow( long nIndex )
     Window *pWin = pSVData->maWinData.mpFirstFrame;
     while( pWin )
     {
-        if( pWin->IsTopWindow() )
+        if( pWin->ImplGetWindow()->IsTopWindow() )
             if( nIdx == nIndex )
-                return pWin;
+                return pWin->ImplGetWindow();
             else
                 nIdx++;
         pWin = pWin->mpFrameData->mpNextFrame;
