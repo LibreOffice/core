@@ -22,6 +22,7 @@ mkdir: %_DEST%\idl%_EXT%\com\sun\star\io
 mkdir: %_DEST%\idl%_EXT%\com\sun\star\java
 mkdir: %_DEST%\idl%_EXT%\com\sun\star\lang
 mkdir: %_DEST%\idl%_EXT%\com\sun\star\linguistic2
+mkdir: %_DEST%\idl%_EXT%\com\sun\star\package
 mkdir: %_DEST%\idl%_EXT%\com\sun\star\pgp
 mkdir: %_DEST%\idl%_EXT%\com\sun\star\plugin
 mkdir: %_DEST%\idl%_EXT%\com\sun\star\presentation
@@ -82,6 +83,7 @@ mkdir: %_DEST%\idl%_EXT%\com\sun\star\portal\system
 ..\com\sun\star\java\*.idl %_DEST%\idl%_EXT%\com\sun\star\java\*.idl
 ..\com\sun\star\lang\*.idl %_DEST%\idl%_EXT%\com\sun\star\lang\*.idl
 ..\com\sun\star\linguistic2\*.idl %_DEST%\idl%_EXT%\com\sun\star\linguistic2\*.idl
+..\com\sun\star\package\*.idl %_DEST%\idl%_EXT%\com\sun\star\package\*.idl
 ..\com\sun\star\pgp\*.idl %_DEST%\idl%_EXT%\com\sun\star\pgp\*.idl
 ..\com\sun\star\plugin\*.idl %_DEST%\idl%_EXT%\com\sun\star\plugin\*.idl
 ..\com\sun\star\presentation\*.idl %_DEST%\idl%_EXT%\com\sun\star\presentation\*.idl
