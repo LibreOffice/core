@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.hxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:15:53 $
+ *  last change: $Author: hr $ $Date: 2004-05-11 11:27:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -374,6 +374,10 @@ public:
     // OD 2004-03-12 #i11860# - former object positioning
     sal_Bool IsFormerObjectPositioning() const;
     void SetUseFormerObjectPositioning( const sal_Bool _bUseFormerObjPos );
+
+    // --> FME #108724#
+    sal_Bool IsFormerTextWrapping() const;
+    void SetUseFormerTextWrapping( sal_Bool _bUseFormerTextWrapping );
 
     //
     // DOCUMENT COMPATIBILITY FLAGS END
