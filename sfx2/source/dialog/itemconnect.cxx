@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itemconnect.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:26:36 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 14:57:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,6 +210,13 @@ void EditWrapper::SetControlValue( String aValue )
 }
 
 // ----------------------------------------------------------------------------
+
+ColorListBoxWrapper::ColorListBoxWrapper(ColorListBox & rListBox):
+    SingleControlWrapper< ColorListBox, Color >(rListBox)
+{}
+
+ColorListBoxWrapper::~ColorListBoxWrapper()
+{}
 
 bool ColorListBoxWrapper::IsControlDontKnow() const
 {
