@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pyuno.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jbu $ $Date: 2003-05-24 23:26:45 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 15:00:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -396,7 +396,9 @@ PyObject *PyUNO_invoke( PyObject *object, const char *name , PyObject *args )
         {
             // clean the tuple from uno.Any !
             int size = PyTuple_Size( args );
+            { // for CC, keeping ref-count of tuple being 1
             paras = PyRef(PyTuple_New( size ), SAL_NO_ACQUIRE);
+            }
             for( int i = 0 ; i < size ;i ++ )
             {
                 PyObject * element = PyTuple_GetItem( args , i );
@@ -697,6 +699,7 @@ PyObject* PyUNO_new (
     if (!tmp_interface.is ())
     {
         // empty reference !
+        Py_INCREF( Py_None );
         return Py_None;
     }
 
