@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdstring.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 23:09:27 $
+ *  last change: $Author: kz $ $Date: 2001-03-01 21:17:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,7 +190,7 @@ String RID_SVXSTR_ASK_DEL_GRADIENT
     Text [ dutch ] = "Wilt u het kleurverloop werkelijk wissen?" ;
     Text [ spanish ] = "¿Desea realmente eliminar el gradiente de color?" ;
     Text [ english_us ] = "Do you want to delete the gradient?" ;
-    Text[ chinese_simplified ] = "ÄúÕæµÄÒªÉ¾³ıÕâ¸ö²ÊÉ«Í¼°¸Âğ£¿";
+    Text[ chinese_simplified ] = "ÕæÒªÉ¾³ıÕâ¸ö²ÊÉ«Í¼°¸Âğ£¿";
     Text[ russian ] = "Âû äåéñòâèòåëüíî õîòèòå óäàëèòü ıòó ãğàäèåíòíóş?";
     Text[ polish ] = "Czy chcesz na pewno usun¹æ gradient?";
     Text[ japanese ] = "‚±‚Ì¸Ş×ÃŞ°¼®İ‚ğ–{“–‚Éíœ‚µ‚Ü‚·‚©H";
@@ -218,7 +218,7 @@ String RID_SVXSTR_ASK_CHANGE_GRADIENT
     Text [ dutch ] = "In het kleurverloop werden wijzigingen aangebracht en niet opgeslagen. \\U kunt het geselecteerde kleurverloop wijzigen \nof een nieuw kleurverloop toevoegen." ;
     Text [ spanish ] = "El gradiente de color ha sido modificado sin guardar.\nPuede modificarlo\no añadir uno nuevo." ;
     Text [ english_us ] = "The gradient was modified without saving. \nModify the selected gradient or add a new gradient." ;
-    Text[ chinese_simplified ] = "Õâ¸ö²ÊÉ«Í¼°¸ÒÑ¾­±»¸ü¸Ä£¬µ«ÊÇ»¹Ã»ÓĞ±»±£´æ¡£\nÄúÄÜ¹»¸ü¸ÄÑ¡ÖĞµÄ²ÊÉ«Í¼°¸\n»òÕßĞÂÔöÒ»¸öĞÂµÄ²ÊÉ«Í¼°¸¡£";
+    Text[ chinese_simplified ] = "Õâ¸ö²ÊÉ«Í¼°¸ÒÑ¾­¸ü¸Ä£¬µ«ÊÇ»¹Ã»ÓĞ±£´æ¡£\nÄúÄÜ¹»¸ü¸ÄÑ¡ÖĞµÄ²ÊÉ«Í¼°¸\n»òÕßĞÂÔöÒ»¸öĞÂµÄ²ÊÉ«Í¼°¸¡£";
     Text[ russian ] = "Ãğàäèåíòíàÿ áûëà èçìåíåíà. íî íå ñîõğàíåíà. \nÂû ìîæåòå èçìåíèòü âûáğàííóş \nèëè äîáàâèòü íîâóş ãğàäèåíòíóş.";
     Text[ polish ] = "Gradient zosta³ zmieniony i nie zapisany. \nMo¿esz zmieniæ zaznaczony gradient \nlub dodaæ nowy gradient.";
     Text[ japanese ] = "¸Ş×ÃŞ°¼®İ‚ª•ÏX‚³‚ê‚Ä•Û‘¶‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB\n‘I‘ğ‚µ‚½¸Ş×ÃŞ°¼®İ‚Ì•ÏX‚Ü‚½‚Í\nV‚µ‚¢¸Ş×ÃŞ°¼®İ‚Ì’Ç‰Á‚ª‚Å‚«‚Ü‚·B";
@@ -334,7 +334,7 @@ String RID_SVXSTR_ASK_DEL_BITMAP
     Text [ dutch ] = "Wilt u de bitmap werkelijk verwijderen?" ;
     Text [ spanish ] = "¿Desea realmente eliminar el bitmap?" ;
     Text [ english_us ] = "Are you sure you want to delete the bitmap?" ;
-    Text[ chinese_simplified ] = "ÄúÕæµÄÒªÉ¾³ıÕâ¸öÎ»Í¼Âğ£¿";
+    Text[ chinese_simplified ] = "ÕæÒªÉ¾³ıÕâ¸öÎ»Í¼Âğ£¿";
     Text[ russian ] = "Âû äåéñòâèòåëüíî õîòèòå óäàëèòü ıòîò bitmap?";
     Text[ polish ] = "Czy chcesz na pewno usun¹æ mapê bitow¹?";
     Text[ japanese ] = "‚±‚ÌËŞ¯ÄÏ¯Ìß‚ğ–{“–‚Éíœ‚µ‚Ü‚·‚©?";
@@ -362,7 +362,7 @@ String RID_SVXSTR_ASK_CHANGE_BITMAP
     Text [ dutch ] = "In de bitmap werden wijzigingen aangebracht en niet opgeslagen. \nU kunt de geselecteerde bitmap wijzigen \nof een nieuwe bitmap toevoegen." ;
     Text [ spanish ] = "El bitmap ha sido modificado sin guardar.\nPuede modificar el bitmap seleccionado\no añadir uno nuevo." ;
     Text [ english_us ] = "The bitmap was modified without saving. \nModify the selected bitmap or add a new bitmap." ;
-    Text[ chinese_simplified ] = "Õâ¸öÎ»Í¼ÑùÊ½ÒÑ¾­±»¸ü¸Ä£¬µ«ÊÇÃ»ÓĞ±»±£´æ¡£ \nÄúÄÜ¹»¸ü¸ÄÑ¡ÖĞµÄÎ»Í¼\n»òÕßĞÂÔöÒ»¸öĞÂµÄÎ»Í¼¡£";
+    Text[ chinese_simplified ] = "Õâ¸öÎ»Í¼ÑùÊ½ÒÑ¾­¸ü¸Ä£¬µ«ÊÇÃ»ÓĞ±£´æ¡£ \nÄúÄÜ¹»¸ü¸ÄÑ¡ÖĞµÄÎ»Í¼\n»òÕßĞÂÔöÒ»¸öĞÂÎ»Í¼¡£";
     Text[ russian ] = "Bitmap áûë èçìåíåí, íî íå ñîõğàíåí. \nÂû ìîæåòå èçìåíèòü âûáğàííûé \nèëè äîáàâèòü íîâûé bitmap.";
     Text[ polish ] = "Mapa bitowa zosta³a zmieniona i nie zapisana. \nMo¿esz zmieniæ zaznaczon¹ mapê bitow¹ \nlub dodaæ now¹ mapê bitow¹.";
     Text[ japanese ] = "ËŞ¯ÄÏ¯Ìß‚ª•ÏX‚³‚ê‚Ä•Û‘¶‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB\n‘I‘ğ‚µ‚½ËŞ¯ÄÏ¯Ìß‚Ì•ÏX‚Ü‚½‚Í\nV‚µ‚¢ËŞ¯ÄÏ¯Ìß‚Ì’Ç‰Á‚ª‚Å‚«‚Ü‚·B";
@@ -472,7 +472,7 @@ String RID_SVXSTR_ASK_DEL_LINESTYLE
     Text [ dutch ] = "Wilt u het lijntype werkelijk wissen?" ;
     Text [ spanish ] = "¿Desea realmente eliminar el estilo de línea?" ;
     Text [ english_us ] = "Do you want to delete the line style?" ;
-    Text[ chinese_simplified ] = "ÄúÕæµÄÒªÉ¾³ıÕâ¸öÏßÌõÊ½ÑùÂğ£¿";
+    Text[ chinese_simplified ] = "ÕæÒªÉ¾³ıÕâ¸öÏßÌõÊ½Ñù£¿";
     Text[ russian ] = "Âû äåéñòâèòåëüíî õîòèòå óäàëèòü ıòî ñòèëü ëèíèè?";
     Text[ polish ] = "Czy styl linii ma na pewno zostaæ usuniêty?";
     Text[ japanese ] = "‚±‚Ìü‚Ì½À²Ù‚ğ–{“–‚Éíœ‚µ‚Ü‚·‚©?";
@@ -500,7 +500,7 @@ String RID_SVXSTR_ASK_CHANGE_LINESTYLE
     Text [ dutch ] = "In het lijntype werden wijzigingen aangebracht die niet werden opgeslagen \nU kunt het geselecteerde lijntype wijzigen \nof een nieuw lijntype toevoegen." ;
     Text [ spanish ] = "El estilo de línea ha sido modificado sin guardar.\nPuede modificar el estilo de línea seleccionado\no añadir uno nuevo." ;
     Text [ english_us ] = "The line style was modified without saving. \nModify the selected line style or add a new line style." ;
-    Text[ chinese_simplified ] = "Õâ¸öÏßÌõÊ½ÑùÒÑ¾­±»¸ü¸Ä£¬µ«ÊÇÃ»ÓĞ±»±£´æ¡£ \nÄúÄÜ¹»¸ü¸ÄÑ¡ÖĞµÄÏßÌõÊ½Ñù\n»òÕßĞÂÔöÒ»¸öÏßÌõÊ½Ñù¡£";
+    Text[ chinese_simplified ] = "Õâ¸öÏßÌõÊ½ÑùÒÑ¾­¸ü¸Ä£¬µ«ÊÇÃ»ÓĞ±£´æ¡£ \nÄúÄÜ¹»¸ü¸ÄÑ¡ÖĞµÄÏßÌõÊ½Ñù\n»òÕßĞÂÔöÒ»¸öÏßÌõÊ½Ñù¡£";
     Text[ russian ] = "Ñòèëü ëèíèè áûë èçìåíåí, íî íå ñîõğàíåí. \nÂû ìîæåòå èçìåíèòü âûáğàííûé\nèëè äîáàâèòü íîâûé ñòèëü ëèíèè.";
     Text[ polish ] = "Styl linii zosta³ zmieniony i nie zapisany. \nMo¿esz zmieniæ zaznaczony styl linii \nlub dodaæ nowy styl linii.";
     Text[ japanese ] = "ü‚Ì½À²Ù‚ª•ÏX‚³‚ê‚Ä•Û‘¶‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB\n‘I‘ğ‚µ‚½ü‚Ì½À²Ù‚Ì•ÏX‚Ü‚½‚Í\nV‚µ‚¢ü‚Ì½À²Ù‚Ì’Ç‰Á‚ª‚Å‚«‚Ü‚·B";
@@ -662,7 +662,7 @@ String RID_SVXSTR_ASK_DEL_HATCH
     Text [ dutch ] = "Wilt u de arcering werkelijk verwijderen?" ;
     Text [ spanish ] = "¿Desea realmente eliminar el entramado?" ;
     Text [ english_us ] = "Do you want to delete the hatching?" ;
-    Text[ chinese_simplified ] = "ÄúÕæµÄÒªÉ¾³ıÕâ¸öÒõÓ°Âğ£¿";
+    Text[ chinese_simplified ] = "ÕæÒªÉ¾³ıÕâ¸öÒõÓ°Âğ£¿";
     Text[ russian ] = "Âû äåéñòâèòåëüíî õîòèòå óäàëèòü ıòó øòğèõîâêó?";
     Text[ polish ] = "Czy na pewno usun¹æ kreskowanie?";
     Text[ japanese ] = "‚±‚ÌÊ¯Áİ¸Ş‚ğ–{“–‚Éíœ‚µ‚Ü‚·‚©H";
@@ -690,7 +690,7 @@ String RID_SVXSTR_ASK_CHANGE_HATCH
     Text [ dutch ] = "In de arcering werden wijzigingen aangebracht en niet opgeslagen. \nU kunt de geselecteerde arcering wijzigen \nof een nieuwe arcering toevoegen." ;
     Text [ spanish ] = "La trama ha sido modificada sin guardar.\nPuede modificar la trama seleccionada\no añadir una nueva." ;
     Text [ english_us ] = "The hatching type was modified but not saved. \nModify the selected hatching type or add a new hatching type." ;
-    Text[ chinese_simplified ] = "Õâ¸öÒõÓ°ÒÑ¾­±»¸ü¸Ä£¬µ«ÊÇÃ»ÓĞ±»±£´æ¡£ \nÄúÄÜ¹»¸ü¸ÄÑ¡ÖĞµÄÒõÓ°\n»òÕßĞÂÔöÒ»¸öĞÂµÄÒõÓ°¡£";
+    Text[ chinese_simplified ] = "Õâ¸öÒõÓ°ÒÑ¾­¸ü¸Ä£¬µ«ÊÇÃ»ÓĞ±£´æ¡£ \nÄúÄÜ¹»¸ü¸ÄÑ¡ÖĞµÄÒõÓ°\n»òÕßĞÂÔöÒ»¸öĞÂµÄÒõÓ°¡£";
     Text[ russian ] = "Øòğèõîâêà áûëà èçìåíåíà, íî íå ñîõğàíåíà. \nÂû ìîæåòå èçìåíèòü âûáğàííóş øòğèõîâêó \nèëè äîáàâèòü íîâóş øòğèõîâêó.";
     Text[ polish ] = "Kreskowanie zosta³o zmienione i nie zapisane. \nMo¿esz zmieniæ zaznaczone kreskowanie \ni lub dodaæ nowe kreskowanie.";
     Text[ japanese ] = "Ê¯Áİ¸Ş‚ª•ÏX‚³‚ê‚Ä•Û‘¶‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB\n‘I‘ğ‚µ‚½Ê¯Áİ¸Ş‚Ì•ÏX‚Ü‚½‚Í\nV‚µ‚¢Ê¯Áİ¸Ş‚Ì’Ç‰Á‚ª‚Å‚«‚Ü‚·B";
@@ -830,7 +830,7 @@ String RID_SVXSTR_ASK_DEL_COLOR
     Text [ dutch ] = "Wilt u de kleur werkelijk wissen?" ;
     Text [ spanish ] = "¿Desea realmente eliminar el color?" ;
     Text [ english_us ] = "Do you want to delete the color?" ;
-    Text[ chinese_simplified ] = "ÄúÕæµÄÒªÉ¾³ıÕâ¸öÑÕÉ«Âğ£¿";
+    Text[ chinese_simplified ] = "ÕæÒªÉ¾³ıÕâ¸öÑÕÉ«Âğ£¿";
     Text[ russian ] = "Âû äåéñòâèòåëüíî õîòèòå óäàëèòü ıòîò öâåò?";
     Text[ polish ] = "Czy chcesz na pewno usun¹æ kolor?";
     Text[ japanese ] = "‚±‚ÌF‚ğ–{“–‚Éíœ‚µ‚Ü‚·‚©?";
@@ -858,7 +858,7 @@ String RID_SVXSTR_ASK_CHANGE_COLOR
     Text [ dutch ] = "In de kleur werden wijzigingen aangebracht en niet opgeslagen. \nU kunt de geselecteerde kleur wijzigen \nof een nieuwe kleur toevoegen." ;
     Text [ spanish ] = "El color ha sido modificado sin guardar.\nPuede modificar el color seleccionado\no añadir uno nuevo." ;
     Text [ english_us ] = "The color was modified without saving.\nModify the selected color or add a new color." ;
-    Text[ chinese_simplified ] = "Õâ¸öÑÕÉ«ÒÑ¾­±»¸ü¸Ä£¬µ«ÊÇÃ»ÓĞ±»±£´æ¡£ \nÄúÄÜ¹»¸ü¸ÄÑ¡ÖĞµÄÑÕÉ«\n»òÕßĞÂÔöÒ»¸öĞÂµÄÑÕÉ«¡£";
+    Text[ chinese_simplified ] = "Õâ¸öÑÕÉ«ÒÑ¾­¸ü¸Ä£¬µ«ÊÇÃ»ÓĞ±£´æ¡£ \nÄúÄÜ¹»¸ü¸ÄÑ¡ÖĞµÄÑÕÉ«\n»òÕßĞÂÔöÒ»¸öĞÂÑÕÉ«¡£";
     Text[ russian ] = "Öâåò áûë èçìåíåí, íî íå ñîõğàíåí. \nÂû ìîæåòå èçìåíèòü âûáğàííûé \nèëè äîáàâèòü íîâûé öâåò.";
     Text[ polish ] = "Kolor zosta³ zmieniony i nie zapisany. \nMo¿esz zmieniæ zaznaczony kolor \nlub dodaæ nowy kolor.";
     Text[ japanese ] = "F‚ª•ÏX‚³‚ê‚Ä•Û‘¶‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB\n‘I‘ğ‚µ‚½F‚Ì•ÏX‚Ü‚½‚Í\nV‚µ‚¢F‚Ì’Ç‰Á‚ª‚Å‚«‚Ü‚·B";
@@ -1100,7 +1100,7 @@ String RID_SVXSTR_ASK_DEL_LINEEND
     Text [ dutch ] = "Wilt u het lijnuiteinde werkelijk wissen?" ;
     Text [ spanish ] = "¿Desea realmente eliminar el final de línea?" ;
     Text [ english_us ] = "Do you want to delete the arrowhead?" ;
-    Text[ chinese_simplified ] = "ÄúÕæµÄÒªÉ¾³ıÕâ¸öÏß¶ËÂğ£¿";
+    Text[ chinese_simplified ] = "ÕæÒªÉ¾³ıÕâ¸öÏß¶Ë£¿";
     Text[ russian ] = "Âû äåéñòâèòåëüíî õîòèòå óäàëèòü ıòîò òèï êîíöà ëèíèè?";
     Text[ polish ] = "Czy chcesz na pewno usun¹æ koñcówki linii?";
     Text[ japanese ] = "‚±‚Ìü’[‚ğ–{“–‚Éíœ‚µ‚Ü‚·‚©H";
@@ -1126,7 +1126,7 @@ String RID_SVXSTR_ASK_CHANGE_LINEEND
     Text [ danish ] = "Piltypen er blevet ændret, men ikke gemt. \nDu kan ændre den markerede pil\n eller tilføje en ny." ;
     Text [ portuguese ] = "O fim de linha foi modificado e não guardado.\nGuardar agora?" ;
     Text [ portuguese_brazilian ] = "Das Linienende wurde geändert und nicht gesichert. \nMöchten Sie das Linienende jetzt sichern?" ;
-    Text[ chinese_simplified ] = "Õâ¸öÏß¶ËÒÑ¾­±»¸ü¸Ä£¬µ«ÊÇÃ»ÓĞ±»±£´æ¡£\nÄúÒªÏÖÔÚ±£´æÕâ¸öÏß¶ËÂğ£¿";
+    Text[ chinese_simplified ] = "Õâ¸öÏß¶ËÒÑ¾­¸ü¸Ä£¬µ«ÊÇÃ»ÓĞ±£´æ¡£\nÄúÒªÏÖÔÚ±£´æÕâ¸öÏß¶ËÂğ£¿";
     Text[ russian ] = "Êîíåö ëèíèè áûë èçìåíåí, íî íå ñîõğàíåí. \nÂû õîòèòå ñåé÷àñ ñîõğàíèòü êîíåö ëèíèè?";
     Text[ polish ] = "Koñcówki linii zosta³y zmienione i nie zapisane. \nCzy chcesz zmieniæ teraz koñcówki linii?";
     Text[ japanese ] = "ü’[‚ª•ÏX‚³‚ê‚Ä•Û‘¶‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB\n‚±‚Ìü’[‚ğ¡‚·‚®•Û‘¶‚µ‚Ü‚·‚©B";
@@ -4042,7 +4042,7 @@ String RID_SVXSTR_BMP20
     Text[ swedish ] = "Rosor";
     Text[ polish ] = "Ró¿e";
     Text[ portuguese_brazilian ] = "Roses";
-    Text[ japanese ] = "^‚ÁÔ‚Èƒoƒ‰";
+    Text[ japanese ] = "^‚ÁÔ‚ÈÊŞ×";
     Text[ korean ] = "Àå¹Ì";
     Text[ chinese_simplified ] = "Ãµ¹å";
     Text[ chinese_traditional ] = "ª´ºÀ";
