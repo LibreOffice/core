@@ -2,9 +2,9 @@
  *
  *  $RCSfile: template.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2001-08-24 05:52:40 $
+ *  last change: $Author: bc $ $Date: 2002-09-02 12:06:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -406,7 +406,7 @@ String CorrespondenceNoTextmark+1
 
 String CorrespondenceMsgError
 {
-    Text = "Fehler";
+    Text = "Es ist ein Fehler aufgetreten!";
     Text[English] = "Error";
     Text[ english_us ] = "Error";
     Text[ portuguese ] = "Erro";
