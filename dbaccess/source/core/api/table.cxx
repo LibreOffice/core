@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 07:34:33 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:57:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -492,6 +492,7 @@ sdbcx::OCollection* ODBTable::createColumns(const TStringVector& _rNames)
                                     xMeta.is() && xMeta->supportsAlterTableWithAddColumn(),
                                     xMeta.is() && xMeta->supportsAlterTableWithDropColumn());
     static_cast<OColumnsHelper*>(pCol)->setParent(this);
+    pCol->setParent(*this);
     OContainerMediator* pMediator = new OContainerMediator(pCol,m_xColumnDefinitions,sal_False);
     m_xColumnMediator = pMediator;
     pCol->setMediator(pMediator);
