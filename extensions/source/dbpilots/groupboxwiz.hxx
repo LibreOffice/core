@@ -2,9 +2,9 @@
  *
  *  $RCSfile: groupboxwiz.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 16:03:29 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 13:41:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,10 +108,9 @@ namespace dbp
 
     protected:
         // OWizardMachine overridables
-        virtual ::svt::OWizardPage*     createPage(sal_uInt16 _nState);
-        virtual sal_uInt16      determineNextState(sal_uInt16 _nCurrentState);
-        virtual void            enterState(sal_uInt16 _nState);
-        virtual sal_Bool        leaveState(sal_uInt16 _nState);
+        virtual ::svt::OWizardPage* createPage( WizardState _nState );
+        virtual WizardState         determineNextState( WizardState _nCurrentState );
+        virtual void                enterState( WizardState _nState );
 
         virtual sal_Bool onFinish(sal_Int32 _nResult);
 
@@ -203,7 +202,7 @@ namespace dbp
         ListBox         m_aOptions;
 
         StringArray     m_aUncommittedValues;
-        sal_uInt16      m_nLastSelection;
+        WizardState     m_nLastSelection;
 
     public:
         OOptionValuesPage( OControlWizard* _pParent );
