@@ -1,7 +1,7 @@
 %{
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.11 2001-01-26 12:05:55 oj Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.12 2001-01-29 09:25:31 oj Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -9,7 +9,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: oj $ $Date: 2001-01-26 12:05:55 $ $Revision: 1.11 $
+//	$Author: oj $ $Date: 2001-01-29 09:25:31 $ $Revision: 1.12 $
 //
 // Description:
 //
@@ -4136,9 +4136,18 @@ void OSQLParser::error(sal_Char *fmt)
 {
 	if(!m_sErrorMessage.getLength())
 	{
-		m_sErrorMessage = m_pContext->getErrorMessage(OParseContext::ERROR_GENERAL);
-		m_sErrorMessage += ::rtl::OUString::createFromAscii(": ");
-		m_sErrorMessage += ::rtl::OUString(fmt,strlen(fmt),RTL_TEXTENCODING_UTF8);
+		::rtl::OUString sStr(fmt,strlen(fmt),RTL_TEXTENCODING_UTF8);
+		::rtl::OUString sSQL_TOKEN(::rtl::OUString::createFromAscii("SQL_TOKEN_"));
+
+		sal_Int32 nPos1 = sStr.indexOf(sSQL_TOKEN);
+		sal_Int32 nPos2 = sStr.indexOf(sSQL_TOKEN,nPos1+1);
+		
+		::rtl::OUString sFirst  = sStr.copy(0,nPos1);
+		::rtl::OUString sSecond = sStr.copy(nPos1+sSQL_TOKEN.getLength(),nPos2-nPos1-sSQL_TOKEN.getLength());
+		sFirst  += sSecond;
+		sFirst  += sStr.copy(nPos2+sSQL_TOKEN.getLength());
+
+		m_sErrorMessage = sFirst;
 		::rtl::OUString aError = s_pScanner->getErrorMessage();
 		if(aError.getLength())
 		{
