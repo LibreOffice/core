@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propcontroller.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-12 14:44:49 $
+ *  last change: $Author: fs $ $Date: 2001-02-05 08:58:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,6 +208,8 @@ namespace pcr
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XIntrospectionAccess >   m_xIntrospection;
         // the parent object (if any) of the introspected object
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >               m_xObjectParent;
+        // the class id of the introspectee - if appliable
+        sal_Int16                                                                           m_nClassId;
 
         sal_uInt16  m_nGenericPageId;
         sal_uInt16  m_nDataPageId;
@@ -354,6 +356,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/01/12 14:44:49  fs
+ *  don't hold the form info service statically - caused problems 'cause it was the last ModuleResourceClient and destroyed upon unloaded the library
+ *
  *  Revision 1.1  2001/01/12 11:31:14  fs
  *  initial checkin - outsourced the form property browser
  *

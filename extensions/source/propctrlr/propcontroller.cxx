@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propcontroller.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-24 14:14:18 $
+ *  last change: $Author: fs $ $Date: 2001-02-05 08:58:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,8 +119,14 @@
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
 #endif
+#ifndef _COMPHELPER_PROPERTY_HXX_
+#include <comphelper/property.hxx>
+#endif
 #ifndef _EXTENSIONS_PROPCTRLR_MODULEPRC_HXX_
 #include "modulepcr.hxx"
+#endif
+#ifndef _EXTENSIONS_FORMSCTRLR_FORMSTRINGS_HXX_
+#include "formstrings.hxx"
 #endif
 
 //------------------------------------------------------------------------
@@ -522,16 +528,7 @@ namespace pcr
         if (isListening())
             stopPropertyListening();
 
-        m_aIntrospectee.clear();
-        m_aObjectProperties.realloc(0);
-        m_aObjectListenerTypes.realloc(0);
-        m_xEventManager = NULL;
-        m_xPropStateAccess = NULL;
-        m_xPropValueAccess = NULL;
-        m_xIntrospection = NULL;
-        m_xObjectParent = NULL;
-
-        m_bHasListSource = m_bHasCursorSource =  sal_False;
+        // destroy the view first. So any pending commits can be done ...
         if (haveView())
         {
             // remove the pages
@@ -543,6 +540,18 @@ namespace pcr
                 getPropertyBox()->RemovePage(m_nEventPageId);
             m_nGenericPageId = m_nDataPageId = m_nEventPageId = 0;
         }
+
+        m_aIntrospectee.clear();
+        m_aObjectProperties.realloc(0);
+        m_aObjectListenerTypes.realloc(0);
+        m_xEventManager = NULL;
+        m_xPropStateAccess = NULL;
+        m_xPropValueAccess = NULL;
+        m_xIntrospection = NULL;
+        m_xObjectParent = NULL;
+        m_nClassId = 0;
+
+        m_bHasListSource = m_bHasCursorSource =  sal_False;
     }
 
     //------------------------------------------------------------------------
@@ -805,6 +814,13 @@ namespace pcr
                     *aCopyDest = *aCopySource;
             }
 
+            // retrieve the class id of the introspectee (if appliable)
+            // TODO: this is form dependent, again ...
+            if (::comphelper::hasProperty(PROPERTY_CLASSID, m_xPropValueAccess))
+                m_nClassId = ::comphelper::getINT16(m_xPropValueAccess->getPropertyValue(PROPERTY_CLASSID));
+            else
+                m_nClassId = 0;
+
             // start the listening for property changes
             startPropertyListening();
         }
@@ -879,6 +895,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2001/01/24 14:14:18  fs
+ *  bindToObject: pass non-form-related objects to setObject, too
+ *
  *  Revision 1.3  2001/01/18 14:45:10  rt
  *  #65293# semicolon removed
  *
