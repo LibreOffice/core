@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_backend.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 12:09:08 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 12:16:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,16 +62,17 @@
 #if ! defined INCLUDED_DP_REGISTRY_H
 #define INCLUDED_DP_REGISTRY_H
 
-#include "dp_props.h"
+#include "dp_misc.h"
+#include "dp_resource.h"
+#include "dp_interact.h"
 #include "rtl/ref.hxx"
 #include "cppuhelper/weakref.hxx"
-#include "cppuhelper/implbase1.hxx"
-#include "cppuhelper/implbase4.hxx"
+#include "cppuhelper/compbase1.hxx"
+#include "cppuhelper/compbase4.hxx"
 #include "tools/inetmime.hxx"
 #include "com/sun/star/lang/XServiceInfo.hpp"
 #include "com/sun/star/lang/XInitialization.hpp"
 #include "com/sun/star/lang/XEventListener.hpp"
-#include "com/sun/star/beans/PropertyAttribute.hpp"
 #include "com/sun/star/deployment/XPackageRegistry.hpp"
 #include <memory>
 #include <hash_map>
@@ -86,177 +87,185 @@ namespace css = ::com::sun::star;
 
 class PackageRegistryBackend;
 
+typedef ::cppu::WeakComponentImplHelper1<
+    css::deployment::XPackage > t_PackageBase;
+
 //==============================================================================
-class Package : public ::cppu::ImplInheritanceHelper1<
-    ::dp_misc::PropertyComponentBase, css::deployment::XPackage >
+class Package : protected ::dp_misc::MutexHolder, public t_PackageBase
 {
 protected:
-    ::rtl::Reference< PackageRegistryBackend > m_myBackend;
-
-    enum {
-        COMPOSITION,
-//         DEPENDENT_URLS,
-        DESCRIPTION,
-        DISPLAY_NAME,
-        IS_REGISTERED,
-        NAME,
-        MEDIA_TYPE,
-        URL
-    };
-    ::std::auto_ptr< ::cppu::IPropertyArrayHelper > m_property_array_helper;
-    bool m_package_composition;
-
-    // OPropertySetHelper
-    virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
-    virtual sal_Bool SAL_CALL convertFastPropertyValue(
-        css::uno::Any & rConvertedValue, css::uno::Any & rOldValue,
-        sal_Int32 nHandle, css::uno::Any const & rValue )
-        throw (css::lang::IllegalArgumentException);
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
-        sal_Int32 nHandle, css::uno::Any const & rValue )
-        throw (css::uno::Exception);
-    virtual void SAL_CALL getFastPropertyValue(
-        css::uno::Any & rValue, sal_Int32 nHandle ) const;
-
+    ::rtl::Reference<PackageRegistryBackend> m_myBackend;
     ::rtl::OUString m_url;
-//     css::uno::Sequence< ::rtl::OUString > m_dependentURLs;
     ::rtl::OUString m_mediaType;
     ::rtl::OUString m_name;
     ::rtl::OUString m_displayName;
     ::rtl::OUString m_description;
 
-    inline void check() const { check_undisposed(); }
+    void check();
+    void fireModified();
     virtual void SAL_CALL disposing();
 
-    /** guarded: */
-    enum t_Registered { REG_VOID, REG_REGISTERED, REG_NOT_REGISTERED };
-    virtual t_Registered getRegStatus(
-        ::osl::ResettableMutexGuard & guard,
-        css::uno::Reference< css::ucb::XCommandEnvironment > const & xCmdEnv )
-        = 0;
-    virtual bool processPackage(
-        bool register_package,
-        ::osl::ResettableMutexGuard & guard,
-        css::uno::Reference< css::ucb::XCommandEnvironment > const & xCmdEnv )
-        = 0;
+    void checkAborted(
+        ::rtl::Reference< ::dp_misc::AbortChannel > const & abortChannel );
 
-    void fireIsRegistered( t_Registered newStatus, t_Registered oldStatus );
-    void fireCurrentIsRegistered(
-        t_Registered oldStatus,
-        css::uno::Reference< css::ucb::XCommandEnvironment > const & xCmdEnv );
+    // @@@ to be implemented by specific backend:
+    virtual bool isRegistered_(
+        ::osl::ResettableMutexGuard & guard,
+        ::rtl::Reference< ::dp_misc::AbortChannel > const & abortChannel,
+        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
+        = 0;
+    virtual void processPackage_(
+        ::osl::ResettableMutexGuard & guard,
+        bool registerPackage,
+        ::rtl::Reference< ::dp_misc::AbortChannel > const & abortChannel,
+        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
+        = 0;
 
     virtual ~Package();
-    inline Package(
-        ::rtl::Reference< PackageRegistryBackend > const & myBackend,
-        ::rtl::OUString const & url,
-        ::rtl::OUString const & mediaType,
-        ::rtl::OUString const & name,
-        ::rtl::OUString const & displayName,
-        ::rtl::OUString const & description,
-        bool package_composition = false )
-        : m_myBackend( myBackend ),
-          m_package_composition( package_composition ),
-          m_url( url ),
-          m_mediaType( mediaType ),
-          m_name( name ),
-          m_displayName( displayName ),
-          m_description( description )
-        {}
+    Package( ::rtl::Reference<PackageRegistryBackend> const & myBackend,
+             ::rtl::OUString const & url,
+             ::rtl::OUString const & mediaType,
+             ::rtl::OUString const & name,
+             ::rtl::OUString const & displayName,
+             ::rtl::OUString const & description );
 
 public:
-    virtual ::rtl::OUString toString() const;
+    // XComponent
+    virtual void SAL_CALL dispose() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL addEventListener(
+        css::uno::Reference<css::lang::XEventListener> const & xListener )
+        throw (css::uno::RuntimeException);
+    virtual void SAL_CALL removeEventListener(
+        css::uno::Reference<css::lang::XEventListener> const & xListener )
+        throw (css::uno::RuntimeException);
+
+    // XModifyBroadcaster
+    virtual void SAL_CALL addModifyListener(
+        css::uno::Reference<css::util::XModifyListener> const & xListener )
+        throw (css::uno::RuntimeException);
+    virtual void SAL_CALL removeModifyListener(
+        css::uno::Reference<css::util::XModifyListener> const & xListener )
+        throw (css::uno::RuntimeException);
 
     // XPackage
-    virtual sal_Bool SAL_CALL registerPackage(
-        css::uno::Reference< css::ucb::XCommandEnvironment > const & xCmdEnv )
+    virtual css::uno::Reference<css::task::XAbortChannel> SAL_CALL
+    createAbortChannel() throw (css::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL isRegistered(
+        css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
+        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
         throw (css::deployment::DeploymentException,
+               css::ucb::CommandFailedException,
+               css::ucb::CommandAbortedException,
+               css::beans::UnknownPropertyException,
                css::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL revokePackage(
-        css::uno::Reference< css::ucb::XCommandEnvironment > const & xCmdEnv )
+    virtual void SAL_CALL registerPackage(
+        css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
+        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
         throw (css::deployment::DeploymentException,
+               css::ucb::CommandFailedException,
+               css::ucb::CommandAbortedException,
+               css::lang::IllegalArgumentException, css::uno::RuntimeException);
+    virtual void SAL_CALL revokePackage(
+        css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
+        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
+        throw (css::deployment::DeploymentException,
+               css::ucb::CommandFailedException,
+               css::ucb::CommandAbortedException,
+               css::lang::IllegalArgumentException,
                css::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL isBundle()
+        throw (css::uno::RuntimeException);
+    virtual css::uno::Sequence< css::uno::Reference<css::deployment::XPackage> >
+    SAL_CALL getBundle(
+        css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
+        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
+        throw (css::deployment::DeploymentException,
+               css::ucb::CommandFailedException,
+               css::ucb::CommandAbortedException,
+               css::lang::IllegalArgumentException,
+               css::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getName()
+        throw (css::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getMediaType()
+        throw (css::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getURL()
+        throw (css::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getDisplayName()
+        throw (css::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getDescription()
+        throw (css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL getIcon(
+        sal_Bool highContrast, sal_Bool smallIcon )
+        throw (css::uno::RuntimeException);
 };
 
-//==============================================================================
-class PackageRegistryBackend : public ::cppu::ImplInheritanceHelper4<
-    ::dp_misc::PropertyComponentBase,
-    css::lang::XInitialization,
+typedef ::cppu::WeakComponentImplHelper4<
     css::lang::XServiceInfo,
+    css::lang::XInitialization,
     css::lang::XEventListener,
-    css::deployment::XPackageRegistry >
-{
-    css::uno::Reference< css::uno::XComponentContext > m_xComponentContext;
-    css::uno::Reference< css::deployment::XPackageRegistry > m_xPackageRegistry;
-    ::rtl::OUString m_cache_path;
+    css::deployment::XPackageRegistry > t_BackendBase;
 
+//==============================================================================
+class PackageRegistryBackend
+    : protected ::dp_misc::MutexHolder, public t_BackendBase
+{
+    css::uno::Reference<css::uno::XComponentContext> m_xComponentContext;
+    css::uno::Reference<css::deployment::XPackageRegistry> m_xRootRegistry;
+    ::rtl::OUString m_cachePath;
     ::rtl::OUString m_implName;
-    css::uno::Sequence< ::rtl::OUString > m_supported_media_types;
+    css::uno::Sequence< ::rtl::OUString > m_supportedMediaTypes;
 
     typedef ::std::hash_map<
-        ::rtl::OUString, css::uno::WeakReference< css::deployment::XPackage >,
+        ::rtl::OUString, css::uno::WeakReference<css::deployment::XPackage>,
         ::rtl::OUStringHash > t_string2weakref;
     t_string2weakref m_bound;
 
-    enum PropertyHandles { SUPPORTED_MEDIA_TYPES };
-    ::std::auto_ptr< ::cppu::IPropertyArrayHelper > m_property_array_helper;
-
-    // OPropertySetHelper
-    virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
-    virtual sal_Bool SAL_CALL convertFastPropertyValue(
-        css::uno::Any & rConvertedValue, css::uno::Any & rOldValue,
-        sal_Int32 nHandle, css::uno::Any const & rValue )
-        throw (css::lang::IllegalArgumentException);
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
-        sal_Int32 nHandle, css::uno::Any const & rValue )
-        throw (css::uno::Exception);
-    virtual void SAL_CALL getFastPropertyValue(
-        css::uno::Any & rValue, sal_Int32 nHandle ) const;
-
 protected:
-    virtual css::uno::Reference< css::deployment::XPackage > createPackage(
-        ::rtl::OUString const & url,
-        ::rtl::OUString const & mediaType, ::rtl::OUString const & subType,
-        INetContentTypeParameterList const & params,
-        css::uno::Reference< css::ucb::XCommandEnvironment > const & xCmdEnv )
+    ::rtl::OUString m_context;
+    // currently only for library containers:
+    enum {
+        CONTEXT_UNKNOWN,
+        CONTEXT_OPEN_DOCUMENT, CONTEXT_CLOSED_DOCUMENT,
+        CONTEXT_USER, CONTEXT_SHARED
+    } m_eContext;
+    sal_Bool m_readOnly;
+
+    ::rtl::OUString m_strCannotBindPackage;
+    ::rtl::OUString m_strCannotDetectMediaType;
+    ::rtl::OUString m_strUnsupportedMediaType;
+
+    // @@@ to be implemented by specific backend:
+    virtual css::uno::Reference<css::deployment::XPackage> bindPackage_(
+        ::rtl::OUString const & url, ::rtl::OUString const & mediaType,
+        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
         = 0;
 
-    inline void check() const { check_undisposed(); }
+    void check();
     virtual void SAL_CALL disposing();
 
     virtual ~PackageRegistryBackend();
-    inline PackageRegistryBackend(
-        css::uno::Reference< css::uno::XComponentContext > const &
-        xComponentContext,
+    PackageRegistryBackend(
+        css::uno::Reference<css::uno::XComponentContext> const & xContext,
         ::rtl::OUString const & implName,
-        css::uno::Sequence< ::rtl::OUString > const & supported_media_types )
-        : m_xComponentContext( xComponentContext ),
-          m_implName( implName ),
-          m_supported_media_types( supported_media_types )
-        {}
+        css::uno::Sequence< ::rtl::OUString > const & supportedMediaTypes );
 
 public:
-    inline css::uno::Reference< css::uno::XComponentContext > const &
+    ::rtl::OUString m_strRegisteringPackage;
+    ::rtl::OUString m_strRevokingPackage;
+
+    inline css::uno::Reference<css::uno::XComponentContext> const &
     getComponentContext() const { return m_xComponentContext; }
 
-    inline css::uno::Reference< css::deployment::XPackageRegistry >
-    const & getPackageRegistry() const { return m_xPackageRegistry; }
+    inline css::uno::Reference<css::deployment::XPackageRegistry>
+    const & getRootRegistry() const { return m_xRootRegistry; }
 
-    inline ::rtl::OUString const & getCachePath() const
-        { return m_cache_path; }
-    inline bool transientMode() const
-        { return m_cache_path.getLength() == 0; }
+    inline ::rtl::OUString const & getCachePath() const { return m_cachePath; }
+    inline bool transientMode() const { return m_cachePath.getLength() == 0; }
 
-    void ensure_no_running_office() const;
-    void ensure_persistentMode() const;
-
-    void bind_error(
-        ::rtl::OUString const & url, css::uno::Any const & cause,
-        css::uno::Reference< css::ucb::XCommandEnvironment > const & xCmdEnv );
-
-    virtual ::rtl::OUString toString() const;
+    void ensurePersistentMode();
 
     // XInitialization
-    void SAL_CALL initialize( css::uno::Sequence< css::uno::Any > const & args )
+    void SAL_CALL initialize( css::uno::Sequence<css::uno::Any> const & args )
         throw (css::uno::Exception);
 
     // XServiceInfo
@@ -269,23 +278,18 @@ public:
     getSupportedServiceNames() throw (css::uno::RuntimeException);
 
     // XEventListener
-    virtual void SAL_CALL disposing( css::lang::EventObject const & source )
+    virtual void SAL_CALL disposing( css::lang::EventObject const & evt )
         throw (css::uno::RuntimeException);
 
     // XPackageRegistry
-    virtual sal_Bool SAL_CALL bindPackage(
-        css::uno::Reference< css::deployment::XPackage > & xPackage,
-        ::rtl::OUString const & url,
-        ::rtl::OUString const & mediaType,
-        css::uno::Reference< css::ucb::XCommandEnvironment > const & xCmdEnv )
+    virtual css::uno::Reference<css::deployment::XPackage> SAL_CALL bindPackage(
+        ::rtl::OUString const & url, ::rtl::OUString const & mediaType,
+        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
         throw (css::deployment::DeploymentException,
-               css::uno::RuntimeException);
-//     virtual ::rtl::OUString SAL_CALL detectMediaType(
-//         ::rtl::OUString const & url ) throw (css::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL repair(
-        css::uno::Reference< css::ucb::XCommandEnvironment > const & xCmdEnv )
-        throw (css::deployment::DeploymentException,
-               css::uno::RuntimeException) { return true; }
+               css::ucb::CommandFailedException,
+               css::lang::IllegalArgumentException, css::uno::RuntimeException);
+    virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL
+    getSupportedMediaTypes() throw (css::uno::RuntimeException);
 };
 
 }
