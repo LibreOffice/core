@@ -1,0 +1,3 @@
+su	sysui	:	xml2cmp NULL
+su	sysui							usr1	-	all	su_mkout NULL
+su	sysui\win32\office\icons				nmake	-	w	su_icons NULL
