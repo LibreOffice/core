@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: dvo $ $Date: 2002-06-11 14:59:34 $
+ *  last change: $Author: nn $ $Date: 2002-06-11 18:08:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2114,6 +2114,8 @@ namespace xmloff { namespace token {
         TOKEN( "error-indicator" ),            // XML_ERROR_INDICATOR
 
         TOKEN( "table-type" ),                 // XML_TABLE_TYPE
+
+        TOKEN( "display-factor" ),             // XML_DISPLAY_FACTOR
 
         { 0, NULL, NULL }                      // XML_TOKEN_END
     };

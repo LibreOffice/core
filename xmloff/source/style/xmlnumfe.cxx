@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfe.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: nn $ $Date: 2001-11-23 18:55:46 $
+ *  last change: $Author: nn $ $Date: 2002-06-11 18:11:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -632,6 +632,7 @@ void SvXMLNumFmtExport::WriteAMPMElement_Impl()
 void SvXMLNumFmtExport::WriteNumberElement_Impl(
                             sal_Int32 nDecimals, sal_Int32 nInteger,
                             const OUString& rDashStr, sal_Bool bGrouping,
+                            sal_Int32 nTrailingThousands,
                             const SvXMLEmbeddedTextEntryArr& rEmbeddedEntries )
 {
     FinishTextElement_Impl();
@@ -661,6 +662,17 @@ void SvXMLNumFmtExport::WriteNumberElement_Impl(
     if ( bGrouping )
     {
         rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_GROUPING, XML_TRUE );
+    }
+
+    //  display-factor if there are trailing thousands separators
+    if ( nTrailingThousands )
+    {
+        //  each separator character removes three digits
+        double fFactor = SolarMath::Pow10Exp( 1.0, 3 * nTrailingThousands );
+
+        OUStringBuffer aFactStr;
+        SvXMLUnitConverter::convertDouble( aFactStr, fFactor );
+        rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_DISPLAY_FACTOR, aFactStr.makeStringAndClear() );
     }
 
     SvXMLElementExport aElem( rExport, XML_NAMESPACE_NUMBER, XML_NUMBER,
@@ -1190,7 +1202,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
     if ( eBuiltIn == NF_NUMBER_STANDARD )
     {
         //  default number format contains just one number element
-        WriteNumberElement_Impl( -1, 1, OUString(), sal_False, aEmbeddedEntries );
+        WriteNumberElement_Impl( -1, 1, OUString(), sal_False, 0, aEmbeddedEntries );
         bAnyContent = sal_True;
     }
     else if ( eBuiltIn == NF_BOOLEAN )
@@ -1209,6 +1221,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
         sal_Bool bInInteger  = sal_True;
         sal_Int32 nExpDigits = 0;
         sal_Int32 nIntegerSymbols = 0;          // for embedded-text, including "#"
+        sal_Int32 nTrailingThousands = 0;       // thousands-separators after all digits
         OUString sCurrExt;
         OUString aCalendar;
         sal_uInt16 nPos = 0;
@@ -1230,9 +1243,14 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                         bDecDashes = TRUE;
                     if ( bInInteger && pElemStr )
                         nIntegerSymbols += pElemStr->Len();
+                    nTrailingThousands = 0;
                     break;
                 case XMLNUM_SYMBOLTYPE_DECSEP:
                     bInInteger = sal_False;
+                    break;
+                case XMLNUM_SYMBOLTYPE_THSEP:
+                    if (pElemStr)
+                        nTrailingThousands += pElemStr->Len();      // is reset to 0 if digits follow
                     break;
                 case XMLNUM_SYMBOLTYPE_EXP:
                     bExpFound = sal_True;           // following digits are exponent digits
@@ -1346,7 +1364,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                     }
                     break;
                 case NF_KEY_GENERAL :
-                        WriteNumberElement_Impl( -1, 1, OUString(), sal_False, aEmbeddedEntries );
+                        WriteNumberElement_Impl( -1, 1, OUString(), sal_False, 0, aEmbeddedEntries );
                     break;
                 case NF_KEY_CCC:
                     if (pElemStr)
@@ -1413,7 +1431,8 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                                     if ( bDecDashes && nPrecision > 0 )
                                         sDashStr.Fill( nPrecision, '-' );
 
-                                    WriteNumberElement_Impl( nDecimals, nInteger, sDashStr, bThousand, aEmbeddedEntries );
+                                    WriteNumberElement_Impl( nDecimals, nInteger, sDashStr, bThousand,
+                                                            nTrailingThousands, aEmbeddedEntries );
                                     bAnyContent = sal_True;
                                 }
                                 break;

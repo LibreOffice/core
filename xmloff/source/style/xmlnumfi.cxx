@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfi.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: nn $ $Date: 2002-05-22 10:46:12 $
+ *  last change: $Author: nn $ $Date: 2002-06-11 18:11:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@
 #include <svtools/zforlist.hxx>
 #include <svtools/zformat.hxx>
 #include <svtools/numuno.hxx>
+#include <tools/solmath.hxx>
 #include <tools/isolang.hxx>
 #include <tools/debug.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -155,12 +156,14 @@ struct SvXMLNumberInfo
     sal_Int32   nDenomDigits;
     sal_Bool    bGrouping;
     sal_Bool    bDecReplace;
+    double      fDisplayFactor;
     SvXMLEmbeddedElementArr aEmbeddedElements;
 
     SvXMLNumberInfo()
     {
         nDecimals = nInteger = nExpDigits = nNumerDigits = nDenomDigits = -1;
         bGrouping = bDecReplace = sal_False;
+        fDisplayFactor = 1.0;
     }
 };
 
@@ -317,6 +320,7 @@ enum SvXMLStyleElemAttrTokens
     XML_TOK_ELEM_ATTR_DECIMAL_PLACES,
     XML_TOK_ELEM_ATTR_MIN_INTEGER_DIGITS,
     XML_TOK_ELEM_ATTR_GROUPING,
+    XML_TOK_ELEM_ATTR_DISPLAY_FACTOR,
     XML_TOK_ELEM_ATTR_DECIMAL_REPLACEMENT,
     XML_TOK_ELEM_ATTR_MIN_EXPONENT_DIGITS,
     XML_TOK_ELEM_ATTR_MIN_NUMERATOR_DIGITS,
@@ -413,6 +417,7 @@ static __FAR_DATA SvXMLTokenMapEntry aStyleElemAttrMap[] =
     { XML_NAMESPACE_NUMBER, XML_DECIMAL_PLACES,          XML_TOK_ELEM_ATTR_DECIMAL_PLACES       },
     { XML_NAMESPACE_NUMBER, XML_MIN_INTEGER_DIGITS,      XML_TOK_ELEM_ATTR_MIN_INTEGER_DIGITS   },
     { XML_NAMESPACE_NUMBER, XML_GROUPING,                XML_TOK_ELEM_ATTR_GROUPING             },
+    { XML_NAMESPACE_NUMBER, XML_DISPLAY_FACTOR,          XML_TOK_ELEM_ATTR_DISPLAY_FACTOR       },
     { XML_NAMESPACE_NUMBER, XML_DECIMAL_REPLACEMENT,     XML_TOK_ELEM_ATTR_DECIMAL_REPLACEMENT  },
     { XML_NAMESPACE_NUMBER, XML_MIN_EXPONENT_DIGITS,     XML_TOK_ELEM_ATTR_MIN_EXPONENT_DIGITS  },
     { XML_NAMESPACE_NUMBER, XML_MIN_NUMERATOR_DIGITS,    XML_TOK_ELEM_ATTR_MIN_NUMERATOR_DIGITS },
@@ -809,6 +814,7 @@ SvXMLNumFmtElementContext::SvXMLNumFmtElementContext( SvXMLImport& rImport,
     sal_Int32 nAttrVal;
     sal_Bool bAttrBool;
     sal_uInt16 nAttrEnum;
+    double fAttrDouble;
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
@@ -834,6 +840,10 @@ SvXMLNumFmtElementContext::SvXMLNumFmtElementContext( SvXMLImport& rImport,
             case XML_TOK_ELEM_ATTR_GROUPING:
                 if ( SvXMLUnitConverter::convertBool( bAttrBool, sValue ) )
                     aNumInfo.bGrouping = bAttrBool;
+                break;
+            case XML_TOK_ELEM_ATTR_DISPLAY_FACTOR:
+                if ( SvXMLUnitConverter::convertDouble( fAttrDouble, sValue ) )
+                    aNumInfo.fDisplayFactor = fAttrDouble;
                 break;
             case XML_TOK_ELEM_ATTR_DECIMAL_REPLACEMENT:
                 if ( sValue.getLength() > 0 )
@@ -1678,6 +1688,22 @@ void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
         aFormatCode.append( pData->GetLocaleData( nFormatLang ).getNumDecimalSep() );
         for ( sal_uInt16 i=0; i<nPrec; i++)
             aFormatCode.append( (sal_Unicode)'-' );
+    }
+
+    //  add extra thousands separators for display factor
+
+    if ( rInfo.fDisplayFactor != 1.0 && rInfo.fDisplayFactor > 0.0 )
+    {
+        //  test for 1.0 is just for optimization - nSepCount would be 0
+
+        //  one separator for each factor of 1000
+        sal_Int32 nSepCount = (sal_Int32) SolarMath::Round( log10(rInfo.fDisplayFactor) / 3.0 );
+        if ( nSepCount > 0 )
+        {
+            OUString aSep = pData->GetLocaleData( nFormatLang ).getNumThousandSep();
+            for ( sal_Int32 i=0; i<nSepCount; i++ )
+                aFormatCode.append( aSep );
+        }
     }
 }
 

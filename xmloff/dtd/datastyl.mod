@@ -1,6 +1,6 @@
 <!--
 
-   $Id: datastyl.mod,v 1.9 2001-11-23 18:57:36 nn Exp $
+   $Id: datastyl.mod,v 1.10 2002-06-11 18:06:26 nn Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -192,6 +192,8 @@
 <!ATTLIST number:fraction number:grouping %boolean; "false">
 
 <!ATTLIST number:number number:decimal-replacement CDATA #IMPLIED>
+
+<!ATTLIST number:number number:display-factor %float; "1">
 
 <!ATTLIST number:scientific-number number:min-exponent-digits %integer; #IMPLIED>
 
