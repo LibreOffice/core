@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryfilter.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-10 16:11:48 $
+ *  last change: $Author: oj $ $Date: 2001-01-15 09:34:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,51 +167,59 @@ DlgFilterCrit::DlgFilterCrit(Window * pParent,
     aLB_WHEREFIELD2.InsertEntry( aSTR_NOENTRY );
     aLB_WHEREFIELD3.InsertEntry( aSTR_NOENTRY );
 
-    // ... sowie auch die restlichen Felder
-    Sequence< ::rtl::OUString> aNames = m_xColumns->getElementNames();
-    const ::rtl::OUString* pBegin = aNames.getConstArray();
-    const ::rtl::OUString* pEnd   = pBegin + aNames.getLength();
-    Reference<XPropertySet> xColumn;
-    for(;pBegin != pEnd;++pBegin)
+    try
     {
-        m_xColumns->getByName(*pBegin) >>= xColumn;
-        OSL_ENSHURE(xColumn.is(),"Column is null!");
-        sal_Int32 nDataType;
-        xColumn->getPropertyValue(PROPERTY_TYPE) >>= nDataType;
-        sal_Int32 eColumnSearch = dbtools::getSearchColumnFlag(m_xConnection,nDataType);
-        // TODO
-        // !pColumn->IsFunction()
-        if(eColumnSearch != ColumnSearch::NONE)
+        // ... sowie auch die restlichen Felder
+        Sequence< ::rtl::OUString> aNames = m_xColumns->getElementNames();
+        const ::rtl::OUString* pBegin = aNames.getConstArray();
+        const ::rtl::OUString* pEnd   = pBegin + aNames.getLength();
+        Reference<XPropertySet> xColumn;
+        for(;pBegin != pEnd;++pBegin)
         {
-            aLB_WHEREFIELD1.InsertEntry( *pBegin );
-            aLB_WHEREFIELD2.InsertEntry( *pBegin );
-            aLB_WHEREFIELD3.InsertEntry( *pBegin );
+            m_xColumns->getByName(*pBegin) >>= xColumn;
+            OSL_ENSHURE(xColumn.is(),"Column is null!");
+            sal_Int32 nDataType;
+            xColumn->getPropertyValue(PROPERTY_TYPE) >>= nDataType;
+            sal_Int32 eColumnSearch = dbtools::getSearchColumnFlag(m_xConnection,nDataType);
+            // TODO
+            // !pColumn->IsFunction()
+            if(eColumnSearch != ColumnSearch::NONE)
+            {
+                aLB_WHEREFIELD1.InsertEntry( *pBegin );
+                aLB_WHEREFIELD2.InsertEntry( *pBegin );
+                aLB_WHEREFIELD3.InsertEntry( *pBegin );
+            }
+        }
+        // initialize the listboxes with noEntry
+        aLB_WHEREFIELD1.SelectEntryPos(0);
+        aLB_WHEREFIELD2.SelectEntryPos(0);
+        aLB_WHEREFIELD3.SelectEntryPos(0);
+
+        // Jetzt die Felder mit den Kriterien des SQL-Strings fuellen
+        m_xColumns->getByName(rFieldName) >>= xColumn;
+        m_xQueryComposer->appendFilterByColumn(xColumn);
+
+        // insert the criteria into the dialog
+        Sequence<Sequence<PropertyValue > > aValues = m_xQueryComposer->getStructuredFilter();
+        const Sequence<PropertyValue >* pOrBegin = aValues.getConstArray();
+        const Sequence<PropertyValue >* pOrEnd   = pOrBegin + aValues.getLength();
+        sal_Bool bOr = sal_True;
+        for(sal_uInt32 i=0;pOrBegin != pOrEnd; ++pOrBegin)
+        {
+            bOr = sal_True;
+            const PropertyValue* pAndBegin  = pOrBegin->getConstArray();
+            const PropertyValue* pAndEnd    = pAndBegin + pOrBegin->getLength();
+            for(;pAndBegin != pAndEnd; ++pAndBegin)
+            {
+                SetLine( i++,*pAndBegin,bOr);
+                bOr = sal_False;
+            }
         }
     }
-    // initialize the listboxes with noEntry
-    aLB_WHEREFIELD1.SelectEntryPos(0);
-    aLB_WHEREFIELD2.SelectEntryPos(0);
-    aLB_WHEREFIELD3.SelectEntryPos(0);
-
-    // Jetzt die Felder mit den Kriterien des SQL-Strings fuellen
-    m_xColumns->getByName(rFieldName) >>= xColumn;
-    m_xQueryComposer->appendFilterByColumn(xColumn);
-
-    // insert the criteria into the dialog
-    Sequence<Sequence<PropertyValue > > aValues = m_xQueryComposer->getStructuredFilter();
-    const Sequence<PropertyValue >* pOrBegin = aValues.getConstArray();
-    const Sequence<PropertyValue >* pOrEnd   = pOrBegin + aValues.getLength();
-    sal_Bool bOr = sal_True;
-    for(sal_uInt32 i=0;pOrBegin != pOrEnd; ++pOrBegin)
+    catch(Exception&)
     {
-        bOr = sal_True;
-        const PropertyValue* pAndBegin  = pOrBegin->getConstArray();
-        const PropertyValue* pAndEnd    = pAndBegin + pOrBegin->getLength();
-        for(;pAndBegin != pAndEnd; ++pAndBegin)
-        {
-            SetLine( i++,*pAndBegin,bOr);
-            bOr = sal_False;
-        }
+        FreeResource();
+        throw;
     }
 
     EnableLines();
