@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgass.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cl $ $Date: 2002-07-01 15:10:15 $
+ *  last change: $Author: mba $ $Date: 2002-07-08 08:21:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1468,7 +1468,7 @@ void AssistentDlgImpl::UpdatePreview( BOOL bDocPreview )
             if(bDocPreview)
                 pSet->Put( SfxBoolItem( SID_PREVIEW, TRUE ) );
             RestorePassword( pSet, aDocFile );
-            if( lErr = pSfxApp->LoadTemplate( xDocShell, aDocFile, aEmptyStr, TRUE, pSet ) )
+            if( lErr = pSfxApp->LoadTemplate( xDocShell, aDocFile, TRUE, pSet ) )
                 ErrorHandler::HandleError(lErr);
             else
                 SavePassword( xDocShell, aDocFile );
@@ -1518,7 +1518,7 @@ void AssistentDlgImpl::UpdatePreview( BOOL bDocPreview )
             pSet->Put( SfxBoolItem( SID_PREVIEW, TRUE ) );
 
             RestorePassword( pSet, aLayoutFile );
-            if( lErr = pSfxApp->LoadTemplate( xLayoutDocShell, aLayoutFile, aEmptyStr, TRUE, pSet ) )
+            if( lErr = pSfxApp->LoadTemplate( xLayoutDocShell, aLayoutFile, TRUE, pSet ) )
                 ErrorHandler::HandleError(lErr);
             SavePassword( xLayoutDocShell, aLayoutFile );
         }
