@@ -1,5 +1,5 @@
 <!--
-	$Id: text.mod,v 1.3 2000-10-16 13:01:46 dvo Exp $
+	$Id: text.mod,v 1.4 2000-10-20 08:14:36 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -525,9 +525,9 @@
 
 <!ELEMENT text:dde-connection-decl EMPTY>
 <!ATTLIST text:dde-connection-decl text:name %string; #REQUIRED>
-<!ATTLIST text:dde-connection-decl text:dde-target-name %string; #REQUIRED>
-<!ATTLIST text:dde-connection-decl text:dde-file-name %string; #REQUIRED>
-<!ATTLIST text:dde-connection-decl text:dde-command %string; #REQUIRED>
+<!ATTLIST text:dde-connection-decl text:dde-application %string; #REQUIRED>
+<!ATTLIST text:dde-connection-decl text:dde-topic %string; #REQUIRED>
+<!ATTLIST text:dde-connection-decl text:dde-item %string; #REQUIRED>
 <!ATTLIST text:dde-connection-decl text:automatic-update %boolean; "false">
 
 <!ELEMENT text:dde-connection (#PCDATA)>
