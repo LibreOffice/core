@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globstr.src,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 14:33:02 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 12:46:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2574,6 +2574,12 @@ Resource RID_GLOBSTR
         Text [ de ]  = "Benutzerdefiniert" ;
         Text [ en-US ] = "Custom footer";
         Text [ x-comment ] = "German text shortened.";
+    };
+
+    String STR_ERR_DATAPILOT_INPUT
+    {
+        Text [ de ] = "Sie können diesen Teil der Datenpilot-Tabelle nicht ändern.";
+        Text[ en-US ] = "You cannot change this part of the DataPilot table.";
     };
 };
 
