@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: pw $ $Date: 2000-10-26 14:25:39 $
+ *  last change: $Author: sab $ $Date: 2000-10-27 14:00:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -971,6 +971,7 @@ XML_CONSTASCII_ACTION( sXML_tab_stop, "tab-stop" );
 XML_CONSTASCII_ACTION( sXML_table, "table" );
 XML_CONSTASCII_ACTION( sXML_table_cell, "table-cell" );
 XML_CONSTASCII_ACTION( sXML_table_column, "table-column" );
+XML_CONSTASCII_ACTION( sXML_table_column_group, "table-column-group" );
 XML_CONSTASCII_ACTION( sXML_table_columns, "table-columns" );
 XML_CONSTASCII_ACTION( sXML_table_count, "table-count" );
 XML_CONSTASCII_ACTION( sXML_table_header, "table-header" );
@@ -979,6 +980,7 @@ XML_CONSTASCII_ACTION( sXML_table_header_rows, "table-header-rows" );
 XML_CONSTASCII_ACTION( sXML_table_name, "table-name");
 XML_CONSTASCII_ACTION( sXML_table_page, "table-page" );
 XML_CONSTASCII_ACTION( sXML_table_row, "table-row" );
+XML_CONSTASCII_ACTION( sXML_table_row_group, "table-row-group" );
 XML_CONSTASCII_ACTION( sXML_table_rows, "table-rows" );
 XML_CONSTASCII_ACTION( sXML_tabstop_char, "char" );
 XML_CONSTASCII_ACTION( sXML_tabstop_leader, "leader-char" );
