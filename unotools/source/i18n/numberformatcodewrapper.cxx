@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numberformatcodewrapper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: er $ $Date: 2001-01-26 17:25:28 $
+ *  last change: $Author: er $ $Date: 2001-03-08 17:12:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@
 #pragma hdrstop
 
 
-#define LOCALEDATA_LIBRARYNAME "int"
+#define LOCALEDATA_LIBRARYNAME "i18n"
 #define LOCALEDATA_SERVICENAME "com.sun.star.i18n.NumberFormatMapper"
 
 using namespace ::com::sun::star;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transliterationwrapper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-01 14:36:50 $
+ *  last change: $Author: er $ $Date: 2001-03-08 17:12:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@
 #pragma hdrstop
 
 
-#define _LIBRARYNAME "int"
+#define _LIBRARYNAME "i18n"
 #define _SERVICENAME "com.sun.star.i18n.Transliteration"
 
 using namespace ::com::sun::star::lang;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: collatorwrapper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-05 16:43:46 $
+ *  last change: $Author: er $ $Date: 2001-03-08 17:12:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ CollatorWrapper::CollatorWrapper (
     }
     else
     {
-        ::rtl::OUString aLibrary (RTL_CONSTASCII_USTRINGPARAM(LLCF_LIBNAME("int")));
+        ::rtl::OUString aLibrary (RTL_CONSTASCII_USTRINGPARAM(LLCF_LIBNAME("i18n")));
 
         try
         {

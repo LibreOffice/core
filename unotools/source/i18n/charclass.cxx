@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charclass.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-07 10:09:33 $
+ *  last change: $Author: er $ $Date: 2001-03-08 17:12:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@
 #pragma hdrstop
 
 
-#define CHARCLASS_LIBRARYNAME "int"
+#define CHARCLASS_LIBRARYNAME "i18n"
 #define CHARCLASS_SERVICENAME "com.sun.star.i18n.CharacterClassification"
 
 using namespace ::com::sun::star;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendarwrapper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2000-11-23 20:19:32 $
+ *  last change: $Author: er $ $Date: 2001-03-08 17:12:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@
 #pragma hdrstop
 
 
-#define CALENDAR_LIBRARYNAME "int"
+#define CALENDAR_LIBRARYNAME "i18n"
 #define CALENDAR_SERVICENAME "com.sun.star.i18n.Calendar"
 
 

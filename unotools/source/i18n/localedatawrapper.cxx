@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedatawrapper.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: er $ $Date: 2001-01-31 19:30:06 $
+ *  last change: $Author: er $ $Date: 2001-03-08 17:12:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@
 #pragma hdrstop
 
 
-#define LOCALEDATA_LIBRARYNAME "int"
+#define LOCALEDATA_LIBRARYNAME "i18n"
 #define LOCALEDATA_SERVICENAME "com.sun.star.i18n.LocaleData"
 
 static const int nDateFormatInvalid = -1;
