@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmstring.src,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: nf $ $Date: 2003-08-05 10:18:18 $
+ *  last change: $Author: nf $ $Date: 2003-08-05 13:24:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5006,14 +5006,13 @@ String RID_STR_SVT_SQL_INTERNATIONAL
     Text [ spanish ] = "COMO;NO;VACIO;VERDADERO;FALSO;ES;ENTRE;O;Y;Promedio;Cantidad;Mαximo;Mνnimo;Suma" ;
     Text [ french ] = "COMME;PAS;VIDE;VRAI;FAUX;EST;ENTRE;OU;ET;Moyenne;Nombre;Maximum;Minimum;Somme" ;
     Text [ dutch ] = "ALS;NIET;LEEG;WAAR;ONWAAR;IS;TUSSEN;OF;EN;Gemiddelde;Aantal;Maximum;Minimum;Som" ;
-    Text[ chinese_simplified ] = "LIKE;NOT;EMPTY;TRUE;FALSE;IS;BETWEEN;OR;AND;average;number;maximum;minimum;sum";
+    Text[ chinese_simplified ] = "LIKE;NOT;EMPTY;TRUE;FALSE;IS;BETWEEN;OR;AND;εΉ³ε‡ε€Ό;ζ•°η›®;ζ€ε¤§;ζ€ε°;ζ€»ζ•°";
     Text[ russian ] = "ΚΐΚ;ΝΕ;ΟΣΡÒΞ;ΘΡÒΘΝΐ;ΛΞΖά;ΕΡÒά;ΜΕΖΔΣ;ΘΛΘ;Θ;ρπδνεε;κξλθχερςβξ;μΰκρθμσμ;μθνθμσμ;ρσμμΰ";
     Text[ polish ] = "JAK;NIE;PUSTY;PRAWDA;FA£SZ;JEST;POMIΚDZY;LUB;I;rednia;Numer;Maksimum;Minimum;Suma";
     Text[ japanese ] = "LIKE;NOT;EMPTY;TRUE;FALSE;IS;BETWEEN;OR;AND;εΉ³ε‡;ζ•°;ζ€ε¤§;ζ€ε°;εθ¨";
     Text[ chinese_traditional ] = "LIKE;NOT;EMPTY;TRUE;FALSE;IS;BETWEEN;OR;AND;εΉ³ε‡ε€Ό;ζ•Έη›®;ζ€ε¤§;ζ€ε°;ηΈ½ζ•Έ";
     Text[ arabic ] = "LIKE;NOT;EMPTY;TRUE;FALSE;IS;BETWEEN;OR;AND;Average;Count;Maximum;Minimum;Sum";
     Text[ dutch ] = "ALS;NIET;LEEG;WAAR;ONWAAR;IS;TUSSEN;OF;EN;Gemiddelde;Aantal;Maximum;Minimum;Som";
-    Text[ chinese_simplified ] = "LIKE;NOT;EMPTY;TRUE;FALSE;IS;BETWEEN;OR;AND;εΉ³ε‡ε€Ό;ζ•°η›®;ζ€ε¤§;ζ€ε°;ζ€»ζ•°";
     Text[ greek ] = "ΟΠΩΣ;ΟΧΙ;ΚΕΝΟ;ΑΛΗΘΗΣ;ΛΑΘΟΣ;ΕΙΝΑΙ;ΜΕΤΑΞΥ;Ή;ΚΑΙ;Μέσος όρος;Πλήθος;Μέγιστο;Ελάχιστο;Άθροισμα";
     Text[ korean ] = "LIKE;NOT;EMPTY;TRUE;FALSE;IS;BETWEEN;OR;AND;ν‰κ· ;κ°μ;μµλ€;μµμ†;ν•©κ³„";
     Text[ turkish ] = "LIKE;NOT;EMPTY;TRUE;FALSE;IS;BETWEEN;OR;AND;Average;Count;Maximum;Minimum;Sum";
