@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hjs $ $Date: 2000-11-07 13:09:54 $
+ *  last change: $Author: obo $ $Date: 2000-11-09 10:14:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,6 @@
  *
  ************************************************************************/
 
-#include <string>
-#include <algorithm>
 
 #ifdef PRECOMPILED
 #include "ui_pch.hxx"
@@ -181,6 +179,7 @@
 #include "itemdef.hxx"
 #include "swslots.hxx"
 
+#include <algorithm>
 
 SFX_IMPL_VIEWFACTORY(SwPagePreView, SW_RES(STR_NONAME))
 {
@@ -2221,6 +2220,9 @@ BOOL SwPagePreView::HandleWheelCommands( const CommandEvent& rCEvt )
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.4  2000/11/07 13:09:54  hjs
+      use min/max from stl
+
       Revision 1.3  2000/10/25 12:05:50  jp
       Spellchecker/Hyphenator are not longer member of the shells
 

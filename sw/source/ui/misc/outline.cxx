@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outline.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hjs $ $Date: 2000-11-07 12:25:18 $
+ *  last change: $Author: obo $ $Date: 2000-11-09 10:10:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,9 +58,6 @@
  *
  *
  ************************************************************************/
-
-#include <string>
-#include <algorithm>
 
 #ifdef PRECOMPILED
 #include "ui_pch.hxx"
@@ -153,6 +150,7 @@
 #ifndef _OUTLINE_HRC
 #include <outline.hrc>
 #endif
+#include <algorithm>
 
 
 #define C2S(cChar) UniString::CreateFromAscii(cChar)
@@ -1213,6 +1211,9 @@ NumberingPreview::~NumberingPreview()
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2000/11/07 12:25:18  hjs
+    use min/max from stl
+
     Revision 1.1.1.1  2000/09/18 17:14:45  hr
     initial import
 
