@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impbmp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 14:33:22 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 13:18:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,18 +61,11 @@
 
 #define _SV_IMPBMP_CXX
 
-#ifndef REMOTE_APPSERVER
 #ifndef _SV_SVSYS_HXX
 #include <svsys.h>
 #endif
 #ifndef _SV_SALBMP_HXX
 #include <salbmp.hxx>
-#endif
-#else
-#include <indbmp.hxx>
-#ifndef _SV_RMBITMAP_HXX
-#include <rmbitmap.hxx>
-#endif
 #endif
 #ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
@@ -98,18 +91,11 @@ ImpBitmap::ImpBitmap() :
 
 ImpBitmap::~ImpBitmap()
 {
-#ifdef REMOTE_APPSERVER
-    ImplReleaseRemoteBmp();
-#endif
     delete mpSalBitmap;
 }
 
 // -----------------------------------------------------------------------
-#ifndef REMOTE_APPSERVER
 void ImpBitmap::ImplSetSalBitmap( SalBitmap* pBitmap )
-#else
-void ImpBitmap::ImplSetSalBitmap( ImplServerBitmap* pBitmap )
-#endif
 {
     delete mpSalBitmap, mpSalBitmap = pBitmap;
 }
@@ -154,27 +140,14 @@ void ImpBitmap::ImplDestroy()
 
 Size ImpBitmap::ImplGetSize() const
 {
-#ifdef REMOTE_APPSERVER
-    if( ImplIsGetPrepared() )
-        return mpRMBitmap->GetSize();
-    else
-#endif
-        return mpSalBitmap->GetSize();
+    return mpSalBitmap->GetSize();
 }
 
 // -----------------------------------------------------------------------
 
 USHORT ImpBitmap::ImplGetBitCount() const
 {
-    USHORT nBitCount;
-
-#ifdef REMOTE_APPSERVER
-    if( ImplIsGetPrepared() )
-        nBitCount = mpRMBitmap->GetBitCount();
-    else
-#endif
-        nBitCount = mpSalBitmap->GetBitCount();
-
+    USHORT nBitCount = mpSalBitmap->GetBitCount();
     return( ( nBitCount <= 1 ) ? 1 : ( nBitCount <= 4 ) ? 4 : ( nBitCount <= 8 ) ? 8 : 24 );
 }
 
@@ -194,114 +167,3 @@ void ImpBitmap::ImplReleaseBuffer( BitmapBuffer* pBuffer, BOOL bReadOnly )
     if( !bReadOnly )
         mnChecksum = 0;
 }
-
-#ifdef REMOTE_APPSERVER
-
-RMBitmap* ImpBitmap::ImplGetRemoteBmp()
-{
-    return mpRMBitmap;
-}
-
-// -----------------------------------------------------------------------
-
-void ImpBitmap::ImplCreateRemoteBmp( const Bitmap& rBitmap )
-{
-    DBG_ASSERT( !mpRMBitmap, "ImplCreateRemoteBmp( Bitmap& rBitmap )???" );
-
-    mpRMBitmap = new RMBitmap( &(Bitmap&) rBitmap );
-    mpRMBitmap->Create();
-}
-
-// -----------------------------------------------------------------------
-
-void ImpBitmap::ImplCreateRemoteBmp( const Bitmap& rBitmap,
-                                     OutputDevice* pOut,
-                                     const Point& rPt, const Size& rSz )
-{
-    DBG_ASSERT( !mpRMBitmap, "ImplCreateRemoteBmp( Bitmap& rBitmap )???" );
-
-    mpRMBitmap = new RMBitmap( &(Bitmap&) rBitmap );
-    mpRMBitmap->CreateGet( pOut, rPt, rSz );
-}
-
-// -----------------------------------------------------------------------
-
-void ImpBitmap::ImplReleaseRemoteBmp()
-{
-    delete mpRMBitmap;
-    mpRMBitmap = NULL;
-}
-
-// -----------------------------------------------------------------------
-
-void ImpBitmap::ImplDrawRemoteBmp( OutputDevice* pOut,
-                            const Point& rSrcPt, const Size& rSrcSz,
-                            const Point& rDestPt, const Size& rDestSz )
-{
-    if( mpRMBitmap )
-        mpRMBitmap->Draw( pOut, rSrcPt, rSrcSz, rDestPt, rDestSz );
-}
-
-// -----------------------------------------------------------------------
-
-void ImpBitmap::ImplDrawRemoteBmpEx( OutputDevice* pOut,
-                            const Point& rSrcPt, const Size& rSrcSz,
-                            const Point& rDestPt, const Size& rDestSz,
-                            const Bitmap& rMask )
-{
-    if( mpRMBitmap )
-        mpRMBitmap->DrawEx( pOut, rSrcPt, rSrcSz, rDestPt, rDestSz, rMask );
-}
-
-// -----------------------------------------------------------------------
-
-void ImpBitmap::ImplDrawRemoteBmpAlpha( OutputDevice* pOut,
-                            const Point& rSrcPt, const Size& rSrcSz,
-                            const Point& rDestPt, const Size& rDestSz,
-                            const AlphaMask& rAlpha )
-{
-    if( mpRMBitmap )
-        mpRMBitmap->DrawAlpha( pOut, rSrcPt, rSrcSz, rDestPt, rDestSz, rAlpha );
-}
-
-// -----------------------------------------------------------------------
-
-void ImpBitmap::ImplDrawRemoteBmpMask( OutputDevice* pOut,
-                            const Point& rSrcPt, const Size& rSrcSz,
-                            const Point& rDestPt, const Size& rDestSz,
-                            const Color& rColor )
-{
-    if( mpRMBitmap )
-        mpRMBitmap->DrawMask( pOut, rSrcPt, rSrcSz, rDestPt, rDestSz, rColor );
-}
-
-// -----------------------------------------------------------------------
-
-BOOL ImpBitmap::ImplIsGetPrepared() const
-{
-    return( mpRMBitmap ? mpRMBitmap->IsGetPrepared() : FALSE );
-}
-
-// -----------------------------------------------------------------------
-
-void ImpBitmap::ImplResolveGet()
-{
-    if( mpRMBitmap )
-    {
-        Bitmap aBmp;
-        mpRMBitmap->Get( aBmp );
-        ImpBitmap* pGetImpBmp = aBmp.ImplGetImpBitmap();
-
-        if( pGetImpBmp )
-        {
-            // wir nehmen der gegetteten Bitmap einfach
-            // die SalBitmap weg; Null-Setzen nicht vergessen,
-            // da die Bitmap die SalBitmap sonst abraeumt
-            delete mpSalBitmap;
-            mpSalBitmap = pGetImpBmp->mpSalBitmap;
-            pGetImpBmp->mpSalBitmap = NULL;
-        }
-    }
-}
-
-#endif
