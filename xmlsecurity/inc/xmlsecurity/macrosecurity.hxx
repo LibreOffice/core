@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrosecurity.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-26 06:08:22 $
+ *  last change: $Author: mt $ $Date: 2004-07-26 12:13:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,8 +115,8 @@ private:
     PushButton          maResetBtn;
 
     cssu::Reference< dcss::xml::crypto::XSecurityEnvironment >  mxSecurityEnvironment;
-    SignatureInformations                                       maCurrentSignatureInformations;
     SvtSecurityOptions                                          maSecOptions;
+
     MacroSecurityTP*    mpLevelTP;
     MacroSecurityTP*    mpTrustSrcTP;
 
@@ -132,8 +132,6 @@ inline void MacroSecurity::EnableReset( bool _bEnable )
 {
     maResetBtn.Enable ( _bEnable );
 }
-
-
 
 class MacroSecurityTP : public TabPage
 {
@@ -185,7 +183,9 @@ private:
     PushButton          maAddLocPB;
     PushButton          maRemoveLocPB;
 
-//  DECL_LINK(          AddCertPBHdl, void* );
+    cssu::Sequence< SvtSecurityOptions::Certificate > maTrustedAuthors;
+
+
     DECL_LINK(          ViewCertPBHdl, void* );
     DECL_LINK(          RemoveCertPBHdl, void* );
     DECL_LINK(          AddLocPBHdl, void* );
@@ -193,9 +193,9 @@ private:
     DECL_LINK(          TrustCertLBSelectHdl, void* );
     DECL_LINK(          TrustFileLocLBSelectHdl, void* );
 
-    cssu::Sequence< SvtSecurityOptions::Certificate >           maTrustedAuthors;
-//  void                InsertCert( cssu::Reference< css::security::XCertificate >& _rxCert, USHORT _nInd );
     void                FillCertLB( void );
+    void                ImplCheckButtons();
+
 public:
                         MacroSecurityTrustedSourcesTP( Window* pParent, MacroSecurity* _pDlg );
 

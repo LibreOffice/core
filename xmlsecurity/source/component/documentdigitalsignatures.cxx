@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentdigitalsignatures.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-26 07:29:30 $
+ *  last change: $Author: mt $ $Date: 2004-07-26 12:13:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,9 +241,9 @@ void DocumentDigitalSignatures::addAuthorToTrustedSources( const ::com::sun::sta
 {
     SvtSecurityOptions aSecOpts;
 
-    SvtSecurityOptions::Certificate aNewCert;
-    aNewCert[ 0 ] = XmlSec::GetContentPart( Author->getIssuerName(), String::CreateFromAscii( "CN" ) );
-    aNewCert[ 1 ] = XmlSec::GetHexString( Author->getIssuerUniqueID(), " " );
+    SvtSecurityOptions::Certificate aNewCert( 3 );
+    aNewCert[ 0 ] = Author->getIssuerName();
+    aNewCert[ 1 ] = bigIntegerToNumericString( Author->getSerialNumber() );
     aNewCert[ 2 ] = baseEncode( Author->getEncoded(), BASE64 );
 
     uno::Sequence< SvtSecurityOptions::Certificate > aTrustedAuthors = aSecOpts.GetTrustedAuthors();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrosecurity.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-26 07:29:31 $
+ *  last change: $Author: mt $ $Date: 2004-07-26 12:13:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,8 @@
 #include <xmlsecurity/certificatechooser.hxx>
 #include <xmlsecurity/certificateviewer.hxx>
 #include <xmlsecurity/biginteger.hxx>
+
+#include <osl/file.hxx>
 
 
 #ifndef _COM_SUN_STAR_XML_CRYPTO_XSECURITYENVIRONMENT_HPP_
@@ -197,25 +199,6 @@ MacroSecurityLevelTP::MacroSecurityLevelTP( Window* _pParent, MacroSecurity* _pD
     ,maLowRB            ( this, ResId( RB_LOW ) )
 {
     FreeResource();
-
-    // Don't use the default v-center here...
-/*
-    WinBits nStyle = maVeryHighRB.GetStyle();
-    nStyle |= WB_TOP;
-    maVeryHighRB.SetStyle( nStyle );
-
-    nStyle = maHighRB.GetStyle();
-    nStyle |= WB_TOP;
-    maHighRB.SetStyle( nStyle );
-
-    nStyle = maMediumRB.GetStyle();
-    nStyle |= WB_TOP;
-    maMediumRB.SetStyle( nStyle );
-
-    nStyle = maLowRB.GetStyle();
-    nStyle |= WB_TOP;
-    maLowRB.SetStyle( nStyle );
-*/
 }
 
 void MacroSecurityLevelTP::ActivatePage()
@@ -234,39 +217,35 @@ void MacroSecurityLevelTP::ClosePage( void )
         mpDlg->maSecOptions.SetMacroSecurityLevel( nLevel );
 }
 
-
-/*IMPL_LINK( MacroSecurityTrustedSourcesTP, AddCertPBHdl, void*, EMTYARG )
+void MacroSecurityTrustedSourcesTP::ImplCheckButtons()
 {
-    CertificateChooser  aChooser( this, mpDlg->mxSecurityEnvironment, mpDlg->maCurrentSignatureInformations );
-    if( aChooser.Execute() )
-    {
-        uno::Reference< css::security::XCertificate > xCert = aChooser.GetSelectedCertificate();
+    bool bCertSelected = maTrustCertLB.FirstSelected() != NULL;
+    maViewCertPB.Enable( bCertSelected );
+    maRemoveCertPB.Enable( bCertSelected );
 
-        if( xCert.is() )
-        {
-            FillCertLB();
-        }
-    }
+    bool bLocationSelected = maTrustFileLocLB.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND;
+    maRemoveLocPB.Enable( bLocationSelected );
+}
 
-    return 0;
-}*/
 
 IMPL_LINK( MacroSecurityTrustedSourcesTP, ViewCertPBHdl, void*, EMTYARG )
 {
     if( maTrustCertLB.FirstSelected() )
     {
         USHORT nSelected = USHORT( sal_Int32( maTrustCertLB.FirstSelected()->GetUserData() ) );
-        const SignatureInformation& rInfo = mpDlg->maCurrentSignatureInformations[ nSelected ];
-        uno::Reference< dcss::security::XCertificate > xCert = mpDlg->mxSecurityEnvironment->getCertificate( rInfo.ouX509IssuerName, numericStringToBigInteger( rInfo.ouX509SerialNumber ) );
+        uno::Reference< dcss::security::XCertificate > xCert = mpDlg->mxSecurityEnvironment->getCertificate( maTrustedAuthors[nSelected][0], numericStringToBigInteger( maTrustedAuthors[nSelected][1] ) );
 
         // If we don't get it, create it from signature data:
         if ( !xCert.is() )
-            xCert = mpDlg->mxSecurityEnvironment->createCertificateFromAscii( rInfo.ouX509Certificate ) ;
+            xCert = mpDlg->mxSecurityEnvironment->createCertificateFromAscii( maTrustedAuthors[nSelected][2] ) ;
 
         DBG_ASSERT( xCert.is(), "*MacroSecurityTrustedSourcesTP::ViewCertPBHdl(): Certificate not found and can't be created!" );
 
-        CertificateViewer aViewer( this, mpDlg->mxSecurityEnvironment, xCert );
-        aViewer.Execute();
+        if ( xCert.is() )
+        {
+            CertificateViewer aViewer( this, mpDlg->mxSecurityEnvironment, xCert );
+            aViewer.Execute();
+        }
     }
     return 0;
 }
@@ -297,6 +276,7 @@ IMPL_LINK( MacroSecurityTrustedSourcesTP, RemoveCertPBHdl, void*, EMTYARG )
         maTrustedAuthors = aNewSeq;
 
         FillCertLB();
+        ImplCheckButtons();
     }
 
     return 0;
@@ -322,10 +302,17 @@ IMPL_LINK( MacroSecurityTrustedSourcesTP, AddLocPBHdl, void*, EMTYARG )
         // then the new path also an URL else system path
         String aNewPathStr = ( aNewObj.GetProtocol() != INET_PROT_NOT_VALID )? aPathStr : aNewObj.getFSysPath( INetURLObject::FSYS_DETECT );
 
+        ::rtl::OUString aSystemFileURL( aNewPathStr );
+        if ( osl::FileBase::getSystemPathFromFileURL( aSystemFileURL, aSystemFileURL ) == osl::FileBase::E_None )
+            aNewPathStr = aSystemFileURL;
+
+
         if( maTrustFileLocLB.GetEntryPos( aNewPathStr ) == LISTBOX_ENTRY_NOTFOUND )
         {
             maTrustFileLocLB.InsertEntry( aNewPathStr );
         }
+
+        ImplCheckButtons();
     }
     catch( uno::Exception& )
     {
@@ -341,6 +328,7 @@ IMPL_LINK( MacroSecurityTrustedSourcesTP, RemoveLocPBHdl, void*, EMTYARG )
     if( nSel != LISTBOX_ENTRY_NOTFOUND )
     {
         maTrustFileLocLB.RemoveEntry( nSel );
+        ImplCheckButtons();
     }
 
     return 0;
@@ -348,29 +336,15 @@ IMPL_LINK( MacroSecurityTrustedSourcesTP, RemoveLocPBHdl, void*, EMTYARG )
 
 IMPL_LINK( MacroSecurityTrustedSourcesTP, TrustCertLBSelectHdl, void*, EMTYARG )
 {
-    bool    bSel = maTrustCertLB.FirstSelected() != NULL;
-    maViewCertPB.Enable( bSel );
-    maRemoveCertPB.Enable( bSel );
-
+    ImplCheckButtons();
     return 0;
 }
 
 IMPL_LINK( MacroSecurityTrustedSourcesTP, TrustFileLocLBSelectHdl, void*, EMTYARG )
 {
-    maRemoveLocPB.Enable( maTrustFileLocLB.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND );
-
+    ImplCheckButtons();
     return 0;
 }
-
-/*void MacroSecurityTrustedSourcesTP::InsertCert( uno::Reference< css::security::XCertificate >& _rxCert, USHORT _nInd )
-{
-        String  aCN_Id( String::CreateFromAscii( "CN" ) );
-
-        SvLBoxEntry*    pEntry = maTrustCertLB.InsertEntry( XmlSec::GetContentPart( _rxCert->getIssuerName(), aCN_Id ) );
-        maTrustCertLB.SetEntryText( XmlSec::GetContentPart( _rxCert->getIssuerName(), aCN_Id ), pEntry, 1 );
-        maTrustCertLB.SetEntryText( XmlSec::GetDateString( _rxCert->getNotAfter() ), pEntry, 2 );
-        pEntry->SetUserData( ( void* ) _nInd );
-}*/
 
 void MacroSecurityTrustedSourcesTP::FillCertLB( void )
 {
@@ -413,7 +387,6 @@ MacroSecurityTrustedSourcesTP::MacroSecurityTrustedSourcesTP( Window* _pParent, 
     FreeResource();
 
     maTrustCertLB.SetSelectHdl( LINK( this, MacroSecurityTrustedSourcesTP, TrustCertLBSelectHdl ) );
-//  maAddCertPB.SetClickHdl( LINK( this, MacroSecurityTrustedSourcesTP, AddCertPBHdl ) );
     maAddCertPB.Hide();     // not used in the moment...
     maViewCertPB.SetClickHdl( LINK( this, MacroSecurityTrustedSourcesTP, ViewCertPBHdl ) );
     maViewCertPB.Disable();
@@ -425,10 +398,18 @@ MacroSecurityTrustedSourcesTP::MacroSecurityTrustedSourcesTP( Window* _pParent, 
     maRemoveLocPB.SetClickHdl( LINK( this, MacroSecurityTrustedSourcesTP, RemoveLocPBHdl ) );
     maRemoveLocPB.Disable();
 
+    maTrustedAuthors = mpDlg->maSecOptions.GetTrustedAuthors();
+
+    FillCertLB();
+
     cssu::Sequence< rtl::OUString > aSecureURLs = mpDlg->maSecOptions.GetSecureURLs();
-    sal_Int32                       nEntryCnt = aSecureURLs.getLength();
+    sal_Int32 nEntryCnt = aSecureURLs.getLength();
     for( sal_Int32 i = 0 ; i < nEntryCnt ; ++i )
-        maTrustFileLocLB.InsertEntry( aSecureURLs[ i ] );
+    {
+        ::rtl::OUString aSystemFileURL( aSecureURLs[ i ] );
+        osl::FileBase::getSystemPathFromFileURL( aSystemFileURL, aSystemFileURL );
+        maTrustFileLocLB.InsertEntry( aSystemFileURL );
+    }
 }
 
 void MacroSecurityTrustedSourcesTP::ActivatePage()
@@ -444,7 +425,11 @@ void MacroSecurityTrustedSourcesTP::ClosePage( void )
     {
         cssu::Sequence< rtl::OUString > aSecureURLs( nEntryCnt );
         for( USHORT i = 0 ; i < nEntryCnt ; ++i )
-            aSecureURLs[ i ] = maTrustFileLocLB.GetEntry( i );
+        {
+            ::rtl::OUString aURL( maTrustFileLocLB.GetEntry( i ) );
+            osl::FileBase::getFileURLFromSystemPath( aURL, aURL );
+            aSecureURLs[ i ] = aURL;
+        }
 
         mpDlg->maSecOptions.SetSecureURLs( aSecureURLs );
     }
