@@ -6745,3 +6745,6 @@ __CTA3?AVDisposedException@lang@star@sun@com@@
 ?ToggleReduceBitmapsResolutionRBHdl@SfxCommonPrintOptionsTabPage@@AAEJPAVRadioButton@@@Z
 ?ToggleReduceGradientsStripesRBHdl@SfxCommonPrintOptionsTabPage@@AAEJPAVRadioButton@@@Z
 ??1KeyEvent@awt@star@sun@com@@QAE@XZ
+?GetConfigurationStream@SfxObjectShell@@QAE?AVSotStorageStreamRef@@ABVString@@E@Z
+??0?$ImplHelperBase1@VXOutputStream@io@star@sun@com@@@cppu@@QAE@XZ
+??_R0?AVWrappedTargetException@lang@star@sun@com@@@8
