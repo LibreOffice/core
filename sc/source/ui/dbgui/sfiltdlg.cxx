@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfiltdlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2002-03-13 11:40:22 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:55:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -468,7 +468,7 @@ IMPL_LINK( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn )
         Close();
     }
 
-    return NULL;
+    return 0;
 }
 
 
@@ -499,7 +499,7 @@ IMPL_LINK( ScSpecialFilterDlg, TimeOutHdl, Timer*, _pTimer )
 
     pTimer->Start();
 
-    return NULL;
+    return 0;
 }
 
 
@@ -518,7 +518,7 @@ IMPL_LINK( ScSpecialFilterDlg, FilterAreaSelHdl, ListBox*, pLb )
         aEdFilterArea.SetText( aString );
     }
 
-    return NULL;
+    return 0;
 }
 
 
@@ -556,7 +556,7 @@ IMPL_LINK( ScSpecialFilterDlg, FilterAreaModHdl, ScRefEdit*, pEd )
             aLbFilterArea.SelectEntryPos( 0 );
     }
 
-    return NULL;
+    return 0;
 }
 
 
