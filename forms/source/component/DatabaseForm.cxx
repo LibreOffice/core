@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-04 16:26:41 $
+ *  last change: $Author: fs $ $Date: 2001-01-05 17:58:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -795,9 +795,8 @@ ODatabaseForm::ODatabaseForm(const Reference<XMultiServiceFactory>& _rxFactory)
 
     decrement(m_refCount);
 
-    m_pGroupManager = new OGroupManager();
+    m_pGroupManager = new OGroupManager(this);
     m_pGroupManager->acquire();
-    addContainerListener(m_pGroupManager);
 }
 
 //------------------------------------------------------------------
