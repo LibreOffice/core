@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xinterface.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: as $ $Date: 2001-08-16 12:15:53 $
+ *  last change: $Author: hr $ $Date: 2001-10-09 18:33:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,13 +125,13 @@ ________________________________________________________________________________
 //                      XInterface::release()
 //*****************************************************************************************************************
 #define PRIVATE_DEFINE_XINTERFACE_AQUIRE_RELEASE( CLASS, BASECLASS )                                                                                        \
-    void SAL_CALL CLASS::acquire() throw( ::com::sun::star::uno::RuntimeException )                                                                         \
+    void SAL_CALL CLASS::acquire() throw()                                                                          \
     {                                                                                                                                                       \
         /* Don't use mutex in methods of XInterface! */                                                                                                     \
         BASECLASS::acquire();                                                                                                                               \
     }                                                                                                                                                       \
                                                                                                                                                             \
-    void SAL_CALL CLASS::release() throw( ::com::sun::star::uno::RuntimeException )                                                                         \
+    void SAL_CALL CLASS::release() throw()                                                                          \
     {                                                                                                                                                       \
         /* Don't use mutex in methods of XInterface! */                                                                                                     \
         BASECLASS::release();                                                                                                                               \
@@ -287,8 +287,8 @@ ________________________________________________________________________________
 //*****************************************************************************************************************
 #define DECLARE_XINTERFACE                                                                                                                                      \
     virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType   ) throw( ::com::sun::star::uno::RuntimeException ); \
-    virtual void                        SAL_CALL acquire       (                                            ) throw( ::com::sun::star::uno::RuntimeException ); \
-    virtual void                        SAL_CALL release       (                                            ) throw( ::com::sun::star::uno::RuntimeException );
+    virtual void                        SAL_CALL acquire       (                                            ) throw();  \
+    virtual void                        SAL_CALL release       (                                            ) throw();
 
 //*****************************************************************************************************************
 //  public

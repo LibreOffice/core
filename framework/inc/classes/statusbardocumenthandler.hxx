@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statusbardocumenthandler.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cd $ $Date: 2001-06-20 09:55:16 $
+ *  last change: $Author: hr $ $Date: 2001-10-09 18:28:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,9 +137,9 @@ class OReadStatusBarDocumentHandler :   public ::com::sun::star::xml::sax::XDocu
         virtual ~OReadStatusBarDocumentHandler();
 
         // XInterface
-        virtual void SAL_CALL acquire() throw( ::com::sun::star::uno::RuntimeException )
+        virtual void SAL_CALL acquire() throw()
             { OWeakObject::acquire(); }
-        virtual void SAL_CALL release() throw( ::com::sun::star::uno::RuntimeException )
+        virtual void SAL_CALL release() throw()
             { OWeakObject::release(); }
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
             const ::com::sun::star::uno::Type & rType ) throw( ::com::sun::star::uno::RuntimeException );

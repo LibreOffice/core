@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menumanager.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: as $ $Date: 2001-06-11 10:13:51 $
+ *  last change: $Author: hr $ $Date: 2001-10-09 18:28:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,9 +144,9 @@ class MenuManager : public XSTATUSLISTENER      ,
         virtual ~MenuManager();
 
         // XInterface
-        virtual void SAL_CALL acquire() throw( RUNTIMEEXCEPTION )
+        virtual void SAL_CALL acquire() throw()
             { OWeakObject::acquire(); }
-        virtual void SAL_CALL release() throw( RUNTIMEEXCEPTION )
+        virtual void SAL_CALL release() throw()
             { OWeakObject::release(); }
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
             const ::com::sun::star::uno::Type & rType ) throw( RUNTIMEEXCEPTION );
