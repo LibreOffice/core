@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docpool.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:03:53 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:56:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -706,7 +706,7 @@ SfxItemPresentation lcl_HFPresentation
                 else
                 {
                     aText += GetMetricText( (long)nLeftMargin,
-                                           eCoreMetric, ePresentationMetric );
+                                           eCoreMetric, ePresentationMetric, pIntl );
                     aText += SVX_RESSTR(GetMetricId(ePresentationMetric));
                 }
                 aText += cpDelim;
@@ -722,7 +722,7 @@ SfxItemPresentation lcl_HFPresentation
                 else
                 {
                     aText += GetMetricText( (long)nRightMargin,
-                                            eCoreMetric, ePresentationMetric );
+                                            eCoreMetric, ePresentationMetric, pIntl );
                     aText += SVX_RESSTR(GetMetricId(ePresentationMetric));
                 }
             }
