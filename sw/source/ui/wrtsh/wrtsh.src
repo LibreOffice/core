@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:45:17 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:28:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@ String STR_CANT_UNDO
     TEXT [ English ] = "not possible" ;
     TEXT [ norwegian ] = "ikke mulig" ;
     TEXT [ italian ] = "Impossibile" ;
-    TEXT [ portuguese_brazilian ] = "n?o poss?vel" ;
+    TEXT [ portuguese_brazilian ] = "imposs�vel" ;
     TEXT [ portuguese ] = "Imposs�vel" ;
     TEXT [ finnish ] = "ei mahdollinen" ;
     TEXT [ danish ] = "ikke mulig" ;
@@ -78,7 +78,7 @@ String STR_CANT_UNDO
     TEXT [ english_us ] = "not possible" ;
     TEXT[ chinese_simplified ] = "不可能";
     TEXT[ russian ] = "����������";
-    TEXT[ polish ] = "niemo�liwy";
+    TEXT[ polish ] = "niemo�liwe";
     TEXT[ japanese ] = "不可能";
     TEXT[ chinese_traditional ] = "不可能";
     TEXT[ arabic ] = "��� ����";
@@ -90,6 +90,9 @@ String STR_CANT_UNDO
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "impossible";
     TEXT[ thai ] = "ไม่สามารถเป็นไปได้";
+    TEXT[ czech ] = "není možné";
+    TEXT[ hebrew ] = "unmöglich";
+    TEXT[ hindi ] = "संभव नहीं";
 };
 String STR_DELETE_UNDO
 {
@@ -97,7 +100,7 @@ String STR_DELETE_UNDO
     TEXT [ English ] = "Delete" ;
     TEXT [ norwegian ] = "Slett" ;
     TEXT [ italian ] = "Elimina" ;
-    TEXT [ portuguese_brazilian ] = "Apagar" ;
+    TEXT [ portuguese_brazilian ] = "Excluir" ;
     TEXT [ portuguese ] = "Eliminar" ;
     TEXT [ finnish ] = "Poista" ;
     TEXT [ danish ] = "Slet" ;
@@ -120,6 +123,9 @@ String STR_DELETE_UNDO
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Suprimeix";
     TEXT[ thai ] = "ลบ";
+    TEXT[ czech ] = "Smazat";
+    TEXT[ hebrew ] = "‮מחיקה‬";
+    TEXT[ hindi ] = "मिटाओ";
 };
 String STR_INSERT_UNDO
 {
@@ -150,6 +156,9 @@ String STR_INSERT_UNDO
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Insereix";
     TEXT[ thai ] = "แทรก";
+    TEXT[ czech ] = "Vložit";
+    TEXT[ hebrew ] = "‮הוספה‬";
+    TEXT[ hindi ] = "जोड़ो";
 };
 String STR_OVR_UNDO
 {
@@ -157,7 +166,7 @@ String STR_OVR_UNDO
     TEXT [ English ] = "Overwrite" ;
     TEXT [ norwegian ] = "Skriv over" ;
     TEXT [ italian ] = "Sovrascrivi" ;
-    TEXT [ portuguese_brazilian ] = "Gravar sobre" ;
+    TEXT [ portuguese_brazilian ] = "Sobrescrever" ;
     TEXT [ portuguese ] = "Substituir" ;
     TEXT [ finnish ] = "Korvaa" ;
     TEXT [ danish ] = "Overskriv" ;
@@ -168,7 +177,7 @@ String STR_OVR_UNDO
     TEXT [ english_us ] = "Overwrite" ;
     TEXT[ chinese_simplified ] = "改写";
     TEXT[ russian ] = "��������";
-    TEXT[ polish ] = "Skasuj przez zapisanie";
+    TEXT[ polish ] = "Zast�p";
     TEXT[ japanese ] = "上書き";
     TEXT[ chinese_traditional ] = "覆寫";
     TEXT[ arabic ] = "������� ���";
@@ -180,6 +189,9 @@ String STR_OVR_UNDO
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Sobreescriu";
     TEXT[ thai ] = "เขียนทับ";
+    TEXT[ czech ] = "Přepsat";
+    TEXT[ hebrew ] = "Überschreiben";
+    TEXT[ hindi ] = "ओवररइट्";
 };
 String STR_SPLITNODE_UNDO
 {
@@ -187,7 +199,7 @@ String STR_SPLITNODE_UNDO
     TEXT [ English ] = "new Paragraph" ;
     TEXT [ norwegian ] = "nytt Avsnitt" ;
     TEXT [ italian ] = "Nuovo paragrafo" ;
-    TEXT [ portuguese_brazilian ] = "novo Par?grafo" ;
+    TEXT [ portuguese_brazilian ] = "Novo Par�grafo" ;
     TEXT [ portuguese ] = "Novo par�grafo" ;
     TEXT [ finnish ] = "Uusi kappale" ;
     TEXT [ danish ] = "nyt afsnit" ;
@@ -210,6 +222,9 @@ String STR_SPLITNODE_UNDO
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Par�graf nou";
     TEXT[ thai ] = "ย่อหน้าใหม่";
+    TEXT[ czech ] = "Nový odstavec";
+    TEXT[ hebrew ] = "neuer Absatz";
+    TEXT[ hindi ] = "नया परिच्छेद";
 };
 String STR_MOVE_UNDO
 {
@@ -240,6 +255,9 @@ String STR_MOVE_UNDO
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Mou";
     TEXT[ thai ] = "ย้าย";
+    TEXT[ czech ] = "Přesunout";
+    TEXT[ hebrew ] = "Verschieben";
+    TEXT[ hindi ] = "स्थान परिवर्तन करो";
 };
 String STR_INSATTR_UNDO
 {
@@ -270,6 +288,9 @@ String STR_INSATTR_UNDO
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Aplica els atributs";
     TEXT[ thai ] = "ใช้คุณลักษณะ";
+    TEXT[ czech ] = "Použít atributy";
+    TEXT[ hebrew ] = "Attribute anwenden";
+    TEXT[ hindi ] = "ऐट्रिब्यूट्स लागू करो";
 };
 String STR_SETFMTCOLL_UNDO
 {
@@ -277,7 +298,7 @@ String STR_SETFMTCOLL_UNDO
     TEXT [ English ] = "Apply styles" ;
     TEXT [ norwegian ] = "Bruk maler" ;
     TEXT [ italian ] = "Applica stili" ;
-    TEXT [ portuguese_brazilian ] = "Apicar estilos" ;
+    TEXT [ portuguese_brazilian ] = "Aplicar Estilos" ;
     TEXT [ portuguese ] = "Aplicar estilos" ;
     TEXT [ finnish ] = "K�yt� tyylej�" ;
     TEXT [ danish ] = "Anvend typografi" ;
@@ -300,6 +321,9 @@ String STR_SETFMTCOLL_UNDO
     TEXT[ language_user1 ] = "All ; All \"Vorlage\"/Styles are always written with capital S. 10.5.00EM";
     TEXT[ catalan ] = "Aplica els estils";
     TEXT[ thai ] = "ใช้ลักษณะ";
+    TEXT[ czech ] = "Použít styly";
+    TEXT[ hebrew ] = "Vorlagen anwenden";
+    TEXT[ hindi ] = "शैलियाँ लागू करो";
 };
 String STR_RESET_ATTR_UNDO
 {
@@ -318,7 +342,7 @@ String STR_RESET_ATTR_UNDO
     TEXT [ english_us ] = "Reset attributes" ;
     TEXT[ chinese_simplified ] = "重设属性";
     TEXT[ russian ] = "������������ ��������";
-    TEXT[ polish ] = "Zresetuj atrybuty";
+    TEXT[ polish ] = "Resetuj atrybuty";
     TEXT[ japanese ] = "属性のリセット";
     TEXT[ chinese_traditional ] = "重設屬性";
     TEXT[ arabic ] = "����� ����� ������";
@@ -326,10 +350,13 @@ String STR_RESET_ATTR_UNDO
     TEXT[ chinese_simplified ] = "重设属性";
     TEXT[ greek ] = "��������� ���������";
     TEXT[ korean ] = "속성 원래대로";
-    TEXT[ turkish ] = "�znitelikleri ba�a al";
+    TEXT[ turkish ] = "�znitelikleri ilk de�erler al";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Reinicia els atributs";
     TEXT[ thai ] = "กำหนดคุณลักษณะใหม่";
+    TEXT[ czech ] = "Obnovit atributy";
+    TEXT[ hebrew ] = "Attribute zurücksetzen";
+    TEXT[ hindi ] = "ऐट्रिब्यूट्स रिसेट्ट करो";
 };
 String STR_APPLY_ATTR_UNDO
 {
@@ -356,10 +383,13 @@ String STR_APPLY_ATTR_UNDO
     TEXT[ chinese_simplified ] = "使用属性";
     TEXT[ greek ] = "�������� ���������";
     TEXT[ korean ] = "속성 적용";
-    TEXT[ turkish ] = "�znitelikleri kullan";
+    TEXT[ turkish ] = "�znitelikleri uygula";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Aplica els atributs";
     TEXT[ thai ] = "ใช้คุณลักษณะ";
+    TEXT[ czech ] = "Použít atributy";
+    TEXT[ hebrew ] = "Attribute anwenden";
+    TEXT[ hindi ] = "ऐट्रिब्यूट्स लगाओ";
 };
 String STR_INSERT_DOC_UNDO
 {
@@ -367,7 +397,7 @@ String STR_INSERT_DOC_UNDO
     TEXT [ English ] = "Insert document" ;
     TEXT [ norwegian ] = "Insert document" ;
     TEXT [ italian ] = "Inserisci documento" ;
-    TEXT [ portuguese_brazilian ] = "Insere um documento" ;
+    TEXT [ portuguese_brazilian ] = "Inserir Documento" ;
     TEXT [ portuguese ] = "Inserir documento" ;
     TEXT [ finnish ] = "Lis�� asiakirja" ;
     TEXT [ danish ] = "Inds�t dokument" ;
@@ -390,6 +420,9 @@ String STR_INSERT_DOC_UNDO
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Insereix el document";
     TEXT[ thai ] = "แทรกเอกสาร";
+    TEXT[ czech ] = "Vložit dokument";
+    TEXT[ hebrew ] = "‮הוספת מסמך‬";
+    TEXT[ hindi ] = "लेखपत्र जोड़ो";
 };
 String STR_INSERT_GLOSSARY
 {
@@ -397,7 +430,7 @@ String STR_INSERT_GLOSSARY
     TEXT [ English ] = "Insert AutoText" ;
     TEXT [ norwegian ] = "Insert AutoText" ;
     TEXT [ italian ] = "Inserisci testo automatico" ;
-    TEXT [ portuguese_brazilian ] = "Inserir Texto Autom?tico" ;
+    TEXT [ portuguese_brazilian ] = "Inserir AutoTexto" ;
     TEXT [ portuguese ] = "Inserir AutoTexto" ;
     TEXT [ finnish ] = "Lis�� automaattinen teksti" ;
     TEXT [ danish ] = "Inds�t AutoTekst" ;
@@ -420,6 +453,9 @@ String STR_INSERT_GLOSSARY
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Insereix el text autom�tic";
     TEXT[ thai ] = "แทรกข้อความอัตโนมัติ";
+    TEXT[ czech ] = "Vložit automatický text";
+    TEXT[ hebrew ] = "AutoText einfügen";
+    TEXT[ hindi ] = "स्वचालित टेक्स्ट् जोड़ो";
 };
 String STR_DELBOOKMARK
 {
@@ -427,7 +463,7 @@ String STR_DELBOOKMARK
     TEXT [ English ] = "Delete bookmark" ;
     TEXT [ norwegian ] = "Slett bokmerke" ;
     TEXT [ italian ] = "Elimina segnalibro" ;
-    TEXT [ portuguese_brazilian ] = "Apagar marca" ;
+    TEXT [ portuguese_brazilian ] = "Excluir marcador" ;
     TEXT [ portuguese ] = "Eliminar marcador de texto" ;
     TEXT [ finnish ] = "Poista kirjanmerkki" ;
     TEXT [ danish ] = "Slet tekstmarkering" ;
@@ -450,6 +486,9 @@ String STR_DELBOOKMARK
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Suprimeix l'adre�a d'inter�s";
     TEXT[ thai ] = "ลบตัวคั่น";
+    TEXT[ czech ] = "Smazat záložku";
+    TEXT[ hebrew ] = "Textmarke löschen";
+    TEXT[ hindi ] = "पृष्ठसंकेत मिटाओ ";
 };
 String STR_INSBOOKMARK
 {
@@ -457,7 +496,7 @@ String STR_INSBOOKMARK
     TEXT [ English ] = "Insert bookmark" ;
     TEXT [ norwegian ] = "Sett inn bokmerke" ;
     TEXT [ italian ] = "Inserisci segnalibro" ;
-    TEXT [ portuguese_brazilian ] = "Inserir marca" ;
+    TEXT [ portuguese_brazilian ] = "Inserir marcador" ;
     TEXT [ portuguese ] = "Inserir marcador de texto" ;
     TEXT [ finnish ] = "Lis�� kirjanmerkki" ;
     TEXT [ danish ] = "Inds�t tekstmarkering" ;
@@ -480,6 +519,9 @@ String STR_INSBOOKMARK
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Insereix una adre�a d'inter�s";
     TEXT[ thai ] = "แทรกตัวคั่น";
+    TEXT[ czech ] = "Vložit záložku";
+    TEXT[ hebrew ] = "Textmarke einfügen";
+    TEXT[ hindi ] = "पृष्ठसंकेत जोड़ो";
 };
 String STR_SORT_TBL
 {
@@ -510,6 +552,9 @@ String STR_SORT_TBL
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Ordena la taula";
     TEXT[ thai ] = "เรียงตาราง";
+    TEXT[ czech ] = "Seřadit tabulku";
+    TEXT[ hebrew ] = "Tabelle sortieren";
+    TEXT[ hindi ] = "सारणी सोर्ट करो";
 };
 String STR_SORT_TXT
 {
@@ -540,6 +585,9 @@ String STR_SORT_TXT
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Ordena el text";
     TEXT[ thai ] = "เรียงข้อความ";
+    TEXT[ czech ] = "Seřadit text";
+    TEXT[ hebrew ] = "Text sortieren";
+    TEXT[ hindi ] = "टेक्स्ट् सोर्ट करो";
 };
 String STR_INSTABLE_UNDO
 {
@@ -547,7 +595,7 @@ String STR_INSTABLE_UNDO
     TEXT [ English ] = "Insert table" ;
     TEXT [ norwegian ] = "Insert table" ;
     TEXT [ italian ] = "Inserisci tabella" ;
-    TEXT [ portuguese_brazilian ] = "Insere uma tabela" ;
+    TEXT [ portuguese_brazilian ] = "Inserir Tabela" ;
     TEXT [ portuguese ] = "Inserir tabela" ;
     TEXT [ finnish ] = "Lis�� taulukko" ;
     TEXT [ danish ] = "Inds�t tabel" ;
@@ -570,6 +618,9 @@ String STR_INSTABLE_UNDO
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Insereix una taula";
     TEXT[ thai ] = "แทรกตาราง";
+    TEXT[ czech ] = "Vložit tabulku";
+    TEXT[ hebrew ] = "‮הוספת טבלה‬";
+    TEXT[ hindi ] = "सारणी जोड़ो";
 };
 String STR_TEXTTOTABLE_UNDO
 {
@@ -577,7 +628,7 @@ String STR_TEXTTOTABLE_UNDO
     TEXT [ English ] = "Convert text to table" ;
     TEXT [ norwegian ] = "Omdann tekst til tabell" ;
     TEXT [ italian ] = "Converti testo in tabella." ;
-    TEXT [ portuguese_brazilian ] = "Converter texto em tabela" ;
+    TEXT [ portuguese_brazilian ] = "Converter texto -> tabela" ;
     TEXT [ portuguese ] = "Converter texto -> tabela" ;
     TEXT [ finnish ] = "Muunna teksti -> taulukko" ;
     TEXT [ danish ] = "Konverter tekst til tabel" ;
@@ -600,6 +651,9 @@ String STR_TEXTTOTABLE_UNDO
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Converteix text -> taula";
     TEXT[ thai ] = "แปลงข้อความ -> ตาราง";
+    TEXT[ czech ] = "Převést text na tabulku";
+    TEXT[ hebrew ] = "Konvertierung Text -> Tabelle";
+    TEXT[ hindi ] = "टेक्स्ट् बदलो -> सारणी";
 };
 String STR_TABLETOTEXT_UNDO
 {
@@ -630,6 +684,9 @@ String STR_TABLETOTEXT_UNDO
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Converteix la taula en text";
     TEXT[ thai ] = "แปลงตารางเป็นข้อความ";
+    TEXT[ czech ] = "Převést tabulku na text";
+    TEXT[ hebrew ] = "Konvertierung Tabelle -> Text";
+    TEXT[ hindi ] = "सारणी को टेक्स्ट् में बदलो";
 };
 String STR_COPY_UNDO
 {
@@ -660,6 +717,9 @@ String STR_COPY_UNDO
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Copia";
     TEXT[ thai ] = "คัดลอก";
+    TEXT[ czech ] = "Kopírovat";
+    TEXT[ hebrew ] = "‮העתקה‬";
+    TEXT[ hindi ] = "प्रतिलिपि";
 };
 String STR_REPLACE_UNDO
 {
@@ -690,6 +750,9 @@ String STR_REPLACE_UNDO
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Reempla�a";
     TEXT[ thai ] = "แทนที่";
+    TEXT[ czech ] = "Nahradit";
+    TEXT[ hebrew ] = "‮החלפה‬";
+    TEXT[ hindi ] = "प्रतिस्थापन";
 };
 String STR_INSERT_PAGE_BREAK_UNDO
 {
@@ -697,7 +760,7 @@ String STR_INSERT_PAGE_BREAK_UNDO
     TEXT [ English ] = "Hard page break" ;
     TEXT [ norwegian ] = "Fast sideskift" ;
     TEXT [ italian ] = "Interruzione di pagina fissa" ;
-    TEXT [ portuguese_brazilian ] = "Quebra for?ada de p?gina" ;
+    TEXT [ portuguese_brazilian ] = "Quebra de p�gina direta" ;
     TEXT [ portuguese ] = "Quebra de p�gina fixa" ;
     TEXT [ finnish ] = "Suora sivunvaihto" ;
     TEXT [ danish ] = "H�rdt sideskift" ;
@@ -708,7 +771,7 @@ String STR_INSERT_PAGE_BREAK_UNDO
     TEXT [ english_us ] = "Direct page break" ;
     TEXT[ chinese_simplified ] = "手工换页";
     TEXT[ russian ] = "������� ������ �������";
-    TEXT[ polish ] = "Twarde �amanie strony";
+    TEXT[ polish ] = "Twardy podzia� strony";
     TEXT[ japanese ] = "任意指定の改ページ";
     TEXT[ chinese_traditional ] = "手動換頁";
     TEXT[ arabic ] = "���� ����� ����";
@@ -720,6 +783,9 @@ String STR_INSERT_PAGE_BREAK_UNDO
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Salt de p�gina directe";
     TEXT[ thai ] = "แบ่งหน้าโดยตรง";
+    TEXT[ czech ] = "Přímé zalomení strany";
+    TEXT[ hebrew ] = "Harter Seitenumbruch";
+    TEXT[ hindi ] = "सीधा पृष्ठ खण्डन";
 };
 String STR_INSERT_COLUMN_BREAK_UNDO
 {
@@ -727,7 +793,7 @@ String STR_INSERT_COLUMN_BREAK_UNDO
     TEXT [ English ] = "Hard column break" ;
     TEXT [ norwegian ] = "Fast kolonneskift" ;
     TEXT [ italian ] = "Interruzione di colonna fissa" ;
-    TEXT [ portuguese_brazilian ] = "Quebra for?ada de coluna" ;
+    TEXT [ portuguese_brazilian ] = "Quebra de coluna direta" ;
     TEXT [ portuguese ] = "Quebra de coluna fixa" ;
     TEXT [ finnish ] = "Suora sarakkeenvaihto" ;
     TEXT [ danish ] = "H�rdt spalteskift" ;
@@ -750,6 +816,9 @@ String STR_INSERT_COLUMN_BREAK_UNDO
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Salt de columna directe";
     TEXT[ thai ] = "แบ่งคอลัมน์โดยตรง";
+    TEXT[ czech ] = "Přímé zalomení sloupce";
+    TEXT[ hebrew ] = "Harter Spaltenumbruch";
+    TEXT[ hindi ] = "सीधा स्तंभ खण्डन";
 };
 String STR_PLAY_MACRO_UNDO
 {
@@ -757,7 +826,7 @@ String STR_PLAY_MACRO_UNDO
     TEXT [ English ] = "Play macro" ;
     TEXT [ norwegian ] = "Kj�r makro" ;
     TEXT [ italian ] = "Esegui macro" ;
-    TEXT [ portuguese_brazilian ] = "Reproduzir macro" ;
+    TEXT [ portuguese_brazilian ] = "Executar macro" ;
     TEXT [ portuguese ] = "Executar macro" ;
     TEXT [ finnish ] = "Suorita makro" ;
     TEXT [ danish ] = "Spil makro" ;
@@ -768,7 +837,7 @@ String STR_PLAY_MACRO_UNDO
     TEXT [ english_us ] = "Run macro" ;
     TEXT[ chinese_simplified ] = "执行宏";
     TEXT[ russian ] = "��������� ������";
-    TEXT[ polish ] = "Wykonaj makro";
+    TEXT[ polish ] = "Uruchom makro";
     TEXT[ japanese ] = "マクロの実行";
     TEXT[ chinese_traditional ] = "執行巨集";
     TEXT[ arabic ] = "����� �������";
@@ -780,6 +849,9 @@ String STR_PLAY_MACRO_UNDO
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Executa la macro";
     TEXT[ thai ] = "ใช้งานมาโคร";
+    TEXT[ czech ] = "Spustit makro";
+    TEXT[ hebrew ] = "Makro abspielen";
+    TEXT[ hindi ] = "मॉक्रो चलाओ";
 };
 String STR_INSERT_ENV_UNDO
 {
@@ -787,7 +859,7 @@ String STR_INSERT_ENV_UNDO
     Text [ English ] = "Insert envelope" ;
     Text [ norwegian ] = "Sett inn konvolutt" ;
     Text [ italian ] = "Inserisci busta" ;
-    Text [ portuguese_brazilian ] = "Inserir envelope" ;
+    Text [ portuguese_brazilian ] = "Inserir Envelope" ;
     Text [ portuguese ] = "Inserir envelope" ;
     Text [ finnish ] = "Lis�� kirjekuori" ;
     Text [ danish ] = "Inds�t konvolut" ;
@@ -810,6 +882,9 @@ String STR_INSERT_ENV_UNDO
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Insereix el sobre";
     Text[ thai ] = "แทรกซองจดหมาย";
+    Text[ czech ] = "Vložit obálku";
+    Text[ hebrew ] = "‮הוספת מעטפה‬";
+    Text[ hindi ] = "लिफाफा जोड़ो";
 };
 String STR_DRAG_AND_COPY
 {
@@ -823,7 +898,7 @@ String STR_DRAG_AND_COPY
     Text [ swedish ] = "Kopiera" ;
     Text [ danish ] = "Kopier" ;
     Text [ portuguese ] = "Copiar" ;
-    Text [ portuguese_brazilian ] = "Kopieren" ;
+    Text [ portuguese_brazilian ] = "Copiar" ;
     Text[ chinese_simplified ] = "复制";
     Text[ russian ] = "����������";
     Text[ polish ] = "Kopiuj";
@@ -839,6 +914,9 @@ String STR_DRAG_AND_COPY
     Text[ catalan ] = "Copia";
     Text[ finnish ] = "Kopioi";
     Text[ thai ] = "คัดลอก";
+    Text[ czech ] = "Kopírovat";
+    Text[ hebrew ] = "‮העתקה‬";
+    Text[ hindi ] = "प्रतिलिपि";
 };
 String STR_DRAG_AND_MOVE
 {
@@ -852,7 +930,7 @@ String STR_DRAG_AND_MOVE
     Text [ swedish ] = "Flytta" ;
     Text [ danish ] = "Flyt" ;
     Text [ portuguese ] = "Mover" ;
-    Text [ portuguese_brazilian ] = "Verschieben" ;
+    Text [ portuguese_brazilian ] = "Mover" ;
     Text[ chinese_simplified ] = "移动";
     Text[ russian ] = "�����������";
     Text[ polish ] = "Przesu�";
@@ -868,6 +946,9 @@ String STR_DRAG_AND_MOVE
     Text[ catalan ] = "Mou";
     Text[ finnish ] = "Siirr�";
     Text[ thai ] = "ย้าย";
+    Text[ czech ] = "Přesunout";
+    Text[ hebrew ] = "Verschieben";
+    Text[ hindi ] = "स्थान परिवर्तन करो";
 };
 String STR_INSERT_RULER
 {
@@ -875,7 +956,7 @@ String STR_INSERT_RULER
     Text [ English ] = "Insert Ruler" ;
     Text [ portuguese ] = "Inserir r�gua" ;
     Text [ english_us ] = "Insert ruler" ;
-    Text [ portuguese_brazilian ] = "Ruler einf?en" ;
+    Text [ portuguese_brazilian ] = "Inserir r�gua" ;
     Text [ swedish ] = "Infoga linjal" ;
     Text [ danish ] = "Inds�t lineal" ;
     Text [ italian ] = "Inserisci ruler" ;
@@ -897,6 +978,9 @@ String STR_INSERT_RULER
     Text[ catalan ] = "Insereix el regle";
     Text[ finnish ] = "Lis�� viivain";
     Text[ thai ] = "แทรกไม้บรรทัด";
+    Text[ czech ] = "Vložit pravítko";
+    Text[ hebrew ] = "Ruler einfügen";
+    Text[ hindi ] = "रूलर जोड़ो";
 };
 String STR_INSERT_CHART
 {
@@ -904,16 +988,16 @@ String STR_INSERT_CHART
     Text [ English ] = "Insert %PRODUCTNAME Chart" ;
     Text [ portuguese ] = "Inserir %PRODUCTNAME Chart" ;
     Text [ english_us ] = "Insert %PRODUCTNAME Chart" ;
-    Text [ portuguese_brazilian ] = "%PRODUCTNAME Chart einf?en" ;
+    Text [ portuguese_brazilian ] = "Inserir gr�fico do %PRODUCTNAME Chart" ;
     Text [ swedish ] = "Infoga %PRODUCTNAME Chart" ;
     Text [ danish ] = "Inds�t %PRODUCTNAME Chart" ;
     Text [ italian ] = "Inserisci %PRODUCTNAME Chart" ;
-    Text [ spanish ] = "Insertar diagrama de %PRODUCTNAME Chart" ;
+    Text [ spanish ] = "Insertar un diagrama de %PRODUCTNAME Chart" ;
     Text [ french ] = "Ins�rer un diagramme %PRODUCTNAME Chart" ;
     Text [ dutch ] = "%PRODUCTNAME Chart invoegen" ;
     Text[ chinese_simplified ] = "插入 %PRODUCTNAME 图表";
     Text[ russian ] = "�������� %PRODUCTNAME Chart";
-    Text[ polish ] = "Wstaw %PRODUCTNAME Chart";
+    Text[ polish ] = "Wstaw wykres %PRODUCTNAME Chart";
     Text[ japanese ] = "%PRODUCTNAME Chart の挿入";
     Text[ chinese_traditional ] = "插入 %PRODUCTNAME 圖表";
     Text[ arabic ] = "����� %PRODUCTNAME Chart";
@@ -921,11 +1005,14 @@ String STR_INSERT_CHART
     Text[ chinese_simplified ] = "插入 %PRODUCTNAME 图表";
     Text[ greek ] = "�������� %PRODUCTNAME Chart";
     Text[ korean ] = "%PRODUCTNAME Chart 삽입";
-    Text[ turkish ] = "%PRODUCTNAME Chart ekle";
+    Text[ turkish ] = "%PRODUCTNAME Grafi�i Ekle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Insereix el %PRODUCTNAME Chart";
     Text[ finnish ] = "Lis�� %PRODUCTNAME-kaavio";
     Text[ thai ] = "แทรกแผนภูมิ %PRODUCTNAME ";
+    Text[ czech ] = "Vložit graf %PRODUCTNAME";
+    Text[ hebrew ] = "%PRODUCTNAME Chart einfügen";
+    Text[ hindi ] = "%PRODUCTNAME चार्ट जोड़ो";
 };
 String STR_INSERTFLY
 {
@@ -956,6 +1043,9 @@ String STR_INSERTFLY
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Insereix un marc";
     TEXT[ thai ] = "แทรกกรอบ";
+    TEXT[ czech ] = "Vložit rámec";
+    TEXT[ hebrew ] = "Rahmen einfügen";
+    TEXT[ hindi ] = "फ्रेम जोड़ो";
 };
 String STR_DELETEFLY
 {
@@ -963,7 +1053,7 @@ String STR_DELETEFLY
     TEXT [ English ] = "Delete frame" ;
     TEXT [ norwegian ] = "Slett ramme" ;
     TEXT [ italian ] = "Elimina cornice" ;
-    TEXT [ portuguese_brazilian ] = "Apagar moldura" ;
+    TEXT [ portuguese_brazilian ] = "Excluir moldura" ;
     TEXT [ portuguese ] = "Eliminar moldura" ;
     TEXT [ finnish ] = "Poista kehys" ;
     TEXT [ danish ] = "Slet ramme" ;
@@ -982,10 +1072,13 @@ String STR_DELETEFLY
     TEXT[ chinese_simplified ] = "删除框对象";
     TEXT[ greek ] = "�������� ��������";
     TEXT[ korean ] = "프레임 삭제";
-    TEXT[ turkish ] = "�er�eveyi d�zelt";
+    TEXT[ turkish ] = "�er�eveyi sil";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Suprimeix el marc";
     TEXT[ thai ] = "ลบกรอบ";
+    TEXT[ czech ] = "Odstranit rámec";
+    TEXT[ hebrew ] = "Rahmen löschen";
+    TEXT[ hindi ] = "फ्रेम मिटाओ";
 };
 String STR_AUTOFORMAT
 {
@@ -993,7 +1086,7 @@ String STR_AUTOFORMAT
     TEXT [ English ] = "AutoFormat" ;
     TEXT [ norwegian ] = "AutoFormat" ;
     TEXT [ italian ] = "Formattazione automatica" ;
-    TEXT [ portuguese_brazilian ] = "Auto Formata??o" ;
+    TEXT [ portuguese_brazilian ] = "AutoFormata��o" ;
     TEXT [ portuguese ] = "AutoFormato" ;
     TEXT [ finnish ] = "Automaattinen muotoilu" ;
     TEXT [ danish ] = "AutoFormat" ;
@@ -1004,7 +1097,7 @@ String STR_AUTOFORMAT
     TEXT [ english_us ] = "AutoFormat" ;
     TEXT[ chinese_simplified ] = "自动格式";
     TEXT[ russian ] = "����������";
-    TEXT[ polish ] = "Autoformat";
+    TEXT[ polish ] = "Autoformatowanie";
     TEXT[ japanese ] = "オートフォーマット";
     TEXT[ chinese_traditional ] = "自動格式";
     TEXT[ arabic ] = "����� ������";
@@ -1016,6 +1109,9 @@ String STR_AUTOFORMAT
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Formatatge autom�tic";
     TEXT[ thai ] = "รูปแบบอัตโนมัติ";
+    TEXT[ czech ] = "Automatický formát";
+    TEXT[ hebrew ] = "‮עיצוב אוטומטי‬";
+    TEXT[ hindi ] = "स्वचालित रचना";
 };
 String STR_TABLEHEADLINE
 {
@@ -1023,7 +1119,7 @@ String STR_TABLEHEADLINE
     TEXT [ English ] = "Table headline" ;
     TEXT [ norwegian ] = "Tabelloverskrift" ;
     TEXT [ italian ] = "Intestazione tabella" ;
-    TEXT [ portuguese_brazilian ] = "Cabe?alho da tabela" ;
+    TEXT [ portuguese_brazilian ] = "T�tulo de tabela" ;
     TEXT [ portuguese ] = "T�tulo da tabela" ;
     TEXT [ finnish ] = "Taulukon otsikko" ;
     TEXT [ danish ] = "Tabeloverskrift" ;
@@ -1046,6 +1142,9 @@ String STR_TABLEHEADLINE
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Encap�alament de la taula";
     TEXT[ thai ] = "หัวข้อตาราง";
+    TEXT[ czech ] = "Nadpis tabulky";
+    TEXT[ hebrew ] = "Tabellenüberschrift";
+    TEXT[ hindi ] = "सारणी शीर्षक";
 };
 String STR_REPLACE
 {
@@ -1076,6 +1175,9 @@ String STR_REPLACE
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Reempla�a";
     TEXT[ thai ] = "แทนที่";
+    TEXT[ czech ] = "Nahradit";
+    TEXT[ hebrew ] = "‮החלפה‬";
+    TEXT[ hindi ] = "प्रतिस्थापन";
 };
 String STR_INSERTSECTION
 {
@@ -1083,7 +1185,7 @@ String STR_INSERTSECTION
     TEXT [ English ] = "Section insert" ;
     TEXT [ norwegian ] = "Sett inn omr�de" ;
     TEXT [ italian ] = "Inserisci area" ;
-    TEXT [ portuguese_brazilian ] = "Inserir se??o" ;
+    TEXT [ portuguese_brazilian ] = "Inserir se��o" ;
     TEXT [ portuguese ] = "Inserir sec��o" ;
     TEXT [ finnish ] = "Lis�� osa" ;
     TEXT [ danish ] = "Inds�t omr�de" ;
@@ -1094,7 +1196,7 @@ String STR_INSERTSECTION
     TEXT [ english_us ] = "Insert section" ;
     TEXT[ chinese_simplified ] = "插入区域";
     TEXT[ russian ] = "�������� ������";
-    TEXT[ polish ] = "Wstaw obszar";
+    TEXT[ polish ] = "Wstaw sekcj�";
     TEXT[ japanese ] = "範囲の挿入";
     TEXT[ chinese_traditional ] = "插入區域";
     TEXT[ arabic ] = "����� ����";
@@ -1106,6 +1208,9 @@ String STR_INSERTSECTION
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Insereix una secci�";
     TEXT[ thai ] = "แทรกส่วน";
+    TEXT[ czech ] = "Vložit sekci";
+    TEXT[ hebrew ] = "Bereich einfügen";
+    TEXT[ hindi ] = "विभाग जोड़ो";
 };
 String STR_DELETESECTION
 {
@@ -1113,7 +1218,7 @@ String STR_DELETESECTION
     TEXT [ English ] = "Section delete" ;
     TEXT [ norwegian ] = "Slett omr�de" ;
     TEXT [ italian ] = "Elimina area" ;
-    TEXT [ portuguese_brazilian ] = "Apagar se??o" ;
+    TEXT [ portuguese_brazilian ] = "Excluir se��o" ;
     TEXT [ portuguese ] = "Eliminar categoria" ;
     TEXT [ finnish ] = "Poista osa" ;
     TEXT [ danish ] = "Slet omr�de" ;
@@ -1124,7 +1229,7 @@ String STR_DELETESECTION
     TEXT [ english_us ] = "Delete section" ;
     TEXT[ chinese_simplified ] = "删除区域";
     TEXT[ russian ] = "������� ������";
-    TEXT[ polish ] = "Usu� obszar";
+    TEXT[ polish ] = "Usu� sekcj�";
     TEXT[ japanese ] = "範囲の削除";
     TEXT[ chinese_traditional ] = "刪除區域";
     TEXT[ arabic ] = "��� �����";
@@ -1136,6 +1241,9 @@ String STR_DELETESECTION
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Suprimeix una secci�";
     TEXT[ thai ] = "ลบส่วน";
+    TEXT[ czech ] = "Odstranit sekci";
+    TEXT[ hebrew ] = "Bereich löschen";
+    TEXT[ hindi ] = "विभाग मिटाओ";
 };
 String STR_CHANGESECTION
 {
@@ -1143,7 +1251,7 @@ String STR_CHANGESECTION
     TEXT [ English ] = "Section change" ;
     TEXT [ norwegian ] = "Endre omr�de" ;
     TEXT [ italian ] = "Cambia area" ;
-    TEXT [ portuguese_brazilian ] = "Mudar se??o" ;
+    TEXT [ portuguese_brazilian ] = "Modificar se��o" ;
     TEXT [ portuguese ] = "Alterar sec��o" ;
     TEXT [ finnish ] = "Muokkaa osaa" ;
     TEXT [ danish ] = "Modificer omr�de" ;
@@ -1154,18 +1262,21 @@ String STR_CHANGESECTION
     TEXT [ english_us ] = "Modify section" ;
     TEXT[ chinese_simplified ] = "更改区域";
     TEXT[ russian ] = "�������� ������";
-    TEXT[ polish ] = "Zmodyfikuj sekcj�";
+    TEXT[ polish ] = "Modyfikuj sekcj�";
     TEXT[ japanese ] = "範囲の変更";
     TEXT[ chinese_traditional ] = "變更區域";
     TEXT[ arabic ] = "����� ������";
     TEXT[ dutch ] = "Bereik wijzigen";
     TEXT[ chinese_simplified ] = "更改区域";
     TEXT[ greek ] = "����������� ��������";
-    TEXT[ korean ] = "구역 변경";
+    TEXT[ korean ] = "구역 수정";
     TEXT[ turkish ] = "B�l�m� de�i�tir";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Modifica la secci�";
     TEXT[ thai ] = "ดัดแปลงส่วน";
+    TEXT[ czech ] = "Upravit sekci";
+    TEXT[ hebrew ] = "Bereich ändern";
+    TEXT[ hindi ] = "विभाग सुधारो";
 };
 String STR_CHANGESECTPASSWD
 {
@@ -1179,10 +1290,10 @@ String STR_CHANGESECTPASSWD
     Text [ swedish ] = "�ndra l�senordsskydd" ;
     Text [ danish ] = "Modificer adgangskodebeskyttelse" ;
     Text [ portuguese ] = "Alterar protec��o da senha" ;
-    Text [ portuguese_brazilian ] = "Pa?wortschutz ?ndern" ;
+    Text [ portuguese_brazilian ] = "Alterar a prote��o por senha" ;
     Text[ chinese_simplified ] = "更改保护密码";
     Text[ russian ] = "�������� ������ �������";
-    Text[ polish ] = "Zmie� ochron� has�a";
+    Text[ polish ] = "Zmie� ochron� has�em";
     Text[ japanese ] = "パスワード保護の変更";
     Text[ chinese_traditional ] = "變更保護密碼";
     Text[ arabic ] = "����� ����� ���� ����";
@@ -1195,6 +1306,9 @@ String STR_CHANGESECTPASSWD
     Text[ catalan ] = "Canvia la contrasenya";
     Text[ finnish ] = "Muuta salasanasuojausta";
     Text[ thai ] = "เปลี่ยนการป้องกันรหัสผ่าน";
+    Text[ czech ] = "Upravit ochranu heslem";
+    Text[ hebrew ] = "Passwortschutz ändern";
+    Text[ hindi ] = "कूटशब्द रक्षा बदलो";
 };
 String STR_CHANGEDEFATTR
 {
@@ -1202,7 +1316,7 @@ String STR_CHANGEDEFATTR
     TEXT [ English ] = "Defaults change" ;
     TEXT [ norwegian ] = "Endre standard" ;
     TEXT [ italian ] = "Cambia valori predefiniti" ;
-    TEXT [ portuguese_brazilian ] = "Mudar padr?s" ;
+    TEXT [ portuguese_brazilian ] = "Modificar valores padr�o" ;
     TEXT [ portuguese ] = "Alterar valores padr�o" ;
     TEXT [ finnish ] = "Muokkaa oletusarvoja" ;
     TEXT [ danish ] = "Modificer standardv�rdier" ;
@@ -1213,18 +1327,21 @@ String STR_CHANGEDEFATTR
     TEXT [ english_us ] = "Modify default values" ;
     TEXT[ chinese_simplified ] = "更改标准值";
     TEXT[ russian ] = "�������� ����������� ��������";
-    TEXT[ polish ] = "Zmie� warto�ci domy�lne";
+    TEXT[ polish ] = "Modyfikuj warto�ci domy�lne";
     TEXT[ japanese ] = "標準値の変更";
     TEXT[ chinese_traditional ] = "變更標準值";
     TEXT[ arabic ] = "����� ����� ����������";
     TEXT[ dutch ] = "Standaardwaarden wijzigen";
     TEXT[ chinese_simplified ] = "更改标准值";
     TEXT[ greek ] = "����������� �������������� �����";
-    TEXT[ korean ] = "기본값 변경";
-    TEXT[ turkish ] = "Standart de�erleri de�i�tir";
+    TEXT[ korean ] = "기본값 수정";
+    TEXT[ turkish ] = "�nde�erleri de�i�tir";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Modifica els valors per defecte";
     TEXT[ thai ] = "ดัดแปลงค่าเริ่มต้น";
+    TEXT[ czech ] = "Upravit výchozí hodnoty";
+    TEXT[ hebrew ] = "Standardwerte ändern";
+    TEXT[ hindi ] = "अनुपस्थिति मूल्यों को सुधारो";
 };
 String STR_OUTLINE_LR
 {
@@ -1232,7 +1349,7 @@ String STR_OUTLINE_LR
     TEXT [ English ] = "Outline promote" ;
     TEXT [ norwegian ] = "Framhev Omriss" ;
     TEXT [ italian ] = "Graduare struttura" ;
-    TEXT [ portuguese_brazilian ] = "Promover vazado" ;
+    TEXT [ portuguese_brazilian ] = "Promover T�pico" ;
     TEXT [ portuguese ] = "Escalonar esquema" ;
     TEXT [ finnish ] = "Korota j�sennystasoa" ;
     TEXT [ danish ] = "Inddel disposition" ;
@@ -1243,7 +1360,7 @@ String STR_OUTLINE_LR
     TEXT [ english_us ] = "Promote Outline" ;
     TEXT[ chinese_simplified ] = "分级大纲";
     TEXT[ russian ] = "������ ���������";
-    TEXT[ polish ] = "Poziomy konspektu";
+    TEXT[ polish ] = "Konspekt wy�ej";
     TEXT[ japanese ] = "アウトラインのレベル";
     TEXT[ chinese_traditional ] = "分級大綱";
     TEXT[ arabic ] = "����� �������";
@@ -1255,6 +1372,9 @@ String STR_OUTLINE_LR
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Promou el contorn";
     TEXT[ thai ] = "เลื่อนเค้าร่าง";
+    TEXT[ czech ] = "O úroveň výše";
+    TEXT[ hebrew ] = "Gliederung stufen";
+    TEXT[ hindi ] = "बाहरी रूपरेखा को उत्तेजित करो";
 };
 String STR_OUTLINE_UD
 {
@@ -1262,7 +1382,7 @@ String STR_OUTLINE_UD
     TEXT [ English ] = "Outline move" ;
     TEXT [ norwegian ] = "Flytt omriss" ;
     TEXT [ italian ] = "Sposta struttura" ;
-    TEXT [ portuguese_brazilian ] = "Mover vazado" ;
+    TEXT [ portuguese_brazilian ] = "Mover t�picos" ;
     TEXT [ portuguese ] = "Mover esquema" ;
     TEXT [ finnish ] = "Siirr� ��riviivaa" ;
     TEXT [ danish ] = "Flyt disposition" ;
@@ -1273,7 +1393,7 @@ String STR_OUTLINE_UD
     TEXT [ english_us ] = "Move outline" ;
     TEXT[ chinese_simplified ] = "移动大纲";
     TEXT[ russian ] = "����������� ���������";
-    TEXT[ polish ] = "Przesu� konspekt";
+    TEXT[ polish ] = "Przenie� konspekt";
     TEXT[ japanese ] = "アウトラインの移動";
     TEXT[ chinese_traditional ] = "移動大綱";
     TEXT[ arabic ] = "��� �������";
@@ -1285,6 +1405,9 @@ String STR_OUTLINE_UD
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Mou el contorn";
     TEXT[ thai ] = "ย้ายเค้าร่าง";
+    TEXT[ czech ] = "Přesunout osnovu";
+    TEXT[ hebrew ] = "Gliederung verschieben";
+    TEXT[ hindi ] = "बाहरी रूपरेखा का स्थान परिवर्तन करो";
 };
 String STR_INSNUM
 {
@@ -1292,7 +1415,7 @@ String STR_INSNUM
     TEXT [ English ] = "Numbering insert" ;
     TEXT [ norwegian ] = "Sett inn nummerering" ;
     TEXT [ italian ] = "Inserisci numerazione" ;
-    TEXT [ portuguese_brazilian ] = "Inserir Numera??o" ;
+    TEXT [ portuguese_brazilian ] = "Inserir numera��o" ;
     TEXT [ portuguese ] = "Inserir numera��o" ;
     TEXT [ finnish ] = "Lis�� numerointi" ;
     TEXT [ danish ] = "Inds�t nummerering" ;
@@ -1315,6 +1438,9 @@ String STR_INSNUM
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Insereix la numeraci�";
     TEXT[ thai ] = "แทรกลำดับตัวเลข";
+    TEXT[ czech ] = "Vložit číslování";
+    TEXT[ hebrew ] = "Nummerierung einfügen";
+    TEXT[ hindi ] = "संख्या देना जोड़ो";
 };
 String STR_NUMUPDOWN
 {
@@ -1322,7 +1448,7 @@ String STR_NUMUPDOWN
     TEXT [ English ] = "Numbering promote" ;
     TEXT [ norwegian ] = "Framhev Nummerering" ;
     TEXT [ italian ] = "Sposta numerazione" ;
-    TEXT [ portuguese_brazilian ] = "Mover Numera??o" ;
+    TEXT [ portuguese_brazilian ] = "Deslocar numera��o" ;
     TEXT [ portuguese ] = "Escalonar numera��o" ;
     TEXT [ finnish ] = "Siirr� numerointi" ;
     TEXT [ danish ] = "Inddel nummerering" ;
@@ -1333,7 +1459,7 @@ String STR_NUMUPDOWN
     TEXT [ english_us ] = "Shift numbering" ;
     TEXT[ chinese_simplified ] = "分级编号";
     TEXT[ russian ] = "������ ���������";
-    TEXT[ polish ] = "Poziomy numeracji";
+    TEXT[ polish ] = "Przesu� numeracj�";
     TEXT[ japanese ] = "番号付けの段階付け";
     TEXT[ language_user1 ] = " ";
     TEXT[ chinese_traditional ] = "分級編號";
@@ -1342,9 +1468,12 @@ String STR_NUMUPDOWN
     TEXT[ chinese_simplified ] = "分级编号";
     TEXT[ greek ] = "�������� �� ������";
     TEXT[ korean ] = "번호 매기기 단계";
-    TEXT[ turkish ] = "Numaralamay� de�i�tir";
+    TEXT[ turkish ] = "Numaralamay� kayd�r";
     TEXT[ catalan ] = "Despla�a la numeraci�";
     TEXT[ thai ] = "เลื่อนลำดับตัวเลข";
+    TEXT[ czech ] = "Posunout číslování";
+    TEXT[ hebrew ] = "Nummerierung stufen";
+    TEXT[ hindi ] = "संख्या देना स्थानान्तर करो";
 };
 String STR_MOVENUM
 {
@@ -1352,7 +1481,7 @@ String STR_MOVENUM
     TEXT [ English ] = "Paragraph move" ;
     Text [ portuguese ] = "Mover par�grafos" ;
     Text [ english_us ] = "Move paragraphs" ;
-    Text [ portuguese_brazilian ] = "Promover Numera??o" ;
+    Text [ portuguese_brazilian ] = "Mover par�grafos" ;
     Text [ swedish ] = "Flytta stycken" ;
     Text [ danish ] = "Flyt afsnit" ;
     Text [ italian ] = "Sposta paragrafi" ;
@@ -1361,7 +1490,7 @@ String STR_MOVENUM
     Text [ dutch ] = "Alinea's verplaatsen" ;
     Text[ chinese_simplified ] = "移动段落";
     Text[ russian ] = "����������� ������";
-    Text[ polish ] = "Przesu� akapity";
+    Text[ polish ] = "Przenie� akapity";
     Text[ japanese ] = "段落の移動";
     Text[ chinese_traditional ] = "移動段落";
     Text[ arabic ] = "����� �������";
@@ -1374,6 +1503,9 @@ String STR_MOVENUM
     Text[ catalan ] = "Mou els par�grafs";
     Text[ finnish ] = "Siirr� kappaleita";
     Text[ thai ] = "ย้ายย่อหน้า";
+    Text[ czech ] = "Přesunout odstavce";
+    Text[ hebrew ] = "Absätze verschieben";
+    Text[ hindi ] = "परिच्छेदों का स्थान परिवर्तन करो";
 };
 String STR_INSERTDRAW
 {
@@ -1387,10 +1519,10 @@ String STR_INSERTDRAW
     Text [ swedish ] = "Infoga ritobjekt" ;
     Text [ danish ] = "Inds�t tegneobjekt" ;
     Text [ portuguese ] = "Inserir objecto de desenho" ;
-    Text [ portuguese_brazilian ] = "Zeichenobjekt einf?en" ;
+    Text [ portuguese_brazilian ] = "Inserir Objeto de Desenho" ;
     Text[ chinese_simplified ] = "插入绘图对象";
     Text[ russian ] = "�������� ����������� ������";
-    Text[ polish ] = "Wstaw obiekty graficzne";
+    Text[ polish ] = "Wstaw obiekt rysunkowy";
     Text[ japanese ] = "描画オブジェクトの挿入";
     Text[ chinese_traditional ] = "插入繪圖物件";
     Text[ arabic ] = "����� ���� �����";
@@ -1403,23 +1535,26 @@ String STR_INSERTDRAW
     Text[ catalan ] = "Insereix l'objecte de dibuix";
     Text[ finnish ] = "Lis�� piirrosobjekti";
     Text[ thai ] = "แทรกวัตถุวาดรูป";
+    Text[ czech ] = "Vložit kresby";
+    Text[ hebrew ] = "Zeichenobjekt einfügen";
+    Text[ hindi ] = "रेखाचित्र वस्तु जोड़ो";
 };
 String STR_NUMORNONUM
 {
     TEXT = "Nummer an/aus" ;
     TEXT [ English ] = "Number on/off" ;
     Text [ english_us ] = "Number On/Off" ;
-    Text [ italian ] = "Numero on/off" ;
+    Text [ italian ] = "Mostra/nascondi numero" ;
     Text [ spanish ] = "N�mero activado/desactivado" ;
     Text [ french ] = "(D�s)activer le num�ro" ;
     Text [ dutch ] = "Nummer aan/uit" ;
     Text [ swedish ] = "Nummer p�/av" ;
     Text [ danish ] = "Aktiver/deaktiver nummer" ;
     Text [ portuguese ] = "N�mero activado/des." ;
-    Text [ portuguese_brazilian ] = "Nummer an/aus" ;
+    Text [ portuguese_brazilian ] = "Ativar/Desativar N�mero" ;
     Text[ chinese_simplified ] = "显示/隐入编号";
     Text[ russian ] = "�����";
-    Text[ polish ] = "W��cz/Wy��cz numer";
+    Text[ polish ] = "W��cz/wy��cz numeracj�";
     Text[ japanese ] = "番号 オン/オフ";
     Text[ chinese_traditional ] = "顯示/隱入編號";
     Text[ arabic ] = "�����/����� �����";
@@ -1432,6 +1567,9 @@ String STR_NUMORNONUM
     Text[ catalan ] = "N�mero activat/desactivat";
     Text[ finnish ] = "Numerot K�yt�ss�/poissa k�yt�st�";
     Text[ thai ] = "ตัวเลข มี/ไม่มี";
+    Text[ czech ] = "Čísla zap/vyp";
+    Text[ hebrew ] = "Nummer an/aus";
+    Text[ hindi ] = "संख्या शुरु/बंद";
 };
 String STR_INC_LEFTMARGIN
 {
@@ -1445,7 +1583,7 @@ String STR_INC_LEFTMARGIN
     Text [ spanish ] = "Aumentar sangr�a" ;
     Text [ french ] = "Augmenter le retrait" ;
     Text [ portuguese ] = "Aumentar avan�o" ;
-    Text [ portuguese_brazilian ] = "Einzug vergr?ern" ;
+    Text [ portuguese_brazilian ] = "Aumentar Recuo" ;
     Text[ chinese_simplified ] = "增大缩进";
     Text[ russian ] = "��������� ������";
     Text[ polish ] = "Zwi�ksz wci�cie";
@@ -1461,6 +1599,9 @@ String STR_INC_LEFTMARGIN
     Text[ catalan ] = "Augmenta el sagnat";
     Text[ finnish ] = "Lis�� sisennyst�";
     Text[ thai ] = "เพิ่มระยะเยื้อง";
+    Text[ czech ] = "Zvětšit odsazení";
+    Text[ hebrew ] = "‮הוספת שוליים‬";
+    Text[ hindi ] = "इन्डेन्ट बढ़ाओ   ";
 };
 String STR_DEC_LEFTMARGIN
 {
@@ -1474,10 +1615,10 @@ String STR_DEC_LEFTMARGIN
     Text [ spanish ] = "Reducir la sangr�a" ;
     Text [ french ] = "R�duire le retrait" ;
     Text [ portuguese ] = "Reduzir avan�o de par�grafo" ;
-    Text [ portuguese_brazilian ] = "Einzug verringern" ;
+    Text [ portuguese_brazilian ] = "Reduzir recuo" ;
     Text[ chinese_simplified ] = "减少缩进";
     Text[ russian ] = "��������� ������";
-    Text[ polish ] = "Zmiejsz wci�cie";
+    Text[ polish ] = "Zmniejsz wci�cie";
     Text[ japanese ] = "インデント間隔の縮小";
     Text[ chinese_traditional ] = "減少縮排";
     Text[ arabic ] = "����� �������";
@@ -1490,13 +1631,16 @@ String STR_DEC_LEFTMARGIN
     Text[ catalan ] = "Redueix el sagnat";
     Text[ finnish ] = "V�henn� sisennyst�";
     Text[ thai ] = "ลดระยะเยื้อง";
+    Text[ czech ] = "Zmenšit odsazení";
+    Text[ hebrew ] = "‮הפחתת שוליים‬";
+    Text[ hindi ] = "इन्डेन्ट घटाओ";
 };
 String STR_INSERTLABEL
 {
     Text = "Beschriftung einf�gen" ;
     Text [ English ] = "Insert caption" ;
     Text [ english_us ] = "Insert caption" ;
-    Text [ portuguese_brazilian ] = "Beschriftung einf?en" ;
+    Text [ portuguese_brazilian ] = "Inserir legenda" ;
     Text [ swedish ] = "Infoga bildtext" ;
     Text [ danish ] = "Inds�t billedtekst" ;
     Text [ italian ] = "Inserisci dicitura" ;
@@ -1506,7 +1650,7 @@ String STR_INSERTLABEL
     Text [ portuguese ] = "Inserir legenda" ;
     Text[ chinese_simplified ] = "插入标签";
     Text[ russian ] = "�������� ��������";
-    Text[ polish ] = "Wstaw legend�";
+    Text[ polish ] = "Wstaw podpis";
     Text[ japanese ] = "図表番号の挿入";
     Text[ chinese_traditional ] = "插入標籤";
     Text[ arabic ] = "����� ����� �������";
@@ -1514,11 +1658,14 @@ String STR_INSERTLABEL
     Text[ chinese_simplified ] = "插入标签";
     Text[ greek ] = "�������� ���������";
     Text[ korean ] = "캡션 삽입";
-    Text[ turkish ] = "Etiket ekle";
+    Text[ turkish ] = "Resim  yaz�s� ekle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Insereix una llegenda";
     Text[ finnish ] = "Lis�� otsikko";
     Text[ thai ] = "แทรกคำบรรยายภาพ";
+    Text[ czech ] = "Vložit popisek";
+    Text[ hebrew ] = "Beschriftung einfügen";
+    Text[ hindi ] = "कॉप्शन् जोड़ो";
 };
 String STR_SETNUMRULESTART
 {
@@ -1526,7 +1673,7 @@ String STR_SETNUMRULESTART
     Text [ English ] = "Start numbering" ;
     Text [ portuguese ] = "Reiniciar numera��o" ;
     Text [ english_us ] = "Restart numbering" ;
-    Text [ portuguese_brazilian ] = "Numerierung neu starten" ;
+    Text [ portuguese_brazilian ] = "Reiniciar numera��o" ;
     Text [ swedish ] = "Starta numrering p� nytt" ;
     Text [ danish ] = "Genstart nummerering" ;
     Text [ italian ] = "Riavvia la numerazione" ;
@@ -1535,7 +1682,7 @@ String STR_SETNUMRULESTART
     Text [ dutch ] = "Nieuwe nummering" ;
     Text[ chinese_simplified ] = "重新开始编号";
     Text[ russian ] = "������ ��������� ������";
-    Text[ polish ] = "W��cz ponownie numeracj�";
+    Text[ polish ] = "Zacznij numeracj� od nowa";
     Text[ japanese ] = "番号付けを新しく開始";
     Text[ chinese_traditional ] = "重新編號";
     Text[ arabic ] = "����� ��� �������";
@@ -1548,6 +1695,9 @@ String STR_SETNUMRULESTART
     Text[ catalan ] = "Reinicia la numeraci�";
     Text[ finnish ] = "Aloita numerointi uudestaan";
     Text[ thai ] = "เริ่มลำดับตัวเลขใหม่";
+    Text[ czech ] = "Restartovat číslování";
+    Text[ hebrew ] = "‮מיספור-ספירה חדשה‬";
+    Text[ hindi ] = "संख्या देना पुनः प्रारंभ करो";
 };
 String STR_CHANGEFTN
 {
@@ -1555,7 +1705,7 @@ String STR_CHANGEFTN
     Text [ English ] = "Change footnote" ;
     Text [ portuguese ] = "Modificar nota de rodap�" ;
     Text [ english_us ] = "Modify footnote" ;
-    Text [ portuguese_brazilian ] = "Fu?note ?ndern" ;
+    Text [ portuguese_brazilian ] = "Modificar nota de rodap�" ;
     Text [ swedish ] = "�ndra fotnot" ;
     Text [ danish ] = "Modificer fodnote" ;
     Text [ italian ] = "Modifica nota a pi� pagina" ;
@@ -1564,19 +1714,22 @@ String STR_CHANGEFTN
     Text [ dutch ] = "Voetnoot wijzigen" ;
     Text[ chinese_simplified ] = "更改注脚";
     Text[ russian ] = "�������� ������";
-    Text[ polish ] = "Zmodyfikuj przypis dolny";
+    Text[ polish ] = "Modyfikuj przypis dolny";
     Text[ japanese ] = "脚注の変更";
     Text[ chinese_traditional ] = "變更註腳";
     Text[ arabic ] = "����� ������� �������";
     Text[ dutch ] = "Voetnoot wijzigen";
     Text[ chinese_simplified ] = "更改注脚";
     Text[ greek ] = "����������� ������������";
-    Text[ korean ] = "각주 변경";
+    Text[ korean ] = "각주 수정";
     Text[ turkish ] = "Dipnotu de�i�tir";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Modifica la nota al peu";
     Text[ finnish ] = "Muokkaa alaviitett�";
     Text[ thai ] = "ดัดแปลงแก้ไขเชิงอรรถ";
+    Text[ czech ] = "Upravit poznámku pod čarou";
+    Text[ hebrew ] = "Fußnote ändern";
+    Text[ hindi ] = "पृष्ठ के नीचे की टीका सुधारो";
 };
 String STR_REDLINE
 {
@@ -1588,7 +1741,7 @@ String STR_ACCEPT_REDLINE
     Text = "�nderung akzeptieren" ;
     Text [ English ] = "Accept redline" ;
     Text [ english_us ] = "Accept changes" ;
-    Text [ portuguese_brazilian ] = "?nderung akzeptieren" ;
+    Text [ portuguese_brazilian ] = "Aceitar modifica��es" ;
     Text [ swedish ] = "Acceptera �ndring" ;
     Text [ danish ] = "Accepter �ndring" ;
     Text [ italian ] = "Accetta le modifiche" ;
@@ -1598,7 +1751,7 @@ String STR_ACCEPT_REDLINE
     Text [ portuguese ] = "Aceitar modifica��es" ;
     Text[ chinese_simplified ] = "接受更改";
     Text[ russian ] = "������� ���������";
-    Text[ polish ] = "Zaakceptuj zmiany";
+    Text[ polish ] = "Akceptuj zmiany";
     Text[ japanese ] = "変更を受け入れる";
     Text[ chinese_traditional ] = "接受變更";
     Text[ arabic ] = "���� ���������";
@@ -1606,11 +1759,14 @@ String STR_ACCEPT_REDLINE
     Text[ chinese_simplified ] = "接受更改";
     Text[ greek ] = "������� �������";
     Text[ korean ] = "변경 동의";
-    Text[ turkish ] = "De�i�iklikleri kaydet";
+    Text[ turkish ] = "De�i�iklikleri kabul et";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Accepta els canvis";
     Text[ finnish ] = "Hyv�ksy muutokset";
     Text[ thai ] = "ยอมรับการเปลี่ยนแปลง";
+    Text[ czech ] = "Přijmout změny";
+    Text[ hebrew ] = "Änderung akzeptieren";
+    Text[ hindi ] = "परिवर्तनों को स्वीकृत करो";
 };
 String STR_REJECT_REDLINE
 {
@@ -1618,7 +1774,7 @@ String STR_REJECT_REDLINE
     Text [ English ] = "Reject redline" ;
     Text [ portuguese ] = "Rejeitar altera��o" ;
     Text [ english_us ] = "Reject change" ;
-    Text [ portuguese_brazilian ] = "?nderung ablehnen" ;
+    Text [ portuguese_brazilian ] = "Rejeitar modifica��es" ;
     Text [ swedish ] = "Ignorera �ndring" ;
     Text [ danish ] = "Forkast �ndring" ;
     Text [ italian ] = "Rifiuta modifica" ;
@@ -1640,6 +1796,9 @@ String STR_REJECT_REDLINE
     Text[ catalan ] = "Rebutja el canvi";
     Text[ finnish ] = "Hylk�� muutos";
     Text[ thai ] = "ปฏิเสธการเปลี่ยนแปลง";
+    Text[ czech ] = "Odmítnout změnu";
+    Text[ hebrew ] = "Änderung ablehnen";
+    Text[ hindi ] = "परिवर्तन अस्वीकार करो";
 };
 String STR_SPLIT_TABLE
 {
@@ -1647,7 +1806,7 @@ String STR_SPLIT_TABLE
     Text [ English ] = "Split table" ;
     Text [ portuguese ] = "Dividir tabela" ;
     Text [ english_us ] = "Split Table" ;
-    Text [ portuguese_brazilian ] = "Tabelle teilen" ;
+    Text [ portuguese_brazilian ] = "Dividir a Tabela" ;
     Text [ swedish ] = "Dela tabell" ;
     Text [ danish ] = "Opdel tabel" ;
     Text [ italian ] = "Dividi tabella" ;
@@ -1656,7 +1815,7 @@ String STR_SPLIT_TABLE
     Text [ dutch ] = "Tabel opsplitsen" ;
     Text[ chinese_simplified ] = "分隔表格";
     Text[ russian ] = "������� �������";
-    Text[ polish ] = "Rozdziel tabel�";
+    Text[ polish ] = "Podziel tabel�";
     Text[ japanese ] = "表の分割";
     Text[ chinese_traditional ] = "分開表格";
     Text[ arabic ] = "��� ������";
@@ -1669,6 +1828,9 @@ String STR_SPLIT_TABLE
     Text[ catalan ] = "Divideix la taula";
     Text[ finnish ] = "Jaa taulukko";
     Text[ thai ] = "แยกตาราง";
+    Text[ czech ] = "Rozdělit tabulku";
+    Text[ hebrew ] = "‮פיצול טבלה‬";
+    Text[ hindi ] = "सारणी अलगा करो";
 };
 String STR_DONTEXPAND
 {
@@ -1676,7 +1838,7 @@ String STR_DONTEXPAND
     Text [ English ] = "Stop attribute" ;
     Text [ portuguese ] = "Parar atributo" ;
     Text [ english_us ] = "Stop attribute" ;
-    Text [ portuguese_brazilian ] = "Attribut stoppen" ;
+    Text [ portuguese_brazilian ] = "Atributos de parada" ;
     Text [ swedish ] = "Stoppa attribut" ;
     Text [ danish ] = "Stop attribut" ;
     Text [ italian ] = "Interrompi attributo" ;
@@ -1698,6 +1860,9 @@ String STR_DONTEXPAND
     Text[ catalan ] = "Atura l'atribut";
     Text[ finnish ] = "Pys�yt� ominaisuus";
     Text[ thai ] = "หยุดคุณลักษณะ";
+    Text[ czech ] = "Atribut zastavení";
+    Text[ hebrew ] = "Attribut stoppen";
+    Text[ hindi ] = "ऐट्रिब्यूट रोको";
 };
 String STR_AUTOCORRECT
 {
@@ -1705,7 +1870,7 @@ String STR_AUTOCORRECT
     Text [ English ] = "AutoCorrect" ;
     Text [ portuguese ] = "AutoCorrec��o" ;
     Text [ english_us ] = "AutoCorrect" ;
-    Text [ portuguese_brazilian ] = "AutoKorrektur" ;
+    Text [ portuguese_brazilian ] = "AutoCorre��o" ;
     Text [ swedish ] = "AutoKorrigering" ;
     Text [ danish ] = "AutoKorrektur" ;
     Text [ italian ] = "Correzione automatica" ;
@@ -1727,6 +1892,9 @@ String STR_AUTOCORRECT
     Text[ catalan ] = "Correcci� autom�tica";
     Text[ finnish ] = "Autom. korjaus";
     Text[ thai ] = "แก้ไขให้ถูกต้องอัตโนมัติ";
+    Text[ czech ] = "Automatické opravy";
+    Text[ hebrew ] = "‮תיקון אוטומטי‬";
+    Text[ hindi ] = "स्वचालित ढंग से ठीक करो";
 };
 String STR_MERGE_TABLE
 {
@@ -1741,8 +1909,8 @@ String STR_MERGE_TABLE
     Text[ italian ] = "Collega tabella";
     Text[ danish ] = "Flet tabeller";
     Text[ swedish ] = "Sammanfoga tabeller";
-    Text[ polish ] = "Po��cz tabele";
-    Text[ portuguese_brazilian ] = "Merge table";
+    Text[ polish ] = "Scal tabele";
+    Text[ portuguese_brazilian ] = "Mesclar tabela";
     Text[ japanese ] = "表の結合";
     Text[ chinese_simplified ] = "合并表格";
     Text[ chinese_traditional ] = "合併表格";
@@ -1756,6 +1924,9 @@ String STR_MERGE_TABLE
     Text[ catalan ] = "Fusiona la taula";
     Text[ finnish ] = "Yhdist� taulukko";
     Text[ thai ] = "ผสานตาราง";
+    Text[ czech ] = "Sloučit tabulku";
+    Text[ hebrew ] = "Tabelle verbinden";
+    Text[ hindi ] = "सारणी को मिलाओ";
 };
 
 String STR_TRANSLITERATE
@@ -1773,16 +1944,19 @@ String STR_TRANSLITERATE
     TEXT[ danish ] = "Store og sm� bogstaver";
     TEXT[ swedish ] = "Bokst�ver/tecken";
     TEXT[ polish ] = "Wielkie i ma�e litery";
-    TEXT[ portuguese_brazilian ] = "Change case";
+    TEXT[ portuguese_brazilian ] = "Caixa/Caracteres";
     TEXT[ japanese ] = "文字種の変換";
     TEXT[ korean ] = "문자 바꾸기";
     TEXT[ chinese_simplified ] = "字母大小写";
     TEXT[ chinese_traditional ] = "字母大小寫";
-    TEXT[ turkish ] = "Change case";
+    TEXT[ turkish ] = "B�y�k/k���k harf";
     TEXT[ arabic ] = "������� ����� ����� �� �����";
     TEXT[ catalan ] = "Maj�scules/min�scules";
     TEXT[ finnish ] = "Muuta kirjainkoko";
     TEXT[ thai ] = "ตัวพิมพ์/ตัวอักขระ";
+    TEXT[ czech ] = "Velikost/znaky";
+    TEXT[ hebrew ] = "‮סיווג אותיות‬";
+    TEXT[ hindi ] = "केस/अक्षरें";
 };
 
 String STR_DELNUM
@@ -1791,7 +1965,7 @@ String STR_DELNUM
     TEXT [ English ] = "Numbering delete" ;
     TEXT [ norwegian ] = "Slett nummerering" ;
     TEXT [ italian ] = "Elimina numerazione" ;
-    TEXT [ portuguese_brazilian ] = "Apagar Numera??o" ;
+    TEXT [ portuguese_brazilian ] = "Excluir numera��o" ;
     TEXT [ portuguese ] = "Eliminar numera��o" ;
     TEXT [ finnish ] = "Poista numerointi" ;
     TEXT [ danish ] = "Slet nummerering" ;
@@ -1814,6 +1988,9 @@ String STR_DELNUM
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Suprimeix la numeraci�";
     TEXT[ thai ] = "ลบลำดับตัวเลข";
+    TEXT[ czech ] = "Odstranit číslování";
+    TEXT[ hebrew ] = "Nummerierung löschen";
+    TEXT[ hindi ] = "संख्या देना मिटाओ";
 };
 String STR_DRAWUNDO
 {
@@ -1827,10 +2004,10 @@ String STR_DRAWUNDO
     Text [ swedish ] = "Ritobjekt" ;
     Text [ danish ] = "Tegneobjekter" ;
     Text [ portuguese ] = "Objectos de desenho" ;
-    Text [ portuguese_brazilian ] = "Zeichenobjekte" ;
+    Text [ portuguese_brazilian ] = "Objetos de desenho" ;
     Text[ chinese_simplified ] = "绘图对象";
     Text[ russian ] = "����������� ������";
-    Text[ polish ] = "Obiekty graficzne";
+    Text[ polish ] = "Obiekty rysunkowe";
     Text[ japanese ] = "図形描画オブジェクト";
     Text[ chinese_traditional ] = "繪圖物件";
     Text[ arabic ] = "������ ������";
@@ -1843,6 +2020,9 @@ String STR_DRAWUNDO
     Text[ catalan ] = "Objectes de dibuix";
     Text[ finnish ] = "Piirrosobjektit";
     Text[ thai ] = "วาดวัตถุ";
+    Text[ czech ] = "Kresby";
+    Text[ hebrew ] = "Zeichenobjekte";
+    Text[ hindi ] = "रेखाचित्र वस्तु";
 };
 String STR_DRAWGROUP
 {
@@ -1856,10 +2036,10 @@ String STR_DRAWGROUP
     Text [ swedish ] = "Gruppera ritobjekt" ;
     Text [ danish ] = "Grupper tegneobjekter" ;
     Text [ portuguese ] = "Agrupar objectos de desenho" ;
-    Text [ portuguese_brazilian ] = "Zeichenobjekte gruppieren" ;
+    Text [ portuguese_brazilian ] = "Agrupar objetos de desenho" ;
     Text[ chinese_simplified ] = "分组绘图对象";
     Text[ russian ] = "������������ ����������� �������";
-    Text[ polish ] = "Grupuj obiekty graficzne";
+    Text[ polish ] = "Grupuj obiekty rysunkowe";
     Text[ japanese ] = "図形描画をグループ化する";
     Text[ chinese_traditional ] = "繪圖物件群組";
     Text[ arabic ] = "����� ������ ������";
@@ -1872,6 +2052,9 @@ String STR_DRAWGROUP
     Text[ catalan ] = "Agrupa els objectes de dibuix";
     Text[ finnish ] = "Ryhmittele piirrosobjektit";
     Text[ thai ] = "จัดกลุ่มวัตถุวาดรูป";
+    Text[ czech ] = "Seskupit kresby";
+    Text[ hebrew ] = "Zeichenobjekte gruppieren";
+    Text[ hindi ] = "रेखाचित्र वस्तु समूह";
 };
 String STR_DRAWUNGROUP
 {
@@ -1885,7 +2068,7 @@ String STR_DRAWUNGROUP
     Text [ swedish ] = "L�s upp gruppobjekt" ;
     Text [ danish ] = "Oph�v gruppeobjekter" ;
     Text [ portuguese ] = "Desagrupar objectos" ;
-    Text [ portuguese_brazilian ] = "Gruppenobjekt aufl?en" ;
+    Text [ portuguese_brazilian ] = "Desagrupar objetos de desenho" ;
     Text[ chinese_simplified ] = "取消分组对象";
     Text[ russian ] = "��������������� ����������� ������";
     Text[ polish ] = "Rozgrupuj obiekty rysunkowe";
@@ -1901,6 +2084,9 @@ String STR_DRAWUNGROUP
     Text[ catalan ] = "Desagrupa els objectes de dibuix";
     Text[ finnish ] = "Pura piirrosobjektien ryhmitys";
     Text[ thai ] = "ไม่จัดกลุ่มวัตถุวาดรูป";
+    Text[ czech ] = "Zrušit seskupení kreseb";
+    Text[ hebrew ] = "Gruppenobjekt auflösen";
+    Text[ hindi ] = "रेखाचित्र वस्तु को अलगाना";
 };
 String STR_DRAWDELETE
 {
@@ -1914,10 +2100,10 @@ String STR_DRAWDELETE
     Text [ swedish ] = "Radera ritobjekt" ;
     Text [ danish ] = "Slet tegneobjekter" ;
     Text [ portuguese ] = "Eliminar objectos de desenho" ;
-    Text [ portuguese_brazilian ] = "Zeichenobjekte l?chen" ;
+    Text [ portuguese_brazilian ] = "Excluir objetos de desenho" ;
     Text[ chinese_simplified ] = "删除绘图对象";
     Text[ russian ] = "������� ����������� �������";
-    Text[ polish ] = "Usu� obiekty graficzne";
+    Text[ polish ] = "Usu� obiekty rysunkowe";
     Text[ japanese ] = "図形描画オブジェクトを解除";
     Text[ chinese_traditional ] = "刪除繪圖物件";
     Text[ arabic ] = "��� ������ ������";
@@ -1930,6 +2116,9 @@ String STR_DRAWDELETE
     Text[ catalan ] = "Suprimeix els objectes de dibuix";
     Text[ finnish ] = "Poista piirrosobjektit";
     Text[ thai ] = "ลบวัตถุวาดรูป";
+    Text[ czech ] = "Smazat kresby";
+    Text[ hebrew ] = "Zeichenobjekte löschen";
+    Text[ hindi ] = "रेखाचित्र वस्तुओं को मिटाओ";
 };
 String STR_REREAD
 {
@@ -1943,7 +2132,7 @@ String STR_REREAD
     Text [ swedish ] = "Ers�tt grafik" ;
     Text [ danish ] = "Erstat grafik" ;
     Text [ portuguese ] = "Substituir imagem" ;
-    Text [ portuguese_brazilian ] = "Grafik ersetzen" ;
+    Text [ portuguese_brazilian ] = "Substituir figura" ;
     Text[ chinese_simplified ] = "替换图形";
     Text[ russian ] = "�������� �������";
     Text[ polish ] = "Zamie� grafik�";
@@ -1959,6 +2148,9 @@ String STR_REREAD
     Text[ catalan ] = "Reempla�a la imatge";
     Text[ finnish ] = "Korvaa grafiikka";
     Text[ thai ] = "แทนที่กราฟิค";
+    Text[ czech ] = "Nahradit obrázek";
+    Text[ hebrew ] = "Grafik ersetzen";
+    Text[ hindi ] = "सुचित्र को प्रतिस्थापित करो";
 };
 String STR_DELGRF
 {
@@ -1972,7 +2164,7 @@ String STR_DELGRF
     Text [ swedish ] = "Radera grafik" ;
     Text [ danish ] = "Slet grafik" ;
     Text [ portuguese ] = "Eliminar imagem" ;
-    Text [ portuguese_brazilian ] = "Grafik l?chen" ;
+    Text [ portuguese_brazilian ] = "Excluir figuras" ;
     Text[ chinese_simplified ] = "删除图形";
     Text[ russian ] = "������� �������";
     Text[ polish ] = "Usu� grafik�";
@@ -1983,11 +2175,14 @@ String STR_DELGRF
     Text[ chinese_simplified ] = "删除图形";
     Text[ greek ] = "�������� ��������";
     Text[ korean ] = "그림 삭제";
-    Text[ turkish ] = "Grafi�i sil";
+    Text[ turkish ] = "Grafi�i silme";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Suprimeix la imatge";
     Text[ finnish ] = "Poista grafiikka";
     Text[ thai ] = "ลบกราฟิค";
+    Text[ czech ] = "Odstranit obrázek";
+    Text[ hebrew ] = "Grafik löschen";
+    Text[ hindi ] = "सुचित्र मिटाओ";
 };
 String STR_DELOLE
 {
@@ -2001,7 +2196,7 @@ String STR_DELOLE
     Text [ swedish ] = "Radera objekt" ;
     Text [ danish ] = "Slet objekt" ;
     Text [ portuguese ] = "Eliminar objecto" ;
-    Text [ portuguese_brazilian ] = "Objekt l?chen" ;
+    Text [ portuguese_brazilian ] = "Excluir objeto" ;
     Text[ chinese_simplified ] = "删除对象";
     Text[ russian ] = "������� ������";
     Text[ polish ] = "Usu� obiekt";
@@ -2012,11 +2207,14 @@ String STR_DELOLE
     Text[ chinese_simplified ] = "删除对象";
     Text[ greek ] = "�������� ������������";
     Text[ korean ] = "개체 삭제";
-    Text[ turkish ] = "Nesneyi sil";
+    Text[ turkish ] = "Nesneyi silme";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Suprimeix l'objecte";
     Text[ finnish ] = "Poista objekti";
     Text[ thai ] = "ลบวัตถุ";
+    Text[ czech ] = "Odstranit objekt";
+    Text[ hebrew ] = "Objekt löschen";
+    Text[ hindi ] = "वस्तु मिटाओ";
 };
 String STR_TABLE_ATTR
 {
@@ -2030,7 +2228,7 @@ String STR_TABLE_ATTR
     Text [ swedish ] = "Anv�nd tabellattribut" ;
     Text [ danish ] = "Anvend tabelattributter" ;
     Text [ portuguese ] = "Aplicar atributos da tabela" ;
-    Text [ portuguese_brazilian ] = "Tabellenattribute anwenden" ;
+    Text [ portuguese_brazilian ] = "Aplicar atributos da tabela" ;
     Text[ chinese_simplified ] = "使用表格属性";
     Text[ russian ] = "��������� �������� �������";
     Text[ polish ] = "Zastosuj atrybuty tabeli";
@@ -2046,6 +2244,9 @@ String STR_TABLE_ATTR
     Text[ catalan ] = "Aplica els atributs de la taula";
     Text[ finnish ] = "K�yt� taulukkom��ritteit�";
     Text[ thai ] = "ใช้คุณลักษณะตาราง";
+    Text[ czech ] = "Použít atributy tabulky";
+    Text[ hebrew ] = "Tabellenattribute anwenden";
+    Text[ hindi ] = "टेबल ऐट्रिब्यूट्स लगाओ";
 };
 String STR_TABLE_AUTOFMT
 {
@@ -2059,10 +2260,10 @@ String STR_TABLE_AUTOFMT
     Text [ swedish ] = "Autoformat Tabell" ;
     Text [ danish ] = "AutoFormat tabel" ;
     Text [ portuguese ] = "AutoFormato tabela" ;
-    Text [ portuguese_brazilian ] = "Autoformat Tabelle" ;
+    Text [ portuguese_brazilian ] = "AutoFormatar Tabela" ;
     Text[ chinese_simplified ] = "自动格式 表格";
     Text[ russian ] = "���������� �������";
-    Text[ polish ] = "Autoformat tabeli";
+    Text[ polish ] = "Autoformatowanie tabeli";
     Text[ japanese ] = "オートフォーマット 表";
     Text[ chinese_traditional ] = "自動格式 表格";
     Text[ arabic ] = "����� ������ ������";
@@ -2075,6 +2276,9 @@ String STR_TABLE_AUTOFMT
     Text[ catalan ] = "Taula de formatatge autom�tic";
     Text[ finnish ] = "Automaattinen taulukon muotoilu";
     Text[ thai ] = "ตารางรูปแบบอัตโนมัติ";
+    Text[ czech ] = "Automatický formát tabulky";
+    Text[ hebrew ] = "Autoformat Tabelle";
+    Text[ hindi ] = "सारणी का स्वचालित रचना";
 };
 String STR_TABLE_INSCOL
 {
@@ -2082,7 +2286,7 @@ String STR_TABLE_INSCOL
     Text [ ENGLISH ] = "Insert column" ;
     Text [ norwegian ] = "Sett inn kolonne" ;
     Text [ italian ] = "Inserisci colonna" ;
-    Text [ portuguese_brazilian ] = "Inserir coluna" ;
+    Text [ portuguese_brazilian ] = "Inserir Coluna" ;
     Text [ portuguese ] = "Inserir coluna" ;
     Text [ finnish ] = "Lis�� sarake" ;
     Text [ danish ] = "Inds�t kolonne" ;
@@ -2105,6 +2309,9 @@ String STR_TABLE_INSCOL
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Insereix una columna";
     Text[ thai ] = "แทรกคอลัมน์";
+    Text[ czech ] = "Vložit sloupec";
+    Text[ hebrew ] = "‮הכנסת טור‬";
+    Text[ hindi ] = "स्तंभ जोड़ो";
 };
 String STR_TABLE_INSROW
 {
@@ -2112,7 +2319,7 @@ String STR_TABLE_INSROW
     Text [ ENGLISH ] = "Insert row" ;
     Text [ norwegian ] = "Sett inn rad" ;
     Text [ italian ] = "Inserisci riga" ;
-    Text [ portuguese_brazilian ] = "Inserir fileira" ;
+    Text [ portuguese_brazilian ] = "Inserir Linha" ;
     Text [ portuguese ] = "Inserir linha" ;
     Text [ finnish ] = "Lis�� rivi" ;
     Text [ danish ] = "Inds�t r�kke" ;
@@ -2135,6 +2342,9 @@ String STR_TABLE_INSROW
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Insereix una fila";
     Text[ thai ] = "แทรกแถว";
+    Text[ czech ] = "Vložit řádek";
+    Text[ hebrew ] = "‮הכנסת שורה‬";
+    Text[ hindi ] = "पंक्ति जोड़ो";
 };
 String STR_TABLE_DELBOX
 {
@@ -2142,7 +2352,7 @@ String STR_TABLE_DELBOX
     Text [ ENGLISH ] = "Delete row/column" ;
     Text [ norwegian ] = "Slett rad/kolonne" ;
     Text [ italian ] = "Elimina riga/colonna" ;
-    Text [ portuguese_brazilian ] = "Apagar fileira/coluna" ;
+    Text [ portuguese_brazilian ] = "Excluir linha/coluna" ;
     Text [ portuguese ] = "Eliminar linha/coluna" ;
     Text [ finnish ] = "Poista rivi/sarake" ;
     Text [ danish ] = "Slet r�kke/kolonne" ;
@@ -2165,6 +2375,9 @@ String STR_TABLE_DELBOX
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Suprimeix la fila/columna";
     Text[ thai ] = "ลบแถว/คอลัมน์";
+    Text[ czech ] = "Odstranit řádek/sloupec";
+    Text[ hebrew ] = "Zeile/Spalte löschen";
+    Text[ hindi ] = "पंक्ति/स्तंभ को मिटाओ";
 };
 String STR_TABLE_SPLIT
 {
@@ -2172,7 +2385,7 @@ String STR_TABLE_SPLIT
     Text [ ENGLISH ] = "Split cells" ;
     Text [ norwegian ] = "Del celler" ;
     Text [ italian ] = "Dividi celle" ;
-    Text [ portuguese_brazilian ] = "Partir c?lulas" ;
+    Text [ portuguese_brazilian ] = "Dividir C�lulas" ;
     Text [ portuguese ] = "Dividir c�lulas" ;
     Text [ finnish ] = "Jaa solut" ;
     Text [ danish ] = "Opdel celler" ;
@@ -2195,6 +2408,9 @@ String STR_TABLE_SPLIT
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Divideix les cel.les";
     Text[ thai ] = "แยกเซลล์";
+    Text[ czech ] = "Rozdělit buňky";
+    Text[ hebrew ] = "‮פיצול תאים‬";
+    Text[ hindi ] = "कोष्ठों को अलगाना";
 };
 String STR_TABLE_MERGE
 {
@@ -2208,7 +2424,7 @@ String STR_TABLE_MERGE
     Text [ swedish ] = "Sammanfoga celler" ;
     Text [ danish ] = "Flet celler" ;
     Text [ portuguese ] = "Unir c�lulas" ;
-    Text [ portuguese_brazilian ] = "Zelle verbinden" ;
+    Text [ portuguese_brazilian ] = "Mesclar C�lulas" ;
     Text[ chinese_simplified ] = "合并单元格";
     Text[ russian ] = "���������� ������";
     Text[ polish ] = "Scal kom�rki";
@@ -2219,11 +2435,14 @@ String STR_TABLE_MERGE
     Text[ chinese_simplified ] = "合并单元格";
     Text[ greek ] = "����� ������";
     Text[ korean ] = "셀 합치기";
-    Text[ turkish ] = "H�creyi birle�tir";
+    Text[ turkish ] = "H�creleri birle�tir";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Fusiona les cel.les";
     Text[ finnish ] = "Yhdist� solut";
     Text[ thai ] = "ผสานเซลล์";
+    Text[ czech ] = "Sloučit buňky";
+    Text[ hebrew ] = "‮מיזוג תאים‬";
+    Text[ hindi ] = "कोष्ठों को मिलाओ";
 };
 String STR_TABLE_NUMFORMAT
 {
@@ -2231,7 +2450,7 @@ String STR_TABLE_NUMFORMAT
     Text [ ENGLISH ] = "Format cell" ;
     Text [ portuguese ] = "Formatar c�lula" ;
     Text [ english_us ] = "Format cell" ;
-    Text [ portuguese_brazilian ] = "Zelle formatieren" ;
+    Text [ portuguese_brazilian ] = "Formatar c�lula" ;
     Text [ swedish ] = "Formatera cell" ;
     Text [ danish ] = "Formater celler" ;
     Text [ italian ] = "Formatta cella" ;
@@ -2253,6 +2472,9 @@ String STR_TABLE_NUMFORMAT
     Text[ catalan ] = "Formata la cel.la";
     Text[ finnish ] = "Muotoile solu";
     Text[ thai ] = "จัดรูปแบบเซลล์";
+    Text[ czech ] = "Formátovat buňku";
+    Text[ hebrew ] = "Zelle formatieren";
+    Text[ hindi ] = "कोष्ठ रचना";
 };
 String STR_INSERT_TOX
 {
@@ -2260,7 +2482,7 @@ String STR_INSERT_TOX
     Text [ ENGLISH ] = "Insert index" ;
     Text [ portuguese ] = "Inserir �ndice" ;
     Text [ english_us ] = "Insert index" ;
-    Text [ portuguese_brazilian ] = "Einf?en Verzeichnis" ;
+    Text [ portuguese_brazilian ] = "Inserir �ndice" ;
     Text [ swedish ] = "Infoga f�rteckning" ;
     Text [ danish ] = "Inds�t indeks" ;
     Text [ italian ] = "Inserisci indice" ;
@@ -2282,6 +2504,9 @@ String STR_INSERT_TOX
     Text[ catalan ] = "Insereix l'�ndex";
     Text[ finnish ] = "Lis�� hakemisto";
     Text[ thai ] = "แทรกดัชนี";
+    Text[ czech ] = "Vložit rejstřík";
+    Text[ hebrew ] = "Insert index";
+    Text[ hindi ] = "अनुक्रमणिका जोड़ो";
 };
 String STR_CLEAR_TOX_RANGE
 {
@@ -2289,7 +2514,7 @@ String STR_CLEAR_TOX_RANGE
     Text [ ENGLISH ] = "Dismiss index" ;
     Text [ portuguese ] = "Remover �ndice" ;
     Text [ english_us ] = "Remove index" ;
-    Text [ portuguese_brazilian ] = "Verzeichnis aufheben" ;
+    Text [ portuguese_brazilian ] = "Remover �ndice" ;
     Text [ swedish ] = "Upph�v f�rteckning" ;
     Text [ danish ] = "Oph�v indeks" ;
     Text [ italian ] = "Rimuovi indice" ;
@@ -2311,6 +2536,9 @@ String STR_CLEAR_TOX_RANGE
     Text[ catalan ] = "Elimina l'�ndex";
     Text[ finnish ] = "Poista hakemisto";
     Text[ thai ] = "เอาดัชนีออก";
+    Text[ czech ] = "Odstranit rejstřík";
+    Text[ hebrew ] = "Remove index";
+    Text[ hindi ] = "अनुक्रमणिका हटाओ";
 };
 String STR_TABLE_TBLCPYTBL
 {
@@ -2318,7 +2546,7 @@ String STR_TABLE_TBLCPYTBL
     Text [ ENGLISH ] = "Copy table" ;
     Text [ portuguese ] = "Copiar tabela" ;
     Text [ english_us ] = "Copy table" ;
-    Text [ portuguese_brazilian ] = "Tabelle kopieren" ;
+    Text [ portuguese_brazilian ] = "Copiar tabela" ;
     Text [ swedish ] = "Kopiera tabell" ;
     Text [ danish ] = "Kopier tabel" ;
     Text [ italian ] = "Copia tabella" ;
@@ -2340,6 +2568,9 @@ String STR_TABLE_TBLCPYTBL
     Text[ catalan ] = "Copia la taula";
     Text[ finnish ] = "Kopioi taulukko";
     Text[ thai ] = "คัดลอกตาราง";
+    Text[ czech ] = "Kopírovat tabulku";
+    Text[ hebrew ] = "Tabelle kopieren";
+    Text[ hindi ] = "सारणी का प्रतिलिपि";
 };
 String STR_TABLE_CPYTBL
 {
@@ -2347,7 +2578,7 @@ String STR_TABLE_CPYTBL
     Text [ ENGLISH ] = "Copy table" ;
     Text [ portuguese ] = "Copiar tabela" ;
     Text [ english_us ] = "Copy table" ;
-    Text [ portuguese_brazilian ] = "Tabelle kopieren" ;
+    Text [ portuguese_brazilian ] = "Copiar tabela" ;
     Text [ swedish ] = "Kopiera tabell" ;
     Text [ danish ] = "Kopier tabel" ;
     Text [ italian ] = "Copia tabella" ;
@@ -2369,6 +2600,9 @@ String STR_TABLE_CPYTBL
     Text[ catalan ] = "Copia la taula";
     Text[ finnish ] = "Kopioi taulukko";
     Text[ thai ] = "คัดลอกตาราง";
+    Text[ czech ] = "Kopírovat tabulku";
+    Text[ hebrew ] = "Tabelle kopieren";
+    Text[ hindi ] = "सारणी का प्रतिलिपि";
 };
 String STR_INS_FROM_SHADOWCRSR
 {
@@ -2376,7 +2610,7 @@ String STR_INS_FROM_SHADOWCRSR
     Text [ ENGLISH ] = "Set cursor" ;
     Text [ portuguese ] = "Configurar cursor" ;
     Text [ english_us ] = "Set cursor" ;
-    Text [ portuguese_brazilian ] = "Cursor setzen" ;
+    Text [ portuguese_brazilian ] = "Definir cursor" ;
     Text [ swedish ] = "S�tt mark�r" ;
     Text [ danish ] = "Konfigurer mark�r" ;
     Text [ italian ] = "Imposta cursore" ;
@@ -2398,6 +2632,9 @@ String STR_INS_FROM_SHADOWCRSR
     Text[ catalan ] = "Defineix el cursor";
     Text[ finnish ] = "M��rit� kohdistin";
     Text[ thai ] = "กำหนดเคอร์เซอร์";
+    Text[ czech ] = "Nastavit kurzor";
+    Text[ hebrew ] = "Cursor setzen";
+    Text[ hindi ] = "कर्सर सेट्ट करो";
 };
 String STR_UNDO_CHAIN
 {
@@ -2405,7 +2642,7 @@ String STR_UNDO_CHAIN
     Text [ ENGLISH ] = "chaine Textframes" ;
     Text [ portuguese ] = "Ligar molduras de texto" ;
     Text [ english_us ] = "Link text frames" ;
-    Text [ portuguese_brazilian ] = "Textrahmen verbinden" ;
+    Text [ portuguese_brazilian ] = "Vincular molduras de texto" ;
     Text [ swedish ] = "L�nka textram" ;
     Text [ danish ] = "K�d tekstbokse" ;
     Text [ italian ] = "Collega la cornice di testo." ;
@@ -2414,7 +2651,7 @@ String STR_UNDO_CHAIN
     Text [ dutch ] = "Tekstkader verbinden" ;
     Text[ chinese_simplified ] = "链接文本框";
     Text[ russian ] = "���������� ��������� �����";
-    Text[ polish ] = "Po��cz ramk� tekstow�";
+    Text[ polish ] = "Po��cz ramki tekstowe";
     Text[ japanese ] = "テキスト枠の連結";
     Text[ chinese_traditional ] = "連結文字方塊";
     Text[ arabic ] = "����� ����� ����";
@@ -2427,6 +2664,9 @@ String STR_UNDO_CHAIN
     Text[ catalan ] = "Enlla�a els marcs de text";
     Text[ finnish ] = "Linkit� tekstikehykset";
     Text[ thai ] = "เชื่อมโยงกรอบข้อความ";
+    Text[ czech ] = "Propojit textové rámce";
+    Text[ hebrew ] = "Textrahmen verbinden";
+    Text[ hindi ] = "टेक्स्ट् फ्रेम को लिंक करो";
 };
 String STR_UNDO_UNCHAIN
 {
@@ -2434,7 +2674,7 @@ String STR_UNDO_UNCHAIN
     Text [ ENGLISH ] = "unchain Textframes" ;
     Text [ portuguese ] = "Desligar molduras de texto" ;
     Text [ english_us ] = "Unlink text frames" ;
-    Text [ portuguese_brazilian ] = "Textrahmenverbindung loesen" ;
+    Text [ portuguese_brazilian ] = "Desvincular molduras de texto" ;
     Text [ swedish ] = "L�s upp l�nkning av textramar" ;
     Text [ danish ] = "Oph�v tekstboksk�dning" ;
     Text [ italian ] = "Staccare il collegamento della cornice di testo" ;
@@ -2443,7 +2683,7 @@ String STR_UNDO_UNCHAIN
     Text [ dutch ] = "Tekstkaderverbinding verwijderen" ;
     Text[ chinese_simplified ] = "取消文本框的链接";
     Text[ russian ] = "����������� ��������� �����";
-    Text[ polish ] = "Roz��cz ramki tekstu";
+    Text[ polish ] = "Roz��cz ramki tekstowe";
     Text[ japanese ] = "テキスト枠の連結解除";
     Text[ chinese_traditional ] = "取消文字方塊的連結";
     Text[ arabic ] = "�� ����� ����� ����";
@@ -2456,6 +2696,9 @@ String STR_UNDO_UNCHAIN
     Text[ catalan ] = "Desenlla�a els marcs de text.";
     Text[ finnish ] = "Poista tekstikehysten linkki";
     Text[ thai ] = "ไม่เชื่อมโยงกรอบข้อความ";
+    Text[ czech ] = "Rozpojit textové rámce";
+    Text[ hebrew ] = "Textrahmenverbindung lösen";
+    Text[ hindi ] = "टेक्स्ट् फ्रेमों का लिंक हटाओ";
 };
 String STR_UNDO_FTNINFO
 {
@@ -2463,7 +2706,7 @@ String STR_UNDO_FTNINFO
     Text [ ENGLISH ] = "change footnote properties" ;
     Text [ portuguese ] = "Modificar configura��o de notas finais" ;
     Text [ english_us ] = "Modify footnote options" ;
-    Text [ portuguese_brazilian ] = "Fu?noteneinstellungen ?ndern" ;
+    Text [ portuguese_brazilian ] = "Modificar op��es de nota de rodap�" ;
     Text [ swedish ] = "�ndra fotnotsinst�llningar" ;
     Text [ danish ] = "Modificer fodnoteindstillinger" ;
     Text [ italian ] = "Modifica impostazioni note a pi� pagina" ;
@@ -2472,19 +2715,22 @@ String STR_UNDO_FTNINFO
     Text [ dutch ] = "Voetnoteninstellingen wijzigen" ;
     Text[ chinese_simplified ] = "更改注脚设定";
     Text[ russian ] = "�������� ��������� ������";
-    Text[ polish ] = "Zmodyfikuj ustawienia przypis�w dolnych";
+    Text[ polish ] = "Modyfikuj ustawienia przypis�w dolnych";
     Text[ japanese ] = "脚注の設定変更";
     Text[ chinese_traditional ] = "變更註腳設定";
     Text[ arabic ] = "����� ������ ������� �������";
     Text[ dutch ] = "Voetnoteninstellingen wijzigen";
     Text[ chinese_simplified ] = "更改注脚设定";
     Text[ greek ] = "����������� �������� �������������";
-    Text[ korean ] = "각주 설정 변경";
+    Text[ korean ] = "각주 설정 수정";
     Text[ turkish ] = "Dipnot ayarlar�n� de�i�tir";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Modifica les opcions de notes al peu";
     Text[ finnish ] = "Muokkaa alaviiteasetuksia";
     Text[ thai ] = "ดัดแปลงแก้ไขตัวเลือกเชิงอรรถ";
+    Text[ czech ] = "Upravit volby poznámek pod čarou";
+    Text[ hebrew ] = "Fußnoteneinstellungen ändern";
+    Text[ hindi ] = "पृष्ठ के नीचे की टीका के विकल्पों को सुधारो";
 };
 String STR_UNDO_ENDNOTEINFO
 {
@@ -2492,7 +2738,7 @@ String STR_UNDO_ENDNOTEINFO
     Text [ ENGLISH ] = "change endnote properties" ;
     Text [ portuguese ] = "Modificar configura��o de notas finais" ;
     Text [ english_us ] = "Modify endnote settings" ;
-    Text [ portuguese_brazilian ] = "Endnoteneinstellungen ?ndern" ;
+    Text [ portuguese_brazilian ] = "Modificar configura��es de nota de fim" ;
     Text [ swedish ] = "�ndra slutnotsinst�llningar" ;
     Text [ danish ] = "Modificer slutnoteindstillinger" ;
     Text [ italian ] = "Modifica impostazione note di chiusura" ;
@@ -2501,19 +2747,22 @@ String STR_UNDO_ENDNOTEINFO
     Text [ dutch ] = "Eindnootinstellingen wijzigen" ;
     Text[ chinese_simplified ] = "更改尾注设定";
     Text[ russian ] = "�������� ��������� �������� ������";
-    Text[ polish ] = "Zmodyfikuj ustawienia przypis�w dolnych";
+    Text[ polish ] = "Modyfikuj ustawienia przypis�w ko�cowych";
     Text[ japanese ] = "文末脚注の設定変更";
     Text[ chinese_traditional ] = "變更尾註設定";
     Text[ arabic ] = "����� ������� ��������� ��������";
     Text[ dutch ] = "Eindnootinstellingen wijzigen";
     Text[ chinese_simplified ] = "更改尾注设定";
     Text[ greek ] = "����������� �������� ���������� ������";
-    Text[ korean ] = "미주 설정 변경";
+    Text[ korean ] = "미주 설정 수정";
     Text[ turkish ] = "Sonnot ayarlar�n� de�i�tir";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Modifica la configuraci� de notes finals";
     Text[ finnish ] = "Muokkaa loppuviiteasetuksia";
     Text[ thai ] = "ดัดแปลงแก้ไขการกำหนดการอ้างอิงท้ายเรื่อง";
+    Text[ czech ] = "Upravit volby vysvětlivek";
+    Text[ hebrew ] = "Endnoteneinstellungen ändern";
+    Text[ hindi ] = "अंतिम टीका निर्धारण को सुधारो";
 };
 String STR_UNDO_COMPAREDOC
 {
@@ -2521,7 +2770,7 @@ String STR_UNDO_COMPAREDOC
     Text [ ENGLISH ] = "compare document" ;
     Text [ portuguese ] = "Comparar documento" ;
     Text [ english_us ] = "Compare Document" ;
-    Text [ portuguese_brazilian ] = "Dokument vergleich" ;
+    Text [ portuguese_brazilian ] = "Comparar Documento" ;
     Text [ swedish ] = "J�mf�relse av dokument" ;
     Text [ danish ] = "Sammenlign dokument" ;
     Text [ italian ] = "Confronto documento" ;
@@ -2530,7 +2779,7 @@ String STR_UNDO_COMPAREDOC
     Text [ dutch ] = "Documentvergelijking" ;
     Text[ chinese_simplified ] = "比较文档";
     Text[ russian ] = "�������� ������ ���������";
-    Text[ polish ] = "Por�wnaj dokument";
+    Text[ polish ] = "Por�wnaj dokumenty";
     Text[ japanese ] = "ドキュメントの比較";
     Text[ chinese_traditional ] = "比較文件";
     Text[ arabic ] = "������ �������";
@@ -2543,6 +2792,9 @@ String STR_UNDO_COMPAREDOC
     Text[ catalan ] = "Compara el document";
     Text[ finnish ] = "Vertaa asiakirjaa";
     Text[ thai ] = "เปรียบเทียบเอกสาร";
+    Text[ czech ] = "Porovnat dokument";
+    Text[ hebrew ] = "‮השווה מסמכים‬";
+    Text[ hindi ] = "लेखपत्र को तुलना करो";
 };
 String STR_UNDO_SETFLYFRMFMT
 {
@@ -2550,7 +2802,7 @@ String STR_UNDO_SETFLYFRMFMT
     Text [ ENGLISH ] = "Apply framestyle" ;
     Text [ portuguese ] = "Aplicar estilo de moldura" ;
     Text [ english_us ] = "Apply frame style" ;
-    Text [ portuguese_brazilian ] = "Rahmenvorlage anwenden" ;
+    Text [ portuguese_brazilian ] = "Aplicar estilo de moldura" ;
     Text [ swedish ] = "Anv�nd ramformatmall" ;
     Text [ danish ] = "Anvend rammetypografi" ;
     Text [ italian ] = "Applica modello di cornice" ;
@@ -2572,6 +2824,9 @@ String STR_UNDO_SETFLYFRMFMT
     Text[ catalan ] = "Aplica l'estil del marc";
     Text[ finnish ] = "K�yt� kehystyyli�";
     Text[ thai ] = "ใช้ลักษณะกรอบ";
+    Text[ czech ] = "Použít styl ohraničení";
+    Text[ hebrew ] = "Rahmenvorlage anwenden";
+    Text[ hindi ] = "फ्रेम शैली लागू करो";
 };
 String STR_UNDO_SETRUBYATTR
 {
@@ -2587,17 +2842,20 @@ String STR_UNDO_SETRUBYATTR
     Text[ italian ] = "Applica testo Ruby";
     Text[ danish ] = "S�t fonetiske symboler";
     Text[ swedish ] = "S�tt fonetiska symboler";
-    Text[ polish ] = "Osad� znaki diakrytyczne";
-    Text[ portuguese_brazilian ] = "Set phonetic Symbols";
+    Text[ polish ] = "Ustawienia dopisk�w fonetycznych";
+    Text[ portuguese_brazilian ] = "Configura��o Ruby";
     Text[ japanese ] = "ルビ設定";
     Text[ korean ] = "덧말 넣기 설정";
     Text[ chinese_simplified ] = "加上拼音或注音符号";
     Text[ chinese_traditional ] = "加上注音標示";
-    Text[ turkish ] = "Set phonetic Symbols";
+    Text[ turkish ] = "Tellafuz yard�mci kutunun �zelliklerini ayarla";
     Text[ arabic ] = "����� ���� �����";
     Text[ catalan ] = "Aplica els s�mbols fon�tics";
     Text[ finnish ] = "Ruby-tekstin asetukset";
     Text[ thai ] = "กำหนดตัวพิมพ์ขนาดเล็ก";
+    Text[ czech ] = "Nastavení Ruby";
+    Text[ hebrew ] = "Phonetische Symbole setzen";
+    Text[ hindi ] = "रूबी निर्धारण";
 };
 #102505#
 String STR_UNDO_TMPAUTOCORR
@@ -2623,18 +2881,21 @@ String STR_UNDO_TMPAUTOCORR
     Text[ chinese_simplified ] = "自动更正";
     Text[ greek ] = "������������";
     Text[ korean ] = "자동 수정";
-    Text[ turkish ] = "Otomatik d�zeltme";
+    Text[ turkish ] = "OtomatikD�zeltme";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Correcci� autom�tica";
     Text[ finnish ] = "Automaattinen korjaus";
     Text[ thai ] = "แก้ไขให้ถูกต้องอัตโนมัติ";
+    Text[ czech ] = "Automatické opravy";
+    Text[ hebrew ] = "‮תיקון אוטומטי‬";
+    Text[ hindi ] = "स्वचालित ढंग से ठीक करो";
 };
 String STR_INSERT_FOOTNOTE
 {
     Text = "Fu�note einf�gen" ;
     Text [ ENGLISH ] = "insert footnote" ;
     Text [ english_us ] = "Insert footnote" ;
-    Text [ portuguese_brazilian ] = "Fu?note einf?en" ;
+    Text [ portuguese_brazilian ] = "Inserir nota de nodap�" ;
     Text [ swedish ] = "Infoga fotnot" ;
     Text [ danish ] = "Inds�t fodnote" ;
     Text [ italian ] = "Inserisci nota a pi� pagina" ;
@@ -2657,6 +2918,9 @@ String STR_INSERT_FOOTNOTE
     Text[ catalan ] = "Insereix una nota al peu";
     Text[ finnish ] = "Lis�� alaviite";
     Text[ thai ] = "แทรกเชิงอรรถ";
+    Text[ czech ] = "Vložit poznámku pod čarou";
+    Text[ hebrew ] = "Fußnote einfügen";
+    Text[ hindi ] = "पृष्ठ के नीचे की टीका जोड़ो";
 };
 String STR_INSERT_URLBTN
 {
@@ -2672,7 +2936,7 @@ String STR_INSERT_URLBTN
     Text[ danish ] = "Inds�t URL-knap";
     Text[ swedish ] = "Infoga URL-knapp";
     Text[ polish ] = "Wstaw przycisk URL";
-    Text[ portuguese_brazilian ] = "insert URL button";
+    Text[ portuguese_brazilian ] = "Inserir bot�o URL";
     Text[ japanese ] = "URLボタンの挿入";
     Text[ chinese_simplified ] = "插入 URL 按钮";
     Text[ chinese_traditional ] = "插入 URL 按鈕";
@@ -2686,6 +2950,9 @@ String STR_INSERT_URLBTN
     Text[ catalan ] = "Insereix un bot� URL";
     Text[ finnish ] = "Lis�� URL-painike";
     Text[ thai ] = "แทรกปุ่ม URL ";
+    Text[ czech ] = "Vložit URL tlačítko";
+    Text[ hebrew ] = "URL Button einfügen";
+    Text[ hindi ] = "URL बटन जोड़ो";
 };
 String STR_INSERT_URLTXT
 {
@@ -2701,7 +2968,7 @@ String STR_INSERT_URLTXT
     Text[ danish ] = "Inds�t hyperlink";
     Text[ swedish ] = "Infoga hyperl�nk";
     Text[ polish ] = "Wstaw hiper��cze";
-    Text[ portuguese_brazilian ] = "insert Hyperlink";
+    Text[ portuguese_brazilian ] = "Inserir Hiperlink";
     Text[ japanese ] = "ハイパーリンクの挿入";
     Text[ chinese_simplified ] = "插入超链接";
     Text[ chinese_traditional ] = "插入超連結";
@@ -2710,11 +2977,14 @@ String STR_INSERT_URLTXT
     Text[ chinese_simplified ] = "插入超链接";
     Text[ greek ] = "�������� ����-��������";
     Text[ korean ] = "하이퍼링크 삽입";
-    Text[ turkish ] = "Hyperlink ekle";
+    Text[ turkish ] = "Hiperlink ekle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Insereix un hiperenlla�";
     Text[ finnish ] = "Lis�� hyperlinkki";
     Text[ thai ] = "แทรกการเชื่อมโยงหลายมิติ";
+    Text[ czech ] = "Vložit hypertextový odkaz";
+    Text[ hebrew ] = "Hyperlink ‮הוספת‬";
+    Text[ hindi ] = "हाइपरलिंक जोड़ो";
 };
 String STR_DELETE_INVISIBLECNTNT
 {
@@ -2731,7 +3001,7 @@ String STR_DELETE_INVISIBLECNTNT
     Text[ italian ] = "Rimuovi contenuto nascosto";
     Text[ danish ] = "fjern usynlige indhold";
     Text[ polish ] = "usu� niewidoczn� zawarto��";
-    Text[ portuguese_brazilian ] = "remove invisible content";
+    Text[ portuguese_brazilian ] = "remover conte�do invis�vel";
     Text[ japanese ] = "表示できない内容を削除する";
     Text[ korean ] = "숨긴 내용 제거";
     Text[ chinese_simplified ] = "删除隐入的内容";
@@ -2742,6 +3012,9 @@ String STR_DELETE_INVISIBLECNTNT
     Text[ catalan ] = "elimina el contingut invisible";
     Text[ finnish ] = "poista n�kym�t�n sis�lt�";
     Text[ thai ] = "เอาเนื้อหาที่มองไม่เห็นออก";
+    Text[ czech ] = "Odstranit skrytý obsah";
+    Text[ hebrew ] = "unischtbaren Inhalt enfernen";
+    Text[ hindi ] = "अलक सन्तोष हटाओ";
 };
 
 String STR_DDEERROR_APP1
@@ -2750,7 +3023,7 @@ String STR_DDEERROR_APP1
     TEXT [ ENGLISH ] = "Application [" ;
     TEXT [ norwegian ] = "Applikasjon[" ;
     TEXT [ italian ] = "L'applicazione [" ;
-    TEXT [ portuguese_brazilian ] = "Aplicativo [" ;
+    TEXT [ portuguese_brazilian ] = "A aplica��o [" ;
     TEXT [ portuguese ] = "A aplica��o [" ;
     TEXT [ finnish ] = "Sovellus [" ;
     TEXT [ danish ] = "Applikationen [" ;
@@ -2770,6 +3043,9 @@ String STR_DDEERROR_APP1
     TEXT[ turkish ] = "Uygulama [";
     TEXT[ catalan ] = "L'aplicaci� [";
     TEXT[ thai ] = "โปรแกรมประยุกต์ [";
+    TEXT[ czech ] = "Aplikace [";
+    TEXT[ hebrew ] = "‮פעולה [‬";
+    TEXT[ hindi ] = "कार्यक्रम [";
 };
 String STR_DDEERROR_APP2
 {
@@ -2777,7 +3053,7 @@ String STR_DDEERROR_APP2
     TEXT [ ENGLISH ] = "] does not respond" ;
     TEXT [ norwegian ] = "] korresponderer ikke" ;
     TEXT [ italian ] = "] non risponde" ;
-    TEXT [ portuguese_brazilian ] = "] n?o responde" ;
+    TEXT [ portuguese_brazilian ] = "] n�o est� respondendo" ;
     TEXT [ portuguese ] = "] n�o responde." ;
     TEXT [ finnish ] = "] ei vastaa." ;
     TEXT [ danish ] = "] svarer ikke" ;
@@ -2788,7 +3064,7 @@ String STR_DDEERROR_APP2
     TEXT [ english_us ] = "] is not responding." ;
     TEXT[ chinese_simplified ] = "] 没有回应。";
     TEXT[ russian ] = "] �� ��������";
-    TEXT[ polish ] = "] nie reaguje";
+    TEXT[ polish ] = "] nie reaguje.";
     TEXT[ japanese ] = "] からの応答がありません";
     TEXT[ chinese_traditional ] = "] 沒有回應。";
     TEXT[ arabic ] = "[ �� ������";
@@ -2800,6 +3076,9 @@ String STR_DDEERROR_APP2
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "] no respon";
     TEXT[ thai ] = "] ไม่ตอบสนอง";
+    TEXT[ czech ] = "] neodpovídá.";
+    TEXT[ hebrew ] = "] kann nicht angesprochen werden";
+    TEXT[ hindi ] = "] उत्तर नहीं दे रहा है ।";
 };
 String STR_DDEERROR_DATA1
 {
@@ -2807,7 +3086,7 @@ String STR_DDEERROR_DATA1
     TEXT [ ENGLISH ] = "Data for [" ;
     TEXT [ norwegian ] = "Data for [" ;
     TEXT [ italian ] = "Dati per [" ;
-    TEXT [ portuguese_brazilian ] = "Dados para [" ;
+    TEXT [ portuguese_brazilian ] = "Os dados para [" ;
     TEXT [ portuguese ] = "Os dados para [" ;
     TEXT [ finnish ] = "Tietoja [" ;
     TEXT [ danish ] = "Dataene til [" ;
@@ -2827,6 +3106,9 @@ String STR_DDEERROR_DATA1
     TEXT[ turkish ] = "[";
     TEXT[ catalan ] = "Les dades per a [";
     TEXT[ thai ] = "ข้อมูลสำหรับ [";
+    TEXT[ czech ] = "Data pro [";
+    TEXT[ hebrew ] = "Die Daten zu [";
+    TEXT[ hindi ] = "केलिए ड़ॉटा  [";
 };
 String STR_DDEERROR_DATA2
 {
@@ -2834,7 +3116,7 @@ String STR_DDEERROR_DATA2
     TEXT [ ENGLISH ] = "] cannot be obtained" ;
     TEXT [ norwegian ] = "] kan ikke oppn�es" ;
     TEXT [ italian ] = "]" ;
-    TEXT [ portuguese_brazilian ] = "] n?o podem ser obtidos" ;
+    TEXT [ portuguese_brazilian ] = "] n�o podem ser obtidos" ;
     TEXT [ portuguese ] = "] n�o podem ser determinados." ;
     TEXT [ finnish ] = "] eiv�t ole saatavilla" ;
     TEXT [ danish ] = "] kan ikke bestemmes" ;
@@ -2845,7 +3127,7 @@ String STR_DDEERROR_DATA2
     TEXT [ english_us ] = "] cannot be obtained" ;
     TEXT[ chinese_simplified ] = "] 的数据无法被读取。";
     TEXT[ russian ] = "] �������� ����������";
-    TEXT[ polish ] = "] nie mo�na uzyska�";
+    TEXT[ polish ] = "] nie mo�e by� uzyskany";
     TEXT[ japanese ] = "] のデータは確認できません";
     TEXT[ chinese_traditional ] = "] 的資料無法被讀取。";
     TEXT[ arabic ] = "[ ��� ������";
@@ -2857,6 +3139,9 @@ String STR_DDEERROR_DATA2
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "] no es poden obtenir";
     TEXT[ thai ] = "] ไม่สามารถได้รับ";
+    TEXT[ czech ] = "] nelze obdržet";
+    TEXT[ hebrew ] = "] können nicht ermittelt werden";
+    TEXT[ hindi ] = "] नहीं मिल सकता है";
 };
 String STR_DDEERROR_LINK1
 {
@@ -2864,7 +3149,7 @@ String STR_DDEERROR_LINK1
     TEXT [ ENGLISH ] = "Link to [" ;
     TEXT [ norwegian ] = "Koble til [" ;
     TEXT [ italian ] = "Collegamento con [" ;
-    TEXT [ portuguese_brazilian ] = "Liga??o para [" ;
+    TEXT [ portuguese_brazilian ] = "O vinculo para [" ;
     TEXT [ portuguese ] = "A liga��o a [" ;
     TEXT [ finnish ] = "Linkki [" ;
     TEXT [ danish ] = "K�den til [" ;
@@ -2884,6 +3169,9 @@ String STR_DDEERROR_LINK1
     TEXT[ turkish ] = "[";
     TEXT[ catalan ] = "L'enlla� amb [";
     TEXT[ thai ] = "เชื่อมโยงไปยัง [";
+    TEXT[ czech ] = "Odkaz na [";
+    TEXT[ hebrew ] = "Die Verknüpfung zu [";
+    TEXT[ hindi ] = "Link to [";
 };
 String STR_DDEERROR_LINK2
 {
@@ -2891,7 +3179,7 @@ String STR_DDEERROR_LINK2
     TEXT [ ENGLISH ] = "] cannot be established" ;
     TEXT [ norwegian ] = "] kan ikke etableres" ;
     TEXT [ italian ] = "]" ;
-    TEXT [ portuguese_brazilian ] = "] n?o pode ser estabelecido" ;
+    TEXT [ portuguese_brazilian ] = "] n�o pode ser estabelecido" ;
     TEXT [ portuguese ] = "] n�o pode ser estabelecido." ;
     TEXT [ finnish ] = "] ei ole muodostettavissa" ;
     TEXT [ danish ] = "] kan ikke oprettes" ;
@@ -2902,7 +3190,7 @@ String STR_DDEERROR_LINK2
     TEXT [ english_us ] = "] cannot be established" ;
     TEXT[ chinese_simplified ] = "]的链接";
     TEXT[ russian ] = "] ���������� ����������";
-    TEXT[ polish ] = "] nie mo�na ustanowi�";
+    TEXT[ polish ] = "] nie mo�e by� ustanowiony";
     TEXT[ japanese ] = "] へのリンクはつくれません";
     TEXT[ chinese_traditional ] = "] 無法建立。";
     TEXT[ arabic ] = "[ ��� ���� �������";
@@ -2914,7 +3202,51 @@ String STR_DDEERROR_LINK2
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "] no es pot establir";
     TEXT[ thai ] = "] ไม่สามารถถูกสร้างได้";
+    TEXT[ czech ] = "] nelze provést";
+    TEXT[ hebrew ] = "] kann nicht eingerichtet werden";
+    TEXT[ hindi ] = "] स्थापित नहीं कर सकते है";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
