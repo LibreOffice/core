@@ -2,9 +2,9 @@
  *
  *  $RCSfile: euro.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-20 21:22:16 $
+ *  last change: $Author: kz $ $Date: 2001-07-24 20:59:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,9 +282,9 @@ Text = "~Schließen";
 Text[English] = "C~lose";
 Text[ english_us ] = "C~lose";
     Text[ portuguese ] = "C~lose";
-    Text[ russian ] = "C~lose";
+    Text[ russian ] = "~Çàêğûòü";
     Text[ greek ] = "C~lose";
-    Text[ dutch ] = "C~lose";
+    Text[ dutch ] = "~Sluiten";
     Text[ french ] = "C~lose";
     Text[ spanish ] = "~Cerrar";
     Text[ finnish ] = "C~lose";
@@ -371,7 +371,7 @@ Text[ english_us ] = "Cell S~tyles";
     Text[ swedish ] = "Cell~mallar";
     Text[ polish ] = "~Style komórki";
     Text[ portuguese_brazilian ] = "Cell~templates";
-    Text[ japanese ] = "¾Ù‚Ì½À²Ù(~T)";
+    Text[ japanese ] = "¾Ù½À²Ù(~T)";
     Text[ korean ] = "¼¿¡¡ÅÛÇÃ¸´(~T)";
     Text[ chinese_simplified ] = "µ¥Ôª¸ñÑùÊ½(~T)";
     Text[ chinese_traditional ] = "Àx¦s®æ¼Ë¦¡(~T)";
@@ -971,9 +971,9 @@ Text = "~Fertig";
 Text[English] = "~finished";
 Text[ english_us ] = "finished!";
     Text[ portuguese ] = "....Pronto!";
-    Text[ russian ] = "Ãîòîâî!";
+    Text[ russian ] = "Ãîòîâî";
     Text[ greek ] = "Ïëïêëçñşèçêå!";
-    Text[ dutch ] = "...Klaar!";
+    Text[ dutch ] = "~Klaar";
     Text[ french ] = "....Terminé !";
     Text[ spanish ] = "Terminado";
     Text[ italian ] = "...fine!";
@@ -1332,7 +1332,7 @@ Text[ english_us ] = "The AutoPilot cannot edit this document as cell formats ca
     Text[ swedish ] = "AutoPilot kan inte redigera det här dokumentet eftersom ingen cellmall kan modifieras i dokument med skyddade tabeller.";
     Text[ polish ] = "AutoPilot nie jest w stanie edytowaæ tego dokumentu, poniewa¿ w dokumentach zawieraj¹cych chronione arkusze nie mo¿na modyfikowaæ stylów komórki.";
     Text[ portuguese_brazilian ] = "But by modified celltempltates even cells in protected sheets may be modified!";
-    Text[ japanese ] = "•ÛŒì‚³‚ê‚½•\\‚ğŠÜ‚ŞÄŞ·­ÒİÄ‚Å‚Í¾Ù‚Ì½À²Ù‚ª•ÏX‚Å‚«‚È‚¢‚½‚ßAµ°ÄÊß²Û¯Ä‚Í‚±‚ÌÄŞ·­ÒİÄ‚ğ•ÒW‚Å‚«‚Ü‚¹‚ñB";
+    Text[ japanese ] = "•ÛŒì‚³‚ê‚½•\\‚ğŠÜ‚ŞÄŞ·­ÒİÄ‚Å‚Í¾Ù½À²Ù‚ª•ÏX‚Å‚«‚È‚¢‚½‚ßAµ°ÄÊß²Û¯Ä‚Í‚±‚ÌÄŞ·­ÒİÄ‚ğ•ÒW‚Å‚«‚Ü‚¹‚ñB";
     Text[ korean ] = "º¸È£µÈ ½ºÇÁ·¹µå½ÃÆ®°¡ ÀÖ´Â ¹®¼­¿¡¼­´Â ¼¿ À¯ÇüÀÌ º¯°æµÉ ¼ö ¾ø±â ¶§¹®¿¡ ÀÚµ¿ÆÄÀÏ·µÀº ÀÌ ¹®¼­¸¦ ÆíÁıÇÒ ¼ö ¾ø½À´Ï´Ù.";
     Text[ chinese_simplified ] = "×Ô¶¯ÎÄ¼şÖúÀíÎŞ·¨±à¼­Õâ¸öÎÄµµ£¬ÒòÎªÔÚÎÄµµÄÚº¬ÓĞÊÜ±£»¤µÄ¹¤×÷±íÊ±ÎŞ·¨¸ü¸ÄÆäµ¥Ôª¸ñÑùÊ½¡£";
     Text[ chinese_traditional ] = "¦Û°ÊÀÉ®×§U²zµ{¦¡µLªk­×§ï³o­Ó¤å¥ó¡A¦]¬°¤@­Ó¨ü«OÅ@¤u§@ªí¤£¤¹³\\ÅÜ§óÀx¦s®æ¼Ë¦¡¡C";
@@ -1994,7 +1994,7 @@ Text[ english_us ] = "Converting the documents...";
     Text[ portuguese_brazilian ] = "Converting the Documents...";
     Text[ japanese ] = "ÄŞ·­ÒİÄ‚Ì•ÏŠ·...";
     Text[ korean ] = "¹®¼­ º¯È¯...";
-    Text[ chinese_simplified ] = "ÎÄµµ×ª»»...";
+    Text[ chinese_simplified ] = "×ª»»ÎÄµµ...";
     Text[ chinese_traditional ] = "Âà´«¤å¥ó...";
     Text[ turkish ] = "Belgeleri dönüştürüyor...";
     Text[ arabic ] = "ÊÍæíá ÇáãÓÊäÏÇÊ...";
@@ -2046,13 +2046,14 @@ Text[ english_us ] = "Sheet is always unprotected";
     Text[ portuguese_brazilian ] = "Sheet Protection is always raised";
     Text[ japanese ] = "í‚É•\\‚Ì•ÛŒì‚ğ‰ğœ";
     Text[ korean ] = "½ÃÆ® º¸È£  Ç×»ó Á¦°Å";
-    Text[ chinese_simplified ] = "×ÜÊÇÈ¡Ïû±í¸ñ±£»¤";
-    Text[ chinese_traditional ] = "Á`¬O¨ú®ø¤u§@ªí«OÅ@";
+    Text[ chinese_simplified ] = "×Ô¶¯È¡Ïû±í¸ñ±£»¤";
+    Text[ chinese_traditional ] = "¦Û°Ê¨ú®ø¤u§@ªí«OÅ@";
     Text[ turkish ] = "Tablo koruması her zaman kaldırılıyor";
     Text[ arabic ] = "Óæİ íÊã ÅáÛÇÁ ÍãÇíÉ ÇáÌÏæá ÏÇÆãÇğ";
     Text[ finnish ] = "Lomake on aina suojaamaton";
     Text[ catalan ] = "Anular siempre la protección de hoja";
 };
+
 
 
 
