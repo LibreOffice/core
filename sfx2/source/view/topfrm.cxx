@@ -2,9 +2,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: mba $ $Date: 2002-10-07 12:52:47 $
+ *  last change: $Author: mba $ $Date: 2002-10-28 12:49:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,12 +87,6 @@
 #ifndef _UNO_COM_SUN_STAR_AWT_POSSIZE_HPP_
 #include <com/sun/star/awt/PosSize.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
-#include <com/sun/star/util/XURLTransformer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
-#include <com/sun/star/beans/PropertyValue.hpp>
-#endif
 
 #ifndef _SV_MENU_HXX
 #include <vcl/menu.hxx>
@@ -149,7 +143,6 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::util;
-using namespace ::com::sun::star::beans;
 
 //------------------------------------------------------------------------
 
@@ -157,46 +150,6 @@ using namespace ::com::sun::star::beans;
 #include "sfxslots.hxx"
 
 DBG_NAME(SfxTopViewFrame);
-
-class SfxAsyncCloser_Impl
-{
-    SfxFrame*   pFrame;
-    Timer*      pTimer;
-
-public:
-
-    SfxAsyncCloser_Impl( SfxFrame* );
-    ~SfxAsyncCloser_Impl();
-    DECL_LINK( TimerHdl, Timer*);
-};
-
-// -----------------------------------------------------------------------
-
-SfxAsyncCloser_Impl::SfxAsyncCloser_Impl( SfxFrame* pF )
-    : pFrame( pF )
-{
-    pTimer = new Timer;
-    pTimer->SetTimeoutHdl( LINK(this, SfxAsyncCloser_Impl, TimerHdl) );
-    pTimer->SetTimeout( 0 );
-    pTimer->Start();
-}
-
-// -----------------------------------------------------------------------
-
-SfxAsyncCloser_Impl::~SfxAsyncCloser_Impl()
-{
-    delete pTimer;
-}
-
-// -----------------------------------------------------------------------
-
-IMPL_LINK(SfxAsyncCloser_Impl, TimerHdl, Timer*, pTimer)
-{
-    pTimer->Stop();
-    pFrame->CloseDocument_Impl();
-    delete this;
-    return 0L;
-}
 
 class SfxTopFrame_Impl
 {
@@ -603,7 +556,9 @@ IMPL_LINK( SfxTopWindow_Impl, CloserHdl, void*, pVoid )
 {
     if ( pFrame && !pFrame->PrepareClose_Impl( TRUE ) )
         return 0L;
-    new SfxAsyncCloser_Impl( pFrame );
+
+    if ( pFrame )
+        pFrame->GetCurrentViewFrame()->GetBindings().Execute( SID_CLOSEWIN, 0, 0, SFX_CALLMODE_ASYNCHRON );
     return 0L;
 }
 
@@ -1228,8 +1183,8 @@ void SfxTopViewFrame::Exec_Impl(SfxRequest &rReq )
                         SFX_APP()->GetAppDispatcher_Impl()->Execute( SID_OPENDOC, SFX_CALLMODE_SLOT, &aNameItem, &aReferer, 0L );
                         return;
                     }
-
                     bClosed = sal_False;
+/*
                     com::sun::star::uno::Reference < ::com::sun::star::frame::XFramesSupplier >
                             xDesktop( ::comphelper::getProcessServiceFactory()->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
                             com::sun::star::uno::UNO_QUERY );
@@ -1242,16 +1197,17 @@ void SfxTopViewFrame::Exec_Impl(SfxRequest &rReq )
                     }
                     else
                     {
-                        try
-                        {
-                            xTask->close(sal_True);
-                            bClosed = sal_True;
-                        }
-                        catch( CloseVetoException& )
-                        {
-                            bClosed = sal_False;
-                        }
+ */
+                    try
+                    {
+                        xTask->close(sal_True);
+                        bClosed = sal_True;
                     }
+                    catch( CloseVetoException& )
+                    {
+                        bClosed = sal_False;
+                    }
+   //                   }
                 }
 
                 rReq.SetReturnValue( SfxBoolItem( rReq.GetSlot(), bClosed ));
