@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csvgrid.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:10 $
+ *  last change: $Author: vg $ $Date: 2003-06-20 09:14:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,14 +148,15 @@ private:
     VirtualDevice               maGridDev;          /// Data grid with selection and cursor.
     PopupMenu                   maPopup;            /// Popup menu for column types.
 
-    ::svtools::ColorConfig&         mrColorConfig;      /// Application color configuration.
+    ::svtools::ColorConfig&     mrColorConfig;      /// Application color configuration.
     Color                       maBackColor;        /// Cell background color.
     Color                       maGridColor;        /// Table grid color.
     Color                       maGridPBColor;      /// Grid color for "first imported line" delimiter.
     Color                       maAppBackColor;     /// Background color for unused area.
-    Color                       maTextColor;        /// Text color for headers and data.
+    Color                       maTextColor;        /// Text color for data area.
     Color                       maHeaderBackColor;  /// Background color for headers.
     Color                       maHeaderGridColor;  /// Grid color for headers.
+    Color                       maHeaderTextColor;  /// Text color for headers.
     Color                       maSelectColor;      /// Header color of selected columns.
 
     ScEditEnginePtr             mpEditEngine;       /// For drawing cell texts.
