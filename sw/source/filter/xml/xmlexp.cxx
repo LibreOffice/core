@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-27 09:37:50 $
+ *  last change: $Author: mtg $ $Date: 2001-03-28 11:36:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -426,7 +426,7 @@ void SwXMLExport::_ExportFontDecls()
     SvXMLExport::_ExportFontDecls();
 }
 
-#define NUM_EXPORTED_PROPERTIES 9
+#define NUM_EXPORTED_VIEW_SETTINGS 9
 void SwXMLExport::GetViewSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps)
 {
     Reference< XMultiServiceFactory > xServiceFactory =
@@ -436,7 +436,7 @@ void SwXMLExport::GetViewSettings(com::sun::star::uno::Sequence<com::sun::star::
     if( !xServiceFactory.is() )
         return;
 
-    aProps.realloc( NUM_EXPORTED_PROPERTIES );
+    aProps.realloc( NUM_EXPORTED_VIEW_SETTINGS );
      // Currently exporting 9 properties
     PropertyValue *pValue = aProps.getArray();
     sal_Int32 nIndex = 0;
@@ -516,14 +516,51 @@ void SwXMLExport::GetViewSettings(com::sun::star::uno::Sequence<com::sun::star::
     pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "ShowFooterWhileBrowsing") );
     pValue[nIndex++].Value.setValue( &bShowFoot, ::getBooleanCppuType() );
 
-    if ( nIndex < NUM_EXPORTED_PROPERTIES )
+    if ( nIndex < NUM_EXPORTED_VIEW_SETTINGS )
         aProps.realloc(nIndex);
 }
-#undef NUM_EXPORTED_PROPERTIES
+#undef NUM_EXPORTED_VIEW_SETTINGS
 
+#define NUM_EXPORTED_CONFIGURATION_SETTINGS 6
 void SwXMLExport::GetConfigurationSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps)
 {
+    Reference < XPropertySet > xPropSet = Reference<XPropertySet>(GetModel(), UNO_QUERY);
+    if (xPropSet.is())
+    {
+        aProps.realloc ( NUM_EXPORTED_CONFIGURATION_SETTINGS );
+        PropertyValue *pValue = aProps.getArray();
+        OUString sLinkUpdateMode ( RTL_CONSTASCII_USTRINGPARAM ( "LinkUpdateMode" ) );
+        OUString sFieldAutoUpdate ( RTL_CONSTASCII_USTRINGPARAM ( "FieldAutoUpdate" ) );
+        OUString sChartAutoUpdate ( RTL_CONSTASCII_USTRINGPARAM ( "ChartAutoUpdate" ) );
+        OUString sAddParaTableSpacing ( RTL_CONSTASCII_USTRINGPARAM ( "AddParaTableSpacing" ) );
+        OUString sAddParaTableSpacingAtStart ( RTL_CONSTASCII_USTRINGPARAM ( "AddParaTableSpacingAtStart" ) );
+        OUString sPrinterName ( RTL_CONSTASCII_USTRINGPARAM ( "PrinterName" ) );
+
+        pValue->Name = sLinkUpdateMode;
+        pValue->Value = xPropSet->getPropertyValue ( sLinkUpdateMode );
+        pValue++;
+
+        pValue->Name = sFieldAutoUpdate;
+        pValue->Value = xPropSet->getPropertyValue ( sFieldAutoUpdate );
+        pValue++;
+
+        pValue->Name = sChartAutoUpdate;
+        pValue->Value = xPropSet->getPropertyValue ( sChartAutoUpdate );
+        pValue++;
+
+        pValue->Name = sAddParaTableSpacing;
+        pValue->Value = xPropSet->getPropertyValue ( sAddParaTableSpacing );
+        pValue++;
+
+        pValue->Name = sAddParaTableSpacingAtStart;
+        pValue->Value = xPropSet->getPropertyValue ( sAddParaTableSpacingAtStart );
+        pValue++;
+
+        pValue->Name = sPrinterName;
+        pValue->Value = xPropSet->getPropertyValue ( sPrinterName );
+    }
 }
+#undef NUM_EXPORTED_CONFIGURATION_SETTINGS
 void SwXMLExport::_ExportContent()
 {
 #ifdef XML_CORE_API
