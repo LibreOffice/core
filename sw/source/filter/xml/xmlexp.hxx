@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:14:52 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:51:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,7 @@ class SwXMLExport : public SvXMLExport
                           SwXMLTableInfo_Impl& rTblInfo );
     void ExportTableLines( const SwTableLines& rLines,
                            SwXMLTableInfo_Impl& rTblInfo,
-                           sal_Bool bHeadline=sal_False );
+                           USHORT nHeaderRows = 0 );
 
     virtual void _ExportMeta();
     virtual void _ExportFontDecls();
