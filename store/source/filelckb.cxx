@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filelckb.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mhu $ $Date: 2002-08-17 16:58:50 $
+ *  last change: $Author: obo $ $Date: 2002-09-03 13:59:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,9 @@
  *
  *
  ************************************************************************/
+#include <string.h>
 
-#define _STORE_FILELCKB_CXX_ "$Revision: 1.9 $"
+#define _STORE_FILELCKB_CXX_ "$Revision: 1.10 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
