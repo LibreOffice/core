@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dockwin.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ssa $ $Date: 2002-05-08 11:17:00 $
+ *  last change: $Author: pl $ $Date: 2002-12-11 17:44:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,6 +168,8 @@ ImplDockFloatWin::~ImplDockFloatWin()
 
 IMPL_LINK( ImplDockFloatWin, DockTimerHdl, ImplDockFloatWin*, pWin )
 {
+    DBG_ASSERT( mpDockWin->IsFloatingMode(), "docktimer called but not floating" );
+
     maDockTimer.Stop();
     ULONG nModes = GetCurrentModButtons();
     if( ! ( nModes & ( MOUSE_LEFT | MOUSE_MIDDLE | MOUSE_RIGHT ) ) )
@@ -193,8 +195,8 @@ IMPL_LINK( ImplDockFloatWin, DockingHdl, ImplDockFloatWin*, pWindow )
 {
     mnLastUserEvent = 0;
     if( mpDockWin->IsDockable()                             &&
-        Time::GetSystemTicks() - mnLastTicks > 500
-        && GetCurrentModButtons() & KEY_MOD1
+        Time::GetSystemTicks() - mnLastTicks > 500          &&
+        (GetCurrentModButtons() & KEY_MOD1)
         )
     {
         maDockPos = Point( mpDockWin->GetParent()->AbsoluteScreenToOutputPixel( OutputToAbsoluteScreenPixel( GetPosPixel() ) ) );
@@ -206,7 +208,6 @@ IMPL_LINK( ImplDockFloatWin, DockingHdl, ImplDockFloatWin*, pWindow )
         if( ! bFloatMode )
         {
             mpDockWin->GetParent()->ImplGetFrameWindow()->ShowTracking( maDockRect, SHOWTRACK_BIG | SHOWTRACK_WINDOW );
-            maDockTimer.Start();
             DockTimerHdl( this );
         }
         else
