@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdmenu.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:57 $
+ *  last change: $Author: hdu $ $Date: 2000-12-07 16:07:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -366,7 +366,11 @@ FontSizeMenu::~FontSizeMenu()
 
 void FontSizeMenu::Select()
 {
-    mnCurHeight = mpHeightAry[GetCurItemId()-1];
+    const USHORT nCurItemId = GetCurItemId();
+    sal_Int32 nValue = GetItemText( nCurItemId ).ToInt32();
+    FontSizeNames::SetNamePreference( nValue == 0 );
+
+    mnCurHeight = mpHeightAry[ nCurItemId - 1 ];
     maSelectHdl.Call( this );
 }
 
@@ -374,12 +378,16 @@ void FontSizeMenu::Select()
 
 void FontSizeMenu::Highlight()
 {
-    long nTempHeight = mnCurHeight;
-    USHORT nCurItemId = GetCurItemId();
+    const long nTempHeight = mnCurHeight;
+    const USHORT nCurItemId = GetCurItemId();
     if ( !nCurItemId )
         mnCurHeight = 0;
     else
-        mnCurHeight = mpHeightAry[nCurItemId-1];
+    {
+        sal_Int32 nValue = GetItemText( nCurItemId ).ToInt32();
+        FontSizeNames::SetNamePreference( nValue == 0 );
+        mnCurHeight = mpHeightAry[ nCurItemId - 1 ];
+    }
     maHighlightHdl.Call( this );
     mnCurHeight = nTempHeight;
 }
@@ -388,29 +396,58 @@ void FontSizeMenu::Highlight()
 
 void FontSizeMenu::Fill( const FontInfo& rInfo, const FontList* pList )
 {
-    // Menu loeschen
     Clear();
 
-    // Groessen ermitteln
-    const long* pAry = pList->GetSizeAry( rInfo );
-
-    // Array kopieren
+    // setup font size array
     if ( mpHeightAry )
         delete mpHeightAry;
-    USHORT n = 0;
-    while ( pAry[n] )
-        n++;
-    mpHeightAry = new long[n];
-    memcpy( mpHeightAry, pAry, n*sizeof(long) );
 
-    // Groessen einfuegen
-    USHORT nId = 1;
-    while ( *pAry )
+    const long* pAry = pList->GetSizeAry( rInfo );
+    int n = 0;
+    for(; pAry[n]; ++n );
+    mpHeightAry = new long[ 2*n ];  // double size needed for chinese names
+
+    USHORT nId = 0;
+
+    // first insert font size names (for simplified/traditional chinese)
+    FontSizeNames aFontSizeNames;
+    if( !aFontSizeNames.IsEmpty() )
     {
-        InsertItem( nId, maIntn.GetNum( *pAry ),
-                    MIB_RADIOCHECK | MIB_AUTOCHECK );
-        nId++;
-        pAry++;
+        pAry = pList->GetSizeAry( rInfo );
+        if( pAry && (pAry == pList->GetStdSizeAry()) )
+        {
+            // for scalable fonts all font size names
+            for( int i = 0;; ++i )
+            {
+                const char* szSizeName = aFontSizeNames.GetIndexName( i );
+                if( !szSizeName)
+                    break;
+                long nSize = aFontSizeNames.GetIndexSize( i );
+                mpHeightAry[ nId ] = nSize;
+                const String aSizeName( szSizeName, RTL_TEXTENCODING_UTF8 );
+                InsertItem( ++nId, aSizeName, MIB_RADIOCHECK | MIB_AUTOCHECK );
+            }
+        }
+        else
+        {
+            // for fixed size fonts only selectable font size names
+            for( ; *pAry; ++pAry )
+            {
+                if( const char* szSizeName = aFontSizeNames.Size2UtfName( *pAry ) )
+                {
+                    mpHeightAry[ nId ] = *pAry;
+                    const String aSizeName( szSizeName, RTL_TEXTENCODING_UTF8 );
+                    InsertItem( ++nId, aSizeName, MIB_RADIOCHECK | MIB_AUTOCHECK );
+                }
+            }
+        }
+    }
+
+    // then insert numerical font size values
+    for( pAry = pList->GetSizeAry( rInfo ); *pAry; ++pAry )
+    {
+        mpHeightAry[ nId ] = *pAry;
+        InsertItem( ++nId, maIntn.GetNum( *pAry ), MIB_RADIOCHECK | MIB_AUTOCHECK );
     }
 
     SetCurHeight( mnCurHeight );
@@ -422,7 +459,7 @@ void FontSizeMenu::SetCurHeight( long nHeight )
 {
     mnCurHeight = nHeight;
 
-    // Menueintrag checken
+    // check menue item
     XubString   aHeight = maIntn.GetNum( nHeight );
     USHORT      nChecked = 0;
     USHORT      nItemCount = GetItemCount();
@@ -430,15 +467,14 @@ void FontSizeMenu::SetCurHeight( long nHeight )
     {
         USHORT nItemId = GetItemId( i );
 
-        if ( IsItemChecked( nItemId ) )
-            nChecked = nItemId;
-
-        XubString aText = GetItemText( nItemId );
-        if ( aText == aHeight )
+        if( mpHeightAry[i] == nHeight )
         {
             CheckItem( nItemId, TRUE );
             return;
         }
+
+        if ( IsItemChecked( nItemId ) )
+            nChecked = nItemId;
     }
 
     if ( nChecked )

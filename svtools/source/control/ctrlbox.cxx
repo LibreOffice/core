@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrlbox.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2000-10-22 17:54:23 $
+ *  last change: $Author: hdu $ $Date: 2000-12-07 16:07:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1101,19 +1101,18 @@ void FontSizeBox::Modify()
 
 void FontSizeBox::Fill( const FontInfo& rInfo, const FontList* pList )
 {
-    // Merken fuer Relative-Mode
+    // remember for relative mode
     aFontInfo = rInfo;
     pFontList = pList;
 
-    // Im Relative-Mode, muessen keine Fontgroessen gesetzt werden
+    // no font sizes need to be set for relative mode
     if ( bRelative )
         return;
 
-    // Fontgroessen abfragen
+    // query font sizes
     const long* pAry = pList->GetSizeAry( rInfo );
 
-    // Wenn es das Array mit den Standardgroessen ist, muessen wir im
-    // Normalfall die ListBox nicht neu fuellen
+    // for standard sizes we don't need to bother
     if ( (pAry == pList->GetStdSizeAry()) && GetEntryCount() )
     {
         if ( bStdSize )
@@ -1128,10 +1127,45 @@ void FontSizeBox::Fill( const FontInfo& rInfo, const FontList* pList )
 
     Clear();
 
-    while ( *pAry )
+    int nId = 0;
+    // first insert font size names (for simplified/traditional chinese)
+    FontSizeNames aFontSizeNames;
+    if( !aFontSizeNames.IsEmpty() )
     {
-        InsertValue( *pAry );
-        pAry++;
+        if( pAry == pList->GetStdSizeAry() )
+        {
+            // for scalable fonts all font size names
+            for( int i = 0;; ++i )
+            {
+                const char* szSizeName = aFontSizeNames.GetIndexName( i );
+                if( !szSizeName)
+                    break;
+                long nSize = aFontSizeNames.GetIndexSize( i );
+                const String aSizeName( szSizeName, RTL_TEXTENCODING_UTF8 );
+                ComboBox::InsertEntry( aSizeName, ++nId );
+                ComboBox::SetEntryData( nId, (void*)(-nSize) );         // mark as special
+            }
+        }
+        else
+        {
+            // for fixed size fonts only selectable font size names
+            for( pAry = pList->GetSizeAry( rInfo ); *pAry; ++pAry )
+            {
+                if( const char* szSizeName = aFontSizeNames.Size2UtfName( *pAry ) )
+                {
+                    const String aSizeName( szSizeName, RTL_TEXTENCODING_UTF8 );
+                    ComboBox::InsertEntry( aSizeName, ++nId );
+                    ComboBox::SetEntryData( nId, (void*)(-(*pAry)) );   // mark as special
+                }
+            }
+        }
+    }
+
+    // then insert numerical font size values
+    for( pAry = pList->GetSizeAry( rInfo ); *pAry; ++pAry )
+    {
+        InsertValue( *pAry, FUNIT_NONE, ++nId );
+        ComboBox::SetEntryData( nId, (void*)(+(*pAry)) );   // mark as normal
     }
 
     SetText( aStr );
@@ -1184,7 +1218,7 @@ void FontSizeBox::SetRelative( BOOL bNewRelative )
 
                 Clear();
                 short i = nPtRelMin, n = 0;
-                // JP 30.06.98: mehr als 100 Werte machen keinen Sinn
+                // JP 30.06.98: more than 100 values are not useful
                 while ( i <= nPtRelMax && n++ < 100 )
                 {
                     InsertValue( i );
@@ -1233,3 +1267,49 @@ XubString FontSizeBox::CreateFieldText( long nValue ) const
         sRet.Insert( '+', 0 );
     return sRet;
 }
+
+// -----------------------------------------------------------------------
+
+long FontSizeBox::GetValue( USHORT nPos, FieldUnit eOutUnit ) const
+{
+    long nComboVal = (long)ComboBox::GetEntryData( nPos );
+    if( nComboVal < 0 )     // marked as special?
+    {
+        FontSizeNames::SetNamePreference( true );
+        return -nComboVal;
+    }
+
+    // do normal font size processing
+    long nRetValue = MetricFormatter::GetValue( eOutUnit );
+    FontSizeNames::SetNamePreference( false );
+    return nRetValue;
+}
+
+// -----------------------------------------------------------------------
+
+long FontSizeBox::GetValue( FieldUnit eOutUnit ) const
+{
+    long nNewValue = 0;
+
+    if( GetField() )
+    {
+        FontSizeNames aFontSizeNames;
+        nNewValue = aFontSizeNames.Name2Size( GetField()->GetText() );
+    }
+
+    FontSizeNames::SetNamePreference( (nNewValue != 0) );
+
+    if( !nNewValue)
+        nNewValue = MetricBox::GetValue( eOutUnit );
+
+    return nNewValue;
+}
+
+// -----------------------------------------------------------------------
+
+void FontSizeBox::SetValue( long nNewValue, FieldUnit eInUnit )
+{
+    MetricFormatter::SetValue( nNewValue, eInUnit );
+}
+
+// -----------------------------------------------------------------------

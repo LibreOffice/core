@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrlbox.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:50 $
+ *  last change: $Author: hdu $ $Date: 2000-12-07 16:06:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,8 +242,7 @@ public:
     BOOL            IsEntrySelected( const Color& rColor ) const;
 
 private:
-    // Wegen einigen Compilern hier nocheinmal private deklariert, da
-    // ansonsten die Compiler diese als Default-Funktionen implementieren
+    // declared as private because some compilers would generate the default functions
                     ColorListBox( const ColorListBox& );
     ColorListBox&   operator =( const ColorListBox& );
     USHORT          GetEntryPos( const void* pData ) const;
@@ -339,8 +338,7 @@ public:
     Color           GetColor() const { return aColor; }
 
 private:
-    // Wegen einigen Compilern hier nocheinmal private deklariert, da
-    // ansonsten die Compiler diese als Default-Funktionen implementieren
+    // declared as private because some compilers would generate the default functions
                     LineListBox( const LineListBox& );
     LineListBox&    operator =( const LineListBox& );
     USHORT          GetEntryPos( const void* pData ) const;
@@ -429,8 +427,7 @@ public:
     BOOL            IsSymbolsEnabled() const { return mbSymbols; }
 
 private:
-    // Wegen einigen Compilern hier nocheinmal private deklariert, da
-    // ansonsten die Compiler diese als Default-Funktionen implementieren
+    // declared as private because some compilers would generate the default functions
                     FontNameBox( const FontNameBox& );
     FontNameBox&    operator =( const FontNameBox& );
 };
@@ -456,8 +453,7 @@ public:
     void            Fill( const XubString& rName, const FontList* pList );
 
 private:
-    // Wegen einigen Compilern hier nocheinmal private deklariert, da
-    // ansonsten die Compiler diese als Default-Funktionen implementieren
+    // declared as private because some compilers would generate the default functions
                     FontStyleBox( const FontStyleBox& );
     FontStyleBox&   operator =( const FontStyleBox& );
 };
@@ -514,9 +510,12 @@ public:
     void            SetPtRelative( BOOL bPtRel = TRUE )
                         { bPtRelative = bPtRel; SetRelative( TRUE ); }
 
+    long            GetValue( FieldUnit eOutUnit = FUNIT_NONE ) const;
+    long            GetValue( USHORT nPos, FieldUnit eOutUnit ) const;
+    void            SetValue( long nNewValue, FieldUnit eInUnit = FUNIT_NONE );
+
 private:
-    // Wegen einigen Compilern hier nocheinmal private deklariert, da
-    // ansonsten die Compiler diese als Default-Funktionen implementieren
+    // declared as private because some compilers would generate the default functions
                     FontSizeBox( const FontSizeBox& );
     FontSizeBox&    operator =( const FontSizeBox& );
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrltool.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:50 $
+ *  last change: $Author: hdu $ $Date: 2000-12-07 16:06:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,6 +252,30 @@ public:
 private:
                             FontList( const FontList& );
     FontList&               operator =( const FontList& );
+};
+
+
+class FontSizeNames
+{
+public:
+                            FontSizeNames();
+
+    bool                    IsEmpty() const { return (mnElem <= 0); }
+    long                    Name2Size( const String& ) const;
+    const char*             Size2UtfName( long ) const;
+
+    const char*             GetIndexName( long ) const;
+    long                    GetIndexSize( long ) const;
+
+private:
+    struct FsizeNameItem*   mpArray;
+    long                    mnElem;
+
+public:
+    static void             SetNamePreference( bool b ) { bPreferName = b; }
+    static bool             GetNamePreference() { return bPreferName; }
+
+    static bool             bPreferName;
 };
 
 #endif  // _CTRLTOOL_HXX

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrltool.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:57 $
+ *  last change: $Author: hdu $ $Date: 2000-12-07 16:07:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -862,4 +862,136 @@ const long* FontList::GetStdSizeAry()
     return aStdSizeAry;
 }
 
+// =======================================================================
 
+// ---------------------------------
+// - FontSizeNames & FsizeNameItem -
+// ---------------------------------
+
+struct FsizeNameItem
+{
+    int     mnSize;
+    char*   mszUtf8Name;
+};
+
+//------------------------------------------------------------------------
+
+static FsizeNameItem aSimplifiedChinese[] =
+{
+    {  50, "\xe5\x85\xab\xe5\x8f\xb7" },
+    {  55, "\xe4\xb8\x83\xe5\x8f\xb7" },
+    {  65, "\xe5\xb0\x8f\xe5\x85\xad" },
+    {  75, "\xe5\x85\xad\xe5\x8f\xb7" },
+    {  90, "\xe5\xb0\x8f\xe4\xba\x94" },
+    { 105, "\xe4\xba\x94\xe5\x8f\xb7" },
+    { 120, "\xe5\xb0\x8f\xe5\x9b\x9b" },
+    { 140, "\xe5\x9b\x9b\xe5\x8f\xb7" },
+    { 150, "\xe5\xb0\x8f\xe4\xb8\x89" },
+    { 160, "\xe4\xb8\x89\xe5\x8f\xb7" },
+    { 180, "\xe5\xb0\x8f\xe4\xba\x8c" },
+    { 220, "\xe4\xba\x8c\xe5\x8f\xb7" },
+    { 240, "\xe5\xb0\x8f\xe4\xb8\x80" },
+    { 260, "\xe4\xb8\x80\xe5\x8f\xb7" },
+    { 360, "\xe5\xb0\x8f\xe5\x88\x9d" },
+    { 420, "\xef\xbb\xbf\xe5\x88\x9d\xe5\x8f\xb7" }
+};
+
+// -----------------------------------------------------------------------
+
+static FsizeNameItem aTraditionalChinese[] =
+{
+    {  50, "\xe5\x85\xab\xe8\x99\x9f" },
+    {  55, "\xe4\xb8\x83\xe8\x99\x9f" },
+    {  65, "\xe5\xb0\x8f\xe5\x85\xad" },
+    {  75, "\xe5\x85\xad\xe8\x99\x9f" },
+    {  90, "\xe5\xb0\x8f\xe4\xba\x94" },
+    { 105, "\xe4\xba\x94\xe8\x99\x9f" },
+    { 120, "\xe5\xb0\x8f\xe5\x9b\x9b" },
+    { 140, "\xe5\x9b\x9b\xe8\x99\x9f" },
+    { 150, "\xe5\xb0\x8f\xe4\xb8\x89" },
+    { 160, "\xe4\xb8\x89\xe8\x99\x9f" },
+    { 180, "\xe5\xb0\x8f\xe4\xba\x8c" },
+    { 220, "\xe4\xba\x8c\xe8\x99\x9f" },
+    { 240, "\xe5\xb0\x8f\xe4\xb8\x80" },
+    { 260, "\xe4\xb8\x80\xe8\x99\x9f" },
+    { 360, "\xe5\xb0\x8f\xe5\x88\x9d" },
+    { 420, "\xef\xbb\xbf\xe5\x88\x9d\xe8\x99\x9f" }
+};
+
+//------------------------------------------------------------------------
+
+bool FontSizeNames::bPreferName = false;
+
+FontSizeNames::FontSizeNames()
+{
+    switch( Application::GetSettings().GetInternational().GetLanguage() )
+    {
+    case LANGUAGE_CHINESE:
+    case LANGUAGE_CHINESE_SIMPLIFIED:
+        mpArray = aSimplifiedChinese;
+        mnElem = sizeof(aSimplifiedChinese) / sizeof(aSimplifiedChinese[0]);
+        break;
+
+    case LANGUAGE_CHINESE_HONGKONG:
+    case LANGUAGE_CHINESE_SINGAPORE:
+    case LANGUAGE_CHINESE_MACAU:
+    case LANGUAGE_CHINESE_TRADITIONAL:
+        mpArray = aTraditionalChinese;
+        mnElem = sizeof(aTraditionalChinese) / sizeof(aTraditionalChinese[0]);
+        break;
+
+    default:
+        mpArray = NULL;
+        mnElem = 0;
+        break;
+    };
+}
+
+//------------------------------------------------------------------------
+
+long FontSizeNames::Name2Size( const String& rName ) const
+{
+    // linear search is sufficient for this rare case
+    for( long i = mnElem; --i >= 0; )
+        if( rName == String( mpArray[i].mszUtf8Name, RTL_TEXTENCODING_UTF8 ) )
+            return mpArray[i].mnSize;
+    return 0;
+}
+
+//------------------------------------------------------------------------
+
+const char* FontSizeNames::Size2UtfName( long nValue ) const
+{
+    // binary search
+    for( long lower = 0, upper = mnElem - 1; lower <= upper; )
+    {
+        long mid = (upper + lower) >> 1;
+        if( nValue == mpArray[mid].mnSize )
+            return mpArray[mid].mszUtf8Name;
+        else if( nValue < mpArray[mid].mnSize )
+            upper = mid - 1;
+        else if( nValue > mpArray[mid].mnSize )
+            lower = mid + 1;
+    }
+    return NULL;
+}
+
+//------------------------------------------------------------------------
+
+const char*  FontSizeNames::GetIndexName( long nIndex ) const
+{
+    if( nIndex >= mnElem )
+        return NULL;
+    return mpArray[ nIndex ].mszUtf8Name;
+}
+
+//------------------------------------------------------------------------
+
+long FontSizeNames::GetIndexSize( long nIndex ) const
+{
+    if( nIndex >= mnElem )
+        return 0;
+    return mpArray[ nIndex ].mnSize;
+}
+
+// =======================================================================
