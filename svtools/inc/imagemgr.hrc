@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pb $ $Date: 2001-05-14 10:09:03 $
+ *  last change: $Author: pb $ $Date: 2001-08-29 11:00:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,6 +172,10 @@
 #define STR_DESCRIPTION_FACTORY_WRITERWEB           (RID_DESCRIPTION_START + 32)
 #define STR_DESCRIPTION_FACTORY_GLOBALDOC           (RID_DESCRIPTION_START + 33)
 #define STR_DESCRIPTION_FACTORY_MATH                (RID_DESCRIPTION_START + 34)
+#define STR_DESCRIPTION_CALC_TEMPLATE               (RID_DESCRIPTION_START + 35)
+#define STR_DESCRIPTION_DRAW_TEMPLATE               (RID_DESCRIPTION_START + 36)
+#define STR_DESCRIPTION_IMPRESS_TEMPLATE            (RID_DESCRIPTION_START + 37)
+#define STR_DESCRIPTION_WRITER_TEMPLATE             (RID_DESCRIPTION_START + 38)
 
 #endif
 
