@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: gt $ $Date: 2001-09-04 11:11:11 $
+ *  last change: $Author: gt $ $Date: 2001-10-23 11:48:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1782,6 +1782,9 @@ IMPL_LINK( SvxSearchDialog, FocusHdl_Impl, Control *, pCtrl )
         aAttributeBtn.Disable();
     }
     bSet = TRUE;
+
+    aSearchLB.SetSelection( Selection( SELECTION_MIN, SELECTION_MAX ) );
+
     ModifyHdl_Impl( (ComboBox*)pCtrl );
     aLayoutBtn.SetText( bFormat && nTxtLen ? aLayoutStr : aStylesStr );
     return 0;
