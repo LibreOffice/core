@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.110 $
+ *  $Revision: 1.111 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-19 15:29:38 $
+ *  last change: $Author: hr $ $Date: 2004-12-10 17:58:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -444,30 +444,6 @@ HelpText [ en-US ] = "The objectbar contains, depending on your current "
     Size = (28,27);
 };
  */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-String RID_BUILDVERSION
-{
-    TEXT = UPDVER ;
-};
-
 
 String STR_FMT_STD
 {
