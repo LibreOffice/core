@@ -41,7 +41,18 @@ XInputStream_impl::XInputStream_impl( shell* pMyShell,const rtl::OUString& aUncP
 
 XInputStream_impl::~XInputStream_impl()
 {
-    closeInput();
+    try
+    {
+        closeInput();
+    }
+    catch (io::IOException const &)
+    {
+        OSL_ENSURE(false, "unexpected situation");
+    }
+    catch (uno::RuntimeException const &)
+    {
+        OSL_ENSURE(false, "unexpected situation");
+    }
 }
 
 

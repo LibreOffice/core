@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bc.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: abi $ $Date: 2001-11-05 07:43:30 $
+ *  last change: $Author: abi $ $Date: 2001-11-19 17:09:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,9 @@
 #endif
 #ifndef _FILERROR_HXX_
 #include "filerror.hxx"
+#endif
+#ifndef _FILINSREQ_HXX_
+#include "filinsreq.hxx"
 #endif
 
 
@@ -1242,21 +1245,43 @@ void SAL_CALL BaseContent::insert( sal_Int32 nMyCommandIdentifier,
     }
 
 
-    sal_Bool success;
+    sal_Bool success = false;
     if( bDocument )
         success = m_pMyShell->mkfil( nMyCommandIdentifier,
                                      m_aUncPath,
                                      aInsertArgument.ReplaceExisting,
                                      aInsertArgument.Data );
     else
-        success = m_pMyShell->mkdir( nMyCommandIdentifier,
-                                     m_aUncPath,
-                                     aInsertArgument.ReplaceExisting );
+    {
+        while( ! success )
+        {
+            success = m_pMyShell->mkdir( nMyCommandIdentifier,
+                                         m_aUncPath,
+                                         aInsertArgument.ReplaceExisting );
+            if( success )
+                break;
 
-//      if( ! success )
-//      {
-//          return;
-//      }
+            XInteractionRequestImpl *aRequestImpl = new XInteractionRequestImpl;
+            uno::Reference< task::XInteractionRequest > aReq( aRequestImpl );
+
+            m_pMyShell->handleTask( nMyCommandIdentifier,aReq );
+            if(  aRequestImpl->aborted() ||
+                 !aRequestImpl->newName().getLength() )
+                // means aborting
+                break;
+
+            // determine new uncpath
+            m_pMyShell->clearError( nMyCommandIdentifier );
+            m_aUncPath = getParentName( m_aUncPath );
+            if( m_aUncPath.lastIndexOf( sal_Unicode('/') ) != m_aUncPath.getLength() - 1 )
+                m_aUncPath += rtl::OUString::createFromAscii("/");
+
+            m_aUncPath += rtl::Uri::encode( aRequestImpl->newName(),
+                                            rtl_UriCharClassPchar,
+                                            rtl_UriEncodeIgnoreEscapes,
+                                            RTL_TEXTENCODING_UTF8 );
+        }
+    }
 
     FileContentIdentifier* p = new FileContentIdentifier( m_pMyShell,m_aUncPath );
     m_xContentIdentifier = Reference< XContentIdentifier >( p );
