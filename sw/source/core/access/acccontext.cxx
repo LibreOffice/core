@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2003-06-12 08:06:41 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 10:55:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,8 +218,9 @@ Window *SwAccessibleContext::GetWindow()
 SwCrsrShell* SwAccessibleContext::GetCrsrShell()
 {
     SwCrsrShell* pCrsrShell;
-    ViewShell* pViewShell = GetMap()->GetShell();
-    if( pViewShell->ISA( SwCrsrShell ) )
+    ViewShell* pViewShell = GetMap() ? GetMap()->GetShell() : 0;
+    ASSERT( pViewShell, "no view shell" );
+    if( pViewShell && pViewShell->ISA( SwCrsrShell ) )
         pCrsrShell = static_cast<SwCrsrShell*>( pViewShell );
     else
         pCrsrShell = NULL;
@@ -231,8 +232,9 @@ const SwCrsrShell* SwAccessibleContext::GetCrsrShell() const
 {
     // just like non-const GetCrsrShell
     const SwCrsrShell* pCrsrShell;
-    const ViewShell* pViewShell = GetMap()->GetShell();
-    if( pViewShell->ISA( SwCrsrShell ) )
+    const ViewShell* pViewShell = GetMap() ? GetMap()->GetShell() : 0;
+    ASSERT( pViewShell, "no view shell" );
+    if( pViewShell && pViewShell->ISA( SwCrsrShell ) )
         pCrsrShell = static_cast<const SwCrsrShell*>( pViewShell );
     else
         pCrsrShell = NULL;
