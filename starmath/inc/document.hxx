@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 13:08:12 $
+ *  last change: $Author: rt $ $Date: 2005-04-04 08:02:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,7 @@ public:
 class SmDocShell : public SfxObjectShell, public SfxListener
 {
     friend class SmPrinterAccess;
+    friend class SmModel;
 
     String              aText;
     SmFormat            aFormat;
@@ -175,10 +176,6 @@ class SmDocShell : public SfxObjectShell, public SfxListener
                         const SfxHint& rHint, const TypeId& rHintType);
 
     void        RestartFocusTimer ();
-
-    BOOL        Try3x( SvStorage *pStor, StreamMode eMode);
-    BOOL        Try2x( SvStorage *pStor, StreamMode eMode);
-    BOOL        WriteAsMathType3( SfxMedium& );
 
     virtual void        Draw(OutputDevice *pDevice,
                              const JobSetup & rSetup,
@@ -206,17 +203,12 @@ class SmDocShell : public SfxObjectShell, public SfxListener
     Printer             *GetPrt();
     OutputDevice*       GetRefDev();
 
-    // used to convert the formula text between different office versions
-    void                ConvertText( String &rText, SmConvert eConv );
-
     BOOL                IsFormulaArranged() const { return bIsFormulaArranged; }
     void                SetFormulaArranged(BOOL bVal) { bIsFormulaArranged = bVal; }
     void                ArrangeFormula();
 
     virtual BOOL        ConvertFrom(SfxMedium &rMedium);
             BOOL        InsertFrom(SfxMedium &rMedium);
-
-    BOOL                ImportSM20File(SvStream *pStream);
 
     void                UpdateText();
 
