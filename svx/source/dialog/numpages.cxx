@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-02-09 07:18:51 $
+ *  last change: $Author: os $ $Date: 2001-02-23 12:29:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,9 @@
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
+#ifndef _COM_SUN_STAR_TEXT_XNUMBERINGTYPEINFO_HPP_
+#include <com/sun/star/text/XNumberingTypeInfo.hpp>
+#endif
 
 #include <string>
 #include <algorithm>
@@ -207,6 +210,7 @@ Reference<XDefaultNumberingProvider> lcl_GetNumberingProvider()
         ::rtl::OUString::createFromAscii( "com.sun.star.text.DefaultNumberingProvider" ) );
     Reference<XDefaultNumberingProvider> xRet(xI, UNO_QUERY);
     DBG_ASSERT(xRet.is(), "service missing: \"com.sun.star.text.DefaultNumberingProvider\"")
+
     return xRet;
 }
 /* -----------------------------31.01.01 11:40--------------------------------
@@ -497,7 +501,7 @@ IMPL_LINK(SvxSingleNumPickTabPage, NumSelectHdl_Impl, ValueSet*, EMPTYARG)
             if(nActNumLvl & nMask)
             {
                 SvxNumberFormat aFmt(pActNum->GetLevel(i));
-                aFmt.SetNumType(eNewType);
+                aFmt.SetNumberingType(eNewType);
                 String aEmptyStr;
                 if(cPrefix == ' ')
                     aFmt.SetPrefix( aEmptyStr );
@@ -507,7 +511,7 @@ IMPL_LINK(SvxSingleNumPickTabPage, NumSelectHdl_Impl, ValueSet*, EMPTYARG)
                     aFmt.SetSuffix( aEmptyStr );
                 else
                     aFmt.SetSuffix( String( cSuffix ) );
-                aFmt.SetCharFmt(sNumCharFmtName);
+                aFmt.SetCharFmtName(sNumCharFmtName);
                 pActNum->SetLevel(i, aFmt);
             }
             nMask <<= 1 ;
@@ -685,10 +689,10 @@ IMPL_LINK(SvxBulletPickTabPage, NumSelectHdl_Impl, ValueSet*, EMPTYARG)
             if(nActNumLvl & nMask)
             {
                 SvxNumberFormat aFmt(pActNum->GetLevel(i));
-                aFmt.SetNumType( SVX_NUM_CHAR_SPECIAL );
+                aFmt.SetNumberingType( SVX_NUM_CHAR_SPECIAL );
                 aFmt.SetBulletFont(&rActBulletFont);
                 aFmt.SetBulletChar(cChar );
-                aFmt.SetCharFmt(sBulletCharFmtName);
+                aFmt.SetCharFmtName(sBulletCharFmtName);
                 // #62069#
                 aFmt.SetBulletRelSize(75);
                 pActNum->SetLevel(i, aFmt);
@@ -906,18 +910,18 @@ IMPL_LINK(SvxNumPickTabPage, NumSelectHdl_Impl, ValueSet*, EMPTYARG)
             if(!pLevelSettings)
                 break;
             SvxNumberFormat aFmt(pActNum->GetLevel(i));
-            aFmt.SetNumType( (SvxExtNumType)pLevelSettings->nNumberType );
+            aFmt.SetNumberingType( (SvxExtNumType)pLevelSettings->nNumberType );
             USHORT nUpperLevelOrChar = (USHORT)pLevelSettings->nParentNumbering;
-            if(aFmt.GetNumType() == SVX_NUM_CHAR_SPECIAL)
+            if(aFmt.GetNumberingType() == SVX_NUM_CHAR_SPECIAL)
             {
                 aFmt.SetBulletFont(&rActBulletFont);
                 aFmt.SetBulletChar(pLevelSettings->sBulletChar.getLength() ? pLevelSettings->sBulletChar.getStr()[0] : 0);
-                aFmt.SetCharFmt(sBulletCharFmtName);
+                aFmt.SetCharFmtName(sBulletCharFmtName);
             }
             else
             {
                 aFmt.SetIncludeUpperLevels(0 != nUpperLevelOrChar ? pActNum->GetLevelCount() : 0);
-                aFmt.SetCharFmt(sNumCharFmtName);
+                aFmt.SetCharFmtName(sNumCharFmtName);
             }
             aFmt.SetPrefix(pLevelSettings->sPrefix);
             aFmt.SetSuffix(pLevelSettings->sSuffix);
@@ -1411,18 +1415,18 @@ IMPL_LINK(SvxBitmapPickTabPage, NumSelectHdl_Impl, ValueSet*, EMPTYARG)
         }
         USHORT nMask = 1;
         String aEmptyStr;
-        USHORT nSetNumType = SVX_NUM_BITMAP;
+        USHORT nSetNumberingType = SVX_NUM_BITMAP;
         if(aLinkedCB.IsChecked())
-            nSetNumType |= LINK_TOKEN;
+            nSetNumberingType |= LINK_TOKEN;
         for(USHORT i = 0; i < pActNum->GetLevelCount(); i++)
         {
             if(nActNumLvl & nMask)
             {
                 SvxNumberFormat aFmt(pActNum->GetLevel(i));
-                aFmt.SetNumType((SvxExtNumType)nSetNumType);
+                aFmt.SetNumberingType((SvxExtNumType)nSetNumberingType);
                 aFmt.SetPrefix( aEmptyStr );
                 aFmt.SetSuffix( aEmptyStr );
-                aFmt.SetCharFmt( sNumCharFmtName );
+                aFmt.SetCharFmtName( sNumCharFmtName );
 
                 SvxBmpItemInfo* pInfo = pExamplesVS->FindInfo(nIdx + 1);
                 const Graphic* pGraphic = pInfo->pBrushItem->GetGraphic(SfxObjectShell::Current());
@@ -1681,6 +1685,38 @@ SvxNumOptionsTabPage::SvxNumOptionsTabPage(Window* pParent,
     eCoreUnit = rSet.GetPool()->GetMetric(rSet.GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE));
 
     FreeResource();
+
+    //get advanced numbering types from the component
+    Reference<XDefaultNumberingProvider> xDefNum = lcl_GetNumberingProvider();
+    Reference<XNumberingTypeInfo> xInfo(xDefNum, UNO_QUERY);
+    if(xInfo.is())
+    {
+        Sequence<sal_Int16> aTypes = xInfo->getSupportedNumberingTypes(  );
+        const sal_Int16* pTypes = aTypes.getConstArray();
+        for(sal_Int32 nType = 0; nType < aTypes.getLength(); nType++)
+        {
+            sal_Int16 nCurrent = pTypes[nType];
+            if(nCurrent > NumberingType::CHARS_LOWER_LETTER_N)
+            {
+                sal_Bool bInsert = sal_True;
+                for(USHORT nEntry = 0; nEntry < aFmtLB.GetEntryCount(); nEntry++)
+                {
+                    USHORT nEntryData = (USHORT)(ULONG)aFmtLB.GetEntryData(nEntry);
+                    if(nEntryData == (USHORT) nCurrent)
+                    {
+                        bInsert = sal_False;
+                        break;
+                    }
+                }
+                if(bInsert)
+                {
+                    OUString aIdent = xInfo->getNumberingIdentifier( nCurrent );
+                    USHORT nPos = aFmtLB.InsertEntry(aIdent);
+                    aFmtLB.SetEntryData(nPos,(void*)(ULONG)nCurrent);
+                }
+            }
+        }
+    }
 }
 
 /*-----------------01.12.97 16:30-------------------
@@ -2002,25 +2038,25 @@ void SvxNumOptionsTabPage::InitControls()
         if(nActNumLvl & nMask)
         {
             aNumFmtArr[i] = &pActNum->GetLevel(i);
-            bShowBullet &= aNumFmtArr[i]->GetNumType() == SVX_NUM_CHAR_SPECIAL;
-            bShowBitmap &= (aNumFmtArr[i]->GetNumType()&(~LINK_TOKEN)) == SVX_NUM_BITMAP;
+            bShowBullet &= aNumFmtArr[i]->GetNumberingType() == SVX_NUM_CHAR_SPECIAL;
+            bShowBitmap &= (aNumFmtArr[i]->GetNumberingType()&(~LINK_TOKEN)) == SVX_NUM_BITMAP;
             if(USHRT_MAX == nLvl)
             {
                 nLvl = i;
-                sFirstCharFmt = aNumFmtArr[i]->GetCharFmt();
+                sFirstCharFmt = aNumFmtArr[i]->GetCharFmtName();
                 eFirstOrient = aNumFmtArr[i]->GetVertOrient();
                 if(bShowBitmap)
                     aFirstSize = aNumFmtArr[i]->GetGraphicSize();
             }
             if( i > nLvl)
             {
-                bSameType &=   aNumFmtArr[i]->GetNumType() == aNumFmtArr[nLvl]->GetNumType();
+                bSameType &=   aNumFmtArr[i]->GetNumberingType() == aNumFmtArr[nLvl]->GetNumberingType();
                 bSameStart = aNumFmtArr[i]->GetStart() == aNumFmtArr[nLvl]->GetStart();
 
                 bSamePrefix = aNumFmtArr[i]->GetPrefix() == aNumFmtArr[nLvl]->GetPrefix();
                 bSameSuffix = aNumFmtArr[i]->GetSuffix() == aNumFmtArr[nLvl]->GetSuffix();
                 bAllLevel &= aNumFmtArr[i]->GetIncludeUpperLevels() == aNumFmtArr[nLvl]->GetIncludeUpperLevels();
-                bSameCharFmt    &=  sFirstCharFmt == aNumFmtArr[i]->GetCharFmt();
+                bSameCharFmt    &=  sFirstCharFmt == aNumFmtArr[i]->GetCharFmtName();
                 bSameVOrient    &= eFirstOrient == aNumFmtArr[i]->GetVertOrient();
                 if(bShowBitmap && bSameSize)
                     bSameSize &= aNumFmtArr[i]->GetGraphicSize() == aFirstSize;
@@ -2059,7 +2095,7 @@ void SvxNumOptionsTabPage::InitControls()
 
     if(bSameType)
     {
-        USHORT nLBData = (USHORT) aNumFmtArr[nLvl]->GetNumType();
+        USHORT nLBData = (USHORT) aNumFmtArr[nLvl]->GetNumberingType();
         aFmtLB.SelectEntryPos(aFmtLB.GetEntryPos( (void*) nLBData ));
     }
     else
@@ -2327,7 +2363,7 @@ IMPL_LINK( SvxNumOptionsTabPage, AllLevelHdl_Impl, NumericField*, pBox )
 IMPL_LINK( SvxNumOptionsTabPage, NumberTypeSelectHdl_Impl, ListBox *, pBox )
 {
     String sSelectStyle;
-    SvxExtNumType eOldType;
+    sal_Int16 eOldType;
     BOOL bShowOrient = FALSE;
     BOOL bBmp = FALSE;
     String aEmptyStr;
@@ -2337,11 +2373,11 @@ IMPL_LINK( SvxNumOptionsTabPage, NumberTypeSelectHdl_Impl, ListBox *, pBox )
         if(nActNumLvl & nMask)
         {
             SvxNumberFormat aNumFmt(pActNum->GetLevel(i));
-            eOldType = aNumFmt.GetNumType();
+            eOldType = aNumFmt.GetNumberingType();
             // PAGEDESC gibt es nicht
             USHORT nNumType = (USHORT)(ULONG)pBox->GetEntryData(pBox->GetSelectEntryPos());
-            aNumFmt.SetNumType((SvxExtNumType)nNumType);
-            if(SVX_NUM_BITMAP == (aNumFmt.GetNumType()&(~LINK_TOKEN)))
+            aNumFmt.SetNumberingType((sal_Int16)nNumType);
+            if(SVX_NUM_BITMAP == (aNumFmt.GetNumberingType()&(~LINK_TOKEN)))
             {
                 bBmp |= 0 != aNumFmt.GetBrush();
                 aNumFmt.SetIncludeUpperLevels( FALSE );
@@ -2353,7 +2389,7 @@ IMPL_LINK( SvxNumOptionsTabPage, NumberTypeSelectHdl_Impl, ListBox *, pBox )
                 SwitchNumberType(SHOW_BITMAP, bBmp );
                 bShowOrient = TRUE;
             }
-            else if( SVX_NUM_CHAR_SPECIAL == aNumFmt.GetNumType() )
+            else if( SVX_NUM_CHAR_SPECIAL == aNumFmt.GetNumberingType() )
             {
                 aNumFmt.SetIncludeUpperLevels( FALSE );
                 aNumFmt.SetSuffix( aEmptyStr );
@@ -2425,7 +2461,7 @@ IMPL_LINK( SvxNumOptionsTabPage, OrientHdl_Impl, ListBox *, pBox )
         if(nActNumLvl & nMask)
         {
             SvxNumberFormat aNumFmt(pActNum->GetLevel(i));
-            if(SVX_NUM_BITMAP == (aNumFmt.GetNumType()&(~LINK_TOKEN)))
+            if(SVX_NUM_BITMAP == (aNumFmt.GetNumberingType()&(~LINK_TOKEN)))
             {
                 const SvxBrushItem* pBrushItem =  aNumFmt.GetBrush();
                 const Size& rSize = aNumFmt.GetGraphicSize();
@@ -2452,7 +2488,7 @@ IMPL_LINK( SvxNumOptionsTabPage, SameLevelHdl_Impl, CheckBox *, pBox )
     for(USHORT i = 0; i < pActNum->GetLevelCount(); i++)
     {
         SvxNumberFormat aNumFmt(pActNum->GetLevel(i));
-        if(aNumFmt.GetNumType() < SVX_NUM_NUMBER_NONE)
+        if(aNumFmt.GetNumberingType() < SVX_NUM_NUMBER_NONE)
         {
             bRepaint = TRUE;
             break;
@@ -2543,7 +2579,7 @@ IMPL_LINK( SvxNumOptionsTabPage, GraphicHdl_Impl, MenuButton *, pButton )
             if(nActNumLvl & nMask)
             {
                 SvxNumberFormat aNumFmt(pActNum->GetLevel(i));
-                aNumFmt.SetCharFmt(sNumCharFmtName);
+                aNumFmt.SetCharFmtName(sNumCharFmtName);
                 aNumFmt.SetGraphic(aGrfName);
 
                 // Size schon mal fuer spaeteren Groessenabgleich setzen
@@ -2721,7 +2757,7 @@ IMPL_LINK( SvxNumOptionsTabPage, SizeHdl_Impl, MetricField *, pField)
         if(nActNumLvl & nMask)
         {
             SvxNumberFormat aNumFmt(pActNum->GetLevel(i));
-            if(SVX_NUM_BITMAP == (aNumFmt.GetNumType()&(~LINK_TOKEN)))
+            if(SVX_NUM_BITMAP == (aNumFmt.GetNumberingType()&(~LINK_TOKEN)))
             {
                 Size aSize(aNumFmt.GetGraphicSize() );
                 Size aSaveSize(aSize);
@@ -2801,11 +2837,11 @@ IMPL_LINK( SvxNumOptionsTabPage, CharFmtHdl_Impl, ListBox *, EMPTYARG )
         {
             SvxNumberFormat aNumFmt(pActNum->GetLevel(i));
             if( 0 == nEntryPos )
-                aNumFmt.SetCharFmt(aEmptyStr);
+                aNumFmt.SetCharFmtName(aEmptyStr);
             else
             {
-                if(SVX_NUM_BITMAP != (aNumFmt.GetNumType()&(~LINK_TOKEN)))
-                    aNumFmt.SetCharFmt(sEntry);
+                if(SVX_NUM_BITMAP != (aNumFmt.GetNumberingType()&(~LINK_TOKEN)))
+                    aNumFmt.SetCharFmtName(sEntry);
             }
             pActNum->SetLevel(i, aNumFmt);
         }
@@ -2939,7 +2975,6 @@ USHORT lcl_DrawBullet(VirtualDevice* pVDev,
     pVDev->SetFont(aTmpFont);
     return nRet;
 }
-
 /*-----------------02.12.97 10:34-------------------
     Vorschau der Numerierung painten
 --------------------------------------------------*/
@@ -3017,13 +3052,13 @@ void    SvxNumberingPreview::Paint( const Rectangle& rRect )
                 //im draw ist das zulaeesig
                 if(nTextOffset < 0)
                     nNumberXPos += nTextOffset;
-                if( SVX_NUM_BITMAP == (rFmt.GetNumType() &(~LINK_TOKEN)))
+                if( SVX_NUM_BITMAP == (rFmt.GetNumberingType() &(~LINK_TOKEN)))
                 {
                     nBulletWidth = rFmt.IsShowSymbol() ? lcl_DrawGraphic(pVDev, rFmt,
                                         nNumberXPos,
                                             nYStart, nWidthRelation) : 0;
                 }
-                else if( SVX_NUM_CHAR_SPECIAL == rFmt.GetNumType() )
+                else if( SVX_NUM_CHAR_SPECIAL == rFmt.GetNumberingType() )
                 {
                     nBulletWidth =  rFmt.IsShowSymbol() ?
                      lcl_DrawBullet(pVDev, rFmt, nNumberXPos, nYStart, aStdFont.GetSize()) : 0;
@@ -3070,7 +3105,7 @@ void    SvxNumberingPreview::Paint( const Rectangle& rRect )
                 aNum.GetLevelVal()[ nLevel ] = rFmt.GetStart();
                 USHORT nXStart = (rFmt.GetAbsLSpace() / nWidthRelation) / 2 + 2;
                 USHORT nTextOffset = 2 * nXStep;
-                if( SVX_NUM_BITMAP == (rFmt.GetNumType()&(~LINK_TOKEN)) )
+                if( SVX_NUM_BITMAP == (rFmt.GetNumberingType()&(~LINK_TOKEN)) )
                 {
                     if(rFmt.IsShowSymbol())
                     {
@@ -3078,7 +3113,7 @@ void    SvxNumberingPreview::Paint( const Rectangle& rRect )
                         nTextOffset += nXStep;
                     }
                 }
-                else if( SVX_NUM_CHAR_SPECIAL == rFmt.GetNumType() )
+                else if( SVX_NUM_CHAR_SPECIAL == rFmt.GetNumberingType() )
                 {
 //                  aNum.GetLevelVal()[ nLevel ] = 0;
                     if(rFmt.IsShowSymbol())

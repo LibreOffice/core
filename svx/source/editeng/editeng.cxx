@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mt $ $Date: 2001-02-20 14:31:07 $
+ *  last change: $Author: os $ $Date: 2001-02-23 12:29:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2316,7 +2316,7 @@ void EditEngine::ImportBulletItem( SvxNumBulletItem& rNumBullet, sal_uInt16 nLev
                 case BS_123:            eNumType = SVX_NUM_ARABIC;              break;
                 default:                eNumType = SVX_NUM_NUMBER_NONE;         break;
             }
-            pNumberFormat->SetNumType( eNumType );
+            pNumberFormat->SetNumberingType( eNumType );
 
             // Justification
             SvxAdjust eAdjust;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editobj.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mt $ $Date: 2000-12-06 16:12:59 $
+ *  last change: $Author: os $ $Date: 2001-02-23 12:29:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@ BOOL lcl_CreateBulletItem( const SvxNumBulletItem& rNumBullet, USHORT nLevel, Sv
             rBullet.SetBitmap( aBmp );
         }
 
-        switch ( pFmt->GetNumType() )
+        switch ( pFmt->GetNumberingType() )
         {
             case SVX_NUM_CHARS_UPPER_LETTER:
             case SVX_NUM_CHARS_UPPER_LETTER_N:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonrule.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-17 17:06:54 $
+ *  last change: $Author: os $ $Date: 2001-02-23 12:29:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,7 +256,7 @@ uno::Sequence<beans::PropertyValue> SvxUnoNumberingRules::getNumberingRuleByInde
 
     uno::Any aVal;
     {
-        aVal <<= (sal_Int16)rFmt.GetNumType();
+        aVal <<= rFmt.GetNumberingType();
         beans::PropertyValue aAlignProp( OUString(RTL_CONSTASCII_USTRINGPARAM(UNO_NAME_NRULE_NUMBERINGTYPE)), -1, aVal, beans::PropertyState_DIRECT_VALUE);
         pArray[nIdx++] = aAlignProp;
     }
@@ -367,7 +367,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const uno::Sequence< beans::
             case SVX_NUM_CHARS_LOWER_LETTER:
             case SVX_NUM_ARABIC:
             case SVX_NUM_NUMBER_NONE:
-                aFmt.SetNumType((SvxExtNumType)nSet);
+                aFmt.SetNumberingType((SvxExtNumType)nSet);
                 continue;
             }
         }

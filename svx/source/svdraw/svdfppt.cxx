@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: sj $ $Date: 2001-02-14 16:49:47 $
+ *  last change: $Author: os $ $Date: 2001-02-23 12:29:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3684,7 +3684,7 @@ BOOL PPTNumberFormatCreator::ImplGetExtNumberFormat( SdrPowerPointImport& rManag
             Size aPrefSize( aGraphic.GetPrefSize() );
             UINT32 nWidth = ( nHeight * aPrefSize.Width() ) / aPrefSize.Height();
             rNumberFormat.SetGraphicSize( Size( nWidth, nHeight ) );
-            rNumberFormat.SetNumType ( SVX_NUM_BITMAP );
+            rNumberFormat.SetNumberingType ( SVX_NUM_BITMAP );
         }
     }
     else if ( nBuStart && ( nBuFlags & 0x03000000 ) )
@@ -3696,101 +3696,101 @@ BOOL PPTNumberFormatCreator::ImplGetExtNumberFormat( SdrPowerPointImport& rManag
                 default :
                 case 0 :
                 {
-                    rNumberFormat.SetNumType( SVX_NUM_CHARS_LOWER_LETTER );
+                    rNumberFormat.SetNumberingType( SVX_NUM_CHARS_LOWER_LETTER );
                     rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( "." ) ) );
                 }
                 break;
                 case 1 :
                 {
-                    rNumberFormat.SetNumType( SVX_NUM_CHARS_UPPER_LETTER );
+                    rNumberFormat.SetNumberingType( SVX_NUM_CHARS_UPPER_LETTER );
                     rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( "." ) ) );
                 }
                 break;
                 case 2 :
                 {
-                    rNumberFormat.SetNumType( SVX_NUM_ARABIC );
+                    rNumberFormat.SetNumberingType( SVX_NUM_ARABIC );
                     rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( ")" ) ) );
                 }
                 break;
                 case 3 :
                 {
-                    rNumberFormat.SetNumType( SVX_NUM_ARABIC );
+                    rNumberFormat.SetNumberingType( SVX_NUM_ARABIC );
                     rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( "." ) ) );
                 }
                 break;
                 case 4 :
                 {
-                    rNumberFormat.SetNumType( SVX_NUM_ROMAN_LOWER );
+                    rNumberFormat.SetNumberingType( SVX_NUM_ROMAN_LOWER );
                     rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( ")" ) ) );
                     rNumberFormat.SetPrefix( String( RTL_CONSTASCII_USTRINGPARAM( "(" ) ) );
                 }
                 break;
                 case 5 :
                 {
-                    rNumberFormat.SetNumType( SVX_NUM_ROMAN_LOWER );
+                    rNumberFormat.SetNumberingType( SVX_NUM_ROMAN_LOWER );
                     rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( ")" ) ) );
                 }
                 break;
                 case 6 :
                 {
-                    rNumberFormat.SetNumType( SVX_NUM_ROMAN_LOWER );
+                    rNumberFormat.SetNumberingType( SVX_NUM_ROMAN_LOWER );
                     rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( "." ) ) );
                 }
                 break;
                 case 7 :
                 {
-                    rNumberFormat.SetNumType( SVX_NUM_ROMAN_UPPER );
+                    rNumberFormat.SetNumberingType( SVX_NUM_ROMAN_UPPER );
                     rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( "." ) ) );
                 }
                 break;
                 case 8 :
                 {
-                    rNumberFormat.SetNumType( SVX_NUM_CHARS_LOWER_LETTER );
+                    rNumberFormat.SetNumberingType( SVX_NUM_CHARS_LOWER_LETTER );
                     rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( ")" ) ) );
                     rNumberFormat.SetPrefix( String( RTL_CONSTASCII_USTRINGPARAM( "(" ) ) );
                 }
                 break;
                 case 9 :
                 {
-                    rNumberFormat.SetNumType( SVX_NUM_CHARS_LOWER_LETTER );
+                    rNumberFormat.SetNumberingType( SVX_NUM_CHARS_LOWER_LETTER );
                     rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( ")" ) ) );
                 }
                 break;
                 case 10 :
                 {
-                    rNumberFormat.SetNumType( SVX_NUM_CHARS_UPPER_LETTER );
+                    rNumberFormat.SetNumberingType( SVX_NUM_CHARS_UPPER_LETTER );
                     rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( ")" ) ) );
                     rNumberFormat.SetPrefix( String( RTL_CONSTASCII_USTRINGPARAM( "(" ) ) );
                 }
                 break;
                 case 11 :
                 {
-                    rNumberFormat.SetNumType( SVX_NUM_CHARS_UPPER_LETTER );
+                    rNumberFormat.SetNumberingType( SVX_NUM_CHARS_UPPER_LETTER );
                     rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( ")" ) ) );
                 }
                 break;
                 case 12 :
                 {
-                    rNumberFormat.SetNumType( SVX_NUM_ARABIC );
+                    rNumberFormat.SetNumberingType( SVX_NUM_ARABIC );
                     rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( ")" ) ) );
                     rNumberFormat.SetPrefix( String( RTL_CONSTASCII_USTRINGPARAM( "(" ) ) );
                 }
                 break;
                 case 13 :
                 {
-                    rNumberFormat.SetNumType( SVX_NUM_ARABIC );
+                    rNumberFormat.SetNumberingType( SVX_NUM_ARABIC );
                 }
                 break;
                 case 14 :
                 {
-                    rNumberFormat.SetNumType( SVX_NUM_ROMAN_UPPER );
+                    rNumberFormat.SetNumberingType( SVX_NUM_ROMAN_UPPER );
                     rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( ")" ) ) );
                     rNumberFormat.SetPrefix( String( RTL_CONSTASCII_USTRINGPARAM( "(" ) ) );
                 }
                 break;
                 case 15 :
                 {
-                    rNumberFormat.SetNumType( SVX_NUM_ROMAN_UPPER );
+                    rNumberFormat.SetNumberingType( SVX_NUM_ROMAN_UPPER );
                     rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( ")" ) ) );
                 }
                 break;
@@ -3814,7 +3814,7 @@ void PPTNumberFormatCreator::GetNumberFormat( SdrPowerPointImport& rManager, Svx
     ImplGetExtNumberFormat( rManager, rNumberFormat, nLevel, nInstance, 0xffffffff, rCharLevel.mnFontHeight, NULL );
     ImplGetNumberFormat( rManager, rNumberFormat, nLevel );
 
-    switch ( rNumberFormat.GetNumType() )
+    switch ( rNumberFormat.GetNumberingType() )
     {
         case SVX_NUM_CHARS_UPPER_LETTER :
         case SVX_NUM_CHARS_LOWER_LETTER :
@@ -3859,14 +3859,14 @@ BOOL PPTNumberFormatCreator::GetNumberFormat( SdrPowerPointImport& rManager, Svx
     nHardCount += ImplGetExtNumberFormat( rManager, rNumberFormat, pParaObj->pParaSet->mnDepth,
                                                 pParaObj->mnInstance, nInstanceInSheet, nFontHeight, pParaObj );
 
-    if ( rNumberFormat.GetNumType() != SVX_NUM_BITMAP )
+    if ( rNumberFormat.GetNumberingType() != SVX_NUM_BITMAP )
         pParaObj->UpdateBulletRelSize( nBulletHeight );
     if ( nHardCount )
         ImplGetNumberFormat( rManager, rNumberFormat, pParaObj->pParaSet->mnDepth );
 
     if ( nHardCount )
     {
-        switch ( rNumberFormat.GetNumType() )
+        switch ( rNumberFormat.GetNumberingType() )
         {
             case SVX_NUM_CHARS_UPPER_LETTER :
             case SVX_NUM_CHARS_LOWER_LETTER :
@@ -3903,8 +3903,8 @@ void PPTNumberFormatCreator::ImplGetNumberFormat( SdrPowerPointImport& rManager,
 {
     if ( nIsBullet )
     {
-        if ( rNumberFormat.GetNumType() == SVX_NUM_NUMBER_NONE )    // be sure that there are no extended paragraph settings
-            rNumberFormat.SetNumType( SVX_NUM_CHAR_SPECIAL );
+        if ( rNumberFormat.GetNumberingType() == SVX_NUM_NUMBER_NONE )  // be sure that there are no extended paragraph settings
+            rNumberFormat.SetNumberingType( SVX_NUM_CHAR_SPECIAL );
     }
     Color aCol( rManager.MSO_CLR_ToColor( nBulletColor ) );
 
