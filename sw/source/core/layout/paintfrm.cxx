@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: od $ $Date: 2002-08-30 13:02:45 $
+ *  last change: $Author: od $ $Date: 2002-09-03 07:58:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1369,7 +1369,11 @@ void lcl_PaintShadow( const SwRect& aFrm, ViewShell* pSh )
 ///     has to be coded.
 void lcl_DrawGraphic( const SvxBrushItem& rBrush, OutputDevice *pOut,
                       ViewShell &rSh, const SwRect &rGrf, const SwRect &rOut,
-                      BOOL bClip, BOOL bGrfNum )
+                      BOOL bClip, BOOL bGrfNum,
+                      bool bBackgrdAlreadyDrawn = false )
+                      /// OD 02.09.2002 #99657#
+                      /// add parameter <bBackgrdAlreadyDrawn> to indicate
+                      /// that the background is already drawn.
 {
     const FASTBOOL bNotInside = bClip && !rOut.IsInside( rGrf );
     if ( bNotInside )
@@ -1389,8 +1393,12 @@ void lcl_DrawGraphic( const SvxBrushItem& rBrush, OutputDevice *pOut,
     ///     graphic is transparent or the intrinsic graphic doesn't exists.
     ///     If <bGrfNum> is set, the graphic is used as a numbering, thus,
     ///     we don't have to paint a background rectangle.
-    if( !bGrfNum &&
-         ( pGrf->IsTransparent() || GRAPHIC_NONE == pGrf->GetType() ) )
+    ///     OD 02.09.2002 add condition:
+    ///         Paint only, if background is not already drawn.
+    if ( !bGrfNum &&
+         ( pGrf->IsTransparent() || GRAPHIC_NONE == pGrf->GetType() ) &&
+         !bBackgrdAlreadyDrawn
+       )
     {
         /// OD 20.08.2002 #99657# #GetTransChg#
         ///     check, if brush color is not "no fill"/"auto fill" instead of checking,
@@ -1405,31 +1413,42 @@ void lcl_DrawGraphic( const SvxBrushItem& rBrush, OutputDevice *pOut,
         ///     determine, if background color have to be drawn transparent
         ///     and calculate transparency percent value
         sal_Int8 nTransparencyPercent = 0;
+        bool bDrawTransparent = false;
         if ( aColor.GetTransparency() != 0 )
         ///     background color is transparent --> draw transparent.
         {
+            bDrawTransparent = true;
             nTransparencyPercent = (aColor.GetTransparency()*100 + 0x7F)/0xFF;
-        } else if ( (pGrf->GetAttr().GetTransparency() != 0) &&
+        }
+        else if ( (pGrf->GetAttr().GetTransparency() != 0) &&
                     (rBrush.GetColor() == COL_TRANSPARENT) )
         ///     graphic is drawn transparent and background color is
         ///     "no fill"/"auto fill" --> draw transparent
         {
+            bDrawTransparent = true;
             nTransparencyPercent = (pGrf->GetAttr().GetTransparency()*100 + 0x7F)/0xFF;
         }
+
+        /// OD 02.09.2002 #99657#
+        /// paint aligned rectangle of <rGrf>
+        SwRect aGrfTmp = rGrf;
+        ::SwAlignRect( aGrfTmp, &rSh );
 
         /// OD 23.08.2002 #99657#
         ///     draw background color transparent, if a transparency percent
         ///     value has been calculated - see above.
-        if ( nTransparencyPercent != 0)
+        if ( bDrawTransparent )
         {
             if( pOut->GetFillColor() != aColor.GetRGBColor() )
                 pOut->SetFillColor( aColor.GetRGBColor() );
-            PolyPolygon aPoly( rGrf.SVRect() );
+            PolyPolygon aPoly( aGrfTmp.SVRect() );
             pOut->DrawTransparent( aPoly, nTransparencyPercent );
-        } else {
+        }
+        else
+        {
             if ( pOut->GetFillColor() != aColor )
                 pOut->SetFillColor( aColor );
-            pOut->DrawRect( rGrf.SVRect() );
+            pOut->DrawRect( aGrfTmp.SVRect() );
         }
     }
     pGrf->Draw( pOut, rGrf.Pos(), rGrf.SSize() );
@@ -1562,10 +1581,14 @@ void MA_FASTCALL DrawGraphic( const SvxBrushItem *pBrush, OutputDevice *pOut,
     default: ASSERT( !pOut, "new Graphic position?" );
     }
 
+    /// OD 02.09.2002 #99657#
+    /// init variable <bGrfBackgrdAlreadDrawn> to indicate, if background of
+    /// graphic is already drawn.
+    bool bGrfBackgrdAlreadyDrawn = false;
     if ( bRetouche )
     {
         /// OD 08.08.2002 #99657# - create region - which has to be drawn - later,
-        ///     because it has to considered transparent drawing.
+        ///     because it has to be considered transparent drawing.
         ///     Thus, commenting the following two lines of code here.
         /*
         SwRegionRects aRegion( rOut, 4 );
@@ -1574,34 +1597,42 @@ void MA_FASTCALL DrawGraphic( const SvxBrushItem *pBrush, OutputDevice *pOut,
         pOut->Push( PUSH_FILLCOLOR );
 
         /// OD 07.08.2002 #99657# #GetTransChg#
-        ///     If we have to consider background transparency,
         ///     check, if a existing background graphic (not filling the complete
         ///     background) is transparent drawn and the background color is
-        ///     "no fill" respectively "auto fill".
+        ///     "no fill" respectively "auto fill", if background transparency
+        ///     has to be considered.
         ///     If YES, memorise transparency of background graphic.
-        sal_Bool bTransparentGrfWithNoFillBackgrd = sal_False;
+        ///     check also, if background graphic bitmap is transparent.
+        bool bTransparentGrfWithNoFillBackgrd = false;
         sal_Int32 nGrfTransparency = 0;
-        if ( bConsiderBackgroundTransparency &&
-             (ePos != GPOS_NONE) &&
+        bool bGrfIsTransparent = false;
+        if ( (ePos != GPOS_NONE) &&
              (ePos != GPOS_TILED) && (ePos != GPOS_AREA)
            )
         {
             GraphicObject *pGrf = (GraphicObject*)pBrush->GetGraphicObject(
                                                     GETOBJSHELL() );
-            GraphicAttr pGrfAttr = pGrf->GetAttr();
-            if ( (pGrfAttr.GetTransparency() != 0) &&
-                 ( pBrush && (pBrush->GetColor() == COL_TRANSPARENT) )
-               )
+            if ( bConsiderBackgroundTransparency )
             {
-                bTransparentGrfWithNoFillBackgrd = sal_True;
-                nGrfTransparency = pGrfAttr.GetTransparency();
+                GraphicAttr pGrfAttr = pGrf->GetAttr();
+                if ( (pGrfAttr.GetTransparency() != 0) &&
+                     ( pBrush && (pBrush->GetColor() == COL_TRANSPARENT) )
+                   )
+                {
+                    bTransparentGrfWithNoFillBackgrd = true;
+                    nGrfTransparency = pGrfAttr.GetTransparency();
+                }
+            }
+            if ( pGrf->IsTransparent() )
+            {
+                bGrfIsTransparent = true;
             }
         }
 
         /// OD 06.08.2002 #99657# #GetTransChg# - to get color of brush,
         ///     check background color against COL_TRANSPARENT ("no fill"/"auto fill")
         ///     instead of checking, if transparency is not set.
-        Color aColor( pBrush &&
+        const Color aColor( pBrush &&
                             ( !(pBrush->GetColor() == COL_TRANSPARENT) ||
                               bFlyMetafile )
                     ? pBrush->GetColor()
@@ -1618,49 +1649,59 @@ void MA_FASTCALL DrawGraphic( const SvxBrushItem *pBrush, OutputDevice *pOut,
         sal_Bool bDrawTransparent = bConsiderBackgroundTransparency &&
                                 ( ( aColor.GetTransparency() != 0) ||
                                     bTransparentGrfWithNoFillBackgrd );
-        /// OD 08.08.2002 #99657# - calculate transparency percent, if background
-        ///     region have to be drawn transparent.
-        sal_Int8 nTransparencyPercent = 0;
-        if ( bDrawTransparent )
-        {
-            nTransparencyPercent =
-              (( bTransparentGrfWithNoFillBackgrd
-                    ? nGrfTransparency : aColor.GetTransparency()
-               )*100 + 0x7F)/0xFF;
-        }
-        /// OD 08.08.2002 #99657# - calculate background region to be drawn
-        ///     in logical or pixel coordinates, depending on <bDrawTransparent>.
-        ///     If background region have to be drawn transparent, create the region
-        ///     in pixel coordinates to avoid overlapping of the different rectangles
-        ///     in the region. An overlapping would cause paint errors, if the
-        ///     different rectangle are drawn transparent.
-        SwRegionRects aRegion( (bDrawTransparent ? SwRect(pOut->LogicToPixel(rOut.SVRect())) : rOut ), 4 );
-        if ( aGrf.HasArea() )
-        {
-            aRegion -= ( bDrawTransparent ? ( SwRect(pOut->LogicToPixel(aGrf.SVRect())) ) : aGrf );
-        }
 
         /// OD 06.08.2002 #99657# - if background region have to be drawn
         ///     transparent, set only the RGB values of the background color as
-        ///     the fill color for the output device. Implemented by setting
-        ///     transparency of color to zero, before setting fill color.
+        ///     the fill color for the output device.
         if ( bDrawTransparent )
-            aColor.SetTransparency(0);
-        if( pOut->GetFillColor() != aColor )
-            pOut->SetFillColor( aColor );
-
-        /// loop rectangle of background region, which has to be drawn
-        for( USHORT i = 0; i < aRegion.Count(); ++i )
         {
-            /// OD 05.08.2002 #99657# - if background region have to be drawn
-            ///     transparent, create an poly-polygon from the to be drawn
-            ///     rectangle and draw it with the corresponding transparency
-            ///     percent, which is calculated above.
-            if ( bDrawTransparent )
+            if( pOut->GetFillColor() != aColor.GetRGBColor() )
+                pOut->SetFillColor( aColor.GetRGBColor() );
+        }
+        else
+        {
+            if( pOut->GetFillColor() != aColor )
+                pOut->SetFillColor( aColor );
+        }
+
+        /// OD 02.09.2002 #99657#
+        if ( bDrawTransparent )
+        {
+            /// background region have to be drawn transparent.
+            /// Thus, create a poly-polygon from the region and draw it with
+            /// the corresponding transparency precent.
+            PolyPolygon aDrawPoly( rOut.SVRect() );
+            if ( aGrf.HasArea() )
             {
-                PolyPolygon aPoly( pOut->PixelToLogic(aRegion[i].SVRect()) );
-                pOut->DrawTransparent( aPoly, nTransparencyPercent );
-            } else {
+                if ( !bGrfIsTransparent )
+                {
+                    Polygon aGrfPoly( aGrf.SVRect() );
+                    aDrawPoly.Insert( aGrfPoly );
+                }
+                else
+                    bGrfBackgrdAlreadyDrawn = true;
+            }
+            /// calculate transparency percent:
+            /// ( <transparency value[0x01..0xFF]>*100 + 0x7F ) / 0xFF
+            /// If there is a background graphic with a background color "no fill"/"auto fill",
+            /// the transparency value is taken from the background graphic,
+            /// otherwise take the transparency value from the color.
+            sal_Int8 nTransparencyPercent =
+              (( bTransparentGrfWithNoFillBackgrd ? nGrfTransparency : aColor.GetTransparency()
+               )*100 + 0x7F)/0xFF;
+            /// draw poly-polygon transparent
+            pOut->DrawTransparent( aDrawPoly, nTransparencyPercent );
+        }
+        else
+        {
+            SwRegionRects aRegion( rOut, 4 );
+            if ( !bGrfIsTransparent )
+                aRegion -= aGrf;
+            else
+                bGrfBackgrdAlreadyDrawn = true;
+            /// loop rectangles of background region, which has to be drawn
+            for( USHORT i = 0; i < aRegion.Count(); ++i )
+            {
                 pOut->DrawRect( aRegion[i].SVRect() );
             }
         }
@@ -1668,7 +1709,10 @@ void MA_FASTCALL DrawGraphic( const SvxBrushItem *pBrush, OutputDevice *pOut,
     }
 
     if( bDraw && aGrf.IsOver( rOut ) )
-        lcl_DrawGraphic( *pBrush, pOut, rSh, aGrf, rOut, TRUE, bGrfNum );
+        /// OD 02.09.2002 #99657#
+        /// add parameter <bGrfBackgrdAlreadyDrawn>
+        lcl_DrawGraphic( *pBrush, pOut, rSh, aGrf, rOut, TRUE, bGrfNum,
+                         bGrfBackgrdAlreadyDrawn );
 
     if( bReplaceGrfNum )
     {
@@ -1791,10 +1835,17 @@ void SwRootFrm::Paint( const SwRect& rRect ) const
 
             pPage->PaintBaBo( aPaintRect, pPage, TRUE );
 
+            /// OD 29.08.2002 #102450#
+            /// determine background color of page for <PaintLayer> method
+            /// calls, paint <hell> or <heaven>
+            const Color aPageBackgrdColor = pPage->GetDrawBackgrdColor();
+
             if ( pSh->Imp()->HasDrawView() )
             {
                 pLines->LockLines( TRUE );
-                pSh->Imp()->PaintLayer( pSh->GetDoc()->GetHellId(), aBorderRect );
+                /// OD 29.08.2002 #102450# - add 3rd parameter
+                pSh->Imp()->PaintLayer( pSh->GetDoc()->GetHellId(), aBorderRect,
+                                        &aPageBackgrdColor );
                 pLines->PaintLines( pSh->GetOut() );
                 pLines->LockLines( FALSE );
             }
@@ -1807,7 +1858,9 @@ void SwRootFrm::Paint( const SwRect& rRect ) const
             BOOL bControlExtra = FALSE;
             if ( pSh->Imp()->HasDrawView() )
             {
-                pSh->Imp()->PaintLayer( pSh->GetDoc()->GetHeavenId(), aBorderRect );
+                /// OD 29.08.2002 #102450# - add 3rd parameter
+                pSh->Imp()->PaintLayer( pSh->GetDoc()->GetHeavenId(), aBorderRect,
+                                        &aPageBackgrdColor );
                 if( pVout->IsFlushable() )
                     bControlExtra = TRUE;
                 else
@@ -3944,6 +3997,30 @@ void SwLayoutFrm::RefreshExtraData( const SwRect &rRect ) const
     }
 }
 
+/** SwPageFrm::GetDrawBackgrdColor - for #102450#
+
+    determine the color, that is respectively will be drawn as background
+    for the page frame.
+    Using existing method SwFrm::GetBackgroundBrush to determine the color
+    that is set at the page frame respectively is parent. If none is found
+    return the global retouche color
+
+    @author OD
+
+    @return Color
+*/
+const Color& SwPageFrm::GetDrawBackgrdColor() const
+{
+    const SvxBrushItem* pBrushItem;
+    const Color* pDummyColor;
+    SwRect aDummyRect;
+    if ( GetBackgroundBrush( pBrushItem, pDummyColor, aDummyRect, true) )
+        return pBrushItem->GetColor();
+    else
+        return aGlobalRetoucheColor;
+}
+
+
 /*************************************************************************
 |*
 |*    SwFrm::Retouche
@@ -3988,8 +4065,14 @@ void SwFrm::Retouche( const SwPageFrm * pPage, const SwRect &rRect ) const
             ResetRetouche();
             SwRect aRetouche( rRetouche );
             ::SizeBorderRect( aRetouche );
-            pSh->Imp()->PaintLayer( pSh->GetDoc()->GetHellId(), aRetouche );
-            pSh->Imp()->PaintLayer( pSh->GetDoc()->GetHeavenId(), aRetouche );
+            /// OD 30.08.2002 #102450#
+            /// determine background color of page for <PaintLayer> method
+            /// calls, painting <hell> or <heaven>
+            const Color aPageBackgrdColor = pPage->GetDrawBackgrdColor();
+            /// OD 29.08.2002 #102450#
+            /// add 3rd parameter to <PaintLayer> method calls
+            pSh->Imp()->PaintLayer( pSh->GetDoc()->GetHellId(), aRetouche, &aPageBackgrdColor );
+            pSh->Imp()->PaintLayer( pSh->GetDoc()->GetHeavenId(), aRetouche, &aPageBackgrdColor );
             pSh->Imp()->PaintLayer( pSh->GetDoc()->GetControlsId(), aRetouche );
             SetRetouche();
 
@@ -4216,12 +4299,18 @@ Graphic SwFlyFrmFmt::MakeGraphic( ImageMap* pMap )
         if ( rAttrs.CalcBottomLine() )
             aOut.SSize().Height()+= 2*nPixelSzH;
 
-        pImp->PaintLayer( pSh->GetDoc()->GetHellId(), aOut );
+        /// OD 30.08.2002 #102450#
+        /// determine color of page, the fly frame is on, for <PaintLayer> method
+        /// calls, painting <hell> or <heaven>
+        const Color aPageBackgrdColor = pFly->FindPageFrm()->GetDrawBackgrdColor();
+        /// OD 30.08.2002 #102450# - add 3rd parameter
+        pImp->PaintLayer( pSh->GetDoc()->GetHellId(), aOut, &aPageBackgrdColor );
         pLines->PaintLines( &aDev );
         if ( pFly->IsFlyInCntFrm() )
             pFly->Paint( aOut );
         pLines->PaintLines( &aDev );
-        pImp->PaintLayer( pSh->GetDoc()->GetHeavenId(), aOut );
+        /// OD 30.08.2002 #102450# - add 3rd parameter
+        pImp->PaintLayer( pSh->GetDoc()->GetHeavenId(), aOut, &aPageBackgrdColor );
         pLines->PaintLines( &aDev );
         if( pSh->GetViewOptions()->IsControl() )
         {
