@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DExport.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-16 15:53:55 $
+ *  last change: $Author: oj $ $Date: 2001-02-23 15:02:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,25 +91,42 @@
 #ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
 #ifndef _VECTOR_
 #include <vector>
 #endif
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
 #endif
+#ifndef _COMPHELPER_STLTYPES_HXX_
+#include <comphelper/stl_types.hxx>
+#endif
+#ifndef DBAUI_TYPEINFO_HXX
+#include "TypeInfo.hxx"
+#endif
 
 namespace dbaui
 {
-
+    class OFieldDescription;
+    class OTypeInfo;
     class ODatabaseExport
     {
+    public:
+        DECLARE_STL_MAP(::rtl::OUString,OFieldDescription*,::comphelper::UStringMixLess,TColumns);
+        typedef ::std::vector<TColumns::iterator> TColumnVector;
     protected:
         ::std::vector<sal_Int32>        m_vColumns;     // Welche Spalten "ubernommen werden sollen
         ::std::vector<sal_Int32>        m_vColumnTypes; // FeldTypen f"ur schnelleren Zugriff
+        ::std::vector<sal_Int32>        m_vColumnSize;
+        ::std::vector<sal_Int32>        m_vFormatKey;
         ::com::sun::star::lang::Locale  m_nLocale;
 
+
+        TColumns        m_aDestColumns; // container for new created columns
+        TColumnVector   m_vDestVector;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>     m_xColumns;     // container
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>    m_xColumnsIdx;      // container
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xTable;       // dest table
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>     m_xTables;      // container
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >         m_xConnection;  // dest conn
@@ -119,11 +136,10 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >  m_xResultSetMetaData;   //
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowUpdate >          m_xRowUpdate;   //
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    m_xFormatter;   // a number formatter working with the connection's NumberFormatsSupplier
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory> m_xFactory;
 
-        ::rtl::OUString     m_sVarChar;     // data type name of DataType::VARCHAR
         String              m_sTextToken;       // Zellen Inhalt
-        sal_Int32*          m_pColumnSize;  // max Gr"o"se f"ur Textfelder
-        sal_Int32*          m_pFormatKeys;  // max Gr"o"se f"ur Textfelder
+        OTypeInfo*          m_pTypeInfo;    // contains the default type
         sal_Int32           m_nColumnPos;       // aktuelle Spaltenposition
         sal_Int32           m_nRows;        // Anzahl der Zeilen die durchsucht werden sollen
         sal_Int32           m_nRowCount;    // current count of rows
@@ -139,15 +155,20 @@ namespace dbaui
         void                CreateDefaultColumn(const ::rtl::OUString& _rColumnName);
         sal_Int32           CheckString(const String& aToken, sal_Int32 _nOldFormat);
         void                insertValueIntoColumn();
+        sal_Bool            createRowSet();
 
         virtual ~ODatabaseExport();
     public:
         ODatabaseExport(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF);
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM);
         // wird f"ur auto. Typ-Erkennung gebraucht
-        ODatabaseExport(sal_Int32 nRows,sal_Int32 nColumns,const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF);
+        ODatabaseExport(sal_Int32 nRows,
+                        const ::std::vector<sal_Int32> &_rColumnPositions,
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM);
 
-        virtual void SetColumnTypes(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& rList);
+        virtual void SetColumnTypes(const TColumnVector* rList,const OTypeInfoMap* _pInfoMap);
         String  ShortenFieldName( const String& rName, xub_StrLen nNewLength, const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& rDestList );
     };
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-16 15:54:53 $
+ *  last change: $Author: oj $ $Date: 2001-02-23 15:02:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,7 @@
 #define DLG_TEXT                        RID_DIALOG_START + 13
 #define DLG_JOIN_TABADD                 RID_DIALOG_START + 14
 #define DLG_QRY_JOIN                    RID_DIALOG_START + 15
+#define WIZ_RTFCOPYTABLE                RID_DIALOG_START + 16
 
 //========================================================================
 // tab pages
@@ -112,6 +113,10 @@
 #define PAGE_ADO                        RID_PAGE_START +  7
 #define PAGE_QUERYADMINISTRATION        RID_PAGE_START +  8
 #define RID_DB_TAB_EDITOR               RID_PAGE_START +  9
+#define TAB_WIZ_COLUMN_SELECT           RID_PAGE_START + 10
+#define TAB_WIZ_TYPE_SELECT             RID_PAGE_START + 11
+#define TAB_WIZ_NAME_MATCHING           RID_PAGE_START + 12
+#define TAB_WIZ_COPYTABLE               RID_PAGE_START + 13
 
 //========================================================================
 // error boxes
@@ -131,17 +136,16 @@
 #define ERR_QRY_ILLEGAL_JOIN            RID_ERRORBOX_START + 12
 #define ERR_CANTADMINQUERIES            RID_ERRORBOX_START + 13
 #define ERR_INVALID_LISTBOX_ENTRY       RID_ERRORBOX_START + 14
+#define ERROR_INVALID_TABLE_NAME        RID_ERRORBOX_START + 15
 
 //========================================================================
 // query boxes
 
 #define QUERY_BRW_DELETE_ROWS           RID_QUERYBOX_START +  0
 #define QUERY_BRW_SAVEMODIFIED          RID_QUERYBOX_START +  1
-#define QUERY_BRW_DELETE_QUERY          RID_QUERYBOX_START +  2
-#define QUERY_CONNECTION_LOST           RID_QUERYBOX_START +  3
-#define QUERY_BRW_DELETE_QUERY_CONFIRM  RID_QUERYBOX_START +  4
-#define QUERY_DESIGN_SAVEMODIFIED       RID_QUERYBOX_START +  5
-#define QUERY_BRW_DELETE_TABLE          RID_QUERYBOX_START +  6
+#define QUERY_CONNECTION_LOST           RID_QUERYBOX_START +  2
+#define QUERY_BRW_DELETE_QUERY_CONFIRM  RID_QUERYBOX_START +  3
+#define QUERY_DESIGN_SAVEMODIFIED       RID_QUERYBOX_START +  4
 
 //========================================================================
 // warning boxes
@@ -200,6 +204,7 @@
 #define RID_QUERYFUNCTION_POPUPMENU     RID_MENU_START +  6
 #define RID_TABLEDESIGNROWPOPUPMENU     RID_MENU_START +  7
 #define RID_BRW_TABLEDESIGN_TOOLBOX     RID_MENU_START +  8
+#define RID_SBA_RTF_PKEYPOPUP           RID_MENU_START +  9
 
 //========================================================================
 // strings
@@ -317,6 +322,23 @@
 #define STR_COLUMN_NAME                     RID_STRING_START + 106
 #define STR_QRY_CONTINUE                    RID_STRING_START + 107
 #define STR_STAT_WARNING                    RID_STRING_START + 108
+#define STR_HTML_TITLE                      RID_STRING_START + 109
+#define STR_RTF_TITLE                       RID_STRING_START + 110
+#define STR_WIZ_COLUMN_SELECT_TITEL         RID_STRING_START + 111
+#define STR_WIZ_TYPE_SELECT_TITEL           RID_STRING_START + 112
+#define STR_WIZ_PKEY_ALREADY_DEFINED        RID_STRING_START + 113
+#define STR_WIZ_NAME_MATCHING_TITEL         RID_STRING_START + 114
+#define STR_WIZ_TABLE_COPY                  RID_STRING_START + 115
+#define STR_COPYTABLE_TITLE_COPY            RID_STRING_START + 116
+#define STR_COPYTABLE_TITLE_MOVE            RID_STRING_START + 117
+#define STR_DUPL_FIELDNAME                  RID_STRING_START + 118
+#define STR_ERR_DUPL_TABLENAME              RID_STRING_START + 119
+#define STR_QUERY_DELETE_TABLE              RID_STRING_START + 120
+#define STR_QUERY_DELETE_QUERY              RID_STRING_START + 121
+#define STR_TITLE_CONFIRM_DELETION          RID_STRING_START + 122
+#define STR_SVT_SQL_SYNTAX_TABLE            RID_STRING_START + 123
+#define STR_SVT_SQL_SYNTAX_COLUMN           RID_STRING_START + 124
+
 
 //========================================================================
 // untyped resources
@@ -330,6 +352,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.25  2001/02/16 15:54:53  oj
+ *  new ex- import data
+ *
  *  Revision 1.24  2001/02/14 14:39:23  oj
  *  some changes
  *

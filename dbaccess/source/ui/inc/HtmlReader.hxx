@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HtmlReader.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-16 15:54:02 $
+ *  last change: $Author: oj $ $Date: 2001-02-23 15:02:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #ifndef _STREAM_HXX
 #include <tools/stream.hxx>
 #endif
+#ifndef _COM_SUN_STAR_AWT_FONTDESCRIPTOR_HPP_
+#include <com/sun/star/awt/FontDescriptor.hpp>
+#endif
 
 
 namespace dbaui
@@ -86,23 +89,28 @@ namespace dbaui
         sal_Int32           m_nTableCount;
         sal_Int16           m_nWidth;
         sal_Int16           m_nColumnWidth;     // max. Spaltenbreite
+        sal_Bool            m_bMetaOptions;     // true when we scaned the meta information
     protected:
         virtual void        NextToken( int nToken ); // Basisklasse
 
         virtual sal_Bool    CreateTable(int nToken);
         void                TableDataOn(SvxCellHorJustify& eVal,String *pValue,int nToken);
-        void                TableFontOn(sal_Int16 &nWidth,sal_Int16 &nHeight);
+        void                TableFontOn(::com::sun::star::awt::FontDescriptor& _rFont,sal_Int32 &_rTextColor);
         sal_Int16           GetWidthPixel( const HTMLOption* pOption );
+        rtl_TextEncoding    GetEncodingByMIME( const String& rMime );
+        void                setTextEncoding();
         ~OHTMLReader();
     public:
         OHTMLReader(SvStream& rIn,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF);
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM);
         // wird f"ur auto. Typ-Erkennung gebraucht
         OHTMLReader(SvStream& rIn,
                     sal_Int32 nRows,
-                    sal_Int32 nColumns,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF);
+                    const ::std::vector<sal_Int32> &_rColumnPositions,
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM);
 
         virtual     SvParserState CallParser();// Basisklasse
         // birgt nur korrekte Daten, wenn der 2. CTOR benutzt wurde

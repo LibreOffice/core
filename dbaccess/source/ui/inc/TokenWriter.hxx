@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TokenWriter.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-16 15:54:09 $
+ *  last change: $Author: oj $ $Date: 2001-02-23 15:02:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,18 @@
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
-
+#ifndef _COM_SUN_STAR_LANG_XEVENTLISTENER_HPP_
+#include <com/sun/star/lang/XEventListener.hpp>
+#endif
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
+#include <com/sun/star/sdb/CommandType.hpp>
+#endif
 
 namespace dbaui
 {
@@ -87,8 +98,10 @@ namespace dbaui
     // ODatabaseImportExport Basisklasse f"ur Import/Export
     // =========================================================================
     class ODatabaseExport;
-    class ODatabaseImportExport
+    class ODatabaseImportExport : public ::cppu::WeakImplHelper1< ::com::sun::star::lang::XEventListener>
     {
+        void initialize();
+        void disposing();
     protected:
         SvStream*                               m_pStream;
         ::com::sun::star::awt::FontDescriptor   m_aFont;
@@ -98,36 +111,48 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >                m_xRow; //
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >  m_xResultSetMetaData;   //
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    m_xFormatter;   // a number formatter working with the connection's NumberFormatsSupplier
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory> m_xFactory;
 
-    #if defined UNX || defined MAC
+        ::rtl::OUString m_sName;
+        ::rtl::OUString m_sDataSourceName;
+        sal_Int32       m_nCommandType;
+        sal_Bool        m_bDisposeConnection;
+
+#if defined UNX || defined MAC
         static const char __FAR_DATA sNewLine;
-    #else
+#else
         static const char __FAR_DATA sNewLine[];
-    #endif
+#endif
         ODatabaseExport*    m_pReader;
         sal_Int32*          m_pRowMarker; // wenn gesetzt, dann nur diese Rows kopieren
 
-        ODatabaseImportExport(  const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject,
-                                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
+        // export data
+        ODatabaseImportExport(  const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _aSeq,
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
                                 const String& rExchange = String());
 
+        // import data
         ODatabaseImportExport(  const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
-                                const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF)
+                                const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
+                                const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM)
                                 :m_xConnection(_rxConnection)
         ,m_pReader(NULL)
         ,m_pRowMarker(NULL)
         ,m_xFormatter(_rxNumberF)
+        ,m_xFactory(_rM)
+        ,m_nCommandType(::com::sun::star::sdb::CommandType::TABLE)
+        ,m_bDisposeConnection(sal_False)
         {}
-    public:
-        virtual ~ODatabaseImportExport();
 
+        virtual ~ODatabaseImportExport();
+    public:
         void setStream(SvStream* _pStream){  m_pStream = _pStream; }
 
         virtual BOOL Write()    = 0; // Export
         virtual BOOL Read()     = 0; // Import
 
+        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
     };
 
     // =========================================================================
@@ -138,15 +163,18 @@ namespace dbaui
     {
 
     public:
-        ORTFImportExport(   const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
+        // export data
+        ORTFImportExport(   const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _aSeq,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
                             const String& rExchange = String())
-                            : ODatabaseImportExport(_rxObject,_rxConnection,_rM,_rxNumberF,rExchange) {};
+                            : ODatabaseImportExport(_aSeq,_rM,_rxNumberF,rExchange) {};
+
+        // import data
         ORTFImportExport(   const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF)
-                        : ODatabaseImportExport(_rxConnection,_rxNumberF)
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM)
+                        : ODatabaseImportExport(_rxConnection,_rxNumberF,_rM)
         {}
 
         virtual BOOL Write();
@@ -181,14 +209,16 @@ namespace dbaui
         inline void FontOff();
 
     public:
-        OHTMLImportExport(  const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
+        // export data
+        OHTMLImportExport(  const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _aSeq,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
                             const String& rExchange = String());
+        // import data
         OHTMLImportExport(  const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF)
-                        : ODatabaseImportExport(_rxConnection,_rxNumberF)
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM)
+                        : ODatabaseImportExport(_rxConnection,_rxNumberF,_rM)
         {}
 
         virtual BOOL Write();
