@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fetab.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ama $ $Date: 2002-06-11 16:10:55 $
+ *  last change: $Author: ama $ $Date: 2002-06-12 07:46:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1402,13 +1402,13 @@ const SwFrm *SwFEShell::GetBox( const Point &rPt ) const
 
 /*************************************************************************
 |*
-|*  SwFEShell::IsMouseTabCol()
+|*  SwFEShell::WhichMouseTabCol()
 |*
 |*  Ersterstellung      MA 22. Jun. 95
-|*  Letzte Aenderung    MA 22. Jun. 95
+|*  Last change         AMA 12. Jun. 02
 |
 |*************************************************************************/
-BOOL SwFEShell::IsMouseTabCol( const Point &rPt ) const
+BYTE SwFEShell::WhichMouseTabCol( const Point &rPt ) const
 {
     SwCellFrm* pFrm = (SwCellFrm*)GetBox( rPt );
     if( pFrm )
@@ -1419,7 +1419,9 @@ BOOL SwFEShell::IsMouseTabCol( const Point &rPt ) const
             pFrm->GetTabBox()->GetSttNd()->IsInProtectSect() )
             pFrm = 0;
     }
-    return 0 != pFrm;
+    if( pFrm )
+        return pFrm->IsVertical() ? SW_TABCOL_VERT : SW_TABCOL_HORI;
+    return SW_TABCOL_NONE;
 }
 
 /*************************************************************************
