@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framectr.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2001-07-09 12:09:48 $
+ *  last change: $Author: fs $ $Date: 2001-08-17 09:23:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
+#ifndef _VCL_STDTEXT_HXX
+#include <vcl/stdtext.hxx>
+#endif
 
 #ifndef _BIB_FRAMECTR_HXX
 #include "framectr.hxx"
@@ -105,6 +108,19 @@
 #endif
 #ifndef __EXTENSIONS_INC_EXTENSIO_HRC__
 #include <extensio.hrc>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYSTATE_HPP_
+#include <com/sun/star/beans/PropertyState.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XEXECUTABLEDIALOG_HPP_
+#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #endif
 
 using namespace osl;
@@ -370,6 +386,63 @@ void BibFrameController_Impl::dispatch(const util::URL& aURL, const uno::Sequenc
         }
         else if(aCommand.EqualsAscii("Bib/standardFilter"))
         {
+            try
+            {
+                uno::Reference< lang::XMultiServiceFactory > xORB = ::comphelper::getProcessServiceFactory();
+
+                // build the arguments for the filter dialog to be created
+                Sequence< Any > aDialogCreationArgs( 3 );
+                Any* pDialogCreationArgs = aDialogCreationArgs.getArray();
+                // the query composer
+                *pDialogCreationArgs++ <<= beans::PropertyValue( ::rtl::OUString::createFromAscii( "QueryComposer" ),
+                                                        -1,
+                                                        makeAny( pDatMan->getParser() ),
+                                                        beans::PropertyState_DIRECT_VALUE
+                                                      );
+
+                // the rowset
+                *pDialogCreationArgs++ <<= beans::PropertyValue( ::rtl::OUString::createFromAscii( "RowSet" ),
+                                                        -1,
+                                                        makeAny( pDatMan->getForm() ),
+                                                        beans::PropertyState_DIRECT_VALUE
+                                                      );
+                // the parent window for the dialog
+                *pDialogCreationArgs++ <<= beans::PropertyValue( ::rtl::OUString::createFromAscii( "ParentWindow" ),
+                                                        -1,
+                                                        makeAny( xWindow ),
+                                                        beans::PropertyState_DIRECT_VALUE
+                                                      );
+
+                // create the dialog object
+                const ::rtl::OUString sDialogServiceName = ::rtl::OUString::createFromAscii( "com.sun.star.uno.sdb.FilterDialog" );
+                uno::Reference< uno::XInterface > xDialog = xORB->createInstanceWithArguments(
+                    sDialogServiceName,
+                    aDialogCreationArgs
+                );
+                if ( !xDialog.is() )
+                {
+                    ShowServiceNotAvailableError( VCLUnoHelper::GetWindow( xWindow ), sDialogServiceName, sal_True );
+                }
+                else
+                {
+                    // execute it
+                    uno::Reference< ui::dialogs::XExecutableDialog > xExec( xDialog, UNO_QUERY );
+                    DBG_ASSERT( xExec.is(), "BibFrameController_Impl::dispatch: missing an interface on the dialog!" );
+                    if ( xExec.is() )
+                        if ( xExec->execute( ) )
+                        {
+                            // the dialog has been executed successfully, and the filter on the query composer
+                            // has been changed
+                            ::rtl::OUString sNewFilter = pDatMan->getParser()->getFilter();
+                            pDatMan->setFilter( sNewFilter );
+                        }
+                }
+            }
+            catch( const uno::Exception& )
+            {
+                DBG_ERROR( "BibFrameController_Impl::dispatch: caught an exception!" );
+            }
+
             sal_uInt16 nCount = aStatusListeners.Count();
             for ( sal_uInt16 n=0; n<nCount; n++ )
             {
@@ -378,22 +451,12 @@ void BibFrameController_Impl::dispatch(const util::URL& aURL, const uno::Sequenc
                 {
                     FeatureStateEvent  aEvent;
                     aEvent.FeatureURL = pObj->aURL;
-                    aEvent.IsEnabled  = sal_True;
+                    aEvent.IsEnabled  = 0 != pDatMan->getParser()->getFilter().getLength();
                     aEvent.Requery    = sal_False;
                     aEvent.Source     = (XDispatch *) this;
                     pObj->xListener->statusChanged( aEvent );
-                    //break; because there are more than one
                 }
             }
-
-            uno::Reference< sdb::XSQLQueryComposer >  xParser=pDatMan->getParser();
-//          uno::Reference< data::XDatabaseDialogs >  xDlgs(xParser, UNO_QUERY);
-//          if (xDlgs.is())
-//          {
-//              uno::Reference< container::XNamed >  xField;
-//              xDlgs->executeFilter(xField);
-//              pDatMan->setFilter(xParser->getFilter());
-//          }
         }
         else if(aCommand.EqualsAscii("Bib/removeFilter"))
         {
