@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 13:00:24 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 16:29:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -488,6 +488,8 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, BOOL bInner )
 
     BOOL bLayoutRTL = aViewData.GetDocument()->IsLayoutRTL( aViewData.GetTabNo() );
     long nTotalWidth = rSize.Width();
+    if ( bLayoutRTL )
+        nTotalWidth += 2*rOffset.X();
 
     BOOL bVScroll    = aViewData.IsVScrollMode();
     BOOL bHScroll    = aViewData.IsHScrollMode();
@@ -849,8 +851,8 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, BOOL bInner )
 
     if (bInner)
     {
-        //! mirror this?
-        pGridWin[SC_SPLIT_BOTTOMLEFT]->SetPosPixel( Point(nPosX,nSplitPosY) );
+        long nInnerPosX = bLayoutRTL ? ( nTotalWidth - nPosX - nLeftSize ) : nPosX;
+        pGridWin[SC_SPLIT_BOTTOMLEFT]->SetPosPixel( Point(nInnerPosX,nSplitPosY) );
     }
     else
     {
@@ -950,6 +952,7 @@ void ScTabView::GetBorderSize( SvBorder& rBorder, const Size& rSize )
     BOOL bOutlMode   = aViewData.IsOutlineMode();
     BOOL bHOutline   = bOutlMode && lcl_HasColOutline(aViewData);
     BOOL bVOutline   = bOutlMode && lcl_HasRowOutline(aViewData);
+    BOOL bLayoutRTL  = aViewData.GetDocument()->IsLayoutRTL( aViewData.GetTabNo() );
 
     rBorder = SvBorder();
 
@@ -970,6 +973,9 @@ void ScTabView::GetBorderSize( SvBorder& rBorder, const Size& rSize )
         rBorder.Left() += pRowBar[SC_SPLIT_BOTTOM]->GetSizePixel().Width();
         rBorder.Top()  += pColBar[SC_SPLIT_LEFT]->GetSizePixel().Height();
     }
+
+    if ( bLayoutRTL )
+        ::std::swap( rBorder.Left(), rBorder.Right() );
 }
 
 IMPL_LINK( ScTabView, TabBarResize, void*, EMPTY_ARG )
