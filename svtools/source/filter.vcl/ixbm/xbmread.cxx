@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xbmread.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:59 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 10:18:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,10 +71,10 @@
 
 XBMReader::XBMReader( SvStream& rStm, void* pCallData ) :
             rIStm           ( rStm ),
+            pAcc1           ( NULL ),
+            nLastPos        ( rStm.Tell() ),
             nWidth          ( 0 ),
             nHeight         ( 0 ),
-            nLastPos        ( rStm.Tell() ),
-            pAcc1           ( NULL ),
             bStatus         ( TRUE )
 {
     pHexTable = new short[ 256 ];
@@ -350,7 +350,7 @@ ReadState XBMReader::ReadXBM( Graphic& rGraphic )
 
                     if ( bStatus )
                     {
-                        XBMFormat eFormat;
+                        XBMFormat eFormat = XBM10;
 
                         if ( aLine.Search( "short" ) != STRING_NOTFOUND )
                             eFormat = XBM10;
