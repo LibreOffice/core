@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jvmargs.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jl $ $Date: 2002-11-13 16:04:59 $
+ *  last change: $Author: jl $ $Date: 2002-12-03 11:39:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 
 #endif
 
+#ifndef _OSL_FILE_H_
+#include <osl/file.h>
+#endif
 
 #include <string.h>
 
@@ -125,7 +128,13 @@ namespace stoc_javavm {
                 ;
 
             else if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("Home"))))
-                _java_home = right;
+            {
+                // we need a system path and not a file URL
+                OUString usSysPath;
+                oslFileError er= osl_getSystemPathFromFileURL( right.pData, &usSysPath.pData);
+                OSL_ASSERT( er == osl_File_E_None);
+                _java_home = usSysPath;
+            }
 
             else if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("VMType"))))
                 _vmtype = right;
