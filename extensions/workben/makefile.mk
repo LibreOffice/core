@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:16:56 $
+#   last change: $Author: jbu $ $Date: 2002-10-01 07:51:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,8 +89,6 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  settings.mk
 .INCLUDE :  sv.mk
 
-UNOUCRDEP=$(SOLARBINDIR)$/applicat.rdb
-UNOUCRRDB=$(SOLARBINDIR)$/applicat.rdb
 UNOUCROUT=$(OUT)$/inc$/$(PRJNAME)$/$(TARGET)
 INCPRE+=$(UNOUCROUT)
 
