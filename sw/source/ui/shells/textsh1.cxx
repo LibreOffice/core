@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh1.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: os $ $Date: 2002-07-05 12:17:02 $
+ *  last change: $Author: mba $ $Date: 2002-07-08 08:16:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -349,8 +349,10 @@ void SwTextShell::Execute(SfxRequest &rReq)
             {
                 USHORT nId = pDlg->IsEndNote() ? FN_INSERT_ENDNOTE : FN_INSERT_FOOTNOTE;
                 SfxRequest aReq( GetView().GetViewFrame(), nId );
-                aReq.AppendItem( SfxStringItem( nId, pDlg->GetStr() ) );
-                aReq.AppendItem( SfxStringItem( FN_PARAM_1, pDlg->GetFontName() ) );
+                if ( pDlg->GetStr().Len() )
+                    aReq.AppendItem( SfxStringItem( nId, pDlg->GetStr() ) );
+                if ( pDlg->GetFontName().Len() )
+                    aReq.AppendItem( SfxStringItem( FN_PARAM_1, pDlg->GetFontName() ) );
                 //aReq.AppendItem( SfxStringItem( FN_PARAM_2, pDlg->GetCharSet() ) );
                 ExecuteSlot( aReq );
             }
@@ -610,13 +612,13 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case SID_ATTR_CHAR_SCALEWIDTH :
         case SID_ATTR_CHAR_ROTATED :
         case FN_TXTATR_INET :
+        case FN_INSERT_HYPERLINK:
         {
             USHORT nWhich = GetPool().GetWhich( nSlot );
             if ( pArgs && pArgs->GetItemState( nWhich ) == SFX_ITEM_SET )
                 bUseDialog = FALSE;
             // intentionally no break
         }
-        case FN_INSERT_HYPERLINK:
         case SID_CHAR_DLG:
         {
             FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, &GetView()));
