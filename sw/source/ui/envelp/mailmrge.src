@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmrge.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-29 10:57:14 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 08:32:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -494,11 +494,11 @@ ModalDialog DLG_MAILMERGE
         Text[ chinese_simplified ] = "Ιϊ³Ιµ¥Έφ΄ςΣ΅ΘΞΞρ(~S)";
         Text[ russian ] = "Ρξηδΰςό ξςδελόνξε ηΰδΰνθε οεχΰςθ";
         Text[ polish ] = "Utwσrz pojedyncze zadania wydruku";
-        Text[ japanese ] = "1‚Β‚Έ‚Βσό(~S)";
+        Text[ japanese ] = "Β•ΚσόΌή®Μή‚Μμ¬(~S)";
         Text[ chinese_traditional ] = "¥Ν¦¨³ζ­Σ¦C¦L¥τ°Θ(~S)";
         Text[ arabic ] = "ΕδΤΗΑ ζΩΗΖέ ΨΘΗΪΙ έΡΟνΙ";
         Text[ greek ] = "Δημιουργία μεμονωμένων εργασιών εκτύπωσης";
-        Text[ korean ] = "΄άΐΟ ΐΞΌβ ΐΫΎχ(~S)";
+        Text[ korean ] = "°Ά°ΆΐΗ ΐΞΌβ ΐΫΎχ(~S)";
         Text[ turkish ] = "Bireysel yazdύrma iώleri oluώtur";
         Text[ language_user1 ] = " ";
     };
@@ -710,24 +710,24 @@ ModalDialog DLG_MAILMERGE
         Disable = TRUE ;
         Text = "~StarOffice Writer" ;
         TabStop = TRUE ;
-        Text [ english_us ] = "~StarOffice Writer" ;
-        Text [ portuguese_brazilian ] = "StarOffice Writer" ;
-        Text [ swedish ] = "~StarOffice Writer" ;
-        Text [ danish ] = "StarOffice Writer" ;
-        Text [ italian ] = "~StarOffice Writer" ;
-        Text [ spanish ] = "~StarOffice Writer" ;
-        Text [ french ] = "StarOffice ~Writer" ;
-        Text [ dutch ] = "~StarOffice Writer" ;
-        Text [ portuguese ] = "~StarOffice Writer" ;
-        Text[ chinese_simplified ] = "StarOffice Writer";
-        Text[ russian ] = "~StarOffice Writer";
-        Text[ polish ] = "~StarOffice Writer";
-        Text[ japanese ] = "StarOffice Writer";
-        Text[ chinese_traditional ] = "~StarOffice Writer";
-        Text[ arabic ] = "StarOffice Writer~";
-        Text[ greek ] = "StarOffice Writer";
-        Text[ korean ] = "~StarOffice Writer";
-        Text[ turkish ] = "~StarOffice Writer";
+        Text [ english_us ] = "~%PRODUCTNAME Writer" ;
+        Text [ portuguese_brazilian ] = "%PRODUCTNAME Writer" ;
+        Text [ swedish ] = "~%PRODUCTNAME Writer" ;
+        Text [ danish ] = "%PRODUCTNAME Writer" ;
+        Text [ italian ] = "~%PRODUCTNAME Writer" ;
+        Text [ spanish ] = "~%PRODUCTNAME Writer" ;
+        Text [ french ] = "%PRODUCTNAME ~Writer" ;
+        Text [ dutch ] = "~%PRODUCTNAME Writer" ;
+        Text [ portuguese ] = "~%PRODUCTNAME Writer" ;
+        Text[ chinese_simplified ] = "%PRODUCTNAME Writer";
+        Text[ russian ] = "~%PRODUCTNAME Writer";
+        Text[ polish ] = "~%PRODUCTNAME Writer";
+        Text[ japanese ] = "%PRODUCTNAME Writer";
+        Text[ chinese_traditional ] = "~%PRODUCTNAME Writer";
+        Text[ arabic ] = "%PRODUCTNAME Writer~";
+        Text[ greek ] = "%PRODUCTNAME Writer";
+        Text[ korean ] = "~%PRODUCTNAME Writer";
+        Text[ turkish ] = "~%PRODUCTNAME Writer";
         Text[ language_user1 ] = " ";
     };
     GroupBox GB_DEST
