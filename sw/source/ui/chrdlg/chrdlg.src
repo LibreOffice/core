@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chrdlg.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-30 20:06:16 $
+ *  last change: $Author: rt $ $Date: 2001-06-08 22:41:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,3 +171,4 @@ InfoBox MSG_ILLEGAL_PAGENUM
     MESSAGE[ language_user1 ] = " ";
     MESSAGE[ catalan ] = "El número de la página no se puede colocar. En páginas izquierdas se pueden utilizar solo números pares, en las derechas solo impares.";
 };
+
