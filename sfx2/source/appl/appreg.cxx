@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appreg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 16:22:59 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 15:41:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,7 @@ void SfxApplication::Registrations_Impl()
     SfxTemplateDialogWrapper::RegisterChildWindow(TRUE);
 
     // Controller
+/*
     SfxObjectVerbsControl::RegisterControl(SID_OBJECT);
     SfxMenuControl::RegisterControl(SID_QUITAPP);
     SfxMenuControl::RegisterControl(SID_SAVEASDOC);
@@ -127,6 +128,7 @@ void SfxApplication::Registrations_Impl()
     SfxMenuControl::RegisterControl(SID_MAIL_SENDDOC);
     SfxAppMenuControl_Impl::RegisterControl( SID_NEWDOCDIRECT );
     SfxAppMenuControl_Impl::RegisterControl( SID_AUTOPILOTMENU );
+*/
     SfxToolBoxControl::RegisterControl(SID_UNDO);
     SfxToolBoxControl::RegisterControl(SID_REDO);
     SfxToolBoxControl::RegisterControl(SID_REPEAT);
