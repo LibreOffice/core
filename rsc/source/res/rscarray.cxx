@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscarray.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-10 11:51:25 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:52:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,7 +284,7 @@ void RscArray::Destroy( const RSCINST & rInst )
 ERRTYPE RscArray::GetValueEle
 (
     const RSCINST & rInst,
-    long lValue,
+    INT32 lValue,
     RscTop * pCreateClass,
     RSCINST * pGetInst
 )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscclass.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-10 11:51:25 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:52:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,7 +311,7 @@ RSCINST RscClass::Create
         ((RscClassInst *)(aInst.pData + nSuperSize))->nVarDflt =
             ((RscClassInst *)(rDflt.pData + nSuperSize))->nVarDflt;
     else
-        ((RscClassInst *)(aInst.pData + nSuperSize))->nVarDflt = 0xFFFFFFFF;
+        ((RscClassInst *)(aInst.pData + nSuperSize))->nVarDflt = ~((ULONG)0);
 
     for( i = 0; i < nEntries; i++ )
     {
@@ -645,7 +645,7 @@ void RscClass::SetToDefault( const RSCINST & rInst )
                 aTmpI.pClass->SetToDefault( aTmpI );
         }
     }
-    pClass->nVarDflt = 0xFFFFFFFF; // alles auf Default
+    pClass->nVarDflt = ~((ULONG)0); // alles auf Default
 
     RscTop::SetToDefault( rInst );
 }
@@ -896,7 +896,7 @@ void RscClass::WriteSrc
 |*    Beschreibung
 |*
 *************************************************************************/
-long RscClass::GetCorrectValues
+INT32 RscClass::GetCorrectValues
 (
     const RSCINST & rInst,
     USHORT nVarPos,
@@ -904,8 +904,8 @@ long RscClass::GetCorrectValues
     RscTypCont * pTC
 )
 {
-    long nLang = 0;
-    long nBaseValue;
+    INT32 nLang = 0;
+    INT32 nBaseValue;
 
     // Basiswert holen
     RSCINST aTmpI = GetInstData( rInst.pData, nVarPos, TRUE );
