@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextFieldMaster.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-04-20 11:40:03 $
+ *  last change: $Author: os $ $Date: 2001-07-30 12:00:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,18 +84,20 @@ service TextFieldMaster
      */
     [optional] interface com::sun::star::beans::XPropertySet;
     //------------------------------------------------------------------------
-    /** determins the name of the field master.
+    /** determins the name of the field master. The name is void as long as the
+     instance is not member of the document structure. When the value is being set
+     the instance is inserted into the document and the name cannot be changed afterwards.
      */
     [property]  string Name;
         //------------------------------------------------------------------------
     /** contains a sequence of all fields that depend on this master.
      */
-    [property]  sequence< XDependentTextField> DependentTextFields;
+    [readonly, property]  sequence< XDependentTextField> DependentTextFields;
     //------------------------------------------------------------------------
     /** contains the instance name as it is used in the <type scope="::com::sun::star::text">
         XTextFieldsSupplier</type>.
      */
-    [property]  string InstanceName;
+    [readonly, property]  string InstanceName;
 };
 
 //=============================================================================
