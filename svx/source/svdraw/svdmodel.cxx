@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 17:48:17 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 14:13:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1322,7 +1322,7 @@ void SdrModel::SetUIUnit(FieldUnit eUnit, const Fraction& rScale)
     }
 }
 
-void SdrModel::TakeUnitStr(FieldUnit eUnit, XubString& rStr) const
+void SdrModel::TakeUnitStr(FieldUnit eUnit, XubString& rStr)
 {
     switch(eUnit)
     {
