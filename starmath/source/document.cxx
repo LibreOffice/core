@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-13 15:50:13 $
+ *  last change: $Author: tl $ $Date: 2001-03-19 10:25:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -717,10 +717,9 @@ void SmDocShell::Convert40To50Txt()
 BOOL SmDocShell::ConvertFrom(SfxMedium &rMedium)
 {
     BOOL     bSuccess = FALSE;
-    if ((rMedium.GetFilter()->GetFilterName().
-        EqualsAscii("MathML XML (Math)")) ||
-        (rMedium.GetFilter()->GetFilterName().
-         EqualsAscii("StarOffice XML (Math)")))
+    const String& rFltName = rMedium.GetFilter()->GetFilterName();
+    if (rFltName.EqualsAscii( MATHML_XML ) ||
+        rFltName.EqualsAscii( STAROFFICE_XML ))
     {
         if (pTree)
         {
@@ -959,15 +958,14 @@ BOOL SmDocShell::ConvertTo( SfxMedium &rMedium )
     const SfxFilter* pFlt = rMedium.GetFilter();
     if( pFlt )
     {
-        if(pFlt->GetFilterName().EqualsAscii(
-            "StarOffice XML (Math)" ))
+        const String& rFltName = pFlt->GetFilterName();
+        if(rFltName.EqualsAscii( STAROFFICE_XML ))
         {
             SmXMLWrapper aEquation(GetModel());
             aEquation.SetFlat(sal_False);
             bRet = aEquation.Export(rMedium);
         }
-        else if(pFlt->GetFilterName().EqualsAscii(
-            "MathML XML (Math)" ))
+        else if(rFltName.EqualsAscii( MATHML_XML ))
         {
             SmXMLWrapper aEquation(GetModel());
             aEquation.SetFlat(sal_True);
