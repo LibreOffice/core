@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.c,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: mhu $ $Date: 2004-11-02 17:31:29 $
+ *  last change: $Author: mhu $ $Date: 2004-11-03 14:37:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,8 +274,8 @@ static rtl_uString ** osl_createCommandArgs_Impl (int argc, char ** argv)
             DWORD dwResult;
             TCHAR szBuffer[MAX_PATH];
 
-            dwResult = GetFullPathName (
-                ppArgs[0]->buffer, MAX_PATH, szBuffer, 0);
+            dwResult = SearchPath (
+                0, ppArgs[0]->buffer, L".exe", MAX_PATH, szBuffer, 0);
             if ((0 < dwResult) && (dwResult < MAX_PATH))
             {
                 /* Replace argv[0] with it's absolute path */
