@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interfacecontainer.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 13:39:32 $
+ *  last change: $Author: jbu $ $Date: 2001-05-17 12:56:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,7 +306,7 @@ sal_Int32 OInterfaceContainerHelper::addInterface( const Reference<XInterface> &
 
 sal_Int32 OInterfaceContainerHelper::removeInterface( const Reference<XInterface> & rListener ) SAL_THROW( () )
 {
-    assert( rListener.is() );
+    OSL_ASSERT( rListener.is() );
     MutexGuard aGuard( rMutex );
     if( bInUse )
         copyAndResetInUse();
@@ -352,7 +352,7 @@ sal_Int32 OInterfaceContainerHelper::removeInterface( const Reference<XInterface
         else
             return ((Sequence< Reference< XInterface > >*)pData)->getLength();
     }
-    else if( Reference<XInterface>( (XInterface*)pData ) == rListener )
+    else if( pData && Reference<XInterface>( (XInterface*)pData ) == rListener )
     {
         ((XInterface *)pData)->release();
         pData = 0;
