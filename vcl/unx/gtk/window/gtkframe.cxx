@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 13:00:10 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 14:52:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 #include <plugins/gtk/gtkgdi.hxx>
 #include <keycodes.hxx>
 #include <wmadaptor.hxx>
+#include <sm.hxx>
 #include <salbmp.h>
 #include <salprn.h>
 #include <floatwin.hxx>
@@ -842,6 +843,8 @@ void GtkSalFrame::Show( BOOL bVisible, BOOL bNoActivate )
     {
         if( bVisible )
         {
+            SessionManagerClient::open(); // will simply return after the first time
+
             if( m_bDefaultPos )
                 Center();
             if( m_bDefaultSize )
