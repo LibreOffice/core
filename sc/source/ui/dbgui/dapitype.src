@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dapitype.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-05 21:10:14 $
+ *  last change: $Author: vg $ $Date: 2002-02-19 21:09:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -581,7 +581,7 @@ ModalDialog RID_SCDLG_DAPIDATA
         Text[ polish ] = "èrÛd≥o danych";
         Text[ portuguese_brazilian ] = "Data source";
         Text[ japanese ] = "„Éá„Éº„Çø„ÇΩ„Éº„Çπ(~U)";
-        Text[ korean ] = "Îç∞Ïù¥ÌÑ∞ ÏÜåÏä§(~U)";
+        Text[ korean ] = "Îç∞Ïù¥ÌÑ∞ Í¥ÄÎ¶¨(~U)";
         Text[ chinese_simplified ] = "Êï∞ÊçÆÊ∫ê(~U)";
         Text[ chinese_traditional ] = "Ë≥áÊñôÊ∫ê(~U)";
         Text[ arabic ] = "„’œ— «·»Ì«‰« ";
