@@ -499,10 +499,12 @@ public:
 
         if (aByteSeq[1] != kTestByte1)
             res = sal_False;
-      printf("# aByteSeq[1] is %d\n", aByteSeq[1]);
-    printf("# aByteSeq[2] is %d\n", aByteSeq[2]);
-    printf("# aByteSeq[3] is %d\n", aByteSeq[3]);
-    printf("# aByteSeq[4] is %d\n", aByteSeq[4]);
+
+    if (aByteSeq[2] != kTestByte2)
+            res = sal_False;
+
+    if (aByteSeq[3] != kTestByte3)
+            res = sal_False;
 
     CPPUNIT_ASSERT_MESSAGE
         (
