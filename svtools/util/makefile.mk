@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.49 $
+#*  $Revision: 1.50 $
 #*
-#*  last change: $Author: kz $ $Date: 2004-06-28 16:13:19 $
+#*  last change: $Author: kz $ $Date: 2004-10-04 19:48:20 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -121,7 +121,9 @@ LIB7FILES=	\
         $(SLB)$/syslocale.lib   \
         $(SLB)$/svhtml2.lib     \
         $(SLB)$/filepicker.lib  \
-        $(SLB)$/heavyconfig.lib
+        $(SLB)$/heavyconfig.lib	\
+        $(SLB)$/hatchwindow.lib
+
 
 .IF "$(GUI)" == "UNX"
 LIB7FILES+= 	$(SLB)$/eaimp.lib
