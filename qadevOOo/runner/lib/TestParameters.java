@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TestParameters.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sw $ $Date: 2003-01-27 16:27:39 $
+ *  last change: $Author: vg $ $Date: 2003-05-27 12:03:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 package lib;
 
 import java.util.Hashtable;
-import com.sun.star.lang.XMultiServiceFactory;
+//import com.sun.star.lang.XMultiServiceFactory;
 
 /**
  * TestParameters describes a parameters (in a form of pairs: name, value) to
@@ -111,7 +111,7 @@ public class TestParameters extends Hashtable {
      * The ServiceFactory to create instances
      */
 
-    public XMultiServiceFactory ServiceFactory;
+    public Object ServiceFactory;
 
     /**
      * The Path to the component description
@@ -265,10 +265,10 @@ public class TestParameters extends Hashtable {
     /**
      * @return a XMultiServiceFactory to be used by a test (tests).
      */
-    public XMultiServiceFactory getMSF() {
-       XMultiServiceFactory ret = null;
-       ret = (XMultiServiceFactory) get("ServiceFactory");
-       return ret;
+    public Object getMSF() {
+        Object ret = null;
+        ret = get("ServiceFactory");
+        return ret;
     }
 
 }// finish class TestParamenters

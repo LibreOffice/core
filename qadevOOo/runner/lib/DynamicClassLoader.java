@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DynamicClassLoader.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 16:27:43 $
+ *  last change:$Date: 2003-05-27 12:03:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,13 +61,15 @@
 
 package lib ;
 
+import java.lang.reflect.Constructor;
+
 public class DynamicClassLoader {
 
     /**
     * This method returns a class created by it's name
     * created by call to <code>Class.forName()</code>.<p>
     * This method must be overloaded if another loading
-    * policy is reauired for Component and Interface
+    * policy is required for Component and Interface
     * testing classes.
     */
     public static Class forName(String className)
@@ -76,7 +78,8 @@ public class DynamicClassLoader {
         return Class.forName(className) ;
     }
 
-        public Object getInstance(String className) {
+        public Object getInstance(String className)
+                                            throws IllegalArgumentException {
             try {
                 Class cls = DynamicClassLoader.forName(className);
                 return cls.newInstance();
@@ -86,6 +89,34 @@ public class DynamicClassLoader {
             } catch ( IllegalAccessException e ) {
                 throw new IllegalArgumentException("Couldn't access " + className
                         + " " + e);
+            } catch ( InstantiationException e ) {
+                throw new IllegalArgumentException("Couldn't instantiate " +
+                                className + " " + e);
+            }
+        }
+
+        public Object getInstance(String className, Object[] ctorArgs)
+                                            throws IllegalArgumentException {
+            try {
+                Class cls = DynamicClassLoader.forName(className);
+                Class[] ctorType = new Class[ctorArgs.length];
+                for(int i=0; i<ctorType.length; i++) {
+                    ctorType[i] = ctorArgs[i].getClass();
+                }
+                Constructor ctor = cls.getConstructor(ctorType);
+                return ctor.newInstance(ctorArgs);
+            } catch ( ClassNotFoundException e ) {
+                throw new IllegalArgumentException("Couldn't find " + className
+                        + " " + e);
+            } catch ( IllegalAccessException e ) {
+                throw new IllegalArgumentException("Couldn't access " + className
+                        + " " + e);
+            } catch ( NoSuchMethodException e ) {
+                throw new IllegalArgumentException("Couldn't find constructor for " + className
+                        + " " + e);
+            } catch ( java.lang.reflect.InvocationTargetException e ) {
+                throw new IllegalArgumentException("Couldn't invoke " +
+                                className + " " + e);
             } catch ( InstantiationException e ) {
                 throw new IllegalArgumentException("Couldn't instantiate " +
                                 className + " " + e);
