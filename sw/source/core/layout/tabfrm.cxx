@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: fme $ $Date: 2002-09-19 13:24:33 $
+ *  last change: $Author: ama $ $Date: 2002-09-19 15:31:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2821,7 +2821,7 @@ SwTwips SwRowFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
     SWRECTFN( this )
     if( HasFixSize() )
     {
-        AdjustCells( (Prt().*fnRect->fnGetHeight)(), !bVert );
+        AdjustCells( (Prt().*fnRect->fnGetHeight)(), TRUE );
         return 0L;
     }
 
