@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrol.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-26 14:33:41 $
+ *  last change: $Author: fs $ $Date: 2002-04-29 15:38:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1120,6 +1120,7 @@ Reference< XAccessibleContext > SAL_CALL UnoControl::getAccessibleContext(  ) th
             // in design mode, use a fallback
             xCurrentContext = ::toolkit::OAccessibleControlContext::create( this );
 
+        DBG_ASSERT( xCurrentContext.is(), "UnoControl::getAccessibleContext: invalid context (invalid peer?)!" );
         maAccessibleContext = xCurrentContext;
 
         // get notified when the context is disposed
@@ -1127,8 +1128,8 @@ Reference< XAccessibleContext > SAL_CALL UnoControl::getAccessibleContext(  ) th
         if ( xContextComp.is() )
             xContextComp->addEventListener( this );
         // In an ideal world, this is not necessary - there the object would be released as soon as it has been
-        // disposed, and this our weak reference would be empty, too.
-        // But 'til this ideal world comes (means we do never have any refcount/lifetime bugs anymore), we
+        // disposed, and thus our weak reference would be empty, too.
+        // But 'til this ideal world comes (means 'til we do never have any refcount/lifetime bugs anymore), we
         // need to listen for disposal and reset our weak reference then.
     }
 
