@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpcontent.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: abi $ $Date: 2002-10-15 16:19:30 $
+ *  last change: $Author: obo $ $Date: 2002-10-17 09:03:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,7 +188,7 @@ namespace ftp
             com::sun::star::ucb::XCommandEnvironment >& Environment
         );
 
-        ::com::sun::star::uno::Sequence<::com::sun::star::uno::Any>
+        com::sun::star::uno::Sequence<com::sun::star::uno::Any>
         setPropertyValues(
             const ::com::sun::star::uno::Sequence<
             ::com::sun::star::beans::PropertyValue>& seqPropVal);
