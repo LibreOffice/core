@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdata.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2003-06-12 07:50:57 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 14:32:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,10 @@
 #include <button.hxx> // for Button::GetStandardText
 #endif
 
+#ifndef _SV_SALIMESTATUS_HXX
+#include <salimestatus.hxx>
+#endif
+
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
@@ -209,6 +213,10 @@ void ImplDeInitSVData()
         delete pSVData->maGDIData.mpDefFontConfig;
     if( pSVData->maGDIData.mpFontSubstConfig )
         delete pSVData->maGDIData.mpFontSubstConfig;
+    if( pSVData->mpImeStatus )
+        delete pSVData->mpImeStatus;
+    if( pSVData->mpSalSystem )
+        delete pSVData->mpSalSystem;
 
     if ( pSVData->mpUnoWrapper )
     {
@@ -412,7 +420,7 @@ bool ImplInitAccessBridge(BOOL bAllowCancel, BOOL &rCancelled)
             aMessage += String(" ", 1, RTL_TEXTENCODING_ASCII_US);
             aMessage += String(ResId(SV_ACCESSERROR_OK_CANCEL_MSG, pResMgr));
 
-            int ret = ImplShowNativeMessageBox(
+            int ret = ImplGetSalSystem()->ShowNativeMessageBox(
                 aTitle,
                 ReplaceJavaErrorMessages(aMessage),
                 SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK_CANCEL,
@@ -438,7 +446,7 @@ bool ImplInitAccessBridge(BOOL bAllowCancel, BOOL &rCancelled)
             aMessage += String(" ", 1, RTL_TEXTENCODING_ASCII_US);
             aMessage += String(ResId(SV_ACCESSERROR_OK_CANCEL_MSG, pResMgr));
 
-            int ret = ImplShowNativeMessageBox(
+            int ret = ImplGetSalSystem()->ShowNativeMessageBox(
                 aTitle,
                 ReplaceJavaErrorMessages(aMessage),
                 SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK_CANCEL,
@@ -464,7 +472,7 @@ bool ImplInitAccessBridge(BOOL bAllowCancel, BOOL &rCancelled)
             aMessage += String(" ", 1, RTL_TEXTENCODING_ASCII_US);
             aMessage += String(ResId(SV_ACCESSERROR_OK_CANCEL_MSG, pResMgr));
 
-            int ret = ImplShowNativeMessageBox(
+            int ret = ImplGetSalSystem()->ShowNativeMessageBox(
                 aTitle,
                 ReplaceJavaErrorMessages(aMessage),
                 SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK_CANCEL,
@@ -490,7 +498,7 @@ bool ImplInitAccessBridge(BOOL bAllowCancel, BOOL &rCancelled)
             aMessage += String(" ", 1, RTL_TEXTENCODING_ASCII_US);
             aMessage += String(ResId(SV_ACCESSERROR_OK_CANCEL_MSG, pResMgr));
 
-            int ret = ImplShowNativeMessageBox(
+            int ret = ImplGetSalSystem()->ShowNativeMessageBox(
                 aTitle,
                 ReplaceJavaErrorMessages(aMessage),
                 SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK_CANCEL,
@@ -533,7 +541,7 @@ bool ImplInitAccessBridge(BOOL bAllowCancel, BOOL &rCancelled)
                     aMessage += String(" ", 1, RTL_TEXTENCODING_ASCII_US);
                     aMessage += String(ResId(SV_ACCESSERROR_OK_CANCEL_MSG, pResMgr));
 
-                    int ret = ImplShowNativeMessageBox(
+                    int ret = ImplGetSalSystem()->ShowNativeMessageBox(
                         aTitle,
                         ReplaceJavaErrorMessages(aMessage),
                         SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK_CANCEL,
@@ -547,7 +555,7 @@ bool ImplInitAccessBridge(BOOL bAllowCancel, BOOL &rCancelled)
                 {
                     // The user tried to activate accessibility support using Tools-Options dialog,
                     // so we don't offer to terminate here !
-                    ImplShowNativeMessageBox(
+                    ImplGetSalSystem()->ShowNativeMessageBox(
                         aTitle,
                         ReplaceJavaErrorMessages(aMessage),
                         SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK,
