@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2000-10-16 13:01:57 $
+ *  last change: $Author: sab $ $Date: 2000-10-17 13:14:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -653,8 +653,6 @@ sal_uInt16 SvXMLStylesContext::GetFamily(
             nFamily = XML_STYLE_FAMILY_TABLE_ROW;
         else if( rValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_table_cell )))
             nFamily = XML_STYLE_FAMILY_TABLE_CELL;
-        else if( rValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_table_page )))
-            nFamily = XML_STYLE_FAMILY_TABLE_PAGE_STYLES;
     }
     else if( rValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(XML_STYLE_FAMILY_SD_GRAPHICS_NAME)))
     {
