@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh1.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:43:27 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 11:13:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1353,8 +1353,27 @@ int SwWrtShell::GetSelectionType() const
     if ( IsTableMode() )
         nCnt |= (SEL_TBL | SEL_TBL_CELLS);
 
-    if ( GetCurNumRule() )
-        nCnt |= SEL_NUM;
+    // --> FME 2005-01-12 #i39855#
+    // Do not pop up numbering toolbar, if the text node has a numbering
+    // of type SVX_NUM_NUMBER_NONE.
+    const SwNumRule* pNumRule = GetCurNumRule();
+    if ( pNumRule )
+    {
+        const SwTxtNode* pTxtNd =
+            GetCrsr()->GetPoint()->nNode.GetNode().GetTxtNode();
+
+        if ( pTxtNd )
+        {
+            const SwNodeNum* pNodeNum = pTxtNd->GetNum();
+            if ( pNodeNum )
+            {
+                 const SwNumFmt& rFmt = pNumRule->Get( pNodeNum->GetRealLevel() );
+                 if ( SVX_NUM_NUMBER_NONE != rFmt.GetNumberingType() )
+                     nCnt |= SEL_NUM;
+            }
+        }
+    }
+    // <--
 
     return nCnt;
 }
