@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fetab.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-18 15:15:51 $
+ *  last change: $Author: ama $ $Date: 2002-03-07 11:37:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -558,10 +558,33 @@ void SwFEShell::_GetTabCols( SwTabCols &rToFill, const SwFrm *pBox ) const
         if ( pLastTable == pTab->GetTable() )
         {
             bDel = FALSE;
+#ifdef VERTICAL_LAYOUT
+            SWRECTFN( pTab )
+#endif
             if ( pLastTabFrm != pTab )
             {
                 //Wenn der TabFrm gewechselt hat, brauchen wir bei gleicher
                 //Breite nur ein wenig shiften.
+#ifdef VERTICAL_LAYOUT
+                SWRECTFNX( pLastTabFrm )
+                if( (pLastTabFrm->Frm().*fnRect->fnGetWidth)() ==
+                    (pTab->Frm().*fnRect->fnGetWidth)() )
+                {
+                    pLastCols->SetLeftMin( (USHORT)
+                                        (pTab->Frm().*fnRect->fnGetLeft)() );
+                    pLastTabFrm = pTab;
+                }
+                else
+                    bDel = TRUE;
+            }
+
+            if ( !bDel &&
+                 pLastCols->GetLeftMin () == (USHORT)(pTab->Frm().*fnRect->fnGetLeft)() &&
+                 pLastCols->GetLeft    () == (USHORT)(pTab->Prt().*fnRect->fnGetLeft)() &&
+                 pLastCols->GetRight   () == (USHORT)(pTab->Prt().*fnRect->fnGetRight)()&&
+                 pLastCols->GetRightMax() ==
+                        (USHORT)(pTab->Frm().*fnRect->fnGetRight)() - pLastCols->GetLeftMin() )
+#else
                 if ( pLastTabFrm->Frm().Width() == pTab->Frm().Width() )
                 {
                     pLastCols->SetLeftMin( (USHORT)pTab->Frm().Left() );
@@ -577,6 +600,7 @@ void SwFEShell::_GetTabCols( SwTabCols &rToFill, const SwFrm *pBox ) const
                  pLastCols->GetRight   () == (USHORT)pTab->Prt().Right()&&
                  pLastCols->GetRightMax() ==
                         (USHORT)pTab->Frm().Right() - pLastCols->GetLeftMin() )
+#endif
             {
                 if ( pLastCellFrm != pBox )
                 {
@@ -1517,10 +1541,16 @@ BOOL SwFEShell::SetColRowWidthHeight( USHORT eType, USHORT nDiff )
     // sollte die Tabelle noch auf relativen Werten (USHRT_MAX) stehen
     // dann muss es jetzt auf absolute umgerechnet werden.
     const SwFmtFrmSize& rTblFrmSz = pTab->GetFmt()->GetFrmSize();
+#ifdef VERTICAL_LAYOUT
+    SWRECTFN( pTab )
+    long nPrtWidth = (pTab->Prt().*fnRect->fnGetWidth)();
+#else
+    long nPrtWidth = pTab->Prt().Width();
+#endif
     if( TBLVAR_CHGABS == pTab->GetTable()->GetTblChgMode() &&
         ( eType & WH_COL_LEFT || eType & WH_COL_RIGHT ) &&
         HORI_NONE == pTab->GetFmt()->GetHoriOrient().GetHoriOrient() &&
-        pTab->Prt().Width() != rTblFrmSz.GetWidth() )
+        nPrtWidth != rTblFrmSz.GetWidth() )
     {
         SwFmtFrmSize aSz( rTblFrmSz );
         aSz.SetWidth( pTab->Prt().Width() );
@@ -1529,11 +1559,15 @@ BOOL SwFEShell::SetColRowWidthHeight( USHORT eType, USHORT nDiff )
 
     if( (eType & (WH_FLAG_BIGGER | WH_FLAG_INSDEL)) ==
         (WH_FLAG_BIGGER | WH_FLAG_INSDEL) )
+#ifdef VERTICAL_LAYOUT
+        nDiff = USHORT((pFrm->Frm().*fnRect->fnGetWidth)());
+#else
         nDiff = USHORT(pFrm->Frm().Width());
+#endif
 
     SwTwips nLogDiff = nDiff;
     nLogDiff *= pTab->GetFmt()->GetFrmSize().GetWidth();
-    nLogDiff /= pTab->Prt().Width();
+    nLogDiff /= nPrtWidth;
 
     BOOL bRet = GetDoc()->SetColRowWidthHeight(
                     *(SwTableBox*)((SwCellFrm*)pFrm)->GetTabBox(),

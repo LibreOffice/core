@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtbl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-07 12:54:12 $
+ *  last change: $Author: ama $ $Date: 2002-03-07 11:38:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2121,10 +2121,18 @@ void SwDoc::GetTabCols( SwTabCols &rFill, const SwCursor* pCrsr,
     }
 
     //Fix-Punkte setzen, LeftMin in Dokumentkoordinaten die anderen relativ.
+#ifdef VERTICAL_LAYOUT
+    SWRECTFN( pTab )
+    rFill.SetLeftMin ( (USHORT)(pTab->Frm().*fnRect->fnGetLeft)() );
+    rFill.SetLeft    ( (pTab->Prt().*fnRect->fnGetLeft)() );
+    rFill.SetRight   ( (pTab->Prt().*fnRect->fnGetRight)());
+    rFill.SetRightMax( (USHORT)(pTab->Frm().*fnRect->fnGetRight)() - rFill.GetLeftMin() );
+#else
     rFill.SetLeftMin ( (USHORT)pTab->Frm().Left() );
     rFill.SetLeft    ( pTab->Prt().Left() );
     rFill.SetRight   ( pTab->Prt().Right());
     rFill.SetRightMax( (USHORT)pTab->Frm().Right() - rFill.GetLeftMin() );
+#endif
 
     pTab->GetTable()->GetTabCols( rFill, pBox );
 }
@@ -2170,21 +2178,33 @@ void SwDoc::SetTabCols( const SwTabCols &rNew, BOOL bCurRowOnly,
     // dann muss es jetzt auf absolute umgerechnet werden.
     SwTable& rTab = *pTab->GetTable();
     const SwFmtFrmSize& rTblFrmSz = rTab.GetFrmFmt()->GetFrmSize();
-    if( //HORI_NONE == pTab->GetFmt()->GetHoriOrient().GetHoriOrient() &&
-        pTab->Prt().Width() != rTblFrmSz.GetWidth() )
+#ifdef VERTICAL_LAYOUT
+    SWRECTFN( pTab )
+    long nPrtWidth = (pTab->Prt().*fnRect->fnGetWidth)();
+#else
+    long nPrtWidth = pTab->Prt().Width();
+#endif
+    if( nPrtWidth != rTblFrmSz.GetWidth() )
     {
         SwFmtFrmSize aSz( rTblFrmSz );
-        aSz.SetWidth( pTab->Prt().Width() );
+        aSz.SetWidth( nPrtWidth );
         rTab.GetFrmFmt()->SetAttr( aSz );
     }
 
     SwTabCols aOld( rNew.Count() );
 
     //Fix-Punkte setzen, LeftMin in Dokumentkoordinaten die anderen relativ.
+#ifdef VERTICAL_LAYOUT
+    aOld.SetLeftMin ( (USHORT)(pTab->Frm().*fnRect->fnGetLeft)() );
+    aOld.SetLeft    ( (pTab->Prt().*fnRect->fnGetLeft)() );
+    aOld.SetRight   ( (pTab->Prt().*fnRect->fnGetRight)());
+    aOld.SetRightMax( (USHORT)(pTab->Frm().*fnRect->fnGetRight)() - aOld.GetLeftMin() );
+#else
     aOld.SetLeftMin ( (USHORT)pTab->Frm().Left() );
     aOld.SetLeft    ( pTab->Prt().Left() );
     aOld.SetRight   ( pTab->Prt().Right());
     aOld.SetRightMax( (USHORT)pTab->Frm().Right() - aOld.GetLeftMin() );
+#endif
 
 /*  if( DoesUndo() )
     {

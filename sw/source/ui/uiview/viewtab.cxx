@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewtab.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2002-03-07 08:55:16 $
+ *  last change: $Author: ama $ $Date: 2002-03-07 11:35:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1247,12 +1247,12 @@ void SwView::StateTabWin(SfxItemSet& rSet)
     const SvxFrameDirectionItem& rFrameDir = rDesc.GetMaster().GetFrmDir();
     const BOOL bVerticalWriting = !bBrowse && (rFrameDir.GetValue() == FRMDIR_VERT_TOP_RIGHT ||
                                     rFrameDir.GetValue() == FRMDIR_VERT_TOP_LEFT);
+
     //enable tab stop display on the rulers depending on the writing direction
     WinBits nRulerStyle = pHRuler->GetStyle() & ~WB_EXTRAFIELD;
     pHRuler->SetStyle(bVerticalWriting ? nRulerStyle : nRulerStyle|WB_EXTRAFIELD);
     nRulerStyle = pVRuler->GetStyle() & ~WB_EXTRAFIELD;
     pVRuler->SetStyle(bVerticalWriting ? nRulerStyle|WB_EXTRAFIELD : nRulerStyle);
-
 
     SvxLRSpaceItem aPageLRSpace( rDesc.GetMaster().GetLRSpace() );
     SwapPageMargin( rDesc, aPageLRSpace );
@@ -1506,7 +1506,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                                   USHORT(DOCUMENTBORDER) +
                                   aTabCols.GetLeft();
 
-                int nRgt = (USHORT)nPageWidth -
+                int nRgt = (USHORT)(bVerticalWriting ? nPageHeight : nPageWidth) -
                                   (aTabCols.GetLeftMin() +
                                   aTabCols.GetRight() -
                                   USHORT(DOCUMENTBORDER) );
