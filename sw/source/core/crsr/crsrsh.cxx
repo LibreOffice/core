@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 09:54:14 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:43:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1217,33 +1217,34 @@ void SwCrsrShell::UpdateCrsr( USHORT eFlags, BOOL bIdleEnd )
 
         SwTabFrm *pTab = pTblFrm->FindTabFrm(), *pMarkTab;
 
-        if( pTab && pTab->GetTable()->IsHeadlineRepeat() && (
-            ( pTab->IsFollow() &&
-              ((SwLayoutFrm*)pTab->Lower())->IsAnLower( pTblFrm )) ||
-            ( (pMarkTab = (pMarkTblFrm = pITmpCrsr->GetCntntNode( FALSE )
-                ->GetFrm( &aTmpMk, pITmpCrsr->GetMark() ))->FindTabFrm())->IsFollow() &&
-                ((SwLayoutFrm*)pMarkTab->Lower())->IsAnLower( pMarkTblFrm )) ))
+        if ( pTab && pTab->GetTable()->GetRowsToRepeat() > 0 )
         {
-            // in wiederholten Tabellen-Kopfzeilen wollen wir keine
-            // Tabellen-Selektion !!
-            pTblFrm = 0;
-
-            SwPosSection fnPosSect = *pPos <  *pITmpCrsr->GetMark()
-                                        ? fnSectionStart
-                                        : fnSectionEnd;
-
-            // dann nur innerhalb der Box selektieren
-            if( pTblCrsr )
+            if (  ( pTab->IsFollow() && pTab->IsInHeadline( *pTblFrm ) ) ||
+                  ( (pMarkTab = (pMarkTblFrm = pITmpCrsr->GetCntntNode( FALSE )->
+                    GetFrm( &aTmpMk, pITmpCrsr->GetMark() ))->FindTabFrm())->IsFollow() &&
+                     pMarkTab->IsInHeadline( *pMarkTblFrm ) ) )
             {
-                pCurCrsr->SetMark();
-                *pCurCrsr->GetMark() = *pTblCrsr->GetMark();
-                pCurCrsr->GetMkPos() = pTblCrsr->GetMkPos();
-                pTblCrsr->DeleteMark();
-                pTblCrsr->SwSelPaintRects::Hide();
-            }
+                // in wiederholten Tabellen-Kopfzeilen wollen wir keine
+                // Tabellen-Selektion !!
+                pTblFrm = 0;
 
-            *pCurCrsr->GetPoint() = *pCurCrsr->GetMark();
-            (*fnSectionCurr)( *pCurCrsr, fnPosSect );
+                SwPosSection fnPosSect = *pPos <  *pITmpCrsr->GetMark()
+                                            ? fnSectionStart
+                                            : fnSectionEnd;
+
+                // dann nur innerhalb der Box selektieren
+                if( pTblCrsr )
+                {
+                    pCurCrsr->SetMark();
+                    *pCurCrsr->GetMark() = *pTblCrsr->GetMark();
+                    pCurCrsr->GetMkPos() = pTblCrsr->GetMkPos();
+                    pTblCrsr->DeleteMark();
+                    pTblCrsr->SwSelPaintRects::Hide();
+                }
+
+                *pCurCrsr->GetPoint() = *pCurCrsr->GetMark();
+                (*fnSectionCurr)( *pCurCrsr, fnPosSect );
+            }
         }
 
         // wir wollen wirklich eine Tabellen-Selektion
