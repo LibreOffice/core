@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basobj3.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 15:52:10 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 17:12:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -848,9 +848,10 @@ void BasicIDE::BasicStopped( BOOL* pbAppWindowDisabled,
 
     // AppWait ?
     USHORT nWait = 0;
-    while ( Application::IsWait() )
+    BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+    while ( pIDEShell->GetViewFrame()->GetWindow().IsWait() )
     {
-        Application::LeaveWait();
+        pIDEShell->GetViewFrame()->GetWindow().LeaveWait();
         nWait++;
     }
     if ( pnWaitCount )
@@ -866,14 +867,9 @@ void BasicIDE::BasicStopped( BOOL* pbAppWindowDisabled,
     Window* pDefParent = Application::GetDefDialogParent();
     if ( pDefParent && !pDefParent->IsEnabled() )
     {
-        // Aber nicht wenn sich noch ein Dialog im Testmodus befindet!
-//      if ( pDefParent == Application::GetAppWindow() )
-        {
-//          Application::GetAppWindow()->Enable( TRUE );
-            pDefParent->Enable( TRUE );
-            if ( pbAppWindowDisabled )
-                *pbAppWindowDisabled = TRUE;
-        }
+        pDefParent->Enable( TRUE );
+        if ( pbAppWindowDisabled )
+            *pbAppWindowDisabled = TRUE;
     }
 
 }
