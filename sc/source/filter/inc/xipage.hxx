@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xipage.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:42:04 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:47:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,6 @@
  *
  ************************************************************************/
 
-// ============================================================================
-
 #ifndef SC_XIPAGE_HXX
 #define SC_XIPAGE_HXX
 
@@ -71,7 +69,6 @@
 #include "xiroot.hxx"
 #endif
 
-
 // Page settings ==============================================================
 
 /** Contains all page (print) settings for a single sheet.
@@ -79,41 +76,40 @@
 class XclImpPageSettings : protected XclImpRoot
 {
 public:
-    explicit                    XclImpPageSettings( const XclImpRoot& rRoot );
+    explicit            XclImpPageSettings( const XclImpRoot& rRoot );
 
     /** Returns read-only access to the page data. */
-    inline const XclPageData&   GetPageData() const { return maData; }
+    inline const XclPageData& GetPageData() const { return maData; }
 
     /** Reads a SETUP record and inserts contained data. */
-    void                        ReadSetup( XclImpStream& rStrm );
+    void                ReadSetup( XclImpStream& rStrm );
     /** Reads a ***MARGIN record (reads all 4 margin records). */
-    void                        ReadMargin( XclImpStream& rStrm );
+    void                ReadMargin( XclImpStream& rStrm );
     /** Reads a HCENTER or VCENTER record. */
-    void                        ReadCenter( XclImpStream& rStrm );
+    void                ReadCenter( XclImpStream& rStrm );
     /** Reads a HEADER or FOOTER record. */
-    void                        ReadHeaderFooter( XclImpStream& rStrm );
+    void                ReadHeaderFooter( XclImpStream& rStrm );
     /** Reads a HORIZONTALPAGEBREAKS or VERTICALPAGEBREAKS record. */
-    void                        ReadPageBreaks( XclImpStream& rStrm );
+    void                ReadPageBreaks( XclImpStream& rStrm );
     /** Reads a PRINTHEADERS record. */
-    void                        ReadPrintheaders( XclImpStream& rStrm );
+    void                ReadPrintheaders( XclImpStream& rStrm );
     /** Reads a PRINTGRIDLINES record. */
-    void                        ReadPrintgridlines( XclImpStream& rStrm );
+    void                ReadPrintgridlines( XclImpStream& rStrm );
     /** Reads a BITMAP record and creates the SvxBrushItem. */
-    void                        ReadBitmap( XclImpStream& rStrm );
+    void                ReadBitmap( XclImpStream& rStrm );
 
     /** Overrides paper size and orientation (used in sheet-charts). */
-    void                        SetPaperSize( sal_uInt16 nXclPaperSize, bool bPortrait );
+    void                SetPaperSize( sal_uInt16 nXclPaperSize, bool bPortrait );
     /** Sets or clears the fit-to-pages setting (contained in WSBOOL record). */
-    inline void                 SetFitToPages( bool bFitToPages ) { maData.mbFitToPages = bFitToPages; }
+    inline void         SetFitToPages( bool bFitToPages ) { maData.mbFitToPages = bFitToPages; }
 
     /** Creates a page stylesheet from current settings and sets it at current sheet. */
-    void                        CreatePageStyle();
+    void                CreatePageStyle();
 
 private:
-    XclPageData                 maData;         /// Page settings data.
-    bool                        mbValidPaper;   /// true = Paper size and orientation valid.
+    XclPageData         maData;         /// Page settings data.
+    bool                mbValidPaper;   /// true = Paper size and orientation valid.
 };
-
 
 // ============================================================================
 
