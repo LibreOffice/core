@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatchprovider.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: as $ $Date: 2001-12-12 13:28:34 $
+ *  last change: $Author: as $ $Date: 2001-12-20 14:01:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,7 +347,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL DispatchProvider::queryDis
                                                 if ( xPlug.is() )
                                                 {
                                                     css::uno::Reference < css::frame::XDispatchProvider > xProv( xTask, css::uno::UNO_QUERY );
-                                                    xReturn = xProv->queryDispatch( aURL, sTargetFrameName, nSearchFlags );
+                                                    xReturn = xProv->queryDispatch( aURL, SPECIALTARGET_SELF, 0 );
                                                 }
                                                 else
                                                     xReturn = implts_getOrCreateDispatchHelper( E_DEFAULTDISPATCHER );
