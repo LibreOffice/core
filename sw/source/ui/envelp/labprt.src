@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labprt.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 11:53:46 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:05:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,7 +208,7 @@ TabPage TP_LAB_PRT
         Text[ chinese_traditional ] = "Ë°å(~W)";
         Text[ arabic ] = "’›";
         Text[ greek ] = "√Ò·ÏÏﬁ";
-        Text[ korean ] = "Ìñâ()(~W)";
+        Text[ korean ] = "Ìñâ(~W)";
         Text[ turkish ] = "Sat˝r";
         Text[ catalan ] = "Fi~la";
         Text[ thai ] = "‡πÅ‡∏ñ~‡∏ß";
@@ -271,7 +271,7 @@ TabPage TP_LAB_PRT
         Text[ english_us ] = "Distribute";
         Text[ portuguese ] = "Distribuir";
         Text[ russian ] = "–‡ÒÔÂ‰ÂÎËÚ¸";
-        Text[ greek ] = "Divide";
+        Text[ greek ] = " ·Ù·ÌÔÏﬁ";
         Text[ dutch ] = "Verdelen";
         Text[ french ] = "RÈpartir";
         Text[ spanish ] = "Distribuir";
@@ -394,6 +394,7 @@ TabPage TP_LAB_PRT
     };
 };
  // **************************************************************************
+
 
 
 
