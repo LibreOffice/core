@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acceleratorinfo.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:19:41 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 17:33:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef __FRAMEWORK_HELPER_ACCELERATORINFO_HXX_
 #define __FRAMEWORK_HELPER_ACCELERATORINFO_HXX_
 
+#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
+#include <com/sun/star/frame/XFrame.hpp>
+#endif
+
 #ifndef _SV_KEYCODE_HXX
 #include <vcl/keycod.hxx>
 #endif
@@ -74,10 +78,13 @@ namespace framework
 {
 
 typedef ::rtl::OUString ( *pfunc_getCommandURLFromKeyCode)( const KeyCode& );
+typedef KeyCode ( *pfunc_getKeyCodeFromCommandURL )( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const ::rtl::OUString& aURL );
 
 pfunc_getCommandURLFromKeyCode SAL_CALL SetCommandURLFromKeyCode( pfunc_getCommandURLFromKeyCode );
+pfunc_getKeyCodeFromCommandURL SAL_CALL SetKeyCodeFromCommandURL( pfunc_getKeyCodeFromCommandURL );
 
 ::rtl::OUString SAL_CALL GetCommandURLFromKeyCode( const KeyCode& aKeyCode );
+KeyCode GetKeyCodeFromCommandURL( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const rtl::OUString& aCommandURL );
 
 };
 
