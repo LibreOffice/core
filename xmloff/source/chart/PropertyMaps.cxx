@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyMaps.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: bm $ $Date: 2001-04-25 16:33:41 $
+ *  last change: $Author: bm $ $Date: 2001-05-10 12:41:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -364,6 +364,18 @@ void XMLChartExportPropertyMapper::handleSpecialItem(
                 bValue = (( nValue & chart::ChartDataCaption::SYMBOL ) == chart::ChartDataCaption::SYMBOL );
                 SvXMLUnitConverter::convertBool( sValueBuffer, bValue );
                 break;
+
+            case XML_SCH_CONTEXT_SPECIAL_SYMBOL_WIDTH:
+            case XML_SCH_CONTEXT_SPECIAL_SYMBOL_HEIGHT:
+                {
+                    awt::Size aSize;
+                    rProperty.maValue >>= aSize;
+                    rUnitConverter.convertMeasure( sValueBuffer,
+                                                   nContextId == XML_SCH_CONTEXT_SPECIAL_SYMBOL_WIDTH
+                                                   ? aSize.Width
+                                                   : aSize.Height );
+                }
+                break;
         }
         if( sValueBuffer.getLength())
         {
@@ -483,6 +495,18 @@ sal_Bool XMLChartImportPropertyMapper::handleSpecialItem(
                 else
                     SCH_XML_UNSETFLAG( nValue, chart::ChartDataCaption::SYMBOL );
                 rProperty.maValue <<= nValue;
+                break;
+            case XML_SCH_CONTEXT_SPECIAL_SYMBOL_WIDTH:
+            case XML_SCH_CONTEXT_SPECIAL_SYMBOL_HEIGHT:
+                {
+                    awt::Size aSize;
+                    rProperty.maValue >>= aSize;
+                    rUnitConverter.convertMeasure( nContextId == XML_SCH_CONTEXT_SPECIAL_SYMBOL_WIDTH
+                                                   ? aSize.Width
+                                                   : aSize.Height,
+                                                   rValue );
+                    rProperty.maValue <<= aSize;
+                }
                 break;
             default:
                 bRet = sal_False;
