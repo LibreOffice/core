@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: cp $ $Date: 2001-08-23 17:35:13 $
+ *  last change: $Author: pl $ $Date: 2001-08-24 10:22:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,13 +126,19 @@
 #include <svapp.hxx>
 
 #ifndef _SAL_I18N_INPUTCONTEXT_HXX
-#include "i18n_ic.hxx"
+#include <i18n_ic.hxx>
 #endif
+
 #ifndef _SAL_I18N_KEYSYM_HXX
-#include "i18n_keysym.hxx"
+#include <i18n_keysym.hxx>
+#endif
+
+#ifndef _SAL_I18N_STATUS_HXX
+#include <i18n_status.hxx>
 #endif
 
 using namespace vcl_sal;
+using namespace vcl;
 
 // -=-= #defines -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #define CLIENT_EVENTS           StructureNotifyMask \
@@ -158,7 +164,7 @@ using namespace vcl_sal;
 #define _GetPaintRegion()   maFrameData.GetPaintRegion()
 #define _IsMapped()         maFrameData.bMapped_
 
-static XLIB_Window hPresentationWindow = None;
+static XLIB_Window  hPresentationWindow = None;
 static SalFrame*    pIntroBitmap = NULL;
 static bool     bWasIntroBitmap = false;
 
@@ -218,7 +224,7 @@ bool SalFrameData::IsOverrideRedirect() const
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-void SalFrameData::Init( USHORT nSalFrameStyle, SystemParentData* pParentData )
+void SalFrameData::Init( ULONG nSalFrameStyle, SystemParentData* pParentData )
 {
     nStyle_     = nSalFrameStyle;
 
@@ -478,12 +484,11 @@ void SalFrameData::Init( USHORT nSalFrameStyle, SystemParentData* pParentData )
 
         Hints.flags        |= WindowGroupHint;
         Hints.window_group  = mpParent ? mpParent->maFrameData.GetShellWindow() : pDisplay_->GetShellWindow();
-       if( x < 0 || y < 0 )
+        if( x < 0 || y < 0 )
             SetSize( Size( w, h ) );
         else
             SetPosSize( Rectangle( Point( x, y ), Size( w, h ) ) );
     }
-
     if( hShell_ )
         XSetWindowBackgroundPixmap( pDisplay_->GetDisplay(), XtWindow( hShell_ ), None );
     if( hComposite_ )
@@ -588,6 +593,7 @@ inline SalFrameData::SalFrameData( SalFrame *pFrame )
     nScreenSaversTimeout_       = 0;
 
     mpInputContext              = NULL;
+    mbDeleteInputContext        = false;
     mbInputFocus                = False;
 
     maResizeTimer.SetTimeoutHdl( LINK( this, SalFrameData, HandleResizeTimer ) );
@@ -616,9 +622,6 @@ inline SalFrameData::~SalFrameData()
 
     NotifyDeleteData ();
 
-    if ( mpInputContext != NULL )
-        delete mpInputContext;
-
     if( pGraphics_ )
     {
         stderr0( "SalFrameData::~SalFrameData pGraphics_\n" );
@@ -632,11 +635,16 @@ inline SalFrameData::~SalFrameData()
         delete pFreeGraphics_;
     }
 
+    if( mpInputContext && mbDeleteInputContext )
+        delete mpInputContext;
+
     if( hShell_ != pDisplay_->GetWidget() )
         XtDestroyWidget( hShell_ );
 
     SalData* pSalData = GetSalData();
 
+    if( mpInputContext )
+        mpInputContext->Unmap( pFrame_ );
     if( pFrame_ == pSalData->pFirstFrame_ )
         pSalData->pFirstFrame_ = GetNextFrame();
     else
@@ -805,6 +813,10 @@ void SalFrame::SetMinClientSize( long nWidth, long nHeight )
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void SalFrame::Show( BOOL bVisible )
 {
+    if( ( bVisible && maFrameData.bMapped_ )
+        || ( !bVisible && !maFrameData.bMapped_ ) )
+        return;
+
     maFrameData.bMapped_   = bVisible;
     maFrameData.bViewable_ = bVisible;
     if( bVisible )
@@ -837,21 +849,16 @@ void SalFrame::Show( BOOL bVisible )
         {
             maFrameData.nWidth_  = maFrameData.aPosSize_.GetWidth();
             maFrameData.nHeight_ = maFrameData.aPosSize_.GetHeight();
-
-            maFrameData.Call( SALEVENT_RESIZE, NULL );
         }
-
-         if( ! maFrameData.nStyle_  )
-         {
-             XSync( _GetXDisplay(), False );
-             XSetInputFocus( _GetXDisplay(), maFrameData.GetShellWindow(), RevertToNone, CurrentTime );
-         }
 
         XSync( _GetXDisplay(), False );
         maFrameData.Call( SALEVENT_RESIZE, NULL );
     }
     else
     {
+        if( maFrameData.getInputContext() )
+            maFrameData.getInputContext()->Unmap( this );
+
         if( maFrameData.nStyle_ & ( SAL_FRAME_STYLE_CHILD | SAL_FRAME_STYLE_FLOAT ) )
             XtPopdown( maFrameData.hShell_ );
         else
@@ -1196,7 +1203,7 @@ void SalFrameData::SetSize( const Size &rSize )
 
         // allow the external status window to reposition
         if (mbInputFocus && mpInputContext != NULL)
-            mpInputContext->SetICFocus ();
+            mpInputContext->SetICFocus ( pFrame_ );
     }
 }
 
@@ -1214,6 +1221,11 @@ void SalFrameData::SetPosSize( const Rectangle &rPosSize )
 
     if ( !values.width || !values.height || aPosSize_ == rPosSize )
         return;
+#ifdef DEBUG
+    fprintf(stderr, "SalFrameData::SetPosSize( %dx%d+%d+%d )\n",
+            rPosSize.GetWidth(), rPosSize.GetHeight(),
+            rPosSize.Left(), rPosSize.Top() );
+#endif
 
     if( ! ( nStyle_ & ( SAL_FRAME_STYLE_CHILD | SAL_FRAME_STYLE_FLOAT ) ) )
     {
@@ -1255,7 +1267,7 @@ void SalFrameData::SetPosSize( const Rectangle &rPosSize )
 
     // allow the external status window to reposition
     if (mbInputFocus && mpInputContext != NULL)
-        mpInputContext->SetICFocus ();
+        mpInputContext->SetICFocus ( pFrame_ );
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1299,6 +1311,7 @@ void SalFrameData::Restore()
         XtMapWidget( hShell_ );
         nShowState_ = SHOWSTATE_NORMAL;
     }
+
     pDisplay_->getWMAdaptor()->maximizeFrame( pFrame_, false, false );
 }
 
@@ -1572,19 +1585,16 @@ void SalFrame::SetInputContext( SalInputContext* pContext )
 
       if (maFrameData.mpInputContext == NULL)
     {
-        Bool isOnTheSpot  = (pContext->mnOptions & SAL_INPUTCONTEXT_EXTTEXTINPUT);
-        Bool preeditState = (pContext->mnOptions & SAL_INPUTCONTEXT_EXTTEXTINPUT_ON);
-
-        maFrameData.mpInputContext = new SalI18N_InputContext(maFrameData.pFrame_,
-                                                              isOnTheSpot);
+        I18NStatus& rStatus( I18NStatus::get() );
+        rStatus.setParent( this );
+        maFrameData.mpInputContext = rStatus.getInputContext( maFrameData.mbDeleteInputContext );
         if (maFrameData.mpInputContext->UseContext())
         {
-              //maFrameData.mpInputContext->SetPreeditState(preeditState);
-              maFrameData.mpInputContext->ExtendEventMask(XtWindow(maFrameData.hShell_));
+              maFrameData.mpInputContext->ExtendEventMask( maFrameData.GetShellWindow() );
               if (pContext->mnOptions & SAL_INPUTCONTEXT_CHANGELANGUAGE)
                 maFrameData.mpInputContext->SetLanguage(pContext->meLanguage);
             if (maFrameData.mbInputFocus)
-                maFrameData.mpInputContext->SetICFocus();
+                maFrameData.mpInputContext->SetICFocus( this );
         }
       }
       return;
@@ -2175,10 +2185,9 @@ long SalFrameData::HandleFocusEvent( XFocusChangeEvent *pEvent )
     if ( mpInputContext != NULL  )
     {
         if( FocusIn == pEvent->type )
-          mpInputContext->SetICFocus();
-        // else
-        //  we don't have to call XUnsetICFocus() for FocusOut.
-        //    mpInputContext->UnsetICFocus();
+            mpInputContext->SetICFocus( pFrame_ );
+        else
+            mpInputContext->UnsetICFocus( pFrame_ );
     }
 
     if ( pEvent->mode == NotifyNormal || pEvent->mode == NotifyWhileGrabbed )
@@ -2731,8 +2740,7 @@ long SalFrameData::Dispatch( XEvent *pEvent )
                 break;
 
             case MapNotify:
-                if( pEvent->xmap.window == GetShellWindow() /* ||
-                    pEvent->xmap.window == GetWindow() */ )
+                if( pEvent->xmap.window == GetShellWindow() )
                 {
                     bMapped_   = TRUE;
                     bViewable_ = TRUE;
@@ -2765,7 +2773,7 @@ long SalFrameData::Dispatch( XEvent *pEvent )
                     bViewable_ = FALSE;
                     nRet = TRUE;
                     if ( mpInputContext != NULL )
-                        mpInputContext->Unmap();
+                        mpInputContext->Unmap( pFrame_ );
                     Call( SALEVENT_RESIZE, NULL );
                 }
                 break;

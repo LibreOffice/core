@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_wrp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-18 12:43:58 $
+ *  last change: $Author: pl $ $Date: 2001-08-24 10:23:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,10 +81,12 @@ struct XIMArg
 #include <X11/Xlibint.h>
 #include "XIM.h"
 
+#define XIIIMP_LIB       "xiiimp.so.2"
+
 #ifdef SOLARIS
-#define XIIIMP_PATH     "/usr/openwin/lib/locale/common/xiiimp.so.2"
+#define XIIIMP_PATH     "/usr/openwin/lib/locale/common/" XIIIMP_LIB
 #else /* Linux */
-#define XIIIMP_PATH     "/usr/lib/im/xiiimp.so.2"
+#define XIIIMP_PATH     "/usr/lib/im/" XIIIMP_LIB
 #endif
 
 /* global variables */
@@ -240,10 +242,13 @@ XvaOpenIM(Display *display, XrmDatabase rdb,
 
         if (!g_dlmodule)
         {
-              g_dlmodule = dlopen(XIIIMP_PATH, RTLD_LAZY);
-              if (!g_dlmodule)
-                goto legacy_XIM;
-
+            g_dlmodule = dlopen(XIIIMP_LIB, RTLD_LAZY);
+            if(!g_dlmodule)
+            {
+                g_dlmodule = dlopen(XIIIMP_PATH, RTLD_LAZY);
+                if (!g_dlmodule)
+                    goto legacy_XIM;
+            }
               g_open_im = (OpenFunction)(long)dlsym(g_dlmodule, "__XOpenIM");
               if (!g_open_im)
                 goto legacy_XIM;

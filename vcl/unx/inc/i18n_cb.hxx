@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_cb.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cp $ $Date: 2001-05-28 17:22:32 $
+ *  last change: $Author: pl $ $Date: 2001-08-24 10:22:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,7 @@ void StatusStartCallback (XIC ic, XPointer client_data, XPointer call_data);
 void StatusDoneCallback  (XIC ic, XPointer client_data, XPointer call_data);
 void StatusDrawCallback  (XIC ic, XPointer client_data,
             XIMStatusDrawCallbackStruct *call_data);
+void SwitchIMCallback (XIC ix, XPointer client_data, XPointer call_data );
 
 // keep informed if kinput2 crashed again
 void IC_IMDestroyCallback (XIM im, XPointer client_data, XPointer call_data);

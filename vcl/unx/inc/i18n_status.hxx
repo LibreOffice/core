@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: i18n_ic.hxx,v $
+ *  $RCSfile: i18n_status.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: pl $ $Date: 2001-08-24 10:22:29 $
  *
@@ -59,82 +59,76 @@
  *
  ************************************************************************/
 
-#ifndef _SAL_I18N_INPUTCONTEXT_HXX
-#define _SAL_I18N_INPUTCONTEXT_HXX
+#ifndef _SAL_I18N_STATUS_HXX
+#define _SAL_I18N_STATUS_HXX
 
-#ifndef _TOOLS_LANG_HXX
-#include <tools/lang.hxx>
+#ifndef _STRING_HXX
+#include <tools/string.hxx>
 #endif
 
-#ifndef _SAL_I18N_CALLBACK_HXX
-#include "i18n_cb.hxx"
+#ifndef _LINK_HXX
+#include <tools/link.hxx>
 #endif
 
-class SalI18N_InputContext
+#ifndef _GEN_HXX
+#include <tools/gen.hxx>
+#endif
+
+#ifndef _RTL_USTRING_HXX
+#include <rtl/ustring.hxx>
+#endif
+
+#include <hash_map>
+
+class SalFrame;
+class WorkWindow;
+class ListBox;
+class FixedText;
+class PushButton;
+class SalI18N_InputContext;
+
+namespace vcl
 {
 
-private:
+class StatusWindow;
 
-    Bool    mbUseable; // system supports current locale ?
-    Bool    mbMultiLingual; // system supports iiimp ?
-    XIC     maContext;
+class I18NStatus
+{
+    SalFrame*               m_pParent;
+    StatusWindow*           m_pStatusWindow;
+    SalI18N_InputContext*   m_pInputContext;
 
-    XIMStyle mnSupportedStatusStyle;
-    XIMStyle mnSupportedPreeditStyle;
-    XIMStyle mnStatusStyle;
-    XIMStyle mnPreeditStyle;
+    ::std::hash_map< ::rtl::OUString, void*, ::rtl::OUStringHash >
+                            m_aChoices;
 
-    preedit_data_t maClientData;
-    XIMCallback maPreeditStartCallback;
-    XIMCallback maPreeditDoneCallback;
-    XIMCallback maPreeditDrawCallback;
-    XIMCallback maPreeditCaretCallback;
-    XIMCallback maCommitStringCallback;
-    XIMCallback maSwitchIMCallback;
-    XIMCallback maDestroyCallback;
+    I18NStatus();
+    ~I18NStatus();
 
-    XVaNestedList mpAttributes;
-    XVaNestedList mpStatusAttributes;
-    XVaNestedList mpPreeditAttributes;
-    SalFrame*     mpFocusFrame;
-
-    Bool         SupportInputMethodStyle( XIMStyles *pIMStyles );
-    unsigned int GetWeightingOfIMStyle(   XIMStyle n_style ) const ;
-    Bool         IsSupportedIMStyle(      XIMStyle n_style ) const ;
+    static I18NStatus* pInstance;
 
 public:
+    static I18NStatus& get();
+    static void free();
 
-    Bool UseContext()       { return mbUseable; }
-    Bool IsMultiLingual()   { return mbMultiLingual; }
-    Bool IsPreeditMode()    { return maClientData.eState == ePreeditStatusActive; }
-    XIC  GetContext()       { return maContext; }
+    void setParent( SalFrame* pParent );
+    SalFrame* getParent() const { return  m_pParent; }
 
-    void ExtendEventMask(  XLIB_Window aFocusWindow );
-    void SetICFocus( SalFrame* pFocusFrame );
-    void UnsetICFocus( SalFrame* pFrame );
-    void HandleDestroyIM();
+    void setStatusText( const String& rText );
+    const String& getStatusText() const;
 
-    int  HandleKeyEvent( XKeyEvent *pEvent, SalFrame *pFrame ); // unused
-    void EndExtTextInput( USHORT nFlags );                      // unused
-    int  CommitStringCallback( sal_Unicode* pText, sal_Size nLength );
-    int  CommitKeyEvent( sal_Unicode* pText, sal_Size nLength );
-    int  UpdateSpotLocation();
+    void show( bool bShow = true );
 
-    void Map( SalFrame *pFrame );
-    void Unmap( SalFrame* pFrame );
+    const ::std::hash_map< ::rtl::OUString, void*, ::rtl::OUStringHash >& getChoices() const { return m_aChoices; }
+    void clearChoices();
+    void addChoice( const String&, void* pData );
+    SalI18N_InputContext* getInputContext( bool& bDeleteAfterUse );
 
-    void SetPreeditState(Bool aPreeditState);
-    void SetLanguage(LanguageType aInputLanguage);
+    void toTop() const;
 
-    SalI18N_InputContext( SalFrame *aFrame );
-    ~SalI18N_InputContext();
-
-private:
-
-    SalI18N_InputContext(); // do not use this
-
+    // for SwitchIMCallback
+    void changeIM( const String& );
 };
 
-#endif _SAL_I18N_INPUTCONTEXT_HXX
+} // namespace
 
-
+#endif // _SAL_I18N_STATUS_HXX

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_im.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cp $ $Date: 2001-08-16 08:08:01 $
+ *  last change: $Author: pl $ $Date: 2001-08-24 10:22:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,13 @@
 #ifndef _SAL_I18N_INPUTMETHOD_HXX
 #include "i18n_im.hxx"
 #endif
+
+#ifndef _SAL_I18N_STATUS_HXX
+#include <i18n_status.hxx>
+#endif
+
+using namespace vcl;
+
 #ifndef _SAL_I18N_CALLBACK_HXX
 #include "i18n_cb.hxx"
 #endif
@@ -304,14 +311,39 @@ SalI18N_InputMethod::CreateMethod ( Display *pDisplay )
             // get ml-input flag from input-method
             if ( maMethod == (XIM)NULL )
                 mbMultiLingual = False;
-            #if !defined(LINUX)
+#if !defined(LINUX)
             else
             if ( XGetIMValues(maMethod,
                     XNMultiLingualInput, &mbMultiLingual, NULL ) != NULL )
                 mbMultiLingual = False;
-            #else
+            if( mbMultiLingual )
+            {
+                XIMUnicodeCharacterSubsets* subsets;
+                if( XGetIMValues( maMethod,
+                                  XNQueryUnicodeCharacterSubset, &subsets, NULL ) == NULL )
+                {
+#ifdef DEBUG
+                    fprintf( stderr, "IM reports %d subsets: ", subsets->count_subsets );
+#endif
+                    I18NStatus& rStatus( I18NStatus::get() );
+                    rStatus.clearChoices();
+                    for( int i = 0; i < subsets->count_subsets; i++ )
+                    {
+#ifdef DEBUG
+                        fprintf( stderr,"\"%s\" ", subsets->supported_subsets[i].name );
+#endif
+                        rStatus.addChoice( String( subsets->supported_subsets[i].name, RTL_TEXTENCODING_UTF8 ), &subsets->supported_subsets[i] );
+                    }
+#ifdef DEBUG
+                    fprintf( stderr, "\n" );
+#endif
+                }
+            }
+            else
+                fprintf( stderr, "query subsets failed\n" );
+#else
                 mbMultiLingual = False;
-            #endif
+#endif
         }
         else
         {

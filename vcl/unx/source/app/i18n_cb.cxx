@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_cb.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cp $ $Date: 2001-07-19 14:12:21 $
+ *  last change: $Author: pl $ $Date: 2001-08-24 10:22:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,17 +69,23 @@
 #include <postx.h>
 
 #include <salunx.h>
-#include "XIM.h"
+#include <XIM.h>
 
 #ifndef _SAL_I18N_CALLBACK_HXX
-#include "i18n_cb.hxx"
+#include <i18n_cb.hxx>
 #endif
+
+#ifndef _SAL_I18N_STATUS_HXX
+#include <i18n_status.hxx>
+#endif
+
 #ifndef _SAL_I18N_INPUTCONTEXT_HXX
 #include "i18n_ic.hxx"
 #endif
 #ifndef _SAL_I18N_INPUTMETHOD_HXX
 #include "i18n_im.hxx"
 #endif
+
 #ifndef _SV_SALFRAME_HXX
 #include <salframe.hxx>
 #endif
@@ -94,7 +100,6 @@ int
 PreeditStartCallback ( XIC ic, XPointer client_data, XPointer call_data )
 {
       preedit_data_t* pPreeditData = (preedit_data_t*)client_data;
-
     if ( pPreeditData->eState == ePreeditStatusActivationRequired )
     {
         pPreeditData->eState = ePreeditStatusActive;
@@ -115,16 +120,15 @@ void
 PreeditDoneCallback ( XIC ic, XPointer client_data, XPointer call_data )
 {
       preedit_data_t* pPreeditData = (preedit_data_t*)client_data;
-
      if (pPreeditData->eState == ePreeditStatusActive )
     {
-        #ifdef __synchronous_extinput__
+#ifdef __synchronous_extinput__
         pPreeditData->pFrame->maFrameData.Call(
                 SALEVENT_ENDEXTTEXTINPUT, (void*)NULL );
-        #else
+#else
         pPreeditData->pFrame->maFrameData.PostExtTextEvent(
                 SALEVENT_ENDEXTTEXTINPUT, (void*)NULL );
-        #endif
+#endif
     }
     pPreeditData->eState = ePreeditStatusStartPending;
 }
@@ -361,12 +365,12 @@ Preedit_FeedbackToSAL ( XIMFeedback* pfeedback, int nlength )
               if (nfeedback & XIMTertiary) // same as 2ery
                 nval |= SAL_EXTTEXTINPUT_ATTR_DASHDOTUNDERLINE;
 
-            #if 0 // visibility feedback not supported now
+#if 0 // visibility feedback not supported now
               if (   (nfeedback & XIMVisibleToForward)
                   || (nfeedback & XIMVisibleToBackward)
                   || (nfeedback & XIMVisibleCenter) )
             { }
-            #endif
+#endif
         }
         // copy in list
         psalattr[npos] = nval;
@@ -383,7 +387,8 @@ PreeditDrawCallback(XIC ic, XPointer client_data,
       preedit_data_t* pPreeditData = (preedit_data_t*)client_data;
 
     // if there's nothing to change then change nothing
-    if ( (call_data->text == NULL) && (call_data->chg_length == 0) )
+    if ( ( (call_data->text == NULL) && (call_data->chg_length == 0) )
+         || pPreeditData->pFrame == NULL )
         return;
 
     // #88564# Solaris 7 deletes the preedit buffer after commit
@@ -439,7 +444,7 @@ PreeditDrawCallback(XIC ic, XPointer client_data,
       // build the SalExtTextInputEvent and send it up
       //
 
-    #ifdef __synchronous_extinput__
+#ifdef __synchronous_extinput__
       SalExtTextInputEvent aTextEvent;
 
       aTextEvent.mnTime = 0;
@@ -451,13 +456,13 @@ PreeditDrawCallback(XIC ic, XPointer client_data,
       aTextEvent.mnDeltaStart = 0; // call_data->chg_first;
       aTextEvent.mbOnlyCursor = False;
 
-      if ( pPreeditData->eState == ePreeditStatusActive )
+      if ( pPreeditData->eState == ePreeditStatusActive && pPreeditData->pFrame )
         pPreeditData->pFrame->maFrameData.Call(SALEVENT_EXTTEXTINPUT,
                 (void*)&aTextEvent);
       if (aTextEvent.mpTextAttr)
         free((void*)aTextEvent.mpTextAttr);
 
-    #else
+#else
 
       SalExtTextInputEvent *pTextEvent = new SalExtTextInputEvent;
 
@@ -473,7 +478,7 @@ PreeditDrawCallback(XIC ic, XPointer client_data,
 
        pPreeditData->pFrame->maFrameData.PostExtTextEvent (SALEVENT_EXTTEXTINPUT,
         (void*)pTextEvent);
-    #endif
+#endif
 
     if (pPreeditData->aText.nLength == 0)
     {
@@ -488,7 +493,7 @@ PreeditDrawCallback(XIC ic, XPointer client_data,
 void
 GetPreeditSpotLocation(XIC ic, XPointer client_data)
 {
-    #ifdef __synchronous_extinput__
+#ifdef __synchronous_extinput__
 
       //
       // Send SalEventExtTextInputPos event to get spotlocation
@@ -496,8 +501,9 @@ GetPreeditSpotLocation(XIC ic, XPointer client_data)
       SalExtTextInputPosEvent mPosEvent;
       preedit_data_t* pPreeditData = (preedit_data_t*)client_data;
 
-      pPreeditData->pFrame->maFrameData.Call(SALEVENT_EXTTEXTINPUTPOS,
-                                             (void*)&mPosEvent);
+    if( pPreeditData->pFrame )
+        pPreeditData->pFrame->maFrameData.Call(SALEVENT_EXTTEXTINPUTPOS,
+                                               (void*)&mPosEvent);
 
       XPoint point;
       point.x = mPosEvent.mnX + mPosEvent.mnWidth;
@@ -508,7 +514,7 @@ GetPreeditSpotLocation(XIC ic, XPointer client_data)
       XSetICValues(ic, XNPreeditAttributes, preedit_attr, NULL);
       XFree(preedit_attr);
 
-    #endif /* __synchronous_extinput__ */
+#endif /* __synchronous_extinput__ */
 
     return;
 }
@@ -585,49 +591,55 @@ CommitStringCallback( XIC ic, XPointer client_data, XPointer call_data )
     // #86964# filter unexpected pure control events
     if (cbtext->length == 1 && IsControlCode(p_unicode_data[0]) )
     {
-        #ifdef __synchronous_extinput__
-           pPreeditData->pFrame->maFrameData.Call( SALEVENT_ENDEXTTEXTINPUT,
-                (void*)NULL );
-        #else
-        pPreeditData->pFrame->maFrameData.PostExtTextEvent(SALEVENT_ENDEXTTEXTINPUT,
-                (void*)NULL );
-        #endif
+        if( pPreeditData->pFrame )
+        {
+#ifdef __synchronous_extinput__
+            pPreeditData->pFrame->maFrameData.Call( SALEVENT_ENDEXTTEXTINPUT,
+                                                    (void*)NULL );
+#else
+            pPreeditData->pFrame->maFrameData.PostExtTextEvent(SALEVENT_ENDEXTTEXTINPUT,
+                                                               (void*)NULL );
+#endif
+        }
     }
     else
     {
-        #ifdef __synchronous_extinput__
+        if( pPreeditData->pFrame )
+        {
+#ifdef __synchronous_extinput__
 
-        SalExtTextInputEvent aTextEvent;
+            SalExtTextInputEvent aTextEvent;
 
-        aTextEvent.mnTime           = 0;
-        aTextEvent.mpTextAttr       = 0;
-        aTextEvent.mnCursorPos      = cbtext->length;
-        aTextEvent.maText           = p_unicode_data;
-        aTextEvent.mnCursorFlags    = 0; // default: make cursor visible
-        aTextEvent.mnDeltaStart     = 0;
-        aTextEvent.mbOnlyCursor     = False;
+            aTextEvent.mnTime           = 0;
+            aTextEvent.mpTextAttr       = 0;
+            aTextEvent.mnCursorPos      = cbtext->length;
+            aTextEvent.maText           = p_unicode_data;
+            aTextEvent.mnCursorFlags    = 0; // default: make cursor visible
+            aTextEvent.mnDeltaStart     = 0;
+            aTextEvent.mbOnlyCursor     = False;
 
-        pPreeditData->pFrame->maFrameData.Call( SALEVENT_EXTTEXTINPUT,
-                (void*)&aTextEvent);
-        pPreeditData->pFrame->maFrameData.Call( SALEVENT_ENDEXTTEXTINPUT,
-                (void*)NULL );
-        #else
+            pPreeditData->pFrame->maFrameData.Call( SALEVENT_EXTTEXTINPUT,
+                                                    (void*)&aTextEvent);
+            pPreeditData->pFrame->maFrameData.Call( SALEVENT_ENDEXTTEXTINPUT,
+                                                    (void*)NULL );
+#else
 
-        SalExtTextInputEvent *pTextEvent = new SalExtTextInputEvent;
+            SalExtTextInputEvent *pTextEvent = new SalExtTextInputEvent;
 
-        pTextEvent->mnTime          = 0;
-        pTextEvent->mpTextAttr      = 0;
-        pTextEvent->mnCursorPos     = cbtext->length;
-        pTextEvent->maText          = UniString(p_unicode_data, cbtext->length);
-        pTextEvent->mnCursorFlags   = 0; // default: make cursor visible
-        pTextEvent->mnDeltaStart    = 0;
-        pTextEvent->mbOnlyCursor    = False;
+            pTextEvent->mnTime          = 0;
+            pTextEvent->mpTextAttr      = 0;
+            pTextEvent->mnCursorPos     = cbtext->length;
+            pTextEvent->maText          = UniString(p_unicode_data, cbtext->length);
+            pTextEvent->mnCursorFlags   = 0; // default: make cursor visible
+            pTextEvent->mnDeltaStart    = 0;
+            pTextEvent->mbOnlyCursor    = False;
 
-        pPreeditData->pFrame->maFrameData.PostExtTextEvent( SALEVENT_EXTTEXTINPUT,
-                (void*)pTextEvent);
-        pPreeditData->pFrame->maFrameData.PostExtTextEvent( SALEVENT_ENDEXTTEXTINPUT,
-                (void*)NULL );
-        #endif
+            pPreeditData->pFrame->maFrameData.PostExtTextEvent( SALEVENT_EXTTEXTINPUT,
+                                                                (void*)pTextEvent);
+            pPreeditData->pFrame->maFrameData.PostExtTextEvent( SALEVENT_ENDEXTTEXTINPUT,
+                                                                (void*)NULL );
+#endif
+        }
     }
     pPreeditData->eState = ePreeditStatusStartPending;
 
@@ -657,7 +669,61 @@ StatusDoneCallback (XIC ic, XPointer client_data, XPointer call_data)
 void
 StatusDrawCallback (XIC ic, XPointer client_data, XIMStatusDrawCallbackStruct *call_data)
 {
+      preedit_data_t* pPreeditData = (preedit_data_t*)client_data;
+    if( pPreeditData->bIsMultilingual )
+    {
+        // IIIMP
+        XIMUnicodeText *cbtext = (XIMUnicodeText *)call_data->data.text;
+        ::vcl::I18NStatus::get().setStatusText( String( cbtext->string.utf16_char, call_data->data.text->length ) );
+        XIMUnicodeCharacterSubset* pSubset = NULL;
+        if( ! XGetICValues( ic,
+                            XNUnicodeCharacterSubset, & pSubset,
+                            NULL )
+            && pSubset )
+        {
+            ::vcl::I18NStatus::get().changeIM( String( ByteString( pSubset->name ), RTL_TEXTENCODING_ISO_8859_1 ) );
+#ifdef DEBUG
+            fprintf( stderr, "got XNUnicodeCharacterSubset\n   %d\n   %d\n   %s\n   %d\n", pSubset->index, pSubset->subset_id, pSubset->name, pSubset->is_active );
+#endif
+        }
+    }
+    else if( call_data->type == XIMTextType )
+    {
+        String aText;
+        if( call_data->data.text )
+        {
+            // XIM with text
+            sal_Char* pMBString = NULL;
+            size_t nLength = 0;
+            if( call_data->data.text->encoding_is_wchar )
+            {
+                wchar_t* pWString = call_data->data.text->string.wide_char;
+                size_t nBytes = wcstombs( NULL, pWString, 1024 );
+                pMBString = (sal_Char*)alloca( nBytes+1 );
+                nLength = wcstombs( pMBString, pWString, nBytes+1 );
+            }
+            else
+            {
+                    pMBString = call_data->data.text->string.multi_byte;
+                    nLength = strlen( pMBString );
+            }
+            aText = String( pMBString, nLength, gsl_getSystemTextEncoding() );
+        }
+        ::vcl::I18NStatus::get().setStatusText( aText );
+    }
+#ifdef DEBUG
+    else
+        fprintf( stderr, "XIMStatusDataType %s not supported\n",
+                 call_data->type == XIMBitmapType ? "XIMBitmapType" : ByteString::CreateFromInt32( call_data->type ).GetBuffer() );
+#endif
     return;
+}
+
+void
+SwitchIMCallback (XIC ic, XPointer client_data, XPointer call_data)
+{
+    XIMSwitchIMNotifyCallbackStruct* pCallData = (XIMSwitchIMNotifyCallbackStruct*)call_data;
+    ::vcl::I18NStatus::get().changeIM( String( ByteString( pCallData->to->name ), RTL_TEXTENCODING_ISO_8859_1 ) );
 }
 
 // ----------------------------------------------------------------------------------

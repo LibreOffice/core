@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: pl $ $Date: 2001-08-09 19:56:33 $
+ *  last change: $Author: pl $ $Date: 2001-08-24 10:22:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,7 +172,7 @@ class SalFrameData
             int             nHeight_;           // client height
             Rectangle       aPosSize_;          // Shells Pos&Size
             Rectangle       aRestoreFullScreen_;
-            USHORT          nStyle_;
+            ULONG           nStyle_;
             BOOL            bAlwaysOnTop_;
             BOOL            bViewable_;
             BOOL            bMapped_;
@@ -196,6 +196,7 @@ class SalFrameData
             SystemChildData maSystemChildData;
 
             SalI18N_InputContext *mpInputContext;
+            bool            mbDeleteInputContext;
             Bool            mbInputFocus;
             SalFrameDelData *mpDeleteData;
             void            RegisterDeleteData (SalFrameDelData *pData);
@@ -234,7 +235,7 @@ class SalFrameData
             DECL_LINK( HandleResizeTimer, void* );
 public:
             long            Dispatch( XEvent *pEvent );
-            void            Init( USHORT nSalFrameStyle, SystemParentData* pParentData = NULL );
+            void            Init( ULONG nSalFrameStyle, SystemParentData* pParentData = NULL );
 
             SalDisplay     *GetDisplay() const { return pDisplay_; }
     inline  Display        *GetXDisplay() const;
@@ -262,6 +263,9 @@ public:
     #endif
     inline  SalColormap    &GetColormap() const;
             bool            IsOverrideRedirect() const;
+    SalI18N_InputContext* getInputContext() const { return mpInputContext; }
+    const Rectangle&        getPosSize() const { return aPosSize_; }
+    void                    setPosSize( const Rectangle& rRect ) { SetPosSize( rRect ); }
 };
 
 #ifdef _SV_SALDISP_HXX
