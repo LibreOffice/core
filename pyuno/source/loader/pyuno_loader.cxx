@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pyuno_loader.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jbu $ $Date: 2003-05-24 23:20:00 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 16:06:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,7 +157,9 @@ static OUString getLibDir()
         {
             static OUString libDir;
 
-            if( osl::Module::getUrlFromAddress( reinterpret_cast<void*>(getLibDir) , libDir ) )
+            // changed from reinterpret_cast<void*> this is not allowed
+            // in gcc 3.3 without permissive.  Us simple C cast.
+            if( osl::Module::getUrlFromAddress( (void*)(getLibDir) , libDir ) )
             {
                 libDir = OUString( libDir.getStr(), libDir.lastIndexOf('/' ) );
             }
