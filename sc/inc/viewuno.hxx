@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewuno.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-23 11:14:49 $
+ *  last change: $Author: sab $ $Date: 2002-03-14 15:21:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,9 @@ typedef ::com::sun::star::uno::Reference<
             ::com::sun::star::view::XSelectionChangeListener >* XSelectionChangeListenerPtr;
 SV_DECL_PTRARR_DEL( XSelectionChangeListenerArr_Impl, XSelectionChangeListenerPtr, 4, 4 );
 
+typedef ::com::sun::star::uno::Reference<
+            ::com::sun::star::beans::XPropertyChangeListener >* XViewPropertyChangeListenerPtr;
+SV_DECL_PTRARR_DEL( XViewPropertyChangeListenerArr_Impl, XViewPropertyChangeListenerPtr, 4, 4 );
 
 
 //  ScViewPaneBase not derived from OWeakObject
@@ -149,6 +152,7 @@ private:
 
 protected:
     ScTabViewShell*         GetViewShell() const    { return pViewShell; }
+    ::com::sun::star::awt::Rectangle GetVisArea() const;
 
 public:
                             ScViewPaneBase(ScTabViewShell* pViewSh, USHORT nP);
@@ -232,6 +236,7 @@ private:
     XSelectionChangeListenerArr_Impl        aSelectionListeners;
     XRangeSelectionListenerArr_Impl         aRangeSelListeners;
     XRangeSelectionChangeListenerArr_Impl   aRangeChgListeners;
+    XViewPropertyChangeListenerArr_Impl     aPropertyChgListeners;
 
     ScViewPaneObj*          GetObjectByIndex_Impl(USHORT nIndex) const;
 
@@ -247,6 +252,7 @@ public:
     virtual void SAL_CALL   release() throw();
 
     void                    SelectionChanged();
+    void                    VisAreaChanged();
 
     void                    RangeSelDone( const String& rText );
     void                    RangeSelAborted( const String& rText );
