@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmain.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2000-09-22 12:53:58 $
+ *  last change: $Author: cd $ $Date: 2000-10-23 07:11:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,10 @@
 #include <vos/process.hxx>
 #include <osl/file.hxx>
 
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+
 #ifdef REMOTE_APPSERVER
 #include <config.hxx>
 #include <ooffice.hxx>
@@ -154,28 +158,22 @@
 #include <outdev.h>
 #include <vos/mutex.hxx>
 #include <vos/timer.hxx>
-#include <unobrok.hxx>
 #include "rvp.hxx"
 #include <atom.hxx>
 
-#include <cppuhelper/servicefactory.hxx>
-#include <unotools/processfactory.hxx>
-#include <unotools/regpathhelper.hxx>
 
 #include <com/sun/star/portal/client/XRmStatus.hpp>
-#include <com/sun/star/registry/XSimpleRegistry.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
 
-using namespace ::com::sun::star::registry;
+using namespace ::rtl;
+using namespace ::cppu;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::portal::client;
-using namespace ::cppu;
-using namespace ::rtl;
 
 #ifdef UNX
 class SalData
 {
+
     void Init (int *pIPointer, char *pCPointer[] );
 };
 void SalData::Init (int *pIPointer, char *pCPointer[] )
@@ -272,103 +270,21 @@ BOOL SVMain()
     NAMESPACE_RTL( OUString )       aExeFileName;
 
 #ifdef REMOTE_APPSERVER
-    // create a readonly applicat rdb.
-    // NOTE : This is a hack, a servicemanager is needed before SFX, so
-    //        there is created one with the readonly registry. There
-    //        now exists 2 Servicemanager
-
-    Application::EnterMultiThread( TRUE );
-
-    Reference< XMultiServiceFactory > rSMgr = createServiceFactory();
-    Reference< XInterface > x = rSMgr->createInstance(
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.registry.SimpleRegistry" ) ) );
-    Reference< XSimpleRegistry > rSimple( x , UNO_QUERY );
-    rSimple->open( ::utl::getPathToSystemRegistry()  , sal_True , sal_False );
-    if( rSimple->isValid() )
-    {
-        Reference < XInitialization > rInit( rSMgr , UNO_QUERY );
-        Any a;
-        a <<= rSimple;
-        Sequence< Any > seq( &a , 1 );
-        rInit->initialize( seq );
-    }
-    // servicemanager up -> copy user installation
-    Any aAny;
-    Reference <XInterface> xRef =  rSMgr->createInstanceWithArguments(
-        OUString::createFromAscii( "com.sun.star.portal.InstallUser" ),
-        Sequence<Any>( &aAny, 1 ) );
-
-
-    // OSL_ENSURE( 0 , "Office is waiting ....\n" );
-
-
-//      sal_Bool bStandAloneMode = sal_False;
-//      sal_Bool bStartDesktop = sal_True;
-
-    OUString conDcp;
-
-    // Anderes Flag setzen, wenn der Server von Hand gestartet wird...
-    USHORT nArgs = Application::GetCommandLineParamCount();
-    for( USHORT n = 0; n < nArgs; n++ )
-    {
-        XubString aParam = Application::GetCommandLineParam( n );
-        if ( (aParam.GetChar( 0 ) == '/') || (aParam.GetChar( 0 ) == '-') )
-        {
-            aParam.SetChar( 0 ,  (sal_Unicode)'-' );
-            if ( aParam.EqualsIgnoreCaseAscii( "-appserver" )  )
-                ; //bStandAloneMode = sal_True;
-
-            else if ( aParam.EqualsIgnoreCaseAscii( "-bean" ) )
-                ; //bStartDesktop = sal_False;
-
-            else if(aParam.Copy(0, 8).EqualsIgnoreCaseAscii("-accept="))
-            {
-//                  ++ n;
-//                  conDcp = Application::GetCommandLineParam(n);
-                conDcp = aParam.Copy(8);
-
-#ifdef DEBUG
-                OString tmp = OUStringToOString(conDcp, RTL_TEXTENCODING_ASCII_US);
-                OSL_TRACE("svmain.cxx: -accept with %s", tmp.getStr());
-#endif
-            }
-        }
-    }
-
-//      ::vos::OThread *pUnoBroker = 0;
-
-//      if (bStandAloneMode)
-//      {
-    Config aCfg( UniString::CreateFromAscii( "remote.ini" ) );
-    aCfg.SetGroup( ByteString("Remote" ) );
-    ByteString s = aCfg.ReadKey(  "ROffice"  );
-    OUString aROffice = OUString::createFromAscii( s.GetBuffer() );
-    aROffice.trim();
-    if ( ! aROffice.getLength() )
-        aROffice = OUString(
-            RTL_CONSTASCII_USTRINGPARAM("socket,host=localhost,port=8125;urp;"));
-
-
-    if(conDcp.getLength() > 0)
-        aROffice = conDcp;
-
     // create condition now to avoid race
     pSVData->mpStartUpCond = new NAMESPACE_VOS(OCondition);
 
     pSVData->mpUserInfo = new UserOnPrintServer;
 
-    // accept incoming connections
-    if(!vcl_accept::accept(aROffice, rSMgr))
-        return sal_False;
+    Application::EnterMultiThread( TRUE );
+#endif
 
-//          pUnoBroker = new vcl_AcceptorThread(
-//              rSMgr ,
-//              NULL, /*rInitialObject ,*/
-//              aROffice );
-//      }
-//      else
-//          pUnoBroker = new UnoBrokerThread( rSMgr , NULL /*rInitialObject*/);
+    // call init to initialize application class
+    // soffice/sfx implementation creates the global service manager
+    pSVData->mpApp->Init();
 
+#ifdef REMOTE_APPSERVER
+    {
+    Reference< XMultiServiceFactory > rSMgr = ::comphelper::getProcessServiceFactory();
 
     pSVData->mpRmEventQueue = new RmEventQueue;
     pSVData->mpRemotePrinterList = new RemotePrinterList( rSMgr );
@@ -378,8 +294,7 @@ BOOL SVMain()
     pSVData->maGDIData.mpScreenFontList   = new ImplDevFontList;
     pSVData->maGDIData.mpScreenFontCache  = new ImplFontCache( FALSE );
 
-
-//      pUnoBroker->create();
+    // OSL_ENSURE( 0 , "Office is waiting ....\n" );
     pSVData->mpStartUpCond->wait();
     delete pSVData->mpStartUpCond;
     pSVData->mpStartUpCond = NULL;
@@ -410,7 +325,7 @@ BOOL SVMain()
     ImplInitRemotePrinterList();
 
     pSVData->maAppData.mpSolarMutex->acquire();
-
+    }
 
 #endif
 
@@ -451,11 +366,6 @@ BOOL SVMain()
 
     // Debug Daten zuruecksetzen
     DBGGUI_DEINIT();
-
-//  #ifdef REMOTE_APPSERVER
-//      if( pUnoBroker )
-//          pUnoBroker->terminate();
-//  #endif
 
     // Access list
     List* pList = pSVData->maAppData.mpAccessList;
@@ -608,6 +518,11 @@ BOOL SVMain()
     }
     delete pSVData->mpAtoms;
 #endif
+
+    // call deinit to deinitialize application class
+    // soffice/sfx implementation disposes the global service manager
+    // Warning: After this call you can't call uno services
+    pSVData->mpApp->DeInit();
 
     if ( pSVData->maAppData.mpSettings )
     {
