@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unohelp.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mt $ $Date: 2002-08-12 17:10:15 $
+ *  last change: $Author: hr $ $Date: 2002-08-27 12:13:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,7 +255,7 @@ uno::Reference < i18n::XCollator > vcl::unohelper::CreateCollator()
         aLibName += aDLLSuffix;
     }
 #ifdef MACOSX
-    aLibName += OUString( RTL_CONSTASCII_USTRINGPARAM( ".dylib.framework" ));
+    aLibName += OUString( RTL_CONSTASCII_USTRINGPARAM( ".dylib" ));
 #else
     aLibName += OUString( RTL_CONSTASCII_USTRINGPARAM( ".so" ));
 #endif
