@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshell.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-01 11:29:58 $
+ *  last change: $Author: bm $ $Date: 2002-10-01 15:17:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -590,7 +590,8 @@ void SdDrawDocShell::SetModified( BOOL bSet /* = TRUE */ )
     SfxInPlaceObject::SetModified( bSet );
 
     // #100237# change model state, too
-    if( pDoc )
+    // #103182# only set the changed state if modification is enabled
+    if( IsEnableSetModified() && pDoc )
         pDoc->NbcSetChanged( bSet );
 
     Broadcast( SfxSimpleHint( SFX_HINT_DOCCHANGED ) );
