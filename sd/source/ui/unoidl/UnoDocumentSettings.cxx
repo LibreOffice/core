@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoDocumentSettings.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: svesik $ $Date: 2001-05-25 18:05:43 $
+ *  last change: $Author: cl $ $Date: 2001-05-28 16:35:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -697,7 +697,13 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                                         0 );
                         }
 
-                        pDocSh->SetPrinter( SfxPrinter::Create ( aStream, pItemSet ) );
+                        pPrinter = SfxPrinter::Create ( aStream, pItemSet );
+
+                        MapMode aMM (pPrinter->GetMapMode());
+                        aMM.SetMapUnit(MAP_100TH_MM);
+                        pPrinter->SetMapMode(aMM);
+
+                        pDocSh->SetPrinter( pPrinter );
 
                         pPrinter = NULL;
 #endif
