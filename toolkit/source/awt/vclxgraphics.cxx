@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxgraphics.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:02:08 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 07:43:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,6 @@
  *
  *
  ************************************************************************/
-
-#define SMART_UNO_GENERATION    // Um einige Funktionen in VCL freizuschalten
 
 #include <toolkit/awt/vclxgraphics.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
@@ -193,14 +191,7 @@ void VCLXGraphics::InitOutputDevice( sal_uInt16 nFlags )
     if( mpOutputDevice )
     {
         mpOutputDevice->SetFont( maFont );
-        FontMetric aFMetric = mpOutputDevice->GetFontMetric();
-
-        aM.Ascent = aFMetric.GetAscent();
-        aM.Descent = aFMetric.GetDescent();
-        aM.Leading = aFMetric.GetLeading();
-        aM.Slant = aFMetric.GetSlant();
-        aM.FirstChar = aFMetric.getFirstChar();
-        aM.LastChar = aFMetric.getLastChar();
+        aM = VCLUnoHelper::CreateFontMetric( mpOutputDevice->GetFontMetric() );
     }
     return aM;
 }
@@ -419,9 +410,9 @@ void VCLXGraphics::drawPolyPolygon( const ::com::sun::star::uno::Sequence< ::com
     if( mpOutputDevice )
     {
         InitOutputDevice( INITOUTDEV_CLIPREGION|INITOUTDEV_RASTEROP|INITOUTDEV_COLORS );
-        sal_Int32 nPolys = (sal_uInt16) DataX.getLength();
+        sal_uInt16 nPolys = (sal_uInt16) DataX.getLength();
         PolyPolygon aPolyPoly( nPolys );
-        for ( sal_Int32 n = 0; n < nPolys; n++ )
+        for ( sal_uInt16 n = 0; n < nPolys; n++ )
             aPolyPoly[n] = VCLUnoHelper::CreatePolygon( DataX.getConstArray()[n], DataY.getConstArray()[n] );
 
         mpOutputDevice->DrawPolyPolygon( aPolyPoly );
