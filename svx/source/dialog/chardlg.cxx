@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-28 12:01:28 $
+ *  last change: $Author: jp $ $Date: 2001-03-28 12:23:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5311,13 +5311,32 @@ void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
     if( SFX_ITEM_UNKNOWN == eState )
     {
         m_aRotationScalingFL.Hide();
+        m_aScalingFL.Show();
         m_a0degRB.Hide();
         m_a90degRB.Hide();
         m_a270degRB.Hide();
         m_aFitToLineCB.Hide();
+
+        // move the "below" controls above
+        Window* aCntrlArr[] = {
+            &m_aScaleWidthFT, &m_aScaleWidthMF, &m_aKerningLine,
+            &m_aKerningLB, &m_aKerningFT, &m_aKerningEdit, &m_aPairKerningBtn,
+            0 };
+
+        long nDiff = m_aScaleWidthFT.GetPosPixel().Y() -
+                    m_a0degRB.GetPosPixel().Y();
+
+        for( Window** ppW = aCntrlArr; *ppW; ++ppW )
+        {
+            Point aPnt( (*ppW)->GetPosPixel() );
+            aPnt.Y() -= nDiff;
+            (*ppW)->SetPosPixel( aPnt );
+        }
     }
     else
     {
+        m_aScalingFL.Hide();
+
         Link aOldLink( m_aFitToLineCB.GetClickHdl() );
         m_aFitToLineCB.SetClickHdl( Link() );
         if( eState >= SFX_ITEM_DEFAULT )
