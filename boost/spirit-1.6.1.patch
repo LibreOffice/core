@@ -1,0 +1,133 @@
+*** misc/spirit-1.6.1/boost/spirit/core/composite/epsilon.hpp	2003-07-08 04:19:06.000000000 +0200
+--- misc/build/spirit-1.6.1/boost/spirit/core/composite/epsilon.hpp	2004-08-25 16:08:38.000000000 +0200
+***************
+*** 70,76 ****
+  private:
+  };
+  
+! #if BOOST_WORKAROUND(BOOST_MSVC, == 1310) // VC 7.1
+  template <typename CondT>
+  inline condition_parser<CondT, false>
+  operator~(condition_parser<CondT, true> const& p)
+--- 70,76 ----
+  private:
+  };
+  
+! #if BOOST_WORKAROUND(BOOST_MSVC, == 1310) || BOOST_WORKAROUND(__SUNPRO_CC, BOOST_TESTED_AT(0x550))
+  template <typename CondT>
+  inline condition_parser<CondT, false>
+  operator~(condition_parser<CondT, true> const& p)
+*** misc/spirit-1.6.1/boost/spirit/core/scanner/scanner.hpp	2003-07-08 04:19:06.000000000 +0200
+--- misc/build/spirit-1.6.1/boost/spirit/core/scanner/scanner.hpp	2004-08-26 15:31:57.000000000 +0200
+***************
+*** 18,23 ****
+--- 18,26 ----
+  #include <iterator>
+  
+  #include "boost/config.hpp"
++ #ifdef BOOST_NO_STD_ITERATOR_TRAITS
++ #include "boost/iterator_adaptors.hpp"
++ #endif
+  #include "boost/spirit/core/match.hpp"
+  #include "boost/spirit/core/non_terminal/parser_id.hpp"
+  
+***************
+*** 236,245 ****
+--- 239,255 ----
+      typedef IteratorT iterator_t;
+      typedef PoliciesT policies_t;
+  
++ #ifdef BOOST_NO_STD_ITERATOR_TRAITS
++     typedef typename boost::detail::iterator_traits<IteratorT>::value_type
++         value_t;
++     typedef typename boost::detail::iterator_traits<IteratorT>::reference
++         ref_t;
++ #else
+      typedef typename BOOST_SPIRIT_IT_NS::iterator_traits<IteratorT>::value_type
+          value_t;
+      typedef typename BOOST_SPIRIT_IT_NS::iterator_traits<IteratorT>::reference
+          ref_t;
++ #endif
+      typedef typename boost::call_traits<IteratorT>::param_type
+          iter_param_t;
+  
+*** misc/spirit-1.6.1/miniboost/boost/config/compiler/gcc.hpp	2003-07-08 04:19:08.000000000 +0200
+--- misc/build/spirit-1.6.1/miniboost/boost/config/compiler/gcc.hpp	2004-08-25 15:40:18.000000000 +0200
+***************
+*** 59,65 ****
+  #endif
+  //
+  // last known and checked version is 3.2:
+! #if (__GNUC__ > 3) || ((__GNUC__ == 3) && (__GNUC_MINOR__ > 2))
+  #  if defined(BOOST_ASSERT_CONFIG)
+  #     error "Unknown compiler version - please run the configure tests and report the results"
+  #  else
+--- 59,66 ----
+  #endif
+  //
+  // last known and checked version is 3.2:
+! // although 3.4 is unchecked, we will give it a try
+! #if (__GNUC__ > 3) || ((__GNUC__ == 3) && (__GNUC_MINOR__ > 4))
+  #  if defined(BOOST_ASSERT_CONFIG)
+  #     error "Unknown compiler version - please run the configure tests and report the results"
+  #  else
+*** misc/spirit-1.6.1/miniboost/boost/config/compiler/sunpro_cc.hpp	2003-07-08 04:19:08.000000000 +0200
+--- misc/build/spirit-1.6.1/miniboost/boost/config/compiler/sunpro_cc.hpp	2004-08-25 16:29:38.000000000 +0200
+***************
+*** 45,52 ****
+  #      define BOOST_NO_INTEGRAL_INT64_T
+  #    endif
+  
+! #    if (__SUNPRO_CC <= 0x540) || !defined(BOOST_STRICT_CONFIG)
+  #      define BOOST_NO_TEMPLATE_TEMPLATES
+  #    endif
+  
+  #define BOOST_COMPILER "Sun compiler version " BOOST_STRINGIZE(__SUNPRO_CC)
+--- 45,57 ----
+  #      define BOOST_NO_INTEGRAL_INT64_T
+  #    endif
+  
+! #    if (__SUNPRO_CC <= 0x550) || !defined(BOOST_STRICT_CONFIG)
+  #      define BOOST_NO_TEMPLATE_TEMPLATES
++        // see http://lists.boost.org/MailArchives/boost/msg47184.php
++        // and http://lists.boost.org/MailArchives/boost/msg47220.php
++ #      define BOOST_NO_INCLASS_MEMBER_INITIALIZATION
++ #      define BOOST_NO_SFINAE
++ #      define BOOST_NO_ARRAY_TYPE_SPECIALIZATIONS
+  #    endif
+  
+  #define BOOST_COMPILER "Sun compiler version " BOOST_STRINGIZE(__SUNPRO_CC)
+*** misc/spirit-1.6.1/miniboost/boost/config/user.hpp	2003-07-08 04:19:08.000000000 +0200
+--- misc/build/spirit-1.6.1/miniboost/boost/config/user.hpp	2004-08-25 15:43:56.000000000 +0200
+***************
+*** 66,68 ****
+--- 66,74 ----
+  // #define BOOST_DISABLE_WIN32
+  
+  
++ // Switch off exception statements if file is compiled without
++ // exception support:
++ #if defined(EXCEPTIONS_OFF) && !defined(BOOST_NO_EXCEPTIONS)
++ #define BOOST_NO_EXCEPTIONS
++ #endif
++ 
+*** misc/spirit-1.6.1/miniboost/boost/throw_exception.hpp	2003-07-08 04:19:08.000000000 +0200
+--- misc/build/spirit-1.6.1/miniboost/boost/throw_exception.hpp	2004-08-25 16:25:25.000000000 +0200
+***************
+*** 29,35 ****
+  
+  #ifdef BOOST_NO_EXCEPTIONS
+  
+! void throw_exception(std::exception const & e); // user defined
+  
+  #else
+  
+--- 29,36 ----
+  
+  #ifdef BOOST_NO_EXCEPTIONS
+  
+! // void throw_exception(std::exception const & e); // user defined
+! inline void throw_exception(std::exception const &) {}
+  
+  #else
+  
