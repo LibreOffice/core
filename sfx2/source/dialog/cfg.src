@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 19:25:01 $
+ *  last change: $Author: obo $ $Date: 2001-05-10 05:24:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,8 @@
     Text[ korean ] = "ÀúÀå(~S)..."; \
     Text[ turkish ] = "~Kaydet..."; \
     Text[ language_user1 ] = " ";   \
-    Text[ catalan ] = "~Guardar...";
+    Text[ catalan ] = "~Guardar...";    \
+    Text[ finnish ] = "~Tallenna";
 
 #define PUSHBUTTON_TEXT_RESET \
     Text = "Zur~ücksetzen" ; \
@@ -110,7 +111,8 @@
     Text[ korean ] = "¿ø·¡´ë·Î(~E)";    \
     Text[ turkish ] = "Baþa al";    \
     Text[ language_user1 ] = " ";   \
-    Text[ catalan ] = "~Restablecer";
+    Text[ catalan ] = "~Restablecer";   \
+    Text[ finnish ] = "P~alauta";
 
 #define PUSHBUTTON_TEXT_LOAD \
 /* ### ACHTUNG: Neuer Text in Resource? La~den... : ~Laden... */\
@@ -135,7 +137,8 @@
     Text[ korean ] = "·Îµå(~L)..."; \
     Text[ turkish ] = "Yükle...";   \
     Text[ language_user1 ] = " ";   \
-    Text[ catalan ] = "~Cargar...";
+    Text[ catalan ] = "~Cargar..."; \
+    Text[ finnish ] = "~Lataa";
 
 #define PUSHBUTTON_TEXT_REMOVE \
 /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */\
@@ -172,7 +175,7 @@
     Text [ italian ] = "~Cambia" ; \
     Text [ portuguese_brazilian ] = "~Mudar" ; \
     Text [ portuguese ] = "~Modificar" ; \
-    Text [ finnish ] = "~Muuta" ; \
+    Text [ finnish ] = "~Muokkaa" ; \
     Text [ danish ] = "Modificer" ; \
     Text [ french ] = "~Modifier" ; \
     Text [ swedish ] = "~Ändra" ; \
@@ -224,7 +227,7 @@
     Text [ italian ] = "Area" ; \
     Text [ portuguese_brazilian ] = "~Agrupar" ; \
     Text [ portuguese ] = "~Categoria" ; \
-    Text [ finnish ] = "~Ryhmitä" ; \
+    Text [ finnish ] = "~Luokka" ; \
     Text [ danish ] = "Område" ; \
     Text [ french ] = "~Catégorie" ; \
     Text [ swedish ] = "~Kategori" ; \
@@ -250,7 +253,7 @@
     Text [ italian ] = "~Funzione" ; \
     Text [ portuguese_brazilian ] = "~Função" ; \
     Text [ portuguese ] = "~Função" ; \
-    Text [ finnish ] = "~Funktio" ; \
+    Text [ finnish ] = "Funktio" ; \
     Text [ danish ] = "Funktion" ; \
     Text [ french ] = "~Fonction" ; \
     Text [ swedish ] = "~Funktion" ; \
@@ -328,6 +331,7 @@ TabPage TP_CONFIG_MENU
         Text[ turkish ] = "~Yeni";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Nuevo";
+        Text[ finnish ] = "~Uusi";
     };
     PushButton BTN_MN_NEWPOPUP
     {
@@ -357,6 +361,7 @@ TabPage TP_CONFIG_MENU
         Text[ turkish ] = "Yeni mönü";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Nue~vo menú";
+        Text[ finnish ] = "Uusi va~likko";
     };
     PushButton BTN_MN_CHANGE
     {
@@ -387,6 +392,7 @@ TabPage TP_CONFIG_MENU
         Text[ turkish ] = "Deðiþtir";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Personalizar";
+        Text[ finnish ] = "~Muokkaa";
     };
     PushButton BTN_MN_REMOVE
     {
@@ -418,6 +424,7 @@ TabPage TP_CONFIG_MENU
         Text[ turkish ] = "Sil";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Eliminar";
+        Text[ finnish ] = "~Poista";
     };
     ImageButton BTN_MN_UP
     {
@@ -464,6 +471,7 @@ TabPage TP_CONFIG_MENU
         Text[ turkish ] = "Baþa al";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Res~tablecer";
+        Text[ finnish ] = "P~alauta";
     };
     PushButton BTN_LOAD
     {
@@ -494,6 +502,7 @@ TabPage TP_CONFIG_MENU
         Text[ turkish ] = "Yükle...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "C~argar...";
+        Text[ finnish ] = "~Lataa";
     };
     PushButton BTN_SAVE
     {
@@ -523,6 +532,7 @@ TabPage TP_CONFIG_MENU
         Text[ turkish ] = "Kaydet...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Guardar...";
+        Text[ finnish ] = "~Tallenna";
     };
     Control BOX_MN_ENTRIES
     {
@@ -592,6 +602,7 @@ TabPage TP_CONFIG_MENU
         Text[ turkish ] = "Ka~tegori";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Área";
+        Text[ finnish ] = "L~uokka";
     };
     Control BOX_MN_GROUP
     {
@@ -628,6 +639,7 @@ TabPage TP_CONFIG_MENU
         Text[ turkish ] = "Ýþlev";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Función";
+        Text[ finnish ] = "~Toiminto";
     };
     Control BOX_MN_FUNCTION
     {
@@ -664,6 +676,7 @@ TabPage TP_CONFIG_MENU
         Text[ turkish ] = "Ýþlevler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Funciones";
+        Text[ finnish ] = "Toiminnot";
     };
 };
  // TP_CONFIG_ACCEL -------------------------------------------------------
@@ -701,6 +714,7 @@ TabPage TP_CONFIG_ACCEL
         Text[ turkish ] = "Deðiþtir";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Modificar";
+        Text[ finnish ] = "Muokkaa";
     };
     PushButton BTN_ACC_REMOVE
     {
@@ -732,6 +746,7 @@ TabPage TP_CONFIG_ACCEL
         Text[ turkish ] = "Sil";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Eliminar";
+        Text[ finnish ] = "~Poista";
     };
     Control BOX_ACC_ENTRIES
     {
@@ -800,6 +815,7 @@ TabPage TP_CONFIG_ACCEL
         Text[ turkish ] = "Ka~tegori";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Área";
+        Text[ finnish ] = "~Luokka";
     };
     Control BOX_ACC_GROUP
     {
@@ -836,6 +852,7 @@ TabPage TP_CONFIG_ACCEL
         Text[ turkish ] = "Ýþlev";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Función";
+        Text[ finnish ] = "~Toiminto";
     };
     Control BOX_ACC_FUNCTION
     {
@@ -909,6 +926,7 @@ TabPage TP_CONFIG_ACCEL
         Text[ turkish ] = "Ýþlevler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Funciones";
+        Text[ finnish ] = "Toiminnot";
     };
     PushButton BTN_RESET
     {
@@ -941,6 +959,7 @@ TabPage TP_CONFIG_ACCEL
         Text[ turkish ] = "Baþa al";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Restablecer";
+        Text[ finnish ] = "P~alauta";
     };
     PushButton BTN_LOAD
     {
@@ -971,6 +990,7 @@ TabPage TP_CONFIG_ACCEL
         Text[ turkish ] = "Yükle...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "C~argar...";
+        Text[ finnish ] = "~Lataa";
     };
     PushButton BTN_SAVE
     {
@@ -1000,6 +1020,7 @@ TabPage TP_CONFIG_ACCEL
         Text[ turkish ] = "Kaydet...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Guardar...";
+        Text[ finnish ] = "~Tallenna";
     };
 };
  // TP_CONFIG_STATBAR -----------------------------------------------------
@@ -1078,6 +1099,7 @@ TabPage TP_CONFIG_STATBAR
         Text[ turkish ] = "Baþa al";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Restablecer";
+        Text[ finnish ] = "P~alauta";
     };
     PushButton BTN_LOAD
     {
@@ -1108,6 +1130,7 @@ TabPage TP_CONFIG_STATBAR
         Text[ turkish ] = "Yükle...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "C~argar...";
+        Text[ finnish ] = "~Lataa";
     };
     PushButton BTN_SAVE
     {
@@ -1137,6 +1160,7 @@ TabPage TP_CONFIG_STATBAR
         Text[ turkish ] = "Kaydet...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Guardar...";
+        Text[ finnish ] = "~Tallenna";
     };
     Bitmap CHKBTN_UNCHECKED { File = "chkun.bmp" ; };
     Bitmap CHKBTN_CHECKED { File = "chkch.bmp" ; };
@@ -1155,7 +1179,7 @@ TabDialog DLG_CONFIG
     Text [ italian ] = "Configura" ;
     Text [ portuguese_brazilian ] = "Configuração" ;
     Text [ portuguese ] = "Configuração" ;
-    Text [ finnish ] = "Asetukset" ;
+    Text [ finnish ] = "Kokoonpano" ;
     Text [ danish ] = "Tilpas" ;
     Text [ french ] = "Adaptation" ;
     Text [ swedish ] = "Anpassa" ;
@@ -1197,6 +1221,7 @@ TabDialog DLG_CONFIG
                 Text[ turkish ] = "Mönü";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Menú";
+                Text[ finnish ] = "Valikko";
             };
             PageItem
             {
@@ -1265,7 +1290,7 @@ TabDialog DLG_CONFIG
                 Text [ italian ] = "Barre dei simboli" ;
                 Text [ portuguese_brazilian ] = "Opções do Quadro de Ferramentas" ;
                 Text [ portuguese ] = "Barras de ferramentas" ;
-                Text [ finnish ] = "Työkalurivin määritykset" ;
+                Text [ finnish ] = "Työkalurivit" ;
                 Text [ danish ] = "Ikonlinjer" ;
                 Text [ french ] = "Barres d'outils" ;
                 Text [ swedish ] = "Symbollister" ;
@@ -1393,7 +1418,7 @@ String STR_SAVE
     Text [ italian ] = "Salva" ;
     Text [ portuguese_brazilian ] = "Gravar" ;
     Text [ portuguese ] = "Guardar" ;
-    Text [ finnish ] = "Tallennus" ;
+    Text [ finnish ] = "Tallenna" ;
     Text [ danish ] = "Gem" ;
     Text [ french ] = "Enregistrer" ;
     Text [ swedish ] = "Spara" ;
@@ -1696,7 +1721,7 @@ String STR_FRONT
     Text [ italian ] = "In avanti" ;
     Text [ portuguese_brazilian ] = "Primeiro plano" ;
     Text [ portuguese ] = "Para a frente" ;
-    Text [ finnish ] = "Edustalle" ;
+    Text [ finnish ] = "Eteen" ;
     Text [ danish ] = "Fremad" ;
     Text [ french ] = "Premier plan" ;
     Text [ swedish ] = "Framåt" ;
@@ -1728,7 +1753,7 @@ QueryBox QBX_MNUCFG_UNDEFINED_FUNCTIONS
     Message [ italian ] = "Vi sono ancora funzioni non definite (???).\n\nContinuare lo stesso?" ;
     Message [ portuguese_brazilian ] = "Ainda existem Funções indefinidas (???).\n\nContinuar de qualquer forma?" ;
     Message [ portuguese ] = "Ainda existem funções indefinidas (???).\n\nDeseja continuar?" ;
-    Message [ finnish ] = "Määrittämättömiä toimintoja on vieläkin (???).\n\nJatketaanko silti?" ;
+    Message [ finnish ] = "Osa toiminnoista on vielä määrittämättä (???).\n\nHyväksytäänkö kokoonpano?" ;
     Message [ danish ] = "Der eksisterer stadig udefinerede funktioner (???).\n\nVil du overtage denne konfiguration alligevel?" ;
     Message [ french ] = "Certaines fonctions n'ont pas été définies (???).\n\nPoursuivre malgré tout ?" ;
     Message [ swedish ] = "Det finns fortfarande odefinierade funktioner (???). \n\nVill Du ändå överta den här konfigurationen?" ;
@@ -1759,7 +1784,7 @@ QueryBox QBX_MNUCFG_POPUP_FUNCTIONS
     Message [ italian ] = "Vi sono ancora voci con funzioni che possono essere assegnate solo a menu di scelta rapida.\n\nContinuare lo stesso?" ;
     Message [ portuguese_brazilian ] = "Existem entradas com Funções que só podem ser atribuidas a popupps.\n\nContinuar de qualquer forma?" ;
     Message [ portuguese ] = "Existem ainda entradas com funções que só podem ser atribuídas a janelas instantâneas.\n\nContinuar?" ;
-    Message [ finnish ] = "Luettelossa on vieläkin toimintoja, jotka voidaan liittää vain kohovalikoihin..\n\nJatketaanko silti?" ;
+    Message [ finnish ] = "Osa merkintöjen toiminnoista voidaan yhä liittää vain ponnahdusobjekteihin.\n\nJatketaanko?" ;
     Message [ danish ] = "Der findes stadig elementer med funktioner, som kun kan tildeles popups.\n\nVil du overtage denne konfiguration alligevel?" ;
     Message [ french ] = "Certaines entrées sont encore associées à des fonctions réservées à des menus déroulants\n\nPoursuivre malgré tout ?" ;
     Message [ swedish ] = "Det finns fortfarande poster med funktioner som bara kan tilldelas popups.\n\nVill Du ändå överta den här konfigurationen?" ;
@@ -1786,7 +1811,7 @@ InfoBox IBX_MNUCFG_ALREADY_INCLUDED
     Message [ italian ] = "Funzione già inclusa in questo elenco." ;
     Message [ portuguese_brazilian ] = "A função já está incluída neste popup." ;
     Message [ portuguese ] = "A função já está incluída neste menu instantâneo." ;
-    Message [ finnish ] = "Toiminto on jo lisätty tähän kohovalikkoon." ;
+    Message [ finnish ] = "Toiminto on jo tässä valikossa." ;
     Message [ danish ] = "Funktionen er allerede indeholdt i denne popup." ;
     Message [ french ] = "Cette fonction est déjà incluse dans ce Pop-up." ;
     Message [ swedish ] = "Funktionen ingår redan i denna snabbmeny." ;
@@ -1831,6 +1856,7 @@ String STR_LOADMENUCONFIG
     Text[ turkish ] = "Mönü konfigürasyonunu yükle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Cargar configuración del menú";
+    Text[ finnish ] = "Lataa valikkomääritys";
 };
 String STR_SAVEMENUCONFIG
 {
@@ -1855,6 +1881,7 @@ String STR_SAVEMENUCONFIG
     Text[ korean ] = "¸Þ´º±¸¼º ÀúÀå";
     Text[ turkish ] = "Mönü konfigürasyonunu kaydet";
     Text[ catalan ] = "Guardar configuración del menú";
+    Text[ finnish ] = "Tallenna valikkomääritys";
 };
 String STR_LOADACCELCONFIG
 {
@@ -1880,6 +1907,7 @@ String STR_LOADACCELCONFIG
     Text[ turkish ] = "Klavye konfigürasyonunu yükle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Cargar configuración del teclado";
+    Text[ finnish ] = "Lataa näppäimistömääritys";
 };
 String STR_SAVEACCELCONFIG
 {
@@ -1904,6 +1932,7 @@ String STR_SAVEACCELCONFIG
     Text[ korean ] = "Å°º¸µå±¸¼º ÀúÀå";
     Text[ turkish ] = "Klavye konfigürasyonunu kaydet";
     Text[ catalan ] = "Guardar configuración del teclado";
+    Text[ finnish ] = "Tallenna näppäimistömääritys";
 };
 String STR_LOADSTATBARCONFIG
 {
@@ -1929,6 +1958,7 @@ String STR_LOADSTATBARCONFIG
     Text[ turkish ] = "Durum çubuðu konfigürasyonunu yükle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Cargar configuración de la barra de estado";
+    Text[ finnish ] = "Lataa tilarivimääritys";
 };
 String STR_SAVESTATBARCONFIG
 {
@@ -1953,6 +1983,7 @@ String STR_SAVESTATBARCONFIG
     Text[ korean ] = "»óÅÂ¸ðÀ½ ±¸¼º ÀúÀå";
     Text[ turkish ] = "Durum çubuðu konfigürasyonunu kaydet";
     Text[ catalan ] = "Guardar configuración de la barra de estado";
+    Text[ finnish ] = "Tallenna tilarivin kokoonpanomääritykset";
 };
 String STR_MENU
 {
@@ -1978,5 +2009,6 @@ String STR_MENU
     Text[ turkish ] = "Mönü";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Menú";
+    Text[ finnish ] = "Valikko";
 };
  // ********************************************************************** EOF
