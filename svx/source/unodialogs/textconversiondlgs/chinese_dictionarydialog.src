@@ -1,0 +1,261 @@
+/*************************************************************************
+ *
+ *  $RCSfile: chinese_dictionarydialog.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:46:53 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "chinese_dictionarydialog.hrc"
+
+#ifndef _SVT_CONTROLDIMS_HRC_
+#include <svtools/controldims.hrc>
+#endif
+
+//-----------------------------------------------------------------------------
+//defines for positions and sizes:
+
+#define FULL_WIDTH (245)
+#define FULL_HEIGHT (165)
+
+#define ROW_1 (RSC_SP_DLG_INNERBORDER_TOP)
+#define ROW_2 (ROW_1+RSC_CD_RADIOBUTTON_HEIGHT+RSC_SP_CTRL_GROUP_Y)
+#define ROW_3 (ROW_2+RSC_CD_RADIOBUTTON_HEIGHT+RSC_SP_CTRL_GROUP_Y)
+#define ROW_4 (ROW_3+RSC_CD_CHECKBOX_HEIGHT+RSC_SP_CTRL_GROUP_Y)
+#define ROW_5 (ROW_4+RSC_CD_FIXEDTEXT_HEIGHT+RSC_SP_CTRL_DESC_Y)
+#define ROW_6 (ROW_5+RSC_CD_TEXTBOX_HEIGHT+RSC_SP_CTRL_DESC_Y)
+
+#define ROW_5a (ROW_5+RSC_CD_PUSHBUTTON_HEIGHT+RSC_SP_CTRL_DESC_Y)
+#define ROW_5b (ROW_5a+RSC_CD_PUSHBUTTON_HEIGHT+RSC_SP_CTRL_DESC_Y)
+
+#define ROW_8 (FULL_HEIGHT-RSC_SP_DLG_INNERBORDER_BOTTOM-RSC_CD_PUSHBUTTON_HEIGHT)
+#define ROW_7 (ROW_8-RSC_CD_FIXEDLINE_HEIGHT-2)
+
+#define LIST_HEIGHT (ROW_7-RSC_SP_CTRL_Y-ROW_6)
+
+#define COL_WIDTH 60
+#define BUTTONCOL_WIDTH 40
+#define COL_1 (RSC_SP_DLG_INNERBORDER_LEFT+RSC_SP_FLGR_SPACE_X)
+#define COL_2 (COL_1+COL_WIDTH+1)
+#define COL_3 (COL_2+COL_WIDTH+1)
+#define COL_4 (FULL_WIDTH-RSC_SP_DLG_INNERBORDER_RIGHT-BUTTONCOL_WIDTH)
+
+#define REST_COL_WIDTH (COL_4-COL_3-RSC_SP_CTRL_GROUP_X)
+
+//-----------------------------------------------------------------------------
+
+ModalDialog DLG_CHINESEDICTIONARY
+{
+    //HelpId = ;
+    Size = MAP_APPFONT( FULL_WIDTH, FULL_HEIGHT );
+    OutputSize = TRUE;
+    Closeable = TRUE ;
+    Moveable = TRUE ;
+    SVLook = TRUE;
+
+    Text [ de ] = "Benutzerwörterbuch bearbeiten";
+    Text [ en-US ] = "Edit Dictionary";
+
+    DIRECTION_RADIOBUTTONS( COL_1, ROW_1, FULL_WIDTH - COL_1 - RSC_SP_DLG_INNERBORDER_RIGHT )
+
+    CheckBox CB_REVERSE
+    {
+        Pos = MAP_APPFONT ( COL_1, ROW_3 ) ;
+        Size = MAP_APPFONT ( FULL_WIDTH - COL_1 - RSC_SP_DLG_INNERBORDER_RIGHT , RSC_CD_CHECKBOX_HEIGHT ) ;
+
+        Text [ de ] = "Beidseitige Entsprechung" ;
+        Text [ en-US ] = "Reverse mapping";
+    };
+
+    FixedText FT_TERM
+    {
+        Pos = MAP_APPFONT ( COL_1 , ROW_4 ) ;
+        Size = MAP_APPFONT ( COL_WIDTH, RSC_CD_FIXEDTEXT_HEIGHT ) ;
+        Text [ de ] = "Begriff";
+        Text [ en-US ] = "Term";
+    };
+    Edit ED_TERM
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( COL_1 , ROW_5 ) ;
+        Size = MAP_APPFONT ( COL_WIDTH , RSC_CD_TEXTBOX_HEIGHT ) ;
+    };
+
+
+    FixedText FT_MAPPING
+    {
+        Pos = MAP_APPFONT ( COL_2 , ROW_4 ) ;
+        Size = MAP_APPFONT ( COL_WIDTH, RSC_CD_FIXEDTEXT_HEIGHT ) ;
+        Text [ de ] = "Entsprechung";
+        Text [ en-US ] = "Mapping";
+    };
+    Edit ED_MAPPING
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( COL_2 , ROW_5 ) ;
+        Size = MAP_APPFONT ( COL_WIDTH , RSC_CD_TEXTBOX_HEIGHT ) ;
+    };
+
+    FixedText FT_PROPERTY
+    {
+        Pos = MAP_APPFONT ( COL_3 , ROW_4 ) ;
+        Size = MAP_APPFONT ( REST_COL_WIDTH, RSC_CD_FIXEDTEXT_HEIGHT ) ;
+        Text [ de ] = "Eigenschaft";
+        Text [ en-US ] = "Property";
+    };
+    ListBox LB_PROPERTY
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( COL_3 , ROW_5 ) ;
+        Size = MAP_APPFONT ( REST_COL_WIDTH , RSC_CD_TEXTBOX_HEIGHT ) ;
+        DropDown = TRUE ;
+
+        StringList [ x-comment ] =
+        {
+            < "Note for non-chinese translation: don't translate, just use the english term" ; Default ; > ;
+            < "Note for non-chinese translation: don't translate, just use the english term" ; > ;
+            < "Note for non-chinese translation: don't translate, just use the english term" ; > ;
+            < "Note for non-chinese translation: don't translate, just use the english term" ; > ;
+            < "Note for non-chinese translation: don't translate, just use the english term" ; > ;
+            < "Note for non-chinese translation: don't translate, just use the english term" ; > ;
+            < "Note for non-chinese translation: don't translate, just use the english term" ; > ;
+            < "Note for non-chinese translation: don't translate, just use the english term" ; > ;
+            < "Note for non-chinese translation: don't translate, just use the english term" ; > ;
+            < "Note for non-chinese translation: don't translate, just use the english term" ; > ;
+            < "Note for non-chinese translation: don't translate, just use the english term" ; > ;
+            < "Note for non-chinese translation: don't translate, just use the english term" ; > ;
+            < "Note for non-chinese translation: don't translate, just use the english term" ; > ;
+            < "Note for non-chinese translation: don't translate, just use the english term" ; > ;
+            < "Note for non-chinese translation: don't translate, just use the english term" ; > ;
+        };
+        StringList [ de ] =
+        {
+            < "Other" ; Default ; > ;
+            < "Foreign" ; > ;
+            < "First name" ; > ;
+            < "Last name" ; > ;
+            < "Title" ; > ;
+            < "Status" ; > ;
+            < "Place name" ; > ;
+            < "Business" ; > ;
+            < "Adjective" ; > ;
+            < "Idiom" ; > ;
+            < "Abbreviation" ; > ;
+            < "Numerical" ; > ;
+            < "Noun" ; > ;
+            < "Verb" ; > ;
+            < "Brand name" ; > ;
+        };
+        stringlist [ en-US ] =
+        {
+            < "Other" ; Default ; > ;
+            < "Foreign" ; > ;
+            < "First name" ; > ;
+            < "Last name" ; > ;
+            < "Title" ; > ;
+            < "Status" ; > ;
+            < "Place name" ; > ;
+            < "Business" ; > ;
+            < "Adjective" ; > ;
+            < "Idiom" ; > ;
+            < "Abbreviation" ; > ;
+            < "Numerical" ; > ;
+            < "Noun" ; > ;
+            < "Verb" ; > ;
+            < "Brand name" ; > ;
+        };
+    };
+
+    Control CT_MAPPINGLIST
+    {
+        Pos = MAP_APPFONT ( COL_1, ROW_6 ) ;
+        Size = MAP_APPFONT ( COL_4 - COL_1 - RSC_SP_CTRL_GROUP_X, LIST_HEIGHT ) ;
+        TabStop = TRUE ;
+    };
+
+    PushButton PB_ADD
+    {
+        Pos = MAP_APPFONT( COL_4, ROW_5 );
+        Size = MAP_APPFONT( BUTTONCOL_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT );
+
+        Text [ de ] = "Hinzufügen";
+        Text [ en-US ] = "~Add";
+    };
+    PushButton PB_MODIFY
+    {
+        Pos = MAP_APPFONT( COL_4, ROW_5a );
+        Size = MAP_APPFONT( BUTTONCOL_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT );
+
+        Text [ de ] = "Ändern";
+        Text [ en-US ] = "~Modify";
+    };
+    PushButton PB_DELETE
+    {
+        Pos = MAP_APPFONT( COL_4, ROW_5b );
+        Size = MAP_APPFONT( BUTTONCOL_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT );
+
+        Text [ de ] = "~Entfernen";
+        Text [ en-US ] = "~Delete";
+    };
+
+    FixedLine FL_BOTTOMLINE
+    {
+        Pos = MAP_APPFONT ( 0 , ROW_7 ) ;
+        Size = MAP_APPFONT ( FULL_WIDTH, RSC_CD_FIXEDLINE_HEIGHT ) ;
+    };
+
+    BUTTONS_OK_CANCEL_HELP_ABREAST( FULL_WIDTH - RSC_SP_DLG_INNERBORDER_RIGHT, ROW_8 )
+};
