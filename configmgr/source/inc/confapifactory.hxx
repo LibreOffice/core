@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confapifactory.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:13:40 $
+ *  last change: $Author: jb $ $Date: 2000-11-07 14:42:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,8 +83,8 @@ namespace configmgr
 
     // instantiation
     uno::Reference< uno::XInterface > SAL_CALL instantiateProvider(uno::Reference< lang::XMultiServiceFactory > const& rServiceManager );
-    uno::Reference< uno::XInterface > SAL_CALL instantiateReadAccess(uno::Reference< lang::XMultiServiceFactory > const& rServiceManager );
-    uno::Reference< uno::XInterface > SAL_CALL instantiateUpdateAccess(uno::Reference< lang::XMultiServiceFactory > const& rServiceManager );
+//  uno::Reference< uno::XInterface > SAL_CALL instantiateReadAccess(uno::Reference< lang::XMultiServiceFactory > const& rServiceManager );
+//  uno::Reference< uno::XInterface > SAL_CALL instantiateUpdateAccess(uno::Reference< lang::XMultiServiceFactory > const& rServiceManager );
 
     uno::Reference< uno::XInterface > SAL_CALL instantiateConfigRegistry(uno::Reference< lang::XMultiServiceFactory > const& rServiceManager );
 

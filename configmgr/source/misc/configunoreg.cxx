@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configunoreg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dg $ $Date: 2000-10-24 11:59:23 $
+ *  last change: $Author: jb $ $Date: 2000-11-07 14:42:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,8 +76,8 @@
 #ifndef CONFIGMGR_API_SVCCOMPONENT_HXX_
 #include "confsvccomponent.hxx"
 #endif
-#ifndef CONFIGMGR_API_PROVIDER_HXX_
-#include "confprovider.hxx"
+#ifndef CONFIGMGR_API_PROVIDER2_HXX_
+#include "confprovider2.hxx"
 #endif
 
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
@@ -278,7 +278,7 @@ namespace configmgr
             const Sequence< OUString > & rServiceNames
         )
     {
-        OSL_ENSHURE(0 == rComponentName.compareToAscii(ConfigurationProvider::staticServiceInfo.implementationName),
+        OSL_ENSHURE(0 == rComponentName.compareToAscii(ConfigurationProvider2::staticServiceInfo.implementationName),
             "configmgr::createProviderFactory : invalid argument !");
         return new OProviderFactory(rServiceManager, pCreateFunction);
     }
@@ -429,7 +429,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(
     {
         Reference< XRegistryKey > xKey(reinterpret_cast<XRegistryKey*>(pRegistryKey));
 
-        RegisterService(&configmgr::ConfigurationProvider::staticServiceInfo, xKey);
+        RegisterService(&configmgr::ConfigurationProvider2::staticServiceInfo, xKey);
 
         RegisterService(configmgr::getConfigurationRegistryServiceInfo(), xKey);
 
@@ -459,7 +459,7 @@ extern "C" void* SAL_CALL component_getFactory(
         ProviderRequest aReq(pServiceManager,pImplementationName);
 
         aReq.CreateProvider(
-            &configmgr::ConfigurationProvider::staticServiceInfo,
+            &configmgr::ConfigurationProvider2::staticServiceInfo,
             &configmgr::instantiateProvider,
             ::configmgr::createProviderFactory)
         ||
