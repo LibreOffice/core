@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process_impl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 13:27:08 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:14:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@
  namespace /* private */
  {
 
-    const rtl::OUString UNICHAR_SLASH = rtl::OUString::createFromAscii("/");
+    const sal_Unicode UNICHAR_SLASH = ((sal_Unicode)'/');
 
     //-------------------------------------------------------
      // if the command line arg 0 contains a '/' somewhere it
