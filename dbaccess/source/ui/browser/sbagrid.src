@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-24 14:38:22 $
+ *  last change: $Author: rt $ $Date: 2001-05-04 19:46:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,7 @@ Menu RID_SBA_GRID_COLCTXMENU
             Text[ greek ] = "Ìïñ~öïğïßçóç óôŞëçò...";
             Text[ korean ] = "¿­ Æ÷¸ËÆÃ(~F)...";
             Text[ turkish ] = "Sütun formatı...";
+            Text[ catalan ] = "Formateado de ~columnas...";
         };
         MenuItem
         {
@@ -125,6 +126,7 @@ Menu RID_SBA_GRID_COLCTXMENU
             Text[ greek ] = "ĞëÜôïò óôŞëçò...";
             Text[ korean ] = "¿­ ³Êºñ(~W)...";
             Text[ turkish ] = "Sütun genişliği...";
+            Text[ catalan ] = "Anc~ho de columna...";
         };
         MenuItem
         {
@@ -142,7 +144,7 @@ Menu RID_SBA_GRID_COLCTXMENU
             Text[ italian ] = "Copia la ~descrizione della colonna";
             Text[ danish ] = "Copy column d~escription";
             Text[ swedish ] = "Kopiera kolumnb~eskrivning";
-            Text[ polish ] = "Kopiuj opis kolumny";
+            Text[ polish ] = "~Kopiuj opis kolumny";
             Text[ portuguese_brazilian ] = "Copy column d~escription";
             Text[ japanese ] = "—ñ‚ÌŒ©o‚µ‚ğºËß°";
             Text[ korean ] = "Copy column d~escription";
@@ -150,6 +152,7 @@ Menu RID_SBA_GRID_COLCTXMENU
             Text[ chinese_traditional ] = "½Æ»s¦C¼ĞÃD";
             Text[ turkish ] = "Copy column d~escription";
             Text[ arabic ] = "äÓÎ æÕİ ÇáÚãæÏ";
+            Text[ catalan ] = "Copy column d~escription";
         };
     };
 };
@@ -182,6 +185,7 @@ Menu RID_SBA_GRID_ROWCTXMENU
             Text[ greek ] = "Ìïñöïğïßçóç ğßíáêá...";
             Text[ korean ] = "Ç¥ Æ÷¸ËÆÃ...";
             Text[ turkish ] = "Tablo formatı...";
+            Text[ catalan ] = "Formateado de tabla...";
         };
         MenuItem
         {
@@ -209,6 +213,7 @@ Menu RID_SBA_GRID_ROWCTXMENU
             Text[ greek ] = "¾øïò ãñáììŞò...";
             Text[ korean ] = "Çà ³ôÀÌ...";
             Text[ turkish ] = "Satır yüksekliği...";
+            Text[ catalan ] = "Altura de fila...";
         };
     };
 };
@@ -235,6 +240,7 @@ String RID_STR_UNDO_MODIFY_RECORD
     Text[ chinese_traditional ] = "´_­ì¡G¿é¤J¸ê®Æ";
     Text[ arabic ] = "ÊÑÇÌÚ: ÅÏÎÇá ÈíÇäÇÊ";
     Text[ turkish ] = "Geri al: Veri girişi";
+    Text[ catalan ] = "Deshacer: Entrada de datos";
 };
 
 String RID_STR_SAVE_CURRENT_RECORD
@@ -261,6 +267,7 @@ String RID_STR_SAVE_CURRENT_RECORD
     Text[ greek ] = "ÁğïèŞêåõóç ôñİ÷ïõóáò åããñáöŞò";
     Text[ korean ] = "ÇöÀçÀÇ  ·¹ÄÚµå ÀúÀå";
     Text[ turkish ] = "Yürürlükteki verileri kaydet";
+    Text[ catalan ] = "guardar registro actual";
 };
 
 String STR_QRY_TITLE
@@ -288,6 +295,7 @@ String STR_QRY_TITLE
     Text[ arabic ] = "ÇáÇÓÊİÓÇÑ #";
     Text[ turkish ] = "Sorgu #";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Consulta #";
 };
 String STR_TBL_TITLE
 {
@@ -314,11 +322,30 @@ String STR_TBL_TITLE
     Text[ arabic ] = "ÇáÌÏæá #";
     Text[ turkish ] = "Tablo #";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Tabla #";
 };
 String STR_VIEW_TITLE
 {
     Text = "Ansicht #" ;
     Text [ ENGLISH ] = "View #" ;
     Text [ english_us ] = "View #" ;
+    Text[ portuguese ] = "Vista #";
+    Text[ russian ] = "Âèä #";
+    Text[ greek ] = "View #";
+    Text[ dutch ] = "Beeld #";
+    Text[ french ] = "Vue #";
+    Text[ spanish ] = "Ver #";
+    Text[ italian ] = "Vista #";
+    Text[ danish ] = "View #";
+    Text[ swedish ] = "Vy #";
+    Text[ polish ] = "Widok #";
+    Text[ portuguese_brazilian ] = "View #";
+    Text[ japanese ] = "ËŞ­° #";
+    Text[ korean ] = "View #";
+    Text[ chinese_simplified ] = "View #";
+    Text[ chinese_traditional ] = "View #";
+    Text[ turkish ] = "View #";
+    Text[ arabic ] = "View #";
+    Text[ catalan ] = "View #";
 };
 
