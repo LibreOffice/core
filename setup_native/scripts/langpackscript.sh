@@ -49,11 +49,11 @@ echo "Searching for the PRODUCTNAMEPLACEHOLDER installation ..."
 
 case $platform in
 SunOS)
-  PACKAGENAME=`pkginfo -x | grep PRODUCTNAMEPLACEHOLDER-core | sed "s/ .*//"`
+  PACKAGENAME=`pkginfo -x | grep PRODUCTNAMEPLACEHOLDER-core01 | sed "s/ .*//"`
   PRODUCTINSTALLLOCATION="`pkginfo -r $PACKAGENAME`"
   ;;
 Linux)
-  RPMNAME=`rpm -qa | grep PRODUCTNAMEPLACEHOLDER-core`
+  RPMNAME=`rpm -qa | grep PRODUCTNAMEPLACEHOLDER-core01`
   PRODUCTINSTALLLOCATION="`rpm -ql $RPMNAME | head -n 1`"
   ;;
 *)
@@ -77,7 +77,7 @@ fi
 outdir=/var/tmp/install_$$
 mkdir $outdir
 
-#diskSpace=`df -k $outdir | tail -1 | awk '{if ( $4 ~ /%/) { print $3 } else { print $4 } }'`
+#diskSpace=`df -k $outdir | $tail_prog -1 | awk '{if ( $4 ~ /%/) { print $3 } else { print $4 } }'`
 #if [ $diskSpace -lt $diskSpaceRequired ]; then
 #    printf "You will need atleast %s kBytes of Disk Free\n" $diskSpaceRequired
 #    printf "Please free up the required Disk Space and try again\n"
