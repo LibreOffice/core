@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrctrl.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:45:25 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:26:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,8 +114,11 @@ DockingWindow RID_SVXCTRL_COLOR
     Text[ czech ] = "Barvy";
     Text[ hebrew ] = "‮צבעים‬";
     Text[ hindi ] = "रंग";
+    Text[ slovak ] = "Farby";
 };
  // ********************************************************************** EOF
+
+
 
 
 
