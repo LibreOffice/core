@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrolmodel.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 10:33:36 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 12:49:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,8 @@
 #ifndef _UNO_DATA_H_
 #include <uno/data.h>
 #endif
+
+#include <memory>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1353,10 +1355,14 @@ void UnoControlModel::setFastPropertyValue( sal_Int32 nPropId, const ::com::sun:
 
 void UnoControlModel::setPropertyValues( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rPropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Values ) throw(::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    ::osl::ClearableMutexGuard aGuard( GetMutex() );
 
     sal_Int32 nProps = rPropertyNames.getLength();
-    sal_Int32* pHandles = new sal_Int32[nProps];
+
+//  sal_Int32* pHandles = new sal_Int32[nProps];
+        // don't do this - it leaks in case of an exception
+    Sequence< sal_Int32 > aHandles( nProps );
+    sal_Int32* pHandles = aHandles.getArray();
 
     // may need to change the order in the sequence, for this we need a non-const value sequence
     // 15.05.2002 - 99314 - fs@openoffice.org
@@ -1367,16 +1373,17 @@ void UnoControlModel::setPropertyValues( const ::com::sun::star::uno::Sequence< 
 
     if ( nValidHandles )
     {
-        // Einzelproperties vom ::com::sun::star::awt::FontDescriptor rausfischen...
-     ::com::sun::star::awt::FontDescriptor* pFD = NULL;
-        for ( sal_uInt16 n = 0; n < nProps; n++ )
+        // if somebody sets properties which are single aspects of a font descriptor,
+        // remove them, and build a font descriptor instead
+        ::std::auto_ptr< awt::FontDescriptor > pFD;
+        for ( sal_uInt16 n = 0; n < nProps; ++n )
         {
             if ( ( pHandles[n] >= BASEPROPERTY_FONTDESCRIPTORPART_START ) && ( pHandles[n] <= BASEPROPERTY_FONTDESCRIPTORPART_END ) )
             {
-                if ( !pFD )
+                if ( !pFD.get() )
                 {
                     ImplControlProperty* pProp = mpData->Get( BASEPROPERTY_FONTDESCRIPTOR );
-                    pFD = new ::com::sun::star::awt::FontDescriptor;
+                    pFD.reset( new awt::FontDescriptor );
                     pProp->GetValue() >>= *pFD;
                 }
                 lcl_ImplMergeFontProperty( *pFD, (sal_uInt16)pHandles[n], pValues[n] );
@@ -1388,21 +1395,26 @@ void UnoControlModel::setPropertyValues( const ::com::sun::star::uno::Sequence< 
         if ( nValidHandles )
         {
             ImplNormalizePropertySequence( nProps, pHandles, pValues, &nValidHandles );
+            aGuard.clear();
+                // clear our guard before calling into setFastPropertyValues - this method
+                // will implicitly call property listeners, and this should not happen with
+                // our mutex locked
+                // #i23451# - 2004-03-18 - fs@openoffice.org
              setFastPropertyValues( nProps, pHandles, pValues, nValidHandles );
         }
+        else
+            aGuard.clear();
+            // same as a few lines above
 
         // FD-Propertie nicht in das Array mergen, weil sortiert...
-        if ( pFD )
+        if ( pFD.get() )
         {
             ::com::sun::star::uno::Any aValue;
             aValue <<= *pFD;
             sal_Int32 nHandle = BASEPROPERTY_FONTDESCRIPTOR;
             setFastPropertyValues( 1, &nHandle, &aValue, 1 );
-            delete pFD;
         }
     }
-
-    delete[] pHandles;
 }
 
 
