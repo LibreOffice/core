@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentsignaturehelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-15 07:16:08 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 18:02:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,8 +104,6 @@ struct SignatureStreamHelper
 {
     css::uno::Reference < css::embed::XStorage >    xSignatureStorage;
     css::uno::Reference < css::io::XStream >        xSignatureStream;
-
-    void Clear();
 };
 
 
@@ -115,6 +113,10 @@ public:
 
     static SignatureStreamHelper OpenSignatureStream( const css::uno::Reference < css::embed::XStorage >& rxStore, sal_Int32 nOpenMode, DocumentSignatureMode eDocSigMode );
     static std::vector< rtl::OUString > CreateElementList( const css::uno::Reference < css::embed::XStorage >& rxStore, const ::rtl::OUString rRootStorageName, DocumentSignatureMode eMode );
+
+    static ::rtl::OUString GetDocumentContentSignatureDefaultStreamName();
+    static ::rtl::OUString GetScriptingContentSignatureDefaultStreamName();
+    static ::rtl::OUString GetPackageSignatureDefaultStreamName();
 };
 
 #endif // _XMLSECURITY_XMLSIGNATUREHELPER_HXX
