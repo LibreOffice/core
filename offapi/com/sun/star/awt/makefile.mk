@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: kz $ $Date: 2004-02-25 16:55:33 $
+#   last change: $Author: obo $ $Date: 2004-03-19 16:19:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -113,6 +113,7 @@ IDLFILES=\
     DeviceCapability.idl\
     DeviceInfo.idl\
     DialogProvider.idl\
+    EnhancedMouseEvent.idl\
     FocusChangeReason.idl\
     FocusEvent.idl\
     FontDescriptor.idl\
@@ -235,6 +236,7 @@ IDLFILES=\
     XDialogProvider.idl\
     XDisplayBitmap.idl\
     XDisplayConnection.idl\
+    XEnhancedMouseClickHandler.idl\
     XEventHandler.idl\
     XExtendedToolkit.idl\
     XFileDialog.idl\
