@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormComponent.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 16:08:41 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 17:09:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -962,6 +962,9 @@ public:
                 throw (::com::sun::star::lang::IllegalArgumentException);
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue )
                 throw (::com::sun::star::uno::Exception);
+
+// ::com::sun::star::beans::XPropertyState
+    virtual ::com::sun::star::uno::Any getPropertyDefaultByHandle( sal_Int32 nHandle ) const;
 
 // XEventListener
     virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw (::com::sun::star::uno::RuntimeException);
