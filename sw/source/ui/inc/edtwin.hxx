@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 16:05:39 $
+ *  last change: $Author: rt $ $Date: 2005-01-05 16:10:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,6 +151,7 @@ friend void     PageNumNotify(  ViewShell* pVwSh,
     SdrViewUserMarker   *pUserMarker;
     SdrObject           *pUserMarkerObj;
     SwShadowCursor      *pShadCrsr;
+    Point               *pRowColumnSelectionStart; // save position where table row/column selection has been started
 
     SwView         &rView;
 
@@ -176,7 +177,8 @@ friend void     PageNumNotify(  ViewShell* pVwSh,
                     bTblIsColMode   : 1, //
                     bChainMode      : 1, //Rahmen verbinden
                     bWasShdwCrsr    : 1, //ShadowCrsr war im MouseButtonDown an
-                    bLockInput      : 1; //Lock waehrend die Rechenleiste aktiv ist
+                    bLockInput      : 1, //Lock waehrend die Rechenleiste aktiv ist
+                    bIsRowDrag      : 1; //selection of rows is used, in combination with pRowColumnSelectionStart
 
     USHORT          nKS_NUMDOWN_Count; // #i23725#
     USHORT          nKS_NUMINDENTINC_Count;
