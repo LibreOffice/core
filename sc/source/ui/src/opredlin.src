@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opredlin.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-24 10:52:54 $
+ *  last change: $Author: kz $ $Date: 2001-08-29 21:43:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,7 +150,7 @@ TabPage RID_SCPAGE_OPREDLINE
         Text[ turkish ] = "~Eklemeler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Inserciones";
-        Text[ finnish ] = "~Lisäykset";
+        Text[ finnish ] = "~Lis?ykset";
     };
     FixedText FT_MOVE
     {
@@ -178,7 +178,7 @@ TabPage RID_SCPAGE_OPREDLINE
         Text[ turkish ] = "~Taþýnan giriþler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Desplazamientos";
-        Text[ finnish ] = "~Siirretyt merkinnät";
+        Text[ finnish ] = "~Siirretyt merkinn?t";
     };
     FixedLine GB_COLORCHGS
     {
@@ -263,6 +263,7 @@ TabPage RID_SCPAGE_OPREDLINE
         Text[ finnish ] = "Laatija";
     };
 };
+
 
 
 
