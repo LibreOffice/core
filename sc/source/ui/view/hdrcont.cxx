@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hdrcont.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-17 17:25:18 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 12:02:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@
 //==================================================================
 
 ScHeaderControl::ScHeaderControl( Window* pParent, SelectionEngine* pSelectionEngine,
-                                    USHORT nNewSize, USHORT nNewFlags ) :
+                                    SCCOLROW nNewSize, USHORT nNewFlags ) :
             Window      ( pParent ),
             pSelEngine  ( pSelectionEngine ),
             nSize       ( nNewSize ),
@@ -159,7 +159,7 @@ __EXPORT ScHeaderControl::~ScHeaderControl()
 {
 }
 
-void ScHeaderControl::DoPaint( USHORT nStart, USHORT nEnd )
+void ScHeaderControl::DoPaint( SCCOLROW nStart, SCCOLROW nEnd )
 {
     BOOL bLayoutRTL = IsLayoutRTL();
     long nLayoutSign = bLayoutRTL ? -1 : 1;
@@ -178,7 +178,7 @@ void ScHeaderControl::DoPaint( USHORT nStart, USHORT nEnd )
     Invalidate(aRect);
 }
 
-void ScHeaderControl::SetMark( BOOL bNewSet, USHORT nNewStart, USHORT nNewEnd )
+void ScHeaderControl::SetMark( BOOL bNewSet, SCCOLROW nNewStart, SCCOLROW nNewEnd )
 {
     BOOL bEnabled = SC_MOD()->GetInputOptions().GetMarkHeader();    //! cachen?
     if (!bEnabled)
@@ -187,8 +187,8 @@ void ScHeaderControl::SetMark( BOOL bNewSet, USHORT nNewStart, USHORT nNewEnd )
     //  Variablen setzen
 
     BOOL bOldSet     = bMarkRange;
-    USHORT nOldStart = nMarkStart;
-    USHORT nOldEnd   = nMarkEnd;
+    SCCOLROW nOldStart = nMarkStart;
+    SCCOLROW nOldEnd     = nMarkEnd;
     PutInOrder( nNewStart, nNewEnd );
     bMarkRange = bNewSet;
     nMarkStart = nNewStart;
@@ -226,7 +226,7 @@ void ScHeaderControl::SetMark( BOOL bNewSet, USHORT nNewStart, USHORT nNewEnd )
     //  sonst war nix, is nix
 }
 
-long ScHeaderControl::GetScrPos( USHORT nEntryNo )
+long ScHeaderControl::GetScrPos( SCCOLROW nEntryNo )
 {
     long nScrPos;
 
@@ -236,15 +236,15 @@ long ScHeaderControl::GetScrPos( USHORT nEntryNo )
     else
     {
         nScrPos = 0;
-        for (USHORT i=GetPos(); i<nEntryNo && nScrPos<nMax; i++)
+        for (SCCOLROW i=GetPos(); i<nEntryNo && nScrPos<nMax; i++)
         {
             USHORT nAdd = GetEntrySize(i);
             if (nAdd)
                 nScrPos += nAdd;
             else
             {
-                USHORT nHidden = GetHiddenCount(i);
-                if (nHidden)
+                SCCOLROW nHidden = GetHiddenCount(i);
+                if (nHidden > 0)
                     i += nHidden - 1;
             }
         }
@@ -291,7 +291,7 @@ void __EXPORT ScHeaderControl::Paint( const Rectangle& rRect )
     else
         nBarSize = (USHORT) GetSizePixel().Height();
 
-    USHORT  nPos = GetPos();
+    SCCOLROW    nPos = GetPos();
 
     long nPStart = bVertical ? rRect.Top() : rRect.Left();
     long nPEnd = bVertical ? rRect.Bottom() : rRect.Right();
@@ -320,7 +320,7 @@ void __EXPORT ScHeaderControl::Paint( const Rectangle& rRect )
 //  long nLineEnd = -1;
     long nLineEnd = nInitScrPos - nLayoutSign;
 
-    for (USHORT i=nPos; i<nSize; i++)
+    for (SCCOLROW i=nPos; i<nSize; i++)
     {
         USHORT nSizePix = GetEntrySize( i );
         if (nSizePix)
@@ -344,8 +344,8 @@ void __EXPORT ScHeaderControl::Paint( const Rectangle& rRect )
         }
         else
         {
-            USHORT nHidden = GetHiddenCount(i);
-            if (nHidden)
+            SCCOLROW nHidden = GetHiddenCount(i);
+            if (nHidden > 0)
                 i += nHidden - 1;
         }
     }
@@ -449,7 +449,7 @@ void __EXPORT ScHeaderControl::Paint( const Rectangle& rRect )
                 break;
         }
 
-        USHORT  nCount=0;
+        SCCOLROW    nCount=0;
         long    nScrPos=nInitScrPos;
         do
         {
@@ -458,7 +458,7 @@ void __EXPORT ScHeaderControl::Paint( const Rectangle& rRect )
             else
                 aScrPos = Point( nScrPos, 0 );
 
-            USHORT  nEntryNo = nCount + nPos;
+            SCCOLROW    nEntryNo = nCount + nPos;
             if ( nEntryNo >= nSize )                // MAXCOL/MAXROW
                 nScrPos = nPEnd + nLayoutSign;      //  beyond nPEnd -> stop
             else
@@ -467,8 +467,8 @@ void __EXPORT ScHeaderControl::Paint( const Rectangle& rRect )
 
                 if (nSizePix == 0)
                 {
-                    USHORT nHidden = GetHiddenCount(nEntryNo);
-                    if (nHidden)
+                    SCCOLROW nHidden = GetHiddenCount(nEntryNo);
+                    if (nHidden > 0)
                         nCount += nHidden - 1;
                 }
                 else if ((nScrPos+nSizePix*nLayoutSign)*nLayoutSign >= nPStart*nLayoutSign)
@@ -553,12 +553,12 @@ void __EXPORT ScHeaderControl::Paint( const Rectangle& rRect )
 //      Maus - Handling
 //
 
-USHORT ScHeaderControl::GetMousePos( const MouseEvent& rMEvt, BOOL& rBorder )
+SCCOLROW ScHeaderControl::GetMousePos( const MouseEvent& rMEvt, BOOL& rBorder )
 {
     BOOL    bFound=FALSE;
-    USHORT  nCount = 1;
-    USHORT  nPos = GetPos();
-    USHORT  nHitNo = nPos;
+    SCCOLROW    nCount = 1;
+    SCCOLROW    nPos = GetPos();
+    SCCOLROW    nHitNo = nPos;
     long    nScrPos;
     long    nMousePos = bVertical ? rMEvt.GetPosPixel().Y() : rMEvt.GetPosPixel().X();
     long    nDif;
@@ -572,7 +572,7 @@ USHORT ScHeaderControl::GetMousePos( const MouseEvent& rMEvt, BOOL& rBorder )
     nScrPos = GetScrPos( nPos ) - nLayoutSign;
     do
     {
-        USHORT nEntryNo = nCount + nPos;
+        SCCOLROW nEntryNo = nCount + nPos;
 
 //      nScrPos = GetScrPos( nEntryNo ) - 1;
 
@@ -606,7 +606,7 @@ void __EXPORT ScHeaderControl::MouseButtonDown( const MouseEvent& rMEvt )
     SelectWindow();
 
     BOOL bFound;
-    USHORT nHitNo = GetMousePos( rMEvt, bFound );
+    SCCOLROW nHitNo = GetMousePos( rMEvt, bFound );
 
     if ( bFound && rMEvt.IsLeft() && ResizeAllowed() )
     {
@@ -670,7 +670,7 @@ void __EXPORT ScHeaderControl::MouseButtonUp( const MouseEvent& rMEvt )
     SetMarking( FALSE );
     bIgnoreMove = FALSE;
     BOOL bFound;
-    USHORT nHitNo = GetMousePos( rMEvt, bFound );
+    SCCOLROW nHitNo = GetMousePos( rMEvt, bFound );
 
     if ( bDragging )
     {
@@ -686,8 +686,8 @@ void __EXPORT ScHeaderControl::MouseButtonUp( const MouseEvent& rMEvt )
 
         if ( nNewWidth < 0 /* && !IsSelected(nDragNo) */ )
         {
-            USHORT nStart;
-            USHORT nEnd = nDragNo;
+            SCCOLROW nStart;
+            SCCOLROW nEnd = nDragNo;
             while (nNewWidth < 0)
             {
                 nStart = nDragNo;
@@ -724,7 +724,7 @@ void __EXPORT ScHeaderControl::MouseMove( const MouseEvent& rMEvt )
     }
 
     BOOL bFound;
-    USHORT nHitNo = GetMousePos( rMEvt, bFound );
+    SCCOLROW nHitNo = GetMousePos( rMEvt, bFound );
 
     if ( bDragging )
     {
@@ -892,9 +892,9 @@ void __EXPORT ScHeaderControl::RequestHelp( const HelpEvent& rHEvt )
 //                  Dummys fuer virtuelle Methoden
 // -----------------------------------------------------------------------
 
-USHORT ScHeaderControl::GetHiddenCount( USHORT nEntryNo )
+SCCOLROW ScHeaderControl::GetHiddenCount( SCCOLROW nEntryNo )
 {
-    USHORT nHidden = 0;
+    SCCOLROW nHidden = 0;
     while ( nEntryNo < nSize && GetEntrySize( nEntryNo ) == 0 )
     {
         ++nEntryNo;
