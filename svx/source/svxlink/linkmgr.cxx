@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkmgr.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 15:01:53 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 14:17:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,9 +163,12 @@ BOOL SvxLinkManager::InsertFileLink( sfx2::SvBaseLink& rLink,
         return FALSE;
 
     String sCmd( rFileNm );
-    sCmd += ::sfx2::cTokenSeperator;
     if( pRange )
+    {
+        sCmd += ::sfx2::cTokenSeperator;
         sCmd += *pRange;
+    }
+
     if( pFilterNm )
         ( sCmd += ::sfx2::cTokenSeperator ) += *pFilterNm;
 
