@@ -2,9 +2,9 @@
 #
 #   $RCSfile: control.pm,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: svesik $ $Date: 2004-04-20 12:25:37 $
+#   last change: $Author: kz $ $Date: 2004-06-11 18:14:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,7 +67,9 @@ use installer::converter;
 use installer::exiter;
 use installer::files;
 use installer::globals;
+use installer::pathanalyzer;
 use installer::scriptitems;
+use installer::systemactions;
 
 #########################################################
 # Checking the local system
@@ -237,6 +239,9 @@ sub check_packagelist
 {
     my ($packages) = @_;
 
+    my $packagepath = $installer::globals::packagelist;
+    installer::pathanalyzer::get_path_from_fullqualifiedname(\$packagepath);
+
     for ( my $i = 0; $i <= $#{$packages}; $i++ )
     {
         my $onepackage = ${$packages}[$i];
@@ -270,7 +275,10 @@ sub check_packagelist
 
         if ( $onepackage->{'script'} )
         {
-            installer::files::check_file($onepackage->{'script'});
+            # adding the path to the script name and checking existence
+            my $script = $packagepath . $onepackage->{'script'};
+            installer::files::check_file($script);
+            $onepackage->{'script'} = $script;
         }
     }
 }
@@ -325,7 +333,7 @@ sub check_logfile
     {
         my $line = "\n***********************************************************\n";
         push(@output, $line);
-        $line = "SUCCESS: No errors in packaging process!\n";
+        $line = "Successful packaging process!\n";
         push(@output, $line);
         $line = "***********************************************************\n";
         push(@output, $line);
@@ -340,9 +348,89 @@ sub check_logfile
         my $line = "$output[$i]";
         print "$line";
         push( @installer::globals::logfileinfo, $line);
+        push( @installer::globals::errorlogfileinfo, $line);
     }
 
+    return $contains_error;
+}
 
+#############################################################
+# Determining the ship installation directory
+#############################################################
+
+sub determine_ship_directory
+{
+    my ($languagesref) = @_;
+
+    my $shipdrive = "";
+
+    if ( $installer::globals::iswin ) { $shipdrive = $installer::globals::winshipdrive; }
+    else { $shipdrive = $installer::globals::unixshipdrive; }
+
+    my $destdir = $shipdrive . $installer::globals::separator . "install" . $installer::globals::separator .
+                $installer::globals::compiler . $installer::globals::productextension . $installer::globals::separator .
+                $installer::globals::product . $installer::globals::separator .
+                $installer::globals::build . "_";
+
+    if ( $installer::globals::minor ) { $destdir = $destdir . $installer::globals::minor . "_"; }
+
+    $destdir = $destdir . $$languagesref . "_native" . "\." . $installer::globals::buildid;
+
+    return $destdir;
+}
+
+#############################################################
+# Controlling if this is an update pack process
+#############################################################
+
+sub check_updatepack
+{
+    my $shipdrive = "";
+    my $filename = "";
+    my $infoline = "";
+
+    if ( $ENV{'UPDATER'} )  # the environment variable UPDATER has to be set
+    {
+        $infoline = "\nEnvironment variable UPDATER set\n";
+        push(@installer::globals::globallogfileinfo, $infoline);
+
+        # testing if $winshipdrive or $installer::globals::unixshipdrive exists
+        # testing the write access to $installer::globals::winshipdrive or $installer::globals::unixshipdrive
+
+        if ( $installer::globals::iswin ) { $shipdrive = $installer::globals::winshipdrive; }
+        else { $shipdrive = $installer::globals::unixshipdrive; }
+
+        if ( ! $shipdrive eq "" )
+        {
+            $infoline = "Ship drive defined: $shipdrive\n";
+            push(@installer::globals::globallogfileinfo, $infoline);
+
+
+            if ( -d $shipdrive )
+            {
+                $infoline = "Ship drive exists\n";
+                push(@installer::globals::globallogfileinfo, $infoline);
+
+                # try to write into $shipdrive
+
+                $directory = $installer::globals::product . "_" . $installer::globals::compiler . "_" . $installer::globals::buildid . "_" . $installer::globals::languageproducts[0] . "_test";
+                $directory = $shipdrive . $installer::globals::separator . "install" . $installer::globals::separator . $directory;
+
+                if ( installer::systemactions::try_to_create_directory($directory))
+                {
+                    my $systemcall = "rmdir $directory";
+                    my $returnvalue = system($systemcall);
+                    $installer::globals::updatepack = 1;
+                    $infoline = "Write access on Ship drive\n";
+                    push(@installer::globals::globallogfileinfo, $infoline);
+                }
+            }
+        }
+    }
+
+    if ( $installer::globals::updatepack ) { $infoline = "Setting updatepack true\n\n"; }
+    else { $infoline = "\nNo updatepack\n"; }
+    push(@installer::globals::globallogfileinfo, $infoline);
 }
 
 1;
