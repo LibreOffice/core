@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Helper.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:09:59 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 19:50:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -91,7 +91,7 @@ public class Helper
             if( args.length > 0 )
                 sConnectString = args[ 0 ];
             else
-                sConnectString = new String( "socket,host=localhost,port=8100" );
+                sConnectString = new String( "socket,host=localhost,port=2083" );
 
             maMSFactory = connect( "uno:" + sConnectString + ";urp;StarOffice.ServiceManager" );
         }

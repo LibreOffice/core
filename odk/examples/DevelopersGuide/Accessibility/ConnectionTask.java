@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConnectionTask.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:05:06 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 19:49:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -222,7 +222,7 @@ class ConnectionTask
 
 
     /// Default port number.
-    private int mnPortNumber = 8100;
+    private int mnPortNumber = 2083;
 
     /// Default host name.
     private String msHostName = "localhost";
