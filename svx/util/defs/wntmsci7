@@ -22385,3 +22385,12 @@ _TI2?AVPropertyVetoException@beans@star@sun@com@@
 ?GetCellText@DbGridControl@@UBE?AVString@@JG@Z
 ?GetCurrentRowCellText@DbGridControl@@IBE?AVString@@PAVDbGridColumn@@ABVDbGridRowRef@@@Z
 ?setCheckBoxState@?%O:\SRX642\src\svx\source\fmcomp\gridcell.cxx2715121697@@YAXABV?$Reference@VXColumn@sdb@star@sun@com@@@uno@star@sun@com@@PAVCheckBoxControl@svt@@@Z
+?CreateAccessible@GraphCtrl@@UAE?AV?$Reference@VXAccessible@accessibility@star@sun@com@drafts@@@uno@star@sun@com@@XZ
+?KeyInput@SvxIMapDlg@@UAEXABVKeyEvent@@@Z
+?CreateDefaultObject@IMapWindow@@QAEXXZ
+?KeyInput@IMapWindow@@UAEXABVKeyEvent@@@Z
+?SelectFirstObject@IMapWindow@@QAEXXZ
+?GetUniqueItem@SvxAlignmentTabPage@@ABEPBVSfxPoolItem@@ABVSfxItemSet@@G@Z
+??0SvxBmpNumValueSet@@QAE@PAVWindow@@ABVResId@@@Z
+?GetTxtStackedClickHdl@SvxWinOrientation@@QBEABVLink@@XZ
+?SetTxtStackedClickHdl@SvxWinOrientation@@QAEXABVLink@@@Z
