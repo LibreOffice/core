@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paratr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2002-05-27 14:34:46 $
+ *  last change: $Author: mba $ $Date: 2002-06-19 17:23:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,9 +253,9 @@ sal_Bool SwFmtDrop::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     switch(nMemberId&~CONVERT_TWIPS)
     {
-        case MID_LINES : rVal <<= nLines; break;
-        case MID_CHARS : rVal <<= nChars; break;
-        case MID_DIST : rVal <<= (sal_Int16) TWIP_TO_MM100(nDistance); break;
+        case MID_DROPCAP_LINES : rVal <<= nLines; break;
+        case MID_DROPCAP_COUNT : rVal <<= nChars; break;
+        case MID_DROPCAP_DISTANCE : rVal <<= (sal_Int16) TWIP_TO_MM100(nDistance); break;
         case MID_DROPCAP_FORMAT:
         {
              style::DropCapFormat aDrop;
@@ -285,9 +285,9 @@ sal_Bool SwFmtDrop::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
     switch(nMemberId&~CONVERT_TWIPS)
     {
-        case MID_LINES : rVal >>= nLines; break;
-        case MID_CHARS : rVal >>= nChars; break;
-        case MID_DIST :
+        case MID_DROPCAP_LINES : rVal >>= nLines; break;
+        case MID_DROPCAP_COUNT : rVal >>= nChars; break;
+        case MID_DROPCAP_DISTANCE :
         {
             sal_Int16 nVal;
             if ( rVal >>= nVal )
