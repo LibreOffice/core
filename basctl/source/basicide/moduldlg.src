@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.src,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 14:05:54 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:43:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,8 @@ TabDialog RID_TD_ORGANIZE
                 Text[ hebrew ] = "Module";
                 Text[ hindi ] = "मोड्यूलें";
                 Text[ slovak ] = "Moduly";
+                Text[ hungarian ] = "Modulok";
+                Text[ slovenian ] = "Moduli";
             };
             PageItem
             {
@@ -156,6 +158,8 @@ TabDialog RID_TD_ORGANIZE
                 Text[ hebrew ] = "Bibliotheken";
                 Text[ hindi ] = "लैब्ररियाँ";
                 Text[ slovak ] = "Knižnice";
+                Text[ hungarian ] = "Könyvtárak";
+                Text[ slovenian ] = "Knjižnice";
             };
         };
     };
@@ -178,6 +182,8 @@ TabDialog RID_TD_ORGANIZE
     Text[ hebrew ] = "Makros verwalten";
     Text[ hindi ] = "मॉक्रो व्यवस्थापक";
     Text[ slovak ] = "Správca makier";
+    Text[ hungarian ] = "Makrószervező";
+    Text[ slovenian ] = "Organizator makrov";
 };
 TabPage RID_TP_MODULS
 {
@@ -196,7 +202,7 @@ TabPage RID_TP_MODULS
         Text [ portuguese_brazilian ] = "M�dulo / Di�l~ogo" ;
         Text [ portuguese ] = "M~�dulo/Di�logo" ;
         Text [ finnish ] = "M~oduuli/valintaikkuna" ;
-        Text [ danish ] = "M~odul/Dialog" ;
+        Text [ danish ] = "~Modul/dialog" ;
         Text [ french ] = "M~odule/bo�te de dialogue" ;
         Text [ swedish ] = "M~odul/dialog" ;
         Text [ dutch ] = "M~odule/dialoogvenster" ;
@@ -217,6 +223,8 @@ TabPage RID_TP_MODULS
         Text[ hebrew ] = "M~odul/Dialog";
         Text[ hindi ] = "मो~ड्यूल/डयलॉग";
         Text[ slovak ] = "M~odul/Dialóg";
+        Text[ hungarian ] = "M~odul/párbeszédablak";
+        Text[ slovenian ] = "M~odul/pogovorno okno";
     };
     /*
     Edit RID_EDIT
@@ -279,6 +287,8 @@ TabPage RID_TP_MODULS
         Text[ hebrew ] = "‮עריכה‬";
         Text[ hindi ] = "~संपादन";
         Text[ slovak ] = "~Upraviť";
+        Text[ hungarian ] = "~Szerkesztés";
+        Text[ slovenian ] = "~Uredi";
     };
     CancelButton RID_PB_CLOSE
     {
@@ -324,6 +334,8 @@ TabPage RID_TP_MODULS
         Text[ hebrew ] = "‮סגירה‬";
         Text[ hindi ] = "बन्द करो";
         Text[ slovak ] = "Zavrieť";
+        Text[ hungarian ] = "Bezárás";
+        Text[ slovenian ] = "Zapri";
     };
     PushButton RID_PB_NEWMOD
     {
@@ -358,6 +370,8 @@ TabPage RID_TP_MODULS
         Text[ hebrew ] = "Neues ~Modul...";
         Text[ hindi ] = "नया ~मोड्यूल...";
         Text[ slovak ] = "Nový ~Modul...";
+        Text[ hungarian ] = "Új ~modul...";
+        Text[ slovenian ] = "Nov ~modul...";
     };
     PushButton RID_PB_NEWDLG
     {
@@ -392,6 +406,8 @@ TabPage RID_TP_MODULS
         Text[ hebrew ] = "Neuer Dialo~g...";
         Text[ hindi ] = "~नया डयलॉग...";
         Text[ slovak ] = "~Nový Dialóg...";
+        Text[ hungarian ] = "Új ~párbeszédablak...";
+        Text[ slovenian ] = "~Novo pogov. okno...";
     };
     PushButton RID_PB_DELETE
     {
@@ -427,6 +443,8 @@ TabPage RID_TP_MODULS
         Text[ hebrew ] = "‮מחיקה‬";
         Text[ hindi ] = "~मिटाओ";
         Text[ slovak ] = "~Zmazať";
+        Text[ hungarian ] = "~Törlés";
+        Text[ slovenian ] = "~Izbriši";
     };
 };
 TabPage RID_TP_LIBS
@@ -466,6 +484,8 @@ TabPage RID_TP_LIBS
         Text[ hebrew ] = "Applikation/D~okument";
         Text[ hindi ] = "कार्यक्रम/ले~खपत्र";
         Text[ slovak ] = "Aplikácia/D~okument";
+        Text[ hungarian ] = "Alkalmazás/d~okumentum";
+        Text[ slovenian ] = "Aplikacija/d~okument";
     };
     ListBox RID_LB_BASICS
     {
@@ -506,6 +526,8 @@ TabPage RID_TP_LIBS
         Text[ hebrew ] = "Bibliothe~k";
         Text[ hindi ] = "~लैब्ररी";
         Text[ slovak ] = "~Knižnica";
+        Text[ hungarian ] = "~Programkönyvtár";
+        Text[ slovenian ] = "~Knjižnica";
     };
     Control RID_TRLBOX
     {
@@ -559,6 +581,8 @@ TabPage RID_TP_LIBS
         Text[ hebrew ] = "‮עריכה‬";
         Text[ hindi ] = "~संपादन";
         Text[ slovak ] = "~Upraviť";
+        Text[ hungarian ] = "~Szerkesztés";
+        Text[ slovenian ] = "~Uredi";
     };
     CancelButton RID_PB_CLOSE
     {
@@ -604,6 +628,8 @@ TabPage RID_TP_LIBS
         Text[ hebrew ] = "‮סגירה‬";
         Text[ hindi ] = "बन्द करो";
         Text[ slovak ] = "Zavrieť";
+        Text[ hungarian ] = "Bezárás";
+        Text[ slovenian ] = "Zapri";
     };
     PushButton RID_PB_PASSWORD
     {
@@ -616,7 +642,7 @@ TabPage RID_TP_LIBS
         Text [ portuguese_brazilian ] = "~Senha..." ;
         Text [ portuguese ] = "~Senha..." ;
         Text [ finnish ] = "~Salasana..." ;
-        Text [ danish ] = "A~dgangskode..." ;
+        Text [ danish ] = "~Adgangskode..." ;
         Text [ french ] = "Mot de passe..." ;
         Text [ swedish ] = "L�s~enord..." ;
         Text [ dutch ] = "W~achtwoord..." ;
@@ -638,6 +664,8 @@ TabPage RID_TP_LIBS
         Text[ hebrew ] = "‮סיסמה‬";
         Text[ hindi ] = "~कूटशब्द...";
         Text[ slovak ] = "~Heslo...";
+        Text[ hungarian ] = "~Jelszó...";
+        Text[ slovenian ] = "~Geslo...";
     };
     PushButton RID_PB_NEWLIB
     {
@@ -652,7 +680,7 @@ TabPage RID_TP_LIBS
         Text [ french ] = "Nouveau..." ;
         Text [ dutch ] = "~Nieuw..." ;
         Text [ spanish ] = "~Nuevo..." ;
-        Text [ danish ] = "~Ny..." ;
+        Text [ danish ] = "~Ny(t)..." ;
         Text [ swedish ] = "~Nytt..." ;
         Text [ finnish ] = "~Uusi..." ;
         Text [ english_us ] = "~New..." ;
@@ -672,6 +700,8 @@ TabPage RID_TP_LIBS
         Text[ hebrew ] = "‮חדש...‬";
         Text[ hindi ] = "~नया...";
         Text[ slovak ] = "~Nové...";
+        Text[ hungarian ] = "Ú~j...";
+        Text[ slovenian ] = "~Nov...";
     };
     PushButton RID_PB_APPEND
     {
@@ -686,7 +716,7 @@ TabPage RID_TP_LIBS
         Text [ spanish ] = "~Adjuntar..." ;
         Text [ french ] = "~Ajouter..." ;
         Text [ swedish ] = "L�gg ~till..." ;
-        Text [ danish ] = "Til~f�j..." ;
+        Text [ danish ] = "~Vedh�ft..." ;
         Text [ portuguese_brazilian ] = "~Anexar..." ;
         Text [ portuguese ] = "~Adicionar..." ;
         Text[ chinese_simplified ] = "新增(~A)...";
@@ -705,6 +735,8 @@ TabPage RID_TP_LIBS
         Text[ hebrew ] = "Hin~zufügen...";
         Text[ hindi ] = "~जोड़ो...";
         Text[ slovak ] = "~Pripojiť...";
+        Text[ hungarian ] = "~Hozzáfűzés...";
+        Text[ slovenian ] = "~Dodaj...";
     };
     PushButton RID_PB_DELETE
     {
@@ -740,6 +772,8 @@ TabPage RID_TP_LIBS
         Text[ hebrew ] = "‮מחיקה‬";
         Text[ hindi ] = "~मिटाओ";
         Text[ slovak ] = "~Zmazať";
+        Text[ hungarian ] = "~Törlés";
+        Text[ slovenian ] = "~Izbriši";
     };
 };
 ModalDialog RID_DLG_LIBS
@@ -807,6 +841,8 @@ ModalDialog RID_DLG_LIBS
         Text[ hebrew ] = "‮אפשרויות‬";
         Text[ hindi ] = "विकल्प";
         Text[ slovak ] = "Nastavenia";
+        Text[ hungarian ] = "Beállítások";
+        Text[ slovenian ] = "Možnosti";
     };
     CheckBox RID_CB_REF
     {
@@ -819,7 +855,7 @@ ModalDialog RID_DLG_LIBS
         Text [ english_us ] = "Insert as reference (read-only)" ;
         Text [ portuguese_brazilian ] = "Inserir como refer�ncia (somente leitura)" ;
         Text [ swedish ] = "Infoga som referens (bara l�sning)" ;
-        Text [ danish ] = "Inds�t som reference (kun l�se)" ;
+        Text [ danish ] = "Inds�t som reference (kun l�sbar)" ;
         Text [ italian ] = "Inserisci come riferimento (sola lettura)" ;
         Text [ spanish ] = "Insertar como referencia (s�lo lectura)" ;
         Text [ french ] = "Ins�rer comme r�f�rence (lecture seule)" ;
@@ -831,7 +867,7 @@ ModalDialog RID_DLG_LIBS
         Text[ japanese ] = "参照として挿入(読み取り専用)";
         Text[ chinese_traditional ] = "當作參照插入(唯讀)";
         Text[ arabic ] = "����� ����� (������� ���)";
-        Text[ greek ] = "�������� �� ���������";
+        Text[ greek ] = "�������� �� ��������� (���� ���������)";
         Text[ korean ] = "참조로 삽입(읽기 전용)";
         Text[ turkish ] = "Referans olarak ekle (salt okunur)";
         Text[ catalan ] = "Insereix com a refer�ncia (nom�s de lectura)";
@@ -841,6 +877,8 @@ ModalDialog RID_DLG_LIBS
         Text[ hebrew ] = "Als Referenz einfügen (nur lesen)";
         Text[ hindi ] = "रेफरेन्स जैसे जोड़ो (केवल पढ़ने केलिए)";
         Text[ slovak ] = "Vložiť ako referenciu (iba pre čítanie)";
+        Text[ hungarian ] = "Hivatkozásként beszúrás (nem átírható)";
+        Text[ slovenian ] = "Vstavi kot sklic (samo za branje)";
     };
     CheckBox RID_CB_REPL
     {
@@ -873,6 +911,8 @@ ModalDialog RID_DLG_LIBS
         Text[ hebrew ] = "Existierende Bibliotheken ersetzen";
         Text[ hindi ] = "अस्तित्व में रहनेवाला लैब्ररियाँ को प्रतिस्थापित करो";
         Text[ slovak ] = "Nahradiť existujúce knižnice";
+        Text[ hungarian ] = "Létező könyvtárak cseréje";
+        Text[ slovenian ] = "Zamenjaj obstoječe knjižnice";
     };
 };
 ModalDialog RID_DLG_NEWLIB
@@ -926,6 +966,8 @@ ModalDialog RID_DLG_NEWLIB
         Text[ hebrew ] = "~Name:";
         Text[ hindi ] = "~नाम:";
         Text[ slovak ] = "~Názov:";
+        Text[ hungarian ] = "~Név:";
+        Text[ slovenian ] = "~Ime:";
     };
     Edit RID_ED_LIBNAME
     {
@@ -935,6 +977,8 @@ ModalDialog RID_DLG_NEWLIB
         TabStop = TRUE ;
     };
 };
+
+
 
 
 
