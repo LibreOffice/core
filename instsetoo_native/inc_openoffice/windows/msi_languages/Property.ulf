@@ -1,0 +1,44 @@
+[OOO_ARPCOMMENTSTEMPLATE]
+en-US = "Comment in the Add-Remove-Programs Applet"
+
+[OOO_ARPCONTACTTEMPLATE]
+en-US = "Department for technical support"
+
+[OOO_ARPHELPLINKTEMPLATE]
+en-US = "http://www.openoffice.org"
+
+[OOO_ARPHELPTELEPHONETEMPLATE]
+en-US = "x-xxx-xxx-xxx"
+
+[OOO_ARPURLINFOABOUTTEMPLATE]
+en-US = "http://www.openoffice.org"
+
+[OOO_ARPURLUPDATEINFOTEMPLATE]
+en-US = "http://www.openoffice.org"
+
+[OOO_STR_NEW_DISPLAY_NAME]
+en-US = "~New"
+
+[OOO_STR_EDIT]
+en-US = "~Edit"
+
+[OOO_STR_MS_WORD_DOCUMENT]
+en-US = "Microsoft Word Document"
+
+[OOO_STR_MS_WORD_TEMPLATE]
+en-US = "Microsoft Word Template"
+
+[OOO_STR_MS_EXCEL_WORKSHEET]
+en-US = "Microsoft Excel Worksheet"
+
+[OOO_STR_MS_EXCEL_TEMPLATE]
+en-US = "Microsoft Excel Template"
+
+[OOO_STR_MS_POWERPOINT_PRESENTATION]
+en-US = "Microsoft PowerPoint Presentation"
+
+[OOO_STR_MS_POWERPOINT_TEMPLATE]
+en-US = "Microsoft PowerPoint Template"
+
+[OOO_STR_MS_POWERPOINT_SHOW]
+en-US = "Microsoft PowerPoint Show"

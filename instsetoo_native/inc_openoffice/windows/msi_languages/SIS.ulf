@@ -1,0 +1,20 @@
+[OOO_SIS_TEMPLATE]
+en-US = "Intel"
+
+[OOO_SIS_TITLE]
+en-US = "Installation database"
+
+[OOO_SIS_AUTHOR]
+en-US = "Author"
+
+[OOO_SIS_SUBJECT]
+en-US = "Subject"
+
+[OOO_SIS_COMMENT]
+en-US = "Comment"
+
+[OOO_SIS_KEYWORDS]
+en-US = "Install,MSI"
+
+[OOO_SIS_APPNAME]
+en-US = "Windows Installer"

@@ -1,0 +1,372 @@
+[OOO_ACTIONTEXT_1]
+en-US = "Advertising application"
+
+[OOO_ACTIONTEXT_2]
+en-US = "Allocating registry space"
+
+[OOO_ACTIONTEXT_3]
+en-US = "Free space: [1]"
+
+[OOO_ACTIONTEXT_4]
+en-US = "Searching for installed applications"
+
+[OOO_ACTIONTEXT_5]
+en-US = "Property: [1], Signature: [2]"
+
+[OOO_ACTIONTEXT_6]
+en-US = "Binding executables"
+
+[OOO_ACTIONTEXT_7]
+en-US = "File: [1]"
+
+[OOO_ACTIONTEXT_8]
+en-US = "Creating IIS Virtual Roots..."
+
+[OOO_ACTIONTEXT_9]
+en-US = "Removing IIS Virtual Roots..."
+
+[OOO_ACTIONTEXT_10]
+en-US = "Searching for qualifying products"
+
+[OOO_ACTIONTEXT_11]
+en-US = "Computing space requirements"
+
+[OOO_ACTIONTEXT_12]
+en-US = "Computing space requirements"
+
+[OOO_ACTIONTEXT_13]
+en-US = "Creating folders"
+
+[OOO_ACTIONTEXT_14]
+en-US = "Folder: [1]"
+
+[OOO_ACTIONTEXT_15]
+en-US = "Creating shortcuts"
+
+[OOO_ACTIONTEXT_16]
+en-US = "Shortcut: [1]"
+
+[OOO_ACTIONTEXT_17]
+en-US = "Deleting services"
+
+[OOO_ACTIONTEXT_18]
+en-US = "Service: [1]"
+
+[OOO_ACTIONTEXT_19]
+en-US = "Creating duplicate files"
+
+[OOO_ACTIONTEXT_20]
+en-US = "File: [1],  Directory: [9],  Size: [6]"
+
+[OOO_ACTIONTEXT_21]
+en-US = "Computing space requirements"
+
+[OOO_ACTIONTEXT_22]
+en-US = "Searching for related applications"
+
+[OOO_ACTIONTEXT_23]
+en-US = "Found application: [1]"
+
+[OOO_ACTIONTEXT_24]
+en-US = "Generating script operations for action:"
+
+[OOO_ACTIONTEXT_25]
+en-US = "[1]"
+
+[OOO_ACTIONTEXT_26]
+en-US = "Copying files to the network"
+
+[OOO_ACTIONTEXT_27]
+en-US = "File: [1], Directory: [9], Size: [6]"
+
+[OOO_ACTIONTEXT_28]
+en-US = "Copying new files"
+
+[OOO_ACTIONTEXT_29]
+en-US = "File: [1],  Directory: [9],  Size: [6]"
+
+[OOO_ACTIONTEXT_30]
+en-US = "Installing ODBC components"
+
+[OOO_ACTIONTEXT_31]
+en-US = "Installing new services"
+
+[OOO_ACTIONTEXT_32]
+en-US = "Service: [2]"
+
+[OOO_ACTIONTEXT_33]
+en-US = "Installing system catalog"
+
+[OOO_ACTIONTEXT_34]
+en-US = "File: [1],  Dependencies: [2]"
+
+[OOO_ACTIONTEXT_35]
+en-US = "Validating install"
+
+[OOO_ACTIONTEXT_36]
+en-US = "Evaluating launch conditions"
+
+[OOO_ACTIONTEXT_37]
+en-US = "Migrating feature states from related applications"
+
+[OOO_ACTIONTEXT_38]
+en-US = "Application: [1]"
+
+[OOO_ACTIONTEXT_39]
+en-US = "Moving files"
+
+[OOO_ACTIONTEXT_40]
+en-US = "File: [1],  Directory: [9],  Size: [6]"
+
+[OOO_ACTIONTEXT_41]
+en-US = "Patching files"
+
+[OOO_ACTIONTEXT_42]
+en-US = "File: [1],  Directory: [2],  Size: [3]"
+
+[OOO_ACTIONTEXT_43]
+en-US = "Updating component registration"
+
+[OOO_ACTIONTEXT_44]
+en-US = "Publishing qualified components"
+
+[OOO_ACTIONTEXT_45]
+en-US = "Component ID: [1], Qualifier: [2]"
+
+[OOO_ACTIONTEXT_46]
+en-US = "Publishing product features"
+
+[OOO_ACTIONTEXT_47]
+en-US = "Feature: [1]"
+
+[OOO_ACTIONTEXT_48]
+en-US = "Publishing product information"
+
+[OOO_ACTIONTEXT_49]
+en-US = "Registering class servers"
+
+[OOO_ACTIONTEXT_50]
+en-US = "Class ID: [1]"
+
+[OOO_ACTIONTEXT_51]
+en-US = "Registering COM+ Applications and Components"
+
+[OOO_ACTIONTEXT_52]
+en-US = "AppId: [1]{{, AppType: [2], Users: [3], RSN: [4]}}"
+
+[OOO_ACTIONTEXT_53]
+en-US = "Registering extension servers"
+
+[OOO_ACTIONTEXT_54]
+en-US = "Extension: [1]"
+
+[OOO_ACTIONTEXT_55]
+en-US = "Registering fonts"
+
+[OOO_ACTIONTEXT_56]
+en-US = "Font: [1]"
+
+[OOO_ACTIONTEXT_57]
+en-US = "Registering MIME info"
+
+[OOO_ACTIONTEXT_58]
+en-US = "MIME Content Type: [1], Extension: [2]"
+
+[OOO_ACTIONTEXT_59]
+en-US = "Registering product"
+
+[OOO_ACTIONTEXT_60]
+en-US = "[1]"
+
+[OOO_ACTIONTEXT_61]
+en-US = "Registering program identifiers"
+
+[OOO_ACTIONTEXT_62]
+en-US = "ProgID: [1]"
+
+[OOO_ACTIONTEXT_63]
+en-US = "Registering type libraries"
+
+[OOO_ACTIONTEXT_64]
+en-US = "LibID: [1]"
+
+[OOO_ACTIONTEXT_65]
+en-US = "Registering user"
+
+[OOO_ACTIONTEXT_66]
+en-US = "[1]"
+
+[OOO_ACTIONTEXT_67]
+en-US = "Removing duplicated files"
+
+[OOO_ACTIONTEXT_68]
+en-US = "File: [1], Directory: [9]"
+
+[OOO_ACTIONTEXT_69]
+en-US = "Updating environment strings"
+
+[OOO_ACTIONTEXT_70]
+en-US = "Name: [1], Value: [2], Action [3]"
+
+[OOO_ACTIONTEXT_71]
+en-US = "Removing applications"
+
+[OOO_ACTIONTEXT_72]
+en-US = "Application: [1], Command line: [2]"
+
+[OOO_ACTIONTEXT_73]
+en-US = "Removing files"
+
+[OOO_ACTIONTEXT_74]
+en-US = "File: [1], Directory: [9]"
+
+[OOO_ACTIONTEXT_75]
+en-US = "Removing folders"
+
+[OOO_ACTIONTEXT_76]
+en-US = "Folder: [1]"
+
+[OOO_ACTIONTEXT_77]
+en-US = "Removing INI file entries"
+
+[OOO_ACTIONTEXT_78]
+en-US = "File: [1],  Section: [2],  Key: [3], Value: [4]"
+
+[OOO_ACTIONTEXT_79]
+en-US = "Removing ODBC components"
+
+[OOO_ACTIONTEXT_80]
+en-US = "Removing system registry values"
+
+[OOO_ACTIONTEXT_81]
+en-US = "Key: [1], Name: [2]"
+
+[OOO_ACTIONTEXT_82]
+en-US = "Removing shortcuts"
+
+[OOO_ACTIONTEXT_83]
+en-US = "Shortcut: [1]"
+
+[OOO_ACTIONTEXT_84]
+en-US = "Searching for qualifying products"
+
+[OOO_ACTIONTEXT_85]
+en-US = "Rolling back action:"
+
+[OOO_ACTIONTEXT_86]
+en-US = "[1]"
+
+[OOO_ACTIONTEXT_87]
+en-US = "Removing backup files"
+
+[OOO_ACTIONTEXT_88]
+en-US = "File: [1]"
+
+[OOO_ACTIONTEXT_89]
+en-US = "Registering modules"
+
+[OOO_ACTIONTEXT_90]
+en-US = "File: [1], Folder: [2]"
+
+[OOO_ACTIONTEXT_91]
+en-US = "Unregistering modules"
+
+[OOO_ACTIONTEXT_92]
+en-US = "File: [1], Folder: [2]"
+
+[OOO_ACTIONTEXT_93]
+en-US = "Initializing ODBC directories"
+
+[OOO_ACTIONTEXT_94]
+en-US = "Starting services"
+
+[OOO_ACTIONTEXT_95]
+en-US = "Service: [1]"
+
+[OOO_ACTIONTEXT_96]
+en-US = "Stopping services"
+
+[OOO_ACTIONTEXT_97]
+en-US = "Service: [1]"
+
+[OOO_ACTIONTEXT_98]
+en-US = "Removing moved files"
+
+[OOO_ACTIONTEXT_99]
+en-US = "File: [1], Directory: [9]"
+
+[OOO_ACTIONTEXT_100]
+en-US = "Unpublishing Qualified Components"
+
+[OOO_ACTIONTEXT_101]
+en-US = "Component ID: [1], Qualifier: [2]"
+
+[OOO_ACTIONTEXT_102]
+en-US = "Unpublishing product features"
+
+[OOO_ACTIONTEXT_103]
+en-US = "Feature: [1]"
+
+[OOO_ACTIONTEXT_104]
+en-US = "Unpublishing product information"
+
+[OOO_ACTIONTEXT_105]
+en-US = "Unregister class servers"
+
+[OOO_ACTIONTEXT_106]
+en-US = "Class ID: [1]"
+
+[OOO_ACTIONTEXT_107]
+en-US = "Unregistering COM+ Applications and Components"
+
+[OOO_ACTIONTEXT_108]
+en-US = "AppId: [1]{{, AppType: [2]}}"
+
+[OOO_ACTIONTEXT_109]
+en-US = "Unregistering extension servers"
+
+[OOO_ACTIONTEXT_110]
+en-US = "Extension: [1]"
+
+[OOO_ACTIONTEXT_111]
+en-US = "Unregistering fonts"
+
+[OOO_ACTIONTEXT_112]
+en-US = "Font: [1]"
+
+[OOO_ACTIONTEXT_113]
+en-US = "Unregistering MIME info"
+
+[OOO_ACTIONTEXT_114]
+en-US = "MIME Content Type: [1], Extension: [2]"
+
+[OOO_ACTIONTEXT_115]
+en-US = "Unregistering program identifiers"
+
+[OOO_ACTIONTEXT_116]
+en-US = "ProgID: [1]"
+
+[OOO_ACTIONTEXT_117]
+en-US = "Unregistering type libraries"
+
+[OOO_ACTIONTEXT_118]
+en-US = "LibID: [1]"
+
+[OOO_ACTIONTEXT_119]
+en-US = "Updating environment strings"
+
+[OOO_ACTIONTEXT_120]
+en-US = "Name: [1], Value: [2], Action [3]"
+
+[OOO_ACTIONTEXT_121]
+en-US = "Writing INI file values"
+
+[OOO_ACTIONTEXT_122]
+en-US = "File: [1],  Section: [2],  Key: [3], Value: [4]"
+
+[OOO_ACTIONTEXT_123]
+en-US = "Writing system registry values"
+
+[OOO_ACTIONTEXT_124]
+en-US = "Key: [1], Name: [2], Value: [3]"
+
