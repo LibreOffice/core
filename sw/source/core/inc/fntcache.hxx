@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 09:53:53 $
+ *  last change: $Author: kz $ $Date: 2003-10-15 09:54:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,8 @@ class SwFntObj : public SwCacheObj
     Font *pScrFont;
     Font *pPrtFont;
     OutputDevice* pPrinter;
-    USHORT nLeading;
+    USHORT nGuessedLeading;
+    USHORT nExtLeading;
     USHORT nScrAscent;
     USHORT nPrtAscent;
     USHORT nScrHeight;
@@ -134,7 +135,6 @@ class SwFntObj : public SwCacheObj
     USHORT nZoom;
     BOOL bSymbol : 1;
     BOOL bPaintBlank : 1;
-    void ChooseFont( ViewShell *pSh, OutputDevice *pOut );
 
     static long nPixWidth;
     static MapMode *pPixMap;
@@ -152,13 +152,16 @@ public:
     inline       Font *GetFont()        { return &aFont; }
     inline const Font *GetFont() const  { return &aFont; }
 
-    inline USHORT GetLeading() const  { return nLeading; }
+    inline USHORT GetGuessedLeading() const  { return nGuessedLeading; }
+    inline USHORT GetExtLeading() const  { return nExtLeading; }
 
-    void GuessLeading( const ViewShell *pSh, const FontMetric& rMet );
-    USHORT GetAscent( const ViewShell *pSh, const OutputDevice *pOut );
-    USHORT GetHeight( const ViewShell *pSh, const OutputDevice *pOut );
+    USHORT GetFontAscent( const ViewShell *pSh, const OutputDevice& rOut );
+    USHORT GetFontHeight( const ViewShell *pSh, const OutputDevice& rOut );
+    USHORT GetFontLeading( const ViewShell *pSh, const OutputDevice& rOut );
 
-    void SetDevFont( const ViewShell *pSh, OutputDevice *pOut );
+    void GuessLeading( const ViewShell& rSh, const FontMetric& rMet );
+
+    void SetDevFont( const ViewShell *pSh, OutputDevice& rOut );
     inline OutputDevice* GetPrt() const { return pPrinter; }
     inline USHORT   GetZoom() const { return nZoom; }
     inline USHORT   GetPropWidth() const { return nPropWidth; }
@@ -168,7 +171,7 @@ public:
     Size  GetTextSize( SwDrawTextInfo &rInf );
     xub_StrLen GetCrsrOfst( SwDrawTextInfo &rInf );
 
-    void CreateScrFont( const ViewShell *pSh, const OutputDevice& rOut );
+    void CreateScrFont( const ViewShell& rSh, const OutputDevice& rOut );
     void CreatePrtFont( const OutputDevice& rOut );
 };
 
