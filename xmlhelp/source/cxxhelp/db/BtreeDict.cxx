@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BtreeDict.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: abi $ $Date: 2001-07-06 11:04:05 $
+ *  last change: $Author: abi $ $Date: 2001-08-22 13:34:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -428,11 +428,11 @@ sal_Int32 BtreeDict::fetch( const rtl::OUString& key ) const throw( excep::XmlSe
      *  Jaczeks index engine.
      */
 
-    //    rtl::OString searchString( key.getStr(),key.getLength(),RTL_TEXTENCODING_UTF8 );
+    rtl::OString searchString( key.getStr(),key.getLength(),RTL_TEXTENCODING_UTF8 );
 
-    //    return find( accessBlock( root_ ),
-    //             reinterpret_cast< const sal_Int8* >( searchString.getStr() ),
-    //             searchString.getLength() );
+    return find( accessBlock( root_ ),
+                 reinterpret_cast< const sal_Int8* >( searchString.getStr() ),
+                 searchString.getLength() );
 
 
     /**
@@ -440,18 +440,18 @@ sal_Int32 BtreeDict::fetch( const rtl::OUString& key ) const throw( excep::XmlSe
      *   as a workaround to Jazceks bug.
      */
 
-    rtl::OString Key( key.getStr(),key.getLength(),RTL_TEXTENCODING_ISO_8859_1 );
+//      rtl::OString Key( key.getStr(),key.getLength(),RTL_TEXTENCODING_ISO_8859_1 );
 
-    sal_Int32 len = key.getLength();
-    sal_Int8 *searchStr = new sal_Int8[ 1+len ];
-    searchStr[len] = 0;
+//      sal_Int32 len = key.getLength();
+//      sal_Int8 *searchStr = new sal_Int8[ 1+len ];
+//      searchStr[len] = 0;
 
-    rtl_copyMemory( searchStr,(const sal_Int8*)(Key.getStr()),len );
-    sal_Int32 ret = find( accessBlock( root_ ),
-                          searchStr,
-                          len );
-    delete[] searchStr;
-    return ret;
+//      rtl_copyMemory( searchStr,(const sal_Int8*)(Key.getStr()),len );
+//      sal_Int32 ret = find( accessBlock( root_ ),
+//                            searchStr,
+//                            len );
+//      delete[] searchStr;
+//      return ret;
 }
 
 
