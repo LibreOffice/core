@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:12:11 $
+#   last change: $Author: hjs $ $Date: 2000-11-17 15:44:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,10 +71,6 @@ TARGET=runtime
 .INCLUDE :  settings.mk
 .INCLUDE :  sv.mk
 
-.IF "$(GUI)" == "WNT"
-ASM=masm386
-.ENDIF
-
 
 # --- Allgemein -----------------------------------------------------------
 
@@ -114,3 +110,4 @@ EXCEPTIONSFILES=$(SLO)$/step0.obj	\
 # --- Targets -------------------------------------------------------------
 
 .INCLUDE :  target.mk
+
