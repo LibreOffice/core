@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-09 11:37:41 $
+ *  last change: $Author: pb $ $Date: 2001-07-10 05:48:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@
 
 #include "app.hrc"
 #include "newhelp.hrc"
+#include "helpid.hrc"
 
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
@@ -1159,18 +1160,25 @@ SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent ) :
     xFrame->initialize( VCLUnoHelper::GetInterface ( pTextWin ) );
     xFrame->setName( DEFINE_CONST_UNICODE("OFFICE_HELP") );
 
+    aToolBox.SetHelpId( HID_HELP_TOOLBOX );
     aToolBox.InsertItem( TBI_INDEX, Image( SfxResId( IMG_HELP_TOOLBOX_INDEX ) ) );
     aToolBox.SetQuickHelpText( TBI_INDEX, String( SfxResId( STR_HELP_BUTTON_INDEX ) ) );
+    aToolBox.SetHelpId( TBI_INDEX, HID_HELP_TOOLBOXITEM_INDEX );
     aToolBox.InsertItem( TBI_START, Image( SfxResId( IMG_HELP_TOOLBOX_START ) ) );
     aToolBox.SetQuickHelpText( TBI_START, String( SfxResId( STR_HELP_BUTTON_START ) ) );
+    aToolBox.SetHelpId( TBI_START, HID_HELP_TOOLBOXITEM_START );
     aToolBox.InsertItem( TBI_BACKWARD, Image( SfxResId( IMG_HELP_TOOLBOX_PREV ) ) );
     aToolBox.SetQuickHelpText( TBI_BACKWARD, String( SfxResId( STR_HELP_BUTTON_PREV ) ) );
+    aToolBox.SetHelpId( TBI_BACKWARD, HID_HELP_TOOLBOXITEM_BACKWARD );
     aToolBox.InsertItem( TBI_FORWARD, Image( SfxResId( IMG_HELP_TOOLBOX_NEXT ) ) );
     aToolBox.SetQuickHelpText( TBI_FORWARD, String( SfxResId( STR_HELP_BUTTON_NEXT ) ) );
+    aToolBox.SetHelpId( TBI_FORWARD, HID_HELP_TOOLBOXITEM_FORWARD );
     aToolBox.InsertItem( TBI_PRINT, Image( SfxResId( IMG_HELP_TOOLBOX_PRINT ) ) );
     aToolBox.SetQuickHelpText( TBI_PRINT, String( SfxResId( STR_HELP_BUTTON_PRINT ) ) );
+    aToolBox.SetHelpId( TBI_PRINT, HID_HELP_TOOLBOXITEM_PRINT );
     aToolBox.InsertItem( TBI_BOOKMARKS, Image( SfxResId( IMG_HELP_TOOLBOX_BOOKMARKS ) ) );
     aToolBox.SetQuickHelpText( TBI_BOOKMARKS, String( SfxResId( STR_HELP_BUTTON_ADDBOOKMARK ) ) );
+    aToolBox.SetHelpId( TBI_BOOKMARKS, HID_HELP_TOOLBOXITEM_BOOKMARKS );
 
     Size aSize = aToolBox.CalcWindowSizePixel();
     aToolBox.SetSizePixel( aSize );
@@ -1454,6 +1462,8 @@ SfxHelpWindow_Impl::SfxHelpWindow_Impl(
     bIndex          ( sal_True )
 
 {
+    SetHelpId( HID_HELP_WINDOW );
+
     OpenStatusListener_Impl* pOpenListener = new OpenStatusListener_Impl;
     xOpenListener = Reference< XStatusListener >( static_cast< ::cppu::OWeakObject* >(pOpenListener), UNO_QUERY );
 

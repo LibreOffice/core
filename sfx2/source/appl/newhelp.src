@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 21:44:11 $
+ *  last change: $Author: pb $ $Date: 2001-07-10 05:48:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,7 @@
  ************************************************************************/
 #include "app.hrc"
 #include "newhelp.hrc"
+#include "helpid.hrc"
 
 Window WIN_HELP_INDEX
 {
@@ -67,6 +68,7 @@ Window WIN_HELP_INDEX
     Size = MAP_APPFONT ( 120 , 200 ) ;
     ListBox LB_ACTIVE
     {
+        HelpId = HID_HELP_LISTBOX;
         Border = TRUE ;
         DropDown = TRUE;
         Pos = MAP_APPFONT ( 6 , 3 ) ;
@@ -79,6 +81,7 @@ Window WIN_HELP_INDEX
     };
     TabControl TC_INDEX
     {
+        HelpId = HID_HELP_TABCONTROL;
         Pos = MAP_APPFONT ( 0, 23 ) ;
         PageList =
         {
@@ -170,6 +173,7 @@ Window WIN_HELP_INDEX
 
 TabPage TP_HELP_INDEX
 {
+    HelpId = HID_HELP_TABPAGE_INDEX;
     Hide = TRUE ;
     Size = MAP_APPFONT ( 120 , 200 ) ;
     FixedText FT_EXPRESSION
@@ -234,6 +238,7 @@ TabPage TP_HELP_INDEX
 
 TabPage TP_HELP_SEARCH
 {
+    HelpId = HID_HELP_TABPAGE_SEARCH;
     Hide = TRUE ;
     Size = MAP_APPFONT ( 120 , 122 ) ;
     FixedText FT_SEARCH
@@ -358,6 +363,7 @@ TabPage TP_HELP_SEARCH
 
 TabPage TP_HELP_BOOKMARKS
 {
+    HelpId = HID_HELP_TABPAGE_BOOKMARKS;
     Hide = TRUE ;
     Size = MAP_APPFONT ( 120 , 200 ) ;
     FixedText FT_BOOKMARKS
