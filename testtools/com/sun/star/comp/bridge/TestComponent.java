@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TestComponent.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 14:59:40 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:14:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -656,7 +656,7 @@ public class TestComponent {
             return arg;
         }
 
-        public void transportPolyUnsignedHyper(TestPolyStruct[] arg) {
+        public void transportPolyHyper(TestPolyStruct[] arg) {
             Long dummy = (Long) arg[0].member;
         }
 
@@ -688,6 +688,10 @@ public class TestComponent {
         }
 
         public TestPolyStruct getNullPolyEnum() {
+            return new TestPolyStruct();
+        }
+
+        public TestPolyStruct getNullPolyBadEnum() {
             return new TestPolyStruct();
         }
 
