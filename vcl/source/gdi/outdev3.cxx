@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: pl $ $Date: 2002-05-08 12:55:17 $
+ *  last change: $Author: hdu $ $Date: 2002-05-28 18:19:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1535,9 +1535,6 @@ void ImplGetDevSizeList::Add( long nNewHeight )
 
 ImplFontEntry::~ImplFontEntry()
 {
-    if ( mpWidthAry )
-        delete mpWidthAry;
-
     if ( mpKernPairs )
         delete mpKernPairs;
 }
@@ -1587,7 +1584,7 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
     // normalize orientation between 0 and 3600
     if ( nOrientation )
     {
-        while ( nOrientation < 0 )
+        while( nOrientation < 0 )
             nOrientation += 3600;
         nOrientation %= 3600;
     }
@@ -2398,9 +2395,6 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
     pEntry->mpNext                  = mpFirstEntry;
     pEntry->mpConversion            = pConvertFontTab;
     pEntry->mnWidthInit             = 0;
-    pEntry->mnWidthAryCount         = 0;
-    pEntry->mnWidthArySize          = 0;
-    pEntry->mpWidthAry              = NULL;
     pEntry->mpKernPairs             = NULL;
     pEntry->mnOwnOrientation        = 0;
     pEntry->mnOrientation           = 0;
@@ -2776,37 +2770,35 @@ int OutputDevice::ImplNewFont()
             pFontEntry->maMetric.mnDStrikeoutOffset2        = 0;
 #ifndef REMOTE_APPSERVER
             pGraphics->GetFontMetric( &(pFontEntry->maMetric) );
-            // query the first latin area, because we need a
-            // WidthFactor for some methods (e.g. GetTextBreak)
-            pFontEntry->mnWidthFactor = pGraphics->GetCharWidth( IMPL_CACHE_A1_FIRST, IMPL_CACHE_A1_LAST,
-                                                                 pFontEntry->maWidthAry+IMPL_CACHE_A1_INDEX );
-            if ( pFontEntry->mnWidthFactor )
-                pFontEntry->mnWidthInit |= IMPL_CACHE_A1_BIT;
-            else
-                pFontEntry->mnWidthFactor = IMPL_FACTOR_NOTINIT;
 #else
 
             long nFactor = 0;
             pGraphics->GetFontMetric(
-                pFontEntry->maMetric,
-                nFactor, IMPL_CACHE_A1_FIRST, IMPL_CACHE_A1_LAST,
-                pFontEntry->maWidthAry+IMPL_CACHE_A1_INDEX,
+                pFontEntry->maMetric, nFactor,
+/*TODO: remove
+                IMPL_CACHE_A1_FIRST, IMPL_CACHE_A1_LAST, pFontEntry->maWidthAry+IMPL_CACHE_A1_INDEX,
+*/
+                0x21, 0x20, NULL,
                 (maFont.GetKerning() & KERNING_FONTSPECIFIC) != 0,
                 &pKernPairs, nKernPairs );
             pFontEntry->mnWidthFactor = nFactor;
-            if ( pFontEntry->mnWidthFactor )
-                pFontEntry->mnWidthInit |= IMPL_CACHE_A1_BIT;
-            else
+
+            if( !pFontEntry->mnWidthFactor )
                 pFontEntry->mnWidthFactor = IMPL_FACTOR_NOTINIT;
+/*TODO: remove
+            else
+                pFontEntry->mnWidthInit |= IMPL_CACHE_A1_BIT;
+*/
 #endif
 
             pFontEntry->mbFixedFont     = pFontEntry->maMetric.mePitch == PITCH_FIXED;
-            pFontEntry->mnLineHeight    = pFontEntry->maMetric.mnAscent+pFontEntry->maMetric.mnDescent;
+            pFontEntry->mnLineHeight    = pFontEntry->maMetric.mnAscent + pFontEntry->maMetric.mnDescent;
             pFontEntry->mbInitKernPairs = FALSE;
             pFontEntry->mnKernPairs     = nKernPairs;
 
-            if ( pFontEntry->maFontSelData.mnOrientation && !pFontEntry->maMetric.mnOrientation &&
-                (meOutDevType != OUTDEV_PRINTER) )
+            if( pFontEntry->maFontSelData.mnOrientation
+            && !pFontEntry->maMetric.mnOrientation
+            && (meOutDevType != OUTDEV_PRINTER) )
             {
                 pFontEntry->mnOwnOrientation = pFontEntry->maFontSelData.mnOrientation;
                 pFontEntry->mnOrientation = pFontEntry->mnOwnOrientation;
@@ -2969,41 +2961,6 @@ void OutputDevice::ImplInitKerningPairs( ImplKernPairData* pKernPairs, long nKer
         if ( pFontEntry->mpKernPairs )
             ImplSortKernPairs( pFontEntry->mpKernPairs, 0, (long)pFontEntry->mnKernPairs-1 );
     }
-}
-
-// -----------------------------------------------------------------------
-
-// returns asian kerning values in quarter of character width units
-// to enable automatic halfwidth substitution for fullwidth punctuation
-// return value is negative for l, positive for r, zero for neutral
-
-// If the range doesn't match in 0x3000 and 0x30FB, please change
-// also ImplCalcKerning.
-
-static int CalcAsianKerning( sal_Unicode c, bool bLeft )
-{
-    // http://www.asahi-net.or.jp/~sd5a-ucd/freetexts/jis/x4051/1995/appendix.html
-    static signed char nTable[0x30] =
-    {
-         0, -2, -2,  0,   0,  0,  0,  0,  +2, -2, +2, -2,  +2, -2, +2, -2,
-        +2, -2,  0,  0,  +2, -2, +2, -2,   0,  0,  0,  0,   0, +2, -2, -2,
-         0,  0,  0,  0,   0,  0,  0,  0,   0,  0, -2, -2,  +2, +2, -2, -2
-    };
-
-    int nResult;
-    if( c>=0x3000 && c<0x3030 )
-        nResult = nTable[ c - 0x3000 ];
-    else switch( c )
-    {
-        // TODO: only for monospaced font, but how to test if it is all monospaced?
-        //case ':': case ';': case '!':
-        case 0x30FB:
-            nResult = bLeft ? -1 : +1; break;   // 25% left and right
-        default:
-            nResult = 0; break;
-    }
-    return nResult;
-
 }
 
 // -----------------------------------------------------------------------
@@ -5606,14 +5563,27 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
         nLayoutFlags |= SAL_LAYOUT_BIDI_RTL;
     if( mnLayoutMode & TEXT_LAYOUT_BIDI_STRONG )
         nLayoutFlags |= SAL_LAYOUT_BIDI_STRONG;
-    if( mnLayoutMode & TEXT_LAYOUT_COMPLEX_DISABLED )
-        nLayoutFlags |= SAL_LAYOUT_COMPLEX_DISABLED;
-    if( mnLayoutMode & TEXT_LAYOUT_ENABLE_LIGATURES )
-        nLayoutFlags |= SAL_LAYOUT_ENABLE_LIGATURES;
     if( mbKerning )
         nLayoutFlags |= SAL_LAYOUT_KERNING_PAIRS;
     if( maFont.GetKerning() & KERNING_ASIAN )
         nLayoutFlags |= SAL_LAYOUT_KERNING_ASIAN;
+
+    if( mnLayoutMode & TEXT_LAYOUT_ENABLE_LIGATURES )
+        nLayoutFlags |= SAL_LAYOUT_ENABLE_LIGATURES;
+    else if( mnLayoutMode & TEXT_LAYOUT_COMPLEX_DISABLED )
+        nLayoutFlags |= SAL_LAYOUT_COMPLEX_DISABLED;
+    else
+    {
+        // disable CTL for non-CTL text
+        const xub_Unicode* pStr = aStr.GetBuffer() + nFirstIndex;
+        const xub_Unicode* pEnd = pStr + (nEndIndex-nFirstIndex);
+        for( int nLen = nEndIndex - nFirstIndex; --nLen >= 0; ++pStr )
+            if( (*pStr >= 0x0500) && (*pStr < 0x2000) )
+                break;
+        if( pStr >= pEnd )
+            nLayoutFlags |= SAL_LAYOUT_COMPLEX_DISABLED;
+    }
+
     aLayoutArgs.SetFlags( nLayoutFlags );
 
     Point aPixelPos = ImplLogicToDevicePixel( rLogicalPos );
@@ -5769,7 +5739,7 @@ void OutputDevice::GetCharWidth( sal_Unicode nFirstChar, sal_Unicode nLastChar,
     for( sal_Unicode aChar = nFirstChar; aChar <= nLastChar; ++aChar )
     {
         String aStr( &aChar, 1 );
-        (*pWidthAry++) = GetTextWidth( aStr, 0, 1 );
+        *(pWidthAry++) = GetTextWidth( aStr, 0, 1 );
     };
 }
 
