@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commonpagesdbp.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 16:03:26 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:39:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@ namespace dbp
         FixedText       m_aExplanation;
         FixedText       m_aDatasourceLabel;
         ListBox         m_aDatasource;
+        PushButton      m_aSearchDatabase;
         FixedText       m_aTableLabel;
         ListBox         m_aTable;
 
@@ -110,9 +111,11 @@ namespace dbp
     protected:
         DECL_LINK( OnListboxSelection, ListBox* );
         DECL_LINK( OnListboxDoubleClicked, ListBox* );
+        DECL_LINK( OnSearchClicked, PushButton* );
 
         void implCollectDatasource();
-        void implFillTables();
+        void implFillTables(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >&
+                        _rxConn = ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >());
 
         // OControlWizardPage overridables
         virtual sal_Bool determineNextButtonState();
