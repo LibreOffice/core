@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-19 09:40:31 $
+ *  last change: $Author: aw $ $Date: 2001-10-23 10:30:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -443,6 +443,33 @@ BOOL __EXPORT FuText::MouseButtonUp(const MouseEvent& rMEvt)
                     pObj->SetItemSetAndBroadcast(aItemSet);
                 }
             }
+
+            // #93382# init object different when vertical writing
+            sal_uInt16 nSlotID(aSfxRequest.GetSlot());
+            BOOL bVertical = (SID_DRAW_TEXT_VERTICAL == nSlotID);
+            if(bVertical)
+            {
+                const SdrMarkList& rMarkList = pView->GetMarkList();
+                if(rMarkList.GetMark(0))
+                {
+                    SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
+                    if(pObj && pObj->ISA(SdrTextObj))
+                    {
+                        SdrTextObj* pText = (SdrTextObj*)pObj;
+                        SfxItemSet aSet(pDrDoc->GetItemPool());
+
+                        pText->SetVerticalWriting(TRUE);
+
+                        aSet.Put(SdrTextAutoGrowWidthItem(TRUE));
+                        aSet.Put(SdrTextAutoGrowHeightItem(FALSE));
+                        aSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP));
+                        aSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT));
+
+                        pText->SetItemSet(aSet);
+                    }
+                }
+            }
+
             SetInEditMode();
 
                 //  Modus verlassen bei einzelnem Klick
