@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: kz $ $Date: 2005-01-21 12:14:37 $
+#   last change: $Author: obo $ $Date: 2005-01-25 15:21:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -132,6 +132,10 @@ SCPDEFS+=-DWITHOUT_LDAP
 
 .IF "$(SYSTEM_CURL)" == "YES"
 SCPDEFS+=-DSYSTEM_CURL
+.ENDIF
+
+.IF "$(JDK)" == "gcj"
+SCPDEFS+=-DGCJ
 .ENDIF
 
 SCP_PRODUCT_TYPE=osl
