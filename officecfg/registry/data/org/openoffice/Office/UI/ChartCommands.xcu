@@ -7,31 +7,6 @@
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">~Diagrammdaten</value>
                     <value xml:lang="en-US">~Chart Data</value>
-                    <value xml:lang="ar">بيانات الرسم البياني</value>
-                    <value xml:lang="no">~Chart Data</value>
-                    <value xml:lang="ca">Dades del ~diagrama </value>
-                    <value xml:lang="zh-TW">圖表資料(~C)</value>
-                    <value xml:lang="cs">Data grafu</value>
-                    <value xml:lang="da">~Diagramdata</value>
-                    <value xml:lang="el">~Δεδομένα διαγράμματος</value>
-                    <value xml:lang="es">Datos del ~diagrama</value>
-                    <value xml:lang="fi">~Kaaviotiedot</value>
-                    <value xml:lang="fr">~Données du diagramme</value>
-                    <value xml:lang="he">~Diagrammdaten</value>
-                    <value xml:lang="it">~Dati del diagramma</value>
-                    <value xml:lang="ja">グラフのデータ(~C)</value>
-                    <value xml:lang="ko">차트 데이터(~C)</value>
-                    <value xml:lang="nl">~Diagramgegevens</value>
-                    <value xml:lang="pl">Dane wykresu</value>
-                    <value xml:lang="pt-BR">Dados do diagrama</value>
-                    <value xml:lang="ru">~Данные диаграммы</value>
-                    <value xml:lang="sk">Dát~a grafu</value>
-                    <value xml:lang="sv">~Diagramdata</value>
-                    <value xml:lang="th">ข้อมูลแ~ผนภูมิ</value>
-                    <value xml:lang="tr">~Karakter Verisi</value>
-                    <value xml:lang="hi">~चार्ट् डॉटा</value>
-                    <value xml:lang="zh-CN">图表数据(~C)</value>
-                    <value xml:lang="pt">~Dados do gráfico</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -41,372 +16,72 @@
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">~Titel...</value>
                     <value xml:lang="en-US">~Title...</value>
-                    <value xml:lang="ar">عنوان...</value>
-                    <value xml:lang="no">~Title...</value>
-                    <value xml:lang="ca">~Títol...</value>
-                    <value xml:lang="zh-TW">標題(~T)...</value>
-                    <value xml:lang="cs">Titulek...</value>
-                    <value xml:lang="da">~Titel...</value>
-                    <value xml:lang="el">~Τίτλος...</value>
-                    <value xml:lang="es">~Título...</value>
-                    <value xml:lang="fi">~Otsikko</value>
-                    <value xml:lang="fr">~Titre...</value>
-                    <value xml:lang="he">‮כותרת...‬</value>
-                    <value xml:lang="it">~Titolo...</value>
-                    <value xml:lang="ja">タイトル(~T)...</value>
-                    <value xml:lang="ko">제목(~T)...</value>
-                    <value xml:lang="nl">~Titel...</value>
-                    <value xml:lang="pl">~Tytuł...</value>
-                    <value xml:lang="pt-BR">Título...</value>
-                    <value xml:lang="ru">~Заголовок...</value>
-                    <value xml:lang="sk">~Nadpis...</value>
-                    <value xml:lang="sv">~Rubrik...</value>
-                    <value xml:lang="th">~ชื่อ...</value>
-                    <value xml:lang="tr">~Başlık...</value>
-                    <value xml:lang="hi">~Title...</value>
-                    <value xml:lang="zh-CN">标题(~T)...</value>
-                    <value xml:lang="pt">~Título...</value>
                 </prop>
             </node>
             <node oor:name=".uno:InsertLegend" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">~Legende...</value>
                     <value xml:lang="en-US">~Legend...</value>
-                    <value xml:lang="ar">مفتاح الرسم البياني...</value>
-                    <value xml:lang="no">~Legend...</value>
-                    <value xml:lang="ca">~Llegenda...</value>
-                    <value xml:lang="zh-TW">圖例(~L)...</value>
-                    <value xml:lang="cs">Legenda...</value>
-                    <value xml:lang="da">~Forklaring...</value>
-                    <value xml:lang="el">Υπόμνημα...</value>
-                    <value xml:lang="es">~Leyenda...</value>
-                    <value xml:lang="fi">~Selite...</value>
-                    <value xml:lang="fr">~Légende...</value>
-                    <value xml:lang="he">~Legende...</value>
-                    <value xml:lang="it">~Legenda...</value>
-                    <value xml:lang="ja">凡例(~L)...</value>
-                    <value xml:lang="ko">범례(~L)...</value>
-                    <value xml:lang="nl">~Legenda...</value>
-                    <value xml:lang="pl">~Legenda...</value>
-                    <value xml:lang="pt-BR">Legenda...</value>
-                    <value xml:lang="ru">Легенда...</value>
-                    <value xml:lang="sk">~Legenda...</value>
-                    <value xml:lang="sv">~Förklaring...</value>
-                    <value xml:lang="th">~คำอธิบาย...</value>
-                    <value xml:lang="tr">~Gösterge</value>
-                    <value xml:lang="hi">~लेज़न्ड़...</value>
-                    <value xml:lang="zh-CN">图例(~L)...</value>
-                    <value xml:lang="pt">~Legenda...</value>
                 </prop>
             </node>
             <node oor:name=".uno:InsertDescription" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">~Datenbeschriftung...</value>
                     <value xml:lang="en-US">~Data Labels...</value>
-                    <value xml:lang="ar">عنونة البيانات...</value>
-                    <value xml:lang="no">~Data Labels...</value>
-                    <value xml:lang="ca">Etiquetes de ~dades...</value>
-                    <value xml:lang="zh-TW">資料標籤(~D)...</value>
-                    <value xml:lang="cs">Popisky dat</value>
-                    <value xml:lang="da">~Dataetiketter...</value>
-                    <value xml:lang="el">Επιγραφή δε~δομένων...</value>
-                    <value xml:lang="es">~Etiqueta datos...</value>
-                    <value xml:lang="fi">~Tietonimiöt</value>
-                    <value xml:lang="fr">Étiquetage des ~données...</value>
-                    <value xml:lang="he">~Datenbeschriftung...</value>
-                    <value xml:lang="it">~Dicitura dati...</value>
-                    <value xml:lang="ja">データラベル(~D)...</value>
-                    <value xml:lang="ko">데이터 레이블(~D)...</value>
-                    <value xml:lang="nl">~Gegevenslabels...</value>
-                    <value xml:lang="pl">~Etykiety danych...</value>
-                    <value xml:lang="pt-BR">Rótulo dos dados...</value>
-                    <value xml:lang="ru">~Подпись данных...</value>
-                    <value xml:lang="sk">Popisy ~dát...</value>
-                    <value xml:lang="sv">~Dataetiketter...</value>
-                    <value xml:lang="th">ป้ายชื่อ~ข้อมูล...</value>
-                    <value xml:lang="tr">~Veri Etiketleri...</value>
-                    <value xml:lang="hi">~Data Labels...</value>
-                    <value xml:lang="zh-CN">数据标志(~D)...</value>
-                    <value xml:lang="pt">~Rótulos de dados...</value>
                 </prop>
             </node>
             <node oor:name=".uno:InsertAxis" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">~Achsen...</value>
                     <value xml:lang="en-US">~Axes...</value>
-                    <value xml:lang="ar">محاور...</value>
-                    <value xml:lang="no">~Axes...</value>
-                    <value xml:lang="ca">~Eixos...</value>
-                    <value xml:lang="zh-TW">軸(~A)...</value>
-                    <value xml:lang="cs">Osy...</value>
-                    <value xml:lang="da">~Akser...</value>
-                    <value xml:lang="el">Άξον~ες...</value>
-                    <value xml:lang="es">~Ejes...</value>
-                    <value xml:lang="fi">~Akselit</value>
-                    <value xml:lang="fr">~Axes...</value>
-                    <value xml:lang="he">~Achsen...</value>
-                    <value xml:lang="it">~Assi...</value>
-                    <value xml:lang="ja">軸(~A)...</value>
-                    <value xml:lang="ko">축(~A)...</value>
-                    <value xml:lang="nl">~Assen...</value>
-                    <value xml:lang="pl">~Osie...</value>
-                    <value xml:lang="pt-BR">Eixo e grade</value>
-                    <value xml:lang="ru">~Оси...</value>
-                    <value xml:lang="sk">~Osi...</value>
-                    <value xml:lang="sv">~Axlar...</value>
-                    <value xml:lang="th">แ~กน...</value>
-                    <value xml:lang="tr">~Eksenler...</value>
-                    <value xml:lang="hi">~Axes...</value>
-                    <value xml:lang="zh-CN">轴(~A)...</value>
-                    <value xml:lang="pt">Ei~xos...</value>
                 </prop>
             </node>
             <node oor:name=".uno:ChartTitle" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Diagrammtitel</value>
                     <value xml:lang="en-US">Chart Title</value>
-                    <value xml:lang="ar">عنوان الرسم البياني</value>
-                    <value xml:lang="no">Chart Title</value>
-                    <value xml:lang="ca">Títol de diagrama</value>
-                    <value xml:lang="zh-TW">圖表標題</value>
-                    <value xml:lang="cs">Titulek grafu</value>
-                    <value xml:lang="da">Diagramtitel</value>
-                    <value xml:lang="el">Τίτλος διαγράμματος</value>
-                    <value xml:lang="es">Título de diagrama</value>
-                    <value xml:lang="fi">Kaavio-otsikko</value>
-                    <value xml:lang="fr">Titre du diagramme</value>
-                    <value xml:lang="he">‮כותרת תרשים‬</value>
-                    <value xml:lang="it">Titolo del diagramma</value>
-                    <value xml:lang="ja">グラフのタイトル</value>
-                    <value xml:lang="ko">차트 제목</value>
-                    <value xml:lang="nl">Diagramtitel</value>
-                    <value xml:lang="pl">Tytuł wykresu</value>
-                    <value xml:lang="pt-BR">Título do Gráfico</value>
-                    <value xml:lang="ru">Название диаграммы</value>
-                    <value xml:lang="sk">Názov grafu</value>
-                    <value xml:lang="sv">Diagramrubrik</value>
-                    <value xml:lang="th">ชื่อแผนภูมิ</value>
-                    <value xml:lang="tr">Şema başlığı</value>
-                    <value xml:lang="hi">चार्ट का शीर्षक</value>
-                    <value xml:lang="zh-CN">图表标题</value>
-                    <value xml:lang="pt">Título do gráfico</value>
                 </prop>
             </node>
             <node oor:name=".uno:Legend" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">~Legende...</value>
                     <value xml:lang="en-US">~Legend...</value>
-                    <value xml:lang="ar">مفتاح الرسم البياني...</value>
-                    <value xml:lang="no">~Legend...</value>
-                    <value xml:lang="ca">~Llegenda...</value>
-                    <value xml:lang="zh-TW">圖例(~L)...</value>
-                    <value xml:lang="cs">Legenda</value>
-                    <value xml:lang="da">~Forklaring...</value>
-                    <value xml:lang="el">Υπόμνημα...</value>
-                    <value xml:lang="es">~Leyenda...</value>
-                    <value xml:lang="fi">~Selite...</value>
-                    <value xml:lang="fr">~Légende...</value>
-                    <value xml:lang="he">~Legende...</value>
-                    <value xml:lang="it">~Legenda...</value>
-                    <value xml:lang="ja">凡例(~L)...</value>
-                    <value xml:lang="ko">범례(~L)...</value>
-                    <value xml:lang="nl">~Legenda...</value>
-                    <value xml:lang="pl">Legenda...</value>
-                    <value xml:lang="pt-BR">~Legenda...</value>
-                    <value xml:lang="ru">Легенда...</value>
-                    <value xml:lang="sk">~Legenda...</value>
-                    <value xml:lang="sv">Förk~laring...</value>
-                    <value xml:lang="th">~คำอธิบาย...</value>
-                    <value xml:lang="tr">~Gösterge</value>
-                    <value xml:lang="hi">~लेज़न्ड़...</value>
-                    <value xml:lang="zh-CN">图例(~L)...</value>
-                    <value xml:lang="pt">~Legenda...</value>
                 </prop>
             </node>
             <node oor:name=".uno:DiagramGrid" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Gitter bearbeiten</value>
                     <value xml:lang="en-US">Edit Grid</value>
-                    <value xml:lang="ar">تحرير شبكة</value>
-                    <value xml:lang="no">Edit Grid</value>
-                    <value xml:lang="ca">Edita la graella</value>
-                    <value xml:lang="zh-TW">編輯網格線</value>
-                    <value xml:lang="cs">Upravit mřížku k ose X</value>
-                    <value xml:lang="da">Rediger gitter</value>
-                    <value xml:lang="el">Επεξεργασία πλέγματος</value>
-                    <value xml:lang="es">Editar cuadrículas</value>
-                    <value xml:lang="fi">Muokkaa ruudukkoa</value>
-                    <value xml:lang="fr">Éditer la grille</value>
-                    <value xml:lang="he">‮עריכת הרשת‬</value>
-                    <value xml:lang="it">Modifica griglie</value>
-                    <value xml:lang="ja">目盛線の編集</value>
-                    <value xml:lang="ko">눈금선 편집</value>
-                    <value xml:lang="nl">Raster bewerken</value>
-                    <value xml:lang="pl">Edytuj siatkę</value>
-                    <value xml:lang="pt-BR">Editar Grade</value>
-                    <value xml:lang="ru">Правка сетки</value>
-                    <value xml:lang="sk">Upraviť mriežku</value>
-                    <value xml:lang="sv">Redigera gitter</value>
-                    <value xml:lang="th">แก้ไขเส้นตาราง</value>
-                    <value xml:lang="tr">Kılavuz çizgileri düzenle</value>
-                    <value xml:lang="hi">जाल का संपादन</value>
-                    <value xml:lang="zh-CN">编辑网格线</value>
-                    <value xml:lang="pt">Editar grelha</value>
                 </prop>
             </node>
             <node oor:name=".uno:DiagramWall" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Diagramm~wand...</value>
                     <value xml:lang="en-US">Chart ~Wall...</value>
-                    <value xml:lang="ar">حائط الرسم البياني...</value>
-                    <value xml:lang="no">Chart ~Wall...</value>
-                    <value xml:lang="ca">~Pla lateral del diagrama...</value>
-                    <value xml:lang="zh-TW">圖表背景牆(~W)...</value>
-                    <value xml:lang="cs">Stěna grafu...</value>
-                    <value xml:lang="da">Diagramvæg...</value>
-                    <value xml:lang="el">Τοίχο~ς διαγράμματος...</value>
-                    <value xml:lang="es">~Pared del diagrama...</value>
-                    <value xml:lang="fi">Kaavio~seinä...</value>
-                    <value xml:lang="fr">P~aroi du diagramme...</value>
-                    <value xml:lang="he">Diagramm~wand...</value>
-                    <value xml:lang="it">~Pareti del diagramma...</value>
-                    <value xml:lang="ja">グラフの壁面(~W)...</value>
-                    <value xml:lang="ko">차트 옆면(~W)...</value>
-                    <value xml:lang="nl">Diagram~wand...</value>
-                    <value xml:lang="pl">Ściana wykresu...</value>
-                    <value xml:lang="pt-BR">Parede do ~gráfico...</value>
-                    <value xml:lang="ru">Стена диаграммы...</value>
-                    <value xml:lang="sk">~Bok grafu...</value>
-                    <value xml:lang="sv">Diagram~vägg...</value>
-                    <value xml:lang="th">~ผนังแผนภูมิ...</value>
-                    <value xml:lang="tr">Harita ~Alanı...</value>
-                    <value xml:lang="hi">चार्ट ~वॉल...</value>
-                    <value xml:lang="zh-CN">图表背景墙(~W)...</value>
-                    <value xml:lang="pt">~Parede do gráfico...</value>
                 </prop>
             </node>
             <node oor:name=".uno:DiagramFloor" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Diagramm~boden...</value>
                     <value xml:lang="en-US">~Chart Floor...</value>
-                    <value xml:lang="ar">أرضية الرسم البياني...</value>
-                    <value xml:lang="no">~Chart Floor...</value>
-                    <value xml:lang="ca">Base del ~diagrama...</value>
-                    <value xml:lang="zh-TW">座標軸(~C)...</value>
-                    <value xml:lang="cs">Pata grafu...</value>
-                    <value xml:lang="da">~Diagramgulv...</value>
-                    <value xml:lang="el">Δά~πεδο διαγράμματος...</value>
-                    <value xml:lang="es">~Base del diagrama...</value>
-                    <value xml:lang="fi">~Kaavion perusta</value>
-                    <value xml:lang="fr">P~lancher du diagramme...</value>
-                    <value xml:lang="he">Diagramm~boden...</value>
-                    <value xml:lang="it">~Pavimento del diagramma...</value>
-                    <value xml:lang="ja">グラフの床面(~C)...</value>
-                    <value xml:lang="ko">차트 밑면(~C)...</value>
-                    <value xml:lang="nl">Diagram~bodem...</value>
-                    <value xml:lang="pl">Podłoże wykresu...</value>
-                    <value xml:lang="pt-BR">~Piso do gráfico...</value>
-                    <value xml:lang="ru">Основание диаграммы...</value>
-                    <value xml:lang="sk">~Päta grafu...</value>
-                    <value xml:lang="sv">D~iagramgolv...</value>
-                    <value xml:lang="th">พื้นแผ~นภูมิ...</value>
-                    <value xml:lang="tr">~Karakter Altı...</value>
-                    <value xml:lang="hi">~चार्ट् फ़ोर्...</value>
-                    <value xml:lang="zh-CN">图表基底(~C)...</value>
-                    <value xml:lang="pt">~Base do gráfico...</value>
                 </prop>
             </node>
             <node oor:name=".uno:DiagramArea" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Diagram~mfläche...</value>
                     <value xml:lang="en-US">C~hart Area...</value>
-                    <value xml:lang="ar">مساحة الرسم البياني...</value>
-                    <value xml:lang="no">C~hart Area...</value>
-                    <value xml:lang="ca">~Àrea de diagrama...</value>
-                    <value xml:lang="zh-TW">圖表平面(~H)...</value>
-                    <value xml:lang="cs">Plocha grafu...</value>
-                    <value xml:lang="da">~Diagramområde...</value>
-                    <value xml:lang="el">Περιοχή διαγρά~μματος...</value>
-                    <value xml:lang="es">~Superficie del diagrama...</value>
-                    <value xml:lang="fi">Kaa~vioalue</value>
-                    <value xml:lang="fr">~Arrière-plan du diagramme...</value>
-                    <value xml:lang="he">Diagram~mfläche...</value>
-                    <value xml:lang="it">~Area del diagramma...</value>
-                    <value xml:lang="ja">グラフエリア(~H)...</value>
-                    <value xml:lang="ko">차트 영역(~H)...</value>
-                    <value xml:lang="nl">Diagram~oppervlak...</value>
-                    <value xml:lang="pl">Obszar wykresu...</value>
-                    <value xml:lang="pt-BR">Áre~a do gráfico...</value>
-                    <value xml:lang="ru">Область диаграммы...</value>
-                    <value xml:lang="sk">P~locha grafu...</value>
-                    <value xml:lang="sv">Diagra~mområde...</value>
-                    <value xml:lang="th">พื้นที่แผน~ภูมิ...</value>
-                    <value xml:lang="tr">K~arakter Alanı...</value>
-                    <value xml:lang="hi">चा~र्ट विस्तीर्ण...</value>
-                    <value xml:lang="zh-CN">图表平面(~H)...</value>
-                    <value xml:lang="pt">Á~rea do gráfico...</value>
                 </prop>
             </node>
             <node oor:name=".uno:View3D" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">3D-An~sicht...</value>
                     <value xml:lang="en-US">3~D View...</value>
-                    <value xml:lang="ar">عرض ثلاثي الأبعاد...</value>
-                    <value xml:lang="no">3~D View...</value>
-                    <value xml:lang="ca">Vista 3~D...</value>
-                    <value xml:lang="zh-TW">~3D 檢視...</value>
-                    <value xml:lang="cs">3D pohled</value>
-                    <value xml:lang="da">~3D-visning...</value>
-                    <value xml:lang="el">Προ~βολή 3Δ...</value>
-                    <value xml:lang="es">~Ver en 3D...</value>
-                    <value xml:lang="fi">Kolmi~ulotteinen näkymä...</value>
-                    <value xml:lang="fr">Affichage ~3D...</value>
-                    <value xml:lang="he">3D-An~sicht...</value>
-                    <value xml:lang="it">~Vista 3D...</value>
-                    <value xml:lang="ja">3~D 表示...</value>
-                    <value xml:lang="ko">3Ｄ 보기(~D)...</value>
-                    <value xml:lang="nl">~3D-weergave...</value>
-                    <value xml:lang="pl">Widok 3-W...</value>
-                    <value xml:lang="pt-BR">~Ver 3D...</value>
-                    <value xml:lang="ru">Вид 3-М...</value>
-                    <value xml:lang="sk">3~D zobrazenie...</value>
-                    <value xml:lang="sv">3D-v~y...</value>
-                    <value xml:lang="th">มุมมอง 3~มิติ...</value>
-                    <value xml:lang="tr">3~B Görünüm...</value>
-                    <value xml:lang="hi">3~D दृश्य</value>
-                    <value xml:lang="zh-CN">~3 维视图...</value>
-                    <value xml:lang="pt">~Vista 3D...</value>
                 </prop>
             </node>
             <node oor:name=".uno:DiagramType" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">~Diagrammtyp...</value>
                     <value xml:lang="en-US">Cha~rt Type...</value>
-                    <value xml:lang="ar">نوع الرسم البياني...</value>
-                    <value xml:lang="no">Cha~rt Type...</value>
-                    <value xml:lang="ca">Tipus de diag~rama...</value>
-                    <value xml:lang="zh-TW">圖表類型(~R)...</value>
-                    <value xml:lang="cs">Typ grafu...</value>
-                    <value xml:lang="da">Diagramtype...</value>
-                    <value xml:lang="el">Τύπος ~διαγράμματος...</value>
-                    <value xml:lang="es">~Tipo de diagrama...</value>
-                    <value xml:lang="fi">Kaa~viotyyppi...</value>
-                    <value xml:lang="fr">Type de ~diagramme...</value>
-                    <value xml:lang="he">~Diagrammtyp...</value>
-                    <value xml:lang="it">Ti~po di diagramma...</value>
-                    <value xml:lang="ja">グラフの種類(~R)...</value>
-                    <value xml:lang="ko">차트 유형(~R)...</value>
-                    <value xml:lang="nl">Diagram~type...</value>
-                    <value xml:lang="pl">Typ wykresu...</value>
-                    <value xml:lang="pt-BR">~Tipo de gráfico...</value>
-                    <value xml:lang="ru">Тип диаграммы...</value>
-                    <value xml:lang="sk">Typ g~rafu...</value>
-                    <value xml:lang="sv">~Diagramtyp...</value>
-                    <value xml:lang="th">ชนิดแผนภู~มิ...</value>
-                    <value xml:lang="tr">Ka~rakter Türü...</value>
-                    <value xml:lang="hi">चा~र्ट वर्ग....</value>
-                    <value xml:lang="zh-CN">图表类型(~R)...</value>
-                    <value xml:lang="pt">~Tipo de gráfico...</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -416,31 +91,6 @@
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Titel ein/aus</value>
                     <value xml:lang="en-US">Title On/Off</value>
-                    <value xml:lang="ar">إظهار/إخفاء العنوان</value>
-                    <value xml:lang="no">Title On/Off</value>
-                    <value xml:lang="ca">Mostra/oculta el títol</value>
-                    <value xml:lang="zh-TW">顯示/隱入標題</value>
-                    <value xml:lang="cs">Názvy os zap/vyp</value>
-                    <value xml:lang="da">Titel til/fra</value>
-                    <value xml:lang="el">Τίτλος Ναι/Όχι</value>
-                    <value xml:lang="es">Mostrar/ocultar título</value>
-                    <value xml:lang="fi">Otsikko käytössä / poissa käytöstä</value>
-                    <value xml:lang="fr">Afficher/masquer le titre</value>
-                    <value xml:lang="he">‮הפעלת\הפסקת כותרת‬</value>
-                    <value xml:lang="it">Mostra/nascondi il titolo</value>
-                    <value xml:lang="ja">タイトル オン/オフ</value>
-                    <value xml:lang="ko">제목 표시/숨기기</value>
-                    <value xml:lang="nl">Titel aan/uit</value>
-                    <value xml:lang="pl">Włącz/Wyłącz tytuł</value>
-                    <value xml:lang="pt-BR">Ativar/Desativar o título</value>
-                    <value xml:lang="ru">Заголовок</value>
-                    <value xml:lang="sk">Zapnúť/vypnúť nadpis</value>
-                    <value xml:lang="sv">Rubrik på/av</value>
-                    <value xml:lang="th">ชื่อ มี/ไม่มี</value>
-                    <value xml:lang="tr">Başlığı görüntüle/gizle</value>
-                    <value xml:lang="hi">शीर्षक शुरु/बंद</value>
-                    <value xml:lang="zh-CN">显示或隐入标题</value>
-                    <value xml:lang="pt">Título</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -450,31 +100,6 @@
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Legende ein/aus</value>
                     <value xml:lang="en-US">Legend On/Off</value>
-                    <value xml:lang="ar">إظهار/إخفاء مفتاح الرسم البياني</value>
-                    <value xml:lang="no">Legend On/Off</value>
-                    <value xml:lang="ca">Llegenda activada/desactivada </value>
-                    <value xml:lang="zh-TW">顯示/隱入圖例</value>
-                    <value xml:lang="cs">Legenda zap/vyp</value>
-                    <value xml:lang="da">Forklaring til/fra</value>
-                    <value xml:lang="el">Υπόμνημα Ναι/Όχι</value>
-                    <value xml:lang="es">Mostrar/ocultar leyenda</value>
-                    <value xml:lang="fi">Selite käytössä / poissa käytöstä</value>
-                    <value xml:lang="fr">Afficher/masquer la légende</value>
-                    <value xml:lang="he">‮הפעלת\הפסקת מקרא‬</value>
-                    <value xml:lang="it">Mostra/nascondi legenda </value>
-                    <value xml:lang="ja">凡例 オン/オフ</value>
-                    <value xml:lang="ko">범례 표시/숨기기</value>
-                    <value xml:lang="nl">Legenda aan/uit</value>
-                    <value xml:lang="pl">Włącz/Wyłącz legendę</value>
-                    <value xml:lang="pt-BR">Ativar/Desativar a legenda</value>
-                    <value xml:lang="ru">Легенда</value>
-                    <value xml:lang="sk">Zapnúť/vypnúť legendu</value>
-                    <value xml:lang="sv">Förklaring på/av</value>
-                    <value xml:lang="th">คำอธิบาย มี/ไม่มี</value>
-                    <value xml:lang="tr">Açıklamayı görüntüle/gizle</value>
-                    <value xml:lang="hi">लेजन्ड शुरु/बंद</value>
-                    <value xml:lang="zh-CN">显示或隐入图例</value>
-                    <value xml:lang="pt">Legenda</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -484,31 +109,6 @@
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Achsentitel ein/aus</value>
                     <value xml:lang="en-US">AxesTitle On/Off</value>
-                    <value xml:lang="ar">إظهار/إخفاء عناوين المحاور</value>
-                    <value xml:lang="no">AxesTitle On/Off</value>
-                    <value xml:lang="ca">Mostra/oculta el títol de l&apos;eix</value>
-                    <value xml:lang="zh-TW">顯示/隱入軸標題</value>
-                    <value xml:lang="cs">Názvy os zap/vyp</value>
-                    <value xml:lang="da">Aksetitler til/fra</value>
-                    <value xml:lang="el">Τίτλοι αξόνων Ναι/Όχι</value>
-                    <value xml:lang="es">Mostrar/ocultar título del eje</value>
-                    <value xml:lang="fi">Akseliotsikot käytössä / poissa käytöstä</value>
-                    <value xml:lang="fr">Afficher/masquer les titres des axes</value>
-                    <value xml:lang="he">‮הפעלת\כיבוי כותרת הציר‬</value>
-                    <value xml:lang="it">Mostra/nascondi il titolo degli assi</value>
-                    <value xml:lang="ja">軸のタイトル オン/オフ</value>
-                    <value xml:lang="ko">축 제목 표시/숨기기</value>
-                    <value xml:lang="nl">Astitels aan/uit</value>
-                    <value xml:lang="pl">Włącz/Wyłącz tytuł osi</value>
-                    <value xml:lang="pt-BR">Ativar/Desativar os títulos dos eixos</value>
-                    <value xml:lang="ru">Заголовок оси</value>
-                    <value xml:lang="sk">Zapnúť/vypnúť názvy osí</value>
-                    <value xml:lang="sv">Axelrubrik på/av</value>
-                    <value xml:lang="th">ชื่อแกน มี/ไม่มี</value>
-                    <value xml:lang="tr">Eksen başlıklarını görüntüle/gizle</value>
-                    <value xml:lang="hi">अक्षरेखा शीर्षक शुरु/बंद</value>
-                    <value xml:lang="zh-CN">显示或隐入轴标题</value>
-                    <value xml:lang="pt">Título dos eixos</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -518,31 +118,6 @@
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Achsen ein/aus</value>
                     <value xml:lang="en-US">Show/Hide Axis Description(s)</value>
-                    <value xml:lang="ar">إظهار/إخفاء المحاور</value>
-                    <value xml:lang="no">Show/Hide Axis Description(s)</value>
-                    <value xml:lang="ca">Mostra/oculta eixos</value>
-                    <value xml:lang="zh-TW">顯示/隱入軸數值</value>
-                    <value xml:lang="cs">Zobrazit/skrýt popis(y) os</value>
-                    <value xml:lang="da">Akser til/fra</value>
-                    <value xml:lang="el">Άξονες Ναι/Όχι</value>
-                    <value xml:lang="es">Mostrar/ocultar ejes</value>
-                    <value xml:lang="fi">Näytä tai piilota akselien selitteet</value>
-                    <value xml:lang="fr">Afficher/masquer les axes</value>
-                    <value xml:lang="he">‮הצגת\הסתרת תאורי הצירים‬</value>
-                    <value xml:lang="it">Mostra/nascondi assi</value>
-                    <value xml:lang="ja">軸 オン/オフ</value>
-                    <value xml:lang="ko">축 표시/숨기기</value>
-                    <value xml:lang="nl">Assen aan/uit</value>
-                    <value xml:lang="pl">Pokaż/ukryj opisy osi</value>
-                    <value xml:lang="pt-BR">Mostrar/Ocultar a descrição dos eixos</value>
-                    <value xml:lang="ru">Описание оси</value>
-                    <value xml:lang="sk">Zobraziť/skryť popis(y) osí</value>
-                    <value xml:lang="sv">Axlar på/av</value>
-                    <value xml:lang="th">แสดง/ซ่อนคำอธิบายแกน</value>
-                    <value xml:lang="tr">Eksenleri görüntüle/gizle</value>
-                    <value xml:lang="hi">अक्षरेखा विवरण दिखाओ/छिपाओ</value>
-                    <value xml:lang="zh-CN">显示或隐入轴数值</value>
-                    <value xml:lang="pt">Mostrar/Ocultar eixos</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -552,31 +127,6 @@
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Gitter horizontal ein/aus</value>
                     <value xml:lang="en-US">Horizontal Grid On/Off</value>
-                    <value xml:lang="ar">إظهار/إخفاء المحور الأفقي</value>
-                    <value xml:lang="no">Horizontal Grid On/Off</value>
-                    <value xml:lang="ca">Graella horitzontal activada/desactivada</value>
-                    <value xml:lang="zh-TW">顯示/隱入橫向網格線</value>
-                    <value xml:lang="cs">Vodorovná mřížka zap/vyp</value>
-                    <value xml:lang="da">Vandret gitter til/fra</value>
-                    <value xml:lang="el">Οριζόντιο πλέγμα Ναι/Όχι</value>
-                    <value xml:lang="es">Mostrar/ocultar cuadrícula horiz.</value>
-                    <value xml:lang="fi">Vaakaruudukko käytössä / poissa käytöstä</value>
-                    <value xml:lang="fr">Afficher/masquer la grille horizontale</value>
-                    <value xml:lang="he">‮הפעלת\הפסקת הרשת האופקית‬</value>
-                    <value xml:lang="it">Mostra/nascondi griglia orizzontale</value>
-                    <value xml:lang="ja">目盛線(横) オン/オフ</value>
-                    <value xml:lang="ko">가로 눈금선 표시/숨기기</value>
-                    <value xml:lang="nl">Horizontaal raster aan/uit</value>
-                    <value xml:lang="pl">Włącz/Wyłącz siatkę poziomą</value>
-                    <value xml:lang="pt-BR">Ativar/Desativar a grade horizontal</value>
-                    <value xml:lang="ru">Горизонтальная сетка</value>
-                    <value xml:lang="sk">Zapnúť/vypnúť vodorovnú mriežku</value>
-                    <value xml:lang="sv">Horisontellt gitter på/av</value>
-                    <value xml:lang="th">เส้นตารางแนวนอน มี/ไม่มี</value>
-                    <value xml:lang="tr">Yatay kılavuz çizgilerini görüntüle/gizle</value>
-                    <value xml:lang="hi">समतल जाल शुरु/बंद</value>
-                    <value xml:lang="zh-CN">显示或隐入横向网格线</value>
-                    <value xml:lang="pt">Grelha horizontal</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -586,31 +136,6 @@
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Gitter vertikal ein/aus</value>
                     <value xml:lang="en-US">Vertical Grid On/Off</value>
-                    <value xml:lang="ar">إظهار/إخفاء المحور الرأسي</value>
-                    <value xml:lang="no">Vertical Grid On/Off</value>
-                    <value xml:lang="ca">Graella vertical activada/desactivada</value>
-                    <value xml:lang="zh-TW">顯示/隱入縱向網格線</value>
-                    <value xml:lang="cs">Svislá mřížka zap/vyp</value>
-                    <value xml:lang="da">Lodret gitter til/fra</value>
-                    <value xml:lang="el">Κατακόρυφο πλέγμα Ναι/Όχι</value>
-                    <value xml:lang="es">Mostrar/ocultar cuadrícula vertical</value>
-                    <value xml:lang="fi">Pystyruudukko käytössä / poissa käytöstä</value>
-                    <value xml:lang="fr">Afficher/masquer la grille verticale</value>
-                    <value xml:lang="he">‮הפעלת\הפסקת הרשת האנכית‬</value>
-                    <value xml:lang="it">Mostra/nascondi griglia verticale</value>
-                    <value xml:lang="ja">目盛線(縦) オン/オフ</value>
-                    <value xml:lang="ko">세로 눈금선 표시/숨기기</value>
-                    <value xml:lang="nl">Verticaal raster aan/uit</value>
-                    <value xml:lang="pl">Włącz/Wyłącz siatkę pionową</value>
-                    <value xml:lang="pt-BR">Ativar/Desativar a grade vertical</value>
-                    <value xml:lang="ru">Вертикальная сетка</value>
-                    <value xml:lang="sk">Zapnúť/vypnúť zvislú mriežku</value>
-                    <value xml:lang="sv">Vertikalt gitter på/av</value>
-                    <value xml:lang="th">เส้นตารางแนวตั้ง มี/ไม่มี</value>
-                    <value xml:lang="tr">Dikey kılavuz çizgilerini görüntüle/gizle</value>
-                    <value xml:lang="hi">Vertical Grid On/Off</value>
-                    <value xml:lang="zh-CN">显示或隐入纵向网格线</value>
-                    <value xml:lang="pt">Grelha vertical</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -620,31 +145,6 @@
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Daten in Reihen</value>
                     <value xml:lang="en-US">Data in Rows</value>
-                    <value xml:lang="ar">بيانات في الصفوف</value>
-                    <value xml:lang="no">Data in Rows</value>
-                    <value xml:lang="ca">Dades en files</value>
-                    <value xml:lang="zh-TW">資料插入欄</value>
-                    <value xml:lang="cs">Data v řádcích</value>
-                    <value xml:lang="da">Data i rækker</value>
-                    <value xml:lang="el">Δεδομένα σε γραμμές</value>
-                    <value xml:lang="es">Datos en filas</value>
-                    <value xml:lang="fi">Rivien tiedot</value>
-                    <value xml:lang="fr">Données en séries</value>
-                    <value xml:lang="he">‮נתונים בשורות‬</value>
-                    <value xml:lang="it">Dati nelle righe</value>
-                    <value xml:lang="ja">系列を行方向に定義</value>
-                    <value xml:lang="ko">행 계열</value>
-                    <value xml:lang="nl">Gegevens in rijen</value>
-                    <value xml:lang="pl">Dane w wierszach</value>
-                    <value xml:lang="pt-BR">Dados nas Linhas</value>
-                    <value xml:lang="ru">Данные в строках</value>
-                    <value xml:lang="sk">Dáta v riadkoch</value>
-                    <value xml:lang="sv">Data i rader</value>
-                    <value xml:lang="th">ข้อมูลในแถว</value>
-                    <value xml:lang="tr">Satırlar içindeki veriler</value>
-                    <value xml:lang="hi">पक्तिंयों में ड़ॉटा</value>
-                    <value xml:lang="zh-CN">行数据</value>
-                    <value xml:lang="pt">Dados em linhas</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -654,31 +154,6 @@
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Daten in Spalten</value>
                     <value xml:lang="en-US">Data in Columns</value>
-                    <value xml:lang="ar">بيانات في الأعمدة</value>
-                    <value xml:lang="no">Data in Columns</value>
-                    <value xml:lang="ca">Dades en columnes</value>
-                    <value xml:lang="zh-TW">資料插入欄</value>
-                    <value xml:lang="cs">Data ve sloupcích</value>
-                    <value xml:lang="da">Data i kolonner</value>
-                    <value xml:lang="el">Δεδομένα σε στήλες</value>
-                    <value xml:lang="es">Datos en columnas</value>
-                    <value xml:lang="fi">Sarakkeiden tiedot</value>
-                    <value xml:lang="fr">Données en colonnes</value>
-                    <value xml:lang="he">‮נתונים בטורים‬</value>
-                    <value xml:lang="it">Dati nelle colonne</value>
-                    <value xml:lang="ja">系列を列方向に定義</value>
-                    <value xml:lang="ko">열 계열</value>
-                    <value xml:lang="nl">Gegevens in kolommen</value>
-                    <value xml:lang="pl">Dane w kolumnach</value>
-                    <value xml:lang="pt-BR">Dados nas Colunas</value>
-                    <value xml:lang="ru">Данные в столбцах</value>
-                    <value xml:lang="sk">Dáta v stĺpcoch</value>
-                    <value xml:lang="sv">Data i kolumner</value>
-                    <value xml:lang="th">ข้อมูลในคอลัมน์์</value>
-                    <value xml:lang="tr">Sütunlar içindeki veriler</value>
-                    <value xml:lang="hi">स्तम्भों में ड़ॉटा</value>
-                    <value xml:lang="zh-CN">列数据</value>
-                    <value xml:lang="pt">Dados em colunas</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -688,93 +163,18 @@
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Werkzeug bestimmen</value>
                     <value xml:lang="en-US">Select Tool</value>
-                    <value xml:lang="ar">تعيين الأدوات</value>
-                    <value xml:lang="no">Select Tool</value>
-                    <value xml:lang="ca">Seleccioneu l&apos;eina</value>
-                    <value xml:lang="zh-TW">選定工具</value>
-                    <value xml:lang="cs">Zvolit nástroj</value>
-                    <value xml:lang="da">Vælg værktøj</value>
-                    <value xml:lang="el">Επιλογή εργαλείου</value>
-                    <value xml:lang="es">Seleccionar herramientas</value>
-                    <value xml:lang="fi">Valitse työkalu</value>
-                    <value xml:lang="fr">Sélectionner un instrument</value>
-                    <value xml:lang="he">‮בחירת כלי‬</value>
-                    <value xml:lang="it">Definisci strumento</value>
-                    <value xml:lang="ja">ツールの選択</value>
-                    <value xml:lang="ko">도구 선택</value>
-                    <value xml:lang="nl">Werktuig selecteren</value>
-                    <value xml:lang="pl">Wybierz narzędzie</value>
-                    <value xml:lang="pt-BR">Selecionar Ferramenta</value>
-                    <value xml:lang="ru">Выбрать инструмент</value>
-                    <value xml:lang="sk">Zvoliť nástroj</value>
-                    <value xml:lang="sv">Bestäm verktyg</value>
-                    <value xml:lang="th">เลือกเครื่องมือ</value>
-                    <value xml:lang="tr">Araç seç</value>
-                    <value xml:lang="hi">औज़ार चुनो</value>
-                    <value xml:lang="zh-CN">选用工具</value>
-                    <value xml:lang="pt">Seleccionar ferramenta</value>
                 </prop>
             </node>
             <node oor:name=".uno:ContextType" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Diagrammtyp</value>
                     <value xml:lang="en-US">Chart Type</value>
-                    <value xml:lang="ar">نوع الرسم البياني</value>
-                    <value xml:lang="no">Chart Type</value>
-                    <value xml:lang="ca">Tipus de diagrama</value>
-                    <value xml:lang="zh-TW">圖表類型</value>
-                    <value xml:lang="cs">Typ grafu</value>
-                    <value xml:lang="da">Diagramtype</value>
-                    <value xml:lang="el">Τύπος διαγράμματος</value>
-                    <value xml:lang="es">Tipo de diagrama</value>
-                    <value xml:lang="fi">Kaaviotyyppi</value>
-                    <value xml:lang="fr">Type de diagramme</value>
-                    <value xml:lang="he">‮סוג תרשים‬</value>
-                    <value xml:lang="it">Tipo di diagramma</value>
-                    <value xml:lang="ja">グラフの種類</value>
-                    <value xml:lang="ko">차트 유형</value>
-                    <value xml:lang="nl">Diagramtype</value>
-                    <value xml:lang="pl">Typ wykresu</value>
-                    <value xml:lang="pt-BR">Tipo de Gráfico</value>
-                    <value xml:lang="ru">Тип диаграммы</value>
-                    <value xml:lang="sk">Typ grafu</value>
-                    <value xml:lang="sv">Diagramtyp</value>
-                    <value xml:lang="th">ชนิดแผนภูมิ</value>
-                    <value xml:lang="tr">Şema tipi</value>
-                    <value xml:lang="hi">चार्ट का प्रकार</value>
-                    <value xml:lang="zh-CN">图表类型</value>
-                    <value xml:lang="pt">Tipo de gráfico</value>
                 </prop>
             </node>
             <node oor:name=".uno:NewArrangement" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Diagramm neu anordnen</value>
                     <value xml:lang="en-US">Reorganize Chart</value>
-                    <value xml:lang="ar">إعادة ترتيب الرسم البياني</value>
-                    <value xml:lang="no">Reorganize Chart</value>
-                    <value xml:lang="ca">Reorganitza el diagrama</value>
-                    <value xml:lang="zh-TW">重新排序圖表</value>
-                    <value xml:lang="cs">Reorganizovat graf</value>
-                    <value xml:lang="da">Genarranger diagram</value>
-                    <value xml:lang="el">Αναδιοργάνωση διαγράμματος</value>
-                    <value xml:lang="es">Nueva alineación de diagrama</value>
-                    <value xml:lang="fi">Järjestele kaavio uudelleen</value>
-                    <value xml:lang="fr">Réorganiser le diagramme</value>
-                    <value xml:lang="he">‮אירגון התרשים מחדש‬</value>
-                    <value xml:lang="it">Ridisponi diagramma</value>
-                    <value xml:lang="ja">グラフの表示を元に戻す</value>
-                    <value xml:lang="ko">차트 다시 배치</value>
-                    <value xml:lang="nl">Diagram opnieuw arrangeren</value>
-                    <value xml:lang="pl">Reorganizuj wykres</value>
-                    <value xml:lang="pt-BR">Reorganizar o gráfico</value>
-                    <value xml:lang="ru">Обновить диаграмму</value>
-                    <value xml:lang="sk">Reorganizovať graf</value>
-                    <value xml:lang="sv">Ordna diagrammet på nytt</value>
-                    <value xml:lang="th">จัดการแผนภูมิใหม่</value>
-                    <value xml:lang="tr">Şemayı yeniden düzenle</value>
-                    <value xml:lang="hi">चार्ट को फिर से व्यवस्था करो</value>
-                    <value xml:lang="zh-CN">重新排序图表</value>
-                    <value xml:lang="pt">Reorganizar gráfico</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -784,682 +184,132 @@
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">~Gitter...</value>
                     <value xml:lang="en-US">~Grids...</value>
-                    <value xml:lang="ar">شبكات...</value>
-                    <value xml:lang="no">~Grids...</value>
-                    <value xml:lang="ca">~Graelles...</value>
-                    <value xml:lang="zh-TW">網格線(~G)...</value>
-                    <value xml:lang="cs">Mřížky...</value>
-                    <value xml:lang="da">~Gitre...</value>
-                    <value xml:lang="el">Πλέ~γμα...</value>
-                    <value xml:lang="es">~Cuadrículas...</value>
-                    <value xml:lang="fi">~Ruudukot</value>
-                    <value xml:lang="fr">~Grilles...</value>
-                    <value xml:lang="he">~Gitter...</value>
-                    <value xml:lang="it">~Griglia...</value>
-                    <value xml:lang="ja">目盛線(~G)...</value>
-                    <value xml:lang="ko">눈금선(~G)...</value>
-                    <value xml:lang="nl">~Rasters...</value>
-                    <value xml:lang="pl">~Siatki...</value>
-                    <value xml:lang="pt-BR">~Grades...</value>
-                    <value xml:lang="ru">~Сетка...</value>
-                    <value xml:lang="sk">~Mriežky...</value>
-                    <value xml:lang="sv">~Gitter...</value>
-                    <value xml:lang="th">เ~ส้นตาราง...</value>
-                    <value xml:lang="tr">~Izgaralar...</value>
-                    <value xml:lang="hi">~Grids...</value>
-                    <value xml:lang="zh-CN">网格线(~G)...</value>
-                    <value xml:lang="pt">~Grelhas...</value>
                 </prop>
             </node>
             <node oor:name=".uno:Update" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Diagramm aktualisieren</value>
                     <value xml:lang="en-US">Update Chart</value>
-                    <value xml:lang="ar">تحديث الرسم البياني</value>
-                    <value xml:lang="no">Update Chart</value>
-                    <value xml:lang="ca">Actualitza el diagrama</value>
-                    <value xml:lang="zh-TW">更新圖表</value>
-                    <value xml:lang="cs">Aktualizovat graf</value>
-                    <value xml:lang="da">Opdater diagram</value>
-                    <value xml:lang="el">Ενημέρωση διαγράμματος</value>
-                    <value xml:lang="es">Actualizar diagrama</value>
-                    <value xml:lang="fi">Päivitä kaavio</value>
-                    <value xml:lang="fr">Actualiser le diagramme</value>
-                    <value xml:lang="he">‮עידכון תרשים‬</value>
-                    <value xml:lang="it">Aggiorna diagramma</value>
-                    <value xml:lang="ja">グラフの更新</value>
-                    <value xml:lang="ko">차트 업데이트</value>
-                    <value xml:lang="nl">Diagram bijwerken</value>
-                    <value xml:lang="pl">Aktualizuj wykres</value>
-                    <value xml:lang="pt-BR">Atualizar o gráfico</value>
-                    <value xml:lang="ru">Обновить диаграмму</value>
-                    <value xml:lang="sk">Aktualizovať graf</value>
-                    <value xml:lang="sv">Uppdatera diagram</value>
-                    <value xml:lang="th">ปรับปรุงแผนภูมิ</value>
-                    <value xml:lang="tr">Şemayı güncelle</value>
-                    <value xml:lang="hi">चार्ट को अपडेट् करो</value>
-                    <value xml:lang="zh-CN">更新图表</value>
-                    <value xml:lang="pt">Actualizar gráfico</value>
                 </prop>
             </node>
             <node oor:name=".uno:DiagramAxisX" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">~X-Achse...</value>
                     <value xml:lang="en-US">~X Axis...</value>
-                    <value xml:lang="ar">المحور س...</value>
-                    <value xml:lang="no">~X Axis...</value>
-                    <value xml:lang="ca">Eix ~X...</value>
-                    <value xml:lang="zh-TW">~X 軸...</value>
-                    <value xml:lang="cs">Osa X</value>
-                    <value xml:lang="da">~X-akse...</value>
-                    <value xml:lang="el">Άξονας ~Χ...</value>
-                    <value xml:lang="es">Eje ~X...</value>
-                    <value xml:lang="fi">~X-akseli</value>
-                    <value xml:lang="fr">Axe ~X...</value>
-                    <value xml:lang="he">~X-Achse...</value>
-                    <value xml:lang="it">Asse ~X...</value>
-                    <value xml:lang="ja">X軸(~X)...</value>
-                    <value xml:lang="ko">X축(~X)...</value>
-                    <value xml:lang="nl">~X-as...</value>
-                    <value xml:lang="pl">Oś X...</value>
-                    <value xml:lang="pt-BR">Eixo ~X...</value>
-                    <value xml:lang="ru">Ось X...</value>
-                    <value xml:lang="sk">Os ~X...</value>
-                    <value xml:lang="sv">~X-axel...</value>
-                    <value xml:lang="th">แกน~X ...</value>
-                    <value xml:lang="tr">~X Ekseni...</value>
-                    <value xml:lang="hi">~X अक्ष</value>
-                    <value xml:lang="zh-CN">~X 轴...</value>
-                    <value xml:lang="pt">Eixo ~X...</value>
                 </prop>
             </node>
             <node oor:name=".uno:DiagramAxisY" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">~Y-Achse...</value>
                     <value xml:lang="en-US">~Y Axis...</value>
-                    <value xml:lang="ar">المحور ص...</value>
-                    <value xml:lang="no">~Y Axis...</value>
-                    <value xml:lang="ca">Eix ~Y...</value>
-                    <value xml:lang="zh-TW">~Y 軸...</value>
-                    <value xml:lang="cs">Osa Y</value>
-                    <value xml:lang="da">~Y-akse...</value>
-                    <value xml:lang="el">Άξονας ~Y...</value>
-                    <value xml:lang="es">Eje ~Y...</value>
-                    <value xml:lang="fi">~Y-akseli...</value>
-                    <value xml:lang="fr">Axe ~Y...</value>
-                    <value xml:lang="he">~Y-Achse...</value>
-                    <value xml:lang="it">Asse ~Y...</value>
-                    <value xml:lang="ja">Y軸(~Y)...</value>
-                    <value xml:lang="ko">Y축(~Y)...</value>
-                    <value xml:lang="nl">~Y-as...</value>
-                    <value xml:lang="pl">Oś Y...</value>
-                    <value xml:lang="pt-BR">Eixo ~Y...</value>
-                    <value xml:lang="ru">Ось Y...</value>
-                    <value xml:lang="sk">Os ~Y...</value>
-                    <value xml:lang="sv">~Y-axel...</value>
-                    <value xml:lang="th">แกน~Y ...</value>
-                    <value xml:lang="tr">~Y Ekseni...</value>
-                    <value xml:lang="hi">~Y अक्ष</value>
-                    <value xml:lang="zh-CN">~Y 轴...</value>
-                    <value xml:lang="pt">Eixo ~Y...</value>
                 </prop>
             </node>
             <node oor:name=".uno:DiagramAxisZ" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">~Z-Achse...</value>
                     <value xml:lang="en-US">~Z Axis...</value>
-                    <value xml:lang="ar">المحور ع...</value>
-                    <value xml:lang="no">~Z Axis...</value>
-                    <value xml:lang="ca">Eix ~Z...</value>
-                    <value xml:lang="zh-TW">~Z 軸...</value>
-                    <value xml:lang="cs">Osa Z</value>
-                    <value xml:lang="da">~Z-akse...</value>
-                    <value xml:lang="el">Άξονας ~Z...</value>
-                    <value xml:lang="es">Eje ~Z...</value>
-                    <value xml:lang="fi">~Z-akseli...</value>
-                    <value xml:lang="fr">Axe ~Z...</value>
-                    <value xml:lang="he">~Z-Achse...</value>
-                    <value xml:lang="it">Asse ~Z...</value>
-                    <value xml:lang="ja">Z軸(~Z)...</value>
-                    <value xml:lang="ko">Z축(~Z)...</value>
-                    <value xml:lang="nl">~Z-as...</value>
-                    <value xml:lang="pl">Oś Z...</value>
-                    <value xml:lang="pt-BR">Eixo ~Z...</value>
-                    <value xml:lang="ru">Ось Z...</value>
-                    <value xml:lang="sk">Os ~Z...</value>
-                    <value xml:lang="sv">~Z-axel...</value>
-                    <value xml:lang="th">แกน~Z ...</value>
-                    <value xml:lang="tr">~Z Ekseni...</value>
-                    <value xml:lang="hi">~Z अक्ष</value>
-                    <value xml:lang="zh-CN">~Z 轴...</value>
-                    <value xml:lang="pt">Eixo ~Z...</value>
                 </prop>
             </node>
             <node oor:name=".uno:DiagramAxisAll" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">~Alle Achsen...</value>
                     <value xml:lang="en-US">~All Axes...</value>
-                    <value xml:lang="ar">كل المحاور...</value>
-                    <value xml:lang="no">~All Axes...</value>
-                    <value xml:lang="ca">Tots els eixos...</value>
-                    <value xml:lang="zh-TW">所有的軸(~A)...</value>
-                    <value xml:lang="cs">Všechny osy</value>
-                    <value xml:lang="da">~Alle akser...</value>
-                    <value xml:lang="el">Ό~λοι οι άξονες...</value>
-                    <value xml:lang="es">~Todos los ejes...</value>
-                    <value xml:lang="fi">Kaikki akselit...</value>
-                    <value xml:lang="fr">~Tous les axes...</value>
-                    <value xml:lang="he">~Alle Achsen...</value>
-                    <value xml:lang="it">~Tutti gli assi...</value>
-                    <value xml:lang="ja">すべての軸(~A)...</value>
-                    <value xml:lang="ko">모든 축(~A)...</value>
-                    <value xml:lang="nl">~Alle assen...</value>
-                    <value xml:lang="pl">Wszystkie osie...</value>
-                    <value xml:lang="pt-BR">~Todos os eixos...</value>
-                    <value xml:lang="ru">Все оси...</value>
-                    <value xml:lang="sk">Všet~ky osi...</value>
-                    <value xml:lang="sv">~Alla axlar...</value>
-                    <value xml:lang="th">แกนทั้งหมด...</value>
-                    <value xml:lang="tr">~Tüm Eksenler...</value>
-                    <value xml:lang="hi">सब अक्ष...</value>
-                    <value xml:lang="zh-CN">所有的轴(~A)...</value>
-                    <value xml:lang="pt">~Todos os eixos...</value>
                 </prop>
             </node>
             <node oor:name=".uno:InsertStatistics" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">~Statistik...</value>
                     <value xml:lang="en-US">~Statistics...</value>
-                    <value xml:lang="ar">إحصائيات...</value>
-                    <value xml:lang="no">~Statistics...</value>
-                    <value xml:lang="ca">~Estadística...</value>
-                    <value xml:lang="zh-TW">統計(~S)...</value>
-                    <value xml:lang="cs">Statistika...</value>
-                    <value xml:lang="da">~Statistik...</value>
-                    <value xml:lang="el">~Στατιστικά...</value>
-                    <value xml:lang="es">~Estadística...</value>
-                    <value xml:lang="fi">~Tilastotiedot</value>
-                    <value xml:lang="fr">~Statistiques...</value>
-                    <value xml:lang="he">‮סטטיסטיקות...‬</value>
-                    <value xml:lang="it">~Statistica...</value>
-                    <value xml:lang="ja">統計(~S)...</value>
-                    <value xml:lang="ko">통계(~S)...</value>
-                    <value xml:lang="nl">~Statistiek...</value>
-                    <value xml:lang="pl">~Statystyka...</value>
-                    <value xml:lang="pt-BR">Estatísticas</value>
-                    <value xml:lang="ru">Статистика...</value>
-                    <value xml:lang="sk">Štati~stika</value>
-                    <value xml:lang="sv">~Statistik...</value>
-                    <value xml:lang="th">~สถิติ...</value>
-                    <value xml:lang="tr">~İstatistikler...</value>
-                    <value xml:lang="hi">~Statistics...</value>
-                    <value xml:lang="zh-CN">统计(~S)...</value>
-                    <value xml:lang="pt">~Estatística...</value>
                 </prop>
             </node>
             <node oor:name=".uno:MainTitle" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">~Haupttitel...</value>
                     <value xml:lang="en-US">~Main Title...</value>
-                    <value xml:lang="ar">العنوان الرئيسي...</value>
-                    <value xml:lang="no">~Main Title...</value>
-                    <value xml:lang="ca">Títol ~principal...</value>
-                    <value xml:lang="zh-TW">主標題(~M)...</value>
-                    <value xml:lang="cs">Hlavní nadpis...</value>
-                    <value xml:lang="da">~Hovedtitel...</value>
-                    <value xml:lang="el">~Κύριος τίτλος...</value>
-                    <value xml:lang="es">Título ~principal...</value>
-                    <value xml:lang="fi">~Pääotsikko</value>
-                    <value xml:lang="fr">Titre ~principal...</value>
-                    <value xml:lang="he">~Haupttitel...</value>
-                    <value xml:lang="it">Titolo principale...</value>
-                    <value xml:lang="ja">メインタイトル(~M)...</value>
-                    <value xml:lang="ko">주 제목(~M)...</value>
-                    <value xml:lang="nl">~Hoofdtitel...</value>
-                    <value xml:lang="pl">Tytuł główny...</value>
-                    <value xml:lang="pt-BR">Título ~principal...</value>
-                    <value xml:lang="ru">Главный заголовок...</value>
-                    <value xml:lang="sk">~Hlavný nadpis...</value>
-                    <value xml:lang="sv">~Huvudrubrik...</value>
-                    <value xml:lang="th">ชื่อ~หลัก...</value>
-                    <value xml:lang="tr">Ana ~Başlık..</value>
-                    <value xml:lang="hi">~प्रधान शीर्षक्...</value>
-                    <value xml:lang="zh-CN">主标题(~M)...</value>
-                    <value xml:lang="pt">~Título principal...</value>
                 </prop>
             </node>
             <node oor:name=".uno:SubTitle" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">~Untertitel...</value>
                     <value xml:lang="en-US">S~ubtitle...</value>
-                    <value xml:lang="ar">عنوان فرعي...</value>
-                    <value xml:lang="no">S~ubtitle...</value>
-                    <value xml:lang="ca">~Subtítol...</value>
-                    <value xml:lang="zh-TW">分標題(~U)...</value>
-                    <value xml:lang="cs">Podtitul...</value>
-                    <value xml:lang="da">Undertitel...</value>
-                    <value xml:lang="el">~Υπότιτλος...</value>
-                    <value xml:lang="es">~Subtítulo...</value>
-                    <value xml:lang="fi">Ala~otsikko</value>
-                    <value xml:lang="fr">~Sous-titre...</value>
-                    <value xml:lang="he">~Untertitel...</value>
-                    <value xml:lang="it">Sottotitolo...</value>
-                    <value xml:lang="ja">サブタイトル(~U)...</value>
-                    <value xml:lang="ko">부제(~U)...</value>
-                    <value xml:lang="nl">~Subtitel...</value>
-                    <value xml:lang="pl">Podtytuł...</value>
-                    <value xml:lang="pt-BR">~Sub-título...</value>
-                    <value xml:lang="ru">Подзаголовок...</value>
-                    <value xml:lang="sk">P~odnadpis...</value>
-                    <value xml:lang="sv">~Underrubrik...</value>
-                    <value xml:lang="th">ชื่อ~รอง...</value>
-                    <value xml:lang="tr">~Altbaşlık...</value>
-                    <value xml:lang="hi">उ~पशीर्षक...</value>
-                    <value xml:lang="zh-CN">分标题(~U)...</value>
-                    <value xml:lang="pt">~Subtítulo...</value>
                 </prop>
             </node>
             <node oor:name=".uno:XTitle" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">~X-Achsentitel...</value>
                     <value xml:lang="en-US">Title (~X Axis)...</value>
-                    <value xml:lang="ar">عنوان المحور س...</value>
-                    <value xml:lang="no">Title (~X Axis)...</value>
-                    <value xml:lang="ca">Títol de l&apos;eix ~X...</value>
-                    <value xml:lang="zh-TW">標題(~X 軸)...</value>
-                    <value xml:lang="cs">Popis osy X</value>
-                    <value xml:lang="da">X-aksetitel...</value>
-                    <value xml:lang="el">Τίτλος άξονα ~X...</value>
-                    <value xml:lang="es">Título del eje ~X...</value>
-                    <value xml:lang="fi">Otsikko (~X-akseli)</value>
-                    <value xml:lang="fr">Titre de l&apos;axe ~X...</value>
-                    <value xml:lang="he">~X-Achsentitel...</value>
-                    <value xml:lang="it">Titolo asse ~X...</value>
-                    <value xml:lang="ja">X軸タイトル(~X)...</value>
-                    <value xml:lang="ko">X축 제목(~X)...</value>
-                    <value xml:lang="nl">Titel  ~X-as...</value>
-                    <value xml:lang="pl">Tytuł osi X...</value>
-                    <value xml:lang="pt-BR">Título do eixo ~X...</value>
-                    <value xml:lang="ru">Заголовок оси X...</value>
-                    <value xml:lang="sk">Titulok (os ~X)...</value>
-                    <value xml:lang="sv">~X-axelrubrik...</value>
-                    <value xml:lang="th">ชื่อ (แกน~X )...</value>
-                    <value xml:lang="tr">Başlık (~X Ekseni)...</value>
-                    <value xml:lang="hi">~X अक्ष का शीर्षक....</value>
-                    <value xml:lang="zh-CN">~X 轴标题...</value>
-                    <value xml:lang="pt">Título do eixo ~X...</value>
                 </prop>
             </node>
             <node oor:name=".uno:YTitle" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">~Y-Achsentitel...</value>
                     <value xml:lang="en-US">Title (~Y Axis)...</value>
-                    <value xml:lang="ar">عنوان المحور ص...</value>
-                    <value xml:lang="no">Title (~Y Axis)...</value>
-                    <value xml:lang="ca">Títol de l&apos;eix ~Y...</value>
-                    <value xml:lang="zh-TW">標題(~Y 軸)...</value>
-                    <value xml:lang="cs">Popis osy Y</value>
-                    <value xml:lang="da">Y-aksetitel...</value>
-                    <value xml:lang="el">Τίτλος άξονα ~Y...</value>
-                    <value xml:lang="es">Título del eje ~Y...</value>
-                    <value xml:lang="fi">Otsikko (~Y-akseli)</value>
-                    <value xml:lang="fr">Titre de l&apos;axe ~Y...</value>
-                    <value xml:lang="he">~Y-Achsentitel...</value>
-                    <value xml:lang="it">Titolo asse ~Y...</value>
-                    <value xml:lang="ja">Y軸タイトル(~Y)...</value>
-                    <value xml:lang="ko">Y축 제목(~Y)...</value>
-                    <value xml:lang="nl">Titel ~ Y -as...</value>
-                    <value xml:lang="pl">Tytuł osi Y...</value>
-                    <value xml:lang="pt-BR">Título do eixo ~Y...</value>
-                    <value xml:lang="ru">Заголовок оси Y...</value>
-                    <value xml:lang="sk">Titulok (os ~Y)...</value>
-                    <value xml:lang="sv">~Y-axelrubrik...</value>
-                    <value xml:lang="th">ชื่อ (แกน~Y )...</value>
-                    <value xml:lang="tr">Başlık (~Y Eksen)...</value>
-                    <value xml:lang="hi">~Y अक्ष का शीर्षक...</value>
-                    <value xml:lang="zh-CN">~Y 轴标题...</value>
-                    <value xml:lang="pt">Título do eixo ~Y...</value>
                 </prop>
             </node>
             <node oor:name=".uno:ZTitle" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">~Z-Achsentitel...</value>
                     <value xml:lang="en-US">Title (~Z Axis)...</value>
-                    <value xml:lang="ar">عنوان المحور ع...</value>
-                    <value xml:lang="no">Title (~Z Axis)...</value>
-                    <value xml:lang="ca">Títol de l&apos;eix ~Z...</value>
-                    <value xml:lang="zh-TW">標題(~Z 軸)...</value>
-                    <value xml:lang="cs">Popis osy Z</value>
-                    <value xml:lang="da">Z-aksetitel...</value>
-                    <value xml:lang="el">Τίτλος άξονα ~Z...</value>
-                    <value xml:lang="es">Título del eje ~Z...</value>
-                    <value xml:lang="fi">Otsikko (~Z-akseli)</value>
-                    <value xml:lang="fr">Titre de l&apos;axe ~Z...</value>
-                    <value xml:lang="he">~Z-Achsentitel...</value>
-                    <value xml:lang="it">Titolo asse ~Z...</value>
-                    <value xml:lang="ja">Z軸タイトル(~Z)...</value>
-                    <value xml:lang="ko">Z축 제목(~Z)...</value>
-                    <value xml:lang="nl">Titel  ~Z-as...</value>
-                    <value xml:lang="pl">Tytuł osi Z...</value>
-                    <value xml:lang="pt-BR">Título do eixo ~Z...</value>
-                    <value xml:lang="ru">Заголовок оси Z...</value>
-                    <value xml:lang="sk">Titulok (os ~Z)...</value>
-                    <value xml:lang="sv">~Z-axelrubrik...</value>
-                    <value xml:lang="th">ชื่อ (แกน~Z )...</value>
-                    <value xml:lang="tr">Başlık (~Z Ekseni)...</value>
-                    <value xml:lang="hi">~Z अक्ष का शीर्षक...</value>
-                    <value xml:lang="zh-CN">~Z 轴标题...</value>
-                    <value xml:lang="pt">Título do eixo ~Z...</value>
                 </prop>
             </node>
             <node oor:name=".uno:AllTitles" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">~Alle Titel...</value>
                     <value xml:lang="en-US">~All Titles...</value>
-                    <value xml:lang="ar">كل العناوين...</value>
-                    <value xml:lang="no">~All Titles...</value>
-                    <value xml:lang="ca">~Tots els títols...</value>
-                    <value xml:lang="zh-TW">全部的標題(~A)...</value>
-                    <value xml:lang="cs">Všechny názvy...</value>
-                    <value xml:lang="da">~Alle titler...</value>
-                    <value xml:lang="el">Όλ~οι οι τίτλοι...</value>
-                    <value xml:lang="es">~Todos los títulos...</value>
-                    <value xml:lang="fi">Kaikki otsikot...</value>
-                    <value xml:lang="fr">T~ous les titres...</value>
-                    <value xml:lang="he">~Alle Titel...</value>
-                    <value xml:lang="it">~Tutti i titoli...</value>
-                    <value xml:lang="ja">すべてのタイトル(~A)...</value>
-                    <value xml:lang="ko">모든 제목(~A)...</value>
-                    <value xml:lang="nl">~Alle titels...</value>
-                    <value xml:lang="pl">Wszystkie tytuły...</value>
-                    <value xml:lang="pt-BR">~Todos os títulos...</value>
-                    <value xml:lang="ru">Все заголовки...</value>
-                    <value xml:lang="sk">Vš~etky názvy...</value>
-                    <value xml:lang="sv">~Alla rubriker...</value>
-                    <value xml:lang="th">ชื่อทั้งหมด...</value>
-                    <value xml:lang="tr">Bütün Başlıklar...</value>
-                    <value xml:lang="hi">सब शीर्षक्...</value>
-                    <value xml:lang="zh-CN">全部的标题(~A)...</value>
-                    <value xml:lang="pt">~Todos os títulos...</value>
                 </prop>
             </node>
             <node oor:name=".uno:DiagramGridXMain" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">~Y-Achsenhauptgitter...</value>
                     <value xml:lang="en-US">~Y Axis Main Grid...</value>
-                    <value xml:lang="ar">الشبكة الرئيسية للمحور ص...</value>
-                    <value xml:lang="no">~Y Axis Main Grid...</value>
-                    <value xml:lang="ca">Graella principal de l&apos;eix ~Y...</value>
-                    <value xml:lang="zh-TW">~Y 軸網格線...</value>
-                    <value xml:lang="cs">Hlavní mřížka osy Y...</value>
-                    <value xml:lang="da">~Y-akse overordnet gitter...</value>
-                    <value xml:lang="el">Κύριο πλέγμα άξονα ~Y...</value>
-                    <value xml:lang="es">Cuadrícula principal del eje ~Y...</value>
-                    <value xml:lang="fi">~Y-akselin pääruudukko...</value>
-                    <value xml:lang="fr">Grille principale de l&apos;axe ~Y...</value>
-                    <value xml:lang="he">~Y-Achsenhauptgitter...</value>
-                    <value xml:lang="it">Griglia principale asse ~Y...</value>
-                    <value xml:lang="ja">Y軸主目盛線(~Y)...</value>
-                    <value xml:lang="ko">Y축 주 눈금선(~Y)...</value>
-                    <value xml:lang="nl">Hoofdraster ~Y-as...</value>
-                    <value xml:lang="pl">Główna siatka osi Y...</value>
-                    <value xml:lang="pt-BR">Grade principal do eixo ~X</value>
-                    <value xml:lang="ru">Основная сетка оси Y...</value>
-                    <value xml:lang="sk">Hlavná mriežka osi ~Y...</value>
-                    <value xml:lang="sv">~Y-axelhuvudgitter...</value>
-                    <value xml:lang="th">เส้นตารางหลักแกน~Y ...</value>
-                    <value xml:lang="tr">~Y Ekseni Ana Izgarası...</value>
-                    <value xml:lang="hi">~Y अक्ष का प्रधान जाल...</value>
-                    <value xml:lang="zh-CN">~Y 轴主网格线...</value>
-                    <value xml:lang="pt">Grelha principal do eixo ~Y...</value>
                 </prop>
             </node>
             <node oor:name=".uno:DiagramGridYMain" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">~X-Achsenhauptgitter...</value>
                     <value xml:lang="en-US">~X Axis Main Grid...</value>
-                    <value xml:lang="ar">الشبكة الرئيسية للمحور س...</value>
-                    <value xml:lang="no">~X Axis Main Grid...</value>
-                    <value xml:lang="ca">Graella principal de l&apos;eix ~X...</value>
-                    <value xml:lang="zh-TW">~X 軸主網格線...</value>
-                    <value xml:lang="cs">Hlavní mřížka osy X...</value>
-                    <value xml:lang="da">~X-akse overordnet gitter...</value>
-                    <value xml:lang="el">Κύριο πλέγμα άξονα ~Χ...</value>
-                    <value xml:lang="es">Cuadrícula principal del eje ~X....</value>
-                    <value xml:lang="fi">~X-akselin pääruudukko</value>
-                    <value xml:lang="fr">Grille principale de l&apos;axe ~X...</value>
-                    <value xml:lang="he">~X-Achsenhauptgitter...</value>
-                    <value xml:lang="it">Griglia principale asse ~X...</value>
-                    <value xml:lang="ja">X軸主目盛線(~X)...</value>
-                    <value xml:lang="ko">X축 주 눈금선(~X)...</value>
-                    <value xml:lang="nl">Hoofdraster ~X-as...</value>
-                    <value xml:lang="pl">Główna siatka osi X...</value>
-                    <value xml:lang="pt-BR">Grade principal do eixo ~Y</value>
-                    <value xml:lang="ru">Основная сетка оси X...</value>
-                    <value xml:lang="sk">Hlavná mriežka osi ~X...</value>
-                    <value xml:lang="sv">~X-axelhuvudgitter...</value>
-                    <value xml:lang="th">เส้นตารางหลักแกน~ X ...</value>
-                    <value xml:lang="tr">X ~Koordinatı Ana Izgarası...</value>
-                    <value xml:lang="hi">~X अक्ष का प्रधान जाल...</value>
-                    <value xml:lang="zh-CN">~X 轴主网格线...</value>
-                    <value xml:lang="pt">Grelha ~principal do eixo X...</value>
                 </prop>
             </node>
             <node oor:name=".uno:DiagramGridZMain" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">~Z-Achsenhauptgitter...</value>
                     <value xml:lang="en-US">~Z Axis Main Grid...</value>
-                    <value xml:lang="ar">شبكة رئيسية للمحور ع...</value>
-                    <value xml:lang="no">~Z Axis Main Grid...</value>
-                    <value xml:lang="ca">Graella principal de l&apos;eix ~Z...</value>
-                    <value xml:lang="zh-TW">~Z 軸主網格線...</value>
-                    <value xml:lang="cs">Hlavní mřížka osy Z</value>
-                    <value xml:lang="da">~Z-akse overordnet gitter...</value>
-                    <value xml:lang="el">Κύριο πλέγμα άξονα ~Z...</value>
-                    <value xml:lang="es">Cuadrícula principal del eje ~Z...</value>
-                    <value xml:lang="fi">~Z-akselin pääruudukko...</value>
-                    <value xml:lang="fr">Grille principale de l&apos;axe ~Z...</value>
-                    <value xml:lang="he">~Z-Achsenhauptgitter...</value>
-                    <value xml:lang="it">Griglia principale asse ~Z...</value>
-                    <value xml:lang="ja">Z軸主目盛線(~Z)...</value>
-                    <value xml:lang="ko">Z축 주 눈금선(~Z)...</value>
-                    <value xml:lang="nl">Hoofdraster ~Z-as...</value>
-                    <value xml:lang="pl">Główna siatka osi Z...</value>
-                    <value xml:lang="pt-BR">Grade principal do eixo ~Z...</value>
-                    <value xml:lang="ru">Основная сетка оси Z...</value>
-                    <value xml:lang="sk">Hlavná mriežka osi ~Z...</value>
-                    <value xml:lang="sv">~Z-axelhuvudgitter...</value>
-                    <value xml:lang="th">เส้นตารางหลักแกน~Z ...</value>
-                    <value xml:lang="tr">~Z Ekseni Ana Izgarası...</value>
-                    <value xml:lang="hi">~Z अक्ष का प्रधान जाल...</value>
-                    <value xml:lang="zh-CN">~Z 轴主网格线...</value>
-                    <value xml:lang="pt">Grelha p~rincipal do eixo Z...</value>
                 </prop>
             </node>
             <node oor:name=".uno:DiagramGridAll" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">~Alle Achsengitter...</value>
                     <value xml:lang="en-US">~All Axis Grids...</value>
-                    <value xml:lang="ar">كل شبكات المحاور...</value>
-                    <value xml:lang="no">~All Axis Grids...</value>
-                    <value xml:lang="ca">~Totes les graelles de l&apos;eix...</value>
-                    <value xml:lang="zh-TW">所有的軸網格線(~A)...</value>
-                    <value xml:lang="cs">Mřížky všech os</value>
-                    <value xml:lang="da">~Alle aksegitre...</value>
-                    <value xml:lang="el">Όλ~α τα πλέγματα αξόνων...</value>
-                    <value xml:lang="es">~Todas las cuadrículas de ejes...</value>
-                    <value xml:lang="fi">~Kaikki akseliruudukot...</value>
-                    <value xml:lang="fr">~Toutes les grilles d&apos;axes...</value>
-                    <value xml:lang="he">~Alle Achsengitter...</value>
-                    <value xml:lang="it">Tutte le griglie degli assi...</value>
-                    <value xml:lang="ja">すべての軸目盛線(~A)...</value>
-                    <value xml:lang="ko">모든 축 눈금선(~A)...</value>
-                    <value xml:lang="nl">~Alle asrasters...</value>
-                    <value xml:lang="pl">Wszystkie siatki osi...</value>
-                    <value xml:lang="pt-BR">~Todas as grades dos eixos...</value>
-                    <value xml:lang="ru">Все сетки оси...</value>
-                    <value xml:lang="sk">Mriežky všetkých ~osí...</value>
-                    <value xml:lang="sv">~Alla axelgitter...</value>
-                    <value xml:lang="th">เส้นตารางแกน~ทั้งหมด...</value>
-                    <value xml:lang="tr">~Tüm Eksen Izgaraları...</value>
-                    <value xml:lang="hi">~सब अक्ष का जाल..</value>
-                    <value xml:lang="zh-CN">全部的轴网格线(~A)...</value>
-                    <value xml:lang="pt">~Todas as grelhas dos eixos...</value>
                 </prop>
             </node>
             <node oor:name=".uno:DiagramObjects" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">~Objekteigenschaften...</value>
                     <value xml:lang="en-US">~Object Properties...</value>
-                    <value xml:lang="ar">خصائص الكائن...</value>
-                    <value xml:lang="no">~Object Properties...</value>
-                    <value xml:lang="ca">~Propietats de l&apos;objecte...</value>
-                    <value xml:lang="zh-TW">物件屬性(~O)...</value>
-                    <value xml:lang="cs">Vlastnosti objektu...</value>
-                    <value xml:lang="da">~Objektegenskaber...</value>
-                    <value xml:lang="el">Ιδιότητες αντικειμέν~ων...</value>
-                    <value xml:lang="es">~Propiedades del objeto...</value>
-                    <value xml:lang="fi">~Objektin ominaisuudet</value>
-                    <value xml:lang="fr">Propriétés de l&apos;~objet...</value>
-                    <value xml:lang="he">~Objekteigenschaften...</value>
-                    <value xml:lang="it">Proprietà ~oggetto...</value>
-                    <value xml:lang="ja">オブジェクトの属性(~O)...</value>
-                    <value xml:lang="ko">개체 등록 정보(~O)...</value>
-                    <value xml:lang="nl">~Objecteigenschappen</value>
-                    <value xml:lang="pl">Właściwości obiektu...</value>
-                    <value xml:lang="pt-BR">Linha de dados/~ponto...</value>
-                    <value xml:lang="ru">~Свойства объекта...</value>
-                    <value xml:lang="sk">Vlastnosti ~objektu...</value>
-                    <value xml:lang="sv">~Objektegenskaper...</value>
-                    <value xml:lang="th">คุณสมบัติ~วัตถุ...</value>
-                    <value xml:lang="tr">~Nesne Özellikleri...</value>
-                    <value xml:lang="hi">~वस्तु का विशेषतायें...</value>
-                    <value xml:lang="zh-CN">对象属性(~O)...</value>
-                    <value xml:lang="pt">~Propriedades do objecto...</value>
                 </prop>
             </node>
             <node oor:name=".uno:DiagramGridXHelp" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Y-Ac~hsenhilfsgitter...</value>
                     <value xml:lang="en-US">Y Axis Minor ~Grid...</value>
-                    <value xml:lang="ar">شبكة مساعدة للمحور ص...</value>
-                    <value xml:lang="no">Y Axis Minor ~Grid...</value>
-                    <value xml:lang="ca">Cuadrícula auxiliar de l&apos;eix ~Y...</value>
-                    <value xml:lang="zh-TW">Y 軸次網格線(~G)...</value>
-                    <value xml:lang="cs">Vedlejší mřížka osy Y...</value>
-                    <value xml:lang="da">Y-akse underordnet gitter...</value>
-                    <value xml:lang="el">Βοη~θητικό πλέγμα του άξονα Y...</value>
-                    <value xml:lang="es">Cuadrícula auxiliar del eje ~Y...</value>
-                    <value xml:lang="fi">Y-akselin toissijainen ruudukko...</value>
-                    <value xml:lang="fr">Grille auxiliaire de l&apos;axe ~Y...</value>
-                    <value xml:lang="he">Y-Ac~hsenhilfsgitter...</value>
-                    <value xml:lang="it">Griglia ausiliaria ~asse Y...</value>
-                    <value xml:lang="ja">Y軸補助目盛線(~G)...</value>
-                    <value xml:lang="ko">Y축 보조 눈금선(~G)...</value>
-                    <value xml:lang="nl">Hulpraster ~Y-as...</value>
-                    <value xml:lang="pl">Pomocnicza siatka osi Y...</value>
-                    <value xml:lang="pt-BR">Grade auxiliar do eixo ~X</value>
-                    <value xml:lang="ru">Промежуточная сетка оси Y...</value>
-                    <value xml:lang="sk">Vedľajšia mriež~ka osy Y...</value>
-                    <value xml:lang="sv">Y-axel~stödgitter...</value>
-                    <value xml:lang="th">เ~ส้นตารางรองแกน Y...</value>
-                    <value xml:lang="tr">Y Ekseni Küçük ~Izgarası...</value>
-                    <value xml:lang="hi">Y अक्ष का ~छोटा जाल...</value>
-                    <value xml:lang="zh-CN">Y 轴次网格线(~G)...</value>
-                    <value xml:lang="pt">Grelha auxiliar do eixo ~Y...</value>
                 </prop>
             </node>
             <node oor:name=".uno:DiagramGridYHelp" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">X-A~chsenhilfsgitter...</value>
                     <value xml:lang="en-US">X Axis ~Minor Grid...</value>
-                    <value xml:lang="ar">شبكة مساعدة للمحور س...</value>
-                    <value xml:lang="no">X Axis ~Minor Grid...</value>
-                    <value xml:lang="ca">Cuadrícula auxiliar de l&apos;eix ~X...</value>
-                    <value xml:lang="zh-TW">X 軸次網格線(~M)...</value>
-                    <value xml:lang="cs">Vedlejší mřížka osy X...</value>
-                    <value xml:lang="da">X-akse underordnet gitter...</value>
-                    <value xml:lang="el">Βοη~θητικό πλέγμα του άξονα Χ...</value>
-                    <value xml:lang="es">Cuadrícula auxiliar del eje ~X...</value>
-                    <value xml:lang="fi">X-akselin toissijainen ruudukko...</value>
-                    <value xml:lang="fr">Grille auxiliaire de l&apos;axe ~X...</value>
-                    <value xml:lang="he">X-A~chsenhilfsgitter...</value>
-                    <value xml:lang="it">Griglia ausiliaria a~sse X...</value>
-                    <value xml:lang="ja">X軸補助目盛線(~M)...</value>
-                    <value xml:lang="ko">X축 보조 눈금선(~M)...</value>
-                    <value xml:lang="nl">Hulpraster ~X-as...</value>
-                    <value xml:lang="pl">Pomocnicza siatka osi X...</value>
-                    <value xml:lang="pt-BR">Grade auxiliar do eixo ~Y</value>
-                    <value xml:lang="ru">Промежуточная сетка оси X...</value>
-                    <value xml:lang="sk">Vedľajšia ~mriežka osi X...</value>
-                    <value xml:lang="sv">X-axels~tödgitter...</value>
-                    <value xml:lang="th">เส้นตาราง~รองแกน X ...</value>
-                    <value xml:lang="tr">X Ekseni ~Küçük Izgarası...</value>
-                    <value xml:lang="hi">X अक्ष का ~छोटा जाल...</value>
-                    <value xml:lang="zh-CN">X 轴次网格线(~M)...</value>
-                    <value xml:lang="pt">Grelha auxiliar do eixo ~X...</value>
                 </prop>
             </node>
             <node oor:name=".uno:DiagramGridZHelp" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Z-Ach~senhilfsgitter...</value>
                     <value xml:lang="en-US">Z Ax~is Minor Grid...</value>
-                    <value xml:lang="ar">شبكة مساعدة للمحور ع...</value>
-                    <value xml:lang="no">Z Ax~is Minor Grid...</value>
-                    <value xml:lang="ca">Cuadrícula auxiliar de l&apos;eix ~Z...</value>
-                    <value xml:lang="zh-TW">Z 軸次網格線(~I)...</value>
-                    <value xml:lang="cs">Vedlejší mřížka osy Z...</value>
-                    <value xml:lang="da">Z-akse underordnet gitter...</value>
-                    <value xml:lang="el">Βοηθητικό πλέγμα του άξονα Z...</value>
-                    <value xml:lang="es">Cuadrícula auxiliar del eje ~Z...</value>
-                    <value xml:lang="fi">Z Ak~selin toissijainen ruudukko...</value>
-                    <value xml:lang="fr">Grille auxiliaire de l&apos;axe ~Z...</value>
-                    <value xml:lang="he">Z-Ach~senhilfsgitter...</value>
-                    <value xml:lang="it">Griglia ausiliaria ass~e Z...</value>
-                    <value xml:lang="ja">Z軸補助目盛線(~I)...</value>
-                    <value xml:lang="ko">Z축 보조 눈금선(~I)...</value>
-                    <value xml:lang="nl">Hulpraster ~Z-as...</value>
-                    <value xml:lang="pl">Pomocnicza siatka osi Z...</value>
-                    <value xml:lang="pt-BR">Grade auxiliar do eixo ~Z</value>
-                    <value xml:lang="ru">Промежуточная сетка оси Z...</value>
-                    <value xml:lang="sk">Vedľajšia mr~iežka osy Z...</value>
-                    <value xml:lang="sv">Z-axelstö~dgitter...</value>
-                    <value xml:lang="th">เส้นตารางรองแก~น Z ...</value>
-                    <value xml:lang="tr">Z Ek~seni Küçük Izgarası...</value>
-                    <value xml:lang="hi">Z अक्ष का ~छोटा जाल...</value>
-                    <value xml:lang="zh-CN">Z 轴次网格线(~I)...</value>
-                    <value xml:lang="pt">Grelha a~uxiliar do eixo Z...</value>
                 </prop>
             </node>
             <node oor:name=".uno:ScaleText" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Textskalierung</value>
                     <value xml:lang="en-US">Scale Text</value>
-                    <value xml:lang="ar">تحجيم النص</value>
-                    <value xml:lang="no">Scale Text</value>
-                    <value xml:lang="ca">Redimensiona el text</value>
-                    <value xml:lang="zh-TW">文字顯示比例</value>
-                    <value xml:lang="cs">Škálovat text</value>
-                    <value xml:lang="da">Tekstskalering</value>
-                    <value xml:lang="el">Κλίμακα κειμένου</value>
-                    <value xml:lang="es">Redimensionar texto</value>
-                    <value xml:lang="fi">Skaalaa teksti</value>
-                    <value xml:lang="fr">Échelle de texte</value>
-                    <value xml:lang="he">‮התאמת גודל הטקסט‬</value>
-                    <value xml:lang="it">Scala testo</value>
-                    <value xml:lang="ja">テキストのスケール</value>
-                    <value xml:lang="ko">텍스트 배율 조정</value>
-                    <value xml:lang="nl">Tekst op schaal brengen</value>
-                    <value xml:lang="pl">Skaluj tekst</value>
-                    <value xml:lang="pt-BR">Escalonar o Texto</value>
-                    <value xml:lang="ru">Масштаб текста</value>
-                    <value xml:lang="sk">Upraviť mierku textu</value>
-                    <value xml:lang="sv">Textskalning</value>
-                    <value xml:lang="th">สเกลข้อความ</value>
-                    <value xml:lang="tr">Metin ölçeklendirme</value>
-                    <value xml:lang="hi">नापना टेक्स्ट्</value>
-                    <value xml:lang="zh-CN">文字显示比例</value>
-                    <value xml:lang="pt">Dimensionar texto</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -1469,186 +319,36 @@
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Beschriftungsart der Diagrammdaten</value>
                     <value xml:lang="en-US">Caption Type for Chart Data</value>
-                    <value xml:lang="ar">طريقة عنونة بيانات الرسم البياني</value>
-                    <value xml:lang="no">Caption Type for Chart Data</value>
-                    <value xml:lang="ca">Tipus de llegenda per a les dades del diagrama</value>
-                    <value xml:lang="zh-TW">圖表資料的標籤</value>
-                    <value xml:lang="cs">Typ popisku pro data grafu</value>
-                    <value xml:lang="da">Etikettype for diagramdata</value>
-                    <value xml:lang="el">Τύπος λεζάντας για τα δεδομένα διαγράμματος</value>
-                    <value xml:lang="es">Típo de etiqueta de los datos del diagrama</value>
-                    <value xml:lang="fi">Kaaviotietojen otsikkotyyppi</value>
-                    <value xml:lang="fr">Type d&apos;étiquette pour les données du diagramme</value>
-                    <value xml:lang="he">‮סוג הכתובית לנתוני התרשים‬</value>
-                    <value xml:lang="it">Tipo di dicitura dei dati del diagramma</value>
-                    <value xml:lang="ja">グラフデータのラベル</value>
-                    <value xml:lang="ko">차트 데이터 캡션 형태</value>
-                    <value xml:lang="nl">Opschrifttype van diagramgegevens</value>
-                    <value xml:lang="pl">Typ podpisu danych na wykresie</value>
-                    <value xml:lang="pt-BR">Tipo de Legenda para Dados do Gráfico</value>
-                    <value xml:lang="ru">Тип названия данных диаграммы</value>
-                    <value xml:lang="sk">Typ popisu pre dáta grafu</value>
-                    <value xml:lang="sv">Etikettyp på diagramdata</value>
-                    <value xml:lang="th">ชนิดคำอธิบายภาพสำหรับข้อมูลแผนภูมิ</value>
-                    <value xml:lang="tr">Şema verileri resim yazısı türü</value>
-                    <value xml:lang="hi">चार्ट ड़ॉटा के लिए नाम</value>
-                    <value xml:lang="zh-CN">图表数据标志的类型</value>
-                    <value xml:lang="pt">Tipo de rótulo para dados do gráfico</value>
                 </prop>
             </node>
             <node oor:name=".uno:LegendPosition" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Position der Legende</value>
                     <value xml:lang="en-US">Legend Position</value>
-                    <value xml:lang="ar">موضع مفتاح الرسم البياني</value>
-                    <value xml:lang="no">Legend Position</value>
-                    <value xml:lang="ca">Posició de la llegenda</value>
-                    <value xml:lang="zh-TW">圖例位置</value>
-                    <value xml:lang="cs">Umístění legendy</value>
-                    <value xml:lang="da">Placering af forklaring</value>
-                    <value xml:lang="el">Θέση υπομνήματος</value>
-                    <value xml:lang="es">Posición de la leyenda</value>
-                    <value xml:lang="fi">Selitteen sijanti</value>
-                    <value xml:lang="fr">Position de la légende</value>
-                    <value xml:lang="he">‮מיקום המקרא‬</value>
-                    <value xml:lang="it">Posizione della legenda</value>
-                    <value xml:lang="ja">凡例の位置</value>
-                    <value xml:lang="ko">범례 위치</value>
-                    <value xml:lang="nl">Positie van legenda</value>
-                    <value xml:lang="pl">Położenie legendy</value>
-                    <value xml:lang="pt-BR">Posição da Legenda</value>
-                    <value xml:lang="ru">Позиция легенды</value>
-                    <value xml:lang="sk">Umiestnenie legendy</value>
-                    <value xml:lang="sv">Förklaringens position</value>
-                    <value xml:lang="th">ตำแหน่งคำอธิบาย</value>
-                    <value xml:lang="tr">Açıklamanın konumu</value>
-                    <value xml:lang="hi">लेजन्ड स्थान</value>
-                    <value xml:lang="zh-CN">图例位置</value>
-                    <value xml:lang="pt">Posição da legenda</value>
                 </prop>
             </node>
             <node oor:name=".uno:DefaultColors" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Defaultfarben der Datenreihen</value>
                     <value xml:lang="en-US">Default Colors for Data Series</value>
-                    <value xml:lang="ar">ألوان افتراضية لصفوف البيانات</value>
-                    <value xml:lang="no">Default Colors for Data Series</value>
-                    <value xml:lang="ca">Colors estàndard de las series de dades</value>
-                    <value xml:lang="zh-TW">資料欄的默認顏色</value>
-                    <value xml:lang="cs">Výchozí barvy pro řady dat</value>
-                    <value xml:lang="da">Standardfarver for dataserierne</value>
-                    <value xml:lang="el">Χρώματα προεπιλογής των σειρών δεδομένων</value>
-                    <value xml:lang="es">Colores predeterminados de las series de datos</value>
-                    <value xml:lang="fi">Tietosarjojen oletusvärit</value>
-                    <value xml:lang="fr">Couleurs par défaut des séries de données</value>
-                    <value xml:lang="he">‮צבעי ברירת המחדל לסדרת הנתונים‬</value>
-                    <value xml:lang="it">Colori standard delle serie di dati</value>
-                    <value xml:lang="ja">データ系列の既定色</value>
-                    <value xml:lang="ko">연속 데이터 기본 색상</value>
-                    <value xml:lang="nl">Standaardkleuren van de gegevensreeksen</value>
-                    <value xml:lang="pl">Kolory domyślne w serii danych</value>
-                    <value xml:lang="pt-BR">Cores Padrão para Série de Dados</value>
-                    <value xml:lang="ru">Цвета по умолчанию рядов данных</value>
-                    <value xml:lang="sk">Východzie farby pre rady dát</value>
-                    <value xml:lang="sv">Standardfärger för dataserierna</value>
-                    <value xml:lang="th">ค่าสีเริ่มต้นสำหรับชุดข้อมูล</value>
-                    <value xml:lang="tr">Standart veri dizileri renkleri</value>
-                    <value xml:lang="hi">ड़ॉटा श्रृंखला के लिए अनुपस्थिति रंग</value>
-                    <value xml:lang="zh-CN">数据组的默认颜色</value>
-                    <value xml:lang="pt">Cores-padrão para séries de dados</value>
                 </prop>
             </node>
             <node oor:name=".uno:BarWidth" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Breite der Säulen</value>
                     <value xml:lang="en-US">Bar Width</value>
-                    <value xml:lang="ar">عرض الأعمدة</value>
-                    <value xml:lang="no">Bar Width</value>
-                    <value xml:lang="ca">Amplada de la barra</value>
-                    <value xml:lang="zh-TW">柱寬</value>
-                    <value xml:lang="cs">Šířka sloupku </value>
-                    <value xml:lang="da">Søjlebredde</value>
-                    <value xml:lang="el">Πάχος στηλών</value>
-                    <value xml:lang="es">Ancho de columnas</value>
-                    <value xml:lang="fi">Palkin leveys</value>
-                    <value xml:lang="fr">Largeur des colonnes</value>
-                    <value xml:lang="he">‮רוחב סרגל‬</value>
-                    <value xml:lang="it">Larghezza barre</value>
-                    <value xml:lang="ja">縦棒の幅</value>
-                    <value xml:lang="ko">바 너비</value>
-                    <value xml:lang="nl">Breedte van de zuilen</value>
-                    <value xml:lang="pl">Szerokość słupka</value>
-                    <value xml:lang="pt-BR">Largura da Barra</value>
-                    <value xml:lang="ru">Ширина столбцов</value>
-                    <value xml:lang="sk">Šírka stĺpca</value>
-                    <value xml:lang="sv">Bredd på pelare</value>
-                    <value xml:lang="th">ความกว้างแถบ</value>
-                    <value xml:lang="tr">Sütun genişliği</value>
-                    <value xml:lang="hi">पट्टी की चौड़ाई</value>
-                    <value xml:lang="zh-CN">柱宽</value>
-                    <value xml:lang="pt">Largura das colunas</value>
                 </prop>
             </node>
             <node oor:name=".uno:NumberOfLines" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Linienanzahl im Verbunddiagramm</value>
                     <value xml:lang="en-US">Number of lines in combination chart</value>
-                    <value xml:lang="ar">عدد الخطوط في الرسم البياني المشترك</value>
-                    <value xml:lang="no">Number of lines in combination chart</value>
-                    <value xml:lang="ca">Número de línies en diagrama combinat</value>
-                    <value xml:lang="zh-TW">連結圖表的線條數目</value>
-                    <value xml:lang="cs">Počet řádků v kombinovaném grafu</value>
-                    <value xml:lang="da">Linjeantal i kombinationsdiagrammet</value>
-                    <value xml:lang="el">Αριθμός γραμμών του διαγράμματος συνδυασμού</value>
-                    <value xml:lang="es">Número de líneas en diagrama combinado</value>
-                    <value xml:lang="fi">Rivimäärä yhdistelmäkaaviossa</value>
-                    <value xml:lang="fr">Nombre de lignes du diagramme combiné</value>
-                    <value xml:lang="he">‮מספר השורות בתרשים משולב‬</value>
-                    <value xml:lang="it">Numero di linee nel diagramma composto</value>
-                    <value xml:lang="ja">組み合わせグラフの線の数</value>
-                    <value xml:lang="ko">조합 차트의 라인 값</value>
-                    <value xml:lang="nl">Aantal lijnen in combinatiediagram</value>
-                    <value xml:lang="pl">Liczba linii w wykresie złożonym</value>
-                    <value xml:lang="pt-BR">Número de linhas no gráfico combinado</value>
-                    <value xml:lang="ru">Число линий в комбинированной диаграмме</value>
-                    <value xml:lang="sk">Počet čiar v kombinovanom grafe</value>
-                    <value xml:lang="sv">Linjeantal i kombinationsdiagram</value>
-                    <value xml:lang="th">จำนวนบรรทัดในการเชื่อมโยงแผนภูมิ</value>
-                    <value xml:lang="tr">Karma şemadaki çizgi sayısı</value>
-                    <value xml:lang="hi">मिलाव चार्ट में पक्तिंयों की संख्या</value>
-                    <value xml:lang="zh-CN">连接图表的线条数目</value>
-                    <value xml:lang="pt">Número de linhas no gráfico de combinação</value>
                 </prop>
             </node>
             <node oor:name=".uno:Forward" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">W~eiter nach vorn</value>
                     <value xml:lang="en-US">Bring ~Forward</value>
-                    <value xml:lang="ar">إحضار أماماً</value>
-                    <value xml:lang="no">Bring ~Forward</value>
-                    <value xml:lang="ca">Porta al ~davant</value>
-                    <value xml:lang="zh-TW">上移一層(~F)</value>
-                    <value xml:lang="cs">Přenést blíž</value>
-                    <value xml:lang="da">~Flyt fremad</value>
-                    <value xml:lang="el">Μ~εταφορά ένα επίπεδο εμπρός</value>
-                    <value xml:lang="es">Traer ~adelante</value>
-                    <value xml:lang="fi">Siirrä ~eteenpäin</value>
-                    <value xml:lang="fr">V~ers l&apos;avant</value>
-                    <value xml:lang="he">W~eiter nach vorn</value>
-                    <value xml:lang="it">Porta più avanti</value>
-                    <value xml:lang="ja">前方に移動(~F)</value>
-                    <value xml:lang="ko">앞으로 이동(~F)</value>
-                    <value xml:lang="nl">Naar v~oren</value>
-                    <value xml:lang="pl">P~rzesuń do przodu</value>
-                    <value xml:lang="pt-BR">Trazer para frente</value>
-                    <value xml:lang="ru">Переместить ~вперед</value>
-                    <value xml:lang="sk">Preniesť ~dopredu</value>
-                    <value xml:lang="sv">Längre fra~m</value>
-                    <value xml:lang="th">นำไป~ข้างหน้า</value>
-                    <value xml:lang="tr">~Bir öne getir</value>
-                    <value xml:lang="hi">~आगे प्रस्तुत करना</value>
-                    <value xml:lang="zh-CN">上移一层(~F)</value>
-                    <value xml:lang="pt">~Mais para a frente</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -1658,31 +358,6 @@
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Weiter ~nach hinten</value>
                     <value xml:lang="en-US">Send Back~ward</value>
-                    <value xml:lang="ar">إرسال خلفاً</value>
-                    <value xml:lang="no">Send Back~ward</value>
-                    <value xml:lang="ca">Envia cap ~enrere</value>
-                    <value xml:lang="zh-TW">下移一層(~W)</value>
-                    <value xml:lang="cs">Přenést dál</value>
-                    <value xml:lang="da">Flyt bag~ud</value>
-                    <value xml:lang="el">~Μεταφορά πίσω</value>
-                    <value xml:lang="es">Enviar a~trás</value>
-                    <value xml:lang="fi">Siirrä taakse~päin</value>
-                    <value xml:lang="fr">~Vers l&apos;arrière</value>
-                    <value xml:lang="he">Weiter ~nach hinten</value>
-                    <value xml:lang="it">Porta più i~ndietro</value>
-                    <value xml:lang="ja">後方に移動(~W)</value>
-                    <value xml:lang="ko">뒤로 이동(~W)</value>
-                    <value xml:lang="nl">Naar a~chteren</value>
-                    <value xml:lang="pl">Pr~zesuń do tyłu</value>
-                    <value xml:lang="pt-BR">Enviar para trás</value>
-                    <value xml:lang="ru">Переместить ~назад</value>
-                    <value xml:lang="sk">Odoslať do~zadu</value>
-                    <value xml:lang="sv">Längre ba~k</value>
-                    <value xml:lang="th">ส่งกลับข้าง~หลัง</value>
-                    <value xml:lang="tr">Bir alta gönder</value>
-                    <value xml:lang="hi">पिछली ~ओर भेजो</value>
-                    <value xml:lang="zh-CN">下移一层(~W)</value>
-                    <value xml:lang="pt">Mais para o f~undo</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -1692,62 +367,12 @@
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">~Sekundäre X-Achse...</value>
                     <value xml:lang="en-US">~Secondary X Axis...</value>
-                    <value xml:lang="ar">المحور س الفرعي...</value>
-                    <value xml:lang="no">~Secondary X Axis...</value>
-                    <value xml:lang="ca">Eix X secundari...</value>
-                    <value xml:lang="zh-TW">第二個 X 軸(~S)...</value>
-                    <value xml:lang="cs">Sekundární osa X...</value>
-                    <value xml:lang="da">~Sekundær X-akse...</value>
-                    <value xml:lang="el">~Δευτερεύων άξονας Χ...</value>
-                    <value xml:lang="es">Eje ~secundario X...</value>
-                    <value xml:lang="fi">Toissijainen X-akseli...</value>
-                    <value xml:lang="fr">Axe X ~secondaire...</value>
-                    <value xml:lang="he">~Sekundäre X-Achse...</value>
-                    <value xml:lang="it">Asse ~X secondario...</value>
-                    <value xml:lang="ja">第2X軸(~S)...</value>
-                    <value xml:lang="ko">2차 X축(~S)...</value>
-                    <value xml:lang="nl">~Secundaire X as...</value>
-                    <value xml:lang="pl">Pomocnicze osie X...</value>
-                    <value xml:lang="pt-BR">Eixo X secundário...</value>
-                    <value xml:lang="ru">Дополнительная ось X...</value>
-                    <value xml:lang="sk">~Sekundárna os X...</value>
-                    <value xml:lang="sv">Sekundär X-axel...</value>
-                    <value xml:lang="th">แกน X ทุติยภูมิ...</value>
-                    <value xml:lang="tr">~İkinci X Ekseni...</value>
-                    <value xml:lang="hi">दूसरे X अक्ष...</value>
-                    <value xml:lang="zh-CN">第二个 Y 轴(~S)...</value>
-                    <value xml:lang="pt">Eixo X ~secundário...</value>
                 </prop>
             </node>
             <node oor:name=".uno:DiagramAxisB" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">~Sekundäre Y-Achse...</value>
                     <value xml:lang="en-US">S~econdary Y Axis...</value>
-                    <value xml:lang="ar">المحور ص فرعي...</value>
-                    <value xml:lang="no">S~econdary Y Axis...</value>
-                    <value xml:lang="ca">Eix Y secundari...</value>
-                    <value xml:lang="zh-TW">第二個 Y 軸(~e)...</value>
-                    <value xml:lang="cs">Sekundární osa Y...</value>
-                    <value xml:lang="da">Sekundær Y-akse...</value>
-                    <value xml:lang="el">~Δευτερεύων άξονας Y...</value>
-                    <value xml:lang="es">~Eje secundario Y...</value>
-                    <value xml:lang="fi">Toissijainen Y-akseli...</value>
-                    <value xml:lang="fr">Axe Y s~econdaire...</value>
-                    <value xml:lang="he">~Sekundäre Y-Achse...</value>
-                    <value xml:lang="it">Asse ~Y secondario...</value>
-                    <value xml:lang="ja">第2Y軸(~E)...</value>
-                    <value xml:lang="ko">2차 Y축(~E)...</value>
-                    <value xml:lang="nl">~Secundaire Y-as...</value>
-                    <value xml:lang="pl">Pomocnicza oś Y...</value>
-                    <value xml:lang="pt-BR">Eixo Y secundário...</value>
-                    <value xml:lang="ru">Дополнительная ось Y...</value>
-                    <value xml:lang="sk">S~ekundárna os X...</value>
-                    <value xml:lang="sv">~Sekundär Y-axel...</value>
-                    <value xml:lang="th">แกน Y ทุติยภูมิ...</value>
-                    <value xml:lang="tr">~İkinci Y Ekseni...</value>
-                    <value xml:lang="hi">~2nd Y Axis...</value>
-                    <value xml:lang="zh-CN">第二个 Y 轴(~E)...</value>
-                    <value xml:lang="pt">Eixo Y ~secundário...</value>
                 </prop>
             </node>
         </node>
@@ -1756,124 +381,24 @@
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">A~nordnung</value>
                     <value xml:lang="en-US">A~rrangement</value>
-                    <value xml:lang="ar">الترتيب</value>
-                    <value xml:lang="no">A~rrangement</value>
-                    <value xml:lang="ca">~Organitza</value>
-                    <value xml:lang="zh-TW">排序(~R)</value>
-                    <value xml:lang="cs">Uspořádání</value>
-                    <value xml:lang="da">~Placering</value>
-                    <value xml:lang="el">Τακτοποίηση</value>
-                    <value xml:lang="es">~Disposición</value>
-                    <value xml:lang="fi">J~ärjestys</value>
-                    <value xml:lang="fr">~Disposition</value>
-                    <value xml:lang="he">A~nordnung</value>
-                    <value xml:lang="it">~Disponi</value>
-                    <value xml:lang="ja">配置(~R)</value>
-                    <value xml:lang="ko">배치(~R)</value>
-                    <value xml:lang="nl">~Rangschikking</value>
-                    <value xml:lang="pl">~Rozmieszczenie</value>
-                    <value xml:lang="pt-BR">Disposição</value>
-                    <value xml:lang="ru">Расположение</value>
-                    <value xml:lang="sk">Uspo~riadanie</value>
-                    <value xml:lang="sv">~Placering</value>
-                    <value xml:lang="th">จั~ดเรียง</value>
-                    <value xml:lang="tr">Düzenleme</value>
-                    <value xml:lang="hi">A~rrangement</value>
-                    <value xml:lang="zh-CN">排序(~R)</value>
-                    <value xml:lang="pt">~Disposição</value>
                 </prop>
             </node>
             <node oor:name=".uno:DiagramAxisMenu" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">~Achse</value>
                     <value xml:lang="en-US">A~xis</value>
-                    <value xml:lang="ar">محور</value>
-                    <value xml:lang="no">A~xis</value>
-                    <value xml:lang="ca">Ei~x</value>
-                    <value xml:lang="zh-TW">軸(~X)</value>
-                    <value xml:lang="cs">Osa</value>
-                    <value xml:lang="da">Akse</value>
-                    <value xml:lang="el">Άξον~ας</value>
-                    <value xml:lang="es">~Eje</value>
-                    <value xml:lang="fi">A~kselit</value>
-                    <value xml:lang="fr">A~xe</value>
-                    <value xml:lang="he">~Achse</value>
-                    <value xml:lang="it">A~sse</value>
-                    <value xml:lang="ja">軸(~X)</value>
-                    <value xml:lang="ko">축(~X)</value>
-                    <value xml:lang="nl">~As</value>
-                    <value xml:lang="pl">Oś</value>
-                    <value xml:lang="pt-BR">~Eixo</value>
-                    <value xml:lang="ru">Ось</value>
-                    <value xml:lang="sk">O~s</value>
-                    <value xml:lang="sv">~Axel</value>
-                    <value xml:lang="th">แก~น</value>
-                    <value xml:lang="tr">~Eksen</value>
-                    <value xml:lang="hi">अ~क्ष</value>
-                    <value xml:lang="zh-CN">轴(~X)</value>
-                    <value xml:lang="pt">~Eixo</value>
                 </prop>
             </node>
             <node oor:name=".uno:ChartTitleMenu" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">~Titel</value>
                     <value xml:lang="en-US">~Title</value>
-                    <value xml:lang="ar">العنوان</value>
-                    <value xml:lang="no">~Title</value>
-                    <value xml:lang="ca">~Títol</value>
-                    <value xml:lang="zh-TW">標題(~T)</value>
-                    <value xml:lang="cs">Titul...</value>
-                    <value xml:lang="da">~Titel</value>
-                    <value xml:lang="el">~Τίτλος</value>
-                    <value xml:lang="es">~Título</value>
-                    <value xml:lang="fi">~Otsikko</value>
-                    <value xml:lang="fr">~Titre</value>
-                    <value xml:lang="he">‮כותרת‬</value>
-                    <value xml:lang="it">~Titolo</value>
-                    <value xml:lang="ja">タイトル(~T)</value>
-                    <value xml:lang="ko">제목(~T)</value>
-                    <value xml:lang="nl">Tite~l</value>
-                    <value xml:lang="pl">Tytuł</value>
-                    <value xml:lang="pt-BR">~Título</value>
-                    <value xml:lang="ru">Заголовок</value>
-                    <value xml:lang="sk">~Nadpis</value>
-                    <value xml:lang="sv">~Rubrik</value>
-                    <value xml:lang="th">~ชื่อ</value>
-                    <value xml:lang="tr">~Başlık</value>
-                    <value xml:lang="hi">~उपाधि</value>
-                    <value xml:lang="zh-CN">标题(~T)</value>
-                    <value xml:lang="pt">~Título</value>
                 </prop>
             </node>
             <node oor:name=".uno:DiagramGridMenu" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">~Gitter</value>
                     <value xml:lang="en-US">~Grid</value>
-                    <value xml:lang="ar">شبكة</value>
-                    <value xml:lang="no">~Grid</value>
-                    <value xml:lang="ca">~Graella</value>
-                    <value xml:lang="zh-TW">網格線(~G)</value>
-                    <value xml:lang="cs">Mřížka</value>
-                    <value xml:lang="da">~Gitter</value>
-                    <value xml:lang="el">Πλέ~γμα</value>
-                    <value xml:lang="es">~Cuadrícula</value>
-                    <value xml:lang="fi">~Ruudukko</value>
-                    <value xml:lang="fr">~Grille</value>
-                    <value xml:lang="he">~Gitter</value>
-                    <value xml:lang="it">~Griglia</value>
-                    <value xml:lang="ja">目盛線(~G)</value>
-                    <value xml:lang="ko">눈금선(~G)</value>
-                    <value xml:lang="nl">~Raster</value>
-                    <value xml:lang="pl">Siatka</value>
-                    <value xml:lang="pt-BR">~Grade...</value>
-                    <value xml:lang="ru">Сетка</value>
-                    <value xml:lang="sk">Mriež~ka</value>
-                    <value xml:lang="sv">~Gitter</value>
-                    <value xml:lang="th">เ~ส้นตาราง</value>
-                    <value xml:lang="tr">~Izgara</value>
-                    <value xml:lang="hi">~जाल</value>
-                    <value xml:lang="zh-CN">网格线(~G)</value>
-                    <value xml:lang="pt">~Grelha</value>
                 </prop>
             </node>
         </node>
