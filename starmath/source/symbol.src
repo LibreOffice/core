@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symbol.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-06 11:06:44 $
+ *  last change: $Author: tl $ $Date: 2001-11-06 15:52:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,8 +137,8 @@ Resource RID_LOCALIZED_NAMES
     {
         ItemList =
         {
-            < "Nu" ; > ;
             < "nu" ; > ;
+            < "Nu" ; > ;
             < "varrho" ; > ;
             < "moltomaggioredi" ; > ;
             < "indentico" ; > ;
@@ -155,8 +155,8 @@ Resource RID_LOCALIZED_NAMES
     {
         ItemList =
         {
-            < "Ni" ; > ;
             < "ni" ; > ;
+            < "Ni" ; > ;
             < "varro" ; > ;
             < "molto_maggiore_di" ; > ;
             < "identico" ; > ;
@@ -173,20 +173,26 @@ Resource RID_LOCALIZED_NAMES
     {
         ItemList =
         {
-            < "element" ; > ;
             < "iota" ; > ;
+            < "IOTA" ; > ;
             < "xi" ; > ;
+            < "XI" ; > ;
             < "rho" ; > ;
+            < "RHO" ; > ;
+            < "element" ; > ;
         };
     };
     StringArray RID_SWEDISH_60_NAMES
     {
         ItemList =
         {
-            < "tillhör" ; > ;
             < "jota" ; > ;
+            < "JOTA" ; > ;
             < "ksi" ; > ;
+            < "KSI" ; > ;
             < "ro" ; > ;
+            < "RO" ; > ;
+            < "tillhör" ; > ;
         };
     };
     StringArray RID_SPANISH_50_NAMES
@@ -546,7 +552,7 @@ Resource RID_LOCALIZED_NAMES
         };
     ItemList [ language_user1 ] =
     {
-            < "alpha" ; > ;
+        < "alpha" ; > ;
         < "ALPHA" ; > ;
         < "beta" ; > ;
         < "BETA" ; > ;
@@ -615,7 +621,7 @@ Resource RID_LOCALIZED_NAMES
     };
     ItemList [ english_us ] =
     {
-            < "alpha" ; > ;
+        < "alpha" ; > ;
         < "ALPHA" ; > ;
         < "beta" ; > ;
         < "BETA" ; > ;
@@ -684,7 +690,7 @@ Resource RID_LOCALIZED_NAMES
     };
     ItemList [ portuguese ] =
     {
-            < "alfa" ; > ;
+        < "alfa" ; > ;
         < "ALFA" ; > ;
         < "beta" ; > ;
         < "BETA" ; > ;
@@ -753,7 +759,7 @@ Resource RID_LOCALIZED_NAMES
     };
     ItemList [ russian ] =
     {
-            < "àëüôà" ; > ;
+        < "àëüôà" ; > ;
         < "ÀËÜÔÀ" ; > ;
         < "áåòà" ; > ;
         < "ÁÅÒÀ" ; > ;
@@ -822,7 +828,7 @@ Resource RID_LOCALIZED_NAMES
     };
     ItemList [ greek ] =
     {
-            < "¢ëöá" ; > ;
+        < "¢ëöá" ; > ;
         < "¢ëöá" ; > ;
         < "ÂÞôá" ; > ;
         < "ÂÞôá" ; > ;
@@ -891,7 +897,7 @@ Resource RID_LOCALIZED_NAMES
     };
     ItemList [ dutch ] =
     {
-            < "alfa" ; > ;
+        < "alfa" ; > ;
         < "ALFA" ; > ;
         < "bèta" ; > ;
         < "BÈTA" ; > ;
@@ -960,7 +966,7 @@ Resource RID_LOCALIZED_NAMES
     };
     ItemList [ french ] =
     {
-            < "alpha" ; > ;
+        < "alpha" ; > ;
         < "ALPHA" ; > ;
         < "bêta" ; > ;
         < "BÊTA" ; > ;
@@ -1029,7 +1035,7 @@ Resource RID_LOCALIZED_NAMES
     };
     ItemList [ spanish ] =
     {
-            < "alfa" ; > ;
+        < "alfa" ; > ;
         < "ALFA" ; > ;
         < "beta" ; > ;
         < "BETA" ; > ;
@@ -1098,7 +1104,7 @@ Resource RID_LOCALIZED_NAMES
     };
     ItemList [ italian ] =
     {
-            < "alfa" ; > ;
+        < "alfa" ; > ;
         < "ALFA" ; > ;
         < "beta" ; > ;
         < "BETA" ; > ;
@@ -1236,7 +1242,7 @@ Resource RID_LOCALIZED_NAMES
     };
     ItemList [ swedish ] =
     {
-            < "alfa" ; > ;
+        < "alfa" ; > ;
         < "ALFA" ; > ;
         < "beta" ; > ;
         < "BETA" ; > ;
@@ -1305,7 +1311,7 @@ Resource RID_LOCALIZED_NAMES
     };
     ItemList [ polish ] =
     {
-            < "alfa" ; > ;
+        < "alfa" ; > ;
         < "ALFA" ; > ;
         < "beta" ; > ;
         < "BETA" ; > ;
@@ -1374,7 +1380,7 @@ Resource RID_LOCALIZED_NAMES
     };
     ItemList [ portuguese_brazilian ] =
     {
-            < "alpha" ; > ;
+        < "alpha" ; > ;
         < "ALPHA" ; > ;
         < "beta" ; > ;
         < "BETA" ; > ;
@@ -1443,7 +1449,7 @@ Resource RID_LOCALIZED_NAMES
     };
     ItemList [ japanese ] =
     {
-            < "alpha" ; > ;
+        < "alpha" ; > ;
         < "ALPHA" ; > ;
         < "beta" ; > ;
         < "BETA" ; > ;
@@ -1512,7 +1518,7 @@ Resource RID_LOCALIZED_NAMES
     };
     ItemList [ korean ] =
     {
-            < "ì•ŒíŒŒ" ; > ;
+        < "ì•ŒíŒŒ" ; > ;
         < "ALPHA" ; > ;
         < "ë² íƒ€" ; > ;
         < "BETA" ; > ;
@@ -1581,7 +1587,7 @@ Resource RID_LOCALIZED_NAMES
     };
     ItemList [ chinese_simplified ] =
     {
-            < "alpha" ; > ;
+        < "alpha" ; > ;
         < "ALPHA" ; > ;
         < "beta" ; > ;
         < "BETA" ; > ;
@@ -1650,7 +1656,7 @@ Resource RID_LOCALIZED_NAMES
     };
     ItemList [ chinese_traditional ] =
     {
-            < "alpha" ; > ;
+        < "alpha" ; > ;
         < "ALPHA" ; > ;
         < "beta" ; > ;
         < "BETA" ; > ;
@@ -1719,7 +1725,7 @@ Resource RID_LOCALIZED_NAMES
     };
     ItemList [ turkish ] =
     {
-            < "Alfa" ; > ;
+        < "Alfa" ; > ;
         < "Alfa" ; > ;
         < "Beta" ; > ;
         < "Beta" ; > ;
@@ -1788,7 +1794,7 @@ Resource RID_LOCALIZED_NAMES
     };
     ItemList [ arabic ] =
     {
-            < "K" ; > ;
+        < "K" ; > ;
         < "K" ; > ;
         < "Beta" ; > ;
         < "Beta" ; > ;
@@ -1857,7 +1863,7 @@ Resource RID_LOCALIZED_NAMES
     };
     ItemList [ catalan ] =
     {
-            < "alpha" ; > ;
+        < "alpha" ; > ;
         < "ALPHA" ; > ;
         < "beta" ; > ;
         < "BETA" ; > ;
@@ -1926,7 +1932,7 @@ Resource RID_LOCALIZED_NAMES
     };
     ItemList [ finnish ] =
     {
-             < "alfa" ; > ;
+        < "alfa" ; > ;
         < "alfa" ; > ;
         < "beeta" ; > ;
         < "beeta" ; > ;
