@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HDriver.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 14:55:17 $
+ *  last change: $Author: hr $ $Date: 2005-04-06 10:38:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,9 @@ namespace connectivity
                                         , ::com::sun::star::embed::XTransactionListener
                                         >   ODriverDelegator_BASE;
 
-        typedef ::std::pair< ::rtl::OUString ,::com::sun::star::uno::WeakReferenceHelper > TWeakConnectionPair;
+        typedef ::std::pair< ::com::sun::star::uno::WeakReferenceHelper,::com::sun::star::uno::WeakReferenceHelper> TWeakRefPair;
+        typedef ::std::pair< ::rtl::OUString ,TWeakRefPair > TWeakConnectionPair;
+
         typedef ::std::pair< ::com::sun::star::uno::WeakReferenceHelper,TWeakConnectionPair> TWeakPair;
         typedef ::std::vector< TWeakPair > TWeakPairVector;
 
