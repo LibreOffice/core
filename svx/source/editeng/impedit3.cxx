@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mt $ $Date: 2000-12-05 19:34:28 $
+ *  last change: $Author: mt $ $Date: 2000-12-07 15:11:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2034,6 +2034,9 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_uInt16 nPos, SvxFont& rF
         (const SvxFontWidthItem&)pNode->GetContentAttribs().GetItem( EE_CHAR_FONTWIDTH);
     sal_uInt16 nRelWidth = rWidthItem.GetProp();
 
+    if ( pOut )
+        pOut->SetTextLineColor();
+
     if ( aStatus.UseCharAttribs() )
     {
         const CharAttribArray& rAttribs = pNode->GetCharAttribs().GetAttribs();
@@ -2053,7 +2056,11 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_uInt16 nPos, SvxFont& rF
             {
                 DBG_ASSERT( ( pAttrib->Which() >= EE_CHAR_START ) && ( pAttrib->Which() <= EE_FEATURE_END ), "Unglueltiges Attribut in Seek() " );
                 if ( IsScriptItemValid( pAttrib->Which(), nScriptType ) )
+                #if SUPD > 615
+                    pAttrib->SetFont( rFont, pOut );
+                #else
                     pAttrib->SetFont( rFont );
+                #endif
                 if ( pAttrib->Which() == EE_CHAR_FONTWIDTH )
                     nRelWidth = ((const SvxFontWidthItem*)pAttrib->GetItem())->GetProp();
             }
@@ -2127,8 +2134,6 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_uInt16 nPos, SvxFont& rF
         rFont.SetSize( aRealSz );
         // Font wird nicht restauriert...
     }
-    if ( pOut )
-        pOut->SetTextLineColor();
 
     if ( mpIMEInfos && mpIMEInfos->pAttribs && ( mpIMEInfos->aPos.GetNode() == pNode ) &&
         ( nPos > mpIMEInfos->aPos.GetIndex() ) && ( nPos <= ( mpIMEInfos->aPos.GetIndex() + mpIMEInfos->nLen ) ) )
