@@ -2,9 +2,9 @@
  *
  *  $RCSfile: combobox.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mt $ $Date: 2001-10-09 12:09:05 $
+ *  last change: $Author: mt $ $Date: 2001-10-24 14:24:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -827,7 +827,7 @@ void ComboBox::ImplUpdateFloatSelection()
             nSelect = mpImplLB->GetEntryList()->GetSelectEntryPos( 0 );
             if( nSelect != LISTBOX_ENTRY_NOTFOUND )
                 mpImplLB->SelectEntry( nSelect, FALSE );
-            mpImplLB->SetTopEntry( 0 );
+            // mpImplLB->SetTopEntry( 0 ); #92555# Ugly....
             mpImplLB->ResetCurrentPos();
         }
     }
