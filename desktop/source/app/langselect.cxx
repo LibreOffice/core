@@ -2,8 +2,8 @@
  *
  *  $RCSfile: langselect.cxx,v $
  *
- *  $Revision: 1.11 $
- *  last change: $Author: rt $ $Date: 2004-08-20 14:23:23 $
+ *  $Revision: 1.12 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 15:15:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,28 +115,32 @@ Locale LanguageSelection::IsoStringToLocale(const OUString& str)
     return l;
 }
 
-void LanguageSelection::prepareLanguage()
+bool LanguageSelection::prepareLanguage()
 {
     OUString aLocaleString = getLanguageString();
-    OUString sConfigSrvc = OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider");
-    Reference< XMultiServiceFactory > theMSF = comphelper::getProcessServiceFactory();
-    try
+    if ( aLocaleString.getLength() > 0 )
     {
+        OUString sConfigSrvc = OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider");
+        Reference< XMultiServiceFactory > theMSF = comphelper::getProcessServiceFactory();
+        try
+        {
+            Reference< XLocalizable > theConfigProvider(
+                theMSF->createInstance( sConfigSrvc ),UNO_QUERY_THROW );
+            Locale loc = LanguageSelection::IsoStringToLocale(aLocaleString);
+            theConfigProvider->setLocale(loc);
+            Reference< XPropertySet > xProp(getConfigAccess("org.openoffice.Setup/L10N/", sal_True), UNO_QUERY_THROW);
+            xProp->setPropertyValue(OUString::createFromAscii("ooLocale"), makeAny(aLocaleString));
+            Reference< XChangesBatch >(xProp, UNO_QUERY_THROW)->commitChanges();
+            return true;
+        }
+        catch (Exception& e)
+        {
+            OString aMsg = OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
+            OSL_ENSURE(sal_False, aMsg.getStr());
 
-        Reference< XLocalizable > theConfigProvider(
-            theMSF->createInstance( sConfigSrvc ),UNO_QUERY_THROW );
-        Locale loc = LanguageSelection::IsoStringToLocale(aLocaleString);
-        theConfigProvider->setLocale(loc);
-        Reference< XPropertySet > xProp(getConfigAccess("org.openoffice.Setup/L10N/", sal_True), UNO_QUERY_THROW);
-        xProp->setPropertyValue(OUString::createFromAscii("ooLocale"), makeAny(aLocaleString));
-        Reference< XChangesBatch >(xProp, UNO_QUERY_THROW)->commitChanges();
+        }
     }
-    catch (Exception& e)
-    {
-        OString aMsg = OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
-        OSL_ENSURE(sal_False, aMsg.getStr());
-
-    }
+    return false;
 }
 
 
@@ -164,12 +168,15 @@ OUString LanguageSelection::getLanguageString()
     }
     // try to use system default
     aUserLanguage = getSystemLanguage();
-    if (isInstalledLanguage(aUserLanguage, sal_False))
+    if (aUserLanguage.getLength() > 0 )
     {
-        // great, system default language is available
-        bFoundLanguage = sal_True;
-        aFoundLanguage = aUserLanguage;
-        return aFoundLanguage;
+        if (isInstalledLanguage(aUserLanguage, sal_False))
+        {
+            // great, system default language is available
+            bFoundLanguage = sal_True;
+            aFoundLanguage = aUserLanguage;
+            return aFoundLanguage;
+        }
     }
     // fallback 1: en-US
     OUString usFB = usFallbackLanguage;
@@ -179,7 +186,7 @@ OUString LanguageSelection::getLanguageString()
         aFoundLanguage = usFallbackLanguage;
         return aFoundLanguage;
     }
-    // falback didn't work use first installed language
+    // fallback didn't work use first installed language
     aUserLanguage = getFirstInstalledLanguage();
     bFoundLanguage = sal_True;
     aFoundLanguage = aUserLanguage;
@@ -274,7 +281,18 @@ OUString LanguageSelection::getUserLanguage()
     Reference< XNameAccess > xAccess(getConfigAccess("org.openoffice.Office.Linguistic/General", sal_False));
     if (xAccess.is())
     {
-        xAccess->getByName(OUString::createFromAscii("UILocale")) >>= aUserLanguage;
+        try
+        {
+            xAccess->getByName(OUString::createFromAscii("UILocale")) >>= aUserLanguage;
+        }
+        catch ( NoSuchElementException const & )
+        {
+            return OUString();
+        }
+        catch ( WrappedTargetException const & )
+        {
+            return OUString();
+        }
     }
     return aUserLanguage;
 }
@@ -285,7 +303,18 @@ OUString LanguageSelection::getSystemLanguage()
     Reference< XNameAccess > xAccess(getConfigAccess("org.openoffice.System/L10N", sal_False));
     if (xAccess.is())
     {
-        xAccess->getByName(OUString::createFromAscii("UILocale")) >>= aUserLanguage;
+        try
+        {
+            xAccess->getByName(OUString::createFromAscii("UILocale")) >>= aUserLanguage;
+        }
+        catch ( NoSuchElementException const & )
+        {
+            return OUString();
+        }
+        catch ( WrappedTargetException const & )
+        {
+            return OUString();
+        }
     }
     return aUserLanguage;
 }
@@ -293,11 +322,13 @@ OUString LanguageSelection::getSystemLanguage()
 
 void LanguageSelection::resetUserLanguage()
 {
-    try{
-       Reference< XPropertySet > xProp(getConfigAccess("org.openoffice.Office.Linguistic/General", sal_True), UNO_QUERY_THROW);
+    try
+    {
+        Reference< XPropertySet > xProp(getConfigAccess("org.openoffice.Office.Linguistic/General", sal_True), UNO_QUERY_THROW);
         xProp->setPropertyValue(OUString::createFromAscii("UILocale"), makeAny(OUString::createFromAscii("")));
         Reference< XChangesBatch >(xProp, UNO_QUERY_THROW)->commitChanges();
-    } catch (com::sun::star::uno::RuntimeException& e)
+    }
+    catch ( Exception& e)
     {
         OString aMsg = OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
         OSL_ENSURE(sal_False, aMsg.getStr());
