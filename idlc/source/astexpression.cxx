@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astexpression.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-20 13:07:12 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 16:19:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,13 +79,13 @@
 #undef  MINCHAR
 #define MINCHAR         -128
 
+#define MAXINT64 SAL_CONST_INT64(9223372036854775807)
+#define MININT64 (SAL_CONST_INT64(-9223372036854775807)-SAL_CONST_INT64(1))
+#define MAXUINT64 SAL_CONST_UINT64(18446744073709551615)
+
 #define MAXINT32        2147483647
 #define MININT32        (-2147483647 - 1)
 #define MAXUINT32       4294967295
-
-#define MAXINT64        9223372036854775807
-#define MININT64        (-9223372036854775807 - 1)
-#define MAXUINT64       18446744073709551615
 
 using namespace ::rtl;
 
