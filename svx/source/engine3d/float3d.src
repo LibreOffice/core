@@ -2,9 +2,9 @@
  *
  *  $RCSfile: float3d.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 19:12:11 $
+ *  last change: $Author: obo $ $Date: 2000-10-27 17:26:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -549,7 +549,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText [ swedish ] = "Tilldela bara 3D-attribut" ;
         QuickHelpText [ danish ] = "Tildel kun 3D-attributter" ;
         QuickHelpText [ italian ] = "Assegna solo attributi 3D" ;
-        QuickHelpText [ spanish ] = "Asignar sólo los atributos tridimensionales" ;
+        QuickHelpText [ spanish ] = "Asignar solo atributos 3D" ;
         QuickHelpText [ french ] = "Assigner uniquement les attributs 3 D" ;
         QuickHelpText [ dutch ] = "Alleen 3D-attributen toewijzen" ;
     QuickHelpText[ russian ] = "Ïğèìåíèòü òîëüêî àòğèáóòû 3-Ì";
@@ -753,7 +753,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text [ portuguese ] = "Escala de profundidade" ;
         Text [ english_us ] = "Scaled depth" ;
         Text [ portuguese_brazilian ] = "Tiefenskalierung" ;
-        Text [ swedish ] = "Djupskalering" ;
+        Text [ swedish ] = "Djupskalning" ;
         Text [ danish ] = "Dybdeskalering" ;
         Text [ italian ] = "Scala profondità" ;
         Text [ spanish ] = "Escala de profundidad" ;
@@ -1304,7 +1304,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText [ swedish ] = "3D-skugga på/av" ;
         QuickHelpText [ danish ] = "Aktiver/deaktiver 3D-skygge" ;
         QuickHelpText [ italian ] = "Mostra/nascondi ombre 3D" ;
-        QuickHelpText [ spanish ] = "Activar/desactivar sombra tridimensional" ;
+        QuickHelpText [ spanish ] = "Activar/desactivar sombra 3D" ;
         QuickHelpText [ french ] = "Activer/désactiver l'ombre 3 D" ;
         QuickHelpText [ dutch ] = "3D-schaduw in/-uitschakelen" ;
     QuickHelpText[ russian ] = "Âêë./âûêë. òåíü 3-Ì";
@@ -1869,7 +1869,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText [ swedish ] = "Välj färg via färgdialog" ;
         QuickHelpText [ danish ] = "Vælg farve via farvedialog" ;
         QuickHelpText [ italian ] = "Scelta colore tramite apposito dialogo" ;
-        QuickHelpText [ spanish ] = "Seleccionar colores a través del diálogo de colores" ;
+        QuickHelpText [ spanish ] = "Seleccionar colores en diálogo de colores" ;
         QuickHelpText [ french ] = "Sélectionner la couleur à partir de la boîte de dialogue de couleurs" ;
         QuickHelpText [ dutch ] = "Kleur via kleurdialoog kiezen" ;
     QuickHelpText[ russian ] = "Âûáğàòü öâåò â äèàëîãå";
@@ -1936,7 +1936,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText [ swedish ] = "Välj färg via färgdialog" ;
         QuickHelpText [ danish ] = "Vælg farve via farvedialog" ;
         QuickHelpText [ italian ] = "Scelta colore tramite apposito dialogo" ;
-        QuickHelpText [ spanish ] = "Seleccionar colores a través del diálogo de colores" ;
+        QuickHelpText [ spanish ] = "Seleccionar color en diálogo de colores" ;
         QuickHelpText [ french ] = "Sélectionner la couleur à partir de la boîte de dialogue de couleurs" ;
         QuickHelpText [ dutch ] = "Kleur uit catalogus kiezen" ;
     QuickHelpText[ russian ] = "Äèàëîãîâîå îêíî öâåòîâ";
@@ -2186,7 +2186,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText [ swedish ] = "Bara textur" ;
         QuickHelpText [ danish ] = "Kun tekstur" ;
         QuickHelpText [ italian ] = "Solo struttura" ;
-        QuickHelpText [ spanish ] = "Sólo textura" ;
+        QuickHelpText [ spanish ] = "Solo textura" ;
         QuickHelpText [ french ] = "Uniquement la texture" ;
         QuickHelpText [ dutch ] = "Alleen textuur" ;
     QuickHelpText[ russian ] = "Òîëüêî òåêñòóğà";
@@ -2862,7 +2862,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text [ danish ] = "Objektfarve" ;
         Text [ italian ] = "Colore oggetto" ;
         Text [ spanish ] = "Color del objeto" ;
-        Text [ french ] = "Couleur objet" ;
+        Text [ french ] = "Couleur d'objet" ;
         Text [ dutch ] = "Objectkleur" ;
         Text [ portuguese ] = "Cor do objecto" ;
         Text[ chinese_simplified ] = "¶ÔÏóÑÕÉ«";
@@ -2903,7 +2903,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText [ swedish ] = "Välj färg via färgdialog" ;
         QuickHelpText [ danish ] = "Vælg farve via farvedialog" ;
         QuickHelpText [ italian ] = "Scelta colore tramite apposito dialogo" ;
-        QuickHelpText [ spanish ] = "Seleccionar colores a través del diálogo de colores" ;
+        QuickHelpText [ spanish ] = "Seleccionar colores en diálogo de colores" ;
         QuickHelpText [ french ] = "Sélectionner la couleur à partir de la boîte de dialogue de couleurs" ;
         QuickHelpText [ dutch ] = "Kleur via kleurendialoog kiezen" ;
     QuickHelpText[ russian ] = "Âûáğàòü öâåò â äèàëîãå";
@@ -2970,7 +2970,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText [ swedish ] = "Välj färg via färgdialog" ;
         QuickHelpText [ danish ] = "Vælg farve via farvedialog" ;
         QuickHelpText [ italian ] = "Scelta colore tramite apposito dialogo" ;
-        QuickHelpText [ spanish ] = "Seleccionar color en el diálogo de colores" ;
+        QuickHelpText [ spanish ] = "Seleccionar color en diálogo de colores" ;
         QuickHelpText [ french ] = "Sélectionner la couleur à partir de la boîte de dialogue de couleurs" ;
         QuickHelpText [ dutch ] = "Kleur via kleurdialoog kiezen" ;
     QuickHelpText[ russian ] = "Äèàëîãîâîå îêíî öâåòîâ";
@@ -3037,7 +3037,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText [ swedish ] = "Välj färg via färgdialog" ;
         QuickHelpText [ danish ] = "Vælg farve via farvedialog" ;
         QuickHelpText [ italian ] = "Scelta colore tramite apposito dialogo" ;
-        QuickHelpText [ spanish ] = "Seleccionar colores a través del diálogo de colores" ;
+        QuickHelpText [ spanish ] = "Seleccionar colores en diálogo de colores" ;
         QuickHelpText [ french ] = "Sélectionner la couleur à partir de la boîte de dialogue de couleurs" ;
         QuickHelpText [ dutch ] = "Kleur via kleurendialoog kiezen" ;
     QuickHelpText[ russian ] = "Âûáğàòü öâåò â äèàëîãå";
@@ -3185,7 +3185,7 @@ DockingWindow RID_SVXFLOAT_3D
     Text[ chinese_simplified ] = "3 Î¬-Ğ§¹û";
     Text[ russian ] = "İôôåêòû 3-Ì";
     Text[ polish ] = "Efekty 3-W";
-    Text[ japanese ] = "3D Œø‰Ê";
+    Text[ japanese ] = "3DŒø‰Ê";
     Text[ chinese_traditional ] = "3 ºû®ÄªG";
     Text[ arabic ] = "ÊÃËíÑÇÊ ËáÇËíÉ ÇáÃÈÚÇÏ";
     Text[ dutch ] = "3D-effecten";
@@ -3219,7 +3219,7 @@ String RID_SVXFLOAT3D_FAVORITE
     Text [ ENGLISH ] = "Favorite" ;
     Text[ english_us ] = "Favorite";
     Text[ portuguese ] = "Favorito";
-    Text[ russian ] = "Favorite";
+    Text[ russian ] = "Èçáğàííûé";
     Text[ greek ] = "Ğñïôßìçóç";
     Text[ dutch ] = "Favoriet";
     Text[ french ] = "Favori";
@@ -3227,7 +3227,7 @@ String RID_SVXFLOAT3D_FAVORITE
     Text[ italian ] = "Favorite";
     Text[ danish ] = "Favorit";
     Text[ swedish ] = "Favorit";
-    Text[ polish ] = "Favorite";
+    Text[ polish ] = "Faworyt";
     Text[ portuguese_brazilian ] = "Favorite";
     Text[ japanese ] = "‚¨‹C‚É“ü‚è";
     Text[ korean ] = "Favorite";
