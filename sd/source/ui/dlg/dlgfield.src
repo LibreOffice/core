@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgfield.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:40:43 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 20:59:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,8 +86,8 @@ ModalDialog DLG_FIELD_MODIFY
         Text [ portuguese ] = "Tipo de campo" ;
         Text[ chinese_simplified ] = "×Ö¶ÎÀàĞÍ";
         Text[ russian ] = "Òèï ïîëÿ";
-        Text[ polish ] = "Rodzaj pola";
-        Text[ japanese ] = "Ì¨°ÙÄŞÀ²Ìß";
+        Text[ polish ] = "Typ pola";
+        Text[ japanese ] = "Ì¨°ÙÄŞ‚Ìí—Ş";
         Text[ chinese_traditional ] = "Äæ¦ìÃş«¬";
         Text[ arabic ] = "äæÚ ÇáÍŞá";
         Text[ greek ] = "Ôığïò ğåäßïõ";
