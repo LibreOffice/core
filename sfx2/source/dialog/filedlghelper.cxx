@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dv $ $Date: 2001-04-27 10:30:48 $
+ *  last change: $Author: dv $ $Date: 2001-05-04 11:52:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,6 +164,8 @@ class FileDialogHelper_Impl : public WeakImplHelper1< XFilePickerListener >
     Reference < XFilePicker >   mxFileDlg;
 
     SfxFilterMatcher           *mpMatcher;
+    OUString                    maPath;
+    OUString                    maCurFilter;
     ErrCode                     mnError;
     sal_Bool                    mbHasPassword   : 1;
     sal_Bool                    mbHasVersions   : 1;
@@ -181,9 +183,8 @@ private:
     void                    updateVersions();
     void                    dispose();
 
-    void                    initOpen( sal_uInt32 nFlags );
-    void                    initSave( sal_uInt32 nFlags );
-    void                    initGraphic( sal_uInt32 nFlags );
+    void                    loadConfig();
+    void                    saveConfig();
 
 public:
     // XFilePickerListener methods
@@ -206,6 +207,12 @@ public:
                                      SfxItemSet *&   rpSet,
                                      String&         rFilter );
     ErrCode                 execute();
+
+    void                    setPath( const OUString& rPath ) { maPath = rPath; }
+    void                    setFilter( const OUString& rFilter ) { maCurFilter = rFilter; }
+
+    OUString                getPath() const { return maPath; }
+    OUString                getFilter() const { return maCurFilter; }
 };
 
 // ------------------------------------------------------------------------
@@ -273,7 +280,7 @@ void FileDialogHelper_Impl::enablePasswordBox()
     Reference< XFilterManager > xFltMgr( mxFileDlg, UNO_QUERY );
     OUString aFilterName = xFltMgr->getCurrentFilter();
 
-    const SfxFilter* pFilter = mpMatcher->GetFilter4UIName(
+    const SfxFilter* pFilter = mpMatcher->GetFilter(
             aFilterName, 0, SFX_FILTER_NOTINFILEDLG );
 
     BOOL bEnablePasswd = pFilter && pFilter->UsesStorage() &&
@@ -339,6 +346,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( sal_uInt32 nFlags )
     // Otherwise, a FileOpen_ReadonlyVersionBox dialog will be created
 
     mnError         = ERRCODE_NONE;
+    mbHasAutoExt    = sal_False;
     mbHasPassword   = sal_False;
     mbHasVersions   = sal_False;
     mbDeleteMatcher = sal_False;
@@ -366,12 +374,13 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( sal_uInt32 nFlags )
         if ( nFlags & SFXWB_PASSWORD )
         {
             mbHasPassword = sal_True;
+            mbHasAutoExt = sal_True;
             aServiceName[0] <<= OUString( RTL_CONSTASCII_USTRINGPARAM( FILE_SAVE_AUTOEXT_PWDBOX ) );
         }
         else
             aServiceName[0] <<= OUString( RTL_CONSTASCII_USTRINGPARAM( FILE_SAVE ) );
     }
-    else if ( !mbInsert && xInit.is() )
+    else if ( !mbInsert )
     {
         aServiceName[0] <<= OUString( RTL_CONSTASCII_USTRINGPARAM( FILE_OPEN_READONLY_VERSIONBOX ) );
         mbHasVersions = sal_True;
@@ -426,8 +435,12 @@ ErrCode FileDialogHelper_Impl::execute( const String&   rPath,
     if ( rPath.Len() )
         mxFileDlg->setDisplayDirectory( rPath );
 
+    loadConfig();
+
     // show the dialog
     sal_Int16 nRet = mxFileDlg->execute();
+
+    saveConfig();
 
     if ( nRet != FileDialogResults::CANCEL )
     {
@@ -509,16 +522,39 @@ ErrCode FileDialogHelper_Impl::execute( const String&   rPath,
 // ------------------------------------------------------------------------
 ErrCode FileDialogHelper_Impl::execute()
 {
-    if ( ! mxFileDlg.is() )
+    Reference< XFilterManager > xFltMgr( mxFileDlg, UNO_QUERY );
+
+    if ( ! mxFileDlg.is() || !xFltMgr.is() )
         return ERRCODE_ABORT;
+
+    if ( maPath.getLength() )
+    {
+        INetURLObject aObj( maPath, INET_PROT_FILE );
+        OUString aTitle( aObj.getName( INetURLObject::LAST_SEGMENT, true,
+                         INetURLObject::DECODE_WITH_CHARSET ) );
+        aObj.removeSegment();
+        mxFileDlg->setDisplayDirectory( aObj.GetMainURL() );
+        mxFileDlg->setDefaultName( aTitle );
+    }
+
+    if ( maCurFilter.getLength() )
+        xFltMgr->setCurrentFilter( maCurFilter );
+
+    loadConfig();
 
     // show the dialog
     sal_Int16 nRet = mxFileDlg->execute();
 
+    maPath = mxFileDlg->getDisplayDirectory();
+    maCurFilter = xFltMgr->getCurrentFilter();
+
     if ( nRet == FileDialogResults::CANCEL )
         return ERRCODE_ABORT;
     else
+    {
+        saveConfig();
         return ERRCODE_NONE;
+    }
 }
 
 // ------------------------------------------------------------------------
@@ -560,63 +596,11 @@ void FileDialogHelper_Impl::addFilters( sal_uInt32 nFlags,
     }
 }
 
-// ------------------------------------------------------------------------
-void FileDialogHelper_Impl::initOpen( sal_uInt32 nFlags )
-{
-    // initialize from config
-    BOOL bAutoExtChecked = TRUE;
-    SvtViewOptions aDlgOpt( E_DIALOG, IODLG_CONFIGNAME );
-
-    if ( aDlgOpt.Exists() )
-    {
-        sal_Int32 nFlag = aDlgOpt.GetUserData().toInt32();
-        bAutoExtChecked = (BOOL)( nFlag );
-    }
-
-#if 0   //--**--
-    if ( _pImp->_pCbAutoExtension )
-        _pImp->_pCbAutoExtension->Check( bAutoExtChecked );
-
-    if ( _pImp->_eMode == FILEDLG_MODE_OPEN )
-        _pImp->InitFilterCache_Impl();
-#endif
-}
-
-
-// ------------------------------------------------------------------------
-void FileDialogHelper_Impl::initSave( sal_uInt32 nFlags )
-{}
-
+/*
 // ------------------------------------------------------------------------
 void FileDialogHelper_Impl::initGraphic( sal_uInt32 nFlags )
 {
-    SvtViewOptions aViewOpt( E_DIALOG, IMPGRF_CONFIGNAME );
-
-    String aUserData;
-
-    if ( aViewOpt.Exists() )
-        aUserData = aViewOpt.GetUserData();
-
 #if 0   //--**--
-    // respect the last "insert as link" state
-    BOOL bLink = FALSE;
-    const SfxPoolItem* pLink = pSfxApp->GetItem( SID_IMPORT_GRAPH_LINK );
-
-    if ( pLink )
-        bLink = ( (const SfxBoolItem*)pLink )->GetValue();
-    else if ( aUserData.Len() > 0 )
-        bLink = (BOOL)aUserData.GetToken(0).ToInt32();
-
-    SetValue( LINK_BOX, bLink );
-
-    // respect the last "show preview" state
-    const SfxPoolItem* pPrevItem = pSfxApp->GetItem( SID_IMPORT_GRAPH_PREVIEW );
-    BOOL bShowPreview = FALSE;
-
-    if ( pPrevItem )
-        bShowPreview = ( (SfxBoolItem*)pPrevItem )->GetValue();
-    else if ( aUserData.Len() > 0 )
-        bShowPreview = (BOOL)aUserData.GetToken(1).ToInt32();
 
     SetValue( PREVIEW_BOX, bShowPreview );
 
@@ -670,26 +654,93 @@ void FileDialogHelper_Impl::initGraphic( sal_uInt32 nFlags )
 #endif  //--**--
 }
 
+*/
 
 
-
-#if 0
+// ------------------------------------------------------------------------
 void FileDialogHelper_Impl::saveConfig()
 {
-    SvtViewOptions aDlgOpt( E_DIALOG, _pImp->_aIniKey );
-    String aUserData = aDlgOpt.GetUserData();
-    sal_Unicode cFlag;
+    Reference < XFilePickerControlAccess > xDlg( mxFileDlg, UNO_QUERY );
+    Any aValue;
 
-    if ( _pImp->_pCbAutoExtension )
-        cFlag = _pImp->_pCbAutoExtension->IsChecked() ? '1' : '0';
-    else if ( !aUserData.Len() )
-        cFlag = '1';
-    else
-        cFlag = aUserData.GetChar(0);
-    aUserData.Replace( 0, 1, cFlag );
-    aDlgOpt.SetUserData( aUserData );
+    if ( ! xDlg.is() )
+        return;
+
+    if ( mbHasAutoExt )
+    {
+        aValue = xDlg->getValue( FilePickerElementID::CBX_AUTO_FILE_EXTENSION );
+        sal_Bool bAutoExt = sal_False;
+        if ( aValue >>= bAutoExt )
+        {
+            SvtViewOptions aDlgOpt( E_DIALOG, IODLG_CONFIGNAME );
+            if ( aDlgOpt.Exists() )
+                aDlgOpt.SetUserData( String::CreateFromInt32( (sal_Int32) bAutoExt ) );
+        }
+    }
+
+    if ( mbHasPreview || mbHasLink )
+    {
+        SvtViewOptions aDlgOpt( E_DIALOG, IMPGRF_CONFIGNAME );
+        String aUserData;// = aDlgOpt.GetUserData();
+
+        aValue = xDlg->getValue( FilePickerElementID::CBX_INSERT_AS_LINK );
+        sal_Bool bValue = sal_False;
+        if ( aValue >>= bValue )
+            aUserData.SetToken( 0, ';', String::CreateFromInt32( (sal_Int32) bValue ) );
+
+        aValue = xDlg->getValue( FilePickerElementID::CBX_PREVIEW );
+        bValue = sal_False;
+        if ( aValue >>= bValue )
+            aUserData.SetToken( 1, ';', String::CreateFromInt32( (sal_Int32) bValue ) );
+
+        aDlgOpt.SetUserData( aUserData );
+    }
 }
-#endif
+
+// ------------------------------------------------------------------------
+void FileDialogHelper_Impl::loadConfig()
+{
+    Reference < XFilePickerControlAccess > xDlg( mxFileDlg, UNO_QUERY );
+    Any aValue;
+
+    if ( ! xDlg.is() )
+        return;
+
+    if ( mbHasAutoExt )
+    {
+        // initialize from config
+        SvtViewOptions aDlgOpt( E_DIALOG, IODLG_CONFIGNAME );
+
+        if ( aDlgOpt.Exists() )
+        {
+            sal_Int32 nFlag = aDlgOpt.GetUserData().toInt32();
+            aValue <<= (sal_Bool) nFlag;
+            xDlg->setValue( FilePickerElementID::CBX_AUTO_FILE_EXTENSION, aValue );
+        }
+    }
+
+    if ( mbHasPreview || mbHasLink )
+    {
+        SvtViewOptions aViewOpt( E_DIALOG, IMPGRF_CONFIGNAME );
+        String aUserData;
+
+        if ( aViewOpt.Exists() )
+            aUserData = aViewOpt.GetUserData();
+
+        if ( aUserData.Len() > 0 )
+        {
+            // respect the last "insert as link" state
+            sal_Bool bLink = (sal_Bool) aUserData.GetToken(0).ToInt32();
+            aValue <<= bLink;
+            xDlg->setValue( FilePickerElementID::CBX_INSERT_AS_LINK, aValue );
+
+            // respect the last "show preview" state
+            sal_Bool bShowPreview = (sal_Bool) aUserData.GetToken(1).ToInt32();
+            aValue <<= bShowPreview;
+            xDlg->setValue( FilePickerElementID::CBX_PREVIEW, aValue );
+        }
+    }
+}
 
 // ------------------------------------------------------------------------
 // -----------          FileDialogHelper        ---------------------------
@@ -754,6 +805,30 @@ String FileDialogHelper::GetPath() const
     }
 
     return String();
+}
+
+// ------------------------------------------------------------------------
+String FileDialogHelper::GetDisplayDirectory() const
+{
+    return mpImp->getPath();
+}
+
+// ------------------------------------------------------------------------
+String FileDialogHelper::GetCurrentFilter() const
+{
+    return mpImp->getFilter();
+}
+
+// ------------------------------------------------------------------------
+void FileDialogHelper::SetDisplayDirectory( const String& rPath )
+{
+    mpImp->setPath( rPath );
+}
+
+// ------------------------------------------------------------------------
+void FileDialogHelper::SetCurrentFilter( const String& rFilter )
+{
+    mpImp->setFilter( rFilter );
 }
 
 // ------------------------------------------------------------------------
