@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fews.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:17:40 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 13:57:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,9 +147,13 @@
 #ifndef _FMTANCHR_HXX
 #include <fmtanchr.hxx>
 #endif
-// OD 08.09.2003 #108749#, #110354#
-#ifndef _ANCHOREDOBJECTPOSITION_HXX
-#include <anchoredobjectposition.hxx>
+// OD 29.10.2003 #113049#
+#ifndef _ENVIRONMENTOFANCHOREDOBJECT_HXX
+#include <environmentofanchoredobject.hxx>
+#endif
+// OD 12.11.2003 #i22341#
+#ifndef _NDTXT_HXX
+#include <ndtxt.hxx>
 #endif
 // OD 27.11.2003 #112045#
 #ifndef _DFLYOBJ_HXX
@@ -868,10 +872,15 @@ SwFEShell::~SwFEShell()
 
 // OD 18.09.2003 #i17567#, #108749#, #110354# - adjustments for allowing
 //          negative vertical positions for fly frames anchored to paragraph/to character.
+// OD 06.11.2003 #i22305# - adjustments for option 'Follow text flow'
+//          for to frame anchored objects.
+// OD 12.11.2003 #i22341# - adjustments for vertical alignment at top of line
+//          for to character anchored objects.
 void SwFEShell::CalcBoundRect( SwRect& _orRect,
                                const RndStdIds _nAnchorId,
                                const SwRelationOrient _eHoriRelOrient,
                                const SwRelationOrient _eVertRelOrient,
+                               const SwPosition* _pToCharCntntPos,
                                const bool _bFollowTextFlow,
                                bool _bMirror,
                                Point* _opRef,
@@ -908,19 +917,18 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
 
     if( FLY_PAGE == _nAnchorId || FLY_AT_FLY == _nAnchorId ) // LAYER_IMPL
     {
-#ifdef AMA_OUT_OF_FLY
-        // Falls wir uns auch ausserhalb des Rahmens aufhalten duerfen
-        SwFrm *pTmp = pFrm->FindPageFrm();
-        rRect = pTmp->Frm();
-        if( FLY_PAGE == _nAnchorId )
-            pFrm = pTmp;
-#else
         SwFrm *pTmp = pFrm;
-        if( FLY_PAGE == _nAnchorId )
+        // OD 06.11.2003 #i22305#
+        if ( FLY_PAGE == _nAnchorId ||
+             ( FLY_AT_FLY == _nAnchorId && !_bFollowTextFlow ) )
+        {
             pFrm = pPage;
+        }
         else
+        {
             pFrm = pFrm->FindFlyFrm();
-        if( !pFrm )
+        }
+        if ( !pFrm )
             pFrm = pTmp;
         _orRect = pFrm->Frm();
         SWRECTFN( pFrm )
@@ -978,7 +986,6 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                 case REL_PG_PRTAREA: aPos.X() += pFrm->Prt().Left(); break;
             }
         }
-#endif
         if ( _opPercent )
             *_opPercent = pFrm->Prt().SSize();
     }
@@ -1005,10 +1012,13 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
             // and vertically by the printing area of the vertical environment,
             // if the object follows the text flow, or by the frame area of the
             // vertical environment, if the object doesn't follow the text flow.
+            // OD 29.10.2003 #113049# - new class <SwEnvironmentOfAnchoredObject>
+            objectpositioning::SwEnvironmentOfAnchoredObject aEnvOfObj(
+                                                            _bFollowTextFlow );
             const SwLayoutFrm& rHoriEnvironLayFrm =
-                    objectpositioning::SwAnchoredObjectPosition::GetHoriEnvironmentLayoutFrm( *pFrm, _bFollowTextFlow, false );
+                                aEnvOfObj.GetHoriEnvironmentLayoutFrm( *pFrm, false );
             const SwLayoutFrm& rVertEnvironLayFrm =
-                    objectpositioning::SwAnchoredObjectPosition::GetVertEnvironmentLayoutFrm( *pFrm, _bFollowTextFlow, false );
+                                aEnvOfObj.GetVertEnvironmentLayoutFrm( *pFrm, false );
             SwRect aHoriEnvironRect( rHoriEnvironLayFrm.Frm() );
             SwRect aVertEnvironRect;
             if ( _bFollowTextFlow )
@@ -1064,6 +1074,56 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                     }
                 }
             }
+
+            // OD 12.11.2003 #i22341# - adjust vertical 'virtual' anchor position
+            // (<aPos.Y()> respectively <aPos.X()>), if object is anchored to
+            // character and vertical aligned at character or top of line
+            if ( _nAnchorId == FLY_AUTO_CNTNT &&
+                 ( _eVertRelOrient == REL_CHAR ||
+                   _eVertRelOrient == REL_VERT_LINE ) )
+            {
+                ASSERT( pFrm->ISA(SwTxtFrm),
+                        "<SwFEShell::CalcBoundRect(..)> - wrong anchor frame." )
+                SwTxtFrm* pTxtFrm = static_cast<SwTxtFrm*>(pFrm);
+                SwTwips nTop = 0L;
+                if ( _eVertRelOrient == REL_CHAR )
+                {
+                    SwRect aCharRect;
+                    if ( _pToCharCntntPos )
+                    {
+                        pTxtFrm->GetAutoPos( aCharRect, *_pToCharCntntPos );
+                    }
+                    else
+                    {
+                        // No content position provided. Thus, use a default one.
+                        SwPosition aDefaultCntntPos( *(pTxtFrm->GetTxtNode()) );
+                        pTxtFrm->GetAutoPos( aCharRect, aDefaultCntntPos );
+                    }
+                    nTop = (aCharRect.*fnRect->fnGetBottom)();
+                }
+                else
+                {
+                    if ( _pToCharCntntPos )
+                    {
+                        pTxtFrm->GetTopOfLine( nTop, *_pToCharCntntPos );
+                    }
+                    else
+                    {
+                        // No content position provided. Thus, use a default one.
+                        SwPosition aDefaultCntntPos( *(pTxtFrm->GetTxtNode()) );
+                        pTxtFrm->GetTopOfLine( nTop, aDefaultCntntPos );
+                    }
+                }
+                if ( bVert )
+                {
+                    aPos.X() = nTop;
+                }
+                else
+                {
+                    aPos.Y() = nTop;
+                }
+            }
+
             if ( bVert )
             {
                 _orRect = SwRect( aVertEnvironRect.Left(),
