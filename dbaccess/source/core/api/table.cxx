@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: vg $ $Date: 2002-10-30 09:33:36 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:48:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,7 +221,9 @@ OColumn* ODBTable::createColumn(const ::rtl::OUString& _rName) const
     }
     else
     {
-        pReturn = new OTableColumnWrapper( ::dbtools::createSDBCXColumn(const_cast<ODBTable*>(this),getConnection(),_rName,isCaseSensitive()) );
+        OColumns* pColumns = static_cast<OColumns*>(m_pColumns);
+        Reference<XPropertySet> xProp(pColumns->createBaseObject(_rName),UNO_QUERY);
+        pReturn = new OTableColumnWrapper( xProp );
     }
     return pReturn;
 }
@@ -370,7 +372,8 @@ void ODBTable::flush_NoBroadcast_NoCommit()
         storeTo(m_aConfigurationNode.openNode(CONFIGKEY_SETTINGS));
 
         OColumns* pColumns = static_cast<OColumns*>(m_pColumns);
-        if ( pColumns ) {
+        if ( pColumns )
+        {
             Reference<XConnection> xCon = getConnection();
             pColumns->storeSettings( m_aConfigurationNode.openNode(CONFIGKEY_QRYDESCR_COLUMNS), getDataSourceNumberFormats( xCon ) );
         };
