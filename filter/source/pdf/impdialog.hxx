@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impdialog.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-23 07:44:40 $
+ *  last change: $Author: sj $ $Date: 2002-09-17 12:59:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,9 +82,9 @@ private:
       OKButton                          maBtnOK;
     CancelButton                        maBtnCancel;
     HelpButton                          maBtnHelp;
-    FixedLine                           maFlRange;
+    FixedLine                           maFlPages;
     RadioButton                         maRbAll;
-    RadioButton                         maRbPages;
+    RadioButton                         maRbRange;
     RadioButton                         maRbSelection;
     Edit                                maEdPages;
     FixedLine                           maFlCompression;

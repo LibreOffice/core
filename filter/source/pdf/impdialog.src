@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impdialog.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-13 14:34:48 $
+ *  last change: $Author: sj $ $Date: 2002-09-17 13:00:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,33 +70,12 @@ ModalDialog DLG_PDFEXPORT
     Closeable = TRUE ;
     Text = "PDF Optionen";
     Text [ ENGLISH ] = "PDF Options";
-    FixedLine FL_RANGE
+    FixedLine FL_PAGES
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 111 , 8 ) ;
-        Text = "Bereich" ;
-        Text [ ENGLISH ] = "Range" ;
-        Text[ english_us ] = "Range";
-        Text[ portuguese ] = "Range";
-        Text[ russian ] = "Range";
-        Text[ greek ] = "Range";
-        Text[ dutch ] = "Range";
-        Text[ french ] = "Zone";
-        Text[ spanish ] = "�rea";
-        Text[ finnish ] = "Range";
-        Text[ italian ] = "Sezione";
-        Text[ danish ] = "Range";
-        Text[ swedish ] = "Omr�de";
-        Text[ polish ] = "Range";
-        Text[ portuguese_brazilian ] = "Range";
-        Text[ japanese ] = "範囲";
-        Text[ korean ] = "영역";
-        Text[ chinese_simplified ] = "区域";
-        Text[ chinese_traditional ] = "區域";
-        Text[ turkish ] = "Range";
-        Text[ arabic ] = "Range";
-        Text[ catalan ] = "Range";
-        Text[ thai ] = "Range";
+        Text = "Seiten" ;
+        Text [ ENGLISH ] = "Pages" ;
     };
     RadioButton RB_ALL
     {
@@ -126,33 +105,12 @@ ModalDialog DLG_PDFEXPORT
         Text[ catalan ] = "~All";
         Text[ thai ] = "~All";
     };
-    RadioButton RB_PAGES
+    RadioButton RB_RANGE
     {
         Pos = MAP_APPFONT ( 12 , 24 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "~Seiten" ;
-        Text [ ENGLISH ] = "Pa~ges" ;
-        Text[ english_us ] = "Pa~ges";
-        Text[ portuguese ] = "Pa~ges";
-        Text[ russian ] = "Pa~ges";
-        Text[ greek ] = "Pa~ges";
-        Text[ dutch ] = "Pa~ges";
-        Text[ french ] = "Pages";
-        Text[ spanish ] = "P�gin~as";
-        Text[ finnish ] = "Pa~ges";
-        Text[ italian ] = "Pagine";
-        Text[ danish ] = "Pa~ges";
-        Text[ swedish ] = "~Sidor";
-        Text[ polish ] = "Pa~ges";
-        Text[ portuguese_brazilian ] = "Pa~ges";
-        Text[ japanese ] = "ページ指定";
-        Text[ korean ] = "페이지(~P)";
-        Text[ chinese_simplified ] = "页(~P)";
-        Text[ chinese_traditional ] = "頁(~P)";
-        Text[ turkish ] = "Pa~ges";
-        Text[ arabic ] = "Pa~ges";
-        Text[ catalan ] = "Pa~ges";
-        Text[ thai ] = "Pa~ges";
+        Text = "~Bereich" ;
+        Text [ ENGLISH ] = "~Range" ;
     };
     RadioButton RB_SELECTION
     {

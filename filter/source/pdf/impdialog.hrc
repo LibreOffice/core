@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impdialog.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-19 14:59:34 $
+ *  last change: $Author: sj $ $Date: 2002-09-17 12:59:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,9 @@
 
 #define DLG_PDFEXPORT       1024
 
-#define FL_RANGE            1
+#define FL_PAGES            1
 #define RB_ALL              2
-#define RB_PAGES            3
+#define RB_RANGE            3
 #define RB_SELECTION        4
 #define ED_PAGES            5
 #define BT_OK               6

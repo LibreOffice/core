@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impdialog.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-23 07:44:38 $
+ *  last change: $Author: sj $ $Date: 2002-09-17 12:58:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,9 +71,9 @@ ImpPDFDialog::ImpPDFDialog( Window* pParent, ResMgr& rResMgr, Sequence< Property
     maBtnOK( this, ResId( BT_OK ) ),
     maBtnCancel( this, ResId( BT_CANCEL ) ),
     maBtnHelp( this, ResId( BT_HELP ) ),
-    maFlRange( this, ResId( FL_RANGE ) ),
+    maFlPages( this, ResId( FL_PAGES ) ),
     maRbAll( this, ResId( RB_ALL ) ),
-    maRbPages( this, ResId( RB_PAGES ) ),
+    maRbRange( this, ResId( RB_RANGE ) ),
     maRbSelection( this, ResId( RB_SELECTION ) ),
     maEdPages( this, ResId( ED_PAGES ) ),
     maFlCompression( this, ResId( FL_COMPRESSION ) ),
@@ -86,7 +86,7 @@ ImpPDFDialog::ImpPDFDialog( Window* pParent, ResMgr& rResMgr, Sequence< Property
     const ULONG nCompressMode = maConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "CompressMode" ) ), 0 );
 
     FreeResource();
-    maRbPages.SetToggleHdl( LINK( this, ImpPDFDialog, TogglePagesHdl ) );
+    maRbRange.SetToggleHdl( LINK( this, ImpPDFDialog, TogglePagesHdl ) );
 
     maRbAll.Check();
     TogglePagesHdl( NULL );
@@ -127,7 +127,7 @@ Sequence< PropertyValue > ImpPDFDialog::GetFilterData()
 
     aRet.realloc( aRet.getLength() + 1 );
 
-    if( maRbPages.IsChecked() )
+    if( maRbRange.IsChecked() )
     {
         aRet[ aRet.getLength() - 1 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageRange" ) );
         aRet[ aRet.getLength() - 1 ].Value <<= OUString( maEdPages.GetText() );
@@ -145,8 +145,8 @@ Sequence< PropertyValue > ImpPDFDialog::GetFilterData()
 
 IMPL_LINK( ImpPDFDialog, TogglePagesHdl, void*, p )
 {
-    maEdPages.Enable( maRbPages.IsChecked() );
-    maEdPages.SetReadOnly( !maRbPages.IsChecked() );
+    maEdPages.Enable( maRbRange.IsChecked() );
+    maEdPages.SetReadOnly( !maRbRange.IsChecked() );
 
     return 0;
 }
