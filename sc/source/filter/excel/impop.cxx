@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-14 12:01:42 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 18:07:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,6 +250,7 @@ ImportExcel::ImportExcel( XclImpRootData& rImpData ):
     ScDocOptions aDocOpt( pD->GetDocOptions() );
     aDocOpt.SetIgnoreCase( TRUE );              // always in Excel
     aDocOpt.SetFormulaRegexEnabled( FALSE );    // regular expressions? what's that?
+    aDocOpt.SetLookUpColRowNames( FALSE );      // default: no natural language refs
     pD->SetDocOptions( aDocOpt );
 }
 
@@ -890,6 +891,17 @@ void ImportExcel::Country( void )
     eLanguage = ::svx::ConvertCountryToLanguage( static_cast< ::svx::CountryId >( nUICountry ) );
     if( eLanguage != LANGUAGE_DONTKNOW )
         SetUILanguage( eLanguage );
+}
+
+
+void ImportExcel::ReadUsesElfs()
+{
+    if( maStrm.ReaduInt16() != 0 )
+    {
+        ScDocOptions aDocOpt = GetDoc().GetDocOptions();
+        aDocOpt.SetLookUpColRowNames( TRUE );
+        GetDoc().SetDocOptions( aDocOpt );
+    }
 }
 
 
