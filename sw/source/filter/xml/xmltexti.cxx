@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexti.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:09:53 $
+ *  last change: $Author: rt $ $Date: 2003-06-12 07:40:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -588,17 +588,26 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertPlugin(
                          RES_FRMATR_END );
     lcl_putHeightAndWidth( aItemSet, nHeight, nWidth);
 
+    // We'll need a (valid) URL, or we need a MIME type. If we don't have
+    // either, do not insert plugin and return early. Copy URL into URL oject
+    // on the way.
        INetURLObject aURLObj;
-    if( rHRef.getLength() && !aURLObj.SetURL( INetURLObject::RelToAbs(rHRef) ) )
+    bool bValidURL = rHRef.getLength() != 0 &&
+                     aURLObj.SetURL( INetURLObject::RelToAbs(rHRef) );
+    bool bValidMimeType = rMimeType.getLength() != 0;
+    if( !bValidURL && !bValidMimeType )
         return xPropSet;
+
     SvStorageRef pStor = new SvStorage( aEmptyStr, STREAM_STD_READWRITE);
     SvFactory *pPlugInFactory = SvFactory::GetDefaultPlugInFactory();
     SvPlugInObjectRef xPlugin = &pPlugInFactory->CreateAndInit( *pPlugInFactory, pStor );
 
     xPlugin->EnableSetModified( FALSE );
     xPlugin->SetPlugInMode( (USHORT)PLUGIN_EMBEDED );
-    xPlugin->SetURL( aURLObj );
-    xPlugin->SetMimeType( rMimeType );
+    if( bValidURL )
+        xPlugin->SetURL( aURLObj );
+    if( bValidMimeType )
+        xPlugin->SetMimeType( rMimeType );
 
     SwFrmFmt *pFrmFmt = pDoc->Insert( *pTxtCrsr->GetPaM(),
                                        xPlugin,
@@ -827,7 +836,7 @@ void SwXMLTextImportHelper::RedlineSetCursor(
 void SwXMLTextImportHelper::RedlineAdjustStartNodeCursor(
     sal_Bool bStart)
 {
-    OUString& rId = GetOpenRedlineId();
+    OUString rId = GetOpenRedlineId();
     if ((NULL != pRedlineHelper) && (rId.getLength() > 0))
     {
         Reference<XTextRange> xTextRange( GetCursor()->getStart() );
