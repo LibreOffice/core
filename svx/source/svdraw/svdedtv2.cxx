@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedtv2.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 14:45:15 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 11:14:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,12 +123,12 @@ void SdrEditView::ImpBundleVirtObjOfMarkList()
 
 SdrObject* SdrEditView::GetMaxToTopObj(SdrObject* pObj) const
 {
-    return NULL;
+  return NULL;
 }
 
 SdrObject* SdrEditView::GetMaxToBtmObj(SdrObject* pObj) const
 {
-    return NULL;
+  return NULL;
 }
 
 void SdrEditView::ObjOrderChanged(SdrObject* pObj, ULONG nOldPos, ULONG nNewPos)
@@ -145,7 +145,9 @@ void SdrEditView::MovMarkedToTop()
         for (nm=0; nm<nAnz; nm++) { // Ordnums muessen alle stimmen!
             GetMarkedObjectByIndex(nm)->GetOrdNum();
         }
-        BOOL bNeedBundle=FALSE;
+        // --> OD 2004-08-24 #110810#
+//      BOOL bNeedBundle=FALSE;
+        // <--
         BOOL bChg=FALSE;
         SdrObjList* pOL0=NULL;
         ULONG nNewPos=0;
@@ -161,44 +163,50 @@ void SdrEditView::MovMarkedToTop()
             ULONG nNowPos=pObj->GetOrdNumDirect();
             const Rectangle& rBR=pObj->GetCurrentBoundRect();
             ULONG nCmpPos=nNowPos+1;
-            SdrObject* pMaxObj=GetMaxToTopObj(pObj);
-            if (pMaxObj!=NULL) {
-                ULONG nMaxPos=pMaxObj->GetOrdNum();
-                if (nMaxPos!=0) nMaxPos--;
-                if (nNewPos>nMaxPos) nNewPos=nMaxPos; // diesen nicht ueberholen.
-                if (nNewPos<nNowPos) nNewPos=nNowPos; // aber dabei auch nicht in die falsche Richtung schieben
-            }
+            // --> OD 2004-08-24 #110810#
+//          SdrObject* pMaxObj=GetMaxToTopObj(pObj);
+//          if (pMaxObj!=NULL) {
+//              ULONG nMaxPos=pMaxObj->GetOrdNum();
+//              if (nMaxPos!=0) nMaxPos--;
+//              if (nNewPos>nMaxPos) nNewPos=nMaxPos; // diesen nicht ueberholen.
+//              if (nNewPos<nNowPos) nNewPos=nNowPos; // aber dabei auch nicht in die falsche Richtung schieben
+//          }
+            // <--
             BOOL bEnd=FALSE;
             while (nCmpPos<nNewPos && !bEnd) {
                 SdrObject* pCmpObj=pOL->GetObj(nCmpPos);
                 if (pCmpObj==NULL) {
                     DBG_ERROR("MovMarkedToTop(): Vergleichsobjekt nicht gefunden");
                     bEnd=TRUE;
-                } else if (pCmpObj==pMaxObj) {
-                    nNewPos=nCmpPos;
-                    nNewPos--;
-                    bEnd=TRUE;
+                // --> OD 2004-08-24 #110810#
+//              } else if (pCmpObj==pMaxObj) {
+//                  nNewPos=nCmpPos;
+//                  nNewPos--;
+//                  bEnd=TRUE;
+                // <--
                 } else if (rBR.IsOver(pCmpObj->GetCurrentBoundRect())) {
                     nNewPos=nCmpPos;
                     bEnd=TRUE;
                 } else nCmpPos++;
             }
             if (nNowPos!=nNewPos) {
-                if (bBundleVirtObj) {
-                    SdrVirtObj* pV0=PTR_CAST(SdrVirtObj,pObj);
-                    if (pV0!=NULL) bNeedBundle=TRUE;
-                    do { // nicht zwischen virtuelle Objekte draengeln
-                        SdrObject* pV1Tmp=pOL->GetObj(nNewPos);
-                        SdrObject* pV2Tmp=pOL->GetObj(nNewPos+1);
-                        SdrVirtObj* pV1=PTR_CAST(SdrVirtObj,pV1Tmp);
-                        SdrVirtObj* pV2=PTR_CAST(SdrVirtObj,pV2Tmp);
-                        // Zwischen VirtObj mit gleichem Master wie ich darf ich schon
-                        if (pV0!=NULL && pV1!=NULL && &pV0->GetReferencedObj()==&pV1->GetReferencedObj()) break;
-                        // Zwischen andere nicht
-                        if (pV1==NULL || pV2==NULL || &pV1->GetReferencedObj()!=&pV2->GetReferencedObj()) break;
-                        nNewPos++;
-                    } while (TRUE);
-                }
+                // --> OD 2004-08-24 #110810#
+//              if (bBundleVirtObj) {
+//                  SdrVirtObj* pV0=PTR_CAST(SdrVirtObj,pObj);
+//                  if (pV0!=NULL) bNeedBundle=TRUE;
+//                  do { // nicht zwischen virtuelle Objekte draengeln
+//                      SdrObject* pV1Tmp=pOL->GetObj(nNewPos);
+//                      SdrObject* pV2Tmp=pOL->GetObj(nNewPos+1);
+//                      SdrVirtObj* pV1=PTR_CAST(SdrVirtObj,pV1Tmp);
+//                      SdrVirtObj* pV2=PTR_CAST(SdrVirtObj,pV2Tmp);
+//                      // Zwischen VirtObj mit gleichem Master wie ich darf ich schon
+//                      if (pV0!=NULL && pV1!=NULL && &pV0->GetReferencedObj()==&pV1->GetReferencedObj()) break;
+//                      // Zwischen andere nicht
+//                      if (pV1==NULL || pV2==NULL || &pV1->GetReferencedObj()!=&pV2->GetReferencedObj()) break;
+//                      nNewPos++;
+//                  } while (TRUE);
+//              }
+                // <--
                 bChg=TRUE;
                 pOL->SetObjectOrdNum(nNowPos,nNewPos);
                 AddUndo(new SdrUndoObjOrdNum(*pObj,nNowPos,nNewPos));
@@ -206,7 +214,9 @@ void SdrEditView::MovMarkedToTop()
             }
             nNewPos--;
         }
-        if (bNeedBundle) ImpBundleVirtObjOfMarkList();
+        // --> OD 2004-08-24 #110810#
+//      if (bNeedBundle) ImpBundleVirtObjOfMarkList();
+        // <--
         EndUndo();
         if (bChg) MarkListHasChanged();
     }
@@ -222,7 +232,9 @@ void SdrEditView::MovMarkedToBtm()
         for (nm=0; nm<nAnz; nm++) { // Ordnums muessen alle stimmen!
             GetMarkedObjectByIndex(nm)->GetOrdNum();
         }
-        BOOL bNeedBundle=FALSE;
+        // --> OD 2004-08-24 #110810#
+//      BOOL bNeedBundle=FALSE;
+        // <--
         BOOL bChg=FALSE;
         SdrObjList* pOL0=NULL;
         ULONG nNewPos=0;
@@ -237,12 +249,14 @@ void SdrEditView::MovMarkedToBtm()
             ULONG nNowPos=pObj->GetOrdNumDirect();
             const Rectangle& rBR=pObj->GetCurrentBoundRect();
             ULONG nCmpPos=nNowPos; if (nCmpPos>0) nCmpPos--;
-            SdrObject* pMaxObj=GetMaxToBtmObj(pObj);
-            if (pMaxObj!=NULL) {
-                ULONG nMinPos=pMaxObj->GetOrdNum()+1;
-                if (nNewPos<nMinPos) nNewPos=nMinPos; // diesen nicht ueberholen.
-                if (nNewPos>nNowPos) nNewPos=nNowPos; // aber dabei auch nicht in die falsche Richtung schieben
-            }
+            // --> OD 2004-08-24 #110810#
+//          SdrObject* pMaxObj=GetMaxToBtmObj(pObj);
+//          if (pMaxObj!=NULL) {
+//              ULONG nMinPos=pMaxObj->GetOrdNum()+1;
+//              if (nNewPos<nMinPos) nNewPos=nMinPos; // diesen nicht ueberholen.
+//              if (nNewPos>nNowPos) nNewPos=nNowPos; // aber dabei auch nicht in die falsche Richtung schieben
+//          }
+            // <--
             BOOL bEnd=FALSE;
             // nNewPos ist an dieser Stelle noch die maximale Position,
             // an der das Obj hinruecken darf, ohne seinen Vorgaenger
@@ -252,32 +266,36 @@ void SdrEditView::MovMarkedToBtm()
                 if (pCmpObj==NULL) {
                     DBG_ERROR("MovMarkedToBtm(): Vergleichsobjekt nicht gefunden");
                     bEnd=TRUE;
-                } else if (pCmpObj==pMaxObj) {
-                    nNewPos=nCmpPos;
-                    nNewPos++;
-                    bEnd=TRUE;
+                // --> OD 2004-08-24 #110810#
+//              } else if (pCmpObj==pMaxObj) {
+//                  nNewPos=nCmpPos;
+//                  nNewPos++;
+//                  bEnd=TRUE;
+                // <--
                 } else if (rBR.IsOver(pCmpObj->GetCurrentBoundRect())) {
                     nNewPos=nCmpPos;
                     bEnd=TRUE;
                 } else nCmpPos--;
             }
             if (nNowPos!=nNewPos) {
-                if (bBundleVirtObj) {
-                    SdrVirtObj* pV0=PTR_CAST(SdrVirtObj,pObj);
-                    if (pV0!=NULL) bNeedBundle=TRUE;
-                    do { // nicht zwischen virtuelle Objekte draengeln
-                        if (nNewPos==0) break;
-                        SdrObject* pV1Tmp=pOL->GetObj(nNewPos);
-                        SdrObject* pV2Tmp=pOL->GetObj(ULONG(nNewPos-1));
-                        SdrVirtObj* pV1=PTR_CAST(SdrVirtObj,pV1Tmp);
-                        SdrVirtObj* pV2=PTR_CAST(SdrVirtObj,pV2Tmp);
-                        // Zwischen VirtObj mit gleichem Master wie ich darf ich schon
-                        if (pV0!=NULL && pV1!=NULL && &pV0->GetReferencedObj()==&pV1->GetReferencedObj()) break;
-                        // Zwischen andere nicht
-                        if (pV1==NULL || pV2==NULL || &pV1->GetReferencedObj()!=&pV2->GetReferencedObj()) break;
-                        nNewPos--;
-                    } while (TRUE);
-                }
+                // --> OD 2004-08-24 #110810#
+//              if (bBundleVirtObj) {
+//                  SdrVirtObj* pV0=PTR_CAST(SdrVirtObj,pObj);
+//                  if (pV0!=NULL) bNeedBundle=TRUE;
+//                  do { // nicht zwischen virtuelle Objekte draengeln
+//                      if (nNewPos==0) break;
+//                      SdrObject* pV1Tmp=pOL->GetObj(nNewPos);
+//                      SdrObject* pV2Tmp=pOL->GetObj(ULONG(nNewPos-1));
+//                      SdrVirtObj* pV1=PTR_CAST(SdrVirtObj,pV1Tmp);
+//                      SdrVirtObj* pV2=PTR_CAST(SdrVirtObj,pV2Tmp);
+//                      // Zwischen VirtObj mit gleichem Master wie ich darf ich schon
+//                      if (pV0!=NULL && pV1!=NULL && &pV0->GetReferencedObj()==&pV1->GetReferencedObj()) break;
+//                      // Zwischen andere nicht
+//                      if (pV1==NULL || pV2==NULL || &pV1->GetReferencedObj()!=&pV2->GetReferencedObj()) break;
+//                      nNewPos--;
+//                  } while (TRUE);
+//              }
+                // <--
                 bChg=TRUE;
                 pOL->SetObjectOrdNum(nNowPos,nNewPos);
                 AddUndo(new SdrUndoObjOrdNum(*pObj,nNowPos,nNewPos));
@@ -285,7 +303,9 @@ void SdrEditView::MovMarkedToBtm()
             }
             nNewPos++;
         }
-        if (bNeedBundle) ImpBundleVirtObjOfMarkList();
+        // --> OD 2004-08-24 #110810#
+//      if (bNeedBundle) ImpBundleVirtObjOfMarkList();
+        // <--
         EndUndo();
         if (bChg) MarkListHasChanged();
     }
@@ -323,7 +343,9 @@ void SdrEditView::PutMarkedInFrontOfObj(const SdrObject* pRefObj)
         for (nm=0; nm<nAnz; nm++) { // Ordnums muessen alle stimmen!
             GetMarkedObjectByIndex(nm)->GetOrdNum();
         }
-        BOOL bNeedBundle=FALSE;
+        // --> OD 2004-08-24 #110810#
+//      BOOL bNeedBundle=FALSE;
+        // <--
         BOOL bChg=FALSE;
         SdrObjList* pOL0=NULL;
         ULONG nNewPos=0;
@@ -338,13 +360,15 @@ void SdrEditView::PutMarkedInFrontOfObj(const SdrObject* pRefObj)
                     pOL0=pOL;
                 }
                 ULONG nNowPos=pObj->GetOrdNumDirect();
-                SdrObject* pMaxObj=GetMaxToTopObj(pObj);
-                if (pMaxObj!=NULL) {
-                    ULONG nMaxOrd=pMaxObj->GetOrdNum(); // geht leider nicht anders
-                    if (nMaxOrd>0) nMaxOrd--;
-                    if (nNewPos>nMaxOrd) nNewPos=nMaxOrd; // nicht ueberholen.
-                    if (nNewPos<nNowPos) nNewPos=nNowPos; // aber dabei auch nicht in die falsche Richtung schieben
-                }
+                // --> OD 2004-08-24 #110810#
+//              SdrObject* pMaxObj=GetMaxToTopObj(pObj);
+//              if (pMaxObj!=NULL) {
+//                  ULONG nMaxOrd=pMaxObj->GetOrdNum(); // geht leider nicht anders
+//                  if (nMaxOrd>0) nMaxOrd--;
+//                  if (nNewPos>nMaxOrd) nNewPos=nMaxOrd; // nicht ueberholen.
+//                  if (nNewPos<nNowPos) nNewPos=nNowPos; // aber dabei auch nicht in die falsche Richtung schieben
+//              }
+                // <--
                 if (pRefObj!=NULL) {
                     if (pRefObj->GetObjList()==pObj->GetObjList()) {
                         ULONG nMaxOrd=pRefObj->GetOrdNum(); // geht leider nicht anders
@@ -355,7 +379,9 @@ void SdrEditView::PutMarkedInFrontOfObj(const SdrObject* pRefObj)
                     }
                 }
                 if (nNowPos!=nNewPos) {
-                    if (bBundleVirtObj && HAS_BASE(SdrVirtObj,pObj)) bNeedBundle=TRUE;
+                    // --> OD 2004-08-24 #110810#
+//                  if (bBundleVirtObj && HAS_BASE(SdrVirtObj,pObj)) bNeedBundle=TRUE;
+                    // <--
                     bChg=TRUE;
                     pOL->SetObjectOrdNum(nNowPos,nNewPos);
                     AddUndo(new SdrUndoObjOrdNum(*pObj,nNowPos,nNewPos));
@@ -364,7 +390,9 @@ void SdrEditView::PutMarkedInFrontOfObj(const SdrObject* pRefObj)
                 nNewPos--;
             } // if (pObj!=pRefObj)
         } // for-Schleife ueber alle Markierten Objekte
-        if (bNeedBundle) ImpBundleVirtObjOfMarkList();
+        // --> OD 2004-08-24 #110810#
+//      if (bNeedBundle) ImpBundleVirtObjOfMarkList();
+        // <--
         EndUndo();
         if (bChg) MarkListHasChanged();
     }
@@ -402,7 +430,9 @@ void SdrEditView::PutMarkedBehindObj(const SdrObject* pRefObj)
         for (nm=0; nm<nAnz; nm++) { // Ordnums muessen alle stimmen!
             GetMarkedObjectByIndex(nm)->GetOrdNum();
         }
-        BOOL bNeedBundle=FALSE;
+        // --> OD 2004-08-24 #110810#
+//      BOOL bNeedBundle=FALSE;
+        // <--
         BOOL bChg=FALSE;
         SdrObjList* pOL0=NULL;
         ULONG nNewPos=0;
@@ -416,12 +446,14 @@ void SdrEditView::PutMarkedBehindObj(const SdrObject* pRefObj)
                     pOL0=pOL;
                 }
                 ULONG nNowPos=pObj->GetOrdNumDirect();
-                SdrObject* pMinObj=GetMaxToBtmObj(pObj);
-                if (pMinObj!=NULL) {
-                    ULONG nMinOrd=pMinObj->GetOrdNum()+1; // geht leider nicht anders
-                    if (nNewPos<nMinOrd) nNewPos=nMinOrd; // nicht ueberholen.
-                    if (nNewPos>nNowPos) nNewPos=nNowPos; // aber dabei auch nicht in die falsche Richtung schieben
-                }
+                // --> OD 2004-08-24 #110810#
+//              SdrObject* pMinObj=GetMaxToBtmObj(pObj);
+//              if (pMinObj!=NULL) {
+//                  ULONG nMinOrd=pMinObj->GetOrdNum()+1; // geht leider nicht anders
+//                  if (nNewPos<nMinOrd) nNewPos=nMinOrd; // nicht ueberholen.
+//                  if (nNewPos>nNowPos) nNewPos=nNowPos; // aber dabei auch nicht in die falsche Richtung schieben
+//              }
+                // <--
                 if (pRefObj!=NULL) {
                     if (pRefObj->GetObjList()==pObj->GetObjList()) {
                         ULONG nMinOrd=pRefObj->GetOrdNum(); // geht leider nicht anders
@@ -432,7 +464,9 @@ void SdrEditView::PutMarkedBehindObj(const SdrObject* pRefObj)
                     }
                 }
                 if (nNowPos!=nNewPos) {
-                    if (bBundleVirtObj && !bNeedBundle && HAS_BASE(SdrVirtObj,pObj)) bNeedBundle=TRUE;
+                    // --> OD 2004-08-24 #110810#
+//                  if (bBundleVirtObj && !bNeedBundle && HAS_BASE(SdrVirtObj,pObj)) bNeedBundle=TRUE;
+                    // <--
                     bChg=TRUE;
                     pOL->SetObjectOrdNum(nNowPos,nNewPos);
                     AddUndo(new SdrUndoObjOrdNum(*pObj,nNowPos,nNewPos));
@@ -441,7 +475,9 @@ void SdrEditView::PutMarkedBehindObj(const SdrObject* pRefObj)
                 nNewPos++;
             } // if (pObj!=pRefObj)
         } // for-Schleife ueber alle markierten Objekte
-        if (bNeedBundle) ImpBundleVirtObjOfMarkList();
+        // --> OD 2004-08-24 #110810#
+//      if (bNeedBundle) ImpBundleVirtObjOfMarkList();
+        // <--
         EndUndo();
         if (bChg) MarkListHasChanged();
     }
@@ -479,12 +515,16 @@ void SdrEditView::ReverseOrderOfMarked()
                 // Verwendung von Replace statt SetOrdNum wg. Performance (Neuberechnung der Ordnums)
                 a++; c--;
                 bChg=TRUE;
-                if (bBundleVirtObj && !bNeedBundle &&
-                    (HAS_BASE(SdrVirtObj,pObj1) || HAS_BASE(SdrVirtObj,pObj2))) bNeedBundle=TRUE;
+                // --> OD 2004-08-24 #110810#
+//              if (bBundleVirtObj && !bNeedBundle &&
+//                  (HAS_BASE(SdrVirtObj,pObj1) || HAS_BASE(SdrVirtObj,pObj2))) bNeedBundle=TRUE;
+                // <--
             }
             a=b+1;
         } while (a<nMarkAnz);
-        if (bNeedBundle) ImpBundleVirtObjOfMarkList();
+        // --> OD 2004-08-24 #110810#
+//      if (bNeedBundle) ImpBundleVirtObjOfMarkList();
+        // <--
         EndUndo();
         if (bChg) MarkListHasChanged();
     }
