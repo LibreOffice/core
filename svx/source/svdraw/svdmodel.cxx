@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ka $ $Date: 2000-12-03 16:55:59 $
+ *  last change: $Author: aw $ $Date: 2001-01-24 12:46:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -844,6 +844,7 @@ void SdrModel::ImpSetOutlinerDefaults( SdrOutliner* pOutliner, BOOL bInit )
     {
         pOutliner->EraseVirtualDevice();
         pOutliner->SetUpdateMode(FALSE);
+        pOutliner->SetEditTextObjectPool(pItemPool);
         pOutliner->SetDefTab(nDefaultTabulator);
     }
 

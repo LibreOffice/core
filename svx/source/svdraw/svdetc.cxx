@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdetc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-10 14:56:24 $
+ *  last change: $Author: aw $ $Date: 2001-01-24 12:46:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -556,7 +556,9 @@ SdrOutliner* SdrMakeOutliner( USHORT nOutlinerMode, SdrModel* pModel )
     pOutl->SetDefaults(aSet);
 */
 
-    SdrOutliner* pOutl=new SdrOutliner( &pModel->GetItemPool(), nOutlinerMode );
+    SfxItemPool* pPool = &pModel->GetItemPool();
+    SdrOutliner* pOutl = new SdrOutliner( pPool, nOutlinerMode );
+    pOutl->SetEditTextObjectPool( pPool );
     pOutl->SetStyleSheetPool( (SfxStyleSheetPool*) pModel->GetStyleSheetPool() );
     pOutl->SetDefTab( pModel->GetDefaultTabulator() );
 
