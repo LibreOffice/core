@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 10:43:17 $
+ *  last change: $Author: vg $ $Date: 2005-02-22 08:22:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2330,7 +2330,15 @@ bool WinwordAnchoring::ConvertPosition( SwFmtHoriOrient& _iorHoriOri,
                 if ( eHoriConv == CONV2PG )
                 {
                     _iorHoriOri.SetRelationOrient( REL_PG_FRAME );
-                    aPos = pAnchoredObj->GetRelPosToPageFrm();
+                    // --> OD 2005-01-27 #i33818#
+                    bool bRelToTableCell( false );
+                    aPos = pAnchoredObj->GetRelPosToPageFrm( bFollowTextFlow,
+                                                             bRelToTableCell );
+                    if ( bRelToTableCell )
+                    {
+                        _iorHoriOri.SetRelationOrient( REL_PG_PRTAREA );
+                    }
+                    // <--
                 }
                 else if ( eHoriConv == CONV2COL )
                 {
@@ -2427,7 +2435,15 @@ bool WinwordAnchoring::ConvertPosition( SwFmtHoriOrient& _iorHoriOri,
                 if ( eVertConv == CONV2PG )
                 {
                     _iorVertOri.SetRelationOrient( REL_PG_FRAME );
-                    aPos = pAnchoredObj->GetRelPosToPageFrm();
+                    // --> OD 2005-01-27 #i33818#
+                    bool bRelToTableCell( false );
+                    aPos = pAnchoredObj->GetRelPosToPageFrm( bFollowTextFlow,
+                                                             bRelToTableCell );
+                    if ( bRelToTableCell )
+                    {
+                        _iorVertOri.SetRelationOrient( REL_PG_PRTAREA );
+                    }
+                    // <--
                 }
                 else if ( eVertConv == CONV2PARA )
                 {
