@@ -2,9 +2,9 @@
  *
  *  $RCSfile: intercept.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: abi $ $Date: 2003-04-04 09:31:54 $
+ *  last change: $Author: abi $ $Date: 2003-04-04 11:41:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,10 @@ public:
     Interceptor(EmbedDocument_Impl* pOLEInterface,DocumentHolder* pDocH);
     ~Interceptor();
 
+    void generateFeatureStateEvent();
+
     // overwritten to release the statuslistner.
+
 
     // XComponent
     virtual void SAL_CALL

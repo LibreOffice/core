@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docholder.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: abi $ $Date: 2003-04-04 09:31:56 $
+ *  last change: $Author: abi $ $Date: 2003-04-04 11:41:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,8 @@ extern ::rtl::OUString  getFilterNameFromGUID_Impl( GUID* );
 
 DocumentHolder::DocumentHolder( const uno::Reference< lang::XMultiServiceFactory >& xFactory,EmbedDocument_Impl *pOLEInterface)
     : m_xFactory( xFactory ),
-      m_pOLEInterface(pOLEInterface)
+      m_pOLEInterface(pOLEInterface),
+      m_pInterceptor(0)
 {
     const ::rtl::OUString aServiceName ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.frame.Desktop" ) );
     uno::Reference< frame::XDesktop > xDesktop( m_xFactory->createInstance( aServiceName ), uno::UNO_QUERY );
@@ -259,12 +260,16 @@ uno::Reference< frame::XFrame > DocumentHolder::DocumentFrame()
             xDPI(m_xFrame,uno::UNO_QUERY);
         if(xDPI.is())
             xDPI->registerDispatchProviderInterceptor(
-                new Interceptor(m_pOLEInterface,this));
+                m_pInterceptor = new Interceptor(m_pOLEInterface,this));
     }
 
     return m_xFrame;
 }
 
+void DocumentHolder::ClearInterceptor()
+{
+    m_pInterceptor = 0;
+}
 
 void DocumentHolder::show()
 {
@@ -433,6 +438,9 @@ void DocumentHolder::setTitle(const rtl::OUString& aDocumentName)
     }
 
     m_aDocumentNamePart = aDocumentName;
+
+    if(m_pInterceptor)
+        m_pInterceptor->generateFeatureStateEvent();
 }
 
 

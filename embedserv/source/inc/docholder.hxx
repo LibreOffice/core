@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docholder.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: abi $ $Date: 2003-04-04 09:31:55 $
+ *  last change: $Author: abi $ $Date: 2003-04-04 11:41:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@
 #endif
 
 class EmbedDocument_Impl;
+class Interceptor;
 
 class DocumentHolder :
     public ::cppu::WeakImplHelper3<
@@ -91,6 +92,7 @@ class DocumentHolder :
 private:
 
     EmbedDocument_Impl* m_pOLEInterface;
+    Interceptor*        m_pInterceptor;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
 
@@ -110,6 +112,7 @@ public:
 
     void CloseDocument();
     void CloseFrame();
+    void ClearInterceptor();
     void FreeOffice();
 
     void resizeWin( const SIZEL& rNewSize );

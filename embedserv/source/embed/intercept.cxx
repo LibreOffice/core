@@ -2,9 +2,9 @@
  *
  *  $RCSfile: intercept.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: abi $ $Date: 2003-04-04 09:47:27 $
+ *  last change: $Author: abi $ $Date: 2003-04-04 11:41:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,6 +190,8 @@ Interceptor::~Interceptor()
 
     if(m_pStatCL)
         delete m_pStatCL;
+
+    m_pDocH->ClearInterceptor();
 }
 
 
@@ -209,6 +211,62 @@ Interceptor::dispatch(
                 URL.Complete == m_aInterceptedURL[3] ||
                 URL.Complete == m_aInterceptedURL[4])
             m_pOLEInterface->Close(1);
+}
+
+
+void Interceptor::generateFeatureStateEvent()
+{
+    if(m_pStatCL)
+    {
+        for(int i = 0; i < IUL; ++i)
+        {
+            if( i == 1 )
+                continue;
+
+            cppu::OInterfaceContainerHelper* pICH =
+                m_pStatCL->getContainer(m_aInterceptedURL[i]);
+            uno::Sequence<uno::Reference<uno::XInterface> > aSeq;
+            if(pICH)
+                aSeq = pICH->getElements();
+            if(!aSeq.getLength())
+                continue;
+
+            frame::FeatureStateEvent aStateEvent;
+            aStateEvent.IsEnabled = sal_True;
+            aStateEvent.Requery = sal_False;
+            if(i == 0)
+            {
+
+                aStateEvent.FeatureURL.Complete = m_aInterceptedURL[0];
+                aStateEvent.FeatureDescriptor = rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM("Update"));
+                aStateEvent.State <<= (rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM("($1) ")) +
+                                       m_pDocH->getTitle());
+
+            }
+            else
+            {
+                frame::FeatureStateEvent aStateEvent;
+                aStateEvent.FeatureURL.Complete = m_aInterceptedURL[i];
+                aStateEvent.FeatureDescriptor = rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM("Close and Return"));
+                aStateEvent.State <<= (rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM("($2) ")) +
+                                       m_pDocH->getTitle());
+
+            }
+
+            for(sal_Int32 k = 0; k < aSeq.getLength(); ++k)
+            {
+                uno::Reference<frame::XStatusListener>
+                    Control(aSeq[k],uno::UNO_QUERY);
+                if(Control.is())
+                    Control->statusChanged(aStateEvent);
+
+            }
+        }
+    }
 }
 
 
