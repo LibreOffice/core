@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablink.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:23:26 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 13:29:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,7 +222,7 @@ BOOL ScTableLink::Refresh(const String& rNewFile, const String& rNewFilter,
     String aNewUrl( ScGlobal::GetAbsDocName( rNewFile, pDocShell ) );
     BOOL bNewUrlName = (aNewUrl != aFileName);
 
-    const SfxFilter* pFilter = SFX_APP()->GetFilter( pDocShell->GetFactory(), rNewFilter );
+    const SfxFilter* pFilter = pDocShell->GetFactory().GetFilterContainer()->GetFilter4FilterName(rNewFilter);
     if (!pFilter)
         return FALSE;
 
@@ -466,8 +466,7 @@ ScDocumentLoader::ScDocumentLoader( const String& rFileName,
     if ( !rFilterName.Len() )
         GetFilterName( rFileName, rFilterName, rOptions );
 
-    const SfxFilter* pFilter = SFX_APP()->GetFilter(
-                                ScDocShell::Factory(), rFilterName );
+    const SfxFilter* pFilter = ScDocShell::Factory().GetFilterContainer()->GetFilter4FilterName( rFilterName );
 
     //  ItemSet immer anlegen, damit die DocShell die Optionen setzen kann
     SfxItemSet* pSet = new SfxAllItemSet( SFX_APP()->GetPool() );
