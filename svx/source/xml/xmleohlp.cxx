@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmleohlp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sj $
+ *  last change: $Author: vg $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -477,7 +477,7 @@ SvStorageRef SvXMLEmbeddedObjectHelper::ImplGetObjectStorage(
 String SvXMLEmbeddedObjectHelper::ImplGetUniqueName( SvStorage* pStg,
                                               const sal_Char* p ) const
 {
-    String aP( ByteString( p ), RTL_TEXTENCODING_UTF8 );
+    String aP = String( ByteString( p ), RTL_TEXTENCODING_UTF8 );
     String aName;
     static ULONG nId = (ULONG)&aP;
     nId++;
