@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contwnd.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 10:34:52 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 17:08:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,12 @@ void ContourWindow::SetPolyPolygon( const PolyPolygon& rPolyPoly )
 
     // zuerst alle Zeichenobjekte loeschen
     aPolyPoly = rPolyPoly;
+
+    // #117412#
+    // To avoid to have destroyed objects which are still selected, it is necessary to deselect
+    // them first (!)
+    pView->UnmarkAllObj();
+
     pPage->Clear();
 
     for ( USHORT i = 0; i < nPolyCount; i++ )
