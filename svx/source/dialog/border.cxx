@@ -2,9 +2,9 @@
  *
  *  $RCSfile: border.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:49:47 $
+ *  last change: $Author: kz $ $Date: 2004-06-29 08:18:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,9 +127,8 @@
 
 static USHORT pRanges[] =
 {
-    SID_ATTR_BORDER_INNER,
-    SID_ATTR_BORDER_SHADOW,
-    SID_ATTR_BORDER_CONNECT,
+    SID_ATTR_BORDER_INNER,  SID_ATTR_BORDER_SHADOW,
+    SID_ATTR_BORDER_CONNECT, SID_ATTR_BORDER_CONNECT,
     0
 };
 
