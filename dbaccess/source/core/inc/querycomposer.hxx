@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-09 13:08:05 $
+ *  last change: $Author: oj $ $Date: 2001-08-14 14:20:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,8 @@ namespace dbaccess
     {
         ::connectivity::OSQLParser              m_aSqlParser;
         ::connectivity::OSQLParseTreeIterator   m_aSqlIterator;
+        ::std::vector<OPrivateColumns*>         m_aColumnsCollection; // used for columns and parameters of old queries
+        ::std::vector<OPrivateTables*>          m_aTablesCollection;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>              m_xConnection;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>         m_xTableSupplier;
@@ -133,11 +135,13 @@ namespace dbaccess
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xServiceFactory;
         ::com::sun::star::uno::Reference< ::com::sun::star::script::XTypeConverter >        m_xTypeConverter;
 
+
+
         ::connectivity::OSQLParseNode*          m_pSqlParseNode;
 
-        OPrivateColumns*                        m_pColumns;
-        OPrivateColumns*                        m_pParameters;
-        OPrivateTables*                         m_pTables;
+        OPrivateColumns*                        m_pColumns;     // currently used columns
+        OPrivateColumns*                        m_pParameters;  // currently used parameters
+        OPrivateTables*                         m_pTables;      // currently used tables
 
         ::rtl::OUString                         m_aQuery;
         ::rtl::OUString                         m_aFilter;  // currently used where clause
@@ -163,6 +167,8 @@ namespace dbaccess
         ::rtl::OUString getComposedFilter() const;
         ::rtl::OUString getGroupBy() const;
         ::rtl::OUString getTableAlias(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& column ) const;
+        // clears all Columns,Parameters and tables and insert it to their vectors
+        void clearCurrentCollections();
     public:
 
         OQueryComposer( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _xTableSupplier,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-09 13:08:05 $
+ *  last change: $Author: oj $ $Date: 2001-08-14 14:20:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,6 +294,13 @@ OQueryComposer::OQueryComposer(const Reference< XNameAccess>& _xTableSupplier,
 OQueryComposer::~OQueryComposer()
 {
     DBG_DTOR(OQueryComposer,NULL);
+    ::std::vector<OPrivateColumns*>::iterator aColIter = m_aColumnsCollection.begin();
+    for(;aColIter != m_aColumnsCollection.end();++aColIter)
+        delete *aColIter;
+
+    ::std::vector<OPrivateTables*>::iterator aTabIter = m_aTablesCollection.begin();
+    for(;aTabIter != m_aTablesCollection.end();++aTabIter)
+        delete *aTabIter;
 }
 // -------------------------------------------------------------------------
 // OComponentHelper
@@ -309,24 +316,8 @@ void SAL_CALL OQueryComposer::disposing(void)
     m_xTableSupplier    = NULL;
     m_xConnection       = NULL;
     m_xServiceFactory   = NULL;
-    if(m_pColumns)
-    {
-        m_pColumns->disposing();
-        delete m_pColumns;
-        m_pColumns = NULL;
-    }
-    if(m_pParameters)
-    {
-        m_pParameters->disposing();
-        delete m_pParameters;
-        m_pParameters = NULL;
-    }
-    if(m_pTables)
-    {
-        m_pTables->disposing();
-        delete m_pTables;
-        m_pTables = NULL;
-    }
+
+    clearCurrentCollections();
 }
 // -------------------------------------------------------------------------
 // ::com::sun::star::lang::XTypeProvider
@@ -437,24 +428,7 @@ void SAL_CALL OQueryComposer::setQuery( const ::rtl::OUString& command ) throw(S
         pOrderNode->getChild(2)->parseNodeToStr(m_aOrgOrder,m_xConnection->getMetaData());
 
     // first clear the tables and columns
-    if(m_pTables)
-    {
-        m_pTables->disposing();
-        delete m_pTables;
-        m_pTables = NULL;
-    }
-    if(m_pColumns)
-    {
-        m_pColumns->disposing();
-        delete m_pColumns;
-        m_pColumns = NULL;
-    }
-    if(m_pParameters)
-    {
-        m_pParameters->disposing();
-        delete m_pParameters;
-        m_pParameters = NULL;
-    }
+    clearCurrentCollections();
     // now set the columns we have to look if the order of the columns is correct
     Reference<XStatement> xStmt = m_xConnection->createStatement();
 
@@ -1278,6 +1252,28 @@ void SAL_CALL OQueryComposer::acquire() throw(::com::sun::star::uno::RuntimeExce
 void SAL_CALL OQueryComposer::release() throw(::com::sun::star::uno::RuntimeException)
 {
     OSubComponent::release();
+}
+// -----------------------------------------------------------------------------
+void OQueryComposer::clearCurrentCollections()
+{
+    if(m_pColumns)
+    {
+        m_pColumns->disposing();
+        m_aColumnsCollection.push_back(m_pColumns);
+        m_pColumns = NULL;
+    }
+    if(m_pParameters)
+    {
+        m_pParameters->disposing();
+        m_aColumnsCollection.push_back(m_pParameters);
+        m_pParameters = NULL;
+    }
+    if(m_pTables)
+    {
+        m_pTables->disposing();
+        m_aTablesCollection.push_back(m_pTables);
+        m_pTables = NULL;
+    }
 }
 // -----------------------------------------------------------------------------
 
