@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impgrfll.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 10:52:33 $
+ *  last change: $Author: kz $ $Date: 2004-11-05 11:50:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -348,7 +348,7 @@ ImpGraphicFill::ImpGraphicFill( const SdrObject&        rObj,
 
 //BFS09        SvtGraphicFill aFill( XOutCreatePolyPolygonBezier( aPolyPoly, rXOut.GetOutDev() ),
         const ::basegfx::B2DPolyPolygon aCandidate(aPolyPoly.getB2DPolyPolygon());
-        SvtGraphicFill aFill( PolyPolygon(aCandidate),
+        SvtGraphicFill aFill( static_cast<PolyPolygon>(aCandidate),
                               ITEMVALUE( rFillItemSet, XATTR_FILLCOLOR, XFillColorItem ),
                               ITEMVALUE( rFillItemSet, XATTR_FILLTRANSPARENCE, XFillTransparenceItem ) / 100.0,
                               SvtGraphicFill::fillEvenOdd,
