@@ -2,9 +2,9 @@
  *
  *  $RCSfile: introspection.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-14 08:12:37 $
+ *  last change: $Author: jl $ $Date: 2001-03-16 15:32:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1448,8 +1448,8 @@ Any ImplIntrospectionAccess::getMaterial(void)
 OUString toLower( OUString aUStr )
 {
     // Tabelle fuer XExactName pflegen
-    NAMESPACE_RTL(OUString) aOWStr( aUStr.getStr() );
-    NAMESPACE_RTL(OUString) aOWLowerStr = aOWStr.toLowerCase();
+    ::rtl::OUString aOWStr( aUStr.getStr() );
+    ::rtl::OUString aOWLowerStr = aOWStr.toLowerCase();
     OUString aLowerUStr( aOWLowerStr.getStr() );
     return aLowerUStr;
 }
