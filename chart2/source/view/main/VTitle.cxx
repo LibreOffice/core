@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VTitle.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: bm $ $Date: 2004-01-26 09:13:28 $
+ *  last change: $Author: fa $ $Date: 2004-03-08 16:03:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,7 +302,8 @@ void VTitle::createShapes(
         else
         {
             uno::Sequence< uno::Reference< text::XTextCursor > > aCursorList( aStringList.getLength() );
-            for( sal_Int32 nN=0; nN<aStringList.getLength();nN++ )
+            sal_Int32 nN = 0;
+            for( nN=0; nN<aStringList.getLength();nN++ )
             {
                 xTextCursor->gotoEnd(false);
                 xText->insertString( xTextRange, aStringList[nN]->getString(), false );

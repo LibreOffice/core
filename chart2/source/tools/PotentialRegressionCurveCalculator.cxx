@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PotentialRegressionCurveCalculator.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2004-01-26 09:13:04 $
+ *  last change: $Author: fa $ $Date: 2004-03-08 16:03:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,8 @@ void SAL_CALL PotentialRegressionCurveCalculator::recalculateRegression(
     }
 
     double fAverageX = 0.0, fAverageY = 0.0;
-    for( size_t i = 0; i < nMax; ++i )
+    size_t i = 0;
+    for( i = 0; i < nMax; ++i )
     {
         fAverageX += log( aValues.first[i] );
         fAverageY += log( aValues.second[i] );

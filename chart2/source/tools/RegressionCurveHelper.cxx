@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RegressionCurveHelper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: bm $ $Date: 2004-01-26 09:13:04 $
+ *  last change: $Author: fa $ $Date: 2004-03-08 16:03:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,7 +222,8 @@ void RegressionCurveHelper::initializeCurveCalculator(
     bool bXValuesFound = false, bYValuesFound = false;
 
     Sequence< Reference< XDataSequence > > aDataSeqs( xSource->getDataSequences());
-    for( sal_Int32 i=0;
+    sal_Int32 i = 0;
+    for( i=0;
          ! (bXValuesFound && bYValuesFound) && i<aDataSeqs.getLength();
          ++i )
     {

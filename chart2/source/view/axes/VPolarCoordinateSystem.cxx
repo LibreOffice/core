@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VPolarCoordinateSystem.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bm $ $Date: 2004-01-26 09:13:13 $
+ *  last change: $Author: fa $ $Date: 2004-03-08 16:03:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,8 @@ void VPolarCoordinateSystem::createAxesShapes( const awt::Size& rReferenceSize, 
 {
     sal_Int32 nDimensionCount = m_xCooSysModel->getDimension();
     double fCoordinateOrigin[3] = { 0.0, 0.0, 0.0 };
-    for( sal_Int32 nDim = 0; nDim < 3; nDim++ )
+    sal_Int32 nDim = 0;
+    for( nDim = 0; nDim < 3; nDim++ )
         fCoordinateOrigin[nDim] = this->getOriginByDimension( nDim );
     //create angle axis (dimension index 0)
     for( nDim = 0; nDim < 3; nDim++ )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TickmarkHelper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: bm $ $Date: 2004-01-26 09:13:08 $
+ *  last change: $Author: fa $ $Date: 2004-03-08 16:03:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -588,6 +588,7 @@ void TickmarkHelper::getAllTicks( ::std::vector< ::std::vector< TickInfo > >& rA
     //this was necessary to create sub ticks correctly
     //now we reduce all ticks to the visible ones that lie between the real borders
     sal_Int32 nDepth = 0;
+    sal_Int32 nTick = 0;
     for( nDepth = 0; nDepth < nDepthCount; nDepth++)
     {
         sal_Int32 nInvisibleAtLowerBorder = 0;
@@ -602,7 +603,7 @@ void TickmarkHelper::getAllTicks( ::std::vector< ::std::vector< TickInfo > >& rA
         uno::Sequence< double >& rTicks = aAllTicks[nDepth];
         sal_Int32 nCount = rTicks.getLength();
         //check lower border
-        for( sal_Int32 nTick=0; nTick<nCheckCount && nTick<nCount; nTick++)
+        for( nTick=0; nTick<nCheckCount && nTick<nCount; nTick++)
         {
             if( !isVisible( rTicks[nTick] ) )
                 nInvisibleAtLowerBorder++;

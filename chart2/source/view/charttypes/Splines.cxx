@@ -381,7 +381,8 @@ double TRight(double x, sal_Int32 i, sal_Int32 k, const double *t )
 //calculate weight vector
 void BVector(double x, sal_Int32 n, sal_Int32 k, double *b, const double *t)
 {
-    for( sal_Int32 i=0; i<=n+k; i++ )
+    sal_Int32 i = 0;
+    for( i=0; i<=n+k; i++ )
         b[i]=0;
 
     sal_Int32 i0 = (sal_Int32)floor(x) + k - 1;

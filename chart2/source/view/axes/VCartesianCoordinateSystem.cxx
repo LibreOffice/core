@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCartesianCoordinateSystem.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2004-01-26 09:13:10 $
+ *  last change: $Author: fa $ $Date: 2004-03-08 16:03:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,8 @@ void VCartesianCoordinateSystem::createAxesShapes( const awt::Size& rReferenceSi
 {
     sal_Int32 nDimensionCount = m_xCooSysModel->getDimension();
     double fCoordinateOrigin[3] = { 0.0, 0.0, 0.0 };
-    for( sal_Int32 nDim = 0; nDim < 3; nDim++ )
+    sal_Int32 nDim = 0;
+    for( nDim = 0; nDim < 3; nDim++ )
         fCoordinateOrigin[nDim] = this->getOriginByDimension( nDim );
     for( nDim = 0; nDim < 3; nDim++ )
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LogarithmicRegressionCurveCalculator.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2004-01-26 09:13:03 $
+ *  last change: $Author: fa $ $Date: 2004-03-08 16:03:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,8 @@ void SAL_CALL LogarithmicRegressionCurveCalculator::recalculateRegression(
     }
 
     double fAverageX = 0.0, fAverageY = 0.0;
-    for( size_t i = 0; i < nMax; ++i )
+    size_t i = 0;
+    for( i = 0; i < nMax; ++i )
     {
         fAverageX += log( aValues.first[i] );
         fAverageY += aValues.second[i];

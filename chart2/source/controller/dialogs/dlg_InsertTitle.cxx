@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlg_InsertTitle.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:25 $
+ *  last change: $Author: fa $ $Date: 2004-03-08 16:03:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,8 @@ InsertTitleDialogData::InsertTitleDialogData()
         , aExistenceList(5)
         , aTextList(5)
 {
-    for(sal_Int32 nN=5;nN--;)
+    sal_Int32 nN = 0;
+    for(nN=5;nN--;)
         aPossibilityList[nN]=true;
     for(nN=5;nN--;)
         aExistenceList[nN]=false;
