@@ -1,4 +1,4 @@
-    <node oor:name="HTML" oor:op="replace">
+    <node oor:name="HTML" oor:op="replace" oor:finalized="true" oor:mandatory="true">
         <prop oor:name="FileFormatVersion"><value>0</value></prop>
         <prop oor:name="Type"><value>writer_web_HTML</value></prop>
         <prop oor:name="DocumentService"><value>com.sun.star.text.WebDocument</value></prop>
@@ -12,11 +12,11 @@
             <value xml:lang="ja">HTML ドキュメント</value>
             <value xml:lang="es">Documento HTML</value>
             <value xml:lang="tr">HTML Dosyası</value>
-            <value xml:lang="ru">Web-страница</value>
-            <value xml:lang="th">เอกสาร HTML </value>
+            <value xml:lang="ru">Web-�?траница</value>
+            <value xml:lang="th">เอ�?สาร HTML </value>
             <value xml:lang="x-comment">HTML-Document</value>
             <value xml:lang="ca">Document HTML</value>
-            <value xml:lang="el">Έγγραφο HTML</value>
+            <value xml:lang="el">Έγγ�?αφο HTML</value>
             <value xml:lang="zh-CN">HTML 文档</value>
             <value xml:lang="pt">Página Web</value>
             <value xml:lang="cs">HTML dokument</value>
@@ -38,5 +38,5 @@
             <value xml:lang="it">Documento HTML</value>
             <value xml:lang="x-translate">HTML-Document</value>
         </prop>
-        <prop oor:name="Flags"><value>IMPORT EXPORT DEFAULT ASYNCHRON PREFERRED</value></prop>
+        <prop oor:name="Flags"><value>IMPORT EXPORT ASYNCHRON PREFERRED</value></prop>
     </node>
