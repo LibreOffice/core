@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scrwnd.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:40 $
+ *  last change: $Author: th $ $Date: 2001-07-06 16:06:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,11 +61,24 @@
 
 #include <math.h>
 #include <limits.h>
+
 #include <tools/debug.hxx>
-#include "svids.hrc"
-#include "svdata.hxx"
-#include "timer.hxx"
-#include "scrwnd.hxx"
+
+#ifndef _SV_SVIDS_HRC
+#include <svids.hrc>
+#endif
+#ifndef _SV_SVDATA_HXX
+#include <svdata.hxx>
+#endif
+#ifndef _VCL_TIMER_HXX
+#include <timer.hxx>
+#endif
+#ifndef _VCL_EVENT_HXX
+#include <event.hxx>
+#endif
+#ifndef _VCL_SCRWND_HXX
+#include <scrwnd.hxx>
+#endif
 
 // -----------
 // - Defines -
