@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewpg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2002-05-29 14:28:45 $
+ *  last change: $Author: mib $ $Date: 2002-05-29 15:05:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,7 +180,8 @@ USHORT ViewShell::CalcPreViewPage(
         USHORT& rRowCol,            // Zeilen/Spalten (Row im Hi, Col im LowByte!)
         USHORT nSttPage,            // Start ab dieser Seite, eine gueltige ??
         Size& rMaxSize,             // MaxSize einer Seite
-        USHORT& rVirtPageNo )       // virtuelle SeitenNummer
+        USHORT& rVirtPageNo,        // virtuelle SeitenNummer
+        USHORT nAccSelPage )        // selected page for accessibility
 {
     const SwRootFrm* pRoot = GetLayout();
     ASSERT( pRoot, "Wo ist mein Layout?" );
@@ -313,8 +314,13 @@ USHORT ViewShell::CalcPreViewPage(
     aMapMode.SetScaleX( aScY );
 
 #ifdef ACCESSIBLE_LAYOUT
+    if( USHRT_MAX == nAccSelPage )
+        nAccSelPage = nSttPage;
+    else if(nAccSelPage < nSttPage || nAccSelPage > nSttPage + (nRow * nCol) )
+        nAccSelPage = nSttPage ? nSttPage : 1;
+
     Imp()->UpdateAccessiblePreview( nRow, nCol, nSttPage, rMaxSize,
-                                    GetPreviewFreePix(), aScY );
+                                    GetPreviewFreePix(), aScY, nAccSelPage );
 #endif
 
     // was machen wir, wenn der MapMode unter einer
@@ -323,6 +329,12 @@ USHORT ViewShell::CalcPreViewPage(
     GetOut()->SetMapMode( aMapMode );
     return nSttPage;
 }
+#ifdef ACCESSIBLE_LAYOUT
+void ViewShell::ShowPreViewSelection( sal_uInt16 nSelPage )
+{
+    Imp()->InvalidateAccessiblePreViewSelection( nSelPage );
+}
+#endif
 
 void ViewShell::PreViewPage(
         const Rectangle& rRect,     // Paint-Rect von Windows
@@ -1333,6 +1345,9 @@ Point ViewShell::GetPreviewFreePix() const
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.9  2002/05/29 14:28:45  os
+      #99649# 'single print job' corrected
+
       Revision 1.8  2002/05/22 11:46:20  dvo
       #95586# made page preview accessible
 

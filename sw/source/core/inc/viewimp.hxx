@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewimp.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dvo $ $Date: 2002-05-22 11:42:08 $
+ *  last change: $Author: mib $ $Date: 2002-05-29 15:01:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,7 +294,10 @@ public:
                                   sal_Int16 nStartPage,
                                   const Size& rPageSize,
                                   const Point& rFreePoint,
-                                  const Fraction& rScale );
+                                  const Fraction& rScale,
+                                     USHORT nSelectedPage );
+
+    void InvalidateAccessiblePreViewSelection( sal_uInt16 nSelPage );
 
     // Fire all accessible events that have been collected so far
     void FireAccessibleEvents();

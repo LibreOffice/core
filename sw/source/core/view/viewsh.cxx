@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: dvo $ $Date: 2002-05-22 11:46:20 $
+ *  last change: $Author: mib $ $Date: 2002-05-29 15:05:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2209,7 +2209,8 @@ ViewShell::CreateAccessiblePreview( sal_uInt8 nRow,
                                     sal_uInt16 nStartPage,
                                     const Size& rPageSize,
                                     const Point& rFreePoint,
-                                    const Fraction& rScale)
+                                    const Fraction& rScale,
+                                    sal_uInt16 nSelectedPage )
 {
     using ::com::sun::star::uno::Reference;
     using ::drafts::com::sun::star::accessibility::XAccessible;
@@ -2223,7 +2224,8 @@ ViewShell::CreateAccessiblePreview( sal_uInt8 nRow,
 
     if( pDoc->GetRootFrm() && GetWin() )
         return Imp()->GetAccessibleMap().GetDocumentPreview(
-                    nRow, nColumn, nStartPage, rPageSize, rFreePoint, rScale );
+                    nRow, nColumn, nStartPage, rPageSize, rFreePoint, rScale,
+                    nSelectedPage );
     return NULL;
 }
 

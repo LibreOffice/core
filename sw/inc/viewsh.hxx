@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dvo $ $Date: 2002-05-22 11:33:44 $
+ *  last change: $Author: mib $ $Date: 2002-05-29 14:59:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,7 +363,7 @@ public:
     //  errechnen & MapMode setzen
     sal_uInt16 CalcPreViewPage( const Size& rWinWidth, sal_uInt16& nRowCol,
                             sal_uInt16 nSttPage, Size& rPageSize,
-                            sal_uInt16& rVirtPageNo );
+                            sal_uInt16& rVirtPageNo, sal_uInt16 nAccSelPage );
     sal_Bool IsPreViewDocPos( Point& rDocPt, sal_uInt16 nRowCol, sal_uInt16 nSttPage,
                             const Size& rMaxSize );
 
@@ -427,10 +427,12 @@ public:
                                      sal_uInt16 nStartPage,
                                      const Size& rPageSize,
                                      const Point& rFreePoint,
-                                     const Fraction& rScale );
+                                     const Fraction& rScale,
+                                       sal_uInt16 nSelectedPage );
 
     Point GetPreviewFreePix() const;
 
+    void ShowPreViewSelection( sal_uInt16 nSelPage );
     void InvalidateAccessibleFocus();
 #endif
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accmap.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dvo $ $Date: 2002-05-29 12:26:49 $
+ *  last change: $Author: mib $ $Date: 2002-05-29 14:59:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,7 @@
 class Rectangle;
 class SwFrm;
 class SwRootFrm;
+class SwPageFrm;
 class SwAccessibleContext;
 class SwAccessibleContextMap_Impl;
 class SwAccessibleEventList_Impl;
@@ -137,6 +138,9 @@ class SwAccessibleMap : public accessibility::IAccessibleViewForwarder,
     SwAccessibleEventList_Impl *mpEvents;
     SwAccessibleEventMap_Impl *mpEventMap;
     ViewShell *mpVSh;
+    /// for page preview: store preview data, VisArea, and mapping of
+    /// preview-to-display coordinates
+    SwAccPreviewData* mpPreview;
 
     ::com::sun::star::uno::WeakReference < ::drafts::com::sun::star::accessibility::XAccessible > mxCursorContext;
 
@@ -144,9 +148,6 @@ class SwAccessibleMap : public accessibility::IAccessibleViewForwarder,
     sal_Int32 mnFootnote;
     sal_Int32 mnEndnote;
 
-    /// for page preview: store preview data, VisArea, and mapping of
-    /// preview-to-display coordinates
-    SwAccPreviewData* mpPreview;
 
     sal_Bool mbShapeSelected;
 
@@ -179,7 +180,7 @@ public:
         ::drafts::com::sun::star::accessibility::XAccessible> GetDocumentPreview(
                 sal_uInt8 nRow, sal_uInt8 nColumn, sal_Int16 nStartPage,
                 const Size& rPageSize, const Point& rFreePoint,
-                const Fraction& rScale );
+                const Fraction& rScale, sal_uInt16 nSelectedPage  );
 
     ::vos::ORef < SwAccessibleContext > GetContextImpl(
                                                  const SwFrm *pFrm,
@@ -201,6 +202,7 @@ public:
 
     ViewShell *GetShell() const { return mpVSh; }
     inline const SwRect& GetVisArea() const;
+    inline const Size& GetPreViewPageSize() const;
 
     void RemoveContext( const SwFrm *pFrm );
     void RemoveContext( const SdrObject *pObj );
@@ -230,7 +232,9 @@ public:
     void UpdatePreview( sal_uInt8 nRow, sal_uInt8 nColumn,
                         sal_Int16 nStartPage,
                         const Size& rPageSize, const Point& rFreePoint,
-                        const Fraction& rScale );
+                        const Fraction& rScale, sal_uInt16 nSelectedPage );
+    void InvalidatePreViewSelection( sal_uInt16 nSelPage );
+    sal_Bool IsPageSelected( const SwPageFrm *pPageFrm ) const;
 
     void FireEvents();
 
@@ -266,12 +270,18 @@ private:
 // helper class that stores preview data
 class SwAccPreviewData
 {
-    SwRect maVisArea;
-    Fraction maScale;
-
     typedef std::vector<Rectangle> Rectangles;
     Rectangles maPreviewRects;
     Rectangles maLogicRects;
+
+    SwRect maVisArea;
+    Fraction maScale;
+    Size maPageSize;
+
+    const SwPageFrm *mpStartPage;
+    const SwPageFrm *mpSelPage;
+
+    sal_uInt16 mnStartPage;
 
 public:
     SwAccPreviewData();
@@ -283,7 +293,9 @@ public:
                  const Size& rPageSize, // size of an empty page
                  const Point& rFreePoint, // free space between pages (x,y)
                  const Fraction& rScale,// scale factor for preview
-                 ViewShell* pShell );
+                 ViewShell* pShell,
+                 sal_uInt16 nSelPage );
+    void InvalidateSelection( sal_uInt16 nSelPage );
 
     const SwRect& GetVisArea() const;
     Point PreviewToLogic(const Point& rPoint) const;
@@ -300,6 +312,10 @@ public:
                         sal_Bool bFromPreview ) const;
 
     void AdjustMapMode( MapMode& rMapMode ) const;
+
+    const SwPageFrm *GetSelPage() const { return mpSelPage; }
+    void DisposePage(const SwPageFrm *pPageFrm );
+    const Size& GetPageSize() const { return maPageSize; }
 };
 
 
@@ -311,5 +327,11 @@ inline const SwRect& SwAccessibleMap::GetVisArea() const
     return mpVSh->IsPreView() ? mpPreview->GetVisArea() : mpVSh->VisArea();
 }
 
+inline const Size& SwAccessibleMap::GetPreViewPageSize() const
+{
+    DBG_ASSERT( mpPreview != NULL,
+                "preview without preview data?" );
+    return mpPreview->GetPageSize();
+}
 
 #endif

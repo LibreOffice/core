@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpage.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2002-05-22 11:38:22 $
+ *  last change: $Author: mib $ $Date: 2002-05-29 14:58:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,10 @@
  */
 class SwAccessiblePage : public SwAccessibleContext
 {
+    sal_Bool    bIsSelected;    // protected by base class mutex
+
+    sal_Bool    IsSelected();
+
     /// helper method for getAccessibleDescription, getAccessibleName
     ::rtl::OUString GetPageResource( sal_uInt16 nResId );
 
@@ -82,6 +86,16 @@ protected:
 
     // return the bounding box for the page in page preview mode
     SwRect GetBounds( /* const SwFrm *pFrm =0 */ );
+
+    // Set states for getAccessibleStateSet.
+    // This drived class additionaly sets
+    // FOCUSABLE(1) and FOCUSED(+)
+    virtual void GetStates( ::utl::AccessibleStateSetHelper& rStateSet );
+
+    virtual void _InvalidateCursorPos();
+    virtual void _InvalidateFocus();
+
+    virtual ~SwAccessiblePage();
 
 public:
 
@@ -91,7 +105,6 @@ public:
     // may only be called with SwPageFrm argument
     SwAccessiblePage( SwAccessibleMap* pMap, const SwFrm *pFrame );
 
-    virtual ~SwAccessiblePage();
 
 
     //
@@ -118,6 +131,7 @@ public:
         getSupportedServiceNames (void)
         throw (::com::sun::star::uno::RuntimeException);
 
+    virtual sal_Bool HasCursor();   // required by map to remember that object
 };
 
 #endif

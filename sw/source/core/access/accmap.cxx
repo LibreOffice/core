@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accmap.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: dvo $ $Date: 2002-05-29 12:26:49 $
+ *  last change: $Author: mib $ $Date: 2002-05-29 14:58:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -959,9 +959,10 @@ SwAccessibleMap::~SwAccessibleMap()
         mpShapeMap = 0;
         delete mpShapes;
         mpShapes = 0;
-        delete mpPreview;
-        mpPreview = NULL;
     }
+
+    delete mpPreview;
+    mpPreview = NULL;
 
     {
         vos::OGuard aGuard( maEventMutex );
@@ -1049,13 +1050,15 @@ Reference<XAccessible> SwAccessibleMap::GetDocumentPreview(
     sal_Int16 nStartPage,
     const Size& rPageSize,
     const Point& rFreePoint,
-    const Fraction& rScale)
+    const Fraction& rScale,
+    sal_uInt16 nSelectedPage )
 {
     // create & update preview data object
     if( mpPreview == NULL )
         mpPreview = new SwAccPreviewData();
     mpPreview->Update( nRow, nColumn, nStartPage,
-                       rPageSize, rFreePoint, rScale, GetShell() );
+                       rPageSize, rFreePoint, rScale, GetShell(),
+                       nSelectedPage );
 
     Reference<XAccessible> xAcc = _GetDocumentView( sal_True );
     return xAcc;
@@ -1465,6 +1468,9 @@ void SwAccessibleMap::Dispose( const SwFrm *pFrm, const SdrObject *pObj,
             RemoveContext( aFrmOrObj.GetSdrObject() );
             xShapeAccImpl->dispose();
         }
+
+        if( mpPreview && pFrm && pFrm->IsPageFrm() )
+            mpPreview->DisposePage( static_cast< const SwPageFrm *>( pFrm ) );
     }
 }
 
@@ -1786,13 +1792,15 @@ void SwAccessibleMap::UpdatePreview( sal_uInt8 nRow, sal_uInt8 nColumn,
                                      sal_Int16 nStartPage,
                                      const Size& rPageSize,
                                      const Point& rFreePoint,
-                                     const Fraction& rScale )
+                                     const Fraction& rScale,
+                                       sal_uInt16 nSelectedPage )
 {
     DBG_ASSERT( GetShell()->IsPreView(), "no preview?" );
     DBG_ASSERT( mpPreview != NULL, "no preview data?" );
 
     mpPreview->Update( nRow, nColumn, nStartPage,
-                       rPageSize, rFreePoint, rScale, GetShell() );
+                       rPageSize, rFreePoint, rScale, GetShell(),
+                       nSelectedPage );
 
     // propagate change of VisArea through the document's
     // accessibility tree; this will also send appropriate scroll
@@ -1800,6 +1808,64 @@ void SwAccessibleMap::UpdatePreview( sal_uInt8 nRow, sal_uInt8 nColumn,
     SwAccessibleContext* pDoc =
         GetContextImpl( GetShell()->GetLayout() ).getBodyPtr();
     static_cast<SwAccessibleDocumentBase*>( pDoc )->SetVisArea();
+
+    Reference < XAccessible > xOldAcc;
+    Reference < XAccessible > xAcc;
+    {
+        vos::OGuard aGuard( maMutex );
+
+        xOldAcc = mxCursorContext;
+
+        const SwPageFrm *pSelPage = mpPreview->GetSelPage();
+        if( pSelPage && mpFrmMap )
+        {
+            SwAccessibleContextMap_Impl::iterator aIter =
+                mpFrmMap->find( pSelPage );
+            if( aIter != mpFrmMap->end() )
+                xAcc = (*aIter).second;
+        }
+    }
+
+    if( xOldAcc.is() && xOldAcc != xAcc )
+        InvalidateCursorPosition( xOldAcc );
+    if( xAcc.is() )
+        InvalidateCursorPosition( xAcc );
+}
+
+void SwAccessibleMap::InvalidatePreViewSelection( sal_uInt16 nSelPage )
+{
+    DBG_ASSERT( GetShell()->IsPreView(), "no preview?" );
+    DBG_ASSERT( mpPreview != NULL, "no preview data?" );
+
+    mpPreview->InvalidateSelection( nSelPage );
+
+    Reference < XAccessible > xOldAcc;
+    Reference < XAccessible > xAcc;
+    {
+        vos::OGuard aGuard( maMutex );
+
+        xOldAcc = mxCursorContext;
+
+        const SwPageFrm *pSelPage = mpPreview->GetSelPage();
+        if( pSelPage && mpFrmMap )
+        {
+            SwAccessibleContextMap_Impl::iterator aIter =
+                mpFrmMap->find( pSelPage );
+            if( aIter != mpFrmMap->end() )
+                xAcc = (*aIter).second;
+        }
+    }
+
+    if( xOldAcc.is() && xOldAcc != xAcc )
+        InvalidateCursorPosition( xOldAcc );
+    if( xAcc.is() )
+        InvalidateCursorPosition( xAcc );
+}
+
+
+sal_Bool SwAccessibleMap::IsPageSelected( const SwPageFrm *pPageFrm ) const
+{
+    return mpPreview && mpPreview->GetSelPage() == pPageFrm;
 }
 
 
@@ -1967,7 +2033,7 @@ Rectangle SwAccessibleMap::CoreToPixel( const Rectangle& rRect ) const
     Rectangle aRect;
     if( GetShell()->GetWin() )
     {
-        PreviewAdjust( rRect.TopLeft(), sal_True );
+        PreviewAdjust( rRect.TopLeft(), sal_False );
         aRect = GetShell()->GetWin()->LogicToPixel( rRect );
     }
 
@@ -1979,7 +2045,7 @@ Rectangle SwAccessibleMap::PixelToCore( const Rectangle& rRect ) const
     Rectangle aRect;
     if( GetShell()->GetWin() )
     {
-        PreviewAdjust( rRect.TopLeft(), sal_False );
+        PreviewAdjust( rRect.TopLeft(), sal_True );
         aRect = GetShell()->GetWin()->PixelToLogic( rRect );
     }
     return aRect;
@@ -2004,7 +2070,10 @@ inline void SwAccessibleMap::PreviewAdjust( const Point& rPoint,
 // SwAccPreviewData
 //
 
-SwAccPreviewData::SwAccPreviewData()
+SwAccPreviewData::SwAccPreviewData() :
+    mpStartPage( 0 ),
+    mpSelPage( 0 ),
+    mnStartPage( 0 )
 {
 }
 
@@ -2018,7 +2087,8 @@ void SwAccPreviewData::Update( sal_uInt8 nRow,
                                const Size& rPageSize,
                                const Point& rFreePixel,
                                const Fraction& rScale,
-                               ViewShell* pShell )
+                               ViewShell* pShell,
+                               sal_uInt16 nSelPage )
 {
     DBG_ASSERT( nRow > 0, "invalid row value" );
     DBG_ASSERT( nColumn > 0, "invalid column value" );
@@ -2026,10 +2096,9 @@ void SwAccPreviewData::Update( sal_uInt8 nRow,
     DBG_ASSERT( pShell != NULL, "need view shell" );
     DBG_ASSERT( pShell->IsPreView(), "not inpreview?" );
 
-    vos::OGuard aGuard(Application::GetSolarMutex());
-
     // store the rScale (for AdjustMapMode; will be called from here, too)
     maScale = rScale;
+    maPageSize = rPageSize;
 
     // get first page frame from layout, and iterate to page nSttPage
     SwRootFrm* pRoot = pShell->GetLayout();
@@ -2041,6 +2110,10 @@ void SwAccPreviewData::Update( sal_uInt8 nRow,
     // adjust for the first page (which is always a right page) if
     // there is more than one column
     sal_Bool bSkipFirstPage = (nStartPage == 0) && (nColumn != 1);
+
+    // get offset of selected page
+    mnStartPage = nStartPage;
+    nSelPage -= nStartPage;
 
     // we'll count on nStartPage, so it should be zero-based
     if( nStartPage > 0 )
@@ -2061,10 +2134,13 @@ void SwAccPreviewData::Update( sal_uInt8 nRow,
     // iterate over pages and collect data
     // 1) VisArea as union of visible pages
     // 2) areas of visible pages for preview/logic mapping
+    mpStartPage = pPage;
+    mpSelPage = 0;
     if( pPage != NULL )
     {
         // first page: use to initialize VisArea
-        maVisArea = pPage->Frm();
+        SwFrmOrObj aPage( pPage );
+        maVisArea = aPage.GetBox();
         maPreviewRects.clear();
         maLogicRects.clear();
 
@@ -2091,31 +2167,54 @@ void SwAccPreviewData::Update( sal_uInt8 nRow,
                 }
                 else
                 {
-                    if( !pPage->IsEmptyPage() )
-                    {
-                        // collect data (for non-empty pages only)
-                        SwRect aSwRect = pPage->Frm();
-                        maVisArea.Union( aSwRect );
+                    // collect data
+                    aPage = pPage;
+                    SwRect aSwRect = aPage.GetBox();
+                    maVisArea.Union( aSwRect );
 
-                        Rectangle aRect = aSwRect.SVRect();
-                        maLogicRects.push_back( aRect );
-                        aRect.SetPos( aCurrentPoint );
-                        maPreviewRects.push_back( aRect );
+                    Rectangle aRect = aSwRect.SVRect();
+                    maLogicRects.push_back( aRect );
+                    aRect.SetPos( aCurrentPoint );
+                    maPreviewRects.push_back( aRect );
 
-                        aCurrentPoint.X() += aSwRect.Width();
-                    }
-                    else
-                    {
-                        aCurrentPoint.X() += rPageSize.Width();
-                    }
+                    aCurrentPoint.X() += pPage->IsEmptyPage()
+                                            ? rPageSize.Width()
+                                            : aSwRect.Width();
+                    if( 0 == nSelPage )
+                        mpSelPage = pPage;
 
                     pPage = static_cast<SwPageFrm*>( pPage->GetNext() );
                 }
                 aCurrentPoint.X() += aFreePoint.X() +1;
+                nSelPage--;
             }
             aCurrentPoint.Y() += rPageSize.Height() + 1 + aFreePoint.Y();
         }
     }
+}
+
+void SwAccPreviewData::InvalidateSelection( sal_uInt16 nSelPage )
+{
+    mpSelPage = 0;
+    nSelPage -= mnStartPage;
+    ASSERT( nSelPage >= 0, "invalid selected page" );
+    ASSERT( mpStartPage, "no start page" );
+    if( mpStartPage != NULL )
+    {
+        const SwPageFrm *pPage = mpStartPage;
+
+        // loop over col*row pages, and advance aCurrentPoint to start
+        // of this page's preview
+        while( mpSelPage == 0 && pPage != 0 )
+        {
+            if( 0 == nSelPage )
+                mpSelPage = pPage;
+
+            pPage = static_cast<const SwPageFrm*>( pPage->GetNext() );
+            nSelPage--;
+        }
+    }
+    ASSERT( mpSelPage, "selected page not found" );
 }
 
 struct ContainsPredicate
@@ -2172,6 +2271,14 @@ void SwAccPreviewData::AdjustMapMode( MapMode& rMapMode ) const
     // adjust scale
     rMapMode.SetScaleX( maScale );
     rMapMode.SetScaleY( maScale );
+}
+
+void SwAccPreviewData::DisposePage(const SwPageFrm *pPageFrm )
+{
+    if( mpStartPage == pPageFrm )
+        mpStartPage = 0;
+    if( mpSelPage == pPageFrm )
+        mpSelPage = 0;
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewimp.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dvo $ $Date: 2002-05-22 11:46:20 $
+ *  last change: $Author: mib $ $Date: 2002-05-29 15:05:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -498,11 +498,19 @@ void SwViewImp::UpdateAccessiblePreview( sal_uInt8 nRow, sal_uInt8 nColumn,
                                          sal_Int16 nStartPage,
                                          const Size& rPageSize,
                                          const Point& rFreePoint,
-                                         const Fraction& rScale )
+                                         const Fraction& rScale,
+                                           sal_uInt16 nSelectedPage )
 {
     if( IsAccessible() )
         GetAccessibleMap().UpdatePreview( nRow, nColumn, nStartPage,
-                                          rPageSize, rFreePoint, rScale );
+                                          rPageSize, rFreePoint, rScale,
+                                             nSelectedPage );
+}
+
+void SwViewImp::InvalidateAccessiblePreViewSelection( sal_uInt16 nSelPage )
+{
+    if( IsAccessible() )
+        GetAccessibleMap().InvalidatePreViewSelection( nSelPage );
 }
 
 SwAccessibleMap *SwViewImp::CreateAccessibleMap()

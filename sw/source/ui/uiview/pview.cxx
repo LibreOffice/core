@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dvo $ $Date: 2002-05-22 11:48:43 $
+ *  last change: $Author: mib $ $Date: 2002-05-29 15:06:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -814,7 +814,8 @@ void  SwPagePreViewWin::Paint( const Rectangle& rRect )
 
         Rectangle aRect( LogicToPixel( rRect ));
         nSelectedPage = nSttPage = pViewShell->CalcPreViewPage( aWinSize, nRowCol,
-                                                0, aPgSize, nVirtPage );
+                                                0, aPgSize, nVirtPage,
+                                                nSelectedPage );
         pViewShell->PreViewPage( PixelToLogic( aRect ), nRowCol, nSttPage,
                                     aPgSize, nSelectedPage );
         nRow = BYTE( nRowCol >> 8 );
@@ -849,7 +850,7 @@ void SwPagePreViewWin::CalcWish( BYTE nNewRow, BYTE nNewCol )
         nSttPage = nLastSttPg;
 
     nSelectedPage = nSttPage = pViewShell->CalcPreViewPage( aWinSize, nRowCol, nSttPage,
-                                            aPgSize, nVirtPage );
+                                            aPgSize, nVirtPage, USHRT_MAX );
     nRow = BYTE( nRowCol >> 8 );
     nCol = BYTE( nRowCol & 0xff );
     SetPagePreview(nRow, nCol);
@@ -915,7 +916,8 @@ int SwPagePreViewWin::MovePage( int eMoveMode )
     Size aSave( aPgSize );
     USHORT nRowCol = ( nRow << 8 ) + nCol;  // Zeilen / DoppelSeiten
     nNewSttPage = pViewShell->CalcPreViewPage( aWinSize, nRowCol,
-                                            nNewSttPage, aPgSize, nVirtPage );
+                                            nNewSttPage, aPgSize, nVirtPage,
+                                            nSelectedPage );
     if( nNewSttPage == nSttPage && aPgSize == aSave )
         return FALSE;
 
@@ -951,7 +953,7 @@ void SwPagePreViewWin::SetWinSize( const Size& rNewSize )
         nSelectedPage = nSttPage = GetDefSttPage();
     nSttPage = pViewShell->CalcPreViewPage( aWinSize, nRowCol,
                                             nSttPage, aPgSize,
-                                            nVirtPage );
+                                            nVirtPage, nSelectedPage );
     if(nSelectedPage < nSttPage || nSelectedPage > nSttPage + (nRow * nCol) )
     {
         nSelectedPage = nSttPage ? nSttPage : 1;
@@ -1147,8 +1149,16 @@ void  SwPagePreView::Execute( SfxRequest &rReq )
 
         case FN_CHAR_LEFT:
             //change the display only when the selection is already at the first position
-            if(aViewWin.GetSelectedPage() < 2 || aViewWin.GetSelectedPage()-- > nSttPage)
+            if( aViewWin.GetSelectedPage() < 2 )
                 break;
+            if( aViewWin.GetSelectedPage()-- > nSttPage )
+            {
+#ifdef ACCESSIBLE_LAYOUT
+                GetViewShell().ShowPreViewSelection( aViewWin.GetSelectedPage() );
+#endif
+                break;
+            }
+
             if( nDefSttPg == nSttPage-- )
             {
                 break;
@@ -1163,6 +1173,9 @@ void  SwPagePreView::Execute( SfxRequest &rReq )
             if((aViewWin.GetSelectedPage()++ < nSttPage + nPages - 1) ||
                 nLastSttPg == nSttPage++ )
             {
+#ifdef ACCESSIBLE_LAYOUT
+                GetViewShell().ShowPreViewSelection( aViewWin.GetSelectedPage() );
+#endif
                 break;
             }
             aViewWin.SetSttPage( nSttPage );
@@ -2195,7 +2208,7 @@ void  SwPagePreViewWin::GetOptimalSize( Size& rSize ) const
     USHORT nVirtPage;
     pViewShell->CalcPreViewPage( rSize, nRowCol,
                                     nSttPage, aPageSize,
-                                    nVirtPage );
+                                    nVirtPage, USHRT_MAX );
 
     if(aPageSize.Width() && aPageSize.Height())
     {
@@ -2264,7 +2277,7 @@ BOOL SwPagePreView::HandleWheelCommands( const CommandEvent& rCEvt )
     DBG_ASSERT( GetViewShell() != NULL, "We need a view shell" );
     return GetViewShell()->CreateAccessiblePreview(
         nRow, nCol, nSttPage, aPgSize,
-        GetViewShell()->GetPreviewFreePix(), aScale );
+        GetViewShell()->GetPreviewFreePix(), aScale, nSelectedPage );
 }
 #endif
 

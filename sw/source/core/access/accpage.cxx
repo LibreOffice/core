@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpage.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2002-05-22 11:38:22 $
+ *  last change: $Author: mib $ $Date: 2002-05-29 14:58:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,16 @@
 
 #pragma hdrstop
 
+#ifndef _SV_WINDOW_HXX
+#include <vcl/window.hxx>
+#endif
+#ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX_
+#include <unotools/accessiblestatesethelper.hxx>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#endif
+
 #ifndef _ACCPAGE_HXX
 #include "accpage.hxx"
 #endif
@@ -84,9 +94,83 @@
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::uno::Sequence;
+using namespace ::drafts::com::sun::star::accessibility;
 using ::rtl::OUString;
 using ::drafts::com::sun::star::accessibility::XAccessibleContext;
 
+const sal_Char sServiceName[] = "com.sun.star.table.AccessibleCellView";
+const sal_Char sImplementationName[] = "SwAccessibleCell";
+
+sal_Bool SwAccessiblePage::IsSelected()
+{
+    return GetMap()->IsPageSelected( static_cast < const SwPageFrm * >( GetFrm() ) );
+}
+
+void SwAccessiblePage::GetStates(
+        ::utl::AccessibleStateSetHelper& rStateSet )
+{
+    SwAccessibleContext::GetStates( rStateSet );
+
+    // FOCUSABLE
+    rStateSet.AddState( AccessibleStateType::FOCUSABLE );
+
+    // FOCUSED
+    if( IsSelected() )
+    {
+        ASSERT( bIsSelected, "bSelected out of sync" );
+        ::vos::ORef < SwAccessibleContext > xThis( this );
+        GetMap()->SetCursorContext( xThis );
+
+        Window *pWin = GetWindow();
+        if( pWin && pWin->HasFocus() )
+            rStateSet.AddState( AccessibleStateType::FOCUSED );
+    }
+}
+
+void SwAccessiblePage::_InvalidateCursorPos()
+{
+    sal_Bool bNewSelected = IsSelected();
+    sal_Bool bOldSelected;
+
+    {
+        vos::OGuard aGuard( aMutex );
+        bOldSelected = bIsSelected;
+        bIsSelected = bNewSelected;
+    }
+
+    if( bNewSelected )
+    {
+        // remember that object as the one that has the caret. This is
+        // neccessary to notify that object if the cursor leaves it.
+        ::vos::ORef < SwAccessibleContext > xThis( this );
+        GetMap()->SetCursorContext( xThis );
+    }
+
+    if( bOldSelected != bNewSelected )
+    {
+        Window *pWin = GetWindow();
+        if( pWin && pWin->HasFocus() )
+            FireStateChangedEvent( AccessibleStateType::FOCUSED, bNewSelected );
+    }
+}
+
+void SwAccessiblePage::_InvalidateFocus()
+{
+    Window *pWin = GetWindow();
+    if( pWin )
+    {
+        sal_Bool bSelected;
+
+        {
+            vos::OGuard aGuard( aMutex );
+            bSelected = bIsSelected;
+        }
+        ASSERT( bSelected, "focus object should be selected" );
+
+        FireStateChangedEvent( AccessibleStateType::FOCUSED,
+                               pWin->HasFocus() && bSelected );
+    }
+}
 
 SwAccessiblePage::SwAccessiblePage( SwAccessibleMap* pMap,
                                     const SwPageFrm *pFrame ) :
@@ -109,24 +193,31 @@ SwAccessiblePage::~SwAccessiblePage()
 {
 }
 
+sal_Bool SwAccessiblePage::HasCursor()
+{
+    vos::OGuard aGuard( aMutex );
+    return bIsSelected;
+}
+
 OUString SwAccessiblePage::getImplementationName( )
     throw( RuntimeException )
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SwAccessiblePage" ) );
+    return OUString(RTL_CONSTASCII_USTRINGPARAM(sImplementationName));
 }
 
 sal_Bool SwAccessiblePage::supportsService( const OUString& rServiceName)
     throw( RuntimeException )
 {
-    return rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "bla" ) );
+    return rServiceName.equalsAsciiL( sServiceName, sizeof(sServiceName)-1 );
 }
 
 Sequence<OUString> SwAccessiblePage::getSupportedServiceNames( )
     throw( RuntimeException )
 {
-    Sequence<OUString> aSeq( 1 );
-    aSeq[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( "bla" ) );
-    return aSeq;
+    Sequence< OUString > aRet(1);
+    OUString* pArray = aRet.getArray();
+    pArray[0] = OUString( RTL_CONSTASCII_USTRINGPARAM(sServiceName) );
+    return aRet;
 }
 
 
