@@ -97,23 +97,23 @@
 </FormatElement>
 <FormatElement msgid="DateFormatskey16" default="false" type="long" usage="DATE" formatindex="24">
 <FormatCode>D. MMM. AAAA</FormatCode>
-<DefaultName>DIN 5008 (EN 28601) </DefaultName>
+<DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey17" default="false" type="long" usage="DATE" formatindex="26">
 <FormatCode>D. MMMM AAAA</FormatCode>
-<DefaultName>DIN 5008 (EN 28601) </DefaultName>
+<DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey18" default="false" type="short" usage="DATE" formatindex="31">
 <FormatCode>MM-DD</FormatCode>
-<DefaultName>DIN 5008 (EN 28601) </DefaultName>
+<DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey19" default="false" type="medium" usage="DATE" formatindex="32">
 <FormatCode>AA-MM-DD</FormatCode>
-<DefaultName>DIN 5008 (EN 28601) </DefaultName>
+<DefaultName>ISO 8601 (EN 28601)</DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey20" default="false" type="medium" usage="DATE" formatindex="33">
 <FormatCode>AAAA-MM-DD</FormatCode>
-<DefaultName></DefaultName>
+<DefaultName>ISO 8601 (EN 28601)</DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey21" default="false" type="medium" usage="DATE" formatindex="38">
 <FormatCode>WW</FormatCode>
