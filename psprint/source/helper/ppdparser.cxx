@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ppdparser.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 13:47:54 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 10:45:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,24 +182,21 @@ String PPDParser::getPPDFile( const String& rFile )
     if( ! aStream.IsOpen() )
     {
         initPPDFiles();
-#ifdef MACOSX
+        // some PPD files contain dots beside the extension, so try name first,
+        // base after that
         std::hash_map< OUString, OUString, OUStringHash >::const_iterator it =
             pAllPPDFiles->find( aPPD.getName() );
-#else
-        std::hash_map< OUString, OUString, OUStringHash >::const_iterator it =
-            pAllPPDFiles->find( aPPD.getBase() );
-#endif // MACOSX
+        if( it == pAllPPDFiles->end() )
+            it = pAllPPDFiles->find( aPPD.getBase() );
         if( it == pAllPPDFiles->end() )
         {
             // a new file ? rehash
             delete pAllPPDFiles; pAllPPDFiles = NULL;
             initPPDFiles();
             // aPPD is already the file name minus the extension
-#ifdef MACOSX
             it = pAllPPDFiles->find( aPPD.getName() );
-#else
-            it = pAllPPDFiles->find( aPPD.getBase() );
-#endif // MACOSX
+            if( it == pAllPPDFiles->end() )
+                it = pAllPPDFiles->find( aPPD.getBase() );
             // note this is optimized for office start where
             // no new files occur and initPPDFiles is called only once
         }
