@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatchprovider.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:46:07 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 16:57:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -863,38 +863,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreat
 sal_Bool DispatchProvider::implts_isLoadableContent( const css::util::URL& aURL )
 {
     LoadEnv::EContentType eType = LoadEnv::classifyContent(aURL.Complete, css::uno::Sequence< css::beans::PropertyValue >());
-    sal_Bool bLoadableNew = (/*eType == LoadEnv::E_CAN_BE_HANDLED || */eType == LoadEnv::E_CAN_BE_LOADED);
-
-    /* SAFE { */
-    ReadGuard aReadLock( m_aLock );
-    css::uno::Reference< css::document::XTypeDetection >     xDetection( m_xFactory->createInstance( SERVICENAME_TYPEDETECTION    ), css::uno::UNO_QUERY );
-    css::uno::Reference< css::ucb::XContentProviderManager > xUCB      ( m_xFactory->createInstance( SERVICENAME_UCBCONTENTBROKER ), css::uno::UNO_QUERY );
-    aReadLock.unlock();
-    /* } SAFE */
-
-    sal_Bool bLoadable = sal_False;
-
-    // (a) a UCB provide loadable contents only
-    if (xUCB.is())
-        bLoadable = xUCB->queryContentProvider( aURL.Complete ).is();
-    // no else here!
-    // (b) if we can detect a type for given URL - it must be loadable too
-    if(
-        ( bLoadable       == sal_False )    &&
-        ( xDetection.is() == sal_True  )
-      )
-    {
-        ::rtl::OUString sTypeName = xDetection->queryTypeByURL( aURL.Complete );
-        bLoadable = (sTypeName.getLength()>0);
-    }
-    // no else here!
-    // (c) such special URL indicates a given input stream - it should be loadable too
-    if( !bLoadable && ProtocolCheck::isProtocol(aURL.Complete,ProtocolCheck::E_PRIVATE_STREAM) )
-        bLoadable = sal_True;
-
-    LOG_ASSERT((bLoadableNew==bLoadable), "mismatch between old and new implementation :-)")
-
-    return bLoadable;
+    return ( eType == LoadEnv::E_CAN_BE_LOADED );
 }
 
 } // namespace framework
