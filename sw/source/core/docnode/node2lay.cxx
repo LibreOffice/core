@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node2lay.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:17 $
+ *  last change: $Author: od $ $Date: 2002-11-15 11:06:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,9 +285,10 @@ SwLayoutFrm* SwNode2LayImpl::UpperFrm( SwFrm* &rpFrm, const SwNode &rNode )
                     rpFrm = bMaster ? NULL : ((SwLayoutFrm*)pFrm)->Lower();
                     return ((SwLayoutFrm*)pFrm);
                 }
-                pUpper =new SwSectionFrm(((SwSectionNode*)pNode)->GetSection());
+                pUpper = new SwSectionFrm(((SwSectionNode*)pNode)->GetSection());
                 pUpper->Paste( rpFrm->GetUpper(),
                                bMaster ? rpFrm : rpFrm->GetNext() );
+                static_cast<SwSectionFrm*>(pUpper)->Init();
                 rpFrm = NULL;
                 return pUpper;
             }

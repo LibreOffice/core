@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndsect.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: od $ $Date: 2002-10-10 09:17:22 $
+ *  last change: $Author: od $ $Date: 2002-11-15 11:07:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1119,9 +1119,14 @@ void SwSectionNode::MakeFrms(const SwNodeIndex & rIdx )
                 SwSectionNode *pS = rIdx.GetNode().FindSectionNode();
                 // if the node is in a section, the sectionframe now
                 // has to be created..
+                // OD 14.11.2002 #104684# - boolean to control <Init()> of a new
+                // section frame.
+                bool bInitNewSect = false;
                 if( pS )
                 {
                     SwSectionFrm *pSct = new SwSectionFrm( pS->GetSection() );
+                    // OD 14.11.2002 #104684# - prepare <Init()> of new section frame.
+                    bInitNewSect = true;
                     SwLayoutFrm* pUp = pSct;
                     while( pUp->Lower() )  // for columned sections
                     {
@@ -1139,6 +1144,8 @@ void SwSectionNode::MakeFrms(const SwNodeIndex & rIdx )
                 else
                     // der neue liegt hinter mir
                     pNew->Paste( pFrm->GetUpper(), pFrm->GetNext() );
+                if ( bInitNewSect )
+                    static_cast<SwSectionFrm*>(pNew)->Init();
             }
         }
     }

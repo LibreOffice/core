@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftnfrm.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: od $ $Date: 2002-11-01 11:39:38 $
+ *  last change: $Author: od $ $Date: 2002-11-15 11:02:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2945,7 +2945,7 @@ BOOL SwCntntFrm::MoveFtnCntFwd( BOOL bMakePage, SwFtnBossFrm *pOldBoss )
                 {
                     pNewUp = new SwSectionFrm( *pSect, FALSE );
                     pNewUp->InsertBefore( pTmpFtn, pTmpFtn->Lower() );
-                    ((SwSectionFrm*)pNewUp)->Init();
+                    static_cast<SwSectionFrm*>(pNewUp)->Init();
                     pNewUp->Frm().Pos() = pTmpFtn->Frm().Pos();
                     pNewUp->Frm().Pos().Y() += 1; //wg. Benachrichtigungen.
 
