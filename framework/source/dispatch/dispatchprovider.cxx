@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatchprovider.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-28 11:08:13 $
+ *  last change: $Author: as $ $Date: 2001-12-12 13:28:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,162 +268,165 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL DispatchProvider::queryDis
     // Set default return value if query failed.
     css::uno::Reference< css::frame::XDispatch > xReturn;
 
-    /* HACK */
-    ::rtl::OUString sNewTarget = sTargetFrameName;
-    if( aURL.Complete.compareToAscii( "macro:", 6 ) == 0 )
-    {
-        sNewTarget = DECLARE_ASCII("_self");
-    }
-    /* HACK */
-
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     ReadGuard aReadLock( m_aLock );
 
     // Make snapshot of neccessary member by using a read lock.
     // Resolve weakreference to owner and hold a normal reference till the end of this method.
     // So he couldn't die .-)
-    css::uno::Reference< css::frame::XFrame > xOwner( m_xFrame.get(), css::uno::UNO_QUERY );
+    css::uno::Reference< css::frame::XFrame >               xOwner   ( m_xFrame.get(), css::uno::UNO_QUERY );
+    css::uno::Reference< css::lang::XMultiServiceFactory >  xFactory = m_xFactory;
 
     aReadLock.unlock();
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
 
     if( xOwner.is() == sal_True )
     {
-        // Classify target of this dispatch call to find right dispatch helper!
-        // Try to get neccessary informations from tree environment.
-        TargetInfo   aInfo  ( xOwner, sNewTarget, nSearchFlags );
-        ETargetClass eResult= TargetFinder::classifyQueryDispatch( aInfo );
-        switch( eResult )
+        if( aURL.Complete.compareToAscii( "macro:", 6 ) == 0 )
         {
-            //-----------------------------------------------------------------------------------------------------
-            case E_SELF          :  {
-                                        // Ask our controller for his agreement for these dispatched URL ...
-                                        // because some URLs are internal and can be handled faster by SFX - which most is the current controller!
-                                        // Attention: Desktop has no controller - don't ask him!
-                                        if( aInfo.eFrameType != E_DESKTOP )
-                                        {
-                                            css::uno::Reference< css::frame::XDispatchProvider > xController( xOwner->getController(), css::uno::UNO_QUERY );
-                                            if( xController.is() == sal_True )
+            /* TODO: In current code we use implementation name instead of service name ...
+                     If we use generic mechanism for protocol handler we should change that.
+             */
+            xReturn = css::uno::Reference< css::frame::XDispatch >( xFactory->createInstance( DECLARE_ASCII("com.sun.star.comp.sfx2.SfxMacroLoader") ), css::uno::UNO_QUERY );
+        }
+        else
+        {
+            // Classify target of this dispatch call to find right dispatch helper!
+            // Try to get neccessary informations from tree environment.
+            TargetInfo   aInfo  ( xOwner, sTargetFrameName, nSearchFlags );
+            ETargetClass eResult= TargetFinder::classifyQueryDispatch( aInfo );
+            switch( eResult )
+            {
+                //-----------------------------------------------------------------------------------------------------
+                case E_SELF          :  {
+                                            // Ask our controller for his agreement for these dispatched URL ...
+                                            // because some URLs are internal and can be handled faster by SFX - which most is the current controller!
+                                            // Attention: Desktop has no controller - don't ask him!
+                                            if( aInfo.eFrameType != E_DESKTOP )
                                             {
-                                                xReturn = xController->queryDispatch( aURL, sNewTarget, nSearchFlags );
+                                                css::uno::Reference< css::frame::XDispatchProvider > xController( xOwner->getController(), css::uno::UNO_QUERY );
+                                                if( xController.is() == sal_True )
+                                                {
+                                                    xReturn = xController->queryDispatch( aURL, sTargetFrameName, nSearchFlags );
+                                                }
+                                            }
+                                            // If controller has no fun to dispatch these URL - we must search another right dispatcher.
+                                            if( xReturn.is() == sal_False )
+                                            {
+                                                xReturn = implts_searchProtocolHandler( aURL, aInfo );
                                             }
                                         }
-                                        // If controller has no fun to dispatch these URL - we must search another right dispatcher.
-                                        if( xReturn.is() == sal_False )
-                                        {
-                                            xReturn = implts_searchProtocolHandler( aURL, aInfo );
-                                        }
-                                    }
-                                    break;
-            //-----------------------------------------------------------------------------------------------------
-            case E_CREATETASK    :  {
-                                        // Check ucb support before you create dispatch helper.
-                                        // He could do nothing then ... but it doesnt perform, if we try it!
-                                        if( implts_isLoadableContent( aURL ) == sal_True )
-                                        {
-                                            css::uno::Reference < css::frame::XFramesSupplier > xDesktop( xOwner, css::uno::UNO_QUERY );
-                                            css::uno::Reference < css::frame::XFrame > xTask = xDesktop->getActiveFrame();
-                                            css::uno::Reference < css::mozilla::XPluginInstance > xPlug( xTask, css::uno::UNO_QUERY );
-                                            if ( xPlug.is() )
+                                        break;
+                //-----------------------------------------------------------------------------------------------------
+                case E_CREATETASK    :  {
+                                            // Check ucb support before you create dispatch helper.
+                                            // He could do nothing then ... but it doesnt perform, if we try it!
+                                            if( implts_isLoadableContent( aURL ) == sal_True )
                                             {
-                                                css::uno::Reference < css::frame::XDispatchProvider > xProv( xTask, css::uno::UNO_QUERY );
-                                                xReturn = xProv->queryDispatch( aURL, sTargetFrameName, nSearchFlags );
+                                                css::uno::Reference < css::frame::XFramesSupplier > xDesktop( xOwner, css::uno::UNO_QUERY );
+                                                css::uno::Reference < css::frame::XFrame > xTask = xDesktop->getActiveFrame();
+                                                css::uno::Reference < css::mozilla::XPluginInstance > xPlug( xTask, css::uno::UNO_QUERY );
+                                                if ( xPlug.is() )
+                                                {
+                                                    css::uno::Reference < css::frame::XDispatchProvider > xProv( xTask, css::uno::UNO_QUERY );
+                                                    xReturn = xProv->queryDispatch( aURL, sTargetFrameName, nSearchFlags );
+                                                }
+                                                else
+                                                    xReturn = implts_getOrCreateDispatchHelper( E_BLANKDISPATCHER );
+                                            }
+                                        }
+                                        break;
+                case E_DEFAULT    :  {
+                                            // Check ucb support before you create dispatch helper.
+                                            // He could do nothing then ... but it doesnt perform, if we try it!
+                                            if( implts_isLoadableContent( aURL ) == sal_True )
+                                            {
+                                                css::uno::Reference < css::frame::XFramesSupplier > xDesktop( xOwner, css::uno::UNO_QUERY );
+                                                css::uno::Reference < css::frame::XFrame > xTask = xDesktop->getActiveFrame();
+                                                css::uno::Reference < css::mozilla::XPluginInstance > xPlug( xTask, css::uno::UNO_QUERY );
+                                                if ( xPlug.is() )
+                                                {
+                                                    css::uno::Reference < css::frame::XDispatchProvider > xProv( xTask, css::uno::UNO_QUERY );
+                                                    xReturn = xProv->queryDispatch( aURL, sTargetFrameName, nSearchFlags );
+                                                }
+                                                else
+                                                    xReturn = implts_getOrCreateDispatchHelper( E_DEFAULTDISPATCHER );
+                                            }
+                                        }
+                                        break;
+                //-----------------------------------------------------------------------------------------------------
+                case E_PARENT        :
+                case E_FORWARD_UP    :  {
+                                            css::uno::Reference< css::frame::XDispatchProvider > xParent( xOwner->getCreator(), css::uno::UNO_QUERY );
+                                            if( xParent.is() == sal_True )
+                                            {
+                                                xReturn = xParent->queryDispatch( aURL, sTargetFrameName, nSearchFlags );
+                                            }
+                                        }
+                                        break;
+                //-----------------------------------------------------------------------------------------------------
+                case E_BEAMER        :  {
+                                            css::uno::Reference< css::frame::XDispatchProvider > xBeamer( xOwner->findFrame( SPECIALTARGET_BEAMER, css::frame::FrameSearchFlag::CHILDREN || css::frame::FrameSearchFlag::SELF ), css::uno::UNO_QUERY );
+                                            if( xBeamer.is() == sal_True )
+                                            {
+                                                xReturn = xBeamer->queryDispatch( aURL, SPECIALTARGET_SELF, 0 );
                                             }
                                             else
-                                                xReturn = implts_getOrCreateDispatchHelper( E_BLANKDISPATCHER );
-                                        }
-                                    }
-                                    break;
-            case E_DEFAULT    :  {
-                                        // Check ucb support before you create dispatch helper.
-                                        // He could do nothing then ... but it doesnt perform, if we try it!
-                                        if( implts_isLoadableContent( aURL ) == sal_True )
-                                        {
-                                            css::uno::Reference < css::frame::XFramesSupplier > xDesktop( xOwner, css::uno::UNO_QUERY );
-                                            css::uno::Reference < css::frame::XFrame > xTask = xDesktop->getActiveFrame();
-                                            css::uno::Reference < css::mozilla::XPluginInstance > xPlug( xTask, css::uno::UNO_QUERY );
-                                            if ( xPlug.is() )
                                             {
-                                                css::uno::Reference < css::frame::XDispatchProvider > xProv( xTask, css::uno::UNO_QUERY );
-                                                xReturn = xProv->queryDispatch( aURL, sTargetFrameName, nSearchFlags );
+                                                css::uno::Reference< css::frame::XDispatchProvider > xController( xOwner->getController(), css::uno::UNO_QUERY );
+                                                if( xController.is() == sal_True )
+                                                {
+                                                    xReturn = xController->queryDispatch( aURL, sTargetFrameName, nSearchFlags );
+                                                }
+                                            }
+                                        }
+                                        break;
+                //-----------------------------------------------------------------------------------------------------
+                case E_MENUBAR       :  {
+                                            xReturn = implts_getOrCreateDispatchHelper( E_MENUDISPATCHER );
+                                        }
+                                        break;
+                //-----------------------------------------------------------------------------------------------------
+                case E_HELPAGENT     :  {
+                                            xReturn = implts_getOrCreateDispatchHelper( E_HELPAGENTDISPATCHER );
+                                        }
+                                        break;
+                //-----------------------------------------------------------------------------------------------------
+                case E_TASKS         :
+                case E_DEEP_DOWN     :
+                case E_FLAT_DOWN     :
+                case E_DEEP_BOTH     :
+                case E_FLAT_BOTH     :  {
+                                            sal_Int32 nNewFlags  =  nSearchFlags                       ;
+                                                    nNewFlags &= ~css::frame::FrameSearchFlag::CREATE;
+                                            css::uno::Reference< css::frame::XFrame > xFrame = xOwner->findFrame( sTargetFrameName, nNewFlags );
+                                            if( xFrame.is() == sal_True )
+                                            {
+                                                xReturn = css::uno::Reference< css::frame::XDispatchProvider >( xFrame, css::uno::UNO_QUERY )->queryDispatch( aURL, SPECIALTARGET_SELF, 0 );
                                             }
                                             else
-                                                xReturn = implts_getOrCreateDispatchHelper( E_DEFAULTDISPATCHER );
-                                        }
-                                    }
-                                    break;
-            //-----------------------------------------------------------------------------------------------------
-            case E_PARENT        :
-            case E_FORWARD_UP    :  {
-                                        css::uno::Reference< css::frame::XDispatchProvider > xParent( xOwner->getCreator(), css::uno::UNO_QUERY );
-                                        if( xParent.is() == sal_True )
-                                        {
-                                            xReturn = xParent->queryDispatch( aURL, sNewTarget, nSearchFlags );
-                                        }
-                                    }
-                                    break;
-            //-----------------------------------------------------------------------------------------------------
-            case E_BEAMER        :  {
-                                        css::uno::Reference< css::frame::XDispatchProvider > xBeamer( xOwner->findFrame( SPECIALTARGET_BEAMER, css::frame::FrameSearchFlag::CHILDREN || css::frame::FrameSearchFlag::SELF ), css::uno::UNO_QUERY );
-                                        if( xBeamer.is() == sal_True )
-                                        {
-                                            xReturn = xBeamer->queryDispatch( aURL, SPECIALTARGET_SELF, 0 );
-                                        }
-                                        else
-                                        {
-                                            css::uno::Reference< css::frame::XDispatchProvider > xController( xOwner->getController(), css::uno::UNO_QUERY );
-                                            if( xController.is() == sal_True )
+                                            if(
+                                                ( aInfo.bCreationAllowed           == sal_True )    &&
+                                                ( implts_isLoadableContent( aURL ) == sal_True )
+                                            )
                                             {
-                                                xReturn = xController->queryDispatch( aURL, sNewTarget, nSearchFlags );
+                                                css::uno::Any aParameter;
+                                                aParameter <<= sTargetFrameName;
+                                                xReturn = implts_getOrCreateDispatchHelper( E_CREATEDISPATCHER, aParameter );
                                             }
                                         }
-                                    }
-                                    break;
-            //-----------------------------------------------------------------------------------------------------
-            case E_MENUBAR       :  {
-                                        xReturn = implts_getOrCreateDispatchHelper( E_MENUDISPATCHER );
-                                    }
-                                    break;
-            //-----------------------------------------------------------------------------------------------------
-            case E_HELPAGENT     :  {
-                                        xReturn = implts_getOrCreateDispatchHelper( E_HELPAGENTDISPATCHER );
-                                    }
-                                    break;
-            //-----------------------------------------------------------------------------------------------------
-            case E_TASKS         :
-            case E_DEEP_DOWN     :
-            case E_FLAT_DOWN     :
-            case E_DEEP_BOTH     :
-            case E_FLAT_BOTH     :  {
-                                        sal_Int32 nNewFlags  =  nSearchFlags                       ;
-                                                  nNewFlags &= ~css::frame::FrameSearchFlag::CREATE;
-                                        css::uno::Reference< css::frame::XFrame > xFrame = xOwner->findFrame( sNewTarget, nNewFlags );
-                                        if( xFrame.is() == sal_True )
-                                        {
-                                            xReturn = css::uno::Reference< css::frame::XDispatchProvider >( xFrame, css::uno::UNO_QUERY )->queryDispatch( aURL, SPECIALTARGET_SELF, 0 );
+                                        break;
+                //-----------------------------------------------------------------------------------------------------
+                #ifdef ENABLE_WARNINGS
+                default             :   {
+                                            if( eResult != E_UNKNOWN )
+                                            {
+                                                LOG_WARNING( "DispatchProvider::queryDispatch()", "No valid result found ... could it be an algorithm error?!" )
+                                            }
                                         }
-                                        else
-                                        if(
-                                            ( aInfo.bCreationAllowed           == sal_True )    &&
-                                            ( implts_isLoadableContent( aURL ) == sal_True )
-                                          )
-                                        {
-                                            css::uno::Any aParameter;
-                                            aParameter <<= sNewTarget;
-                                            xReturn = implts_getOrCreateDispatchHelper( E_CREATEDISPATCHER, aParameter );
-                                        }
-                                    }
-                                    break;
-            //-----------------------------------------------------------------------------------------------------
-            #ifdef ENABLE_WARNINGS
-            default             :   {
-                                        if( eResult != E_UNKNOWN )
-                                        {
-                                            LOG_WARNING( "DispatchProvider::queryDispatch()", "No valid result found ... could it be an algorithm error?!" )
-                                        }
-                                    }
-                                    break;
-            #endif
+                                        break;
+                #endif
+            }
         }
     }
 
