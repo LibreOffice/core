@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-20 09:36:54 $
+ *  last change: $Author: vg $ $Date: 2003-06-25 10:49:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3582,6 +3582,34 @@ void lcl_PaintTopBottomLine( const sal_Bool         _bTop,
     }
 }
 
+
+/*************************************************************************
+|*
+|*  const SwFrm* lcl_HasNextCell( const SwFrm& rFrm )
+|*
+|* No comment. #i15844#
+|*
+|*************************************************************************/
+
+const SwFrm* lcl_HasNextCell( const SwFrm& rFrm )
+{
+    ASSERT( rFrm.IsCellFrm(),
+            "lcl_HasNextCell( const SwFrm& rFrm ) should be called with SwCellFrm" )
+
+    const SwFrm* pTmpFrm = &rFrm;
+    do
+    {
+        if ( pTmpFrm->GetNext() )
+            return pTmpFrm->GetNext();
+
+        pTmpFrm = pTmpFrm->GetUpper()->GetUpper();
+    }
+    while ( pTmpFrm->IsCellFrm() );
+
+    return 0;
+}
+
+
 /*************************************************************************
 |*
 |*  SwFrm::PaintBorder()
@@ -3619,6 +3647,8 @@ const SwFrm* lcl_GetCellFrmForBorderAttrs( const SwFrm*         _pCellFrm,
                                            const SwBorderAttrs& _rCellBorderAttrs,
                                            const bool           _bTop )
 {
+    ASSERT( _pCellFrm, "No cell frame available, dying soon" )
+
     // determine, if cell frame is at bottom/top border of a table frame and
     // the table frame has/is a follow.
     const SwFrm* pTmpFrm = _pCellFrm;
@@ -3667,12 +3697,30 @@ const SwFrm* lcl_GetCellFrmForBorderAttrs( const SwFrm*         _pCellFrm,
     if ( bCellNeedsAttribute )
     {
         // determine, if cell frame has no borders inside the table.
-        const SvxBoxItem aBorderBox = _rCellBorderAttrs.GetBox();
-        const bool bNoBordersInside =
-                ( !aBorderBox.GetTop()    || !pParentRowFrm->GetPrev() ) &&
-                ( !aBorderBox.GetLeft()   || bCellAtLeftBorder ) &&
-                ( !aBorderBox.GetRight()  || bCellAtRightBorder ) &&
-                ( !aBorderBox.GetBottom() || !pParentRowFrm->GetNext() );
+        const SwFrm* pNextCell = 0;
+        bool bNoBordersInside = false;
+
+        if ( bCellAtLeftBorder && ( 0 != ( pNextCell = lcl_HasNextCell( *_pCellFrm ) ) ) )
+        {
+            SwBorderAttrAccess aAccess( SwFrm::GetCache(), pNextCell );
+            const SwBorderAttrs &rBorderAttrs = *aAccess.Get();
+            const SvxBoxItem& rBorderBox = rBorderAttrs.GetBox();
+            bCellAtRightBorder = !lcl_HasNextCell( *pNextCell );
+            bNoBordersInside =
+                ( !rBorderBox.GetTop()    || !pParentRowFrm->GetPrev() ) &&
+                  !rBorderBox.GetLeft() &&
+                ( !rBorderBox.GetRight()  || bCellAtRightBorder ) &&
+                ( !rBorderBox.GetBottom() || !pParentRowFrm->GetNext() );
+        }
+        else
+        {
+            const SvxBoxItem& rBorderBox = _rCellBorderAttrs.GetBox();
+            bNoBordersInside =
+                ( !rBorderBox.GetTop()    || !pParentRowFrm->GetPrev() ) &&
+                ( !rBorderBox.GetLeft()   || bCellAtLeftBorder ) &&
+                ( !rBorderBox.GetRight()  || bCellAtRightBorder ) &&
+                ( !rBorderBox.GetBottom() || !pParentRowFrm->GetNext() );
+        }
 
         if ( bNoBordersInside )
         {
