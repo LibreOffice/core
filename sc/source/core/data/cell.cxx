@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cell.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 11:42:51 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:19:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,10 @@
 #include "ddelink.hxx"
 #include "validat.hxx"
 #include "progress.hxx"
-#include "bclist.hxx"
+
+#ifndef _SVT_BROADCAST_HXX
+#include <svtools/broadcast.hxx>
+#endif
 
 // jetzt fuer alle Systeme niedriger Wert, Rest wird per FormulaTree ausgebuegelt,
 // falls wirklich eine tiefe Rekursion ist, geht das schneller, als zu versuchen
@@ -229,7 +232,7 @@ void ScBaseCell::LoadNote( SvStream& rStream )
     rStream >> *pNote;
 }
 
-void ScBaseCell::SetBroadcaster(ScBroadcasterList* pNew)
+void ScBaseCell::SetBroadcaster(SvtBroadcaster* pNew)
 {
     delete pBroadcaster;
     pBroadcaster = pNew;
@@ -592,7 +595,7 @@ ScFormulaCell::ScFormulaCell() :
     pNext(0),
     pPreviousTrack(0),
     pNextTrack(0),
-    aPos(0),
+    aPos(0,0,0),
     nMatCols(0),
     nMatRows(0)
 {
@@ -675,7 +678,7 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
 ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rNewPos,
                               const ScFormulaCell& rScFormulaCell, USHORT nCopyFlags ) :
     ScBaseCell( rScFormulaCell ),
-    SfxListener(),
+    SvtListener(),
     aErgString( rScFormulaCell.aErgString ),
     nErgValue( rScFormulaCell.nErgValue ),
     bIsValue( rScFormulaCell.bIsValue ),
@@ -847,8 +850,11 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
                 bSubTotal = TRUE;
             }
         }
+#if SC_ROWLIMIT_STREAM_ACCESS
+#error address types changed!
         if ( cMatrixFlag == MM_FORMULA && rHdr.BytesLeft() )
             rStream >> nMatCols >> nMatRows;
+#endif
     }
     else
     {
@@ -873,7 +879,7 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
         pDoc->SetHasMacroFunc( TRUE );
 }
 
-BOOL lcl_IsBeyond( ScTokenArray* pCode, USHORT nMaxRow )
+BOOL lcl_IsBeyond( ScTokenArray* pCode, SCROW nMaxRow )
 {
     ScToken* t;
     pCode->Reset();
@@ -887,7 +893,7 @@ BOOL lcl_IsBeyond( ScTokenArray* pCode, USHORT nMaxRow )
 
 void ScFormulaCell::Save( SvStream& rStream, ScMultipleWriteHeader& rHdr ) const
 {
-    USHORT nSaveMaxRow = pDocument->GetSrcMaxRow();
+    SCROW nSaveMaxRow = pDocument->GetSrcMaxRow();
     if ( nSaveMaxRow < MAXROW && lcl_IsBeyond( pCode, nSaveMaxRow ) )
     {
         //  Zelle mit Ref-Error erzeugen und speichern
@@ -935,6 +941,8 @@ void ScFormulaCell::Save( SvStream& rStream, ScMultipleWriteHeader& rHdr ) const
     }
 //  rStream << (BYTE) 0x00;
 #endif
+#if SC_ROWLIMIT_STREAM_ACCESS
+#error address types changed!
     if ( nFormatIndex )
         rStream << (BYTE) (0x10 | sizeof(UINT32)) << nFormatIndex;
     else
@@ -948,6 +956,7 @@ void ScFormulaCell::Save( SvStream& rStream, ScMultipleWriteHeader& rHdr ) const
     if ( cMatrixFlag == MM_FORMULA )
         rStream << nMatCols << nMatRows;
 
+#endif
     rHdr.EndEntry();
 }
 
@@ -1012,7 +1021,7 @@ void ScFormulaCell::GetFormula( String& rFormula ) const
     }
 }
 
-void ScFormulaCell::GetResultDimensions( USHORT& rCols, USHORT& rRows )
+void ScFormulaCell::GetResultDimensions( SCSIZE& rCols, SCSIZE& rRows )
 {
     if (IsDirtyOrInTableOpDirty() && pDocument->GetAutoCalc())
         Interpret();
@@ -1020,7 +1029,10 @@ void ScFormulaCell::GetResultDimensions( USHORT& rCols, USHORT& rRows )
     if ( !pCode->GetError() && pMatrix )
         pMatrix->GetDimensions( rCols, rRows );
     else
-        rCols = rRows = 0;
+    {
+        rCols = 0;
+        rRows = 0;
+    }
 }
 
 void ScFormulaCell::Compile( const String& rFormula, BOOL bNoListening )
@@ -1516,8 +1528,7 @@ ULONG ScFormulaCell::GetStandardFormat( SvNumberFormatter& rFormatter, ULONG nFo
 }
 
 
-void __EXPORT ScFormulaCell::SFX_NOTIFY( SfxBroadcaster& rBC,
-        const TypeId& rBCType, const SfxHint& rHint, const TypeId& rHintType )
+void __EXPORT ScFormulaCell::Notify( SvtBroadcaster& rBC, const SfxHint& rHint)
 {
     if ( !pDocument->IsInDtorClear() && !pDocument->GetHardRecalcState() )
     {
@@ -1649,7 +1660,7 @@ BOOL lcl_ScDetectiveRefIter_SkipRef( ScToken* p )
     return FALSE;
 }
 
-BOOL ScDetectiveRefIter::GetNextRef( ScTripel& rStart, ScTripel& rEnd )
+BOOL ScDetectiveRefIter::GetNextRef( ScRange& rRange )
 {
     BOOL bRet = FALSE;
 
@@ -1667,12 +1678,8 @@ BOOL ScDetectiveRefIter::GetNextRef( ScTripel& rStart, ScTripel& rEnd )
     if( p )
     {
         SingleDoubleRefProvider aProv( *p );
-        rStart.Put( aProv.Ref1.nCol,
-                    aProv.Ref1.nRow,
-                    aProv.Ref1.nTab );
-        rEnd.Put( aProv.Ref2.nCol,
-                  aProv.Ref2.nRow,
-                  aProv.Ref2.nTab );
+        rRange.aStart.Set( aProv.Ref1.nCol, aProv.Ref1.nRow, aProv.Ref1.nTab );
+        rRange.aEnd.Set( aProv.Ref2.nCol, aProv.Ref2.nRow, aProv.Ref2.nTab );
         bRet = TRUE;
     }
 
