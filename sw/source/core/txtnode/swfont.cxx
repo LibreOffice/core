@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-06 13:13:06 $
+ *  last change: $Author: ama $ $Date: 2001-03-06 15:05:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,7 +300,11 @@ void SwFont::SetFnt( const SwAttrSet *pAttrSet )
             aSub[SW_CJK].SetSize( aTmpSize );
             aSub[SW_CJK].Font::SetItalic( pAttrSet->GetCJKPosture().GetPosture() );
             aSub[SW_CJK].Font::SetWeight( pAttrSet->GetCJKWeight().GetWeight() );
-            aSub[SW_CJK].SetLanguage( pAttrSet->GetCJKLanguage().GetLanguage() );
+            LanguageType eNewLang = pAttrSet->GetCJKLanguage().GetLanguage();
+            aSub[SW_CJK].SetLanguage( eNewLang );
+            aSub[SW_LATIN].SetCJKContextLanguage( eNewLang );
+            aSub[SW_CJK].SetCJKContextLanguage( eNewLang );
+            aSub[SW_CTL].SetCJKContextLanguage( eNewLang );
         }
         {   // CTL
             const SvxFontItem& rFont = pAttrSet->GetCTLFont();
@@ -430,7 +434,13 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet )
             aSub[SW_CJK].Font::SetWeight( ((SvxWeightItem*)pItem)->GetWeight() );
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_CJK_LANGUAGE,
             TRUE, &pItem ))
-            aSub[SW_CJK].SetLanguage( ((SvxLanguageItem*)pItem)->GetLanguage() );
+        {
+            LanguageType eNewLang = ((SvxLanguageItem*)pItem)->GetLanguage();
+            aSub[SW_CJK].SetLanguage( eNewLang );
+            aSub[SW_LATIN].SetCJKContextLanguage( eNewLang );
+            aSub[SW_CJK].SetCJKContextLanguage( eNewLang );
+            aSub[SW_CTL].SetCJKContextLanguage( eNewLang );
+        }
 
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_CTL_FONT,
             TRUE, &pItem ))
@@ -598,7 +608,11 @@ SwFont::SwFont( const SwAttrSet* pAttrSet )
         aSub[SW_CJK].SetSize( aTmpSize );
         aSub[SW_CJK].SetItalic( pAttrSet->GetCJKPosture().GetPosture() );
         aSub[SW_CJK].SetWeight( pAttrSet->GetCJKWeight().GetWeight() );
-        aSub[SW_CJK].SetLanguage( pAttrSet->GetCJKLanguage().GetLanguage() );
+        LanguageType eNewLang = pAttrSet->GetCJKLanguage().GetLanguage();
+        aSub[SW_CJK].SetLanguage( eNewLang );
+        aSub[SW_LATIN].SetCJKContextLanguage( eNewLang );
+        aSub[SW_CJK].SetCJKContextLanguage( eNewLang );
+        aSub[SW_CTL].SetCJKContextLanguage( eNewLang );
     }
 
     {
@@ -695,8 +709,12 @@ SwFont::SwFont( const SwAttrHandler& rAttrHandler )
                 rAttrHandler.GetDefault( RES_CHRATR_CJK_POSTURE ) ).GetPosture() );
         aSub[SW_CJK].SetWeight( ( (SvxWeightItem&)
                 rAttrHandler.GetDefault( RES_CHRATR_CJK_WEIGHT ) ).GetWeight() );
-        aSub[SW_CJK].SetLanguage( ( (SvxLanguageItem&)
-                rAttrHandler.GetDefault( RES_CHRATR_CJK_LANGUAGE ) ).GetLanguage() );
+        LanguageType eNewLang = ( (SvxLanguageItem&)
+            rAttrHandler.GetDefault( RES_CHRATR_CJK_LANGUAGE ) ).GetLanguage();
+        aSub[SW_CJK].SetLanguage( eNewLang );
+        aSub[SW_LATIN].SetCJKContextLanguage( eNewLang );
+        aSub[SW_CJK].SetCJKContextLanguage( eNewLang );
+        aSub[SW_CTL].SetCJKContextLanguage( eNewLang );
     }
 
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-06 13:07:58 $
+ *  last change: $Author: ama $ $Date: 2001-03-06 15:06:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -809,6 +809,12 @@ inline void SwSubFont::SetLanguage( LanguageType eNewLang )
 inline void SwFont::SetLanguage( const LanguageType eNewLang, const BYTE nWhich )
 {
     aSub[nWhich].SetLanguage( eNewLang );
+    if( SW_CJK == nWhich )
+    {
+        aSub[SW_LATIN].SetCJKContextLanguage( eNewLang );
+        aSub[SW_CJK].SetCJKContextLanguage( eNewLang );
+        aSub[SW_CTL].SetCJKContextLanguage( eNewLang );
+    }
 }
 
 inline void SwFont::SetPaintBlank( const BOOL bNew )
