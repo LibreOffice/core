@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convdiclist.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 16:06:10 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:34:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -435,16 +435,22 @@ void ConvDicNameContainer::AddConvDics(
         sal_Int16 nConvType;
         if (IsConvDic( aURL, nLang, nConvType ))
         {
+            // get decoded dictionary file name
+            INetURLObject aURLObj( aURL );
+            String aDicName = aURLObj.getBase( INetURLObject::LAST_SEGMENT,
+                        true, INetURLObject::DECODE_WITH_CHARSET,
+                        RTL_TEXTENCODING_UTF8 );
+
             Reference < XConversionDictionary > xDic;
             if (nLang == LANGUAGE_KOREAN &&
                 nConvType == ConversionDictionaryType::HANGUL_HANJA)
             {
-                // get decoded dictionary file name
-                INetURLObject aURLObj( aURL );
-                String aDicName = aURLObj.getBase( INetURLObject::LAST_SEGMENT,
-                            true, INetURLObject::DECODE_WITH_CHARSET,
-                            RTL_TEXTENCODING_UTF8 );
                 xDic = new HHConvDic( aDicName, aURL );
+            }
+            else if ((nLang == LANGUAGE_CHINESE_SIMPLIFIED || nLang == LANGUAGE_CHINESE_TRADITIONAL) &&
+                      nConvType == ConversionDictionaryType::SCHINESE_TCHINESE)
+            {
+                xDic = new ConvDic( aDicName, nLang, nConvType, FALSE, aURL );
             }
 
             if (xDic.is())
@@ -520,6 +526,17 @@ ConvDicNameContainer & ConvDicList::GetNameContainer()
                 xDic->setActive( sal_True );
         }
 
+        // since there is no UI to active/deactivate the dictionaries
+        // for chinese text conversion they should be activated by default
+        Reference< XConversionDictionary > xS2TDic(
+                    pNameContainer->GetByName( A2OU("ChineseS2T") ), UNO_QUERY );
+        Reference< XConversionDictionary > xT2SDic(
+                    pNameContainer->GetByName( A2OU("ChineseT2S") ), UNO_QUERY );
+            if (xS2TDic.is())
+                xS2TDic->setActive( sal_True );
+            if (xT2SDic.is())
+                xT2SDic->setActive( sal_True );
+
     }
     return *pNameContainer;
 }
@@ -537,25 +554,32 @@ Reference< container::XNameContainer > SAL_CALL ConvDicList::getDictionaryContai
 Reference< XConversionDictionary > SAL_CALL ConvDicList::addNewDictionary(
         const OUString& rName,
         const Locale& rLocale,
-        sal_Int16 nConversionDictionaryType )
+        sal_Int16 nConvDicType )
     throw (NoSupportException, ElementExistException, RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
     INT16 nLang = LocaleToLanguage( rLocale );
-    if (LANGUAGE_KOREAN != nLang  ||
-        nConversionDictionaryType != ConversionDictionaryType::HANGUL_HANJA)
-        throw NoSupportException();
 
     if (GetNameContainer().hasByName( rName ))
         throw ElementExistException();
+
     Reference< XConversionDictionary > xRes;
-    DBG_ASSERT( nLang == LANGUAGE_KOREAN, "unexpected language" );
-    DBG_ASSERT( nConversionDictionaryType == ConversionDictionaryType::HANGUL_HANJA,
-            "unexpected conversion type" );
     String aDicMainURL( GetConvDicMainURL( rName, SvtPathOptions().GetUserDictionaryPath() ) );
-    xRes = new HHConvDic( rName, aDicMainURL );
-    if (xRes.is())
+    if (nLang == LANGUAGE_KOREAN &&
+        nConvDicType == ConversionDictionaryType::HANGUL_HANJA)
+    {
+        xRes = new HHConvDic( rName, aDicMainURL );
+    }
+    else if ((nLang == LANGUAGE_CHINESE_SIMPLIFIED || nLang == LANGUAGE_CHINESE_TRADITIONAL) &&
+              nConvDicType == ConversionDictionaryType::SCHINESE_TCHINESE)
+    {
+        xRes = new ConvDic( rName, nLang, nConvDicType, FALSE, aDicMainURL );
+    }
+
+    if (!xRes.is())
+        throw NoSupportException();
+    else
     {
         xRes->setActive( sal_True );
         uno::Any aAny;
@@ -579,21 +603,21 @@ uno::Sequence< OUString > SAL_CALL ConvDicList::queryConversions(
     MutexGuard  aGuard( GetLinguMutex() );
 
     INT16 nLang = LocaleToLanguage( rLocale );
-    if (LANGUAGE_KOREAN != nLang  ||
-        nConversionDictionaryType != ConversionDictionaryType::HANGUL_HANJA)
-        throw NoSupportException();
 
     INT32 nCount = 0;
     uno::Sequence< OUString > aRes( 20 );
     OUString *pRes = aRes.getArray();
 
+    sal_Bool bSupported = sal_False;
     INT32 nLen = GetNameContainer().GetCount();
     for (INT32 i = 0;  i < nLen;  ++i)
     {
         const Reference< XConversionDictionary > xDic( GetNameContainer().GetByIndex(i) );
-        if (xDic.is()  &&
-            xDic->getLocale() == rLocale  &&
-            xDic->getConversionType() == nConversionDictionaryType)
+        sal_Bool bMatch =   xDic.is()  &&
+                            xDic->getLocale() == rLocale  &&
+                            xDic->getConversionType() == nConversionDictionaryType;
+        bSupported |= bMatch;
+        if (bMatch  &&  xDic->isActive())
         {
             Sequence< OUString > aNewConv( xDic->getConversions(
                                 rText, nStartPos, nLength,
@@ -612,6 +636,9 @@ uno::Sequence< OUString > SAL_CALL ConvDicList::queryConversions(
             }
         }
     }
+
+    if (!bSupported)
+        throw NoSupportException();
 
     aRes.realloc( nCount );
     return aRes;
