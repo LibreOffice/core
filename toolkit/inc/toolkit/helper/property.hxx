@@ -2,9 +2,9 @@
  *
  *  $RCSfile: property.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 11:55:41 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 10:32:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,6 +180,7 @@ namespace rtl {
 #define BASEPROPERTY_SPINVALUE_MAX          99  // sal_Int32
 #define BASEPROPERTY_SPININCREMENT         100  // sal_Int32
 #define BASEPROPERTY_REPEAT                101  // sal_Bool
+#define BASEPROPERTY_ENFORCE_FORMAT        102  // sal_Bool
 
 // Keine gebundenen Properties, werden immer aus der Property BASEPROPERTY_FONTDESCRIPTOR entnommen.
 #define BASEPROPERTY_FONTDESCRIPTORPART_START           1000
