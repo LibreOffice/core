@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoPkgContainer.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-15 15:56:34 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 15:27:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,11 @@ public class UnoPkgContainer extends ParcelContainer
     // gets the ParcelContainer for persisted uno packages
     public ParcelContainer getRegisteredUnoPkgContainer( String url )
     {
+        if (!url.endsWith("/"))
+        {
+            url += "/";
+        }
+
         LogUtils.DEBUG("** getRegisterPackage ctx = " + containerUrl  );
         LogUtils.DEBUG("** getRegisterPackage  for uri " + url );
         LogUtils.DEBUG("** getRegisterPackage  for langugage " + language );
@@ -145,6 +150,11 @@ public class UnoPkgContainer extends ParcelContainer
 
     private void registerPackageContainer( String url, ParcelContainer c )
     {
+        if (!url.endsWith("/"))
+        {
+            url += "/";
+        }
+
         LogUtils.DEBUG("RegisterPackage ctx = " + containerUrl  );
         LogUtils.DEBUG("RegisterPackage language = " + language  );
         LogUtils.DEBUG("RegisterPackage " + c + " for url " + url );
@@ -153,6 +163,11 @@ public class UnoPkgContainer extends ParcelContainer
 
     public void deRegisterPackageContainer( String url )
     {
+        if (!url.endsWith("/"))
+        {
+            url += "/";
+        }
+
         LogUtils.DEBUG("In deRegisterPackageContainer for " + url );
         if ( hasRegisteredUnoPkgContainer( url ) )
         {
@@ -258,10 +273,7 @@ public class UnoPkgContainer extends ParcelContainer
             throw new com.sun.star.lang.WrappedTargetException( "Failed to resolve script " , null, new com.sun.star.lang.IllegalArgumentException( "Cannot resolve script location for script = " + functionName ) );
         }
 
-        Parcel p = null;
-        p = (Parcel)pc.getByName( parcelName );
-        scriptData = (ScriptMetaData)p.getByName( functionName );
-        LogUtils.DEBUG("** found script data for  " + functionName + " script is " + scriptData );
+        scriptData = pc.findScript( psu );
         return scriptData;
 
     }
@@ -385,6 +397,12 @@ public class UnoPkgContainer extends ParcelContainer
         String uri = null;
         DeployedUnoPackagesDB db = null;
         uri =  dPackage.getURL();
+
+        if ( !uri.endsWith( "/" ) )
+        {
+            uri += "/";
+        }
+
         LogUtils.DEBUG("** processUnoPackage getURL() -> " + uri );
         LogUtils.DEBUG("** processUnoPackage getName() -> " + dPackage.getName() );
         LogUtils.DEBUG("** processUnoPackage getMediaType() -> " + dPackage.getPackageType().getMediaType() );
@@ -405,7 +423,6 @@ public class UnoPkgContainer extends ParcelContainer
         LogUtils.DEBUG("processUnoPackage - script library package");
         String parentUrl = uri;
 
-
         if ( uri.indexOf( "%2Funo_packages%2F" ) > -1 ||
              uri.indexOf( "/uno_packages/" ) > -1 )
         {
@@ -425,7 +442,7 @@ public class UnoPkgContainer extends ParcelContainer
                 LogUtils.DEBUG("processUnoPackage - composition is contained in " + parentUrl);
             }
 
-            ParcelContainer pkgContainer = getChildContainer( parentUrl );
+            ParcelContainer pkgContainer = getChildContainerForURL( parentUrl );
             if ( pkgContainer == null )
             {
                 pkgContainer = new ParcelContainer( this, m_xCtx, parentUrl, language, false );
