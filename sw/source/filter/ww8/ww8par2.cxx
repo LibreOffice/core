@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 15:50:18 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 13:35:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2227,7 +2227,12 @@ void WW8TabDesc::CalcDefaults()
     the val from the top and put in on the bottom cell. I can't seem to make
     disjoint upper and lowers to see what happens there.
     */
-    for (pR = pFirstBand; pR; pR = pR->pNextBand)
+
+    /* #i29550# FME 2004-06-02 Removed this code because of the implementation
+       of the collapsing table borders model. So this should not be necessary
+       anymore. */
+
+    /*    for (pR = pFirstBand; pR; pR = pR->pNextBand)
     {
         WW8TabBandDesc *pNext = pR->pNextBand;
         if (!pNext)
@@ -2258,7 +2263,7 @@ void WW8TabDesc::CalcDefaults()
 
             rAbove = WW8_BRC();
         }
-    }
+    } */
 
     if (nMinLeft && (HORI_LEFT == eOri))
         eOri = HORI_LEFT_AND_WIDTH; //  absolutely positioned
