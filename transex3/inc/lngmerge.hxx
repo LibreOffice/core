@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngmerge.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:47:32 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 12:39:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,8 +82,14 @@ private:
     ByteString sSource;
     BOOL bDBIsUTF8;
     BOOL bULF;
+    std::vector<ByteString> aLanguages;
 
-    void FillInFallbacks( ByteString *Text );
+    void FillInFallbacks( ByteStringHashMap Text );
+    bool isNextGroup(  ByteString &sGroup_out , ByteString &sLine_in);
+    void ReadLine( const ByteString &sLine_in , ByteStringHashMap &rText_inout );
+    void WriteSDF( SvFileStream &aSDFStream , ByteStringHashMap &rText_inout ,
+                    const ByteString &rSDFFile, const ByteString &rPrj ,
+                    const ByteString &rRoot , const ByteString &sActFileName , const ByteString &sID );
 public:
     LngParser( const ByteString &rLngFile, BOOL bUTF8, BOOL bULFFormat );
     ~LngParser();
