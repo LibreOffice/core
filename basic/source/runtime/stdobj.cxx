@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdobj.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 13:37:00 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-02 11:58:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,12 +67,14 @@
 #include "stdobj.hxx"
 #include "stdobj1.hxx"
 #include "rtlproto.hxx"
+#include "sbintern.hxx"
 
 // Das nArgs-Feld eines Tabelleneintrags ist wie folgt verschluesselt:
 // Zur Zeit wird davon ausgegangen, dass Properties keine Parameter
 // benoetigen!
 
-#define _ARGSMASK   0x00FF  // Bis zu 255 Argumente
+#define _ARGSMASK   0x007F  // Bis zu 127 Argumente
+#define _COMPTMASK  0x0080  // Only valid in compatibility mode
 #define _RWMASK     0x0F00  // Maske fuer R/W-Bits
 #define _TYPEMASK   0xF000  // Maske fuer den Typ des Eintrags
 
@@ -198,17 +200,21 @@ static Methods aMethods[] = {
 { "CVErr",          SbxVARIANT,   1 | _FUNCTION, RTLNAME(CVErr)             },
   { "expression",   SbxVARIANT },
 { "Date",           SbxSTRING,        _LFUNCTION,RTLNAME(Date)              },
-{ "DateAdd",        SbxDATE,   1 | _FUNCTION, RTLNAME(DateAdd)               },
+{ "DateAdd",        SbxDATE,      3 | _FUNCTION, RTLNAME(DateAdd)           },
   { "Interval",     SbxSTRING },
   { "Number",       SbxLONG },
   { "Date",         SbxDATE },
-{ "DateDiff",       SbxLONG,   1 | _FUNCTION, RTLNAME(DateDiff)             },
+{ "DateDiff",       SbxDOUBLE,    5 | _FUNCTION, RTLNAME(DateDiff)          },
   { "Interval",     SbxSTRING },
   { "Date1",        SbxDATE },
   { "Date2",        SbxDATE },
-{ "DatePart",       SbxLONG,   1 | _FUNCTION, RTLNAME(DatePart)             },
+  { "Firstdayofweek" , SbxINTEGER, _OPT },
+  { "Firstweekofyear", SbxINTEGER, _OPT },
+{ "DatePart",       SbxLONG,      4 | _FUNCTION, RTLNAME(DatePart)          },
   { "Interval",     SbxSTRING },
   { "Date",         SbxDATE },
+  { "Firstdayofweek" , SbxINTEGER, _OPT },
+  { "Firstweekofyear", SbxINTEGER, _OPT },
 { "DateSerial",     SbxDATE,      3 | _FUNCTION, RTLNAME(DateSerial)        },
   { "Year",         SbxINTEGER },
   { "Month",        SbxINTEGER },
@@ -403,7 +409,7 @@ static Methods aMethods[] = {
 { "MB_YESNO",       SbxINTEGER,       _CPROP,    RTLNAME(MB_YESNO)          },
 { "MB_YESNOCANCEL", SbxINTEGER,       _CPROP,    RTLNAME(MB_YESNOCANCEL)    },
 
-
+{ "Me",             SbxOBJECT,    0 | _FUNCTION | _COMPTMASK, RTLNAME(Me)   },
 { "Mid",            SbxSTRING,    3 | _LFUNCTION,RTLNAME(Mid)               },
   { "String",       SbxSTRING },
   { "StartPos",     SbxLONG } ,
@@ -414,10 +420,15 @@ static Methods aMethods[] = {
   { "pathname",     SbxSTRING },
 { "Month",          SbxINTEGER,   1 | _FUNCTION, RTLNAME(Month)             },
   { "Date",         SbxDATE },
-{ "MsgBox",         SbxINTEGER,    3 | _FUNCTION, RTLNAME(MsgBox)          },
-  { "Message",      SbxSTRING },
-  { "Type",         SbxINTEGER,       _OPT },
+{ "MonthName",      SbxSTRING,    2 | _FUNCTION | _COMPTMASK, RTLNAME(MonthName) },
+  { "Month",        SbxINTEGER },
+  { "Abbreviate",   SbxBOOL,          _OPT } ,
+{ "MsgBox",         SbxINTEGER,    5 | _FUNCTION, RTLNAME(MsgBox)          },
+  { "Prompt",       SbxSTRING },
+  { "Buttons",      SbxINTEGER,       _OPT },
   { "Title",        SbxSTRING,        _OPT },
+  { "Helpfile",     SbxSTRING,        _OPT },
+  { "Context",      SbxINTEGER,       _OPT },
 
 { "Nothing",        SbxOBJECT,        _CPROP,    RTLNAME(Nothing)           },
 { "Now",            SbxDATE,          _FUNCTION, RTLNAME(Now)               },
@@ -450,6 +461,9 @@ static Methods aMethods[] = {
   { "Count",        SbxLONG } ,
 { "RmDir",          SbxNULL,      1 | _FUNCTION, RTLNAME(RmDir)             },
   { "pathname",     SbxSTRING },
+{ "Round",          SbxDOUBLE,    2 | _FUNCTION | _COMPTMASK, RTLNAME(Round)},
+  { "Expression",   SbxDOUBLE },
+  { "Numdecimalplaces", SbxINTEGER,   _OPT },
 { "Rnd",            SbxDOUBLE,    1 | _FUNCTION, RTLNAME(Rnd)               },
   { "Number",       SbxDOUBLE,        _OPT },
 { "RTrim",          SbxSTRING,    1 | _FUNCTION, RTLNAME(RTrim)             },
@@ -501,6 +515,8 @@ static Methods aMethods[] = {
 { "String",         SbxSTRING,    2 | _FUNCTION, RTLNAME(String)            },
   { "Count",        SbxLONG },
   { "Filler",       SbxVARIANT },
+{ "StrReverse",     SbxSTRING,    1 | _FUNCTION | _COMPTMASK, RTLNAME(StrReverse) },
+  { "String1",      SbxSTRING },
 
 { "Switch",         SbxVARIANT,   2 | _FUNCTION, RTLNAME(Switch)            },
   { "Expression",   SbxVARIANT },
@@ -589,10 +605,15 @@ static Methods aMethods[] = {
 { "V_DATE",         SbxINTEGER,       _CPROP,    RTLNAME(V_DATE)            },
 { "V_STRING",       SbxINTEGER,       _CPROP,    RTLNAME(V_STRING)          },
 
-{ "Wait",           SbxNULL,      1 | _FUNCTION, RTLNAME(Wait)           },
+{ "Wait",           SbxNULL,      1 | _FUNCTION, RTLNAME(Wait)              },
   { "Milliseconds", SbxLONG  },
-{ "Weekday",        SbxINTEGER,   1 | _FUNCTION, RTLNAME(Weekday)           },
+{ "Weekday",        SbxINTEGER,   2 | _FUNCTION, RTLNAME(Weekday)           },
   { "Date",         SbxDATE },
+  { "Firstdayofweek", SbxINTEGER, _OPT },
+{ "WeekdayName",    SbxSTRING,    3 | _FUNCTION | _COMPTMASK, RTLNAME(WeekdayName) },
+  { "Weekday",      SbxINTEGER },
+  { "Abbreviate",   SbxBOOL,      _OPT },
+  { "Firstdayofweek", SbxINTEGER, _OPT },
 { "Year",           SbxINTEGER,   1 | _FUNCTION, RTLNAME(Year)              },
   { "Date",         SbxDATE },
 
@@ -656,11 +677,19 @@ SbxVariable* SbiStdObject::Find( const String& rName, SbxClassType t )
              && ( p->nHash == nHash )
              && ( rName.EqualsIgnoreCaseAscii( p->pName ) ) )
             {
-                bFound = TRUE; break;
+                bFound = TRUE;
+                if( p->nArgs & _COMPTMASK )
+                {
+                    SbiInstance* pInst = pINST;
+                    if( !pInst || !pInst->IsCompatibility() )
+                        bFound = FALSE;
+                }
+                break;
             }
             nIndex += ( p->nArgs & _ARGSMASK ) + 1;
             p = aMethods + nIndex;
         }
+
         if( bFound )
         {
             // Args-Felder isolieren:
