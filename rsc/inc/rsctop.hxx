@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rsctop.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 11:50:47 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:23:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@
 #endif
 
 /****************** T Y P E S ********************************************/
-typedef short RSCVAR;
+typedef sal_uInt32 RSCVAR;
 #define VAR_POINTER     0x0001
 #define VAR_HIDDEN      0x0002
 #define VAR_NODATAINST  0x0004
@@ -90,11 +90,11 @@ class RscTop : public RefNode
 {
     RscTop *        pSuperClass;
     RSCINST         aDfltInst;
-    USHORT          nTypId;
+    sal_uInt32          nTypId;
     RscTop *        pRefClass;
 
 protected:
-                    RscTop( HASHID nId, USHORT nTypIdent,
+                    RscTop( Atom nId, sal_uInt32 nTypIdent,
                             RscTop * pSuperCl = NULL );
 
 public:
@@ -109,7 +109,7 @@ public:
             RscTop* GetSuperClass() const
                     { return pSuperClass; }
                     // Gibt den Typidentifier zurueck
-            USHORT  GetTypId() const
+            sal_uInt32  GetTypId() const
                     { return nTypId; };
                     // Gibt die Oberklasse zurueck
             BOOL    InHierarchy( RscTop * pClass );
@@ -130,12 +130,12 @@ public:
                     // ausgehen, dass alle Klassenzeiger noch gueltig sind
     virtual void    Pre_dtor();
 
-    virtual HASHID  GetConstant( USHORT );
+    virtual Atom    GetConstant( sal_uInt32 );
 
     virtual RscTop *    GetTypeClass() const;
 
                     // Gibt die Groesse der Klasse in Bytes
-    virtual USHORT  Size();
+    virtual sal_uInt32  Size();
 
                     // Gibt die Referenz zurueck
     virtual ERRTYPE GetRef( const RSCINST & rInst, RscId * );
@@ -144,23 +144,23 @@ public:
     virtual ERRTYPE SetRef( const RSCINST & rInst, const RscId & rRefId );
 
                     // Variable anlegen
-    virtual ERRTYPE SetVariable( HASHID nVarName, RscTop * pClass,
+    virtual ERRTYPE SetVariable( Atom nVarName, RscTop * pClass,
                                  RSCINST * pDflt = NULL,
-                                 RSCVAR nVarType = 0, USHORT nMask = 0,
-                                 HASHID nDataBaseName = HASH_NONAME );
+                                 RSCVAR nVarType = 0, sal_uInt32 nMask = 0,
+                                 Atom nDataBaseName = InvalidAtom );
 
                     // Zaehlt alle Variablen auf
     virtual void    EnumVariables( void * pData, VarEnumCallbackProc );
 
                     // Liefert Instanz der Variablen zurueck
                     // pData, pClass im return koennen NULL sein
-    virtual RSCINST GetVariable( const RSCINST & rInst, HASHID nVarName,
+    virtual RSCINST GetVariable( const RSCINST & rInst, Atom nVarName,
                                  const RSCINST & rInitInst,
                                  BOOL nInitDflt = FALSE,
                                  RscTop * pCreateClass = NULL );
-    virtual RSCINST GetCopyVar( const RSCINST & rInst, HASHID nVarName );
+    virtual RSCINST GetCopyVar( const RSCINST & rInst, Atom nVarName );
 
-    virtual RSCINST GetTupelVar( const RSCINST & rInst, USHORT nPos,
+    virtual RSCINST GetTupelVar( const RSCINST & rInst, sal_uInt32 nPos,
                                  const RSCINST & rInitInst );
 
                     // Liefert Instanz aus einem Feld zurueck
@@ -177,7 +177,7 @@ public:
 
                     // Liefert Instanz aus einem Feld zurueck
                     // pGetInst im return kann NULL sein
-    virtual ERRTYPE GetArrayEle( const RSCINST & rInst, HASHID nId,
+    virtual ERRTYPE GetArrayEle( const RSCINST & rInst, Atom nId,
                                 RscTop * pCreateClass,
                                 RSCINST * pGetInst );
 
@@ -185,22 +185,22 @@ public:
                                RscTop * pClass );
 
                     // Liefert Instanz an der Position zurueck
-    virtual RSCINST GetPosEle( const RSCINST & rInst, USHORT nPos );
+    virtual RSCINST GetPosEle( const RSCINST & rInst, sal_uInt32 nPos );
 
                     // verschiebt eine Instanz
-    virtual ERRTYPE MovePosEle( const RSCINST & rInst, USHORT nDestPos,
-                                USHORT nSourcePos );
+    virtual ERRTYPE MovePosEle( const RSCINST & rInst, sal_uInt32 nDestPos,
+                                sal_uInt32 nSourcePos );
 
                     // aendert RscId an Position
-    virtual ERRTYPE SetPosRscId( const RSCINST & rInst, USHORT nPos,
+    virtual ERRTYPE SetPosRscId( const RSCINST & rInst, sal_uInt32 nPos,
                                  const RscId & rRscId);
 
                     // Liefert Information ueber Instanz
                     // an der Position zurueck
-    virtual SUBINFO_STRUCT GetInfoEle( const RSCINST & rInst, USHORT nPos );
+    virtual SUBINFO_STRUCT GetInfoEle( const RSCINST & rInst, sal_uInt32 nPos );
 
                     // Anzahl der Eintraege
-    virtual USHORT GetCount( const RSCINST & rInst );
+    virtual sal_uInt32 GetCount( const RSCINST & rInst );
 
                     // Eine Zuweisung an eine Variable
     virtual ERRTYPE SetNumber( const RSCINST & rInst, INT32 lValue );
@@ -209,19 +209,19 @@ public:
     virtual ERRTYPE SetBool( const RSCINST & rInst, BOOL bValue );
 
                     // Eine Zuweisung an eine Variable
-    virtual ERRTYPE SetConst( const RSCINST & rInst, HASHID nValueId,
+    virtual ERRTYPE SetConst( const RSCINST & rInst, Atom nValueId,
                               INT32 nValue );
 
                     // Eine Zuweisung an eine Variable
-    virtual ERRTYPE SetNotConst( const RSCINST & rInst, HASHID nId );
+    virtual ERRTYPE SetNotConst( const RSCINST & rInst, Atom nId );
 
-    virtual ERRTYPE SetString( const RSCINST & rInst, char * pStr );
+    virtual ERRTYPE SetString( const RSCINST & rInst, const char * pStr );
 
     virtual ERRTYPE GetNumber( const RSCINST & rInst, INT32 * pN );
 
     virtual ERRTYPE GetBool( const RSCINST & rInst, BOOL * pB );
 
-    virtual ERRTYPE GetConst( const RSCINST & rInst, HASHID * pH );
+    virtual ERRTYPE GetConst( const RSCINST & rInst, Atom * pH );
 
     virtual ERRTYPE GetString( const RSCINST & rInst, char ** ppStr );
 
@@ -245,28 +245,28 @@ public:
     virtual BOOL    IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef );
 
                     // Instanz auf Default setzen
-    virtual void    SetDefault( const RSCINST & rInst, HASHID nVarId );
+    virtual void    SetDefault( const RSCINST & rInst, Atom nVarId );
 
                     // Default zu einer Variablen holen
-    virtual RSCINST GetDefault( HASHID nVarId );
+    virtual RSCINST GetDefault( Atom nVarId );
 
     virtual void    Delete( const RSCINST & rInst, RscTop * pClass,
                             const RscId & rId );
 
-    virtual void    DeletePos( const RSCINST & rInst, USHORT nPos );
+    virtual void    DeletePos( const RSCINST & rInst, sal_uInt32 nPos );
 
                     // Schreibt den Kopf und das Ende einer Resource
                     // Script Datei
     virtual void    WriteSrcHeader( const RSCINST & rInst, FILE * fOutput,
-                                    RscTypCont * pTC, USHORT nTab,
+                                    RscTypCont * pTC, sal_uInt32 nTab,
                                     const RscId & aId, const char * );
     virtual void    WriteSrc( const RSCINST & rInst, FILE * fOutput,
-                              RscTypCont * pTC, USHORT nTab,const char * );
+                              RscTypCont * pTC, sal_uInt32 nTab,const char * );
     virtual ERRTYPE WriteRcHeader( const RSCINST & rInst, RscWriteRc & aMem,
                                    RscTypCont * pTC, const RscId & aId,
-                                    USHORT nDeep, BOOL bExtra );
+                                    sal_uInt32 nDeep, BOOL bExtra );
     virtual ERRTYPE WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
-                             RscTypCont * pTC, USHORT nDeep, BOOL bExtra );
+                             RscTypCont * pTC, sal_uInt32 nDeep, BOOL bExtra );
 
     // Weiterleitung an Superklassen wird unterbunden
     virtual ERRTYPE WriteHxxHeader( const RSCINST & rInst, FILE * fOutput,
