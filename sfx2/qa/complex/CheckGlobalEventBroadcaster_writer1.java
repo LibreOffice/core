@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CheckGlobalEventBroadcaster_writer1.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2004-11-17 13:33:05 $
+ *  last change:$Date: 2005-03-23 14:23:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,7 +154,7 @@ public class CheckGlobalEventBroadcaster_writer1 extends ComplexTestCase {
         notifyEvents.clear();
         xTextDoc = wHelper.openEmptyDoc();
         shortWait();
-        expected = new String[] { "OnUnfocus", "OnNew", "OnViewCreated", "OnFocus" };
+        expected = new String[] { "OnUnfocus", "OnCreate", "OnViewCreated", "OnFocus" };
 
         assure("Wrong events fired when opening empty doc",
                proveExpectation(expected));
@@ -184,7 +184,7 @@ public class CheckGlobalEventBroadcaster_writer1 extends ComplexTestCase {
         notifyEvents.clear();
         xTextDoc = wHelper.openFromDialog(".uno:NewWindow", "", false);
         shortWait();
-        expected = new String[] { "OnUnfocus", "OnNew", "OnViewCreated", "OnFocus", "OnUnfocus", "OnViewCreated", "OnFocus", };
+        expected = new String[] { "OnUnfocus", "OnCreate", "OnViewCreated", "OnFocus", "OnUnfocus", "OnViewCreated", "OnFocus", };
 
         assure("Wrong events fired when opening an writer doc via Window-New Window",
                proveExpectation(expected));
@@ -218,7 +218,7 @@ public class CheckGlobalEventBroadcaster_writer1 extends ComplexTestCase {
         shortWait();
         shortWait();
     shortWait();
-        expected = new String[] { "OnViewClosed", "OnNew", "OnFocus", "OnModifyChanged" };
+        expected = new String[] { "OnViewClosed", "OnCreate", "OnFocus", "OnModifyChanged" };
 
         assure("Wrong events fired when starting labels wizard",
                proveExpectation(expected));
