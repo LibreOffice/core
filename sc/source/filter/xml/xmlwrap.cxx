@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlwrap.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-30 10:49:34 $
+ *  last change: $Author: nn $ $Date: 2001-04-04 09:19:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -456,7 +456,8 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
         uno::Reference<frame::XModel> xModel = pObjSh->GetModel();
         uno::Reference<task::XStatusIndicator> xStatusIndicator = GetStatusIndicator(xModel);
         sal_Int32 nProgressRange(1000000);
-        xStatusIndicator->start(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Export XML")), nProgressRange);
+        if(xStatusIndicator.is())
+            xStatusIndicator->start(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Export XML")), nProgressRange);
         uno::Any aProgRange;
         aProgRange <<= nProgressRange;
         xInfoSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ProgressRange")), aProgRange);
@@ -553,7 +554,8 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
                 sal_True, aSettingsArgs, pSharedData);
         }
 
-        xStatusIndicator->end();
+        if (xStatusIndicator.is())
+            xStatusIndicator->end();
         return bStylesRet && ((!bStylesOnly && bDocRet && bMetaRet && bSettingsRet) || bStylesOnly);
     }
 
