@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-24 13:25:25 $
+ *  last change: $Author: oj $ $Date: 2001-07-30 08:53:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,20 +252,18 @@ sal_Bool SAL_CALL ORowSetBase::wasNull(  ) throw(SQLException, RuntimeException)
     return (m_aCurrentRow && m_aCurrentRow != m_pCache->getEnd()) ? (*(*m_aCurrentRow))[m_nLastColumnIndex].isNull() : sal_True;
 }
 // -----------------------------------------------------------------------------
-ORowSetValue ORowSetBase::getValue(sal_Int32 columnIndex)
+const ORowSetValue& ORowSetBase::getValue(sal_Int32 columnIndex)
 {
     ::osl::MutexGuard aGuard( m_rMutex );
     checkCache();
     OSL_ENSURE(!(m_bBeforeFirst || m_bAfterLast),"Illegal call here!");
 
-    ORowSetValue aRet;
     if(m_aCurrentRow && m_aCurrentRow != m_pCache->getEnd())
-        aRet = (*(*m_aCurrentRow))[m_nLastColumnIndex = columnIndex];
+        return (*(*m_aCurrentRow))[m_nLastColumnIndex = columnIndex];
     else
     {
-        if(m_aCurrentRow)
-            OSL_ENSURE((m_bBeforeFirst || m_bAfterLast),"ORowSetBase::getValue: we don't stand on a valid row! Row is equal to end of matrix");
-        else
+        OSL_ENSURE(m_aCurrentRow && (m_bBeforeFirst || m_bAfterLast),"ORowSetBase::getValue: we don't stand on a valid row! Row is equal to end of matrix");
+        if(!m_aCurrentRow)
         {
             positionCache();
             m_aCurrentRow   = m_pCache->m_aMatrixIter;
@@ -274,8 +272,8 @@ ORowSetValue ORowSetBase::getValue(sal_Int32 columnIndex)
             return getValue(columnIndex);
         }
     }
-
-    return aRet;
+    // we should normally never reach this here
+    return m_aEmptyValue;
 }
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL ORowSetBase::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)

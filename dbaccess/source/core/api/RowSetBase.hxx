@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-24 13:25:25 $
+ *  last change: $Author: oj $ $Date: 2001-07-30 08:53:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,6 +161,7 @@ namespace dbaccess
         ::com::sun::star::uno::Any              m_aBookmark;
         ORowSetCacheIterator                    m_aCurrentRow;      // contains the actual fetched row
         ORowSetRow                              m_aOldRow;
+        connectivity::ORowSetValue              m_aEmptyValue;      // only for error case
 
         ::cppu::OWeakObject*                    m_pMySelf;          // set by derived classes
         ORowSetCache*                           m_pCache;           // the cache is used by the rowset and his clone (shared)
@@ -203,7 +204,7 @@ namespace dbaccess
         // postions the cache which the currently bookmark m_aBookmark
         void positionCache();
         // returns a value of a column of the current row
-        connectivity::ORowSetValue getValue(sal_Int32 columnIndex);
+        const connectivity::ORowSetValue& getValue(sal_Int32 columnIndex);
         // sets the current and the bookmark
         void setCurrentRow(sal_Bool _bMoved,const ORowSetMatrix::iterator& _rOldValues);
         void checkPositioningAllowed() throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);

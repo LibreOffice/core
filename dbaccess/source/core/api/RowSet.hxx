@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-24 13:25:25 $
+ *  last change: $Author: oj $ $Date: 2001-07-30 08:53:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,7 +206,7 @@ namespace dbaccess
         // inform the clones that we will delete some records
         void notifyClonesRowDelete(const ::com::sun::star::uno::Any& _rBookmark);
         void checkUpdateIterator();
-        connectivity::ORowSetValue getInsertValue(sal_Int32 columnIndex);
+        const connectivity::ORowSetValue& getInsertValue(sal_Int32 columnIndex);
         void setParameter(sal_Int32 parameterIndex, const connectivity::ORowSetValue& x);
         // resizes the parameter vector if nescessary
         void checkAndResizeParameters(sal_Int32 parameterIndex);
@@ -461,6 +461,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.24  2001/07/24 13:25:25  oj
+    #89430# move ORowSetValue into dbtools
+
     Revision 1.23  2001/06/26 10:12:40  oj
     #87808# setObject corrected and some more
 
