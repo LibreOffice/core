@@ -1,3 +1,7 @@
+-o cfgmgr2.LocalSchemaSupplier
+-o cfgmgr2.LocalSingleStratum
+-o cfgmgr2.MultiStratumBackend
+-o sysmgr1.SystemIntegration
 -o cfgmgr2.BootstrapContext
 -o cfgmgr2.LayerUpdateMerger
 -o cfgmgr2.LayerWriter
