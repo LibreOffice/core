@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrolmodel.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: fs $ $Date: 2002-07-15 12:11:50 $
+ *  last change: $Author: fs $ $Date: 2002-07-29 12:20:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,10 @@
 
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
+#endif
+
+#ifndef _UNO_DATA_H_
+#include <uno/data.h>
 #endif
 
 using namespace ::com::sun::star;
@@ -1180,6 +1184,19 @@ sal_Bool UnoControlModel::convertFastPropertyValue( Any & rConvertedValue, Any &
                         sal_uInt32 n;
                         if ( bConverted = ( rValue >>= n ) )
                             rConvertedValue <<= n;
+                    }
+                    break;
+                    case TypeClass_INTERFACE:
+                    {
+                        if ( rValue.getValueType().getTypeClass() == TypeClass_INTERFACE )
+                        {
+                            Reference< XInterface > xPure;
+                            if ( ( rValue >>= xPure ) && xPure.is() )
+                            {
+                                rConvertedValue = xPure->queryInterface( *pDestType );
+                                bConverted = rConvertedValue.hasValue();
+                            }
+                        }
                     }
                     break;
                     // TODO: perhaps we should allow us some more tolerance for enum types, too ....
