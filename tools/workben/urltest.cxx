@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urltest.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sb $ $Date: 2002-10-04 14:08:01 $
+ *  last change: $Author: sb $ $Date: 2002-11-08 12:56:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1141,7 +1141,15 @@ main()
                 { "file://!%23$%&'()-.@^_{}~/abc",
                   "file://!%23$%25&'()-.@%5E_%7B%7D~/abc" },
                 { "file://d:\\dir1\\file1", 0 },
-                { "http://as@alaska:8000/test/test.sxw", 0 } };
+                { "http://as@alaska:8000/test/test.sxw", 0 },
+                { "telnet:", 0 },
+                { "telnet://", 0 },
+                { "telnet://ab:cd@ef:", "telnet://ab:cd@ef:/" },
+                { "telnet://ab:cd@ef:123", "telnet://ab:cd@ef:123/" },
+                { "TELNET://abc.def.ghi/", "telnet://abc.def.ghi/" },
+                { "telnet://abc.def.ghi/jkl", 0 },
+                { "telnet://abc.def.ghi?jkl", 0 },
+                { "telnet://abc.def.ghi/?jkl", 0 } };
         for (int i = 0; i < sizeof aTest / sizeof aTest[0]; ++i)
         {
             INetURLObject aUrl(aTest[i].m_pInput);
