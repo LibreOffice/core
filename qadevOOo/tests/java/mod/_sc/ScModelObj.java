@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScModelObj.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change:$Date: 2003-12-11 12:13:00 $
+ *  last change:$Date: 2004-01-05 19:19:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,11 +126,11 @@ public class ScModelObj extends TestCase {
 
         XComponent oComp = (XComponent) UnoRuntime.queryInterface(
                                    XComponent.class, xSpreadsheetDoc);
-        oComp.dispose();
+        util.DesktopTools.closeDoc(oComp);
 
         oComp = (XComponent) UnoRuntime.queryInterface(XComponent.class,
                                                        xSecondsheetDoc);
-        oComp.dispose();
+        util.DesktopTools.closeDoc(oComp);
     }
 
     /**
@@ -168,13 +168,13 @@ public class ScModelObj extends TestCase {
         if (xSpreadsheetDoc != null) {
             XComponent oComp = (XComponent) UnoRuntime.queryInterface(
                                        XComponent.class, xSpreadsheetDoc);
-            oComp.dispose();
+            util.DesktopTools.closeDoc(oComp);
         }
 
         if (xSecondsheetDoc != null) {
             XComponent oComp = (XComponent) UnoRuntime.queryInterface(
                                        XComponent.class, xSecondsheetDoc);
-            oComp.dispose();
+            util.DesktopTools.closeDoc(oComp);
         }
 
         try {
