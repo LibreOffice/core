@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mergetbl.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:58:29 $
+ *  last change: $Author: rt $ $Date: 2001-05-04 21:05:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,7 @@ ModalDialog DLG_MERGE_TABLE
         Text[ korean ] = "¸ðµå";
         Text[ turkish ] = "Kip";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Modo";
     };
     RadioButton RB_MERGE_PREV
     {
@@ -144,6 +145,7 @@ ModalDialog DLG_MERGE_TABLE
         Text[ korean ] = "ÀÌÀü Ç¥¿¡¡¡¿¬°á(~P)";
         Text[ turkish ] = "~Önceki tablo ile birleþtir";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "unir con la tabla ~anterior";
     };
     RadioButton RB_MERGE_NEXT
     {
@@ -170,6 +172,7 @@ ModalDialog DLG_MERGE_TABLE
         Text[ korean ] = "´ÙÀ½ Ç¥¿¡¡¡¿¬°á(~N)";
         Text[ turkish ] = "S~onraki tablo ile birleþtir";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "unir con la tabla ~siguiente";
     };
     Text[ english_us ] = "Merge Tables";
     Text[ portuguese ] = "Unir tabelas";
@@ -190,4 +193,5 @@ ModalDialog DLG_MERGE_TABLE
     Text[ korean ] = "Ç¥ ¿¬°á";
     Text[ turkish ] = "Tablolarý birleþtir";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "unir tablas";
 };
