@@ -2,9 +2,9 @@
  *
  *  $RCSfile: combobox.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 10:53:59 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 12:11:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,7 +189,7 @@ void ComboBox::ImplInitData()
 
 void ComboBox::ImplCalcEditHeight()
 {
-    long nLeft, nTop, nRight, nBottom;
+    sal_Int32 nLeft, nTop, nRight, nBottom;
     GetBorder( nLeft, nTop, nRight, nBottom );
     mnDDHeight = (USHORT)(mpSubEdit->GetTextHeight() + nTop + nBottom + 4);
     if ( !IsDropDownBox() )
@@ -1120,7 +1120,7 @@ Size ComboBox::CalcMinimumSize() const
 Size ComboBox::CalcAdjustedSize( const Size& rPrefSize ) const
 {
     Size aSz = rPrefSize;
-    long nLeft, nTop, nRight, nBottom;
+    sal_Int32 nLeft, nTop, nRight, nBottom;
     ((Window*)this)->GetBorder( nLeft, nTop, nRight, nBottom );
     aSz.Height() -= nTop+nBottom;
     if ( !IsDropDownBox() )
