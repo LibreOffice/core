@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: hjs $ $Date: 2001-07-17 09:58:22 $
+#   last change: $Author: hjs $ $Date: 2001-07-17 14:07:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -122,7 +122,7 @@ $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE) : $(MISC)$/$(TARFILE_NAME).tar
     +cd $(PACKAGE_DIR) && tar -xvf ../../$(ROUT)$/misc$/$(TARFILE_NAME).tar && $(TOUCH) $(UNTAR_FLAG_FILE)
     @+echo make writeable...
 .IF "$(GUI)"=="WNT"
-    @+cd $(PACKAGE_DIR) && attrib /s -r && $(TOUCH) $(UNTAR_FLAG_FILE) >& $(NULLDEV)
+    @+cd $(PACKAGE_DIR) && attrib /s -r  >& $(NULLDEV) && $(TOUCH) $(UNTAR_FLAG_FILE)
 .ELSE			# "$(GUI)"=="WNT"
     @+cd $(PACKAGE_DIR) && chmod -R +w * && $(TOUCH) $(UNTAR_FLAG_FILE)
 .ENDIF			# "$(GUI)"=="WNT"
@@ -140,7 +140,11 @@ $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE) : $(PACKAGE_DIR)$/$(ADD_FILES_FLAG_FILE)
 .IF "$(PATCH_FILE_NAME)"=="none" ||	"$(PATCH_FILE_NAME)"==""
     +cd $(PACKAGE_DIR) && echo no patch needed...
 .ELSE			# "$(PATCH_FILE_NAME)"=="none" ||	"$(PATCH_FILE_NAME)"==""
+.IF "$(GUI)"=="WNT"
+    +cd $(PACKAGE_DIR) && patch --verbose -b -p2 -f -i ..$/..$/$(PATCH_FILE_NAME) && $(TOUCH) $(PATCH_FLAG_FILE)
+.ELSE           # "$(GUI)"=="WNT"
     +cd $(PACKAGE_DIR) && $(TYPE) ..$/..$/$(PATCH_FILE_NAME) | patch -b -p2 && $(TOUCH) $(PATCH_FLAG_FILE)
+.ENDIF          # "$(GUI)"=="WNT"
 .ENDIF			# "$(PATCH_FILE_NAME)"=="none" ||	"$(PATCH_FILE_NAME)"==""
 
 $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE)
@@ -229,8 +233,8 @@ create_patch : $(MISC)$/$(TARFILE_ROOTDIR) $(P_ADDITIONAL_FILES)
     @+echo still some problems with win32 generated patches...
 
 create_clean : $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE)
-    +echo done
+    @+echo done
     
 patch : $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE)
-    +echo done
+    @+echo done
 
