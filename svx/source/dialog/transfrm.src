@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfrm.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 23:57:38 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 23:45:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,7 +217,7 @@ TabPage RID_SVXPAGE_POSITION
         Text[ french ] = "Point de base";
         Text[ spanish ] = "Punto base";
         Text[ finnish ] = "Base point";
-        Text[ italian ] = "Base point";
+        Text[ italian ] = "Punto base";
         Text[ danish ] = "Base point";
         Text[ swedish ] = "Baspunkt";
         Text[ polish ] = "Punkt wyjœciowy";
@@ -994,7 +994,7 @@ TabPage RID_SVXPAGE_SIZE
         Text[ french ] = "Point de base";
         Text[ spanish ] = "Punto base";
         Text[ finnish ] = "Base point";
-        Text[ italian ] = "Base point";
+        Text[ italian ] = "Punto base";
         Text[ danish ] = "Base point";
         Text[ swedish ] = "Baspunkt";
         Text[ polish ] = "Punkt wyjœciowy";
@@ -1344,10 +1344,10 @@ TabPage RID_SVXPAGE_ANGLE
         Text[ russian ] = "Çàäàííûå çíà÷åíèÿ";
         Text[ greek ] = "Presets";
         Text[ dutch ] = "Presets";
-        Text[ french ] = "Presets";
+        Text[ french ] = "Définitions";
         Text[ spanish ] = "Predeterminaciones";
         Text[ finnish ] = "Presets";
-        Text[ italian ] = "Presets";
+        Text[ italian ] = "Preimpostazioni";
         Text[ danish ] = "Presets";
         Text[ swedish ] = "Förinställningar";
         Text[ polish ] = "Ustawienia domyœlne";
@@ -1499,10 +1499,10 @@ TabPage RID_SVXPAGE_ANGLE
         Text[ russian ] = "Çàäàííûå çíà÷åíèÿ";
         Text[ greek ] = "Presets";
         Text[ dutch ] = "Presets";
-        Text[ french ] = "Presets";
+        Text[ french ] = "Définitions";
         Text[ spanish ] = "Predeterminaciones";
         Text[ finnish ] = "Presets";
-        Text[ italian ] = "Presets";
+        Text[ italian ] = "Preimpostazioni";
         Text[ danish ] = "Presets";
         Text[ swedish ] = "Förinställningar";
         Text[ polish ] = "Ustawienia domyœlne";
@@ -1532,7 +1532,7 @@ TabPage RID_SVXPAGE_ANGLE
         QuickHelpText[ french ] = "Angle de rotation!";
         QuickHelpText[ spanish ] = "Ángulo de rotación!";
         QuickHelpText[ finnish ] = "Angle";
-        QuickHelpText[ italian ] = "Angle";
+        QuickHelpText[ italian ] = "Angolo di rotazione!";
         QuickHelpText[ danish ] = "Angle";
         QuickHelpText[ swedish ] = "Rotationsvinkel!";
         QuickHelpText[ polish ] = "K¹t obrotu!";
@@ -1911,4 +1911,5 @@ TabDialog RID_SVXDLG_TRANSFORM
     Text[ catalan ] = "Posición y tamaño";
 };
  // ********************************************************************** EOF
+
 
