@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-11 14:33:32 $
+ *  last change: $Author: cl $ $Date: 2001-03-27 22:34:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,14 +188,14 @@ SfxItemPropertyMap* ImplGetFieldItemPropertyMap( sal_Int32 mnId )
 
     switch( mnId )
     {
-    case ID_DATEFIELD:
+    case ID_EXT_DATEFIELD:
+    case ID_EXT_TIMEFIELD:
         return aExDateTimeFieldPropertyMap_Impl;
     case ID_URLFIELD:
         return aUrlFieldPropertyMap_Impl;
+    case ID_DATEFIELD:
     case ID_TIMEFIELD:
         return aDateTimeFieldPropertyMap_Impl;
-    case ID_EXT_TIMEFIELD:
-        return aExDateTimeFieldPropertyMap_Impl;
     case ID_EXT_FILEFIELD:
         return aExtFileFieldPropertyMap_Impl;
     case ID_AUTHORFIELD:
@@ -314,6 +314,7 @@ SvxUnoTextField::SvxUnoTextField( sal_Int32 nServiceId ) throw()
 
     switch( nServiceId )
     {
+    case ID_EXT_DATEFIELD:
     case ID_DATEFIELD:
         mpImpl->mbBoolean2 = sal_True;
         mpImpl->mnInt32 = SVXDATEFORMAT_STDSMALL;
@@ -321,13 +322,10 @@ SvxUnoTextField::SvxUnoTextField( sal_Int32 nServiceId ) throw()
         break;
 
     case ID_EXT_TIMEFIELD:
+    case ID_TIMEFIELD:
         mpImpl->mbBoolean2 = sal_False;
         mpImpl->mbBoolean1 = sal_False;
         mpImpl->mnInt16 = SVXTIMEFORMAT_STANDARD;
-        break;
-
-    case ID_TIMEFIELD:
-        mpImpl->mbBoolean2 = sal_False;
         break;
 
     case ID_URLFIELD:
@@ -379,21 +377,19 @@ SvxUnoTextField::SvxUnoTextField( uno::Reference< text::XTextRange > xAnchor, co
             switch( mnServiceId )
             {
             case ID_DATEFIELD:
+            case ID_EXT_DATEFIELD:
                 mpImpl->mbBoolean2 = sal_True;
                 mpImpl->maDateTime = getDate( ((SvxDateField*)pData)->GetFixDate() );
                 mpImpl->mnInt32 = ((SvxDateField*)pData)->GetFormat();
                 mpImpl->mbBoolean1 = ((SvxDateField*)pData)->GetType() == SVXDATETYPE_FIX;
                 break;
 
+            case ID_TIMEFIELD:
             case ID_EXT_TIMEFIELD:
                 mpImpl->mbBoolean2 = sal_False;
                 mpImpl->maDateTime = getTime( ((SvxExtTimeField*)pData)->GetFixTime() );
                 mpImpl->mbBoolean1 = ((SvxExtTimeField*)pData)->GetType() == SVXTIMETYPE_FIX;
                 mpImpl->mnInt16 = ((SvxExtTimeField*)pData)->GetFormat();
-                break;
-
-            case ID_TIMEFIELD:
-                mpImpl->mbBoolean2 = sal_False;
                 break;
 
             case ID_URLFIELD:
@@ -442,6 +438,7 @@ SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()
     case ID_TIMEFIELD:
     case ID_EXT_TIMEFIELD:
     case ID_DATEFIELD:
+    case ID_EXT_DATEFIELD:
     {
         if( mpImpl->mbBoolean2 ) // IsDate?
         {
@@ -1049,8 +1046,8 @@ sal_Int32 SvxUnoTextField::GetFieldId( const SvxFieldData* pFieldData ) const th
         return ID_EXT_FILEFIELD;
     else if( pFieldData->ISA( SvxAuthorField ) )
         return ID_AUTHORFIELD;
-    else if( pFieldData->ISA( SvxDateField )    )
-        return ID_DATEFIELD;
+    else if( pFieldData->ISA( SvxDateField ) )
+        return ID_EXT_DATEFIELD;
     else if( pFieldData->ISA( SdrMeasureField ) )
         return ID_MEASUREFIELD;
 
