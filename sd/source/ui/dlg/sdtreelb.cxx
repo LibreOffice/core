@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdtreelb.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ka $ $Date: 2002-07-24 09:14:57 $
+ *  last change: $Author: ka $ $Date: 2002-07-30 13:49:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,6 @@
 #include "navigatr.hxx"
 #include "strings.hrc"
 #include "res_bmp.hrc"
-#include "helpids.h"
 
 
 BOOL SdPageObjsTLB::bIsInDrag = FALSE;
@@ -166,8 +165,6 @@ SdPageObjsTLB::SdPageObjsTLB( Window* pParentWin, const SdResId& rSdResId,
     SetNodeBitmaps( Bitmap( SdResId( BMP_EXPAND_H ) ),
                     Bitmap( SdResId( BMP_COLLAPSE_H ) ),
                     BMP_COLOR_HIGHCONTRAST );
-
-    SetHelpId( HID_SD_PAGEOBJSTLB );
 }
 
 /*************************************************************************
