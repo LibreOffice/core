@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txatritr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-21 12:50:03 $
+ *  last change: $Author: os $ $Date: 2002-02-07 14:26:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,11 @@
  *
  ************************************************************************/
 
+#ifdef PRECOMPILED
+#include "core_pch.hxx"
+#endif
+
+#pragma hdrstop
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
