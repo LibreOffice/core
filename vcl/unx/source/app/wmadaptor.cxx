@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-20 08:58:46 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:51:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1475,6 +1475,8 @@ void NetWMAdaptor::setFrameTypeAndDecoration( X11SalFrame* pFrame, WMWindowType 
         switch( eType )
         {
             case windowType_Utility:
+                eWMType = m_aWMAtoms[ NET_WM_WINDOW_TYPE_UTILITY ] ? NET_WM_WINDOW_TYPE_UTILITY : NET_WM_WINDOW_TYPE_DIALOG;
+                break;
             case windowType_ModelessDialogue:
             case windowType_ModalDialogue:
                 eWMType = NET_WM_WINDOW_TYPE_DIALOG;
