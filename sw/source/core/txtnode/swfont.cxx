@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ama $ $Date: 2000-12-12 15:16:19 $
+ *  last change: $Author: ama $ $Date: 2001-01-15 14:02:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -579,7 +579,7 @@ SwFont::SwFont( const SwAttrSet* pAttrSet )
     }
 
     {
-        const SvxFontItem& rFont = pAttrSet->GetCJKFont();
+        const SvxFontItem& rFont = pAttrSet->GetCTLFont();
         aSub[SW_CTL].SetFamily( rFont.GetFamily() );
         aSub[SW_CTL].SetName( rFont.GetFamilyName() );
         aSub[SW_CTL].SetStyleName( rFont.GetStyleName() );
