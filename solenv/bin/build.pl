@@ -5,9 +5,9 @@ eval 'exec perl -S $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.91 $
+#   $Revision: 1.92 $
 #
-#   last change: $Author: vg $ $Date: 2003-10-14 16:16:08 $
+#   last change: $Author: vg $ $Date: 2003-10-14 16:19:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,7 +84,7 @@ if (defined $ENV{CWS_WORK_STAMP}) {
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.91 $ ';
+$id_str = ' $Revision: 1.92 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -118,7 +118,6 @@ $QuantityToBuild = 0;
 %folders_hashes = ();
 %running_children = ();
 $dependencies_hash = 0;
-$handler_set = 0;
 $cmd_file = '';
 $BuildAllParents = 0;
 $show = 0;
