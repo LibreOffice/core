@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgattr.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 18:00:26 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:16:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,7 +185,7 @@ TabDialog DLG_ATTR
         Text [ portuguese_brazilian ] = "Formato" ;
         Text [ portuguese ] = "Formato" ;
         Text [ finnish ] = "Muoto" ;
-        Text [ danish ] = "Format" ;
+        Text [ danish ] = "Form" ;
         Text [ french ] = "Format" ;
         Text [ swedish ] = "Format" ;
         Text [ dutch ] = "Formaat" ;
@@ -284,6 +284,8 @@ TabDialog DLG_ATTR
     Text[ hindi ] = "क्षेत्र रचना";
     Text[ slovak ] = "Formát poľa";
 };
+
+
 
 
 
