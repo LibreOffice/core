@@ -25,8 +25,6 @@
 ..\%__SRC%\bin\epn%UPD%*.sym %_DEST%\bin%_EXT%\epn%UPD%*.sym
 ..\%__SRC%\bin\eti%UPD%*.dll %_DEST%\bin%_EXT%\eti%UPD%*.dll
 ..\%__SRC%\bin\eti%UPD%*.sym %_DEST%\bin%_EXT%\eti%UPD%*.sym
-..\%__SRC%\bin\ecg%UPD%*.dll %_DEST%\bin%_EXT%\ecg%UPD%*.dll
-..\%__SRC%\bin\ecg%UPD%*.sym %_DEST%\bin%_EXT%\ecg%UPD%*.sym
 ..\%__SRC%\bin\era%UPD%*.dll %_DEST%\bin%_EXT%\era%UPD%*.dll
 ..\%__SRC%\bin\era%UPD%*.sym %_DEST%\bin%_EXT%\era%UPD%*.sym
 ..\%__SRC%\bin\eps%UPD%*.dll %_DEST%\bin%_EXT%\eps%UPD%*.dll
