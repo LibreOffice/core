@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontent.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 16:42:56 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:14:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,13 +212,13 @@ ContentProperties::ContentProperties( const rtl::OUString& rContentType )
   bEncrypted( sal_False ),
   bHasEncryptedEntries( sal_False )
 {
-    bIsFolder = rContentType.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( PACKAGE_FOLDER_CONTENT_TYPE ) );
+    bIsFolder = rContentType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( PACKAGE_FOLDER_CONTENT_TYPE ) )
+                || rContentType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( PACKAGE_ZIP_FOLDER_CONTENT_TYPE ) );
     bIsDocument = !bIsFolder;
 
     OSL_ENSURE( bIsFolder ||
-                rContentType.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( PACKAGE_STREAM_CONTENT_TYPE ) ),
+                rContentType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( PACKAGE_STREAM_CONTENT_TYPE ) ) ||
+                rContentType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( PACKAGE_ZIP_STREAM_CONTENT_TYPE ) ),
                 "ContentProperties::ContentProperties - Unknown type!" );
 }
 
@@ -272,15 +272,10 @@ Content* Content::create(
             = new ::ucb::ContentIdentifier( rxSMgr, aURI.getUri() );
 
         star::ucb::ContentInfo aInfo;
-        if ( bFolder )
-            aInfo.Type = rtl::OUString::createFromAscii(
-                            PACKAGE_FOLDER_CONTENT_TYPE );
-        else if ( aURI.isRootFolder() )
-            aInfo.Type = rtl::OUString::createFromAscii(
-                            PACKAGE_FOLDER_CONTENT_TYPE ); // root folder
+        if ( bFolder || aURI.isRootFolder() )
+            aInfo.Type = GetContentType( aURI.getScheme(), sal_True );
         else
-            aInfo.Type = rtl::OUString::createFromAscii(
-                            PACKAGE_STREAM_CONTENT_TYPE );
+            aInfo.Type = GetContentType( aURI.getScheme(), sal_False );
 
         return new Content( rxSMgr, pProvider, xId, xPackage, aURI, aInfo );
     }
@@ -297,13 +292,14 @@ Content* Content::create(
     if ( !Info.Type.getLength() )
         return 0;
 
-    if ( !Info.Type.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( PACKAGE_FOLDER_CONTENT_TYPE ) ) &&
-         !Info.Type.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( PACKAGE_STREAM_CONTENT_TYPE ) ) )
+    PackageUri aURI( Identifier->getContentIdentifier() );
+
+    if ( !Info.Type.equalsIgnoreAsciiCase(
+                GetContentType( aURI.getScheme(), sal_True ) ) &&
+         !Info.Type.equalsIgnoreAsciiCase(
+                GetContentType( aURI.getScheme(), sal_False ) ) )
         return 0;
 
-    PackageUri aURI( Identifier->getContentIdentifier() );
     uno::Reference< container::XHierarchicalNameAccess > xPackage;
 
 #if 0
@@ -317,6 +313,16 @@ Content* Content::create(
     uno::Reference< star::ucb::XContentIdentifier > xId
         = new ::ucb::ContentIdentifier( rxSMgr, aURI.getUri() );
     return new Content( rxSMgr, pProvider, xId, xPackage, aURI, Info );
+}
+
+//=========================================================================
+// static
+::rtl::OUString Content::GetContentType( const ::rtl::OUString& aScheme, sal_Bool bFolder )
+{
+    return
+        ( rtl::OUString::createFromAscii( "application/" )
+        + aScheme
+        + ( bFolder ? rtl::OUString::createFromAscii( "-folder" ) : rtl::OUString::createFromAscii( "-stream" ) ) );
 }
 
 //=========================================================================
@@ -805,14 +811,14 @@ Content::queryCreatableContentsInfo()
 
         // Folder.
         aSeq.getArray()[ 0 ].Type
-            = rtl::OUString::createFromAscii( PACKAGE_FOLDER_CONTENT_TYPE );
+            = GetContentType( m_aUri.getScheme(), sal_True );
         aSeq.getArray()[ 0 ].Attributes
             = star::ucb::ContentInfoAttribute::KIND_FOLDER;
         aSeq.getArray()[ 0 ].Properties = aProps;
 
         // Stream.
         aSeq.getArray()[ 1 ].Type
-            = rtl::OUString::createFromAscii( PACKAGE_STREAM_CONTENT_TYPE );
+            = GetContentType( m_aUri.getScheme(), sal_False );
         aSeq.getArray()[ 1 ].Attributes
             = star::ucb::ContentInfoAttribute::INSERT_WITH_INPUTSTREAM
               | star::ucb::ContentInfoAttribute::KIND_DOCUMENT;
@@ -842,17 +848,17 @@ Content::createNewContent( const star::ucb::ContentInfo& Info )
         if ( !Info.Type.getLength() )
             return uno::Reference< star::ucb::XContent >();
 
-        if ( !Info.Type.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( PACKAGE_FOLDER_CONTENT_TYPE ) ) &&
-             !Info.Type.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( PACKAGE_STREAM_CONTENT_TYPE ) ) )
+        if ( !Info.Type.equalsIgnoreAsciiCase(
+                GetContentType( m_aUri.getScheme(), sal_True ) ) &&
+             !Info.Type.equalsIgnoreAsciiCase(
+                GetContentType( m_aUri.getScheme(), sal_False ) ) )
             return uno::Reference< star::ucb::XContent >();
 
         rtl::OUString aURL = m_aUri.getUri();
         aURL += rtl::OUString::createFromAscii( "/" );
 
-        if ( Info.Type.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( PACKAGE_FOLDER_CONTENT_TYPE ) ) )
+        if ( Info.Type.equalsIgnoreAsciiCase(
+                GetContentType( m_aUri.getScheme(), sal_True ) ) )
             aURL += rtl::OUString::createFromAscii( "New_Folder" );
         else
             aURL += rtl::OUString::createFromAscii( "New_Stream" );
@@ -1944,8 +1950,8 @@ void Content::transfer(
 
     // Is source a package content?
     if ( ( rInfo.SourceURL.getLength() == 0 ) ||
-         ( rInfo.SourceURL.compareToAscii(
-            PACKAGE_URL_SCHEME "://", PACKAGE_URL_SCHEME_LENGTH + 3 ) != 0 ) )
+         ( rInfo.SourceURL.compareTo(
+            m_aUri.getUri(), PACKAGE_URL_SCHEME_LENGTH + 3 ) != 0 ) )
     {
         ucbhelper::cancelCommandExecution(
             uno::makeAny( star::ucb::InteractiveBadTransferURLException(
@@ -2027,8 +2033,8 @@ void Content::transfer(
     //////////////////////////////////////////////////////////////////////
 
     rtl::OUString aType = xSource->isFolder()
-            ? rtl::OUString::createFromAscii( PACKAGE_FOLDER_CONTENT_TYPE )
-            : rtl::OUString::createFromAscii( PACKAGE_STREAM_CONTENT_TYPE );
+            ? GetContentType( m_aUri.getScheme(), sal_True )
+            : GetContentType( m_aUri.getScheme(), sal_False );
     star::ucb::ContentInfo aInfo;
     aInfo.Type = aType;
     aInfo.Attributes = 0;
@@ -2508,16 +2514,14 @@ sal_Bool Content::loadData(
             if ( xEnumAccess.is() )
             {
                 // folder
-                rProps.aContentType = rtl::OUString::createFromAscii(
-                                                PACKAGE_FOLDER_CONTENT_TYPE );
+                rProps.aContentType = GetContentType( rURI.getScheme(), sal_True );
                 rProps.bIsDocument = sal_False;
                 rProps.bIsFolder = sal_True;
             }
             else
             {
                 // stream
-                rProps.aContentType = rtl::OUString::createFromAscii(
-                                                PACKAGE_STREAM_CONTENT_TYPE );
+                rProps.aContentType = GetContentType( rURI.getScheme(), sal_False );
                 rProps.bIsDocument = sal_True;
                 rProps.bIsFolder = sal_False;
             }
