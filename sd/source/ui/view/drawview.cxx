@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ka $ $Date: 2001-08-17 10:10:26 $
+ *  last change: $Author: aw $ $Date: 2001-11-07 14:27:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -471,6 +471,21 @@ void SdDrawView::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType,
         else if ( eHintKind == HINT_LAYERCHG || eHintKind == HINT_LAYERORDERCHG )
         {
             pDrawViewShell->ResetActualLayer();
+        }
+
+        // #94278# switch to that page when it's not a master page
+        if(HINT_SWITCHTOPAGE == eHintKind)
+        {
+            const SdrPage* pPage = ((const SdrHint&)rHint).GetPage();
+
+            if(pPage && !pPage->IsMasterPage())
+            {
+                if(pDrawViewShell->GetActualPage() != pPage)
+                {
+                    sal_uInt16 nPageNum = (pPage->GetPageNum() - 1) / 2; // Sdr --> Sd
+                    pDrawViewShell->SwitchPage(nPageNum);
+                }
+            }
         }
     }
 
