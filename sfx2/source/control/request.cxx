@@ -2,7 +2,7 @@
 // class SfxRequest
 //
 // (C) 1996 - 2000 StarDivision GmbH, Hamburg, Germany
-// $Author: mba $ $Date: 2002-04-22 16:56:18 $ $Revision: 1.5 $
+// $Author: mba $ $Date: 2002-05-27 13:52:19 $ $Revision: 1.6 $
 // $Logfile:   T:/sfx2/source/control/request.cxv  $ $Workfile:   REQUEST.CXX  $
 //------------------------------------------------------------------*/
 
@@ -62,7 +62,6 @@ struct SfxRequest_Impl: public SfxListener
 
 {
     SfxRequest*         pAnti;       // Owner wegen sterbendem Pool
-    SfxMacro*           pMacro;      // falls != 0, soll hierdrin recorded werden
     String              aTarget;     // ggf. von App gesetztes Zielobjekt
     SfxItemPool*        pPool;       // ItemSet mit diesem Pool bauen
     SfxPoolItem*        pRetVal;     // R"uckgabewert geh"ort sich selbst
@@ -148,7 +147,6 @@ SfxRequest::SfxRequest
 
     pImp->bDone = FALSE;
     pImp->bIgnored = FALSE;
-    pImp->pMacro = 0;
     pImp->pRetVal = 0;
     pImp->pShell = 0;
     pImp->pSlot = 0;
@@ -190,7 +188,6 @@ SfxRequest::SfxRequest
     pImp->bDone = FALSE;
     pImp->bIgnored = FALSE;
     pImp->SetPool( &rShell.GetPool() );
-    pImp->pMacro = 0;
     pImp->pRetVal = 0;
     pImp->pShell = 0;
     pImp->nCallMode = SFX_CALLMODE_SYNCHRON;
@@ -222,7 +219,6 @@ SfxRequest::SfxRequest
     pImp->bDone = FALSE;
     pImp->bIgnored = FALSE;
     pImp->SetPool( &rPool );
-    pImp->pMacro = 0;
     pImp->pRetVal = 0;
     pImp->pShell = 0;
     pImp->pSlot = 0;
@@ -250,7 +246,6 @@ SfxRequest::SfxRequest
     pImp->bDone = FALSE;
     pImp->bIgnored = FALSE;
     pImp->SetPool( rSfxArgs.GetPool() );
-    pImp->pMacro = 0;
     pImp->pRetVal = 0;
     pImp->pShell = 0;
     pImp->pSlot = 0;
@@ -625,7 +620,7 @@ void SfxRequest::Done_Impl
 /*  [Beschreibung]
 
     Interne Methode zum als 'done' markieren des SfxRequest und zum Auswerten
-    der Parameter in 'pSet' falls aufgezeichnet wird (pMacro gesetzt ist).
+    der Parameter in 'pSet' falls aufgezeichnet wird.
 */
 
 {
@@ -648,13 +643,18 @@ void SfxRequest::Done_Impl
 
     // record-f"ahig?
     // neues Recorden verwendet UnoName!
-//    DBG_ASSERT( pImp->pSlot->pName, "recording not exported slot" );
-//    if ( !pImp->pSlot->pName ) // Hosentr"ger und G"urtel
-//        return;
+    if ( !pImp->pSlot->pUnoName )
+    {
+        ByteString aStr( "Recording not exported slot: ");
+        aStr += ByteString::CreateFromInt32( pImp->pSlot->GetSlotId() );
+        DBG_ERROR( aStr.GetBuffer() );
+    }
+
+    if ( !pImp->pSlot->pUnoName ) // Hosentr"ger und G"urtel
+        return;
 
     // "ofters ben"otigte Werte
     SfxItemPool &rPool = pImp->pShell->GetPool();
-    SfxMapUnit eUserMetric;// = SFX_APP()->GetOptions().GetUserMetric();
 
     // Property-Slot?
     if ( !pImp->pSlot->IsMode(SFX_SLOT_METHOD) )
@@ -663,7 +663,14 @@ void SfxRequest::Done_Impl
         const SfxPoolItem *pItem;
         USHORT nWhich = rPool.GetWhich(pImp->pSlot->GetSlotId());
         SfxItemState eState = pSet ? pSet->GetItemState( nWhich, FALSE, &pItem ) : SFX_ITEM_UNKNOWN;
-        DBG_ASSERT( eState == SFX_ITEM_SET, "recording property not available" );
+#ifdef DBG_UTIL
+        if ( SFX_ITEM_SET != eState )
+        {
+            ByteString aStr( "Recording property not available: ");
+            aStr += ByteString::CreateFromInt32( pImp->pSlot->GetSlotId() );
+            DBG_ERROR( aStr.GetBuffer() );
+        }
+#endif
         uno::Sequence < beans::PropertyValue > aSeq;
         if ( eState == SFX_ITEM_SET )
             TransformItems( pImp->pSlot->GetSlotId(), *pSet, aSeq, pImp->pSlot );
@@ -861,6 +868,9 @@ void SfxRequest::SetTarget( const String &rTarget )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2002/04/22 16:56:18  mba
+    #98405#: new macro recording functionality
+
     Revision 1.4  2002/04/11 08:05:49  mba
     #98405#: support macro recorder
 

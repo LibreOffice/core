@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: mba $ $Date: 2002-05-22 11:30:28 $
+ *  last change: $Author: mba $ $Date: 2002-05-27 13:50:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,8 +285,15 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
         {
             // simple property
 #ifdef DBG_UTIL
+            // this indicates an error only for macro recording; if the dispatch API is used for
+            // UI purposes or from the testtool, it is possible to use the "toggle" ability of
+            // some property slots, so this should be notified as a warning only
             if ( nCount != 1 )
-                DBG_WARNING( "Playing macro: wrong number of parameters!" );
+            {
+                ByteString aStr( "MacroPlayer: wrong number of parameters for slot: ");
+                aStr += ByteString::CreateFromInt32( nSlotId );
+                DBG_WARNING( aStr.GetBuffer() );
+            }
 #endif
             if ( nCount )
             {
@@ -295,21 +302,43 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 if ( aName.CompareToAscii( pSlot->pUnoName ) == COMPARE_EQUAL )
                 {
                     if( pItem->PutValue( rProp.Value ) )
+                        // only use successfully converted items
                         rSet.Put( *pItem );
+#ifdef DBG_UTIL
                     else
-                        DBG_ERROR("Property not convertable!");
+                    {
+                        ByteString aStr( "Property not convertable: ");
+                        aStr += pSlot->pUnoName;
+                        DBG_ERROR( aStr.GetBuffer() );
+                    }
+#endif
                 }
+#ifdef DBG_UTIL
                 else
-                    DBG_ERROR("Property name does not match!");
+                {
+                    // for a simple property the name of the only argument *must* match
+                    ByteString aStr( "Property name does not match: ");
+                    aStr += ByteString( aName, RTL_TEXTENCODING_UTF8 );
+                    DBG_ERROR( aStr.GetBuffer() );
+                }
+#endif
             }
         }
         else
         {
 #ifdef DBG_UTIL
+            // this indicates an error only for macro recording; if the dispatch API is used for
+            // UI purposes or from the testtool, it is possible to skip some or all arguments,
+            // so this should be notified as a warning only
             if ( nCount != nSubCount )
-                DBG_WARNING( "Playing macro: wrong number of parameters!" );
+            {
+                ByteString aStr( "MacroPlayer: wrong number of parameters for slot: ");
+                aStr += ByteString::CreateFromInt32( nSlotId );
+                DBG_WARNING( aStr.GetBuffer() );
+            }
 #endif
-            // complex property; collect sub items and reconstruct complex item
+            // complex property; collect sub items from the parameter set and reconstruct complex item
+            BOOL bRet = TRUE;
             for ( sal_uInt16 n=0; n<nCount; n++ )
             {
                 const ::com::sun::star::beans::PropertyValue& rProp = pPropsVal[n];
@@ -325,19 +354,44 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                         BYTE nSubId = (BYTE) (sal_Int8) pType->aAttrib[nSub].nAID;
                         if ( bConvertTwips )
                             nSubId |= CONVERT_TWIPS;
-                        pItem->PutValue( rProp.Value, nSubId );
+                        if ( !pItem->PutValue( rProp.Value, nSubId ) )
+                            bRet = FALSE;
                         break;
                     }
                 }
 
-                rSet.Put( *pItem );
+#ifdef DBG_UTIL
+                if ( nSub >= nSubCount )
+                {
+                    // for complex property slots every passed argument *must* match to the name of a member of the item
+                    ByteString aStr( "Property name does not match: ");
+                    aStr += ByteString( String(rProp.Name), RTL_TEXTENCODING_UTF8 );
+                    DBG_ERROR( aStr.GetBuffer() );
+                }
+#endif
             }
+
+            if ( bRet )
+                // only use completely converted items
+                rSet.Put( *pItem );
+#ifdef DBG_UTIL
+            else
+            {
+                ByteString aStr( "Complex property not convertable: ");
+                aStr += pSlot->pUnoName;
+                DBG_ERROR( aStr.GetBuffer() );
+            }
+#endif
         }
 
         delete pItem;
     }
     else if ( nCount )
     {
+#ifdef DBG_UTIL
+        // for debugging purposes: detect parameters that don't match to any formal argument or one of its members
+        sal_Int32 nFoundArgs = 0;
+#endif
         // slot is a method
         for ( sal_uInt16 nArgs=0; nArgs<pSlot->nArgDefCount; nArgs++ )
         {
@@ -350,24 +404,35 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
             USHORT nSubCount = pType->nAttribs;
             if ( nSubCount == 0 )
             {
+                // "simple" (base type) argument
                 for ( sal_uInt16 n=0; n<nCount; n++ )
                 {
                     const ::com::sun::star::beans::PropertyValue& rProp = pPropsVal[n];
                     String aName = rProp.Name;
                     if ( aName.CompareToAscii(rArg.pName) == COMPARE_EQUAL )
                     {
+#ifdef DBG_UTIL
+                        ++nFoundArgs;
+#endif
                         if( pItem->PutValue( rProp.Value ) )
+                            // only use successfully converted items
                             rSet.Put( *pItem );
+#ifdef DBG_UTIL
                         else
-                            DBG_ERROR("Property not convertable!");
+                        {
+                            ByteString aStr( "Property not convertable: ");
+                            aStr += rArg.pName;
+                            DBG_ERROR( aStr.GetBuffer() );
+                        }
+#endif
                         break;
                     }
                 }
             }
             else
             {
-                // complex argument; collect sub items and reconstruct complex item
-                BOOL bDone = FALSE;
+                // complex argument; collect sub items from argument arry and reconstruct complex item
+                BOOL bRet = TRUE;
                 for ( sal_uInt16 n=0; n<nCount; n++ )
                 {
                     const ::com::sun::star::beans::PropertyValue& rProp = pPropsVal[n];
@@ -380,26 +445,32 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                         const char* pName = aStr.GetBuffer();
                         if ( rProp.Name.compareToAscii( pName ) == COMPARE_EQUAL )
                         {
+#ifdef DBG_UTIL
+                            ++nFoundArgs;
+#endif
                             BYTE nSubId = (BYTE) (sal_Int8) pType->aAttrib[nSub].nAID;
                             if ( bConvertTwips )
                                 nSubId |= CONVERT_TWIPS;
-                            BOOL bSuccess = pItem->PutValue( rProp.Value, nSubId );
-                            DBG_ASSERT(bSuccess, "Property not convertable!");
-                            if ( bSuccess )
-                                bDone = TRUE;
+                            if (!pItem->PutValue( rProp.Value, nSubId ) )
+                                bRet = FALSE;
                             break;
                         }
                     }
                 }
 
-                if ( bDone )
+                if ( bRet )
+                    // only use completely converted items
                     rSet.Put( *pItem );
             }
 
             delete pItem;
         }
 
-        // special additional parameters for some slots
+        // special additional parameters for some slots not seen in the slot definitions
+        // Some of these slots are not considered to be used for macro recording, because they shouldn't be recorded as slots,
+        // but as dispatching or factory or arbitrary URLs to the frame
+        // Some also can use additional arguments that are not recordable (will be changed later,
+        // f.e. "SaveAs" shouldn't support parameters not in the slot definition!)
         if ( nSlotId == SID_NEWWINDOW )
         {
             for ( sal_uInt16 n=0; n<nCount; n++ )
@@ -477,6 +548,13 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 }
             }
         }
+#ifdef DB_UTIL
+        else
+        {
+            // except for the "special" slots: assure that every argument was convertable
+            DBG_ASSERT( nFoundArgs == nCount, "Some properties didn't match to any formal argument!");
+        }
+#endif
     }
 }
 
@@ -493,10 +571,11 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
     if ( nSlotId == SID_SAVEASURL )
         nSlotId = SID_SAVEASDOC;
 
-    // find number of properties
+    // find number of properties to avoid permanent reallocations in the sequence
     sal_Int32 nProps=0;
 
-#ifdef DEBUG
+#ifdef DBG_UTIL
+    // trace number of items and compare with number of properties for debugging purposes
     sal_Int32 nItems=0;
 #endif
 
@@ -510,14 +589,23 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             USHORT nSubCount = pType->nAttribs;
             if ( nSubCount )
                 // it's a complex property, we want it split into simple types
+                // so we expect to get as many items as we have (sub) members
                 nProps = nSubCount;
             else
+                // simple property: we expect to get exactly one item
                 nProps++;
         }
+#ifdef DBG_UTIL
         else
-            DBG_ERROR("Processing property slot without argument!");
+        {
+            // we will not rely on the "toggle" ability of some property slots
+            ByteString aStr( "Processing property slot without argument: ");
+            aStr += ByteString::CreateFromInt32( nSlotId );
+            DBG_ERROR( aStr.GetBuffer() );
+        }
+#endif
 
-#ifdef DEBUG
+#ifdef DBG_UTIL
         nItems++;
 #endif
     }
@@ -535,15 +623,18 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 USHORT nSubCount = rArg.pType->nAttribs;
                 if ( nSubCount )
                     // argument has a complex type, we want it split into simple types
+                    // so for this argument we expect to get as many items as we have (sub) members
                     nProps += nSubCount;
                 else
+                    // argument of simple type: we expect to get exactly one item for it
                     nProps++;
-#ifdef DEBUG
+#ifdef DBG_UTIL
                 nItems++;
 #endif
             }
         }
 
+        // special treatment for slots that are *not* meant to be recorded as slots (except SaveAs/To)
         if ( nSlotId == SID_OPENDOC || nSlotId == SID_EXPORTDOC || nSlotId == SID_SAVEASDOC || nSlotId == SID_SAVETO )
         {
             sal_Int32 nAdditional=0;
@@ -600,22 +691,26 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             if ( rSet.GetItemState( SID_DOCUMENT ) == SFX_ITEM_SET )
                 nAdditional++;
 
+            // consider additional arguments
             nProps += nAdditional;
-#ifdef DEBUG
+#ifdef DBG_UTIL
             nItems += nAdditional;
 #endif
         }
     }
 
-#ifdef DEBUG
+#ifdef DBG_UTIL
+    // now check the itemset: is there any item that is not convertable using the list of formal arguments
+    // or the table of additional items?!
     if ( rSet.Count() != nItems )
     {
+        // detect unknown item and present error message
         const USHORT *pRanges = rSet.GetRanges();
         while ( *pRanges )
         {
             for(USHORT nId = *pRanges++; nId <= *pRanges; ++nId)
             {
-                if ( rSet.GetItemState(nId) < SFX_ITEM_SET )
+                if ( rSet.GetItemState(nId) < SFX_ITEM_SET ) //???
                     continue;
 
                 USHORT nFormalArgs = pSlot->GetFormalArgumentCount();
@@ -711,8 +806,12 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             {
                 //rPool.FillVariable( *pItem, *pVar, eUserMetric );
                 pValue[nProps].Name = String( String::CreateFromAscii( pSlot->pUnoName ) ) ;
-                if ( pItem && !pItem->QueryValue( pValue[nProps].Value ) )
-                    DBG_ERROR("Item not convertable!");
+                if ( !pItem->QueryValue( pValue[nProps].Value ) )
+                {
+                    ByteString aStr( "Item not convertable: ");
+                    aStr += ByteString::CreateFromInt32(nSlotId);
+                    DBG_ERROR( aStr.GetBuffer() );
+                }
             }
             else
             {
@@ -729,8 +828,14 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                     aName += '.';
                     aName += String( String::CreateFromAscii( pType->aAttrib[n-1].pName ) ) ;
                     pValue[nProps].Name = aName;
-                    if ( pItem && !pItem->QueryValue( pValue[nProps++].Value, nSubId ) )
-                        DBG_ERROR("Item not convertable!");
+                    if ( !pItem->QueryValue( pValue[nProps++].Value, nSubId ) )
+                    {
+                        ByteString aStr( "Sub item ");
+                        aStr += ByteString::CreateFromInt32( pType->aAttrib[n-1].nAID );
+                        aStr += " not convertable in slot: ";
+                        aStr += ByteString::CreateFromInt32(nSlotId);
+                        DBG_ERROR( aStr.GetBuffer() );
+                    }
                 }
             }
         }
@@ -752,8 +857,12 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 {
                     //rPool.FillVariable( *pItem, *pVar, eUserMetric );
                     pValue[nProps].Name = String( String::CreateFromAscii( rArg.pName ) ) ;
-                    if ( pItem && !pItem->QueryValue( pValue[nProps++].Value ) )
-                        DBG_ERROR("Item not convertable!");
+                    if ( !pItem->QueryValue( pValue[nProps++].Value ) )
+                    {
+                        ByteString aStr( "Item not convertable: ");
+                        aStr += ByteString::CreateFromInt32(rArg.nSlotId);
+                        DBG_ERROR( aStr.GetBuffer() );
+                    }
                 }
                 else
                 {
@@ -761,7 +870,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                     for ( USHORT n = 1; n <= nSubCount; ++n )
                     {
                         //rPool.FillVariable( rItem, *pVar, eUserMetric );
-                        BYTE nSubId = (BYTE) (sal_Int8) pType->aAttrib[n-1].nAID;
+                        BYTE nSubId = (BYTE) (sal_Int8) rArg.pType->aAttrib[n-1].nAID;
                         if ( bConvertTwips )
                             nSubId |= CONVERT_TWIPS;
 
@@ -770,8 +879,14 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                         aName += '.';
                         aName += String( String::CreateFromAscii( rArg.pType->aAttrib[n-1].pName ) ) ;
                         pValue[nProps].Name = aName;
-                        if ( pItem && !pItem->QueryValue( pValue[nProps++].Value, nSubId ) )
-                            DBG_ERROR("Item not convertable!");
+                        if ( pItem->QueryValue( pValue[nProps++].Value, nSubId ) )
+                        {
+                            ByteString aStr( "Sub item ");
+                            aStr += ByteString::CreateFromInt32( rArg.pType->aAttrib[n-1].nAID );
+                            aStr += " not convertable in slot: ";
+                            aStr += ByteString::CreateFromInt32(rArg.nSlotId);
+                            DBG_ERROR( aStr.GetBuffer() );
+                        }
                     }
                 }
             }
