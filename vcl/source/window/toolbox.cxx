@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ssa $ $Date: 2002-03-07 17:58:39 $
+ *  last change: $Author: ssa $ $Date: 2002-03-08 08:40:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3526,15 +3526,16 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
     // eg, in a edit control
     BOOL bDrawHotSpot = TRUE;
     Window *pWin = Application::GetFocusWindow();
-    while( pWin )
-    {
-        pWin = pWin->GetParent();
-        if( pWin && pWin->mbToolBox )
+    if( pWin && !pWin->mbToolBox )
+        while( pWin )
         {
-            bDrawHotSpot = FALSE;
-            break;
+            pWin = pWin->GetParent();
+            if( pWin && pWin->mbToolBox )
+            {
+                bDrawHotSpot = FALSE;
+                break;
+            }
         }
-    }
 
     if ( bDrawHotSpot && ( ((eStyle == POINTER_ARROW) && (mnOutStyle & TOOLBOX_STYLE_HANDPOINTER)) ||
          (mnOutStyle & TOOLBOX_STYLE_FLAT) || !mnOutStyle ) )
@@ -4540,14 +4541,30 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
             ImplChangeHighlightUpDn( FALSE );
         }
         break;
+        case KEY_PAGEUP:
+            if ( mnCurLine > 1 )
+            {
+                ShowLine( FALSE );
+                ImplDrawSpin( FALSE, FALSE );
+            }
+        break;
+        case KEY_PAGEDOWN:
+            if ( mnCurLine+mnVisLines-1 < mnCurLines )
+            {
+                ShowLine( TRUE );
+                ImplDrawSpin( FALSE, FALSE );
+            }
+        break;
         case KEY_END:
             {
-            ImplChangeHighlight( mpItemList->Last() );
+                ImplChangeHighlight( NULL );
+                ImplChangeHighlightUpDn( FALSE );
             }
             break;
         case KEY_HOME:
             {
-            ImplChangeHighlight( mpItemList->First() );
+                ImplChangeHighlight( NULL );
+                ImplChangeHighlightUpDn( TRUE );
             }
             break;
         case KEY_ESCAPE:
