@@ -528,5 +528,6 @@ UDK_3.3 {
         osl_setCommandArgs;
         rtl_uStringbuffer_insertUtf32;
         rtl_ustr_ascii_compareIgnoreAsciiCase_WithLengths;
+        rtl_logfile_longTrace;
 } UDK_3.2;
 
