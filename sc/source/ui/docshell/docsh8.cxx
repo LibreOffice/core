@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh8.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kso $ $Date: 2000-12-01 08:07:14 $
+ *  last change: $Author: nn $ $Date: 2000-12-05 16:45:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@
 #include <comphelper/types.hxx>
 #include <ucbhelper/content.hxx>
 #include <comphelper/processfactory.hxx>
+#include <connectivity/dbcharset.hxx>
 
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
@@ -310,11 +311,15 @@ ULONG ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet,
         String aConnUrl = String::CreateFromAscii("sdbc:dbase:");
         aConnUrl += aPath;
 
+        dbtools::OCharsetMap aMap;
+        dbtools::OCharsetMap::CharsetIterator aIter = aMap.find( (rtl_TextEncoding) eCharSet );
+        rtl::OUString aCharSetStr = (*aIter).getIanaName();
+
         uno::Sequence<beans::PropertyValue> aProps(2);
         aProps[0].Name = rtl::OUString::createFromAscii(SC_DBPROP_EXTENSION);
         aProps[0].Value <<= rtl::OUString( aExtension );
         aProps[1].Name = rtl::OUString::createFromAscii(SC_DBPROP_CHARSET);
-        aProps[1].Value <<= (rtl_TextEncoding) eCharSet;
+        aProps[1].Value <<= aCharSetStr;
 
         uno::Reference<sdbc::XConnection> xConnection =
                                 xDrvMan->getConnectionWithInfo( aConnUrl, aProps );
@@ -812,11 +817,15 @@ ULONG ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet, BO
         String aConnUrl = String::CreateFromAscii("sdbc:dbase:");
         aConnUrl += aPath;
 
+        dbtools::OCharsetMap aMap;
+        dbtools::OCharsetMap::CharsetIterator aIter = aMap.find( (rtl_TextEncoding) eCharSet );
+        rtl::OUString aCharSetStr = (*aIter).getIanaName();
+
         uno::Sequence<beans::PropertyValue> aProps(2);
         aProps[0].Name = rtl::OUString::createFromAscii(SC_DBPROP_EXTENSION);
         aProps[0].Value <<= rtl::OUString( aExtension );
         aProps[1].Name = rtl::OUString::createFromAscii(SC_DBPROP_CHARSET);
-        aProps[1].Value <<= (rtl_TextEncoding) eCharSet;
+        aProps[1].Value <<= aCharSetStr;
 
         uno::Reference<sdbc::XConnection> xConnection =
                                 xDrvMan->getConnectionWithInfo( aConnUrl, aProps );
