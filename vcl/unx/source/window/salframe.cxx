@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-17 18:55:42 $
+ *  last change: $Author: obr $ $Date: 2001-10-18 09:27:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -830,10 +830,28 @@ void SalFrame::SetIcon( USHORT nIcon )
         else
         {
             const String& rWM( maFrameData.pDisplay_->getWMAdaptor()->getWindowManagerName() );
-            if( rWM.EqualsAscii( "KWin" )           // assume KDE is running
-                || rWM.EqualsAscii( "Sawfish" )     // assume GNOME is running
-                )
+            if( rWM.EqualsAscii( "KWin" ) )         // assume KDE is running
                 iconSize = 16;
+            static bool bGnomeIconSize = false;
+            static bool bGnomeChecked = false;
+            if( ! bGnomeChecked )
+            {
+                bGnomeChecked=true;
+                int nCount = 0;
+                Atom* pProps = XListProperties( _GetXDisplay(),
+                                                _GetDisplay()->GetRootWindow(),
+                                                &nCount );
+                for( int i = 0; i < nCount && !bGnomeIconSize; i++ )
+                 {
+                    char* pName = XGetAtomName( _GetXDisplay(), pProps[i] );
+                    if( !strcmp( pName, "GNOME_PANEL_DESKTOP_AREA" ) )
+                        bGnomeIconSize = true;
+                    if( pName )
+                        XFree( pName );
+                 }
+            }
+            if( bGnomeIconSize )
+                iconSize = 20;
         }
 
         XWMHints Hints;
