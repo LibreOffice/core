@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 13:33:28 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 14:57:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1173,10 +1173,11 @@ void XMLShapeExportPropertyMapper::ContextFilter(
     XMLPropertyState* pCaptionEscAbs = NULL;
 
     // filter properties
-    for( std::vector< XMLPropertyState >::iterator property = rProperties.begin();
-         property != rProperties.end();
-         property++ )
+    for( std::vector< XMLPropertyState >::iterator aIter = rProperties.begin();
+         aIter != rProperties.end();
+         ++aIter )
     {
+            XMLPropertyState *property = &(*aIter);
         if( property->mnIndex == -1 )
             continue;
 
@@ -1473,10 +1474,11 @@ void XMLPageExportPropertyMapper::ContextFilter(
     XMLPropertyState* pDateTimeFormat = NULL;
 
     // filter properties
-    for( std::vector< XMLPropertyState >::iterator property = rProperties.begin();
-         property != rProperties.end();
-         property++ )
+    for( std::vector< XMLPropertyState >::iterator aIter = rProperties.begin();
+         aIter != rProperties.end();
+         ++aIter )
     {
+        XMLPropertyState *property = &(*aIter);
         if( property->mnIndex == -1 )
             continue;
 
