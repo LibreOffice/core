@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: kz $ $Date: 2004-05-19 14:06:12 $
+#   last change: $Author: hr $ $Date: 2004-08-02 14:07:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -93,6 +93,7 @@ IDLFILES=\
     DataSourceBrowser.idl \
     DefinitionContainer.idl \
     DocumentDefinition.idl \
+    DocumentSaveRequest.idl \
     ErrorMessageDialog.idl \
     InteractionHandler.idl \
     ParametersRequest.idl \
@@ -126,6 +127,7 @@ IDLFILES=\
     XDatabaseAccessListener.idl \
     XDatabaseEnvironment.idl \
     XFormDocumentsSupplier.idl \
+    XInteractionDocumentSave.idl \
     XInteractionSupplyParameters.idl \
     XParametersSupplier.idl \
     XQueriesSupplier.idl \
