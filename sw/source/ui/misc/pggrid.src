@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pggrid.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-27 20:19:06 $
+ *  last change: $Author: kz $ $Date: 2002-06-13 13:31:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ TabPage TP_TEXTGRID_PAGE
         Text[ polish ] = "Grid";
         Text[ portuguese_brazilian ] = "Grid";
         Text[ japanese ] = "グリッド線";
-        Text[ korean ] = "문자 수/열 수 외곽선";
+        Text[ korean ] = "그리드선";
         Text[ chinese_simplified ] = "格子线";
         Text[ chinese_traditional ] = "格子線";
         Text[ turkish ] = "Grid";
@@ -113,7 +113,7 @@ TabPage TP_TEXTGRID_PAGE
         Text[ polish ] = "No grid";
         Text[ portuguese_brazilian ] = "No grid";
         Text[ japanese ] = "グリッド線なし";
-        Text[ korean ] = "문자 수/열 수 외곽선 없음";
+        Text[ korean ] = "그리드선 없음";
         Text[ chinese_simplified ] = "不使用格子线";
         Text[ chinese_traditional ] = "不使用格子線";
         Text[ turkish ] = "No grid";
@@ -140,7 +140,7 @@ TabPage TP_TEXTGRID_PAGE
         Text[ polish ] = "Grid (lines only)";
         Text[ portuguese_brazilian ] = "Grid (lines only)";
         Text[ japanese ] = "グリッド線 (行グリッド線のみ)";
-        Text[ korean ] = "문자 수/열 수 외곽선(줄 만)";
+        Text[ korean ] = "그리드선(줄 만)";
         Text[ chinese_simplified ] = "格子线(仅线条)";
         Text[ chinese_traditional ] = "格子線(僅線條)";
         Text[ turkish ] = "Grid (lines only)";
@@ -167,7 +167,7 @@ TabPage TP_TEXTGRID_PAGE
         Text[ polish ] = "Grid (lines and characters)";
         Text[ portuguese_brazilian ] = "Grid (lines and characters)";
         Text[ japanese ] = "グリッド線 (行グリッド線と文字グリッド線)";
-        Text[ korean ] = "문자 수/열 수 외곽선(줄과 문자)";
+        Text[ korean ] = "그리드선(줄과 문자)";
         Text[ chinese_simplified ] = "格子线(线条和字符)";
         Text[ chinese_traditional ] = "格子線(線條和字元)";
         Text[ turkish ] = "Grid (lines and characters)";
@@ -199,7 +199,7 @@ TabPage TP_TEXTGRID_PAGE
         Text[ polish ] = "Grid layout";
         Text[ portuguese_brazilian ] = "Grid layout";
         Text[ japanese ] = "グリッド線の設定";
-        Text[ korean ] = "문자 수/열 수 외곽선 설정";
+        Text[ korean ] = "그리드선 설정";
         Text[ chinese_simplified ] = "格子线版式";
         Text[ chinese_traditional ] = "格子線版式";
         Text[ turkish ] = "Grid layout";
@@ -226,7 +226,7 @@ TabPage TP_TEXTGRID_PAGE
         Text[ polish ] = "Lines per page";
         Text[ portuguese_brazilian ] = "Lines per page";
         Text[ japanese ] = "ページ単位の行数";
-        Text[ korean ] = "한 페이지 당 열 수";
+        Text[ korean ] = "한 페이지 당 줄 수";
         Text[ chinese_simplified ] = "每页的行数";
         Text[ chinese_traditional ] = "毎頁的行數";
         Text[ turkish ] = "Lines per page";
@@ -260,17 +260,17 @@ TabPage TP_TEXTGRID_PAGE
         Text[ russian ] = "Base text size";
         Text[ greek ] = "Base text size";
         Text[ dutch ] = "Base text size";
-        Text[ french ] = "Taille du texte de base";
-        Text[ spanish ] = "Tama�o texto base";
+        Text[ french ] = "Taille max. du texte de base";
+        Text[ spanish ] = "Tama�o m�x. texto base";
         Text[ finnish ] = "Base text size";
-        Text[ italian ] = "Dimensioni testo base";
+        Text[ italian ] = "Dimensioni max. testo base";
         Text[ danish ] = "Base text size";
         Text[ swedish ] = "Max. storlek bastext";
         Text[ polish ] = "Base text size";
         Text[ portuguese_brazilian ] = "Base text size";
-        Text[ japanese ] = "対象文字列のサイズ";
+        Text[ japanese ] = "対象文字列の最大サイズ";
         Text[ korean ] = "기본 텍스트 크기";
-        Text[ chinese_simplified ] = "主文字的大小";
+        Text[ chinese_simplified ] = "最大的主文字大小";
         Text[ chinese_traditional ] = "最大的主文字大小";
         Text[ turkish ] = "Base text size";
         Text[ arabic ] = "Base text size";
@@ -313,7 +313,7 @@ TabPage TP_TEXTGRID_PAGE
         Text[ polish ] = "Characters per line";
         Text[ portuguese_brazilian ] = "Characters per line";
         Text[ japanese ] = "行単位の文字数";
-        Text[ korean ] = "한 열당 문자 수";
+        Text[ korean ] = "한 줄당 문자 수";
         Text[ chinese_simplified ] = "每行的字数";
         Text[ chinese_traditional ] = "毎行的字數";
         Text[ turkish ] = "Characters per line";
@@ -347,17 +347,17 @@ TabPage TP_TEXTGRID_PAGE
         Text[ russian ] = "Ruby text size";
         Text[ greek ] = "Ruby text size";
         Text[ dutch ] = "Ruby text size";
-        Text[ french ] = "Taille du texte Ruby";
-        Text[ spanish ] = "Tama�o texto Ruby";
+        Text[ french ] = "Taille max. du texte Ruby";
+        Text[ spanish ] = "Tama�o m�x. texto Ruby";
         Text[ finnish ] = "Ruby text size";
-        Text[ italian ] = "Dimens. testo Ruby";
+        Text[ italian ] = "Dimens. max. testo Ruby";
         Text[ danish ] = "Ruby text size";
         Text[ swedish ] = "Max. storlek ruby-text";
         Text[ polish ] = "Ruby text size";
         Text[ portuguese_brazilian ] = "Ruby text size";
-        Text[ japanese ] = "ルビ文字のサイズ";
+        Text[ japanese ] = "ルビ文字の最大サイズ";
         Text[ korean ] = "루비 텍스트 크기";
-        Text[ chinese_simplified ] = "拼音文字的大小";
+        Text[ chinese_simplified ] = "最大的拼音文字大小";
         Text[ chinese_traditional ] = "最大的注音符號大小";
         Text[ turkish ] = "Ruby text size";
         Text[ arabic ] = "Ruby text size";
@@ -427,7 +427,7 @@ TabPage TP_TEXTGRID_PAGE
         Text[ polish ] = "Grid display";
         Text[ portuguese_brazilian ] = "Grid display";
         Text[ japanese ] = "グリッド線の表示";
-        Text[ korean ] = "문자 수/열 수 외곽선 표시";
+        Text[ korean ] = "그리드선 표시";
         Text[ chinese_simplified ] = "显示格子线";
         Text[ chinese_traditional ] = "顯示格子線";
         Text[ turkish ] = "Grid display";
@@ -454,7 +454,7 @@ TabPage TP_TEXTGRID_PAGE
         Text[ polish ] = "Display grid";
         Text[ portuguese_brazilian ] = "Display grid";
         Text[ japanese ] = "グリッド線を表示する";
-        Text[ korean ] = "문자 수/열 수 외곽선 표시";
+        Text[ korean ] = "그리드선 표시";
         Text[ chinese_simplified ] = "显示格子线";
         Text[ chinese_traditional ] = "顯示格子線";
         Text[ turkish ] = "Display grid";
@@ -481,7 +481,7 @@ TabPage TP_TEXTGRID_PAGE
         Text[ polish ] = "Print grid";
         Text[ portuguese_brazilian ] = "Print grid";
         Text[ japanese ] = "グリッド線を印刷する";
-        Text[ korean ] = "문자 수/열 수 외곽선 인쇄";
+        Text[ korean ] = "그리드선 인쇄";
         Text[ chinese_simplified ] = "打印格子线";
         Text[ chinese_traditional ] = "列印格子線";
         Text[ turkish ] = "Print grid";
@@ -508,7 +508,7 @@ TabPage TP_TEXTGRID_PAGE
         Text[ polish ] = "Grid color";
         Text[ portuguese_brazilian ] = "Grid color";
         Text[ japanese ] = "グリッド線の色";
-        Text[ korean ] = "문자 수/열 수 외곽선 색";
+        Text[ korean ] = "그리드선 색";
         Text[ chinese_simplified ] = "格子线的颜色";
         Text[ chinese_traditional ] = "格子線的顔色";
         Text[ turkish ] = "Grid color";
