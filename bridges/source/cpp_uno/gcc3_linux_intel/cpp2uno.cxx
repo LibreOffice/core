@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpp2uno.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:36:30 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 13:25:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -535,3 +535,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
     }
     return code;
 }
+
+void bridges::cpp_uno::shared::VtableFactory::flushCode(
+    unsigned char const *, unsigned char const *)
+{}
