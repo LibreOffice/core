@@ -1,0 +1,14 @@
+    <node oor:name="writerweb8_writer" oor:op="replace" oor:finalized="true" oor:mandatory="true">
+        <prop oor:name="FileFormatVersion"><value>6800</value></prop>
+        <prop oor:name="Type"><value>writer8</value></prop>
+        <prop oor:name="DocumentService"><value>com.sun.star.text.WebDocument</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="UserData"><value>CXML</value></prop>
+        <prop oor:name="FilterService"/>
+        <prop oor:name="TemplateName"/>
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">Open Text Document (%productname% Writer/Web)</value>
+            <value xml:lang="de">Offenes Textdokument (%productname% Writer/Web)</value>
+        </prop>
+        <prop oor:name="Flags"><value>EXPORT TEMPLATE</value></prop>
+    </node>
