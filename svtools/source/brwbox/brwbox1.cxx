@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwbox1.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-30 13:01:06 $
+ *  last change: $Author: pl $ $Date: 2001-09-04 16:51:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,11 +80,7 @@ extern const char* BrowseBoxCheckInvariants( const void* pVoid );
 
 DECLARE_LIST( BrowserColumns, BrowserColumn* );
 
-#ifdef VCL
 #define SCROLL_FLAGS (SCROLL_CLIP | SCROLL_NOCHILDREN)
-#else
-#define SCROLL_FLAGS TRUE
-#endif
 
 //-------------------------------------------------------------------
 
