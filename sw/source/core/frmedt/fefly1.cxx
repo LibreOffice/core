@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fefly1.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-24 08:57:18 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:03:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -406,7 +406,7 @@ SwFlyFrm *SwFEShell::FindFlyFrm() const
             return 0;
 
         SdrObject *pO = rMrkList.GetMark( 0 )->GetObj();
-        return pO->IsWriterFlyFrame() ? ((SwVirtFlyDrawObj*)pO)->GetFlyFrm() : 0;
+        return pO->ISA(SwVirtFlyDrawObj) ? ((SwVirtFlyDrawObj*)pO)->GetFlyFrm() : 0;
     }
     return 0;
 }
@@ -449,7 +449,7 @@ const SwFrmFmt* SwFEShell::IsFlyInFly()
     SwFrmFmt *pFmt = FindFrmFmt( pObj );
     if( pFmt && FLY_AT_FLY == pFmt->GetAnchor().GetAnchorId() )
     {
-        SwFrm* pFly = pObj->IsWriterFlyFrame() ?
+        SwFrm* pFly = pObj->ISA(SwVirtFlyDrawObj) ?
             ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm()->GetAnchor() :
             ((SwDrawContact*)GetUserCall(pObj))->GetAnchor();
         ASSERT( pFly, "IsFlyInFly: Where's my anchor?" );
@@ -457,7 +457,7 @@ const SwFrmFmt* SwFEShell::IsFlyInFly()
         return ((SwFlyFrm*)pFly)->GetFmt();
     }
 
-    Point aTmpPos = pObj->GetBoundRect().TopLeft();
+    Point aTmpPos = pObj->GetCurrentBoundRect().TopLeft();
 
     SwFrm *pTxtFrm;
     {
@@ -556,7 +556,7 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, sal_Bool bMoveIt )
     if ( FLY_IN_CNTNT == nAnchorId )
         return aRet;
 
-    sal_Bool bFlyFrame = pObj->IsWriterFlyFrame();
+    sal_Bool bFlyFrame = pObj->ISA(SwVirtFlyDrawObj);
 
     SwFlyFrm* pFly;
     const SwFrm* pOldAnch;
@@ -1654,7 +1654,7 @@ const SwFrmFmt* SwFEShell::IsURLGrfAtPos( const Point& rPt, String* pURL,
     pDView->SetHitTolerancePixel( 2 );
 
     if( pDView->PickObj( rPt, pObj, pPV,SDRSEARCH_PICKMACRO ) &&
-        pObj->IsWriterFlyFrame() )
+        pObj->ISA(SwVirtFlyDrawObj) )
     {
         SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
         const SwFmtURL &rURL = pFly->GetFmt()->GetURL();
@@ -1721,7 +1721,7 @@ const Graphic *SwFEShell::GetGrfAtPos( const Point &rPt,
     SdrPageView* pPV;
     SwDrawView *pDView = (SwDrawView*)Imp()->GetDrawView();
 
-    if( pDView->PickObj( rPt, pObj, pPV ) && pObj->IsWriterFlyFrame() )
+    if( pDView->PickObj( rPt, pObj, pPV ) && pObj->ISA(SwVirtFlyDrawObj) )
     {
         SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
         if ( pFly->Lower() && pFly->Lower()->IsNoTxtFrm() )
@@ -1768,12 +1768,12 @@ const SwFrmFmt* SwFEShell::GetFmtFromObj( const Point& rPt, SwRect** pRectToFill
         if( pDView->PickObj( rPt, pObj, pPView, SDRSEARCH_PICKMARKABLE ) )
         {
             // dann teste mal was es ist:
-            if ( pObj->IsWriterFlyFrame() )
+            if ( pObj->ISA(SwVirtFlyDrawObj) )
                 pRet = ((SwVirtFlyDrawObj*)pObj)->GetFmt();
             else if ( pObj->GetUserCall() ) //nicht fuer Gruppenobjekte
                 pRet = ((SwDrawContact*)pObj->GetUserCall())->GetFmt();
             if(pRet && pRectToFill)
-                **pRectToFill = pObj->GetBoundRect();
+                **pRectToFill = pObj->GetCurrentBoundRect();
         }
         pDView->SetHitTolerancePixel( nOld );
     }
@@ -1834,7 +1834,7 @@ ObjCntType SwFEShell::GetObjCntType( const SdrObject& rObj ) const
             }
         }
     }
-    else if( pInvestigatedObj->IsWriterFlyFrame() )
+    else if( pInvestigatedObj->ISA(SwVirtFlyDrawObj) )
     {
         SwFlyFrm *pFly = ((SwVirtFlyDrawObj&)(*pInvestigatedObj)).GetFlyFrm();
         if ( pFly->Lower() && pFly->Lower()->IsNoTxtFrm() )
@@ -1926,7 +1926,7 @@ sal_Bool SwFEShell::ReplaceSdrObj( const String& rGrfName, const String& rFltNam
         aFrmSet.Set( pFmt->GetAttrSet() );
 
         // Groesse und Position setzen ??
-        if( !pObj->IsWriterFlyFrame() )
+        if( !pObj->ISA(SwVirtFlyDrawObj) )
         {
             // dann mal los:
             const Rectangle &rBound = pObj->GetSnapRect();
