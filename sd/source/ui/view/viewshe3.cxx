@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe3.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:38:14 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:48:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,8 @@
 #include "ViewShell.hxx"
 #include "GraphicViewShell.hxx"
 #include "GraphicViewShellBase.hxx"
+
+#include <sfx2/viewfrm.hxx>
 
 #ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
