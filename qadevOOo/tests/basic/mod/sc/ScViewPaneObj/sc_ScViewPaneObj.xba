@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: sc_ScViewPaneObj.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 18:00:47 $ 
+'*  last change:$Date: 2003-03-18 11:20:16 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -98,6 +98,12 @@ ErrHndl:
 End Sub
 
 Sub DisposeObj()
-    if not isNULL(oDoc) then oDoc.dispose()
+    if NOT isNULL(oDoc) then
+        if (hasUnoInterfaces(oDoc, "com.sun.star.util.XCloseable")) then
+            oDoc.close(FALSE)
+        elseif (hasUnoInterfaces(oDoc, "com.sun.star.lang.XComponent")) then
+            oDoc.dispose()
+        end if
+    end if
 End Sub
 </script:module>

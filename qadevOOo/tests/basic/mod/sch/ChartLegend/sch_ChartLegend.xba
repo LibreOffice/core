@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: sch_ChartLegend.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 18:01:24 $ 
+'*  last change:$Date: 2003-03-18 11:21:56 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -112,6 +112,14 @@ ErrHndl:
 End Sub
 
 Sub DisposeObj()
-    if NOT isNULL(oComponentDoc) then oComponentDoc.dispose()
+    if NOT isNULL(oComponentDoc) then
+        if (hasUnoInterfaces(oComponentDoc, _
+                                           "com.sun.star.util.XCloseable")) then
+            oComponentDoc.close(FALSE)
+        elseif (hasUnoInterfaces(oComponentDoc, _
+                                           "com.sun.star.lang.XComponent")) then
+            oComponentDoc.dispose()
+        end if
+    end if
 End Sub
 </script:module>
