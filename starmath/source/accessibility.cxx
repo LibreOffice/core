@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibility.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: tl $ $Date: 2002-10-17 09:59:00 $
+ *  last change: $Author: tl $ $Date: 2002-10-22 09:31:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,33 +308,6 @@ awt::Size SAL_CALL SmGraphicAccessible::getSize()
     return awt::Size( aSz.Width(), aSz.Height() );
 }
 
-sal_Bool SAL_CALL SmGraphicAccessible::isShowing()
-    throw (RuntimeException)
-{
-    vos::OGuard aGuard(Application::GetSolarMutex());
-    if (!pWin)
-        throw RuntimeException();
-
-    return pWin->IsVisible();
-}
-
-sal_Bool SAL_CALL SmGraphicAccessible::isVisible()
-    throw (RuntimeException)
-{
-    vos::OGuard aGuard(Application::GetSolarMutex());
-    if (!pWin)
-        throw RuntimeException();
-
-    return pWin->IsReallyVisible();
-}
-
-sal_Bool SAL_CALL SmGraphicAccessible::isFocusTraversable()
-    throw (RuntimeException)
-{
-    vos::OGuard aGuard(Application::GetSolarMutex());
-    return TRUE;
-}
-
 void SAL_CALL SmGraphicAccessible::grabFocus()
     throw (RuntimeException)
 {
@@ -352,6 +325,31 @@ uno::Any SAL_CALL SmGraphicAccessible::getAccessibleKeyBinding()
     return uno::Any();
 }
 
+sal_Int32 SAL_CALL SmGraphicAccessible::getForeground()
+    throw (RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
+    if (!pWin)
+        throw RuntimeException();
+    return (sal_Int32) pWin->GetTextColor().GetColor();
+}
+
+sal_Int32 SAL_CALL SmGraphicAccessible::getBackground()
+    throw (RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
+    if (!pWin)
+        throw RuntimeException();
+    Wallpaper aWall( pWin->GetDisplayBackground() );
+    ColorData nCol;
+    if (aWall.IsBitmap() || aWall.IsGradient())
+        nCol = pWin->GetSettings().GetStyleSettings().GetWindowColor().GetColor();
+    else
+        nCol = aWall.GetColor().GetColor();
+    return (sal_Int32) nCol;
+}
 
 sal_Int32 SAL_CALL SmGraphicAccessible::getAccessibleChildCount()
     throw (RuntimeException)
@@ -1624,33 +1622,6 @@ awt::Size SAL_CALL SmEditAccessible::getSize(  )
     return awt::Size( aSz.Width(), aSz.Height() );
 }
 
-sal_Bool SAL_CALL SmEditAccessible::isShowing(  )
-    throw (RuntimeException)
-{
-    vos::OGuard aGuard(Application::GetSolarMutex());
-    if (!pWin)
-        throw RuntimeException();
-
-    return pWin->IsVisible();
-}
-
-sal_Bool SAL_CALL SmEditAccessible::isVisible(  )
-    throw (RuntimeException)
-{
-    vos::OGuard aGuard(Application::GetSolarMutex());
-    if (!pWin)
-        throw RuntimeException();
-
-    return pWin->IsReallyVisible();
-}
-
-sal_Bool SAL_CALL SmEditAccessible::isFocusTraversable(  )
-    throw (RuntimeException)
-{
-    vos::OGuard aGuard(Application::GetSolarMutex());
-    return TRUE;
-}
-
 void SAL_CALL SmEditAccessible::grabFocus(  )
     throw (RuntimeException)
 {
@@ -1668,6 +1639,31 @@ uno::Any SAL_CALL SmEditAccessible::getAccessibleKeyBinding(  )
     return uno::Any();
 }
 
+sal_Int32 SAL_CALL SmEditAccessible::getForeground()
+    throw (RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
+    if (!pWin)
+        throw RuntimeException();
+    return (sal_Int32) pWin->GetTextColor().GetColor();
+}
+
+sal_Int32 SAL_CALL SmEditAccessible::getBackground()
+    throw (RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
+    if (!pWin)
+        throw RuntimeException();
+    Wallpaper aWall( pWin->GetDisplayBackground() );
+    ColorData nCol;
+    if (aWall.IsBitmap() || aWall.IsGradient())
+        nCol = pWin->GetSettings().GetStyleSettings().GetWindowColor().GetColor();
+    else
+        nCol = aWall.GetColor().GetColor();
+    return (sal_Int32) nCol;
+}
 
 // XAccessibleContext
 sal_Int32 SAL_CALL SmEditAccessible::getAccessibleChildCount(  )
