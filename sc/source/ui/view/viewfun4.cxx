@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun4.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-24 10:31:46 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:27:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,8 +84,6 @@
 #include <svx/svxerr.hxx>
 #include <svx/impgrf.hxx>
 #include <svx/unolingu.hxx>
-#include <so3/ipobj.hxx>
-#include <so3/svstor.hxx>
 
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
@@ -96,6 +94,9 @@
 #include <svtools/transfer.hxx>
 #include <svtools/urlbmk.hxx>
 #include <vcl/msgbox.hxx>
+
+#include <comphelper/storagehelper.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include "viewfunc.hxx"
 #include "docsh.hxx"
@@ -115,6 +116,8 @@
 #include "impex.hxx"
 #include "editutil.hxx"
 #include "editable.hxx"
+
+using namespace com::sun::star;
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -610,13 +613,19 @@ BOOL ScViewFunc::PasteFile( const Point& rPos, const String& rFile, BOOL bLink )
     {
         // 3. Kann die Datei als OLE eingefuegt werden?
         // auch nicht-Storages, z.B. Sounds (#38282#)
+        uno::Reference < embed::XStorage > xStorage = comphelper::OStorageHelper::GetTemporaryStorage();
 
-        SvStorageRef refStor = new SvStorage( EMPTY_STRING );
-        SvObjectRef refOleObj =
-            ((SvFactory*)SvInPlaceObject::ClassFactory())->CreateAndInit( aStrURL, refStor, bLink );
-        SvInPlaceObjectRef refObj( &refOleObj );
-        if( refObj.Is() )
-            return PasteObject( rPos, refObj );
+        //TODO/LATER: what about "bLink"?
+
+        uno::Sequence < beans::PropertyValue > aMedium(1);
+        aMedium[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) );
+        aMedium[0].Value <<= ::rtl::OUString( aStrURL );
+
+        comphelper::EmbeddedObjectContainer aCnt( xStorage );
+        ::rtl::OUString aName;
+        uno::Reference < embed::XEmbeddedObject > xObj = aCnt.InsertEmbeddedObject( aMedium, aName );
+        if( xObj.is() )
+            return PasteObject( rPos, xObj );
 
         // #105851# If an OLE object can't be created, insert a URL button
 
