@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfmgr.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ka $ $Date: 2001-01-30 11:21:27 $
+ *  last change: $Author: ka $ $Date: 2001-02-15 11:48:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1047,3 +1047,4 @@ SvStream& operator<<( SvStream& rOStm, const GraphicObject& rGraphicObj )
 
     return rOStm;
 }
+
