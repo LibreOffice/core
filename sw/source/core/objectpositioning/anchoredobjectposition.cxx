@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anchoredobjectposition.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 13:08:33 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:49:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,15 +179,8 @@ void SwAnchoredObjectPosition::_GetInfoAboutObj()
 
     // determine format the object belongs to
     {
-        if ( IsObjFly() )
-        {
-            mpFrmFmt = static_cast<SwVirtFlyDrawObj&>(mrDrawObj).GetFlyFrm()->GetFmt();
-        }
-        else
-        {
-            mpFrmFmt = static_cast<SwDrawContact*>(mpContact)->GetFmt();
-        }
-
+        // --> OD 2004-07-01 #i28701#
+        mpFrmFmt = &mpAnchoredObj->GetFrmFmt();
         ASSERT( mpFrmFmt,
                 "<SwAnchoredObjectPosition::_GetInfoAboutObj() - missing frame format." );
     }
@@ -487,84 +480,70 @@ SwTwips SwAnchoredObjectPosition::_GetVertRelPos(
 
     OD 2004-07-22 #i31805# - add 3rd parameter <_bCheckBottom>
 
+    --> OD 2004-07-01 #i28701# - parameter <_nTopOfAnch> and <_bVert> added
+
     @author OD
 */
-SwTwips SwAnchoredObjectPosition::_AdjustVertRelPos(
-                                                const SwFrm&  _rPageAlignLayFrm,
-                                                const SwTwips _nProposedRelPosY,
-                                                const bool _bCheckBottom ) const
+SwTwips SwAnchoredObjectPosition::_AdjustVertRelPos( const SwTwips _nTopOfAnch,
+                                                     const bool _bVert,
+                                                     const SwFrm&  _rPageAlignLayFrm,
+                                                     const SwTwips _nProposedRelPosY,
+>                                                    const bool _bCheckBottom ) const
 {
     SwTwips nAdjustedRelPosY = _nProposedRelPosY;
-
-    const SwFrm& rAnchorFrm = GetAnchorFrm();
-    SWRECTFN( (&rAnchorFrm) );
 
     const Size aObjSize( GetAnchoredObj().GetObjRect().SSize() );
 
     // determine the area of 'page' alignment frame, to which the vertical
     // position is restricted.
-    SwRect aPgAlignArea = _rPageAlignLayFrm.Frm();
-    /* OD 29.10.2003 - extension of 'page' alignment area, if 'page' alignment
-                       frame is a page isn't applied yet
+    // --> OD 2004-07-06 #i28701# - Extend restricted area for the vertical
+    // position to area of the page frame, if wrapping style influence is
+    // considered on object positioning. Needed to avoid layout loops in the
+    // object positioning algorithm considering the wrapping style influence
+    // caused by objects, which follow the text flow and thus are restricted
+    // to its environment (e.g. page header/footer).
+    SwRect aPgAlignArea;
     {
-        if ( _rPageAlignLayFrm.ISA(SwPageFrm) )
+        if ( GetFrmFmt().GetDoc()->ConsiderWrapOnObjPos() )
         {
-            // extend 'page' area by size of object descreased by 10pt == 200 SwTwips
-            if ( bVert )
-            {
-                SwTwips nExtend = aObjSize.Width() - 200;
-                if ( nExtend > 0 )
-                {
-                    aPgAlignArea.Left( aPgAlignArea.Left() - nExtend );
-                    aPgAlignArea.Right( aPgAlignArea.Right() + nExtend );
-                }
-            }
-            else
-            {
-                SwTwips nExtend = aObjSize.Height() - 200;
-                if ( nExtend > 0 )
-                {
-                    aPgAlignArea.Top( aPgAlignArea.Top() - nExtend );
-                    aPgAlignArea.Bottom( aPgAlignArea.Bottom() + nExtend );
-                }
-            }
+            aPgAlignArea = _rPageAlignLayFrm.FindPageFrm()->Frm();
+        }
+        else
+        {
+            aPgAlignArea = _rPageAlignLayFrm.Frm();
         }
     }
-    */
 
-    if ( bVert )
+    if ( _bVert )
     {
         // OD 2004-07-22 #i31805# - consider value of <_bCheckBottom>
         if ( _bCheckBottom &&
-             rAnchorFrm.Frm().Right() - nAdjustedRelPosY - aObjSize.Width() <
+             _nTopOfAnch - nAdjustedRelPosY - aObjSize.Width() <
                 aPgAlignArea.Left() )
         {
             nAdjustedRelPosY = aPgAlignArea.Left() +
-                               rAnchorFrm.Frm().Right() -
+                               _nTopOfAnch -
                                aObjSize.Width();
         }
-        if ( rAnchorFrm.Frm().Right() + nAdjustedRelPosY >
-                aPgAlignArea.Right() )
+        if ( _nTopOfAnch + nAdjustedRelPosY > aPgAlignArea.Right() )
         {
-            nAdjustedRelPosY = aPgAlignArea.Right() -
-                               rAnchorFrm.Frm().Right();
+            nAdjustedRelPosY = aPgAlignArea.Right() - _nTopOfAnch;
         }
     }
     else
     {
         // OD 2004-07-22 #i31805# - consider value of <_bCheckBottom>
         if ( _bCheckBottom &&
-             rAnchorFrm.Frm().Top() + nAdjustedRelPosY + aObjSize.Height() >
+             _nTopOfAnch + nAdjustedRelPosY + aObjSize.Height() >
                 aPgAlignArea.Bottom() )
         {
             nAdjustedRelPosY = aPgAlignArea.Bottom() -
-                               rAnchorFrm.Frm().Top() -
+                               _nTopOfAnch -
                                aObjSize.Height();
         }
-        if ( rAnchorFrm.Frm().Top() + nAdjustedRelPosY <
-                aPgAlignArea.Top() )
+        if ( _nTopOfAnch + nAdjustedRelPosY <  aPgAlignArea.Top() )
         {
-            nAdjustedRelPosY = aPgAlignArea.Top() - rAnchorFrm.Frm().Top();
+            nAdjustedRelPosY = aPgAlignArea.Top() - _nTopOfAnch;
         }
     }
 
@@ -911,39 +890,40 @@ SwTwips SwAnchoredObjectPosition::_CalcRelPosX(
         nRelPosX += (*fnRect->fnXDiff)( nLeftOrient, nLeftAnchor );
     }
 
-    // adjust relative horizontal position, if object is manual horizontal
-    // positioned (not 'page' aligned) and orients not at the anchor frame,
-    // but it overlaps anchor frame.
-    if ( _rHoriOrient.GetHoriOrient() == HORI_NONE && !bAlignedRelToPage &&
-         &rAnchorFrm != &_rHoriOrientFrm )
-    {
-        // E.g.: consider a columned page/section with an horizontal
-        //       negative positioned object.
-        // OD 2004-03-23 #i26791#
-        const SwRect& rObjRect = GetAnchoredObj().GetObjRect();
-        if( bVert )
-        {
-            if( _rHoriOrientFrm.Frm().Top() > rAnchorFrm.Frm().Bottom() &&
-                rObjRect.Right() > rAnchorFrm.Frm().Left() )
-            {
-                const SwTwips nProposedPosX = nRelPosX + rAnchorFrm.Frm().Top();
-                if ( nProposedPosX < rAnchorFrm.Frm().Bottom() )
-                    nRelPosX = rAnchorFrm.Frm().Height() + 1;
-            }
-        }
-        else
-        {
-            if( _rHoriOrientFrm.Frm().Left() > rAnchorFrm.Frm().Right() &&
-                rObjRect.Top() < rAnchorFrm.Frm().Bottom() )
-            {
-                // OD 04.08.2003 #110978# - correction: use <nRelPosX>
-                // instead of <aRelPos.X()>
-                const SwTwips nProposedPosX = nRelPosX + rAnchorFrm.Frm().Left();
-                if ( nProposedPosX < rAnchorFrm.Frm().Right() )
-                    nRelPosX = rAnchorFrm.Frm().Width() + 1;
-            }
-        }
-    }
+    // OD 2004-05-21 #i28701# - deactivate follow code
+//    // adjust relative horizontal position, if object is manual horizontal
+//    // positioned (not 'page' aligned) and orients not at the anchor frame,
+//    // but it overlaps anchor frame.
+//    if ( _rHoriOrient.GetHoriOrient() == HORI_NONE && !bAlignedRelToPage &&
+//         &rAnchorFrm != &_rHoriOrientFrm )
+//    {
+//        // E.g.: consider a columned page/section with an horizontal
+//        //       negative positioned object.
+//        // OD 2004-03-23 #i26791#
+//        const SwRect& rObjRect = GetAnchoredObj().GetObjRect();
+//        if( bVert )
+//        {
+//            if( _rHoriOrientFrm.Frm().Top() > rAnchorFrm.Frm().Bottom() &&
+//                rObjRect.Right() > rAnchorFrm.Frm().Left() )
+//            {
+//                const SwTwips nProposedPosX = nRelPosX + rAnchorFrm.Frm().Top();
+//                if ( nProposedPosX < rAnchorFrm.Frm().Bottom() )
+//                    nRelPosX = rAnchorFrm.Frm().Height() + 1;
+//            }
+//        }
+//        else
+//        {
+//            if( _rHoriOrientFrm.Frm().Left() > rAnchorFrm.Frm().Right() &&
+//                rObjRect.Top() < rAnchorFrm.Frm().Bottom() )
+//            {
+//                // OD 04.08.2003 #110978# - correction: use <nRelPosX>
+//                // instead of <aRelPos.X()>
+//                const SwTwips nProposedPosX = nRelPosX + rAnchorFrm.Frm().Left();
+//                if ( nProposedPosX < rAnchorFrm.Frm().Right() )
+//                    nRelPosX = rAnchorFrm.Frm().Width() + 1;
+//            }
+//        }
+//    }
     // adjust calculated relative horizontal position, in order to
     // keep object inside 'page' alignment layout frame
     const SwFrm& rEnvironmentLayFrm =
