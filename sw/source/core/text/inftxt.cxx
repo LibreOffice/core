@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-29 16:41:23 $
+ *  last change: $Author: fme $ $Date: 2001-10-30 09:39:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,6 +188,10 @@ using namespace ::com::sun::star::beans;
 extern const sal_Char __FAR_DATA sBulletFntName[];
 
 extern void MA_FASTCALL SwAlignRect( SwRect &rRect, ViewShell *pSh );
+
+#ifdef VERTICAL_LAYOUT
+extern USHORT UnMapDirection( USHORT nDir, const BOOL bVertFormat );
+#endif
 
 #ifndef PRODUCT
 // Test2: WYSIWYG++
@@ -884,7 +888,12 @@ void SwTxtPaintInfo::DrawPostIts( const SwLinePortion &rPor, sal_Bool bScript ) 
         const USHORT nFontHeight = pFnt->GetHeight( pVsh, GetOut() );
         const USHORT nFontAscent = pFnt->GetAscent( pVsh, GetOut() );
 
+#ifdef VERTICAL_LAYOUT
+        switch ( UnMapDirection( pFnt->GetOrientation(),
+                                 GetTxtFrm()->IsVertical() ) )
+#else
         switch ( pFnt->GetOrientation() )
+#endif
         {
         case 0 :
             aSize.Width() = nPostItsWidth;
@@ -907,7 +916,18 @@ void SwTxtPaintInfo::DrawPostIts( const SwLinePortion &rPor, sal_Bool bScript ) 
             break;
         }
 
+#ifdef VERTICAL_LAYOUT
+        SwRect aTmpRect( aTmp, aSize );
+
+        if ( GetTxtFrm()->IsVertical() )
+            GetTxtFrm()->SwitchHorizontalToVertical( aTmpRect );
+
+        const Rectangle aRect( aTmpRect.Pos(),
+                               Size( aTmpRect.Width(), aTmpRect.Height() ) );
+#else
         const Rectangle aRect( aTmp, aSize );
+#endif
+
         pOpt->PaintPostIts( pWin, aRect, bScript ? COL_LIGHTGREEN : COL_YELLOW );
     }
 }

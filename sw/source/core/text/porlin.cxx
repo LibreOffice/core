@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlin.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mh $ $Date: 2001-10-25 17:10:38 $
+ *  last change: $Author: fme $ $Date: 2001-10-30 09:41:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,9 @@ sal_Bool ChkChain( SwLinePortion *pStart )
 #ifdef DEBUG
 const sal_Char *GetPortionName( const MSHORT nType );
 #endif
+#ifdef VERTICAL_LAYOUT
+extern USHORT UnMapDirection( USHORT nDir, const BOOL bVertFormat );
+#endif
 
 SwLinePortion::~SwLinePortion()
 {
@@ -157,7 +160,12 @@ void SwLinePortion::PrePaint( const SwTxtPaintInfo& rInf,
     KSHORT nPos;
     SwTxtPaintInfo aInf( rInf );
 
+#ifdef VERTICAL_LAYOUT
+    switch ( UnMapDirection( rInf.GetFont()->GetOrientation(),
+                                  rInf.GetTxtFrm()->IsVertical() ) )
+#else
     switch ( rInf.GetFont()->GetOrientation() )
+#endif
     {
     case 0 :
         nPos = KSHORT( rInf.X() );
