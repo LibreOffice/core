@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshtxt.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: thb $ $Date: 2002-05-27 16:42:43 $
+ *  last change: $Author: thb $ $Date: 2002-05-29 16:07:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -764,7 +764,9 @@ Rectangle SvxTextEditSourceImpl::GetVisArea() const
             pTextObj->TakeTextAnchorRect( aAnchorRect );
             aVisArea.Move( -aAnchorRect.Left(), -aAnchorRect.Top() );
 
-            return mpWindow->LogicToPixel( aVisArea );
+            MapMode aMapMode(mpWindow->GetMapMode());
+            aMapMode.SetOrigin(Point());
+            return mpWindow->LogicToPixel( aVisArea, aMapMode );
         }
     }
 
@@ -773,10 +775,13 @@ Rectangle SvxTextEditSourceImpl::GetVisArea() const
 
 Point SvxTextEditSourceImpl::LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const
 {
-    if( IsValid() )
+    if( IsValid() && mpModel )
     {
-        Point aPoint( mpWindow->LogicToLogic( rPoint, rMapMode, mpWindow->GetMapMode() ) );
-        return mpWindow->LogicToPixel( aPoint );
+        Point aPoint( OutputDevice::LogicToLogic( rPoint, rMapMode,
+                                                  MapMode(mpModel->GetScaleUnit()) ) );
+        MapMode aMapMode(mpWindow->GetMapMode());
+        aMapMode.SetOrigin(Point());
+        return mpWindow->LogicToPixel( aPoint, aMapMode );
     }
 
     return Point();
@@ -784,10 +789,14 @@ Point SvxTextEditSourceImpl::LogicToPixel( const Point& rPoint, const MapMode& r
 
 Point SvxTextEditSourceImpl::PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const
 {
-    if( IsValid() )
+    if( IsValid() && mpModel )
     {
-        Point aPoint( mpWindow->PixelToLogic( rPoint ) );
-        return mpWindow->LogicToLogic( rPoint, mpWindow->GetMapMode(), rMapMode );
+        MapMode aMapMode(mpWindow->GetMapMode());
+        aMapMode.SetOrigin(Point());
+        Point aPoint( mpWindow->PixelToLogic( rPoint, aMapMode ) );
+        return OutputDevice::LogicToLogic( aPoint,
+                                           MapMode(mpModel->GetScaleUnit()),
+                                           rMapMode );
     }
 
     return Point();
