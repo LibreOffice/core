@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-30 10:17:59 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:39:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,7 +322,9 @@ SwGrfNode * SwEditShell::_GetGrfNode() const
         pCrsr->GetPoint()->nNode == pCrsr->GetMark()->nNode )
         pGrfNode = pCrsr->GetPoint()->nNode.GetNode().GetGrfNode();
 
+
     ASSERT( pGrfNode, "ist keine Graphic!!" );
+
     return pGrfNode;
 }
 /******************************************************************************
@@ -420,7 +422,7 @@ void SwEditShell::GetGrfNms( String* pGrfName, String* pFltName,
     else
     {
         SwGrfNode *pGrfNode = _GetGrfNode();
-        if( pGrfNode->IsLinkedFile() )
+        if( pGrfNode && pGrfNode->IsLinkedFile() )
             pGrfNode->GetFileFilterNms( pGrfName, pFltName );
     }
 }
