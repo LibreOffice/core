@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconrec.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cl $ $Date: 2001-10-16 15:37:13 $
+ *  last change: $Author: hr $ $Date: 2001-10-18 16:13:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -647,7 +647,7 @@ XPolygon getPolygon( sal_uInt16 nResId, SdrModel* pDoc )
 
     if( pLineEndList )
     {
-        String aArrowName( SVX_RESSTR(nResId) );
+        String aArrowName( SVX_RES(nResId) );
         long nCount = pLineEndList->Count();
         long nIndex;
         for( nIndex = 0; nIndex < nCount; nIndex++ )
