@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-08 08:56:33 $
+ *  last change: $Author: oj $ $Date: 2002-03-26 07:52:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,8 +203,10 @@ namespace dbaui
             ID_BROWSER_ADDTABLE and ID_RELATION_ADD_RELATION also the modified flag will be set to true
             @param  _pConnection
                     the connection which should be added
+            @param  _bAddData
+                    <TRUE/> when the data should also be appended
         */
-        void addConnection(OTableConnection* _pConnection);
+        void addConnection(OTableConnection* _pConnection,sal_Bool _bAddData = sal_True);
 
         BOOL            Scroll( long nDelta, BOOL bHoriz, BOOL bPaintScrollBars );
         ULONG           GetTabWinCount();

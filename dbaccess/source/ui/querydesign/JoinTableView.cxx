@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-11 12:53:01 $
+ *  last change: $Author: oj $ $Date: 2002-03-26 07:52:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1661,9 +1661,16 @@ void OJoinTableView::childCountChanged(sal_Int32 _nOldCount)
         m_pAccessible->notifyAccessibleEvent(3/* AccessibleEventId::ACCESSIBLE_CHILD_EVENT */,makeAny(_nOldCount),makeAny(GetTabWinCount() + getTableConnections()->size()));
 }
 // -----------------------------------------------------------------------------
-void OJoinTableView::addConnection(OTableConnection* _pConnection)
+void OJoinTableView::addConnection(OTableConnection* _pConnection,sal_Bool _bAddData)
 {
-    m_pView->getController()->getTableConnectionData()->push_back(_pConnection->GetData());
+    if ( _bAddData )
+    {
+#if _DEBUG
+        ::std::vector< OTableConnectionData*>* pTabConnDataList = m_pView->getController()->getTableConnectionData();
+        OSL_ENSURE( ::std::find(pTabConnDataList->begin(),pTabConnDataList->end(),_pConnection->GetData()) == pTabConnDataList->end(),"Data already in vector!");
+#endif
+        m_pView->getController()->getTableConnectionData()->push_back(_pConnection->GetData());
+    }
     m_vTableConnection.push_back(_pConnection);
     _pConnection->Invalidate(),
     childCountChanged(m_vTableConnection.size() - 1);
