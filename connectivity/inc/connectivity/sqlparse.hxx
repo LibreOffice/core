@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlparse.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hjs $ $Date: 2002-03-06 12:56:01 $
+ *  last change: $Author: fs $ $Date: 2002-04-08 16:23:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,6 +167,19 @@ namespace connectivity
 
         // determines the default international setting
         static const ::com::sun::star::lang::Locale& getDefaultLocale();
+
+        /** set's the default locale which should be used when analyzing strings
+            <p>If no locale is set, and any method which needs a locale is called, a default
+            (en-US) is used.</p>
+            <p>If, while parsing, the locale can be obtained from other sources (such as the number format
+            set for a table column), the preferred locale is ignored.</p>
+        */
+        static void setDefaultLocale( const ::com::sun::star::lang::Locale& _rLocale );
+
+        /** get's a locale instance which should be used when parsing in the context specified by this instance
+            <p>if this is not overridden by derived classes, it returns the static default locale.</p>
+        */
+        virtual ::com::sun::star::lang::Locale getPreferredLocale( ) const;
     };
 
     //==========================================================================
@@ -197,6 +210,7 @@ namespace connectivity
         ::com::sun::star::lang::Locale* m_pLocale;      // current locale settings for parsing
         ::rtl::OUString                     m_sFieldName;   // current field name for a predicate
         ::rtl::OUString                     m_sErrorMessage;// current error msg
+
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                                     m_xField;       // current field
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >
