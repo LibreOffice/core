@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtercachedata.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: as $ $Date: 2001-08-27 10:41:32 $
+ *  last change: $Author: as $ $Date: 2001-10-24 09:33:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -787,6 +787,8 @@ typedef PreferredHash::const_iterator                               ConstPreferr
 typedef CheckedIterator< StringList >                               CheckedStringListIterator   ;
 typedef CheckedIterator< FileTypeHash >                             CheckedTypeIterator         ;
 typedef CheckedIterator< PerformanceHash >                          CheckedPerformanceIterator  ;
+
+typedef ::std::vector< ConstFilterIterator >                        FilterQuery                 ;
 
 //*****************************************************************************************************************
 // Use private static data container to hold all values of configuration!
