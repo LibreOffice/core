@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fetab.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 11:09:26 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 11:39:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,10 +168,18 @@
 
 inline BOOL IsSame( long nA, long nB ) { return  Abs(nA-nB) <= COLFUZZY; }
 
+// table column cache
 SwTabCols *pLastCols   = 0;
-const SwTable   *pLastTable  = 0;
-const SwTabFrm  *pLastTabFrm = 0;
-const SwFrm     *pLastCellFrm = 0;
+const SwTable   *pColumnCacheLastTable  = 0;
+const SwTabFrm  *pColumnCacheLastTabFrm = 0;
+const SwFrm     *pColumnCacheLastCellFrm = 0;
+
+// table row cache
+SwTabCols *pLastRows   = 0;
+const SwTable   *pRowCacheLastTable  = 0;
+const SwTabFrm  *pRowCacheLastTabFrm = 0;
+const SwFrm     *pRowCacheLastCellFrm = 0;
+
 
 class TblWait
 {
@@ -636,6 +644,7 @@ BOOL SwFEShell::SplitTab( BOOL bVert, USHORT nCnt, BOOL bSameHeight )
         bRet = GetDoc()->SplitTbl( aBoxes, bVert, nCnt, bSameHeight );
 
         DELETEZ( pLastCols );
+        DELETEZ( pLastRows );
     }
     else
         bRet = FALSE;
@@ -657,7 +666,7 @@ void SwFEShell::_GetTabCols( SwTabCols &rToFill, const SwFrm *pBox ) const
     {
         //Paar Kleinigkeiten muessen wir schon noch sicherstellen
         FASTBOOL bDel = TRUE;
-        if ( pLastTable == pTab->GetTable() )
+        if ( pColumnCacheLastTable == pTab->GetTable() )
         {
             bDel = FALSE;
             SWRECTFN( pTab )
@@ -670,12 +679,12 @@ void SwFEShell::_GetTabCols( SwTabCols &rToFill, const SwFrm *pBox ) const
                                     (pPage->Frm().*fnRect->fnGetLeft)() +
                                    DOCUMENTBORDER;
 
-            if ( pLastTabFrm != pTab )
+            if ( pColumnCacheLastTabFrm != pTab )
             {
                 //Wenn der TabFrm gewechselt hat, brauchen wir bei gleicher
                 //Breite nur ein wenig shiften.
-                SWRECTFNX( pLastTabFrm )
-                if( (pLastTabFrm->Frm().*fnRect->fnGetWidth)() ==
+                SWRECTFNX( pColumnCacheLastTabFrm )
+                if( (pColumnCacheLastTabFrm->Frm().*fnRect->fnGetWidth)() ==
                     (pTab->Frm().*fnRect->fnGetWidth)() )
                 {
                     pLastCols->SetLeftMin( nLeftMin );
@@ -684,7 +693,7 @@ void SwFEShell::_GetTabCols( SwTabCols &rToFill, const SwFrm *pBox ) const
                             pLastCols->GetLeftMin() == (pTab->Frm().*fnRect->fnGetLeft)(),
                             "GetTabCols: wrong result" )
 
-                    pLastTabFrm = pTab;
+                    pColumnCacheLastTabFrm = pTab;
                 }
                 else
                     bDel = TRUE;
@@ -696,11 +705,11 @@ void SwFEShell::_GetTabCols( SwTabCols &rToFill, const SwFrm *pBox ) const
                  pLastCols->GetRight   () == (USHORT)(pTab->Prt().*fnRect->fnGetRight)()&&
                  pLastCols->GetRightMax() == (USHORT)nRightMax - pLastCols->GetLeftMin() )
             {
-                if ( pLastCellFrm != pBox )
+                if ( pColumnCacheLastCellFrm != pBox )
                 {
                     pTab->GetTable()->GetTabCols( *pLastCols,
                                         ((SwCellFrm*)pBox)->GetTabBox(), TRUE);
-                    pLastCellFrm = pBox;
+                    pColumnCacheLastCellFrm = pBox;
                 }
                 rToFill = *pLastCols;
             }
@@ -715,9 +724,71 @@ void SwFEShell::_GetTabCols( SwTabCols &rToFill, const SwFrm *pBox ) const
         GetDoc()->GetTabCols( rToFill, 0, (SwCellFrm*)pBox );
 
         pLastCols   = new SwTabCols( rToFill );
-        pLastTable  = pTab->GetTable();
-        pLastTabFrm = pTab;
-        pLastCellFrm= pBox;
+        pColumnCacheLastTable  = pTab->GetTable();
+        pColumnCacheLastTabFrm = pTab;
+        pColumnCacheLastCellFrm= pBox;
+    }
+
+#if OSL_DEBUG_LEVEL > 1
+    SwTabColsEntry aEntry;
+    for ( int i = 0; i < rToFill.Count(); ++i )
+    {
+        aEntry = rToFill.GetEntry( i );
+    }
+#endif
+}
+
+/***********************************************************************
+#*  Class      :  SwFEShell
+#*  Methoden   :  _GetTabRows
+#*  Datum      :  FME 2004-01-14
+#*  Update     :
+#***********************************************************************/
+void SwFEShell::_GetTabRows( SwTabCols &rToFill, const SwFrm *pBox ) const
+{
+    const SwTabFrm *pTab = pBox->FindTabFrm();
+    if ( pLastRows )
+    {
+        //Paar Kleinigkeiten muessen wir schon noch sicherstellen
+        FASTBOOL bDel = TRUE;
+        if ( pRowCacheLastTable == pTab->GetTable() )
+        {
+            bDel = FALSE;
+            SWRECTFN( pTab )
+
+            const SwPageFrm* pPage = pTab->FindPageFrm();
+            ULONG nLeftMin = (*fnRect->fnYDiff)(
+                                        (pTab->Frm().*fnRect->fnGetTop)(),
+                                        (pPage->Frm().*fnRect->fnGetTop)() );
+            nLeftMin += DOCUMENTBORDER;
+            const ULONG nRightMax = LONG_MAX;
+
+            if ( pRowCacheLastTabFrm != pTab ||
+                 pRowCacheLastCellFrm != pBox )
+                bDel = TRUE;
+
+            if ( !bDel &&
+                 pLastRows->GetLeftMin () == (USHORT)nLeftMin &&
+                 pLastRows->GetLeft    () == (USHORT)(pTab->Prt().*fnRect->fnGetTop)() &&
+                 pLastRows->GetRight   () == (USHORT)(pTab->Prt().*fnRect->fnGetBottom)()&&
+                 pLastRows->GetRightMax() == nRightMax )
+            {
+                rToFill = *pLastRows;
+            }
+            else
+                bDel = TRUE;
+        }
+        if ( bDel )
+            DELETEZ(pLastRows);
+    }
+    if ( !pLastRows )
+    {
+        GetDoc()->GetTabRows( rToFill, 0, (SwCellFrm*)pBox );
+
+        pLastRows   = new SwTabCols( rToFill );
+        pRowCacheLastTable  = pTab->GetTable();
+        pRowCacheLastTabFrm = pTab;
+        pRowCacheLastCellFrm= pBox;
     }
 }
 
@@ -754,6 +825,63 @@ void SwFEShell::GetTabCols( SwTabCols &rToFill ) const
     } while ( !pFrm->IsCellFrm() );
 
     _GetTabCols( rToFill, pFrm );
+}
+
+/*-- 19.01.2004 08:56:42---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwFEShell::GetTabRows( SwTabCols &rToFill ) const
+{
+    const SwFrm *pFrm = GetCurrFrm();
+    if( !pFrm->IsInTab() )
+        return;
+    do
+    {   pFrm = pFrm->GetUpper();
+    } while ( !pFrm->IsCellFrm() );
+
+    _GetTabRows( rToFill, pFrm );
+}
+/*-- 19.01.2004 08:56:44---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwFEShell::SetTabRows( const SwTabCols &rNew, BOOL bCurColOnly )
+{
+    SwFrm *pBox = GetCurrFrm();
+    if( !pBox->IsInTab() )
+        return;
+
+    SET_CURR_SHELL( this );
+    StartAllAction();
+
+    do {
+        pBox = pBox->GetUpper();
+    } while ( !pBox->IsCellFrm() );
+
+    GetDoc()->SetTabRows( rNew, bCurColOnly, 0, (SwCellFrm*)pBox );
+    EndAllActionAndCall();
+}
+/*-- 19.01.2004 08:59:45---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwFEShell::GetMouseTabRows( SwTabCols &rToFill, const Point &rPt ) const
+{
+    const SwFrm *pBox = GetBox( rPt );
+    if ( pBox )
+        _GetTabRows( rToFill, pBox );
+}
+/*-- 19.01.2004 08:59:45---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwFEShell::SetMouseTabRows( const SwTabCols &rNew, BOOL bCurColOnly, const Point &rPt )
+{
+    const SwFrm *pBox = GetBox( rPt );
+    if( pBox )
+    {
+        SET_CURR_SHELL( this );
+        StartAllAction();
+        GetDoc()->SetTabRows( rNew, bCurColOnly, 0, (SwCellFrm*)pBox );
+        EndAllActionAndCall();
+    }
 }
 
 /***********************************************************************
@@ -1254,6 +1382,7 @@ BOOL SwFEShell::SetTableAutoFmt( const SwTableAutoFmt& rNew )
         StartAllAction();
         bRet = GetDoc()->SetTableAutoFmt( aBoxes, rNew );
         DELETEZ( pLastCols );
+        DELETEZ( pLastRows );
         EndAllActionAndCall();
     }
     else
@@ -1329,6 +1458,7 @@ BOOL SwFEShell::DeleteTblSel()
         bRet = GetDoc()->DeleteRowCol( aBoxes );
 
         DELETEZ( pLastCols );
+        DELETEZ( pLastRows );
     }
     else
         bRet = FALSE;
@@ -1436,7 +1566,8 @@ const SwFrm *lcl_FindFrmInTab( const SwLayoutFrm *pLay, const Point &rPt, SwTwip
     return 0;
 }
 
-const SwFrm *lcl_FindFrm( const SwLayoutFrm *pLay, const Point &rPt, SwTwips nFuzzy )
+const SwFrm *lcl_FindFrm( const SwLayoutFrm *pLay, const Point &rPt,
+                          SwTwips nFuzzy, bool* pbRow )
 {
     const SwFrm *pFrm = pLay->ContainsCntnt();
     if ( pFrm )
@@ -1465,17 +1596,17 @@ const SwFrm *lcl_FindFrm( const SwLayoutFrm *pLay, const Point &rPt, SwTwips nFu
                 pFrm = pFrm->GetUpper();
             if ( pFrm )
             {
-                if( pFrm->IsVertical() )
+                if ( ::IsSame(pFrm->Frm().Left(), rPt.X()) ||
+                     ::IsSame(pFrm->Frm().Right(),rPt.X()) )
                 {
-                    if ( ::IsSame(pFrm->Frm().Top(), rPt.Y()) ||
-                         ::IsSame(pFrm->Frm().Bottom(),rPt.Y()) )
-                        return pFrm;
+                    if ( pbRow ) *pbRow = false;
+                    return pFrm;
                 }
-                else
+                if ( ::IsSame(pFrm->Frm().Top(), rPt.Y()) ||
+                     ::IsSame(pFrm->Frm().Bottom(),rPt.Y()) )
                 {
-                    if ( ::IsSame(pFrm->Frm().Left(), rPt.X()) ||
-                         ::IsSame(pFrm->Frm().Right(),rPt.X()) )
-                        return pFrm;
+                    if ( pbRow ) *pbRow = true;
+                    return pFrm;
                 }
                 pFrm = pFrm->GetUpper();
             }
@@ -1484,7 +1615,7 @@ const SwFrm *lcl_FindFrm( const SwLayoutFrm *pLay, const Point &rPt, SwTwips nFu
     return 0;
 }
 
-const SwFrm *SwFEShell::GetBox( const Point &rPt ) const
+const SwFrm *SwFEShell::GetBox( const Point &rPt, bool* pbRow ) const
 {
     const SwPageFrm *pPage = (SwPageFrm*)GetLayout()->Lower();
     Window* pOutWin = GetWin();
@@ -1515,14 +1646,14 @@ const SwFrm *SwFEShell::GetBox( const Point &rPt ) const
                 if ( pObj->ISA(SwVirtFlyDrawObj) )
                 {
                     pFrm = lcl_FindFrm( ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm(),
-                                        rPt, nFuzzy );
+                                        rPt, nFuzzy, pbRow );
                 }
             }
         }
         const SwLayoutFrm *pLay = (SwLayoutFrm*)pPage->Lower();
         while ( pLay && !pFrm )
         {
-            pFrm = lcl_FindFrm( pLay, rPt, nFuzzy );
+            pFrm = lcl_FindFrm( pLay, rPt, nFuzzy, pbRow );
             pLay = (SwLayoutFrm*)pLay->GetNext();
         }
     }
@@ -1540,7 +1671,8 @@ const SwFrm *SwFEShell::GetBox( const Point &rPt ) const
 |*************************************************************************/
 BYTE SwFEShell::WhichMouseTabCol( const Point &rPt ) const
 {
-    SwCellFrm* pFrm = (SwCellFrm*)GetBox( rPt );
+    bool bRow;
+    SwCellFrm* pFrm = (SwCellFrm*)GetBox( rPt, &bRow );
     if( pFrm )
     {
         while( pFrm->Lower()->IsRowFrm() )
@@ -1550,7 +1682,12 @@ BYTE SwFEShell::WhichMouseTabCol( const Point &rPt ) const
             pFrm = 0;
     }
     if( pFrm )
-        return pFrm->IsVertical() ? SW_TABCOL_VERT : SW_TABCOL_HORI;
+    {
+        if ( pFrm->IsVertical() )
+            return bRow ? SW_TABCOL_VERT : SW_TABROW_VERT;
+        else
+            return bRow ? SW_TABROW_HORI : SW_TABCOL_HORI;
+    }
     return SW_TABCOL_NONE;
 }
 
@@ -1629,6 +1766,7 @@ USHORT SwFEShell::GetCurMouseTabColNum( const Point &rPt ) const
 void ClearFEShellTabCols()
 {
     DELETEZ( pLastCols );
+    DELETEZ( pLastRows );
 }
 
 /*************************************************************************
