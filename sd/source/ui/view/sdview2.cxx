@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview2.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-14 15:52:32 $
+ *  last change: $Author: ka $ $Date: 2001-06-26 12:36:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -601,27 +601,22 @@ sal_Int8 SdView::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTar
             }
             else
             {
-                BOOL            bDrawing = rTargetHelper.IsDropFormatSupported( SOT_FORMATSTR_ID_DRAWING );
-                BOOL            bGraphic = rTargetHelper.IsDropFormatSupported( SOT_FORMATSTR_ID_SVXB );
-                BOOL            bMtf = rTargetHelper.IsDropFormatSupported( FORMAT_GDIMETAFILE );
-                BOOL            bBitmap = rTargetHelper.IsDropFormatSupported( FORMAT_BITMAP );
-                BOOL            bBookmark = rTargetHelper.IsDropFormatSupported( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK );
-                BOOL            bXFillExchange = rTargetHelper.IsDropFormatSupported( SOT_FORMATSTR_ID_XFA );
-                BOOL            bSBAFormat = rTargetHelper.IsDropFormatSupported( SOT_FORMATSTR_ID_SVX_FORMFIELDEXCH );
-                BOOL            bIsPresTarget = FALSE;
-                BOOL            nDefaultDrop = DND_ACTION_NONE;
-                //!!!DND BOOL   nDefaultDrop = nRet = FmFormView::AcceptDrop( rEvt, rTargetHelper, nPage, nLayer );
+                const BOOL  bDrawing = rTargetHelper.IsDropFormatSupported( SOT_FORMATSTR_ID_DRAWING );
+                const BOOL  bGraphic = rTargetHelper.IsDropFormatSupported( SOT_FORMATSTR_ID_SVXB );
+                const BOOL  bMtf = rTargetHelper.IsDropFormatSupported( FORMAT_GDIMETAFILE );
+                const BOOL  bBitmap = rTargetHelper.IsDropFormatSupported( FORMAT_BITMAP );
+                BOOL        bBookmark = rTargetHelper.IsDropFormatSupported( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK );
+                BOOL        bXFillExchange = rTargetHelper.IsDropFormatSupported( SOT_FORMATSTR_ID_XFA );
 
-                nDropAction = ( ( nDropAction & DND_ACTION_MOVE ) ? DND_ACTION_COPY : nDropAction );
-
-                if( !nDefaultDrop && ( ( ( bDrawing || bGraphic || bMtf || bBitmap || bBookmark ) && ( ( nDropAction & DND_ACTION_MOVE ) || ( nDropAction & DND_ACTION_LINK ) ) ) || bXFillExchange ) )
+                if( bXFillExchange || ( ( bDrawing || bGraphic || bMtf || bBitmap || bBookmark ) && ( nDropAction & DND_ACTION_LINK ) ) )
                 {
                     SdrObject*      pPickObj = NULL;
                     SdrPageView*    pPV = NULL;
                     SdWindow*       pWindow = pViewSh->GetActiveWindow();
-                    USHORT          nHitLog = USHORT( pWindow->PixelToLogic( Size( HITPIX, 0 ) ).Width() );
+                    USHORT          nHitLog = (USHORT) pWindow->PixelToLogic( Size( HITPIX, 0 ) ).Width();
                     Point           aPos( pWindow->PixelToLogic( rEvt.maPosPixel ) );
-                    BOOL            bHasPickObj = PickObj( aPos, pPickObj, pPV );
+                    const BOOL      bHasPickObj = PickObj( aPos, pPickObj, pPV );
+                    BOOL            bIsPresTarget = FALSE;
 
                     if( bHasPickObj && pPickObj && ( pPickObj->IsEmptyPresObj() || pPickObj->GetUserCall() ) )
                     {
@@ -632,10 +627,8 @@ sal_Int8 SdView::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTar
                     }
 
                     if( bHasPickObj && !bIsPresTarget &&
-                        ( !pPickObj->ISA( SdrGrafObj ) || bGraphic || bMtf || bBitmap ||
-                          ( bXFillExchange && !pPickObj->ISA( SdrGrafObj ) && !pPickObj->ISA( SdrOle2Obj ) ) ) )
+                        ( !pPickObj->ISA( SdrGrafObj ) || bGraphic || bMtf || bBitmap || ( bXFillExchange && !pPickObj->ISA( SdrGrafObj ) && !pPickObj->ISA( SdrOle2Obj ) ) ) )
                     {
-
                         if( !pDropMarker )
                             pDropMarker = new SdrViewUserMarker(this);
 
@@ -645,35 +638,33 @@ sal_Int8 SdView::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTar
                             pDropMarker->SetXPolyPolygon( pDropMarkerObj, GetPageViewPvNum( 0 ) );
                             pDropMarker->Show();
                         }
+
+                        nRet = DND_ACTION_LINK;
                     }
                     else
-                    {
                         bXFillExchange = FALSE;
-
-                        if( pDropMarker )
-                        {
-                            pDropMarker->Hide();
-                            pDropMarkerObj = NULL;
-                        }
-                    }
                 }
-                else
+
+                if( !nRet )
                 {
+                    const BOOL  bSBAFormat = rTargetHelper.IsDropFormatSupported( SOT_FORMATSTR_ID_SVX_FORMFIELDEXCH );
+                    const BOOL  bEditEngine = rTargetHelper.IsDropFormatSupported( SOT_FORMATSTR_ID_EDITENGINE );
+                    const BOOL  bString = rTargetHelper.IsDropFormatSupported( FORMAT_STRING );
+                    const BOOL  bRTF = rTargetHelper.IsDropFormatSupported( FORMAT_RTF );
+                    const BOOL  bFile = rTargetHelper.IsDropFormatSupported( FORMAT_FILE );
+
                     if( pDropMarker )
                     {
                         pDropMarker->Hide();
                         pDropMarkerObj = NULL;
                     }
+
+                    if( bBookmark && bFile && ( nDropAction & DND_ACTION_MOVE ) && ( !pViewSh || pViewSh->GetSlideShow() ) )
+                        bBookmark = FALSE;
+
+                    if( bDrawing || bGraphic || bMtf || bBitmap || bBookmark || bFile || bXFillExchange || bSBAFormat || bEditEngine || bString || bRTF )
+                        nRet = nDropAction;
                 }
-
-
-                BOOL bFile = ( rTargetHelper.IsDropFormatSupported( FORMAT_FILE ) && pViewSh && !pViewSh->GetSlideShow() && !( nDropAction & DND_ACTION_MOVE ) );
-
-                if( bBookmark && !bFile && rTargetHelper.IsDropFormatSupported( FORMAT_FILE ) )
-                    bBookmark = FALSE;
-
-                if( IsDragDropFormatSupported() || bFile || bBookmark || bGraphic || bXFillExchange || bSBAFormat || nDefaultDrop )
-                    nRet = nDropAction;
             }
         }
     }
@@ -736,7 +727,6 @@ sal_Int8 SdView::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rT
             if( pTargetWindow )
                 aPos = pTargetWindow->PixelToLogic( rEvt.maPosPixel );
 
-            //!!!DND if( !( bReturn = FmFormView::Drop(rMEvt, pWin) ) ) )
             if( !InsertData( aDataHelper, aPos, nDropAction, TRUE, 0, nPage, nLayer ) && pViewSh )
             {
                 String                  aTmpString1, aTmpString2;
