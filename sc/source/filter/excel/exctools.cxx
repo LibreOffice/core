@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exctools.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-09 15:01:16 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 12:01:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,10 +125,6 @@ RootData::RootData( void )
 
     pTabId = NULL;
     pUserBViewList = NULL;
-    pNameList = NULL;
-    pScNameList = NULL;
-    pExtSheetCntAndRecs = NULL;
-    nRowMax = 0;
 
     pObjRecs = NULL;
     pEscher = NULL;
@@ -139,25 +135,15 @@ RootData::RootData( void )
     pER = NULL;
 }
 
-
 RootData::~RootData()
 {
     delete pExtSheetBuff;
     delete pTabNameBuff;
     delete pShrfmlaBuff;
     delete pExtNameBuff;
-
-    if( pScNameList )
-        delete pScNameList;
-    if( pExtSheetCntAndRecs )
-        delete pExtSheetCntAndRecs;
-
     delete pAutoFilterBuffer;
     delete pPrintRanges;
     delete pPrintTitles;
-
-//  if( pCtrlStorage )
-//      delete pCtrlStorage;
 }
 
 
