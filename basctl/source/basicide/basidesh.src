@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-17 20:12:00 $
+ *  last change: $Author: kz $ $Date: 2001-08-21 20:35:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -378,13 +378,13 @@ String RID_STR_ERRORCHOOSEMACRO
     Text[ portuguese ] = "O acesso a macros de outros documentos é impossível.";
     Text[ russian ] = "Äîñòóï ê ìàêğîñàì äğóãèõ äîêóìåíòîâ íåâîçìîæåí.";
     Text[ greek ] = "Macros from other documents are not accessible.";
-    Text[ dutch ] = "Macros from other documents are not accessible.";
+    Text[ dutch ] = "Geen toegang tot macro's van andere documenten.";
     Text[ french ] = "Impossible d'accéder aux macros des autres documents !";
     Text[ spanish ] = "No se puede acceder a las macros de otros documentos.";
     Text[ finnish ] = "Macros from other documents are not accessible.";
     Text[ italian ] = "Impossibile accedere alle macro di altri documenti.";
     Text[ danish ] = "Macros from other documents are not accessible.";
-    Text[ swedish ] = "Macros from other documents are not accessible.";
+    Text[ swedish ] = "Makron från andra dokument är inte tillgängliga.";
     Text[ polish ] = "Macros from other documents are not accessible.";
     Text[ portuguese_brazilian ] = "Macros from other documents are not accessible.";
     Text[ japanese ] = "ã»ã‹ã®ï¾„ï¾ï½·ï½­ï¾’ï¾ï¾„ã®ï¾ï½¸ï¾›ã¸ã¯ï½±ï½¸ï½¾ï½½ã§ãã¾ã›ã‚“ã€‚";
@@ -469,7 +469,7 @@ String RID_STR_FILEEXISTS
     Text[ russian ] = "Ôàéë 'XX' óæå ñóùåñòâóåò";
     Text[ polish ] = "Plik 'XX' ju¿ istnieje.";
     Text[ japanese ] = "ã€ŒXXã€ï¾Œï½§ï½²ï¾™ã¯ã™ã§ã«ã‚ã‚Šã¾ã™ã€‚";
-    Text[ chinese_traditional ] = "æª”æ¡ˆ 'XX' å·²ç¶“å­˜åœ¨ã€‚";
+    Text[ chinese_traditional ] = "æª”æ¡ˆ<XX>å·²ç¶“å­˜åœ¨ã€‚";
     Text[ arabic ] = "ãæÌæÏ ãÓÈŞÇğ 'XX' Çáãáİ";
     Text[ dutch ] = "Bestand ''XX' bestaat reeds";
     Text[ chinese_simplified ] = "æ–‡ä»¶ 'XX' å·²ç»å­˜åœ¨ã€‚";
@@ -1228,7 +1228,7 @@ String RID_STR_REFNOTPOSSIBLE
     Text[ russian ] = "Ññûëêà íà 'XX' íåâîçìîæíà.";
     Text[ polish ] = "Odwo³anie do 'XX' nie jest mo¿liwe.";
     Text[ japanese ] = "ã€ŒXXã€ã¸ã®å‚ç…§ã¯ä¸å¯èƒ½ã§ã™ã€‚";
-    Text[ chinese_traditional ] = "ç„¡æ³•å¼•ç”¨'XX' ã€‚";
+    Text[ chinese_traditional ] = "ç„¡æ³•å¼•ç”¨<XX>ã€‚";
     Text[ arabic ] = ".ÛíÑ ããßä 'XX' ÇáãÑÌÚ Åáì";
     Text[ dutch ] = "Verwijzing naar ' XX' niet mogelijk.";
     Text[ chinese_simplified ] = "æ— æ³•å¼•ç”¨ 'XX' ã€‚";
@@ -2809,6 +2809,7 @@ Image RID_IMG_LOCKED
     ImageBitmap = Bitmap { File = "locked.bmp" ; };
     MaskColor = Color { Red = 0xFFFF ; Green = 0xFFFF ; Blue = 0xFFFF ; };
 };
+
 
 
 
