@@ -2,9 +2,9 @@
  *
  *  $RCSfile: standardcontrol.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 12:06:39 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 11:25:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -479,7 +479,7 @@ namespace pcr
     //==================================================================
     //= OColorControl
     //==================================================================
-    #define LB_DEFAULT_COUNT 9
+    #define LB_DEFAULT_COUNT 14
     //------------------------------------------------------------------
     String MakeHexStr(sal_uInt32 nVal, sal_uInt32 nLength)
     {
@@ -650,7 +650,7 @@ namespace pcr
             :OCommonBehaviourControl(this)
             ,ListBox(pParent, nWinStyle)
     {
-        SetDropDownLineCount(9);
+        SetDropDownLineCount( LB_DEFAULT_COUNT );
 
         SetSelectHdl(LINK( this, OCommonBehaviourControl, ModifiedHdl ));
         SetGetFocusHdl(LINK( this, OCommonBehaviourControl, GetFocusHdl));
@@ -754,7 +754,7 @@ namespace pcr
         SetGetFocusHdl(LINK( this, OCommonBehaviourControl, GetFocusHdl));
         SetLoseFocusHdl(LINK( this, OCommonBehaviourControl, LoseFocusHdl));
 
-        SetDropDownLineCount(9);
+        SetDropDownLineCount( LB_DEFAULT_COUNT );
     }
 
     //------------------------------------------------------------------
