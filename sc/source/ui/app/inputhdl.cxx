@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputhdl.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:18:00 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:01:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1404,8 +1404,7 @@ void ScInputHandler::UpdateAdjust( sal_Unicode cTyped )
     }
 
     BOOL bAsianVertical = pLastPattern &&
-        (SvxCellOrientation)((const SvxOrientationItem&)
-            pLastPattern->GetItem(ATTR_ORIENTATION)).GetValue() == SVX_ORIENTATION_STACKED &&
+        ((const SfxBoolItem&)pLastPattern->GetItem( ATTR_STACKED )).GetValue() &&
         ((const SfxBoolItem&)pLastPattern->GetItem( ATTR_VERTICAL_ASIAN )).GetValue();
     if ( bAsianVertical )
     {
