@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcvtjp6.tab,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:28 $
+ *  last change: $Author: th $ $Date: 2000-12-01 10:56:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2754,9 +2754,29 @@ static ImplTextEncodingData aImplJISX0201TextEncodingData =
 
 /* ======================================================================= */
 
+static ImplTextConverterData aImplJISX0212TextConverterData =
+{
+    aJIS0212DBCSHighTab,
+    NULL,
+    RTL_UNICODE_CHAR_DEFAULT,
+};
+
+static ImplTextConverter aImplJISX0212TextConverter =
+{
+    &aImplJISX0212TextConverterData,
+    NULL,
+    ImplUnicodeToJISX0208,  // can use same routine with JISX0208
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL
+};
+
 static ImplTextEncodingData aImplJISX0212TextEncodingData =
 {
-    NULL,
+    &aImplJISX0212TextConverter,
     RTL_TEXTENCODING_JIS_X_0212,
     2, 2, 2,
     128,
@@ -2767,3 +2787,4 @@ static ImplTextEncodingData aImplJISX0212TextEncodingData =
     RTL_TEXTENCODING_INFO_MULTIBYTE,
     SCRIPT_JAPANESE,
 };
+
