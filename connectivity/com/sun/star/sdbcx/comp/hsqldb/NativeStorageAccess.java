@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NativeStorageAccess.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:05:52 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:36:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ public class NativeStorageAccess {
     {
         if ( System.getProperty( "os.name" ).startsWith( "Windows" ) )
         {
-            NativeLibraryLoader.loadLibrary(StorageNativeOutputStream.class.getClassLoader(), "msvcr70");
+            NativeLibraryLoader.loadLibrary(StorageNativeOutputStream.class.getClassLoader(), "msvcr71");
             NativeLibraryLoader.loadLibrary(StorageNativeOutputStream.class.getClassLoader(), "uwinapi");
             NativeLibraryLoader.loadLibrary(StorageNativeOutputStream.class.getClassLoader(), "sal3");
         }
