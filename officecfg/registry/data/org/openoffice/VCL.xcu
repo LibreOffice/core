@@ -3,9 +3,9 @@
  *
  *  $RCSfile: VCL.xcu,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-28 07:57:56 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 16:36:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,11 @@
     <node oor:name="Accessibility" oor:op="replace">
       <prop oor:name="EnableATToolSupport" oor:type="xs:string" oor:op="replace">
         <value>false</value>
+      </prop>
+    </node>
+    <node oor:name="Transfer" oor:op="replace">
+      <prop oor:name="SelectionTimeout" oor:type="xs:string" oor:op="replace">
+        <value>3</value>
       </prop>
     </node>
   </node>
