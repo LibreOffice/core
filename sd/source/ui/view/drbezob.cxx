@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drbezob.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tbe $ $Date: 2000-10-23 10:40:00 $
+ *  last change: $Author: tbe $ $Date: 2000-11-10 16:32:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,9 +86,6 @@
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
 #endif
-//#ifndef _IDETEMP_HXX
-//#include <basctl/idetemp.hxx>
-//#endif
 
 #pragma hdrstop
 

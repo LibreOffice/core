@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fudraw.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tbe $ $Date: 2000-10-23 10:34:18 $
+ *  last change: $Author: tbe $ $Date: 2000-11-10 16:23:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,6 @@
 #include "sdresid.hxx"
 #include "drawview.hxx"
 #include "fusel.hxx"
-//#include <basctl/idetemp.hxx>
 #ifndef _AEITEM_HXX //autogen
 #include <svtools/aeitem.hxx>
 #endif

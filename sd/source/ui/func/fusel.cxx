@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fusel.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 11:46:16 $
+ *  last change: $Author: tbe $ $Date: 2000-11-10 16:28:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,6 @@
 #include <svtools/urihelper.hxx>
 #include <svx/svxids.hrc>
 #include <svx/xfillit0.hxx>
-//#include <basctl/idetemp.hxx>
 
 #ifndef _SFXVIEWFRM_HXX //autogen
 #include <sfx2/viewfrm.hxx>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupoor.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tbe $ $Date: 2000-10-23 10:36:04 $
+ *  last change: $Author: tbe $ $Date: 2000-11-10 16:26:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,6 @@
 #pragma hdrstop
 
 #include <svx/svxids.hrc>
-//#include <basctl/idetemp.hxx>
 
 #ifndef _AEITEM_HXX //autogen
 #include <svtools/aeitem.hxx>

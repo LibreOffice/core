@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drvwshrg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tbe $ $Date: 2000-10-23 10:47:01 $
+ *  last change: $Author: tbe $ $Date: 2000-11-10 16:39:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,6 @@
 #include <sfx2/templdlg.hxx>
 #endif
 
-//#include <basctl/idetemp.hxx>
 #include <svx/fontwork.hxx>
 #include <svx/bmpmask.hxx>
 #include <svx/galbrws.hxx>

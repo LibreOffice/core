@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconbez.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 11:46:16 $
+ *  last change: $Author: tbe $ $Date: 2000-11-10 16:18:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,6 @@
  *
  ************************************************************************/
 
-//#include <basctl/idetemp.hxx>
 #ifndef _AEITEM_HXX //autogen
 #include <svtools/aeitem.hxx>
 #endif

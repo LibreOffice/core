@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 11:50:43 $
+ *  last change: $Author: tbe $ $Date: 2000-11-10 16:34:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,9 +105,6 @@
 #ifndef _EEITEM_HXX //autogen
 #include <svx/eeitem.hxx>
 #endif
-//#ifndef _IDETEMP_HXX //autogen
-//#include <basctl/idetemp.hxx>
-//#endif
 #ifndef _SB_SBSTAR_HXX //autogen
 #include <basic/sbstar.hxx>
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futempl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 11:46:17 $
+ *  last change: $Author: tbe $ $Date: 2000-11-10 16:29:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,6 @@
 #include <svx/editdata.hxx>
 #include <svx/bulitem.hxx>
 #include <svx/svxids.hrc>   // fuer SID_OBJECT_SELECT
-//#include <basctl/idetemp.hxx>
 #ifndef _SFX_BINDINGS_HXX //autogen
 #include <sfx2/bindings.hxx>
 #endif
