@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 10:00:23 $
+ *  last change: $Author: vg $ $Date: 2003-05-27 10:37:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -489,7 +489,9 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( USHORT nPrefix
         {
             bIsEmpty = sal_False;
             bTextP = sal_True;
-            if ((nCellType == util::NumberFormat::TEXT) || bFormulaTextResult)
+            com::sun::star::table::CellAddress aCellPos = rXMLImport.GetTables().GetRealCellPos();
+            if (((nCellType == util::NumberFormat::TEXT) || bFormulaTextResult) &&
+                !rXMLImport.GetTables().IsPartOfMatrix(aCellPos.Column, aCellPos.Row))
             {
                 if (!bHasTextImport)
                 {
@@ -950,19 +952,42 @@ void ScXMLTableRowCellContext::EndElement()
                                     case util::NumberFormat::TEXT:
                                         {
                                             sal_Bool bDoIncrement = sal_True;
-                                            uno::Reference <text::XText> xText (xCell, uno::UNO_QUERY);
-                                            if (xText.is())
+                                            if (rXMLImport.GetTables().IsPartOfMatrix(aCurrentPos.Column, aCurrentPos.Row))
                                             {
-                                                if(pOUTextValue && pOUTextValue->getLength())
-                                                    xText->setString(*pOUTextValue);
-                                                else if (pOUTextContent && pOUTextContent->getLength())
-                                                    xText->setString(*pOUTextContent);
-                                                else if ( i > 0 && pOUText && pOUText->getLength() )
+                                                LockSolarMutex();
+                                                ScCellObj* pCellObj = (ScCellObj*)ScCellRangesBase::getImplementation(xCell);
+                                                if (pCellObj)
                                                 {
-                                                    xText->setString(*pOUText);
+                                                    if(pOUTextValue && pOUTextValue->getLength())
+                                                        pCellObj->SetFormulaResultString(*pOUTextValue);
+                                                    else if (pOUTextContent && pOUTextContent->getLength())
+                                                        pCellObj->SetFormulaResultString(*pOUTextContent);
+                                                    else if ( i > 0 && pOUText && pOUText->getLength() )
+                                                    {
+                                                        pCellObj->SetFormulaResultString(*pOUText);
+                                                    }
+                                                    else
+                                                        bDoIncrement = sal_False;
                                                 }
                                                 else
                                                     bDoIncrement = sal_False;
+                                            }
+                                            else
+                                            {
+                                                uno::Reference <text::XText> xText (xCell, uno::UNO_QUERY);
+                                                if (xText.is())
+                                                {
+                                                    if(pOUTextValue && pOUTextValue->getLength())
+                                                        xText->setString(*pOUTextValue);
+                                                    else if (pOUTextContent && pOUTextContent->getLength())
+                                                        xText->setString(*pOUTextContent);
+                                                    else if ( i > 0 && pOUText && pOUText->getLength() )
+                                                    {
+                                                        xText->setString(*pOUText);
+                                                    }
+                                                    else
+                                                        bDoIncrement = sal_False;
+                                                }
                                             }
                                             if (bDoIncrement || bHasTextImport)
                                                 rXMLImport.GetProgressBarHelper()->Increment();
@@ -975,7 +1000,17 @@ void ScXMLTableRowCellContext::EndElement()
                                     case util::NumberFormat::DATETIME:
                                     case util::NumberFormat::LOGICAL:
                                         {
-                                            xCell->setValue(fValue);
+                                            if (rXMLImport.GetTables().IsPartOfMatrix(aCurrentPos.Column, aCurrentPos.Row))
+                                            {
+                                                LockSolarMutex();
+                                                ScCellObj* pCellObj = (ScCellObj*)ScCellRangesBase::getImplementation(xCell);
+                                                if (pCellObj)
+                                                    pCellObj->SetFormulaResultDouble(fValue);
+                                            }
+                                            else
+                                            {
+                                                xCell->setValue(fValue);
+                                            }
                                             rXMLImport.GetProgressBarHelper()->Increment();
                                         }
                                         break;
@@ -1076,6 +1111,8 @@ void ScXMLTableRowCellContext::EndElement()
                         {
                             if (nMatrixCols > 0 && nMatrixRows > 0)
                             {
+                                rXMLImport.GetTables().AddMatrixRange(aCellPos.Column, aCellPos.Row,
+                                                aCellPos.Column + nMatrixCols - 1, aCellPos.Row + nMatrixRows - 1);
                                 uno::Reference <table::XCellRange> xMatrixCellRange =
                                     xCellRange->getCellRangeByPosition(aCellPos.Column, aCellPos.Row,
                                                 aCellPos.Column + nMatrixCols - 1, aCellPos.Row + nMatrixRows - 1);
