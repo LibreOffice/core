@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galtheme.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: tv $ $Date: 2001-10-04 12:42:33 $
+ *  last change: $Author: kz $ $Date: 2001-10-11 20:49:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,7 +246,7 @@ String RID_GALLERYSTR_THEME_EMOTICONS
     Text[ russian ] = "Смайлики";
     Text[ dutch ] = "Emoticons";
     Text[ french ] = "Emoticons";
-    Text[ spanish ] = "Emoticon";
+    Text[ spanish ] = "Emoticуn";
     Text[ italian ] = "Emoticons";
     Text[ danish ] = "Former";
     Text[ swedish ] = "Emoticons";
@@ -896,7 +896,7 @@ String RID_GALLERYSTR_THEME_CLIMA
     Text[ portuguese ] = "Clima";
     Text[ russian ] = "Климат";
     Text[ greek ] = "Climate";
-    Text[ dutch ] = "Climate";
+    Text[ dutch ] = "Klimaat";
     Text[ french ] = "Climat";
     Text[ spanish ] = "Clima";
     Text[ italian ] = "Clima";
@@ -924,7 +924,7 @@ String RID_GALLERYSTR_THEME_EDUCATION
     Text[ portuguese ] = "Escola & Universidade";
     Text[ russian ] = "Школа и университет";
     Text[ greek ] = "School & University";
-    Text[ dutch ] = "School & University";
+    Text[ dutch ] = "School & Universiteit";
     Text[ french ] = "Йcole & universitй";
     Text[ spanish ] = "Escuela y universidad";
     Text[ italian ] = "Scuola & Universitа";
@@ -952,7 +952,7 @@ String RID_GALLERYSTR_THEME_TROUBLE
     Text[ portuguese ] = "Soluзгo de problemas";
     Text[ russian ] = "Решения проблем";
     Text[ greek ] = "Problem Solving";
-    Text[ dutch ] = "Problem Solving";
+    Text[ dutch ] = "Probleemoplossingen";
     Text[ french ] = "Solutions";
     Text[ spanish ] = "Soluciones de problemas";
     Text[ italian ] = "Soluzioni";
@@ -976,7 +976,27 @@ String RID_GALLERYSTR_THEME_SCREENBEANS
 {
     Text = "ScreenBeans";
     Text[ENGLISH] = "ScreenBeans";
-    Text[english_us] = "ScreenBeans";
+    Text[english_us] = "Screen Beans";
+    Text[ language_user1 ] = "EM9.10.01: I checked the name and it is trademarked, so keep capitalized and two words (i.e. German is wrong).";
+    Text[ portuguese ] = "ScreenBeans";
+    Text[ russian ] = "ScreenBeans";
+    Text[ greek ] = "ScreenBeans";
+    Text[ dutch ] = "ScreenBeans";
+    Text[ french ] = "ScreenBeans";
+    Text[ spanish ] = "ScreenBeans";
+    Text[ finnish ] = "ScreenBeans";
+    Text[ italian ] = "Screen Beans";
+    Text[ danish ] = "ScreenBeans";
+    Text[ swedish ] = "Screen Beans";
+    Text[ polish ] = "ScreenBeans";
+    Text[ portuguese_brazilian ] = "ScreenBeans";
+    Text[ japanese ] = "ScreenBeans";
+    Text[ korean ] = "ScreenBeans";
+    Text[ chinese_simplified ] = "Screen Beans";
+    Text[ chinese_traditional ] = "Screen Beans";
+    Text[ turkish ] = "ScreenBeans";
+    Text[ arabic ] = "ScreenBeans";
+    Text[ catalan ] = "ScreenBeans";
 };
 
 // -----------------------------------------------------------------------------
@@ -986,6 +1006,7 @@ String RID_GALLERYSTR_THEME_DUMMY5
     // !!! Don't translate, please !!!
     Text = "Dummy 5";
 };
+
 
 
 
