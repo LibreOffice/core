@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosett.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dvo $ $Date: 2000-12-11 20:00:34 $
+ *  last change: $Author: os $ $Date: 2000-12-12 14:49:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1709,7 +1709,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::getNumberingRuleByIndex(
                 sValue = rTxtColl.GetName();
             }
         }
-        aUString = sValue;
+        aUString = SwXStyleFamilies::GetProgrammaticName(sValue, SFX_STYLE_FAMILY_PARA);
         pData = new PropValData((void*)&aUString, UNO_NAME_HEADING_STYLE_NAME, ::getCppuType((const OUString*)0));
         aPropertyValues.Insert(pData, aPropertyValues.Count());
     }
@@ -2065,7 +2065,7 @@ void SwXNumberingRules::setNumberingRuleByIndex(
                 {
                     OUString uTmp;
                     pData->aVal >>= uTmp;
-                    String sStyleName = uTmp;
+                    String sStyleName = SwXStyleFamilies::GetUIName(uTmp, SFX_STYLE_FAMILY_PARA);
                     const SwTxtFmtColls* pColls = pDocShell->GetDoc()->GetTxtFmtColls();
                     const sal_uInt16 nCount = pColls->Count();
                     for(sal_uInt16 i = 0; i < nCount; ++i)
