@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrodlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tbe $ $Date: 2000-11-03 15:20:51 $
+ *  last change: $Author: tbe $ $Date: 2000-11-03 15:33:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
