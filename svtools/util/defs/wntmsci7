@@ -8061,3 +8061,12 @@ CreateWindow
 ?IsAnyEnabled@SvtCJKOptions@@QBEEXZ
 ?SetAll@SvtCJKOptions@@QAEXE@Z
 ?GetProperLanguage@SvNumberFormatter@@SAGG@Z
+??0MenuItem@@QAE@ABU0@@Z
+??0SvtDynamicMenuOptions@@QAE@XZ
+??1MenuItem@@QAE@XZ
+??1SvtDynamicMenuOptions@@QAE@XZ
+?AppendItem@SvtDynamicMenuOptions@@QAEXW4EDynamicMenuType@@ABVOUString@rtl@@111@Z
+?Clear@SvtDynamicMenuOptions@@QAEXW4EDynamicMenuType@@@Z
+?GetMenu@SvtDynamicMenuOptions@@QBE?AV?$Sequence@V?$Sequence@UPropertyValue@beans@star@sun@com@@@uno@star@sun@com@@@uno@star@sun@com@@W4EDynamicMenuType@@@Z
+?GetOwnStaticMutex@SvtDynamicMenuOptions@@SAAAVMutex@osl@@XZ
+?m_nRefCount@SvtDynamicMenuOptions@@0JA
