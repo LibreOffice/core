@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inspagob.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:52:59 $
+ *  last change: $Author: rt $ $Date: 2001-03-01 21:21:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,11 +79,11 @@ ModalDialog DLG_INSERT_PAGES_OBJS
     Text [ danish ] = "Indsæt sider/objekter" ;
     Text [ portuguese ] = "Inserir páginas/objectos" ;
     Text [ portuguese_brazilian ] = "Seiten/Objekte einfügen" ;
-    Text[ chinese_simplified ] = "²åÈëÒ³Ãæ/¶ÔÏó";
+    Text[ chinese_simplified ] = "²åÈëÒ³Ãæ»ò¶ÔÏó";
     Text[ russian ] = "Âñòàâèòü ñëàéäû/îáúåêòû";
     Text[ polish ] = "Wstaw slajdy/obiekty";
     Text[ japanese ] = "Íß°¼Ş/µÌŞ¼Şª¸Ä‚Ì‘}“ü";
-    Text[ chinese_traditional ] = "´¡¤J­¶­±/ª«¥ó";
+    Text[ chinese_traditional ] = "´¡¤J­¶­±©Îª«¥ó";
     Text[ arabic ] = "ÅÏÑÇÌ ÕİÍÇÊ/ßÇÆäÇÊ";
     OKButton BTN_OK
     {
@@ -157,7 +157,7 @@ ModalDialog DLG_INSERT_PAGES_OBJS
         Text[ polish ] = "Usuñ nieu¿ywane strony t³a";
         Text[ portuguese_brazilian ] = "~Remove not used master pages";
         Text[ japanese ] = "–¢g—p‚Ì”wŒiÍß°¼Ş‚Ííœ‚·‚é(~R)";
-        Text[ chinese_simplified ] = "É¾³ı²»ÓÃµÄ±³¾°Ò³Ãæ(~R)";
+        Text[ chinese_simplified ] = "Çå³ı²»²ÉÓÃµÄ±³¾°Ò³Ãæ(~R)";
         Text[ chinese_traditional ] = "§R°£¤£¥Îªº­I´º­¶­±(~R)";
         Text[ arabic ] = "ÍĞİ ÕİÍÇÊ ÇáÎáİíÉ ÇáÊí áã ÊõÓÊÚãá";
         Text[ greek ] = "ÄéáãñáöŞ ìç ÷ñçóéìïğïéïõìİ~íùí óåëéäşí öüíôïõ.";
