@@ -2,9 +2,9 @@
  *
  *  $RCSfile: all_toks.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: np $ $Date: 2002-05-14 09:02:18 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 11:21:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,7 @@ DEF_TOKEN_CLASS_WITHTEXT(Greater,">")
 DEF_TOKEN_CLASS_WITHTEXT(Asterix,"*")
 DEF_TOKEN_CLASS_WITHTEXT(AmpersAnd,"&")
 DEF_TOKEN_CLASS_WITHTEXT(Ellipse,"...")
+DEF_TOKEN_CLASS(typename)
 
 DEF_TOKEN_CLASS_WITHTEXT(DefineName,sText)
 DEF_TOKEN_CLASS_WITHTEXT(MacroName,sText)
@@ -183,8 +184,3 @@ Tok_UnblockMacro::DealOut( ::TokenDealer & o_rDealer )
 }
 
 }   // namespace cpp
-
-
-
-
-
