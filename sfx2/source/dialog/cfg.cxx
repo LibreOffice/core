@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 11:24:02 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:50:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@
 #endif
 #include <tools/urlobj.hxx>
 #include <svtools/pathoptions.hxx>
-#include <so3/svstor.hxx>
+#include <sot/storage.hxx>
 
 #ifndef GCC
 #pragma hdrstop
@@ -2060,65 +2060,65 @@ IMPL_LINK( SfxStatusBarConfigPage, Load, Button *, pButton )
         BOOL bLoadedDocument = FALSE;
         SfxObjectShellRef xDoc;
 
-        SfxConfigManager* pCfgMgr = SFX_APP()->GetConfigManager_Impl();
-        if ( pCfgMgr->GetURL() != aCfgName )
-        {
-            // it was not the global configuration manager
-            // first check if URL points to a document already loaded
-            xDoc = SFX_APP()->DocAlreadyLoaded( aCfgName, TRUE, TRUE );
-            if ( xDoc.Is() )
-                bLoadedDocument = TRUE;
-            else
-                // try to load a document from the URL
-                xDoc = MakeObjectShellForOrganizer_Impl( aCfgName, TRUE );
-            if ( xDoc.Is() )
-            {
-                // get config manager, force creation if there was none before
-                pCfgMgr = xDoc->GetConfigManager( TRUE );
-            }
-            else
-            {
-                // URL doesn't point to a document, must be a single storage
-                bCreated = TRUE;
-                SvStorageRef xStor = new SvStorage( aCfgName, STREAM_STD_READ );
-                if ( xStor->GetError() == ERRCODE_NONE )
-                    pCfgMgr = new SfxConfigManager( xStor );
-                else
-                    pCfgMgr = NULL;
-            }
-        }
-
-        if ( pCfgMgr )
-        {
-            // create new StatusBarManager and read configuration
-            // constructing with a SfxConfigManager reads in configuration
-            SfxStatusBarManager* pStbMgr = new SfxStatusBarManager( this, *pMgr, pCfgMgr );
-
-            // put new configuration into TabPage
-            SfxStatusBarManager* pOld = pMgr;
-            pMgr = pStbMgr;
-            aEntriesBox.SetUpdateMode( FALSE );
-            ResetConfig();
-            Init();
-            aEntriesBox.SetUpdateMode( TRUE );
-            aEntriesBox.Invalidate();
-            aEntriesBox.bDefault = FALSE;
-            aEntriesBox.bModified = TRUE;
-            pMgr = pOld;
-
-            StatusBar* pBar = pStbMgr->GetStatusBar();
-            delete pStbMgr;
-            delete pBar;
-
-            if ( bCreated )
-                delete pCfgMgr;
-            else
-                pCfgMgr->ReInitialize( pMgr->GetType() );
-
-            if ( bLoadedDocument && !xDoc->GetConfigManager()->HasConfigItem( pMgr->GetType() ) )
-                // config item has global configuration until now, must be changed
-                pMgr->GetConfigManager()->ReConnect( pMgr->GetType(), pCfgMgr );
-        }
+//REMOVE            SfxConfigManager* pCfgMgr = SFX_APP()->GetConfigManager_Impl();
+//REMOVE            if ( pCfgMgr->GetURL() != aCfgName )
+//REMOVE            {
+//REMOVE                // it was not the global configuration manager
+//REMOVE                // first check if URL points to a document already loaded
+//REMOVE                xDoc = SFX_APP()->DocAlreadyLoaded( aCfgName, TRUE, TRUE );
+//REMOVE                if ( xDoc.Is() )
+//REMOVE                    bLoadedDocument = TRUE;
+//REMOVE                else
+//REMOVE                    // try to load a document from the URL
+//REMOVE                    xDoc = MakeObjectShellForOrganizer_Impl( aCfgName, TRUE );
+//REMOVE                if ( xDoc.Is() )
+//REMOVE                {
+//REMOVE                    // get config manager, force creation if there was none before
+//REMOVE                    pCfgMgr = xDoc->GetConfigManager( TRUE );
+//REMOVE                }
+//REMOVE                else
+//REMOVE                {
+//REMOVE                    // URL doesn't point to a document, must be a single storage
+//REMOVE                    bCreated = TRUE;
+//REMOVE                    SvStorageRef xStor = new SvStorage( aCfgName, STREAM_STD_READ );
+//REMOVE                    if ( xStor->GetError() == ERRCODE_NONE )
+//REMOVE                        pCfgMgr = new SfxConfigManager( xStor );
+//REMOVE                    else
+//REMOVE                        pCfgMgr = NULL;
+//REMOVE                }
+//REMOVE            }
+//REMOVE
+//REMOVE            if ( pCfgMgr )
+//REMOVE            {
+//REMOVE                // create new StatusBarManager and read configuration
+//REMOVE                // constructing with a SfxConfigManager reads in configuration
+//REMOVE                SfxStatusBarManager* pStbMgr = new SfxStatusBarManager( this, *pMgr, pCfgMgr );
+//REMOVE
+//REMOVE                // put new configuration into TabPage
+//REMOVE                SfxStatusBarManager* pOld = pMgr;
+//REMOVE                pMgr = pStbMgr;
+//REMOVE                aEntriesBox.SetUpdateMode( FALSE );
+//REMOVE                ResetConfig();
+//REMOVE                Init();
+//REMOVE                aEntriesBox.SetUpdateMode( TRUE );
+//REMOVE                aEntriesBox.Invalidate();
+//REMOVE                aEntriesBox.bDefault = FALSE;
+//REMOVE                aEntriesBox.bModified = TRUE;
+//REMOVE                pMgr = pOld;
+//REMOVE
+//REMOVE                StatusBar* pBar = pStbMgr->GetStatusBar();
+//REMOVE                delete pStbMgr;
+//REMOVE                delete pBar;
+//REMOVE
+//REMOVE                if ( bCreated )
+//REMOVE                    delete pCfgMgr;
+//REMOVE                else
+//REMOVE                    pCfgMgr->ReInitialize( pMgr->GetType() );
+//REMOVE
+//REMOVE                if ( bLoadedDocument && !xDoc->GetConfigManager()->HasConfigItem( pMgr->GetType() ) )
+//REMOVE                    // config item has global configuration until now, must be changed
+//REMOVE                    pMgr->GetConfigManager()->ReConnect( pMgr->GetType(), pCfgMgr );
+//REMOVE            }
 
         GetTabDialog()->LeaveWait();
     }
@@ -2137,55 +2137,56 @@ IMPL_LINK( SfxStatusBarConfigPage, Save, Button *, pButton )
         SfxObjectShellRef xDoc;
 
         BOOL bLoadedDocument = FALSE;
-        SfxConfigManager* pCfgMgr = SFX_APP()->GetConfigManager_Impl();
-        if ( pCfgMgr->GetURL() != aCfgName )
-        {
-            // it was not the global configuration manager
-            // first check if URL points to a document already loaded
-            xDoc = SFX_APP()->DocAlreadyLoaded( aCfgName, TRUE, TRUE );
-            if ( xDoc.Is() )
-                bLoadedDocument = TRUE;
-            else
-                // try to load a document from the URL
-                xDoc = MakeObjectShellForOrganizer_Impl( aCfgName, TRUE );
-            if ( xDoc.Is() )
-            {
-                // get config manager, force creation if there was none before
-                pCfgMgr = xDoc->GetConfigManager( TRUE );
-            }
-            else
-            {
-                // URL doesn't point to a document, must be a single storage
-                bCreated = TRUE;
-                SvStorageRef xStor = new SvStorage( aCfgName, STREAM_STD_WRITE, STORAGE_TRANSACTED );
-                if ( xStor->GetError() == ERRCODE_NONE )
-                    pCfgMgr = new SfxConfigManager( xStor );
-                else
-                    pCfgMgr = NULL;
-            }
-        }
 
-        if ( pCfgMgr )
-        {
-            // create new StatusBarManager and apply changes
-            SfxStatusBarManager* pStbMgr = new SfxStatusBarManager( this, *pMgr, pCfgMgr );
-            Apply( pStbMgr, FALSE );
-            pCfgMgr->StoreConfigItem( *pStbMgr );
-            if ( bLoadedDocument )
-            {
-                SfxRequest aReq( SID_SAVEDOC, SFX_CALLMODE_SYNCHRON, xDoc->GetPool() );
-                xDoc->ExecuteSlot( aReq );
-            }
-            else
-                pCfgMgr->StoreConfiguration();
-
-            StatusBar* pBar = pStbMgr->GetStatusBar();
-            delete pStbMgr;
-            delete pBar;
-
-            if ( bCreated )
-                delete pCfgMgr;
-        }
+//REMOVE            SfxConfigManager* pCfgMgr = SFX_APP()->GetConfigManager_Impl();
+//REMOVE            if ( pCfgMgr->GetURL() != aCfgName )
+//REMOVE            {
+//REMOVE                // it was not the global configuration manager
+//REMOVE                // first check if URL points to a document already loaded
+//REMOVE                xDoc = SFX_APP()->DocAlreadyLoaded( aCfgName, TRUE, TRUE );
+//REMOVE                if ( xDoc.Is() )
+//REMOVE                    bLoadedDocument = TRUE;
+//REMOVE                else
+//REMOVE                    // try to load a document from the URL
+//REMOVE                    xDoc = MakeObjectShellForOrganizer_Impl( aCfgName, TRUE );
+//REMOVE                if ( xDoc.Is() )
+//REMOVE                {
+//REMOVE                    // get config manager, force creation if there was none before
+//REMOVE                    pCfgMgr = xDoc->GetConfigManager( TRUE );
+//REMOVE                }
+//REMOVE                else
+//REMOVE                {
+//REMOVE                    // URL doesn't point to a document, must be a single storage
+//REMOVE                    bCreated = TRUE;
+//REMOVE                    SvStorageRef xStor = new SvStorage( aCfgName, STREAM_STD_WRITE, STORAGE_TRANSACTED );
+//REMOVE                    if ( xStor->GetError() == ERRCODE_NONE )
+//REMOVE                        pCfgMgr = new SfxConfigManager( xStor );
+//REMOVE                    else
+//REMOVE                        pCfgMgr = NULL;
+//REMOVE                }
+//REMOVE            }
+//REMOVE
+//REMOVE            if ( pCfgMgr )
+//REMOVE            {
+//REMOVE                // create new StatusBarManager and apply changes
+//REMOVE                SfxStatusBarManager* pStbMgr = new SfxStatusBarManager( this, *pMgr, pCfgMgr );
+//REMOVE                Apply( pStbMgr, FALSE );
+//REMOVE                pCfgMgr->StoreConfigItem( *pStbMgr );
+//REMOVE                if ( bLoadedDocument )
+//REMOVE                {
+//REMOVE                    SfxRequest aReq( SID_SAVEDOC, SFX_CALLMODE_SYNCHRON, xDoc->GetPool() );
+//REMOVE                    xDoc->ExecuteSlot( aReq );
+//REMOVE                }
+//REMOVE                else
+//REMOVE                    pCfgMgr->StoreConfiguration();
+//REMOVE
+//REMOVE                StatusBar* pBar = pStbMgr->GetStatusBar();
+//REMOVE                delete pStbMgr;
+//REMOVE                delete pBar;
+//REMOVE
+//REMOVE                if ( bCreated )
+//REMOVE                    delete pCfgMgr;
+//REMOVE            }
 
         GetTabDialog()->LeaveWait();
     }
