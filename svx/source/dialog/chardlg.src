@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-06 19:17:09 $
+ *  last change: $Author: kz $ $Date: 2001-04-09 23:10:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1008,7 +1008,7 @@ TabPage RID_SVXPAGE_CHAR_EXT
         Text [ dutch ] = "~Kleine letters" ;
         Text [ spanish ] = "~Minъsculas" ;
         Text [ english_us ] = "~Lower case" ;
-        Text[ chinese_simplified ] = "РЎРґ(~L)";
+        Text[ chinese_simplified ] = "РЎРґЧЦДё";
         Text[ russian ] = "Строчные";
         Text[ polish ] = "Maі~e litery";
         Text[ japanese ] = "Џ¬•¶Ћљ(~L)";
@@ -3940,11 +3940,11 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     };
     StringList [ dutch ] =
     {
-            < "(Zonder)" ; default ; > ;
+            < "(geen)" ; default ; > ;
         < "Punt" ; default ; > ;
         < "Cirkel" ; default ; > ;
-        < "Scheibe" ; default ; > ;
-        < "Akzent" ; default ; > ;
+        < "Schijf" ; default ; > ;
+        < "Accent  " ; default ; > ;
     };
     StringList [ french ] =
     {
@@ -4383,7 +4383,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ portuguese ] = "Relief";
         Text[ russian ] = "Рельеф";
         Text[ greek ] = "AнЬглхцп";
-        Text[ dutch ] = "Relief";
+        Text[ dutch ] = "~Reliлf";
         Text[ french ] = "~Relief";
         Text[ spanish ] = "Relief";
         Text[ italian ] = "Relief";
@@ -4447,9 +4447,9 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     };
     StringList [ dutch ] =
     {
-            < "Keine" ; Default ; > ;
-        < "Erhaben" ; Default ; > ;
-        < "Vertieft" ; Default ; > ;
+            < "Geen" ; Default ; > ;
+        < "Reliлf" ; Default ; > ;
+        < "Diepte" ; Default ; > ;
     };
     StringList [ french ] =
     {
@@ -4687,7 +4687,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ russian ] = "Строчные";
         Text[ greek ] = "РежпЯ чбсбкфЮсет";
         Text[ dutch ] = "Kleine letters";
-        Text[ french ] = "Petites majuscules";
+        Text[ french ] = "Minuscules";
         Text[ spanish ] = "Minъsculas";
         Text[ italian ] = "Minuscolo";
         Text[ danish ] = "Lowercase";
@@ -5033,7 +5033,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ portuguese ] = "Rotation / scaling";
         Text[ russian ] = "Вращение / масштабирование";
         Text[ greek ] = "РесйуфспцЮ / КлймЬкщуз";
-        Text[ dutch ] = "Rotation / scaling";
+        Text[ dutch ] = "Rotatie / schaalindeling";
         Text[ french ] = "Rotation / Йchelle";
         Text[ spanish ] = "Rotaciуn / Escala";
         Text[ italian ] = "Rotation / scaling";
@@ -5057,7 +5057,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ portuguese ] = "Scaling";
         Text[ russian ] = "Масштабирование";
         Text[ greek ] = "Scaling";
-        Text[ dutch ] = "Scaling";
+        Text[ dutch ] = "Schaalverdeling";
         Text[ french ] = "Йchelle";
         Text[ spanish ] = "Scaling";
         Text[ italian ] = "Scaling";
@@ -5082,7 +5082,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ portuguese ] = "0 degree";
         Text[ russian ] = "0 градусов";
         Text[ greek ] = "0 вбимпЯ";
-        Text[ dutch ] = "0 degree";
+        Text[ dutch ] = "0 graden";
         Text[ french ] = "0 degrй";
         Text[ spanish ] = "0 grados";
         Text[ italian ] = "0 degree";
@@ -5107,7 +5107,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ portuguese ] = "90 degree";
         Text[ russian ] = "90 градусов";
         Text[ greek ] = "90 вбимпЯ";
-        Text[ dutch ] = "90 degree";
+        Text[ dutch ] = "90 graden";
         Text[ french ] = "90 degrйs";
         Text[ spanish ] = "90 grados";
         Text[ italian ] = "90 degree";
@@ -5132,7 +5132,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ portuguese ] = "270 degree";
         Text[ russian ] = "270 градусов";
         Text[ greek ] = "270 вбимпЯ";
-        Text[ dutch ] = "270 degree";
+        Text[ dutch ] = "270 graden";
         Text[ french ] = "270 degrйs";
         Text[ spanish ] = "270 grados";
         Text[ italian ] = "270 degree";
@@ -5157,7 +5157,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ portuguese ] = "Fit to line";
         Text[ russian ] = "Согласовать со строкой";
         Text[ greek ] = "РспубсмпгЮ щт рспт фз уейсЬ";
-        Text[ dutch ] = "Fit to line";
+        Text[ dutch ] = "Aanpassen aan regel";
         Text[ french ] = "Ajuster а la ligne";
         Text[ spanish ] = "Ajustar a fila";
         Text[ italian ] = "Fit to line";
@@ -5181,7 +5181,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ portuguese ] = "Scale width";
         Text[ russian ] = "Масштабировать ширину";
         Text[ greek ] = "КлймЬкщуз рлЬфпхт";
-        Text[ dutch ] = "Scale width";
+        Text[ dutch ] = "Breedte op schaal brengen";
         Text[ french ] = "Graduer la largeur";
         Text[ spanish ] = "Tamaсo del ancho";
         Text[ italian ] = "Scale width";
