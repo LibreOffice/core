@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2000-12-19 17:00:44 $
+ *  last change: $Author: nn $ $Date: 2001-02-26 18:57:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -401,6 +401,7 @@ ScGridWindow::ScGridWindow( Window* pParent, ScViewData* pData, ScSplitPos eWhic
             bDPMouse( FALSE ),
             bRFMouse( FALSE ),
             nPagebreakMouse( SC_PD_NONE ),
+            nPageScript( 0 ),
             bDragRect( FALSE ),
             pFilterBox( NULL ),
             pFilterFloat( NULL ),

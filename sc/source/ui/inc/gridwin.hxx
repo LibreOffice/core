@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-12-19 16:57:23 $
+ *  last change: $Author: nn $ $Date: 2001-02-26 18:56:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,6 +180,8 @@ private:
     ScRange                 aPagebreakSource;
     ScRange                 aPagebreakDrag;
     BOOL                    bPagebreakDrawn;
+
+    BYTE                    nPageScript;
 
     long                    nLastClickX;
     long                    nLastClickY;
