@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DescGetter.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-10-06 12:40:16 $
+ *  last change:$Date: 2003-11-18 16:16:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,12 @@ public abstract class DescGetter {
                     System.out.println("Exception while reading scenario");
             }
         }
-
+        try {
+            scenario.close();
+        } catch (java.io.IOException ioe) {
+            if (debug)
+                System.out.println("Exception while closeing scenario");
+        }
         entries = new DescEntry[entryList.size()];
         entries = (DescEntry[])entryList.toArray(entries);
         return entries;
