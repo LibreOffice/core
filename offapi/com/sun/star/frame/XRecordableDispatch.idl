@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XRecordableDispatch.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:54:31 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 10:07:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,8 @@
 
     @see XDispatchRecorderSupplier
     @see XDispatch
+
+    @since #107627#
  */
 interface XRecordableDispatch: com::sun::star::uno::XInterface
 {
