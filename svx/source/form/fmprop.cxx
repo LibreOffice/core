@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmprop.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-18 08:02:45 $
+ *  last change: $Author: fs $ $Date: 2001-01-04 16:39:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -356,7 +356,7 @@ const FmPropertyInfo* FmPropertyInfoService::getPropertyInfo()
             // TODO : UI-Anbindung fuer Privilegien
             FmPropertyInfo(FM_PROP_LASTDIRTY,           FM_ATTR_LASTDIRTY,          sal_True,  ::rtl::OUString(),                                   nPos++, 0) ,
             FmPropertyInfo(FM_PROP_HIDDEN_VALUE,        FM_ATTR_HIDDEN_VALUE,       sal_True,  ::rtl::OUString(SVX_RES(RID_STR_VALUE)),             nPos++, HID_PROP_HIDDEN_VALUE),
-            FmPropertyInfo(FM_PROP_VALUE,               FM_ATTR_VALUE,              sal_True,  ::rtl::OUString(SVX_RES(RID_STR_VALUE)),             nPos++, HID_PROP_VALUE) ,
+            FmPropertyInfo(FM_PROP_VALUE,               FM_ATTR_VALUE,              sal_True,  ::rtl::OUString(),                                   nPos++, 0),
             FmPropertyInfo(FM_PROP_VALUEMIN,            FM_ATTR_VALUEMIN,           sal_True,  ::rtl::OUString(SVX_RES(RID_STR_VALUEMIN)),          nPos++, HID_PROP_VALUEMIN) ,
             FmPropertyInfo(FM_PROP_VALUEMAX,            FM_ATTR_VALUEMAX,           sal_True,  ::rtl::OUString(SVX_RES(RID_STR_VALUEMAX)),          nPos++, HID_PROP_VALUEMAX) ,
             FmPropertyInfo(FM_PROP_VALUESTEP,           FM_ATTR_VALUESTEP,          sal_True,  ::rtl::OUString(SVX_RES(RID_STR_VALUESTEP)),         nPos++, HID_PROP_VALUESTEP) ,
@@ -369,18 +369,26 @@ const FmPropertyInfo* FmPropertyInfoService::getPropertyInfo()
             FmPropertyInfo(FM_PROP_CURRENCYSYMBOL,      FM_ATTR_CURRENCYSYMBOL,     sal_True,  ::rtl::OUString(SVX_RES(RID_STR_CURRENCYSYMBOL)),        nPos++, HID_PROP_CURRENCYSYMBOL),
             FmPropertyInfo(FM_PROP_CURRSYM_POSITION,    FM_ATTR_CURRSYM_POSITION,   sal_True,  ::rtl::OUString(SVX_RES(RID_STR_CURRSYM_POSITION)),  nPos++, HID_PROP_CURRSYM_POSITION),
 
-            FmPropertyInfo(FM_PROP_DATE,                FM_ATTR_DATE,               sal_True,  ::rtl::OUString(SVX_RES(RID_STR_DATE)),              nPos++, HID_PROP_DATE) ,
+            FmPropertyInfo(FM_PROP_DATE,                FM_ATTR_DATE,               sal_True,  ::rtl::OUString(),                                   nPos++, 0) ,
             FmPropertyInfo(FM_PROP_DATEMIN,             FM_ATTR_DATEMIN,            sal_True,  ::rtl::OUString(SVX_RES(RID_STR_DATEMIN)),           nPos++, HID_PROP_DATEMIN) ,
             FmPropertyInfo(FM_PROP_DATEMAX,             FM_ATTR_DATEMAX,            sal_True,  ::rtl::OUString(SVX_RES(RID_STR_DATEMAX)),           nPos++, HID_PROP_DATEMAX) ,
-            FmPropertyInfo(FM_PROP_DATEFORMAT,          FM_ATTR_DATEFORMAT,         sal_True,  ::rtl::OUString(SVX_RES(RID_STR_DATEFORMAT)),            nPos++, HID_PROP_DATEFORMAT) ,
+            FmPropertyInfo(FM_PROP_DATEFORMAT,          FM_ATTR_DATEFORMAT,         sal_True,  ::rtl::OUString(SVX_RES(RID_STR_DATEFORMAT)),        nPos++, HID_PROP_DATEFORMAT) ,
             FmPropertyInfo(FM_PROP_DATE_SHOW_CENTURY,   FM_ATTR_DATE_SHOW_CENTURY,  sal_True,  ::rtl::OUString(SVX_RES(RID_STR_DATE_SHOW_CENTURY)), nPos++, HID_PROP_DATE_SHOW_CENTURY ),
             FmPropertyInfo(FM_PROP_DEFAULT_DATE,        FM_ATTR_DEFAULT_DATE,       sal_True,  ::rtl::OUString(SVX_RES(RID_STR_DEFAULTVALUE)),      nPos++, HID_PROP_DEFAULT_DATE ),
 
-            FmPropertyInfo(FM_PROP_TIME,                FM_ATTR_TIME,               sal_True,  ::rtl::OUString(SVX_RES(RID_STR_TIME)),              nPos++, HID_PROP_TIME) ,
+            FmPropertyInfo(FM_PROP_TIME,                FM_ATTR_TIME,               sal_True,  ::rtl::OUString(),                                   nPos++, 0) ,
             FmPropertyInfo(FM_PROP_TIMEMIN,             FM_ATTR_TIMEMIN,            sal_True,  ::rtl::OUString(SVX_RES(RID_STR_TIMEMIN)),           nPos++, HID_PROP_TIMEMIN) ,
             FmPropertyInfo(FM_PROP_TIMEMAX,             FM_ATTR_TIMEMAX,            sal_True,  ::rtl::OUString(SVX_RES(RID_STR_TIMEMAX)),           nPos++, HID_PROP_TIMEMAX) ,
-            FmPropertyInfo(FM_PROP_TIMEFORMAT,          FM_ATTR_TIMEFORMAT,         sal_True,  ::rtl::OUString(SVX_RES(RID_STR_TIMEFORMAT)),            nPos++, HID_PROP_TIMEFORMAT) ,
+            FmPropertyInfo(FM_PROP_TIMEFORMAT,          FM_ATTR_TIMEFORMAT,         sal_True,  ::rtl::OUString(SVX_RES(RID_STR_TIMEFORMAT)),        nPos++, HID_PROP_TIMEFORMAT) ,
             FmPropertyInfo(FM_PROP_DEFAULT_TIME,        FM_ATTR_DEFAULT_TIME,       sal_True,  ::rtl::OUString(SVX_RES(RID_STR_DEFAULTVALUE)),      nPos++, HID_PROP_DEFAULT_TIME ),
+
+            FmPropertyInfo(FM_PROP_EFFECTIVE_VALUE,     FM_ATTR_EFFECTIVE_VALUE,    sal_False, ::rtl::OUString(),                                   nPos++, 0),
+            FmPropertyInfo(FM_PROP_EFFECTIVE_MIN,       FM_ATTR_EFFECTIVE_MIN,      sal_False, ::rtl::OUString(SVX_RES(RID_STR_VALUEMIN)),          nPos++, HID_PROP_EFFECTIVEMIN),
+            FmPropertyInfo(FM_PROP_EFFECTIVE_MAX,       FM_ATTR_EFFECTIVE_MAX,      sal_False, ::rtl::OUString(SVX_RES(RID_STR_VALUEMAX)),          nPos++, HID_PROP_EFFECTIVEMAX),
+            FmPropertyInfo(FM_PROP_EFFECTIVE_DEFAULT,   FM_ATTR_EFFECTIVE_DEFAULT,  sal_False, ::rtl::OUString(SVX_RES(RID_STR_DEFAULTVALUE)),      nPos++, HID_PROP_EFFECTIVEDEFAULT),
+            FmPropertyInfo(FM_PROP_FORMATKEY,           FM_ATTR_FORMATKEY,          sal_True,  ::rtl::OUString(SVX_RES(RID_STR_FORMATKEY)),         nPos++, HID_PROP_FORMATKEY),
+            FmPropertyInfo(FM_PROP_FORMATSSUPPLIER,     FM_ATTR_FORMATSSUPPLIER,    sal_True,  ::rtl::OUString(),                                   nPos++, 0),
+            FmPropertyInfo(FM_PROP_TREATASNUMERIC,      FM_ATTR_TREATASNUMERIC,     sal_False, ::rtl::OUString(),                                   nPos++, 0),
 
             FmPropertyInfo(FM_PROP_SIZE,                FM_ATTR_SIZE,               sal_True,  ::rtl::OUString(SVX_RES(RID_STR_SIZE)),              nPos++, HID_PROP_SIZE),
             FmPropertyInfo(FM_PROP_CLASSID,             FM_ATTR_CLASSID,            sal_False, ::rtl::OUString(SVX_RES(RID_STR_CLASSID)),           nPos++, HID_PROP_CLASSID),
@@ -444,13 +452,6 @@ const FmPropertyInfo* FmPropertyInfoService::getPropertyInfo()
             FmPropertyInfo(FM_PROP_FILTERPROPOSAL,      FM_ATTR_FILTERPROPOSAL,     sal_True,  ::rtl::OUString(SVX_RES(RID_STR_FILTERPROPOSAL)),        nPos++, HID_PROP_FILTERPROPOSAL) ,
             FmPropertyInfo(FM_PROP_QUERY,               FM_ATTR_QUERY,              sal_True,  ::rtl::OUString(),                                   nPos++, 0 ),
             FmPropertyInfo(FM_PROP_ISPASSTHROUGH,       FM_ATTR_ISPASSTHROUGH,      sal_True,  ::rtl::OUString(),                                   nPos++, 0 ),
-            FmPropertyInfo(FM_PROP_FORMATKEY,           FM_ATTR_FORMATKEY,          sal_True,  ::rtl::OUString(SVX_RES(RID_STR_FORMATKEY)),         nPos++, HID_PROP_FORMATKEY),
-            FmPropertyInfo(FM_PROP_FORMATSSUPPLIER,     FM_ATTR_FORMATSSUPPLIER,    sal_True,  ::rtl::OUString(),                                   nPos++, 0),
-            FmPropertyInfo(FM_PROP_TREATASNUMERIC,      FM_ATTR_TREATASNUMERIC,     sal_False, ::rtl::OUString(),                                   nPos++, 0),
-            FmPropertyInfo(FM_PROP_EFFECTIVE_VALUE,     FM_ATTR_EFFECTIVE_VALUE,    sal_False, ::rtl::OUString(),                                   nPos++, 0),
-            FmPropertyInfo(FM_PROP_EFFECTIVE_MIN,       FM_ATTR_EFFECTIVE_MIN,      sal_False, ::rtl::OUString(SVX_RES(RID_STR_VALUEMIN)),          nPos++, HID_PROP_EFFECTIVEMIN),
-            FmPropertyInfo(FM_PROP_EFFECTIVE_MAX,       FM_ATTR_EFFECTIVE_MAX,      sal_False, ::rtl::OUString(SVX_RES(RID_STR_VALUEMAX)),          nPos++, HID_PROP_EFFECTIVEMAX),
-            FmPropertyInfo(FM_PROP_EFFECTIVE_DEFAULT,   FM_ATTR_EFFECTIVE_DEFAULT,  sal_False, ::rtl::OUString(SVX_RES(RID_STR_DEFAULTVALUE)),      nPos++, HID_PROP_EFFECTIVEDEFAULT),
             FmPropertyInfo(FM_PROP_TAG,                 FM_ATTR_TAG,                sal_True,  ::rtl::OUString(SVX_RES(RID_STR_TAG)),               nPos++, HID_PROP_TAG ),
             FmPropertyInfo(FM_PROP_HELPTEXT,            FM_ATTR_HELPTEXT,           sal_False, ::rtl::OUString(SVX_RES(RID_STR_HELPTEXT)),          nPos++, HID_PROP_HELPTEXT),
             FmPropertyInfo(FM_PROP_HELPURL,             FM_ATTR_HELPURL,            sal_False, ::rtl::OUString(SVX_RES(RID_STR_HELPURL)),           nPos++, HID_PROP_HELPURL),
