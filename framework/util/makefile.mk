@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: as $ $Date: 2000-12-13 09:19:47 $
+#   last change: $Author: rt $ $Date: 2000-12-13 16:27:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -149,6 +149,7 @@ APP1STDLIBS=	\
                 $(SVTOOLLIB)						\
                 $(TKLIB)							\
                 $(COMPHELPERLIB)					\
+                $(SOTLIB)							\
                 $(SVLIB)
 
 APP1DEPN=		$(SLB)$/fwk_helper.lib				\
