@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hjs $ $Date: 2001-06-19 14:23:40 $
+#   last change: $Author: hjs $ $Date: 2001-06-19 14:41:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -93,6 +93,9 @@ SHL1LIBS=       $(SLB)$/soltools_support.lib $(SLB)$/soltools_giparser.lib
 SHL1IMPLIB=     i$(TARGET)
 SHL1DEF=	    $(MISC)$/$(SHL1TARGET).def
 SHL1OBJS=       $(SLO)$/GenInfoParser.obj
+#perl libraries not in LD_LIBRARY_PATH
+SHL1NOCHECK=TRUE
+
 .IF "$(GUI)"=="WNT"
 SHL1STDLIBS=    msvcirt.lib $(PERLLIB)
 .ENDIF
