@@ -2,9 +2,9 @@
  *
  *  $RCSfile: concustomshape.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-27 12:31:10 $
+ *  last change: $Author: rt $ $Date: 2005-01-07 09:11:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,8 @@ class ConstCustomShape : public SwDrawBase
 
     rtl::OUString GetShapeType() const;
     static rtl::OUString GetShapeTypeFromRequest( SfxRequest& rReq );
+
+    virtual void CreateDefaultObject();
 
     // #i33136#
     virtual bool doConstructOrthogonal() const;
