@@ -23,8 +23,8 @@ mkdir: %_DEST%\xml%_EXT%\registry\data\org\openoffice\TypeDetection
 
 ..\registry\schema\oo-ldap-attr.map %_DEST%\xml%_EXT%\registry\schema\oo-ldap-attr.map
 ..\registry\schema\oo-ad-ldap-attr.map %_DEST%\xml%_EXT%\registry\schema\oo-ad-ldap-attr.map
-..\registry\schema\org\openoffice\LDAP.xcs %_DEST%\xml%_EXT%\registry\schema\org\openoffice\LDAP.xcs
-..\registry\data\org\openoffice\LDAP.xcu %_DEST%\xml%_EXT%\registry\data\org\openoffice\LDAP.xcu
+
+..\%__SRC%\misc\registry\data\org\openoffice\*.xcu.sample %_DEST%\xml%_EXT%\registry\data\org\openoffice\*.xcu.sample
 
 ..\%__SRC%\misc\registry\data\org\openoffice\*.xcu %_DEST%\xml%_EXT%\registry\data\org\openoffice
 ..\%__SRC%\misc\registry\data\org\openoffice\Office\*.xcu %_DEST%\xml%_EXT%\registry\data\org\openoffice\Office
