@@ -2,9 +2,9 @@
  *
  *  $RCSfile: section.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-13 19:43:46 $
+ *  last change: $Author: dvo $ $Date: 2001-03-20 18:46:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,6 +280,7 @@ SwSection& SwSection::operator=( const SwSection& rCpy )
     sLinkFileName = rCpy.GetLinkFileName();
     SetLinkFilePassWd( rCpy.GetLinkFilePassWd() );
     SetConnectFlag( rCpy.IsConnectFlag() );
+    SetPasswd( rCpy.GetPasswd() );
 
     eType = rCpy.eType;
 
@@ -306,6 +307,7 @@ int SwSection::operator==( const SwSection& rCmp ) const
             IsProtect() == rCmp.IsProtect() &&
             GetLinkFileName() == rCmp.GetLinkFileName() &&
             GetLinkFilePassWd() == rCmp.GetLinkFilePassWd() &&
+            GetPasswd() == rCmp.GetPasswd() &&
             ( !GetFmt() || !rCmp.GetFmt() || GetFmt() == rCmp.GetFmt());
 }
 
