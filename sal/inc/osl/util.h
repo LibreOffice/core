@@ -2,9 +2,9 @@
  *
  *  $RCSfile: util.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mfe $ $Date: 2001-02-28 12:50:43 $
+ *  last change: $Author: jsc $ $Date: 2001-04-26 08:22:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,17 +69,15 @@
 extern "C" {
 #endif
 
-/***
- *
- * @param pEthernetAddr 6 bytes of memory
- *
- * @return sal_True  if the ethernetaddress could be retrieved. <br>
- *         sal_False if no address could be found. This may be either because
- *         there is no ethernet card or there is no appropriate algorithm
- *         implemented on the platform. In this case, pEthernetAddr is
- *         unchanged.
- *
- ***/
+/**
+    @param pEthernetAddr 6 bytes of memory
+
+    @return sal_True  if the ethernetaddress could be retrieved. <br>
+            sal_False if no address could be found. This may be either because
+           there is no ethernet card or there is no appropriate algorithm
+           implemented on the platform. In this case, pEthernetAddr is
+           unchanged.
+*/
 sal_Bool SAL_CALL osl_getEthernetAddress( sal_uInt8 *pEthernetAddr );
 
 #ifdef __cplusplus

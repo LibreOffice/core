@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nlsupport.h,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obr $ $Date: 2001-04-11 11:33:31 $
+ *  last change: $Author: jsc $ $Date: 2001-04-26 08:22:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,15 +76,15 @@ extern "C" {
 #endif
 
 /**
- * Determines the text encoding used by the underlying platform for the
- * specified locale.
- *
- * @param pLocale
- * the locale to return the text encoding for. If this parameter is NULL,
- * the default locale of the current process is used.
- *
- * @returns the rtl_TextEncoding that matches the platform specific encoding
- * description or RTL_TEXTENCODING_DONTKNOW if no mapping is available.
+    Determines the text encoding used by the underlying platform for the
+    specified locale.
+
+    @param pLocale
+    the locale to return the text encoding for. If this parameter is NULL,
+    the default locale of the current process is used.
+
+    @returns the rtl_TextEncoding that matches the platform specific encoding
+    description or RTL_TEXTENCODING_DONTKNOW if no mapping is available.
 */
 
 rtl_TextEncoding SAL_CALL osl_getTextEncodingFromLocale( rtl_Locale * pLocale );
