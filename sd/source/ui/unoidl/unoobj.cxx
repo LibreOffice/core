@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-23 11:59:04 $
+ *  last change: $Author: cl $ $Date: 2001-06-20 15:45:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,9 @@
 #endif
 #ifndef _SVDOGRAF_HXX
 #include <svx/svdograf.hxx>
+#endif
+#ifndef _OUTLOBJ_HXX
+#include <svx/outlobj.hxx>
 #endif
 
 #ifndef _SD_SPOUTLINER_HXX
@@ -1172,8 +1175,14 @@ void SdXShape::SetEmptyPresObj( sal_Bool bEmpty ) throw()
     {
         if(!bEmpty)
         {
+            OutlinerParaObject* pOutlinerParaObject = pObj->GetOutlinerParaObject();
+            const sal_Bool bVertical = pOutlinerParaObject ? pOutlinerParaObject->IsVertical() : sal_False;
+
             // really delete SdrOutlinerObj at pObj
             pObj->NbcSetOutlinerParaObject(0L);
+            if( bVertical && PTR_CAST( SdrTextObj, pObj ) )
+                ((SdrTextObj*)pObj)->SetVerticalWriting( sal_True );
+
             SdrGrafObj* pGraphicObj = PTR_CAST( SdrGrafObj, pObj );
             if( pGraphicObj )
             {
@@ -1206,7 +1215,10 @@ void SdXShape::SetEmptyPresObj( sal_Bool bEmpty ) throw()
                 OutlinerParaObject* pOutlinerParaObject = pObj->GetOutlinerParaObject();
                 pOutliner->SetText( *pOutlinerParaObject );
                 SfxStyleSheetPool* pStyle = pOutliner->GetStyleSheetPool();
+                const sal_Bool bVertical = pOutliner->IsVertical();
+
                 pOutliner->Clear();
+                pOutliner->SetVertical( bVertical );
                 pOutliner->SetStyleSheetPool( (SfxStyleSheetPool*)pDoc->GetStyleSheetPool() );
                 pOutliner->SetStyleSheet( 0, pPage->GetTextStyleSheetForObject( pObj ) );
                 pOutliner->Insert( pPage->GetPresObjText( pPage->GetPresObjKind(pObj) ) );
