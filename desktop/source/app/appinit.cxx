@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cd $ $Date: 2001-08-21 16:00:55 $
+ *  last change: $Author: mba $ $Date: 2002-03-19 17:09:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,10 +273,10 @@ void registerServices( Reference< XMultiServiceFactory >& xSMgr )
     }
 
     ::rtl::OUString aPortalConnect;
-    sal_Bool        bServer = pCmdLine->IsServer();
+    bool bServer = (bool) pCmdLine->IsServer();
 
     pCmdLine->GetPortalConnectString( aPortalConnect );
-    if ( !configureUcb( bServer, aPortalConnect ))
+    if ( !configureUcb( bServer, aPortalConnect ) )
     {
         DBG_ERROR( "Can't configure UCB" );
         exit(-1);
@@ -338,7 +338,8 @@ void removeTemporaryDirectory()
         if ( ::utl::UCBContentHelper::Kill( aCurrentTempURL ) )
         {
             SvtInternalOptions().SetCurrentTempURL( String() );
-            ::utl::UCBContentHelper::Kill( aCurrentTempBase );
+            ::osl::Directory::remove( aCurrentTempBase );
+            //::utl::UCBContentHelper::Kill( aCurrentTempBase );
         }
     }
 }
