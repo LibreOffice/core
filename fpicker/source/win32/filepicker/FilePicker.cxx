@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilePicker.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tra $ $Date: 2001-08-06 07:34:48 $
+ *  last change: $Author: tra $ $Date: 2001-08-10 12:14:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -594,10 +594,18 @@ void SAL_CALL CFilePicker::initialize( const Sequence< Any >& aArguments )
 {
     // parameter checking
     Any aAny;
-    if ( !aArguments.getLength( ) ||
-         (aAny = aArguments[0]).getValueType() != ::getCppuType( (sal_Int16*)0 ) )
+    if ( 0 == aArguments.getLength( ) )
         throw IllegalArgumentException(
-            OUString::createFromAscii( "Invalid arguments" ),
+            OUString::createFromAscii( "no arguments" ),
+            static_cast< XFilePicker* >( this ),
+            1 );
+
+    aAny = aArguments[0];
+
+    if ( (aAny.getValueType() != ::getCppuType((sal_Int16*)0)) &&
+         (aAny.getValueType() != ::getCppuType((sal_Int8*)0)) )
+        throw IllegalArgumentException(
+            OUString::createFromAscii( "invalid argument type" ),
             static_cast< XFilePicker* >( this ),
             1 );
 
@@ -658,7 +666,6 @@ void SAL_CALL CFilePicker::initialize( const Sequence< Any >& aArguments )
         break;
 
     case FILEOPEN_PLAY:
-        bFileOpenDialog = sal_False;
         if ( bIsWin2000 )
             winResTemplateId = TMPL2000_PLAY_PUSHBUTTON;
         else
