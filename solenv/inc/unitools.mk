@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unitools.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hjs $ $Date: 2001-06-22 16:06:10 $
+#   last change: $Author: hjs $ $Date: 2001-09-17 16:59:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,7 +85,7 @@ GNUMAKE*=$(ENV_TOOLS)$/gnumake.exe
 #wraper for solenv\bin\mkdir.pl to fix mkdir /p problem
 MKDIR=+$(SOLARENV)$/bin$/mkdir.btm
 TOUCH*=$(BUILD_TOOLS)$/touch.exe
-PERL*=$(ENV_TOOLS)$/perl5.btm
+PERL*:=$(ENV_TOOLS)$/perl5.btm
 SCP_CHECK_TOOL=checkscp.exe
 
 #signing for win32 only
