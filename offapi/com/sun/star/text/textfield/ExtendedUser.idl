@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ExtendedUser.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2002-01-08 15:33:48 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:46:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ module com { module sun { module star { module text { module textfield {
     (name, address, phone, ...)
     @see com::sun::star::text::TextField
 */
-service ExtendedUser
+published service ExtendedUser
 {
     service  com::sun::star::text::TextField;
     /** contains the content.
