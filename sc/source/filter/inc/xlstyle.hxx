@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlstyle.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-21 08:05:17 $
+ *  last change: $Author: vg $ $Date: 2003-07-24 11:56:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,6 +220,10 @@ struct XclFontData
 
     /** Returns the API font height. */
     float                       GetApiHeight() const;
+    /** Returns the API font family. */
+    sal_Int16                   GetApiFamily() const;
+    /** Returns the API character set. */
+    sal_Int16                   GetApiCharSet() const;
     /** Returns the API font posture. */
     ::com::sun::star::awt::FontSlant GetApiPosture() const;
     /** Returns the API font weight. */
@@ -228,6 +232,21 @@ struct XclFontData
     sal_Int16                   GetApiUnderline() const;
     /** Returns the API font strike-out style. */
     sal_Int16                   GetApiStrikeout() const;
+
+    /** Sets the API font height. */
+    void                        SetApiHeight( float fPoint );
+    /** Sets the API font family. */
+    void                        SetApiFamily( sal_Int16 nApiFamily );
+    /** Sets the API character set. */
+    void                        SetApiCharSet( sal_Int16 nApiCharSet );
+    /** Sets the API font posture. */
+    void                        SetApiPosture( ::com::sun::star::awt::FontSlant eApiPosture );
+    /** Sets the API font weight. */
+    void                        SetApiWeight( float fApiWeight );
+    /** Sets the API font underline style. */
+    void                        SetApiUnderline( sal_Int16 nApiUnderl );
+    /** Sets the API font strike-out style. */
+    void                        SetApiStrikeout( sal_Int16 nApiStrikeout );
 };
 
 bool operator==( const XclFontData& rLeft, const XclFontData& rRight );
