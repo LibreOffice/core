@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-06 12:40:46 $
+ *  last change: $Author: ama $ $Date: 2001-04-10 14:26:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -634,6 +634,7 @@ const SwPropNameLen __FAR_DATA UNO_NAME_HEADER_SECTION                      (MAP
 const SwPropNameLen __FAR_DATA UNO_NAME_PARA_IS_HANGING_PUNCTUATION         (MAP_CHAR_LEN("ParaIsHangingPunctuation"));
 const SwPropNameLen __FAR_DATA UNO_NAME_PARA_IS_CHARACTER_DISTANCE          (MAP_CHAR_LEN("ParaIsCharacterDistance"));
 const SwPropNameLen __FAR_DATA UNO_NAME_PARA_IS_FORBIDDEN_RULES             (MAP_CHAR_LEN("ParaIsForbiddenRules"));
+const SwPropNameLen __FAR_DATA UNO_NAME_PARA_VERT_ALIGNMENT                 (MAP_CHAR_LEN("ParaVertAlignment"));
 const SwPropNameLen __FAR_DATA UNO_NAME_IS_MAIN_ENTRY                       (MAP_CHAR_LEN("IsMainEntry"));
 
 const SwPropNameLen __FAR_DATA UNO_NAME_GRAPHIC_ROTATION                    (MAP_CHAR_LEN("GraphicRotation"));
