@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:32:23 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 13:20:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,13 +61,9 @@
 
 #define _SV_OUTDEV_CXX
 #include <tools/ref.hxx>
-#ifndef REMOTE_APPSERVER
 #ifndef _SV_SVSYS_HXX
 #include <svsys.h>
 #endif
-#endif
-
-#ifndef REMOTE_APPSERVER
 #ifndef _SV_SALGDI_HXX
 #include <salgdi.hxx>
 #endif
@@ -83,12 +79,6 @@
 #ifndef _SV_SALPRN_HXX
 #include <salprn.hxx>
 #endif
-#else
-#ifndef _SV_RMOUTDEV_HXX
-#include <rmoutdev.hxx>
-#endif
-#endif
-
 #ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
@@ -250,7 +240,6 @@ static void ImplDeleteObjStack( ImplObjStack* pObjStack )
 
 // -----------------------------------------------------------------------
 
-#ifndef REMOTE_APPSERVER
 
 BOOL OutputDevice::ImplSelectClipRegion( SalGraphics* pGraphics, const Region& rRegion, OutputDevice *pOutDev )
 {
@@ -279,7 +268,6 @@ BOOL OutputDevice::ImplSelectClipRegion( SalGraphics* pGraphics, const Region& r
     return bClipRegion;
 }
 
-#endif
 
 // =======================================================================
 
@@ -307,7 +295,6 @@ PolyPolygon ImplSubdivideBezier( const PolyPolygon& rPolyPoly )
 
 // =======================================================================
 
-#ifndef REMOTE_APPSERVER
 // #100127# Extracted from OutputDevice::DrawPolyPolygon()
 void OutputDevice::ImplDrawPolyPolygon( USHORT nPoly, const PolyPolygon& rPolyPoly )
 {
@@ -392,7 +379,6 @@ void OutputDevice::ImplDrawPolyPolygon( USHORT nPoly, const PolyPolygon& rPolyPo
         delete[] pFlagAryAry;
     }
 }
-#endif
 
 // =======================================================================
 
@@ -552,11 +538,7 @@ void OutputDevice::EnableRTL( BOOL bEnable )
 
 BOOL OutputDevice::ImplHasMirroredGraphics()
 {
-#ifndef REMOTE_APPSERVER
     return ( ImplGetGraphics() && (mpGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL) );
-#else
-    return FALSE;
-#endif
 }
 
 void    OutputDevice::ImplReMirror( Point &rPoint ) const
@@ -597,8 +579,6 @@ void    OutputDevice::ImplReMirror( Region &rRegion ) const
 
 
 // -----------------------------------------------------------------------
-
-#ifndef REMOTE_APPSERVER
 
 int OutputDevice::ImplGetGraphics() const
 {
@@ -832,8 +812,6 @@ void OutputDevice::ImplReleaseGraphics( BOOL bRelease )
     }
 }
 
-#endif
-
 // -----------------------------------------------------------------------
 
 void OutputDevice::ImplInitOutDevData()
@@ -879,7 +857,6 @@ void OutputDevice::ImplInitLineColor()
 {
     DBG_TESTSOLARMUTEX();
 
-#ifndef REMOTE_APPSERVER
     if( mbLineColor )
     {
         if( ROP_0 == meRasterOp )
@@ -893,9 +870,6 @@ void OutputDevice::ImplInitLineColor()
     }
     else
         mpGraphics->SetLineColor();
-#else
-    mpGraphics->SetLineColor( maLineColor );
-#endif
 
     mbInitLineColor = FALSE;
 }
@@ -906,7 +880,6 @@ void OutputDevice::ImplInitFillColor()
 {
     DBG_TESTSOLARMUTEX();
 
-#ifndef REMOTE_APPSERVER
     if( mbFillColor )
     {
         if( ROP_0 == meRasterOp )
@@ -920,9 +893,6 @@ void OutputDevice::ImplInitFillColor()
     }
     else
         mpGraphics->SetFillColor();
-#else
-    mpGraphics->SetFillColor( maFillColor );
-#endif
 
     mbInitFillColor = FALSE;
 }
@@ -958,11 +928,7 @@ void OutputDevice::ImplInitClipRegion()
         else
         {
             mbOutputClipped = FALSE;
-#ifndef REMOTE_APPSERVER
             ImplSelectClipRegion( mpGraphics, aRegion, this );
-#else
-            mpGraphics->SetClipRegion( aRegion );
-#endif
         }
         mbClipRegionSet = TRUE;
     }
@@ -975,13 +941,9 @@ void OutputDevice::ImplInitClipRegion()
             else
             {
                 mbOutputClipped = FALSE;
-#ifndef REMOTE_APPSERVER
                 ImplSelectClipRegion( mpGraphics,
                                       // #102532# Respect output offset also for clip region
                                       ImplPixelToDevicePixel( maRegion ), this );
-#else
-                mpGraphics->SetClipRegion( maRegion );
-#endif
             }
 
             mbClipRegionSet = TRUE;
@@ -990,11 +952,7 @@ void OutputDevice::ImplInitClipRegion()
         {
             if ( mbClipRegionSet )
             {
-#ifndef REMOTE_APPSERVER
                 mpGraphics->ResetClipRegion();
-#else
-                mpGraphics->SetClipRegion();
-#endif
                 mbClipRegionSet = FALSE;
             }
 
@@ -1192,14 +1150,8 @@ void OutputDevice::SetRasterOp( RasterOp eRasterOp )
         meRasterOp = eRasterOp;
         mbInitLineColor = mbInitFillColor = TRUE;
 
-#ifndef REMOTE_APPSERVER
         if( mpGraphics || ImplGetGraphics() )
             mpGraphics->SetXORMode( (ROP_INVERT == meRasterOp) || (ROP_XOR == meRasterOp) );
-#else
-        ImplServerGraphics* pGraphics = ImplGetServerGraphics();
-        if( pGraphics )
-            pGraphics->SetRasterOp( eRasterOp );
-#endif
     }
 
     if( mpAlphaVDev )
@@ -1467,7 +1419,6 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
     if ( !IsDeviceOutputNecessary() || !mbLineColor || ImplIsRecordLayout() )
         return;
 
-#ifndef REMOTE_APPSERVER
     if ( !mpGraphics )
     {
         if ( !ImplGetGraphics() )
@@ -1486,17 +1437,6 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
     Point aEndPt = ImplLogicToDevicePixel( rEndPt );
 
     mpGraphics->DrawLine( aStartPt.X(), aStartPt.Y(), aEndPt.X(), aEndPt.Y(), this );
-
-#else
-    ImplServerGraphics* pGraphics = ImplGetServerGraphics();
-    if ( pGraphics )
-    {
-        if ( mbInitLineColor )
-            ImplInitLineColor();
-        pGraphics->DrawLine( ImplLogicToDevicePixel( rStartPt ),
-                             ImplLogicToDevicePixel( rEndPt ) );
-    }
-#endif
 
     if( mpAlphaVDev )
         mpAlphaVDev->DrawLine( rStartPt, rEndPt );
@@ -1521,8 +1461,6 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt,
 
     if ( !IsDeviceOutputNecessary() || !mbLineColor || ( LINE_NONE == rLineInfo.GetStyle() ) || ImplIsRecordLayout() )
         return;
-
-#ifndef REMOTE_APPSERVER
 
     if( !mpGraphics && !ImplGetGraphics() )
         return;
@@ -1580,61 +1518,6 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt,
         mpGraphics->DrawLine( aStartPt.X(), aStartPt.Y(), aEndPt.X(), aEndPt.Y(), this );
     }
 
-#else
-
-    ImplServerGraphics* pGraphics = ImplGetServerGraphics();
-    if ( pGraphics )
-    {
-        const LineInfo aInfo( ImplLogicToDevicePixel( rLineInfo ) );
-
-        if( ( aInfo.GetWidth() > 1L ) || ( LINE_DASH == aInfo.GetStyle() ) )
-        {
-            Polygon             aPoly( 2 ); aPoly[ 0 ] = rStartPt; aPoly[ 1 ] = rEndPt;
-            GDIMetaFile*        pOldMetaFile = mpMetaFile;
-            ImplLineConverter   aLineCvt( ImplLogicToDevicePixel( aPoly ), aInfo, ( mbRefPoint ) ? &maRefPoint : NULL );
-
-            mpMetaFile = NULL;
-
-            if ( aInfo.GetWidth() > 1 )
-            {
-                const Color     aOldLineColor( maLineColor );
-                const Color     aOldFillColor( maFillColor );
-
-                SetLineColor();
-                ImplInitLineColor();
-                SetFillColor( aOldLineColor );
-                ImplInitFillColor();
-
-                for( const Polygon* pPoly = aLineCvt.ImplGetFirst(); pPoly; pPoly = aLineCvt.ImplGetNext() )
-                    pGraphics->DrawPolygon( *pPoly );
-
-                SetLineColor( aOldLineColor );
-                SetFillColor( aOldFillColor );
-            }
-            else
-            {
-                if ( mbInitLineColor )
-                    ImplInitLineColor();
-
-                for ( const Polygon* pPoly = aLineCvt.ImplGetFirst(); pPoly; pPoly = aLineCvt.ImplGetNext() ) {
-                    Point xPoint((*pPoly)[ 0 ].X(), (*pPoly)[ 0 ].Y());
-                    Point yPoint((*pPoly)[ 1 ].X(), (*pPoly)[ 1 ].Y());
-                    mpGraphics->DrawLine( xPoint, yPoint );
-                }
-            }
-            mpMetaFile = pOldMetaFile;
-        }
-        else
-        {
-            if ( mbInitLineColor )
-                ImplInitLineColor();
-
-            pGraphics->DrawLine( ImplLogicToDevicePixel( rStartPt ), ImplLogicToDevicePixel( rEndPt ) );
-        }
-    }
-
-#endif
-
     if( mpAlphaVDev )
         mpAlphaVDev->DrawLine( rStartPt, rEndPt, rLineInfo );
 }
@@ -1658,7 +1541,6 @@ void OutputDevice::DrawRect( const Rectangle& rRect )
         return;
     aRect.Justify();
 
-#ifndef REMOTE_APPSERVER
     if ( !mpGraphics )
     {
         if ( !ImplGetGraphics() )
@@ -1676,17 +1558,6 @@ void OutputDevice::DrawRect( const Rectangle& rRect )
         ImplInitFillColor();
 
     mpGraphics->DrawRect( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(), this );
-#else
-    ImplServerGraphics* pGraphics = ImplGetServerGraphics();
-    if ( pGraphics )
-    {
-        if ( mbInitLineColor )
-            ImplInitLineColor();
-        if ( mbInitFillColor )
-            ImplInitFillColor();
-        pGraphics->DrawRect( aRect );
-    }
-#endif
 
     if( mpAlphaVDev )
         mpAlphaVDev->DrawRect( rRect );
@@ -1708,7 +1579,6 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly )
     if ( !IsDeviceOutputNecessary() || !mbLineColor || (nPoints < 2) || ImplIsRecordLayout() )
         return;
 
-#ifndef REMOTE_APPSERVER
     // we need a graphics
     if ( !mpGraphics )
     {
@@ -1742,22 +1612,6 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly )
     {
         mpGraphics->DrawPolyLine( nPoints, pPtAry, this );
     }
-#else
-    ImplServerGraphics* pGraphics = ImplGetServerGraphics();
-    if ( pGraphics )
-    {
-        if ( mbInitLineColor )
-            ImplInitLineColor();
-
-        Polygon aPoly = ImplLogicToDevicePixel( rPoly );
-
-        // #100127# TODO: maybe extend Polygon::operator>>
-        if( aPoly.HasFlags() )
-            aPoly = ImplSubdivideBezier( aPoly );
-
-        pGraphics->DrawPolyLine( aPoly );
-    }
-#endif
 
     if( mpAlphaVDev )
         mpAlphaVDev->DrawPolyLine( rPoly );
@@ -1794,7 +1648,6 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly, const LineInfo& rLineInfo
         nPoints = aPoly.GetSize();
     }
 
-#ifndef REMOTE_APPSERVER
     // we need a graphics
     if ( !mpGraphics && !ImplGetGraphics() )
         return;
@@ -1840,48 +1693,6 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly, const LineInfo& rLineInfo
         else
             mpGraphics->DrawPolyLine( nPoints, (const SalPoint*) aPoly.GetConstPointAry(), this );
     }
-#else
-    ImplServerGraphics* pGraphics = ImplGetServerGraphics();
-
-    if ( pGraphics )
-    {
-        const LineInfo aInfo( ImplLogicToDevicePixel( rLineInfo ) );
-
-        if( aInfo.GetWidth() > 1L )
-        {
-            const Color         aOldLineColor( maLineColor );
-            const Color         aOldFillColor( maFillColor );
-            GDIMetaFile*        pOldMetaFile = mpMetaFile;
-            ImplLineConverter   aLineCvt( aPoly, aInfo, ( mbRefPoint ) ? &maRefPoint : NULL );
-
-            mpMetaFile = NULL;
-            SetLineColor();
-            ImplInitLineColor();
-            SetFillColor( aOldLineColor );
-            ImplInitFillColor();
-
-            for( const Polygon* pPoly = aLineCvt.ImplGetFirst(); pPoly; pPoly = aLineCvt.ImplGetNext() )
-                pGraphics->DrawPolygon( *pPoly );
-
-            SetLineColor( aOldLineColor );
-            SetFillColor( aOldFillColor );
-            mpMetaFile = pOldMetaFile;
-        }
-        else
-        {
-            if ( mbInitLineColor )
-                ImplInitLineColor();
-            if ( LINE_DASH == aInfo.GetStyle() )
-            {
-                ImplLineConverter   aLineCvt( aPoly, aInfo, ( mbRefPoint ) ? &maRefPoint : NULL );
-                for( const Polygon* pPoly = aLineCvt.ImplGetFirst(); pPoly; pPoly = aLineCvt.ImplGetNext() )
-                    pGraphics->DrawPolyLine( *pPoly );
-            }
-            else
-                pGraphics->DrawPolyLine( aPoly );
-        }
-    }
-#endif
 
     if( mpAlphaVDev )
         mpAlphaVDev->DrawPolyLine( rPoly, rLineInfo );
@@ -1903,7 +1714,6 @@ void OutputDevice::DrawPolygon( const Polygon& rPoly )
     if ( !IsDeviceOutputNecessary() || (!mbLineColor && !mbFillColor) || (nPoints < 2) || ImplIsRecordLayout() )
         return;
 
-#ifndef REMOTE_APPSERVER
     // we need a graphics
     if ( !mpGraphics )
     {
@@ -1939,25 +1749,6 @@ void OutputDevice::DrawPolygon( const Polygon& rPoly )
     {
         mpGraphics->DrawPolygon( nPoints, pPtAry, this );
     }
-#else
-    ImplServerGraphics* pGraphics = ImplGetServerGraphics();
-    if ( pGraphics )
-    {
-        if ( mbInitLineColor )
-            ImplInitLineColor();
-        if ( mbInitFillColor )
-            ImplInitFillColor();
-
-        Polygon aPoly = ImplLogicToDevicePixel( rPoly );
-
-        // #100127# TODO: maybe extend Polygon::operator>>
-        if( aPoly.HasFlags() )
-            aPoly = ImplSubdivideBezier( aPoly );
-
-        pGraphics->DrawPolygon( aPoly );
-    }
-#endif
-
     if( mpAlphaVDev )
         mpAlphaVDev->DrawPolygon( rPoly );
 }
@@ -1978,7 +1769,6 @@ void OutputDevice::DrawPolyPolygon( const PolyPolygon& rPolyPoly )
     if ( !IsDeviceOutputNecessary() || (!mbLineColor && !mbFillColor) || !nPoly || ImplIsRecordLayout() )
         return;
 
-#ifndef REMOTE_APPSERVER
     // we need a graphics
     if ( !mpGraphics )
     {
@@ -2017,48 +1807,6 @@ void OutputDevice::DrawPolyPolygon( const PolyPolygon& rPolyPoly )
         // ImplLogicToDevicePixel calls
         ImplDrawPolyPolygon( nPoly, ImplLogicToDevicePixel( rPolyPoly ) );
     }
-#else
-    ImplServerGraphics* pGraphics = ImplGetServerGraphics();
-    if ( pGraphics )
-    {
-        if ( mbInitLineColor )
-            ImplInitLineColor();
-
-        if ( mbInitFillColor )
-            ImplInitFillColor();
-        if ( nPoly == 1 )
-        {
-            Polygon aPoly = ImplLogicToDevicePixel( rPolyPoly.GetObject( 0 ) );
-            USHORT nSize = aPoly.GetSize();
-            if ( nSize >= 2 )
-            {
-                // #100127# TODO: maybe extend Polygon::operator>>
-                if( aPoly.HasFlags() )
-                    aPoly = ImplSubdivideBezier( aPoly );
-
-                pGraphics->DrawPolygon( aPoly );
-            }
-        }
-        else
-        {
-            PolyPolygon aPolyPoly = ImplLogicToDevicePixel( rPolyPoly );
-
-            USHORT i, nPoints = aPolyPoly.Count();
-            for( i=0; i<nPoints; ++i )
-            {
-                if( aPolyPoly.GetObject( i ).HasFlags() )
-                {
-                    // #100127# TODO: maybe extend Polygon::operator>>
-                    aPolyPoly = ImplSubdivideBezier( aPolyPoly );
-                    break;
-                }
-            }
-
-            pGraphics->DrawPolyPolygon( aPolyPoly );
-        }
-    }
-#endif
-
     if( mpAlphaVDev )
         mpAlphaVDev->DrawPolyPolygon( rPolyPoly );
 }
@@ -2268,14 +2016,12 @@ USHORT OutputDevice::GetBitCount() const
     if ( meOutDevType == OUTDEV_VIRDEV )
         return ((VirtualDevice*)this)->mnBitCount;
 
-#ifndef REMOTE_APPSERVER
     // we need a graphics
     if ( !mpGraphics )
     {
         if ( !((OutputDevice*)this)->ImplGetGraphics() )
             return 0;
     }
-#endif
 
     return (USHORT)mpGraphics->GetBitCount();
 }
@@ -2318,7 +2064,6 @@ OpenGL* OutputDevice::GetOpenGL()
 {
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
-#ifndef REMOTE_APPSERVER
     OpenGL* pOGL;
 
     if( OUTDEV_PRINTER != meOutDevType )
@@ -2335,9 +2080,6 @@ OpenGL* OutputDevice::GetOpenGL()
         pOGL = NULL;
 
     return pOGL;
-#else
-    return NULL;
-#endif
 }
 
 // -----------------------------------------------------------------------
