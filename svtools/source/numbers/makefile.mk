@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: pluby $ $Date: 2000-12-15 03:00:32 $
+#   last change: $Author: svesik $ $Date: 2001-02-02 18:46:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -116,10 +116,8 @@ EXCEPTIONSFILES= \
         $(SLO)$/numfmuno.obj \
         $(SLO)$/supservs.obj
 
-# NETBSD: somewhere we have to instantiate the static data members.
-# NETBSD-1.2.1 doesn't know about weak symbols so the default mechanism for GCC won't work.
 # SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symb ols
-.IF "$(OS)"=="NETBSD" || "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
+.IF "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
 SLOFILES+=$(SLO)$/staticmbnumbers.obj
 .ENDIF
 
