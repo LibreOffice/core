@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfrm.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-27 12:53:08 $
+ *  last change: $Author: rt $ $Date: 2002-05-28 20:43:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -495,7 +495,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Text[ polish ] = "Protect";
         Text[ portuguese_brazilian ] = "Protect";
         Text[ japanese ] = "Protect";
-        Text[ korean ] = "Protect";
+        Text[ korean ] = "Î≥¥Ìò∏";
         Text[ chinese_simplified ] = "Protect";
         Text[ chinese_traditional ] = "‰øùË≠∑";
         Text[ turkish ] = "Protect";
@@ -585,7 +585,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Text[ polish ] = "Konfiguracja";
         Text[ portuguese_brazilian ] = "Adjust";
         Text[ japanese ] = "ÈÅ©Âêà";
-        Text[ korean ] = "Ï°∞Ï†ï";
+        Text[ korean ] = "Ï°∞Ï†à";
         Text[ chinese_simplified ] = "Ë∞ÉÊï¥";
         Text[ chinese_traditional ] = "Ë™øÊï¥";
         Text[ arabic ] = "÷»ÿ";
@@ -718,7 +718,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Text[ chinese_traditional ] = "Á∏ÆÂÆö(~A)";
         Text[ arabic ] = "„—”«…";
         Text[ greek ] = "¡„Í˝Ò˘ÛÁ";
-        Text[ korean ] = "Í∏∞Ï§Ä ÏúÑÏπò(~A)";
+        Text[ korean ] = "ÏúÑÏπò Í≥†Ï†ï(~A)";
         Text[ turkish ] = "~Sabitleyici";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Ancla";
