@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ocomponentaccess.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2000-09-26 13:01:15 $
+ *  last change: $Author: as $ $Date: 2000-10-06 11:34:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,13 +196,12 @@ sal_Bool SAL_CALL OComponentAccess::hasElements() throw( RuntimeException )
     // Set default return value, if method failed.
     sal_Bool bReturn = sal_False;
 
-    // Try to "lock" the desktop for access to taskscontainer.
-    Reference< XInterface > xLock = m_xOwner.get();
+    // Try to "lock" the desktop for access to task container.
+    Reference< XFramesSupplier > xLock( m_xOwner.get(), UNO_QUERY );
     if ( xLock.is() == sal_True )
     {
         // Ask container of owner for existing elements.
-        Reference< XElementAccess > xDesktopContainer( xLock, UNO_QUERY );
-        bReturn = xDesktopContainer->hasElements();
+        bReturn = xLock->getFrames()->hasElements();
     }
 
     // Return result of this operation.
