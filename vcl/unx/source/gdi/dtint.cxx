@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dtint.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 14:44:37 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:26:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,27 @@ DtIntegrator* DtIntegrator::CreateDtIntegrator()
         DtIntegrator* pIntegrator = aIntegratorList.GetObject( i );
         if( pIntegrator->mpDisplay == pDisplay )
             return pIntegrator;
+    }
+    /*
+     *  #i22061# override desktop detection
+     *  if environment variable OOO_FORCE_DESKTOP is set
+     *  to one of "cde" "kde" "gnome" then autodetection
+     *  is overridden.
+     */
+    static const char* pOverride = getenv( "OOO_FORCE_DESKTOP" );
+    if( pOverride && *pOverride )
+    {
+        OString aOver( pOverride );
+#if USE_CDE
+        if( aOver.equalsIgnoreAsciiCase( "cde" ) )
+            return new CDEIntegrator( pFrame );
+#endif
+        if( aOver.equalsIgnoreAsciiCase( "kde" ) )
+            return new KDEIntegrator( pFrame );
+        if( aOver.equalsIgnoreAsciiCase( "gnome" ) )
+            return new GNOMEIntegrator( pFrame );
+        if( aOver.equalsIgnoreAsciiCase( "none" ) )
+            return new DtIntegrator( pFrame );
     }
 
     Atom nDtAtom = None;
