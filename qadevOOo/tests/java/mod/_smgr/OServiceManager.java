@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OServiceManager.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:17:46 $
+ *  last change:$Date: 2003-02-04 09:28:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,8 @@ import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
 
 /**
  * Test for object which is represented by service
@@ -170,8 +172,9 @@ public class OServiceManager extends TestCase {
             XPropertySet xProp = (XPropertySet)UnoRuntime.queryInterface(
                                             XPropertySet.class, oInterface);
             if (xProp != null) {
-                xContext = (XComponentContext)
-                            xProp.getPropertyValue("DefaultContext");
+                xContext = (XComponentContext) AnyConverter.toObject(
+                    new Type(XComponentContext.class),
+                            xProp.getPropertyValue("DefaultContext"));
             }
         } catch (com.sun.star.uno.Exception e) {
             log.println("Can't insert a service to the ServiceManager") ;
