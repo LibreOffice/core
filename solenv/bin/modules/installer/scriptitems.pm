@@ -2,9 +2,9 @@
 #
 #   $RCSfile: scriptitems.pm,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: kz $ $Date: 2004-10-14 17:28:48 $
+#   last change: $Author: obo $ $Date: 2004-10-18 13:53:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -694,6 +694,43 @@ sub get_Source_Directory_For_Files_From_Includepathlist
 }
 
 #################################################################################
+# Removing files, that shall not be included into langugagepacks
+# (because of rpm conflicts)
+#################################################################################
+
+sub remove_Files_For_Languagepacks
+{
+    my ($itemsarrayref) = @_;
+
+    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::scriptitems::remove_Files_For_Languagepacks : $#{$filesarrayref}"); }
+
+    my $infoline;
+
+    my @newitemsarray = ();
+
+    for ( my $i = 0; $i <= $#{$itemsarrayref}; $i++ )
+    {
+        my $oneitem = ${$itemsarrayref}[$i];
+        my $gid = $oneitem->{'gid'};
+
+        # scp Todo: Remove asap after removal of old setup
+
+        if (( $gid eq "gid_File_Extra_Fontunxpsprint" ) ||
+            ( $gid eq "gid_File_Extra_Migration_Lang" ))
+        {
+            $infoline = "ATTENTION: Removing item $oneitem->{'gid'} from the installation set.\n";
+            push( @installer::globals::logfileinfo, $infoline);
+
+            next;
+        }
+
+        push(@newitemsarray, $oneitem);
+    }
+
+    return \@newitemsarray;
+}
+
+#################################################################################
 # Removing files, that are not part of ada products
 #################################################################################
 
@@ -992,16 +1029,23 @@ sub remove_Setup_from_Installset
             ( $gid eq "gid_File_Extra_Cdecalc" ) ||
             ( $gid eq "gid_File_Extra_Cdedraw" ) ||
             ( $gid eq "gid_File_Extra_Cdeimpress" ) ||
+            ( $gid eq "gid_File_Bmp_Logo" ) ||
+            ( $gid eq "gid_File_Bmp_Product" ) ||
+            ( $gid eq "gid_File_Bmp_Vendor" ) ||
+            ( $gid eq "gid_File_Bmp_Vendor_Hc" ) ||
             ( $gid eq "gid_File_Images_Zip_Setup" ))
         {
             $infoline = "ATTENTION: Removing setup item $oneitem->{'gid'} from the installation set.\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            push( @installer::globals::globallogfileinfo, $infoline);
 
             next;
         }
 
         push(@newitemsarray, $oneitem);
     }
+
+    $infoline = "\n";
+    push( @installer::globals::globallogfileinfo, $infoline);
 
     return \@newitemsarray;
 }
