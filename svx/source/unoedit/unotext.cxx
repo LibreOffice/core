@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:27 $
+ *  last change: $Author: cl $ $Date: 2000-09-28 09:52:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,8 +350,6 @@ void SAL_CALL SvxUnoTextRangeBase::setString(const OUString& aString)
     sal_uInt16 nLen = aConverted.Len();
     if (nLen)
         GoRight( nLen, sal_True );
-
-    CollapseToEnd();
 }
 
 // Interface beans::XPropertySet
@@ -1258,17 +1256,49 @@ void SAL_CALL SvxUnoText::insertControlCharacter( const uno::Reference< text::XT
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    ESelection aSelection;
-    ::GetSelection( aSelection, GetEditSource()->GetTextForwarder() );
-    SetSelection( aSelection );
+    SvxTextForwarder* pForwarder = GetEditSource()->GetTextForwarder();
 
-    if ( nControlCharacter == text::ControlCharacter::PARAGRAPH_BREAK )
+    if( pForwarder )
     {
+        ESelection aSelection;
+        ::GetSelection( aSelection, pForwarder );
+        SetSelection( aSelection );
+
         String aText( (char)13, 1 );    // '\r' geht auf'm Mac nicht
-        insertString( xRange, aText, bAbsorb );
+
+        if ( nControlCharacter == text::ControlCharacter::PARAGRAPH_BREAK )
+        {
+            insertString( xRange, aText, bAbsorb );
+
+            return;
+        }
+        else if( nControlCharacter == text::ControlCharacter::APPEND_PARAGRAPH )
+        {
+            SvxUnoTextRangeBase* pRange = SvxUnoTextRange::getImplementation( xRange );
+            if(pRange)
+            {
+                ESelection aRange = pRange->GetSelection();
+                ESelection aOldSelection = aRange;
+
+                aRange.nStartPos  = pForwarder->GetTextLen( aRange.nStartPara ) + 1;
+
+                aRange.nEndPara = aRange.nStartPara;
+                aRange.nEndPos  = aRange.nStartPos;
+
+                pRange->SetSelection( aRange );
+                if (!bAbsorb)                   // nicht ersetzen -> hinten anhaengen
+                    pRange->CollapseToEnd();
+
+                pRange->setString( aText );
+
+                pRange->SetSelection( aOldSelection );
+
+                return;
+            }
+        }
     }
-    else
-        throw lang::IllegalArgumentException();
+
+    throw lang::IllegalArgumentException();
 }
 
 // XText
