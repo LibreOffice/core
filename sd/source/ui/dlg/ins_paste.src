@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ins_paste.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:57:41 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:59:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,10 +112,13 @@ ModalDialog DLG_INSERT_PASTE
         Text[ korean ] = "위치";
         Text[ chinese_simplified ] = "位置";
         Text[ chinese_traditional ] = "位置";
-        Text[ turkish ] = "�� unvan�";
+        Text[ turkish ] = "Konum";
         Text[ arabic ] = "Start_num";
         Text[ catalan ] = "Mostra";
         Text[ thai ] = "ตำแหน่ง";
+        Text[ czech ] = "Umístění";
+        Text[ hebrew ] = "‮מיקום‬";
+        Text[ hindi ] = "Position";
     };
     RadioButton RB_BEFORE
     {
@@ -143,10 +146,13 @@ ModalDialog DLG_INSERT_PASTE
         Text[ arabic ] = "���";
         Text[ greek ] = "���� ���";
         Text[ korean ] = "앞(~B)";
-        Text[ turkish ] = "�n~�ne";
+        Text[ turkish ] = "~�nce";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "A~bans de";
         Text[ thai ] = "~ก่อน";
+        Text[ czech ] = "Před";
+        Text[ hebrew ] = "da~vor";
+        Text[ hindi ] = "~Before";
     };
     RadioButton RB_AFTER
     {
@@ -175,30 +181,48 @@ ModalDialog DLG_INSERT_PASTE
         Text[ arabic ] = "���";
         Text[ greek ] = "���� ���";
         Text[ korean ] = "뒤(~F)";
-        Text[ turkish ] = "ar~kas�na";
+        Text[ turkish ] = "~Sonra";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "da~rrera";
         Text[ thai ] = "ห~ลังจาก";
+        Text[ czech ] = "Za";
+        Text[ hebrew ] = "da~hinter";
+        Text[ hindi ] = "A~fter";
     };
     Text[ swedish ] = "Infoga diabilder";
     Text[ spanish ] = "Insertar diapositivas";
     Text[ korean ] = "슬라이드 삽입";
     Text[ chinese_traditional ] = "插入投影片";
     Text[ english_us ] = "Insert Slides";
-    Text[ portuguese ] = "Insert slides";
-    Text[ russian ] = "Insert slides";
-    Text[ greek ] = "Insert slides";
-    Text[ dutch ] = "Insert slides";
+    Text[ portuguese ] = "Insert Slides";
+    Text[ russian ] = "Insert Slides";
+    Text[ greek ] = "Insert Slides";
+    Text[ dutch ] = "Insert Slides";
     Text[ french ] = "Insertion de diapos";
-    Text[ finnish ] = "Insert slides";
+    Text[ finnish ] = "Insert Slides";
     Text[ italian ] = "Inserisci diapositiva";
-    Text[ danish ] = "Insert slides";
-    Text[ polish ] = "Insert slides";
+    Text[ danish ] = "Insert Slides";
+    Text[ polish ] = "Insert Slides";
     Text[ japanese ] = "スライドの挿入";
     Text[ chinese_simplified ] = "插入幻灯片";
-    Text[ turkish ] = "Insert slides";
-    Text[ arabic ] = "Insert slides";
+    Text[ turkish ] = "Slayt Ekle";
+    Text[ arabic ] = "Insert Slides";
+    Text[ czech ] = "Vložit snímky";
+    Text[ hebrew ] = "Dias einfügen";
+    Text[ catalan ] = "Insert Slides";
+    Text[ portuguese_brazilian ] = "Insert Slides";
+    Text[ thai ] = "Insert Slides";
+    Text[ hindi ] = "Insert Slides";
 };
+
+
+
+
+
+
+
+
+
 
 
 
