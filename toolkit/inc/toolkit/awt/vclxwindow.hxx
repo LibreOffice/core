@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindow.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hjs $ $Date: 2002-02-07 14:39:37 $
+ *  last change: $Author: hjs $ $Date: 2002-02-07 15:56:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,10 +78,10 @@
 #ifndef _COM_SUN_STAR_AWT_XPOINTER_HPP_
 #include <com/sun/star/awt/XPointer.hpp>
 #endif
-#ifndef _COM_SUN_STAR_AWT_XGraphics_HPP_
+#ifndef _COM_SUN_STAR_AWT_XGRAPHICS_HPP_
 #include <com/sun/star/awt/XGraphics.hpp>
 #endif
-#ifndef _COM_SUN_STAR_BEANS_XXPropertyChangeListener_HPP_
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYCHANGELISTENER_HPP_
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #endif
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HDL_
