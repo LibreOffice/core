@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-09 10:41:30 $
+ *  last change: $Author: mba $ $Date: 2000-10-30 13:45:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1478,7 +1478,7 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
     String aTemplFileName( pInfo->GetTemplateFileName() );
     String aFoundName;
     SvStorageRef aTemplStor;
-    if ( aTemplName.Len() || aTemplFileName.Len() )
+    if ( aTemplName.Len() || aTemplFileName.Len() && !IsReadOnly() )
     {
         // try to locate template, first using filename
         // this must be done because writer global document uses this "great" idea to manage the templates of all parts
@@ -1486,7 +1486,7 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
         // but it is NOT an error if the template filename points not to a valid file
         SfxDocumentTemplates aTempl;
         aTempl.Construct();
-        if ( aTemplFileName.Len() && !IsReadOnly() )
+        if ( aTemplFileName.Len() )
         {
             INetURLObject aURL( aTemplFileName, INET_PROT_FILE );
             aTemplStor = new SvStorage( aURL.GetMainURL(),
@@ -1498,46 +1498,54 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
                 aFoundName = aTemplFileName;
         }
 
-        // if the template filename did not lead to success, try the template logical name
-        if( !aFoundName.Len() && aTempl.GetFull( String(), aTemplName, aFoundName ) && !IsReadOnly() )
+        if( !aFoundName.Len() && aTemplName.Len() )
         {
-            // template found, check if comparing filenames is enabled
-            if( (USHORT)SFX_INIMANAGER()->Get( SFX_KEY_SEARCHTEMPLATE ).ToInt32() && aTemplFileName != aFoundName )
+            // if the template filename did not lead to success, try the template logical name
+            if ( aTempl.GetFull( String(), aTemplName, aFoundName ) )
             {
-                // template with given template name was found but with a different filename
-                SfxMedium aSfxMedium( aFoundName, STREAM_READ | STREAM_SHARE_DENYNONE, FALSE );
-                const SfxFilter* pFilter = NULL;
-                SFX_APP()->GetFilterMatcher().GuessFilter( aSfxMedium, &pFilter, SFX_FILTER_IMPORT | SFX_FILTER_TEMPLATE );
-                if ( pFilter && pFilter->GetFilterContainer() == pFile->GetFilter()->GetFilterContainer() )
+                // template was found
+                // check if template filename differs from the specified one
+                // if comparing filenames is enabled ask user, otherwise accept the different file name
+                if( aTemplFileName.Len() && aTemplFileName != aFoundName &&
+                        (USHORT)SFX_INIMANAGER()->Get( SFX_KEY_SEARCHTEMPLATE ).ToInt32() )
                 {
-                    String aMsg( SfxResId( STR_TEMPL_MOVED ) );
-                    aMsg.SearchAndReplace( DEFINE_CONST_UNICODE( "$(TEMPLATE)" ), aTemplName );
-                    aMsg.SearchAndReplace( DEFINE_CONST_UNICODE( "$(FOUND)" ), aFoundName );
-                    if( QueryBox( 0, WB_YES_NO, aMsg ).Execute() == RET_YES )
+                    // template with given template name was found but with a different filename
+                    SfxMedium aSfxMedium( aFoundName, STREAM_READ | STREAM_SHARE_DENYNONE, FALSE );
+                    const SfxFilter* pFilter = NULL;
+                    SFX_APP()->GetFilterMatcher().GuessFilter( aSfxMedium, &pFilter, SFX_FILTER_IMPORT | SFX_FILTER_TEMPLATE );
+                    if ( pFilter && pFilter->GetFilterContainer() == pFile->GetFilter()->GetFilterContainer() )
                     {
-                        pInfo->SetTemplateFileName( aFoundName );
-                        FlushDocInfo();
-                        SetModified( TRUE );
+                        String aMsg( SfxResId( STR_TEMPL_MOVED ) );
+                        aMsg.SearchAndReplace( DEFINE_CONST_UNICODE( "$(TEMPLATE)" ), aTemplName );
+                        aMsg.SearchAndReplace( DEFINE_CONST_UNICODE( "$(FOUND)" ), aFoundName );
+                        if( QueryBox( 0, WB_YES_NO, aMsg ).Execute() == RET_YES )
+                        {
+                            pInfo->SetTemplateFileName( aFoundName );
+                            FlushDocInfo();
+                            SetModified( TRUE );
+                        }
+                        else
+                            aFoundName.Erase();
                     }
                     else
                         aFoundName.Erase();
                 }
-                else
-                    aFoundName.Erase();
             }
-        }
-        else if ( !IsReadOnly() )
-        {
-            // template not found, ask user for removing template link
-            String aMsg( SfxResId( STR_TEMPL_RESET ) );
-            aMsg.SearchAndReplace( DEFINE_CONST_UNICODE( "$(TEMPLATE)" ), aTemplName );
-            if( QueryBox( 0, WB_YES_NO, aMsg ).Execute() == RET_NO )
+
+            if ( !aFoundName.Len() )
             {
-                String aStr;
-                pInfo->SetTemplateFileName( aStr );
-                pInfo->SetTemplateName( aStr );
-                FlushDocInfo();
-                SetModified( TRUE );
+                // template not found, ask user for removing template link
+                // but only if template name is set, not if only a template filename is given
+                String aMsg( SfxResId( STR_TEMPL_RESET ) );
+                aMsg.SearchAndReplace( DEFINE_CONST_UNICODE( "$(TEMPLATE)" ), aTemplName );
+                if( QueryBox( 0, WB_YES_NO, aMsg ).Execute() == RET_NO )
+                {
+                    String aStr;
+                    pInfo->SetTemplateFileName( aStr );
+                    pInfo->SetTemplateName( aStr );
+                    FlushDocInfo();
+                    SetModified( TRUE );
+                }
             }
         }
     }
