@@ -2,9 +2,9 @@
  *
  *  $RCSfile: importmergehandler.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-11-28 09:05:12 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 13:15:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,6 @@
 
 #include "importmergehandler.hxx"
 
-#ifndef _COM_SUN_STAR_LANG_WRAPPEDTARGETRUNTIMEEXCEPTION_HPP_
-#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
-#endif
 #ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
 #include <com/sun/star/lang/XInitialization.hpp>
 #endif
@@ -81,6 +78,8 @@ namespace configmgr
 // -----------------------------------------------------------------------------
     namespace backend
     {
+// -----------------------------------------------------------------------------
+        namespace beans = ::com::sun::star::beans;
 // -----------------------------------------------------------------------------
 
 ImportMergeHandler::ImportMergeHandler( Backend const & xTargetBackend, Mode mode, OUString const & aEntity )
@@ -160,24 +159,33 @@ ImportMergeHandler::OutputHandler ImportMergeHandler::createOutputHandler()
         xOutputHandler =    hasEntity() ? getBackend()->getUpdateHandler(aComponentName,getEntity())
                                         : getBackend()->getOwnUpdateHandler(aComponentName);
     }
-    catch (backenduno::BackendAccessException & e)
+    catch (lang::NoSupportException & e)
+    {
+        OUStringBuffer sMessage;
+        sMessage.appendAscii("configmgr::backend::ImportHandler: ");
+        sMessage.appendAscii("Could not get output handler for component ").append(aComponentName);
+        sMessage.appendAscii(": Backend does not support updates - ").append( e.Message );
+
+        throw lang::WrappedTargetException(sMessage.makeStringAndClear(), *this, uno::makeAny(e));
+    }
+    catch (lang::IllegalArgumentException & e)
     {
         OUStringBuffer sMessage;
         sMessage.appendAscii("configmgr::backend::ImportHandler: ");
         sMessage.appendAscii("Could not get output handler for component ").append(aComponentName);
         sMessage.appendAscii(" due to a backend exception: ").append( e.Message );
 
-        throw lang::WrappedTargetRuntimeException(sMessage.makeStringAndClear(), *this, uno::makeAny(e));
+        throw lang::WrappedTargetException(sMessage.makeStringAndClear(), *this, uno::makeAny(e));
     }
 
     if (!xOutputHandler.is())
     {
         OUStringBuffer sMessage;
         sMessage.appendAscii("configmgr::backend::ImportHandler: ");
-        sMessage.appendAscii("Cannot import. The backend does not support component ")
+        sMessage.appendAscii("Cannot import. ERROR - The backend returns a NULL handler for component ")
                 .append(aComponentName).append( sal_Unicode('.') );
 
-        throw lang::IllegalArgumentException(sMessage.makeStringAndClear(), *this, 1);
+        throw uno::RuntimeException(sMessage.makeStringAndClear(), *this);
     }
 
     switch (m_mode)
@@ -196,7 +204,7 @@ ImportMergeHandler::OutputHandler ImportMergeHandler::createOutputHandler()
 // XLayerHandler
 
 void SAL_CALL ImportMergeHandler::startLayer(  )
-        throw (MalformedDataException, uno::RuntimeException)
+    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     m_xOutputHandler.clear();
 
@@ -205,7 +213,7 @@ void SAL_CALL ImportMergeHandler::startLayer(  )
 // -----------------------------------------------------------------------------
 
 void SAL_CALL ImportMergeHandler::endLayer(  )
-        throw (MalformedDataException, lang::IllegalAccessException, uno::RuntimeException)
+    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if (isStarted())
         getOutputHandler()->endUpdate();
@@ -216,85 +224,87 @@ void SAL_CALL ImportMergeHandler::endLayer(  )
 }
 // -----------------------------------------------------------------------------
 
-void SAL_CALL ImportMergeHandler::overrideNode( const OUString& aName, sal_Int16 aAttributes )
-        throw (MalformedDataException, container::NoSuchElementException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException)
+void SAL_CALL ImportMergeHandler::overrideNode( const OUString& aName, sal_Int16 aAttributes, sal_Bool bClear )
+    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if (!isStarted() && startComponent(aName))
     {
-        (m_xOutputHandler = createOutputHandler())->startUpdate( OUString() );
+        (m_xOutputHandler = createOutputHandler())->startUpdate(  );
     }
 
-    bool bReset = (m_mode != merge); // is not relevant for no_overwrite,but might be cheaper there
-    getOutputHandler()->modifyNode(aName,aAttributes,aAttributes,m_mode);
+    OSL_ENSURE(!bClear,"'clear' operation not supported properly on import");
+
+    bool bReset = (m_mode != merge) || bClear; // is not relevant for no_overwrite,but might be cheaper there
+    getOutputHandler()->modifyNode(aName,aAttributes,aAttributes,bReset);
 }
 // -----------------------------------------------------------------------------
 
 void SAL_CALL ImportMergeHandler::addOrReplaceNode( const OUString& aName, sal_Int16 aAttributes )
-        throw (MalformedDataException, container::NoSuchElementException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException)
+    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     getOutputHandler()->addOrReplaceNode(aName,aAttributes);
 }
 // -----------------------------------------------------------------------------
 
 void SAL_CALL ImportMergeHandler::addOrReplaceNodeFromTemplate( const OUString& aName, const TemplateIdentifier& aTemplate, sal_Int16 aAttributes )
-        throw (MalformedDataException, container::NoSuchElementException, beans::IllegalTypeException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException)
+    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    getOutputHandler()->addOrReplaceNodeFromTemplate(aName,aTemplate,aAttributes);
+    getOutputHandler()->addOrReplaceNodeFromTemplate(aName,aAttributes,aTemplate);
 }
 // -----------------------------------------------------------------------------
 
 void SAL_CALL ImportMergeHandler::endNode(  )
-        throw (MalformedDataException, uno::RuntimeException)
+    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     getOutputHandler()->endNode();
 }
 // -----------------------------------------------------------------------------
 
 void SAL_CALL ImportMergeHandler::dropNode( const OUString& aName )
-        throw (MalformedDataException, container::NoSuchElementException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException)
+    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     getOutputHandler()->removeNode(aName);
 }
 // -----------------------------------------------------------------------------
 
-void SAL_CALL ImportMergeHandler::overrideProperty( const OUString& aName, sal_Int16 aAttributes, const uno::Type&  )
-        throw (MalformedDataException, beans::UnknownPropertyException, beans::IllegalTypeException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException)
+void SAL_CALL ImportMergeHandler::overrideProperty( const OUString& aName, sal_Int16 aAttributes, const uno::Type& aType, sal_Bool bClear )
+    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    // type is unused and can't be verified
-    getOutputHandler()->modifyProperty(aName,aAttributes,aAttributes);
+    OSL_ENSURE(!bClear,"'clear' operation not supported on import");
+    getOutputHandler()->modifyProperty(aName,aAttributes,aAttributes,aType);
 }
 // -----------------------------------------------------------------------------
 
 void SAL_CALL ImportMergeHandler::endProperty(  )
-        throw (MalformedDataException, uno::RuntimeException)
+    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     getOutputHandler()->endProperty();
 }
 // -----------------------------------------------------------------------------
 
 void SAL_CALL ImportMergeHandler::setPropertyValue( const uno::Any& aValue )
-        throw (MalformedDataException, beans::IllegalTypeException, lang::IllegalArgumentException, uno::RuntimeException)
+    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     getOutputHandler()->setPropertyValue(aValue);
 }
 // -----------------------------------------------------------------------------
 
 void SAL_CALL ImportMergeHandler::setPropertyValueForLocale( const uno::Any& aValue, const OUString & aLocale )
-        throw (MalformedDataException, beans::IllegalTypeException, lang::IllegalArgumentException, uno::RuntimeException)
+    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     getOutputHandler()->setPropertyValueForLocale(aValue,aLocale);
 }
 // -----------------------------------------------------------------------------
 
 void SAL_CALL ImportMergeHandler::addProperty( const OUString& aName, sal_Int16 aAttributes, const uno::Type& aType )
-        throw (MalformedDataException, beans::PropertyExistException, beans::IllegalTypeException, lang::IllegalArgumentException, uno::RuntimeException)
+    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     getOutputHandler()->addOrReplaceProperty(aName, aAttributes, aType);
 }
 // -----------------------------------------------------------------------------
 
 void SAL_CALL ImportMergeHandler::addPropertyWithValue( const OUString& aName, sal_Int16 aAttributes, const uno::Any& aValue )
-        throw (MalformedDataException, beans::PropertyExistException, beans::IllegalTypeException, lang::IllegalArgumentException, uno::RuntimeException)
+    throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     getOutputHandler()->addOrReplacePropertyWithValue(aName, aAttributes, aValue);
 }
