@@ -2,9 +2,9 @@
  *
  *  $RCSfile: popup.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-17 20:49:16 $
+ *  last change: $Author: kz $ $Date: 2001-07-24 21:07:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ String RID_POPUP_CELLS
     Text = "Popup-Menü für Zellen" ;
     Text [ ENGLISH ] = "Cell Popup Menu" ;
     Text [ norwegian ] = "Cell Popup Menu" ;
-    Text [ italian ] = "Menu cella di scelta rapida" ;
+    Text [ italian ] = "Menu a comparsa per celle" ;
     Text [ portuguese_brazilian ] = "Menu Popup da C?lula" ;
     Text [ portuguese ] = "Menu instantâneo para células" ;
     Text [ finnish ] = "Solun ponnahdusvalikko" ;
@@ -475,7 +475,7 @@ String RID_POPUP_TAB
     Text = "Popup-Menü für Tabellenleiste" ;
     Text [ ENGLISH ] = "Table Control Popup Menu" ;
     Text [ norwegian ] = "Table Control Popup Menu" ;
-    Text [ italian ] = "Menu di scelta rapida per barra tabella" ;
+    Text [ italian ] = "Menu a comparsa per barra tabella" ;
     Text [ portuguese_brazilian ] = "Menu Popup de Controle da Tabela" ;
     Text [ portuguese ] = "Menu instantâneo para barra de tabelas" ;
     Text [ finnish ] = "Lomakerivin ponnahdusvalikko" ;
@@ -665,7 +665,7 @@ String RID_POPUP_PIVOT
     Text = "Popup-Menü für den Datenpilot" ;
     Text [ ENGLISH ] = "Data Pilot Popup Menu" ;
     Text [ norwegian ] = "Data Pilot Popup Menu" ;
-    Text [ italian ] = "Menu a scelta rapida DataPilot" ;
+    Text [ italian ] = "Menu a comparsa DataPilot" ;
     Text [ portuguese_brazilian ] = "Data Pilot Popup Menu" ;
     Text [ portuguese ] = "Menu instantâneo para o piloto de dados" ;
     Text [ french ] = "Menu Pop-up pour le pilote de données" ;
@@ -796,7 +796,7 @@ String RID_POPUP_PREVIEW
     Text = "Popup-Menü für Seitenvorschau" ;
     Text [ ENGLISH ] = "Page Preview Popup Menu" ;
     Text [ norwegian ] = "Page Preview Popup Menu" ;
-    Text [ italian ] = "Menu di scelta rapida per l'anteprima pagina" ;
+    Text [ italian ] = "Menu a comparsa per l'anteprima pagina" ;
     Text [ portuguese_brazilian ] = "Page Preview Popup Menu" ;
     Text [ portuguese ] = "Menu instantâneo para visualizar página" ;
     Text [ finnish ] = "Sivun esikatselun ponnahdusvalikko" ;
@@ -957,7 +957,7 @@ String RID_POPUP_EDIT
     Text = "Popup-Menü für Texteingabe" ;
     Text [ ENGLISH ] = "Text Edit Popup Menu" ;
     Text [ english_us ] = "Text Input pop-up menu" ;
-    Text [ italian ] = "Menu a tendina per l'introduzione del testo" ;
+    Text [ italian ] = "Menu a comparsa per scrivere il testo" ;
     Text [ spanish ] = "Menú emergente para entrada de texto" ;
     Text [ french ] = "Menu Pop-up pour la saisie de texte" ;
     Text [ dutch ] = "PopUp-menu voor tekstinvoer" ;
@@ -1207,7 +1207,7 @@ String RID_POPUP_AUDIT
     Text = "Popup-Menü für Detektiv-Füll-Modus" ;
     Text [ ENGLISH ] = "Auditing Fill Mode Popup Menu" ;
     Text [ english_us ] = "Detective Fill Mode pop-up menu" ;
-    Text [ italian ] = "Menu a tendina per il modo di riempimento detective" ;
+    Text [ italian ] = "Menu a comparsa per il modo di riempimento detective" ;
     Text [ spanish ] = "Menú emergente para el modo Detective de relleno" ;
     Text [ french ] = "Menu Pop-up du mode Remplissage d'audit" ;
     Text [ dutch ] = "PopUp-menu voor verkenner-opvul-modus" ;
@@ -1437,7 +1437,7 @@ String RID_POPUP_PAGEBREAK
     Text [ portuguese_brazilian ] = "Popup-Men?f? Seitenumbruch-Vorschau" ;
     Text [ swedish ] = "Popupmeny för förhandsvisning av sidbrytning" ;
     Text [ danish ] = "Popup-menu for sideskiftsvisning" ;
-    Text [ italian ] = "Menu a tendina per l'anteprima dell'impaginazione" ;
+    Text [ italian ] = "Menu a comparsa per l'anteprima dell'impaginazione" ;
     Text [ spanish ] = "Menú emergente para previsualización de saltos de página" ;
     Text [ french ] = "Menu Pop-up pour l'aperçu des sauts de page" ;
     Text [ dutch ] = "Popup-menu voor voorbeeld van paginaeinde" ;
@@ -1789,6 +1789,7 @@ Menu RID_POPUP_PAGEBREAK
         };
     };
 };
+
 
 
 
