@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlFileControlModel.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 15:45:26 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 14:15:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,16 +61,16 @@
 #ifndef __com_sun_star_awt_UnoControlFileControlModel_idl__
 #define __com_sun_star_awt_UnoControlFileControlModel_idl__
 
+#ifndef __com_sun_star_awt_FontDescriptor_idl__
+#include <com/sun/star/awt/FontDescriptor.idl>
+#endif
+
 #ifndef __com_sun_star_awt_UnoControlModel_idl__
 #include <com/sun/star/awt/UnoControlModel.idl>
 #endif
 
 #ifndef __com_sun_star_util_Color_idl__
 #include <com/sun/star/util/Color.idl>
-#endif
-
-#ifndef __com_sun_star_awt_FontDescriptor_idl__
-#include <com/sun/star/awt/FontDescriptor.idl>
 #endif
 
 
@@ -155,6 +155,15 @@ published service UnoControlFileControlModel
 
     //-------------------------------------------------------------------------
 
+    /** specifies whether the selection in the control should be hidden when
+        the control is not active (focused).
+
+        @since OOo 2.0.0
+    */
+    [optional, property] boolean HideInactiveSelection;
+
+    //-------------------------------------------------------------------------
+
     /** specifies that the control will be printed with the document.
      */
     [property] boolean Printable;
@@ -168,6 +177,7 @@ published service UnoControlFileControlModel
     [optional, property] boolean ReadOnly;
 
     //-------------------------------------------------------------------------
+
     /** specifies that the control can be reached with the TAB key.
      */
     [property] boolean Tabstop;
@@ -190,12 +200,6 @@ published service UnoControlFileControlModel
      */
     [property] com::sun::star::util::Color TextLineColor;
 
-    //-------------------------------------------------------------------------
-
-    /** specifies whether the selection in the control should be hidden when the control is not
-        active (focused).
-    */
-    [optional, property] boolean HideInactiveSelection;
 };
 
 //=============================================================================
