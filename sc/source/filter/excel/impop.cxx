@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 18:07:55 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:26:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,12 @@
 #ifndef SC_XLTABLE_HXX
 #include "xltable.hxx"
 #endif
+#ifndef SC_XLVIEW_HXX
+#include "xlview.hxx"
+#endif
+#ifndef SC_XLTRACER_HXX
+#include "xltracer.hxx"
+#endif
 #ifndef SC_XIHELPER_HXX
 #include "xihelper.hxx"
 #endif
@@ -135,9 +141,6 @@
 #endif
 #ifndef SC_XILINK_HXX
 #include "xilink.hxx"
-#endif
-#ifndef SC_XLTRACER_HXX
-#include "xltracer.hxx"
 #endif
 
 #include "excimp8.hxx"
@@ -154,24 +157,11 @@ ImportTyp::ImportTyp( ScDocument* pDoc, CharSet eQ )
 {
     eQuellChar = eQ;
     pD = pDoc;
-
-    pExtOpt = NULL;
 }
 
 
 ImportTyp::~ImportTyp()
 {
-    ScExtDocOptions*    p = pD->GetExtDocOptions();
-    if( p )
-    {
-        if( pExtOpt )
-        {
-            *p = *pExtOpt;
-            delete pExtOpt;
-        }
-    }
-    else
-        pD->SetExtDocOptions( pExtOpt );
 }
 
 
@@ -179,21 +169,6 @@ FltError ImportTyp::Read()
 {
     return eERR_INTERN;
 }
-
-
-ScExtDocOptions &ImportTyp::GetExtOpt( void )
-{
-    if( !pExtOpt )
-    {
-        pExtOpt = new ScExtDocOptions;
-        ScExtDocOptions*    pOrg = pD->GetExtDocOptions();
-        if( pOrg )
-            *pExtOpt = *pOrg;
-    }
-    return *pExtOpt;
-}
-
-
 
 
 ImportExcel::ImportExcel( XclImpRootData& rImpData ):
@@ -205,22 +180,16 @@ ImportExcel::ImportExcel( XclImpRootData& rImpData ):
     pChart = pUsedChartFirst = pUsedChartLast = NULL;
 
     nBdshtTab = 0;
-    nFirstVisTab = 0xFFFF;
     nIxfeIndex = 0;     // zur Sicherheit auf 0
 
     // Root-Daten fuellen - nach new's ohne Root als Parameter
-    pExcRoot = mpRD;
-    pExcRoot->pDoc = GetDocPtr();
+    pExcRoot = &GetOldRoot();
     pExcRoot->pIR = this;   // ExcRoot -> XclImpRoot
-    pExcRoot->pScRangeName = GetDoc().GetRangeName();
-    pExcRoot->aStandard.AssignAscii( "General" );
-    pExcRoot->eDateiTyp = pExcRoot->eHauptDateiTyp = BiffX;
+    pExcRoot->eDateiTyp = BiffX;
     pExcRoot->pExtSheetBuff = new ExtSheetBuffer( pExcRoot );   //&aExtSheetBuff;
     pExcRoot->pTabNameBuff = new NameBuffer( pExcRoot );        //&aTabNameBuff;
     pExcRoot->pShrfmlaBuff = new ShrfmlaBuffer( pExcRoot );     //&aShrfrmlaBuff;
     pExcRoot->pExtNameBuff = new ExtNameBuff ( pExcRoot );
-    pExcRoot->pCharset = &eQuellChar;   // dto.
-    GetExtDocOptions().SetChanged( TRUE );
 
     pExtNameBuff = new NameBuffer( pExcRoot );          //#94039# prevent empty rootdata
     pExtNameBuff->SetBase( 1 );
@@ -231,13 +200,6 @@ ImportExcel::ImportExcel( XclImpRootData& rImpData ):
     pFormConv = pExcRoot->pFmlaConverter = new ExcelToSc( aIn );
 
     bTabTruncated = FALSE;
-
-    // options from configuration
-    ScFilterOptions aFilterOpt;
-
-    pExcRoot->fRowScale = aFilterOpt.GetExcelRowScale();
-    if( pExcRoot->fRowScale <= 0.0 )
-        pExcRoot->fRowScale = 1.0;
 
     pExcRoot->bChartTab = FALSE;
 
@@ -269,15 +231,38 @@ ImportExcel::~ImportExcel( void )
 
 void ImportExcel::Dimensions( void )
 {
-    UINT16 nRowFirst, nRowLast, nColFirst, nColLast;
+    XclRange aXclUsedArea( ScAddress::UNINITIALIZED );
+    maStrm >> aXclUsedArea;
+    if( (aXclUsedArea.GetColCount() > 1) && (aXclUsedArea.GetRowCount() > 1) )
+    {
+        // Excel stores first unused row/column index
+        --aXclUsedArea.maLast.mnCol;
+        --aXclUsedArea.maLast.mnRow;
+        // create the Calc range
+        SCTAB nScTab = GetCurrScTab();
+        ScRange& rScUsedArea = GetExtDocOptions().GetOrCreateTabSettings( nScTab ).maUsedArea;
+        GetAddressConverter().ConvertRange( rScUsedArea, aXclUsedArea, nScTab, nScTab, false );
+        // if any error occurs in ConvertRange(), rScUsedArea keeps untouched
+    }
+}
 
-    aIn >> nRowFirst >> nRowLast >> nColFirst >> nColLast;
 
-    if( aIn.IsValid() )
-        pColRowBuff->SetDimension( ScRange( static_cast<SCCOL>(nColFirst),
-                    static_cast<SCROW>(nRowFirst), GetCurrScTab(),
-                    static_cast<SCCOL>(nColLast), static_cast<SCROW>(nRowLast),
-                    GetCurrScTab() ) );
+void ImportExcel::Window1()
+{
+    sal_uInt16 nFlags, nTabBarSize;
+    maStrm.Ignore( 8 );
+    maStrm >> nFlags;
+    maStrm.Ignore( 6 );
+    maStrm >> nTabBarSize;
+
+    ScViewOptions aViewOpt( GetDoc().GetViewOptions() );
+    aViewOpt.SetOption( VOPT_HSCROLL,       ::get_flag( nFlags, EXC_WIN1_HOR_SCROLLBAR ) );
+    aViewOpt.SetOption( VOPT_VSCROLL,       ::get_flag( nFlags, EXC_WIN1_VER_SCROLLBAR ) );
+    aViewOpt.SetOption( VOPT_TABCONTROLS,   ::get_flag( nFlags, EXC_WIN1_TABBAR ) );
+    GetDoc().SetViewOptions( aViewOpt );
+
+    if( nTabBarSize <= 1000 )
+        GetExtDocOptions().GetDocSettings().mfTabBarWidth = static_cast< double >( nTabBarSize ) / 1000.0;
 }
 
 
@@ -287,7 +272,7 @@ void ImportExcel::Blank25( void )
 
     aIn >> nRow >> nCol;
 
-    if( pExcRoot->eHauptDateiTyp == Biff2 )
+    if( GetBiff() == EXC_BIFF2 )
     {
         sal_uInt8 nXFData;
         aIn >> nXFData;
@@ -355,7 +340,7 @@ void ImportExcel::Number25( void )
 
     aIn >> nRow >> nCol;
 
-    if( pExcRoot->eHauptDateiTyp == Biff2 )
+    if( GetBiff() == EXC_BIFF2 )
     {
         sal_uInt8 nXFData;
         aIn >> nXFData;
@@ -395,7 +380,7 @@ void ImportExcel::Boolerr25( void )
     UINT16  nRow, nCol, nXF;
     BYTE    bErrOrVal, nError;
 
-    if( pExcRoot->eHauptDateiTyp == Biff2 )
+    if( GetBiff() == EXC_BIFF2 )
     {// nur fuer BIFF2
         BYTE nAttr0, nAttr1, nAttr2;
 
@@ -447,7 +432,7 @@ void ImportExcel::RecString( void )
 {
     if( pLastFormCell )
     {
-        pLastFormCell->SetString( aIn.ReadByteString( pExcRoot->eHauptDateiTyp != Biff2 ) );
+        pLastFormCell->SetString( aIn.ReadByteString( GetBiff() != Biff2 ) );
 
         pLastFormCell = NULL;
     }
@@ -466,9 +451,8 @@ void ImportExcel::Row25( void )
         aIn >> nRowHeight;  // direkt in Twips angegeben
         aIn.Ignore( 2 );
 
-        if( pExcRoot->eHauptDateiTyp == Biff2 )
+        if( GetBiff() == EXC_BIFF2 )
         {// -------------------- BIFF2
-            nRowHeight = ( UINT16 ) ( ( double ) nRowHeight * pExcRoot->fRowScale );
             pColRowBuff->SetHeight( nRow, nRowHeight );
         }
         else
@@ -481,7 +465,7 @@ void ImportExcel::Row25( void )
             BYTE nLevel = 0;
             ::extract_value( nLevel, nGrbit, 0, 3 );
             pRowOutlineBuff->SetLevel( nRow, nLevel,
-                TRUEBOOL( nGrbit & EXC_ROW_COLLAPSED ), TRUEBOOL( nGrbit & EXC_ROW_HIDDEN ) );
+                ::get_flag( nGrbit, EXC_ROW_COLLAPSED ), ::get_flag( nGrbit, EXC_ROW_HIDDEN ) );
 
             pColRowBuff->SetRowSettings( nRow, nRowHeight, nGrbit );
         }
@@ -496,7 +480,6 @@ void ImportExcel::Bof2( void )
     maStrm.Ignore( 2 );
     maStrm >> nSubType;
 
-    pExcRoot->eHauptDateiTyp = Biff2;
     if( nSubType == 0x0010 )        // Worksheet?
         pExcRoot->eDateiTyp = Biff2;
     else if( nSubType == 0x0020 )   // Chart?
@@ -504,10 +487,7 @@ void ImportExcel::Bof2( void )
     else if( nSubType == 0x0040 )   // Macro?
         pExcRoot->eDateiTyp = Biff2M;
     else
-    {
         pExcRoot->eDateiTyp = BiffX;
-        pExcRoot->eHauptDateiTyp = BiffX;
-    }
 }
 
 
@@ -559,27 +539,6 @@ void ImportExcel::Note( void )
 }
 
 
-void ImportExcel::Selection( void )
-{
-    UINT16  nNumRefs, nFirstRow, nLastRow;
-    UINT8   nPane, nFirstCol, nLastCol;
-
-    aIn >> nPane;
-    aIn.Ignore( 6 );
-    aIn >> nNumRefs;
-
-    if( (nPane == pColRowBuff->GetActivePane()) && nNumRefs )
-    {
-        nNumRefs--;
-        aIn.Ignore( nNumRefs * 6 );     // nur letzte Selektion interessiert
-        aIn >> nFirstRow >> nLastRow >> nFirstCol >> nLastCol;
-        pColRowBuff->SetSelection( ScRange(
-            static_cast<SCCOL>(nFirstCol), static_cast<SCROW>(nFirstRow), GetCurrScTab(),
-            static_cast<SCCOL>(nLastCol), static_cast<SCROW>(nLastRow), GetCurrScTab()));
-    }
-}
-
-
 void ImportExcel::Columndefault( void )
 {// Default Cell Attributes
     UINT16  nColMic, nColMac;
@@ -613,7 +572,7 @@ void ImportExcel::Array25( void )
 
     aIn >> nFirstRow >> nLastRow >> nFirstCol >> nLastCol;
 
-    if( pExcRoot->eHauptDateiTyp == Biff2 )
+    if( GetBiff() == EXC_BIFF2 )
     {//                     BIFF2
         aIn.Ignore( 1 );
         nFormLen = aIn.ReaduInt8();
@@ -705,12 +664,8 @@ void ImportExcel::Colwidth( void )
 void ImportExcel::Defrowheight2( void )
 {
     UINT16  nDef;
-
     aIn >> nDef;
-
     nDef &=0x7FFF;
-    nDef = ( UINT16 ) ( ( double ) nDef * pExcRoot->fRowScale );
-
     pColRowBuff->SetDefHeight( nDef );
 }
 
@@ -731,12 +686,6 @@ void ImportExcel::DocProtect( void )
         uno::Sequence<sal_Int8> aEmptyPass;
         GetDoc().SetDocProtection( TRUE, aEmptyPass );
     }
-}
-
-
-void ImportExcel::Pane( void )
-{
-    pColRowBuff->ReadSplit( aIn );
 }
 
 
@@ -846,7 +795,7 @@ void ImportExcel::Boundsheet( void )
 {
     UINT16      nGrbit;
 
-    if( pExcRoot->eHauptDateiTyp == Biff5 )
+    if( GetBiff() == EXC_BIFF5 )
     {
         aIn.Ignore( 4 );
         aIn >> nGrbit;
@@ -869,8 +818,6 @@ void ImportExcel::Boundsheet( void )
 
     if( ( nGrbit & 0x0001 ) || ( nGrbit & 0x0002 ) )
         pD->SetVisible( nTab, FALSE );
-    else if( nFirstVisTab == 0xFFFF )
-        nFirstVisTab = nBdshtTab;       // first visible for WINDOW2 import
 
     pD->RenameTab( nTab, aName );
     nBdshtTab++;
@@ -950,16 +897,6 @@ void ImportExcel::Standardwidth( void )
 {
     USHORT nScWidth = XclTools::GetScColumnWidth( maStrm.ReaduInt16(), GetCharWidth() );
     pColRowBuff->SetDefWidth( nScWidth, TRUE );
-}
-
-
-void ImportExcel::Scl( void )
-{
-    UINT16  nNscl, nDscl;
-
-    aIn >> nNscl >> nDscl;
-
-    GetExtDocOptions().SetZoom( nNscl, nDscl );
 }
 
 
@@ -1097,13 +1034,13 @@ void ImportExcel::Rstring( void )
 
 void ImportExcel::Olesize( void )
 {
-    aIn.Ignore( 2 );
-    UINT16  nFirstRow, nLastRow;
-    UINT8   nFirstCol, nLastCol;
-    aIn >> nFirstRow >> nLastRow >> nFirstCol >> nLastCol;
-    GetExtDocOptions().SetOleSize( static_cast<SCCOL>(nFirstCol),
-            static_cast<SCROW>(nFirstRow), static_cast<SCCOL>(nLastCol),
-            static_cast<SCROW>(nLastRow) );
+    XclRange aXclOleSize( ScAddress::UNINITIALIZED );
+    maStrm.Ignore( 2 );
+    aXclOleSize.Read( maStrm, false );
+
+    SCTAB nScTab = GetCurrScTab();
+    ScRange& rOleSize = GetExtDocOptions().GetDocSettings().maOleSize;
+    GetAddressConverter().ConvertRange( rOleSize, aXclOleSize, nScTab, nScTab, false );
 }
 
 
@@ -1165,7 +1102,7 @@ void ImportExcel::Label( void )
     sal_uInt16 nRow, nCol, nXFIndex;
     maStrm >> nRow >> nCol;
 
-    if( GetBiff() == xlBiff2 )
+    if( GetBiff() == EXC_BIFF2 )
     {
         sal_uInt8 nAttr0, nAttr1, nAttr2;
         maStrm >> nAttr0 >> nAttr1 >> nAttr2;
@@ -1185,7 +1122,7 @@ void ImportExcel::Label( void )
         GetXFRangeBuffer().SetXF( nScCol, nScRow, nXFIndex );
         pColRowBuff->Used( nScCol, nScRow );
 
-        XclStrFlags nFlags = (GetBiff() == xlBiff2) ? EXC_STR_8BITLENGTH : EXC_STR_DEFAULT;
+        XclStrFlags nFlags = (GetBiff() == EXC_BIFF2) ? EXC_STR_8BITLENGTH : EXC_STR_DEFAULT;
         XclImpString aString( maStrm, nFlags );
         if( ScBaseCell* pCell = XclImpStringHelper::CreateCell( GetRoot(), aString, nXFIndex ) )
             GetDoc().PutCell( nScCol, nScRow, GetCurrScTab(), pCell );
@@ -1263,7 +1200,7 @@ void ImportExcel::Row34( void )
         BYTE nLevel = 0;
         ::extract_value( nLevel, nGrbit, 0, 3 );
         pRowOutlineBuff->SetLevel( nScRow, nLevel,
-            TRUEBOOL( nGrbit & EXC_ROW_COLLAPSED ), TRUEBOOL( nGrbit & EXC_ROW_HIDDEN ) );
+            ::get_flag( nGrbit, EXC_ROW_COLLAPSED ), ::get_flag( nGrbit, EXC_ROW_HIDDEN ) );
 
         pColRowBuff->SetRowSettings( nScRow, nRowHeight, nGrbit );
 
@@ -1281,7 +1218,6 @@ void ImportExcel::Bof3( void )
     maStrm >> nSubType;
 
     DBG_ASSERT( nSubType != 0x0100, "*ImportExcel::Bof3(): Biff3 als Workbook?!" );
-    pExcRoot->eHauptDateiTyp = Biff3;
     if( nSubType == 0x0010 )        // Sheet?
         pExcRoot->eDateiTyp = Biff3;
     else if( nSubType == 0x0100 )   // Book?
@@ -1291,10 +1227,7 @@ void ImportExcel::Bof3( void )
     else if( nSubType == 0x0040 )   // Macro?
         pExcRoot->eDateiTyp = Biff3M;
     else
-    {
         pExcRoot->eDateiTyp = BiffX;
-        pExcRoot->eHauptDateiTyp = BiffX;
-    }
 }
 
 
@@ -1304,7 +1237,7 @@ void ImportExcel::Array34( void )
     BYTE                    nFirstCol, nLastCol;
 
     aIn >> nFirstRow >> nLastRow >> nFirstCol >> nLastCol;
-    aIn.Ignore( (pExcRoot->eHauptDateiTyp >= Biff5) ? 6 : 2 );
+    aIn.Ignore( (GetBiff() >= EXC_BIFF5) ? 6 : 2 );
     aIn >> nFormLen;
 
     if( nLastRow <= MAXROW && nLastCol <= MAXCOL )
@@ -1340,8 +1273,6 @@ void ImportExcel::Defrowheight345( void )
     UINT16  nDef, nOpt;
 
     aIn >> nOpt >> nDef;
-
-    nDef = ( UINT16 ) ( ( double ) nDef * pExcRoot->fRowScale );
 
     if( nOpt & 0x0002 )
         pColRowBuff->SetDefHeight( 0 );
@@ -1430,43 +1361,6 @@ void ImportExcel::TableOp( void )
 }
 
 
-void ImportExcel::Window2_5( void )
-{
-    ScExtDocOptions&    rExtOpt = GetExtDocOptions();
-    UINT16              nOpt, nRow, nCol;
-    UINT32              nColorIndex;
-
-    aIn >> nOpt >> nRow >> nCol >> nColorIndex;
-
-    nRow = Min( nRow, (UINT16)MAXROW );
-    nCol = Min( nCol, (UINT16)MAXCOL );
-    pColRowBuff->SetVisCorner( nCol, nRow );
-
-    if( nOpt & EXC_WIN2_DISPLAYED )
-        rExtOpt.SetActTab( static_cast<sal_uInt16>(GetCurrScTab()) );
-    pColRowBuff->SetTabSelected( TRUEBOOL( nOpt & EXC_WIN2_SELECTED ) );
-    pColRowBuff->SetFrozen( TRUEBOOL( nOpt & EXC_WIN2_FROZEN ) );
-
-    if( static_cast<sal_uInt16>(GetCurrScTab()) == nFirstVisTab )     // import from first visible sheet
-    {
-        if( !( nOpt & EXC_WIN2_DEFAULTCOLOR ) )
-            rExtOpt.SetGridCol( GetPalette().GetColor( static_cast< sal_Int16 >( nColorIndex ) ) );
-
-        ScViewOptions aOpts( pD->GetViewOptions() );
-        aOpts.SetOption( VOPT_FORMULAS, TRUEBOOL( nOpt & EXC_WIN2_SHOWFORMULAS ) );
-        aOpts.SetOption( VOPT_GRID, TRUEBOOL( nOpt & EXC_WIN2_SHOWGRID ) );
-        aOpts.SetOption( VOPT_HEADER, TRUEBOOL( nOpt & EXC_WIN2_SHOWHEADINGS ) );
-        aOpts.SetOption( VOPT_NULLVALS, TRUEBOOL( nOpt & EXC_WIN2_SHOWZEROS ) );
-        aOpts.SetOption( VOPT_OUTLINER, TRUEBOOL( nOpt & EXC_WIN2_OUTLINE ) );
-        pD->SetViewOptions( aOpts );
-        GetTracer().TraceInvisibleGrid(TRUEBOOL( nOpt & EXC_WIN2_SHOWGRID ));
-    }
-
-    // #106948# RTL layout
-    GetDoc().SetLayoutRTL( GetCurrScTab(), ::get_flag( nOpt, EXC_WIN2_MIRRORED ) );
-}
-
-
 void ImportExcel::Bof4( void )
 {
     sal_uInt16 nSubType;
@@ -1474,7 +1368,6 @@ void ImportExcel::Bof4( void )
     maStrm.Ignore( 2 );
     maStrm >> nSubType;
 
-    pExcRoot->eHauptDateiTyp = Biff4;
     if( nSubType == 0x0010 )        // Sheet?
         pExcRoot->eDateiTyp = Biff4;
     else if( nSubType == 0x0100 )   // Book?
@@ -1484,10 +1377,7 @@ void ImportExcel::Bof4( void )
     else if( nSubType == 0x0040 )   // Macro?
         pExcRoot->eDateiTyp = Biff4M;
     else
-    {
         pExcRoot->eDateiTyp = BiffX;
-        pExcRoot->eHauptDateiTyp = BiffX;
-    }
 }
 
 
@@ -1495,7 +1385,6 @@ void ImportExcel::Bof5( void )
 {
     //POST: eDateiTyp = Typ der zu lesenden Datei
     UINT16      nSubType, nVers;
-    BiffTyp     eHaupt = Biff5;
     BiffTyp     eDatei;
 
     maStrm.DisableDecryption();
@@ -1524,31 +1413,25 @@ void ImportExcel::Bof5( void )
             break;
         default:
             pExcRoot->eDateiTyp = BiffX;
-            pExcRoot->eHauptDateiTyp = BiffX;
             return;
     }
 
-    if( nVers == 0x0600 && pExcRoot->eHauptDateiTyp != Biff5 )
-    {// Biff8
-        eHaupt = ( BiffTyp ) ( eHaupt - Biff5 + Biff8 );
+    if( nVers == 0x0600 && (GetBiff() == EXC_BIFF8) )
         eDatei = ( BiffTyp ) ( eDatei - Biff5 + Biff8 );
-    }
 
-    pExcRoot->eHauptDateiTyp = eHaupt;
     pExcRoot->eDateiTyp = eDatei;
 }
 
 void ImportExcel::EndSheet( void )
 {
     pColRowBuff->Apply( GetCurrScTab() );
-    GetXFRangeBuffer().Apply();
 
     pExcRoot->pExtSheetBuff->Reset();
 
-    GetPageSettings().CreatePageStyle();
-
-    if( pExcRoot->eHauptDateiTyp < Biff8 )
+    if( GetBiff() <= EXC_BIFF5 )
         pExcRoot->pExtNameBuff->Reset();
+
+    FinalizeTable();
 }
 
 
@@ -1557,6 +1440,8 @@ void ImportExcel::NeueTabelle( void )
     SCTAB nTab = GetCurrScTab();
     if( nTab > 0 && !pD->HasTable( nTab ) )
         pD->MakeTable( nTab );
+
+    InitializeTable( nTab );
 
     pOutlineListBuffer->Append(new OutlineDataBuffer(*pExcRoot, nTab ));          //#94039# prevent empty rootdata
 
@@ -1601,26 +1486,31 @@ void ImportExcel::PostDocLoad( void )
 
 
     // visible area if embedded OLE
-    ScModelObj* pDocObj = GetDocModelObj();
-    if( pDocObj )
+    if( ScModelObj* pDocObj = GetDocModelObj() )
     {
-        ScExtDocOptions& rExtDocOpt = GetExtDocOptions();
-        SfxObjectShell* pEmbObj = pDocObj->GetEmbeddedObject();
-        const ScRange* pOleSize = rExtDocOpt.GetOleSize();
-        if( pEmbObj && pOleSize )
+        // visible area if embedded
+        const ScExtDocSettings& rDocSett = GetExtDocOptions().GetDocSettings();
+        const ScRange& rOleSize = rDocSett.maOleSize;
+        if( rOleSize.aStart.Col() >= 0 )
         {
-            pEmbObj->SetVisArea( GetDoc().GetMMRect(
-                pOleSize->aStart.Col(), pOleSize->aStart.Row(),
-                pOleSize->aEnd.Col(), pOleSize->aEnd.Row(),
-                static_cast<SCTAB>(rExtDocOpt.nActTab) ) );
-            GetDoc().SetVisibleTab( static_cast<SCTAB>(rExtDocOpt.nActTab) );
+            if( SfxObjectShell* pEmbObj = pDocObj->GetEmbeddedObject() )
+            {
+                pEmbObj->SetVisArea( GetDoc().GetMMRect(
+                    rOleSize.aStart.Col(), rOleSize.aStart.Row(),
+                    rOleSize.aEnd.Col(), rOleSize.aEnd.Row(),
+                    rDocSett.mnDisplTab ) );
+                GetDoc().SetVisibleTab( rDocSett.mnDisplTab );
+            }
         }
 
         // #111099# open forms in alive mode (has no effect, if no controls in document)
         pDocObj->setPropertyValue( CREATE_OUSTRING( SC_UNO_APPLYFMDES ), ::comphelper::makeBoolAny( sal_False ) );
     }
 
-    // document owns the passed extended document options -> create a new object
+    // enables extended options to be set to the view after import
+    GetExtDocOptions().SetChanged( true );
+
+    // root data owns the extended document options -> create a new object
     GetDoc().SetExtDocOptions( new ScExtDocOptions( GetExtDocOptions() ) );
 
     EndAllChartObjects();
