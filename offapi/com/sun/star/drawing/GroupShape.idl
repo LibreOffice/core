@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GroupShape.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-02 15:12:11 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 19:06:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@
         @see XShapeGroup
         @see XShapes
  */
-service GroupShape
+published service GroupShape
 {
     /** Since a GroupShape is also a shape, it has to support this service
     */
