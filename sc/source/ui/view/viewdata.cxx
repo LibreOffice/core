@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdata.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:56:15 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:27:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 #include <svx/eeitem.hxx>
 #define ITEMID_FIELD EE_FEATURE_FIELD
 
+#include <sfx2/viewfrm.hxx>
 #include <svx/adjitem.hxx>
 #include <svx/algitem.hxx>
 #include <svx/brshitem.hxx>
