@@ -16,7 +16,7 @@
   <dlg:text dlg:id="Label2" dlg:tab-index="5" dlg:left="6" dlg:top="4" dlg:width="168" dlg:height="26" dlg:value="This macro will create a drawing document and  design a complete tree view of all subdirectories from a given path." dlg:multiline="true"/>
   <dlg:progressmeter dlg:id="ProgressBar1" dlg:tab-index="6" dlg:left="6" dlg:top="101" dlg:width="170" dlg:height="10"/>
   <dlg:text dlg:id="Label3" dlg:tab-index="7" dlg:disabled="true" dlg:left="6" dlg:top="69" dlg:width="170" dlg:height="8" dlg:value="Getting the files and subdirectories..."/>
-  <dlg:text dlg:id="Label4" dlg:tab-index="8" dlg:disabled="true" dlg:left="6" dlg:top="80" dlg:width="170" dlg:height="8" dlg:value="Sorting the siles and subdirectories..."/>
+  <dlg:text dlg:id="Label4" dlg:tab-index="8" dlg:disabled="true" dlg:left="6" dlg:top="80" dlg:width="170" dlg:height="8" dlg:value="Sorting the files and subdirectories..."/>
   <dlg:text dlg:id="Label5" dlg:tab-index="9" dlg:disabled="true" dlg:left="6" dlg:top="91" dlg:width="170" dlg:height="8" dlg:value="Drawing the filestructure..."/>
  </dlg:bulletinboard>
 </dlg:window>
