@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodechange.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-14 10:53:36 $
+ *  last change: $Author: jb $ $Date: 2000-11-16 18:03:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,6 +327,42 @@ void NodeChanges::reset(Node const& aNode)
 {
 }
 */
+
+bool NodeChanges::getChangesInfo(std::vector<NodeChangeInfo>& rInfos) const
+{
+    if (isEmpty()) return false;
+
+    rInfos.clear();
+    rInfos.reserve(getCount());
+
+    for (Iterator it = begin(); it != end(); ++it)
+    {
+        NodeChangeInfo aInfo;
+        if ( it->getChangeInfo(aInfo) )
+            rInfos.push_back(aInfo);
+    }
+
+    return !rInfos.empty();
+}
+//-----------------------------------------------------------------------------
+
+bool NodeChanges::getChangesInfo(std::vector<ExtendedNodeChangeInfo>& rInfos) const
+{
+    if (isEmpty()) return false;
+
+    rInfos.clear();
+    rInfos.reserve(getCount());
+
+    for (Iterator it = begin(); it != end(); ++it)
+    {
+        ExtendedNodeChangeInfo aInfo;
+        if ( it->getChangeInfo(aInfo) )
+            rInfos.push_back(aInfo);
+    }
+
+    return !rInfos.empty();
+}
+//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
     }

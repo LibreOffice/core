@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodechange.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:40:31 $
+ *  last change: $Author: jb $ $Date: 2000-11-16 18:03:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,6 +167,14 @@ namespace configmgr
             /// checks whether there are any (non-empty) changes in this
             bool isEmpty() const;
 
+            /// retrieves the total count of changes in this collection
+            ChangesList::size_type getCount() const { return m_aChanges.size(); }
+
+            /// retrieve information about the changed data
+            bool getChangesInfo(std::vector<NodeChangeInfo>& rInfos) const;
+            /// retrieve information about the changed data
+            bool getChangesInfo(std::vector<ExtendedNodeChangeInfo>& rInfos) const;
+
             /// test all changes
             NodeChanges& test()             { implTest(); return *this; }
             NodeChanges const& test() const { implTest(); return *this; }
@@ -175,7 +183,7 @@ namespace configmgr
             NodeChanges& apply()            { implApply(); return *this; }
             NodeChanges const& apply() const{ implApply(); return *this; }
 
-            /// remove all changes known as doing nothing from this collection.
+            /// remove all changes known to be doing nothing from this collection.
             NodeChanges& compact();
 
             /** insert a change into this collection
