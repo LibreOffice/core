@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis_funcnames.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-13 20:10:13 $
+ *  last change: $Author: kz $ $Date: 2001-08-21 20:11:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2485,6 +2485,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
     };
 
 };
+
 
 
 
