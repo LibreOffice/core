@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: gt $ $Date: 2001-04-06 12:37:56 $
+ *  last change: $Author: dr $ $Date: 2001-04-19 09:57:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,23 +142,38 @@ public:
 
 
 
+//----------------------------------------------------------- class DefRowXFs -
 
-class DefRowXFs : protected List
+class DefRowXFs : protected UINT32List
 {
 protected:
     UINT32                      nLastList;
     UINT16                      nLastRow;
 
-    static inline void*         Set( UINT16 nRowNum, UINT16 nXF );
-    static inline void          Get( const void*, UINT16& rRowNum, UINT16& rXF );
+    static inline void          Get( UINT32 nVal, UINT16& rRowNum, UINT16& rXF );
 public:
                                 DefRowXFs( void );
     virtual                     ~DefRowXFs();
 
-    void                        Add( UINT16 nRowNum, UINT16 nXF );
+    inline void                 Add( UINT16 nRowNum, UINT16 nXF );
 
     void                        ChangeXF( UINT16 nRowNum, UINT16& rXF );
 };
+
+// structure: 2 byte row number, 2 byte XF -> 4 byte
+
+inline void DefRowXFs::Add( UINT16 nR, UINT16 nXF )
+{
+    UINT32List::Append( ( UINT32 ) ( nR | ( ( UINT32 ) nXF << 16 ) ) );
+}
+
+
+inline void DefRowXFs::Get( UINT32 nVal, UINT16& rR, UINT16& rXF )
+{
+    rR = ( UINT16 ) nVal;
+    rXF = ( UINT16 ) ( nVal >> 16 );
+}
+
 
 
 
@@ -184,6 +199,9 @@ private:
 
     void                        AddRow( ExcRow* pRow );
     void                        AddUsedRow( ExcRow*& rpRow );   // Add() or delete
+
+    void                        AddWebQueries();
+
 public:
                                 ExcTable( RootData* pRD );
                                 ExcTable( RootData* pRD, UINT16 nScTable );

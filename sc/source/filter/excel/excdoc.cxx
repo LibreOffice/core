@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2001-04-19 09:01:56 $
+ *  last change: $Author: dr $ $Date: 2001-04-19 09:55:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,16 @@
 #include <svtools/intitem.hxx>
 #include <svtools/zformat.hxx>
 #include <so3/svstor.hxx>
+#include <sfx2/objsh.hxx>
+#include <tools/urlobj.hxx>
+#include <rtl/ustring>
+
+#include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/sheet/XAreaLinks.hpp>
+#include <com/sun/star/sheet/XAreaLink.hpp>
 
 #include "drwlayer.hxx"
 
@@ -97,6 +107,8 @@
 #include "stlsheet.hxx"
 #include "stlpool.hxx"
 #include "olinetab.hxx"
+#include "unonames.hxx"
+#include "convuno.hxx"
 
 #include "excdoc.hxx"
 #include "excupn.hxx"
@@ -112,6 +124,9 @@
 #ifndef _SC_XCLEXPCHANGETRACK_HXX
 #include "XclExpChangeTrack.hxx"
 #endif
+
+using namespace ::com::sun::star;
+using namespace ::rtl;
 
 
 NameBuffer*     ExcDocument::pTabNames = NULL;
@@ -148,21 +163,6 @@ ExcRecordListInst::~ExcRecordListInst()
 
 
 
-// structure: 2 byte row number, 2 byte XF -> 4 byte -> 1 pointer
-
-inline void* DefRowXFs::Set( UINT16 nR, UINT16 nXF )
-{
-    return ( void* ) ( nR | ( nXF << 16 ) );
-}
-
-
-inline void DefRowXFs::Get( const void* p, UINT16& rR, UINT16& rXF )
-{
-    rR = ( UINT16 ) ( UINT32 ) p;
-    rXF = ( UINT16 ) ( ((UINT32)p) >> 16 );
-}
-
-
 DefRowXFs::DefRowXFs( void )
 {
     nLastList = 0;
@@ -175,22 +175,16 @@ DefRowXFs::~DefRowXFs()
 }
 
 
-void DefRowXFs::Add( UINT16 nR, UINT16 nXF )
-{
-    List::Insert( Set( nR, nXF ), LIST_APPEND );
-}
-
-
 //void DefRowXFs::ChangeXF( ExcRow& rRow )
 void DefRowXFs::ChangeXF( UINT16 nRowNum, UINT16& rXF )
 {
     UINT32  nCnt;
     UINT16  nR, nXF;
 
-    nCnt = List::Count();
+    nCnt = UINT32List::Count();
     for( UINT32 n = ( nRowNum > nLastRow )? nLastList : 0 ; n < nCnt ; n++ )
     {
-        Get( List::GetObject( n ), nR, nXF );
+        Get( UINT32List::Get( n ), nR, nXF );
         if( nRowNum == nR )
         {
             rXF = nXF;
@@ -261,6 +255,82 @@ void ExcTable::AddUsedRow( ExcRow*& rpRow )
 }
 
 
+void ExcTable::AddWebQueries()
+{
+    SfxObjectShell* pShell = pExcRoot->pDoc->GetDocumentShell();
+    if( !pShell ) return;
+
+    uno::Reference< frame::XModel > xModel( pShell->GetModel() );
+    uno::Reference< beans::XPropertySet > xPropSet( xModel, uno::UNO_QUERY );
+    if( !xPropSet.is() ) return;
+
+    uno::Reference< sheet::XAreaLinks > xAreaLinks;
+    uno::Any aAny( xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_AREALINKS ) ) ) );
+    if( !(aAny >>= xAreaLinks) ) return;
+
+    uno::Reference< container::XIndexAccess > xLinksIAccess( xAreaLinks, uno::UNO_QUERY );
+    if( !xLinksIAccess.is() ) return;
+
+    const OUString aPropFilter( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_FILTER ) );
+//  const OUString aPropFilterOpt( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_FILTOPT ) );
+    const OUString aPropURL( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_LINKURL ) );
+    const OUString aPropRefresh( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_REFDELAY ) );
+    OUString aFilter, /*aFilterOpt,*/ aURL;
+    OUString aWebQueryFilter( RTL_CONSTASCII_USTRINGPARAM( EXC_WEBQRY_FILTER ) );
+    String aRangeName;
+    sal_Int32 nRefresh;
+
+    sal_Int32 nCount = xLinksIAccess->getCount();
+    for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
+    {
+        uno::Reference< sheet::XAreaLink > xAreaLink;
+        uno::Any aLinkAny( xLinksIAccess->getByIndex( nIndex ) );
+        if( aLinkAny >>= xAreaLink )
+        {
+            table::CellRangeAddress aDestRange( xAreaLink->getDestArea() );
+            if( aDestRange.Sheet == nScTab )
+            {
+                uno::Reference< beans::XPropertySet > xLinkProp( xAreaLink, uno::UNO_QUERY );
+                if( xLinkProp.is() )
+                {
+                    aLinkAny = xLinkProp->getPropertyValue( aPropFilter );
+                    aLinkAny >>= aFilter;
+                    if( aFilter == aWebQueryFilter )
+                    {
+                        // get properties
+//                      aLinkAny = xLinkProp->getPropertyValue( aPropFilterOpt );
+//                      aLinkAny >>= aAreaLink.sFilterOptions;
+                        aLinkAny = xLinkProp->getPropertyValue( aPropURL );
+                        aLinkAny >>= aURL;
+                        aLinkAny = xLinkProp->getPropertyValue( aPropRefresh );
+                        aLinkAny >>= nRefresh;
+                        INetURLObject aURLObj( ScGlobal::GetAbsDocName( aURL, pExcRoot->pDoc->GetDocumentShell() ) );
+
+                        // find range or create a new range
+                        ScRange aScDestRange;
+                        ScUnoConversion::FillScRange( aScDestRange, aDestRange );
+                        ScRangeData* pRangeData = pExcRoot->pDoc->GetRangeName()->GetRangeAtBlock( aScDestRange );
+                        if( pRangeData )
+                            aRangeName = pRangeData->GetName();
+                        else
+                        {
+                            aRangeName = aURLObj.getBase();
+                            ExcName* pExcName = new ExcName( pExcRoot, aScDestRange, aRangeName );
+                            pExcRoot->pNameList->Append( pExcName );
+                            aRangeName = pExcName->GetName();
+                        }
+
+                        // create the web query record
+                        Add( new XclExpWebQuery( aRangeName, aURLObj.getFSysPath( INetURLObject::FSYS_DOS ),
+                            xAreaLink->getSourceArea(), nRefresh ) );
+                    }
+                }
+            }
+        }
+    }
+}
+
+
 void ExcTable::SetDefRowXF( UINT16 nXF, UINT16 n )
 {
     if( !pDefRowXFs )
@@ -274,7 +344,7 @@ void ExcTable::FillAsHeader( ExcRecordListRefs& rBSRecList )
 {
     RootData&           rR          = *pExcRoot;
     ScDocument&         rDoc        = *rR.pDoc;
-    ExcETabNumBuffer&   rTabBuffer  = *rR.pTabBuffer;
+    XclExpTabNumBuffer& rTabBuffer  = *rR.pTabBuffer;
 
     if ( rR.eDateiTyp < Biff8 )
         Add( new ExcBofW );
@@ -553,7 +623,7 @@ void ExcTable::FillAsTable( void )
 {
     RootData&           rR          = *pExcRoot;
     ScDocument&         rDoc        = *rR.pDoc;
-    ExcETabNumBuffer&   rTabBuffer  = *rR.pTabBuffer;
+    XclExpTabNumBuffer& rTabBuffer  = *rR.pTabBuffer;
 
     if( nScTab >= rTabBuffer.GetScTabCount() )
     {
@@ -1103,6 +1173,9 @@ void ExcTable::FillAsTable( void )
 
     if( rR.eDateiTyp >= Biff8 )
     {
+        // web queries
+        AddWebQueries();
+
         // conditional formats
         const ScConditionalFormatList*  pCondFormList = rDoc.GetCondFormList();
         if( pCondFormList )
