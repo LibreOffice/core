@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saveopt.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:37:34 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 10:09:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,9 @@
  *
  ************************************************************************/
 
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include "saveopt.hxx"
 
