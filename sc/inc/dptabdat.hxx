@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dptabdat.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:48 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 12:22:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,12 +132,16 @@ struct ScDPTableIteratorParam
     USHORT          nRowCount;
     const long*     pRows;
     ScDPItemData*   pRowData;
+    USHORT          nPageCount;
+    const long*     pPages;
+    ScDPItemData*   pPageData;
     USHORT          nDatCount;
     const long*     pDats;
     ScDPValueData*  pValues;
 
     ScDPTableIteratorParam( long nCCount, const long* pC, ScDPItemData* pCDat,
                             long nRCount, const long* pR, ScDPItemData* pRDat,
+                            long nPCount, const long* pP, ScDPItemData* pPDat,
                             long nDCount, const long* pD, ScDPValueData* pV );
 };
 
