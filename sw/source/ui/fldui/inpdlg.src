@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inpdlg.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 11:55:48 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:07:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,7 +206,7 @@ ModalDialog DLG_FLD_INPUT
         Text[ russian ] = "ƒ‡ÎÂÂ";
         Text[ polish ] = "~Dalej";
         Text[ japanese ] = "Ê¨°„Å∏(~N)";
-        Text[ chinese_traditional ] = "ÁπºÁ∫å(~N)";
+        Text[ chinese_traditional ] = "‰∏ã‰∏ÄÊ≠•(~N)";
         Text[ arabic ] = "«· «·Ì";
         Text[ greek ] = "≈¸ÏÂÌÔ";
         Text[ korean ] = "Îã§Ïùå(~N)";
@@ -252,6 +252,7 @@ ModalDialog DLG_FLD_INPUT
     Text[ hindi ] = "‡§á‡§®‡§™‡•Å‡§ü‡•ç ‡§ï‡•ç‡§∑‡•á‡§§‡•ç‡§∞";
     Text[ slovak ] = "Vstupn√© pole";
 };
+
 
 
 
