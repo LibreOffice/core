@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.33 $
+#   $Revision: 1.34 $
 #
-#   last change: $Author: pl $ $Date: 2001-10-24 16:41:15 $
+#   last change: $Author: hdu $ $Date: 2002-04-18 16:44:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -199,6 +199,10 @@ LIB1FILES+= \
 .IF "$(USE_BUILTIN_RASTERIZER)"!=""
     LIB1FILES +=    $(SLB)$/glyphs.lib
     SHL1STDLIBS+=   $(FREETYPELIBST)
+.IF "$(ENABLE_CTL)"!=""
+    SHL1STDLIBS+= -licule
+    SHL1STDLIBS+= -licuuc
+.ENDIF
 .ENDIF
 
 SHL1TARGET= vcl$(VERSION)$(DLLPOSTFIX)
