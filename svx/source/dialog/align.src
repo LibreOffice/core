@@ -2,9 +2,9 @@
  *
  *  $RCSfile: align.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-09 23:06:11 $
+ *  last change: $Author: kz $ $Date: 2001-04-26 19:30:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,12 +248,12 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text [ english_us ] = "I~ndent" ;
         Text [ swedish ] = "Indra~g" ;
         Text [ danish ] = "Indrykning" ;
-        Text [ italian ] = "Rientro" ;
+        Text [ italian ] = "~Rientro" ;
         Text [ spanish ] = "SangrÌa" ;
         Text [ french ] = "~Retrait" ;
         Text [ dutch ] = "~Inspringing" ;
         Text [ portuguese_brazilian ] = "Einzu~g" ;
-        Text [ portuguese ] = "AvanÁo" ;
+        Text [ portuguese ] = "A~vanÁo" ;
         Text[ chinese_simplified ] = "ÀıΩ¯(~N)";
         Text[ russian ] = "ŒÚÒÚÛÔ";
         Text[ polish ] = "WciÍcie";
@@ -346,7 +346,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text = "~Oben" ;
         Text [ ENGLISH ] = "~Top" ;
         Text [ norwegian ] = "~Top" ;
-        Text [ italian ] = "Sopra" ;
+        Text [ italian ] = "In ~alto" ;
         Text [ portuguese_brazilian ] = "~Topo" ;
         Text [ portuguese ] = "Em ~cima" ;
         Text [ finnish ] = "~Ylˆs" ;
@@ -358,7 +358,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text [ english_us ] = "~Top" ;
         Text[ chinese_simplified ] = "…œ(~T)";
         Text[ russian ] = "—‚ÂıÛ";
-        Text[ polish ] = "W ~gÛrze";
+        Text[ polish ] = "Na ~gÛrze";
         Text[ japanese ] = "è„(~T)";
         Text[ chinese_traditional ] = "¶V§W(~T)";
         Text[ arabic ] = "√⁄·Ï";
@@ -376,7 +376,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text = "~Unten" ;
         Text [ ENGLISH ] = "~Bottom" ;
         Text [ norwegian ] = "~Bottom" ;
-        Text [ italian ] = "Basso" ;
+        Text [ italian ] = "In ~basso" ;
         Text [ portuguese_brazilian ] = "~Base" ;
         Text [ portuguese ] = "Em ~baixo" ;
         Text [ finnish ] = "~Alas" ;
@@ -388,7 +388,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text [ english_us ] = "~Bottom" ;
         Text[ chinese_simplified ] = "œ¬(~B)";
         Text[ russian ] = "—ÌËÁÛ";
-        Text[ polish ] = "W ~dole";
+        Text[ polish ] = "Na dole";
         Text[ japanese ] = "â∫(~B)";
         Text[ chinese_traditional ] = "¶V§U(~B)";
         Text[ arabic ] = "√”›·";
@@ -418,7 +418,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text [ english_us ] = "C~enter" ;
         Text[ chinese_simplified ] = "÷–(~E)";
         Text[ russian ] = "¬ ˆÂÌÚÂ";
-        Text[ polish ] = "Wy~úrodkowany";
+        Text[ polish ] = "Do úrodka";
         Text[ japanese ] = "íÜâõ(~E)";
         Text[ chinese_traditional ] = "∏m§§(~E)";
         Text[ arabic ] = "«·Ê”ÿ";
@@ -676,7 +676,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text = "Obe~n" ;
         Text [ ENGLISH ] = "To~p" ;
         Text [ norwegian ] = "To~p" ;
-        Text [ italian ] = "In altro" ;
+        Text [ italian ] = "In alto" ;
         Text [ portuguese_brazilian ] = "To~po" ;
         Text [ portuguese ] = "Em ~cima" ;
         Text [ finnish ] = "Yl~‰" ;
