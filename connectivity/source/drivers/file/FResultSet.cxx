@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-28 12:18:53 $
+ *  last change: $Author: oj $ $Date: 2001-03-01 11:01:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,9 +181,9 @@ OResultSet::OResultSet(OStatement_Base* pStmt,OSQLParseTreeIterator&    _aSQLIte
     osl_incrementInterlockedCount( &m_refCount );
 
 
-    for (int jj = 0; jj < sizeof nOrderbyColumnNumber / sizeof (* nOrderbyColumnNumber); jj++)
+    for (int jj = 0; jj < sizeof m_nOrderbyColumnNumber / sizeof (* m_nOrderbyColumnNumber); jj++)
     {
-        nOrderbyColumnNumber[jj] = SQL_COLUMN_NOTFOUND;
+        m_nOrderbyColumnNumber[jj] = SQL_COLUMN_NOTFOUND;
         bOrderbyAscending[jj] = TRUE;
     }
     m_nResultSetConcurrency = isCount() ? ResultSetConcurrency::READ_ONLY : ResultSetConcurrency::UPDATABLE;
@@ -1606,11 +1606,11 @@ OFILEKeyValue* OResultSet::GetOrderbyKeyValue(OValueRow _rRow)
     UINT32 nBookmarkValue = Abs((sal_Int32)(*_rRow)[0]);
 
     OFILEKeyValue* pKeyValue = new OFILEKeyValue((UINT32)nBookmarkValue);
-    for (int i = 0; i < sizeof nOrderbyColumnNumber / sizeof (* nOrderbyColumnNumber); i++)
+    for (int i = 0; i < sizeof m_nOrderbyColumnNumber / sizeof (* m_nOrderbyColumnNumber); i++)
     {
-        if (nOrderbyColumnNumber[i] == SQL_COLUMN_NOTFOUND) break;
+        if (m_nOrderbyColumnNumber[i] == SQL_COLUMN_NOTFOUND) break;
 
-        ORowSetValue xKey = (*_rRow)[nOrderbyColumnNumber[i]];
+        ORowSetValue xKey = (*_rRow)[m_nOrderbyColumnNumber[i]];
         switch (xKey.getTypeKind())
         {
             case ::com::sun::star::sdbc::DataType::VARCHAR:
@@ -1903,65 +1903,17 @@ BOOL OResultSet::OpenImpl()
     GetAssignValues(); // assign values and describe parameter columns
     m_aSQLAnalyzer.setParameterColumns(m_xParamColumns);
     anylizeSQL();
+    if (m_xParamColumns->size())
+        m_aSQLAnalyzer.describeParam(m_xParamColumns);
 
     sal_Int32 i=0;
     // initialize the column index map (mapping select columns to table columns)
     m_aColMapping.resize(m_xColumns->size() + 1);
-    for (i=0; i<m_aColMapping.size(); ++i)
+    for (i=0; i<(sal_Int32)m_aColMapping.size(); ++i)
         m_aColMapping[i] = i;
 
     // now check which columns are bound
-    ::comphelper::UStringMixEqual aCase(m_xDBMetaData->storesMixedCaseQuotedIdentifiers());
-
-    Reference<XPropertySet> xTableColumn;
-    ::rtl::OUString sTableColumnName, sSelectColumnRealName;
-    OValueVector::iterator aRowIter = m_aRow->begin();
-    for (   i=0, ++aRowIter;    // the first column is the bookmark column
-            aRowIter != m_aRow->end();
-            ++i, ++aRowIter
-        )
-    {
-        try
-        {
-            // get the table column and it's name
-            xTableColumn.clear();
-            ::cppu::extractInterface(xTableColumn, xNames->getByIndex(i));
-            OSL_ENSURE(xTableColumn.is(), "OResultSet::OpenImpl: invalid table column!");
-            if (xTableColumn.is())
-                xTableColumn->getPropertyValue(PROPERTY_NAME) >>= sTableColumnName;
-            else
-                sTableColumnName = ::rtl::OUString();
-
-            // look if we have such a select column
-            // TODO: would like to have a O(log n) search here ...
-            for (   OSQLColumns::iterator aIter = m_xColumns->begin();
-                    aIter != m_xColumns->end();
-                    ++aIter
-                )
-            {
-                (*aIter)->getPropertyValue(PROPERTY_REALNAME) >>= sSelectColumnRealName;
-                if (aCase(sTableColumnName, sSelectColumnRealName))
-                {
-                    sal_Int32 nSelectColumnPos = aIter - m_xColumns->begin() + 1;
-                        // the getXXX methods are 1-based ...
-                    sal_Int32 nTableColumnPos = i + 1;
-                        // get first table column is the bookmark column ...
-                    m_aColMapping[nSelectColumnPos] = nTableColumnPos;
-
-                    aRowIter->setBound(sal_True);
-                    sal_Int32 nType = DataType::OTHER;
-                    if (xTableColumn.is())
-                        xTableColumn->getPropertyValue(PROPERTY_TYPE) >>= nType;
-                    aRowIter->setTypeKind(nType);
-                }
-            }
-        }
-        catch (Exception&)
-        {
-            OSL_ENSURE(sal_False, "OResultSet::OpenImpl: caught an Exception!");
-        }
-    }
-
+    setBoundedColumns(m_aRow,m_xColumns,xNames,sal_True);
     // Parameter substituieren (AssignValues und Kriterien):
     if (m_xParamColumns->size())
     {
@@ -1986,7 +1938,10 @@ BOOL OResultSet::OpenImpl()
         }
 
         if (m_aParameterRow.isValid() &&  nParaCount < m_aParameterRow->size())
+        {
+            setBoundedColumns(m_aEvaluateRow,m_xParamColumns,xNames,sal_False);
             m_aSQLAnalyzer.bindParameterRow(m_aParameterRow);
+        }
     }
 
     // Neuen Index aufbauen:
@@ -2065,7 +2020,7 @@ BOOL OResultSet::OpenImpl()
                 {
                     if(!IsSorted())
                     {
-                        nOrderbyColumnNumber[0] = m_aColMapping[1];
+                        m_nOrderbyColumnNumber[0] = m_aColMapping[1];
                         bOrderbyAscending[0] = FALSE;
                     }
                     else
@@ -2076,17 +2031,17 @@ BOOL OResultSet::OpenImpl()
                 //  if (!HasRestriction() && !IsSorted() && bShowDeleted)
                     //  SetRowCount(MaxRowCount());
 
-                OSL_ENSURE(sizeof nOrderbyColumnNumber / sizeof (* nOrderbyColumnNumber) == SQL_ORDERBYKEYS,"Maximale Anzahl der ORDER BY Columns muss derzeit genau 3 sein!");
+                OSL_ENSURE(sizeof m_nOrderbyColumnNumber / sizeof (* m_nOrderbyColumnNumber) == SQL_ORDERBYKEYS,"Maximale Anzahl der ORDER BY Columns muss derzeit genau 3 sein!");
                 OKeyType eKeyType[SQL_ORDERBYKEYS];
-                aRowIter = m_aRow->begin()+1;
+                OValueVector::iterator aRowIter = m_aRow->begin()+1;
                 for (int i = 0; i < SQL_ORDERBYKEYS; i++)
                 {
-                    if (nOrderbyColumnNumber[i] == SQL_COLUMN_NOTFOUND)
+                    if (m_nOrderbyColumnNumber[i] == SQL_COLUMN_NOTFOUND)
                         eKeyType[i] = SQL_ORDERBYKEY_NONE;
                     else
                     {
-                        OSL_ENSURE(m_aRow->size() > nOrderbyColumnNumber[i],"Invalid Index");
-                        switch ((m_aRow->begin()+nOrderbyColumnNumber[i])->getTypeKind())
+                        OSL_ENSURE((sal_Int32)m_aRow->size() > m_nOrderbyColumnNumber[i],"Invalid Index");
+                        switch ((m_aRow->begin()+m_nOrderbyColumnNumber[i])->getTypeKind())
                         {
                         case DataType::CHAR:
                             case DataType::VARCHAR:
@@ -2114,7 +2069,7 @@ BOOL OResultSet::OpenImpl()
                                 OSL_ASSERT("OFILECursor::Execute: Datentyp nicht implementiert");
                                 break;
                         }
-                        (*m_aEvaluateRow)[nOrderbyColumnNumber[i]].setBound(sal_True);
+                        (*m_aEvaluateRow)[m_nOrderbyColumnNumber[i]].setBound(sal_True);
                     }
                 }
 
@@ -2122,7 +2077,7 @@ BOOL OResultSet::OpenImpl()
                 // dabei den "Key", nach dem sortiert werden soll, in den Index eintragen:
                 if (IsSorted())
                 {
-                    if (!m_aSQLAnalyzer.hasRestriction() && nOrderbyColumnNumber[1] == SQL_COLUMN_NOTFOUND)
+                    if (!m_aSQLAnalyzer.hasRestriction() && m_nOrderbyColumnNumber[1] == SQL_COLUMN_NOTFOUND)
                     {
                         // Ist nur ein Feld fuer die Sortierung angegeben
                         // Und diese Feld ist indiziert, dann den Index ausnutzen
@@ -2132,9 +2087,9 @@ BOOL OResultSet::OpenImpl()
                         {
                             xIndexes = Reference<XIndexAccess>(xIndexSup->getIndexes(),UNO_QUERY);
                             Reference<XPropertySet> xColProp;
-                            if(nOrderbyColumnNumber[0] < xIndexes->getCount())
+                            if(m_nOrderbyColumnNumber[0] < xIndexes->getCount())
                             {
-                                ::cppu::extractInterface(xColProp,xIndexes->getByIndex(nOrderbyColumnNumber[0]));
+                                ::cppu::extractInterface(xColProp,xIndexes->getByIndex(m_nOrderbyColumnNumber[0]));
                                 // iterate through the indexes to find the matching column
                                 for(sal_Int32 i=0;i<xIndexes->getCount();++i)
                                 {
@@ -2272,7 +2227,7 @@ BOOL OResultSet::OpenImpl()
                         }
                         if (!bWasSorted)
                         {
-                            nOrderbyColumnNumber[0] = SQL_COLUMN_NOTFOUND;
+                            m_nOrderbyColumnNumber[0] = SQL_COLUMN_NOTFOUND;
                             sort(m_pFileSet->begin(),m_pFileSet->end());
                         }
                     }
@@ -2377,7 +2332,7 @@ void OResultSet::setOrderbyColumn(UINT16 nOrderbyColumnNo,
                                      OSQLParseNode* pColumnRef,
                                      OSQLParseNode* pAscendingDescending)
 {
-    if (nOrderbyColumnNo >= (sizeof nOrderbyColumnNumber / sizeof (* nOrderbyColumnNumber)))
+    if (nOrderbyColumnNo >= (sizeof m_nOrderbyColumnNumber / sizeof (* m_nOrderbyColumnNumber)))
     {
         //  aStatus.SetStatementTooComplex();
         return;
@@ -2410,7 +2365,7 @@ void OResultSet::setOrderbyColumn(UINT16 nOrderbyColumnNo,
         return;
     // Alles geprueft und wir haben den Namen der Column.
     // Die wievielte Column ist das?
-    nOrderbyColumnNumber[nOrderbyColumnNo] = xColLocate->findColumn(aColumnName);
+    m_nOrderbyColumnNumber[nOrderbyColumnNo] = xColLocate->findColumn(aColumnName);
 
     // Ascending or Descending?
     bOrderbyAscending[nOrderbyColumnNo]  = (SQL_ISTOKEN(pAscendingDescending,DESC)) ?
@@ -2842,5 +2797,67 @@ sal_Bool OResultSet::isCount() const
             );
 }
 // -----------------------------------------------------------------------------
+void OResultSet::setBoundedColumns(const OValueRow& _rRow,
+                                   const ::vos::ORef<connectivity::OSQLColumns>& _rxColumns,
+                                   const Reference<XIndexAccess>& _xNames,
+                                   sal_Bool _bSetColumnMapping)
+{
+    ::comphelper::UStringMixEqual aCase(m_xDBMetaData->storesMixedCaseQuotedIdentifiers());
 
+    Reference<XPropertySet> xTableColumn;
+    ::rtl::OUString sTableColumnName, sSelectColumnRealName;
+    OValueVector::iterator aRowIter = _rRow->begin()+1;
+    for (sal_Int32 i=0; // the first column is the bookmark column
+            aRowIter != _rRow->end();
+            ++i, ++aRowIter
+        )
+    {
+        try
+        {
+            // get the table column and it's name
+            _xNames->getByIndex(i) >>= xTableColumn;
+            OSL_ENSURE(xTableColumn.is(), "OResultSet::OpenImpl: invalid table column!");
+            if (xTableColumn.is())
+                xTableColumn->getPropertyValue(PROPERTY_NAME) >>= sTableColumnName;
+            else
+                sTableColumnName = ::rtl::OUString();
+
+            // look if we have such a select column
+            // TODO: would like to have a O(log n) search here ...
+            for (   OSQLColumns::iterator aIter = _rxColumns->begin();
+                    aIter != _rxColumns->end();
+                    ++aIter
+                )
+            {
+                if((*aIter)->getPropertySetInfo()->hasPropertyByName(PROPERTY_REALNAME))
+                    (*aIter)->getPropertyValue(PROPERTY_REALNAME) >>= sSelectColumnRealName;
+                else
+                    (*aIter)->getPropertyValue(PROPERTY_NAME) >>= sSelectColumnRealName;
+
+                if (aCase(sTableColumnName, sSelectColumnRealName))
+                {
+                    if(_bSetColumnMapping)
+                    {
+                        sal_Int32 nSelectColumnPos = aIter - m_xColumns->begin() + 1;
+                            // the getXXX methods are 1-based ...
+                        sal_Int32 nTableColumnPos = i + 1;
+                            // get first table column is the bookmark column ...
+                        m_aColMapping[nSelectColumnPos] = nTableColumnPos;
+                    }
+
+                    aRowIter->setBound(sal_True);
+                    sal_Int32 nType = DataType::OTHER;
+                    if (xTableColumn.is())
+                        xTableColumn->getPropertyValue(PROPERTY_TYPE) >>= nType;
+                    aRowIter->setTypeKind(nType);
+                }
+            }
+        }
+        catch (Exception&)
+        {
+            OSL_ENSURE(sal_False, "OResultSet::OpenImpl: caught an Exception!");
+        }
+    }
+}
+// -----------------------------------------------------------------------------
 
