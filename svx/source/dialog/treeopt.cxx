@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeopt.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-01 08:50:51 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 15:53:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,7 +254,6 @@ SfxTabPage* CreateGeneralTabPage( sal_uInt16 nId, Window* pParent, const SfxItem
         case RID_SFXPAGE_PATH:                      fnCreate = &SvxPathTabPage::Create; break;
         case RID_SFXPAGE_GENERAL:                   fnCreate = &SvxGeneralTabPage::Create; break;
         case RID_SFXPAGE_PRINTOPTIONS:              fnCreate = &SfxCommonPrintOptionsTabPage::Create; break;
-        case OFA_TP_HELPERPROG:                     fnCreate = &OfaHelperProgramsTabPage::Create; break;
         case OFA_TP_LANGUAGES:                      fnCreate = &OfaLanguagesTabPage::Create; break;
         case RID_SFXPAGE_LINGU:                     fnCreate = &SvxLinguTabPage::Create; break;
         case RID_SVXPAGE_COLOR:                     fnCreate = &SvxColorTabPage::Create; break;
@@ -266,6 +265,7 @@ SfxTabPage* CreateGeneralTabPage( sal_uInt16 nId, Window* pParent, const SfxItem
         case RID_SVXPAGE_INET_PROXY:                fnCreate = &SvxProxyTabPage::Create; break;
         case RID_SVXPAGE_INET_SEARCH:               fnCreate = &SvxSearchTabPage::Create; break;
         case RID_SVXPAGE_INET_SCRIPTING:            fnCreate = &SvxScriptingTabPage::Create; break;
+        case RID_SVXPAGE_INET_MAIL:             fnCreate = &SvxEMailTabPage::Create; break;
         case RID_SVXPAGE_COLORCONFIG:               fnCreate = &SvxColorOptionsTabPage::Create; break;
         case RID_OFAPAGE_HTMLOPT:                   fnCreate = &OfaHtmlTabPage::Create; break;
         case SID_OPTFILTER_MSOFFICE:                fnCreate = &OfaMSFilterTabPage::Create; break;
@@ -1467,6 +1467,11 @@ void OfaTreeOptionsDialog::Initialize()
 
         for ( sal_uInt16 i = 1; i < nEnd; i++ )
         {
+#if defined WNT
+            // Disable E-mail tab-page on Windows
+            if ( i == 3 )
+                continue;
+#endif
             sal_uInt16 nPageId = (sal_uInt16)rInetArray.GetValue(i);
             AddTabPage( nPageId, rInetArray.GetString(i), nGroup );
         }
