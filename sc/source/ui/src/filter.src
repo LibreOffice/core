@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:25:00 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:34:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ korean ] = "¿¬°á";
         Text[ turkish ] = "Baðlantý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Vínculo";
     };
     FixedText FT_FIELD
     {
@@ -139,6 +140,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ korean ] = "ÇÊµå ÀÌ¸§";
         Text[ turkish ] = "Alan adý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Nombre del campo";
     };
     FixedText FT_COND
     {
@@ -168,6 +170,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ korean ] = "Á¶°Ç";
         Text[ turkish ] = "Koþul";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Condición";
     };
     FixedText FT_VAL
     {
@@ -197,6 +200,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ korean ] = "°ª";
         Text[ turkish ] = "Deðer";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Valor";
     };
     ListBox LB_OP1
     {
@@ -320,6 +324,11 @@ ModelessDialog RID_SCDLG_FILTER
             < " " ; Default ; > ;
         < " " ; Default ; > ;
     };
+    StringList [ catalan ] =
+    {
+            < "Y" ; Default ; > ;
+        < "O" ; Default ; > ;
+    };
     };
     ListBox LB_OP2
     {
@@ -442,6 +451,11 @@ ModelessDialog RID_SCDLG_FILTER
     {
             < " " ; Default ; > ;
         < " " ; Default ; > ;
+    };
+    StringList [ catalan ] =
+    {
+            < "Y" ; Default ; > ;
+        < "O" ; Default ; > ;
     };
     };
     ListBox LB_FIELD1
@@ -750,6 +764,19 @@ ModelessDialog RID_SCDLG_FILTER
         < " " ; Default ; > ;
         < " " ; Default ; > ;
     };
+    StringList [ catalan ] =
+    {
+            < "=" ; Default ; > ;
+        < "<" ; Default ; > ;
+        < ">" ; Default ; > ;
+        < "<=" ; Default ; > ;
+        < ">=" ; Default ; > ;
+        < "<>" ; Default ; > ;
+        < "el mayor" ; Default ; > ;
+        < "el menor" ; Default ; > ;
+        < "el mayor %" ; Default ; > ;
+        < "el menor %" ; Default ; > ;
+    };
     };
     ListBox LB_COND2
     {
@@ -1032,6 +1059,19 @@ ModelessDialog RID_SCDLG_FILTER
         < " " ; Default ; > ;
         < " " ; Default ; > ;
         < " " ; Default ; > ;
+    };
+    StringList [ catalan ] =
+    {
+            < "=" ; Default ; > ;
+        < "<" ; Default ; > ;
+        < ">" ; Default ; > ;
+        < "<=" ; Default ; > ;
+        < ">=" ; Default ; > ;
+        < "<>" ; Default ; > ;
+        < "el mayor" ; Default ; > ;
+        < "el menor" ; Default ; > ;
+        < "el mayor %" ; Default ; > ;
+        < "el menor %" ; Default ; > ;
     };
     };
     ListBox LB_COND3
@@ -1316,6 +1356,19 @@ ModelessDialog RID_SCDLG_FILTER
         < " " ; Default ; > ;
         < " " ; Default ; > ;
     };
+    StringList [ catalan ] =
+    {
+            < "=" ; Default ; > ;
+        < "<" ; Default ; > ;
+        < ">" ; Default ; > ;
+        < "<=" ; Default ; > ;
+        < ">=" ; Default ; > ;
+        < "<>" ; Default ; > ;
+        < "el mayor" ; Default ; > ;
+        < "el menor" ; Default ; > ;
+        < "el mayor %" ; Default ; > ;
+        < "el menor %" ; Default ; > ;
+    };
     };
     ComboBox ED_VAL1
     {
@@ -1365,6 +1418,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ korean ] = "±âÁØ";
         Text[ turkish ] = "Ölçütler";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Criterios";
     };
     CheckBox BTN_CASE
     {
@@ -1396,6 +1450,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ greek ] = "Êåöáëáßá/ÐåæÜ";
         Text[ korean ] = "´ë/¼Ò¹®ÀÚ(~S)";
         Text[ turkish ] = "~Büyük/Küçük harf duyarlý";
+        Text[ catalan ] = "M~ayúsculas/minúsculas";
     };
     CheckBox BTN_REGEXP
     {
@@ -1427,6 +1482,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ korean ] = "ÀÏ¹ÝÀû Ç¥Çö(~E)";
         Text[ turkish ] = "~Genel arama karakteri";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Expresión corriente";
     };
     CheckBox BTN_HEADER
     {
@@ -1458,6 +1514,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ korean ] = "¹üÀ§¿¡ ¿­ ¸Ó¸®±Û Æ÷ÇÔ(~C)";
         Text[ turkish ] = "Aralýk, ~sütun baþlýklarý içeriyor";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Area contiene títulos de ~columnas";
     };
     CheckBox BTN_UNIQUE
     {
@@ -1488,6 +1545,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ korean ] = "Áßº¹ ¾øÀ½(~N)";
         Text[ turkish ] = "Ayný sonuçlarý ~ayýkla";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Sin duplicados";
     };
     CheckBox BTN_COPY_RESULT
     {
@@ -1518,6 +1576,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ korean ] = "ÇÊÅÍ°á°ú¡¡Ãâ·Â(~R)";
         Text[ turkish ] = "Sonuçlarýn görüntüleneceði ~yer";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Copia~r resultado en...";
     };
     CheckBox BTN_DEST_PERS
     {
@@ -1546,6 +1605,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ korean ] = "À¯Áö(~K)";
         Text[ turkish ] = "~Filtre ölçütlerini koru";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ma~ntener criterios";
     };
     ListBox LB_COPY_AREA
     {
@@ -1591,6 +1651,7 @@ ModelessDialog RID_SCDLG_FILTER
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
+        QuickHelpText[ catalan ] = "Reducir";
     };
     GroupBox GB_OPTIONS
     {
@@ -1620,6 +1681,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ korean ] = "¿É¼Ç";
         Text[ turkish ] = "Seçenekler";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Opciones";
     };
     FixedText FT_DBAREA
     {
@@ -1650,6 +1712,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ korean ] = "´õ¹Ì";
         Text[ turkish ] = "taklit";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Comodín";
     };
     FixedText FT_DBAREA_LABEL
     {
@@ -1679,6 +1742,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ korean ] = "µ¥ÀÌÅÍ ¿µ¿ª:";
         Text[ turkish ] = "Veri aralýðý:";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Área de datos:";
     };
     OKButton BTN_OK
     {
@@ -1717,6 +1781,7 @@ ModelessDialog RID_SCDLG_FILTER
     Text[ korean ] = "Ç¥ÁØÇÊÅÍ";
     Text[ turkish ] = "Standart filtre";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Filtro estándar";
 };
  //============================================================================
 ModelessDialog RID_SCDLG_SPEC_FILTER
@@ -1768,6 +1833,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text[ korean ] = "ÇÊÅÍ±âÁØÀº£®£®¿¡¡¡ÀÖÀ½(~F)";
         Text[ turkish ] = "~Filtre ölçütlerinin bulunduðu yer";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Leer criterios del ~filtro en";
     };
     ListBox LB_CRITERIA_AREA
     {
@@ -1811,6 +1877,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
+        QuickHelpText[ catalan ] = "Reducir";
     };
     CheckBox BTN_CASE
     {
@@ -1842,6 +1909,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text[ greek ] = "ÐåæÜ-Êåöáëáßá";
         Text[ korean ] = "´ë/¼Ò¹®ÀÚ ±¸ºÐ(~C)";
         Text[ turkish ] = "~Büyük/Küçük harf duyarlý";
+        Text[ catalan ] = "M~ayúsculas/minúsculas";
     };
     CheckBox BTN_REGEXP
     {
@@ -1873,6 +1941,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text[ korean ] = "ÀÏ¹ÝÀû Ç¥Çö(~E)";
         Text[ turkish ] = "~Genel arama karakteri";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Expresión corriente";
     };
     CheckBox BTN_HEADER
     {
@@ -1904,6 +1973,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text[ korean ] = "¿­ ¸Ó¸®±Û Æ÷ÇÔ(~O)";
         Text[ turkish ] = "Aralýk, ~sütun baþlýklarý içeriyor";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Area contiene títulos de ~columnas";
     };
     CheckBox BTN_UNIQUE
     {
@@ -1934,6 +2004,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text[ korean ] = "Áßº¹ ¾øÀ½(~N)";
         Text[ turkish ] = "Ayný sonuçlarý ~ayýkla";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Sin duplicados";
     };
     CheckBox BTN_COPY_RESULT
     {
@@ -1964,6 +2035,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text[ korean ] = "ÇÊÅÍ°á°ú¸¦ Ãâ·Â(~P)";
         Text[ turkish ] = "Sonuçlarýn görüntüleneceði ~yer";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Escribi~r resultados en...";
     };
     CheckBox BTN_DEST_PERS
     {
@@ -1992,6 +2064,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text[ korean ] = "À¯Áö(~K)";
         Text[ turkish ] = "~Filtre ölçütlerini koru";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ma~ntener criterios";
     };
     ListBox LB_COPY_AREA
     {
@@ -2037,6 +2110,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
+        QuickHelpText[ catalan ] = "Reducir";
     };
     GroupBox GB_OPTIONS
     {
@@ -2066,6 +2140,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text[ korean ] = "¿É¼Ç";
         Text[ turkish ] = "Seçenekler";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Opciones";
     };
     FixedText FT_DBAREA
     {
@@ -2096,6 +2171,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text[ korean ] = "´õ¹Ì";
         Text[ turkish ] = "Taklit";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Comodín";
     };
     FixedText FT_DBAREA_LABEL
     {
@@ -2125,6 +2201,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text[ korean ] = "µ¥ÀÌÅÍ ¿µ¿ª:";
         Text[ turkish ] = "Veri aralýðý:";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Área de datos:";
     };
     OKButton BTN_OK
     {
@@ -2163,6 +2240,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
     Text[ korean ] = "°í±ÞÇÊÅÍ";
     Text[ turkish ] = "Özel filtre";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Filtro especial";
 };
  //============================================================================
 ModalDialog RID_SCDLG_PIVOTFILTER
@@ -2215,6 +2293,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text[ korean ] = "¿¬°á";
         Text[ turkish ] = "Baðlantý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Vínculo";
     };
     FixedText FT_FIELD
     {
@@ -2244,6 +2323,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text[ korean ] = "ÇÊµå ÀÌ¸§";
         Text[ turkish ] = "Alan adý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Nombre del campo";
     };
     FixedText FT_COND
     {
@@ -2273,6 +2353,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text[ korean ] = "Á¶°Ç";
         Text[ turkish ] = "Koþul";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Condición";
     };
     FixedText FT_VAL
     {
@@ -2302,6 +2383,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text[ korean ] = "°ª";
         Text[ turkish ] = "Deðer";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Valor";
     };
     ListBox LB_OP1
     {
@@ -2425,6 +2507,11 @@ ModalDialog RID_SCDLG_PIVOTFILTER
             < " " ; Default ; > ;
         < " " ; Default ; > ;
     };
+    StringList [ catalan ] =
+    {
+            < "Y" ; Default ; > ;
+        < "O" ; Default ; > ;
+    };
     };
     ListBox LB_OP2
     {
@@ -2547,6 +2634,11 @@ ModalDialog RID_SCDLG_PIVOTFILTER
     {
             < " " ; Default ; > ;
         < " " ; Default ; > ;
+    };
+    StringList [ catalan ] =
+    {
+            < "Y" ; Default ; > ;
+        < "O" ; Default ; > ;
     };
     };
     ListBox LB_FIELD1
@@ -2787,6 +2879,15 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         < " " ; Default ; > ;
         < " " ; Default ; > ;
     };
+    StringList [ catalan ] =
+    {
+            < "=" ; Default ; > ;
+        < "<" ; Default ; > ;
+        < ">" ; Default ; > ;
+        < "<=" ; Default ; > ;
+        < ">=" ; Default ; > ;
+        < "<>" ; Default ; > ;
+    };
     };
     ListBox LB_COND2
     {
@@ -3001,6 +3102,15 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         < " " ; Default ; > ;
         < " " ; Default ; > ;
         < " " ; Default ; > ;
+    };
+    StringList [ catalan ] =
+    {
+            < "=" ; Default ; > ;
+        < "<" ; Default ; > ;
+        < ">" ; Default ; > ;
+        < "<=" ; Default ; > ;
+        < ">=" ; Default ; > ;
+        < "<>" ; Default ; > ;
     };
     };
     ListBox LB_COND3
@@ -3217,6 +3327,15 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         < " " ; Default ; > ;
         < " " ; Default ; > ;
     };
+    StringList [ catalan ] =
+    {
+            < "=" ; Default ; > ;
+        < "<" ; Default ; > ;
+        < ">" ; Default ; > ;
+        < "<=" ; Default ; > ;
+        < ">=" ; Default ; > ;
+        < "<>" ; Default ; > ;
+    };
     };
     ComboBox ED_VAL1
     {
@@ -3266,6 +3385,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text[ korean ] = "±âÁØ";
         Text[ turkish ] = "Ölçütler";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Criterios";
     };
     CheckBox BTN_CASE
     {
@@ -3297,6 +3417,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text[ greek ] = "ÐåæÜ-Êåöáëáßá";
         Text[ korean ] = "´ë/¼Ò¹®ÀÚ ±¸ºÐ(~C)";
         Text[ turkish ] = "~Büyük/Küçük harf duyarlý";
+        Text[ catalan ] = "M~ayúsculas/minúsculas";
     };
     CheckBox BTN_REGEXP
     {
@@ -3328,6 +3449,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text[ korean ] = "ÀÏ¹ÝÀû Ç¥Çö(~R)";
         Text[ turkish ] = "~Genel arama karakteri";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Expresión corriente";
     };
     CheckBox BTN_UNIQUE
     {
@@ -3358,6 +3480,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text[ korean ] = "Áßº¹ ¾øÀ½(~N)";
         Text[ turkish ] = "Ayný sonuçlarý ~ayýkla";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Sin duplicados";
     };
     GroupBox GB_OPTIONS
     {
@@ -3387,6 +3510,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text[ korean ] = "¿É¼Ç";
         Text[ turkish ] = "Seçenekler";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Opciones";
     };
     FixedText FT_DBAREA
     {
@@ -3417,6 +3541,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text[ korean ] = "´õ¹Ì";
         Text[ turkish ] = "Taklit";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Comodín";
     };
     FixedText FT_DBAREA_LABEL
     {
@@ -3446,6 +3571,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text[ korean ] = "µ¥ÀÌÅÍ ¿µ¿ª:";
         Text[ turkish ] = "Veri aralýðý:";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Área de datos:";
     };
     OKButton BTN_OK
     {
@@ -3484,4 +3610,5 @@ ModalDialog RID_SCDLG_PIVOTFILTER
     Text[ korean ] = "ÇÊÅÍ";
     Text[ turkish ] = "Filtre";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Filtro";
 };
