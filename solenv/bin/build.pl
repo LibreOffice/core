@@ -5,9 +5,9 @@ eval 'exec perl -S $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.65 $
+#   $Revision: 1.66 $
 #
-#   last change: $Author: vg $ $Date: 2002-09-23 15:46:15 $
+#   last change: $Author: vg $ $Date: 2002-10-25 12:48:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,7 +75,7 @@ use Cwd;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.65 $ ';
+$id_str = ' $Revision: 1.66 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -867,7 +867,7 @@ sub children_number {
 };
 
 sub start_child {
-    &cancel_build if (scalar keys %broken_build);
+    #&cancel_build if (scalar keys %broken_build);
     my $child_nick = shift;
     my $pid;
     if ($pid = fork) { # parent
@@ -916,9 +916,8 @@ sub build_multiprocessing {
         sleep(1) if (!$Prj);
         &build_actual_queue(\@build_queue);
     } while (scalar (keys %ParentDepsHash));
-    while (&children_number()) {
-        sleep(5);
-    };
+    # Let all children finish their work
+    sleep(1) while (&children_number());
     &cancel_build if (scalar keys %broken_build);
     print STDERR "Multiprocessing build is finished\n";
     exit(0);
@@ -932,7 +931,7 @@ sub build_actual_queue {
     my $i = 0;
     do {
         while ($i <= (scalar(@$build_queue) - 1)) {
-            &cancel_build if (scalar keys %broken_build);
+            #&cancel_build if (scalar keys %broken_build);
             $Prj = $$build_queue[$i];
             &annonce_module($Prj) if (!(defined $module_annonced{$Prj}));
             $only_dependent = 0;
