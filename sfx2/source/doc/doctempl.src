@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 21:40:38 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 20:27:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -373,7 +373,7 @@ String RID_CNT_STR_WAITING
     Text [ spanish ] = "Los componentes de %PRODUCTNAME van a ser inicializados ahora tras la instalación.";
     Text[ chinese_simplified ] = "°²×°Íê³ÉºóÊ×´Î³õÊ¼»¯ %PRODUCTNAME ³ÌÊ½²¿¼ş¡£";
     Text[ russian ] = "Èíèöèàëèçàöèÿ êîìïîíåíòîâ %PRODUCTNAME ïîñëå èíñòàëëÿöèè.";
-    Text[ polish ] = "Po zakoñczeniu instalacji rozpocznie siê teraz inicjalizacja komponentów %PRODUCTNAME.";
+    Text[ polish ] = "Po zakoñczeniu instalacji rozpocznie siê inicjalizacja komponentów %PRODUCTNAME.";
     Text[ japanese ] = "%PRODUCTNAME ºİÎß°ÈİÄ‚ÍA²İ½Ä°Ù‚³‚ê‚½‚ ‚Æ‚É‚Ü‚¸‰Šú‰»‚³‚ê‚Ü‚·B";
     Text[ chinese_traditional ] = "¦w¸Ë§¹¦¨«á­º¦¸ªì©l¤Æ %PRODUCTNAME µ{¦¡³¡¥ó¡C";
     Text[ arabic ] = "ÌÇÑí ÇáÂä ÊåíÆÉ ãßæäÇÊ %PRODUCTNAME ááãÑÉ ÇáÃæáì ÈÚÏ ÇäÊåÇÁ ÚãáíÉ ÇáÊËÈíÊ.";
