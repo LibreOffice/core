@@ -2,9 +2,9 @@
 *
 *  $RCSfile: xmltoken.cxx,v $
 *
-*  $Revision: 1.76 $
+*  $Revision: 1.77 $
 *
-*  last change: $Author: obo $ $Date: 2004-11-16 14:00:00 $
+*  last change: $Author: obo $ $Date: 2004-11-23 09:39:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2147,7 +2147,7 @@ namespace xmloff { namespace token {
 
         TOKEN( "join-border",                     XML_JOIN_BORDER ),
 
-        TOKEN( "show-list",                        XML_SHOW_LIST ),
+        TOKEN( "display-list",                     XML_DISPLAY_LIST ),
         TOKEN( "no",                               XML_NO ),
         TOKEN( "unsorted",                         XML_UNSORTED ),
         TOKEN( "sorted-ascending",                 XML_SORTED_ASCENDING ),
@@ -2352,7 +2352,7 @@ namespace xmloff { namespace token {
         TOKEN( "data-pilot-display-info",           XML_DATA_PILOT_DISPLAY_INFO ),
         TOKEN( "sort-mode",                         XML_SORT_MODE ),
         TOKEN( "data-pilot-sort-info",              XML_DATA_PILOT_SORT_INFO ),
-        TOKEN( "add-empty-line",                    XML_ADD_EMPTY_LINE ),
+        TOKEN( "add-empty-lines",                   XML_ADD_EMPTY_LINES ),
         TOKEN( "tabular-layout",                    XML_TABULAR_LAYOUT ),
         TOKEN( "outline-subtotals-top",             XML_OUTLINE_SUBTOTALS_TOP ),
         TOKEN( "outline-subtotals-bottom",          XML_OUTLINE_SUBTOTALS_BOTTOM ),
@@ -2362,10 +2362,10 @@ namespace xmloff { namespace token {
         TOKEN( "3d" ,                               XML_3D ),
         TOKEN( "image-position" ,                   XML_IMAGE_POSITION ),
         TOKEN( "image-align" ,                      XML_IMAGE_ALIGN ),
-        TOKEN( "diagonal-bltr",                     XML_DIAGONAL_BLTR ),
-        TOKEN( "diagonal-bltr-width",               XML_DIAGONAL_BLTR_WIDTH ),
-        TOKEN( "diagonal-tlbr",                     XML_DIAGONAL_TLBR ),
-        TOKEN( "diagonal-tlbr-width",               XML_DIAGONAL_TLBR_WIDTH ),
+        TOKEN( "diagonal-bl-tr",                    XML_DIAGONAL_BL_TR ),
+        TOKEN( "diagonal-bl-tr-width",              XML_DIAGONAL_BL_TR_WIDTH ),
+        TOKEN( "diagonal-tl-br",                    XML_DIAGONAL_TL_BR ),
+        TOKEN( "diagonal-tl-br-width",              XML_DIAGONAL_TL_BR_WIDTH ),
         TOKEN( "repeat-content",                    XML_REPEAT_CONTENT ),
         TOKEN( "shrink-to-fit",                     XML_SHRINK_TO_FIT ),
 
