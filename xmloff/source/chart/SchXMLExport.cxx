@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: bm $ $Date: 2001-05-25 16:13:58 $
+ *  last change: $Author: bm $ $Date: 2001-05-28 15:04:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -603,26 +603,28 @@ void SchXMLExportHelper::parseDocument( uno::Reference< chart::XChartDocument >&
     // ------------------------------------
     if( bExportContent )
     {
-        sal_Bool bExportTable = bIncludeTable;
-        // check for clipboard flag on document => export Table
-        if( xDocPropSet.is() &&
-            ! bExportTable )
-        {
-            uno::Any aAny;
-            try
-            {
-                aAny = xDocPropSet->getPropertyValue( ::rtl::OUString::createFromAscii( "ExportData" ));
-                aAny >>= bExportTable;
-            }
-            catch( uno::Exception )
-            {
-                DBG_ERROR( "Property ExportData not found" );
-            }
-        }
+        // #85929# always export table, otherwise clipboard may loose data
+//          sal_Bool bExportTable = bIncludeTable;
+//          // check for clipboard flag on document => export Table
+//          if( xDocPropSet.is() &&
+//              ! bExportTable )
+//          {
+//              uno::Any aAny;
+//              try
+//              {
+//                  aAny = xDocPropSet->getPropertyValue( ::rtl::OUString::createFromAscii( "ExportData" ));
+//                  aAny >>= bExportTable;
+//              }
+//              catch( uno::Exception )
+//              {
+//                  DBG_ERROR( "Property ExportData not found" );
+//              }
+//          }
 
         // export of table element
-        if( bExportTable )
-            exportTable( xData );
+//          if( bExportTable )
+
+        exportTable( xData );
     }
 
     // close <chart:chart> element
