@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: np $ $Date: 2002-11-14 14:03:30 $
+#   last change: $Author: rt $ $Date: 2002-12-11 15:40:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,7 +72,6 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
-
 # --- Files --------------------------------------------------------
 
 
@@ -85,6 +84,8 @@ APP1STACK=	1000000
 APP1STDLIBS= MSVCIRT.LIB
 .ENDIF
 
+
+UWINAPILIB=$(0)
 
 APP1LIBS=	$(LB)$/x2c_xcd.lib $(LB)$/x2c_support.lib
 APP1DEPN=   $(LB)$/x2c_xcd.lib $(LB)$/x2c_support.lib
