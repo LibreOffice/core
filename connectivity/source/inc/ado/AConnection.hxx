@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AConnection.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-29 12:22:55 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 12:35:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,9 +73,7 @@
 #ifndef _CONNECTIVITY_OSUBCOMPONENT_HXX_
 #include "OSubComponent.hxx"
 #endif
-#ifndef _MAP_
 #include <map>
-#endif
 #ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
 #include "connectivity/CommonTools.hxx"
 #endif
@@ -85,6 +83,7 @@
 #ifndef CONNECTIVITY_CONNECTION_HXX
 #include "TConnection.hxx"
 #endif
+#include "ado/Awrapado.hxx"
 
 namespace connectivity
 {
@@ -93,7 +92,6 @@ namespace connectivity
         struct OExtendedTypeInfo
         {
             ::connectivity::OTypeInfo       aSimpleType;    // the general type info
-            sal_Int32                       eType;          // the ADO type
 
             inline ::rtl::OUString getDBName() const { return aSimpleType.aTypeName; }
         };
@@ -101,7 +99,7 @@ namespace connectivity
         class WpADOConnection;
         class ODriver;
         class OCatalog;
-        typedef ::std::multimap<sal_Int32, OExtendedTypeInfo*>          OTypeInfoMap;
+        typedef ::std::multimap<DataTypeEnum, OExtendedTypeInfo*>       OTypeInfoMap;
         typedef connectivity::OMetaConnection                           OConnection_BASE;
 
 
@@ -194,11 +192,10 @@ namespace connectivity
             ODriver*  getDriver()       const { return m_pDriver; }
 
             static const OExtendedTypeInfo* getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
-                               sal_Int32 _nType,
+                               DataTypeEnum _nType,
                                const ::rtl::OUString& _sTypeName,
                                sal_Int32 _nPrecision,
                                sal_Int32 _nScale,
-                               sal_Int32 _nAdoType,
                                sal_Bool& _brForceToType);
         };
     }
