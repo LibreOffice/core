@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoattr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-13 11:50:51 $
+ *  last change: $Author: aw $ $Date: 2000-11-13 13:37:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -411,8 +411,6 @@ void SdrAttrObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
         if(pModel)
         {
             SfxStyleSheetBasePool *pPool = pModel->GetStyleSheetPool();
-            DBG_ASSERT(pPool, "SdrAttrObj::ReadData(): kein StyleSheetPool");
-
             if(pPool)
             {
                 SfxStyleSheet *pTmpStyleSheet = (SfxStyleSheet*)pPool->Find(aStyleSheetName, eFamily);
