@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2001-11-08 21:30:03 $
+ *  last change: $Author: vg $ $Date: 2001-11-13 22:40:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,7 +213,7 @@ String STR_DELETE_TEMPLATE
     Text[ turkish ] = "\"$1\" girişi silinsin mi?";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "¿Desea eliminar la entrada \"$1\"?";
-    Text[ finnish ] = "Haluatko varmasti poistaa merkinn?n $1?";
+    Text[ finnish ] = "Haluatko varmasti poistaa merkinnän $1?";
 };
 QueryBox MSG_REGION_NOTEMPTY
 {
@@ -642,7 +642,7 @@ String STR_ERROR_COPY_TEMPLATE
     Text [ italian ] = "Errore durante la copia del modello \"$1\".\nProbabilmente il modello esiste già." ;
     Text [ portuguese_brazilian ] = "Erro ao copiar o modelo" ;
     Text [ portuguese ] = "Erro ao copiar o modelo \"$1\".\nÉ possível que já exista." ;
-    Text [ finnish ] = "On ilmennyt virhe kopioitaessa mallipohjaa $1. \nT?m?n niminen mallipohja saattaa olla jo olemassa." ;
+    Text [ finnish ] = "On ilmennyt virhe kopioitaessa mallipohjaa $1. \nTämän niminen mallipohja saattaa olla jo olemassa." ;
     Text [ danish ] = "Fejl ved kopiering af skabelonen \"$1\".\nMuligvis findes skabelonen allerede." ;
     Text [ french ] = "Erreur lors de la copie du modèle \"$1\".\nIl se peut qu'il existe déjà." ;
     Text [ swedish ] = "Fel vid kopiering av mallen \"$1\".\nEventuellt existerar mallen redan." ;
@@ -699,7 +699,7 @@ String STR_ERROR_MOVE_TEMPLATE
     Text [ italian ] = "Errore durante lo spostamento del modello \"$1\"." ;
     Text [ portuguese_brazilian ] = "Erro ao mover o modelo " ;
     Text [ portuguese ] = "Erro ao mover o modelo \"$1\"." ;
-    Text [ finnish ] = "On ilmennyt virhe siirrett?ess? mallipohjaa $1." ;
+    Text [ finnish ] = "On ilmennyt virhe siirrettäessä mallipohjaa $1." ;
     Text [ danish ] = "Fejl under flytning af skabelonen \"$1\"." ;
     Text [ french ] = "Erreur lors du déplacement du modèle \"$1\"." ;
     Text [ swedish ] = "Fel vid flyttning av mall \"$1\" " ;
@@ -912,7 +912,7 @@ String STR_QUERY_DEFAULT_TEMPLATE
     TEXT [ italian ] = "Volete che il modello \"$(TESTO)\" diventi il modello predefinito?" ;
     TEXT [ portuguese_brazilian ] = "O modelo $(TEXTO) deve se tornar o modelo padr o?" ;
     TEXT [ portuguese ] = "Deseja usar o modelo \"$(TEXTO)\" como modelo padrão?" ;
-    TEXT [ finnish ] = "Tehd??nk?mallipohjasta $(TEXT) oletusmallipohja?" ;
+    TEXT [ finnish ] = "Tehdäänkö mallipohjasta $(TEXT) oletusmallipohja?" ;
     TEXT [ danish ] = "Vil du definere skabelonen \"$(TEKST)\" som standardskabelon?" ;
     TEXT [ french ] = "Souhaitez-vous faire du modèle \"$(TEXT)\" le modèle par défaut ?" ;
     TEXT [ swedish ] = "Skall mallen \"$(TEXT)\" göras till standardmall?" ;
@@ -1078,7 +1078,7 @@ String STR_QUERY_SAVEOWNFORMAT
     Text[ turkish ] = "Bu belgede, $(FORMAT) formatında kaydedilemeyen\n formatlamalar ve bilgiler bulunabilir. Değişiklikleri \n$(OWNFORMAT) formatında kaydetmek istiyor musunuz?";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Este documento puede contener informaciones y formatos\nque no se pueden guardar en el formato $(FORMAT).\n¿Desea guardar los cambios en formato\n$(OWNFORMAT)?";
-    Text[ finnish ] = "T?m? tiedosto saattaa sis?lt?? ominaisuuksia ja tietoja, joita ei voi tallentaa muotoon\n$(FORMAT). Haluatko tallentaa muutokset k?ytt?m?ll? muotoa\n$(OWNFORMAT)?";
+    Text[ finnish ] = "Tämä tiedosto saattaa sisältää ominaisuuksia ja tietoja, joita ei voi tallentaa muotoon\n$(FORMAT). Haluatko tallentaa muutokset käyttämällä muotoa\n$(OWNFORMAT)?";
 };
 String STR_QUERY_MUSTOWNFORMAT
 {
@@ -1105,7 +1105,7 @@ String STR_QUERY_MUSTOWNFORMAT
     Text[ korean ] = "ë¬¸ì„œë¥¼ $(FORMAT) í˜•ì‹ìœ¼ë¡œ ì €ì¥í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤. ë¬¸ì„œë¥¼ $(OWNFORMAT) í˜•ì‹ìœ¼ë¡œ\nì €ì¥í•˜ê² ìŠµë‹ˆê¹Œ?";
     Text[ turkish ] = "Belgeler $(FORMAT) formatında kaydedilemiyor\n. Belgeyi $(OWNFORMAT) formatında\nkaydetmek ister misiniz?";
     Text[ catalan ] = "Los documentos no se pueden guardar en el formato $(FORMAT).\n¿Desea guardar el documento en formato $(OWNFORMAT)?";
-    Text[ finnish ] = "Asiakirjoja ei voi tallentaa muodossa $(FORMAT). Haluatko\ntallentaa muutokset k?ytt?m?ll? muotoa $(OWNFORMAT)?";
+    Text[ finnish ] = "Asiakirjoja ei voi tallentaa muodossa $(FORMAT). Haluatko\ntallentaa muutokset käyttämällä muotoa $(OWNFORMAT)?";
 };
 String STR_SAVEDOC
 {
@@ -1189,7 +1189,7 @@ String STR_SAVEASDOC
     Text[ turkish ] = "~Farklı kaydet...";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "G~uardar como...";
-    Text[ finnish ] = "Tallenna~ nimell?";
+    Text[ finnish ] = "Tallenna~ nimellä";
 };
 String STR_SAVECOPYDOC
 {
@@ -1217,7 +1217,7 @@ String STR_SAVECOPYDOC
     Text[ turkish ] = "Kopyasını farklı  ka~ydet...";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Guardar copia ~como...";
-    Text[ finnish ] = "~Tallenna kopio nimell?...";
+    Text[ finnish ] = "~Tallenna kopio nimellä...";
 };
 String STR_CLOSEDOC
 {
@@ -1359,7 +1359,7 @@ String RID_STR_FILTBASIC
     Text[ turkish ] = "%PRODUCTNAME Basic kitaplıkları";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Bibliotecas %PRODUCTNAME Basic";
-    Text[ finnish ] = "%PRODUCTNAME Basic Libraries";
+    Text[ finnish ] = "Ohjelman %PRODUCTNAME peruskirjastot";
 };
 String RID_STR_WARNSTYLEOVERWRITE
 {
@@ -1445,7 +1445,7 @@ Resource RID_DLSTATUS
         Text[ turkish ] = "Bağlanılan: $(HOST). Yanıt bekleniyor...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Conexión con: $(HOST). Esperando respuesta...";
-        Text[ finnish ] = "Yhdistetään kohteeseen: $(HOST). Odotetaan vastausta";
+        Text[ finnish ] = "Yhdistetään kohteeseen: $(HOST).Odotetaan vastausta";
     };
     String INET_CONNECT_START
     {
@@ -1501,7 +1501,7 @@ Resource RID_DLSTATUS
         Text[ turkish ] = "Aktarılan:  $(HOST) sunucusundan $(TARGET). Okunan: $(BYTE)";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Transfiriendo: $(TARGET) desde $(HOST). Leído: $(BYTE)";
-        Text[ finnish ] = "Avataan $(TARGET) koneelta $(HOST)! Ladattu: $(BYTE)";
+        Text[ finnish ] = "Ladataan $(TARGET) koneelta $(HOST). Ladattu: $(BYTE)";
     };
     String INET_CONNECTION_CLOSED
     {
@@ -1742,7 +1742,7 @@ String STR_TEMPL_MOVED
     Text[ turkish ] = "\"$(TEMPLATE)\" şablonu asıl yerinde bulunamadı. Aynı adlı şablonun bulunduğu yerin adı: \"$(FOUND)\". Bu şablon gelecekte karşılaştırma için kullanılsın mı?";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "La plantilla \"$(TEMPLATE)\" no se encontró en su ubicación original. Una plantilla con el mismo nombre se encontró en \"$(FOUND)\". ¿Desea utilizar esta plantilla al sincronizar en el futuro?";
-    Text[ finnish ] = "Mallipohjaa $(TEMPLATE) ei l?tynyt alkuper?isest? sijainnista. Samanniminen mallipohja on kohteessa $(FOUND). K?ytet??nk?t?t? mallipohjaa vastaisuudessa vertailuihin?";
+    Text[ finnish ] = "Mallipohjaa $(TEMPLATE) ei löytynyt alkuperäisestä sijainnista. Samanniminen mallipohja on kohteessa $(FOUND). Käytetäänkö tätä mallipohjaa vastaisuudessa vertailuihin?";
 };
 String STR_TEMPL_RESET
 {
@@ -1770,7 +1770,7 @@ String STR_TEMPL_RESET
     Text[ turkish ] = "\"$(TEMPLATE)\" şablonu bulunamadı. Bu şablon gelecekte de aransın mı?";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "No se encontró la plantilla \"$(TEMPLATE)\". ¿Desea que se busque la próxima vez que abra el documento?";
-    Text[ finnish ] = "Mallipohjaa $(TEMPLATE) ei l?tynyt. Etsit??nk?mallipohjaa seuraavan kerran, kun asiakirja avataan?";
+    Text[ finnish ] = "Mallipohjaa $(TEMPLATE) ei löytynyt. Etsitäänkö mallipohjaa seuraavan kerran, kun asiakirja avataan?";
 };
 String STR_AUTOMATICVERSION
 {
@@ -2009,7 +2009,7 @@ String STR_NOSAVEANDCLOSE
     Text[ turkish ] = "~Sil";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "~Rechazar";
-    Text[ finnish ] = "~Hylk??";
+    Text[ finnish ] = "~Hylkää";
 };
 
 String STR_PACKNGO_NOACCESS
@@ -2035,7 +2035,7 @@ String STR_PACKNGO_NOACCESS
     Text[ arabic ] = "ÊÚĞÑ ÇáæÕæá Åáì ÇáŞÑÕ ÇáÍÇáí.";
     Text[ turkish ] = "Kullanılan veri taşıyıcısına erişim sağlanamadı.";
     Text[ catalan ] = "No se pudo acceder al medio actual.";
-    Text[ finnish ] = "Nykyinen tietojen tallennusv?line ei ole k?ytett?viss?.";
+    Text[ finnish ] = "Nykyinen tietojen tallennusväline ei ole käytettävissä.";
 };
 
 String STR_PACKNGO_NEWMEDIUM
@@ -2061,7 +2061,7 @@ String STR_PACKNGO_NEWMEDIUM
     Text[ arabic ] = "ÇáÑÌÇÁ ÅÏÎÇá ÇáŞÑÕ ÇáÊÇáí¡ Ëã ÇáäŞÑ İæŞ ÇáÒÑ \"ÍÓäÇğ\".";
     Text[ turkish ] = "Bir sonraki veri taşıyıcısını takıp Tamam düğmesine tıklayınız.";
     Text[ catalan ] = "Inserte el siguiente medio y pulse el botón Aceptar.";
-    Text[ finnish ] = "Lis?? seuraava tietov?line ja valitse OK.";
+    Text[ finnish ] = "Lisää seuraava tietoväline ja valitse OK.";
 };
 
 String STR_OBJECT
@@ -2152,6 +2152,7 @@ String STR_OPENOBJECT
 };
 
 // ******************************************************************* EOF
+
 
 
 
