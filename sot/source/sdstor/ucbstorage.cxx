@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbstorage.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: mav $ $Date: 2002-09-25 10:43:29 $
+ *  last change: $Author: mav $ $Date: 2002-10-10 13:07:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1816,7 +1816,6 @@ void UCBStorage_Impl::Init()
         }
         else
         {
-            ReadContent();
             // get the manifest information from the package
             Any aAny = m_pContent->getPropertyValue( ::rtl::OUString::createFromAscii( "MediaType" ) );
             rtl::OUString aTmp;
@@ -1838,6 +1837,9 @@ void UCBStorage_Impl::Init()
         // get human presentable name using the clipboard format
         SotExchange::GetFormatDataFlavor( m_nFormat, aDataFlavor );
         m_aUserTypeName = aDataFlavor.HumanPresentableName;
+
+        if( m_pContent && !m_bIsLinked && m_aClassId != SvGlobalName() )
+            ReadContent();
     }
 }
 
