@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adddlg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pl $ $Date: 2001-12-19 15:36:55 $
+ *  last change: $Author: pl $ $Date: 2002-03-01 08:30:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -398,7 +398,12 @@ APCommandPage::APCommandPage( Window* pParent, DeviceKind::type eKind )
     FreeResource();
     ::std::list< String > aCommands;
     if( m_eKind == DeviceKind::Printer )
+    {
         m_aHelpBtn.Show( FALSE );
+        Size aSize = m_aCommandTxt.GetSizePixel();
+        aSize.Width() = m_aCommandBox.GetSizePixel().Width();
+        m_aCommandTxt.SetSizePixel( aSize );
+    }
     if( m_eKind != DeviceKind::Pdf )
     {
         m_aPdfDirBtn.Show( FALSE );
@@ -411,6 +416,21 @@ APCommandPage::APCommandPage( Window* pParent, DeviceKind::type eKind )
         case DeviceKind::Fax:       CommandStore::getFaxCommands( aCommands );break;
         case DeviceKind::Pdf:       CommandStore::getPdfCommands( aCommands );break;
     }
+    // adjust height of command text and help button
+    Rectangle aPosSize( m_aCommandTxt.GetPosPixel(), m_aCommandTxt.GetSizePixel() );
+    Rectangle aTextSize = m_aCommandTxt.GetTextRect( Rectangle( Point(), aPosSize.GetSize() ), m_aCommandTxt.GetText() );
+    if( aTextSize.GetWidth() <= 2*(aPosSize.GetWidth()+1) )
+    {
+        Size aNewSize( aPosSize.GetWidth(), aPosSize.GetHeight()*2/3 );
+        if( aNewSize.Height() < m_aHelpBtn.GetSizePixel().Height()+2 )
+            aNewSize.Height() = m_aHelpBtn.GetSizePixel().Height()+2;
+        Point aNewPos( aPosSize.Left(), aPosSize.Top() + aPosSize.GetHeight() - aNewSize.Height() );
+        m_aCommandTxt.SetPosSizePixel( aNewPos, aNewSize );
+        aNewPos.X() = m_aHelpBtn.GetPosPixel().X();
+        m_aHelpBtn.SetPosPixel( aNewPos );
+    }
+
+    // fill in commands
     ::std::list< String >::iterator it;
     for( it = aCommands.begin(); it != aCommands.end(); ++it )
         m_aCommandBox.InsertEntry( *it );
