@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2001-01-18 14:45:10 $
+ *  last change: $Author: fs $ $Date: 2001-02-05 08:59:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -882,8 +882,15 @@ namespace pcr
             Reference< XRowSet > xRowSet(m_xPropValueAccess, UNO_QUERY);
             if (!xRowSet.is())
             {
-                DBG_ERROR("OPropertyBrowserController::SetQueries: could not obtain the rowset for the introspectee!");
-                return;
+                // are we inspecting a combo-/listbox?
+                if ((FormComponentType::COMBOBOX == m_nClassId) || (FormComponentType::LISTBOX == m_nClassId))
+                    xRowSet = Reference< XRowSet >(m_xObjectParent, UNO_QUERY);
+
+                if (!xRowSet.is())
+                {
+                    DBG_ERROR("OPropertyBrowserController::SetQueries: could not obtain the rowset for the introspectee!");
+                    return;
+                }
             }
 
             Reference< XTablesSupplier >  xTables;
@@ -2000,13 +2007,9 @@ namespace pcr
                             }
 
                         if (PROPERTY_ID_LISTSOURCETYPE == nPropId)
-                            if (::comphelper::hasProperty(PROPERTY_CLASSID, m_xPropValueAccess))
-                            {
-                                sal_Int16 nClassID = ::comphelper::getINT16(m_xPropValueAccess->getPropertyValue(PROPERTY_CLASSID));
-                                if (nClassID == FormComponentType::COMBOBOX)
-                                    // remove the first sequence element
-                                    ++pStart;
-                            }
+                            if (FormComponentType::COMBOBOX == m_nClassId)
+                                // remove the first sequence element
+                                ++pStart;
 
                         // copy the sequence
                         for (const ::rtl::OUString* pLoop = pStart; pLoop != pEnd; ++pLoop)
@@ -2498,6 +2501,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2001/01/18 14:45:10  rt
+ *  #65293# semicolon removed
+ *
  *  Revision 1.3  2001/01/12 17:02:53  fs
  *  StringToAny: corrected the evaluation of booleans
  *
