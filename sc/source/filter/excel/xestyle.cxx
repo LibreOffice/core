@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xestyle.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:34:59 $
+ *  last change: $Author: vg $ $Date: 2003-05-27 15:07:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,10 +128,11 @@
 
 // helpers ====================================================================
 
-/** Returns true, if the passed itemset really contains the item. */
-inline bool lcl_xestyle_CheckItem( const SfxItemSet& rItemSet, sal_uInt16 nWhichId )
+/** Returns true, if the passed itemset contains the item.
+    @param bDeep  true = Searches in parent item sets too. */
+inline bool lcl_xestyle_CheckItem( const SfxItemSet& rItemSet, sal_uInt16 nWhichId, bool bDeep )
 {
-    return rItemSet.GetItemState( nWhichId, FALSE ) == SFX_ITEM_SET;
+    return rItemSet.GetItemState( nWhichId, bDeep ) == SFX_ITEM_SET;
 }
 
 
@@ -1031,12 +1032,12 @@ void XclExpNumFmtBuffer::WriteDefaultFormats( XclExpStream& rStrm )
 
 // ----------------------------------------------------------------------------
 
-bool XclExpCellProt::FillFromItemSet( const SfxItemSet& rItemSet, XclBiff eBiff )
+bool XclExpCellProt::FillFromItemSet( const SfxItemSet& rItemSet, XclBiff eBiff, bool bStyle )
 {
     const ScProtectionAttr& rProtItem = GETITEM( rItemSet, ScProtectionAttr, ATTR_PROTECTION );
-    mbLocked = !!rProtItem.GetProtection();     // BOOL->bool
+    mbLocked = rProtItem.GetProtection();
     mbHidden = rProtItem.GetHideFormula() || rProtItem.GetHideCell();
-    return lcl_xestyle_CheckItem( rItemSet, ATTR_PROTECTION );
+    return lcl_xestyle_CheckItem( rItemSet, ATTR_PROTECTION, bStyle );
 }
 
 #if 0
@@ -1056,7 +1057,7 @@ void XclExpCellProt::FillToXF3( sal_uInt16& rnProt ) const
 
 // ----------------------------------------------------------------------------
 
-bool XclExpCellAlign::FillFromItemSet( const SfxItemSet& rItemSet, XclBiff eBiff, bool bForceWrapped )
+bool XclExpCellAlign::FillFromItemSet( const SfxItemSet& rItemSet, XclBiff eBiff, bool bForceWrapped, bool bStyle )
 {
     bool bUsed = false;
 
@@ -1070,12 +1071,12 @@ bool XclExpCellAlign::FillFromItemSet( const SfxItemSet& rItemSet, XclBiff eBiff
             sal_Int32 nTmpIndent = GETITEMVALUE( rItemSet, SfxUInt16Item, ATTR_INDENT, sal_Int32 );
             (nTmpIndent += 100) /= 200; // 1 Excel unit == 10 pt == 200 twips
             mnIndent = static_cast< sal_uInt8 >( ::std::max( ::std::min( nTmpIndent, 0x0FL ), 0L ) );
-            bUsed |= lcl_xestyle_CheckItem( rItemSet, ATTR_INDENT );
+            bUsed |= lcl_xestyle_CheckItem( rItemSet, ATTR_INDENT, bStyle );
 
             // rotation
             sal_Int32 nScRot = GETITEMVALUE( rItemSet, SfxInt32Item, ATTR_ROTATE_VALUE, sal_Int32 );
             mnRotation = XclTools::GetXclRotation( nScRot );
-            bUsed |= lcl_xestyle_CheckItem( rItemSet, ATTR_ROTATE_VALUE );
+            bUsed |= lcl_xestyle_CheckItem( rItemSet, ATTR_ROTATE_VALUE, bStyle );
 
             // CTL text direction
             switch( GETITEMVALUE( rItemSet, SvxFrameDirectionItem, ATTR_WRITINGDIR, SvxFrameDirection ) )
@@ -1085,7 +1086,7 @@ bool XclExpCellAlign::FillFromItemSet( const SfxItemSet& rItemSet, XclBiff eBiff
                 case FRMDIR_HORI_RIGHT_TOP: meTextDir = xlTextDirRTL;       break;
                 default:    DBG_ERRORFILE( "XclExpCellAlign::FillFromItemSet - unknown CTL text direction" );
             }
-            bUsed |= lcl_xestyle_CheckItem( rItemSet, ATTR_WRITINGDIR );
+            bUsed |= lcl_xestyle_CheckItem( rItemSet, ATTR_WRITINGDIR, bStyle );
         }
 
         case xlBiff7:   // attributes new in BIFF7
@@ -1101,7 +1102,7 @@ bool XclExpCellAlign::FillFromItemSet( const SfxItemSet& rItemSet, XclBiff eBiff
                 case SVX_VER_JUSTIFY_BOTTOM:    meVerAlign = xlVAlignBottom;    break;
                 default:    DBG_ERROR( "XclExpCellAlign::FillFromItemSet - unknown vertical alignment" );
             }
-            bUsed |= lcl_xestyle_CheckItem( rItemSet, ATTR_VER_JUSTIFY );
+            bUsed |= lcl_xestyle_CheckItem( rItemSet, ATTR_VER_JUSTIFY, bStyle );
 
             // orientation
             switch( GETITEMVALUE( rItemSet, SvxOrientationItem, ATTR_ORIENTATION, SvxCellOrientation ) )
@@ -1112,14 +1113,14 @@ bool XclExpCellAlign::FillFromItemSet( const SfxItemSet& rItemSet, XclBiff eBiff
                 case SVX_ORIENTATION_STACKED:   meOrient = xlTextOrientTopBottom;   break;
                 default:    DBG_ERROR( "XclExpCellAlign::FillFromItemSet - unknown text orientation" );
             }
-            bUsed |= lcl_xestyle_CheckItem( rItemSet, ATTR_ORIENTATION );
+            bUsed |= lcl_xestyle_CheckItem( rItemSet, ATTR_ORIENTATION, bStyle );
         }
 
         case xlBiff3:   // attributes new in BIFF3
         {
             // text wrap
             mbWrapped = bForceWrapped || GETITEMVALUE( rItemSet, SfxBoolItem, ATTR_LINEBREAK, BOOL );
-            bUsed |= bForceWrapped | lcl_xestyle_CheckItem( rItemSet, ATTR_LINEBREAK );
+            bUsed |= bForceWrapped | lcl_xestyle_CheckItem( rItemSet, ATTR_LINEBREAK, bStyle );
         }
 
         case xlBiff2:   // attributes new in BIFF2
@@ -1135,7 +1136,7 @@ bool XclExpCellAlign::FillFromItemSet( const SfxItemSet& rItemSet, XclBiff eBiff
                 case SVX_HOR_JUSTIFY_REPEAT:    meHorAlign = xlHAlignFill;      break;
                 default:    DBG_ERROR( "XclExpCellAlign::FillFromItemSet - unknown horizontal alignment" );
             }
-            bUsed |= lcl_xestyle_CheckItem( rItemSet, ATTR_HOR_JUSTIFY );
+            bUsed |= lcl_xestyle_CheckItem( rItemSet, ATTR_HOR_JUSTIFY, bStyle );
         }
 
         break;
@@ -1240,14 +1241,14 @@ void lcl_xestyle_GetBorderLine(
 }
 
 
-bool XclExpCellBorder::FillFromItemSet( const SfxItemSet& rItemSet, XclExpPalette& rPalette, XclBiff eBiff )
+bool XclExpCellBorder::FillFromItemSet( const SfxItemSet& rItemSet, XclExpPalette& rPalette, XclBiff eBiff, bool bStyle )
 {
     const SvxBoxItem& rBoxItem = GETITEM( rItemSet, SvxBoxItem, ATTR_BORDER );
     lcl_xestyle_GetBorderLine( mnLeftLine,   mnLeftColorId,   rBoxItem.GetLeft(),   rPalette, eBiff );
     lcl_xestyle_GetBorderLine( mnRightLine,  mnRightColorId,  rBoxItem.GetRight(),  rPalette, eBiff );
     lcl_xestyle_GetBorderLine( mnTopLine,    mnTopColorId,    rBoxItem.GetTop(),    rPalette, eBiff );
     lcl_xestyle_GetBorderLine( mnBottomLine, mnBottomColorId, rBoxItem.GetBottom(), rPalette, eBiff );
-    return lcl_xestyle_CheckItem( rItemSet, ATTR_BORDER );
+    return lcl_xestyle_CheckItem( rItemSet, ATTR_BORDER, bStyle );
 }
 
 void XclExpCellBorder::SetFinalColors( const XclExpPalette& rPalette )
@@ -1325,7 +1326,7 @@ XclExpCellArea::XclExpCellArea() :
 {
 }
 
-bool XclExpCellArea::FillFromItemSet( const SfxItemSet& rItemSet, XclExpPalette& rPalette, XclBiff eBiff )
+bool XclExpCellArea::FillFromItemSet( const SfxItemSet& rItemSet, XclExpPalette& rPalette, XclBiff eBiff, bool bStyle )
 {
     const SvxBrushItem& rBrushItem = GETITEM( rItemSet, SvxBrushItem, ATTR_BACKGROUND );
     if( rBrushItem.GetColor().GetTransparency() )
@@ -1340,7 +1341,7 @@ bool XclExpCellArea::FillFromItemSet( const SfxItemSet& rItemSet, XclExpPalette&
         mnForeColorId = rPalette.InsertColor( rBrushItem.GetColor(), xlColorCellArea );
         mnBackColorId = XclExpPalette::GetColorIdFromIndex( EXC_XF_AUTOCOLOR );
     }
-    return lcl_xestyle_CheckItem( rItemSet, ATTR_BACKGROUND );
+    return lcl_xestyle_CheckItem( rItemSet, ATTR_BACKGROUND, bStyle );
 }
 
 void XclExpCellArea::SetFinalColors( const XclExpPalette& rPalette )
@@ -1406,7 +1407,7 @@ XclExpXF::XclExpXF( const XclExpRoot& rRoot, const SfxStyleSheetBase& rStyleShee
     XclExpRoot( rRoot ),
     mnParentXFId( XclExpXFBuffer::GetXFIdFromIndex( EXC_XF_STYLEPARENT ) )
 {
-    bool bDefStyle = !!(rStyleSheet.GetName() == ScGlobal::GetRscString( STR_STYLENAME_STANDARD )); // BOOL->bool
+    bool bDefStyle = (rStyleSheet.GetName() == ScGlobal::GetRscString( STR_STYLENAME_STANDARD ));
     Init( const_cast< SfxStyleSheetBase& >( rStyleSheet ).GetItemSet(), NUMBERFORMAT_ENTRY_NOT_FOUND, false, bDefStyle );
 }
 
@@ -1458,35 +1459,35 @@ void XclExpXF::Init( const SfxItemSet& rItemSet, sal_uInt32 nForcedNumFmt, bool 
     mpItemSet = &rItemSet;
 
     // cell protection
-    mbProtUsed = maProtection.FillFromItemSet( rItemSet, GetBiff() );
+    mbProtUsed = maProtection.FillFromItemSet( rItemSet, GetBiff(), IsStyleXF() );
 
     // font
     mnFont = GetFontBuffer().Insert( rItemSet, bDefStyle );
     mbFontUsed =
-        lcl_xestyle_CheckItem( rItemSet, ATTR_FONT_HEIGHT ) ||
-        lcl_xestyle_CheckItem( rItemSet, ATTR_FONT_WEIGHT ) ||
-        lcl_xestyle_CheckItem( rItemSet, ATTR_FONT_POSTURE ) ||
-        lcl_xestyle_CheckItem( rItemSet, ATTR_FONT_UNDERLINE ) ||
-        lcl_xestyle_CheckItem( rItemSet, ATTR_FONT_CROSSEDOUT ) ||
-        lcl_xestyle_CheckItem( rItemSet, ATTR_FONT_CONTOUR ) ||
-        lcl_xestyle_CheckItem( rItemSet, ATTR_FONT_SHADOWED ) ||
-        lcl_xestyle_CheckItem( rItemSet, ATTR_FONT_COLOR ) ||
-        lcl_xestyle_CheckItem( rItemSet, ATTR_FONT_LANGUAGE );
+        lcl_xestyle_CheckItem( rItemSet, ATTR_FONT_HEIGHT,     IsStyleXF() ) ||
+        lcl_xestyle_CheckItem( rItemSet, ATTR_FONT_WEIGHT,     IsStyleXF() ) ||
+        lcl_xestyle_CheckItem( rItemSet, ATTR_FONT_POSTURE,    IsStyleXF() ) ||
+        lcl_xestyle_CheckItem( rItemSet, ATTR_FONT_UNDERLINE,  IsStyleXF() ) ||
+        lcl_xestyle_CheckItem( rItemSet, ATTR_FONT_CROSSEDOUT, IsStyleXF() ) ||
+        lcl_xestyle_CheckItem( rItemSet, ATTR_FONT_CONTOUR,    IsStyleXF() ) ||
+        lcl_xestyle_CheckItem( rItemSet, ATTR_FONT_SHADOWED,   IsStyleXF() ) ||
+        lcl_xestyle_CheckItem( rItemSet, ATTR_FONT_COLOR,      IsStyleXF() ) ||
+        lcl_xestyle_CheckItem( rItemSet, ATTR_FONT_LANGUAGE,   IsStyleXF() );
 
     // number format
     sal_uInt32 nScFmt = (nForcedNumFmt == NUMBERFORMAT_ENTRY_NOT_FOUND) ?
         GETITEMVALUE( rItemSet, SfxUInt32Item, ATTR_VALUE_FORMAT, sal_uInt32 ) : nForcedNumFmt;
     mnNumFmt = GetNumFmtBuffer().Insert( nScFmt );
-    mbFmtUsed = lcl_xestyle_CheckItem( rItemSet, ATTR_VALUE_FORMAT );
+    mbFmtUsed = lcl_xestyle_CheckItem( rItemSet, ATTR_VALUE_FORMAT, IsStyleXF() );
 
     // alignment
-    mbAlignUsed = maAlignment.FillFromItemSet( rItemSet, GetBiff(), bForceWrapped );
+    mbAlignUsed = maAlignment.FillFromItemSet( rItemSet, GetBiff(), bForceWrapped, IsStyleXF() );
 
     // cell border
-    mbBorderUsed = maBorder.FillFromItemSet( rItemSet, GetPalette(), GetBiff() );
+    mbBorderUsed = maBorder.FillFromItemSet( rItemSet, GetPalette(), GetBiff(), IsStyleXF() );
 
     // background area
-    mbAreaUsed = maArea.FillFromItemSet( rItemSet, GetPalette(), GetBiff() );
+    mbAreaUsed = maArea.FillFromItemSet( rItemSet, GetPalette(), GetBiff(), IsStyleXF() );
 
     // set all b***Used flags to true in "Default"/"Normal" style
     if( bDefStyle )
