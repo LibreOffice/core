@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoidx.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: jp $ $Date: 2001-11-06 08:34:24 $
+ *  last change: $Author: os $ $Date: 2001-11-14 13:42:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,12 +148,6 @@
 #endif
 #ifndef _DOCSH_HXX //autogen
 #include <docsh.hxx>
-#endif
-#ifndef _SHELLRES_HXX
-#include <shellres.hxx>
-#endif
-#ifndef _VIEWSH_HXX
-#include <viewsh.hxx>
 #endif
 #ifndef _CHPFLD_HXX
 #include <chpfld.hxx>
@@ -732,39 +726,6 @@ uno::Any SwXDocumentIndex::getPropertyValue(const OUString& rPropertyName)
             {
                 bBOOL = sal_False;
                 OUString uRet(pTOXBase->GetTitle());
-                //I18N
-                ShellResource* pShellRes = ViewShell::GetShellRes();
-                switch(eTOXType)
-                {
-                    case TOX_CONTENT :
-                        if(!uRet.compareTo(pShellRes->aTOXContentName))
-                            uRet = C2U("Table of Contents");
-                    break;
-                    case TOX_INDEX  :
-                        if(!uRet.compareTo(pShellRes->aTOXIndexName))
-                            uRet = C2U("Alphabetical Index");
-                    break;
-                    case TOX_USER:
-                        if(!uRet.compareTo(pShellRes->aTOXUserName))
-                            uRet = C2U("User-Defined");
-                    break;
-                    case TOX_ILLUSTRATIONS:
-                        if(!uRet.compareTo(pShellRes->aTOXIllustrationsName))
-                            uRet = C2U("Illustration Index");
-                    break;
-                    case TOX_OBJECTS:
-                        if(!uRet.compareTo(pShellRes->aTOXObjectsName))
-                            uRet = C2U("Table of Objects");
-                    break;
-                    case TOX_TABLES:
-                        if(!uRet.compareTo(pShellRes->aTOXTablesName))
-                            uRet = C2U("Index of Tables");
-                    break;
-                    case TOX_AUTHORITIES:
-                        if(!uRet.compareTo(pShellRes->aTOXAuthoritiesName))
-                            uRet = C2U("Bibliography");
-                    break;
-                }
                 aRet <<= uRet;
                 break;
             }
