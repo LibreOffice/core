@@ -1,0 +1,219 @@
+/*************************************************************************
+ *
+ *  $RCSfile: Shape.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: mh $ $Date: 2002-02-28 16:00:16 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_text_Shape_idl__
+#define __com_sun_star_text_Shape_idl__
+
+#ifndef __com_sun_star_text_TextContent_idl__
+#include <com/sun/star/text/TextContent.idl>
+#endif
+#ifndef __com_sun_star_text_XTextFrame_idl__
+#include <com/sun/star/text/XTextFrame.idl>
+#endif
+#ifndef __com_sun_star_text_XTextRange_idl__
+#include <com/sun/star/text/XTextRange.idl>
+#endif
+#ifndef __com_sun_star_drawing_Shape_idl__
+#include <com/sun/star/drawing/Shape.idl>
+#endif
+#ifndef __com_sun_star_text_TextContentAnchorType_idl__
+#include <com/sun/star/text/TextContentAnchorType.idl>
+#endif
+#ifndef __com_sun_star_text_WrapTextMode_idl__
+#include <com/sun/star/text/WrapTextMode.idl>
+#endif
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module text {
+
+//=============================================================================
+
+/** specifies the service of shapes in a text document
+ */
+service Shape
+{
+    service com::sun::star::drawing::Shape;
+    //-------------------------------------------------------------------------
+    /** contains the number of the page where the objects are anchored.
+        <p> The value is valid only if the
+        AnchorType is
+        <const>TextContentAnchorType::AT_PAGE</const>.</p>
+     */
+    [property] short AnchorPageNo;
+    //-------------------------------------------------------------------------
+    /** contains the text frame the current frame is anchored to.
+        <p> The value is valid only if the
+        AnchorType is <const>TextContentAnchorType::AT_FRAME</const>.</p>
+     */
+    [property] com::sun::star::text::XTextFrame AnchorFrame;
+    //-------------------------------------------------------------------------
+    /** determines if the text of the paragraph in which the object
+        is anchored, wraps around the object.
+     */
+    [property] boolean SurroundAnchorOnly;
+    //-------------------------------------------------------------------------
+    /** specifies how the text content is attached to its surrounding
+        <type scope="com::sun::star::drawing">Text</type>.
+    */
+    [optional, property] com::sun::star::text::TextContentAnchorType AnchorType;
+    //-------------------------------------------------------------------------
+    /** determines the horizontal orientation of the object.
+
+        @see BaseFrame::HoriOrientation
+     */
+    [property] short HoriOrient;
+    //-------------------------------------------------------------------------
+    /** contains the horizontal position of the object (1/100 mm).
+        <p> It is only valid if "HoriOrient" is HoriOrientation_NONE.</p>
+     */
+    [property] long HoriOrientPosition;
+
+    //-------------------------------------------------------------------------
+    /** determines the environment of the object to which the orientation
+        is related.
+
+        @see BaseFrame::RelOrientation
+     */
+    [property] short HoriOrientRelation;
+
+    //-------------------------------------------------------------------------
+    /** determines the vertical orientation of the object.
+
+        @see BaseFrame::VertOrientation
+     */
+    [property] short VertOrient;
+
+    //-------------------------------------------------------------------------
+    /** contains the vertical position of the object (1/100 mm).
+
+        It is only valid if <member>TextEmbeddedObject::VertOrient</member> is
+        <const>VertOrientation::NONE</const>.
+     */
+    [property] long VertOrientPosition;
+
+    //-------------------------------------------------------------------------
+
+    /** determines the environment of the object to which the orientation is related.
+
+        @see BaseFrame::RelOrientation
+     */
+    [property] short VertOrientRelation;
+    //-------------------------------------------------------------------------
+    /** contains the left margin of the object.
+     */
+    [property] long LeftMargin;
+
+    //-------------------------------------------------------------------------
+    /** contains the right margin of the object.
+     */
+    [property] long RightMargin;
+    //-------------------------------------------------------------------------
+
+    /** contains the top margin of the object.
+     */
+    [property] long TopMargin;
+
+    //-------------------------------------------------------------------------
+    /** contains the bottom margin of the object.
+     */
+    [property] long BottomMargin;
+    //-------------------------------------------------------------------------
+    /** determines the type of the surrounding text.
+
+        @deprecated
+     */
+    [property] com::sun::star::text::WrapTextMode Surround;
+    //-------------------------------------------------------------------------
+    /** determines if the text of the paragraph in which the object
+        is anchored, wraps around the object.
+     */
+    [property] boolean SurroundAnchorOnly;
+    //-------------------------------------------------------------------------
+
+    /** determines if the text wraps around the contour of the object.
+     */
+    [property] boolean SurroundContour;
+    //-------------------------------------------------------------------------
+
+    /** the text flows only around the contour of the object.
+     */
+    [property] boolean ContourOutside;
+    //-------------------------------------------------------------------------
+    /** determines if the object is opaque or transparent for text.
+     */
+    [property] boolean Opaque;
+    //-------------------------------------------------------------------------
+    /** contains a text range where the shape should be anchored to.
+     <p>There are two different ways to get newly created shapes into the
+     text document. One of them is to use the insertTextContent() method of
+     the <type scope=com::sun::star::text>XSimpleText</type>. The other is to call the add()
+     method of the <type scope=com::sun::star::drawing>XShapes</type> interface.
+     To be able to determine an anchor position for shape that are anchored at a certain
+     text position the property TextRange is used.</p>
+     */
+    [property] com::sun::star::text::XTextRange TextRange;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

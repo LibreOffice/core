@@ -1,0 +1,132 @@
+/*************************************************************************
+ *
+ *  $RCSfile: RedlinePortion.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: mh $ $Date: 2002-02-28 15:58:04 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_text_RedlinePortion_idl__
+#define __com_sun_star_text_RedlinePortion_idl__
+
+#ifndef __com_sun_star_text_TextPortion_idl__
+#include <com/sun/star/text/TextPortion.idl>
+#endif
+#ifndef __com_sun_star_beans_PropertyValues_idl__
+#include <com/sun/star/beans/PropertyValues.idl>
+#endif
+#ifndef __com_sun_star_util_DateTime_idl__
+#include <com/sun/star/util/DateTime.idl>
+#endif
+
+//=============================================================================
+
+module com { module sun { module star { module text {
+
+//=============================================================================
+/** A RedlinePortion is a TextPortion that marks a change that has been recorded by
+the change tracking.
+
+*/
+service RedlinePortion
+{
+    service com::sun::star::text::TextPortion;
+    /** contains the name of the author of the change.*/
+    [readonly, property] string RedlineAuthor;
+    /** contains the date and time of the change.*/
+    [readonly, property] com::sun::star::util::DateTime RedlineDataTime;
+    /** contains a comment for the change.*/
+    [readonly, property] string RedlineComment;
+    /** contains the type of the change
+    <p> Valid type names are:</p>
+    <UL>
+        <LI><P>Insert - marks an insertion</P>
+        <LI><P>Delete - marks an deletion</P>
+        <LI><P>Format - marks an attribute change</P>
+        <LI><P>TextTable - marks a text table</P>
+        <LI><P>Style - marks an applied style</P>
+    </UL>
+     */
+    [readonly, property] string RedlineType;
+    /** contains the data of a second level redline data
+        <p> The elements of the sequence are:</p>
+        <UL>
+            <LI><P>string RedlineAuthor;                              </P>
+            <LI><P>com::sun::star::util::DateTime RedlineDataTime;    </P>
+            <LI><P>string RedlineComment;                             </P>
+            <LI><P>string RedlineType;                                </P>
+        </UL>
+     */
+    [readonly, property] com::sun::star::beans::PropertyValues RedlineSuccessorData;
+    /** contains a unique identifier for the redline.
+     This is necessary for file export filters to able to recognize redline portions
+        that point to the same redline.*/
+    [readonly, property] string RedlineIdentifier;
+    /** determines whether the portion is member of a header or footer text.*/
+    [readonly, property] boolean IsInHeaderFooter;
+    /** provides access to the text of the redline. This interface is only provided
+     if the change is not visible. The visibility depends on the redline display options that
+     are set at the documents property set (RedlineDisplayType).*/
+    [readonly, property] com::sun::star::text::XText RedlineText;
+    /** determines whether the last paragraph of a redline text has to be merged with a
+     possible following text content (i.e. a text table)*/
+    [readonly, property] boolean MergeLastPara;
+};
+
+//=============================================================================
+
+}; }; }; };
+#endif
+
