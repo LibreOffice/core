@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyActionsOASIS.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:57:31 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:19:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -477,6 +477,14 @@ XMLTransformerActionInit aTableCellPropertyOASISAttrActionTable[] =
     { XML_NAMESPACE_STYLE, XML_BORDER_LINE_WIDTH_LEFT, XML_ATACTION_INS2INCHS,
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_STYLE, XML_BORDER_LINE_WIDTH_RIGHT, XML_ATACTION_INS2INCHS,
+          NO_PARAMS }, /* generated entry */
+    { XML_NAMESPACE_STYLE, XML_DIAGONAL_BLTR, XML_ATACTION_INS2INCHS,
+          NO_PARAMS }, /* generated entry */
+    { XML_NAMESPACE_STYLE, XML_DIAGONAL_BLTR_WIDTH, XML_ATACTION_INS2INCHS,
+          NO_PARAMS }, /* generated entry */
+    { XML_NAMESPACE_STYLE, XML_DIAGONAL_TLBR, XML_ATACTION_INS2INCHS,
+          NO_PARAMS }, /* generated entry */
+    { XML_NAMESPACE_STYLE, XML_DIAGONAL_TLBR_WIDTH, XML_ATACTION_INS2INCHS,
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_FO, XML_PADDING, XML_ATACTION_IN2INCH,
           NO_PARAMS }, /* generated entry */
