@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_im.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 10:56:07 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 17:53:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,11 +62,15 @@
 #ifndef _SAL_I18N_INPUTMETHOD_HXX
 #define _SAL_I18N_INPUTMETHOD_HXX
 
+#ifndef _VCL_DLLAPI_H
+#include "dllapi.h"
+#endif
+
 extern "C" char* GetMethodName( XIMStyle nStyle, char *pBuf, int nBufSize);
 
 #define bUseInputMethodDefault True
 
-class SalI18N_InputMethod
+class VCL_DLLPUBLIC SalI18N_InputMethod
 {
     Bool        mbUseable;  // system supports locale as well as status
                             // and preedit style ?
