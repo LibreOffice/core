@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 18:52:59 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:12:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,7 @@ private:
     String          aName;
     String          aComment;
     BOOL            bScenario;
+    BOOL            bLayoutRTL;
 
     String          aLinkDoc;
     String          aLinkFlt;
@@ -219,6 +220,9 @@ public:
 
     BOOL        IsVisible() const                            { return bVisible; }
     void        SetVisible( BOOL bVis );
+
+    BOOL        IsLayoutRTL() const                          { return bLayoutRTL; }
+    void        SetLayoutRTL( BOOL bSet );
 
     BOOL        IsScenario() const                           { return bScenario; }
     void        SetScenario( BOOL bFlag );
