@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleGraphicShape.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: af $ $Date: 2002-04-18 16:31:06 $
+ *  last change: $Author: af $ $Date: 2002-05-03 16:49:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,13 +75,10 @@ using namespace ::drafts::com::sun::star::accessibility;
 
 //=====  internal  ============================================================
 
-AccessibleGraphicShape::AccessibleGraphicShape (const ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::XShape>& rxShape,
-    const ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessible>& rxParent,
-    const AccessibleShapeTreeInfo& rShapeTreeInfo,
-    long nIndex)
-    :      AccessibleShape (rxShape, rxParent, rShapeTreeInfo, nIndex)
+AccessibleGraphicShape::AccessibleGraphicShape (
+    const AccessibleShapeInfo& rShapeInfo,
+    const AccessibleShapeTreeInfo& rShapeTreeInfo)
+    : AccessibleShape (rShapeInfo, rShapeTreeInfo)
 {
 }
 
@@ -100,7 +97,7 @@ AccessibleGraphicShape::~AccessibleGraphicShape (void)
 ::rtl::OUString SAL_CALL AccessibleGraphicShape::getAccessibleImageDescription (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii ("Image description");
+    return AccessibleShape::getAccessibleDescription ();
 }
 
 
@@ -109,7 +106,7 @@ AccessibleGraphicShape::~AccessibleGraphicShape (void)
 sal_Int32 SAL_CALL AccessibleGraphicShape::getAccessibleImageHeight (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    return 0;
+    return AccessibleShape::getSize().Height;
 }
 
 
@@ -118,7 +115,7 @@ sal_Int32 SAL_CALL AccessibleGraphicShape::getAccessibleImageHeight (void)
 sal_Int32 SAL_CALL AccessibleGraphicShape::getAccessibleImageWidth (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    return 0;
+    return AccessibleShape::getSize().Width;
 }
 
 
@@ -191,7 +188,7 @@ uno::Sequence<uno::Type> SAL_CALL
 
 
 
-/// Set this object's name if is different to the current name.
+/// Create the base name of this object, i.e. the name without appended number.
 ::rtl::OUString
     AccessibleGraphicShape::CreateAccessibleBaseName (void)
     throw (::com::sun::star::uno::RuntimeException)
