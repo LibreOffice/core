@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databasecontext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-18 16:15:16 $
+ *  last change: $Author: fs $ $Date: 2000-10-23 12:57:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -374,10 +374,6 @@ void ODatabaseContext::revokeObject(const rtl::OUString& _rName) throw( Exceptio
         Reference< XInterface > xExistent = aExistent->second.get();
         if (xExistent.is())
         {
-            Reference< XComponent > xComp(xExistent, UNO_QUERY);
-            if (xComp.is())
-                xComp->dispose();
-
             // solaris compiler needs a construct like this and can't work with comphelper::getImplementation ...
             Reference< XUnoTunnel > xTunnel(xExistent, UNO_QUERY);
             ODatabaseSource* pObjectImpl = NULL;
