@@ -2,9 +2,9 @@
  *
  *  $RCSfile: canvasbitmap.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 11:57:12 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 07:35:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,7 @@
 #include <canvasbitmaphelper.hxx>
 
 #include "impltools.hxx"
+#include "repainttarget.hxx"
 
 
 #define CANVASBITMAP_IMPLEMENTATION_NAME "VCLCanvas::CanvasBitmap"
@@ -102,7 +103,8 @@ namespace vclcanvas
                                                 ::com::sun::star::lang::XServiceInfo >                                  CanvasBitmapBase_Base;
     typedef ::canvas::internal::BitmapCanvasBase< CanvasBitmapBase_Base, CanvasBitmapHelper, tools::LocalGuard >    CanvasBitmap_Base;
 
-    class CanvasBitmap : public CanvasBitmap_Base
+    class CanvasBitmap : public CanvasBitmap_Base,
+                         public RepaintTarget
     {
     public:
         /** Must be called with locked Solar mutex
@@ -131,6 +133,12 @@ namespace vclcanvas
         virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
+
+        // RepaintTarget interface
+        virtual bool repaint( const GraphicObjectSharedPtr& rGrf,
+                              const ::Point&                rPt,
+                              const ::Size&                 rSz,
+                              const GraphicAttr&            rAttr ) const;
 
         BitmapEx getBitmap() const;
 
