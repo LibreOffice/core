@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ccoll.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:31:32 $
+ *  last change: $Author: rt $ $Date: 2001-05-10 06:20:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@ TabPage TP_CONDCOLL
         Text[ turkish ] = "Settings";
         Text[ arabic ] = "ÎíÇÑÇÊ";
         Text[ catalan ] = "Opciones";
+        Text[ finnish ] = "Optionen";
     };
     CheckBox CB_CONDITION
     {
@@ -125,6 +126,7 @@ TabPage TP_CONDCOLL
         Text[ turkish ] = "~Koþullu biçim olarak";
         Text[ language_user1 ] = "\"Vorlagen\" Styles are capitalized. EM15.5.00";
         Text[ catalan ] = "C~omo estilo condicional";
+        Text[ finnish ] = "~Ehdollinen Tyyli";
     };
     FixedText FT_CONTEXT
     {
@@ -153,6 +155,7 @@ TabPage TP_CONDCOLL
         Text[ turkish ] = "Baðlam";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Contexto";
+        Text[ finnish ] = "~Konteksti";
     };
     FixedText FT_USED
     {
@@ -181,6 +184,7 @@ TabPage TP_CONDCOLL
         Text[ turkish ] = "Uygulanan biçim";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Estilos utilizados";
+        Text[ finnish ] = "Käytetyt tyylit";
     };
     Control TB_CONDCOLLS
     {
@@ -219,6 +223,7 @@ TabPage TP_CONDCOLL
         Text[ turkish ] = "Paragraf biçimi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Es~tilos de párrafo";
+        Text[ finnish ] = "Paragraph Styles";
     };
     ListBox LB_STYLE
     {
@@ -268,6 +273,7 @@ TabPage TP_CONDCOLL
         Text[ turkish ] = "~Kaldýr";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Eliminar";
+        Text[ finnish ] = "~Poista";
     };
     PushButton PB_ASSIGN
     {
@@ -297,6 +303,7 @@ TabPage TP_CONDCOLL
         Text[ turkish ] = "~Ata";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Asignar";
+        Text[ finnish ] = "~Käytä";
     };
     StringArray STR_REGIONS
     {
@@ -983,6 +990,37 @@ TabPage TP_CONDCOLL
         < "9° nivel de la numeración" ; > ;
         < "10° nivel de numeración" ; > ;
     };
+    ItemList [ finnish ] =
+    {
+            < "Lomakkeen yläotsikko" ; > ;
+        < "Taulukko" ; > ;
+        < "Kehys" ; > ;
+        < "Osio" ; > ;
+        < "Alaviite" ; > ;
+        < "Loppuhuomautus" ; > ;
+        < "Yläotsikko" ; > ;
+        < "Alaselite" ; > ;
+        < " 1. jäsennystaso" ; > ;
+        < " 2. jäsennystaso" ; > ;
+        < " 3. jäsennystaso" ; > ;
+        < " 4. jäsennystaso" ; > ;
+        < " 5. jäsennystaso" ; > ;
+        < " 6. jäsennystaso" ; > ;
+        < " 7. jäsennystaso" ; > ;
+        < " 8. jäsennystaso" ; > ;
+        < " 9. jäsennystaso" ; > ;
+        < "10. jäsennystaso" ; > ;
+        < " 1. numerointitaso" ; > ;
+        < " 2. numerointitaso" ; > ;
+        < " 3. numerointitaso" ; > ;
+        < " 4. numerointitaso" ; > ;
+        < " 5. numerointitaso" ; > ;
+        < " 6. numerointitaso" ; > ;
+        < " 7. jäsennystaso" ; > ;
+        < " 8. jäsennystaso" ; > ;
+        < " 9. jäsennystaso" ; > ;
+        < "10. numerointitaso" ; > ;
+    };
     };
     String STR_NOTEMPL
     {
@@ -1008,6 +1046,7 @@ TabPage TP_CONDCOLL
         Text[ korean ] = "<¾øÀ½>";
         Text[ turkish ] = "<yok>";
         Text[ catalan ] = "<ninguno>";
+        Text[ finnish ] = "<Ei mitään>";
     };
 };
  // ********************************************************************** EOF
