@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2001-04-26 12:40:28 $
+ *  last change: $Author: cl $ $Date: 2001-04-30 15:13:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1386,7 +1386,7 @@ static rtl::OUString createVisibleLayerString( const SetOfByte& rVisibleLayer )
 {
 }
 
-#define NUM_VIEW_SETTINGS 43
+#define NUM_VIEW_SETTINGS 47
 void SdViewShell::WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& rSequence, sal_Bool bBrowse )
 {
     rSequence.realloc ( NUM_VIEW_SETTINGS );
@@ -1623,6 +1623,22 @@ void SdViewShell::WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::co
     pValue->Value <<= (sal_Int32)pFrameView->GetSnapGrid().Height();
     pValue++;nIndex++;
 
+    pValue->Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sUNO_View_GridSnapWidthXNumerator ) );
+    pValue->Value <<= (sal_Int32)pFrameView->GetSnapGridWidthX().GetNumerator();
+    pValue++;nIndex++;
+
+    pValue->Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sUNO_View_GridSnapWidthXDenominator ) );
+    pValue->Value <<= (sal_Int32)pFrameView->GetSnapGridWidthX().GetDenominator();
+    pValue++;nIndex++;
+
+    pValue->Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sUNO_View_GridSnapWidthYNumerator ) );
+    pValue->Value <<= (sal_Int32)pFrameView->GetSnapGridWidthY().GetNumerator();
+    pValue++;nIndex++;
+
+    pValue->Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sUNO_View_GridSnapWidthYDenominator ) );
+    pValue->Value <<= (sal_Int32)pFrameView->GetSnapGridWidthY().GetDenominator();
+    pValue++;nIndex++;
+
     pValue->Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sUNO_View_IsAngleSnapEnabled ) );
     pValue->Value <<= (sal_Bool)pFrameView->IsAngleSnapEnabled();
     pValue++;nIndex++;
@@ -1709,6 +1725,12 @@ void SdViewShell::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence <
         sal_Int32 nInt32;
         sal_Int16 nInt16;
         rtl::OUString aString;
+
+        sal_Int32 aSnapGridWidthXNum = pFrameView->GetSnapGridWidthX().GetNumerator();
+        sal_Int32 aSnapGridWidthXDom = pFrameView->GetSnapGridWidthX().GetDenominator();
+
+        sal_Int32 aSnapGridWidthYNum = pFrameView->GetSnapGridWidthY().GetNumerator();
+        sal_Int32 aSnapGridWidthYDom = pFrameView->GetSnapGridWidthY().GetDenominator();
 
         const com::sun::star::beans::PropertyValue *pValue = rSequence.getConstArray();
         for (sal_Int16 i = 0 ; i < nLength; i++, pValue++ )
@@ -2089,7 +2111,28 @@ void SdViewShell::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence <
                     pFrameView->SetSnapAngle( nInt32 );
                 }
             }
+            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_GridSnapWidthXNumerator ) ) )
+            {
+                pValue->Value >>= aSnapGridWidthXNum;
+            }
+            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_GridSnapWidthXDenominator ) ) )
+            {
+                pValue->Value >>= aSnapGridWidthXDom;
+            }
+            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_GridSnapWidthYNumerator ) ) )
+            {
+                pValue->Value >>= aSnapGridWidthYNum;
+            }
+            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_GridSnapWidthYDenominator ) ) )
+            {
+                pValue->Value >>= aSnapGridWidthYDom;
+            }
         }
+
+        const Fraction aSnapGridWidthX( aSnapGridWidthXNum, aSnapGridWidthXDom );
+        const Fraction aSnapGridWidthY( aSnapGridWidthYNum, aSnapGridWidthYDom );
+
+        pFrameView->SetSnapGridWidth( aSnapGridWidthX, aSnapGridWidthY );
     }
 }
 #undef NUM_VIEW_SETTINGS

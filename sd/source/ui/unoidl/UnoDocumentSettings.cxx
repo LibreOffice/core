@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoDocumentSettings.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: thb $ $Date: 2001-04-26 17:11:09 $
+ *  last change: $Author: cl $ $Date: 2001-04-30 15:10:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,8 +226,8 @@ enum SdDocumentSettingsPropertyHandles
         static PropertyMapEntry aDrawSettingsInfoMap[] =
         {
             { MAP_LEN("MeasureUnit"),           HANDLE_MEASUREUNIT,         &::getCppuType((const sal_Int16*)0),    0,  0 },
-            { MAP_LEN("ScaleNominator"),        HANDLE_SCALE_NUM,           &::getCppuType((const sal_Int32*)0),    0,  0 },
-            { MAP_LEN("ScaleDominator"),        HANDLE_SCALE_DOM,           &::getCppuType((const sal_Int32*)0),    0,  0 },
+            { MAP_LEN("ScaleNumerator"),        HANDLE_SCALE_NUM,           &::getCppuType((const sal_Int32*)0),    0,  0 },
+            { MAP_LEN("ScaleDenominator"),      HANDLE_SCALE_DOM,           &::getCppuType((const sal_Int32*)0),    0,  0 },
             { NULL, 0, 0, NULL, 0, 0 }
         };
 
