@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RasterOperation.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-27 08:50:44 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 17:14:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@ module com { module sun { module star { module awt {
 /** These values are used to specify the binary pixel-operation applied
     when pixels are written to the device.
 */
-enum RasterOperation
+published enum RasterOperation
 {
     //-------------------------------------------------------------------------
 
