@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imivctl.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-27 11:22:50 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 12:33:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,7 +361,7 @@ public:
     void            SetStyle( WinBits nWinStyle );
     WinBits         GetStyle() const { return nWinBits; }
     void            InsertEntry( SvxIconChoiceCtrlEntry*, ULONG nPos, const Point* pPos=0 );
-    void            CreateAutoMnemonics( void );
+    void            CreateAutoMnemonics( MnemonicGenerator* _pGenerator = NULL );
     void            RemoveEntry( SvxIconChoiceCtrlEntry* pEntry );
     void            FontModified();
     void            SelectAll( BOOL bSelect = TRUE, BOOL bPaint = TRUE );
