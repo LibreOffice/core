@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartView.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-17 16:43:18 $
+ *  last change: $Author: iha $ $Date: 2003-12-17 19:05:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -768,13 +768,15 @@ void formatPage(
 
         if( xPageProp.is())
         {
-            tPropertyNameValueMap aFillValueMap;
-            tMakePropertyNameMap aCharNameMap = PropertyMapper::getPropertyNameMapForFillProperties();
-            PropertyMapper::getValueMap( aFillValueMap, aCharNameMap, xModelPage );
+            tPropertyNameValueMap aNameValueMap;
+            tMakePropertyNameMap aNameMap = PropertyMapper::getPropertyNameMapForFillProperties();
+            const tMakePropertyNameMap& rLineNameMap = PropertyMapper::getPropertyNameMapForLineProperties();
+            aNameMap.insert( rLineNameMap.begin(), rLineNameMap.end());
+            PropertyMapper::getValueMap( aNameValueMap, aNameMap, xModelPage );
 
             tNameSequence aNames;
             tAnySequence aValues;
-            PropertyMapper::getMultiPropertyListsFromValueMap( aNames, aValues, aFillValueMap );
+            PropertyMapper::getMultiPropertyListsFromValueMap( aNames, aValues, aNameValueMap );
             PropertyMapper::setMultiProperties( aNames, aValues, xPageProp );
         }
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartController_Properties.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-17 16:43:12 $
+ *  last change: $Author: iha $ $Date: 2003-12-17 19:03:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,7 +173,7 @@ private:
                 pItemConverter =  new wrapper::GraphicPropertyItemConverter(
                                         xObjectProperties, rDrawModel.GetItemPool(),
                                         rDrawModel,
-                                        wrapper::GraphicPropertyItemConverter::FILL_PROPERTIES );
+                                        wrapper::GraphicPropertyItemConverter::LINE_AND_FILL_PROPERTIES );
                     break;
             case OBJECTTYPE_TITLE:
             {

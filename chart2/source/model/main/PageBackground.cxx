@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageBackground.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-17 14:28:28 $
+ *  last change: $Author: iha $ $Date: 2003-12-17 19:04:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,7 @@
 #include "PageBackground.hxx"
 #include "macros.hxx"
 #include "algohelper.hxx"
-// #include "LineProperties.hxx"
+#include "LineProperties.hxx"
 #include "FillProperties.hxx"
 #include "UserDefinedProperties.hxx"
 
@@ -112,8 +112,8 @@ const uno::Sequence< Property > & lcl_GetPropertySequence()
     {
         // get properties
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
-//         ::chart::LineProperties::AddPropertiesToVector(
-//             aProperties, /* bIncludeStyleProperties = */ true );
+         ::chart::LineProperties::AddPropertiesToVector(
+             aProperties, /* bIncludeStyleProperties = */ true );
         ::chart::FillProperties::AddPropertiesToVector(
             aProperties, /* bIncludeStyleProperties = */ true );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
@@ -166,9 +166,9 @@ uno::Any PageBackground::GetDefaultValue( sal_Int32 nHandle ) const
     if( 0 == aStaticDefaults.size() )
     {
         // initialize defaults
-//         LineProperties::AddDefaultsToMap(
-//             aStaticDefaults,
-//             /* bIncludeStyleProperties = */ true );
+        LineProperties::AddDefaultsToMap(
+             aStaticDefaults,
+             /* bIncludeStyleProperties = */ true );
         FillProperties::AddDefaultsToMap(
             aStaticDefaults,
             /* bIncludeStyleProperties = */ true );
