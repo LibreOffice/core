@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charsets.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-05 10:07:57 $
+ *  last change: $Author: fs $ $Date: 2000-10-11 11:31:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,8 @@
 #ifndef _TOOLS_RC_HXX
 #include <tools/rc.hxx>
 #endif
-#ifndef _UTL_STLTYPES_HXX_
-#include <unotools/stl_types.hxx>
+#ifndef _COMPHELPER_STLTYPES_HXX_
+#include <comphelper/stl_types.hxx>
 #endif
 
 //.........................................................................
@@ -154,6 +154,9 @@ protected:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/10/05 10:07:57  fs
+ *  initial checkin
+ *
  *
  *  Revision 1.0 26.09.00 12:16:37  fs
  ************************************************************************/
