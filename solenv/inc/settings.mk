@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.149 $
+#   $Revision: 1.150 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-12 12:59:26 $
+#   last change: $Author: rt $ $Date: 2004-07-13 13:28:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -785,7 +785,7 @@ INCUNOIDL=$(INCCOM)$/$(PRJNAME)
 I={$(INCLUDE)}
 INCDEPN=. $(INCGUI) $(INCLOCAL) $(INC)
 .IF "$(PRJINC)"!=""
-INCLOCPRJ=$(PRJINC)$/inc
+INCLOCPRJ=$(foreach,i,$(PRJINC) $i$/inc)
 INCDEPN+=$(INCLOCPRJ)
 .ENDIF
 
