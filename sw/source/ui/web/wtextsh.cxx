@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wtextsh.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 17:01:59 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 13:12:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,6 @@ SFX_IMPL_INTERFACE(SwWebTextShell, SwBaseShell, SW_RES(STR_SHELLNAME_WEBTEXT))
 {
     SFX_POPUPMENU_REGISTRATION(SW_RES(MN_WEB_TEXT_POPUPMENU));
     SFX_OBJECTBAR_REGISTRATION(SFX_OBJECTBAR_OBJECT, SW_RES(RID_WEBTEXT_TOOLBOX));
-    SFX_OBJECTMENU_REGISTRATION(SID_OBJECTMENU0, SW_RES(MN_OBJECTMENU_WEBTEXT));
     SFX_CHILDWINDOW_REGISTRATION(FN_EDIT_FORMULA);
     SFX_CHILDWINDOW_REGISTRATION(SID_INSERT_DIAGRAM);
     SFX_CHILDWINDOW_REGISTRATION(FN_INSERT_FIELD);

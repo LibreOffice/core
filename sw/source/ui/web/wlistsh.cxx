@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wlistsh.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 17:01:30 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 13:12:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,6 @@
 SFX_IMPL_INTERFACE(SwWebListShell, SwListShell, SW_RES(STR_SHELLNAME_LIST))
 {
     SFX_OBJECTBAR_REGISTRATION(SFX_OBJECTBAR_OBJECT, SW_RES(RID_NUM_TOOLBOX));
-    SFX_OBJECTMENU_REGISTRATION(SID_OBJECTMENU0, SW_RES(MN_OBJECTMENU_LIST));
 }
 
 TYPEINIT1(SwWebListShell,SwListShell)
