@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: May 2000
+dnl * Date: $Date: 2003-08-18 14:53:58 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.55 $ )
+AC_REVISION( $Revision: 1.56 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -30,16 +30,22 @@ AC_ARG_WITH(gpc,
                           comply with their distrubution policy.
 ],,)
 AC_ARG_ENABLE(libart,
-[  --enable-libart          Enables the use of libart, instead of GPC for
+[  --enable-libart         Enables the use of libart, instead of GPC for
 			  polygon clipping.
 ],,)
+AC_ARG_ENABLE(libsn,
+[  --enable-libsn          Enables the use of libstartup-notification
+],,)
 AC_ARG_ENABLE(gcc3,
-[  --enable-gcc3          Deprecated: Now has no effect, checks compiler version.
+[  --enable-gcc3           Deprecated: Now has no effect, checks compiler version
 ],,)
 AC_ARG_ENABLE(symbols,
 [  --enable-symbols        Include debugging symbols in output.  Warning -  
                           a complete build needs 8 Gb of space and takes 
                           much longer.  (enables -g compiler flag)
+
+                          --enable-symbols=SMALL sets the gcc -g1 setting
+                          which is smaller.
 
 ],,)
 AC_ARG_ENABLE(debug,
@@ -48,7 +54,8 @@ AC_ARG_ENABLE(debug,
                           (enables -g compiler flag and dmake debug=true)
 ],,)
 AC_ARG_ENABLE(crashdump,
-[  --enable-crashdump:     Enable the crashdump feature code.
+[  --enable-crashdump:     Enable the crashdump feature code. This option
+                          implicitly activates --enable-symbols.
 ],,)
 AC_ARG_ENABLE(static-gtk,
 [  --enable-static-gtk:    Modules that are linked against gtk libraries use
@@ -69,6 +76,11 @@ AC_ARG_WITH(jdk-home,
                           location of the entire distribution.
  
                           Usage: --with-jdk-home=<absolute path to JDK 1.3 home>
+],,)
+AC_ARG_ENABLE(java,
+[  --disable-java          Build without Java support.  Use if there is no supported JDK
+                          for your platform.  The build will have no support for Java
+                          components, applets, accessibility or XML filters.
 ],,)
 AC_ARG_WITH(ant-home,
 [  --with-ant-home         If you have installed Jakarta Ant on your system,
@@ -94,6 +106,24 @@ AC_ARG_WITH(cl-home,
  
                           Usage: --with-cl-home=<absolute path to Microsoft C/C++ compiler home>
 ],,)
+AC_ARG_WITH(mspdb-path,
+[  --with-mspdb-path       For Microsoft C/C++ compiler users, please supply the path
+                          pointing to the mspdb60.dll (MSVC 6) or mspdb60.dll (.NET). 
+ 
+                          Usage: --with-mspdb-path=<absolute path to mspdb60.dll/mspdb70.dll>
+],,)
+AC_ARG_WITH(midl-path,
+[  --with-midl-path       For Microsoft C/C++ .NET compiler users, please supply the path
+                          pointing to the midl.exe. 
+ 
+                          Usage: --with-midl-path=<absolute path to midl.exe>
+],,)
+AC_ARG_WITH(wdevenv-path,
+[  --with-wdevenv-path       For Microsoft C/C++ .NET compiler users, please supply the path
+                          pointing to the wdevenv.exe. 
+ 
+                          Usage: --with-wdevenv-path=<absolute path to wdevenv.exe>
+],,)
 AC_ARG_WITH(psdk-home,
 [  --with-psdk-home        For Windows NT users, please supply the path
                           for the Microsoft Platform SDK.
@@ -104,9 +134,9 @@ AC_ARG_WITH(2003-psdk,
 [  --with-2003-psdk        Deprecated: Now has no effect.
 ],,)
 AC_ARG_WITH(old-psdk,
-[  --with-old-psdk         For Windows users, and compatibility reasons. Please use
-                          this option for the October 2002 version of the Microsoft
-                          Platform SDK.
+[  --with-old-psdk         For Windows users, and compatibility reasons. Please
+                          use this option for the October 2002 version of the
+						  Microsoft Platform SDK.
 
                           This is a temporary workaround! 
  
@@ -147,9 +177,9 @@ AC_ARG_WITH(lang,
 ],,)
 AC_ARG_WITH(dict,
 [  --with-dict             Use this option to build OpenOffice.org with
-                          dictionary support. US English is always
+                          dictionary support. ALL dictionaries are always
                           included by default unless overridden with
-                          this options. Separate multiple dictionaries with
+                          this option. Separate multiple dictionaries with
                           commas. For all dictionaries, use --with-dict=ALL.
 
                           Usage: --with-dict=ENGB,ENUS,ITIT
@@ -167,14 +197,16 @@ AC_ARG_WITH(os-version,
                           Usage: --with-os-version=<OSVERSION>
 ],,)
 AC_ARG_WITH(unzip-home,
-[  --with-unzip-home       For Windows users, please supply the path for 
-                          unzip.exe.
+[  --with-unzip-home       Deprecated: use --with-zip-home instead],,)
+AC_ARG_WITH(zip-home,
+[  --with-zip-home         If you use a non standard zip, for example windows
+                          please supply the path for zip
 
-                          Usage: --with-unzip-home=<path to unzip.exe directory>
+                          Usage: --with-zip-home=<path to zip executable>
 ],,)
 AC_ARG_WITH(mingwin,
 [  --with-mingwin          For Windows users, use the mingwin32 compiler within
-                          cygwin environment (this implies --with-use-shell=tcsh)
+                          cygwin environment, this implies --with-use-shell=tcsh
 
                           Usage: --with-mingwin=yes
 ],WITH_MINGWIN=$withval,WITH_MINGWIN=0)
@@ -294,25 +326,23 @@ esac
 
 AC_MSG_RESULT([checked ($_os)])
 
-dnl ===================================================================
-dnl First setting is whether to include symbols into final build.
-dnl ===================================================================
-if test "$enable_symbols" = "yes"; then
-   ENVCFLAGSCXX="-g"
-   ENVCFLAGS="-g"
-else
-   ENVCFLAGSCXX=""
-   ENVCFLAGS=""
-fi
+AC_SUBST(PTHREAD_CFLAGS)
+AC_SUBST(PTHREAD_LIBS)
 
 dnl ===================================================================
-dnl Set the ENABLE_CRASHDUMP variable.
+dnl Set the ENABLE_CRASHDUMP variable. (Activate --enable-symbols)
 dnl ===================================================================
 if test "$enable_crashdump" = "yes" -o "$enable_crashdump" = "TRUE"; then
    ENABLE_CRASHDUMP="TRUE"
+   if test -z "$enable_symbols"; then
+      enable_symbols="yes"
+   fi
 else
    if test "$enable_crashdump" = "STATIC"; then
       ENABLE_CRASHDUMP="STATIC"
+      if test -z "$enable_symbols"; then
+         enable_symbols="yes"
+      fi
    else
       if test "$enable_crashdump" = "" -o "$enable_crashdump" = "no"; then
          ENABLE_CRASHDUMP=""
@@ -321,6 +351,37 @@ else
       fi
    fi
 fi
+AC_SUBST(ENABLE_CRASHDUMP)
+
+dnl ===================================================================
+dnl Set the ENABLE_DEBUG variable. (Activate --enable-symbols)
+dnl ===================================================================
+if test -n "$enable_debug"; then
+   ENABLE_DEBUG="TRUE"
+   if test -z "$enable_symbols"; then
+      enable_symbols="yes"
+   fi
+else
+   ENABLE_DEBUG="FALSE"
+fi
+AC_SUBST(ENABLE_DEBUG)
+
+dnl ===================================================================
+dnl First setting is whether to include symbols into final build.
+dnl ===================================================================
+if test -n "$enable_symbols" ; then
+	if test "$enable_symbols" = "yes" -o "$enable_symbols" = "TRUE"; then
+		ENABLE_SYMBOLS="TRUE"
+	else
+		if test "$enable_symbols" = "SMALL" -o "$enable_symbols" = "small"; then
+			ENABLE_SYMBOLS="SMALL"
+		else
+			echo enable symbols is: $enable_symbols
+			AC_MSG_ERROR([--enable-symbols only accepts yes, TRUE or SMALL as parameter.])
+		fi
+	fi
+fi
+AC_SUBST(ENABLE_SYMBOLS)
 
 dnl ===================================================================
 dnl WINNT uses either 4nt or tcsh, all other O/S use tcsh.
@@ -379,6 +440,8 @@ else
       fi
    fi
 fi
+USE_SHELL="$with_use_shell"
+AC_SUBST(USE_SHELL)
 
 _machine_type=`uname -m`
 
@@ -436,6 +499,10 @@ if test "$GCC" = "yes"; then
 
    if test "$_gcc_major" = "3"; then
       USE_GCC3="TRUE"
+      if test "$_gcc_longver"  -eq "030203"; then
+         AC_MSG_ERROR([found version "$_gcc_version"
+		 	gives internal error, use another version please.])
+      fi
    else
       USE_GCC3="FALSE"
       if test "$_gcc_longver"  -lt "029502"; then
@@ -449,6 +516,7 @@ if test "$GCC" = "yes"; then
    fi
    AC_MSG_RESULT([checked (gcc $_gcc_version)])
 fi  
+AC_SUBST(USE_GCC3)
 
 dnl ===================================================================
 dnl Search all the common names for GNU make
@@ -490,6 +558,7 @@ else
        fi
     fi
 fi
+AC_SUBST(GNUMAKE)
 
 dnl ===================================================================
 dnl  Test the solaris compiler version
@@ -497,7 +566,7 @@ dnl ===================================================================
 if test "$_os" = "SunOS"; then
    if test "$CC" = "cc"; then
       AC_PATH_PROGS(_cc, cc)
-      COMPATH=`echo $_cc | $SED -n "s/\/bin\/cc//p"`
+      COMPATH=`echo $_cc | $SED -n "s/\/cc//p"`
       AC_MSG_CHECKING([the SUN Workshop C compiler version])
       dnl cc -V outputs to standard error!!!!
       _workshop_version=`$CC -V 2>&1 | $AWK '/^cc/ { print $7 }'`
@@ -525,7 +594,7 @@ dnl ===================================================================
 if test "$_os" = "IRIX" -o "$_os" = "IRIX64"; then
    if test "$CC" = "cc"; then
       AC_PATH_PROGS(_cc, cc)
-      COMPATH=`echo $_cc | $SED -n "s/\/usr\/bin\/cc//p"`
+      COMPATH=`echo $_cc | $SED -n "s/\/cc//p"`
       AC_MSG_CHECKING([the SGI MIPSpro C compiler version])
       dnl cc -version outputs to standard error!!!!
       _mipspro_version=`$CC -version 2>&1 | $AWK '{ print $4 }'`
@@ -550,7 +619,7 @@ dnl ===================================================================
 if test "$_os" = "OSF1"; then
    if test "$CC" = "cc"; then
       AC_PATH_PROGS(_cc, cc)
-      COMPATH=`echo $_cc | $SED -n "s/\/usr\/bin\/cc//p"`
+      COMPATH=`echo $_cc | $SED -n "s/\/cc//p"`
       AC_MSG_WARN([******* $_cc , $COMPATH])
       AC_MSG_CHECKING([the Compaq C compiler version])
       dnl cc -V outputs to standard error!!!!
@@ -571,6 +640,39 @@ dnl ===================================================================
 if test "$_os" = "WINNT"; then
 	if test "$WITH_MINGWIN" != "yes"; then
 		AC_MSG_CHECKING([the Microsoft C/C++ Compiler])
+		dnl ===========================================================
+		dnl  Check for mspdb?0.dll
+		dnl ===========================================================
+		dnl  .NET Compiler?
+		AC_PATH_PROG(MSPDB_PATH, mspdb70.dll)
+		if test -n "$MSPDB_PATH";then
+			MSPDB_PATH=`dirname "$MSPDB_PATH"`
+		fi
+   		if test -e "$with_mspdb_path/mspdb70.dll"; then
+			MSPDB_PATH="$with_mspdb_path"
+		fi
+		if test -z "$MSPDB_PATH" -a -e "$with_cl_home/../Common7/IDE/mspdb70.dll"; then
+			MSPDB_PATH="$with_cl_home/../Common7/IDE"
+		fi
+		if test -z "$MSPDB_PATH"; then
+		dnl  MSVC 6 Compiler?
+			AC_PATH_PROG(MSPDB_PATH, mspdb60.dll)
+			if test -n "$MSPDB_PATH";then
+				MSPDB_PATH=`dirname "$MSPDB_PATH"`
+			fi
+   			if test -e "$with_mspdb_path/mspdb60.dll"; then
+				MSPDB_PATH="$with_mspdb_path"
+            fi
+			if test -z "$MSPDB_PATH" -a -e "$with_cl_home/../Common/msdev98/mspdb60.dll"; then
+				MSPDB_PATH="$with_cl_home/../Common/msdev98"
+			fi
+		fi
+		if test -z "$MSPDB_PATH"; then
+			AC_MSG_ERROR([You need a mspdb?0.dll, make sure it's in the path or use --with-mspdb-path])
+		fi
+		MSPDB_PATH=`cygpath -d "$MSPDB_PATH"`
+		MSPDB_PATH=`cygpath -u "$MSPDB_PATH"`
+		PATH="$MSPDB_PATH:$PATH"
    		if test -x "$with_cl_home/bin/cl.exe"; then
    			CC="$with_cl_home/bin/cl.exe"
    		else
@@ -626,6 +728,48 @@ if test "$_os" = "WINNT"; then
 		fi
 	fi
 fi
+AC_SUBST(COMEX)
+AC_SUBST(MSPDB_PATH)
+
+dnl ===================================================================
+dnl  .NET needs special treatment
+dnl ===================================================================
+if test "$COMEX" = "8"; then
+	dnl Check midl.exe
+	AC_PATH_PROG(MIDL_PATH, midl.exe)
+	if test -n "$MIDL_PATH";then
+		MIDL_PATH=`dirname $MIDL_PATH`
+	fi
+	if test -x "$with_midl_path/midl.exe"; then
+		MIDL_PATH="$with_midl_path"
+	fi
+	if test -z "$MIDL_PATH" -a -e "$with_cl_home/../Common7/Tools/Bin/midl.exe"; then
+		MIDL_PATH="$with_cl_home/../Common7/Tools/Bin"
+	fi
+	if test ! -x "$MIDL_PATH/midl.exe"; then
+		AC_MSG_ERROR([midl.exe not found. Make sure it's in the path or use --with-midl-path])
+	fi
+	# Convert to posix path with 8.3 filename restrictions ( No spaces )
+	MIDL_PATH=`cygpath -d "$MIDL_PATH"`
+	MIDL_PATH=`cygpath -u "$MIDL_PATH"`
+
+	dnl Check wdevenv.exe
+	AC_PATH_PROG(WDEVENV_PATH, wdevenv.exe)
+	if test -n "$WDEVENV_PATH"; then
+		WDEVENV_PATH=`dirname $WDEVENV_PATH`
+	fi
+	if test -x "$with_wdevenv_path/wdevenv.exe"; then
+		WDEVENV_PATH="$with_wdevenv_path"
+	fi
+	if test ! -x "$WDEVENV_PATH/wdevenv.exe"; then
+		AC_MSG_ERROR([wdevenv.exe not found. Make sure it's in the path or use --with-wdevenv-path])
+	fi
+	# Convert to posix path with 8.3 filename restrictions ( No spaces )
+	WDEVENV_PATH=`cygpath -d "$WDEVENV_PATH"`
+	WDEVENV_PATH=`cygpath -u "$WDEVENV_PATH"`
+fi
+AC_SUBST(MIDL_PATH)
+AC_SUBST(WDEVENV_PATH)
 
 dnl ===================================================================
 dnl Check if stdc headers are available excluding windows.
@@ -680,7 +824,7 @@ if test "$GXX" = "yes"; then
 fi
 else
 if test "$GXX" = "yes"; then
-   _gxx_include_path=`echo "#include <cstring>" | $CXX -E -xc++ - | $SED -n '/.*1*"\(.*\)\/cstring".*/s//\1/p' | head -1`
+   _gxx_include_path=`echo "#include <cstring>" | $CXX -E -xc++ - | $SED -n '/.*1*"\(.*\)\/cstring".*/s//\1/p' | head -n 1`
    if test "$_gxx_include_path" = "/usr/libexec/(null)/include"; then
        _gxx_include_path="/usr/include"
    fi
@@ -688,6 +832,11 @@ dnl This is the original code...
 dnl _gxx_include_path=`$CXX -print-search-dirs | grep instal |$AWK '{ print \$2 }'`/include 
 fi
 fi
+if test -z "$_gxx_include_path"; then
+   _gxx_include_path="NO_GXX_INCLUDE"
+fi
+GXX_INCLUDE_PATH="$_gxx_include_path"
+AC_SUBST(GXX_INCLUDE_PATH)
 
 dnl ===================================================================
 dnl Extra checking for the SUN OS compiler
@@ -770,6 +919,8 @@ extern "C" void __sjthrow(void) __attribute__ ((__noreturn__));
 
 AC_MSG_RESULT(Exceptions type: $exceptions_type)
 AC_LANG_RESTORE
+EXCEPTIONS="$exceptions_type"
+AC_SUBST(EXCEPTIONS)
 
 dnl **************************************************************
 dnl Testing for required  Solaris and workshop compiler patches...
@@ -895,15 +1046,15 @@ if test -n "$enable_sgistl"; then
 			AC_MSG_RESULT([not found.])
 		fi
 	else
-		AC_MSG_ERROR([IRIX not found.])
+		AC_MSG_ERROR([Option --enable-sgistl is only valid for IRIX])
 	fi
 else
 
 dnl ===================================================================
 dnl Checks for STLPORT4
 dnl ===================================================================
-AC_MSG_CHECKING([for STLport4 headers])
-if test -d "$with_stlport4_home"; then
+  AC_MSG_CHECKING([for STLport4 headers])
+  if test -d "$with_stlport4_home"; then
 	STLPORT4=$with_stlport4_home
         if test "$_os" != "WINNT" -o "$WITH_MINGWIN" = "yes"; then
            AC_TRY_CPP($STLPORT4/stlport/hash_map, AC_MSG_RESULT([checked.]), AC_MSG_ERROR([STLport4 headers not found.]))
@@ -947,20 +1098,47 @@ if test -d "$with_stlport4_home"; then
 			fi
 		fi
 	fi
-else
+  else
 	AC_MSG_RESULT([using internal stlport.])
+  fi
 fi
 
+if test -z "$STLPORT4"; then 
+   STLPORT4="NO_STLPORT4"
 fi
+AC_SUBST(STLPORT4)
+
+dnl ===================================================================
+dnl Java support enable
+dnl ===================================================================
+AC_MSG_CHECKING([whether to build with Java support])
+if test "$enable_java" != "no"; then
+   AC_MSG_RESULT([yes])
+   SOLAR_JAVA="TRUE"
+else
+   AC_MSG_RESULT([no])
+   SOLAR_JAVA=""
+fi
+AC_SUBST(SOLAR_JAVA)
+
 dnl ===================================================================
 dnl Checks for JDK.
 dnl ===================================================================
 JAVA_HOME=; export JAVA_HOME
 if test -z "$with_jdk_home"; then
-   AC_PATH_PROG(JAVA, javac)
+   AC_PATH_PROG(JAVAC, javac)
+   AC_PATH_PROG(JAVA, java)
 else
-   _java_path="$with_jdk_home/bin/javac"
+   _javac_path="$with_jdk_home/bin/javac"
    dnl Check if there is a java compiler at all.
+   if test -x "$_javac_path"; then
+      JAVAC=$_javac_path
+	else
+		AC_MSG_ERROR([$_javac_path not found set with_jdk_home])
+   fi
+   
+   _java_path="$with_jdk_home/bin/java"
+   dnl Check if there is a java interpreter at all.
    if test -x "$_java_path"; then
       JAVA=$_java_path
 	else
@@ -969,20 +1147,44 @@ else
 fi
 AC_MSG_CHECKING([the installed JDK])
 if test "$JAVA"; then
+
    dnl java -version sends output to stderr!
-   _jdk=`$JAVA -J-version 2>&1 | $AWK -F'"' '{ print \$2 }' | $SED s/[[-A-Za-z]]*//`
-
-   _jdk_ver=`echo "$_jdk" | $AWK -F. '{ print (($1 * 100) + $2) * 100 + $3;}'`
-
-   if test "$_jdk_ver" -lt 10300; then
-        AC_MSG_ERROR([You need at least jdk-1.3])
+   if test `$JAVA -version 2>&1 | grep -c "Kaffe"` -gt 0; then
+     
+     dnl Kaffe specific tests
+     KAFFE_VER=`$JAVA -version 2>&1 | $EGREP "  Version:" | $SED -r "s/.*  Version: ([[0-9\.]]*).*/\1/"`
+     if test -z "$KAFFE_VER"; then
+       AC_MSG_ERROR([looks like Kaffe but version detection failed])
+     fi
+     _kaffe_ver=`echo "$KAFFE_VER" | $AWK -F. '{ print (($1 * 100) + $2) * 100 + $3;}'`
+     if test "$_kaffe_ver" -lt 10100; then
+        AC_MSG_ERROR([Kaffe is too old ($KAFFE_VER - $_kaffe_ver), you need at least 1.1.0])
+     fi
+     JDK=kaffe
+     
+     dnl TODO: define some project exclusion variables
+     
+     AC_MSG_RESULT([checked (Kaffe $KAFFE_VER)])
+     AC_MSG_WARN([EXPERIMENTAL: Kaffe is not a full JDK replacement - some projects will fail to compile])
+     echo "EXPERIMENTAL: Kaffe is not a full JDK replacement - some projects will fail to compile" >>warn
    else
-      JAVA_HOME=`echo $JAVA | $SED -n "s,//*bin//*javac,,p"`
-      AC_MSG_RESULT([checked (JDK $_jdk)])
+     
+     dnl SUN JDK specific tests
+     _jdk=`$JAVAC -J-version 2>&1 | $AWK -F'"' '{ print \$2 }' | $SED s/[[-A-Za-z]]*//`
+     _jdk_ver=`echo "$_jdk" | $AWK -F. '{ print (($1 * 100) + $2) * 100 + $3;}'`
+
+     if test "$_jdk_ver" -lt 10300; then
+          AC_MSG_ERROR([JDK is too old, you need at least 1.3])
+     fi
+     AC_MSG_RESULT([checked (JDK $_jdk)])
    fi
+   JAVA_HOME=`echo $JAVAC | $SED -n "s,//*bin//*javac,,p"`
 else
    AC_MSG_ERROR([JAVA not found. You need at least jdk-1.3])
 fi
+AC_SUBST(JAVA_HOME)
+AC_SUBST(JDK)
+
 dnl ===================================================================
 dnl Checks for specific files.
 dnl ===================================================================
@@ -997,10 +1199,6 @@ dnl Check whether there's a C++ pre-processor.
 if test "$_os" = "Linux" -o "$_os" = "FreeBSD" -o "$_os" = "NetBSD" ; then
    AC_PROG_CXXCPP
 fi
-dnl Check for a BSD compatible install program.
-dnl AC_PROG_INSTALL
-dnl Check whether ln -s works on the current file system.
-dnl AC_PROG_LN_S
 
 dnl ===================================================================
 dnl Check whether xmkmf program can be used, x systems only
@@ -1010,8 +1208,6 @@ if test  "$test_x" = "yes"; then
 		if test -z "$XMKMF"; then
 		   AC_MSG_ERROR([install xmkmf to run this script, include openwin in path])
 		fi
-else
-	echo "Skipping xmkmf test $test_x"
 fi
 
 dnl ===================================================================
@@ -1043,6 +1239,7 @@ if test "$PERL"; then
 else
    AC_MSG_ERROR([Perl not found, install version 5 of Perl])
 fi
+AC_SUBST(PERL)
 
 dnl ===================================================================
 dnl Check whether the tcsh can be used.
@@ -1058,13 +1255,17 @@ else
    AC_MSG_WARN([Windows 4NT builds don't need tcsh])
    TCSH="NO_TCSH_NEEDED"
 fi
+AC_SUBST(TCSH)
+
 dnl ===================================================================
 dnl Check whether the gtk 2.0 libraries are available.
 dnl ===================================================================
-if test  "$test_gtk" = "yes"; then
+if test -n "$ENABLE_CRASHDUMP" ; then
+
+  if test  "$test_gtk" = "yes"; then
     pkg_modules="gtk+-2.0 >= 1.3.13"
     PKG_CHECK_MODULES( GTK, [$pkg_modules] )
-dnl	AM_PATH_GTK("1.3.13", AC_MSG_RESULT([GTK OK]), AC_MSG_WARN([GTK 2.0 not found])
+  fi
 fi
 
 dnl ===================================================================
@@ -1119,6 +1320,17 @@ else
    x_includes="no_x_includes"
    x_libraries="no_x_libraries"
 fi
+if test -z "$x_includes"; then
+   x_includes="no_x_includes"
+fi
+if test -z "$x_libraries"; then
+   x_libraries="no_x_libraries"
+fi
+XINC="$x_includes"
+AC_SUBST(XINC)
+XLIB="$x_libraries"
+AC_SUBST(XLIB)
+
 dnl ***************************************
 dnl testing libc version for Linux...
 dnl ***************************************
@@ -1163,6 +1375,8 @@ if test \( "$_os" = "WINNT" \) ; then
 		AC_MSG_ERROR([PSDK files not found, please use --with-psdk-home .])
 	fi
 fi
+AC_SUBST(PSDK_HOME)
+
 dnl ***************************************
 dnl testing bison and flex exist
 dnl ***************************************
@@ -1206,6 +1420,8 @@ dnl We also need to check for --with-gnu-cp
     fi
   fi
 fi
+AC_SUBST(GNUPATCH)
+AC_SUBST(GNUCP)
 
 dnl ***************************************
 dnl testing bash tools path on Windows
@@ -1214,6 +1430,11 @@ if test "$_os" = "WINNT"; then
 	AC_PATH_PROG(CYGWIN, bash)
 	CYGWIN=`dirname $CYGWIN`
 fi
+if test -z "$CYGWIN"; then
+   CYGWIN="NO_CYGWIN"
+fi
+AC_SUBST(CYGWIN)
+
 dnl ***************************************
 dnl testing ml.exe assembler path
 dnl ***************************************
@@ -1229,36 +1450,99 @@ if test "$_os" = "WINNT" -a "$WITH_MINGWIN" != "yes"; then
 else
 	with_asm_home="NO_ASM_HOME"
 fi
-dnl ***************************************
-dnl testing unzip.exe path
-dnl ***************************************
-if test "$_os" = "WINNT"; then
-# We are looking for zip, not unzip. All occurences should
-# change from UNZIP to ZIP
-if test ! -x "$with_unzip_home/zip.exe"; then
-   AC_PATH_PROG(ZIP_EXE, zip.exe)
-   if test -z "$ZIP_EXE"; then
-      with_unzip_home="NO_UNZIP_HOME"
-   else
-      if test "$with_use_shell" = "4nt" ; then
-         if test -z "`$ZIP_EXE -h | grep -i WinNT`" ; then
-AC_MSG_ERROR([$ZIP_EXE found in the path is not the required native Windows Version 2.3 of Info-ZIPs zip.exe.
-Probably there is a cygwin version in the path.])
-         fi
-      else
-         if test -n "`$ZIP_EXE -h | grep -i WinNT`" ; then
-AC_MSG_ERROR([$ZIP_EXE found in the path is not the required cygwin version of Info-ZIPs zip.exe.])
-         fi
-      fi
-      with_unzip_home="UNZIP_IN_PATH"
-   fi
+ASM_HOME="$with_asm_home"
+AC_SUBST(ASM_HOME)
+
+dnl ===================================================================
+dnl testing handle deprecated unzip switch
+dnl ===================================================================
+if test -z "$with_zip_home"; then
+	with_zip_home="$with_unzip_home"
 fi
+dnl ===================================================================
+dnl Zip will be found where you tell me to find it
+dnl ===================================================================
+if test -n "$with_zip_home" ; then
+	ZIP="$with_zip_home/zip"
+    ZIP_HOME="$with_zip_home"
 else
-        with_unzip_home="NO_UNZIP_HOME"
+	ZIP_HOME="ZIP_IN_PATH"
+fi
+dnl ===================================================================
+dnl Zip must be available or else it is an error, all platforms
+dnl ===================================================================
+AC_PATH_PROG(ZIP, zip)
+if test -z "$ZIP"; then
+    AC_MSG_ERROR([Zip is required to build, please install or use --with-zip-home],,)
 fi
 
 dnl ===================================================================
-dnl Test for the presence of the right polgyon clipping code
+dnl Zip must be a specific type for different build types.
+dnl ===================================================================
+if test "$_os" = "WINNT"; then
+    if test "$with_use_shell" = "4nt" ; then
+         if test -z "`$ZIP -h | grep -i WinNT`" ; then
+AC_MSG_ERROR([$ZIP found in the path is not the required native Windows Version 2.3 of Info-ZIPs zip.exe.
+Probably there is a cygwin version in the path.])
+         fi
+    else
+         if test -n "`$ZIP -h | grep -i WinNT`" ; then
+AC_MSG_ERROR([$ZIP found in the path is not the required cygwin version of Info-ZIPs zip.exe.])
+         fi
+    fi
+fi
+AC_SUBST(ZIP_HOME)
+
+dnl ===================================================================
+dnl Windows builds need unicows.dll in external/unicows/
+dnl ===================================================================
+if test "$_os" = "WINNT"; then
+   AC_MSG_CHECKING([unicows.dll])
+   if test -f ../external/unicows/unicows.dll; then
+      AC_MSG_RESULT([found])
+   else
+      AC_MSG_ERROR([The Microsoft Layer for Unicode (unicows.dll) is missing in external/unicows/.
+Get it from the Microsoft site and put it into external/unicows.
+(Note: Microsoft seems to enjoy changing the exact location of this file. You
+may have to search Microsoft's website.) Last time it was seen at:
+<http://download.microsoft.com/download/b/7/5/b75eace3-00e2-4aa0-9a6f-0b6882c71642/unicows.exe>.])
+   fi
+fi
+
+dnl ===================================================================
+dnl Windows builds need dbghelp.dll in external/dbghelp/
+dnl ===================================================================
+if test "$_os" = "WINNT"; then
+   AC_MSG_CHECKING([dbghelp.dll])
+   if test -f ../external/dbghelp/dbghelp.dll; then
+      AC_MSG_RESULT([found])
+   else
+      AC_MSG_ERROR([The dbghelp.dll is missing in external/dbghelp/.
+Get it from the Microsoft site and put it into external/dbghelp.
+(Note: Microsoft seems to enjoy changing the exact location of this file. You
+may have to search Microsoft's website.) Last time it was seen at:
+<http://www.microsoft.com/downloads/release.asp?releaseid=30682>.])
+   fi
+fi
+
+dnl ===================================================================
+dnl Windows builds with .NET need msvcp70.dll in external/msvcp70/
+dnl ===================================================================
+if test "$_os" = "WINNT" -a "$COMEX" = "8"; then
+   AC_MSG_CHECKING([msvcp70.dll])
+   if test -f ../external/msvcp70/msvcp70.dll; then
+      AC_MSG_RESULT([found])
+   else
+      AC_MSG_ERROR([The msvcp70.dll is missing in external/msvcp70/.
+The dll is part of the .NET installation and can be found in a directory
+similar to:
+"c:\\Program Files\\Microsoft Visual Studio .NET\\Visual C++ .NET Professional - English\\"
+Please copy the file to external/msvcp70.])
+   fi
+fi
+
+dnl ===================================================================
+dnl Test for the presence of the right polygon clipping code
 dnl ===================================================================
 
 WITH_GPC=NO
@@ -1266,8 +1550,6 @@ WITH_LIBART=NO
 
 if test -n "$enable_libart"; then
   PKG_CHECK_MODULES( LIBART, libart-2.0 >= 2.3.13 )
-  AC_SUBST(LIBART_CFLAGS)
-  AC_SUBST(LIBART_LIBS)
   WITH_LIBART=YES
 	
 elif test "$with_gpc" != "no" ; then
@@ -1289,9 +1571,27 @@ elif test "$with_gpc" != "no" ; then
 	AC_MSG_RESULT([GPC files found])
   else
 	AC_MSG_ERROR([GPC files not found
-ftp://ftp.cs.man.ac.uk/pub/toby/gpc/gpc231.tar.Z and untar in external/gpc])
+ftp://ftp.cs.man.ac.uk/pub/toby/gpc/gpc231.tar.Z and untar in external/gpc,
+or install libart and use --enable-libart])
   fi
 fi
+AC_SUBST(WITH_LIBART)
+AC_SUBST(LIBART_CFLAGS)
+AC_SUBST(LIBART_LIBS)
+AC_SUBST(WITH_GPC)
+
+dnl ===================================================================
+dnl Test for the presence of libstartup-notification
+dnl ===================================================================
+
+WITH_LIBSN=NO
+if test -n "$enable_libsn"; then
+  PKG_CHECK_MODULES( LIBSN, libstartup-notification-1.0 >= 0.5 )
+  WITH_LIBSN=YES
+fi
+AC_SUBST(WITH_LIBSN)
+AC_SUBST(LIBSN_CFLAGS)
+AC_SUBST(LIBSN_LIBS)
 
 dnl ===================================================================
 dnl Test for the presence of Ant and that it works
@@ -1342,6 +1642,10 @@ EOF
 
   rm -f conftest* core core.* *.core
 fi
+if test -z "$ANT_HOME"; then
+   ANT_HOME="NO_ANT_HOME"
+fi
+AC_SUBST(ANT_HOME)
 
 
 dnl ===================================================================
@@ -1354,124 +1658,59 @@ echo "*                                                                  *"
 echo "********************************************************************"
 
 # Get UPD number from ../solenv/inc/minor.mk
-upd=`grep RSCVERSION= ../solenv/inc/minor.mk | $AWK -F"=" '{ print $2 }'` 
+UPD="`grep RSCVERSION= ../solenv/inc/minor.mk | $AWK -F"=" '{ print $2 }'`"
+AC_SUBST(UPD)
 
 if test -z "$COMPATH"; then
    AC_MSG_ERROR([No compiler found.])
 fi
-if test -z "$_gxx_include_path"; then
-   _gxx_include_path="NO_GXX_INCLUDE"
-fi
-if test -z "$JAVA_HOME"; then
-   AC_MSG_ERROR([No java found.])
-fi
-if test -z "$ANT_HOME"; then
-   ANT_HOME="NO_ANT_HOME"
-fi
-if test -z "$TCSH"; then
-   AC_MSG_ERROR([No tcsh found.])
-fi
-if test -z "$STLPORT4"; then 
-   STLPORT4="NO_STLPORT4"
-fi
-if test -z "$PERL"; then
-   AC_MSG_ERROR([No perl found.])
-fi
-if test -z "$x_libraries"; then
-   x_libraries="no_x_libraries"
-fi
-if test -z "$x_includes"; then
-   x_includes="no_x_includes"
-fi
+AC_SUBST(COMPATH)
+
 if test -z "$with_local_solenv"; then
    LOCAL_SOLENV="DEFAULT"
 else
    LOCAL_SOLENV=$with_local_solenv
 fi
+AC_SUBST(LOCAL_SOLENV)
+
 if test -z "$with_local_solver"; then
    LOCAL_SOLVER="DEFAULT"
 else
    LOCAL_SOLVER=$with_local_solver
 fi
-if test -z "$CYGWIN"; then
-   CYGWIN="NO_CYGWIN"
-fi
-if test -z "$with_lang"; then
-   with_lang=,ENUS,
-else
-   with_lang=","$with_lang","
-fi
-if test -z "$with_dict"; then
-   with_dict=,ALL,
-else
-   with_dict=","$with_dict","
-fi
+AC_SUBST(LOCAL_SOLVER)
 
-if test -n "$enable_debug"; then
-   ENABLE_DEBUG="TRUE"
+if test -z "$with_lang"; then
+   WITH_LANG=,ENUS,
 else
-   ENABLE_DEBUG="FALSE"
+   WITH_LANG=","$with_lang","
 fi
+AC_SUBST(WITH_LANG)
+
+if test -z "$with_dict"; then
+   WITH_DICT=,ALL,
+else
+   WITH_DICT=","$with_dict","
+fi
+AC_SUBST(WITH_DICT)
 
 if test -n "$enable_static_gtk"; then
    ENABLE_STATIC_GTK="TRUE"
 else
    ENABLE_STATIC_GTK="FALSE"	
 fi
+AC_SUBST(ENABLE_STATIC_GTK)
 
 dnl ===================================================================
 dnl Bits to substitute into set_soenv.in
 dnl ===================================================================
-AC_SUBST(ANT_HOME)
-AC_SUBST(COMPATH)
-GXX_INCLUDE_PATH="$_gxx_include_path"
-AC_SUBST(GXX_INCLUDE_PATH)
+
 GCC_HOME="$with_gcc_home"
 AC_SUBST(GCC_HOME)
-AC_SUBST(GNUMAKE)
-AC_SUBST(JAVA_HOME)
-AC_SUBST(TCSH)
-AC_SUBST(PERL)
-XLIB="$x_libraries"
-AC_SUBST(XLIB)
-XINC="$x_includes"
-AC_SUBST(XINC)
-AC_SUBST(LOCAL_SOLENV)
-AC_SUBST(LOCAL_SOLVER)
-UPD="$upd"
-AC_SUBST(UPD)
-AC_SUBST(CYGWIN)
-AC_SUBST(COMEX)
-AC_SUBST(STLPORT4)
-WITH_LANG="$with_lang"
-AC_SUBST(WITH_LANG)
-WITH_DICT="$with_dict"
-AC_SUBST(WITH_DICT)
-AC_SUBST(PSDK_HOME)
-ASM_HOME="$with_asm_home"
-AC_SUBST(ASM_HOME)
-UNZIP_HOME="$with_unzip_home"
-AC_SUBST(UNZIP_HOME)
+
 AC_SUBST(WITH_MINGWIN)
-USE_SHELL="$with_use_shell"
-AC_SUBST(USE_SHELL)
-EXCEPTIONS="$exceptions_type"
-AC_SUBST(EXCEPTIONS)
 OSVERSION="$with_os_version"
 AC_SUBST(OSVERSION)
-AC_SUBST(USE_GCC3)
-AC_SUBST(PTHREAD_CFLAGS)
-AC_SUBST(PTHREAD_LIBS)
-AC_SUBST(ENABLE_DEBUG)
-AC_SUBST(ENABLE_STATIC_GTK)
-AC_SUBST(ENVCFLAGSCXX)
-AC_SUBST(ENABLE_CRASHDUMP)
-AC_SUBST(WITH_GPC)
-AC_SUBST(WITH_LIBART)
-AC_SUBST(LIBART_CFLAGS)
-AC_SUBST(LIBART_LIBS)
-AC_SUBST(GNUPATCH)
-AC_SUBST(GNUCP)
 
 AC_OUTPUT([set_soenv])
 
