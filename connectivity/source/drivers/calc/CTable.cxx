@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CTable.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-21 11:35:24 $
+ *  last change: $Author: nn $ $Date: 2001-02-21 13:51:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -477,6 +477,7 @@ void lcl_SetValue( file::ORowSetValue& rValue, const Reference<XSpreadsheet>& xS
     else
     {
         ::rtl::OUStringBuffer aBuffer(2);
+        aBuffer.setLength( 2 );
         aBuffer.setCharAt( 0, (sal_Unicode) ( 'A' + ( nColumn / 26 ) - 1 ) );
         aBuffer.setCharAt( 1, (sal_Unicode) ( 'A' + ( nColumn % 26 ) ) );
         return aBuffer.makeStringAndClear();
