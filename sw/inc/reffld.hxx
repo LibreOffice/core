@@ -2,9 +2,9 @@
  *
  *  $RCSfile: reffld.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2002-01-11 13:59:20 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 14:51:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,6 +157,8 @@ public:
     virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, BYTE nMId );
 
     void                ConvertProgrammaticToUIName();
+
+    virtual String GetDescription() const;
 };
 
 
