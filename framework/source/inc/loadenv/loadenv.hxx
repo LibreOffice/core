@@ -2,9 +2,9 @@
  *
  *  $RCSfile: loadenv.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-21 14:03:29 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 16:27:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -737,6 +737,14 @@ class LoadEnv : private ThreadHelpBase
                     FALSE otherwise.
          */
         sal_Bool impl_isFrameAlreadyUsedForLoading(const css::uno::Reference< css::frame::XFrame >& xFrame) const;
+
+        //_______________________________________
+
+        /** @short  try to determine the used application module
+                    of this load request and applay right position and size
+                    for this document window ... hopefully before we show it .-)
+         */
+        void impl_applyPersistentWindowState(const css::uno::Reference< css::awt::XWindow >& xWindow);
 };
 
 } // namespace framework
