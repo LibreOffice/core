@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TemplateScanner.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:57:38 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 13:48:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::ucb;
 
 namespace {
+
 const OUString TITLE            = OUString::createFromAscii ("Title");
 const OUString TARGET_DIR_URL   = OUString::createFromAscii ("TargetDirURL");
 const OUString DESCRIPTION      = OUString::createFromAscii ("TypeDescription");
@@ -98,7 +99,12 @@ const OUString IMPRESS_BIN_TEMPLATE = OUString::createFromAscii ("application/vn
 const OUString IMPRESS_XML_TEMPLATE = OUString::createFromAscii ("application/vnd.sun.xml.impress");
 // The following id comes from the bugdoc in #i2764#.
 const OUString IMPRESS_XML_TEMPLATE_B = OUString::createFromAscii ("Impress 2.0");
-}
+const OUString IMPRESS_XML_TEMPLATE_OASIS = OUString::createFromAscii ("application/x-vnd.oasis.openoffice.presentation");
+
+} // end of anonymous namespace
+
+
+
 
 namespace sd
 {
@@ -128,12 +134,17 @@ void TemplateScanner::GetTemplateRoot (void)
 {
     Reference<lang::XMultiServiceFactory> xFactory =
         ::comphelper::getProcessServiceFactory ();
+    DBG_ASSERT (xFactory.is(),
+        "TemplateScanner::GetTemplateRoot: xFactory is NULL");
 
     Reference<frame::XDocumentTemplates> xTemplates (
         xFactory->createInstance (DOCTEMPLATES), UNO_QUERY);
+    DBG_ASSERT (xTemplates.is(),
+        "TemplateScanner::GetTemplateRoot: xTemplates is NULL");
 
     if (xTemplates.is())
         mxTemplateRoot = xTemplates->getContent();
+
 }
 
 
@@ -174,7 +185,8 @@ void TemplateScanner::ScanEntries (Content& rRoot, TemplateDir* pDir)
             //  Check wether the entry is an impress template.  If so add a
             //  new entry to the resulting list (which is created first if
             //  necessary).
-            if (    (aContentType == IMPRESS_BIN_TEMPLATE)
+            if (    (aContentType == IMPRESS_XML_TEMPLATE_OASIS)
+                ||  (aContentType == IMPRESS_BIN_TEMPLATE)
                 ||  (aContentType == IMPRESS_XML_TEMPLATE)
                 ||  (aContentType == IMPRESS_XML_TEMPLATE_B))
                 pDir->m_aEntries.push_back (
