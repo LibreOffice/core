@@ -2,9 +2,9 @@
  *
  *  $RCSfile: page.src,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-04 17:31:20 $
+ *  last change: $Author: fs $ $Date: 2002-11-25 14:45:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,10 +177,10 @@ TabPage RID_SVXPAGE_PAGE
         Left = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
-        Maximum = 6500 ;
+        Maximum = 11900 ;
         DecimalDigits = 2 ;
         Unit = FUNIT_CM ;
-        Last = 6500 ;
+        Last = 11900 ;
         SpinSize = 10 ;
     };
     FixedText FT_PAPER_HEIGHT
@@ -222,10 +222,10 @@ TabPage RID_SVXPAGE_PAGE
         Left = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
-        Maximum = 6500 ;
+        Maximum = 11900 ;
         DecimalDigits = 2 ;
         Unit = FUNIT_CM ;
-        Last = 6500 ;
+        Last = 11900 ;
         SpinSize = 10 ;
     };
     FixedText FT_ORIENTATION
