@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: hr $ $Date: 2003-04-04 19:28:19 $
+#   last change: $Author: vg $ $Date: 2003-05-28 13:31:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -142,6 +142,7 @@ IDLFILES=\
     XRecordableDispatch.idl\
     XStatusListener.idl\
     XStorable.idl\
+    XSynchronousDispatch.idl\
     XSynchronousFrameLoader.idl\
     XTask.idl\
     XTasksSupplier.idl\
