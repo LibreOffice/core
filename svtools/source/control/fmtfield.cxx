@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtfield.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-02 15:37:42 $
+ *  last change: $Author: fs $ $Date: 2000-11-09 15:15:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,18 +67,27 @@
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
-
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
+#endif
 #ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
 #endif
-
 #ifndef _ZFORMAT_HXX //autogen
 #include "zformat.hxx"
 #endif
-
 #ifndef _FMTFIELD_HXX_
 #include "fmtfield.hxx"
-#endif // _FMTFIELD_HXX_
+#endif
+#ifndef _ISOLANG_HXX
+#include <tools/isolang.hxx>
+#endif
+#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
+#include <com/sun/star/lang/Locale.hpp>
+#endif
+
+
+using namespace ::com::sun::star::lang;
 
 //==============================================================================
 // regulaerer Ausdruck, um komplette Zahlen und alles, was waehrend der Eingabe einer kompletten Zahl als Fragment vorkommt,
@@ -849,12 +858,29 @@ void DoubleNumericField::ResetConformanceTester()
     const SvNumberformat* pFormatEntry = ImplGetFormatter()->GetEntry(m_nFormatKey);
     char cSepHexCode[3];
 
-    unsigned char cSeparator = pFormatEntry ? International(pFormatEntry->GetLanguage()).GetNumThousandSep() : ',';
-    sprintf(cSepHexCode, "%0X", cSeparator);
+    unsigned char cSeparatorThousand = ',';
+    unsigned char cSeparatorDecimal = '.';
+    if (pFormatEntry)
+    {
+        String aLanguage, aCountry, aVariant;
+        ConvertLanguageToIsoNames( pFormatEntry->GetLanguage(), aLanguage, aCountry );
+        LocaleDataWrapper aLocaleInfo(::comphelper::getProcessServiceFactory(), Locale( aLanguage, aCountry, aVariant ));
+
+        String sSeparator = aLocaleInfo.GetNumThousandSep();
+        if (sSeparator.Len())
+            cSeparatorThousand = sSeparator.GetBuffer()[0];
+        // TODO: for real unicode we need the possibility to search for regular expressions allowing something like "\x????"
+        // (4 digits instead of 2)
+
+        sSeparator = aLocaleInfo.GetNumDecimalSep();
+        if (sSeparator.Len())
+            cSeparatorDecimal = sSeparator.GetBuffer()[0];
+    }
+
+    sprintf(cSepHexCode, "%0X", cSeparatorThousand);
     sDescription.SearchAndReplaceAscii("++", String::CreateFromAscii(cSepHexCode));
 
-    cSeparator = pFormatEntry ? International(pFormatEntry->GetLanguage()).GetNumDecimalSep() : '.';
-    sprintf(cSepHexCode, "%0X", cSeparator);
+    sprintf(cSepHexCode, "%0X", cSeparatorDecimal);
     sDescription.SearchAndReplaceAscii("##", String::CreateFromAscii(cSepHexCode));
 
     delete m_pConformanceTester;
