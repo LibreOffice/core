@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-09 10:24:24 $
+ *  last change: $Author: nn $ $Date: 2000-10-26 19:06:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,6 +161,11 @@ class ScDocShell: public SfxObjectShell, public SfxInPlaceObject, public SfxList
 
     void            RemoveUnknownObjects();
 
+    ULONG           DBaseImport( const String& rFullFileName, CharSet eCharSet,
+                                 BOOL bSimpleColWidth[MAXCOL+1] );
+    ULONG           DBaseExport( const String& rFullFileName, CharSet eCharSet,
+                                 BOOL& bHasMemo );
+
 protected:
 
     virtual void SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
@@ -239,8 +244,6 @@ public:
 
     ScDrawLayer*    MakeDrawLayer();
 
-    ULONG           SbaSdbImport( const String& rName, const String& rParStr, BOOL bHeader, BOOL bSimpleColWidth[MAXCOL+1] );
-    ULONG           SbaSdbExport( BOOL& bHasMemo, const String& rParStr, const String& aFileName );
     void            AsciiSave( SvStream& rStream, sal_Unicode cDelim, sal_Unicode cStrDelim,
                                CharSet eCharSet);
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-20 09:14:03 $
+ *  last change: $Author: nn $ $Date: 2000-10-26 19:07:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,41 +69,33 @@
 
 #include "scitems.hxx"
 
-#include <sdb/sdbcol.hxx>
-#include <sdb/sdbconn.hxx>
-#include <sdb/sdbtab.hxx>
-
-#include <sfx2/sfx.hrc>
-#include <sfx2/app.hxx>
-#include <sfx2/topfrm.hxx>
-#include <vcl/exchange.hxx>
-#include <offmgr/app.hxx>
-#include <svx/srchitem.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/sfxecode.hxx>
-#include <sfx2/docfile.hxx>
-#include <sfx2/docfilt.hxx>
-#include <sfx2/evntconf.hxx>
-#include <svtools/stritem.hxx>
-#include <vcl/msgbox.hxx>
+#include <tools/fsys.hxx>
 #include <tools/stream.hxx>
 #include <tools/string.hxx>
 #include <tools/urlobj.hxx>
+#include <vcl/msgbox.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/waitobj.hxx>
+#include <svtools/ctrltool.hxx>
+#include <svtools/sfxecode.hxx>
+#include <svtools/zforlist.hxx>
+#include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dinfdlg.hxx>
-#include <svtools/ctrltool.hxx>
-#include <so3/clsids.hxx>
-#include <svtools/converter.hxx>
-#include <offmgr/fltrcfg.hxx>
+#include <sfx2/docfile.hxx>
+#include <sfx2/docfilt.hxx>
+#include <sfx2/evntconf.hxx>
+#include <sfx2/sfx.hrc>
+#include <sfx2/topfrm.hxx>
+#include <svx/srchitem.hxx>
 #include <svx/svxmsbas.hxx>
-#include <vcl/waitobj.hxx>
+#include <offmgr/app.hxx>
+#include <offmgr/fltrcfg.hxx>
+#include <so3/clsids.hxx>
 #include <unotools/charclass.hxx>
 
 #include <sot/formats.hxx>
 #define SOT_FORMATSTR_ID_STARCALC_30 SOT_FORMATSTR_ID_STARCALC
-
-#include <offmgr/sbaobj.hxx>
 
 #ifndef SO2_DECL_SVSTORAGESTREAM_DEFINED
 #define SO2_DECL_SVSTORAGESTREAM_DEFINED
@@ -112,13 +104,10 @@ SO2_DECL_REF(SvStorageStream)
 
 // INCLUDE ---------------------------------------------------------------
 
-#include "docoptio.hxx"     // fuer SbaSdbExport
-#include "cell.hxx"         // fuer SbaSdbExport
-
+#include "cell.hxx"
 #include "global.hxx"
 #include "filter.hxx"
 #include "scmod.hxx"
-#include "dbdocfun.hxx"
 #include "tabvwsh.hxx"
 #include "docfunc.hxx"
 #include "imoptdlg.hxx"
@@ -126,7 +115,6 @@ SO2_DECL_REF(SvStorageStream)
 #include "scresid.hxx"
 #include "sc.hrc"
 #include "globstr.hrc"
-#include "printfun.hxx"
 #include "tpstat.hxx"
 #include "scerrors.hxx"
 #include "brdcst.hxx"
@@ -142,7 +130,7 @@ SO2_DECL_REF(SvStorageStream)
 #include "docuno.hxx"
 #include "appoptio.hxx"
 #include "detdata.hxx"
-#include "printfun.hxx"     // ScJobSetup
+#include "printfun.hxx"
 #include "dociter.hxx"
 #include "cellform.hxx"
 #include "chartlis.hxx"
@@ -281,477 +269,6 @@ USHORT ScDocShell::GetSaveTab()
 }
 
 //------------------------------------------------------------------
-
-inline IsAsciiDigit( sal_Unicode c )
-{
-    return 0x31 <= c && c <= 0x39;
-}
-
-inline IsAsciiAlpha( sal_Unicode c )
-{
-    return (0x41 <= c && c <= 0x5a) || (0x61 <= c && c <= 0x7a);
-}
-
-
-ULONG ScDocShell::SbaSdbExport( BOOL& bHasMemo, const String& rParStr,
-        const String& aFileName )
-{
-
-    ULONG nErr = eERR_OK;
-    bHasMemo = FALSE;
-    SbaObject* pSbaObject = ((OfficeApplication*)SFX_APP())->GetSbaObject();
-    DBG_ASSERT( pSbaObject, "pSbaObject==NULL" );
-    SdbConnectionRef xConnect = pSbaObject->OpenConnection( rParStr );
-
-    if ( !xConnect.Is() || !xConnect->Status().IsSuccessful() )
-        return SCERR_EXPORT_CONNECT;
-
-    SdbTableRef xTable = xConnect->CreateTable( aFileName );  // Erzeugen der Tabellenstruktur
-    if ( !xTable.Is() )
-        return SCERR_EXPORT_CURSOR;
-
-    SdbColumnsRef xTblCol = xTable->Columns();  // leere Struktur holen
-
-    USHORT nFirstCol, nFirstRow, nLastCol, nLastRow, nCol, nRow;
-
-    USHORT nTab = GetSaveTab();
-    aDocument.GetDataStart( nTab, nFirstCol, nFirstRow );
-    aDocument.GetCellArea( nTab, nLastCol, nLastRow );
-    ScProgress aProgress( this, ScGlobal::GetRscString( STR_SAVE_DOC ),
-        nLastRow - nFirstRow );
-    SvNumberFormatter* pNumFmt = aDocument.GetFormatTable();
-    String aFieldName, aString, aOutString;
-    SdbDatabaseType eDbType;
-    xub_StrLen nFieldLen;
-    USHORT nPrecision;
-    BOOL bTypeDefined, bPrecDefined;
-    StrCollection aFieldNamesCollection;
-    BOOL bHasFieldNames = TRUE;
-    for ( nCol = nFirstCol; nCol <= nLastCol && bHasFieldNames; nCol++ )
-    {   // nur Strings in erster Zeile => sind Feldnamen
-        if ( !aDocument.HasStringData( nCol, nFirstRow, nTab ) )
-            bHasFieldNames = FALSE;
-    }
-    USHORT nFirstDataRow = ( bHasFieldNames ? nFirstRow + 1 : nFirstRow );
-    for ( nCol = nFirstCol; nCol <= nLastCol; nCol++ )
-    {
-        bTypeDefined = FALSE;
-        bPrecDefined = FALSE;
-        nFieldLen = 0;
-        nPrecision = 0;
-        // Feldname[,Type[,Width[,Prec]]]
-        // Typ etc.: L; D; C[,W]; N[,W[,P]]
-        if ( bHasFieldNames )
-        {
-            aDocument.GetString( nCol, nFirstRow, nTab, aString );
-            aString.ToUpperAscii();
-            xub_StrLen nToken = aString.GetTokenCount( ',' );
-            if ( nToken > 1 )
-            {
-                aFieldName = aString.GetToken( 0, ',' );
-                aString.EraseAllChars( ' ' );
-                switch ( aString.GetToken( 1, ',' ).GetChar(0) )
-                {
-                    case 'L' :
-                        eDbType = SDB_DBTYPE_BOOLEAN;
-                        nFieldLen = 1;
-                        bTypeDefined = TRUE;
-                        bPrecDefined = TRUE;
-                        break;
-                    case 'D' :
-                        eDbType = SDB_DBTYPE_DATE;
-                        nFieldLen = 8;
-                        bTypeDefined = TRUE;
-                        bPrecDefined = TRUE;
-                        break;
-                    case 'M' :
-                        eDbType = SDB_DBTYPE_LONGVARCHAR;
-                        nFieldLen = 10;
-                        bTypeDefined = TRUE;
-                        bPrecDefined = TRUE;
-                        bHasMemo = TRUE;
-                        break;
-                    case 'C' :
-                        eDbType = SDB_DBTYPE_VARCHAR;
-                        bTypeDefined = TRUE;
-                        bPrecDefined = TRUE;
-                        break;
-                    case 'N' :
-                        eDbType = SDB_DBTYPE_DECIMAL;
-                        bTypeDefined = TRUE;
-                        break;
-                }
-                if ( bTypeDefined && !nFieldLen && nToken > 2 )
-                {
-                    nFieldLen = aString.GetToken( 2, ',' ).ToInt32();
-                    if ( !bPrecDefined && nToken > 3 )
-                    {
-                        String aTmp( aString.GetToken( 3, ',' ) );
-                        if ( CharClass::isAsciiNumeric(aTmp) )
-                        {
-                            nPrecision = aTmp.ToInt32();
-                            bPrecDefined = TRUE;
-                        }
-                    }
-                }
-            }
-            else
-                aFieldName = aString;
-
-            // Feldnamen pruefen und ggbf. gueltigen Feldnamen erzeugen.
-            // Erstes Zeichen muss Buchstabe sein,
-            // weitere nur alphanumerisch und Unterstrich erlaubt,
-            // "_DBASELOCK" ist reserviert (obsolet weil erstes Zeichen kein Buchstabe),
-            // keine doppelten Namen.
-            if ( !IsAsciiAlpha( aFieldName.GetChar(0) ) )
-                aFieldName.Insert( 'N', 0 );
-            String aTmpStr;
-            sal_Unicode c;
-            for ( const sal_Unicode* p = aFieldName.GetBuffer(); c = *p; p++ )
-            {
-                if ( IsAsciiAlpha( c ) || IsAsciiDigit( c ) || c == '_' )
-                    aTmpStr += c;
-                else
-                    aTmpStr += '_';
-            }
-            aFieldName = aTmpStr;
-            if ( aFieldName.Len() > 10 )
-                aFieldName.Erase( 10 );
-            StrData* pStrData = new StrData( aFieldName );
-            if ( !aFieldNamesCollection.Insert( pStrData ) )
-            {   // doppelter Feldname, numerisch erweitern
-                USHORT nSub = 1;
-                String aFixPart( aFieldName );
-                do
-                {
-                    ++nSub;
-                    String aVarPart = String::CreateFromInt32( nSub );
-                    if ( aFixPart.Len() + aVarPart.Len() > 10 )
-                        aFixPart.Erase( 10 - aVarPart.Len() );
-                    aFieldName = aFixPart;
-                    aFieldName += aVarPart;
-                    pStrData->SetString( aFieldName );
-                } while ( !aFieldNamesCollection.Insert( pStrData ) );
-            }
-        }
-        else
-        {
-            aFieldName = 'N';
-            aFieldName += String::CreateFromInt32(nCol+1);
-        }
-
-        if ( !bTypeDefined )
-        {   // Feldtyp
-            ScBaseCell* pCell;
-            aDocument.GetCell( nCol, nFirstDataRow, nTab, pCell );
-            if ( !pCell || pCell->HasStringData() )
-                eDbType = SDB_DBTYPE_VARCHAR;
-            else
-            {
-                ULONG nFormat;
-                aDocument.GetNumberFormat( nCol, nFirstDataRow, nTab, nFormat );
-                if ( pCell && pCell->GetCellType() == CELLTYPE_FORMULA
-                  && ((nFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0) )
-                {
-                    nFormat = ScGlobal::GetStandardFormat(
-                        ((ScFormulaCell*)pCell)->GetValue(), *pNumFmt, nFormat,
-                        ((ScFormulaCell*)pCell)->GetFormatType() );
-                }
-                switch ( pNumFmt->GetType( nFormat ) )
-                {
-                    case NUMBERFORMAT_LOGICAL :
-                        eDbType = SDB_DBTYPE_BOOLEAN;
-                        nFieldLen = 1;
-                        break;
-                    case NUMBERFORMAT_DATE :
-                        eDbType = SDB_DBTYPE_DATE;
-                        nFieldLen = 8;
-                        break;
-                    case NUMBERFORMAT_TIME :
-                    case NUMBERFORMAT_DATETIME :
-                        eDbType = SDB_DBTYPE_VARCHAR;
-                        break;
-                    default:
-                        eDbType = SDB_DBTYPE_DECIMAL;
-                }
-            }
-        }
-        BOOL bSdbLenAdjusted = FALSE;
-        BOOL bSdbLenBad = FALSE;
-        // Feldlaenge
-        if ( eDbType == SDB_DBTYPE_VARCHAR && !nFieldLen )
-        {   // maximale Feldbreite bestimmen
-            nFieldLen = aDocument.GetMaxStringLen( nTab, nCol, nFirstDataRow,
-                nLastRow );
-            if ( nFieldLen == 0 )
-                nFieldLen = 1;
-        }
-        else if ( eDbType == SDB_DBTYPE_DECIMAL )
-        {   // maximale Feldbreite und Nachkommastellen bestimmen
-            xub_StrLen nLen;
-            USHORT nPrec;
-            nLen = aDocument.GetMaxNumberStringLen( nPrec, nTab, nCol,
-                nFirstDataRow, nLastRow );
-            // dBaseIII Limit Nachkommastellen: 15
-            if ( nPrecision > 15 )
-                nPrecision = 15;
-            if ( nPrec > 15 )
-                nPrec = 15;
-            if ( bPrecDefined && nPrecision != nPrec )
-            {   // Laenge auf vorgegebene Nachkommastellen anpassen
-                if ( nPrecision )
-                    nLen += nPrecision - nPrec;
-                else
-                    nLen -= nPrec+1;            // auch den . mit raus
-            }
-            if ( nLen > nFieldLen )
-                nFieldLen = nLen;
-            if ( !bPrecDefined )
-                nPrecision = nPrec;
-            if ( nFieldLen == 0 )
-                nFieldLen = 1;
-            else if ( nFieldLen > 19 )
-                nFieldLen = 19;     // dBaseIII Limit Feldlaenge numerisch: 19
-            if ( nPrecision && nFieldLen < nPrecision + 2 )
-                nFieldLen = nPrecision + 2;     // 0. muss mit reinpassen
-            // 538 MUST: Sdb internal representation adds 2 to the field length!
-            // To give the user what he wants we must substract it here.
-             //! CAVEAT! There is no way to define a numeric field with a length
-             //! of 1 and no decimals!
-            if ( nFieldLen == 1 && nPrecision == 0 )
-                bSdbLenBad = TRUE;
-            nFieldLen = SvDbaseConverter::ConvertPrecisionToOdbc( nFieldLen, nPrecision );
-            bSdbLenAdjusted = TRUE;
-        }
-        if ( nFieldLen > 254 )
-        {
-            if ( eDbType == SDB_DBTYPE_VARCHAR )
-            {   // zu lang fuer normales Textfeld => Memofeld
-                eDbType = SDB_DBTYPE_LONGVARCHAR;
-                nFieldLen = 10;
-                bHasMemo = TRUE;
-            }
-            else
-                nFieldLen = 254;                    // dumm gelaufen..
-        }
-        xTblCol->AddColumn( xConnect->CreateColumn(
-                                    aFieldName,     // feld name (max 10 Zeichen)
-                                    eDbType,        // typ
-                                    nFieldLen,      // feldlaenge
-                                    nPrecision));   // Nachkommastellen
-        // undo change to field length, reflect reality
-        if ( bSdbLenAdjusted )
-        {
-            nFieldLen = SvDbaseConverter::ConvertPrecisionToDbase( nFieldLen, nPrecision );
-            if ( bSdbLenBad && nFieldLen == 1 )
-                nFieldLen = 2;      // THIS is reality
-        }
-        if ( bTypeDefined )
-        {   // Angabe anpassen und ausgeben
-            aOutString = aFieldName;
-            switch ( eDbType )
-            {
-                case SDB_DBTYPE_BOOLEAN :
-                    aOutString.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ",L" ));
-                    break;
-                case SDB_DBTYPE_DATE :
-                    aOutString.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ",D" ));
-                    break;
-                case SDB_DBTYPE_LONGVARCHAR :
-                    aOutString.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ",M" ));
-                    break;
-                case SDB_DBTYPE_VARCHAR :
-                    aOutString.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ",C," ));
-                    aOutString += String::CreateFromInt32( nFieldLen );
-                    break;
-                case SDB_DBTYPE_DECIMAL :
-                    aOutString.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ",N," ));
-                    aOutString += String::CreateFromInt32( nFieldLen );
-                    aOutString += ',';
-                    aOutString += String::CreateFromInt32( nPrecision );
-                    break;
-            }
-            if ( !aOutString.EqualsIgnoreCaseAscii( aString ) )
-            {
-                aDocument.SetString( nCol, nFirstRow, nTab, aOutString );
-                PostPaint( nCol, nFirstRow, nTab, nCol, nFirstRow, nTab, PAINT_GRID );
-            }
-        }
-    }
-    xTable->Update();
-
-    if ( xTable->Status().IsError() )
-        nErr = SCERR_EXPORT_CURSOR;
-    else
-    {
-        SdbCursorRef xCur = xConnect->CreateCursor( SDB_KEYSET, SDB_APPENDONLY );
-        SdbCursor* pCur = &xCur;
-        DBG_ASSERT( pCur, "Cursor" );
-        pCur->Open( aFileName, TRUE );
-
-        if ( !pCur->Status().IsError() )
-        {
-            USHORT nIdx;
-            double fVal;
-            Date aDate;
-            SvNumberFormatter& rFormatter = *aDocument.GetFormatTable();
-            ScFieldEditEngine aEditEngine( aDocument.GetEditPool() );
-            for ( nRow = nFirstDataRow; nRow <= nLastRow; nRow++ )
-            {
-                pCur->AppendRow();
-                for ( nCol = nFirstCol, nIdx = 1; nCol <= nLastCol; nCol++, nIdx++ )
-                {
-                    ODbVariantRef xVar = (*pCur->GetRow())[nIdx];
-                    const SdbColumn* pCol = xTblCol->Column( nIdx );
-                    SdbDatabaseType eType = pCol->GetType();
-                    switch ( eType )
-                    {
-                        case SDB_DBTYPE_LONGVARCHAR :
-                        {
-                            ScBaseCell* pCell;
-                            aDocument.GetCell( nCol, nRow, nTab, pCell );
-                            if ( pCell && pCell->GetCellType() != CELLTYPE_NOTE )
-                            {
-                                if ( pCell->GetCellType() == CELLTYPE_EDIT )
-                                {   // #60761# Paragraphs erhalten
-                                    aEditEngine.SetText( *((ScEditCell*)pCell)->GetData() );
-                                    aString = aEditEngine.GetText( LINEEND_CRLF );
-                                }
-                                else
-                                {
-                                    ULONG nFormat;
-                                    Color* pColor;
-                                    aDocument.GetNumberFormat( nCol, nRow, nTab, nFormat );
-                                    ScCellFormat::GetString( pCell, nFormat, aString, &pColor, rFormatter );
-                                }
-                                xVar->setString( aString );
-                            }
-                            else
-                                xVar->setVoid();
-                        }
-                        break;
-                        case SDB_DBTYPE_VARCHAR :
-                            aDocument.GetString( nCol, nRow, nTab, aString );
-                            xVar->setString( aString );
-                            if ( nErr == eERR_OK && pCol->GetLength() < aString.Len() )
-                                nErr = SCWARN_EXPORT_DATALOST;
-                        break;
-                        case SDB_DBTYPE_DATE :
-                        {
-                            aDocument.GetValue( nCol, nRow, nTab, fVal );
-                            // #39274# zwischen 0 Wert und 0 kein Wert unterscheiden
-                            BOOL bIsNull = (fVal == 0.0);
-                            if ( bIsNull )
-                                bIsNull = !aDocument.HasValueData( nCol, nRow, nTab );
-                            if ( bIsNull )
-                            {
-                                xVar->setVoid();    // sonst Basic-NullDate
-                                if ( nErr == eERR_OK &&
-                                        aDocument.HasStringData( nCol, nRow, nTab ) )
-                                    nErr = SCWARN_EXPORT_DATALOST;
-                            }
-                            else
-                            {
-                                // unser NullDate: 30.12.1899 / 1.1.1900 / 1.1.1904
-                                aDate = *(pNumFmt->GetNullDate());
-                                aDate += (long)fVal;
-                                // Basic NullDate: 30.12.1899
-                                //pVar->PutDate( (double)( aDate - Date(30,12,1899) ) );
-                                xVar->setDate( aDate );
-                            }
-                        }
-                        break;
-                        case SDB_DBTYPE_BOOLEAN :
-                        case SDB_DBTYPE_DECIMAL :
-                        {
-                            aDocument.GetValue( nCol, nRow, nTab, fVal );
-                            if ( fVal == 0.0 && nErr == eERR_OK &&
-                                    aDocument.HasStringData( nCol, nRow, nTab ) )
-                                nErr = SCWARN_EXPORT_DATALOST;
-                            xVar->setDouble( fVal );
-                        }
-                        break;
-                        default:
-                            DBG_ERROR( "ScDocShell::SbaSdbExport: unknown FieldType" );
-                            if ( nErr == eERR_OK )
-                                nErr = SCWARN_EXPORT_DATALOST;
-                            aDocument.GetValue( nCol, nRow, nTab, fVal );
-                            xVar->setDouble( fVal );
-                    }
-                }
-                pCur->UpdateRow();
-                if ( pCur->Status().IsError() )
-                {   // #63824# aussagekraeftige Fehlermeldung
-                    //! 2do: was ist bei Call aus Basic? generelles Problem..
-                    String aMsg;
-                    ScRange aRange( nFirstCol, nRow, nTab, nLastCol, nRow, nTab );
-                    aRange.Format( aMsg, (SCA_VALID | SCA_TAB_3D), &aDocument );
-                    aMsg += '\n';
-                    const SdbStatus& rStat = pCur->Status();
-                    aMsg += rStat.ErrorMessage();
-                    aMsg.AppendAscii(RTL_CONSTASCII_STRINGPARAM( "\n\n" ));
-                    aMsg += rStat.ErrorInfo();
-                    // STR_MSSG_DOSUBTOTALS_0 == "StarCalc"
-                    BOOL bOk = MessBox( GetDialogParent(),
-                        WinBits( WB_OK_CANCEL | WB_DEF_OK ),
-                        ScGlobal::GetRscString( STR_MSSG_DOSUBTOTALS_0 ),
-                        aMsg ).Execute();
-                    if ( bOk )
-                    {
-                        nErr = SCWARN_EXPORT_DATALOST;
-                        // Wenigstens schreiben, was geht,
-                        // SdbCursor UpdateRow schreibt bei Ueberlaeufen nichts.
-                        // Leider laesst sich nicht feststellen, welche Spalte
-                        // den Fehler ausgeloest hat.
-                        //! 2do: Sdb sollte hier einen Spaltenwert liefern
-                        USHORT nCol, nIdx;
-                        for ( nCol = nFirstCol, nIdx = 1; nCol <= nLastCol; nCol++, nIdx++ )
-                        {
-                            switch ( xTblCol->Column( nIdx )->GetType() )
-                            {
-                                case SDB_DBTYPE_DECIMAL :
-                                    //pCur->Variable( nIdx )->PutNull();
-                                    (*pCur->GetRow())[nIdx]->setVoid();
-                                break;
-                            }
-                        }
-                        pCur->UpdateRow();
-                        if ( pCur->Status().IsError() )
-                        {   // Letzter Versuch: eine leere Zeile
-                            for ( nCol = nFirstCol, nIdx = 1; nCol <= nLastCol; nCol++, nIdx++ )
-                            {
-                                //pCur->Variable( nIdx )->PutNull();
-                                (*pCur->GetRow())[nIdx]->setVoid();
-                            }
-                            pCur->UpdateRow();
-                            if ( pCur->Status().IsError() )
-                            {   // da geht anscheinend gar nichts mehr
-                                nErr = SCERR_EXPORT_DATA;
-                                break;  // for ( nRow ... )
-                            }
-                        }
-                    }
-                    else
-                    {
-                        nErr = SCERR_EXPORT_DATA;
-                        break;
-                    }
-                }
-                if ( !aProgress.SetStateOnPercent( nRow - nFirstRow ) )
-                {   // UserBreak
-                    nErr = SCERR_EXPORT_DATA;
-                    break;
-                }
-            }
-        }
-        else
-            nErr = SCERR_EXPORT_CURSOR;
-        pCur->Close();
-    }
-
-    return nErr;
-}
-
 
 BOOL ScDocShell::LoadCalc( SvStorage* pStor )       // StarCalc 3 oder 4 Datei
 {
@@ -1454,14 +971,10 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
                     SfxItemSet* pItemSet = rMedium.GetItemSet();
                     if (pItemSet)
                         pItemSet->Put(SfxStringItem(SID_FILE_FILTEROPTIONS, sCharSet));
-                    String aBaseName = rMedium.GetURLObject().getBase();
-                    String aParString = String::CreateFromAscii(
-                                           RTL_CONSTASCII_STRINGPARAM( "Typ=DBF;Dsn=" ));
-                    aParString += rMedium.GetPhysicalName();    //  Sdb kann keine URLs !!!
-                    aParString.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ";Charset=" ));
-                    aParString += sCharSet;
-                    aParString.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ";deleted;HDR;" ));
-                    ULONG eError = SbaSdbImport( aBaseName, aParString, TRUE, bSimpleColWidth );
+
+                    ULONG eError = DBaseImport( rMedium.GetPhysicalName(),
+                                        GetCharsetValue(sCharSet), bSimpleColWidth );
+
                     if (eError != eERR_OK)
                     {
                         if (!GetError())
@@ -1483,14 +996,10 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
             else
             {
                 sCharSet = sItStr;
-                String aBaseName = rMedium.GetURLObject().getBase();
-                String aParString = String::CreateFromAscii(
-                                       RTL_CONSTASCII_STRINGPARAM( "Typ=DBF;Dsn=" ));
-                aParString += rMedium.GetPhysicalName();    //  Sdb kann keine URLs !!!
-                aParString.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ";Charset=" ));
-                aParString += sCharSet;
-                aParString.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ";deleted;HDR" ));
-                ULONG eError = SbaSdbImport( aBaseName, aParString, TRUE, bSimpleColWidth );
+
+                ULONG eError = DBaseImport( rMedium.GetPhysicalName(),
+                                    GetCharsetValue(sCharSet), bSimpleColWidth );
+
                 if (eError != eERR_OK)
                 {
                     if (!GetError())
@@ -2224,23 +1733,14 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
         else
         {
             WaitObject aWait( GetDialogParent() );
-            String aParString = String::CreateFromAscii(
-                                   RTL_CONSTASCII_STRINGPARAM( "Typ=DBF;Dsn=" ));
             DirEntry aTmpFile( rMed.GetPhysicalName() );
-            // Sdb kann keine URLs !!!
-            // nur Pfad fuer OpenPrivateConnection!
-            aParString += aTmpFile.GetPath().GetFull();
-            // die Extension braucht's auch noch..
-            aParString.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ";Ext=" ));
-            aParString += aTmpFile.GetExtension();
-            // Dateiname mit vollem Pfad ist laenger als 8 Zeichen...
-            aParString.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ";NOFILENAMELIMIT=1" ));
-            aParString.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ";Charset=" ));
-            aParString += sCharSet;
 // HACK damit Sba geoffnetes TempFile ueberschreiben kann
             rMed.CloseOutStream();
             BOOL bHasMemo = FALSE;
-            ULONG eError = SbaSdbExport( bHasMemo, aParString, aTmpFile.GetBase() );
+
+            ULONG eError = DBaseExport( rMed.GetPhysicalName(),
+                                GetCharsetValue(sCharSet), bHasMemo );
+
             if ( eError != eERR_OK && (eError & ERRCODE_WARNING_MASK) )
             {
                 if ( !rMed.GetError() )
