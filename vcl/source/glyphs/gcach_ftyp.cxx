@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 09:33:00 $
+ *  last change: $Author: kz $ $Date: 2004-08-30 16:21:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1025,9 +1025,7 @@ int FreetypeServerFont::GetRawGlyphIndex( sal_UCS4 aChar ) const
 {
     if( mpFontInfo->IsSymbolFont() )
     {
-        if( FT_IS_SFNT( maFaceFT ) )
-            aChar |= 0xF000;    // emulate W2K high/low mapping of symbols
-        else
+        if( !FT_IS_SFNT( maFaceFT ) )
         {
             if( (aChar & 0xFF00) == 0xF000 )
                 aChar &= 0xFF;    // PS font symbol mapping
@@ -1065,6 +1063,12 @@ int FreetypeServerFont::GetRawGlyphIndex( sal_UCS4 aChar ) const
     if( nGlyphIndex < 0 )
     {
         nGlyphIndex = FT_Get_Char_Index( maFaceFT, aChar );
+        if( !nGlyphIndex)
+        {
+            // check if symbol aliasing helps
+            if( (aChar <= 0x00FF) && mpFontInfo->IsSymbolFont() )
+                nGlyphIndex = FT_Get_Char_Index( maFaceFT, aChar | 0xF000 );
+        }
         mpFontInfo->CacheGlyphIndex( aChar, nGlyphIndex );
     }
 
