@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pb $ $Date: 2001-05-07 10:28:20 $
+ *  last change: $Author: pb $ $Date: 2001-05-08 07:05:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,7 @@ private:
 
     DECL_LINK(          SelectHdl_Impl, SvtTemplateWindow* );
     DECL_LINK(          DoubleClickHdl_Impl, SvtTemplateWindow* );
+    DECL_LINK(          OKHdl_Impl, PushButton* );
 
 public:
     SvtDocumentTemplateDialog( Window* pParent );
