@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fubullet.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 10:56:22 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 10:04:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,8 @@
 #include <svtools/sbx.hxx>
 #endif
 #endif
+#include <svx/svxdlg.hxx> //CHINA001
+#include <svx/dialogs.hrc> //CHINA001
 
 namespace sd {
 
@@ -120,7 +122,11 @@ FuBullet::FuBullet (
     : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
 {
 
-    SvxCharacterMap* pDlg = new SvxCharacterMap( NULL, FALSE );
+    //CHINA001 SvxCharacterMap* pDlg = new SvxCharacterMap( NULL, FALSE );
+    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+    DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+    AbstractSvxCharacterMap* pDlg = pFact->CreateSvxCharacterMap( NULL,  ResId(RID_SVXDLG_CHARMAP), FALSE );
+    DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
 
     SfxItemSet aFontAttr( pDoc->GetPool() );
     pView->GetAttributes( aFontAttr );
