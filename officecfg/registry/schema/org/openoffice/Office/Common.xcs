@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: cd $ $Date: 2002-11-19 07:42:58 $
+ *  last change: $Author: jb $ $Date: 2002-11-20 17:03:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -621,8 +621,10 @@
 			<info>
 				<desc xml:lang="en-US">Specifies the object names for the different Office modules.  Each module is assigned to a worldwide unique key. The different object names are filled by the setup.</desc>
 			</info>
-			<prop oor:name="Name" oor:type="xs:string" oor:localized="true"/>
-			<prop oor:name="Key" oor:type="xs:string"/>
+			<prop oor:name="Name" oor:type="xs:string" oor:localized="true">
+			</prop>
+			<prop oor:name="Key" oor:type="xs:string">
+			</prop>
 		</group>
 		<group oor:name="RecoveryEntry">
 			<info>
@@ -1118,6 +1120,7 @@
 						<author>MBA</author>
 						<desc xml:lang="en-US">Contains the Office installation path.</desc>
 					</info>
+					<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 				</prop>
 				<prop oor:name="OfficeInstallURL" oor:type="xs:string">
 					<!-- OldLocation:NEW-->
@@ -1125,6 +1128,7 @@
 						<author>MBA</author>
 						<desc xml:lang="en-US">Contains the Office installation path in URL notation. Must match the UCB configuration.</desc>
 					</info>
+					<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 				</prop>
 				<prop oor:name="Addin" oor:type="xs:string">
 					<info>
@@ -1655,6 +1659,7 @@
 					<author>CD</author>
 					<desc xml:lang="en-US">Specifies the current or last temp directory. This directory will be removed during shutdown or next office start.</desc>
 				</info>
+				<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
 			<set oor:name="RecoveryList" oor:node-type="RecoveryEntry">
 				<info>
@@ -2249,6 +2254,7 @@
 					<info>
 						<deprecated/>
 					</info>
+					<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 				</prop>
 				<prop oor:name="State" oor:type="xs:boolean">
 					<!-- OldPath: soffice_View/Window -->
@@ -2306,6 +2312,7 @@
 					<info>
 						<deprecated/>
 					</info>
+					<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 				</prop>
 			</group>
 			<group oor:name="SplitWindow">
@@ -2321,6 +2328,7 @@
 						<deprecated/>
 						<author>MBA</author>
 					</info>
+					<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 				</prop>
 				<prop oor:name="Version" oor:type="xs:int">
 					<!-- OldPath: soffice_View/SplitWindow -->
@@ -2762,12 +2770,14 @@
 					<author>ABI</author>
 					<desc xml:lang="en-US">Determines the locale for the help pages.</desc>
 				</info>
+				<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
 			<prop oor:name="System" oor:type="xs:string">
 				<info>
 					<author>ABI</author>
 					<desc xml:lang="en-US">Determines the operating system on which the help system is displayed.</desc>
 				</info>
+				<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
 			<prop oor:name="Tip" oor:type="xs:boolean">
 				<!-- OldLocation: Soffice.cfg -->
@@ -2836,11 +2846,13 @@
 					<info>
 						<desc xml:lang="en-US">Contains a string specifying the URL to be used for online registration.</desc>
 					</info>
+					<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 				</prop>
 				<prop oor:name="ReminderDate" oor:type="xs:string">
 					<info>
 						<desc xml:lang="en-US">Contains a string representation of the date on which the user recieves a reminder (e.g. "13.02.2002").</desc>
 					</info>
+					<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 				</prop>
 				<prop oor:name="RequestDialog" oor:type="xs:int">
 					<info>

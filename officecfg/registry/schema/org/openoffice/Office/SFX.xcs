@@ -3,9 +3,9 @@
  *
  *  $RCSfile: SFX.xcs,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tpf $ $Date: 2002-10-25 17:16:41 $
+ *  last change: $Author: jb $ $Date: 2002-11-20 17:03:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@
 					<author>PB</author>
 					<desc xml:lang="en-US">Lists IDs used by SFX to start the help agent.</desc>
 				</info>
+				<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
 		</group>
 	</component>

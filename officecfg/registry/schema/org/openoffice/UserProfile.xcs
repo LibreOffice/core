@@ -3,9 +3,9 @@
  *
  *  $RCSfile: UserProfile.xcs,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tpf $ $Date: 2002-10-25 17:15:48 $
+ *  last change: $Author: jb $ $Date: 2002-11-20 17:03:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@
 					<author>PB</author>
 					<desc xml:lang="en-US">The name of the user's company.</desc>
 				</info>
+				<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
 			<prop oor:name="givenname" oor:type="xs:string">
 				<!-- OldPath: User -->
@@ -87,6 +88,7 @@
 					<author>PB</author>
 					<desc xml:lang="en-US">The first name of the user.</desc>
 				</info>
+				<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
 			<prop oor:name="sn" oor:type="xs:string">
 				<!-- OldPath: User -->
@@ -96,6 +98,7 @@
 					<author>PB</author>
 					<desc xml:lang="en-US">The last name of the user.</desc>
 				</info>
+				<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
 			<prop oor:name="initials" oor:type="xs:string">
 				<!-- OldPath: User -->
@@ -105,6 +108,7 @@
 					<author>PB</author>
 					<desc xml:lang="en-US">The user's initials.</desc>
 				</info>
+				<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
 			<prop oor:name="street" oor:type="xs:string">
 				<!-- OldPath: User -->
@@ -114,6 +118,7 @@
 					<author>PB</author>
 					<desc xml:lang="en-US">The street where the use lives.</desc>
 				</info>
+				<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
 			<prop oor:name="l" oor:type="xs:string">
 				<!-- OldPath: User -->
@@ -123,6 +128,7 @@
 					<author>PB</author>
 					<desc xml:lang="en-US">The city where the user lives.</desc>
 				</info>
+				<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
 			<prop oor:name="st" oor:type="xs:string">
 				<!-- OldPath: User -->
@@ -132,6 +138,7 @@
 					<author>PB</author>
 					<desc xml:lang="en-US">The state where the user lives.</desc>
 				</info>
+				<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
 			<prop oor:name="postalcode" oor:type="xs:string">
 				<!-- OldPath: User -->
@@ -141,6 +148,7 @@
 					<author>PB</author>
 					<desc xml:lang="en-US">The user's ZIP-code.</desc>
 				</info>
+				<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
 			<prop oor:name="c" oor:type="xs:string">
 				<!-- OldPath: User -->
@@ -150,6 +158,7 @@
 					<author>PB</author>
 					<desc xml:lang="en-US">The country where the user lives.</desc>
 				</info>
+				<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
 			<prop oor:name="title" oor:type="xs:string">
 				<!-- OldPath: User -->
@@ -159,6 +168,7 @@
 					<author>PB</author>
 					<desc xml:lang="en-US">The user's title.</desc>
 				</info>
+				<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
 			<prop oor:name="position" oor:type="xs:string">
 				<!-- OldPath: User -->
@@ -168,6 +178,7 @@
 					<author>PB</author>
 					<desc xml:lang="en-US">The users position. This field is only present for backward compatibility. It is not defined for ldap orgPerson.</desc>
 				</info>
+				<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
 			<prop oor:name="homephone" oor:type="xs:string">
 				<!-- OldPath: User -->
@@ -177,6 +188,7 @@
 					<author>PB</author>
 					<desc xml:lang="en-US">The user's private telephone number.</desc>
 				</info>
+				<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
 			<prop oor:name="telephonenumber" oor:type="xs:string">
 				<!-- OldPath: User -->
@@ -186,6 +198,7 @@
 					<author>PB</author>
 					<desc xml:lang="en-US">The user's telephone number at work.</desc>
 				</info>
+				<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
 			<prop oor:name="facsimiletelephonenumber" oor:type="xs:string">
 				<!-- OldPath: User -->
@@ -195,6 +208,7 @@
 					<author>PB</author>
 					<desc xml:lang="en-US">The user's fax number.</desc>
 				</info>
+				<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
 			<prop oor:name="mail" oor:type="xs:string">
 				<!-- OldPath: User -->
@@ -204,6 +218,7 @@
 					<author>PB</author>
 					<desc xml:lang="en-US">The user's e-mail address.</desc>
 				</info>
+				<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
 			<prop oor:name="UserGroup" oor:type="xs:string">
 				<!-- OldPath: User -->

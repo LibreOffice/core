@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Writer.xcs,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: tpf $ $Date: 2002-10-25 17:16:43 $
+ *  last change: $Author: jb $ $Date: 2002-11-20 17:03:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1433,6 +1433,7 @@
 						<desc xml:lang="en-US">Specifies the fax machine that is used when faxing directly from the document.</desc>
 						<label xml:lang="en-US">Fax</label>
 					</info>
+					<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 				</prop>
 			</group>
 			<group oor:name="Papertray">
@@ -2040,6 +2041,7 @@
 									<desc xml:lang="en-US">Text of the caption field.</desc>
 									<label xml:lang="en-US">CaptionText</label>
 								</info>
+								<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 							</prop>
 							<prop oor:name="Position" oor:type="xs:int">
 								<info>
@@ -2159,6 +2161,7 @@
 									<desc xml:lang="en-US">Text of the caption field.</desc>
 									<label xml:lang="en-US">CaptionText</label>
 								</info>
+								<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 							</prop>
 							<prop oor:name="Position" oor:type="xs:int">
 								<info>
@@ -2278,6 +2281,7 @@
 									<desc xml:lang="en-US">Text of the caption field.</desc>
 									<label xml:lang="en-US">CaptionText</label>
 								</info>
+								<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 							</prop>
 							<prop oor:name="Level" oor:type="xs:int">
 								<info>
@@ -2383,6 +2387,7 @@
 									<desc xml:lang="en-US">Text of the caption field.</desc>
 									<label xml:lang="en-US">CaptionText</label>
 								</info>
+								<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 							</prop>
 							<prop oor:name="Position" oor:type="xs:int">
 								<info>
@@ -2502,6 +2507,7 @@
 									<desc xml:lang="en-US">Text of the caption field.</desc>
 									<label xml:lang="en-US">CaptionText</label>
 								</info>
+								<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 							</prop>
 							<prop oor:name="Position" oor:type="xs:int">
 								<info>
@@ -2621,6 +2627,7 @@
 									<desc xml:lang="en-US">Text of the caption field.</desc>
 									<label xml:lang="en-US">CaptionText</label>
 								</info>
+								<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 							</prop>
 							<prop oor:name="Position" oor:type="xs:int">
 								<info>
@@ -2740,6 +2747,7 @@
 									<desc xml:lang="en-US">Text of the caption field.</desc>
 									<label xml:lang="en-US">CaptionText</label>
 								</info>
+								<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 							</prop>
 							<prop oor:name="Position" oor:type="xs:int">
 								<info>
@@ -2859,6 +2867,7 @@
 									<desc xml:lang="en-US">Text of the caption field.</desc>
 									<label xml:lang="en-US">CaptionText</label>
 								</info>
+								<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 							</prop>
 							<prop oor:name="Position" oor:type="xs:int">
 								<info>
@@ -2978,6 +2987,7 @@
 									<desc xml:lang="en-US">Text of the caption field.</desc>
 									<label xml:lang="en-US">CaptionText</label>
 								</info>
+								<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 							</prop>
 							<prop oor:name="Position" oor:type="xs:int">
 								<info>
@@ -3097,6 +3107,7 @@
 									<desc xml:lang="en-US">Text of the caption field.</desc>
 									<label xml:lang="en-US">CaptionText</label>
 								</info>
+								<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 							</prop>
 							<prop oor:name="Position" oor:type="xs:int">
 								<info>
@@ -3824,6 +3835,7 @@
 						<desc xml:lang="en-US">Specifies the label text (address).</desc>
 						<label xml:lang="en-US">Label text</label>
 					</info>
+					<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 				</prop>
 				<prop oor:name="Database" oor:type="xs:string">
 					<!-- OldPath: Writer/Dialog/Labels/Labels -->
@@ -3834,6 +3846,7 @@
 						<desc xml:lang="en-US">Specifies the database used.</desc>
 						<label xml:lang="en-US">Database</label>
 					</info>
+					<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 				</prop>
 			</group>
 			<group oor:name="Medium">
@@ -3860,6 +3873,7 @@
 						<desc xml:lang="en-US">Specifies the brand name of the label format.</desc>
 						<label xml:lang="en-US">Brand</label>
 					</info>
+					<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 				</prop>
 				<prop oor:name="Type" oor:type="xs:string">
 					<!-- OldPath: Writer/Dialog/Labels/Labels -->
@@ -3870,6 +3884,7 @@
 						<desc xml:lang="en-US">Specifies the type of the label format.</desc>
 						<label xml:lang="en-US">Type</label>
 					</info>
+					<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 				</prop>
 			</group>
 			<group oor:name="Format">
@@ -4043,6 +4058,7 @@
 						<desc xml:lang="en-US">Specifies the brand name of the business card format.</desc>
 						<label xml:lang="en-US">Brand</label>
 					</info>
+					<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 				</prop>
 				<prop oor:name="Type" oor:type="xs:string">
 					<!-- OldPath: Writer/Dialog/BusinessCards/Medium -->
@@ -4053,6 +4069,7 @@
 						<desc xml:lang="en-US">Specifies the type of the business card format.</desc>
 						<label xml:lang="en-US">Type</label>
 					</info>
+					<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 				</prop>
 			</group>
 			<group oor:name="Format">
@@ -4757,6 +4774,7 @@
 						<desc xml:lang="en-US">Specifies the recipient&amp;apos;s address.</desc>
 						<label xml:lang="en-US">Addressee</label>
 					</info>
+					<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 				</prop>
 				<prop oor:name="Sender" oor:type="xs:string">
 					<!-- OldPath: Writer/Dialog/Envelope/Envelope -->
@@ -4789,6 +4807,7 @@
 						<desc xml:lang="en-US">Specifies the database to be used for the addressee.</desc>
 						<label xml:lang="en-US">Database</label>
 					</info>
+					<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 				</prop>
 			</group>
 			<group oor:name="Format">
@@ -7827,6 +7846,7 @@
 						<author>OS</author>
 						<desc xml:lang="en-US">Specifies the path for the form letter file.</desc>
 					</info>
+					<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 				</prop>
 				<group oor:name="FileName">
 					<!-- OldLocation: Soffice.cfg -->
