@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:59:05 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:44:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,27 +62,16 @@
 
 PRJ=..$/..
 
-PRJNAME=SVTOOLS
+PRJNAME=svtools
 TARGET=svhtml
 AUTOSEG=true
 LIBTARGET=NO
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
-
-.IF "$(header)" == ""
-
-CXXFILES = \
-        parhtml.cxx 		\
-        htmlkywd.cxx 	\
-        htmlkey2.cxx 	\
-        htmlsupp.cxx 	\
-        htmlout.cxx
 
 OBJFILES =  $(OBJ)$/htmlkey2.obj
 
@@ -105,8 +94,7 @@ LIB4TARGET=$(SLB)$/svhtml2.lib
 LIB4OBJFILES=\
     $(SLO)$/htmlout.obj
 
-.ENDIF
-
 # ==========================================================================
 
 .INCLUDE :  target.mk
+
