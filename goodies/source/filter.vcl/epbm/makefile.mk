@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-15 14:07:34 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:00:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,8 @@ DEPTARGET=vepbm
 CDEFS+= -DEDITDEBUG
 .ENDIF
 
-SRCFILES=	dlgepbm.src \
+SRS1NAME=$(TARGET)
+SRC1FILES=	dlgepbm.src \
             epbmstr.src
 
 SLOFILES =	$(SLO)$/epbm.obj \
