@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.213 $
+ *  $Revision: 1.214 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 16:11:43 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 12:58:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,6 +212,7 @@
 #include <gdimtf.hxx>
 #endif
 
+#include <pdfextoutdevdata.hxx>
 
 using namespace rtl;
 using namespace ::com::sun::star::uno;
@@ -1592,6 +1593,12 @@ void Window::ImplResetReallyVisible()
 
 void Window::ImplSetReallyVisible()
 {
+    // #i43594# it is possible that INITSHOW was never send, because the visibility state changed between
+    // ImplCallInitShow() and ImplSetReallyVisible() when called from Show()
+    // mbReallyShown is a useful indicator
+    if( !mpWindowImpl->mbReallyShown )
+        ImplCallInitShow();
+
     BOOL bBecameReallyVisible = !mpWindowImpl->mbReallyVisible;
 
     mbDevOutput     = TRUE;
@@ -6924,6 +6931,29 @@ void Window::SetPosSizePixel( long nX, long nY,
         }
         if( nFlags & WINDOW_POSSIZE_Y )
             nSysFlags |= SAL_FRAME_POSSIZE_Y;
+
+        if( nSysFlags & (SAL_FRAME_POSSIZE_WIDTH|SAL_FRAME_POSSIZE_HEIGHT) )
+        {
+            // check for min/max client size and adjust size accordingly
+            // otherwise it may happen that the resize event is ignored, i.e. the old size remains
+            // unchanged but ImplHandleResize() is called with the wrong size
+            SystemWindow *pSystemWindow = dynamic_cast< SystemWindow* >( pWindow );
+            if( pSystemWindow )
+            {
+                Size aMinSize = pSystemWindow->GetMinOutputSizePixel();
+                Size aMaxSize = pSystemWindow->GetMaxOutputSizePixel();
+                if( nWidth < aMinSize.Width() )
+                    nWidth = aMinSize.Width();
+                if( nHeight < aMinSize.Height() )
+                    nHeight = aMinSize.Height();
+
+                if( nWidth > aMaxSize.Width() )
+                    nWidth = aMaxSize.Width();
+                if( nHeight > aMaxSize.Height() )
+                    nHeight = aMaxSize.Height();
+            }
+        }
+
         pWindow->mpWindowImpl->mpFrame->SetPosSize( nX, nY, nWidth, nHeight, nSysFlags );
 
         // Resize should be called directly. If we havn't
@@ -9257,13 +9287,17 @@ Reference< ::com::sun::star::rendering::XCanvas > Window::GetFullscreenCanvas( c
     return xCanvas;
 }
 
-void Window::ImplPaintToMetaFile( GDIMetaFile* pMtf, const Region* pOuterClip )
+void Window::ImplPaintToMetaFile( GDIMetaFile* pMtf, OutputDevice* pTargetOutDev, const Region* pOuterClip )
 {
     BOOL bRVisible = mpWindowImpl->mbReallyVisible;
     mpWindowImpl->mbReallyVisible = mpWindowImpl->mbVisible;
     BOOL bDevOutput = mbDevOutput;
     mbDevOutput = TRUE;
 
+    long nOldDPIX = ImplGetDPIX();
+    long nOldDPIY = ImplGetDPIY();
+    mnDPIX = pTargetOutDev->ImplGetDPIX();
+    mnDPIY = pTargetOutDev->ImplGetDPIY();
     BOOL bOutput = IsOutputEnabled();
     EnableOutput();
 
@@ -9281,7 +9315,13 @@ void Window::ImplPaintToMetaFile( GDIMetaFile* pMtf, const Region* pOuterClip )
     // put a push action to metafile
     Push();
     // copy graphics state to metafile
-    SetFont( GetFont() );
+    Font aCopyFont = GetFont();
+    if( nOldDPIX != mnDPIX || nOldDPIY != mnDPIY )
+    {
+        aCopyFont.SetHeight( aCopyFont.GetHeight() * mnDPIY / nOldDPIY );
+        aCopyFont.SetWidth( aCopyFont.GetWidth() * mnDPIX / nOldDPIX );
+    }
+    SetFont( aCopyFont );
     SetTextColor( GetTextColor() );
     if( IsLineColor() )
         SetLineColor( GetLineColor() );
@@ -9338,7 +9378,7 @@ void Window::ImplPaintToMetaFile( GDIMetaFile* pMtf, const Region* pOuterClip )
             sal_Int32 nDeltaY = GetOutOffYPixel() - pChild->GetOutOffYPixel();
             pMtf->Move( nDeltaX, nDeltaY );
             aClip.Move( nDeltaX, nDeltaY );
-            pChild->ImplPaintToMetaFile( pMtf, &aClip );
+            pChild->ImplPaintToMetaFile( pMtf, pTargetOutDev, &aClip );
             pMtf->Move( -nDeltaX, -nDeltaY );
         }
     }
@@ -9356,7 +9396,7 @@ void Window::ImplPaintToMetaFile( GDIMetaFile* pMtf, const Region* pOuterClip )
                 aClip = *pOuterClip;
                 aClip.Move( nDeltaX, nDeltaY );
             }
-            pOverlap->ImplPaintToMetaFile( pMtf, pOuterClip ? &aClip : NULL );
+            pOverlap->ImplPaintToMetaFile( pMtf, pTargetOutDev, pOuterClip ? &aClip : NULL );
             pMtf->Move( -nDeltaX, -nDeltaY );
         }
     }
@@ -9367,13 +9407,14 @@ void Window::ImplPaintToMetaFile( GDIMetaFile* pMtf, const Region* pOuterClip )
     EnableOutput( bOutput );
     mpWindowImpl->mbReallyVisible = bRVisible;
     mbDevOutput = bDevOutput;
+    mnDPIX = nOldDPIX;
+    mnDPIY = nOldDPIY;
 }
 
 void Window::PaintToDevice( OutputDevice* pDev, const Point& rPos, const Size& rSize )
 {
     GDIMetaFile aMF;
     Point       aPos  = pDev->LogicToPixel( rPos );
-    Size        aSize = pDev->LogicToPixel( rSize );
 
     Window* pRealParent = NULL;
     if( ! mpWindowImpl->mbVisible )
@@ -9395,11 +9436,11 @@ void Window::PaintToDevice( OutputDevice* pDev, const Point& rPos, const Size& r
         sal_Int32 nDeltaX = GetOutOffXPixel() - mpWindowImpl->mpBorderWindow->GetOutOffXPixel();
         sal_Int32 nDeltaY = GetOutOffYPixel() - mpWindowImpl->mpBorderWindow->GetOutOffYPixel();
         aMF.Move( nDeltaX, nDeltaY );
-        mpWindowImpl->mpBorderWindow->ImplPaintToMetaFile( &aMF );
+        mpWindowImpl->mpBorderWindow->ImplPaintToMetaFile( &aMF, pDev );
         aMF.Move( -nDeltaX, -nDeltaY );
     }
     else
-        ImplPaintToMetaFile( &aMF );
+        ImplPaintToMetaFile( &aMF, pDev );
 
     mpWindowImpl->mbVisible = bVisible;
 
