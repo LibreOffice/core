@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SettingsExportHelper.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-04 10:57:07 $
+ *  last change: $Author: mtg $ $Date: 2001-05-16 11:48:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,18 +106,14 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XINDEXCONTAINER_HPP_
 #include <com/sun/star/container/XIndexContainer.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FORMULA_SYMBOLDESCRIPTOR_HPP_
+#include <com/sun/star/formula/SymbolDescriptor.hpp>
+#endif
+#ifndef _XMLENUMS_HXX_
+#include <xmlenums.hxx>
+#endif
 
 using namespace ::com::sun::star;
-
-enum XMLForbiddenCharactersEnum
-{
-    XML_FORBIDDEN_CHARACTER_LANGUAGE,
-    XML_FORBIDDEN_CHARACTER_COUNTRY,
-    XML_FORBIDDEN_CHARACTER_VARIANT,
-    XML_FORBIDDEN_CHARACTER_BEGIN_LINE,
-    XML_FORBIDDEN_CHARACTER_END_LINE,
-    XML_FORBIDDEN_CHARACTER_MAX
-};
 
 XMLSettingsExportHelper::XMLSettingsExportHelper(SvXMLExport& rTempExport)
     : rExport(rTempExport)
@@ -217,6 +213,12 @@ void XMLSettingsExportHelper::CallTypeFunction(const uno::Any& rAny,
             else if( aType.equals(getCppuType( (uno::Reference<i18n::XForbiddenCharacters> *)0 ) ) )
             {
                 exportForbiddenCharacters( rAny, rName );
+            }
+            else if( aType.equals(getCppuType( (uno::Sequence<formula::SymbolDescriptor> *)0 ) ) )
+            {
+                uno::Sequence< formula::SymbolDescriptor > aProps;
+                rAny >>= aProps;
+                exportSymbolDescriptors(aProps, rName);
             }
             else if( aType.equals(getCppuType( (const awt::Rectangle *)0 ) ) )
             {
@@ -323,7 +325,67 @@ void XMLSettingsExportHelper::exportSequencePropertyValue(
             CallTypeFunction(aProps[i].Value, aProps[i].Name);
     }
 }
+void XMLSettingsExportHelper::exportSymbolDescriptors(
+                    const uno::Sequence < formula::SymbolDescriptor > &rProps,
+                    const rtl::OUString rName) const
+{
+    uno::Reference< lang::XMultiServiceFactory > xServiceFactory( comphelper::getProcessServiceFactory() );
+    DBG_ASSERT( xServiceFactory.is(), "XMLSettingsExportHelper::exportSymbolDescriptors: got no service manager" );
 
+    if( xServiceFactory.is() )
+    {
+        uno::Reference< container::XIndexContainer > xBox(xServiceFactory->createInstance(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.document.IndexedPropertyValues") ) ), uno::UNO_QUERY);
+        DBG_ASSERT( xBox.is(), "could not create service com.sun.star.document.IndexedPropertyValues" );
+        if (xBox.is() )
+        {
+            const rtl::OUString sName     ( RTL_CONSTASCII_USTRINGPARAM ( "Name" ) );
+            const rtl::OUString sExportName ( RTL_CONSTASCII_USTRINGPARAM ( "ExportName" ) );
+            const rtl::OUString sSymbolSet ( RTL_CONSTASCII_USTRINGPARAM ( "SymbolSet" ) );
+            const rtl::OUString sCharacter ( RTL_CONSTASCII_USTRINGPARAM ( "Character" ) );
+            const rtl::OUString sFontName ( RTL_CONSTASCII_USTRINGPARAM ( "FontName" ) );
+            const rtl::OUString sCharSet  ( RTL_CONSTASCII_USTRINGPARAM ( "CharSet" ) );
+            const rtl::OUString sFamily   ( RTL_CONSTASCII_USTRINGPARAM ( "Family" ) );
+            const rtl::OUString sPitch    ( RTL_CONSTASCII_USTRINGPARAM ( "Pitch" ) );
+            const rtl::OUString sWeight   ( RTL_CONSTASCII_USTRINGPARAM ( "Weight" ) );
+            const rtl::OUString sItalic   ( RTL_CONSTASCII_USTRINGPARAM ( "Italic" ) );
+
+            sal_Int32 nCount = rProps.getLength();
+            const formula::SymbolDescriptor *pDescriptor = rProps.getConstArray();
+
+            for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++, pDescriptor++ )
+            {
+                uno::Sequence < beans::PropertyValue > aSequence ( XML_SYMBOL_DESCRIPTOR_MAX );
+                beans::PropertyValue *pSymbol = aSequence.getArray();
+
+                pSymbol[XML_SYMBOL_DESCRIPTOR_NAME].Name         = sName;
+                pSymbol[XML_SYMBOL_DESCRIPTOR_NAME].Value       <<= pDescriptor->sName;
+                pSymbol[XML_SYMBOL_DESCRIPTOR_EXPORT_NAME].Name  = sExportName;
+                pSymbol[XML_SYMBOL_DESCRIPTOR_EXPORT_NAME].Value<<= pDescriptor->sExportName;
+                pSymbol[XML_SYMBOL_DESCRIPTOR_FONT_NAME].Name    = sFontName;
+                pSymbol[XML_SYMBOL_DESCRIPTOR_FONT_NAME].Value  <<= pDescriptor->sFontName;
+                pSymbol[XML_SYMBOL_DESCRIPTOR_CHAR_SET].Name      = sCharSet;
+                pSymbol[XML_SYMBOL_DESCRIPTOR_CHAR_SET].Value   <<= pDescriptor->nCharSet;
+                pSymbol[XML_SYMBOL_DESCRIPTOR_FAMILY].Name       = sFamily;
+                pSymbol[XML_SYMBOL_DESCRIPTOR_FAMILY].Value <<= pDescriptor->nFamily;
+                pSymbol[XML_SYMBOL_DESCRIPTOR_PITCH].Name        = sPitch;
+                pSymbol[XML_SYMBOL_DESCRIPTOR_PITCH].Value      <<= pDescriptor->nPitch;
+                pSymbol[XML_SYMBOL_DESCRIPTOR_WEIGHT].Name       = sWeight;
+                pSymbol[XML_SYMBOL_DESCRIPTOR_WEIGHT].Value <<= pDescriptor->nWeight;
+                pSymbol[XML_SYMBOL_DESCRIPTOR_ITALIC].Name       = sItalic;
+                pSymbol[XML_SYMBOL_DESCRIPTOR_ITALIC].Value <<= pDescriptor->nItalic;
+                pSymbol[XML_SYMBOL_DESCRIPTOR_SYMBOL_SET].Name       = sSymbolSet;
+                pSymbol[XML_SYMBOL_DESCRIPTOR_SYMBOL_SET].Value <<= pDescriptor->sSymbolSet;
+                pSymbol[XML_SYMBOL_DESCRIPTOR_CHARACTER].Name       = sCharacter;
+                pSymbol[XML_SYMBOL_DESCRIPTOR_CHARACTER].Value  <<= pDescriptor->nCharacter;
+
+                xBox->insertByIndex(nIndex, uno::makeAny( aSequence ));
+            }
+
+            uno::Reference< container::XIndexAccess > xIA( xBox, uno::UNO_QUERY );
+            exportIndexAccess( xIA, rName );
+        }
+    }
+}
 void XMLSettingsExportHelper::exportbase64Binary(
                     const uno::Sequence<sal_Int8>& aProps,
                     const rtl::OUString& rName) const
