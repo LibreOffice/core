@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntctrl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: gt $ $Date: 2001-10-10 08:55:40 $
+ *  last change: $Author: hr $ $Date: 2001-10-12 13:00:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -661,14 +661,17 @@ void SvxFontPrevWindow::Paint( const Rectangle& rRect )
             nX += nStartBracketWidth;
         }
 
-        pImpl->DrawPrev( this, pPrinter, Point( nX, nY - nSmallAscent - 2 ), aSmallFont );
-        pImpl->DrawPrev( this, pPrinter, Point( nX, nY ), aSmallFont );
+        Point aTmpPoint1( nX, nY - nSmallAscent - 2 );
+        Point aTmpPoint2( nX, nY );
+        pImpl->DrawPrev( this, pPrinter, aTmpPoint1, aSmallFont );
+        pImpl->DrawPrev( this, pPrinter, aTmpPoint2, aSmallFont );
 
         nX += nTextWidth;
         if(pImpl->cEndBracket)
         {
+            Point aTmpPoint( nX + 1, nY - nOffset - 4);
             String sBracket(pImpl->cEndBracket);
-            rFont.DrawPrev( this, pPrinter, Point( nX + 1, nY - nOffset - 4), sBracket );
+            rFont.DrawPrev( this, pPrinter, aTmpPoint, sBracket );
         }
         pImpl->aCJKFont.SetSize( aSize );
     }
@@ -676,7 +679,8 @@ void SvxFontPrevWindow::Paint( const Rectangle& rRect )
     {
         DrawLine( Point( 0,  nY ), Point( nX, nY ) );
         DrawLine( Point( nX + aTxtSize.Width(), nY ), Point( aLogSize.Width(), nY ) );
-        pImpl->DrawPrev( this, pPrinter, Point( nX, nY ), rFont );
+        Point aTmpPoint( nX, nY );
+        pImpl->DrawPrev( this, pPrinter, aTmpPoint, rFont );
     }
 }
 /* -----------------------------04.12.00 16:26--------------------------------

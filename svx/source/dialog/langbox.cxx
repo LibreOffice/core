@@ -2,9 +2,9 @@
  *
  *  $RCSfile: langbox.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tl $ $Date: 2001-06-21 09:51:30 $
+ *  last change: $Author: hr $ $Date: 2001-10-12 13:00:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,14 +309,18 @@ void SvxLanguageBox::SetLanguageList( INT16 nLangList,
         if (LANG_LIST_HYPH_USED  & nLangList)
         {
             Reference< XHyphenator > xTmp( SvxGetHyphenator() );
-            if (xTmp.is())
-                aHyphUsedLang = lcl_LocaleSeqToLangSeq( xTmp->getLocales() );
+            if (xTmp.is()) {
+                Sequence < Locale > aLocaleSequence( xTmp->getLocales() );
+                aHyphUsedLang = lcl_LocaleSeqToLangSeq( aLocaleSequence );
+            }
         }
         if (LANG_LIST_THES_USED  & nLangList)
         {
             Reference< XThesaurus > xTmp( SvxGetThesaurus() );
-            if (xTmp.is())
-                aThesUsedLang = lcl_LocaleSeqToLangSeq( xTmp->getLocales() );
+            if (xTmp.is()) {
+                Sequence < Locale > aLocaleSequence( xTmp->getLocales() );
+                aThesUsedLang = lcl_LocaleSeqToLangSeq( aLocaleSequence );
+            }
         }
 
         SvxLanguageTable aLangTable;
