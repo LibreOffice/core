@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: nf $ $Date: 2001-06-05 05:55:39 $
+ *  last change: $Author: fme $ $Date: 2001-06-05 06:59:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2064,8 +2064,9 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     };
     FixedLine FL_SEPARATOR
     {
-        Pos = MAP_APPFONT ( 175 , GB_JAVA_Y + 7 ) ;
-        Size = MAP_APPFONT ( 4 , 40 ) ;
+        Pos = MAP_APPFONT ( 175 , GB_JAVA_Y + 11 ) ;
+        Size = MAP_APPFONT ( 4 , 36 ) ;
+        Vert = TRUE;
     };
     FixedLine GB_EXECUTE
     {
