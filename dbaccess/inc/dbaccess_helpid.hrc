@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbaccess_helpid.hrc,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-05 12:47:30 $
+ *  last change: $Author: fs $ $Date: 2000-12-05 15:58:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,7 @@
 #define UID_CTL_CONTENT                             (HID_DBACCESS_START + 21)
 #define HID_TLB_TABBROWSER                          (HID_DBACCESS_START + 22)
 #define HID_TLB_TREELISTBOX                         (HID_DBACCESS_START + 23)
+#define HID_DSADMIN_DIALOG                          (HID_DBACCESS_START + 24)
 
 #define HID_ADMINDLG_CONNECTERROR                   (HID_DBACCESS_START + 26)
 
@@ -139,6 +140,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2000/12/05 12:47:30  fs
+ *  #80539# removed two obsolete ids
+ *
  *  Revision 1.7  2000/12/05 11:39:45  fs
  *  #80539# HID_GENERIC_SQL_ERROR
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-05 12:47:59 $
+ *  last change: $Author: fs $ $Date: 2000-12-05 15:59:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@ hidspecial UID_CTL_CONTENT                              { HelpId = UID_CTL_CONTE
 hidspecial HID_TLB_TABBROWSER                           { HelpId = HID_TLB_TABBROWSER; };
 hidspecial HID_TLB_TREELISTBOX                          { HelpId = HID_TLB_TREELISTBOX; };
 
+hidspecial HID_DSADMIN_DIALOG                           { HelpId = HID_DSADMIN_DIALOG; };
 hidspecial HID_DSADMIN_DATASOURCE_SELECTOR              { HelpId = HID_DSADMIN_DATASOURCE_SELECTOR; };
 hidspecial HID_DSADMIN_DATASOURCE_NEWDS                 { HelpId = HID_DSADMIN_DATASOURCE_NEWDS; };
 hidspecial HID_DSADMIN_DATASOURCE_DSLIST                { HelpId = HID_DSADMIN_DATASOURCE_DSLIST; };
@@ -126,6 +127,9 @@ hidspecial HID_GENERIC_SQL_ERROR                        { HelpId = HID_GENERIC_S
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2000/12/05 12:47:59  fs
+ *  #80539# removed two obsolete ids
+ *
  *  Revision 1.4  2000/12/05 11:40:56  fs
  *  #80539# HID_GENERIC_SQL_ERROR
  *
