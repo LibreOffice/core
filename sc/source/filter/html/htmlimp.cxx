@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlimp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:04:54 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:37:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,14 +270,14 @@ String ScHTMLImport::GetHTMLRangeNameList( ScDocument* pDoc, const String& rOrig
                     ScRange aRange;
                     if( pRangeData && pRangeData->IsReference( aRange ) && !aRangeList.In( aRange ) )
                     {
-                        ScfTools::AddToken( aNewName, aToken );
+                        ScGlobal::AddToken( aNewName, aToken, ';' );
                         aRangeList.Append( aRange );
                     }
                 }
             }
         }
         else
-            ScfTools::AddToken( aNewName, aToken );
+            ScGlobal::AddToken( aNewName, aToken, ';' );
     }
     return aNewName;
 }
