@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 14:16:34 $
+ *  last change: $Author: kz $ $Date: 2003-12-09 11:58:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,7 +228,6 @@
 #include "writerwordglue.hxx"
 #endif
 
-
 using namespace sw::util;
 using namespace sw::types;
 
@@ -368,10 +367,21 @@ static void WriteDop( SwWW8Writer& rWrt )
 
     const SwDocStat& rDStat = rWrt.pDoc->GetDocStat();
     rDop.cWords = rDStat.nWord;
-    rDop.cCh    = rDStat.nChar;
-    rDop.cPg    = (INT16)rDStat.nPage;
+    rDop.cCh = rDStat.nChar;
+    rDop.cPg = rDStat.nPage;
     rDop.cParas = rDStat.nPara;
     rDop.cLines = rDStat.nPara;
+
+    const SfxDocumentInfo *pInf = rWrt.pDoc->GetInfo();
+    ASSERT(pInf, "No document Info, very suspicious");
+    if (!pInf)
+        rDop.dttmCreated = rDop.dttmRevised = rDop.dttmLastPrint = 0x45FBAC69;
+    else
+    {
+        rDop.dttmCreated = rWrt.GetDTTM(pInf->GetCreated().GetTime());
+        rDop.dttmRevised = rWrt.GetDTTM(pInf->GetChanged().GetTime());
+        rDop.dttmLastPrint = rWrt.GetDTTM(pInf->GetPrinted().GetTime());
+    }
 
     rDop.fProtEnabled = rWrt.pSepx ? rWrt.pSepx->DocumentIsProtected() : 0;
 
@@ -1846,7 +1856,7 @@ wdy     short   :3  E0000000    weekday(Sunday=0
 WW8SaveData::WW8SaveData( SwWW8Writer& rWriter, ULONG nStt, ULONG nEnd )
     : rWrt( rWriter ),
     pOldPam( rWrt.pCurPam ), pOldEnd( rWrt.GetEndPaM() ),
-    pOldFlyFmt( rWrt.pFlyFmt ), pOldPageDesc( rWrt.pAktPageDesc )
+    pOldFlyFmt(rWrt.mpParentFrame), pOldPageDesc( rWrt.pAktPageDesc )
 
 {
     pOldFlyOffset = rWrt.pFlyOffset;
@@ -1895,7 +1905,7 @@ WW8SaveData::~WW8SaveData()
     rWrt.bOutFlyFrmAttrs = bOldFlyFrmAttrs;
     rWrt.bStartTOX = bOldStartTOX;
     rWrt.bInWriteTOX = bOldInWriteTOX;
-    rWrt.pFlyFmt = pOldFlyFmt;
+    rWrt.mpParentFrame = pOldFlyFmt;
     rWrt.pAktPageDesc = pOldPageDesc;
     ASSERT( !rWrt.pO->Count(), " pO ist am Ende von WW8SaveData nicht leer" );
     if( pOOld )
@@ -1916,13 +1926,13 @@ void SwWW8Writer::WriteText()
     {
         SwNode * pNd = pCurPam->GetNode();
 
-        if( pNd->IsTxtNode() ) // blitzschnelle Methode
+        if (pNd->IsTxtNode()) // blitzschnelle Methode
         {
             const SwTxtNode* pTxtNode = pNd->GetTxtNode();
-            if( pTxtNode->GetpSwAttrSet() )
-                Out_SfxBreakItems( *pTxtNode->GetpSwAttrSet(), *pTxtNode );
-            if( !bIsInTable )
-                OutWW8FlyFrmsInCntnt( *pTxtNode ); // als Zeichen gebundene Flys
+            Out_SfxBreakItems(pTxtNode->GetpSwAttrSet(), *pTxtNode);
+            // all textframes anchored as character for the winword 7- format
+            if (!bWrtWW8 && !bIsInTable)
+                OutWW8FlyFrmsInCntnt(*pTxtNode);
         }
 
         if( pNd->IsCntntNode() )
@@ -2187,7 +2197,7 @@ ULONG SwWW8Writer::StoreDoc()
 
     bFtnAtTxtEnd = bEndAtTxtEnd = true;
 
-    pFlyFmt = 0;
+    mpParentFrame = 0;
     pFlyOffset = 0;
     eNewAnchorType = FLY_PAGE;
     nTxtTyp = TXT_MAINTEXT;
@@ -2195,7 +2205,6 @@ ULONG SwWW8Writer::StoreDoc()
     nStyleBeforeFly = nLastFmtId = 0;
     pStyAttr = 0;
     pOutFmtNode = 0;
-    pUsedNumTbl = 0;
     pEscher = 0;
     pRedlAuthors = 0;
     if( aTOXArr.Count() )
@@ -2233,6 +2242,7 @@ ULONG SwWW8Writer::StoreDoc()
     }
 
     maFontHelper.InitFontTable(bWrtWW8, *pDoc);
+    GatherChapterFields();
 
     pFib = new WW8Fib( bWrtWW8 ? 8 : 6 );
 
@@ -2355,7 +2365,10 @@ ULONG SwWW8Writer::StoreDoc()
 
     // Tabelle fuer die freifliegenden Rahmen erzeugen, aber nur wenn
     // das gesamte Dokument geschrieben wird
-    pDoc->GetAllFlyFmts(maFlyPos, bWriteAll ? 0 : pOrigPam, bWrtWW8);
+    if (bWrtWW8)
+        maFrames = GetAllFrames(*pDoc, bWriteAll ? 0 : pOrigPam);
+    else
+        maFrames = GetNonDrawingFrames(*pDoc, bWriteAll ? 0 : pOrigPam);
 
     // set AutoHyphenation flag if found in default para style
     const SfxPoolItem* pItem;
@@ -2373,19 +2386,15 @@ ULONG SwWW8Writer::StoreDoc()
 
     StoreDoc1();
 
-    // loesche die Tabelle mit den freifliegenden Rahmen
-    for (USHORT i = maFlyPos.Count(); i > 0;)
-        delete maFlyPos[--i];
+    if (nRedlineMode != pDoc->GetRedlineMode())
+        pDoc->SetRedlineMode(nRedlineMode);
 
-    if( nRedlineMode != pDoc->GetRedlineMode() )
-        pDoc->SetRedlineMode( nRedlineMode );
-
-    if( pUsedNumTbl )           // all used NumRules
+    if (pUsedNumTbl)           // all used NumRules
     {
         // clear the part of the list array that was copied from the document
         // - it's an auto delete array, so the rest of the array which are
         // duplicated lists that were added during the export will be deleted.
-        pUsedNumTbl->Remove( 0, pUsedNumTbl->Count()-nUniqueList );
+        pUsedNumTbl->Remove(0, pUsedNumTbl->Count()-nUniqueList);
         delete pUsedNumTbl;
     }
 
@@ -2524,8 +2533,8 @@ ULONG SwWW8Writer::WriteStorage()
 }
 
 SwWW8Writer::SwWW8Writer(const String& rFltName)
-    : aMainStg(sMainStream), pISet(0), pUsedNumTbl(0), pBmpPal(0),
-    pKeyMap(0), pOLEExp(0), pOCXExp(0), pOleMap(0), nUniqueList(0),
+    : aMainStg(sMainStream), pISet(0), pUsedNumTbl(0), mpTopNodeOfHdFtPage(0),
+    pBmpPal(0), pKeyMap(0), pOLEExp(0), pOCXExp(0), pOleMap(0), nUniqueList(0),
     pAktPageDesc(0), pPapPlc(0), pChpPlc(0), pChpIter(0), pO(0)
 {
     bWrtWW8 = rFltName.EqualsAscii(FILTER_WW8);
