@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layctrl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: gt $ $Date: 2002-07-31 10:36:25 $
+ *  last change: $Author: os $ $Date: 2002-10-16 08:56:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,7 +297,7 @@ void TableWindow::KeyInput( const KeyEvent& rKEvt )
         USHORT nKey = rKEvt.GetKeyCode().GetCode();
         if( KEY_UP == nKey || KEY_DOWN == nKey ||
             KEY_LEFT == nKey || KEY_RIGHT == nKey ||
-            KEY_RETURN == nKey )
+            KEY_ESCAPE == nKey ||KEY_RETURN == nKey )
         {
             bHandled = TRUE;
             long nNewCol = nCol;
@@ -305,8 +305,14 @@ void TableWindow::KeyInput( const KeyEvent& rKEvt )
             switch(nKey)
             {
                 case KEY_UP :
-                    if(nNewLine)
+                    if(nNewLine > 1)
+                    {
                         nNewLine--;
+                        break;
+                    }
+                //no break;
+                case KEY_ESCAPE:
+                    EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL);
                 break;
                 case KEY_DOWN :
                     nNewLine++;
@@ -610,7 +616,8 @@ void ColumnsWindow::KeyInput( const KeyEvent& rKEvt )
     {
         USHORT nKey = rKEvt.GetKeyCode().GetCode();
         if( KEY_LEFT == nKey || KEY_RIGHT == nKey ||
-            KEY_RETURN == nKey )
+            KEY_RETURN == nKey ||KEY_ESCAPE == nKey ||
+            KEY_UP == nKey)
         {
             bHandled = TRUE;
             long nNewCol = nCol;
@@ -627,6 +634,10 @@ void ColumnsWindow::KeyInput( const KeyEvent& rKEvt )
                     if(IsMouseCaptured())
                         ReleaseMouse();
                     EndPopupMode(FLOATWIN_POPUPMODEEND_CLOSEALL );
+                break;
+                case KEY_ESCAPE :
+                case KEY_UP :
+                    EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL);
                 break;
             }
             //make sure that a table can initially be created
@@ -761,7 +772,7 @@ SfxPopupWindow* SvxTableToolBoxControl::CreatePopupWindow()
     {
         ToolBox& rTbx = GetToolBox();
         TableWindow* pWin = new TableWindow( GetId(), GetBindings(), rTbx );
-        pWin->StartPopupMode( &rTbx, FLOATWIN_POPUPMODE_GRABFOCUS );
+        pWin->StartPopupMode( &rTbx, FLOATWIN_POPUPMODE_GRABFOCUS|FLOATWIN_POPUPMODE_NOKEYCLOSE );
         return pWin;
     }
     return 0;
@@ -826,7 +837,8 @@ SfxPopupWindow* SvxColumnsToolBoxControl::CreatePopupWindow()
     if(bEnabled)
     {
         pWin = new ColumnsWindow( GetId(), GetBindings(), GetToolBox() );
-        pWin->StartPopupMode( &GetToolBox(), FLOATWIN_POPUPMODE_GRABFOCUS );
+        pWin->StartPopupMode( &GetToolBox(),
+                    FLOATWIN_POPUPMODE_GRABFOCUS|FLOATWIN_POPUPMODE_NOKEYCLOSE );
     }
     return pWin;
 }
