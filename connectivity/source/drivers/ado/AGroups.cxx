@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AGroups.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-09 07:05:38 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 15:22:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,7 @@
 #endif
 
 using namespace comphelper;
+using namespace connectivity;
 using namespace connectivity::ado;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -94,7 +95,7 @@ using namespace com::sun::star::container;
 
 typedef connectivity::sdbcx::OCollection OCollection_TYPE;
 // -------------------------------------------------------------------------
-Reference< XNamed > OGroups::createObject(const ::rtl::OUString& _rName)
+sdbcx::ObjectType OGroups::createObject(const ::rtl::OUString& _rName)
 {
     return new OAdoGroup(m_pCatalog,isCaseSensitive(),_rName);
 }
@@ -121,13 +122,6 @@ void OGroups::appendObject( const Reference< XPropertySet >& descriptor )
 void OGroups::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
 {
     m_aCollection.Delete(_sElementName);
-}
-// -----------------------------------------------------------------------------
-Reference< XNamed > OGroups::cloneObject(const Reference< XPropertySet >& _xDescriptor)
-{
-    Reference< XNamed > xName(_xDescriptor,UNO_QUERY);
-    OSL_ENSURE(xName.is(),"Must be a XName interface here !");
-    return xName.is() ? createObject(xName->getName()) : Reference< XNamed >();
 }
 // -----------------------------------------------------------------------------
 
