@@ -137,6 +137,8 @@
             <include name="${package}/Resources.java"/>
             <include name="${package}/XmlUtil.java"/>
             <include name="${package}/Debug.java"/>
+            <include name="${package}/EndianConverter.java"/>
+            <include name="${package}/OfficeUtil.java"/>
         </javac>
         <copy todir="${build.class}/${package}">
             <fileset dir=".">
