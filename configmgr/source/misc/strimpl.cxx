@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strimpl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: lla $ $Date: 2000-11-03 08:51:04 $
+ *  last change: $Author: dg $ $Date: 2000-11-17 08:42:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,6 @@ namespace configmgr
     IMPLEMENT_CONSTASCII_USTRING(TYPE_BOOLEAN, "boolean");
     IMPLEMENT_CONSTASCII_USTRING(TYPE_SHORT,   "short");
     IMPLEMENT_CONSTASCII_USTRING(TYPE_INT,     "int");
-    IMPLEMENT_CONSTASCII_USTRING(TYPE_INTEGER, "integer");
     IMPLEMENT_CONSTASCII_USTRING(TYPE_LONG,    "long");
     IMPLEMENT_CONSTASCII_USTRING(TYPE_DOUBLE,  "double");
     IMPLEMENT_CONSTASCII_USTRING(TYPE_STRING,  "string");
@@ -102,7 +101,9 @@ namespace configmgr
     IMPLEMENT_CONSTASCII_USTRING(ATTR_GROUP,    "group");
     IMPLEMENT_CONSTASCII_USTRING(ATTR_DERIVED,  "cfg:derivedBy");
     IMPLEMENT_CONSTASCII_USTRING(ATTR_INSTANCE, "cfg:element-type");
-    IMPLEMENT_CONSTASCII_USTRING(ATTR_ENCODING, "encoding");
+    IMPLEMENT_CONSTASCII_USTRING(ATTR_STATE,    "state");
+    IMPLEMENT_CONSTASCII_USTRING(ATTR_ENCODING, "cfg:encoding");
+    IMPLEMENT_CONSTASCII_USTRING(ATTR_WRITABLE, "cfg:writable");
     IMPLEMENT_CONSTASCII_USTRING(ATTR_MODE,     "mode");
     IMPLEMENT_CONSTASCII_USTRING(ATTR_PATH,     "path");
 
@@ -111,11 +112,15 @@ namespace configmgr
     IMPLEMENT_CONSTASCII_USTRING(ATTR_VALUE_ADD,    "add");
     IMPLEMENT_CONSTASCII_USTRING(ATTR_VALUE_REMOVE, "remove");
 
-    IMPLEMENT_CONSTASCII_USTRING(ATTR_LANG, "xml:lang");
-    IMPLEMENT_CONSTASCII_USTRING(ATTR_LOCALIZE, "cfg:localized");
+    IMPLEMENT_CONSTASCII_USTRING(ATTR_LANG,      "xml:lang");
+    IMPLEMENT_CONSTASCII_USTRING(ATTR_LOCALIZE,  "cfg:localized");
     IMPLEMENT_CONSTASCII_USTRING(ATTR_SEPARATOR, "cfg:separator");
     IMPLEMENT_CONSTASCII_USTRING(ATTR_NULL,      "xsi:null");
     IMPLEMENT_CONSTASCII_USTRING(ATTR_NULLABLE,  "cfg:nullable");
+
+    // boolean constants
+    IMPLEMENT_CONSTASCII_USTRING(ATTR_VALUE_TRUE,"true");
+    IMPLEMENT_CONSTASCII_USTRING(ATTR_VALUE_FALSE,"false");
 
     // Parameter
     IMPLEMENT_CONSTASCII_USTRING(PARAM_OBJECT, "Object");
@@ -123,6 +128,11 @@ namespace configmgr
     IMPLEMENT_CONSTASCII_USTRING(PARAM_ISNEWOBJECT, "IsNewObject");
 
     IMPLEMENT_CONSTASCII_USTRING(XML_CDATA, "CDATA");
+
+    // States for update actions
+    IMPLEMENT_CONSTASCII_USTRING(STATE_MODIFIED,     "modified");
+    IMPLEMENT_CONSTASCII_USTRING(STATE_REPLACED,     "replaced");
+    IMPLEMENT_CONSTASCII_USTRING(STATE_DELETED,      "deleted");
 
 // emacs:
 // create the declare from the implement
