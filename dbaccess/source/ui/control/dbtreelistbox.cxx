@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtreelistbox.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 09:42:22 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 12:04:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,9 @@
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
 #endif
+#ifndef _SV_HELP_HXX
+#include <vcl/help.hxx>
+#endif
 #ifndef _DBAUI_TABLETREE_HRC_
 #include "tabletree.hrc"
 #endif
@@ -163,7 +166,7 @@ DBTreeListBox::~DBTreeListBox()
         m_aTimer.Stop();
 }
 //------------------------------------------------------------------------
-SvLBoxEntry* DBTreeListBox::GetEntryPosByName(const String& aName,SvLBoxEntry* pStart) const
+SvLBoxEntry* DBTreeListBox::GetEntryPosByName( const String& aName, SvLBoxEntry* pStart, const IEntryFilter* _pFilter ) const
 {
     SvLBoxTreeList* pModel = GetModel();
     SvTreeEntryList* pChilds = pModel->GetChildList(pStart);
@@ -176,7 +179,11 @@ SvLBoxEntry* DBTreeListBox::GetEntryPosByName(const String& aName,SvLBoxEntry* p
             pEntry = static_cast<SvLBoxEntry*>(pChilds->GetObject(i));
             SvLBoxString* pItem = (SvLBoxString*)(pEntry->GetFirstItem(SV_ITEM_ID_LBOXSTRING));
             if ( pItem->GetText().Equals(aName) )
-                break;
+            {
+                if ( !_pFilter || _pFilter->includeEntry( pEntry ) )
+                    // found
+                    break;
+            }
             pEntry = NULL;
         }
     }
@@ -370,6 +377,37 @@ void DBTreeListBox::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
             EndSelection();
         }
     }
+}
+
+// -------------------------------------------------------------------------
+void DBTreeListBox::RequestHelp( const HelpEvent& rHEvt )
+{
+    if ( !m_pActionListener )
+    {
+        SvTreeListBox::RequestHelp( rHEvt );
+        return;
+    }
+
+    if( rHEvt.GetMode() & HELPMODE_QUICK )
+    {
+        Point aPos( ScreenToOutputPixel( rHEvt.GetMousePosPixel() ));
+        SvLBoxEntry* pEntry = GetEntry( aPos );
+        if( pEntry )
+        {
+            String sQuickHelpText;
+            if ( m_pActionListener->requestQuickHelp( pEntry, sQuickHelpText ) )
+            {
+                Size aSize( GetOutputSizePixel().Width(), GetEntryHeight() );
+                Rectangle aScreenRect( OutputToScreenPixel( GetEntryPos( pEntry ) ), aSize );
+
+                Help::ShowQuickHelp( this, aScreenRect,
+                                     sQuickHelpText, QUICKHELP_LEFT | QUICKHELP_VCENTER );
+                return;
+            }
+        }
+    }
+
+    SvTreeListBox::RequestHelp( rHEvt );
 }
 
 // -------------------------------------------------------------------------
