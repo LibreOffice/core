@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormattedField.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-26 12:36:04 $
+ *  last change: $Author: fs $ $Date: 2001-05-18 14:44:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,9 +173,9 @@ using namespace ::com::sun::star::util;
 
 class OMarkableStreamBlock
 {
-        Reference< XMarkableStream >           m_xMarkStream;
-        Reference< XDataInputStream >          m_xInStream;
-        Reference< XDataOutputStream >         m_xOutStream;
+    Reference< XMarkableStream >           m_xMarkStream;
+    Reference< XDataInputStream >          m_xInStream;
+    Reference< XDataOutputStream >         m_xOutStream;
 
     sal_Int32   m_nBlockStart;
     sal_Int32   m_nBlockLen;
@@ -184,11 +184,11 @@ public:
     /** starts reading of a "skippable" block of data within the given input stream<BR>
         The object given by _rxInput must support the XMarkableStream interface.
     */
-        OMarkableStreamBlock(const Reference< XDataInputStream >& _rxInput);
+    OMarkableStreamBlock(const Reference< XDataInputStream >& _rxInput);
     /** starts writing of a "skippable" block of data into the given output stream
         The object given by _rxOutput must support the XMarkableStream interface.
     */
-        OMarkableStreamBlock(const Reference< XDataOutputStream >& _rxOutput);
+    OMarkableStreamBlock(const Reference< XDataOutputStream >& _rxOutput);
 
     ~OMarkableStreamBlock();
 };
@@ -321,7 +321,7 @@ OFormattedControl::OFormattedControl(const Reference<XMultiServiceFactory>& _rxF
 
     increment(m_refCount);
     {   // als FocusListener anmelden
-                Reference<XWindow>  xComp;
+        Reference<XWindow>  xComp;
         if (query_aggregation(m_xAggregate, xComp))
         {
             xComp->addKeyListener(this);
@@ -503,7 +503,7 @@ StringSequence OFormattedModel::getSupportedServiceNames() throw()
 //------------------------------------------------------------------------------
 Reference<com::sun::star::beans::XPropertySetInfo> SAL_CALL OFormattedModel::getPropertySetInfo() throw(RuntimeException)
 {
-        Reference<com::sun::star::beans::XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
+    Reference<com::sun::star::beans::XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
 }
 
@@ -567,7 +567,7 @@ void OFormattedModel::setPropertyToDefaultByHandle(sal_Int32 nHandle)
 {
     if (nHandle == PROPERTY_ID_FORMATSSUPPLIER)
     {   // das aggregierte Model koennte auf die Idee kommen
-                Reference<XNumberFormatsSupplier>  xSupplier = calcDefaultFormatsSupplier();
+        Reference<XNumberFormatsSupplier>  xSupplier = calcDefaultFormatsSupplier();
         DBG_ASSERT(m_xAggregateSet.is(), "OFormattedModel::setPropertyToDefaultByHandle(FORMATSSUPPLIER) : have no aggregate !");
         if (m_xAggregateSet.is())
             m_xAggregateSet->setPropertyValue(PROPERTY_FORMATSSUPPLIER, makeAny(xSupplier));
@@ -901,23 +901,23 @@ void OFormattedModel::write(const Reference<XObjectOutputStream>& _rxOutStream)
     {
         // aus dem FormatKey und dem Formatter persistente Angaben basteln
 
-                Any aKey = m_xAggregateSet->getPropertyValue(PROPERTY_FORMATKEY);
+        Any aKey = m_xAggregateSet->getPropertyValue(PROPERTY_FORMATKEY);
         sal_Int32 nKey = aKey.hasValue() ? getINT32(aKey) : 0;
 
-                Reference<XNumberFormats>  xFormats = xSupplier->getNumberFormats();
+        Reference<XNumberFormats>  xFormats = xSupplier->getNumberFormats();
 
         ::rtl::OUString         sFormatDescription;
         LanguageType    eFormatLanguage = LANGUAGE_DONTKNOW;
 
         static const ::rtl::OUString s_aLocaleProp = ::rtl::OUString::createFromAscii("Locale");
-                Reference<com::sun::star::beans::XPropertySet>  xFormat = xFormats->getByKey(nKey);
+        Reference<com::sun::star::beans::XPropertySet>  xFormat = xFormats->getByKey(nKey);
         if (hasProperty(s_aLocaleProp, xFormat))
         {
-                        Any aLocale = xFormat->getPropertyValue(s_aLocaleProp);
-                        DBG_ASSERT(isA(aLocale, static_cast<Locale*>(NULL)), "OFormattedModel::write : invalid language property !");
-                        if (isA(aLocale, static_cast<Locale*>(NULL)))
+            Any aLocale = xFormat->getPropertyValue(s_aLocaleProp);
+            DBG_ASSERT(isA(aLocale, static_cast<Locale*>(NULL)), "OFormattedModel::write : invalid language property !");
+            if (isA(aLocale, static_cast<Locale*>(NULL)))
             {
-                                Locale* pLocale = (Locale*)aLocale.getValue();
+                Locale* pLocale = (Locale*)aLocale.getValue();
                 eFormatLanguage = ConvertIsoNamesToLanguage(
                     ::rtl::OUStringToOString(pLocale->Language, RTL_TEXTENCODING_ASCII_US).getStr(),
                     ::rtl::OUStringToOString(pLocale->Country, RTL_TEXTENCODING_ASCII_US).getStr()
@@ -943,7 +943,7 @@ void OFormattedModel::write(const Reference<XObjectOutputStream>& _rxOutStream)
 
     // and to be a little bit more compatible we make the following section skippable
     {
-                Reference< XDataOutputStream > xOut(_rxOutStream, UNO_QUERY);
+        Reference< XDataOutputStream > xOut(_rxOutStream, UNO_QUERY);
         OMarkableStreamBlock aDownCompat(xOut);
 
         // a sub version within the skippable block
@@ -983,7 +983,7 @@ void OFormattedModel::read(const Reference<XObjectInputStream>& _rxInStream)
     OEditBaseModel::read(_rxInStream);
     sal_uInt16 nVersion = _rxInStream->readShort();
 
-        Reference<XNumberFormatsSupplier>  xSupplier;
+    Reference<XNumberFormatsSupplier>  xSupplier;
     sal_Int32 nKey = -1;
     switch (nVersion)
     {
@@ -1001,16 +1001,18 @@ void OFormattedModel::read(const Reference<XObjectInputStream>& _rxInStream)
                 // und daraus von einem Formatter zu einem Key zusammenwuerfeln lassen ...
                 xSupplier = calcFormatsSupplier();
                     // calcFormatsSupplier nimmt erst den vom Model, dann einen von der starform, dann einen ganz neuen ....
-                                Reference<XNumberFormats>  xFormats = xSupplier->getNumberFormats();
+                Reference<XNumberFormats>  xFormats = xSupplier->getNumberFormats();
 
                 if (xFormats.is())
                 {
                     UniString sLanguage, sCountry;
                     ConvertLanguageToIsoNames(eDescriptionLanguage, sLanguage, sCountry);
-                                        Locale aDescriptionLanguage(
+                    Locale aDescriptionLanguage(
                         sLanguage,
                         sCountry,
-                        ::rtl::OUString());
+                        ::rtl::OUString()
+                    );
+
                     nKey = xFormats->queryKey(sFormatDescription, aDescriptionLanguage, sal_False);
                     if (nKey == (sal_Int32)-1)
                     {   // noch nicht vorhanden in meinem Formatter ...
@@ -1023,7 +1025,7 @@ void OFormattedModel::read(const Reference<XObjectInputStream>& _rxInStream)
 
             if (nVersion == 0x0003)
             {   // since version 3 there is a "skippable" block at this position
-                                Reference< XDataInputStream > xIn(_rxInStream, UNO_QUERY);
+                Reference< XDataInputStream > xIn(_rxInStream, UNO_QUERY);
                 OMarkableStreamBlock aDownCompat(xIn);
 
                 sal_Int16 nSubVersion = _rxInStream->readShort();
