@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datefunc.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:19:40 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:44:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ czech ] = "Vrátí počet týdnů v zadaném období";
             Text[ hebrew ] = "Berechnet die Anzahl der Wochen in einem bestimmten Zeitraum.";
             Text[ hindi ] = "निर्दिष्ट अवधि में रहनेवाला सप्ताह की संख्या को गणना करता है";
+            Text[ slovak ] = "Vráti počet týždňov v zadanom období";
         };
         String 2 // name of parameter 1         DiffWeeks
         {
@@ -126,6 +127,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ czech ] = "Počáteční datum";
             Text[ hebrew ] = "Ausgangsdatum";
             Text[ hindi ] = "प्रारंभ दिनांक";
+            Text[ slovak ] = "Počiatočný dátum";
         };
         String 3 // description of parameter 1  DiffWeeks
         {
@@ -156,6 +158,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ czech ] = "První den období";
             Text[ hebrew ] = "Erster Tag des Zeitraums.";
             Text[ hindi ] = "अवधि का पहिला दिन";
+            Text[ slovak ] = "Prvý deň obdobia";
         };
         String 4 // name of parameter 2         DiffWeeks
         {
@@ -186,6 +189,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ czech ] = "Koncové datum";
             Text[ hebrew ] = "Enddatum";
             Text[ hindi ] = "अंतिम दिनांक";
+            Text[ slovak ] = "Koncový dátum";
         };
         String 5 // description of parameter 2  DiffWeeks
         {
@@ -216,6 +220,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ czech ] = "Poslední den období";
             Text[ hebrew ] = "Letzter Tag des Zeitraums.";
             Text[ hindi ] = "अवधि का अंतिम दिन";
+            Text[ slovak ] = "Posledný deň obdobia";
         };
         String 6 // name of parameter 3         DiffWeeks
         {
@@ -246,6 +251,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ czech ] = "Typ";
             Text[ hebrew ] = "‮סוג‬";
             Text[ hindi ] = "वर्ग";
+            Text[ slovak ] = "Typ";
         };
         String 7 // description of parameter 3  DiffWeeks
         {
@@ -276,6 +282,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ czech ] = "Typ výpočtu: Typ=0 určuje časový interval, Typ=1 znamená kalendářní týdny.";
             Text[ hebrew ] = "Art der Berechnung: Art=0 für Wochenanzahl im Intervall, Art=1 für Kalenderwochen.";
             Text[ hindi ] = "गणना करने का वर्ग: वर्ग=0 का अर्थ समय का अंतराल है, वर्ग=1 का अर्थ केलन्डर सप्ताह है ।";
+            Text[ slovak ] = "Typ výpočtu: Typ=0 určuje časový interval, Typ=1 znamená kalendárne týždne.";
         };
     };
 
@@ -310,6 +317,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ czech ] = "Vrátí počet měsíců v zadaném období.";
             Text[ hebrew ] = "Berechnet die Anzahl der Monate in einem bestimmten Zeitraum.";
             Text[ hindi ] = "निर्दिष्ट अवधि में मासों की संख्या को निर्धार करता है ।";
+            Text[ slovak ] = "Vráti počet mesiacov v zadanom období.";
         };
         String 2 // name of parameter 1         DiffMonths
         {
@@ -340,6 +348,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ czech ] = "Počáteční datum";
             Text[ hebrew ] = "Ausgangsdatum";
             Text[ hindi ] = "प्रारंभ दिनांक";
+            Text[ slovak ] = "Počiatočný dátum";
         };
         String 3 // description of parameter 1  DiffMonths
         {
@@ -370,6 +379,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ czech ] = "První den období.";
             Text[ hebrew ] = "Erster Tag des Zeitraums.";
             Text[ hindi ] = "अवधि का पहिला दिन ।";
+            Text[ slovak ] = "Prvý deň obdobia.";
         };
         String 4 // name of parameter 2         DiffMonths
         {
@@ -400,6 +410,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ czech ] = "Koncové datum";
             Text[ hebrew ] = "Enddatum";
             Text[ hindi ] = "अंतिम दिनांक";
+            Text[ slovak ] = "Koncový dátum";
         };
         String 5 // description of parameter 2  DiffMonths
         {
@@ -430,6 +441,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ czech ] = "Poslední den období.";
             Text[ hebrew ] = "Letzter Tag des Zeitraums.";
             Text[ hindi ] = "अवधि का अंतिम दिन ।";
+            Text[ slovak ] = "Posledný deň obdobia.";
         };
         String 6 // name of parameter 3         DiffMonths
         {
@@ -460,6 +472,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ czech ] = "Typ";
             Text[ hebrew ] = "‮סוג‬";
             Text[ hindi ] = "वर्ग";
+            Text[ slovak ] = "Typ";
         };
         String 7 // description of parameter 3  DiffMonths
         {
@@ -490,6 +503,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ czech ] = "Typ výpočtu: Typ=0 určuje časový interval, Typ=1 znamená kalendářní měsíce.";
             Text[ hebrew ] = "Art der Berechnung: Art=0 für Monatsanzahl im Intervall, Art=1 für Kalendermonate.";
             Text[ hindi ] = "गणना करने का वर्ग: वर्ग=0 का अर्थ समय का अंतराल है, वर्ग=1 का अर्थ केलन्डर मास है ।";
+            Text[ slovak ] = "Typ výpočtu: Typ=0 určuje časový interval, Typ=1 znamená kalendárne mesiace.";
         };
     };
 
@@ -524,6 +538,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ czech ] = "Vrátí počet roků v zadaném období.";
             Text[ hebrew ] = "Berechnet die Anzahl der Jahre in einem bestimmten Zeitraum.";
             Text[ hindi ] = "निर्दिष्ट अवधि में रहनेवाला वर्षों की संख्या को गणना करता है";
+            Text[ slovak ] = "Vráti počet rokov v zadanom období.";
         };
         String 2 // name of parameter 1         DiffYears
         {
@@ -554,6 +569,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ czech ] = "Počáteční datum";
             Text[ hebrew ] = "Ausgangsdatum";
             Text[ hindi ] = "प्रारंभ दिनांक";
+            Text[ slovak ] = "Počiatočný dátum";
         };
         String 3 // description of parameter 1  DiffYears
         {
@@ -584,6 +600,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ czech ] = "První den období";
             Text[ hebrew ] = "Erster Tag des Zeitraums.";
             Text[ hindi ] = "अवधि का पहिला दिन";
+            Text[ slovak ] = "Prvý deň obdobia";
         };
         String 4 // name of parameter 2         DiffYears
         {
@@ -614,6 +631,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ czech ] = "Koncové datum";
             Text[ hebrew ] = "Enddatum";
             Text[ hindi ] = "अंतिम दिनांक";
+            Text[ slovak ] = "Koncový dátum";
         };
         String 5 // description of parameter 2  DiffYears
         {
@@ -644,6 +662,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ czech ] = "Poslední den období";
             Text[ hebrew ] = "Letzter Tag des Zeitraums.";
             Text[ hindi ] = "अवधि का अंतिम दिन";
+            Text[ slovak ] = "Posledný deň obdobia";
         };
         String 6 // name of parameter 3         DiffYears
         {
@@ -674,6 +693,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ czech ] = "Typ";
             Text[ hebrew ] = "‮סוג‬";
             Text[ hindi ] = "वर्ग";
+            Text[ slovak ] = "Typ";
         };
         String 7 // description of parameter 3  DiffYears
         {
@@ -704,6 +724,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ czech ] = "Typ výpočtu: Typ=0 určuje časový interval, Typ=1 znamená kalendářní roky.";
             Text[ hebrew ] = "Art der Berechnung: Art=0 für Jahresanzahl im Intervall, Art=1 für Kalenderjahre.";
             Text[ hindi ] = "गणना करने का वर्ग: वर्ग=0 का अर्थ समय का अंतराल है, वर्ग=1 का अर्थ केलन्डर वर्ष है ।";
+            Text[ slovak ] = "Typ výpočtu: Typ=0 určuje časový interval, Typ=1 znamená kalendárne roky.";
         };
     };
 
@@ -738,6 +759,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ czech ] = "Vrátí 1 (TRUE) pokud datum je dnem v přestupném roce, jinak vrátí 0 (FALSE).";
             Text[ hebrew ] = "Gibt 1 (WAHR) zurück, wenn das angegebene Datum in einem Schaltjahr liegt, sonst 0 (FALSCH).";
             Text[ hindi ] = "अगर दिनांक अधिकवर्ष का एक दिन है तो 1 (TRUE) को वापस करता है, नहीं तो 0 (FALSE).";
+            Text[ slovak ] = "Vráti 1 (TRUE) ak dátum je dňom v prestupnom roku, inak vráti 0 (FALSE).";
         };
         String 2 // name of parameter 1         IsLeapYear
         {
@@ -768,6 +790,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ czech ] = "Datum";
             Text[ hebrew ] = "‮תאריך‬";
             Text[ hindi ] = "दिनांक";
+            Text[ slovak ] = "Dátum";
         };
         String 3 // description of parameter 1  IsLeapYear
         {
@@ -798,6 +821,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ czech ] = "Jakýkoliv den v požadovaném roce";
             Text[ hebrew ] = "Ein beliebiger Tag im gewünschten Jahr.";
             Text[ hindi ] = "उद्देशित वर्ष का किसी एक दिन";
+            Text[ slovak ] = "Akýkoľvek deň v požadovanom roku";
         };
     };
 
@@ -832,6 +856,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ czech ] = "Vrátí počet dní v měsíci, do kterého patří zadané datum";
             Text[ hebrew ] = "Gibt die Anzahl der Tage des Monats zurück, in dem das angegebene Datum liegt.";
             Text[ hindi ] = "प्रविष्ट की हुयी दिनांक का मास में रहनेवाला दिनों की संख्या को वापस करता है";
+            Text[ slovak ] = "Vráti počet dní v mesiaci, do ktorého patrí zadaný dátum";
         };
         String 2 // name of parameter 1         DaysInMonth
         {
@@ -862,6 +887,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ czech ] = "Datum";
             Text[ hebrew ] = "‮תאריך‬";
             Text[ hindi ] = "दिनांक";
+            Text[ slovak ] = "Dátum";
         };
         String 3 // description of parameter 1  DaysInMonth
         {
@@ -892,6 +918,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ czech ] = "Jakýkoliv den v požadovaném měsíci";
             Text[ hebrew ] = "Ein beliebiger Tag im gewünschten Monat.";
             Text[ hindi ] = "उद्देशित मास का किसी एक दिन";
+            Text[ slovak ] = "Akýkoľvek deň v požadovanom mesiaci";
         };
     };
 
@@ -926,6 +953,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ czech ] = "Vrátí počet dní v roce, do kterého patří zadané datum.";
             Text[ hebrew ] = "Gibt die Anzahl der Tage des Jahres zurück, in dem das angegebene Datum liegt.";
             Text[ hindi ] = "प्रविष्ट की हुयी दिनांक का वर्ष में रहनेवाला दिनों की संख्या को वापस करता है ।";
+            Text[ slovak ] = "Vráti počet dní v roku, do ktorého patrí zadaný dátum.";
         };
         String 2 // name of parameter 1         DaysInYear
         {
@@ -956,6 +984,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ czech ] = "Datum";
             Text[ hebrew ] = "‮תאריך‬";
             Text[ hindi ] = "दिनांक";
+            Text[ slovak ] = "Dátum";
         };
         String 3 // description of parameter 1  DaysInYear
         {
@@ -986,6 +1015,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ czech ] = "Jakýkoliv den v požadovaném roce";
             Text[ hebrew ] = "Ein beliebiger Tag im gewünschten Jahr.";
             Text[ hindi ] = "उद्देशित वर्ष का किसी एक दिन";
+            Text[ slovak ] = "Akýkoľvek deň v požadovanom roku";
         };
     };
 
@@ -1020,6 +1050,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ czech ] = "Vrátí počet týdnů v roce, do kterého patří zadané datum";
             Text[ hebrew ] = "Gibt die Anzahl der Wochen des Jahres zurück, in dem das angegebene Datum liegt.";
             Text[ hindi ] = "प्रविष्ट की हुयी दिनांक का वर्ष में रहनेवाला सप्ताहों की संख्या को वापस करता है";
+            Text[ slovak ] = "Vráti počet týždňov v roku, do ktorého patrí zadaný dátum";
         };
         String 2 // name of parameter 1         WeeksInYear
         {
@@ -1050,6 +1081,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ czech ] = "Datum";
             Text[ hebrew ] = "‮תאריך‬";
             Text[ hindi ] = "दिनांक";
+            Text[ slovak ] = "Dátum";
         };
         String 3 // description of parameter 1  WeeksInYear
         {
@@ -1080,6 +1112,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ czech ] = "Jakýkoliv den v požadovaném roce";
             Text[ hebrew ] = "Ein beliebiger Tag im gewünschten Jahr.";
             Text[ hindi ] = "उद्देशित वर्ष का किसी एक दिन";
+            Text[ slovak ] = "Akýkoľvek deň v požadovanom roku";
         };
     };
 
@@ -1114,6 +1147,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ czech ] = "Šifruje nebo dešifruje text za použití algoritmu ROT13";
             Text[ hebrew ] = "Verschlüsselt oder entschlüsselt einen Text mit Hilfe des ROT13-Algorithmus.";
             Text[ hindi ] = "ROT13 सिद्धांत को उपयोग करके टेक्स्ट् को ऐनक्रिप्ट् अथवा डिक्रिप्ट् करता है";
+            Text[ slovak ] = "Šifruje alebo dešifruje text s použitím algoritmu ROT13";
         };
         String 2 // name of parameter 1         Rot13
         {
@@ -1144,6 +1178,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ czech ] = "Text";
             Text[ hebrew ] = "‮טקסט‬";
             Text[ hindi ] = "टेक्स्ट्";
+            Text[ slovak ] = "Text";
         };
         String 3 // description of parameter 1  Rot13
         {
@@ -1174,6 +1209,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ czech ] = "Text, který má být zašifrován, nebo už zašifrovaný text";
             Text[ hebrew ] = "Zu verschlüsselnder oder verschlüsselter Text.";
             Text[ hindi ] = "टेक्स्ट् को ऐनक्रिप्ट् करना है अथवा टेक्स्ट् को पहिले से ही ऐनक्रिप्ट् किया है";
+            Text[ slovak ] = "Text, ktorý má byť šifrovaný, alebo už zašifrovaný text";
         };
     };
 };
@@ -1210,6 +1246,7 @@ Resource RID_DATE_FUNCTION_NAMES
         Text[ czech ] = "WEEKS";
         Text[ hebrew ] = "WOCHEN";
         Text[ hindi ] = "WEEKS";
+        Text[ slovak ] = "WEEKS";
     };
     String DATE_FUNCNAME_DiffMonths
     {
@@ -1240,6 +1277,7 @@ Resource RID_DATE_FUNCTION_NAMES
         Text[ czech ] = "MONTHS";
         Text[ hebrew ] = "MONATE";
         Text[ hindi ] = "MONTHS";
+        Text[ slovak ] = "MONTHS";
     };
     String DATE_FUNCNAME_DiffYears
     {
@@ -1270,6 +1308,7 @@ Resource RID_DATE_FUNCTION_NAMES
         Text[ czech ] = "YEARS";
         Text[ hebrew ] = "JAHRE";
         Text[ hindi ] = "YEARS";
+        Text[ slovak ] = "YEARS";
     };
     String DATE_FUNCNAME_IsLeapYear
     {
@@ -1300,6 +1339,7 @@ Resource RID_DATE_FUNCTION_NAMES
         Text[ czech ] = "ISLEAPYEAR";
         Text[ hebrew ] = "ISTSCHALTJAHR";
         Text[ hindi ] = "ISLEAPYEAR";
+        Text[ slovak ] = "ISLEAPYEAR";
     };
     String DATE_FUNCNAME_DaysInMonth
     {
@@ -1330,6 +1370,7 @@ Resource RID_DATE_FUNCTION_NAMES
         Text[ czech ] = "DAYSINMONTH";
         Text[ hebrew ] = "TAGEIMMONAT";
         Text[ hindi ] = "DAYSINMONTH";
+        Text[ slovak ] = "DAYSINMONTH";
     };
     String DATE_FUNCNAME_DaysInYear
     {
@@ -1360,6 +1401,7 @@ Resource RID_DATE_FUNCTION_NAMES
         Text[ czech ] = "DAYSINYEAR";
         Text[ hebrew ] = "TAGEIMJAHR";
         Text[ hindi ] = "DAYSINYEAR";
+        Text[ slovak ] = "DAYSINYEAR";
     };
     String DATE_FUNCNAME_WeeksInYear
     {
@@ -1390,6 +1432,7 @@ Resource RID_DATE_FUNCTION_NAMES
         Text[ czech ] = "WEEKSINYEAR";
         Text[ hebrew ] = "WOCHENIMJAHR";
         Text[ hindi ] = "WEEKSINYEAR";
+        Text[ slovak ] = "WEEKSINYEAR";
     };
     String DATE_FUNCNAME_Rot13
     {
@@ -1420,6 +1463,7 @@ Resource RID_DATE_FUNCTION_NAMES
         Text[ czech ] = "ROT13";
         Text[ hebrew ] = "ROT13";
         Text[ hindi ] = "ROT13";
+        Text[ slovak ] = "ROT13";
     };
 };
 
@@ -1492,6 +1536,8 @@ Resource RID_DATE_DEFFUNCTION_NAMES
         };
     };
 };
+
+
 
 
 
