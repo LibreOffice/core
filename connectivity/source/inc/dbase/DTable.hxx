@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-11 08:42:48 $
+ *  last change: $Author: fs $ $Date: 2000-12-12 07:09:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,6 @@ namespace connectivity
             DBFHeader       m_aHeader;
             DBFMemoHeader   m_aMemoHeader;
             SvStream*       m_pMemoStream;
-            sal_Bool        m_bWriteable;
             sal_Bool        m_bWriteableMemo;
             sal_Bool        m_bValid;       // set to false when this isn't a correct dbase table
 
