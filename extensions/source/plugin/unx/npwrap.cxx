@@ -2,9 +2,9 @@
  *
  *  $RCSfile: npwrap.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 12:38:48 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:16:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,113 +61,126 @@
 #include <errno.h>
 #include <dlfcn.h>
 #include <unistd.h>
+#include <fcntl.h>
+#include <signal.h>
 
 #include <plugin/unx/plugcon.hxx>
 
-
 PluginConnector* pConnector = NULL;
-
-NPWindow aNPWindow;
-NPSetWindowCallbackStruct aNPSetWindowCallbackStruct;
 
 int         nAppArguments = 0;
 char**      pAppArguments = NULL;
 Display*    pAppDisplay = NULL;
 
 extern void* pPluginLib;
+extern NPError (*pNP_Shutdown)();
+
+XtAppContext app_context;
+Widget topLevel = NULL, topBox = NULL;
+int wakeup_fd[2] = { 0, 0 };
+static bool bPluginAppQuit = false;
 
 static long GlobalConnectionLostHdl( void* pInst, void* pArg )
 {
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "xhello exiting due to connection lost\n" );
-#endif
-    exit( 0 );
+    medDebug( 1, "pluginapp exiting due to connection lost\n" );
+
+    write( wakeup_fd[1], "xxxx", 4 );
     return 0;
 }
 
-XtAppContext app_context;
-Widget topLevel, hello;
-
-void ThreadEventHandler( Widget widget, XtPointer closure,
-                         XEvent* pEvent, XLIB_Boolean* dispatch_further )
+extern "C"
 {
-    if( pEvent->type == ClientMessage &&
-        pEvent->xclient.format == 32 &&
-        pEvent->xclient.data.l[0] == 1 &&
-        pEvent->xclient.data.l[1] == 2 &&
-        pEvent->xclient.data.l[2] == 3 &&
-        pEvent->xclient.data.l[3] == 4 &&
-        pEvent->xclient.data.l[4] == 5 )
+    static int plugin_x_error_handler( Display*, XErrorEvent* )
     {
-        *dispatch_further = False;
-        pConnector->CallWorkHandler();
+        return 0;
     }
-    else
-        *dispatch_further = True;
+
+    static void ThreadEventHandler( XtPointer client_data, int* source, XtInputId* id )
+    {
+        char buf[256];
+        // clear pipe
+        int len, nLast = -1;
+
+        while( (len = read( wakeup_fd[0], buf, sizeof( buf ) ) ) > 0 )
+            nLast = len-1;
+        if( ! bPluginAppQuit )
+        {
+            if( ( nLast == -1  || buf[nLast] != 'x' ) && pConnector )
+                pConnector->CallWorkHandler();
+            else
+            {
+                // it seems you can use XtRemoveInput only
+                // safely from within the callback
+                // why is that ?
+                medDebug( 1, "removing wakeup pipe\n" );
+                XtRemoveInput( *id );
+                XtAppSetExitFlag( app_context );
+                bPluginAppQuit = true;
+
+                delete pConnector;
+                pConnector = NULL;
+            }
+        }
+    }
 }
+
 
 IMPL_LINK( PluginConnector, NewMessageHdl, Mediator*, pMediator )
 {
-    XEvent aEvent;
-    aEvent.type = ClientMessage;
-    aEvent.xclient.display = XtDisplay( topLevel );
-    aEvent.xclient.message_type = XA_STRING;
-    aEvent.xclient.window = XtWindow( topLevel );
-    aEvent.xclient.format = 32;
-    aEvent.xclient.data.l[0] = 1;
-    aEvent.xclient.data.l[1] = 2;
-    aEvent.xclient.data.l[2] = 3;
-    aEvent.xclient.data.l[3] = 4;
-    aEvent.xclient.data.l[4] = 5;
-    XSendEvent( XtDisplay( topLevel ),
-                XtWindow( topLevel ), False,
-                0, &aEvent );
-    XFlush( XtDisplay( topLevel ) );
+    medDebug( 1, "new message handler\n" );
+    write( wakeup_fd[1], "cccc", 4 );
     return 0;
+
 }
 
-#if defined USE_MOTIF
-Widget createSubWidget( char* pPluginText, Widget shell )
+Widget createSubWidget( char* pPluginText, Widget shell, XLIB_Window aParentWindow )
 {
-    Widget newWidget;
-      newWidget = XtVaCreateManagedWidget(
-          "hello",
+    Widget newWidget = XtVaCreateManagedWidget(
+          "drawingArea",
+#if defined USE_MOTIF
         xmDrawingAreaWidgetClass,
+#else
+        labelWidgetClass,
+#endif
           shell,
+        XtNwidth, 200,
+        XtNheight, 200,
           NULL );
+    XtRealizeWidget( shell );
+
+    medDebug( 1, "Reparenting new widget %x to %x\n", XtWindow( newWidget ), aParentWindow );
+    XReparentWindow( pAppDisplay,
+                     XtWindow( shell ),
+                     aParentWindow,
+                     0, 0 );
+    XtMapWidget( shell );
+    XtMapWidget( newWidget );
+    XRaiseWindow( pAppDisplay, XtWindow( shell ) );
+    XSync( pAppDisplay, False );
 
     return newWidget;
 }
-#else
-Widget createSubWidget( char* pPluginText, Widget shell )
-{
-    hello = XtVaCreateManagedWidget(
-        pPluginText,
-        labelWidgetClass,
-        shell,
-        NULL );
 
-    return hello;
-}
-#endif
-
-void* CreateNewShell( void** pShellReturn )
+void* CreateNewShell( void** pShellReturn, XLIB_Window aParentWindow )
 {
+    XLIB_String n, c;
+    XtGetApplicationNameAndClass(pAppDisplay, &n, &c);
+
     Widget newShell =
-        XtVaAppCreateShell( "SOPluginApp", "SOPluginApp",
-                            applicationShellWidgetClass,
+        XtVaAppCreateShell( "pane", c,
+                            topLevelShellWidgetClass,
                             pAppDisplay,
-                            XtNwidth, 10,
-                            XtNheight, 10,
+                            XtNwidth, 200,
+                            XtNheight, 200,
                             XtNoverrideRedirect, True,
                             NULL );
+    *pShellReturn = newShell;
+
     char pText[1024];
     sprintf( pText, "starting plugin %s ...", pAppArguments[2] );
-    Widget newWidget = createSubWidget( pText, newShell );
 
-    XtRealizeWidget( newShell );
+    Widget newWidget = createSubWidget( pText, newShell, aParentWindow );
 
-    *pShellReturn = newShell;
     return newWidget;
 }
 
@@ -179,9 +192,7 @@ static void CheckPlugin( const char* pPath )
     void *pLib = dlopen( pPath, RTLD_LAZY );
     if( ! pLib )
     {
-#if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "could not dlopen( %s ) (%s)\n", pPath, dlerror() );
-#endif
+        medDebug( 1, "could not dlopen( %s ) (%s)\n", pPath, dlerror() );
         return;
     }
 
@@ -189,10 +200,9 @@ static void CheckPlugin( const char* pPath )
         dlsym( pLib, "NP_GetMIMEDescription" );
     if( pNP_GetMIMEDescription )
         printf( "%s\n", pNP_GetMIMEDescription() );
-#if OSL_DEBUG_LEVEL > 1
     else
-        fprintf( stderr, "could not dlsym NP_GetMIMEDescription (%s)\n", dlerror() );
-#endif
+        medDebug( 1, "could not dlsym NP_GetMIMEDescription (%s)\n", dlerror() );
+
     dlclose( pLib );
 }
 
@@ -212,32 +222,45 @@ static void LoadAdditionalLibs( const char* pPluginLib )
 #endif
 }
 
-#if OSL_DEBUG_LEVEL > 1
-#ifdef LINUX
+#if OSL_DEBUG_LEVEL > 1 && defined LINUX
 #include <execinfo.h>
-#include <signal.h>
-void signal_handler( int nSig )
-{
-    void* pStack[64];
-    fprintf( stderr, "caught signal %d, exiting\n", nSig );
-    int nStackLevels = backtrace( pStack, sizeof(pStack)/sizeof(pStack[0]) );
-    backtrace_symbols_fd( pStack, nStackLevels, STDERR_FILENO );
-    _exit(nSig);
-}
-#endif
 #endif
 
-main( int argc, char **argv)
+extern "C" {
+
+static void signal_handler( int nSig )
 {
 #if OSL_DEBUG_LEVEL > 1
+    fprintf( stderr, "caught signal %d, exiting\n", nSig );
 #ifdef LINUX
+    void* pStack[64];
+    int nStackLevels = backtrace( pStack, sizeof(pStack)/sizeof(pStack[0]) );
+    backtrace_symbols_fd( pStack, nStackLevels, STDERR_FILENO );
+#endif
+#endif
+    if( pConnector )
+    {
+        // ensure that a read on the other side will wakeup
+        delete pConnector;
+        pConnector = NULL;
+    }
+
+    _exit(nSig);
+}
+
+}
+
+int main( int argc, char **argv)
+{
     struct sigaction aSigAction;
     aSigAction.sa_handler = signal_handler;
     sigemptyset( &aSigAction.sa_mask );
     aSigAction.sa_flags = SA_NOCLDSTOP;
     sigaction( SIGSEGV, &aSigAction, NULL );
-#endif
-#endif
+    sigaction( SIGBUS, &aSigAction, NULL );
+    sigaction( SIGABRT, &aSigAction, NULL );
+    sigaction( SIGTERM, &aSigAction, NULL );
+    sigaction( SIGILL, &aSigAction, NULL );
 
     int nArg = (argc < 3) ? 1 : 2;
     char* pBaseName = argv[nArg] + strlen(argv[nArg]);
@@ -255,6 +278,40 @@ main( int argc, char **argv)
 
     XInitThreads();
 
+    XSetErrorHandler( plugin_x_error_handler );
+
+    if( pipe( wakeup_fd ) )
+    {
+        medDebug( 1, "could not pipe()\n" );
+        return 1;
+    }
+    // initialize 'wakeup' pipe.
+    int flags;
+
+    // set close-on-exec descriptor flag.
+    if ((flags = fcntl (wakeup_fd[0], F_GETFD)) != -1)
+    {
+        flags |= FD_CLOEXEC;
+        fcntl (wakeup_fd[0], F_SETFD, flags);
+    }
+    if ((flags = fcntl (wakeup_fd[1], F_GETFD)) != -1)
+    {
+        flags |= FD_CLOEXEC;
+        fcntl (wakeup_fd[1], F_SETFD, flags);
+    }
+
+    // set non-blocking I/O flag.
+    if ((flags = fcntl (wakeup_fd[0], F_GETFL)) != -1)
+    {
+        flags |= O_NONBLOCK;
+        fcntl (wakeup_fd[0], F_SETFL, flags);
+    }
+    if ((flags = fcntl (wakeup_fd[1], F_GETFL)) != -1)
+    {
+        flags |= O_NONBLOCK;
+        fcntl (wakeup_fd[1], F_SETFL, flags);
+    }
+
     pPluginLib = dlopen( argv[2], RTLD_LAZY );
     if( ! pPluginLib )
     {
@@ -264,54 +321,42 @@ main( int argc, char **argv)
     }
     int nSocket = atol( argv[1] );
 
-    pConnector = new PluginConnector( nSocket );
-    pConnector->SetConnectionLostHdl( Link( NULL, GlobalConnectionLostHdl ) );
+     pConnector = new PluginConnector( nSocket );
+     pConnector->SetConnectionLostHdl( Link( NULL, GlobalConnectionLostHdl ) );
 
     XtSetLanguageProc( NULL, NULL, NULL );
 
-    topLevel = XtVaAppInitialize(
+    topLevel = XtVaOpenApplication(
         &app_context,       /* Application context */
         "SOPlugin",         /* Application class */
         NULL, 0,            /* command line option list */
         &argc, argv,        /* command line args */
         NULL,               /* for missing app-defaults file */
+        topLevelShellWidgetClass,
         XtNoverrideRedirect, True,
         NULL);              /* terminate varargs list */
     pAppDisplay = XtDisplay( topLevel );
-    XtAddRawEventHandler( topLevel, 0, True, ThreadEventHandler, NULL );
 
-    char pText[1024];
-    sprintf( pText, "starting plugin %s ...", pAppArguments[2] );
-    hello = createSubWidget( pText, topLevel );
+    XtAppAddInput( app_context,
+                   wakeup_fd[0],
+                   (XtPointer)XtInputReadMask,
+                   ThreadEventHandler, NULL );
 
     /*
      *  Create windows for widgets and map them.
      */
-    XtRealizeWidget(topLevel);
-
     INT32 nWindow;
     sscanf( argv[3], "%d", &nWindow );
-    medDebug( 1, "Reparenting topLevel to %x\n", nWindow );
-      XReparentWindow( pAppDisplay,
-                       XtWindow( topLevel ),
-                       (XLIB_Window)nWindow,
-                       0, 0 );
+    char pText[1024];
+    sprintf( pText, "starting plugin %s ...", pAppArguments[2] );
+    topBox = createSubWidget( pText, topLevel, (XLIB_Window)nWindow );
 
-    XSync( XtDisplay( hello ), False );
 
-    // send that we are ready to go
-       MediatorMessage* pMessage =
-           pConnector->Transact( "init req", 8,
-                                 NULL );
-       delete pMessage;
-
-    aNPSetWindowCallbackStruct.display      = pAppDisplay;
-    aNPSetWindowCallbackStruct.visual       = (Visual*)
-        XDefaultVisual( pAppDisplay, XDefaultScreen( pAppDisplay ) );
-    aNPSetWindowCallbackStruct.colormap     = (Colormap)
-        XDefaultColormap( pAppDisplay, XDefaultScreen( pAppDisplay ) );
-    aNPSetWindowCallbackStruct.depth        =
-        DefaultDepth( pAppDisplay, XDefaultScreen( pAppDisplay ) );
+     // send that we are ready to go
+    MediatorMessage* pMessage =
+        pConnector->Transact( "init req", 8,
+                              NULL );
+    delete pMessage;
 
 #if OSL_DEBUG_LEVEL > 3
     int nPID = getpid();
@@ -319,7 +364,7 @@ main( int argc, char **argv)
     if( nChild == 0 )
     {
         char pidbuf[16];
-        const char* pArgs[] = { "xterm", "-sl", "2000", "-sb", "-e", "gdb53", "pluginapp.bin", pidbuf, NULL };
+        const char* pArgs[] = { "xterm", "-sl", "2000", "-sb", "-e", "gdb", "pluginapp.bin", pidbuf, NULL };
         sprintf( pidbuf, "%d", nPID );
         execvp( pArgs[0], pArgs );
         _exit(255);
@@ -331,7 +376,26 @@ main( int argc, char **argv)
     /*
      *  Loop for events.
      */
-    XtAppMainLoop(app_context);
+    // for some reason XtAppSetExitFlag won't quit the application
+    // in ThreadEventHandler most of times; Xt will hang in select
+    // (hat is in XtAppNextEvent). Have our own mainloop instead
+    // of XtAppMainLoop
+    do
+    {
+        XtAppProcessEvent( app_context, XtIMAll );
+    } while( ! XtAppGetExitFlag( app_context ) && ! bPluginAppQuit );
+
+    medDebug( 1, "left plugin app main loop\n" );
+
+    pNP_Shutdown();
+    medDebug( 1, "NP_Shutdown done\n" );
+    dlclose( pPluginLib );
+    medDebug( 1, "plugin close\n" );
+
+    close( wakeup_fd[0] );
+    close( wakeup_fd[1] );
+
+    return 0;
 }
 
 #ifdef GCC
@@ -349,3 +413,4 @@ extern "C" {
     { free(pMem); }
 }
 #endif
+
