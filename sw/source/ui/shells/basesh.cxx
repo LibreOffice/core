@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-02 17:43:37 $
+ *  last change: $Author: os $ $Date: 2001-02-27 12:21:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1373,7 +1373,6 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                 //bis dahin wird der Slot disabled
                 if( bIsGraphicSelection && rSh.IsGrfSwapOut( TRUE ))
                 {
-                    rSet.DisableItem( nWhich );
                     if( AddGrfUpdateSlot( nWhich ))
                         rSh.GetGraphic(FALSE);  // start the loading
                 }
@@ -2537,6 +2536,9 @@ void SwBaseShell::ExecField( SfxRequest& rReq )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2001/02/02 17:43:37  jp
+    use new clipboard
+
     Revision 1.4  2000/12/22 12:07:32  jp
     Bug #81672#: asynch loaded graphics for status updates
 
