@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: mtg $ $Date: 2001-11-01 15:10:56 $
+ *  last change: $Author: mtg $ $Date: 2001-11-06 18:52:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1176,6 +1176,8 @@ public:
 
     sal_Bool    SetProperty(const String& rName, Any aVal);
     sal_Bool    GetProperty(const String& rName, Any*& rpAny);
+    sal_Bool    ClearProperty( const OUString& rPropertyName );
+    void    ClearAllProperties( );
     void        GetProperty(const OUString &rPropertyName, const Reference < XPropertySet > &rxPropertySet, uno::Any& rAny );
 
 
@@ -1222,6 +1224,33 @@ sal_Bool SwStyleProperties_Impl::SetProperty(const String& rName, Any aVal)
         pAnyArr[nPos] = new Any ( aVal );
     }
     return nPos < nArrLen;
+}
+
+sal_Bool SwStyleProperties_Impl::ClearProperty( const OUString& rName )
+{
+    sal_uInt16 nPos = 0;
+    const SfxItemPropertyMap* pTemp = _pMap;
+    while( pTemp->pName )
+    {
+        if( rName.equalsAsciiL ( pTemp->pName, pTemp->nNameLen ) )
+            break;
+        ++nPos;
+        ++pTemp;
+    }
+    if( nPos < nArrLen )
+    {
+        delete pAnyArr[nPos];
+        pAnyArr[ nPos ] = 0;
+    }
+    return nPos < nArrLen;
+}
+void SwStyleProperties_Impl::ClearAllProperties( )
+{
+    for ( sal_uInt16 i = 0; i < nArrLen; i++ )
+    {
+        delete pAnyArr[i];
+        pAnyArr[ i ] = 0;
+    }
 }
 //--------------------------------------------------------------------
 //--------------------------------------------------------------------
@@ -2598,6 +2627,7 @@ void SAL_CALL SwXStyle::setPropertiesToDefault( const Sequence< OUString >& aPro
     throw (UnknownPropertyException, RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
+    SwFmt *pTargetFmt = 0;
 
     if(pBasePool)
     {
@@ -2608,23 +2638,13 @@ void SAL_CALL SwXStyle::setPropertiesToDefault( const Sequence< OUString >& aPro
         if(pBase)
         {
             SwDocStyleSheet aStyle( *(SwDocStyleSheet*)pBase );
-            SwFmt *pTargetFmt = 0;
             sal_Int8 nPropSetId;
             switch(eFamily)
             {
-                case SFX_STYLE_FAMILY_CHAR:
-                    nPropSetId = PROPERTY_SET_CHAR_STYLE;
-                    pTargetFmt = aStyle.GetCharFmt();
-                case SFX_STYLE_FAMILY_PARA:
-                    nPropSetId = PROPERTY_SET_PARA_STYLE;
-                    pTargetFmt = aStyle.GetCollection();
-                    break;
-                case SFX_STYLE_FAMILY_FRAME:
-                    nPropSetId = PROPERTY_SET_FRAME_STYLE;
-                    pTargetFmt = aStyle.GetFrmFmt();
-                    break;
+                case SFX_STYLE_FAMILY_CHAR: pTargetFmt = aStyle.GetCharFmt(); break;
+                case SFX_STYLE_FAMILY_PARA: pTargetFmt = aStyle.GetCollection(); break;
+                case SFX_STYLE_FAMILY_FRAME: pTargetFmt = aStyle.GetFrmFmt(); break;
                 case SFX_STYLE_FAMILY_PAGE:
-                    nPropSetId = PROPERTY_SET_PAGE_STYLE;
                     {
                         sal_uInt16 nPgDscPos = USHRT_MAX;
                         SwPageDesc *pDesc = m_pDoc->FindPageDescByName( aStyle.GetPageDesc()->GetName(), &nPgDscPos );
@@ -2633,32 +2653,44 @@ void SAL_CALL SwXStyle::setPropertiesToDefault( const Sequence< OUString >& aPro
                     }
                     break;
                 case SFX_STYLE_FAMILY_PSEUDO:
-                    nPropSetId = PROPERTY_SET_NUM_STYLE;
                     break;
-            }
-
-            const SfxItemPropertyMap* pMap = aSwMapProvider.GetPropertyMap(nPropSetId);
-            const OUString* pNames = aPropertyNames.getConstArray();
-
-            for(sal_Int32 nProp = 0, nEnd = aPropertyNames.getLength(); nProp < nEnd; nProp++)
-            {
-                pMap = SfxItemPropertyMap::GetByName( pMap, pNames[nProp]);
-                if(!pMap)
-                {
-                    UnknownPropertyException aExcept;
-                    aExcept.Message = pNames[nProp];
-                    throw aExcept;
-                }
-                if ( pMap->nWID == FN_UNO_FOLLOW_STYLE || pMap->nWID == FN_UNO_NUM_RULES )
-                    throw RuntimeException();
-                if ( pMap->nFlags & PropertyAttribute::READONLY)
-                    throw RuntimeException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
-
-                pTargetFmt->ResetAttr ( pMap->nWID);
             }
         }
     }
+    sal_Int8 nPropSetId = PROPERTY_SET_CHAR_STYLE;
+    switch(eFamily)
+    {
+        case SFX_STYLE_FAMILY_PARA: nPropSetId = PROPERTY_SET_PARA_STYLE  ; break;
+        case SFX_STYLE_FAMILY_FRAME: nPropSetId = PROPERTY_SET_FRAME_STYLE ;break;
+        case SFX_STYLE_FAMILY_PAGE: nPropSetId = PROPERTY_SET_PAGE_STYLE  ;break;
+        case SFX_STYLE_FAMILY_PSEUDO: nPropSetId = PROPERTY_SET_NUM_STYLE   ;break;
+    }
+
+    const SfxItemPropertyMap* pMap = aSwMapProvider.GetPropertyMap(nPropSetId);
+    const OUString* pNames = aPropertyNames.getConstArray();
+
+    if ( pTargetFmt )
+    {
+        for( sal_Int32 nProp = 0, nEnd = aPropertyNames.getLength(); nProp < nEnd; nProp++ )
+        {
+            pMap = SfxItemPropertyMap::GetByName( pMap, pNames[nProp] );
+            if( !pMap )
+                throw UnknownPropertyException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is unknown: " ) ) + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
+            if ( pMap->nWID == FN_UNO_FOLLOW_STYLE || pMap->nWID == FN_UNO_NUM_RULES )
+                throw RuntimeException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Cannot reset: " ) ) + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
+            if ( pMap->nFlags & PropertyAttribute::READONLY )
+                throw RuntimeException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
+
+            pTargetFmt->ResetAttr ( pMap->nWID );
+        }
+    }
+    else if ( bIsDescriptor )
+    {
+        for( sal_Int32 nProp = 0, nEnd = aPropertyNames.getLength(); nProp < nEnd; nProp++ )
+            pPropImpl->ClearProperty ( pNames[ nProp ] );
+    }
 }
+
 void SAL_CALL SwXStyle::setAllPropertiesToDefault(  )
     throw (RuntimeException)
 {
@@ -2736,6 +2768,8 @@ void SAL_CALL SwXStyle::setAllPropertiesToDefault(  )
         else
             throw RuntimeException();
     }
+    else if ( bIsDescriptor )
+        pPropImpl->ClearAllProperties();
     else
         throw RuntimeException();
 }
