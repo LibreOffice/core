@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slideshowimpl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 16:57:22 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 15:05:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef _COM_SUN_STAR_DOCUMENT_XEVENTSSUPPLIER_HPP_
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #endif
@@ -439,13 +438,7 @@ bool SlideshowImpl::startPreview(
         xSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Number" ) ) ) >>= nPageNumber;
         mpAnimationPageList->insertPageNumber( nPageNumber-1 );
 
-        if( (pParent == 0) && mpViewShell )
-        {
-//          pParent = dynamic_cast< ::Window* >( mpView->GetWin( 0 ) );
-            pParent = mpViewShell->GetParentWindow();
-        }
-
-        mpShowWindow = new ShowWindow( pParent );
+        mpShowWindow = new ShowWindow( ((pParent == 0) && mpViewShell) ?  mpViewShell->GetParentWindow() : pParent );
         if( mpViewShell )
         {
             mpViewShell->SetActiveWindow( mpShowWindow );
@@ -457,9 +450,20 @@ bool SlideshowImpl::startPreview(
             mpView->AddWin( mpShowWindow );
 
         // call resize handler
-        const Rectangle& aContentRect = mpViewShell->GetViewShellBase().getClientRectangle();
-        maPresSize = aContentRect.GetSize();
-        mpShowWindow->SetPosPixel( aContentRect.TopLeft() );
+        if( pParent )
+        {
+            maPresSize = pParent->GetSizePixel();
+        }
+        else if( mpViewShell )
+        {
+            const Rectangle& aContentRect = mpViewShell->GetViewShellBase().getClientRectangle();
+            maPresSize = aContentRect.GetSize();
+            mpShowWindow->SetPosPixel( aContentRect.TopLeft() );
+        }
+        else
+        {
+            DBG_ERROR("sd::SlideshowImpl::startPreview(), I need either a parent window or a viewshell!");
+        }
         resize( maPresSize );
 
         sal_Int32 nPropertyCount = 1;
@@ -632,9 +636,15 @@ bool SlideshowImpl::startShow( PresentationSettings* pPresSettings )
             const Rectangle& aClientRect = mpViewShell->GetViewShellBase().getClientRectangle();
             maPresSize = aClientRect.GetSize();
             mpShowWindow->SetPosPixel( aClientRect.TopLeft() );
+            resize( maPresSize );
         }
 
-        resize( maPresSize );
+        // #i41824#
+        // Note: In FullScreen Mode the OS (window manager) sends a resize to
+        // the WorkWindow once it actually resized it to full size.  The
+        // WorkWindow propagates the resize to the DrawViewShell which calls
+        // resize() at the SlideShow (this).  Calling resize here results in a
+        // temporary display of a black window in the window's default size
 
 /*
         if ( mbRehearseTimings )
@@ -1887,8 +1897,6 @@ void SlideshowImpl::resize( const Size& rSize )
 
     if( mpShowWindow && (ANIMATIONMODE_VIEW != meAnimationMode) )
     {
-        const Size aOldSize( mpShowWindow->GetSizePixel() );
-
         mpShowWindow->SetSizePixel( maPresSize );
         mpShowWindow->Show();
 
