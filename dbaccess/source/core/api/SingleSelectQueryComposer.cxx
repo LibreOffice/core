@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SingleSelectQueryComposer.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 12:27:39 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 11:01:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1508,6 +1508,7 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
                 }
                 break;
             case DataType::BIT:
+            case DataType::BOOLEAN:
                 {
                     ::rtl::OUString sTmpName = aSql;
 
