@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-10 16:37:27 $
+ *  last change: $Author: mba $ $Date: 2001-10-11 12:29:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -796,6 +796,13 @@ void SfxObjectShell::SetNamedVisibility_Impl()
     }
 
     SetName( GetTitle(SFX_TITLE_APINAME) );
+}
+
+void SfxObjectShell::SetNoName()
+{
+    bHasName = 0;
+    bIsTmp = sal_True;
+    GetModel()->attachResource( ::rtl::OUString(), GetModel()->getArgs() );
 }
 
 //--------------------------------------------------------------------
