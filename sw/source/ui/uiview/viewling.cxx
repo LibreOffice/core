@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewling.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-21 10:31:24 $
+ *  last change: $Author: hr $ $Date: 2003-09-29 15:06:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -779,14 +779,27 @@ void SwView::StartThesaurus()
                     pWrtShell->Left(CRSR_SKIP_CELLS, FALSE, 1, FALSE );
 
                 pWrtShell->SelWrd();
-            }
-#ifdef TL_NEVER
-            String aTmp(pThes->GetPreStripped());
-            aTmp += pDlg->GetWord();
-            aTmp += pThes->GetPostStripped();
 
-            pWrtShell->Insert(aTmp);
-#endif
+                // make sure the selection build later from the
+                // data below does not include footnotes and other
+                // "in word" character to the left and right in order
+                // to preserve those. Therefore count those "in words"
+                // in order to modify the selection accordingly.
+                const sal_Unicode* pChar = aTmp.GetBuffer();
+                xub_StrLen nLeft = 0;
+                while (pChar && *pChar++ == CH_TXTATR_INWORD)
+                    ++nLeft;
+                pChar = aTmp.Len() ? aTmp.GetBuffer() + aTmp.Len() - 1 : 0;
+                xub_StrLen nRight = 0;
+                while (pChar && *pChar-- == CH_TXTATR_INWORD)
+                    ++nRight;
+
+                // adjust existing selection
+                SwPaM *pCrsr = pWrtShell->GetCrsr();
+                pCrsr->GetPoint()->nContent/*.nIndex*/ -= nRight;
+                pCrsr->GetMark()->nContent/*.nIndex*/ += nLeft;
+            }
+
             pWrtShell->Insert( pDlg->GetWord() );
 
             pWrtShell->EndUndo(UNDO_DELETE);
