@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlescher.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 08:49:14 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:27:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,9 +67,14 @@
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
 #endif
+#ifndef _VCL_MAPUNIT_HXX
+#include <vcl/mapunit.hxx>
+#endif
 
 
-// (0x005D) OBJ ===============================================================
+// Constants and Enumerations =================================================
+
+// (0x005D) OBJ ---------------------------------------------------------------
 
 const sal_uInt16 EXC_ID_OBJ                 = 0x005D;
 
@@ -140,7 +145,17 @@ enum XclCtrlBindMode
 };
 
 
-// (0x01B6) TXO ===============================================================
+// (0x00EC) MSODRAWING --------------------------------------------------------
+
+const sal_uInt16 EXC_ID_MSODRAWING          = 0x00EC;
+
+// additional flags not extant in svx headers
+const sal_uInt16 EXC_ESC_ANCHOR_POSLOCKED   = 0x0001;
+const sal_uInt16 EXC_ESC_ANCHOR_SIZELOCKED  = 0x0002;
+const sal_uInt16 EXC_ESC_ANCHOR_LOCKED      = EXC_ESC_ANCHOR_POSLOCKED|EXC_ESC_ANCHOR_SIZELOCKED;
+
+
+// (0x01B6) TXO ---------------------------------------------------------------
 
 const sal_uInt16 EXC_ID_TXO                 = 0x01B6;
 
@@ -173,6 +188,44 @@ enum XclTxoRotation
     xlTxoRot90cw                            = 0x0003,       /// 90 degr. clockwise.
     xlTxoRot_Default                        = xlTxoNoRot
 };
+
+
+// ============================================================================
+
+// Escher client anchor =======================================================
+
+class Rectangle;
+class ScDocument;
+class SvStream;
+class XclImpStream;
+class XclExpStream;
+
+/** Represents the position (anchor) of an Escher object in a Calc document. */
+struct XclEscherAnchor
+{
+    sal_uInt16                  mnLCol;     /// Left column index.
+    sal_uInt16                  mnLX;       /// X offset in left column (1/1024 of column width).
+    sal_uInt16                  mnTRow;     /// Top row index.
+    sal_uInt16                  mnTY;       /// Y offset in top row (1/256 of row height).
+    sal_uInt16                  mnRCol;     /// Right column index.
+    sal_uInt16                  mnRX;       /// X offset in right column (1/1024 of column width).
+    sal_uInt16                  mnBRow;     /// Bottom row index.
+    sal_uInt16                  mnBY;       /// Y offset in bottom row (1/256 of row height).
+    sal_uInt16                  mnScTab;    /// Calc sheet index.
+
+    explicit                    XclEscherAnchor( sal_uInt16 nScTab );
+
+    /** Calculates a rectangle from the contained coordinates. */
+    Rectangle                   GetRect( ScDocument& rDoc, MapUnit eMapUnit ) const;
+    /** Initializes the anchor coordinates from a rectangle. */
+    void                        SetRect( ScDocument& rDoc, const Rectangle& rRect, MapUnit eMapUnit );
+};
+
+SvStream& operator>>( SvStream& rStrm, XclEscherAnchor& rAnchor );
+SvStream& operator<<( SvStream& rStrm, const XclEscherAnchor& rAnchor );
+
+XclImpStream& operator>>( XclImpStream& rStrm, XclEscherAnchor& rAnchor );
+XclExpStream& operator<<( XclExpStream& rStrm, const XclEscherAnchor& rAnchor );
 
 
 // ============================================================================
