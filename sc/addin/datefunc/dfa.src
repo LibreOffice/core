@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dfa.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-08 18:05:02 $
+ *  last change: $Author: kz $ $Date: 2001-01-12 21:51:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -599,7 +599,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ dutch ] = "IsSchrikkelJaar";
         Text[ chinese_simplified ] = "IsLeapYear";
         Text[ greek ] = "ΕίναιΔίσεκτοΈτος";
-        Text[ korean ] = "ΐ±³β";
+        Text[ korean ] = "IsLeapYear";
         Text[ turkish ] = "Artύkyύldύr";
     };
     String DFA_ISLEAPYEAR_DESC // Description
