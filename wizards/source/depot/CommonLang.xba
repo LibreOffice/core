@@ -86,6 +86,7 @@ Public sInterval as String
 Public ShortMonths(11,1)
 Public iStep as Integer
 Public sDepotCurrency as String
+Public iValueCol as Integer
 
 Public DlgReference as Object
 Public DlgTransaction as Object	
@@ -99,8 +100,8 @@ Public TransactTitle(1 To 2)
 Public NullList()
 Public sStartupWelcome$, sStartupChooseMarket$, sStartupHint$
 
-Public sMarket(6,9) as String
-Public sCountryMarket(6,9) as String
+Public sMarket(7,10) as String
+Public sCountryMarket(7,10) as String
 
 Public cDlgCaption1$, cDlgCaption2$
 Public sMsgError$, sMsgNoName$, sMsgNoQuantity$, sMsgNoDividend$, sMsgNoExchangeRate$
@@ -199,6 +200,7 @@ Sub LocalizedCurrencies()
 		sCountryMarket(0,7) = &quot;FR&quot;
 		sCountryMarket(0,8) = &quot;40C&quot;
 		sCountryMarket(0,9) = &quot;59/9&quot;
+		sCountryMarket(0,10) = &quot;1&quot;
 
 		sCountryMarket(1,0) = &quot;Euro&quot;
 		sCountryMarket(1,1) = chr(8364)
@@ -209,6 +211,7 @@ Sub LocalizedCurrencies()
 		sCountryMarket(1,7) = &quot;IT&quot;
 		sCountryMarket(1,8) = &quot;410&quot;
 		sCountryMarket(1,9) = &quot;44&quot;
+		sCountryMarket(1,10) = &quot;1&quot;
 
 		sCountryMarket(2,0) = &quot;Euro&quot;
 		sCountryMarket(2,1) = chr(8364)
@@ -219,6 +222,7 @@ Sub LocalizedCurrencies()
 		sCountryMarket(2,7) = &quot;ES&quot;
 		sCountryMarket(2,8) = &quot;40A&quot;
 		sCountryMarket(2,9) = &quot;44&quot;
+		sCountryMarket(2,10) = &quot;1&quot;
 
 		sCountryMarket(3,0) = &quot;Dansk krone&quot;
 		sCountryMarket(3,1) = &quot;kr&quot;
@@ -229,6 +233,7 @@ Sub LocalizedCurrencies()
 		sCountryMarket(3,7) = &quot;DK&quot;
 		sCountryMarket(3,8) = &quot;406&quot;
 		sCountryMarket(3,9) = &quot;44&quot;
+		sCountryMarket(3,10) = &quot;1&quot;
 
 		sCountryMarket(4,0) = &quot;Svensk krona&quot;
 		sCountryMarket(4,1) = &quot;kr&quot;
@@ -239,6 +244,7 @@ Sub LocalizedCurrencies()
 		sCountryMarket(4,7) = &quot;SE&quot;
 		sCountryMarket(4,8) = &quot;41D&quot;
 		sCountryMarket(4,9) = &quot;44&quot;
+		sCountryMarket(4,10) = &quot;1&quot;
 
 		&apos; Taiwan Dollar
 		sCountryMarket(5,0) = &quot;新臺幣&quot;
@@ -250,6 +256,7 @@ Sub LocalizedCurrencies()
 		sCountryMarket(5,7) = &quot;TW&quot;	
 		sCountryMarket(5,8) = &quot;404&quot;
 		sCountryMarket(5,9) = &quot;44&quot;
+		sCountryMarket(5,10) = &quot;1&quot;		
 
 		&apos; Chinese Yuan
 		sCountryMarket(6,0) = &quot;人民币&quot;
@@ -261,17 +268,19 @@ Sub LocalizedCurrencies()
 		sCountryMarket(6,7) = &quot;CN&quot;	
 		sCountryMarket(6,8) = &quot;804&quot;
 		sCountryMarket(6,9) = &quot;44&quot;
-
+		sCountryMarket(6,10) = &quot;1&quot;
+		
 		&apos; korean Won
-&apos;		sCountryMarket(7,0) = &quot;한국 원&quot;
-&apos;		sCountryMarket(7,1) = &quot;&quot;
-&apos;		sCountryMarket(7,2) = &quot;&quot;
-&apos;		sCountryMarket(7,3) = &quot;&quot;
-&apos;		sCountryMarket(7,5) = &quot;&quot;
-&apos;		sCountryMarket(7,6) = &quot;ko&quot;
-&apos;		sCountryMarket(7,7) = &quot;KR&quot;			
-&apos;		sCountryMarket(7,8) = &quot;412&quot;
-&apos;		sCountryMarket(7,9) = &quot;&quot;
+		sCountryMarket(7,0) = &quot;한국 원화&quot;
+		sCountryMarket(7,1) = &quot;￦&quot;
+		sCountryMarket(7,2) = &quot;서울&quot;
+		sCountryMarket(7,3) = &quot;http://kr.finance.yahoo.com/d/quotes.csv?s=&lt;StockID&gt;.KS&amp;f=snl1d1t1c1ohgv&amp;e=.csv&quot;
+		sCountryMarket(7,5) = &quot;종목 코드&quot;
+		sCountryMarket(7,6) = &quot;ko&quot;
+		sCountryMarket(7,7) = &quot;KR&quot;			
+		sCountryMarket(7,8) = &quot;412&quot;
+		sCountryMarket(7,9) = &quot;44&quot;
+		sCountryMarket(7,10) = &quot;2&quot;
 
 
 &apos;		sCountryMarket(5,0) = &quot;Российский рубль&quot;
@@ -311,7 +320,7 @@ Sub LocalizedCurrencies()
 		For n = 0 To Ubound(sCountryMarket(),1)
 			If sDocLanguage = sCountryMarket(n,6) and sDocCountry = sCountryMarket(n,7) Then
 				GlobListIndex = 6
-				For m = 0 To 9
+				For m = 0 To 10
 					sMarket(6,m) = sCountryMarket(n,m)
 				Next m
 				Exit For

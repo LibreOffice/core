@@ -9,7 +9,7 @@ Sub LoadSpanishLanguage()
 	sCancel = &quot;Cancelar&quot;
 	sColumnHeader = &quot;Título de columna&quot;	
 	sInsertStockName = &quot;Introduzca primero algunas acciones en su depósito.&quot;
-	sTitle = &quot;&lt;PRODUCTNAME&gt;&lt;PRODUCTNAME&gt;: Administración de acciones&quot;
+	sTitle = &quot;&lt;PRODUCTNAME&gt;: Administración de acciones&quot;
 	sTitle = ReplaceString(sTitle, sProductName, &quot;&lt;PRODUCTNAME&gt;&quot;)
 	sMsgError = &quot;Error de entrada&quot;
 	sMsgNoName = sInsertStockname
@@ -45,7 +45,7 @@ Sub LoadSpanishLanguage()
 	sNoInternetUpdate = &quot;Sin actualización por Internet&quot;
 	sMarketPlace = &quot;Plaza bursátil:&quot;
 	sNoInternetDataAvailable = &quot;No se pudieron recibir las cotizaciones por Internet.&quot;
-	sCheckInternetSettings = &quot;Las causas posibles son: &lt;BR&gt;Verifique su configuración de Internet. &lt;BR&gt;Ha indicado un &lt;SYMBOL&gt; incorrecto para la acción.&quot;
+	sCheckInternetSettings = &quot;Causas posibles: &lt;BR&gt; Debe comprobar la configuración de Internet.&lt;BR&gt; Ha indicado un código incorrecto (p.ej. número, símbolo, etc.) para la acción.&quot;
 	sCheckInternetSettings = ReplaceString(sCheckInternetSettings, chr(13), &quot;&lt;BR&gt;&quot;)
 
 	sMsgEndDatebeforeNow = &quot;La fecha final debe ser anterior a la fecha de hoy.&quot;
@@ -63,6 +63,7 @@ Sub LoadSpanishLanguage()
 	sMarket(0,7) = &quot;US&quot;
 	sMarket(0,8) = &quot;409&quot;
 	sMarket(0,9) = &quot;44&quot;
+	sMarket(0,10) = &quot;1&quot;
 	
 	sMarket(1,0) = &quot;Euro&quot;
 	sMarket(1,1) = chr(8364)
@@ -73,6 +74,7 @@ Sub LoadSpanishLanguage()
 	sMarket(1,7) = &quot;DE;NL;PT;GR&quot;
 	sMarket(1,8) = &quot;407;413;816;408&quot;
 	sMarket(1,9) = &quot;59/9&quot;
+	sMarket(1,10) = &quot;1&quot;
 
 	sMarket(2,0) = &quot;Libra esterlina&quot;
 	sMarket(2,1) = &quot;£&quot;
@@ -83,6 +85,7 @@ Sub LoadSpanishLanguage()
 	sMarket(2,7) = &quot;GB&quot;
 	sMarket(2,8) = &quot;809&quot;
 	sMarket(2,9) = &quot;44&quot;
+	sMarket(2,10) = &quot;1&quot;
 
 	sMarket(3,0) = &quot;Yen japonés&quot;
 	sMarket(3,1) = &quot;¥&quot;
@@ -93,6 +96,7 @@ Sub LoadSpanishLanguage()
 	sMarket(3,7) = &quot;JP&quot;
 	sMarket(3,8) = &quot;411&quot;
 	sMarket(3,9) = &quot;&quot;
+	sMarket(3,10) = &quot;&quot;
 	
 	sMarket(4,0) = &quot;Dólar hongkonés&quot;
 	sMarket(4,1) = &quot;HK$&quot;
@@ -103,6 +107,7 @@ Sub LoadSpanishLanguage()
 	sMarket(4,7) = &quot;HK&quot;	
 	sMarket(4,8) = &quot;C04&quot;
 	sMarket(4,9) = &quot;44&quot;
+	sMarket(4,10) = &quot;1&quot;
 
 	sMarket(5,0) = &quot;Dólar australiano&quot;
 	sMarket(5,1) = &quot;$&quot;
@@ -113,6 +118,7 @@ Sub LoadSpanishLanguage()
 	sMarket(5,7) = &quot;AU&quot;
 	sMarket(5,8) = &quot;C09&quot;
 	sMarket(5,9) = &quot;44&quot;
+	sMarket(5,10) = &quot;1&quot;
 
 &apos; ****************************End of the default subset*********************************
 	CompleteMarketList()

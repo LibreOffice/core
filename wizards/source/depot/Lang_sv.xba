@@ -8,7 +8,7 @@ Sub LoadSwedishLanguage()
 	sCancel = &quot;Avbryt&quot;
 	sColumnHeader = &quot;Kolumnhuvud&quot;	
 	sInsertStockName = &quot;Infoga först några aktier i Din portfölj!&quot;
-	sTitle = &quot;&lt;PRODUCTNAME&gt;&lt;PRODUCTNAME&gt;: Aktieförvaltning&quot;
+	sTitle = &quot;&lt;PRODUCTNAME&gt;: Aktieförvaltning&quot;
 	sTitle = ReplaceString(sTitle, sProductName, &quot;&lt;PRODUCTNAME&gt;&quot;)
 	sMsgError = &quot;Inmatningsfel&quot;
 	sMsgNoName = sInsertStockname
@@ -44,7 +44,7 @@ Sub LoadSwedishLanguage()
 	sNoInternetUpdate = &quot;utan Internet-uppdatering&quot;
 	sMarketPlace = &quot;Börs:&quot;
 	sNoInternetDataAvailable = &quot;Det gick inte att ta emot Internet-kurser!&quot;
-	sCheckInternetSettings = &quot;Detta kan bero på att: &lt;BR&gt;Dina Internet-inställningar måste ändras. &lt;BR&gt;Du har angivit en felaktig &lt;SYMBOL&gt; för aktien.&quot;
+	sCheckInternetSettings = &quot;Detta kan bero på att: &lt;BR&gt; Dina Internet-inställningar måste ändras.&lt;BR&gt; Du har angivit ett felaktigt ID (t.ex. symbol, värdepappersnr.) för aktien.&quot;
 	sCheckInternetSettings = ReplaceString(sCheckInternetSettings, chr(13), &quot;&lt;BR&gt;&quot;)
 
 	sMsgEndDatebeforeNow = &quot;Slutdatum måste ligga före idag!&quot;
@@ -62,6 +62,7 @@ Sub LoadSwedishLanguage()
 	sMarket(0,7) = &quot;US&quot;
 	sMarket(0,8) = &quot;409&quot;
 	sMarket(0,9) = &quot;44&quot;
+	sMarket(0,10) = &quot;1&quot;
 	
 	sMarket(1,0) = &quot;Euro&quot;
 	sMarket(1,1) = chr(8364)
@@ -72,6 +73,7 @@ Sub LoadSwedishLanguage()
 	sMarket(1,7) = &quot;DE;NL;PT;GR&quot;
 	sMarket(1,8) = &quot;407;413;816;408&quot;
 	sMarket(1,9) = &quot;59/9&quot;
+	sMarket(1,10) = &quot;1&quot;
 
 	sMarket(2,0) = &quot;Engelskt pund&quot;
 	sMarket(2,1) = &quot;£&quot;
@@ -82,6 +84,7 @@ Sub LoadSwedishLanguage()
 	sMarket(2,7) = &quot;GB&quot;
 	sMarket(2,8) = &quot;809&quot;
 	sMarket(2,9) = &quot;44&quot;
+	sMarket(2,10) = &quot;1&quot;
 
 	sMarket(3,0) = &quot;Japansk yen&quot;
 	sMarket(3,1) = &quot;¥&quot;
@@ -92,6 +95,7 @@ Sub LoadSwedishLanguage()
 	sMarket(3,7) = &quot;JP&quot;
 	sMarket(3,8) = &quot;411&quot;
 	sMarket(3,9) = &quot;&quot;
+	sMarket(3,10) = &quot;&quot;
 	
 	sMarket(4,0) = &quot;Hongkongdollar&quot;
 	sMarket(4,1) = &quot;HK$&quot;
@@ -102,6 +106,7 @@ Sub LoadSwedishLanguage()
 	sMarket(4,7) = &quot;HK&quot;	
 	sMarket(4,8) = &quot;C04&quot;
 	sMarket(4,9) = &quot;44&quot;
+	sMarket(4,10) = &quot;1&quot;
 
 	sMarket(5,0) = &quot;Australisk dollar&quot;
 	sMarket(5,1) = &quot;$&quot;
@@ -112,6 +117,7 @@ Sub LoadSwedishLanguage()
 	sMarket(5,7) = &quot;AU&quot;
 	sMarket(5,8) = &quot;C09&quot;
 	sMarket(5,9) = &quot;44&quot;
+	sMarket(5,10) = &quot;1&quot;
 
 &apos; ****************************End of the default subset*********************************
 	CompleteMarketList()

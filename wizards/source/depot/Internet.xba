@@ -121,7 +121,7 @@ End Sub
 
 
 
-Function GetCurrentRate(sUrl as String, fValue As Double, iValueCol as Integer) as Boolean
+Function GetCurrentRate(sUrl as String, fValue As Double, iValueRow as Integer) as Boolean
 Dim sFilter As String
 Dim sOptions As String
 Dim oLinkSheet As Object
@@ -139,10 +139,10 @@ Dim sDate as String
 	
 	oLinkSheet.LinkMode = com.sun.star.sheet.SheetLinkMode.NONE
 	oLinkSheet.link(sUrl, &quot;&quot;, sFilter, sOptions, 1 )
-	fValue = oLinkSheet.getCellByPosition(1, iValueCol).Value
+	fValue = oLinkSheet.getCellByPosition(iValueCol, iValueRow).Value
 	If fValue = 0 Then
 		Dim sValue as String
-		sValue = oLinkSheet.getCellByPosition(1, iValueCol).String
+		sValue = oLinkSheet.getCellByPosition(1, iValueRow).String
 		sValue = ReplaceString(sValue, &quot;.&quot;,&quot;,&quot;)
 		fValue = Val(sValue)
 	End If

@@ -4,7 +4,10 @@
 
 
 Sub Initialize(Optional bChooseMarketPlace as Boolean)
+Dim bEnableHistory as Boolean
 	GlobalScope.BasicLibraries.LoadLibrary(&quot;Tools&quot;)
+&apos;	oMarketModel = GetControlModel(oDocument.Sheets(0), &quot;CmdHistory&quot;)
+&apos;	bEnableHistory = oMarketModel.Enabled
 	ToggleWindow(False)
 	Today = Date()
 	bDebugmode = False
@@ -22,6 +25,7 @@ Sub Initialize(Optional bChooseMarketPlace as Boolean)
 	sDocCountry = oDocLocale.Country
 	LoadLanguage()
 	ToggleWindow(True)
+&apos;	oMarketModel.Enabled = bEnableHistory
 	If Not IsMissing(bChooseMarketPlace) Then
 		If bChoosemarketPlace Then
 			ChooseMarket()

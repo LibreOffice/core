@@ -9,7 +9,7 @@ Sub LoadChineseTradLanguage()
 	sCancel = &quot;取消&quot;
 	sColumnHeader = &quot;欄標簽&quot;	
 	sInsertStockName = &quot;請先填入股票名稱!&quot;
-	sTitle = &quot;&lt;PRODUCTNAME&gt;&lt;PRODUCTNAME&gt;: 股票管理&quot;
+	sTitle = &quot;&lt;PRODUCTNAME&gt;: 股票管理&quot;
 	sTitle = ReplaceString(sTitle, sProductName, &quot;&lt;PRODUCTNAME&gt;&quot;)
 	sMsgError = &quot;輸入無效&quot;
 	sMsgNoName = sInsertStockname
@@ -45,7 +45,7 @@ Sub LoadChineseTradLanguage()
 	sNoInternetUpdate = &quot;不透過 internet 更新&quot;
 	sMarketPlace = &quot;證券交易所：&quot;
 	sNoInternetDataAvailable = &quot;無法接受 Internet 股票價格!&quot;
-	sCheckInternetSettings = &quot;可能的原因： Internet 設定不正確，需要重新設定。 &lt;BR&gt;輸入了一個錯誤的股票 &lt;SYMBOL&gt; 。&quot;
+	sCheckInternetSettings = &quot;可能的原因：&lt;BR&gt;Internet 設定不正確，需要重新設定。&lt;BR&gt;輸入了一個錯誤的股票代碼。&quot;
 	sCheckInternetSettings = ReplaceString(sCheckInternetSettings, chr(13), &quot;&lt;BR&gt;&quot;)
 
 	sMsgEndDatebeforeNow = &quot;到期日期必須是在今日之前！&quot;
@@ -63,6 +63,7 @@ Sub LoadChineseTradLanguage()
 	sMarket(0,7) = &quot;US&quot;
 	sMarket(0,8) = &quot;409&quot;
 	sMarket(0,9) = &quot;44&quot;
+	sMarket(0,10) = &quot;1&quot;
 	
 	sMarket(1,0) = &quot;歐元&quot;
 	sMarket(1,1) = chr(8364)
@@ -73,6 +74,7 @@ Sub LoadChineseTradLanguage()
 	sMarket(1,7) = &quot;DE;NL;PT;GR&quot;
 	sMarket(1,8) = &quot;407;413;816;408&quot;
 	sMarket(1,9) = &quot;59/9&quot;
+	sMarket(1,10) = &quot;1&quot;
 
 	sMarket(2,0) = &quot;英鎊&quot;
 	sMarket(2,1) = &quot;£&quot;
@@ -83,6 +85,7 @@ Sub LoadChineseTradLanguage()
 	sMarket(2,7) = &quot;GB&quot;
 	sMarket(2,8) = &quot;809&quot;
 	sMarket(2,9) = &quot;44&quot;
+	sMarket(2,10) = &quot;1&quot;
 
 	sMarket(3,0) = &quot;日元&quot;
 	sMarket(3,1) = &quot;¥&quot;
@@ -93,6 +96,7 @@ Sub LoadChineseTradLanguage()
 	sMarket(3,7) = &quot;JP&quot;
 	sMarket(3,8) = &quot;411&quot;
 	sMarket(3,9) = &quot;&quot;
+	sMarket(3,10) = &quot;&quot;
 	
 	sMarket(4,0) = &quot;港幣&quot;
 	sMarket(4,1) = &quot;HK$&quot;
@@ -103,6 +107,7 @@ Sub LoadChineseTradLanguage()
 	sMarket(4,7) = &quot;HK&quot;	
 	sMarket(4,8) = &quot;C04&quot;
 	sMarket(4,9) = &quot;44&quot;
+	sMarket(4,10) = &quot;1&quot;
 
 	sMarket(5,0) = &quot;澳元&quot;
 	sMarket(5,1) = &quot;$&quot;
@@ -113,6 +118,7 @@ Sub LoadChineseTradLanguage()
 	sMarket(5,7) = &quot;AU&quot;
 	sMarket(5,8) = &quot;C09&quot;
 	sMarket(5,9) = &quot;44&quot;
+	sMarket(5,10) = &quot;1&quot;
 
 &apos; ****************************End of the default subset*********************************
 	CompleteMarketList()
