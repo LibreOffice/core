@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpp3.c,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 15:56:22 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 10:42:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -409,8 +409,9 @@ readoptions(char* filename, char*** pfargv)
 {
         FILE           *fp;
         int c;
+        int bInQuotes = 0;
         char optbuff[1024], *poptbuff;
-        int fargc=0, endit=FALSE, i, back;
+        int fargc=0, i, back;
         char *fargv[PARALIMIT], **pfa;
 
         pfa=*pfargv=malloc(sizeof(fargv));
@@ -426,32 +427,37 @@ readoptions(char* filename, char*** pfargv)
         }
         do
         {
+            /*
+             *  #i27914# double ticks '"' now have a duplicate function:
+             *  1. they define a string ( e.g. -DFOO="baz" )
+             *  2. a string can contain spaces, so -DFOO="baz zum" defines one
+             *  argument no two !
+             */
             c=fgetc(fp);
             if ( c != ' ' && c != CR && c != NL && c != HT && c != EOF)
             {
                 *poptbuff++=c;
+                if( c == '"' )
+                    bInQuotes = ~bInQuotes;
             }
             else
             {
-/*
-                if ( c == EOF )
+                if( c != EOF && bInQuotes )
+                    *poptbuff++=c;
+                else
                 {
-                    endit=TRUE;
-                }
-*/
-                *poptbuff=EOS;
-                if (strlen(optbuff)>0)
-                {
-                    pfa[fargc+1]=malloc(strlen(optbuff)+1);
-                    strcpy(pfa[fargc+1],optbuff);
-                    fargc++;
-                    pfa[fargc+1]=0;
-                    poptbuff=&optbuff[0];
+                    *poptbuff=EOS;
+                    if (strlen(optbuff)>0)
+                    {
+                        pfa[fargc+1]=malloc(strlen(optbuff)+1);
+                        strcpy(pfa[fargc+1],optbuff);
+                        fargc++;
+                        pfa[fargc+1]=0;
+                        poptbuff=&optbuff[0];
+                    }
                 }
             }
         }
-/*      while ( !endit );
- */
         while ( c != EOF );
 
         fclose(fp);
