@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtnav.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-09 11:19:08 $
+ *  last change: $Author: fs $ $Date: 2001-04-18 12:29:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -338,8 +338,10 @@ class FmFilterNavigator : public SvTreeListBox, public SfxListener
     enum DROP_ACTION{ DA_SCROLLUP, DA_SCROLLDOWN, DA_EXPANDNODE };
 
     FmFilterModel*          m_pModel;
+    SvLBoxEntry*            m_pEditingCurrently;
     Timer                   m_aSelectTimer;
     OFilterExchangeHelper   m_aControlExchange;
+
 
     AutoTimer           m_aDropActionTimer;
     unsigned short      m_aTimerCounter;
