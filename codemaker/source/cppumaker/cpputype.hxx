@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpputype.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-20 13:09:28 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:53:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,30 +62,14 @@
 #ifndef _CPPUMAKER_CPPUTYPE_HXX_
 #define _CPPUMAKER_CPPUTYPE_HXX_
 
-#include "codemaker/typemanager.hxx"
 #include "codemaker/dependency.hxx"
+#include "codemaker/options.hxx"
+#include "codemaker/typemanager.hxx"
 
-enum BASETYPE
-{
-    BT_INVALID,
-    BT_VOID,
-    BT_ANY,
-    BT_TYPE,
-    BT_BOOLEAN,
-    BT_CHAR,
-    BT_STRING,
-    BT_FLOAT,
-    BT_DOUBLE,
-    BT_OCTET,
-    BT_BYTE,
-    BT_SHORT,
-    BT_LONG,
-    BT_HYPER,
-    BT_UNSIGNED_SHORT,
-    BT_UNSIGNED_LONG,
-    BT_UNSIGNED_HYPER
-};
+#include "registry/reader.hxx"
+#include "registry/types.h"
 
+namespace codemaker { struct ExceptionTreeNode; }
 
 enum CppuTypeDecl
 {
@@ -100,7 +84,7 @@ class FileStream;
 class CppuType
 {
 public:
-    CppuType(TypeReader& typeReader,
+    CppuType(typereg::Reader& typeReader,
              const ::rtl::OString& typeName,
              const TypeManager& typeMgr,
              const TypeDependency& typeDependencies);
@@ -113,7 +97,7 @@ public:
                               const ::rtl::OString& sName,
                               const ::rtl::OString& sOutPath )
         throw( CannotDumpException );
-    virtual sal_Bool dumpDependedTypes(CppuOptions* pOptions)  throw( CannotDumpException );
+    void dumpDependedTypes(CppuOptions * options);
     virtual sal_Bool dumpHFile(FileStream& o) throw( CannotDumpException ) = 0;
     virtual sal_Bool dumpHxxFile(FileStream& o) throw( CannotDumpException ) = 0;
 
@@ -133,10 +117,8 @@ public:
                           sal_Bool bRef=sal_False, sal_Bool bNative=sal_False)
                     throw( CannotDumpException );
     ::rtl::OString  getTypeClass(const ::rtl::OString& type="", sal_Bool bCStyle=sal_False);
-    ::rtl::OString  getBaseType(const ::rtl::OString& type);
     void    dumpCppuGetType(FileStream& o, const ::rtl::OString& type, sal_Bool bDecl=sal_False, CppuTypeDecl eDeclFlag=CPPUTYPEDECL_ALLTYPES);
     void    dumpTypeInit(FileStream& o, const ::rtl::OString& type);
-    BASETYPE isBaseType(const ::rtl::OString& type);
 
     ::rtl::OString typeToIdentifier(const ::rtl::OString& type);
 
@@ -150,11 +132,16 @@ public:
     ::rtl::OString  indent();
     ::rtl::OString  indent(sal_uInt32 num);
 protected:
-    virtual sal_uInt32  checkInheritedMemberCount(const TypeReader* pReader);
+    virtual sal_uInt32 checkInheritedMemberCount(
+        const typereg::Reader* pReader);
 
-    ::rtl::OString  checkSpecialCppuType(const ::rtl::OString& type);
+    bool passByReference(rtl::OString const & unoType);
+
+    ::rtl::OString  resolveTypedefs(const ::rtl::OString& type);
     ::rtl::OString  checkRealBaseType(const ::rtl::OString& type, sal_Bool bResolveTypeOnly = sal_False);
     void    dumpCppuGetTypeMemberDecl(FileStream& o, CppuTypeDecl eDeclFlag);
+
+    bool isGlobal() const;
 
      sal_Bool isNestedType()
         { return m_bIsNestedType; };
@@ -174,7 +161,7 @@ protected:
     sal_uInt32          m_indentLength;
     ::rtl::OString      m_typeName;
     ::rtl::OString      m_name;
-    TypeReader          m_reader;
+    typereg::Reader     m_reader;
     TypeManager&        m_typeMgr;
     TypeDependency      m_dependencies;
     sal_Bool            m_bIsNestedType;
@@ -184,7 +171,7 @@ protected:
 class InterfaceType : public CppuType
 {
 public:
-    InterfaceType(TypeReader& typeReader,
+    InterfaceType(typereg::Reader& typeReader,
                  const ::rtl::OString& typeName,
                  const TypeManager& typeMgr,
                  const TypeDependency& typeDependencies);
@@ -210,18 +197,37 @@ public:
     sal_uInt32  getInheritedMemberCount();
 
 protected:
-    sal_uInt32  checkInheritedMemberCount(const TypeReader* pReader);
+    sal_uInt32  checkInheritedMemberCount(const typereg::Reader* pReader);
 
 protected:
     sal_uInt32  m_inheritedMemberCount;
     sal_Bool    m_hasAttributes;
     sal_Bool    m_hasMethods;
+
+private:
+    void dumpExceptionSpecification(
+        FileStream & out, sal_uInt32 methodIndex, bool runtimeException);
+
+    void dumpAttributeExceptionSpecification(
+        FileStream & out, rtl::OUString const & name, RTMethodMode sort);
+
+    void dumpExceptionTypeName(
+        FileStream & out, char const * prefix, sal_uInt32 index,
+        rtl::OUString name);
+
+    sal_Int32 dumpExceptionTypeNames(
+        FileStream & out, char const * prefix, sal_uInt16 methodIndex,
+        bool runtimeException);
+
+    sal_Int32 dumpAttributeExceptionTypeNames(
+        FileStream & out, char const * prefix, rtl::OUString const & name,
+        RTMethodMode sort);
 };
 
 class ModuleType : public CppuType
 {
 public:
-    ModuleType(TypeReader& typeReader,
+    ModuleType(typereg::Reader& typeReader,
                   const ::rtl::OString& typeName,
                const TypeManager& typeMgr,
                const TypeDependency& typeDependencies);
@@ -239,7 +245,7 @@ public:
 class ConstantsType : public ModuleType
 {
 public:
-    ConstantsType(TypeReader& typeReader,
+    ConstantsType(typereg::Reader& typeReader,
                   const ::rtl::OString& typeName,
                const TypeManager& typeMgr,
                const TypeDependency& typeDependencies);
@@ -252,7 +258,7 @@ public:
 class StructureType : public CppuType
 {
 public:
-    StructureType(TypeReader& typeReader,
+    StructureType(typereg::Reader& typeReader,
                   const ::rtl::OString& typeName,
                   const TypeManager& typeMgr,
                   const TypeDependency& typeDependencies);
@@ -269,7 +275,7 @@ public:
 class ExceptionType : public CppuType
 {
 public:
-    ExceptionType(TypeReader& typeReader,
+    ExceptionType(typereg::Reader& typeReader,
                   const ::rtl::OString& typeName,
                   const TypeManager& typeMgr,
                   const TypeDependency& typeDependencies);
@@ -286,7 +292,7 @@ public:
 class EnumType : public CppuType
 {
 public:
-    EnumType(TypeReader& typeReader,
+    EnumType(typereg::Reader& typeReader,
               const ::rtl::OString& typeName,
               const TypeManager& typeMgr,
               const TypeDependency& typeDependencies);
@@ -304,7 +310,7 @@ public:
 class TypeDefType : public CppuType
 {
 public:
-    TypeDefType(TypeReader& typeReader,
+    TypeDefType(typereg::Reader& typeReader,
               const ::rtl::OString& typeName,
               const TypeManager& typeMgr,
               const TypeDependency& typeDependencies);
@@ -320,6 +326,50 @@ public:
     void        dumpCGetCppuType(FileStream& o);
 };
 
+class ConstructiveType: public CppuType {
+public:
+    ConstructiveType(
+        typereg::Reader & reader, rtl::OString const & name,
+        TypeManager const & manager, TypeDependency const & dependencies):
+        CppuType(reader, name, manager, dependencies) {}
+
+    virtual sal_Bool dumpFile(
+        CppuOptions * pOptions, rtl::OString const & sExtension,
+        rtl::OString const & sName, rtl::OString const & sOutPath)
+        throw (CannotDumpException);
+
+    virtual sal_Bool dumpHFile(FileStream & o) throw (CannotDumpException);
+};
+
+class ServiceType: public ConstructiveType {
+public:
+    ServiceType(
+        typereg::Reader & reader, rtl::OString const & name,
+        TypeManager const & manager, TypeDependency const & dependencies):
+        ConstructiveType(reader, name, manager, dependencies) {}
+
+    bool isSingleInterfaceBased();
+
+    virtual sal_Bool dumpHxxFile(FileStream & o) throw (CannotDumpException);
+
+private:
+    bool hasRestParameter(sal_uInt16 ctorIndex) const;
+
+    void dumpCatchClauses(
+        FileStream & out, codemaker::ExceptionTreeNode const * node);
+};
+
+class SingletonType: public ConstructiveType {
+public:
+    SingletonType(
+        typereg::Reader & reader, rtl::OString const & name,
+        TypeManager const & manager, TypeDependency const & dependencies):
+        ConstructiveType(reader, name, manager, dependencies) {}
+
+    bool isInterfaceBased();
+
+    virtual sal_Bool dumpHxxFile(FileStream & o) throw (CannotDumpException);
+};
 
 sal_Bool produceType(const ::rtl::OString& typeName,
                      TypeManager& typeMgr,
