@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Button.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:12:18 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:35:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef _FRM_BUTTON_HXX_
 #define _FRM_BUTTON_HXX_
 
-#ifndef _FRM_IMAGE_HXX_
-#include "Image.hxx"
+#ifndef FORMS_SOURCE_CLICKABLEIMAGE_HXX
+#include "clickableimage.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_AWT_MOUSEEVENT_HPP_
@@ -97,7 +97,7 @@ namespace frm
 // OButtonModel
 //==================================================================
 class OButtonModel
-        :public OImageModel
+        :public OClickableImageBaseModel
         ,public ::comphelper::OAggregationArrayUsageHelper<OButtonModel>
 {
 public:
@@ -129,11 +129,13 @@ protected:
 //==================================================================
 // OButtonControl
 //==================================================================
-typedef ::cppu::ImplHelper2<    ::com::sun::star::awt::XButton,
-                                ::com::sun::star::awt::XActionListener> OButtonControl_BASE;
+typedef ::cppu::ImplHelper3 <   ::com::sun::star::awt::XButton
+                            ,   ::com::sun::star::awt::XActionListener
+                            ,   ::com::sun::star::beans::XPropertyChangeListener
+                            >   OButtonControl_BASE;
 
 class OButtonControl    :public OButtonControl_BASE
-                        ,public OImageControl
+                        ,public OClickableImageBaseControl
                         ,public OFormNavigationHelper
 {
 private:
@@ -156,7 +158,7 @@ public:
     virtual StringSequence SAL_CALL getSupportedServiceNames() throw();
 
     // UNO Anbindung
-    DECLARE_UNO3_AGG_DEFAULTS(OButtonControl, OImageControl);
+    DECLARE_UNO3_AGG_DEFAULTS(OButtonControl, OClickableImageBaseControl);
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation(const ::com::sun::star::uno::Type& _rType) throw(::com::sun::star::uno::RuntimeException);
 
     // XActionListener
@@ -187,6 +189,10 @@ protected:
     virtual void    featureStateChanged( sal_Int32 _nFeatureId, sal_Bool _bEnabled );
     virtual void    allFeatureStatesChanged( );
     virtual bool    isEnabled( sal_Int32 _nFeatureId ) const;
+
+    // XDispatchProviderInterception disambiguaiton
+    virtual void SAL_CALL registerDispatchProviderInterceptor( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterceptor >& Interceptor ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL releaseDispatchProviderInterceptor( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterceptor >& Interceptor ) throw (::com::sun::star::uno::RuntimeException);
 
     // OImageControl overridables
     virtual void    actionPerformed_Impl( sal_Bool bNotifyListener, const ::com::sun::star::awt::MouseEvent& _rEvt );
