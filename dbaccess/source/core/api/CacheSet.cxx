@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CacheSet.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-01 13:04:36 $
+ *  last change: $Author: oj $ $Date: 2000-12-06 09:48:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -526,11 +526,17 @@ void OCacheSet::fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition)
             (*aIter) = getInt(i);
             break;
         }
+        if(wasNull())
+            aIter->setNull();
+
     }
 }
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.10  2000/12/01 13:04:36  oj
+    #80932# update and insert corrected
+
     Revision 1.9  2000/11/30 15:58:20  oj
     #80934# standarddate is no longer public
 
