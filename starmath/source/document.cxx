@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-18 12:32:43 $
+ *  last change: $Author: tl $ $Date: 2001-11-02 12:13:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -721,7 +721,7 @@ void SmDocShell::Convert50To60Txt( String &rText )
 
 void SmDocShell::Convert60To50Txt( String &rText )
 {
-    // change 50 symbol-names to their 60 equivalent
+    // change 60 symbol-names to their 50 equivalent
     LanguageType nLang = Application::GetSettings().GetUILanguage();
     SmLocalizedSymbolData &rData = SM_MOD1()->GetLocSymbolData();
     const ResStringArray *p50Names = rData.Get50NamesArray( nLang );

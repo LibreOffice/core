@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smmod.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tl $ $Date: 2001-10-09 09:11:06 $
+ *  last change: $Author: tl $ $Date: 2001-11-02 12:13:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,6 +240,7 @@ const ResStringArray* SmLocalizedSymbolData::Get50NamesArray( LanguageType nLang
             case LANGUAGE_FRENCH    : nRID = RID_FRENCH_50_NAMES;  break;
             case LANGUAGE_ITALIAN   : nRID = RID_ITALIAN_50_NAMES;  break;
             case LANGUAGE_SWEDISH   : nRID = RID_SWEDISH_50_NAMES;  break;
+            case LANGUAGE_SPANISH   : nRID = RID_SPANISH_50_NAMES;  break;
             default                 : nRID = -1;  break;
         }
         delete p50NamesAry;
@@ -263,6 +264,7 @@ const ResStringArray* SmLocalizedSymbolData::Get60NamesArray( LanguageType nLang
             case LANGUAGE_FRENCH    : nRID = RID_FRENCH_60_NAMES;  break;
             case LANGUAGE_ITALIAN   : nRID = RID_ITALIAN_60_NAMES;  break;
             case LANGUAGE_SWEDISH   : nRID = RID_SWEDISH_60_NAMES;  break;
+            case LANGUAGE_SPANISH   : nRID = RID_SPANISH_60_NAMES;  break;
             default                 : nRID = -1;  break;
         }
         delete p60NamesAry;

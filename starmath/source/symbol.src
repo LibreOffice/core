@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symbol.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-31 21:45:03 $
+ *  last change: $Author: tl $ $Date: 2001-11-02 12:13:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,6 +187,22 @@ Resource RID_LOCALIZED_NAMES
             < "jota" ; > ;
             < "ksi" ; > ;
             < "ro" ; > ;
+        };
+    };
+    StringArray RID_SPANISH_50_NAMES
+    {
+        ItemList =
+        {
+            < "distinto" ; > ;
+            < "muchomenos" ; > ;
+        };
+    };
+    StringArray RID_SPANISH_60_NAMES
+    {
+        ItemList =
+        {
+            < "diferente" ; > ;
+            < "muchomenor" ; > ;
         };
     };
     StringArray RID_EXPORT_SYMBOLSET_NAMES
