@@ -2,9 +2,9 @@
  *
  *  $RCSfile: errtxt.src,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 16:40:42 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:07:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -612,6 +612,12 @@ Resource RID_ERRHDL
         Text [ de ] = "Dieses Dokument enthält Attribute die nicht im gewählten Format gespeichert werden können.\nBitte speichern Sie das Dokument in einem %PRODUCTNAME 6.0 Dateiformat.";
         Text [ en-US ] = "This document contains attributes that cannot be saved in the selected format.\nPlease save the document in a %PRODUCTNAME 6.0 file format.";
     };
+    String ERRCODE_SFX_TARGETFILECORRUPTED
+    {
+        Text [ de ] = "Die Datei $(FILENAME) konnte nicht gespeichert werden. Bitte überprüfen Sie Ihre Systemeinstellungen. Eine automatisch erstellte Sicherungsdatei finden Sie unter dem Namen $(BACKUPNAME) im Ordner $(PATH).";
+        Text [ en-US ] = "The file $(FILENAME) cannot be saved. Please check your system settings. You can find an automatically generated backup copy of this file in folder $(PATH) named $(BACKUPNAME).";
+    };
+
 #ifdef ERRCODE_IO_INVALIDLENGTH
     String ERRCODE_IO_INVALIDLENGTH
     {
