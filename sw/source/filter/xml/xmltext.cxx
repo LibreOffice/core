@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltext.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 16:10:35 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 09:09:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,35 +76,38 @@ using namespace ::com::sun::star::text;
 
 // ---------------------------------------------------------------------
 
-class SwXMLBodyContext_Impl : public SvXMLImportContext
+
+class SwXMLBodyContentContext_Impl : public SvXMLImportContext
 {
     SwXMLImport& GetSwImport() { return (SwXMLImport&)GetImport(); }
 
 public:
 
-    SwXMLBodyContext_Impl( SwXMLImport& rImport, sal_uInt16 nPrfx,
+    SwXMLBodyContentContext_Impl( SwXMLImport& rImport, sal_uInt16 nPrfx,
                              const OUString& rLName );
-    virtual ~SwXMLBodyContext_Impl();
+    virtual ~SwXMLBodyContentContext_Impl();
 
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix, const OUString& rLocalName,
             const Reference< xml::sax::XAttributeList > & xAttrList );
 
+    // The body element's text:global attribute can be ignored, because
+    // we must have the correct object shell already.
     virtual void EndElement();
 };
 
-SwXMLBodyContext_Impl::SwXMLBodyContext_Impl( SwXMLImport& rImport,
+SwXMLBodyContentContext_Impl::SwXMLBodyContentContext_Impl( SwXMLImport& rImport,
                                               sal_uInt16 nPrfx,
                                                    const OUString& rLName ) :
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
 }
 
-SwXMLBodyContext_Impl::~SwXMLBodyContext_Impl()
+SwXMLBodyContentContext_Impl::~SwXMLBodyContentContext_Impl()
 {
 }
 
-SvXMLImportContext *SwXMLBodyContext_Impl::CreateChildContext(
+SvXMLImportContext *SwXMLBodyContentContext_Impl::CreateChildContext(
         sal_uInt16 nPrefix, const OUString& rLocalName,
         const Reference< xml::sax::XAttributeList > & xAttrList )
 {
@@ -119,19 +122,19 @@ SvXMLImportContext *SwXMLBodyContext_Impl::CreateChildContext(
     return pContext;
 }
 
-void SwXMLBodyContext_Impl::EndElement()
+void SwXMLBodyContentContext_Impl::EndElement()
 {
     /* #108146# Code moved to SwXMLOmport::endDocument */
     GetImport().GetTextImport()->SetOutlineStyles();
 }
 
-SvXMLImportContext *SwXMLImport::CreateBodyContext(
+SvXMLImportContext *SwXMLImport::CreateBodyContentContext(
                                        const OUString& rLocalName )
 {
     SvXMLImportContext *pContext = 0;
 
     if( !IsStylesOnlyMode() )
-         pContext = new SwXMLBodyContext_Impl( *this, XML_NAMESPACE_OFFICE,
+         pContext = new SwXMLBodyContentContext_Impl( *this, XML_NAMESPACE_OFFICE,
                                               rLocalName );
     else
         pContext = new SvXMLImportContext( *this, XML_NAMESPACE_OFFICE,
