@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh3.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:58:22 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 10:14:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -904,6 +904,8 @@ void ScCellShell::Execute( SfxRequest& rReq )
             {
                 if (GetViewData()->HasEditView(GetViewData()->GetActivePart()))
                     pScMod->InputCancelHandler();
+                else if (pTabViewShell->HasPaintBrush())
+                    pTabViewShell->ResetBrushDocument();            // abort format paint brush
                 else if (pTabViewShell->HasHintWindow())
                     pTabViewShell->RemoveHintWindow();              // Eingabemeldung abschalten
                 else
