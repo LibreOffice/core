@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDeco.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-18 08:45:26 $
+ *  last change: $Author: fs $ $Date: 2001-08-30 08:03:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,16 +134,17 @@ using namespace ::utl;
 //==========================================================================
 DBG_NAME(ODBTableDecorator)
 //--------------------------------------------------------------------------
-ODBTableDecorator::ODBTableDecorator(const OConfigurationNode& _rTableConfig,
-        const Reference< XDatabaseMetaData >& _rxMetaData,
-        const Reference< XColumnsSupplier >& _rxTable) throw(SQLException)
-        : OTableDescriptor_BASE(m_aMutex)
-        ,ODataSettings(OTableDescriptor_BASE::rBHelper)
-        ,OConfigurationFlushable(m_aMutex,_rTableConfig.cloneAsRoot())
-        ,m_nPrivileges(0)
-        ,m_xTable(_rxTable)
-        ,m_xMetaData(_rxMetaData)
-        ,m_pColumns(NULL)
+ODBTableDecorator::ODBTableDecorator(
+        const OConfigurationNode& _rTableConfig, const Reference< XDatabaseMetaData >& _rxMetaData,
+        const Reference< XColumnsSupplier >& _rxTable, const Reference< XNumberFormatsSupplier >& _rxNumberFormats ) throw(SQLException)
+    :OTableDescriptor_BASE(m_aMutex)
+    ,ODataSettings(OTableDescriptor_BASE::rBHelper)
+    ,OConfigurationFlushable(m_aMutex,_rTableConfig.cloneAsRoot())
+    ,m_nPrivileges(0)
+    ,m_xTable(_rxTable)
+    ,m_xMetaData(_rxMetaData)
+    ,m_xNumberFormats( _rxNumberFormats )
+    ,m_pColumns(NULL)
 {
     DBG_CTOR(ODBTableDecorator, NULL);
     osl_incrementInterlockedCount( &m_refCount );
@@ -168,14 +169,15 @@ ODBTableDecorator::ODBTableDecorator(const OConfigurationNode& _rTableConfig,
 }
 // -----------------------------------------------------------------------------
 ODBTableDecorator::ODBTableDecorator(   const Reference< XDatabaseMetaData >& _rxMetaData,
-                    const Reference< XColumnsSupplier >& _rxNewTable) throw(SQLException)
-        : OTableDescriptor_BASE(m_aMutex)
-        ,ODataSettings(OTableDescriptor_BASE::rBHelper)
-        ,OConfigurationFlushable(m_aMutex)
-        ,m_nPrivileges(-1)
-        ,m_xMetaData(_rxMetaData)
-        ,m_xTable(_rxNewTable)
-        ,m_pColumns(NULL)
+        const Reference< XColumnsSupplier >& _rxNewTable, const Reference< XNumberFormatsSupplier >& _rxNumberFormats ) throw(SQLException)
+    :OTableDescriptor_BASE(m_aMutex)
+    ,ODataSettings(OTableDescriptor_BASE::rBHelper)
+    ,OConfigurationFlushable(m_aMutex)
+    ,m_nPrivileges(-1)
+    ,m_xMetaData(_rxMetaData)
+    ,m_xTable(_rxNewTable)
+    ,m_xNumberFormats( _rxNumberFormats )
+    ,m_pColumns(NULL)
 {
     DBG_CTOR(ODBTableDecorator, NULL);
     construct();
@@ -438,7 +440,7 @@ void ODBTableDecorator::flush_NoBroadcast_NoCommit()
 
         OColumns* pColumns = static_cast<OColumns*>(m_pColumns);
         if(pColumns)
-            pColumns->storeSettings(m_aConfigurationNode.openNode(CONFIGKEY_QRYDESCR_COLUMNS));
+            pColumns->storeSettings( m_aConfigurationNode.openNode( CONFIGKEY_QRYDESCR_COLUMNS ), m_xNumberFormats );
     }
 }
 // XRename,
@@ -520,7 +522,7 @@ Reference< XNameAccess> ODBTableDecorator::getColumns() throw (RuntimeException)
 
         // load the UI settings of the columns
         if (m_aConfigurationNode.isValid())
-            pCol->loadSettings(m_aConfigurationNode.openNode(CONFIGKEY_QRYDESCR_COLUMNS));
+            pCol->loadSettings( m_aConfigurationNode.openNode( CONFIGKEY_QRYDESCR_COLUMNS ), m_xNumberFormats );
     }
 
     return m_pColumns;
@@ -631,9 +633,18 @@ void ODBTableDecorator::fillPrivileges() const
 // -----------------------------------------------------------------------------
 Reference< XPropertySet > SAL_CALL ODBTableDecorator::createDataDescriptor(  ) throw (RuntimeException)
 {
-    Reference<XDataDescriptorFactory> xFactory(m_xTable,UNO_QUERY);
-    Reference< XPropertySet > xProp = xFactory->createDataDescriptor();
-    return new ODBTableDecorator(m_aConfigurationNode.cloneAsRoot(),m_xMetaData,Reference<XColumnsSupplier>(xProp,UNO_QUERY));
+    Reference< XDataDescriptorFactory > xFactory( m_xTable, UNO_QUERY );
+    DBG_ASSERT( xFactory.is(), "ODBTableDecorator::createDataDescriptor: invalid table!" );
+    Reference< XColumnsSupplier > xColsSupp;
+    if ( xFactory.is() )
+        xColsSupp = xColsSupp.query( xFactory->createDataDescriptor() );
+
+    return new ODBTableDecorator(
+        m_aConfigurationNode.cloneAsRoot(),
+        m_xMetaData,
+        xColsSupp,
+        m_xNumberFormats
+    );
 }
 // -----------------------------------------------------------------------------
 Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL ODBTableDecorator::getPropertySetInfo(  ) throw(RuntimeException)
@@ -698,10 +709,16 @@ void SAL_CALL ODBTableDecorator::release() throw(::com::sun::star::uno::RuntimeE
 {
     OTableDescriptor_BASE::release();
 }
+
 // -----------------------------------------------------------------------------
 void SAL_CALL ODBTableDecorator::setName( const ::rtl::OUString& aName ) throw (::com::sun::star::uno::RuntimeException)
 {
 }
-// -----------------------------------------------------------------------------
 
+// -----------------------------------------------------------------------------
+void ODBTableDecorator::setContext( const ::utl::OConfigurationTreeRoot& _rNode, const Reference< XNumberFormatsSupplier >& _rxNumberFormats )
+{
+    OConfigurationFlushable::setConfigurationNode( _rNode );
+    m_xNumberFormats = _rxNumberFormats;
+}
 

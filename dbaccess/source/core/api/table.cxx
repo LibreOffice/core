@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-18 08:45:27 $
+ *  last change: $Author: fs $ $Date: 2001-08-30 08:03:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,9 @@
 #ifndef _CONNECTIVITY_SDBCX_COLUMN_HXX_
 #include <connectivity/sdbcx/VColumn.hxx>
 #endif
+#ifndef DBACORE_SDBCORETOOLS_HXX
+#include "sdbcoretools.hxx"
+#endif
 
 using namespace dbaccess;
 using namespace ::com::sun::star::uno;
@@ -140,21 +143,22 @@ typedef ::std::map <sal_Int32, OTableColumn*, std::less <sal_Int32> > OColMap;
 DBG_NAME(ODBTable)
 //--------------------------------------------------------------------------
 ODBTable::ODBTable(const OConfigurationNode& _rTableConfig,
-        const Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxMetaData,
+        const Reference< XConnection >& _rxConn,
         const ::rtl::OUString& _rCatalog,
         const ::rtl::OUString& _rSchema,
         const ::rtl::OUString& _rName,
         const ::rtl::OUString& _rType,
         const ::rtl::OUString& _rDesc) throw(SQLException)
-        : connectivity::sdbcx::OTable(_rxMetaData->storesMixedCaseQuotedIdentifiers(),_rName,_rType,_rDesc,_rSchema,_rCatalog)
-        ,OConfigurationFlushable(m_aMutex,_rTableConfig.isValid() ? _rTableConfig.cloneAsRoot() : OConfigurationTreeRoot())
-        ,m_nPrivileges(0)
-        ,m_xMetaData(_rxMetaData)
+    :connectivity::sdbcx::OTable( _rxConn->getMetaData()->storesMixedCaseQuotedIdentifiers(), _rName, _rType, _rDesc, _rSchema, _rCatalog )
+    ,OConfigurationFlushable(m_aMutex,_rTableConfig.isValid() ? _rTableConfig.cloneAsRoot() : OConfigurationTreeRoot())
+    ,m_nPrivileges(0)
+    ,m_xConnection( _rxConn )
+    ,m_xMetaData( _rxConn->getMetaData() )
 {
     DBG_CTOR(ODBTable, NULL);
     osl_incrementInterlockedCount( &m_refCount );
 
-    DBG_ASSERT(_rxMetaData.is(), "ODBTable::ODBTable : invalid conn !");
+    DBG_ASSERT(m_xMetaData.is(), "ODBTable::ODBTable : invalid conn !");
     DBG_ASSERT(_rName.getLength(), "ODBTable::ODBTable : name !");
     // register our properties
     construct();
@@ -178,12 +182,13 @@ ODBTable::ODBTable(const OConfigurationNode& _rTableConfig,
     // likely that it's already used up than it's here.)
 }
 // -----------------------------------------------------------------------------
-ODBTable::ODBTable( const Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxMetaData)
-                throw(::com::sun::star::sdbc::SQLException)
-        : connectivity::sdbcx::OTable(_rxMetaData->storesMixedCaseQuotedIdentifiers())
-        ,OConfigurationFlushable(m_aMutex)
-        ,m_nPrivileges(-1)
-        ,m_xMetaData(_rxMetaData)
+ODBTable::ODBTable( const Reference< XConnection >& _rxConn )
+                throw(SQLException)
+    :connectivity::sdbcx::OTable( _rxConn->getMetaData()->storesMixedCaseQuotedIdentifiers())
+    ,OConfigurationFlushable(m_aMutex)
+    ,m_nPrivileges(-1)
+    ,m_xConnection( _rxConn )
+    ,m_xMetaData( _rxConn->getMetaData() )
 {
     construct();
 }
@@ -465,8 +470,8 @@ void ODBTable::flush_NoBroadcast_NoCommit()
         storeTo(m_aConfigurationNode.openNode(CONFIGKEY_SETTINGS));
 
         OColumns* pColumns = static_cast<OColumns*>(m_pColumns);
-        if(pColumns)
-            pColumns->storeSettings(m_aConfigurationNode.openNode(CONFIGKEY_QRYDESCR_COLUMNS));
+        if ( pColumns )
+            pColumns->storeSettings( m_aConfigurationNode.openNode(CONFIGKEY_QRYDESCR_COLUMNS), getDataSourceNumberFormats( m_xConnection ) );
     }
 }
 // XRename,
@@ -584,7 +589,11 @@ void ODBTable::refreshColumns()
 
     // our column's settings
     if (m_aConfigurationNode.isValid())
-        static_cast<OColumns*>(m_pColumns)->loadSettings(m_aConfigurationNode.openNode(CONFIGKEY_QRYDESCR_COLUMNS));
+    {
+        OColumns* pColumns = static_cast<OColumns*>(m_pColumns);
+        pColumns->loadSettings( m_aConfigurationNode.openNode(CONFIGKEY_QRYDESCR_COLUMNS), getDataSourceNumberFormats( m_xConnection ) );
+    }
+
 }
 // -------------------------------------------------------------------------
 void ODBTable::refreshPrimaryKeys(std::vector< ::rtl::OUString>& _rKeys)
