@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ListBox.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2002-12-02 09:56:34 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 08:59:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,18 +96,25 @@
 #ifndef _COM_SUN_STAR_FORM_XCHANGEBROADCASTER_HPP_
 #include <com/sun/star/form/XChangeBroadcaster.hpp>
 #endif
+#ifndef _DRAFTS_COM_SUN_STAR_FORM_XLISTENTRYSINK_HDL_
+#include <drafts/com/sun/star/form/XListEntrySink.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_FORM_XLISTENTRYLISTENER_HDL_
+#include <drafts/com/sun/star/form/XListEntryListener.hpp>
+#endif
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
 #endif
 #ifndef FORMS_ERRORBROADCASTER_HXX
 #include "errorbroadcaster.hxx"
 #endif
+#ifndef FORMS_ENTRYLISTHELPER_HXX
+#include "entrylisthelper.hxx"
+#endif
 
 //.........................................................................
 namespace frm
 {
-
-const ::rtl::OUString LISTBOX_EMPTY_VALUE = ::rtl::OUString::createFromAscii("$$$empty$$$");
 
 //==================================================================
 //= OListBoxModel
@@ -117,6 +124,7 @@ typedef ::cppu::ImplHelper1 <   ::com::sun::star::util::XRefreshable
 
 class OListBoxModel :public OBoundControlModel
                     ,public OListBoxModel_BASE
+                    ,public OEntryListHelper
                     ,public OErrorBroadcaster
                     ,public ::comphelper::OAggregationArrayUsageHelper< OListBoxModel >
 {
@@ -130,22 +138,27 @@ class OListBoxModel :public OBoundControlModel
     ::com::sun::star::uno::Sequence<sal_Int16>  m_aDefaultSelectSeq;    // DefaultSelected
     // </properties>
 
-    ::cppu::OInterfaceContainerHelper   m_aRefreshListeners;
+    ::cppu::OInterfaceContainerHelper           m_aRefreshListeners;
 
-    static sal_Int32        nSelectHandle;
-    // [properties]
+    sal_Int16                                   m_nNULLPos;             // position of the NULL value in our list
+    sal_Bool                                    m_bBoundComponent : 1;
 
-    sal_Int16               m_nNULLPos; // Position an der der NULLwert abgelegt wird
-    sal_Bool                m_bBoundComponent : 1;
+    /** type how we should transfer our selection to external value bindings
+    */
+    enum TransferSelection
+    {
+        tsIndexList,        /// as list of indexes of selected entries
+        tsIndex,            /// as index of the selected entry
+        tsEntryList,        /// as list of string representations of selected entries
+        tsEntry             /// as string representation of the selected entry
+    };
+    TransferSelection                           m_eTransferSelectionAs;
 
+private:
     // Helper functions
     StringSequence GetCurValueSeq() const;
 
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type>   _getTypes();
-
-protected:
-    // UNO Anbindung
-    virtual void _onValueChanged();
 
 public:
     DECLARE_DEFAULT_LEAF_XTOR( OListBoxModel );
@@ -169,28 +182,19 @@ public:
                 ::com::sun::star::uno::Any& _rConvertedValue, ::com::sun::star::uno::Any& _rOldValue, sal_Int32 _nHandle, const ::com::sun::star::uno::Any& _rValue )
                 throw (::com::sun::star::lang::IllegalArgumentException);
 
-// XLoadListener
-    virtual void         _loaded(const ::com::sun::star::lang::EventObject& rEvent);
-    virtual void         _unloaded();
-
-// XBoundComponent
-    virtual sal_Bool _commit();
-
-// XPropertySet
+protected:
+    // XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException);
     virtual cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
 
-// XPersistObject
+    // XPersistObject
     virtual ::rtl::OUString SAL_CALL    getServiceName() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL
         write(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL
         read(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 
-// XReset
-    virtual void _reset();
-
-// XRefreshable
+    // XRefreshable
     virtual void SAL_CALL refresh() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL addRefreshListener(const ::com::sun::star::uno::Reference< ::com::sun::star::util::XRefreshListener>& _rxListener) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeRefreshListener(const ::com::sun::star::uno::Reference< ::com::sun::star::util::XRefreshListener>& _rxListener) throw(::com::sun::star::uno::RuntimeException);
@@ -202,10 +206,43 @@ public:
         ) const;
     IMPLEMENT_INFO_SERVICE()
 
-protected:
-    void loadData();
+    // XEventListener
+    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw (::com::sun::star::uno::RuntimeException);
 
+protected:
+    // OBoundControlModel overridables
+    virtual ::com::sun::star::uno::Any
+                            translateDbColumnToControlValue( );
+    virtual ::com::sun::star::uno::Any
+                            translateExternalValueToControlValue( );
+    virtual ::com::sun::star::uno::Any
+                            translateControlValueToExternalValue( );
+    virtual sal_Bool        commitControlValueToDbColumn( bool _bPostReset );
+
+    virtual void            onConnectedDbColumn( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxForm );
+    virtual void            onDisconnectedDbColumn();
+    virtual void            onConnectedExternalValue( );
+
+    virtual ::com::sun::star::uno::Any
+                            getDefaultForReset() const;
+
+    virtual sal_Bool        approveValueBinding( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::form::XValueBinding >& _rxBinding );
+
+    // OEntryListHelper overriables
+    virtual void    stringItemListChanged( );
+    virtual void    connectedExternalListSource( );
+    virtual void    disconnectedExternalListSource( );
+
+protected:
     DECLARE_XCLONEABLE();
+
+private:
+    void        loadData();
+
+    /**
+    @precond we don't actually have an external list source
+    */
+    void        implRefreshListFromDbBinding( );
 };
 
 //==================================================================
