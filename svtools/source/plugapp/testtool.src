@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testtool.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:39:33 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 16:53:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 
 ToolBox DisplayHidToolBox {
     SVLook = TRUE ;
-    Text = "DisplayHID";
+    Text [ de ] = "DisplayHID";
     ItemList = {
     ToolBoxItem  {
             Type = TOOLBOXITEM_BUTTON;
@@ -83,10 +83,11 @@ class FlagToolBoxState
     TIB_AUTOSIZE, TIB_DROPDOWN,
 };*/
             Identifier = TT_SHOW;
-            Text = "Display IDs";
+            Text [ de ] = "IDs anzeigen";
             ItemBitmap = Bitmap  {
                 File = "ttshow.bmp";
             };
+            Text[ en-US ] = "Display IDs";
         };
     ToolBoxItem  {
             Type = TOOLBOXITEM_SEPARATOR;
@@ -94,43 +95,49 @@ class FlagToolBoxState
     ToolBoxItem  {
             _ToolBoxItemFlags = TIB_AUTOSIZE;
             Identifier = TT_OUTPUT;
-            Text = "This is the input window";
+            Text [ de ] = "Das ist das Eingabefenster";
+            Text[ en-US ] = "This is the input window";
         };
     ToolBoxItem  {
             Type = TOOLBOXITEM_SEPARATOR;
         };
     ToolBoxItem  {
             Identifier = TT_SEND_DATA;
-            Text = "Transfer to TestTool";
+            Text [ de ] = "Zum TestTool Übertragen";
             ItemBitmap = Bitmap  {
                 File = "ttremote.bmp";
             };
+            Text[ en-US ] = "Transfer to TestTool";
         };
     ToolBoxItem  {
             Type = TOOLBOXITEM_SEPARATOR;
         };
     ToolBoxItem  {
             Identifier = TT_ALLWIN;
-            Text = "Show all windows";
+            Text [ de ] = "Alle Fenster anzeigen";
             ItemBitmap = Bitmap  {
                 File = "ttall.bmp";
             };
+            Text[ en-US ] = "Show all windows";
         };
     ToolBoxItem  {
             Identifier = TT_KURZNAME;
-            Text = "Show short names (if available)";
+            Text [ de ] = "Kurzname Anzeigen (Falls Vorhanden)";
             ItemBitmap = Bitmap  {
                 File = "ttdef.bmp";
             };
+            Text[ en-US ] = "Show short names (if available)";
         };
     ToolBoxItem  {
             Identifier = TT_LANGNAME;
-            Text = "Always show long-name";
+            Text [ de ] = "Langname immer Anzeigen";
             ItemBitmap = Bitmap  {
                 File = "tthid.bmp";
             };
+            Text[ en-US ] = "Always show long-name";
         };
     };
+    Text[ en-US ] = "DisplayHID";
 };
 
 Bitmap TT_SHOW2 {
@@ -140,7 +147,7 @@ Bitmap TT_SHOW2 {
 WorkWindow TT_INLINE_TRANSLATION {
     SVLook = TRUE;
     Size = MAP_APPFONT( 2*Control_Border + 4*ButtonWidth + 3*Button_Button, 120 );
-    Text = "Inplace Translation";
+    Text [ de ] = "Inplace Translation";
     Moveable = TRUE;
     Sizeable = TRUE;
     Closeable = TRUE;
@@ -148,81 +155,95 @@ WorkWindow TT_INLINE_TRANSLATION {
     GroupBox TT_GB_TRANSLATION {
             Pos = MAP_APPFONT( 2, 3 );
             Size = MAP_APPFONT( 173, 44 );
-            Text = "Translation";
+            Text [ de ] = "Übersetzung";
+        Text[ en-US ] = "Translation";
     };
     Edit TT_E_NEW {
             Disable = TRUE;
             Border = TRUE;
             Pos = MAP_APPFONT( 7, 16 );
             Size = MAP_APPFONT( 162, 12 );
-            Text = "~Edit";
+            Text [ de ] = "~Bearbeiten";
             TabStop = TRUE;
+        Text[ en-US ] = "~Edit";
     };
     FixedText TT_FT_OLD {
             Pos = MAP_APPFONT( 7, 33 );
             Size = MAP_APPFONT( 162, 10 );
-            Text = "Original Text";
+            Text [ de ] = "Ursprünglicher Text";
+        Text[ en-US ] = "Original Text";
     };
     GroupBox TT_GB_COMMENT {
             Pos = MAP_APPFONT( 2, 52 );
             Size = MAP_APPFONT( 173, 32 );
-            Text = "Comment";
+            Text [ de ] = "Kommentar";
+        Text[ en-US ] = "Comment";
     };
     Edit TT_E_COMMENT {
             Disable = TRUE;
             Border = TRUE;
             Pos = MAP_APPFONT( 7, 64 );
             Size = MAP_APPFONT( 162, 12 );
-            Text = "~Comment";
+            Text [ de ] = "~Kommentar";
             TabStop = TRUE;
+        Text[ en-US ] = "~Comment";
     };
     PushButton TT_PB_SELECT {
             Pos = MAP_APPFONT( Control_Border, 89 );
             Size = MAP_APPFONT( ButtonWidth, 12 );
             TabStop = TRUE;
-            Text = "~Select";
+            Text [ de ] = "~Auswählen";
+        Text[ en-US ] = "~Select";
     };
     PushButton TT_PB_RESTORE {
             Disable = TRUE;
             Pos = MAP_APPFONT( Control_Border + ButtonWidth + Button_Button, 89 );
             Size = MAP_APPFONT( ButtonWidth, 12 );
             TabStop = TRUE;
-            Text = "~Restore";
+            Text [ de ] = "~Restore";
+        Text[ en-US ] = "~Restore";
     };
     PushButton TT_PB_ACCEPT {
             Disable = TRUE;
             Pos = MAP_APPFONT( Control_Border + 2*(ButtonWidth + Button_Button), 89 );
             Size = MAP_APPFONT( ButtonWidth, 12 );
             TabStop = TRUE;
-            Text = "~Accept";
+            Text [ de ] = "~Accept";
+        Text[ en-US ] = "~Accept";
     };
     PushButton TT_PB_NEXT {
             Pos = MAP_APPFONT( Control_Border + 3*(ButtonWidth + Button_Button), 89 );
             Size = MAP_APPFONT( ButtonWidth, 12 );
             TabStop = TRUE;
-            Text = "~Next";
+            Text [ de ] = "~Nächster";
+        Text[ en-US ] = "~Next";
     };
+    Text[ en-US ] = "Inplace Translation";
 };
 
 MessBox TT_DISCARD_CHANGED_DATA {
     Buttons = WB_YES_NO;
     DefButton = WB_DEF_YES;
-    Message = "The Translation will be lost. Proceed anyway?";
+    Message [ de ] = "Die Übersetzung wird verloren gehen. Fortfahren?";
+    Message[ en-US ] = "The Translation will be lost. Proceed anyway?";
 };
 
 ErrorBox TT_NO_CONTROL {
     Buttons = WB_OK;
     DefButton = WB_DEF_OK;
-    Message = "The Control is no longer valid. The Translation cannot be saved.";
+    Message [ de ] = "Das Control ist nicht mehr gültig. Die Übersetzung kann nicht gespeichert werden.";
+    Message[ en-US ] = "The Control is no longer valid. The Translation cannot be saved.";
 };
 
 String TT_GPF
 {
-    Text = "GPF occurred";
+    Text [ de ] = "GPF Aufgetreten";
+    Text[ en-US ] = "GPF occurred";
 };
 
 String TT_ALTERNATE_CAPTION
 {
-    Text = "HelpID does not match UniqueID: ";
+    Text [ de ] = "HelpID ungleich UniqueID: ";
+    Text[ en-US ] = "HelpID does not match UniqueID: ";
 };
 
