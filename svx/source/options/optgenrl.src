@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgenrl.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-09 23:05:40 $
+ *  last change: $Author: kz $ $Date: 2001-04-11 18:17:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -491,7 +491,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text [ french ] = " Adresse " ;
         Text [ swedish ] = "Adress " ;
         Text [ dutch ] = "  Adres   " ;
-        Text [ spanish ] = "  Dirección " ;
+        Text [ spanish ] = "Dirección " ;
         Text [ english_us ] = "Address " ;
         Text[ chinese_simplified ] = " µØÖ· ";
         Text[ russian ] = "Àäğåñ ";
@@ -523,7 +523,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ chinese_simplified ] = "Ê¹ÓÃÎÄµµÊôĞÔµÄÊı¾İ";
         Text[ russian ] = "Èñïîëüçîâàòü äàííûå äëÿ ñâîéñòâ äîêóìåíòà";
         Text[ polish ] = "U¿yj danych dla w³aœciwoœci dokumentów";
-        Text[ japanese ] = "ÄŞ·­ÒİÄÌßÛÊßÃ¨—p‚ÌÌ§²Ù‚ğg—p‚µ‚Ä‰º‚³‚¢B";
+        Text[ japanese ] = "ÄŞ·­ÒİÄ‘®«‚ÌÃŞ°À‚ğg—p";
         Text[ chinese_traditional ] = "¨Ï¥Î¤å¥óÄİ©Êªº¸ê®Æ";
         Text[ arabic ] = "ÇÓÊÎÏÇã ÈíÇäÇÊ ÎÕÇÆÕ ÇáãÓÊäÏ";
         Text[ greek ] = "×ñŞóç äåäïìİíùí ãéá ôéò éäéüôçôåò ôïõ åããñÜöïõ";
