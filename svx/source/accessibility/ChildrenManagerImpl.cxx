@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChildrenManagerImpl.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: af $ $Date: 2002-06-12 12:56:26 $
+ *  last change: $Author: af $ $Date: 2002-06-13 16:57:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -455,10 +455,10 @@ void ChildrenManagerImpl::AddAccessibleShape (std::auto_ptr<AccessibleShape> pSh
 void ChildrenManagerImpl::ClearAccessibleShapeList (void)
 {
     // Clear the list of visible accessible objects.  Objects not created on
-    // demand for XShapes are disposed later.
+    // demand for XShapes are treated below.
     ChildDescriptorListType::iterator I;
     for (I=maVisibleChildren.begin(); I!=maVisibleChildren.end(); I++)
-        if (I->mxAccessibleShape.is() && ! I->mxShape.is())
+        if (I->mxAccessibleShape.is() && I->mxShape.is())
         {
             uno::Any aShape;
             aShape <<= I->mxAccessibleShape;
@@ -467,15 +467,12 @@ void ChildrenManagerImpl::ClearAccessibleShapeList (void)
                 uno::Any(),
                 aShape);
 
-            // Dispose the object if there is a cooresponding UNO shape.
-            // Otherwise it will be disposed below.
-            if (I->mxShape.is())
-            {
-                Reference<lang::XComponent> xComponent (
-                    I->mxAccessibleShape, uno::UNO_QUERY);
-                if (xComponent.is())
-                    xComponent->dispose ();
-            }
+            // Dispose the object.
+            Reference<lang::XComponent> xComponent (
+                I->mxAccessibleShape, uno::UNO_QUERY);
+            if (xComponent.is())
+                xComponent->dispose ();
+
             // Reset the reference to the accessible object in any case.  If
             // it has not been disposed above it will be soon.
             I->mxAccessibleShape = NULL;
