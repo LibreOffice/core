@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8sty.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cmc $ $Date: 2000-10-10 16:54:06 $
+ *  last change: $Author: jp $ $Date: 2000-11-21 12:55:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -436,19 +436,39 @@ void WW8WrtStyle::SkipOdd()     // Ruecke zu gerader Adresse vor
 
 void WW8WrtStyle::Set1StyleDefaults( const SwFmt& rFmt, BOOL bPap )
 {
-    // defaults, that differs between WinWord and SO
-    static USHORT __READONLY_DATA aPapIds[] = {
-        RES_PARATR_WIDOWS, RES_PARATR_HYPHENZONE,
-        0 };
-    static USHORT __READONLY_DATA aChpIds[] = {
-        RES_CHRATR_FONTSIZE, RES_CHRATR_LANGUAGE,
-        0 };
+    BOOL aFlags[ RES_FRMATR_END - RES_CHRATR_BEGIN ];
+    USHORT nStt, nEnd, n;
+    if( bPap )
+       nStt = RES_PARATR_BEGIN, nEnd = RES_FRMATR_END;
+    else
+       nStt = RES_CHRATR_BEGIN, nEnd = RES_TXTATR_END;
 
-    for( const USHORT* pIds = bPap ? aPapIds : aChpIds; *pIds; ++pIds )
+    // dynamic defaults
+    const SfxItemPool& rPool = *rFmt.GetAttrSet().GetPool();
+    for( n = nStt; n < nEnd; ++n )
+        aFlags[ n - RES_CHRATR_BEGIN ] = 0 != rPool.GetPoolDefaultItem( n );
+
+    // static defaults, that differs between WinWord and SO
+    if( bPap )
     {
-        if( SFX_ITEM_SET != rFmt.GetItemState( *pIds, FALSE ))
-            Out( aWW8AttrFnTab, rFmt.GetAttr( *pIds, TRUE ), rWrt );
+        aFlags[ RES_PARATR_WIDOWS - RES_CHRATR_BEGIN ] = 1;
+        aFlags[ RES_PARATR_HYPHENZONE - RES_CHRATR_BEGIN ] = 1;
     }
+    else
+    {
+           aFlags[ RES_CHRATR_FONTSIZE - RES_CHRATR_BEGIN ] = 1;
+        aFlags[ RES_CHRATR_LANGUAGE - RES_CHRATR_BEGIN ] = 1;
+    }
+
+    const SfxItemSet* pOldI = rWrt.GetCurItemSet();
+    rWrt.SetCurItemSet( &rFmt.GetAttrSet() );
+
+    const BOOL* pFlags = aFlags + ( nStt - RES_CHRATR_BEGIN );
+    for( n = nStt; n < nEnd; ++n, ++pFlags )
+        if( *pFlags && SFX_ITEM_SET != rFmt.GetItemState( n, FALSE ))
+            Out( aWW8AttrFnTab, rFmt.GetAttr( n, TRUE ), rWrt );
+
+    rWrt.SetCurItemSet( pOldI );
 }
 
 void WW8WrtStyle::BuildUpx( const SwFmt* pFmt, BOOL bPap, USHORT nPos,
@@ -1861,11 +1881,14 @@ const SvULongs* WW8_WrPlcSubDoc::GetShapeIdArr() const
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtw8sty.cxx,v 1.2 2000-10-10 16:54:06 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtw8sty.cxx,v 1.3 2000-11-21 12:55:21 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2000/10/10 16:54:06  cmc
+      MSOffice 97/2000 Controls {Im|Ex}port
+
       Revision 1.1.1.1  2000/09/18 17:14:58  hr
       initial import
 
