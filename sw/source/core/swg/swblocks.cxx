@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swblocks.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-30 18:11:05 $
+ *  last change: $Author: mtg $ $Date: 2001-02-08 16:05:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,14 @@
 #ifndef _SWSWERROR_H
 #include <swerror.h>
 #endif
+#ifndef _SW_XMLTEXTBLOCKS_HXX
+#include <SwXMLTextBlocks.hxx>
+#endif
 
+
+#ifndef _DOCSH_HXX
+#include <docsh.hxx>
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::ucb;
@@ -153,7 +160,14 @@ USHORT SwImpBlocks::Hash( const String& r )
 
 
 SwBlockName::SwBlockName( const String& rShort, const String& rLong, long n )
-    : aShort( rShort ), aLong( rLong ), nPos( n ),
+    : aShort( rShort ), aLong( rLong ), nPos( n ), aPackageName (rShort),
+    bIsOnlyTxtFlagInit( FALSE ), bIsOnlyTxt( FALSE )
+{
+    nHashS = SwImpBlocks::Hash( rShort );
+    nHashL = SwImpBlocks::Hash( rLong );
+}
+SwBlockName::SwBlockName( const String& rShort, const String& rLong, const String& rPackageName)
+    : aShort( rShort ), aLong( rLong ), nPos( 0 ), aPackageName (rPackageName),
     bIsOnlyTxtFlagInit( FALSE ), bIsOnlyTxt( FALSE )
 {
     nHashS = SwImpBlocks::Hash( rShort );
@@ -167,6 +181,8 @@ short SwImpBlocks::GetFileType( const String& rFile )
 {
     if( !FStatHelper::IsDocument( rFile ) )
         return SWBLK_NO_FILE;
+    if( SwXMLTextBlocks::IsFileUCBStorage( rFile ) )
+        return SWBLK_XML;
     if( SvStorage::IsStorageFile( rFile ) )
         return SWBLK_SW3;
     // Kein Storage: Ist es eine SWG-Datei?
@@ -271,6 +287,12 @@ const String& SwImpBlocks::GetLongName( USHORT n ) const
     return aEmptyStr;
 }
 
+const String& SwImpBlocks::GetPackageName( USHORT n ) const
+{
+    if( n < aNames.Count() )
+        return aNames[ n ]->aPackageName;
+    return aEmptyStr;
+}
 
 void SwImpBlocks::AddName( const String& rShort, const String& rLong,
                             BOOL bOnlyTxt )
@@ -283,6 +305,7 @@ void SwImpBlocks::AddName( const String& rShort, const String& rLong,
     pNew->bIsOnlyTxt = bOnlyTxt;
     aNames.C40_PTR_INSERT( SwBlockName, pNew );
 }
+
 
 
 BOOL SwImpBlocks::IsFileChanged() const
@@ -336,7 +359,10 @@ SwTextBlocks::SwTextBlocks( const String& rFile )
         case SWBLK_SW2:
             pImp = new Sw2TextBlocks( sFileName ); break;
         case SWBLK_SW3:
-            pImp = new Sw3TextBlocks( sFileName ); break;
+            pImp = new Sw3TextBlocks( sFileName );
+            break;
+        case SWBLK_XML:
+            pImp = new SwXMLTextBlocks( sFileName ); break;
         case SWBLK_NO_FILE:
             pImp = new Sw3TextBlocks( sFileName ); break;
     }
@@ -373,7 +399,13 @@ void SwTextBlocks::SetName( const String& r )
 
 BOOL SwTextBlocks::IsOld() const
 {
-    return pImp ? pImp->IsOld() : FALSE;
+    if (pImp)
+    {
+        short nType = pImp->GetFileType();
+        if (SWBLK_SW3 == nType || SWBLK_SW2 == nType )
+            return TRUE;
+    }
+    return FALSE;
 }
 
 
@@ -384,6 +416,11 @@ ULONG SwTextBlocks::ConvertToNew()
     if( IsOld() )
     {
         // Erst mal muessen wir die Datei freigeben
+        short nType = pImp->GetFileType();
+        Sw2TextBlocks *pTwo = NULL;
+        Sw3TextBlocks *pThree = NULL;
+        SwImpBlocks *pOld = NULL;
+
         pImp->nCur = (USHORT) -1;
         String aName( pImp->aFile );
         delete pImp; pImp = NULL;
@@ -391,7 +428,7 @@ ULONG SwTextBlocks::ConvertToNew()
         INetURLObject aOldFull( aName );
         INetURLObject aNewFull( aName );
         aOldFull.SetExtension( String::CreateFromAscii("bak") );
-        String aOld( aOldFull.GetFull() );
+        String aOld( aOldFull.GetMainURL() );
         BOOL bError = FALSE;
         try
         {
@@ -417,32 +454,55 @@ ULONG SwTextBlocks::ConvertToNew()
 
         if( bError )
         {
-            pImp = new Sw2TextBlocks( aName );
+            if (nType == SWBLK_SW2)
+                pImp = new Sw2TextBlocks( aOld );
+            else
+                pImp = new Sw3TextBlocks( aOld );
             return nErr = ERR_SWG_CANNOT_WRITE;
         }
 
         // Die Datei ist erfolgreich umbenannt. Jetzt wird der Storage
         // aufgesetzt
-        Sw2TextBlocks* pOld = new Sw2TextBlocks( aOld );
-        Sw3TextBlocks* pNew = new Sw3TextBlocks( aName );
+        if (nType == SWBLK_SW2)
+            pOld = pTwo = new Sw2TextBlocks( aOld );
+        else
+            pOld = pThree = new Sw3TextBlocks( aOld );
+        SwXMLTextBlocks* pNew = new SwXMLTextBlocks( aName );
+        pNew->SetName ( pOld->GetName());
         // Wir kopieren den Doc-Ptr in das alte System
         // den alten SvPersist heben wir uns aber auf,
         // da dieser die ganze Zeit leben bleibt
-        SvPersist* pPersist2 = pOld->pDoc->GetPersist();
-        delete pOld->pDoc; pOld->pDoc = pNew->pDoc;
         // und lesen die Dateivorlagen erneut ein
-        nErr = pOld->LoadDoc();
+        SvPersist* pPersist2 = pOld->pDoc->GetPersist();
+        delete pOld->pDoc;
+        if (SWBLK_SW2 == nType )
+        {
+            nErr = pTwo->LoadDoc();
+            pOld->pDoc = pNew->pDoc;
+        }
+        else
+        {
+            nErr = pThree->OpenFile ( TRUE );
+            pThree->SetDoc ( pNew->pDoc );
+            pOld->pDoc->AddLink();
+        }
         if( !nErr && 0 == ( nErr = pNew->OpenFile( FALSE )) )
         {
             nErr = pNew->SetConvertMode( TRUE );
             // jetzt werden die Bausteine einfach umkopiert!
             if( !nErr )
             {
-                pOld->StatLineStartPercent();
-                for( USHORT i = 0; i < pOld->GetCount(); i++ )
+                if (SWBLK_SW2 == nType)
+                    pTwo->StatLineStartPercent();
+                USHORT nCount = pOld->GetCount();
+                for( USHORT i = 0; i < nCount; i++ )
                 {
                     pNew->ClearDoc();
-                    pNew->pDoc->SetPersist( pPersist2 );
+                    if (SWBLK_SW2 == nType )
+                    {
+                        // I think this is how it should work (!!!!!!) mtg
+                        pNew->pDoc->SetPersist( pPersist2 );
+                    }
                     nErr = pOld->GetDoc( i );
                     if( nErr )
                         break;
@@ -455,15 +515,30 @@ ULONG SwTextBlocks::ConvertToNew()
                     if( nErr )
                         break;
                     pNew->AddName( aShort, aLong );
-                    pNew->pDoc->SetPersist( 0 );
+                    if (SWBLK_SW2 == nType )
+                        pNew->pDoc->SetPersist( 0 );
+                    else
+                    {
+                        SwDocShell * pDocShell = pNew->pDoc->GetDocShell();
+                        pDocShell->InvalidateModel();
+                        pDocShell->ReactivateModel();
+                    }
                 }
-                ::EndProgress( pOld->pDoc->GetDocShell() );
+                if (SWBLK_SW2 == nType )
+                    ::EndProgress( pOld->pDoc->GetDocShell() );
             }
             if( !nErr )
                 nErr = pNew->SetConvertMode( FALSE );
         }
-        // Haben wir es geschafft?
-        pOld->pDoc = NULL;
+        if ( SWBLK_SW3 == nType )
+        {
+            pThree->CloseFile();
+        }
+        else
+        {
+            // Haben wir es geschafft?
+            pOld->pDoc = NULL;
+        }
         pNew->ClearDoc();
         if( !nErr )
         {
@@ -500,14 +575,17 @@ ULONG SwTextBlocks::ConvertToNew()
                 aNewContent.executeCommand( C2U( "transfer" ), aAny);
             }
             catch(...){}
-            pImp = new Sw2TextBlocks( aName );
+            if ( SWBLK_SW2 == nType )
+                pImp = new Sw2TextBlocks( aOld );
+            else
+                pImp = new Sw3TextBlocks( aOld );
         }
         pNew->CloseFile();
 
         try
         {
             ::ucb::Content aContent(
-                aNewFull.GetMainURL(), Reference< XCommandEnvironment > ());
+                aOld, Reference< XCommandEnvironment > ());
             aContent.executeCommand( C2U( "delete" ), makeAny( sal_Bool( sal_True ) ) );
         }
         catch(...){}
@@ -621,7 +699,14 @@ USHORT SwTextBlocks::Rename( USHORT n, const String* s, const String* l )
 ULONG SwTextBlocks::CopyBlock( SwTextBlocks& rSource, String& rSrcShort,
                                 const String& rLong )
 {
-    if( rSource.IsOld() )
+    BOOL bIsOld = FALSE;
+    if (rSource.pImp)
+    {
+        short nType = rSource.pImp->GetFileType();
+        if (SWBLK_SW2 == nType || SWBLK_SW3 == nType )
+            bIsOld = TRUE;
+    }
+    if( bIsOld ) //rSource.IsOld() )
         nErr = ERR_SWG_OLD_GLOSSARY;
     else if( pImp->bInPutMuchBlocks )
         nErr = ERR_SWG_INTERNAL_ERROR;
