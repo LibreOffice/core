@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-09 15:52:33 $
+ *  last change: $Author: oj $ $Date: 2001-01-11 09:18:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1496,7 +1496,12 @@ IMPL_LINK(SbaTableQueryBrowser, OnListContextMenu, const CommandEvent*, _pEvent)
                     {
                         aProps[2].Name = PROPERTY_CURRENTQUERY;
 
+                        // get the name of the query
                         ::rtl::OUString aName;
+                        SvLBoxItem* pQueryTextItem = pEntry->GetFirstItem(SV_ITEM_ID_DBTEXTITEM);
+                        if (pQueryTextItem)
+                            aName = static_cast<SvLBoxString*>(pQueryTextItem)->GetText();
+
                         DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(pEntry->GetUserData());
                         if(!pData)
                         {
