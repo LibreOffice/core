@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-30 14:11:04 $
+ *  last change: $Author: dr $ $Date: 2001-04-05 10:57:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -702,6 +702,7 @@ void ScXMLExport::GetAreaLinks( uno::Reference< sheet::XSpreadsheetDocument>& xS
             const OUString sFilter( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_FILTER ) );
             const OUString sFilterOpt( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_FILTOPT ) );
             const OUString sURL( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_LINKURL ) );
+            const OUString sRefresh( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_REFDELAY ) );
 
             sal_Int32 nCount = xLinksIAccess->getCount();
             for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
@@ -722,6 +723,8 @@ void ScXMLExport::GetAreaLinks( uno::Reference< sheet::XSpreadsheetDocument>& xS
                         aLinkAny >>= aAreaLink.sFilterOptions;
                         aLinkAny = xLinkProp->getPropertyValue( sURL );
                         aLinkAny >>= aAreaLink.sURL;
+                        aLinkAny = xLinkProp->getPropertyValue( sRefresh );
+                        aLinkAny >>= aAreaLink.nRefresh;
                     }
                     rAreaLinks.AddNewAreaLink( aAreaLink );
                 }
@@ -2297,6 +2300,11 @@ void ScXMLExport::WriteAreaLink( const ScMyCell& rMyCell )
         AddAttribute( XML_NAMESPACE_TABLE, sXML_last_column_spanned, sValue.makeStringAndClear() );
         SvXMLUnitConverter::convertNumber( sValue, rAreaLink.GetRowCount() );
         AddAttribute( XML_NAMESPACE_TABLE, sXML_last_row_spanned, sValue.makeStringAndClear() );
+        if( rAreaLink.nRefresh )
+        {
+            SvXMLUnitConverter::convertTime( sValue, (double)rAreaLink.nRefresh / 86400 );
+            AddAttribute( XML_NAMESPACE_TABLE, sXML_refresh_delay, sValue.makeStringAndClear() );
+        }
         SvXMLElementExport aElem( *this, XML_NAMESPACE_TABLE, sXML_cell_range_source, sal_True, sal_True );
     }
 }

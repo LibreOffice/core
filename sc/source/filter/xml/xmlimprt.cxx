@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: sab $ $Date: 2001-04-03 06:06:30 $
+ *  last change: $Author: dr $ $Date: 2001-04-05 10:57:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -514,6 +514,7 @@ static __FAR_DATA SvXMLTokenMapEntry aTableCellRangeSourceAttrTokenMap[] =
     { XML_NAMESPACE_TABLE,  sXML_filter_options,        XML_TOK_TABLE_CELL_RANGE_SOURCE_ATTR_FILTER_OPTIONS },
     { XML_NAMESPACE_TABLE,  sXML_last_column_spanned,   XML_TOK_TABLE_CELL_RANGE_SOURCE_ATTR_LAST_COLUMN    },
     { XML_NAMESPACE_TABLE,  sXML_last_row_spanned,      XML_TOK_TABLE_CELL_RANGE_SOURCE_ATTR_LAST_ROW       },
+    { XML_NAMESPACE_TABLE,  sXML_refresh_delay,         XML_TOK_TABLE_CELL_RANGE_SOURCE_ATTR_REFRESH_DELAY  },
     XML_TOKEN_MAP_END
 };
 

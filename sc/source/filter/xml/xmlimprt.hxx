@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: sab $ $Date: 2001-04-03 06:06:30 $
+ *  last change: $Author: dr $ $Date: 2001-04-05 10:57:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -348,7 +348,8 @@ enum ScXMLCellRangeSourceAttrTokens
     XML_TOK_TABLE_CELL_RANGE_SOURCE_ATTR_FILTER_NAME,
     XML_TOK_TABLE_CELL_RANGE_SOURCE_ATTR_FILTER_OPTIONS,
     XML_TOK_TABLE_CELL_RANGE_SOURCE_ATTR_LAST_COLUMN,
-    XML_TOK_TABLE_CELL_RANGE_SOURCE_ATTR_LAST_ROW
+    XML_TOK_TABLE_CELL_RANGE_SOURCE_ATTR_LAST_ROW,
+    XML_TOK_TABLE_CELL_RANGE_SOURCE_ATTR_REFRESH_DELAY
 };
 
 enum ScXMLNamedExpressionsTokens

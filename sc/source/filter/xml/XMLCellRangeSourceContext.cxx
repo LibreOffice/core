@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLCellRangeSourceContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-10 16:56:12 $
+ *  last change: $Author: dr $ $Date: 2001-04-05 10:57:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@ using namespace ::com::sun::star;
 ScMyImpCellRangeSource::ScMyImpCellRangeSource() :
     nColumns( 0 ),
     nRows( 0 ),
+    nRefresh( 0 ),
     bHas( sal_False )
 {
 }
@@ -148,6 +149,15 @@ ScXMLCellRangeSourceContext::ScXMLCellRangeSourceContext(
                     rCellRangeSource.nRows = nValue;
                 else
                     rCellRangeSource.nRows = 1;
+            }
+            break;
+            case XML_TOK_TABLE_CELL_RANGE_SOURCE_ATTR_REFRESH_DELAY:
+            {
+                double fTime;
+                if( SvXMLUnitConverter::convertTime( fTime, sValue ) )
+                    rCellRangeSource.nRefresh = Max( (sal_Int32)(fTime * 86400.0), (sal_Int32)0 );
+                else
+                    rCellRangeSource.nRefresh = 0;
             }
             break;
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportIterator.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-28 08:19:33 $
+ *  last change: $Author: dr $ $Date: 2001-04-05 10:57:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,6 +181,9 @@ struct ScMyAreaLink
     ::rtl::OUString             sURL;
     ::rtl::OUString             sSourceStr;
     ::com::sun::star::table::CellRangeAddress aDestRange;
+    sal_Int32                   nRefresh;
+
+    inline                      ScMyAreaLink() : nRefresh( 0 ) {}
 
     inline sal_Int32            GetColCount() const { return aDestRange.EndColumn - aDestRange.StartColumn + 1; }
     inline sal_Int32            GetRowCount() const { return aDestRange.EndRow - aDestRange.StartRow + 1; }
@@ -194,7 +197,7 @@ typedef ::std::list< ScMyAreaLink > ScMyAreaLinkList;
 class ScMyAreaLinksContainer : ScMyIteratorBase
 {
 private:
-    ScMyAreaLinkList                aAreaLinkList;
+    ScMyAreaLinkList            aAreaLinkList;
 protected:
     virtual sal_Bool            GetFirstAddress( ::com::sun::star::table::CellAddress& rCellAddress );
 public:
