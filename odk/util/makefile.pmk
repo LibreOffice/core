@@ -22,6 +22,7 @@ MY_COPY_RECURSIVE=$(GNUCOPY) -urf
 DESTDIRBIN=$(DESTDIR)$/bin$/windows
 MY_DELETE_RECURSIVE=del /sxyf
 MY_DIRCMP=dircmp -r
+REMOVE_READONLY=attrib -r
 .ELSE
 #--------------------
 # UNX ONLY
@@ -29,4 +30,5 @@ MY_DIRCMP=dircmp -r
 DESTDIRBIN=$(DESTDIR)$/bin$/solsparc
 MY_DELETE_RECURSIVE=rm -rf
 MY_DIRCMP=dircmp 
+REMOVE_READONLY=chmod +w
 .ENDIF
