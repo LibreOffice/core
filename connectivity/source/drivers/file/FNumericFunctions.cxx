@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FNumericFunctions.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 08:25:12 $
+ *  last change: $Author: obo $ $Date: 2004-03-15 12:46:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,11 +142,14 @@ ORowSetValue OOp_Exp::operate(const ORowSetValue& lhs) const
 // -----------------------------------------------------------------------------
 ORowSetValue OOp_Ln::operate(const ORowSetValue& lhs) const
 {
-    if ( lhs.isNull() )
+    if ( lhs.isNull() || static_cast<double>(lhs) < 0.0 )
         return lhs;
 
     double nVal(lhs);
-    return log(nVal);
+    nVal = log(nVal);
+    if ( rtl::math::isNan(nVal) )
+        return ORowSetValue();
+    return nVal;
 }
 // -----------------------------------------------------------------------------
 ORowSetValue OOp_Log::operate(const ::std::vector<ORowSetValue>& lhs) const
