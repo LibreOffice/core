@@ -173,6 +173,7 @@
 "SwXParagraph";"com::sun::star::style::CharacterProperties#optional";"CharUnderlineColor"
 "SwXParagraph";"com::sun::star::style::CharacterProperties#optional";"CharUnderlineHasColor"
 "SwXParagraph";"com::sun::star::style::CharacterProperties#optional";"CharStyleNames#optional"
+"SwXParagraph";"com::sun::star::style::CharacterProperties#optional";"CharHidden#optional"
 "SwXParagraph";"com::sun::star::beans::XPropertySet";"getPropertySetInfo()"
 "SwXParagraph";"com::sun::star::beans::XPropertySet";"setPropertyValue()"
 "SwXParagraph";"com::sun::star::beans::XPropertySet";"getPropertyValue()"
