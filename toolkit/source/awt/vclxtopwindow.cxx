@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxtopwindow.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2001-07-17 13:03:51 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 17:58:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,21 @@
  *
  ************************************************************************/
 
+#ifndef _COM_SUN_STAR_LANG_SYSTEMDEPENDENT_HPP_
+#include <com/sun/star/lang/SystemDependent.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_SYSTEMDEPENDENTXWINDOW_HPP_
+#include <com/sun/star/awt/SystemDependentXWindow.hpp>
+#endif
+
+#ifndef UNX
+#include <tools/prewin.h>
+#include <windows.h>
+#include <tools/postwin.h>
+#endif
+
+#include <vcl/syschild.hxx>
+#include <vcl/sysdata.hxx>
 #include <cppuhelper/typeprovider.hxx>
 
 #include <toolkit/awt/vclxtopwindow.hxx>
@@ -75,7 +90,8 @@
 //  class VCLXTopWindow
 //  ----------------------------------------------------
 
-VCLXTopWindow::VCLXTopWindow()
+VCLXTopWindow::VCLXTopWindow(bool bWHWND)
+    : m_bWHWND(bWHWND)
 {
 }
 
@@ -86,8 +102,16 @@ VCLXTopWindow::~VCLXTopWindow()
 // ::com::sun::star::uno::XInterface
 ::com::sun::star::uno::Any VCLXTopWindow::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XTopWindow*, this ) );
+    ::com::sun::star::uno::Any aRet;
+    if(! m_bWHWND) {
+        aRet = ::cppu::queryInterface( rType,
+                                       SAL_STATIC_CAST( ::com::sun::star::awt::XTopWindow*, this ) );
+    }
+    else {
+        aRet = ::cppu::queryInterface( rType,
+                                       SAL_STATIC_CAST( ::com::sun::star::awt::XTopWindow*, this ),
+                                       SAL_STATIC_CAST( ::com::sun::star::awt::XSystemDependentWindowPeer*, this ) );
+    }
     return (aRet.hasValue() ? aRet : VCLXContainer::queryInterface( rType ));
 }
 
@@ -96,6 +120,44 @@ IMPL_XTYPEPROVIDER_START( VCLXTopWindow )
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTopWindow>* ) NULL ),
     VCLXContainer::getTypes()
 IMPL_XTYPEPROVIDER_END
+
+
+
+::com::sun::star::uno::Any VCLXTopWindow::getWindowHandle( const ::com::sun::star::uno::Sequence< sal_Int8 >& ProcessId, sal_Int16 SystemType ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    // TODO, check the process id
+    ::com::sun::star::uno::Any aRet;
+    Window* pWindow = GetWindow();
+    if ( pWindow )
+    {
+        const SystemEnvData* pSysData = ((SystemWindow *)pWindow)->GetSystemData();
+        if( pSysData )
+        {
+#ifdef UNX
+            if( SystemType == ::com::sun::star::lang::SystemDependent::SYSTEM_XWINDOW )
+            {
+                ::com::sun::star::awt::SystemDependentXWindow aSD;
+                aSD.DisplayPointer = (sal_Int64)pSysData->pDisplay;
+                aSD.WindowHandle = pSysData->aWindow;
+                aRet <<= aSD;
+            }
+#elif (defined WNT)
+            if( SystemType == ::com::sun::star::lang::SystemDependent::SYSTEM_WIN32 )
+            {
+                 aRet <<= (sal_Int32)pSysData->hWnd;
+            }
+#elif (defined OS2)
+            if( SystemType == ::com::sun::star::lang::SystemDependent::SYSTEM_OS2 )
+            {
+                 aRet <<= (sal_Int32)pSysData->hWnd;
+            }
+#endif
+        }
+    }
+    return aRet;
+}
 
 
 void VCLXTopWindow::addTopWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTopWindowListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
