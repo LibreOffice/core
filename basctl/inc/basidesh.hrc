@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2000-09-29 11:02:34 $
+ *  last change: $Author: kz $ $Date: 2001-05-08 13:50:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,8 @@
 #ifndef _BASIDESH_HRC
 #define _BASIDESH_HRC
 
-#ifndef _SFX_HRC
-#include <sfx2/sfx.hrc>
+#ifndef _SVTOOLS_IMAGEMGR_HRC
+#include <svtools/imagemgr.hrc>
 #endif
 
 #ifndef _SVX_SVXIDS_HRC
