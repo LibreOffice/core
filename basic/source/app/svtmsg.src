@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtmsg.src,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: kz $ $Date: 2002-01-16 21:15:15 $
+ *  last change: $Author: kz $ $Date: 2002-05-02 21:41:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@ String S_GPF_ABORT
     Text[ turkish ] = "Program aborted with GPF";
     Text[ catalan ] = "Programa avortat amb GPF";
     Text[ finnish ] = "Ohjelma keskeytetty (yleinen ohjelmavirhe)";
+    Text[ thai ] = "โปรแกรมล้มเลิกเพราะ GPF";
 };
 String S_APP_SHUTDOWN
 {
@@ -120,6 +121,7 @@ String S_APP_SHUTDOWN
     Text[ turkish ] = "Application has been shut down";
     Text[ catalan ] = "No s'ha tancat l'aplicaci�";
     Text[ finnish ] = "Sovellus on sammutettu";
+    Text[ thai ] = "โปรแกรมประยุกต์ได้ปิดลงแล้ว";
 };
 String S_SID_EXECUTE_FAILED_NO_DISPATCHER
 {
@@ -144,6 +146,7 @@ String S_SID_EXECUTE_FAILED_NO_DISPATCHER
     Text[ turkish ] = "Slot ID cannot be run. No ActiveDispatcher";
     Text[ catalan ] = "No s'ha pogut executar Slot ID. ActiveDispatcher no existeix";
     Text[ finnish ] = "Paikkatunnuksen suoritus ei onnistu. Ei aktiivista l�hetint�";
+    Text[ thai ] = "ช่องเสียบ ID ไม่สามารถใช้งานได้ ไม่มีตัวจ่ายงานที่ทำงานอยู่";
 };
 String S_SID_EXECUTE_FAILED
 {
@@ -168,6 +171,7 @@ String S_SID_EXECUTE_FAILED
     Text[ turkish ] = "Slot ID could not be run";
     Text[ catalan ] = "No s'ha pogut executar Slot ID";
     Text[ finnish ] = "Paikkatunnusta ei voitu suorittaa";
+    Text[ thai ] = "ช่องเสียบ ID ไม่สามารถใช้งานได้";
 };
 String S_UNO_PROPERTY_NITIALIZE_FAILED
 {
@@ -192,6 +196,7 @@ String S_UNO_PROPERTY_NITIALIZE_FAILED
     Text[ turkish ] = "UnoSlot: Properties could not be initialized";
     Text[ catalan ] = "UnoSlot: No s'ha pogut instal�lar Properties";
     Text[ finnish ] = "UnoSlot: Ominaisuuksia ei voitu alustaa";
+    Text[ thai ] = "UnoSlot: ไม่สามารถเริ่มคุณสมบัติได้";
 };
 String S_RESETAPPLICATION_FAILED_COMPLEX
 {
@@ -216,6 +221,7 @@ String S_RESETAPPLICATION_FAILED_COMPLEX
     Text[ turkish ] = "ResetApplication failed: too complex";
     Text[ catalan ] = "No s'ha realitzat ResetApplication: Massa complexa";
     Text[ finnish ] = "ResetApplication-sovelluksenalustustoiminto ei onnistunut: liian monimutkainen";
+    Text[ thai ] = "ตั้งค่าโปรแกรมประยุกต์อีกครั้งล้มเหลว: ซับซ้อนเกินไป";
 };
 String S_RESETAPPLICATION_FAILED_UNKNOWN
 {
@@ -240,6 +246,7 @@ String S_RESETAPPLICATION_FAILED_UNKNOWN
     Text[ turkish ] = "ResetApplication failed: unknown window type";
     Text[ catalan ] = "No s'ha realitzat ResetApplication: Error desconegut";
     Text[ finnish ] = "ResetApplication-sovelluksenalustustoiminto ei onnistunut: tuntematon ikkunatyyppi";
+    Text[ thai ] = "ตั้งค่าโปรแกรมประยุกต์อีกครั้งล้มเหลว: ไม่รู้จักชนิดของหน้าต่าง";
 };
 String S_NO_ACTIVE_WINDOW
 {
@@ -264,6 +271,7 @@ String S_NO_ACTIVE_WINDOW
     Text[ turkish ] = "Active window not found (GetNextCloseWindow)";
     Text[ catalan ] = "No s'ha trobat cap finestra activa (GetNextCloseWindow)";
     Text[ finnish ] = "Aktiivista ikkunaa ei l�ytynyt (GetNextCloseWindow)";
+    Text[ thai ] = "ไม่พบหน้าต่างที่ทำงานอยู่ (GetNextCloseWindow)";
 };
 String S_NO_DIALOG_IN_GETACTIVE
 {
@@ -288,6 +296,7 @@ String S_NO_DIALOG_IN_GETACTIVE
     Text[ turkish ] = "GetActive does not deliver a dialog! Inform development.";
     Text[ catalan ] = "GetActive no retorna cap di�leg! Informa al servei de programaci�";
     Text[ finnish ] = "GetActive-aktiivihakutoiminto ei n�yt� valintaikkunaa! Ota yhteys sovelluskehitt�jiin.";
+    Text[ thai ] = "GetActive ไม่แสดงไดอะล็อก! แจ้งการพัฒนา";
 };
 String S_NO_POPUP
 {
@@ -312,6 +321,7 @@ String S_NO_POPUP
     Text[ turkish ] = "PopUp menu not open";
     Text[ catalan ] = "No hi ha cap PopupMenu obert";
     Text[ finnish ] = "Ponnahdusvalikko ei ole avoinna";
+    Text[ thai ] = "เมนูแบบผุดขึ้นไม่เปิด";
 };
 String S_NO_SUBMENU
 {
@@ -336,6 +346,7 @@ String S_NO_SUBMENU
     Text[ turkish ] = "Submenu does not exist";
     Text[ catalan ] = "Submen� inexistent";
     Text[ finnish ] = "Alivalikkoa ei ole";
+    Text[ thai ] = "ไม่มีเมนูย่อยอยู่";
 };
 String S_CONTROLTYPE_NOT_SUPPORTED
 {
@@ -360,6 +371,7 @@ String S_CONTROLTYPE_NOT_SUPPORTED
     Text[ turkish ] = "ControlType ($Arg1) is not supported";
     Text[ catalan ] = "No hi ha suport per a ControlType ($Arg1)";
     Text[ finnish ] = "Ohjaintyyppi� ($Arg1) ei tueta";
+    Text[ thai ] = "ไม่สนับสนุน ControlType ($Arg1) ";
 };
 String S_SELECTION_BY_ATTRIBUTE_ONLY_DIRECTORIES
 {
@@ -384,6 +396,7 @@ String S_SELECTION_BY_ATTRIBUTE_ONLY_DIRECTORIES
     Text[ turkish ] = "Selection by attributes only possible for directories";
     Text[ catalan ] = "La selecci� per atributs nom�s �s possible per a directoris.";
     Text[ finnish ] = "M��ritevalintoja voi tehd� vain hakemistoissa";
+    Text[ thai ] = "เลือกโดยคุณลักษณะที่เป็นไปได้ของไดเร็กทอรี่เท่านั้น";
 };
 String S_NO_MORE_FILES
 {
@@ -408,6 +421,7 @@ String S_NO_MORE_FILES
     Text[ turkish ] = "No further files";
     Text[ catalan ] = "No hi ha cap m�s fitxer";
     Text[ finnish ] = "Ei en�� tiedostoja";
+    Text[ thai ] = "ไม่มีแฟ้มมากกว่านี้";
 };
 String S_UNKNOWN_METHOD
 {
@@ -432,6 +446,7 @@ String S_UNKNOWN_METHOD
     Text[ turkish ] = "Unknown method '($Arg1)' to ($Arg2)";
     Text[ catalan ] = "M�tode desconegut '($Arg1)' a ($Arg2)";
     Text[ finnish ] = "Tuntematon menetelm� ($Arg1) -> ($Arg2)";
+    Text[ thai ] = "ไม่รู้จักวิธี '($Arg1)' ถึง ($Arg2)";
 };
 String S_INVALID_PARAMETERS
 {
@@ -456,6 +471,7 @@ String S_INVALID_PARAMETERS
     Text[ turkish ] = "Invalid Parameters";
     Text[ catalan ] = "Par�metres incorrectes";
     Text[ finnish ] = "V��r�t parametrit";
+    Text[ thai ] = "พารามิเตอร์ไม่ถูกต้อง";
 };
 String S_POINTER_OUTSIDE_APPWIN
 {
@@ -480,6 +496,7 @@ String S_POINTER_OUTSIDE_APPWIN
     Text[ turkish ] = "Pointer not located in application window at '($Arg1)'";
     Text[ catalan ] = "Pointer es troba fora de la finestra d'aplicaci� a '($Arg1)'";
     Text[ finnish ] = "Sovellusikkunassa ei ole osoitinta kohteessa ($Arg1)";
+    Text[ thai ] = "จุดชี้ไม่อยู่ในหน้าต่างโปรแกรมประยุกต์ที่ '($Arg1)'";
 };
 String S_UNKNOWN_COMMAND
 {
@@ -504,6 +521,7 @@ String S_UNKNOWN_COMMAND
     Text[ turkish ] = "Unknown command '($Arg1)'";
     Text[ catalan ] = "Error desconegut '($Arg1)'";
     Text[ finnish ] = "Tuntematon komento ($Arg1)";
+    Text[ thai ] = "ไม่รู้จักคำสั่ง '($Arg1)'";
 };
 String S_WIN_NOT_FOUND
 {
@@ -528,6 +546,7 @@ String S_WIN_NOT_FOUND
     Text[ turkish ] = "($Arg1) could not be found";
     Text[ catalan ] = "No s'ha pogut trobar ($Arg1)";
     Text[ finnish ] = "($Arg1) ei l�ytynyt";
+    Text[ thai ] = "ไม่สามารถพบ ($Arg1) ";
 };
 String S_WIN_INVISIBLE
 {
@@ -552,6 +571,7 @@ String S_WIN_INVISIBLE
     Text[ turkish ] = "($Arg1) is not visible";
     Text[ catalan ] = "($Arg1) no �s visible";
     Text[ finnish ] = "($Arg1) ei ole n�kyviss�";
+    Text[ thai ] = "ไม่เห็น ($Arg1) ";
 };
 String S_WIN_DISABLED
 {
@@ -576,6 +596,7 @@ String S_WIN_DISABLED
     Text[ turkish ] = "($Arg1) could not be accessed";
     Text[ catalan ] = "No s'ha pogut accedir a ($Arg1)";
     Text[ finnish ] = "($Arg1) ei voitu k�ytt��";
+    Text[ thai ] = "ไม่สามารถเข้าถึง ($Arg1) ";
 };
 String S_NUMBER_TOO_BIG
 {
@@ -600,6 +621,7 @@ String S_NUMBER_TOO_BIG
     Text[ turkish ] = "Entry number ($Arg2) is too large in ($Arg1). Max. allowed is ($Arg3)";
     Text[ catalan ] = "L'entrada n�mero ($Arg2) �s massa gran per a ($Arg1). El m�xim perm�s �s ($Arg3)";
     Text[ finnish ] = "Merkint� numero ($Arg2) on liian suuri kohteessa ($Arg1). Enimm�isarvo on ($Arg3)";
+    Text[ thai ] = "ใส่ตัวเลข ($Arg2) มากเกินไปใน ($Arg1) จำนวนมากที่สุดที่ใส่ได้คือ ($Arg3)";
 };
 String S_NUMBER_TOO_SMALL
 {
@@ -624,6 +646,7 @@ String S_NUMBER_TOO_SMALL
     Text[ turkish ] = "The entry number ($Arg2) is too small in ($Arg1). Min allowed is ($Arg3)";
     Text[ catalan ] = "L'entrada n�mero ($Arg2) �s massa petita per a ($Arg1). El m�nim perm�s �s ($Arg3)";
     Text[ finnish ] = "Merkint� numero ($Arg2) on liian pieni kohteessa ($Arg1). Enimm�isarvo on ($Arg3)";
+    Text[ thai ] = "ใส่ตัวเลข ($Arg2) น้อยเกินไปใน ($Arg1) จำนวนน้อยที่สุดที่ใส่ได้คือ ($Arg3)";
 };
 String S_WINDOW_DISAPPEARED
 {
@@ -648,6 +671,7 @@ String S_WINDOW_DISAPPEARED
     Text[ turkish ] = "Window momentarily not visible at ($Arg1)";
     Text[ catalan ] = "La finestra no es pot veure moment�niament a ($Arg1)";
     Text[ finnish ] = "Ikkuna ei ole tilap�isesti n�kyviss� kohteessa ($Arg1)";
+    Text[ thai ] = "ไม่เห็นหน้าต่างชั่วขณะู่ที่ ($Arg1)";
 };
 String S_ERROR_SAVING_IMAGE
 {
@@ -672,6 +696,7 @@ String S_ERROR_SAVING_IMAGE
     Text[ turkish ] = "Error #($Arg1) when saving the image";
     Text[ catalan ] = "S'ha produ�t un error #($Arg1) en desar la imatge";
     Text[ finnish ] = "Virhe #($Arg1) tallennettaessa kuvaa";
+    Text[ thai ] = "ผิดพลาด #($Arg1) ขณะกำลังบันทึกรูปภาพ";
 };
 String S_INVALID_POSITION
 {
@@ -696,6 +721,7 @@ String S_INVALID_POSITION
     Text[ turkish ] = "Invalid positon at ($Arg1)";
     Text[ catalan ] = "Posici� no v�lida a ($Arg1)";
     Text[ finnish ] = "Virheellinen sijainti kohteessa ($Arg1)";
+    Text[ thai ] = "ตำแหน่งไม่ถูกต้องที่ ($Arg1)";
 };
 String S_SPLITWIN_NOT_FOUND
 {
@@ -720,6 +746,7 @@ String S_SPLITWIN_NOT_FOUND
     Text[ turkish ] = "Split window not found at ($Arg1)";
     Text[ catalan ] = "No s'ha trobat la finestra dividida a ($Arg1)";
     Text[ finnish ] = "Jaettua ikkunaa ei l�ytynyt kohteesta ($Arg1)";
+    Text[ thai ] = "ไม่พบหน้าต่างที่แยกที่ ($Arg1)";
 };
 String S_INTERNAL_ERROR
 {
@@ -744,6 +771,7 @@ String S_INTERNAL_ERROR
     Text[ turkish ] = "Internal error at ($Arg1)";
     Text[ catalan ] = "S'ha produ�t un error intern a ($Arg1)";
     Text[ finnish ] = "Sis�inen virhe kohteessa ($Arg1)";
+    Text[ thai ] = "ผิดพลาดภายในที่ ($Arg1)";
 };
 String S_NO_STATUSBAR
 {
@@ -768,6 +796,7 @@ String S_NO_STATUSBAR
     Text[ turkish ] = "No status bar at ($Arg1)";
     Text[ catalan ] = "No hi ha barra d'estat a ($Arg1)";
     Text[ finnish ] = "Ei tilarivi� kohteessa ($Arg1)";
+    Text[ thai ] = "ไม่มีแถบสถานะที่ ($Arg1)";
 };
 String S_ITEMS_INVISIBLE
 {
@@ -792,6 +821,7 @@ String S_ITEMS_INVISIBLE
     Text[ turkish ] = "The items are hidden at ($Arg1)";
     Text[ catalan ] = "Els elements a ($Arg1) s�n amagats";
     Text[ finnish ] = "Nimikkeet on piilotettu kohteessa ($Arg1)";
+    Text[ thai ] = "ซ่อนรายการที่ ($Arg1)";
 };
 String S_TABPAGE_NOT_FOUND
 {
@@ -816,6 +846,7 @@ String S_TABPAGE_NOT_FOUND
     Text[ turkish ] = "Tab page not found at ($Arg1)";
     Text[ catalan ] = "No s'ha trobat la p�gina de les pestanyes a ($Arg1)";
     Text[ finnish ] = "V�lilehtisivua ei l�ytynyt kohteesta ($Arg1)";
+    Text[ thai ] = "ไม่พบระยะกั้นหน้าที่ ($Arg1)";
 };
 String S_TRISTATE_NOT_ALLOWED
 {
@@ -841,6 +872,7 @@ String S_TRISTATE_NOT_ALLOWED
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "No es poden definir tres estats a ($Arg1)";
     Text[ finnish ] = "Kolmitilaa ei voi asettaa kohteeseen ($Arg1)";
+    Text[ thai ] = "ไม่สามารถตั้งค่าได้สามสถานะที่ ($Arg1)";
 };
 String S_ERROR_IN_SET_TEXT
 {
@@ -865,6 +897,7 @@ String S_ERROR_IN_SET_TEXT
     Text[ turkish ] = "Set text did not function";
     Text[ catalan ] = "La definici� de text no ha funcionat";
     Text[ finnish ] = "Tekstin m��ritys ei toiminut";
+    Text[ thai ] = "ตั้งค่าให้ข้อความไม่มีฟังก์ชั่น";
 };
 String S_ATTEMPT_TO_WRITE_READONLY
 {
@@ -889,6 +922,7 @@ String S_ATTEMPT_TO_WRITE_READONLY
     Text[ turkish ] = "Attempt to write on read-only ($Arg1)";
     Text[ catalan ] = "S'intenta escriure en mode de nom�s lectura ($Arg1)";
     Text[ finnish ] = "Yritettiin kirjoittaan vain luku -objektiin ($Arg1)";
+    Text[ thai ] = "พยายามเขียนแบบอ่านอย่างเดียว ($Arg1)";
 };
 String S_NO_SELECT_FALSE
 {
@@ -913,6 +947,7 @@ String S_NO_SELECT_FALSE
     Text[ turkish ] = "Select FALSE not allowed. Use MultiSelect at ($Arg1)";
     Text[ catalan ] = "No es permet la selecci� de FALSE. Utilitzeu Miltiselect a ($Arg1)";
     Text[ finnish ] = "Valinta UNTRUE ei ole sallittu. K�yt� MultiSelect-monivalintatoimintoa kohteessa ($Arg1)";
+    Text[ thai ] = "ไม่อนุญาตให้เลือก เท็จ ใช้การเลือกหลายส่วนที่ ($Arg1)";
 };
 String S_ENTRY_NOT_FOUND
 {
@@ -937,6 +972,7 @@ String S_ENTRY_NOT_FOUND
     Text[ turkish ] = "\"($Arg2)\" entry at ($Arg1) not found";
     Text[ catalan ] = "No s'ha trobat l'entrada \"($Arg2)\" a ($Arg1)";
     Text[ finnish ] = "Merkint�� ($Arg2) kohteessa ($Arg1) ei l�ytynyt";
+    Text[ thai ] = "ไม่พบรายการ \"($Arg2)\" ที่ ($Arg1) ";
 };
 String S_METHOD_FAILED
 {
@@ -961,6 +997,7 @@ String S_METHOD_FAILED
     Text[ turkish ] = "($Arg1) of entry \"($Arg2)\" failed";
     Text[ catalan ] = "Ha fallat ($Arg1) de l'entrada \"($Arg2)\"";
     Text[ finnish ] = "($Arg1) merkinn�lle ($Arg2) ei onnistunut";
+    Text[ thai ] = "($Arg1) ของรายการ \"($Arg2)\" ล้มเหลว";
 };
 String S_HELPID_ON_TOOLBOX_NOT_FOUND
 {
@@ -985,6 +1022,7 @@ String S_HELPID_ON_TOOLBOX_NOT_FOUND
     Text[ turkish ] = "HelpID in ToolBox not found at ($Arg1)";
     Text[ catalan ] = "No s'ha trobat el HelpID del quadre d'eines de ($Arg1)";
     Text[ finnish ] = "Ty�kaluvalikon ohjetunnusta ei l�ytynyt kohteesta ($Arg1)";
+    Text[ thai ] = "ไม่พบ ID ช่วยเหลือในกล่องเครื่องมือที่ ($Arg1)";
 };
 String S_BUTTON_DISABLED_ON_TOOLBOX
 {
@@ -1009,6 +1047,7 @@ String S_BUTTON_DISABLED_ON_TOOLBOX
     Text[ turkish ] = "The button is disabled in ToolBox at ($Arg1)";
     Text[ catalan ] = "S'ha inhabilitat el bot?al quadre d'eines de ($Arg1)";
     Text[ finnish ] = "Painike on poistettu k�yt�st� ty�kaluvalikosta kohteessa ($Arg1)";
+    Text[ thai ] = "ไม่สามารถใช้งานปุ่มที่อยู่ในกล่องเครื่องมือที่ ($Arg1)";
 };
 String S_BUTTON_HIDDEN_ON_TOOLBOX
 {
@@ -1033,6 +1072,7 @@ String S_BUTTON_HIDDEN_ON_TOOLBOX
     Text[ turkish ] = "The button is hidden in ToolBox at ($Arg1)";
     Text[ catalan ] = "El bot� al quadre d'eines de ($Arg1) �s ocult";
     Text[ finnish ] = "Painike on piilotettu ty�kaluvalikosta kohteessa ($Arg1)";
+    Text[ thai ] = "ซ่อนปุ่มที่อยู่ในกล่องเครื่องมือที่ ($Arg1)";
 };
 String S_CANNOT_MAKE_BUTTON_VISIBLE_IN_TOOLBOX
 {
@@ -1057,6 +1097,7 @@ String S_CANNOT_MAKE_BUTTON_VISIBLE_IN_TOOLBOX
     Text[ turkish ] = "Button cannot be made visible in ToolBox at ($Arg1)";
     Text[ catalan ] = "No es pot fer visible el bot� al quadre d'eines de ($Arg1)";
     Text[ finnish ] = "Ty�kaluvalikon painiketta ei voi n�ytt�� kohteessa ($Arg1)";
+    Text[ thai ] = "ไม่สามารถทำให้เห็นปุ่มที่อยู่ในกล่องเครื่องมือได้ที่ ($Arg1)";
 };
 String S_TEAROFF_FAILED
 {
@@ -1081,6 +1122,7 @@ String S_TEAROFF_FAILED
     Text[ turkish ] = "TearOff failed in ToolBox at ($Arg1)";
     Text[ catalan ] = "TearOff ha fallat en el quadre d'eines a ($Arg1)";
     Text[ finnish ] = "TearOff-irrottamistoiminto ei onnistunut ty�kaluvalikossa kohteessa ($Arg1)";
+    Text[ thai ] = "TearOff ล้มเหลวในกล่องเครื่องมือที่ ($Arg1)";
 };
 
 // Has to stay in for old res files
@@ -1107,6 +1149,7 @@ String S_NO_SELECTED_ENTRY_DEPRECATED
     Text[ turkish ] = "An entry has not been selected in TreeListBox at ($Arg1)";
     Text[ catalan ] = "No hi ha cap entrada seleccionada a TreeListBox per ($Arg1)";
     Text[ finnish ] = "Valikkoluetteloruudun (TreeListBox) merkint�� ei ole valittu kohteessa ($Arg1)";
+    Text[ thai ] = "รายการไม่ได้ถูกเลือกใน TreeListBox ที่ ($Arg1)";
 };
 String S_NO_SELECTED_ENTRY
 {
@@ -1131,6 +1174,7 @@ String S_NO_SELECTED_ENTRY
     Text[ korean ] = "($Arg1)의 ($Arg2)에는 선택된 항목이 없습니다.";
     Text[ chinese_simplified ] = "没有在 ($Arg1) 的 ($Arg2) 中选中一个条目";
     Text[ chinese_traditional ] = "No entry was selected in ($Arg2) at ($Arg1)";
+    Text[ thai ] = "รายการไม่ได้ถูกเลือกใน TreeListBox ที่ ($Arg1)";
 };
 String S_SELECT_DESELECT_VIA_STRING_NOT_IMPLEMENTED
 {
@@ -1155,6 +1199,7 @@ String S_SELECT_DESELECT_VIA_STRING_NOT_IMPLEMENTED
     Text[ turkish ] = "Select/Deselect with string not implemented at ($Arg1)";
     Text[ catalan ] = "No s'ha implementat a ($Arg1) l'opci� amb cadena selecciona/desselecciona";
     Text[ finnish ] = "Valinta/valinnan poisto merkkijonolla ei ole k�yt�ss� kohteessa ($Arg1)";
+    Text[ thai ] = "เลือก/ไม่เลือกสายอักขระที่ยังใช้ไม่ได้ที่ ($Arg1)";
 };
 String S_ALLOWED_ONLY_IN_FLOATING_MODE
 {
@@ -1179,6 +1224,7 @@ String S_ALLOWED_ONLY_IN_FLOATING_MODE
     Text[ turkish ] = "Method only allowed in floating mode at ($Arg1)";
     Text[ catalan ] = "El m�tode nom�s es permet en el mode flotant a ($Arg1)";
     Text[ finnish ] = "Menetelm� on sallittu vain kohteen ($Arg1) irrallistilassa";
+    Text[ thai ] = "อนุญาตให้ใช้วิธีการในโหมดลอยเท่านั้นที่ ($Arg1) ";
 };
 String S_ALLOWED_ONLY_IN_DOCKING_MODE
 {
@@ -1203,6 +1249,7 @@ String S_ALLOWED_ONLY_IN_DOCKING_MODE
     Text[ turkish ] = "Method only allowed in docking mode at ($Arg1)";
     Text[ catalan ] = "El m�tode nom�s es permet en el mode d'acoblament a ($Arg1)";
     Text[ finnish ] = "Menetelm� on sallittu vain kohteen ($Arg1) telakointitilassa";
+    Text[ thai ] = "อนุญาตให้ใช้วิธีการในโหมดเทียบชิดขอบเท่านั้นที่ ($Arg1) ";
 };
 String S_SIZE_NOT_CHANGEABLE
 {
@@ -1227,6 +1274,7 @@ String S_SIZE_NOT_CHANGEABLE
     Text[ turkish ] = "Size cannot be altered at ($Arg1)";
     Text[ catalan ] = "No es pot modificar la mida a ($Arg1)";
     Text[ finnish ] = "Kokoa ei voi muuttaa kohteessa ($Arg1)";
+    Text[ thai ] = "ไม่สามารถเปลี่ยนขนาดที่ ($Arg1)";
 };
 String S_NO_OK_BUTTON
 {
@@ -1251,6 +1299,7 @@ String S_NO_OK_BUTTON
     Text[ turkish ] = "There is no OK button at ($Arg1)";
     Text[ catalan ] = "No hi ha cap bot� D'acord a ($Arg1)";
     Text[ finnish ] = "Kohteessa ($Arg1) ei ole OK-painiketta";
+    Text[ thai ] = "ไม่มีปุ่ม ตกลง ที่ ($Arg1)";
 };
 String S_NO_CANCEL_BUTTON
 {
@@ -1275,6 +1324,7 @@ String S_NO_CANCEL_BUTTON
     Text[ turkish ] = "There is no Cancel button at ($Arg1)";
     Text[ catalan ] = "No hi ha cap bot� Cancel�la a ($Arg1)";
     Text[ finnish ] = "Kohteessa ($Arg1) ei ole Peruuta-painiketta";
+    Text[ thai ] = "ไม่มีปุ่ม ยกเลิก ที่ ($Arg1)";
 };
 String S_NO_YES_BUTTON
 {
@@ -1299,6 +1349,7 @@ String S_NO_YES_BUTTON
     Text[ turkish ] = "There is no Yes button at ($Arg1)";
     Text[ catalan ] = "No hi ha cap bot� S� a ($Arg1)";
     Text[ finnish ] = "Kohteessa ($Arg1) ei ole Kyll�-painiketta";
+    Text[ thai ] = "ไม่มีปุ่ม ใช่ ที่ ($Arg1)";
 };
 String S_NO_NO_BUTTON
 {
@@ -1323,6 +1374,7 @@ String S_NO_NO_BUTTON
     Text[ turkish ] = "There is no No button at ($Arg1)";
     Text[ catalan ] = "No hi ha cap bot� No a ($Arg1)";
     Text[ finnish ] = "Kohteessa ($Arg1) ei ole Ei-painiketta";
+    Text[ thai ] = "ไม่มีปุ่ม ไม่ใช่ ที่ ($Arg1)";
 };
 String S_NO_RETRY_BUTTON
 {
@@ -1347,6 +1399,7 @@ String S_NO_RETRY_BUTTON
     Text[ turkish ] = "There is no Repeat button at ($Arg1)";
     Text[ catalan ] = "No hi ha cap bot� Repeteix a ($Arg1)";
     Text[ finnish ] = "Kohteessa ($Arg1) ei ole Toista-painiketta";
+    Text[ thai ] = "ไม่มีปุ่ม ทำซ้ำ ที่ ($Arg1)";
 };
 String S_NO_HELP_BUTTON
 {
@@ -1371,6 +1424,7 @@ String S_NO_HELP_BUTTON
     Text[ turkish ] = "There is no Help button at ($Arg1)";
     Text[ catalan ] = "No hi ha cap bot� Ajuda a ($Arg1)";
     Text[ finnish ] = "Kohteessa ($Arg1) ei ole Ohje-painiketta";
+    Text[ thai ] = "ไม่มีปุ่ม ช่วยเหลือ ที่ ($Arg1)";
 };
 String S_NO_DEFAULT_BUTTON
 {
@@ -1395,6 +1449,7 @@ String S_NO_DEFAULT_BUTTON
     Text[ turkish ] = "There is no Default button defined at ($Arg1)";
     Text[ catalan ] = "No hi ha cap bot� Per defecte definit a ($Arg1)";
     Text[ finnish ] = "Kohteeseen ($Arg1) ei ole m��ritetty oletuspainiketta";
+    Text[ thai ] = "ไม่มีปุ่ม ค่าเริ่มต้น ระบุไว้ที่ ($Arg1)";
 };
 String S_BUTTON_ID_NOT_THERE
 {
@@ -1419,6 +1474,7 @@ String S_BUTTON_ID_NOT_THERE
     Text[ turkish ] = "There is no button with a ($Arg1) ID at ($Arg2)";
     Text[ catalan ] = "Ni hi ha cap bot� amb un identificador ($Arg1) a ($Arg2)";
     Text[ finnish ] = "Tunnuksen ($Arg1) painiketta ei ole kohteessa ($Arg2)";
+    Text[ thai ] = "ไม่มีปุ่ม ID ($Arg1) ที่ ($Arg2)";
 };
 String S_BUTTONID_REQUIRED
 {
@@ -1443,6 +1499,7 @@ String S_BUTTONID_REQUIRED
     Text[ turkish ] = "A button ID needs to be entered at ($Arg1)";
     Text[ catalan ] = "Cal introduir un bot� ID a ($Arg1)";
     Text[ finnish ] = "Painiketunnus on sy�tett�v� kohteeseen ($Arg1)";
+    Text[ thai ] = "จำเป็นต้องใส่ปุ่ม ID ที่ ($Arg1)";
 };
 String S_UNKNOWN_TYPE
 {
@@ -1467,6 +1524,7 @@ String S_UNKNOWN_TYPE
     Text[ turkish ] = "Unknown object type ($Arg1) from UId";
     Text[ catalan ] = "No es permet un tipus d'objecte desconegut ($Arg1) de UId o un m�tode '($Arg2)'";
     Text[ finnish ] = "Tuntematon objektityyppi ($Arg1) UID:st� tai menetelm�� '($Arg2)' ei tueta";
+    Text[ thai ] = "ไม่รู้จักชนิดวัตถุ ($Arg1) จาก UId หรือไม่สนับสนุนวิธี '($Arg2)' ";
 };
 String S_UNPACKING_STORAGE_FAILED
 {
@@ -1491,6 +1549,7 @@ String S_UNPACKING_STORAGE_FAILED
     Text[ arabic ] = "���� ����� �� ��� �����\"($Arg1)\"  ��� \"($Arg2)\"";
     Text[ catalan ] = "Ha fallat la descompressi� de l'emmagatzemament \"($Arg1)\" a \"($Arg2)\"";
     Text[ finnish ] = "Pakkauksen ($Arg1) purkaminen kohteeseen ($Arg2) ei onnistunut";
+    Text[ thai ] = "ที่เก็บที่เปิด \"($Arg1)\" ถึง \"($Arg2)\" ล้มเหลว";
 };
 String S_NO_LIST_BOX_BUTTON
 {
@@ -1515,6 +1574,7 @@ String S_NO_LIST_BOX_BUTTON
     Text[ arabic ] = "ListBoxButton does not exist in ($Arg1)";
     Text[ catalan ] = "No hi ha cap ListBoxButton a ($Arg1)";
     Text[ finnish ] = "Kohdetta ListBoxButton ei ole kohteessa ($Arg1)";
+    Text[ thai ] = "ไม่มี ListBoxButton อยู่ใน ($Arg1)";
 };
 String S_UNO_URL_EXECUTE_FAILED_NO_DISPATCHER
 {
@@ -1539,6 +1599,7 @@ String S_UNO_URL_EXECUTE_FAILED_NO_DISPATCHER
     Text[ turkish ] = "Slot ID cannot be run. No ActiveDispatcher";
     Text[ catalan ] = "No es pot executar Slot ID. ActiveDispatcher no existeix";
     Text[ finnish ] = "UNO URL -osoitetta ($Arg1) ei voitu suorittaa. L�hetinohjelmaa ei l�ytynyt.";
+    Text[ thai ] = "ไม่สามารถใช้งาน UNO URL \"($Arg1)\" ได้ ไม่พบตัวเลือกจ่ายงาน";
 };
 String S_UNO_URL_EXECUTE_FAILED_NO_FRAME
 {
@@ -1563,6 +1624,7 @@ String S_UNO_URL_EXECUTE_FAILED_NO_FRAME
     Text[ turkish ] = "Slot ID could not be run";
     Text[ catalan ] = "No es pot executar Slot ID";
     Text[ finnish ] = "UNO URL -osoitetta ($Arg1) ei voitu suorittaa: ty�p�yd�ll� ei ole aktiivista kehyst�.";
+    Text[ thai ] = "ไม่สามารถใช้งาน UNO URL \"($Arg1)\" ได้: กรอบที่ไม่ได้ใช้งานอยู่บนเดสก์ท็อป";
 };
 String S_NO_MENU
 {
@@ -1587,6 +1649,7 @@ String S_NO_MENU
     Text[ turkish ] = "There is no Help button at ($Arg1)";
     Text[ catalan ] = "No hi ha bot� Ajuda per a ($Arg1)";
     Text[ finnish ] = "Kohteessa ($Arg1) ei ole Ohje-painiketta";
+    Text[ thai ] = "ไม่มีเมนูที่ ($Arg1)";
 };
 String S_UNO_URL_EXECUTE_FAILED_DISABLED
 {
@@ -1611,6 +1674,7 @@ String S_UNO_URL_EXECUTE_FAILED_DISABLED
     Text[ turkish ] = "Slot ID could not be run";
     Text[ catalan ] = "No se pudo ejecutar Slot ID";
     Text[ finnish ] = "Paikkatunnusta ei voitu suorittaa";
+    Text[ thai ] = "UNO URL \"($Arg1)\" could not be run: Disabled";
 };
 String S_NO_SCROLLBAR
 {
@@ -1635,6 +1699,7 @@ String S_NO_SCROLLBAR
     Text[ turkish ] = "No status bar at ($Arg1)";
     Text[ arabic ] = "No status bar at ($Arg1)";
     Text[ catalan ] = "No status bar at ($Arg1)";
+    Text[ thai ] = "No status bar at ($Arg1)";
 };
 String S_NO_SAX_PARSER
 {
@@ -1659,6 +1724,7 @@ String S_NO_SAX_PARSER
     Text[ turkish ] = "No SAX Parser using ($Arg1). Initialize with 'SAXReadFile' first.";
     Text[ arabic ] = "No SAX Parser using ($Arg1). Initialize with 'SAXReadFile' first.";
     Text[ catalan ] = "No SAX Parser using ($Arg1). Initialize with 'SAXReadFile' first.";
+    Text[ thai ] = "No SAX Parser using ($Arg1). Initialize with 'SAXReadFile' first.";
 };
 
 
