@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmstring.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-03 19:16:05 $
+ *  last change: $Author: kz $ $Date: 2001-04-09 23:03:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1861,7 +1861,7 @@ String RID_STR_DELETECONFIRM_RECORD
     Text [ italian ] = "Intendete eliminare il record # di dati." ;
     Text [ spanish ] = "Usted desea eliminar 1 registro de datos." ;
     Text [ french ] = "Vous avez l'intention de supprimer 1 enregistrement." ;
-    Text [ dutch ] = "U wilt # record wissen." ;
+    Text [ dutch ] = "U wilt 1 record wissen." ;
     Text[ chinese_simplified ] = "ДъТЄЙѕіэТ»ёцКэѕЭМхДїЎЈ";
     Text[ russian ] = "Вы намерены удалить 1 запись.";
     Text[ polish ] = "Zamierzasz usun№ж 1 rekord.";
@@ -4873,7 +4873,7 @@ String RID_STR_EVT_RELOADING
     Text[ portuguese ] = "Before reloading";
     Text[ russian ] = "Перед перезагрузкой";
     Text[ greek ] = "Рсйн фзн ербнбцьсфщуз";
-    Text[ dutch ] = "Before reloading";
+    Text[ dutch ] = "Alvorens opnieuw te laden";
     Text[ french ] = "Avant le rechargement";
     Text[ spanish ] = "Antes de recargar";
     Text[ italian ] = "Before reloading";
@@ -5309,7 +5309,7 @@ String RID_STR_EVT_UNLOADING
     Text[ portuguese ] = "Before unloading";
     Text[ russian ] = "Перед разгрузкой";
     Text[ greek ] = "Рсйн фзн брпцьсфщуз";
-    Text[ dutch ] = "Before unloading";
+    Text[ dutch ] = "Voor het afsluiten";
     Text[ french ] = "Avant le dйchargement";
     Text[ spanish ] = "Antes de descargar";
     Text[ italian ] = "Before unloading";
