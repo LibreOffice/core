@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opengrf.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: thb $ $Date: 2001-08-17 09:27:29 $
+ *  last change: $Author: louis $ $Date: 2001-08-17 18:47:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
