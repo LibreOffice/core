@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdoc.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-12 13:06:40 $
+ *  last change: $Author: mt $ $Date: 2001-11-26 15:38:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1579,6 +1579,7 @@ void EditDoc::InsertAttribInSelection( ContentNode* pNode, USHORT nStart, USHORT
 {
     DBG_ASSERT( pNode, "Wohin mit dem Attribut?" );
     DBG_ASSERT( nEnd <= pNode->Len(), "InsertAttrib: Attribut zu gross!" );
+    DBG_ASSERT( ( rPoolItem.Which() < EE_FEATURE_START ) || ( rPoolItem.Which() > EE_FEATURE_END ), "InsertAttribInSelection - don't use this method for features!" );
 
     // fuer Optimierung:
     // dieses endet am Anfang der Selektion => kann erweitert werden
@@ -1708,6 +1709,7 @@ BOOL EditDoc::RemoveAttribs( ContentNode* pNode, USHORT nStart, USHORT nEnd, Edi
         if ( bRemoveAttrib )
         {
             DBG_ASSERT( ( pAttr != rpStarting ) && ( pAttr != rpEnding ), "Loeschen und behalten des gleichen Attributs ?" );
+            DBG_ASSERT( !pAttr->IsFeature(), "RemoveAttribs: Remove a feature?!" );
             pNode->GetCharAttribs().GetAttribs().Remove(nAttr);
             GetItemPool().Remove( *pAttr->GetItem() );
             delete pAttr;
@@ -1970,7 +1972,7 @@ void CharAttribList::OptimizeRanges( SfxItemPool& rItemPool )
         for ( USHORT nNext = n+1; nNext < aAttribs.Count(); nNext++ )
         {
             EditCharAttrib* p = aAttribs.GetObject( nNext );
-            if ( ( p->GetStart() == pAttr->GetEnd() ) && ( p->Which() == pAttr->Which() ) )
+            if ( !pAttr->IsFeature() && ( p->GetStart() == pAttr->GetEnd() ) && ( p->Which() == pAttr->Which() ) )
             {
                 if ( *p->GetItem() == *pAttr->GetItem() )
                 {
