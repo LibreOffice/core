@@ -5,9 +5,9 @@
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.125 $
+#   $Revision: 1.126 $
 #
-#   last change: $Author: vg $ $Date: 2004-11-04 16:28:17 $
+#   last change: $Author: vg $ $Date: 2004-11-15 12:16:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,9 +68,8 @@
 
     use Config;
     use POSIX;
-    use Cwd;
+    use Cwd qw (cwd);
     use File::Path;
-
 
     use lib ("$ENV{SOLARENV}/bin/modules");
 
@@ -89,6 +88,12 @@
         eval { require Logging; import Logging; };
         $log = Logging->new() if (!$@);
     };
+    my $enable_multiprocessing = 1;
+    if ($ENV{GUI} eq 'WNT') {
+        eval { require Win32::Process; import Win32::Process; };
+        $enable_multiprocessing = 0 if ($@);
+        $_4nt_exe = $ENV{ComSpec};#'c:\4nt401\4nt.exe'; # 4nt executable
+    };
 
     ### for XML file format
     #use lib ("/home/vg119683/work/modules");
@@ -98,7 +103,7 @@
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.125 $ ';
+    $id_str = ' $Revision: 1.126 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -172,11 +177,13 @@
     %modules_types = (); # modules types ('mod', 'img', 'lnk') hash
     %platforms = (); # platforms available or being working with
     %platforms_to_copy = (); # copy output trees for the platforms when --prepare
-    $tmp_dir = undef; # temp directory for checkout
+    $tmp_dir = get_tmp_dir(); # temp directory for checkout
+#    $dmake_batch = undef;     #
     @possible_build_lists = ('build.lst', 'build.xlist'); # build lists names
     %build_lists_hash = (); # hash of arrays $build_lists_hash{$module} = \($path, $xml_list_object)
     $pre_job = ' announce'; # job to add for not-single module build
     $post_job = ' deliver'; # -"-
+    %windows_procs = ();
 ### main ###
 
     &get_options;
@@ -197,7 +204,7 @@
     };
 
     $StandDir = &get_stand_dir();
-    provide_consistency() if (defined $ENV{CWS_WORK_STAMP} && defined($log));
+    &provide_consistency if (defined $ENV{CWS_WORK_STAMP} && defined($log));
 
     $deliver_commando = $ENV{DELIVER};
     $deliver_commando .= ' '. $dlv_switch if ($dlv_switch);
@@ -205,6 +212,8 @@
     %prj_platform = ();
     $check_error_string = '';
     $dmake = '';
+#    $dmake_bin = '';
+    $dmake_args = '';
     $echo = '';
     $new_line = "\n";
 
@@ -414,6 +423,8 @@ sub dmake_dir {
     if ($child) {
         my $oldfh = select STDERR;
         $| = 1;
+        select $oldfh;
+        $| =1;
         _exit($? >> 8) if ($? && ($? != -1));
         _exit(0);
     } elsif ($error_code && ($error_code != -1)) {
@@ -580,7 +591,7 @@ sub get_deps_hash {
                 if ($Dir =~ /(\\|\/)/o) {
                     $Dir = $module_to_build . $1 . $';
                 } else {$Dir = $module_to_build;};
-                $PathHash{$DirAlias} = $StandDir . CorrectPath($Dir);
+                $PathHash{$DirAlias} = CorrectPath($StandDir . $Dir);
             };
         };
         foreach my $alias (keys %DeadDependencies) {
@@ -666,7 +677,18 @@ sub CorrectPath {
 
 sub check_dmake {
 #print "Checking dmake...";
-    if (open(DMAKEVERSION, "dmake -V |")) {
+#    my $dmake_batch = CorrectPath("$tmp_dir/dmake.bat");
+    if ($QuantityToBuild && ($ENV{GUI} eq 'WNT') && ($ENV{USE_SHELL} eq '4nt')) {
+        if (open(DMAKEVERSION, "where dmake |")) {
+            my @output = <DMAKEVERSION>;
+            close DMAKEVERSION;
+            $dmake_bin = $output[0];
+            $dmake_bin =~ /(\b)$/;
+            $dmake_bin = $`;
+        };
+        return if (-e $dmake_bin);
+    } elsif (open(DMAKEVERSION, "dmake -V |")) {
+#    if (open(DMAKEVERSION, "dmake -V |")) {
         my @dmake_version = <DMAKEVERSION>;
         close DMAKEVERSION;
 #       if ($dmake_version[0] =~ /^dmake\s\-\sCopyright\s\(c\)/) {
@@ -696,9 +718,15 @@ sub get_commands {
         };
     };
 
+    $dmake_args = join(' ', 'dmake', @dmake_args);
+
     while ($arg = pop(@dmake_args)) {
         $dmake .= ' '.$arg;
     };
+#    if (($ENV{GUI} eq 'WNT') && $QuantityToBuild) {
+#        print_error("There is no such executable $_4nt_exe") if (!-e $_4nt_exe);
+#        $dmake_batch = generate_4nt_batch();
+#    };
 };
 
 #
@@ -752,7 +780,7 @@ sub get_stand_dir {
 #
 sub PickPrjToBuild {
     my $DepsHash = shift;
-    &handle_dead_children if ($QuantityToBuild);
+    handle_dead_children() if ($QuantityToBuild);
     my $Prj = &FindIndepPrj($DepsHash);
     delete $$DepsHash{$Prj};
     return $Prj;
@@ -1036,16 +1064,17 @@ sub get_options {
 
     &print_error('Switches --with_branches and --since collision') if ($build_from && $build_since);
     $cmd_file = '' if ($show);
-    if (($ENV{GUI} eq 'WNT') && $QuantityToBuild) {
-        $QuantityToBuild = 0;
-        &print_error('-P switch is disabled for windows!\n');
-    };
     $incompatible = scalar keys %incompatibles;
     if ($prepare && !$incompatible) {
         &print_error("--prepare is for use with --from switch only!\n");
     };
-    if ($QuantityToBuild && $ignore) {
-        &print_error("Cannot ignore errors in multiprocessing build");
+    if ($QuantityToBuild) {
+        if ($ignore) {
+            print_error("Cannot ignore errors in multiprocessing build");
+        };
+        if (!$enable_multiprocessing) {
+            print_error("Cannot load Win32::Process module for multiprocessing build");
+        };
     };
     if ($only_platform) {
         $only_common = 'common';
@@ -1107,7 +1136,17 @@ sub cancel_build {
         print STDERR "\nAttention: if you build and deliver the above module(s) you may prolongue your build from module " . &PickPrjToBuild(\%global_deps_hash) . "\n";
     } else {
         &finish_logging($log_string . $CurrentPrj);
-        kill 9 => -$$;
+#        if ($ENV{GUI} eq 'WNT') {
+            while (children_number()) {
+                handle_dead_children();
+                sleep 1;
+            }
+            foreach (keys %broken_build) {
+                print STDERR "ERROR: error " . $broken_build{$_} . " occurred while making $_\n";
+            };
+#        } else {
+#            kill 9 => -$$;
+#        };
     };
     print STDERR "\n";
     do_exit(1);
@@ -1120,23 +1159,35 @@ sub store_error {
     my ($pid, $error_code) = @_;
     my $child_nick = $processes_hash{$pid};
     $broken_modules_hashes{$folders_hashes{$child_nick}}++;
-    $broken_build{&CorrectPath($StandDir . $PathHash{$child_nick})} = $error_code;
-    &cancel_build if (!$BuildAllParents);
+    $broken_build{$child_nick} = $error_code;
 };
 
 #
 # child handler (clears (or stores info about) the terminated child)
 #
 sub handle_dead_children {
-    my $pid = 0;
-    if (($pid = waitpid( -1, &WNOHANG)) > 0) {
-        &store_error($pid, $?) if ($?);
-        &clear_from_child($pid);
-    };
-    while(&children_number() >= $QuantityToBuild) {
-        sleep 1;
-        &handle_dead_children;
-    };
+    return if (!children_number());
+    do {
+        my $pid = 0;
+        if ($ENV{GUI} eq 'WNT') {
+            foreach $pid (keys %processes_hash) {
+                my $exit_code  = undef;
+                my $proc_obj = $windows_procs{$pid};
+                $proc_obj->GetExitCode($exit_code);
+                if ( $exit_code != 259 ) {
+                    store_error($pid, $exit_code) if ($exit_code);
+                    clear_from_child($pid);
+                    delete $windows_procs{$pid};
+                };
+            }
+        } else {
+            if (($pid = waitpid( -1, &WNOHANG)) > 0) {
+                store_error($pid, $?) if ($?);
+                clear_from_child($pid);
+            };
+        };
+        sleep 1 if (children_number() >= $QuantityToBuild);
+    } while(children_number() >= $QuantityToBuild);
 };
 
 sub clear_from_child {
@@ -1160,20 +1211,29 @@ sub BuildDependent {
     while ($child_nick = &PickPrjToBuild($dependencies_hash)) {
         if (($QuantityToBuild)) { # multiprocessing not for $BuildAllParents (-all etc)!!
             do {
-                &handle_dead_children;
-                return if (defined $broken_modules_hashes{$dependencies_hash});
+                handle_dead_children();
+                if (defined $broken_modules_hashes{$dependencies_hash}) {
+                    return if ($BuildAllParents);
+                    last;
+                };
                 # start current child & all
                 # that could be started now
-                &start_child($child_nick) if ($child_nick);
+                start_child($child_nick) if ($child_nick);
                 $child_nick = &PickPrjToBuild($dependencies_hash);
-                while ($only_dependent) {
+                if (!$child_nick) {
                     return if ($BuildAllParents);
-                    sleep 1;
-                    $child_nick = &PickPrjToBuild($dependencies_hash);
+                    sleep 1 if (!$no_projects);
                 };
             } while (!$no_projects);
             return if ($BuildAllParents);
-            &handle_dead_children while (&children_number());
+
+            if (defined $broken_modules_hashes{$dependencies_hash}) {
+                while (children_number()) {
+                    handle_dead_children();
+                    sleep 1;
+                }
+                cancel_build();
+            }
             &mp_success_exit;
         } else {
             &dmake_dir($child_nick);
@@ -1188,25 +1248,40 @@ sub children_number {
 
 sub start_child {
     my $child_nick = shift;
-    my $pid;
+    my $pid = undef;
     my $children_running;
     my $oldfh = select STDOUT;
     $| = 1;
-    if ($pid = fork) { # parent
-        select $oldfh;
-        $processes_hash{$pid} = $child_nick;
-        $children_running = &children_number;
-        print 'Running processes: ', $children_running, "\n";
-        $maximal_processes = $children_running if ($children_running > $maximal_processes);
-        $folders_hashes{$child_nick} = $dependencies_hash;
-        $running_children{$dependencies_hash}++;
-#        sleep(1) if ($BuildAllParents);
-    } elsif (defined $pid) { # child
-        select $oldfh;
-        $child = 1;
-        &dmake_dir($child_nick);
-        do_exit(1);
+    if ($ENV{GUI} eq 'WNT') {
+        print "$child_nick\n";
+        my $process_obj = undef;
+        my $rc = Win32::Process::Create($process_obj, $dmake_bin,
+                                    $dmake_args,
+                                    0, 0, #NORMAL_PRIORITY_CLASS,
+                                    $child_nick);
+#        my $rc = Win32::Process::Create($process_obj, $_4nt_exe,
+#                                    "/c $dmake_batch",
+#                                   0, NORMAL_PRIORITY_CLASS,
+#                                    $child_nick);
+        print_error("Cannot start child process") if (!$rc);
+        $pid = $process_obj->GetProcessID();
+        $windows_procs{$pid} = $process_obj;
+    } else {
+        if ($pid = fork) { # parent
+        } elsif (defined $pid) { # child
+            select $oldfh;
+            $child = 1;
+            &dmake_dir($child_nick);
+            do_exit(1);
+        };
     };
+    select $oldfh;
+    $processes_hash{$pid} = $child_nick;
+    $children_running = children_number();
+    print 'Running processes: ', $children_running, "\n";
+    $maximal_processes = $children_running if ($children_running > $maximal_processes);
+    $folders_hashes{$child_nick} = $dependencies_hash;
+    $running_children{$dependencies_hash}++;
 };
 
 #
@@ -1236,7 +1311,7 @@ sub build_multiprocessing {
         if (scalar keys %broken_modules_hashes) {
             do {
                 sleep(1);
-                &handle_dead_children;
+                handle_dead_children();
                 &build_actual_queue(\@build_queue);
             } while (&children_number());
             &cancel_build;
@@ -1282,7 +1357,7 @@ sub build_actual_queue {
                 next;
             };
             $i++;
-            &handle_dead_children;
+            handle_dead_children();
         };
         $i = 0;
     } while (!&are_all_dependent($build_queue));
@@ -1630,6 +1705,36 @@ sub is_output_tree {
     return '';
 };
 
+#
+# Procedure generates a 4nt batch file in $tmp_dir
+#
+#sub generate_4nt_batch {
+#    my $batch_file = "$tmp_dir/dmake.bat";
+#    if (!open(DMAKE_BATCH, ">>$batch_file")) {
+#        print_error("Cannot generate batch file");
+#    };
+#    print DMAKE_BATCH "@" . $dmake . "\n";
+#    print DMAKE_BATCH "\@dmake\n";
+#    print DMAKE_BATCH "\@exit %?\n";
+#    close DMAKE_BATCH;
+#    return CorrectPath($batch_file);
+#};
+
+sub get_tmp_dir {
+    my $tmp_dir;
+    if( defined($ENV{TMP}) ) {
+       $tmp_dir = $ENV{TMP} . '/';
+    } else {
+       $tmp_dir = '/tmp/';
+    }
+    $tmp_dir .= $$ while (-d $tmp_dir);
+    $tmp_dir = CorrectPath($tmp_dir);
+    eval {mkpath($tmp_dir)};
+    print_error("Cannot create temporary directory for checkout in $tmp_dir") if ($@);
+    return $tmp_dir;
+};
+
+
 sub retrieve_build_list {
     my $module = shift;
 
@@ -1650,17 +1755,6 @@ sub retrieve_build_list {
     }
     print STDERR " failed...\n";
     print STDERR "Fetching from CVS... ";
-    if (!defined $tmp_dir) {
-        if( defined($ENV{TMP}) ) {
-           $tmp_dir = $ENV{TMP} . '/';
-        } else {
-           $tmp_dir = '/tmp/';
-        }
-        $tmp_dir .= $$ while (-d $tmp_dir);
-        $tmp_dir = CorrectPath($tmp_dir);
-        eval {mkpath($tmp_dir)};
-        print_error("Cannot create temporary directory for checkout in $tmp_dir") if ($@);
-    }
     if (!checkout_module($module, 'image', $tmp_dir)) {
         print " failed\n";
         if (!defined $dead_parents{$module}) {
