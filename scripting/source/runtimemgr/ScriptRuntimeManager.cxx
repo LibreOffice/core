@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptRuntimeManager.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dfoster $ $Date: 2003-05-21 09:04:36 $
+ *  last change: $Author: dfoster $ $Date: 2003-05-23 14:59:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,20 +236,6 @@ Any SAL_CALL ScriptRuntimeManager::invoke(
         }
 
         OSL_TRACE("Storage sid is: %d\n", resolvedSid);
-
-        if (resolvedSid != scriptingConstantsPool.USER_STORAGE_ID &&
-            resolvedSid != scriptingConstantsPool.SHARED_STORAGE_ID)
-        {
-            /* LanguageType nLang = LANGUAGE_SYSTEM;
-            ResMgr *pResMgr = ResMgr::SearchCreateResMgr( "scripting" MAKE_NUMSTR(SUPD), nLang );
-            QueryBox aBox( NULL, ResId(DLG_SCRIPTEXEC, pResMgr));
-            sal_Int32 res = aBox.Execute();
-            delete pResMgr;
-            if (res == RET_NO)
-            {
-                return results;
-            } */
-        }
 
         // modifying the XPropertySet on the resolved Context to contain the
         // full script info

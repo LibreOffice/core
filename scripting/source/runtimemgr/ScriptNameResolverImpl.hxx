@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptNameResolverImpl.hxx,v $
 *
-*  $Revision: 1.12 $
+*  $Revision: 1.13 $
 *
-*  last change: $Author: dfoster $ $Date: 2003-05-16 10:14:21 $
+*  last change: $Author: dfoster $ $Date: 2003-05-23 14:59:51 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -128,7 +128,7 @@ private:
         SAL_THROW ( ( css::uno::RuntimeException ) );
     ::rtl::OUString
     ScriptNameResolverImpl::getFilesysURL( const ::rtl::OUString & scriptURI )
-        throw( css::uno::RuntimeException );
+        throw( css::lang::IllegalArgumentException );
 
     /**********************************************
      Reference< XComponentContext > m_xContext

@@ -2,8 +2,8 @@
 *
 *  $RCSfile: ScriptStorage.cxx,v $
 *
-*  $Revision: 1.20 $
-*  last change: $Author: dfoster $ $Date: 2003-05-16 10:14:22 $
+*  $Revision: 1.21 $
+*  last change: $Author: dfoster $ $Date: 2003-05-23 14:59:52 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -119,6 +119,18 @@ ScriptStorage::ScriptStorage( const Reference <
     validateXRef( m_xMgr,
         "ScriptStorage::ScriptStorage : cannot get service manager" );
 
+    if( !mh_scriptLangs )
+    {
+        ::osl::MutexGuard guard( ::osl::Mutex::getGlobalMutex() );
+        if( !mh_scriptLangs )
+        {
+            mh_scriptLangs = new ScriptLanguages_hash();
+            (*mh_scriptLangs)[ OUString::createFromAscii( "bsh" ) ] =
+                OUString::createFromAscii( "BeanShell" );
+            (*mh_scriptLangs)[ OUString::createFromAscii( "js" ) ] =
+                OUString::createFromAscii( "Rhino" );
+        }
+    }
     s_moduleCount.modCnt.acquire( &s_moduleCount.modCnt );
 }
 
@@ -147,13 +159,6 @@ throw ( RuntimeException, Exception )
     {   // Protect member variable writes
         ::osl::Guard< osl::Mutex > aGuard( m_mutex );
 
-        /* not sure whether Java scripts are supported as filesystem scripts
-         * mh_scriptLangs[ OUString::createFromAscii( "class" ) ] =
-         *  OUString::createFromAscii( "Java" ); */
-        mh_scriptLangs[ OUString::createFromAscii( "bsh" ) ] =
-            OUString::createFromAscii( "BeanShell" );
-        mh_scriptLangs[ OUString::createFromAscii( "js" ) ] =
-            OUString::createFromAscii( "Rhino" );
         // Check args
         if ( args.getLength() != NUMBER_STORAGE_INITIALIZE_ARGS )
         {
@@ -196,8 +201,8 @@ throw ( RuntimeException, Exception )
         // extension that is associated with a script (eg. .bsh, .js etc)
         OUString fileExtension = getFileExtension( m_stringUri );
         // and see if this is in our scripts map
-        ScriptLanguages_hash::iterator h_it = mh_scriptLangs.find( fileExtension );
-        if ( h_it != mh_scriptLangs.end() )
+        ScriptLanguages_hash::iterator h_it = mh_scriptLangs->find( fileExtension );
+        if ( h_it != mh_scriptLangs->end() )
         {
             createForFilesystem( fileExtension );
         }
@@ -408,19 +413,23 @@ throw ( RuntimeException, Exception )
 
     // no x-platform issues here as we are dealing with URLs
     sal_Int32 lastFileSep = xStringUri.lastIndexOf( '/' );
+    // the char just after the filesep
+    lastFileSep += 1;
     sal_Int32 lastFileExt = xStringUri.lastIndexOf( fileExtension );
-    sal_Int32 startPath = xStringUri.indexOf( OUString::createFromAscii( "://" ) );
+    OUString searchString = OUString::createFromAscii( "://" );
+    sal_Int32 searchStringLength = searchString.getLength();
+    sal_Int32 startPath = xStringUri.indexOf( searchString );
     sal_Int32 uriLength = xStringUri.getLength();
-    OUString fileNameNoExt = xStringUri.copy( lastFileSep + 1,
-        lastFileExt - lastFileSep  - 2 );
-    OUString fileName = xStringUri.copy( lastFileSep + 1, uriLength - lastFileSep -1 );
-    OUString filePath = xStringUri.copy( startPath + 3,
-        lastFileSep - startPath - 2 );
-    OUString filePathWithName = xStringUri.copy( startPath + 3,
-        uriLength - startPath - 3 );
+    OUString fileNameNoExt = xStringUri.copy( lastFileSep ,
+        lastFileExt - lastFileSep  - 1 );
+    OUString fileName = xStringUri.copy( lastFileSep, uriLength - lastFileSep );
+    OUString filePath = xStringUri.copy( startPath + searchStringLength,
+        lastFileSep - startPath - searchStringLength );
+    OUString filePathWithName = xStringUri.copy( startPath + searchStringLength,
+        uriLength - startPath - searchStringLength );
 
     ScriptData scriptData;
-    scriptData.language = mh_scriptLangs.find( fileExtension )->second;
+    scriptData.language = mh_scriptLangs->find( fileExtension )->second;
     OSL_TRACE( "\t language = %s", ::rtl::OUStringToOString(
         scriptData.language, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
 

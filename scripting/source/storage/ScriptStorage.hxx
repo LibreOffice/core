@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptStorage.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dfoster $ $Date: 2003-05-16 10:14:22 $
+ *  last change: $Author: dfoster $ $Date: 2003-05-23 14:59:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,7 +207,7 @@ private:
     css::uno::Reference< css::lang::XMultiComponentFactory > m_xMgr;
 
     ::std::vector < ::rtl::OUString >  mv_logicalNames;
-    ScriptLanguages_hash mh_scriptLangs;
+    static ScriptLanguages_hash* mh_scriptLangs;
     ScriptInfo_hash mh_implementations;
     ScriptOutput_hash mh_parcels;
     sal_Int32 m_scriptStorageID;

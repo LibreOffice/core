@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptNameResolverImpl.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: dfoster $ $Date: 2003-05-21 09:04:36 $
+ *  last change: $Author: dfoster $ $Date: 2003-05-23 14:59:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,7 +245,7 @@ throw ( lang::IllegalArgumentException, script::CannotConvertException, RuntimeE
         {
             filesysURL = getFilesysURL( scriptURI );
         }
-        catch ( RuntimeException & e )
+        catch ( lang::IllegalArgumentException & e )
         {
             OUString temp = OUSTR( "ScriptNameResolverImpl::resolve: " );
             throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
@@ -471,7 +471,7 @@ SAL_THROW ( ( lang::IllegalArgumentException, css::security::AccessControlExcept
             {
                 permissionURI = getFilesysURL( scriptURI );
             }
-            catch ( RuntimeException & e )
+            catch ( lang::IllegalArgumentException & e )
             {
                 OUString temp = OUSTR( "ScriptNameResolverImpl::resolveFromURI: " );
                 throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
@@ -611,7 +611,7 @@ const ::rtl::OUString & permissionURI ) SAL_THROW ( ( RuntimeException, css::sec
 //*************************************************************************
 OUString
 ScriptNameResolverImpl::getFilesysURL( const OUString & scriptURI )
-throw( RuntimeException )
+throw( lang::IllegalArgumentException )
 {
         OUString filePath;
         OUString fileName;
@@ -652,7 +652,7 @@ throw( RuntimeException )
         {
             // we need to throw
             OUString temp = OUSTR( "ScriptNameResolverImpl::getFilesysURL: error getting the filesysURL" );
-            throw RuntimeException( temp, Reference< XInterface >() );
+            throw lang::IllegalArgumentException( temp, Reference< XInterface >(), 0 );
         }
         filePath+=fileName;
         OSL_TRACE( "ScriptNameResolverImpl::getFilesysURL: filesys URL = %s",
