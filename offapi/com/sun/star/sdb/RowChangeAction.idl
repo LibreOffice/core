@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowChangeAction.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:55:03 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 21:40:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 // DocMerge from idl: constants com::sun::star::sdb::RowChangeAction
 /** determines the type of change which is going to be performed.
  */
-constants RowChangeAction
+published constants RowChangeAction
 {
 
     // DocMerge from idl: value com::sun::star::sdb::RowChangeAction::INSERT
