@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpage.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 11:03:55 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 16:20:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1177,7 +1177,11 @@ SdrPage::~SdrPage()
 {
     // #111111#
     // tell all the registered PageUsers that the page is in destruction
-    for(::sdr::PageUserVector::iterator aIterator = maPageUsers.begin(); aIterator != maPageUsers.end(); aIterator++)
+    // This causes some (all?) PageUsers to remove themselves from the list
+    // of page users.  Therefore we have to use a copy of the list for the
+    // iteration.
+    ::sdr::PageUserVector aListCopy (maPageUsers.begin(), maPageUsers.end());
+    for(::sdr::PageUserVector::iterator aIterator = aListCopy.begin(); aIterator != aListCopy.end(); aIterator++)
     {
         sdr::PageUser* pPageUser = *aIterator;
         DBG_ASSERT(pPageUser, "SdrPage::~SdrPage: corrupt PageUser list (!)");
