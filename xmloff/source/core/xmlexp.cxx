@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:06:44 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:12:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,7 +314,7 @@ void SvXMLExport::SetDocHandler( const uno::Reference< xml::sax::XDocumentHandle
 
 void SvXMLExport::_InitCtor()
 {
-    if( getExportFlags() != 0 )
+    if( (getExportFlags() & ~EXPORT_OASIS) != 0 )
     {
         pNamespaceMap->Add( GetXMLToken(XML_NP_OFFICE), GetXMLToken(XML_N_OFFICE), XML_NAMESPACE_OFFICE );
         pNamespaceMap->Add( GetXMLToken(XML_NP_OOO), GetXMLToken(XML_N_OOO), XML_NAMESPACE_OOO );
