@@ -2,9 +2,9 @@
  *
  *  $RCSfile: funcuno.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2000-12-21 13:59:04 $
+ *  last change: $Author: nn $ $Date: 2001-06-06 18:17:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -462,10 +462,16 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const rtl::OUString& aName,
 
         uno::TypeClass eClass = rArg.getValueTypeClass();
         uno::Type aType = rArg.getValueType();
-        if ( eClass == uno::TypeClass_SHORT ||
+        if ( eClass == uno::TypeClass_BYTE ||
+                eClass == uno::TypeClass_SHORT ||
+                eClass == uno::TypeClass_UNSIGNED_SHORT ||
                 eClass == uno::TypeClass_LONG ||
+                eClass == uno::TypeClass_UNSIGNED_LONG ||
+                eClass == uno::TypeClass_FLOAT ||
                 eClass == uno::TypeClass_DOUBLE )
         {
+            //  #87871# accept integer types because Basic passes a floating point
+            //  variable as byte, short or long if it's an integer number.
             double fVal;
             rArg >>= fVal;
             aTokenArr.AddDouble( fVal );
@@ -609,10 +615,16 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const rtl::OUString& aName,
                         {
                             // leave empty
                         }
-                        else if ( eElemClass == uno::TypeClass_SHORT ||
+                        else if ( eElemClass == uno::TypeClass_BYTE ||
+                                    eElemClass == uno::TypeClass_SHORT ||
+                                    eElemClass == uno::TypeClass_UNSIGNED_SHORT ||
                                     eElemClass == uno::TypeClass_LONG ||
+                                    eElemClass == uno::TypeClass_UNSIGNED_LONG ||
+                                    eElemClass == uno::TypeClass_FLOAT ||
                                     eElemClass == uno::TypeClass_DOUBLE )
                         {
+                            //  #87871# accept integer types because Basic passes a floating point
+                            //  variable as byte, short or long if it's an integer number.
                             double fVal;
                             rElement >>= fVal;
                             pDoc->SetValue( (USHORT) nCol, (USHORT) nDocRow, 0, fVal );

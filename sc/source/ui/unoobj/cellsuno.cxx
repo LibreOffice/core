@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-01 18:42:14 $
+ *  last change: $Author: nn $ $Date: 2001-06-06 18:17:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1125,10 +1125,16 @@ BOOL lcl_PutDataArray( ScDocShell& rDocShell, const ScRange& rRange,
                     // void = "no value"
                     pDoc->SetError( nDocCol, nDocRow, nTab, NOVALUE );
                 }
-                else if ( eElemClass == uno::TypeClass_SHORT ||
+                else if ( eElemClass == uno::TypeClass_BYTE ||
+                            eElemClass == uno::TypeClass_SHORT ||
+                            eElemClass == uno::TypeClass_UNSIGNED_SHORT ||
                             eElemClass == uno::TypeClass_LONG ||
+                            eElemClass == uno::TypeClass_UNSIGNED_LONG ||
+                            eElemClass == uno::TypeClass_FLOAT ||
                             eElemClass == uno::TypeClass_DOUBLE )
                 {
+                    //  #87871# accept integer types because Basic passes a floating point
+                    //  variable as byte, short or long if it's an integer number.
                     double fVal;
                     rElement >>= fVal;
                     pDoc->SetValue( nDocCol, nDocRow, nTab, fVal );
