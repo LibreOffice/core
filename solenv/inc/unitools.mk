@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unitools.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: vg $ $Date: 2003-12-17 18:07:06 $
+#   last change: $Author: rt $ $Date: 2004-03-02 11:33:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,6 +87,9 @@ COPYUPDATE=/u
 ECHON*=echos
 ECHONL=echo.
 FIND*=$(BUILD_TOOLS)$/find.exe
+.IF "(use_cygcp)"!=""
+GNUCOPY=$(BUILD_TOOLS)$/gnucp.exe
+.ENDIF			# "(use_cygcp)"!=""
 GNUCOPY*=$(BUILD_TOOLS)$/cp.exe
 GNUMAKE*=$(ENV_TOOLS)$/gnumake.exe
 GREP*=$(ENV_TOOLS)$/grep32.exe
