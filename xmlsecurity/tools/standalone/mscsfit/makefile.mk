@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: mt $ $Date: 2004-07-12 13:15:25 $
+#   last change: $Author: vg $ $Date: 2005-03-10 18:19:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,9 +92,9 @@ SHARE_LIBS =	\
         $(SALLIB)
 
 .IF "$(GUI)"=="WNT"
-SHARE_LIBS+= "ixml2.lib" "crypt32.lib" "advapi32.lib" "xmlsec.lib" "xmlsec-mscrypto.lib" "xsec_xmlsec.lib"
+SHARE_LIBS+= "ixml2.lib" "crypt32.lib" "advapi32.lib" "libxmlsec.lib" "libxmlsec-mscrypto.lib" "xsec_xmlsec.lib"
 .ELSE
-SHARE_LIBS+= "-lxml2" "-lnss3" "-lnspr4" "-lxmlsec" "-lxmlsec-nss" "-lxsec_xmlsec"
+SHARE_LIBS+= "-lxml2" "-lnss3" "-lnspr4" "-lxmlsec1" "-lxmlsec1-nss" "-lxsec_xmlsec"
 .ENDIF
         
 SHARE_OBJS =	\
