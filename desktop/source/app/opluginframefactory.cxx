@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opluginframefactory.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cd $ $Date: 2001-07-16 12:52:33 $
+ *  last change: $Author: hr $ $Date: 2001-11-01 17:00:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,10 +138,10 @@ OPlugInFrameFactory::~OPlugInFrameFactory()
 //  XInterface
 //*****************************************************************************************************************
 
-void SAL_CALL OPlugInFrameFactory::acquire() throw( RuntimeException )
+void SAL_CALL OPlugInFrameFactory::acquire() throw()
 { OWeakObject::acquire(); }
 
-void SAL_CALL OPlugInFrameFactory::release() throw( RuntimeException )
+void SAL_CALL OPlugInFrameFactory::release() throw()
 { OWeakObject::release(); }
 
 Any SAL_CALL OPlugInFrameFactory::queryInterface( const Type& aType ) throw( RuntimeException )

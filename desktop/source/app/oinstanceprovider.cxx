@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oinstanceprovider.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cd $ $Date: 2001-07-16 12:52:33 $
+ *  last change: $Author: hr $ $Date: 2001-11-01 17:00:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,10 +135,10 @@ OInstanceProvider::~OInstanceProvider()
 //  XInterface
 //*****************************************************************************************************************
 
-void SAL_CALL OInstanceProvider::acquire() throw( RuntimeException )
+void SAL_CALL OInstanceProvider::acquire() throw()
 { OWeakObject::acquire(); }
 
-void SAL_CALL OInstanceProvider::release() throw( RuntimeException )
+void SAL_CALL OInstanceProvider::release() throw()
 { OWeakObject::release(); }
 
 Any SAL_CALL OInstanceProvider::queryInterface( const Type& aType ) throw( RuntimeException )

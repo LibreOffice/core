@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oinstanceprovider.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cd $ $Date: 2001-07-16 12:52:33 $
+ *  last change: $Author: hr $ $Date: 2001-11-01 17:00:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,8 +165,8 @@ class OInstanceProvider :   public XINSTANCEPROVIDER            ,
         //  XInterface
         //---------------------------------------------------------------------------------------------------------
 
-        virtual void SAL_CALL acquire() throw( RUNTIMEEXCEPTION );
-        virtual void SAL_CALL release() throw( RUNTIMEEXCEPTION );
+        virtual void SAL_CALL acquire() throw();
+        virtual void SAL_CALL release() throw();
         virtual ANY SAL_CALL queryInterface( const UNOTYPE& aType ) throw( RUNTIMEEXCEPTION );
 
         //---------------------------------------------------------------------------------------------------------
