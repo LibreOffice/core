@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: sb $ $Date: 2000-12-04 17:35:31 $
+#   last change: $Author: kso $ $Date: 2001-02-02 08:20:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,7 +80,8 @@ SLOFILES=\
     $(SLO)$/ucbserv.obj \
     $(SLO)$/ucbstore.obj \
     $(SLO)$/ucbprops.obj \
-    $(SLO)$/provprox.obj
+    $(SLO)$/provprox.obj \
+    $(SLO)$/ucbcmds.obj
 
 # NETBSD: somewhere we have to instantiate the static data members.
 # NETBSD-1.2.1 doesn't know about weak symbols so the default mechanism for GCC won't work.
