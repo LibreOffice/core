@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BackendSetupException.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 14:12:59 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 18:14:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ module backend {
 
     @since #107957#
   */
-exception BackendSetupException : ::com::sun::star::configuration::CannotLoadConfigurationException {
+published exception BackendSetupException : ::com::sun::star::configuration::CannotLoadConfigurationException {
 
     /** The exception that is raised by the underlying backend implementation.
         <p>May be a numeric error code, a message <atom>string</atom> or <void/>,
