@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbhelper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mba $ $Date: 2001-01-16 15:28:25 $
+ *  last change: $Author: pb $ $Date: 2001-01-25 08:27:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -349,9 +349,9 @@ Sequence < OUString > UCBContentHelper::GetFolderContents( const String& rFolder
         }
         catch( ::com::sun::star::ucb::CommandAbortedException& )
         {
-            DBG_ERRORFILE( "createCursor: CommandAbortedException" );
+            // folder not exists?
         }
-        catch( ... )
+        catch( Exception& )
         {
             DBG_ERRORFILE( "createCursor: Any other exception" );
         }
@@ -662,3 +662,4 @@ sal_Bool UCBContentHelper::FindInPath( const String& rPath, const String& rName,
 }
 
 };
+
