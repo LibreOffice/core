@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionExport.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 18:20:40 $
+ *  last change: $Author: rt $ $Date: 2004-05-17 16:28:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1261,6 +1261,7 @@ enum TemplateParamEnum
     TOK_TPARAM_CHAR_STYLE,
     TOK_TPARAM_TAB_RIGHT_ALIGNED,
     TOK_TPARAM_TAB_POSITION,
+    TOK_TPARAM_TAB_WITH_TAB, // #i21237#
     TOK_TPARAM_TAB_FILL_CHAR,
     TOK_TPARAM_TEXT,
     TOK_TPARAM_CHAPTER_FORMAT,
@@ -1288,6 +1289,8 @@ SvXMLEnumStringMapEntry __READONLY_DATA aTemplateParamMap[] =
     ENUM_STRING_MAP_ENTRY( "TabStopRightAligned",   TOK_TPARAM_TAB_RIGHT_ALIGNED ),
     ENUM_STRING_MAP_ENTRY( "TabStopPosition",       TOK_TPARAM_TAB_POSITION ),
     ENUM_STRING_MAP_ENTRY( "TabStopFillCharacter",  TOK_TPARAM_TAB_FILL_CHAR ),
+    // #i21237#
+    ENUM_STRING_MAP_ENTRY( "WithTab",               TOK_TPARAM_TAB_WITH_TAB ),
     ENUM_STRING_MAP_ENTRY( "Text",                  TOK_TPARAM_TEXT ),
     ENUM_STRING_MAP_ENTRY( "ChapterFormat",         TOK_TPARAM_CHAPTER_FORMAT ),
     ENUM_STRING_MAP_ENTRY( "BibliographyDataField", TOK_TPARAM_BIBLIOGRAPHY_DATA ),
@@ -1363,6 +1366,9 @@ void XMLSectionExport::ExportIndexTemplateElement(
     sal_Int16 nBibliographyData;
     sal_Bool bBibliographyDataOK = sal_False;
 
+    // With Tab Stop #i21237#
+    sal_Bool bWithTabStop;
+    sal_Bool bWithTabStopOK = sal_False;
 
     // token type
     enum TemplateTypeEnum nTokenType = TOK_TTYPE_INVALID;
@@ -1414,6 +1420,12 @@ void XMLSectionExport::ExportIndexTemplateElement(
                 case TOK_TPARAM_TAB_POSITION:
                     rValues[i].Value >>= nTabPosition;
                     bTabPositionOK = sal_True;
+                    break;
+
+                // #i21237#
+                case TOK_TPARAM_TAB_WITH_TAB:
+                    bWithTabStop = *(sal_Bool *)rValues[i].Value.getValue();
+                    bWithTabStopOK = sal_True;
                     break;
 
                 case TOK_TPARAM_TAB_FILL_CHAR:
@@ -1522,6 +1534,14 @@ void XMLSectionExport::ExportIndexTemplateElement(
             {
                 GetExport().AddAttribute(XML_NAMESPACE_STYLE,
                                          XML_LEADER_CHAR, sFillChar);
+            }
+
+            // #i21237#
+            if (bWithTabStopOK && ! bWithTabStop)
+            {
+                   GetExport().AddAttribute(XML_NAMESPACE_STYLE,
+                                         XML_WITH_TAB,
+                                         XML_FALSE);
             }
         }
 
