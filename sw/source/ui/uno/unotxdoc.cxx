@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: mtg $ $Date: 2001-06-25 16:28:54 $
+ *  last change: $Author: mtg $ $Date: 2001-06-26 11:43:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,7 +249,8 @@
 
 
 using namespace ::com::sun::star;
-using namespace com::sun::star::i18n;
+using namespace ::com::sun::star::text;
+using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -407,6 +408,7 @@ Sequence< uno::Type > SAL_CALL SwXTextDocument::getTypes() throw(RuntimeExceptio
 SwXTextDocument::SwXTextDocument(SwDocShell* pShell) :
     SfxBaseModel(pShell),
     aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_DOCUMENT)),
+    aRefreshCont ( static_cast < XTextDocument* > ( this ) ),
     pDocShell(pShell),
     bObjectValid(pShell != 0),
     pxXTextTables(0),
@@ -497,7 +499,7 @@ void SwXTextDocument::GetNumberFormatter()
 /*-- 18.12.98 11:55:11---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-Reference< text::XText >  SwXTextDocument::getText(void) throw( RuntimeException )
+Reference< XText >  SwXTextDocument::getText(void) throw( RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
     if(!IsValid())
@@ -762,10 +764,10 @@ Reference< util::XReplaceDescriptor >  SwXTextDocument::createReplaceDescriptor(
 /* -----------------26.02.99 15:52-------------------
  *
  * --------------------------------------------------*/
-SwUnoCrsr*  SwXTextDocument::CreateCursorForSearch(Reference< text::XTextCursor > & xCrsr)
+SwUnoCrsr*  SwXTextDocument::CreateCursorForSearch(Reference< XTextCursor > & xCrsr)
 {
     getText();
-     text::XText* pText = xBodyText.get();
+     XText* pText = xBodyText.get();
     SwXBodyText* pBText = (SwXBodyText*)pText;
     xCrsr = pBText->CreateTextCursor(sal_True);
 
@@ -794,7 +796,7 @@ sal_Int32 SwXTextDocument::replaceAll(const Reference< util::XSearchDescriptor >
     if(!IsValid() || !xDescTunnel.is() || !xDescTunnel->getSomething(SwXTextSearch::getUnoTunnelId()))
         throw RuntimeException();
 
-    Reference< text::XTextCursor >  xCrsr;
+    Reference< XTextCursor >  xCrsr;
     SwUnoCrsr*  pUnoCrsr = CreateCursorForSearch(xCrsr);
 
     const SwXTextSearch* pSearch = (const SwXTextSearch*)
@@ -869,7 +871,7 @@ Reference< util::XSearchDescriptor >  SwXTextDocument::createSearchDescriptor(vo
  * wird fuer findAll/First/Next verwendet
  * --------------------------------------------------*/
 SwUnoCrsr*  SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor > & xDesc,
-                                        Reference< text::XTextCursor > & xCrsr, sal_Bool bAll,
+                                        Reference< XTextCursor > & xCrsr, sal_Bool bAll,
                                                 sal_Int32& nResult,
                                                 Reference< XInterface >  xLastResult)
 {
@@ -1000,7 +1002,7 @@ Reference< XIndexAccess >
     ::vos::OGuard aGuard(Application::GetSolarMutex());
     Reference< XInterface >  xTmp;
     sal_Int32 nResult = 0;
-    Reference< text::XTextCursor >  xCrsr;
+    Reference< XTextCursor >  xCrsr;
     SwUnoCrsr* pResultCrsr = FindAny(xDesc, xCrsr, sal_True, nResult, xTmp);
     if(!pResultCrsr)
         throw RuntimeException();
@@ -1020,14 +1022,14 @@ Reference< XInterface >  SwXTextDocument::findFirst(const Reference< util::XSear
     ::vos::OGuard aGuard(Application::GetSolarMutex());
     Reference< XInterface >  xTmp;
     sal_Int32 nResult = 0;
-    Reference< text::XTextCursor >  xCrsr;
+    Reference< XTextCursor >  xCrsr;
     SwUnoCrsr* pResultCrsr = FindAny(xDesc, xCrsr, sal_False, nResult, xTmp);
     if(!pResultCrsr)
         throw RuntimeException();
     Reference< XInterface >  xRet;
     if(nResult)
     {
-        Reference< text::XTextRange >  xTempRange = SwXTextRange::CreateTextRangeFromPosition(
+        Reference< XTextRange >  xTempRange = SwXTextRange::CreateTextRangeFromPosition(
                         pDocShell->GetDoc(),
                         *pResultCrsr->GetPoint(),
                         pResultCrsr->GetMark());
@@ -1045,7 +1047,7 @@ Reference< XInterface >  SwXTextDocument::findNext(const Reference< XInterface >
     ::vos::OGuard aGuard(Application::GetSolarMutex());
     Reference< XInterface >  xTmp;
     sal_Int32 nResult = 0;
-    Reference< text::XTextCursor >  xCrsr;
+    Reference< XTextCursor >  xCrsr;
     if(!xStartAt.is())
         throw RuntimeException();
     SwUnoCrsr* pResultCrsr = FindAny(xDesc, xCrsr, sal_False, nResult, xStartAt);
@@ -1054,7 +1056,7 @@ Reference< XInterface >  SwXTextDocument::findNext(const Reference< XInterface >
     Reference< XInterface >  xRet;
     if(nResult)
     {
-        Reference< text::XTextRange >  xTempRange = SwXTextRange::CreateTextRangeFromPosition(
+        Reference< XTextRange >  xTempRange = SwXTextRange::CreateTextRangeFromPosition(
                         pDocShell->GetDoc(),
                         *pResultCrsr->GetPoint(),
                         pResultCrsr->GetMark());
@@ -1504,6 +1506,7 @@ void SwXTextDocument::Invalidate()
     }
     InitNewDoc();
     pDocShell = 0;
+    aRefreshCont.Disposing();
 }
 /* -----------------------------13.07.00 15:59--------------------------------
 
@@ -2218,6 +2221,7 @@ void SwXTextDocument::refresh(void) throw( RuntimeException )
     if(!IsValid())
         throw RuntimeException();
     SwWrtShell *pWrtShell = pDocShell->GetWrtShell();
+    notifyRefreshListeners();
     if(pWrtShell)
         pWrtShell->CalcLayout();
 }
@@ -2227,7 +2231,10 @@ void SwXTextDocument::refresh(void) throw( RuntimeException )
 void SwXTextDocument::addRefreshListener(const Reference< util::XRefreshListener > & l)
     throw( RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    if ( !IsValid() )
+        throw RuntimeException();
+    aRefreshCont.AddListener ( reinterpret_cast < const Reference < lang::XEventListener > &> ( l ));
 }
 /*-- 21.02.00 08:41:07---------------------------------------------------
 
@@ -2235,7 +2242,9 @@ void SwXTextDocument::addRefreshListener(const Reference< util::XRefreshListener
 void SwXTextDocument::removeRefreshListener(const Reference< util::XRefreshListener > & l)
     throw( RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    if ( !IsValid() || !aRefreshCont.RemoveListener ( reinterpret_cast < const Reference < lang::XEventListener > &> ( l ) ) )
+        throw RuntimeException();
 }
 /* -----------------------------26.02.01 12:22--------------------------------
 
