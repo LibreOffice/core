@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-21 15:54:29 $
+ *  last change: $Author: th $ $Date: 2001-03-23 11:45:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2587,7 +2587,8 @@ int OutputDevice::ImplNewFont()
             pGraphics->GetFontMetric(
                 pFontEntry->maMetric,
                 nFactor, 0, CHARCACHE_STD-1, pFontEntry->maWidthAry,
-                maFont.IsKerning(), &pKernPairs, nKernPairs
+                (maFont.GetKerning() & KERNING_FONTSPECIFIC) != 0,
+                &pKernPairs, nKernPairs
                 );
             pFontEntry->mnWidthFactor = nFactor;
 #endif
@@ -2614,13 +2615,15 @@ int OutputDevice::ImplNewFont()
     }
 
     // Wenn Kerning gewuenscht ist, die Kerning-Werte ermitteln
-    if ( maFont.IsKerning() )
+    if ( maFont.GetKerning() & KERNING_FONTSPECIFIC )
     {
         ImplInitKerningPairs( pKernPairs, nKernPairs );
         mbKerning = (pFontEntry->mnKernPairs) != 0;
     }
     else
         mbKerning = FALSE;
+    if ( maFont.GetKerning() & KERNING_ASIAN )
+        mbKerning = TRUE;
 
     // Calculate the EmphasisArea
     mnEmphasisAscent = 0;
@@ -2872,35 +2875,65 @@ long OutputDevice::ImplCalcKerning( const sal_Unicode* pStr, xub_StrLen nLen,
     ImplKernPairData* pKernPairs    = pEntry->mpKernPairs;
     ImplKernInfoData* pKernInfo     = pEntry->mpKernInfo;
     long nWidth                     = 0;
+    xub_StrLen i;
 
+    if ( (maFont.GetKerning() & KERNING_FONTSPECIFIC) && pEntry->mnKernPairs )
+    {
 #ifdef DBG_UTIL
-    {
-    ImplKernPairData    aTestPair;
+        {
+        ImplKernPairData    aTestPair;
 #ifdef __LITTLEENDIAN
-    ULONG               nTestComp  = ((ULONG)((USHORT)0xAABB) << 16) | (USHORT)0xCCDD;
+        ULONG               nTestComp  = ((ULONG)((USHORT)0xAABB) << 16) | (USHORT)0xCCDD;
 #else
-    ULONG               nTestComp  = ((ULONG)((USHORT)0xCCDD) << 16) | (USHORT)0xAABB;
+        ULONG               nTestComp  = ((ULONG)((USHORT)0xCCDD) << 16) | (USHORT)0xAABB;
 #endif
-    aTestPair.mnChar1 = 0xCCDD;
-    aTestPair.mnChar2 = 0xAABB;
-    DBG_ASSERT( nTestComp == *((ULONG*)&aTestPair), "Code doesn't work in this Version" );
-    }
+        aTestPair.mnChar1 = 0xCCDD;
+        aTestPair.mnChar2 = 0xAABB;
+        DBG_ASSERT( nTestComp == *((ULONG*)&aTestPair), "Code doesn't work in this Version" );
+        }
 #endif
 
-    for ( USHORT i = 0; i < nLen-1; i++ )
-    {
-        USHORT  nIndex = (USHORT)(unsigned char)pStr[i];
-        USHORT  nFirst = pKernInfo->maFirstAry[nIndex];
-        USHORT  nLast  = pKernInfo->maLastAry[nIndex];
-#ifdef __LITTLEENDIAN
-        ULONG   nComp  = ((ULONG)((USHORT)(unsigned char)pStr[i+1]) << 16) | nIndex;
-#else
-        ULONG   nComp  = ((ULONG)nIndex << 16) | ((USHORT)(unsigned char)pStr[i+1]);
-#endif
-        for ( USHORT j = nFirst; j <= nLast; j++ )
+        const sal_Unicode* pTempStr = pStr;
+        for ( i = 0; i < nLen-1; i++ )
         {
-            if ( nComp == *((ULONG*)&(pKernPairs[j])) )
+            USHORT  nIndex = (USHORT)*pTempStr;
+            USHORT  nFirst = pKernInfo->maFirstAry[nIndex];
+            USHORT  nLast  = pKernInfo->maLastAry[nIndex];
+
+            pTempStr++;
+#ifdef __LITTLEENDIAN
+            ULONG   nComp  = ((ULONG)((USHORT)*pTempStr) << 16) | nIndex;
+#else
+            ULONG   nComp  = ((ULONG)nIndex << 16) | ((USHORT)*pTempStr);
+#endif
+            for ( USHORT j = nFirst; j <= nLast; j++ )
             {
+                if ( nComp == *((ULONG*)&(pKernPairs[j])) )
+                {
+                    long nAmount = pKernPairs[j].mnKern;
+                    nWidth += nAmount;
+                    if ( pDXAry )
+                    {
+                        for ( USHORT n = i; n < nAryLen; n++ )
+                            pDXAry[n] += nAmount;
+                    }
+                }
+            }
+        }
+    }
+
+    if ( maFont.GetKerning() & KERNING_ASIAN )
+    {
+        const sal_Unicode* pTempStr = pStr;
+        for ( i = 0; i < nLen-1; i++ )
+        {
+            USHORT nFirst = (USHORT)*pTempStr;
+            pTempStr++;
+            USHORT nNext = (USHORT)*pTempStr;
+            if ( ((nFirst >= 0x3001) && (nFirst <= 0x301F)) ||
+                 ((nNext >= 0x3001) && (nNext <= 0x301F)) )
+            {
+/*
                 long nAmount = pKernPairs[j].mnKern;
                 nWidth += nAmount;
                 if ( pDXAry )
@@ -2908,6 +2941,7 @@ long OutputDevice::ImplCalcKerning( const sal_Unicode* pStr, xub_StrLen nLen,
                     for ( USHORT n = i; n < nAryLen; n++ )
                         pDXAry[n] += nAmount;
                 }
+*/
             }
         }
     }
@@ -2934,20 +2968,16 @@ long OutputDevice::ImplGetTextWidth( const xub_Unicode* pStr, xub_StrLen nLen,
         }
         else
         {
-            // Bei Fixed-Fonts reicht eine Multiplikation
-            // Not TRUE for all Fonts, like CJK Fonts
-//            if ( pFontEntry->mbFixedFont )
-//                nWidth = ImplGetCharWidth( 'A' ) * nLen;
-//            else
+            // Also Fixed-Fonts are calculated char by char, because
+            // not every Font or in every CJK Fonts all characters have
+            // the same width
+            const sal_Unicode*  pTempStr = pStr;
+            xub_StrLen          nTempLen = nLen;
+            while ( nTempLen )
             {
-                const sal_Unicode*  pTempStr = pStr;
-                xub_StrLen          nTempLen = nLen;
-                while ( nTempLen )
-                {
-                    nWidth += ImplGetCharWidth( *pTempStr );
-                    nTempLen--;
-                    pTempStr++;
-                }
+                nWidth += ImplGetCharWidth( *pTempStr );
+                nTempLen--;
+                pTempStr++;
             }
             nWidth /= nFactor;
 
@@ -5165,33 +5195,25 @@ long OutputDevice::GetTextWidth( const XubString& rStr,
         {
             long* pCharWidthAry = pFontEntry->maWidthAry;
 
-            // Bei Fixed-Fonts reicht eine Multiplikation
-            // Not TRUE for all Fonts, like CJK Fonts
-//            if ( pFontEntry->mbFixedFont )
-//            {
-//                nWidth = pCharWidthAry['A'] * nLen;
-//                nWidth /= pFontEntry->mnWidthFactor;
-//            }
-//            else
+            // Also Fixed-Fonts are calculated char by char, because
+            // not every Font or in every CJK Fonts all characters have
+            // the same width
+            const sal_Unicode*  pStr = rStr.GetBuffer();
+            const sal_Unicode*  pTempStr;
+            xub_StrLen          nTempLen;
+            pStr += nIndex;
+            pTempStr = pStr;
+            nTempLen = nLen;
+            while ( nTempLen )
             {
-                const sal_Unicode*  pStr = rStr.GetBuffer();
-                const sal_Unicode*  pTempStr;
-                USHORT          nTempLen;
-                pStr += nIndex;
-                pTempStr = pStr;
-                nTempLen = nLen;
-                while ( nTempLen )
-                {
-                    nWidth += ImplGetCharWidth( *pTempStr );
-                    nTempLen--;
-                    pTempStr++;
-                }
-                nWidth /= pFontEntry->mnWidthFactor;
-
-                // Kerning beruecksichtigen (tun wir nur bei Fonts ohne feste Breite)
-                if ( mbKerning )
-                    nWidth += ImplCalcKerning( pStr, nLen, NULL, 0 );
+                nWidth += ImplGetCharWidth( *pTempStr );
+                nTempLen--;
+                pTempStr++;
             }
+            nWidth /= pFontEntry->mnWidthFactor;
+
+            if ( mbKerning )
+                nWidth += ImplCalcKerning( pStr, nLen, NULL, 0 );
         }
     }
 
@@ -6485,8 +6507,8 @@ FontMetric OutputDevice::GetFontMetric() const
         aMetric.SetOrientation( pEntry->mnOwnOrientation );
     else
         aMetric.SetOrientation( pMetric->mnOrientation );
-    if ( !mbKerning )
-        aMetric.SetKerning( FALSE );
+    if ( !pEntry->mnKernPairs )
+        aMetric.SetKerning( aMetric.GetKerning() & ~KERNING_FONTSPECIFIC );
 
     // restliche Metricen setzen
     aMetric.mpImplMetric->meType        = pMetric->meType;
