@@ -2,9 +2,9 @@
  *
  *  $RCSfile: template.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-02 19:26:27 $
+ *  last change: $Author: kz $ $Date: 2001-04-05 19:26:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,7 +177,7 @@ String STYLES + 2
     Text[ russian ] = "Отмена";
     Text[ greek ] = "~Бкэсщуз";
     Text[ dutch ] = "Stoppen";
-    Text[ french ] = "Annuler";
+    Text[ french ] = "~Annuler";
     Text[ spanish ] = "~Cancelar";
     Text[ italian ] = "Annulla";
     Text[ danish ] = "Annuller";
@@ -202,7 +202,7 @@ String STYLES + 3
     Text[ russian ] = "OK";
     Text[ greek ] = "~OK";
     Text[ dutch ] = "OK";
-    Text[ french ] = "OK";
+    Text[ french ] = "~OK";
     Text[ spanish ] = "~Aceptar";
     Text[ italian ] = "OK";
     Text[ danish ] = "OK";
