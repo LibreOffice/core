@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rehearsetimingsactivity.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 13:43:47 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 07:55:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,13 +175,13 @@ private:
                   cppcanvas::CustomSpriteSharedPtr> > ViewsVecT;
     ViewsVecT m_views;
 
-    template <typename FuncT>
-    FuncT for_each_sprite( FuncT func ) const {
+    template <typename func_type>
+    void for_each_sprite( func_type const & func ) const
+    {
         ViewsVecT::const_iterator iPos( m_views.begin() );
         const ViewsVecT::const_iterator iEnd( m_views.end() );
         for ( ; iPos != iEnd; ++iPos )
             func( iPos->second );
-        return func;
     }
 
     basegfx::B2DRectangle m_spriteRectangle;
