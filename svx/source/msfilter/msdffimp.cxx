@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: cmc $ $Date: 2001-03-23 09:14:36 $
+ *  last change: $Author: sj $ $Date: 2001-03-23 14:47:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5099,10 +5099,7 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
                 xInplaceObj->EnableSetModified( FALSE );
                 xInplaceObj->SetVisArea( Rectangle( Point(), aSz ));
                 xInplaceObj->EnableSetModified( TRUE );
-
-                XubString aNm;
-                pRet = new SdrOle2Obj( xInplaceObj, aNm,
-                                        rBoundRect, /*TRUE*/ FALSE );
+                pRet = new SdrOle2Obj( xInplaceObj, aDstStgName, rBoundRect, FALSE );
             }
         }
     }
