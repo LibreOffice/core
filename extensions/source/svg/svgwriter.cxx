@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svgwriter.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2001-11-02 11:23:51 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:53:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,11 @@ protected:
 
 public:
 
-                            SVGMtfExport( const REF( NMSP_SAX::XDocumentHandler )& rxHandler );
+    // #110680#
+    SVGMtfExport(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+        const REF( NMSP_SAX::XDocumentHandler )& rxHandler );
+
     virtual                 ~SVGMtfExport();
 
     virtual void            writeMtf( const GDIMetaFile& rMtf );
@@ -92,8 +96,11 @@ public:
 
 // -----------------------------------------------------------------------------
 
-SVGMtfExport::SVGMtfExport( const REF( NMSP_SAX::XDocumentHandler )& rxHandler ) :
-        SvXMLExport( NMSP_RTL::OUString(), rxHandler )
+// #110680#
+SVGMtfExport::SVGMtfExport(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+    const REF( NMSP_SAX::XDocumentHandler )& rxHandler )
+:   SvXMLExport( xServiceFactory, NMSP_RTL::OUString(), rxHandler )
 {
     GetDocHandler()->startDocument();
 }
@@ -190,7 +197,10 @@ void SAL_CALL SVGWriter::write( const REF( NMSP_SAX::XDocumentHandler )& rxDocHa
 
     const REF( NMSP_SAX::XDocumentHandler ) xDocumentHandler( rxDocHandler );
 
-    SVGMtfExport* pWriter = new SVGMtfExport( xDocumentHandler );
+    // #110680#
+    // SVGMtfExport* pWriter = new SVGMtfExport( xDocumentHandler );
+    SVGMtfExport* pWriter = new SVGMtfExport( mxFact, xDocumentHandler );
+
     pWriter->writeMtf( aMtf );
     delete pWriter;
 }
