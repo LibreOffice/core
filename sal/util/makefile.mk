@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: hjs $ $Date: 2002-04-15 10:06:24 $
+#   last change: $Author: mhu $ $Date: 2002-07-23 12:47:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,8 +66,9 @@ $(PRJPCH)=
 
 PRJNAME=sal
 TARGET=sal
+NO_BSYMBOLIC=TRUE
+NO_DEFAULT_STL=TRUE
 USE_LDUMP2=TRUE
-# NO_DEFAULT_STL=TRUE
 
 .IF "$(GUI)"!="OS2"
 USE_DEFFILE=TRUE
@@ -149,12 +150,13 @@ SHL1STDLIBS+=-init InitLibrary -term ExitLibrary
 
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="SOLARIS"
+# libposix4.so (SunOS 5.6) -> librt.so (SunOS >= 5.7)
 SHL1STDLIBS= -lpthread -lposix4
 .IF "$(COM)" == "C50"
 SHL1STDLIBS+= -z allextract -staticlib=Crun -z defaultextract
-.ENDIF
-.ENDIF
-.ENDIF
+.ENDIF # C50
+.ENDIF # SOLARIS
+.ENDIF # UNX
 
 .IF "$(GUI)"=="OS2"
 SHL1STDLIBS=n:\toolkit4\lib\so32dll.lib\
