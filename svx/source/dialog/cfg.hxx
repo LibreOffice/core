@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 14:27:12 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:28:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,10 @@
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>     // SvUShorts
@@ -137,7 +141,7 @@ class SvxToolbarConfigPage;
 
 typedef std::vector< SvxConfigEntry* > SvxEntries;
 
-class SvxConfigDialog : public SfxTabDialog
+class SVX_DLLPUBLIC SvxConfigDialog : public SfxTabDialog
 {
 public:
     SvxConfigDialog( Window*, const SfxItemSet* );
