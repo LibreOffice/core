@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Test_fps.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:05:05 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:35:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -392,7 +392,7 @@ int SAL_CALL main(int nArgc, char* Argv[], char* Env[]  )
         xFilePicker->setDefaultName( OUString::createFromAscii("d:\\test2.sxw"));
 
         OUString aDirURL;
-        OUString aSysPath = OStringToOUString( "d:\\üהצ", osl_getThreadTextEncoding( ) );
+        OUString aSysPath = OStringToOUString( "d:\\ueaeoe", osl_getThreadTextEncoding( ) );
         ::osl::FileBase::getFileURLFromSystemPath( aSysPath, aDirURL );
         xFilePicker->setDisplayDirectory( aDirURL );
 
