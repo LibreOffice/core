@@ -2,9 +2,9 @@
  *
  *  $RCSfile: split.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ssa $ $Date: 2002-07-19 15:24:32 $
+ *  last change: $Author: ssa $ $Date: 2002-08-14 14:05:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,7 @@ void Splitter::ImplInit( Window* pParent, WinBits nWinStyle )
     }
 
     SetPointer( Pointer( ePointerStyle ) );
+
     if( GetSettings().GetStyleSettings().GetFaceColor().IsDark() )
         SetBackground( ImplWhiteWall );
     else
@@ -764,6 +765,25 @@ long Splitter::Notify( NotifyEvent& rNEvt )
 
 // -----------------------------------------------------------------------
 
+void Splitter::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    Window::DataChanged( rDCEvt );
+    if( rDCEvt.GetType() == DATACHANGED_SETTINGS )
+    {
+        Color oldFaceColor = ((AllSettings *) rDCEvt.GetData())->GetStyleSettings().GetFaceColor();
+        Color newFaceColor = Application::GetSettings().GetStyleSettings().GetFaceColor();
+        if( oldFaceColor.IsDark() != newFaceColor.IsDark() )
+        {
+            if( newFaceColor.IsDark() )
+                SetBackground( ImplWhiteWall );
+            else
+                SetBackground( ImplBlackWall );
+        }
+    }
+}
+
+// -----------------------------------------------------------------------
+
 void Splitter::Paint( const Rectangle& rPaintRect )
 {
     if( HasFocus() || mbKbdSplitting )
@@ -805,10 +825,6 @@ void Splitter::Paint( const Rectangle& rPaintRect )
     }
     else
     {
-        if( GetSettings().GetStyleSettings().GetFaceColor().IsDark() )
-            SetBackground( ImplWhiteWall );
-        else
-            SetBackground( ImplBlackWall );
         Window::Paint( rPaintRect );
     }
 }
