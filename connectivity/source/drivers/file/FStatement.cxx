@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FStatement.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 16:20:55 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:44:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -307,52 +307,6 @@ void OStatement_Base::setWarning (const SQLWarning &ex) throw( SQLException)
 }
 
 // -------------------------------------------------------------------------
-
-sal_Bool SAL_CALL OStatement_Base::execute( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    executeQuery(sql);
-
-    return m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT || m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT_COUNT;
-}
-
-// -------------------------------------------------------------------------
-
-Reference< XResultSet > SAL_CALL OStatement_Base::executeQuery( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
-    construct(sql);
-    OResultSet* pResult = createResultSet();
-    Reference< XResultSet > xRS = pResult;
-    initializeResultSet(pResult);
-
-    pResult->OpenImpl();
-    return xRS;
-}
-// -------------------------------------------------------------------------
-Reference< XConnection > SAL_CALL OStatement_Base::getConnection(  ) throw(SQLException, RuntimeException)
-{
-    return (Reference< XConnection >)m_pConnection;
-}
-// -------------------------------------------------------------------------
-sal_Int32 SAL_CALL OStatement_Base::executeUpdate( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
-
-    construct(sql);
-    OResultSet* pResult = createResultSet();
-    Reference< XResultSet > xRS = pResult;
-    initializeResultSet(pResult);
-    pResult->OpenImpl();
-
-    return pResult->getRowCountResult();
-}
-// -------------------------------------------------------------------------
 Any SAL_CALL OStatement_Base::getWarnings(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -401,6 +355,53 @@ void SAL_CALL OStatement::release() throw()
     OStatement_BASE2::release();
 }
 // -----------------------------------------------------------------------------
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OStatement::execute( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    executeQuery(sql);
+
+    return m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT || m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT_COUNT;
+}
+
+// -------------------------------------------------------------------------
+
+Reference< XResultSet > SAL_CALL OStatement::executeQuery( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
+    construct(sql);
+    OResultSet* pResult = createResultSet();
+    Reference< XResultSet > xRS = pResult;
+    initializeResultSet(pResult);
+
+    pResult->OpenImpl();
+    return xRS;
+}
+// -------------------------------------------------------------------------
+Reference< XConnection > SAL_CALL OStatement::getConnection(  ) throw(SQLException, RuntimeException)
+{
+    return (Reference< XConnection >)m_pConnection;
+}
+// -------------------------------------------------------------------------
+sal_Int32 SAL_CALL OStatement::executeUpdate( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
+
+    construct(sql);
+    OResultSet* pResult = createResultSet();
+    Reference< XResultSet > xRS = pResult;
+    initializeResultSet(pResult);
+    pResult->OpenImpl();
+
+    return pResult->getRowCountResult();
+}
+
+// -----------------------------------------------------------------------------
 void SAL_CALL OStatement_Base::disposing(void)
 {
     if(m_aEvaluateRow.isValid())
@@ -412,14 +413,15 @@ void SAL_CALL OStatement_Base::disposing(void)
     OStatement_BASE::disposing();
 }
 // -----------------------------------------------------------------------------
-::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OStatement_Base::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
+Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OStatement_Base::getPropertySetInfo(  ) throw(RuntimeException)
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
 // -----------------------------------------------------------------------------
-::com::sun::star::uno::Any SAL_CALL OStatement::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
+Any SAL_CALL OStatement::queryInterface( const Type & rType ) throw(RuntimeException)
 {
-    return OStatement_BASE2::queryInterface( rType);
+    Any aRet = OStatement_XStatement::queryInterface( rType);
+    return aRet.hasValue() ? aRet : OStatement_BASE2::queryInterface( rType);
 }
 // -----------------------------------------------------------------------------
 OSQLAnalyzer* OStatement_Base::createAnalyzer()
@@ -522,6 +524,11 @@ void OStatement_Base::construct(const ::rtl::OUString& sql)  throw(SQLException,
                                         makeAny(m_aSQLIterator.getWarning()));
         if ( xTabs.size() > 1 || m_aSQLIterator.getWarning().Message.getLength() )
             throwGenericSQLException(   ::rtl::OUString::createFromAscii("The statement is invalid. It contains more than one table."),
+                                        static_cast<XWeak*>(this),
+                                        makeAny(m_aSQLIterator.getWarning()));
+
+        if ( m_aSQLIterator.getSelectColumns()->empty() )
+            throwGenericSQLException(   ::rtl::OUString::createFromAscii("The statement is invalid. It contains no valid column names."),
                                         static_cast<XWeak*>(this),
                                         makeAny(m_aSQLIterator.getWarning()));
 
