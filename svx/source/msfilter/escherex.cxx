@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sj $ $Date: 2000-12-20 12:10:27 $
+ *  last change: $Author: sj $ $Date: 2000-12-20 14:58:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,7 +329,7 @@ sal_uInt32 EscherPropertyContainer::ImplGetColor( const sal_uInt32 nSOColor, sal
         return nSOColor & 0xffffff;
 }
 
-sal_uInt32 EscherPropertyContainer::ImplGetGradientColor(
+sal_uInt32 EscherPropertyContainer::GetGradientColor(
     const ::com::sun::star::awt::Gradient* pGradient,
         sal_uInt32 nStartColor )
 {
@@ -403,8 +403,8 @@ void EscherPropertyContainer::CreateGradientProperties(
     }
     AddOpt( ESCHER_Prop_fillType, ESCHER_FillShadeScale );
     AddOpt( ESCHER_Prop_fillAngle, ( ( -3600 + nAngle ) << 16 ) / 10 );
-    AddOpt( ESCHER_Prop_fillColor, ImplGetGradientColor( pGradient, nFirstColor ) );
-    AddOpt( ESCHER_Prop_fillBackColor, ImplGetGradientColor( pGradient, nFirstColor ^ 1 ) );
+    AddOpt( ESCHER_Prop_fillColor, GetGradientColor( pGradient, nFirstColor ) );
+    AddOpt( ESCHER_Prop_fillBackColor, GetGradientColor( pGradient, nFirstColor ^ 1 ) );
     AddOpt( ESCHER_Prop_fillFocus, nFillFocus );
 };
 
@@ -1978,72 +1978,5 @@ UINT32 EscherEx::GetColor( const Color& rSOColor, BOOL bSwap )
 
     return nColor;
 }
-
-// ---------------------------------------------------------------------------------------------
-
-UINT32 EscherEx::GetGradientColor( const ::com::sun::star::awt::Gradient* pVCLGradient, UINT32 nStartColor )
-{
-    UINT32 nIntensity;
-    Color   aColor;
-    if ( nStartColor & 1 )
-    {
-        nIntensity = pVCLGradient->StartIntensity;
-        aColor = pVCLGradient->StartColor;
-    }
-    else
-    {
-        nIntensity = pVCLGradient->EndIntensity;
-        aColor = pVCLGradient->EndColor;
-    }
-    UINT32 nRed = ( ( aColor.GetRed() * nIntensity ) / 100 );
-    UINT32 nGreen = ( ( aColor.GetGreen() * nIntensity ) / 100 ) << 8;
-    UINT32 nBlue = ( ( aColor.GetBlue() * nIntensity ) / 100 ) << 16;
-    return nRed | nGreen | nBlue;
-}
-
-// ---------------------------------------------------------------------------------------------
-
-void EscherEx::WriteGradient( EscherPropertyContainer& rPropOpt, const ::com::sun::star::awt::Gradient* pVCLGradient )
-{
-    UINT32 nFillFocus = 0x64;
-    UINT32 nFirstColor = 0;
-
-
-    switch ( pVCLGradient->Style )
-    {
-        default:
-        case GradientStyle_LINEAR :
-        {
-        }
-        break;
-        case GradientStyle_AXIAL :
-        {
-            nFillFocus = 0x32;
-            nFirstColor = 1;
-        }
-        break;
-        case GradientStyle_RADIAL :
-        {
-        }
-        break;
-        case GradientStyle_ELLIPTICAL :
-        {
-        }
-        break;
-        case GradientStyle_SQUARE :
-        {
-        }
-        break;
-        case GradientStyle_RECT :
-        {
-        }
-        break;
-    }
-    rPropOpt.AddOpt( ESCHER_Prop_fillType, ESCHER_FillShadeScale );
-    rPropOpt.AddOpt( ESCHER_Prop_fillAngle, ( ( -3600 + pVCLGradient->Angle ) << 16 ) / 10 );
-    rPropOpt.AddOpt( ESCHER_Prop_fillColor, GetGradientColor( pVCLGradient, nFirstColor ) );
-    rPropOpt.AddOpt( ESCHER_Prop_fillBackColor, GetGradientColor( pVCLGradient, nFirstColor ^ 1 ) );
-    rPropOpt.AddOpt( ESCHER_Prop_fillFocus, nFillFocus );
-};
 
 // ---------------------------------------------------------------------------------------------
