@@ -2,9 +2,9 @@
  *
  *  $RCSfile: osl_File.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-05 21:20:14 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 13:36:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,10 @@
 #endif
 #include <rtl/ustrbuf.hxx>
 
+#include "osl/thread.h"
+
+#include "rtl/ustrbuf.hxx"
+
 #ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
 #endif
@@ -92,6 +96,13 @@
 #endif
 
 #include <cppunit/simpleheader.hxx>
+
+#ifdef WNT
+#   define UNICODE
+#   define WIN32_LEAN_AND_MEAN
+#   include <windows.h>
+#   include <tchar.h>
+#endif
 
 using namespace osl;
 using namespace rtl;
@@ -5990,6 +6001,213 @@ namespace osl_Directory
         CPPUNIT_TEST_SUITE_END( );
     };// class remove
 
+    //########################################
+    // TEST Directory::createPath
+    //########################################
+
+    #ifdef WNT
+    #   define PATH_BUFFER_SIZE MAX_PATH
+    #else
+    #   define PATH_BUFFER_SIZE PATH_MAX
+    #endif
+
+    char TEST_PATH_POSTFIX[] = "hello/world";
+
+    //########################################
+    OUString get_test_path()
+    {
+        OUString tmp;
+        FileBase::RC rc = FileBase::getTempDirURL(tmp);
+
+        CPPUNIT_ASSERT_MESSAGE
+        (
+        "Test path creation failed",
+        rc == FileBase::E_None
+        );
+
+        OUStringBuffer b(tmp);
+        if (tmp.lastIndexOf('/') != (tmp.getLength() - 1))
+            b.appendAscii("/");
+
+        b.appendAscii(TEST_PATH_POSTFIX);
+
+        return b.makeStringAndClear();
+    }
+
+    //########################################
+    void rm_test_path(const OUString& path)
+    {
+        sal_Unicode buffer[PATH_BUFFER_SIZE];
+        rtl_copyMemory(buffer, path.getStr(), (path.getLength() + 1) * sizeof(sal_Unicode));
+
+        sal_Int32 i = rtl_ustr_lastIndexOfChar(buffer, '/');
+        if (i == path.getLength())
+            buffer[i] = 0;
+
+        Directory::remove(buffer);
+
+        i = rtl_ustr_lastIndexOfChar(buffer, '/');
+        buffer[i] = 0;
+        Directory::remove(buffer);
+    }
+
+    //########################################
+    class DirCreatedObserver : public DirectoryCreationObserver
+    {
+    public:
+        DirCreatedObserver() : i(0)
+        {
+        }
+
+        virtual void DirectoryCreated(const rtl::OUString& aDirectoryUrl)
+        {
+            i++;
+        };
+
+        int number_of_dirs_created() const
+        {
+            return i;
+        }
+
+    private:
+            int i;
+    };
+
+    char* buff = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+    //########################################
+    class createPath : public CppUnit::TestFixture
+    {
+    public:
+        //##########################################
+        createPath()
+        {}
+
+        //##########################################
+        void with_relative_path()
+        {
+            FileBase::RC rc = Directory::createPath(
+                OUString::createFromAscii(TEST_PATH_POSTFIX));
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "osl_createDirectoryPath contract broken",
+                rc == FileBase::E_INVAL
+            );
+        }
+
+        //##########################################
+        void without_callback()
+        {
+            OUString tp_url = get_test_path();
+
+            rm_test_path(tp_url);
+
+            FileBase::RC rc = Directory::createPath(tp_url);
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "osl_createDirectoryPath failed",
+                rc == FileBase::E_None
+            );
+        }
+
+        //##########################################
+        void with_callback()
+        {
+            OUString tp_url = get_test_path();
+
+            rm_test_path(tp_url);
+
+            DirCreatedObserver* observer = new DirCreatedObserver;
+
+            FileBase::RC rc = Directory::createPath(tp_url, observer);
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "osl_createDirectoryPath failed",
+                (rc == FileBase::E_None) && (observer->number_of_dirs_created() > 0)
+            );
+
+            delete observer;
+        }
+
+    #ifdef WNT
+
+        //##########################################
+        char* get_unused_drive_letter()
+        {
+            DWORD ld = GetLogicalDrives();
+            DWORD i = 4;
+            DWORD j = 2;
+
+            while ((ld & i) && (i > 1))
+            { i = i << 1; j++; }
+
+            if (i > 2)
+                return buff + j;
+
+            return NULL;
+        }
+
+        //##########################################
+        void at_invalid_logical_drive()
+        {
+            char* drv = get_unused_drive_letter();
+            char buff[PATH_BUFFER_SIZE];
+            rtl_zeroMemory(buff, sizeof(buff));
+
+            strncpy(buff, drv, 1);
+            strcat(buff, ":\\");
+            strcat(buff, TEST_PATH_POSTFIX);
+
+            OUString path = OUString::createFromAscii(buff);
+            OUString tp_url;
+            FileBase::getFileURLFromSystemPath(path, tp_url);
+
+            FileBase::RC rc = Directory::createPath(tp_url);
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "osl_createDirectoryPath doesn't fail on unused logical drive letters",
+                rc != FileBase::E_None
+            );
+        }
+
+        //##########################################
+        void with_UNC_path()
+        {
+
+            OUString tp_unc = OUString::createFromAscii("\\\\Tra-1\\TRA_D\\hello\\world\\");
+            OUString tp_url;
+            FileBase::getFileURLFromSystemPath(tp_unc, tp_url);
+
+            FileBase::RC rc = Directory::createPath(tp_url);
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "osl_createDirectoryPath fails with UNC path",
+                rc == FileBase::E_None
+            );
+        }
+
+    #endif /* WNT */
+
+    CPPUNIT_TEST_SUITE(createPath);
+    CPPUNIT_TEST(with_relative_path);
+    CPPUNIT_TEST(without_callback);
+    CPPUNIT_TEST(with_callback);
+#ifdef WNT
+    CPPUNIT_TEST(at_invalid_logical_drive);
+
+    // adapt the UNC path in method createDirectoryPath_with_UNC_path
+    // in order to run this test successfully
+    //CPPUNIT_TEST(with_UNC_path);
+#endif
+    CPPUNIT_TEST_SUITE_END();
+
+    }; // class createPath
+
     // -----------------------------------------------------------------------------
      CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_Directory::ctors, "osl_Directory" );
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_Directory::open, "osl_Directory" );
@@ -6000,6 +6218,7 @@ namespace osl_Directory
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_Directory::getVolumeInfo, "osl_Directory" );
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_Directory::create, "osl_Directory" );
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_Directory::remove, "osl_Directory" );
+    CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_Directory::createPath, "osl_Directory" );
 }// namespace osl_Directory
 
 
