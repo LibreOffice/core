@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txatbase.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-12 09:54:12 $
+ *  last change: $Author: ama $ $Date: 2001-03-15 15:47:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,12 +164,6 @@ public:
     inline USHORT Which() const { return GetAttr().Which(); }
 
     virtual int         operator==( const SwTxtAttr& ) const;
-
-    virtual void ChgFnt( SwFont * );
-    virtual void RstFnt( SwFont * );
-
-    virtual void ChgTxtAttr( SwTxtAttr & );
-    virtual void RstTxtAttr( SwTxtAttr & );
 
     inline const SvxFontItem            &GetFont() const;
     inline const SvxPostureItem         &GetPosture() const;
@@ -471,6 +465,9 @@ inline const SvxCharReliefItem& SwTxtAttr::GetCharRelief() const
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.12  2001/03/12 09:54:12  ama
+      New: Fontattribute relief
+
       Revision 1.11  2001/03/06 16:05:31  ama
       Chg by FME: Attribute handler
 
