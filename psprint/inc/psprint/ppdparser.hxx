@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ppdparser.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 10:07:44 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 13:59:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,13 @@ public:
     UIType              getUIType() const { return m_eUIType; }
     SetupType           getSetupType() const { return m_eSetupType; }
     int                 getOrderDependency() const { return m_nOrderDependency; }
+};
+
+// define a hash for PPDKey
+struct PPDKeyhash
+{
+    size_t operator()( const PPDKey * pKey) const
+        { return (size_t)pKey; }
 };
 
 // ----------------------------------------------------------------------
@@ -311,7 +318,8 @@ public:
 
 class PPDContext
 {
-    ::std::hash_map< const PPDKey*, const PPDValue* >   m_aCurrentValues;
+    typedef ::std::hash_map< const PPDKey*, const PPDValue*, PPDKeyhash > hash_type;
+    hash_type m_aCurrentValues;
     const PPDParser*                                    m_pParser;
 
     // returns false: check failed, new value is constrained
