@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmctrler.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-04 13:45:49 $
+ *  last change: $Author: oj $ $Date: 2002-11-14 10:01:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -630,13 +630,14 @@ void FmXFormController::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) c
                             if (j != rRow.begin())
                                 aFilter += ::rtl::OUString::createFromAscii(" AND ");
 
-                            aTest = (const sal_Unicode*)(*j).second;
+                            aTest = (*j).second;
                             aErrorMsg = ::rtl::OUString();
                             ::rtl::Reference< ISQLParseNode > xParseNode = predicateTree(aErrorMsg, aTest, xFormatter, xField);
                             if (xParseNode.is())
                             {
                                 aCriteria = ::rtl::OUString();
-                                xParseNode->parseNodeToStr(aCriteria, xMetaData,getParseContext());
+                                // don't use a parse context here, we need it unlocalized
+                                xParseNode->parseNodeToStr(aCriteria, xMetaData,NULL);
                                 aFilter += aCriteria;
                             }
                         }
@@ -686,7 +687,7 @@ void FmXFormController::fillProperties(
 //------------------------------------------------------------------------------
 sal_Bool SAL_CALL FmXFormController::hasElements(void) throw( RuntimeException )
 {
-    return m_aChilds.size() != 0;
+    return !m_aChilds.empty();
 }
 
 //------------------------------------------------------------------------------
@@ -2329,18 +2330,25 @@ void FmXFormController::setFilter(vector<FmFieldInfo>& rFieldInfos)
         for (vector<FmFieldInfo>::iterator iter = rFieldInfos.begin();
             iter != rFieldInfos.end(); iter++)
         {
-            try
+            if ( xQueryColumns->hasByName((*iter).aFieldName) )
             {
-                xQueryColumns->getByName((*iter).aFieldName) >>= (*iter).xField;
-                (*iter).xField->getPropertyValue(FM_PROP_REALNAME) >>= (*iter).aFieldName;
-            }
-            catch (...)
-            {
+                if ( (xQueryColumns->getByName((*iter).aFieldName) >>= (*iter).xField) && (*iter).xField.is() )
+                    (*iter).xField->getPropertyValue(FM_PROP_REALNAME) >>= (*iter).aFieldName;
             }
         }
 
+        Reference< ::com::sun::star::sdbc::XDatabaseMetaData> xMetaData(xConnection->getMetaData());
         // now transfer the filters into Value/TextComponent pairs
-        ::comphelper::UStringMixEqual aCompare(xConnection->getMetaData()->storesMixedCaseQuotedIdentifiers());
+        ::comphelper::UStringMixEqual aCompare(xMetaData->storesMixedCaseQuotedIdentifiers());
+
+        // need to parse criteria localized
+        OStaticDataAccessTools aStaticTools;
+        Reference< ::com::sun::star::util::XNumberFormatsSupplier> xFormatSupplier( aStaticTools.getNumberFormats(xConnection, sal_True));
+        Reference< ::com::sun::star::util::XNumberFormatter> xFormatter(m_xORB
+                        ->createInstance(::rtl::OUString::createFromAscii("com.sun.star.util.NumberFormatter")), UNO_QUERY);
+        xFormatter->attachNumberFormatsSupplier(xFormatSupplier);
+        ::com::sun::star::lang::Locale aAppLocale = Application::GetSettings().GetUILocale();
+        LocaleDataWrapper aLocaleWrapper(m_xORB,aAppLocale);
 
         // retrieving the filter
         const Sequence < PropertyValue >* pRow = aFilterRows.getConstArray();
@@ -2414,7 +2422,23 @@ void FmXFormController::setFilter(vector<FmFieldInfo>& rFieldInfos)
                             aRow[(*iter).xText] = aCompText;
                         }
                         else
-                            aRow[(*iter).xText] = ::comphelper::getString(pRefValues[j].Value);
+                        {
+                            ::rtl::OUString sPredicate,sErrorMsg;
+                            pRefValues[j].Value >>= sPredicate;
+                            ::rtl::Reference< ISQLParseNode > xParseNode = predicateTree(sErrorMsg, sPredicate, xFormatter, xField);
+                            if ( xParseNode.is() )
+                            {
+                                ::rtl::OUString sCriteria;
+                                xParseNode->parseNodeToPredicateStr( sCriteria
+                                                                    ,xMetaData
+                                                                    ,xFormatter
+                                                                    ,xField
+                                                                    ,aAppLocale
+                                                                    ,aLocaleWrapper.getNumDecimalSep().GetChar(0)
+                                                                    ,getParseContext());
+                                aRow[(*iter).xText] = sCriteria;
+                            }
+                        }
                         break;
                     }
                 }
