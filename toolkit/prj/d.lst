@@ -27,6 +27,10 @@ hedabu: ..\inc\toolkit\awt\vclxwindows.hxx %_DEST%\inc%_EXT%\toolkit\awt\vclxwin
 hedabu: ..\inc\toolkit\awt\vclxmenu.hxx %_DEST%\inc%_EXT%\toolkit\awt\vclxmenu.hxx
 
 hedabu: ..\inc\toolkit\controls\unocontrol.hxx %_DEST%\inc%_EXT%\toolkit\controls\unocontrol.hxx
+hedabu: ..\inc\toolkit\controls\unocontrols.hxx %_DEST%\inc%_EXT%\toolkit\controls\unocontrols.hxx
+hedabu: ..\inc\toolkit\controls\unocontrolmodel.hxx %_DEST%\inc%_EXT%\toolkit\controls\unocontrolmodel.hxx
+hedabu: ..\inc\toolkit\controls\unocontrolbase.hxx %_DEST%\inc%_EXT%\toolkit\controls\unocontrolbase.hxx
+hedabu: ..\inc\toolkit\helper\servicenames.hxx %_DEST%\inc%_EXT%\toolkit\helper\servicenames.hxx
 
 hedabu: ..\inc\toolkit\helper\emptyfontdescriptor.hxx %_DEST%\inc%_EXT%\toolkit\helper\emptyfontdescriptor.hxx
 hedabu: ..\inc\toolkit\helper\vclunohelper.hxx %_DEST%\inc%_EXT%\toolkit\helper\vclunohelper.hxx
