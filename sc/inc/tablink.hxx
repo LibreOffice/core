@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablink.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-07 15:57:57 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 20:45:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ SO2_DECL_REF(SvEmbeddedObject)
 class ScDocShell;
 class SfxObjectShell;
 
-class ScTableLink : public SvBaseLink
+class ScTableLink : public ::so3::SvBaseLink
 {
 private:
     ScDocShell* pDocShell;      // Container
@@ -93,7 +93,8 @@ public:
                     const String& rFilter, const String& rOpt);
     virtual ~ScTableLink();
     virtual void Closed();
-    virtual void DataChanged(SvData& rData);
+    virtual void DataChanged( const String& rMimeType,
+                              const ::com::sun::star::uno::Any & rValue );
 
     virtual BOOL Edit(Window* pParent);
 

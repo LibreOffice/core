@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkuno.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-12-21 13:59:04 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 20:52:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,7 +150,7 @@ ScTableLink* ScSheetLinkObj::GetLink_Impl() const
         USHORT nCount = pLinkManager->GetLinks().Count();
         for (USHORT i=0; i<nCount; i++)
         {
-            SvBaseLink* pBase = *pLinkManager->GetLinks()[i];
+            ::so3::SvBaseLink* pBase = *pLinkManager->GetLinks()[i];
             if (pBase->ISA(ScTableLink))
             {
                 ScTableLink* pTabLink = (ScTableLink*)pBase;
@@ -588,7 +588,7 @@ ScAreaLink* lcl_GetAreaLink( ScDocShell* pDocShell, USHORT nPos )
         USHORT nAreaCount = 0;
         for (USHORT i=0; i<nTotalCount; i++)
         {
-            SvBaseLink* pBase = *pLinkManager->GetLinks()[i];
+            ::so3::SvBaseLink* pBase = *pLinkManager->GetLinks()[i];
             if (pBase->ISA(ScAreaLink))
             {
                 if ( nAreaCount == nPos )
@@ -656,7 +656,7 @@ void ScAreaLinkObj::Modify_Impl( const rtl::OUString* pNewFile, const rtl::OUStr
         //! Undo zusammenfassen
 
         SvxLinkManager* pLinkManager = pDocShell->GetDocument()->GetLinkManager();
-        pLinkManager->Remove(*pLink);
+        pLinkManager->Remove( pLink );
         pLink = NULL;   // bei Remove geloescht
 
         BOOL bFitBlock = TRUE;          // verschieben, wenn durch Update Groesse geaendert
@@ -943,7 +943,7 @@ void SAL_CALL ScAreaLinksObj::removeByIndex( sal_Int32 nIndex ) throw(uno::Runti
         //! SetAddUndo oder so
 
         SvxLinkManager* pLinkManager = pDocShell->GetDocument()->GetLinkManager();
-        pLinkManager->Remove(*pLink);
+        pLinkManager->Remove( pLink );
     }
 }
 
@@ -968,7 +968,7 @@ sal_Int32 SAL_CALL ScAreaLinksObj::getCount() throw(uno::RuntimeException)
         USHORT nTotalCount = pLinkManager->GetLinks().Count();
         for (USHORT i=0; i<nTotalCount; i++)
         {
-            SvBaseLink* pBase = *pLinkManager->GetLinks()[i];
+            ::so3::SvBaseLink* pBase = *pLinkManager->GetLinks()[i];
             if (pBase->ISA(ScAreaLink))
                 ++nAreaCount;
         }

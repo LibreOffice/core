@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servobj.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:00 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 20:50:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,15 +65,15 @@
 #ifndef _SFXLSTNER_HXX //autogen
 #include <svtools/lstner.hxx>
 #endif
-#ifndef _PSEUDO_HXX //autogen
-#include <so3/pseudo.hxx>
+#ifndef _LINKSRC_HXX //autogen
+#include <so3/linksrc.hxx>
 #endif
 
 #include "global.hxx"
 
 class ScDocShell;
 
-class ScServerObject : public SvPseudoObject, public SfxListener
+class ScServerObject : public ::so3::SvLinkSource, public SfxListener
 {
 private:
     ScDocShell*     pDocSh;
@@ -87,10 +87,9 @@ public:
             ScServerObject( ScDocShell* pShell, const String& rItem );
     virtual ~ScServerObject();
 
-    virtual BOOL GetData( SvData* );
-    virtual BOOL SetData( SvData& );
-
-    ULONG GetSelectorCount() const { return SvPseudoObject::GetSelectorCount(); }
+    virtual BOOL GetData( ::com::sun::star::uno::Any & rData /*out param*/,
+                             const String & rMimeType,
+                             BOOL bSynchron = FALSE );
 
     virtual void SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                          const SfxHint& rHint, const TypeId& rHintType );

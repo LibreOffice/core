@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh4.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-26 19:03:18 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 20:49:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1825,14 +1825,18 @@ void ScDocShell::GetPageOnFromPageStyleSet( const SfxItemSet* pStyleSet,
     rbFooter = ((const SfxBoolItem&)pSet->Get(ATTR_PAGE_ON)).GetValue();
 }
 
-long __EXPORT ScDocShell::DdeGetData( const String& rItem, SvData& rData )
+long __EXPORT ScDocShell::DdeGetData( const String& rItem,
+                                      const String& rMimeType,
+                                      ::com::sun::star::uno::Any & rValue )
 {
-    if( rData.GetFormat() == FORMAT_STRING )
+    if( FORMAT_STRING == SotExchange::GetFormatIdFromMimeType( rMimeType ) )
     {
         if( rItem.EqualsIgnoreCaseAscii( "Format" ) )
         {
             ByteString aFmtByte( aDdeTextFmt, gsl_getSystemTextEncoding() );
-            rData.SetData( (void*) aFmtByte.GetBuffer(), aFmtByte.Len() + 1 );
+            rValue <<= ::com::sun::star::uno::Sequence< sal_Int8 >(
+                                        (sal_Int8*)aFmtByte.GetBuffer(),
+                                        aFmtByte.Len() + 1 );
             return 1;
         }
         ScImportExport aObj( &aDocument, rItem );
@@ -1841,62 +1845,79 @@ long __EXPORT ScDocShell::DdeGetData( const String& rItem, SvData& rData )
 
         if( aDdeTextFmt.GetChar(0) == 'F' )
             aObj.SetFormulas( TRUE );
-        if( aDdeTextFmt.EqualsAscii( "SYLK" ) || aDdeTextFmt.EqualsAscii( "FSYLK" ) )
+        if( aDdeTextFmt.EqualsAscii( "SYLK" ) ||
+            aDdeTextFmt.EqualsAscii( "FSYLK" ) )
         {
             ByteString aData;
-            if( aObj.ExportByteString( aData, gsl_getSystemTextEncoding(), SOT_FORMATSTR_ID_SYLK ) )
+            if( aObj.ExportByteString( aData, gsl_getSystemTextEncoding(),
+                                        SOT_FORMATSTR_ID_SYLK ) )
             {
-                rData.SetData( (void*) aData.GetBuffer(), aData.Len() + 1 );
+                rValue <<= ::com::sun::star::uno::Sequence< sal_Int8 >(
+                                            (sal_Int8*)aData.GetBuffer(),
+                                            aData.Len() + 1 );
                 return 1;
             }
             else
                 return 0;
         }
-        if( aDdeTextFmt.EqualsAscii( "CSV" ) || aDdeTextFmt.EqualsAscii( "FCSV" ) )
+        if( aDdeTextFmt.EqualsAscii( "CSV" ) ||
+            aDdeTextFmt.EqualsAscii( "FCSV" ) )
             aObj.SetSeparator( ',' );
-        return aObj.ExportData( rData ) ? 1 : 0;
+        return aObj.ExportData( rMimeType, rValue ) ? 1 : 0;
     }
 
     ScImportExport aObj( &aDocument, rItem );
     if( aObj.IsRef() )
-        return aObj.ExportData( rData ) ? 1 : 0;
-    else
-        return 0;
+        return aObj.ExportData( rMimeType, rValue ) ? 1 : 0;
+    return 0;
 }
 
-long __EXPORT ScDocShell::DdeSetData( const String& rItem, const SvData& rData )
+long __EXPORT ScDocShell::DdeSetData( const String& rItem,
+                                        const String& rMimeType,
+                                const ::com::sun::star::uno::Any & rValue )
 {
-    SvData* p = (SvData*) &rData;
-
-    if( rData.GetFormat() == FORMAT_STRING )
+    if( FORMAT_STRING == SotExchange::GetFormatIdFromMimeType( rMimeType ))
     {
         if( rItem.EqualsIgnoreCaseAscii( "Format" ) )
         {
-            p->GetData( aDdeTextFmt );
-            aDdeTextFmt.ToUpperAscii();
-            return 1;
+            ::com::sun::star::uno::Sequence< sal_Int8 > aSeq;
+            if( rValue >>= aSeq )
+            {
+                aDdeTextFmt = String( (const sal_Char*)aSeq.getConstArray(),
+                                        aSeq.getLength(),
+                                        gsl_getSystemTextEncoding() );
+                aDdeTextFmt.ToUpperAscii();
+                return 1;
+            }
+            return 0;
         }
         ScImportExport aObj( &aDocument, rItem );
         if( aDdeTextFmt.GetChar(0) == 'F' )
             aObj.SetFormulas( TRUE );
-        if( aDdeTextFmt.EqualsAscii( "SYLK" ) || aDdeTextFmt.EqualsAscii( "FSYLK" ) )
+        if( aDdeTextFmt.EqualsAscii( "SYLK" ) ||
+            aDdeTextFmt.EqualsAscii( "FSYLK" ) )
         {
-            String aData;
-            p->GetData( aData );
-            return aObj.ImportString( aData, SOT_FORMATSTR_ID_SYLK ) ? 1 : 0;
+            ::com::sun::star::uno::Sequence< sal_Int8 > aSeq;
+            if( rValue >>= aSeq )
+            {
+                String aData( (const sal_Char*)aSeq.getConstArray(),
+                              aSeq.getLength(), gsl_getSystemTextEncoding() );
+                return aObj.ImportString( aData, SOT_FORMATSTR_ID_SYLK ) ? 1 : 0;
+            }
+            return 0;
         }
-        if( aDdeTextFmt.EqualsAscii( "CSV" ) || aDdeTextFmt.EqualsAscii( "FCSV" ) )
+        if( aDdeTextFmt.EqualsAscii( "CSV" ) ||
+            aDdeTextFmt.EqualsAscii( "FCSV" ) )
             aObj.SetSeparator( ',' );
-        return aObj.ImportData( *p ) ? 1 : 0;
+        return aObj.ImportData( rMimeType, rValue ) ? 1 : 0;
     }
     ScImportExport aObj( &aDocument, rItem );
     if( aObj.IsRef() )
-        return aObj.ImportData( *p ) ? 1 : 0;
-    else
-        return 0;
+        return aObj.ImportData( rMimeType, rValue ) ? 1 : 0;
+    return 0;
 }
 
-SvPseudoObject* __EXPORT ScDocShell::DdeCreateHotLink( const String& rItem )
+::so3::SvLinkSource* __EXPORT ScDocShell::DdeCreateLinkSource( const String& rItem )
 {
     //  only check for valid item string - range is parsed again in ScServerObject ctor
 

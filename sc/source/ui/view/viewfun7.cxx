@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun7.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-14 19:24:34 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 20:53:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -584,7 +584,6 @@ BOOL ScViewFunc::PasteObject( const Point& rPos, SvInPlaceObject* pObj,
         SdrOle2Obj* pSdrObj = new SdrOle2Obj( pObj, aName, aRect );
         SdrPageView* pPV = pDrView->GetPageViewPvNum(0);
         pDrView->InsertObjectSafe( pSdrObj, *pPV );             // nicht markieren wenn Ole
-        pSdrObj->SetOleLink(pInfoObj);
         GetViewData()->GetViewShell()->SetDrawShell( TRUE );
         return TRUE;
     }

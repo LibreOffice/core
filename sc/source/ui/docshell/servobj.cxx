@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servobj.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:55 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 20:49:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,7 +157,9 @@ void ScServerObject::Clear()
     }
 }
 
-BOOL __EXPORT ScServerObject::GetData( SvData* pData )      // wie ScDocShell::DdeGetData
+BOOL __EXPORT ScServerObject::GetData(
+        ::com::sun::star::uno::Any & rData /*out param*/,
+        const String & rMimeType, BOOL bSynchron )
 {
     if (!pDocSh)
         return FALSE;
@@ -187,38 +189,35 @@ BOOL __EXPORT ScServerObject::GetData( SvData* pData )      // wie ScDocShell::D
     String aDdeTextFmt = pDocSh->GetDdeTextFmt();
     ScDocument* pDoc = pDocSh->GetDocument();
 
-    if( pData->GetFormat() == FORMAT_STRING )
+    if( FORMAT_STRING == SotExchange::GetFormatIdFromMimeType( rMimeType ))
     {
         ScImportExport aObj( pDoc, aRange );
         if( aDdeTextFmt.GetChar(0) == 'F' )
             aObj.SetFormulas( TRUE );
-        if( aDdeTextFmt.EqualsAscii( "SYLK" ) || aDdeTextFmt.EqualsAscii( "FSYLK" ) )
+        if( aDdeTextFmt.EqualsAscii( "SYLK" ) ||
+            aDdeTextFmt.EqualsAscii( "FSYLK" ) )
         {
             String aData;
             if( aObj.ExportString( aData, SOT_FORMATSTR_ID_SYLK ) )
             {
                 ByteString aByteData( aData, gsl_getSystemTextEncoding() );
-                pData->SetData( (void*) aByteData.GetBuffer(), aByteData.Len() + 1 );
+                rData <<= ::com::sun::star::uno::Sequence< sal_Int8 >(
+                                        (sal_Int8*)aByteData.GetBuffer(),
+                                        aByteData.Len() + 1 );
                 return 1;
             }
-            else
-                return 0;
+            return 0;
         }
-        if( aDdeTextFmt.EqualsAscii( "CSV" ) || aDdeTextFmt.EqualsAscii( "FCSV" ) )
+        if( aDdeTextFmt.EqualsAscii( "CSV" ) ||
+            aDdeTextFmt.EqualsAscii( "FCSV" ) )
             aObj.SetSeparator( ',' );
-        return aObj.ExportData( *pData ) ? 1 : 0;
+        return aObj.ExportData( rMimeType, rData ) ? 1 : 0;
     }
+
     ScImportExport aObj( pDoc, aRange );
     if( aObj.IsRef() )
-        return aObj.ExportData( *pData ) ? 1 : 0;
-    else
-        return 0;
-}
-
-BOOL __EXPORT ScServerObject::SetData( SvData& )
-{
-    //  erstmal nicht
-    return FALSE;
+        return aObj.ExportData( rMimeType, rData ) ? 1 : 0;
+    return 0;
 }
 
 void __EXPORT ScServerObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
@@ -272,11 +271,8 @@ void __EXPORT ScServerObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBC
         }
     }
 
-    if ( bDataChanged && GetSelectorCount() )
-    {
-        SvData aSvData;
-        DataChanged( aSvData );
-    }
+    if ( bDataChanged && HasDataLinks() )
+        SvLinkSource::NotifyDataChanged();
 }
 
 

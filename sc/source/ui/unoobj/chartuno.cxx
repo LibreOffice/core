@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chartuno.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-28 19:44:57 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 20:52:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,7 +294,6 @@ void SAL_CALL ScChartsObj::addNewByName( const rtl::OUString& aName,
             pChartListener->StartListeningTo();
 
             SdrOle2Obj* pObj = new SdrOle2Obj( aIPObj, aObjName, aInsRect );
-            pObj->SetOleLink(pInfoObj);     //! erst nach Insert?
 
             pPage->InsertObject( pObj );
             pModel->AddUndo( new SdrUndoInsertObj( *pObj ) );       //! Undo-Kommentar?

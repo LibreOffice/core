@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwshb.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-05 19:11:08 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 20:53:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -392,7 +392,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
 
         case SID_LINKS:
             {
-                SvBaseLinksDialog( pWin, pDoc->GetLinkManager() ).Execute();
+                ::so3::SvBaseLinksDialog( pWin, pDoc->GetLinkManager() ).Execute();
                 rBindings.Invalidate( nSlot );
                 SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );     // Navigator
                 rReq.Done();

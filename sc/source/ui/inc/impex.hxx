@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impex.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:59 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 20:50:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,9 +75,9 @@ class SvDataTypeList;
 class ScDocShell;
 class ScDocument;
 class SvStream;
-class SvData;
 class SfxMedium;
 class ScAsciiOptions;
+class SvData;
 
 class ScImportExport
 {
@@ -161,8 +161,13 @@ public:
     BOOL ImportStream( SvStream&, ULONG=FORMAT_STRING );
     BOOL ExportStream( SvStream&, ULONG=FORMAT_STRING );
 
-    BOOL ImportData( SvData& );
-    BOOL ExportData( SvData& );
+    BOOL ImportData( const String& rMimeType,
+                     const ::com::sun::star::uno::Any & rValue );
+    BOOL ExportData( const String& rMimeType,
+                     ::com::sun::star::uno::Any & rValue  );
+
+    BOOL ImportData( SvData& rData );
+    BOOL ExportData( SvData& rData );
 
     BOOL IsOverflow() const { return bOverflow; }       // nach dem Importieren
 };

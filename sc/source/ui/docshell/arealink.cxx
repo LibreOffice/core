@@ -2,9 +2,9 @@
  *
  *  $RCSfile: arealink.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-07 15:59:10 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 20:49:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,14 +89,14 @@
 #include "patattr.hxx"          // raus, wenn ResetAttrib am Dokument
 #include "docpool.hxx"          // raus, wenn ResetAttrib am Dokument
 
-TYPEINIT1(ScAreaLink,SvBaseLink);
+TYPEINIT1(ScAreaLink,::so3::SvBaseLink);
 
 //------------------------------------------------------------------------
 
 ScAreaLink::ScAreaLink( SfxObjectShell* pShell, const String& rFile,
                         const String& rFilter, const String& rOpt,
                         const String& rArea, const ScRange& rDest ) :
-    SvBaseLink  (LINKUPDATE_ONCALL,FORMAT_FILE),
+    ::so3::SvBaseLink(LINKUPDATE_ONCALL,FORMAT_FILE),
     pDocShell   ((ScDocShell*)pShell),
     aFileName   (rFile),
     aFilterName (rFilter),
@@ -131,7 +131,8 @@ BOOL __EXPORT ScAreaLink::Edit(Window* pParent)
     return bRet;
 }
 
-void __EXPORT ScAreaLink::DataChanged(SvData& rData)
+void __EXPORT ScAreaLink::DataChanged( const String&,
+                                       const ::com::sun::star::uno::Any& )
 {
     //  bei bInCreate nichts tun, damit Update gerufen werden kann, um den Status im
     //  LinkManager zu setzen, ohne die Daten im Dokument zu aendern
@@ -145,7 +146,7 @@ void __EXPORT ScAreaLink::DataChanged(SvData& rData)
         String aFile;
         String aFilter;
         String aArea;
-        pLinkManager->GetDisplayNames(*this,0,&aFile,&aArea,&aFilter);
+        pLinkManager->GetDisplayNames( this,0,&aFile,&aArea,&aFilter);
 
         //  the file dialog returns the filter name with the application prefix
         //  -> remove prefix
@@ -159,7 +160,7 @@ void __EXPORT ScAreaLink::DataChanged(SvData& rData)
             // adjust in dialog:
             String aLinkName;
             MakeLnkName( aLinkName, NULL, aFile, aArea, &aFilter );
-            SetName( new SvLinkName( aLinkName ) );
+            SetName( aLinkName );
         }
 
         Refresh(aFile,aFilter,aArea);

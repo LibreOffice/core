@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ddelink.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-21 16:24:12 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 20:47:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,13 @@
 #include "sc.hrc"
 #include "hints.hxx"
 
-TYPEINIT2(ScDdeLink,SvBaseLink,SfxBroadcaster);
+TYPEINIT2(ScDdeLink,::so3::SvBaseLink,SfxBroadcaster);
+
+#ifdef PM2
+#define DDE_TXT_ENCODING    RTL_TEXTENCODING_IBM_850
+#else
+#define DDE_TXT_ENCODING    RTL_TEXTENCODING_MS_1252
+#endif
 
 BOOL ScDdeLink::bIsInUpdate = FALSE;
 
@@ -91,7 +97,7 @@ BOOL ScDdeLink::bIsInUpdate = FALSE;
 
 ScDdeLink::ScDdeLink( ScDocument* pD, const String& rA, const String& rT, const String& rI,
                         BYTE nM ) :
-    SvBaseLink(LINKUPDATE_ALWAYS,FORMAT_STRING),
+    ::so3::SvBaseLink(LINKUPDATE_ALWAYS,FORMAT_STRING),
     pDoc( pD ),
     aAppl( rA ),
     aTopic( rT ),
@@ -110,7 +116,7 @@ __EXPORT ScDdeLink::~ScDdeLink()
 }
 
 ScDdeLink::ScDdeLink( ScDocument* pD, const ScDdeLink& rOther ) :
-    SvBaseLink(LINKUPDATE_ALWAYS,FORMAT_STRING),
+    ::so3::SvBaseLink(LINKUPDATE_ALWAYS,FORMAT_STRING),
     pDoc    ( pD ),
     aAppl   ( rOther.aAppl ),
     aTopic  ( rOther.aTopic ),
@@ -124,7 +130,7 @@ ScDdeLink::ScDdeLink( ScDocument* pD, const ScDdeLink& rOther ) :
 }
 
 ScDdeLink::ScDdeLink( ScDocument* pD, SvStream& rStream, ScMultipleReadHeader& rHdr ) :
-    SvBaseLink(LINKUPDATE_ALWAYS,FORMAT_STRING),
+    ::so3::SvBaseLink(LINKUPDATE_ALWAYS,FORMAT_STRING),
     pDoc( pD ),
     pResult( NULL ),
     bNeedUpdate( FALSE )
@@ -172,15 +178,17 @@ void ScDdeLink::Store( SvStream& rStream, ScMultipleWriteHeader& rHdr ) const
     rHdr.EndEntry();
 }
 
-void __EXPORT ScDdeLink::DataChanged(SvData& rData)
+void __EXPORT ScDdeLink::DataChanged( const String& rMimeType,
+                                const ::com::sun::star::uno::Any & rValue )
 {
     //  wir koennen nur Strings...
-
-    if ( rData.GetFormat() != FORMAT_STRING )
+    if ( FORMAT_STRING != SotExchange::GetFormatIdFromMimeType( rMimeType ))
         return;
 
-    String aLinkStr;
-    rData.GetData( aLinkStr );
+    ::com::sun::star::uno::Sequence< sal_Int8 > aSeq;
+    rValue >>= aSeq;
+    String aLinkStr( (sal_Char*)aSeq.getConstArray(), aSeq.getLength(),
+                          DDE_TXT_ENCODING   );
     aLinkStr.ConvertLineEnd(LINEEND_LF);
 
     //  wenn String mit Zeilenende aufhoert, streichen:
@@ -282,11 +290,6 @@ void ScDdeLink::ResetValue()
         Broadcast( ScHint( SC_HINT_DATACHANGED, ScAddress( 0 ), NULL ) );
 }
 
-void __EXPORT ScDdeLink::Closed()
-{
-    SvBaseLink::Closed();
-}
-
 void __EXPORT ScDdeLink::ListenersGone()
 {
     BOOL bWas = bIsInUpdate;
@@ -295,7 +298,7 @@ void __EXPORT ScDdeLink::ListenersGone()
     ScDocument* pStackDoc = pDoc;   // member pDoc can't be used after removing the link
 
     SvxLinkManager* pLinkMgr = pDoc->GetLinkManager();
-    pLinkMgr->Remove(*this);        // deletes this
+    pLinkMgr->Remove( this);        // deletes this
 
     if ( !pLinkMgr->GetLinks().Count() )            // letzten geloescht ?
     {

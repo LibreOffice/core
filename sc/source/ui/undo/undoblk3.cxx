@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undoblk3.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-10 10:03:56 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 20:51:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1704,11 +1704,11 @@ ScAreaLink* lcl_FindAreaLink( SvxLinkManager* pLinkManager, const String& rDoc,
                             const String& rFlt, const String& rOpt,
                             const String& rSrc, const ScRange& rDest )
 {
-    const SvBaseLinks& rLinks = pLinkManager->GetLinks();
+    const ::so3::SvBaseLinks& rLinks = pLinkManager->GetLinks();
     USHORT nCount = pLinkManager->GetLinks().Count();
     for (USHORT i=0; i<nCount; i++)
     {
-        SvBaseLink* pBase = *rLinks[i];
+        ::so3::SvBaseLink* pBase = *rLinks[i];
         if (pBase->ISA(ScAreaLink))
             if ( ((ScAreaLink*)pBase)->IsEqual( rDoc, rFlt, rOpt, rSrc, rDest ) )
                 return (ScAreaLink*)pBase;
@@ -1767,7 +1767,7 @@ void __EXPORT ScUndoInsertAreaLink::Undo()
     ScAreaLink* pLink = lcl_FindAreaLink( pLinkManager, aDocName, aFltName, aOptions,
                                             aAreaName, aRange );
     if (pLink)
-        pLinkManager->Remove(*pLink);
+        pLinkManager->Remove( pLink );
 
     SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );     // Navigator
 }
@@ -1874,7 +1874,7 @@ void __EXPORT ScUndoRemoveAreaLink::Redo()
     ScAreaLink* pLink = lcl_FindAreaLink( pLinkManager, aDocName, aFltName, aOptions,
                                             aAreaName, aRange );
     if (pLink)
-        pLinkManager->Remove(*pLink);
+        pLinkManager->Remove( pLink );
 
     SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );     // Navigator
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:55:47 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 20:51:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1084,11 +1084,11 @@ void ScContentTree::GetLinkNames()
 
     SvxLinkManager* pLinkManager = pDoc->GetLinkManager();
     DBG_ASSERT(pLinkManager, "kein LinkManager am Dokument?")
-    const SvBaseLinks& rLinks = pLinkManager->GetLinks();
+    const ::so3::SvBaseLinks& rLinks = pLinkManager->GetLinks();
     USHORT nCount = rLinks.Count();
     for (USHORT i=0; i<nCount; i++)
     {
-        SvBaseLink* pBase = *rLinks[i];
+        ::so3::SvBaseLink* pBase = *rLinks[i];
         if (pBase->ISA(ScAreaLink))
             InsertContent( SC_CONTENT_AREALINK, ((ScAreaLink*)pBase)->GetSource() );
 
@@ -1105,11 +1105,11 @@ const ScAreaLink* ScContentTree::GetLink( ULONG nIndex )
     ULONG nFound = 0;
     SvxLinkManager* pLinkManager = pDoc->GetLinkManager();
     DBG_ASSERT(pLinkManager, "kein LinkManager am Dokument?")
-    const SvBaseLinks& rLinks = pLinkManager->GetLinks();
+    const ::so3::SvBaseLinks& rLinks = pLinkManager->GetLinks();
     USHORT nCount = rLinks.Count();
     for (USHORT i=0; i<nCount; i++)
     {
-        SvBaseLink* pBase = *rLinks[i];
+        ::so3::SvBaseLink* pBase = *rLinks[i];
         if (pBase->ISA(ScAreaLink))
         {
             if (nFound == nIndex)

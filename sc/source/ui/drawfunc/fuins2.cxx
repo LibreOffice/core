@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuins2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-14 15:33:37 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 20:50:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -367,7 +367,6 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, SdrView* pView,
 
             SdrPageView* pPV = pView->GetPageViewPvNum(0);
             pView->InsertObject(pObj, *pPV);
-            pObj->SetOleLink(pInfoObj);
 
             //  #73279# Math objects change their object size during InsertObject.
             //  New size must be set in SdrObject, or a wrong scale will be set at
@@ -615,7 +614,6 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, SdrView* pVi
 
             SdrPageView* pPV = pView->GetPageViewPvNum(0);
             pView->InsertObject(pObj, *pPV);
-            pObj->SetOleLink(pInfoObj);
 
             // Dies veranlaesst Chart zum sofortigen Update
             SvData aEmpty;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: areasave.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-30 11:35:45 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 20:51:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,11 +150,11 @@ BOOL ScAreaLinkSaveCollection::IsEqual( const ScDocument* pDoc ) const
     if (pLinkManager)
     {
         USHORT nPos = 0;
-        const SvBaseLinks& rLinks = pLinkManager->GetLinks();
+        const ::so3::SvBaseLinks& rLinks = pLinkManager->GetLinks();
         USHORT nLinkCount = rLinks.Count();
         for (USHORT i=0; i<nLinkCount; i++)
         {
-            SvBaseLink* pBase = *rLinks[i];
+            ::so3::SvBaseLink* pBase = *rLinks[i];
             if (pBase->ISA(ScAreaLink))
             {
                 if ( nPos >= GetCount() || !(*this)[nPos]->IsEqual( *(ScAreaLink*)pBase ) )
@@ -175,11 +175,11 @@ void ScAreaLinkSaveCollection::Restore( ScDocument* pDoc ) const
     if (pLinkManager)
     {
         USHORT nPos = 0;
-        const SvBaseLinks& rLinks = pLinkManager->GetLinks();
+        const ::so3::SvBaseLinks& rLinks = pLinkManager->GetLinks();
         USHORT nLinkCount = rLinks.Count();
         for (USHORT i=0; i<nLinkCount; i++)
         {
-            SvBaseLink* pBase = *rLinks[i];
+            ::so3::SvBaseLink* pBase = *rLinks[i];
             if (pBase->ISA(ScAreaLink))
             {
                 ScAreaLink* pLink = (ScAreaLink*)pBase;
@@ -209,11 +209,11 @@ ScAreaLinkSaveCollection* ScAreaLinkSaveCollection::CreateFromDoc( const ScDocum
     SvxLinkManager* pLinkManager = const_cast<ScDocument*>(pDoc)->GetLinkManager();
     if (pLinkManager)
     {
-        const SvBaseLinks& rLinks = pLinkManager->GetLinks();
+        const ::so3::SvBaseLinks& rLinks = pLinkManager->GetLinks();
         USHORT nLinkCount = rLinks.Count();
         for (USHORT i=0; i<nLinkCount; i++)
         {
-            SvBaseLink* pBase = *rLinks[i];
+            ::so3::SvBaseLink* pBase = *rLinks[i];
             if (pBase->ISA(ScAreaLink))
             {
                 if (!pColl)

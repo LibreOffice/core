@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ddelink.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-21 16:22:28 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 20:46:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ class ScMatrix;
 class ScMultipleReadHeader;
 class ScMultipleWriteHeader;
 
-class ScDdeLink : public SvBaseLink, public SfxBroadcaster
+class ScDdeLink : public ::so3::SvBaseLink, public SfxBroadcaster
 {
 private:
 static BOOL bIsInUpdate;
@@ -103,8 +103,8 @@ public:
     void            Store( SvStream& rStream, ScMultipleWriteHeader& rHdr ) const;
 
                                             // von SvBaseLink ueberladen:
-    virtual void    Closed();
-    virtual void    DataChanged( SvData& );
+    virtual void    DataChanged( const String& rMimeType,
+                                const ::com::sun::star::uno::Any & rValue );
     void            NewData(USHORT nCols, USHORT nRows);
 
                                             // von SfxBroadcaster ueberladen:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dr $ $Date: 2001-03-05 14:53:14 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 20:47:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1713,13 +1713,13 @@ void ScInterpreter::ScStyle()
         SetIllegalParameter();
 }
 
-ScDdeLink* lcl_GetDdeLink( SvLinkManager* pLinkMgr,
+ScDdeLink* lcl_GetDdeLink( SvxLinkManager* pLinkMgr,
                                 const String& rA, const String& rT, const String& rI, BYTE nM )
 {
     USHORT nCount = pLinkMgr->GetLinks().Count();
     for (USHORT i=0; i<nCount; i++ )
     {
-        SvBaseLink* pBase = *pLinkMgr->GetLinks()[i];
+        ::so3::SvBaseLink* pBase = *pLinkMgr->GetLinks()[i];
         if (pBase->ISA(ScDdeLink))
         {
             ScDdeLink* pLink = (ScDdeLink*)pBase;
@@ -1755,7 +1755,7 @@ void ScInterpreter::ScDde()
         //  temporary documents (ScFunctionAccess) have no DocShell
         //  and no LinkManager -> abort
 
-        SvLinkManager* pLinkMgr = pDok->GetLinkManager();
+        SvxLinkManager* pLinkMgr = pDok->GetLinkManager();
         if (!pLinkMgr)
         {
             SetNoValue();
@@ -1785,7 +1785,7 @@ void ScInterpreter::ScDde()
         if (!pLink)
         {
             pLink = new ScDdeLink( pDok, aAppl, aTopic, aItem, nMode );
-            pLinkMgr->InsertDDELink( *pLink, aAppl, aTopic, aItem );
+            pLinkMgr->InsertDDELink( pLink, aAppl, aTopic, aItem );
             if ( pLinkMgr->GetLinks().Count() == 1 )                    // erster ?
             {
                 SfxBindings* pBindings = pDok->GetViewBindings();

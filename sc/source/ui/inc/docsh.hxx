@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-22 17:23:25 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 20:50:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -352,9 +352,11 @@ public:
                                                BOOL&             rbHeader,
                                                BOOL&             rbFooter );
 
-    virtual long DdeGetData( const String& rItem, SvData& rData );
-    virtual long DdeSetData( const String& rItem, const SvData& rData );
-    virtual SvPseudoObject* DdeCreateHotLink( const String& rItem );
+    virtual long DdeGetData( const String& rItem, const String& rMimeType,
+                                ::com::sun::star::uno::Any & rValue );
+    virtual long DdeSetData( const String& rItem, const String& rMimeType,
+                                const ::com::sun::star::uno::Any & rValue );
+    virtual ::so3::SvLinkSource* DdeCreateLinkSource( const String& rItem );
 
     const String& GetDdeTextFmt() const { return aDdeTextFmt; }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablink.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-07 15:59:10 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 20:49:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,13 +94,13 @@
 #include "global.hxx"
 #include "hints.hxx"
 
-TYPEINIT1(ScTableLink,SvBaseLink);
+TYPEINIT1(ScTableLink, ::so3::SvBaseLink);
 
 //------------------------------------------------------------------------
 
 ScTableLink::ScTableLink(ScDocShell* pDocSh, const String& rFile,
                             const String& rFilter, const String& rOpt):
-    SvBaseLink(LINKUPDATE_ONCALL,FORMAT_FILE),
+    ::so3::SvBaseLink(LINKUPDATE_ONCALL,FORMAT_FILE),
     pDocShell(pDocSh),
     aFileName(rFile),
     aFilterName(rFilter),
@@ -113,7 +113,7 @@ ScTableLink::ScTableLink(ScDocShell* pDocSh, const String& rFile,
 
 ScTableLink::ScTableLink(SfxObjectShell* pShell, const String& rFile,
                             const String& rFilter, const String& rOpt):
-    SvBaseLink(LINKUPDATE_ONCALL,FORMAT_FILE),
+    ::so3::SvBaseLink(LINKUPDATE_ONCALL,FORMAT_FILE),
     pDocShell((ScDocShell*)pShell),
     aFileName(rFile),
     aFilterName(rFilter),
@@ -152,14 +152,15 @@ BOOL __EXPORT ScTableLink::Edit(Window* pParent)
     return bRet;
 }
 
-void __EXPORT ScTableLink::DataChanged(SvData& rData)
+void __EXPORT ScTableLink::DataChanged( const String&,
+                                        const ::com::sun::star::uno::Any& )
 {
     SvxLinkManager* pLinkManager=pDocShell->GetDocument()->GetLinkManager();
     if (pLinkManager!=NULL)
     {
         String aFile;
         String aFilter;
-        pLinkManager->GetDisplayNames(*this,0,&aFile,NULL,&aFilter);
+        pLinkManager->GetDisplayNames( this,0,&aFile,NULL,&aFilter);
 
         //  the file dialog returns the filter name with the application prefix
         //  -> remove prefix

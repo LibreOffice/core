@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impex.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-14 15:31:48 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 20:49:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -358,7 +358,6 @@ BOOL ScImportExport::ImportData( SvData& rData )
     }
 }
 
-
 BOOL ScImportExport::ExportData( SvData& rData )
 {
     SvMemoryStream aStrm;
@@ -366,6 +365,29 @@ BOOL ScImportExport::ExportData( SvData& rData )
     {
         aStrm << (BYTE) 0;
         rData.SetData( (void*)aStrm.GetData(), aStrm.Tell() );
+        return TRUE;
+    }
+    return FALSE;
+}
+
+BOOL ScImportExport::ImportData( const String& rMimeType,
+                     const ::com::sun::star::uno::Any & rValue )
+{
+    DBG_ASSERT( !this, "Implementation is missing" );
+    return FALSE;
+}
+
+BOOL ScImportExport::ExportData( const String& rMimeType,
+                                 ::com::sun::star::uno::Any & rValue )
+{
+    SvMemoryStream aStrm;
+    if( ExportStream( aStrm,
+                SotExchange::GetFormatIdFromMimeType( rMimeType ) ))
+    {
+        aStrm << (BYTE) 0;
+        rValue <<= ::com::sun::star::uno::Sequence< sal_Int8 >(
+                                        (sal_Int8*)aStrm.GetData(),
+                                        aStrm.Seek( STREAM_SEEK_TO_END ) );
         return TRUE;
     }
     return FALSE;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: arealink.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:47 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 20:45:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@
 class ScDocShell;
 class SfxObjectShell;
 
-class ScAreaLink : public SvBaseLink
+class ScAreaLink : public ::so3::SvBaseLink
 {
 private:
     ScDocShell* pDocShell;      // Container
@@ -94,7 +94,8 @@ public:
     virtual ~ScAreaLink();
 
     virtual void Closed();
-    virtual void DataChanged(SvData& rData);
+    virtual void DataChanged( const String& rMimeType,
+                              const ::com::sun::star::uno::Any & rValue );
 
     virtual BOOL Edit(Window* pParent);
 

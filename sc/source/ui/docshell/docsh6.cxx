@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh6.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-22 17:35:16 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 20:49:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -487,7 +487,7 @@ void ScDocShell::UpdateLinks()
     for (i=nCount; i>0; )
     {
         --i;
-        SvBaseLink* pBase = *pLinkManager->GetLinks()[i];
+        ::so3::SvBaseLink* pBase = *pLinkManager->GetLinks()[i];
         if (pBase->ISA(ScTableLink))
         {
             ScTableLink* pTabLink = (ScTableLink*)pBase;
@@ -551,7 +551,7 @@ BOOL ScDocShell::ReloadTabLinks()
     USHORT nCount = pLinkManager->GetLinks().Count();
     for (USHORT i=0; i<nCount; i++ )
     {
-        SvBaseLink* pBase = *pLinkManager->GetLinks()[i];
+        ::so3::SvBaseLink* pBase = *pLinkManager->GetLinks()[i];
         if (pBase->ISA(ScTableLink))
         {
             ScTableLink* pTabLink = (ScTableLink*)pBase;
