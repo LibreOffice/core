@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commandbase.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-18 16:05:07 $
+ *  last change: $Author: oj $ $Date: 2001-02-05 09:03:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,12 +80,13 @@ class OCommandBase
 {
 protected:
 // <properties>
-    ::rtl::OUString     m_sElementName;
-    ::rtl::OUString     m_sCommand;
-    sal_Bool            m_bEscapeProcessing;        // no BitField ! so it can be used with a OPropertyContainer
-    ::rtl::OUString     m_sUpdateTableName;
-    ::rtl::OUString     m_sUpdateSchemaName;
-    ::rtl::OUString     m_sUpdateCatalogName;
+    ::com::sun::star::uno::Sequence< sal_Int8>  m_aLayoutInformation;
+    ::rtl::OUString                             m_sElementName;
+    ::rtl::OUString                             m_sCommand;
+    sal_Bool                                    m_bEscapeProcessing;        // no BitField ! so it can be used with a OPropertyContainer
+    ::rtl::OUString                             m_sUpdateTableName;
+    ::rtl::OUString                             m_sUpdateSchemaName;
+    ::rtl::OUString                             m_sUpdateCatalogName;
 // </properties>
 
 protected:

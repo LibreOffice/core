@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commanddefinition.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-05 10:48:09 $
+ *  last change: $Author: oj $ $Date: 2001-02-05 09:03:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,8 @@ void OCommandDefinition::registerProperties()
 
     registerProperty(PROPERTY_UPDATE_CATALOGNAME, PROPERTY_ID_UPDATE_CATALOGNAME, PropertyAttribute::BOUND,
                     &m_sUpdateCatalogName, ::getCppuType(&m_sUpdateCatalogName));
+    registerProperty(PROPERTY_LAYOUTINFORMATION, PROPERTY_ID_LAYOUTINFORMATION, 0,
+                    &m_aLayoutInformation, ::getCppuType(&m_aLayoutInformation));
 }
 
 //--------------------------------------------------------------------------
