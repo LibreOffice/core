@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcache.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:17:21 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:52:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,10 @@
 #include <psprint/fontmanager.hxx>
 #endif
 
+#ifndef _STRING_HXX
+#include <tools/string.hxx>
+#endif
+
 #include <hash_map>
 
 namespace psp
@@ -97,9 +101,10 @@ class FontCache
 
     typedef std::hash_map< int, FontDir > FontCacheData;
     FontCacheData   m_aCache;
+    String          m_aCacheFile;
     bool            m_bDoFlush;
 
-    void read( const ::rtl::OString& rPath );
+    void read();
     void clearCache();
 
     void copyPrintFont( const PrintFontManager::PrintFont* pFrom, PrintFontManager::PrintFont* pTo ) const;
