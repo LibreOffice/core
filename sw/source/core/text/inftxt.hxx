@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.hxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 16:11:37 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:09:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,6 @@
  ************************************************************************/
 #ifndef _INFTXT_HXX
 #define _INFTXT_HXX
-
 #include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUES_HPP_
 #include <com/sun/star/beans/PropertyValues.hpp>
@@ -554,9 +553,11 @@ class SwTxtFormatInfo : public SwTxtPaintInfo
     xub_StrLen nHyphWrdLen;     // gefundene Wort-Laenge
     xub_StrLen nLineStart;      // aktueller Zeilenbeginn im rTxt
     xub_StrLen nUnderScorePos;  // enlarge repaint if underscore has been found
-    KSHORT nLeft;           // linker Rand
-    KSHORT nRight;          // rechter Rand
-    KSHORT nFirst;          // EZE
+    // --> FME 2004-11-25 #i34348# Changed type from USHORT to SwTwips
+    SwTwips nLeft;          // linker Rand
+    SwTwips nRight;           // rechter Rand
+    SwTwips nFirst;           // EZE
+    // <--
     KSHORT nRealWidth;      // "echte" Zeilenbreite
     KSHORT nWidth;          // "virtuelle" Zeilenbreite
     KSHORT nLineHeight;     // endgueltige Hoehe nach CalcLine
@@ -615,13 +616,13 @@ public:
     inline xub_StrLen GetReformatStart() const;
 
     // Raender
-    inline KSHORT Left() const { return nLeft; }
-    inline void Left( const KSHORT nNew ) { nLeft = nNew; }
-    inline KSHORT Right() const { return nRight; }
-    inline void Right( const KSHORT nNew ) { nRight = nNew; }
-    inline KSHORT First() const { return nFirst; }
-    inline void First( const KSHORT nNew ) { nFirst = nNew; }
-    inline KSHORT CurrLeft() const { return (nLineStart ? nLeft : nFirst); }
+    inline SwTwips Left() const { return nLeft; }
+    inline void Left( const SwTwips nNew ) { nLeft = nNew; }
+    inline SwTwips Right() const { return nRight; }
+    inline void Right( const SwTwips nNew ) { nRight = nNew; }
+    inline SwTwips First() const { return nFirst; }
+    inline void First( const SwTwips nNew ) { nFirst = nNew; }
+    inline SwTwips CurrLeft() const { return (nLineStart ? nLeft : nFirst); }
     inline KSHORT RealWidth() const { return nRealWidth; }
     inline void RealWidth( const KSHORT nNew ) { nRealWidth = nNew; }
     inline KSHORT ForcedLeftMargin() const { return nForcedLeftMargin; }
