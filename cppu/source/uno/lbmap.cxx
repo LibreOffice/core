@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lbmap.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-09 12:10:57 $
+ *  last change: $Author: dbo $ $Date: 2001-03-12 11:46:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,9 +60,9 @@
  ************************************************************************/
 
 #ifdef CPPU_ASSERTIONS
-#define CPPU_TRACE(x) OSL_TRACE(x)
+#define CPPU_TRACE OSL_TRACE
 #else
-#define CPPU_TRACE(x)
+#define CPPU_TRACE
 #endif
 
 #ifndef _RTL_USTRING_HXX_
@@ -173,19 +173,16 @@ MappingsData::~MappingsData() SAL_THROW( () )
     t_OUString2Entry::const_iterator iPos( aName2Entry.begin() );
     while (iPos != aName2Entry.end())
     {
-        CPPU_TRACE( "\n### unrevoked mapping: " );
         MappingEntry * pEntry = (*iPos).second;
         OString aName( OUStringToOString( pEntry->aMappingName, RTL_TEXTENCODING_ASCII_US ) );
-        CPPU_TRACE( aName.getStr() );
+        CPPU_TRACE( "### unrevoked mapping: %s", aName.getStr() );
         ++iPos;
     }
     OSL_ENSHURE( aCallbacks.empty(), "### callbacks left!" );
     if (aCallbacks.size())
     {
-        CPPU_TRACE( "\n### " );
         OString aSize( OString::valueOf( (sal_Int32)aCallbacks.size() ) );
-        CPPU_TRACE( aSize.getStr() );
-        CPPU_TRACE( " unrevoked callbacks" );
+        CPPU_TRACE( "### %d unrevoked callbacks", aSize.getStr() );
     }
 #endif
 }
@@ -630,10 +627,8 @@ SAL_DLLEXPORT void SAL_CALL uno_registerMapping(
         OUString aMappingName(
             getMappingName( pFrom, pTo, pAddPurpose ? OUString(pAddPurpose) : OUString() ) );
 #ifdef CPPU_ASSERTIONS
-        CPPU_TRACE( "> inserting new mapping " );
         OString aMappingName8( OUStringToOString( aMappingName, RTL_TEXTENCODING_ASCII_US ) );
-        CPPU_TRACE( aMappingName8.getStr() );
-        CPPU_TRACE( " <\n" );
+        CPPU_TRACE( "> inserting new mapping: %s", aMappingName8.getStr() );
 #endif
         // count initially 1
         MappingEntry * pEntry = new MappingEntry( *ppMapping, freeMapping, aMappingName );
@@ -672,10 +667,8 @@ SAL_DLLEXPORT void SAL_CALL uno_revokeMapping(
         rData.aName2Entry.erase( pEntry->aMappingName );
         aGuard.clear();
 #ifdef CPPU_ASSERTIONS
-        CPPU_TRACE( "> revoking mapping " );
         OString aMappingName( OUStringToOString( pEntry->aMappingName, RTL_TEXTENCODING_ASCII_US  ) );
-        CPPU_TRACE( aMappingName.getStr() );
-        CPPU_TRACE( " <\n" );
+        CPPU_TRACE( "> revoking mapping %s", aMappingName.getStr() );
 #endif
         (*pEntry->freeMapping)( pEntry->pMapping );
         delete pEntry;
