@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprnpsp.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-13 08:59:48 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:21:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -629,6 +629,34 @@ void PspSalInfoPrinter::InitPaperFormats( const ImplJobSetup* pSetupData )
             }
         }
     }
+}
+
+// -----------------------------------------------------------------------
+
+DuplexMode PspSalInfoPrinter::GetDuplexMode( const ImplJobSetup* pJobSetup )
+{
+    DuplexMode aRet = DUPLEX_UNKNOWN;
+    PrinterInfo aInfo( PrinterInfoManager::get().getPrinterInfo( pJobSetup->maPrinterName ) );
+    if ( pJobSetup->mpDriverData )
+        JobData::constructFromStreamBuffer( pJobSetup->mpDriverData, pJobSetup->mnDriverDataLen, aInfo );
+    if( aInfo.m_pParser )
+    {
+        const PPDKey * pKey = aInfo.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "Duplex" ) ) );
+        if( pKey )
+        {
+            const PPDValue* pVal = aInfo.m_aContext.getValue( pKey );
+            if( pVal && (
+                pVal->m_aOption.EqualsIgnoreCaseAscii( "None" )          ||
+                pVal->m_aOption.EqualsIgnoreCaseAscii( "Simplex", 0, 7 )
+                ) )
+            {
+                aRet = DUPLEX_OFF;
+            }
+            else
+                aRet = DUPLEX_ON;
+        }
+    }
+    return aRet;
 }
 
 // -----------------------------------------------------------------------
