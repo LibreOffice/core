@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parasc.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:41:42 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 08:42:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -387,9 +387,12 @@ ULONG SwASCIIParser::ReadChars()
 
     rtl_TextToUnicodeConverter hConverter=0;
     rtl_TextToUnicodeContext hContext=0;
-    if (RTL_TEXTENCODING_UCS2 != pUseMe->GetCharSet())
+    CharSet currentCharSet = pUseMe->GetCharSet();
+    if (RTL_TEXTENCODING_UCS2 != currentCharSet)
     {
-        hConverter = rtl_createTextToUnicodeConverter( pUseMe->GetCharSet() );
+        if( currentCharSet == RTL_TEXTENCODING_DONTKNOW )
+                currentCharSet = RTL_TEXTENCODING_ASCII_US;
+        hConverter = rtl_createTextToUnicodeConverter( currentCharSet );
         ASSERT( hConverter, "no string convert avaiable" );
         if (!hConverter)
             return ERR_W4W_DLL_ERROR | ERROR_SW_READ_BASE;
