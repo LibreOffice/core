@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glyphset.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-16 17:57:23 $
+ *  last change: $Author: pl $ $Date: 2001-10-31 17:58:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,7 +169,7 @@ GlyphSet::LookupGlyphID (sal_Unicode nChar,
     // loop thru all the font subsets
     for (aGlyphSet  = maGlyphList.begin(), nGlyphSetID = 1;
          aGlyphSet != maGlyphList.end();
-         aGlyphSet++, nGlyphSetID++)
+         ++aGlyphSet, nGlyphSetID++)
     {
         // check every subset if it contains the queried unicode char
         glyph_mapping_t::const_iterator aGlyph = (*aGlyphSet).find (nChar);
@@ -400,7 +400,7 @@ GlyphSet::ImplDrawText (PrinterGfx &rGfx, const Point& rPoint,
     sal_uChar *pGlyphSubset = (sal_uChar*)alloca (nLen * sizeof(sal_uChar));
 
     std::set< sal_Int32 >::iterator aSet;
-    for (aSet = aGlyphSet.begin(); aSet != aGlyphSet.end(); aSet++)
+    for (aSet = aGlyphSet.begin(); aSet != aGlyphSet.end(); ++aSet)
     {
         Point     aPoint  = rPoint;
         sal_Int32 nOffset = 0;
@@ -445,7 +445,7 @@ GlyphSet::PSUploadEncoding(osl::File* pOutFile, PrinterGfx &rGfx)
     // loop thru all the font subsets
     sal_Int32               nGlyphSetID = 0;
     glyphlist_t::iterator   aGlyphSet;
-    for (aGlyphSet = maGlyphList.begin(); aGlyphSet != maGlyphList.end(); ++aGlyphSet)
+    for (aGlyphSet = maGlyphList.begin(); aGlyphSet != maGlyphList.end(); aGlyphSet++)
     {
         ++nGlyphSetID;
 
@@ -467,27 +467,35 @@ GlyphSet::PSUploadEncoding(osl::File* pOutFile, PrinterGfx &rGfx)
         // need a list of glyphs, sorted by glyphid
         typedef std::map< sal_uInt8, sal_Unicode > ps_mapping_t;
         typedef ps_mapping_t::value_type ps_value_t;
-        ps_mapping_t aSortedGlypSet;
+        ps_mapping_t aSortedGlyphSet;
 
         glyph_mapping_t::const_iterator aUnsortedGlyph;
         for (aUnsortedGlyph  = (*aGlyphSet).begin();
              aUnsortedGlyph != (*aGlyphSet).end();
-             aUnsortedGlyph++)
+             ++aUnsortedGlyph)
         {
-            aSortedGlypSet.insert(ps_value_t((*aUnsortedGlyph).second,
+            aSortedGlyphSet.insert(ps_value_t((*aUnsortedGlyph).second,
                                              (*aUnsortedGlyph).first));
         }
 
         ps_mapping_t::const_iterator aSortedGlyph;
         // loop thru all the glyphs in the subset
-        for (aSortedGlyph  = (aSortedGlypSet).begin();
-             aSortedGlyph != (aSortedGlypSet).end();
-             aSortedGlyph++)
+        for (aSortedGlyph  = (aSortedGlyphSet).begin();
+             aSortedGlyph != (aSortedGlyphSet).end();
+             ++aSortedGlyph)
         {
             nSize += psp::appendStr ("/",
                                      pEncodingVector + nSize);
-            nSize += psp::appendStr ((*rMgr.getAdobeNameFromUnicode((*aSortedGlyph).second).first).second,
-                                     pEncodingVector + nSize);
+            ::std::pair<
+                  ::std::hash_multimap< sal_Unicode, ::rtl::OString >::const_iterator,
+                  ::std::hash_multimap< sal_Unicode, ::rtl::OString >::const_iterator
+                  > aName( rMgr.getAdobeNameFromUnicode((*aSortedGlyph).second) );
+
+            if( aName.first != aName.second )
+                nSize += psp::appendStr ((*aName.first).second,
+                                         pEncodingVector + nSize);
+            else
+                nSize += psp::appendStr (".notdef", pEncodingVector + nSize );
             nSize += psp::appendStr (" ",
                                      pEncodingVector + nSize);
             // flush line
