@@ -2,9 +2,9 @@
 *
 *  $RCSfile: Dataimport.java,v $
 *
-*  $Revision: 1.29 $
+*  $Revision: 1.30 $
 *
-*  last change: $Author: pjunck $ $Date: 2004-10-27 13:36:03 $
+*  last change: $Author: kz $ $Date: 2004-11-27 09:06:59 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -136,7 +136,7 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
                 System.out.println("Connected to " + ConnectStr);
             Dataimport CurDataimport = new Dataimport(xMSF);
             XTextDocument xTextDocument = null;
-            TextDocument oTextDocument = new TextDocument(xMSF, true, true);
+            TextDocument oTextDocument = new TextDocument(xMSF, true, true, null);
             CurDataimport.createReport(xMSF, oTextDocument.xTextDocument);
 
         } catch (Exception e) {
