@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xfont.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hdu $ $Date: 2002-09-04 17:48:20 $
+ *  last change: $Author: hdu $ $Date: 2002-09-05 07:59:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -668,7 +668,7 @@ X11FontLayout::X11FontLayout( const ImplLayoutArgs& rArgs, ExtendedFontStruct& r
         rFont.GetCharWidth( cChar, cChar, &nGlyphWidth, NULL );
         int nGlyphFlags = (nGlyphWidth > 0) ? 0 : GlyphItem::IS_IN_CLUSTER;
         if( bRightToLeft )
-            nGlyphFlags = GlyphItem::IS_RTL_GLYPH;
+            nGlyphFlags |= GlyphItem::IS_RTL_GLYPH;
         int nGlyphIndex = cChar | GF_ISCHAR;
         pGlyphBuffer[i] = GlyphItem( nLogicalIndex, nGlyphIndex, aNewPos, nGlyphFlags, nGlyphWidth );
 
