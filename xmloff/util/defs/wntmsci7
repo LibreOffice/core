@@ -10587,3 +10587,4 @@ _TI3?AVSAXParseException@sax@xml@star@sun@com@@
 ?ProcessAttribute@XMLTableFormulaImportContext@@MAEXGABVOUString@rtl@@@Z
 ?StaticType@XMLTableFormulaImportContext@@SAP6APAXXZXZ
 ?Type@XMLTableFormulaImportContext@@UBEP6APAXXZXZ
+?s_pType_com_sun_star_text_WritingMode2@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBW4WritingMode2@text@456@@Z@4PAU_typelib_TypeDescriptionReference@@A
