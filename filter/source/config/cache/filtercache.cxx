@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtercache.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-09 12:24:50 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 11:59:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #include "filtercache.hxx"
 #include "cacheupdatelistener.hxx"
 #include "macros.hxx"
@@ -85,10 +84,6 @@
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
-
-#ifndef _COMPHELPER_SINGLETONREF_HXX_
-#include <comphelper/singletonref.hxx>
 #endif
 
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
