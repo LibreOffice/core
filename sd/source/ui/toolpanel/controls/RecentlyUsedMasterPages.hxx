@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RecentlyUsedMasterPages.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:47:50 $
+ *  last change: $Author: rt $ $Date: 2004-08-04 08:59:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #ifndef SD_TOOLPANEL_CONTROLS_RECENTLY_USED_MASTER_PAGES_HXX
 #define SD_TOOLPANEL_CONTROLS_RECENTLY_USED_MASTER_PAGES_HXX
 
+#include "tools/SdGlobalResourceContainer.hxx"
 #include <osl/mutex.hxx>
 #include <tools/link.hxx>
 #include <vcl/image.hxx>
@@ -87,6 +88,7 @@ namespace sd { namespace toolpanel { namespace controls {
 /** This singleton holds a list of the most recently used master pages.
 */
 class RecentlyUsedMasterPages
+    : public SdGlobalResource
 {
 public:
     /** Return the single instance of this class.
@@ -104,8 +106,6 @@ public:
     Image GetMasterPagePreview (int nIndex, int nWidth) const;
 
 private:
-    static ::osl::Mutex maMutex;
-
     /** The single instance of this class.  It is created on demand when
         Instance() is called for the first time.
     */
@@ -119,7 +119,8 @@ private:
     unsigned long int mnMaxListSize;
 
     RecentlyUsedMasterPages (void);
-    ~RecentlyUsedMasterPages (void);
+    virtual ~RecentlyUsedMasterPages (void);
+
     /** Call this method after a new object has been created.
     */
     void LateInit (void);
