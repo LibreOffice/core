@@ -2,9 +2,9 @@
  *
  *  $RCSfile: status.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pl $ $Date: 2002-05-29 17:01:29 $
+ *  last change: $Author: cd $ $Date: 2002-11-20 08:43:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -505,9 +505,29 @@ void DrawProgress( Window* pWindow, const Point& rPos,
     USHORT nPerc1 = nPercent1 / nPercentCount;
     USHORT nPerc2 = nPercent2 / nPercentCount;
 
-    // Percent-Rechtecke malen
-    if ( nPerc1 < nPerc2 )
+    if ( nPerc1 > nPerc2 )
     {
+        // Support progress that can also decrease
+
+        // Rechteck berechnen
+        long        nDX = nPrgsWidth + nOffset;
+        long        nLeft = rPos.X()+((nPerc1-1)*nDX);
+        Rectangle   aRect( nLeft, rPos.Y(), nLeft+nPrgsWidth, rPos.Y()+nPrgsHeight );
+
+        do
+        {
+            pWindow->Erase( aRect );
+            aRect.Left()  -= nDX;
+            aRect.Right() -= nDX;
+            nPerc1--;
+        }
+        while ( nPerc1 > nPerc2 );
+
+        pWindow->Flush();
+    }
+    else if ( nPerc1 < nPerc2 )
+    {
+        // Percent-Rechtecke malen
         // Wenn Percent2 ueber 100%, Werte anpassen
         if ( nPercent2 > 10000 )
         {
@@ -1375,6 +1395,23 @@ void StatusBar::EndProgressMode()
 
 // -----------------------------------------------------------------------
 
+void StatusBar::ResetProgressMode()
+{
+    if ( mbProgressMode )
+    {
+        mnPercent = 0;
+        maPrgsTxt.Erase();
+        if ( IsReallyVisible() )
+        {
+            Invalidate();
+            Update();
+            Flush();
+        }
+    }
+}
+
+// -----------------------------------------------------------------------
+
 void StatusBar::SetText( const XubString& rText )
 {
     if ( (!mbVisibleItems || (GetStyle() & WB_RIGHT)) && !mbProgressMode &&
@@ -1391,6 +1428,16 @@ void StatusBar::SetText( const XubString& rText )
             long nOldTextWidth = GetTextWidth( GetText() );
             Window::SetText( rText );
             ImplDrawText( TRUE, nOldTextWidth );
+            Flush();
+        }
+    }
+    else if ( mbProgressMode )
+    {
+        maPrgsTxt = rText;
+        if ( IsReallyVisible() )
+        {
+            Invalidate();
+            Update();
             Flush();
         }
     }
