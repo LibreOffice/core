@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escher.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-04 13:26:21 $
+ *  last change: $Author: rt $ $Date: 2003-09-25 07:40:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,8 @@ protected:
     long mnEmuMul, mnEmuDiv;
 
     virtual INT32 WriteFlyFrameAttr(const SwFrmFmt& rFmt, MSO_SPT eShapeType,
+        EscherPropertyContainer& rPropOpt);
+    void WriteBrushAttr(const SvxBrushItem &rBrush,
         EscherPropertyContainer& rPropOpt);
     void WritePicture(EscherPropertyContainer &rPropOpt,
         const Graphic &rGraphic, const SdrObject &rObj, sal_uInt32 nShapeId);
