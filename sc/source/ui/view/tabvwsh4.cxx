@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 10:28:42 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 17:58:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 
 #ifndef _SVX_EXTRUSION_BAR_HXX
 #include <svx/extrusionbar.hxx>
+#endif
+#ifndef _SVX_FONTWORK_BAR_HXX
+#include <svx/fontworkbar.hxx>
 #endif
 #include <svx/boxitem.hxx>
 #include <svx/fmshell.hxx>
@@ -936,7 +939,12 @@ void ScTabViewShell::SetCurSubShell(ObjectSelectionType eOST, BOOL bForce)
                         {
                             pExtrusionBarShell = new svx::ExtrusionBar( this );
                         }
-                        AddSubShell(  *pExtrusionBarShell );
+                        if ( !pFontworkBarShell )
+                        {
+                            pFontworkBarShell = new svx::FontworkBar( this );
+                        }
+                        AddSubShell( *pExtrusionBarShell );
+                        AddSubShell( *pFontworkBarShell );
 
                         if ( !pDrawShell )
                         {
@@ -1656,6 +1664,7 @@ FASTBOOL __EXPORT ScTabViewShell::KeyInput( const KeyEvent &rKeyEvent )
     pNavSettings(NULL),         \
     aTarget( this ),            \
     pExtrusionBarShell(NULL),   \
+    pFontworkBarShell(NULL),    \
     pAccessibilityBroadcaster(NULL)
 
 
@@ -1935,6 +1944,7 @@ __EXPORT ScTabViewShell::~ScTabViewShell()
     //  #54104# alles auf NULL, falls aus dem TabView-dtor noch darauf zugegriffen wird
     //! (soll eigentlich nicht !??!?!)
 
+    DELETEZ(pFontworkBarShell);
     DELETEZ(pExtrusionBarShell);
     DELETEZ(pCellShell);
     DELETEZ(pPageBreakShell);
