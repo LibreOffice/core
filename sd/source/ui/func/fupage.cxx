@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupage.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:47:53 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:04:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,7 +287,7 @@ FuPage::FuPage( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView,
             bScale = FALSE;
         aNewAttr.Put( SfxBoolItem( SID_ATTR_PAGE_EXT1, bScale ) );
 
-        BOOL bFullSize = ( (SdPage*)( pPage->GetMasterPage( 0 ) ) )->IsBackgroundFullSize();
+        BOOL bFullSize = ((SdPage&)(pPage->TRG_GetMasterPage())).IsBackgroundFullSize();
         aNewAttr.Put( SfxBoolItem( SID_ATTR_PAGE_EXT2, bFullSize ) );
 
         ///////////////////////////////////////////////////////////////////////
@@ -467,7 +467,7 @@ FuPage::FuPage( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView,
 
                     pDoc->SetChanged(TRUE);
 
-                    SdrObject* pObj = ( (SdPage*)( pPage->GetMasterPage( 0 ) ) )->GetPresObj( PRESOBJ_BACKGROUND );
+                    SdrObject* pObj = ((SdPage&)(pPage->TRG_GetMasterPage())).GetPresObj( PRESOBJ_BACKGROUND );
                     if( pObj )
                     {
                         // BackgroundObj: no hard attributes allowed
@@ -502,7 +502,7 @@ FuPage::FuPage( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView,
     INT32               nLeft  = -1, nRight = -1, nUpper = -1, nLower = -1;
     BOOL                bScaleAll = TRUE;
     Orientation         eOrientation = pPage->GetOrientation();
-    BOOL                bFullSize = ( (SdPage*)( pPage->GetMasterPage( 0 ) ) )->IsBackgroundFullSize();
+    BOOL                bFullSize = ((SdPage&)(pPage->TRG_GetMasterPage())).IsBackgroundFullSize();
     USHORT              nPaperBin = pPage->GetPaperBin();
 
     if( pArgs->GetItemState(SID_ATTR_PAGE, TRUE, &pPoolItem) == SFX_ITEM_SET )
@@ -565,7 +565,7 @@ FuPage::FuPage( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView,
     {
         bFullSize = ((const SfxBoolItem*) pPoolItem)->GetValue();
 
-        if( ( (SdPage*)( pPage->GetMasterPage( 0 ) ) )->IsBackgroundFullSize() != bFullSize )
+        if(((SdPage&)(pPage->TRG_GetMasterPage())).IsBackgroundFullSize() != bFullSize )
             bSetPageSizeAndBorder = TRUE;
     }
 
