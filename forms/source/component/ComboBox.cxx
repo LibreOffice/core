@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ComboBox.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fs $ $Date: 2002-03-04 14:46:12 $
+ *  last change: $Author: fs $ $Date: 2002-06-05 09:53:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,9 +330,6 @@ void OComboBoxModel::fillProperties(
                 Sequence< Property >& _rAggregateProps ) const
 {
     FRM_BEGIN_PROP_HELPER(12)
-        // Text auf transient setzen
-                ModifyPropertyAttributes(_rAggregateProps, PROPERTY_TEXT, PropertyAttribute::TRANSIENT, 0);
-
         DECL_PROP2(CLASSID,             sal_Int16,                  READONLY, TRANSIENT);
         DECL_PROP1(NAME,                ::rtl::OUString,            BOUND);
         DECL_PROP1(TAG,                 ::rtl::OUString,            BOUND);
