@@ -1,0 +1,197 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XLayerImporter.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2003-04-17 14:18:26 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2002 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_configuration_backend_XLayerImporter_idl__
+#define __com_sun_star_configuration_backend_XLayerImporter_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_configuration_backend_XLayer_idl__
+#include <com/sun/star/configuration/backend/XLayer.idl>
+#endif
+
+#ifndef __com_sun_star_configuration_backend_XBackend_idl__
+#include <com/sun/star/configuration/backend/XBackend.idl>
+#endif
+
+#ifndef __com_sun_star_configuration_backend_MalformedDataException_idl__
+#include <com/sun/star/configuration/backend/MalformedDataException.idl>
+#endif
+#ifndef __com_sun_star_lang_NullPointerException_idl__
+#include <com/sun/star/lang/NullPointerException.idl>
+#endif
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#endif
+#ifndef __com_sun_star_lang_WrappedTargetException_idl__
+#include <com/sun/star/lang/WrappedTargetException.idl>
+#endif
+
+//=============================================================================
+
+module com { module sun { module star { module configuration { module backend {
+
+//=============================================================================
+
+/** allows importing a layer into a <type>Backend</type>
+
+  @since #107959#
+*/
+interface XLayerImporter : ::com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    /** gets the target backend for importing.
+
+        @returns
+            the <type>Backend</type> into which layers are
+            imported by <member>XLayerImporter::importLayer()<member/>.
+
+    */
+    XBackend getTargetBackend();
+
+    //-------------------------------------------------------------------------
+
+    /** sets the target backend for importing.
+
+        @param aBackend
+            a <type>Backend</type> into which layers should be
+            imported by <method>XLayerImporter::importLayer()<method/>.
+
+        @throws com::sun::star::lang::NullPointerException
+            if the backend passed is <NULL/>.
+    */
+    void setTargetBackend([in] XBackend aBackend)
+        raises (com::sun::star::lang::NullPointerException) ;
+
+    //-------------------------------------------------------------------------
+
+    /** Imports the layer given into the backend.
+
+        <p>This method imports data for the current entity of the backend.</p>
+
+        @param aLayer
+            a layer whose data will be imported into the backend
+
+        @throws com::sun::star::lang::NullPointerException
+            if the layer passed is <NULL/> or no backend is available.
+
+        @throws com::sun::star::configuration::backend::MalformedDataException
+            if the layer passed is invalid
+
+        @throws com::sun::star::lang::IllegalArgumentException
+            if the layer passed is for a component
+            that doesn't exist in the backend
+
+        @throws com::sun::star::lang::WrappedTargetException
+            if an error occurs in the backend or source layer.
+
+        @see com::sun::star::configuration::backend::XBackend::getOwnUpdateHandler()
+    */
+    void importLayer([in] XLayer aLayer)
+        raises (MalformedDataException,
+                com::sun::star::lang::IllegalArgumentException,
+                com::sun::star::lang::NullPointerException,
+                com::sun::star::lang::WrappedTargetException) ;
+
+    //-------------------------------------------------------------------------
+
+    /** Imports the layer given into the backend for a given entity.
+
+        <p>This method imports data for the current entity of the backend.</p>
+
+        @param aLayer
+            a layer whose data will be imported into the backend
+
+        @param aEntity
+            a entity into whose data the layer will be imported
+
+        @throws com::sun::star::lang::NullPointerException
+            if the layer passed is <NULL/> or no backend is available.
+
+        @throws com::sun::star::configuration::backend::MalformedDataException
+            if the layer passed is invalid
+
+        @throws com::sun::star::lang::IllegalArgumentException
+            if the layer passed is for a component
+            that doesn't exist in the backend
+            or if the entity doesn't exist in the backend.
+
+        @throws com::sun::star::lang::WrappedTargetException
+            if an error occurs in the backend or source layer.
+
+        @see com::sun::star::configuration::backend::XBackend::getUpdateHandler()
+    */
+    void importLayerForEntity([in] XLayer aLayer, [in] string aEntity)
+        raises (MalformedDataException,
+                com::sun::star::lang::IllegalArgumentException,
+                com::sun::star::lang::NullPointerException,
+                com::sun::star::lang::WrappedTargetException) ;
+
+    //-------------------------------------------------------------------------
+} ;
+
+//=============================================================================
+
+} ; } ; } ; } ; } ;
+
+#endif
