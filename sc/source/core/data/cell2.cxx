@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cell2.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: er $ $Date: 2002-09-12 16:03:20 $
+ *  last change: $Author: er $ $Date: 2002-09-16 12:34:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -896,6 +896,7 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
             pDocument->RemoveFromFormulaTree( this );   // update formula count
             delete pCode;
             pCode = pRangeData->GetCode()->Clone();
+            pCode->SetReplacedSharedFormula( TRUE );
             ScCompiler aComp2(pDocument, aPos, *pCode);
             aComp2.MoveRelWrap();
             aComp2.UpdateSharedFormulaReference( eUpdateRefMode, aOldPos, r,
@@ -913,11 +914,18 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
             // InsertCol/InsertRow
             if ( bNewListening )
             {
-                if ( eUpdateRefMode == URM_INSDEL && !bIsInsert )
-                    StartListeningTo( pDocument, SC_LISTENING_EXCEPT |
-                        SC_LISTENING_NAMES_ABS | SC_LISTENING_NAMES_REL );
+                if ( pRangeData && eUpdateRefMode == URM_INSDEL )
+                {
+                    // All replaced shared formula listeners have to be
+                    // established after an Insert or Delete. Do nothing here.
+                }
+                else if ( eUpdateRefMode == URM_INSDEL && !bIsInsert )
+                {
                     // Deletes establish listeners on names _after_
-                    // UpdateReference and the following Delete
+                    // UpdateReference and the following Delete.
+                    StartListeningTo( pDocument, SC_LISTENING_EXCEPT |
+                            SC_LISTENING_NAMES_ABS | SC_LISTENING_NAMES_REL );
+                }
                 else
                     StartListeningTo( pDocument, 0 );
             }
@@ -957,6 +965,7 @@ void ScFormulaCell::UpdateInsertTab(USHORT nTable)
             pDocument->RemoveFromFormulaTree( this );   // update formula count
             delete pCode;
             pCode = new ScTokenArray( *pRangeData->GetCode() );
+            pCode->SetReplacedSharedFormula( TRUE );
             ScCompiler aComp2(pDocument, aPos, *pCode);
             aComp2.MoveRelWrap();
             aComp2.UpdateInsertTab( nTable, FALSE );
@@ -990,6 +999,7 @@ BOOL ScFormulaCell::UpdateDeleteTab(USHORT nTable, BOOL bIsMove)
             pDocument->RemoveFromFormulaTree( this );   // update formula count
             delete pCode;
             pCode = pRangeData->GetCode()->Clone();
+            pCode->SetReplacedSharedFormula( TRUE );
             ScCompiler aComp2(pDocument, aPos, *pCode);
             aComp2.CompileTokenArray();
             aComp2.MoveRelWrap();
@@ -1025,6 +1035,7 @@ void ScFormulaCell::UpdateMoveTab( USHORT nOldPos, USHORT nNewPos, USHORT nTabNo
             pDocument->RemoveFromFormulaTree( this );   // update formula count
             delete pCode;
             pCode = pRangeData->GetCode()->Clone();
+            pCode->SetReplacedSharedFormula( TRUE );
             ScCompiler aComp2(pDocument, aPos, *pCode);
             aComp2.CompileTokenArray();
             aComp2.MoveRelWrap();
