@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-13 11:06:53 $
+ *  last change: $Author: os $ $Date: 2000-12-01 11:45:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UTIL_iXNUMBERFORMATTER_HPP_
 #include <com/sun/star/util/XNumberFormatter.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_XCOMPLETEDCONNECTION_HPP_
+#include <com/sun/star/sdb/XCompletedConnection.hpp>
 #endif
 #ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>
@@ -297,6 +300,7 @@ using namespace com::sun::star::sdbcx;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::util;
 using namespace ::com::sun::star::ucb;
+using namespace com::sun::star::task;
 
 #define C2S(cChar) String::CreateFromAscii(cChar)
 #define C2U(char) rtl::OUString::createFromAscii(char)
@@ -1478,11 +1482,13 @@ Reference< sdbc::XConnection> SwNewDBMgr::GetConnection(const String& rDataSourc
         {
             if(xDBContext->hasByName(rDataSource))
             {
-                Any aDBSource = xDBContext->getByName(rDataSource);
-                Reference<XDataSource>* pxSource = (Reference<XDataSource>*)aDBSource.getValue();
-                   OUString sDummy;
-                xConnection = (*pxSource)->getConnection(sDummy, sDummy);
-                rxSource = (*pxSource);
+                Reference<XCompletedConnection> xComplConnection;
+                xDBContext->getByName(rDataSource) >>= xComplConnection;
+                rxSource = Reference<XDataSource>(xComplConnection, UNO_QUERY);
+
+                Reference< XInteractionHandler > xHandler(
+                    xMgr->createInstance( C2U( "com.sun.star.sdb.InteractionHandler" )), UNO_QUERY);
+                xConnection = xComplConnection->connectWithCompletion( xHandler );
             }
         }
         catch(...) {}
