@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utility.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2001-11-09 11:57:14 $
+ *  last change: $Author: jb $ $Date: 2002-03-15 11:39:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef CONFIGMGR_UTILITY_HXX_
 #define CONFIGMGR_UTILITY_HXX_
 
+#ifndef _SALHELPER_SIMPLEREFERENCEOBJECT_HXX_
+#include <salhelper/simplereferenceobject.hxx>
+#endif
+
 #define CFG_NOTHROW() SAL_THROW( () )
 
 #define CFG_THROW1( Ex1 )           SAL_THROW( (Ex1) )
@@ -90,6 +94,18 @@ namespace configmgr
     private:
         Noncopyable     (Noncopyable& notImplemented);
         void operator=  (Noncopyable& notImplemented);
+    };
+
+    struct Refcounted
+    : virtual salhelper::SimpleReferenceObject
+    {
+    };
+
+    // helps to workaround some ambiguity problems
+    template <typename>
+    struct RefcountedAs
+    : virtual salhelper::SimpleReferenceObject
+    {
     };
 
 }
