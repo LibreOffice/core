@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: lo $ $Date: 2002-09-30 15:59:39 $
+#   last change: $Author: obo $ $Date: 2002-10-10 12:57:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -118,7 +118,7 @@ SLOFILES = \
         $(SLO)$/ssoinit.obj				\
         $(SLO)$/officeipcmanager.obj	\
         $(SLO)$/javainteractionhandler.obj \
-        $(OBJ)$/lockfile.obj
+        $(SLO)$/lockfile.obj
 
 .ENDIF
 
