@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lbmap.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pliao $ $Date: 2000-11-17 00:40:40 $
+ *  last change: $Author: dbo $ $Date: 2000-12-14 14:11:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,65 +299,64 @@ static inline OUString getMappingName(
     return aKey.makeStringAndClear();
 }
 //==================================================================================================
-static inline OUString getLibName(
+static inline OUString getBridgeName(
     const Environment & rFrom, const Environment & rTo, const OUString & rAddPurpose )
 {
-    OUStringBuffer aLibName( 16 );
-#ifdef SAL_UNX
-    aLibName.appendAscii( RTL_CONSTASCII_STRINGPARAM("lib") );
+    OUStringBuffer aBridgeName( 16 );
     if (rAddPurpose.getLength())
     {
-        aLibName.append( rAddPurpose );
-        aLibName.append( (sal_Unicode)'_' );
+        aBridgeName.append( rAddPurpose );
+        aBridgeName.append( (sal_Unicode)'_' );
     }
-    aLibName.append( rFrom.getTypeName() );
-    aLibName.append( (sal_Unicode)'_' );
-    aLibName.append( rTo.getTypeName() );
-#ifdef MACOSX
-    aLibName.appendAscii( RTL_CONSTASCII_STRINGPARAM(".dylib.framework") );
-#else
-    aLibName.appendAscii( RTL_CONSTASCII_STRINGPARAM(".so") );
-#endif
-#else
-    if (rAddPurpose.getLength())
-    {
-        aLibName.append( rAddPurpose );
-        aLibName.append( (sal_Unicode)'_' );
-    }
-    aLibName.append( rFrom.getTypeName() );
-    aLibName.append( (sal_Unicode)'_' );
-    aLibName.append( rTo.getTypeName() );
-#ifndef OS2
-    aLibName.appendAscii( RTL_CONSTASCII_STRINGPARAM(".dll") );
-#endif
-#endif
-    return aLibName.makeStringAndClear();
+    aBridgeName.append( rFrom.getTypeName() );
+    aBridgeName.append( (sal_Unicode)'_' );
+    aBridgeName.append( rTo.getTypeName() );
+    return aBridgeName.makeStringAndClear();
 }
-
-//--------------------------------------------------------------------------------------------------
-static inline void setNegativeModule( const OUString & rName )
+//==================================================================================================
+static inline void setNegativeBridge( const OUString & rBridgeName )
 {
     MappingsData & rData = getMappingsData();
     MutexGuard aGuard( rData.aNegativeLibsMutex );
-    rData.aNegativeLibs.insert( rName );
+    rData.aNegativeLibs.insert( rBridgeName );
 }
-//--------------------------------------------------------------------------------------------------
-static inline oslModule loadModule( const OUString & rName )
+//==================================================================================================
+static inline oslModule loadModule( const OUString & rBridgeName )
 {
     sal_Bool bNeg;
     {
     MappingsData & rData = getMappingsData();
     MutexGuard aGuard( rData.aNegativeLibsMutex );
-    const t_OUStringSet::const_iterator iFind( rData.aNegativeLibs.find( rName ) );
+    const t_OUStringSet::const_iterator iFind( rData.aNegativeLibs.find( rBridgeName ) );
     bNeg = (iFind != rData.aNegativeLibs.end());
     }
 
     if (! bNeg)
     {
-        oslModule hModule = osl_loadModule( rName.pData, SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_LAZY );
+        OUStringBuffer aLibName( 32 );
+#ifdef SAL_UNX
+        aLibName.appendAscii( RTL_CONSTASCII_STRINGPARAM("lib") );
+        aLibName.append( rBridgeName );
+#ifdef MACOSX
+        aLibName.appendAscii( RTL_CONSTASCII_STRINGPARAM(".dylib.framework") );
+#else
+        aLibName.appendAscii( RTL_CONSTASCII_STRINGPARAM(".so") );
+#endif
+#else
+        aLibName.append( rBridgeName );
+#ifndef OS2
+        aLibName.appendAscii( RTL_CONSTASCII_STRINGPARAM(".dll") );
+#endif
+#endif
+        OUString aModule( aLibName.makeStringAndClear() );
+
+        oslModule hModule = ::osl_loadModule(
+            aModule.pData, SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_LAZY );
+
         if (hModule)
             return hModule;
-        setNegativeModule( rName ); // no load again
+
+        setNegativeBridge( rBridgeName ); // no load again
     }
     return 0;
 }
@@ -373,26 +372,33 @@ static Mapping loadExternalMapping(
         OUString aName;
 
         if (rFrom.getTypeName().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_LB_UNO) ))
-            hModule = loadModule( aName = getLibName( rTo, rFrom, rAddPurpose ) );
+            hModule = loadModule( aName = getBridgeName( rTo, rFrom, rAddPurpose ) );
         if (! hModule)
-            hModule = loadModule( aName = getLibName( rFrom, rTo, rAddPurpose ) );
+            hModule = loadModule( aName = getBridgeName( rFrom, rTo, rAddPurpose ) );
         if (! hModule)
-            hModule = loadModule( aName = getLibName( rTo, rFrom, rAddPurpose ) );
+            hModule = loadModule( aName = getBridgeName( rTo, rFrom, rAddPurpose ) );
 
         if (hModule)
         {
+#ifdef MACOSX
+            OUString aSymbolName(
+                aName + OUString( RTL_CONSTASCII_USTRINGPARAM(UNO_EXT_GETMAPPING) ) );
+#else
             OUString aSymbolName( RTL_CONSTASCII_USTRINGPARAM(UNO_EXT_GETMAPPING) );
+#endif
             uno_ext_getMappingFunc fpGetMapFunc =
-                (uno_ext_getMappingFunc)osl_getSymbol( hModule, aSymbolName.pData );
+                (uno_ext_getMappingFunc)::osl_getSymbol( hModule, aSymbolName.pData );
+
             if (fpGetMapFunc)
             {
                 Mapping aExt;
                 (*fpGetMapFunc)( (uno_Mapping **)&aExt, rFrom.get(), rTo.get() );
+                OSL_ASSERT( aExt.is() );
                 if (aExt.is())
                     return aExt;
             }
-            osl_unloadModule( hModule );
-            setNegativeModule( aName );
+            ::osl_unloadModule( hModule );
+            setNegativeBridge( aName );
         }
     }
     return Mapping();
