@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MemoryByteGrabber.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-14 14:29:41 $
+ *  last change: $Author: hr $ $Date: 2002-02-21 14:32:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,8 @@
  ************************************************************************/
 #ifndef _MEMORY_BYTE_GRABBER_HXX_
 #define _MEMORY_BYTE_GRABBER_HXX_
+
+#include <string.h>
 
 #ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
 #include <com/sun/star/io/XInputStream.hpp>

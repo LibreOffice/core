@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XUnbufferedStream.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2002-01-29 15:26:12 $
+ *  last change: $Author: hr $ $Date: 2002-02-21 14:32:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+#include <string.h>
 #ifndef _XUNBUFFERED_STREAM_HXX
 #include <XUnbufferedStream.hxx>
 #endif
