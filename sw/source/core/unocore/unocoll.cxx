@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocoll.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-21 14:58:08 $
+ *  last change: $Author: os $ $Date: 2001-03-23 13:40:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,12 @@
 #endif
 #ifndef _SVTOOLS_PASSWORDHELPER_HXX
 #include <svtools/PasswordHelper.hxx>
+#endif
+#ifndef _SVTOOLS_UNOIMAP_HXX
+#include <svtools/unoimap.hxx>
+#endif
+#ifndef _SVTOOLS_UNOEVENT_HXX_
+#include <svtools/unoevent.hxx>
 #endif
 #ifndef _FRMFMT_HXX
 #include <frmfmt.hxx>
@@ -281,8 +287,26 @@ const char* __FAR_DATA aProvNames[] =
         "com.sun.star.text.NumberingRules",             //SW_SERVICE_NUMBERING_RULES
         "com.sun.star.text.TextColumns",                //SW_SERVICE_TEXT_COLUMNS,
         "com.sun.star.text.IndexHeaderSection",     //SW_SERVICE_INDEX_HEADER_SECTION
-        "com.sun.star.text.Defaults"                //SW_SERVICE_DEFAULTS
+        "com.sun.star.text.Defaults",                //SW_SERVICE_DEFAULTS
+        "com.sun.star.image.ImageMapRectangleObject",   //SW_SERVICE_IMAP_RECTANGLE
+        "com.sun.star.image.ImageMapCircleObject",      //SW_SERVICE_IMAP_CIRCLE
+        "com.sun.star.image.ImageMapPolygonObject"      //SW_SERVICE_IMAP_POLYGON
     };
+/* -----------------------------23.03.01 13:38--------------------------------
+
+ ---------------------------------------------------------------------------*/
+const SvEventDescription* lcl_GetSupportedMacroItems()
+{
+    static const SvEventDescription aMacroDescriptionsImpl[] =
+    {
+        { SFX_EVENT_MOUSEOVER_OBJECT, "OnMouseOver" },
+        { SFX_EVENT_MOUSEOUT_OBJECT, "OnMouseOut" },
+        { 0, NULL }
+    };
+
+    return aMacroDescriptionsImpl;
+}
+
 /******************************************************************
  * SwXServiceProvider
  ******************************************************************/
@@ -568,6 +592,15 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
         break;
         case SW_SERVICE_DEFAULTS:
             xRet = (cppu::OWeakObject*)new SwXTextDefaults( pDoc );
+        break;
+        case SW_SERVICE_IMAP_RECTANGLE :
+            xRet = SvUnoImageMapRectangleObject_createInstance( lcl_GetSupportedMacroItems() );
+        break;
+        case SW_SERVICE_IMAP_CIRCLE    :
+            xRet = SvUnoImageMapCircleObject_createInstance( lcl_GetSupportedMacroItems() );
+        break;
+        case SW_SERVICE_IMAP_POLYGON   :
+            xRet = SvUnoImageMapPolygonObject_createInstance( lcl_GetSupportedMacroItems() );
         break;
 //      case SW_SERVICE_FIELDTYPE_TABLEFIELD:
         default:
