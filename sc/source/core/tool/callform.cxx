@@ -2,9 +2,9 @@
  *
  *  $RCSfile: callform.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: er $ $Date: 2001-07-11 15:28:50 $
+ *  last change: $Author: er $ $Date: 2001-07-26 17:15:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,12 +282,7 @@ BOOL InitExternalFunc(const rtl::OUString& rModuleName)
         return FALSE;
 
     rtl::OUString aNP;
-#ifdef TF_FILEURL
     aNP = rModuleName;
-#else
-    if ( osl::FileBase::getNormalizedPathFromFileURL( rModuleName, aNP ) != osl::FileBase::E_None )
-        return FALSE;
-#endif
 
     BOOL bRet = FALSE;
     OModule* pLib = new OModule( aNP );
