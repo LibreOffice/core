@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlopt.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-28 13:15:56 $
+ *  last change: $Author: kz $ $Date: 2001-08-29 09:20:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1039,11 +1039,11 @@ TabPage TP_REDLINE_OPT
     };
     StringList [ finnish ] =
     {
-            < "[Ei mitään]" ; > ;
+            < "[Ei mit??n]" ; > ;
         < "Vasen marginaali" ; > ;
         < "Oikea marginaali" ; > ;
         < "Ulkomarginaali" ; > ;
-        < "Sisämarginaali" ; > ;
+        < "Sisempi marginaali" ; > ;
     };
     };
     FixedText FT_LC_COL
@@ -1110,7 +1110,7 @@ TabPage TP_REDLINE_OPT
         Text[ turkish ] = "Yazana göre";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Según autor";
-        Text[ finnish ] = "Laatijan mukaan";
+        Text[ finnish ] = "Laatija";
     };
     String STR_NOTHING
     {
@@ -1138,6 +1138,7 @@ TabPage TP_REDLINE_OPT
         Text[ finnish ] = "[Ei mitään]";
     };
 };
+
 
 
 
