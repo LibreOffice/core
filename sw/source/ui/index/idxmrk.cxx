@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: iha $ $Date: 2002-08-08 13:14:10 $
+ *  last change: $Author: iha $ $Date: 2002-08-09 11:39:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -458,11 +458,13 @@ void SwIndexMarkDlg::InitControls()
 
 void    SwIndexMarkDlg::UpdateLanguageDependenciesForPhoneticReading()
 {
-    bIsPhoneticReadingEnabled = FALSE;
-
     //no phonetic reading if no global cjk support
     if( !xExtendedIndexEntrySupplier.is() )
+    {
+        bIsPhoneticReadingEnabled = FALSE;
         return;
+    }
+    bIsPhoneticReadingEnabled = TRUE;
 
     //get the current language
     if(!bNewMark) //if dialog is opened to iterate existing marks
@@ -501,12 +503,14 @@ void    SwIndexMarkDlg::UpdateLanguageDependenciesForPhoneticReading()
         nLangForPhoneticReading = ((const SvxLanguageItem&)aLangSet.Get(nWhich)).GetLanguage();
     }
 
+    /*
     //enable phonetic reading dependent on the current language
     {
         SwBreakIt aBreakIt = SwBreakIt();
         lang::Locale& rLocale = aBreakIt.GetLocale( LanguageType( nLangForPhoneticReading ) );
         bIsPhoneticReadingEnabled = xExtendedIndexEntrySupplier->usePhoneticEntry( rLocale );
     }
+    */
 }
 
 String  SwIndexMarkDlg::GetDefaultPhoneticReading( const String& rText )
