@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ActionTrigger.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cd $ $Date: 2001-11-29 09:03:28 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:44:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ module com {  module sun {  module star {  module ui {
 /** describes a trigger for an (user inter-)action.
     <p>Common examples for such triggers are menu entries or toolbar icons.</p>
 */
-service ActionTrigger
+published service ActionTrigger
 {
     /** contains the text of the menu entry.
      */
