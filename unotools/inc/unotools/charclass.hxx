@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charclass.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: er $ $Date: 2002-12-10 19:53:39 $
+ *  last change: $Author: er $ $Date: 2002-12-10 19:56:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,8 +87,8 @@
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
 #endif
 
-#ifndef INCLUDED_UNOTOOLS_READWRITEMUTEXGUARD_HXX
-#include <unotools/readwritemutexguard.hxx>
+#ifndef _OSL_MUTEX_HXX_
+#include <osl/mutex.hxx>
 #endif
 
 class String;
