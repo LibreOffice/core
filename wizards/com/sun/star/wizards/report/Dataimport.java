@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Dataimport.java,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: bc $ $Date: 2002-09-13 15:57:05 $
+ *  last change: $Author: bc $ $Date: 2002-09-13 16:28:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -482,7 +482,7 @@ public class Dataimport extends ReportWizard{
      }}
 
 
-    public void addDBRecordstoReportDocument(ReportDocument CurReportDocument, XResultSet xResultSet, String[] FieldNames)
+/*    public void addDBRecordstoReportDocument(ReportDocument CurReportDocument, XResultSet xResultSet, String[] FieldNames)
     throws com.sun.star.sdbc.SQLException, com.sun.star.container.NoSuchElementException, com.sun.star.lang.IllegalArgumentException,
         com.sun.star.lang.WrappedTargetException{
     int iColIndex;
@@ -508,7 +508,7 @@ public class Dataimport extends ReportWizard{
         CurReportDocument.ReportTextDocument.getText().insertControlCharacter(xTextCursor, com.sun.star.text.ControlCharacter.PARAGRAPH_BREAK, false);
     }
        CurReportDocument.ReportTextDocument.unlockControllers();
-    }
+    } */
 
 
     public void updateProgressDisplay(int iCounter, UNODialogs CurUNOProgressDialog){
