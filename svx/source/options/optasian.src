@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optasian.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:44:58 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 11:29:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -536,6 +536,8 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
     Text[ hindi ] = "प्रॉक्सी";
     Text[ slovak ] = "Proxy";
 };
+
+
 
 
 
