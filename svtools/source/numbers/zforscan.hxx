@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforscan.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2000-11-03 20:46:56 $
+ *  last change: $Author: er $ $Date: 2000-11-18 21:46:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,11 +126,11 @@ public:
                      USHORT nAnz);              // Kopiert die FormatInfo
     USHORT GetAnzResStrings() const             { return nAnzResStrings; }
 
-    const International& GetIntl() const        { return *pFormatter->GetInternational(); }
     const CharClass& GetChrCls() const          { return *pFormatter->GetCharClass(); }
     const LocaleDataWrapper& GetLoc() const     { return *pFormatter->GetLocaleData(); }
+    CalendarWrapper& GetCal() const             { return *pFormatter->GetCalendar(); }
 
-    const String& GetQuartalString() const  { return sKeyword[NF_KEY_QUARTER]; }
+    const String& GetQuarterString() const  { return sKeyword[NF_KEY_QUARTER]; }
     const String& GetTrueString() const     { return sKeyword[NF_KEY_TRUE]; }
     const String& GetFalseString() const    { return sKeyword[NF_KEY_FALSE]; }
     const String& GetColorString() const    { return sKeyword[NF_KEY_COLOR]; }
@@ -172,7 +172,7 @@ private:                            // ---- privater Teil
     NfKeywordTable sKeyword;                    // Schluesselworte der Syntax
     Color StandardColor[SC_MAX_ANZ_STANDARD_FARBEN];
                                                 // Array der Standardfarben
-    Date* pNullDate;                            // "1.1.1900"
+    Date* pNullDate;                            // 30Dec1899
     String sNameStandardFormat;             // "Standard"
     short nStandardPrec;                        // default Precision fuer Standardformat (2)
     SvNumberFormatter* pFormatter;              // Pointer auf die Formatliste

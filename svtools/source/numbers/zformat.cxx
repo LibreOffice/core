@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2000-11-04 21:51:34 $
+ *  last change: $Author: er $ $Date: 2000-11-18 21:46:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,18 @@
 #endif
 #ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
+#endif
+#ifndef _UNOTOOLS_CALENDARWRAPPER_HXX
+#include <unotools/calendarwrapper.hxx>
+#endif
+#ifndef _COM_SUN_STAR_I18N_CALENDARFIELDINDEX_HPP_
+#include <com/sun/star/i18n/CalendarFieldIndex.hpp>
+#endif
+#ifndef _COM_SUN_STAR_I18N_CALENDARDISPLAYINDEX_HPP_
+#include <com/sun/star/i18n/CalendarDisplayIndex.hpp>
+#endif
+#ifndef _COM_SUN_STAR_I18N_AMPMVALUE_HPP_
+#include <com/sun/star/i18n/AmPmValue.hpp>
 #endif
 
 #define _ZFORMAT_CXX
@@ -1427,6 +1439,7 @@ BOOL SvNumberformat::GetOutputString(double fNumber,
         ImpGetOutputStandard(fNumber, OutString);
         return FALSE;
     }
+    BOOL bHadStandard = FALSE;
     if (bStandard)                              // einzelne Standardformate
     {
         if (rScan.GetStandardPrec() == 300)     // alle Zahlformate InputLine
@@ -1438,75 +1451,19 @@ BOOL SvNumberformat::GetOutputString(double fNumber,
         {
             case NUMBERFORMAT_NUMBER:                   // Standardzahlformat
                 ImpGetOutputStandard(fNumber, OutString);
+                bHadStandard = TRUE;
             break;
             case NUMBERFORMAT_DATE:
-            {
-                if (fabs(fNumber) > _D_MAX_LONG_)       // zu gross
-                {
-                    OutString = rScan.GetErrorString();
-                    return FALSE;
-                }
-                long nNum = (long) floor(fNumber);
-                Date aDate = *(rScan.GetNullDate()) + nNum;
-                OutString = rIntl().GetDate(aDate);
-            }
+                bRes |= ImpGetDateOutput(fNumber, 0, OutString);
+                bHadStandard = TRUE;
             break;
             case NUMBERFORMAT_TIME:
-            {
-                if (fNumber < 0.0)                          // -2:20 -> 21:40
-                {
-                    fNumber = -fNumber;
-                    fNumber -= floor(fNumber);              // Datum hier egal
-                    fNumber = 1.0 - fNumber;
-                }
-                else
-                    fNumber -= floor(fNumber);              //   "
-
-                ULONG nTime = (ULONG) floor(0.5 + fNumber * 86400.0);
-                ULONG nHour = nTime / 3600;
-                nHour = nHour % 24;
-                if (nHour < 10)
-                    OutString += '0';
-                OutString += String::CreateFromInt32(nHour);
-                OutString += rLoc().getTimeSep();
-                ULONG nMin = (nTime%3600) / 60;
-                if (nMin < 10)
-                     OutString += '0';
-                OutString += String::CreateFromInt32(nMin);
-                OutString += rLoc().getTimeSep();
-                ULONG nSec = (nTime%60);
-                if (nSec < 10)
-                     OutString += '0';
-                OutString += String::CreateFromInt32(nSec);
-            }
+                bRes |= ImpGetTimeOutput(fNumber, 0, OutString);
+                bHadStandard = TRUE;
             break;
             case NUMBERFORMAT_DATETIME:
-            {
-                if (fabs(fNumber) > _D_MAX_LONG_)       // zu gross
-                {
-                    OutString = rScan.GetErrorString();
-                    return FALSE;
-                }
-                double fNum1 = floor(fNumber);
-                long nNum1 = (long) fNum1;
-                Date aDate = *(rScan.GetNullDate()) + nNum1;
-                OutString = rIntl().GetDate(aDate);
-                OutString += ' ';
-                fNumber -= fNum1;
-                ULONG nTime = (ULONG) floor(0.5 + fNumber * 86400.0);
-                ULONG nHour = nTime / 3600;
-                if (nHour < 10)
-                    OutString += '0';
-                OutString += String::CreateFromInt32(nHour);
-                OutString += rLoc().getTimeSep();
-                ULONG nMin = (nTime%3600) / 60;
-                if (nMin < 10)
-                     OutString += '0';
-                OutString += String::CreateFromInt32(nMin);
-            }
-            break;
-            case NUMBERFORMAT_FRACTION:
-            case NUMBERFORMAT_CURRENCY:         // keine Standardoptimierung
+                bRes |= ImpGetDateTimeOutput(fNumber, 0, OutString);
+                bHadStandard = TRUE;
             break;
             case NUMBERFORMAT_PERCENT:
             {
@@ -1522,6 +1479,7 @@ BOOL SvNumberformat::GetOutputString(double fNumber,
                  }
                  else
                     OutString = rScan.GetErrorString();
+                bHadStandard = TRUE;
             }
             break;
             case NUMBERFORMAT_SCIENTIFIC:
@@ -1535,7 +1493,7 @@ BOOL SvNumberformat::GetOutputString(double fNumber,
             break;
         }
     }
-    else                                // keine Standards mehr
+    if ( !bHadStandard )
     {
         USHORT nIx;                             // Index des Teilformats
         short nCheck = ImpCheckCondition(fNumber, fLimit1, eOp1);
@@ -1949,6 +1907,10 @@ BOOL SvNumberformat::ImpGetTimeOutput(double fNumber,
                                    USHORT nIx,
                                    String& OutString)
 {
+    using namespace ::com::sun::star::i18n;
+    BOOL bCalendarSet = FALSE;
+    CalendarWrapper& rCal = GetCal();
+    double fNumberOrig = fNumber;
     BOOL bRes = FALSE;
     BOOL bSign = FALSE;
     if (fNumber < 0.0)
@@ -1988,8 +1950,6 @@ BOOL SvNumberformat::ImpGetTimeOutput(double fNumber,
     fTime = floor( 0.5 + fTime * fFactor ) / fFactor; // runden
     if (bSign && fTime == 0.0)
         bSign = FALSE;                      // nicht -00:00:00
-
-//    ULONG nTime = (ULONG) floor(fTime);     // Vorkommaanteil
 
     ULONG nSeconds = 0;
     ULONG nHours = 0;
@@ -2099,10 +2059,20 @@ BOOL SvNumberformat::ImpGetTimeOutput(double fNumber,
             break;
             case NF_KEY_AMPM:               // AM/PM
             {
+                if ( !bCalendarSet )
+                {
+                    DateTime aDateTime( *(rScan.GetNullDate()) );
+                    aDateTime += fNumberOrig;
+                    CalendarWrapper& rCal = GetCal();
+                    rCal.setGregorianDateTime( aDateTime );
+                    bCalendarSet = TRUE;
+                }
                 if (cAmPm == 'a')
-                    OutString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "AM" ) );
+                    OutString += rCal.getDisplayName( CalendarDisplayIndex::AM_PM,
+                        AmPmValue::AM, 0 );
                 else
-                    OutString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "PM" ) );
+                    OutString += rCal.getDisplayName( CalendarDisplayIndex::AM_PM,
+                        AmPmValue::PM, 0 );
             }
             break;
             case NF_KEY_AP:                 // A/P
@@ -2156,6 +2126,7 @@ BOOL SvNumberformat::ImpGetDateOutput(double fNumber,
                                    USHORT nIx,
                                    String& OutString)
 {
+    using namespace ::com::sun::star::i18n;
     BOOL bRes = FALSE;
     if (fabs(fNumber) > _D_MAX_LONG_)       // zu gross
     {
@@ -2164,6 +2135,8 @@ BOOL SvNumberformat::ImpGetDateOutput(double fNumber,
     }
     long nNum = (long) floor(fNumber);
     Date aDate = *(rScan.GetNullDate()) + nNum;
+    CalendarWrapper& rCal = GetCal();
+    rCal.setGregorianDateTime( aDate );
     const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
     const USHORT nAnz = NumFor[nIx].GetnAnz();
     for (USHORT i = 0; i < nAnz; i++)
@@ -2187,20 +2160,30 @@ BOOL SvNumberformat::ImpGetDateOutput(double fNumber,
                 OutString += rInfo.sStrArray[i];
                 break;
             case NF_KEY_M:                  // M
-                OutString += String::CreateFromInt32(aDate.GetMonth());
+                OutString += String::CreateFromInt32( rCal.getValue(
+                    CalendarFieldIndex::MONTH ) + 1 );
             break;
             case NF_KEY_MM:                 // MM
             {
-                if (aDate.GetMonth() < 10)
+                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::MONTH ) + 1;
+                if ( nVal < 10 )
                     OutString += '0';
-                OutString += String::CreateFromInt32(aDate.GetMonth());
+                OutString += String::CreateFromInt32( nVal );
             }
             break;
             case NF_KEY_MMM:                // MMM
-                OutString += rIntl().GetAbbrevMonthText(aDate.GetMonth());
+            {
+                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::MONTH );
+                OutString += rCal.getDisplayName( CalendarDisplayIndex::MONTH,
+                    nVal, 0 );
+            }
             break;
             case NF_KEY_MMMM:               // MMMM
-                OutString += rIntl().GetMonthText(aDate.GetMonth());
+            {
+                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::MONTH );
+                OutString += rCal.getDisplayName( CalendarDisplayIndex::MONTH,
+                    nVal, 1 );
+            }
             break;
             case NF_KEY_Q:                  // Q
             case NF_KEY_QQ:                 // QQ
@@ -2220,52 +2203,77 @@ BOOL SvNumberformat::ImpGetDateOutput(double fNumber,
                 {
                     OutString += '.';       // #40387# "1. Quartal" mit Leerzeichen
                     OutString += ' ';
-                    OutString += rScan.GetQuartalString();
+                    OutString += rScan.GetQuarterString();
                 }
             }
             break;
             case NF_KEY_T:                  // T
-                OutString += String::CreateFromInt32(aDate.GetDay());
+                OutString += String::CreateFromInt32( rCal.getValue(
+                    CalendarFieldIndex::DAY_OF_MONTH ) );
             break;
             case NF_KEY_TT:                 // TT
             {
-                if (aDate.GetDay() < 10)
+                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::DAY_OF_MONTH );
+                if ( nVal < 10 )
                     OutString += '0';
-                OutString += String::CreateFromInt32(aDate.GetDay());
+                OutString += String::CreateFromInt32( nVal );
             }
             break;
             case NF_KEY_TTT:                // TTT
-                OutString += rIntl().GetAbbrevDayText(aDate.GetDayOfWeek());
+            {
+                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::DAY_OF_MONTH );
+                OutString += rCal.getDisplayName( CalendarDisplayIndex::DAY,
+                    nVal, 0 );
+            }
             break;
             case NF_KEY_TTTT:               // TTTT
-                OutString += rIntl().GetDayText(aDate.GetDayOfWeek());
+            {
+                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::DAY_OF_MONTH );
+                OutString += rCal.getDisplayName( CalendarDisplayIndex::DAY,
+                    nVal, 1 );
+            }
             break;
             case NF_KEY_JJ:                 // JJ
             {
-                String sStr = String::CreateFromInt32(aDate.GetYear());
-                sStr.Erase(0,2);
-                OutString += sStr;
+                //! TODO: what about negative values? abs and era?
+                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::YEAR );
+                if ( 99 < nVal )
+                    nVal %= 100;
+                if ( nVal < 10 )
+                    OutString += '0';
+                OutString += String::CreateFromInt32( nVal );
             }
             break;
             case NF_KEY_JJJJ:               // JJJJ
-                OutString += String::CreateFromInt32(aDate.GetYear());
+                //! TODO: what about negative values? abs and era?
+                OutString += String::CreateFromInt32( rCal.getValue(
+                    CalendarFieldIndex::YEAR ) );
             break;
             case NF_KEY_NN:                 // NN
-                OutString += rIntl().GetAbbrevDayText(aDate.GetDayOfWeek());
+            {
+                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::DAY_OF_WEEK );
+                OutString += rCal.getDisplayName( CalendarDisplayIndex::DAY,
+                    nVal, 0 );
+            }
             break;
             case NF_KEY_NNN:                // NNN
-                OutString += rIntl().GetDayText(aDate.GetDayOfWeek());
+            {
+                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::DAY_OF_WEEK );
+                OutString += rCal.getDisplayName( CalendarDisplayIndex::DAY,
+                    nVal, 1 );
+            }
             break;
             case NF_KEY_NNNN:               // NNNN
             {
-                OutString += rIntl().GetDayText(aDate.GetDayOfWeek());
+                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::DAY_OF_WEEK );
+                OutString += rCal.getDisplayName( CalendarDisplayIndex::DAY,
+                    nVal, 1 );
                 OutString += rLoc().getLongDateDayOfWeekSep();
             }
             break;
-            case NF_KEY_WW :                // WW Kalenderwoche
-                OutString += String::CreateFromInt32(
-                    aDate.GetWeekOfYear( rIntl().GetWeekStart(),
-                        rIntl().GetWeekCountStart() ) );
+            case NF_KEY_WW :                // WW
+                OutString += String::CreateFromInt32( rCal.getValue(
+                    CalendarFieldIndex::WEEK_OF_YEAR ) );
             break;
             default:
             break;
@@ -2278,6 +2286,7 @@ BOOL SvNumberformat::ImpGetDateTimeOutput(double fNumber,
                                        USHORT nIx,
                                        String& OutString)
 {
+    using namespace ::com::sun::star::i18n;
     BOOL bRes = FALSE;
     if (fabs(fNumber) > _D_MAX_LONG_)       // zu gross
     {
@@ -2288,14 +2297,15 @@ BOOL SvNumberformat::ImpGetDateTimeOutput(double fNumber,
     double fNum2 = fNumber - fNum1;         // -> Zeit
     long nNum1 = (long) fNum1;
 
-    Date aDate = *(rScan.GetNullDate()) + nNum1;
+    DateTime aDateTime( *(rScan.GetNullDate()) );
+    aDateTime += fNumber;
+    CalendarWrapper& rCal = GetCal();
+    rCal.setGregorianDateTime( aDateTime );
 
     const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
     double fTime = fNum2*86400.0;
     double fFactor = pow(10.0,rInfo.nCntPost);
     fTime = floor(0.5 + fTime * fFactor) / fFactor; // runden
-
-//    ULONG nTime = (ULONG) floor(fTime);     // Vorkommaanteil
 
     ULONG nSeconds = 0;
     ULONG nHours = 0;
@@ -2398,9 +2408,11 @@ BOOL SvNumberformat::ImpGetDateTimeOutput(double fNumber,
             case NF_KEY_AMPM:               // AM/PM
             {
                 if (cAmPm == 'a')
-                    OutString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "AM" ) );
+                    OutString += rCal.getDisplayName( CalendarDisplayIndex::AM_PM,
+                        AmPmValue::AM, 0 );
                 else
-                    OutString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "PM" ) );
+                    OutString += rCal.getDisplayName( CalendarDisplayIndex::AM_PM,
+                        AmPmValue::PM, 0 );
             }
             break;
             case NF_KEY_AP:                 // A/P
@@ -2442,25 +2454,35 @@ BOOL SvNumberformat::ImpGetDateTimeOutput(double fNumber,
             }
             break;
             case NF_KEY_M:                  // M
-                OutString += String::CreateFromInt32(aDate.GetMonth());
+                OutString += String::CreateFromInt32( rCal.getValue(
+                    CalendarFieldIndex::MONTH ) + 1 );
             break;
             case NF_KEY_MM:                 // MM
             {
-                if (aDate.GetMonth() < 10)
+                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::MONTH ) + 1;
+                if ( nVal < 10 )
                     OutString += '0';
-                OutString += String::CreateFromInt32(aDate.GetMonth());
+                OutString += String::CreateFromInt32( nVal );
             }
             break;
             case NF_KEY_MMM:                // MMM
-                OutString += rIntl().GetAbbrevMonthText(aDate.GetMonth());
+            {
+                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::MONTH );
+                OutString += rCal.getDisplayName( CalendarDisplayIndex::MONTH,
+                    nVal, 0 );
+            }
             break;
             case NF_KEY_MMMM:               // MMMM
-                OutString += rIntl().GetMonthText(aDate.GetMonth());
+            {
+                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::MONTH );
+                OutString += rCal.getDisplayName( CalendarDisplayIndex::MONTH,
+                    nVal, 1 );
+            }
             break;
             case NF_KEY_Q:                  // Q
             case NF_KEY_QQ:                 // QQ
             {
-                USHORT nMonth = aDate.GetMonth();
+                USHORT nMonth = aDateTime.GetMonth();
                 if (nMonth <= 3)
                     OutString += '1';
                 else if (nMonth <=6)
@@ -2471,54 +2493,81 @@ BOOL SvNumberformat::ImpGetDateTimeOutput(double fNumber,
                     OutString += '4';
                 OutString += '.';       // #40387# "1. Quartal" mit Leerzeichen
                 OutString += ' ';
-                OutString += rScan.GetQuartalString();
+                OutString += rScan.GetQuarterString();
                 if (rInfo.nTypeArray[i] == NF_KEY_QQ)
                 {
                     OutString += ' ';
-                    OutString += String::CreateFromInt32(aDate.GetYear());
+                    OutString += String::CreateFromInt32(aDateTime.GetYear());
                 }
             }
             break;
             case NF_KEY_T:                  // T
-                OutString += String::CreateFromInt32(aDate.GetDay());
+                OutString += String::CreateFromInt32( rCal.getValue(
+                    CalendarFieldIndex::DAY_OF_MONTH ) );
             break;
             case NF_KEY_TT:                 // TT
             {
-                if (aDate.GetDay() < 10)
+                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::DAY_OF_MONTH );
+                if ( nVal < 10 )
                     OutString += '0';
-                OutString += String::CreateFromInt32(aDate.GetDay());
+                OutString += String::CreateFromInt32( nVal );
             }
             break;
             case NF_KEY_TTT:                // TTT
-                OutString += rIntl().GetAbbrevDayText(aDate.GetDayOfWeek());
+            {
+                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::DAY_OF_MONTH );
+                OutString += rCal.getDisplayName( CalendarDisplayIndex::DAY,
+                    nVal, 0 );
+            }
             break;
             case NF_KEY_TTTT:               // TTTT
-                OutString += rIntl().GetDayText(aDate.GetDayOfWeek());
+            {
+                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::DAY_OF_MONTH );
+                OutString += rCal.getDisplayName( CalendarDisplayIndex::DAY,
+                    nVal, 1 );
+            }
             break;
             case NF_KEY_JJ:                 // JJ
             {
-                String sStr = String::CreateFromInt32(aDate.GetYear());
-                sStr.Erase(0,2);
-                OutString += sStr;
+                //! TODO: what about negative values? abs and era?
+                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::YEAR );
+                if ( 99 < nVal )
+                    nVal %= 100;
+                if ( nVal < 10 )
+                    OutString += '0';
+                OutString += String::CreateFromInt32( nVal );
             }
             break;
             case NF_KEY_JJJJ:               // JJJJ
-                OutString += String::CreateFromInt32(aDate.GetYear());
+                //! TODO: what about negative values? abs and era?
+                OutString += String::CreateFromInt32( rCal.getValue(
+                    CalendarFieldIndex::YEAR ) );
             break;
             case NF_KEY_NN:                 // NN
-                OutString += rIntl().GetAbbrevDayText(aDate.GetDayOfWeek());
+            {
+                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::DAY_OF_WEEK );
+                OutString += rCal.getDisplayName( CalendarDisplayIndex::DAY,
+                    nVal, 0 );
+            }
             break;
             case NF_KEY_NNN:                // NNN
-                OutString += rIntl().GetDayText(aDate.GetDayOfWeek());
+            {
+                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::DAY_OF_WEEK );
+                OutString += rCal.getDisplayName( CalendarDisplayIndex::DAY,
+                    nVal, 1 );
+            }
             break;
             case NF_KEY_NNNN:               // NNNN
-                OutString += rIntl().GetDayText(aDate.GetDayOfWeek());
+            {
+                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::DAY_OF_WEEK );
+                OutString += rCal.getDisplayName( CalendarDisplayIndex::DAY,
+                    nVal, 1 );
                 OutString += rLoc().getLongDateDayOfWeekSep();
+            }
             break;
-            case NF_KEY_WW :                // WW Kalenderwoche
-                OutString += String::CreateFromInt32(
-                    aDate.GetWeekOfYear( rIntl().GetWeekStart(),
-                        rIntl().GetWeekCountStart() ) );
+            case NF_KEY_WW :                // WW
+                OutString += String::CreateFromInt32( rCal.getValue(
+                    CalendarFieldIndex::WEEK_OF_YEAR ) );
             break;
             default:
             break;
@@ -3102,7 +3151,7 @@ DateFormat SvNumberformat::GetDateOrder() const
     }
     else
         DBG_ERROR( "SvNumberformat::GetDateOrder: kein Datum" );
-    return rIntl().GetDateFormat();
+    return rLoc().getDateFormat();
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforscan.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: er $ $Date: 2000-11-04 21:51:34 $
+ *  last change: $Author: er $ $Date: 2000-11-18 21:46:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,9 +181,6 @@ void ImpSvNumberformatScan::SetDependentKeywords()
             sKeyword[NF_KEY_TTTT].AssignAscii( RTL_CONSTASCII_STRINGPARAM(      "TTTT" ) );
             sKeyword[NF_KEY_JJ].AssignAscii( RTL_CONSTASCII_STRINGPARAM(        "JJ" ) );
             sKeyword[NF_KEY_JJJJ].AssignAscii( RTL_CONSTASCII_STRINGPARAM(      "JJJJ" ) );
-            sKeyword[NF_KEY_QUARTER].AssignAscii( RTL_CONSTASCII_STRINGPARAM(   "Quartal" ) );
-            sKeyword[NF_KEY_TRUE].AssignAscii( RTL_CONSTASCII_STRINGPARAM(      "WAHR" ) );
-            sKeyword[NF_KEY_FALSE].AssignAscii( RTL_CONSTASCII_STRINGPARAM(     "FALSCH" ) );
             sKeyword[NF_KEY_BOOLEAN].AssignAscii( RTL_CONSTASCII_STRINGPARAM(   "LOGISCH" ) );
             sKeyword[NF_KEY_COLOR].AssignAscii( RTL_CONSTASCII_STRINGPARAM(     "FARBE" ) );
             sKeyword[NF_KEY_BLACK].AssignAscii( RTL_CONSTASCII_STRINGPARAM(     "SCHWARZ" ) );
@@ -319,8 +316,6 @@ void ImpSvNumberformatScan::SetDependentKeywords()
                     sKeyword[NF_KEY_H].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "H" ) );
                     sKeyword[NF_KEY_HH].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "HH" ) );
             }
-            // Quartal
-            sKeyword[NF_KEY_QUARTER].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "Quarter" ) );
             // Logisch
             sKeyword[NF_KEY_BOOLEAN].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "BOOLEAN" ) );
             // Farbe
@@ -352,6 +347,13 @@ void ImpSvNumberformatScan::SetDependentKeywords()
         DBG_ERRORFILE( "SetDependentKeywords: FALSE_WORD?" );
         sKeyword[NF_KEY_FALSE].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "FALSE" ) );
     }
+    // quarter
+    sKeyword[NF_KEY_QUARTER] = pLocaleData->getQuarterWord();
+    if ( !sKeyword[NF_KEY_QUARTER].Len() )
+    {
+        DBG_ERRORFILE( "SetDependentKeywords: QUARTER_WORD?" );
+        sKeyword[NF_KEY_QUARTER].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "quarter" ) );
+    }
 
     // currency symbol
     sCurString = pCharClass->upper( pLocaleData->getCurrSymbol() );
@@ -360,8 +362,10 @@ void ImpSvNumberformatScan::SetDependentKeywords()
 
 void ImpSvNumberformatScan::ChangeNullDate(USHORT nDay, USHORT nMonth, USHORT nYear)
 {
-    delete pNullDate;
-    pNullDate = new Date(nDay, nMonth, nYear);
+    if ( pNullDate )
+        *pNullDate = Date(nDay, nMonth, nYear);
+    else
+        pNullDate = new Date(nDay, nMonth, nYear);
 }
 
 void ImpSvNumberformatScan::ChangeStandardPrec(short nPrec)

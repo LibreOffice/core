@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforfind.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2000-10-17 18:44:42 $
+ *  last change: $Author: er $ $Date: 2000-11-18 21:46:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,13 +107,13 @@ public:
 
 private:
     SvNumberFormatter*  pFormatter;
-    String aUpperMonthText[12];                 // The 12 months
-    String aUpperAbbrevMonthText[12];           // The 12 monaths, abbreviated
-    String aUpperDayText[7];                    // The 7 days of week
-    String aUpperAbbrevDayText[7];              // The 7 days of week, abbreviated
-    String aUpperCurrSymbol;                    // Currency symbol
+    String* pUpperMonthText;                    // Array of month names, uppercase
+    String* pUpperAbbrevMonthText;              // Array of month names, abbreviated, uppercase
+    String* pUpperDayText;                      // Array of day of week names, uppercase
+    String* pUpperAbbrevDayText;                // Array of day of week names, abbreviated, uppercase
+    String  aUpperCurrSymbol;                   // Currency symbol, uppercase
     BOOL    bTextInitialized;                   // Whether days and months are initialized
-    Date* pNullDate;                            // "1.1.1900"
+    Date* pNullDate;                            // 30Dec1899
                                                 // Variables for provisional results:
     String sStrArray[SV_MAX_ANZ_INPUT_STRINGS]; // Array of scanned substrings
     BOOL   IsNum[SV_MAX_ANZ_INPUT_STRINGS];     // Whether a substring is numeric
@@ -123,7 +123,7 @@ private:
     BOOL   bDecSepInDateSeps;                   // True <=> DecSep in {.,-,/,DateSep}
 
     short  nSign;                               // Sign of number
-    short  nMonth;                              // Month (1..12) if date
+    short  nMonth;                              // Month (1..x) if date
                                                 // negative => short format
     short  nMonthPos;                           // 1 = front, 2 = middle
                                                 // 3 = end
@@ -176,7 +176,7 @@ private:
             const String& rString,
             xub_StrLen nPos )
                 {   // mostly used with one character
-                    if ( rWhat.GetChar(0) != rString.GetChar(0) )
+                    if ( rWhat.GetChar(0) != rString.GetChar(nPos) )
                         return FALSE;
                     return StringContainsImpl( rWhat, rString, nPos );
                 }
@@ -248,9 +248,9 @@ private:
             double& fOutNumber,                 // result as double
             USHORT nIndex,                      // Index of hour in input
             USHORT nAnz );                      // Count of time substrings in input
-    USHORT ImplGetDay  ( USHORT nIndex );       // Day: input or current
-    USHORT ImplGetMonth( USHORT nIndex );       // Month: input or current
-    USHORT ImplGetYear ( USHORT nIndex );       // Year: input or current
+    USHORT ImplGetDay  ( USHORT nIndex );       // Day input, 0 if no match
+    USHORT ImplGetMonth( USHORT nIndex );       // Month input, zero based return, NumberOfMonths if no match
+    USHORT ImplGetYear ( USHORT nIndex );       // Year input, 0 if no match
     BOOL GetDateRef(                            // Conversion of date to class Date
             Date& aDt,
             USHORT& nCounter,                   // Count of date substrings

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforlist.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: er $ $Date: 2000-11-04 21:51:34 $
+ *  last change: $Author: er $ $Date: 2000-11-18 21:46:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,9 @@
 #ifndef _UNOTOOLS_NUMBERFORMATCODEWRAPPER_HXX
 #include <unotools/numberformatcodewrapper.hxx>
 #endif
+#ifndef _UNOTOOLS_CALENDARWRAPPER_HXX
+#include <unotools/calendarwrapper.hxx>
+#endif
 #ifndef _COM_SUN_STAR_I18N_KNUMBERFORMATUSAGE_HPP_
 #include <com/sun/star/i18n/KNumberFormatUsage.hpp>
 #endif
@@ -175,6 +178,7 @@ SvNumberFormatter::~SvNumberFormatter()
         delete pEntry;
         pEntry = aFTable.Next();
     }
+    delete pCalendar;
     delete pLocaleData;
     delete pCharClass;
     delete pIntl;
@@ -199,6 +203,8 @@ void SvNumberFormatter::ImpConstruct( LanguageType eLang )
     aLocale = ConvertLanguageToLocale( eLang );
     pCharClass = new CharClass( xServiceManager, aLocale );
     pLocaleData = new LocaleDataWrapper( xServiceManager, aLocale );
+    pCalendar = new CalendarWrapper( xServiceManager );
+    pCalendar->loadDefaultCalendar( aLocale );
     pStringScanner = new ImpSvNumberInputScan( this );
     pFormatScanner = new ImpSvNumberformatScan( this );
     pFormatTable = NULL;
@@ -207,6 +213,27 @@ void SvNumberFormatter::ImpConstruct( LanguageType eLang )
     pMergeTable = new SvULONGTable;
     bNoZero = FALSE;
     pColorLink = NULL;
+}
+
+
+void SvNumberFormatter::ChangeIntl(LanguageType eLnge)
+{
+    if (ActLnge != eLnge)
+    {
+        delete pIntl;
+        ActLnge = eLnge;
+        if ( !International::IsFormatAvailable( eLnge ) )
+            eLnge = UNKNOWN_SUBSTITUTE;
+        pIntl = new International( eLnge );
+
+        aLocale = ConvertLanguageToLocale( eLnge );
+        pCharClass->setLocale( aLocale );
+        pLocaleData->setLocale( aLocale );
+        pCalendar->loadDefaultCalendar( aLocale );
+
+        pFormatScanner->ChangeIntl();
+        pStringScanner->ChangeIntl();
+    }
 }
 
 
@@ -270,25 +297,6 @@ void SvNumberFormatter::ImpChangeSysCL(LanguageType eLnge)
             pEntry = (SvNumberformat*) aFTable.First();
         }
         ImpGenerateFormats(0);                      // wieder neue Standardformate
-    }
-}
-
-void SvNumberFormatter::ChangeIntl(LanguageType eLnge)
-{
-    if (ActLnge != eLnge)
-    {
-        delete pIntl;
-        ActLnge = eLnge;
-        if ( !International::IsFormatAvailable( eLnge ) )
-            eLnge = UNKNOWN_SUBSTITUTE;
-        pIntl = new International( eLnge );
-
-        aLocale = ConvertLanguageToLocale( eLnge );
-        pCharClass->setLocale( aLocale );
-        pLocaleData->setLocale( aLocale );
-
-        pFormatScanner->ChangeIntl();
-        pStringScanner->ChangeIntl();
     }
 }
 
@@ -803,7 +811,7 @@ ULONG SvNumberFormatter::ImpGenerateCL(LanguageType eLnge)
         Locale aLoadedLocale = pLocaleData->getLoadedLocale();
         if ( aLoadedLocale.Language != aLocale.Language || aLoadedLocale.Country != aLocale.Country )
         {
-            ByteString aMsg( RTL_CONSTASCII_STRINGPARAM( "Locales don't match:\n" ) );
+            ByteString aMsg( RTL_CONSTASCII_STRINGPARAM( "Locales don't match:" ) );
             DBG_ERRORFILE( pLocaleData->AppendLocaleInfo( aMsg ).GetBuffer() );
         }
 #endif

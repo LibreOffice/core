@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforfind.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2000-11-04 21:51:34 $
+ *  last change: $Author: er $ $Date: 2000-11-18 21:46:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,8 +80,14 @@
 #ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
 #endif
+#ifndef _UNOTOOLS_CALENDARWRAPPER_HXX
+#include <unotools/calendarwrapper.hxx>
+#endif
 #ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
 #include <unotools/localedatawrapper.hxx>
+#endif
+#ifndef _COM_SUN_STAR_I18N_CALENDARFIELDINDEX_HPP_
+#include <com/sun/star/i18n/CalendarFieldIndex.hpp>
 #endif
 
 #include "zforlist.hxx"         // NUMBERFORMAT_XXX
@@ -105,6 +111,11 @@
 //      Konstruktor
 
 ImpSvNumberInputScan::ImpSvNumberInputScan( SvNumberFormatter* pFormatterP )
+        :
+        pUpperMonthText( NULL ),
+        pUpperAbbrevMonthText( NULL ),
+        pUpperDayText( NULL ),
+        pUpperAbbrevDayText( NULL )
 {
     pFormatter = pFormatterP;
     pNullDate = new Date(30,12,1899);
@@ -121,6 +132,10 @@ ImpSvNumberInputScan::~ImpSvNumberInputScan()
 {
     Reset();
     delete pNullDate;
+    delete [] pUpperMonthText;
+    delete [] pUpperAbbrevMonthText;
+    delete [] pUpperDayText;
+    delete [] pUpperAbbrevDayText;
 }
 
 
@@ -383,19 +398,7 @@ BOOL ImpSvNumberInputScan::StringContainsImpl( const String& rWhat,
             const String& rString, xub_StrLen nPos )
 {
     if ( nPos + rWhat.Len() <= rString.Len() )
-    {
-        register const sal_Unicode* pWhat = rWhat.GetBuffer();
-        register const sal_Unicode* const pEnd = pWhat + rWhat.Len();
-        register const sal_Unicode* pStr = rString.GetBuffer() + nPos;
-        while ( pWhat < pEnd )
-        {
-            if ( *pWhat != *pStr )
-                return FALSE;
-            pWhat++;
-            pStr++;
-        }
-        return TRUE;
-    }
+        return StringPtrContainsImpl( rWhat, rString.GetBuffer(), nPos );
     return FALSE;
 }
 
@@ -532,67 +535,67 @@ short ImpSvNumberInputScan::GetLogical( const String& rString )
 //---------------------------------------------------------------------------
 //      GetMonth
 //
-// Wandelt String mit Monatsbezeichnung (JAN, Januar) in Zahl des Monats um
-// gibt 0 zurueck, wenn nix gefunden wird.
+// Converts a string containing a month name (JAN, January) at nPos into the
+// month number (negative if abbreviated), returns 0 if nothing found
 
 short ImpSvNumberInputScan::GetMonth( const String& rString, xub_StrLen& nPos )
 {
-    short res = 0;
+    short res = 0;      // no month found
 
-    if (rString.Len() > nPos)                           // nur wenn Platz
+    if (rString.Len() > nPos)                           // only if needed
     {
         if ( !bTextInitialized )
             InitText();
-//      String sString( pFormatter->GetCharClass()->upper(rString) );       // NoMoreUpperNeeded
-        for (int i = 0; i < 12; i++)                    // 12 Monate
+        sal_Int16 nMonths = pFormatter->GetCalendar()->getNumberOfMonthsInYear();
+        for ( sal_Int16 i = 0; i < nMonths; i++ )
         {
-            if ( StringContains( aUpperMonthText[i], rString, nPos ) )
-            {                                           // zuerst den langen
-                nPos += aUpperMonthText[i].Len();
-                res = i+1;                              // lange positiv
-                break;                                  // Ende for
+            if ( StringContains( pUpperMonthText[i], rString, nPos ) )
+            {                                           // full names first
+                nPos += pUpperMonthText[i].Len();
+                res = i+1;
+                break;  // for
             }
-            else if ( StringContains( aUpperAbbrevMonthText[i], rString, nPos ) )
-            {                                           // dann den kurzen
-                nPos += aUpperAbbrevMonthText[i].Len();
-                res = -(i+1);                           // kurze negativ
-                break;                                  // Ende for
+            else if ( StringContains( pUpperAbbrevMonthText[i], rString, nPos ) )
+            {                                           // abbreviated
+                nPos += pUpperAbbrevMonthText[i].Len();
+                res = -(i+1);                           // negative
+                break;  // for
             }
         }
     }
 
-    return res;                                         // kein Monat gefunden
+    return res;
 }
 
 
 //---------------------------------------------------------------------------
 //      GetDayOfWeek
 //
-// Wandelt String mit Wochentagname (Mo, Montag) in Zahl des Wochentags um
-// (enum DayOfWeek + 1 !), gibt 0 zurueck, wenn nix gefunden wird.
+// Converts a string containing a DayOfWeek name (Mon, Monday) at nPos into the
+// DayOfWeek number + 1 (negative if abbreviated), returns 0 if nothing found
 
 short ImpSvNumberInputScan::GetDayOfWeek( const String& rString, xub_StrLen& nPos )
 {
-    short res = 0;
+    short res = 0;      // no day found
 
-    if (rString.Len() > nPos)                           // nur wenn Platz
+    if (rString.Len() > nPos)                           // only if needed
     {
         if ( !bTextInitialized )
             InitText();
-//      String sString( pFormatter->GetCharClass()->upper(rString) );       // NoMoreUpperNeeded
-        for (short i = 0; i < 7; i++)                   // 7 Wochentage
+        sal_Int16 nDays = pFormatter->GetCalendar()->getNumberOfDaysInWeek();
+        for ( sal_Int16 i = 0; i < nDays; i++ )
         {
-            if ( StringContains( aUpperDayText[i], rString, nPos ) )
-            {                                           // zuerst den langen
-                nPos += aUpperDayText[i].Len();
-                res = i + 1;                            // lange positiv
-                break;                                  // Ende for
+            if ( StringContains( pUpperDayText[i], rString, nPos ) )
+            {                                           // full names first
+                nPos += pUpperDayText[i].Len();
+                res = i + 1;
+                break;  // for
             }
-            if ( StringContains( aUpperAbbrevDayText[i], rString, nPos ) )
-            {                                           // dann den kurzen
-                nPos += aUpperAbbrevDayText[i].Len();
-                res = -(i + 1);                         // kurze negativ
-                break;                                  // Ende for
+            if ( StringContains( pUpperAbbrevDayText[i], rString, nPos ) )
+            {                                           // abbreviated
+                nPos += pUpperAbbrevDayText[i].Len();
+                res = -(i + 1);                         // negative
+                break;  // for
             }
         }
     }
@@ -615,7 +618,6 @@ BOOL ImpSvNumberInputScan::GetCurrency( const String& rString, xub_StrLen& nPos,
     {
         if ( !bTextInitialized )
             InitText();
-//      String sString( pFormatter->GetCharClass()->upper(rString) );       // NoMoreUpperNeeded
         if ( StringContains( aUpperCurrSymbol, rString, nPos ) )
         {
             nPos += aUpperCurrSymbol.Len();
@@ -847,13 +849,14 @@ USHORT ImpSvNumberInputScan::ImplGetDay( USHORT nIndex )
 
 USHORT ImpSvNumberInputScan::ImplGetMonth( USHORT nIndex )
 {
-    USHORT nRes = 0;
+    // preset invalid month number
+    USHORT nRes = pFormatter->GetCalendar()->getNumberOfMonthsInYear();
 
     if (sStrArray[nNums[nIndex]].Len() <= 2)
     {
         USHORT nNum = (USHORT) sStrArray[nNums[nIndex]].ToInt32();
-        if (nNum <= 12)
-            nRes = nNum;
+        if ( 0 < nNum && nNum <= nRes )
+            nRes = nNum - 1;        // zero based for CalendarFieldIndex::MONTH
     }
 
     return nRes;
@@ -885,6 +888,7 @@ USHORT ImpSvNumberInputScan::ImplGetYear( USHORT nIndex )
 BOOL ImpSvNumberInputScan::GetDateRef( Date& aDt, USHORT& nCounter,
         const SvNumberformat* pFormat )
 {
+    using namespace ::com::sun::star::i18n;
     NfEvalDateFormat eEDF;
     int nFormatOrder;
     if ( pFormat && ((pFormat->GetType() & NUMBERFORMAT_DATE) == NUMBERFORMAT_DATE) )
@@ -894,7 +898,7 @@ BOOL ImpSvNumberInputScan::GetDateRef( Date& aDt, USHORT& nCounter,
         {
             case NF_EVALDATEFORMAT_INTL :
             case NF_EVALDATEFORMAT_FORMAT :
-                nFormatOrder = 1;       // nur ein Durchlauf
+                nFormatOrder = 1;       // only one loop
             break;
             default:
                 nFormatOrder = 2;
@@ -907,27 +911,29 @@ BOOL ImpSvNumberInputScan::GetDateRef( Date& aDt, USHORT& nCounter,
     }
     BOOL res = TRUE;
 
-    const International* pIntl = pFormatter->GetInternational();
+    const LocaleDataWrapper* pLoc = pFormatter->GetLocaleData();
+    CalendarWrapper* pCal = pFormatter->GetCalendar();
     for ( int nTryOrder = 1; nTryOrder <= nFormatOrder; nTryOrder++ )
     {
+        pCal->setGregorianDateTime( aDt );
         DateFormat DateFmt;
         switch ( eEDF )
         {
             case NF_EVALDATEFORMAT_INTL :
-                DateFmt = pIntl->GetDateFormat();
+                DateFmt = pLoc->getDateFormat();
             break;
             case NF_EVALDATEFORMAT_FORMAT :
                 DateFmt = pFormat->GetDateOrder();
             break;
             case NF_EVALDATEFORMAT_INTL_FORMAT :
                 if ( nTryOrder == 1 )
-                    DateFmt = pIntl->GetDateFormat();
+                    DateFmt = pLoc->getDateFormat();
                 else
                     DateFmt = pFormat->GetDateOrder();
             break;
             case NF_EVALDATEFORMAT_FORMAT_INTL :
                 if ( nTryOrder == 2 )
-                    DateFmt = pIntl->GetDateFormat();
+                    DateFmt = pLoc->getDateFormat();
                 else
                     DateFmt = pFormat->GetDateOrder();
             break;
@@ -938,52 +944,52 @@ BOOL ImpSvNumberInputScan::GetDateRef( Date& aDt, USHORT& nCounter,
         res = TRUE;
         nCounter = 0;
 
-        switch (nAnzNums)       // Anzahl der Zahlen im String
+        switch (nAnzNums)       // count of numbers in string
         {
-            case 0:                 // gar keine
-                if (nMonthPos)          // nur Monat (Jan)
+            case 0:                 // none
+                if (nMonthPos)          // only month (Jan)
                 {
-                    aDt.SetDay(1);
-                    aDt.SetMonth((USHORT)Abs(nMonth));
+                    pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, 1 );
+                    pCal->setValue( CalendarFieldIndex::MONTH, Abs(nMonth)-1 );
                 }
                 else
                     res = FALSE;
                 break;
 
-            case 1:                 // nur eine Zahl
+            case 1:                 // only one number
                 nCounter = 1;
-                switch (nMonthPos)  // Wo steht der Monat
+                switch (nMonthPos)  // where is the month
                 {
-                    case 0:             // nicht gefunden => nur Tag eingegeben
-                        aDt.SetDay(ImplGetDay(0));
+                    case 0:             // not found => only day entered
+                        pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(0) );
                         break;
-                    case 1:             // Monat am Anfang (Jan 01)
-                        aDt.SetMonth((USHORT)Abs(nMonth));
+                    case 1:             // month at the beginning (Jan 01)
+                        pCal->setValue( CalendarFieldIndex::MONTH, Abs(nMonth)-1 );
                         switch (DateFmt)
                         {
                             case MDY:
                             case YMD:
-                                aDt.SetDay(ImplGetDay(0));
+                                pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(0) );
                                 break;
                             case DMY:
-                                aDt.SetDay(1);
-                                aDt.SetYear(ImplGetYear(0));
+                                pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, 1 );
+                                pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(0) );
                                 break;
                             default:
                                 res = FALSE;
                                 break;
                         }
                         break;
-                    case 3:             // Monat am Ende (10 Jan)
-                        aDt.SetMonth((USHORT)Abs(nMonth));
+                    case 3:             // month at the end (10 Jan)
+                        pCal->setValue( CalendarFieldIndex::MONTH, Abs(nMonth)-1 );
                         switch (DateFmt)
                         {
                             case DMY:
-                                aDt.SetDay(ImplGetDay(0));
+                                pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(0) );
                                 break;
                             case YMD:
-                                aDt.SetDay(1);
-                                aDt.SetYear(ImplGetYear(0));
+                                pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, 1 );
+                                pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(0) );
                                 break;
                             default:
                                 res = FALSE;
@@ -996,82 +1002,88 @@ BOOL ImpSvNumberInputScan::GetDateRef( Date& aDt, USHORT& nCounter,
                 }   // switch (nMonthPos)
                 break;
 
-            case 2:                 // 2 Zahlen
+            case 2:                 // 2 numbers
                 nCounter = 2;
-                switch (nMonthPos)  // Wo steht der Monat
+                switch (nMonthPos)  // where is the month
                 {
-                    case 0:             // nicht gefunden
+                    case 0:             // not found
                         switch (DateFmt)
                         {
                             case MDY:
-                                aDt.SetDay(ImplGetDay(1));
-                                aDt.SetMonth(ImplGetMonth(0));
+                                pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(1) );
+                                pCal->setValue( CalendarFieldIndex::MONTH, ImplGetMonth(0) );
                                 break;
                             case DMY:
-                                aDt.SetDay(ImplGetDay(0));
-                                aDt.SetMonth(ImplGetMonth(1));
-                                if (!aDt.IsValid())             // 2. Versuch
+                                pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(0) );
+                                pCal->setValue( CalendarFieldIndex::MONTH, ImplGetMonth(1) );
+#if 0
+//! TODO: howto with an XCalendar?
+                                if (!aDt.IsValid())             // 2nd try
                                 {
-                                    aDt.SetDay(1);
-                                    aDt.SetMonth(ImplGetMonth(0));
-                                    aDt.SetYear(ImplGetYear(1));
+                                    pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, 1 );
+                                    pCal->setValue( CalendarFieldIndex::MONTH, ImplGetMonth(0) );
+                                    pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(1) );
                                 }
+#endif
                                 break;
                             case YMD:
-                                aDt.SetDay(ImplGetDay(1));
-                                aDt.SetMonth(ImplGetMonth(0));
-                                if (!aDt.IsValid())             // 2. Versuch
+                                pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(1) );
+                                pCal->setValue( CalendarFieldIndex::MONTH, ImplGetMonth(0) );
+#if 0
+//! TODO: howto with an XCalendar?
+                                if (!aDt.IsValid())             // 2nd try
                                 {
-                                    aDt.SetDay(1);
-                                    aDt.SetMonth(ImplGetMonth(1));
-                                    aDt.SetYear(ImplGetYear(0));
+                                    pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, 1 );
+                                    pCal->setValue( CalendarFieldIndex::MONTH, ImplGetMonth(1) );
+                                    pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(0) );
                                 }
+#endif
                                 break;
                             default:
                                 res = FALSE;
                                 break;
                         }
                         break;
-                    case 1:             // Monat am Anfang (Jan 01 01)
+                    case 1:             // month at the beginning (Jan 01 01)
                         switch (DateFmt)
                         {
                             case MDY:
-                                aDt.SetDay(ImplGetDay(0));
-                                aDt.SetMonth((USHORT)Abs(nMonth));
-                                aDt.SetYear(ImplGetYear(1));
+                                pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(0) );
+                                pCal->setValue( CalendarFieldIndex::MONTH, Abs(nMonth)-1 );
+                                pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(1) );
                                 break;
                             default:
                                 res = FALSE;
                                 break;
                         }
                         break;
-                    case 2:             // Monat in der Mitte (10 Jan 94)
-                        aDt.SetMonth((USHORT)Abs(nMonth));
+                    case 2:             // month in the middle (10 Jan 94)
+                        pCal->setValue( CalendarFieldIndex::MONTH, Abs(nMonth)-1 );
                         switch (DateFmt)
                         {
                             case DMY:
-                                aDt.SetDay(ImplGetDay(0));
-                                aDt.SetYear(ImplGetYear(1));
+                                pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(0) );
+                                pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(1) );
                                 break;
                             case YMD:
-                                aDt.SetDay(ImplGetDay(1));
-                                aDt.SetYear(ImplGetYear(0));
+                                pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(1) );
+                                pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(0) );
                                 break;
                             default:
                                 res = FALSE;
                                 break;
                         }
                         break;
-                    default:            // sonst., z.B. Monat am Ende (94 10 Jan)
+                    default:            // else, e.g. month at the end (94 10 Jan)
                         res = FALSE;
                         break;
                 }   // switch (nMonthPos)
                 break;
 
-            default:                // mehr als zwei (31.12.94 8:23) (31.12. 8:23)
-                switch (nMonthPos)  // Wo steht der Monat
+            default:                // more than two numbers (31.12.94 8:23) (31.12. 8:23)
+                switch (nMonthPos)  // where is the month
                 {
-                    case 0:             // nicht gefunden
+                    case 0:             // not found
                         nCounter = 3;
                         if ( nTimePos > 1 )
                         {   // find first time number index (should only be 3 or 2 anyway)
@@ -1087,61 +1099,61 @@ BOOL ImpSvNumberInputScan::GetDateRef( Date& aDt, USHORT& nCounter,
                         switch (DateFmt)
                         {
                             case MDY:
-                                aDt.SetDay(ImplGetDay(1));
-                                aDt.SetMonth(ImplGetMonth(0));
+                                pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(1) );
+                                pCal->setValue( CalendarFieldIndex::MONTH, ImplGetMonth(0) );
                                 if ( nCounter > 2 )
-                                    aDt.SetYear(ImplGetYear(2));
+                                    pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(2) );
                                 break;
                             case DMY:
-                                aDt.SetDay(ImplGetDay(0));
-                                aDt.SetMonth(ImplGetMonth(1));
+                                pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(0) );
+                                pCal->setValue( CalendarFieldIndex::MONTH, ImplGetMonth(1) );
                                 if ( nCounter > 2 )
-                                    aDt.SetYear(ImplGetYear(2));
+                                    pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(2) );
                                 break;
                             case YMD:
                                 if ( nCounter > 2 )
-                                    aDt.SetDay(ImplGetDay(2));
-                                aDt.SetMonth(ImplGetMonth(1));
-                                aDt.SetYear(ImplGetYear(0));
+                                    pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(2) );
+                                pCal->setValue( CalendarFieldIndex::MONTH, ImplGetMonth(1) );
+                                pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(0) );
                                 break;
                             default:
                                 res = FALSE;
                                 break;
                         }
                         break;
-                    case 1:             // Monat am Anfang (Jan 01 01 8:23)
+                    case 1:             // month at the beginning (Jan 01 01 8:23)
                         nCounter = 2;
                         switch (DateFmt)
                         {
                             case MDY:
-                                aDt.SetDay(ImplGetDay(0));
-                                aDt.SetMonth((USHORT)Abs(nMonth));
-                                aDt.SetYear(ImplGetYear(1));
+                                pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(0) );
+                                pCal->setValue( CalendarFieldIndex::MONTH, Abs(nMonth)-1 );
+                                pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(1) );
                                 break;
                             default:
                                 res = FALSE;
                                 break;
                         }
                         break;
-                    case 2:             // Monat in der Mitte (10 Jan 94 8:23)
+                    case 2:             // month in the middle (10 Jan 94 8:23)
                         nCounter = 2;
-                        aDt.SetMonth((USHORT)Abs(nMonth));
+                        pCal->setValue( CalendarFieldIndex::MONTH, Abs(nMonth)-1 );
                         switch (DateFmt)
                         {
                             case DMY:
-                                aDt.SetDay(ImplGetDay(0));
-                                aDt.SetYear(ImplGetYear(1));
+                                pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(0) );
+                                pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(1) );
                                 break;
                             case YMD:
-                                aDt.SetDay(ImplGetDay(1));
-                                aDt.SetYear(ImplGetYear(0));
+                                pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(1) );
+                                pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(2) );
                                 break;
                             default:
                                 res = FALSE;
                                 break;
                         }
                         break;
-                    default:            // sonst., z.B. Monat am Ende (94 10 Jan 8:23)
+                    default:            // else, e.g. month at the end (94 10 Jan 8:23)
                         nCounter = 2;
                         res = FALSE;
                         break;
@@ -1149,12 +1161,13 @@ BOOL ImpSvNumberInputScan::GetDateRef( Date& aDt, USHORT& nCounter,
                 break;
         }   // switch (nAnzNums)
 
+        aDt = pCal->getGregorianDateTime();
         if ( nTryOrder < nFormatOrder )
         {
             if ( res && aDt.IsValid() )
                 nTryOrder = nFormatOrder;   // break for
             else
-                aDt = Date();               // naechster
+                aDt = Date();               // next try
         }
     }
 
@@ -1192,35 +1205,35 @@ BOOL ImpSvNumberInputScan::ScanStartString( const String& rString,
             if ( nSign = GetSign(rString, nPos) )   // DM -1
                 SkipBlanks(rString, nPos);
     }
-    else if ( nMonth = GetMonth(rString, nPos) )    // Monat (Jan 1)?
+    else if ( nMonth = GetMonth(rString, nPos) )    // month (Jan 1)?
     {
-        eScannedType = NUMBERFORMAT_DATE;           // !!! es ist eine Datum !!!
-        nMonthPos = 1;                              // Monat an 1. Pos
+        eScannedType = NUMBERFORMAT_DATE;           // !!! it IS a date !!!
+        nMonthPos = 1;                              // month at the beginning
         if ( nMonth < 0 )
-            SkipChar( '.', rString, nPos );         // abgekuerzt
+            SkipChar( '.', rString, nPos );         // abbreviated
         SkipBlanks(rString, nPos);
     }
     else if ( nDayOfWeek = GetDayOfWeek( rString, nPos ) )
-    {   // Wochentag wird nur weggeparst
-        eScannedType = NUMBERFORMAT_DATE;           // !!! es ist eine Datum !!!
+    {   // day of week is just parsed away
+        eScannedType = NUMBERFORMAT_DATE;           // !!! it IS a date !!!
         if ( nPos < rString.Len() )
         {
             if ( nDayOfWeek < 0 )
-            {   // kurz
+            {   // abbreviated
                 if ( rString.GetChar( nPos ) == '.' )
                     ++nPos;
             }
             else
-            {   // lang
+            {   // full long name
                 SkipBlanks(rString, nPos);
                 SkipString( pFormatter->GetLocaleData()->getLongDateDayOfWeekSep(), rString, nPos );
             }
             SkipBlanks(rString, nPos);
-            if ( nMonth = GetMonth(rString, nPos) ) // Monat (Jan 1)?
+            if ( nMonth = GetMonth(rString, nPos) ) // month (Jan 1)?
             {
-                nMonthPos = 1;                      // Monat an 1. Pos
+                nMonthPos = 1;                      // month a the beginning
                 if ( nMonth < 0 )
-                    SkipChar( '.', rString, nPos ); // abgekuerzt
+                    SkipChar( '.', rString, nPos ); // abbreviated
                 SkipBlanks(rString, nPos);
             }
         }
@@ -1300,7 +1313,6 @@ BOOL ImpSvNumberInputScan::ScanMidString(
         nThousand++;
     }
 
-    const International* pIntl = pFormatter->GetInternational();
     const LocaleDataWrapper* pLoc = pFormatter->GetLocaleData();
     const String& rDate = pLoc->getDateSep();
     const String& rTime = pLoc->getTimeSep();
@@ -1325,7 +1337,7 @@ BOOL ImpSvNumberInputScan::ScanMidString(
             nMonthPos = 2;                          // month in the middle
             if ( nMonth < 0 )
                 SkipChar( '.', rString, nPos );     // abbreviated
-            SkipString( pIntl->GetLongDateMonthSep(), rString, nPos );
+            SkipString( pLoc->getLongDateMonthSep(), rString, nPos );
             SkipBlanks(rString, nPos);
         }
     }
@@ -1343,7 +1355,7 @@ BOOL ImpSvNumberInputScan::ScanMidString(
         nMonthPos = 2;                              // month in the middle
         if ( nMonth < 0 )
             SkipChar( '.', rString, nPos );         // abbreviated
-        SkipString( pIntl->GetLongDateMonthSep(), rString, nPos );
+        SkipString( pLoc->getLongDateMonthSep(), rString, nPos );
         SkipBlanks(rString, nPos);
     }
 
@@ -1389,9 +1401,9 @@ BOOL ImpSvNumberInputScan::ScanMidString(
 
     // #68232# recognize long date separators like ", " in "September 5, 1999"
     if ( nPos < rString.Len() && eScannedType == NUMBERFORMAT_DATE
-            && nMonthPos == 1 && pIntl->GetLongDateFormat() == MDY )
+            && nMonthPos == 1 && pLoc->getLongDateFormat() == MDY )
     {
-        if ( SkipString( pIntl->GetLongDateDaySep(), rString, nPos )  )
+        if ( SkipString( pLoc->getLongDateDaySep(), rString, nPos )  )
             SkipBlanks( rString, nPos );
     }
 
@@ -1922,23 +1934,36 @@ BOOL ImpSvNumberInputScan::IsNumberFormatMain(
 
 
 //---------------------------------------------------------------------------
-// Die 12 Monate und 7 Wochentage initialisieren
+// Initialize uppercase months, weekdays and currency
 
 void ImpSvNumberInputScan::InitText()
 {
-    int j;
-    const International* pIntl = pFormatter->GetInternational();
+    sal_Int16 j, nElems;
     const CharClass* pChrCls = pFormatter->GetCharClass();
     const LocaleDataWrapper* pLoc = pFormatter->GetLocaleData();
-    for ( j=0; j<12; j++ )
+    const CalendarWrapper* pCal = pFormatter->GetCalendar();
+    delete [] pUpperMonthText;
+    delete [] pUpperAbbrevMonthText;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem > xElems
+        = pCal->getMonths();
+    nElems = xElems.getLength();
+    pUpperMonthText = new String[nElems];
+    pUpperAbbrevMonthText = new String[nElems];
+    for ( j=0; j<nElems; j++ )
     {
-        aUpperMonthText[j] = pChrCls->upper( pIntl->GetMonthText(j+1) );
-        aUpperAbbrevMonthText[j] = pChrCls->upper( pIntl->GetAbbrevMonthText(j+1) );
+        pUpperMonthText[j] = pChrCls->upper( xElems[j].FullName );
+        pUpperAbbrevMonthText[j] = pChrCls->upper( xElems[j].AbbrevName );
     }
-    for ( j=0; j<7; j++ )
+    delete [] pUpperDayText;
+    delete [] pUpperAbbrevDayText;
+    xElems = pCal->getDays();
+    nElems = xElems.getLength();
+    pUpperDayText = new String[nElems];
+    pUpperAbbrevDayText = new String[nElems];
+    for ( j=0; j<nElems; j++ )
     {
-        aUpperDayText[j] = pChrCls->upper( pIntl->GetDayText( (DayOfWeek) j ) );
-        aUpperAbbrevDayText[j] = pChrCls->upper( pIntl->GetAbbrevDayText( (DayOfWeek) j ) );
+        pUpperDayText[j] = pChrCls->upper( xElems[j].FullName );
+        pUpperAbbrevDayText[j] = pChrCls->upper( xElems[j].AbbrevName );
     }
     aUpperCurrSymbol = pChrCls->upper( pLoc->getCurrSymbol() );
     bTextInitialized = TRUE;
@@ -1972,8 +1997,10 @@ void ImpSvNumberInputScan::ChangeNullDate(
         const USHORT nMonth,
         const USHORT nYear )
 {
-    delete pNullDate;
-    pNullDate = new Date(nDay, nMonth, nYear);
+    if ( pNullDate )
+        *pNullDate = Date(nDay, nMonth, nYear);
+    else
+        pNullDate = new Date(nDay, nMonth, nYear);
 }
 
 
