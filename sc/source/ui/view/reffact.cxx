@@ -2,9 +2,9 @@
  *
  *  $RCSfile: reffact.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-14 15:42:44 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:01:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,7 +230,7 @@ ScSimpleRefDlgWrapper::ScSimpleRefDlgWrapper( Window* pParent,
     }
     pWindow = NULL;
 
-    if(bAutoReOpen)
+    if(bAutoReOpen && pViewShell)
         pWindow = pViewShell->CreateRefDialog( p, this, pInfo, pParent, WID_SIMPLE_REF);
 
     if (!pWindow)
