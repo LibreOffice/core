@@ -13,6 +13,8 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = True
 Option Explicit
 Private interfaces(0) As String
+Private bDisposingCalled As Boolean
+Private bQuiet As Boolean
 
 Public Property Get Bridge_ImplementedInterfaces() As Variant
     Bridge_ImplementedInterfaces = interfaces
@@ -20,6 +22,8 @@ End Property
 
 Private Sub Class_Initialize()
 interfaces(0) = "com.sun.star.lang.XEventListener"
+bDisposingCalled = False
+bQuiet = False
 End Sub
 
 Private Sub Class_Terminate()
@@ -28,5 +32,20 @@ Private Sub Class_Terminate()
 End Sub
 
 Public Sub disposing(ByVal source As Object)
+    If bQuiet = False Then
     MsgBox "disposing called"
+    End If
+    bDisposingCalled = True
 End Sub
+
+Public Sub setQuiet(quiet As Boolean)
+    bQuiet = quiet
+End Sub
+
+Public Sub resetDisposing()
+    bDisposingCalled = False
+End Sub
+
+Public Function disposingCalled()
+    disposingCalled = bDisposingCalled
+End Function
