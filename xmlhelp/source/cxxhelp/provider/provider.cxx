@@ -2,9 +2,9 @@
  *
  *  $RCSfile: provider.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 18:07:32 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:09:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,11 +173,73 @@ XTYPEPROVIDER_IMPL_5( ContentProvider,
 //
 //=========================================================================
 
-XSERVICEINFO_IMPL_1( ContentProvider,
-                     OUString::createFromAscii(
-                             "CHelpContentProvider" ),
-                     OUString::createFromAscii(
-                             MYUCP_CONTENT_PROVIDER_SERVICE_NAME ) );
+rtl::OUString SAL_CALL ContentProvider::getImplementationName()
+    throw( com::sun::star::uno::RuntimeException )
+{
+    return getImplementationName_Static();
+}
+
+
+rtl::OUString ContentProvider::getImplementationName_Static()
+{
+    return OUString::createFromAscii("CHelpContentProvider" );
+}
+
+
+sal_Bool SAL_CALL
+ContentProvider::supportsService(const rtl::OUString& ServiceName )
+    throw( com::sun::star::uno::RuntimeException )
+{
+    com::sun::star::uno::Sequence< rtl::OUString > aSNL =
+        getSupportedServiceNames();
+    const rtl::OUString* pArray = aSNL.getArray();
+    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
+    {
+        if( pArray[ i ] == ServiceName )
+            return sal_True;
+    }
+
+    return sal_False;
+}
+
+com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL
+ContentProvider::getSupportedServiceNames()
+    throw( com::sun::star::uno::RuntimeException )
+{
+    return getSupportedServiceNames_Static();
+}
+
+static com::sun::star::uno::Reference<
+com::sun::star::uno::XInterface > SAL_CALL
+ContentProvider_CreateInstance(
+    const com::sun::star::uno::Reference<
+    com::sun::star::lang::XMultiServiceFactory> & rSMgr )
+    throw( com::sun::star::uno::Exception )
+{
+    com::sun::star::lang::XServiceInfo* pX =
+        (com::sun::star::lang::XServiceInfo*)new ContentProvider( rSMgr );
+    return com::sun::star::uno::Reference<
+        com::sun::star::uno::XInterface >::query( pX );
+}
+
+
+com::sun::star::uno::Sequence< rtl::OUString >
+ContentProvider::getSupportedServiceNames_Static()
+{
+    com::sun::star::uno::Sequence< rtl::OUString > aSNS( 2 );
+    aSNS.getArray()[ 0 ] =
+        OUString::createFromAscii(
+            MYUCP_CONTENT_PROVIDER_SERVICE_NAME1 );
+    aSNS.getArray()[ 1 ] =
+        OUString::createFromAscii(
+            MYUCP_CONTENT_PROVIDER_SERVICE_NAME2 );
+
+    return aSNS;
+}
+
+
+
+
 
 //=========================================================================
 //
