@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 13:31:46 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 19:08:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -354,6 +354,7 @@ void SfxObjectShell::ViewAssigned()
 sal_Bool SfxObjectShell::Close()
 {
     {DBG_CHKTHIS(SfxObjectShell, 0);}
+    SfxObjectShellRef aRef(this);
     if ( !pImp->bClosing )
     {
         // falls noch ein Progress l"auft, nicht schlie\sen
@@ -386,8 +387,6 @@ sal_Bool SfxObjectShell::Close()
                 rDocs.Remove( nPos );
             pImp->bInList = sal_False;
 
-            // Broadcasten (w"ahrend dessen festhalten)
-            SfxObjectShellRef aRef(this);
 /*
             // Ist leider zu sp"at, da kaum noch Macros laufen, wenn keine View
             // mehr da ist!
