@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: kz $ $Date: 2004-10-04 17:34:17 $
+#   last change: $Author: pjunck $ $Date: 2004-10-27 12:18:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,6 +90,7 @@ XCSFILES= \
     ProtocolHandler.xcs \
     SFX.xcs \
     Substitution.xcs \
+    TableWizard.xcs \
     UI.xcs \
     Views.xcs \
     Writer.xcs \
@@ -97,6 +98,7 @@ XCSFILES= \
     Scripting.xcs \
     Security.xcs \
     WebWizard.xcs \
+    FormWizard.xcs \
     TypeDetection.xcs
 
 .INCLUDE :  target.mk
