@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ascfldlg.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:42:54 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:14:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ ModalDialog DLG_ASCII_FILTER
         Text[ danish ] = "Egenskaber";
         Text[ swedish ] = "Egenskaper";
         Text[ polish ] = "W�a�ciwo�ci";
-        Text[ portuguese_brazilian ] = "Properties";
+        Text[ portuguese_brazilian ] = "Propriedades";
         Text[ japanese ] = "属性";
         Text[ korean ] = "등록 정보";
         Text[ chinese_simplified ] = "属性";
@@ -99,6 +99,9 @@ ModalDialog DLG_ASCII_FILTER
         Text[ catalan ] = "Propietats";
         Text[ finnish ] = "Ominaisuudet";
         Text[ thai ] = "คุณสมบัติ";
+        Text[ czech ] = "Vlastnosti";
+        Text[ hebrew ] = "‮מאפינים‬";
+        Text[ hindi ] = "विशेषतायें";
     };
     FixedText FT_CHARSET
     {
@@ -116,8 +119,8 @@ ModalDialog DLG_ASCII_FILTER
         Text[ italian ] = "Ti~po di carattere";
         Text[ danish ] = "Tegns�t";
         Text[ swedish ] = "Teckenupps�ttning";
-        Text[ polish ] = "Zbi�r znak�w";
-        Text[ portuguese_brazilian ] = "Charset";
+        Text[ polish ] = "Z~estaw znak�w";
+        Text[ portuguese_brazilian ] = "~Conjunto de caracteres";
         Text[ japanese ] = "文字列(~F)";
         Text[ korean ] = "문자집합(~F)";
         Text[ chinese_simplified ] = "字符集(~F)";
@@ -127,6 +130,9 @@ ModalDialog DLG_ASCII_FILTER
         Text[ catalan ] = "~Lletra";
         Text[ finnish ] = "~Merkist�";
         Text[ thai ] = "~ตัวอักษร";
+        Text[ czech ] = "Znaková sada";
+        Text[ hebrew ] = "Z~eichensatz";
+        Text[ hindi ] = "~अक्षर";
     };
     ListBox LB_CHARSET
     {
@@ -152,8 +158,8 @@ ModalDialog DLG_ASCII_FILTER
         Text[ italian ] = "Carattere standard";
         Text[ danish ] = "Standardskrifttyper";
         Text[ swedish ] = "Standardteckensnitt";
-        Text[ polish ] = "Czcionka podstawowa";
-        Text[ portuguese_brazilian ] = "Standard fonts";
+        Text[ polish ] = "Czcionka domy�lna";
+        Text[ portuguese_brazilian ] = "Fontes padr�o";
         Text[ japanese ] = "既定フォント";
         Text[ korean ] = "기본 글꼴";
         Text[ chinese_simplified ] = "标准字体";
@@ -163,6 +169,9 @@ ModalDialog DLG_ASCII_FILTER
         Text[ catalan ] = "Tipus de lletra per defecte";
         Text[ finnish ] = "Oletusfontit";
         Text[ thai ] = "ค่าเริ่มต้นตัวอักษร";
+        Text[ czech ] = "Výchozí písma";
+        Text[ hebrew ] = "~Grundschrift";
+        Text[ hindi ] = "अनुपस्थिति अक्षर";
     };
     ListBox LB_FONT
     {
@@ -188,8 +197,8 @@ ModalDialog DLG_ASCII_FILTER
         Text[ italian ] = "Lin~gua";
         Text[ danish ] = "Sprog";
         Text[ swedish ] = "Spr�k";
-        Text[ polish ] = "J�zyk";
-        Text[ portuguese_brazilian ] = "Language";
+        Text[ polish ] = "J�~zyk";
+        Text[ portuguese_brazilian ] = "Idio~ma";
         Text[ japanese ] = "言語(~G)";
         Text[ korean ] = "언어(~G)";
         Text[ chinese_simplified ] = "语言(~G)";
@@ -200,6 +209,9 @@ ModalDialog DLG_ASCII_FILTER
         Text[ catalan ] = "Llen~guatge";
         Text[ finnish ] = "K~ieli";
         Text[ thai ] = "ภา~ษา";
+        Text[ czech ] = "Jazyk";
+        Text[ hebrew ] = "~Sprache";
+        Text[ hindi ] = "भा~षा";
     };
     ListBox LB_LANGUAGE
     {
@@ -225,8 +237,8 @@ ModalDialog DLG_ASCII_FILTER
         Text[ italian ] = "~Interruzione paragrafo";
         Text[ danish ] = "Afsnitsskift";
         Text[ swedish ] = "Styckebrytning";
-        Text[ polish ] = "Podzia� akapitu";
-        Text[ portuguese_brazilian ] = "Paragraphbreak";
+        Text[ polish ] = "Podzia� ~akapitu";
+        Text[ portuguese_brazilian ] = "~Quebra de par�grafo";
         Text[ japanese ] = "段落区切り(~P)";
         Text[ korean ] = "단락 나누기(~P)";
         Text[ chinese_simplified ] = "换段落(~P)";
@@ -237,6 +249,9 @@ ModalDialog DLG_ASCII_FILTER
         Text[ catalan ] = "~Salt de par�gaf";
         Text[ finnish ] = "~Kappalevaihto";
         Text[ thai ] = "แบ่ง~ย่อหน้า";
+        Text[ czech ] = "Zalomení odstavce";
+        Text[ hebrew ] = "~Absatzumbruch";
+        Text[ hindi ] = "~परिच्छेद खण्डन";
     };
     RadioButton RB_CRLF
     {
@@ -256,8 +271,8 @@ ModalDialog DLG_ASCII_FILTER
         Text[ italian ] = "~CR & LF";
         Text[ danish ] = "CR og LF";
         Text[ swedish ] = "~CR & LF";
-        Text[ polish ] = "~CR & LF";
-        Text[ portuguese_brazilian ] = "CR & LF";
+        Text[ polish ] = "~CR i LF";
+        Text[ portuguese_brazilian ] = "~CR & LF";
         Text[ japanese ] = "~CR & LF";
         Text[ korean ] = "~CR & LF";
         Text[ chinese_simplified ] = "回车并换行(~C)";
@@ -268,6 +283,9 @@ ModalDialog DLG_ASCII_FILTER
         Text[ catalan ] = "~CR i LF";
         Text[ finnish ] = "~CR & LF";
         Text[ thai ] = "~CR & LF";
+        Text[ czech ] = "CR & LF";
+        Text[ hebrew ] = "~CR & LF";
+        Text[ hindi ] = "~CR और LF";
     };
     RadioButton RB_CR
     {
@@ -287,7 +305,7 @@ ModalDialog DLG_ASCII_FILTER
         Text[ danish ] = "CR";
         Text[ swedish ] = "C~R";
         Text[ polish ] = "C~R";
-        Text[ portuguese_brazilian ] = "CR";
+        Text[ portuguese_brazilian ] = "C~R";
         Text[ japanese ] = "C~R";
         Text[ korean ] = "C~R";
         Text[ chinese_simplified ] = "回车(~R)";
@@ -298,6 +316,9 @@ ModalDialog DLG_ASCII_FILTER
         Text[ catalan ] = "C~R";
         Text[ finnish ] = "C~R";
         Text[ thai ] = "C~R";
+        Text[ czech ] = "CR";
+        Text[ hebrew ] = "C~R";
+        Text[ hindi ] = "C~R";
     };
     RadioButton RB_LF
     {
@@ -317,7 +338,7 @@ ModalDialog DLG_ASCII_FILTER
         Text[ danish ] = "LF";
         Text[ swedish ] = "LF";
         Text[ polish ] = "~LF";
-        Text[ portuguese_brazilian ] = "LF";
+        Text[ portuguese_brazilian ] = "~LF";
         Text[ japanese ] = "~LF";
         Text[ korean ] = "~LF";
         Text[ chinese_simplified ] = "新行(~L)";
@@ -328,6 +349,9 @@ ModalDialog DLG_ASCII_FILTER
         Text[ catalan ] = "~LF";
         Text[ finnish ] = "~LF";
         Text[ thai ] = "~LF";
+        Text[ czech ] = "LF";
+        Text[ hebrew ] = "~LF";
+        Text[ hindi ] = "~LF";
     };
 
     OKButton PB_OK
@@ -364,7 +388,7 @@ ModalDialog DLG_ASCII_FILTER
         Text[ danish ] = "System";
         Text[ swedish ] = "System";
         Text[ polish ] = "System";
-        Text[ portuguese_brazilian ] = "System";
+        Text[ portuguese_brazilian ] = "Sistema";
         Text[ japanese ] = "システム";
         Text[ korean ] = "시스템";
         Text[ chinese_simplified ] = "系统";
@@ -375,6 +399,9 @@ ModalDialog DLG_ASCII_FILTER
         Text[ catalan ] = "Sistema";
         Text[ finnish ] = "J�rjestelm�";
         Text[ thai ] = "ระบบ";
+        Text[ czech ] = "Systém";
+        Text[ hebrew ] = "System";
+        Text[ hindi ] = "सिस्टम";
     };
     Text[ english_us ] = "ASCII Filter Options";
     Text[ portuguese ] = "Op��es de filtro ASCII";
@@ -387,7 +414,7 @@ ModalDialog DLG_ASCII_FILTER
     Text[ danish ] = "ASCII filterindstillinger";
     Text[ swedish ] = "ASCII filteralternativ";
     Text[ polish ] = "Opcje filtra ASCII";
-    Text[ portuguese_brazilian ] = "ASCII filter options";
+    Text[ portuguese_brazilian ] = "Op��es do filtro ASCII";
     Text[ japanese ] = "ASCIIフィルタオプション";
     Text[ korean ] = "아스키 필터 옵션";
     Text[ chinese_simplified ] = "ASCII 转换器选项";
@@ -398,7 +425,19 @@ ModalDialog DLG_ASCII_FILTER
     Text[ catalan ] = "Opcions del filtre ASCII";
     Text[ finnish ] = "ASCII-suodatusasetukset";
     Text[ thai ] = "ตัวเลือกตัวกรอง ASCII ";
+    Text[ czech ] = "Volby pro ASCII filtr";
+    Text[ hebrew ] = "ASCII Filter Optionen";
+    Text[ hindi ] = "ASCII फिल्टर विकल्प";
 };
+
+
+
+
+
+
+
+
+
 
 
 
