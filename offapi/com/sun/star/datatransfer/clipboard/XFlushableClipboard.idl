@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XFlushableClipboard.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-02 12:14:20 $
+ *  last change: $Author: tra $ $Date: 2001-03-02 13:07:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef __com_sun_star_datatransfer_clipboard_XFlushableClipboard_idl__
 #define __com_sun_star_datatransfer_clipboard_XFlushableClipboard_idl__
 
-#ifndef __com_sun_star_datatransfer_clipboard_XClipboard_idl__
-#include <com/sun/star/datatransfer/clipboard/XClipboard.idl>
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
 #endif
 
 //=============================================================================
@@ -76,7 +76,7 @@ module com { module sun { module star { module datatransfer { module clipboard {
 
 [ uik(2FD0B8A6-7BA0-49b0-8CCDA4D4-C165748E), ident("XFlushableClipboard",  0.1) ]
 
-interface XFlushableClipboard: com::sun::star::datatransfer::clipboard::XClipboard
+interface XFlushableClipboard: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /**
