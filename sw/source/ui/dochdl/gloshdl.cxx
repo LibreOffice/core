@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gloshdl.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:46:44 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 16:38:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,12 +88,6 @@
 #ifndef _SFXDOCFILE_HXX
 #include <sfx2/docfile.hxx>
 #endif
-#ifndef _OFAACCFG_HXX //autogen
-#include <offmgr/ofaaccfg.hxx>
-#endif
-#ifndef _OFF_APP_HXX //autogen
-#include <offmgr/app.hxx>
-#endif
 #define _SVSTDARR_STRINGS
 #include <svtools/svstdarr.hxx>
 
@@ -174,6 +168,8 @@
 #ifndef _FRMMGR_HXX
 #include <frmmgr.hxx>
 #endif
+
+#include <svx/acorrcfg.hxx>
 
 // PUBLIC METHODES -------------------------------------------------------
 struct TextBlockInfo_Impl
@@ -555,7 +551,7 @@ BOOL SwGlossaryHdl::NewGlossary(const String& rName, const String& rShortName,
         pOnlyTxt = &sOnlyTxt;
     }
 
-    const OfaAutoCorrCfg* pCfg = OFF_APP()->GetAutoCorrConfig();
+    const SvxAutoCorrCfg* pCfg = SvxAutoCorrCfg::Get();
 
     const USHORT nSuccess = pWrtShell->MakeGlossary( *pTmp, rName, rShortName,
                             pCfg->IsSaveRelFile(), pCfg->IsSaveRelNet(),
@@ -1057,7 +1053,7 @@ BOOL SwGlossaryHdl::ImportGlossaries( const String& rName )
                 SwReader aReader( *pMed, rName );
                 if( aReader.HasGlossaries( *pR ) )
                 {
-                    const OfaAutoCorrCfg* pCfg = OFF_APP()->GetAutoCorrConfig();
+                    const SvxAutoCorrCfg* pCfg = SvxAutoCorrCfg::Get();
                     bRet = aReader.ReadGlossaries( *pR, *pGlossary,
                                 pCfg->IsSaveRelFile() );
                 }
