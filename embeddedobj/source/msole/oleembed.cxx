@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oleembed.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 09:02:47 $
+ *  last change: $Author: vg $ $Date: 2005-02-25 09:22:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,9 @@
 #ifndef _COM_SUN_STAR_EMBED_NEEDSRUNNINGSTATEEXCEPTION_HPP_
 #include <com/sun/star/embed/NeedsRunningStateException.hpp>
 #endif
+#ifndef _COM_SUN_STAR_EMBED_STATECHANGEINPROGRESSEXCEPTION_HPP_
+#include <com/sun/star/embed/StateChangeInProgressException.hpp>
+#endif
 
 #ifndef _COM_SUN_STAR_IO_XSEEKABLE_HPP_
 #include <com/sun/star/io/XSeekable.hpp>
@@ -94,6 +97,8 @@
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
 #endif
+
+#include <targetstatecontrol.hxx>
 
 #include <olecomponent.hxx>
 
@@ -178,6 +183,16 @@ void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
 #ifdef WNT
     if ( m_pOleComponent )
     {
+        if ( m_nTargetState != -1 )
+        {
+            // means that the object is currently trying to reach the target state
+            throw embed::StateChangeInProgressException( ::rtl::OUString(),
+                                                        uno::Reference< uno::XInterface >(),
+                                                        m_nTargetState );
+        }
+
+        TargetStateControl_Impl aControl( m_nTargetState, nNewState );
+
         // TODO: additional verbs can be a problem, since nobody knows how the object
         //       will behave after activation
 
@@ -351,6 +366,15 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
         // StateChangeNotification_Impl( sal_True, nOldState, nNewState );
         if ( m_nObjectState == embed::EmbedStates::LOADED )
         {
+            if ( m_nTargetState != -1 )
+            {
+                // means that the object is currently trying to reach the target state
+                throw embed::StateChangeInProgressException( ::rtl::OUString(),
+                                                            uno::Reference< uno::XInterface >(),
+                                                            m_nTargetState );
+            }
+            TargetStateControl_Impl aControl( m_nTargetState, embed::EmbedStates::RUNNING );
+
             // if the target object is in loaded state
             // it must be switched to running state to execute verb
 
