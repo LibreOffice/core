@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDropTargetDropContext.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:03:38 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 18:39:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ module com { module sun { module star { module datatransfer { module dnd {
     under feedback and to effect the subsequent data transfer, if appropriate. </p>
 */
 
-interface XDropTargetDropContext : com::sun::star::uno::XInterface
+published interface XDropTargetDropContext : com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /** Accept the Drop.
