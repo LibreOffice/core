@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ruler.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:57 $
+ *  last change: $Author: th $ $Date: 2001-08-24 14:31:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -808,6 +808,8 @@ void Ruler::ImplDrawBorders( long nMin, long nMax, long nVirTop, long nVirBottom
                     maVirDev.SetLineColor( rStyleSettings.GetWindowTextColor() );
                 if ( mpData->pBorders[i].nStyle & RULER_BORDER_SNAP )
                     ImplVDrawLine( n, nVirTop, n, nVirBottom );
+                else if ( mpData->pBorders[i].nStyle & RULER_BORDER_MARGIN )
+                    ImplVDrawLine( n, nVirTop, n, nVirBottom );
                 else
                 {
                     ImplVDrawLine( n-1, nVirTop, n-1, nVirBottom );
@@ -1081,7 +1083,7 @@ void Ruler::ImplInitSettings( BOOL bFont,
         if ( IsControlForeground() )
             aColor = GetControlForeground();
         else
-            aColor = rStyleSettings.GetButtonTextColor();
+            aColor = rStyleSettings.GetWindowTextColor();
         SetTextColor( aColor );
         SetTextFillColor();
     }
@@ -1483,7 +1485,10 @@ void Ruler::ImplDrawExtra( BOOL bPaint )
     // Inhalt ausgeben
     if ( meExtraType == RULER_EXTRA_NULLOFFSET )
     {
-        SetLineColor( rStyleSettings.GetWindowTextColor() );
+        if ( !(rStyleSettings.GetOptions() & STYLE_OPTION_MONO) )
+            SetLineColor( rStyleSettings.GetButtonTextColor() );
+        else
+            SetLineColor( rStyleSettings.GetWindowTextColor() );
         DrawLine( Point( aRect.Left()+1, aRect.Top()+4 ),
                   Point( aRect.Right()-1, aRect.Top()+4 ) );
         DrawLine( Point( aRect.Left()+4, aRect.Top()+1 ),
