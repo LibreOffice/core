@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 13:27:31 $
+ *  last change: $Author: vg $ $Date: 2003-07-04 13:21:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,12 +344,28 @@ SwFlyFrm::~SwFlyFrm()
             //Erst die Flys des Frm vernichten, denn diese koennen sich sonst nach
             //dem Remove nicht mehr bei der Seite abmelden.
             while ( pFrm->GetDrawObjs() && pFrm->GetDrawObjs()->Count() )
-            {   SdrObject *pObj = (*pFrm->GetDrawObjs())[0];
-                SdrObjUserCall *pUserCall;
+            {
+                SdrObject *pObj = (*pFrm->GetDrawObjs())[0];
                 if ( pObj->IsWriterFlyFrame() )
                     delete ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
-                else if ( 0 != ( pUserCall = GetUserCall(pObj) ) )
-                    ((SwDrawContact*)pUserCall)->DisconnectFromLayout();
+                else
+                // OD 23.06.2003 #108784# - consider 'virtual' drawing objects
+                {
+                    if ( pObj->ISA(SwDrawVirtObj) )
+                    {
+                        SwDrawVirtObj* pDrawVirtObj = static_cast<SwDrawVirtObj*>(pObj);
+                        pDrawVirtObj->RemoveFromWriterLayout();
+                        pDrawVirtObj->RemoveFromDrawingPage();
+                    }
+                    else
+                    {
+                        SdrObjUserCall* pUserCall = GetUserCall(pObj);
+                        if ( pUserCall )
+                        {
+                            static_cast<SwDrawContact*>(pUserCall)->DisconnectFromLayout();
+                        }
+                    }
+                }
             }
             pFrm->Remove();
             delete pFrm;
@@ -2069,7 +2085,7 @@ void SwFrm::AppendDrawObj( SwDrawContact *pNew )
     if ( pNew->GetAnchor() && pNew->GetAnchor() != this )
         pNew->DisconnectFromLayout( FALSE );
 
-    SdrObject *pObj = pNew->GetMaster();
+    SdrObject* pObj = pNew->GetMaster();
     if ( pNew->GetAnchor() != this )
     {
         if ( !pDrawObjs )
@@ -2077,6 +2093,7 @@ void SwFrm::AppendDrawObj( SwDrawContact *pNew )
         pDrawObjs->Insert( pObj, pDrawObjs->Count() );
         pNew->ChgAnchor( this );
     }
+
     const SwFmtAnchor &rAnch = pNew->GetFmt()->GetAnchor();
     if( FLY_AUTO_CNTNT == rAnch.GetAnchorId() )
     {
@@ -2093,6 +2110,18 @@ void SwFrm::AppendDrawObj( SwDrawContact *pNew )
         pNew->GetMaster()->SetAnchorPos( GetFrmAnchorPos( ::HasWrap( pNew->GetMaster() ) ) );
     }
 
+    // OD 27.06.2003 #108784# - move 'master' drawing object to visible layer
+    {
+        SwDoc* pDoc = pNew->GetFmt()->GetDoc();
+        if ( pDoc )
+        {
+            if ( !pDoc->IsVisibleLayerId( pObj->GetLayer() ) )
+            {
+                pObj->SetLayer( pDoc->GetVisibleLayerIdByInvisibleOne( pObj->GetLayer() ) );
+            }
+        }
+    }
+
     //Bei der Seite anmelden; kann sein, dass noch keine da ist - die
     //Anmeldung wird dann in SwPageFrm::PreparePage durch gefuehrt.
     SwPageFrm *pPage = FindPageFrm();
@@ -2105,6 +2134,66 @@ void SwFrm::AppendDrawObj( SwDrawContact *pNew )
     if( pSh && pSh->GetLayout()->IsAnyShellAccessible() )
         pSh->Imp()->AddAccessibleObj( pNew->GetMaster() );
 #endif
+}
+
+// OD 20.05.2003 #108784# - add 'virtual' drawing object to frame.
+void SwFrm::AppendVirtDrawObj( SwDrawContact* _pDrawContact,
+                               SwDrawVirtObj* _pDrawVirtObj )
+{
+    if ( _pDrawVirtObj->GetAnchorFrm() != this )
+    {
+        if ( !pDrawObjs )
+            pDrawObjs = new SwDrawObjs();
+        pDrawObjs->Insert( _pDrawVirtObj, pDrawObjs->Count() );
+        _pDrawVirtObj->SetAnchorFrm( this );
+    }
+
+    // positioning of 'virtual' drawing object.
+    const SwFmtAnchor &rAnch = _pDrawContact->GetFmt()->GetAnchor();
+    switch ( rAnch.GetAnchorId() )
+    {
+        case FLY_AUTO_CNTNT:
+            {
+                ASSERT( false,
+                        "<SwFrm::AppendVirtDrawObj(..)> - at character anchored drawing objects aren't supported." );
+            }
+            break;
+        case FLY_PAGE:
+        case FLY_AT_CNTNT:
+        case FLY_AT_FLY:
+            {
+                // set anchor position
+                _pDrawVirtObj->NbcSetAnchorPos( GetFrmAnchorPos( ::HasWrap( _pDrawVirtObj ) ) );
+                // set offset in relation to reference object
+                Point aOffset = GetFrmAnchorPos( ::HasWrap( _pDrawVirtObj ) ) -
+                                _pDrawContact->GetAnchor()->GetFrmAnchorPos( ::HasWrap( _pDrawVirtObj ) );
+                _pDrawVirtObj->SetOffset( aOffset );
+                // correct relative position at 'virtual' drawing object
+                _pDrawVirtObj->AdjustRelativePosToReference();
+            }
+            break;
+        case FLY_IN_CNTNT:
+        {
+            /*nothing to do*/;
+        }
+        break;
+        default:    ASSERT( false, "<SwFrm::AppendVirtDrawObj(..) - unknown anchor type." );
+    }
+
+    //Bei der Seite anmelden; kann sein, dass noch keine da ist - die
+    //Anmeldung wird dann in SwPageFrm::PreparePage durch gefuehrt.
+    SwPageFrm *pPage = FindPageFrm();
+    if ( pPage )
+    {
+        pPage->SwPageFrm::AppendVirtDrawObj( _pDrawContact, _pDrawVirtObj );
+    }
+
+    // Notify accessible layout.
+    ViewShell* pSh = GetShell();
+    if( pSh && pSh->GetLayout()->IsAnyShellAccessible() )
+    {
+        pSh->Imp()->AddAccessibleObj( _pDrawVirtObj );
+    }
 }
 
 void SwFrm::RemoveDrawObj( SwDrawContact *pToRemove )
@@ -2127,6 +2216,30 @@ void SwFrm::RemoveDrawObj( SwDrawContact *pToRemove )
         DELETEZ( pDrawObjs );
 
     pToRemove->ChgAnchor( 0 );
+}
+
+// OD 20.05.2003 #108784# - remove 'virtual' drawing object from frame.
+void SwFrm::RemoveVirtDrawObj( SwDrawContact* _pDrawContact,
+                               SwDrawVirtObj* _pDrawVirtObj )
+{
+    // Notify accessible layout.
+    ViewShell* pSh = GetShell();
+    if( pSh && pSh->GetLayout()->IsAnyShellAccessible() )
+    {
+        pSh->Imp()->DisposeAccessibleObj( _pDrawVirtObj );
+    }
+
+    SwPageFrm *pPage = _pDrawVirtObj->GetPageFrm();
+    if ( pPage && pPage->GetSortedObjs() )
+    {
+        pPage->SwPageFrm::RemoveVirtDrawObj( _pDrawContact, _pDrawVirtObj );
+    }
+
+    pDrawObjs->Remove( pDrawObjs->GetPos( _pDrawVirtObj ) );
+    if ( !pDrawObjs->Count() )
+        DELETEZ( pDrawObjs );
+
+    _pDrawVirtObj->SetAnchorFrm( 0 );
 }
 
 /*************************************************************************
@@ -2201,24 +2314,44 @@ void SwFrm::CalcFlys( BOOL bPosOnly )
             }
             else
             {
+                // assumption: <pO> is a drawing object.
                 SwFrmFmt *pFrmFmt = ::FindFrmFmt( pO );
                 if( !pFrmFmt ||
                     FLY_IN_CNTNT != pFrmFmt->GetAnchor().GetAnchorId() )
                 {
                     // change anchor position
                     pO->SetAnchorPos( GetFrmAnchorPos( ::HasWrap( pO ) ) );
-                    if ( GetValidPosFlag() )
+                    // OD 19.06.2003 #108784# - correct relative position of
+                    // <SwDrawVirtObj>-objects to reference object.
+                    if ( pO->ISA(SwDrawVirtObj) )
                     {
-                        SwPageFrm* pPage = FindPageFrm();
-                        if ( pPage && ! pPage->IsInvalidLayout() )
+                        static_cast<SwDrawVirtObj*>(pO)->AdjustRelativePosToReference();
+                    }
+                    else
+                    {
+                        if ( GetValidPosFlag() )
                         {
-                            // check if the new position
-                            // would not exceed the margins of the page
-                            CaptureDrawObj( *pO, pPage->Frm() );
+                            SwPageFrm* pPage = FindPageFrm();
+                            if ( pPage && ! pPage->IsInvalidLayout() )
+                            {
+                                // check if the new position
+                                // would not exceed the margins of the page
+                                CaptureDrawObj( *pO, pPage->Frm() );
+                            }
+                        }
+
+                        ((SwDrawContact*)GetUserCall(pO))->ChkPage();
+
+                        // OD 27.06.2003 #108784# - correct movement of 'virtual'
+                        // drawing objects caused by the <SetAnchorPos(..)>
+                        // of the 'master' drawing object.
+                        SwDrawContact* pDrawContact =
+                            static_cast<SwDrawContact*>(pO->GetUserCall());
+                        if ( pDrawContact )
+                        {
+                            pDrawContact->CorrectRelativePosOfVirtObjs();
                         }
                     }
-
-                    ((SwDrawContact*)GetUserCall(pO))->ChkPage();
                 }
             }
         }
