@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Type.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dbo $ $Date: 2002-08-21 09:19:08 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 10:52:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,6 +169,13 @@ inline const ::com::sun::star::uno::Type & SAL_CALL getBooleanCppuType() SAL_THR
         ::typelib_static_type_getByTypeClass( typelib_TypeClass_BOOLEAN ) );
 }
 inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_Bool * ) SAL_THROW( () )
+{
+    return * reinterpret_cast< const ::com::sun::star::uno::Type * >(
+        ::typelib_static_type_getByTypeClass( typelib_TypeClass_BOOLEAN ) );
+}
+
+inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType(
+    bool const * ) SAL_THROW( () )
 {
     return * reinterpret_cast< const ::com::sun::star::uno::Type * >(
         ::typelib_static_type_getByTypeClass( typelib_TypeClass_BOOLEAN ) );
