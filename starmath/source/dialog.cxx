@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: tl $ $Date: 2002-05-24 12:50:39 $
+ *  last change: $Author: tl $ $Date: 2002-05-24 13:27:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1235,6 +1235,7 @@ void SmShowSymbolSet::Paint(const Rectangle&)
     {
         SmSym    aSymbol (aSymbolSet.GetSymbol(i));
         Font     aFont   (aSymbol.GetFace());
+        aFont.SetAlign(ALIGN_TOP);
 
         // etwas kleinere FontSize nehmen (als nLen) um etwas Luft zu haben
         // (hoffentlich auch genug für links und rechts!)
@@ -1438,6 +1439,7 @@ void SmShowSymbol::SetSymbol(const SmSym *pSymbol)
 
         Font aFont (pSymbol->GetFace());
         aFont.SetSize(Size(0, GetOutputSize().Height() - GetOutputSize().Height() / 3));
+        aFont.SetAlign(ALIGN_TOP);
         SetFont(aFont);
 
         // keep old text color (font may have different color set)
@@ -1715,6 +1717,7 @@ void SmShowChar::SetFont(const Font &rFont)
     Size  aSize (Size(0, GetOutputSize().Height() - GetOutputSize().Height() / 3));
 
     aFont.SetSize(aSize);
+    aFont.SetAlign(ALIGN_TOP);
     aFont.SetTransparent(TRUE);
     Control::SetFont(aFont);
 

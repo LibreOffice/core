@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symbol.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: tl $ $Date: 2001-10-02 12:58:24 $
+ *  last change: $Author: tl $ $Date: 2002-05-24 13:27:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,7 @@ SmSym::SmSym() :
 {
     aExportName = Name;
     Face.SetTransparent(TRUE);
+    Face.SetAlign(ALIGN_BASELINE);
 }
 
 
@@ -156,7 +157,11 @@ SmSym::SmSym(const String& rName, const Font& rFont, sal_Unicode aChar,
              const String& rSet, BOOL bIsPredefined)
 {
     Name        = aExportName   = rName;
+
     Face        = rFont;
+    Face.SetTransparent(TRUE);
+    Face.SetAlign(ALIGN_BASELINE);
+
     Character   = aChar;
     if (RTL_TEXTENCODING_SYMBOL == rFont.GetCharSet())
         Character |= 0xF000;
