@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrolmodel.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-09 15:02:24 $
+ *  last change: $Author: fs $ $Date: 2000-12-15 08:54:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -963,6 +963,19 @@ sal_Bool UnoControlModel::convertFastPropertyValue( ::com::sun::star::uno::Any &
         }
         else
         {
+//          rConvertedValue.setValue( rValue.getValue(), *pDestType );
+                // VERY BAD. No check if is made if the value type of rValue and pDestType are compatible in any way.
+                // This will crash as soon as somebody tries to set a property value (rValue) which's type
+                // is far enough from the destination type which it is 'c-style cast' to with the line above.
+
+            if (!pDestType->equals(rValue.getValueType()))
+                throw ::com::sun::star::lang::IllegalArgumentException(
+                            ::rtl::OUString::createFromAscii("Unable to convert the given value for the property ")
+                        +=  GetPropertyName(nPropId),
+                    static_cast< ::com::sun::star::beans::XPropertySet* >(this),
+                    1);
+
+            // no we're allow to do this
             rConvertedValue.setValue( rValue.getValue(), *pDestType );
         }
     }
