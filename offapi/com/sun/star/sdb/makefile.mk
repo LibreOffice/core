@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-17 14:32:11 $
+#   last change: $Author: obo $ $Date: 2004-11-22 10:40:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,6 +92,7 @@ IDLFILES=\
     DatasourceAdministrationDialog.idl \
     DataSourceBrowser.idl \
     DefinitionContainer.idl \
+    Document.idl \
     DocumentDefinition.idl \
     DocumentSaveRequest.idl \
     ErrorMessageDialog.idl \
