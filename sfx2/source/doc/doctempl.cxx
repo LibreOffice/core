@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: dv $ $Date: 2000-12-21 16:45:11 $
+ *  last change: $Author: dv $ $Date: 2000-12-21 18:00:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -825,6 +825,12 @@ String SfxDocumentTemplates::GetTemplatePath
         aURLObj.insertName( rLongName, false,
                      INetURLObject::LAST_SEGMENT, true,
                      INetURLObject::ENCODE_ALL );
+
+        OUString aExtension = aURLObj.getExtension();
+
+        if ( ! aExtension.len() )
+            aURLObj.setExtension( OUString( RTL_CONSTASCII_USTRINGPARAM( "vor" ) ) );
+
         return aURLObj.GetMainURL();
     }
     else
@@ -869,6 +875,12 @@ String SfxDocumentTemplates::GetDefaultTemplatePath
         aURLObj.insertName( rLongName, false,
                      INetURLObject::LAST_SEGMENT, true,
                      INetURLObject::ENCODE_ALL );
+
+        OUString aExtension = aURLObj.getExtension();
+
+        if ( ! aExtension.len() )
+            aURLObj.setExtension( OUString( RTL_CONSTASCII_USTRINGPARAM( "vor" ) ) );
+
         return aURLObj.GetMainURL();
     }
     else
@@ -1599,7 +1611,12 @@ BOOL SfxDocumentTemplates::SetName
         {
             INetURLObject aURL( aFolderURL );
             aURL.setName( aTitle );
-            aURL.setExtension( OUString( RTL_CONSTASCII_USTRINGPARAM( "vor" ) ) );
+
+            OUString aExtension = aURL.getExtension();
+
+            if ( ! aExtension.len() )
+                aURL.setExtension( OUString( RTL_CONSTASCII_USTRINGPARAM( "vor" ) ) );
+
             aFolderTitle = aURL.getName();
         }
 
