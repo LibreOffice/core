@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibload.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 15:30:17 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 16:15:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -466,68 +466,60 @@ void BibliographyLoader::loadView(const Reference< XFrame > & rFrame, const rtl:
 
     Reference< XForm > xForm = m_pDatMan->createDatabaseForm( aBibDesc );
 
-    if ( xForm.is() )
+    Reference< awt::XWindow >  aWindow = rFrame->getContainerWindow();
+    VCLXWindow* pParentComponent = VCLXWindow::GetImplementation(aWindow);
+
+    Window* pParent = VCLUnoHelper::GetWindow( aWindow );
+
+    BibBookContainer *pMyWindow = new BibBookContainer( pParent, m_pDatMan );
+    pMyWindow->Show();
+
+    ::bib::BibView* pView = new ::bib::BibView( pMyWindow, m_pDatMan, WB_SECTION_STYLE | WB_3DLOOK );
+    pView->Show();
+    m_pDatMan->SetView( pView );
+
+    ::bib::BibBeamer* pBeamer = new ::bib::BibBeamer( pMyWindow, m_pDatMan );
+    pBeamer->Show();
+    pMyWindow->createTopFrame(pBeamer);
+
+    pMyWindow->createBottomFrame(pView);
+
+    Reference< awt::XWindow >  xWin ( pMyWindow->GetComponentInterface(), UNO_QUERY );
+
+    Reference< XController >  xCtrRef( new BibFrameController_Impl( xWin, m_pDatMan ) );
+
+    xCtrRef->attachFrame(rFrame);
+    rFrame->setComponent( xWin, xCtrRef);
+    pBeamer->SetXController(xCtrRef);
+    //!
+
+    // not earlier because SetFocus() is triggered in setVisible()
+    pParentComponent->setVisible(sal_True);
+
+    m_xDatMan->load();
+    // #100312# ----------
+    m_pDatMan->RegisterInterceptor(pBeamer);
+
+    if ( rListener.is() )
+        rListener->loadFinished( this );
+
+    // attach menu bar
+    Reference< XPropertySet > xPropSet( rFrame, UNO_QUERY );
+    Reference< drafts::com::sun::star::frame::XLayoutManager > xLayoutManager;
+    if ( xPropSet.is() )
     {
-        Reference< awt::XWindow >  aWindow = rFrame->getContainerWindow();
-        VCLXWindow* pParentComponent = VCLXWindow::GetImplementation(aWindow);
-
-        Window* pParent = VCLUnoHelper::GetWindow( aWindow );
-
-        BibBookContainer *pMyWindow = new BibBookContainer( pParent, m_pDatMan );
-        pMyWindow->Show();
-
-        ::bib::BibView* pView = new ::bib::BibView( pMyWindow, m_pDatMan, WB_SECTION_STYLE | WB_3DLOOK );
-        pView->Show();
-        m_pDatMan->SetView( pView );
-
-        ::bib::BibBeamer* pBeamer = new ::bib::BibBeamer( pMyWindow, m_pDatMan );
-        pBeamer->Show();
-        pMyWindow->createTopFrame(pBeamer);
-
-        pMyWindow->createBottomFrame(pView);
-
-        Reference< awt::XWindow >  xWin ( pMyWindow->GetComponentInterface(), UNO_QUERY );
-
-        Reference< XController >  xCtrRef( new BibFrameController_Impl( xWin, m_pDatMan ) );
-
-        xCtrRef->attachFrame(rFrame);
-        rFrame->setComponent( xWin, xCtrRef);
-        pBeamer->SetXController(xCtrRef);
-        //!
-
-        // not earlier because SetFocus() is triggered in setVisible()
-        pParentComponent->setVisible(sal_True);
-
-        m_xDatMan->load();
-        // #100312# ----------
-        m_pDatMan->RegisterInterceptor(pBeamer);
-
-        if ( rListener.is() )
-            rListener->loadFinished( this );
-
-        // attach menu bar
-        Reference< XPropertySet > xPropSet( rFrame, UNO_QUERY );
-        Reference< drafts::com::sun::star::frame::XLayoutManager > xLayoutManager;
-        if ( xPropSet.is() )
+        try
         {
-            try
-            {
-                Any a = xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )));
-                a >>= xLayoutManager;
-            }
-            catch ( uno::Exception& )
-            {
-            }
+            Any a = xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )));
+            a >>= xLayoutManager;
         }
+        catch ( uno::Exception& )
+        {
+        }
+    }
 
-        if ( xLayoutManager.is() )
-            xLayoutManager->createElement( OUString( RTL_CONSTASCII_USTRINGPARAM( "private:resource/menubar/menubar" )));
-    }
-    else
-    {
-        if ( rListener.is() )
-            rListener->loadCancelled( this );
-    }
+    if ( xLayoutManager.is() )
+        xLayoutManager->createElement( OUString( RTL_CONSTASCII_USTRINGPARAM( "private:resource/menubar/menubar" )));
 }
 /* -----------------06.12.99 14:37-------------------
 
