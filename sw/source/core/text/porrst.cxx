@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porrst.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: fme $ $Date: 2002-04-24 11:23:21 $
+ *  last change: $Author: fme $ $Date: 2002-06-20 09:09:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,10 +81,8 @@
 #ifndef _SVX_LRSPITEM_HXX //autogen
 #include <svx/lrspitem.hxx>
 #endif
-#ifdef VERTICAL_LAYOUT
 #ifndef _SVX_PGRDITEM_HXX
 #include <svx/pgrditem.hxx>
-#endif
 #endif
 #ifndef _WINDOW_HXX //autogen
 #include <vcl/window.hxx>
@@ -135,10 +133,8 @@
 #ifndef _SWFNTCCH_HXX
 #include <swfntcch.hxx> // SwFontAccess
 #endif
-#ifdef VERTICAL_LAYOUT
 #ifndef SW_TGRDITEM_HXX
 #include <tgrditem.hxx>
-#endif
 #endif
 #ifndef _PAGEDESC_HXX
 #include <pagedesc.hxx> // SwPageDesc
@@ -186,13 +182,8 @@ void SwTmpEndPortion::Paint( const SwTxtPaintInfo &rInf ) const
 /*************************************************************************
  *                      class SwBreakPortion
  *************************************************************************/
-#ifdef VERTICAL_LAYOUT
 SwBreakPortion::SwBreakPortion( const SwLinePortion &rPortion )
     : SwLinePortion( rPortion ), nRestWidth( 0 )
-#else
-SwBreakPortion::SwBreakPortion( const SwLinePortion &rPortion )
-    : SwLinePortion( rPortion ), nViewWidth( 0 ), nRestWidth( 0 )
-#endif
 {
     nLineLength = 1;
     SetWhichPor( POR_BRK );
@@ -211,11 +202,7 @@ void SwBreakPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
     if( rInf.OnWin() && rInf.GetOpt().IsLineBreak() )
     {
-#ifdef VERTICAL_LAYOUT
         USHORT nViewWidth = ((SwBreakPortion*)this)->CalcViewWidth( rInf );
-#else
-        ((SwBreakPortion*)this)->CalcViewWidth( rInf );
-#endif
 
         if( nViewWidth && nViewWidth <= nRestWidth )
             rInf.DrawLineBreak( *this );
@@ -226,11 +213,7 @@ void SwBreakPortion::Paint( const SwTxtPaintInfo &rInf ) const
  *                  SwBreakPortion::CalcViewWidth()
  *************************************************************************/
 
-#ifdef VERTICAL_LAYOUT
 USHORT SwBreakPortion::CalcViewWidth( const SwTxtSizeInfo &rInf )
-#else
-void SwBreakPortion::CalcViewWidth( const SwTxtSizeInfo &rInf )
-#endif
 {
     ASSERT( rInf.GetOpt().IsLineBreak(), "SwBreakPortion::CalcViewWidth: zombie" );
     // Im Mormalfall folgt auf ein Break keine weitere Portion, nur wenn im Blocksatz
@@ -246,7 +229,6 @@ void SwBreakPortion::CalcViewWidth( const SwTxtSizeInfo &rInf )
         else
             nRestWidth = GetPortion()->Width();
     }
-#ifdef VERTICAL_LAYOUT
     USHORT nViewWidth = 0;
 
     // The view width is not depending on the zoom factor anymore.
@@ -254,16 +236,6 @@ void SwBreakPortion::CalcViewWidth( const SwTxtSizeInfo &rInf )
         nViewWidth = LINE_BREAK_WIDTH;
 
     return nViewWidth;
-
-#else
-    if( rInf.GetWin() && nRestWidth )
-    {
-        if( !nViewWidth )
-            nViewWidth = (KSHORT)rInf.GetOpt().GetLineBreakWidth( rInf.GetWin() );
-    }
-    else
-        nViewWidth = 0;
-#endif
 }
 
 /*************************************************************************
@@ -292,14 +264,9 @@ void SwBreakPortion::HandlePortion( SwPortionHandler& rPH ) const
 }
 
 
-#ifdef VERTICAL_LAYOUT
 SwKernPortion::SwKernPortion( SwLinePortion &rPortion, short nKrn,
                               sal_Bool bBG, sal_Bool bGK ) :
     nKern( nKrn ), bBackground( bBG ), bGridKern( bGK )
-#else
-SwKernPortion::SwKernPortion( SwLinePortion &rPortion, short nKrn, sal_Bool bBG ) :
-    nKern( nKrn ), bBackground( bBG )
-#endif
 {
     Height( rPortion.Height() );
     SetAscent( rPortion.GetAscent() );
@@ -310,7 +277,6 @@ SwKernPortion::SwKernPortion( SwLinePortion &rPortion, short nKrn, sal_Bool bBG 
      rPortion.Insert( this );
 }
 
-#ifdef VERTICAL_LAYOUT
 SwKernPortion::SwKernPortion( const SwLinePortion& rPortion ) :
     nKern( 0 ), bBackground( sal_False ), bGridKern( sal_True )
 {
@@ -320,7 +286,6 @@ SwKernPortion::SwKernPortion( const SwLinePortion& rPortion ) :
     nLineLength = 0;
     SetWhichPor( POR_KERN );
 }
-#endif
 
 void SwKernPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
@@ -352,10 +317,8 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
 
 void SwKernPortion::FormatEOL( SwTxtFormatInfo &rInf )
 {
-#ifdef VERTICAL_LAYOUT
     if ( bGridKern )
         return;
-#endif
 
     if( rInf.GetLast() == this )
         rInf.SetLast( FindPrevPortion( rInf.GetRoot() ) );
@@ -390,40 +353,11 @@ void SwArrowPortion::Paint( const SwTxtPaintInfo &rInf ) const
     ((SwArrowPortion*)this)->aPos = rInf.GetPos();
 }
 
-#ifndef VERTICAL_LAYOUT
-void SwArrowPortion::PaintIt( OutputDevice *pOut ) const
-{
-    Size aSize( 6, 12 );
-    aSize = pOut->PixelToLogic( aSize );
-    SwRect aRect( GetPos(), aSize );
-    if( bLeft )
-    {
-        aRect.Pos().Y() += 20 - GetAscent();
-        aRect.Pos().X() += 20;
-        if( aSize.Height() > Height() )
-            aRect.Height( Height() );
-    }
-    else
-    {
-        if( aSize.Height() > Height() )
-            aRect.Height( Height() );
-        aRect.Pos().Y() -= aRect.Height() + 20;
-        aRect.Pos().X() -= aRect.Width() + 20;
-    }
-
-    Color aCol( COL_LIGHTRED );
-    SvxFont::DrawArrow( *pOut, aRect.SVRect(), aSize, aCol, bLeft );
-}
-#endif
-
 SwLinePortion *SwArrowPortion::Compress() { return this; }
-
 
 SwTwips SwTxtFrm::EmptyHeight() const
 {
-#ifdef VERTICAL_LAYOUT
     ASSERT( ! IsVertical() || ! IsSwapped(),"SwTxtFrm::EmptyHeight with swapped frame" );
-#endif
 
     SwFont *pFnt;
     const SwTxtNode& rTxtNode = *GetTxtNode();
@@ -440,10 +374,8 @@ SwTwips SwTxtFrm::EmptyHeight() const
         pFnt->ChkMagic( pSh, pFnt->GetActual() );
     }
 
-#ifdef VERTICAL_LAYOUT
     if ( IsVertical() )
         pFnt->SetVertical( 2700 );
-#endif
 
     OutputDevice *pOut = pSh ? pSh->GetOut() : 0;
     if ( !pOut || !rTxtNode.GetDoc()->IsBrowseMode() ||
@@ -470,13 +402,9 @@ SwTwips SwTxtFrm::EmptyHeight() const
 
     SwTwips nRet;
     if( !pOut )
-#ifdef VERTICAL_LAYOUT
         nRet = IsVertical() ?
                Prt().SSize().Width() + 1 :
                Prt().SSize().Height() + 1;
-#else
-        nRet = Prt().SSize().Height() + 1;
-#endif
     else
     {
         pFnt->SetFntChg( sal_True );
@@ -493,9 +421,7 @@ SwTwips SwTxtFrm::EmptyHeight() const
 
 sal_Bool SwTxtFrm::FormatEmpty()
 {
-#ifdef VERTICAL_LAYOUT
     ASSERT( ! IsVertical() || ! IsSwapped(),"SwTxtFrm::FormatEmpty with swapped frame" );
-#endif
 
     if ( HasFollow() || GetTxtNode()->GetpSwpHints() ||
         0 != GetTxtNode()->GetNumRule() ||
@@ -503,8 +429,15 @@ sal_Bool SwTxtFrm::FormatEmpty()
          IsInFtn() || ( HasPara() && GetPara()->IsPrepMustFit() ) )
         return sal_False;
     const SwAttrSet& aSet = GetTxtNode()->GetSwAttrSet();
+#ifdef BIDI
+    const USHORT nAdjust = aSet.GetAdjust().GetAdjust();
+    if( ( ( ! IsRightToLeft() && ( SVX_ADJUST_LEFT != nAdjust ) ) ||
+          (   IsRightToLeft() && ( SVX_ADJUST_RIGHT != nAdjust ) ) ) ||
+          aSet.GetRegister().GetValue() )
+#else
     if( SVX_ADJUST_LEFT != aSet.GetAdjust().GetAdjust()
         || aSet.GetRegister().GetValue() )
+#endif
         return sal_False;
     const SvxLineSpacingItem &rSpacing = aSet.GetLineSpacing();
     if( SVX_LINE_SPACE_MIN == rSpacing.GetLineSpaceRule() ||
@@ -523,7 +456,6 @@ sal_Bool SwTxtFrm::FormatEmpty()
         {
             SwTwips nHeight = EmptyHeight();
 
-#ifdef VERTICAL_LAYOUT
             if ( GetTxtNode()->GetSwAttrSet().GetParaGrid().GetValue() &&
                  IsInDocBody() )
             {
@@ -534,9 +466,6 @@ sal_Bool SwTxtFrm::FormatEmpty()
 
             SWRECTFN( this )
             const SwTwips nChg = nHeight - (Prt().*fnRect->fnGetHeight)();
-#else
-            const SwTwips nChg = nHeight - Prt().SSize().Height();
-#endif
 
             if( !nChg )
                 SetUndersized( sal_False );
@@ -570,12 +499,8 @@ sal_Bool SwTxtFrm::FillRegister( SwTwips& rRegStart, KSHORT& rRegDiff )
         pFrm = pFrm->GetUpper();
     if( ( FRM_BODY| FRM_FLY ) & pFrm->GetType() )
     {
-#ifdef VERTICAL_LAYOUT
         SWRECTFN( pFrm )
         rRegStart = (pFrm->*fnRect->fnGetPrtTop)();
-#else
-        rRegStart = pFrm->Frm().Top() + pFrm->Prt().Top();
-#endif
         pFrm = pFrm->FindPageFrm();
         if( pFrm->IsPageFrm() )
         {
@@ -658,15 +583,11 @@ sal_Bool SwTxtFrm::FillRegister( SwTwips& rRegStart, KSHORT& rRegDiff )
                         }
                     }
                 }
-#ifdef VERTICAL_LAYOUT
                 const long nTmpDiff = pDesc->GetRegAscent() - rRegDiff;
                 if ( bVert )
                     rRegStart -= nTmpDiff;
                 else
                     rRegStart += nTmpDiff;
-#else
-                rRegStart += pDesc->GetRegAscent() - rRegDiff;
-#endif
             }
         }
     }
