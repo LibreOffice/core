@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfac.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:52:59 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 16:11:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,9 +92,8 @@
 #include "app.hxx"
 #include "module.hxx"
 #include "mnumgr.hxx"
-#include "accmgr.hxx"
-#include <sfxresid.hxx>
-#include <sfxuno.hxx>
+#include "sfxresid.hxx"
+#include "sfxuno.hxx"
 #include "doc.hrc"
 
 namespace css = ::com::sun::star;
@@ -123,9 +122,7 @@ struct SfxObjectFactory_Impl
     ::rtl::OUString             aServiceName;
     SfxFilterContainer*         pFilterContainer;
     SfxModule*                  pModule;
-    SfxAcceleratorManager*      pAccMgr;
     sal_uInt16                  nImageId;
-    sal_Bool                    bOwnsAccel;
     String                      aStandardTemplate;
     sal_Bool                    bTemplateInitialized;
     SvGlobalName                aClassName;
@@ -136,9 +133,7 @@ struct SfxObjectFactory_Impl
         pNameResId          ( NULL ),
         pFilterContainer    ( NULL ),
         pModule             ( NULL ),
-        pAccMgr             ( NULL ),
         nImageId            ( 0 ),
-        bOwnsAccel          ( sal_False ),
         bTemplateInitialized( sal_False )
         {}
 
@@ -148,17 +143,6 @@ struct SfxObjectFactory_Impl
         delete pAccelResId;
         // Jetzt vom FilterMatcher
         // delete pFilterContainer;
-        if ( bOwnsAccel )
-            delete pAccMgr;
-    }
-
-    void ClearAccMgr()
-    {
-        if ( bOwnsAccel )
-        {
-            delete pAccMgr;
-            pAccMgr = 0;
-        }
     }
 };
 
@@ -190,7 +174,6 @@ SfxObjectFactory::SfxObjectFactory
     pImpl->aHelpPIFile += DEFINE_CONST_UNICODE( "hlppi" );
     pImpl->aHelpFile += DEFINE_CONST_UNICODE( ".hlp" );
     pImpl->aHelpPIFile += DEFINE_CONST_UNICODE( ".hlp" );
-    pImpl->bOwnsAccel = sal_False;
 
     String aShortName( String::CreateFromAscii( pShortName ) );
     aShortName.ToLowerAscii();
@@ -303,40 +286,6 @@ const String& SfxObjectFactory::GetHelpFile() const
 SfxModule* SfxObjectFactory::GetModule() const
 {
     return pImpl->pModule;
-}
-
-SfxAcceleratorManager* SfxObjectFactory::GetAccMgr_Impl()
-{
-    if ( !pImpl->pAccMgr && pImpl->pAccelResId )
-    {
-        const ResId& rMyId = *GetAccelId();
-        // factories in the same module may share their accelerators
-        //TODO: do we want that? How to accomplish?
-/*
-        SfxApplication *pApp = SFX_APP();
-        SfxObjectFactoryArr_Impl& rArr = GetObjFacArray_Impl();
-        sal_uInt32 nCount = rArr.Count();
-        for ( sal_uInt32 n=0; n<nCount; n++ )
-        {
-            SfxObjectFactory *pFact = rArr[(sal_uInt16)n];
-            if ( pFact == this )
-                break;
-            const ResId *pId = pFact->pImpl->pAccelResId;
-            if ( pId &&
-                pId->GetId() == rMyId.GetId() &&
-                pId->GetResMgr() == rMyId.GetResMgr() )
-            {
-                pImpl->pAccMgr = pFact->GetAccMgr_Impl();
-                return pImpl->pAccMgr;
-            }
-        }
-*/
-        // create accelerator manager
-        pImpl->pAccMgr = new SfxAcceleratorManager( rMyId, SFX_APP()->GetConfigManager_Impl() );
-        //pImpl->bOwnsAccel = sal_True;
-    }
-
-    return pImpl->pAccMgr;
 }
 
 void SfxObjectFactory::SetModule_Impl( SfxModule *pMod )
