@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:03:55 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:23:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@ class SwInterHyphInfo;          // for Hyphenate(), splargs.hxx
 class SwWrongList;      // fuer OnlineSpelling
 class SwNodeNum;
 class OutputDevice;
+class SwScriptInfo;
 
 // Konstanten fuer das Text-Insert:
 #define INS_DEFAULT         0x0000 // keine Extras
@@ -111,6 +112,7 @@ class SwTxtNode: public SwCntntNode
     friend class SwDoc;         // CTOR und AppendTxtNode()
     friend class SwNodes;
     friend class SwTxtFrm;
+    friend class SwScriptInfo;
     friend void SwpHints::Insert( SwTxtAttr*, SwTxtNode&, USHORT );
 
     //Kann 0 sein, nur dann nicht 0 wenn harte Attribute drin stehen.
@@ -120,6 +122,14 @@ class SwTxtNode: public SwCntntNode
     SwNodeNum   *pNdNum;    // Numerierung fuer diesen Absatz
     SwNodeNum   *pNdOutl;   // Outline fuer diesen Absatz
     XubString   aText;
+
+    // Some of the chars this para are hidden. Paragraph has to be reformatted
+    // on changing the view to print preview.
+    mutable BOOL bContainsHiddenChars : 1;
+    // The whole paragraph is hidden because of the hidden text attribute
+    mutable BOOL bHiddenCharsHidePara : 1;
+    // The last two flags have to be recalculated if this flag is set:
+    mutable BOOL bRecalcHiddenCharFlags : 1;
 
     SwTxtNode( const SwNodeIndex &rWhere, SwTxtFmtColl *pTxtColl,
                 SwAttrSet* pAutoAttr = 0 );
@@ -144,6 +154,17 @@ class SwTxtNode: public SwCntntNode
 
     void Replace0xFF( XubString& rTxt, xub_StrLen& rTxtStt,
                         xub_StrLen nEndPos, BOOL bExpandFlds ) const;
+
+    // Optimization: Asking for information about hidden characters at SwScriptInfo
+    // updates these flags.
+    inline bool IsCalcHiddenCharFlags() const { return bRecalcHiddenCharFlags; }
+    inline void SetHiddenCharAttribute( bool bNewHiddenCharsHidePara, bool bNewContainsHiddenChars ) const
+    {
+        bHiddenCharsHidePara = bNewHiddenCharsHidePara;
+        bContainsHiddenChars = bNewContainsHiddenChars;
+        bRecalcHiddenCharFlags = false;
+    }
+    void CalcHiddenCharFlags() const;
 
 public:
     const String& GetTxt() const { return aText; }
@@ -320,17 +341,33 @@ public:
     // Passes back info needed on the dropcap dimensions
     bool GetDropSize(int& rFontHeight, int& rDropHeight, int& rDropDescent) const;
 
-    // Berechnung des Visible-Flags
-    inline BOOL CalcVisibleFlag()
-        { if(pSwpHints) return pSwpHints->CalcVisibleFlag(); return FALSE; }
+
+    //
+    // Hidden Paragraph Field:
+    //
+    inline BOOL CalcHiddenParaField()
+        { if(pSwpHints) return pSwpHints->CalcHiddenParaField(); return FALSE; }
     // Setzen des CalcVisible-Flags
-    inline void SetCalcVisible(){ if(pSwpHints) pSwpHints->SetCalcVisible(); }
+    inline void SetCalcHiddenParaField(){ if(pSwpHints) pSwpHints->SetCalcHiddenParaField(); }
 
     // Ist der Absatz sichtbar
-    inline BOOL IsVisible() const
-        { return pSwpHints ? pSwpHints->IsVisible() : TRUE; }
+    inline BOOL HasHiddenParaField() const
+        { return pSwpHints ? pSwpHints->HasHiddenParaField() : FALSE; }
 
-    // Besitzt der Absatz Fussnoten?
+    //
+    // Hidden Paragraph Field:
+    //
+    inline bool HasHiddenCharAttribute( bool bWholePara ) const
+    {
+        if ( bRecalcHiddenCharFlags )
+            CalcHiddenCharFlags();
+        return bWholePara ? bHiddenCharsHidePara : bContainsHiddenChars;
+    }
+    inline void SetCalcHiddenCharFlags() const { bRecalcHiddenCharFlags = TRUE; }
+
+    //
+    // Footnotes:
+    //
     inline BOOL HasFtn() const {return pSwpHints ? pSwpHints->HasFtn() : FALSE;}
 
     inline SwTxtAttr* MakeTmpTxtAttr( const SfxPoolItem& rNew )
