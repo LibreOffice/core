@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopool.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2001-04-30 10:06:24 $
+ *  last change: $Author: cl $ $Date: 2001-05-30 15:10:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,12 @@
 #ifndef _SVX_UNOWPAGE_HXX
 #include "unopage.hxx"
 #endif
+#ifndef _SVDETC_HXX
+#include "svdetc.hxx"
+#endif
+#ifndef _MyEDITENG_HXX
+#include "editeng.hxx"
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -117,11 +123,19 @@ using namespace ::cppu;
 SvxUnoDrawPool::SvxUnoDrawPool( SdrModel* pModel ) throw()
 : PropertySetHelper( SvxPropertySetInfoPool::getOrCreate( SVXUNO_SERVICEID_COM_SUN_STAR_DRAWING_DEFAULTS ) ), mpModel( pModel )
 {
-    mpDefaultsPool = SdrObject::GetGlobalDrawObjectItemPool();
+    mpDefaultsPool = new SdrItemPool(SDRATTR_START, SDRATTR_END );
+    SfxItemPool* pOutlPool=EditEngine::CreatePool();
+    mpDefaultsPool->SetSecondaryPool(pOutlPool);
+
+//  mpDefaultsPool = new SdrItemPool( SdrObject::GetGlobalDrawObjectItemPool() );
+    SdrModel::SetTextDefaults( mpDefaultsPool, SdrEngineDefaults::GetFontHeight() );
+    mpDefaultsPool->SetDefaultMetric((SfxMapUnit)SdrEngineDefaults::GetMapUnit());
+    mpDefaultsPool->FreezeIdRanges();
 }
 
 SvxUnoDrawPool::~SvxUnoDrawPool() throw()
 {
+    delete mpDefaultsPool;
 }
 
 SfxItemPool* SvxUnoDrawPool::getModelPool( sal_Bool bReadOnly ) throw()
@@ -335,7 +349,10 @@ void SvxUnoDrawPool::_getPropertyStates( const comphelper::PropertyMapEntry** pp
                 }
                 break;
             default:
-                if( pPool->GetDefaultItem( nWhich ) == mpDefaultsPool->GetDefaultItem( nWhich ) )
+                const SfxPoolItem& r1 = pPool->GetDefaultItem( nWhich );
+                const SfxPoolItem& r2 = mpDefaultsPool->GetDefaultItem( nWhich );
+
+                if( r1 == r2 )
                 {
                     *pStates = PropertyState_DEFAULT_VALUE;
                 }

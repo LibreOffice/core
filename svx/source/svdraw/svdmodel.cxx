@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: sj $ $Date: 2001-05-22 10:15:00 $
+ *  last change: $Author: cl $ $Date: 2001-05-30 15:14:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -801,6 +801,11 @@ void SdrModel::DisposeLoadedModels()
 }
 
 void SdrModel::SetTextDefaults() const
+{
+    SetTextDefaults( pItemPool, nDefTextHgt );
+}
+
+void SdrModel::SetTextDefaults( SfxItemPool* pItemPool, ULONG nDefTextHgt )
 {
     SvxFontItem aSvxFontItem;
     SvxFontItem aSvxFontItemCJK( EE_CHAR_FONTINFO_CJK );
