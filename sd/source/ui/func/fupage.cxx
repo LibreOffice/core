@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupage.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:13:03 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 11:09:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,8 @@
  ************************************************************************/
 
 #pragma hdrstop
+
+#include "fupage.hxx"
 
 // Seite einrichten Tab-Page
 #define ITEMID_PAGE         SID_ATTR_PAGE
@@ -121,25 +123,40 @@
 #include "strings.hrc"
 #include "dlgpage.hxx"
 #include "sdpage.hxx"
-#include "sdview.hxx"
+#ifndef SD_VIEW_HXX
+#include "View.hxx"
+#endif
+#ifndef SD_WINDOW_HXX
+#include "Window.hxx"
+#endif
 #include "pres.hxx"
 #include "drawdoc.hxx"
-#include "docshell.hxx"
-#include "viewshel.hxx"
-#include "drviewsh.hxx"
-#include "fupage.hxx"
+#include "DrawDocShell.hxx"
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
+#endif
+#ifndef SD_DRAW_VIEW_SHELL_HXX
+#include "DrawViewShell.hxx"
+#endif
 #include "app.hrc"
-#include "preview.hxx"
-#include "prevchld.hxx"
+#ifndef SD_PREVIEW_WINDOW_HXX
+#include "PreviewWindow.hxx"
+#endif
+#ifndef SD_PREVIEW_CHILD_WINDOW_HXX
+#include "PreviewChildWindow.hxx"
+#endif
 #include "unchss.hxx"
 #include "undoback.hxx"
+
+namespace sd {
+
+class Window;
 
 // 50 cm 28350
 // erstmal vom Writer uebernommen
 #define MAXHEIGHT 28350
 #define MAXWIDTH  28350
 
-class SdWindow;
 
 TYPEINIT1( FuPage, FuPoor );
 
@@ -149,7 +166,7 @@ TYPEINIT1( FuPage, FuPoor );
 |*
 \************************************************************************/
 
-FuPage::FuPage( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
+FuPage::FuPage( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView,
                  SdDrawDocument* pDoc, SfxRequest& rReq )
        : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
 {
@@ -165,20 +182,20 @@ FuPage::FuPage( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
     //
     // Retrieve current page
     //
-    if ( pViewSh->ISA(SdDrawViewShell) )
-        ePageKind = ((SdDrawViewShell*) pViewSh)->GetPageKind();
+    if ( pViewSh->ISA(DrawViewShell) )
+        ePageKind = static_cast<DrawViewShell*>(pViewSh)->GetPageKind();
 
      // shall we display background area tabpage?
     bool bDisplayBackgroundTabPage = (ePageKind == PK_STANDARD) ? TRUE : FALSE;
 
-    if( ( (SdDrawViewShell*) pViewSh )->GetEditMode() == EM_MASTERPAGE )
+    if (static_cast<DrawViewShell*>(pViewSh)->GetEditMode() == EM_MASTERPAGE)
     {
         pPage = pDoc->GetSdPage(0, ePageKind);
     }
     else
     {
         bMasterPage = FALSE;
-        pPage = ( (SdDrawViewShell*) pViewSh )->GetActualPage();
+        pPage = static_cast<DrawViewShell*>(pViewSh)->GetActualPage();
     }
 
     if( !pArgs )
@@ -241,10 +258,11 @@ FuPage::FuPage( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
         aNewAttr.Put( aMaxSizeItem );
 
         // get printer
-        SfxPrinter* pPrinter = ( (SdDrawDocShell*) pViewSh->GetViewFrame()->GetObjectShell() )->GetPrinter(TRUE);
+        SfxPrinter* pPrinter = ( (DrawDocShell*) pViewSh->GetViewFrame()->GetObjectShell() )->GetPrinter(TRUE);
 
         // paperbin
-        SvxPaperBinItem aPaperBinItem( SID_ATTR_PAGE_PAPERBIN, pPage->GetPaperBin() );
+        SvxPaperBinItem aPaperBinItem( SID_ATTR_PAGE_PAPERBIN,
+            (const BYTE)pPage->GetPaperBin() );
         aNewAttr.Put( aPaperBinItem );
 
         // Raender, Umrandung und das andere Zeug
@@ -400,9 +418,11 @@ FuPage::FuPage( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
                         {
                             String aTit(SdResId( STR_PAGE_BACKGROUND_TITLE ));
                             String aTxt(SdResId( STR_PAGE_BACKGROUND_TXT ));
-                            MessBox aQuestionBox( (Window*)pWin, WB_YES_NO | WB_DEF_YES,
-                                                  aTit,
-                                                  aTxt );
+                            MessBox aQuestionBox (
+                                pWin,
+                                WB_YES_NO | WB_DEF_YES,
+                                aTit,
+                                aTxt );
                             aQuestionBox.SetImage( QueryBox::GetStandardImage() );
                             bMasterPage = ( RET_YES == aQuestionBox.Execute() );
                         }
@@ -497,8 +517,8 @@ FuPage::FuPage( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
         if( pPage->GetOrientation() != eOrientation )
             bSetPageSizeAndBorder = TRUE;
 
-        if ( pViewSh->ISA(SdDrawViewShell) )
-            ((SdDrawViewShell*) pViewSh)->ResetActualPage();
+        if ( pViewSh->ISA(DrawViewShell) )
+            static_cast<DrawViewShell*>(pViewSh)->ResetActualPage();
     }
 
     if( pArgs->GetItemState(SID_ATTR_PAGE_SIZE, TRUE, &pPoolItem) == SFX_ITEM_SET )
@@ -633,3 +653,4 @@ FuPage::FuPage( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
 }
 
 
+} // end of namespace sd
