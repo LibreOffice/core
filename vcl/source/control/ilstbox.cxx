@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ilstbox.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:35 $
+ *  last change: $Author: cp $ $Date: 2000-10-19 17:06:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,16 @@
 #include <ilstbox.hxx>
 #endif
 
+#ifndef _VCL_UNOHELP_HXX
+#include <unohelp.hxx>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XCOLLATOR_HPP_
+#include <com/sun/star/util/XCollator.hpp>
+#endif
+
 #pragma hdrstop
+
+using namespace ::com::sun::star;
 
 // =======================================================================
 
@@ -182,6 +191,15 @@ void ImplEntryList::SelectEntry( USHORT nPos, BOOL bSelect )
 
 // -----------------------------------------------------------------------
 
+uno::Reference< util::XCollator > ImplGetCollator()
+{
+    static uno::Reference< util::XCollator > xCollator;
+    if ( !xCollator.is() )
+        xCollator = vcl::unohelper::CreateCollator();
+
+    return xCollator;
+}
+
 USHORT ImplEntryList::InsertEntry( USHORT nPos, ImplEntryType* pNewEntry, BOOL bSort )
 {
     if ( !!pNewEntry->maImage )
@@ -193,57 +211,84 @@ USHORT ImplEntryList::InsertEntry( USHORT nPos, ImplEntryType* pNewEntry, BOOL b
     }
     else
     {
+        // XXX the transliteration !IsValid(). This exploits that neither
+        // the i18n nor the i18n_simple implementation uses it yet
+        uno::Reference< util::XCollator > xCollator = ImplGetCollator();
+        uno::Reference< util::XTransliteration > xTransliteration;
+        lang::Locale aLocale = Application::GetSettings().GetLocale();
+
         const XubString& rStr = pNewEntry->maStr;
         ULONG nLow, nHigh, nMid;
 
         nHigh = Count();
 
-        const International& rIntl = Application::GetSettings().GetInternational();
         ImplEntryType* pTemp = GetEntry( (USHORT)(nHigh-1) );
-        StringCompare eComp = rIntl.Compare( rStr, pTemp->maStr );
 
-        // Schnelles Einfuegen bei sortierten Daten
-        if ( eComp != COMPARE_LESS )
+        try
         {
-            Insert( pNewEntry, LIST_APPEND );
-        }
-        else
-        {
-            nLow  = mnMRUCount;
-            pTemp = (ImplEntryType*)GetEntry( (USHORT)nLow );
-            eComp = rIntl.Compare( rStr, pTemp->maStr );
-            if ( eComp != COMPARE_GREATER )
+            // XXX even though XCollator::compareString returns a sal_Int32 the only
+            // defined values are {-1, 0, 1} which is compatible with StringCompare
+            StringCompare eComp = (StringCompare)xCollator->compareString (
+                                                            rStr, pTemp->maStr,
+                                                            aLocale, xTransliteration);
+
+            // Schnelles Einfuegen bei sortierten Daten
+            if ( eComp != COMPARE_LESS )
             {
-                Insert( pNewEntry, (ULONG)0 );
+                Insert( pNewEntry, LIST_APPEND );
             }
             else
             {
-                // Binaeres Suchen
-                nHigh--;
-                do
+                nLow  = mnMRUCount;
+                pTemp = (ImplEntryType*)GetEntry( (USHORT)nLow );
+
+                eComp = (StringCompare)xCollator->compareString (rStr, pTemp->maStr,
+                                                            aLocale, xTransliteration);
+                if ( eComp != COMPARE_GREATER )
                 {
-                    nMid = (nLow + nHigh) / 2;
-                    pTemp = (ImplEntryType*)GetObject( nMid );
-                    eComp = rIntl.Compare( rStr, pTemp->maStr );
-
-                    if ( eComp == COMPARE_LESS )
-                        nHigh = nMid-1;
-                    else
-                    {
-                        if ( eComp == COMPARE_GREATER )
-                            nLow = nMid + 1;
-                        else
-                            break;
-                    }
+                    Insert( pNewEntry, (ULONG)0 );
                 }
-                while ( nLow <= nHigh );
+                else
+                {
+                    // Binaeres Suchen
+                    nHigh--;
+                    do
+                    {
+                        nMid = (nLow + nHigh) / 2;
+                        pTemp = (ImplEntryType*)GetObject( nMid );
 
-                if ( eComp != COMPARE_LESS )
-                    nMid++;
+                        eComp = (StringCompare)xCollator->compareString (
+                                                            rStr, pTemp->maStr,
+                                                            aLocale, xTransliteration);
 
-                Insert( pNewEntry, nMid );
+                        if ( eComp == COMPARE_LESS )
+                            nHigh = nMid-1;
+                        else
+                        {
+                            if ( eComp == COMPARE_GREATER )
+                                nLow = nMid + 1;
+                            else
+                                break;
+                        }
+                    }
+                    while ( nLow <= nHigh );
+
+                    if ( eComp != COMPARE_LESS )
+                        nMid++;
+
+                    Insert( pNewEntry, nMid );
+                }
             }
         }
+        catch (uno::RuntimeException &rError)
+        {
+            // XXX this is arguable, if the exception occured because pNewEntry is
+            // garbage you wouldn't insert it. If the exception occured because the
+            // Collator implementation is garbage then give the user a chance to see
+            // his stuff
+            Insert( pNewEntry, (ULONG)0 );
+        }
+
     }
 
     return (USHORT)GetPos( pNewEntry );
