@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envfmt.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tl $ $Date: 2001-02-19 15:07:46 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 21:01:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,24 @@ TabPage TP_ENV_FMT
         Left = TRUE ;
         Text = "Position" ;
         Text [ ENGLISH ] = "Position" ;
+        Text[ english_us ] = "Position";
+        Text[ portuguese ] = "Position";
+        Text[ russian ] = "œÓÁËˆËˇ";
+        Text[ greek ] = "»›ÛÁ";
+        Text[ dutch ] = "Position";
+        Text[ french ] = "Position";
+        Text[ spanish ] = "Position";
+        Text[ italian ] = "Position";
+        Text[ danish ] = "Position";
+        Text[ swedish ] = "Position";
+        Text[ polish ] = "Position";
+        Text[ portuguese_brazilian ] = "Position";
+        Text[ japanese ] = "Position";
+        Text[ korean ] = "Position";
+        Text[ chinese_simplified ] = "Position";
+        Text[ chinese_traditional ] = "¶Ï∏m";
+        Text[ turkish ] = "Position";
+        Text[ arabic ] = "«·„Ê÷⁄";
     };
     FixedText TXT_ADDR_LEFT
     {
@@ -204,6 +222,24 @@ TabPage TP_ENV_FMT
         Left = TRUE ;
         Text = "Format" ;
         Text [ ENGLISH ] = "Format" ;
+        Text[ english_us ] = "Format";
+        Text[ portuguese ] = "Format";
+        Text[ russian ] = "‘ÓÏ‡Ú";
+        Text[ greek ] = "Ã›„ÂËÔÚ";
+        Text[ dutch ] = "Format";
+        Text[ french ] = "Format";
+        Text[ spanish ] = "Format";
+        Text[ italian ] = "Format";
+        Text[ danish ] = "Format";
+        Text[ swedish ] = "Format";
+        Text[ polish ] = "Format";
+        Text[ portuguese_brazilian ] = "Format";
+        Text[ japanese ] = "Format";
+        Text[ korean ] = "Format";
+        Text[ chinese_simplified ] = "Format";
+        Text[ chinese_traditional ] = "ÆÊ¶°";
+        Text[ turkish ] = "Format";
+        Text[ arabic ] = "«· ‰”Ìﬁ";
     };
     MenuButton BTN_ADDR_EDIT
     {
@@ -269,6 +305,24 @@ TabPage TP_ENV_FMT
         Left = TRUE ;
         Text = "Position" ;
         Text [ ENGLISH ] = "Position" ;
+        Text[ english_us ] = "Position";
+        Text[ portuguese ] = "Position";
+        Text[ russian ] = "œÓÁËˆËˇ";
+        Text[ greek ] = "»›ÛÁ";
+        Text[ dutch ] = "Position";
+        Text[ french ] = "Position";
+        Text[ spanish ] = "Position";
+        Text[ italian ] = "Position";
+        Text[ danish ] = "Position";
+        Text[ swedish ] = "Position";
+        Text[ polish ] = "Position";
+        Text[ portuguese_brazilian ] = "Position";
+        Text[ japanese ] = "Position";
+        Text[ korean ] = "Position";
+        Text[ chinese_simplified ] = "Position";
+        Text[ chinese_traditional ] = "¶Ï∏m";
+        Text[ turkish ] = "Position";
+        Text[ arabic ] = "«·„Ê÷⁄";
     };
     FixedText TXT_SEND_LEFT
     {
@@ -369,6 +423,24 @@ TabPage TP_ENV_FMT
         Left = TRUE ;
         Text = "Format" ;
         Text [ ENGLISH ] = "Format" ;
+        Text[ english_us ] = "Format";
+        Text[ portuguese ] = "Format";
+        Text[ russian ] = "‘ÓÏ‡Ú";
+        Text[ greek ] = "Ã›„ÂËÔÚ";
+        Text[ dutch ] = "Format";
+        Text[ french ] = "Format";
+        Text[ spanish ] = "Format";
+        Text[ italian ] = "Format";
+        Text[ danish ] = "Format";
+        Text[ swedish ] = "Format";
+        Text[ polish ] = "Format";
+        Text[ portuguese_brazilian ] = "Format";
+        Text[ japanese ] = "Format";
+        Text[ korean ] = "Format";
+        Text[ chinese_simplified ] = "Format";
+        Text[ chinese_traditional ] = "ÆÊ¶°";
+        Text[ turkish ] = "Format";
+        Text[ arabic ] = "«· ‰”Ìﬁ";
     };
     MenuButton BTN_SEND_EDIT
     {
@@ -440,7 +512,7 @@ TabPage TP_ENV_FMT
         Text [ finnish ] = "Muotoile" ;
         Text [ danish ] = "~Format" ;
         Text [ french ] = "Forma~t" ;
-        Text [ swedish ] = "F~ormat" ;
+        Text [ swedish ] = "~Format" ;
         Text [ dutch ] = "~Formaat" ;
         Text [ spanish ] = "~Formato" ;
         Text [ english_us ] = "F~ormat" ;
@@ -449,8 +521,8 @@ TabPage TP_ENV_FMT
         Text[ russian ] = "‘Ó~Ï‡Ú";
         Text[ polish ] = "Format";
         Text[ japanese ] = "èëéÆ(~O)";
-        Text[ chinese_traditional ] = "ÆÊ¶°(~O)";
-        Text[ arabic ] = "«·ÕÃ„";
+        Text[ chinese_traditional ] = "ÆÊ¶°";
+        Text[ arabic ] = "«· ‰”Ìﬁ";
         Text[ language_user1 ] = " ";
         Text[ greek ] = "≈ÈÎÔ„›Ú";
         Text[ korean ] = "º≠Ωƒ(~O)";
@@ -486,7 +558,7 @@ TabPage TP_ENV_FMT
         Text[ russian ] = "ÿËËÌ‡";
         Text[ polish ] = "Szer.";
         Text[ japanese ] = "ïù(~W)";
-        Text[ chinese_traditional ] = "ºe(~W)";
+        Text[ chinese_traditional ] = "ºe";
         Text[ arabic ] = "«·⁄—÷";
         Text[ greek ] = "–Î‹ÙÔÚ";
         Text[ korean ] = "≥ ∫Ò(~W)";
@@ -532,7 +604,7 @@ TabPage TP_ENV_FMT
         Text[ russian ] = "¬˚ÒÓÚ‡";
         Text[ polish ] = "Wys.";
         Text[ japanese ] = "çÇÇ≥(~H)";
-        Text[ chinese_traditional ] = "∞™(~H)";
+        Text[ chinese_traditional ] = "∞™";
         Text[ arabic ] = "«·«— ›«⁄";
         Text[ greek ] = "æ¯ÔÚ";
         Text[ korean ] = "≥Ù¿Ã(~H)";
@@ -592,7 +664,7 @@ Menu MNU_EDIT
             TEXT[ chinese_traditional ] = "¶r§∏(~H)...";
             TEXT[ arabic ] = "Œÿ...";
             TEXT[ greek ] = "~◊·Ò·ÍÙﬁÒÂÚ...";
-            TEXT[ korean ] = "±‚»£(~H)...";
+            TEXT[ korean ] = "±‚»£...";
             TEXT[ turkish ] = "Karakter...";
         };
         MenuItem
@@ -618,7 +690,7 @@ Menu MNU_EDIT
             TEXT[ chinese_traditional ] = "¨q∏®(~A)...";
             TEXT[ arabic ] = "...›ﬁ—…";
             TEXT[ greek ] = "–~·Ò‹„Ò·ˆÔÚ...";
-            TEXT[ korean ] = "¥‹∂Ù(~A)...";
+            TEXT[ korean ] = "¥‹∂Ù...";
             TEXT[ turkish ] = "Paragraf...";
             TEXT[ language_user1 ] = " ";
         };
