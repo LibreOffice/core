@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dllcomponentloader.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dbo $ $Date: 2000-12-15 10:20:50 $
+ *  last change: $Author: dbo $ $Date: 2000-12-15 11:07:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -388,6 +388,10 @@ Reference<XInterface> SAL_CALL DllComponentLoader::activate(
         // ========================= LATEST VERSION =========================
 #ifdef MACOSX
         OUString aGetEnvName( getMacSymbolName( rLibName, COMPONENT_GETENV ) );
+#ifdef _DEBUG
+        OUString aNonMacSym( RTL_CONSTASCII_USTRINGPARAM(COMPONENT_GETENV) );
+        OSL_ENSURE( !osl_getSymbol( lib, aNonMacSym.pData ), "### found symbol "COMPONENT_GETENV" in global namespace!" );
+#endif
 #else
         OUString aGetEnvName( RTL_CONSTASCII_USTRINGPARAM(COMPONENT_GETENV) );
 #endif
@@ -418,6 +422,10 @@ Reference<XInterface> SAL_CALL DllComponentLoader::activate(
 
 #ifdef MACOSX
             OUString aGetFactoryName( getMacSymbolName( rLibName, COMPONENT_GETFACTORY ) );
+#ifdef _DEBUG
+            OUString aNonMacSym( RTL_CONSTASCII_USTRINGPARAM(COMPONENT_GETFACTORY) );
+            OSL_ENSURE( !osl_getSymbol( lib, aNonMacSym.pData ), "### found symbol "COMPONENT_GETFACTORY" in global namespace!" );
+#endif
 #else
             OUString aGetFactoryName( RTL_CONSTASCII_USTRINGPARAM(COMPONENT_GETFACTORY) );
 #endif
@@ -541,6 +549,10 @@ sal_Bool SAL_CALL DllComponentLoader::writeRegistryInfo(
         // ========================= LATEST VERSION =========================
 #ifdef MACOSX
         OUString aGetEnvName( getMacSymbolName( rLibName, COMPONENT_GETENV ) );
+#ifdef _DEBUG
+        OUString aNonMacSym( RTL_CONSTASCII_USTRINGPARAM(COMPONENT_GETENV) );
+        OSL_ENSURE( !osl_getSymbol( lib, aNonMacSym.pData ), "### found symbol "COMPONENT_GETENV" in global namespace!" );
+#endif
 #else
         OUString aGetEnvName( RTL_CONSTASCII_USTRINGPARAM(COMPONENT_GETENV) );
 #endif
@@ -571,6 +583,10 @@ sal_Bool SAL_CALL DllComponentLoader::writeRegistryInfo(
 
 #ifdef MACOSX
             OUString aWriteInfoName( getMacSymbolName( rLibName, COMPONENT_WRITEINFO ) );
+#ifdef _DEBUG
+            OUString aNonMacSym( RTL_CONSTASCII_USTRINGPARAM(COMPONENT_WRITEINFO) );
+            OSL_ENSURE( !osl_getSymbol( lib, aNonMacSym.pData ), "### found symbol "COMPONENT_WRITEINFO" in global namespace!" );
+#endif
 #else
             OUString aWriteInfoName( RTL_CONSTASCII_USTRINGPARAM(COMPONENT_WRITEINFO) );
 #endif
