@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertySet.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mi $ $Date: 2002-09-02 11:22:46 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:18:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ module com {  module sun {  module star {  module beans {
 
     <p>It specifies several, mostly optional ways to access properties.
  */
-service PropertySet
+published service PropertySet
 {
     interface com::sun::star::beans::XPropertySet;
 
