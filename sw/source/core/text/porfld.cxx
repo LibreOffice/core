@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfld.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ama $ $Date: 2001-02-14 15:55:35 $
+ *  last change: $Author: ama $ $Date: 2001-02-15 10:57:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -482,7 +482,7 @@ sal_Bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
             SetAscent( rInf.GetAscent() );
     }
 
-    if( bEOL && rInf.GetLast() )
+    if( bEOL && rInf.GetLast() && !rInf.GetUnderFlow() )
         rInf.GetLast()->FormatEOL( rInf );
     return bFull;
 }

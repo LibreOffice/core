@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porexp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2000-10-26 07:41:24 $
+ *  last change: $Author: ama $ $Date: 2001-02-15 10:56:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,7 +226,8 @@ void SwBlankPortion::FormatEOL( SwTxtFormatInfo &rInf )
             rInf.X( rInf.X() - PrtWidth() );
             rInf.SetIdx( rInf.GetIdx() - GetLen() );
         }
-        Underflow( rInf );
+        Truncate();
+        rInf.SetUnderFlow( this );
         if( rInf.GetLast()->IsKernPortion() )
         {
             rInf.SetLast( rInf.GetLast()->FindPrevPortion( rInf.GetRoot() ) );
@@ -245,7 +246,8 @@ sal_Bool SwBlankPortion::Format( SwTxtFormatInfo &rInf )
     const sal_Bool bFull = rInf.IsUnderFlow() || SwExpandPortion::Format( rInf );
     if( bFull && MayUnderFlow( rInf, rInf.GetIdx(), rInf.IsUnderFlow() ) )
     {
-        Underflow( rInf );
+        Truncate();
+        rInf.SetUnderFlow( this );
         if( rInf.GetLast()->IsKernPortion() )
         {
             rInf.SetLast( rInf.GetLast()->FindPrevPortion( rInf.GetRoot() ) );
