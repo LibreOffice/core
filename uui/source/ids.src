@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ids.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 19:11:33 $
+ *  last change: $Author: rt $ $Date: 2001-05-10 05:12:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 //
 //  Miscellaneous Resources
 //
-// $Author: kz $ $Date: 2001-05-04 19:11:33 $ $Revision: 1.8 $
+// $Author: rt $ $Date: 2001-05-10 05:12:51 $ $Revision: 1.9 $
 //============================================================================
 
 #ifndef UUI_IDS_HRC
@@ -94,6 +94,7 @@ String RID_KEEP_PASSWORD
     Text[ swedish ] = "Ko~m ihåg lösenordet tills tillämpningen avslutas";
     Text[ turkish ] = "~Remember password till end of session";
     Text[ catalan ] = "~Recordar contraseña hasta finalizar la aplicación";
+    Text[ finnish ] = "~Muista salasana istunnon loppuun asti";
 };
 
 String RID_SAVE_PASSWORD
@@ -121,6 +122,7 @@ String RID_SAVE_PASSWORD
     Text[ swedish ] = "~Spara lösenord permanent";
     Text[ turkish ] = "~Save password";
     Text[ catalan ] = "~Guardar contraseña";
+    Text[ finnish ] = "~Muista salasana";
 };
 
 String STR_ERROR_FILEIO
@@ -146,6 +148,7 @@ String STR_ERROR_FILEIO
     Text[ swedish ] = "Fel vid åtkomst till filen ($URL1)";
     Text[ turkish ] = "Error accessing file ($URL1)";
     Text[ catalan ] = "Error de acceso al archivo ($URL1)";
+    Text[ finnish ] = "On ilmennyt virhe käytettäessä tiedostoa ($URL1)";
 };
 
 String STR_ERROR_WRONGMEDIUM
@@ -171,5 +174,6 @@ String STR_ERROR_WRONGMEDIUM
     Text[ swedish ] = "Lägg in datamediet $$.";
     Text[ turkish ] = "Please insert disk $$.";
     Text[ catalan ] = "Inserte por favor el medio $$.";
+    Text[ finnish ] = "Syötä tallennusväline $$.";
 };
 
