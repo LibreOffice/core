@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XSchema.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-11-18 16:21:35 $
+ *  last change:$Date: 2004-07-23 10:44:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,11 @@
 package ifc.configuration.backend;
 
 import com.sun.star.configuration.backend.XSchema;
+import com.sun.star.io.XActiveDataSink;
+import com.sun.star.io.XInputStream;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.ucb.XSimpleFileAccess;
+import com.sun.star.uno.UnoRuntime;
 
 import lib.MultiMethodTest;
 
@@ -70,6 +75,11 @@ import util.XSchemaHandlerImpl;
 public class _XSchema extends MultiMethodTest {
     public XSchema oObj;
     XSchemaHandlerImpl xSchemaHandlerImpl = new XSchemaHandlerImpl();
+    String filename = null;
+
+    protected void before() {
+        filename = (String)tEnv.getObjRelation("ParsedFileName");
+    }
 
     public void _readComponent() {
         requiredMethod("readTemplates()");
@@ -130,6 +140,7 @@ public class _XSchema extends MultiMethodTest {
         }
 
         tRes.tested("readComponent()", res);
+        reopenFile();
     }
 
     public void _readSchema() {
@@ -189,7 +200,21 @@ public class _XSchema extends MultiMethodTest {
             res &= false;
         }
 
+        // check for the wrapped target exception
+        try {
+            xSchemaHandlerImpl.cleanCalls();
+            oObj.readSchema(xSchemaHandlerImpl);
+        } catch (com.sun.star.lang.NullPointerException e) {
+            log.println("Unexpected Exception (" + e + ") -- FAILED");
+        } catch (com.sun.star.lang.WrappedTargetException e) {
+            log.println("Expected Exception -- OK");
+            res = true;
+        } catch (com.sun.star.configuration.backend.MalformedDataException e) {
+            log.println("Unexpected Exception (" + e + ") -- FAILED");
+        }
+
         tRes.tested("readSchema()", res);
+        reopenFile();
     }
 
     public void _readTemplates() {
@@ -227,13 +252,13 @@ public class _XSchema extends MultiMethodTest {
                 res &= true;
             }
 
-            int ec = implCalled.indexOf("endGroup");
+            int ec = implCalled.indexOf("endNode");
 
             if (ec < 0) {
-                log.println("endGroup wasn't called -- FAILED");
+                log.println("endNode wasn't called -- FAILED");
                 res &= false;
             } else {
-                log.println("endGroup was called -- OK");
+                log.println("endNode was called -- OK");
                 res &= true;
             }
         } catch (com.sun.star.lang.NullPointerException e) {
@@ -248,6 +273,25 @@ public class _XSchema extends MultiMethodTest {
         }
 
         tRes.tested("readTemplates()", res);
+        reopenFile();
+    }
 
+    /**
+     * reopen the parsed file again, to avoid the wrapped target exception.
+     */
+    private void reopenFile() {
+        XSimpleFileAccess simpleAccess = null;
+        XInputStream xStream = null;
+        try {
+            Object fileacc = ((XMultiServiceFactory)tParam.getMSF()).createInstance("com.sun.star.comp.ucb.SimpleFileAccess");
+            simpleAccess = (XSimpleFileAccess)
+                            UnoRuntime.queryInterface(XSimpleFileAccess.class,fileacc);
+            log.println("Going to parse: "+filename);
+            xStream = simpleAccess.openFileRead(filename);
+        } catch (com.sun.star.uno.Exception e) {
+        }
+
+        XActiveDataSink xSink = (XActiveDataSink) UnoRuntime.queryInterface(XActiveDataSink.class, oObj);
+        xSink.setInputStream(xStream);
     }
 }
