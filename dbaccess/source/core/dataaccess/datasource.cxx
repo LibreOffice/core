@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-06 17:48:22 $
+ *  last change: $Author: fs $ $Date: 2000-11-08 16:05:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,11 +109,20 @@
 #ifndef _COM_SUN_STAR_SDBC_XDRIVERMANAGER_HPP_
 #include <com/sun/star/sdbc/XDriverManager.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UCB_XINTERACTIONSUPPLYAUTHENTICATION_HPP_
+#include <com/sun/star/ucb/XInteractionSupplyAuthentication.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_AUTHENTICATIONREQUEST_HPP_
+#include <com/sun/star/ucb/AuthenticationRequest.hpp>
+#endif
 #ifndef _TYPELIB_TYPEDESCRIPTION_HXX_
 #include <typelib/typedescription.hxx>
 #endif
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
+#endif
+#ifndef _COMPHELPER_INTERACTION_HXX_
+#include <comphelper/interaction.hxx>
 #endif
 
 #ifndef _DBA_CORE_CONNECTION_HXX_
@@ -129,10 +138,13 @@ using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::task;
+using namespace ::com::sun::star::ucb;
 using namespace ::cppu;
 using namespace ::osl;
 using namespace ::vos;
 using namespace ::dbtools;
+using namespace ::comphelper;
 
 // persistent tokens
 #define PT_SVFORMATTER      0x0001
@@ -141,6 +153,112 @@ using namespace ::dbtools;
 namespace dbaccess
 {
 //........................................................................
+
+//============================================================
+//= OAuthenticationContinuation
+//============================================================
+    class OAuthenticationContinuation : public OInteraction< XInteractionSupplyAuthentication >
+    {
+        sal_Bool    m_bDatasourceReadonly : 1;  // if sal_True, the data source using this continuation
+                                                // is readonly, which means that no user can be set and
+                                                // the password can't be remembered
+        sal_Bool    m_bRemberPassword : 1;      // remember the password for this session ?
+
+        ::rtl::OUString     m_sUser;            // the user
+        ::rtl::OUString     m_sPassword;        // the user's password
+
+    public:
+        virtual sal_Bool SAL_CALL canSetRealm(  ) throw(RuntimeException);
+        virtual void SAL_CALL setRealm( const ::rtl::OUString& Realm ) throw(RuntimeException);
+        virtual sal_Bool SAL_CALL canSetUserName(  ) throw(RuntimeException);
+        virtual void SAL_CALL setUserName( const ::rtl::OUString& UserName ) throw(RuntimeException);
+        virtual sal_Bool SAL_CALL canSetPassword(  ) throw(RuntimeException);
+        virtual void SAL_CALL setPassword( const ::rtl::OUString& Password ) throw(RuntimeException);
+        virtual Sequence< RememberAuthentication > SAL_CALL getRememberPasswordModes( RememberAuthentication& Default ) throw(RuntimeException);
+        virtual void SAL_CALL setRememberPassword( RememberAuthentication Remember ) throw(RuntimeException);
+        virtual sal_Bool SAL_CALL canSetAccount(  ) throw(RuntimeException);
+        virtual void SAL_CALL setAccount( const ::rtl::OUString& Account ) throw(RuntimeException);
+        virtual Sequence< RememberAuthentication > SAL_CALL getRememberAccountModes( RememberAuthentication& Default ) throw(RuntimeException);
+        virtual void SAL_CALL setRememberAccount( RememberAuthentication Remember ) throw(RuntimeException);
+
+        ::rtl::OUString getUser() const             { return m_sUser; }
+        ::rtl::OUString getPassword() const         { return m_sPassword; }
+        sal_Bool        getRememberPassword() const { return m_bRemberPassword; }
+    };
+
+    //--------------------------------------------------------------------------
+    sal_Bool SAL_CALL OAuthenticationContinuation::canSetRealm(  ) throw(RuntimeException)
+    {
+        return sal_False;
+    }
+
+    //--------------------------------------------------------------------------
+    void SAL_CALL OAuthenticationContinuation::setRealm( const ::rtl::OUString& Realm ) throw(RuntimeException)
+    {
+        DBG_ERROR("OAuthenticationContinuation::setRealm: not supported!");
+    }
+
+    //--------------------------------------------------------------------------
+    sal_Bool SAL_CALL OAuthenticationContinuation::canSetUserName(  ) throw(RuntimeException)
+    {
+        return !m_bDatasourceReadonly;
+    }
+
+    //--------------------------------------------------------------------------
+    void SAL_CALL OAuthenticationContinuation::setUserName( const ::rtl::OUString& _rUser ) throw(RuntimeException)
+    {
+        m_sUser = _rUser;
+    }
+
+    //--------------------------------------------------------------------------
+    sal_Bool SAL_CALL OAuthenticationContinuation::canSetPassword(  ) throw(RuntimeException)
+    {
+        return sal_True;
+    }
+
+    //--------------------------------------------------------------------------
+    void SAL_CALL OAuthenticationContinuation::setPassword( const ::rtl::OUString& _rPassword ) throw(RuntimeException)
+    {
+        m_sPassword = _rPassword;
+    }
+
+    //--------------------------------------------------------------------------
+    Sequence< RememberAuthentication > SAL_CALL OAuthenticationContinuation::getRememberPasswordModes( RememberAuthentication& Default ) throw(RuntimeException)
+    {
+        return m_bDatasourceReadonly ? RememberAuthentication_NO : RememberAuthentication_SESSION;
+    }
+
+    //--------------------------------------------------------------------------
+    void SAL_CALL OAuthenticationContinuation::setRememberPassword( RememberAuthentication _eRemember ) throw(RuntimeException)
+    {
+        m_bRemberPassword = (RememberAuthentication_NO != _eRemember);
+    }
+
+    //--------------------------------------------------------------------------
+    sal_Bool SAL_CALL OAuthenticationContinuation::canSetAccount(  ) throw(RuntimeException)
+    {
+        return sal_False;
+    }
+
+    //--------------------------------------------------------------------------
+    void SAL_CALL OAuthenticationContinuation::setAccount( const ::rtl::OUString& ) throw(RuntimeException)
+    {
+        DBG_ERROR("OAuthenticationContinuation::setAccount: not supported!");
+    }
+
+    //--------------------------------------------------------------------------
+    Sequence< RememberAuthentication > SAL_CALL OAuthenticationContinuation::getRememberAccountModes( RememberAuthentication& ) throw(RuntimeException)
+    {
+        Sequence < RememberAuthentication > aReturn(1);
+        aReturn[0] = RememberAuthentication_NO;
+        return aReturn;
+    }
+
+    //--------------------------------------------------------------------------
+    void SAL_CALL OAuthenticationContinuation::setRememberAccount( RememberAuthentication Remember ) throw(RuntimeException)
+    {
+        DBG_ERROR("OAuthenticationContinuation::setRememberAccount: not supported!");
+    }
 
 //============================================================
 //= ODatabaseContext
@@ -580,6 +698,68 @@ sal_Int32 ODatabaseSource::getLoginTimeout(void) throw( SQLException, RuntimeExc
     return m_nLoginTimeout;
 }
 
+
+// XCompletedConnection
+//------------------------------------------------------------------------------
+Reference< XConnection > SAL_CALL ODatabaseSource::connectWithCompletion( const Reference< XInteractionHandler >& _rxHandler ) throw(SQLException, RuntimeException)
+{
+    MutexGuard aGuard(m_aMutex);
+    if (OComponentHelper::rBHelper.bDisposed)
+        throw DisposedException();
+
+    if (!_rxHandler.is())
+    {
+        DBG_ERROR("ODatabaseSource::connectWithCompletion: invalid interaction handler!");
+        return getConnection(m_sUser, m_aPassword);
+    }
+
+    ::rtl::OUString sUser(m_sUser), sPassword(m_aPassword);
+
+    if (m_bPasswordRequired && (0 == sPassword.getLength()))
+    {   // we need a password, but don't have one yet.
+        // -> ask the user
+
+        // build an interaction request
+        // two continuations (Ok and Cancel)
+        OInteractionAbort* pAbort = new OInteractionAbort;
+        OAuthenticationContinuation* pAuthenticate = new OAuthenticationContinuation;
+        // the request
+        AuthenticationRequest aRequest;
+        aRequest.ServerName = m_sName;
+        aRequest.HasRealm = aRequest.HasAccount = sal_False;
+        aRequest.HasUserName = aRequest.HasPassword = sal_True;
+        aRequest.UserName = m_sUser;
+        aRequest.Password = m_aPassword;
+        OInteractionRequest* pRequest = new OInteractionRequest(makeAny(aRequest));
+        Reference< XInteractionRequest > xRequest(pRequest);
+        // some knittings
+        pRequest->addContinuation(pAbort);
+        pRequest->addContinuation(pAuthenticate);
+
+        // handle the request
+        try
+        {
+            _rxHandler->handle(xRequest);
+        }
+        catch(Exception&)
+        {
+            DBG_ERROR("ODatabaseSource::connectWithCompletion: caught an exception while calling the handler!");
+        }
+
+        if (!pAuthenticate->wasSelected())
+            return Reference< XConnection >();
+
+        // get the result
+        sUser = m_sUser = pAuthenticate->getUser();
+        sPassword = pAuthenticate->getPassword();
+
+        if (pAuthenticate->getRememberPassword())
+            m_aPassword = pAuthenticate->getPassword();
+    }
+
+    return getConnection(sUser, sPassword);
+}
+
 //------------------------------------------------------------------------------
 Reference< XConnection > ODatabaseSource::getConnection(const rtl::OUString& user, const rtl::OUString& password) throw( SQLException, RuntimeException )
 {
@@ -590,7 +770,7 @@ Reference< XConnection > ODatabaseSource::getConnection(const rtl::OUString& use
     Reference< XConnection > xSdbcConn = buildLowLevelConnection(user, password);
     if (!xSdbcConn.is())
         // something went heavily wrong, for instance the driver manager could not be instantiated
-        throwGenericSQLException(::rtl::OUString::createFromAscii("Could not connect to the data source. Un unspecified error occured."), static_cast< XDataSource* >(this));
+        throwGenericSQLException(::rtl::OUString::createFromAscii("Could not connect to the data source. An unspecified error occured."), static_cast< XDataSource* >(this));
 
     Reference< XConnection > xConn;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-30 09:27:06 $
+ *  last change: $Author: fs $ $Date: 2000-11-08 16:05:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,8 +101,8 @@
 #ifndef _CPPUHELPER_WEAKREF_HXX_
 #include <cppuhelper/weakref.hxx>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE6_HXX_
-#include <cppuhelper/implbase6.hxx>
+#ifndef _CPPUHELPER_IMPLBASE7_HXX_
+#include <cppuhelper/implbase7.hxx>
 #endif
 #ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
@@ -140,6 +140,9 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDB_XCOMPLETEDCONNECTION_HPP_
+#include <com/sun/star/sdb/XCompletedConnection.hpp>
+#endif
 #ifndef _DBA_CONFIGNODE_HXX_
 #include "confignode.hxx"
 #endif
@@ -161,12 +164,13 @@ typedef std::vector< OWeakConnection > OWeakConnectionArray;
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
     ODatabaseSource_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
 
-typedef ::cppu::ImplHelper6 <   ::com::sun::star::lang::XServiceInfo,
-                                ::com::sun::star::lang::XUnoTunnel,
-                                ::com::sun::star::sdbc::XDataSource,
-                                ::com::sun::star::sdb::XFormDocumentsSupplier,
-                                ::com::sun::star::sdb::XReportDocumentsSupplier,
-                                ::com::sun::star::sdb::XQueryDefinitionsSupplier
+typedef ::cppu::ImplHelper7 <   ::com::sun::star::lang::XServiceInfo
+                            ,   ::com::sun::star::lang::XUnoTunnel
+                            ,   ::com::sun::star::sdbc::XDataSource
+                            ,   ::com::sun::star::sdb::XFormDocumentsSupplier
+                            ,   ::com::sun::star::sdb::XReportDocumentsSupplier
+                            ,   ::com::sun::star::sdb::XQueryDefinitionsSupplier
+                            ,   ::com::sun::star::sdb::XCompletedConnection
                             >   ODatabaseSource_Base;
 
 class ODatabaseSource   :public ::comphelper::OBaseMutex
@@ -269,6 +273,9 @@ public:
                                                  )
                                                  throw (::com::sun::star::uno::Exception);
     virtual void SAL_CALL getFastPropertyValue( ::com::sun::star::uno::Any& rValue, sal_Int32 nHandle ) const;
+
+// ::com::sun::star::sdb::XCompletedConnection
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL connectWithCompletion( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& handler ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
 // ::com::sun::star::sdbc::XDataSource
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL getConnection( const ::rtl::OUString& user, const ::rtl::OUString& password ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
