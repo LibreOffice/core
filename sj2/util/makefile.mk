@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: obo $ $Date: 2004-06-01 09:13:55 $
+#   last change: $Author: rt $ $Date: 2004-06-16 10:20:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,8 +86,11 @@ SHL1STDLIBS= \
         $(UNOTOOLSLIB) \
         $(TOOLSLIB) \
         $(CPPULIB) \
-        $(SALLIB) \
-    $(JVMACCESSLIB)
+        $(SALLIB)
+
+.IF "$(SOLAR_JAVA)"!=""
+    SHL1STDLIBS+=$(JVMACCESSLIB)
+.ENDIF
 
 SHL1LIBS=   $(SLB)$/$(TARGET).lib
 SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
