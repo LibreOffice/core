@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.src,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2001-12-04 18:48:41 $
+ *  last change: $Author: obo $ $Date: 2001-12-12 22:21:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3804,7 +3804,7 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ polish ] = "Rosnπco";
         QuickHelpText[ portuguese_brazilian ] = "Ascending";
         QuickHelpText[ japanese ] = "ÊòáÈ†Ü";
-        QuickHelpText[ korean ] = "Ïò§Î¶ÑÏ∞®Ïàú!";
+        QuickHelpText[ korean ] = "Ïò§Î¶ÑÏ∞®Ïàú";
         QuickHelpText[ chinese_simplified ] = "Ascending";
         QuickHelpText[ chinese_traditional ] = "Âêë‰∏ä";
         QuickHelpText[ arabic ] = " ’«⁄œÌ";
@@ -3813,7 +3813,7 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Aufsteigend";
         QuickHelpText[ catalan ] = "Ascendiente";
-        QuickHelpText[ finnish ] = "Nouseva!";
+        QuickHelpText[ finnish ] = "Nouseva";
     };
     ImageRadioButton RB_SORTDOWN1
     {
@@ -3839,7 +3839,7 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ polish ] = "Malejπco";
         QuickHelpText[ portuguese_brazilian ] = "Descending";
         QuickHelpText[ japanese ] = "ÈôçÈ†Ü";
-        QuickHelpText[ korean ] = "ÎÇ¥Î¶ºÏ∞®Ïàú!";
+        QuickHelpText[ korean ] = "ÎÇ¥Î¶ºÏ∞®Ïàú";
         QuickHelpText[ chinese_simplified ] = "Descending";
         QuickHelpText[ chinese_traditional ] = "Âêë‰∏ã";
         QuickHelpText[ arabic ] = " ‰«“·Ì";
@@ -3848,7 +3848,7 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Absteigend";
         QuickHelpText[ catalan ] = "Descendiente";
-        QuickHelpText[ finnish ] = "Laskeva!";
+        QuickHelpText[ finnish ] = "Laskeva";
     };
     ImageRadioButton RB_SORTUP2
     {
@@ -3875,7 +3875,7 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ polish ] = "Rosnπco";
         QuickHelpText[ portuguese_brazilian ] = "Ascending";
         QuickHelpText[ japanese ] = "ÊòáÈ†Ü";
-        QuickHelpText[ korean ] = "Ïò§Î¶ÑÏ∞®Ïàú!";
+        QuickHelpText[ korean ] = "Ïò§Î¶ÑÏ∞®Ïàú";
         QuickHelpText[ chinese_simplified ] = "Ascending";
         QuickHelpText[ chinese_traditional ] = "Âêë‰∏ä";
         QuickHelpText[ arabic ] = " ’«⁄œÌ";
@@ -3884,7 +3884,7 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Aufsteigend";
         QuickHelpText[ catalan ] = "Ascendiente";
-        QuickHelpText[ finnish ] = "Nouseva!";
+        QuickHelpText[ finnish ] = "Nouseva";
     };
     ImageRadioButton RB_SORTDOWN2
     {
@@ -3910,7 +3910,7 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ polish ] = "Malejπco";
         QuickHelpText[ portuguese_brazilian ] = "Descending";
         QuickHelpText[ japanese ] = "ÈôçÈ†Ü";
-        QuickHelpText[ korean ] = "ÎÇ¥Î¶ºÏ∞®Ïàú!";
+        QuickHelpText[ korean ] = "ÎÇ¥Î¶ºÏ∞®Ïàú";
         QuickHelpText[ chinese_simplified ] = "Descending";
         QuickHelpText[ chinese_traditional ] = "Âêë‰∏ã";
         QuickHelpText[ arabic ] = " ‰«“·Ì";
@@ -3919,7 +3919,7 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Absteigend";
         QuickHelpText[ catalan ] = "Descendiente";
-        QuickHelpText[ finnish ] = "Laskeva!";
+        QuickHelpText[ finnish ] = "Laskeva";
     };
     ImageRadioButton RB_SORTUP3
     {
@@ -3946,7 +3946,7 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ polish ] = "Rosnπco";
         QuickHelpText[ portuguese_brazilian ] = "Ascending";
         QuickHelpText[ japanese ] = "ÊòáÈ†Ü";
-        QuickHelpText[ korean ] = "Ïò§Î¶ÑÏ∞®Ïàú!";
+        QuickHelpText[ korean ] = "Ïò§Î¶ÑÏ∞®Ïàú";
         QuickHelpText[ chinese_simplified ] = "Ascending";
         QuickHelpText[ chinese_traditional ] = "Âêë‰∏ä";
         QuickHelpText[ arabic ] = " ’«⁄œÌ";
@@ -3955,7 +3955,7 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Aufsteigend";
         QuickHelpText[ catalan ] = "Ascendiente";
-        QuickHelpText[ finnish ] = "Nouseva!";
+        QuickHelpText[ finnish ] = "Nouseva";
     };
     ImageRadioButton RB_SORTDOWN3
     {
@@ -3981,7 +3981,7 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ polish ] = "Malejπco";
         QuickHelpText[ portuguese_brazilian ] = "Descending";
         QuickHelpText[ japanese ] = "ÈôçÈ†Ü";
-        QuickHelpText[ korean ] = "ÎÇ¥Î¶ºÏ∞®Ïàú!";
+        QuickHelpText[ korean ] = "ÎÇ¥Î¶ºÏ∞®Ïàú";
         QuickHelpText[ chinese_simplified ] = "Descending";
         QuickHelpText[ chinese_traditional ] = "Âêë‰∏ã";
         QuickHelpText[ arabic ] = " ‰«“·Ì";
@@ -3990,7 +3990,7 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Absteigend";
         QuickHelpText[ catalan ] = "Descendiente";
-        QuickHelpText[ finnish ] = "Laskeva!";
+        QuickHelpText[ finnish ] = "Laskeva";
     };
     FixedText FT_SECONDKEY
     {
@@ -4784,6 +4784,7 @@ ModalDialog DLG_CREATE_AUTOMARK
     Text[ catalan ] = "Editar archivo de concordancia";
     Text[ finnish ] = "Muokkaa vastaavuustiedostoa";
 };
+
 
 
 
