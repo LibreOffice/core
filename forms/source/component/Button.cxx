@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Button.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-02 10:28:06 $
+ *  last change: $Author: fs $ $Date: 2001-08-27 16:54:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,20 +225,9 @@ InterfaceRef SAL_CALL OButtonControl_CreateInstance(const Reference<XMultiServic
 //------------------------------------------------------------------------------
 Sequence<Type> OButtonControl::_getTypes()
 {
-    static Sequence<Type> aTypes;
-    if (!aTypes.getLength())
-    {
-        // my base class
-        Sequence<Type> aBaseClassTypes = OImageControl::_getTypes();
-
-        Sequence<Type> aOwnTypes(2);
-        Type* pOwnTypes = aOwnTypes.getArray();
-        pOwnTypes[0] = getCppuType((Reference<XButton>*)NULL);
-        pOwnTypes[1] = getCppuType((Reference<XActionListener>*)NULL);
-
-        aTypes = concatSequences(aBaseClassTypes, aOwnTypes);
-    }
-    return aTypes;
+    return ::comphelper::concatSequences(
+        OButtonControl_BASE::getTypes(), OImageControl::_getTypes()
+    );
 }
 
 //------------------------------------------------------------------------------
@@ -280,9 +269,13 @@ OButtonControl::~OButtonControl()
 //------------------------------------------------------------------------------
 Any SAL_CALL OButtonControl::queryAggregation(const Type& _rType) throw (RuntimeException)
 {
-    Any aReturn = OImageControl::queryAggregation(_rType);
-    if (!aReturn.hasValue())
-        aReturn = OButtonControl_BASE::queryInterface(_rType);
+    // if asked for the XTypeProvider, don't let OButtonControl_BASE do this
+    Any aReturn;
+    if ( !_rType.equals( ::getCppuType( static_cast< Reference< XTypeProvider >* >( NULL ) ) ) )
+        aReturn = OButtonControl_BASE::queryInterface( _rType );
+
+    if ( !aReturn.hasValue() )
+        aReturn = OImageControl::queryAggregation( _rType );
 
     return aReturn;
 }
@@ -349,7 +342,7 @@ IMPL_LINK( OButtonControl, OnClick, void*, EMPTYARG )
 void OButtonControl::setLabel(const ::rtl::OUString& Label) throw( RuntimeException )
 {
     Reference<XButton>  xButton;
-    query_aggregation( m_xAggregate, xButton);
+    query_aggregation( m_xAggregate, xButton );
     if (xButton.is())
         xButton->setLabel(Label);
 }
