@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cmc $ $Date: 2002-10-18 13:28:28 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:28:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,10 +144,11 @@ protected:
     virtual const SwStartNode *GetStartNode() const;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor >         createCursor()throw(::com::sun::star::uno::RuntimeException);
     sal_Bool                            IsValid();
+    virtual ~SwXCell();
 public:
     SwXCell(SwFrmFmt* pTblFmt, SwTableBox* pBox, sal_uInt16 nPos=USHRT_MAX );
     SwXCell(SwFrmFmt* pTblFmt, const SwStartNode& rStartNode); // XML import interface
-    virtual ~SwXCell();
+
 
     TYPEINFO();
 
@@ -221,9 +222,11 @@ class SwXTextTableRow : public cppu::WeakImplHelper2
     SwTableLine*            pLine;
 
     SwFrmFmt* GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
+protected:
+    virtual ~SwXTextTableRow();
 public:
     SwXTextTableRow(SwFrmFmt* pFmt, SwTableLine* pLine);
-    virtual ~SwXTextTableRow();
+
 
     TYPEINFO();
 
@@ -250,26 +253,30 @@ public:
 /* -----------------20.07.98 13:03-------------------
  *
  * --------------------------------------------------*/
-class SwXTextTableCursor : public cppu::WeakImplHelper3
-<
-    ::com::sun::star::text::XTextTableCursor,
-    ::com::sun::star::lang::XServiceInfo,
-    ::com::sun::star::beans::XPropertySet
->,
-    public SwClient
+typedef cppu::WeakImplHelper3<
+                                ::com::sun::star::text::XTextTableCursor,
+                                ::com::sun::star::lang::XServiceInfo,
+                                ::com::sun::star::beans::XPropertySet
+                            > SwXTextTableCursor_Base;
+class SwXTextTableCursor : public SwXTextTableCursor_Base
+    ,public SwClient
+    ,public OTextCursorHelper
 {
     SwDepend                aCrsrDepend;
     SfxItemPropertySet      aPropSet;
 
     SwFrmFmt*       GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
-    SwUnoCrsr*      GetCrsr() const { return (SwUnoCrsr*)aCrsrDepend.GetRegisteredIn(); }
+    //  SwUnoCrsr*      GetCrsr() const { return (SwUnoCrsr*)aCrsrDepend.GetRegisteredIn(); }
 
+protected:
+    virtual ~SwXTextTableCursor();
 public:
     SwXTextTableCursor(SwFrmFmt* pFmt, SwTableBox* pBox);
     SwXTextTableCursor(SwFrmFmt& rTableFmt,
                         const SwTableCursor* pTableSelection);
-    virtual ~SwXTextTableCursor();
 
+
+    DECLARE_XINTERFACE();
     //XTextTableCursor
     virtual ::rtl::OUString SAL_CALL getRangeName(  ) throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL gotoCellByName( const ::rtl::OUString& aCellName, sal_Bool bExpand ) throw(::com::sun::star::uno::RuntimeException);
@@ -298,6 +305,15 @@ public:
 
     //SwClient
     virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
+
+    // ITextCursorHelper
+    virtual const SwPaM*        GetPaM() const;
+    virtual SwPaM*              GetPaM();
+    virtual const SwDoc*        GetDoc() const;
+    virtual SwDoc*              GetDoc();
+
+    const SwUnoCrsr*            GetCrsr() const;
+    SwUnoCrsr*                  GetCrsr();
 };
 
 /*-----------------11.12.97 09:38-------------------
@@ -342,11 +358,12 @@ class SwXTextTable : public cppu::WeakImplHelper10
 
     sal_Bool                        bFirstRowAsLabel    :1;
     sal_Bool                        bFirstColumnAsLabel :1;
-
+protected:
+    virtual ~SwXTextTable();
 public:
     SwXTextTable();
     SwXTextTable(SwFrmFmt& rFrmFmt);
-    virtual ~SwXTextTable();
+
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 
@@ -538,9 +555,11 @@ class SwXTableRows : public cppu::WeakImplHelper2
 
 {
     SwFrmFmt* GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
+protected:
+    virtual ~SwXTableRows();
 public:
     SwXTableRows(SwFrmFmt& rFrmFmt);
-    virtual ~SwXTableRows();
+
 
     TYPEINFO();
 
@@ -585,9 +604,11 @@ class SwXTableColumns : public cppu::WeakImplHelper2
 
 {
     SwFrmFmt* GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
+protected:
+    virtual ~SwXTableColumns();
 public:
     SwXTableColumns(SwFrmFmt& rFrmFmt);
-    virtual ~SwXTableColumns();
+
 
     TYPEINFO();
 // automatisch auskommentiert - [getIdlClass or queryInterface] - Bitte XTypeProvider benutzen!
