@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolboxlayoutdocumenthandler.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cd $ $Date: 2001-08-03 16:50:24 $
+ *  last change: $Author: cd $ $Date: 2001-09-25 12:22:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,6 +233,8 @@ class OWriteToolBoxLayoutDocumentHandler : private ThreadHelpBase // Struct for 
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >      m_xEmptyList;
         ::rtl::OUString                                                                     m_aXMLToolbarNS;
         ::rtl::OUString                                                                     m_aAttributeType;
+        ::rtl::OUString                                                                     m_aTrueValue;
+        ::rtl::OUString                                                                     m_aFalseValue;
 };
 
 } // namespace framework

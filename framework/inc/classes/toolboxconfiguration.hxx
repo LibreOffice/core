@@ -60,12 +60,14 @@ struct ToolBoxLayoutItemDescriptor
     ToolBoxAlign                eAlign;         // Alignment im angedockten Zustand
     BOOL                        bVisible;       // ein - oder ausgeschaltet
     BOOL                        bFloating;      // angedockt oder nicht
+    ButtonType                  eType;          // Text, Symbol or Text+Symbol
 
     ToolBoxLayoutItemDescriptor() : nFloatingLines( 0 )
                                     ,nLines( 1 )
                                     ,eAlign( BOXALIGN_LEFT )
                                     ,bVisible( sal_False )
-                                    ,bFloating( sal_False ) {}
+                                    ,bFloating( sal_False )
+                                    ,eType( BUTTON_SYMBOL ) {}
 };
 
 typedef ToolBoxLayoutItemDescriptor* ToolBoxLayoutItemDescriptorPtr;

@@ -64,6 +64,6 @@
 
 #define ATTRIBUTE_STYLE_TEXT        "text"
 #define ATTRIBUTE_STYLE_SYMBOL      "symbol"
-#define ATTRIBUTE_STYLE_SYMBOLTEXT  "symboltext"
+#define ATTRIBUTE_STYLE_SYMBOLTEXT  "symbol+text"
 
 #endif
