@@ -2,9 +2,9 @@
 #
 #   $RCSfile: idtglobal.pm,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: hr $ $Date: 2004-09-08 14:56:56 $
+#   last change: $Author: obo $ $Date: 2004-10-18 13:54:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,9 +64,11 @@ package installer::windows::idtglobal;
 
 use installer::existence;
 use installer::exiter;
+use installer::files;
 use installer::globals;
 use installer::pathanalyzer;
 use installer::remover;
+use installer::scriptitems;
 use installer::systemactions;
 use installer::windows::language;
 
@@ -269,7 +271,7 @@ sub write_idt_header
         push(@{$idtref}, $oneline);
         $oneline = "s38\tS38\tL64\tL255\tI2\ti2\tS72\ti2\n";
         push(@{$idtref}, $oneline);
-        $oneline = "65001\tFeature\tFeature\n";
+        $oneline = "WINDOWSENCODINGTEMPLATE\tFeature\tFeature\n";
         push(@{$idtref}, $oneline);
     }
 
@@ -309,7 +311,7 @@ sub write_idt_header
         push(@{$idtref}, $oneline);
         $oneline = "s72\ts72\tl128\ts72\ts72\tS255\tL255\tI2\tS72\tI2\tI2\tS72\n";
         push(@{$idtref}, $oneline);
-        $oneline = "65001\tShortcut\tShortcut\n";
+        $oneline = "WINDOWSENCODINGTEMPLATE\tShortcut\tShortcut\n";
         push(@{$idtref}, $oneline);
     }
 
@@ -405,7 +407,8 @@ sub get_languagefilename
 {
     my ($idtfilename, $basedir) = @_;
 
-    $idtfilename =~ s/\.idt/\.ulf/;
+    # $idtfilename =~ s/\.idt/\.ulf/;
+    $idtfilename =~ s/\.idt/\.mlf/;
 
     my $languagefilename = $basedir . $installer::globals::separator . $idtfilename;
 
@@ -598,6 +601,28 @@ sub prepare_language_idt_directory
 
     installer::systemactions::copy_directory_with_fileextension($newidtdir, $destinationdir, $onelanguage);
     installer::systemactions::rename_files_with_fileextension($destinationdir, $onelanguage);
+
+}
+
+##############################################################
+# Returning the source path of the rtf licensefile for
+# a specified language
+##############################################################
+
+sub get_rtflicensefilesource
+{
+    my ($language, $includepatharrayref) = @_;
+
+    my $licensefilename = "license_" . $language . ".rtf";
+
+    my $sourcefileref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$licensefilename, $includepatharrayref, 1);
+
+    if ($$sourcefileref eq "") { installer::exiter::exit_program("ERROR: Could not find $licensefilename!", "get_rtflicensefilesource"); }
+
+    my $infoline = "Using licensefile: $$sourcefileref\n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    return $$sourcefileref;
 }
 
 ##############################################################
@@ -718,6 +743,29 @@ sub get_rtf_licensetext
 }
 
 ##############################################################
+# A simple converter to create a license txt string from
+# the rtf format
+##############################################################
+
+sub make_string_licensetext
+{
+    my ($licensefile) = @_;
+
+    my $rtf_licensetext = "";
+
+    for ( my $i = 0; $i <= $#{$licensefile}; $i++ )
+    {
+        my $oneline = ${$licensefile}[$i];
+        $oneline =~ s/\s*$//g;      # no whitespace at line end
+
+        $rtf_licensetext = $rtf_licensetext .  $oneline;
+    }
+
+    return $rtf_licensetext;
+}
+
+
+##############################################################
 # Including the license text into the table control.idt
 ##############################################################
 
@@ -772,7 +820,8 @@ sub add_licensefile_to_database
             installer::exiter::exit_program("ERROR: Could not split line correctly!", "add_licensefile_to_database");
         }
 
-        my $licensetext = get_rtf_licensetext($licensefile);
+        # my $licensetext = get_rtf_licensetext($licensefile);
+        my $licensetext = make_string_licensetext($licensefile);
 
         $control{'Text'} = $licensetext;
 
@@ -1230,6 +1279,35 @@ sub add_childprojects
     # gm_o_java gm_optional Java 1.4.2 Description 2 200
     # gm_o_adabas gm_optional Adabas Description 2 200
 
+}
+
+##################################################################
+# Setting the encoding in all idt files. Replacing the
+# variable WINDOWSENCODINGTEMPLATE
+##################################################################
+
+sub setencoding
+{
+    my ( $languageidtdir, $onelanguage ) = @_;
+
+    my $encoding = installer::windows::language::get_windows_encoding($onelanguage);
+
+    # collecting all idt files in the directory $languageidtdir and substituting the string
+
+    my $idtfiles = installer::systemactions::find_file_with_file_extension("idt", $languageidtdir);
+
+    for ( my $i = 0; $i <= $#{$idtfiles}; $i++ )
+    {
+        my $onefilename = $languageidtdir . $installer::globals::separator . ${$idtfiles}[$i];
+        my $onefile = installer::files::read_file($onefilename);
+
+        for ( my $j = 0; $j <= $#{$onefile}; $j++ )
+        {
+            ${$onefile}[$j] =~ s/WINDOWSENCODINGTEMPLATE/$encoding/g;
+        }
+
+        installer::files::save_file($onefilename, $onefile);
+    }
 }
 
 1;
