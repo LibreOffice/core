@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interaction.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 15:58:30 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:56:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@
 #endif
 #ifndef _COM_SUN_STAR_TASK_XINTERACTIONREQUEST_HPP_
 #include <com/sun/star/task/XInteractionRequest.hpp>
+#endif
+#ifndef INCLUDED_COMPHELPERDLLAPI_H
+#include "comphelper/comphelperdllapi.h"
 #endif
 
 //.........................................................................
@@ -165,7 +168,7 @@ namespace comphelper
     /** implements an interaction request (<type scope="com.sun.star.task">XInteractionRequest</type>)<p/>
         at run time, you can freely add any interaction continuation objects
     */
-    class OInteractionRequest : public OInteractionRequest_Base
+    class COMPHELPER_DLLPUBLIC OInteractionRequest : public OInteractionRequest_Base
     {
         ::com::sun::star::uno::Any
                     m_aRequest;         /// the request we represent
