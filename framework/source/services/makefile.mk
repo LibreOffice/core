@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: kz $ $Date: 2004-02-25 17:49:01 $
+#   last change: $Author: kz $ $Date: 2004-06-10 13:22:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,6 +85,7 @@ SLOFILES=			\
                     $(SLO)$/pathsettings.obj                        \
                     $(SLO)$/backingcomp.obj							\
                     $(SLO)$/dispatchhelper.obj                      \
+                    $(SLO)$/license.obj                      \
                     $(SLO)$/modulemanager.obj
 
 SRS1NAME=$(TARGET)
