@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DropCapFormat.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:56:13 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 23:22:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 // DocMerge from xml: struct com::sun::star::style::DropCapFormat
 /** This struct describes drop caps at a paragraph object.
  */
-struct DropCapFormat
+published struct DropCapFormat
 {
     // DocMerge from xml: field com::sun::star::style::DropCapFormat::Lines
     /** This is the number of lines used for a drop cap.
