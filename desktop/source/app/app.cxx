@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.122 $
+ *  $Revision: 1.123 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-18 15:31:06 $
+ *  last change: $Author: hr $ $Date: 2003-09-29 14:56:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,6 +244,9 @@
 #endif
 #ifndef INCLUDED_SVTOOLS_SYSLOCALEOPTIONS_HXX
 #include <svtools/syslocaleoptions.hxx>
+#endif
+#ifndef SVTOOLS_FOLDER_RESTRICTION_HXX
+#include <svtools/folderrestriction.hxx>
 #endif
 #ifndef _UNOTOOLS_TEMPFILE_HXX
 #include <unotools/tempfile.hxx>
@@ -1376,6 +1379,18 @@ void Desktop::Main()
         pLanguageOptions = new SvtLanguageOptions(sal_True);
         SetSplashScreenProgress(45);
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "} create SvtPathOptions and SvtLanguageOptions" );
+
+        // Check special env variable #111015#
+        std::vector< String > aUnrestrictedFolders;
+        svt::getUnrestrictedFolders( aUnrestrictedFolders );
+
+        if ( aUnrestrictedFolders.size() > 0 )
+        {
+            // Set different working directory. The first entry is
+            // the new work path.
+            String aWorkPath = aUnrestrictedFolders[0];
+            SvtPathOptions().SetWorkPath( aWorkPath );
+        }
 
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ set locale settings" );
         String sLanguage = SvtPathOptions().SubstituteVariable(String::CreateFromAscii("$(langid)"));
