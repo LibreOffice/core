@@ -2,9 +2,9 @@
  *
  *  $RCSfile: config.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 13:20:06 $
+ *  last change: $Author: obo $ $Date: 2004-09-08 16:11:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,12 +169,10 @@ static BYTE* ImplSysReadConfig( const XubString& rFileName,
 
     if( aFile.open( osl_File_OpenFlag_Read ) == ::osl::FileBase::E_None )
     {
-        aFile.setPos( Pos_End, 0 );
         sal_uInt64 nPos = 0, nRead = 0;
-        if( aFile.getPos( nPos ) == ::osl::FileBase::E_None )
+        if( aFile.getSize( nPos ) == ::osl::FileBase::E_None )
         {
             pBuf = (BYTE*)SvMemAlloc( nPos );
-            aFile.setPos( Pos_Absolut, 0 );
             if( aFile.read( pBuf, nPos, nRead ) == ::osl::FileBase::E_None && nRead == nPos )
             {
                 rTimeStamp = ImplSysGetConfigTimeStamp( rFileName );
