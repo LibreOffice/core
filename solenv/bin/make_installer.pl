@@ -1156,7 +1156,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
                             # Copying the java installer into the installation set
                             chdir($currentdir); # changing back into start directory
-                            if ( $installer::globals::addjavainstaller ) { installer::javainstaller::create_java_installer($installdir, $languagestringref, $languagesarrayref, $filesinproductlanguageresolvedarrayref, $allvariableshashref, $includepatharrayref, $modulesinproductarrayref); }
+                            if ( $installer::globals::addjavainstaller ) { installer::javainstaller::create_java_installer($installdir, $newdir, $languagestringref, $languagesarrayref, $filesinproductlanguageresolvedarrayref, $allvariableshashref, $includepatharrayref, $modulesinproductarrayref); }
                         }
                     }
                 }
