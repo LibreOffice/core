@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jb $ $Date: 2000-12-06 18:02:29 $
+#   last change: $Author: jb $ $Date: 2000-12-14 16:21:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,6 +76,7 @@ ENABLE_EXCEPTIONS=TRUE
 SLOFILES=	\
         $(SLO)$/treecache.obj	\
         $(SLO)$/treedata.obj	\
+        $(SLO)$/timestamp.obj	\
         
 
 # --- Targets ----------------------------------
