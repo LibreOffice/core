@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 14:50:04 $
+#   last change: $Author: kz $ $Date: 2004-01-28 14:24:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,14 +72,10 @@ BOOTSTRAP_SERVICE=	FALSE
 
 # --- Generate -----------------------------------------------------
 
-SLOFILES=			$(SLO)$/servicemanager.obj						\
-                    $(SLO)$/filtercachedata.obj						\
-                    $(SLO)$/filtercache.obj							\
-                    $(SLO)$/wildcard.obj							\
+SLOFILES=           \
                     $(SLO)$/framecontainer.obj						\
                     $(SLO)$/taskcreator.obj							\
                     $(SLO)$/targetfinder.obj						\
-                    $(SLO)$/argumentanalyzer.obj					\
                     $(SLO)$/menumanager.obj							\
                     $(SLO)$/bmkmenu.obj								\
                     $(SLO)$/menuconfiguration.obj					\
