@@ -2,9 +2,9 @@
  *
  *  $RCSfile: merge.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 16:16:08 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 15:39:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -423,6 +423,7 @@ USHORT MergeDataFile::GetLangIndex( USHORT nId )
         case THAI: return THAI_INDEX;
         case HINDI: return HINDI_INDEX;
         case ESTONIAN: return ESTONIAN_INDEX;
+        case SLOVENIAN: return SLOVENIAN_INDEX;
         case EXTERN: return EXTERN_INDEX;
     }
     return 0xFFFF;
