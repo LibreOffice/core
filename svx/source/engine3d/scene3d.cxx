@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scene3d.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bm $ $Date: 2000-12-02 16:34:45 $
+ *  last change: $Author: aw $ $Date: 2000-12-04 16:43:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2087,14 +2087,24 @@ void E3dScene::ImpSetSceneItemsFromCamera()
 //-/}
 
 // ItemSet access
-const sal_uInt16 E3dScene::mnSceneRangeData[4] = { SDRATTR_3DSCENE_FIRST, SDRATTR_3DSCENE_LAST, 0, 0 };
-const sal_uInt16 E3dScene::mnAllRangeData[4] = { SDRATTR_START, SDRATTR_END, 0, 0 };
+//const sal_uInt16 E3dScene::mnSceneRangeData[4] = { SDRATTR_3DSCENE_FIRST, SDRATTR_3DSCENE_LAST, 0, 0 };
+////const sal_uInt16 E3dScene::mnSceneRangeData[4] = { SDRATTR_3DSCENE_PERSPECTIVE, SDRATTR_3DSCENE_SHADE_MODE, 0, 0 };
+//const sal_uInt16 E3dScene::mnAllRangeData[4] = { SDRATTR_START, SDRATTR_END, 0, 0 };
 
 void E3dScene::ImpResetToSceneItems()
 {
-    ImpForceItemSet();
-    mpObjectItemSet->SetRanges(mnSceneRangeData);
-    mpObjectItemSet->SetRanges(mnAllRangeData);
+    // #81191# SfxItemSet::SetRanges(...) does not do what is expected :-(
+    if(mpObjectItemSet)
+    {
+        SfxItemSet aNew(*mpObjectItemSet->GetPool(), SDRATTR_3DSCENE_FIRST, SDRATTR_3DSCENE_LAST);
+        aNew.Put(*mpObjectItemSet);
+        mpObjectItemSet->ClearItem(0L);
+        mpObjectItemSet->Put(aNew);
+    }
+
+//  ImpForceItemSet();
+//  mpObjectItemSet->SetRanges(mnSceneRangeData);
+//  mpObjectItemSet->SetRanges(mnAllRangeData);
 }
 
 const SfxItemSet& E3dScene::GetItemSet() const
