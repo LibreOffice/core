@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:01:55 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:39:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@ String RID_EDITUNDO_DEL
     TEXT [ English ] = "Delete" ;
     TEXT [ norwegian ] = "Slett" ;
     TEXT [ italian ] = "Elimina" ;
-    TEXT [ portuguese_brazilian ] = "Apagar" ;
+    TEXT [ portuguese_brazilian ] = "Excluir" ;
     TEXT [ portuguese ] = "Eliminar" ;
     TEXT [ finnish ] = "Poista" ;
     TEXT [ danish ] = "Slet" ;
@@ -90,6 +90,9 @@ String RID_EDITUNDO_DEL
     TEXT[ turkish ] = "Sil";
     TEXT[ catalan ] = "Suprimeix";
     TEXT[ thai ] = "ลบ";
+    TEXT[ czech ] = "Smazat";
+    TEXT[ hebrew ] = "‮מחיקה‬";
+    TEXT[ hindi ] = "मिटाओ";
 };
 
 String RID_EDITUNDO_MOVE
@@ -120,6 +123,9 @@ String RID_EDITUNDO_MOVE
     TEXT[ turkish ] = "Ta��";
     TEXT[ catalan ] = "Mou";
     TEXT[ thai ] = "ย้าย";
+    TEXT[ czech ] = "Přesunout";
+    TEXT[ hebrew ] = "‮הזזה‬";
+    TEXT[ hindi ] = "स्थानान्तर";
 };
 
 String RID_EDITUNDO_INSERT
@@ -150,6 +156,9 @@ String RID_EDITUNDO_INSERT
     TEXT[ turkish ] = "Ekle";
     TEXT[ catalan ] = "Insereix";
     TEXT[ thai ] = "แทรก";
+    TEXT[ czech ] = "Vložit";
+    TEXT[ hebrew ] = "‮הוספה‬";
+    TEXT[ hindi ] = "जोड़ो";
 };
 
 String RID_EDITUNDO_REPLACE
@@ -180,6 +189,9 @@ String RID_EDITUNDO_REPLACE
     TEXT[ turkish ] = "De�i�tir";
     TEXT[ catalan ] = "Reempla�a";
     TEXT[ thai ] = "แทนที่";
+    TEXT[ czech ] = "Nahradit";
+    TEXT[ hebrew ] = "‮החלפה‬";
+    TEXT[ hindi ] = "प्रतिस्थापन";
 };
 
 String RID_EDITUNDO_SETATTRIBS
@@ -210,6 +222,9 @@ String RID_EDITUNDO_SETATTRIBS
     TEXT[ turkish ] = "�znitelikleri kullan";
     TEXT[ catalan ] = "Aplica els atributs";
     TEXT[ thai ] = "ใช้คุณลักษณะ";
+    TEXT[ czech ] = "Použít atributy";
+    TEXT[ hebrew ] = "‮ישום תכונות‬";
+    TEXT[ hindi ] = "ऐट्रिब्यूट्स लागू करो";
 };
 
 String RID_EDITUNDO_RESETATTRIBS
@@ -229,7 +244,7 @@ String RID_EDITUNDO_RESETATTRIBS
     TEXT [ english_us ] = "Reset attributes" ;
     TEXT[ chinese_simplified ] = "重设属性";
     TEXT[ russian ] = "������������ ��������";
-    TEXT[ polish ] = "Zresetuj atrybuty";
+    TEXT[ polish ] = "Resetuj atrybuty";
     TEXT[ japanese ] = "属性を元に戻す";
     TEXT[ chinese_traditional ] = "重設屬性";
     TEXT[ arabic ] = "����� ����� ������";
@@ -240,6 +255,9 @@ String RID_EDITUNDO_RESETATTRIBS
     TEXT[ turkish ] = "�znitelikleri ba�a al";
     TEXT[ catalan ] = "Reinicia els atributs";
     TEXT[ thai ] = "กำหนดคุณลักษณะใหม่";
+    TEXT[ czech ] = "Obnovit atributy";
+    TEXT[ hebrew ] = "‮איפוס תכונות‬";
+    TEXT[ hindi ] = "ऐट्रिब्यूट्स रिसेट्ट करो";
 };
 
 String RID_EDITUNDO_INDENT
@@ -248,7 +266,7 @@ String RID_EDITUNDO_INDENT
     TEXT [ English ] = "Einr�cken" ;
     Text [ portuguese ] = "Avan�ar" ;
     Text [ english_us ] = "Indent" ;
-    Text [ portuguese_brazilian ] = "Einr?ken" ;
+    Text [ portuguese_brazilian ] = "Recuo" ;
     Text [ swedish ] = "Dra in" ;
     Text [ danish ] = "Indryk" ;
     Text [ italian ] = "Rientro" ;
@@ -269,6 +287,9 @@ String RID_EDITUNDO_INDENT
     Text[ catalan ] = "Sagnat";
     Text[ finnish ] = "Sisenn�";
     Text[ thai ] = "ระยะเยื้อง";
+    Text[ czech ] = "Odsazení";
+    Text[ hebrew ] = "‮כניסה‬";
+    Text[ hindi ] = "इन्डेन्ट";
 };
 
 String RID_EDITUNDO_SETSTYLE
@@ -277,7 +298,7 @@ String RID_EDITUNDO_SETSTYLE
     TEXT [ English ] = "Apply styles" ;
     TEXT [ norwegian ] = "Bruk maler" ;
     TEXT [ italian ] = "Applica modelli" ;
-    TEXT [ portuguese_brazilian ] = "Apicar estilos" ;
+    TEXT [ portuguese_brazilian ] = "Aplicar Estilos" ;
     TEXT [ portuguese ] = "Aplicar estilos" ;
     TEXT [ finnish ] = "K�yt� tyylej�" ;
     TEXT [ danish ] = "Anvend typografier" ;
@@ -299,6 +320,9 @@ String RID_EDITUNDO_SETSTYLE
     TEXT[ turkish ] = "�ablonlar� kullan";
     TEXT[ catalan ] = "Aplica els estils";
     TEXT[ thai ] = "ใช้ลักษณะ";
+    TEXT[ czech ] = "Použít styly";
+    TEXT[ hebrew ] = "‮ישום סגנונות‬";
+    TEXT[ hindi ] = "शैलियों को लागू करो";
 };
 
 String RID_EDITUNDO_TRANSLITERATE
@@ -316,17 +340,20 @@ String RID_EDITUNDO_TRANSLITERATE
     TEXT[ danish ] = "Store og sm� bogstaver";
     TEXT[ swedish ] = "Bokst�ver/tecken";
     TEXT[ polish ] = "Wielkie i ma�e litery";
-    TEXT[ portuguese_brazilian ] = "Change case";
+    TEXT[ portuguese_brazilian ] = "Caixa/Caracteres";
     TEXT[ japanese ] = "文字種の変換";
     TEXT[ korean ] = "문자 바꾸기";
     TEXT[ chinese_simplified ] = "变化字母和字体格式";
     TEXT[ chinese_traditional ] = "變化字母和字型格式";
-    TEXT[ turkish ] = "Change case";
+    TEXT[ turkish ] = "Ko�ul/Karakterler";
     TEXT[ arabic ] = "������� ����� ����� �� �����";
     TEXT[ language_user1 ] = "nk03.04.01: hier passt Englisch Uebesetzung besser.";
     TEXT[ catalan ] = "Maj�scules/min�scules";
     TEXT[ finnish ] = "Muuta kirjainkoko";
     TEXT[ thai ] = "ตัวพิมพ์/ตัวอักขระ";
+    TEXT[ czech ] = "Velikost/znaky";
+    TEXT[ hebrew ] = "‮סיווג אותיות‬";
+    TEXT[ hindi ] = "केस/अक्षरें";
 };
 
 
@@ -353,15 +380,18 @@ Menu RID_MENU_SPELL
             Text[ danish ] = "~Stavekontrol";
             Text[ swedish ] = "~R�ttstavning...";
             Text[ polish ] = "~Pisownia";
-            Text[ portuguese_brazilian ] = "~Rechtschreibung";
+            Text[ portuguese_brazilian ] = "Verifica��o ~Ortogr�fica";
             Text[ japanese ] = "文章校正(~S)...";
             Text[ korean ] = "맞춤법 검사(~S)...";
             Text[ chinese_simplified ] = "拼写检查(~S)...";
             Text[ chinese_traditional ] = "拼寫檢查(~S)...";
-            Text[ turkish ] = "~Yaz�m k�lavuzu";
+            Text[ turkish ] = "~Yaz�m Kontrol�...";
             Text[ arabic ] = "��~��� ������";
             Text[ catalan ] = "~Ortografia";
             Text[ thai ] = "~ตรวจสอบการสะกด";
+            Text[ czech ] = "Kontrola pravopisu";
+            Text[ hebrew ] = "‮בדיקת איות‬";
+            Text[ hindi ] = "~अक्षर की जाँच";
         };
         MenuItem
         {
@@ -380,10 +410,10 @@ Menu RID_MENU_SPELL
             Text [ swedish ] = "~L�gg till" ;
             Text [ danish ] = "Ti~lf�j" ;
             Text [ portuguese ] = "~Adicionar" ;
-            Text [ portuguese_brazilian ] = "~Aufnehmen" ;
+            Text [ portuguese_brazilian ] = "~Adicionar" ;
             Text [ chinese_simplified ] = "加入(~A)";
             Text[ russian ] = "��������";
-            Text[ polish ] = "Dodaj";
+            Text[ polish ] = "~Dodaj";
             Text[ japanese ] = "追加(~A)";
             Text[ chinese_traditional ] = "加入(~A)";
             Text[ arabic ] = "�����";
@@ -395,6 +425,9 @@ Menu RID_MENU_SPELL
             Text[ catalan ] = "~Afegeix";
             Text[ finnish ] = "Lis~��";
             Text[ thai ] = "เ~พิ่ม";
+            Text[ czech ] = "Přidat";
+            Text[ hebrew ] = "‮הוספה‬";
+            Text[ hindi ] = "~जोड़ो";
         };
         MenuItem
         {
@@ -404,18 +437,18 @@ Menu RID_MENU_SPELL
             Text [ ENGLISH ] = "I~gnore all" ;
             Text [ norwegian ] = "I~gnorer alle" ;
             Text [ italian ] = "~Ignora tutto" ;
-            Text [ portuguese_brazilian ] = "I~gnorar tudo" ;
+            Text [ portuguese_brazilian ] = "Ignorar Tudo" ;
             Text [ portuguese ] = "I~gnorar tudo" ;
             Text [ finnish ] = "Ohita kaikki" ;
             Text [ danish ] = "I~gnorer alle" ;
-            Text [ french ] = "~Ignorer tout" ;
+            Text [ french ] = "Tout ~ignorer" ;
             Text [ swedish ] = "~Ignorera alla" ;
             Text [ dutch ] = "Alle ~negeren" ;
             Text [ spanish ] = "I~gnorar todo" ;
             Text [ english_us ] = "Ignore All" ;
             Text [ chinese_simplified ] = "全部忽略";
             Text[ russian ] = "���������� ���";
-            Text[ polish ] = "Ignoruj wszystkie";
+            Text[ polish ] = "Ignoruj wszystko";
             Text[ japanese ] = "すべて無視する";
             Text[ chinese_traditional ] = "全部忽略";
             Text[ arabic ] = "����� ����";
@@ -426,6 +459,9 @@ Menu RID_MENU_SPELL
             Text[ turkish ] = "T�m�n� yok say";
             Text[ catalan ] = "Ignora'ls tots";
             Text[ thai ] = "เพิกเฉยทั้งหมด";
+            Text[ czech ] = "Ignorovat vše";
+            Text[ hebrew ] = "‮התעלמות מהכל‬";
+            Text[ hindi ] = "सब उपेक्षा करो";
         };
         MenuItem
         {
@@ -437,7 +473,7 @@ Menu RID_MENU_SPELL
             Text = "Auto~Korrektur" ;
             Text [ English ] = "~AutoCorrect" ;
             Text [ english_us ] = "AutoCorrect" ;
-            Text [ portuguese_brazilian ] = "Auto~Korrektur" ;
+            Text [ portuguese_brazilian ] = "AutoCorre��o" ;
             Text [ swedish ] = "Auto~Korrigering" ;
             Text [ danish ] = "Auto~Korrektur" ;
             Text [ italian ] = "~Correzione automatica" ;
@@ -459,6 +495,9 @@ Menu RID_MENU_SPELL
             Text[ catalan ] = "Auto~correcci�";
             Text[ finnish ] = "Automaattinen korjaus";
             Text[ thai ] = "แก้ไขอัตโนมัติ";
+            Text[ czech ] = "Automatické opravy";
+            Text[ hebrew ] = "‮תיקון אוטומטי‬";
+            Text[ hindi ] = "स्वयं ठीक करो";
         };
     };
 };
@@ -485,10 +524,13 @@ String RID_STR_WORD
     Text[ korean ] = "단어는 %x";
     Text[ chinese_simplified ] = "单词是 %x";
     Text[ chinese_traditional ] = "字是 %x";
-    Text[ turkish ] = "Word is %x";
+    Text[ turkish ] = "Kelime: %x";
     Text[ arabic ] = "Word is %x";
     Text[ catalan ] = "Word is %x";
     Text[ thai ] = "Word is %x";
+    Text[ czech ] = "Slovo je %x";
+    Text[ hebrew ] = "‮מילה היא %x‬";
+    Text[ hindi ] = "Word is %x";
 };
 
 String RID_STR_PARAGRAPH
@@ -512,10 +554,22 @@ String RID_STR_PARAGRAPH
     Text[ korean ] = "단락은 %x";
     Text[ chinese_simplified ] = "段落是 %x";
     Text[ chinese_traditional ] = "段落是 %x";
-    Text[ turkish ] = "Paragraph is %x";
+    Text[ turkish ] = "%x paragrafd�r";
     Text[ arabic ] = "Paragraph is %x";
     Text[ catalan ] = "Paragraph is %x";
     Text[ thai ] = "Paragraph is %x";
+    Text[ czech ] = "Odstavec je %x";
+    Text[ hebrew ] = "‮פסקה היא %x‬";
+    Text[ hindi ] = "Paragraph is %x";
 };
+
+
+
+
+
+
+
+
+
 
 
