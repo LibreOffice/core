@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiescher.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:59:22 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 17:59:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,10 +153,15 @@ public:
     inline SCTAB                GetScTab() const        { return mnScTab; }
     /** Returns the Excel object identifier. */
     inline sal_uInt16           GetObjId() const        { return mnObjId; }
-    /** Returns true, if this Escher object contains an SdrObj and a valid anchor position. */
-    inline bool                 IsValid() const         { return !mbSkip && GetSdrObj() && !GetAnchor().IsEmpty(); }
+    /** Returns true, if Escher object is printable. */
+    inline bool                 GetIsSkip() const       { return mbSkip; }
     /** Returns true, if Escher object is printable. */
     inline bool                 GetPrintable() const    { return mbPrintable; }
+
+    /** Returns true, if width and height of the anchor rectangle are greater than 1. */
+    bool                        IsVisibleArea() const;
+    /** Returns true, if this Escher object contains an SdrObj and a valid anchor position. */
+    bool                        IsValid() const;
 
     /** Sets the position of this object in the draw page. */
     inline void                 SetAnchor( const Rectangle& rRect ) { maAnchorRect = rRect; }
@@ -221,13 +226,9 @@ public:
 
     /** Sets the horizontal and vertical text alignment from the passed Excel TXO flags. */
     void                        SetAlignment( sal_uInt16 nAlign );
-    /** Returns the horizontal text alignment. */
-    inline XclTxoHorAlign       GetHorAlign() const { return meHorAlign; }
-    /** Returns the vertical text alignment. */
-    inline XclTxoVerAlign       GetVerAlign() const { return meVerAlign; }
 
     /** Sets the text of this Escher text object to the passed SdrObj, if it can take text. */
-    void                        ApplyTextOnSdrObj( SdrObject& rSdrObj );
+    void                        ApplyTextOnSdrObj( SdrObject& rSdrObj ) const;
 
     /** Sets a new SdrObj for this Escher object. This object owns the passed SdrObj. */
     virtual void                SetSdrObj( SdrObject* pSdrObj );
@@ -582,14 +583,14 @@ public:
     explicit                    XclImpObjectManager( const XclImpRoot& rRoot );
                                 ~XclImpObjectManager();
 
-// *** Escher stream *** ------------------------------------------------------
+    // *** Escher stream *** --------------------------------------------------
 
     /** Returns true, if the Escher stream contains any data. */
     inline bool                 HasEscherStream()   { return maStreamConsumer.HasData(); }
     /** Returns the Escher stream. */
     inline SvStream&            GetEscherStream()   { return maStreamConsumer.GetStream(); }
 
-// *** Escher objects *** -----------------------------------------------------
+    // *** Escher objects *** -------------------------------------------------
 
     /** Returns the number of contained objects. */
     inline sal_uInt32           GetEscherObjCount() const { return maEscherObjList.GetObjCount(); }
@@ -614,7 +615,7 @@ public:
     /** Returns access to the anchor of the object at the passed Escher stream position. */
     XclEscherAnchor*            GetEscherAnchorAcc( sal_uInt32 nStrmPos );
 
-// *** Text boxes *** ---------------------------------------------------------
+    // *** Text boxes *** -----------------------------------------------------
 
     /** Returns the textbox object at the specified Escher stream position. */
     const XclImpEscherTxo*      GetEscherTxo( sal_uInt32 nStrmPos ) const;
@@ -624,7 +625,7 @@ public:
     /** Returns the note object in the specified sheet by Excel object identifier. */
     const XclImpEscherNote*     GetEscherNote( SCTAB  nScTab, sal_uInt16 nObjId ) const;
 
-// *** Chart *** --------------------------------------------------------------
+    // *** Chart *** ----------------------------------------------------------
 
     /** Returns true, if the current object is a chart. */
     bool                        IsCurrObjChart() const;
@@ -641,7 +642,7 @@ public:
         @descr  Used to import sheet charts, which do not have a corresponding OBJ record. */
     void                        StartNewChartObj();
 
-// *** OLE / controls *** -----------------------------------------------------
+    // *** OLE / controls *** -------------------------------------------------
 
     /** Creates the SdrObj for an OLE Escher object.
         @descr  The passed object may be a common OLE object, then this function creates
@@ -651,7 +652,7 @@ public:
     /** Creates the SdrObj for an old-fashioned Escher control object. */
     bool                        CreateSdrObj( XclImpEscherTbxCtrl& rCtrlObj );
 
-// *** Read Excel records *** -------------------------------------------------
+    // *** Read Excel records *** ---------------------------------------------
 
     /** Reads the MSODRAWINGGROUP record. */
     void                        ReadMsodrawinggroup( XclImpStream& rStrm );
@@ -665,7 +666,7 @@ public:
     /** Reads the TXO record. */
     void                        ReadTxo( XclImpStream& rStrm );
 
-// *** Misc *** ---------------------------------------------------------------
+    // *** Misc *** -----------------------------------------------------------
 
     /** Lets the object manager add a dummy object, before the next object is read. */
     inline void                 InsertDummyObj() { mbStartWithDummy = true; }
@@ -673,7 +674,7 @@ public:
     /** Returns the DFF manager (Escher stream converter). Don't call before the Escher stream is read. */
     XclImpDffManager&           GetDffManager();
     /** Updates the connector rules of the passed object in the solver container. */
-    void                        UpdateConnectorRules( const DffObjData& rObjData, SdrObject* pSdrObj );
+    void                        UpdateConnectorRules( const DffObjData& rObjData, SdrObject& rSdrObj );
 
     /** Sets the object with the passed identification to be ignored on import. */
     void                        SetSkipObj( SCTAB  nScTab, sal_uInt16 nObjId );
@@ -681,6 +682,7 @@ public:
     /** Inserts all objects into the Calc document. */
     void                        Apply();
 
+    // ------------------------------------------------------------------------
 private:
     /** Appends the passed object to the list. */
     void                        AppendEscherObj( XclImpEscherObj* pEscherObj );
@@ -698,10 +700,15 @@ private:
     /** Reads a sub record for TBX form controls in an OBJ record. */
     void                        ReadObjTbxSubRec( XclImpStream& rStrm, sal_uInt16 nSubRecId );
 
-    /** Returns the solver container (for connector rules). */
-    SvxMSDffSolverContainer&    GetSolverContainer();
     /** Returns the OCX converter (OCX form controls converter). */
     XclImpOcxConverter&         GetOcxConverter();
+
+    /** Returns the solver container (for connector rules). */
+    SvxMSDffSolverContainer&    GetSolverContainer();
+    /** Returns the first connector rule from the solver container. */
+    SvxMSDffConnectorRule*      GetFirstConnectorRule();
+    /** Returns the next connector rule from the solver container. */
+    SvxMSDffConnectorRule*      GetNextConnectorRule();
 
     /** Identifies an Escher object to skip on import (will not be inserted into the Calc document). */
     struct XclSkipObj
