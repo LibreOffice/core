@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodule.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:06:55 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:39:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,29 +61,31 @@
 #ifndef _SWMODULE_HXX
 #define _SWMODULE_HXX
 
-
 #ifndef _LINK_HXX //autogen
 #include <tools/link.hxx>
+#endif
+#ifndef _STRING_HXX
+#include <tools/string.hxx>
+#endif
+#ifndef _VCL_FLDUNIT_HXX
+#include <vcl/fldunit.hxx>
+#endif
+#ifndef _SFXLSTNER_HXX //autogen
+#include <svtools/lstner.hxx>
 #endif
 #ifndef _SFXMODULE_HXX //autogen
 #include <sfx2/module.hxx>
 #endif
 
-#ifndef _SFXLSTNER_HXX //autogen
-#include <svtools/lstner.hxx>
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
 #endif
-#ifndef SW_SWDLL_HXX
-//#include <swdll.hxx>
-#endif
+#ifndef _SHELLID_HXX
 #include "shellid.hxx"
-#ifndef _STRING_HXX
-#include <tools/string.hxx>
 #endif
+
 #ifndef _COM_SUN_STAR_LINGUISTIC2_XLINGUSERVICEEVENTLISTENER_HPP_
 #include <com/sun/star/linguistic2/XLinguServiceEventListener.hpp>
-#endif
-#ifndef _VCL_FLDUNIT_HXX
-#include <vcl/fldunit.hxx>
 #endif
 
 class SvStringsDtor;
@@ -206,27 +208,27 @@ public:
     void                ExecWizzard(SfxRequest &);
 
     // Benutzereinstellungen modifizieren
-    const SwMasterUsrPref *GetUsrPref(sal_Bool bWeb) const;
+    SW_DLLPUBLIC const SwMasterUsrPref *GetUsrPref(sal_Bool bWeb) const;
     const SwViewOption* GetViewOption(sal_Bool bWeb);
     void                MakeUsrPref( SwViewOption &rToFill, sal_Bool bWeb ) const;
     void                ApplyUsrPref(const SwViewOption &, SwView*,
                                      sal_uInt16 nDest = VIEWOPT_DEST_VIEW );
     void ApplyUserMetric( FieldUnit eMetric, BOOL bWeb );
-    void ApplyFldUpdateFlags(sal_Int32 nFldFlags);
-    void ApplyLinkMode(sal_Int32 nNewLinkMode);
+    SW_DLLPUBLIC void ApplyFldUpdateFlags(sal_Int32 nFldFlags);
+    SW_DLLPUBLIC void ApplyLinkMode(sal_Int32 nNewLinkMode);
 
     // ConfigItems erzeugen
     SwModuleOptions*    GetModuleConfig()       { return pModuleConfig;}
-    SwPrintOptions*     GetPrtOptions(sal_Bool bWeb);
-    SwChapterNumRules*  GetChapterNumRules();
+    SW_DLLPUBLIC SwPrintOptions*    GetPrtOptions(sal_Bool bWeb);
+    SW_DLLPUBLIC SwChapterNumRules* GetChapterNumRules();
     SwStdFontConfig*    GetStdFontConfig()      { return pStdFontConfig; }
     SwNavigationConfig* GetNavigationConfig();
     SwToolbarConfigItem*GetToolbarConfig()      { return pToolbarConfig;    }
     SwToolbarConfigItem*GetWebToolbarConfig()   { return pWebToolbarConfig; }
-    SwDBConfig*         GetDBConfig();
+    SW_DLLPUBLIC SwDBConfig*            GetDBConfig();
     svtools::ColorConfig&   GetColorConfig();
-    SvtAccessibilityOptions&    GetAccessibilityOptions();
-    SvtCTLOptions&      GetCTLOptions();
+    SW_DLLPUBLIC SvtAccessibilityOptions&    GetAccessibilityOptions();
+    SW_DLLPUBLIC SvtCTLOptions&      GetCTLOptions();
     SvtUserOptions&     GetUserOptions();
     SvtUndoOptions&     GetUndoOptions();
 
@@ -289,7 +291,7 @@ public:
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::scanner::XScannerManager >
-            GetScannerManager() const {return m_xScannerManager;}
+            GetScannerManager();
 };
 
 
@@ -313,9 +315,8 @@ inline void SwModule::SetLngSvcEvtListener(
 --------------------------------------------------*/
 
 #define SW_MOD() ( *(SwModule**) GetAppData(SHL_WRITER))
-SwView*     GetActiveView();
-SwWrtShell* GetActiveWrtShell();
 
-
+SW_DLLPUBLIC SwView*    GetActiveView();
+SW_DLLPUBLIC SwWrtShell* GetActiveWrtShell();
 
 #endif
