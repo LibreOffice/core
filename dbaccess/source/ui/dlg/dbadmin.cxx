@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-26 15:02:16 $
+ *  last change: $Author: fs $ $Date: 2000-10-30 08:01:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -736,39 +736,43 @@ sal_Bool ODbAdminDialog::getCurrentSettings(Sequence< PropertyValue >& _rDriverP
             PropertyValue(  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("user")), 0,
                             makeAny(::rtl::OUString(pUser->GetValue())), PropertyState_DIRECT_VALUE));
 
-    // password: DSID_PASSWORD -> "password"
-    SFX_ITEMSET_GET(*GetExampleSet(), pPassword, SfxStringItem, DSID_PASSWORD, sal_True);
-    String sPassword = pPassword ? pPassword->GetValue() : String();
-    SFX_ITEMSET_GET(*GetExampleSet(), pPasswordRequired, SfxBoolItem, DSID_PASSWORDREQUIRED, sal_True);
-    // if the set does not contain a password, but the item set says it requires one, ask the user
-    if ((!pPassword || !pPassword->GetValue().Len()) && (pPasswordRequired && pPasswordRequired->GetValue()))
+    // check if the connection type requires a password
+    if (hasAuthentication(*GetExampleSet()))
     {
-        SFX_ITEMSET_GET(*GetExampleSet(), pName, SfxStringItem, DSID_NAME, sal_True);
+        // password: DSID_PASSWORD -> "password"
+        SFX_ITEMSET_GET(*GetExampleSet(), pPassword, SfxStringItem, DSID_PASSWORD, sal_True);
+        String sPassword = pPassword ? pPassword->GetValue() : String();
+        SFX_ITEMSET_GET(*GetExampleSet(), pPasswordRequired, SfxBoolItem, DSID_PASSWORDREQUIRED, sal_True);
+        // if the set does not contain a password, but the item set says it requires one, ask the user
+        if ((!pPassword || !pPassword->GetValue().Len()) && (pPasswordRequired && pPasswordRequired->GetValue()))
+        {
+            SFX_ITEMSET_GET(*GetExampleSet(), pName, SfxStringItem, DSID_NAME, sal_True);
 
-        ::svt::LoginDialog aDlg(this,
-            LF_NO_PATH | LF_NO_ACCOUNT | LF_NO_ERRORTEXT | LF_USERNAME_READONLY,
-            String(), NULL);
+            ::svt::LoginDialog aDlg(this,
+                LF_NO_PATH | LF_NO_ACCOUNT | LF_NO_ERRORTEXT | LF_USERNAME_READONLY,
+                String(), NULL);
 
-        aDlg.SetName(pUser ? pUser->GetValue() : String());
-        aDlg.ClearPassword();  // this will give the password field the focus
+            aDlg.SetName(pUser ? pUser->GetValue() : String());
+            aDlg.ClearPassword();  // this will give the password field the focus
 
-        String sLoginRequest(ModuleRes(STR_ENTER_CONNECTION_PASSWORD));
-        sLoginRequest.SearchAndReplaceAscii("$name$", pName ? pName->GetValue() : String()),
-        aDlg.SetLoginRequestText(sLoginRequest);
+            String sLoginRequest(ModuleRes(STR_ENTER_CONNECTION_PASSWORD));
+            sLoginRequest.SearchAndReplaceAscii("$name$", pName ? pName->GetValue() : String()),
+            aDlg.SetLoginRequestText(sLoginRequest);
 
-        sal_uInt16 nResult = aDlg.Execute();
-        if (nResult != RET_OK)
-            return sal_False;
+            sal_uInt16 nResult = aDlg.Execute();
+            if (nResult != RET_OK)
+                return sal_False;
 
-        sPassword = aDlg.GetPassword();
-        if (aDlg.IsSavePassword())
-            pExampleSet->Put(SfxStringItem(DSID_PASSWORD, sPassword));
+            sPassword = aDlg.GetPassword();
+            if (aDlg.IsSavePassword())
+                pExampleSet->Put(SfxStringItem(DSID_PASSWORD, sPassword));
+        }
+
+        if (sPassword.Len())
+            aReturn.push_back(
+                PropertyValue(  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("password")), 0,
+                                makeAny(::rtl::OUString(sPassword)), PropertyState_DIRECT_VALUE));
     }
-
-    if (sPassword.Len())
-        aReturn.push_back(
-            PropertyValue(  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("password")), 0,
-                            makeAny(::rtl::OUString(sPassword)), PropertyState_DIRECT_VALUE));
 
     _rDriverParam = Sequence< PropertyValue >(aReturn.begin(), aReturn.size());
 
@@ -1370,22 +1374,30 @@ void ODbAdminDialog::translateProperties(const SfxItemSet& _rSource, const Refer
 }
 
 //-------------------------------------------------------------------------
-void ODbAdminDialog::fillDatasourceInfo(const SfxItemSet& _rSource, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rInfo)
+DATASOURCE_TYPE ODbAdminDialog::getDatasourceType(const SfxItemSet& _rSet) const
 {
-    // within the current "Info" sequence, replace the ones we can examine from the item set
-    // (we don't just fill a completely new sequence with our own items, but we preserve any properties unknown to
-    // us)
-
-    // first determine which of all the items are relevant for the data source (depends on the connection url)
-    sal_Int32* pRelevantItems = NULL;
-
-    SFX_ITEMSET_GET(_rSource, pConnectURL, SfxStringItem, DSID_CONNECTURL, sal_True);
-    SFX_ITEMSET_GET(_rSource, pTypeCollection, DbuTypeCollectionItem, DSID_TYPECOLLECTION, sal_True);
-    DBG_ASSERT(pConnectURL && pTypeCollection, "ODbAdminDialog::translateProperties: invalid items in the source set!");
+    SFX_ITEMSET_GET(_rSet, pConnectURL, SfxStringItem, DSID_CONNECTURL, sal_True);
+    SFX_ITEMSET_GET(_rSet, pTypeCollection, DbuTypeCollectionItem, DSID_TYPECOLLECTION, sal_True);
+    DBG_ASSERT(pConnectURL && pTypeCollection, "ODbAdminDialog::getDatasourceType: invalid items in the source set!");
     String sConnectURL = pConnectURL->GetValue();
     ODsnTypeCollection* pCollection = pTypeCollection->getCollection();
-    DBG_ASSERT(pCollection, "ODbAdminDialog::translateProperties: invalid type collection!");
-    DATASOURCE_TYPE eType = pCollection->getType(sConnectURL);
+    DBG_ASSERT(pCollection, "ODbAdminDialog::getDatasourceType: invalid type collection!");
+    return pCollection->getType(sConnectURL);
+}
+
+//-------------------------------------------------------------------------
+sal_Bool ODbAdminDialog::hasAuthentication(const SfxItemSet& _rSet) const
+{
+    DATASOURCE_TYPE eType = getDatasourceType(_rSet);
+    SFX_ITEMSET_GET(_rSet, pTypeCollection, DbuTypeCollectionItem, DSID_TYPECOLLECTION, sal_True);
+    return pTypeCollection->getCollection()->hasAuthentication(eType);
+}
+
+//-------------------------------------------------------------------------
+const sal_Int32* ODbAdminDialog::getRelevantItems(const SfxItemSet& _rSet) const
+{
+    DATASOURCE_TYPE eType = getDatasourceType(_rSet);
+    const sal_Int32* pRelevantItems = NULL;
     switch (eType)
     {
         case DST_ADABAS: pRelevantItems = OAdabasDetailsPage::getDetailIds(); break;
@@ -1394,6 +1406,18 @@ void ODbAdminDialog::fillDatasourceInfo(const SfxItemSet& _rSource, ::com::sun::
         case DST_DBASE: pRelevantItems = ODbaseDetailsPage::getDetailIds(); break;
         case DST_TEXT: pRelevantItems = OTextDetailsPage::getDetailIds(); break;
     }
+    return pRelevantItems;
+}
+
+//-------------------------------------------------------------------------
+void ODbAdminDialog::fillDatasourceInfo(const SfxItemSet& _rSource, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rInfo)
+{
+    // within the current "Info" sequence, replace the ones we can examine from the item set
+    // (we don't just fill a completely new sequence with our own items, but we preserve any properties unknown to
+    // us)
+
+    // first determine which of all the items are relevant for the data source (depends on the connection url)
+    const sal_Int32* pRelevantItems = getRelevantItems(_rSource);
     DBG_ASSERT(pRelevantItems, "ODbAdminDialog::translateProperties: invalid item ids got from the page!");
 
     // collect the translated property values for the relevant items
@@ -2141,6 +2165,9 @@ IMPL_LINK(ODatasourceSelector, OnButtonPressed, Button*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.10  2000/10/26 15:02:16  oj
+ *  localstrings for dll
+ *
  *  Revision 1.9  2000/10/26 07:31:30  fs
  *  introduced fillDatasourceInfo, with this now getCurrentSettings collects _all_ relevant properties
  *
