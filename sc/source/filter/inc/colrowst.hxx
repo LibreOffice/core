@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrowst.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:12 $
+ *  last change: $Author: gt $ $Date: 2001-02-01 14:33:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,7 @@ public:
     inline void         SetHeight( const UINT16 nRow, const UINT16 nNew );
     inline void         HideRow( const UINT16 nRow );
     inline void         SetRowSettings( const UINT16 nRow, const UINT16 nExcelHeight, const UINT16 nGrbit );
-                        // Auswertung/Umrechung von nExcelHeight und Auswertung nGrbit
+                                    // Auswertung/Umrechung von nExcelHeight und Auswertung nGrbit
 
     void                ReadSplit( SvStream& rIn );
     void                SetFrozen( const BOOL bFrozen );
@@ -224,8 +224,7 @@ inline void ColRowSettings::Used( const UINT16 nCol, const UINT16 nRow )
 }
 
 
-inline void ColRowSettings::SetRowSettings( const UINT16 nRow, const UINT16 nExcelHeight,
-    const UINT16 nGrbit )
+inline void ColRowSettings::SetRowSettings( const UINT16 nRow, const UINT16 nExcelHeight, const UINT16 nGrbit )
 {
     if( nRow <= MAXROW )
         _SetRowSettings( nRow, nExcelHeight, nGrbit );
@@ -236,16 +235,41 @@ inline void ColRowSettings::SetRowSettings( const UINT16 nRow, const UINT16 nExc
 
 // ---------------------------------------------------- class FltColumn --
 
+struct FltColumnItem;
+
 class FltColumn : public ExcRoot
 {
 private:
+    friend FltColumnItem;
     UINT16*                 pData;      // Daten-Array fuer XF-Indizes
     UINT16                  nLastRow;
     UINT16                  nCol;       // Column-Nummer
     const static UINT16     nDefCleared;
+#ifdef DEBUG
+    static UINT16           nSizeFixedArray;
+#else
+    const static UINT16     nSizeFixedArray;
+#endif
+    FltColumnItem*          pFirst;
+    FltColumnItem*          pLast;
+    FltColumnItem*          pAct;
+
+    void                    DeleteList( void );
+    inline FltColumnItem*   First( void );
+    inline FltColumnItem*   Next( void );
+    inline FltColumnItem*   Last( void );
+    inline FltColumnItem*   Prev( void );
+
+    inline void             Append( FltColumnItem* );
+    inline void             InsertBefore( FltColumnItem* pActual, FltColumnItem* pPreAct );
+    inline void             InsertIn( FltColumnItem* pActual, FltColumnItem* pInAct );
+    BOOL                    Merge( FltColumnItem* pActual, UINT16 nRow );   // return = TRUE if row could be merged
+    BOOL                    Insert( FltColumnItem* pActual, UINT16 nRow, UINT16 nXF );
+                                                                            // return = TRUE if row could be inserted
+    void                    _SetXF( UINT16 nRow, UINT16 nNewXF );
 public:
                             FltColumn( RootData* pRD, UINT16 nNewCol );     // fuer den Ersten
-                            ~FltColumn();
+    virtual                 ~FltColumn();
 
     inline void             SetXF( UINT16 nRow, UINT16 nNewXF );
     void                    Reset( void );
@@ -260,7 +284,10 @@ inline void FltColumn::SetXF( UINT16 nRow, UINT16 nNewXF )
     if( nRow > nLastRow )
         nLastRow = nRow;
 
-    pData[ nRow ] = nNewXF;
+    if( nRow < nSizeFixedArray )
+        pData[ nRow ] = nNewXF;
+    else
+        _SetXF( nRow, nNewXF );
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrowst.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: gt $ $Date: 2000-09-28 09:28:35 $
+ *  last change: $Author: gt $ $Date: 2001-02-01 14:33:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,8 +77,6 @@
 #include "colrowst.hxx"
 
 
-
-const UINT16    FltColumn::nDefCleared = 0xFFFF;
 
 
 ColRowSettings::ColRowSettings( void )
@@ -357,10 +355,10 @@ void ColRowSettings::_SetRowSettings( const UINT16 nRow, const UINT16 nExcelHeig
     if( nExcelHeight & 0x8000 )
         nFlags |= ROWFLAG_DEFAULT;
 
-    if( nGrbit & 0x40 )
+    if( nGrbit & EXC_ROW_UNSYNCED )
         nFlags |= ROWFLAG_MAN;
 
-    if( nGrbit &  0x20 )
+    if( nGrbit &  EXC_ROW_ZEROHEIGHT )
         nFlags |= ROWFLAG_HIDDEN;
 
     pRowFlags[ nRow ] = nFlags;
@@ -446,13 +444,249 @@ void ColRowSettings::SetVertPagebreak( const UINT16 n )
 
 
 
+const UINT16        FltColumn::nDefCleared = 0xFFFF;
+#ifdef DEBUG
+UINT16              FltColumn::nSizeFixedArray = 128;
+#else
+const UINT16        FltColumn::nSizeFixedArray = 128;
+#endif
+
+
+struct FltColumnItem
+{
+    FltColumnItem*  pNext;
+    FltColumnItem*  pPrev;
+
+    UINT16          nStart;
+    UINT16          nEnd;
+    UINT16          nXF;
+
+    inline          FltColumnItem( UINT16 nRow, UINT16 nXF );
+    inline          FltColumnItem( UINT16 nStartRow, UINT16 nEndRow, UINT16 nXF );
+};
+
+
+inline FltColumnItem::FltColumnItem( UINT16 nR, UINT16 nN )
+{
+    nStart = nEnd = nR;
+    nXF = nN;
+#ifdef DEBUG
+    pNext = pPrev = NULL;
+#endif
+}
+
+
+inline FltColumnItem::FltColumnItem( UINT16 nStartRow, UINT16 nEndRow, UINT16 nN )
+{
+    nStart = nStartRow;
+    nEnd = nEndRow;
+    nXF = nN;
+#ifdef DEBUG
+    pNext = pPrev = NULL;
+#endif
+}
+
+
+
+
+inline FltColumnItem* FltColumn::First( void )
+{
+//  return ( FltColumnItem* ) List::First();
+    pAct = pFirst;
+    return pAct;
+}
+
+
+inline FltColumnItem* FltColumn::Next( void )
+{
+//  return ( FltColumnItem* ) List::Next();
+    if( pAct )
+        pAct = pAct->pNext;
+    return pAct;
+}
+
+
+inline FltColumnItem* FltColumn::Last( void )
+{
+//  return ( FltColumnItem* ) List::Last();
+    pAct = pLast;
+    return pAct;
+}
+
+
+inline FltColumnItem* FltColumn::Prev( void )
+{
+//  return ( FltColumnItem* ) List::Prev();
+    if( pAct )
+        pAct = pAct->pPrev;
+    return pAct;
+}
+
+
+inline void FltColumn::Append( FltColumnItem* p )
+{
+//  List::Insert( p, LIST_APPEND );
+    if( pLast )
+    {
+        pLast->pNext = p;
+        p->pPrev = pLast;
+    }
+    else
+    {   // first element
+        pFirst = p;
+        p->pPrev = NULL;
+    }
+
+    p->pNext = NULL;
+    pLast = p;
+}
+
+
+inline void FltColumn::InsertBefore( FltColumnItem* pA, FltColumnItem* pP )
+{
+    pP->pNext = pA;
+
+    if( pA->pPrev )
+    {
+        pP->pPrev = pA->pPrev;
+
+        pA->pPrev->pNext = pP;
+    }
+    else
+    {   // first
+        pP->pPrev = NULL;
+
+        pFirst = pP;
+    }
+
+    pA->pPrev = pP;
+}
+
+
+inline void FltColumn::InsertIn( FltColumnItem* pA, FltColumnItem* pI )
+{   //
+    DBG_ASSERT( pA->nStart <= pI->nStart && pA->nEnd >= pI->nEnd, "*FltColumn::InsertIn(): wrong use" );
+    DBG_ASSERT( pA->pPrev, "*FltColumn::InsertIn(): old can't be the first" );
+    DBG_ASSERT( pA->pNext, "*FltColumn::InsertIn(): old can't be the last" );
+
+    if( pA->nEnd == pI->nStart )
+    {   // at the end of old
+        pA->nEnd--;
+        InsertBefore( pA->pNext, pI );
+    }
+    else if( pA->nStart == pI->nStart )
+    {   // at the begining of old
+        pA->nStart++;
+        InsertBefore( pA, pI );
+    }
+    else
+    {   // somewhere in the middle of old
+        FltColumnItem*      pPre = new FltColumnItem( pA->nStart, pI->nStart - 1, pA->nXF );
+                                        // range before new
+        InsertBefore( pA, pPre );       // insert in list before old: pPre<->pA
+        pA->nStart = pI->nEnd + 1;      // shorten old range to start after inserted
+
+        InsertBefore( pA, pI );         // pPre<->pI<->pA
+    }
+}
+
+
+BOOL FltColumn::Merge( FltColumnItem* pA, UINT16 n )
+{
+    UINT16  nP1 = n + 1;
+
+    if( nP1 < pA->nStart )
+        // merge not possible, but insert new item in list before
+        InsertBefore( pA, new FltColumnItem( n, pA->nXF ) );
+    else if( nP1 == pA->nStart )
+        pA->nStart = n;
+    else if( n > pA->nEnd )
+        return FALSE;       // try the following item
+
+    return TRUE;
+}
+
+
+BOOL FltColumn::Insert( FltColumnItem* pA, UINT16 n, UINT16 nXF )
+{
+    if( n <= pA->nStart )
+        // before or at start of act range
+        InsertBefore( pA, new FltColumnItem( n, nXF ) );
+    else if( n <= pA->nEnd )
+        // in act range
+        InsertIn( pA, new FltColumnItem( n, nXF ) );
+    else
+        return FALSE;
+
+    return TRUE;
+}
+
+
+void FltColumn::_SetXF( UINT16 nRow, UINT16 nXF )
+{
+    FltColumnItem*  p = Last();
+
+    if( p )
+    {
+        UINT16      n = p->nEnd + 1;
+
+        if( n == nRow && p->nXF == nXF )
+        {   // appends last
+            p->nEnd = n;
+            return;
+        }
+        else if( n > nRow )
+        {   // must be inserted before
+            p = First();
+            while( p )
+            {
+                if( p->nXF == nXF )
+                {
+                    if( Merge( p, nRow ) )
+                        return;
+                }
+                else
+                {
+                    if( Insert( p, nRow, nXF ) )
+                        return;
+                }
+
+                p = Next();
+            }
+            return;
+        }
+    }
+
+    Append( new FltColumnItem( nRow, nXF ) );
+}
+
+
+void FltColumn::DeleteList( void )
+{
+    if( pFirst )
+    {
+        FltColumnItem*  p = First();
+        FltColumnItem*  pDel;
+
+        while( p )
+        {
+            pDel = p;
+            p = Next();
+            delete pDel;
+        }
+
+        pFirst = pLast = pAct = NULL;
+    }
+}
+
+
 FltColumn::FltColumn( RootData* pRD, UINT16 nNewCol ) : ExcRoot( pRD )
 {
     DBG_ASSERT( nNewCol <= MAXCOL, "-FltColumn::Ctor: Column > MAXCOL! MIIIIIIIIIIIIIIIIIIST!" );
 
-    pData = new UINT16[ MAXROW + 1 ];
+    pData = new UINT16[ nSizeFixedArray ];
     nCol = nNewCol;
-    nLastRow = MAXROW;
+    pFirst = pLast = pAct = NULL;
     Reset();
 }
 
@@ -460,15 +694,19 @@ FltColumn::FltColumn( RootData* pRD, UINT16 nNewCol ) : ExcRoot( pRD )
 FltColumn::~FltColumn()
 {
     delete[] pData;
+
+    DeleteList();
 }
 
 
 void FltColumn::Reset( void )
 {
-    for( UINT16 nC = 0 ; nC <= nLastRow ; nC++ )
+    for( UINT16 nC = 0 ; nC < nSizeFixedArray ; nC++ )
         pData[ nC ] = nDefCleared;
 
     nLastRow = 0;
+
+    DeleteList();
 }
 
 
@@ -482,7 +720,8 @@ void FltColumn::Apply( const UINT16 nTab ) const
     nLastCount = 0;
     nLastXF = pData[ nLastCount ];
 
-    for( nCount = 1 ; nCount <= nLastRow ; nCount++ )
+    // XFs from array
+    for( nCount = 1 ; nCount < nSizeFixedArray ; nCount++ )
     {
         nAktXF = pData[ nCount ];
         if( nAktXF != nLastXF )
@@ -496,6 +735,14 @@ void FltColumn::Apply( const UINT16 nTab ) const
     // ...und den Rest applyen
     if( nLastXF != nDefCleared )
         rD.ApplyPatternAreaTab( nCol, nLastCount, nCol, nCount - 1, nTab, rXF_Buff.GetPattern( nLastXF ) );
+
+    // Xfs from list
+    FltColumnItem*  p = ( ( FltColumn* ) this )->First();
+    while( p )
+    {
+        rD.ApplyPatternAreaTab( nCol, p->nStart, nCol, p->nEnd, nTab, rXF_Buff.GetPattern( p->nXF ) );
+        p = ( ( FltColumn* ) this )->Next();
+    }
 }
 
 
