@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlgrhlp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cl $
+ *  last change: $Author: mib $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,6 +166,15 @@ SotStorageStreamRef SvXMLGraphicHelper::ImplGetGraphicStream( const ::rtl::OUStr
                                      STREAM_READ |
                                      ( ( GRAPHICHELPER_MODE_WRITE == meCreateMode ) ?
                                        ( STREAM_WRITE | ( bTruncate ? STREAM_TRUNC : 0 ) ) : 0 ) );
+        if( GRAPHICHELPER_MODE_WRITE == meCreateMode && xStm.Is() )
+        {
+            OUString aPropName( RTL_CONSTASCII_USTRINGPARAM("Encrypted") );
+            sal_Bool bTrue = sal_True;
+            uno::Any aAny;
+            aAny.setValue( &bTrue, ::getBooleanCppuType() );
+            xStm->SetProperty( aPropName, aAny );
+
+        }
     }
 
     return xStm;
