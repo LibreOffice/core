@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.16 $
-# Date:        $Date: 2004-02-25 13:50:35 $
+# Version:     $Revision: 1.17 $
+# Date:        $Date: 2004-03-09 12:31:38 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -589,20 +589,12 @@ elsif ( $platform eq "$Winnt" )
       $INPATH         = $OUTPATH.$PROEXT;
       $GVERDIR        = $INPATH;
       $COMEX          = '@COMEX@';
-      if ( "@COMEX@" eq "10" )
-      { # .NET 2003 needs M1310
-         $CVER        = "M1310";
-      }
-      else
-      {  
-         if ( "@COMEX@" eq "8" )
-         {  # .NET needs M1300
-            $CVER        = "M1300";
-         }
-         else
-         {  # keep the historical value for MSVC 6
-            $CVER        = "MI200";
-         }
+      if ( "@COMEX@" eq "10" ) { # .NET 2003 needs M1310
+          $CVER        = "M1310";
+      } elsif ( "@COMEX@" eq "8" ) { # .NET 2002 needs M1300
+          $CVER        = "M1300";
+      } else {                   # Unsupported
+          die "Unsupported value for COMEX variable.\n";
       }
 
   if ( "@USE_SHELL@" ne "4nt" )
