@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Object.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:22 $
+ *  last change: $Author: oj $ $Date: 2000-11-22 14:44:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -387,7 +387,7 @@ void java_lang_Object::ThrowSQLException(JNIEnv * pEnv,const Reference< XInterfa
             java_lang_Throwable *pThrow = new java_lang_Throwable(pEnv,jThrow);
             ::rtl::OUString aMsg = pThrow->getMessage();
             delete pThrow;
-            throw RuntimeException(aMsg,_rContext);
+            throw SQLException(aMsg,_rContext,::rtl::OUString(),-1,Any());
         }
         pEnv->ExceptionClear();
     }

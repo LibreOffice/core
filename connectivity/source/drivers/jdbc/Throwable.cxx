@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Throwable.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:23 $
+ *  last change: $Author: oj $ $Date: 2000-11-22 14:44:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@ jclass java_lang_Throwable::getMyClass()
     }
     return theClass;
 }
+// -----------------------------------------------------------------------------
 
 void java_lang_Throwable::saveClassRef( jclass pClass )
 {
@@ -95,6 +96,7 @@ void java_lang_Throwable::saveClassRef( jclass pClass )
     // der uebergebe Klassen-Handle ist schon global, daher einfach speichern
     theClass = pClass;
 }
+// -----------------------------------------------------------------------------
 
 ::rtl::OUString java_lang_Throwable::getMessage() const
 {
@@ -116,6 +118,7 @@ void java_lang_Throwable::saveClassRef( jclass pClass )
     // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
     return aStr;
 }
+// -----------------------------------------------------------------------------
 
 ::rtl::OUString java_lang_Throwable::getLocalizedMessage() const
 {
@@ -137,6 +140,7 @@ void java_lang_Throwable::saveClassRef( jclass pClass )
     // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
     return aStr;
 }
+// -----------------------------------------------------------------------------
 ::rtl::OUString java_lang_Throwable::toString() const
 {
     ::rtl::OUString aStr;
@@ -157,4 +161,6 @@ void java_lang_Throwable::saveClassRef( jclass pClass )
     // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
     return aStr;
 }
+// -----------------------------------------------------------------------------
+
 

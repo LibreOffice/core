@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Class.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:22 $
+ *  last change: $Author: oj $ $Date: 2000-11-22 14:44:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,8 +114,8 @@ java_lang_Class * java_lang_Class::forName( const ::rtl::OUString& _par0 )
             out = t.pEnv->CallStaticObjectMethod( getMyClass(), mID, args[0].l );
             ThrowSQLException(t.pEnv,0);
             // und aufraeumen
-            t.pEnv->DeleteLocalRef((jstring)args[0].l);
         } //mID
+        t.pEnv->DeleteLocalRef((jstring)args[0].l);
     } //t.pEnv
     // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
     return out==0 ? NULL : new java_lang_Class( t.pEnv, out );
@@ -160,6 +160,26 @@ java_lang_Object * java_lang_Class::newInstance()
     } //t.pEnv
     // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
     return out==0 ? NULL : new java_lang_Object( t.pEnv, out );
+}
+
+jobject java_lang_Class::newInstanceObject()
+{
+    jobject out(NULL);
+    SDBThreadAttach t;
+    if( t.pEnv )
+    {
+        // temporaere Variable initialisieren
+        char * cSignature = "()Ljava/lang/Object;";
+        char * cMethodName = "newInstance";
+        // Java-Call absetzen
+        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        if( mID ){
+            out = t.pEnv->CallObjectMethod( object, mID);
+            ThrowSQLException(t.pEnv,0);
+        } //mID
+    } //t.pEnv
+    // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
+    return out;
 }
 
 ::rtl::OUString java_lang_Class::getName()

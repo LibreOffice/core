@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JDriver.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-30 07:58:03 $
+ *  last change: $Author: oj $ $Date: 2000-11-22 14:44:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #ifndef _CONNECTIVITY_JAVA_LANG_OBJECT_HXX_
 #include "java/lang/Object.hxx"
 #endif
+#ifndef _CONNECTIVITY_JAVA_LANG_CLASS_HXX_
+#include "java/lang/Class.hxx"
+#endif
 #ifndef _CONNECTIVITY_JAVA_SQL_DRIVERMANAGER_HXX_
 #include "java/sql/DriverManager.hxx"
 #endif
@@ -90,6 +93,10 @@ using namespace ::com::sun::star::lang;
 java_sql_Driver::java_sql_Driver(const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory)
     : java_lang_Object(_rxFactory)
 {
+    SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    // this object is not the right one
+    t.pEnv->DeleteGlobalRef( object );
+    object = 0;
 }
 // --------------------------------------------------------------------------------
 jclass java_sql_Driver::theClass = 0;
@@ -164,13 +171,47 @@ void java_sql_Driver::saveClassRef( jclass pClass )
 }
 // -------------------------------------------------------------------------
 Reference< XConnection > SAL_CALL java_sql_Driver::connect( const ::rtl::OUString& url, const
-                                                                         Sequence< ::com::sun::star::beans::PropertyValue >& info ) throw(SQLException, RuntimeException)
+                                                         Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
 {
-    Reference< XConnection > xRet;
-
-    object = java_sql_DriverManager::getDriver(url);
-    jobject out(0);
     SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    Reference< XConnection > xRet;
+    // first try if the jdbc driver is alraedy registered at the driver manager
+    try
+    {
+        if(!object)
+        {
+            const PropertyValue* pBegin = info.getConstArray();
+            const PropertyValue* pEnd   = pBegin + info.getLength();
+            for(jsize i=0;pBegin != pEnd;++pBegin)
+            {
+                if(!pBegin->Name.compareToAscii("JDBCDRV"))
+                {
+                    // here I try to find the class for jdbc driver
+                    java_sql_SQLException_BASE::getMyClass();
+                    java_lang_Throwable::getMyClass();
+
+                    ::rtl::OUString aStr;
+                    pBegin->Value >>= aStr;
+                    // the driver manager holds the class of the driver for later use
+                    // if forName didn't find the class it will throw an exception
+                    java_lang_Class *pDrvClass = java_lang_Class::forName(aStr);
+                    if(pDrvClass)
+                    {
+                        saveRef(t.pEnv, pDrvClass->newInstanceObject());
+                        delete pDrvClass;
+                    }
+                    break;
+                }
+            }
+        }
+    }
+    catch(Exception&)
+    {
+        throw SQLException(::rtl::OUString::createFromAscii("The specified driver could not be loaded!"),*this,::rtl::OUString(),1000,Any());
+    }
+
+    jobject out(0);
+
     if( t.pEnv )
     {
         jvalue args[2];
@@ -199,55 +240,31 @@ Reference< XConnection > SAL_CALL java_sql_Driver::connect( const ::rtl::OUStrin
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL java_sql_Driver::acceptsURL( const ::rtl::OUString& url ) throw(SQLException, RuntimeException)
 {
-    try
+    // don't ask the real driver for the url
+    // I feel responsible for all jdbc url's
+    if(!url.compareTo(::rtl::OUString::createFromAscii("jdbc:"),5))
     {
-        if(object)
-        {
-            SDBThreadAttach t;
-            if( t.pEnv )
-                t.pEnv->DeleteGlobalRef( object );
-            object = NULL;
-        }
-        object = java_sql_DriverManager::getDriver(url);
+        return sal_True;
     }
-    catch(SQLException&)
-    {
-        return sal_False;
-    }
-    catch(Exception&)
-    {
-        return sal_False;
-    }
-
-    jboolean out(0);
-    SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
-    if( t.pEnv )
-    {
-        if(!object)
-            return sal_False;
-        jvalue args;
-        args.l = convertwchar_tToJavaString(t.pEnv,url);
-        // temporaere Variable initialisieren
-        char * cSignature = "(Ljava/lang/String;)Z";
-        char * cMethodName = "acceptsURL";
-        // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
-        if( mID )
-            out = t.pEnv->CallBooleanMethod( object, mID,args);
-        // und aufraeumen
-        t.pEnv->DeleteLocalRef((jstring)args.l);
-        ThrowSQLException(t.pEnv,*this);
-    } //t.pEnv
-    return out;
+    return sal_False;
 }
 // -------------------------------------------------------------------------
-Sequence< DriverPropertyInfo > SAL_CALL java_sql_Driver::getPropertyInfo( const ::rtl::OUString& url, const Sequence< ::com::sun::star::beans::PropertyValue >& info ) throw(SQLException, RuntimeException)
+Sequence< DriverPropertyInfo > SAL_CALL java_sql_Driver::getPropertyInfo( const ::rtl::OUString& url,
+                                                                         const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
 {
+    SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if(!object)
         object = java_sql_DriverManager::getDriver(url);
 
+    if(!object)
+    {
+        // one of these must throw an exception
+        ThrowSQLException(t.pEnv,*this);
+        throw SQLException(); // we need a object here
+    }
+
     jobjectArray out(0);
-    SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+
     if( t.pEnv )
     {
         jvalue args[2];

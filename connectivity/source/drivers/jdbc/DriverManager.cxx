@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DriverManager.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:22 $
+ *  last change: $Author: oj $ $Date: 2000-11-22 14:44:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,10 +115,10 @@ jobject java_sql_DriverManager::getDriver(const ::rtl::OUString &url)
         if( mID )
         {
             out = t.pEnv->CallStaticObjectMethod( getMyClass(), mID, args[0].l );
-            ThrowSQLException(t.pEnv,0);
             // und aufraeumen
-            t.pEnv->DeleteLocalRef((jstring)args[0].l);
+
         } //mID
+        t.pEnv->DeleteLocalRef((jstring)args[0].l);
         return t.pEnv->NewGlobalRef( out );
     } //t.pEnv
 

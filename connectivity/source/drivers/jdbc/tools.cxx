@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tools.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2000-10-26 15:03:02 $
+ *  last change: $Author: oj $ $Date: 2000-11-22 14:44:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,28 +97,18 @@ jstring connectivity::convertwchar_tToJavaString(JNIEnv *pEnv,const ::rtl::OUStr
 }
 
 // --------------------------------------------------------------------------------
-jobjectArray connectivity::createStringPropertyArray(JNIEnv *pEnv,const Sequence< ::com::sun::star::beans::PropertyValue >& info )  throw(starsdbc::SQLException, RuntimeException)
+jobjectArray connectivity::createStringPropertyArray(JNIEnv *pEnv,const Sequence< PropertyValue >& info )  throw(SQLException, RuntimeException)
 {
     jobjectArray aArray = pEnv->NewObjectArray(info.getLength(),java_lang_String::getMyClass(),pEnv->NewStringUTF(""));
 
-    const ::com::sun::star::beans::PropertyValue* pBegin    = info.getConstArray();
-    const ::com::sun::star::beans::PropertyValue* pEnd  = pBegin + info.getLength();
+    const PropertyValue* pBegin = info.getConstArray();
+    const PropertyValue* pEnd   = pBegin + info.getLength();
 
     sal_Bool bFound = sal_False;
     for(jsize i=0;pBegin != pEnd;++pBegin)
     {
-        if(!bFound || pBegin->Name.compareToAscii("JDBCDRV"))
-        {
-            java_sql_SQLException_BASE::getMyClass();
-            java_lang_Throwable::getMyClass();
-
-            ::rtl::OUString aStr;
-            pBegin->Value >>= aStr;
-            //Datenbanktreiber wird ueber einen Klassennamen erzeugt
-            java_lang_Class *pDrvClass = java_lang_Class::forName(aStr);
-            bFound = sal_True;
-        }
-        else
+        // this is a special property to find the jdbc driver
+        if(!pBegin->Name.compareToAscii("JDBCDRV"))
         {
             ::rtl::OUString aStr;
             pBegin->Value >>= aStr;
