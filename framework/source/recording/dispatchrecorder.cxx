@@ -120,6 +120,87 @@ void SAL_CALL DispatchRecorder::endRecording() throw( css::uno::RuntimeException
 }
 
 //*************************************************************************
+static void AppendToBuffer( css::uno::Any aValue, ::rtl::OUStringBuffer& aArgumentBuffer )
+{
+    // if value == bool
+    if (aValue.getValueType() == getBooleanCppuType())
+    {
+        sal_Bool bVal;
+        aValue >>= bVal;
+        if (bVal)
+            aArgumentBuffer.appendAscii("true");
+        else
+            aArgumentBuffer.appendAscii("false");
+    }
+    else
+    // if value == sal_Int8
+    if (aValue.getValueType() == getCppuType((sal_Int8*)0))
+    {
+        sal_Int8 nVal;
+        aValue >>= nVal;
+        aArgumentBuffer.append((sal_Int32)nVal);
+    }
+    else
+    // if value == sal_Int16
+    if (aValue.getValueType() == getCppuType((sal_Int16*)0))
+    {
+        sal_Int16 nVal;
+        aValue >>= nVal;
+        aArgumentBuffer.append((sal_Int32)nVal);
+    }
+    else
+    // if value == sal_Int32
+    if (aValue.getValueType() == getCppuType((sal_Int32*)0))
+    {
+        sal_Int32 nVal;
+        aValue >>= nVal;
+        aArgumentBuffer.append((sal_Int32)nVal);
+    }
+    else
+    // if value == float
+    if (aValue.getValueType() == getCppuType((float*)0))
+    {
+        float fVal;
+        aValue >>= fVal;
+        aArgumentBuffer.append(fVal);
+    }
+    else
+    // if value == double
+    if (aValue.getValueType() == getCppuType((double*)0))
+    {
+        double fVal;
+        aValue >>= fVal;
+        aArgumentBuffer.append(fVal);
+    }
+    else
+    // if value == string
+    if (aValue.getValueType() == getCppuType((::rtl::OUString*)0))
+    {
+        ::rtl::OUString sVal;
+        aValue >>= sVal;
+        aArgumentBuffer.appendAscii("\"");
+        aArgumentBuffer.append     (sVal);
+        aArgumentBuffer.appendAscii("\"");
+    }
+    else if (aValue.getValueType() == ::getCppuType((const css::uno::Sequence < css::uno::Any >*)0) )
+    {
+        css::uno::Sequence < css::uno::Any > aSeq;
+        aValue >>= aSeq;
+        aArgumentBuffer.appendAscii("Array(");
+        for ( sal_Int32 nAny=0; nAny<aSeq.getLength(); nAny++ )
+        {
+            AppendToBuffer( aSeq[nAny], aArgumentBuffer );
+            if ( nAny+1 < aSeq.getLength() )
+                // not last argument
+                aArgumentBuffer.appendAscii(",");
+        }
+
+        aArgumentBuffer.appendAscii(")");
+    }
+    else
+        LOG_WARNING("","Type not scriptable!")
+}
+
 void SAL_CALL DispatchRecorder::implts_recordMacro( const css::util::URL& aURL,
                                                     const css::uno::Sequence< css::beans::PropertyValue >& lArguments,
                                                           sal_Bool bAsComment )
@@ -163,70 +244,7 @@ void SAL_CALL DispatchRecorder::implts_recordMacro( const css::util::URL& aURL,
             aArgumentBuffer.appendAscii("(");
             aArgumentBuffer.append     (i);
             aArgumentBuffer.appendAscii(").Value = ");
-
-            // if value == bool
-            if (lArguments[i].Value.getValueType() == getBooleanCppuType())
-            {
-                sal_Bool bVal;
-                lArguments[i].Value >>= bVal;
-                if (bVal)
-                    aArgumentBuffer.appendAscii("true");
-                else
-                    aArgumentBuffer.appendAscii("false");
-            }
-            else
-            // if value == sal_Int8
-            if (lArguments[i].Value.getValueType() == getCppuType((sal_Int8*)0))
-            {
-                sal_Int8 nVal;
-                lArguments[i].Value >>= nVal;
-                aArgumentBuffer.append((sal_Int32)nVal);
-            }
-            else
-            // if value == sal_Int16
-            if (lArguments[i].Value.getValueType() == getCppuType((sal_Int16*)0))
-            {
-                sal_Int16 nVal;
-                lArguments[i].Value >>= nVal;
-                aArgumentBuffer.append((sal_Int32)nVal);
-            }
-            else
-            // if value == sal_Int32
-            if (lArguments[i].Value.getValueType() == getCppuType((sal_Int32*)0))
-            {
-                sal_Int32 nVal;
-                lArguments[i].Value >>= nVal;
-                aArgumentBuffer.append((sal_Int32)nVal);
-            }
-            else
-            // if value == float
-            if (lArguments[i].Value.getValueType() == getCppuType((float*)0))
-            {
-                float fVal;
-                lArguments[i].Value >>= fVal;
-                aArgumentBuffer.append(fVal);
-            }
-            else
-            // if value == double
-            if (lArguments[i].Value.getValueType() == getCppuType((double*)0))
-            {
-                double fVal;
-                lArguments[i].Value >>= fVal;
-                aArgumentBuffer.append(fVal);
-            }
-            else
-            // if value == string
-            if (lArguments[i].Value.getValueType() == getCppuType((::rtl::OUString*)0))
-            {
-                ::rtl::OUString sVal;
-                lArguments[i].Value >>= sVal;
-                aArgumentBuffer.appendAscii("\"");
-                aArgumentBuffer.append     (sVal);
-                aArgumentBuffer.appendAscii("\"");
-            }
-            else
-                LOG_ASSERT2(0, "Type not scriptable!")
-
+            AppendToBuffer( lArguments[i].Value, aArgumentBuffer);
             aArgumentBuffer.appendAscii("\n");
         }
     }
