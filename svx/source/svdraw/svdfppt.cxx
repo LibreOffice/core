@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.104 $
+ *  $Revision: 1.105 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-16 13:53:44 $
+ *  last change: $Author: vg $ $Date: 2003-05-26 09:06:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3677,7 +3677,10 @@ BOOL PPTNumberFormatCreator::ImplGetExtNumberFormat( SdrPowerPointImport& rManag
                     UINT32 nMaBuFlags = rLev.nBuFlags;
 
                     if ( (!( nBuFlags & 0x00800000)) && ( nMaBuFlags & 0x00800000 ) )
-                        nBuInstance = rLev.nBuInstance;
+                    {
+                        if (!( nBuFlags & 0x02000000))          // if there is a BuStart without BuInstance,
+                            nBuInstance = rLev.nBuInstance;     // then there is no graphical Bullet possible
+                    }
                     if ( (!( nBuFlags & 0x01000000)) && ( nMaBuFlags & 0x01000000 ) )
                         nNumberingType = rLev.nNumberingType;
                     if ( (!( nBuFlags & 0x02000000)) && ( nMaBuFlags & 0x02000000 ) )
@@ -3818,7 +3821,7 @@ BOOL PPTNumberFormatCreator::ImplGetExtNumberFormat( SdrPowerPointImport& rManag
 
 void PPTNumberFormatCreator::GetNumberFormat( SdrPowerPointImport& rManager, SvxNumberFormat& rNumberFormat, UINT32 nLevel, const PPTParaLevel& rParaLevel, const PPTCharLevel& rCharLevel, UINT32 nInstance )
 {
-    nIsBullet = rParaLevel.mnBuFlags & ( 1 << PPT_ParaAttr_BulletOn ) != 0 ? 1 : 0;
+    nIsBullet = ( rParaLevel.mnBuFlags & ( 1 << PPT_ParaAttr_BulletOn ) ) != 0 ? 1 : 0;
     nBulletChar = rParaLevel.mnBulletChar;
 
     sal_Bool bBuHardFont;
