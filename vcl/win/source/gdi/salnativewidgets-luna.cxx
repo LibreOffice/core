@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salnativewidgets-luna.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:02:25 $
+ *  last change: $Author: hr $ $Date: 2004-10-13 09:00:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,6 +271,7 @@ BOOL WinSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
                 hTheme = getThemeHandle( mhWnd, L"Spin");
             break;
         case CTRL_EDITBOX:
+        case CTRL_MULTILINE_EDITBOX:
             if( nPart == HAS_BACKGROUND_TEXTURE )
                 return FALSE;   // we do not paint the inner part (ie the selection background/focus indication)
                 //return TRUE;
@@ -711,7 +712,7 @@ BOOL ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         return ImplDrawTheme( hTheme, hDC, iPart, iState, rc, aCaption);
     }
 
-    if( nType == CTRL_EDITBOX )
+    if( ( nType == CTRL_EDITBOX ) || ( nType == CTRL_MULTILINE_EDITBOX ) )
     {
         iPart = EP_EDITTEXT;
         if( !(nState & CTRL_STATE_ENABLED) )
@@ -857,6 +858,7 @@ BOOL WinSalGraphics::drawNativeControl( ControlType nType,
             hTheme = getThemeHandle( mhWnd, L"Spin");
             break;
         case CTRL_EDITBOX:
+        case CTRL_MULTILINE_EDITBOX:
             hTheme = getThemeHandle( mhWnd, L"Edit");
             break;
         case CTRL_LISTBOX:
