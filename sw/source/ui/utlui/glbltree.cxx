@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glbltree.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-13 12:37:38 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:45:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -897,8 +897,7 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* pCont,
             sal_Int32 nPos = 0;
             while(pMed)
             {
-                String sFileName = URIHelper::SmartRelToAbs( pMed->GetName() );
-                sFileName += sfx2::cTokenSeperator;
+                String sFileName = pMed->GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
                 sFileName += pMed->GetFilter()->GetFilterName();
                 sFileName += sfx2::cTokenSeperator;
                 pFileNames[nPos++] = sFileName;
@@ -911,7 +910,7 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* pCont,
     else if(pFileName->Len())
     {
         aFileNames.realloc(1);
-        aFileNames.getArray()[0] = URIHelper::SmartRelToAbs( *pFileName );
+        aFileNames.getArray()[0] = INetURLObject( *pFileName ).GetMainURL( INetURLObject::NO_DECODE );
     }
 
     sal_Int32 nFiles = aFileNames.getLength();
