@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-09-14 14:52:13 $
+ *  last change: $Author: os $ $Date: 2001-09-28 09:32:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -874,4 +874,7 @@
 #define HID_BUSINESS_CARD_CONTENT               (HID_BASE + 2150 )
 #define HID_SAVE_LABEL_DLG                      (HID_BASE + 2151 )
 #define HID_BUSINESS_FMT_PAGE                   (HID_BASE + 2152 )
-
+#define HID_BUSINESS_FMT_PAGE_CONT              (HID_BASE + 2153 )
+#define HID_BUSINESS_FMT_PAGE_SHEET             (HID_BASE + 2154 )
+#define HID_BUSINESS_FMT_PAGE_BRAND             (HID_BASE + 2155 )
+#define HID_BUSINESS_FMT_PAGE_TYPE              (HID_BASE + 2156 )
