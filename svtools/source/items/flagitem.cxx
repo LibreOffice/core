@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flagitem.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:00 $
+ *  last change: $Author: er $ $Date: 2001-05-13 03:25:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@ SfxItemPresentation SfxFlagItem::GetPresentation
     SfxMapUnit              eCoreMetric,
     SfxMapUnit              ePresentationMetric,
     XubString&              rText,
-    const International *
+    const IntlWrapper *
 )   const
 {
     DBG_CHKTHIS(SfxFlagItem, 0);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: intitem.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:00 $
+ *  last change: $Author: er $ $Date: 2001-05-13 03:25:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,7 +147,7 @@ int SfxInt16Item::Compare(const SfxPoolItem & rWith) const
 SfxItemPresentation SfxInt16Item::GetPresentation(SfxItemPresentation,
                                                   SfxMapUnit, SfxMapUnit,
                                                   XubString & rText,
-                                                  const International *) const
+                                                  const IntlWrapper *) const
 {
     DBG_CHKTHIS(SfxInt16Item, 0);
     rText = UniString::CreateFromInt32(m_nValue);

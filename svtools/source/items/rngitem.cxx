@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rngitem.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pluby $ $Date: 2000-12-15 02:59:10 $
+ *  last change: $Author: er $ $Date: 2001-05-13 03:25:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,7 +147,7 @@ SfxItemPresentation SfxXRangeItem::GetPresentation
     SfxMapUnit              eCoreMetric,
     SfxMapUnit              ePresentationMetric,
     XubString&              rText,
-    const International *
+    const IntlWrapper *
 )   const
 {
     rText = UniString::CreateFromInt64(nFrom);
@@ -264,7 +264,7 @@ SfxItemPresentation SfxXRangesItem::GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     XubString &rText,
-                                    const International * ) const
+                                    const IntlWrapper * ) const
 {
     HACK(n. i.)
     return SFX_ITEM_PRESENTATION_NONE;
@@ -296,89 +296,6 @@ SvStream& SfxXRangesItem::Store( SvStream &rStream, USHORT nItemVersion ) const
 }
 
 
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 16:59:01  hr
-    initial import
-
-    Revision 1.24  2000/09/18 14:13:35  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.23  2000/08/31 13:41:28  willem.vandorp
-    Header and footer replaced
-
-    Revision 1.22  2000/05/26 16:38:31  os
-    Set/FillVariable removed
-
-    Revision 1.21  2000/04/12 08:01:39  sb
-    Adapted to Unicode.
-
-    Revision 1.20  2000/02/09 16:23:50  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.19  1999/09/27 12:16:04  hr
-    for-scope
-
-    Revision 1.18  1999/09/08 15:35:16  sb
-    #66082# Copied Count_Impl from nranges.cxx.
-
-    Revision 1.17  1999/09/01 06:52:36  sb
-    #66082# Added International param to SfxPoolItem::GetPresentation().
-
-    Revision 1.16  1998/01/09 11:17:06  MH
-    chg: header
-
-
-      Rev 1.15   09 Jan 1998 12:17:06   MH
-   chg: header
-
-      Rev 1.14   05 Mar 1997 13:44:56   MI
-   falsche Var verwendet daher op== falsch
-
-      Rev 1.13   03 Feb 1997 10:00:14   MI
-   Typeinfo fuer Ranges
-
-      Rev 1.12   03 Feb 1997 09:13:22   MI
-   NUMTYPE durch USHORT ersetzt
-
-      Rev 1.11   02 Feb 1997 16:46:32   MI
-   compilebar
-
-      Rev 1.10   02 Feb 1997 13:29:24   MI
-   jetzt auch Sfx..RangesItem (mehrere Ranges)
-
-      Rev 1.9   02 Feb 1997 12:23:56   MI
-   jetzt auch LongRange
-
-      Rev 1.8   14 Nov 1996 18:49:12   MI
-   FileFirmat 4.0
-
-      Rev 1.7   14 Mar 1996 17:40:46   MH
-   del: S_VERSION
-
-      Rev 1.6   12 Mar 1996 12:49:42   OV
-   ein fehlendes DBG_CTOR eingefuegt
-
-      Rev 1.5   21 Nov 1995 15:50:52   MI
-   FillVariable fuer strukturierte Items
-
-      Rev 1.4   20 Nov 1995 15:44:20   AB
-   Unicode-Anpassung
-
-      Rev 1.3   15 Nov 1995 20:16:36   MI
-   GetVariable/SetVariable
-
-      Rev 1.2   05 Jul 1995 18:11:38   MI
-   GetValueText raus #pragmas rein
-
-      Rev 1.1   29 Jun 1995 17:16:30   MI
-   GetPresentation impl.
-
-      Rev 1.0   22 Feb 1995 16:26:28   OV
-   Initial revision.
-
-------------------------------------------------------------------------*/
 #undef NUMTYPE
 #undef SfxXRangeItem
 #undef SfxXRangesItem

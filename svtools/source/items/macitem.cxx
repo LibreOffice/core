@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macitem.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:01 $
+ *  last change: $Author: er $ $Date: 2001-05-13 03:25:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,13 +67,10 @@
 #define ITEMID_MACRO 0
 
 #include "macitem.hxx"
-#include <segmentc.hxx>
 
 // STATIC DATA -----------------------------------------------------------
 
 DBG_NAME(SvxMacroItem);
-
-SEG_EOFGLOBALS()
 
 // -----------------------------------------------------------------------
 
@@ -139,8 +136,6 @@ SvxMacro& SvxMacro::operator=( const SvxMacro& rBase )
 }
 
 
-#pragma SEG_FUNCDEF(macitem_02)
-
 SvxMacroTableDtor& SvxMacroTableDtor::operator=( const SvxMacroTableDtor& rTbl )
 {
     DelDtor();
@@ -154,7 +149,6 @@ SvxMacroTableDtor& SvxMacroTableDtor::operator=( const SvxMacroTableDtor& rTbl )
     return *this;
 }
 
-#pragma SEG_FUNCDEF(macitem_03)
 
 SvStream& SvxMacroTableDtor::Read( SvStream& rStrm, USHORT nVersion )
 {
@@ -188,7 +182,6 @@ SvStream& SvxMacroTableDtor::Read( SvStream& rStrm, USHORT nVersion )
     return rStrm;
 }
 
-#pragma SEG_FUNCDEF(macitem_04)
 
 SvStream& SvxMacroTableDtor::Write( SvStream& rStream ) const
 {
@@ -216,7 +209,6 @@ SvStream& SvxMacroTableDtor::Write( SvStream& rStream ) const
 }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(macitem_05)
 
 void SvxMacroTableDtor::DelDtor()
 {
@@ -230,7 +222,6 @@ void SvxMacroTableDtor::DelDtor()
 }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(macitem_06)
 
 int SvxMacroItem::operator==( const SfxPoolItem& rAttr ) const
 {
@@ -258,7 +249,6 @@ int SvxMacroItem::operator==( const SfxPoolItem& rAttr ) const
 }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(macitem_07)
 
 SfxPoolItem* SvxMacroItem::Clone( SfxItemPool* ) const
 {
@@ -266,7 +256,6 @@ SfxPoolItem* SvxMacroItem::Clone( SfxItemPool* ) const
 }
 
 //------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(macitem_08)
 
 SfxItemPresentation SvxMacroItem::GetPresentation
 (
@@ -274,7 +263,7 @@ SfxItemPresentation SvxMacroItem::GetPresentation
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
     XubString&          rText,
-    const International *
+    const IntlWrapper *
 )   const
 {
 /*!!!
@@ -296,7 +285,6 @@ SfxItemPresentation SvxMacroItem::GetPresentation
 }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(macitem_09)
 
 SvStream& SvxMacroItem::Store( SvStream& rStrm , USHORT nItemVersion ) const
 {
@@ -304,7 +292,6 @@ SvStream& SvxMacroItem::Store( SvStream& rStrm , USHORT nItemVersion ) const
 }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(macitem_0a)
 
 SfxPoolItem* SvxMacroItem::Create( SvStream& rStrm, USHORT nVersion ) const
 {
@@ -314,7 +301,6 @@ SfxPoolItem* SvxMacroItem::Create( SvStream& rStrm, USHORT nVersion ) const
 }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(macitem_0b)
 
 void SvxMacroItem::SetMacro( USHORT nEvent, const SvxMacro& rMacro )
 {
@@ -329,67 +315,10 @@ void SvxMacroItem::SetMacro( USHORT nEvent, const SvxMacro& rMacro )
 }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(macitem_0c)
 
 USHORT SvxMacroItem::GetVersion( USHORT nFileFormatVersion ) const
 {
     return SOFFICE_FILEFORMAT_31 == nFileFormatVersion
                 ? 0 : aMacroTable.GetVersion();
 }
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.15  2000/09/18 14:13:34  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.14  2000/08/31 13:41:28  willem.vandorp
-    Header and footer replaced
-
-    Revision 1.13  2000/04/12 08:01:39  sb
-    Adapted to Unicode.
-
-    Revision 1.12  2000/02/09 16:23:32  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.11  1999/09/01 06:52:36  sb
-    #66082# Added International param to SfxPoolItem::GetPresentation().
-
-    Revision 1.10  1998/07/23 11:54:38  ANK
-    #53261# SvxMacro- Konstruktor geaendert setzt jetzt auch eType
-
-
-      Rev 1.9   23 Jul 1998 13:54:38   ANK
-   #53261# SvxMacro- Konstruktor geaendert setzt jetzt auch eType
-
-      Rev 1.8   08 Jul 1998 16:06:16   MIB
-   Get(JavaScript|StarBasic)String
-
-      Rev 1.7   27 May 1998 19:33:56   ANK
-   neuer Konstruktor fuer SvxMacro
-
-      Rev 1.6   15 May 1998 19:42:42   ANK
-   neue Fkt SvxMacro::GetLanguage
-
-      Rev 1.5   19 Jan 1998 19:18:06   MH
-   chg: header
-
-      Rev 1.4   04 Mar 1997 12:36:00   WP
-   WTC Anpassungen verallgemeinert
-
-      Rev 1.3   05 Feb 1997 14:55:24   AB
-   SvxMacro geaendert
-
-      Rev 1.2   06 Dec 1996 14:39:18   TRI
-   WTC Anpassung
-
-      Rev 1.1   05 Dec 1996 10:28:12   JP
-   GetScripType -> GetScriptType
-
-      Rev 1.0   03 Dec 1996 19:39:56   JP
-   Initial revision.
-
-------------------------------------------------------------------------*/
-
-#pragma SEG_EOFMODULE
 
