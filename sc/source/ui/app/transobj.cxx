@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transobj.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: nn $ $Date: 2002-11-28 11:06:40 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:43:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -430,10 +430,26 @@ sal_Bool ScTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObj
             {
                 ScTabEditEngine* pEngine = (ScTabEditEngine*)pUserObject;
                 if ( nUserObjectId == SCTRANS_TYPE_EDIT_RTF )
+                {
                     pEngine->Write( *rxOStm, EE_FORMAT_RTF );
+                    bRet = ( rxOStm->GetError() == ERRCODE_NONE );
+                }
                 else
-                    pEngine->Write( *rxOStm, EE_FORMAT_BIN );
-                bRet = ( rxOStm->GetError() == ERRCODE_NONE );
+                {
+                    //  #107722# can't use Write for EditEngine format because that would
+                    //  write old format without support for unicode characters.
+                    //  Get the data from the EditEngine's transferable instead.
+
+                    USHORT nParCnt = pEngine->GetParagraphCount();
+                    if ( nParCnt == 0 )
+                        nParCnt = 1;
+                    ESelection aSel( 0, 0, nParCnt-1, pEngine->GetTextLen(nParCnt-1) );
+
+                    uno::Reference<datatransfer::XTransferable> xEditTrans = pEngine->CreateTransferable( aSel );
+                    TransferableDataHelper aEditHelper( xEditTrans );
+
+                    bRet = aEditHelper.GetSotStorageStream( rFlavor, rxOStm );
+                }
             }
             break;
 
