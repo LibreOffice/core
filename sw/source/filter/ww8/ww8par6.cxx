@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.134 $
+ *  $Revision: 1.135 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 15:11:15 $
+ *  last change: $Author: vg $ $Date: 2003-05-19 12:28:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,7 +293,6 @@
 
 #define MM_250 1417             // WW-Default fuer Hor. Seitenraender: 2.5 cm
 #define MM_200 1134             // WW-Default fuer u.Seitenrand: 2.0 cm
-#define MM_125 709              // WW-Default fuer vert. K/F-Pos: 1.25 cm
 
 BYTE lcl_ReadBorders(bool bVer67, WW8_BRC* brc, WW8PLCFx_Cp_FKP* pPap,
     const WW8RStyle* pSty = 0, const WW8PLCFx_SEPX* pSep = 0);
@@ -350,22 +349,6 @@ static BYTE ReadBSprm( const WW8PLCFx_SEPX* pSep, USHORT nId, BYTE nDefaultVal )
     const BYTE* pS = pSep->HasSprm( nId );          // sprm da ?
     BYTE nVal = ( pS ) ? SVBT8ToByte( pS ) : nDefaultVal;
     return nVal;
-}
-
-// dito, aber mit Return, ob vorhanden
-static bool ReadBSprmRet(BYTE& rnRet, const WW8PLCFx_SEPX* pSep, USHORT nId,
-    BYTE nDefaultVal)
-{
-    if (const BYTE* pS = pSep->HasSprm(nId))            // sprm da ?
-    {
-        rnRet = SVBT8ToByte( pS );
-        return true;
-    }
-    else
-    {
-        rnRet = nDefaultVal;
-        return false;
-    }
 }
 
 static short ReadULSprm( const WW8PLCFx_SEPX* pSep, USHORT nId, short nDefaultVal )
@@ -1136,7 +1119,7 @@ void wwSectionManager::CreateSep(const long nTxtPos, bool bMustHaveBreak)
     {
         aNewSection.maSep.grpfIhdt = WW8_HEADER_ODD | WW8_FOOTER_ODD;
 
-        if (aNewSection.maSep.fTitlePage)
+        if (aNewSection.HasTitlePage())
             aNewSection.maSep.grpfIhdt |= WW8_HEADER_FIRST | WW8_FOOTER_FIRST;
 
         if (mrReader.pWDop->fFacingPages)
@@ -1173,8 +1156,8 @@ void wwSectionManager::CreateSep(const long nTxtPos, bool bMustHaveBreak)
     if (!bVer67)
         aNewSection.SetDirection();
 
+    mrReader.HandleLineNumbering(aNewSection);
     maSegments.push_back(aNewSection);
-
 }
 
 void SwWW8ImplReader::CopyPageDescHdFt(const SwPageDesc* pOrgPageDesc,
@@ -2129,9 +2112,14 @@ WW8FlySet::WW8FlySet(SwWW8ImplReader& rReader, const WW8FlyPara* pFW,
     if (!rReader.mbNewDoc)
         Reader::ResetFrmFmtAttrs(*this);    // Abstand/Umrandung raus
                                             // Position
-
-    Put( SwFmtHoriOrient( pFS->nXPos, pFS->eHAlign, pFS->eHRel,
-                pFS->bToggelPos ));
+/*Below can all go when we have from left in rtl mode*/
+    long nXPos = pFS->nXPos;
+    SwRelationOrient eHRel = pFS->eHRel;
+    if ((pFS->eAnchor == FLY_PAGE) && (eHRel == FRAME))
+        eHRel = REL_PG_FRAME;
+    rReader.MiserableRTLGraphicsHack(nXPos, pFS->nWidth, pFS->eHAlign, eHRel);
+/*Above can all go when we have from left in rtl mode*/
+    Put( SwFmtHoriOrient(nXPos, pFS->eHAlign, pFS->eHRel, pFS->bToggelPos ));
     Put( SwFmtVertOrient( pFS->nYPos, pFS->eVAlign, pFS->eVRel ) );
 
     if (pFS->nLeMgn || pFS->nRiMgn)     // Raender setzen
@@ -2400,7 +2388,6 @@ bool SwWW8ImplReader::StartApo(const BYTE* pSprm29,
 
         // merke Pos im Haupttext
         pSFlyPara->pMainTextPos = new SwPosition( *pPaM->GetPoint() );
-        nLastFlyNode = pSFlyPara->pMainTextPos->nNode.GetIndex();
 
         //remove fltanchors, otherwise they will be closed inside the
         //frame, which makes no sense, restore them after the frame is
@@ -3778,7 +3765,33 @@ void SwWW8ImplReader::Read_LR( USHORT nId, const BYTE* pData, short nLen )
         nTabCntnt = aPos.nContent.GetIndex();
     }
 
-    switch( nId )
+    /*
+    The older word sprms mean left/right, while the new ones mean before/after.
+    Writer now also works with before after, so when we see old left/right and
+    we're RTL. We swap them
+    */
+    if (IsRightToLeft())
+    {
+        switch (nId)
+        {
+            //Left becomes after;
+            case 17:
+                nId = 16;
+                break;
+            case 0x840F:
+                nId = 0x840E;
+                break;
+            //Right becomes before;
+            case 16:
+                nId = 17;
+                break;
+            case 0x840E:
+                nId = 0x840F;
+                break;
+        }
+    }
+
+    switch (nId)
     {
         //sprmPDxaLeft
         case     17:
@@ -4066,16 +4079,8 @@ void SwWW8ImplReader::Read_Justify( USHORT, const BYTE* pData, short nLen )
     NewAttr(aAdjust);
 }
 
-void SwWW8ImplReader::Read_RTLJustify( USHORT, const BYTE* pData, short nLen )
+bool SwWW8ImplReader::IsRightToLeft()
 {
-    if( nLen < 0 )
-    {
-        pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_PARATR_ADJUST );
-        return;
-    }
-
-    //if we are in a ltr paragraph this is the same as normal Justify,
-    //if we are in a rtl paragraph the meaning is reversed.
     bool bRTL = false;
     const BYTE *pDir =
         pPlcxMan ? pPlcxMan->GetPapPLCF()->HasSprm(0x2441) : 0;
@@ -4088,8 +4093,20 @@ void SwWW8ImplReader::Read_RTLJustify( USHORT, const BYTE* pData, short nLen )
         if (pDir && (pDir->GetValue() == FRMDIR_HORI_RIGHT_TOP))
             bRTL = true;
     }
+    return bRTL;
+}
 
-    if (!bRTL)
+void SwWW8ImplReader::Read_RTLJustify( USHORT, const BYTE* pData, short nLen )
+{
+    if( nLen < 0 )
+    {
+        pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_PARATR_ADJUST );
+        return;
+    }
+
+    //If we are in a ltr paragraph this is the same as normal Justify,
+    //If we are in a rtl paragraph the meaning is reversed.
+    if (!IsRightToLeft())
         Read_Justify(0x2403 /*dummy*/, pData, nLen);
     else
     {
