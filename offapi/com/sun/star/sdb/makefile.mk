@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: fs $ $Date: 2001-04-26 09:14:18 $
+#   last change: $Author: oj $ $Date: 2002-11-04 14:04:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -107,6 +107,9 @@ IDLFILES=\
     SQLErrorEvent.idl \
     SQLQueryComposer.idl \
     Table.idl \
+    TableDesign.idl \
+    QueryDesign.idl \
+    RelationDesign.idl \
     TableDescriptor.idl \
     XAlterQuery.idl \
     XBookmarksSupplier.idl \
