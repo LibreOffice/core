@@ -3,5 +3,6 @@
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
 
 ..\source\win32\syssh.xml %_DEST%\xml%_EXT%\syssh.xml
+..\source\unix\exec\syssh.xml %_DEST%\xml%_EXT%\syssh.xml
 ..\source\win32\simplemail\smplmail.xml %_DEST%\xml%_EXT%\smplmail.xml
 ..\source\proxysettings\proxyset.xml %_DEST%\xml%_EXT%\proxyset.xml
