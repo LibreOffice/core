@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2002-06-17 08:53:33 $
+ *  last change: $Author: dbo $ $Date: 2002-06-18 09:39:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4111,7 +4111,7 @@
       <prop oor:name="PluginsEnabled" oor:type="xs:boolean">
         <!-- OldPath: ? -->
         <!-- OldLocation: soffice.ini -->
-        <!-- Responsible: DBO -->
+        <!-- Responsible: PB -->
         <!-- UIHints: Tools  Options  Browser  Other  Plug-Ins  Enable -->
         <value>true</value>
         <info>
