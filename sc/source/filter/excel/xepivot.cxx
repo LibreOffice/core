@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xepivot.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:07:31 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 12:04:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -558,7 +558,7 @@ void XclExpPCField::InsertItemArrayIndex( size_t nListPos )
 void XclExpPCField::InsertOrigItem( XclExpPCItem* pNewItem )
 {
     size_t nItemIdx = maOrigItemList.Size();
-    maOrigItemList.AppendRecord( XclExpPCItemRef( pNewItem ) );
+    maOrigItemList.AppendNewRecord( pNewItem );
     InsertItemArrayIndex( nItemIdx );
     mnTypeFlags |= pNewItem->GetTypeFlag();
 }
@@ -613,7 +613,7 @@ void XclExpPCField::InsertOrigBoolItem( bool bValue )
 
 sal_uInt16 XclExpPCField::InsertGroupItem( XclExpPCItem* pNewItem )
 {
-    maGroupItemList.AppendRecord( XclExpPCItemRef( pNewItem ) );
+    maGroupItemList.AppendNewRecord( pNewItem );
     return static_cast< sal_uInt16 >( maGroupItemList.Size() - 1 );
 }
 
@@ -641,19 +641,19 @@ void XclExpPCField::SetNumGroupLimit( const ScDPNumGroupInfo& rNumInfo )
 {
     ::set_flag( maNumGroupInfo.mnFlags, EXC_SXNUMGROUP_AUTOMIN, rNumInfo.AutoStart );
     ::set_flag( maNumGroupInfo.mnFlags, EXC_SXNUMGROUP_AUTOMAX, rNumInfo.AutoEnd );
-    maNumGroupLimits.AppendRecord( XclExpPCItemRef( new XclExpPCItem( rNumInfo.Start, false ) ) );
-    maNumGroupLimits.AppendRecord( XclExpPCItemRef( new XclExpPCItem( rNumInfo.End, false ) ) );
-    maNumGroupLimits.AppendRecord( XclExpPCItemRef( new XclExpPCItem( rNumInfo.Step, false ) ) );
+    maNumGroupLimits.AppendNewRecord( new XclExpPCItem( rNumInfo.Start, false ) );
+    maNumGroupLimits.AppendNewRecord( new XclExpPCItem( rNumInfo.End, false ) );
+    maNumGroupLimits.AppendNewRecord( new XclExpPCItem( rNumInfo.Step, false ) );
 }
 
 void XclExpPCField::SetDateGroupLimit( const ScDPNumGroupInfo& rDateInfo, bool bUseStep )
 {
     ::set_flag( maNumGroupInfo.mnFlags, EXC_SXNUMGROUP_AUTOMIN, rDateInfo.AutoStart );
     ::set_flag( maNumGroupInfo.mnFlags, EXC_SXNUMGROUP_AUTOMAX, rDateInfo.AutoEnd );
-    maNumGroupLimits.AppendRecord( XclExpPCItemRef( new XclExpPCItem( rDateInfo.Start, true ) ) );
-    maNumGroupLimits.AppendRecord( XclExpPCItemRef( new XclExpPCItem( rDateInfo.End, true ) ) );
+    maNumGroupLimits.AppendNewRecord( new XclExpPCItem( rDateInfo.Start, true ) );
+    maNumGroupLimits.AppendNewRecord( new XclExpPCItem( rDateInfo.End, true ) );
     sal_Int16 nStep = bUseStep ? limit_cast< sal_Int16 >( rDateInfo.Step, 1, SAL_MAX_INT16 ) : 1;
-    maNumGroupLimits.AppendRecord( XclExpPCItemRef( new XclExpPCItem( nStep ) ) );
+    maNumGroupLimits.AppendNewRecord( new XclExpPCItem( nStep ) );
 }
 
 void XclExpPCField::Finalize()
@@ -853,8 +853,8 @@ void XclExpPivotCache::AddStdFields( const ScDPObject& rDPObj )
         ScRange aColRange( rRange );
         aColRange.aStart.SetCol( nScCol );
         aColRange.aEnd.SetCol( nScCol );
-        maFieldList.AppendRecord( XclExpPCFieldRef(
-            new XclExpPCField( GetRoot(), *this, GetFieldCount(), rDPObj, aColRange ) ) );
+        maFieldList.AppendNewRecord( new XclExpPCField(
+            GetRoot(), *this, GetFieldCount(), rDPObj, aColRange ) );
     }
 }
 
@@ -1049,7 +1049,7 @@ XclExpPTField::XclExpPTField( const XclExpPivotTable& rPTable, sal_uInt16 nCache
     // create field items
     if( mpCacheField )
         for( sal_uInt16 nItemIdx = 0, nItemCount = mpCacheField->GetItemCount(); nItemIdx < nItemCount; ++nItemIdx )
-            maItemList.AppendRecord( XclExpPTItemRef( new XclExpPTItem( *mpCacheField, nItemIdx ) ) );
+            maItemList.AppendNewRecord( new XclExpPTItem( *mpCacheField, nItemIdx ) );
     maFieldInfo.mnItemCount = static_cast< sal_uInt16 >( maItemList.Size() );
 }
 
@@ -1246,7 +1246,7 @@ XclExpPTItem* XclExpPTField::GetItemAcc( const String& rName )
 
 void XclExpPTField::AppendSubtotalItem( sal_uInt16 nItemType )
 {
-    maItemList.AppendRecord( XclExpPTItemRef( new XclExpPTItem( nItemType, EXC_SXVI_DEFAULT_CACHE, true ) ) );
+    maItemList.AppendNewRecord( new XclExpPTItem( nItemType, EXC_SXVI_DEFAULT_CACHE, true ) );
     ++maFieldInfo.mnItemCount;
 }
 
@@ -1292,7 +1292,7 @@ XclExpPivotTable::XclExpPivotTable( const XclExpRoot& rRoot, const ScDPObject& r
 
             /*  1)  Default-construct all pivot table fields for all pivot cache fields. */
             for( sal_uInt16 nFieldIdx = 0, nFieldCount = mrPCache.GetFieldCount(); nFieldIdx < nFieldCount; ++nFieldIdx )
-                maFieldList.AppendRecord( XclExpPTFieldRef( new XclExpPTField( *this, nFieldIdx ) ) );
+                maFieldList.AppendNewRecord( new XclExpPTField( *this, nFieldIdx ) );
 
             const List& rDimList = pSaveData->GetDimensions();
             ULONG nDimIdx, nDimCount = rDimList.Count();
@@ -1588,6 +1588,39 @@ void XclExpPivotTable::WriteSxex( XclExpStream& rStrm ) const
 
 // ============================================================================
 
+namespace {
+
+const SCTAB EXC_PTMGR_PIVOTCACHES = SCTAB_MAX;
+
+/** Record wrapper class to write the pivot caches or pivot tables. */
+class XclExpPivotRecWrapper : public XclExpRecordBase
+{
+public:
+    explicit            XclExpPivotRecWrapper( XclExpPivotTableManager& rPTMgr, SCTAB nScTab );
+    virtual void        Save( XclExpStream& rStrm );
+private:
+    XclExpPivotTableManager& mrPTMgr;
+    SCTAB               mnScTab;
+};
+
+XclExpPivotRecWrapper::XclExpPivotRecWrapper( XclExpPivotTableManager& rPTMgr, SCTAB nScTab ) :
+    mrPTMgr( rPTMgr ),
+    mnScTab( nScTab )
+{
+}
+
+void XclExpPivotRecWrapper::Save( XclExpStream& rStrm )
+{
+    if( mnScTab == EXC_PTMGR_PIVOTCACHES )
+        mrPTMgr.WritePivotCaches( rStrm );
+    else
+        mrPTMgr.WritePivotTables( rStrm, mnScTab );
+}
+
+} // namespace
+
+// ----------------------------------------------------------------------------
+
 XclExpPivotTableManager::XclExpPivotTableManager( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot ),
     mbShareCaches( true )
@@ -1600,8 +1633,17 @@ void XclExpPivotTableManager::CreatePivotTables()
         for( USHORT nDPObj = 0, nCount = pDPColl->GetCount(); nDPObj < nCount; ++nDPObj )
             if( ScDPObject* pDPObj = (*pDPColl)[ nDPObj ] )
                 if( const XclExpPivotCache* pPCache = CreatePivotCache( *pDPObj ) )
-                    maPTableList.AppendRecord( XclExpPivotTableRef(
-                        new XclExpPivotTable( GetRoot(), *pDPObj, *pPCache ) ) );
+                    maPTableList.AppendNewRecord( new XclExpPivotTable( GetRoot(), *pDPObj, *pPCache ) );
+}
+
+XclExpRecordRef XclExpPivotTableManager::CreatePivotCachesRecord()
+{
+    return XclExpRecordRef( new XclExpPivotRecWrapper( *this, EXC_PTMGR_PIVOTCACHES ) );
+}
+
+XclExpRecordRef XclExpPivotTableManager::CreatePivotTablesRecord( SCTAB nScTab )
+{
+    return XclExpRecordRef( new XclExpPivotRecWrapper( *this, nScTab ) );
 }
 
 void XclExpPivotTableManager::WritePivotCaches( XclExpStream& rStrm )
@@ -1658,33 +1700,6 @@ const XclExpPivotCache* XclExpPivotTableManager::CreatePivotCache( const ScDPObj
     }
 
     return 0;
-}
-
-// ============================================================================
-// Reference record classes
-// ============================================================================
-
-XclExpPivotCacheRefRecord::XclExpPivotCacheRefRecord( const XclExpRoot& rRoot ) :
-    mrPTManager( rRoot.GetPivotTableManager() )
-{
-}
-
-void XclExpPivotCacheRefRecord::Save( XclExpStream& rStrm )
-{
-    mrPTManager.WritePivotCaches( rStrm );
-}
-
-// ----------------------------------------------------------------------------
-
-XclExpPivotTablesRefRecord::XclExpPivotTablesRefRecord( const XclExpRoot& rRoot ) :
-    mrPTManager( rRoot.GetPivotTableManager() ),
-    mnScTab( rRoot.GetCurrScTab() )
-{
-}
-
-void XclExpPivotTablesRefRecord::Save( XclExpStream& rStrm )
-{
-    mrPTManager.WritePivotTables( rStrm, mnScTab );
 }
 
 // ============================================================================
