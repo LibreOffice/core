@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gfxlink.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sj $ $Date: 2002-10-25 12:30:16 $
+ *  last change: $Author: vg $ $Date: 2003-06-24 07:32:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,6 +230,14 @@ const Size& GfxLink::GetPrefSize() const
 void GfxLink::SetPrefSize( const Size& rPrefSize )
 {
     mpImpData->maPrefSize = rPrefSize;
+    mpImpData->mbPrefSizeValid = true;
+}
+
+// ------------------------------------------------------------------------
+
+bool GfxLink::IsPrefSizeValid()
+{
+    return mpImpData->mbPrefSizeValid;
 }
 
 // ------------------------------------------------------------------------
@@ -244,6 +252,14 @@ const MapMode& GfxLink::GetPrefMapMode() const
 void GfxLink::SetPrefMapMode( const MapMode& rPrefMapMode )
 {
     mpImpData->maPrefMapMode = rPrefMapMode;
+    mpImpData->mbPrefMapModeValid = true;
+}
+
+// ------------------------------------------------------------------------
+
+bool GfxLink::IsPrefMapModeValid()
+{
+    return mpImpData->mbPrefMapModeValid;
 }
 
 // ------------------------------------------------------------------------
@@ -354,6 +370,7 @@ SvStream& operator>>( SvStream& rIStream, GfxLink& rGfxLink)
     ULONG           nUserId;
     UINT16          nType;
     BYTE*           pBuf;
+    bool            bMapAndSizeValid( false );
     VersionCompat*  pCompat = new VersionCompat( rIStream, STREAM_READ );
 
     // Version 1
@@ -362,6 +379,7 @@ SvStream& operator>>( SvStream& rIStream, GfxLink& rGfxLink)
     if( pCompat->GetVersion() >= 2 )
     {
         rIStream >> aSize >> aMapMode;
+        bMapAndSizeValid = true;
     }
 
     delete pCompat;
@@ -371,8 +389,12 @@ SvStream& operator>>( SvStream& rIStream, GfxLink& rGfxLink)
 
     rGfxLink = GfxLink( pBuf, nSize, (GfxLinkType) nType, TRUE );
     rGfxLink.SetUserId( nUserId );
-    rGfxLink.SetPrefSize( aSize );
-    rGfxLink.SetPrefMapMode( aMapMode );
+
+    if( bMapAndSizeValid )
+    {
+        rGfxLink.SetPrefSize( aSize );
+        rGfxLink.SetPrefMapMode( aMapMode );
+    }
 
     return rIStream;
 }
