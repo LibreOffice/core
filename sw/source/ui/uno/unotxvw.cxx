@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxvw.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 16:51:46 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 14:31:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1142,17 +1142,16 @@ SwXTextViewCursor::~SwXTextViewCursor()
 // - XTextRange
 // - XLineCursor
 
-sal_Bool SwXTextViewCursor::IsTextSelection() const
-{
+sal_Bool SwXTextViewCursor::IsTextSelection( void ) const {
+
     sal_Bool bRes = sal_False;
-    SwView* pView = ((SwXTextView*)this)->GetView();
-    if(pView)
-    {
-        //! pView->GetShellMode() will only work after the shell
-        //! has already changed and thus can not be used here!
-        SwWrtShell::SelectionType eSelType = static_cast<SwWrtShell::SelectionType>(
+        DBG_ASSERT(pView, "pView is NULL ???");
+    if(pView) {
+            //! pView->GetShellMode() will only work after the shell
+            //! has already changed and thus can not be used here!
+      SwWrtShell::SelectionType eSelType = static_cast<SwWrtShell::SelectionType>(
                 pView->GetWrtShell().GetSelectionType());
-        bRes = ((SwWrtShell::SEL_TXT        & eSelType) ||
+            bRes = ((SwWrtShell::SEL_TXT        & eSelType) ||
                 (SwWrtShell::SEL_NUM        & eSelType)) &&
                !(SwWrtShell::SEL_TBL_CELLS  & eSelType);
     }
