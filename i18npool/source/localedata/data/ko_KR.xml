@@ -585,83 +585,82 @@
 <quarter4Abbreviation>사</quarter4Abbreviation>
 </ReservedWords>
 </LC_MISC>
-
 <LC_NumberingLevel>
-<NumberingLevel Prefix=" " NumType="28" Suffix="." />
-<NumberingLevel Prefix=" " NumType="27" Suffix="." />
-<NumberingLevel Prefix=" " NumType="14" Suffix=" " />
-<NumberingLevel Prefix=" " NumType="4" Suffix="." />
-<NumberingLevel Prefix=" " NumType="0" Suffix="." />
 <NumberingLevel Prefix=" " NumType="1" Suffix="." />
+<NumberingLevel Prefix=" " NumType="4" Suffix="." />
+<NumberingLevel Prefix=" " NumType="14" Suffix=" " />
 <NumberingLevel Prefix=" " NumType="2" Suffix="." />
+<NumberingLevel Prefix=" " NumType="28" Suffix=")" />
+<NumberingLevel Prefix="(" NumType="27" Suffix=")" />
+<NumberingLevel Prefix=" " NumType="0" Suffix="." />
 <NumberingLevel Prefix=" " NumType="3" Suffix="." />
 </LC_NumberingLevel>
 
 <LC_OutLineNumberingLevel>
 
 <OutlineStyle>
-<OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="28" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="4" Suffix=")" BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="28" Suffix=")" BulletChar="0022"  BulletFontName=""  ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix="(" NumType="4" Suffix=")" BulletChar="0022"  BulletFontName=""  ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar=""  BulletFontName=""  ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar=""  BulletFontName=""  ParentNumbering="1" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar=""  BulletFontName=""  ParentNumbering="2" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar=""  BulletFontName=""  ParentNumbering="3" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar=""  BulletFontName=""  ParentNumbering="4" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
 </OutlineStyle>
 
 <OutlineStyle>
-<OutLineNumberingLevel Prefix="(" NumType="4" Suffix=")" BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix="(" NumType="28" Suffix=")" BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix="(" NumType="1" Suffix=")" BulletChar="0020"  BulletFontName=""  ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="4" Suffix=")" BulletChar="0020"  BulletFontName=""  ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="28" Suffix=")" BulletChar="0020"  BulletFontName=""  ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar=""  BulletFontName="" ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar=""  BulletFontName="" ParentNumbering="1" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar=""  BulletFontName="" ParentNumbering="2" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar=""  BulletFontName="" ParentNumbering="3" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar=""  BulletFontName="" ParentNumbering="4" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
 </OutlineStyle>
 
 <OutlineStyle>
-<OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="14" Suffix=" " BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="3" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="0" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar=""  BulletFontName=""            ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="14" Suffix=" " BulletChar=""  BulletFontName=""            ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="3" Suffix="." BulletChar=""  BulletFontName=""            ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="0" Suffix="." BulletChar=""  BulletFontName=""            ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
 <OutLineNumberingLevel Prefix=" " NumType="1" Suffix=")" BulletChar=""  BulletFontName=""  ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
 </OutlineStyle>
 
 <OutlineStyle>
-<OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="30" Suffix=" " BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="4" Suffix=")" BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="29" Suffix=" " BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix="(" NumType="4" Suffix=")" BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar=""  BulletFontName=""  ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="30" Suffix=" " BulletChar=""  BulletFontName="" ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="4" Suffix=")" BulletChar=""  BulletFontName=""  ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="29" Suffix=" " BulletChar=""  BulletFontName="" ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix="(" NumType="4" Suffix=")" BulletChar=""  BulletFontName=""  ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
 </OutlineStyle>
 
 <OutlineStyle>
-<OutLineNumberingLevel Prefix=" " NumType="28" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="27" Suffix=")" BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="28" Suffix=")" BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix="(" NumType="27" Suffix=")" BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix="(" NumType="28" Suffix=")" BulletChar="0020"  BulletFontName=""  ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar=""  BulletFontName=""  ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="28" Suffix=")" BulletChar=""  BulletFontName="" ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="14" Suffix=" " BulletChar=""  BulletFontName="" ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="27" Suffix=")" BulletChar=""  BulletFontName="" ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix="(" NumType="28" Suffix=")" BulletChar=""  BulletFontName=""  ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
 </OutlineStyle>
 
 <OutlineStyle>
-<OutLineNumberingLevel Prefix=" " NumType="2" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="0" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="3" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="1" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020"  BulletFontName=""  ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix="제" NumType="15" Suffix="장" BulletChar=""  BulletFontName=""  ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix="제" NumType="15" Suffix="절" BulletChar=""  BulletFontName=""  ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix="제" NumType="15" Suffix="항" BulletChar=""  BulletFontName=""  ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix="(" NumType="15" Suffix=")" BulletChar=""  BulletFontName=""  ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="1" Suffix="." BulletChar=""  BulletFontName=""  ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
 </OutlineStyle>
 
 
 <OutlineStyle>
-<OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar="0020"  BulletFontName=""            ParentNumbering="1" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar="0020"  BulletFontName=""            ParentNumbering="2" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar="0020"  BulletFontName=""            ParentNumbering="3" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar="0020"  BulletFontName=""            ParentNumbering="4" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix="제" NumType="4" Suffix="장" BulletChar=""  BulletFontName="" ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix="제" NumType="4" Suffix="절" BulletChar=""  BulletFontName="" ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix="제" NumType="4" Suffix="항" BulletChar=""  BulletFontName="" ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix="(" NumType="4" Suffix=")" BulletChar=""  BulletFontName="" ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="1" Suffix="." BulletChar=""  BulletFontName="" ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
 </OutlineStyle>
 
 <OutlineStyle>
-<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="27A2"  BulletFontName=""  ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="E006"  BulletFontName=""  ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="E004"  BulletFontName=""  ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="21E8"  BulletFontName=""  ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="261E"  BulletFontName=""  ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="2" Suffix="." BulletChar=""  BulletFontName=""  ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="0" Suffix="." BulletChar=""  BulletFontName=""  ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar=""  BulletFontName=""  ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="3" Suffix="." BulletChar=""  BulletFontName=""  ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="1" Suffix="." BulletChar=""  BulletFontName=""  ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
 </OutlineStyle>
 
 </LC_OutLineNumberingLevel>
