@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfdlg.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 05:30:54 $
+ *  last change: $Author: kz $ $Date: 2001-04-05 19:11:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -421,7 +421,7 @@ TabPage TP_DOCINFODOC
         Text [ danish ] = "Redigeret:" ;
         Text [ swedish ] = "Redigeringstid:" ;
         Text [ finnish ] = "Edit time:" ;
-        Text [ english_us ] = "Accessed:" ;
+        Text [ english_us ] = "Edited:" ;
         Text[ chinese_simplified ] = "±ај­µДК±јдЈє";
         Text[ russian ] = "Отредактирован:";
         Text[ polish ] = "Edytowany:";
