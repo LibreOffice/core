@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addonmenu.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 16:58:51 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 17:43:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,12 +254,36 @@ USHORT AddonMenuManager::GetNextPos( USHORT nPos )
     return ( nPos == MENU_APPEND ) ? MENU_APPEND : ( nPos+1 );
 }
 
+
+static USHORT FindMenuId( Menu* pMenu, const String aCommand )
+{
+    USHORT nPos = 0;
+    String aCmd;
+    for ( nPos = 0; nPos < pMenu->GetItemCount(); nPos++ )
+    {
+        USHORT nId = pMenu->GetItemId( nPos );
+        aCmd = pMenu->GetItemCommand( nId );
+        if ( aCmd == aCommand )
+            return nId;
+    }
+
+    return USHRT_MAX;
+}
+
+
 // Merge the Add-Ons help menu items into the given menu bar at a defined pos
 void AddonMenuManager::MergeAddonHelpMenu( Reference< XFrame >& rFrame, MenuBar* pMergeMenuBar )
 {
     if ( pMergeMenuBar )
     {
         PopupMenu* pHelpMenu = pMergeMenuBar->GetPopupMenu( SID_HELPMENU );
+        if ( !pHelpMenu )
+        {
+            USHORT nId = FindMenuId( pMergeMenuBar, String::CreateFromAscii( ".uno:HelpMenu" ));
+            if ( nId != USHRT_MAX )
+                pHelpMenu = pMergeMenuBar->GetPopupMenu( nId );
+        }
+
         if ( pHelpMenu )
         {
             // Add-Ons help menu items should be inserted after the "registration" menu item
@@ -269,6 +293,9 @@ void AddonMenuManager::MergeAddonHelpMenu( Reference< XFrame >& rFrame, MenuBar*
             USHORT nInsSepAfterPos  = MENU_APPEND;
             USHORT nUniqueMenuId    = ADDONMENU_ITEMID_START;
             AddonsOptions aOptions;
+
+            if ( nRegPos == USHRT_MAX )
+                nRegPos = FindMenuId( pHelpMenu, String::CreateFromAscii( ".uno:OnlineRegistrationDlg" ));
 
             Sequence< Sequence< PropertyValue > > aAddonSubMenu;
             const Sequence< Sequence< PropertyValue > >& rAddonHelpMenuEntries = aOptions.GetAddonsHelpMenu();
