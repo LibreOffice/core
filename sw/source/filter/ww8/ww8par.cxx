@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-05 13:31:51 $
+ *  last change: $Author: cmc $ $Date: 2002-07-12 15:02:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2597,83 +2597,9 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
 
             ::SetProgressState( nProgress, rDoc.GetDocShell() );    // Update
 
-            if( pCollA )
+            if (pCollA)
             {
-                SwNumRule aOutlineRule( *rDoc.GetOutlineNumRule() );
-
-                USHORT nI;
-                // Bitfeld, welche Outline-Level bereits an einem
-                // Style gesetzt wurden (vermeiden von Doppeltvergabe)
-                USHORT nFlagsStyleOutlLevel = 0;
-                if (!mbNewDoc)
-                {
-                    const SwTxtFmtColls& rColls = *rDoc.GetTxtFmtColls();
-                    for( nI = 0; nI < rColls.Count(); nI++ )
-                    {
-                        const SwTxtFmtColl& rColl = *rColls[ nI ];
-                        if( MAXLEVEL > rColl.GetOutlineLevel() )
-                        {
-                            nFlagsStyleOutlLevel |= 1 << rColl.GetOutlineLevel();
-                        }
-                    }
-                }
-                USHORT nIa=10;
-                USHORT nIz=nColls;
-                for( USHORT nJ = 0; nJ < 2; nJ++ )
-                {
-                    for( nI = nIa; nI < nIz; nI++ )
-                    {
-                        SwWW8StyInf& rSI = pCollA[ nI ];
-
-                        if(    ( MAXLEVEL > rSI.nOutlineLevel )
-                            && rSI.pOutlineNumrule
-                            && rSI.pFmt )
-                        {
-                            USHORT nAktFlags = 1 << rSI.nOutlineLevel;
-                            if( nAktFlags & nFlagsStyleOutlLevel )
-                            {
-                                rSI.pFmt->SetAttr(
-                                    SwNumRuleItem( rSI.pOutlineNumrule->GetName() ) );
-                                ((SwTxtFmtColl*)rSI.pFmt)->SetOutlineLevel( NO_NUMBERING );
-                            }
-                            else
-                            // die Default-Styles im ZWEITEN Durchgang auf
-                            // jeden Fall nehmen, die User-definierten nur,
-                            // wenn auch verwendet.
-                            if( nJ || rSI.pFmt->GetDepends() )
-                            {
-                                // Numformat aus der NumRule nehmen
-                                // und bei der OutlineRule setzen.
-
-                                /*
-                                #i1886#
-                                I believe that when a list is registered onto
-                                a winword style which is an outline numbering
-                                style (i.e. nOutlineLevel is set) that the
-                                style of numbering is for the level is indexed
-                                by the *list* level that was registered on
-                                that style, and not the outlinenumbering
-                                level, which is probably a logical sequencing,
-                                and not a physical mapping into the list style
-                                reged on that outline style.
-                                */
-                                BYTE nFromLevel=rSI.nListLevel;
-                                BYTE nToLevel=rSI.nOutlineLevel;
-                                const SwNumFmt& rRule = rSI.pOutlineNumrule->Get( nFromLevel );
-                                aOutlineRule.Set( nToLevel, rRule );
-                                // am Style die Outlinenummer eintragen
-                                ((SwTxtFmtColl*)rSI.pFmt)->SetOutlineLevel( nToLevel );
-                                // Flag verodern, um Doppeltvergabe zu vermeiden
-                                nFlagsStyleOutlLevel |= nAktFlags;
-                            }
-                        }
-                    }
-                    nIa = 1;
-                    nIz = 10;
-                }
-                if( nFlagsStyleOutlLevel )
-                    rDoc.SetOutlineNumRule( aOutlineRule );
-
+                SetOutLineStyles();
                 delete[] pCollA;
             }
 
@@ -2836,6 +2762,143 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
     }
     DELETEZ(pPaM);
     return nErrRet;
+}
+
+class outlinecmp
+{
+public:
+    bool operator()(const SwTxtFmtColl *pOne, const SwTxtFmtColl *pTwo) const
+    {
+        return pOne->GetOutlineLevel() < pTwo->GetOutlineLevel();
+    }
+};
+
+class outlineeq
+{
+private:
+    BYTE mnNum;
+public:
+    outlineeq(BYTE nNum) : mnNum(nNum) {}
+    bool operator()(const SwTxtFmtColl *pTest) const
+    {
+        return pTest->GetOutlineLevel() == mnNum;
+    }
+};
+
+void SwWW8ImplReader::SetOutLineStyles()
+{
+    /*
+    #i3674# & #101291# Load new document and insert document cases.
+    */
+    SwNumRule aOutlineRule(*rDoc.GetOutlineNumRule());
+    const SwTxtFmtColls& rColls = *rDoc.GetTxtFmtColls();
+
+    //Get a list of txt styles sorted by outline number
+    ::std::vector<SwTxtFmtColl *> aOutLined;
+    aOutLined.reserve(rColls.Count());
+    for(USHORT nA = 0; nA < rColls.Count(); ++nA )
+        aOutLined.push_back(rColls[nA]);
+    ::std::sort(aOutLined.begin(), aOutLined.end(), outlinecmp());
+
+    typedef ::std::vector<SwTxtFmtColl *>::iterator myiter;
+
+    /*
+    If we are inserted into a document then don't clobber existing existing
+    levels.
+    */
+    USHORT nFlagsStyleOutlLevel = 0;
+    if (!mbNewDoc)
+    {
+        myiter aEnd = aOutLined.end();
+        for (myiter aIter = aOutLined.begin(); aIter < aEnd; ++aIter )
+        {
+            if ((*aIter)->GetOutlineLevel() < MAXLEVEL)
+                nFlagsStyleOutlLevel |= 1 << (*aIter)->GetOutlineLevel();
+            else
+                break;
+        }
+    }
+
+    USHORT nOldFlags = nFlagsStyleOutlLevel;
+
+    /*
+    Leave the first 10 styles until after the rest of them are handled to give
+    priority to the non standard styles in the case of a collision between
+    styles that want into the outlinenumbering list. Its an inherited hack
+    which I'm dubious about.
+    */
+    USHORT nIa=10;
+    USHORT nIz=nColls;
+    for (USHORT nJ = 0; nJ < 2; ++nJ)
+    {
+        for (USHORT nI = nIa; nI < nIz; ++nI)
+        {
+            SwWW8StyInf& rSI = pCollA[nI];
+
+            if ((MAXLEVEL > rSI.nOutlineLevel) && rSI.pOutlineNumrule
+                    && rSI.pFmt)
+            {
+                USHORT nAktFlags = 1 << rSI.nOutlineLevel;
+                if (nAktFlags & nFlagsStyleOutlLevel)
+                {
+                    /*
+                    If our spot is already taken by something we can't replace
+                    then don't insert and remove our outline level.
+                    */
+                    rSI.pFmt->SetAttr(
+                            SwNumRuleItem( rSI.pOutlineNumrule->GetName() ) );
+                    ((SwTxtFmtColl*)rSI.pFmt)->SetOutlineLevel(NO_NUMBERING);
+                }
+                else if (nJ || rSI.pFmt->GetDepends())
+                {
+                    /*
+                    If there is a style already set for this outline
+                    numbering level and its not a style set by us already
+                    then we can remove it outline numbering.
+                    (its one of the default headings in a new document
+                    so we can clobber it)
+                    Of course if we are being inserted into a document that
+                    already has some set we can't do this, thats covered by
+                    the list of level in nFlagsStyleOutlLevel to ignore.
+                    */
+                    outlineeq aCmp(rSI.nListLevel);
+                    myiter aResult = ::std::find_if(aOutLined.begin(),
+                        aOutLined.end(), aCmp);
+
+                    myiter aEnd = aOutLined.end();
+                    while (aResult != aEnd  && aCmp(*aResult))
+                    {
+                        (*aResult)->SetOutlineLevel(NO_NUMBERING);
+                        ++aResult;
+                    }
+
+                    /*
+                    #i1886#
+                    I believe that when a list is registered onto a winword
+                    style which is an outline numbering style (i.e.
+                    nOutlineLevel is set) that the style of numbering is for
+                    the level is indexed by the *list* level that was
+                    registered on that style, and not the outlinenumbering
+                    level, which is probably a logical sequencing, and not a
+                    physical mapping into the list style reged on that outline
+                    style.
+                    */
+                    BYTE nFromLevel=rSI.nListLevel;
+                    BYTE nToLevel=rSI.nOutlineLevel;
+                    const SwNumFmt& rRule=rSI.pOutlineNumrule->Get(nFromLevel);
+                    aOutlineRule.Set(nToLevel, rRule);
+                    // Set my outline level
+                    ((SwTxtFmtColl*)rSI.pFmt)->SetOutlineLevel( nToLevel );
+                    // If there are more styles on this level ignore them
+                    nFlagsStyleOutlLevel |= nAktFlags;
+                }
+            }
+        }
+        nIa = 1;
+        nIz = 10;
+    }
+    if (nOldFlags != nFlagsStyleOutlLevel)
+        rDoc.SetOutlineNumRule(aOutlineRule);
 }
 
 const String* SwWW8ImplReader::GetAnnotationAuthor(sal_uInt16 nIdx)

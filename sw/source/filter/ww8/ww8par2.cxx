@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-11 10:35:00 $
+ *  last change: $Author: cmc $ $Date: 2002-07-12 15:02:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3502,13 +3502,9 @@ SwTxtFmtColl* WW8RStyle::MakeOrGetFmtColl( BOOL* pbStyExist, WW8_STD* pStd, cons
         && aArr[pStd->sti]!=RES_NONE    // Default-Style bekannt
         && !( pIo->nIniFlags & WW8FL_NO_DEFSTYLES ) ) // nicht abgeschaltet
     {
-
-        SwTxtFmtColl* pCol = pIo->rDoc.GetTxtCollFromPool( aArr[pStd->sti] );
-        if( pCol )
+        if(SwTxtFmtColl* pCol = pIo->rDoc.GetTxtCollFromPool(aArr[pStd->sti]))
         {
             *pbStyExist = TRUE;
-            if (pIo->mbNewDoc)      //#i3674#
-                pCol->SetOutlineLevel(NO_NUMBERING);
             return pCol;
         }
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-11 09:55:17 $
+ *  last change: $Author: cmc $ $Date: 2002-07-12 15:02:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1124,6 +1124,8 @@ friend class WW8FormulaControl;
     void MoveInsideFly(const SwFrmFmt *pFlyFmt);
     void MoveOutsideFly(const SwFrmFmt *pFlyFmt, const SwPosition &rPos,
         BOOL bTableJoin=TRUE);
+
+    void SetOutLineStyles();
 
     //No copying
     SwWW8ImplReader(const SwWW8ImplReader &);
