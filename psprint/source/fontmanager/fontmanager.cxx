@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:18:11 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:13:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,7 @@
 #include <sft.h>
 #undef NO_LIST
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 #include <sys/times.h>
 #include <stdio.h>
 #endif
@@ -471,7 +471,7 @@ bool PrintFontManager::TrueTypeFontFile::queryMetricPage( int nPage, MultiAtomPr
                     }
                 }
             }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "found %d/%d kern pairs for %s\n",
                      m_pMetrics->m_aXKernPairs.size(),
                      m_pMetrics->m_aYKernPairs.size(),
@@ -573,7 +573,7 @@ bool PrintFontManager::PrintFont::readAfmMetrics( const OString& rFileName, Mult
         // default is jis
         if( m_aEncoding == RTL_TEXTENCODING_DONTKNOW )
             m_aEncoding = RTL_TEXTENCODING_JIS_X_0208;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "Encoding %d for %s\n", m_aEncoding, pInfo->gfi->fontName );
 #endif
     }
@@ -992,7 +992,7 @@ bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, bo
         int nLength = CountTTCFonts( aFullPath.getStr() );
         if( nLength )
         {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "%s contains %d fonts\n", aFullPath.getStr(), nLength );
 #endif
             ::std::list<OString>::const_iterator xlfd_it = rXLFDs.begin();
@@ -1004,7 +1004,7 @@ bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, bo
                     aXLFD = *xlfd_it;
                     ++xlfd_it;
                 }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 fprintf( stderr, "   XLFD=\"%s\"\n", aXLFD.getStr() );
 #endif
                 TrueTypeFontFile* pFont     = new TrueTypeFontFile();
@@ -1022,7 +1022,7 @@ bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, bo
                     rNewFonts.push_back( pFont );
             }
         }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         else
             fprintf( stderr, "CountTTCFonts( \"%s/%s\" ) failed\n", getDirectory(nDirID).getStr(), rFontFile.getStr() );
 #endif
@@ -1483,7 +1483,7 @@ bool PrintFontManager::analyzeTrueTypeFile( PrintFont* pFont ) const
         CloseTTFont( pTTFont );
         bSuccess = true;
     }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     else
         fprintf( stderr, "could not OpenTTFont \"%s\"\n", aFile.GetBuffer() );
 #endif
@@ -1547,7 +1547,7 @@ void PrintFontManager::getServerDirectories()
         if( ! access( it->GetBuffer(), F_OK ) )
         {
             m_aFontDirectories.push_back( *it );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "adding fs dir %s\n", it->GetBuffer() );
 #endif
         }
@@ -1561,14 +1561,14 @@ void PrintFontManager::initialize( void* pInitDisplay )
 
     if( ! m_pFontCache )
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "creating font cache ... " );
         clock_t aStart;
         struct tms tms;
         aStart = times( &tms );
 #endif
         m_pFontCache = new FontCache();
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         clock_t aStop = times( &tms );
         fprintf( stderr, "done in %lf s\n", (double)(aStop - aStart)/(double)sysconf( _SC_CLK_TCK ) );
 #endif
@@ -1584,7 +1584,7 @@ void PrintFontManager::initialize( void* pInitDisplay )
         m_aPrivateFontDirectories.clear();
     }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     clock_t aStart;
     clock_t aStep1;
     clock_t aStep2;
@@ -1788,7 +1788,7 @@ void PrintFontManager::initialize( void* pInitDisplay )
                                 nDirFonts++;
                                 if( bUpdateFont && isPrivateFontFile( aFont ) )
                                     changeFontProperties( aFont, OStringToOUString( getXLFD( *it ), RTL_TEXTENCODING_UTF8 ) );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                                 fprintf( stderr, "adding font %d: \"%s\" from %s\n", aFont,
                                          OUStringToOString( getFontFamily( aFont ), RTL_TEXTENCODING_MS_1252 ).getStr(),
                                          getFontFileSysPath( aFont ).getStr() );
@@ -1804,7 +1804,7 @@ void PrintFontManager::initialize( void* pInitDisplay )
         }
     }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     aStep1 = times( &tms );
 #endif
 
@@ -1878,7 +1878,7 @@ void PrintFontManager::initialize( void* pInitDisplay )
                                 m_aFontFileToFontID[ aFileName ].insert( m_nNextFontID );
                                 m_aFonts[ m_nNextFontID++ ] = *it;
                                 m_pFontCache->updateFontCacheEntry( *it, false );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                                 nBuiltinFonts++;
 #endif
                             }
@@ -1894,7 +1894,7 @@ void PrintFontManager::initialize( void* pInitDisplay )
         }
     }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     aStep2 = times( &tms );
 #endif
 
@@ -1912,7 +1912,7 @@ void PrintFontManager::initialize( void* pInitDisplay )
         m_aFamilyTypes[ font_it->second->m_nFamilyName ] = eType;
     }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     aStep3 = times( &tms );
     fprintf( stderr, "PrintFontManager::initialize: collected %d fonts (%d builtin, %d cached)\n", m_aFonts.size(), nBuiltinFonts, nCached );
     double fTick = (double)sysconf( _SC_CLK_TCK );
@@ -2558,7 +2558,7 @@ bool PrintFontManager::getMetrics( fontID nFontID, sal_Unicode minCharacter, sal
 static bool createPath( const ByteString& rPath )
 {
     bool bSuccess = false;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "createPath( %s )\n", rPath.GetBuffer() );
 #endif
 
@@ -2571,11 +2571,11 @@ static bool createPath( const ByteString& rPath )
 
         if( nPos != STRING_NOTFOUND && nPos != 0 && createPath( rPath.Copy( 0, nPos+1 ) ) )
         {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "mkdir ", rPath.GetBuffer() );
 #endif
             bSuccess = mkdir( rPath.GetBuffer(), 0777 ) ? false : true;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "%s\n", bSuccess ? "succeeded" : "failed" );
 #endif
         }
@@ -2839,7 +2839,7 @@ bool PrintFontManager::checkImportPossible() const
     }
     if( aFontsDir.IsOpen() && aFontsDir.IsWritable() )
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "found writable %s\n", ByteString( aFontsDir.GetFileName(), osl_getThreadTextEncoding() ).GetBuffer() );
 #endif
         bSuccess = true;
@@ -3045,24 +3045,24 @@ bool PrintFontManager::removeFonts( const ::std::list< fontID >& rFonts )
         ByteString aFile( getFontFile( pFont ) );
         if( aFile.Len() )
         {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "try unlink( \"%s\" ) ... ", aFile.GetBuffer() );
 #endif
             if( unlink( aFile.GetBuffer() ) )
             {
                 bRet = false;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 fprintf( stderr, "failed\n" );
 #endif
                 continue;
             }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "succeeded\n" );
 #endif
             OString aAfm( getAfmFile( pFont ) );
             if( aAfm.getLength() )
             {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 fprintf( stderr, "unlink( \"%s\" )\n", aAfm.getStr() );
 #endif
                 unlink( aAfm.getStr() );
