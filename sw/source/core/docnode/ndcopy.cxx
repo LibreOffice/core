@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndcopy.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-29 10:29:55 $
+ *  last change: $Author: jp $ $Date: 2001-11-22 19:08:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -791,7 +791,8 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
     // kein Copy abfangen.
     if( !rPam.HasMark() || *pStt >= *pEnd ||
         //JP 29.6.2001: 88963 - dont copy if inspos is in region of start to end
-        ( pDoc == this && *pStt <= rPos && rPos <= *pEnd ))
+        //JP 15.11.2001: don't test inclusive the end, ever exclusive
+        ( pDoc == this && *pStt <= rPos && rPos < *pEnd ))
         return FALSE;
 
     BOOL bEndEqualIns = pDoc == this && rPos == *pEnd;
@@ -890,6 +891,7 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
                             rPam.Exchange();
 
                         aRg.aEnd = pEnd->nNode;
+                        pEndNd = pEnd->nNode.GetNode().GetTxtNode();
                     }
                     else if( rPos == *pEnd )        // Wurde das Ende auch verschoben
                     {
@@ -991,33 +993,38 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
             }
         }
 
-        int bHasRange = aRg.aStart != aRg.aEnd;
-
-        SfxItemSet aBrkSet( pDoc->GetAttrPool(), aBreakSetRange );
-        if( bHasRange && pSttNd && bCopyCollFmt && pDestNd->GetpSwAttrSet() )
+        if( aRg.aStart != aRg.aEnd )
         {
-            aBrkSet.Put( *pDestNd->GetpSwAttrSet() );
-            if( SFX_ITEM_SET == aBrkSet.GetItemState( RES_BREAK, FALSE ) )
-                pDestNd->ResetAttr( RES_BREAK );
-            if( SFX_ITEM_SET == aBrkSet.GetItemState( RES_PAGEDESC, FALSE ) )
-                pDestNd->ResetAttr( RES_PAGEDESC );
-        }
+            SfxItemSet aBrkSet( pDoc->GetAttrPool(), aBreakSetRange );
+            if( pSttNd && bCopyCollFmt && pDestNd->GetpSwAttrSet() )
+            {
+                aBrkSet.Put( *pDestNd->GetpSwAttrSet() );
+                if( SFX_ITEM_SET == aBrkSet.GetItemState( RES_BREAK, FALSE ) )
+                    pDestNd->ResetAttr( RES_BREAK );
+                if( SFX_ITEM_SET == aBrkSet.GetItemState( RES_PAGEDESC, FALSE ) )
+                    pDestNd->ResetAttr( RES_PAGEDESC );
+            }
 
-        SwNodeIndex aSavePos( aInsPos, bHasRange ? -1 : 0 );
-        if( bHasRange )
-        {
-            CopyWithFlyInFly( aRg, aInsPos, bMakeNewFrms, FALSE );
-            aSavePos++;
+            if( aInsPos == pEnd->nNode )
+            {
+                SwNodeIndex aSaveIdx( aInsPos, -1 );
+                CopyWithFlyInFly( aRg, aInsPos, bMakeNewFrms, FALSE );
+                aSaveIdx++;
+                pEnd->nNode = aSaveIdx;
+                pEnd->nContent.Assign( aSaveIdx.GetNode().GetTxtNode(), 0 );
+            }
+            else
+                CopyWithFlyInFly( aRg, aInsPos, bMakeNewFrms, FALSE );
+
             bCopyBookmarks = FALSE;
-        }
 
-        // harte Umbrueche wieder in den ersten Node setzen
-        if( aBrkSet.Count() && 0 != ( pDestNd = pDoc->GetNodes()[
-                aCpyPam.GetPoint()->nNode.GetIndex()+1 ]->GetTxtNode() ) )
-        {
-            pDestNd->SwCntntNode::SetAttr( aBrkSet );
+            // harte Umbrueche wieder in den ersten Node setzen
+            if( aBrkSet.Count() && 0 != ( pDestNd = pDoc->GetNodes()[
+                    aCpyPam.GetPoint()->nNode.GetIndex()+1 ]->GetTxtNode() ) )
+            {
+                pDestNd->SwCntntNode::SetAttr( aBrkSet );
+            }
         }
-
     } while( FALSE );
 
     // Position ummelden ( falls verschoben / im anderen Node )
@@ -1033,23 +1040,7 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
     else
         *aCpyPam.GetMark() = rPos;
 
-
-#ifndef PPC
     aCpyPam.Move( fnMoveForward, bCanMoveBack ? fnGoCntnt : fnGoNode );
-#else
-    /*
-     * All das wegen dem PPC, der leider ein kleines Problem mit Funktions -
-     * pointer und tenaeren Ausdruecken hat.
-     * Wer diese Zeilen nach MAERZ 94 sieht sage mir das bitte.
-     * OK 19.01.94 18:16
-     */
-    if( bCanMoveBack )
-        aCpyPam.Move( fnMoveForward, fnGoCntnt );
-    else
-        aCpyPam.Move( fnMoveForward, fnGoNode );
-#endif
-
-
     aCpyPam.Exchange();
 
     // dann kopiere noch alle Bookmarks
@@ -1086,8 +1077,11 @@ void SwDoc::CopyWithFlyInFly( const SwNodeRange& rRg,
     _SaveRedlEndPosForRestore aRedlRest( rInsPos );
 
     SwNodeIndex aSavePos( rInsPos, -1 );
+    BOOL bEndIsEqualEndPos = rInsPos == rRg.aEnd;
     GetNodes()._CopyNodes( rRg, rInsPos, bMakeNewFrms, TRUE );
     aSavePos++;
+    if( bEndIsEqualEndPos )
+        ((SwNodeIndex&)rRg.aEnd) = aSavePos;
 
     aRedlRest.Restore();
 
