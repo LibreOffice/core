@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stgcache.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-22 11:12:47 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 12:38:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 
 #include <string.h>
 
+#ifndef _OSL_ENDIAN_H_
+#include <osl/endian.h>
+#endif
 #ifndef _TOOLS_STRING_HXX
 #include <tools/string.hxx>
 #endif
@@ -131,7 +134,7 @@ void StgPage::SetPage( short nOff, INT32 nVal )
 {
     if( ( nOff < (short) ( nData / sizeof( INT32 ) ) ) && nOff >= 0 )
     {
-#ifdef __BIGENDIAN
+#ifdef OSL_BIGENDIAN
       nVal = SWAPLONG(nVal);
 #endif
         ((INT32*) pData )[ nOff ] = nVal;
