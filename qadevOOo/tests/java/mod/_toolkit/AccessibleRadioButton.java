@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleRadioButton.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change:$Date: 2003-09-08 13:01:22 $
+ *  last change:$Date: 2003-10-06 13:34:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,7 +297,7 @@ public class AccessibleRadioButton extends TestCase {
         }
 
         oObj = at.getAccessibleObjectForRole(xRoot,
-            AccessibleRole.RADIO_BUTTON, "Internet");
+            AccessibleRole.RADIO_BUTTON, "Web");
 
         XAccessibleContext anotherButton = at.getAccessibleObjectForRole(xRoot,
             AccessibleRole.RADIO_BUTTON, "FTP");
@@ -327,7 +327,7 @@ public class AccessibleRadioButton extends TestCase {
                 }
             });
 
-        tEnv.addObjRelation("XAccessibleText.Text", "Internet");
+        tEnv.addObjRelation("XAccessibleText.Text", "Web");
 
         tEnv.addObjRelation("EditOnly","Can't change or select Text in AccessibleRadioButton");
 
