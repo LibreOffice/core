@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cli_cs_testobj.cs,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-10-06 12:59:39 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 13:02:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@ using uno;
 using uno.util;
 using unoidl.com.sun.star.uno;
 using unoidl.com.sun.star.lang;
-using unoidl.com.sun.star.test.bridge;
+using unoidl.test.testtools.bridgetest;
 
 namespace cs_testobj
 {
@@ -122,6 +122,9 @@ public class BridgeTestObject : WeakBase, XRecursiveCall, XBridgeTest2
     private int[][] _arLong2;
     private int[][][] _arLong3;
     private Any[] _arAny;
+
+//    private int _raiseAttr1;
+
     
     public void setValues(
         bool          bBool, 
@@ -625,8 +628,99 @@ public class BridgeTestObject : WeakBase, XRecursiveCall, XBridgeTest2
     }
 
     
+    public TestPolyStruct transportPolyBoolean(/*[in]*/TestPolyStruct arg)
+    {
+        return arg;
+    }
+  
+    public  void  transportPolyUnsignedHyper(/*[in][out]*/ ref TestPolyStruct arg)
+    {
+    }
 
+    public void  transportPolySequence(TestPolyStruct arg1,
+                                       out TestPolyStruct arg2)
+    {
+        arg2 = arg1;
+    }
+
+    public TestPolyStruct getNullPolyLong()
+    {
+        return new TestPolyStruct();
+    }
+
+    public TestPolyStruct getNullPolyString()
+    {
+        return new TestPolyStruct();
+    }
+
+    public TestPolyStruct getNullPolyType()
+    {
+        return new TestPolyStruct();
+    }
+
+    public TestPolyStruct getNullPolyAny()
+    {
+        return new TestPolyStruct();
+    }
+
+    public TestPolyStruct getNullPolySequence()
+    {
+        return new TestPolyStruct();
+    }
+
+    public TestPolyStruct getNullPolyEnum()
+    {
+        return new TestPolyStruct();
+    }
+
+    public TestPolyStruct getNullPolyStruct()
+    {
+        return new TestPolyStruct();
+    }
+
+    public TestPolyStruct getNullPolyInterface()
+    {
+        return new TestPolyStruct();
+    }
+
+    public XMulti getMulti()
+    {
+        return new testtools.bridgetest.cli_cs.Multi();
+    }
+
+    public int testMultiF1(XMulti arg)
+    {
+        return arg.f1();
+    }
+
+    public int testMultiF2(XMulti arg)
+    {
+        return ((XB)arg).f2();
+    }
+
+    public int testMultiF3(XMulti arg)
+    {
+        return arg.f3();
+    }
+
+    public int testMultiA(XMulti arg, int arg2)
+    {
+        ((XB)arg).a = arg2;
+        return ((XB)arg).a;
+    }
     
+    public int RaiseAttr1
+    {
+        get { throw new RuntimeException(); }
+        set { throw new IllegalArgumentException(); }
+    }
+
+    public int RaiseAttr2
+    {
+        get { throw new IllegalArgumentException(); }
+        set { throw new IllegalArgumentException(); }
+    }
+
 
 }
 
