@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mnumgr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2001-07-06 13:25:43 $
+ *  last change: $Author: pb $ $Date: 2001-07-10 08:46:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -341,12 +341,7 @@ void SfxMenuManager::InsertVerbs(const SvVerbList *pList)
 
 BOOL SfxMenuManager::StoreMenu( SvStream& rStream, Menu* pMenu, SfxModule* pMod )
 {
-    LanguageType eLangType = Application::GetAppInternational().GetLanguage();
-    if (eLangType == LANGUAGE_SYSTEM)
-    {
-        eLangType = System::GetLanguage();
-    }
-
+    LanguageType eLangType = Application::GetSettings().GetUILanguage();
     rStream << nVersion
             << (USHORT) eLangType;
 
@@ -436,12 +431,7 @@ Menu* SfxMenuManager::LoadMenu( SvStream& rStream )
         return NULL;
 
     rStream >> nLanguage;
-    LanguageType eLangType = Application::GetAppInternational().GetLanguage();
-    if (eLangType == LANGUAGE_SYSTEM)
-    {
-        eLangType = System::GetLanguage();
-    }
-
+    LanguageType eLangType = Application::GetSettings().GetUILanguage();
     if ( eLangType != (LanguageType) nLanguage )
         return NULL;
 
