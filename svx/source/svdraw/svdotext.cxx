@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 13:56:45 $
+ *  last change: $Author: vg $ $Date: 2003-07-04 13:30:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,6 +159,9 @@ SdrTextObj::SdrTextObj():
 
     // #101684#
     mbInEditMode = FALSE;
+
+    // #108784#
+    maTextEditOffset = Point(0, 0);
 }
 
 SdrTextObj::SdrTextObj(const Rectangle& rNewRect):
@@ -179,6 +182,9 @@ SdrTextObj::SdrTextObj(const Rectangle& rNewRect):
 
     // #101684#
     mbInEditMode = FALSE;
+
+    // #108784#
+    maTextEditOffset = Point(0, 0);
 }
 
 SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind):
@@ -197,6 +203,9 @@ SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind):
 
     // #101684#
     mbInEditMode = FALSE;
+
+    // #108784#
+    maTextEditOffset = Point(0, 0);
 }
 
 SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect):
@@ -217,6 +226,9 @@ SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect):
 
     // #101684#
     mbInEditMode = FALSE;
+
+    // #108784#
+    maTextEditOffset = Point(0, 0);
 }
 
 SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect, SvStream& rInput, USHORT eFormat):
@@ -239,6 +251,9 @@ SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect, SvStr
 
     // #101684#
     mbInEditMode = FALSE;
+
+    // #108784#
+    maTextEditOffset = Point(0, 0);
 }
 
 SdrTextObj::~SdrTextObj()
