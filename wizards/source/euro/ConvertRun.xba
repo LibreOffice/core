@@ -180,8 +180,10 @@ Dim oSheetRanges as Object
 			oSheetRanges = oPreSelRange.CellFormatRanges.createEnumeration
 			While oSheetRanges.hasMoreElements
 				oRange = oSheetRanges.NextElement
-				ConvertCellCurrencies(oRange)
-				SwitchNumberFormat(oRange, oFormats, sEuroSign)
+				If CheckFormatType(oRange) Then
+					ConvertCellCurrencies(oRange)
+					SwitchNumberFormat(oRange, oFormats, sEuroSign)
+				End If
 			Wend
 		Else
 			ConverttheHardWay(SelList(), False, True)
