@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentdefinition.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 12:28:50 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:04:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #endif
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
+#endif
+#ifndef _COMPHELPER_MEDIADESCRIPTOR_HXX_
+#include <comphelper/mediadescriptor.hxx>
 #endif
 #ifndef _SO_CLSIDS_HXX
 #include <so3/clsids.hxx>
@@ -258,13 +261,13 @@ namespace dbaccess
         class OEmbedObjectHolder :   public ::comphelper::OBaseMutex
                                     ,public TEmbedObjectHolder
         {
-            Reference< XStateChangeBroadcaster > m_xBroadCaster;
+            Reference< XEmbeddedObject > m_xBroadCaster;
             ODocumentDefinition*                 m_pDefinition;
             sal_Bool                             m_bInStateChange;
         protected:
             virtual void SAL_CALL disposing();
         public:
-            OEmbedObjectHolder(const Reference< XStateChangeBroadcaster >& _xBroadCaster,ODocumentDefinition* _pDefinition)
+            OEmbedObjectHolder(const Reference< XEmbeddedObject >& _xBroadCaster,ODocumentDefinition* _pDefinition)
                 : TEmbedObjectHolder(m_aMutex)
                 ,m_xBroadCaster(_xBroadCaster)
                 ,m_pDefinition(_pDefinition)
@@ -468,6 +471,7 @@ ODocumentDefinition::ODocumentDefinition(const Reference< XInterface >& _rxConta
     ,m_pInterceptor(NULL)
     ,m_pClientHelper(NULL)
     ,m_bForm(_bForm)
+    ,m_bOpenInDesign(sal_False)
 {
     DBG_CTOR(ODocumentDefinition, NULL);
     registerProperties();
@@ -568,7 +572,8 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
     Any aRet;
     ::osl::MutexGuard aGuard(m_aMutex);
     sal_Bool bOpenInDesign = aCommand.Name.equalsAscii("openDesign");
-    if ( aCommand.Name.compareToAscii( "open" ) == 0 || (bOpenInDesign) )
+    sal_Bool bOpenForMail = aCommand.Name.equalsAscii("openForMail");
+    if ( aCommand.Name.compareToAscii( "open" ) == 0 || bOpenInDesign || bOpenForMail )
     {
         //////////////////////////////////////////////////////////////////
         // open command for a folder content
@@ -641,43 +646,55 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
             Reference<XModel> xModel;
             if ( m_pImpl->m_aProps.sPersistentName.getLength() )
             {
+                m_bOpenInDesign = bOpenInDesign;
                 loadEmbeddedObject(Sequence< sal_Int8 >(),xConnection,!bOpenInDesign);
                 if ( m_xEmbeddedObject.is() )
                 {
-                    m_xEmbeddedObject->changeState(EmbedStates::ACTIVE);
-
-                    // object is new, so we an interceptor for save
-                    xModel.set(getComponent(),UNO_QUERY);
-                    if ( xModel.is() )
+                    if ( bOpenForMail )
                     {
-                        if ( m_xListener.is() )
+                        xModel.set(getComponent(),UNO_QUERY);
+                        fillReportData(!bOpenInDesign);
+                        aRet <<= xModel;
+                    }
+                    else
+                    {
+                        m_xEmbeddedObject->changeState(EmbedStates::ACTIVE);
+
+                        // object is new, so we an interceptor for save
+                        xModel.set(getComponent(),UNO_QUERY);
+                        if ( xModel.is() )
                         {
-                            Reference<XFrame> xFrame = xModel->getCurrentController()->getFrame();
-                            if ( xFrame.is() )
-                            {
-                                Reference<XTopWindow> xTopWindow( xFrame->getContainerWindow(),UNO_QUERY );
-                                if( xTopWindow.is() )
-                                    xTopWindow->toFront();
-                            }
-                        }
-                        else
-                        {
-                            if ( !m_xFrameLoader.is() )
-                            {
-                                m_xFrameLoader.set(m_xORB->createInstance(SERVICE_FRAME_DESKTOP),UNO_QUERY);
-                            }
-                            // remove the frame from the desktop because we need full control of it.
-                            if ( m_xFrameLoader.is() )
+                            if ( m_xListener.is() )
                             {
                                 Reference<XFrame> xFrame = xModel->getCurrentController()->getFrame();
-                                Reference<XFramesSupplier> xSup(m_xFrameLoader,UNO_QUERY);
-                                if ( xSup.is() )
+                                if ( xFrame.is() )
                                 {
-                                    Reference<XFrames> xFrames = xSup->getFrames();
-                                    xFrames->remove(xFrame);
+                                    Reference<XTopWindow> xTopWindow( xFrame->getContainerWindow(),UNO_QUERY );
+                                    if( xTopWindow.is() )
+                                        xTopWindow->toFront();
                                 }
                             }
+                            else
+                            {
+                                if ( !m_xFrameLoader.is() )
+                                {
+                                    m_xFrameLoader.set(m_xORB->createInstance(SERVICE_FRAME_DESKTOP),UNO_QUERY);
+                                }
+                                // remove the frame from the desktop because we need full control of it.
+                                if ( m_xFrameLoader.is() )
+                                {
+                                    Reference<XFrame> xFrame = xModel->getCurrentController()->getFrame();
+                                    Reference<XFramesSupplier> xSup(m_xFrameLoader,UNO_QUERY);
+                                    if ( xSup.is() )
+                                    {
+                                        Reference<XFrames> xFrames = xSup->getFrames();
+                                        xFrames->remove(xFrame);
+                                    }
+                                }
 
+                                //  Reference<XStateChangeBroadcaster> xBrd(m_xEmbeddedObject,UNO_QUERY);
+                                m_xListener = new OEmbedObjectHolder(m_xEmbeddedObject,this);
+                            }
                             if ( bOpenInDesign && m_bForm )
                             {
                                 Reference<XViewSettingsSupplier> xViewSup(xModel->getCurrentController(),UNO_QUERY);
@@ -703,8 +720,6 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
                                     }
                                 }
                             }
-                            Reference<XStateChangeBroadcaster> xBrd(m_xEmbeddedObject,UNO_QUERY);
-                            m_xListener = new OEmbedObjectHolder(xBrd,this);
                         }
                         fillReportData(!bOpenInDesign);
                         aRet <<= xModel;
@@ -914,6 +929,8 @@ sal_Bool ODocumentDefinition::save(sal_Bool _bApprove)
                     m_pImpl->m_aProps.aTitle = pDocuSave->getName();
                     Reference< XContent> xContent = this;
                     xNC->insertByName(pDocuSave->getName(),makeAny(xContent));
+
+                    updateDocumentTitle();
                 }
             }
         }
@@ -955,9 +972,6 @@ void ODocumentDefinition::fillLoadArgs(Sequence<PropertyValue>& _rArgs,Sequence<
 
     _rArgs[nLen].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MacroExecutionMode"));
     _rArgs[nLen++].Value <<= MacroExecMode::USE_CONFIG;
-
-    _rArgs[nLen].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL"));
-    _rArgs[nLen++].Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/swriter"));
 
     if ( m_pImpl->m_aProps.aTitle.getLength() )
     {
@@ -1060,40 +1074,23 @@ void ODocumentDefinition::loadEmbeddedObject(const Sequence< sal_Int8 >& _aClass
     if ( xModel.is() )
     {
         Sequence<PropertyValue> aArgs = xModel->getArgs();
+        ::comphelper::MediaDescriptor aHelper(aArgs);
+        static const ::rtl::OUString s_sReadOnly(RTL_CONSTASCII_USTRINGPARAM("ReadOnly"));
+        if ( ! aHelper.createItemIfMissing(s_sReadOnly,_bReadOnly) )
+            aHelper[s_sReadOnly] <<= _bReadOnly;
 
-        sal_Bool bAddReadOnly = sal_True;
-        sal_Bool bMacroExecutionMode = sal_True;
-        PropertyValue* pIter = aArgs.getArray();
-        PropertyValue* pEnd  = pIter + aArgs.getLength();
-        for(;pIter != pEnd;++pIter)
+        if ( m_pImpl->m_aProps.aTitle.getLength() )
         {
-            if ( pIter->Name.equalsAscii("ReadOnly") )
-            {
-                pIter->Value <<= _bReadOnly;
-                bAddReadOnly = sal_False;
-            }
-            else if ( pIter->Name.equalsAscii("MacroExecutionMode") )
-            {
-                pIter->Value <<= MacroExecMode::USE_CONFIG;
-                bMacroExecutionMode = sal_False;
-            }
+            static const ::rtl::OUString s_sDocumentTitle(RTL_CONSTASCII_USTRINGPARAM("DocumentTitle"));
+            if ( ! aHelper.createItemIfMissing(s_sDocumentTitle,m_pImpl->m_aProps.aTitle) )
+                aHelper[s_sDocumentTitle] <<= m_pImpl->m_aProps.aTitle;
         }
 
-        if ( bAddReadOnly )
-        {
-            sal_Int32 nLen = aArgs.getLength();
-            aArgs.realloc(nLen+1);
-            aArgs[nLen].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReadOnly"));
-            aArgs[nLen].Value <<= _bReadOnly;
-        }
+        static const ::rtl::OUString s_sMacroExecutionMode(RTL_CONSTASCII_USTRINGPARAM("MacroExecutionMode"));
+        if ( ! aHelper.createItemIfMissing(s_sMacroExecutionMode,MacroExecMode::USE_CONFIG) )
+            aHelper[s_sMacroExecutionMode] <<= MacroExecMode::USE_CONFIG;
 
-        if ( bMacroExecutionMode )
-        {
-            sal_Int32 nLen = aArgs.getLength();
-            aArgs.realloc(nLen+1);
-            aArgs[nLen].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MacroExecutionMode"));
-            aArgs[nLen].Value <<= MacroExecMode::USE_CONFIG;
-        }
+        aHelper >> aArgs;
 
         xModel->attachResource(xModel->getURL(),aArgs);
     }
@@ -1209,6 +1206,9 @@ void SAL_CALL ODocumentDefinition::rename( const ::rtl::OUString& newName ) thro
         fire(&nHandle, &aNew, &aOld, 1, sal_True );
         m_pImpl->m_aProps.aTitle = newName;
         fire(&nHandle, &aNew, &aOld, 1, sal_False );
+
+        if ( m_xEmbeddedObject.is() && m_xEmbeddedObject->getCurrentState() == EmbedStates::ACTIVE )
+            updateDocumentTitle();
     }
     catch(const PropertyVetoException&)
     {
@@ -1241,35 +1241,19 @@ void ODocumentDefinition::setModelReadOnly(sal_Bool _bReadOnly)
     if ( xModel.is() )
     {
         Sequence<PropertyValue> aArgs = xModel->getArgs();
+        ::comphelper::MediaDescriptor aHelper(aArgs);
+        static const ::rtl::OUString s_sReadOnly(RTL_CONSTASCII_USTRINGPARAM("ReadOnly"));
+        if ( ! aHelper.createItemIfMissing(s_sReadOnly,_bReadOnly) )
+            aHelper[s_sReadOnly] <<= _bReadOnly;
 
-        sal_Bool bAddReadOnly = sal_True;
-        sal_Bool bMacroExecutionMode = sal_True;
-        PropertyValue* pIter = aArgs.getArray();
-        PropertyValue* pEnd  = pIter + aArgs.getLength();
-        for(;pIter != pEnd;++pIter)
-        {
-            if ( pIter->Name.equalsAscii("ReadOnly") )
-            {
-                pIter->Value <<= _bReadOnly;
-                bAddReadOnly = sal_False;
-            }
-        }
-
-        if ( bAddReadOnly )
-        {
-            sal_Int32 nLen = aArgs.getLength();
-            aArgs.realloc(nLen+1);
-            aArgs[nLen].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReadOnly"));
-            aArgs[nLen].Value <<= _bReadOnly;
-        }
-
+        aHelper >> aArgs;
         xModel->attachResource(xModel->getURL(),aArgs);
     }
 }
 // -----------------------------------------------------------------------------
 void ODocumentDefinition::fillReportData(sal_Bool _bFill)
 {
-    if ( !m_bForm && _bFill && m_pImpl->m_aProps.bAsTemplate ) // open a report in alive mode, so we need to fill it
+    if ( !m_bForm && _bFill && m_pImpl->m_aProps.bAsTemplate && !m_bOpenInDesign ) // open a report in alive mode, so we need to fill it
     {
         setModelReadOnly(sal_False);
         Sequence<Any> aArgs(1);
@@ -1284,6 +1268,23 @@ void ODocumentDefinition::fillReportData(sal_Bool _bFill)
     }
 }
 // -----------------------------------------------------------------------------
+void ODocumentDefinition::updateDocumentTitle()
+{
+    if ( m_pImpl->m_aProps.aTitle.getLength() )
+    {
+        Reference<XModel> xModel(getComponent(),UNO_QUERY);
+        if ( xModel.is() )
+        {
+            Sequence<PropertyValue> aArgs = xModel->getArgs();
+            ::comphelper::MediaDescriptor aHelper(aArgs);
+            static const ::rtl::OUString s_sDocumentTitle(RTL_CONSTASCII_USTRINGPARAM("DocumentTitle"));
+            if ( ! aHelper.createItemIfMissing(s_sDocumentTitle,m_pImpl->m_aProps.aTitle) )
+                aHelper[s_sDocumentTitle] <<= m_pImpl->m_aProps.aTitle;
+            aHelper >> aArgs;
+            xModel->attachResource(xModel->getURL(),aArgs);
+        }
+    }
+}
 //........................................................................
 }   // namespace dbaccess
 //........................................................................
