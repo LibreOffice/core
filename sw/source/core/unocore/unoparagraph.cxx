@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoparagraph.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:44:21 $
+ *  last change: $Author: hr $ $Date: 2003-11-07 15:13:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,7 +268,7 @@ void SwXParagraph::setPropertyValue(const OUString& rPropertyName, const Any& aV
     aPropertyNames.getArray()[0] = rPropertyName;
     Sequence<Any> aValues(1);
     aValues.getArray()[0] = aValue;
-    setPropertyValues(aPropertyNames, aValues);
+    SetPropertyValues_Impl( aPropertyNames, aValues );
 }
 /*-- 11.12.98 08:12:49---------------------------------------------------
 
@@ -279,31 +279,32 @@ uno::Any SwXParagraph::getPropertyValue(const OUString& rPropertyName)
     vos::OGuard aGuard(Application::GetSolarMutex());
     Sequence<OUString> aPropertyNames(1);
     aPropertyNames.getArray()[0] = rPropertyName;
-    Sequence< Any > aRet = getPropertyValues(aPropertyNames );
+    Sequence< Any > aRet = GetPropertyValues_Impl(aPropertyNames );
     return aRet.getConstArray()[0];
 }
 /* -----------------------------02.04.01 11:43--------------------------------
 
  ---------------------------------------------------------------------------*/
-void SwXParagraph::setPropertyValues(
-    const Sequence< OUString >& rPropertyNames,
-    const Sequence< Any >& aValues )
-        throw(PropertyVetoException, IllegalArgumentException,
-                        WrappedTargetException, RuntimeException)
+void SAL_CALL SwXParagraph::SetPropertyValues_Impl(
+    const uno::Sequence< OUString >& rPropertyNames,
+    const uno::Sequence< Any >& rValues )
+    throw( UnknownPropertyException, PropertyVetoException, IllegalArgumentException,
+            WrappedTargetException, RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(pUnoCrsr)
     {
         const OUString* pPropertyNames = rPropertyNames.getConstArray();
-        const Any* pValues = aValues.getConstArray();
+        const Any* pValues = rValues.getConstArray();
         const SfxItemPropertyMap*   pMap = aPropSet.getPropertyMap();
         OUString sTmp;
         SwParaSelection aParaSel(pUnoCrsr);
         for(sal_Int32 nProp = 0; nProp < rPropertyNames.getLength(); nProp++)
         {
             pMap = SfxItemPropertyMap::GetByName(pMap, pPropertyNames[nProp]);
-            if(pMap)
+            if(!pMap)
+                throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + pPropertyNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
+            else
             {
                 if ( pMap->nFlags & PropertyAttribute::READONLY)
                     throw PropertyVetoException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + pPropertyNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
@@ -312,21 +313,41 @@ void SwXParagraph::setPropertyValues(
                                         sTmp, pValues[nProp], pMap);
                 pMap++;
             }
-            else
-                throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + pPropertyNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
         }
     }
     else
         throw uno::RuntimeException();
 }
+
+void SwXParagraph::setPropertyValues(
+    const Sequence< OUString >& rPropertyNames,
+    const Sequence< Any >& rValues )
+        throw(PropertyVetoException, IllegalArgumentException,
+                        WrappedTargetException, RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
+    // workaround for bad designed API
+    try
+    {
+        SetPropertyValues_Impl( rPropertyNames, rValues );
+    }
+    catch (UnknownPropertyException &rException)
+    {
+        // wrap the original (here not allowed) exception in
+        // a WrappedTargetException that gets thrown instead.
+        WrappedTargetException aWExc;
+        aWExc.TargetException <<= rException;
+        throw aWExc;
+    }
+}
 /* -----------------------------02.04.01 11:43--------------------------------
 
  ---------------------------------------------------------------------------*/
-Sequence< Any > SwXParagraph::getPropertyValues(
-    const Sequence< OUString >& rPropertyNames )
-        throw(RuntimeException)
+uno::Sequence< Any > SAL_CALL SwXParagraph::GetPropertyValues_Impl(
+        const uno::Sequence< OUString > & rPropertyNames )
+    throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
     Sequence< Any > aValues(rPropertyNames.getLength());
     SwUnoCrsr* pUnoCrsr = ((SwXParagraph*)this)->GetCrsr();
     if(pUnoCrsr)
@@ -354,11 +375,37 @@ Sequence< Any > SwXParagraph::getPropertyValues(
                 ++pMap;
             }
             else
-                throw RuntimeException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + pPropertyNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
+                throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + pPropertyNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
         }
     }
     else
         throw RuntimeException();
+    return aValues;
+}
+/* -----------------------------04.11.03 11:43--------------------------------
+
+ ---------------------------------------------------------------------------*/
+Sequence< Any > SwXParagraph::getPropertyValues(
+    const Sequence< OUString >& rPropertyNames )
+        throw(RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    Sequence< Any > aValues;
+
+    // workaround for bad designed API
+    try
+    {
+        aValues = GetPropertyValues_Impl( rPropertyNames );
+    }
+    catch (UnknownPropertyException &)
+    {
+        throw RuntimeException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property exception caught" ) ), static_cast < cppu::OWeakObject * > ( this ) );
+    }
+    catch (WrappedTargetException &)
+    {
+        throw RuntimeException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "WrappedTargetException caught" ) ), static_cast < cppu::OWeakObject * > ( this ) );
+    }
+
     return aValues;
 }
 /* -----------------------------02.04.01 11:43--------------------------------
@@ -781,6 +828,7 @@ uno::Reference< XTextRange >  SwXParagraph::getStart(void) throw( uno::RuntimeEx
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if( pUnoCrsr)
     {
+        SwParaSelection aSelection(pUnoCrsr);
         SwPaM aPam(*pUnoCrsr->Start());
         uno::Reference< XText >  xParent = getText();
         xRet = new SwXTextRange(aPam, xParent);
@@ -799,6 +847,7 @@ uno::Reference< XTextRange >  SwXParagraph::getEnd(void) throw( uno::RuntimeExce
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if( pUnoCrsr)
     {
+        SwParaSelection aSelection(pUnoCrsr);
         SwPaM aPam(*pUnoCrsr->End());
         uno::Reference< XText >  xParent = getText();
         xRet = new SwXTextRange(aPam, xParent);
