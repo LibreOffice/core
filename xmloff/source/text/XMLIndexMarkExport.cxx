@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexMarkExport.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
+ *  last change: $Author: dvo $ $Date: 2002-07-03 16:18:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,10 @@ XMLIndexMarkExport::XMLIndexMarkExport(
         sDocumentIndexMark(RTL_CONSTASCII_USTRINGPARAM("DocumentIndexMark")),
         sIsStart(RTL_CONSTASCII_USTRINGPARAM("IsStart")),
         sIsCollapsed(RTL_CONSTASCII_USTRINGPARAM("IsCollapsed")),
-        sAlternativeText(RTL_CONSTASCII_USTRINGPARAM("AlternativeText"))
+        sAlternativeText(RTL_CONSTASCII_USTRINGPARAM("AlternativeText")),
+        sTextReading(RTL_CONSTASCII_USTRINGPARAM("TextReading")),
+        sPrimaryKeyReading(RTL_CONSTASCII_USTRINGPARAM("PrimaryKeyReading")),
+        sSecondaryKeyReading(RTL_CONSTASCII_USTRINGPARAM("SecondaryKeyReading"))
 {
 }
 
@@ -250,19 +253,31 @@ void XMLIndexMarkExport::ExportTOCMarkAttributes(
                              sBuf.makeStringAndClear());
 }
 
+void lcl_ExportPropertyString( SvXMLExport& rExport,
+                               const Reference<XPropertySet> & rPropSet,
+                               const OUString sProperty,
+                               XMLTokenEnum eToken,
+                               Any& rAny )
+{
+    rAny = rPropSet->getPropertyValue( sProperty );
+
+    OUString sValue;
+    if( rAny >>= sValue )
+    {
+        if( sValue.getLength() > 0 )
+        {
+            rExport.AddAttribute( XML_NAMESPACE_TEXT, eToken, sValue );
+        }
+    }
+}
+
 void XMLIndexMarkExport::ExportUserIndexMarkAttributes(
     const Reference<XPropertySet> & rPropSet)
 {
     // name of user index
     // (unless it's the default index; then it has no name)
-    Any aAny = rPropSet->getPropertyValue(sUserIndexName);
-    OUString sIndexName;
-    aAny >>= sIndexName;
-    if (sIndexName.getLength() > 0)
-    {
-        rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_INDEX_NAME,
-                                 sIndexName);
-    }
+    Any aAny;
+    lcl_ExportPropertyString( rExport, rPropSet, sUserIndexName, XML_INDEX_NAME, aAny );
 
     // additionally export outline level; just reuse ExportTOCMarkAttributes
     ExportTOCMarkAttributes( rPropSet );
@@ -272,22 +287,13 @@ void XMLIndexMarkExport::ExportAlphabeticalIndexMarkAttributes(
     const Reference<XPropertySet> & rPropSet)
 {
     // primary and secondary keys (if available)
+    Any aAny;
+    lcl_ExportPropertyString( rExport, rPropSet, sTextReading, XML_STRING_VALUE_PHONETIC, aAny );
+    lcl_ExportPropertyString( rExport, rPropSet, sPrimaryKey, XML_KEY1, aAny );
+    lcl_ExportPropertyString( rExport, rPropSet, sPrimaryKeyReading, XML_KEY1_PHONETIC, aAny );
+    lcl_ExportPropertyString( rExport, rPropSet, sSecondaryKey, XML_KEY2, aAny );
+    lcl_ExportPropertyString( rExport, rPropSet, sSecondaryKeyReading, XML_KEY2_PHONETIC, aAny );
 
-    OUString sPrimary;
-    Any aAny = rPropSet->getPropertyValue(sPrimaryKey);
-    aAny >>= sPrimary;
-    if (sPrimary.getLength() > 0)
-    {
-        rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_KEY1, sPrimary);
-    }
-
-    OUString sSecondary;
-    aAny = rPropSet->getPropertyValue(sSecondaryKey);
-    aAny >>= sSecondary;
-    if (sSecondary.getLength() > 0)
-    {
-        rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_KEY2, sSecondary);
-    }
 }
 
 void XMLIndexMarkExport::GetID(

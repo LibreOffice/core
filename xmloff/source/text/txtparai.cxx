@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparai.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-08 11:29:32 $
+ *  last change: $Author: dvo $ $Date: 2002-07-03 16:18:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1410,6 +1410,9 @@ class XMLAlphaIndexMarkImportContext_Impl : public XMLIndexMarkImportContext_Imp
 {
     const OUString sPrimaryKey;
     const OUString sSecondaryKey;
+    const OUString sTextReading;
+    const OUString sPrimaryKeyReading;
+    const OUString sSecondaryKeyReading;
 
 public:
     TYPEINFO();
@@ -1439,7 +1442,10 @@ XMLAlphaIndexMarkImportContext_Impl::XMLAlphaIndexMarkImportContext_Impl(
         XMLIndexMarkImportContext_Impl(rImport, nPrefix, rLocalName,
                                        nTok, rHnts),
         sPrimaryKey(RTL_CONSTASCII_USTRINGPARAM("PrimaryKey")),
-        sSecondaryKey(RTL_CONSTASCII_USTRINGPARAM("SecondaryKey"))
+        sSecondaryKey(RTL_CONSTASCII_USTRINGPARAM("SecondaryKey")),
+        sTextReading(RTL_CONSTASCII_USTRINGPARAM("TextReading")),
+        sPrimaryKeyReading(RTL_CONSTASCII_USTRINGPARAM("PrimaryKeyReading")),
+        sSecondaryKeyReading(RTL_CONSTASCII_USTRINGPARAM("SecondaryKeyReading"))
 {
 }
 
@@ -1460,6 +1466,24 @@ void XMLAlphaIndexMarkImportContext_Impl::ProcessAttribute(
             Any aAny;
             aAny <<= sValue;
             rPropSet->setPropertyValue(sSecondaryKey, aAny);
+        }
+        else if ( IsXMLToken( sLocalName, XML_KEY1_PHONETIC ) )
+        {
+            Any aAny;
+            aAny <<= sValue;
+            rPropSet->setPropertyValue(sPrimaryKeyReading, aAny);
+        }
+        else if ( IsXMLToken( sLocalName, XML_KEY2_PHONETIC ) )
+        {
+            Any aAny;
+            aAny <<= sValue;
+            rPropSet->setPropertyValue(sSecondaryKeyReading, aAny);
+        }
+        else if ( IsXMLToken( sLocalName, XML_STRING_VALUE_PHONETIC ) )
+        {
+            Any aAny;
+            aAny <<= sValue;
+            rPropSet->setPropertyValue(sTextReading, aAny);
         }
         else
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: er $ $Date: 2002-06-26 16:55:05 $
+ *  last change: $Author: dvo $ $Date: 2002-07-03 16:18:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2121,6 +2121,10 @@ namespace xmloff { namespace token {
         TOKEN( "transliteration-language" ),   // XML_TRANSLITERATION_LANGUAGE
         TOKEN( "transliteration-country" ),    // XML_TRANSLITERATION_COUNTRY
         TOKEN( "transliteration-style" ),      // XML_TRANSLITERATION_STYLE
+
+        TOKEN( "key1-phonetic" ),              // XML_KEY1_PHONETIC
+        TOKEN( "key2-phonetic" ),              // XML_KEY2_PHONETIC
+        TOKEN( "string-value-phonetic" ),      // XML_STRING_VALUE_PHONETIC
 
         { 0, NULL, NULL }                      // XML_TOKEN_END
     };
