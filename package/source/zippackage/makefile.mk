@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: mtg $ $Date: 2001-09-14 15:24:09 $
+#   last change: $Author: mtg $ $Date: 2001-11-29 13:40:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,9 +84,9 @@ SLOFILES= \
         $(SLO)$/ZipPackageFolder.obj	\
         $(SLO)$/ZipPackageFolderEnumeration.obj	\
         $(SLO)$/ZipPackageSink.obj		\
-        $(SLO)$/ZipPackageStream.obj 	\
-        $(SLO)$/InteractionRequest.obj  \
-        $(SLO)$/InteractionContinuation.obj
+        $(SLO)$/ZipPackageStream.obj
+#		$(SLO)$/InteractionRequest.obj  \
+#		$(SLO)$/InteractionContinuation.obj
 
 # --- UNO stuff ---------------------------------------------------
 
