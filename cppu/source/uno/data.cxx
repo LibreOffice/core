@@ -2,9 +2,9 @@
  *
  *  $RCSfile: data.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:48:49 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 12:16:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -389,7 +389,9 @@ sal_Bool SAL_CALL uno_type_isAssignableFromData(
 #   pragma pack(8)
 #endif
 
-#if defined(__GNUC__) && (defined(LINUX) || defined(FREEBSD)) && defined(INTEL)
+#if defined(INTEL) \
+    && (defined(__GNUC__) && (defined(LINUX) || defined(FREEBSD)) \
+        || defined(__SUNPRO_CC) && defined(SOLARIS))
 #define MAX_ALIGNMENT_4
 #endif
 
