@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-08 11:45:33 $
+ *  last change: $Author: pl $ $Date: 2001-05-11 15:15:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,17 +65,13 @@
 #ifndef __SGI_STL_HASH_MAP
 #include <hash_map>
 #endif
-#ifndef _RTL_USTRING_
-#include <rtl/ustring>
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
 #endif
 
 
 // forwards
 namespace osl { class File; }
-
-#ifndef _RTL_USTRING_
-#include <rtl/ustring>
-#endif
 
 namespace psp {
 typedef int fontID;
