@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: pluby $ $Date: 2001-02-12 01:33:41 $
+#   last change: $Author: pluby $ $Date: 2001-02-13 02:56:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -215,6 +215,16 @@ APP8STDLIBS+=	$(LIBCIMT)
 # SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
 .IF "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
 APP8OBJS+=$(OBJ)$/staticmbtest.obj 
+.ENDIF
+
+# gcc on Mac OS X optimizes out some temporary variables when optimization is
+# turned on for compiling 
+.IF "$(OS)"=="MACOSX"
+NOOPTFILES+=$(APP1OBJS) $(APP2OBJS) $(APP3OBJS) $(APP4OBJS) $(APP5OBJS) \
+  $(APP6OBJS) $(APP7OBJS) $(APP8OBJS)
+.IF "$(NOOPT_FLAG)"!=""
+CFLAGSNOOPT=
+.ENDIF
 .ENDIF
 
 ALLIDLFILES:=	testcorefl.idl language_binding.idl testintrosp.idl
