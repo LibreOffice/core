@@ -1,14 +1,17 @@
 ### 100941 ###
 svx.SvxUnoText::com::sun::star::text::XTextRangeMover
-
 ### 101696 ###
 svx.SvxUnoTextRange::com::sun::star::text::XTextRange
 
 ### 112813 ###
 svx.AccessibleEditableTextPara::com::sun::star::accessibility::XAccessibleEditableText
 
-### 114134 ###
-svx.SvxDrawPage::com::sun::star::drawing::XShapeGrouper
+### 114898 ###
+svx.SvxGraphCtrlAccessibleContext::com::sun::star::accessibility::XAccessibleEventBroadcaster
+
+### 115136 ###
+svx.AccessiblePageShape::com::sun::star::accessibility::XAccessibleEventBroadcaster
+svx.AccessiblePresentationShape::com::sun::star::accessibility::XAccessibleEventBroadcaster
 
 ### 97139 ###
 svx.SvxUnoTextCursor::com::sun::star::beans::XMultiPropertyStates
@@ -16,23 +19,29 @@ svx.SvxUnoTextCursor::com::sun::star::beans::XMultiPropertyStates
 ### i23298 ###
 svx.SvxDrawPage::com::sun::star::drawing::GenericDrawPage
 
-### i23458 ###
-svx.GraphicExporter::com::sun::star::document::XFilter
-
 ### i23461 ###
 svx.SvxDrawPage::com::sun::star::drawing::XMasterPageTarget
 
 ### i23462 ###
 svx.SvxGraphicObject::com::sun::star::drawing::GraphicObjectShape
 
-### i23469 ###
-svx.SvxUnoNumberingRules::com::sun::star::container::XIndexReplace
-
-### i26267 ###
-svx.SvxShapeDimensioning::com::sun::star::drawing::ShadowProperties
-
-### 114898 ###
-svx.SvxGraphCtrlAccessibleContext::com::sun::star::accessibility::XAccessibleEventBroadcaster
-
-### 115136 ###
+### i26126 ###
+svx.AccessibleControlShape::com::sun::star::accessibility::XAccessibleComponent
+svx.AccessibleControlShape::com::sun::star::accessibility::XAccessibleEventBroadcaster
+svx.AccessibleControlShape::com::sun::star::accessibility::XAccessibleExtendedComponent
+svx.AccessibleControlShape::com::sun::star::accessibility::XAccessible
+svx.AccessibleControlShape::com::sun::star::accessibility::XAccessibleContext
+svx.AccessibleGraphicShape::com::sun::star::accessibility::XAccessibleComponent
+svx.AccessibleGraphicShape::com::sun::star::accessibility::XAccessible
+svx.AccessibleGraphicShape::com::sun::star::accessibility::XAccessibleContext
+svx.AccessibleOLEShape::com::sun::star::accessibility::XAccessibleComponent
+svx.AccessibleOLEShape::com::sun::star::accessibility::XAccessibleEventBroadcaster
+svx.AccessibleOLEShape::com::sun::star::accessibility::XAccessibleExtendedComponent
+svx.AccessibleOLEShape::com::sun::star::accessibility::XAccessible
+svx.AccessibleOLEShape::com::sun::star::accessibility::XAccessibleContext
+svx.AccessiblePageShape::com::sun::star::accessibility::XAccessibleComponent
+svx.AccessiblePageShape::com::sun::star::accessibility::XAccessibleEventBroadcaster
+svx.AccessiblePageShape::com::sun::star::accessibility::XAccessibleExtendedComponent
+svx.AccessiblePageShape::com::sun::star::accessibility::XAccessible
+svx.AccessiblePageShape::com::sun::star::accessibility::XAccessibleContext
 svx.AccessiblePresentationShape::com::sun::star::accessibility::XAccessibleEventBroadcaster
