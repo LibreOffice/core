@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyMaps.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-05 23:05:47 $
+ *  last change: $Author: bm $ $Date: 2000-12-06 17:07:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,6 +237,7 @@ const XMLPropertyMapEntry aXMLChartPropMap[] =
     { "LineEndName",    XML_NAMESPACE_DRAW, sXML_marker_end,            XML_TYPE_STRING, 0 },
     { "LineEndWidth",   XML_NAMESPACE_DRAW, sXML_marker_end_width,      XML_TYPE_MEASURE, 0 },
     { "LineEndCenter",  XML_NAMESPACE_DRAW, sXML_marker_end_center,     XML_TYPE_BOOL, 0 },
+    { "LineTransparence", XML_NAMESPACE_SVG,sXML_stroke_opacity,        XML_TYPE_PERCENT16, 0 },
     { "LineJoint",      XML_NAMESPACE_SVG,  sXML_stroke_linejoin,       XML_SCH_TYPE_LINEJOIN, 0 },
 
     // fill attributes
@@ -245,6 +246,7 @@ const XMLPropertyMapEntry aXMLChartPropMap[] =
     { "FillGradientName",   XML_NAMESPACE_DRAW, sXML_fill_gradient_name,    XML_TYPE_STRING, 0 },
     { "FillHatchName",  XML_NAMESPACE_DRAW, sXML_fill_hatch_name,           XML_TYPE_STRING, 0 },
     { "FillBitmapName", XML_NAMESPACE_DRAW, sXML_fill_image_name,           XML_TYPE_STRING, 0 },
+    { "FillTransparence",   XML_NAMESPACE_DRAW, sXML_transparency,          XML_TYPE_PERCENT16, 0 },
     { "FillTransparenceName",   XML_NAMESPACE_DRAW, sXML_transparency_name, XML_TYPE_STRING, 0 },
 
     // text attributes
