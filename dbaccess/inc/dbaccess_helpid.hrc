@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbaccess_helpid.hrc,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-05 15:58:16 $
+ *  last change: $Author: fs $ $Date: 2000-12-08 21:10:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,11 +135,22 @@
 
 #define HID_GENERIC_SQL_ERROR                       (HID_DBACCESS_START + 60)
 
+#define HID_BROWSER_COLUMNFORMAT                    (HID_DBACCESS_START + 61)
+#define HID_BROWSER_COLUMNWIDTH                     (HID_DBACCESS_START + 62)
+#define HID_BROWSER_TABLEFORMAT                     (HID_DBACCESS_START + 63)
+#define HID_BROWSER_ROWHEIGHT                       (HID_DBACCESS_START + 64)
+#define HID_BROWSER_DSADMINISTRATE                  (HID_DBACCESS_START + 65)
+#define HID_BROWSER_CLOSECONN                       (HID_DBACCESS_START + 66)
+#define HID_BROWSER_REFRESHCONN                     (HID_DBACCESS_START + 67)
+
 #endif // _DBA_DBACCESS_HELPID_HRC_
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9  2000/12/05 15:58:16  fs
+ *  #79820# HID_DSADMIN_DIALOG
+ *
  *  Revision 1.8  2000/12/05 12:47:30  fs
  *  #80539# removed two obsolete ids
  *

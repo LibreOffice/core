@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-05 15:59:22 $
+ *  last change: $Author: fs $ $Date: 2000-12-08 21:11:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,12 +121,23 @@ hidspecial HID_DSADMIN_NO_TABLES                        { HelpId = HID_DSADMIN_N
 hidspecial HID_DSADMIN_SELECT_TABLES                    { HelpId = HID_DSADMIN_SELECT_TABLES; };
 hidspecial HID_DSADMIN_TABLE_SELECTOR                   { HelpId = HID_DSADMIN_TABLE_SELECTOR; };
 hidspecial HID_DSADMIN_SUPPRESS_VERSIONCL               { HelpId = HID_DSADMIN_SUPPRESS_VERSIONCL; };
-
 hidspecial HID_GENERIC_SQL_ERROR                        { HelpId = HID_GENERIC_SQL_ERROR; };
+hidspecial HID_BROWSER_COLUMNFORMAT                     { HelpId = HID_BROWSER_COLUMNFORMAT; };
+hidspecial HID_BROWSER_COLUMNWIDTH                      { HelpId = HID_BROWSER_COLUMNWIDTH; };
+hidspecial HID_BROWSER_TABLEFORMAT                      { HelpId = HID_BROWSER_TABLEFORMAT; };
+hidspecial HID_BROWSER_ROWHEIGHT                        { HelpId = HID_BROWSER_ROWHEIGHT; };
+hidspecial HID_BROWSER_DSADMINISTRATE                   { HelpId = HID_BROWSER_DSADMINISTRATE; };
+hidspecial HID_BROWSER_CLOSECONN                        { HelpId = HID_BROWSER_CLOSECONN; };
+hidspecial HID_BROWSER_REFRESHCONN                      { HelpId = HID_BROWSER_REFRESHCONN; };
+
+
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2000/12/05 15:59:22  fs
+ *  #79820# HID_DSADMIN_DIALOG
+ *
  *  Revision 1.5  2000/12/05 12:47:59  fs
  *  #80539# removed two obsolete ids
  *
