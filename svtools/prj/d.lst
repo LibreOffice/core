@@ -271,6 +271,7 @@ hedabu: ..\inc\custritm.hxx %_DEST%\inc%_EXT%\svtools\custritm.hxx
 hedabu: ..\inc\sfxecode.hxx %_DEST%\inc%_EXT%\svtools\sfxecode.hxx
 hedabu: ..\inc\ehdl.hxx %_DEST%\inc%_EXT%\svtools\ehdl.hxx
 hedabu: ..\inc\svtools.hrc %_DEST%\inc%_EXT%\svtools\svtools.hrc
+hedabu: ..\source\dialogs\filedlg2.hrc %_DEST%\inc%_EXT%\svtools\filedlg2.hrc
 
 hedabu: ..\source\xmlfilt\attrlist.hxx %_DEST%\inc%_EXT%\svtools\attrlist.hxx
 hedabu: ..\source\xmlfilt\i18nmap.hxx %_DEST%\inc%_EXT%\svtools\i18nmap.hxx
