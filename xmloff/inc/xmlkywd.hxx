@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: dvo $ $Date: 2000-12-19 18:56:47 $
+ *  last change: $Author: cl $ $Date: 2000-12-20 16:15:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1669,5 +1669,10 @@ XML_CONSTASCII_ACTION( sXML_play_full, "play-full" );
 XML_CONSTASCII_ACTION( sXML_path_id, "path-id" );
 
 XML_CONSTASCII_ACTION( sXML_animations, "animations" );
+
+XML_CONSTASCII_ACTION( sXML_kind, "kind" );
+XML_CONSTASCII_ACTION( sXML_start_angle, "start-angle" );
+XML_CONSTASCII_ACTION( sXML_cut, "cut" );
+XML_CONSTASCII_ACTION( sXML_arc, "arc" );
 
 #endif
