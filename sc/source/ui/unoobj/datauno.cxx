@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datauno.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:32:34 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:07:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,7 +299,7 @@ void ScImportDescriptor::FillImportParam( ScImportParam& rParam, const uno::Sequ
     for (long i = 0; i < nPropCount; i++)
     {
         const beans::PropertyValue& rProp = pPropArray[i];
-        String aPropName = rProp.Name;
+        String aPropName(rProp.Name);
 
         if (aPropName.EqualsAscii( SC_UNONAME_ISNATIVE ))
             rParam.bNative = ScUnoHelpFunctions::GetBoolFromAny( rProp.Value );
@@ -435,7 +435,7 @@ void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const uno::Sequence<b
     for (long i = 0; i < nPropCount; i++)
     {
         const beans::PropertyValue& rProp = pPropArray[i];
-        String aPropName = rProp.Name;
+        String aPropName(rProp.Name);
 
         if (aPropName.EqualsAscii( SC_UNONAME_ORIENT ))
         {
@@ -774,13 +774,12 @@ uno::Any SAL_CALL ScSubTotalDescriptorBase::getByIndex( sal_Int32 nIndex )
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    uno::Reference<sheet::XSubTotalField> xField = GetObjectByIndex_Impl((USHORT)nIndex);
-    uno::Any aAny;
+    uno::Reference<sheet::XSubTotalField> xField(GetObjectByIndex_Impl((USHORT)nIndex));
     if (xField.is())
-        aAny <<= xField;
+        return uno::makeAny(xField);
     else
         throw lang::IndexOutOfBoundsException();
-    return aAny;
+    return uno::Any();
 }
 
 uno::Type SAL_CALL ScSubTotalDescriptorBase::getElementType() throw(uno::RuntimeException)
@@ -801,8 +800,8 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScSubTotalDescriptorBase::getPr
                                                         throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    static uno::Reference<beans::XPropertySetInfo> aRef =
-        new SfxItemPropertySetInfo( aPropSet.getPropertyMap() );
+    static uno::Reference<beans::XPropertySetInfo> aRef(
+        new SfxItemPropertySetInfo( aPropSet.getPropertyMap() ));
     return aRef;
 }
 
@@ -816,7 +815,7 @@ void SAL_CALL ScSubTotalDescriptorBase::setPropertyValue(
     ScSubTotalParam aParam;
     GetData(aParam);
 
-    String aString = aPropertyName;
+    String aString(aPropertyName);
 
     // some old property names are for 5.2 compatibility
 
@@ -858,7 +857,7 @@ uno::Any SAL_CALL ScSubTotalDescriptorBase::getPropertyValue( const rtl::OUStrin
     ScSubTotalParam aParam;
     GetData(aParam);
 
-    String aString = aPropertyName;
+    String aString(aPropertyName);
     uno::Any aRet;
 
     // some old property names are for 5.2 compatibility
@@ -1302,8 +1301,8 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScFilterDescriptorBase::getProp
                                                         throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    static uno::Reference<beans::XPropertySetInfo> aRef =
-        new SfxItemPropertySetInfo( aPropSet.getPropertyMap() );
+    static uno::Reference<beans::XPropertySetInfo> aRef(
+        new SfxItemPropertySetInfo( aPropSet.getPropertyMap() ));
     return aRef;
 }
 
@@ -1317,7 +1316,7 @@ void SAL_CALL ScFilterDescriptorBase::setPropertyValue(
     ScQueryParam aParam;
     GetData(aParam);
 
-    String aString = aPropertyName;
+    String aString(aPropertyName);
     if (aString.EqualsAscii( SC_UNONAME_CONTHDR ))
         aParam.bHasHeader = ScUnoHelpFunctions::GetBoolFromAny( aValue );
     else if (aString.EqualsAscii( SC_UNONAME_COPYOUT ))
@@ -1367,7 +1366,7 @@ uno::Any SAL_CALL ScFilterDescriptorBase::getPropertyValue( const rtl::OUString&
     ScQueryParam aParam;
     GetData(aParam);
 
-    String aString = aPropertyName;
+    String aString(aPropertyName);
     uno::Any aRet;
 
     if (aString.EqualsAscii( SC_UNONAME_CONTHDR ))
@@ -1567,7 +1566,7 @@ void SAL_CALL ScDatabaseRangeObj::setName( const rtl::OUString& aNewName )
     if (pDocShell)
     {
         ScDBDocFunc aFunc(*pDocShell);
-        String aNewStr = aNewName;
+        String aNewStr(aNewName);
         BOOL bOk = aFunc.RenameDBRange( aName, aNewStr, TRUE );
         if (bOk)
             aName = aNewStr;
@@ -1633,7 +1632,7 @@ void ScDatabaseRangeObj::SetSortParam(const ScSortParam& rSortParam)
     if (pData)
     {
         //  im SortDescriptor sind die Fields innerhalb des Bereichs gezaehlt
-        ScSortParam aParam = rSortParam;
+        ScSortParam aParam(rSortParam);
         ScRange aDBRange;
         pData->GetArea(aDBRange);
         SCCOLROW nFieldStart = aParam.bByRow ? static_cast<SCCOLROW>(aDBRange.aStart.Col()) : static_cast<SCCOLROW>(aDBRange.aStart.Row());
@@ -1700,7 +1699,7 @@ void ScDatabaseRangeObj::SetQueryParam(const ScQueryParam& rQueryParam)
     if (pData)
     {
         //  im FilterDescriptor sind die Fields innerhalb des Bereichs gezaehlt
-        ScQueryParam aParam = rQueryParam;
+        ScQueryParam aParam(rQueryParam);
         ScRange aDBRange;
         pData->GetArea(aDBRange);
         SCCOLROW nFieldStart = aParam.bByRow ? static_cast<SCCOLROW>(aDBRange.aStart.Col()) : static_cast<SCCOLROW>(aDBRange.aStart.Row());
@@ -1759,7 +1758,7 @@ void ScDatabaseRangeObj::SetSubTotalParam(const ScSubTotalParam& rSubTotalParam)
     if (pData)
     {
         //  im FilterDescriptor sind die Fields innerhalb des Bereichs gezaehlt
-        ScSubTotalParam aParam = rSubTotalParam;
+        ScSubTotalParam aParam(rSubTotalParam);
         ScRange aDBRange;
         pData->GetArea(aDBRange);
         SCCOL nFieldStart = aDBRange.aStart.Col();
@@ -1923,8 +1922,8 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDatabaseRangeObj::getProperty
                                                         throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    static uno::Reference<beans::XPropertySetInfo> aRef =
-        new SfxItemPropertySetInfo( aPropSet.getPropertyMap() );
+    static uno::Reference<beans::XPropertySetInfo> aRef(
+        new SfxItemPropertySetInfo( aPropSet.getPropertyMap() ));
     return aRef;
 }
 
@@ -1941,7 +1940,7 @@ void SAL_CALL ScDatabaseRangeObj::setPropertyValue(
         ScDBData aNewData( *pData );
         BOOL bDo = TRUE;
 
-        String aString = aPropertyName;
+        String aString(aPropertyName);
         if ( aString.EqualsAscii( SC_UNONAME_KEEPFORM ) )
             aNewData.SetKeepFmt( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
         else if ( aString.EqualsAscii( SC_UNONAME_MOVCELLS ) )
@@ -2030,7 +2029,7 @@ uno::Any SAL_CALL ScDatabaseRangeObj::getPropertyValue( const rtl::OUString& aPr
     ScDBData* pData = GetDBData_Impl();
     if ( pData )
     {
-        String aString = aPropertyName;
+        String aString(aPropertyName);
         if ( aString.EqualsAscii( SC_UNONAME_KEEPFORM ) )
             ScUnoHelpFunctions::SetBoolInAny( aRet, pData->IsKeepFmt() );
         else if ( aString.EqualsAscii( SC_UNONAME_MOVCELLS ) )
@@ -2157,7 +2156,7 @@ ScDatabaseRangeObj* ScDatabaseRangesObj::GetObjectByName_Impl(const rtl::OUStrin
 {
     if ( pDocShell && hasByName(aName) )
     {
-        String aString = aName;
+        String aString(aName);
         return new ScDatabaseRangeObj( pDocShell, aString );
     }
     return NULL;
@@ -2174,7 +2173,7 @@ void SAL_CALL ScDatabaseRangesObj::addNewByName( const rtl::OUString& aName,
     {
         ScDBDocFunc aFunc(*pDocShell);
 
-        String aString = aName;
+        String aString(aName);
         ScRange aNameRange( (SCCOL)aRange.StartColumn, (SCROW)aRange.StartRow, aRange.Sheet,
                             (SCCOL)aRange.EndColumn,   (SCROW)aRange.EndRow,   aRange.Sheet );
         bDone = aFunc.AddDBRange( aString, aNameRange, TRUE );
@@ -2191,7 +2190,7 @@ void SAL_CALL ScDatabaseRangesObj::removeByName( const rtl::OUString& aName )
     if (pDocShell)
     {
         ScDBDocFunc aFunc(*pDocShell);
-        String aString = aName;
+        String aString(aName);
         bDone = aFunc.DeleteDBRange( aString, TRUE );
     }
     if (!bDone)
@@ -2229,13 +2228,12 @@ uno::Any SAL_CALL ScDatabaseRangesObj::getByIndex( sal_Int32 nIndex )
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    uno::Reference<sheet::XDatabaseRange> xRange = GetObjectByIndex_Impl((USHORT)nIndex);
-    uno::Any aAny;
+    uno::Reference<sheet::XDatabaseRange> xRange(GetObjectByIndex_Impl((USHORT)nIndex));
     if (xRange.is())
-        aAny <<= xRange;
+        return uno::makeAny(xRange);
     else
         throw lang::IndexOutOfBoundsException();
-    return aAny;
+    return uno::Any();
 }
 
 uno::Type SAL_CALL ScDatabaseRangesObj::getElementType() throw(uno::RuntimeException)
@@ -2257,13 +2255,12 @@ uno::Any SAL_CALL ScDatabaseRangesObj::getByName( const rtl::OUString& aName )
                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    uno::Reference<sheet::XDatabaseRange> xRange = GetObjectByName_Impl(aName);
-    uno::Any aAny;
+    uno::Reference<sheet::XDatabaseRange> xRange(GetObjectByName_Impl(aName));
     if (xRange.is())
-        aAny <<= xRange;
+        return uno::makeAny(xRange);
     else
         throw container::NoSuchElementException();
-    return aAny;
+    return uno::Any();
 }
 
 uno::Sequence<rtl::OUString> SAL_CALL ScDatabaseRangesObj::getElementNames()
@@ -2303,7 +2300,7 @@ sal_Bool SAL_CALL ScDatabaseRangesObj::hasByName( const rtl::OUString& aName )
         ScDBCollection* pNames = pDocShell->GetDocument()->GetDBCollection();
         if (pNames)
         {
-            String aString = aName;
+            String aString(aName);
             USHORT nPos = 0;
             if (pNames->SearchName( aString, nPos ))
                 return TRUE;
