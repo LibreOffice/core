@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: pjunck $ $Date: 2004-11-03 08:03:42 $
+#   last change: $Author: vg $ $Date: 2005-02-16 15:48:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,13 +64,10 @@ PRJ=..
 
 PRJNAME=	ucbhelper
 TARGET=		ucbhelper
-NO_BSYMBOLIC=	TRUE
-ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :	settings.mk
-
 .INCLUDE :	..$/version.mk
 
 # --- Files --------------------------------------------------------
@@ -97,6 +94,7 @@ SHL1STDLIBS+= -lnsl -lsocket
 
 SHL1DEPN=
 SHL1IMPLIB=	i$(TARGET)
+SHL1USE_EXPORTS=ordinal
 SHL1LIBS=	$(LIB1TARGET)
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 
@@ -104,8 +102,6 @@ DEF1NAME=	$(SHL1TARGET)
 DEF1DEPN=	$(MISC)$/$(SHL1TARGET).flt
 DEFLIB1NAME=	$(TARGET)
 DEF1DES=	Universal Content Broker - Helpers
-#DEF1EXPORT1=	createComponentFactory
-#DEF1EXPORT2=	writeComponentInfo
 
 # --- Targets ------------------------------------------------------
 
