@@ -2,9 +2,9 @@
  *
  *  $RCSfile: readonlyimage.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-29 16:25:52 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 12:01:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
 
 String RID_SVXSTR_READONLY_CONFIG_TIP
 {
-    Text = "Diese Einstellung wurde vom Administrator gesperrt";
-    Text[english_us] = "This setting is protected by the Administrator";
+    Text [ de ] = "Diese Einstellung wurde vom Administrator gesperrt";
+    Text [ en-US ] = "This setting is protected by the Administrator";
 };
 Image RID_SVXBMP_LOCK
 {
