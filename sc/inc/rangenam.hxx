@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rangenam.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-09 14:58:46 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 11:58:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,6 @@ private:
     RangeType       eType;
     ScDocument*     pDoc;
     USHORT          nIndex;
-    USHORT          nExportIndex;
     BOOL            bModified;          // wird bei UpdateReference gesetzt/geloescht
 
     friend class ScRangeName;
@@ -155,10 +154,8 @@ public:
     const String&   GetName( void ) const           { return aName; }
     ScAddress       GetPos() const                  { return aPos; }
     // Der Index muss eindeutig sein. Ist er 0, wird ein neuer Index vergeben
-    void            SetIndex( USHORT nInd )         { nIndex = nExportIndex = nInd; }
+    void            SetIndex( USHORT nInd )         { nIndex = nInd; }
     const USHORT    GetIndex() const                { return nIndex; }
-    void            SetExportIndex( USHORT nInd )   { nExportIndex = nInd; }
-    const USHORT    GetExportIndex() const          { return nExportIndex; }
     ScTokenArray*   GetCode()                       { return pCode; }
     USHORT          GetErrCode();
     BOOL            HasReferences() const;
