@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ocompinstream.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2003-09-11 10:14:51 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 17:58:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,11 +111,17 @@ protected:
 
     ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue > m_aProperties;
 
+    sal_Bool m_bDisposed;
+
+    OInputCompStream();
     OInputCompStream( OWriteStream_Impl& pImpl );
 
 public:
     OInputCompStream( OWriteStream_Impl& pImpl,
                       ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > xStream,
+                      const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aProps );
+
+    OInputCompStream( ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > xStream,
                       const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aProps );
 
     virtual ~OInputCompStream();

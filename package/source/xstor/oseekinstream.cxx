@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oseekinstream.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2003-09-11 10:15:03 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 17:58:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,35 @@ OInputSeekStream::OInputSeekStream( OWriteStream_Impl& pImpl,
     }
 }
 
+OInputSeekStream::OInputSeekStream( uno::Reference < io::XStream > xStream,
+                                    const uno::Sequence< beans::PropertyValue >& aProps )
+: OInputCompStream()
+{
+    OSL_ENSURE( xStream.is(), "No stream is provided!\n" );
+
+    if ( xStream.is() )
+    {
+        m_xStream = xStream->getInputStream();
+        m_xSeekable = uno::Reference< io::XSeekable >( xStream, uno::UNO_QUERY );
+
+        OSL_ENSURE( m_xStream.is(), "No input stream is provided!\n" );
+        OSL_ENSURE( m_xSeekable.is(), "No seeking support!\n" );
+    }
+
+    m_aProperties = aProps;
+}
+
+OInputSeekStream::OInputSeekStream( uno::Reference < io::XInputStream > xStream,
+                                    const uno::Sequence< beans::PropertyValue >& aProps )
+: OInputCompStream( xStream, aProps )
+{
+    if ( m_xStream.is() )
+    {
+        m_xSeekable = uno::Reference< io::XSeekable >( m_xStream, uno::UNO_QUERY );
+        OSL_ENSURE( m_xSeekable.is(), "No seeking support!\n" );
+    }
+}
+
 OInputSeekStream::~OInputSeekStream()
 {
 }
@@ -170,7 +199,7 @@ void SAL_CALL OInputSeekStream::seek( sal_Int64 location )
                 uno::RuntimeException )
 {
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
-    if ( !m_pImpl )
+    if ( m_bDisposed )
         throw lang::DisposedException();
 
     if ( !m_xSeekable.is() )
@@ -184,7 +213,7 @@ sal_Int64 SAL_CALL OInputSeekStream::getPosition()
                 uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
-    if ( !m_pImpl )
+    if ( m_bDisposed )
         throw lang::DisposedException();
 
     if ( !m_xSeekable.is() )
@@ -198,7 +227,7 @@ sal_Int64 SAL_CALL OInputSeekStream::getLength()
                 uno::RuntimeException )
 {
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
-    if ( !m_pImpl )
+    if ( m_bDisposed )
         throw lang::DisposedException();
 
     if ( !m_xSeekable.is() )
