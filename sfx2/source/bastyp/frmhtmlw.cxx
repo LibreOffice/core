@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmhtmlw.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-13 12:51:36 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:28:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@
 #endif
 
 #include <unotools/configmgr.hxx>
+#include "svtools/urihelper.hxx"
 
 #include "docinf.hxx"
 #include "frmhtmlw.hxx"
@@ -137,7 +138,7 @@ void SfxFrameHTMLWriter::OutMeta( SvStream& rStrm,
     HTMLOutFuncs::Out_String( rStrm, rContent, eDestEnc, pNonConvertableChars ) << "\">";
 }
 
-void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm,
+void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const String& rBaseURL,
                                       const SfxDocumentInfo* pInfo,
                                       const sal_Char *pIndent,
                                          rtl_TextEncoding eDestEnc,
@@ -202,7 +203,9 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm,
             if( rReloadURL.Len() )
             {
                 sContent.AppendAscii( ";URL=" );
-                sContent += String(INetURLObject::AbsToRel(rReloadURL));
+                sContent += String(
+                    URIHelper::simpleNormalizedMakeRelative(
+                        rBaseURL, rReloadURL));
             }
 
             OutMeta( rStrm, pIndent, sHTML_META_refresh, sContent, TRUE,
@@ -293,7 +296,7 @@ void SfxFrameHTMLWriter::OutHeader( rtl_TextEncoding eDestEnc )
 */
 
 void SfxFrameHTMLWriter::Out_FrameDescriptor(
-    SvStream& rOut, const uno::Reference < beans::XPropertySet >& xSet,
+    SvStream& rOut, const String& rBaseURL, const uno::Reference < beans::XPropertySet >& xSet,
     rtl_TextEncoding eDestEnc, String *pNonConvertableChars )
 {
     try
@@ -306,7 +309,8 @@ void SfxFrameHTMLWriter::Out_FrameDescriptor(
             String aURL = INetURLObject( aStr ).GetMainURL( INetURLObject::DECODE_TO_IURI );
             if( aURL.Len() )
             {
-                aURL = INetURLObject::AbsToRel( aURL );
+                aURL = URIHelper::simpleNormalizedMakeRelative(
+                    rBaseURL, aURL );
                 ((sOut += ' ') += sHTML_O_src) += "=\"";
                 rOut << sOut.GetBuffer();
                 HTMLOutFuncs::Out_String( rOut, aURL, eDestEnc, pNonConvertableChars );
