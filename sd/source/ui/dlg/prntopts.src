@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prntopts.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:01:10 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:05:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,7 @@ TabPage TP_PRINT_OPTIONS
         Text[ czech ] = "Obsah";
         Text[ hebrew ] = "‮תוכן עיניינים‬";
         Text[ hindi ] = "विषयसूची";
+        Text[ slovak ] = "Obsah";
     };
     CheckBox CBX_DRAW
     {
@@ -145,6 +146,7 @@ TabPage TP_PRINT_OPTIONS
         Text[ czech ] = "Kresba";
         Text[ hebrew ] = "‮ציור‬";
         Text[ hindi ] = "~रेखाचित्र";
+        Text[ slovak ] = "Kres~ba";
     };
     CheckBox CBX_NOTES
     {
@@ -178,6 +180,7 @@ TabPage TP_PRINT_OPTIONS
         Text[ czech ] = "Komentáře";
         Text[ hebrew ] = "‮הערות‬";
         Text[ hindi ] = "~टिप्पणी";
+        Text[ slovak ] = "Poz~námky";
     };
     CheckBox CBX_HANDOUTS
     {
@@ -211,6 +214,7 @@ TabPage TP_PRINT_OPTIONS
         Text[ czech ] = "Teze";
         Text[ hebrew ] = "Handzette~l";
         Text[ hindi ] = "~हान्डौट्स";
+        Text[ slovak ] = "~Tézy";
     };
     CheckBox CBX_OUTLINE
     {
@@ -244,6 +248,7 @@ TabPage TP_PRINT_OPTIONS
         Text[ czech ] = "Osnova";
         Text[ hebrew ] = "~Gliederung";
         Text[ hindi ] = "~बाहरी रूपरेखा";
+        Text[ slovak ] = "Ko~nspekt";
     };
     FixedLine FL_SEPARATOR1
     {
@@ -282,6 +287,7 @@ TabPage TP_PRINT_OPTIONS
         Text[ czech ] = "Kvalita";
         Text[ hebrew ] = "Ausgabequalität";
         Text[ hindi ] = "गुण";
+        Text[ slovak ] = "Kvalita";
     };
     RadioButton RBT_COLOR
     {
@@ -315,6 +321,7 @@ TabPage TP_PRINT_OPTIONS
         Text[ czech ] = "Výchozí";
         Text[ hebrew ] = "‮ברירת מחדל‬";
         Text[ hindi ] = "अनुपस्थिति";
+        Text[ slovak ] = "Východzie";
     };
     RadioButton RBT_GRAYSCALE
     {
@@ -348,6 +355,7 @@ TabPage TP_PRINT_OPTIONS
         Text[ czech ] = "Stupně šedi";
         Text[ hebrew ] = "Graustu~fen";
         Text[ hindi ] = "ग्रेस्केल";
+        Text[ slovak ] = "Stupn~e šedej";
     };
     RadioButton RBT_BLACKWHITE
     {
@@ -381,6 +389,7 @@ TabPage TP_PRINT_OPTIONS
         Text[ czech ] = "Černá a bílá";
         Text[ hebrew ] = "Schwarz~weiß";
         Text[ hindi ] = "काला और सफेद";
+        Text[ slovak ] = "Čierna & ~Biela";
     };
     FixedLine GRP_PRINT_EXT
     {
@@ -414,6 +423,7 @@ TabPage TP_PRINT_OPTIONS
         Text[ czech ] = "Tisk";
         Text[ hebrew ] = "‮הדפסה‬";
         Text[ hindi ] = "छपाई";
+        Text[ slovak ] = "Tlač";
     };
     CheckBox CBX_PAGENAME
     {
@@ -448,6 +458,7 @@ TabPage TP_PRINT_OPTIONS
         Text[ czech ] = "Název stránky";
         Text[ hebrew ] = "Seiten~name";
         Text[ hindi ] = "~पृष्ठ का नाम";
+        Text[ slovak ] = "~Názov stránky";
     };
     CheckBox CBX_DATE
     {
@@ -482,6 +493,7 @@ TabPage TP_PRINT_OPTIONS
         Text[ czech ] = "Datum";
         Text[ hebrew ] = "Dat~um";
         Text[ hindi ] = "~दिनांक";
+        Text[ slovak ] = "~Dátum";
     };
     CheckBox CBX_TIME
     {
@@ -516,6 +528,7 @@ TabPage TP_PRINT_OPTIONS
         Text[ czech ] = "Čas";
         Text[ hebrew ] = "Z~eit";
         Text[ hindi ] = "~समय";
+        Text[ slovak ] = "Č~as";
     };
     CheckBox CBX_HIDDEN_PAGES
     {
@@ -550,6 +563,7 @@ TabPage TP_PRINT_OPTIONS
         Text[ czech ] = "Skryté stránky";
         Text[ hebrew ] = "Ausge~blendeten Seiten";
         Text[ hindi ] = "~छिपा हुआ पृष्ठ";
+        Text[ slovak ] = "Skryté s~tránky";
     };
     FixedLine FL_SEPARATOR2
     {
@@ -589,6 +603,7 @@ TabPage TP_PRINT_OPTIONS
         Text[ czech ] = "Volby stránky";
         Text[ hebrew ] = "Seitenoptionen";
         Text[ hindi ] = "पृष्ठ का विकल्प";
+        Text[ slovak ] = "Nastavenia stránky";
     };
     RadioButton RBT_DEFAULT
     {
@@ -622,6 +637,7 @@ TabPage TP_PRINT_OPTIONS
         Text[ czech ] = "Výchozí";
         Text[ hebrew ] = "‮ברירת מגדל‬";
         Text[ hindi ] = "~स्टान्डर्ड";
+        Text[ slovak ] = "Východzie";
     };
     RadioButton RBT_PAGESIZE
     {
@@ -656,6 +672,7 @@ TabPage TP_PRINT_OPTIONS
         Text[ czech ] = "Přizpůsobit rozměru stránky";
         Text[ hebrew ] = "An ~Seitengröße anpassen";
         Text[ hindi ] = "पृष्ठ ~केलिए योग्य";
+        Text[ slovak ] = "~Roztiahnuť na celú stránku";
     };
     RadioButton RBT_PAGETILE
     {
@@ -689,6 +706,7 @@ TabPage TP_PRINT_OPTIONS
         Text[ czech ] = "Stránky jako dlaždice";
         Text[ hebrew ] = "Seiten ~kacheln";
         Text[ hindi ] = "~टइल पृष्ठ";
+        Text[ slovak ] = "~Dlaždice";
     };
     RadioButton RBT_BOOKLET
     {
@@ -722,6 +740,7 @@ TabPage TP_PRINT_OPTIONS
         Text[ czech ] = "Příručka";
         Text[ hebrew ] = "~Prospekt";
         Text[ hindi ] = "~छोटी पुस्तक";
+        Text[ slovak ] = "Prí~ručka";
     };
     CheckBox CBX_FRONT
     {
@@ -755,6 +774,7 @@ TabPage TP_PRINT_OPTIONS
         Text[ czech ] = "Popředí";
         Text[ hebrew ] = "~Vorderseite";
         Text[ hindi ] = "~सामने का भाग";
+        Text[ slovak ] = "P~opredie";
     };
     CheckBox CBX_BACK
     {
@@ -788,6 +808,7 @@ TabPage TP_PRINT_OPTIONS
         Text[ czech ] = "Pozadí";
         Text[ hebrew ] = "‮הקודם‬";
         Text[ hindi ] = "~पिछली ओर";
+        Text[ slovak ] = "Poza~die";
     };
     CheckBox CBX_PAPERBIN
     {
@@ -820,6 +841,7 @@ TabPage TP_PRINT_OPTIONS
         Text[ czech ] = "Podavač papíru dle nastavení tiskárny";
         Text[ hebrew ] = "Papierschacht aus ~Druckereinstellung";
         Text[ hindi ] = "मुद्र~क निर्धारण से कागज़ ट्रे";
+        Text[ slovak ] = "Zásobník papi~era z nastavenia tlačiarne";
     };
     Text[ chinese_simplified ] = "选项";
     Text[ russian ] = "���������";
@@ -836,7 +858,10 @@ TabPage TP_PRINT_OPTIONS
     Text[ czech ] = "Volby";
     Text[ hebrew ] = "‮אפשרויות‬";
     Text[ hindi ] = "विकल्प";
+    Text[ slovak ] = "Nastavenia";
 };
+
+
 
 
 
