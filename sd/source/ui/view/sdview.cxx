@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 11:21:57 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:24:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -966,10 +966,13 @@ VirtualDevice* View::CreatePageVDev(USHORT nSdPage, PageKind ePageKind,
       > void CompleteRedraw( ... );
     */
 
+    pVDev->Push();  //SJ: i40609, the vdev mapmode seems to be dangled after CompleteRedraw,
+                    //so we are pushing here, because the mapmode is used afterwards
     // temporary for gcc
     Point aPoint( 0, 0 );
     Region aRegion (Rectangle( aPoint, aPageSize ) );
     pView->CompleteRedraw(pVDev, aRegion);
+    pVDev->Pop();
     delete pView;
     return pVDev;
 }
