@@ -2,9 +2,9 @@
  *
  *  $RCSfile: string3d.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 20:33:27 $
+ *  last change: $Author: rt $ $Date: 2001-04-26 19:28:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -303,7 +303,7 @@ String RID_SVX_3D_UNDO_BREAK_LATHE
     Text[ chinese_simplified ] = "·Ö¿ª3Î¬¶ÔÏó";
     Text[ russian ] = "Ğàçáèòü 3-Ì-Îáúåêò";
     Text[ polish ] = "Rozdziel obiekt 3-W";
-    Text[ japanese ] = "3D ‘ÌµÌŞ¼Şª¸Ä‚Ì•ªŠ„";
+    Text[ japanese ] = "3D ‘ÌµÌŞ¼Şª¸Ä‚ğØ‚è—£‚·";
     Text[ chinese_traditional ] = "¤À¶} 3D ª«¥ó";
     Text[ arabic ] = "ÊŞÓíã ßÇÆä ËáÇËí ÇáÃÈÚÇÏ";
     Text[ greek ] = "ÄéÜóğáóç áíôéêåéìİíïõ 3Ä";
