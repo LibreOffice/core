@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OOo2Oasis.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 08:16:35 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:23:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,10 +278,12 @@ static XMLTransformerActionInit aActionTable[] =
                         XML_ENDNOTE | (OOO_STYLE_REF_ACTIONS << 16) ),
 
     // rename <text:footnote> and <text:endnote> to <text:note>
-    ENTRY1Q( TEXT, ENDNOTE_REF, XML_ETACTION_RENAME_ELEM,
-                        XML_NAMESPACE_TEXT, XML_NOTE_REF ),
-    ENTRY1Q( TEXT, FOOTNOTE_REF, XML_ETACTION_RENAME_ELEM,
-                        XML_NAMESPACE_TEXT, XML_NOTE_REF ),
+    ENTRY3QQN( TEXT, ENDNOTE_REF, XML_ETACTION_RENAME_ELEM_ADD_ATTR,
+                        XML_NAMESPACE_TEXT, XML_NOTE_REF,
+                           XML_NAMESPACE_TEXT, XML_NOTE_CLASS, XML_ENDNOTE ),
+    ENTRY3QQN( TEXT, FOOTNOTE_REF, XML_ETACTION_RENAME_ELEM_ADD_ATTR,
+                        XML_NAMESPACE_TEXT, XML_NOTE_REF,
+                           XML_NAMESPACE_TEXT, XML_NOTE_CLASS, XML_FOOTNOTE ),
 
     // rename <text:tab-stop> to <text:tab>
     ENTRY1Q( TEXT, TAB_STOP, XML_ETACTION_RENAME_ELEM,
@@ -988,7 +990,7 @@ static XMLTokenEnum aTokenMap[] =
     XML_NONE, XML_SINGLE, XML_DOUBLE, XML_BOLD, XML_BOLD_DOTTED,
     XML_BOLD_DASH, XML_BOLD_LONG_DASH, XML_BOLD_DOT_DASH,
     XML_BOLD_DOT_DOT_DASH, XML_BOLD_WAVE, XML_DOUBLE_WAVE,
-    XML_SINGLE_LINE, XML_DOUBLE_LINE, XML_THICK_LINE, XML_SLASH, XML_X,
+    XML_SINGLE_LINE, XML_DOUBLE_LINE, XML_THICK_LINE, XML_SLASH, XML_uX,
     XML_TOKEN_END
 };
 
@@ -997,6 +999,7 @@ static XMLTokenEnum aTokenMap[] =
 class XMLDocumentTransformerContext_Impl : public XMLTransformerContext
 {
     ::rtl::OUString m_aElemQName;
+    ::rtl::OUString m_aOldClass;
 
 public:
     TYPEINFO();
@@ -1042,6 +1045,8 @@ void XMLDocumentTransformerContext_Impl::StartElement(
         const Reference< XAttributeList >& rAttrList )
 {
     Reference< XAttributeList > xAttrList( rAttrList );
+
+    m_aOldClass = GetTransformer().GetClass();
 
     XMLMutableAttributeList *pMutableAttrList = 0;
     sal_Bool bOOo = sal_False, bOOoW = sal_False, bOOoC = sal_False,
@@ -1137,6 +1142,8 @@ void XMLDocumentTransformerContext_Impl::StartElement(
 void XMLDocumentTransformerContext_Impl::EndElement()
 {
     GetTransformer().GetDocHandler()->endElement( m_aElemQName );
+
+    GetTransformer().SetClass( m_aOldClass );
 }
 
 //-----------------------------------------------------------------------------
@@ -1565,7 +1572,7 @@ XMLTransformerActions *OOo2OasisTransformer::GetUserDefinedActions(
     return pActions;
 }
 
-OUString OOo2OasisTransformer::GetEventName( const OUString& rName )
+OUString OOo2OasisTransformer::GetEventName( const OUString& rName, sal_Bool )
 {
     if( !m_pEventMap )
         m_pEventMap = XMLEventOOoTransformerContext::CreateEventMap();
