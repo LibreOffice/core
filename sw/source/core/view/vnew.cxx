@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vnew.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 16:13:58 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:24:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,6 +193,17 @@ void ViewShell::Init( const SwViewOption *pNewOpt )
         GetDoc()->SetRootFrm( pRoot = new SwRootFrm( pDoc->GetDfltFrmFmt(), this ) );
 
     SizeChgNotify( pRoot->Frm().SSize() );
+
+    // --> #i31958#
+    // XForms mode: initialize XForms mode, based on design mode (draw view)
+    //   MakeDrawView() requires layout
+    if( GetDoc()->isXForms() )
+    {
+        if( ! HasDrawView() )
+            MakeDrawView();
+        pOpt->SetFormView( ! GetDrawView()->IsDesignMode() );
+    }
+    // <-- #i31958#
 }
 
 /*************************************************************************
