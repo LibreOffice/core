@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.c,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hro $ $Date: 2001-04-24 16:51:49 $
+ *  last change: $Author: hro $ $Date: 2001-05-08 14:16:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,7 @@
  *
  ************************************************************************/
 
+#define UNICODE
 #include "system.h"
 #include <systools/win32/kernel9x.h>
 #include <systools/win32/shell9x.h>
@@ -75,6 +76,24 @@ LPWSTR *lpArgvW = NULL;
 int nArgnW = 0;
 
 
+/***************************************************************************/
+
+oslProcessError SAL_CALL osl_getProcessWorkingDir( rtl_uString **pustrWorkingDir )
+{
+    TCHAR   szBuffer[MAX_PATH];
+    DWORD   dwLen = GetCurrentDirectory( sizeof(szBuffer), szBuffer );
+
+    if ( dwLen )
+    {
+        rtl_uString_newFromStr_WithLength( pustrWorkingDir, szBuffer, dwLen );
+
+        return osl_Process_E_None;
+    }
+    else
+        return osl_Process_E_Unknown;
+}
+
+/***************************************************************************/
 
 oslProcessError SAL_CALL osl_executeProcess(rtl_uString *strImageName,
                                             rtl_uString *strArguments[],

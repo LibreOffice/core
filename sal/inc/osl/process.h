@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jbu $ $Date: 2001-03-16 15:12:25 $
+ *  last change: $Author: hro $ $Date: 2001-05-08 14:17:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,13 +156,14 @@ typedef struct {
 } oslIOResource;
 
 typedef struct {
-    sal_uInt32           Size;
-    oslProcessData       Fields;
-    oslProcessIdentifier Ident;
-    oslProcessExitCode   Code;
-    TimeValue            UserTime;
-    TimeValue            SystemTime;
-    sal_uInt32           HeapUsage;
+    sal_uInt32              Size;
+    oslProcessData          Fields;
+    oslProcessIdentifier    Ident;
+    oslProcessExitCode      Code;
+    TimeValue               UserTime;
+    TimeValue               SystemTime;
+    sal_uInt32              HeapUsage;
+    rtl_uString             *WorkingDirURL;
 } oslProcessInfo;
 
 #ifdef SAL_W32
@@ -285,6 +286,14 @@ oslProcessError SAL_CALL osl_getCommandArg(sal_uInt32 nArg, rtl_uString **strCom
     @param strValue [out] string that receives the value of environment variable.
 */
 oslProcessError SAL_CALL osl_getEnvironment(rtl_uString *strVar, rtl_uString **strValue);
+
+/** Get the working directory of the current process as a file URL.
+
+    The file URL is encoded as common for the OSL file API.
+    @param  pustrWorkingDir [out] string that receives the working directory file URL.
+*/
+
+oslProcessError SAL_CALL osl_getProcessWorkingDir( rtl_uString **pustrWorkingDir );
 
 sal_Bool SAL_CALL osl_sendResourcePipe(oslPipe Pipe, oslSocket Socket);
 
