@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: fs $ $Date: 2000-10-05 08:49:50 $
+#   last change: $Author: oj $ $Date: 2001-02-01 14:01:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,7 +64,7 @@ PRJ=..$/..
 
 PRJNAME=connectivity
 TARGET=sql
-
+ENABLE_EXCEPTIONS=TRUE
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  svpre.mk
@@ -81,13 +81,6 @@ SLOFILES =  \
         $(SLO)$/sqlnode.obj			\
         $(SLO)$/internalnode.obj
 
-
-EXCEPTIONSFILES=	\
-        $(SLO)$/sqlbison.obj		\
-        $(SLO)$/PColumn.obj			\
-        $(SLO)$/sqliterator.obj		\
-        $(SLO)$/internalnode.obj	\
-        $(SLO)$/sqlnode.obj
 
 all: \
         $(MISC)$/sqlflex.cxx \
