@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docinf.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 16:10:01 $
+ *  last change: $Author: vg $ $Date: 2003-05-26 08:29:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,6 +268,10 @@ ULONG SfxPSStringProperty_Impl::Load( SvStream& rStream )
     }
     else
         aString.Erase();
+
+    USHORT nPos=0;
+    if ( (nPos = aString.Search( (sal_Unicode)'\0') ) != STRING_NOTFOUND )
+        aString.Erase( nPos );
 
     return rStream.GetErrorCode();
 }
