@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCompletedExecution.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:55:07 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 21:44:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@
 /** is used for execution where information for execution may be required from
     the user.
  */
-interface XCompletedExecution: com::sun::star::uno::XInterface
+published interface XCompletedExecution: com::sun::star::uno::XInterface
 {
 
     // DocMerge from xml: method com::sun::star::sdb::XCompletedExecution::executeWithCompletion

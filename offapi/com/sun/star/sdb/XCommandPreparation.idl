@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCommandPreparation.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:55:07 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 21:44:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
 #endif
 
  module com {  module sun {  module star {  module sdbc {
-interface XPreparedStatement;
+ published interface XPreparedStatement;
 };};};};
 
  module com {  module sun {  module star {  module sdb {
@@ -80,7 +80,7 @@ interface XPreparedStatement;
     prepared by the user.
     </p>
  */
-interface XCommandPreparation: com::sun::star::uno::XInterface
+published interface XCommandPreparation: com::sun::star::uno::XInterface
 {
 
     // DocMerge from xml: method com::sun::star::sdbc::com::sun::star::sdb::XCommandPreparation::prepareCommand
