@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 11:53:28 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:59:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #pragma hdrstop
 
 #define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
@@ -175,6 +174,11 @@
 #ifndef _SORTEDOBJS_HXX
 #include <sortedobjs.hxx>
 #endif
+// --> OD 2005-03-04 #b6234250#
+#ifndef _OBJECTFORMATTER_HXX
+#include <objectformatter.hxx>
+#endif
+// <--
 
 // ftnfrm.cxx:
 void lcl_RemoveFtns( SwFtnBossFrm* pBoss, BOOL bPageOnly, BOOL bEndNotes );
@@ -677,7 +681,9 @@ SwLayNotify::~SwLayNotify()
             pLay->Lower() && pLay->Lower()->IsColumnFrm()) &&
          (bPos || bNotify) && !(pLay->GetType() & 0x1823) )  //Tab, Row, FtnCont, Root, Page
     {
-        pLay->NotifyLowerObjs();
+        // --> OD 2005-03-11 #i44016# - force unlock of position of lower objects.
+        pLay->NotifyLowerObjs( true );
+        // <--
     }
     if ( bPos && pLay->IsFtnFrm() && pLay->Lower() )
     {
@@ -1048,6 +1054,13 @@ SwCntntNotify::~SwCntntNotify()
             pCnt->InvalidateNextPrtArea();
         }
     }
+
+    // --> OD 2005-03-07 #i44049#
+    if ( pCnt->IsTxtFrm() && POS_DIFF( aFrm, pCnt->Frm() ) )
+    {
+        pCnt->InvalidateObjs( true );
+    }
+    // <--
 }
 
 /*************************************************************************
@@ -3404,7 +3417,20 @@ SwFrm* GetFrmOfModify( SwModify& rMod, USHORT nFrmType, const Point* pPoint,
                 if( pPoint )
                 {
                     if( bCalcFrm )
+                    {
+                        // --> OD 2005-03-04 #b6234250# - format parent Writer
+                        // fly frame, if it isn't been formatted yet.
+                        // Note: The Writer fly frame could be the frame itself.
+                        SwFlyFrm* pFlyFrm( pTmpFrm->FindFlyFrm() );
+                        if ( pFlyFrm &&
+                             pFlyFrm->Frm().Pos().X() == WEIT_WECH &&
+                             pFlyFrm->Frm().Pos().Y() == WEIT_WECH )
+                        {
+                            SwObjectFormatter::FormatObj( *pFlyFrm );
+                        }
+                        // <--
                         pTmpFrm->Calc();
+                    }
 
                     if( aIter.IsChanged() )     // der Liste hat sich ver-
                         break;                  // aendert, neu anfangen !!
