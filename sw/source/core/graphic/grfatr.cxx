@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfatr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tl $ $Date: 2002-09-18 13:38:08 $
+ *  last change: $Author: od $ $Date: 2002-11-05 17:13:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -387,7 +387,9 @@ BOOL SwTransparencyGrf::PutValue( const com::sun::star::uno::Any& rVal,
     if(nVal < 0)
     {
         // for compatibility with old documents
-        nVal = nVal * 128 / 100;
+        // OD 05.11.2002 #104308# - introduce rounding as for SO 6.0 PP2
+        // introduced by fix of #104293#.
+        nVal = ( ( nVal * 128 ) - (99/2) ) / 100;
         nVal += 128;
     }
     DBG_ASSERT( 0 <= nVal && nVal <= 100, "value out of range" );
