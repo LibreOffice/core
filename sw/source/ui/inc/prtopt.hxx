@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prtopt.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-06-25 14:46:04 $
+ *  last change: $Author: mtg $ $Date: 2001-08-08 21:38:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,36 +78,7 @@ public:
     virtual ~SwPrintOptions();
 
     virtual void            Commit();
-
-    sal_Bool IsPrintGraphic()   const { return bPrintGraphic; }
-    sal_Bool IsPrintTable()     const { return bPrintTable; }
-    sal_Bool IsPrintDraw()      const { return bPrintDraw; }
-    sal_Bool IsPrintControl()   const { return bPrintControl; }
-    sal_Bool IsPrintLeftPage()  const { return bPrintLeftPage; }
-    sal_Bool IsPrintRightPage() const { return bPrintRightPage; }
-    sal_Bool IsPrintReverse()   const { return bPrintReverse; }
-    sal_Bool IsPaperFromSetup() const { return bPaperFromSetup; }
-    sal_Bool IsPrintProspect()  const { return bPrintProspect; }
-    sal_Bool IsPrintPageBackground() const { return bPrintPageBackground; }
-    sal_Bool IsPrintBlackFont() const { return bPrintBlackFont;}
-    sal_Bool IsPrintSingleJobs() const { return bPrintSingleJobs;}
-    sal_Int16 GetPrintPostIts() const { return nPrintPostIts; }
-    const rtl::OUString     GetFaxName() const{return sFaxName;}
-
-    void SetPrintGraphic  ( sal_Bool b ) { SetModified(); bPrintGraphic = b;}
-    void SetPrintTable    ( sal_Bool b ) { SetModified(); bPrintTable = b;}
-    void SetPrintDraw     ( sal_Bool b ) { SetModified(); bPrintDraw = b;}
-    void SetPrintControl  ( sal_Bool b ) { SetModified(); bPrintControl = b; }
-    void SetPrintLeftPage ( sal_Bool b ) { SetModified(); bPrintLeftPage = b;}
-    void SetPrintRightPage( sal_Bool b ) { SetModified(); bPrintRightPage = b;}
-    void SetPrintReverse  ( sal_Bool b ) { SetModified(); bPrintReverse = b;}
-    void SetPaperFromSetup( sal_Bool b ) { SetModified(); bPaperFromSetup = b;}
-    void SetPrintPostIts    ( sal_Int16 n){ SetModified(); nPrintPostIts = n; }
-    void SetPrintProspect   ( sal_Bool b ) { SetModified(); bPrintProspect = b; }
-    void SetPrintPageBackground(sal_Bool b){ SetModified(); bPrintPageBackground = b;}
-    void SetPrintBlackFont(sal_Bool b){ SetModified(); bPrintBlackFont = b;}
-    void SetPrintSingleJobs(sal_Bool b){ SetModified(); bPrintSingleJobs = b;}
-    void SetFaxName(const rtl::OUString& rSet){sFaxName = rSet;}
+    virtual void            doSetModified( ) { bModified = sal_True; SetModified();}
 
     SwPrintOptions& operator=(const SwPrintData& rData)
     {
