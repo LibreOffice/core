@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swtypes.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 12:13:07 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 14:38:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,10 +186,13 @@ extern SwPathFinder *pPathFinder;
 // Werte fuer die Einzuege an der Nummerierung und BulletListe
 // (fuer die weiteren Ebenen sind die Werte mit den Ebenen+1 zu
 //  multiplizieren; Ebenen 0..4 !!!)
-const USHORT lBullIndent = 567 / 2;
-const short lBullFirstLineOffset = -567 / 2;
-const USHORT lNumIndent = 567 / 2;
-const short lNumFirstLineOffset = -567 / 2;
+
+// -> #i30312#
+const USHORT lBullIndent = 1440/4;
+const short lBullFirstLineOffset = -lBullIndent;
+const USHORT lNumIndent = 1440/4;
+const short lNumFirstLineOffset = -lNumIndent;
+// <- #i30312#
 
 // Anzahl der SystemField-Types vom SwDoc
 #define INIT_FLDTYPES   32
