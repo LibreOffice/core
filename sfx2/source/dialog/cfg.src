@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 16:53:06 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 13:54:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,9 @@
 #include "dialog.hrc"
 #include "cfg.hrc"
  // pragma ----------------------------------------------------------------
+
+#define MASKCOLOR  MaskColor = \
+    Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
 
 #define PUSHBUTTON_TEXT_SAVE \
     Text [ de ] = "~Speichern..." ; \
@@ -245,6 +248,26 @@ TabPage TP_CONFIG_MENU
         TabStop = TRUE ;
         HelpId = HID_CONFIGFUNCTION_LISTBOX ;
     };
+};
+String STR_MYMACROS
+{
+    Text = "My Macros";
+    Text [ en-US ] = "My Macros";
+};
+String STR_PRODMACROS
+{
+    Text = "%PRODUCTNAME Macros";
+    Text [ en-US ] = "%PRODUCTNAME Macros";
+};
+Image IMG_HARDDISK
+{
+    ImageBitmap = Bitmap { File = "harddisk_16.bmp" ; };
+    MASKCOLOR
+};
+Image IMG_HARDDISK_HC
+{
+    ImageBitmap = Bitmap { File = "harddisk_16_h.bmp" ; };
+    MASKCOLOR
 };
  // TP_CONFIG_ACCEL -------------------------------------------------------
 TabPage TP_CONFIG_ACCEL
