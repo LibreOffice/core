@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupoor.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: cl $ $Date: 2002-07-24 10:11:42 $
+ *  last change: $Author: cl $ $Date: 2002-09-06 13:13:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -817,7 +817,7 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
             {
                 SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
 
-                if(pObj->ISA(SdrTextObj) && pObj->HasTextEdit())
+                if(pObj->ISA(SdrTextObj) && pObj->HasTextEdit() && !pObj->ISA(SdrOle2Obj))
                 {
                     // #98533# use common IsSimpleCharInput from
                     // the EditEngine.
