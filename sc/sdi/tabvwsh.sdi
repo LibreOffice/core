@@ -3,7 +3,7 @@
  // StarCalc
  //
  // (C) 1994 StarDivision GmbH, Hamburg, Germany
- // $Author: nn $ $Date: 2001-01-05 19:09:06 $ $Revision: 1.3 $
+ // $Author: nn $ $Date: 2001-04-20 18:49:36 $ $Revision: 1.4 $
  // $Logfile:   T:/sc/sdi/tabvwsh.sdv  $ $Workfile:   tabvwsh.sdi  $
  //----------------------------------------------------------------------------
 
@@ -178,6 +178,11 @@ interface TableEditView : View
     SID_GRID_VISIBLE    [ ExecMethod = ExecDrawOpt; StateMethod = GetDrawOptState; Export = FALSE; ]
     SID_GRID_USE        [ ExecMethod = ExecDrawOpt; StateMethod = GetDrawOptState; Export = FALSE; ]
     SID_HELPLINES_MOVE  [ ExecMethod = ExecDrawOpt; StateMethod = GetDrawOptState; Export = FALSE; ]
+
+    SID_GETUNDOSTRINGS  [ StateMethod = GetUndoState; ]
+    SID_GETREDOSTRINGS  [ StateMethod = GetUndoState; ]
+    SID_UNDO            [ ExecMethod = ExecuteUndo; StateMethod = GetUndoState; ]
+    SID_REDO            [ ExecMethod = ExecuteUndo; StateMethod = GetUndoState; ]
 }
 
 

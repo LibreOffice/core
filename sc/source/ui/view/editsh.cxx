@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-26 19:24:33 $
+ *  last change: $Author: nn $ $Date: 2001-04-20 18:52:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -831,18 +831,36 @@ void ScEditShell::ExecuteUndo(SfxRequest& rReq)
 
     pHdl->DataChanging();
 
+    const SfxItemSet* pReqArgs = rReq.GetArgs();
     USHORT nSlot = rReq.GetSlot();
     switch ( nSlot )
     {
         case SID_UNDO:
-            pTableView->Undo();
-            if (pTopView)
-                pTopView->Undo();
-            break;
         case SID_REDO:
-            pTableView->Redo();
-            if (pTopView)
-                pTopView->Redo();
+            {
+                BOOL bIsUndo = ( nSlot == SID_UNDO );
+
+                USHORT nCount = 1;
+                const SfxPoolItem* pItem;
+                if ( pReqArgs && pReqArgs->GetItemState( nSlot, TRUE, &pItem ) == SFX_ITEM_SET )
+                    nCount = ((const SfxUInt16Item*)pItem)->GetValue();
+
+                for (USHORT i=0; i<nCount; i++)
+                {
+                    if ( bIsUndo )
+                    {
+                        pTableView->Undo();
+                        if (pTopView)
+                            pTopView->Undo();
+                    }
+                    else
+                    {
+                        pTableView->Redo();
+                        if (pTopView)
+                            pTopView->Redo();
+                    }
+                }
+            }
             break;
     }
     pViewData->GetBindings().InvalidateAll(FALSE);
