@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mt $ $Date: 2001-06-12 14:42:19 $
+ *  last change: $Author: mt $ $Date: 2001-06-13 10:30:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1644,10 +1644,12 @@ void Edit::Command( const CommandEvent& rCEvt )
                 maText.Insert( mpIMEInfos->aOldTextAfterStartPos.Copy( nNewIMETextLen, nRestore ), mpIMEInfos->nPos + nNewIMETextLen );
             }
             else if ( ( nOldIMETextLen < nNewIMETextLen ) &&
-                      ( ( mpIMEInfos->nPos + nNewIMETextLen ) < maText.Len() ) )
+                      ( nOldIMETextLen < mpIMEInfos->aOldTextAfterStartPos.Len() ) )
             {
                 // overwrite
                 USHORT nOverwrite = nNewIMETextLen - nOldIMETextLen;
+                if ( ( nOldIMETextLen + nOverwrite ) > mpIMEInfos->aOldTextAfterStartPos.Len() )
+                    nOverwrite = mpIMEInfos->aOldTextAfterStartPos.Len() - nOldIMETextLen;
                 maText.Erase( mpIMEInfos->nPos + nNewIMETextLen, nOverwrite );
             }
         }
