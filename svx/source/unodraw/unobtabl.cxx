@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unobtabl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pw $ $Date: 2000-10-12 11:56:15 $
+ *  last change: $Author: cl $ $Date: 2000-11-08 11:24:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,12 +78,20 @@
 #include <svtools/itempool.hxx>
 #endif
 
+#ifndef _SV_CVTGRF_HXX
+#include <vcl/cvtgrf.hxx>
+#endif
+
 #ifndef _SFXITEMSET_HXX //autogen
 #include <svtools/itemset.hxx>
 #endif
 #ifndef _SVX_XIT_HXX
 #include <xit.hxx>
 #endif
+#ifndef _SFXDOCFILE_HXX
+#include <sfx2/docfile.hxx>
+#endif
+
 #include "xbtmpit.hxx"
 #include "svdmodel.hxx"
 #include "xdef.hxx"
@@ -331,14 +339,14 @@ GraphicObject CreateGraphicObjectFromURL( const ::rtl::OUString &rURL ) throw()
     }
     else
     {
+        SfxMedium aMedium( rURL, STREAM_READ, TRUE );
+        SvStream* pStream = aMedium.GetInStream();
+
         Graphic         aGraphic;
-        GraphicFilter*  pFilter = GetGrfFilter();
-
-        if( pFilter->ImportGraphic( aGraphic, INetURLObject( rURL, INET_PROT_FILE ) ) == GRFILTER_OK )
+        if( pStream )
         {
-            // ok
+            ULONG nRC = GraphicConverter::Import( *pStream, aGraphic );
         }
-
         return GraphicObject( aGraphic );
     }
 }
