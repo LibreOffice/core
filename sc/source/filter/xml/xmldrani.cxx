@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldrani.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-16 14:26:52 $
+ *  last change: $Author: er $ $Date: 2001-04-23 09:44:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -432,6 +432,16 @@ void ScXMLDatabaseRangeContext::EndElement()
                         aSubTotalParam.nUserIndex = nSubTotalsUserListIndex;
                         pDBData->SetSubTotalParam(aSubTotalParam);
                         xSubTotalDescriptor->addNew(aSubTotalColumns, nSubTotalRuleGroupFieldNumber);
+                    }
+                    if ( pDBData->HasImportParam() && !pDBData->HasImportSelection() )
+                    {
+                        ULONG nRefresh = 0;
+//!!!!!!!
+//! TODO: (erAck 23.04.01) export/import refresh delay
+//!!!!!!!
+                        pDBData->SetRefreshDelay( nRefresh );
+                        pDBData->SetRefreshHandler( pDBCollection->GetRefreshHandler() );
+                        pDBData->SetRefreshControl( pDoc->GetRefreshTimerControlAddress() );
                     }
                 }
             }

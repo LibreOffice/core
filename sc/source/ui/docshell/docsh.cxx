@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: er $ $Date: 2001-04-21 20:28:55 $
+ *  last change: $Author: er $ $Date: 2001-04-23 09:44:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,7 @@ SO2_DECL_REF(SvStorageStream)
 #include "xmlwrap.hxx"
 #include "drwlayer.hxx"
 #include "refreshtimer.hxx"
+#include "dbcolect.hxx"
 
 #include "docsh.hxx"
 
@@ -2118,6 +2119,9 @@ ScDocShell::ScDocShell( SfxObjectCreateMode eMode )
     if (pStlPool)
         StartListening(*pStlPool);
     SetHelpId( HID_SCSHELL_DOCSH );
+
+    aDocument.GetDBCollection()->SetRefreshHandler(
+        LINK( this, ScDocShell, RefreshDBDataHdl ) );
 
     //  InitItems und CalcOutputFactor werden jetzt nach bei Load/ConvertFrom/InitNew gerufen
 }

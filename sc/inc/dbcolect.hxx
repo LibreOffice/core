@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbcolect.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2001-04-21 20:31:39 $
+ *  last change: $Author: er $ $Date: 2001-04-23 09:42:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,6 +248,7 @@ class ScDBCollection : public SortedCollection
 {
 
 private:
+    Link        aRefreshHandler;
     ScDocument* pDoc;
     USHORT nEntryIndex;         // Zaehler fuer die eindeutigen Indizes
 
@@ -285,6 +286,10 @@ public:
     USHORT  GetEntryIndex()                 { return nEntryIndex; }
     void    SetEntryIndex(USHORT nInd)      { nEntryIndex = nInd; }
     virtual BOOL Insert(DataObject* pDataObject);
+
+    void            SetRefreshHandler( const Link& rLink )
+                        { aRefreshHandler = rLink; }
+    const Link&     GetRefreshHandler() const   { return aRefreshHandler; }
 };
 
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbcolect.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: er $ $Date: 2001-04-21 20:29:27 $
+ *  last change: $Author: er $ $Date: 2001-04-23 09:43:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1229,11 +1229,7 @@ BOOL ScDBCollection::Insert(DataObject* pDataObject)
     BOOL bInserted = SortedCollection::Insert(pDataObject);
     if ( bInserted && pData->HasImportParam() && !pData->HasImportSelection() )
     {
-//!!!!!!!
-//! TODO: (erAck 21.04.01) we can't access the ScDocShell of ui/inc. Solution?
-//!!!!!!!
-//      pData->SetRefreshHandler(
-//          LINK( pDoc->GetDocumentShell(), ScDocShell, RefreshDBDataHdl ) );
+        pData->SetRefreshHandler( GetRefreshHandler() );
         pData->SetRefreshControl( pDoc->GetRefreshTimerControlAddress() );
     }
     return bInserted;
