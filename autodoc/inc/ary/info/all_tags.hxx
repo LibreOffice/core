@@ -2,9 +2,9 @@
  *
  *  $RCSfile: all_tags.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:12:24 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:11:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,7 +285,31 @@ class LabelTag : public AtTag
   private:
     virtual DocuText *  Text();
 
-    udmstri             sLabel;
+    String              sLabel;
+};
+
+class SinceTag : public AtTag
+{
+  public:
+                        SinceTag();
+
+    virtual bool        Add_SpecialMeaningToken(
+                            const char *        i_sText,
+                            intt                i_nNr );
+    virtual const char *
+                        Title() const;
+    virtual UINT8       NrOfSpecialMeaningTokens() const;
+    virtual AtTag *     GetFollower();
+
+    const String &      Version() const         { return sVersion; }
+
+  private:
+    virtual void        do_StoreAt(
+                            DocuDisplay &       o_rDisplay ) const;
+    virtual DocuText *  Text();
+
+    // Data
+    String              sVersion;
 };
 
 
