@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cuitabarea.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:23:53 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:33:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #define _CUI_TAB_AREA_HXX
 
 // include ---------------------------------------------------------------
+
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
 
 #include "tabarea.hxx"
 
@@ -145,7 +149,7 @@ public:
 |*
 \************************************************************************/
 
-class SvxTransparenceTabPage : public SvxTabPage
+class SVX_DLLPUBLIC SvxTransparenceTabPage : public SvxTabPage
 {
     const SfxItemSet&   rOutAttrs;
     RECT_POINT          eRP;
@@ -233,7 +237,7 @@ public:
 |*
 \************************************************************************/
 
-class SvxAreaTabPage : public SvxTabPage
+class SVX_DLLPUBLIC SvxAreaTabPage : public SvxTabPage
 {
 private:
     FixedLine           aFlProp;
