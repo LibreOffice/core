@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.78 $
+#   $Revision: 1.79 $
 #
-#   last change: $Author: kz $ $Date: 2004-06-11 11:54:56 $
+#   last change: $Author: obo $ $Date: 2004-07-06 13:09:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -147,6 +147,7 @@ UNOIDLDBFILES= \
     $(UCR)$/cssuidialogs.db \
     $(UCR)$/cssui.db \
     $(UCR)$/cssframe.db \
+    $(UCR)$/cssfstatus.db \
     $(UCR)$/cssgraphic.db \
     $(UCR)$/cssaccessibility.db\
     $(UCR)$/dcsssprovider.db \
@@ -157,9 +158,9 @@ UNOIDLDBFILES= \
     $(UCR)$/dcssfstatus.db \
     $(UCR)$/dcssgeometry.db \
     $(UCR)$/dcssrendering.db \
-    $(UCR)$/dcssdrawing.db	
-    
-    
+    $(UCR)$/dcssdrawing.db
+
+
 REFERENCE_RDB=$(PRJ)$/type_reference$/OO_11$/types.rdb
 REFERENCE_DOC_RDB=$(PRJ)$/type_reference$/OO_11$/types_doc.rdb
 
