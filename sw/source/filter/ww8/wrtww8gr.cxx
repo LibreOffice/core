@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8gr.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 14:25:35 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:18:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,8 @@
 #include <svx/svdoole2.hxx>
 #endif
 
+#include <unotools/ucbstreamhelper.hxx>
+
 #ifndef _FMTANCHR_HXX //autogen
 #include <fmtanchr.hxx>
 #endif
@@ -153,6 +155,8 @@
 #ifndef _ESCHER_HXX
 #include "escher.hxx"
 #endif
+
+#include "docsh.hxx"
 
 // Damit KA debuggen kann, ohne sich den ganzen Writer zu holen, ist
 // temporaer dieses Debug gesetzt. Ist ausserdem noch das passende IniFlag
@@ -225,29 +229,43 @@ bool SwWW8Writer::TestOleNeedsGraphic(const SwAttrSet& rSet,
     long nX=0,nY=0;
     if (!bGraphicNeeded && SwWW8ImplReader::ImportOleWMF(xOleStg,aWMF,nX,nY))
     {
+        //TODO/LATER: this line looks strange - shouldn't it be true?!
         bGraphicNeeded = false;
         Point aTmpPoint;
         Rectangle aRect( aTmpPoint, Size( nX, nY ) );
         Graphic aGraph(aWMF);
 
-        SvStorageRef xRef( pDoc->GetDocStorage() );
-
+        ErrCode nErr = ERRCODE_NONE;
         SdrOle2Obj *pRet = SvxMSDffManager::CreateSdrOLEFromStorage(
-            rStorageName,xObjStg,xRef,aGraph,aRect,0,0);
+            rStorageName,xObjStg,pDoc->GetDocStorage(),aGraph,aRect,0,nErr,0);
 
         if (pRet)
         {
-            const SvInPlaceObjectRef rO(pRet->GetObjRef());
-            GDIMetaFile aMtf;
-            rO->GetGDIMetaFile( aMtf );
+            SwOLEObj &rSObj = pOLENd->GetOLEObj();
+            comphelper::EmbeddedObjectContainer aCnt( pDoc->GetDocStorage() );
 
-            SwOLEObj &rSObj= pOLENd->GetOLEObj();
-            const SvInPlaceObjectRef rO2(rSObj.GetOleRef());
-            GDIMetaFile aNewMtf;
-            rO2->GetGDIMetaFile( aNewMtf );
-
-            if (aMtf.IsEqual(aNewMtf)) //New method (#94067#)
-                bGraphicNeeded = false;
+            SvStream* pGraphicStream = ::utl::UcbStreamHelper::CreateStream( aCnt.GetGraphicStream( rSObj.GetOleRef() ) );
+            DBG_ASSERT( pGraphicStream && !pGraphicStream->GetError(), "No graphic stream available!" );
+            if ( pGraphicStream && !pGraphicStream->GetError() )
+            {
+                Graphic aGr1;
+                GraphicFilter* pGF = GraphicFilter::GetGraphicFilter();
+                String aEmptyStr;
+                if( pGF->ImportGraphic( aGr1, aEmptyStr, *pGraphicStream, GRFILTER_FORMAT_DONTKNOW ) == GRFILTER_OK )
+                {
+                    Graphic aGr2;
+                    delete pGraphicStream;
+                    pGraphicStream =
+                            ::utl::UcbStreamHelper::CreateStream( aCnt.GetGraphicStream( pRet->GetObjRef() ) );
+                    if( pGF->ImportGraphic( aGr2, aEmptyStr, *pGraphicStream, GRFILTER_FORMAT_DONTKNOW ) == GRFILTER_OK )
+                    {
+                        if ( aGr1 == aGr2 )
+                            bGraphicNeeded = false;
+                    }
+                }
+            }
+            else
+                delete pGraphicStream;
 
             delete pRet;
         }
@@ -288,16 +306,16 @@ Writer& OutWW8_SwOleNode( Writer& rWrt, SwCntntNode& rNode )
     pDataAdr = pSpecOLE + 2; //WW6 sprm is 1 but has 1 byte len as well.
     SwOLENode *pOLENd = rNode.GetOLENode();
 
-    SvStorageRef xObjStg = rWW8Wrt.GetStorage().OpenStorage(
+    SvStorageRef xObjStg = rWW8Wrt.GetStorage().OpenSotStorage(
         CREATE_CONST_ASC(SL::aObjectPool), STREAM_READWRITE |
         STREAM_SHARE_DENYALL );
 
     if( xObjStg.Is()  )
     {
-        SvInPlaceObjectRef xObj(pOLENd->GetOLEObj().GetOleRef());
-        if( xObj.Is() )
+        ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject > xObj(pOLENd->GetOLEObj().GetOleRef());
+        if( xObj.is() )
         {
-            SvInPlaceObject *pObj = &xObj;
+            ::com::sun::star::embed::XEmbeddedObject *pObj = xObj.get();
             UINT32 nPictureId = (UINT32)pObj;
             Set_UInt32(pDataAdr, nPictureId);
 
@@ -315,7 +333,7 @@ Writer& OutWW8_SwOleNode( Writer& rWrt, SwCntntNode& rNode )
 
             String sStorageName( '_' );
             sStorageName += String::CreateFromInt32( nPictureId );
-            SvStorageRef xOleStg = xObjStg->OpenStorage( sStorageName,
+            SvStorageRef xOleStg = xObjStg->OpenSotStorage( sStorageName,
                                 STREAM_READWRITE| STREAM_SHARE_DENYALL );
             if( xOleStg.Is() )
             {
@@ -324,7 +342,7 @@ Writer& OutWW8_SwOleNode( Writer& rWrt, SwCntntNode& rNode )
                 waste time rewriting it
                 */
                 if (!bDuplicate)
-                    rWW8Wrt.GetOLEExp().ExportOLEObject(*pObj, *xOleStg);
+                    rWW8Wrt.GetOLEExp().ExportOLEObject( xObj, *xOleStg );
 
                 // write as embedded field - the other things will be done
                 // in the escher export
@@ -752,18 +770,32 @@ void SwWW8WrGrf::WriteGraphicNode(SvStream& rStrm, const GraphicDetails &rItem)
                 SwOLENode *pOleNd = const_cast<SwOLENode*>(pNd);
                 ASSERT( pOleNd, " Wer hat den OleNode versteckt ?" );
                 SwOLEObj&                   rSObj= pOleNd->GetOLEObj();
-                const SvInPlaceObjectRef    rObj(  rSObj.GetOleRef() );
+                ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject > rObj(  rSObj.GetOleRef() );
 
-                GDIMetaFile aMtf;
-                rObj->GetGDIMetaFile(aMtf);
+                comphelper::EmbeddedObjectContainer aCnt( pOleNd->GetDoc()->GetDocStorage() );
 
-                aMtf.WindStart();
-                aMtf.Play(Application::GetDefaultDevice(), Point(0, 0),
-                    Size(2880, 2880));
-
-                WritePICFHeader(rStrm, rFly, 8, nWidth, nHeight,
-                    pNd->GetpSwAttrSet());
-                WriteWindowMetafileBits(rStrm, aMtf);
+                SvStream* pGraphicStream = ::utl::UcbStreamHelper::CreateStream( aCnt.GetGraphicStream( rObj ) );
+                DBG_ASSERT( pGraphicStream && !pGraphicStream->GetError(), "No graphic stream available!" );
+                if ( pGraphicStream && !pGraphicStream->GetError() )
+                {
+                    Graphic aGr;
+                    GraphicFilter* pGF = GraphicFilter::GetGraphicFilter();
+                    String aEmptyStr;
+                    if( pGF->ImportGraphic( aGr, aEmptyStr, *pGraphicStream, GRFILTER_FORMAT_DONTKNOW ) == GRFILTER_OK )
+                    {
+                        //TODO/LATER: do we really want to use GDIMetafile?!
+                        GDIMetaFile aMtf;
+                        aMtf = aGr.GetGDIMetaFile();
+                        aMtf.WindStart();
+                        aMtf.Play(Application::GetDefaultDevice(), Point(0, 0),
+                            Size(2880, 2880));
+                        WritePICFHeader(rStrm, rFly, 8, nWidth, nHeight,
+                            pNd->GetpSwAttrSet());
+                        WriteWindowMetafileBits(rStrm, aMtf);
+                    }
+                }
+                else
+                    delete pGraphicStream;
             }
             else
             {
@@ -782,10 +814,13 @@ void SwWW8WrGrf::WriteGraphicNode(SvStream& rStrm, const GraphicDetails &rItem)
             SwOLENode *pOleNd = const_cast<SwOLENode*>(pNd);
             ASSERT( pOleNd, " Wer hat den OleNode versteckt ?" );
             SwOLEObj&                   rSObj= pOleNd->GetOLEObj();
-            const SvInPlaceObjectRef    rObj(  rSObj.GetOleRef() );
 
+            Graphic* pGr = SdrOle2Obj::GetGraphicFromObject( pOleNd->GetDoc()->GetDocStorage(), rObj );
+
+            //TODO/LATER: do we really want to use GDIMetafile?!
             GDIMetaFile aMtf;
-            rObj->GetGDIMetaFile(aMtf);
+            if ( pGr )
+                aMtf = pGr->GetGDIMetaFile();
 
             Size aS(aMtf.GetPrefSize());
             aMtf.WindStart();
@@ -795,6 +830,7 @@ void SwWW8WrGrf::WriteGraphicNode(SvStream& rStrm, const GraphicDetails &rItem)
             WritePICFHeader(rStrm, rFly, 8, nWidth, nHeight,
                 pNd->GetpSwAttrSet());
             WriteWindowMetafileBits(rStrm, aMtf);
+            delete pGr;
 #endif
         }
         break;
