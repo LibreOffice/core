@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxmacxp.mk,v $
 #
-#   $Revision: 1.37 $
+#   $Revision: 1.38 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-13 21:03:16 $
+#   last change: $Author: pluby $ $Date: 2001-03-20 03:48:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -102,10 +102,6 @@ CC=cc
 cc=cc
 objc=cc
 CFLAGS=-c $(INCLUDE)
-.IF "$(shell uname -r)"!="1.2"
-CFLAGS+=-I/System/Library/Frameworks/System.framework/Versions/B/Headers/bsd \
-  -I/System/Library/Frameworks/System.framework/Versions/B/Headers/c++
-.ENDIF
 CFLAGSCC=-pipe -traditional-cpp
 
 OBJCFLAGS=-no-precomp
