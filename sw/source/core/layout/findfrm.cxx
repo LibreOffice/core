@@ -2,9 +2,9 @@
  *
  *  $RCSfile: findfrm.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 14:30:04 $
+ *  last change: $Author: vg $ $Date: 2005-02-22 08:19:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1498,6 +1498,19 @@ const SwRowFrm* SwFrm::IsInFollowFlowRow() const
         pMasterRow = (SwRowFrm*)pMasterRow->GetNext();
 
     return pMasterRow;
+}
+
+bool SwFrm::IsInBalancedSection() const
+{
+    bool bRet = false;
+
+    if ( IsInSct() )
+    {
+        const SwSectionFrm* pSectionFrm = FindSctFrm();
+        if ( pSectionFrm )
+            bRet = pSectionFrm->IsBalancedSection();
+    }
+    return bRet;
 }
 
 
