@@ -2,9 +2,9 @@
  *
  *  $RCSfile: versdlg.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-01 20:19:56 $
+ *  last change: $Author: kz $ $Date: 2001-03-28 12:25:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,11 +111,11 @@ ModalDialog DLG_VERSIONS
         Text [ french ] = "~Enregistrer une nouvelle version" ;
         Text [ dutch ] = "~Nieuwe versie opslaan" ;
         Text [ portuguese ] = "~Guardar nova versão" ;
-        Text[ chinese_simplified ] = "±£´æĞÂ°æ±¾(~S)";
+        Text[ chinese_simplified ] = "±£´æĞÂ°æ±¾(~N)";
         Text[ russian ] = "Ñîõğàíèòü íîâóş âåğñèş";
         Text[ polish ] = "Zapisz now¹ wersjê";
-        Text[ japanese ] = "V‚µ‚¢ÊŞ°¼Ş®İ‚Ì•Û‘¶(~S)";
-        Text[ chinese_traditional ] = "«O¦s·sª©¥»(~S)";
+        Text[ japanese ] = "V‚µ‚¢ÊŞ°¼Ş®İ‚Ì•Û‘¶(~N)";
+        Text[ chinese_traditional ] = "«O¦s·sª©¥»(~N)";
         Text[ arabic ] = "ÍİÙ ÇáÅÕÏÇÑ ÇáÌÏíÏ";
         Text[ greek ] = "ÁğïèŞêåõóç íİáò İêäïóçò";
         Text[ korean ] = "»õ ¹öÀü ÀúÀå(~N)";
@@ -276,11 +276,11 @@ ModalDialog DLG_VERSIONS
         Text [ french ] = "Fermer" ;
         Text [ dutch ] = "Sluiten" ;
         Text [ portuguese ] = "Fechar" ;
-        Text[ chinese_simplified ] = "¹Ø±Õ";
+        Text[ chinese_simplified ] = "¹Ø±Õ(~C)";
         Text[ russian ] = "Çàêğûòü";
         Text[ polish ] = "Zamknij";
-        Text[ japanese ] = "•Â‚¶‚é";
-        Text[ chinese_traditional ] = "Ãö³¬";
+        Text[ japanese ] = "•Â‚¶‚é(~C)";
+        Text[ chinese_traditional ] = "Ãö³¬(~C)";
         Text[ arabic ] = "ÅÛáÇŞ";
         Text[ greek ] = "Êëåßóéìï";
         Text[ korean ] = "´İ±â(~C)";
