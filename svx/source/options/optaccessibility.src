@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optaccessibility.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fs $ $Date: 2002-11-26 15:59:42 $
+ *  last change: $Author: kz $ $Date: 2002-12-05 10:23:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,17 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text = "Sonstige Optionen" ;
         Text [ English ] = "Miscellaneous options" ;
         Text[ english_us ] = "Miscellaneous options";
+        Text[ portuguese ] = "Miscellaneous options";
+        Text[ russian ] = "Miscellaneous options";
+        Text[ spanish ] = "Miscellaneous options";
+        Text[ italian ] = "Miscellaneous options";
+        Text[ swedish ] = "Miscellaneous options";
+        Text[ polish ] = "Miscellaneous options";
+        Text[ portuguese_brazilian ] = "Miscellaneous options";
+        Text[ japanese ] = "Miscellaneous options";
+        Text[ korean ] = "Miscellaneous options";
+        Text[ turkish ] = "Miscellaneous options";
+        Text[ thai ] = "Miscellaneous options";
     };
     CheckBox CB_ACCESSIBILITY_TOOL
     {
@@ -300,6 +311,17 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text = "Optionen für die Kontrastdarstellung" ;
         Text [ english ] = "Options for high contrast appearance" ;
         Text [ english_us ] = "Options for high contrast appearance";
+        Text[ portuguese ] = "Options for high contrast appearance";
+        Text[ russian ] = "Options for high contrast appearance";
+        Text[ spanish ] = "Options for high contrast appearance";
+        Text[ italian ] = "Options for high contrast appearance";
+        Text[ swedish ] = "Options for high contrast appearance";
+        Text[ polish ] = "Options for high contrast appearance";
+        Text[ portuguese_brazilian ] = "Options for high contrast appearance";
+        Text[ japanese ] = "Options for high contrast appearance";
+        Text[ korean ] = "Options for high contrast appearance";
+        Text[ turkish ] = "Options for high contrast appearance";
+        Text[ thai ] = "Options for high contrast appearance";
     };
     CheckBox CB_AUTO_DETECT_HC
     {
@@ -309,6 +331,17 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text = "~Kontrastdarstellungsmodus des Betriebssystems automatisch erkennen" ;
         Text [ english ] = "Automatically detect high contrast mode of operating system" ;
         Text [ english_us ] = "Automatically detect high contrast mode of operating system";
+        Text[ portuguese ] = "Automatically detect high contrast mode of operating system";
+        Text[ russian ] = "Automatically detect high contrast mode of operating system";
+        Text[ spanish ] = "Automatically detect high contrast mode of operating system";
+        Text[ italian ] = "Automatically detect high contrast mode of operating system";
+        Text[ swedish ] = "Automatically detect high contrast mode of operating system";
+        Text[ polish ] = "Automatically detect high contrast mode of operating system";
+        Text[ portuguese_brazilian ] = "Automatically detect high contrast mode of operating system";
+        Text[ japanese ] = "Automatically detect high contrast mode of operating system";
+        Text[ korean ] = "Automatically detect high contrast mode of operating system";
+        Text[ turkish ] = "Automatically detect high contrast mode of operating system";
+        Text[ thai ] = "Automatically detect high contrast mode of operating system";
     };
     CheckBox CB_AUTOMATIC_FONT_COLOR
     {
