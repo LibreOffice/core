@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: mh $ $Date: 2002-10-22 13:06:12 $
+#   last change: $Author: fs $ $Date: 2002-10-25 13:21:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,6 +76,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 
 SLOFILES =	\
+        $(SLO)$/formstyles.obj \
         $(SLO)$/officeforms.obj \
         $(SLO)$/formevents.obj \
         $(SLO)$/eventimport.obj \
