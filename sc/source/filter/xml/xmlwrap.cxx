@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlwrap.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-06 14:50:12 $
+ *  last change: $Author: nn $ $Date: 2001-02-09 20:01:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,10 +101,12 @@ using namespace com::sun::star;
 
 // -----------------------------------------------------------------------
 
-ScXMLImportWrapper::ScXMLImportWrapper(ScDocument& rD, SfxMedium& rM) :
+ScXMLImportWrapper::ScXMLImportWrapper(ScDocument& rD, SfxMedium* pM, SvStorage* pS) :
     rDoc(rD),
-    rMedium(rM)
+    pMedium(pM),
+    pStorage(pS)
 {
+    DBG_ASSERT( pMedium || pStorage, "ScXMLImportWrapper: Medium or Storage must be set" );
 }
 
 sal_Bool ScXMLImportWrapper::Import()
@@ -121,10 +123,13 @@ sal_Bool ScXMLImportWrapper::Import()
     uno::Reference< uno::XInterface > xPipe;
 
     xml::sax::InputSource aParserInput;
-    aParserInput.sSystemId = OUString(rMedium.GetName());
+    if (pMedium)
+        aParserInput.sSystemId = OUString(pMedium->GetName());
 
     SvStorageStreamRef xDocStream;
-    SvStorage *pStorage = rMedium.GetStorage();
+    if ( !pStorage && pMedium )
+        pStorage = pMedium->GetStorage();
+
     if( pStorage )
     {
         OUString sDocName( RTL_CONSTASCII_USTRINGPARAM( "Content.xml" ) );
@@ -133,12 +138,12 @@ sal_Bool ScXMLImportWrapper::Import()
         xDocStream->SetBufferSize( 16*1024 );
         aParserInput.aInputStream = new utl::OInputStreamWrapper( *xDocStream );
     }
-    else
+    else if ( pMedium )
     {
         // if there is a medium and if this medium has a load environment,
         // we get an active data source from the medium.
-        rMedium.GetInStream()->Seek( 0 );
-        xSource = rMedium.GetDataSource();
+        pMedium->GetInStream()->Seek( 0 );
+        xSource = pMedium->GetDataSource();
         DBG_ASSERT( xSource.is(), "got no data source from medium" );
         if( !xSource.is() )
             return sal_False;
@@ -158,6 +163,8 @@ sal_Bool ScXMLImportWrapper::Import()
         aParserInput.aInputStream =
             uno::Reference< io::XInputStream >( xPipe, uno::UNO_QUERY );
     }
+    else
+        return sal_False;
 
     // get parser
     uno::Reference<uno::XInterface> xXMLParser =
@@ -318,11 +325,14 @@ sal_Bool ScXMLImportWrapper::Export()
     if(!xWriter.is())
         return sal_False;
 
-    SvStorage *pStorage = rMedium.GetOutputStorage( sal_True );
+    if ( !pStorage && pMedium )
+        pStorage = pMedium->GetOutputStorage( sal_True );
 
     uno::Reference<xml::sax::XDocumentHandler> xHandler( xWriter, uno::UNO_QUERY );
 
-    OUString sFileName = rMedium.GetName();
+    OUString sFileName;
+    if (pMedium)
+        sFileName = pMedium->GetName();
     SfxObjectShell* pObjSh = rDoc.GetDocumentShell();
     uno::Sequence<beans::PropertyValue> aDescriptor(1);
     beans::PropertyValue* pProps = aDescriptor.getArray();
@@ -351,9 +361,9 @@ sal_Bool ScXMLImportWrapper::Export()
                 xMetaStream->SetBufferSize( 16*1024 );
                 xMetaOut = new utl::OOutputStreamWrapper( *xMetaStream );
             }
-            else
+            else if ( pMedium )
             {
-                xMetaOut = rMedium.GetDataSink();
+                xMetaOut = pMedium->GetDataSink();
             }
 
             uno::Reference<io::XActiveDataSource> xMetaSrc( xWriter, uno::UNO_QUERY );
@@ -396,9 +406,9 @@ sal_Bool ScXMLImportWrapper::Export()
                 xDocStream->SetBufferSize( 16*1024 );
                 xDocOut = new utl::OOutputStreamWrapper( *xDocStream );
             }
-            else
+            else if ( pMedium )
             {
-                xDocOut = rMedium.GetDataSink();
+                xDocOut = pMedium->GetDataSink();
             }
 
             uno::Reference<io::XActiveDataSource> xDocSrc( xWriter, uno::UNO_QUERY );
