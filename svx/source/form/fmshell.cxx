@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshell.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-09 16:06:15 $
+ *  last change: $Author: oj $ $Date: 2000-11-16 15:57:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -377,7 +377,7 @@ sal_uInt16 AutoSlotMap[] =
     SID_FM_AUTOFILTER,
     0
 };
-
+using namespace ::com::sun::star::uno;
 //========================================================================
 //========================================================================
 #ifdef NOOLDSV
@@ -1350,8 +1350,9 @@ void FmFormShell::Execute(SfxRequest &rReq)
                     xReload->reload();
 
                 }
-                catch(...)
+                catch(Exception&)
                 {
+                    DBG_ERROR("Exception occured!");
                 }
             }
             rReq.Done();
