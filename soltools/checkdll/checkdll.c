@@ -2,9 +2,9 @@
  *
  *  $RCSfile: checkdll.c,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mh $ $Date: 2003-07-17 10:26:34 $
+ *  last change: $Author: vg $ $Date: 2005-03-11 10:05:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,11 +120,12 @@ int main(int argc, char *argv[])
         }
         if (pLib) {
                 // Prefix symbol name with '_'
-                char *name = malloc(1+strlen(psymbol)+1);
+                int len = strlen(psymbol);
+                char *name = malloc(1+len+1);
                 NSSymbol *symbol;
                 void *address = NULL;
-                strcpy(name, "_");
-                strcat(name, psymbol);
+                strncpy(name, "_", 2);
+                strncat(name, psymbol, len);
                 symbol = NSLookupSymbolInImage(pLib, name, NSLOOKUPSYMBOLINIMAGE_OPTION_BIND);
                 free(name);
                 if (symbol) address = NSAddressOfSymbol(symbol);
