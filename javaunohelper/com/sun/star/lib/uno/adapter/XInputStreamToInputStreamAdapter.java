@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XInputStreamToInputStreamAdapter.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aidan $ $Date: 2002-05-20 11:56:11 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:50:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,8 +157,9 @@ public class XInputStreamToInputStreamAdapter extends InputStream {
         byte [][] tmp = new byte [1][b.length];
         try {
         long bytesRead=0;
-        if (len >xin.available()) {
-          bytesRead = xin.readBytes(tmp, xin.available());
+            int av = xin.available();
+        if ( av != 0 && len > av) {
+          bytesRead = xin.readBytes(tmp, av);
         }
         else{
         bytesRead = xin.readBytes(tmp,len);
@@ -211,7 +212,7 @@ public class XInputStreamToInputStreamAdapter extends InputStream {
             }
         } while (tmpLongVal > 0);
 
-        if (avail < n) {
+        if ( avail != 0 && avail < n) {
             return(avail);
         } else {
             return(n);
