@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2004-12-03 14:19:46 $
+dnl * Date: $Date: 2004-12-10 17:49:41 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.78 $ )
+AC_REVISION( $Revision: 1.79 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -2750,10 +2750,12 @@ dnl ===================================================================
 
 if test "$enable_java" != "no"; then
 ANT_HOME=; export ANT_HOME
+WITH_ANT_HOME=; export WITH_ANT_HOME
 if test -z "$with_ant_home"; then
    AC_PATH_PROGS(ANT, [jakarta-ant ant ant.sh ant.bat])
 else
-   AC_PATH_PROGS(ANT, [jakarta-ant ant ant.sh ant.bat],,$with_ant_home/bin)
+   AC_PATH_PROGS(ANT, [jakarta-ant ant ant.sh ant.bat],,$with_ant_home/bin:$PATH)
+   WITH_ANT_HOME=$with_ant_home
 fi
 
 
@@ -2792,7 +2794,11 @@ EOF
   AC_TRY_EVAL(ant_cmd)
   if test $? = 0 && test -f ./conftest.class ; then
     AC_MSG_RESULT([Ant works]) 
-    ANT_HOME=`echo $ANT | $SED -n "s/\/bin\/ant.*\$//p"`
+    if test -z "$WITH_ANT_HOME"; then
+        ANT_HOME=`echo $ANT | $SED -n "s/\/bin\/ant.*\$//p"`
+    else
+        ANT_HOME="$WITH_ANT_HOME"
+    fi
   else
     echo "configure: Ant test failed" >&5
     cat conftest.java >&5
