@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.120 $
+ *  $Revision: 1.121 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:48:24 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 15:11:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1445,6 +1445,31 @@ SfxSlotInfo FN_TABLE_MERGE_TABLE
 {
     Slotname [ de ] = "Tabelle zusammenfassen";
     Slotname [ en-US ] = "Merge Table";
+};
+SfxSlotInfo FN_FORMAT_APPLY_HEAD1
+{
+    Slotname [ de ] = "Vorlage anwenden Überschrift 1";
+    Slotname [ en-US ] = "Apply Style Heading 1";
+};
+SfxSlotInfo FN_FORMAT_APPLY_HEAD2
+{
+    Slotname [ de ] = "Vorlage anwenden Überschrift 2";
+    Slotname [ en-US ] = "Apply Style Heading 2";
+};
+SfxSlotInfo FN_FORMAT_APPLY_HEAD3
+{
+    Slotname [ de ] = "Vorlage anwenden Überschrift 3";
+    Slotname [ en-US ] = "Apply Style Heading 3";
+};
+SfxSlotInfo FN_FORMAT_APPLY_DEFAULT
+{
+    Slotname [ de ] = "Vorlage anwenden Standard";
+    Slotname [ en-US ] = "Apply Style Default";
+};
+SfxSlotInfo FN_FORMAT_APPLY_TEXTBODY
+{
+    Slotname [ de ] = "Vorlage anwenden Textkörper";
+    Slotname [ en-US ] = "Apply Style Textbody";
 };
 SfxSlotInfo FN_TABLE_MODE_FIX
 {
