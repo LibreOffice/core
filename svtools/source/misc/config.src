@@ -2,9 +2,9 @@
  *
  *  $RCSfile: config.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 05:07:08 $
+ *  last change: $Author: kz $ $Date: 2001-05-16 14:40:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@ String STR_WARNING_ITEM
     TEXT [ English ] = "Item has wrong version!" ;
     TEXT [ norwegian ] = "Element har feil versjon!" ;
     TEXT [ italian ] = "La voce ha una versione errata!" ;
-    TEXT [ portuguese_brazilian ] = "Versão errada do item!" ;
+    TEXT [ portuguese_brazilian ] = "Vers?o errada do item!" ;
     TEXT [ portuguese ] = "O registo tem a versão errada!" ;
     TEXT [ finnish ] = "Virheellinen versio!" ;
     TEXT [ danish ] = "Elementets version er forkert! " ;
