@@ -2,9 +2,9 @@
  *
  *  $RCSfile: versionhelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-07-29 13:02:19 $
+ *  last change: $Author: vg $ $Date: 2003-10-06 13:36:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,8 @@ void VersionHelper::printall(FILE * out)
 {
     if (isOk())
     {
-        fprintf(out, "  Time:%s\n", getTime().getStr()  );
+        rtl::OString aStr = getTime();
+        fprintf(out, "  Time:%s\n", aStr.getStr()  );
         fprintf(out, "  Date:%s\n", getDate().getStr()  );
         fprintf(out, "   Upd:%s\n", getUpd().getStr()   );
         fprintf(out, " Minor:%s\n", getMinor().getStr() );
