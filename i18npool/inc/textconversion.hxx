@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textconversion.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:56:24 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:35:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,6 +203,9 @@ public:
 private :
         // user defined dictionary list
         com::sun::star::uno::Reference < com::sun::star::linguistic2::XConversionDictionaryList > xCDL;
+        rtl::OUString SAL_CALL getWordConversion(const ::rtl::OUString& aText,
+            sal_Int32 nStartPos, sal_Int32 nLength, sal_Bool toSChinese, sal_Int32 nConversionOptions);
+        com::sun::star::lang::Locale aLocale;
 };
 
 } // i18n
