@@ -19,6 +19,8 @@
 #define ELEMENT_TOOLBARCONFIGITEMS  "toolbarconfigitems"
 #define ELEMENT_TOOLBARCONFIGITEM   "toolbarconfigitem"
 
+#define ATTRIBUTE_UINAME            "uiname"
+
 #define ATTRIBUTE_BITMAP            "bitmap"
 #define ATTRIBUTE_TEXT              "text"
 #define ATTRIBUTE_URL               "href"
