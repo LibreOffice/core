@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: th $ $Date: 2001-07-25 14:57:46 $
+ *  last change: $Author: obr $ $Date: 2001-07-26 13:09:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -631,114 +631,6 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
         mpFrameData->mbSysObjFocus      = FALSE;
         mpFrameData->maPaintTimer.SetTimeout( 30 );
         mpFrameData->maPaintTimer.SetTimeoutHdl( LINK( this, Window, ImplHandlePaintHdl ) );
-
-        try {
-#ifdef REMOTE_APPSERVER
-            ImplSVData* pSVData = ImplGetSVData();
-
-            if ( pSVData->mxClientFactory.is() )
-            {
-                mpFrameData->mxClipboard = Reference< XClipboard >( pSVData->mxClientFactory->createInstance( OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboard" ) ), UNO_QUERY );
-            }
-
-            if ( mpFrame->IsValid() )
-                mpFrame->GetDragSourceDropTarget( mpFrameData->mxDragSource, mpFrameData->mxDropTarget );
-#else
-            Reference< XMultiServiceFactory > xFactory = vcl::unohelper::GetMultiServiceFactory();
-            if ( xFactory.is() )
-            {
-                /*
-                 * IMHO this belongs in the platform dependend part of vcl, but the vcl guys say it
-                 * is better to implement it here to reduce dependencies on the other ports like Mac etc.
-                 */
-
-                const SystemEnvData * pEnvData = GetSystemData();
-
-                if( pEnvData )
-                {
-                    Sequence< Any > aClipboardAL, aSelectionAL;
-                    OUString aClipboardSN, aSelectionSN;
-
-                    Sequence< Any > aDragSourceAL( 2 ), aDropTargetAL( 2 );
-                    OUString aDragSourceSN, aDropTargetSN;
-
-#if defined WNT
-                    aClipboardSN = OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboard" );
-
-                    aDragSourceSN = OUString::createFromAscii( "com.sun.star.datatransfer.dnd.OleDragSource" );
-                    aDropTargetSN = OUString::createFromAscii( "com.sun.star.datatransfer.dnd.OleDropTarget" );
-                    aDragSourceAL[ 1 ] = makeAny( (sal_uInt32) pEnvData->hWnd );
-                    aDropTargetAL[ 0 ] = makeAny( (sal_uInt32) pEnvData->hWnd );
-
-#elif defined UNX
-
-                    aClipboardSN = OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboard" );
-                    aSelectionSN = OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboard" );
-
-                    aDragSourceSN = OUString::createFromAscii( "com.sun.star.datatransfer.dnd.X11DragSource" );
-                    aDropTargetSN = OUString::createFromAscii( "com.sun.star.datatransfer.dnd.X11DropTarget" );
-
-                    aClipboardAL.realloc( 2 );
-                    aClipboardAL[ 0 ] = makeAny( Application::GetDisplayConnection() );
-                    aClipboardAL[ 1 ] = makeAny( OUString::createFromAscii( "CLIPBOARD" ) );
-
-                    aSelectionAL.realloc( 2 );
-                    aSelectionAL[ 0 ] = makeAny( Application::GetDisplayConnection() );
-                    aSelectionAL[ 1 ] = makeAny( OUString::createFromAscii( "PRIMARY" ) );
-
-                    aDragSourceAL[ 0 ] = makeAny( Application::GetDisplayConnection() );
-                    aDropTargetAL[ 0 ] = makeAny( Application::GetDisplayConnection() );
-                    aDropTargetAL[ 1 ] = makeAny( pEnvData->aShellWindow );
-#endif
-                    // FIXME: add service names for macos etc. here
-
-                    // remember clipboard instance here
-                    if( aClipboardSN.getLength() )
-                    {
-                        mpFrameData->mxClipboard = Reference< XClipboard > ( xFactory->createInstance( aClipboardSN ), UNO_QUERY );
-
-                        if( mpFrameData->mxClipboard.is() && aClipboardAL.getLength() )
-                        {
-                            Reference< XInitialization > xInit = Reference< XInitialization >( mpFrameData->mxClipboard, UNO_QUERY );
-
-                            if( xInit.is() )
-                                xInit->initialize( aClipboardAL );
-                        }
-                    }
-
-                    // remember primary selection here
-                    if( aSelectionSN.getLength() )
-                    {
-                        mpFrameData->mxSelection = Reference< XClipboard > ( xFactory->createInstance( aSelectionSN ), UNO_QUERY );
-
-                        if( mpFrameData->mxSelection.is() && aSelectionAL.getLength() )
-                        {
-                            Reference< XInitialization > xInit = Reference< XInitialization >( mpFrameData->mxSelection, UNO_QUERY );
-
-                            if( xInit.is() )
-                                xInit->initialize( aSelectionAL );
-                        }
-                    }
-
-
-                    if( aDragSourceSN.getLength() )
-                        mpFrameData->mxDragSource = Reference< XDragSource > ( xFactory->createInstanceWithArguments( aDragSourceSN, aDragSourceAL ), UNO_QUERY );
-
-                    if( aDropTargetSN.getLength() )
-                        mpFrameData->mxDropTarget = Reference< XDropTarget > ( xFactory->createInstanceWithArguments( aDropTargetSN, aDropTargetAL ), UNO_QUERY );
-
-                }
-            }
-#endif
-        }
-
-        // createInstance can throw any exception
-        catch( Exception exc )
-        {
-            // release all instances
-            mpFrameData->mxDropTarget.clear();
-            mpFrameData->mxDragSource.clear();
-        }
     }
 
     // init data
@@ -6805,16 +6697,37 @@ Reference< XDropTarget > Window::GetDropTarget()
     {
         sal_Int8 nDefaultActions = 0;
 
-        if( mpFrameData && mpFrameData->mxDropTarget.is() )
+        if( mpFrameData )
         {
-            nDefaultActions = mpFrameData->mxDropTarget->getDefaultActions();
-
-            if( ! mpFrameData->mxDropTargetListener.is() )
+            if( ! mpFrameData->mxDropTarget.is() )
             {
-                OSL_TRACE( "adding droptarget listener" );
-                mpFrameData->mxDropTargetListener = new DNDEventDispatcher( mpFrameWindow );
-                mpFrameData->mxDropTarget->addDropTargetListener( mpFrameData->mxDropTargetListener );
+                // initialization is done in GetDragSource
+                Reference< XDragSource > xDragSource = GetDragSource();
             }
+
+            if( mpFrameData->mxDropTarget.is() )
+            {
+                nDefaultActions = mpFrameData->mxDropTarget->getDefaultActions();
+
+                if( ! mpFrameData->mxDropTargetListener.is() )
+                {
+                    mpFrameData->mxDropTargetListener = new DNDEventDispatcher( mpFrameWindow );
+
+                    try
+                    {
+                        OSL_TRACE( "adding droptarget listener" );
+                        mpFrameData->mxDropTarget->addDropTargetListener( mpFrameData->mxDropTargetListener );
+                    }
+
+                    catch( RuntimeException exc )
+                    {
+                        // release all instances
+                        mpFrameData->mxDropTarget.clear();
+                        mpFrameData->mxDragSource.clear();
+                    }
+                }
+            }
+
         }
 
         mxDNDListenerContainer = static_cast < XDropTarget * > ( new DNDListenerContainer( nDefaultActions ) );
@@ -6830,7 +6743,62 @@ Reference< XDragSource > Window::GetDragSource()
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
-    return mpFrameData ? mpFrameData->mxDragSource : Reference< XDragSource > ();
+    if( mpFrameData )
+    {
+        if( ! mpFrameData->mxDragSource.is() )
+        {
+            try
+            {
+#ifdef REMOTE_APPSERVER
+                if ( mpFrame->IsValid() )
+                    mpFrame->GetDragSourceDropTarget( mpFrameData->mxDragSource, mpFrameData->mxDropTarget );
+#else
+
+                Reference< XMultiServiceFactory > xFactory = vcl::unohelper::GetMultiServiceFactory();
+                if ( xFactory.is() )
+                {
+                    const SystemEnvData * pEnvData = GetSystemData();
+
+                    if( pEnvData )
+                    {
+                        Sequence< Any > aDragSourceAL( 2 ), aDropTargetAL( 2 );
+                        OUString aDragSourceSN, aDropTargetSN;
+#if defined WNT
+                        aDragSourceSN = OUString::createFromAscii( "com.sun.star.datatransfer.dnd.OleDragSource" );
+                        aDropTargetSN = OUString::createFromAscii( "com.sun.star.datatransfer.dnd.OleDropTarget" );
+                        aDragSourceAL[ 1 ] = makeAny( (sal_uInt32) pEnvData->hWnd );
+                        aDropTargetAL[ 0 ] = makeAny( (sal_uInt32) pEnvData->hWnd );
+#elif defined UNX
+                        aDragSourceSN = OUString::createFromAscii( "com.sun.star.datatransfer.dnd.X11DragSource" );
+                        aDropTargetSN = OUString::createFromAscii( "com.sun.star.datatransfer.dnd.X11DropTarget" );
+
+                        aDragSourceAL[ 0 ] = makeAny( Application::GetDisplayConnection() );
+                        aDropTargetAL[ 0 ] = makeAny( Application::GetDisplayConnection() );
+                        aDropTargetAL[ 1 ] = makeAny( pEnvData->aShellWindow );
+#endif
+                        if( aDragSourceSN.getLength() )
+                            mpFrameData->mxDragSource = Reference< XDragSource > ( xFactory->createInstanceWithArguments( aDragSourceSN, aDragSourceAL ), UNO_QUERY );
+
+                        if( aDropTargetSN.getLength() )
+                            mpFrameData->mxDropTarget = Reference< XDropTarget > ( xFactory->createInstanceWithArguments( aDropTargetSN, aDropTargetAL ), UNO_QUERY );
+                    }
+                }
+#endif
+            }
+
+            // createInstance can throw any exception
+            catch( Exception exc )
+            {
+                // release all instances
+                mpFrameData->mxDropTarget.clear();
+                mpFrameData->mxDragSource.clear();
+            }
+        }
+
+        return mpFrameData->mxDragSource;
+    }
+
+    return Reference< XDragSource > ();
 }
 
 // -----------------------------------------------------------------------
@@ -6840,13 +6808,14 @@ void Window::GetDragSourceDropTarget(Reference< XDragSource >& xDragSource, Refe
 {
     if( mpFrameData )
     {
-        xDragSource = mpFrameData->mxDragSource;
+        // initialization is done in GetDragSource
+        xDragSource = GetDragSource();
         xDropTarget = mpFrameData->mxDropTarget;
     }
     else
     {
-        xDragSource = Reference< XDragSource > ();
-        xDropTarget = Reference< XDropTarget > ();
+        xDragSource.clear();
+        xDropTarget.clear();
     }
 }
 
@@ -6864,7 +6833,57 @@ Reference< XClipboard > Window::GetClipboard()
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     if( mpFrameData )
+    {
+        if( ! mpFrameData->mxClipboard.is() )
+        {
+            try
+            {
+#ifdef REMOTE_APPSERVER
+
+                // FIXME: unix clipboard not appropriatly initialized yet.
+                Reference< XMultiServiceFactory > xFactory( ImplGetSVData()->mxClientFactory );
+
+                if( xFactory.is() )
+                {
+                    mpFrameData->mxClipboard = Reference< XClipboard >( xFactory->createInstance( OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboard" ) ), UNO_QUERY );
+                }
+
+#else
+                Reference< XMultiServiceFactory > xFactory( vcl::unohelper::GetMultiServiceFactory() );
+
+                if( xFactory.is() )
+                {
+                    mpFrameData->mxClipboard = Reference< XClipboard >( xFactory->createInstance( OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboard" ) ), UNO_QUERY );
+
+#ifdef UNX          // unix clipboard needs to be initialized
+                    if( mpFrameData->mxClipboard.is() )
+                    {
+                        Reference< XInitialization > xInit = Reference< XInitialization >( mpFrameData->mxClipboard, UNO_QUERY );
+
+                        if( xInit.is() )
+                        {
+                            Sequence< Any > aArgumentList( 2 );
+                            aArgumentList[ 0 ] = makeAny( Application::GetDisplayConnection() );
+                            aArgumentList[ 1 ] = makeAny( OUString::createFromAscii( "CLIPBOARD" ) );
+
+                            xInit->initialize( aArgumentList );
+                        }
+                    }
+#endif
+                }
+#endif
+            }
+
+            // createInstance can throw any exception
+            catch( Exception exc )
+            {
+                // release all instances
+                mpFrameData->mxClipboard.clear();
+            }
+        }
+
         return mpFrameData->mxClipboard;
+    }
 
     return static_cast < XClipboard * > (0);
 }
@@ -6876,7 +6895,51 @@ Reference< XClipboard > Window::GetSelection()
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     if( mpFrameData )
+    {
+        if( ! mpFrameData->mxSelection.is() )
+        {
+            try
+            {
+#ifdef REMOTE_APPSERVER
+
+                // FIXME: primary selection not supported yet
+#else
+
+#ifdef UNX      // FIXME: primary selection only supported on unix yet
+                Reference< XMultiServiceFactory > xFactory( vcl::unohelper::GetMultiServiceFactory() );
+
+                if( xFactory.is() )
+                {
+                    mpFrameData->mxSelection = Reference< XClipboard >( xFactory->createInstance( OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboard" ) ), UNO_QUERY );
+
+                    if( mpFrameData->mxSelection.is() )
+                    {
+                        Reference< XInitialization > xInit = Reference< XInitialization >( mpFrameData->mxSelection, UNO_QUERY );
+
+                        if( xInit.is() )
+                        {
+                            Sequence< Any > aArgumentList( 2 );
+                            aArgumentList[ 0 ] = makeAny( Application::GetDisplayConnection() );
+                            aArgumentList[ 1 ] = makeAny( OUString::createFromAscii( "PRIMARY" ) );
+
+                            xInit->initialize( aArgumentList );
+                        }
+                    }
+                }
+#endif
+#endif
+            }
+
+            // createInstance can throw any exception
+            catch( Exception exc )
+            {
+                // release all instances
+                mpFrameData->mxSelection.clear();
+            }
+        }
+
         return mpFrameData->mxSelection;
+    }
 
     return static_cast < XClipboard * > (0);
 }
