@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabctrl.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:15:56 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:25:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,14 +59,12 @@
  *
  ************************************************************************/
 
-#define _SV_TABCTRL_CXX
-
 #ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
 
 #ifndef _SV_RC_H
-#include <rc.h>
+#include <tools/rc.h>
 #endif
 #ifndef _SV_SVDATA_HXX
 #include <svdata.hxx>
@@ -79,9 +77,6 @@
 #endif
 #ifndef _SV_EVENT_HXX
 #include <event.hxx>
-#endif
-#ifndef _SV_ACCESS_HXX
-#include <access.hxx>
 #endif
 #ifndef _SV_MENU_HXX
 #include <menu.hxx>
@@ -815,9 +810,6 @@ void TabControl::ImplChangeTabPage( USHORT nId, USHORT nOldId )
         }
 
         pPage->Show();
-
-        if( Application::GetAccessHdlCount() && pPage->IsReallyVisible() )
-            Application::AccessNotify( AccessNotification( ACCESS_EVENT_DLGCONTROLS, GetParent() ) );
     }
 
     if ( pOldPage )
@@ -1130,7 +1122,6 @@ void TabControl::ImplPaint( const Rectangle& rRect, bool bLayout )
     aLightFont.SetWeight( WEIGHT_LIGHT );
 
     // Aktuelles Item ermitteln
-    ImplTabItem* pPrevCurItem = NULL;
     ImplTabItem* pCurItem = NULL;
     ImplTabItem* pItem = mpItemList->First();
     pItem = mpItemList->First();
