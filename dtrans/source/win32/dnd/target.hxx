@@ -2,9 +2,9 @@
  *
  *  $RCSfile: target.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jl $ $Date: 2001-02-13 10:41:48 $
+ *  last change: $Author: jl $ $Date: 2001-02-20 12:56:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,6 @@ private:
 
     // Used to find out wheter the listeners callbacks through the Context interfaces
     // contained in the event objects are valid.
-//  sal_uInt32 m_currentEventId;
 
     Reference<XDropTargetDragContext> m_currentDragContext;
     Reference<XDropTargetDropContext> m_currentDropContext;
@@ -194,8 +193,6 @@ public:
 // XDropTargetDragContext delegated from DragContext
     void _acceptDrag( sal_Int8 dragOperation, const Reference<XDropTargetDragContext>& context);
     void _rejectDrag( const Reference<XDropTargetDragContext>& context);
-//  Sequence<DataFlavor> _getCurrentDataFlavors( const Reference<XDropTargetDragContext>& context);
-//  sal_Bool _isDataFlavorSupported( const DataFlavor& df, const Reference<XDropTargetDragContext>& context);
 
 
 protected:
