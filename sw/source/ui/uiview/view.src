@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-24 20:36:01 $
+ *  last change: $Author: kz $ $Date: 2001-08-29 09:27:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,7 @@ QueryBox DLG_BODY
     MESSAGE [ italian ] = "Controllare il testo principale?" ;
     MESSAGE [ portuguese_brazilian ] = "Deseja verificar o corpo do documento?" ;
     MESSAGE [ portuguese ] = "Deseja verificar o texto principal?" ;
-    MESSAGE [ finnish ] = "Haluatko tarkistaa päätekstin?" ;
+    MESSAGE [ finnish ] = "Haluatko tarkistaa p??tekstin?" ;
     MESSAGE [ danish ] = "Vil du kontrollere brødteksten?" ;
     MESSAGE [ french ] = "Voulez-vous vérifier le texte principal?" ;
     MESSAGE [ swedish ] = "Vill Du kontrollera huvudtexten?" ;
@@ -156,7 +156,7 @@ QueryBox DLG_PRT_FIELDNAME
     MESSAGE [ spanish ] = "La opción nombre de campo está activada. \n¿Desea imprimir el archivo con nombres de campo?" ;
     MESSAGE [ danish ] = "Vis feltnavn er aktiveret\nVil du udskrive dokumentet med feltnavn?" ;
     MESSAGE [ swedish ] = "Alternativet Visa fältnamn är aktiverat.\nVill Du skriva ut dokumentet med fältnamnet?" ;
-    MESSAGE [ finnish ] = "Näytä kenttäkomennot -asetus on valittuna.\nHaluatko tulostaa asiakirjan niin, että kenttänimet näkyvät?" ;
+    MESSAGE [ finnish ] = "N?yt? kentt?komennot -asetus on valittuna.\nHaluatko tulostaa asiakirjan niin, ett? kentt?nimet n?kyv?t?" ;
     MESSAGE [ english_us ] = "Show field commands option is checked.\nDo you want to print the document with field names?" ;
     MESSAGE[ chinese_simplified ] = "å­—æ®µåç§°é€‰é¡¹è¿˜å¤„äºä½¿ç”¨çš„çŠ¶æ€ã€‚\næ‚¨è¦è¿åŒå­—æ®µåç§°ä¸€èµ·æ‰“å°è¿™ä¸ªæ–‡ä»¶å—ï¼Ÿ";
     MESSAGE[ russian ] = "Ïàğàìåòğ 'Ïîêàçàòü èìÿ ïîëÿ' îòìå÷åí.\nÂû õîòèòå íàïå÷àòàòü äîêóìåíò ñ èìåíàìè ïîëÿ?";
@@ -209,7 +209,7 @@ QueryBox DLG_THESAURUS
     MESSAGE [ italian ] = "Tale temine andrebbe evitato. Avviare il dizionario dei sinonimi?" ;
     MESSAGE [ portuguese_brazilian ] = "Por favor evite esta palavra!Iniciar thesaurus?" ;
     MESSAGE [ portuguese ] = "Evite esta palavra! Iniciar o dicionário de sinónimos?" ;
-    MESSAGE [ finnish ] = "Tämä sana esiintyy vältettävien sanojen luettelossa! Avataanko synonyymisanasto?" ;
+    MESSAGE [ finnish ] = "T?m? sana esiintyy v?ltett?vien sanojen luettelossa! Avataanko synonyymisanasto?" ;
     MESSAGE [ danish ] = "Undgå venligst dette ord! Vil du bruge synonymordbogen?" ;
     MESSAGE [ french ] = "Il vaudrait mieux éviter d'employer ce mot ! Souhaitez-vous consulter le dictionnaire des synonymes ?" ;
     MESSAGE [ swedish ] = "Undvik det här ordet! Starta synonymordlista?" ;
@@ -238,7 +238,7 @@ QueryBox DLG_SPECIAL_FORCED
     MESSAGE [ italian ] = "Il controllo delle aree speciali non è attivo, controllare lo stesso?" ;
     MESSAGE [ portuguese_brazilian ] = "Verifica??o de Regi?s especiais est? desativada, Verificar assim mesmo?" ;
     MESSAGE [ portuguese ] = "A verificação de zonas especiais está desactivada, mesmo assim prosseguir?" ;
-    MESSAGE [ finnish ] = "Tarkista erityisalueet -toiminto on poistettu käytöstä. Tarkistetaanko kuitenkin?" ;
+    MESSAGE [ finnish ] = "Tarkista erityisalueet -toiminto on poistettu k?yt?t?. Tarkistetaanko kuitenkin?" ;
     MESSAGE [ danish ] = "Stavekontrol af særområder er slået fra, skal der kontrolleres alligevel?" ;
     MESSAGE [ french ] = "La vérification dans les zones spéciales est désactivée. Vérifier tout de même ?" ;
     MESSAGE [ swedish ] = "Kontroll av specialområden är avstängd. Kontrollera ändå?" ;
@@ -339,7 +339,7 @@ InfoBox MSG_NO_MERGE_ENTRY
     Message[ turkish ] = "Belgeler birleştirilemedi.";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "No se pudieron fusionar los documentos.";
-    Message[ finnish ] = "Asiakirjoja ei voitu yhdistää.";
+    Message[ finnish ] = "Asiakirjoja ei voitu yhdist??.";
 };
 InfoBox MSG_ERR_INSERT_GLOS
 {
@@ -349,7 +349,7 @@ InfoBox MSG_ERR_INSERT_GLOS
     MESSAGE [ italian ] = "Impossibile creare voce di glossario." ;
     MESSAGE [ portuguese_brazilian ] = "N?o pude inserir Texto Autom?tico." ;
     MESSAGE [ portuguese ] = "Impossível inserir o AutoTexto." ;
-    MESSAGE [ finnish ] = "Automaattista tekstiä ei voitu luoda." ;
+    MESSAGE [ finnish ] = "Automaattista teksti? ei voitu luoda." ;
     MESSAGE [ danish ] = "Det var ikke muligt at oprette AutoTekst." ;
     MESSAGE [ french ] = "Impossible de créer l'AutoTexte." ;
     MESSAGE [ swedish ] = "AutoText kunde inte skapas." ;
@@ -392,7 +392,7 @@ InfoBox MSG_ERR_SRCSTREAM
     Message[ turkish ] = "Kaynak kod yüklenemiyor.";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "No es posible cargar el texto fuente.";
-    Message[ finnish ] = "Lähdettä ei voi ladata.";
+    Message[ finnish ] = "L?hdett? ei voi ladata.";
 };
 InfoBox MSG_ERR_NO_FAX
 {
@@ -478,7 +478,7 @@ InfoBox MSG_NOT_FOUND
     Message [ italian ] = "Termine non trovato" ;
     Message [ portuguese_brazilian ] = "Padrao de busca n?o encontrado." ;
     Message [ portuguese ] = "Impossível encontrar expressão procurada." ;
-    Message [ finnish ] = "Hakuavainta ei löytynyt." ;
+    Message [ finnish ] = "Hakuavainta ei l?tynyt." ;
     Message [ danish ] = "Søgningen gav intet resultat." ;
     Message [ french ] = "Terme recherché introuvable !" ;
     Message [ swedish ] = "Sökord hittades inte." ;
@@ -505,7 +505,7 @@ InfoBox MSG_INDEX_OVERFLOW
     Message [ italian ] = "Termine non trovato" ;
     Message [ portuguese_brazilian ] = "Padrao de busca n?o encontrado." ;
     Message [ portuguese ] = "localizado." ;
-    Message [ finnish ] = "löytynyt." ;
+    Message [ finnish ] = "l?tynyt." ;
     Message [ danish ] = "fundet." ;
     Message [ french ] = "trouvé(e/s)." ;
     Message [ swedish ] = "funnet." ;
@@ -548,7 +548,7 @@ InfoBox MSG_SCAN_NOSOURCE
     Message[ turkish ] = "Kaynak belirlenmedi.";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "No se especificó la fuente.";
-    Message[ finnish ] = "Lähdettä ei määritetty.";
+    Message[ finnish ] = "L?hdett? ei m??ritetty.";
 };
 String STR_NOGLOS1
 {
@@ -589,7 +589,7 @@ String STR_NOGLOS2
     TEXT [ italian ] = "' non trovato." ;
     TEXT [ portuguese_brazilian ] = "' n?o encontrado." ;
     TEXT [ portuguese ] = "' não encontrado." ;
-    TEXT [ finnish ] = "Kohdetta ' ei löydy." ;
+    TEXT [ finnish ] = "Kohdetta ' ei l?dy." ;
     TEXT [ danish ] = "'blev ikke fundet." ;
     TEXT [ french ] = "' est introuvable." ;
     TEXT [ swedish ] = "' hittades inte." ;
@@ -642,7 +642,7 @@ String STR_ERROR_NOLANG
     TEXT [ italian ] = "Nell'area verificata non è stata impostata nessuna lingua." ;
     TEXT [ portuguese_brazilian ] = "No language choosed in checked region." ;
     TEXT [ portuguese ] = "Na secção verificada não existe nenhuma língua definida." ;
-    TEXT [ finnish ] = "Tarkistettavassa alueessa ei ole valittu kieltä." ;
+    TEXT [ finnish ] = "Tarkistettavassa alueessa ei ole valittu kielt?." ;
     TEXT [ danish ] = "Der er ikke angivet et sprog i det kontrollerede område." ;
     TEXT [ french ] = "Aucune langue choisie pour région définie." ;
     TEXT [ swedish ] = "Inget språk är inställt i det kontrollerade området." ;
@@ -669,7 +669,7 @@ String STR_EDIT_FOOTNOTE
     TEXT [ italian ] = "Modifica nota a piè pagina" ;
     TEXT [ portuguese_brazilian ] = "Editar nota de rodap?" ;
     TEXT [ portuguese ] = "Editar nota de rodapé" ;
-    TEXT [ finnish ] = "Muokkaa alaviitettä" ;
+    TEXT [ finnish ] = "Muokkaa alaviitett?" ;
     TEXT [ danish ] = "Rediger fodnote" ;
     TEXT [ french ] = "Édition de note de bas de page" ;
     TEXT [ swedish ] = "Redigera fotnot" ;
@@ -739,7 +739,7 @@ String RID_TOOLS_TOOLBOX
     Text[ turkish ] = "Ana araç çubuğu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Barra de herramientas";
-    Text[ finnish ] = "Päätyökalurivi";
+    Text[ finnish ] = "P??ty?alurivi";
 };
 String RID_SRCVIEW_TOOLBOX
 {
@@ -765,7 +765,7 @@ String RID_SRCVIEW_TOOLBOX
     Text[ turkish ] = "Kaynak kod";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Texto fuente";
-    Text[ finnish ] = "Lähde";
+    Text[ finnish ] = "L?hde";
 };
 String STR_SRCVIEW_ROW
 {
@@ -802,7 +802,7 @@ String STR_SRCVIEW_COL
     Text [ italian ] = "Colonna " ;
     Text [ portuguese_brazilian ] = "Coluna " ;
     Text [ portuguese ] = "Coluna " ;
-    Text [ finnish ] = "Sarake " ;
+    Text [ finnish ] = "Sarake" ;
     Text [ danish ] = "Kolonne " ;
     Text [ french ] = "Colonne " ;
     Text [ swedish ] = "Kolumn  " ;
@@ -845,7 +845,7 @@ String STR_PRINT_TITLE
     Text[ turkish ] = "Seçimi yazdır";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Imprimir la selección";
-    Text[ finnish ] = "Tulostetaan valinta";
+    Text[ finnish ] = "Tulostusvalinta";
 };
 String STR_PRINT_MSG
 {
@@ -871,7 +871,7 @@ String STR_PRINT_MSG
     Text[ turkish ] = "Seçimi ya da tüm belgeyi yazdırmak istiyor musunuz?";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "¿Desea imprimir solo la selección o todo el documento?";
-    Text[ finnish ] = "Haluatko tulostaa valinnan vai koko asiakirjan?";
+    Text[ finnish ] = "Haluatko tulostaa vain valinnan vai koko asiakirjan?";
 };
 String STR_PRINT_ALL
 {
@@ -949,7 +949,7 @@ String STR_READONLY_SEL
     TEXT[ turkish ] = "Salt okunur";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "solo lectura";
-    TEXT[ finnish ] = "vain luku";
+    TEXT[ finnish ] = "Vain luku";
 };
 String STR_SAVEAS_SRC
 {
@@ -975,7 +975,7 @@ String STR_SAVEAS_SRC
     Text[ turkish ] = "Kaynak kodu dışa aktar...";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "~Exportar texto fuente...";
-    Text[ finnish ] = "~Vie lähde";
+    Text[ finnish ] = "~Vie l?hde";
 };
 String MN_SRCVIEW_POPUPMENU
 {
@@ -1001,7 +1001,7 @@ String MN_SRCVIEW_POPUPMENU
     Text[ turkish ] = "HTML kaynak kodu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Texto fuente HTML";
-    Text[ finnish ] = "HTML-lähde";
+    Text[ finnish ] = "HTML-l?hde";
 };
 
 ToolBox RID_TOOLS_TOOLBOX
@@ -1231,10 +1231,11 @@ Menu MN_SRCVIEW_POPUPMENU
             Text[ turkish ] = "HTML kaynak kodu";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Texto fuente HTML";
-            Text[ finnish ] = "HTML-lähde";
+            Text[ finnish ] = "HTML-l?hde";
         };
     };
 };
+
 
 
 
