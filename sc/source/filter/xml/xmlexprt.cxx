@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-21 09:48:35 $
+ *  last change: $Author: sab $ $Date: 2001-02-22 18:10:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1211,7 +1211,13 @@ void ScXMLExport::_ExportContent()
                         uno::Reference<util::XProtectable> xProtectable (xTable, uno::UNO_QUERY);
                         if (xProtectable.is())
                             if (xProtectable->isProtected())
+                            {
                                 AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_use_cell_protection, sXML_true);
+                                rtl::OUStringBuffer aBuffer;
+                                SvXMLUnitConverter::encodeBase64(aBuffer, pDoc->GetTabPassword(nTable));
+                                if (aBuffer.getLength())
+                                    AddAttribute(XML_NAMESPACE_TABLE, sXML_password, aBuffer.makeStringAndClear());
+                            }
                         rtl::OUString sPrintRanges( GetPrintRanges() );
                         if( sPrintRanges.getLength() )
                             AddAttribute( XML_NAMESPACE_TABLE, sXML_print_ranges, sPrintRanges );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsubti.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-05 13:43:01 $
+ *  last change: $Author: sab $ $Date: 2001-02-22 18:10:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,6 +157,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > xDrawPage;
     ::com::sun::star::uno::Reference < ::com::sun::star::drawing::XShapes > xShapes;
     rtl::OUString                       sCurrentSheetName;
+    rtl::OUString                       sPassword;
     sal_Int16                           nCurrentDrawPage;
     sal_Int16                           nCurrentXShapes;
     std::vector<ScMyTableData*>         aTableVec;
@@ -177,7 +178,8 @@ private:
 public:
                                         ScMyTables(ScXMLImport& rImport);
                                         ~ScMyTables();
-    void                                NewSheet(const rtl::OUString& sTableName, const rtl::OUString& sStyleName, const sal_Bool bProtection);
+    void                                NewSheet(const rtl::OUString& sTableName, const rtl::OUString& sStyleName,
+                                                const sal_Bool bProtection, const rtl::OUString& sPassword);
     void                                AddRow();
     void                                CloseRow();
     void                                AddColumn(sal_Bool bIsCovered);

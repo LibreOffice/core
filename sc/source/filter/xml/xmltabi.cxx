@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltabi.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-15 09:29:26 $
+ *  last change: $Author: sab $ $Date: 2001-02-22 18:10:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,7 @@ ScXMLTableContext::ScXMLTableContext( ScXMLImport& rImport,
         sal_Bool bProtection(sal_False);
         rtl::OUString sName;
         rtl::OUString sStyleName;
+        rtl::OUString sPassword;
         sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
         const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetTableAttrTokenMap();
         for( sal_Int16 i=0; i < nAttrCount; i++ )
@@ -144,9 +145,12 @@ ScXMLTableContext::ScXMLTableContext( ScXMLImport& rImport,
                 case XML_TOK_TABLE_PRINT_RANGES:
                         sPrintRanges = sValue;
                     break;
+                case XML_TOK_TABLE_PASSWORD:
+                        sPassword = sValue;
+                    break;
             }
         }
-        GetScImport().GetTables().NewSheet(sName, sStyleName, bProtection);
+        GetScImport().GetTables().NewSheet(sName, sStyleName, bProtection, sPassword);
     }
     else
     {

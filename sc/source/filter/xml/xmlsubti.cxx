@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsubti.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-01 17:39:59 $
+ *  last change: $Author: sab $ $Date: 2001-02-22 18:10:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@
 
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
+#ifndef _XMLOFF_XMLUCONV_HXX
+#include <xmloff/xmluconv.hxx>
+#endif
 
 #ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
@@ -227,7 +230,8 @@ ScMyTables::~ScMyTables()
     }
 }
 
-void ScMyTables::NewSheet(const rtl::OUString& sTableName, const rtl::OUString& sStyleName, const sal_Bool bTempProtection)
+void ScMyTables::NewSheet(const rtl::OUString& sTableName, const rtl::OUString& sStyleName,
+                        const sal_Bool bTempProtection, const rtl::OUString& sTempPassword)
 {
     sCurrentSheetName = sTableName;
     ScMyTableData* aTable;
@@ -241,6 +245,7 @@ void ScMyTables::NewSheet(const rtl::OUString& sTableName, const rtl::OUString& 
     nCurrentSheet++;
 
     bProtection = bTempProtection;
+    sPassword = sTempPassword;
     uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( rImport.GetModel(), uno::UNO_QUERY );
     if ( xSpreadDoc.is() )
     {
@@ -642,12 +647,15 @@ void ScMyTables::DeleteTable()
     }
     if (bProtection)
     {
-        uno::Reference <util::XProtectable> xProtectable(xCurrentSheet, uno::UNO_QUERY);
+        uno::Sequence<sal_uInt8> aPass;
+        SvXMLUnitConverter::decodeBase64(aPass, sPassword);
+        rImport.GetDocument()->SetTabProtection(nCurrentSheet, bProtection, aPass);
+        /*uno::Reference <util::XProtectable> xProtectable(xCurrentSheet, uno::UNO_QUERY);
         if (xProtectable.is())
         {
             rtl::OUString sKey;
             xProtectable->protect(sKey);
-        }
+        }*/
     }
     aResizeShapes.ResizeShapes(xCurrentSheet);
 }
