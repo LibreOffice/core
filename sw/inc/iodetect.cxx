@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iodetect.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 14:00:01 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 08:21:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -486,6 +486,7 @@ FASTBOOL SwIoSystem::IsFileFilter( SfxMedium& rMedium, const String& rFmtName,
                     bRet = IsValidStgFilter( xStor, *pFltr );
                 else if ( xStg.Is() )
                     bRet = xStg.Is() && IsValidStgFilter( *xStg, *pFltr );
+                bRet = bRet && (pFltr->GetUserData() == rFmtName);
             }
             else if( !xStg.Is() && !xStor.is() )
             {
