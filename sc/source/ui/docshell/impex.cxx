@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impex.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-11 12:29:41 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:20:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -373,7 +373,8 @@ BOOL ScImportExport::ExportData( const String& rMimeType,
                                  ::com::sun::star::uno::Any & rValue )
 {
     SvMemoryStream aStrm;
-    if( ExportStream( aStrm,
+    // mba: no BaseURL for data exchange
+    if( ExportStream( aStrm, String(),
                 SotExchange::GetFormatIdFromMimeType( rMimeType ) ))
     {
         aStrm << (BYTE) 0;
@@ -407,7 +408,7 @@ BOOL ScImportExport::ImportString( const ::rtl::OUString& rText, ULONG nFmt )
             SvMemoryStream aStrm( (void*)rText.getStr(), rText.getLength() * sizeof(sal_Unicode), STREAM_READ );
             aStrm.SetStreamCharSet( RTL_TEXTENCODING_UNICODE );
             SetNoEndianSwap( aStrm );       //! no swapping in memory
-            return ImportStream( aStrm, nFmt );
+            return ImportStream( aStrm, String(), nFmt );
             // ImportStream must handle RTL_TEXTENCODING_UNICODE
         }
         break;
@@ -418,7 +419,7 @@ BOOL ScImportExport::ImportString( const ::rtl::OUString& rText, ULONG nFmt )
             SvMemoryStream aStrm( (void*)aTmp.getStr(), aTmp.getLength() * sizeof(sal_Char), STREAM_READ );
             aStrm.SetStreamCharSet( eEnc );
             SetNoEndianSwap( aStrm );       //! no swapping in memory
-            return ImportStream( aStrm, nFmt );
+            return ImportStream( aStrm, String(), nFmt );
         }
     }
 }
@@ -440,7 +441,8 @@ BOOL ScImportExport::ExportString( ::rtl::OUString& rText, ULONG nFmt )
     SvMemoryStream aStrm;
     aStrm.SetStreamCharSet( RTL_TEXTENCODING_UNICODE );
     SetNoEndianSwap( aStrm );       //! no swapping in memory
-    if( ExportStream( aStrm, nFmt ) )
+    // mba: no BaseURL for data exc
+    if( ExportStream( aStrm, String(), nFmt ) )
     {
         aStrm << (sal_Unicode) 0;
         aStrm.Seek( STREAM_SEEK_TO_END );
@@ -467,7 +469,8 @@ BOOL ScImportExport::ExportByteString( ByteString& rText, rtl_TextEncoding eEnc,
     SvMemoryStream aStrm;
     aStrm.SetStreamCharSet( eEnc );
     SetNoEndianSwap( aStrm );       //! no swapping in memory
-    if( ExportStream( aStrm, nFmt ) )
+    // mba: no BaseURL for data exchange
+    if( ExportStream( aStrm, String(), nFmt ) )
     {
         aStrm << (sal_Char) 0;
         aStrm.Seek( STREAM_SEEK_TO_END );
@@ -483,7 +486,7 @@ BOOL ScImportExport::ExportByteString( ByteString& rText, rtl_TextEncoding eEnc,
 }
 
 
-BOOL ScImportExport::ImportStream( SvStream& rStrm, ULONG nFmt )
+BOOL ScImportExport::ImportStream( SvStream& rStrm, const String& rBaseURL, ULONG nFmt )
 {
     if( nFmt == FORMAT_STRING )
     {
@@ -502,21 +505,21 @@ BOOL ScImportExport::ImportStream( SvStream& rStrm, ULONG nFmt )
     }
     if( nFmt == FORMAT_RTF )
     {
-        if( RTF2Doc( rStrm ) )
+        if( RTF2Doc( rStrm, rBaseURL ) )
             return TRUE;
     }
     if( nFmt == SOT_FORMATSTR_ID_LINK )
         return TRUE;            // Link-Import?
     if ( nFmt == SOT_FORMATSTR_ID_HTML )
     {
-        if( HTML2Doc( rStrm ) )
+        if( HTML2Doc( rStrm, rBaseURL ) )
             return TRUE;
     }
     if ( nFmt == SOT_FORMATSTR_ID_HTML_SIMPLE )
     {
         MSE40HTMLClipFormatObj aMSE40ClpObj;                // needed to skip the header data
         SvStream* pHTML = aMSE40ClpObj.IsValid( rStrm );
-        if ( pHTML && HTML2Doc( *pHTML ) )
+        if ( pHTML && HTML2Doc( *pHTML, rBaseURL ) )
             return TRUE;
     }
 
@@ -524,7 +527,7 @@ BOOL ScImportExport::ImportStream( SvStream& rStrm, ULONG nFmt )
 }
 
 
-BOOL ScImportExport::ExportStream( SvStream& rStrm, ULONG nFmt )
+BOOL ScImportExport::ExportStream( SvStream& rStrm, const String& rBaseURL, ULONG nFmt )
 {
     if( nFmt == FORMAT_STRING )
     {
@@ -580,7 +583,7 @@ BOOL ScImportExport::ExportStream( SvStream& rStrm, ULONG nFmt )
     }
     if( nFmt == SOT_FORMATSTR_ID_HTML )
     {
-        if( Doc2HTML( rStrm ) )
+        if( Doc2HTML( rStrm, rBaseURL ) )
             return TRUE;
     }
     if( nFmt == FORMAT_RTF )
@@ -1708,10 +1711,10 @@ BOOL ScImportExport::Doc2Sylk( SvStream& rStrm )
 }
 
 
-BOOL ScImportExport::Doc2HTML( SvStream& rStrm )
+BOOL ScImportExport::Doc2HTML( SvStream& rStrm, const String& rBaseURL )
 {
     // CharSet is ignored in ScExportHTML, read from Load/Save HTML options
-    ScExportHTML( rStrm, pDoc, aRange, RTL_TEXTENCODING_DONTKNOW, bAll,
+    ScExportHTML( rStrm, rBaseURL, pDoc, aRange, RTL_TEXTENCODING_DONTKNOW, bAll,
         aStreamPath, aNonConvertibleChars );
     return BOOL( rStrm.GetError() == SVSTREAM_OK );
 }
@@ -1761,10 +1764,10 @@ BOOL ScImportExport::Dif2Doc( SvStream& rStrm )
 }
 
 
-BOOL ScImportExport::RTF2Doc( SvStream& rStrm )
+BOOL ScImportExport::RTF2Doc( SvStream& rStrm, const String& rBaseURL )
 {
     ScRTFImport aImp( pDoc, aRange );
-    aImp.Read( rStrm );
+    aImp.Read( rStrm, rBaseURL );
     aRange = aImp.GetRange();
 
     BOOL bOk = StartPaste();
@@ -1780,10 +1783,10 @@ BOOL ScImportExport::RTF2Doc( SvStream& rStrm )
 }
 
 
-BOOL ScImportExport::HTML2Doc( SvStream& rStrm )
+BOOL ScImportExport::HTML2Doc( SvStream& rStrm, const String& rBaseURL )
 {
-    ScHTMLImport aImp( pDoc, aRange );
-    aImp.Read( rStrm );
+    ScHTMLImport aImp( pDoc, rBaseURL, aRange );
+    aImp.Read( rStrm, rBaseURL );
     aRange = aImp.GetRange();
 
     BOOL bOk = StartPaste();
