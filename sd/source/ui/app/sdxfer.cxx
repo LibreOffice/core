@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxfer.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-30 10:33:02 $
+ *  last change: $Author: ka $ $Date: 2001-06-08 08:02:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,6 +179,7 @@ SdTransferable::SdTransferable( SdDrawDocument* pSrcDoc, SdView* pWorkView ) :
     bInternalMove( FALSE ),
     bOwnView( FALSE ),
     bOwnDocument( FALSE ),
+    pOLEDataHelper( NULL ),
     pBookmark( NULL ),
     pGraphic( NULL ),
     pImageMap( NULL )
@@ -206,6 +207,8 @@ SdTransferable::~SdTransferable()
     }
 
     aDocShellRef.Clear();
+
+    delete pOLEDataHelper;
     delete pGraphic;
     delete pBookmark;
     delete pImageMap;
@@ -225,7 +228,7 @@ void SdTransferable::CreateObjectReplacement( SdrObject* pObj )
         UINT32 nInv = pObj->GetObjInventor();
         UINT16 nIdent = pObj->GetObjIdentifier();
 
-        aOLEDataHelper = TransferableDataHelper();
+        delete pOLEDataHelper, pOLEDataHelper = NULL;
         delete pGraphic, pGraphic = NULL;
         delete pBookmark, pBookmark = NULL;
         delete pImageMap, pImageMap = NULL;
@@ -235,7 +238,7 @@ void SdTransferable::CreateObjectReplacement( SdrObject* pObj )
             const SvInPlaceObjectRef& rOldObjRef = ((SdrOle2Obj*)pObj)->GetObjRef();
 
             if( rOldObjRef.Is() )
-                aOLEDataHelper = TransferableDataHelper( rOldObjRef->CreateTransferableSnapshot() );
+                pOLEDataHelper = new TransferableDataHelper( rOldObjRef->CreateTransferableSnapshot() );
         }
         else if( pObj->ISA( SdrGrafObj ) && !pSourceDoc->GetAnimationInfo( pObj ) )
         {
@@ -388,12 +391,12 @@ void SdTransferable::AddSupportedFormats()
     if( !pSdViewIntern )
         CreateData();
 
-    if( aOLEDataHelper.GetTransferable().is() )
+    if( pOLEDataHelper )
     {
         AddFormat( SOT_FORMATSTR_ID_EMBED_SOURCE );
         AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
 
-        DataFlavorExVector              aVector( aOLEDataHelper.GetDataFlavorExVector() );
+        DataFlavorExVector              aVector( pOLEDataHelper->GetDataFlavorExVector() );
         DataFlavorExVector::iterator    aIter( aVector.begin() ), aEnd( aVector.end() );
 
         while( aIter != aEnd )
@@ -445,7 +448,7 @@ sal_Bool SdTransferable::GetData( const DataFlavor& rFlavor )
 
     CreateData();
 
-    if( aOLEDataHelper.GetTransferable().is() && aOLEDataHelper.HasFormat( rFlavor ) )
+    if( pOLEDataHelper && pOLEDataHelper->HasFormat( rFlavor ) )
     {
         ULONG nOldSwapMode;
 
@@ -455,7 +458,7 @@ sal_Bool SdTransferable::GetData( const DataFlavor& rFlavor )
             pSdDrawDocumentIntern->SetSwapGraphicsMode( SDR_SWAPGRAPHICSMODE_PURGE );
         }
 
-        bOK = SetAny( aOLEDataHelper.GetAny( rFlavor ), rFlavor );
+        bOK = SetAny( pOLEDataHelper->GetAny( rFlavor ), rFlavor );
 
         if( pSdDrawDocumentIntern )
             pSdDrawDocumentIntern->SetSwapGraphicsMode( nOldSwapMode );
