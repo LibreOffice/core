@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: fs $ $Date: 2002-02-01 12:08:54 $
+ *  last change: $Author: fs $ $Date: 2002-03-05 17:08:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -517,6 +517,9 @@ void UnoControlDialogModel::insertByName( const ::rtl::OUString& aName, const un
 {
     uno::Reference< awt::XControlModel > xM;
     aElement >>= xM;
+    if ( !xM.is() )
+        throw lang::IllegalArgumentException( ::rtl::OUString::createFromAscii( "The to be inserted element must not be NULL." ), *this, 1 );
+
     UnoControlModelHolder* pNew = new UnoControlModelHolder( aName, xM );
     mpModels->Insert( pNew, LIST_APPEND );
 
@@ -577,6 +580,12 @@ IMPL_XTYPEPROVIDER_END
 void UnoDialogControl::ImplInsertControl( uno::Reference< awt::XControlModel >& rxModel, const ::rtl::OUString& rName )
 {
     uno::Reference< beans::XPropertySet > xP( rxModel, uno::UNO_QUERY );
+
+    // be more tolerant against invalid arguments
+    // this is part of the fix for #97087# - 05.03.2002 - fs@openoffice.org
+    DBG_ASSERT( xP.is(), "UnoDialogControl::ImplInsertControl: invalid model!" );
+    if ( !xP.is() )
+        return;
 
     ::rtl::OUString aDefCtrl;
     xP->getPropertyValue( GetPropertyName( BASEPROPERTY_DEFAULTCONTROL ) ) >>= aDefCtrl;
