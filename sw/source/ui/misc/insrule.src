@@ -2,9 +2,9 @@
  *
  *  $RCSfile: insrule.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:44:00 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:21:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ ModalDialog DLG_INSERT_RULER
         Text = "Auswahl" ;
         Text [ ENGLISH ] = "Selection" ;
         Text [ english_us ] = "Selection" ;
-        Text [ portuguese_brazilian ] = "Auswahl" ;
+        Text [ portuguese_brazilian ] = "Seleção" ;
         Text [ swedish ] = "Urval" ;
         Text [ danish ] = "Vælg" ;
         Text [ italian ] = "Selezione" ;
@@ -98,6 +98,9 @@ ModalDialog DLG_INSERT_RULER
         Text[ catalan ] = "Selecció";
         Text[ finnish ] = "Valinta";
         Text[ thai ] = "à¹€à¸¥à¸·à¸­à¸";
+        Text[ czech ] = "VÃ½bÄ›r";
+        Text[ hebrew ] = "â€®××‘×—×¨â€¬";
+        Text[ hindi ] = "à¤šà¥à¤¨à¤¾à¤µ";
     };
     Control VS_EXAMPLE
     {
@@ -134,7 +137,7 @@ ModalDialog DLG_INSERT_RULER
         Text [ English ] = "Simple" ;
         Text [ portuguese ] = "Simples" ;
         Text [ english_us ] = "Plain" ;
-        Text [ portuguese_brazilian ] = "Einfach" ;
+        Text [ portuguese_brazilian ] = "Pleno" ;
         Text [ swedish ] = "Enkel" ;
         Text [ danish ] = "Enkelt" ;
         Text [ italian ] = "Semplice" ;
@@ -143,41 +146,60 @@ ModalDialog DLG_INSERT_RULER
         Text [ dutch ] = "Enkel" ;
         Text[ chinese_simplified ] = "å•çº¿";
         Text[ russian ] = "Îáû÷íàÿ";
-        Text[ polish ] = "Pojedyncze";
+        Text[ polish ] = "Zwyk³e";
         Text[ japanese ] = "ã‚·ãƒ³ãƒ—ãƒ«";
         Text[ chinese_traditional ] = "å–®ç·š";
         Text[ arabic ] = "ãİÑÏ";
         Text[ greek ] = "Áğëü";
         Text[ korean ] = "ë‹¨ìˆœ";
-        Text[ turkish ] = "Tek";
+        Text[ turkish ] = "Sade";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Senzilla";
         Text[ finnish ] = "Yksittäinen";
         Text[ thai ] = "à¹€à¸”à¸µà¹ˆà¸¢à¸§";
+        Text[ czech ] = "ProstÃ©";
+        Text[ hebrew ] = "Einfach";
+        Text[ hindi ] = "à¤–à¤¾à¤²à¥€";
     };
     Text [ english_us ] = "Insert Horizontal Ruler" ;
-    Text [ portuguese_brazilian ] = "Horizontale Linie einf?en" ;
+    Text [ portuguese_brazilian ] = "Inserir Régua Horizontal" ;
     Text [ swedish ] = "Infoga horisontell linje" ;
     Text [ danish ] = "Indsæt vandret linje" ;
     Text [ italian ] = "Inserisci linea orizzontale" ;
-    Text [ spanish ] = "Insertar regla horizontal" ;
+    Text [ spanish ] = "Insertar línea horizontal" ;
     Text [ french ] = "Insertion de ligne horizontale" ;
     Text [ dutch ] = "Horizontale lijn invoegen" ;
     Text [ portuguese ] = "Inserir linha horizontal" ;
     Text[ chinese_simplified ] = "æ’å…¥æ°´å¹³çº¿";
     Text[ russian ] = "Âñòàâèòü ãîğèçîíòàëüíóş ëèíèş";
-    Text[ polish ] = "Wstaw liniê poziom¹";
+    Text[ polish ] = "Wstaw linijkê poziom¹";
     Text[ japanese ] = "æ°´å¹³ç·šã®æŒ¿å…¥";
     Text[ chinese_traditional ] = "æ’å…¥æ°´å¹³ç·š";
     Text[ arabic ] = "ÅÏÑÇÌ ÎØ ÃİŞí";
     Text[ greek ] = "ĞñïóèŞêç ïñéæüíôéáò ãñáììŞò";
-    Text[ korean ] = "ê°€ë¡œ ëˆˆê¸ˆì ì‚½ì…";
-    Text[ turkish ] = "Yatay çizgi ekle";
+    Text[ korean ] = "ê°€ë¡œì„  ì‚½ì…";
+    Text[ turkish ] = "Yatay cetvel ekle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Insereix una línia horitzontal";
     Text[ finnish ] = "Lisää vaakaviivain";
     Text[ thai ] = "à¹à¸—à¸£à¸à¹„à¸¡à¹‰à¸šà¸£à¸£à¸—à¸±à¸”à¹à¸™à¸§à¸™à¸­à¸™";
+    Text[ czech ] = "VloÅ¾it vodorovnou ÄÃ¡ru";
+    Text[ hebrew ] = "â€®×”×•×¡×¤×ª ×¡×¨×’×œ ××•×¤×§×™â€¬";
+    Text[ hindi ] = "à¤¸à¤®à¤¤à¤² à¤°à¥‚à¤²à¤° à¤œà¥‹à¤¡à¤¼à¥‹";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
