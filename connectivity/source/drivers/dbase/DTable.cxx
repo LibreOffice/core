@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-19 12:58:42 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 08:24:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,9 @@
 #endif
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include "connectivity/dbtools.hxx"
+#endif
+#ifndef _CONNECTIVITY_FILE_VALUE_HXX_
+#include "connectivity/FValue.hxx"
 #endif
 
 #include <algorithm>
@@ -290,7 +293,7 @@ void ODbaseTable::fillColumns()
             case 'M':
                 eType = DataType::LONGVARCHAR;
                 aTypeName = ::rtl::OUString::createFromAscii("LONGVARCHAR");
-                nPrecision = 0;
+                nPrecision = 65535;
                 break;
             default:
                 aTypeName = ::rtl::OUString::createFromAscii("OTHER");
@@ -644,7 +647,7 @@ sal_Int64 ODbaseTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (R
             ODbaseTable_BASE::getSomething(rId);
 }
 //------------------------------------------------------------------
-sal_Bool ODbaseTable::fetchRow(OValueRow _rRow,const OSQLColumns & _rCols, sal_Bool _bUseTableDefs,sal_Bool bRetrieveData)
+sal_Bool ODbaseTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols, sal_Bool _bUseTableDefs,sal_Bool bRetrieveData)
 {
     // Einlesen der Daten
     BOOL bIsCurRecordDeleted = ((char)m_pBuffer[0] == '*') ? TRUE : sal_False;
@@ -654,7 +657,7 @@ sal_Bool ODbaseTable::fetchRow(OValueRow _rRow,const OSQLColumns & _rCols, sal_B
     // Satz als geloescht markieren
     //  rRow.setState(bIsCurRecordDeleted ? ROW_DELETED : ROW_CLEAN );
     _rRow->setDeleted(bIsCurRecordDeleted);
-    (*_rRow)[0] = m_nFilePos;
+    *(*_rRow)[0] = m_nFilePos;
 
     if (!bRetrieveData)
         return TRUE;
@@ -694,7 +697,7 @@ sal_Bool ODbaseTable::fetchRow(OValueRow _rRow,const OSQLColumns & _rCols, sal_B
         }
 
         // Ist die Variable ueberhaupt gebunden?
-        if (!(*_rRow)[i].isBound())
+        if (!(*_rRow)[i]->isBound())
         {
             // Nein - naechstes Feld.
             nByteOffset += nLen;
@@ -713,9 +716,9 @@ sal_Bool ODbaseTable::fetchRow(OValueRow _rRow,const OSQLColumns & _rCols, sal_B
             aStr.EraseTrailingChars();
 
             if (!aStr.Len())                // keine StringLaenge, dann NULL
-                (*_rRow)[i].setNull();
+                (*_rRow)[i]->setNull();
             else
-                (*_rRow)[i] = aStr;
+                *(*_rRow)[i]= ORowSetValue(aStr);
             pData[nLen] = cLast;
         }
         else
@@ -734,7 +737,7 @@ sal_Bool ODbaseTable::fetchRow(OValueRow _rRow,const OSQLColumns & _rCols, sal_B
             if (!aStr.Len())
             {
                 nByteOffset += nLen;
-                (*_rRow)[i].setNull();  // keine Werte -> fertig
+                (*_rRow)[i]->setNull(); // keine Werte -> fertig
                 continue;
             }
 
@@ -744,7 +747,7 @@ sal_Bool ODbaseTable::fetchRow(OValueRow _rRow,const OSQLColumns & _rCols, sal_B
                 {
                     if (aStr.Len() != nLen)
                     {
-                        (*_rRow)[i].setNull();
+                        (*_rRow)[i]->setNull();
                         break;
                     }
                     sal_uInt16  nYear   = (sal_uInt16)aStr.Copy( 0, 4 ).ToInt32();
@@ -752,11 +755,11 @@ sal_Bool ODbaseTable::fetchRow(OValueRow _rRow,const OSQLColumns & _rCols, sal_B
                     sal_uInt16  nDay    = (sal_uInt16)aStr.Copy( 6, 2 ).ToInt32();
 
                     ::com::sun::star::util::Date aDate(nDay,nMonth,nYear);
-                    (*_rRow)[i] = aDate;
+                    *(*_rRow)[i] = aDate;
                 }
                 break;
                 case DataType::DECIMAL:
-                    (*_rRow)[i] = aStr;
+                    *(*_rRow)[i] = ORowSetValue(aStr);
                     //  pVal->setDouble(SdbTools::ToDouble(aStr));
                 break;
                 case DataType::BIT:
@@ -769,7 +772,7 @@ sal_Bool ODbaseTable::fetchRow(OValueRow _rRow,const OSQLColumns & _rCols, sal_B
                         case 'J':   b = TRUE; break;
                         default:    b = sal_False; break;
                     }
-                    (*_rRow)[i] = b;
+                    *(*_rRow)[i] = b;
                     //  pVal->setDouble(b);
                 }
                 break;
@@ -778,16 +781,16 @@ sal_Bool ODbaseTable::fetchRow(OValueRow _rRow,const OSQLColumns & _rCols, sal_B
                     long nBlockNo = aStr.ToInt32(); // Blocknummer lesen
                     if (nBlockNo > 0 && m_pMemoStream) // Daten aus Memo-Datei lesen, nur wenn
                     {
-                        if (!ReadMemo(nBlockNo, (*_rRow)[i]))
+                        if ( !ReadMemo(nBlockNo, (*_rRow)[i]->get()) )
                             break;
                     }
                     else
-                        (*_rRow)[i].setNull();
+                        (*_rRow)[i]->setNull();
                 }   break;
                 default:
                     OSL_ASSERT("Falscher Type");
             }
-            (*_rRow)[i].setTypeKind(nType);
+            (*_rRow)[i]->setTypeKind(nType);
         }
 
 //      if (aStatus.IsError())
@@ -1223,7 +1226,7 @@ BOOL ODbaseTable::DropImpl()
     return bDropped;
 }
 //------------------------------------------------------------------
-BOOL ODbaseTable::InsertRow(OValueVector& rRow, BOOL bFlush,const Reference<XIndexAccess>& _xCols)
+BOOL ODbaseTable::InsertRow(OValueRefVector& rRow, BOOL bFlush,const Reference<XIndexAccess>& _xCols)
 {
     // Buffer mit Leerzeichen füllen
     AllocBuffer();
@@ -1268,7 +1271,7 @@ BOOL ODbaseTable::InsertRow(OValueVector& rRow, BOOL bFlush,const Reference<XInd
 
             // bei Erfolg # erhöhen
             m_aHeader.db_anz++;
-            rRow[0] = m_nFilePos;                               // BOOKmark setzen
+            *rRow[0] = m_nFilePos;                              // BOOKmark setzen
             m_nFilePos = nTempPos;
         }
     }
@@ -1279,7 +1282,7 @@ BOOL ODbaseTable::InsertRow(OValueVector& rRow, BOOL bFlush,const Reference<XInd
 }
 
 //------------------------------------------------------------------
-BOOL ODbaseTable::UpdateRow(OValueVector& rRow, OValueRow pOrgRow,const Reference<XIndexAccess>& _xCols)
+BOOL ODbaseTable::UpdateRow(OValueRefVector& rRow, OValueRefRow& pOrgRow,const Reference<XIndexAccess>& _xCols)
 {
     // Buffer mit Leerzeichen füllen
     AllocBuffer();
@@ -1316,7 +1319,7 @@ BOOL ODbaseTable::DeleteRow(const OSQLColumns& _rCols)
     long nFilePos = m_aHeader.db_kopf + (long)(m_nFilePos-1) * m_aHeader.db_slng;
     m_pFileStream->Seek(nFilePos);
 
-    OValueRow aRow = new OValueVector(_rCols.size());
+    OValueRefRow aRow = new OValueRefVector(_rCols.size());
 
     if (!fetchRow(aRow,_rCols,TRUE,TRUE))
         return sal_False;
@@ -1350,7 +1353,7 @@ BOOL ODbaseTable::DeleteRow(const OSQLColumns& _rCols)
                 if (aIter == _rCols.end())
                     continue;
 
-                pIndex->Delete(m_nFilePos,(*aRow)[nPos]);
+                pIndex->Delete(m_nFilePos,*(*aRow)[nPos]);
             }
         }
     }
@@ -1395,7 +1398,7 @@ double toDouble(const ByteString& rString)
 }
 
 //------------------------------------------------------------------
-BOOL ODbaseTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Reference<XIndexAccess>& _xCols)
+BOOL ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const Reference<XIndexAccess>& _xCols)
 {
     sal_Int32 nByteOffset  = 1;
 
@@ -1438,7 +1441,7 @@ BOOL ODbaseTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Refer
         if (xIndex.is())
         {
             // first check if the value is different to the old one and when if it conform to the index
-            if(pOrgRow.isValid() && (rRow[nPos].isNull() || rRow[nPos] == (*pOrgRow)[nPos]))
+            if(pOrgRow.isValid() && (rRow[nPos]->getValue().isNull() || rRow[nPos] == (*pOrgRow)[nPos]))
                 continue;
             else
             {
@@ -1448,7 +1451,7 @@ BOOL ODbaseTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Refer
                 ODbaseIndex* pIndex = (ODbaseIndex*)xTunnel->getSomething(ODbaseIndex::getUnoTunnelImplementationId());
                 OSL_ENSURE(pIndex,"ODbaseTable::UpdateBuffer: No Index returned!");
 
-                if (pIndex->Find(0,rRow[nPos]))
+                if (pIndex->Find(0,*rRow[nPos]))
                 {
                     // es existiert kein eindeutiger Wert
                     ::rtl::OUString sMessage = ::rtl::OUString::createFromAscii("Duplicate value found in column \"");
@@ -1511,7 +1514,7 @@ BOOL ODbaseTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Refer
 
         ++nPos; // the row values start at 1
         // Ist die Variable ueberhaupt gebunden?
-        if (!rRow[nPos].isBound() )
+        if ( !rRow[nPos]->isBound() )
         {
             // Nein - naechstes Feld.
             nByteOffset += nLen;
@@ -1524,16 +1527,16 @@ BOOL ODbaseTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Refer
             ODbaseIndex* pIndex = (ODbaseIndex*)xTunnel->getSomething(ODbaseIndex::getUnoTunnelImplementationId());
             OSL_ENSURE(pIndex,"ODbaseTable::UpdateBuffer: No Index returned!");
             // Update !!
-            if (pOrgRow.isValid() && !rRow[nPos].isNull() )//&& pVal->isModified())
-                pIndex->Update(m_nFilePos,(*pOrgRow)[nPos],rRow[nPos]);
+            if (pOrgRow.isValid() && !rRow[nPos]->getValue().isNull() )//&& pVal->isModified())
+                pIndex->Update(m_nFilePos,*(*pOrgRow)[nPos],*rRow[nPos]);
             else
-                pIndex->Insert(m_nFilePos,rRow[nPos]);
+                pIndex->Insert(m_nFilePos,*rRow[nPos]);
         }
 
 
 
         char* pData = (char *)(m_pBuffer + nByteOffset);
-        if (rRow[nPos].isNull())
+        if (rRow[nPos]->getValue().isNull())
         {
             memset(pData,' ',nLen); // Zuruecksetzen auf NULL
             nByteOffset += nLen;
@@ -1549,10 +1552,10 @@ BOOL ODbaseTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Refer
                 case DataType::DATE:
                 {
                     ::com::sun::star::util::Date aDate;
-                    if(rRow[nPos].getTypeKind() == DataType::DOUBLE)
-                        aDate = ::dbtools::DBTypeConversion::toDate(rRow[nPos].getDouble());
+                    if(rRow[nPos]->getValue().getTypeKind() == DataType::DOUBLE)
+                        aDate = ::dbtools::DBTypeConversion::toDate(rRow[nPos]->getValue().getDouble());
                     else
-                        aDate = rRow[nPos];
+                        aDate = rRow[nPos]->getValue();
                     char s[9];
                     snprintf(s,
                         sizeof(s),
@@ -1568,7 +1571,7 @@ BOOL ODbaseTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Refer
                 {
                     memset(pData,' ',nLen); // Zuruecksetzen auf NULL
 
-                    double n = rRow[nPos];
+                    double n = rRow[nPos]->getValue();
 
                     m_pColumns->getByIndex(i) >>= xCol;
                     OSL_ENSURE(xCol.is(),"ODbaseTable::UpdateBuffer column is null!");
@@ -1584,7 +1587,7 @@ BOOL ODbaseTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Refer
                     {
                         strncpy(pData,aDefaultValue.GetBuffer(),nLen);
                         // write the resulting double back
-                        rRow[nPos] = toDouble(aDefaultValue);
+                        *rRow[nPos] = toDouble(aDefaultValue);
                         bValidLength = TRUE;
                     }
                     if (!bValidLength)
@@ -1601,7 +1604,7 @@ BOOL ODbaseTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Refer
                     }
                 } break;
                 case DataType::BIT:
-                    *pData = rRow[nPos].getBool() ? 'T' : 'F';
+                    *pData = rRow[nPos]->getValue().getBool() ? 'T' : 'F';
                     break;
                 case DataType::LONGVARCHAR:
                 {
@@ -1612,12 +1615,12 @@ BOOL ODbaseTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Refer
 
                     // Naechstes Anfangszeichen wieder restaurieren:
                     pData[nLen] = cNext;
-                    if (!m_pMemoStream || !WriteMemo(rRow[nPos], nBlockNo))
+                    if (!m_pMemoStream || !WriteMemo(rRow[nPos]->get(), nBlockNo))
                         break;
 
                     ByteString aStr;
                     ByteString aBlock(ByteString::CreateFromInt32(nBlockNo));
-                    aStr.Expand(nLen - aBlock.Len(), '0');
+                    aStr.Expand(static_cast<sal_uInt16>(nLen - aBlock.Len(), '0') );
                     aStr += aBlock;
                     aStr.Convert(gsl_getSystemTextEncoding(),getConnection()->getTextEncoding());
                     // Zeichen kopieren:
@@ -1627,7 +1630,7 @@ BOOL ODbaseTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Refer
                 default:
                 {
                     memset(pData,' ',nLen); // Zuruecksetzen auf NULL
-                    ByteString aStr(rRow[nPos].getString().getStr(),getConnection()->getTextEncoding());
+                    ByteString aStr(rRow[nPos]->getValue().getString().getStr(),getConnection()->getTextEncoding());
                     // Zeichen kopieren:
                     memcpy(pData, aStr.GetBuffer(), std::min(nLen,(sal_Int32)aStr.Len()));
                 }   break;
@@ -2017,25 +2020,25 @@ String ODbaseTable::createTempFile()
 void ODbaseTable::copyData(ODbaseTable* _pNewTable,sal_Int32 _nPos)
 {
     sal_Int32 nPos = _nPos + 1; // +1 because we always have the bookmark clumn as well
-    OValueRow aRow = new OValueVector(m_pColumns->getCount());
-    OValueRow aInsertRow;
+    OValueRefRow aRow = new OValueRefVector(m_pColumns->getCount());
+    OValueRefRow aInsertRow;
     if(_nPos)
     {
-        aInsertRow = new OValueVector(_pNewTable->m_pColumns->getCount());
-        ::std::for_each(aInsertRow->begin(),aInsertRow->end(),TSetBound(sal_True));
+        aInsertRow = new OValueRefVector(_pNewTable->m_pColumns->getCount());
+        ::std::for_each(aInsertRow->begin(),aInsertRow->end(),TSetRefBound(sal_True));
     }
     else
         aInsertRow = aRow;
 
     // we only have to bind the values which we need to copy into the new table
-    ::std::for_each(aRow->begin(),aRow->end(),TSetBound(sal_True));
+    ::std::for_each(aRow->begin(),aRow->end(),TSetRefBound(sal_True));
     if(_nPos && (_nPos < (sal_Int32)aRow->size()))
-        (*aRow)[nPos].setBound(sal_False);
+        (*aRow)[nPos]->setBound(sal_False);
 
 
     sal_Bool bOk = sal_True;
     sal_Int32 nCurPos;
-    OValueVector::iterator aIter;
+    OValueRefVector::iterator aIter;
     for(sal_uInt32 nRowPos = 0; nRowPos < m_aHeader.db_anz;++nRowPos)
     {
         if(bOk = seekRow(IResultSetHelper::BOOKMARK,nRowPos+1,nCurPos))
@@ -2047,11 +2050,11 @@ void ODbaseTable::copyData(ODbaseTable* _pNewTable,sal_Int32 _nPos)
                 {
                     aIter = aRow->begin()+1;
                     sal_Int32 nCount = 1;
-                    for(OValueVector::iterator aInsertIter = aInsertRow->begin()+1; aIter != aRow->end() && aInsertIter != aInsertRow->end();++aIter,++nCount)
+                    for(OValueRefVector::iterator aInsertIter = aInsertRow->begin()+1; aIter != aRow->end() && aInsertIter != aInsertRow->end();++aIter,++nCount)
                     {
                         if(nPos != nCount)
                         {
-                            *aInsertIter = *aIter;
+                            (*aInsertIter)->setValue( (*aIter)->getValue() );
                             ++aInsertIter;
                         }
                     }
