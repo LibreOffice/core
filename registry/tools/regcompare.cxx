@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regcompare.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-26 14:03:24 $
+ *  last change: $Author: jsc $ $Date: 2001-09-26 14:05:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -390,7 +390,7 @@ OString Options::prepareHelp()
     help += "    @<filename>    = filename specifies a command file.\n";
     help += "Options:\n";
     help += "    -s<name>  = name specifies the name of a start key. If no start key\n";
-    help += "                is specified the comparison starts with the root key.n";
+    help += "                is specified the comparison starts with the root key.\n";
     help += "    -x<name>  = name specifies the name of a key which won't be compared.\n";
     help += "    -f        = force the detailed output of any diffenrences. Default\n";
     help += "                is that only the the number of differences is returned.\n";
