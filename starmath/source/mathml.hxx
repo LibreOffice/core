@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mib $ $Date: 2001-10-19 14:27:17 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 16:25:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ namespace com { namespace sun { namespace star {
     namespace io {
         class XInputStream;
         class XOutputStream; }
-        namespace beans { XPropertySet; }
+        namespace beans { class XPropertySet; }
 } } }
 
 
