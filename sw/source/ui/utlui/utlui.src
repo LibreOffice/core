@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utlui.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:20:09 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:50:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2070,7 +2070,7 @@ String STR_MULT_INTERACT_SPELL_WARN
 {
     Text = "Die Interaktive Rechschreibprόfung ist\nbereits in anderem Dokument aktiv" ;
     Text [ ENGLISH ] = "The interactive spelling already active\in a different document" ;
-    Text[ english_us ] = "The interactive spellcheck is already active\\in a different document";
+    Text[ english_us ] = "The interactive spellcheck is already active\nin a different document";
     Text[ portuguese ] = "A verificaηγo ortogrαfica interactiva jα estα\nactiva noutro documento";
     Text[ russian ] = "Θνςεπΰκςθβνΰÿ οπξβεπκΰ ξπτξγπΰτθθ\nσζε βκλώχενΰ β δπσγξμ δξκσμενςε";
     Text[ greek ] = "Το αναδραστικό πρόγραμμα ορθογραφικού ελέγχου\nχρησιμοποιείται από κάποιο άλλο έγγραφο";
@@ -2102,7 +2102,7 @@ String STR_MULT_INTERACT_HYPH_WARN
 {
     Text = "Die Interaktive Silbentrennung ist\nbereits in anderem Dokument aktiv" ;
     Text [ ENGLISH ] = "The interactive hyphenation already active\in a different document" ;
-    Text[ english_us ] = "The interactive hyphenation is already active\\in a different document";
+    Text[ english_us ] = "The interactive hyphenation is already active\nin a different document";
     Text[ portuguese ] = "A divisγo silαbica interactiva jα estα\nactiva noutro documento";
     Text[ russian ] = "Θνςεπΰκςθβνΰÿ πΰρρςΰνξβκΰ οεπενξρξβ\nσζε βκλώχενΰ β δπσγξμ δξκσμενςε";
     Text[ greek ] = "Το διαλογικό πρόγραμμα συλλαβισμού\nχρησιμοποιείται από κάποιο άλλο έγγραφο";
