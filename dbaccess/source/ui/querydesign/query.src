@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-07 09:27:26 $
+ *  last change: $Author: fs $ $Date: 2001-08-07 09:38:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -669,9 +669,31 @@ Menu RID_QUERYFUNCTION_POPUPMENU
         {
             Identifier = ID_QUERY_ALIASNAME ;
             HelpID = HID_QUERY_ALIASNAME ;
-            Text = "Feld-Alias" ;
-            Text [ english ] = "Field alias" ;
-            Text [ english_us ] = "Field alias";
+            Text = "Aliasname" ;
+            Text [ ENGLISH ] = "Alias name" ;
+            Text[ english_us ] = "Alias";
+            Text[ portuguese ] = "Alias";
+            Text[ russian ] = "Ïñåâäîíèì";
+            Text[ dutch ] = "Alias naam";
+            Text[ french ] = "Alias";
+            Text[ spanish ] = "Alias";
+            Text[ italian ] = "Alias";
+            Text[ danish ] = "Aliasnavn";
+            Text[ swedish ] = "Aliasnamn";
+            Text[ polish ] = "Nazwa alias";
+            Text[ portuguese_brazilian ] = "Alias name";
+            Text[ japanese ] = "´²Ø±½–¼";
+            Text[ chinese_simplified ] = "±ğÃû";
+            Text[ chinese_traditional ] = "¥N¥Î¦WºÙ";
+            Text[ dutch ] = "Alias naam";
+            Text[ chinese_simplified ] = "±ğÃû";
+            Text[ greek ] = "Øåõäşíõìï";
+            Text[ korean ] = "¿¡ÀÏ¸®¾î½º ÀÌ¸§";
+            Text[ arabic ] = "ÇÓã ãÓÊÚÇÑ";
+            Text[ turkish ] = "Diğer ad";
+            Text[ language_user1 ] = " ";
+            Text[ finnish ] = "Alias";
+            Text[ catalan ] = "Alias";
         };
         MenuItem
         {
@@ -711,9 +733,31 @@ Menu RID_QUERYFUNCTION_POPUPMENU
 };
 String STR_QUERY_HANDLETEXT
 {
-    Text = "Feld;Feld-alias;Tabelle;Sortierung;Sichtbar;Funktion;Kriterium;oder;oder" ;
-    Text [ english ] = "Field;Field alias;Table;Order;Visible;Function;Criteria;or;or" ;
-    Text [ english_us ] = "Field;Field alias;Table;Sort;Visible;Function;Criterion;Or;Or";
+    Text = "Feld;Alias;Tabelle;Sortierung;Sichtbar;Funktion;Kriterium;oder;oder" ;
+    Text [ ENGLISH ] = "Field;Alias;Table;Order;Visible;Function;Criteria;or;or" ;
+    Text[ english_us ] = "Field;Alias;Table;Sort;Visible;Function;Criterion;Or;Or";
+    Text[ portuguese ] = "Campo;Alias;Tabela;Ordem;Visível;Função;Critério;ou;ou";
+    Text[ russian ] = "Ïîëå;Ïñåâäîíèì;Òàáëèöà;Ñîğòèğîâêà;Âèäèìûé;Ôóíêöèÿ;Êğèòåğèé;èëè;èëè";
+    Text[ dutch ] = "Veld;Alias;Tabel;Volgorde;Zichtbaar;Functie;Criterium;of;of";
+    Text[ french ] = "Champ;Alias;Table;Tri;Visible;Fonction;Critère;Ou;Ou";
+    Text[ spanish ] = "Campo;Alias;Tabla;Orden;Visible;Función;Criterio;o;o";
+    Text[ italian ] = "Campo;Alias;Tabella;Ordine;Visibile;Funzione;Criteri;o;o";
+    Text[ danish ] = "Felt;Alias;Tabel;Sortering;Synlig;Funktion;Kriterium;eller;eller";
+    Text[ swedish ] = "Fält;Alias;Tabell;Sortering;Synlig;Funktion;Kriterium;eller;eller";
+    Text[ polish ] = "Pole;Alias;Tabela;Sortowanie;Widoczny;Funkcja;Kryterium;lub;lub";
+    Text[ portuguese_brazilian ] = "Campo;Tabela;Ordem;Vis?vel;Crit?rios;ou;ou";
+    Text[ japanese ] = "Ì¨°ÙÄŞ;´²Ø±½;Ã°ÌŞÙ;•À‚×‘Ö‚¦;•\\¦;ŠÖ”;ğŒ;‚ ‚é‚¢‚Í;‚ ‚é‚¢‚Í";
+    Text[ chinese_simplified ] = "×Ö¶Î;±ğÃû;±í¸ñ;ÅÅĞò;¿É¼ûµÄ;¹¦ÄÜ;Ìõ¼ş;»òÕß;»òÕß";
+    Text[ chinese_traditional ] = "Äæ¦ì;¥N¥Î¦W;ªí®æ;±Æ§Ç;¥iµø;¨ç¼Æ;³W«h;©ÎªÌ;©ÎªÌ";
+    Text[ dutch ] = "Veld;Alias;Tabel;Volgorde;Zichtbaar;Functie;Criterium;of;of";
+    Text[ chinese_simplified ] = "×Ö¶Î;±ğÃû;±í¸ñ;ÅÅĞò;¿É¼ûµÄ;¹¦ÄÜ;Ìõ¼ş;»òÕß;»òÕß";
+    Text[ greek ] = "Ğåäßï;Øåõäşíõìï;Ğßíáêáò;Ôáîéíüìçóç;Ïñáôü;ÓõíÜñôçóç;ÊñéôŞñéï;Åßôå;Åßôå";
+    Text[ korean ] = "ÇÊµå:¿¡ÀÏ¸®¾î½º;Å×ÀÌºí;Á¤·Ä;°¡½ÃÀû;±â´É;±âÁØ;¶Ç´Â;¶Ç´Â";
+    Text[ arabic ] = "ÍŞá;ÇÓã ãÓÊÚÇÑ;ÌÏæá;İÑÒ;ãÑÆí;ãåãÉ;ãÚíÇÑ;Ãæ;Ãæ";
+    Text[ turkish ] = "Alan;Diğer ad;Tablo;Sıralama;Görünür;İşlev;Ölçüt;ya da;ya da";
+    Text[ language_user1 ] = " ";
+    Text[ finnish ] = "Feld;Alias;Tabelle;Sortierung;Sichtbar;Funktion;Kriterium;oder;oder";
+    Text[ catalan ] = "Campo;Alias;Tabla;Orden;Visible;Función;Criterio;o;o";
 };
 
 ErrorBox ERR_QRY_TOO_MANY_COLUMNS
@@ -1335,10 +1379,31 @@ ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
         {
             Identifier = ID_BROWSER_QUERY_VIEW_ALIASES;
             HelpId = SID_SBA_QUERY_VIEW_ALIASES ;
-            Text = "Feld-Alias" ;
-            Text [ english ] = "Field alias" ;
-            Text [ english_us ] = "Field alias";
-
+            Text = "Aliasname" ;
+            Text [ ENGLISH ] = "Alias name" ;
+            Text[ english_us ] = "Alias";
+            Text[ portuguese ] = "Alias";
+            Text[ russian ] = "Ïñåâäîíèì";
+            Text[ dutch ] = "Aliasnaam";
+            Text[ french ] = "Alias";
+            Text[ spanish ] = "Alias";
+            Text[ italian ] = "Alias";
+            Text[ danish ] = "Aliasnavn";
+            Text[ swedish ] = "Aliasnamn";
+            Text[ polish ] = "Nazwa alias";
+            Text[ portuguese_brazilian ] = "Alias name";
+            Text[ japanese ] = "´²Ø±½–¼";
+            Text[ chinese_simplified ] = "±ğÃû";
+            Text[ chinese_traditional ] = "¥N¥Î¦W";
+            Text[ dutch ] = "Aliasnaam";
+            Text[ chinese_simplified ] = "±ğÃû";
+            Text[ greek ] = "Øåõäşíõìï";
+            Text[ korean ] = "¿¡ÀÏ¸®¾î½º ÀÌ¸§";
+            Text[ arabic ] = "ÇÓã ãÓÊÚÇÑ";
+            Text[ turkish ] = "Diğer ad";
+            Text[ language_user1 ] = " ";
+            Text[ finnish ] = "Alias";
+            Text[ catalan ] = "Alias";
         };
         ToolBoxItem
         {
