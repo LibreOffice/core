@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwlayer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-29 10:19:02 $
+ *  last change: $Author: nn $ $Date: 2000-10-19 13:19:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1243,6 +1243,8 @@ void ScDrawLayer::Load( SvStream& rStream )
 void ScDrawLayer::Store( SvStream& rStream ) const
 {
     ScWriteHeader aHdr( rStream );
+
+    const_cast<ScDrawLayer*>(this)->PrepareStore();     // non-const
 
     {
         rStream << (USHORT) SCID_DRAWPOOL;
