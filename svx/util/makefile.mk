@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.36 $
+#   $Revision: 1.37 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-20 10:03:40 $
+#   last change: $Author: kz $ $Date: 2004-08-31 14:56:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -253,6 +253,7 @@ LIB1FILES       = \
             $(LIBPRE) $(SLB)$/tbxctrls.lib  \
             $(LIBPRE) $(SLB)$/unoedit.lib   \
             $(LIBPRE) $(SLB)$/unodraw.lib	\
+            $(LIBPRE) $(SLB)$/unogallery.lib\
             $(LIBPRE) $(SLB)$/gal.lib		\
             $(LIBPRE) $(SLB)$/accessibility.lib	\
             $(LIBPRE) $(SLB)$/customshapes.lib\
