@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.141 $
+#   $Revision: 1.142 $
 #
-#   last change: $Author: vg $ $Date: 2003-12-17 18:06:05 $
+#   last change: $Author: kz $ $Date: 2004-01-29 11:52:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1157,7 +1157,8 @@ JAVAMAKER*=javamaker
 RDBMAKER*=rdbmaker
 JAVA*=java
 SCPCOMP*=scpcomp
-SCPLINK*=scplink
+#SCPLINK*=scplink
+SCPLINK*=$(PERL) $(SOLARENV)$/bin/par2script.pl
 LZIP*=lzip
 CPPLCC*=cpplcc
 
