@@ -2,9 +2,9 @@
 #
 #   $RCSfile: fullcpp.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: np $ $Date: 2002-06-25 15:15:46 $
+#   last change: $Author: hjs $ $Date: 2002-09-03 13:07:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,7 +69,7 @@
 .IF "$(GUI)"=="WNT"
 
 # RTTI
-CFLAGS+= /GR
+CFLAGS+= -GR
 
 .IF "$(NP_LOCALBUILD)"!=""
 
