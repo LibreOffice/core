@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-14 09:10:03 $
+ *  last change: $Author: vg $ $Date: 2001-06-19 15:58:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2334,6 +2334,7 @@ void SelectionManager::dragDoDispatch()
         osl_yieldThread();
         dispatchEvent( 200 );
     }
+    oslThread aThread = m_aDragExecuteThread;
 #ifdef DEBUG
     fprintf( stderr, "end executeDrag dispatching\n" );
 #endif
@@ -2374,13 +2375,13 @@ void SelectionManager::dragDoDispatch()
         XUngrabKeyboard( m_pDisplay, CurrentTime );
         XFlush( m_pDisplay );
 
-        osl_freeThreadHandle( m_aDragExecuteThread );
         m_aDragExecuteThread = NULL;
         m_aDragRunning.reset();
 #ifdef DEBUG
         fprintf( stderr, "thread cleaned up\n" );
 #endif
     }
+    osl_destroyThread( aThread );
 }
 
 /*
