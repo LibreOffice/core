@@ -2,9 +2,9 @@
  *
  *  $RCSfile: validate.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 08:02:48 $
+ *  last change: $Author: dr $ $Date: 2001-05-22 12:43:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,36 +81,16 @@ TabDialog TAB_DLG_VALIDATION
             PageItem
             {
                 Identifier = TP_VALIDATION_VALUES ;
-                Text = "Werte" ;
-                Text [ ENGLISH ] = "Values" ;
                 PageResID = TP_VALIDATION_VALUES ;
-                Text [ english_us ] = "Values" ;
-                Text [ swedish ] = "V‰rden" ;
-                Text [ danish ] = "VÊrdier" ;
-                Text [ italian ] = "Valori" ;
-                Text [ spanish ] = "Valores" ;
-                Text [ french ] = "Valeurs" ;
-                Text [ dutch ] = "Waarden" ;
-                Text [ portuguese ] = "Valores" ;
-                Text [ portuguese_brazilian ] = "Werte" ;
-                Text[ chinese_simplified ] = " ˝÷µ";
-                Text[ russian ] = "«Ì‡˜ÂÌËˇ";
-                Text[ polish ] = "Warto?ci";
-                Text[ japanese ] = "íl";
-                Text[ chinese_traditional ] = "º∆≠»";
-                Text[ arabic ] = "«·ﬁÌ„";
-                Text[ greek ] = "‘ÈÏ›Ú";
-                Text[ korean ] = "∞™";
-                Text[ turkish ] = "Deerler";
-                Text[ catalan ] = "Valores";
-                Text[ finnish ] = "Arvot";
+                Text = "Kriterien" ;
+                Text [ ENGLISH ] = "Criteria" ;
             };
             PageItem
             {
                 Identifier = TP_VALIDATION_INPUTHELP ;
+                PageResID = TP_VALIDATION_INPUTHELP ;
                 Text = "Eingabehilfe" ;
                 Text [ ENGLISH ] = "Input help" ;
-                PageResID = TP_VALIDATION_INPUTHELP ;
                 Text [ english_us ] = "Input Help" ;
                 Text [ swedish ] = "Inmatningshj‰lp" ;
                 Text [ danish ] = "InputhjÊlp" ;
@@ -135,9 +115,9 @@ TabDialog TAB_DLG_VALIDATION
             PageItem
             {
                 Identifier = TP_VALIDATION_ERROR ;
+                PageResID = TP_VALIDATION_ERROR ;
                 Text = "Fehlermeldung" ;
                 Text [ ENGLISH ] = "Error message" ;
-                PageResID = TP_VALIDATION_ERROR ;
                 Text [ english_us ] = "Error Alert" ;
                 Text [ swedish ] = "Felmeddelande" ;
                 Text [ danish ] = "Fejlmelding" ;
@@ -192,8 +172,8 @@ TabPage TP_VALIDATION_VALUES
     Text [ ENGLISH ] = "Values" ;
     FixedText FT_ALLOW
     {
-        Pos = MAP_APPFONT ( 12 , 20 ) ;
-        Size = MAP_APPFONT ( 65 , 8 ) ;
+        Pos = MAP_APPFONT ( 6 , 16 ) ;
+        Size = MAP_APPFONT ( 70 , 8 ) ;
         Text = "~Zulassen" ;
         Text [ ENGLISH ] = "~Allow" ;
         Text [ dutch ] = "~Toestaan" ;
@@ -220,8 +200,8 @@ TabPage TP_VALIDATION_VALUES
     ListBox LB_ALLOW
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 80 , 18 ) ;
-        Size = MAP_APPFONT ( 91 , 80 ) ;
+        Pos = MAP_APPFONT ( 80 , 14 ) ;
+        Size = MAP_APPFONT ( 90 , 80 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
          // Reihenfolge entspricht enum ScValidationMode
@@ -436,8 +416,8 @@ TabPage TP_VALIDATION_VALUES
     };
     FixedText FT_VALUE
     {
-        Pos = MAP_APPFONT ( 12 , 62 ) ;
-        Size = MAP_APPFONT ( 65 , 8 ) ;
+        Pos = MAP_APPFONT ( 6 , 48 ) ;
+        Size = MAP_APPFONT ( 70 , 8 ) ;
         Text = "~Daten" ;
         Text [ ENGLISH ] = "~Data" ;
         Text [ english_us ] = "~Data" ;
@@ -464,8 +444,8 @@ TabPage TP_VALIDATION_VALUES
     ListBox LB_VALUE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 80 , 60 ) ;
-        Size = MAP_APPFONT ( 91 , 90 ) ;
+        Pos = MAP_APPFONT ( 80 , 46 ) ;
+        Size = MAP_APPFONT ( 90 , 90 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
          // Reihenfolge entspricht enum ScConditionMode
@@ -727,8 +707,8 @@ TabPage TP_VALIDATION_VALUES
     };
     FixedText FT_MIN
     {
-        Pos = MAP_APPFONT ( 12 , 90 ) ;
-        Size = MAP_APPFONT ( 65 , 8 ) ;
+        Pos = MAP_APPFONT ( 6 , 66 ) ;
+        Size = MAP_APPFONT ( 70 , 8 ) ;
         Text = "~Minimum" ;
         Text [ ENGLISH ] = "~Minimum" ;
         Text [ english_us ] = "~Minimum" ;
@@ -755,14 +735,14 @@ TabPage TP_VALIDATION_VALUES
     Edit EDT_MIN
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 80 , 88 ) ;
-        Size = MAP_APPFONT ( 160 , 12 ) ;
+        Pos = MAP_APPFONT ( 80 , 64 ) ;
+        Size = MAP_APPFONT ( 174 , 12 ) ;
         TabStop = TRUE ;
     };
     FixedText FT_MAX
     {
-        Pos = MAP_APPFONT ( 12 , 106 ) ;
-        Size = MAP_APPFONT ( 65 , 8 ) ;
+        Pos = MAP_APPFONT ( 6 , 82 ) ;
+        Size = MAP_APPFONT ( 70 , 8 ) ;
         Text = "M~aximum" ;
         Text [ ENGLISH ] = "Ma~ximum" ;
         Text [ english_us ] = "Ma~ximum" ;
@@ -789,14 +769,14 @@ TabPage TP_VALIDATION_VALUES
     Edit EDT_MAX
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 80 , 104 ) ;
-        Size = MAP_APPFONT ( 160 , 12 ) ;
+        Pos = MAP_APPFONT ( 80 , 80 ) ;
+        Size = MAP_APPFONT ( 174 , 12 ) ;
         TabStop = TRUE ;
     };
     TriStateBox TSB_ALLOW_BLANKS
     {
-        Pos = MAP_APPFONT ( 80 , 36 ) ;
-        Size = MAP_APPFONT ( 99 , 12 ) ;
+        Pos = MAP_APPFONT ( 80 , 30 ) ;
+        Size = MAP_APPFONT ( 174 , 10 ) ;
         Text = "~Leerzellen zulassen" ;
         Text [ ENGLISH ] = "Allow ~blanks" ;
         TabStop = TRUE ;
@@ -820,34 +800,6 @@ TabPage TP_VALIDATION_VALUES
         Text[ turkish ] = "~Bo˛ h¸cre geÁerli";
         Text[ catalan ] = "~Permitir celdas vacÌas";
         Text[ finnish ] = "~Salli tyhj‰t merkit";
-    };
-    GroupBox GRP_VALUES
-    {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 248 , 176 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? G¸ltigkeitskriterien : G≥ltigkeitskriterien */
-        Text = "G¸ltigkeitskriterien" ;
-        Text [ ENGLISH ] = "Validation settings" ;
-        Text [ english_us ] = "Validity criteria" ;
-        Text [ swedish ] = "Validitetskriterier" ;
-        Text [ danish ] = "Validitetskriterier" ;
-        Text [ italian ] = "Criteri di validit‡" ;
-        Text [ spanish ] = "Criterios de validez" ;
-        Text [ french ] = "CritËres de validitÈ" ;
-        Text [ dutch ] = "Geldigheidscriteria" ;
-        Text [ portuguese ] = "CritÈrios de validade" ;
-        Text [ portuguese_brazilian ] = "G?tigkeitskriterien" ;
-        Text[ chinese_simplified ] = "”––ß±Í◊º";
-        Text[ russian ] = "”ÒÎÓ‚Ëˇ ÔÓ‚ÂÍË";
-        Text[ polish ] = "Kryteria waøno?ci";
-        Text[ japanese ] = "èåèÇÃê›íË";
-        Text[ chinese_traditional ] = "¶≥Æƒº–∑«";
-        Text[ arabic ] = "„⁄«ÌÌ— «·’·«ÕÌ…";
-        Text[ greek ] = " ÒÈÙﬁÒÈÔ ÈÛ˜˝ÔÚ";
-        Text[ korean ] = "¿Ø»øº∫ ±‚¡ÿ";
-        Text[ turkish ] = "GeÁerlilik ˆlÁ¸tleri";
-        Text[ catalan ] = "Criterios de validez";
-        Text[ finnish ] = "Kelpoisuusehdot";
     };
     Text [ dutch ] = "Waarden" ;
     Text [ english_us ] = "Values" ;
@@ -880,7 +832,7 @@ TabPage TP_VALIDATION_INPUTHELP
     TriStateBox TSB_HELP
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 248 , 12 ) ;
+        Size = MAP_APPFONT ( 248 , 10 ) ;
         Text = "E~ingabehilfen bei Selektion einer Zelle anbieten" ;
         Text [ ENGLISH ] = "~Show input help when cell is selected" ;
         TabStop = TRUE ;
@@ -905,10 +857,10 @@ TabPage TP_VALIDATION_INPUTHELP
         Text[ catalan ] = "~Mostrar Ayuda de entrada al seleccionar una celda";
         Text[ finnish ] = "~N‰yt‰ syˆttˆohje, kun solu on valittuna";
     };
-    GroupBox GRP_CONTENT
+    FixedLine FL_CONTENT
     {
-        Pos = MAP_APPFONT ( 6 , 20 ) ;
-        Size = MAP_APPFONT ( 248 , 159 ) ;
+        Pos = MAP_APPFONT ( 6 , 22 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Inhalt" ;
         Text [ ENGLISH ] = "Content" ;
         Text [ english_us ] = "Contents" ;
@@ -934,8 +886,8 @@ TabPage TP_VALIDATION_INPUTHELP
     };
     FixedText FT_TITLE
     {
-        Pos = MAP_APPFONT ( 12 , 32 ) ;
-        Size = MAP_APPFONT ( 65 , 8 ) ;
+        Pos = MAP_APPFONT ( 12 , 35 ) ;
+        Size = MAP_APPFONT ( 64 , 8 ) ;
         Text = "~Titel" ;
         Text [ ENGLISH ] = "~Title" ;
         Text [ english_us ] = "~Title" ;
@@ -961,8 +913,8 @@ TabPage TP_VALIDATION_INPUTHELP
     };
     FixedText FT_INPUTHELP
     {
-        Pos = MAP_APPFONT ( 12 , 48 ) ;
-        Size = MAP_APPFONT ( 65 , 8 ) ;
+        Pos = MAP_APPFONT ( 12 , 53 ) ;
+        Size = MAP_APPFONT ( 64 , 8 ) ;
         Text = "~Eingabehilfe" ;
         Text [ ENGLISH ] = "~Input help" ;
         Text [ dutch ] = "~Invoerhulp" ;
@@ -989,15 +941,15 @@ TabPage TP_VALIDATION_INPUTHELP
     Edit EDT_TITLE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 80 , 31 ) ;
-        Size = MAP_APPFONT ( 166 , 12 ) ;
+        Pos = MAP_APPFONT ( 80 , 33 ) ;
+        Size = MAP_APPFONT ( 171 , 12 ) ;
         TabStop = TRUE ;
     };
     MultiLineEdit EDT_INPUTHELP
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 80 , 47 ) ;
-        Size = MAP_APPFONT ( 166 , 127 ) ;
+        Pos = MAP_APPFONT ( 80 , 51 ) ;
+        Size = MAP_APPFONT ( 171 , 128 ) ;
         TabStop = TRUE ;
         VScroll = TRUE ;
         IgnoreTab = TRUE ;
@@ -1011,10 +963,10 @@ TabPage TP_VALIDATION_ERROR
     Size = MAP_APPFONT ( 260 , 185 ) ;
     Text = "Fehlermeldung" ;
     Text [ ENGLISH ] = "Error message" ;
-    GroupBox GRP_CONTENT
+    FixedLine FL_CONTENT
     {
-        Pos = MAP_APPFONT ( 6 , 20 ) ;
-        Size = MAP_APPFONT ( 248 , 159 ) ;
+        Pos = MAP_APPFONT ( 6 , 22 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Inhalt" ;
         Text [ ENGLISH ] = "Content" ;
         Text [ english_us ] = "Contents" ;
@@ -1041,9 +993,9 @@ TabPage TP_VALIDATION_ERROR
     TriStateBox TSB_SHOW
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 248 , 12 ) ;
+        Size = MAP_APPFONT ( 248 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Fehlermeldung bei Eingabe ung¸ltiger Werte anzeigen : ~Fehlermeldung bei Eingabe ung≥ltiger Werte anzeigen */
-        Text = "~Fehlermeldung bei Eingabe ung¸ltiger Werte anzeigen" ;
+        Text = "Fehler~meldung bei Eingabe ung¸ltiger Werte anzeigen" ;
         Text [ ENGLISH ] = "Show error ~message after invalid values are entered" ;
         TabStop = TRUE ;
         Text [ dutch ] = "Fout~melding bij invoer van ongeldige gegevens weergeven" ;
@@ -1070,8 +1022,8 @@ TabPage TP_VALIDATION_ERROR
     MultiLineEdit EDT_ERROR
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 80 , 63 ) ;
-        Size = MAP_APPFONT ( 166 , 111 ) ;
+        Pos = MAP_APPFONT ( 80 , 69 ) ;
+        Size = MAP_APPFONT ( 171 , 110 ) ;
         TabStop = TRUE ;
         VScroll = TRUE ;
         IgnoreTab = TRUE ;
@@ -1079,14 +1031,14 @@ TabPage TP_VALIDATION_ERROR
     Edit EDT_TITLE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 80 , 47 ) ;
-        Size = MAP_APPFONT ( 166 , 12 ) ;
+        Pos = MAP_APPFONT ( 80 , 51 ) ;
+        Size = MAP_APPFONT ( 171 , 12 ) ;
         TabStop = TRUE ;
     };
     FixedText FT_ERROR
     {
-        Pos = MAP_APPFONT ( 12 , 64 ) ;
-        Size = MAP_APPFONT ( 65 , 8 ) ;
+        Pos = MAP_APPFONT ( 12 , 71 ) ;
+        Size = MAP_APPFONT ( 64 , 8 ) ;
         Text = "~Fehlermeldung" ;
         Text [ ENGLISH ] = "~Error message" ;
         Text [ english_us ] = "~Error message" ;
@@ -1112,8 +1064,8 @@ TabPage TP_VALIDATION_ERROR
     };
     FixedText FT_TITLE
     {
-        Pos = MAP_APPFONT ( 12 , 48 ) ;
-        Size = MAP_APPFONT ( 65 , 8 ) ;
+        Pos = MAP_APPFONT ( 12 , 53 ) ;
+        Size = MAP_APPFONT ( 64 , 8 ) ;
         Text = "~Titel" ;
         Text [ ENGLISH ] = "~Title" ;
         Text [ english_us ] = "~Title" ;
@@ -1139,8 +1091,8 @@ TabPage TP_VALIDATION_ERROR
     };
     FixedText FT_ACTION
     {
-        Pos = MAP_APPFONT ( 12 , 32 ) ;
-        Size = MAP_APPFONT ( 65 , 8 ) ;
+        Pos = MAP_APPFONT ( 12 , 35 ) ;
+        Size = MAP_APPFONT ( 64 , 8 ) ;
         Text = "~Aktion" ;
         Text [ ENGLISH ] = "~Action" ;
         Text [ english_us ] = "~Action" ;
@@ -1167,8 +1119,8 @@ TabPage TP_VALIDATION_ERROR
     ListBox LB_ACTION
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 80 , 31 ) ;
-        Size = MAP_APPFONT ( 102 , 76 ) ;
+        Pos = MAP_APPFONT ( 80 , 33 ) ;
+        Size = MAP_APPFONT ( 107 , 76 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
          // Reihenfolge entspricht enum ScValidErrorStyle
@@ -1336,7 +1288,7 @@ TabPage TP_VALIDATION_ERROR
     };
     PushButton BTN_SEARCH
     {
-        Pos = MAP_APPFONT ( 186 , 31 ) ;
+        Pos = MAP_APPFONT ( 191 , 32 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         Text = "~Durchsuchen..." ;
         Text [ ENGLISH ] = "~Search..." ;

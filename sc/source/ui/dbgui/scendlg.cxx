@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scendlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2001-01-31 19:32:53 $
+ *  last change: $Author: dr $ $Date: 2001-05-22 12:43:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,9 +102,9 @@ ScNewScenarioDlg::ScNewScenarioDlg( Window* pParent, const String& rName, BOOL b
         //aCbAttrib     ( this, ResId( CB_ATTRIB ) ),
         //aCbValue      ( this, ResId( CB_VALUE ) ),
         aCbCopyAll      ( this, ResId( CB_COPYALL ) ),
-        aGbName         ( this, ResId( GB_NAME )),
-        aGbComment      ( this, ResId( GB_COMMENT ) ),
-        aGbOptions      ( this, ResId( GB_OPTIONS ) ),
+        aFlName         ( this, ResId( FL_NAME )),
+        aFlComment      ( this, ResId( FL_COMMENT ) ),
+        aFlOptions      ( this, ResId( FL_OPTIONS ) ),
         aDefScenarioName( rName ),
         bIsEdit         ( bEdit )
 {
@@ -150,6 +150,7 @@ ScNewScenarioDlg::ScNewScenarioDlg( Window* pParent, const String& rName, BOOL b
     aEdComment  .SetText( aComment );
     aEdName     .SetText( rName );
     aBtnOk      .SetClickHdl( LINK( this, ScNewScenarioDlg, OkHdl ) );
+    aCbShowFrame.SetClickHdl( LINK( this, ScNewScenarioDlg, EnableHdl ) );
 
     FreeResource();
 
@@ -218,6 +219,7 @@ void ScNewScenarioDlg::SetScenarioData( const String& rName, const String& rComm
     aLbColor.SelectEntry(rColor);
 
     aCbShowFrame.Check ( (nFlags & SC_SCENARIO_SHOWFRAME)  != 0 );
+    EnableHdl( &aCbShowFrame );
     //aCbPrintFrame.Check( (nFlags & SC_SCENARIO_PRINTFRAME) != 0 );
     aCbTwoWay.Check    ( (nFlags & SC_SCENARIO_TWOWAY)     != 0 );
     //aCbAttrib.Check    ( (nFlags & SC_SCENARIO_ATTRIB)     != 0 );
@@ -256,4 +258,12 @@ IMPL_LINK( ScNewScenarioDlg, OkHdl, OKButton *, EMPTYARG )
     //! beim Editieren testen, ob eine andere Tabelle den Namen hat!
 }
 
+//------------------------------------------------------------------------
+
+IMPL_LINK( ScNewScenarioDlg, EnableHdl, CheckBox *, pBox )
+{
+    if( pBox == &aCbShowFrame )
+        aLbColor.Enable( aCbShowFrame.IsChecked() );
+    return 0;
+}
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scendlg.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 08:00:50 $
+ *  last change: $Author: dr $ $Date: 2001-05-22 12:43:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 247 , 199 ) ;
+    Size = MAP_APPFONT ( 260 , 151 ) ;
     Text = "Szenario anlegen" ;
     Text [ ENGLISH ] = "Create Scenario" ;
     Text [ NORWEGIAN ] = "Lag Scenario" ;
@@ -82,28 +82,28 @@ ModalDialog RID_SCDLG_NEWSCENARIO
     Moveable = TRUE ;
     OKButton BTN_OK
     {
-        Pos = MAP_APPFONT ( 191 , 11 ) ;
-        Size = MAP_APPFONT ( 50 , 15 ) ;
+        Pos = MAP_APPFONT ( 204 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         DefButton = TRUE ;
     };
     CancelButton BTN_CANCEL
     {
-        Pos = MAP_APPFONT ( 191 , 29 ) ;
-        Size = MAP_APPFONT ( 50 , 15 ) ;
+        Pos = MAP_APPFONT ( 204 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
     HelpButton BTN_HELP
     {
-        Pos = MAP_APPFONT ( 191 , 48 ) ;
-        Size = MAP_APPFONT ( 50 , 15 ) ;
+        Pos = MAP_APPFONT ( 204 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
     MultiLineEdit ED_COMMENT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 20 , 54 ) ;
-        Size = MAP_APPFONT ( 156 , 46 ) ;
+        Pos = MAP_APPFONT ( 12 , 43 ) ;
+        Size = MAP_APPFONT ( 183 , 46 ) ;
         TabStop = TRUE ;
         MaxTextLength = 512 ;
         VScroll = TRUE ;
@@ -112,43 +112,22 @@ ModalDialog RID_SCDLG_NEWSCENARIO
     Edit ED_NAME
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 20 , 18 ) ;
-        Size = MAP_APPFONT ( 156 , 12 ) ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 183 , 12 ) ;
         TabStop = TRUE ;
     };
     CheckBox CB_SHOWFRAME
     {
-        Pos = MAP_APPFONT ( 12 , 126 ) ;
-        Size = MAP_APPFONT ( 83 , 10 ) ;
-        Text = "Rahmen anzeigen in" ;
-        Text [ ENGLISH ] = "Display frame" ;
-        Text [ english_us ] = "Display border in" ;
-        Text [ portuguese_brazilian ] = "Rahmen anzeigen in" ;
-        Text [ swedish ] = "Visa ram i" ;
-        Text [ danish ] = "Vis ramme i" ;
-        Text [ italian ] = "Mostra cornice in" ;
-        Text [ spanish ] = "Mostrar borde en" ;
-        Text [ french ] = "Afficher cadre dans" ;
-        Text [ dutch ] = "Kader weergeven in" ;
-        Text [ portuguese ] = "Mostrar moldura em" ;
-        Text[ chinese_simplified ] = "ÏÔÊ¾±ß¿ò";
-        Text[ russian ] = "Ïîêàçàòü ðàìêè â öâåòå";
-        Text[ polish ] = "Poka¿ ramkê w k~olorze";
-        Text[ japanese ] = "˜g‚ð•\\Ž¦";
-        Text[ language_user1 ] = " ";
-        Text[ chinese_traditional ] = "Åã¥ÜÃä®Ø";
-        Text[ arabic ] = "ÅÙåÇÑ ÇáßÇÏÑ ÈÇááæä";
-        Text[ greek ] = "ÅìöÜíéóç ðëáéóßïõ óôï";
-        Text[ korean ] = "°æ°è¼± Ç¥½Ã";
-        Text[ turkish ] = "Çerçeve rengi";
-        Text[ catalan ] = "Mostrar borde en";
-        Text[ finnish ] = "Näytä reunus";
+        Pos = MAP_APPFONT ( 12 , 107 ) ;
+        Size = MAP_APPFONT ( 109 , 10 ) ;
+        Text = "~Rahmen anzeigen" ;
+        Text [ ENGLISH ] = "Display ~border" ;
     };
     ListBox LB_COLOR
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 51 , 138 ) ;
-        Size = MAP_APPFONT ( 126 , 86 ) ;
+        Pos = MAP_APPFONT ( 125 , 105 ) ;
+        Size = MAP_APPFONT ( 70 , 86 ) ;
         DropDown = TRUE ;
         DDExtraWidth = TRUE ;
     };
@@ -183,11 +162,11 @@ ModalDialog RID_SCDLG_NEWSCENARIO
     };
     CheckBox CB_TWOWAY
     {
-        Pos = MAP_APPFONT ( 12 , 157 ) ;
-        Size = MAP_APPFONT (160 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 121 ) ;
+        Size = MAP_APPFONT ( 183 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Zurückkopieren : Zur³ckkopieren */
-        Text = "Zurückkopieren" ;
-        Text [ ENGLISH ] = "Copy back" ;
+        Text = "~Zurückkopieren" ;
+        Text [ ENGLISH ] = "C~opy back" ;
         Text [ english_us ] = "Copy back" ;
         Text [ portuguese_brazilian ] = "Zur?ckkopieren" ;
         Text [ swedish ] = "Kopiera tillbaka" ;
@@ -270,10 +249,10 @@ ModalDialog RID_SCDLG_NEWSCENARIO
     };
     CheckBox CB_COPYALL
     {
-        Pos = MAP_APPFONT ( 12 , 170 ) ;
-        Size = MAP_APPFONT ( 95 , 10 ) ;
-        Text = "Ganze Tabelle kopieren" ;
-        Text [ ENGLISH ] = "Copy entire sheet" ;
+        Pos = MAP_APPFONT ( 12 , 135 ) ;
+        Size = MAP_APPFONT ( 183 , 10 ) ;
+        Text = "Ganze ~Tabelle kopieren" ;
+        Text [ ENGLISH ] = "Copy entire ~sheet" ;
         Text [ english_us ] = "Copy entire sheet" ;
         Text [ portuguese_brazilian ] = "Ganze Tabelle kopieren" ;
         Text [ swedish ] = "Kopiera hel tabell" ;
@@ -376,12 +355,12 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "en";
     };
-    GroupBox GB_NAME
+    FixedLine FL_NAME
     {
-        Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 180 , 30 ) ;
-        Text = "Name des Szenarios" ;
-        Text [ ENGLISH ] = "Szenario Name" ;
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 192 , 8 ) ;
+        Text = "~Name des Szenarios" ;
+        Text [ ENGLISH ] = "~Name of scenario" ;
         Text [ ENGLISH_US ] = "Name of scenario";
         Text[ italian ] = "Nome dello scenario";
         Text[ portuguese_brazilian ] = "Name des Szenarios";
@@ -404,12 +383,12 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ catalan ] = "Nombre del escenario";
         Text[ finnish ] = "Skenaarion nimi";
     };
-    GroupBox GB_COMMENT
+    FixedLine FL_COMMENT
     {
-        Pos = MAP_APPFONT ( 7 , 42 ) ;
-        Size = MAP_APPFONT ( 180 , 64 ) ;
-        Text = "Kommentar" ;
-        Text [ ENGLISH ] = "Comment" ;
+        Pos = MAP_APPFONT ( 6 , 32 ) ;
+        Size = MAP_APPFONT ( 192 , 8 ) ;
+        Text = "~Kommentar" ;
+        Text [ ENGLISH ] = "~Comment" ;
         Text [ ENGLISH_US ] = "Comment";
         Text[ italian ] = "Commento";
         Text[ portuguese_brazilian ] = "Kommentar";
@@ -432,10 +411,10 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ catalan ] = "Comentario";
         Text[ finnish ] = "Kommentti";
     };
-    GroupBox GB_OPTIONS
+    FixedLine FL_OPTIONS
     {
-        Pos = MAP_APPFONT ( 6 , 114 ) ;
-        Size = MAP_APPFONT ( 180 , 73 ) ;
+        Pos = MAP_APPFONT ( 6 , 95 ) ;
+        Size = MAP_APPFONT ( 192 , 8 ) ;
         Text = "Einstellungen" ;
         Text [ ENGLISH ] = "Additional settings" ;
         Text [ ENGLISH_US ] = "Settings";

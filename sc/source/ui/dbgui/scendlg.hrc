@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scendlg.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:54 $
+ *  last change: $Author: dr $ $Date: 2001-05-22 12:43:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,14 +60,23 @@
  ************************************************************************/
 #include "sc.hrc"
 //#define RID_SCDLG_NEWSCENARIO 256
-#define BTN_OK 1
-#define BTN_CANCEL 1
-#define BTN_HELP 1
-#define FT_NAME 1
-#define ED_NAME 1
-#define FT_COMMENT 2
-#define ED_COMMENT 2
-#define STR_CREATEDBY 1
+#define BTN_OK                  1
+#define BTN_CANCEL              2
+#define BTN_HELP                3
+
+#define FL_NAME                 10
+#define ED_NAME                 11
+#define FL_COMMENT              12
+#define ED_COMMENT              13
+
+#define FL_OPTIONS              20
+#define CB_SHOWFRAME            21
+#define LB_COLOR                22
+#define CB_PRINTFRAME           23
+#define CB_TWOWAY               24
+#define CB_ATTRIB               25
+#define CB_VALUE                26
+#define CB_COPYALL              27
 
 #ifdef STR_ON
 #undef STR_ON
@@ -76,15 +85,6 @@
 #undef STR_EDIT
 #endif
 
-#define STR_ON 2
-#define CB_SHOWFRAME 3
-#define LB_COLOR 4
-#define CB_PRINTFRAME 5
-#define CB_TWOWAY 6
-#define CB_ATTRIB 7
-#define CB_VALUE 8
-#define CB_COPYALL 9
-#define STR_EDIT 10
-#define GB_NAME 1
-#define GB_COMMENT 2
-#define GB_OPTIONS 3
+#define STR_CREATEDBY           31
+#define STR_ON                  32
+#define STR_EDIT                33

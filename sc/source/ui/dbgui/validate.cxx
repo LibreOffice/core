@@ -2,9 +2,9 @@
  *
  *  $RCSfile: validate.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-17 19:28:42 $
+ *  last change: $Author: dr $ $Date: 2001-05-22 12:43:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,6 @@ ScTPValidationValue::ScTPValidationValue( Window*           pParent,
         aEdtMin         ( this, ScResId( EDT_MIN ) ),
         aFtMax          ( this, ScResId( FT_MAX ) ),
         aEdtMax         ( this, ScResId( EDT_MAX ) ),
-        aGrpValues      ( this, ScResId( GRP_VALUES ) ),
 
         aStrMin         ( ScResId( SCSTR_MINIMUM ) ),
         aStrMax         ( ScResId( SCSTR_MAXIMUM ) ),
@@ -315,7 +314,7 @@ ScTPValidationHelp::ScTPValidationHelp( Window*         pParent,
         aEdtTitle       ( this, ScResId( EDT_TITLE ) ),
         aFtInputHelp    ( this, ScResId( FT_INPUTHELP ) ),
         aEdInputHelp    ( this, ScResId( EDT_INPUTHELP ) ),
-        aGrpContent     ( this, ScResId( GRP_CONTENT ) ),
+        aFlContent      ( this, ScResId( FL_CONTENT ) ),
 
         rSet            ( rArgSet )
 {
@@ -386,8 +385,6 @@ BOOL __EXPORT ScTPValidationHelp::FillItemSet( SfxItemSet& rArgSet )
     return TRUE;
 }
 
-
-
 //========================================================================
 //========================================================================
 // Error Alert Page
@@ -406,7 +403,7 @@ ScTPValidationError::ScTPValidationError( Window*           pParent,
         aEdtTitle       ( this, ScResId( EDT_TITLE ) ),
         aFtError        ( this, ScResId( FT_ERROR ) ),
         aEdError        ( this, ScResId( EDT_ERROR ) ),
-        aGrpContent     ( this, ScResId( GRP_CONTENT ) ),
+        aFlContent      ( this, ScResId( FL_CONTENT ) ),
 
         rSet            ( rArgSet )
 {
