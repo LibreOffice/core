@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyexport.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-25 08:01:56 $
+ *  last change: $Author: fs $ $Date: 2002-11-01 12:30:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,7 +302,10 @@ namespace xmloff
                     aSimpleType = aValue.getValueType();
 
                 // the type attribute
-                AddAttribute(XML_NAMESPACE_FORM, "property-type", implGetPropertyXMLType(aValue.getValueType()));
+                // modified by BerryJia for Bug102407
+                com::sun::star::beans::Property aPropertyStruct;
+                aPropertyStruct = m_xPropertyInfo->getPropertyByName(*aProperty);
+                AddAttribute(XML_NAMESPACE_FORM, "property-type", implGetPropertyXMLType(aPropertyStruct.Type));
 
                 if (bIsSequence)
                     // we have a special attribute indicating that the property is a list
@@ -313,11 +316,19 @@ namespace xmloff
 
                 if (!bIsSequence)
                 {   // the simple case
-                    sValue = implConvertAny(aValue);
-
-                    SvXMLElementExport aValueTag(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, "property-value", sal_True, sal_False);
-                        // (no whitespace inside the tag)
-                    m_rContext.getGlobalContext().GetDocHandler()->characters(sValue);
+                    //add by BerryJia for Bug102407
+                    if(TypeClass_VOID == aValue.getValueType().getTypeClass())
+                    {
+                        AddAttribute(XML_NAMESPACE_FORM, "property-is-void", ::rtl::OUString::createFromAscii("true"));
+                        SvXMLElementExport aValueTag(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, "property-value", sal_True, sal_False);
+                    }
+                    else
+                    {
+                        sValue = implConvertAny(aValue);
+                        SvXMLElementExport aValueTag(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, "property-value", sal_True, sal_False);
+                            // (no whitespace inside the tag)
+                        m_rContext.getGlobalContext().GetDocHandler()->characters(sValue);
+                    }
                     // done with this property
                     continue;
                 }
@@ -743,6 +754,7 @@ namespace xmloff
                 return s_sTypeLong;
             case TypeClass_ENUM:
                 return s_sTypeInteger;
+
             default:
                 return s_sTypeDouble;
         }
@@ -803,6 +815,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.20  2002/10/25 08:01:56  fs
+ *  during #104402# changed signature of some exportAttribute* methods for performance reasons
+ *
  *  Revision 1.19  2002/08/22 07:36:10  oj
  *  #99721# now save image url relative
  *

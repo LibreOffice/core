@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyimport.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-25 13:19:34 $
+ *  last change: $Author: fs $ $Date: 2002-11-01 12:31:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,12 +255,20 @@ namespace xmloff
     class OAccumulateCharacters : public SvXMLImportContext
     {
     protected:
-        ::rtl::OUString m_sCharacters;
+        ::rtl::OUString             m_sCharacters;
+        sal_Bool                    m_bPropertyIsVoid;      //added by BerryJia for Bug102407
+
     public:
         OAccumulateCharacters(SvXMLImport& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName);
 
+        virtual void StartElement(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList);
+
         // SvXMLImportContext overridables
         virtual void Characters(const ::rtl::OUString& _rChars);
+
+        //added by BerryJia for Bug102407
+        sal_Bool isVoid();
 
         ::rtl::OUString getCharacters() const { return m_sCharacters; }
     };
@@ -275,6 +283,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9  2002/10/25 13:19:34  fs
+ *  #104402# importing grid column styles now
+ *
  *  Revision 1.8  2001/03/29 09:44:19  fs
  *  enableTrackAttributes to prevent the (expensive) attribute tracking
  *

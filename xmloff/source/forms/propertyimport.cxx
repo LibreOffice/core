@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyimport.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-25 08:54:58 $
+ *  last change: $Author: fs $ $Date: 2002-11-01 12:34:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -526,9 +526,15 @@ namespace xmloff
         OSL_ENSURE(m_xValueReader.Is(), "OSinglePropertyContext::EndElement: did not encounter a value tag!");
         if (m_xValueReader.Is())
         {
-            ::rtl::OUString sCharacters = m_xValueReader->getCharacters();
-            // convert these characters into the property value target type
-            m_aPropValue.Value = OPropertyImport::convertString(GetImport(), m_aPropType, sCharacters);
+            //modified by BerryJia for Bug102407
+            if (m_xValueReader->isVoid())
+                m_aPropValue.Value = Any();
+            else
+            {
+                ::rtl::OUString sCharacters = m_xValueReader->getCharacters();
+                // convert these characters into the property value target type
+                m_aPropValue.Value = OPropertyImport::convertString(GetImport(), m_aPropType, sCharacters);
+            }
         }
 
         // now that we finally have our property value, add it to our parent object
@@ -541,15 +547,36 @@ namespace xmloff
     //---------------------------------------------------------------------
     OAccumulateCharacters::OAccumulateCharacters(SvXMLImport& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName)
         :SvXMLImportContext(_rImport, _nPrefix, _rName)
+        //added by BerryJia for Bug102407
+        ,m_bPropertyIsVoid(sal_False)
     {
     }
 
+    //---------------------------------------------------------------------
+    void OAccumulateCharacters::StartElement(const Reference< sax::XAttributeList >& _rxAttrList)
+    {
+        ::rtl::OUString sIsVoidAttributeName = GetImport().GetNamespaceMap().GetQNameByIndex(
+            GetPrefix(), ::rtl::OUString::createFromAscii("property-is-void"));
+        ::rtl::OUString sIsVoidAttributeValue = _rxAttrList->getValueByName(sIsVoidAttributeName);
+
+        if (sIsVoidAttributeValue.getLength())
+        {
+            //modified by BerryJia for Bug102407
+            m_bPropertyIsVoid = sal_False;
+            GetImport().GetMM100UnitConverter().convertBool(m_bPropertyIsVoid, sIsVoidAttributeValue);
+        }
+    }
     //---------------------------------------------------------------------
     void OAccumulateCharacters::Characters(const ::rtl::OUString& _rChars)
     {
         m_sCharacters += _rChars;
     }
-
+    //---------------------------------------------------------------------
+    //added by BerryJia for Bug102407
+    sal_Bool OAccumulateCharacters::isVoid()
+    {
+        return m_bPropertyIsVoid;
+    }
 //.........................................................................
 }   // namespace xmloff
 //.........................................................................
@@ -557,6 +584,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.14  2002/10/25 08:54:58  fs
+ *  #104402# importing of column-style-name not yet imported
+ *
  *  Revision 1.13  2001/07/10 17:07:50  mtg
  *  updated namespace handling
  *

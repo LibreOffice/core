@@ -1,5 +1,5 @@
 <!--
-	$Id: form.mod,v 1.12 2002-10-25 08:11:58 fs Exp $
+	$Id: form.mod,v 1.13 2002-11-01 12:30:41 fs Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -337,4 +337,4 @@
 <!ATTLIST form:property form:property-name CDATA #REQUIRED>
 <!ATTLIST form:property form:property-type (boolean|short|int|long|double|string)  #REQUIRED>
 <!ELEMENT form:property-value (#PCDATA)>
-
+<!ATTLIST form:property-value form:property-is-void %boolean; #IMPLIED>
