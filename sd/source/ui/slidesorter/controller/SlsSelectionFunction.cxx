@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsSelectionFunction.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2004-11-27 14:32:21 $
+ *  last change: $Author: rt $ $Date: 2004-11-30 10:07:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,9 +78,6 @@
 #include "view/SlsPageObjectViewObjectContact.hxx"
 #ifndef SD_SHOW_VIEW_HXX
 #include "showview.hxx"
-#endif
-#ifndef SD_FADER_HXX
-#include "fader.hxx"
 #endif
 #ifndef SD_PANE_MANAGER_HXX
 #include "PaneManager.hxx"
