@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmvwimp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-24 15:21:39 $
+ *  last change: $Author: fs $ $Date: 2000-11-01 14:52:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -618,7 +618,8 @@ IMPL_LINK(FmXFormView, OnActivate, void*, EMPTYTAG)
                 xForm->load();
         }
 
-        LINK(this, FmXFormView, OnAutoFocus).Call(NULL);
+        if (pModel && pModel->GetAutoControlFocus())
+            LINK(this, FmXFormView, OnAutoFocus).Call(NULL);
 
         if (pModel)
             // unlock the environment
