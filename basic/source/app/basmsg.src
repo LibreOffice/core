@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basmsg.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-16 14:50:15 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 21:53:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,3 +146,4 @@ String S_WARNING_PREFIX
     Text[ catalan ] = "Advertencia: ";
     Text[ finnish ] = "Varoitus: ";
 };
+
