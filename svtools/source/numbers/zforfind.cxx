@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforfind.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: er $ $Date: 2002-09-05 18:00:42 $
+ *  last change: $Author: er $ $Date: 2002-09-09 12:56:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1379,9 +1379,10 @@ BOOL ImpSvNumberInputScan::ScanStartString( const String& rString,
     if ( nSign = GetSign(rString, nPos) )           // sign?
         SkipBlanks(rString, nPos);
 
-    if ( nMatchedAllStrings )
-    {   // Match against format in any case, so later on for a "1-2-3-4" input
-        // we may distinguish between a y-m-d (or similar) date and a 0-0-0-0
+    // #102371# match against format string only if start string is not a sign character
+    if ( nMatchedAllStrings && !(nSign && rString.Len() == 1) )
+    {   // Match against format in any case, so later on for a "x1-2-3" input
+        // we may distinguish between a xy-m-d (or similar) date and a x0-0-0
         // format. No sign detection here!
         if ( ScanStringNumFor( rString, nPos, pFormat, 0, TRUE ) )
             nMatchedAllStrings |= nMatchedStartString;
@@ -2456,6 +2457,7 @@ BOOL ImpSvNumberInputScan::IsNumberFormat(
             case NUMBERFORMAT_CURRENCY:
             case NUMBERFORMAT_NUMBER:
             case NUMBERFORMAT_SCIENTIFIC:
+            case NUMBERFORMAT_DEFINED:          // if no category detected handle as number
             {
                 if ( nDecPos == 1 )                         // . at start
                     sResString.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "0." ) );
@@ -2590,6 +2592,8 @@ BOOL ImpSvNumberInputScan::IsNumberFormat(
             break;
 
             default:
+                DBG_ERRORFILE( "Some number recognized but what's it?" );
+                fOutNumber = 0.0;
                 break;
         }
     }
