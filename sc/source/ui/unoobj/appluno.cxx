@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appluno.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 19:19:32 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:24:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -461,7 +461,7 @@ uno::Reference<uno::XInterface> SAL_CALL ScSpreadsheetSettings_CreateInstance(
                         const uno::Reference<lang::XMultiServiceFactory>& rSMgr )
 {
     ScUnoGuard aGuard;
-    SC_DLL()->Load();       // load module
+    ScDLL::Init();
     static uno::Reference<uno::XInterface> xInst = (cppu::OWeakObject*)new ScSpreadsheetSettings();
     return xInst;
 }
@@ -720,7 +720,7 @@ uno::Reference<uno::XInterface> SAL_CALL ScRecentFunctionsObj_CreateInstance(
                         const uno::Reference<lang::XMultiServiceFactory>& rSMgr )
 {
     ScUnoGuard aGuard;
-    SC_DLL()->Load();       // load module
+    ScDLL::Init();
     static uno::Reference<uno::XInterface> xInst = (cppu::OWeakObject*)new ScRecentFunctionsObj();
     return xInst;
 }
@@ -801,7 +801,7 @@ uno::Reference<uno::XInterface> SAL_CALL ScFunctionListObj_CreateInstance(
                         const uno::Reference<lang::XMultiServiceFactory>& rSMgr )
 {
     ScUnoGuard aGuard;
-    SC_DLL()->Load();       // load module
+    ScDLL::Init();
     static uno::Reference<uno::XInterface> xInst = (cppu::OWeakObject*)new ScFunctionListObj();
     return xInst;
 }
