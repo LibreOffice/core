@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TypeClass.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2002-01-23 08:52:21 $
+ *  last change: $Author: kso $ $Date: 2002-11-13 15:51:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,24 +148,33 @@ enum TypeClass
     /** reflecting interface types
     */
     INTERFACE,
-
     /** reflecting services
     */
     SERVICE,
     /** reflecting modules
     */
     MODULE,
-
     /** reflecting interface methods
     */
     INTERFACE_METHOD,
     /** reflecting interface attributes
     */
     INTERFACE_ATTRIBUTE,
-
     /** reflecting the unreflectable type
     */
-    UNKNOWN
+    UNKNOWN,
+    /** reflecting properties
+    */
+    PROPERTY,
+    /** reflecting constants
+    */
+    CONSTANT,
+    /** reflecting constants groups
+    */
+    CONSTANTS,
+    /** reflecting singletons
+    */
+    SINGLETON
 };
 
 //=============================================================================
@@ -175,6 +184,9 @@ enum TypeClass
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2002/01/23 08:52:21  dbo
+    #96711# IDL documentation review
+
     Revision 1.4  2000/11/08 12:29:00  mi
     moved from api
 
