@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exprgen.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mh $ $Date: 2001-10-17 18:53:05 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:56:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ static OpTable aOpTable [] = {
 
 // Ausgabe eines Elements
 
-void SbiExprNode::Gen()
+void SbiExprNode::Gen( BOOL bParam0Allowed )
 {
     if( IsConstant() )
     {
@@ -117,7 +117,11 @@ void SbiExprNode::Gen()
         SbiExprNode* pWithParent = NULL;
         SbiOpcode eOp;
         if( aVar.pDef->GetScope() == SbPARAM )
+        {
             eOp = _PARAM;
+            if( !bParam0Allowed && 0 == aVar.pDef->GetPos() )
+                eOp = aVar.pDef->IsGlobal() ? _FIND_G : _FIND;
+        }
         // AB: 17.12.1995, Spezialbehandlung fuer WITH
         else if( (pWithParent = GetWithParent()) != NULL )
         {
@@ -260,11 +264,11 @@ void SbiExprList::Gen()
     }
 }
 
-void SbiExpression::Gen()
+void SbiExpression::Gen( BOOL bParam0Allowed )
 {
     // AB: 17.12.1995, Spezialbehandlung fuer WITH
     // Wenn pExpr == .-Ausdruck in With, zunaechst Gen fuer Basis-Objekt
-    pExpr->Gen();
+    pExpr->Gen( bParam0Allowed );
     if( bBased )
         pParser->aGen.Gen( _BASED, pParser->nBase ),
         pParser->aGen.Gen( _ARGV );
