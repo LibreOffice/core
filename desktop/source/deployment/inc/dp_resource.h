@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_resource.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 14:06:45 $
+ *  last change: $Author: rt $ $Date: 2004-12-07 10:52:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,10 +82,10 @@ ResId getResId( USHORT id );
 //==============================================================================
 String getResourceString( USHORT id );
 
-template<typename Unique, USHORT id>
-struct StaticResourceString
-    : public ::rtl::StaticData< ::rtl::OUString, Unique > {
-    ::rtl::OUString operator () () { return getResourceString(id); }
+template <typename Unique, USHORT id>
+struct StaticResourceString :
+        public rtl::StaticWithInit<const rtl::OUString, Unique> {
+    const rtl::OUString operator () () { return getResourceString(id); }
 };
 
 //==============================================================================
