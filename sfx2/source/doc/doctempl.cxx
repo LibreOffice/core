@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dv $ $Date: 2000-12-06 11:14:36 $
+ *  last change: $Author: dv $ $Date: 2000-12-07 10:12:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,7 +178,7 @@ using namespace ucb;
 #define TEMPLATE_DIR_NAME       "templates"
 #define TITLE                   "Title"
 #define IS_FOLDER               "IsFolder"
-#define PROPERTY_TYPE           "TypeDecription"
+#define PROPERTY_TYPE           "TypeDescription"
 #define TARGET_URL              "TargetURL"
 #define TYPE_FOLDER             "application/vnd.sun.star.hier-folder"
 #define TYPE_LINK               "application/vnd.sun.star.hier-link"
@@ -186,7 +186,6 @@ using namespace ucb;
 
 #define TARGET_DIR_URL          "TargetDirURL"
 #define PARENT_DIR_URL          "ParentDirURL"
-#define REAL_NAME               "RealName"
 #define COMMAND_DELETE          "delete"
 #define COMMAND_TRANSFER        "transfer"
 
@@ -207,7 +206,8 @@ class EntryData_Impl
     OUString            maTitle;
     OUString            maOwnURL;
     OUString            maTargetURL;
-    sal_Bool            mbChecked;
+    sal_Bool            mbInUse     : 1;
+    sal_Bool            mbNew       : 1;
 
 public:
                         EntryData_Impl( const OUString& rTitle );
@@ -222,6 +222,12 @@ public:
 
     int                 Compare( const OUString& rTitle ) const;
     void                SetType( const OUString& rType );
+
+    void                ResetFlags() { mbInUse = sal_False; mbNew = sal_False; }
+    void                RemoveEntry();
+    void                SetInUse( sal_Bool bInUse ) { mbInUse = bInUse; }
+    sal_Bool            IsInUse() const { return mbInUse; }
+    sal_Bool            IsNew() const { return mbNew; }
 };
 
 DECLARE_LIST( EntryList_Impl, EntryData_Impl* );
@@ -232,33 +238,30 @@ class RegionData_Impl
 {
     EntryList_Impl      maEntries;
     OUString            maTitle;
-    OUString            maRealTitle;    //!dv
     OUString            maOwnURL;
     OUString            maTargetURL;
     Content             maTargetContent;
     Content             maHierarchyContent;
-    sal_Bool            mbChecked;
+    sal_Bool            mbInUse     : 1;
+    sal_Bool            mbNew       : 1;
 
 private:
     long                GetEntryPos( const OUString& rTitle,
                                      sal_Bool& rFound ) const;
 public:
-                        RegionData_Impl( const OUString& rTitle,
-                                         const OUString& rRealTitle );
+                        RegionData_Impl( const OUString& rTitle );
                         ~RegionData_Impl();
 
     EntryData_Impl*     GetEntry( const OUString& rName ) const;
     EntryData_Impl*     GetEntry( ULONG nIndex ) const;
 
     const OUString&     GetTitle() const { return maTitle; }
-    const OUString&     GetRealTitle() const { return maRealTitle; }
     const OUString&     GetTargetURL() const { return maTargetURL; }
     const OUString&     GetHierarchyURL() const { return maOwnURL; }
 
     ULONG               GetCount() const;
 
     void                SetTitle( const OUString& rTitle ) { maTitle = rTitle; }
-    void                SetRealTitle( const OUString& rTitle ) { maRealTitle = rTitle; }
     void                SetTargetURL( const OUString& rTargetURL );
     void                SetHierarchyURL( const OUString& rURL) { maOwnURL = rURL; }
 
@@ -270,10 +273,15 @@ public:
                                   const OUString& rTargetURL );
     void                DeleteEntry( ULONG nIndex );
 
-    void                SetChecked( sal_Bool bChecked ) { mbChecked = bChecked; }
     int                 Compare( const OUString& rTitle ) const
                             { return maTitle.compareTo( rTitle ); }
     int                 Compare( RegionData_Impl* pCompareWith ) const;
+
+    void                ResetFlags();
+    void                RemoveUnused();
+    void                RemoveRegion();
+    void                SetInUse( sal_Bool bInUse ) { mbInUse = bInUse; }
+    sal_Bool            IsInUse() const { return mbInUse; }
 };
 
 DECLARE_LIST( RegionList_Impl, RegionData_Impl* );
@@ -311,7 +319,6 @@ public:
     void                CreateFromHierarchy( Content &rTemplRoot );
 
     void                AddRegion( const OUString& rTitle,
-                                   const OUString& rRealTitle,
                                    const OUString& rTargetURL,
                                    Content& rContent );
     void                DeleteRegion( ULONG nIndex );
@@ -321,11 +328,10 @@ public:
     RegionData_Impl*    GetRegion( const OUString& rName ) const;
     RegionData_Impl*    GetRegion( ULONG nIndex ) const;
     RegionData_Impl*    GetRegionByPath( const String& rPath ) const;
-    void                GetFolders( Content& rRoot, Content& rFolder, ULONG nIndex );
+    void                GetFolders( Content& rRoot, Content& rFolder );
     void                GetTemplates( Content& rTargetFolder,
                                       Content& rParentFolder,
-                                      RegionData_Impl* pRegion,
-                                      const OUString& rParentURL );
+                                      RegionData_Impl* pRegion );
 
     long                GetRegionPos( const OUString& rTitle,
                                       sal_Bool& rFound ) const;
@@ -346,6 +352,7 @@ public:
 
     void                AddToStandard( Content& rRoot,
                                        Content& rFolder );
+    sal_Bool            DoUpdate();
 };
 
 SfxDocTemplate_Impl *gpTemplateData = 0;
@@ -368,8 +375,6 @@ private:
 public:
                             Updater_Impl( SfxDocTemplate_Impl* pTemplates );
                             ~Updater_Impl();
-
-    sal_Bool                DoUpdate();
 
     virtual void SAL_CALL   run();
     virtual void SAL_CALL   onTerminated();
@@ -587,7 +592,7 @@ String SfxDocumentTemplates::GetFullRegionName
     RegionData_Impl *pData1 = pImp->GetRegion( nIdx );
 
     if ( pData1 )
-        aName = pData1->GetRealTitle();
+        aName = pData1->GetTitle();
 
     /*  Second: check if there is another region with the same name.
         If there is one, append the path to the region name so it is
@@ -604,7 +609,7 @@ String SfxDocumentTemplates::GetFullRegionName
         pData2 = pImp->GetRegion( nIndex );
 
         if ( ( nIndex != nIdx ) &&
-             ( pData2->GetRealTitle() == aCompareMe ) )
+             ( pData2->GetTitle() == aCompareMe ) )
         {
             INetURLObject aURLObj( pData2->GetTargetURL() );
             aURLObj.removeSegment();
@@ -645,7 +650,7 @@ const String& SfxDocumentTemplates::GetRegionName
     RegionData_Impl *pData = pImp->GetRegion( nIdx );
 
     if ( pData )
-        maTmpString = pData->GetRealTitle();
+        maTmpString = pData->GetTitle();
     else
         maTmpString.Erase();
 
@@ -1626,19 +1631,10 @@ BOOL SfxDocumentTemplates::SetName
     Content aFolderCont;
 
     OUString aTitle( rName );
-    OUString aRealTitle( rName );
     OUString aFolderURL = pRegion->GetTargetURL();
     OUString aHierURL = pRegion->GetHierarchyURL();
 
-    sal_Bool bSetRealTitle( sal_False );
-
-    if ( nIdx == USHRT_MAX )
-    {
-        sal_Int32 nStart = pRegion->GetRealTitle().getLength();
-        aTitle += pRegion->GetTitle().copy( nStart );
-        bSetRealTitle = sal_True;
-    }
-    else
+    if ( nIdx != USHRT_MAX )
     {
         EntryData_Impl *pEntry = pRegion->GetEntry( nIdx );
         if ( !pEntry )
@@ -1657,11 +1653,6 @@ BOOL SfxDocumentTemplates::SetName
     {
         aHierCont = Content( aHierURL, aCmdEnv );
         aHierCont.setPropertyValue( aTitleStr, makeAny( aTitle ) );
-        if ( bSetRealTitle )
-        {
-            OUString aPropName( OUString( RTL_CONSTASCII_USTRINGPARAM( REAL_NAME ) ) );
-            aHierCont.setPropertyValue( aPropName, makeAny( aRealTitle ) );
-        }
         aHierURL = aHierCont.get()->getIdentifier()->getContentIdentifier();
     }
     catch( ContentCreationException& )
@@ -1677,7 +1668,7 @@ BOOL SfxDocumentTemplates::SetName
     try
     {
         aFolderCont = Content( aFolderURL, aCmdEnv );
-        aFolderCont.setPropertyValue( aTitleStr, makeAny( aRealTitle ) );
+        aFolderCont.setPropertyValue( aTitleStr, makeAny( aTitle ) );
         aFolderURL = aFolderCont.get()->getIdentifier()->getContentIdentifier();
     }
     catch( ContentCreationException& )
@@ -1691,14 +1682,13 @@ BOOL SfxDocumentTemplates::SetName
     // Update the internal data structures
     if ( pEntry )
     {
-        pEntry->SetTitle( aRealTitle );
+        pEntry->SetTitle( aTitle );
         pEntry->SetTargetURL( aFolderURL );
         pEntry->SetHierarchyURL( aHierURL );
     }
     else
     {
         pRegion->SetTitle( aTitle );
-        pRegion->SetRealTitle( aRealTitle );
         pRegion->SetTargetURL( aFolderURL );
         pRegion->SetHierarchyURL( aHierURL );
     }
@@ -1976,7 +1966,7 @@ BOOL SfxDocumentTemplates::GetLogicNames
 
     if ( bFound )
     {
-        rRegion = pData->GetRealTitle();
+        rRegion = pData->GetTitle();
         rName = pEntry->GetTitle();
     }
 
@@ -2032,8 +2022,9 @@ SfxDocumentTemplates::~SfxDocumentTemplates()
 // -----------------------------------------------------------------------
 EntryData_Impl::EntryData_Impl( const OUString& rTitle )
 {
-    maTitle     = rTitle;
-    mbChecked   = sal_False;
+    maTitle = rTitle;
+    mbInUse = sal_True;
+    mbNew   = sal_True;
 }
 
 // -----------------------------------------------------------------------
@@ -2093,15 +2084,34 @@ void EntryData_Impl::SetType( const OUString& rType )
 }
 
 // -----------------------------------------------------------------------
-// -----------------------------------------------------------------------
-// -----------------------------------------------------------------------
-// -----------------------------------------------------------------------
-RegionData_Impl::RegionData_Impl( const OUString& rTitle,
-                                  const OUString& rRealTitle )
+void EntryData_Impl::RemoveEntry()
 {
-    maTitle         = rTitle;
-    maRealTitle     = rRealTitle;
-    mbChecked       = sal_False;
+    Content aEntry;
+
+    try
+    {
+        Reference< XCommandEnvironment > aCmdEnv;
+        aEntry = Content( maOwnURL, aCmdEnv );
+
+        OUString aCmd( RTL_CONSTASCII_USTRINGPARAM( COMMAND_DELETE ) );
+        Any aArg = makeAny( sal_Bool( sal_True ) );
+
+        aEntry.executeCommand( aCmd, aArg );
+    }
+    catch ( CommandAbortedException& ) {}
+    catch ( RuntimeException& ) {}
+    catch ( Exception& ) {}
+}
+
+// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
+RegionData_Impl::RegionData_Impl( const OUString& rTitle )
+{
+    maTitle     = rTitle;
+    mbInUse     = sal_True;
+    mbNew       = sal_True;
 }
 
 // -----------------------------------------------------------------------
@@ -2245,19 +2255,21 @@ EntryData_Impl* RegionData_Impl::AddEntry( Content& rParentFolder,
     catch ( Exception& )
     { return NULL; }
 
-    EntryData_Impl* pEntry = new EntryData_Impl( rTitle );
-    pEntry->SetTargetURL( rTargetURL );
-    pEntry->SetHierarchyURL( aLinkURL );
+    EntryData_Impl *pEntry;
+    sal_Bool        bFound = sal_False;
+    long            nPos = GetEntryPos( rTitle, bFound );
 
-    sal_Bool    bFound = sal_False;
-    long        nPos = GetEntryPos( pEntry->GetTitle(), bFound );
-
-    if ( !bFound )
-        maEntries.Insert( pEntry, nPos );
+    if ( bFound )
+    {
+        pEntry = maEntries.GetObject( nPos );
+        pEntry->SetInUse( sal_True );
+    }
     else
     {
-        delete pEntry;
-        pEntry = maEntries.GetObject( nPos );
+        pEntry = new EntryData_Impl( rTitle );
+        pEntry->SetTargetURL( rTargetURL );
+        pEntry->SetHierarchyURL( aLinkURL );
+        maEntries.Insert( pEntry, nPos );
     }
 
     return pEntry;
@@ -2302,11 +2314,62 @@ void RegionData_Impl::DeleteEntry( ULONG nIndex )
 // -----------------------------------------------------------------------
 int RegionData_Impl::Compare( RegionData_Impl* pCompare ) const
 {
-    int nCompare = maRealTitle.compareTo( pCompare->maRealTitle );
+    int nCompare = maTitle.compareTo( pCompare->maTitle );
 
     return nCompare;
 }
 
+// -----------------------------------------------------------------------
+void RegionData_Impl::ResetFlags()
+{
+    mbInUse = sal_False;
+    mbNew   = sal_False;
+
+    EntryData_Impl *pData = maEntries.First();
+    while ( pData )
+    {
+        pData->ResetFlags();
+        pData = maEntries.Next();
+    }
+}
+
+// -----------------------------------------------------------------------
+void RegionData_Impl::RemoveUnused()
+{
+    ULONG           nCount = maEntries.Count();
+    EntryData_Impl *pData;
+
+    while ( nCount )
+    {
+        pData = maEntries.GetObject( --nCount );
+        if ( !pData->IsInUse() )
+        {
+            pData->RemoveEntry();
+            maEntries.Remove( nCount );
+            delete pData;
+        }
+    }
+}
+
+// -----------------------------------------------------------------------
+void RegionData_Impl::RemoveRegion()
+{
+    Content aRegion;
+
+    try
+    {
+        Reference< XCommandEnvironment > aCmdEnv;
+        aRegion = Content( maOwnURL, aCmdEnv );
+
+        OUString aCmd( RTL_CONSTASCII_USTRINGPARAM( COMMAND_DELETE ) );
+        Any aArg = makeAny( sal_Bool( sal_True ) );
+
+        aRegion.executeCommand( aCmd, aArg );
+    }
+    catch ( CommandAbortedException& ) {}
+    catch ( RuntimeException& ) {}
+    catch ( Exception& ) {}
+}
 
 // -----------------------------------------------------------------------
 // -----------------------------------------------------------------------
@@ -2343,7 +2406,7 @@ RegionData_Impl* SfxDocTemplate_Impl::GetRegion( const OUString& rName )
     {
         pData = maRegions.GetObject( i );
 
-        if ( pData->GetRealTitle() == rName )
+        if ( pData->GetTitle() == rName )
             return pData;
     }
 
@@ -2391,12 +2454,11 @@ void SfxDocTemplate_Impl::DeleteRegion( ULONG nIndex )
 /*  AddRegion adds a Region to the RegionList
 */
 void SfxDocTemplate_Impl::AddRegion( const OUString& rTitle,
-                                     const OUString& rRealTitle,
                                      const OUString& rTargetURL,
                                      Content& rContent )
 {
     RegionData_Impl* pRegion;
-    pRegion = new RegionData_Impl( rTitle, rRealTitle );
+    pRegion = new RegionData_Impl( rTitle );
     pRegion->SetHierarchyContent( rContent );
     pRegion->SetTargetURL( rTargetURL );
     pRegion->SetHierarchyURL( rContent.get()->getIdentifier()->getContentIdentifier() );
@@ -2453,12 +2515,11 @@ void SfxDocTemplate_Impl::AddRegion( const OUString& rTitle,
 void SfxDocTemplate_Impl::CreateFromHierarchy( Content &rTemplRoot )
 {
     Reference< XResultSet > xResultSet;
-    Sequence< OUString > aProps(4);
+    Sequence< OUString > aProps(3);
     OUString* pProps = aProps.getArray();
     pProps[0] = OUString::createFromAscii( TITLE );
     pProps[1] = OUString::createFromAscii( TARGET_DIR_URL );
     pProps[2] = OUString::createFromAscii( PARENT_DIR_URL );
-    pProps[3] = OUString::createFromAscii( REAL_NAME );
 
     try
     {
@@ -2484,12 +2545,11 @@ void SfxDocTemplate_Impl::CreateFromHierarchy( Content &rTemplRoot )
                 OUString aTitle( xRow->getString( 1 ) );
                 OUString aTargetDir( xRow->getString( 2 ) );
                 OUString aParentDir( xRow->getString( 3 ) );
-                OUString aRealTitle( xRow->getString( 4 ) );
 
                 OUString aId = xContentAccess->queryContentIdentifierString();
                 Content  aContent = Content( aId, aCmdEnv );
 
-                AddRegion( aTitle, aRealTitle, aTargetDir, aContent );
+                AddRegion( aTitle, aTargetDir, aContent );
             }
         }
         catch( CommandAbortedException& )
@@ -2525,21 +2585,8 @@ void SfxDocTemplate_Impl::Construct( const String& rDirs )
 
     ReadFolderList();
 
-    if ( bNewRoot )
-    {
-        USHORT i;
-        USHORT nCount = rDirs.GetTokenCount( C_DELIM );
-
-        for ( i=0; i<nCount; i++ )
-        {
-            Content aTemplDir;
-
-            if ( GetTemplateDir( i, aTemplDir ) )
-                GetFolders( aTemplRoot, aTemplDir, i );
-        }
-    }
-    else
-        CreateFromHierarchy( aTemplRoot );
+    CreateFromHierarchy( aTemplRoot );
+    Rescan( sal_False );
 }
 
 // -----------------------------------------------------------------------
@@ -2622,8 +2669,7 @@ sal_Bool SfxDocTemplate_Impl::GetTemplateDir( USHORT nIndex,
 // -----------------------------------------------------------------------
 
 void SfxDocTemplate_Impl::GetFolders( Content& rRoot,
-                                      Content& rFolder,
-                                      ULONG nIndex )
+                                      Content& rFolder )
 {
     Reference< XResultSet > xResultSet;
     Sequence< OUString > aProps(1);
@@ -2652,8 +2698,6 @@ void SfxDocTemplate_Impl::GetFolders( Content& rRoot,
         OUString aFolderURL = rFolder.get()->getIdentifier()->getContentIdentifier();
         OUString aRootURL = rRoot.get()->getIdentifier()->getContentIdentifier();
         aRootURL += OUString( '/' );
-        OUString aIndex( '.' );
-        aIndex += OUString::valueOf( (sal_Int32) nIndex );
 
         Content aFolder;
         Sequence< OUString > aNames(2);
@@ -2661,11 +2705,10 @@ void SfxDocTemplate_Impl::GetFolders( Content& rRoot,
         pNames[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( TITLE ) );
         pNames[1] = OUString( RTL_CONSTASCII_USTRINGPARAM( IS_FOLDER ) );
 
-        Sequence< OUString > aAdditionalProps(3);
+        Sequence< OUString > aAdditionalProps(2);
         pNames = aAdditionalProps.getArray();
         pNames[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( TARGET_DIR_URL ) );
         pNames[1] = OUString( RTL_CONSTASCII_USTRINGPARAM( PARENT_DIR_URL ) );
-        pNames[2] = OUString( RTL_CONSTASCII_USTRINGPARAM( REAL_NAME ) );
 
         Sequence< Any > aValues(2);
         Any* pValues = aValues.getArray();
@@ -2676,7 +2719,6 @@ void SfxDocTemplate_Impl::GetFolders( Content& rRoot,
         {
             while ( xResultSet->next() )
             {
-                sal_Bool    bWasInList;
                 OUString    aTitle( xRow->getString(1) );
 
                 if ( aTitle.compareToAscii( "wizard" ) == 0 )
@@ -2685,10 +2727,9 @@ void SfxDocTemplate_Impl::GetFolders( Content& rRoot,
                     continue;
 
                 aTitle = GetLongName( aTitle );
-                OUString aURLTitle = aTitle + aIndex;
 
                 INetURLObject aNewFolderObj( aRootURL );
-                aNewFolderObj.insertName( aURLTitle, false,         // aURLTitle?
+                aNewFolderObj.insertName( aTitle, false,
                       INetURLObject::LAST_SEGMENT, true,
                       INetURLObject::ENCODE_ALL );
 
@@ -2701,7 +2742,7 @@ void SfxDocTemplate_Impl::GetFolders( Content& rRoot,
                 }
                 catch( ContentCreationException& )
                 {
-                    pValues[0] = makeAny( aURLTitle );              // aURLTitle?
+                    pValues[0] = makeAny( aTitle );
                     pValues[1] = makeAny( sal_Bool( sal_True ) );
 
                     try
@@ -2723,8 +2764,6 @@ void SfxDocTemplate_Impl::GetFolders( Content& rRoot,
                                                                   makeAny( aId ) );
                                         xFolderProp->addProperty( pNames[1], PropertyAttribute::MAYBEVOID,
                                                                   makeAny( aId ) );
-                                        xFolderProp->addProperty( pNames[2], PropertyAttribute::MAYBEVOID,
-                                                                  makeAny( aTitle ) );
                                     }
                                     catch( PropertyExistException& ) {}
                                     catch( IllegalTypeException& ) { DBG_ERRORFILE( "IllegalTypeException" ); }
@@ -2732,12 +2771,11 @@ void SfxDocTemplate_Impl::GetFolders( Content& rRoot,
                                 }
                             }
 
-                            Sequence< Any > aPropValues(3);
+                            Sequence< Any > aPropValues(2);
                             Any* pPropValues = aPropValues.getArray();
 
                             pPropValues[0] = makeAny( aId );
                             pPropValues[1] = makeAny( aFolderURL );
-                            pPropValues[2] = makeAny( aTitle );
 
                             aFolder.setPropertyValues( aAdditionalProps, aPropValues );
                         }
@@ -2748,19 +2786,19 @@ void SfxDocTemplate_Impl::GetFolders( Content& rRoot,
                     }
                 }
 
-                RegionData_Impl *pRegion = new RegionData_Impl( aURLTitle, aTitle );
-                pRegion->SetTargetURL( aId );
-                pRegion->SetHierarchyURL( aNewFolderURL );
+                RegionData_Impl *pRegion = GetRegion( aTitle );
 
-                bWasInList = InsertOrMarkRegion( pRegion );
+                if ( !pRegion )
+                {
+                    pRegion = new RegionData_Impl( aTitle );
+                    pRegion->SetTargetURL( aId );
+                    pRegion->SetHierarchyURL( aNewFolderURL );
+                }
+
+                InsertOrMarkRegion( pRegion );
 
                 Content aSubFolder( xContentAccess->queryContent(), aCmdEnv );
-                GetTemplates( aSubFolder, aFolder, pRegion, aNewFolderURL );
-
-                if ( bWasInList )
-                {
-                    delete pRegion;
-                }
+                GetTemplates( aSubFolder, aFolder, pRegion );
             }
         }
         catch( CommandAbortedException& )
@@ -2776,36 +2814,20 @@ void SfxDocTemplate_Impl::GetFolders( Content& rRoot,
 void SfxDocTemplate_Impl::AddToStandard( Content& rRoot,
                                          Content& rFolder )
 {
-    sal_Bool    bWasInList;
     OUString    aTitle( RTL_CONSTASCII_USTRINGPARAM( STANDARD_FOLDER ) );
 
     aTitle = GetLongName( aTitle );
 
     OUString aRootURL = rRoot.get()->getIdentifier()->getContentIdentifier();
+    OUString aFolderURL = rFolder.get()->getIdentifier()->getContentIdentifier();
 
     INetURLObject aNewFolderObj( aRootURL );
-    aNewFolderObj.insertName( aTitle, false,            // aURLTitle?
+    aNewFolderObj.insertName( aTitle, false,
           INetURLObject::LAST_SEGMENT, true,
           INetURLObject::ENCODE_ALL );
 
     OUString aNewFolderURL = aNewFolderObj.GetMainURL();
-    OUString aFolderURL = rFolder.get()->getIdentifier()->getContentIdentifier();
-    OUString aType = OUString( RTL_CONSTASCII_USTRINGPARAM( TYPE_FOLDER ) );
-
     Content aFolder;
-    Sequence< OUString > aNames(2);
-    OUString* pNames = aNames.getArray();
-    pNames[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( TITLE ) );
-    pNames[1] = OUString( RTL_CONSTASCII_USTRINGPARAM( IS_FOLDER ) );
-
-    Sequence< OUString > aAdditionalProps(3);
-    pNames = aAdditionalProps.getArray();
-    pNames[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( TARGET_DIR_URL ) );
-    pNames[1] = OUString( RTL_CONSTASCII_USTRINGPARAM( PARENT_DIR_URL ) );
-    pNames[2] = OUString( RTL_CONSTASCII_USTRINGPARAM( REAL_NAME ) );
-
-    Sequence< Any > aValues(2);
-    Any* pValues = aValues.getArray();
 
     try
     {
@@ -2814,6 +2836,21 @@ void SfxDocTemplate_Impl::AddToStandard( Content& rRoot,
     }
     catch( ContentCreationException& )
     {
+        OUString aType = OUString( RTL_CONSTASCII_USTRINGPARAM( TYPE_FOLDER ) );
+
+        Sequence< OUString > aNames(2);
+        OUString* pNames = aNames.getArray();
+        pNames[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( TITLE ) );
+        pNames[1] = OUString( RTL_CONSTASCII_USTRINGPARAM( IS_FOLDER ) );
+
+        Sequence< OUString > aAdditionalProps(2);
+        pNames = aAdditionalProps.getArray();
+        pNames[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( TARGET_DIR_URL ) );
+        pNames[1] = OUString( RTL_CONSTASCII_USTRINGPARAM( PARENT_DIR_URL ) );
+
+        Sequence< Any > aValues(2);
+        Any* pValues = aValues.getArray();
+
         pValues[0] = makeAny( aTitle );
         pValues[1] = makeAny( sal_Bool( sal_True ) );
 
@@ -2861,26 +2898,28 @@ void SfxDocTemplate_Impl::AddToStandard( Content& rRoot,
         }
     }
 
-    RegionData_Impl *pRegion = new RegionData_Impl( aTitle, aTitle );
-    pRegion->SetTargetURL( aFolderURL );
-    pRegion->SetHierarchyURL( aNewFolderURL );
+    RegionData_Impl *pRegion = GetRegion( aTitle );
 
-    bWasInList = InsertOrMarkRegion( pRegion );
-
-    GetTemplates( rFolder, aFolder, pRegion, aNewFolderURL );
-
-    if ( bWasInList )
+    if ( !pRegion )
     {
-        delete pRegion;
+        pRegion = new RegionData_Impl( aTitle );
+        pRegion->SetTargetURL( aFolderURL );
+        pRegion->SetHierarchyURL( aNewFolderURL );
+        InsertOrMarkRegion( pRegion );
     }
+    else
+    {
+        pRegion->SetInUse( sal_True );
+    }
+
+    GetTemplates( rFolder, aFolder, pRegion );
 }
 
 // -----------------------------------------------------------------------
 
 void SfxDocTemplate_Impl::GetTemplates( Content& rTargetFolder,
                                         Content& rParentFolder,
-                                        RegionData_Impl* pRegion,
-                                        const OUString& rParentURL )
+                                        RegionData_Impl* pRegion )
 {
     Reference< XResultSet > xResultSet;
     Sequence< OUString >    aProps(1);
@@ -2918,7 +2957,7 @@ void SfxDocTemplate_Impl::GetTemplates( Content& rTargetFolder,
                 EntryData_Impl* pEntry;
                 pEntry = pRegion->AddEntry( rParentFolder, aTitle, aId );
 
-                if ( pEntry )
+                if ( pEntry && pEntry->IsNew() )
                 {
                     OUString aType = GetTypeFromURL( aId );
                     pEntry->SetType( aType );
@@ -2987,12 +3026,12 @@ sal_Bool SfxDocTemplate_Impl::InsertOrMarkRegion( RegionData_Impl *pNew )
     if ( pData )
     {
         bFound = sal_True;
-        pData->SetChecked( sal_True );
+        pData->SetInUse( sal_True );
     }
     else
     {
         bFound = sal_False;
-        pNew->SetChecked( sal_True );
+        pNew->SetInUse( sal_True );
 
         NamePair_Impl   *pPair = maNames.First();
 
@@ -3031,7 +3070,7 @@ sal_Bool SfxDocTemplate_Impl::InsertOrMarkRegion( RegionData_Impl *pNew )
     if ( nCompVal == 0 )
     {
         bFound = TRUE;
-        pMid->SetChecked( sal_True );
+        pMid->SetInUse( sal_True );
     }
     else
     {
@@ -3061,9 +3100,6 @@ sal_Bool SfxDocTemplate_Impl::InsertNewRegionToHierarchy(
     OUString aRootURL = rRoot.get()->getIdentifier()->getContentIdentifier();
     aRootURL += OUString( '/' );
 
-    OUString aIndex( '.' );
-    aIndex += OUString::valueOf( (sal_Int32) nIndex );
-
     Sequence< OUString > aNames(2);
     Sequence< Any > aValues(2);
 
@@ -3071,18 +3107,17 @@ sal_Bool SfxDocTemplate_Impl::InsertNewRegionToHierarchy(
     pNames[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( TITLE ) );
     pNames[1] = OUString( RTL_CONSTASCII_USTRINGPARAM( IS_FOLDER ) );
 
-    Sequence< OUString > aAdditionalProps(3);
+    Sequence< OUString > aAdditionalProps(2);
     pNames = aAdditionalProps.getArray();
     pNames[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( TARGET_DIR_URL ) );
     pNames[1] = OUString( RTL_CONSTASCII_USTRINGPARAM( PARENT_DIR_URL ) );
-    pNames[2] = OUString( RTL_CONSTASCII_USTRINGPARAM( REAL_NAME ) );
 
     OUString aType = OUString( RTL_CONSTASCII_USTRINGPARAM( TYPE_FOLDER ) );
 
-    sal_Bool    bExists = sal_False;
+    sal_Bool bExists = sal_False;
 
-    OUString aURLTitle = rTitle + aIndex;
-    OUString aNewFolderURL = aRootURL + aURLTitle;
+    //dv!  hier muss ein URLObject benutzt werden
+    OUString aNewFolderURL = aRootURL + rTitle;
 
     Content aFolder;
 
@@ -3094,7 +3129,7 @@ sal_Bool SfxDocTemplate_Impl::InsertNewRegionToHierarchy(
     catch( ContentCreationException& )
     {
         Any* pValues = aValues.getArray();
-        pValues[0] = makeAny( aURLTitle );
+        pValues[0] = makeAny( rTitle );
         pValues[1] = makeAny( sal_Bool( sal_True ) );
 
         try
@@ -3116,8 +3151,6 @@ sal_Bool SfxDocTemplate_Impl::InsertNewRegionToHierarchy(
                                                       makeAny( rTargetURL ) );
                             xFolderProp->addProperty( pNames[1], PropertyAttribute::MAYBEVOID,
                                                       makeAny( aFolderURL ) );
-                            xFolderProp->addProperty( pNames[2], PropertyAttribute::MAYBEVOID,
-                                                      makeAny( rTitle ) );
                         }
                         catch( PropertyExistException& ) {}
                         catch( IllegalTypeException& ) { DBG_ERRORFILE( "IllegalTypeException" ); }
@@ -3125,12 +3158,11 @@ sal_Bool SfxDocTemplate_Impl::InsertNewRegionToHierarchy(
                     }
                 }
 
-                Sequence< Any > aPropValues(3);
+                Sequence< Any > aPropValues(2);
                 Any* pPropValues = aPropValues.getArray();
 
                 pPropValues[0] = makeAny( rTargetURL );
                 pPropValues[1] = makeAny( aFolderURL );
-                pPropValues[2] = makeAny( rTitle );
 
                 aFolder.setPropertyValues( aAdditionalProps, aPropValues );
             }
@@ -3146,7 +3178,7 @@ sal_Bool SfxDocTemplate_Impl::InsertNewRegionToHierarchy(
 
     if ( !bExists )
     {
-        RegionData_Impl *pRegion = new RegionData_Impl( aURLTitle, rTitle );
+        RegionData_Impl *pRegion = new RegionData_Impl( rTitle );
         pRegion->SetTargetURL( rTargetURL );
         pRegion->SetHierarchyURL( aNewFolderURL );
 
@@ -3325,15 +3357,71 @@ OUString SfxDocTemplate_Impl::GetLongName( const OUString& rShortName )
 sal_Bool SfxDocTemplate_Impl::Rescan( sal_Bool bNow )
 {
     sal_Bool         bRet = sal_True;
-    Updater_Impl    *pThread = new Updater_Impl( this );
 
     if ( bNow )
     {
-        bRet = pThread->DoUpdate();
-        delete pThread;
+        bRet = DoUpdate();
     }
     else
+    {
+        Updater_Impl *pThread = new Updater_Impl( this );
         pThread->create();
+    }
+
+    return bRet;
+}
+
+//------------------------------------------------------------------------
+sal_Bool SfxDocTemplate_Impl::DoUpdate()
+{
+    sal_Bool bRet = sal_True;
+
+    // First: reset the flags of all regions and their children
+    RegionData_Impl *pRegion = maRegions.First();
+
+    while ( pRegion )
+    {
+        pRegion->ResetFlags();
+        pRegion = maRegions.Next();
+    }
+
+    // Now scan all the folder in the template search path and mark
+    // them
+
+    Content     aTemplRoot;
+    sal_Bool    bNewRoot;
+
+    if ( ! GetTemplateRoot( aTemplRoot, bNewRoot ) )
+        return sal_False;
+
+    ULONG i;
+    ULONG nCount = maDirs.GetTokenCount( C_DELIM );
+
+    for ( i=0; i<nCount; i++ )
+    {
+        Content aTemplDir;
+
+        if ( GetTemplateDir( (USHORT) i, aTemplDir ) )
+            GetFolders( aTemplRoot, aTemplDir );
+    }
+
+    // Now remove all non existing objects
+
+    nCount = GetRegionCount();
+
+    while ( nCount )
+    {
+        pRegion = maRegions.GetObject( --nCount );
+
+        if ( pRegion->IsInUse() )
+            pRegion->RemoveUnused();
+        else
+        {
+            pRegion->RemoveRegion();
+            maRegions.Remove( nCount );
+            delete pRegion;
+        }
+    }
 
     return bRet;
 }
@@ -3354,17 +3442,9 @@ Updater_Impl::~Updater_Impl()
 }
 
 //------------------------------------------------------------------------
-sal_Bool Updater_Impl::DoUpdate()
-{
-    sal_Bool bRet = sal_True;
-
-    return bRet;
-}
-
-//------------------------------------------------------------------------
 void SAL_CALL Updater_Impl::run()
 {
-    DoUpdate();
+    maDocTemplates->DoUpdate();
 }
 
 //------------------------------------------------------------------------
