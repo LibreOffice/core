@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpath.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:40:51 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:19:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,10 @@
 #else
 class HeaderBar;
 #endif
+#ifndef SVX_CONTROLL_FUCUS_HELPER_HXX
+#include "ControlFocusHelper.hxx"
+#endif
+
 
 // forward ---------------------------------------------------------------
 
@@ -94,21 +98,7 @@ struct OptPath_Impl;
 
 #define SfxPathTabPage SvxPathTabPage
 
-// class SvxPathControl_Impl ---------------------------------------------
 
-class SvxPathControl_Impl : public Control
-{
-private:
-    Control*        m_pFocusCtrl;
-
-public:
-    SvxPathControl_Impl( Window* pParent, const ResId& rId ) :
-        Control( pParent, rId ), m_pFocusCtrl( NULL ) {}
-
-    void            SetFocusControl( Control* pCtrl ) { m_pFocusCtrl = pCtrl; }
-
-    virtual long    Notify( NotifyEvent& rNEvt );
-};
 
 // class SvxPathTabPage --------------------------------------------------
 
@@ -117,7 +107,7 @@ class SvxPathTabPage : public SfxTabPage
 private:
     FixedText           aTypeText;
     FixedText           aPathText;
-    SvxPathControl_Impl aPathCtrl;
+    SvxControlFocusHelper aPathCtrl;
     PushButton          aStandardBtn;
     PushButton          aPathBtn;
     FixedLine           aStdBox;
