@@ -2,9 +2,9 @@
  *
  *  $RCSfile: namebuff.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:35:48 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:44:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,27 +272,27 @@ BOOL ShrfmlaBuffer::GetAddress( const String& rName, ScRange& rRet )
         xub_StrLen          nPos = aTmp.Search( '_' );
         if( nPos != STRING_NOTFOUND )
         {
-            rRet.aStart.SetCol( ( USHORT ) aTmp.ToInt32() );
+            rRet.aStart.SetCol( static_cast<SCCOL>(aTmp.ToInt32()) );
             aTmp.Erase( 0, nPos + 1 );
 
             nPos = aTmp.Search( '_' );
             if( nPos != STRING_NOTFOUND )
             {
-                rRet.aStart.SetRow( ( USHORT ) aTmp.ToInt32() );
+                rRet.aStart.SetRow( static_cast<SCROW>(aTmp.ToInt32()) );
                 aTmp.Erase( 0, nPos + 1 );
 
                 nPos = aTmp.Search( '_' );
                 if( nPos != STRING_NOTFOUND )
                 {
-                    rRet.aEnd.SetCol( ( USHORT ) aTmp.ToInt32() );
+                    rRet.aEnd.SetCol( static_cast<SCCOL>(aTmp.ToInt32()) );
                     aTmp.Erase( 0, nPos + 1 );
                     nPos = aTmp.Search( '_' );
                     if( nPos != STRING_NOTFOUND )
                     {
-                        rRet.aEnd.SetRow( ( USHORT ) aTmp.ToInt32() );
+                        rRet.aEnd.SetRow( static_cast<SCROW>(aTmp.ToInt32()) );
                         aTmp.Erase( 0, nPos + 1 );
 
-                        rRet.aStart.SetTab( ( USHORT ) aTmp.ToInt32() );
+                        rRet.aStart.SetTab( static_cast<SCTAB>(aTmp.ToInt32()) );
                         rRet.aEnd.SetTab( rRet.aStart.Tab() );
                         return TRUE;
                     }
@@ -343,12 +343,12 @@ BOOL ExtSheetBuffer::GetScTabIndex( UINT16 nExcIndex, UINT16& rScIndex )
 
         if( rTabNum == 0xFFFF )
         {// neue Tabelle erzeugen
-            UINT16  nNewTabNum;
+            SCTAB   nNewTabNum;
             if( pCur->bSWB )
             {// Tabelle ist im selben Workbook!
                 if( pExcRoot->pDoc->GetTable( pCur->aTab, nNewTabNum ) )
                 {
-                    rScIndex = rTabNum = nNewTabNum;
+                    rScIndex = rTabNum = static_cast<UINT16>(nNewTabNum);
                     return TRUE;
                 }
                 else
@@ -363,7 +363,7 @@ BOOL ExtSheetBuffer::GetScTabIndex( UINT16 nExcIndex, UINT16& rScIndex )
                     String      aTabName( ScGlobal::GetDocTabName( aURL, pCur->aTab ) );
                     if( pExcRoot->pDoc->LinkExternalTab( nNewTabNum, aTabName, aURL, pCur->aTab ) )
                     {
-                        rScIndex = rTabNum = nNewTabNum;
+                        rScIndex = rTabNum = static_cast<UINT16>(nNewTabNum);
                         return TRUE;
                     }
                     else
