@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outleeng.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: aw $ $Date: 2002-08-01 14:44:33 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 15:49:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #include <outl_pch.hxx>
 
 #pragma hdrstop
@@ -137,6 +136,11 @@ void OutlinerEditEng::ParagraphHeightChanged( USHORT nPara )
 BOOL OutlinerEditEng::SpellNextDocument()
 {
     return pOwner->SpellNextDocument();
+}
+
+BOOL OutlinerEditEng::ConvertNextDocument()
+{
+    return pOwner->ConvertNextDocument();
 }
 
 XubString OutlinerEditEng::GetUndoComment( USHORT nUndoId ) const
