@@ -2,7 +2,7 @@
  *
  *  $RCSfile: xmlgrhlp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
  *  last change: $Author: ka $
  *
@@ -279,17 +279,40 @@ void SvXMLGraphicHelper::ImplInsertGraphicURL( const ::rtl::OUString& rURLStr, s
 
             if( aGrfObject.GetType() != GRAPHIC_NONE )
             {
-                String aStreamName( aGraphicObjectId );
+                String          aStreamName( aGraphicObjectId );
+                Graphic         aGraphic( (Graphic&) aGrfObject.GetGraphic() );
+                const GfxLink   aGfxLink( aGraphic.GetLink() );
 
-                if( aGrfObject.GetType() == GRAPHIC_BITMAP )
+                if( aGfxLink.GetDataSize() )
                 {
-                    if( aGrfObject.IsAnimated() )
-                        aStreamName += String( RTL_CONSTASCII_USTRINGPARAM( ".gif" ) );
-                    else
-                        aStreamName += String( RTL_CONSTASCII_USTRINGPARAM( ".png" ) );
+                    switch( aGfxLink.GetType() )
+                    {
+                        case( GFX_LINK_TYPE_EPS_BUFFER ): aStreamName += String( RTL_CONSTASCII_USTRINGPARAM( ".eps" ) ); break;
+                        case( GFX_LINK_TYPE_NATIVE_GIF ): aStreamName += String( RTL_CONSTASCII_USTRINGPARAM( ".gif" ) ); break;
+                        case( GFX_LINK_TYPE_NATIVE_JPG ): aStreamName += String( RTL_CONSTASCII_USTRINGPARAM( ".jpg" ) ); break;
+                        case( GFX_LINK_TYPE_NATIVE_PNG ): aStreamName += String( RTL_CONSTASCII_USTRINGPARAM( ".png" ) ); break;
+                        case( GFX_LINK_TYPE_NATIVE_TIF ): aStreamName += String( RTL_CONSTASCII_USTRINGPARAM( ".tif" ) ); break;
+                        case( GFX_LINK_TYPE_NATIVE_WMF ): aStreamName += String( RTL_CONSTASCII_USTRINGPARAM( ".wmf" ) ); break;
+                        case( GFX_LINK_TYPE_NATIVE_MET ): aStreamName += String( RTL_CONSTASCII_USTRINGPARAM( ".met" ) ); break;
+                        case( GFX_LINK_TYPE_NATIVE_PCT ): aStreamName += String( RTL_CONSTASCII_USTRINGPARAM( ".pct" ) ); break;
+
+                        default:
+                            aStreamName += String( RTL_CONSTASCII_USTRINGPARAM( ".grf" ) );
+                        break;
+                    }
                 }
-                else if( aGrfObject.GetType() == GRAPHIC_GDIMETAFILE )
-                    aStreamName += String( RTL_CONSTASCII_USTRINGPARAM( ".svm" ) );
+                else
+                {
+                    if( aGrfObject.GetType() == GRAPHIC_BITMAP )
+                    {
+                        if( aGrfObject.IsAnimated() )
+                            aStreamName += String( RTL_CONSTASCII_USTRINGPARAM( ".gif" ) );
+                        else
+                            aStreamName += String( RTL_CONSTASCII_USTRINGPARAM( ".png" ) );
+                    }
+                    else if( aGrfObject.GetType() == GRAPHIC_GDIMETAFILE )
+                        aStreamName += String( RTL_CONSTASCII_USTRINGPARAM( ".svm" ) );
+                }
 
                 if( mbDirect && aStreamName.Len() )
                     ImplWriteGraphic( aPictureStorageName, aStreamName, aGraphicObjectId );
