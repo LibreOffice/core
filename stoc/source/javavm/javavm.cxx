@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javavm.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: dbo $ $Date: 2002-11-20 15:55:15 $
+ *  last change: $Author: jl $ $Date: 2002-12-03 11:38:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1433,14 +1433,11 @@ static void initVMConfiguration(JVM * pjvm,
     jvm.addSystemClasspath( retrieveComponentClassPath( "UNO_SHARE_PACKAGES_CACHE" ) );
     jvm.addUserClasspath( retrieveComponentClassPath( "UNO_USER_PACKAGES_CACHE" ) );
 
-//For a non product office we use the flags -ea and -Xcheck:jni
+//For a non product office we use the flags -ea
+// we cannot use -Xcheck:jni, because this prevents debugging (j2re1.4.1_01, netbeans 3.4)
 #ifdef _DEBUG
         if(!getenv( "DISABLE_SAL_DBGBOX" ) )
-        {
-            OUString s=OUString(OUSTR("-ea"));
-            jvm.pushProp(s);
-            jvm.pushProp(OUString(OUSTR("-Xcheck:jni")));
-        }
+            jvm.pushProp(OUSTR("-ea"));
 #endif
 
 
@@ -1527,7 +1524,7 @@ JavaVM * JavaVirtualMachine_Impl::createJavaVM(const JVM & jvm) throw(RuntimeExc
         javaHome += jvm.getJavaHome();
         const OUString & vmType  = jvm.getVMType();
 
-        if(!vmType.equals(OUSTR("jre")))
+        if(!vmType.equals(OUSTR("JRE")))
         {
             javaHome += OUSTR("/jre");
         }
