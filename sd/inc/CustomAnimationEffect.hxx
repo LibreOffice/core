@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CustomAnimationEffect.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:37:09 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 18:16:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,6 +333,7 @@ public:
     virtual void disposeShape( const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape );
     virtual void insertTextRange( const com::sun::star::uno::Any& aTarget );
     virtual void disposeTextRange( const com::sun::star::uno::Any& aTarget );
+    virtual bool hasEffect( const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape );
 
     /** this must be called if effects from this sequence are changed.
         the method will call the registered listeners */
@@ -418,6 +419,7 @@ public:
     virtual void disposeShape( const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape );
     virtual void insertTextRange( const com::sun::star::uno::Any& aTarget );
     virtual void disposeTextRange( const com::sun::star::uno::Any& aTarget );
+    virtual bool hasEffect( const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape );
 
     const InteractiveSequenceList& getInteractiveSequenceList() const { return maInteractiveSequenceList; }
 
