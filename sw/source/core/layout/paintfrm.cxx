@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: rt $ $Date: 2003-06-12 07:38:32 $
+ *  last change: $Author: vg $ $Date: 2003-06-20 09:36:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1280,9 +1280,13 @@ void MA_FASTCALL lcl_CalcBorderRect( SwRect &rRect, const SwFrm *pFrm,
     // area equals the frame area.
     // Notes: Borders of cell frames in R2L text direction will switch its side
     //        - left border is painted on the right; right border on the left.
-    //        See <lcl_PaintLeftRightLine>
-    if( pFrm->IsSctFrm() ||
-        pFrm->IsCellFrm() )
+    //        See <lcl_PaintLeftLine> and <lcl_PaintRightLine>.
+    if( pFrm->IsSctFrm() )
+    {
+        rRect = pFrm->Prt();
+        rRect.Pos() += pFrm->Frm().Pos();
+    }
+    else if ( pFrm->IsCellFrm() )
         rRect = pFrm->Frm();
     else
     {
@@ -4615,7 +4619,7 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
     }
 
     SwRect aPaintRect( Frm() );
-    if( IsTxtFrm() )
+    if( IsTxtFrm() || IsSctFrm() )
         aPaintRect = UnionFrm( TRUE );
 
     if ( aPaintRect.IsOver( rRect ) )
