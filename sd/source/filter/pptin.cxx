@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-07 15:26:42 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:08:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -913,24 +913,28 @@ sal_Bool ImplSdPPTImport::Import()
 
                         // Schatten am ersten Objekt (Hintergrundobjekt) entfernen (#57918#)
                         SfxItemSet aTempAttr( pDoc->GetPool() );
-                        aTempAttr.Put( pObj->GetItemSet() );
+                        aTempAttr.Put( pObj->GetMergedItemSet() );
 
                         BOOL bShadowIsOn = ( (SdrShadowItem&)( aTempAttr.Get( SDRATTR_SHADOW ) ) ).GetValue();
                         if( bShadowIsOn )
                         {
                             aTempAttr.Put( SdrShadowItem( FALSE ) );
-                            pObj->SetItemSet( aTempAttr );
+                            pObj->SetMergedItemSet( aTempAttr );
                         }
                         SfxStyleSheet* pSheet = pMPage->GetStyleSheetForPresObj( PRESOBJ_BACKGROUND );
                         if ( pSheet )
                         {   // StyleSheet fuellen und dem Objekt zuweisen
                             pSheet->GetItemSet().ClearItem();
-                            pSheet->GetItemSet().Put( pObj->GetItemSet() );
+                            pSheet->GetItemSet().Put( pObj->GetMergedItemSet() );
                             aTempAttr.ClearItem();
-                            pObj->SetItemSet( aTempAttr );
+                            pObj->SetMergedItemSet( aTempAttr );
                             pObj->SetStyleSheet( pSheet, FALSE );
                         }
                         pMPage->GetPresObjList()->Insert( pObj, LIST_APPEND );
+
+                        // #110094#-15
+                        // tell the page that it's visualization has changed
+                        pMPage->ActionChanged();
                     }
                 }
             }
@@ -1008,7 +1012,7 @@ sal_Bool ImplSdPPTImport::Import()
                     pSdrModel->InsertPage( pNotesPage );
                     SdrObject* pPageObj = pNotesPage->GetPresObj( PRESOBJ_PAGE, 1 );
                     if ( pPageObj )
-                        ((SdrPageObj*)pPageObj)->SetPageNum( ( nPageNum << 1 ) + 1 );
+                        ((SdrPageObj*)pPageObj)->SetReferencedPage(pSdrModel->GetPage(( nPageNum << 1 ) + 1));
                 }
                 if( pStbMgr )
                     pStbMgr->SetState( nImportedPages++ );
@@ -2412,7 +2416,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                     aTempAttr.Put( aMinHeight );
                     SdrTextAutoGrowHeightItem aAutoGrowHeight( FALSE );
                     aTempAttr.Put( aAutoGrowHeight );
-                    pText->SetItemSet(aTempAttr);
+                    pText->SetMergedItemSet(aTempAttr);
                 }
                 else
                 {
@@ -2503,7 +2507,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
 
                             SfxItemSet aSet( pSdrModel->GetItemPool() );
                             ApplyAttributes( rStCtrl, aSet, pPresObj );
-                            pPresObj->SetItemSet(aSet);
+                            pPresObj->SetMergedItemSet(aSet);
 
                             if ( ( eAktPageKind != PPT_NOTEPAGE ) && ( pSlideLayout->aPlacementId[ i ] != -1 ) )
                             {
@@ -2702,8 +2706,11 @@ SdrObject* ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                                         && ( pInfo->eTextEffect != ::com::sun::star::presentation::AnimationEffect_NONE )
                                             && ( pObj->ISA( SdrObjGroup ) != TRUE ) )
                                     {
-                                        XFillStyle eFillStyle = ((XFillStyleItem&)(pObj->GetItem(XATTR_FILLSTYLE))).GetValue();
-                                        XLineStyle eLineStyle = ((XLineStyleItem&)(pObj->GetItem(XATTR_LINESTYLE))).GetValue();
+                                        const SfxItemSet& rObjItemSet = pObj->GetMergedItemSet();
+
+                                        XFillStyle eFillStyle = ((XFillStyleItem&)(rObjItemSet.Get(XATTR_FILLSTYLE))).GetValue();
+                                        XLineStyle eLineStyle = ((XLineStyleItem&)(rObjItemSet.Get(XATTR_LINESTYLE))).GetValue();
+
                                         if ( ( eFillStyle == XFILL_NONE ) && ( eLineStyle == XLINE_NONE ) )
                                             pInfo->eEffect = ::com::sun::star::presentation::AnimationEffect_NONE;
                                     }
