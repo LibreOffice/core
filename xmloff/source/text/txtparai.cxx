@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparai.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-14 12:14:39 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:01:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -746,6 +746,8 @@ SvXMLImportContext *XMLImpRubyContext_Impl::CreateChildContext(
                                                        rLocalName,
                                                        xAttrList,
                                                        pHint );
+        else
+            pContext = 0; //  TODO What value should this be?
     }
     else
         pContext = SvXMLImportContext::CreateChildContext( nPrefix, rLocalName,
