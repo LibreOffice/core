@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 18:15:06 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:19:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,9 +60,6 @@
  ************************************************************************/
 
 
-#ifdef PRECOMPILED
-#include "ui_pch.hxx"
-#endif
 
 #pragma hdrstop
 
@@ -261,6 +258,9 @@
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
 #endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
@@ -914,7 +914,37 @@ BOOL SwNewDBMgr::MergePrint( SwView& rView,
     //check if the doc is synchronized and contains at least one linked section
     BOOL bSynchronizedDoc = pSh->IsLabelDoc() && pSh->GetSectionFmtCount() > 1;
     //merge source is already open
-    rOpt.nMergeCnt = pImpl->pMergeData && pImpl->pMergeData->aSelection.getLength();
+    rOpt.nMergeCnt = 0;
+    if(pImpl->pMergeData)
+    {
+        if(pImpl->pMergeData->aSelection.getLength())
+            rOpt.nMergeCnt = pImpl->pMergeData->aSelection.getLength();
+        else if(pImpl->pMergeData->xResultSet.is())
+        {
+            Reference<XPropertySet> xPrSet(pImpl->pMergeData->xResultSet, UNO_QUERY);
+            if(xPrSet.is())
+            {
+                try
+                {
+                    sal_Bool bFinal;
+                    Any aFinal = xPrSet->getPropertyValue(C2U("IsRowCountFinal"));
+                    aFinal >>= bFinal;
+                    if(!bFinal)
+                    {
+                        pImpl->pMergeData->xResultSet->last();
+                        pImpl->pMergeData->xResultSet->first();
+                    }
+                    long nCount;
+                    Any aCount = xPrSet->getPropertyValue(C2U("RowCount"));
+                    aCount >>= nCount;
+                    rOpt.nMergeCnt = (ULONG)nCount;
+                }
+                catch(Exception&)
+                {
+                }
+            }
+        }
+    }
 
     SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
     pModOpt->SetSinglePrintJob(rOpt.IsPrintSingleJobs());
@@ -928,6 +958,12 @@ BOOL SwNewDBMgr::MergePrint( SwView& rView,
          bUserBreak = FALSE,
          bRet = FALSE;
     long nStartRow, nEndRow;
+    //calculate number of data sets to be printed
+    Sequence<PropertyValue> aViewProperties(1);
+    PropertyValue* pViewProperties =  aViewProperties.getArray();
+    pViewProperties[0].Name = C2U("MailMergeCount");
+    pViewProperties[0].Value <<= (sal_Int32)rOpt.nMergeCnt;
+    rView.SetAdditionalPrintOptions(aViewProperties);
     do {
         nStartRow = pImpl->pMergeData ? pImpl->pMergeData->xResultSet->getRow() : 0;
         {
