@@ -281,16 +281,19 @@ public abstract class CanvasBase
         return null;
     }
 
-    public synchronized XCanvasFont queryFont( drafts.com.sun.star.rendering.FontRequest fontRequest ) throws com.sun.star.lang.IllegalArgumentException
+    public synchronized XCanvasFont createFont( FontRequest fontRequest, com.sun.star.beans.PropertyValue[] extraFontProperties, drafts.com.sun.star.geometry.Matrix2D fontMatrix ) throws com.sun.star.lang.IllegalArgumentException
     {
+        // TODO: support extra arguments
         return new CanvasFont( fontRequest, this );
     }
 
-    public synchronized XCachedPrimitive drawText( drafts.com.sun.star.rendering.StringContext text,
-                                                   drafts.com.sun.star.rendering.XCanvasFont   xFont,
-                                                   drafts.com.sun.star.rendering.ViewState     viewState,
-                                                   drafts.com.sun.star.rendering.RenderState   renderState,
-                                                   byte                                        textDirection ) throws com.sun.star.lang.IllegalArgumentException
+    public FontInfo[] queryAvailableFonts( FontInfo aFilter, com.sun.star.beans.PropertyValue[] aFontProperties ) throws com.sun.star.lang.IllegalArgumentException
+    {
+        // TODO
+        return null;
+    }
+
+    public XCachedPrimitive drawText( StringContext text, XCanvasFont xFont, ViewState viewState, RenderState renderState, byte textDirection ) throws com.sun.star.lang.IllegalArgumentException
     {
         CanvasUtils.printLog( "CanvasBase.drawText() called" );
 
@@ -308,43 +311,28 @@ public abstract class CanvasBase
         return null;
     }
 
-    public synchronized XCachedPrimitive drawOffsettedText( drafts.com.sun.star.rendering.StringContext    text,
-                                                            drafts.com.sun.star.rendering.XCanvasFont      xFont,
-                                                            double []                                      offsets,
-                                                            drafts.com.sun.star.rendering.ViewState        viewState,
-                                                            drafts.com.sun.star.rendering.RenderState      renderState,
-                                                            byte                                           textDirection ) throws com.sun.star.lang.IllegalArgumentException
+    public XCachedPrimitive drawTextLayout( XTextLayout layoutetText, ViewState viewState, RenderState renderState ) throws com.sun.star.lang.IllegalArgumentException
     {
         CanvasUtils.printLog( "CanvasBase.drawOffsettedText() called" );
 
-        CanvasUtils.preCondition( text.Length == text.Text.length() &&
-                                  text.Length == offsets.length, "CanvasBase.drawOffsettedText" );
+        // cache
+        Graphics2D graphics = getGraphics();
 
-        if( text.Length > 0 )
+        CanvasUtils.printLog( "XCanvas: drawOffsettedText called" );
+
+        CanvasUtils.setupGraphicsState( graphics, viewState, renderState, CanvasUtils.alsoSetupPaint );
+        CanvasUtils.setupGraphicsFont( graphics, viewState, renderState, layoutetText.getFont() );
+
+        CanvasUtils.printLog( "XCanvas: drawOffsettedText canvas setup done" );
+
+        if( layoutetText instanceof TextLayout )
         {
-            // cache
-            Graphics2D graphics = getGraphics();
-
-            CanvasUtils.printLog( "XCanvas: drawOffsettedText called" );
-
-            CanvasUtils.setupGraphicsState( graphics, viewState, renderState, CanvasUtils.alsoSetupPaint );
-            CanvasUtils.setupGraphicsFont( graphics, viewState, renderState, xFont );
-
-            CanvasUtils.printLog( "XCanvas: drawOffsettedText canvas setup done" );
-
-            // TODO: use proper advancement. Text direction need not be horizontal!
-            // TODO: given text string need not have a one-to-one relationship between code point and glyph (offset)!
-            graphics.drawString( text.Text.substring(text.StartPosition, text.StartPosition + 1), (float)0.0, (float)0.0 );
-            for( int i=1; i<offsets.length && i<text.Length; ++i )
-            {
-                CanvasUtils.printLog( "XCanvas: drawOffsettedText rendering a \"" +
-                                      text.Text.substring(text.StartPosition + i,
-                                                          text.StartPosition + i + 1) +
-                                      "\" (position " + (text.StartPosition + i) +
-                                      " of " + text.Text + ", offset " + offsets[i] + ")" );
-
-                graphics.drawString( text.Text.substring(text.StartPosition + i, text.StartPosition + i + 1), (float)offsets[i-1], (float)0.0 );
-            }
+            ((TextLayout)layoutetText).draw( graphics );
+        }
+        else
+        {
+            CanvasUtils.printLog( "drawTextLayout: mismatching TextLayout object." );
+            throw new com.sun.star.lang.IllegalArgumentException();
         }
 
         return null;
@@ -369,6 +357,18 @@ public abstract class CanvasBase
         CanvasUtils.postRenderImageTreatment( bitmap );
 
         return null;
+    }
+
+    public synchronized XCachedPrimitive drawBitmapModulated( drafts.com.sun.star.rendering.XBitmap     xBitmap,
+                                                              drafts.com.sun.star.rendering.ViewState   viewState,
+                                                              drafts.com.sun.star.rendering.RenderState renderState ) throws com.sun.star.lang.IllegalArgumentException
+    {
+        CanvasUtils.printLog( "CanvasBase.drawBitmapModulated() called" );
+
+        // TODO(F3): Implement channel modulation
+        return drawBitmap(xBitmap,
+                          viewState,
+                          renderState);
     }
 
     public synchronized XGraphicDevice getDevice()
