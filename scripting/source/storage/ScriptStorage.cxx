@@ -2,8 +2,8 @@
 *
 *  $RCSfile: ScriptStorage.cxx,v $
 *
-*  $Revision: 1.26 $
-*  last change: $Author: dfoster $ $Date: 2003-07-23 10:19:56 $
+*  $Revision: 1.27 $
+*  last change: $Author: dfoster $ $Date: 2003-07-23 12:13:38 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -656,6 +656,10 @@ throw ( RuntimeException )
             xOS->closeOutput();
 
         }
+
+        // clear the hash map, as all output streams have been closed.
+        // need to re-create on next save
+        mh_parcels.clear();
     }
     // *** TODO - other exception handling IO etc.
     catch ( RuntimeException & re )
