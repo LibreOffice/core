@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoevent.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2000-12-20 15:16:41 $
+ *  last change: $Author: os $ $Date: 2000-12-22 09:52:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,12 @@
  *
  *
  ************************************************************************/
+
+#ifdef PRECOMPILED
+#include "core_pch.hxx"
+#endif
+
+#pragma hdrstop
 
 // HINTIDs must be on top; it is required for the macitem.hxx header
 #ifndef _HINTIDS_HXX
