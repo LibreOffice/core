@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2000-09-22 13:38:09 $
+ *  last change: $Author: sab $ $Date: 2000-09-25 13:40:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,7 @@ const XMLPropertyMapEntry aXMLScCellStylesProperties[] =
     { "IsCellBackgroundTransparent", XML_NAMESPACE_FO, sXML_background_color, XML_SC_TYPE_ISCELLBACKGROUNDTRANSPARENT|MID_FLAG_MULTI_PROPERTY, CTF_ISCELLBACKGROUNDTRANSPARENT },
 //  { "IsTextWrapped", XML_NAMESPACE_STYLE, sXML_text_outline, XML_TYPE_BOOL, 0 },
     { "Orientation", XML_NAMESPACE_FO, sXML_direction, XML_SC_TYPE_ORIENTATION, 0 },
-    { "ParaIndent", XML_NAMESPACE_FO, sXML_margin_left, XML_TYPE_MEASURE, 0 },
+    { "ParaIndent", XML_NAMESPACE_FO, sXML_margin_left, XML_TYPE_MEASURE, CTF_PARAINDENT },
     { "ParaBottomMargin", XML_NAMESPACE_FO, sXML_padding, XML_TYPE_MEASURE, CTF_ALLPADDING },
     { "ParaBottomMargin", XML_NAMESPACE_FO, sXML_padding_bottom, XML_TYPE_MEASURE, CTF_BOTTOMPADDING },
     { "ParaLeftMargin", XML_NAMESPACE_FO, sXML_padding_left, XML_TYPE_MEASURE, CTF_LEFTPADDING },

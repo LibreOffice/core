@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyli.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:16 $
+ *  last change: $Author: sab $ $Date: 2000-09-25 13:40:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,9 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SHEET_XSHEETCONDITIONALENTRIES_HPP_
+#include <com/sun/star/sheet/XSheetConditionalEntries.hpp>
+#endif
 #ifndef _XMLOFF_XMLPROPERTYSETCONTEXT_HXX
 #include <xmloff/xmlprcon.hxx>
 #endif
@@ -99,6 +102,7 @@
 #endif
 
 #define SC_NUMBERFORMAT "NumberFormat"
+#define SC_CONDITIONALFORMAT "ConditionalFormat"
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -146,7 +150,9 @@ void ScXMLImportPropertyMapper::finished(::std::vector< XMLPropertyState >& rPro
     XMLPropertyState* pAllPaddingProperty = NULL;
     XMLPropertyState* pAllBorderProperty = NULL;
     XMLPropertyState* pAllBorderWidthProperty = NULL;
-    ::std::vector< XMLPropertyState >::const_iterator i = rProperties.begin();
+    XMLPropertyState* pParaIndent = NULL;
+    ::std::vector< XMLPropertyState >::iterator i = rProperties.begin();
+    ::std::vector< XMLPropertyState >::iterator aParaIndentItr = rProperties.begin();
     for (i; i != rProperties.end(); i++)
     {
         sal_Int16 nContextID = getPropertySetMapper()->GetEntryContextId(i->mnIndex);
@@ -167,6 +173,11 @@ void ScXMLImportPropertyMapper::finished(::std::vector< XMLPropertyState >& rPro
                 pAllBorderWidthProperty = new XMLPropertyState(i->mnIndex, i->maValue);
             }
             break;
+            case CTF_PARAINDENT :
+            {
+                pParaIndent = new XMLPropertyState(i->mnIndex, i->maValue);
+                aParaIndentItr = i;
+            }
         }
     }
     if (pAllPaddingProperty)
@@ -199,6 +210,100 @@ void ScXMLImportPropertyMapper::finished(::std::vector< XMLPropertyState >& rPro
             rProperties.push_back(aNewProperty);
         }
     }
+    if (pParaIndent)
+    {
+        sal_Int32 nValue;
+        if (pParaIndent->maValue >>= nValue)
+        {
+            sal_Int16 n16Value = nValue;
+            pParaIndent->maValue <<= n16Value;
+            aParaIndentItr->mnIndex = pParaIndent->mnIndex;
+            aParaIndentItr->maValue = pParaIndent->maValue;
+        }
+    }
+}
+
+class ScXMLMapContext : public SvXMLImportContext
+{
+    rtl::OUString sApplyStyle;
+    rtl::OUString sCondition;
+    rtl::OUString sBaseCell;
+public:
+
+    ScXMLMapContext(
+            SvXMLImport& rImport, sal_uInt16 nPrfx,
+            const rtl::OUString& rLName,
+            const Reference< xml::sax::XAttributeList > & xAttrList );
+    virtual ~ScXMLMapContext();
+
+    const rtl::OUString& GetApplyStyle() const { return sApplyStyle; }
+    const rtl::OUString& GetCondition() const { return sCondition; }
+    const rtl::OUString& GetBaseCell() const { return sBaseCell; }
+};
+
+ScXMLMapContext::ScXMLMapContext(SvXMLImport& rImport, sal_uInt16 nPrfx,
+            const OUString& rLName, const Reference< xml::sax::XAttributeList > & xAttrList )
+    : SvXMLImportContext( rImport, nPrfx, rLName ),
+    sCondition(),
+    sApplyStyle(),
+    sBaseCell()
+{
+    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    {
+        const OUString& rAttrName = xAttrList->getNameByIndex( i );
+        OUString aLocalName;
+        sal_uInt16 nPrefix =
+            GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
+                                                            &aLocalName );
+        const OUString& rValue = xAttrList->getValueByIndex( i );
+
+        // TODO: use a map here
+        if( XML_NAMESPACE_STYLE == nPrefix )
+        {
+            if( aLocalName.compareToAscii( sXML_condition ) == 0 )
+                sCondition = rValue;
+            else if( aLocalName.compareToAscii( sXML_apply_style_name ) == 0 )
+                sApplyStyle = rValue;
+            else if (aLocalName.compareToAscii( sXML_base_cell_address ) == 0 )
+                sBaseCell = rValue;
+        }
+    }
+}
+
+ScXMLMapContext::~ScXMLMapContext()
+{
+}
+
+uno::Any XMLTableStyleContext::GetConditionalFormat(const uno::Any aAny,
+        const rtl::OUString& sCondition,
+        const rtl::OUString& sApplyStyle, const rtl::OUString& sBaseCell) const
+{
+    if (sCondition.getLength() && sApplyStyle.getLength())
+    {
+        uno::Reference<sheet::XSheetConditionalEntries> xConditionalEntries;
+        if (aAny >>= xConditionalEntries)
+        {
+            uno::Sequence<beans::PropertyValue> aProps;
+            if (sBaseCell.getLength())
+            {
+                /*aProps.realloc(aProps.getLength() + 1);
+                beans::PropertyValue aProp;
+                ScAddress aBase;
+                aBase.Parse(sBaseCell, pDoc);
+                table::CellAddress aBaseAddress;
+                aBaseAddress.Column = aBase.Col();
+                aBaseAddress.Row = aBase.Row();
+                aBaseAddress.Sheet = aBase.Tab();
+                uno::Any aAnyBase;
+                aAnyBase <<= aBaseAddress;
+                aProp.Value = aAnyBase;
+                aProp.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SOURCEPOS));
+                aProps[aProps.getLength() - 1] = aProp;*/
+            }
+        }
+    }
+    return aAny;
 }
 
 void XMLTableStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
@@ -241,6 +346,16 @@ SvXMLImportContext *XMLTableStyleContext::CreateChildContext(
     SvXMLImportContext *pContext = XMLPropStyleContext::CreateChildContext( nPrefix, rLocalName,
                                                            xAttrList );
 
+    if (!pContext)
+    {
+        if( XML_NAMESPACE_STYLE == nPrefix &&
+            rLocalName.compareToAscii( sXML_map ) == 0 )
+        {
+            pContext = new ScXMLMapContext(GetImport(), nPrefix, rLocalName, xAttrList);
+            aMaps.push_back((ScXMLMapContext*)pContext);
+        }
+    }
+
     return pContext;
 }
 
@@ -264,6 +379,20 @@ void XMLTableStyleContext::FillPropertySet(
             sal_Int32 nNumberFormat = pStyle->GetKey();
             aNumberFormat <<= nNumberFormat;
             rPropSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_NUMBERFORMAT)), aNumberFormat);
+        }
+    }
+    if (aMaps.size() > 0)
+    {
+        std::vector<ScXMLMapContext*>::iterator aItr = aMaps.begin();
+        while(aItr != aMaps.end())
+        {
+            rtl::OUString sApplyStyle = (*aItr)->GetApplyStyle();
+            rtl::OUString sCondition = (*aItr)->GetCondition();
+            rtl::OUString sBaseCell = (*aItr)->GetBaseCell();
+            uno::Any aConditionalFormat = rPropSet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_CONDITIONALFORMAT)));
+            rPropSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_CONDITIONALFORMAT)),
+                GetConditionalFormat(aConditionalFormat, sCondition, sApplyStyle, sBaseCell));
+            aItr++;
         }
     }
 }

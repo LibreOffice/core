@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2000-09-22 13:38:09 $
+ *  last change: $Author: sab $ $Date: 2000-09-25 13:40:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,7 @@ extern const XMLPropertyMapEntry aXMLScTableStylesProperties[];
 #define CTF_BOTTOMBORDERWIDTH                   19
 #define CTF_NUMBERFORMAT                        20
 #define CTF_MAP                                 21
+#define CTF_PARAINDENT                          22
 
 //PageStyles
 #define CTF_BACKGROUNDCOLOR                     50

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyli.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:16 $
+ *  last change: $Author: sab $ $Date: 2000-09-25 13:40:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,15 +112,20 @@ public:
             ::std::vector< XMLPropertyState >& rProperties ) const;
 };
 
+class ScXMLMapContext;
 
 class XMLTableStyleContext : public XMLPropStyleContext
 {
     ::rtl::OUString             sDataStyleName;
     const rtl::OUString         sNumberFormat;
     SvXMLStylesContext*         pStyles;
+    std::vector<ScXMLMapContext*>   aMaps;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+
+    com::sun::star::uno::Any GetConditionalFormat(const ::com::sun::star::uno::Any aAny, const rtl::OUString& sCondition,
+        const rtl::OUString& sApplyStyle, const rtl::OUString& sBaseCell) const;
 protected:
 
     virtual void SetAttribute( sal_uInt16 nPrefixKey,
