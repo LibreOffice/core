@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmvwimp.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:03:18 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:41:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,9 @@
 #include "svdmark.hxx"
 #endif
 
-class SdrPageViewWinRec;
+//class SdrPageViewWinRec;
+class SdrPageViewWindow;
+
 class SdrPageView;
 class SdrObject;
 class FmFormObj;
@@ -147,7 +149,8 @@ class FmXPageViewWinRec : public ::cppu::WeakImplHelper1< ::com::sun::star::cont
 
 public:
     FmXPageViewWinRec(  const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xORB,
-                        const SdrPageViewWinRec*, FmXFormView* pView);
+        const SdrPageViewWindow&, FmXFormView* pView);
+        //const SdrPageViewWinRec*, FmXFormView* pView);
     ~FmXPageViewWinRec();
 
 // UNO Anbindung
@@ -268,7 +271,8 @@ public:
 
 private:
     FmWinRecList::iterator findWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& rCC );
-    void addWindow(const SdrPageViewWinRec*);
+    //void addWindow(const SdrPageViewWinRec*);
+    void addWindow(const SdrPageViewWindow&);
     void removeWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& rCC );
     void Activate(sal_Bool bSync = sal_False);
     void Deactivate(BOOL bDeactivateController = TRUE);
