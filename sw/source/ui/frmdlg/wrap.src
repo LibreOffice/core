@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrap.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:19:47 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:57:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,7 @@ TabPage TP_FRM_WRAP
         Text[ czech ] = "Nastavení";
         Text[ hebrew ] = "‮הגדרות‬";
         Text[ hindi ] = "निर्धारण";
+        Text[ slovak ] = "Nastavenia";
     };
     ImageRadioButton RB_NO_WRAP
     {
@@ -134,6 +135,7 @@ TabPage TP_FRM_WRAP
         Text[ czech ] = "Žádné";
         Text[ hebrew ] = "‮ללא‬";
         Text[ hindi ] = "~कोई नहीं";
+        Text[ slovak ] = "Žia~dne";
     };
     ImageRadioButton RB_WRAP_LEFT
     {
@@ -166,6 +168,7 @@ TabPage TP_FRM_WRAP
         Text[ czech ] = "Vlevo";
         Text[ hebrew ] = "‮לפני‬";
         Text[ hindi ] = "~बायाँ";
+        Text[ slovak ] = "Pred";
     };
     ImageRadioButton RB_WRAP_RIGHT
     {
@@ -198,6 +201,7 @@ TabPage TP_FRM_WRAP
         Text[ czech ] = "Vpravo";
         Text[ hebrew ] = "‮אחרי‬";
         Text[ hindi ] = "दा~हिना";
+        Text[ slovak ] = "Za";
     };
     ImageRadioButton RB_WRAP_PARALLEL
     {
@@ -231,6 +235,7 @@ TabPage TP_FRM_WRAP
         Text[ czech ] = "Rovnoběžně";
         Text[ hebrew ] = "~Parallel";
         Text[ hindi ] = "~समानान्तर";
+        Text[ slovak ] = "~Rovnobežne";
     };
     ImageRadioButton RB_WRAP_THROUGH
     {
@@ -265,6 +270,7 @@ TabPage TP_FRM_WRAP
         Text[ czech ] = "Přes";
         Text[ hebrew ] = "~Durchlauf";
         Text[ hindi ] = "~में";
+        Text[ slovak ] = "Ce~z";
     };
     ImageRadioButton RB_WRAP_IDEAL
     {
@@ -298,6 +304,7 @@ TabPage TP_FRM_WRAP
         Text[ czech ] = "Optimální";
         Text[ hebrew ] = "D~ynamisch";
         Text[ hindi ] = "~योग्य";
+        Text[ slovak ] = "~Optimálne";
     };
 
     CheckBox CB_ANCHOR_ONLY
@@ -330,6 +337,7 @@ TabPage TP_FRM_WRAP
         Text[ czech ] = "První odstavec";
         Text[ hebrew ] = "Er~ster Absatz";
         Text[ hindi ] = "~पहिला परिच्छेद";
+        Text[ slovak ] = "P~rvý odstavec";
     };
     CheckBox CB_TRANSPARENT
     {
@@ -361,6 +369,7 @@ TabPage TP_FRM_WRAP
         Text[ czech ] = "Na pozadí";
         Text[ hebrew ] = "Im Hin~tergrund";
         Text[ hindi ] = "पृष्ठ~भाग में";
+        Text[ slovak ] = "Na ~pozadí";
     };
     CheckBox CB_OUTLINE
     {
@@ -393,6 +402,7 @@ TabPage TP_FRM_WRAP
         Text[ czech ] = "Obrys";
         Text[ hebrew ] = "Kont~ur";
         Text[ hindi ] = "परिवे~श";
+        Text[ slovak ] = "~Obrys";
     };
     CheckBox CB_ONLYOUTSIDE
     {
@@ -425,6 +435,7 @@ TabPage TP_FRM_WRAP
         Text[ czech ] = "Pouze vně";
         Text[ hebrew ] = "~Nur außen";
         Text[ hindi ] = "केवल बाहरी ओर";
+        Text[ slovak ] = "Iba vonku";
     };
     FixedLine FL_OPTION
     {
@@ -456,6 +467,7 @@ TabPage TP_FRM_WRAP
         Text[ czech ] = "Volby";
         Text[ hebrew ] = "‮אפשרויות‬";
         Text[ hindi ] = "विकल्प";
+        Text[ slovak ] = "Nastavenia";
     };
     FixedLine FL_OPTION_SEP
     {
@@ -495,6 +507,7 @@ TabPage TP_FRM_WRAP
         Text[ czech ] = "Vlevo";
         Text[ hebrew ] = "L~inks";
         Text[ hindi ] = "बा~याँ";
+        Text[ slovak ] = "~Vľavo";
     };
     MetricField ED_LEFT_MARGIN
     {
@@ -543,6 +556,7 @@ TabPage TP_FRM_WRAP
         Text[ czech ] = "Vpravo";
         Text[ hebrew ] = "Re~chts";
         Text[ hindi ] = "~दाहिना";
+        Text[ slovak ] = "Vp~ravo";
     };
     MetricField ED_RIGHT_MARGIN
     {
@@ -591,6 +605,7 @@ TabPage TP_FRM_WRAP
         Text[ czech ] = "Nahoře";
         Text[ hebrew ] = "~Oben";
         Text[ hindi ] = "~ऊपर";
+        Text[ slovak ] = "~Hore";
     };
     MetricField ED_TOP_MARGIN
     {
@@ -639,6 +654,7 @@ TabPage TP_FRM_WRAP
         Text[ czech ] = "Dole";
         Text[ hebrew ] = "Unt~en";
         Text[ hindi ] = "~नीचे";
+        Text[ slovak ] = "~Dolu";
     };
     MetricField ED_BOTTOM_MARGIN
     {
@@ -686,6 +702,7 @@ TabPage TP_FRM_WRAP
         Text[ czech ] = "Vzdálenost";
         Text[ hebrew ] = "‮רוווח‬";
         Text[ hindi ] = "अन्तर देना";
+        Text[ slovak ] = "Vzdialenosť";
     };
 #define WRAP_IDLIST \
         IdList =            \
@@ -717,6 +734,8 @@ TabPage TP_FRM_WRAP
     };
 
 };
+
+
 
 
 
