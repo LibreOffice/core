@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-27 09:52:58 $
+ *  last change: $Author: ssa $ $Date: 2001-11-28 11:42:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -765,21 +765,37 @@ void Dialog::SetModalInputMode( BOOL bModal )
         if ( mpPrevExecuteDlg && !mpPrevExecuteDlg->IsWindowOrChild( this, TRUE ) )
             mpPrevExecuteDlg->EnableInput( FALSE, TRUE, TRUE, this );
 
-        // determine next overlap dialog parent
-        Window* pParent = GetParent();
-        if ( pParent )
+        // disable ALL windows in our frame hierarchy except ourself
+        Window* pFrame = pSVData->maWinData.mpFirstFrame;
+        while ( pFrame )
         {
-            mpDialogParent = pParent->ImplGetFirstOverlapWindow();
-            if ( mpDialogParent )
-                mpDialogParent->EnableInput( FALSE, TRUE, TRUE, this );
+            Window* pParent = pFrame->GetParent();
+            if ( pParent )
+            {
+                mpDialogParent = pParent->ImplGetFirstOverlapWindow();
+                if ( mpDialogParent && pParent->ImplIsChild( this, TRUE ) ) // disable only our app
+                    mpDialogParent->EnableInput( FALSE, TRUE, TRUE, this );
+            }
+            pFrame = pFrame->mpFrameData->mpNextFrame;
         }
     }
     else
     {
         pSVData->maAppData.mnModalDialog--;
 
-        if ( mpDialogParent )
-            mpDialogParent->EnableInput( TRUE, TRUE, TRUE, this );
+        // enable ALL windows in our frame hierarchy again
+        Window* pFrame = pSVData->maWinData.mpFirstFrame;
+        while ( pFrame )
+        {
+            Window* pParent = pFrame->GetParent();
+            if ( pParent )
+            {
+                mpDialogParent = pParent->ImplGetFirstOverlapWindow();
+                if ( mpDialogParent && pParent->ImplIsChild( this, TRUE ) )
+                    mpDialogParent->EnableInput( TRUE, TRUE, TRUE, this );
+            }
+            pFrame = pFrame->mpFrameData->mpNextFrame;
+        }
 
         // Enable the prev Modal Dialog
         if ( mpPrevExecuteDlg && !mpPrevExecuteDlg->IsWindowOrChild( this, TRUE ) )
