@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: nf $ $Date: 2001-06-27 12:08:41 $
+#   last change: $Author: nf $ $Date: 2001-08-03 14:41:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,12 +83,18 @@ OBJFILES=   			\
     $(OBJ)$/wrdtrans.obj	\
     $(OBJ)$/wtratree.obj	\
     $(OBJ)$/wtranode.obj    \
-    $(OBJ)$/srciter.obj	
+    $(OBJ)$/srciter.obj		\
+    $(OBJ)$/utf8conv.obj
+
+LIB1TARGET= $(LB)$/transex.lib
+LIB1ARCHIV= $(LB)$/libtransex.a
+LIB1FILES=  $(LB)$/transex3.lib
+
 
 # extractor and merger for *.src and *.hrc
 APP1TARGET=	$(TARGET)
 APP1STACK=	16000
-APP1OBJS=   $(OBJ)$/src_yy.obj $(OBJ)$/utf8conv.obj
+APP1OBJS=   $(OBJ)$/src_yy.obj 
 APP1STDLIBS+=$(BTSTRPLIB) $(STATIC_LIBS) 
 APP1LIBS+=	$(LB)$/$(TARGET).lib
 APP1DEPN=   $(OBJ)$/src_yy.obj $(LB)$/$(TARGET).lib

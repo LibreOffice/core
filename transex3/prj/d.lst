@@ -16,7 +16,8 @@ mkdir: %_DEST%\inc%_EXT%\transex3
 ..\%__SRC%\misc\*staticdatamembers.h* %_DEST%\inc%_EXT%\*staticdatamembers.h*
 
 ..\inc\export.hxx %_DEST%\inc%_EXT%\transex3\export.hxx
-..\%__SRC%\lib\transex3.lib %_DEST%\lib%_EXT%\transex3.lib
+..\%__SRC%\lib\transex.lib %_DEST%\lib%_EXT%\transex.lib
+..\%__SRC%\lib\libtransex.a %_DEST%\lib%_EXT%\libtransex.a
 
 dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
 dos: sh -c "if test %OS% = MACOSX; then create-libstatic-link %_DEST%\lib%_EXT%; fi"
