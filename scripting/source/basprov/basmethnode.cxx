@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basmethnode.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-19 23:13:31 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 14:06:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,13 +92,15 @@
 #include <basic/sbmod.hxx>
 #endif
 
+#include <util/MiscUtils.hxx>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::comphelper;
 using namespace ::drafts::com::sun::star::script;
-
+using namespace ::sf_misc;
 
 #define BASPROV_PROPERTY_ID_URI         1
 #define BASPROV_PROPERTY_ID_EDITABLE    2
@@ -119,11 +121,11 @@ namespace basprov
     // =============================================================================
 
     BasicMethodNodeImpl::BasicMethodNodeImpl( const Reference< XComponentContext >& rxContext,
-        const Reference< XPropertySet >& rxScriptingContext, SbMethod* pMethod, bool isAppScript )
+        const ::rtl::OUString& sScriptingContext, SbMethod* pMethod, bool isAppScript )
         : ::scripting_helper::OBroadcastHelperHolder( StarBASIC::GetGlobalMutex() )
         ,OPropertyContainer( GetBroadcastHelper() )
         ,m_xContext( rxContext )
-        ,m_xScriptingContext( rxScriptingContext )
+        ,m_sScriptingContext( sScriptingContext )
         ,m_pMethod( pMethod )
         ,m_bIsAppScript( isAppScript )
         ,m_bEditable( sal_True )
@@ -266,11 +268,9 @@ namespace basprov
             ::rtl::OUString sDocURL, sLibName, sModName;
             USHORT nLine1, nLine2;
 
-            if ( !m_bIsAppScript && m_xScriptingContext.is() )
+            if ( !m_bIsAppScript )
             {
-                Reference< frame::XModel > xModel;
-                // TODO: use ScriptingContantsPool for SCRIPTING_DOC_REF
-                m_xScriptingContext->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SCRIPTING_DOC_REF" ) ) ) >>= xModel;
+                Reference< frame::XModel > xModel = MiscUtils::tDocUrlToModel( m_sScriptingContext );
 
                 if ( xModel.is() )
                 {
