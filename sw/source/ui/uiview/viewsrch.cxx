@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsrch.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:49 $
+ *  last change: $Author: jp $ $Date: 2000-10-20 14:52:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,6 +251,8 @@ void __EXPORT SwView::ExecSearch(SfxRequest& rReq, BOOL bNoMessage)
             if (nSlot == FN_REPEAT_SEARCH)
             {
                 ASSERT(pSrchItem, "Search-Item fehlt");
+                if( !pSrchItem )
+                    pSrchItem = new SvxSearchItem;
             }
             else
             {
@@ -832,6 +834,9 @@ void SwView::StateSearch(SfxItemSet &rSet)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:49  hr
+    initial import
+
     Revision 1.57  2000/09/18 16:06:14  willem.vandorp
     OpenOffice header added.
 
