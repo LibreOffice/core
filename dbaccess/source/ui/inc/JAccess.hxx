@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JAccess.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-11 12:42:09 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:20:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ namespace dbaui
         /** OJoinDesignViewAccess needs a valid view
         */
         OJoinDesignViewAccess(  OJoinTableView* _pTableView,
-                                const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >& _xParent);
+                                const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _xParent);
 
         // XServiceInfo - static methods
         static ::rtl::OUString getImplementationName_Static(void) throw( com::sun::star::uno::RuntimeException );
@@ -93,7 +93,7 @@ namespace dbaui
 
         // XAccessibleContext
         virtual sal_Int32 SAL_CALL getAccessibleChildCount(  ) throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int32 i ) throw (::com::sun::star::lang::IndexOutOfBoundsException,::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int32 i ) throw (::com::sun::star::lang::IndexOutOfBoundsException,::com::sun::star::uno::RuntimeException);
         virtual sal_Int16 SAL_CALL getAccessibleRole(  ) throw (::com::sun::star::uno::RuntimeException);
 
         OJoinTableView* getTableView() const { return m_pTableView; }
