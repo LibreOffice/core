@@ -2,9 +2,9 @@
  *
  *  $RCSfile: markarr.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2001-11-05 19:16:23 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:10:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #ifndef SC_MARKARR_HXX
 #define SC_MARKARR_HXX
 
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
+#endif
 #ifndef _SOLAR_H
 #include <tools/solar.h>
 #endif
@@ -70,14 +73,14 @@
 
 struct ScMarkEntry
 {
-    USHORT          nRow;
+    SCROW           nRow;
     BOOL            bMarked;
 };
 
 class ScMarkArray
 {
-    USHORT          nCount;
-    USHORT          nLimit;
+    SCSIZE          nCount;
+    SCSIZE          nLimit;
     ScMarkEntry*    pData;
 
 friend class ScMarkArrayIter;
@@ -87,33 +90,34 @@ public:
             ScMarkArray();
             ~ScMarkArray();
     void    Reset( BOOL bMarked = FALSE );
-    BOOL    GetMark( USHORT nRow ) const;
-    void    SetMark( USHORT nRow, BOOL bMarked );
-    void    SetMarkArea( USHORT nStartRow, USHORT nEndRow, BOOL bMarked );
-    BOOL    IsAllMarked( USHORT nStartRow, USHORT nEndRow ) const;
-    BOOL    HasOneMark( USHORT& rStartRow, USHORT& rEndRow ) const;
+    BOOL    GetMark( SCROW nRow ) const;
+    void    SetMark( SCROW nRow, BOOL bMarked );
+    void    SetMarkArea( SCROW nStartRow, SCROW nEndRow, BOOL bMarked );
+    BOOL    IsAllMarked( SCROW nStartRow, SCROW nEndRow ) const;
+    BOOL    HasOneMark( SCROW& rStartRow, SCROW& rEndRow ) const;
     BOOL    HasMarks() const;
     void    CopyMarksTo( ScMarkArray& rDestMarkArray ) const;
 
-    BOOL    Search( USHORT nRow, short& nIndex ) const;
-    void    DeleteArea(USHORT nStartRow, USHORT nEndRow);
+    BOOL    Search( SCROW nRow, SCSIZE& nIndex ) const;
+    void    DeleteArea(SCROW nStartRow, SCROW nEndRow);
     void    SwapCol(ScMarkArray& rMarkArray);
-    void    MoveTo(USHORT nStartRow, USHORT nEndRow, ScMarkArray& rMarkArray);
+    void    MoveTo(SCROW nStartRow, SCROW nEndRow, ScMarkArray& rMarkArray);
 
-    short   GetNextMarked( short nRow, BOOL bUp ) const;        // inkl. aktuelle
-    USHORT  GetMarkEnd( USHORT nRow, BOOL bUp ) const;
+    /// Including current row, may return -1 if bUp and not found
+    SCsROW  GetNextMarked( SCsROW nRow, BOOL bUp ) const;
+    SCROW   GetMarkEnd( SCROW nRow, BOOL bUp ) const;
 };
 
 
 class ScMarkArrayIter                   // selektierte Bereiche durchgehen
 {
     const ScMarkArray*  pArray;
-    USHORT              nPos;
+    SCSIZE              nPos;
 public:
                 ScMarkArrayIter( const ScMarkArray* pNewArray );
                 ~ScMarkArrayIter();
 
-    BOOL        Next( USHORT& rTop, USHORT& rBottom );
+    BOOL        Next( SCROW& rTop, SCROW& rBottom );
 };
 
 
