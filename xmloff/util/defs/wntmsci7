@@ -7304,3 +7304,8 @@ writeInfo
 ??_C@_0CD@HFHE@o?3?2SRC618?2wntmsci7?2inc?2vos?1ref?4i@
 ??_C@_0DF@MCA@O?3?2SRC618?2src?2xmloff?2source?2form@
 ??_C@_0DJ@CINN@O?3?2SRC618?2src?2xmloff?2source?2form@
+??_C@_0BO@DAEK@com?4sun?4star?4text?4WritingMode?$AA@
+??_C@_0CA@FBH@com?4sun?4star?4drawing?4BitmapMode?$AA@
+?aXML_WritingMode_EnumMap@@3PAUSvXMLEnumMapEntry@@A
+?s_pType_com_sun_star_drawing_BitmapMode@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBW4BitmapMode@drawing@456@@Z@4PAU_typelib_TypeDescriptionReference@@A
+?s_pType_com_sun_star_text_WritingMode@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBW4WritingMode@text@456@@Z@4PAU_typelib_TypeDescriptionReference@@A
