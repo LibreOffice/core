@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cmc $ $Date: 2001-02-16 15:26:50 $
+ *  last change: $Author: cmc $ $Date: 2001-02-19 18:00:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2216,6 +2216,17 @@ void SwWW8ImplReader::ProcessEscherAlign( SvxMSDffImportRec* pRecord,
         UINT16 nXAlign = nCntXAlign > pRecord->nXAlign ? pRecord->nXAlign : 1;
         UINT16 nYAlign = nCntYAlign > pRecord->nYAlign ? pRecord->nYAlign : 1;
 
+        /*
+        #74188#
+        Strangely in this case the FSPA value seems to be considered before
+        the newer escher nXRelTo record.
+        */
+        if ((pRecord->nXRelTo == 2) && (rFSPA.nbx != pRecord->nXRelTo))
+            pRecord->nXRelTo = rFSPA.nbx;
+        if ((pRecord->nYRelTo == 2) && (rFSPA.nby != pRecord->nYRelTo))
+            pRecord->nYRelTo = rFSPA.nby;
+
+
         UINT16 nXRelTo = nCntRelTo > pRecord->nXRelTo ? pRecord->nXRelTo : 1;
         UINT16 nYRelTo = nCntRelTo > pRecord->nYRelTo ? pRecord->nYRelTo : 1;
 
@@ -2403,13 +2414,25 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
                 if( 0>nWidthTw ) nWidthTw =0;
                 long nHeightTw = pF->nYaBottom - pF->nYaTop;
                 if( 0>nHeightTw) nHeightTw=0;
-
+#if 0
                 if( nbxRelPageBorder == pF->nbx )
                 {
                     pF->nXaLeft -= nPgLeft;
-                    if( bTable )
-                        pF->nXaLeft -= GetTableLeft();
+#endif
+                /*
+                 Absolute positions in winword for graphics are broken when
+                 the graphic is in a table, all absolute positions now become
+                 relative to the top left corner of that cell.  We really
+                 cannot import that feature correctly as we have not the same
+                 functionality (yet). This normalizes the absolute position
+                 by the left of the table, which at least puts it close, theres
+                 nothing we can do about the vertical either.
+                 */
+                if( bTable )
+                    pF->nXaLeft -= GetTableLeft();
+#if 0
                 }
+#endif
 /*
                 RndStdIds        eAnchor;
                 SwHoriOrient     eHori;
@@ -3001,11 +3024,14 @@ void SwWW8ImplReader::GrafikDtor()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.10 2001-02-16 15:26:50 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.11 2001-02-19 18:00:38 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.10  2001/02/16 15:26:50  cmc
+      ##444## Background graphics/objects always infront of text
+
       Revision 1.9  2001/02/07 10:13:02  cmc
       #80372# Paragraph border instead of Paragraph text border == WW edge align
 
