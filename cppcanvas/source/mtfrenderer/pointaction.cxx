@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pointaction.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2004-03-18 10:41:05 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:56:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,16 @@
  *
  ************************************************************************/
 
-#include "pointaction.hxx"
-#include "outdevstate.hxx"
-#include "cppcanvas/canvas.hxx"
+#include <pointaction.hxx>
+#include <outdevstate.hxx>
+#include <cppcanvas/canvas.hxx>
+
+#ifndef _RTL_LOGFILE_HXX_
+#include <rtl/logfile.hxx>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_XCANVAS_HPP_
+#include <drafts/com/sun/star/rendering/XCanvas.hpp>
+#endif
 
 #ifndef _SV_GEN_HXX
 #include <tools/gen.hxx>
@@ -77,7 +84,7 @@
 #include <canvas/canvastools.hxx>
 #endif
 
-#include "mtftools.hxx"
+#include <mtftools.hxx>
 
 
 using namespace ::com::sun::star;
@@ -115,11 +122,17 @@ namespace cppcanvas
         {
         }
 
-        bool PointAction::render() const
+        bool PointAction::render( const ::basegfx::B2DHomMatrix& rTransformation ) const
         {
+            RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::PointAction::render()" );
+            RTL_LOGFILE_CONTEXT_TRACE1( aLog, "::cppcanvas::internal::PointAction: 0x%X", this );
+
+            rendering::RenderState aLocalState( maState );
+            ::canvas::tools::prependToRenderState(aLocalState, rTransformation);
+
             mpCanvas->getUNOCanvas()->drawPoint( ::vcl::unotools::point2DFromPoint(maPoint),
                                                  mpCanvas->getViewState(),
-                                                 maState );
+                                                 aLocalState );
 
             return true;
         }
