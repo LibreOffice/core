@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxitems.src,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 12:13:26 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 09:13:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2143,7 +2143,7 @@ String RID_SVXITEMS_CHARROTATE_OFF
 String RID_SVXITEMS_CHARROTATE
 {
     Text [ de ] = "Zeichen um $(ARG1)° gedreht";
-    Text [ en-US ] = "Character rotated by $(ARG1)°";
+    Text [ en-US ] = "Character rotated by $(ARG1)Â°";
 };
 String RID_SVXITEMS_CHARROTATE_FITLINE
 {
