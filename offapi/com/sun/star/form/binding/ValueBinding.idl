@@ -1,0 +1,138 @@
+/*************************************************************************
+ *
+ *  $RCSfile: ValueBinding.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2004-04-02 10:38:32 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_form_binding_ValueBinding_idl__
+#define __com_sun_star_form_binding_ValueBinding_idl__
+
+#ifndef __com_sun_star_util_XValueBinding_idl__
+#include <com/sun/star/form/binding/XValueBinding.idl>
+#endif
+#ifndef __com_sun_star_beans_XPropertySet_idl__
+#include <com/sun/star/beans/XPropertySet.idl>
+#endif
+#ifndef __com_sun_star_lang_XComponent_idl__
+#include <com/sun/star/lang/XComponent.idl>
+#endif
+#ifndef __com_sun_star_util_XModifyBroadcaster_idl__
+#include <com/sun/star/util/XModifyBroadcaster.idl>
+#endif
+
+//=============================================================================
+
+module com {  module sun {  module star {  module form { module binding {
+
+//=============================================================================
+
+/** defines a component which allows access to a single value
+
+    <p>Read/Write access to the value represented by this component is supported,
+    as well as (optionally) active broadcasting of value changes</p>
+*/
+service ValueBinding
+{
+    /** determines whether the value is currently readonly
+
+        <p>For instance, you could imagine a <type>ValueBinding</type> which
+        represents a cell in a spreadsheet document, and whose value is readonly
+        as long as the spreadsheet is locked.</p>
+    */
+    [property, bound, readonly]  boolean  ReadOnly;
+
+    //-------------------------------------------------------------------------
+    /** allows access to the properties of the binding
+    */
+    interface   com::sun::star::beans::XPropertySet;
+
+    //-------------------------------------------------------------------------
+    /** allows read and write access to the value represented by this binding
+    */
+    interface XValueBinding;
+
+    /** allows other components to be notified when the value represented
+        by the <type>ValueBinding</type> instance changes.
+
+        <p>This interface is optional, since a binding may not support
+        actively notifying changes in it's value. Note, however, that in case
+        this interface is not supported, the bound component cannot react
+        on value changes, and will thus override any values which are
+        set by an instance other than itself.</p>
+    */
+    [optional] interface com::sun::star::util::XModifyBroadcaster;
+
+    /** allows life time control for the component
+
+        <p>An <type>ValueBinding</type> may be known to one ore more components
+        supporting the <type>XBindableValue</type> interface, which all work with
+        this binding. However, they will not <em>own</em> the <type>ValueBinding</type>.
+        The ownership is with another instance, which may also decide to obsolete
+        the <type>ValueBinding</type> for whatever reasons (e.g. because the data model
+        which the binding reflected died). For this reason, a <type>ValueBinding</type>
+        must offer a possibility to be obsoleted by it's owner, and to notify this
+        obsoletion to other interested parties, such as <type>XBindableValue</type>s.</p>
+    */
+    interface com::sun::star::lang::XComponent;
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+#endif
