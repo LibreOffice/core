@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyphenimp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-12 10:35:34 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 14:34:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -349,6 +349,11 @@ Hyphenator::hyphenate( const ::rtl::OUString& aWord,
         char *lcword;
         int k = 0;
 
+        PropertyHelper_Hyphen & rHelper = GetPropHelper();
+        //rHelper.SetTmpPropVals(aProperties);
+    sal_Int16 minTrail = rHelper.GetMinTrailing();
+    sal_Int16 minLead = rHelper.GetMinLeading();
+    sal_Int16 minLen = rHelper.GetMinWordLength();
 
     HyphenDict *dict = NULL;
         rtl_TextEncoding aEnc = 0;
@@ -427,7 +432,11 @@ Hyphenator::hyphenate( const ::rtl::OUString& aWord,
         for (INT32 i = 0; i < encWord.getLength(); i++)
         {
             hyphenatedWordBuffer.append(aWord[i]);
-            if ((hyphens[i]&1)  && (i < Leading))
+                BOOL hit = (wordlen >= minLen);
+                hit = hit && (hyphens[i]&1) && (i < Leading);
+                hit = hit && (i >= (minLead-1) );
+                hit = hit && ((wordlen - i - 1) >= minTrail);
+            if (hit)
             {
             nHyphenationPos = i;
             hyphenatedWordBuffer.append(sal_Unicode('='));
@@ -497,7 +506,7 @@ Reference< XPossibleHyphens > SAL_CALL
   dict = NULL;
   aEnc = 0;
 
-  // if we have a hyphenationd citionary matching this locale
+  // if we have a hyphenation dictionary matching this locale
   if (k != -1) {
 
       // if this dictioanry has not been loaded yet do that
