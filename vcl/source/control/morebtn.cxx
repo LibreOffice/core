@@ -2,9 +2,9 @@
  *
  *  $RCSfile: morebtn.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:14:46 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:23:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,14 +59,12 @@
  *
  ************************************************************************/
 
-#define _SV_MOREBTN_CXX
-
 #ifndef _SV_MOREBTN_HXX
 #include <morebtn.hxx>
 #endif
 
 #ifndef _SV_RD_H
-#include <rc.h>
+#include <tools/rc.h>
 #endif
 
 
