@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AViews.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-15 10:50:24 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:43:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,24 +127,24 @@ void OViews::appendObject( const Reference< XPropertySet >& descriptor )
             aCommand.put_CommandText(getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_COMMAND))));
             ADOViews* pViews = (ADOViews*)m_aCollection;
             if(FAILED(pViews->Append(OLEString(sName),aCommand)))
-                ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),*this);
+                ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),static_cast<XTypeProvider*>(this));
 
             OTables* pTables = static_cast<OTables*>(static_cast<OCatalog&>(m_rParent).getPrivateTables());
             if(pTables)
                 pTables->appendNew(sName);
         }
         else
-            throw SQLException(::rtl::OUString::createFromAscii("Could not append view!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
+            throw SQLException(::rtl::OUString::createFromAscii("Could not append view!"),static_cast<XTypeProvider*>(this),OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
     }
     else
-        throw SQLException(::rtl::OUString::createFromAscii("Could not append view!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
+        throw SQLException(::rtl::OUString::createFromAscii("Could not append view!"),static_cast<XTypeProvider*>(this),OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
 }
 // -------------------------------------------------------------------------
 // XDrop
 void OViews::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
 {
     if(!m_aCollection.Delete(_sElementName))
-        ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),*this);
+        ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),static_cast<XTypeProvider*>(this));
 }
 // -------------------------------------------------------------------------
 Reference< XNamed > OViews::cloneObject(const Reference< XPropertySet >& _xDescriptor)

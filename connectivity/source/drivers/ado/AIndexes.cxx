@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AIndexes.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-09 07:05:38 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:42:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,7 @@ void OIndexes::appendObject( const Reference< XPropertySet >& descriptor )
                                   OLEVariant(pIndex->getImpl())));
     }
     if(bError)
-        throw SQLException(::rtl::OUString::createFromAscii("Could not append index!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
+        throw SQLException(::rtl::OUString::createFromAscii("Could not append index!"),static_cast<XTypeProvider*>(this),OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
 }
 // -------------------------------------------------------------------------
 // XDrop
