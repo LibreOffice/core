@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: cl $ $Date: 2002-02-04 14:20:11 $
+ *  last change: $Author: cl $ $Date: 2002-03-21 11:28:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1572,8 +1572,11 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
 
     if( pObj && pModel )
     {
-        if( pMap == NULL || ( pMap->nFlags & beans::PropertyAttribute::READONLY ) != 0 )
+        if( pMap == NULL )
             throw beans::UnknownPropertyException();
+
+        if( (pMap->nFlags & beans::PropertyAttribute::READONLY ) != 0 )
+            throw beans::PropertyVetoException();
 
         pModel->SetChanged();
 
@@ -3499,7 +3502,32 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
             }
         }
     }
+    else if( pObj && pObj->GetObjInventor() == FmFormInventor)
+    {
+        const UINT16 nIdent = pObj->GetObjIdentifier();
 
+        switch(nIdent)
+        {
+        case OBJ_FM_CONTROL:
+            {
+                static uno::Sequence< OUString > *pSeq = 0;
+                if( 0 == pSeq )
+                {
+                    OGuard aGuard( Application::GetSolarMutex() );
+                    if( 0 == pSeq )
+                    {
+                        static uno::Sequence< OUString > SvxShape_UnoServices;
+                        SvxServiceInfoHelper::addToSequence( SvxShape_UnoServices, 2,
+                            sUNO_service_drawing_ControlShape,
+                            sUNO_service_drawing_Shape );
+
+                        pSeq = &SvxShape_UnoServices;
+                    }
+                }
+                return *pSeq;
+            }
+        }
+    }
     uno::Sequence< OUString > aSeq;
     return aSeq;
 }
