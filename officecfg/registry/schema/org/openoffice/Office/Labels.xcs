@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Labels.xcs,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 14:31:03 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:34:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,11 +88,12 @@
 				<desc xml:lang="sv">Contains the properties used for a label.</desc>
 				<desc xml:lang="pl">Contains the properties used for a label.</desc>
 				<desc xml:lang="pt-BR">Contains the properties used for a label.</desc>
-				<desc xml:lang="ja">Contains the properties used for a label.</desc>
+				<desc xml:lang="ja">ラベルに対して使用するプロパティが含まれます。</desc>
 				<desc xml:lang="ko">Contains the properties used for a label.</desc>
 				<desc xml:lang="tr">Contains the properties used for a label.</desc>
 				<desc xml:lang="th">Contains the properties used for a label.</desc>
 				<desc xml:lang="hi-IN">Contains the properties used for a label.</desc>
+				<desc xml:lang="x-comment">Contains the properties used for a label.</desc>
 			</info>
 			<prop oor:name="Name" oor:type="xs:string">
 				<!--Label: Type Description: Name of the format-->
@@ -116,11 +117,12 @@
 					<desc xml:lang="sv">Contains the descriptive name for the label format.</desc>
 					<desc xml:lang="pl">Contains the descriptive name for the label format.</desc>
 					<desc xml:lang="pt-BR">Contains the descriptive name for the label format.</desc>
-					<desc xml:lang="ja">Contains the descriptive name for the label format.</desc>
+					<desc xml:lang="ja">ラベル形式の記述名が含まれます。</desc>
 					<desc xml:lang="ko">Contains the descriptive name for the label format.</desc>
 					<desc xml:lang="tr">Contains the descriptive name for the label format.</desc>
 					<desc xml:lang="th">Contains the descriptive name for the label format.</desc>
 					<desc xml:lang="hi-IN">Contains the descriptive name for the label format.</desc>
+					<desc xml:lang="x-comment">Contains the descriptive name for the label format.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Measure" oor:type="xs:string">
@@ -145,11 +147,12 @@
 					<desc xml:lang="sv">Contains the measurement data of the label concatenated by a colon (;) in the following order: No of Rows;No. Of Columns; Width; Height; Hor. Distance; Vert. Distance;Left margin;Upper margin; At the end a &apos;1&apos; is append if the label type is continuous otherwise a &apos;0&apos;.</desc>
 					<desc xml:lang="pl">Contains the measurement data of the label concatenated by a colon (;) in the following order: No of Rows;No. Of Columns; Width; Height; Hor. Distance; Vert. Distance;Left margin;Upper margin; At the end a &apos;1&apos; is append if the label type is continuous otherwise a &apos;0&apos;.</desc>
 					<desc xml:lang="pt-BR">Contains the measurement data of the label concatenated by a colon (;) in the following order: No of Rows;No. Of Columns; Width; Height; Hor. Distance; Vert. Distance;Left margin;Upper margin; At the end a &apos;1&apos; is append if the label type is continuous otherwise a &apos;0&apos;.</desc>
-					<desc xml:lang="ja">Contains the measurement data of the label concatenated by a colon (;) in the following order: No of Rows;No. Of Columns; Width; Height; Hor. Distance; Vert. Distance;Left margin;Upper margin; At the end a &apos;1&apos; is append if the label type is continuous otherwise a &apos;0&apos;.</desc>
+					<desc xml:lang="ja">次の順序でコロン (;) によって区切られるラベルの測定データが含まれます。行数、列数、幅、;高さ、水平方向の距離、垂直方向の間隔、左側の余白、上側の余白 (ラベルの種類が連続的な場合は「1」、そうでない場合は「0」が末尾に追加されます)。</desc>
 					<desc xml:lang="ko">Contains the measurement data of the label concatenated by a colon (;) in the following order: No of Rows;No. Of Columns; Width; Height; Hor. Distance; Vert. Distance;Left margin;Upper margin; At the end a &apos;1&apos; is append if the label type is continuous otherwise a &apos;0&apos;.</desc>
 					<desc xml:lang="tr">Contains the measurement data of the label concatenated by a colon (;) in the following order: No of Rows;No. Of Columns; Width; Height; Hor. Distance; Vert. Distance;Left margin;Upper margin; At the end a &apos;1&apos; is append if the label type is continuous otherwise a &apos;0&apos;.</desc>
 					<desc xml:lang="th">Contains the measurement data of the label concatenated by a colon (;) in the following order: No of Rows;No. Of Columns; Width; Height; Hor. Distance; Vert. Distance;Left margin;Upper margin; At the end a &apos;1&apos; is append if the label type is continuous otherwise a &apos;0&apos;.</desc>
 					<desc xml:lang="hi-IN">Contains the measurement data of the label concatenated by a colon (;) in the following order: No of Rows;No. Of Columns; Width; Height; Hor. Distance; Vert. Distance;Left margin;Upper margin; At the end a &apos;1&apos; is append if the label type is continuous otherwise a &apos;0&apos;.</desc>
+					<desc xml:lang="x-comment">Contains the measurement data of the label concatenated by a colon (;) in the following order: No of Rows;No. Of Columns; Width; Height; Hor. Distance; Vert. Distance;Left margin;Upper margin; At the end a &apos;1&apos; is append if the label type is continuous otherwise a &apos;0&apos;.</desc>
 				</info>
 			</prop>
 		</group>
@@ -174,11 +177,12 @@
 				<desc xml:lang="sv">Specifies a set of labels of a manufacturer.</desc>
 				<desc xml:lang="pl">Specifies a set of labels of a manufacturer.</desc>
 				<desc xml:lang="pt-BR">Specifies a set of labels of a manufacturer.</desc>
-				<desc xml:lang="ja">Specifies a set of labels of a manufacturer.</desc>
+				<desc xml:lang="ja">メーカーのラベルセットを指定します。</desc>
 				<desc xml:lang="ko">Specifies a set of labels of a manufacturer.</desc>
 				<desc xml:lang="tr">Specifies a set of labels of a manufacturer.</desc>
 				<desc xml:lang="th">Specifies a set of labels of a manufacturer.</desc>
 				<desc xml:lang="hi-IN">Specifies a set of labels of a manufacturer.</desc>
+				<desc xml:lang="x-comment">Specifies a set of labels of a manufacturer.</desc>
 			</info>
 		</set>
 	</templates>
@@ -204,11 +208,12 @@
 					<desc xml:lang="sv">Contains the list of label manufacturers.</desc>
 					<desc xml:lang="pl">Contains the list of label manufacturers.</desc>
 					<desc xml:lang="pt-BR">Contains the list of label manufacturers.</desc>
-					<desc xml:lang="ja">Contains the list of label manufacturers.</desc>
+					<desc xml:lang="ja">ラベルメーカーのリストが含まれます。</desc>
 					<desc xml:lang="ko">Contains the list of label manufacturers.</desc>
 					<desc xml:lang="tr">Contains the list of label manufacturers.</desc>
 					<desc xml:lang="th">Contains the list of label manufacturers.</desc>
 					<desc xml:lang="hi-IN">Contains the list of label manufacturers.</desc>
+					<desc xml:lang="x-comment">Contains the list of label manufacturers.</desc>
 				<label xml:lang="en-US">Available Manufacturers</label>
 				<label xml:lang="el">Available Manufacturers</label>
 				<label xml:lang="nl">Available Manufacturers</label>
@@ -228,15 +233,17 @@
 				<label xml:lang="sv">Available Manufacturers</label>
 				<label xml:lang="pl">Available Manufacturers</label>
 				<label xml:lang="pt-BR">Available Manufacturers</label>
-				<label xml:lang="ja">Available Manufacturers</label>
+				<label xml:lang="ja">利用可能なメーカー</label>
 				<label xml:lang="ko">Available Manufacturers</label>
 				<label xml:lang="tr">Available Manufacturers</label>
 				<label xml:lang="th">Available Manufacturers</label>
 				<label xml:lang="hi-IN">Available Manufacturers</label>
+				<label xml:lang="x-comment">Available Manufacturers</label>
 			</info>
 		</set>
 	</component>
 </oor:component-schema>
+
 
 
 
