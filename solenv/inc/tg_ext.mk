@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: hjs $ $Date: 2001-09-20 19:53:17 $
+#   last change: $Author: hjs $ $Date: 2001-10-19 16:23:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,15 +66,11 @@ INCLUDE!:=$(shell echo $(INCLUDE:s/\stl//) | sed "s/[ \t]*-I/;/g" )
 .EXPORT : INCLUDE
 .ENDIF			# "$(GUI)"=="WNT"
 
-#.IF "$(OS)"=="SOLARIS"
-#.IF "$(BUILD_SOSL)"==""
-#CC:=$(COMPATH)$/bin$/cc
-#.EXPORT : CC
-#.ENDIF			# "$(BUILD_SOSL)"==""
-#.ENDIF			# "$(OS)"=="SOLARIS"
-
 #override
-PACKAGE_DIR=build$/$(ROUT)
+PACKAGE_DIR=$(MISC)$/build
+#MUST match with PACKAGE_DIR
+BACK_PATH=..$/..$/..$/
+
 P_CONFIGURE_DIR=$(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$(CONFIGURE_DIR)
 P_BUILD_DIR=$(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$(BUILD_DIR)
 P_INSTALL_DIR=$(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$(BUILD_DIR)
@@ -119,7 +115,7 @@ $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE) : $(MISC)$/$(TARFILE_NAME).tar
     @+-$(MKDIR) $(PACKAGE_DIR:d)
     @+-$(MKDIR) $(PACKAGE_DIR)
 # see tg_zip.mk
-    +cd $(PACKAGE_DIR) && tar -xvf ../../$(ROUT)$/misc$/$(TARFILE_NAME).tar && $(TOUCH) $(UNTAR_FLAG_FILE)
+    +cd $(PACKAGE_DIR) && tar -xvf $(BACK_PATH)$(ROUT)$/misc$/$(TARFILE_NAME).tar && $(TOUCH) $(UNTAR_FLAG_FILE)
     @+echo make writeable...
 .IF "$(GUI)"=="WNT"
     @+cd $(PACKAGE_DIR) && attrib /s -r  >& $(NULLDEV) && $(TOUCH) $(UNTAR_FLAG_FILE)
@@ -142,9 +138,9 @@ $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE) : $(PACKAGE_DIR)$/$(ADD_FILES_FLAG_FILE)
     +$(TOUCH) $@
 .ELSE			# "$(PATCH_FILE_NAME)"=="none" ||	"$(PATCH_FILE_NAME)"==""
 .IF "$(GUI)"=="WNT"
-    +cd $(PACKAGE_DIR) && $(TYPE) ..$/..$/$(PATCH_FILE_NAME) | tr -d "\015" | patch -b -p2 && $(TOUCH) $(PATCH_FLAG_FILE)
+    +cd $(PACKAGE_DIR) && $(TYPE) $(BACK_PATH)$(PATCH_FILE_NAME) | tr -d "\015" | patch -b -p2 && $(TOUCH) $(PATCH_FLAG_FILE)
 .ELSE           # "$(GUI)"=="WNT"
-    +cd $(PACKAGE_DIR) && $(TYPE) ..$/..$/$(PATCH_FILE_NAME) | patch -b -p2 && $(TOUCH) $(PATCH_FLAG_FILE)
+    +cd $(PACKAGE_DIR) && $(TYPE) $(BACK_PATH)$(PATCH_FILE_NAME) | patch -b -p2 && $(TOUCH) $(PATCH_FLAG_FILE)
 .ENDIF          # "$(GUI)"=="WNT"
 .ENDIF			# "$(PATCH_FILE_NAME)"=="none" ||	"$(PATCH_FILE_NAME)"==""
 
