@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:18:29 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:14:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,7 +157,7 @@ const OUString& psp::getPrinterPath()
         }
         aPath += ::psp::getEnvironmentPath( "SAL_PSPRINT", (sal_Unicode)':' );
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "initalizing printer path to \"%s\"\n", OUStringToOString( aPath, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
 #endif
     }
@@ -305,7 +305,7 @@ const OUString& psp::getFontPath()
             aPath += OUString( RTL_CONSTASCII_USTRINGPARAM( ";" ) );
             aPath += OStringToOUString( aJREpath, osl_getThreadTextEncoding() );
         }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "initalizing font path to \"%s\"\n", OUStringToOString( aPath, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
 #endif
     }
