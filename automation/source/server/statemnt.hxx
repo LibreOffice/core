@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statemnt.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2002-11-18 15:29:21 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 16:03:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,6 +176,10 @@ public:
 #define MAX_RETRIES 9
 class StatementList : public SafePointer
 {
+private:
+    StatementList(const StatementList&);
+    StatementList & operator=(const StatementList&);
+
 protected:
     StatementList();
     USHORT nRetryCount;
@@ -406,7 +410,7 @@ public:
 
 };
 
-class StatementFlow : StatementList     // Kommunikation mit Sequence
+class StatementFlow : public StatementList      // Kommunikation mit Sequence
 {
     USHORT nArt;
 

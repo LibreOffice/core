@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rcontrol.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: gh $ $Date: 2002-12-02 10:22:07 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 16:03:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,10 +69,6 @@
 
 #ifndef _RCONTROL_HXX
 #define _RCONTROL_HXX
-
-
-#define TESTTOOL_PORT 12479
-#define UNO_PORT 12480
 
 
 #define UID_ACTIVE          0
@@ -420,6 +416,7 @@
 
 #define RC_GetDocumentCount ( M_SOFFICE             | M_WITH_RETURN | 39 )
 
+#define RC_GetSystemLanguage ( M_SOFFICE             | M_WITH_RETURN | 40 )
 
 // Flow Control
 #define F_EndCommandBlock   101         // Initiiert Rückmeldung des Status
@@ -451,6 +448,7 @@
 #define S_AssertError       220
 #define S_AssertWarning     221
 #define S_AssertTrace       222
+#define S_QAError           223
 
 
 

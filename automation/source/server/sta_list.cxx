@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sta_list.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: gh $ $Date: 2002-12-09 14:49:34 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 16:03:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -949,7 +949,7 @@ void StatementList::DirectLog(ULONG nUId, String aMessage)
 
 #define CALL_EVENT_WITH_NOTIFY( EventType, Event, WinP, Method )    \
 {                                                                   \
-    if ( StatementList::WinPtrValid( WinP ) )                                       \
+    if ( StatementList::WinPtrValid( WinP ) )                       \
     {                                                               \
         NotifyEvent aNEvt( EventType, WinP, &Event );               \
         if ( !WinP->PreNotify( aNEvt ) )                            \

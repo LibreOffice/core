@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objtest.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2002-11-18 15:54:04 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 16:03:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -460,8 +460,8 @@ void TestToolObj::LoadIniFile()             // Laden der IniEinstellungen, die d
 #define GETSET(aVar, KeyName, Dafault)                          \
     {                                                           \
         ByteString __##aVar##__;                                \
-        __##aVar##__ = aConf.ReadKey(KeyName,"No Entry");       \
-        if ( __##aVar##__.Equals("No Entry") )              \
+        __##aVar##__ = aConf.ReadKey(KeyName);      \
+        if ( !__##aVar##__.Len() )                  \
         {                                                       \
             __##aVar##__ = Dafault;                             \
             aConf.WriteKey(KeyName, __##aVar##__);              \
@@ -469,15 +469,27 @@ void TestToolObj::LoadIniFile()             // Laden der IniEinstellungen, die d
         aVar = UniString( __##aVar##__, RTL_TEXTENCODING_UTF8 );\
     }
 
-    Config aConf(Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ));
-    aConf.SetGroup("Path");
+#define NEWOLD( NewKey, OldKey )                                                                \
+    {                                                                                           \
+        ByteString aValue;                                                                      \
+        if ( ( (aValue = aConf.ReadKey( OldKey )).Len() ) && !aConf.ReadKey( NewKey ).Len() )   \
+            aConf.WriteKey( NewKey, aValue );                                                   \
+    }
 
+
+    Config aConf(Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ));
+    aConf.SetGroup("Misc");
+    ByteString aCurrentProfile = aConf.ReadKey( "CurrentProfile", "Path" );
+    aConf.SetGroup( aCurrentProfile );
+
+    NEWOLD( "BaseDir", "Basisverzeichnis" )
     String aFB;
     DirEntry aDirEntry( CUniString( DEF_BASE_DIR ), FSYS_STYLE_VFAT );
     ByteString aText   = ByteString( aDirEntry.GetFull(), RTL_TEXTENCODING_UTF8 );
-    GETSET( aFB, "Basisverzeichnis", aText );
+    GETSET( aFB, "BaseDir", aText );
     pImpl->aFileBase = DirEntry(aFB);
 
+    // remove old keys
     if ( aConf.ReadKey("KeyCodes + Classes").Len() != 0 ||
          aConf.ReadKey("KeyCodes + Classes + Res_Type").Len() != 0 )
     {
@@ -485,15 +497,16 @@ void TestToolObj::LoadIniFile()             // Laden der IniEinstellungen, die d
         aConf.DeleteKey("KeyCodes + Classes");
     }
 
+    NEWOLD( "LogBaseDir", "LogBasisverzeichnis" )
     String aLFB;
-    GETSET( aLFB, "LogBasisverzeichnis", ByteString( aFB, RTL_TEXTENCODING_UTF8 ) );
+    GETSET( aLFB, "LogBaseDir", ByteString( aFB, RTL_TEXTENCODING_UTF8 ) );
     pImpl->aLogFileBase = DirEntry(aLFB);
 
+    NEWOLD( "HIDDir", "HIDVerzeichnis" )
     String aHID;
-
     aDirEntry = DirEntry( CUniString(DEF_HID_DIR), FSYS_STYLE_VFAT );
     aText = ByteString( aDirEntry.GetFull(), RTL_TEXTENCODING_UTF8 );
-    GETSET( aHID, "HIDVerzeichnis", aText );
+    GETSET( aHID, "HIDDir", aText );
     pImpl->aHIDDir = DirEntry(aHID);
 
 
@@ -503,6 +516,11 @@ void TestToolObj::LoadIniFile()             // Laden der IniEinstellungen, die d
     GETSET( aST, "ServerTimeout", ByteString::CreateFromInt64(Time(0,0,45).GetTime()) );     // 45 Sekunden Initial
     pImpl->aServerTimeout = Time(aST.ToInt64());
 
+    String aSOSE;
+    aCurrentProfile = aConf.ReadKey( "CurrentProfile", "Misc" );
+    aConf.SetGroup( aCurrentProfile );
+    GETSET( aSOSE, "StopOnSyntaxError", "0" );     // 45 Sekunden Initial
+    pImpl->bStopOnSyntaxError = aSOSE.EqualsAscii("1");
 }
 
 #define MAKE_TT_KEYWORD( cName, aType, aResultType, nID ) \
@@ -550,6 +568,9 @@ void TestToolObj::InitTestToolObj()
 
     pImpl->nTestCaseLineNr = 0;
 
+    pImpl->bEnableQaErrors = TRUE;
+    pImpl->bDebugFindNoErrors = FALSE;
+
     pFehlerListe = new CErrors;             // Vor allem anderen. Wer weiss, wer alles einen Fehler auslöst.
 
     In = new CmdStream();
@@ -591,11 +612,14 @@ void TestToolObj::InitTestToolObj()
     MAKE_TT_KEYWORD( "PrintLog", SbxCLASS_METHOD, SbxNULL, ID_PrintLog );
     MAKE_TT_KEYWORD( "WarnLog", SbxCLASS_METHOD, SbxNULL, ID_WarnLog );
     MAKE_TT_KEYWORD( "ErrorLog", SbxCLASS_METHOD, SbxNULL, ID_ErrorLog );
+    MAKE_TT_KEYWORD( "QAErrorLog", SbxCLASS_METHOD, SbxNULL, ID_QAErrorLog );
+    MAKE_TT_KEYWORD( "EnableQaErrors", SbxCLASS_PROPERTY, SbxBOOL, ID_EnableQaErrors );
     MAKE_TT_KEYWORD( "MaybeAddErr", SbxCLASS_METHOD, SbxNULL, ID_MaybeAddErr );
     MAKE_TT_KEYWORD( "ClearError", SbxCLASS_METHOD, SbxNULL, ID_ClearError );
     MAKE_TT_KEYWORD( "SaveIDs", SbxCLASS_METHOD, SbxBOOL, ID_SaveIDs );
     MAKE_TT_KEYWORD( "AutoExecute", SbxCLASS_PROPERTY, SbxBOOL, ID_AutoExecute );   // Achtung! PROPERTY Also eine Variable
     MAKE_TT_KEYWORD( "Execute", SbxCLASS_METHOD, SbxNULL, ID_Execute );
+    MAKE_TT_KEYWORD( "StopOnSyntaxError", SbxCLASS_PROPERTY, SbxBOOL, ID_StopOnSyntaxError );
 
 /*  Dialog Handler werden gebraucht, wenn im internen Testtool ein Dialog
     hochgerissen wird. Nach versenden der Remote-Kommandos wird IdleHandler aktiviert.
@@ -1765,6 +1789,16 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                         pImpl->aTestCaseName.Erase();
                         pImpl->aTestCaseFileName.Erase();
                         pImpl->nTestCaseLineNr = 0;
+
+                        pImpl->bEnableQaErrors = TRUE;
+                        pImpl->bDebugFindNoErrors = FALSE;
+
+                        String aName( CUniString( "StopOnSyntaxError" ) );
+                        SbxVariableRef xStopOnSyntaxError = SbxObject::Find( aName, SbxCLASS_PROPERTY );
+                        if ( xStopOnSyntaxError.Is() )
+                            xStopOnSyntaxError->PutBool( pImpl->bStopOnSyntaxError );
+                        else
+                            SetError( SbxERR_BAD_ACTION );
                     }
                     else
                         SetError( SbxERR_WRONG_ARGS );
@@ -1971,6 +2005,19 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                             ADD_ERROR_LOG( GET_ERROR()->aText, aRun.GetModuleName(SbxNAME_SHORT_TYPES),
                                 StarBASIC::GetErl(), aRun.GetCol1(), aRun.GetCol2() );
                         }
+                    }
+                    break;
+                case ID_QAErrorLog:
+                    if ( rPar )  // rPar != NULL  <=>  Es gibt Parameter
+                    {
+                        USHORT n;
+                        String aSammel;
+                        for ( n = 1; n < rPar->Count(); n++ )
+                        {
+                            SbxVariableRef pArg = rPar->Get( n );
+                            aSammel += pArg->GetString();
+                        }
+                        ADD_QA_ERROR_LOG( aSammel );
                     }
                     break;
                 case ID_PrintLog:
@@ -2430,6 +2477,12 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                     else
                         SetError( SbxERR_WRONG_ARGS );
                     break;
+                case ID_EnableQaErrors:
+                    if ( !rPar )  // rPar = NULL  <=>  Kein Parameter
+                        pImpl->bEnableQaErrors = pVar->GetBool();
+                    else
+                        SetError( SbxERR_WRONG_ARGS );
+                    break;
             }
         }  // if( nHintId == SBX_HINT_DATACHANGED )
         else if( nHintId == SBX_HINT_BASICSTART )
@@ -2481,6 +2534,10 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
     }
 }
 
+void TestToolObj::DebugFindNoErrors( BOOL bDebugFindNoErrors )
+{
+    pImpl->bDebugFindNoErrors = bDebugFindNoErrors;
+}
 
 SbxVariable* TestToolObj::Find( const String& Str, SbxClassType Type)
 {
@@ -2575,12 +2632,15 @@ SbxVariable* TestToolObj::Find( const String& Str, SbxClassType Type)
                 return pReturn;
             }
         }
-        ADD_ERROR(SbxERR_PROC_UNDEFINED,GEN_RES_STR1(S_UNKNOWN_SLOT_CONTROL, Str) );
-        if ( bQuietErrors )
-        {       // Vorsichtshalber Control, falls noch ´ne Methode Folgt.
-            pImpl->pControlsObj->SetName(Str);
-            pImpl->pControlsObj->SetUserData( ID_ErrorDummy );
-            return pImpl->pControlsObj;
+        if ( !pImpl->bDebugFindNoErrors )
+        {
+            ADD_ERROR(SbxERR_PROC_UNDEFINED,GEN_RES_STR1(S_UNKNOWN_SLOT_CONTROL, Str) );
+            if ( bQuietErrors )
+            {       // Vorsichtshalber Control, falls noch ´ne Methode Folgt.
+                pImpl->pControlsObj->SetName(Str);
+                pImpl->pControlsObj->SetUserData( ID_ErrorDummy );
+                return pImpl->pControlsObj;
+            }
         }
     }
     return NULL;
@@ -2870,8 +2930,11 @@ HACK("Ich gestehe alles: Ich war zu faul das richtig zu machen.")
         aSource.Insert(CUniString("Sub ").Append(aSuffix).AppendAscii(" CaseLog \"").Append(aSuffix).AppendAscii("\" : on error goto endcse : TestEnter "),nTestCase);
     }
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Attention!!! The lable endsub is officially used to exit a sub instead of using 'exit sub' or 'return'
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
     while ( (nEndCase = ImplSearch( aSource, 0, aSource.Len(), CUniString("endcase") ) ) != STRING_NOTFOUND )
-        aSource.SearchAndReplaceAscii("endcase",CUniString("goto endsub : endcse: if err = 35 or err = 18 then : on error goto 0 : resume : endif : MaybeAddErr : ExceptLog : resume endcse_res : endcse_res: on error goto 0 : endsub: TestExit : ClearError : CaseLog \"\" : end sub "), nEndCase );
+        aSource.SearchAndReplaceAscii("endcase",CUniString("goto endsub : endcse: if ( err = 35 and StopOnSyntaxError ) or err = 18 then : on error goto 0 : resume : endif : MaybeAddErr : ExceptLog : resume endcse_res : endcse_res: on error goto 0 : endsub: TestExit : ClearError : CaseLog \"\" : end sub "), nEndCase );
 
     if ( aSource.Len() >= STRING_MAXLEN )
     {
@@ -3305,6 +3368,11 @@ BOOL TestToolObj::ReturnResults( SvStream *pIn )
                                 ADD_ASSERTION_LOG( aString1 );
 //                              ADD_ERROR_LOG( aString1, aRun.GetModuleName(SbxNAME_SHORT_TYPES),
 //                                  aRun.GetLine(), aRun.GetCol1(), aRun.GetCol2() );
+                            }
+                            break;
+                        case S_QAError:
+                            {
+                                ADD_QA_ERROR_LOG( aString1 );
                             }
                             break;
                         default:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statemnt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: gh $ $Date: 2002-12-02 10:22:07 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 16:03:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2361,6 +2361,10 @@ BOOL StatementCommand::Execute()
                     // So daß nacher auch wieder alles auf Default steht
                     nUseBindings = 0;
                     nControlType = CONST_CTTreeListBox;
+
+                    nSubMenuId1 = 0;
+                    nSubMenuId2 = 0;
+                    pMenuWindow = NULL;
                 }
                 if ( !nRetryCount )
                     ReportError( GEN_RES_STR0( S_RESETAPPLICATION_FAILED_COMPLEX ) );
@@ -2885,9 +2889,15 @@ BOOL StatementCommand::Execute()
                                     pPopup->EndExecute(nNr1);
                                     nSubMenuId1 = 0;
                                     nSubMenuId2 = 0;
+                                    pMenuWindow = NULL;
                                 }
                                 else
+                                {
                                     pMenuBar->SelectEntry(nNr1);
+                                    nSubMenuId1 = 0;
+                                    nSubMenuId2 = 0;
+                                    pMenuWindow = NULL;
+                                }
                             }
                         }
                         break;
@@ -3188,16 +3198,14 @@ BOOL StatementCommand::Execute()
 #endif
                     // The Count is only larger than 2 is the path is a directory which is not empty
                     // the Count of 2 results from the "." and ".." directory
-                    if ( Dir( aDestPath, FSYS_KIND_FILE | FSYS_KIND_DIR ).Count() <= 2 )
-                    {
-                        SotStorageRef xStorage = new SotStorage( aFileName, STREAM_STD_READ );
-                        if ( xStorage->GetError() )
-                            ReportError( GEN_RES_STR2(S_UNPACKING_STORAGE_FAILED, aFileName, aDestPath.GetFull()) );
-                        else
-                            UnpackStorage( xStorage, aDestPath );
-                    }
+                    if ( Dir( aDestPath, FSYS_KIND_FILE | FSYS_KIND_DIR ).Count() > 2 )
+                        DirectLog( S_QAError, GEN_RES_STR1( S_DIRECTORY_NOT_EMPTY, aDestPath.GetFull() ) );
+
+                    SotStorageRef xStorage = new SotStorage( aFileName, STREAM_STD_READ );
+                    if ( xStorage->GetError() )
+                        ReportError( GEN_RES_STR2(S_UNPACKING_STORAGE_FAILED, aFileName, aDestPath.GetFull()) );
                     else
-                        ReportError( GEN_RES_STR1( S_DIRECTORY_NOT_EMPTY, aDestPath.GetFull() ) );
+                        UnpackStorage( xStorage, aDestPath );
                 }
                 else
                     ReportError( GEN_RES_STR0( S_INVALID_PARAMETERS ) );
@@ -3293,6 +3301,11 @@ BOOL StatementCommand::Execute()
                 }
                 else
                     ReportError( GEN_RES_STR0( S_INVALID_PARAMETERS ) );
+            }
+            break;
+        case RC_GetSystemLanguage :
+            {
+                pRet->GenReturn ( RET_Value, nMethodId, (USHORT)Application::GetSettings().GetLanguage() );
             }
             break;
         default:
@@ -5781,23 +5794,18 @@ SvLBoxString* pItem = NULL;\
                         MessBox* pMB = (MessBox*)pControl;
                         switch( nMethodId )
                         {
-#if SUPD > 631
                             case M_GetCheckBoxText:
                                 pRet->GenReturn ( RET_Value, nUId, pMB->GetCheckBoxText() );
                                 break;
                             case M_IsChecked :
                                 pRet->GenReturn ( RET_Value, nUId, BOOL( pMB->GetCheckBoxState() == STATE_CHECK) );
                                 break;
-                            case M_GetState :
-                                pRet->GenReturn ( RET_Value, nUId, ULONG( pMB->GetCheckBoxState() ));
-                                break;
                             case M_Check :
-                                pMB->SetCheckBoxState( STATE_CHECK );
+                                pMB->SetCheckBoxState( TRUE );
                                 break;
                             case M_UnCheck :
-                                pMB->SetCheckBoxState( STATE_NOCHECK );
+                                pMB->SetCheckBoxState( FALSE );
                                 break;
-#endif
                             case M_GetText :
                                 pRet->GenReturn ( RET_Value, nUId, pMB->GetMessText());
                                 break;

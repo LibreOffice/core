@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdstrm.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2002-11-18 15:53:31 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 16:03:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,7 @@ String CmdStream::WandleKeyEventString( String aKeys )
                         nModify ^= nCode;
                     else
                     {
-                        if ( ( nModify == KEY_SHIFT || nModify == 0 ) &&
+                        if ( ( nModify == 0 ) &&
                               (((nCode & 0xFF00) == KEYGROUP_NUM)   ||
                                ((nCode & 0xFF00) == KEYGROUP_ALPHA) ||
                                ( nCode == KEY_SPACE) ||

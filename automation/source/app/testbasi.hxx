@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testbasi.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mh $ $Date: 2002-11-18 17:33:37 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 16:03:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@ public:
     SbTextType GetSymbolType( const String &Symbol, BOOL bWasTTControl );   // Besimmt den erweiterten Symboltyp für das Syntaxhighlighting
     virtual const String GetSpechialErrorText();
     virtual void ReportRuntimeError( AppBasEd *pEditWin );
+    virtual void DebugFindNoErrors( BOOL bDebugFindNoErrors );
 };
 
 SV_DECL_IMPL_REF(TTBasic)

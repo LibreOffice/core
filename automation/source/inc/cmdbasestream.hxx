@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdbasestream.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2002-11-18 11:12:06 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 16:03:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,10 +77,10 @@ class CmdBaseStream
 {
 protected:
     ICommStream* pCommStream;
-public:
     CmdBaseStream();
     ~CmdBaseStream();
 
+public:
 
     void GenError( comm_ULONG nError, const comm_UniChar* aString, comm_USHORT nLenInChars );
 

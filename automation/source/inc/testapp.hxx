@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testapp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mh $ $Date: 2002-11-18 17:33:37 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 16:03:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,7 @@ public:
     TestToolObj( String aName, MyBasic* pBas ); // Pfade aus INI, IPC benutzen
     ~TestToolObj();
     void LoadIniFile();             // Laden der IniEinstellungen, die durch den ConfigDialog geändert werden können
+    void DebugFindNoErrors( BOOL bDebugFindNoErrors );
 
 private:
     BOOL bWasPrecompilerError;  // True wenn beim letzten Precompile ein Fehler auftrat

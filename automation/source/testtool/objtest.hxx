@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objtest.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2002-11-18 15:54:15 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 16:03:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,9 +100,11 @@
 #define ID_PrintLog     19
 #define ID_WarnLog      20
 #define ID_ErrorLog     21
-#define ID_MaybeAddErr  22
-#define ID_ClearError   23
-#define ID_GetNextCloseWindow   24
+#define ID_EnableQaErrors 22
+#define ID_QAErrorLog   23
+#define ID_MaybeAddErr  24
+#define ID_ClearError   25
+#define ID_GetNextCloseWindow   26
 #define ID_RemoteCommand 27
 #define ID_SaveIDs      28
 #define ID_AutoExecute  29
@@ -121,7 +123,7 @@
 #define ID_GetTestCaseName 42
 #define ID_GetTestCaseFileName 43
 #define ID_GetTestCaseLineNr 44
-
+#define ID_StopOnSyntaxError 45
 
 #define ID_DoNothing    99
 
@@ -318,6 +320,11 @@ public:
     String aTestCaseName;       // holds name of current TestCase
     String aTestCaseFileName;   // holds FileName of current TestCase
     USHORT nTestCaseLineNr;     // holds Line of current TestCase
+
+    BOOL bEnableQaErrors;       // include QA errors in report
+    BOOL bDebugFindNoErrors;    // suppress generating errors when find of variables is called for variable viewing purposes
+
+    BOOL bStopOnSyntaxError;    // catch syntax errors in testcases or not
 };
 
 
@@ -390,5 +397,11 @@ public:
 
 #define ADD_ASSERTION_LOG(aMsg)                                         \
     ADD_AUTO_LOG(LOG_ASSERTION, aMsg)                                   \
+
+#define ADD_QA_ERROR_LOG(aMsg)                                          \
+    if ( pImpl->bEnableQaErrors )                                       \
+    {                                                                   \
+        ADD_AUTO_LOG(LOG_QA_ERROR, aMsg)                                \
+    }
 
 #endif

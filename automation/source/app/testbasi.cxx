@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testbasi.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2002-11-18 11:13:26 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 16:03:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,10 +181,14 @@ const String TTBasic::GetSpechialErrorText()
 void TTBasic::ReportRuntimeError( AppBasEd *pEditWin )
 {
     SbxVariableRef aDummy = new SbxVariable;
-    aDummy->SetUserData( 22 );
+    aDummy->SetUserData( 24 );  // ID_MaybeAddErr
     ((TestToolObj*)pTestObject)->SFX_NOTIFY( pTestObject->GetBroadcaster(), xx, SbxHint( SBX_HINT_DATAWANTED, aDummy ), xx );
-    aDummy->SetUserData( 18 );
+    aDummy->SetUserData( 18 );  // ID_ExceptLog
     ((TestToolObj*)pTestObject)->SFX_NOTIFY( pTestObject->GetBroadcaster(), xx, SbxHint( SBX_HINT_DATAWANTED, aDummy ), xx );
     MyBasic::ReportRuntimeError( pEditWin );
 }
 
+void TTBasic::DebugFindNoErrors( BOOL bDebugFindNoErrors )
+{
+    ((TestToolObj*)pTestObject)->DebugFindNoErrors( bDebugFindNoErrors );
+}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcommuni.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2002-11-18 15:54:26 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 16:03:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ public:
 
 protected:
     virtual BOOL RetryConnect();
-    USHORT nRetryConnectCalls;
+    BOOL bApplicationStarted;
     Time aFirstRetryCall;
     String aAppPath;
     String aAppParams;

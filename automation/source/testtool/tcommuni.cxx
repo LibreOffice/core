@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcommuni.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2002-11-18 15:54:21 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 16:03:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,10 +82,11 @@
 
 #include "rcontrol.hxx"
 #include "tcommuni.hxx"
+#include <basic/testtool.hxx>
 #include <basic/process.hxx>
 
 CommunicationManagerClientViaSocketTT::CommunicationManagerClientViaSocketTT()
-: CommunicationManagerClientViaSocket( ByteString( GetHostConfig(), RTL_TEXTENCODING_UTF8 ), GetTTPortConfig(), TRUE )
+: CommunicationManagerClientViaSocket( TRUE )
 , aAppPath()
 , aAppParams()
 , pProcess( NULL )
@@ -95,8 +96,8 @@ CommunicationManagerClientViaSocketTT::CommunicationManagerClientViaSocketTT()
 
 BOOL CommunicationManagerClientViaSocketTT::StartCommunication()
 {
-    nRetryConnectCalls = 0;
-    return CommunicationManagerClientViaSocket::StartCommunication();
+    bApplicationStarted = FALSE;
+    return CommunicationManagerClientViaSocket::StartCommunication( ByteString( GetHostConfig(), RTL_TEXTENCODING_UTF8 ), GetTTPortConfig() );
 }
 
 
@@ -110,7 +111,7 @@ BOOL CommunicationManagerClientViaSocketTT::StartCommunication( String aApp, Str
 
 BOOL CommunicationManagerClientViaSocketTT::RetryConnect()
 {
-    if ( !nRetryConnectCalls++ )
+    if ( !bApplicationStarted )
     {
         // Die App ist wohl nicht da. Starten wir sie mal.
         if ( aAppPath.Len() )
@@ -121,6 +122,7 @@ BOOL CommunicationManagerClientViaSocketTT::RetryConnect()
             pProcess->SetImage( aAppPath, aAppParams );
 
             BOOL bSucc = pProcess->Start();
+            bApplicationStarted = TRUE;
 
             if ( bSucc )
             {
@@ -173,7 +175,7 @@ String GetHostConfig()
     Config aConf(Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ));
     aConf.SetGroup("Communication");
 
-    GETSET( abHostToTalk, "Host", "localhost" );
+    GETSET( abHostToTalk, "Host", DEFAULT_HOST );
     return UniString( abHostToTalk, RTL_TEXTENCODING_UTF8 );
 }
 
@@ -199,7 +201,7 @@ ULONG GetTTPortConfig()
     Config aConf(Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ));
     aConf.SetGroup("Communication");
 
-    GETSET( abPortToTalk, "TTPort", ByteString::CreateFromInt32(TESTTOOL_PORT) );
+    GETSET( abPortToTalk, "TTPort", ByteString::CreateFromInt32( TESTTOOL_DEFAULT_PORT ) );
     return abPortToTalk.ToInt64();
 }
 
@@ -225,7 +227,6 @@ ULONG GetUnoPortConfig()
     Config aConf(Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ));
     aConf.SetGroup("Communication");
 
-    GETSET( abPortToTalk, "UnoPort", ByteString::CreateFromInt32(UNO_PORT) );
+    GETSET( abPortToTalk, "UnoPort", ByteString::CreateFromInt32( UNO_DEFAULT_PORT ) );
     return abPortToTalk.ToInt64();
 }
-
