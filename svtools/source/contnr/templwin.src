@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2002-08-01 20:10:57 $
+ *  last change: $Author: kz $ $Date: 2002-08-05 20:10:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ String STR_SVT_NEWDOC
     Text[ chinese_traditional ] = "新增文件";
     Text[ turkish ] = "New Document";
     Text[ arabic ] = "New Document";
-    Text[ catalan ] = "New Document";
+    Text[ catalan ] = "Document nou";
     Text[ thai ] = "เอกสารใหม่";
 };
 
@@ -135,7 +135,7 @@ String STR_SVT_MYDOCS
     Text[ chinese_traditional ] = "我的文件夾";
     Text[ turkish ] = "My Documents";
     Text[ arabic ] = "My Documents";
-    Text[ catalan ] = "My Documents";
+    Text[ catalan ] = "Els meus documents";
     Text[ thai ] = "My Documents";
 };
 
@@ -173,7 +173,7 @@ String STR_SVT_TEMPLATES
     Text[ chinese_traditional ] = "樣式";
     Text[ turkish ] = "Templates";
     Text[ arabic ] = "Templates";
-    Text[ catalan ] = "Templates";
+    Text[ catalan ] = "Plantilles";
     Text[ thai ] = "แม่แบบ";
 };
 
@@ -210,7 +210,7 @@ String STR_SVT_SAMPLES
     Text[ chinese_traditional ] = "示例";
     Text[ turkish ] = "Samples";
     Text[ arabic ] = "Samples";
-    Text[ catalan ] = "Samples";
+    Text[ catalan ] = "Mostres";
     Text[ finnish ] = "Mallit";
     Text[ thai ] = "ตัวอย่าง";
 };
@@ -257,7 +257,7 @@ ToolBox TB_SVT_FILEVIEW
             Text[ chinese_traditional ] = "返回";
             Text[ turkish ] = "Back";
             Text[ arabic ] = "Back";
-            Text[ catalan ] = "Back";
+            Text[ catalan ] = "Cap enrere";
             Text[ finnish ] = "Edellinen";
             Text[ thai ] = "กลับไป";
         };
@@ -285,7 +285,7 @@ ToolBox TB_SVT_FILEVIEW
             Text[ chinese_traditional ] = "目錄向上一層";
             Text[ turkish ] = "Higher";
             Text[ arabic ] = "Higher";
-            Text[ catalan ] = "Higher";
+            Text[ catalan ] = "Un nivell amunt";
             Text[ finnish ] = "Taso yl�sp�in";
             Text[ thai ] = "ขึ้นหนึ่งระดับ";
         };
@@ -317,7 +317,7 @@ ToolBox TB_SVT_FILEVIEW
             Text[ chinese_traditional ] = "列印";
             Text[ turkish ] = "Print";
             Text[ arabic ] = "Print";
-            Text[ catalan ] = "Print";
+            Text[ catalan ] = "Imprimeix";
             Text[ finnish ] = "Tulosta";
             Text[ thai ] = "พิมพ์";
         };
@@ -417,7 +417,7 @@ ToolBox TB_SVT_FRAMEWIN
             Text[ chinese_traditional ] = "文件屬性";
             Text[ turkish ] = "Docinfo";
             Text[ arabic ] = "Docinfo";
-            Text[ catalan ] = "Docinfo";
+            Text[ catalan ] = "Propietats del document";
             Text[ thai ] = "คุณสมบัติเอกสาร";
         };
         ToolBoxItem
@@ -446,7 +446,7 @@ ToolBox TB_SVT_FRAMEWIN
             Text[ chinese_traditional ] = "預覽";
             Text[ turkish ] = "Preview";
             Text[ arabic ] = "Preview";
-            Text[ catalan ] = "Preview";
+            Text[ catalan ] = "Previsualiza";
             Text[ thai ] = "แสดงตัวอย่าง";
         };
     };
@@ -549,7 +549,7 @@ ModalDialog DLG_DOCTEMPLATE
         Text[ chinese_traditional ] = "管理(~Z)...";
         Text[ turkish ] = "Manage...";
         Text[ arabic ] = "Manage...";
-        Text[ catalan ] = "Manage...";
+        Text[ catalan ] = "~Organitza...";
         Text[ finnish ] = "~J�rjest�";
         Text[ thai ] = "จัดระเบี~ยบ...";
     };
@@ -576,7 +576,7 @@ ModalDialog DLG_DOCTEMPLATE
         Text[ chinese_traditional ] = "編輯(~E)";
         Text[ turkish ] = "Edit";
         Text[ arabic ] = "Edit";
-        Text[ catalan ] = "Edit";
+        Text[ catalan ] = "~Edita";
         Text[ finnish ] = "~Muokkaa";
         Text[ thai ] = "แ~ก้ไข";
     };
