@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: svesik $ $Date: 2001-02-02 14:54:31 $
+#   last change: $Author: pluby $ $Date: 2001-03-02 07:19:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,11 +83,6 @@ SLOFILES=\
     $(SLO)$/cacheddynamicresultsetstub.obj \
     $(SLO)$/cacheddynamicresultset.obj \
     $(SLO)$/cacheserv.obj
-
-# SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
-.IF "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
-SLOFILES+=$(SLO)$/staticmbcacher.obj
-.ENDIF
 
 LIB1TARGET=$(SLB)$/_$(TARGET).lib
 LIB1OBJFILES=$(SLOFILES)

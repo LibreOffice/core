@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: pluby $ $Date: 2001-02-23 22:01:38 $
+#   last change: $Author: pluby $ $Date: 2001-03-02 07:14:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -109,11 +109,6 @@ SLOFILES=\
         $(SLO)$/mdrivermanager.obj			\
         $(SLO)$/registration.obj
 
-# SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
-.IF "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX" 
-SLOFILES+=$(SLO)$/staticmbmanager.obj
-.ENDIF
-
 # --- Library -----------------------------------
 
 SHL1TARGET=	$(SDBC_TARGET)$(SDBC_MAJOR)
@@ -129,11 +124,6 @@ SHL1STDLIBS=\
     $(VOSLIB)					\
     $(OSLLIB)					\
     $(SALLIB)
-
-# SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
-.IF "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX" 
-SHL1STDLIBS+=$(UCBHELPERLIB)
-.ENDIF
 
 SHL1DEPN=
 SHL1IMPLIB=	i$(SHL1TARGET)

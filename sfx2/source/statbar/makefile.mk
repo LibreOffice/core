@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: ganaya $ $Date: 2001-02-22 03:51:48 $
+#   last change: $Author: pluby $ $Date: 2001-03-02 07:17:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -93,11 +93,6 @@ SLOFILES =						\
         $(SLO)$/stbmgr.obj		\
         $(SLO)$/stbitem.obj     \
         $(SLO)$/progind.obj
-
-# SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
-.IF "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
-SLOFILES+=$(SLO)$/staticmbstatbar.obj
-.ENDIF
 
 # --- Targets -------------------------------------------------------
 

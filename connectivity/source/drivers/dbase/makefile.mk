@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: pluby $ $Date: 2001-02-23 22:01:37 $
+#   last change: $Author: pluby $ $Date: 2001-03-02 07:13:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -111,12 +111,6 @@ SLOFILES=\
     $(SLO)$/DConnection.obj			\
     $(SLO)$/Dservices.obj			\
     $(SLO)$/DDriver.obj
-
-# SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
-.IF "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX" 
-SLOFILES+=$(SLO)$/staticmbdbase.obj
-SLOFILES+=$(SLO)$/staticmbodbc.obj
-.ENDIF
 
 .IF "$(OS)"=="MACOSX"
 #SHL1VERSIONMAP=$(TARGET).$(DLLPOSTFIX).map

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: ganaya $ $Date: 2001-02-23 15:37:04 $
+#   last change: $Author: pluby $ $Date: 2001-03-02 07:16:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -131,11 +131,6 @@ SLOFILES = \
         $(SLO)$/spelldta.obj\
         $(SLO)$/thesdsp.obj\
         $(SLO)$/lngreg.obj
-
-# SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
-.IF "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
-SLOFILES+=$(SLO)$/staticmb.obj
-.ENDIF
 
 SHL1TARGET= $(TARGET)$(UPD)$(DLLPOSTFIX)
 

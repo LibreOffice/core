@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: pluby $ $Date: 2001-02-23 22:01:37 $
+#   last change: $Author: pluby $ $Date: 2001-03-02 07:13:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -171,12 +171,6 @@ SLOFILES=\
         $(SLO)$/OFunctions.obj					\
         $(SLO)$/OConnection.obj
         
-# SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
-.IF "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
-SLOFILES+=$(SLO)$/staticmbadabas.obj
-SLOFILES+=$(SLO)$/staticmbodbc.obj
-.ENDIF
-
 .IF "$(OS)"=="MACOSX"
 #SHL1VERSIONMAP=$(ADABAS_TARGET).$(DLLPOSTFIX).map
 .ELSE      

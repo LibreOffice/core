@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: sb $ $Date: 2001-02-06 11:07:19 $
+#   last change: $Author: pluby $ $Date: 2001-03-02 07:19:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,11 +82,6 @@ SLOFILES=\
     $(SLO)$/provprox.obj \
     $(SLO)$/ucbcmds.obj \
     $(SLO)$/coreremotecontentbroker.obj
-
-# SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
-.IF "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
-SLOFILES+=$(SLO)$/staticmbucbcore.obj
-.ENDIF
 
 LIB1TARGET=$(SLB)$/_$(TARGET).lib
 LIB1OBJFILES=$(SLOFILES)

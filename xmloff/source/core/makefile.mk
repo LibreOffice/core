@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: svesik $ $Date: 2001-02-02 13:25:27 $
+#   last change: $Author: pluby $ $Date: 2001-03-02 07:21:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -115,11 +115,6 @@ SLOFILES =	\
         $(SLO)$/xmluconv.obj	\
         $(SLO)$/ProgressBarHelper.obj	\
         $(SLO)$/PropertySetMerger.obj
-
-# SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
-.IF "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
-SLOFILES+=$(SLO)$/staticmb.obj
-.ENDIF
 
 # --- Tagets -------------------------------------------------------
 
