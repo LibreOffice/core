@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfatr.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-27 21:34:45 $
+ *  last change: $Author: jp $ $Date: 2001-05-03 08:47:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,6 +201,9 @@
 #endif
 #ifndef _XOUTBMP_HXX //autogen
 #include <svx/xoutbmp.hxx>
+#endif
+#ifndef _SVX_PARAVERTALIGNITEM_HXX
+#include <svx/paravertalignitem.hxx>
 #endif
 #ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
@@ -3518,6 +3521,26 @@ static Writer& OutRTF_SwNumRule( Writer& rWrt, const SfxPoolItem& rHt )
     return rWrt;
 }
 
+static Writer& OutRTF_SwFontAlign( Writer& rWrt, const SfxPoolItem& rHt )
+{
+    SwRTFWriter& rRTFWrt = (SwRTFWriter&)rWrt;
+    const SvxParaVertAlignItem & rAttr = (const SvxParaVertAlignItem &)rHt;
+    const char* pStr;
+    switch ( rAttr.GetValue() )
+    {
+    case SvxParaVertAlignItem::TOP:         pStr = sRTF_FAHANG;     break;
+    case SvxParaVertAlignItem::BOTTOM:      pStr = sRTF_FAVAR;      break;
+    case SvxParaVertAlignItem::CENTER:      pStr = sRTF_FACENTER;   break;
+    case SvxParaVertAlignItem::BASELINE:    pStr = sRTF_FAROMAN;    break;
+
+//  case SvxParaVertAlignItem::AUTOMATIC:
+    default:                                pStr = sRTF_FAAUTO;     break;
+    }
+    rWrt.Strm() << pStr;
+    rRTFWrt.bOutFmtAttr = TRUE;
+    return rWrt;
+}
+
 /*
  * lege hier die Tabellen fuer die RTF-Funktions-Pointer auf
  * die Ausgabe-Funktionen an.
@@ -3595,8 +3618,8 @@ SwAttrFnTab aRTFAttrFnTab = {
 /* RES_PARATR_NUMRULE */            OutRTF_SwNumRule,
 /* RES_PARATR_SCRIPTSPACE */        0, // Dummy:
 /* RES_PARATR_HANGINGPUNCTUATION */ 0, // Dummy:
-/* RES_PARATR_DUMMY1 */             0, // Dummy:
-/* RES_PARATR_DUMMY2 */             0, // Dummy:
+/* RES_PARATR_FORBIDDEN_RULE*/      0, // Dummy:
+/* RES_PARATR_VERTALIGN */          OutRTF_SwFontAlign, // Dummy:
 /* RES_PARATR_DUMMY3 */             0, // Dummy:
 /* RES_PARATR_DUMMY4 */             0, // Dummy:
 /* RES_PARATR_DUMMY5 */             0, // Dummy:
@@ -3675,11 +3698,14 @@ SwNodeFnTab aRTFNodeFnTab = {
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/rtfatr.cxx,v 1.16 2001-03-27 21:34:45 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/rtfatr.cxx,v 1.17 2001-05-03 08:47:36 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.16  2001/03/27 21:34:45  jp
+      export character background
+
       Revision 1.15  2001/03/13 19:44:57  jp
       Bug #84868#: CTOR RTFEndPosLst - start position is also needed
 
