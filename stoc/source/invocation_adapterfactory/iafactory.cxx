@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iafactory.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dbo $ $Date: 2002-08-22 14:41:39 $
+ *  last change: $Author: jbu $ $Date: 2002-08-28 15:06:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -738,6 +738,8 @@ FactoryImpl::FactoryImpl( Reference< XComponentContext > const & xContext )
     typelib_InterfaceTypeDescription * pTD = 0;
     const Type & rInvType = ::getCppuType( (const Reference< script::XInvocation > *)0 );
     TYPELIB_DANGER_GET( (typelib_TypeDescription **)&pTD, rInvType.getTypeLibType() );
+    if( ! pTD->aBase.bComplete )
+        typelib_typedescription_complete( (typelib_TypeDescription **)&pTD );
     ::typelib_typedescriptionreference_getDescription(
         &m_pInvokMethodTD, pTD->ppMembers[ 1 ] ); // invoke()
     ::typelib_typedescriptionreference_getDescription(
