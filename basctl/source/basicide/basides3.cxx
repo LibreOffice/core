@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basides3.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-25 09:10:51 $
+ *  last change: $Author: ab $ $Date: 2002-10-31 12:42:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,11 +170,14 @@ DialogWindow* BasicIDEShell::CreateDlgWin( StarBASIC* pBasic, String aDlgName )
         DBG_ASSERT( nKey, "CreateDlgWin: Kein Key - Fenster nicht gefunden!" );
     }
 
-    pWin->GrabScrollBars( &aHScrollBar, &aVScrollBar );
-    pTabBar->InsertPage( (USHORT)nKey, aDlgName );
-    pTabBar->Sort();
-    if ( !pCurWin )
-        SetCurWindow( pWin, FALSE, FALSE );
+    if( pWin )
+    {
+        pWin->GrabScrollBars( &aHScrollBar, &aVScrollBar );
+        pTabBar->InsertPage( (USHORT)nKey, aDlgName );
+        pTabBar->Sort();
+        if ( !pCurWin )
+            SetCurWindow( pWin, FALSE, FALSE );
+    }
 
     bCreatingWindow = FALSE;
     return pWin;
