@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerparser.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cyrillem $ $Date: 2002-07-19 18:21:07 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 13:34:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
 #include "basicparser.hxx"
 #endif
 
-#include <drafts/com/sun/star/configuration/backend/XLayerHandler.hpp>
+#include <com/sun/star/configuration/backend/XLayerHandler.hpp>
 
 namespace configmgr
 {
@@ -78,7 +78,7 @@ namespace configmgr
         namespace lang      = ::com::sun::star::lang;
 
         namespace sax           = ::com::sun::star::xml::sax;
-        namespace backenduno    = ::drafts::com::sun::star::configuration::backend;
+        namespace backenduno    = ::com::sun::star::configuration::backend;
 
 // -----------------------------------------------------------------------------
 
