@@ -3,7 +3,7 @@
  // StarCalc
  //
  // (C) 1994 StarDivision GmbH, Hamburg, Germany
- // $Author: mba $ $Date: 2002-08-29 14:19:17 $ $Revision: 1.10 $
+ // $Author: hjs $ $Date: 2003-09-25 10:42:20 $ $Revision: 1.11 $
  // $Logfile:   T:/sc/sdi/tabvwsh.sdv  $ $Workfile:   tabvwsh.sdi  $
  //----------------------------------------------------------------------------
 
@@ -86,8 +86,6 @@ interface BaseSelection : Selection
 
      //SID_CHOOSE_CONTROLS  [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
     SID_OBJECT_SELECT       [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
-    SID_SHOW_HIDDEN         [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ] // status()
-    SID_SHOW_FORMS          [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ] // status()
     SID_INSERT_DRAW         [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
     SID_FM_CREATE_CONTROL   [ ExecMethod = ExecDraw ; ]
     SID_LINKS               [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
