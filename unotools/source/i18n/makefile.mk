@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: er $ $Date: 2001-05-13 03:12:41 $
+#   last change: $Author: er $ $Date: 2001-07-05 14:52:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -102,6 +102,7 @@ SLOFILES=	\
     $(SLO)$/intlwrapper.obj \
     $(SLO)$/localedatawrapper.obj	\
     $(SLO)$/numberformatcodewrapper.obj \
+    $(SLO)$/readwritemutexguard.obj \
     $(SLO)$/transliterationwrapper.obj \
     $(SLO)$/textsearch.obj
 
