@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SimpleMailClientFlags.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-05-03 13:22:22 $
+ *  last change: $Author: tra $ $Date: 2001-05-07 05:39:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ constants SimpleMailClientFlags
     /** Uses the default settings when sending a mail, e.g.
         launches the current configured system mail client
     */
-    const long MCF_DEFAULTS             = 0;
+    const long DEFAULTS             = 0;
 
     //---------------------------------------------------------------------
     /** Does not show the current configured system mail client but sends
@@ -87,7 +87,7 @@ constants SimpleMailClientFlags
 
         @see ::som::sun::star::system::XSimpleMailClient
      */
-    const long MCF_NO_USER_INTERFACE    = 1;
+    const long NO_USER_INTERFACE    = 1;
 
     //---------------------------------------------------------------------
     /** No logon dialog should be displayed to prompt the user for logon
@@ -97,7 +97,7 @@ constants SimpleMailClientFlags
         ::com::sun::star::system::XSimpleMailClient an Exception  will
         be thrown
     */
-    const long MCF_NO_LOGON_DIALOG      = 2;
+    const long NO_LOGON_DIALOG      = 2;
 };
 
 //=============================================================================

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SystemShellExecute.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-04-27 09:33:37 $
+ *  last change: $Author: tra $ $Date: 2001-05-07 05:39:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,21 +76,21 @@ module com { module sun { module star { module system {
 
 //=============================================================================
 
+interface XSystemShellExecute;
+
 //=============================================================================
-/** A SystemExecute service implements an interface to execute an abrbitrary
+/** A SystemExecute service implements an interface to execute an arbitrary
     system command.
 
-    @see XSystemExecute
+    @see com::sun::star::system::XSystemShellExecute
 */
-
-interface XSystemShellExecute;
 
 service SystemShellExecute
 {
     //-------------------------------------------------------------------------
     /** Provides access to a XSystemExecute interface.
 
-        @see XSystemExecute
+        @see com::sun::star::system::XSystemShellExecute
     */
     interface XSystemShellExecute;
 

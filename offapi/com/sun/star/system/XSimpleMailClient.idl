@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSimpleMailClient.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-05-03 13:21:54 $
+ *  last change: $Author: tra $ $Date: 2001-05-07 05:39:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,12 +110,12 @@ interface XSimpleMailClient: com::sun::star::uno::XInterface
 
         @param aFlag
         specifies different flags that control the send process
-        if the flag MCF_NO_USER_INTERFACE is specified a recipient
+        if the flag NO_USER_INTERFACE is specified a recipient
         address must have been specified for the given xMailMessage object
 
         @throws ::com::sun::star::lang::IllegalArgumentException
         if invalid or excluding flags have been specified or if the
-        flag MCF_NO_USER_INTERFACE is specified and no recipient
+        flag NO_USER_INTERFACE is specified and no recipient
         address has been specified for the given xMailMessage object
 
         @throws ::com::sun::star::uno::Exception

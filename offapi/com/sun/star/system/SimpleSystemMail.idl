@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SimpleSystemMail.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-05-03 13:22:29 $
+ *  last change: $Author: tra $ $Date: 2001-05-07 05:39:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,21 +76,21 @@ module com { module sun { module star { module system {
 
 //=============================================================================
 
+interface XSimpleMailClientSupplier;
+
 //=============================================================================
 /** A SimpleSystemMail service implements an interface to send mail messages
     via the current configured system mail client
 
-    @see XSimpleMailClient
+    @see com::sun::star::system::XSimpleMailClient
 */
-
-interface XSimpleMailClientSupplier;
 
 service SimpleSystemMail
 {
     //-------------------------------------------------------------------------
     /** Provides access to a XSimpleMailClientSupplier interface.
 
-        @see XSimpleMailClientSupplier
+        @see com::sun::star::system::XSimpleMailClientSupplier
     */
     interface XSimpleMailClientSupplier;
 
