@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objdlg.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sb $ $Date: 2002-07-03 15:53:22 $
+ *  last change: $Author: kz $ $Date: 2004-07-23 12:07:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,14 +135,10 @@ public:
     ObjectCatalog( Window * pParent );
     virtual ~ObjectCatalog();
 
-    void                ScanBasic( BasicManager* pBasMgr, const String& rName );
     void                UpdateEntries();
-
-//  BYTE                GetSelectedType();
-//  BasicManager*       GetSelectedSbx( String& rLib, String& rModOrObj, String& rSubOrProp );
+    void                SetCurrentEntry( BasicEntryDescriptor& rDesc );
 
     void                SetCancelHdl( const Link& rLink ) { aCancelHdl = rLink; }
-//  void                SetInsertHdl( const Link& rLink ) { aInsertHdl = rLink; }
 };
 
 #endif  //_OBJDLG_HXX
