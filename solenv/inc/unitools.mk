@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unitools.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: mh $ $Date: 2000-10-30 06:00:05 $
+#   last change: $Author: hjs $ $Date: 2000-12-14 13:29:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,7 +83,7 @@ GNUCOPY*=$(BUILD_TOOLS)$/cp.exe
 #wraper for solenv\bin\mkdir.pl to fix mkdir /p problem
 MKDIR=+$(SOLARENV)$/bin$/mkdir.btm
 TOUCH*=$(BUILD_TOOLS)$/touch.exe
-PERL*=$(BUILD_TOOLS)$/perl.exe
+PERL*=$(ENV_TOOLS)$/perl5.btm
 #signing for win32 only
 SIGNCODE=$(BUILD_TOOLS)$/PackSign$/signcode
 CABARC=$(BUILD_TOOLS)$/PackSign$/cabarc
