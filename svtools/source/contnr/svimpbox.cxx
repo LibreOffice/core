@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svimpbox.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: pb $ $Date: 2001-11-06 11:43:28 $
+ *  last change: $Author: fs $ $Date: 2001-12-07 15:40:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2043,6 +2043,15 @@ void SvImpLBox::MouseButtonDown( const MouseEvent& rMEvt )
                 if( !bSimpleTravel && !aSelEng.IsAlwaysAdding())
                     SelAllDestrAnch( FALSE, TRUE ); // DeselectAll();
                 SetCursor( pEntry );
+
+                DBG_ERROR( "Please report what you did to get this assertion to FS!" );
+                    // The entry which has been double-clicked changed - and we select it, again.
+                    // I have situations where this behaviour does not make any sense at all - even more, it
+                    // leads to hacks to revert it's results.
+                    // So I'm not sure if this behaviour here is nonsense (which I believe at the moment),
+                    // or if there are really scenarious where it dones make sense ....
+                    // 07.12.2001 - 95727 - fs@openoffice.org
+
                 return;
             }
             if( pEntry->HasChilds() || pEntry->HasChildsOnDemand() )
