@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FTable.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 08:26:02 $
+ *  last change: $Author: obo $ $Date: 2004-06-02 07:50:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,7 +273,8 @@ void OFileTable::dropColumn(sal_Int32 _nPos)
 // -----------------------------------------------------------------------------
 SvStream* OFileTable::createStream_simpleError( const String& _rFileName, StreamMode _eOpenMode)
 {
-    SvStream* pReturn = ::utl::UcbStreamHelper::CreateStream( _rFileName, _eOpenMode, NULL);
+    utl::UcbLockBytesHandler* p_null_dummy=NULL;
+    SvStream* pReturn = ::utl::UcbStreamHelper::CreateStream( _rFileName, _eOpenMode, p_null_dummy);
     if (pReturn && (ERRCODE_NONE != pReturn->GetErrorCode()))
     {
         delete pReturn;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LFolderList.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 17:05:12 $
+ *  last change: $Author: obo $ $Date: 2004-06-02 07:50:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -597,7 +597,8 @@ sal_Bool OEvoabFolderList::seekRow(IResultSetHelper::Movement eCursorPosition)
 // -----------------------------------------------------------------------------
 SvStream* OEvoabFolderList::createStream_simpleError( const String& _rFileName, StreamMode _eOpenMode)
 {
-    SvStream* pReturn = ::utl::UcbStreamHelper::CreateStream( _rFileName, _eOpenMode, NULL);
+    utl::UcbLockBytesHandler* p_null_dummy=NULL;
+    SvStream* pReturn = ::utl::UcbStreamHelper::CreateStream( _rFileName, _eOpenMode, p_null_dummy);
     if (pReturn && (ERRCODE_NONE != pReturn->GetErrorCode()))
     {
         delete pReturn;
