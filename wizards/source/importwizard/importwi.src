@@ -2,9 +2,9 @@
  *
  *  $RCSfile: importwi.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2002-02-05 21:29:29 $
+ *  last change: $Author: kz $ $Date: 2002-02-08 21:19:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,7 +350,7 @@ String sWelcometextLabel2
     Text[ English_us ] = "Please note that when converting Microsoft documents any attached VBA macros lose their functionality.";
     Text[ french ] = "Notez que la conversion des documents Microsoft entraîne la perte de fonctionnalité des macros VBA attachées.";
     Text[ italian ] = "Vi preghiamo di osservare che quando importate documenti Microsoft si possono perdere macro VBA connesse e la loro funzionalità.";
-    Text[ spanish ] = "No olvide que al convertir documentos de Microsoft pierden su funcionalidad las macros VBA adjuntadas.";
+    Text[ spanish ] = "No olvide que al convertir documentos de Microsoft las macros VBA que se hayan adjuntado pueden perder su funcionalidad.";
     Text[ portuguese ] = "Não esqueça que durante a conversão dos documentos Microsoft, as macros VBA anexas perdem a respectiva funcionalidade.";
     Text[ dutch ] = "Wij wijzen u erop dat bij het converteren van Microstof-documenten de functionaliteit van de bijbehorende VBA-macro's verloren gaat.";
     Text[ swedish ] = "Observera att bifogade VBA-makron förlorar sin funktionalitet när Microsoft-dokument konverteras.";
@@ -1468,7 +1468,7 @@ String sXMLDocumentCheckbox_2_
     Text[ English_us ] = "Spreadsheets";
     Text[ french ] = "Classeurs";
     Text[ italian ] = "Fogli elettronici";
-    Text[ spanish ] = "Documentos de hojas de cálculo";
+    Text[ spanish ] = "Hojas de cálculo";
     Text[ portuguese ] = "Folhas de cálculo ";
     Text[ dutch ] = "Werkbladdocumenten";
     Text[ swedish ] = "Tabelldokument";
