@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.59 $
+#   $Revision: 1.60 $
 #
-#   last change: $Author: hjs $ $Date: 2004-10-21 09:56:55 $
+#   last change: $Author: rt $ $Date: 2004-11-26 18:32:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,9 +89,9 @@ BACK_PATH=..$/..$/..$/
 # Remove entire package from output directory, for example, if new patches are
 # to be applied.
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
-    REMOVE_PACKAGE_COMMAND=+-$(RM) -r $(PACKAGE_DIR) >& $(NULLDEV)
+    REMOVE_PACKAGE_COMMAND=+-$(RM) -r $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR) >& $(NULLDEV)
 .ELSE			# "$(GUI)"=="WNT"
-    REMOVE_PACKAGE_COMMAND=+-$(RM) /s $(PACKAGE_DIR) >& $(NULLDEV)
+    REMOVE_PACKAGE_COMMAND=+-$(RM) /s $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR) >& $(NULLDEV)
 .ENDIF			# "$(GUI)"=="WNT"
 
 P_CONFIGURE_DIR=$(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$(CONFIGURE_DIR)
@@ -181,14 +181,13 @@ $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE) : $(PRJ)$/$(ROUT)$/misc$/$(TARFILE_NAME).unpa
     +cd $(PACKAGE_DIR) && ( $(shell +$(TYPE) $(PRJ)$/$(ROUT)$/misc$/$(TARFILE_NAME).unpack)) && $(TOUCH) $(UNTAR_FLAG_FILE)
     @+echo make writeable...
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
-    @+cd $(PACKAGE_DIR) && chmod -R +rw * && $(TOUCH) $(UNTAR_FLAG_FILE)
-    @+cd $(PACKAGE_DIR) && find . -type d -exec chmod a+x {{}} \;
+    @+cd $(PACKAGE_DIR) && chmod -R +rw $(TARFILE_ROOTDIR) && $(TOUCH) $(UNTAR_FLAG_FILE)
+    @+cd $(PACKAGE_DIR) && find $(TARFILE_ROOTDIR) -type d -exec chmod a+x {{}} \;
 .ELSE			# "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
 # Native W32 tools generate only filedates with even seconds, cygwin also with odd seconds
     +$(DELAY) 2
-    @+cd $(PACKAGE_DIR) && attrib /s -r  >& $(NULLDEV) && $(TOUCH) $(UNTAR_FLAG_FILE)
+    @+cd $(PACKAGE_DIR) && attrib /s -r $(TARFILE_ROOTDIR) >& $(NULLDEV) && $(TOUCH) $(UNTAR_FLAG_FILE)
 .ENDIF			# "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
-
 
 #add new files to patch
 $(PACKAGE_DIR)$/$(ADD_FILES_FLAG_FILE) : $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE) $(T_ADDITIONAL_FILES:+".dummy")
