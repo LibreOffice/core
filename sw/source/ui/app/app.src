@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-10 20:33:11 $
+ *  last change: $Author: os $ $Date: 2001-09-10 14:44:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -402,13 +402,24 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             Text [ dutch ] = "Alinea-opmaakprofielen" ;
             Text [ spanish ] = "Estilos de p·rrafo" ;
             Text [ english_us ] = "Paragraph Styles" ;
+            Text[ chinese_simplified ] = "ÊÆµËêΩÊ†∑Âºè";
+            Text[ language_user1 ] = " ";
+            Text[ russian ] = "—ÚËÎË ‡·Á‡ˆ‡";
+            Text[ polish ] = "Style akapitu";
+            Text[ japanese ] = "ÊÆµËêΩÔΩΩÔæÄÔΩ≤Ôæô";
+            Text[ chinese_traditional ] = "ÊÆµËêΩÊ®£Âºè";
+            Text[ arabic ] = "√‰„«ÿ ›ﬁ—…";
+            Text[ greek ] = "–Ò¸Ùı· ·Ò·„Ò‹ˆ˘Ì";
+            Text[ korean ] = "Îã®ÎùΩ Ïú†Ìòï";
+            Text[ turkish ] = "Paragraf biÁimi";
+            Text[ catalan ] = "Estilos de p·rrafo";
             StyleFamily = SFX_STYLE_FAMILY_PARA ;
             FilterList =
             {
-                < "Automatisch" ; SFXSTYLEBIT_AUTO ; > ;
                 < "Alle Vorlagen" ; SFXSTYLEBIT_ALL ; > ;
                 < "Verwendete Vorlagen" ; SFXSTYLEBIT_USED ; > ;
                 < "Benutzervorlagen" ; SFXSTYLEBIT_USERDEF ; > ;
+                < "Automatisch" ; SFXSTYLEBIT_AUTO ; > ;
                 < "Textvorlagen" ; SWSTYLEBIT_TEXT ; > ;
                 < "Kapitelvorlagen" ; SWSTYLEBIT_CHAPTER ; > ;
                 < "Listenvorlagen" ; SWSTYLEBIT_LIST ; > ;
@@ -419,10 +430,10 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             };
             FilterList [ ENGLISH ] =
             {
-                < "Automatisch" ; SFXSTYLEBIT_AUTO ; > ;
                 < "Alle Vorlagen" ; SFXSTYLEBIT_ALL ; > ;
                 < "Verwendete Vorlagen" ; SFXSTYLEBIT_USED ; > ;
                 < "Benutzervorlagen" ; SFXSTYLEBIT_USERDEF ; > ;
+                < "Automatisch" ; SFXSTYLEBIT_AUTO ; > ;
                 < "Textvorlagen" ; SWSTYLEBIT_TEXT ; > ;
                 < "Kapitelvorlagen" ; SWSTYLEBIT_CHAPTER ; > ;
                 < "Listenvorlagen" ; SWSTYLEBIT_LIST ; > ;
@@ -431,355 +442,6 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
                 < "HTML Vorlagen" ; SWSTYLEBIT_HTML ; > ;
                 < "Bedingte Vorlagen" ; SWSTYLEBIT_CONDCOLL ; > ;
             };
-            filterlist [ english_us ] =
-            {
-                < "Automatic" ; SFXSTYLEBIT_AUTO ; > ;
-                < "All Styles" ; SFXSTYLEBIT_ALL ; > ;
-                < "Applied Styles" ; SFXSTYLEBIT_USED ; > ;
-                < "Custom Styles" ; SFXSTYLEBIT_USERDEF ; > ;
-                < "Text Styles" ; SWSTYLEBIT_TEXT ; > ;
-                < "Chapter Styles" ; SWSTYLEBIT_CHAPTER ; > ;
-                < "List Styles" ; SWSTYLEBIT_LIST ; > ;
-                < "Index Styles" ; SWSTYLEBIT_IDX ; > ;
-                < "Special Styles" ; SWSTYLEBIT_EXTRA ; > ;
-                < "HTML Styles" ; SWSTYLEBIT_HTML ; > ;
-                < "Conditional Styles" ; SWSTYLEBIT_CONDCOLL ; > ;
-            };
-            filterlist [ portuguese_brazilian ] =
-            {
-                < "Automatisch" ; SFXSTYLEBIT_AUTO ; > ;
-                < "Alle Vorlagen" ; SFXSTYLEBIT_ALL ; > ;
-                < "Verwendete Vorlagen" ; SFXSTYLEBIT_USED ; > ;
-                < "Benutzervorlagen" ; SFXSTYLEBIT_USERDEF ; > ;
-                < "Textvorlagen" ; SWSTYLEBIT_TEXT ; > ;
-                < "Kapitelvorlagen" ; SWSTYLEBIT_CHAPTER ; > ;
-                < "Listenvorlagen" ; SWSTYLEBIT_LIST ; > ;
-                < "Verzeichnisvorlagen" ; SWSTYLEBIT_IDX ; > ;
-                < "Vorlagen Sonderbereiche" ; SWSTYLEBIT_EXTRA ; > ;
-                < "HTML Vorlagen" ; SWSTYLEBIT_HTML ; > ;
-                < "Bedingte Vorlagen" ; SWSTYLEBIT_CONDCOLL ; > ;
-            };
-            filterlist [ swedish ] =
-            {
-                < "Automatiskt" ; SFXSTYLEBIT_AUTO ; > ;
-                < "Alla formatmallar" ; SFXSTYLEBIT_ALL ; > ;
-                < "Anv‰nda formatmallar" ; SFXSTYLEBIT_USED ; > ;
-                < "Anv‰ndardefinierade formatmallar" ; SFXSTYLEBIT_USERDEF ; > ;
-                < "Textformatmallar" ; SWSTYLEBIT_TEXT ; > ;
-                < "Kapitelformatmallar" ; SWSTYLEBIT_CHAPTER ; > ;
-                < "Listformatmallar" ; SWSTYLEBIT_LIST ; > ;
-                < "Fˆrteckningsformatmallar" ; SWSTYLEBIT_IDX ; > ;
-                < "Formatmallar specialomrÂden" ; SWSTYLEBIT_EXTRA ; > ;
-                < "HTML-formatmallar" ; SWSTYLEBIT_HTML ; > ;
-                < "Villkorliga formatmallar" ; SWSTYLEBIT_CONDCOLL ; > ;
-            };
-            filterlist [ danish ] =
-            {
-                < "Automatisk" ; SFXSTYLEBIT_AUTO ; > ;
-                < "Alle typografier" ; SFXSTYLEBIT_ALL ; > ;
-                < "Anvendte typografier" ; SFXSTYLEBIT_USED ; > ;
-                < "Brugerdefinerede typografier" ; SFXSTYLEBIT_USERDEF ; > ;
-                < "Teksttypografier" ; SWSTYLEBIT_TEXT ; > ;
-                < "Kapiteltypografier" ; SWSTYLEBIT_CHAPTER ; > ;
-                < "Listetypografier" ; SWSTYLEBIT_LIST ; > ;
-                < "Indekstypografier" ; SWSTYLEBIT_IDX ; > ;
-                < "Typografi sÊromrÂder" ; SWSTYLEBIT_EXTRA ; > ;
-                < "HTML-typografier" ; SWSTYLEBIT_HTML ; > ;
-                < "Betingede typografier" ; SWSTYLEBIT_CONDCOLL ; > ;
-            };
-            filterlist [ italian ] =
-            {
-                < "Automatico" ; SFXSTYLEBIT_AUTO ; > ;
-                < "Tutti i modelli" ; SFXSTYLEBIT_ALL ; > ;
-                < "Modelli usati" ; SFXSTYLEBIT_USED ; > ;
-                < "Modelli utente" ; SFXSTYLEBIT_USERDEF ; > ;
-                < "Modelli di testo" ; SWSTYLEBIT_TEXT ; > ;
-                < "Modelli di capitolo" ; SWSTYLEBIT_CHAPTER ; > ;
-                < "Modelli di elenchi" ; SWSTYLEBIT_LIST ; > ;
-                < "Modelli di indice" ; SWSTYLEBIT_IDX ; > ;
-                < "Modelli aree speciali" ; SWSTYLEBIT_EXTRA ; > ;
-                < "Modelli HTML" ; SWSTYLEBIT_HTML ; > ;
-                < "Modelli condizionati" ; SWSTYLEBIT_CONDCOLL ; > ;
-            };
-            filterlist [ spanish ] =
-            {
-                < "Autom·tico" ; SFXSTYLEBIT_AUTO ; > ;
-                < "Todos los estilos" ; SFXSTYLEBIT_ALL ; > ;
-                < "Estilos utilizados" ; SFXSTYLEBIT_USED ; > ;
-                < "Estilos del usuario" ; SFXSTYLEBIT_USERDEF ; > ;
-                < "Estilos de texto" ; SWSTYLEBIT_TEXT ; > ;
-                < "Estilos de capÌtulos" ; SWSTYLEBIT_CHAPTER ; > ;
-                < "Estilos de listas" ; SWSTYLEBIT_LIST ; > ;
-                < "Estilos de Ìndices" ; SWSTYLEBIT_IDX ; > ;
-                < "Estilos de ·reas especiales" ; SWSTYLEBIT_EXTRA ; > ;
-                < "Estilos HTML" ; SWSTYLEBIT_HTML ; > ;
-                < "Estilos condicionados" ; SWSTYLEBIT_CONDCOLL ; > ;
-            };
-            filterlist [ french ] =
-            {
-                < "Automatique" ; SFXSTYLEBIT_AUTO ; > ;
-                < "Tous les styles" ; SFXSTYLEBIT_ALL ; > ;
-                < "Styles utilisÈs" ; SFXSTYLEBIT_USED ; > ;
-                < "Styles personnalisÈs" ; SFXSTYLEBIT_USERDEF ; > ;
-                < "Styles de texte" ; SWSTYLEBIT_TEXT ; > ;
-                < "Styles de chapitre" ; SWSTYLEBIT_CHAPTER ; > ;
-                < "Styles de liste" ; SWSTYLEBIT_LIST ; > ;
-                < "Styles d'index" ; SWSTYLEBIT_IDX ; > ;
-                < "Styles pour zones spÈciales" ; SWSTYLEBIT_EXTRA ; > ;
-                < "Styles HTML" ; SWSTYLEBIT_HTML ; > ;
-                < "Styles conditionnels" ; SWSTYLEBIT_CONDCOLL ; > ;
-            };
-            filterlist [ dutch ] =
-            {
-                < "Automatisch" ; SFXSTYLEBIT_AUTO ; > ;
-                < "Alle opmaakprofielen" ; SFXSTYLEBIT_ALL ; > ;
-                < "Gebruikte opmaakprofielen" ; SFXSTYLEBIT_USED ; > ;
-                < "Eigen opmaakprofielen" ; SFXSTYLEBIT_USERDEF ; > ;
-                < "Tekstopmaakprofielen" ; SWSTYLEBIT_TEXT ; > ;
-                < "Opmaakprofielen voor hoofdtukken" ; SWSTYLEBIT_CHAPTER ; > ;
-                < "Lijstopmaakprofielen" ; SWSTYLEBIT_LIST ; > ;
-                < "Indexopmaakprofielen" ; SWSTYLEBIT_IDX ; > ;
-                < "Opmaakprof. speciale bereiken" ; SWSTYLEBIT_EXTRA ; > ;
-                < "HTML-opmaakprofielen" ; SWSTYLEBIT_HTML ; > ;
-                < "Conditionele opmaakprofielen" ; SWSTYLEBIT_CONDCOLL ; > ;
-            };
-            filterlist [ portuguese ] =
-            {
-                < "Autom·tico" ; SFXSTYLEBIT_AUTO ; > ;
-                < "Estilos todos" ; SFXSTYLEBIT_ALL ; > ;
-                < "Estilos usados" ; SFXSTYLEBIT_USED ; > ;
-                < "Estilos personalizados" ; SFXSTYLEBIT_USERDEF ; > ;
-                < "Estilos de texto" ; SWSTYLEBIT_TEXT ; > ;
-                < "Estilos de capÌtulos" ; SWSTYLEBIT_CHAPTER ; > ;
-                < "Estilos de listas" ; SWSTYLEBIT_LIST ; > ;
-                < "Estilos de Ìndices" ; SWSTYLEBIT_IDX ; > ;
-                < "Estilos de ·reas especiais" ; SWSTYLEBIT_EXTRA ; > ;
-                < "Estilos HTML" ; SWSTYLEBIT_HTML ; > ;
-                < "Estilos condicionais" ; SWSTYLEBIT_CONDCOLL ; > ;
-            };
-            Text[ chinese_simplified ] = "ÊÆµËêΩÊ†∑Âºè";
-            FilterList [ chinese_simplified ] =
-        {
-            < "Ëá™Âä®" ; SFXSTYLEBIT_AUTO ; > ;
-            < "ÂÖ®ÈÉ®Ê†∑Âºè" ; SFXSTYLEBIT_ALL ; > ;
-            < "‰ΩøÁî®ÁöÑÊ†∑Âºè" ; SFXSTYLEBIT_USED ; > ;
-            < "Ëá™ÂÆöÊ†∑Âºè" ; SFXSTYLEBIT_USERDEF ; > ;
-            < "ÊñáÂ≠óÊ†∑Âºè" ; SWSTYLEBIT_TEXT ; > ;
-            < "Á´†Ê†∑Âºè" ; SWSTYLEBIT_CHAPTER ; > ;
-            < "ÂàóÂçïÊ†∑Âºè" ; SWSTYLEBIT_LIST ; > ;
-            < "ÁõÆÂΩïÊ†∑Âºè" ; SWSTYLEBIT_IDX ; > ;
-            < "Ê†∑ÂºèÁâπÊÆäÂå∫Âüü" ; SWSTYLEBIT_EXTRA ; > ;
-            < "HTML Ê†∑Âºè" ; SWSTYLEBIT_HTML ; > ;
-            < "ÊúâÊù°‰ª∂ÁöÑÊ†∑Âºè" ; SWSTYLEBIT_CONDCOLL ; > ;
-        };
-        FilterList [ language_user1 ] =
-        {
-            < " " ; SFXSTYLEBIT_AUTO ; > ;
-            < " " ; SFXSTYLEBIT_ALL ; > ;
-            < " " ; SFXSTYLEBIT_USED ; > ;
-            < " " ; SFXSTYLEBIT_USERDEF ; > ;
-            < " " ; SWSTYLEBIT_TEXT ; > ;
-            < " " ; SWSTYLEBIT_CHAPTER ; > ;
-            < " " ; SWSTYLEBIT_LIST ; > ;
-            < " " ; SWSTYLEBIT_IDX ; > ;
-            < " " ; SWSTYLEBIT_EXTRA ; > ;
-            < " " ; SWSTYLEBIT_HTML ; > ;
-            < " " ; SWSTYLEBIT_CONDCOLL ; > ;
-        };
-        FilterList [ language_user1 ] =
-        {
-            < " " ; SFXSTYLEBIT_AUTO ; > ;
-            < " " ; SFXSTYLEBIT_ALL ; > ;
-            < " " ; SFXSTYLEBIT_USED ; > ;
-            < " " ; SFXSTYLEBIT_USERDEF ; > ;
-            < " " ; SWSTYLEBIT_TEXT ; > ;
-            < " " ; SWSTYLEBIT_CHAPTER ; > ;
-            < " " ; SWSTYLEBIT_LIST ; > ;
-            < " " ; SWSTYLEBIT_IDX ; > ;
-            < " " ; SWSTYLEBIT_EXTRA ; > ;
-            < " " ; SWSTYLEBIT_HTML ; > ;
-            < " " ; SWSTYLEBIT_CONDCOLL ; > ;
-        };
-        Text[ language_user1 ] = " ";
-            Text[ russian ] = "—ÚËÎË ‡·Á‡ˆ‡";
-            Text[ polish ] = "Style akapitu";
-            Text[ japanese ] = "ÊÆµËêΩÔΩΩÔæÄÔΩ≤Ôæô";
-            FilterList [ russian ] =
-        {
-            < "¿‚ÚÓÏ‡ÚË˜ÂÒÍË" ; SFXSTYLEBIT_AUTO ; > ;
-            < "¬ÒÂ ÒÚËÎË" ; SFXSTYLEBIT_ALL ; > ;
-            < "œËÏÂÌÂÌÌ˚Â ÒÚËÎË" ; SFXSTYLEBIT_USED ; > ;
-            < "—ÚËÎË ÔÓÎ¸ÁÓ‚‡ÚÂÎˇ" ; SFXSTYLEBIT_USERDEF ; > ;
-            < "—ÚËÎË ÚÂÍÒÚ‡" ; SWSTYLEBIT_TEXT ; > ;
-            < "—ÚËÎË „Î‡‚˚" ; SWSTYLEBIT_CHAPTER ; > ;
-            < "—ÚËÎË ÒÔËÒÍ‡" ; SWSTYLEBIT_LIST ; > ;
-            < "—ÚËÎË ÛÍ‡Á‡ÚÂÎˇ" ; SWSTYLEBIT_IDX ; > ;
-            < "—ÚËÎË ÒÔÂˆË‡Î¸Ì˚ı Ó·Î‡ÒÚÂÈ" ; SWSTYLEBIT_EXTRA ; > ;
-            < "—ÚËÎË HTML" ; SWSTYLEBIT_HTML ; > ;
-            < "”ÒÎÓ‚Ì˚Â ÒÚËÎË" ; SWSTYLEBIT_CONDCOLL ; > ;
-        };
-        FilterList [ polish ] =
-        {
-            < "Automatycznie" ; SFXSTYLEBIT_AUTO ; > ;
-            < "Wszystkie style" ; SFXSTYLEBIT_ALL ; > ;
-            < "Uøyte style" ; SFXSTYLEBIT_USED ; > ;
-            < "Style indywidualne" ; SFXSTYLEBIT_USERDEF ; > ;
-            < "Style tekstu" ; SWSTYLEBIT_TEXT ; > ;
-            < "Style rozdzia≥u" ; SWSTYLEBIT_CHAPTER ; > ;
-            < "Style listy" ; SWSTYLEBIT_LIST ; > ;
-            < "Style indeksu" ; SWSTYLEBIT_IDX ; > ;
-            < "Style do specjalnych zadaÒ" ; SWSTYLEBIT_EXTRA ; > ;
-            < "Style HTML" ; SWSTYLEBIT_HTML ; > ;
-            < "Warunkowe style" ; SWSTYLEBIT_CONDCOLL ; > ;
-        };
-        FilterList [ japanese ] =
-        {
-            < "Ëá™Âãï" ; SFXSTYLEBIT_AUTO ; > ;
-            < "„Åô„Åπ„Å¶„ÅÆÔΩΩÔæÄÔΩ≤Ôæô" ; SFXSTYLEBIT_ALL ; > ;
-            < "‰ΩøÁî®„Åó„ÅüÔΩΩÔæÄÔΩ≤Ôæô" ; SFXSTYLEBIT_USED ; > ;
-            < "ÔæïÔΩ∞ÔΩªÔæûÔΩ∞ÂÆöÁæ©„ÅÆÔΩΩÔæÄÔΩ≤Ôæô" ; SFXSTYLEBIT_USERDEF ; > ;
-            < "ÊñáÊõ∏Áî®ÔΩΩÔæÄÔΩ≤Ôæô" ; SWSTYLEBIT_TEXT ; > ;
-            < "Á´†„ÅÆÔΩΩÔæÄÔΩ≤Ôæô" ; SWSTYLEBIT_CHAPTER ; > ;
-            < "ÔæòÔΩΩÔæÑ„ÅÆÔΩΩÔæÄÔΩ≤Ôæô" ; SWSTYLEBIT_LIST ; > ;
-            < "Á¥¢ÂºïÔΩΩÔæÄÔΩ≤Ôæô" ; SWSTYLEBIT_IDX ; > ;
-            < "ÁâπÂà•ÁØÑÂõ≤„ÅÆÔΩΩÔæÄÔΩ≤Ôæô" ; SWSTYLEBIT_EXTRA ; > ;
-            < "HTML ÂΩ¢ÂºèÔΩΩÔæÄÔΩ≤Ôæô" ; SWSTYLEBIT_HTML ; > ;
-            < "Êù°‰ª∂‰ªò„ÅçÔΩΩÔæÄÔΩ≤Ôæô" ; SWSTYLEBIT_CONDCOLL ; > ;
-        };
-        Text[ chinese_traditional ] = "ÊÆµËêΩÊ®£Âºè";
-            FilterList [ chinese_traditional ] =
-        {
-            < "Ëá™Âãï" ; SFXSTYLEBIT_AUTO ; > ;
-            < "ÂÖ®ÈÉ®Ê®£Âºè" ; SFXSTYLEBIT_ALL ; > ;
-            < "‰ΩøÁî®ÁöÑÊ®£Âºè" ; SFXSTYLEBIT_USED ; > ;
-            < "Ëá™Ë®ÇÊ®£Âºè" ; SFXSTYLEBIT_USERDEF ; > ;
-            < "ÊñáÂ≠óÊ®£Âºè" ; SWSTYLEBIT_TEXT ; > ;
-            < "Á´†Ê®£Âºè" ; SWSTYLEBIT_CHAPTER ; > ;
-            < "Ê∏ÖÂñÆÊ®£Âºè" ; SWSTYLEBIT_LIST ; > ;
-            < "ÁõÆÈåÑÊ®£Âºè" ; SWSTYLEBIT_IDX ; > ;
-            < "Ê®£ÂºèÁâπÊÆäÂçÄÂüü" ; SWSTYLEBIT_EXTRA ; > ;
-            < "HTML Ê®£Âºè" ; SWSTYLEBIT_HTML ; > ;
-            < "ÊúâÊ¢ù‰ª∂ÁöÑÊ®£Âºè" ; SWSTYLEBIT_CONDCOLL ; > ;
-        };
-        Text[ arabic ] = "√‰„«ÿ ›ﬁ—…";
-            FilterList [ arabic ] =
-        {
-            < " ·ﬁ«∆Ì" ; SFXSTYLEBIT_AUTO ; > ;
-            < "ﬂ· «·√‰„«ÿ" ; SFXSTYLEBIT_ALL ; > ;
-            < "√‰„«ÿ ﬁÌœ «·«” Œœ«„" ; SFXSTYLEBIT_USED ; > ;
-            < "√‰„«ÿ „Œ’’…" ; SFXSTYLEBIT_USERDEF ; > ;
-            < "√‰„«ÿ ‰’" ; SWSTYLEBIT_TEXT ; > ;
-            < "√‰„«ÿ «·›’·" ; SWSTYLEBIT_CHAPTER ; > ;
-            < "√‰„«ÿ «·ﬁ«∆„…" ; SWSTYLEBIT_LIST ; > ;
-            < "√‰„«ÿ ›Â—”" ; SWSTYLEBIT_IDX ; > ;
-            < "√‰„«ÿ ‰ÿ«ﬁ«  Œ«’…" ; SWSTYLEBIT_EXTRA ; > ;
-            < "√‰„«ÿ  HTML" ; SWSTYLEBIT_HTML ; > ;
-            < "√‰„«ÿ „‘—Êÿ…" ; SWSTYLEBIT_CONDCOLL ; > ;
-        };
-        Text[ dutch ] = "Alinea-opmaakprofielen";
-            Text[ chinese_simplified ] = "ÊÆµËêΩÊ†∑Âºè";
-            FilterList [ dutch ] =
-        {
-            < "Automatisch" ; SFXSTYLEBIT_AUTO ; > ;
-            < "Alle opmaakprofielen" ; SFXSTYLEBIT_ALL ; > ;
-            < "Gebruikte opmaakprofielen" ; SFXSTYLEBIT_USED ; > ;
-            < "Eigen opmaakprofielen" ; SFXSTYLEBIT_USERDEF ; > ;
-            < "Tekstopmaakprofielen" ; SWSTYLEBIT_TEXT ; > ;
-            < "Opmaakprofielen voor hoofdtukken" ; SWSTYLEBIT_CHAPTER ; > ;
-            < "Lijstopmaakprofielen" ; SWSTYLEBIT_LIST ; > ;
-            < "Indexopmaakprofielen" ; SWSTYLEBIT_IDX ; > ;
-            < "Opmaakprof. speciale bereiken" ; SWSTYLEBIT_EXTRA ; > ;
-            < "HTML-opmaakprofielen" ; SWSTYLEBIT_HTML ; > ;
-            < "Conditionele opmaakprofielen" ; SWSTYLEBIT_CONDCOLL ; > ;
-        };
-        FilterList [ chinese_simplified ] =
-        {
-            < "Ëá™Âä®" ; SFXSTYLEBIT_AUTO ; > ;
-            < "ÂÖ®ÈÉ®Ê†∑Âºè" ; SFXSTYLEBIT_ALL ; > ;
-            < "‰ΩøÁî®ÁöÑÊ†∑Âºè" ; SFXSTYLEBIT_USED ; > ;
-            < "Ëá™ÂÆöÊ†∑Âºè" ; SFXSTYLEBIT_USERDEF ; > ;
-            < "ÊñáÂ≠óÊ†∑Âºè" ; SWSTYLEBIT_TEXT ; > ;
-            < "Á´†Ê†∑Âºè" ; SWSTYLEBIT_CHAPTER ; > ;
-            < "ÂàóÂçïÊ†∑Âºè" ; SWSTYLEBIT_LIST ; > ;
-            < "ÁõÆÂΩïÊ†∑Âºè" ; SWSTYLEBIT_IDX ; > ;
-            < "Ê†∑ÂºèÁâπÊÆäÂå∫Âüü" ; SWSTYLEBIT_EXTRA ; > ;
-            < "HTML Ê†∑Âºè" ; SWSTYLEBIT_HTML ; > ;
-            < "ÊúâÊù°‰ª∂ÁöÑÊ†∑Âºè" ; SWSTYLEBIT_CONDCOLL ; > ;
-        };
-        Text[ greek ] = "–Ò¸Ùı· ·Ò·„Ò‹ˆ˘Ì";
-            Text[ korean ] = "Îã®ÎùΩ Ïú†Ìòï";
-            FilterList [ greek ] =
-        {
-            < "¡ıÙ¸Ï·Ù·" ; SFXSTYLEBIT_AUTO ; > ;
-            < "ºÎ· Ù· Ò¸Ùı·" ; SFXSTYLEBIT_ALL ; > ;
-            < "≈ˆ·ÒÏÔÛÏ›Ì· ÛÙıÎ" ; SFXSTYLEBIT_USED ; > ;
-            < "–Ò¸Ùı· ˜ÒﬁÛÙÁ" ; SFXSTYLEBIT_USERDEF ; > ;
-            < "–Ò¸ÙıÔ ÍÂÈÏ›ÌÔı" ; SWSTYLEBIT_TEXT ; > ;
-            < "–Ò¸Ùı· ÍÂˆ·Î·ﬂ˘Ì" ; SWSTYLEBIT_CHAPTER ; > ;
-            < "”ÙıÎ ÎﬂÛÙ·Ú" ; SWSTYLEBIT_LIST ; > ;
-            < "–Ò¸Ùı· ÂıÒÂÙÁÒﬂ˘Ì" ; SWSTYLEBIT_IDX ; > ;
-            < "–Ò¸Ùı· ÂÈ‰ÈÍ˛Ì ÂÒÈÔ˜˛Ì" ; SWSTYLEBIT_EXTRA ; > ;
-            < "–Ò¸Ùı· HTML" ; SWSTYLEBIT_HTML ; > ;
-            < "–Ò¸Ùı· ı¸ ¸ÒÔıÚ" ; SWSTYLEBIT_CONDCOLL ; > ;
-        };
-        FilterList [ korean ] =
-        {
-            < "ÏûêÎèô" ; SFXSTYLEBIT_AUTO ; > ;
-            < "Î™®Îì† Ïú†Ìòï" ; SFXSTYLEBIT_ALL ; > ;
-            < "ÏÇ¨Ïö©Îêú Ïú†Ìòï." ; SFXSTYLEBIT_USED ; > ;
-            < "ÏÇ¨Ïö©Ïûê Ï†ïÏùò Ïú†Ìòï" ; SFXSTYLEBIT_USERDEF ; > ;
-            < "ÌÖçÏä§Ìä∏ Ïú†Ìòï" ; SWSTYLEBIT_TEXT ; > ;
-            < "Ïû• Ïú†Ìòï" ; SWSTYLEBIT_CHAPTER ; > ;
-            < "Î™©Î°ù Ïú†Ìòï" ; SWSTYLEBIT_LIST ; > ;
-            < "ÏÉâÏù∏ Ïú†Ìòï" ; SWSTYLEBIT_IDX ; > ;
-            < "ÌäπÏàòÍµ¨Ïó≠ Ïú†Ìòï" ; SWSTYLEBIT_EXTRA ; > ;
-            < "HTML Ïú†Ìòï" ; SWSTYLEBIT_HTML ; > ;
-            < "Ï°∞Í±¥Ï†Å Ïú†Ìòï" ; SWSTYLEBIT_CONDCOLL ; > ;
-        };
-        Text[ turkish ] = "Paragraf biÁimi";
-            FilterList [ turkish ] =
-        {
-            < "Otomatik" ; SFXSTYLEBIT_AUTO ; > ;
-            < "B¸t¸n biÁimler" ; SFXSTYLEBIT_ALL ; > ;
-            < "Kullan˝lan biÁim" ; SFXSTYLEBIT_USED ; > ;
-            < "Kullan˝c˝ biÁimi" ; SFXSTYLEBIT_USERDEF ; > ;
-            < "Metin biÁimi" ; SWSTYLEBIT_TEXT ; > ;
-            < "Bˆl¸m biÁimi" ; SWSTYLEBIT_CHAPTER ; > ;
-            < "Liste biÁimi" ; SWSTYLEBIT_LIST ; > ;
-            < "Dizin biÁimi" ; SWSTYLEBIT_IDX ; > ;
-            < "÷zel bˆl¸m biÁimi" ; SWSTYLEBIT_EXTRA ; > ;
-            < "HTML biÁimi" ; SWSTYLEBIT_HTML ; > ;
-            < "Ko˛ullu biÁim" ; SWSTYLEBIT_CONDCOLL ; > ;
-        };
-        Text[ catalan ] = "Estilos de p·rrafo";
-            FilterList [ catalan ] =
-        {
-            < "Autom·tico" ; SFXSTYLEBIT_AUTO ; > ;
-            < "Todos los estilos" ; SFXSTYLEBIT_ALL ; > ;
-            < "Estilos aplicados" ; SFXSTYLEBIT_USED ; > ;
-            < "Estilos del usuario" ; SFXSTYLEBIT_USERDEF ; > ;
-            < "Estilos de texto" ; SWSTYLEBIT_TEXT ; > ;
-            < "Estilos de capÌtulos" ; SWSTYLEBIT_CHAPTER ; > ;
-            < "Estilos de listas" ; SWSTYLEBIT_LIST ; > ;
-            < "Estilos de Ìndices" ; SWSTYLEBIT_IDX ; > ;
-            < "Estilos de ·reas especiales" ; SWSTYLEBIT_EXTRA ; > ;
-            < "Estilos HTML" ; SWSTYLEBIT_HTML ; > ;
-            < "Estilos condicionados" ; SWSTYLEBIT_CONDCOLL ; > ;
-        };
-        FilterList [ finnish ] =
-        {
-            < "Automaattinen" ; SFXSTYLEBIT_AUTO ; > ;
-            < "Kaikki tyylit" ; SFXSTYLEBIT_ALL ; > ;
-            < "K‰ytetyt tyylit" ; SFXSTYLEBIT_USED ; > ;
-            < "Mukautetut tyylit" ; SFXSTYLEBIT_USERDEF ; > ;
-            < "Tekstityylit" ; SWSTYLEBIT_TEXT ; > ;
-            < "Luvun tyylit" ; SWSTYLEBIT_CHAPTER ; > ;
-            < "Luettelotyylit" ; SWSTYLEBIT_LIST ; > ;
-            < "Hakemistotyylit" ; SWSTYLEBIT_IDX ; > ;
-            < "Erikoistyylit" ; SWSTYLEBIT_EXTRA ; > ;
-            < "HTML-tyylit" ; SWSTYLEBIT_HTML ; > ;
-            < "Ehdolliset tyylit" ; SWSTYLEBIT_CONDCOLL ; > ;
-        };
     };
         SfxStyleFamilyItem
         {
