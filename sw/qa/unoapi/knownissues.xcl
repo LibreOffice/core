@@ -101,6 +101,3 @@ sw.CharacterStyle::com::sun::star::style::CharacterPropertiesAsian
 ### i25473 ###
 sw.ParagraphStyle::com::sun::star::beans::XMultiPropertyStates
 sw.ConditionalParagraphStyle::com::sun::star::beans::XMultiPropertyStates
-
-### i26227 ###
-sw.SwXTextGraphicObject::com::sun::star::text::XTextContent
