@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addonstoolbarmanager.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 16:51:55 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 12:50:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,6 +149,9 @@ class AddonsToolBarManager : public ToolBarManager
                               const rtl::OUString& rResourceName,
                               ToolBar* pToolBar );
         virtual ~AddonsToolBarManager();
+
+        // XComponent
+        void SAL_CALL dispose() throw ( ::com::sun::star::uno::RuntimeException );
 
         virtual void RefreshImages();
         void FillToolbar( const com::sun::star::uno::Sequence< com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > >& rAddonToolbar );
