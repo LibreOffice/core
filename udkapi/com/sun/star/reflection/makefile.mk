@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 17:36:27 $
+#   last change: $Author: hr $ $Date: 2004-02-03 13:22:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -104,6 +104,7 @@ IDLFILES=\
     XInterfaceMemberTypeDescription.idl\
     XInterfaceMethodTypeDescription.idl\
     XInterfaceTypeDescription.idl\
+    XInterfaceTypeDescription2.idl \
     XMethodParameter.idl\
     XModuleTypeDescription.idl\
     XPropertyTypeDescription.idl\
