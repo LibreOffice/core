@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tempfile.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-30 09:18:22 $
+ *  last change: $Author: mba $ $Date: 2000-12-01 11:54:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -356,62 +356,6 @@ String TempFile::GetTempNameBaseDirectory()
     rtl::OUString aTmp;
     FileBase::getSystemPathFromNormalizedPath( aTempNameBase_Impl, aTmp );
     return aTmp;
-}
-
-sal_Bool LocalFileHelper::ConvertPhysicalNameToURL( const String& rName, String& rReturn )
-{
-    rtl::OUString aRet;
-    ::rtl::OUString aTmp;
-    FileBase::normalizePath( rName, aTmp );
-
-    ::ucb::ContentBroker* pBroker = ::ucb::ContentBroker::get();
-    if ( !pBroker )
-    {
-        FileBase::getFileURLFromNormalizedPath( aTmp, aRet );
-    }
-    else
-    {
-        ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentProviderManager > xManager =
-                pBroker->getContentProviderManagerInterface();
-
-        rtl::OUString aHost;
-        osl_getLocalHostname( &aHost.pData );
-        aRet = ::ucb::getFileURLFromNormalizedPath( xManager, aHost, aTmp );
-    }
-
-    rReturn = aRet;
-    return aRet.getLength();
-}
-
-sal_Bool LocalFileHelper::ConvertURLToPhysicalName( const String& rName, String& rReturn )
-{
-    rtl::OUString aRet;
-    ::ucb::ContentBroker* pBroker = ::ucb::ContentBroker::get();
-    if ( !pBroker )
-    {
-        FileBase::getNormalizedPathFromFileURL( rName, aRet );
-    }
-    else
-    {
-        ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentProviderManager > xManager =
-                pBroker->getContentProviderManagerInterface();
-
-        rtl::OUString aHost;
-        osl_getLocalHostname( &aHost.pData );
-        aRet = ::ucb::getNormalizedPathFromFileURL( xManager, aHost, rName );
-    }
-
-    ::rtl::OUString aTmp;
-    FileBase::getSystemPathFromNormalizedPath( aRet, aTmp );
-    rReturn = aTmp;
-    return sal_True;
-}
-
-sal_Bool LocalFileHelper::IsLocalFile( const String& rName )
-{
-    String aTmp;
-    ConvertURLToPhysicalName( rName, aTmp );
-    return aTmp.Len();
 }
 
 };
