@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SpreadsheetDrawPage.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2002-10-14 11:04:04 $
+ *  last change: $Author: sab $ $Date: 2002-11-12 15:46:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module drawing {
+ module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
@@ -132,6 +132,9 @@ service SpreadsheetDrawPage
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2002/10/14 11:04:04  sab
+    #86769#; the service name should be SpreadsheetDrawPage
+
     Revision 1.1  2002/09/27 11:03:14  sab
     #86769#; add a more simpler drawpage service for the spreadsheet drawpage
 
