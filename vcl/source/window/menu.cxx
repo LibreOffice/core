@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: ssa $ $Date: 2002-03-22 17:12:58 $
+ *  last change: $Author: pl $ $Date: 2002-04-09 17:03:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,6 +176,8 @@ struct MenuItemData
     BOOL            bChecked;       // Checked
     BOOL            bEnabled;       // Enabled
     BOOL            bIsTemporary;   // Temporary inserted ('No selection possible')
+    BOOL            bMirrorMode;
+    long            nItemImageAngle;
 
     Size            aSz;            // nur temporaer gueltig
 
@@ -232,34 +234,38 @@ MenuItemData* MenuItemList::Insert( USHORT nId, MenuItemType eType,
                                     const XubString& rStr, const Image& rImage,
                                     Menu* pMenu, USHORT nPos )
 {
-    MenuItemData* pData = new MenuItemData( rStr, rImage );
-    pData->nId          = nId;
-    pData->eType        = eType;
-    pData->nBits        = nBits;
-    pData->pSubMenu     = NULL;
-    pData->pAutoSubMenu = NULL;
-    pData->nHelpId      = 0;
-    pData->nUserValue   = 0;
-    pData->bChecked     = FALSE;
-    pData->bEnabled     = TRUE;
-    pData->bIsTemporary = FALSE;
+    MenuItemData* pData     = new MenuItemData( rStr, rImage );
+    pData->nId              = nId;
+    pData->eType            = eType;
+    pData->nBits            = nBits;
+    pData->pSubMenu         = NULL;
+    pData->pAutoSubMenu     = NULL;
+    pData->nHelpId          = 0;
+    pData->nUserValue       = 0;
+    pData->bChecked         = FALSE;
+    pData->bEnabled         = TRUE;
+    pData->bIsTemporary     = FALSE;
+    pData->bMirrorMode      = FALSE;
+    pData->nItemImageAngle  = 0;
     List::Insert( (void*)pData, nPos );
     return pData;
 }
 
 void MenuItemList::InsertSeparator( USHORT nPos )
 {
-    MenuItemData* pData = new MenuItemData;
-    pData->nId          = 0;
-    pData->eType        = MENUITEM_SEPARATOR;
-    pData->nBits        = 0;
-    pData->pSubMenu     = NULL;
-    pData->pAutoSubMenu = NULL;
-    pData->nHelpId      = 0;
-    pData->nUserValue   = 0;
-    pData->bChecked     = FALSE;
-    pData->bEnabled     = TRUE;
-    pData->bIsTemporary = FALSE;
+    MenuItemData* pData     = new MenuItemData;
+    pData->nId              = 0;
+    pData->eType            = MENUITEM_SEPARATOR;
+    pData->nBits            = 0;
+    pData->pSubMenu         = NULL;
+    pData->pAutoSubMenu     = NULL;
+    pData->nHelpId          = 0;
+    pData->nUserValue       = 0;
+    pData->bChecked         = FALSE;
+    pData->bEnabled         = TRUE;
+    pData->bIsTemporary     = FALSE;
+    pData->bMirrorMode      = FALSE;
+    pData->nItemImageAngle  = 0;
     List::Insert( (void*)pData, nPos );
 }
 
@@ -1286,6 +1292,93 @@ void Menu::SetItemImage( USHORT nItemId, const Image& rImage )
     ImplSetMenuItemData( pData, nPos );
 }
 
+static inline Image ImplRotImage( const Image& rImage, long nAngle10 )
+{
+    Image aRet;
+
+    // rotate the image to the new angle
+    Bitmap aRotBitmap = rImage.GetBitmap();
+    if( rImage.HasMaskColor() )
+    {
+        aRotBitmap.Rotate( nAngle10, rImage.GetMaskColor() );
+        aRet = Image( aRotBitmap, rImage.GetMaskColor() );
+    }
+    else if( rImage.HasMaskBitmap() )
+    {
+        aRotBitmap.Rotate( nAngle10, Color( COL_WHITE ) );
+        Bitmap aRotMask = rImage.GetMaskBitmap();
+        aRotMask.Rotate( nAngle10, Color( COL_WHITE ) );
+        aRet = Image( aRotBitmap, aRotMask );
+    }
+    else
+    {
+        aRotBitmap.Rotate( nAngle10, Color( COL_WHITE ) );
+        aRet = Image( aRotBitmap );
+    }
+    return aRet;
+}
+
+void Menu::SetItemImageAngle( USHORT nItemId, long nAngle10 )
+{
+    USHORT          nPos;
+    MenuItemData*   pData = pItemList->GetData( nItemId, nPos );
+
+    if ( pData )
+    {
+        Size aOldSize = pData->aImage.GetSizePixel();
+
+        long nDeltaAngle = (nAngle10 - pData->nItemImageAngle) % 3600;
+        while( nDeltaAngle < 0 )
+            nDeltaAngle += 3600;
+
+        pData->nItemImageAngle = nAngle10;
+        if( nDeltaAngle && !!pData->aImage )
+            pData->aImage = ImplRotImage( pData->aImage, nDeltaAngle );
+    }
+}
+
+static inline Image ImplMirrorImage( const Image& rImage )
+{
+    Image aRet;
+
+    // rotate the image to the new angle
+    Bitmap aMirrorBitmap = rImage.GetBitmap();
+    aMirrorBitmap.Mirror( BMP_MIRROR_HORZ );
+    if( rImage.HasMaskColor() )
+    {
+        aRet = Image( aMirrorBitmap, rImage.GetMaskColor() );
+    }
+    else if( rImage.HasMaskBitmap() )
+    {
+        Bitmap aMirrorMask = rImage.GetMaskBitmap();
+        aMirrorMask.Mirror( BMP_MIRROR_HORZ );
+        aRet = Image( aMirrorBitmap, aMirrorMask );
+    }
+    else
+    {
+        aRet = Image( aMirrorBitmap );
+    }
+    return aRet;
+}
+
+void Menu::SetItemImageMirrorMode( USHORT nItemId, BOOL bMirror )
+{
+    USHORT          nPos;
+    MenuItemData*   pData = pItemList->GetData( nItemId, nPos );
+
+    if ( pData )
+    {
+        if( ( pData->bMirrorMode && ! bMirror ) ||
+            ( ! pData->bMirrorMode && bMirror )
+            )
+        {
+            pData->bMirrorMode = bMirror ? true : false;
+            if( !!pData->aImage )
+                pData->aImage = ImplMirrorImage( pData->aImage );
+        }
+    }
+}
+
 Image Menu::GetItemImage( USHORT nItemId ) const
 {
     MenuItemData* pData = pItemList->GetData( nItemId );
@@ -1294,6 +1387,26 @@ Image Menu::GetItemImage( USHORT nItemId ) const
         return pData->aImage;
     else
         return Image();
+}
+
+long Menu::GetItemImageAngle( USHORT nItemId ) const
+{
+    MenuItemData* pData = pItemList->GetData( nItemId );
+
+    if ( pData )
+        return pData->nItemImageAngle;
+    else
+        return 0;
+}
+
+BOOL Menu::GetItemImageMirrorMode( USHORT nItemId ) const
+{
+    MenuItemData* pData = pItemList->GetData( nItemId );
+
+    if ( pData )
+        return pData->bMirrorMode;
+    else
+        return FALSE;
 }
 
 void Menu::SetItemCommand( USHORT nItemId, const String& rCommand )
