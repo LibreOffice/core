@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scextopt.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:03:36 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:48:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,7 @@ class ScExtDocOptions
 {
 // Code: colrowst.cxx
 private:
-    friend ColRowSettings;
+    friend class ColRowSettings;
     // Window -Info
     ScExtTabOptions**       ppExtTabOpts;
 
