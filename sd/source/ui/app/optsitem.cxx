@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsitem.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-25 10:49:06 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:35:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,9 @@
 #include "app.hxx"
 #include "optsitem.hxx"
 #include "cfgids.hxx"
-#include "frmview.hxx"
+#ifndef SD_FRAME_VIEW_HXX
+#include "FrameView.hxx"
+#endif
 
 using namespace ::rtl;
 using namespace ::utl;
@@ -364,7 +366,8 @@ SdOptionsLayoutItem::SdOptionsLayoutItem( USHORT nWhich ) :
 
 // ----------------------------------------------------------------------
 
-SdOptionsLayoutItem::SdOptionsLayoutItem( USHORT nWhich, SdOptions* pOpts, FrameView* pView ) :
+SdOptionsLayoutItem::SdOptionsLayoutItem( USHORT nWhich, SdOptions* pOpts,
+    ::sd::FrameView* pView ) :
     SfxPoolItem     ( nWhich ),
     SdOptionsLayout ( 0, FALSE )
 {
@@ -513,7 +516,7 @@ SdOptionsContentsItem::SdOptionsContentsItem( USHORT nWhich ) :
 
 // ----------------------------------------------------------------------
 
-SdOptionsContentsItem::SdOptionsContentsItem( USHORT nWhich, SdOptions* pOpts, FrameView* pView ) :
+SdOptionsContentsItem::SdOptionsContentsItem( USHORT nWhich, SdOptions* pOpts, ::sd::FrameView* pView ) :
     SfxPoolItem         ( nWhich ),
     SdOptionsContents   ( 0, FALSE )
 {
@@ -782,7 +785,8 @@ SdOptionsMiscItem::SdOptionsMiscItem( USHORT nWhich ) :
 
 // ----------------------------------------------------------------------
 
-SdOptionsMiscItem::SdOptionsMiscItem( USHORT nWhich, SdOptions* pOpts, FrameView* pView ) :
+SdOptionsMiscItem::SdOptionsMiscItem( USHORT nWhich, SdOptions* pOpts,
+    ::sd::FrameView* pView ) :
     SfxPoolItem     ( nWhich ),
     SdOptionsMisc   ( 0, FALSE )
 {
@@ -1009,7 +1013,7 @@ SdOptionsSnapItem::SdOptionsSnapItem( USHORT nWhich ) :
 
 // ----------------------------------------------------------------------
 
-SdOptionsSnapItem::SdOptionsSnapItem( USHORT nWhich, SdOptions* pOpts, FrameView* pView ) :
+SdOptionsSnapItem::SdOptionsSnapItem( USHORT nWhich, SdOptions* pOpts, ::sd::FrameView* pView ) :
     SfxPoolItem     ( nWhich ),
     SdOptionsSnap   ( 0, FALSE )
 {
@@ -1166,7 +1170,7 @@ SdOptionsZoomItem::SdOptionsZoomItem( USHORT nWhich ) :
 
 // ----------------------------------------------------------------------
 
-SdOptionsZoomItem::SdOptionsZoomItem( USHORT nWhich, SdOptions* pOpts, FrameView* pView ) :
+SdOptionsZoomItem::SdOptionsZoomItem( USHORT nWhich, SdOptions* pOpts, ::sd::FrameView* pView ) :
     SfxPoolItem     ( nWhich ),
     SdOptionsZoom   ( 0, FALSE )
 {
@@ -1360,7 +1364,7 @@ SdOptionsGridItem::SdOptionsGridItem( USHORT nWhich ) :
 
 // -----------------------------------------------------------------------------
 
-SdOptionsGridItem::SdOptionsGridItem( USHORT nWhich, SdOptions* pOpts, FrameView* pView ) :
+SdOptionsGridItem::SdOptionsGridItem( USHORT nWhich, SdOptions* pOpts, ::sd::FrameView* pView ) :
     SvxGridItem( nWhich )
 {
     SetSynchronize( pOpts->IsSynchronize() );
@@ -1643,7 +1647,7 @@ SdOptionsPrintItem::SdOptionsPrintItem( USHORT nWhich ) :
 
 // ----------------------------------------------------------------------
 
-SdOptionsPrintItem::SdOptionsPrintItem( USHORT nWhich, SdOptions* pOpts, FrameView* pView ) :
+SdOptionsPrintItem::SdOptionsPrintItem( USHORT nWhich, SdOptions* pOpts, ::sd::FrameView* pView ) :
     SfxPoolItem     ( nWhich ),
     SdOptionsPrint  ( 0, FALSE )
 {
