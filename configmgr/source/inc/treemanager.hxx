@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treemanager.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:19:09 $
+ *  last change: $Author: hr $ $Date: 2004-06-18 15:50:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,7 @@ namespace configmgr
 
         CacheList           m_aCacheList; // Map
         TemplateCache       m_aTemplates;
+        sal_Bool            m_bEnableAsync;
 
     protected:
         // ref counted, that's why no public dtor
@@ -165,6 +166,10 @@ namespace configmgr
                                     RequestOptions const& _xOptions
                                  ) CFG_NOTHROW();
 
+        virtual void refreshAll() CFG_UNO_THROW_ALL(  );
+        virtual void flushAll() CFG_NOTHROW();
+        virtual void enableAsync(const sal_Bool& bEnableAsync) CFG_NOTHROW() ;
+
         // IDefaultableTreeManager
         virtual sal_Bool fetchDefaultData(  memory::UpdateAccessor& _aAccessToken,
                                             AbsolutePath const& aSubtreePath,
@@ -186,6 +191,8 @@ namespace configmgr
     // implementation interfaces
         void refreshSubtree(const AbsolutePath &_aAbsoluteSubtreePath,
                             const RequestOptions& _aOptions) CFG_UNO_THROW_ALL(  );
+
+
 
     private:
         CacheData & getTemplates() { return * m_aTemplates.get(); }
