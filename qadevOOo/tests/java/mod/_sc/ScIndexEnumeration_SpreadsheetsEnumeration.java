@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScIndexEnumeration_SpreadsheetsEnumeration.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:16:22 $
+ *  last change:$Date: 2003-05-27 13:09:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package mod._sc;
 
 import com.sun.star.container.XEnumerationAccess;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XComponent;
 import com.sun.star.sheet.XSpreadsheetDocument;
 import com.sun.star.sheet.XSpreadsheets;
@@ -83,7 +84,7 @@ public class ScIndexEnumeration_SpreadsheetsEnumeration extends TestCase {
     public void initialize( TestParameters Param, PrintWriter log ) {
         // get a soffice factory object
 
-        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF());
         try {
             log.println("creating a spreadsheetdocument");
             xSpreadsheetDoc = SOF.createCalcDoc(null);
@@ -105,7 +106,7 @@ public class ScIndexEnumeration_SpreadsheetsEnumeration extends TestCase {
 
     protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
-        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF());
 
         log.println("getting sheets");
         XSpreadsheets xSpreadsheets = (XSpreadsheets)xSpreadsheetDoc.getSheets();
