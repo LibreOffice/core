@@ -2,9 +2,9 @@
  *
  *  $RCSfile: taskpanelist.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ssa $ $Date: 2002-02-22 09:10:27 $
+ *  last change: $Author: vg $ $Date: 2002-02-22 16:44:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,7 +174,7 @@ BOOL TaskPaneList::HandleKeyEvent( KeyEvent aKeyEvent )
 
 Window* TaskPaneList::FindNextPane( Window *pWindow )
 {
-    mTaskPanes.sort(LTR);
+    //mTaskPanes.sort(LTR);
 
     ::std::list< Window* >::iterator p = mTaskPanes.begin();
     while( p != mTaskPanes.end() )
