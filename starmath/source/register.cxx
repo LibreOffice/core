@@ -2,9 +2,9 @@
  *
  *  $RCSfile: register.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2001-03-19 13:02:50 $
+ *  last change: $Author: jl $ $Date: 2001-03-22 16:02:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,7 +179,7 @@ sal_Bool SAL_CALL component_writeInfo(  void*   pServiceManager ,
         xNewKey->createKey( rServices.getConstArray()[i]);
 
 
-    return True;
+    return sal_True;
 }
 
 void* SAL_CALL component_getFactory(    const   sal_Char*   pImplementationName ,
