@@ -2,9 +2,9 @@
  *
  *  $RCSfile: combtransition.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:04:12 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:08:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,8 +119,6 @@ namespace presentation
             mpLeavingBitmap( rLeavingBitmap ),
             mpEnteringBitmap( rEnteringBitmap ),
             maBitmapSize( getBitmapSize() ),
-            maPushDirection( maBitmapSize *
-                             rPushDirection ),
             maClipPolygon1( createClipPolygon( rPushDirection,
                                                maBitmapSize,
                                                nNumStripes,
@@ -129,6 +127,8 @@ namespace presentation
                                                maBitmapSize,
                                                nNumStripes,
                                                1 ) ),
+            maPushDirection( maBitmapSize *
+                             rPushDirection ),
             mpSoundPlayer( rSoundPlayer )
         {
             ENSURE_AND_THROW(
