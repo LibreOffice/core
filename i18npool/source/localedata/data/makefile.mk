@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.21 $
+#*  $Revision: 1.22 $
 #*
-#*  last change: $Author: vg $ $Date: 2003-07-02 15:07:46 $
+#*  last change: $Author: kz $ $Date: 2003-08-25 15:22:30 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -217,6 +217,7 @@ SHL2DEF=$(MISC)$/$(SHL2TARGET).def
 DEF2NAME=$(SHL2TARGET)
 
 SHL2STDLIBS=	$(LINK_LOCALEDATA_EN_LIB)
+SHL2DEPN=$(SHL1TARGETN)
 SHL2OBJS= \
     $(SLO)$/localedata_es_AR.obj \
     $(SLO)$/localedata_es_BO.obj \
@@ -250,6 +251,7 @@ SHL3DEF=$(MISC)$/$(SHL3TARGET).def
 DEF3NAME=$(SHL3TARGET)
 
 SHL3STDLIBS=	$(LINK_LOCALEDATA_EN_LIB) $(LINK_LOCALEDATA_ES_LIB)
+SHL3DEPN=$(SHL1TARGETN) $(SHL2TARGETN)
 SHL3OBJS=	\
     $(SLO)$/localedata_ca_ES.obj	\
     $(SLO)$/localedata_cs_CZ.obj	\
@@ -302,6 +304,7 @@ SHL4DEF=$(MISC)$/$(SHL4TARGET).def
 DEF4NAME=$(SHL4TARGET)
 
 SHL4STDLIBS=	$(LINK_LOCALEDATA_EN_LIB)
+SHL4DEPN=$(SHL1TARGETN)
 SHL4OBJS= \
     $(SLO)$/localedata_af_ZA.obj \
     $(SLO)$/localedata_ar_EG.obj \
@@ -337,4 +340,6 @@ LIB4OBJFILES=$(SHL4OBJS)
 $(MY_MISC_CXXFILES) : $(BIN)$/saxparser$(EXECPOST)
 
 $(MISC)$/localedata_%.cxx : %.xml
-    +$(WRAPCMD) $(BIN)$/saxparser $* $< $@ $(BIN)$/$(TARGET).rdb $(SOLARBINDIR)$/types.rdb
+    +$(WRAPCMD) $(BIN)$/saxparser $* $< $@ $(BIN)$/$(@:b).rdb $(SOLARBINDIR)$/types.rdb
+    +$(RM) $(BIN)$/$(@:b).rdb
+
