@@ -1,0 +1,6 @@
+cr	crashrep	:	sal sysui gtk tools NULL
+cr	crashrep				usr1	-	all	cr_mkout NULL
+cr	crashrep\source\unx\res		nmake	-	u	cr_sures NULL
+cr	crashrep\source\unx		nmake	-	u	cr_sunx cr_sures.u NULL
+cr	crashrep			nmake	-	u	cr_supstack NULL
+cr	crashrep\source\win32		nmake	-	n	cr_swin32 NULL
