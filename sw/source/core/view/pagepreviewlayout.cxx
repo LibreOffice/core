@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagepreviewlayout.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 09:40:41 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:44:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1080,47 +1080,6 @@ SwTwips SwPagePreviewLayout::GetWinPagesScrollAmount(
     }
 
     return nScrollAmount;
-}
-
-/** determine window preview page the page with the given number is on.
-
-    OD 17.01.2003 #103492#
-
-    @author OD
-
-    @param _nPageNum
-    input parameter - physical page number of page, for which the preview
-    window page number has to be calculated.
-
-    @return number of preview window page the page with the given physical
-    page number is on
-*/
-sal_uInt16 SwPagePreviewLayout::GetWinPageNumOfPage( sal_uInt16 _nPageNum ) const
-{
-    ASSERT( PreviewLayoutValid(), "PagePreviewLayout not valid" );
-    {
-        ASSERT( _nPageNum <= mnPages,
-                "parameter <_nPageNum> out of range - SwPagePreviewLayout::GetWinPageNumOfPage() will return 0!" );
-        if ( _nPageNum > mnPages )
-            return 0;
-    }
-
-    // OD 19.02.2003 #107369# - leaving left-top-corner blank is controlled
-    // by <mbBookPreview>.
-    if ( mbBookPreview )
-    {
-        // Note: increase given physical page number by one, because left-top-corner
-        //       in the preview layout is left blank.
-        ++_nPageNum;
-    }
-
-    sal_uInt16 nPagesPerWinPage = mnRows * mnCols;
-
-    sal_uInt16 nWinPageNum = (_nPageNum) / nPagesPerWinPage;
-    if ( ( (_nPageNum) % nPagesPerWinPage ) > 0 )
-        ++nWinPageNum;
-
-    return nWinPageNum;
 }
 
 // =============================================================================
