@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-30 16:14:31 $
+ *  last change: $Author: nn $ $Date: 2000-11-30 18:29:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3689,6 +3689,7 @@ BOOL ScDocument::SavePool( SvStream& rStream ) const
         {
             rStream << (USHORT) SCID_EDITPOOL;
             ScWriteHeader aEditPoolHdr( rStream );
+            pEditPool->SetFileFormatVersion( (USHORT)rStream.GetVersion() );
             pEditPool->Store( rStream );
         }
     }
