@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strimpl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dg $ $Date: 2001-10-11 14:23:02 $
+ *  last change: $Author: dg $ $Date: 2001-10-11 15:41:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,8 +149,8 @@ namespace configmgr
     IMPLEMENT_CONSTASCII_USTRING(NODE_USERPROFILE_GROUP_PATH, "Data");
     IMPLEMENT_CONSTASCII_USTRING(NODE_USERPROFILE_GROUP_FIELD, "UserGroup");
     IMPLEMENT_CONSTASCII_USTRING(NODE_USERPROFILE_DEFAULTGROUP, "defaultGroup");
-    IMPLEMENT_CONSTASCII_USTRING(NODE_USERPROFILE_GROUPLIST, "org.openoffice.UserProfile/Group");
-    IMPLEMENT_CONSTASCII_USTRING(NODE_USERPROFILE_USERLIST, "org.openoffice.UserProfile/User");
+    IMPLEMENT_CONSTASCII_USTRING(NODE_USERPROFILE_GROUPLIST, "Template/Group");
+    IMPLEMENT_CONSTASCII_USTRING(NODE_USERPROFILE_USERLIST, "Template/User");
     IMPLEMENT_CONSTASCII_USTRING(NODE_USERTEMPLATE_MODULE, "org.openoffice.Webtop.Common");
     IMPLEMENT_CONSTASCII_USTRING(NODE_USERTEMPLATE_NAME, "User");
 
