@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdesc.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:52:58 $
+ *  last change: $Author: kz $ $Date: 2001-03-01 21:47:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ String STR_DROP_OVER
     Text[ russian ] = "Èíèöèàëû íàä";
     Text[ polish ] = "Inicja³y nad";
     Text[ japanese ] = "ÄŞÛ¯Ìß·¬¯Ìß";
-    Text[ chinese_traditional ] = "¤j¼g¦r¥À¡A°ª«×µ¥©ó";
+    Text[ chinese_traditional ] = "¦r­º¤j¼g¡A°ª«×µ¥©ó";
     Text[ arabic ] = "ÃÍÑİ ÇÓÊåáÇáíÉ İæŞ";
     Text[ dutch ] = "Initialen over";
     Text[ chinese_simplified ] = "´óĞ´×ÖÄ¸£¬¸ß¶ÈµÈÓÚ";
@@ -316,7 +316,7 @@ String STR_CHARFMT
     Text[ russian ] = "Ñòèëü çíàêîâ";
     Text[ polish ] = "Styl znaku";
     Text[ japanese ] = "•¶š½À²Ù";
-    Text[ chinese_traditional ] = "¤å¦r¼Ë¦¡";
+    Text[ chinese_traditional ] = "¦r¤¸¼Ë¦¡";
     Text[ arabic ] = "äãØ ÇáÃÍÑİ";
     Text[ dutch ] = "Tekenopmaakprofiel";
     Text[ chinese_simplified ] = "×Ö·ûÑùÊ½";
@@ -338,14 +338,14 @@ String STR_NO_CHARFMT
     Text [ danish ] = "ingen tegntypografi" ;
     Text [ portuguese ] = "Estilo de caracteres inexistente" ;
     Text [ portuguese_brazilian ] = "keine Zeichenvorlage" ;
-    Text[ chinese_simplified ] = "ÎŞÎÄ×ÖÑùÊ½";
+    Text[ chinese_simplified ] = "ÎŞ×Ö·ûÑùÊ½";
     Text[ russian ] = "Áåç ñòèëÿ çíàêîâ";
     Text[ polish ] = "Brak stylu znaków";
     Text[ japanese ] = "•¶š½À²Ù‚È‚µ";
-    Text[ chinese_traditional ] = "µL¤å¦r¼Ë¦¡";
+    Text[ chinese_traditional ] = "µL¦r¤¸¼Ë¦¡";
     Text[ arabic ] = "ÈÏæä äãØ ÃÍÑİ";
     Text[ dutch ] = "geen opmaakprofiel";
-    Text[ chinese_simplified ] = "ÎŞÎÄ×ÖÑùÊ½";
+    Text[ chinese_simplified ] = "ÎŞ×Ö·ûÑùÊ½";
     Text[ greek ] = "÷ùñßò óôõë ÷áñáêôŞñùí";
     Text[ korean ] = "¹®ÀÚ À¯Çü ¾øÀ½.";
     Text[ turkish ] = "Karakter biçimi yok";
@@ -1019,14 +1019,14 @@ String STR_LINE_TOP
     Text [ danish ] = "række øverst" ;
     Text [ portuguese ] = "Linha superior" ;
     Text [ portuguese_brazilian ] = "Zeile oben" ;
-    Text[ chinese_simplified ] = "ĞĞÏòÉÏ";
+    Text[ chinese_simplified ] = "ĞĞÉÏ·½";
     Text[ russian ] = "Ñòğîêà ñâåğõó";
     Text[ polish ] = "Wiersz na górze";
     Text[ japanese ] = "ü‚Ìã";
-    Text[ chinese_traditional ] = "¦æ¦V¤W";
+    Text[ chinese_traditional ] = "¦æ¤W¤è";
     Text[ arabic ] = "ÃÚáì ÇáÓØÑ";
     Text[ dutch ] = "bovenste regel";
-    Text[ chinese_simplified ] = "ĞĞÏòÉÏ";
+    Text[ chinese_simplified ] = "ĞĞÉÏ·½";
     Text[ greek ] = "ÃñáììŞ ğÜíù";
     Text[ korean ] = "¼± À§";
     Text[ turkish ] = "Satır üstü";
@@ -1071,14 +1071,14 @@ String STR_LINE_BOTTOM
     Text [ danish ] = "række nederst" ;
     Text [ portuguese ] = "Linha inferior" ;
     Text [ portuguese_brazilian ] = "Zeile unten" ;
-    Text[ chinese_simplified ] = "ĞĞÏòÏÂ";
+    Text[ chinese_simplified ] = "ĞĞÏÂ·½";
     Text[ russian ] = "Ñòğîêà ñíèçó";
     Text[ polish ] = "Wiersz na dole";
     Text[ japanese ] = "ü‚Ì‰º";
-    Text[ chinese_traditional ] = "¦æ¦V¤U";
+    Text[ chinese_traditional ] = "¦æ¤U¤è";
     Text[ arabic ] = "ÃÓİá ÇáÓØÑ";
     Text[ dutch ] = "onderste regel";
-    Text[ chinese_simplified ] = "ĞĞÏòÏÂ";
+    Text[ chinese_simplified ] = "ĞĞÏÂ·½";
     Text[ greek ] = "ÃñáììŞ êÜôù";
     Text[ korean ] = "¼± ¾Æ·¡";
     Text[ turkish ] = "Satır altı";
