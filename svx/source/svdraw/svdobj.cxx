@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-26 14:09:14 $
+ *  last change: $Author: aw $ $Date: 2001-01-11 11:15:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,10 @@
 
 #ifndef _MyEDITENG_HXX
 #include "editeng.hxx"
+#endif
+
+#ifndef _SV_SALBTYPE_HXX
+#include <vcl/salbtype.hxx>     // FRound
 #endif
 
 using namespace ::com::sun::star;
@@ -4259,6 +4263,103 @@ void SdrObject::MigrateItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool)
 #endif
 
     return xShape;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+// transformation interface for StarOfficeAPI. This implements support for
+// homogen 3x3 matrices containing the transformation of the SdrObject. At the
+// moment it contains a shearX, rotation and translation, but for setting all linear
+// transforms like Scale, ShearX, ShearY, Rotate and Translate are supported.
+//
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// gets base transformation and rectangle of object. If it's an SdrPathObj it fills the PolyPolygon
+// with the base geometry and returns TRUE. Otherwise it returns FALSE.
+BOOL SdrObject::TRGetBaseGeometry(Vector2D& rScale, double& rShear, double& rRotate,
+    Vector2D& rTranslate, XPolyPolygon& rPolyPolygon) const
+{
+    // any kind of SdrObject, just use SnapRect
+    Rectangle aRectangle(GetSnapRect());
+
+    rScale.X() = (double)aRectangle.GetWidth();
+    rScale.Y() = (double)aRectangle.GetHeight();
+    rShear = rRotate = 0.0;
+    rTranslate.X() = (double)aRectangle.Left();
+    rTranslate.Y() = (double)aRectangle.Top();
+
+    return FALSE;
+}
+
+// sets the base geometry of the object using infos contained in the homogen 3x3 matrix.
+// If it's an SdrPathObj it will use the provided geometry information. The Polygon has
+// to use (0,0) as upper left and will be scaled to the given size in the matrix.
+void SdrObject::TRSetBaseGeometry(const Matrix3D& rMat, const XPolyPolygon& rPolyPolygon)
+{
+    // break up matrix
+    Vector2D aScale, aTranslate;
+    double fShear, fRotate;
+    TRDecomposeAndCorrect(rMat, aScale, fShear, fRotate, aTranslate);
+
+    // build BaseRect
+    Rectangle aBaseRect(
+        Point(FRound(aTranslate.X()), FRound(aTranslate.Y())),
+        Size(FRound(aScale.X()), FRound(aScale.Y())));
+
+    // set BaseRect
+    SetSnapRect(aBaseRect);
+}
+
+// Help routine to decompose given homogen 3x3 matrix to components. A correction of
+// the components is done to avoid inaccuracies.
+BOOL SdrObject::TRDecomposeAndCorrect(const Matrix3D& rMat, Vector2D& rScale,
+    double& rShear, double& rRotate, Vector2D& rTranslate) const
+{
+    // break up homogen 3x3 matrix using homogen 4x4 matrix
+    Matrix4D aDecomposeTrans(rMat);
+    Vector3D aScale;
+    Vector3D aShear;
+    Vector3D aRotate;
+    Vector3D aTranslate;
+    if(aDecomposeTrans.Decompose(aScale, aTranslate, aRotate, aShear))
+    {
+        const double fSmallValue(SMALL_DVALUE);
+
+        // handle scale
+        if(fabs(aScale.X() - 1.0) < fSmallValue)
+            aScale.X() = 1.0;
+        if(fabs(aScale.Y() - 1.0) < fSmallValue)
+            aScale.Y() = 1.0;
+        rScale.X() = aScale.X();
+        rScale.Y() = aScale.Y();
+
+        // handle shear
+        if(fabs(aShear.X()) < fSmallValue)
+            aShear.X() = 0.0;
+        rShear = aShear.X();
+
+        // handle rotate
+        if(fabs(aRotate.Z()) < fSmallValue)
+            aRotate.Z() = 0.0;
+        rRotate = aRotate.Z();
+
+        // handle translate
+        if(fabs(aTranslate.X()) < fSmallValue)
+            aTranslate.X() = 0.0;
+        if(fabs(aTranslate.Y()) < fSmallValue)
+            aTranslate.Y() = 0.0;
+        rTranslate.X() = aTranslate.X();
+        rTranslate.Y() = aTranslate.Y();
+
+        return TRUE;
+    }
+    else
+    {
+        rScale.X() = rScale.Y() = 10000.0;
+        rShear = rRotate = 0.0;
+        rTranslate.X() = rTranslate.Y() = 0.0;
+
+        return FALSE;
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdopath.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 11:11:37 $
+ *  last change: $Author: aw $ $Date: 2001-01-11 11:15:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,10 @@
 
 #ifndef _SVX_XLNTRIT_HXX
 #include "xlntrit.hxx"
+#endif
+
+#ifndef _SV_SALBTYPE_HXX
+#include <vcl/salbtype.hxx>     // FRound
 #endif
 
 /*************************************************************************/
@@ -3012,3 +3016,100 @@ void SdrPathObj::ConvertAllSegments(SdrPathType ePathType)
     }
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+// transformation interface for StarOfficeAPI. This implements support for
+// homogen 3x3 matrices containing the transformation of the SdrObject. At the
+// moment it contains a shearX, rotation and translation, but for setting all linear
+// transforms like Scale, ShearX, ShearY, Rotate and Translate are supported.
+//
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// gets base transformation and rectangle of object. If it's an SdrPathObj it fills the PolyPolygon
+// with the base geometry and returns TRUE. Otherwise it returns FALSE.
+BOOL SdrPathObj::TRGetBaseGeometry(Vector2D& rScale, double& rShear, double& rRotate,
+    Vector2D& rTranslate, XPolyPolygon& rPolyPolygon) const
+{
+    // get turn and shear
+    rRotate = (aGeo.nDrehWink / 100.0) * F_PI180;
+    rShear = (aGeo.nShearWink / 100.0) * F_PI180;
+
+    // get path, remove rotate and shear
+    rPolyPolygon = GetPathPoly();
+    if(aGeo.nDrehWink)
+        RotateXPoly(rPolyPolygon, Point(), -aGeo.nSin, aGeo.nCos);
+    Rectangle aRectangle(rPolyPolygon.GetBoundRect());
+    Point aTmp(aRectangle.TopLeft());
+    if(aGeo.nShearWink)
+    {
+        ShearXPoly(rPolyPolygon, aTmp, -aGeo.nTan, FALSE);
+        aRectangle = rPolyPolygon.GetBoundRect();
+        aTmp = aRectangle.TopLeft();
+    }
+    RotatePoint(aTmp, Point(), aGeo.nSin, aGeo.nCos);
+    aTmp -= aRectangle.TopLeft();
+
+    // polygon to base position
+    rPolyPolygon.Move(aTmp.X(), aTmp.Y());
+
+    // get bound rect for values
+    aRectangle = rPolyPolygon.GetBoundRect();
+
+    // fill in values
+    rScale.X() = (double)aRectangle.GetWidth();
+    rScale.Y() = (double)aRectangle.GetHeight();
+    rTranslate.X() = (double)aRectangle.Left();
+    rTranslate.Y() = (double)aRectangle.Top();
+
+    // polygon to (0,0)
+    rPolyPolygon.Move(-aRectangle.Left(), -aRectangle.Top());
+
+    return TRUE;
+}
+
+// sets the base geometry of the object using infos contained in the homogen 3x3 matrix.
+// If it's an SdrPathObj it will use the provided geometry information. The Polygon has
+// to use (0,0) as upper left and will be scaled to the given size in the matrix.
+void SdrPathObj::TRSetBaseGeometry(const Matrix3D& rMat, const XPolyPolygon& rPolyPolygon)
+{
+    // break up matrix
+    Vector2D aScale, aTranslate;
+    double fShear, fRotate;
+    TRDecomposeAndCorrect(rMat, aScale, fShear, fRotate, aTranslate);
+
+    // reset object shear and rotations
+    aGeo.nDrehWink = 0;
+    aGeo.RecalcSinCos();
+    aGeo.nShearWink = 0;
+    aGeo.RecalcTan();
+
+    // set PathPoly
+    SetPathPoly(rPolyPolygon);
+
+    // shear?
+    if(fShear != 0.0)
+    {
+        GeoStat aGeoStat;
+        aGeoStat.nShearWink = FRound((atan(fShear) / F_PI180) * 100.0);
+        aGeoStat.RecalcTan();
+        Shear(Point(), aGeoStat.nShearWink, aGeoStat.nTan, FALSE);
+    }
+
+    // rotation?
+    if(fRotate != 0.0)
+    {
+        GeoStat aGeoStat;
+        aGeoStat.nDrehWink = FRound((fRotate / F_PI180) * 100.0);
+        aGeoStat.RecalcSinCos();
+        Rotate(Point(), aGeoStat.nDrehWink, aGeoStat.nSin, aGeoStat.nCos);
+    }
+
+    // translate?
+    if(aTranslate.X() != 0.0 || aTranslate.Y() != 0.0)
+    {
+        Move(Size(
+            (sal_Int32)FRound(aTranslate.X()),
+            (sal_Int32)FRound(aTranslate.Y())));
+    }
+}
+
+// EOF

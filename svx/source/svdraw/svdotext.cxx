@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: aw $ $Date: 2000-12-13 15:05:15 $
+ *  last change: $Author: aw $ $Date: 2001-01-11 11:15:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,10 @@
 
 #ifndef _SVX_XFTOUIT_HXX
 #include "xftouit.hxx"
+#endif
+
+#ifndef _SV_SALBTYPE_HXX
+#include <vcl/salbtype.hxx>     // FRound
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2099,6 +2103,82 @@ void SdrTextObj::SetVerticalWriting( BOOL bVertical )
     DBG_ASSERT( pOutlinerParaObject, "SdrTextObj::SetVerticalWriting() without OutlinerParaObject!" );
     if( pOutlinerParaObject )
         pOutlinerParaObject->SetVertical( bVertical );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+// transformation interface for StarOfficeAPI. This implements support for
+// homogen 3x3 matrices containing the transformation of the SdrObject. At the
+// moment it contains a shearX, rotation and translation, but for setting all linear
+// transforms like Scale, ShearX, ShearY, Rotate and Translate are supported.
+//
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// gets base transformation and rectangle of object. If it's an SdrPathObj it fills the PolyPolygon
+// with the base geometry and returns TRUE. Otherwise it returns FALSE.
+BOOL SdrTextObj::TRGetBaseGeometry(Vector2D& rScale, double& rShear, double& rRotate,
+    Vector2D& rTranslate, XPolyPolygon& rPolyPolygon) const
+{
+    // get turn and shear
+    rRotate = (aGeo.nDrehWink / 100.0) * F_PI180;
+    rShear = (aGeo.nShearWink / 100.0) * F_PI180;
+
+    // get aRect, this is the unrotated snaprect
+    Rectangle aRectangle(aRect);
+
+    // fill other values
+    rScale.X() = (double)aRectangle.GetWidth();
+    rScale.Y() = (double)aRectangle.GetHeight();
+    rTranslate.X() = (double)aRectangle.Left();
+    rTranslate.Y() = (double)aRectangle.Top();
+
+    return FALSE;
+}
+
+// sets the base geometry of the object using infos contained in the homogen 3x3 matrix.
+// If it's an SdrPathObj it will use the provided geometry information. The Polygon has
+// to use (0,0) as upper left and will be scaled to the given size in the matrix.
+void SdrTextObj::TRSetBaseGeometry(const Matrix3D& rMat, const XPolyPolygon& rPolyPolygon)
+{
+    // break up matrix
+    Vector2D aScale, aTranslate;
+    double fShear, fRotate;
+    TRDecomposeAndCorrect(rMat, aScale, fShear, fRotate, aTranslate);
+
+    // reset object shear and rotations
+    aGeo.nDrehWink = 0;
+    aGeo.RecalcSinCos();
+    aGeo.nShearWink = 0;
+    aGeo.RecalcTan();
+
+    // build and set BaseRect (use scale)
+    Rectangle aBaseRect(Point(), Size(FRound(aScale.X()), FRound(aScale.Y())));
+    SetSnapRect(aBaseRect);
+
+    // shear?
+    if(fShear != 0.0)
+    {
+        GeoStat aGeoStat;
+        aGeoStat.nShearWink = FRound((atan(fShear) / F_PI180) * 100.0);
+        aGeoStat.RecalcTan();
+        Shear(Point(), aGeoStat.nShearWink, aGeoStat.nTan, FALSE);
+    }
+
+    // rotation?
+    if(fRotate != 0.0)
+    {
+        GeoStat aGeoStat;
+        aGeoStat.nDrehWink = FRound((fRotate / F_PI180) * 100.0);
+        aGeoStat.RecalcSinCos();
+        Rotate(Point(), aGeoStat.nDrehWink, aGeoStat.nSin, aGeoStat.nCos);
+    }
+
+    // translate?
+    if(aTranslate.X() != 0.0 || aTranslate.Y() != 0.0)
+    {
+        Move(Size(
+            (sal_Int32)FRound(aTranslate.X()),
+            (sal_Int32)FRound(aTranslate.Y())));
+    }
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
