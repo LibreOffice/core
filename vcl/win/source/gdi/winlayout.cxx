@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hdu $ $Date: 2002-09-18 15:08:48 $
+ *  last change: $Author: hdu $ $Date: 2002-09-26 19:01:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,23 +152,19 @@ SimpleWinLayout::SimpleWinLayout( HDC hDC, const ImplLayoutArgs& rArgs )
     {
         // Win32 glyph APIs have serious problems with vertical layout
         // => workaround is to use the unicode methods then
-        bool bDisableGlyphs = (0 != (rArgs.mnFlags & SAL_LAYOUT_VERTICAL));
+        bool bDisableGlyphs = false;
 
-        // #99019# don't use glyph indices for non-TT fonts
-        // also for printer, because the drivers often transparently replace TTs with PS fonts
-        if( !bDisableGlyphs )
+        if( rArgs.mnFlags & SAL_LAYOUT_VERTICAL )
+            bDisableGlyphs = true;
+        else
         {
-            DWORD nFLI = GetFontLanguageInfo( mhDC );
-            bDisableGlyphs = ((nFLI & GCP_GLYPHSHAPE) == 0);
-        }
-
-        if( bDisableGlyphs )
-        {
+            // #99019# don't use glyph indices for non-TT fonts
+            // also for printer, because the drivers often transparently replace TTs with PS fonts
             TEXTMETRICA aTextMetricA;
-            if( ::GetTextMetricsA( mhDC, &aTextMetricA )
-            &&  (aTextMetricA.tmPitchAndFamily & TMPF_TRUETYPE)
-            && !(aTextMetricA.tmPitchAndFamily & TMPF_DEVICE) )
-                bDisableGlyphs = false;
+            if( ::GetTextMetricsA( mhDC, &aTextMetricA ) )
+                if( (aTextMetricA.tmPitchAndFamily & TMPF_DEVICE)
+                ||  !(aTextMetricA.tmPitchAndFamily & TMPF_TRUETYPE) )
+                    bDisableGlyphs = true;
         }
 
         if( bDisableGlyphs )
@@ -239,13 +235,13 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
     if( aSalShlData.mbWNT )  // TODO: remove when unicode layer successful
     {
         GCP_RESULTSW aGCPW;
-        aGCPW.lStructSize    = sizeof(aGCPW);
-        aGCPW.lpOutString    = NULL;
-        aGCPW.lpGlyphs       = NULL;
-        aGCPW.lpCaretPos     = NULL;
-        aGCPW.lpClass        = pGcpClass;
-        aGCPW.nGlyphs        = nMaxGlyphCount;
-        aGCPW.nMaxFit        = 0;
+        aGCPW.lStructSize   = sizeof(aGCPW);
+        aGCPW.lpOutString   = NULL;
+        aGCPW.lpGlyphs      = NULL;
+        aGCPW.lpCaretPos    = NULL;
+        aGCPW.lpClass       = pGcpClass;
+        aGCPW.nGlyphs       = nMaxGlyphCount;
+        aGCPW.nMaxFit       = 0;
 
         // get glyphs/outstring and kerned placement
         if( mnLayoutFlags & SAL_LAYOUT_DISABLE_GLYPH_PROCESSING )
@@ -271,7 +267,7 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
     }
     else
     {
-        // TODO: emulate full GetCharacterPlacementW on crappy OS
+        // TODO: emulate full GetCharacterPlacementW on non-unicode OS
         // TODO: move into uwinapi.dll
         // convert into ANSI code page
         int nMBLen = ::WideCharToMultiByte( CP_ACP,
@@ -1222,10 +1218,10 @@ bool UniscribeLayout::GetItemSubrange( const VisualItem& rVisualItem,
 // -----------------------------------------------------------------------
 
 int UniscribeLayout::GetNextGlyphs( int nLen, long* pGlyphs, Point& rPos,
-    int& nStart, long* pGlyphAdvances, int* pCharPosAry ) const
+    int& nVisualStart, long* pGlyphAdvances, int* pCharPosAry ) const
 {
     // return zero if no more glyph found
-    if( nStart >= mnGlyphCount )
+    if( nVisualStart >= mnGlyphCount )
         return 0;
 
     // calculate glyph position relative to layout base
@@ -1233,53 +1229,61 @@ int UniscribeLayout::GetNextGlyphs( int nLen, long* pGlyphs, Point& rPos,
     long nXOffset = 0;
     const int* pGlyphWidths = mpJustifications ? mpJustifications : mpGlyphAdvances;
 
+    int nVisualMinGlyphPos = 0;
+    int nNextVisualStart = 0;
     int nMinGlyphPos = 0;
+    int nCurrGlyphPos = 0;
     int nEndGlyphPos = mnGlyphCount;
-    int nNextStart = mnGlyphCount;
 
+    // search item with the visual starting glyph,
     // update position in items with visible glyphs
-    for( int nItem = 0, i; nItem < mnItemCount ; ++nItem )
+    int i;
+    const VisualItem* pVisualItem = NULL;
+    for( int nItem = 0; nItem < mnItemCount; ++nItem )
     {
         // skip invisible items
-        const VisualItem& rVisualItem = mpVisualItems[ nItem ];
-        nNextStart = rVisualItem.mnEndGlyphPos;
-        if( !GetItemSubrange( rVisualItem, nMinGlyphPos, nEndGlyphPos ) )
+        pVisualItem = &mpVisualItems[ nItem ];
+        if( !GetItemSubrange( *pVisualItem, nMinGlyphPos, nEndGlyphPos ) )
             continue;
 
-        // adjust current glyph pos to first visible glyph
-        if( nStart <= rVisualItem.mnMinGlyphPos )
-            nStart = nMinGlyphPos;
+        nVisualMinGlyphPos = nNextVisualStart;
+        nNextVisualStart += pVisualItem->mnEndGlyphPos - pVisualItem->mnMinGlyphPos;
+        if( nNextVisualStart > nVisualStart )
+            break;
 
         // advance to next visual position by using adjusted glyph widths
-        int nGLimit = (nStart >= rVisualItem.mnMinGlyphPos) ? nStart : nEndGlyphPos;
         // TODO: shortcut addition with cached ABC width if possible
-        for( i = nMinGlyphPos; i < nGLimit; ++i )
+        for( i = nMinGlyphPos; i < nEndGlyphPos; ++i )
             nXOffset += pGlyphWidths[ i ];
+    }
 
-        // break in item with current start glyph
-        if( nStart >= rVisualItem.mnMinGlyphPos )
-        {
-            // adjust glyph position relative to cluster start
-            i = mnMinCharPos;
-            if( !rVisualItem.mpScriptItem->a.fRTL )
-            {
-                int nTmpIndex = mpLogClusters[ i ];
-                while( (--i >= rVisualItem.mnMinCharPos) && (nTmpIndex == mpLogClusters[i]) )
-                    nXOffset -= mpCharWidths[i];
-            }
-            else
-            {
-                int nTmpIndex = mpLogClusters[ rVisualItem.mnEndCharPos - 1 ];
-                while( (--i >= rVisualItem.mnMinCharPos) && (nTmpIndex == mpLogClusters[i]) )
-                    nXOffset += mpCharWidths[i];
-            }
+    // adjust visual glyph pos to first visible glyph in item
+    if( nVisualStart == nVisualMinGlyphPos )
+        nVisualStart += nMinGlyphPos - pVisualItem->mnMinGlyphPos;
 
-            break;
-        }
+    nCurrGlyphPos = pVisualItem->mnMinGlyphPos + (nVisualStart - nVisualMinGlyphPos);
+
+    // advance to next visual position by using adjusted glyph widths
+    for( i = nMinGlyphPos; i < nCurrGlyphPos; ++i )
+        nXOffset += pGlyphWidths[ i ];
+
+    // adjust nXOffset relative to cluster start
+    i = mnMinCharPos;
+    if( !pVisualItem->mpScriptItem->a.fRTL )
+    {
+        int nTmpIndex = mpLogClusters[ i ];
+        while( (--i >= pVisualItem->mnMinCharPos) && (nTmpIndex == mpLogClusters[i]) )
+            nXOffset -= mpCharWidths[i];
+    }
+    else
+    {
+        int nTmpIndex = mpLogClusters[ pVisualItem->mnEndCharPos - 1 ];
+        while( (--i >= pVisualItem->mnMinCharPos) && (nTmpIndex == mpLogClusters[i]) )
+            nXOffset += mpCharWidths[i];
     }
 
     // calculate absolute position in pixel units
-    const GOFFSET aGOffset = mpGlyphOffsets[ nStart ];
+    const GOFFSET aGOffset = mpGlyphOffsets[ nCurrGlyphPos ];
     Point aRelativePos( nXOffset + aGOffset.du, aGOffset.dv );
     rPos = GetDrawPosition( aRelativePos );
 
@@ -1290,28 +1294,29 @@ int UniscribeLayout::GetNextGlyphs( int nLen, long* pGlyphs, Point& rPos,
     while( nCount < nLen )
     {
         // update returned values
-        *(pGlyphs++) = mpOutGlyphs[ nStart ];
+        *(pGlyphs++) = mpOutGlyphs[ nCurrGlyphPos ];
         if( pGlyphAdvances )
-            *(pGlyphAdvances++) = pGlyphWidths[ nStart ];
+            *(pGlyphAdvances++) = pGlyphWidths[ nCurrGlyphPos ];
         if( pCharPosAry )
             *(pCharPosAry++) = -1; // TODO: use mpGlyphs2Chars[nGI];
 
-        // stop at item boundary
         ++nCount;
-        if( ++nStart >= nEndGlyphPos )
+        ++nVisualStart;
+        // stop aftert last visible glyph in item
+        if( ++nCurrGlyphPos >= nEndGlyphPos )
         {
-            nStart = nNextStart;
+            nVisualStart = nNextVisualStart;
             break;
         }
 
         // stop when next x-position is unexpected
         if( !pGlyphAdvances  )
-            if( (mpGlyphOffsets && (mpGlyphOffsets[nStart].du != aGOffset.du) )
-             || (mpJustifications && (mpJustifications[nStart] != mpGlyphAdvances[nStart]) ) )
+            if( (mpGlyphOffsets && (mpGlyphOffsets[nCurrGlyphPos].du != aGOffset.du) )
+             || (mpJustifications && (mpJustifications[nCurrGlyphPos] != mpGlyphAdvances[nCurrGlyphPos]) ) )
                 break;
 
         // stop when next y-position is unexpected
-        if( mpGlyphOffsets && (mpGlyphOffsets[nStart].dv != aGOffset.dv) )
+        if( mpGlyphOffsets && (mpGlyphOffsets[nCurrGlyphPos].dv != aGOffset.dv) )
             break;
     }
 
