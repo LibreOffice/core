@@ -23549,3 +23549,4 @@ _TI2?AVPropertyVetoException@beans@star@sun@com@@
 ?SetState@AccessibleParaManager@accessibility@@QAEXF@Z
 ?UnSetState@AccessibleParaManager@accessibility@@AAEXJF@Z
 ?UnSetState@AccessibleParaManager@accessibility@@QAEXF@Z
+?FireEvent@AccessibleTextHelper@accessibility@@QBEXABUAccessibleEventObject@2star@sun@com@drafts@@@Z
