@@ -5,9 +5,9 @@ eval 'exec perl -S $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.68 $
+#   $Revision: 1.69 $
 #
-#   last change: $Author: vg $ $Date: 2002-11-26 12:47:35 $
+#   last change: $Author: vg $ $Date: 2002-11-28 16:30:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,7 +75,7 @@ use Cwd;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.68 $ ';
+$id_str = ' $Revision: 1.69 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -124,6 +124,7 @@ $dlv_switch = '';
 $child = 0;
 %processes_hash = ();
 %module_annonced = ();
+$locked = 0; # lock for signal handler
 
 &get_options;
 
@@ -752,7 +753,7 @@ sub get_options {
     $cmd_file = '' if ($show);
     if (($ENV{GUI} eq 'WNT') && $QuantityToBuild) {
         $QuantityToBuild = 0;
-        &print_error('-PP switch is unusable under windows!\n');
+        &print_error('-PP switch is disabled for windows!\n');
     };
 };
 
@@ -800,6 +801,12 @@ sub store_error {
 # child handler (clears (or stores info about) the terminated child)
 #
 sub handle_dead_child {
+    if ($locked) {
+        while ($locked) {sleep(1)};
+        $locked = 1;
+    } else {
+        $locked = 1;
+    }
     my $pid = 0;
     foreach (keys %processes_hash) {
         if (($pid = waitpid($_, &WNOHANG)) > 0) {
@@ -807,6 +814,7 @@ sub handle_dead_child {
             &clear_from_child($pid);
         };
     };
+    $locked = 0;
 };
 
 sub clear_from_child {
@@ -844,9 +852,10 @@ sub BuildDependent {
                 &start_child($child_nick) if ($child_nick);
                 sleep if (&children_number() >= $QuantityToBuild);
                 $child_nick = &PickPrjToBuild($dependencies_hash);
-                if ($only_dependent) {
+                while ($only_dependent) {
                     return if ($BuildAllParents);
                     sleep;
+                    $child_nick = &PickPrjToBuild($dependencies_hash);
                 };
             } while (!$no_projects);
             return if ($BuildAllParents);
