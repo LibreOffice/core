@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XFolderPicker.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 12:31:17 $
+ *  last change:$Date: 2003-09-08 11:28:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,10 @@
 
 package ifc.ui.dialogs;
 
+import lib.MultiMethodTest;
+
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.ui.dialogs.XFolderPicker;
-import lib.MultiMethodTest;
 
 /**
 * Testing <code>com.sun.star.ui.XFolderPicker</code>
