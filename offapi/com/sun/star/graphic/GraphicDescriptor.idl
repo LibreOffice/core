@@ -1,0 +1,185 @@
+/*************************************************************************
+ *
+ *  $RCSfile: GraphicDescriptor.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2004-06-11 09:34:55 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef com_sun_star_graphic_GraphicDescriptor_idl
+#define com_sun_star_graphic_GraphicDescriptor_idl
+
+#include <com/sun/star/graphic/GraphicType.idl>
+#include <com/sun/star/beans/XPropertySet.idl>
+#include <com/sun/star/awt/Size.idl>
+
+module com { module sun { module star { module graphic
+{
+
+/** This service describes all graphic properties that are available
+    via the <type scope="com::sun::star::beans">XPropertySet</type> interface
+
+    @see XPropertySet
+*/
+service GraphicDescriptor
+{
+    /** The property interface by which the properties of all
+        supported services are exchanged
+    */
+    interface ::com::sun::star::beans::XPropertySet;
+
+    /** The type of the graphic
+
+        @see GraphicType
+    */
+    [property] byte GraphicType;
+
+    /** The MimeType of the loaded graphic
+
+        <p> The mime can be the original mime type of the graphic
+        source the graphic container was constructed from or it
+        can be the internal mime type image/x-vclgraphic, in which
+        case the original mime type is not available anymore</p>
+
+        <p> Currently, the following mime types are supported for
+        loaded graphics:<\p>
+        <ul>
+            <li>image/bmp</li>
+            <li>image/gif</li>
+            <li>image/jpeg</li>
+            <li>image/x-photo-cd</li>
+            <li>image/x-pcx</li>
+            <li>image/png</li>
+            <li>image/tiff</li>
+            <li>image/x-xbitmap</li>
+            <li>image/x-xpixmap</li>
+            <li>image/x-portable-bitmap</li>
+            <li>image/x-portable-graymap</li>
+            <li>image/x-portable-pixmap</li>
+            <li>image/x-cmu-raster</li>
+            <li>image/x-targa</li>
+            <li>image/x-photoshop</li>
+            <li>image/x-eps</li>
+            <li>image/x-dxf</li>
+            <li>image/x-met</li>
+            <li>image/x-pict</li>
+            <li>image/x-sgf</li>
+            <li>image/x-svm</li>
+            <li>image/x-wmf</li>
+            <li>image/x-sgv</li>
+            <li>image/x-emf</li>
+            <li>image/x-vclgraphic</li>
+        </ul>
+
+    */
+    [property] string MimeType;
+
+    /** The Size of the graphic in pixel.
+
+        <p> This property may not be available in case of
+        vector graphics or if the pixel size can not be
+        determined correctly for some formats without loading
+        the whole graphic</p>
+    */
+    [optional, property] ::com::sun::star::awt::Size SizePixel;
+
+    /** The Size of the graphic in 100th mm.
+
+        <p> This property may not be available in case of
+        pixel graphics or if the logical size can not be
+        determined correctly for some formats without loading
+        the whole graphic</p>
+    */
+    [optional, property] ::com::sun::star::awt::Size Size100thMM;
+
+    /** The number of bits per pixel used for the pixel graphic
+
+        <p> This property is not available for vector
+        graphics and may not be available for some kinds
+        of pixel graphics</p>
+    */
+    [optional, property] byte BitsPerPixel;
+
+    /** Indicates that it is a transparent graphic
+
+        <p>This property is always <TRUE/> for vector graphics.
+        The status of this flag is not always clear if the
+        graphic was not loaded at all, e.g. in case of just
+        querying for the <type>GraphicDescriptor</type>.</p>
+    */
+    [optional, property] boolean Transparent;
+
+    /** Indicates that it is a pixel graphic with an alpha channel
+
+        <p>The status of this flag is not always clear if the
+        graphic was not loaded at all, e.g. in case of just
+        querying for the <type>GraphicDescriptor</type></p>
+    */
+    [optional, property] boolean Alpha;
+
+    /** Indicates that it is a graphic that consists of several
+        frames that can be played as an animation
+
+        <p>The status of this flag is not always clear if the
+        graphic was not loaded at all, e.g. in case of just
+        querying for the <type>GraphicDescriptor</type></p>
+    */
+    [optional, property] boolean Animated;
+};
+
+} ; } ; } ; } ;
+
+#endif
