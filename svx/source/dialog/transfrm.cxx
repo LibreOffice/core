@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfrm.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:01:13 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 18:12:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1179,7 +1179,8 @@ void SvxPositionSizeTabPage::Reset( const SfxItemSet& rOutAttrs )
     nTmpHeight = Fraction( nTmpHeight ) / aUIScale;
 
     UINT32 nNorm = 10;
-    for( int i=0; i<maMtrWidth.GetDecimalDigits()-1; i++ )
+    int i;
+    for( i = 0; i < maMtrWidth.GetDecimalDigits()-1; i++ )
         nNorm*=10;
     nTmpWidth*=(double)nNorm;
 
