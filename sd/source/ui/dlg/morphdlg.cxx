@@ -2,9 +2,9 @@
  *
  *  $RCSfile: morphdlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:10:12 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 18:44:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,8 @@
 #include "morphdlg.hxx"
 #include "morphdlg.hrc"
 
-#ifndef _SV_CONFIG_HXX //autogen
-#include <vcl/config.hxx>
+#ifndef _CONFIG_HXX
+#include <tools/config.hxx>
 #endif
 #ifndef SVX_XFILLIT0_HXX //autogen
 #include <svx/xfillit0.hxx>
