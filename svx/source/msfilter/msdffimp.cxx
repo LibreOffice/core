@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: sj $ $Date: 2001-11-07 16:09:57 $
+ *  last change: $Author: sj $ $Date: 2001-11-19 16:59:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5019,10 +5019,10 @@ const SvInPlaceObjectRef SvxMSDffManager::CheckForConvertToSOObj( UINT32 nConver
 
                             //JP 26.10.2001: Bug 93374 / 91928
                             // the writer objects need the correct visarea
-                            if( sStarName.EqualsAscii( "swriter" ))
-                            {
-                                // set the correcet VisArea
-                                Size aSz( OutputDevice::LogicToLogic(
+                            if( sStarName.EqualsAscii( "swriter" )
+                                || sStarName.EqualsAscii( "scalc" ) )   // SJ: 19.11.2001 bug 94908, also chart objects
+                            {                                           // needs the correct visarea, but this is not
+                                Size aSz( OutputDevice::LogicToLogic(   // true for PowerPoint (see bugdoc 94908b)
                                                 rGrf.GetPrefSize(),
                                                 rGrf.GetPrefMapMode(),
                                         MapMode( xIPObj->GetMapUnit() ) ) );
