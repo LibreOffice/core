@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rubydialog.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:38:34 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 11:22:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -875,6 +875,8 @@ ModelessDialog RID_SVXDLG_RUBY
     Text[ hindi ] = "रूबी";
     Text[ slovak ] = "Ruby";
 };
+
+
 
 
 
