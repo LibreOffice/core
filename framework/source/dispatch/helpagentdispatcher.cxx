@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpagentdispatcher.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2001-07-02 13:27:02 $
+ *  last change: $Author: pb $ $Date: 2001-08-17 08:47:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,6 +309,9 @@ namespace framework
     //--------------------------------------------------------------------
     void HelpAgentDispatcher::closeAgent()
     {
+        // the hint has been ignored by the user (click the closer)
+        markURLIgnored(m_sCurrentURL);
+        // close the window
         closeAgentWindow();
     }
 
@@ -421,6 +424,9 @@ namespace framework
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/07/02 13:27:02  as
+ *  #79955# move to dispatch dir
+ *
  *  Revision 1.3  2001/06/11 10:27:57  as
  *  #85529# use new lock mechanism
  *
