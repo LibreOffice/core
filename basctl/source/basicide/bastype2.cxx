@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastype2.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 17:49:45 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 16:59:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -566,7 +566,7 @@ String BasicTreeListBox::GetRootEntryName( SfxObjectShell* pShell, LibraryLocati
     else if ( !( nMode & BROWSEMODE_MODULES ) && ( nMode & BROWSEMODE_DIALOGS ) )
         eType = LIBRARY_TYPE_DIALOG;
 
-    return BasicIDE::GetTitle( pShell, eLocation, SFX_TITLE_FILENAME, eType );
+    return BasicIDE::GetTitle( pShell, eLocation, SFX_TITLE_CAPTION, eType );
 }
 
 void BasicTreeListBox::GetRootEntryBitmaps( SfxObjectShell* pShell, Image& rImage, Image& rImageHC )
