@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtftn.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ama $ $Date: 2001-10-19 10:07:55 $
+ *  last change: $Author: fme $ $Date: 2001-10-22 12:59:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,9 @@
 #include "ndindex.hxx"
 
 using namespace ::com::sun::star;
+
+extern BYTE WhichFont( xub_StrLen nIdx, const String* pTxt,
+                       const SwScriptInfo* pSI );
 
 /*************************************************************************
  *                              _IsFtnNumFrm()
@@ -304,10 +307,18 @@ SwTwips SwTxtFrm::_GetFtnFrmHeight() const
             if ( !pRef->IsInFtnConnect() )
             {
                 SwSaveFtnHeight aSave( (SwFtnBossFrm*)pBoss, nHeight  );
+#ifdef VERTICAL_LAYOUT
                 nHeight = ((SwFtnContFrm*)pCont)->Grow( LONG_MAX PHEIGHT, sal_True );
+#else
+                nHeight = ((SwFtnContFrm*)pCont)->Grow( LONG_MAX, pHeight, sal_True );
+#endif
             }
             else
+#ifdef VERTICAL_LAYOUT
                 nHeight = ((SwFtnContFrm*)pCont)->Grow( LONG_MAX PHEIGHT, sal_True );
+#else
+                nHeight = ((SwFtnContFrm*)pCont)->Grow( LONG_MAX, pHeight, sal_True );
+#endif
 
             nHeight += nTmp;
             if( nHeight < 0 )
@@ -1275,19 +1286,7 @@ SwFtnSave::SwFtnSave( const SwTxtSizeInfo &rInf, const SwTxtFtn* pTxtFtn )
         const SwDoc *pDoc = rInf.GetTxtFrm()->GetNode()->GetDoc();
 
         // examine text and set script
-        if ( pBreakIt->xBreak.is() )
-        {
-            const XubString& rTxt = rFtn.GetViewNumStr( *pDoc );
-            USHORT nTxtScript = pBreakIt->xBreak->getScriptType( rTxt, 0 );
-
-            BYTE nScript = SW_LATIN;
-            switch ( nTxtScript ) {
-                case i18n::ScriptType::ASIAN : nScript = SW_CJK; break;
-                case i18n::ScriptType::COMPLEX : nScript = SW_CTL; break;
-            }
-
-            pFnt->SetActual( nScript );
-        }
+        pFnt->SetActual( WhichFont( 0, &rFtn.GetViewNumStr( *pDoc ), 0 ) );
 
         const SwEndNoteInfo* pInfo;
         if( rFtn.IsEndNote() )

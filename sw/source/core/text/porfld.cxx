@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfld.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-11 10:54:19 $
+ *  last change: $Author: fme $ $Date: 2001-10-22 12:59:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,28 +268,11 @@ SwFldSlot::~SwFldSlot()
     }
 }
 
-#ifdef DEBUG
-USHORT lcl_Script( const xub_Unicode aChar )
-{
-    USHORT nRet = i18n::ScriptType::WEAK;
-    if( 'A' <= aChar && aChar <= 'Z' )
-        nRet = i18n::ScriptType::LATIN;
-    else if( 'a' <= aChar && aChar <= 'z' )
-        nRet = i18n::ScriptType::ASIAN;
-    else if( '0' <= aChar && aChar <= '9' )
-        nRet = i18n::ScriptType::COMPLEX;
-    return nRet;
-}
-#endif
-
 BYTE SwFldPortion::ScriptChange( const SwTxtSizeInfo &rInf, xub_StrLen& rFull )
 {
     BYTE nRet = 0;
     const String& rTxt = rInf.GetTxt();
     rFull += rInf.GetIdx();
-#ifdef DEBUG
-    static BOOL bTestCJK = FALSE;
-#endif
     if( rFull > rTxt.Len() )
         rFull = rTxt.Len();
     if( rFull && pBreakIt->xBreak.is() )
@@ -297,24 +280,6 @@ BYTE SwFldPortion::ScriptChange( const SwTxtSizeInfo &rInf, xub_StrLen& rFull )
         BYTE nActual = pFnt ? pFnt->GetActual() : rInf.GetFont()->GetActual();
         xub_StrLen nChg = rInf.GetIdx();
         USHORT nScript;
-#ifdef DEBUG
-        if( bTestCJK )
-        {
-            while( ++nChg < rFull )
-            {
-                nScript = lcl_Script( rTxt.GetChar( nChg ) );
-                BYTE nScr = nActual;
-                switch ( nScript ) {
-                    case i18n::ScriptType::LATIN : nScr = SW_LATIN; break;
-                    case i18n::ScriptType::ASIAN : nScr = SW_CJK; break;
-                    case i18n::ScriptType::COMPLEX : nScr = SW_CTL; break;
-                }
-                if( nActual != nScr )
-                    break;
-            }
-        }
-        else
-#endif
         {
             nScript = i18n::ScriptType::LATIN;
             if( nActual )
@@ -325,9 +290,6 @@ BYTE SwFldPortion::ScriptChange( const SwTxtSizeInfo &rInf, xub_StrLen& rFull )
         if( rFull > nChg )
         {
             nRet = nActual;
-#ifdef DEBUG
-            if( !bTestCJK )
-#endif
             nScript = pBreakIt->xBreak->getScriptType( rTxt, nChg );
             if( i18n::ScriptType::ASIAN == nScript )
                 nRet += SW_CJK;
@@ -347,24 +309,6 @@ void SwFldPortion::CheckScript( const SwTxtSizeInfo &rInf )
     {
         BYTE nActual = pFnt ? pFnt->GetActual() : rInf.GetFont()->GetActual();
         USHORT nScript;
-#ifdef DEBUG
-        static BOOL bTestCJK = FALSE;
-        if( bTestCJK )
-        {
-            nScript = lcl_Script( aTxt.GetChar(0) );
-            xub_StrLen nChg = 0;
-            USHORT nCnt = 0;
-            if( i18n::ScriptType::WEAK == nScript )
-            {
-                while( ++nChg < aTxt.Len() &&
-                    i18n::ScriptType::WEAK == lcl_Script( aTxt.GetChar(nChg) ) )
-                    ;
-                if( nChg < aTxt.Len() )
-                    nScript = lcl_Script( aTxt.GetChar( nChg ) );
-            }
-        }
-        else
-#endif
         {
             nScript = pBreakIt->xBreak->getScriptType( aTxt, 0 );
             xub_StrLen nChg = 0;
@@ -1288,5 +1232,3 @@ KSHORT SwCombinedPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
         return 0;   // the combined portion doesn't fit.
     return SwFldPortion::GetViewWidth( rInf );
 }
-
-

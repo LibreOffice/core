@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itratr.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ama $ $Date: 2001-09-10 09:55:04 $
+ *  last change: $Author: fme $ $Date: 2001-10-22 12:59:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,6 +176,9 @@
 
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star;
+
+extern BYTE WhichFont( xub_StrLen nIdx, const String* pTxt,
+                       const SwScriptInfo* pSI );
 
 /*************************************************************************
  *                      SwAttrIter::Chg()
@@ -412,13 +415,9 @@ sal_Bool SwAttrIter::Seek( const xub_StrLen nNewPos )
         }
         SeekFwd( nNewPos );
     }
-    USHORT nScript = pScriptInfo->ScriptType( nNewPos );
-    BYTE nScr = SW_LATIN;
-    if( nScript == i18n::ScriptType::ASIAN )
-        nScr = SW_CJK;
-    else if( nScript == i18n::ScriptType::COMPLEX )
-        nScr = SW_CTL;
-    pFnt->SetActual( nScr );
+
+    pFnt->SetActual( WhichFont( nNewPos, 0, pScriptInfo ) );
+
     if( pRedln )
         nChgCnt += pRedln->Seek( *pFnt, nNewPos, nPos );
     nPos = nNewPos;

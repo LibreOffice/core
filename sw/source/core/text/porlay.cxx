@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlay.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fme $ $Date: 2001-08-30 11:47:34 $
+ *  last change: $Author: fme $ $Date: 2001-10-22 12:59:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,8 +93,12 @@
 #ifndef _DOC_HXX
 #include <doc.hxx>
 #endif
+#ifndef _SVX_SCRIPTTYPEITEM_HXX
+#include <svx/scripttypeitem.hxx>
+#endif
 
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::i18n::ScriptType;
 
 /*************************************************************************
  *                 SwLineLayout::~SwLineLayout()
@@ -467,6 +471,35 @@ SwCharRange &SwCharRange::operator+=(const SwCharRange &rRange)
 }
 
 /*************************************************************************
+ *                      WhichFont()
+ *
+ * Converts i18n Script Type (LATIN, ASIAN, COMPLEX, WEAK) to
+ * Sw Script Types (SW_LATIN, SW_CJK, SW_CTL), used to identify the font
+ *************************************************************************/
+
+BYTE WhichFont( xub_StrLen nIdx, const String* pTxt, const SwScriptInfo* pSI )
+{
+    ASSERT( pTxt || pSI,"How should I determine the script type?" );
+    USHORT nScript;
+
+    // First we try to use our SwScriptInfo
+    if ( pSI )
+        nScript = pSI->ScriptType( nIdx );
+    else
+        // Ok, we have to ask the break iterator
+        nScript = pBreakIt->GetRealScriptOfText( *pTxt, nIdx );
+
+    switch ( nScript ) {
+        case i18n::ScriptType::LATIN : return SW_LATIN;
+        case i18n::ScriptType::ASIAN : return SW_CJK;
+        case i18n::ScriptType::COMPLEX : return SW_CTL;
+    }
+
+    ASSERT( sal_False, "Somebody tells lies about the script type!" );
+    return SW_LATIN;
+}
+
+/*************************************************************************
  *                      SwScriptInfo::InitScriptInfo()
  *
  * searches for script changes in rTxt and stores them
@@ -533,14 +566,17 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode )
     // WEAK can only occur at the beginning of a paragraph
     // the first character not in the weak group determines the type of the
     // weak characters
-    if( i18n::ScriptType::WEAK == nScript )
+    if( WEAK == nScript )
     {
-        nChg = (xub_StrLen)pBreakIt->xBreak->endOfScript( rTxt, nChg, nScript );
-        if( nChg < rTxt.Len() )
-            nScript = pBreakIt->xBreak->getScriptType( rTxt, nChg );
+        xub_StrLen nWeakEnd =
+                (xub_StrLen)pBreakIt->xBreak->endOfScript( rTxt, nChg, nScript );
+        if( nWeakEnd < rTxt.Len() )
+            nScript = pBreakIt->xBreak->getScriptType( rTxt, nWeakEnd );
         else
-            nScript = i18n::ScriptType::LATIN;
+            // default to application language
+            nScript = GetScriptTypeOfLanguage( GetAppLanguage() );
     }
+
     USHORT nLastChg;
     if( nCntComp )
     {
@@ -560,9 +596,19 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode )
     aCompLen.Remove( nCntComp, nCompRemove );
     aCompType.Remove( nCntComp, nCompRemove );
 
+    // nSkipScript can differ from nScript: Starting a line with a weak
+    // character, the script defaults to the application language. A call of
+    // endOfScript() with the default language would not be correct.
+    const USHORT nSkipScript = pBreakIt->xBreak->getScriptType( rTxt, nChg );
+    nChg = (xub_StrLen)pBreakIt->xBreak->endOfScript( rTxt, nChg, nSkipScript );
+
     do
     {
-        nChg = (xub_StrLen)pBreakIt->xBreak->endOfScript( rTxt, nChg, nScript );
+        ASSERT( i18n::ScriptType::WEAK != nScript,
+                "Inserting WEAK into SwScriptInfo structure" );
+        if ( nChg > rTxt.Len() )
+            nChg = rTxt.Len();
+
         aScriptChg.Insert( nChg, nCnt );
         aScriptType.Insert( nScript, nCnt++ );
 
@@ -639,11 +685,14 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode )
             }
         }
 
-        if( nChg < rTxt.Len() )
-            nScript = pBreakIt->xBreak->getScriptType( rTxt, nChg );
-        else
+        if ( nChg >= rTxt.Len() )
             break;
+
+        const USHORT nOldScript = nScript;
+        nScript = pBreakIt->xBreak->getScriptType( rTxt, nChg );
         nLastChg = nChg;
+        nChg = (xub_StrLen)pBreakIt->xBreak->endOfScript( rTxt, nChg, nOldScript );
+
     } while( TRUE );
 
     // STRING_LEN means the data structure is up to date
@@ -687,7 +736,8 @@ USHORT SwScriptInfo::ScriptType( const xub_StrLen nPos ) const
             return GetScriptType( nX );
     }
 
-    return i18n::ScriptType::LATIN;
+    // the default is the application language script
+    return GetScriptTypeOfLanguage( GetAppLanguage() );
 }
 
 /*************************************************************************
@@ -959,4 +1009,3 @@ SwTwips SwTxtFrm::HangingMargin() const
         ((SwParaPortion*)GetPara())->SetMargin( sal_False );
     return nRet;
 }
-

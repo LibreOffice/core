@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawfont.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-02 13:47:08 $
+ *  last change: $Author: fme $ $Date: 2001-10-22 13:03:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,31 +150,36 @@ inline void SwScriptInfo::SetInvalidity( const xub_StrLen nPos )
 inline USHORT SwScriptInfo::CountScriptChg() const { return aScriptChg.Count(); }
 inline xub_StrLen SwScriptInfo::GetScriptChg( const USHORT nCnt ) const
 {
+    ASSERT( nCnt < aScriptChg.Count(),"No ScriptChange today!");
     return aScriptChg[ nCnt ];
 }
 inline USHORT SwScriptInfo::GetScriptType( const xub_StrLen nCnt ) const
 {
+    ASSERT( nCnt < aScriptChg.Count(),"No ScriptType today!");
     return aScriptType[ nCnt ];
 }
 inline USHORT SwScriptInfo::CountCompChg() const { return aCompChg.Count(); };
 inline xub_StrLen SwScriptInfo::GetCompStart( const USHORT nCnt ) const
 {
+    ASSERT( nCnt < aCompChg.Count(),"No CompressionStart today!");
     return aCompChg[ nCnt ];
 }
 inline xub_StrLen SwScriptInfo::GetCompLen( const USHORT nCnt ) const
 {
+    ASSERT( nCnt < aCompChg.Count(),"No CompressionLen today!");
     return aCompLen[ nCnt ];
 }
 
 inline USHORT SwScriptInfo::GetCompType( const USHORT nCnt ) const
 {
+    ASSERT( nCnt < aCompChg.Count(),"No CompressionType today!");
     return aCompType[ nCnt ];
 }
 
 /*************************************************************************
  *                      class SwDrawTextInfo
  *
- * encapsultes information for drawing text
+ * encapsulates information for drawing text
  *************************************************************************/
 
 class SwDrawTextInfo

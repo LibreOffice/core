@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlnitr.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ama $ $Date: 2001-09-24 09:06:56 $
+ *  last change: $Author: fme $ $Date: 2001-10-22 12:59:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,9 @@
 
 using namespace ::com::sun::star;
 
+extern BYTE WhichFont( xub_StrLen nIdx, const String* pTxt,
+                       const SwScriptInfo* pSI );
+
 /*************************************************************************
  *                      SwAttrIter::CtorInit()
  *************************************************************************/
@@ -207,24 +210,15 @@ void SwAttrIter::CtorInit( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf )
 
     if ( pBreakIt->xBreak.is() )
     {
-        USHORT nScript = pScriptInfo->GetScriptType( 0 );
+        pFnt->SetActual( WhichFont( 0, 0, pScriptInfo ) );
+
         xub_StrLen nChg = 0;
         USHORT nCnt = 0;
-
-        // set font to script type of first character
-        switch ( nScript ) {
-            case i18n::ScriptType::ASIAN :
-                pFnt->SetActual( SW_CJK ); break;
-            case i18n::ScriptType::COMPLEX :
-                pFnt->SetActual( SW_CTL ); break;
-            default:
-                pFnt->SetActual( SW_LATIN ); break;
-        }
 
         do
         {
             nChg = pScriptInfo->GetScriptChg( nCnt );
-            nScript = pScriptInfo->GetScriptType( nCnt++ );
+            USHORT nScript = pScriptInfo->GetScriptType( nCnt++ );
             BYTE nTmp = 4;
             switch ( nScript ) {
                 case i18n::ScriptType::ASIAN :

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtdrop.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-19 08:38:42 $
+ *  last change: $Author: fme $ $Date: 2001-10-22 12:59:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,7 +261,8 @@ MSHORT SwTxtNode::GetDropLen( MSHORT nWishLen ) const
     {
         // find first word
         const SwAttrSet& rAttrSet = GetSwAttrSet();
-        const USHORT nTxtScript = pBreakIt->xBreak->getScriptType( GetTxt(),0 );
+        const USHORT nTxtScript = pBreakIt->GetRealScriptOfText( GetTxt(), 0 );
+
         LanguageType eLanguage;
 
         switch ( nTxtScript )

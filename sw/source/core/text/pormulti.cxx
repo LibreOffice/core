@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-02 13:48:52 $
+ *  last change: $Author: fme $ $Date: 2001-10-22 12:59:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,8 @@
 
 using namespace ::com::sun::star;
 extern sal_Bool IsUnderlineBreak( const SwLinePortion& rPor, const SwFont& rFnt );
+extern BYTE WhichFont( xub_StrLen nIdx, const String* pTxt,
+                       const SwScriptInfo* pSI );
 
 /*-----------------10.10.00 15:23-------------------
  *  class SwMultiPortion
@@ -342,24 +344,14 @@ SwDoubleLinePortion::SwDoubleLinePortion( const SwMultiCreator& rCreate,
     if( pBracket->cPre > 255 )
     {
         String aTxt( pBracket->cPre );
-        USHORT nScript = pBreakIt->xBreak->getScriptType( aTxt, 0 );
-        switch ( nScript ) {
-            case i18n::ScriptType::LATIN : nTmp = SW_LATIN; break;
-            case i18n::ScriptType::ASIAN : nTmp = SW_CJK; break;
-            case i18n::ScriptType::COMPLEX : nTmp = SW_CTL; break;
-        }
+        nTmp = WhichFont( 0, &aTxt, 0 );
     }
     pBracket->nPreScript = nTmp;
     nTmp = SW_SCRIPTS;
     if( pBracket->cPost > 255 )
     {
         String aTxt( pBracket->cPost );
-        USHORT nScript = pBreakIt->xBreak->getScriptType( aTxt, 0 );
-        switch ( nScript ) {
-            case i18n::ScriptType::LATIN : nTmp = SW_LATIN; break;
-            case i18n::ScriptType::ASIAN : nTmp = SW_CJK; break;
-            case i18n::ScriptType::COMPLEX : nTmp = SW_CTL; break;
-        }
+        nTmp = WhichFont( 0, &aTxt, 0 );
     }
     pBracket->nPostScript = nTmp;
 
