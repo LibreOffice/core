@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attributes.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2001-11-05 16:50:18 $
+ *  last change: $Author: hjs $ $Date: 2001-11-08 10:55:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ namespace configmgr
             isDefault,          isToDefault     = isDefault,
             isMerged,           isModification  = isMerged,
             isReplaced,         isReplacement   = isReplaced,
-            isAdded,            isAddition      = isAdded,
+            isAdded,            isAddition      = isAdded
         };
         inline bool existsInDefault(State eState)   { return eState <= isReplaced;}
         inline bool isReplacedForUser(State eState) { return eState >= isReplaced;}
