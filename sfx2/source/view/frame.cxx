@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-23 12:23:23 $
+ *  last change: $Author: mba $ $Date: 2000-10-25 13:26:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,6 +329,7 @@ sal_Bool SfxFrame::DoClose()
         SfxViewShell *pViewSh;
         if ( pImp->pCurrentViewFrame && 0 != ( pViewSh = pImp->pCurrentViewFrame->GetViewShell() ) )
         {
+            pViewSh->DisconnectClients_Impl( NULL );
             pWin = pViewSh->GetWindow();
             if ( pWin )
             {
@@ -345,16 +346,16 @@ sal_Bool SfxFrame::DoClose()
 
         // Bei internen Tasks m"ussen Controller und Tools abger"aumt werden
         if ( pImp->pWorkWin )
-        {
             pImp->pWorkWin->DeleteControllers_Impl();
-            DELETEZ( pImp->pWorkWin );
-        }
 
         if ( pImp->pCurrentViewFrame )
             bRet = pImp->pCurrentViewFrame->Close();
 
         if ( pImp->bOwnsBindings )
-            delete pBindings;
+        {
+            DELETEZ( pImp->pWorkWin );
+            DELETEZ( pBindings );
+        }
 
         // now close frame; it will be deleted if this call is successful, so don't use any members after that!
         Reference < XFrame > xFrame( pImp-> xFrame );
@@ -2142,6 +2143,9 @@ sal_Bool SfxFrame::IsPlugin_Impl() const
 
 void SfxFrame::Resize()
 {
+    if ( IsClosing_Impl() )
+        return;
+
     if ( OwnsBindings_Impl() )
     {
         SfxWorkWindow *pWork = GetWorkWindow_Impl();
