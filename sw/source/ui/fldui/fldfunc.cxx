@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldfunc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-05 18:41:36 $
+ *  last change: $Author: jp $ $Date: 2001-07-11 17:08:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,7 +164,7 @@ SwFldFuncPage::SwFldFuncPage(Window* pParent, const SfxItemSet& rCoreSet ) :
     Beschreibung:
  --------------------------------------------------------------------*/
 
-__EXPORT SwFldFuncPage::~SwFldFuncPage()
+SwFldFuncPage::~SwFldFuncPage()
 {
 }
 
@@ -172,7 +172,7 @@ __EXPORT SwFldFuncPage::~SwFldFuncPage()
     Beschreibung:
  --------------------------------------------------------------------*/
 
-void __EXPORT SwFldFuncPage::Reset(const SfxItemSet& rSet)
+void SwFldFuncPage::Reset(const SfxItemSet& rSet)
 {
     SavePos(&aTypeLB);
     Init(); // Allgemeine initialisierung
@@ -365,16 +365,18 @@ IMPL_LINK( SwFldFuncPage, TypeHdl, ListBox *, pBox )
 
         if (IsFldEdit())
         {
-            aNameED.SetText(GetCurField()->GetPar1());
+            if( !aNameED.HasDroppedData() )
+                aNameED.SetText(GetCurField()->GetPar1());
             aValueED.SetText(GetCurField()->GetPar2());
         }
         else
         {
-            aNameED.SetText(aEmptyStr);
+            if( !aNameED.HasDroppedData() )
+                aNameED.SetText(aEmptyStr);
             aValueED.SetText(aEmptyStr);
         }
 
-        if (aNameFT.GetText() != sOldNameFT)
+        if( aNameFT.GetText() != sOldNameFT )
             aNameFT.SetText(sOldNameFT);
         if (aValueFT.GetText() != sOldValueFT)
             aValueFT.SetText(sOldValueFT);
@@ -404,7 +406,7 @@ IMPL_LINK( SwFldFuncPage, TypeHdl, ListBox *, pBox )
                 aNameFT.SetText(SW_RESSTR(STR_COND));
                 aNameED.SetDropEnable(TRUE);
                 aValueFT.SetText(SW_RESSTR(STR_INSTEXT));
-                if (!IsFldEdit())
+                if (!IsFldEdit() )
                     aValueED.SetText(::GetActiveView()->GetWrtShell().GetSelTxt());
                 bName = bValue = TRUE;
                 break;
@@ -414,8 +416,10 @@ IMPL_LINK( SwFldFuncPage, TypeHdl, ListBox *, pBox )
                 aNameED.SetDropEnable(TRUE);
                 if (IsFldEdit())
                 {
-                    aCond1ED.SetText(GetCurField()->GetPar2().GetToken(0, '|'));
-                    aCond2ED.SetText(GetCurField()->GetPar2().GetToken(1, '|'));
+                    if( !aCond1ED.HasDroppedData() )
+                        aCond1ED.SetText(GetCurField()->GetPar2().GetToken(0, '|'));
+                    if( !aCond2ED.HasDroppedData() )
+                        aCond2ED.SetText(GetCurField()->GetPar2().GetToken(1, '|'));
                 }
 
                 bName = bValue = TRUE;
@@ -455,6 +459,9 @@ IMPL_LINK( SwFldFuncPage, TypeHdl, ListBox *, pBox )
             default:
                 break;
         }
+        aNameED.ResetDroppedDataFlag();
+        aCond1ED.ResetDroppedDataFlag();
+        aCond2ED.ResetDroppedDataFlag();
 
         if (bShowSelection)
         {
@@ -583,7 +590,7 @@ IMPL_LINK( SwFldFuncPage, MacroHdl, Button *, pBtn )
     Beschreibung:
  --------------------------------------------------------------------*/
 
-BOOL __EXPORT SwFldFuncPage::FillItemSet(SfxItemSet& rSet)
+BOOL SwFldFuncPage::FillItemSet(SfxItemSet& rSet)
 {
     BOOL bPage = FALSE;
     USHORT nTypeId = (USHORT)(ULONG)aTypeLB.GetEntryData(GetTypeSel());
@@ -668,7 +675,7 @@ String SwFldFuncPage::TurnMacroString(const String &rMacro)
     Beschreibung:
  --------------------------------------------------------------------*/
 
-SfxTabPage* __EXPORT SwFldFuncPage::Create(     Window* pParent,
+SfxTabPage* SwFldFuncPage::Create(  Window* pParent,
                         const SfxItemSet& rAttrSet )
 {
     return ( new SwFldFuncPage( pParent, rAttrSet ) );
@@ -721,6 +728,9 @@ IMPL_LINK( SwFldFuncPage, ModifyHdl, Edit *, EMPTYARG )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2001/07/05 18:41:36  jp
+    changes for TF_DATA
+
     Revision 1.2  2001/01/18 14:01:38  jp
     new Field/-Type: combined character
 

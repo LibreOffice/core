@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldvar.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-05 18:41:36 $
+ *  last change: $Author: jp $ $Date: 2001-07-11 17:08:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,7 +171,7 @@ SwFldVarPage::SwFldVarPage(Window* pParent, const SfxItemSet& rCoreSet ) :
     Beschreibung:
  --------------------------------------------------------------------*/
 
-__EXPORT SwFldVarPage::~SwFldVarPage()
+SwFldVarPage::~SwFldVarPage()
 {
 }
 
@@ -179,7 +179,7 @@ __EXPORT SwFldVarPage::~SwFldVarPage()
     Beschreibung:
  --------------------------------------------------------------------*/
 
-void __EXPORT SwFldVarPage::Reset(const SfxItemSet& rSet)
+void SwFldVarPage::Reset(const SfxItemSet& rSet)
 {
     SavePos(&aTypeLB);
 
@@ -291,11 +291,13 @@ IMPL_LINK( SwFldVarPage, TypeHdl, ListBox *, pBox )
         if (nOld != LISTBOX_ENTRY_NOTFOUND)
         {
             aNameED.SetText(aEmptyStr);
-            aValueED.SetText(aEmptyStr);
+            if( !aValueED.HasDroppedData() )
+                aValueED.SetText(aEmptyStr);
         }
 
         aValueED.SetDropEnable(FALSE);
         UpdateSubType();    // Auswahl-Listboxen initialisieren
+        aValueED.ResetDroppedDataFlag();
     }
 
     bInit = FALSE;
@@ -320,7 +322,8 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
         if (nTypeId != TYP_FORMELFLD)
             aNameED.SetText(GetFldMgr().GetCurFldPar1());
 
-        aValueED.SetText(GetFldMgr().GetCurFldPar2());
+        if( !aValueED.HasDroppedData() )
+            aValueED.SetText(GetFldMgr().GetCurFldPar2());
     }
 
     if (aNameFT.GetText() != sOldNameFT)
@@ -356,15 +359,16 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
 
                         if (pType->GetType() == UF_STRING)
                         {
-                            aValueED.SetText(pType->GetContent());
+                            if( !aValueED.HasDroppedData() )
+                                aValueED.SetText(pType->GetContent());
                             aNumFormatLB.SelectEntryPos(0);
                         }
-                        else
+                        else if( !aValueED.HasDroppedData() )
                             aValueED.SetText(pType->GetContent());
 //                          aValueED.SetText(pType->GetContent(aNumFormatLB.GetFormat()));
                     }
                 }
-                else
+                else if( !aValueED.HasDroppedData() )
                     aValueED.SetText(pType->GetContent());
             }
             else
@@ -372,7 +376,8 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
                 if (pBox)   // Nur bei Interaktion mit Maus
                 {
                     aNameED.SetText(aEmptyStr);
-                    aValueED.SetText(aEmptyStr);
+                     if( !aValueED.HasDroppedData() )
+                        aValueED.SetText(aEmptyStr);
                 }
             }
             bValue = bName = bNumFmt = bInvisible = TRUE;
@@ -421,7 +426,8 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
                 // Muss aber verwendet werden, da sonst bei GetPar2 nur der vom
                 // Kalkulator errechnete Wert angezeigt werden wuerde
                 // (statt test2 = test + 1)
-                aValueED.SetText(((SwSetExpField*)GetCurField())->GetFormula());
+                 if( !aValueED.HasDroppedData() )
+                    aValueED.SetText(((SwSetExpField*)GetCurField())->GetFormula());
             }
             aValueED.SetDropEnable(TRUE);
             break;
@@ -502,7 +508,7 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
                             aNumFormatLB.SelectEntryPos(0);
                         }
                     }
-                    if (IsFldEdit() && (!pBox || bInit))
+                    if (IsFldEdit() && (!pBox || bInit) )
                         aValueED.SetText(((SwSetExpField*)GetCurField())->GetPromptText());
                 }
                 else    // USERFLD
@@ -602,6 +608,7 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
             aValueED.SetText(aEmptyStr);
             break;
     }
+    aValueED.ResetDroppedDataFlag();
 
     aNumFormatLB.Show(bNumFmt);
     aFormatLB.Show(!bNumFmt);
@@ -1190,7 +1197,7 @@ IMPL_LINK( SwFldVarPage, SeparatorHdl, Edit *, pED )
     Beschreibung:
  --------------------------------------------------------------------*/
 
-BOOL __EXPORT SwFldVarPage::FillItemSet(SfxItemSet& rSet)
+BOOL SwFldVarPage::FillItemSet(SfxItemSet& rSet)
 {
     USHORT nTypeId = (USHORT)(ULONG)aTypeLB.GetEntryData(GetTypeSel());
 
@@ -1322,7 +1329,7 @@ BOOL __EXPORT SwFldVarPage::FillItemSet(SfxItemSet& rSet)
     Beschreibung:
  --------------------------------------------------------------------*/
 
-SfxTabPage* __EXPORT SwFldVarPage::Create(  Window* pParent,
+SfxTabPage* SwFldVarPage::Create(   Window* pParent,
                         const SfxItemSet& rAttrSet )
 {
     return ( new SwFldVarPage( pParent, rAttrSet ) );
@@ -1397,6 +1404,9 @@ void SwFldVarPage::FillUserData()
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2001/07/05 18:41:36  jp
+    changes for TF_DATA
+
     Revision 1.3  2001/02/13 20:30:37  jp
     Bug #83829#: validate fieldname
 
