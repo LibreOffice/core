@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoedge.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: aw $ $Date: 2002-11-20 14:52:25 $
+ *  last change: $Author: vg $ $Date: 2003-05-16 13:54:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -318,6 +318,10 @@ SdrEdgeObj::SdrEdgeObj():
     bEdgeTrackDirty=FALSE;
     nNotifyingCount=0;
     pEdgeTrack=new XPolygon;
+
+    // #109007#
+    // Default is to allow default connects
+    mbSuppressDefaultConnect = (FASTBOOL)sal_False;
 }
 
 SdrEdgeObj::~SdrEdgeObj()
@@ -2274,10 +2278,18 @@ FASTBOOL SdrEdgeObj::ImpFindConnector(const Point& rPt, const SdrPageView& rPV, 
                             aConPos=aPt.GetAbsolutePos(*pObj);
                             bOk=TRUE;
                         } else i+=3;
-                    } else if (bCenter && !bUserFnd && !bEdge) { // Edges nicht!
-                        nConNum=0;
-                        aConPos=aObjBound.Center();
-                        bOk=TRUE;
+                    }
+                    else if (bCenter && !bUserFnd && !bEdge)
+                    {
+                        // #109007#
+                        // Suppress default connect at object center
+                        if(!pThis || !pThis->GetSuppressDefaultConnect())
+                        {
+                            // Edges nicht!
+                            nConNum=0;
+                            aConPos=aObjBound.Center();
+                            bOk=TRUE;
+                        }
                     }
                     if (bOk && aMouseRect.IsInside(aConPos)) {
                         if (bUser) bUserFnd=TRUE;
@@ -2296,10 +2308,16 @@ FASTBOOL SdrEdgeObj::ImpFindConnector(const Point& rPt, const SdrPageView& rPV, 
                 }
                 // Falls kein Konnektor getroffen wird nochmal
                 // HitTest versucht fuer BestConnector (=bCenter)
-                if (!bFnd && !bEdge && pObj->IsHit(rPt,nBoundHitTol,&rVisLayer)) {
-                    bFnd=TRUE;
-                    aTestCon.pObj=pObj;
-                    aTestCon.bBestConn=TRUE;
+                if (!bFnd && !bEdge && pObj->IsHit(rPt,nBoundHitTol,&rVisLayer))
+                {
+                    // #109007#
+                    // Suppress default connect at object inside bound
+                    if(!pThis || !pThis->GetSuppressDefaultConnect())
+                    {
+                        bFnd=TRUE;
+                        aTestCon.pObj=pObj;
+                        aTestCon.bBestConn=TRUE;
+                    }
                 }
                 if (bFnd) {
                     Rectangle aMouseRect2(rPt,rPt);
