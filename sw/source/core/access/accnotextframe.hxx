@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accnotextframe.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2002-08-07 13:32:17 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:12:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,15 +69,15 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEIMAGE_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessibleImage.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEIMAGE_HPP_
+#include <com/sun/star/accessibility/XAccessibleImage.hpp>
 #endif
 
 class SwFlyFrm;
 class SwNoTxtNode;
 
 class SwAccessibleNoTextFrame : public  SwAccessibleFrameBase,
-                                public ::drafts::com::sun::star::accessibility::XAccessibleImage
+                                public ::com::sun::star::accessibility::XAccessibleImage
 {
     SwDepend        aDepend;
     ::rtl::OUString sDesc;
