@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:06:45 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 11:10:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1885,7 +1885,8 @@ void XMLTextFieldExport::ExportFieldHelper(
             aDateTime.Hours = 0;
             OUStringBuffer aBuffer;
             GetExport().GetMM100UnitConverter().convertDateTime(aBuffer,
-                                                                aDateTime);
+                                                                aDateTime,
+                                                                sal_True);
             SvXMLElementExport aDateElem( GetExport(), XML_NAMESPACE_DC,
                                               XML_DATE, sal_True,
                                               sal_False );
