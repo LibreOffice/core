@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 11:02:13 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 14:20:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,12 +157,6 @@
 #include "anminfo.hxx"
 #ifndef _SD_SLIDESHOW_HXX
 #include "slideshow.hxx"
-#endif
-#ifndef SD_PREVIEW_WINDOW_HXX
-#include "PreviewWindow.hxx"
-#endif
-#ifndef SD_PREVIEW_CHILD_WINDOW_HXX
-#include "PreviewChildWindow.hxx"
 #endif
 
 #ifndef _SDR_CONTACT_VIEWOBJECTCONTACT_HXX
