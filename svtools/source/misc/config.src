@@ -2,9 +2,9 @@
  *
  *  $RCSfile: config.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-08 21:36:52 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 20:06:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ String STR_WARNING_ITEM
     TEXT[ chinese_simplified ] = "ÌõÄ¿°æ±¾ÎŞĞ§";
     TEXT[ russian ] = "Íåïğàâèëüíàÿ âåğñèÿ ıëåìåíòà!";
     TEXT[ polish ] = "Wersja elementu jest nieprawid³owa!";
-    TEXT[ japanese ] = "“ü—Í€–Ú‚Í³‚µ‚­‚È‚¢ÊŞ°¼Ş®İ‚Å‚·!";
+    TEXT[ japanese ] = "ÊŞ°¼Ş®İ‚ª³‚µ‚­‚ ‚è‚Ü‚¹‚ñB";
     TEXT[ chinese_traditional ] = "±ø¥Øª©¥»µL®Ä";
     TEXT[ arabic ] = "ÇáÅÏÎÇá áå ÅÕÏÇÑ ÎÇØÆ!";
     TEXT[ dutch ] = "Verkeerde versie van item!";
@@ -90,4 +90,5 @@ String STR_WARNING_ITEM
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "¡La entrada contiene una versión incorrecta!";
 };
+
 
