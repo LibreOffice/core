@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbgoutsw.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-17 16:09:41 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 15:29:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,8 +73,12 @@ class SfxItemSet;
 class SwPosition;
 class SwPaM;
 class SwNodeNum;
+class SwNodes;
 
 #define DBG_OUT_HERE printf("%s(%d):", __FILE__, __LINE__)
+#define DBG_OUT_HERE_FN printf("%s(%d) %s:", __FILE__, __LINE__, __FUNCTION__)
+#define DBG_OUT_HERE_LN printf("%s(%d)\n", __FILE__, __LINE__)
+#define DBG_OUT_HERE_FN_LN printf("%s(%d) %s\n", __FILE__, __LINE__, __FUNCTION__)
 #define DBG_OUT(x) printf("%s\n", dbg_out(x))
 #define DBG_OUT_LN(x) printf("%s(%d): %s\n", __FILE__, __LINE__, dbg_out(x))
 
