@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cp $ $Date: 2000-11-03 17:08:15 $
+ *  last change: $Author: cd $ $Date: 2000-11-10 09:17:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1785,7 +1785,8 @@ long SalFrameData::HandleKeyEvent( XKeyEvent *pEvent )
     pPrintable[0] = 0;
 
     // singlebyte code composed by input method, the new default
-    if (mpInputContext != NULL && mpInputContext->UseContext()) {
+    if (mpInputContext != NULL && mpInputContext->UseContext())
+    {
         Status nStatus;
         nKeySym = pDisplay_->GetKeySym( pEvent, pPrintable, &nLen,
                 &nStatus, mpInputContext->GetContext() );
@@ -1864,7 +1865,11 @@ long SalFrameData::HandleKeyEvent( XKeyEvent *pEvent )
 
     rtl_TextEncoding nEncoding = gsl_getSystemTextEncoding();
     sal_Unicode *pBuffer;
+    sal_Unicode *pString;
+    sal_Size     nBufferSize = nLen * 2;
     sal_Size     nSize;
+    pBuffer = (sal_Unicode*) malloc( nBufferSize + 2 );
+    pBuffer[ 0 ] = 0;
     if ( nEncoding != RTL_TEXTENCODING_UNICODE )
     {
         // create text converter
@@ -1873,12 +1878,9 @@ long SalFrameData::HandleKeyEvent( XKeyEvent *pEvent )
         rtl_TextToUnicodeContext aContext =
                  rtl_createTextToUnicodeContext( aConverter );
 
-        sal_Size    nBufferSize = nLen * 2;
         sal_uInt32  nConversionInfo;
         sal_Size    nConvertedChars;
 
-        pBuffer = (sal_Unicode*) alloca( nBufferSize + 2 );
-        pBuffer[ 0 ] = 0;
 
         // convert to single byte text stream
         nSize = rtl_convertTextToUnicode(
@@ -1892,13 +1894,14 @@ long SalFrameData::HandleKeyEvent( XKeyEvent *pEvent )
         // destroy converter
         rtl_destroyTextToUnicodeContext( aConverter, aContext );
         rtl_destroyTextToUnicodeConverter( aConverter );
+
+        pString = pBuffer;
     }
     else
     {
-        pBuffer = (sal_Unicode*)pPrintable;
+        pString = (sal_Unicode*)pPrintable;
           nSize = nLen;
     }
-
     // XXX it shouldn't be possible to create a keyrelease event with
     // more than a single character in the event, but check it anyway
     // as well it shouldn't be possible to generate more than a single
@@ -1908,14 +1911,14 @@ long SalFrameData::HandleKeyEvent( XKeyEvent *pEvent )
         && mpInputContext->UseContext()
         && KeyRelease != pEvent->type )
     {
-        mpInputContext->CommitStringCallback( pBuffer, nSize );
+        mpInputContext->CommitStringCallback( pString, nSize );
     }
     else
     {
         aKeyEvt.mnCode     = nKeyCode | nModCode;
         aKeyEvt.mnRepeat   = 0;
         aKeyEvt.mnTime     = pEvent->time;
-        aKeyEvt.mnCharCode = pBuffer[ 0 ];
+        aKeyEvt.mnCharCode = pString[ 0 ];
 
         if( KeyRelease == pEvent->type )
         {
@@ -1939,6 +1942,7 @@ long SalFrameData::HandleKeyEvent( XKeyEvent *pEvent )
         }
     }
 
+    free (pBuffer);
     return True;
 }
 
