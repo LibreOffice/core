@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basecontrol.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-27 11:28:18 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 10:43:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -380,7 +380,7 @@ namespace unocontrols{
 //____________________________________________________________________________________________________________
 
 #define TRGB_COLORDATA(TRANSPARENCE,RED,GREEN,BLUE) \
-        ((sal_Int32)(((sal_uInt32)((sal_uInt8)(BLUE##))))|(((sal_uInt32)((sal_uInt8)(GREEN##)))<<8)|(((sal_uInt32)((sal_uInt8)(RED##)))<<16)|(((sal_uInt32)((sal_uInt8)(TRANSPARENCE##)))<<24))
+        ((sal_Int32)(((sal_uInt32)((sal_uInt8)(BLUE))))|(((sal_uInt32)((sal_uInt8)(GREEN)))<<8)|(((sal_uInt32)((sal_uInt8)(RED)))<<16)|(((sal_uInt32)((sal_uInt8)(TRANSPARENCE)))<<24))
 
 //____________________________________________________________________________________________________________
 //  structs
