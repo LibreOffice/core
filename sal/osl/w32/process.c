@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.c,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:45:14 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 15:56:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -692,33 +692,24 @@ oslProcessError SAL_CALL osl_getExecutableFile( rtl_uString **pustrFile )
 
 /***************************************************************************/
 
+/* #109941# because of a bug in the M$ unicows library we have to
+   allocate a buffer large enough to hold the requested environment
+   variable instead of testing for the required size. This wastes
+   some stack space, maybe we should revoke this work around if
+   unicows library is fixed */
+
+#define ENV_BUFFER_SIZE (32*1024-1)
+
 oslProcessError SAL_CALL osl_getEnvironment(rtl_uString *ustrVar, rtl_uString **ustrValue)
 {
-    WCHAR buffer[1];
-    DWORD dwRet;
+    WCHAR buff[ENV_BUFFER_SIZE];
 
-    /* get the size of the buffer needed */
-    dwRet = GetEnvironmentVariableW( ustrVar->buffer, buffer, 1 );
-
-    /* allocate buffer that is big enough */
-    if( dwRet > 0 )
+    if (GetEnvironmentVariableW(ustrVar->buffer, buff, ENV_BUFFER_SIZE) > 0)
     {
-        rtl_uString* ustrTmp = NULL;
-
-        /* wasting one byte here */
-        rtl_uString_new_WithLength( &ustrTmp, dwRet );
-        ustrTmp->length = GetEnvironmentVariableW( ustrVar->buffer, ustrTmp->buffer, dwRet );
-
-        if( dwRet == (DWORD) ustrTmp->length + 1 )
-        {
-            *ustrValue = ustrTmp;
-            return osl_Process_E_None;
-        }
-
-        rtl_uString_release( ustrTmp );
+        rtl_uString_newFromStr(ustrValue, buff);
+        return osl_Process_E_None;
     }
-
-    return  osl_Process_E_Unknown;
+    return osl_Process_E_Unknown;
 }
 
 /***************************************************************************/
