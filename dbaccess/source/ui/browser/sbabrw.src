@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 15:09:53 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 04:35:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,10 +132,7 @@
 
 ImageList RID_DEFAULTIMAGELIST_SC
 {
-    ImageBitmap = Bitmap
-    {
-        File = "sc_qrtl.bmp";
-    };
+    Prefix = "sc";
     MaskColor   = Color {\
     Red   = 0xFFFF;\
     Green = 0x0000;\
@@ -146,10 +143,7 @@ ImageList RID_DEFAULTIMAGELIST_SC
 
 ImageList RID_DEFAULTIMAGELIST_LC
 {
-    ImageBitmap = Bitmap
-    {
-        File = "lc_qrtl.bmp" ;
-    };
+    Prefix = "lc";
     MaskColor   = Color {\
     Red   = 0xFFFF;\
     Green = 0x0000;\
@@ -160,10 +154,7 @@ ImageList RID_DEFAULTIMAGELIST_LC
 
 ImageList RID_DEFAULTIMAGELIST_SCH
 {
-    ImageBitmap = Bitmap
-    {
-        File = "sch_qrtl.bmp";
-    };
+    Prefix = "sch";
     MaskColor   = Color {\
     Red   = 0xffff;\
     Green = 0x0000;\
@@ -174,10 +165,7 @@ ImageList RID_DEFAULTIMAGELIST_SCH
 
 ImageList RID_DEFAULTIMAGELIST_LCH
 {
-    ImageBitmap = Bitmap
-    {
-        File = "lch_qrtl.bmp" ;
-    };
+    Prefix = "lch";
     MaskColor   = Color {\
     Red   = 0xffff;\
     Green = 0x0000;\
