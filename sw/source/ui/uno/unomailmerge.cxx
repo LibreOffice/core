@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomailmerge.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:43:08 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 18:17:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -636,7 +636,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
             throw PropertyVetoException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rName, static_cast < cppu::OWeakObject * > ( this ) );
         else if (rName.equalsAscii( GetPropName( UNO_NAME_DATA_SOURCE_NAME ) ))
             bOK = rValue >>= aCurDataSourceName;
-        else if (rName.equalsAscii( GetPropName( UNO_NAME_DATA_COMMAND ) ))
+        else if (rName.equalsAscii( GetPropName( UNO_NAME_DAD_COMMAND ) ))
             bOK = rValue >>= aCurDataCommand;
         else if (rName.equalsAscii( GetPropName( UNO_NAME_FILTER ) ))
             bOK = rValue >>= aCurFilter;
@@ -660,7 +660,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
         }
         else if (rName.equalsAscii( GetPropName( UNO_NAME_FILE_NAME_PREFIX ) ))
             bOK = rValue >>= aCurFileNamePrefix;
-        else if (rName.equalsAscii( GetPropName( UNO_NAME_DATA_COMMAND_TYPE ) ))
+        else if (rName.equalsAscii( GetPropName( UNO_NAME_DAD_COMMAND_TYPE ) ))
             bOK = rValue >>= nCurDataCommandType;
         else if (rName.equalsAscii( GetPropName( UNO_NAME_OUTPUT_TYPE ) ))
             bOK = rValue >>= nCurOutputType;
