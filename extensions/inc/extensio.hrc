@@ -2,9 +2,9 @@
  *
  *  $RCSfile: extensio.hrc,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-01 12:56:18 $
+ *  last change: $Author: fs $ $Date: 2001-08-08 14:52:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,5 +152,6 @@
 #define HID_ABSPILOT_NEXT                       (HID_EXTENSIONS_START + 64)
 #define HID_ABSPILOT_CANCEL                     (HID_EXTENSIONS_START + 65)
 #define HID_ABSPILOT_FINISH                     (HID_EXTENSIONS_START + 66)
+#define HID_ABSPILOT                            (HID_EXTENSIONS_START + 67)
 
 #endif
