@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoDocumentSettings.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-25 15:57:12 $
+ *  last change: $Author: cl $ $Date: 2001-06-26 08:59:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1000,6 +1000,7 @@ void DocumentSettings::_getPropertyValues( const PropertyMapEntry** ppEntries, A
             {
                 *pValue <<= pDoc->GetCharCompressType();
             }
+            break;
             default:
                 throw UnknownPropertyException();
         }
