@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accfrmobjslist.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:36:33 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 13:59:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,10 @@
 #ifndef _PAGEFRM_HXX
 #include <pagefrm.hxx>
 #endif
+// OD 2004-05-24 #i28701#
+#ifndef _SORTEDOBJS_HXX
+#include <sortedobjs.hxx>
+#endif
 #ifndef _ACCFRMOBJSLIST_HXX
 #include <accfrmobjslist.hxx>
 #endif
@@ -80,19 +84,19 @@ SwFrmOrObjSList_const_iterator::SwFrmOrObjSList_const_iterator(
         {
             const SwPageFrm *pPgFrm =
                 static_cast< const SwPageFrm * >( rList.pFrm );
-            const SwSortDrawObjs *pObjs = pPgFrm->GetSortedObjs();
+            const SwSortedObjs *pObjs = pPgFrm->GetSortedObjs();
             if( pObjs && pObjs->Count() )
-                aCurr = (*pObjs)[nNextObj++];
+                aCurr = (*pObjs)[nNextObj++]->GetDrawObj();
         }
         else if( rList.pFrm->IsTxtFrm() )
         {
-            const SwDrawObjs *pObjs = rList.pFrm->GetDrawObjs();
+            const SwSortedObjs *pObjs = rList.pFrm->GetDrawObjs();
             if( pObjs && pObjs->Count() )
             {
-                aCurr = (*pObjs)[nNextObj++];
+                aCurr = (*pObjs)[nNextObj++]->GetDrawObj();
                 while( aCurr.IsValid() && !aCurr.IsBoundAsChar() )
                     aCurr = (nNextObj < pObjs->Count())
-                                ? (*pObjs)[nNextObj++]
+                                ? (*pObjs)[nNextObj++]->GetDrawObj()
                                 : static_cast< const SdrObject *>( 0 );
 
             }
@@ -127,20 +131,20 @@ SwFrmOrObjSList_const_iterator& SwFrmOrObjSList_const_iterator::next()
         {
             const SwPageFrm *pPgFrm =
                 static_cast< const SwPageFrm * >( rList.pFrm );
-            const SwSortDrawObjs *pObjs = pPgFrm->GetSortedObjs();
+            const SwSortedObjs *pObjs = pPgFrm->GetSortedObjs();
             aCurr = (pObjs && nNextObj < pObjs->Count())
-                            ? (*pObjs)[nNextObj++]
+                            ? (*pObjs)[nNextObj++]->GetDrawObj()
                             : static_cast< const SdrObject *>( 0 );
         }
         else if( rList.pFrm->IsTxtFrm() )
         {
-            const SwDrawObjs *pObjs = rList.pFrm->GetDrawObjs();
+            const SwSortedObjs *pObjs = rList.pFrm->GetDrawObjs();
             aCurr = (pObjs && nNextObj < pObjs->Count())
-                            ? (*pObjs)[nNextObj++]
+                            ? (*pObjs)[nNextObj++]->GetDrawObj()
                             : static_cast< const SdrObject *>( 0 );
             while( aCurr.IsValid() && !aCurr.IsBoundAsChar() )
                 aCurr = (nNextObj < pObjs->Count())
-                            ? (*pObjs)[nNextObj++]
+                            ? (*pObjs)[nNextObj++]->GetDrawObj()
                             : static_cast< const SdrObject *>( 0 );
         }
     }
