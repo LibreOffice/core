@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldControls.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-14 10:35:10 $
+ *  last change: $Author: oj $ $Date: 2001-03-19 12:40:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ namespace dbaui
         short   m_nPos;
         String  m_strHelpText;
     public:
-        inline OPropColumnEditCtrl(Window* pParent, ::rtl::OUString& _rAllowedChars, INT32 nHelpId, short nPosition = -1, WinBits nWinStyle = 0);
+        inline OPropColumnEditCtrl(Window* pParent, ::rtl::OUString& _rAllowedChars, USHORT nHelpId, short nPosition = -1, WinBits nWinStyle = 0);
 
         inline BOOL IsModified() { return GetText() != GetSavedValue(); }
 
@@ -115,7 +115,7 @@ namespace dbaui
     };
     inline OPropColumnEditCtrl::OPropColumnEditCtrl(Window* pParent,
                                                     ::rtl::OUString& _rAllowedChars,
-                                                    INT32 nHelpId,
+                                                    USHORT nHelpId,
                                                     short nPosition,
                                                     WinBits nWinStyle)
         :OSQLNameEdit(pParent, _rAllowedChars,nWinStyle)
@@ -131,7 +131,8 @@ namespace dbaui
         String  m_strHelpText;
 
     public:
-        inline OPropEditCtrl(Window* pParent, INT32 nHelpId, short nPosition = -1, WinBits nWinStyle = 0);
+        inline OPropEditCtrl(Window* pParent, USHORT nHelpId, short nPosition = -1, WinBits nWinStyle = 0);
+        inline OPropEditCtrl(Window* pParent, USHORT nHelpId, const ResId& _rRes,short nPosition = -1);
 
         inline BOOL IsModified() { return GetText() != GetSavedValue(); }
 
@@ -145,8 +146,14 @@ namespace dbaui
         }
     };
 
-    inline OPropEditCtrl::OPropEditCtrl(Window* pParent, INT32 nHelpId, short nPosition, WinBits nWinStyle)
+    inline OPropEditCtrl::OPropEditCtrl(Window* pParent, USHORT nHelpId, short nPosition, WinBits nWinStyle)
         :Edit(pParent, nWinStyle)
+        ,m_nPos(nPosition)
+    {
+        m_strHelpText = String(ModuleRes(nHelpId));
+    }
+    inline OPropEditCtrl::OPropEditCtrl(Window* pParent, USHORT nHelpId, const ResId& _rRes,short nPosition)
+        :Edit(pParent, _rRes)
         ,m_nPos(nPosition)
     {
         m_strHelpText = String(ModuleRes(nHelpId));
@@ -160,7 +167,8 @@ namespace dbaui
         String  m_strHelpText;
 
     public:
-        inline OPropNumericEditCtrl(Window* pParent, INT32 nHelpId, short nPosition = -1, WinBits nWinStyle = 0);
+        inline OPropNumericEditCtrl(Window* pParent, USHORT nHelpId, short nPosition = -1, WinBits nWinStyle = 0);
+        inline OPropNumericEditCtrl(Window* pParent, USHORT nHelpId, const ResId& _rRes,short nPosition = -1);
 
         inline BOOL IsModified() { return GetText() != GetSavedValue(); }
 
@@ -174,8 +182,14 @@ namespace dbaui
         }
     };
 
-    inline OPropNumericEditCtrl::OPropNumericEditCtrl(Window* pParent, INT32 nHelpId, short nPosition, WinBits nWinStyle)
+    inline OPropNumericEditCtrl::OPropNumericEditCtrl(Window* pParent, USHORT nHelpId, short nPosition, WinBits nWinStyle)
         :NumericField(pParent, nWinStyle)
+        ,m_nPos(nPosition)
+    {
+        m_strHelpText = String(ModuleRes(nHelpId));
+    }
+    inline OPropNumericEditCtrl::OPropNumericEditCtrl(Window* pParent, USHORT nHelpId, const ResId& _rRes,short nPosition)
+        :NumericField(pParent, _rRes)
         ,m_nPos(nPosition)
     {
         m_strHelpText = String(ModuleRes(nHelpId));
@@ -189,7 +203,8 @@ namespace dbaui
         String  m_strHelpText;
 
     public:
-        inline OPropListBoxCtrl(Window* pParent, INT32 nHelpId, short nPosition = -1, WinBits nWinStyle = 0);
+        inline OPropListBoxCtrl(Window* pParent, USHORT nHelpId, short nPosition = -1, WinBits nWinStyle = 0);
+        inline OPropListBoxCtrl(Window* pParent, USHORT nHelpId, const ResId& _rRes,short nPosition = -1);
 
         inline BOOL IsModified() { return GetSelectEntryPos() != GetSavedValue(); }
 
@@ -203,8 +218,14 @@ namespace dbaui
         }
     };
 
-    inline OPropListBoxCtrl::OPropListBoxCtrl(Window* pParent, INT32 nHelpId, short nPosition, WinBits nWinStyle)
+    inline OPropListBoxCtrl::OPropListBoxCtrl(Window* pParent, USHORT nHelpId, short nPosition, WinBits nWinStyle)
         :ListBox(pParent, nWinStyle)
+        ,m_nPos(nPosition)
+    {
+        m_strHelpText = String(ModuleRes(nHelpId));
+    }
+    inline OPropListBoxCtrl::OPropListBoxCtrl(Window* pParent, USHORT nHelpId, const ResId& _rRes,short nPosition)
+        :ListBox(pParent, _rRes)
         ,m_nPos(nPosition)
     {
         m_strHelpText = String(ModuleRes(nHelpId));
