@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 13:40:28 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:41:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -704,21 +704,24 @@ public:
     void InsertSoftHyph( const xub_StrLen nHyphPos );
 
     //Tabelle
-    const SwTable& InsertTable(USHORT nRows, USHORT nCols,
+    const SwTable& InsertTable( const SwInsertTableOptions& rInsTblOpts,  // ALL_TBL_INS_ATTR
+                                USHORT nRows, USHORT nCols,
                                 SwHoriOrient = HORI_FULL,
-                                USHORT nInsert = ALL_TBL_INS_ATTR,
                                 const SwTableAutoFmt* pTAFmt = 0 );
-    void InsertDDETable( SwDDEFieldType* pDDEType,
-                            USHORT nRows, USHORT nCols,
-                            SwHoriOrient eAdj = HORI_FULL,
-                            USHORT nInsert = HEADLINE_NO_BORDER );
+
+    void InsertDDETable( const SwInsertTableOptions& rInsTblOpts,  // HEADLINE_NO_BORDER
+                         SwDDEFieldType* pDDEType,
+                         USHORT nRows, USHORT nCols,
+                         SwHoriOrient eAdj = HORI_FULL );
+
     void UpdateTable();
     void SetTableName( SwFrmFmt& rTblFmt, const String &rNewName );
 
     SwFrmFmt *GetTableFmt();
-    BOOL TextToTable( sal_Unicode cCh, SwHoriOrient eAdj = HORI_FULL,
-                        USHORT nInsert = ALL_TBL_INS_ATTR,
-                        const SwTableAutoFmt* pTAFmt = 0 );
+    BOOL TextToTable( const SwInsertTableOptions& rInsTblOpts,  //ALL_TBL_INS_ATTR
+                      sal_Unicode cCh,
+                      SwHoriOrient eAdj = HORI_FULL,
+                      const SwTableAutoFmt* pTAFmt = 0 );
     BOOL TableToText( sal_Unicode cCh );
     FASTBOOL IsTextToTableAvailable() const;
 
