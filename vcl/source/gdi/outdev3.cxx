@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cp $ $Date: 2000-11-03 14:59:39 $
+ *  last change: $Author: th $ $Date: 2000-11-06 20:45:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2148,7 +2148,6 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
     pEntry->mpKernInfo              = NULL;
     pEntry->mnOwnOrientation        = 0;
     pEntry->mnOrientation           = 0;
-    pEntry->mbVertical              = FALSE;
     mpFirstEntry                    = pEntry;
 
     // Font-Selection-Daten setzen
@@ -2828,9 +2827,10 @@ long OutputDevice::ImplGetTextWidth( const xub_Unicode* pStr, xub_StrLen nLen,
         else
         {
             // Bei Fixed-Fonts reicht eine Multiplikation
-            if ( pFontEntry->mbFixedFont )
-                nWidth = ImplGetCharWidth( 'A' ) * nLen;
-            else
+            // Not TRUE for all Fonts, like CJK Fonts
+//            if ( pFontEntry->mbFixedFont )
+//                nWidth = ImplGetCharWidth( 'A' ) * nLen;
+//            else
             {
                 const sal_Unicode*  pTempStr = pStr;
                 xub_StrLen          nTempLen = nLen;
@@ -3032,19 +3032,35 @@ void OutputDevice::ImplInitTextLineSize()
         n2LineDY2 = 1;
 
     BOOL bVertical = maFont.IsVertical();
+    long nLeading = mpFontEntry->maMetric.mnLeading;
     if ( bVertical )
-        nUnderlineOffset = -( mpFontEntry->maMetric.mnAscent * 3/4 );
+    {
+        if ( !nLeading )
+        {
+            if ( mpFontEntry->maMetric.mnDescent )
+                nLeading = mpFontEntry->maMetric.mnDescent;
+            else
+            {
+                nLeading = mpFontEntry->maMetric.mnAscent*4/5;
+                if ( !nLeading )
+                    nLeading = 1;
+            }
+        }
+        nUnderlineOffset = -(mpFontEntry->maMetric.mnAscent-nLeading/2);
+    }
     else
         nUnderlineOffset = mpFontEntry->maMetric.mnDescent/2 + 1;
-    if ( bVertical )
-          nStrikeoutOffset = 0;
-    else
-        nStrikeoutOffset = -((mpFontEntry->maMetric.mnAscent-mpFontEntry->maMetric.mnLeading)/3);
+    nStrikeoutOffset = -((mpFontEntry->maMetric.mnAscent-mpFontEntry->maMetric.mnLeading)/3);
 
     if ( !pFontEntry->maMetric.mnUnderlineSize )
     {
         pFontEntry->maMetric.mnUnderlineSize    = nLineHeight;
         pFontEntry->maMetric.mnUnderlineOffset  = nUnderlineOffset - nLineHeight2;
+        if ( bVertical && (nLeading < mpFontEntry->maMetric.mnDescent) )
+        {
+            if ( nLineHeight > 1 )
+                pFontEntry->maMetric.mnUnderlineSize--;
+        }
     }
     if ( !pFontEntry->maMetric.mnBUnderlineSize )
     {
@@ -3059,16 +3075,18 @@ void OutputDevice::ImplInitTextLineSize()
     }
     if ( !pFontEntry->maMetric.mnWUnderlineSize )
     {
-        if ( mpFontEntry->maMetric.mnDescent < 6 )
+        long nWCalcSize = mpFontEntry->maMetric.mnDescent;
+        if ( bVertical )
+            nWCalcSize = nLeading;
+        if ( nWCalcSize < 6 )
         {
-            if ( (mpFontEntry->maMetric.mnDescent == 1) ||
-                 (mpFontEntry->maMetric.mnDescent == 2) )
-                pFontEntry->maMetric.mnWUnderlineSize = mpFontEntry->maMetric.mnDescent;
+            if ( (nWCalcSize == 1) || (nWCalcSize == 2) )
+                pFontEntry->maMetric.mnWUnderlineSize = nWCalcSize;
             else
                 pFontEntry->maMetric.mnWUnderlineSize = 3;
         }
         else
-            pFontEntry->maMetric.mnWUnderlineSize = ((mpFontEntry->maMetric.mnDescent*50)+50) / 100;
+            pFontEntry->maMetric.mnWUnderlineSize = ((nWCalcSize*50)+50) / 100;
         pFontEntry->maMetric.mnWUnderlineOffset = nUnderlineOffset;
     }
     if ( !pFontEntry->maMetric.mnStrikeoutSize )
@@ -3994,7 +4012,7 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
     {
         ::rtl::OUString aText( rStr );
         uno::Reference < text::XBreakIterator > xBI;
-        uno::Reference< linguistic2::XHyphenator > xHyph;
+        uno::Reference< linguistic::XHyphenator > xHyph;
         text::LineBreakHyphenationOptions aHyphOptions( xHyph, 1 );
         text::LineBreakUserOptions aUserOptions;
 
@@ -4535,12 +4553,13 @@ long OutputDevice::GetTextWidth( const XubString& rStr,
             long* pCharWidthAry = pFontEntry->maWidthAry;
 
             // Bei Fixed-Fonts reicht eine Multiplikation
-            if ( pFontEntry->mbFixedFont )
-            {
-                nWidth = pCharWidthAry['A'] * nLen;
-                nWidth /= pFontEntry->mnWidthFactor;
-            }
-            else
+            // Not TRUE for all Fonts, like CJK Fonts
+//            if ( pFontEntry->mbFixedFont )
+//            {
+//                nWidth = pCharWidthAry['A'] * nLen;
+//                nWidth /= pFontEntry->mnWidthFactor;
+//            }
+//            else
             {
                 const sal_Unicode*  pStr = rStr.GetBuffer();
                 const sal_Unicode*  pTempStr;
