@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regmerge.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2001-08-17 13:05:32 $
+ *  last change: $Author: rt $ $Date: 2004-05-18 13:16:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,10 +126,23 @@ OUString convertToFileUrl(const OString& fileName)
 int realargc;
 char* realargv[2048];
 
-static void checkCommandFile(char* cmdfile)
+static void dumpHelp()
+{
+    fprintf(stderr, "using: regmerge [-v|--verbose] mergefile mergeKeyName regfile_1 ... regfile_n\n");
+    fprintf(stderr, "       regmerge @regcmds\nOptions:\n");
+    fprintf(stderr, "  -v, --verbose : verbose output on stdout.\n");
+    fprintf(stderr, "  mergefile     : specifies the merged registry file. If this file doesn't exists,\n");
+    fprintf(stderr, "                  it is created.\n");
+    fprintf(stderr, "  mergeKeyName  : specifies the merge key, everything is merged under this key.\n");
+    fprintf(stderr, "                  If this key doesn't exists, it is created.\n");
+    fprintf(stderr, "  regfile_1..n  : specifies one or more registry files which are merged.\n");
+}
+
+static bool checkCommandFile(char* cmdfile)
 {
     FILE    *commandfile;
     char    option[256];
+    bool    bVerbose = false;
 
     commandfile = fopen(cmdfile+1, "r");
     if( commandfile == NULL )
@@ -141,13 +154,27 @@ static void checkCommandFile(char* cmdfile)
         {
             if (option[0]== '@')
             {
-                checkCommandFile(option);
-            } else
-            {
-                realargv[realargc]= strdup(option);
-                realargc++;
+                bool bRet = checkCommandFile(option);
+                // ensure that the option will not be overwritten
+                if ( !bRet )
+                    bVerbose = bRet;
+            } else {
+                if (option[0]== '-') {
+                    if (strncmp(option, "-v", 2)  == 0 ||
+                        strncmp(option, "--verbose", 9) == 0)
+                    {
+                        bVerbose = true;
+                    } else {
+                        fprintf(stderr, "ERROR: unknown option \"%s\"\n", option);
+                        dumpHelp();
+                        exit(-1);
+                    }
+                }else
+                {
+                    realargv[realargc]= strdup(option);
+                    realargc++;
+                }
             }
-
             if (realargc == 2047)
             {
                 fprintf(stderr, "ERROR: more than 2048 arguments.\n");
@@ -156,23 +183,44 @@ static void checkCommandFile(char* cmdfile)
         }
         fclose(commandfile);
     }
+
+    return bVerbose;
 }
 
-static void checkCommandArgs(int argc, char **argv)
+static bool checkCommandArgs(int argc, char **argv)
 {
+    bool bVerbose = false;
+
     realargc = 0;
 
     for (int i=0; i<argc; i++)
     {
         if (argv[i][0]== '@')
         {
-            checkCommandFile(argv[i]);
-        } else
-        {
-            realargv[i]= strdup(argv[i]);
-            realargc++;
+            bool bRet = checkCommandFile(argv[i]);
+            // ensure that the option will not be overwritten
+            if ( !bRet )
+                bVerbose = bRet;
+        } else {
+            if (argv[i][0]== '-') {
+                if (strncmp(argv[i], "-v", 2)  == 0 ||
+                    strncmp(argv[i], "--verbose", 9) == 0)
+                {
+                    bVerbose = true;
+                } else {
+                    fprintf(stderr, "ERROR: unknown option \"%s\"\n", argv[i]);
+                    dumpHelp();
+                    exit(-1);
+                }
+            } else
+            {
+                realargv[realargc]= strdup(argv[i]);
+                realargc++;
+            }
         }
     }
+
+    return bVerbose;
 }
 
 static void cleanCommandArgs()
@@ -193,14 +241,11 @@ int _cdecl main( int argc, char * argv[] )
 {
     RegHandle       hReg;
     RegKeyHandle    hRootKey;
-
-    checkCommandArgs(argc, argv);
+    bool            bVerbose = checkCommandArgs(argc, argv);
 
     if (realargc < 4)
     {
-        fprintf(stderr, "using: regmerge mergefile mergeKeyName regfile_1 ... regfile_n\n");
-        fprintf(stderr, "       regmerge @regcmds\n");
-
+        dumpHelp();
         cleanCommandArgs();
         exit(1);
     }
@@ -210,7 +255,8 @@ int _cdecl main( int argc, char * argv[] )
     {
         if (reg_createRegistry(regName.pData, &hReg))
         {
-            fprintf(stderr, "open registry \"%s\" failed\n", realargv[1]);
+            if (bVerbose)
+                fprintf(stderr, "open registry \"%s\" failed\n", realargv[1]);
             cleanCommandArgs();
             exit(-1);
         }
@@ -224,39 +270,47 @@ int _cdecl main( int argc, char * argv[] )
         for (int i = 3; i < realargc; i++)
         {
             targetRegName = convertToFileUrl(realargv[i]);
-            if (_ret = reg_mergeKey(hRootKey, mergeKeyName.pData, targetRegName.pData, sal_False, sal_True))
+            if (_ret = reg_mergeKey(hRootKey, mergeKeyName.pData, targetRegName.pData, sal_False, bVerbose))
             {
                 if (_ret == REG_MERGE_CONFLICT)
                 {
-                    fprintf(stderr, "merging registry \"%s\" under key \"%s\" in registry \"%s\".\n",
-                            realargv[i], realargv[2], realargv[1]);
+                    if (bVerbose)
+                        fprintf(stderr, "merging registry \"%s\" under key \"%s\" in registry \"%s\".\n",
+                                realargv[i], realargv[2], realargv[1]);
                 } else
                 {
-                    fprintf(stderr, "ERROR: merging registry \"%s\" under key \"%s\" in registry \"%s\" failed.\n",
-                            realargv[i], realargv[2], realargv[1]);
+                    if (bVerbose)
+                        fprintf(stderr, "ERROR: merging registry \"%s\" under key \"%s\" in registry \"%s\" failed.\n",
+                                realargv[i], realargv[2], realargv[1]);
                     exit(-2);
                 }
             } else
             {
-                fprintf(stderr, "merging registry \"%s\" under key \"%s\" in registry \"%s\".\n",
-                        realargv[i], realargv[2], realargv[1]);
+                if (bVerbose)
+                    fprintf(stderr, "merging registry \"%s\" under key \"%s\" in registry \"%s\".\n",
+                            realargv[i], realargv[2], realargv[1]);
             }
         }
 
         if (reg_closeKey(hRootKey))
         {
-            fprintf(stderr, "closing root key of registry \"%s\" failed\n", realargv[1]);
+            if (bVerbose)
+                fprintf(stderr, "closing root key of registry \"%s\" failed\n",
+                        realargv[1]);
             exit(-3);
         }
     } else
     {
-        fprintf(stderr, "open root key of registry \"%s\" failed\n", realargv[1]);
+        if (bVerbose)
+            fprintf(stderr, "open root key of registry \"%s\" failed\n",
+                    realargv[1]);
         exit(-4);
     }
 
     if (reg_closeRegistry(hReg))
     {
-        fprintf(stderr, "closing registry \"%s\" failed\n", realargv[1]);
+        if (bVerbose)
+            fprintf(stderr, "closing registry \"%s\" failed\n", realargv[1]);
         cleanCommandArgs();
         exit(-5);
     }
