@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.155 $
+#   $Revision: 1.156 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-17 16:05:54 $
+#   last change: $Author: obo $ $Date: 2004-11-19 11:42:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1073,16 +1073,17 @@ RSCDEFS=-D$(GUI) -D$(GVER) -D$(COM) -D$(CVER) -DSUPD=$(UPD) $(JAVADEF)
 RSCDEFS+=-DBUILD_SPECIAL=$(BUILD_SPECIAL)
 .ENDIF
 
+RSCDEFIMG*=default_images
 .IF "$(rscres)"!=""
 RSCRES=$(rscres)
 .ENDIF
 .IF "$(RSCRES)"!=""
 RSCGLOINC=$(RSCRES)
 .ELSE
-RSCGLOINC=$(SOLARSRC)$/res
+RSCGLOINC=$(SOLARSRC)$/$(RSCDEFIMG)$/res
 .ENDIF
 
-RSCLOCINC=$(PRJ)$/win$/res
+RSCLOCINC=$(PRJ)$/res
 RSCEXTINC=.
 
 .IF "$(DEBUG)" != ""
@@ -1179,11 +1180,7 @@ LINKFLAGS+=$(LINKFLAGSPROF)
 JAVAFLAGS+=$(JAVAFLAGSDEBUG)
 CDEFS+= $(CDEFSDEBUG)
 CFLAGS+= $(CFLAGSDEBUG)
-.IF "$(COM)"=="WTC"
-LINK+= $(LINKFLAGSDEBUG)
-.ELSE
 LINKFLAGS+= $(LINKFLAGSDEBUG)
-.ENDIF
 .ENDIF
 
 .IF "$(dbgutil)"!=""
