@@ -1,15 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="GetTexts" script:language="StarBasic">Option Explicit
-&apos; Option für doppelte Strings
-&apos; Alternativtexte, Namen usw für HTML-Seiten--&gt; ist Anbindung an StarOfficeAPI geplant?
-&apos; Verlustanzeige &quot;Wo ist Peggy?&quot;
-&apos; Überschriften für Textfelder
-&apos; GetTextFrames mit Peter absprechen
-&apos; Ole - Objekte auch mit einbeziehen?
-&apos; Redimensionierung des LogArrays, wenn Implementierung so weit ist
-&apos; Namen von Notizenseiten mit Peter durchsprechen
-
 &apos; Macro-Description:
 &apos; This Macro extracts the Strings out of the currently activated document und inserts them into a logdocument
 &apos; The aim of the macro is to provide the programmer an insight into the StarOffice API

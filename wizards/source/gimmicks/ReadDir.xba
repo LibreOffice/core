@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="ReadDir" script:language="StarBasic">Option Explicit
-&apos; Todo: Capitalization of ReadDirDlg for CVS 
-&apos; Verzeichnis StarOne überprüfen (letzte beiden Dateien)
-&apos; Ordnung nach Verzeichnis und dann die Dateien ( indem &quot;AAAA&quot; vor den Verzeichnisnamen gesetzt wird).
-&apos; Nicht-Verzeichnisnamen abfangen
-&apos;Public Const SBBASEWIDTH = 8000
-&apos;Public Const SBBASEHEIGHT = 1000
 Public Const SBPAGEX = 800
 Public Const SBPAGEY = 800
 Public Const SBRELDIST = 1.3

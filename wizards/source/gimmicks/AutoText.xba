@@ -5,8 +5,7 @@ Option Explicit
 Dim oDocument as Object
 Dim sDocumentTitle as String
 
-&apos; Todo: Problem mit der Spaltenbreite lösen
-&apos; Internationale Vorlage für Überschrift
+
 Sub Main()
 Dim oTable as Object
 Dim oRows as Object
