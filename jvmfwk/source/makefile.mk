@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: jl $ $Date: 2004-05-13 11:15:02 $
+#   last change: $Author: rt $ $Date: 2004-09-08 16:04:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,11 +71,9 @@ UNIXVERSIONNAMES = UDK
 
 .INCLUDE: settings.mk
 
-.IF "$(SOLAR_JAVA)"==""
-nojava:
-    @echo "Not building jvmfwk  because Java is disabled"
+.IF "$(SYSTEM_LIBXML)" == "YES"
+CFLAGS+=-DSYSTEM_LIBXML $(LIBXML_CFLAGS)
 .ENDIF
-
 
 UNOUCROUT = $(OUT)$/inc
 
