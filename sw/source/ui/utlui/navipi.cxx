@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-19 15:30:13 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:37:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1449,7 +1449,8 @@ sal_Int8 SwNavigationPI::ExecuteDrop( const ExecuteDropEvent& rEvt )
     if( !aContentTree.IsInDrag() &&
         0 != (sFileName = SwNavigationPI::CreateDropFileName( aData )).Len() )
     {
-        GraphicDescriptor aDesc( sFileName );
+        INetURLObject aTemp( sFileName );
+        GraphicDescriptor aDesc( aTemp );
         if( !aDesc.Detect() )   // keine Grafiken annehmen
         {
             if( STRING_NOTFOUND == sFileName.Search('#')
