@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiescher.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 13:28:15 $
+ *  last change: $Author: rt $ $Date: 2004-05-18 12:43:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,10 @@
 #include "xiescher.hxx"
 #endif
 
+#ifndef _COM_SUN_STAR_AWT_SCROLLBARORIENTATION_HPP_
+#include <com/sun/star/awt/ScrollBarOrientation.hpp>
+#endif
+
 #ifndef _RTL_LOGFILE_HXX_
 #include <rtl/logfile.hxx>
 #endif
@@ -82,7 +86,9 @@
 #ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
 #include <svtools/moduleoptions.hxx>
 #endif
+#ifndef _SVT_FLTRCFG_HXX
 #include <svtools/fltrcfg.hxx>
+#endif
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
@@ -478,7 +484,13 @@ XclImpEscherTbxCtrl::XclImpEscherTbxCtrl( XclImpEscherObj& rSrcObj, sal_uInt16 n
     mnSelEntry( 0 ),
     mnSelType( EXC_OBJ_LBS_SEL_SIMPLE ),
     mnLineCount( 0 ),
-    mb3DStyle( true )
+    mnScrollValue( 0 ),
+    mnScrollMin( 0 ),
+    mnScrollMax( 100 ),
+    mnScrollStep( 1 ),
+    mnScrollPage( 10 ),
+    mb3DStyle( true ),
+    mbScrollHor( false )
 {
 }
 
@@ -535,6 +547,18 @@ void XclImpEscherTbxCtrl::ReadLbsData( XclImpStream& rStrm )
 
 }
 
+void XclImpEscherTbxCtrl::ReadSbs( XclImpStream& rStrm )
+{
+    sal_uInt16 nOrient, nStyle;
+    rStrm.Ignore( 4 );
+    rStrm >> mnScrollValue >> mnScrollMin >> mnScrollMax >> mnScrollStep >> mnScrollPage >> nOrient;
+    rStrm.Ignore( 2 );
+    rStrm >> nStyle;
+
+    mbScrollHor = ::get_flag( nOrient, EXC_OBJ_SBS_HORIZONTAL );
+    mb3DStyle = ::get_flag( nStyle, EXC_OBJ_SBS_3D );
+}
+
 OUString XclImpEscherTbxCtrl::GetServiceName() const
 {
 #define LCL_CREATE_NAME( name ) CREATE_OUSTRING( "com.sun.star.form.component." name )
@@ -547,6 +571,8 @@ OUString XclImpEscherTbxCtrl::GetServiceName() const
         case EXC_OBJ_CMO_LISTBOX:       return LCL_CREATE_NAME( "ListBox" );
         case EXC_OBJ_CMO_GROUPBOX:      return LCL_CREATE_NAME( "GroupBox" );
         case EXC_OBJ_CMO_COMBOBOX:      return LCL_CREATE_NAME( "ListBox" );    // it's a dropdown listbox
+        case EXC_OBJ_CMO_SPIN:          return LCL_CREATE_NAME( "SpinButton" );
+        case EXC_OBJ_CMO_SCROLLBAR:     return LCL_CREATE_NAME( "ScrollBar" );
     }
     DBG_ERRORFILE( "XclImpEscherTbxCtrl::GetServiceName - unknown control type" );
     return OUString();
@@ -555,7 +581,10 @@ OUString XclImpEscherTbxCtrl::GetServiceName() const
 
 void XclImpEscherTbxCtrl::SetProperties( Reference< XPropertySet >& rxPropSet ) const
 {
-    // the control name
+    namespace AwtScrollOrient = ::com::sun::star::awt::ScrollBarOrientation;
+
+    // control name -----------------------------------------------------------
+
     OUString aName;
     switch( mnCtrlType )
     {
@@ -566,28 +595,13 @@ void XclImpEscherTbxCtrl::SetProperties( Reference< XPropertySet >& rxPropSet ) 
         case EXC_OBJ_CMO_LISTBOX:       aName = CREATE_OUSTRING( "ListBox" );       break;
         case EXC_OBJ_CMO_GROUPBOX:      aName = CREATE_OUSTRING( "GroupBox" );      break;
         case EXC_OBJ_CMO_COMBOBOX:      aName = CREATE_OUSTRING( "ComboBox" );      break;
+        case EXC_OBJ_CMO_SPIN:          aName = CREATE_OUSTRING( "SpinButton" );    break;
+        case EXC_OBJ_CMO_SCROLLBAR:     aName = CREATE_OUSTRING( "ScrollBar" );     break;
     }
     if( aName.getLength() )
         ::setPropValue( rxPropSet, CREATE_OUSTRING( "Name" ), aName );
 
-    // 3D border style
-    if( (mnCtrlType == EXC_OBJ_CMO_LISTBOX) || (mnCtrlType == EXC_OBJ_CMO_COMBOBOX) )
-        ::setPropValue( rxPropSet, CREATE_OUSTRING( "Border" ), static_cast< sal_Int16 >( mb3DStyle ? 2 : 1 ) );
-
-    // check box/radio button state
-    if( (mnCtrlType == EXC_OBJ_CMO_CHECKBOX) || (mnCtrlType == EXC_OBJ_CMO_OPTIONBUTTON) )
-    {
-        sal_Int16 nApiState = 0;
-        switch( mnState )
-        {
-            case EXC_OBJ_CBLS_STATE_UNCHECK:    nApiState = 0;  break;
-            case EXC_OBJ_CBLS_STATE_CHECK:      nApiState = 1;  break;
-            case EXC_OBJ_CBLS_STATE_TRI:        nApiState = (mnCtrlType == EXC_OBJ_CMO_CHECKBOX) ? 2 : 1;   break;
-        }
-        if( mnCtrlType == EXC_OBJ_CMO_CHECKBOX )
-            ::setPropBool( rxPropSet, CREATE_OUSTRING( "TriState" ), nApiState == 2 );
-        ::setPropValue( rxPropSet, CREATE_OUSTRING( "DefaultState" ), nApiState );
-    }
+    // control label ----------------------------------------------------------
 
     if( const XclImpString* pString = GetString() )
     {
@@ -616,54 +630,116 @@ void XclImpEscherTbxCtrl::SetProperties( Reference< XPropertySet >& rxPropSet ) 
         }
     }
 
-    // listbox/combobox contents
-    if( (mnCtrlType == EXC_OBJ_CMO_LISTBOX) || (mnCtrlType == EXC_OBJ_CMO_COMBOBOX) )
+    // special control contents -----------------------------------------------
+
+    switch( mnCtrlType )
     {
-        Sequence< sal_Int16 > aSelection;
+        // checkbox/option button
 
-        switch( mnCtrlType )
+        case EXC_OBJ_CMO_CHECKBOX:
+        case EXC_OBJ_CMO_OPTIONBUTTON:
         {
-            case EXC_OBJ_CMO_LISTBOX:
-            {
-                // selection type
-                bool bMultiSel = (mnSelType != EXC_OBJ_LBS_SEL_SIMPLE);
-                ::setPropBool( rxPropSet, CREATE_OUSTRING( "MultiSelection" ), bMultiSel );
+            bool bCheckBox = mnCtrlType == EXC_OBJ_CMO_CHECKBOX;
 
-                // selection
-                if( bMultiSel )
-                {
-                    aSelection.realloc( static_cast< sal_Int32 >( maMultiSel.size() ) );
-                    sal_Int32 nSeqIndex = 0;
-                    for( ScfInt16Vec::const_iterator aIter = maMultiSel.begin(), aEnd = maMultiSel.end();
-                            aIter != aEnd; ++aIter, ++nSeqIndex )
-                        aSelection[ nSeqIndex ] = *aIter;
-                }
-                else if( mnSelEntry > 0 )
-                {
-                    aSelection.realloc( 1 );
-                    aSelection[ 0 ] = mnSelEntry - 1;
-                }
-            }
-            break;
-
-            case EXC_OBJ_CMO_COMBOBOX:
+            sal_Int16 nApiState = 0;
+            switch( mnState )
             {
-                // dropdown button
-                ::setPropBool( rxPropSet, CREATE_OUSTRING( "Dropdown" ), true );
-                // dropdown line count
-                ::setPropValue( rxPropSet, CREATE_OUSTRING( "LineCount" ), mnLineCount );
-                // selection
-                if( mnSelEntry > 0 )
-                {
-                    aSelection.realloc( 1 );
-                    aSelection[ 0 ] = mnSelEntry - 1;
-                }
+                case EXC_OBJ_CBLS_STATE_UNCHECK:    nApiState = 0;                  break;
+                case EXC_OBJ_CBLS_STATE_CHECK:      nApiState = 1;                  break;
+                case EXC_OBJ_CBLS_STATE_TRI:        nApiState = bCheckBox ? 2 : 1;  break;
             }
-            break;
+            if( bCheckBox )
+                ::setPropBool( rxPropSet, CREATE_OUSTRING( "TriState" ), nApiState == 2 );
+            ::setPropValue( rxPropSet, CREATE_OUSTRING( "DefaultState" ), nApiState );
         }
+        break;
 
-        if( !GetCellLink() && aSelection.getLength() )
-            ::setPropValue( rxPropSet, CREATE_OUSTRING( "DefaultSelection" ), aSelection );
+        // listbox/combobox
+
+        case EXC_OBJ_CMO_LISTBOX:
+        case EXC_OBJ_CMO_COMBOBOX:
+        {
+            ::setPropValue( rxPropSet, CREATE_OUSTRING( "Border" ), static_cast< sal_Int16 >( mb3DStyle ? 2 : 1 ) );
+
+            Sequence< sal_Int16 > aSelection;
+
+            switch( mnCtrlType )
+            {
+                case EXC_OBJ_CMO_LISTBOX:
+                {
+                    // selection type
+                    bool bMultiSel = (mnSelType != EXC_OBJ_LBS_SEL_SIMPLE);
+                    ::setPropBool( rxPropSet, CREATE_OUSTRING( "MultiSelection" ), bMultiSel );
+
+                    // selection
+                    if( bMultiSel )
+                    {
+                        aSelection.realloc( static_cast< sal_Int32 >( maMultiSel.size() ) );
+                        sal_Int32 nSeqIndex = 0;
+                        for( ScfInt16Vec::const_iterator aIter = maMultiSel.begin(), aEnd = maMultiSel.end();
+                                aIter != aEnd; ++aIter, ++nSeqIndex )
+                            aSelection[ nSeqIndex ] = *aIter;
+                    }
+                    else if( mnSelEntry > 0 )
+                    {
+                        aSelection.realloc( 1 );
+                        aSelection[ 0 ] = mnSelEntry - 1;
+                    }
+                }
+                break;
+
+                case EXC_OBJ_CMO_COMBOBOX:
+                {
+                    // dropdown button
+                    ::setPropBool( rxPropSet, CREATE_OUSTRING( "Dropdown" ), true );
+                    // dropdown line count
+                    ::setPropValue( rxPropSet, CREATE_OUSTRING( "LineCount" ), mnLineCount );
+                    // selection
+                    if( mnSelEntry > 0 )
+                    {
+                        aSelection.realloc( 1 );
+                        aSelection[ 0 ] = mnSelEntry - 1;
+                    }
+                }
+                break;
+            }
+
+            if( !GetCellLink() && aSelection.getLength() )
+                ::setPropValue( rxPropSet, CREATE_OUSTRING( "DefaultSelection" ), aSelection );
+        }
+        break;
+
+        // spin button
+
+        case EXC_OBJ_CMO_SPIN:
+        {
+            ::setPropValue( rxPropSet, CREATE_OUSTRING( "Border" ), static_cast< sal_Int16 >( 0 ) );
+            ::setPropValue( rxPropSet, CREATE_OUSTRING( "SpinValueMin" ), static_cast< sal_Int32 >( mnScrollMin ) );
+            ::setPropValue( rxPropSet, CREATE_OUSTRING( "SpinValueMax" ), static_cast< sal_Int32 >( mnScrollMax ) );
+            ::setPropValue( rxPropSet, CREATE_OUSTRING( "SpinIncrement" ), static_cast< sal_Int32 >( mnScrollStep ) );
+            // Excel spin buttons always vertical
+            ::setPropValue( rxPropSet, CREATE_OUSTRING( "Orientation" ), AwtScrollOrient::VERTICAL );
+            ::setPropValue( rxPropSet, CREATE_OUSTRING( "DefaultSpinValue" ), static_cast< sal_Int32 >( mnScrollValue ) );
+        }
+        break;
+
+        // scrollbar
+
+        case EXC_OBJ_CMO_SCROLLBAR:
+        {
+            sal_Int32 nApiOrient = mbScrollHor ? AwtScrollOrient::HORIZONTAL : AwtScrollOrient::VERTICAL;
+            sal_Int32 nVisSize = std::min< sal_Int32 >( mnScrollPage, 1 );
+
+            ::setPropValue( rxPropSet, CREATE_OUSTRING( "Border" ), static_cast< sal_Int16 >( 0 ) );
+            ::setPropValue( rxPropSet, CREATE_OUSTRING( "ScrollValueMin" ), static_cast< sal_Int32 >( mnScrollMin ) );
+            ::setPropValue( rxPropSet, CREATE_OUSTRING( "ScrollValueMax" ), static_cast< sal_Int32 >( mnScrollMax ) );
+            ::setPropValue( rxPropSet, CREATE_OUSTRING( "LineIncrement" ), static_cast< sal_Int32 >( mnScrollStep ) );
+            ::setPropValue( rxPropSet, CREATE_OUSTRING( "BlockIncrement" ), static_cast< sal_Int32 >( mnScrollPage ) );
+            ::setPropValue( rxPropSet, CREATE_OUSTRING( "VisibleSize" ), nVisSize );
+            ::setPropValue( rxPropSet, CREATE_OUSTRING( "Orientation" ), nApiOrient );
+            ::setPropValue( rxPropSet, CREATE_OUSTRING( "DefaultScrollValue" ), static_cast< sal_Int32 >( mnScrollValue ) );
+        }
+        break;
     }
 }
 
@@ -1675,7 +1751,8 @@ void XclImpObjectManager::ReadObj( XclImpStream& rStrm )
             case EXC_ID_OBJ_FTCBLS:
             case EXC_ID_OBJ_FTSBSFMLA:
             case EXC_ID_OBJ_FTLBSDATA:
-            case EXC_ID_OBJ_FTCBLSFMLA: ReadObjTbxSubRec( rStrm, nSubRecId );       break;
+            case EXC_ID_OBJ_FTCBLSFMLA:
+            case EXC_ID_OBJ_FTSBS:      ReadObjTbxSubRec( rStrm, nSubRecId );       break;
         }
 
         rStrm.PopPosition();
@@ -1873,6 +1950,8 @@ void XclImpObjectManager::ReadObjFtCmo( XclImpStream& rStrm )
         case EXC_OBJ_CMO_GROUPBOX:
         case EXC_OBJ_CMO_LISTBOX:
         case EXC_OBJ_CMO_COMBOBOX:
+        case EXC_OBJ_CMO_SPIN:
+        case EXC_OBJ_CMO_SCROLLBAR:
             ReplaceEscherObj( new XclImpEscherTbxCtrl( *pEscherObj, nObjType ) );
         break;
         case EXC_OBJ_CMO_PICTURE:
@@ -1882,9 +1961,7 @@ void XclImpObjectManager::ReadObjFtCmo( XclImpStream& rStrm )
             ReplaceEscherObj( new XclImpEscherChart( *pEscherObj ) );
         break;
         case EXC_OBJ_CMO_EDIT:          // only in dialogs
-        case EXC_OBJ_CMO_DIALOG:        // not supported in Calc
-        case EXC_OBJ_CMO_SPIN:          // not supported in Calc
-        case EXC_OBJ_CMO_SCROLLBAR:     // not supported in Calc
+        case EXC_OBJ_CMO_DIALOG:        // not supported
             pEscherObj->SetSkip();
         break;
         default:
@@ -1919,6 +1996,8 @@ void XclImpObjectManager::ReadObjTbxSubRec( XclImpStream& rStrm, sal_uInt16 nSub
             case EXC_ID_OBJ_FTLBSDATA:  pCtrlObj->ReadLbsData( rStrm );     break;
             case EXC_ID_OBJ_FTSBSFMLA:  // equal to ftCblsFmla
             case EXC_ID_OBJ_FTCBLSFMLA: pCtrlObj->ReadCblsFmla( rStrm );    break;
+            case EXC_ID_OBJ_FTSBS:      pCtrlObj->ReadSbs( rStrm );         break;
+
             default:    DBG_ERRORFILE( "XclImpObjectManager::ReadObjTbxSubRec - unknown subrecord" );
         }
     }
