@@ -162,8 +162,10 @@ private:
 
     /** This is a shortcut for accessing the view shell data member of
         the base class casted to the correct class.
+        @return
+            The returned pointer may be NULL.
     */
-    DrawViewShell& GetDrawViewShell (void) const;
+    DrawViewShell* GetDrawViewShell (void) const;
 };
 
 } // end of namespace sd
