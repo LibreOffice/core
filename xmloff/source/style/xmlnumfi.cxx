@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfi.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-28 15:06:10 $
+ *  last change: $Author: nn $ $Date: 2001-06-13 18:44:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1156,6 +1156,12 @@ void SvXMLNumFormatContext::CreateAndInsert(sal_Bool bOverwrite)
         aFormatCode.insert( 0, aConditions.makeStringAndClear() );
         OUString sFormat = aFormatCode.makeStringAndClear();
 
+        if ( !sFormat.getLength() )
+        {
+            //  insert empty format as empty string (with quotes)
+            sFormat = OUString::createFromAscii("\"\"");    // ""
+        }
+
         //  test special cases
 
         if ( bAutoDec )         // automatic decimal places
@@ -1263,6 +1269,12 @@ void SvXMLNumFormatContext::CreateAndInsert(sal_Bool bOverwrite)
                 String sTitle (sFormatTitle);
                 pFormat->SetComment(sTitle);
             }
+        }
+
+        if ( nIndex == NUMBERFORMAT_ENTRY_NOT_FOUND )
+        {
+            DBG_ERROR("invalid number format");
+            nIndex = pFormatter->GetStandardIndex( nFormatLang );
         }
 
         pData->AddKey( nIndex, GetName() );
