@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cmc $ $Date: 2001-03-16 14:23:21 $
+ *  last change: $Author: cmc $ $Date: 2001-04-20 14:54:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,8 +146,6 @@
 #define DELETEAZ( p ) { delete[]( p ); p = 0; };
 
 
-
-
 //-----------------------------------------
 //              Tabellen
 //-----------------------------------------
@@ -268,7 +266,7 @@ class WW8TabDesc
 public:
     BOOL IsValidCell( short nCol ) const;
 
-    WW8TabDesc( SwWW8ImplReader* pIoClass );
+    WW8TabDesc( SwWW8ImplReader* pIoClass, WW8_CP nStartCp );
     BOOL Ok() const { return bOk; }
     void CreateSwTable();
     void TableCellEnd();
@@ -1065,9 +1063,12 @@ void WW8TabBandDesc::ReadShd( SVBT16* pS )
 
 
 
-static BOOL SearchRowEnd( BOOL bVer67, BOOL bComplex, WW8PLCFx_Cp_FKP* pPap )
+static BOOL SearchRowEnd( BOOL bVer67, BOOL bComplex, WW8PLCFx_Cp_FKP* pPap, WW8_CP &rStartCp )
 {
     BYTE* pB;
+    WW8PLCFxDesc aRes;
+    aRes.pMemPos = 0;
+    aRes.nEndPos = rStartCp;
 
     while(     (    ( bVer67 && !bComplex )
                  || ( pPap->GetPCDIdx() < pPap->GetPCDIMax()) )
@@ -1080,14 +1081,21 @@ static BOOL SearchRowEnd( BOOL bVer67, BOOL bComplex, WW8PLCFx_Cp_FKP* pPap )
                 && *pB == 1 )
                 return TRUE;    // RowEnd found
         }
-        (*pPap)++;
+
+        aRes.nStartPos = aRes.nEndPos;
+        aRes.pMemPos = 0;
+        //Seek to our next block of properties
+        pPap->SeekPos(aRes.nStartPos);
+        pPap->GetSprms(&aRes);
+        //Update our aRes to get the new starting point of the next properties
+        rStartCp = aRes.nEndPos;
     }
     return FALSE;
 }
 
 
 
-WW8TabDesc::WW8TabDesc( SwWW8ImplReader* pIoClass )
+WW8TabDesc::WW8TabDesc( SwWW8ImplReader* pIoClass, WW8_CP nStartCp )
     : pIo( pIoClass ),
     pFirstBand( 0 ),
     pActBand( 0 ),
@@ -1151,7 +1159,7 @@ WW8TabDesc::WW8TabDesc( SwWW8ImplReader* pIoClass )
         BYTE* pTabDxaColSprm  = 0;
 
 
-        if( !SearchRowEnd( bVer67, bComplex, pPap ) )   // Suche Ende einer TabZeile
+        if( !SearchRowEnd( bVer67, bComplex, pPap, nStartCp ) ) // Suche Ende einer TabZeile
         {
             bOk = FALSE;
             break;
@@ -1333,7 +1341,13 @@ WW8TabDesc::WW8TabDesc( SwWW8ImplReader* pIoClass )
         nRows++;
         pActBand->nRows++;
 
-        (*pPap)++;
+        //Seek our pap to its next block of properties
+        WW8PLCFxDesc aRes;
+        aRes.pMemPos = 0;
+        aRes.nStartPos = nStartCp;
+        pPap->SeekPos(aRes.nStartPos);
+        pPap->GetSprms(&aRes);
+
         if(    ( pPap->Where() == LONG_MAX )
             || (    ( !bVer67 || bComplex )
                  && ( pPap->GetPCDIdx() >= pPap->GetPCDIMax() ) ) )
@@ -1546,7 +1560,7 @@ void WW8TabDesc::CreateSwTable()
     // append new node to ensure that this content remains
     // ABOVE the table
     SwPosition* pPoint = pIo->pPaM->GetPoint();
-    BOOL bInsNode = ( pPoint->nContent.GetIndex() );
+    BOOL bInsNode = pPoint->nContent.GetIndex() ? TRUE : FALSE;
     if(    !bInsNode
         && pIo->pNode_FLY_AT_CNTNT == &pPoint->nNode.GetNode() )
     {
@@ -2195,8 +2209,26 @@ void WW8TabDesc::TableCellEnd()
         USHORT iCol = GetLogicalWWCol();
         if( iCol < aNumRuleNames.Count() )
             aNumRuleNames.DeleteAndDestroy( iCol, aNumRuleNames.Count()-iCol );
+#if 0
+        /*Hang on, we can have character runs that contain for example...
+        <bold>
+        text
+            Table
+        text
+        </bold>
 
+        This invalidates all attributes causing in our bold example the incorrect...
+        <bold>
+        text
+            Table
+        </bold>
+        text
+
+        If this code is truly necessary it needs to be done a different way,
+        cmc 18/04/2001
+        */
         pIo->pCtrlStck->SetAttr( *pIo->pPaM->GetPoint(), 0, FALSE );
+#endif
 
         nAktCol = 0;
         nAktRow++;
@@ -2317,13 +2349,13 @@ void WW8TabDesc::SetNumRuleName( const String& rName )
 
 
 
-BOOL SwWW8ImplReader::StartTable()
+BOOL SwWW8ImplReader::StartTable(WW8_CP nStartCp)
 {
     if(    pTableDesc       // keine rekursiven Tabellen
         || bReadNoTbl )     // Nicht bei EinfuegenDatei in Tabelle
         return FALSE;       // oder Fussnote
 
-    pTableDesc = new WW8TabDesc( this );
+    pTableDesc = new WW8TabDesc( this, nStartCp );
     if( pTableDesc->Ok() )
         pTableDesc->CreateSwTable();
     else
@@ -3024,11 +3056,14 @@ void SwWW8ImplReader::ReadDocInfo()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par2.cxx,v 1.7 2001-03-16 14:23:21 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par2.cxx,v 1.8 2001-04-20 14:54:47 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.7  2001/03/16 14:23:21  cmc
+      ##561## Styles should inherit the toggleable attributes from eachother
+
       Revision 1.6  2001/03/12 12:58:56  cmc
       ##510##, #81434# Set default asian fontsize to winword default as well as western fontsize
 

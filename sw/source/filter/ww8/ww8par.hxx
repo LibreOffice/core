@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: cmc $ $Date: 2001-04-03 17:21:04 $
+ *  last change: $Author: cmc $ $Date: 2001-04-20 14:54:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -811,7 +811,7 @@ friend class WW8FormulaControl;
     BYTE* TestApo( BOOL& rbStartApo, BOOL& rbStopApo, BOOL& rbNowStyleApo,
                    BOOL bInTable,    BOOL bTableRowEnd,
                    BOOL bStillInTable );
-    BOOL ProcessSpecial( BOOL bAllEnd, BOOL* pbReSync );
+    BOOL ProcessSpecial( BOOL bAllEnd, BOOL* pbReSync, WW8_CP nStartCp );
 
     ULONG ReadWmfHeader( WmfFileHd* pHd, long nPos );
     BOOL ReadGrafFile( String& rFileName, Graphic*& rpGraphic,
@@ -848,7 +848,7 @@ friend class WW8FormulaControl;
     void SetImplicitTab();
     ULONG LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss);
 
-    BOOL StartTable();
+    BOOL StartTable(WW8_CP nStartCp);
     void TabCellEnd();
     void StopTable();
     short GetTableLeft();
@@ -1151,11 +1151,14 @@ public:     // eigentlich private, geht aber leider nur public
 
     Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.hxx,v 1.20 2001-04-03 17:21:04 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.hxx,v 1.21 2001-04-20 14:54:47 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.20  2001/04/03 17:21:04  cmc
+      ##505## Test for special case of textbox that contains only another textbox whose size is greater than container so as to disable autogrow
+
       Revision 1.19  2001/03/27 12:01:49  cmc
       brightness, contrast, drawmode {im|ex}port, merge 0x01 and 0x08 graphics systems for escher to replace hack
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: cmc $ $Date: 2001-04-12 15:15:55 $
+ *  last change: $Author: cmc $ $Date: 2001-04-20 14:54:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1379,7 +1379,7 @@ BYTE* SwWW8ImplReader::TestApo( BOOL& rbStartApo, BOOL& rbStopApo,
     return pSprm29;
 }
 
-BOOL SwWW8ImplReader::ProcessSpecial( BOOL bAllEnd, BOOL* pbReSync )    // Apo / Table / Anl
+BOOL SwWW8ImplReader::ProcessSpecial( BOOL bAllEnd, BOOL* pbReSync, WW8_CP nStartCp )   // Apo / Table / Anl
 {
     if( bNeverCallProcessSpecial )
         return FALSE;
@@ -1495,7 +1495,7 @@ BOOL SwWW8ImplReader::ProcessSpecial( BOOL bAllEnd, BOOL* pbReSync )    // Apo /
         if( bAnl )                          // Nummerierung ueber Zellengrenzen
             StopAnl();                      // fuehrt zu Absturz -> keine Anls
                                             // in Tabellen
-        bTable = StartTable();
+        bTable = StartTable(nStartCp);
         *pbReSync = TRUE;                   // nach StartTable ist ein ReSync
                                             // noetig ( eigentlich nur, falls
                                             // die Tabelle ueber eine
@@ -1786,11 +1786,10 @@ void SwWW8ImplReader::ProcessAktCollChange( WW8PLCFManResult& rRes,
     if( pStartAttr && bCallProcessSpecial && !bNeverCallProcessSpecial )
     {
         BOOL bReSync;
-        bTabRowEnd = ProcessSpecial( FALSE, &bReSync );// Apo / Table / Anl
+        bTabRowEnd = ProcessSpecial( FALSE, &bReSync, rRes.nAktCp + pPlcxMan->GetCpOfs() );// Apo / Table / Anl
         if( bReSync )
             *pStartAttr = pPlcxMan->Get( &rRes ); // hole Attribut-Pos neu
     }
-
 
 /*
 SwWW8ImplReader::ProcessAktCollChange(WW8PLCFManResult & {...}, unsigned char * 0x0012d6d8, unsigned char 0x01) line 1643
@@ -1825,6 +1824,7 @@ long SwWW8ImplReader::ReadTextAttr( long& rTxtPos, BOOL& rbStartLine )
     WW8PLCFManResult aRes;
 
     BOOL bStartAttr = pPlcxMan->Get( &aRes ); // hole Attribut-Pos
+    aRes.nAktCp = rTxtPos;              // Akt. Cp-Pos
 
     if( aRes.nFlags & MAN_MASK_NEW_SEP ){   // neue Section
         bPgSecBreak = FALSE;                // PageDesc erzeugen und fuellen
@@ -1862,7 +1862,6 @@ long SwWW8ImplReader::ReadTextAttr( long& rTxtPos, BOOL& rbStartLine )
         }
         else if( aRes.nSprmId < 0x800 ) // eigene Hilfs-Attribute
         {
-            aRes.nAktCp = rTxtPos;              // Akt. Cp-Pos
             nSkipChars = ImportExtSprm( &aRes, bStartAttr );
             if( 256 <= aRes.nSprmId && 258 >= aRes.nSprmId )
             {
@@ -1966,7 +1965,7 @@ void SwWW8ImplReader::ReadAttrEnds( long& rNext, long& rTxtPos )
         rNext = pPlcxMan->Where();
     }
     BOOL bDummyReSync;
-    ProcessSpecial( TRUE, &bDummyReSync );
+    ProcessSpecial( TRUE, &bDummyReSync, -1 );
 }
 
 void SwWW8ImplReader::ReadText( long nStartCp, long nTextLen, short nType )
@@ -2690,7 +2689,7 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
 #ifdef DEBUG
     {
     const SwSpzFrmFmts& rFmts = *rDoc.GetSpzFrmFmts();
-    for( ULONG iN = 0, nN = rFmts.Count(); iN < nN; ++iN )
+    for( USHORT iN = 0, nN = rFmts.Count(); iN < nN; ++iN )
     {
         const SwFmtAnchor& rA = rFmts[ iN ]->GetAnchor();
         if( FLY_IN_CNTNT == rA.GetAnchorId() &&
@@ -3092,11 +3091,14 @@ void SwMSDffManager::ProcessClientAnchor2( SvStream& rSt, DffRecordHeader& rHd, 
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.cxx,v 1.18 2001-04-12 15:15:55 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.cxx,v 1.19 2001-04-20 14:54:47 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.18  2001/04/12 15:15:55  cmc
+      Make identifying page vs section break safe
+
       Revision 1.17  2001/04/10 10:51:11  cmc
       CJK Kerning and Punctionation {im|ex}port
 
