@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accgraphic.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2002-07-09 12:51:28 $
+ *  last change: $Author: mib $ $Date: 2002-08-15 10:25:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@
 #ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HPP_
 #include <com/sun/star/uno/RuntimeException.hpp>
 #endif
+#ifndef _RTL_UUID_H_
+#include <rtl/uuid.h>
+#endif
 #ifndef _FLYFRM_HXX
 #include <flyfrm.hxx>
 #endif
@@ -123,4 +126,15 @@ Sequence< OUString > SAL_CALL SwAccessibleGraphic::getSupportedServiceNames()
     pArray[0] = OUString( RTL_CONSTASCII_USTRINGPARAM(sServiceName) );
     pArray[1] = OUString( RTL_CONSTASCII_USTRINGPARAM(sAccessibleServiceName) );
     return aRet;
+}
+
+Sequence< sal_Int8 > SAL_CALL SwAccessibleGraphic::getImplementationId()
+        throw(RuntimeException)
+{
+    static Sequence< sal_Int8 > aId( 16 );
+    static sal_Bool bInit = sal_False;
+    if(!bInit)
+        rtl_createUuid( reinterpret_cast< sal_uInt8 * >(aId.getArray() ),
+                        0, sal_True );
+    return aId;
 }

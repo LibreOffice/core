@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accdoc.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mib $ $Date: 2002-08-07 13:32:16 $
+ *  last change: $Author: mib $ $Date: 2002-08-15 10:25:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,9 @@
 #include <sfx2/viewsh.hxx>
 #endif
 
+#ifndef _RTL_UUID_H_
+#include <rtl/uuid.h>
+#endif
 #ifndef _VOS_MUTEX_HXX_ //autogen
 #include <vos/mutex.hxx>
 #endif
@@ -505,6 +508,17 @@ Sequence< Type > SAL_CALL SwAccessibleDocument::getTypes() throw(RuntimeExceptio
     pTypes[nIndex] = ::getCppuType( static_cast< Reference< XAccessibleSelection > * >( 0 ) );
 
     return aTypes;
+}
+
+Sequence< sal_Int8 > SAL_CALL SwAccessibleDocument::getImplementationId()
+        throw(RuntimeException)
+{
+    static Sequence< sal_Int8 > aId( 16 );
+    static sal_Bool bInit = sal_False;
+    if(!bInit)
+        rtl_createUuid( reinterpret_cast< sal_uInt8 * >(aId.getArray() ),
+                        0, sal_True );
+    return aId;
 }
 
 //=====  XAccessibleSelection  ============================================

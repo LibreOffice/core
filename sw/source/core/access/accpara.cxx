@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: mib $ $Date: 2002-08-15 09:30:32 $
+ *  last change: $Author: mib $ $Date: 2002-08-15 10:25:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,9 @@
 #endif
 #ifndef _VIEWOPT_HXX
 #include <viewopt.hxx>
+#endif
+#ifndef _RTL_UUID_H_
+#include <rtl/uuid.h>
 #endif
 #ifndef _VOS_MUTEX_HXX_ //autogen
 #include <vos/mutex.hxx>
@@ -1089,6 +1092,16 @@ Sequence< Type > SAL_CALL SwAccessibleParagraph::getTypes() throw(RuntimeExcepti
     return aTypes;
 }
 
+Sequence< sal_Int8 > SAL_CALL SwAccessibleParagraph::getImplementationId()
+        throw(RuntimeException)
+{
+    static Sequence< sal_Int8 > aId( 16 );
+    static sal_Bool bInit = sal_False;
+    if(!bInit)
+        rtl_createUuid( reinterpret_cast< sal_uInt8 * >(aId.getArray() ),
+                        0, sal_True );
+    return aId;
+}
 
 
 //

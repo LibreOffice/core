@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccell.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mib $ $Date: 2002-08-07 13:32:16 $
+ *  last change: $Author: mib $ $Date: 2002-08-15 10:25:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HPP_
 #include <com/sun/star/uno/RuntimeException.hpp>
+#endif
+#ifndef _RTL_UUID_H_
+#include <rtl/uuid.h>
 #endif
 #ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
@@ -374,7 +377,16 @@ Sequence< Type > SAL_CALL SwAccessibleCell::getTypes() throw(RuntimeException)
     return aTypes;
 }
 
-
+Sequence< sal_Int8 > SAL_CALL SwAccessibleCell::getImplementationId()
+        throw(RuntimeException)
+{
+    static Sequence< sal_Int8 > aId( 16 );
+    static sal_Bool bInit = sal_False;
+    if(!bInit)
+        rtl_createUuid( reinterpret_cast< sal_uInt8 * >(aId.getArray() ),
+                        0, sal_True );
+    return aId;
+}
 
 // =====  XAccessibleValue  ===============================================
 

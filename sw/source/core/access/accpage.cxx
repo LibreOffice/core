@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpage.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2002-07-10 16:53:34 $
+ *  last change: $Author: mib $ $Date: 2002-08-15 10:25:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 
 #pragma hdrstop
 
+#ifndef _RTL_UUID_H_
+#include <rtl/uuid.h>
+#endif
 #ifndef _SV_WINDOW_HXX
 #include <vcl/window.hxx>
 #endif
@@ -238,6 +241,17 @@ Sequence<OUString> SwAccessiblePage::getSupportedServiceNames( )
     pArray[0] = OUString( RTL_CONSTASCII_USTRINGPARAM(sServiceName) );
     pArray[1] = OUString( RTL_CONSTASCII_USTRINGPARAM(sAccessibleServiceName) );
     return aRet;
+}
+
+Sequence< sal_Int8 > SAL_CALL SwAccessiblePage::getImplementationId()
+        throw(RuntimeException)
+{
+    static Sequence< sal_Int8 > aId( 16 );
+    static sal_Bool bInit = sal_False;
+    if(!bInit)
+        rtl_createUuid( reinterpret_cast< sal_uInt8 * >(aId.getArray() ),
+                        0, sal_True );
+    return aId;
 }
 
 OUString SwAccessiblePage::getAccessibleDescription( )

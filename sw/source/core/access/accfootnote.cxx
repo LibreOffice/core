@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accfootnote.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2002-07-10 16:53:32 $
+ *  last change: $Author: mib $ $Date: 2002-08-15 10:25:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HPP_
 #include <com/sun/star/uno/RuntimeException.hpp>
+#endif
+#ifndef _RTL_UUID_H_
+#include <rtl/uuid.h>
 #endif
 #ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
@@ -205,6 +208,17 @@ Sequence< OUString > SAL_CALL SwAccessibleFootnote::getSupportedServiceNames()
         pArray[0] = OUString( RTL_CONSTASCII_USTRINGPARAM(sServiceNameFootnote) );
     pArray[1] = OUString( RTL_CONSTASCII_USTRINGPARAM(sAccessibleServiceName) );
     return aRet;
+}
+
+Sequence< sal_Int8 > SAL_CALL SwAccessibleFootnote::getImplementationId()
+        throw(RuntimeException)
+{
+    static Sequence< sal_Int8 > aId( 16 );
+    static sal_Bool bInit = sal_False;
+    if(!bInit)
+        rtl_createUuid( reinterpret_cast< sal_uInt8 * >(aId.getArray() ),
+                        0, sal_True );
+    return aId;
 }
 
 sal_Bool SwAccessibleFootnote::IsEndnote( const SwFtnFrm *pFtnFrm )

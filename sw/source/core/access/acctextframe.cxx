@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acctextframe.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2002-07-24 13:14:55 $
+ *  last change: $Author: mib $ $Date: 2002-08-15 10:25:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 
 #pragma hdrstop
 
+#ifndef _RTL_UUID_H_
+#include <rtl/uuid.h>
+#endif
 #ifndef _VOS_MUTEX_HXX_ //autogen
 #include <vos/mutex.hxx>
 #endif
@@ -198,6 +201,17 @@ Sequence< OUString > SAL_CALL SwAccessibleTextFrame::getSupportedServiceNames()
     pArray[0] = OUString( RTL_CONSTASCII_USTRINGPARAM(sServiceName) );
     pArray[1] = OUString( RTL_CONSTASCII_USTRINGPARAM(sAccessibleServiceName) );
     return aRet;
+}
+
+Sequence< sal_Int8 > SAL_CALL SwAccessibleTextFrame::getImplementationId()
+        throw(RuntimeException)
+{
+    static Sequence< sal_Int8 > aId( 16 );
+    static sal_Bool bInit = sal_False;
+    if(!bInit)
+        rtl_createUuid( reinterpret_cast< sal_uInt8 * >(aId.getArray() ),
+                        0, sal_True );
+    return aId;
 }
 
 

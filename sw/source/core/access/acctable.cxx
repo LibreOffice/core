@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acctable.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mib $ $Date: 2002-08-15 09:30:32 $
+ *  last change: $Author: mib $ $Date: 2002-08-15 10:25:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 
 #ifndef _VOS_MUTEX_HXX_ //autogen
 #include <vos/mutex.hxx>
+#endif
+#ifndef _RTL_UUID_H_
+#include <rtl/uuid.h>
 #endif
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
@@ -908,6 +911,17 @@ Sequence< ::com::sun::star::uno::Type > SAL_CALL SwAccessibleTable::getTypes() t
     pTypes[nIndex++] = ::getCppuType( static_cast< Reference< XAccessibleTable > * >( 0 ) );
 
     return aTypes;
+}
+
+Sequence< sal_Int8 > SAL_CALL SwAccessibleTable::getImplementationId()
+        throw(RuntimeException)
+{
+    static Sequence< sal_Int8 > aId( 16 );
+    static sal_Bool bInit = sal_False;
+    if(!bInit)
+        rtl_createUuid( reinterpret_cast< sal_uInt8 * >(aId.getArray() ),
+                        0, sal_True );
+    return aId;
 }
 
 

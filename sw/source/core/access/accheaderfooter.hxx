@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accheaderfooter.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2002-07-10 16:53:33 $
+ *  last change: $Author: mib $ $Date: 2002-08-15 10:25:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,9 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString> SAL_CALL
         getSupportedServiceNames (void)
         throw (::com::sun::star::uno::RuntimeException);
+
+    //=====  XTypeProvider  ====================================================
+    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException);
 };
 
 
