@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 15:13:40 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:28:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1015,7 +1015,7 @@ uno::Reference< uno::XInterface > SAL_CALL SdXImpressDocument::createInstance( c
     }
     if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.NumberingRules" ) ) )
     {
-        return SvxCreateNumRule( pDoc );
+        return uno::Reference< uno::XInterface >( SvxCreateNumRule( pDoc ), uno::UNO_QUERY );
     }
     if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Background" ) ) )
     {
@@ -1226,7 +1226,7 @@ uno::Sequence< OUString > SAL_CALL SdXImpressDocument::getAvailableServiceNames(
 
     const uno::Sequence< OUString > aSNS_ORG( SvxFmMSFactory::getAvailableServiceNames() );
 
-    uno::Sequence< OUString > aSNS( mbImpressDoc ? (30 + 4) : (19 + 4) );
+    uno::Sequence< OUString > aSNS( mbImpressDoc ? (30 + 4) : (18 + 4) );
 
     sal_uInt16 i(0);
 
