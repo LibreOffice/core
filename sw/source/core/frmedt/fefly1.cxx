@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fefly1.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2002-08-30 09:02:05 $
+ *  last change: $Author: vg $ $Date: 2002-09-03 10:05:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2042,7 +2042,7 @@ void SwFEShell::GetConnectableFrmFmts(SwFrmFmt & rFmt,
 
     StartAction();
 
-    SwFmtChain & rChain = rFmt.GetChain();
+    SwFmtChain rChain = rFmt.GetChain();
     SwFrmFmt * pOldChainNext = (SwFrmFmt *) rChain.GetNext();
     SwFrmFmt * pOldChainPrev = (SwFrmFmt *) rChain.GetPrev();
 
