@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldl2.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:40:17 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:41:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -372,6 +372,22 @@ BOOL __EXPORT BasicCheckBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
     {
         ErrorBox( this, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_LIBISREADONLY ) ) ).Execute();
         return FALSE;
+    }
+
+    // i24094: Password verification necessary for renaming
+    BOOL bOK = TRUE;
+    if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && !xModLibContainer->isLibraryLoaded( aOULibName ) )
+    {
+        // check password
+        Reference< script::XLibraryContainerPassword > xPasswd( xModLibContainer, UNO_QUERY );
+        if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aOULibName ) && !xPasswd->isLibraryPasswordVerified( aOULibName ) )
+        {
+            String aPassword;
+            Reference< script::XLibraryContainer > xModLibContainer1( xModLibContainer, UNO_QUERY );
+            bOK = QueryPassword( xModLibContainer1, aLibName, aPassword );
+        }
+        if ( !bOK )
+            return FALSE;
     }
 
     // TODO: check if library is reference/link
