@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.158 $
+ *  $Revision: 1.159 $
  *
- *  last change: $Author: oj $ $Date: 2002-12-02 08:53:25 $
+ *  last change: $Author: ssa $ $Date: 2002-12-04 17:34:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,6 +209,9 @@
 #include <dndlcon.hxx>
 #include <dndevdis.hxx>
 
+#ifndef _UNOTOOLS_CONFIGNODE_HXX_
+#include <unotools/confignode.hxx>
+#endif
 
 #pragma hdrstop
 
@@ -437,6 +440,28 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, BOOL bCallHdl )
         aStyleSettings.SetGroupFont( aFont );
 
         rSettings.SetStyleSettings( aStyleSettings );
+    }
+
+
+    // #104427# auto detect HC mode ?
+    if( !rSettings.GetStyleSettings().GetHighContrastMode() )
+    {
+        sal_Bool bTmp, bAutoHCMode = sal_True;
+        utl::OConfigurationNode aNode = utl::OConfigurationTreeRoot::createWithServiceFactory(
+            vcl::unohelper::GetMultiServiceFactory(),
+            OUString::createFromAscii( "org.openoffice.Office.Common/Accessibility" ) );    // note: case sensisitive !
+        ::com::sun::star::uno::Any aValue = aNode.getNodeValue( OUString::createFromAscii( "AutoDetectSystemHC" ) );
+        if( aValue >>= bTmp )
+            bAutoHCMode = bTmp;
+        if( bAutoHCMode )
+        {
+            if( rSettings.GetStyleSettings().GetFaceColor().GetLuminance() < 8 )
+            {
+                StyleSettings aStyleSettings = rSettings.GetStyleSettings();
+                aStyleSettings.SetHighContrastMode( TRUE );
+                rSettings.SetStyleSettings( aStyleSettings );
+            }
+        }
     }
 
 
