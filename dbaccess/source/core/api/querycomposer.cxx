@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-24 13:25:25 $
+ *  last change: $Author: oj $ $Date: 2001-08-09 13:08:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,12 +128,16 @@
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
 #endif
+#ifndef _DBHELPER_DBCONVERSION_HXX_
+#include <connectivity/dbconversion.hxx>
+#endif
 #ifndef _CONNECTIVITY_SDBCX_COLUMN_HXX_
 #include <connectivity/PColumn.hxx>
 #endif
 
 
 using namespace dbaccess;
+using namespace dbtools;
 using namespace comphelper;
 using namespace connectivity;
 using namespace ::com::sun::star::uno;
@@ -144,6 +148,7 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::script;
 using namespace ::cppu;
 using namespace ::osl;
 using namespace ::utl;
@@ -660,6 +665,9 @@ void SAL_CALL OQueryComposer::appendFilterByColumn( const Reference< XPropertySe
     //  ::rtl::OUString aSql = getTableAlias(column) + aName;
     if(aValue.hasValue())
     {
+        if(!m_xTypeConverter.is())
+            m_xTypeConverter = Reference< XTypeConverter >(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.script.Converter")),UNO_QUERY);
+        OSL_ENSURE(m_xTypeConverter.is(),"NO typeconverter!");
 
         switch(nType)
         {
@@ -667,9 +675,7 @@ void SAL_CALL OQueryComposer::appendFilterByColumn( const Reference< XPropertySe
             case DataType::CHAR:
             case DataType::LONGVARCHAR:
                 aSql += STR_LIKE;
-                aSql += ::rtl::OUString::createFromAscii("\'");
-                aSql += toString(aValue).getStr();
-                aSql += ::rtl::OUString::createFromAscii("\'");
+                aSql += DBTypeConversion::toSQLString(nType,aValue,sal_True,m_xTypeConverter);
                 break;
             case DataType::VARBINARY:
             case DataType::BINARY:
@@ -700,12 +706,8 @@ void SAL_CALL OQueryComposer::appendFilterByColumn( const Reference< XPropertySe
                 }
                 break;
             default:
-                {
-                    ::rtl::OUString aValueStr(toString(aValue));
-                    aSql += STR_EQUAL;
-                    aSql += ::rtl::OUString::createFromAscii(" ");
-                    aSql += aValueStr.getStr();
-                }
+                aSql += STR_EQUAL;
+                aSql += DBTypeConversion::toSQLString(nType,aValue,sal_True,m_xTypeConverter);
         }
     }
     else
