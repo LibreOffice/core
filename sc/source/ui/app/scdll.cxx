@@ -1,9 +1,9 @@
 /*
  *  $RCSfile: scdll.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 12:29:29 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 17:23:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,8 +148,6 @@
 #include "tbinsert.hxx"
 
 #include <svx/xmlsecctrl.hxx>
-
-
 // Child-Windows
 #include "reffact.hxx"
 #include "navipi.hxx"
