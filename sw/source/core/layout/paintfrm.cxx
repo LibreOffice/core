@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 11:18:27 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 15:54:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2231,7 +2231,7 @@ void SwRootFrm::Paint( const SwRect& rRect ) const
             // OD 20.12.2002 #94627# - no paint of page border and shadow, if
             // writer is in place mode.
             if( pSh->GetWin() &&
-                !pSh->GetDoc()->GetDocShell()->GetProtocol().IsInPlaceActive() )
+                !pSh->GetDoc()->GetDocShell()->IsInPlaceActive() )
             {
                 // OD 12.02.2003 #i9719#, #105645# - use new method
                 // <SwPageFrm::PaintBorderAndShadow(..)>.
@@ -4663,7 +4663,7 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
             if ( pSh->GetOut()->GetOutDevType() == OUTDEV_PRINTER ||
                  pSh->GetViewOptions()->IsPDFExport() ||
                  ( pSh->GetDoc()->GetDocShell()->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED &&
-                   !pSh->GetDoc()->GetDocShell()->GetProtocol().IsInPlaceActive()
+                   !pSh->GetDoc()->GetDocShell()->IsInPlaceActive()
                  )
                )
             {
