@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2001-01-19 20:24:45 $
+ *  last change: $Author: pb $ $Date: 2001-01-23 07:55:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3516,6 +3516,8 @@ String STR_KEY_BASIC_PATH
 {
     Text = "BASIC" ;
 };
+
+#if (SUPD <= 614)
 String STR_KEY_DATABASE_PATH
 {
     Text = "Datenbankanfragen" ;
@@ -3544,6 +3546,8 @@ String STR_KEY_DATABASE_PATH
     Text[ turkish ] = "Veritabaný sorgularý";
     Text[ language_user1 ] = " ";
 };
+#endif
+
 String STR_KEY_PALETTE_PATH
 {
     Text = "Paletten" ;
@@ -3785,6 +3789,8 @@ String STR_KEY_NEW_DIR
     Text[ turkish ] = "Standart þablonlar";
     Text[ language_user1 ] = " ";
 };
+
+#if (SUPD <= 614)
 String STR_KEY_TRASH_DIR
 {
     Text = "Papierkorb" ;
@@ -3811,6 +3817,8 @@ String STR_KEY_TRASH_DIR
     Text[ turkish ] = "Çöp kutusu";
     Text[ language_user1 ] = " ";
 };
+#endif
+
 String STR_KEY_STORAGE_DIR
 {
     Text = "Nachrichtenspeicher" ;
@@ -3836,6 +3844,11 @@ String STR_KEY_STORAGE_DIR
     Text[ korean ] = "¸Þ½ÃÁö  ÀúÀåÀå¼Ò";
     Text[ turkish ] = "Ýleti depolama alaný";
     Text[ language_user1 ] = " ";
+};
+String STR_KEY_TEMP_PATH
+{
+    Text = "" ;
+    Text[ language_user1 ] = "PB: only an empty string";
 };
 String STR_KEY_AUTOPILOT_DIR
 {
