@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: pluby $ $Date: 2000-11-22 02:27:25 $
+ *  last change: $Author: pluby $ $Date: 2000-11-22 02:43:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@ SalFrame::SalFrame()
 SalFrame::~SalFrame()
 {
     ReleaseGraphics( maFrameData.mpGraphics );
-    VCLWindow_release( maFrameData.mhWnd );
+    VCLWindow_Release( maFrameData.mhWnd );
 }
 
 // -----------------------------------------------------------------------
@@ -152,7 +152,7 @@ SalGraphics* SalFrame::GetGraphics()
             if ( !pFrame )
                 break;
         }
-        hView = VCLWindow_contentView( pFrame->maFrameData.mhWnd );
+        hView = VCLWindow_ContentView( pFrame->maFrameData.mhWnd );
 
         if ( hView )
         {
@@ -194,7 +194,7 @@ void SalFrame::SetTitle( const XubString& rTitle )
 
     ByteString aByteTitle( rTitle, gsl_getSystemTextEncoding() );
     char *pTitle = (char *)aByteTitle.GetBuffer();
-    VCLWindow_setTitle(maFrameData.mhWnd, pTitle);
+    VCLWindow_SetTitle( maFrameData.mhWnd, pTitle );
 
 }
 
@@ -210,11 +210,11 @@ void SalFrame::Show( BOOL bVisible )
 {
     if ( bVisible )
     {
-        VCLWindow_makeKeyAndOrderFront( maFrameData.mhWnd );
+        VCLWindow_Show( maFrameData.mhWnd );
     } // if
     else
     {
-        VCLWindow_close( maFrameData.mhWnd );
+        VCLWindow_Close( maFrameData.mhWnd );
     } // else
 
     // This is temporary code for testing only and should be removed
@@ -236,7 +236,7 @@ void SalFrame::Show( BOOL bVisible )
 
     // Get this window's cached handle to its native content view
 
-    VCLVIEW hView = VCLWindow_contentView ( maFrameData.mhWnd );
+    VCLVIEW hView = VCLWindow_ContentView ( maFrameData.mhWnd );
 
     // Draw a line on the native content view (no color)
 
@@ -361,7 +361,7 @@ void SalFrame::SetMinClientSize( long nWidth, long nHeight )
 
 void SalFrame::SetClientSize( long nWidth, long nHeight )
 {
-  // VCLWindow_setSize( maFrameData.mhWnd, nWidth, nHeight );
+  // VCLWindow_SetSize( maFrameData.mhWnd, nWidth, nHeight );
 }
 
 // -----------------------------------------------------------------------

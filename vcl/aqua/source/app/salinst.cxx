@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: pluby $ $Date: 2000-11-20 05:44:22 $
+ *  last change: $Author: pluby $ $Date: 2000-11-22 02:43:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,24 +185,24 @@ void SalInstance::Yield( BOOL bWait )
     if ( pSVData->maAppData.mnModalMode )
     {
         // If this is a request from a modal window, run a modal session.
-        // Note that VCLApplication_runModalForWindow will not return until
+        // Note that VCLApplication_RunModalForWindow will not return until
         // the modal session has ended.
         Dialog *pDialog = pSVData->maWinData.mpLastExecuteDlg;
         if ( pDialog ) {
             SalFrame *pFrame = pDialog->ImplGetFrame();
             if ( pFrame && pFrame->maFrameData.mhWnd )
-                VCLApplication_runModalForWindow( pFrame->maFrameData.mhWnd );
+                VCLApplication_RunModalForWindow( pFrame->maFrameData.mhWnd );
         }
     }
     else
     {
         // If this is not a request from a modal window, start the event queue.
-        // Note that VCLApplication_run() will not return until the
+        // Note that VCLApplication_Run will not return until the
         // application shuts down. On other platforms, this function returns
         // after each event is pulled off the event queue and dispatched.
         // Instead, we have enter this method only once and let
-        // VCLApplication_run do all of the pulling and dispatching of events.
-        VCLApplication_run();
+        // VCLApplication_Run do all of the pulling and dispatching of events.
+        VCLApplication_Run();
     }
 }
 
@@ -229,7 +229,7 @@ SalFrame* SalInstance::CreateFrame( SalFrame* pParent, ULONG nSalFrameStyle )
     pFrame->maFrameData.mpParent = pParent;
 
     // Create the native window
-    pFrame->maFrameData.mhWnd = VCLWindow_new( nSalFrameStyle, NULL,
+    pFrame->maFrameData.mhWnd = VCLWindow_New( nSalFrameStyle, NULL,
         pFrame, &(pFrame->maFrameData) );
 
     return pFrame;
