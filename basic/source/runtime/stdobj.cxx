@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdobj.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-02 11:58:24 $
+ *  last change: $Author: rt $ $Date: 2004-11-15 16:37:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,9 @@ static Methods aMethods[] = {
 { "Abs",            SbxDOUBLE,    1 | _FUNCTION, RTLNAME(Abs)               },
   { "number",       SbxDOUBLE },
 { "Array",          SbxOBJECT,        _FUNCTION, RTLNAME(Array)             },
-{ "Asc",            SbxINTEGER,   1 | _FUNCTION, RTLNAME(Asc)               },
+{ "Asc",            SbxLONG,      1 | _FUNCTION, RTLNAME(Asc)               },
+  { "string",       SbxSTRING },
+{ "AscW",           SbxLONG,      1 | _FUNCTION | _COMPTMASK, RTLNAME(Asc)  },
   { "string",       SbxSTRING },
 { "Atn",            SbxDOUBLE,    1 | _FUNCTION, RTLNAME(Atn)               },
   { "number",       SbxDOUBLE },
@@ -155,6 +157,8 @@ static Methods aMethods[] = {
   { "Expression",   SbxVARIANT },
 
 { "Chr",            SbxSTRING,    1 | _FUNCTION, RTLNAME(Chr)               },
+  { "string",       SbxINTEGER },
+{ "ChrW",           SbxSTRING,    1 | _FUNCTION | _COMPTMASK, RTLNAME(Chr)  },
   { "string",       SbxINTEGER },
 
 { "CInt",           SbxINTEGER,   1 | _FUNCTION, RTLNAME(CInt)              },
@@ -341,10 +345,15 @@ static Methods aMethods[] = {
   { "Default",      SbxSTRING,        _OPT },
   { "XPosTwips",    SbxLONG,          _OPT },
   { "YPosTwips",    SbxLONG,          _OPT },
-{ "InStr",          SbxINTEGER,   4 | _FUNCTION, RTLNAME(InStr)             },
-  { "StartPos",     SbxSTRING,        _OPT },
+{ "InStr",          SbxLONG,      4 | _FUNCTION, RTLNAME(InStr)             },
+  { "Start",        SbxSTRING,        _OPT },
   { "String1",      SbxSTRING },
   { "String2",      SbxSTRING },
+  { "Compare",      SbxINTEGER,       _OPT },
+{ "InStrRev",       SbxLONG,      4 | _FUNCTION | _COMPTMASK, RTLNAME(InStrRev)},
+  { "String1",      SbxSTRING },
+  { "String2",      SbxSTRING },
+  { "Start",        SbxSTRING,        _OPT },
   { "Compare",      SbxINTEGER,       _OPT },
 { "Int",            SbxDOUBLE,    1 | _FUNCTION, RTLNAME(Int)               },
   { "number",       SbxDOUBLE },
@@ -466,6 +475,7 @@ static Methods aMethods[] = {
   { "Numdecimalplaces", SbxINTEGER,   _OPT },
 { "Rnd",            SbxDOUBLE,    1 | _FUNCTION, RTLNAME(Rnd)               },
   { "Number",       SbxDOUBLE,        _OPT },
+{ "RTL",            SbxOBJECT,    0 | _FUNCTION | _COMPTMASK, RTLNAME(RTL)  },
 { "RTrim",          SbxSTRING,    1 | _FUNCTION, RTLNAME(RTrim)             },
   { "string",       SbxSTRING },
 { "SavePicture",    SbxNULL,      2 | _FUNCTION, RTLNAME(SavePicture)       },
