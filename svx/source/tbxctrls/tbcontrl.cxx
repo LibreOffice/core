@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: pb $ $Date: 2001-11-14 13:45:44 $
+ *  last change: $Author: os $ $Date: 2002-01-09 15:04:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2530,8 +2530,8 @@ SvxFrameLineColorToolBoxControl::SvxFrameLineColorToolBoxControl
     SfxBindings& rBindings
 ) :
 
-    SfxToolBoxControl( nId, rTbx, rBindings )
-
+    SfxToolBoxControl( nId, rTbx, rBindings ),
+    pBtnUpdater(new SvxTbxButtonColorUpdater(   nId, &GetToolBox() ))
 {
 }
 
@@ -2539,6 +2539,8 @@ SvxFrameLineColorToolBoxControl::SvxFrameLineColorToolBoxControl
 
 SvxFrameLineColorToolBoxControl::~SvxFrameLineColorToolBoxControl()
 {
+
+    delete pBtnUpdater;
 }
 
 // -----------------------------------------------------------------------
@@ -2573,6 +2575,14 @@ void SvxFrameLineColorToolBoxControl::StateChanged(
     ToolBox& rTbx = GetToolBox();
     rTbx.EnableItem( nId, SFX_ITEM_DISABLED != eState );
     rTbx.SetItemState( nId, ( SFX_ITEM_DONTCARE == eState ) ? STATE_DONTKNOW : STATE_NOCHECK );
+
+    const SvxColorItem* pItem = 0;
+    if ( SFX_ITEM_DONTCARE != eState )
+    {
+       pItem = PTR_CAST( SvxColorItem, pState );
+        if ( pItem )
+            pBtnUpdater->Update( pItem->GetValue());
+    }
 }
 
 // class SvxReloadControllerItem_Impl ------------------------------------
