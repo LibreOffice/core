@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 14:46:44 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 14:54:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2791,19 +2791,10 @@ void SdrModel::PostSave()
 
 uno::Reference< uno::XInterface > SdrModel::getUnoModel()
 {
-    // try weak reference first
-    uno::Reference< uno::XInterface > xModel( mxUnoModel );
+    if( !mxUnoModel.is() )
+        mxUnoModel = createUnoModel();
 
-    if( !xModel.is() )
-    {
-        // create one
-        xModel = createUnoModel();
-
-        mxUnoModel = xModel;
-    }
-
-    return xModel;
-
+    return mxUnoModel;
 }
 
 uno::Reference< uno::XInterface > SdrModel::createUnoModel()
