@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envprt.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:16:28 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:53:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,7 @@ TabPage TP_ENV_PRT
         Text[ czech ] = "Orientace obálky";
         Text[ hebrew ] = "Umschlageinzug";
         Text[ hindi ] = "लिफाफा का अनुस्थापन";
+        Text[ slovak ] = "Orientácia obálky";
     };
     ToolBox BOX_ALIGN
     {
@@ -172,6 +173,7 @@ TabPage TP_ENV_PRT
         Text[ czech ] = "Tisk od horního okraje";
         Text[ hebrew ] = "Von ~oben bedrucken";
         Text[ hindi ] = "~ऊपर से छपाई";
+        Text[ slovak ] = "~Tlač od horného okraja";
     };
     RadioButton BTN_BOTTOM
     {
@@ -206,6 +208,7 @@ TabPage TP_ENV_PRT
         Text[ czech ] = "Tisk od spodního okraje";
         Text[ hebrew ] = "Von ~unten bedrucken";
         Text[ hindi ] = "~नीचे से छपाई";
+        Text[ slovak ] = "Tlač od ~spodného okraja";
     };
     FixedText TXT_RIGHT
     {
@@ -240,6 +243,7 @@ TabPage TP_ENV_PRT
         Text[ czech ] = "Posunout doprava";
         Text[ hebrew ] = "Nach ~rechts";
         Text[ hindi ] = "~दाहिनी ओर स्थान बदलो";
+        Text[ slovak ] = "Po~sunúť doprava";
     };
     MetricField FLD_RIGHT
     {
@@ -291,6 +295,7 @@ TabPage TP_ENV_PRT
         Text[ czech ] = "Posunout dolů";
         Text[ hebrew ] = "~Nach unten";
         Text[ hindi ] = "~नीचे की ओर स्थान बदलो";
+        Text[ slovak ] = "Posunúť ~dolu";
     };
     MetricField FLD_DOWN
     {
@@ -339,6 +344,7 @@ TabPage TP_ENV_PRT
         Text[ czech ] = "Aktuální tiskárna";
         Text[ hebrew ] = "Aktueller Drucker";
         Text[ hindi ] = "वर्तमान मुद्रक";
+        Text[ slovak ] = "Aktuálna tlačiareň";
     };
     FixedText TXT_PRINTER
     {
@@ -373,6 +379,7 @@ TabPage TP_ENV_PRT
         Text[ czech ] = "- Není nainstalována tiskárna -";
         Text[ hebrew ] = "- Kein Drucker installiert -";
         Text[ hindi ] = "- कोई मुद्रक प्रतिष्ठापित नहीं -";
+        Text[ slovak ] = "- Tlačiareň nie je nainštalovaná -";
     };
     PushButton BTN_PRTSETUP
     {
@@ -406,6 +413,7 @@ TabPage TP_ENV_PRT
         Text[ czech ] = "Nastavení...";
         Text[ hebrew ] = "~Einrichten...";
         Text[ hindi ] = "सेटप...";
+        Text[ slovak ] = "Nastavenie...";
     };
 };
  // Bitmaps ******************************************************************
@@ -506,6 +514,8 @@ Bitmap BMP_VER_RGHT_UPPER_H
 {
     File = "envvr_u_h.bmp" ;
 };
+
+
 
 
 
