@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prov.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sb $ $Date: 2000-12-15 08:29:59 $
+ *  last change: $Author: hro $ $Date: 2000-12-20 12:22:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,6 +210,11 @@ extern "C" void * SAL_CALL component_getFactory(
 extern "C" oslFileError osl_getRealPath(rtl_uString* strPath, rtl_uString** strRealPath);
 #endif
 
+static bool moreLength( const shell::MountPoint& m1, const shell::MountPoint& m2 )
+{
+    return m1.m_aDirectory.getLength() > m2.m_aDirectory.getLength();
+}
+
 FileProvider::FileProvider( const uno::Reference< lang::XMultiServiceFactory >& xMultiServiceFactory )
     : m_xMultiServiceFactory( xMultiServiceFactory ),
       m_pMyShell( 0 )
@@ -336,7 +341,11 @@ FileProvider::FileProvider( const uno::Reference< lang::XMultiServiceFactory >& 
                 rtl::OUString aRealUnqAlias;
 
                 osl_getRealPath( aUnqDir.pData, &aRealUnqDir.pData );
+#if 0
                 osl_getRealPath( aUnqAl.pData, &aRealUnqAlias.pData );
+#else
+                aRealUnqAlias = aUnqAl;
+#endif
 
                 if ( !aRealUnqAlias.getLength() )
                     aRealUnqAlias = aUnqAl;
@@ -357,6 +366,20 @@ FileProvider::FileProvider( const uno::Reference< lang::XMultiServiceFactory >& 
 #endif
 
             }
+
+            // Cut trailing slashes
+
+            for ( sal_uInt32 j = 0; j < m_pMyShell->m_vecMountPoint.size(); j++ )
+            {
+                sal_Int32   nLen = m_pMyShell->m_vecMountPoint[j].m_aDirectory.getLength();
+
+                if ( m_pMyShell->m_vecMountPoint[j].m_aDirectory.lastIndexOf( '/' ) == nLen - 1 )
+                    m_pMyShell->m_vecMountPoint[j].m_aDirectory = m_pMyShell->m_vecMountPoint[j].m_aDirectory.copy( 0, nLen - 1 );
+            }
+
+            // Now sort the mount point entries according to the length
+
+            std::stable_sort( m_pMyShell->m_vecMountPoint.begin(), m_pMyShell->m_vecMountPoint.end(), moreLength );
         }
     }
     catch( ... )
