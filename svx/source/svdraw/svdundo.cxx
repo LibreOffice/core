@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdundo.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dl $ $Date: 2001-03-26 14:37:56 $
+ *  last change: $Author: dl $ $Date: 2001-03-29 11:43:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1190,6 +1190,7 @@ SdrUndoDelPage::~SdrUndoDelPage()
 
 void SdrUndoDelPage::Undo()
 {
+    pPage->SetModel( &rMod );
     ImpInsertPage(nPageNum);
     if (pUndoGroup!=NULL) { // MasterPage-Beziehungen wiederherstellen
         pUndoGroup->Undo();
@@ -1201,6 +1202,7 @@ void SdrUndoDelPage::Undo()
 void SdrUndoDelPage::Redo()
 {
     ImpRemovePage(nPageNum);
+    pPage->SetModel( NULL );
     // Die MasterPage-Beziehungen werden ggf. von selbst geloesst
     DBG_ASSERT(!bItsMine,"RedoDeletePage: pPage gehoert bereits der UndoAction");
     bItsMine=TRUE;
