@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urihelper.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sb $ $Date: 2002-08-13 08:25:37 $
+ *  last change: $Author: sb $ $Date: 2002-10-16 13:19:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -429,7 +429,7 @@ URIHelper::FindFirstURLInText(UniString const & rText,
     if (!(rBegin <= rEnd && rEnd <= rText.Len()))
         return UniString();
 
-    // Search for the first substring of [pBegin..pEnd[ that matches any of the
+    // Search for the first substring of [rBegin..rEnd[ that matches any of the
     // following productions (for which the appropriate style bit is set in
     // eStyle, if applicable).
     //
@@ -520,7 +520,8 @@ URIHelper::FindFirstURLInText(UniString const & rText,
                         while (i != rEnd
                                && checkWChar(rCharClass, rText, &i, &nUriEnd));
                     }
-                    if (isBoundary1(rCharClass, rText, nUriEnd, rEnd))
+                    if (nUriEnd != nPrefixEnd
+                        && isBoundary1(rCharClass, rText, nUriEnd, rEnd))
                     {
                         INetURLObject aUri(UniString(rText, nPos,
                                                      nUriEnd - nPos),
@@ -547,8 +548,9 @@ URIHelper::FindFirstURLInText(UniString const & rText,
                         while (i != rEnd
                                && checkWChar(rCharClass, rText, &i, &nUriEnd));
                     }
-                    if (isBoundary1(rCharClass, rText, nUriEnd, rEnd)
-                        || rText.GetChar(nUriEnd) == '\\')
+                    if (nUriEnd != nPrefixEnd
+                        && (isBoundary1(rCharClass, rText, nUriEnd, rEnd)
+                            || rText.GetChar(nUriEnd) == '\\'))
                     {
                         INetURLObject aUri(UniString(rText, nPos,
                                                      nUriEnd - nPos),

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: test_URIHelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sb $ $Date: 2002-08-22 14:33:34 $
+ *  last change: $Author: sb $ $Date: 2002-10-16 13:20:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,51 @@ extern "C" sal_Bool SAL_CALL test_URIHelper_FindFirstURLInText(
            { "aaa_bbb@xxx.yy", "mailto:aaa_bbb@xxx.yy", 0, 14 },
            { "{a:\\bla/bla/bla...}", "file:///a:/bla/bla/bla", 1, 15 },
            { "#b:/c/d#e#f#", "file:///b:/c/d", 1, 7 },
-           { "a:/", "file:///a:/", 0, 3 } };
+           { "a:/", "file:///a:/", 0, 3 },
+           { ".component:", 0, 0, 0 },
+           { ".uno:", 0, 0, 0 },
+           { "cid:", 0, 0, 0 },
+           { "data:", 0, 0, 0 },
+           { "db:", 0, 0, 0 },
+           { "file:", 0, 0, 0 },
+           { "ftp:", 0, 0, 0 },
+           { "http:", 0, 0, 0 },
+           { "https:", 0, 0, 0 },
+           { "imap:", 0, 0, 0 },
+           { "javascript:", 0, 0, 0 },
+           { "ldap:", 0, 0, 0 },
+           { "macro:", 0, 0, 0 },
+           { "mailto:", 0, 0, 0 },
+           { "news:", 0, 0, 0 },
+           { "out:", 0, 0, 0 },
+           { "pop3:", 0, 0, 0 },
+           { "private:", 0, 0, 0 },
+           { "slot:", 0, 0, 0 },
+           { "staroffice.component:", 0, 0, 0 },
+           { "staroffice.db:", 0, 0, 0 },
+           { "staroffice.factory:", 0, 0, 0 },
+           { "staroffice.helpid:", 0, 0, 0 },
+           { "staroffice.java:", 0, 0, 0 },
+           { "staroffice.macro:", 0, 0, 0 },
+           { "staroffice.out:", 0, 0, 0 },
+           { "staroffice.pop3:", 0, 0, 0 },
+           { "staroffice.private:", 0, 0, 0 },
+           { "staroffice.searchfolder:", 0, 0, 0 },
+           { "staroffice.slot:", 0, 0, 0 },
+           { "staroffice.trashcan:", 0, 0, 0 },
+           { "staroffice.uno:", 0, 0, 0 },
+           { "staroffice.vim:", 0, 0, 0 },
+           { "staroffice:", 0, 0, 0 },
+           { "vim:", 0, 0, 0 },
+           { "vnd.sun.star.cmd:", 0, 0, 0 },
+           { "vnd.sun.star.help:", 0, 0, 0 },
+           { "vnd.sun.star.hier:", 0, 0, 0 },
+           { "vnd.sun.star.odma:", 0, 0, 0 },
+           { "vnd.sun.star.pkg:", 0, 0, 0 },
+           { "vnd.sun.star.script:", 0, 0, 0 },
+           { "vnd.sun.star.webdav:", 0, 0, 0 },
+           { "vnd.sun.star.wfs:", 0, 0, 0 },
+           { "wfs:", 0, 0, 0 } };
 
     bool bReturn = true;
     for (int i = 0; i < sizeof aTests / sizeof (Test); ++i)
