@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: oj $ $Date: 2001-10-15 12:59:14 $
+#   last change: $Author: hjs $ $Date: 2001-10-23 11:43:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -129,14 +129,16 @@ CFLAGS +=   -Zi -GR- -W3 -Gy -MDd -UNDEBUG
 .ENDIF
 .ENDIF
 .IF "$(GUI)" == "UNX"
-INCPRE +=   . -I.. -I$(MOZ_INC) -I$(MOZ_INC)$/nspr -DMOZILLA_CLIENT \
+INCPRE +=   . -I.. -I$(MOZ_INC) -I$(MOZ_INC)$/nspr
+CDEFS+=	    -DMOZILLA_CLIENT \
             -DOSTYPE=\"Linux2.2.14-5\" -DOJI
 .IF "$(OS)" == "LINUX"
-# INCPRE +=   -I.. -I$(MOZ_INC) -DDEBUG -DMOZILLA_CLIENT 
-INCPRE +=   -fPIC \
-            -fno-rtti -fno-exceptions -Wall -Wconversion -Wpointer-arith \
+CFLAGS +=   -fPIC -g
+CFLAGSCXX += \
+            -fno-rtti -Wall -Wconversion -Wpointer-arith \
             -Wbad-function-cast -Wcast-align -Woverloaded-virtual -Wsynth \
-            -Wno-long-long -pthread  -DTRACING -g 
+            -Wno-long-long -pthread 
+CDEFS     += -DTRACING
 .ENDIF
 .ENDIF
 
