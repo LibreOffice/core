@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-12 09:49:49 $
+ *  last change: $Author: fs $ $Date: 2001-04-17 13:56:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -404,7 +404,7 @@ Reference< XConnection> getConnection(
 {
     try
     {
-        getConnection_allowException(_rsTitleOrPath, _rsUser, _rsPwd, _rxFactory);
+        return getConnection_allowException(_rsTitleOrPath, _rsUser, _rsPwd, _rxFactory);
     }
     catch(Exception&)
     {
@@ -1256,6 +1256,9 @@ void showError(const SQLExceptionInfo& _rInfo,
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.20  2001/04/12 09:49:49  fs
+ *  #84852# calcConnection: use a OAutoConnectionDisposer when setting the rowsets connection
+ *
  *  Revision 1.19  2001/04/12 06:28:34  fs
  *  #84694# allow calcConnection to throw an SQLexception when using getConnection
  *
