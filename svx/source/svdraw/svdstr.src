@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-08 17:48:17 $
+ *  last change: $Author: kz $ $Date: 2001-01-12 20:56:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6970,7 +6970,7 @@ String STR_StandardLayerName
     Text [ english_us ] = "Standard" ;
     Text[ chinese_simplified ] = "±ê×¼";
     Text[ russian ] = "Ñòàíäàğò";
-    Text[ polish ] = "Standard";
+    Text[ polish ] = "Domyœlnie";
     Text[ japanese ] = "•W€";
     Text[ chinese_traditional ] = "¼Ğ·Ç";
     Text[ arabic ] = "ŞíÇÓí";
@@ -7995,7 +7995,7 @@ String STR_ItemValMEASURE_STD
     Text [ dutch ] = "Standaard" ;
     Text[ chinese_simplified ] = "±ê×¼";
     Text[ russian ] = "Ñòàíäàğò";
-    Text[ polish ] = "Standard";
+    Text[ polish ] = "Domyœlnie";
     Text[ japanese ] = "•W€";
     Text[ chinese_traditional ] = "¼Ğ·Ç";
     Text[ arabic ] = "ŞíÇÓí";
@@ -14125,11 +14125,11 @@ String SIP_SA_MEASURESCALE
     Text[ polish ] = "Dodatkowy czynnik skali";
     Text[ portuguese_brazilian ] = "scale extra factor";
     Text[ japanese ] = "¡–@‚Ì’Ç‰Á—v‘f";
-    Text[ chinese_simplified ] = "¶¨Á¿¸½¼ÓÒòËØ";
-    Text[ chinese_traditional ] = "©w¶qªş¥[¦]¯À";
+    Text[ chinese_simplified ] = "¿Ì¶ÈµÄ¸½¼ÓÒòËØ";
+    Text[ chinese_traditional ] = "Åã¥Ü¤ñ¨Òªºªş¥[¦]¯À";
     Text[ arabic ] = "ãÚíÇÑ ŞíÇÓí ÅÖÇİí";
     Text[ dutch ] = "schaal, extra factor";
-    Text[ chinese_simplified ] = "¶¨Á¿¸½¼ÓÒòËØ";
+    Text[ chinese_simplified ] = "¿Ì¶ÈµÄ¸½¼ÓÒòËØ";
     Text[ greek ] = "Ğñüóèåôïò ğáñÜãïíôáò êëßìáêáò";
     Text[ korean ] = "¹èÀ² Ãß°¡ ¿äÀÎ";
     Text[ turkish ] = "Ek ölçek faktörü";
@@ -14744,7 +14744,7 @@ String SIP_SA_LAYERNAME
     Text [ ENGLISH ] = "Layer" ;
     Text[ english_us ] = "Level";
     Text[ portuguese ] = "Nível";
-    Text[ russian ] = "Ñëîé";
+    Text[ russian ] = "Óğîâåíü";
     Text[ dutch ] = "Niveau";
     Text[ french ] = "Niveau";
     Text[ spanish ] = "Nivel";
@@ -15617,7 +15617,7 @@ String SIP_EE_PARA_OUTLLEVEL
     Text [ ENGLISH ] = "Layer of enumeration" ;
     Text[ english_us ] = "Numbering level";
     Text[ portuguese ] = "Nível de numeração";
-    Text[ russian ] = "Ñëîé ñïèñêà";
+    Text[ russian ] = "Óğîâåíü ñïèñêà";
     Text[ dutch ] = "Nummeringsniveau";
     Text[ french ] = "Niveau d'énumération";
     Text[ spanish ] = "Nivel de enumeración";
