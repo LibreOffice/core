@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abspilot.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:42:52 $
+ *  last change: $Author: vg $ $Date: 2003-06-02 08:03:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,7 +191,6 @@ TabPage RID_PAGE_SELECTABTYPE
         Text = "Mozilla / Netscape";
         Text [ english ] = "Mozilla / Netscape";
         Text [ english_us ] = "Mozilla / Netscape";
-        Group = TRUE;
         Text[ portuguese ] = "Mozilla / Netscape 6.x";
         Text[ russian ] = "Адресная книга Mozilla / Netscape 6.x";
         Text[ greek ] = "Mozilla / Netscape";
@@ -216,9 +215,38 @@ TabPage RID_PAGE_SELECTABTYPE
         Text[ thai ] = "Mozilla / Netscape";
         Text[ hindi ] = "Mozilla / Netscape 6.x";
     };
+    RadioButton RB_EVOLUTION
+     {
+         Pos        = MAP_APPFONT ( 15, 79 ) ;
+         Size   = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
+
+        Text = "Evolution";
+        Text [ english ] = "Evolution";
+        Text [ english_us ] = "Evolution";
+        Group = TRUE;
+        Text[ portuguese ] = "Evolution";
+        Text[ russian ] = "Evolution";
+        Text[ greek ] = "Evolution";
+        Text[ dutch ] = "Evolution";
+        Text[ french ] = "Evolution";
+        Text[ spanish ] = "Evolution";
+        Text[ finnish ] = "Evolution";
+        Text[ italian ] = "Evolution";
+        Text[ danish ] = "Evolution";
+        Text[ swedish ] = "Evolution";
+        Text[ polish ] = "Evolution";
+        Text[ portuguese_brazilian ] = "Evolution";
+        Text[ japanese ] = "Evolution";
+        Text[ korean ] = "Evolution";
+        Text[ chinese_simplified ] = "Evolution";
+        Text[ chinese_traditional ] = "Evolution";
+        Text[ turkish ] = "Evolution";
+        Text[ arabic ] = "Evolution";
+        Text[ catalan ] = "Evolution";
+    };
     RadioButton RB_LDAP
     {
-        Pos     = MAP_APPFONT ( 15, 79 ) ;
+        Pos     = MAP_APPFONT ( 15, 90 ) ;
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
 
         Text = "LDAP Adress-Bestand";
@@ -250,7 +278,7 @@ TabPage RID_PAGE_SELECTABTYPE
     };
     RadioButton RB_OUTLOOK
     {
-        Pos     = MAP_APPFONT ( 15, 90 ) ;
+        Pos     = MAP_APPFONT ( 15, 101 ) ;
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
 
         Text = "Outlook Adressbuch";
@@ -282,7 +310,7 @@ TabPage RID_PAGE_SELECTABTYPE
     };
     RadioButton RB_OUTLOOKEXPRESS
     {
-        Pos     = MAP_APPFONT ( 15,101 ) ;
+        Pos     = MAP_APPFONT ( 15,112 ) ;
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
 
         Text = "Windows System-Adressbuch";
@@ -314,7 +342,7 @@ TabPage RID_PAGE_SELECTABTYPE
     };
     RadioButton RB_OTHER
     {
-        Pos     = MAP_APPFONT ( 15, 112 ) ;
+        Pos     = MAP_APPFONT ( 15, 123 ) ;
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
 
         Text = "andere externe Datenquelle";
