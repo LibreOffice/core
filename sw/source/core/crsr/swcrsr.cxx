@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcrsr.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: os $ $Date: 2002-09-13 13:15:52 $
+ *  last change: $Author: fme $ $Date: 2002-11-01 13:35:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -428,6 +428,7 @@ FASTBOOL SwCursor::IsSelOvr( int eFlags )
                 {
                     // set this cntntNode as new position
                     rPtIdx = *pCNd;
+                    pNd = pCNd;
 
                     // ContentIndex noch anmelden:
                     xub_StrLen nTmpPos = bGoNxt ? 0 : pCNd->Len();
