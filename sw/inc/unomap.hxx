@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.hxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: dvo $ $Date: 2001-08-23 09:38:30 $
+ *  last change: $Author: jp $ $Date: 2001-10-24 18:48:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,80 +106,54 @@
 #define PROPERTY_MAP_EMBEDDED_OBJECT        38
 #define PROPERTY_MAP_REDLINE                39
 #define PROPERTY_MAP_TEXT_DEFAULT           40
-#define PROPERTY_MAP_END                    41
 
-#define PROPERTY_MAP_FLDTYP_DATETIME                    42
-#define PROPERTY_MAP_FLDTYP_USER                        43
-#define PROPERTY_MAP_FLDTYP_SET_EXP                     44
-#define PROPERTY_MAP_FLDTYP_GET_EXP                     45
-#define PROPERTY_MAP_FLDTYP_FILE_NAME                   46
-#define PROPERTY_MAP_FLDTYP_PAGE_NUM                    47
-#define PROPERTY_MAP_FLDTYP_AUTHOR                      48
-#define PROPERTY_MAP_FLDTYP_CHAPTER                     49
-#define PROPERTY_MAP_FLDTYP_GET_REFERENCE               50
-#define PROPERTY_MAP_FLDTYP_CONDITIONED_TEXT            51
-#define PROPERTY_MAP_FLDTYP_HIDDEN_TEXT                 52
-#define PROPERTY_MAP_FLDTYP_ANNOTATION                  53
-#define PROPERTY_MAP_FLDTYP_INPUT_USER                  54
-#define PROPERTY_MAP_FLDTYP_INPUT                       55
-#define PROPERTY_MAP_FLDTYP_MACRO                       56
-#define PROPERTY_MAP_FLDTYP_DDE                         57
-#define PROPERTY_MAP_FLDTYP_HIDDEN_PARA                 58
-#define PROPERTY_MAP_FLDTYP_DOC_INFO                    59
-#define PROPERTY_MAP_FLDTYP_TEMPLATE_NAME               60
-#define PROPERTY_MAP_FLDTYP_USER_EXT                    61
-#define PROPERTY_MAP_FLDTYP_REF_PAGE_SET                62
-#define PROPERTY_MAP_FLDTYP_REF_PAGE_GET                63
-#define PROPERTY_MAP_FLDTYP_JUMP_EDIT                   64
-#define PROPERTY_MAP_FLDTYP_SCRIPT                      65
-#define PROPERTY_MAP_FLDTYP_DATABASE_NEXT_SET           66
-#define PROPERTY_MAP_FLDTYP_DATABASE_NUM_SET            67
-#define PROPERTY_MAP_FLDTYP_DATABASE_SET_NUM            68
-#define PROPERTY_MAP_FLDTYP_DATABASE                    69
-#define PROPERTY_MAP_FLDTYP_DATABASE_NAME               70
-#define PROPERTY_MAP_FLDTYP_PAGE_COUNT                  71
-#define PROPERTY_MAP_FLDTYP_PARAGRAPH_COUNT             72
-#define PROPERTY_MAP_FLDTYP_WORD_COUNT                  73
-#define PROPERTY_MAP_FLDTYP_CHARACTER_COUNT             74
-#define PROPERTY_MAP_FLDTYP_TABLE_COUNT                 75
-#define PROPERTY_MAP_FLDTYP_GRAPHIC_OBJECT_COUNT        76
-#define PROPERTY_MAP_FLDTYP_EMBEDDED_OBJECT_COUNT       77
-#define PROPERTY_MAP_FLDTYP_DOCINFO_CHANGE_AUTHOR       78
-#define PROPERTY_MAP_FLDTYP_DOCINFO_CREATE_AUTHOR       79
-#define PROPERTY_MAP_FLDTYP_DOCINFO_PRINT_AUTHOR        80
-#define PROPERTY_MAP_FLDTYP_DOCINFO_PRINT_DATE_TIME     81
-#define PROPERTY_MAP_FLDTYP_DOCINFO_CHANGE_DATE_TIME    82
-#define PROPERTY_MAP_FLDTYP_DOCINFO_CREATE_DATE_TIME    83
-#define PROPERTY_MAP_FLDTYP_DOCINFO_EDIT_TIME           84
-#define PROPERTY_MAP_FLDTYP_DOCINFO_DESCRIPTION         85
-#define PROPERTY_MAP_FLDTYP_DOCINFO_INFO_0              86
-#define PROPERTY_MAP_FLDTYP_DOCINFO_INFO_1              87
-#define PROPERTY_MAP_FLDTYP_DOCINFO_INFO_2              88
-#define PROPERTY_MAP_FLDTYP_DOCINFO_INFO_3              89
-#define PROPERTY_MAP_FLDTYP_DOCINFO_KEY_WORDS           90
-#define PROPERTY_MAP_FLDTYP_DOCINFO_SUBJECT             91
-#define PROPERTY_MAP_FLDTYP_DOCINFO_TITLE               92
-#define PROPERTY_MAP_FLDTYP_DOCINFO_REVISION            93
-#define PROPERTY_MAP_FLDTYP_DUMMY_0                     94
-#define PROPERTY_MAP_FLDTYP_COMBINED_CHARACTERS         95
-#define PROPERTY_MAP_FLDTYP_DUMMY_3                     96
-#define PROPERTY_MAP_FLDTYP_DUMMY_4                     97
-#define PROPERTY_MAP_FLDTYP_DUMMY_5                     98
-#define PROPERTY_MAP_FLDTYP_DUMMY_6                     99
-#define PROPERTY_MAP_FLDTYP_DUMMY_7                    100
-#define PROPERTY_MAP_FLDTYP_DUMMY_8                    101
-#define PROPERTY_MAP_FLDTYP_TABLEFIELD                 102
-#define PROPERTY_MAP_FLDMSTR_USER                      103
-#define PROPERTY_MAP_FLDMSTR_DDE                       104
-#define PROPERTY_MAP_FLDMSTR_SET_EXP                   105
-#define PROPERTY_MAP_FLDMSTR_DATABASE                  106
-#define PROPERTY_MAP_FLDMSTR_DUMMY2                    107
-#define PROPERTY_MAP_FLDMSTR_DUMMY3                    108
-#define PROPERTY_MAP_FLDMSTR_DUMMY4                    109
-#define PROPERTY_MAP_FLDMSTR_DUMMY5                    110
-#define PROPERTY_MAP_FLDTYP_BIBLIOGRAPHY               111
-#define PROPERTY_MAP_FLDMSTR_BIBLIOGRAPHY              112
-
+#define PROPERTY_MAP_FLDTYP_DATETIME                    41
+#define PROPERTY_MAP_FLDTYP_USER                        42
+#define PROPERTY_MAP_FLDTYP_SET_EXP                     43
+#define PROPERTY_MAP_FLDTYP_GET_EXP                     44
+#define PROPERTY_MAP_FLDTYP_FILE_NAME                   45
+#define PROPERTY_MAP_FLDTYP_PAGE_NUM                    46
+#define PROPERTY_MAP_FLDTYP_AUTHOR                      47
+#define PROPERTY_MAP_FLDTYP_CHAPTER                     48
+#define PROPERTY_MAP_FLDTYP_GET_REFERENCE               49
+#define PROPERTY_MAP_FLDTYP_CONDITIONED_TEXT            50
+#define PROPERTY_MAP_FLDTYP_HIDDEN_TEXT                 51
+#define PROPERTY_MAP_FLDTYP_ANNOTATION                  52
+#define PROPERTY_MAP_FLDTYP_INPUT                       53
+#define PROPERTY_MAP_FLDTYP_MACRO                       54
+#define PROPERTY_MAP_FLDTYP_DDE                         55
+#define PROPERTY_MAP_FLDTYP_HIDDEN_PARA                 56
+#define PROPERTY_MAP_FLDTYP_DOC_INFO                    57
+#define PROPERTY_MAP_FLDTYP_TEMPLATE_NAME               58
+#define PROPERTY_MAP_FLDTYP_USER_EXT                    59
+#define PROPERTY_MAP_FLDTYP_REF_PAGE_SET                60
+#define PROPERTY_MAP_FLDTYP_REF_PAGE_GET                61
+#define PROPERTY_MAP_FLDTYP_JUMP_EDIT                   62
+#define PROPERTY_MAP_FLDTYP_SCRIPT                      63
+#define PROPERTY_MAP_FLDTYP_DATABASE_NEXT_SET           64
+#define PROPERTY_MAP_FLDTYP_DATABASE_NUM_SET            65
+#define PROPERTY_MAP_FLDTYP_DATABASE_SET_NUM            66
+#define PROPERTY_MAP_FLDTYP_DATABASE                    67
+#define PROPERTY_MAP_FLDTYP_DATABASE_NAME               68
+#define PROPERTY_MAP_FLDTYP_DOCSTAT                     69
+#define PROPERTY_MAP_FLDTYP_DOCINFO_AUTHOR              70
+#define PROPERTY_MAP_FLDTYP_DOCINFO_DATE_TIME           71
+#define PROPERTY_MAP_FLDTYP_DOCINFO_CHANGE_DATE_TIME    72
+#define PROPERTY_MAP_FLDTYP_DOCINFO_CREATE_DATE_TIME    73
+#define PROPERTY_MAP_FLDTYP_DOCINFO_EDIT_TIME           74
+#define PROPERTY_MAP_FLDTYP_DOCINFO_MISC                75
+#define PROPERTY_MAP_FLDTYP_DOCINFO_REVISION            76
+#define PROPERTY_MAP_FLDTYP_COMBINED_CHARACTERS         77
+#define PROPERTY_MAP_FLDTYP_DUMMY_0                     78
+#define PROPERTY_MAP_FLDTYP_TABLE_FORMULA               79
+#define PROPERTY_MAP_FLDMSTR_USER                       80
+#define PROPERTY_MAP_FLDMSTR_DDE                        81
+#define PROPERTY_MAP_FLDMSTR_SET_EXP                    82
+#define PROPERTY_MAP_FLDMSTR_DATABASE                   83
+#define PROPERTY_MAP_FLDMSTR_DUMMY0                     84
+#define PROPERTY_MAP_FLDTYP_BIBLIOGRAPHY                85
+#define PROPERTY_MAP_FLDMSTR_BIBLIOGRAPHY               86
+#define PROPERTY_MAP_END                                87
 
 #define PROPERTY_SET_CHAR_STYLE             1
 #define PROPERTY_SET_PARA_STYLE             2
