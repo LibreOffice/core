@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mba $ $Date: 2002-09-23 11:27:08 $
+ *  last change: $Author: mba $ $Date: 2002-09-23 15:57:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,7 +287,7 @@ sal_Bool SfxFrame::DoClose()
         try
         {
             Reference< XCloseable > xCloseable  ( pImp->xFrame, UNO_QUERY );
-            if ( !GetCurrentDocument() || !GetCurrentDocument()->Get_Impl()->bDisposing && xCloseable.is())
+            if ( (!GetCurrentDocument() || !GetCurrentDocument()->Get_Impl()->bDisposing ) && xCloseable.is())
                 xCloseable->close(sal_True);
             else if ( pImp->xFrame.is() )
                 pImp->xFrame->dispose();
