@@ -30,8 +30,8 @@ Public cCalSubcmdSwitchOwnDataOrGeneral_Back$
 Public cCalSubcmdSwitchOwnDataOrGeneral_OwnData$
 
 &apos;Language
-Public cCalLongMonthNames$(12)
-Public cCalShortMonthNames$(12)
+Public cCalLongMonthNames(11) as String
+Public cCalShortMonthNames(11) as String
 
 Public sBitmapFilename$
 Public sCalendarTitle$, sMonthTitle$, sWizardTitle$, sError$
@@ -39,13 +39,15 @@ Public cCalStyleWorkday$, cCalStyleWeekend$
 
 &apos; German only
 &apos; Variablen, die zur Verwaltung der Eingabe der Bundesländer dienen
-Public CalChoosenLand%, MouseClicked%, LandWhenClick%
+Public CalChoosenLand as Integer
+&apos; LandWhenClick%,  MouseClicked%,
 Public LastMousePosX, LastMousePosY As Single
 
 Public oDocument as Object
 Public oSheets as Object
 Public oSheet as Object
 Public oStatusLine as Object
+Public bCancelTask as Boolean
 
 &apos; BL* bedeutet BundesLand*
 Public CONST CalBLBayern         = 1
@@ -70,15 +72,16 @@ Public DlgCalModel as Object
 
 Sub CalAutopilotTable()
 Dim BitmapDir as String
-
+Dim iThisMonth as Integer
 &apos; On Error Goto ErrorHandler
 	BasicLibraries.LoadLibrary(&quot;Tools&quot;)
+	bDoSelect = True
 	&apos; HauptRoutine zur Erstellung des Kalenders
 	oDocument = StarDesktop.ActiveFrame.Controller.Model
 	oStatusline = oDocument.GetCurrentController.GetFrame.CreateStatusIndicator
 
 	sCurLangLocale = oDocument.CharLocale.Language
-	DlgCalendar = LoadDialog(&quot;Schedule&quot;, &quot;Dialog1&quot;)
+	DlgCalendar = LoadDialog(&quot;Schedule&quot;, &quot;DlgCalendar&quot;)
 	DlgCalModel = DlgCalendar.Model
     LoadLanguage(sCurLangLocale)
 	&apos; Da modulübergreifende Variablen unsicher sind,
@@ -88,26 +91,36 @@ Dim BitmapDir as String
 	BitmapDir = GetOfficeSubPath(&quot;Template&quot;,&quot;wizard/bitmap&quot;)
 	DlgCalModel.imgCountry.ImageURL = BitmapDir &amp; sBitmapFilename
 	CalChoosenLand = -2
-	MouseClicked% = False
+&apos;	MouseClicked% = False
 
 	&apos; Die Daten für die eigenen Ereignisdaten werden geladen.
 	CalLoadOwnData()
-	DlgCalendar.GetControl(&quot;lstMonth&quot;).SelectItem(cCalShortMonthNames$(Month(Now())), True)
 
 	With DlgCalModel
-&apos;		.lbOwnData.FontName = &quot;Courier&quot;
+&apos; Todo: In der DocAssigndatenbank festhalten, dass der Font der Listbox lstOwnEvents für die asiatischen
+&apos; Sprachen von Hand von Cumberland umgesetzt werden muss
 		.cmdDelete.Enabled = False
 &apos;		.lstMonth.Tag = DlgCalModel.txtMonth.Text
-		.lstMonth.StringItemList() = cCalShortMonthNames$()
-		.lstOwnEventMonth.StringItemList() = cCalShortMonthNames$()
+		.lstMonth.StringItemList() = cCalShortMonthNames()
+		.lstOwnEventMonth.StringItemList() = cCalShortMonthNames()
 		.optYear.State = 1
 		.txtYear.Text = Year(Now())
 		.txtYear.Tag = DlgCalModel.txtYear.Text
 		.Step = 1
 	End With
 	CalChooseCalendar()  &apos; month
+	iThisMonth = Month(Now)
+	DlgCalendar.GetControl(&quot;lstMonth&quot;).SelectItemPos(iThisMonth-1, True)
 	DlgCalendar.GetControl(&quot;lstHolidays&quot;).SelectItemPos(0,True)
-	DlgCalendar.Visible = True
+
+&apos;	bCancelTask = False
+	DlgCalendar.Execute()
+	DlgCalendar.Dispose()
+&apos;	Do
+&apos;		If Not bCancelTask Then
+&apos;			DlgCalendar.Visible = True
+&apos;		End If
+&apos;	Loop Until bCancelTask
 	Exit Sub
 
 ErrorHandler:
@@ -124,10 +137,9 @@ End Sub
 
 
 Sub CalcmdCancel()
-	If bCalOwnDataChanged Then
-		Call CalSaveOwnData()
-	End If
-	DlgCalendar.Visible = False
+	Call CalSaveOwnData()
+&apos;	bCancelTask = True
+	DlgCalendar.EndExecute &apos;Visible = False
 End Sub
 
 
@@ -137,29 +149,20 @@ Sub CalcmdOk()
 	&apos; It is either given out a month or a year
 Dim i, iSelYear as Integer
 Dim SelYear as String
-	DlgCalendar.Visible = False
+&apos;	DlgCalendar.Visible = False
 
-	If cLANGUAGE_GERMAN = sCurLangLocale Then
-		If Ubound(DlgCalModel.lstHolidays.SelectedItems()) &gt; -1 Then
-			CalChoosenLand = DlgCalModel.lstHolidays.SelectedItems(0)
-		Else
-			CalChoosenLand = 0
-		End If
-	End If
 	oSheets = oDocument.sheets
-	If bCalOwnDataChanged Then
- 		Call CalSaveOwnData()
-    End If
-
-	&apos; Unprotect all tables so they can be deleted or modified
-   	For i = 0 To oSheets.Count - 1
-		oSheets.GetbyIndex(i).unprotect(&quot;&quot;)
-    Next
+	Call CalSaveOwnData()
+	UnprotectSheets(oSheets)
 	oSheets.RemovebyName(oSheets.GetbyIndex(0).Name)
-
 	iSelYear = Val(DlgCalModel.txtYear.Text)
 	Select Case sCurLangLocale
 		Case cLANGUAGE_GERMAN
+			If Ubound(DlgCalModel.lstHolidays.SelectedItems()) &gt; -1 Then
+				CalChoosenLand = DlgCalModel.lstHolidays.SelectedItems(0)
+			Else
+				CalChoosenLand = 0
+			End If
 			Call CalFindWholeYearHolidays_GERMANY(iSelYear, CalChoosenLand)
 		Case cLANGUAGE_ENGLISH
 			Call FindWholeYearHolidays_US(iSelYear)
@@ -189,22 +192,22 @@ Dim SelYear as String
 		oSheets.RemovebyName(oSheets.GetbyIndex(0).Name)
 		oSheet = oSheets.GetbyIndex(0)
 		oSheet.Name = sCalendarTitle$ + &quot; &quot; + iSelYear
-		oDocument.AddActionLock
+&apos;		oDocument.AddActionLock
 		Call CalCreateYearTable(iSelYear)
 	ElseIf DlgCalModel.optMonth.State = 1 Then
 		Dim iMonth
-		iMonth = DlgCalModel.lstMonth.SelectedItem(0)
+		iMonth = DlgCalModel.lstMonth.SelectedItems(0) + 1
 		oSheets.RemovebyName(oSheets.GetbyIndex(1).Name)
 		oSheet = oSheets.GetbyIndex(0)
-		oSheet.Name = sMonthTitle$ + &quot; &quot; + cCalLongMonthNames$(iMonth)
-		oDocument.AddActionLock
+		oSheet.Name = sMonthTitle$ + &quot; &quot; + cCalLongMonthNames(iMonth)
+&apos;		oDocument.AddActionLock
 		Call CalCreateMonthTable(iSelYear, iMonth)
 	End If
 
-	oDocument.RemoveActionLock
-	&apos; Protect the remaining sheet
+&apos;	oDocument.RemoveActionLock
 	oSheet.protect(&quot;&quot;)
 	oStatusLine.End
-	DlgCalendar.Visible = False
+	DlgCalendar.EndExecute()
+	bCancelTask = True
 End Sub
 </script:module>

@@ -110,26 +110,19 @@ End Sub
 
 Sub CalMouseMoved(aEvent as object)
 Dim ListIndex as Integer
-	oStatusline.SetText(aEvent.ClickCount)
-&apos;	If aEvent.ClickCount = 2 Then
-&apos;		oStatusLine.SetText(&quot;Click&quot;)
-&apos;		bDoSelect = False
-&apos;	Else
-&apos;		oStatusLine.SetText(&quot;&quot;)
-&apos;	End If
-	&apos;       Nimmt Mousemoves ueber dem Bitmap entgegen, und wertet sie je nach
-	&apos;       Land aus.
+	&apos; Nimmt Mousemoves ueber dem Bitmap entgegen, und wertet sie je nach Land aus.
 	Select Case sCurLangLocale
 		Case  cLANGUAGE_GERMAN
 		&apos; Ermittelt das Land auf dem sich der MausCursor befindet, und aktualisiert
 		&apos; die Textbox mit der Bundeslandbezeichnung, falls ein Mausklick stattfandt.
-&apos;			If bDoSelect Then 
+			oStatusline.SetText(aEvent.ClickCount)
+			If bDoSelect Then
 				ListIndex = CalGetGermanLandAtMousePos(aEvent.X, aEvent.Y, Land$)
 				DlgCalendar.GetControl(&quot;lstHolidays&quot;).SelectItemPos(ListIndex, True)
-				If aEvent.ClickCount = 2 Then
+				If aEvent.ClickCount = 1 Then
 					bDoSelect = False
 				End If
-&apos;			End If
+			End If
 	End Select
 	
 	LastMousePosX = aEvent.X
@@ -161,12 +154,12 @@ End Sub
 
 
 
-Sub CalChkForChangeInsertAccept
-	&apos;       Aktualisiert die Label des Insert/Accept Buttons
-	If (DataSelectedFromList=True) And (ButtonLabelIsInsert) Then
-		DlgCalModel.cmdInsert.Label = cSubChkForChangeInsertAccept_Accpet$
-	End If
-End Sub
+&apos;Sub CalChkForChangeInsertAccept
+&apos;       Aktualisiert die Label des Insert/Accept Buttons
+&apos;If (DataSelectedFromList=True) And (ButtonLabelIsInsert) Then
+&apos;	DlgCalModel.cmdInsert.Label = cSubChkForChangeInsertAccept_Accpet$
+&apos;	End If
+&apos;End Sub
 
 
 
@@ -177,7 +170,6 @@ Dim NullList() as String
 		.chkEventOnce.State = 0
 		.lblEventYear.Enabled = False
 		.txtOwnEventYear.Enabled = False
-&apos;		SpinOwnEventYear.Enabled = False
 		.txtOwnEventYear.Text = &quot;&quot;
 		.txtEvent.Text = &quot;&quot;
 		.txtOwnEventDay.Text = &quot;&quot;
@@ -208,22 +200,22 @@ Sub ToggleInsertButton()
 End Sub
 
 
-Sub CalModMonthTextBox(txtMonth As Object,IncFactor as Integer)
-	Dim nActVal&amp;
-	nActVal&amp; = Val(txtMonth.Text)
-	If (1 &lt;= nActVal&amp; And 12 &gt;= nActVal) Then
-		txtMonth.Text = cCalShortMonthNames$(nActVal&amp;)
-	End If
-	nActVal&amp; = CalGetIntOfShortMonthName%(txtMonth.Text)
-	If 0 = nActVal&amp; Then
-		Beep
-		txtMonth.Text = cCalShortMonthNames$(1)
-	ElseIf (1 &lt; nActVal&amp;) AND (IncFactor = -1) Then
-		txtMonth.Text = cCalShortMonthNames$(nActVal&amp; + IncFactor)
-	ElseIf (12 &gt; nActVal&amp;)AND (IncFactor = 1) Then
-		txtMonth.Text = cCalShortMonthNames$(nActVal&amp; + IncFactor)
-	End If
-End Sub
+&apos;Sub CalModMonthTextBox(txtMonth As Object,IncFactor as Integer)
+&apos;	Dim nActVal&amp;
+&apos;	nActVal&amp; = Val(txtMonth.Text)
+&apos;	If (1 &lt;= nActVal&amp; And 12 &gt;= nActVal) Then
+&apos;		txtMonth.Text = cCalShortMonthNames$(nActVal&amp;)
+&apos;	End If
+&apos;	nActVal&amp; = CalGetIntOfShortMonthName%(txtMonth.Text)
+&apos;	If 0 = nActVal&amp; Then
+&apos;		Beep
+&apos;		txtMonth.Text = cCalShortMonthNames$(1)
+&apos;	ElseIf (1 &lt; nActVal&amp;) AND (IncFactor = -1) Then
+&apos;		txtMonth.Text = cCalShortMonthNames$(nActVal&amp; + IncFactor)
+&apos;	ElseIf (12 &gt; nActVal&amp;)AND (IncFactor = 1) Then
+&apos;		txtMonth.Text = cCalShortMonthNames$(nActVal&amp; + IncFactor)
+&apos;	End If
+&apos;End Sub
 
 
 Sub CalUpdateNewEventFrame()
@@ -231,6 +223,7 @@ Dim bDoEnable as Boolean
 Dim sSelectedItem
 Dim ListIndex as Integer
 Dim MaxSelIndex as Integer
+Dim iMonth as Integer
 	bDoEnable = False
 	With DlgCalModel
 		MaxSelIndex = Ubound(DlgCalModel.lstOwnData.SelectedItems())
@@ -238,7 +231,8 @@ Dim MaxSelIndex as Integer
 			ListIndex = .lstOwnData.SelectedItems(MaxSelIndex)
 			.txtEvent.Text = CalGetNameofEvent(ListIndex)
 			.txtOwnEventDay.Text = CalGetDayOfEvent(ListIndex)
-			DlgCalendar.GetControl(&quot;lstOwnEventMonth&quot;).SelectItem(CalGetMonthOfEvent(ListIndex), True)
+			iMonth = CalGetMonthOfEvent(ListIndex)
+			DlgCalendar.GetControl(&quot;lstOwnEventMonth&quot;).SelectItemPos(iMonth, True)
 			.txtOwnEventYear.Text = CalGetYearofEvent(ListIndex)
 			bDoEnable = DlgCalModel.txtOwnEventYear.Text = &quot;&quot;
 			.chkEventOnce.State = Abs(bDoEnable)

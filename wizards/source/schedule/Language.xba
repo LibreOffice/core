@@ -24,7 +24,7 @@ Const dlgMonth = 1200
 &apos; Abreviated months start 1225
 Const dlgShortMonth = 1225
 
-	If InitResources(&quot;Calendar-template&quot;, &quot;cal&quot;) Then
+	If InitResources(&quot;schedule&quot;, &quot;cal&quot;) Then
 		If LangLocale  = cLANGUAGE_GERMAN Then
 			DlgCalendar.GetControl(&quot;lblHolidays&quot;).Visible = True
 			DlgCalendar.GetControl(&quot;lstHolidays&quot;).Visible = True
@@ -91,8 +91,8 @@ Const dlgShortMonth = 1225
 			.cmdDelete.Label = GetResText(1017)
 			&apos; Load long month names
 			For i = 0 To 11
-				cCalLongMonthNames(i+1) = GetResText(dlgMonth+i)
-				cCalShortMonthNames(i+1)= Left$(cCalLongMonthNames(i+1), 3)
+				cCalLongMonthNames(i) = GetResText(dlgMonth+i)
+				cCalShortMonthNames(i)= Left$(cCalLongMonthNames(i), 3)
 			Next
 			&apos; Load sheet names
 			sCalendarTitle$ = GetResText(1410)

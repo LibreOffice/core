@@ -42,82 +42,81 @@ End Sub
 
 
 
-Sub CalInsertBankholiday(byval actDate&amp;, byval Event$, ByVal nBankholidayLevel%)
-	Dim DayInYear%
+Sub CalInsertBankholiday(byval CurDate as Long, byval EventName as String, ByVal iLevel as Integer)
+Dim iDay
 	&apos;	Fuegt ein Ereignis in das globale EventArray ein.
 	&apos;	Der Sonderfall der eintreten kann, ist der, dass das Datum
 	&apos;	an dem eingefuegt werden soll, bereits ein Ereignis enthaelt.
 	&apos;	Dann werden beide Ereignisse mit einem Schraegstrich verbunden.
-	DayInYear% =(Month(actDate&amp;)-1)*31 +Day(actDate&amp;)
+	iDay =(Month(CurDate)-1)*31 +Day(CurDate)
 
 	&apos;	Hoehere Prioritaet des Feiertagtyps
-	If (0 &lt;&gt; CalTypeOfBankHoliday%(DayInYear%)) Then
-		If (nBankholidayLevel% &lt; CalTypeOfBankHoliday%(DayInYear%)) Then
-			CalTypeOfBankHoliday%(DayInYear%) = nBankholidayLevel%
+	If (0 &lt;&gt; CalTypeOfBankHoliday(iDay)) Then
+		If (nBankholidayLevel &lt; CalTypeOfBankHoliday(iDay)) Then
+			CalTypeOfBankHoliday(iDay) = iLevel
 		End If
 	Else
-		CalTypeOfBankHoliday%(DayInYear%) = nBankholidayLevel%
+		CalTypeOfBankHoliday(iDay) = iLevel
 	End If
 
-	If (CalBankHolidayName$(DayInYear%) = &quot;&quot;) Then
-		CalBankHolidayName$(DayInYear%) = Event$
+	If (CalBankHolidayName(iDay) = &quot;&quot;) Then
+		CalBankHolidayName(iDay) = EventName
 	Else
-		CalBankHolidayName$(DayInYear%) = CalBankHolidayName$(DayInYear%) + &quot; / &quot; + Event$
+		CalBankHolidayName(iDay) = CalBankHolidayName(iDay) &amp; &quot; / &quot; &amp; EventName
 	End If
 End Sub
 
 
 
-Function CalIsLeapYear%(ByVal TheYear%)
-	CalIsLeapYear% = TheYear Mod 4 = 0
+Function CalIsLeapYear(ByVal iYear as Integer) as Boolean
+	CalIsLeapYear = iYear Mod 4 = 0
 End Function
 
 
-Function CalMaxDayInMonth%(byval YearVal%, byval MonthVal%)
-	&apos;	Liefert den maximalen Tag eines Monats in einem
-	&apos;	bestimmten Jahr.
-
-	Dim tmpDate&amp;
-	Dim	MaxDay%
+Function CalMaxDayInMonth(ByVal iYear as Integer, ByVal iMonth as Integer) as Integer
+&apos; Liefert den maximalen Tag eines Monats in einem
+&apos; bestimmten Jahr.
+	Dim TmpDate as Long
+	Dim	MaxDay as Long
 	
 	MaxDay = 28
-	tmpDate&amp; = DateSerial(YearVal%, MonthVal%, MaxDay)
+	TmpDate = DateSerial(iYear, iMonth, MaxDay)
 	
-	While Month(tmpDate&amp;) = MonthVal%
-		MaxDay% = MaxDay% + 1
-		tmpDate&amp; = tmpDate&amp; + 1
+	While Month(TmpDate) = iMonth
+		MaxDay = MaxDay + 1
+		TmpDate = TmpDate + 1
 	Wend
-	Maxday% = MaxDay% - 1
-	CalMaxDayInMonth% = MaxDay%	
+	Maxday = MaxDay - 1
+	CalMaxDayInMonth() = MaxDay
 End Function
 
 
-Function CalGetIntOfShortMonthName%(byval MonthName$)
+Function CalGetIntOfShortMonthName(ByVal MonthName as String) as Integer
 Dim i as Integer
 Dim nMonth as Integer
 	
-	nMonth = Val(MonthName$)
+	nMonth = Val(MonthName)
 	
 	If (1 &lt;= nMonth And 12 &gt;= nMonth) Then
-		CalGetIntOfShortMonthName% = nMonth
+		CalGetIntOfShortMonthName = nMonth
 		Exit Function
 	End If	
 	
-	MonthName$ = UCase(Trim(Left(MonthName, 3)))
+	MonthName = UCase(Trim(Left(MonthName, 3)))
 
-	For i = 1 To 12 
-		If (UCase(cCalShortMonthNames$(i)) = MonthName$) Then
-			CalGetIntOfShortMonthName% = i
+	For i = 0 To 11 
+		If (UCase(cCalShortMonthNames(i)) = MonthName) Then
+			CalGetIntOfShortMonthName = i+1
 			Exit Function
 		End If
 	Next
 	
 	&apos;	Not Found
-	CalGetIntOfShortMonthName% = 0
+	CalGetIntOfShortMonthName = 0
 End Function
 
 
-Sub CalInsertOwnDataInTables(byval YearToInsert%)
+Sub CalInsertOwnDataInTables(ByVal iSelYear as Integer)
 	&apos;	Fügt die eigenen Individuellen Daten aus der Tabelle in die
 	&apos;	bereits erstellte unsortierte Tabelle ein.	
 Dim CurEventName as String
@@ -129,7 +128,7 @@ Dim i as Integer
 	LastIndex = Ubound(DlgCalModel.lstOwnData.StringItemList())
 	For i = 0 To LastIndex
 		CurYear = CalGetYearOfEvent(i)
-		If (CurYear = YearToInsert) Or (CurYear = 0) Then
+		If (CurYear = iSelYear) Or (CurYear = 0) Then
 			CurMonth = CalGetMonthofEvent(i)
 			CurDay = CalGetDayofEvent(i)
 			CurEventName = CalGetNameOfEvent(i)

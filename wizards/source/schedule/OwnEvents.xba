@@ -6,62 +6,66 @@ Sub Main
 	Call CalAutopilotTable()
 End Sub
 
-Sub CalSaveOwnData()
+
 	&apos;	Sichert die Daten, die im lbOwnData Control eingegeben wurden.
 	&apos;	Die Datei heißt Date.Dat und wird ins Unterverzeichnis Konfiguration
 	&apos;	des Office3 Verzeichnis geschrieben.
-Dim FileName$
-Dim FileChannel%
-	Dim i as Integer
-	FileName$ = GetPathSettings(&quot;Config&quot;, False)+ GetPathSeparator() + &quot;DATE.DAT&quot;
-	&apos;	Falls die Datei neu geschrieben wird, muß sie vorher gelöscht werden
-	If Dir$(FileName$) = &quot;DATE.DAT&quot; Then
-		kill(FileName$)
-	End If
 
-	FileChannel% = FreeFile()
-	Open FileName$ For OUTPUT Access WRITE LOCK WRITE As FileChannel%
+Sub CalSaveOwnData()
+Dim FileName as String
+Dim FileChannel as Integer
+Dim i as Integer
+	If bCalOwnDataChanged Then
+		FileName = GetPathSettings(&quot;Config&quot;, False) &amp; &quot;/&quot; &amp; &quot;DATE.DAT&quot;
+		&apos;	Falls die Datei neu geschrieben wird, muß sie vorher gelöscht werden
+		If Dir$(FileName) = &quot;DATE.DAT&quot; Then
+			kill(FileName)
+		End If	
+
+		FileChannel = FreeFile()
+		Open FileName For OUTPUT Access WRITE LOCK WRITE As FileChannel
 	
-	Write #FileChannel%, &quot;==========================================================&quot;
-	Write #FileChannel%, &quot;Don&apos;t edit this file,&quot;
-	Write #FileChannel%, &quot;Don&apos;t edit this file!&quot;
-	Write #FileChannel%, &quot;----------------------------------------------------------&quot;
-	Write #FileChannel%, &quot;It is not allowed to edit this file! Don&apos;t edit this file!&quot;
-	Write #FileChannel%, &quot;==========================================================&quot;
+		Write #FileChannel, &quot;==========================================================&quot;
+		Write #FileChannel, &quot;Don&apos;t edit this file,&quot;
+		Write #FileChannel, &quot;Don&apos;t edit this file!&quot;
+		Write #FileChannel, &quot;----------------------------------------------------------&quot;
+		Write #FileChannel, &quot;It is not allowed to edit this file! Don&apos;t edit this file!&quot;
+		Write #FileChannel, &quot;==========================================================&quot;
 	
-	For i = 0 To Ubound(DlgCalModel.lstOwnData.StringItemList())
-		Write #FileChannel%, DlgCalModel.lstOwnData.StringItemList(i)
-	Next
-	
-	Close #FileChannel%
+		For i = 0 To Ubound(DlgCalModel.lstOwnData.StringItemList())
+			Write #FileChannel, DlgCalModel.lstOwnData.StringItemList(i)
+		Next
+		Close #FileChannel
+	End If
 End Sub
 
 
 &apos;	Lädt die Daten der persönlichen Ereignisse und
 &apos;	schreibt diese dann in das Control lbOwnData.
 Sub CalLoadOwnData()
-Dim FileName$, tempStr$
-Dim FileChannel%, Count%
+Dim FileName as String
+Dim TempStr as String
+Dim FileChannel as Integer
 Dim i as Integer
-	FileName$ = GetPathSettings(&quot;Config&quot;, False)+ GetPathSeparator() + &quot;DATE.DAT&quot;
+	FileName = GetPathSettings(&quot;Config&quot;, False) &amp; &quot;/DATE.DAT&quot;
 
-	If Dir(FileName$) = &quot;DATE.DAT&quot; Then 
-		FileChannel% = FreeFile()
-		Open FileName$ For INPUT Access READ LOCK READ As FileChannel%
+	If Dir(FileName) = &quot;DATE.DAT&quot; Then 
+		FileChannel = FreeFile()
+		Open FileName For INPUT Access READ LOCK READ As FileChannel
 		
 		&apos;	Kommentare werden eingelesen
-		For Count% = 1 To 6
-			Line Input #FileChannel%, tempStr$
+		For i = 1 To 6
+			Line Input #FileChannel, TempStr
 		Next
 		i = 0
 		&apos;	Einfügen nach Reihenfolge sortiert.
-		While (not eof(#FileChannel%))
-			Input #FileChannel%, tempStr$
-			DlgCalModel.lstOwnData.AddItem(tempStr$, i)
+		While (not eof(#FileChannel))
+			Input #FileChannel, TempStr
+			DlgCalendar.GetControl(&quot;lstOwnData&quot;).AddItem(TempStr, i)
 			i = i + 1
 		Wend		
 
-		Close #FileChannel%
+		Close #FileChannel
 	End If	
 End Sub
 
@@ -84,7 +88,7 @@ Dim newDate as Date
 Dim EvMonth as Integer
 Dim EvDay as Integer
 Dim EvYear as Integer
-	EvMonth = DlgCalModel.lstOwnEventMonth.SelectedItems(0)	
+	EvMonth = DlgCalModel.lstOwnEventMonth.SelectedItems(0)	+ 1
 	EvDay = Val(DlgCalModel.txtOwnEventDay.Text)	
 	If DlgCalModel.chkEventOnce.State = 1 Then
 		EvYear = Val(DlgCalModel.txtOwnEventYear.Text)
@@ -132,6 +136,7 @@ Dim bInserted as Boolean
 Dim bDateDoubled as Boolean
 Dim EvYear as Integer
 Dim i as Integer
+Dim CurDate as Date
 Dim CurEvYear as Integer
 Dim CurEvMonth as Integer
 Dim CurEvDay as Integer
@@ -141,14 +146,11 @@ Dim CurEvDay as Integer
 	If bGetYear Then
 		EvYear = Val(DlgCalModel.txtOwnEventYear.Text)
 		If (EvYear &lt;= 1582) OR (EvYear &gt;= 9957)	Then
-			SetFocusToControl(txtOwnEventMonth)
+			SetFocusToControl(DlgCalModel.txtOwnEventMonth)
 			Exit Sub
 		End If
 	End If
 
-	If DlgCalModel.chkEventOnce.State = 1 Then
-		EvYear = Val(DlgCalModel.txtOwnEventYear.Text)
-	End If			
 	newDate = CalCreateDateFromInput()
 	DateStr = CalCreateDateStrOfInput()
 	If DateStr = &quot;&quot; Then Exit Sub
@@ -201,23 +203,25 @@ Dim CurEvDay as Integer
 			Loop Until bInserted Or i &gt; LastIndex
 		End If
 	
-		&apos;	Das Datum ist noch nicht vorhanden und wir richtig einsortiert
+		&apos;	Das Datum ist noch nicht vorhanden und wird richtig einsortiert
 		If Not bInserted And Not bDateDoubled Then
 			i = 0
 			Do 
-				bInserted = newDate &gt; CalGetDateWithoutYear(i)
-				i = i + 1
+				CurDate = CalGetDateWithoutYear(i)
+				bInserted = newDate &lt; CurDate
 				If bInserted Then
-					DlgCalendar.GetControl(&quot;lstOwnData&quot;).AddItem(DateStr, i)
+					Exit Do
 				End If
+				i = i + 1
 			Loop Until bInserted Or i &gt; LastIndex
+			DlgCalendar.GetControl(&quot;lstOwnData&quot;).AddItem(DateStr, i)
 		End If
 	End If
 	
 	&apos;	Flag zum Speichern der neuen Daten.
-	If bInserted = True Then
+&apos;	If bInserted Then
 		bCalOwnDataChanged = True
-	End If
+&apos;	End If
 	
 	Call CalClearInputMask()
 End Sub
@@ -237,7 +241,7 @@ Dim DayStr as String
 End Function
 
 
-Function CalGetNameOfEvent(ByVal ListIndex as Integer) as Integer
+Function CalGetNameOfEvent(ByVal ListIndex as Integer) as String
 Dim NameStr as String
 	NameStr = DlgCalModel.lstOwnData.StringItemList(ListIndex)
 	NameStr = Trim (Mid(NameStr, 16))
@@ -274,8 +278,8 @@ Dim bDoEnable as Boolean
 		EvDay = Val(DlgCalModel.txtOwnEventDay.Text)
 		bDoEnable = Ubound(DlgCalModel.lstOwnEventMonth.SelectedItems()) &gt; -1
 		If bDoEnable Then
-			EvMonth = DlgCalModel.lstOwnEventMonth.SelectedItems(0)
-			bDoEnable = (EvDay &gt; 1) AND (EvDay &lt; CalMaxDayInMonth(EvYear, EvMonth))
+			EvMonth = DlgCalModel.lstOwnEventMonth.SelectedItems(0) + 1
+			bDoEnable = (EvDay &gt; 1) AND (EvDay &lt;= CalMaxDayInMonth(EvYear, EvMonth))
 			If bDoEnable Then
 				bDoEnable = LTrim(DlgCalModel.txtEvent.Text) &lt;&gt; &quot;&quot;	
 			End If
