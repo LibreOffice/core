@@ -2076,3 +2076,8 @@ __CTA2?AVIllegalArgumentException@lang@star@sun@com@@
 ?setTransactionIsolation@OConnection@file@connectivity@@UAAXJ@Z
 ?setTypeMap@OConnection@file@connectivity@@UAAXABV?$Reference@VXNameAccess@container@star@sun@com@@@uno@star@sun@com@@@Z
 ?supportsService@OConnection@file@connectivity@@UAAEABVOUString@rtl@@@Z
+??4?$ORefVector@VORowSetValue@connectivity@@@connectivity@@QAEAAV01@ABV01@@Z
+?_M_insert_dispatch@?$vector@VString@@V?$allocator@VString@@@_STL@@@_STL@@QAEXPAVString@@PBV3@1U__false_type@@@Z
+?__copy@_STL@@YAPAVORowSetValue@connectivity@@PAV23@00U_Ra__ItT@1@PAH@Z
+?copy@_STL@@YAPAU?$_Rb_tree_iterator@U?$pair@$$CBJJ@_STL@@U?$_N_Tr@U?$pair@$$CBJJ@_STL@@@2@@1@PAU21@00@Z
+?upper_bound@?$_Rb_tree@JU?$pair@$$CBJJ@_STL@@U?$_S1st@U?$pair@$$CBJJ@_STL@@@2@U?$less@J@2@V?$allocator@U?$pair@$$CBJJ@_STL@@@2@@_STL@@QAE?AU?$_Rb_tree_iterator@U?$pair@$$CBJJ@_STL@@U?$_N_Tr@U?$pair@$$CBJJ@_STL@@@2@@2@ABJ@Z
