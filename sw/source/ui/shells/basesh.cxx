@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 10:15:00 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 13:11:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -409,23 +409,6 @@ BOOL lcl_UpdateContourDlg( SwWrtShell &rSh, int nSel )
                   rSh.GetGraphicPolygon(), rSh.GetIMapInventor() );
     }
     return bRet;
-}
-
-/*--------------------------------------------------------------------
-    Beschreibung:   Alle Items disablen, wird auch aus anderen Source gerufen
- --------------------------------------------------------------------*/
-
-void DisableAllItems(SfxItemSet &rSet)
-{
-    SfxWhichIter aIter(rSet);
-
-    USHORT nWhich = aIter.FirstWhich();
-    ASSERT(nWhich, leeres Set);
-    while(nWhich)
-    {
-        rSet.DisableItem(nWhich);
-        nWhich = aIter.NextWhich();
-    }
 }
 
 /*--------------------------------------------------------------------
