@@ -1,94 +1,119 @@
-# Builds the java demo component.
+# Builds the Java InstanceInspector component example of the SDK.
 
-PRJ=..$(PS)..$(PS)..
-SETTINGS=../../../settings
+PRJ=../../..
+SETTINGS=$(PRJ)/settings
 
 include $(SETTINGS)/settings.mk
-
-include $(SETTINGS)/dk.mk
 include $(SETTINGS)/std.mk
+include $(SETTINGS)/dk.mk
 
 # Define non-platform/compiler specific settings
+COMPONENT1_NAME=InstanceInspector
+OUT_COMP_CLASS=$(OUT_CLASS)/$(COMPONENT1_NAME)
+OUT_COMP_GEN=$(OUT_MISC)/$(COMPONENT1_NAME)
+COMPONENT1_RDB_NAME=$(COMPONENT1_NAME).rdb
+COMPONENT1_RDB=$(OUT_COMP_GEN)/$(COMPONENT1_RDB_NAME)
+COMPONENT1_PACKAGE=$(OUT_BIN)/$(COMPONENT1_NAME).zip
+COMPONENT1_PACKAGE_URL=$(subst \\,\,"$(COMPONENT_PACKAGE_DIR)$(PS)$(COMPONENT1_NAME).zip")
+COMPONENT1_JAR_NAME=$(COMPONENT1_NAME).jar
+COMPONENT1_JAR=$(OUT_CLASS)/$(COMPONENT1_JAR_NAME)
+COMPONENT1_MANIFESTFILE=$(OUT_COMP_CLASS)/$(COMPONENT1_NAME).Manifest
 
-REGISTERFLAG = $(OUT_MISC)$(PS)instanceinspector_register_component.flag
-COMPONENTJARFLAG = $(OUT_MISC)$(PS)instanceinspector_create_component_jar.flag
-TYPEFLAG= $(OUT_MISC)$(PS)instanceinspector_type_generation.flag
-JAVAFLAG= $(OUT_MISC)$(PS)instanceinspector_javac.flag
-
-OUT_COMPONENT = $(OUT_CLASS)$(PS)instanceinspector
-COMPONENT_RDB = $(OUT_BIN)$(PS)InstanceInspector.rdb
-
-COMPONENT_JAR = $(OUT_CLASS)$(PS)InstanceInspector.jar
-COMPONENT_MANIFESTFILE = Manifest
+REGISTERFLAG=$(OUT_MISC)$(PS)java_$(COMPONENT1_NAME)_register_component.flag
 
 IDLFILES = XInstanceInspector.idl
 
 # normally the idl file should be stored in a directory tree fitting the module structure,
 # for the example we know the module structure
-PACKAGE = org$(PS)OpenOffice
+PACKAGE = org/OpenOffice
 
-JAVAFILES  =	InstanceInspector.java \
-		Test.java
+JAVAFILES  = InstanceInspector.java \
+	Test.java
 
-GENJAVAFILES = $(patsubst %.idl,$(OUT_MISC)$(PS)$(PACKAGE)$(PS)%.java,$(IDLFILES))
-GENURDFILES = $(subst \\,\,$(patsubst %.idl,$(OUT_MISC)$(PS)%.urd,$(IDLFILES)))
+GENJAVAFILES = $(patsubst %.idl,$(OUT_COMP_GEN)/$(PACKAGE)/%.java,$(IDLFILES))
+GENURDFILES = $(patsubst %.idl,$(OUT_COMP_GEN)/%.urd,$(IDLFILES))
 
-CLASSFILES = $(patsubst %.java,$(OUT_COMPONENT)$(PS)%.class,$(JAVAFILES) )
+CLASSFILES = $(patsubst %.java,$(OUT_COMP_CLASS)/%.class,$(JAVAFILES))
+CLASSFILES += $(subst $(OUT_COMP_GEN),$(OUT_COMP_CLASS),$(GENJAVAFILES:.java=.class))
 
-CLASSFILES += $(patsubst %.java,$(OUT_COMPONENT)$(PS)$(PACKAGE)$(PS)%.class,$(GENJAVAFILES) )
+$(COMPONENT1_NAME)_CLASSFILES = $(COMPONENT1_NAME).class \
+		$(COMPONENT1_NAME)$$_$(COMPONENT1_NAME).class						  
 
-SDK_CLASSPATH =	$(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(OFFICE_CLASSES_DIR)$(PS)jurt.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)$(PS)unoil.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)$(PS)ridl.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)$(PS)sandbox.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)$(PS)java_uno.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)$(PS)juh.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)$(PS)jut.jar\
-		$(PATH_SEPARATOR)$(OUT_COMPONENT))
+$(COMPONENT1_NAME)_CLASSFILES += $(subst $(OUT_COMP_GEN)/,,$(GENJAVAFILES:.java=.class))
 
-OFFICE_FILEURL = $(subst \,/,$(OFFICE_PROGRAM_PATH))
+SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(OFFICE_CLASSES_DIR)/jurt.jar\
+		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/unoil.jar\
+		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/ridl.jar\
+		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/sandbox.jar\
+		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/juh.jar\
+		$(PATH_SEPARATOR)$(OUT_COMP_CLASS))
 
 
 # Targets
 .PHONY: ALL
-ALL : register
+ALL : JavaInstanceInspectorExample
 
 include $(SETTINGS)/stdtarget.mk
 
-$(OUT_COMPONENT) : $(OUT)
-	$(MKDIR) $@
+$(OUT_COMP_GEN) : $(OUT)
+	$(MKDIR) $(subst /,$(PS),$@)
+	$(MKDIR) $(subst /,$(PS),$(OUT_COMP_CLASS))
 
-$(TYPEFLAG) : $(IDLFILES)
-	$(BIN_DIR)$(PS)idlc -I. -I$(IDL_DIR) -O$(OUT_MISC) $^
-	$(BIN_DIR)$(PS)regmerge $(COMPONENT_RDB) /UCR $(GENURDFILES)
-	$(BIN_DIR)$(PS)regmerge $(COMPONENT_RDB) / $(DKREGISTRYNAME)
-	$(BIN_DIR)$(PS)javamaker -BUCR -Torg.OpenOffice.XInstanceInspector -O$(OUT_MISC) $(COMPONENT_RDB)
-	@echo bla > $@
+$(OUT_COMP_CLASS)/%.Manifest : $(OUT_COMP_GEN)
+	@echo RegistrationClassName: $(basename $(@F))> $@
 
-$(JAVAFLAG) : $(OUT_COMPONENT) $(TYPEFLAG) $(JAVAFILES)
-	javac -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMPONENT) $(GENJAVAFILES) $(JAVAFILES)
-	@echo bla > $@
+$(OUT_COMP_GEN)/%.urd : %.idl $(OUT_COMP_GEN)
+	idlc -C -I. -I$(IDL_DIR) -O$(OUT_COMP_GEN) $<
 
-$(COMPONENTJARFLAG) : $(JAVAFLAG)
-	jar cvfm $(COMPONENT_JAR) $(COMPONENT_MANIFESTFILE) -C $(OUT_COMPONENT) .
-	-$(DEL) $(REGISTERFLAG)
-	@echo bla > $@
+$(OUT_COMP_GEN)/%.rdb : $(GENURDFILES)
+	-$(DEL) $(subst /,$(PS),$@)
+	regmerge $@ /UCR $(GENURDFILES)
 
-$(REGISTERFLAG) : $(COMPONENTJARFLAG)
+$(OUT_COMP_GEN)/%.java : $(COMPONENT1_RDB) $(OUT_COMP_GEN)
+	javamaker -BUCR -nD -T$(subst /,.,$(patsubst $(OUT_COMP_GEN)/%.java,%,$@)) -O$(OUT_COMP_GEN) $(COMPONENT1_RDB) $(DKREGISTRYNAME)
+
+$(CLASSFILES) : $(OUT_COMP_GEN) $(JAVAFILES) $(GENJAVAFILES)
+	javac -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $(GENJAVAFILES) $(JAVAFILES) 
+
+$(OUT_CLASS)/%.jar : $(OUT_COMP_CLASS)/%.Manifest $(CLASSFILES)
+	cd $(OUT_COMP_CLASS) && jar cvfm ../$(@F) $(<F) $($(basename $(@F))_CLASSFILES)
+
+$(OUT_BIN)/%.zip : $(OUT_COMP_GEN)/%.rdb $(OUT_CLASS)/%.jar
+	$(COPY) $(subst /,$(PS),$<) $(subst /,$(PS),$(OUT_CLASS))
+	cd $(OUT_CLASS) && jar cvfM ../bin/$(@F) $(^F)
+	$(DEL) $(subst /,$(PS),$(OUT_CLASS)/$(<F))
+
+$(REGISTERFLAG) : $(COMPONENT1_PACKAGE)
 ifneq "$(SDK_AUTO_DEPLOYMENT)" ""
-	$(BIN_DIR)$(PS)regmerge "$(URLPREFIX)$(OFFICE_FILEURL)/applicat.rdb" /UCR $(GENURDFILES)
-	$(COPY) $(COMPONENT_JAR) "$(OFFICE_CLASSES_DIR)"
-	java -classpath "$(SDK_CLASSPATH)" com.sun.star.tools.uno.RegComp "$(URLPREFIX)$(OFFICE_FILEURL)/applicat.rdb" register "$(URLPREFIX)$(OFFICE_FILEURL)/classes/InstanceInspector.jar" com.sun.star.loader.Java2
-	@echo bla > $@
+	-$(DEL) $(subst /,$(PS),$@)
+	$(DEPLOYTOOL) $(COMPONENT1_PACKAGE_URL)
+	@echo flagged > $(subst /,$(PS),$@)
 else
 	@echo --------------------------------------------------------------------------------
 	@echo  If you want to install your component automatically, please set the environment
-	@echo  variable SDK_AUTO_DEPLOYMENT = YES. 
+	@echo  variable SDK_AUTO_DEPLOYMENT = YES. But note that auto deployment is only 
+	@echo  possible if no office instance is running. 
 	@echo --------------------------------------------------------------------------------
 endif
 
-register: $(REGISTERFLAG)
+JavaInstanceInspectorExample : $(REGISTERFLAG)
 	@echo --------------------------------------------------------------------------------
-	@echo Please use the following command to execute
-	@echo java -classpath "$(SDK_CLASSPATH)" Test $(OSEP)Connection$(CSEP)
+	@echo Please use the following command to execute the example!
+	@echo -
+	@echo make Test.run
+	@echo ------
+	@echo The InstanceInspector component was installed if SDK_AUTO_DEPLOYMENT = YES.
+	@echo You can use this component inside your office installation, see the example
+	@echo description.
 	@echo --------------------------------------------------------------------------------
+
+%.run: $(OUT_COMP_CLASS)/%.class
+	java -classpath "$(SDK_CLASSPATH)" $(basename $@)
+
+.PHONY: clean
+clean :
+	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_CLASS))
+	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_GEN))
+	-$(DEL) $(subst /,$(PS),$(COMPONENT1_PACKAGE_URL))
+	-$(DEL) $(subst /,$(PS),$(COMPONENT1_JAR))
+	-$(DEL) $(subst /,$(PS),$(REGISTERFLAG))
