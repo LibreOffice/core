@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compbase.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:26:08 $
+ *  last change: $Author: jbu $ $Date: 2000-10-06 16:00:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,18 +135,11 @@ public: \
     } \
     virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & xListener ) throw(::com::sun::star::uno::RuntimeException) \
     { \
-        ::osl::MutexGuard aGuard( rBHelper.rMutex ); \
-        OSL_ENSHURE( !rBHelper.bInDispose, "do not add listeners in the dispose call" ); \
-        OSL_ENSHURE( !rBHelper.bDisposed, "object is disposed" ); \
-        if (!rBHelper.bInDispose && !rBHelper.bDisposed) \
-            rBHelper.aLC.addInterface( ::getCppuType( (const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > *)0 ), xListener ); \
+        rBHelper.addListener( ::getCppuType( &xListener ), xListener ); \
     } \
     virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & xListener ) throw(::com::sun::star::uno::RuntimeException) \
     { \
-        ::osl::MutexGuard aGuard( rBHelper.rMutex ); \
-        OSL_ENSHURE( !rBHelper.bDisposed, "object is disposed" ); \
-        if (!rBHelper.bInDispose && !rBHelper.bDisposed) \
-            rBHelper.aLC.removeInterface( ::getCppuType( (const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > *)0 ), xListener ); \
+        rBHelper.removeListener( ::getCppuType( &xListener ), xListener ); \
     } \
 }; \
 template< __CLASS_IFC##N > \
@@ -207,18 +200,11 @@ public: \
     } \
     virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & xListener ) throw(::com::sun::star::uno::RuntimeException) \
     { \
-        ::osl::MutexGuard aGuard( rBHelper.rMutex ); \
-        OSL_ENSHURE( !rBHelper.bInDispose, "do not add listeners in the dispose call" ); \
-        OSL_ENSHURE( !rBHelper.bDisposed, "object is disposed" ); \
-        if (!rBHelper.bInDispose && !rBHelper.bDisposed) \
-            rBHelper.aLC.addInterface( ::getCppuType( (const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > *)0 ), xListener ); \
+        rBHelper.addListener( ::getCppuType( &xListener ), xListener ); \
     } \
     virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & xListener ) throw(::com::sun::star::uno::RuntimeException) \
     { \
-        ::osl::MutexGuard aGuard( rBHelper.rMutex ); \
-        OSL_ENSHURE( !rBHelper.bDisposed, "object is disposed" ); \
-        if (!rBHelper.bInDispose && !rBHelper.bDisposed) \
-            rBHelper.aLC.removeInterface( ::getCppuType( (const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > *)0 ), xListener ); \
+        rBHelper.removeListener( ::getCppuType( &xListener ), xListener ); \
     } \
 };
 

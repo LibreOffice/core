@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interfacecontainer.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:26:09 $
+ *  last change: $Author: jbu $ $Date: 2000-10-06 16:00:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,6 +304,7 @@ public:
      */
     inline void SAL_CALL clear();
 
+    typedef key keyType;
 private:
     ::std::hash_map< key , void* , hashImpl , equalImpl > *m_pMap;
     ::osl::Mutex &  rMutex;
@@ -316,7 +317,7 @@ private:
 
 
 /**
- * This struct contain the standard variables of a broadcaster. Helper
+ * This struct contains the standard variables of a broadcaster. Helper
  * classes only know a reference to this struct instead of references
  * to the four members. The access to the members must be guarded with
  * rMutex.
@@ -346,6 +347,40 @@ struct OBroadcastHelperVar
         , bDisposed( sal_False )
         , bInDispose( sal_False )
     {}
+
+    /**
+     * adds a listener threadsafe.
+     **/
+    inline void addListener( const container::keyType &key , const ::com::sun::star::uno::Reference < ::com::sun::star::uno::XInterface > &r )
+    {
+        MutexGuard guard( rMutex );
+        OSL_ENSHURE( !bInDispose, "do not add listeners in the dispose call" );
+        OSL_ENSHURE( !bDisposed, "object is disposed" );
+        if( ! bInDispose && ! bDisposed  )
+            aLC.addInterface( key , r );
+    }
+
+    /**
+     * removes a listener threadsafe
+     **/
+    inline void removeListener( const container::keyType &key , const ::com::sun::star::uno::Reference < ::com::sun::star::uno::XInterface > & r )
+    {
+        MutexGuard guard( rMutex );
+        OSL_ENSHURE( !bDisposed, "object is disposed" );
+        if( ! bInDispose && ! bDisposed  )
+            aLC.removeInterface( key , r );
+    }
+
+    /**
+     * Return the container created under this key.
+     * @return the container created under this key. If the container
+     *         was not created, null was returned. This can be used to optimize
+     *         performance ( construction of an event object can be avoided ).
+     ***/
+    inline OInterfaceContainerHelper * SAL_CALL getContainer( const container::keyType &key ) const
+    {
+        return aLC.getContainer( key );
+    }
 };
 
 /*------------------------------------------
