@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsubti.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-06 17:45:42 $
+ *  last change: $Author: dr $ $Date: 2000-11-10 16:56:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SHEET_XCELLRANGEMOVEMENT_HPP_
 #include <com/sun/star/sheet/XCellRangeMovement.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGESUPPLIER_HPP_
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMED_HPP_
 #include <com/sun/star/container/XNamed.hpp>
@@ -200,10 +203,11 @@ void ScMyTableData::SetChangedCols(const sal_Int32 nValue)
 /*******************************************************************************************************************************/
 
 ScMyTables::ScMyTables(ScXMLImport& rTempImport)
-    : rImport(rTempImport)
+    : rImport(rTempImport),
+    nTableCount( 0 ),
+    nCurrentSheet( -1 ),
+    nCurrentDrawPage( -1 )
 {
-    nTableCount = 0;
-    nCurrentSheet = -1;
     aTableVec.resize(nDefaultTabCount, NULL);
 }
 
@@ -260,12 +264,11 @@ void ScMyTables::NewSheet(const rtl::OUString& sTableName, const rtl::OUString& 
             if ( xIndex.is() )
             {
                 uno::Any aSheet = xIndex->getByIndex(nCurrentSheet);
-                uno::Reference <sheet::XSpreadsheet> xSheet;
-                if ( aSheet >>= xSheet )
+                if ( aSheet >>= xCurrentSheet )
                 {
                     if (!(nCurrentSheet > 0))
                     {
-                        uno::Reference < container::XNamed > xNamed(xSheet, uno::UNO_QUERY );
+                        uno::Reference < container::XNamed > xNamed(xCurrentSheet, uno::UNO_QUERY );
                         if ( xNamed.is() )
                             try
                             {
@@ -283,7 +286,7 @@ void ScMyTables::NewSheet(const rtl::OUString& sTableName, const rtl::OUString& 
                                 }
                             }
                     }
-                    uno::Reference <beans::XPropertySet> xProperties(xSheet, uno::UNO_QUERY);
+                    uno::Reference <beans::XPropertySet> xProperties(xCurrentSheet, uno::UNO_QUERY);
                     if (xProperties.is())
                     {
                         XMLTableStylesContext *pStyles = (XMLTableStylesContext *)&rImport.GetAutoStyles();
@@ -728,4 +731,17 @@ void ScMyTables::AddColCount(sal_Int32 nTempColCount)
 {
     aTableVec[nTableCount - 1]->SetColCount(aTableVec[nTableCount - 1]->GetColCount() + nTempColCount);
 }
+
+uno::Reference< drawing::XDrawPage > ScMyTables::GetCurrentXDrawPage()
+{
+    if( (nCurrentSheet != nCurrentDrawPage) || !xDrawPage.is() )
+    {
+        uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier( xCurrentSheet, uno::UNO_QUERY );
+        if( xDrawPageSupplier.is() )
+            xDrawPage = xDrawPageSupplier->getDrawPage();
+        nCurrentDrawPage = nCurrentSheet;
+    }
+    return xDrawPage;
+}
+
 

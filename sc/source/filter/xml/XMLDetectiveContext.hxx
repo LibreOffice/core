@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: XMLCellRangeSourceContext.hxx,v $
+ *  $RCSfile: XMLDetectiveContext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: dr $ $Date: 2000-11-10 16:56:12 $
  *
@@ -59,11 +59,22 @@
  *
  ************************************************************************/
 
-#ifndef _SC_XMLCELLRANGESOURCECONTEXT_HXX
-#define _SC_XMLCELLRANGESOURCECONTEXT_HXX
+#ifndef _SC_XMLDETECTIVECONTEXT_HXX
+#define _SC_XMLDETECTIVECONTEXT_HXX
 
 #ifndef _XMLOFF_XMLIMP_HXX
 #include <xmloff/xmlimp.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_TABLE_CELLRANGEADDRESS_HPP_
+#include <com/sun/star/table/CellRangeAddress.hpp>
+#endif
+
+#ifndef SC_DETFUNC_HXX
+#include "detfunc.hxx"
+#endif
+#ifndef SC_DETDATA_HXX
+#include "detdata.hxx"
 #endif
 
 class ScXMLImport;
@@ -71,37 +82,93 @@ class ScXMLImport;
 
 //___________________________________________________________________
 
-struct ScMyImpCellRangeSource
+struct ScMyImpDetectiveObj
 {
-    ::rtl::OUString             sSourceStr;
-    ::rtl::OUString             sFilterName;
-    ::rtl::OUString             sFilterOptions;
-    ::rtl::OUString             sURL;
-    sal_Int32                   nColumns;
-    sal_Int32                   nRows;
-    sal_Bool                    bHas;
+    ScRange                     aSourceRange;
+    ScDetectiveObjType          eObjType;
+    sal_Bool                    bHasError;
 
-                                ScMyImpCellRangeSource();
+                                ScMyImpDetectiveObj();
+};
+
+typedef ::std::vector< ScMyImpDetectiveObj > ScMyImpDetectiveObjVec;
+
+
+//___________________________________________________________________
+
+class ScXMLDetectiveContext : public SvXMLImportContext
+{
+private:
+    ScMyImpDetectiveObjVec&     rDetectiveObjVec;
+
+    const ScXMLImport&          GetScImport() const { return (const ScXMLImport&)GetImport(); }
+    ScXMLImport&                GetScImport()       { return (ScXMLImport&)GetImport(); }
+
+public:
+                                ScXMLDetectiveContext(
+                                    ScXMLImport& rImport,
+                                    USHORT nPrfx,
+                                    const ::rtl::OUString& rLName,
+                                    ScMyImpDetectiveObjVec& rNewDetectiveObjVec
+                                    );
+    virtual                     ~ScXMLDetectiveContext();
+
+    virtual SvXMLImportContext* CreateChildContext(
+                                    USHORT nPrefix,
+                                    const ::rtl::OUString& rLocalName,
+                                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList
+                                    );
+    virtual void                EndElement();
 };
 
 
 //___________________________________________________________________
 
-class ScXMLCellRangeSourceContext : public SvXMLImportContext
+class ScXMLDetectiveHighlightedContext : public SvXMLImportContext
+{
+private:
+    ScMyImpDetectiveObjVec&     rDetectiveObjVec;
+    ScMyImpDetectiveObj         aDetectiveObj;
+    sal_Bool                    bValid;
+
+    const ScXMLImport&          GetScImport() const { return (const ScXMLImport&)GetImport(); }
+    ScXMLImport&                GetScImport()       { return (ScXMLImport&)GetImport(); }
+
+public:
+                                ScXMLDetectiveHighlightedContext(
+                                    ScXMLImport& rImport,
+                                    USHORT nPrfx,
+                                    const ::rtl::OUString& rLName,
+                                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
+                                    ScMyImpDetectiveObjVec& rNewDetectiveObjVec
+                                    );
+    virtual                     ~ScXMLDetectiveHighlightedContext();
+
+    virtual SvXMLImportContext* CreateChildContext(
+                                    USHORT nPrefix,
+                                    const ::rtl::OUString& rLocalName,
+                                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList
+                                    );
+    virtual void                EndElement();
+};
+
+
+//___________________________________________________________________
+
+class ScXMLDetectiveOperationContext : public SvXMLImportContext
 {
 private:
     const ScXMLImport&          GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport&                GetScImport()       { return (ScXMLImport&)GetImport(); }
 
 public:
-                                ScXMLCellRangeSourceContext(
+                                ScXMLDetectiveOperationContext(
                                     ScXMLImport& rImport,
                                     USHORT nPrfx,
                                     const ::rtl::OUString& rLName,
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
-                                    ScMyImpCellRangeSource& rCellRangeSource
+                                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList
                                     );
-    virtual                     ~ScXMLCellRangeSourceContext();
+    virtual                     ~ScXMLDetectiveOperationContext();
 
     virtual SvXMLImportContext* CreateChildContext(
                                     USHORT nPrefix,

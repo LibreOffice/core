@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-02 13:51:36 $
+ *  last change: $Author: dr $ $Date: 2000-11-10 16:56:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,10 @@
 #ifndef SC_XMLCELLI_HXX
 #define SC_XMLCELLI_HXX
 
-#ifndef SC_XMLCELLRANGESOURCECONTEXT_HXX
+#ifndef _SC_XMLDETECTIVECONTEXT_HXX
+#include "XMLDetectiveContext.hxx"
+#endif
+#ifndef _SC_XMLCELLRANGESOURCECONTEXT_HXX
 #include "XMLCellRangeSourceContext.hxx"
 #endif
 
@@ -128,9 +131,10 @@ class ScXMLTableRowCellContext : public SvXMLImportContext
     sal_Int32   nCellsRepeated;
     sal_Int16   nCellType;
     sal_Int32   nRepeatedRows;
-    double  fValue;
-    ScMyAnnotation  aMyAnnotation;
-    ScMyImpCellRangeSource aCellRangeSource;
+    double      fValue;
+    ScMyAnnotation          aMyAnnotation;
+    ScMyImpDetectiveObjVec  aDetectiveObjVec;
+    ScMyImpCellRangeSource  aCellRangeSource;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -173,8 +177,8 @@ public:
     void SetString(const rtl::OUString& sOUTempText) { sOUText = sOUTempText; }
 
     void SetAnnotation(const com::sun::star::uno::Reference<com::sun::star::table::XCell>& xCell);
-
-    void SetCellRangeSource( sal_Int16 nSheet, sal_Int32 nColumnPos, sal_Int32 nRowPos );
+    void SetDetectiveObj( const ::com::sun::star::table::CellAddress& rPosition );
+    void SetCellRangeSource( const ::com::sun::star::table::CellAddress& rPosition );
 
     virtual void EndElement();
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsubti.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:16 $
+ *  last change: $Author: dr $ $Date: 2000-11-10 16:56:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,12 @@
 #include <xmloff/xmlictxt.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_SHEET_XSPREADSHEET_HPP_
+#include <com/sun/star/sheet/XSpreadsheet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGE_HPP_
+#include <com/sun/star/drawing/XDrawPage.hpp>
+#endif
 #ifndef _COM_SUN_STAR_TABLE_CELLADDRESS_HPP_
 #include <com/sun/star/table/CellAddress.hpp>
 #endif
@@ -139,6 +145,9 @@ class ScMyTables
 private:
     ScXMLImport&                        rImport;
 
+    ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheet > xCurrentSheet;
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > xDrawPage;
+    sal_Int16                           nCurrentDrawPage;
     std::vector<ScMyTableData*>         aTableVec;
     sal_Int16                           nTableCount;
     sal_Int16                           nCurrentSheet;
@@ -168,6 +177,10 @@ public:
     sal_Int16                           GetCurrentSheet() const { return nCurrentSheet; }
     sal_Int32                           GetCurrentColumn() const { return aTableVec[nTableCount - 1]->GetColCount(); }
     sal_Int32                           GetCurrentRow() const { return aTableVec[nTableCount - 1]->GetRow(); }
+    ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheet >
+                                        GetCurrentXSheet()  { return xCurrentSheet; }
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >
+                                        GetCurrentXDrawPage();
 };
 
 #endif

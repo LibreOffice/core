@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLConverter.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-10 09:57:28 $
+ *  last change: $Author: dr $ $Date: 2000-11-10 16:56:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,8 +233,7 @@ sal_Int32 ScXMLConverter::GetRangeFromString(
     nOffset = GetTokenByOffset( sToken, rRangeStr, nOffset );
     if( nOffset >= 0 )
     {
-        sal_Int32 nLength = sToken.getLength();
-        sal_Int32 nIndex = sToken.indexOf( ':' );
+        sal_Int32 nIndex = IndexOf( sToken, sXML__colon[0], 0 );
         if( nIndex < 0 )
         {
             rRange.aStart.Parse( sToken, (ScDocument*) pDocument );

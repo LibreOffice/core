@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: dr $ $Date: 2000-11-08 12:56:05 $
+#   last change: $Author: dr $ $Date: 2000-11-10 16:56:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -107,6 +107,7 @@ CXXFILES = \
         XMLTableMasterPageExport.cxx \
         xmllabri.cxx \
         XMLTableHeaderFooterContext.cxx \
+        XMLDetectiveContext.cxx \
         XMLCellRangeSourceContext.cxx \
         XMLConsolidationContext.cxx \
         XMLConverter.cxx \
@@ -137,6 +138,7 @@ SLOFILES =  \
         $(SLO)$/XMLTableMasterPageExport.obj \
         $(SLO)$/xmllabri.obj \
         $(SLO)$/XMLTableHeaderFooterContext.obj \
+        $(SLO)$/XMLDetectiveContext.obj \
         $(SLO)$/XMLCellRangeSourceContext.obj \
         $(SLO)$/XMLConsolidationContext.obj \
         $(SLO)$/XMLConverter.obj \

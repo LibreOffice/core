@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-10 09:57:28 $
+ *  last change: $Author: dr $ $Date: 2000-11-10 16:56:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2467,7 +2467,7 @@ void ScXMLExport::WriteDetective( const ScMyCell& rMyCell )
             OUString sString;
             for( ScMyDetectiveObjVec::const_iterator aObjItr = rObjVec.begin(); aObjItr != rObjVec.end(); aObjItr++ )
             {
-                if( aObjItr->eObjType == SC_DETOBJ_ARROW )
+                if( (aObjItr->eObjType == SC_DETOBJ_ARROW) || (aObjItr->eObjType == SC_DETOBJ_TOOTHERTAB) )
                 {
                     ScXMLConverter::GetStringFromRange( sString, aObjItr->aSourceRange, pDoc );
                     AddAttribute( XML_NAMESPACE_TABLE, sXML_cell_range_address, sString );
