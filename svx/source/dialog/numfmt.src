@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmt.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: bm $ $Date: 2001-02-07 12:31:40 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 21:00:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -888,7 +888,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         QuickHelpText[ chinese_traditional ] = "ΌW¥[";
         QuickHelpText[ arabic ] = "ΕΦΗέΙ";
         QuickHelpText[ greek ] = "Προσθήκη";
-        QuickHelpText[ korean ] = "Add";
+        QuickHelpText[ korean ] = "Γί°΅!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
@@ -921,7 +921,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         QuickHelpText[ chinese_traditional ] = "§R°£";
         QuickHelpText[ arabic ] = "ΕÒΗαΙ";
         QuickHelpText[ greek ] = "Διαγραφή";
-        QuickHelpText[ korean ] = "Remove";
+        QuickHelpText[ korean ] = "Α¦°Ε!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
@@ -951,7 +951,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         QuickHelpText[ chinese_traditional ] = "Εά§σµϋ»y";
         QuickHelpText[ arabic ] = "ΚΫννΡ ΗαΚΪανή";
         QuickHelpText[ greek ] = "Επεξεργασία σχολίου";
-        QuickHelpText[ korean ] = "Edit Comment";
+        QuickHelpText[ korean ] = "ΑΦΌ® ΖνΑύ!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
