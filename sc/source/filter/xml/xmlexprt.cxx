@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.172 $
+ *  $Revision: 1.173 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:31:38 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 16:10:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3012,6 +3012,8 @@ void ScXMLExport::WriteScenario()
             AddAttribute(XML_NAMESPACE_TABLE, XML_COPY_STYLES, XML_FALSE);
         if (nFlags & SC_SCENARIO_VALUE)
             AddAttribute(XML_NAMESPACE_TABLE, XML_COPY_FORMULAS, XML_FALSE);
+        if (nFlags & SC_SCENARIO_PROTECT)
+            AddAttribute(XML_NAMESPACE_TABLE, XML_PROTECTED, XML_TRUE);
         SvXMLUnitConverter::convertBool(aBuffer, pDoc->IsActiveScenario(nCurrentTable));
         AddAttribute(XML_NAMESPACE_TABLE, XML_IS_ACTIVE, aBuffer.makeStringAndClear());
         const ScRangeList* pRangeList = pDoc->GetScenarioRanges(nCurrentTable);
