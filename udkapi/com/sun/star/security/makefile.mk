@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: dbo $ $Date: 2000-12-12 17:02:56 $
+#   last change: $Author: dbo $ $Date: 2000-12-13 14:21:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,6 +59,11 @@
 #
 #
 #*************************************************************************
+
+# build dependency: security
+#		    security/auth
+#		    security/auth/callback
+#		    security/auth/login
 
 PRJ=..$/..$/..$/..
 
