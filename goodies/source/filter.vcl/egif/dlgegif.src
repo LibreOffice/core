@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgegif.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2001-08-24 13:24:00 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:28:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ ModalDialog DLG_EXPORT_GIF
     Text [ spanish ] = "Opciones GIF" ;
     Text [ french ] = "Options GIF" ;
     Text [ dutch ] = "GIF-opties" ;
-    Text [ swedish ] = "GIF alternativ" ;
+    Text [ swedish ] = "GIF-alternativ" ;
     Text [ danish ] = "GIF indstillinger" ;
     Text [ portuguese_brazilian ] = "GIF Optionen" ;
     Text [ portuguese ] = "Opções GIF" ;
@@ -115,7 +115,7 @@ ModalDialog DLG_EXPORT_GIF
         Text[ chinese_simplified ] = "æ¨¡å¼";
         Text[ russian ] = "Ğåæèì";
         Text[ polish ] = "Tryb";
-        Text[ japanese ] = "ï¾“ï½°ï¾„ï¾";
+        Text[ japanese ] = "ãƒ¢ãƒ¼ãƒ‰";
         Text[ chinese_traditional ] = "æ¨¡å¼";
         Text[ arabic ] = "æÖÚ";
         Text[ dutch ] = "Modus";
@@ -124,8 +124,9 @@ ModalDialog DLG_EXPORT_GIF
         Text[ korean ] = "ëª¨ë“œ";
         Text[ turkish ] = "Kip";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Modo";
+        Text[ catalan ] = "Mode";
         Text[ finnish ] = "Tila";
+        Text[ thai ] = "à¹‚à¸«à¸¡à¸”";
     };
     CheckBox CBX_INTERLACED
     {
@@ -146,7 +147,7 @@ ModalDialog DLG_EXPORT_GIF
         Text[ chinese_simplified ] = "äº¤é”™(~I)";
         Text[ russian ] = "~Ñ ÷åğåäîâàíèåì";
         Text[ polish ] = "Interlaced";
-        Text[ japanese ] = "ï½²ï¾ï¾€ï½°ï¾šï½°ï½½æ–¹å¼(~I)";
+        Text[ japanese ] = "ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ¬ãƒ¼ã‚¹æ–¹å¼(~I)";
         Text[ chinese_traditional ] = "äº¤éŒ¯(~I)";
         Text[ arabic ] = "ãÊÔÇÈß";
         Text[ dutch ] = "~Interlaced";
@@ -155,8 +156,9 @@ ModalDialog DLG_EXPORT_GIF
         Text[ korean ] = "ì¸í„°ë ˆì´ìŠ¤(~I)";
         Text[ turkish ] = "~Interlaced";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Entrelazado";
-        Text[ finnish ] = "~Lomitettu";
+        Text[ catalan ] = "~Entrellaçat";
+        Text[ finnish ] = "Lomitettu";
+        Text[ thai ] = "~à¸›à¸£à¸°à¸ªà¸²à¸™à¸à¸±à¸™";
     };
     FixedLine GRP_DRAW
     {
@@ -176,10 +178,10 @@ ModalDialog DLG_EXPORT_GIF
         Text[ chinese_simplified ] = "ç»˜å›¾å¯¹è±¡";
         Text[ russian ] = "Ãğàôè÷åñêèå îáúåêòû";
         Text[ polish ] = "Obiekty graficzne";
-        Text[ japanese ] = "å›³å½¢æç”»ï½µï¾Œï¾ï½¼ï¾ï½ªï½¸ï¾„";
+        Text[ japanese ] = "å›³å½¢æç”»ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ";
         Text[ russian ] = "Ãğàôè÷åñêèå îáúåêòû";
     Text[ polish ] = "Obiekty graficzne";
-    Text[ japanese ] = "å›³å½¢æç”»ï½µï¾Œï¾ï½¼ï¾ï½ªï½¸ï¾„";
+    Text[ japanese ] = "å›³å½¢æç”»ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ";
     Text[ chinese_simplified ] = "ç»˜å›¾å¯¹è±¡";
     Text[ chinese_traditional ] = "ç¹ªåœ–ç‰©ä»¶";
         Text[ arabic ] = "ßÇÆäÇÊ ÑÓæãíÉ";
@@ -189,8 +191,9 @@ ModalDialog DLG_EXPORT_GIF
         Text[ korean ] = "ê·¸ë¦¬ê¸° ê°œì²´";
         Text[ turkish ] = "Çizim nesneleri";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Objetos de dibujo";
+        Text[ catalan ] = "Objectes de dibuix";
         Text[ finnish ] = "Piirrosobjektit";
+        Text[ thai ] = "à¸§à¸±à¸•à¸–à¸¸à¸§à¸²à¸”à¸£à¸¹à¸›";
     };
     CheckBox CBX_TRANSLUCENT
     {
@@ -220,13 +223,14 @@ ModalDialog DLG_EXPORT_GIF
         Text[ korean ] = "íˆ¬ëª… ëª¨ë“œ ì €ì¥(~T)";
         Text[ turkish ] = "Saydam biçimde kaydet";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Guardar en modo ~transparente";
-        Text[ finnish ] = "Tallenna ~läpinäkyvyys";
+        Text[ catalan ] = "Desa la ~transparència";
+        Text[ finnish ] = "Tallenna läpinäkyvyys";
+        Text[ thai ] = "à¸šà¸±à¸™à¸—à¸¶à¸à¸„à¸§à¸²à¸¡à¹‚~à¸›à¸£à¹ˆà¸‡à¹à¸ªà¸‡";
     };
     Text[ chinese_simplified ] = "GIF é€‰é¡¹";
     Text[ russian ] = "Ïàğàìåòğû GIF";
     Text[ polish ] = "Opcje GIF";
-    Text[ japanese ] = "GIF ï½µï¾Œï¾Ÿï½¼ï½®ï¾";
+    Text[ japanese ] = "GIF ã‚ªãƒ—ã‚·ãƒ§ãƒ³";
     Text[ chinese_traditional ] = "GIFé¸é …";
     Text[ arabic ] = "GIF ÎíÇÑÇÊ";
     Text[ dutch ] = "GIF-opties";
@@ -235,9 +239,17 @@ ModalDialog DLG_EXPORT_GIF
     Text[ korean ] = "GIF ì˜µì…˜";
     Text[ turkish ] = "GIF seçenekleri";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Opciones GIF";
-    Text[ finnish ] = "GIF-asetukset";
+    Text[ catalan ] = "Opcions GIF";
+    Text[ finnish ] = "GIF-vientiasetukset";
+    Text[ thai ] = "à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸ GIF ";
 };
+
+
+
+
+
+
+
 
 
 

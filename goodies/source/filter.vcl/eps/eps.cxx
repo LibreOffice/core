@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eps.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: sj $ $Date: 2002-11-13 16:43:04 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:28:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,8 +89,6 @@
 #define EPS_PREVIEW_TIFF    1
 #define EPS_PREVIEW_EPSI    2
 
-#define EPS_SCALING_FAKTOR  0.1
-
 #define PS_LINESIZE         70      // maximum number of characters a line in the output
 
 #define PS_NONE             0       // formating mode: action which is inserted behind the output
@@ -121,15 +119,7 @@ struct StackMember
     Color       aTextFillCol;
     Color       aBackgroundCol;
     Font        aFont;
-    MapMode     aMapMode;
-    double      fXScale;
-    double      fYScale;
-    double      fXOrig;
-    double      fYOrig;
-    BOOL        bRegionChanged;
-    Region      bClipRegion;
     TextAlign   eTextAlign;
-    Region      aClipReg;
 
     double                      fLineWidth;
     double                      fMiterLimit;
@@ -166,16 +156,12 @@ private:
     SvStream*           mpPS;
     const GDIMetaFile*  pMTF;
     GDIMetaFile*        pAMTF;              // only created if Graphics is not a Metafile
-    MapMode             aMapMode;
     VirtualDevice       aVDev;
 
     double              nBoundingX1;        // this represents the bounding box
     double              nBoundingY1;
     double              nBoundingX2;
     double              nBoundingY2;
-
-    double              fXScaling;          // represents the factor of the current ( MapMode to 100THmm )
-    double              fYScaling;
                                             //
     StackMember*        pGDIStack;
     ULONG               mnCursorPos;        // aktuelle Cursorposition im Output
@@ -189,7 +175,6 @@ private:
     Color               aTextFillColor;     //
     Color               aBackgroundColor;   //
     BOOL                bRegionChanged;
-    Region              aClipRegion;
     TextAlign           eTextAlign;         //
 
     double                      fLineWidth;
@@ -264,7 +249,7 @@ private:
     void                ImplPolyPoly( const PolyPolygon & rPolyPolygon, sal_Bool bTextOutline = sal_False );
     void                ImplPolyLine( const Polygon & rPolygon );
 
-    void                ImplSetClipRegion();
+    void                ImplSetClipRegion( Region& rRegion );
     void                ImplBmp( Bitmap*, Bitmap*, const Point &, double nWidth, double nHeight );
     void                ImplGenerateBitmap( sal_Unicode nChar, sal_Int32 nResolution, VirtualDevice& rVirDev,
                                             const Point& rPos, const Size& rSize, sal_Int32 nWidth );
@@ -283,6 +268,7 @@ private:
     inline void         ImplWriteTextFillColor( ULONG nMode = PS_RET );
     void                ImplWriteColor( ULONG nMode );
 
+    double              ImplGetScaling( const MapMode& );
     void                ImplGetMapMode( const MapMode& );
     BOOL                ImplGetBoundingBox( double* nNumb, BYTE* pSource, ULONG nSize );
     BYTE*               ImplSearchEntry( BYTE* pSource, BYTE* pDest, ULONG nComp, ULONG nSize );
@@ -350,7 +336,7 @@ BOOL PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream,
     mnLevel = 2;
     mbGrayScale = FALSE;
     mbCompression = TRUE;
-    mnTextMode = 1;     // default : export text as bitmap only when using non standard fonts
+    mnTextMode = 0;         // default0 : export glyph outlines
 
     // try to get the dialog selection
     if ( pConfigItem )
@@ -374,10 +360,9 @@ BOOL PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream,
             mbGrayScale = pConfigItem->ReadInt32( aColorStr, 1 ) == 2;
             mbCompression = pConfigItem->ReadInt32( aComprStr, 1 ) == 1;
             String sTextMode( RTL_CONSTASCII_USTRINGPARAM( "TextMode" ) );
-            mnTextMode = pConfigItem->ReadInt32( sTextMode, 1 );
-            if ( mnTextMode > 1 )
+            mnTextMode = pConfigItem->ReadInt32( sTextMode, 0 );
+            if ( mnTextMode > 2 )
                 mnTextMode = 0;
-
             delete pResMgr;
         }
     }
@@ -429,13 +414,10 @@ BOOL PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream,
         pMTF = &rGraphic.GetGDIMetaFile();
     else
         pMTF = pAMTF = new GDIMetaFile( rGraphic.GetGDIMetaFile() );
-
-    ImplGetMapMode( pMTF->GetPrefMapMode() );
     aVDev.SetMapMode( pMTF->GetPrefMapMode() );
-
     nBoundingX1 = nBoundingY1 = 0;
-    nBoundingX2 = pMTF->GetPrefSize().Width() * fXScaling;
-    nBoundingY2 = pMTF->GetPrefSize().Height() * fYScaling;
+    nBoundingX2 = pMTF->GetPrefSize().Width();
+    nBoundingY2 = pMTF->GetPrefSize().Height();
 
     pGDIStack = NULL;
     aColor = Color( COL_TRANSPARENT );
@@ -452,7 +434,6 @@ BOOL PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream,
     aBackgroundColor = Color( COL_WHITE );
     eTextAlign = ALIGN_BASELINE;
     bRegionChanged = FALSE;
-    aClipRegion.SetEmpty();
 
     nChrSet = 0x00;
     pChrSetList = NULL;
@@ -512,8 +493,8 @@ void PSWriter::ImplWriteProlog( const Graphic* pPreview )
     *mpPS << "%%BoundingBox: ";                         // BoundingBox
     ImplWriteLong( 0 );
     ImplWriteLong( 0 );
-    aMapMode = MapMode( pMTF->GetPrefMapMode() );
-    Size aSizePoint = Application::GetDefaultDevice()->LogicToLogic( pMTF->GetPrefSize(), aMapMode, MAP_POINT );
+    Size aSizePoint = Application::GetDefaultDevice()->LogicToLogic( pMTF->GetPrefSize(),
+                        pMTF->GetPrefMapMode(), MAP_POINT );
     ImplWriteLong( aSizePoint.Width() );
     ImplWriteLong( aSizePoint.Height() ,PS_RET );
     ImplWriteLine( "%%Pages: 0" );
@@ -632,8 +613,11 @@ void PSWriter::ImplWriteProlog( const Graphic* pPreview )
     ImplWriteLine( "%%BeginPageSetup" );
     ImplWriteLine( "%%EndPageSetup" );
     ImplWriteLine( "pum" );
-    ImplScale( (double)aSizePoint.Width() / (double)nBoundingX2, (double)aSizePoint.Height() / (double)nBoundingY2 );
-    ImplTranslate( 0, - nBoundingY2 );
+    ImplScale( (double)aSizePoint.Width() / (double)pMTF->GetPrefSize().Width(), (double)aSizePoint.Height() / (double)pMTF->GetPrefSize().Height() );
+    ImplWriteDouble( 0 );
+    ImplWriteDouble( -pMTF->GetPrefSize().Height() );
+    ImplWriteLine( "t" );
+    ImplWriteLine( "/tm matrix currentmatrix def" );
 }
 
 //---------------------------------------------------------------------------------
@@ -912,7 +896,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                 VirtualDevice   aVDev;
                 GDIMetaFile     aTmpMtf;
 
-                aVDev.SetMapMode( aMapMode );
+                aVDev.SetMapMode( rVDev.GetMapMode() );
                 aVDev.AddHatchActions( ( (const MetaHatchAction*)pMA)->GetPolyPolygon(),
                                        ( (const MetaHatchAction*)pMA )->GetHatch(), aTmpMtf );
                 ImplWriteActions( aTmpMtf, rVDev );
@@ -963,44 +947,37 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
             case META_ISECTRECTCLIPREGION_ACTION:
             {
                 const MetaISectRectClipRegionAction* pA = (const MetaISectRectClipRegionAction*) pMA;
-                if ( aClipRegion.IsEmpty() )
-                    aClipRegion = pA->GetRect();
-                else
-                    aClipRegion.Intersect( pA->GetRect() );
-                bRegionChanged = TRUE;
-                ImplSetClipRegion();
+                Region aRegion( pA->GetRect() );
+                ImplSetClipRegion( aRegion );
             }
             break;
 
             case META_CLIPREGION_ACTION:
             {
                 const MetaClipRegionAction* pA = (const MetaClipRegionAction*) pMA;
-                bRegionChanged = TRUE;
-                aClipRegion = pA->GetRegion();
-                ImplSetClipRegion();
+                Region aRegion( pA->GetRegion() );
+                ImplSetClipRegion( aRegion );
             }
             break;
 
             case META_ISECTREGIONCLIPREGION_ACTION:
             {
                 const MetaISectRegionClipRegionAction* pA = (const MetaISectRegionClipRegionAction*) pMA;
-                if ( aClipRegion.IsEmpty() )
-                    aClipRegion = pA->GetRegion();
-                else
-                    aClipRegion.Intersect( pA->GetRegion() );
-                bRegionChanged = TRUE;
-                ImplSetClipRegion();
+                Region aRegion( pA->GetRegion() );
+                ImplSetClipRegion( aRegion );
             }
             break;
 
             case META_MOVECLIPREGION_ACTION:
             {
+/*
                 if ( !aClipRegion.IsEmpty() )
                 {
                     const MetaMoveClipRegionAction* pA = (const MetaMoveClipRegionAction*) pMA;
                     aClipRegion.Move( pA->GetHorzMove(), pA->GetVertMove() );
                     ImplSetClipRegion();
                 }
+*/
             }
             break;
 
@@ -1055,20 +1032,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
             case META_MAPMODE_ACTION :
             {
                 pMA->Execute( &rVDev );
-                aMapMode = ( (const MetaMapModeAction*) pMA )->GetMapMode();
-
-                if( aMapMode.GetMapUnit() == MAP_RELATIVE )
-                {
-                    fXScaling *= (double)aMapMode.GetScaleX();
-                    fYScaling *= (double)aMapMode.GetScaleY();
-                    sal_Int32 nXOffset = aMapMode.GetOrigin().X();
-                    sal_Int32 nYOffset = aMapMode.GetOrigin().Y();
-                    ImplTranslate( (double)nXOffset * fXScaling, (double)nYOffset * fYScaling );
-                    if ( !aClipRegion.IsEmpty() )
-                        aClipRegion.Move( -nXOffset, -nYOffset );
-                }
-                else
-                    ImplGetMapMode( aMapMode );
+                ImplGetMapMode( rVDev.GetMapMode() );
             }
             break;
 
@@ -1100,13 +1064,8 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                 pGS->bTextFillCol = bTextFillColor;
                 pGS->aTextFillCol = aTextFillColor;
                 pGS->aBackgroundCol = aBackgroundColor;
-                pGS->bRegionChanged = bRegionChanged;
-                pGS->aClipReg = aClipRegion;
-                pGS->aMapMode = aMapMode;
                 bRegionChanged = FALSE;
                 pGS->aFont = maFont;
-                pGS->fXScale = fXScaling;
-                pGS->fYScale = fYScaling;
                 mnLatestPush = mpPS->Tell();
                 ImplWriteLine( "gs" );
             }
@@ -1120,11 +1079,6 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                 {
                     pGS = pGDIStack;
                     pGDIStack = pGS->pSucc;
-                    if ( aMapMode != pGS->aMapMode )
-                    {
-                        aMapMode = pGS->aMapMode;
-                        ImplGetMapMode( aMapMode );
-                    }
                     aDashArray = pGS->aDashArray;
                     eJoinType = pGS->eJoinType;
                     eLineCap = pGS->eLineCap;
@@ -1140,18 +1094,10 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                     bTextFillColor = pGS->bTextFillCol;
                     aTextFillColor = pGS->aTextFillCol;
                     aBackgroundColor = pGS->aBackgroundCol;
-                    if ( bRegionChanged )
-                    {
-                        aClipRegion = pGS->aClipReg;
-                        ImplSetClipRegion();
-                    }
-                    bRegionChanged = pGS->bRegionChanged;
                     maFont = pGS->aFont;
                     maLastFont = Font();                // set maLastFont != maFont -> so that
-                    fXScaling = pGS->fXScale;
-                    fYScaling = pGS->fYScale;
                     delete pGS;
-                    UINT32 nCurrentPos = mpPS->Tell();
+                    sal_uInt32 nCurrentPos = mpPS->Tell();
                     if ( nCurrentPos - 3 == mnLatestPush )
                     {
                         mpPS->Seek( mnLatestPush );
@@ -1167,6 +1113,8 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
             case META_EPS_ACTION :
             {
                 GfxLink aGfxLink = ( (const MetaEPSAction*) pMA )->GetLink();
+                const GDIMetaFile aSubstitute( ( ( const MetaEPSAction*) pMA )->GetSubstitute() );
+
                 BOOL    bLevelConflict = FALSE;
                 BYTE*   pSource = (BYTE*) aGfxLink.GetData();
                 ULONG   nSize = aGfxLink.GetDataSize();
@@ -1205,11 +1153,17 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                     {
                         Point   aPoint = ( (const MetaEPSAction*) pMA )->GetPoint();
                         Size    aSize = ( (const MetaEPSAction*) pMA )->GetSize();
-                        double fXScale = (double)aSize.Width() * (double)fXScaling / ( nBoundingBox[ 2 ] - nBoundingBox[ 0 ] );
-                        double fYScale = (double)aSize.Height() * (double)fYScaling / ( nBoundingBox[ 3 ] - nBoundingBox[ 1 ] );
-                        ImplWriteLine( "gs\n%%BeginDocument:" );
-                        ImplTranslate( aPoint.X() * fXScaling, aPoint.Y() * fYScaling + nBoundingBox[ 3 ] * fYScale );
-                        ImplScale( fXScale, fYScale );
+
+                        MapMode aMapMode( aSubstitute.GetPrefMapMode() );
+                        Size aOutSize( rVDev.LogicToLogic( aSize, rVDev.GetMapMode(), aMapMode ) );
+                        Point aOrigin( rVDev.LogicToLogic( aPoint, rVDev.GetMapMode(), aMapMode ) );
+                        aOrigin.Y() += aOutSize.Height();
+                        aMapMode.SetOrigin( aOrigin );
+                        aMapMode.SetScaleX( aOutSize.Width() / ( nBoundingBox[ 2 ] - nBoundingBox[ 0 ] ) );
+                        aMapMode.SetScaleY( aOutSize.Height() / ( nBoundingBox[ 3 ] - nBoundingBox[ 1 ] ) );
+                        ImplWriteLine( "gs" );
+                        ImplGetMapMode( aMapMode );
+                        ImplWriteLine( "%%BeginDocument:" );
                         mpPS->Write( pSource, aGfxLink.GetDataSize() );
                         ImplWriteLine( "%%EndDocument\ngr" );
                     }
@@ -1325,10 +1279,6 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                                 bSkipSequence = sal_False;
                             if ( bSkipSequence )
                             {
-                                fStrokeWidth *= fXScaling > fYScaling ? fXScaling : fYScaling;
-                                sal_uInt32 j, i = aDashArray.size();
-                                for ( j = 0; j < i; j++ )
-                                    aDashArray[ j ] *= fXScaling > fYScaling ? fXScaling : fYScaling;
                                 ImplWriteLineInfo( fStrokeWidth, aStroke.getMiterLimit(),
                                                     aStroke.getCapType(), eJT, aDashArray );
                                 ImplPolyLine( aPath );
@@ -1463,8 +1413,8 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
 
 inline void PSWriter::ImplWritePoint( const Point& rPoint, sal_uInt32 nMode )
 {
-    ImplWriteDouble( rPoint.X() * fXScaling );
-    ImplWriteDouble( rPoint.Y() * fYScaling, nMode );
+    ImplWriteDouble( rPoint.X() );
+    ImplWriteDouble( rPoint.Y(), nMode );
 }
 
 //---------------------------------------------------------------------------------
@@ -1500,13 +1450,10 @@ void PSWriter::ImplCurveTo( const Point& rP1, const Point& rP2, const Point& rP3
 
 void PSWriter::ImplTranslate( const double& fX, const double& fY, sal_uInt32 nMode )
 {
-    if ( ( fX != 0.0 ) || ( fY != 0.0 ) )
-    {
-        ImplWriteDouble( fX );
-        ImplWriteDouble( fY );
-        ImplWriteByte( 't' );
-        ImplExecMode( nMode );
-    }
+    ImplWriteDouble( fX );
+    ImplWriteDouble( fY );
+    ImplWriteByte( 't' );
+    ImplExecMode( nMode );
 }
 
 //---------------------------------------------------------------------------------
@@ -1527,9 +1474,8 @@ void PSWriter::ImplRect( const Rectangle & rRect )
         ImplRectFill( rRect );
     if ( bLineColor )
     {
-
-        double nWidth = rRect.GetWidth() * fXScaling;
-        double nHeight = rRect.GetHeight() * fYScaling;
+        double nWidth = rRect.GetWidth();
+        double nHeight = rRect.GetHeight();
 
         ImplWriteLineColor( PS_SPACE );
         ImplMoveTo( rRect.TopLeft() );
@@ -1549,8 +1495,8 @@ void PSWriter::ImplRect( const Rectangle & rRect )
 
 void PSWriter::ImplRectFill( const Rectangle & rRect )
 {
-    double nWidth = rRect.GetWidth() * fXScaling;
-    double nHeight = rRect.GetHeight() * fYScaling;
+    double nWidth = rRect.GetWidth();
+    double nHeight = rRect.GetHeight();
 
     ImplWriteFillColor( PS_SPACE );
     ImplMoveTo( rRect.TopLeft() );
@@ -1614,7 +1560,7 @@ void PSWriter::ImplWriteGradient( const PolyPolygon& rPolyPoly, const Gradient& 
 {
     VirtualDevice   aVDev;
     GDIMetaFile     aTmpMtf;
-    aVDev.SetMapMode( aMapMode );
+    aVDev.SetMapMode( rVDev.GetMapMode() );
     aVDev.AddGradientActions( rPolyPoly.GetBoundRect(), rGradient, aTmpMtf );
     ImplWriteActions( aTmpMtf, rVDev );
 }
@@ -1696,19 +1642,19 @@ void PSWriter::ImplPolyLine( const Polygon & rPoly )
 
 //---------------------------------------------------------------------------------
 
-void PSWriter::ImplSetClipRegion()
+void PSWriter::ImplSetClipRegion( Region& rClipRegion )
 {
-    if ( !aClipRegion.IsEmpty() )
+    if ( !rClipRegion.IsEmpty() )
     {
         Rectangle       aRect;
-        RegionHandle    hRegionHandle = aClipRegion.BeginEnumRects();
+        RegionHandle    hRegionHandle = rClipRegion.BeginEnumRects();
 
-        while ( aClipRegion.GetNextEnumRect( hRegionHandle, aRect ) )
+        while ( rClipRegion.GetNextEnumRect( hRegionHandle, aRect ) )
         {
-            double nX1 = aRect.Left() * fXScaling;
-            double nY1 = aRect.Top() * fYScaling;
-            double nX2 = aRect.Right() * fXScaling;
-            double nY2 = aRect.Bottom() * fYScaling;
+            double nX1 = aRect.Left();
+            double nY1 = aRect.Top();
+            double nX2 = aRect.Right();
+            double nY2 = aRect.Bottom();
             ImplWriteDouble( nX1 );
             ImplWriteDouble( nY1 );
             ImplWriteByte( 'm' );
@@ -1725,7 +1671,7 @@ void PSWriter::ImplSetClipRegion()
             ImplWriteDouble( nY1 );
             ImplWriteByte( 'l', PS_SPACE | PS_WRAP );
         };
-        aClipRegion.EndEnumRects( hRegionHandle );
+        rClipRegion.EndEnumRects( hRegionHandle );
         ImplWriteLine( "eoclip newpath" );
     }
 }
@@ -1792,12 +1738,8 @@ void PSWriter::ImplBmp( Bitmap* pBitmap, Bitmap* pMaskBitmap, const Point & rPoi
         if ( bDoTrans )
         {
             ImplWriteLine( "gs\npum" );
-            ImplTranslate( aSourcePos.X() * fXScaling, - ( -aSourcePos.Y() * fYScaling ) );
-            ImplScale( nXWidth * fXScaling / nWidth,  nYHeight * fYScaling / nHeight );
-            if ( !aClipRegion.IsEmpty() )
-            {
-    //          aRegion.Intersect( aClipRegion );
-            }
+            ImplTranslate( aSourcePos.X(), aSourcePos.Y() );
+            ImplScale( nXWidth / nWidth,  nYHeight / nHeight );
             RegionHandle    hRegionHandle = aRegion.BeginEnumRects();
 
             while ( aRegion.GetNextEnumRect( hRegionHandle, aRect ) )
@@ -1826,8 +1768,8 @@ void PSWriter::ImplBmp( Bitmap* pBitmap, Bitmap* pMaskBitmap, const Point & rPoi
         if (!bDoTrans )
             ImplWriteLine( "pum" );
 
-        ImplTranslate( aSourcePos.X() * fXScaling, - ( -aSourcePos.Y() * fYScaling - nYHeight * fYScaling ) );
-        ImplScale( nXWidth * fXScaling, nYHeight * fYScaling );
+        ImplTranslate( aSourcePos.X(), aSourcePos.Y() + nYHeight );
+        ImplScale( nXWidth, nYHeight );
         if ( mnLevel == 1 )                 // level 1 is always grayscale !!!
         {
             ImplWriteLong( nWidth );
@@ -2064,8 +2006,8 @@ void PSWriter::ImplWriteString( const ByteString& rString, VirtualDevice& rVDev,
             for( i = 0; i < nLen; i++ )
             {
                 if ( i > 0 )
-                    nx = pDXArry[ i - 1 ] * fXScaling;
-                ImplWriteDouble( ( bStretch ) ? nx : rVDev.GetTextWidth( rString.GetChar( i ) ) * fXScaling );
+                    nx = pDXArry[ i - 1 ];
+                ImplWriteDouble( ( bStretch ) ? nx : rVDev.GetTextWidth( rString.GetChar( i ) ) );
                 ImplWriteDouble( nx );
                 ImplWriteLine( "(", PS_NONE );
                 ImplWriteCharacter( rString.GetChar( i ) );
@@ -2090,14 +2032,14 @@ void PSWriter::ImplGenerateBitmap( sal_Unicode nChar, sal_Int32 nTextResolution,
     Point       aEmptyPoint( 0, 0 );
     Fraction    aFract( 1, nTextResolution );
     MapMode     aMapModeInch( MAP_INCH, aEmptyPoint, aFract, aFract );
-    Size        aSizePixel = OutputDevice::LogicToLogic( rSize, aMapMode, aMapModeInch );
+    Size        aSizePixel = OutputDevice::LogicToLogic( rSize, rVirDev.GetMapMode(), aMapModeInch );
 
     Color aTextColor( COL_BLACK );
     rVirDev.SetTextColor( aTextColor );
     rVirDev.SetTextAlign( ALIGN_TOP );
-    const Size aOutSize( rVirDev.PixelToLogic( aSizePixel, aMapMode ) );
+    const Size aOutSize( rVirDev.PixelToLogic( aSizePixel, rVirDev.GetMapMode() ) );
     rVirDev.SetOutputSize( aOutSize );
-    MapMode aScaledMapMode( aMapMode );
+    MapMode aScaledMapMode( rVirDev.GetMapMode() );
     Fraction aFracX = aScaledMapMode.GetScaleX();
     Fraction aFracY = aScaledMapMode.GetScaleY();
     aFracX *= Fraction( aOutSize.Width(), rSize.Width() );
@@ -2112,7 +2054,6 @@ void PSWriter::ImplGenerateBitmap( sal_Unicode nChar, sal_Int32 nTextResolution,
     else
         rVirDev.DrawTextArray( aEmptyPoint, aUniString, NULL );
 
-    rVirDev.SetMapMode( aMapMode );
     Bitmap aBmp = rVirDev.GetBitmap( aEmptyPoint, aOutSize );       // aBmp is a bitmap of the whole text in nTextResolution dpi
 
     Bitmap aMask( aBmp );
@@ -2130,16 +2071,13 @@ void PSWriter::ImplText( const String& rUniString, const Point& rPos, const INT3
     sal_uInt16 nLen = rUniString.Len();
     if ( !nLen )
         return;
-    sal_Bool bGlyph = sal_False;
-    if ( mnTextMode == 0 )
-        bGlyph = sal_True;
-    if ( bGlyph )
+    if ( mnTextMode == 0 )  // using glpyh outlines
     {
         Font    aNotRotatedFont( maFont );
         aNotRotatedFont.SetOrientation( 0 );
 
         VirtualDevice aVirDev( 1 );
-        aVirDev.SetMapMode( aMapMode );
+        aVirDev.SetMapMode( rVDev.GetMapMode() );
         aVirDev.SetFont( aNotRotatedFont );
 
         sal_Int16 nRotation = maFont.GetOrientation();
@@ -2158,9 +2096,11 @@ void PSWriter::ImplText( const String& rUniString, const Point& rPos, const INT3
         std::vector<PolyPolygon> aPolyPolyVec;
         if ( aVirDev.GetTextOutlines( aPolyPolyVec, rUniString ) )
         {
-            ImplWriteLine( "pum" );
             // always adjust text position to match baseline alignment
-            ImplTranslate( aPos.X() * fXScaling, aPos.Y() * fYScaling );
+            ImplWriteLine( "pum" );
+            ImplWriteDouble( aPos.X() );
+            ImplWriteDouble( aPos.Y() );
+            ImplWriteLine( "t" );
             if ( nRotation )
             {
                 ImplWriteF( nRotation, 1 );
@@ -2172,11 +2112,11 @@ void PSWriter::ImplText( const String& rUniString, const Point& rPos, const INT3
             ImplWriteLine( "pom" );
         }
         bLineColor = bOldLineColor;
-//      else
-//          ImplGenerateBitmap( nChar, 300, aVirDev, aPos, aSize, nWidth );
     }
-    else
+    else if ( ( mnTextMode == 1 ) || ( mnTextMode == 2 ) )  // normal text output
     {
+        if ( mnTextMode == 2 )  // forcing output one complete text packet, by
+            pDXArry = NULL;     // ignoring the kerning array
         ImplSetAttrForText( rPos );
         ByteString aStr( rUniString, maFont.GetCharSet() );
         ImplWriteString( aStr, rVDev, pDXArry, nWidth != 0 );
@@ -2209,7 +2149,7 @@ void PSWriter::ImplSetAttrForText( const Point& rPoint )
 
         maLastFont = maFont;
         aSize = maFont.GetSize();
-        ImplWriteDouble( aSize.Height() * fYScaling );      ///???????????????????
+        ImplWriteDouble( aSize.Height() );
         *mpPS << "sf ";
     }
     if ( eTextAlign != ALIGN_BASELINE )
@@ -2328,54 +2268,60 @@ void PSWriter::ImplWriteColor( ULONG nMode )
 
 //---------------------------------------------------------------------------------
 
-void PSWriter::ImplGetMapMode( const MapMode& aMapMode )
+double PSWriter::ImplGetScaling( const MapMode& rMapMode )
 {
     double  nMul;
-    switch ( aMapMode.GetMapUnit() )
+    switch ( rMapMode.GetMapUnit() )
     {
         case MAP_PIXEL :
         case MAP_SYSFONT :
         case MAP_APPFONT :
 
         case MAP_100TH_MM :
-            nMul = 1 * EPS_SCALING_FAKTOR;
+            nMul = 1;
             break;
         case MAP_10TH_MM :
-            nMul = 10 * EPS_SCALING_FAKTOR;
+            nMul = 10;
             break;
         case MAP_MM :
-            nMul = 100 * EPS_SCALING_FAKTOR;
+            nMul = 100;
             break;
         case MAP_CM :
-            nMul = 1000 * EPS_SCALING_FAKTOR;
+            nMul = 1000;
             break;
         case MAP_1000TH_INCH :
-            nMul = 2.54 * EPS_SCALING_FAKTOR;
+            nMul = 2.54;
             break;
         case MAP_100TH_INCH :
-            nMul = 25.4 * EPS_SCALING_FAKTOR;
+            nMul = 25.4;
             break;
         case MAP_10TH_INCH :
-            nMul = 254 * EPS_SCALING_FAKTOR;
+            nMul = 254;
             break;
         case MAP_INCH :
-            nMul = 2540 * EPS_SCALING_FAKTOR;
+            nMul = 2540;
             break;
         case MAP_TWIP :
-            nMul = 1,76388889 * EPS_SCALING_FAKTOR;
+            nMul = 1,76388889;
             break;
         case MAP_POINT :
-            nMul = 35,27777778 * EPS_SCALING_FAKTOR;
+            nMul = 35,27777778;
             break;
         default:
             nMul = 1.0;
             break;
     }
-    ImplTranslate( aMapMode.GetOrigin().X() * nMul, aMapMode.GetOrigin().Y() * nMul );
-    double nScale = aMapMode.GetScaleX();
-    fXScaling = nMul * nScale;
-    nScale = aMapMode.GetScaleY();
-    fYScaling = nMul * nScale;
+    return nMul;
+}
+
+//---------------------------------------------------------------------------------
+
+void PSWriter::ImplGetMapMode( const MapMode& rMapMode )
+{
+    ImplWriteLine( "tm setmatrix" );
+    double nMul = ImplGetScaling( rMapMode );
+    ImplTranslate( rMapMode.GetOrigin().X() * nMul, rMapMode.GetOrigin().Y() * nMul );
+    ImplScale( nMul * (double)rMapMode.GetScaleX(), nMul * (double)rMapMode.GetScaleY() );
 }
 
 //---------------------------------------------------------------------------------
@@ -2468,7 +2414,7 @@ void PSWriter::ImplWriteLineInfo( const LineInfo& rLineInfo )
     SvtGraphicStroke::DashArray aDashArray;
     if ( rLineInfo.GetStyle() == LINE_DASH )
         aDashArray.push_back( 2 );
-    double fLWidth = ( ( rLineInfo.GetWidth() + 1 ) * fXScaling + ( rLineInfo.GetWidth() + 1 ) * fYScaling ) * 0.5;
+    double fLWidth = ( ( rLineInfo.GetWidth() + 1 ) + ( rLineInfo.GetWidth() + 1 ) ) * 0.5;
     ImplWriteLineInfo( fLWidth, 10.0, SvtGraphicStroke::capButt, SvtGraphicStroke::joinMiter, aDashArray );
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfmgr2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: thb $ $Date: 2002-10-25 15:15:35 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:28:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,11 @@
 #include <vcl/outdev.hxx>
 #include <vcl/window.hxx>
 #include <vcl/gdimtf.hxx>
+#include <vcl/metaact.hxx>
+#include <vcl/metric.hxx>
 #include <vcl/animate.hxx>
 #include <vcl/alpha.hxx>
+#include <vcl/virdev.hxx>
 #include "grfcache.hxx"
 #include "grfmgr.hxx"
 
@@ -194,8 +197,11 @@ BOOL GraphicManager::DrawObj( OutputDevice* pOut, const Point& rPt, const Size& 
         // create output and fill cache
         const Size aOutSize( pOut->GetOutputSizePixel() );
 
-        if( !( nFlags & GRFMGR_DRAW_CACHED ) || rObj.IsAnimated() || ( pOut->GetOutDevType() == OUTDEV_PRINTER ) ||
-            ( pOut->GetConnectMetaFile() && !pOut->IsOutputEnabled() ) )
+        if( rObj.IsAnimated() || ( pOut->GetOutDevType() == OUTDEV_PRINTER ) ||
+            ( !( nFlags & GRFMGR_DRAW_NO_SUBSTITUTE ) &&
+              ( ( nFlags & GRFMGR_DRAW_SUBSTITUTE ) ||
+                !( nFlags & GRFMGR_DRAW_CACHED ) ||
+                ( pOut->GetConnectMetaFile() && !pOut->IsOutputEnabled() ) ) ) )
         {
             // simple output of transformed graphic
             const Graphic aGraphic( rObj.GetTransformedGraphic( &rAttr ) );
@@ -508,14 +514,23 @@ BOOL GraphicManager::ImplCreateOutput( OutputDevice* pOut,
             }
             else
             {
-                if( bSimple )
-                    bRet = ( aOutBmpEx = aBmpEx ).Scale( Size( nEndX - nStartX + 1, nEndY - nStartY + 1 ) );
+                // #105229# Don't scale if output size equals bitmap size
+                if( aOutSzPix == rBmpSzPix )
+                {
+                    aOutBmpEx = aBmpEx;
+                    bRet = TRUE;
+                }
                 else
                 {
-                    bRet = ImplCreateScaled( aBmpEx,
-                                             pMapIX, pMapFX, pMapIY, pMapFY,
-                                             nStartX, nEndX, nStartY, nEndY,
-                                             aOutBmpEx );
+                    if( bSimple )
+                        bRet = ( aOutBmpEx = aBmpEx ).Scale( Size( nEndX - nStartX + 1, nEndY - nStartY + 1 ) );
+                    else
+                    {
+                        bRet = ImplCreateScaled( aBmpEx,
+                                                 pMapIX, pMapFX, pMapIY, pMapFY,
+                                                 nStartX, nEndX, nStartY, nEndY,
+                                                 aOutBmpEx );
+                    }
                 }
             }
 
@@ -577,7 +592,50 @@ BOOL GraphicManager::ImplCreateOutput( OutputDevice* pOut,
             const double fGrfWH = (double) aNewSize.Width() / aNewSize.Height();
             const double fOutWH = (double) rSz.Width() / rSz.Height();
 
-            pMtf->Scale( fOutWH / fGrfWH, 1.0 );
+            double fScaleX = fOutWH / fGrfWH;
+            double fScaleY = 1.0;
+
+            // taking care of font width default if scaling metafile:
+            sal_uInt32 nCurPos;
+            MetaAction* pAct;
+            for( nCurPos = 0, pAct = (MetaAction*)pMtf->FirstAction(); pAct;
+                    pAct = (MetaAction*)pMtf->NextAction(), nCurPos++ )
+            {
+                MetaAction* pModAct = NULL;
+                switch( pAct->GetType() )
+                {
+                    case META_FONT_ACTION :
+                    {
+                        MetaFontAction* pA = (MetaFontAction*)pAct;
+                        Font aFont( pA->GetFont() );
+                        if ( !aFont.GetWidth() )
+                        {
+                            FontMetric aFontMetric( pOut->GetFontMetric( aFont ) );
+                            aFont.SetWidth( aFontMetric.GetWidth() );
+                            pModAct = new MetaFontAction( aFont );
+                        }
+                    }
+                }
+                if ( pModAct )
+                {
+                    pMtf->ReplaceAction( pModAct, nCurPos );
+                    pAct->Delete();
+                }
+                else
+                {
+                    if( pAct->GetRefCount() > 1 )
+                    {
+                        pMtf->ReplaceAction( pModAct = pAct->Clone(), nCurPos );
+                        pAct->Delete();
+                    }
+                    else
+                        pModAct = pAct;
+                }
+                pModAct->Scale( fScaleX, fScaleY );
+            }
+            pMtf->SetPrefSize( Size( FRound( aNewSize.Width() * fScaleX ),
+                                     FRound( aNewSize.Height() * fScaleY ) ) );
+
 /*
             if( fGrfWH < fWinWH )
                 aNewSize.Width() = (long) ( ( aNewSize.Height() = rSz.Height.Height() ) * fGrfWH );
@@ -1547,7 +1605,363 @@ void GraphicManager::ImplDraw( OutputDevice* pOut, const Point& rPt, const Size&
 
 // -----------------------------------------------------------------------------
 
-BOOL GraphicObject::ImplDrawTiled( OutputDevice& rOut, const Point& rPosPixel,
+struct ImplTileInfo
+{
+    ImplTileInfo() : aTileTopLeft(), aNextTileTopLeft(), aTileSizePixel(), nTilesEmptyX(0), nTilesEmptyY(0) {}
+
+    Point aTileTopLeft;     // top, left position of the rendered tile
+    Point aNextTileTopLeft; // top, left position for next recursion
+                            // level's tile
+    Size  aTileSizePixel;   // size of the generated tile (might
+                            // differ from
+                            // aNextTileTopLeft-aTileTopLeft, because
+                            // this is nExponent*prevTileSize. The
+                            // generated tile is always nExponent
+                            // times the previous tile, such that it
+                            // can be used in the next stage. The
+                            // required area coverage is often
+                            // less. The extraneous area covered is
+                            // later overwritten by the next stage)
+    int   nTilesEmptyX;     // number of original tiles empty right of
+                            // this tile. This counts from
+                            // aNextTileTopLeft, i.e. the additional
+                            // area covered by aTileSizePixel is not
+                            // considered here. This is for
+                            // unification purposes, as the iterative
+                            // calculation of the next level's empty
+                            // tiles has to be based on this value.
+    int   nTilesEmptyY;     // as above, for Y
+};
+
+
+bool GraphicObject::ImplRenderTempTile( VirtualDevice& rVDev, int nExponent,
+                                        int nNumTilesX, int nNumTilesY,
+                                        const Size& rTileSizePixel,
+                                        const GraphicAttr* pAttr, ULONG nFlags )
+{
+    if( nExponent <= 1 )
+        return false;
+
+    // determine MSB factor
+    int nMSBFactor( 1 );
+    while( nNumTilesX / nMSBFactor != 0 ||
+           nNumTilesY / nMSBFactor != 0 )
+    {
+        nMSBFactor *= nExponent;
+    }
+
+    // one less
+    nMSBFactor /= nExponent;
+
+    ImplTileInfo aTileInfo;
+
+    // #105229# Switch off mapping (converting to logic and back to
+    // pixel might cause roundoff errors)
+    BOOL bOldMap( rVDev.IsMapModeEnabled() );
+    rVDev.EnableMapMode( FALSE );
+
+    bool bRet( ImplRenderTileRecursive( rVDev, nExponent, nMSBFactor, nNumTilesX, nNumTilesY,
+                                        nNumTilesX, nNumTilesY, rTileSizePixel, pAttr, nFlags, aTileInfo ) );
+
+    rVDev.EnableMapMode( bOldMap );
+
+    return bRet;
+}
+
+// -----------------------------------------------------------------------------
+
+// define for debug drawings
+//#define DBG_TEST
+
+// see header comment. this works similar to base conversion of a
+// number, i.e. if the exponent is 10, then the number for every tile
+// size is given by the decimal place of the corresponding decimal
+// representation.
+bool GraphicObject::ImplRenderTileRecursive( VirtualDevice& rVDev, int nExponent, int nMSBFactor,
+                                             int nNumOrigTilesX, int nNumOrigTilesY,
+                                             int nRemainderTilesX, int nRemainderTilesY,
+                                             const Size& rTileSizePixel, const GraphicAttr* pAttr,
+                                             ULONG nFlags, ImplTileInfo& rTileInfo )
+{
+    // gets loaded with our tile bitmap
+    GraphicObject aTmpGraphic;
+
+    // stores a flag that renders the zero'th tile position
+    // (i.e. (0,0)+rCurrPos) only if we're at the bottom of the
+    // recursion stack. All other position already have that tile
+    // rendered, because the lower levels painted their generated tile
+    // there.
+    bool bNoFirstTileDraw( false );
+
+    // what's left when we're done with our tile size
+    const int nNewRemainderX( nRemainderTilesX % nMSBFactor );
+    const int nNewRemainderY( nRemainderTilesY % nMSBFactor );
+
+    // gets filled out from the recursive call with info of what's
+    // been generated
+    ImplTileInfo aTileInfo;
+
+    // current output position while drawing
+    Point aCurrPos;
+    int nX, nY;
+
+    // check for recursion's end condition: LSB place reached?
+    if( nMSBFactor == 1 )
+    {
+        aTmpGraphic = *this;
+
+        // set initial tile size -> orig size
+        aTileInfo.aTileSizePixel = rTileSizePixel;
+        aTileInfo.nTilesEmptyX = nNumOrigTilesX;
+        aTileInfo.nTilesEmptyY = nNumOrigTilesY;
+    }
+    else if( ImplRenderTileRecursive( rVDev, nExponent, nMSBFactor/nExponent,
+                                      nNumOrigTilesX, nNumOrigTilesY,
+                                      nNewRemainderX, nNewRemainderY,
+                                      rTileSizePixel, pAttr, nFlags, aTileInfo ) )
+    {
+        // extract generated tile -> see comment on the first loop below
+        BitmapEx aTileBitmap( rVDev.GetBitmap( aTileInfo.aTileTopLeft, aTileInfo.aTileSizePixel ) );
+
+        aTmpGraphic = GraphicObject( aTileBitmap );
+
+        // fill stripes left over from upstream levels:
+        //
+        //  x0000
+        //  0
+        //  0
+        //  0
+        //  0
+        //
+        // where x denotes the place filled by our recursive predecessors
+
+        // check whether we have to fill stripes here. Although not
+        // obvious, there is one case where we can skip this step: if
+        // the previous recursion level (the one who filled our
+        // aTileInfo) had zero area to fill, then there are no white
+        // stripes left, naturally. This happens if the digit
+        // associated to that level has a zero, and can be checked via
+        // aTileTopLeft==aNextTileTopLeft.
+        if( aTileInfo.aTileTopLeft != aTileInfo.aNextTileTopLeft )
+        {
+            // now fill one row from aTileInfo.aNextTileTopLeft.X() all
+            // the way to the right
+            aCurrPos.X() = aTileInfo.aNextTileTopLeft.X();
+            aCurrPos.Y() = aTileInfo.aTileTopLeft.Y();
+            for( nX=0; nX < aTileInfo.nTilesEmptyX; nX += nMSBFactor )
+            {
+                if( !aTmpGraphic.Draw( &rVDev, aCurrPos, aTileInfo.aTileSizePixel, pAttr, nFlags ) )
+                    return false;
+
+                aCurrPos.X() += aTileInfo.aTileSizePixel.Width();
+            }
+
+#ifdef DBG_TEST
+//          rVDev.SetFillColor( COL_WHITE );
+            rVDev.SetFillColor();
+            rVDev.SetLineColor( Color( 255 * nExponent / nMSBFactor, 255 - 255 * nExponent / nMSBFactor, 128 - 255 * nExponent / nMSBFactor ) );
+            rVDev.DrawEllipse( Rectangle(aTileInfo.aNextTileTopLeft.X(), aTileInfo.aTileTopLeft.Y(),
+                                         aTileInfo.aNextTileTopLeft.X() - 1 + (aTileInfo.nTilesEmptyX/nMSBFactor)*aTileInfo.aTileSizePixel.Width(),
+                                         aTileInfo.aTileTopLeft.Y() + aTileInfo.aTileSizePixel.Height() - 1) );
+#endif
+
+            // now fill one column from aTileInfo.aNextTileTopLeft.Y() all
+            // the way to the bottom
+            aCurrPos.X() = aTileInfo.aTileTopLeft.X();
+            aCurrPos.Y() = aTileInfo.aNextTileTopLeft.Y();
+            for( nY=0; nY < aTileInfo.nTilesEmptyY; nY += nMSBFactor )
+            {
+                if( !aTmpGraphic.Draw( &rVDev, aCurrPos, aTileInfo.aTileSizePixel, pAttr, nFlags ) )
+                    return false;
+
+                aCurrPos.Y() += aTileInfo.aTileSizePixel.Height();
+            }
+
+#ifdef DBG_TEST
+            rVDev.DrawEllipse( Rectangle(aTileInfo.aTileTopLeft.X(), aTileInfo.aNextTileTopLeft.Y(),
+                                         aTileInfo.aTileTopLeft.X() + aTileInfo.aTileSizePixel.Width() - 1,
+                                         aTileInfo.aNextTileTopLeft.Y() - 1 + (aTileInfo.nTilesEmptyY/nMSBFactor)*aTileInfo.aTileSizePixel.Height()) );
+#endif
+        }
+        else
+        {
+            // Thought that aTileInfo.aNextTileTopLeft tile has always
+            // been drawn already, but that's wrong: typically,
+            // _parts_ of that tile have been drawn, since the
+            // previous level generated the tile there. But when
+            // aTileInfo.aNextTileTopLeft!=aTileInfo.aTileTopLeft, the
+            // difference between these two values is missing in the
+            // lower right corner of this first tile. So, can do that
+            // only here.
+            bNoFirstTileDraw = true;
+        }
+    }
+    else
+    {
+        return false;
+    }
+
+    // calc number of original tiles in our drawing area without
+    // remainder
+    nRemainderTilesX -= nNewRemainderX;
+    nRemainderTilesY -= nNewRemainderY;
+
+    // fill tile info for calling method
+    rTileInfo.aTileTopLeft     = aTileInfo.aNextTileTopLeft;
+    rTileInfo.aNextTileTopLeft = Point( rTileInfo.aTileTopLeft.X() + rTileSizePixel.Width()*nRemainderTilesX,
+                                        rTileInfo.aTileTopLeft.Y() + rTileSizePixel.Height()*nRemainderTilesY );
+    rTileInfo.aTileSizePixel   = Size( rTileSizePixel.Width()*nMSBFactor*nExponent,
+                                       rTileSizePixel.Height()*nMSBFactor*nExponent );
+    rTileInfo.nTilesEmptyX     = aTileInfo.nTilesEmptyX - nRemainderTilesX;
+    rTileInfo.nTilesEmptyY     = aTileInfo.nTilesEmptyY - nRemainderTilesY;
+
+    // init output position
+    aCurrPos = aTileInfo.aNextTileTopLeft;
+
+    // fill our drawing area. Fill possibly more, to create the next
+    // bigger tile size -> see bitmap extraction above. This does no
+    // harm, since everything right or below our actual area is
+    // overdrawn by our caller. Just in case we're in the last level,
+    // we don't draw beyond the right or bottom border.
+    for( nY=0; nY < aTileInfo.nTilesEmptyY && nY < nExponent*nMSBFactor; nY += nMSBFactor )
+    {
+        aCurrPos.X() = aTileInfo.aNextTileTopLeft.X();
+
+        for( nX=0; nX < aTileInfo.nTilesEmptyX && nX < nExponent*nMSBFactor; nX += nMSBFactor )
+        {
+            if( bNoFirstTileDraw )
+                bNoFirstTileDraw = false; // don't draw first tile position
+            else if( !aTmpGraphic.Draw( &rVDev, aCurrPos, aTileInfo.aTileSizePixel, pAttr, nFlags ) )
+                return false;
+
+            aCurrPos.X() += aTileInfo.aTileSizePixel.Width();
+        }
+
+        aCurrPos.Y() += aTileInfo.aTileSizePixel.Height();
+    }
+
+#ifdef DBG_TEST
+//  rVDev.SetFillColor( COL_WHITE );
+    rVDev.SetFillColor();
+    rVDev.SetLineColor( Color( 255 * nExponent / nMSBFactor, 255 - 255 * nExponent / nMSBFactor, 128 - 255 * nExponent / nMSBFactor ) );
+    rVDev.DrawRect( Rectangle((rTileInfo.aTileTopLeft.X())*rTileSizePixel.Width(),
+                              (rTileInfo.aTileTopLeft.Y())*rTileSizePixel.Height(),
+                              (rTileInfo.aNextTileTopLeft.X())*rTileSizePixel.Width()-1,
+                              (rTileInfo.aNextTileTopLeft.Y())*rTileSizePixel.Height()-1) );
+#endif
+
+    return true;
+}
+
+// -----------------------------------------------------------------------------
+
+bool GraphicObject::ImplDrawTiled( OutputDevice* pOut, const Rectangle& rArea, const Size& rSizePixel,
+                                   const Size& rOffset, const GraphicAttr* pAttr, ULONG nFlags, int nTileCacheSize1D )
+{
+    // how many tiles to generate per recursion step
+    enum{ SubdivisionExponent=2 };
+
+    const MapMode   aOutMapMode( pOut->GetMapMode() );
+    const MapMode   aMapMode( aOutMapMode.GetMapUnit(), Point(), aOutMapMode.GetScaleX(), aOutMapMode.GetScaleY() );
+    bool            bRet( false );
+
+    if( GetGraphic().GetType() == GRAPHIC_BITMAP &&
+        rSizePixel.Width() * rSizePixel.Height() < nTileCacheSize1D*nTileCacheSize1D )
+    {
+        // First combine very small bitmaps into a larger tile
+        // ===================================================
+
+        VirtualDevice   aVDev;
+        const int       nNumTilesInCacheX( (nTileCacheSize1D + rSizePixel.Width()-1) / rSizePixel.Width() );
+        const int       nNumTilesInCacheY( (nTileCacheSize1D + rSizePixel.Height()-1) / rSizePixel.Height() );
+
+        aVDev.SetOutputSizePixel( Size( nNumTilesInCacheX*rSizePixel.Width(), nNumTilesInCacheY*rSizePixel.Height() ) );
+        aVDev.SetMapMode( aMapMode );
+
+        // draw bitmap content
+        if( ImplRenderTempTile( aVDev, SubdivisionExponent, nNumTilesInCacheX,
+                                nNumTilesInCacheY, rSizePixel, pAttr, nFlags ) )
+        {
+            BitmapEx aTileBitmap( aVDev.GetBitmap( Point(0,0), aVDev.GetOutputSize() ) );
+
+            // draw alpha content, if any
+            if( IsTransparent() )
+            {
+                GraphicObject aAlphaGraphic;
+
+                if( GetGraphic().IsAlpha() )
+                    aAlphaGraphic.SetGraphic( GetGraphic().GetBitmapEx().GetAlpha().GetBitmap() );
+                else
+                    aAlphaGraphic.SetGraphic( GetGraphic().GetBitmapEx().GetMask() );
+
+                if( aAlphaGraphic.ImplRenderTempTile( aVDev, SubdivisionExponent, nNumTilesInCacheX,
+                                                      nNumTilesInCacheY, rSizePixel, pAttr, nFlags ) )
+                {
+                    // Combine bitmap and alpha/mask
+                    if( GetGraphic().IsAlpha() )
+                        aTileBitmap = BitmapEx( aTileBitmap.GetBitmap(),
+                                                AlphaMask( aVDev.GetBitmap( Point(0,0), aVDev.GetOutputSize() ) ) );
+                    else
+                        aTileBitmap = BitmapEx( aTileBitmap.GetBitmap(),
+                                                aVDev.GetBitmap( Point(0,0), aVDev.GetOutputSize() ).CreateMask( Color(COL_WHITE) ) );
+                }
+            }
+
+            // paint generated tile
+            GraphicObject aTmpGraphic( aTileBitmap );
+            bRet = aTmpGraphic.ImplDrawTiled( pOut, rArea,
+                                              aTileBitmap.GetSizePixel(),
+                                              rOffset, pAttr, nFlags, nTileCacheSize1D );
+        }
+    }
+    else
+    {
+        const Size      aOutOffset( pOut->LogicToPixel( rOffset, aOutMapMode ) );
+        const Rectangle aOutArea( pOut->LogicToPixel( rArea, aOutMapMode ) );
+
+        // number of invisible (because out-of-area) tiles
+        int nInvisibleTilesX;
+        int nInvisibleTilesY;
+
+        // round towards -infty for negative offset
+        if( aOutOffset.Width() < 0 )
+            nInvisibleTilesX = (aOutOffset.Width() - rSizePixel.Width() + 1) / rSizePixel.Width();
+        else
+            nInvisibleTilesX = aOutOffset.Width() / rSizePixel.Width();
+
+        // round towards -infty for negative offset
+        if( aOutOffset.Height() < 0 )
+            nInvisibleTilesY = (aOutOffset.Height() - rSizePixel.Height() + 1) / rSizePixel.Height();
+        else
+            nInvisibleTilesY = aOutOffset.Height() / rSizePixel.Height();
+
+        // origin from where to 'virtually' start drawing in pixel
+        const Point aOutOrigin( pOut->LogicToPixel( Point( rArea.Left() - rOffset.Width(),
+                                                           rArea.Top() - rOffset.Height() ) ) );
+        // position in pixel from where to really start output
+        const Point aOutStart( aOutOrigin.X() + nInvisibleTilesX*rSizePixel.Width(),
+                               aOutOrigin.Y() + nInvisibleTilesY*rSizePixel.Height() );
+
+        pOut->Push( PUSH_CLIPREGION );
+        pOut->IntersectClipRegion( rArea );
+
+        // Paint all tiles
+        // ===============
+
+        bRet = ImplDrawTiled( *pOut, aOutStart,
+                              (aOutArea.GetWidth() + aOutArea.Left() - aOutStart.X() + rSizePixel.Width() - 1) / rSizePixel.Width(),
+                              (aOutArea.GetHeight() + aOutArea.Top() - aOutStart.Y() + rSizePixel.Height() - 1) / rSizePixel.Height(),
+                              rSizePixel, pAttr, nFlags );
+
+        pOut->Pop();
+    }
+
+    return bRet;
+}
+
+// -----------------------------------------------------------------------------
+
+bool GraphicObject::ImplDrawTiled( OutputDevice& rOut, const Point& rPosPixel,
                                    int nNumTilesX, int nNumTilesY,
                                    const Size& rTileSizePixel, const GraphicAttr* pAttr, ULONG nFlags )
 {
@@ -1555,20 +1969,41 @@ BOOL GraphicObject::ImplDrawTiled( OutputDevice& rOut, const Point& rPosPixel,
     Size    aTileSizeLogic( rOut.PixelToLogic( rTileSizePixel ) );
     int     nX, nY;
 
+    // #107607# Use logical coordinates for metafile playing, too
+    bool    bDrawInPixel( rOut.GetConnectMetaFile() == NULL && GRAPHIC_BITMAP == GetType() );
+
+    // #105229# Switch off mapping (converting to logic and back to
+    // pixel might cause roundoff errors)
+    BOOL bOldMap( rOut.IsMapModeEnabled() );
+
+    if( bDrawInPixel )
+        rOut.EnableMapMode( FALSE );
+
     for( nY=0; nY < nNumTilesY; ++nY )
     {
         aCurrPos.X() = rPosPixel.X();
 
         for( nX=0; nX < nNumTilesX; ++nX )
         {
-            if( !Draw( &rOut, rOut.PixelToLogic( aCurrPos ), aTileSizeLogic, pAttr, nFlags ) )
+            // #105229# work with pixel coordinates here, mapping is disabled!
+            // #104004# don't disable mapping for metafile recordings
+            if( !Draw( &rOut,
+                       bDrawInPixel ? aCurrPos : rOut.PixelToLogic( aCurrPos ),
+                       bDrawInPixel ? rTileSizePixel : aTileSizeLogic,
+                       pAttr, nFlags ) )
+            {
+                rOut.EnableMapMode( bOldMap );
                 return FALSE;
+            }
 
             aCurrPos.X() += rTileSizePixel.Width();
         }
 
         aCurrPos.Y() += rTileSizePixel.Height();
     }
+
+    if( bDrawInPixel )
+        rOut.EnableMapMode( bOldMap );
 
     return TRUE;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgeps.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2002-12-05 10:21:24 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:28:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,7 +248,7 @@ ModalDialog DLG_EXPORT_EPS
         Text[ dutch ] = "Niveau ~1";
         Text[ chinese_simplified ] = "ηΊ§ε« ~1";
         Text[ greek ] = "Επίπεδο ~1";
-        Text[ korean ] = "λ λ²¨ 1(1)";
+        Text[ korean ] = "μμ¤€1(~1)";
         Text[ turkish ] = "Dόzey ~1";
         Text[ finnish ] = "Taso ~1";
         Text[ catalan ] = "Nivell ~1";
@@ -279,7 +279,7 @@ ModalDialog DLG_EXPORT_EPS
         Text[ dutch ] = "Niveau ~2";
         Text[ chinese_simplified ] = "ηΊ§ε« ~2";
         Text[ greek ] = "Επίπεδο ~2";
-        Text[ korean ] = "λ λ²¨ 2(2)";
+        Text[ korean ] = "μμ¤€2(~2)";
         Text[ turkish ] = "Dόzey ~2";
         Text[ finnish ] = "Taso ~2";
         Text[ catalan ] = "Nivell ~2";
@@ -310,7 +310,7 @@ ModalDialog DLG_EXPORT_EPS
         Text[ dutch ] = "Kleuropmaak";
         Text[ chinese_simplified ] = "ιΆθ‰²ζ ΌεΌ";
         Text[ greek ] = "Μορφή χρώματος";
-        Text[ korean ] = "μƒ‰ ν•μ‹";
+        Text[ korean ] = "μƒ‰μƒ μ„μ‹";
         Text[ turkish ] = "Renk formatύ";
         Text[ catalan ] = "Format del color";
         Text[ finnish ] = "Vδrimuoto";
@@ -341,7 +341,7 @@ ModalDialog DLG_EXPORT_EPS
         Text[ dutch ] = "~Kleur";
         Text[ chinese_simplified ] = "ιΆθ‰²(~C)";
         Text[ greek ] = "Χρώμα";
-        Text[ korean ] = "μƒ‰(~C)";
+        Text[ korean ] = "μƒ‰μƒ(~C)";
         Text[ turkish ] = "Renk";
         Text[ finnish ] = "~Vδri";
         Text[ catalan ] = "~Color";
@@ -372,7 +372,7 @@ ModalDialog DLG_EXPORT_EPS
         Text[ dutch ] = "~Grijswaarden";
         Text[ chinese_simplified ] = "η°εΊ¦(~G)";
         Text[ greek ] = "Διαβάθμιση του γκρι";
-        Text[ korean ] = "νμƒ‰λ„(~G)";
+        Text[ korean ] = "νμƒ‰μ΅°(~G)";
         Text[ turkish ] = "Gri tonlarύ";
         Text[ finnish ] = "~Harmaasδvy";
         Text[ catalan ] = "~Escala de grisos";
@@ -495,3 +495,8 @@ ModalDialog DLG_EXPORT_EPS
     Text[ catalan ] = "Opcions d'exportaciσ EPS";
     Text[ thai ] = "ΰΈ•ΰΈ±ΰΈ§ΰΉ€ΰΈ¥ΰΈ·ΰΈ­ΰΈΰΈªΰΉΰΈ‡ EPS ΰΈ­ΰΈ­ΰΈ";
 };
+
+
+
+
+

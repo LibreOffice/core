@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgepgm.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2001-11-16 22:12:03 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:28:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,23 +101,24 @@ ModalDialog DLG_EXPORT_EPGM
         Text[ danish ] = "Filformat";
         Text[ french ] = "Format de fichier";
         Text[ swedish ] = "Filformat";
-        Text[ dutch ] = "Bestandsformaat";
+        Text[ dutch ] = "Bestandsindeling";
         Text[ spanish ] = "Formato de archivo";
         Text[ english_us ] = "File format";
         Text[ chinese_simplified ] = "æ–‡ä»¶æ ¼å¼";
         Text[ russian ] = "Ôîğìàò ôàéëà";
         Text[ polish ] = "Format pliku";
-        Text[ japanese ] = "ï¾Œï½§ï½²ï¾™ã®æ›¸å¼";
+        Text[ japanese ] = "ãƒ•ã‚¡ã‚¤ãƒ«ã®æ›¸å¼";
         Text[ chinese_traditional ] = "æª”æ¡ˆæ ¼å¼";
         Text[ arabic ] = "ÊäÓíŞ Çáãáİ";
-        Text[ dutch ] = "Bestandsformaat";
+        Text[ dutch ] = "Bestandsindeling";
         Text[ chinese_simplified ] = "æ–‡ä»¶æ ¼å¼";
         Text[ greek ] = "ÌïñöŞ áñ÷åßïõ";
         Text[ korean ] = "íŒŒì¼ ì„œì‹";
         Text[ turkish ] = "Dosya formatı";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Formato de archivo";
+        Text[ catalan ] = "Format del fitxer";
         Text[ finnish ] = "Tiedostomuoto";
+        Text[ thai ] = "à¸£à¸¹à¸›à¹à¸šà¸šà¹à¸Ÿà¹‰à¸¡";
     };
     RadioButton RB_RAW
     {
@@ -138,7 +139,7 @@ ModalDialog DLG_EXPORT_EPGM
         Text[ chinese_simplified ] = "äºŒå…ƒ(~B)";
         Text[ russian ] = "Áèíàğíûé";
         Text[ polish ] = "Binarny";
-        Text[ japanese ] = "ï¾Šï¾ï½²ï¾…ï¾˜(~B)";
+        Text[ japanese ] = "ãƒã‚¤ãƒŠãƒª(~B)";
         Text[ language_user1 ] = " ";
         Text[ chinese_traditional ] = "äºŒå…ƒ(~B)";
         Text[ arabic ] = "ËäÇÆí";
@@ -147,8 +148,9 @@ ModalDialog DLG_EXPORT_EPGM
         Text[ greek ] = "Äõáäéêü";
         Text[ korean ] = "ë°”ì´ë„ˆë¦¬(~B)";
         Text[ turkish ] = "İkili";
-        Text[ catalan ] = "~Binario";
-        Text[ finnish ] = "~Binääri";
+        Text[ catalan ] = "~Binari";
+        Text[ finnish ] = "~Binaari";
+        Text[ thai ] = "à¹€~à¸¥à¸‚à¸à¸²à¸™à¸ªà¸­à¸‡";
     };
     RadioButton RB_ASCII
     {
@@ -161,7 +163,7 @@ ModalDialog DLG_EXPORT_EPGM
         Text[ portuguese_brazilian ] = "~Text";
         Text[ portuguese ] = "~Texto";
         Text[ danish ] = "~Tekst";
-        Text[ french ] = "~Texte";
+        Text[ french ] = "Texte";
         Text[ swedish ] = "~Text";
         Text[ dutch ] = "~Tekst";
         Text[ spanish ] = "~Texto";
@@ -169,7 +171,7 @@ ModalDialog DLG_EXPORT_EPGM
         Text[ chinese_simplified ] = "æ–‡å­—(~T)";
         Text[ russian ] = "Òåêñò";
         Text[ polish ] = "Tekst";
-        Text[ japanese ] = "ï¾ƒï½·ï½½ï¾„(~T)";
+        Text[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆ(~T)";
         Text[ chinese_traditional ] = "æ–‡å­—(~T)";
         Text[ arabic ] = "ÇáäÕ";
         Text[ dutch ] = "~Tekst";
@@ -178,21 +180,22 @@ ModalDialog DLG_EXPORT_EPGM
         Text[ korean ] = "í…ìŠ¤íŠ¸(~T)";
         Text[ turkish ] = "Metin";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Texto";
+        Text[ catalan ] = "~Text";
         Text[ finnish ] = "~Teksti";
+        Text[ thai ] = "~à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
     };
     Text[ italian ] = "Opzioni PGM";
     Text[ portuguese_brazilian ] = "PGM Optionen";
     Text[ portuguese ] = "Opções PGM";
     Text[ danish ] = "PGM indstillinger";
     Text[ french ] = "Options PGM";
-    Text[ swedish ] = "PGM alternativ";
+    Text[ swedish ] = "PGM-alternativ";
     Text[ dutch ] = "PGM-opties";
     Text[ spanish ] = "Opciones PGM";
     Text[ chinese_simplified ] = "PGM é€‰é¡¹";
     Text[ russian ] = "Ïàğàìåòğû PGM";
     Text[ polish ] = "Opcje PGM";
-    Text[ japanese ] = "PGM ï½µï¾Œï¾Ÿï½¼ï½®ï¾";
+    Text[ japanese ] = "PGM ã‚ªãƒ—ã‚·ãƒ§ãƒ³";
     Text[ chinese_traditional ] = "PGMé¸é …";
     Text[ arabic ] = "PGM ÎíÇÑÇÊ";
     Text[ dutch ] = "PGM-opties";
@@ -201,9 +204,15 @@ ModalDialog DLG_EXPORT_EPGM
     Text[ korean ] = "PGM ì˜µì…˜";
     Text[ turkish ] = "PGM seçenekleri";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Opciones PGM";
-    Text[ finnish ] = "PGM-asetukset";
+    Text[ catalan ] = "Opcions PGM";
+    Text[ finnish ] = "PGM-vientiasetukset";
+    Text[ thai ] = "à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸ PGM ";
 };
+
+
+
+
+
 
 
 

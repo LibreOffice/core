@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgepct.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-21 20:15:45 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:28:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ ModalDialog DLG_EXPORT_EPCT
     Text [ spanish ] = "Opciones PICT" ;
     Text [ french ] = "Options PICT" ;
     Text [ dutch ] = "PICT-opties" ;
-    Text [ swedish ] = "PICT alternativ" ;
+    Text [ swedish ] = "PICT-alternativ" ;
     Text [ danish ] = "PICT indstillinger" ;
     Text [ portuguese_brazilian ] = "PICT Optionen" ;
     Text [ portuguese ] = "Opções PICT" ;
@@ -131,7 +131,7 @@ ModalDialog DLG_EXPORT_EPCT
         Text[ chinese_simplified ] = "å¤§å°";
         Text[ russian ] = "Ğàçìåğ";
         Text[ polish ] = "Rozmiar";
-        Text[ japanese ] = "ï½»ï½²ï½½ï¾";
+        Text[ japanese ] = "ã‚µã‚¤ã‚º";
         Text[ chinese_traditional ] = "å¤§å°";
         Text[ arabic ] = "ÇáÍÌã";
         Text[ dutch ] = "Grootte";
@@ -140,8 +140,9 @@ ModalDialog DLG_EXPORT_EPCT
         Text[ korean ] = "í¬ê¸°";
         Text[ turkish ] = "Boyut";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Tamaño";
+        Text[ catalan ] = "Mida";
         Text[ finnish ] = "Koko";
+        Text[ thai ] = "à¸‚à¸™à¸²à¸”";
     };
     FixedText FT_SIZEX
     {
@@ -170,8 +171,9 @@ ModalDialog DLG_EXPORT_EPCT
         Text[ korean ] = "ë„ˆë¹„";
         Text[ turkish ] = "Genişlik";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Ancho";
+        Text[ catalan ] = "Amplada";
         Text[ finnish ] = "Leveys";
+        Text[ thai ] = "à¸„à¸§à¸²à¸¡à¸à¸§à¹‰à¸²à¸‡";
     };
     FixedText FT_SIZEY
     {
@@ -200,8 +202,9 @@ ModalDialog DLG_EXPORT_EPCT
         Text[ korean ] = "ë†’ì´";
         Text[ turkish ] = "Yükseklik";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Altura";
+        Text[ catalan ] = "Alçada";
         Text[ finnish ] = "Korkeus";
+        Text[ thai ] = "à¸„à¸§à¸²à¸¡à¸ªà¸¹à¸‡";
     };
     OKButton BTN_OK
     {
@@ -233,7 +236,7 @@ ModalDialog DLG_EXPORT_EPCT
         Text [ english_us ] = "~Original" ;
         Text [ italian ] = "~Originale" ;
         Text [ spanish ] = "~Original" ;
-        Text [ french ] = "~Original" ;
+        Text [ french ] = "Original" ;
         Text [ swedish ] = "~Original" ;
         Text [ danish ] = "~Original" ;
         Text [ portuguese_brazilian ] = "~Original" ;
@@ -241,17 +244,18 @@ ModalDialog DLG_EXPORT_EPCT
         Text[ chinese_simplified ] = "åŸä»¶(~O)";
         Text[ russian ] = "Îğèãèíàë";
         Text[ polish ] = "Orygina³";
-        Text[ japanese ] = "ï½µï¾˜ï½¼ï¾ï¾…ï¾™(~O)";
+        Text[ japanese ] = "ã‚ªãƒªã‚¸ãƒŠãƒ«(~O)";
         Text[ chinese_traditional ] = "åŸä»¶(~O)";
         Text[ arabic ] = "ÇáÃÕá";
         Text[ dutch ] = "~Origineel";
         Text[ chinese_simplified ] = "åŸä»¶(~O)";
         Text[ greek ] = "Áñ÷éêü";
-        Text[ korean ] = "ì˜¤ë¦¬ì§€ë„(~O)";
+        Text[ korean ] = "ì›ë³¸(~O)";
         Text[ turkish ] = "Aslı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Original";
         Text[ finnish ] = "~Alkuperäinen";
+        Text[ thai ] = "~à¸”à¸±à¹‰à¸‡à¹€à¸”à¸´à¸¡";
     };
     RadioButton RB_SIZE
     {
@@ -272,7 +276,7 @@ ModalDialog DLG_EXPORT_EPCT
         Text[ chinese_simplified ] = "å¤§å°(~S)";
         Text[ russian ] = "Ğàçìåğ";
         Text[ polish ] = "Rozmiar";
-        Text[ japanese ] = "ï½»ï½²ï½½ï¾(~S)";
+        Text[ japanese ] = "ã‚µã‚¤ã‚º(~S)";
         Text[ chinese_traditional ] = "å¤§å°(~S)";
         Text[ arabic ] = "ÇáÍÌã";
         Text[ dutch ] = "~Grootte";
@@ -281,8 +285,9 @@ ModalDialog DLG_EXPORT_EPCT
         Text[ korean ] = "í¬ê¸°(~S)";
         Text[ turkish ] = "Boyut";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Tamaño";
+        Text[ catalan ] = "~Mida";
         Text[ finnish ] = "~Koko";
+        Text[ thai ] = "~à¸‚à¸™à¸²à¸”";
     };
     FixedLine GRP_MODE
     {
@@ -302,7 +307,7 @@ ModalDialog DLG_EXPORT_EPCT
         Text[ chinese_simplified ] = "æ¨¡å¼";
         Text[ russian ] = "Ğåæèì";
         Text[ polish ] = "Tryb";
-        Text[ japanese ] = "ï¾“ï½°ï¾„ï¾";
+        Text[ japanese ] = "ãƒ¢ãƒ¼ãƒ‰";
         Text[ chinese_traditional ] = "æ¨¡å¼";
         Text[ arabic ] = "ÇáæÖÚ";
         Text[ dutch ] = "Modus";
@@ -311,13 +316,14 @@ ModalDialog DLG_EXPORT_EPCT
         Text[ korean ] = "ëª¨ë“œ";
         Text[ turkish ] = "Kip";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Modo";
+        Text[ catalan ] = "Mode";
         Text[ finnish ] = "Tila";
+        Text[ thai ] = "à¹‚à¸«à¸¡à¸”";
     };
     Text[ chinese_simplified ] = "PICT é€‰é¡¹";
     Text[ russian ] = "Ïàğàìåòğû PICT";
     Text[ polish ] = "Opcje PICT";
-    Text[ japanese ] = "PICT ï½µï¾Œï¾Ÿï½¼ï½®ï¾";
+    Text[ japanese ] = "PICT ã‚ªãƒ—ã‚·ãƒ§ãƒ³";
     Text[ chinese_traditional ] = "PICTé¸é …";
     Text[ arabic ] = "PICT ÎíÇÑÇÊ";
     Text[ dutch ] = "PICT-opties";
@@ -326,9 +332,21 @@ ModalDialog DLG_EXPORT_EPCT
     Text[ korean ] = "PICT ì˜µì…˜";
     Text[ turkish ] = "PICT seçenekleri";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Opciones PICT";
-    Text[ finnish ] = "PICT-asetukset";
+    Text[ catalan ] = "Opcions PICT";
+    Text[ finnish ] = "PICT-vientiasetukset";
+    Text[ thai ] = "à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸ PICT ";
 };
+
+
+
+
+
+
+
+
+
+
+
 
 
 

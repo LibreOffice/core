@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ipict.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sj $ $Date: 2002-10-31 11:32:29 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:28:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1270,10 +1270,7 @@ ULONG PictReader::ReadData(USHORT nOpcode)
     case 0x000d:   // TxSize
     {
         *pPict >> nUSHORT;
-
-        long nTemp = Max( (long) ( Fraction( (long) nUSHORT ) * aVRes ), 12L );
-        aActFont.SetSize( Size( 0, nTemp ) );
-
+        aActFont.SetSize( Size( 0, (long) ( Fraction( (long) nUSHORT ) * aVRes ) ) );
         eActMethod=PDM_UNDEFINED;
         nDataSize=2;
     }

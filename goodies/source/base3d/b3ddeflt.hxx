@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3ddeflt.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:10 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:28:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,9 +137,18 @@ private:
     // benoetigte Interpolatoren
     BxdInterpolator         aIntXPosLeft;
     BxdInterpolator         aIntXPosRight;
+
     BxdInterpolator         aIntDepthLeft;
     BxdInterpolator         aIntDepthRight;
     BxdInterpolator         aIntDepthLine;
+
+    // #96837#
+    // Added interpolators for real z coordinate in eye coor. In these,
+    // 1/z is interpolated to have a base for perspective corrected texturing.
+    BxdInterpolator         aRealDepthLeft;
+    BxdInterpolator         aRealDepthRight;
+    BxdInterpolator         aRealDepthLine;
+
     BxdInterpolator         aIntTexSLeft;
     BxdInterpolator         aIntTexSRight;
     BxdInterpolator         aIntTexTLeft;
@@ -163,6 +172,10 @@ private:
     // Bool fuer Detailreduzierung
     unsigned                bReducedDetail                  : 1;
     unsigned                bDetailBackedup                 : 1;
+
+    // #96837#
+    // Bool for enabling/disabling perspective texture correction
+    unsigned                mbPTCorrection                  : 1;
 
     // Funktionen fuer erlangen/freigeben der BitmapAccesses
     void AcquireAccess();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgeps.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sj $ $Date: 2002-08-15 09:23:02 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:28:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,12 @@ DlgExportEPS::DlgExportEPS( FltCallDialogParameter& rPara ) :
     sal_Int32   nVersion = pConfigItem->ReadInt32( sVersion, 2 );
     sal_Int32   nColor = pConfigItem->ReadInt32( sColorFormat, 0 );
     sal_Int32   nCompr = pConfigItem->ReadInt32( sCompressionMode, 2 );
+
+    /* SJ: The following line is not superfluous, reading the item will also    #106652#
+       create the corresponding FilterData Property. Since all filter
+       are no longer accessing the configuration itself, we have fill the
+       FilterData sequence with all available configuration items */
+    pConfigItem->ReadInt32( sTextMode, 0 );
 
     BOOL bCheck = FALSE;
     if ( nPreview & 1 )

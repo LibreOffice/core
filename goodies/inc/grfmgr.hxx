@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfmgr.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: thb $ $Date: 2002-10-24 17:19:52 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:28:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,8 @@
 #define GRFMGR_DRAW_CACHED                  0x00000001UL
 #define GRFMGR_DRAW_BILINEAR                0x00000002UL
 #define GRFMGR_DRAW_USE_DRAWMODE_SETTINGS   0x00000004UL
+#define GRFMGR_DRAW_SUBSTITUTE              0x00000008UL
+#define GRFMGR_DRAW_NO_SUBSTITUTE           0x00000010UL
 #define GRFMGR_DRAW_STANDARD                (GRFMGR_DRAW_CACHED|GRFMGR_DRAW_BILINEAR)
 
 // --------------------
@@ -117,7 +119,9 @@ class GraphicManager;
 class SvStream;
 class BitmapWriteAccess;
 class GraphicCache;
+class VirtualDevice;
 struct GrfSimpleCacheObj;
+struct ImplTileInfo;
 
 // ---------------
 // - GraphicAttr -
@@ -263,7 +267,63 @@ private:
     BOOL                    ImplGetCropParams( OutputDevice* pOut, Point& rPt, Size& rSz, const GraphicAttr* pAttr,
                                                PolyPolygon& rClipPolyPoly, BOOL& bRectClipRegion ) const;
 
-    BOOL                    ImplDrawTiled( OutputDevice& rOut, const Point& rPos,
+    /** Render a given number of tiles in an optimized way
+
+        This method recursively subdivides the tile rendering problem
+        in smaller parts, i.e. rendering output size x with few tiles
+        of size y, which in turn are generated from the original
+        bitmap in a recursive fashion. The subdivision size can be
+        controlled by the exponent argument, which specifies the
+        minimal number of smaller tiles used in one recursion
+        step. The resulting tile size is given as the integer number
+        of repetitions of the original bitmap along x and y. As the
+        exponent need not necessarily divide these numbers without
+        remainder, the repetition counts are effectively converted to
+        base-exponent numbers, where each place denotes the number of
+        times the corresponding tile size is rendered.
+
+        @param rVDev
+        Virtual device to render everything into
+
+        @param nExponent
+        Number of repetitions per subdivision step, _must_ be greater than 1
+
+        @param nNumTilesX
+        Number of original tiles to generate in x direction
+
+        @param nNumTilesY
+        Number of original tiles to generate in y direction
+
+        @param rTileSizePixel
+        Size in pixel of the original tile bitmap to render it in
+
+        @param pAttr
+        Graphic attributes to be used for rendering
+
+        @param nFlags
+        Graphic flags to be used for rendering
+
+        @param rCurrPos
+        Current output point for this recursion level (should start with (0,0))
+
+        @return true, if everything was successfully rendered.
+    */
+    bool                    ImplRenderTempTile( VirtualDevice& rVDev, int nExponent,
+                                                int nNumTilesX, int nNumTilesY,
+                                                const Size& rTileSizePixel,
+                                                const GraphicAttr* pAttr, ULONG nFlags );
+
+    /// internally called by ImplRenderTempTile()
+    bool                    ImplRenderTileRecursive( VirtualDevice& rVDev, int nExponent, int nMSBFactor,
+                                                     int nNumOrigTilesX, int nNumOrigTilesY,
+                                                     int nRemainderTilesX, int nRemainderTilesY,
+                                                     const Size& rTileSizePixel, const GraphicAttr* pAttr,
+                                                     ULONG nFlags, ImplTileInfo& rTileInfo );
+
+    bool                    ImplDrawTiled( OutputDevice* pOut, const Rectangle& rArea, const Size& rSizePixel,
+                                           const Size& rOffset, const GraphicAttr* pAttr, ULONG nFlags, int nTileCacheSize1D );
+
+    bool                    ImplDrawTiled( OutputDevice& rOut, const Point& rPos,
                                            int nNumTilesX, int nNumTilesY,
                                            const Size& rTileSize,
                                            const GraphicAttr* pAttr, ULONG nFlags );
@@ -319,7 +379,33 @@ public:
     void                    SetGraphic( const Graphic& rGraphic );
     void                    SetGraphic( const Graphic& rGraphic, const String& rLink );
 
-    Graphic                 GetTransformedGraphic( const GraphicAttr* pAttr = NULL ) const;
+    /** Get graphic transformed according to given attributes
+
+        This method returns a Graphic transformed, cropped and scaled
+        to the given parameters, ready to be rendered to printer or
+        display. The returned graphic has the same visual appearance
+        as if it had been drawn via GraphicObject::Draw() to a
+        specific output device.
+
+        @param rDestSize
+        Desired output size in logical coordinates. The mapmode to
+        interpret these logical coordinates in is given by the second
+        parameter, rDestMap.
+
+        @param rDestMap
+        Mapmode the output should be interpreted in. This is used to
+        interpret rDestSize, to set the appropriate PrefMapMode on the
+        returned Graphic, and to deal correctly with metafile graphics.
+
+        @param rAttr
+        Graphic attributes used to transform the graphic. This
+        includes cropping, rotation, mirroring, and various color
+        adjustment parameters.
+
+        @return the readily transformed Graphic
+     */
+    Graphic                 GetTransformedGraphic( const Size& rDestSize, const MapMode& rDestMap, const GraphicAttr& rAttr ) const;
+    Graphic                 GetTransformedGraphic( const GraphicAttr* pAttr = NULL ) const; // TODO: Change to Impl
 
     void                    SetAttr( const GraphicAttr& rAttr );
     const GraphicAttr&      GetAttr() const { return maAttr; }
@@ -387,10 +473,19 @@ public:
         @param nFlags
         Optional rendering flags
 
+        @param nTileCacheSize1D
+        Optional dimension of the generated cache tiles. The pOut sees
+        a number of tile draws, which have approximately
+        nTileCacheSize1D times nTileCacheSize1D bitmap sizes if the
+        tile bitmap is smaller. Otherwise, the tile is drawn as
+        is. This is useful if e.g. you want only a few, very large
+        bitmap drawings appear on the outdev.
+
         @return TRUE, if drawing completed successfully
      */
     BOOL                    DrawTiled( OutputDevice* pOut, const Rectangle& rArea, const Size& rSize,
-                                       const Size& rOffset, const GraphicAttr* pAttr = NULL, ULONG nFlags = GRFMGR_DRAW_STANDARD );
+                                       const Size& rOffset, const GraphicAttr* pAttr = NULL,
+                                       ULONG nFlags = GRFMGR_DRAW_STANDARD, int nTileCacheSize1D=128 );
 
     BOOL                    StartAnimation( OutputDevice* pOut, const Point& rPt, const Size& rSz, long nExtraData = 0L,
                                             const GraphicAttr* pAttr = NULL, ULONG nFlags = GRFMGR_DRAW_STANDARD,

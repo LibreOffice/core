@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3ddeflt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2001-06-06 09:01:44 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:28:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,10 @@ Base3DDefault::Base3DDefault(OutputDevice* pOutDev)
     fDetail(1.0),
     bReducedDetail(FALSE),
     bDetailBackedup(FALSE),
+
+    // #96837#
+    mbPTCorrection(sal_True),
+
     fDetailBackup( -1.0 ),
     nMaxPixels(500000)
 {
@@ -739,6 +743,7 @@ void Base3DDefault::Clipped3DLine(UINT32 nInd1, UINT32 nInd2)
                     rEntity1.TexCoor().X() * fTexWidth,
                     rEntity2.TexCoor().X() * fTexWidth,
                     nCount);
+
                 aIntTexTLine.Load(
                     rEntity1.TexCoor().Y() * fTexHeight,
                     rEntity2.TexCoor().Y() * fTexHeight,
@@ -964,6 +969,7 @@ void Base3DDefault::Clipped3DTriangle(UINT32 nInd1, UINT32 nInd2, UINT32 nInd3)
     B3dEntity& rEntity1 = aBuffers[nInd1];
     B3dEntity& rEntity2 = aBuffers[nInd2];
     B3dEntity& rEntity3 = aBuffers[nInd3];
+
     bNormalsUsed = rEntity1.IsNormalUsed() && rEntity2.IsNormalUsed() && rEntity3.IsNormalUsed();
     bTextureUsed = IsTextureActive() && rEntity1.IsTexCoorUsed() && rEntity2.IsTexCoorUsed() && rEntity3.IsTexCoorUsed();
     Base3DMaterialMode eMode = Base3DMaterialFront;
@@ -986,13 +992,21 @@ void Base3DDefault::Clipped3DTriangle(UINT32 nInd1, UINT32 nInd2, UINT32 nInd3)
 
             rEntity1.Color() = SolveColorModel(
                 GetMaterialObject(eMode),
-                rEntity1.Normal(), rEntity1.Point().GetVector3D());
+                rEntity1.Normal(),
+                rEntity1.Point().GetVector3D()
+                );
+
             rEntity2.Color() = SolveColorModel(
                 GetMaterialObject(eMode),
-                rEntity2.Normal(), rEntity2.Point().GetVector3D());
+                rEntity2.Normal(),
+                rEntity2.Point().GetVector3D()
+                );
+
             rEntity3.Color() = SolveColorModel(
                 GetMaterialObject(eMode),
-                rEntity3.Normal(), rEntity3.Point().GetVector3D());
+                rEntity3.Normal(),
+                rEntity3.Point().GetVector3D()
+                );
 
             // Die Normalen NICHT ungueltig machen, da die Entities
             // eventuell noch fuer weitere Primitive benutzt werden.
@@ -1089,24 +1103,68 @@ void Base3DDefault::Clipped3DTriangle(UINT32 nInd1, UINT32 nInd2, UINT32 nInd3)
 
         // YStart, Links und rechts laden
         nYLine = aOutPointTop.Y();
+
         aIntXPosLeft.Load(aOutPointTop.X(), aOutPointLeft.X(), nDeltaYLeft);
         aIntDepthLeft.Load(pEntTop->Point().Z(), pEntLeft->Point().Z(), nDeltaYLeft);
+
         aIntXPosRight.Load(aOutPointTop.X(), aOutPointRight.X(), nDeltaYRight);
         aIntDepthRight.Load(pEntTop->Point().Z(), pEntRight->Point().Z(), nDeltaYRight);
+
         if(bTextureUsed)
         {
-            aIntTexSLeft.Load(
-                pEntTop->TexCoor().X() * fTexWidth,
-                pEntLeft->TexCoor().X() * fTexWidth, nDeltaYLeft);
-            aIntTexTLeft.Load(
-                pEntTop->TexCoor().Y() * fTexHeight,
-                pEntLeft->TexCoor().Y() * fTexHeight, nDeltaYLeft);
-            aIntTexSRight.Load(
-                pEntTop->TexCoor().X() * fTexWidth,
-                pEntRight->TexCoor().X() * fTexWidth, nDeltaYRight);
-            aIntTexTRight.Load(
-                pEntTop->TexCoor().Y() * fTexHeight,
-                pEntRight->TexCoor().Y() * fTexHeight, nDeltaYRight);
+            // #96837#
+            if(mbPTCorrection)
+            {
+                // Load real depth interpolators (if needed)
+                const double fRealDepthLeft(1.0 / GetTransformationSet()->ViewToEyeCoor(pEntLeft->Point().GetVector3D()).Z());
+                const double fRealDepthRight(1.0 / GetTransformationSet()->ViewToEyeCoor(pEntRight->Point().GetVector3D()).Z());
+                const double fRealDepthTop(1.0 / GetTransformationSet()->ViewToEyeCoor(pEntTop->Point().GetVector3D()).Z());
+                aRealDepthLeft.Load(fRealDepthTop, fRealDepthLeft, nDeltaYLeft);
+                aRealDepthRight.Load(fRealDepthTop, fRealDepthRight, nDeltaYRight);
+
+                // #96837#
+                aIntTexSLeft.Load(
+                    pEntTop->TexCoor().X() * fTexWidth * fRealDepthTop,
+                    pEntLeft->TexCoor().X() * fTexWidth * fRealDepthLeft,
+                    nDeltaYLeft);
+
+                aIntTexTLeft.Load(
+                    pEntTop->TexCoor().Y() * fTexHeight * fRealDepthTop,
+                    pEntLeft->TexCoor().Y() * fTexHeight * fRealDepthLeft,
+                    nDeltaYLeft);
+
+                aIntTexSRight.Load(
+                    pEntTop->TexCoor().X() * fTexWidth * fRealDepthTop,
+                    pEntRight->TexCoor().X() * fTexWidth * fRealDepthRight,
+                    nDeltaYRight);
+
+                aIntTexTRight.Load(
+                    pEntTop->TexCoor().Y() * fTexHeight * fRealDepthTop,
+                    pEntRight->TexCoor().Y() * fTexHeight * fRealDepthRight,
+                    nDeltaYRight);
+            }
+            else
+            {
+                aIntTexSLeft.Load(
+                    pEntTop->TexCoor().X() * fTexWidth,
+                    pEntLeft->TexCoor().X() * fTexWidth,
+                    nDeltaYLeft);
+
+                aIntTexTLeft.Load(
+                    pEntTop->TexCoor().Y() * fTexHeight,
+                    pEntLeft->TexCoor().Y() * fTexHeight,
+                    nDeltaYLeft);
+
+                aIntTexSRight.Load(
+                    pEntTop->TexCoor().X() * fTexWidth,
+                    pEntRight->TexCoor().X() * fTexWidth,
+                    nDeltaYRight);
+
+                aIntTexTRight.Load(
+                    pEntTop->TexCoor().Y() * fTexHeight,
+                    pEntRight->TexCoor().Y() * fTexHeight,
+                    nDeltaYRight);
+            }
         }
 
         if(bNormalsUsed && GetShadeModel() == Base3DPhong)
@@ -1399,12 +1457,14 @@ void Base3DDefault::DrawLinePhongTexture(long nYPos, B3dMaterial& rMat)
         aIntVectorLine.Load(aVectorLeft, aVectorRight, nXLineDelta);
         aIntDepthLine.Load(aIntDepthLeft.GetDoubleValue(), aIntDepthRight.GetDoubleValue(), nXLineDelta);
 
-        // Texturkoordinateninterpolation?
-        if(bTextureUsed)
+        // #96837##
+        if(mbPTCorrection)
         {
-            aIntTexSLine.Load(aIntTexSLeft.GetDoubleValue(), aIntTexSRight.GetDoubleValue(), nXLineDelta);
-            aIntTexTLine.Load(aIntTexTLeft.GetDoubleValue(), aIntTexTRight.GetDoubleValue(), nXLineDelta);
+            aRealDepthLine.Load(aRealDepthLeft.GetDoubleValue(), aRealDepthRight.GetDoubleValue(), nXLineDelta);
         }
+
+        aIntTexSLine.Load(aIntTexSLeft.GetDoubleValue(), aIntTexSRight.GetDoubleValue(), nXLineDelta);
+        aIntTexTLine.Load(aIntTexTLeft.GetDoubleValue(), aIntTexTRight.GetDoubleValue(), nXLineDelta);
 
         if(GetTransformationSet())
         {
@@ -1428,13 +1488,24 @@ void Base3DDefault::DrawLinePhongTexture(long nYPos, B3dMaterial& rMat)
                     aNormal.Normalize();
                     Color aCol = SolveColorModel(rMat, aNormal, aPoint);
 
-                    // Texturkoordinateninterpolation?
-                    if(bTextureUsed)
+                    // #96837#
+                    if(mbPTCorrection)
                     {
-                        GetActiveTexture()->ModifyColor(aCol,
-                            aIntTexSLine.GetDoubleValue(),
-                            aIntTexTLine.GetDoubleValue());
+                        GetActiveTexture()->ModifyColor(
+                            aCol,
+                            aIntTexSLine.GetDoubleValue() / aRealDepthLine.GetDoubleValue(),
+                            aIntTexTLine.GetDoubleValue() / aRealDepthLine.GetDoubleValue()
+                            );
                     }
+                    else
+                    {
+                        GetActiveTexture()->ModifyColor(
+                            aCol,
+                            aIntTexSLine.GetDoubleValue(),
+                            aIntTexTLine.GetDoubleValue()
+                            );
+                    }
+
                     WritePixel(nXLineStart, nYPos, aCol, nDepth);
                 }
 
@@ -1447,12 +1518,14 @@ void Base3DDefault::DrawLinePhongTexture(long nYPos, B3dMaterial& rMat)
                     aIntDepthLine.Increment();
                     aIntVectorLine.Increment();
 
-                    // Texturkoordinateninterpolation?
-                    if(bTextureUsed)
+                    // #96837#
+                    if(mbPTCorrection)
                     {
-                        aIntTexSLine.Increment();
-                        aIntTexTLine.Increment();
+                        aRealDepthLine.Increment();
                     }
+
+                    aIntTexSLine.Increment();
+                    aIntTexTLine.Increment();
                 }
             }
         }
@@ -1548,6 +1621,12 @@ void Base3DDefault::DrawLineColorTexture(long nYPos)
         aIntTexTLine.Load(aIntTexTLeft.GetDoubleValue(), aIntTexTRight.GetDoubleValue(), nXLineDelta);
         aIntDepthLine.Load(aIntDepthLeft.GetDoubleValue(), aIntDepthRight.GetDoubleValue(), nXLineDelta);
 
+        // #96837#
+        if(mbPTCorrection)
+        {
+            aRealDepthLine.Load(aRealDepthLeft.GetDoubleValue(), aRealDepthRight.GetDoubleValue(), nXLineDelta);
+        }
+
         while(nXLineDelta--)
         {
             // Werte vorbereiten
@@ -1557,9 +1636,25 @@ void Base3DDefault::DrawLineColorTexture(long nYPos)
             if(IsVisibleAndScissor(nXLineStart, nYPos, nDepth))
             {
                 Color aCol = aIntColorLine.GetColorValue();
-                GetActiveTexture()->ModifyColor(aCol,
-                    aIntTexSLine.GetDoubleValue(),
-                    aIntTexTLine.GetDoubleValue());
+
+                // #96837#
+                if(mbPTCorrection)
+                {
+                    GetActiveTexture()->ModifyColor(
+                        aCol,
+                        aIntTexSLine.GetDoubleValue() / aRealDepthLine.GetDoubleValue(),
+                        aIntTexTLine.GetDoubleValue() / aRealDepthLine.GetDoubleValue()
+                        );
+                }
+                else
+                {
+                    GetActiveTexture()->ModifyColor(
+                        aCol,
+                        aIntTexSLine.GetDoubleValue(),
+                        aIntTexTLine.GetDoubleValue()
+                        );
+                }
+
                 WritePixel(nXLineStart, nYPos, aCol, nDepth);
             }
 
@@ -1573,6 +1668,12 @@ void Base3DDefault::DrawLineColorTexture(long nYPos)
                 aIntColorLine.Increment();
                 aIntTexSLine.Increment();
                 aIntTexTLine.Increment();
+
+                // #96837#
+                if(mbPTCorrection)
+                {
+                    aRealDepthLine.Increment();
+                }
             }
         }
     }
@@ -1647,6 +1748,12 @@ void Base3DDefault::DrawLineTexture(long nYPos, Color& rCol)
         aIntTexTLine.Load(aIntTexTLeft.GetDoubleValue(), aIntTexTRight.GetDoubleValue(), nXLineDelta);
         aIntDepthLine.Load(aIntDepthLeft.GetDoubleValue(), aIntDepthRight.GetDoubleValue(), nXLineDelta);
 
+        // #96837#
+        if(mbPTCorrection)
+        {
+            aRealDepthLine.Load(aRealDepthLeft.GetDoubleValue(), aRealDepthRight.GetDoubleValue(), nXLineDelta);
+        }
+
         while(nXLineDelta--)
         {
             // Werte vorbereiten
@@ -1657,9 +1764,25 @@ void Base3DDefault::DrawLineTexture(long nYPos, Color& rCol)
             {
                 // Texturkoordinateninterpolation?
                 Color aCol = rCol;
-                GetActiveTexture()->ModifyColor(aCol,
-                    aIntTexSLine.GetDoubleValue(),
-                    aIntTexTLine.GetDoubleValue());
+
+                // #96837#
+                if(mbPTCorrection)
+                {
+                    GetActiveTexture()->ModifyColor(
+                        aCol,
+                        aIntTexSLine.GetDoubleValue() / aRealDepthLine.GetDoubleValue(),
+                        aIntTexTLine.GetDoubleValue() / aRealDepthLine.GetDoubleValue()
+                        );
+                }
+                else
+                {
+                    GetActiveTexture()->ModifyColor(
+                        aCol,
+                        aIntTexSLine.GetDoubleValue(),
+                        aIntTexTLine.GetDoubleValue()
+                        );
+                }
+
                 WritePixel(nXLineStart, nYPos, aCol, nDepth);
             }
 
@@ -1672,6 +1795,12 @@ void Base3DDefault::DrawLineTexture(long nYPos, Color& rCol)
                 aIntDepthLine.Increment();
                 aIntTexSLine.Increment();
                 aIntTexTLine.Increment();
+
+                // #96837#
+                if(mbPTCorrection)
+                {
+                    aRealDepthLine.Increment();
+                }
             }
         }
     }
@@ -1724,12 +1853,36 @@ void Base3DDefault::LoadLeftTexture(long nSize)
 {
     aIntXPosLeft.Load(aOutPointLeft.X(), aOutPointRight.X(), nSize);
     aIntDepthLeft.Load(pEntLeft->Point().Z(), pEntRight->Point().Z(), nSize);
-    aIntTexSLeft.Load(
-        pEntLeft->TexCoor().X() * fTexWidth,
-        pEntRight->TexCoor().X() * fTexWidth, nSize);
-    aIntTexTLeft.Load(
-        pEntLeft->TexCoor().Y() * fTexHeight,
-        pEntRight->TexCoor().Y() * fTexHeight, nSize);
+
+    // #96837#
+    if(mbPTCorrection)
+    {
+        const double fRealDepthLeft = 1.0 / GetTransformationSet()->ViewToEyeCoor(pEntLeft->Point().GetVector3D()).Z();
+        const double fRealDepthRight = 1.0 / GetTransformationSet()->ViewToEyeCoor(pEntRight->Point().GetVector3D()).Z();
+        aRealDepthLeft.Load(fRealDepthLeft, fRealDepthRight, nSize);
+
+        aIntTexSLeft.Load(
+            pEntLeft->TexCoor().X() * fTexWidth * fRealDepthLeft,
+            pEntRight->TexCoor().X() * fTexWidth * fRealDepthRight,
+            nSize);
+
+        aIntTexTLeft.Load(
+            pEntLeft->TexCoor().Y() * fTexHeight * fRealDepthLeft,
+            pEntRight->TexCoor().Y() * fTexHeight * fRealDepthRight,
+            nSize);
+    }
+    else
+    {
+        aIntTexSLeft.Load(
+            pEntLeft->TexCoor().X() * fTexWidth,
+            pEntRight->TexCoor().X() * fTexWidth,
+            nSize);
+
+        aIntTexTLeft.Load(
+            pEntLeft->TexCoor().Y() * fTexHeight,
+            pEntRight->TexCoor().Y() * fTexHeight,
+            nSize);
+    }
 }
 
 void Base3DDefault::LoadLeft(long nSize)
@@ -1742,12 +1895,37 @@ void Base3DDefault::LoadRightTexture(long nSize)
 {
     aIntXPosRight.Load(aOutPointRight.X(), aOutPointLeft.X(), nSize);
     aIntDepthRight.Load(pEntRight->Point().Z(), pEntLeft->Point().Z(), nSize);
-    aIntTexSRight.Load(
-        pEntRight->TexCoor().X() * fTexWidth,
-        pEntLeft->TexCoor().X() * fTexWidth, nSize);
-    aIntTexTRight.Load(
-        pEntRight->TexCoor().Y() * fTexHeight,
-        pEntLeft->TexCoor().Y() * fTexHeight, nSize);
+
+    // #96837#
+    if(mbPTCorrection)
+    {
+        const double fRealDepthLeft = 1.0 / GetTransformationSet()->ViewToEyeCoor(pEntLeft->Point().GetVector3D()).Z();
+        const double fRealDepthRight = 1.0 / GetTransformationSet()->ViewToEyeCoor(pEntRight->Point().GetVector3D()).Z();
+        aRealDepthRight.Load(fRealDepthRight, fRealDepthLeft, nSize);
+
+        // #96837#
+        aIntTexSRight.Load(
+            pEntRight->TexCoor().X() * fTexWidth * fRealDepthRight,
+            pEntLeft->TexCoor().X() * fTexWidth * fRealDepthLeft,
+            nSize);
+
+        aIntTexTRight.Load(
+            pEntRight->TexCoor().Y() * fTexHeight * fRealDepthRight,
+            pEntLeft->TexCoor().Y() * fTexHeight * fRealDepthLeft,
+            nSize);
+    }
+    else
+    {
+        aIntTexSRight.Load(
+            pEntRight->TexCoor().X() * fTexWidth,
+            pEntLeft->TexCoor().X() * fTexWidth,
+            nSize);
+
+        aIntTexTRight.Load(
+            pEntRight->TexCoor().Y() * fTexHeight,
+            pEntLeft->TexCoor().Y() * fTexHeight,
+            nSize);
+    }
 }
 
 void Base3DDefault::LoadRight(long nSize)
@@ -1760,6 +1938,13 @@ void Base3DDefault::NextStepRightTexture()
 {
     aIntXPosRight.Increment();
     aIntDepthRight.Increment();
+
+    // #96837#
+    if(mbPTCorrection)
+    {
+        aRealDepthRight.Increment();
+    }
+
     aIntTexSRight.Increment();
     aIntTexTRight.Increment();
 }
@@ -1774,6 +1959,13 @@ void Base3DDefault::NextStepLeftTexture()
 {
     aIntXPosLeft.Increment();
     aIntDepthLeft.Increment();
+
+    // #96837#
+    if(mbPTCorrection)
+    {
+        aRealDepthLeft.Increment();
+    }
+
     aIntTexSLeft.Increment();
     aIntTexTLeft.Increment();
 }
@@ -1784,3 +1976,4 @@ void Base3DDefault::NextStepLeft()
     aIntDepthLeft.Increment();
 }
 
+// eof

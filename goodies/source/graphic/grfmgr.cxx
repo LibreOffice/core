@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfmgr.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: thb $ $Date: 2002-10-31 09:01:24 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:28:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,8 @@
  ************************************************************************/
 
 #define ENABLE_BYTESTRING_STREAM_OPERATORS
+
+#include <algorithm>
 
 #include <tools/vcompat.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -728,108 +730,19 @@ BOOL GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
 // -----------------------------------------------------------------------------
 
 BOOL GraphicObject::DrawTiled( OutputDevice* pOut, const Rectangle& rArea, const Size& rSize,
-                               const Size& rOffset, const GraphicAttr* pAttr, ULONG nFlags )
+                               const Size& rOffset, const GraphicAttr* pAttr, ULONG nFlags, int nTileCacheSize1D )
 {
-    enum { MaxTileCacheSize1D=10 };
-
     if( pOut == NULL || rSize.Width() == 0 || rSize.Height() == 0 )
         return FALSE;
 
     const MapMode   aOutMapMode( pOut->GetMapMode() );
     const MapMode   aMapMode( aOutMapMode.GetMapUnit(), Point(), aOutMapMode.GetScaleX(), aOutMapMode.GetScaleY() );
-    const Size      aOutTileSize( pOut->LogicToPixel( rSize, aOutMapMode ) );
-    BOOL            bRet( FALSE );
+    // #106258# Clamp size to 1 for zero values. This is okay, since
+    // logical size of zero is handled above already
+    const Size      aOutTileSize( ::std::max( 1L, pOut->LogicToPixel( rSize, aOutMapMode ).Width() ),
+                                  ::std::max( 1L, pOut->LogicToPixel( rSize, aOutMapMode ).Height() ) );
 
-    if( GetGraphic().GetType() == GRAPHIC_BITMAP &&
-        aOutTileSize.Width() * aOutTileSize.Height() < MaxTileCacheSize1D*MaxTileCacheSize1D )
-    {
-        // First combine very small bitmaps into a larger tile
-        // ===================================================
-
-        VirtualDevice   aVDev;
-        const int       nNumTilesInCacheX( (MaxTileCacheSize1D + aOutTileSize.Width()-1) / aOutTileSize.Width() );
-        const int       nNumTilesInCacheY( (MaxTileCacheSize1D + aOutTileSize.Height()-1) / aOutTileSize.Height() );
-
-        aVDev.SetOutputSizePixel( Size( nNumTilesInCacheX*aOutTileSize.Width(), nNumTilesInCacheY*aOutTileSize.Height() ) );
-        aVDev.SetMapMode( aMapMode );
-
-        // draw bitmap content
-        if( ImplDrawTiled( aVDev, Point(0,0), nNumTilesInCacheX, nNumTilesInCacheY, aOutTileSize, pAttr, nFlags ) )
-        {
-            BitmapEx aTileBitmap( aVDev.GetBitmap( Point(0,0), aVDev.GetOutputSize() ) );
-
-            // draw alpha content, if any
-            if( IsTransparent() )
-            {
-                GraphicObject aAlphaGraphic;
-
-                if( GetGraphic().IsAlpha() )
-                    aAlphaGraphic.SetGraphic( GetGraphic().GetBitmapEx().GetAlpha().GetBitmap() );
-                else
-                    aAlphaGraphic.SetGraphic( GetGraphic().GetBitmapEx().GetMask() );
-
-                if( aAlphaGraphic.ImplDrawTiled( aVDev, Point(0,0), nNumTilesInCacheX, nNumTilesInCacheY, aOutTileSize, pAttr, nFlags ) )
-                {
-                    // Combine bitmap and alpha/mask
-                    if( GetGraphic().IsAlpha() )
-                        aTileBitmap = BitmapEx( aTileBitmap.GetBitmap(),
-                                                AlphaMask( aVDev.GetBitmap( Point(0,0), aVDev.GetOutputSize() ) ) );
-                    else
-                        aTileBitmap = BitmapEx( aTileBitmap.GetBitmap(),
-                                                aVDev.GetBitmap( Point(0,0), aVDev.GetOutputSize() ).CreateMask( Color(COL_WHITE) ) );
-                }
-            }
-
-            // paint generated tile
-            GraphicObject aTmpGraphic( aTileBitmap );
-            bRet = aTmpGraphic.DrawTiled( pOut, rArea,
-                                          Size( rSize.Width()*nNumTilesInCacheX,
-                                                rSize.Height()*nNumTilesInCacheY ),
-                                          rOffset, pAttr, nFlags );
-        }
-    }
-    else
-    {
-        const Size      aOutOffset( pOut->LogicToPixel( rOffset, aOutMapMode ) );
-        const Rectangle aOutArea( pOut->LogicToPixel( rArea, aOutMapMode ) );
-
-        // number of invisible (because out-of-area) tiles
-        int nInvisibleTilesX;
-        int nInvisibleTilesY;
-
-        // round towards -infty for negative offset
-        if( aOutOffset.Width() < 0 )
-            nInvisibleTilesX = (aOutOffset.Width() - aOutTileSize.Width() + 1) / aOutTileSize.Width();
-        else
-            nInvisibleTilesX = aOutOffset.Width() / aOutTileSize.Width();
-
-        // round towards -infty for negative offset
-        if( aOutOffset.Height() < 0 )
-            nInvisibleTilesY = (aOutOffset.Height() - aOutTileSize.Height() + 1) / aOutTileSize.Height();
-        else
-            nInvisibleTilesY = aOutOffset.Height() / aOutTileSize.Height();
-
-        // origin from where to 'virtually' start drawing in pixel
-        const Point aOutOrigin( pOut->LogicToPixel( Point( rArea.Left() - rOffset.Width(),
-                                                           rArea.Top() - rOffset.Height() ) ) );
-        // position in pixel from where to really start output
-        const Point aOutStart( aOutOrigin.X() + nInvisibleTilesX*aOutTileSize.Width(),
-                               aOutOrigin.Y() + nInvisibleTilesY*aOutTileSize.Height() );
-
-        pOut->Push( PUSH_CLIPREGION );
-        pOut->IntersectClipRegion( rArea );
-
-        // Paint all tiles
-        // ===============
-        bRet = ImplDrawTiled( *pOut, aOutStart,
-                              (aOutArea.GetWidth() + aOutArea.Left() - aOutStart.X() + aOutTileSize.Width() - 1) / aOutTileSize.Width(),
-                              (aOutArea.GetHeight() + aOutArea.Top() - aOutStart.Y() + aOutTileSize.Height() - 1) / aOutTileSize.Height(),
-                              aOutTileSize, pAttr, nFlags );
-
-        pOut->Pop();
-    }
-
-    return bRet;
+    return ImplDrawTiled( pOut, rArea, aOutTileSize, rOffset, pAttr, nFlags, nTileCacheSize1D );
 }
 
 // -----------------------------------------------------------------------------
@@ -938,7 +851,191 @@ void GraphicObject::SetGraphic( const Graphic& rGraphic, const String& rLink )
 
 // -----------------------------------------------------------------------------
 
-Graphic GraphicObject::GetTransformedGraphic( const GraphicAttr* pAttr ) const
+Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMode& rDestMap, const GraphicAttr& rAttr ) const
+{
+    // #104550# Extracted from svx/source/svdraw/svdograf.cxx
+    Graphic             aTransGraphic( maGraphic );
+    const GraphicType   eType = GetType();
+    const Size          aSrcSize( aTransGraphic.GetPrefSize() );
+
+    // #104115# Convert the crop margins to graphic object mapmode
+    const MapMode aMapGraph( aTransGraphic.GetPrefMapMode() );
+    const MapMode aMap100( MAP_100TH_MM );
+
+    Size aCropLeftTop;
+    Size aCropRightBottom;
+
+    if( GRAPHIC_GDIMETAFILE == eType )
+    {
+        GDIMetaFile aMtf( aTransGraphic.GetGDIMetaFile() );
+
+        if( aMapGraph == MAP_PIXEL )
+        {
+            aCropLeftTop = Application::GetDefaultDevice()->LogicToPixel( Size( rAttr.GetLeftCrop(),
+                                                                                rAttr.GetTopCrop() ),
+                                                                          aMap100 );
+            aCropRightBottom = Application::GetDefaultDevice()->LogicToPixel( Size( rAttr.GetRightCrop(),
+                                                                                    rAttr.GetBottomCrop() ),
+                                                                              aMap100 );
+        }
+        else
+        {
+            aCropLeftTop = OutputDevice::LogicToLogic( Size( rAttr.GetLeftCrop(),
+                                                             rAttr.GetTopCrop() ),
+                                                       aMap100,
+                                                       aMapGraph );
+            aCropRightBottom = OutputDevice::LogicToLogic( Size( rAttr.GetRightCrop(),
+                                                                 rAttr.GetBottomCrop() ),
+                                                           aMap100,
+                                                           aMapGraph );
+        }
+
+        // #104115# If the metafile is cropped, give it a special
+        // treatment: clip against the remaining area, scale up such
+        // that this area later fills the desired size, and move the
+        // origin to the upper left edge of that area.
+        if( rAttr.IsCropped() )
+        {
+            const MapMode aMtfMapMode( aMtf.GetPrefMapMode() );
+
+            Rectangle aClipRect( aMtfMapMode.GetOrigin().X() + aCropLeftTop.Width(),
+                                 aMtfMapMode.GetOrigin().Y() + aCropLeftTop.Height(),
+                                 aMtfMapMode.GetOrigin().X() + aSrcSize.Width() - aCropRightBottom.Width(),
+                                 aMtfMapMode.GetOrigin().Y() + aSrcSize.Height() - aCropRightBottom.Height() );
+
+            // #104115# To correctly crop rotated metafiles, clip by view rectangle
+            aMtf.AddAction( new MetaISectRectClipRegionAction( aClipRect ), 0 );
+
+            // #104115# To crop the metafile, scale larger than the output rectangle
+            aMtf.Scale( (double)rDestSize.Width() / (aSrcSize.Width() - aCropLeftTop.Width() - aCropRightBottom.Width()),
+                        (double)rDestSize.Height() / (aSrcSize.Height() - aCropLeftTop.Height() - aCropRightBottom.Height()) );
+
+            // #104115# Adapt the pref size by hand (scale changes it
+            // proportionally, but we want it to be smaller than the
+            // former size, to crop the excess out)
+            aMtf.SetPrefSize( Size( (long)((double)rDestSize.Width() *  (1.0 + (aCropLeftTop.Width() + aCropRightBottom.Width()) / aSrcSize.Width())  + .5),
+                                    (long)((double)rDestSize.Height() * (1.0 + (aCropLeftTop.Height() + aCropRightBottom.Height()) / aSrcSize.Height()) + .5) ) );
+
+            // #104115# Adapt the origin of the new mapmode, such that it
+            // is shifted to the place where the cropped output starts
+            Point aNewOrigin( (long)((double)aMtfMapMode.GetOrigin().X() + rDestSize.Width() * aCropLeftTop.Width() / (aSrcSize.Width() - aCropLeftTop.Width() - aCropRightBottom.Width()) + .5),
+                              (long)((double)aMtfMapMode.GetOrigin().Y() + rDestSize.Height() * aCropLeftTop.Height() / (aSrcSize.Height() - aCropLeftTop.Height() - aCropRightBottom.Height()) + .5) );
+            MapMode aNewMap( rDestMap );
+            aNewMap.SetOrigin( OutputDevice::LogicToLogic(aNewOrigin, aMtfMapMode, rDestMap) );
+            aMtf.SetPrefMapMode( aNewMap );
+        }
+        else
+        {
+            aMtf.Scale( Fraction( rDestSize.Width(), aSrcSize.Width() ), Fraction( rDestSize.Height(), aSrcSize.Height() ) );
+            aMtf.SetPrefMapMode( rDestMap );
+        }
+
+        aTransGraphic = aMtf;
+    }
+    else if( GRAPHIC_BITMAP == eType )
+    {
+        BitmapEx    aBmpEx( aTransGraphic.GetBitmapEx() );
+
+        // convert crops to pixel
+        aCropLeftTop = Application::GetDefaultDevice()->LogicToPixel( Size( rAttr.GetLeftCrop(),
+                                                                            rAttr.GetTopCrop() ),
+                                                                      aMap100 );
+        aCropRightBottom = Application::GetDefaultDevice()->LogicToPixel( Size( rAttr.GetRightCrop(),
+                                                                                rAttr.GetBottomCrop() ),
+                                                                          aMap100 );
+
+        // #104115# Crop the bitmap
+        if( rAttr.IsCropped() )
+        {
+            Size aSrcSize( aTransGraphic.GetPrefSize() );
+
+            // setup crop rectangle in prefmapmode system
+            Rectangle aCropRect( aCropLeftTop.Width(), aCropLeftTop.Height(),
+                                 aSrcSize.Width() - aCropRightBottom.Width(),
+                                 aSrcSize.Height() - aCropRightBottom.Height() );
+
+            // convert from prefmapmode to pixel
+            aCropRect = Application::GetDefaultDevice()->LogicToPixel( aCropRect,
+                                                                       aMapGraph );
+
+            aBmpEx.Crop( aCropRect );
+
+            // #104115# Negative crop sizes mean: enlarge bitmap and pad
+            if( aCropLeftTop.Width() < 0 ||
+                aCropLeftTop.Height() < 0 ||
+                aCropRightBottom.Width() < 0 ||
+                aCropRightBottom.Height() < 0 )
+            {
+                Size aBmpSize( aBmpEx.GetSizePixel() );
+                sal_Int32 nPadLeft( aCropLeftTop.Width() < 0 ? -aCropLeftTop.Width() : 0 );
+                sal_Int32 nPadTop( aCropLeftTop.Height() < 0 ? -aCropLeftTop.Height() : 0 );
+                sal_Int32 nPadTotalWidth( aBmpSize.Width() + nPadLeft + (aCropRightBottom.Width() < 0 ? -aCropRightBottom.Width() : 0) );
+                sal_Int32 nPadTotalHeight( aBmpSize.Height() + nPadTop + (aCropRightBottom.Height() < 0 ? -aCropRightBottom.Height() : 0) );
+
+                BitmapEx aBmpEx2;
+
+                if( aBmpEx.IsTransparent() )
+                {
+                    if( aBmpEx.IsAlpha() )
+                        aBmpEx2 = BitmapEx( aBmpEx.GetBitmap(), aBmpEx.GetAlpha() );
+                    else
+                        aBmpEx2 = BitmapEx( aBmpEx.GetBitmap(), aBmpEx.GetMask() );
+                }
+                else
+                {
+                    // #104115# Generate mask bitmap and init to zero
+                    Bitmap aMask( aBmpSize, 1 );
+                    aMask.Erase( Color(0,0,0) );
+
+                    // #104115# Always generate transparent bitmap, we need the border transparent
+                    aBmpEx2 = BitmapEx( aBmpEx.GetBitmap(), aMask );
+
+                    // #104115# Add opaque mask to source bitmap, otherwise the destination remains transparent
+                    aBmpEx = aBmpEx2;
+                }
+
+                aBmpEx2.SetSizePixel( Size(nPadTotalWidth, nPadTotalHeight) );
+                aBmpEx2.Erase( Color(0xFF,0,0,0) );
+                aBmpEx2.CopyPixel( Rectangle( Point(nPadLeft, nPadTop), aBmpSize ), Rectangle( Point(0, 0), aBmpSize ), &aBmpEx );
+                aBmpEx = aBmpEx2;
+            }
+        }
+
+        const Size  aSizePixel( aBmpEx.GetSizePixel() );
+
+        if( rAttr.GetRotation() != 0 && !IsAnimated() )
+        {
+            if( aSizePixel.Width() && aSizePixel.Height() && rDestSize.Width() && rDestSize.Height() )
+            {
+                double fSrcWH = (double) aSizePixel.Width() / aSizePixel.Height();
+                double fDstWH = (double) rDestSize.Width() / rDestSize.Height();
+                double fScaleX = 1.0, fScaleY = 1.0;
+
+                // always choose scaling to shrink bitmap
+                if( fSrcWH < fDstWH )
+                    fScaleY = aSizePixel.Width() / ( fDstWH * aSizePixel.Height() );
+                else
+                    fScaleX = fDstWH * aSizePixel.Height() / aSizePixel.Width();
+
+                aBmpEx.Scale( fScaleX, fScaleY );
+            }
+        }
+
+        aTransGraphic = aBmpEx;
+
+        aTransGraphic.SetPrefSize( rDestSize );
+        aTransGraphic.SetPrefMapMode( rDestMap );
+    }
+
+    GraphicObject aGrfObj( aTransGraphic );
+    aTransGraphic = aGrfObj.GetTransformedGraphic( &rAttr );
+
+    return aTransGraphic;
+}
+
+// -----------------------------------------------------------------------------
+
+Graphic GraphicObject::GetTransformedGraphic( const GraphicAttr* pAttr ) const // TODO: Change to Impl
 {
     GetGraphic();
 

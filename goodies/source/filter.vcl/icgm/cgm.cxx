@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cgm.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sj $ $Date: 2002-02-08 09:32:40 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:28:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -940,70 +940,80 @@ SvStream& operator>>( SvStream& rOStm, CGM& rCGM )
 
 extern "C" sal_uInt32 __LOADONCALLAPI ImportCGM( String& rFileName, uno::Reference< frame::XModel > & rXModel, sal_uInt32 nMode, void* pProgressBar )
 {
-    sal_Bool bProgressBar = sal_False;
 
-    CGM*    pCGM;                       // retvalue == 0 -> ERROR
-    sal_uInt32  nStatus = 0;            //          == 0xffrrggbb -> background color in the lower 24 bits
+    sal_uInt32  nStatus = 0;            // retvalue == 0 -> ERROR
+                                        //          == 0xffrrggbb -> background color in the lower 24 bits
+    sal_Bool    bProgressBar = sal_False;
 
     if( rXModel.is() )
     {
-        pCGM = new CGM( nMode, rXModel );
-        if ( pCGM && pCGM->IsValid() )
+        SvStream*   pIn = NULL;
+        CGM*        pCGM= NULL;
+
+        try
         {
-            if ( nMode & CGM_IMPORT_CGM )
+            pCGM = new CGM( nMode, rXModel );
+            if ( pCGM && pCGM->IsValid() )
             {
-                SvStream* pIn = ::utl::UcbStreamHelper::CreateStream( rFileName, STREAM_READ );
-                if ( pIn )
+                if ( nMode & CGM_IMPORT_CGM )
                 {
-                    pIn->SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
-                    pIn->Seek( STREAM_SEEK_TO_END );
-                    sal_uInt32  nInSize = pIn->Tell();
-                    pIn->Seek( 0 );
-
-#ifdef CGM_EXPORT_IMPRESS
-                    uno::Reference< task::XStatusIndicator >  aXStatInd;
-                    sal_uInt32  nNext = 0;
-                    sal_uInt32  nAdd = nInSize / 20;
-                    if ( pProgressBar )
-                        aXStatInd = *(uno::Reference< task::XStatusIndicator > *)pProgressBar;
-                    bProgressBar = aXStatInd.is();
-                    if ( bProgressBar )
-                        aXStatInd->start( rtl::OUString::createFromAscii("CGM Import"), nInSize );
-#endif
-
-                    while ( pCGM->IsValid() && ( pIn->Tell() < nInSize ) && !pCGM->IsFinished() )
+                    SvStream* pIn = ::utl::UcbStreamHelper::CreateStream( rFileName, STREAM_READ );
+                    if ( pIn )
                     {
+                        pIn->SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
+                        pIn->Seek( STREAM_SEEK_TO_END );
+                        sal_uInt32  nInSize = pIn->Tell();
+                        pIn->Seek( 0 );
 
 #ifdef CGM_EXPORT_IMPRESS
-
-
+                        uno::Reference< task::XStatusIndicator >  aXStatInd;
+                        sal_uInt32  nNext = 0;
+                        sal_uInt32  nAdd = nInSize / 20;
+                        if ( pProgressBar )
+                            aXStatInd = *(uno::Reference< task::XStatusIndicator > *)pProgressBar;
+                        bProgressBar = aXStatInd.is();
                         if ( bProgressBar )
-                        {
-                            sal_uInt32 nCurrentPos = pIn->Tell();
-                            if ( nCurrentPos >= nNext )
-                            {
-                                aXStatInd->setValue( nCurrentPos );
-                                nNext = nCurrentPos + nAdd;
-                            }
-                        }
+                            aXStatInd->start( rtl::OUString::createFromAscii("CGM Import"), nInSize );
 #endif
 
-                        if ( pCGM->Write( *pIn ) == sal_False )
-                            break;
-                    }
-                    if ( pCGM->IsValid() )
-                    {
-                        nStatus = pCGM->GetBackGroundColor() | 0xff000000;
-                    }
-                    delete pIn;
+                        while ( pCGM->IsValid() && ( pIn->Tell() < nInSize ) && !pCGM->IsFinished() )
+                        {
+
 #ifdef CGM_EXPORT_IMPRESS
-                    if ( bProgressBar )
-                        aXStatInd->end();
+
+
+                            if ( bProgressBar )
+                            {
+                                sal_uInt32 nCurrentPos = pIn->Tell();
+                                if ( nCurrentPos >= nNext )
+                                {
+                                    aXStatInd->setValue( nCurrentPos );
+                                    nNext = nCurrentPos + nAdd;
+                                }
+                            }
 #endif
+
+                            if ( pCGM->Write( *pIn ) == sal_False )
+                                break;
+                        }
+                        if ( pCGM->IsValid() )
+                        {
+                            nStatus = pCGM->GetBackGroundColor() | 0xff000000;
+                        }
+#ifdef CGM_EXPORT_IMPRESS
+                        if ( bProgressBar )
+                            aXStatInd->end();
+#endif
+                    }
                 }
             }
         }
+        catch( ::com::sun::star::uno::Exception& )
+        {
+            nStatus = 0;
+        }
         delete pCGM;
+        delete pIn;
     }
     return nStatus;
 }

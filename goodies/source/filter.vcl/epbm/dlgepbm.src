@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgepbm.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:14:49 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:28:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,23 +101,24 @@ ModalDialog DLG_EXPORT_EPBM
         Text[ danish ] = "Filformat";
         Text[ french ] = "Format de fichier";
         Text[ swedish ] = "Filformat";
-        Text[ dutch ] = "Bestandsformaat";
+        Text[ dutch ] = "Bestandsindeling";
         Text[ spanish ] = "Formato de archivo";
         Text[ english_us ] = "File format";
-        Text[ chinese_simplified ] = "ÎÄ¼ş¸ñÊ½";
+        Text[ chinese_simplified ] = "æ–‡ä»¶æ ¼å¼";
         Text[ russian ] = "Ôîğìàò ôàéëà";
         Text[ polish ] = "Format pliku";
-        Text[ japanese ] = "Ì§²Ù‚Ì‘®";
-        Text[ chinese_traditional ] = "ÀÉ®×®æ¦¡";
+        Text[ japanese ] = "ãƒ•ã‚¡ã‚¤ãƒ«ã®æ›¸å¼";
+        Text[ chinese_traditional ] = "æª”æ¡ˆæ ¼å¼";
         Text[ arabic ] = "ÊäÓíŞ Çáãáİ";
-        Text[ dutch ] = "Bestandsformaat";
-        Text[ chinese_simplified ] = "ÎÄ¼ş¸ñÊ½";
+        Text[ dutch ] = "Bestandsindeling";
+        Text[ chinese_simplified ] = "æ–‡ä»¶æ ¼å¼";
         Text[ greek ] = "ÌïñöŞ áñ÷åßïõ";
-        Text[ korean ] = "ÆÄÀÏ ¼­½Ä";
+        Text[ korean ] = "íŒŒì¼ í˜•ì‹";
         Text[ turkish ] = "Dosya formatı";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Formato de archivo";
+        Text[ catalan ] = "Format del fitxer";
         Text[ finnish ] = "Tiedostomuoto";
+        Text[ thai ] = "à¸£à¸¹à¸›à¹à¸šà¸šà¹à¸Ÿà¹‰à¸¡";
     };
     RadioButton RB_RAW
     {
@@ -135,20 +136,21 @@ ModalDialog DLG_EXPORT_EPBM
         Text[ dutch ] = "~Binair";
         Text[ spanish ] = "~Binario";
         Text[ english_us ] = "~Binary";
-        Text[ chinese_simplified ] = "¶şÔª(~B)";
+        Text[ chinese_simplified ] = "äºŒå…ƒ(~B)";
         Text[ russian ] = "Áèíàğíûé";
         Text[ polish ] = "Binarny";
-        Text[ japanese ] = "ÊŞ²ÅØ(~B)";
+        Text[ japanese ] = "ãƒã‚¤ãƒŠãƒª(~B)";
         Text[ language_user1 ] = " ";
-        Text[ chinese_traditional ] = "¤G¤¸(~B)";
+        Text[ chinese_traditional ] = "äºŒå…ƒ(~B)";
         Text[ arabic ] = "ËäÇÆí";
         Text[ dutch ] = "~Binair";
-        Text[ chinese_simplified ] = "¶şÔª(~B)";
+        Text[ chinese_simplified ] = "äºŒå…ƒ(~B)";
         Text[ greek ] = "Äõáäéêü";
-        Text[ korean ] = "¹ÙÀÌ³Ê¸®(~B)";
+        Text[ korean ] = "ë°”ì´ë„ˆë¦¬(~B)";
         Text[ turkish ] = "İkili";
-        Text[ catalan ] = "~Binario";
-        Text[ finnish ] = "~Binääri";
+        Text[ catalan ] = "~Binari";
+        Text[ finnish ] = "~Binaari";
+        Text[ thai ] = "à¹€~à¸¥à¸‚à¸à¸²à¸™à¸ªà¸­à¸‡";
     };
     RadioButton RB_ASCII
     {
@@ -161,49 +163,61 @@ ModalDialog DLG_EXPORT_EPBM
         Text[ portuguese_brazilian ] = "~Text";
         Text[ portuguese ] = "~Texto";
         Text[ danish ] = "~Tekst";
-        Text[ french ] = "~Texte";
+        Text[ french ] = "Texte";
         Text[ swedish ] = "~Text";
         Text[ dutch ] = "~Tekst";
         Text[ spanish ] = "~Texto";
         Text[ english_us ] = "~Text";
-        Text[ chinese_simplified ] = "ÎÄ×Ö(~T)";
+        Text[ chinese_simplified ] = "æ–‡å­—(~T)";
         Text[ russian ] = "Òåêñò";
         Text[ polish ] = "Tekst";
-        Text[ japanese ] = "Ã·½Ä(~T)";
-        Text[ chinese_traditional ] = "¤å¦r(~T)";
+        Text[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆ(~T)";
+        Text[ chinese_traditional ] = "æ–‡å­—(~T)";
         Text[ arabic ] = "ÇáäÕ";
         Text[ dutch ] = "~Tekst";
-        Text[ chinese_simplified ] = "ÎÄ×Ö(~T)";
+        Text[ chinese_simplified ] = "æ–‡å­—(~T)";
         Text[ greek ] = "Êåßìåíï";
-        Text[ korean ] = "ÅØ½ºÆ®(~T)";
+        Text[ korean ] = "í…ìŠ¤íŠ¸(~T)";
         Text[ turkish ] = "Metin";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Texto";
+        Text[ catalan ] = "~Text";
         Text[ finnish ] = "~Teksti";
+        Text[ thai ] = "~à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
     };
     Text[ italian ] = "Opzioni PBM";
     Text[ portuguese_brazilian ] = "PBM Optionen";
     Text[ portuguese ] = "Opções PBM";
     Text[ danish ] = "PBM indstillinger";
     Text[ french ] = "Options PBM";
-    Text[ swedish ] = "PBM alternativ";
+    Text[ swedish ] = "PBM-alternativ";
     Text[ dutch ] = "PBM-opties";
     Text[ spanish ] = "Opciones PBM ";
-    Text[ chinese_simplified ] = "PBM Ñ¡Ïî";
+    Text[ chinese_simplified ] = "PBM é€‰é¡¹";
     Text[ russian ] = "Ïàğàìåòğû PBM";
     Text[ polish ] = "Opcje PBM ";
-    Text[ japanese ] = "PBM µÌß¼®İ";
-    Text[ chinese_traditional ] = "PBM¿ï¶µ";
+    Text[ japanese ] = "PBM ã‚ªãƒ—ã‚·ãƒ§ãƒ³";
+    Text[ chinese_traditional ] = "PBMé¸é …";
     Text[ arabic ] = "PBM ÎíÇÑÇÊ";
     Text[ dutch ] = "PBM-opties";
-    Text[ chinese_simplified ] = "PBM Ñ¡Ïî";
+    Text[ chinese_simplified ] = "PBM é€‰é¡¹";
     Text[ greek ] = "Åğéëïãİò PBM";
-    Text[ korean ] = "PBM ¿É¼Ç";
+    Text[ korean ] = "PBM ì˜µì…˜";
     Text[ turkish ] = "PBM seçenekleri";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Opciones PBM ";
-    Text[ finnish ] = "PBM-asetukset";
+    Text[ catalan ] = "Opcions PBM";
+    Text[ finnish ] = "PBM-vientiasetukset";
+    Text[ thai ] = "à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸ PBM ";
 };
+
+
+
+
+
+
+
+
+
+
 
 
 
