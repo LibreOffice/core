@@ -2,9 +2,9 @@
 *
 *  $RCSfile: module_hidden_ooo.scp,v $
 *
-*  $Revision: 1.4 $
+*  $Revision: 1.5 $
 *
-*  last change: $Author: rt $ $Date: 2005-03-29 12:48:32 $
+*  last change: $Author: rt $ $Date: 2005-03-30 11:41:08 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -336,11 +336,13 @@ Module gid_Module_Root_Files_5
 	gid_File_Jar_AVmedia,
 	gid_File_Lib_AVMediaWin,
 	gid_File_Lib_XSec_Framework,
+#ifndef WITHOUT_MOZILLA
 	gid_File_Lib_XSec_XmlSec,
 	gid_File_Lib_XSec_XMLSecurity,
 	gid_File_Lib_LibXMLSec_xmlseccore,
 	gid_File_Lib_LibXMLSec_xmlsecmscrypto,
 	gid_File_Lib_LibXMLSec_xmlsecnss,
+#endif
 	gid_File_Lib_Migrationoo2);
 End
 
@@ -797,8 +799,12 @@ Module gid_Module_Root_Files_8
 	gid_File_Res_Uui,
 	gid_File_Res_Vcl,
 	gid_File_Res_Xsltdlg,
+#ifndef WITHOUT_MOZILLA
 	gid_File_Res_AVMedia,
 	gid_File_Res_XMLSecurity);
+#else
+	gid_File_Res_AVMedia);
+#endif
 End
 
 #ifndef WITHOUT_FONTS
