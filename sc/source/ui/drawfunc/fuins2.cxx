@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuins2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:56 $
+ *  last change: $Author: nn $ $Date: 2000-10-05 16:50:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,6 @@
 #include <sch/schdll.hxx>
 #include <sch/memchrt.hxx>
 #include <sch/schdll0.hxx>
-#include <sim2/simdll0.hxx>
 #include <starmath/smdll0.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdview.hxx>
@@ -252,14 +251,6 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, SdrView* pView,
         // damit DrawShell eingeschaltet wird (Objekt aktivieren ist unnoetig):
         bIsFromFile = TRUE;
     }
-#ifdef SO3
-    else if (nSlot == SID_INSERT_SIMAGE)
-    {
-        if ( SFX_APP()->HasFeature(SFX_FEATURE_SIMAGE) )
-            aIPObj = &((SvFactory*)SvInPlaceObject::ClassFactory())->CreateAndInit(
-                                        *SIM_MOD()->pSimDrawDocShellFactory,
-                                        aStor );
-    }
     else if (nSlot == SID_INSERT_SMATH)
     {
         if ( SFX_APP()->HasFeature(SFX_FEATURE_SMATH) )
@@ -268,23 +259,6 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, SdrView* pView,
                                         *SM_MOD()->pSmDocShellFactory,
                                         aStor );
     }
-#else
-    else if (nSlot == SID_INSERT_SIMAGE)
-    {
-        if ( SFX_APP()->HasFeature(SFX_FEATURE_SIMAGE) )
-            aIPObj = &SvInPlaceObject::ClassFactory()->CreateAndInit(
-                                        *SIM_MOD()->pSimDrawDocShellFactory,
-                                        aStor );
-    }
-    else if (nSlot == SID_INSERT_SMATH)
-    {
-        if ( SFX_APP()->HasFeature(SFX_FEATURE_SMATH) )
-            aIPObj = &SvInPlaceObject::ClassFactory()->CreateAndInit(
-//                                      *OFF_APP()->GetSmDLL()->pSmDocShellFactory,
-                                        *SM_MOD()->pSmDocShellFactory,
-                                        aStor );
-    }
-#endif
     else if (nSlot == SID_INSERT_PLUGIN)
     {
         SvInsertPlugInDialog aDlg;
