@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfrm.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-14 20:42:01 $
+ *  last change: $Author: os $ $Date: 2001-08-30 13:59:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -524,6 +524,7 @@ TabPage RID_SVXPAGE_POSITION
         Pos = MAP_APPFONT ( 12 , 100 + 11  ) ;
         Size = MAP_APPFONT ( 37 , 10 ) ;
         Text = "~Position" ;
+        Text[English] = "~Position" ;
         Hide = TRUE ;
     };
     ListBox LB_ORIENT
