@@ -209,8 +209,7 @@ JAVA_TODO= \
     $(DESTDIRJAVAEXAMPLES)$/ToDo$/ToDo.sxc  \
     $(DESTDIRJAVAEXAMPLES)$/ToDo$/ToDo.xml  \
     $(DESTDIRJAVAEXAMPLES)$/ToDo$/XToDo.idl  \
-    $(DESTDIRJAVAEXAMPLES)$/ToDo$/Makefile  \
-    $(DESTDIRJAVAEXAMPLES)$/ToDo$/Manifest
+    $(DESTDIRJAVAEXAMPLES)$/ToDo$/Makefile
 
 JAVA_WRITERSELECTOR= \
     $(DESTDIRJAVAEXAMPLES)$/WriterSelector$/WriterSelector.java \
