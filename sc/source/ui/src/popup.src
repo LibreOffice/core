@@ -2,9 +2,9 @@
  *
  *  $RCSfile: popup.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:50:06 $
+ *  last change: $Author: kz $ $Date: 2001-07-17 20:49:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -644,7 +644,7 @@ Menu RID_POPUP_TAB
             Text [ spanish ] = "~Seleccionar todas" ;
             Text [ english_us ] = "Select All S~heets" ;
             /* ### ACHTUNG: Neuer Text in Resource? Alle Tabellen auswählen : Alle Tabellen auswõhlen */
-            Text[ chinese_simplified ] = "Ñ¡ÔñÈ«²¿¹¤×÷±í(~H)";
+            Text[ chinese_simplified ] = "Ñ¡ÔñÈ«²¿µÄ¹¤×÷±í(~H)";
             Text[ russian ] = "Âûäåëèòü âñå";
             Text[ polish ] = "Zaznacz wszystkie arkusze";
             Text[ japanese ] = "‚·‚×‚Ä‚Ì•\\‚ð‘I‘ð(~H)";
@@ -1789,6 +1789,7 @@ Menu RID_POPUP_PAGEBREAK
         };
     };
 };
+
 
 
 
