@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-20 09:46:17 $
+ *  last change: $Author: dv $ $Date: 2001-07-24 11:10:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,6 +221,7 @@ class FileDialogHelper_Impl : public WeakImplHelper1< XFilePickerListener >
 
     OUString                maPath;
     OUString                maCurFilter;
+    OUString                maSelectFilter;
     Timer                   maPreViewTimer;
     Graphic                 maGraphic;
 
@@ -753,6 +754,18 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
 
     loadConfig();
 
+    // when no filter is set, we set the curentFilter to <all>
+    if ( !maCurFilter.getLength() && maSelectFilter.getLength() )
+    {
+        Reference< XFilterManager > xFltMgr( mxFileDlg, UNO_QUERY );
+        try
+        {
+            xFltMgr->setCurrentFilter( maSelectFilter );
+        }
+        catch( IllegalArgumentException )
+        {}
+    }
+
     // show the dialog
     sal_Int16 nRet = mxFileDlg->execute();
 
@@ -871,6 +884,18 @@ ErrCode FileDialogHelper_Impl::execute()
         return ERRCODE_ABORT;
 
     loadConfig();
+
+    // when no filter is set, we set the curentFilter to <all>
+    if ( !maCurFilter.getLength() && maSelectFilter.getLength() )
+    {
+        Reference< XFilterManager > xFltMgr( mxFileDlg, UNO_QUERY );
+        try
+        {
+            xFltMgr->setCurrentFilter( maSelectFilter );
+        }
+        catch( IllegalArgumentException )
+        {}
+    }
 
     // show the dialog
     sal_Int16 nRet = mxFileDlg->execute();
@@ -1059,6 +1084,7 @@ void FileDialogHelper_Impl::addFilters( sal_uInt32 nFlags,
             try
             {
                 xFltMgr->appendFilter( aAllFilterName, DEFINE_CONST_UNICODE( FILEDIALOG_FILTER_ALL ) );
+                maSelectFilter = aAllFilterName;
             }
             catch( IllegalArgumentException )
             {
@@ -1075,6 +1101,8 @@ void FileDialogHelper_Impl::addFilters( sal_uInt32 nFlags,
         try
         {
             xFltMgr->appendFilter( aUIName, pFilter->GetWildcard().GetWildCard() );
+            if ( !maSelectFilter.getLength() )
+                maSelectFilter = aUIName;
         }
         catch( IllegalArgumentException )
         {
@@ -1095,6 +1123,9 @@ void FileDialogHelper_Impl::addFilter( const OUString& rFilterName,
     try
     {
         xFltMgr->appendFilter( rFilterName, rExtension );
+
+        if ( !maSelectFilter.getLength() )
+            maSelectFilter = rFilterName;
     }
     catch( IllegalArgumentException )
     {
@@ -1136,8 +1167,10 @@ void FileDialogHelper_Impl::addGraphicFilter()
 
     try
     {
-        xFltMgr->appendFilter( String( SfxResId( STR_SFX_IMPORT_ALL ) ),
-                               aExtensions );
+        OUString aAllFilterName = String( SfxResId( STR_SFX_IMPORT_ALL ) );
+
+        xFltMgr->appendFilter( aAllFilterName, aExtensions );
+        maSelectFilter = aAllFilterName;
     }
     catch( IllegalArgumentException )
     {
