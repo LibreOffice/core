@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saxwriter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2000-10-25 08:13:18 $
+ *  last change: $Author: jbu $ $Date: 2001-01-04 07:21:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@
 #include <cppuhelper/implbase3.hxx>
 
 #include <rtl/strbuf.hxx>
+#include <rtl/byteseq.hxx>
 
 #include <assert.h>
 
@@ -110,7 +111,7 @@ namespace sax_expatwrap {
 *                    Set this to true, if you want to perform this special conversion
 *
 ****/
-sal_Int32 CalcXMLLen( const Sequence<sal_Int8> & seq , sal_Bool bConvertAll )
+sal_Int32 CalcXMLLen( const Sequence<sal_Int8> & seq , sal_Bool bConvertAll ) throw ( SAXException )
 {
     sal_Int32 nLen = 0;
     const sal_Int8 *pArray = seq.getConstArray();
@@ -142,6 +143,13 @@ sal_Int32 CalcXMLLen( const Sequence<sal_Int8> & seq , sal_Bool bConvertAll )
         }
         else if( bConvertAll &&  9 == c ) {
             nLen += 6;
+        }
+        else if( c >= 0 && c < 32 && c != 9 && c != 13 && c != 10 )
+        {
+            SAXException except;
+            except.Message = OUString( RTL_CONSTASCII_USTRINGPARAM( "Invalid charcter during XML-Export: " ) );
+            except.Message += OUString::valueOf( (sal_Int32) c );
+            throw except;
         }
         else {
             nLen ++;
@@ -265,7 +273,9 @@ private:
 
     Sequence < sal_Int8 > ustring2UTF8( const OUString &sValue )
         {
-            return m_unicode2utf8.convert( sValue );
+            // OSTRING is binary compatible to a SAL_
+            OString o = OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 );
+            return Sequence< sal_Int8 > ( *( Sequence< sal_Int8 > *) &o );
         }
 
     Sequence < sal_Int8 > utf8ToXML( const Sequence< sal_Int8 > & , sal_Bool bConvertAll );
@@ -279,7 +289,6 @@ private:
         {
             return utf8ToXML( ustring2UTF8( sValue ) , bConvertAll );
         }
-
 
     Unicode2TextConverter m_unicode2utf8;
     Reference< XOutputStream > m_out;
@@ -327,7 +336,18 @@ Sequence< OUString >    SaxWriter_getSupportedServiceNames(void) throw()
 
 Sequence < sal_Int8 >  SAXWriter::utf8ToXML( const Sequence<sal_Int8> & seqSource ,  sal_Bool bConvertAll )
 {
-    Sequence< sal_Int8 > seqTarget( CalcXMLLen( seqSource , bConvertAll ) );
+    sal_Int32 nXMLLength = CalcXMLLen( seqSource , bConvertAll );
+
+    // Note: This optimization does only work as long as all possible conversions
+    //       INCREASE the length of the resulting string. Ensure, that this optimization
+    //       is removed in case there is added a new conversion, that decreases or
+    //       does not change the length of the string.
+    if( nXMLLength == seqSource.getLength() )
+    {
+        return seqSource;
+    }
+
+    Sequence< sal_Int8 > seqTarget( nXMLLength );
     sal_Int32 nMaxSource = seqSource.getLength();
     const sal_Int8 *pSource = seqSource.getConstArray();
     sal_Int8  *pTarget = seqTarget.getArray();
@@ -386,16 +406,25 @@ void SAXWriter::doIndent( Sequence<sal_Int8> &seq )
 
         // write the linebreaks !
         Sequence<sal_Int8> seqIndent( m_nLevel + 1 );
-        seqIndent.getArray()[0] = 10;
-        memset( &(seqIndent.getArray()[1] ) , 32 , m_nLevel );
+        char *pData = (char*) seqIndent.getConstArray();
+        pData[0] = 10;
+        memset( &(pData[1]) , 32 , m_nLevel );
         writeSequence( seqIndent );
 
         // remove one leading space in the sequence
-        if( seq.getLength() && 32 == seq.getArray()[0] ) {
-            memmove( seq.getArray() , &(seq.getArray()[1]) , seq.getLength() -1 );
-            seq.realloc( seq.getLength()-1 );
-        }
+        if( seq.getLength() && 32 == seq.getArray()[0] )
+        {
+            memmove( (char*) seq.getConstArray() , &(seq.getConstArray()[1]) , seq.getLength() -1 );
 
+            // an realloc is too expensive
+            // ByteSequence and Sequence< sal_Int8> are binary identical
+            ByteSequence *pSeq = ( ByteSequence *) &seq;
+
+            // WE OWN the sequence  !
+            OSL_ASSERT( pSeq->getHandle()->nRefCount == 1 );
+
+            pSeq->getHandle()->nElements --;
+        }
     }
 
     m_bForceLineBreak = sal_False;
@@ -510,7 +539,7 @@ void SAXWriter::startElement(const OUString& aName, const Reference< XAttributeL
 
     sal_Int32 nAttribCount = xAttribs.is() ? xAttribs->getLength() : 0;
 
-    OStringBuffer str(64 *( nAttribCount+1) );
+    OStringBuffer str(92 *( nAttribCount+1) );
     str.append( "<" );
 
     // Tags may only contain ascii chars !
@@ -529,12 +558,9 @@ void SAXWriter::startElement(const OUString& aName, const Reference< XAttributeL
     // preparing for empty tag
     str.append( ">" );
 
-    Sequence<sal_Int8> seqWrite( str.getLength() );
-    memcpy( seqWrite.getArray() , str.getStr() , str.getLength()  );
+    m_seqStartElement = Sequence< sal_Int8 >( (const sal_Int8*) str.getStr(),str.getLength() );
 
-    doIndent( seqWrite );
-
-    m_seqStartElement = seqWrite;
+    doIndent( m_seqStartElement );
 
     m_nLevel ++;
 }
@@ -562,18 +588,17 @@ void SAXWriter::endElement(const OUString& aName)   throw (SAXException, Runtime
     }
     else {
         // only ascii chars allowed
+        OString o = OUStringToOString( aName , RTL_TEXTENCODING_UTF8 );
+
         sal_Int32 nLen = aName.getLength();
         Sequence< sal_Int8 > seqWrite( nLen + 3 );
 
-        sal_Int8 *p = seqWrite.getArray();
-        sal_Unicode *pStr = (sal_Unicode * )aName.getStr();
+        sal_Int8 *p = (sal_Int8*)seqWrite.getConstArray();     //we own it
+        const sal_Int8 *pSource = (sal_Int8*) o.pData->buffer;
 
         p[0] = '<';
         p[1] = '/';
-        for( sal_Int32 i = 0 ; i < nLen ; i ++ )
-        {
-            p[2+i] = (sal_Int8) pStr[i];
-        }
+        memcpy( &(p[2]) , pSource , nLen );
         p[nLen+2] = '>';
 
         doIndent( seqWrite );
