@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tencinfo.c,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 14:15:15 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 14:25:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -906,6 +906,16 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromMimeCharset( const sal_Char* pM
                use in Thailand. */
         { "koi8u", RTL_TEXTENCODING_KOI8_U },
         { "cpis", RTL_TEXTENCODING_IBM_861 },
+        { "ksc56011987", RTL_TEXTENCODING_MS_949 },
+        { "isoir149", RTL_TEXTENCODING_MS_949 },
+        { "ksc56011989", RTL_TEXTENCODING_MS_949 },
+        { "ksc5601", RTL_TEXTENCODING_MS_949 },
+        { "korean", RTL_TEXTENCODING_MS_949 },
+        { "csksc56011987", RTL_TEXTENCODING_MS_949 },
+            /* Map KS_C_5601-1987 and aliases to MS-949 instead of EUC-KR, as
+               this character set identifier seems to be prominently used by MS
+               to stand for KS C 5601 plus MS-949 extensions */
+        { "latin9", RTL_TEXTENCODING_ISO_8859_15 },
         { NULL, RTL_TEXTENCODING_DONTKNOW }
     };
 
