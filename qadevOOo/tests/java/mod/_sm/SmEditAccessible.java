@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SmEditAccessible.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:17:44 $
+ *  last change:$Date: 2003-01-29 16:39:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@ import drafts.com.sun.star.accessibility.XAccessible;
 import drafts.com.sun.star.accessibility.AccessibleRole;
 import util.utils;
 import drafts.com.sun.star.accessibility.XAccessibleComponent;
+import drafts.com.sun.star.accessibility.XAccessibleContext;
 
 /**
  * Object implements the following interfaces :
@@ -164,13 +165,15 @@ public class SmEditAccessible extends TestCase {
         log.println("ImplementationName " + utils.getImplName(oObj));
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
-
+        final XAccessibleContext con = (XAccessibleContext) UnoRuntime.queryInterface(XAccessibleContext.class, oObj);
         tEnv.addObjRelation("EventProducer",
             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer(){
                 public void fireEvent() {
                     try {
-                        xPS.setPropertyValue("Formula", "sum hat x");
+                        System.out.println("Childs "+con.getAccessibleChildCount());
+                        xPS.setPropertyValue("Formula", "sum hat x \n int a \n sum b");
                         shortWait();
+                        System.out.println("Childs "+con.getAccessibleChildCount());
                         xPS.setPropertyValue("Formula", expFormula);
                         shortWait();
                     } catch(com.sun.star.lang.WrappedTargetException e) {
