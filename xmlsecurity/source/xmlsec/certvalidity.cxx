@@ -2,9 +2,9 @@
  *
  *  $RCSfile: certvalidity.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mmi $ $Date: 2004-08-03 10:11:30 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:24:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,60 +68,60 @@
 using ::rtl::OUString ;
 using namespace ::com::sun::star::security ;
 
-#define CERT_VALIDITY_VALID_STR "valid certificate"
-#define CERT_VALIDITY_INVALID_STR "invalid certificate"
-#define CERT_VALIDITY_UNTRUSTED_STR "untrusted certificate"
-#define CERT_VALIDITY_TIMEOUT_STR "expired certificate"
-#define CERT_VALIDITY_REVOKED_STR "revoked certificate"
-#define CERT_VALIDITY_UNKNOWN_REVOKATION_STR "unknown certificate revocation status"
-#define CERT_VALIDITY_SIGNATURE_INVALID_STR "invalid certificate signature"
-#define CERT_VALIDITY_EXTENSION_INVALID_STR "invalid certificate extension"
-#define CERT_VALIDITY_EXTENSION_UNKNOWN_STR "unknown critical certificate extension"
-#define CERT_VALIDITY_ISSUER_UNKNOWN_STR "unknown certificate issuer"
-#define CERT_VALIDITY_ISSUER_UNTRUSTED_STR "untrusted certificate issuer"
-#define CERT_VALIDITY_ISSUER_INVALID_STR "invalid certificate issuer"
-#define CERT_VALIDITY_ROOT_UNKNOWN_STR "unknown root certificate"
-#define CERT_VALIDITY_ROOT_UNTRUSTED_STR "untrusted root certificate"
-#define CERT_VALIDITY_ROOT_INVALID_STR "invalid root certificate"
-#define CERT_VALIDITY_CHAIN_INCOMPLETE_STR "invalid certification path"
+#define VALID_STR "valid certificate"
+#define INVALID_STR "invalid certificate"
+#define UNTRUSTED_STR "untrusted certificate"
+#define TIMEOUT_STR "expired certificate"
+#define REVOKED_STR "revoked certificate"
+#define UNKNOWN_REVOKATION_STR "unknown certificate revocation status"
+#define SIGNATURE_INVALID_STR "invalid certificate signature"
+#define EXTENSION_INVALID_STR "invalid certificate extension"
+#define EXTENSION_UNKNOWN_STR "unknown critical certificate extension"
+#define ISSUER_UNKNOWN_STR "unknown certificate issuer"
+#define ISSUER_UNTRUSTED_STR "untrusted certificate issuer"
+#define ISSUER_INVALID_STR "invalid certificate issuer"
+#define ROOT_UNKNOWN_STR "unknown root certificate"
+#define ROOT_UNTRUSTED_STR "untrusted root certificate"
+#define ROOT_INVALID_STR "invalid root certificate"
+#define CHAIN_INCOMPLETE_STR "invalid certification path"
 
 rtl::OUString certificateValidityToOUString( ::sal_Int32 certValidity ) {
     OUString aValidity ;
 
     if( !certValidity ) {
-        aValidity = OUString::createFromAscii( ( const char* )CERT_VALIDITY_VALID_STR ) ;
-    } else if( ( certValidity & CertificateValidity::CERT_VALIDITY_INVALID ) == CertificateValidity::CERT_VALIDITY_INVALID ) {
-         aValidity = OUString::createFromAscii( ( const char* )CERT_VALIDITY_INVALID_STR ) ;
-    } else if( ( certValidity &  CertificateValidity::CERT_VALIDITY_UNTRUSTED ) ==  CertificateValidity::CERT_VALIDITY_UNTRUSTED ) {
-         aValidity = OUString::createFromAscii( ( const char* )CERT_VALIDITY_UNTRUSTED_STR ) ;
-    } else if( ( certValidity & CertificateValidity::CERT_VALIDITY_TIMEOUT ) == CertificateValidity::CERT_VALIDITY_TIMEOUT ) {
-         aValidity = OUString::createFromAscii( ( const char* )CERT_VALIDITY_TIMEOUT_STR ) ;
-    } else if( ( certValidity & CertificateValidity::CERT_VALIDITY_REVOKED ) == CertificateValidity::CERT_VALIDITY_REVOKED ) {
-         aValidity = OUString::createFromAscii( ( const char* )CERT_VALIDITY_REVOKED_STR ) ;
-    } else if( ( certValidity &  CertificateValidity::CERT_VALIDITY_UNKNOWN_REVOKATION ) == CertificateValidity::CERT_VALIDITY_UNKNOWN_REVOKATION ) {
-         aValidity = OUString::createFromAscii( ( const char* )CERT_VALIDITY_UNKNOWN_REVOKATION_STR ) ;
-    } else if( ( certValidity &  CertificateValidity::CERT_VALIDITY_SIGNATURE_INVALID ) == CertificateValidity::CERT_VALIDITY_SIGNATURE_INVALID ) {
-         aValidity = OUString::createFromAscii( ( const char* )CERT_VALIDITY_SIGNATURE_INVALID_STR ) ;
-    } else if( ( certValidity &  CertificateValidity::CERT_VALIDITY_EXTENSION_INVALID ) == CertificateValidity::CERT_VALIDITY_EXTENSION_INVALID ) {
-         aValidity = OUString::createFromAscii( ( const char* )CERT_VALIDITY_EXTENSION_INVALID_STR ) ;
-    } else if( ( certValidity &  CertificateValidity::CERT_VALIDITY_EXTENSION_UNKNOWN ) == CertificateValidity::CERT_VALIDITY_EXTENSION_UNKNOWN ) {
-         aValidity = OUString::createFromAscii( ( const char* )CERT_VALIDITY_EXTENSION_UNKNOWN_STR ) ;
-    } else if( ( certValidity &  CertificateValidity::CERT_VALIDITY_ISSUER_UNKNOWN ) == CertificateValidity::CERT_VALIDITY_ISSUER_UNKNOWN ) {
-         aValidity = OUString::createFromAscii( ( const char* )CERT_VALIDITY_ISSUER_UNKNOWN_STR ) ;
-    } else if( ( certValidity &  CertificateValidity::CERT_VALIDITY_ISSUER_UNTRUSTED ) == CertificateValidity::CERT_VALIDITY_ISSUER_UNTRUSTED ) {
-         aValidity = OUString::createFromAscii( ( const char* )CERT_VALIDITY_ISSUER_UNTRUSTED_STR ) ;
-    } else if( ( certValidity &  CertificateValidity::CERT_VALIDITY_ISSUER_INVALID ) == CertificateValidity::CERT_VALIDITY_ISSUER_INVALID ) {
-         aValidity = OUString::createFromAscii( ( const char* )CERT_VALIDITY_ISSUER_INVALID_STR ) ;
-    } else if( ( certValidity &  CertificateValidity::CERT_VALIDITY_ROOT_UNKNOWN ) == CertificateValidity::CERT_VALIDITY_ROOT_UNKNOWN ) {
-         aValidity = OUString::createFromAscii( ( const char* )CERT_VALIDITY_ROOT_UNKNOWN_STR ) ;
-    } else if( ( certValidity &  CertificateValidity::CERT_VALIDITY_ROOT_UNTRUSTED ) == CertificateValidity::CERT_VALIDITY_ROOT_UNTRUSTED ) {
-         aValidity = OUString::createFromAscii( ( const char* )CERT_VALIDITY_ROOT_UNTRUSTED_STR ) ;
-    } else if( ( certValidity &  CertificateValidity::CERT_VALIDITY_ROOT_INVALID ) == CertificateValidity::CERT_VALIDITY_ROOT_INVALID ) {
-         aValidity = OUString::createFromAscii( ( const char* )CERT_VALIDITY_ROOT_INVALID_STR ) ;
-    } else if( ( certValidity &  CertificateValidity::CERT_VALIDITY_CHAIN_INCOMPLETE ) == CertificateValidity::CERT_VALIDITY_CHAIN_INCOMPLETE ) {
-         aValidity = OUString::createFromAscii( ( const char* )CERT_VALIDITY_CHAIN_INCOMPLETE_STR ) ;
+        aValidity = OUString::createFromAscii( ( const char* )VALID_STR ) ;
+    } else if( ( certValidity & CertificateValidity::INVALID ) == CertificateValidity::INVALID ) {
+         aValidity = OUString::createFromAscii( ( const char* )INVALID_STR ) ;
+    } else if( ( certValidity &  CertificateValidity::UNTRUSTED ) ==  CertificateValidity::UNTRUSTED ) {
+         aValidity = OUString::createFromAscii( ( const char* )UNTRUSTED_STR ) ;
+    } else if( ( certValidity & CertificateValidity::TIMEOUT ) == CertificateValidity::TIMEOUT ) {
+         aValidity = OUString::createFromAscii( ( const char* )TIMEOUT_STR ) ;
+    } else if( ( certValidity & CertificateValidity::REVOKED ) == CertificateValidity::REVOKED ) {
+         aValidity = OUString::createFromAscii( ( const char* )REVOKED_STR ) ;
+    } else if( ( certValidity &  CertificateValidity::UNKNOWN_REVOKATION ) == CertificateValidity::UNKNOWN_REVOKATION ) {
+         aValidity = OUString::createFromAscii( ( const char* )UNKNOWN_REVOKATION_STR ) ;
+    } else if( ( certValidity &  CertificateValidity::SIGNATURE_INVALID ) == CertificateValidity::SIGNATURE_INVALID ) {
+         aValidity = OUString::createFromAscii( ( const char* )SIGNATURE_INVALID_STR ) ;
+    } else if( ( certValidity &  CertificateValidity::EXTENSION_INVALID ) == CertificateValidity::EXTENSION_INVALID ) {
+         aValidity = OUString::createFromAscii( ( const char* )EXTENSION_INVALID_STR ) ;
+    } else if( ( certValidity &  CertificateValidity::EXTENSION_UNKNOWN ) == CertificateValidity::EXTENSION_UNKNOWN ) {
+         aValidity = OUString::createFromAscii( ( const char* )EXTENSION_UNKNOWN_STR ) ;
+    } else if( ( certValidity &  CertificateValidity::ISSUER_UNKNOWN ) == CertificateValidity::ISSUER_UNKNOWN ) {
+         aValidity = OUString::createFromAscii( ( const char* )ISSUER_UNKNOWN_STR ) ;
+    } else if( ( certValidity &  CertificateValidity::ISSUER_UNTRUSTED ) == CertificateValidity::ISSUER_UNTRUSTED ) {
+         aValidity = OUString::createFromAscii( ( const char* )ISSUER_UNTRUSTED_STR ) ;
+    } else if( ( certValidity &  CertificateValidity::ISSUER_INVALID ) == CertificateValidity::ISSUER_INVALID ) {
+         aValidity = OUString::createFromAscii( ( const char* )ISSUER_INVALID_STR ) ;
+    } else if( ( certValidity &  CertificateValidity::ROOT_UNKNOWN ) == CertificateValidity::ROOT_UNKNOWN ) {
+         aValidity = OUString::createFromAscii( ( const char* )ROOT_UNKNOWN_STR ) ;
+    } else if( ( certValidity &  CertificateValidity::ROOT_UNTRUSTED ) == CertificateValidity::ROOT_UNTRUSTED ) {
+         aValidity = OUString::createFromAscii( ( const char* )ROOT_UNTRUSTED_STR ) ;
+    } else if( ( certValidity &  CertificateValidity::ROOT_INVALID ) == CertificateValidity::ROOT_INVALID ) {
+         aValidity = OUString::createFromAscii( ( const char* )ROOT_INVALID_STR ) ;
+    } else if( ( certValidity &  CertificateValidity::CHAIN_INCOMPLETE ) == CertificateValidity::CHAIN_INCOMPLETE ) {
+         aValidity = OUString::createFromAscii( ( const char* )CHAIN_INCOMPLETE_STR ) ;
     } else {
-         aValidity = OUString::createFromAscii( ( const char* )CERT_VALIDITY_INVALID_STR ) ;
+         aValidity = OUString::createFromAscii( ( const char* )INVALID_STR ) ;
     }
 
     return aValidity ;
