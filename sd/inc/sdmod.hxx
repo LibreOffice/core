@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-01 11:29:34 $
+ *  last change: $Author: af $ $Date: 2002-11-28 10:48:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,8 @@ class SvNumberFormatter;
 class SfxErrorHandler;
 class SdView;
 class OutputDevice;
-
+class SdPage;
+class SdDrawDocument;
 // ----------------------
 // - SdOptionStreamMode -
 // ----------------------
@@ -184,6 +185,20 @@ public:
     virtual SfxItemSet*  CreateItemSet( USHORT nId );
     virtual void         ApplyItemSet( USHORT nId, const SfxItemSet& rSet );
     virtual SfxTabPage*  CreateTabPage( USHORT nId, Window* pParent, const SfxItemSet& rSet );
+
+private:
+
+    /** Create a new summary page.  When the document has been created in
+        the kiosk mode with automatical transitions then this method adds
+        this kind of transition to the new summary page.
+        @param pViewFrame
+            The view frame that is used to execute the slot for creating the
+            summary page.
+        @param pDocument
+            The document which will contain the summary page and from which
+            the information about the default transition is retrieved.
+    */
+    void AddSummaryPage (SfxViewFrame* pViewFrame, SdDrawDocument* pDocument);
 };
 
 

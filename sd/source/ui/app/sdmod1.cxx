@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod1.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ka $ $Date: 2002-11-05 15:37:00 $
+ *  last change: $Author: af $ $Date: 2002-11-28 10:52:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -561,10 +561,7 @@ void SdModule::Execute(SfxRequest& rReq)
                         }
 
                         if(bSummary)
-                        {
-                            pViewFrame->GetDispatcher()->Execute(SID_SUMMARY_PAGE,
-                                SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD);
-                        }
+                            AddSummaryPage (pViewFrame, pDoc);
 
                         if(aDocPath.Len() == 0) // leeres Document?
                         {
@@ -857,4 +854,39 @@ void SdModule::GetState(SfxItemSet& rItemSet)
     }
 }
 
+
+
+
+void SdModule::AddSummaryPage (SfxViewFrame* pViewFrame, SdDrawDocument* pDocument)
+{
+    pViewFrame->GetDispatcher()->Execute(SID_SUMMARY_PAGE,
+        SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD);
+
+    OSL_ASSERT (pDocument!=NULL);
+
+    sal_Int32 nPageCount = pDocument->GetSdPageCount (PK_STANDARD);
+
+    // We need at least two pages: the summary page and one to use as
+    // template to take the transition parameters from.
+    if (nPageCount >= 2)
+    {
+        // Get a page from which to retrieve the transition parameters.
+        SdPage* pTemplatePage = pDocument->GetSdPage (0, PK_STANDARD);
+        OSL_ASSERT (pTemplatePage!=NULL);
+
+        // The summary page, if it exists, is the last page.
+        SdPage* pSummaryPage = pDocument->GetSdPage (nPageCount-1, PK_STANDARD);
+        OSL_ASSERT (pSummaryPage!=NULL);
+
+        // Take the change mode of the template page as indication of the
+        // document's kiosk mode.
+        if (pTemplatePage->GetPresChange() == PRESCHANGE_AUTO)
+        {
+            pSummaryPage->SetPresChange(PRESCHANGE_AUTO);
+            pSummaryPage->SetFadeEffect (pTemplatePage->GetFadeEffect());
+            pSummaryPage->SetFadeSpeed (pTemplatePage->GetFadeSpeed());
+            pSummaryPage->SetTime (pTemplatePage->GetTime());
+        }
+    }
+}
 
