@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbgoutsw.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 11:45:44 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 13:58:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@ class SfxItemSet;
 struct SwPosition;
 class SwPaM;
 class SwNodeNum;
+class SwUndo;
 class SwUndos;
 class SwRect;
 class SwFrmFmt;
@@ -107,6 +108,7 @@ const char * dbg_out(SwNodes & rNodes);
 const char * dbg_out(const SwPosition & rPos);
 const char * dbg_out(const SwPaM & rPam);
 const char * dbg_out(const SwNodeNum & rNum);
+const char * dbg_out(const SwUndo & rUndo);
 const char * dbg_out(const SwUndos & rUndos);
 const char * dbg_out(const SwRewriter & rRewriter);
 const char * dbg_out(const SwNumRule & rRule);
