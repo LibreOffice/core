@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 12:00:58 $
+ *  last change: $Author: obo $ $Date: 2004-06-08 10:29:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2779,7 +2779,8 @@ void ScGridWindow::SelectForContextMenu( const Point& rPosPixel )
     //  the cursor is moved or an object at the click position selected.
     //  (see SwEditWin::SelectMenuPosition in Writer)
 
-    short nCellX, nCellY;
+    SCsCOL nCellX;
+    SCsROW nCellY;
     pViewData->GetPosFromPixel( rPosPixel.X(), rPosPixel.Y(), eWhich, nCellX, nCellY );
     ScTabView* pView = pViewData->GetView();
     SdrView* pDrawView = pView->GetSdrView();
