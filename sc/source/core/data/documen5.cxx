@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen5.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: sab $ $Date: 2002-07-10 15:15:07 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:21:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,6 @@
 #include <svx/svdpage.hxx>
 #include <sch/schdll.hxx>
 #include <sch/memchrt.hxx>
-#include <sch/schdll0.hxx>
 #include <so3/ipobj.hxx>
 
 #ifndef SO2_DECL_SVINPLACEOBJECT_DEFINED
@@ -92,6 +91,7 @@ SO2_DECL_REF(SvInPlaceObject)
 #ifndef _GLOBNAME_HXX
 #include <tools/globname.hxx>
 #endif
+#include <sot/exchange.hxx>
 
 // -----------------------------------------------------------------------
 
@@ -521,8 +521,7 @@ void ScDocument::UpdateChartListenerCollection()
                             //  time
                             SvInfoObject* pInfoObj = pShell->Find(aObjName);
                             DBG_ASSERT(pInfoObj, "Why isn't here a SvInfoObject?");
-                            if ( pInfoObj &&
-                                 ((nId = SchModuleDummy::HasID(pInfoObj->GetClassName()) ) != 0) )
+                            if ( pInfoObj && ( nId = SotExchange::IsChart( pInfoObj->GetClassName() ) ) )
                             {
                                 SvInPlaceObjectRef aIPObj = ((SdrOle2Obj*)pObject)->GetObjRef();
                                 DBG_ASSERT(aIPObj.Is(), "no SvInPlaceObject given");
