@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: kso $ $Date: 2000-10-16 14:55:20 $
+#   last change: $Author: kso $ $Date: 2001-01-26 16:02:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -97,16 +97,18 @@ SLOFILES=\
     $(SLO)$/webdavcontentcaps.obj	\
     $(SLO)$/webdavresultset.obj     \
     $(SLO)$/webdavdatasupplier.obj	\
-    $(SLO)$/DAVProperties.obj		\
-    $(SLO)$/DAVResource.obj			\
+    $(SLO)$/DAVProperties.obj	\
+    $(SLO)$/DAVResource.obj		\
     $(SLO)$/DAVSessionFactory.obj	\
-    $(SLO)$/NeonUri.obj				\
-    $(SLO)$/NeonInputStream.obj		\
+    $(SLO)$/NeonUri.obj		\
+    $(SLO)$/NeonInputStream.obj	\
     $(SLO)$/NeonPropFindRequest.obj	\
-    $(SLO)$/NeonPUTFile.obj			\
-    $(SLO)$/NeonSession.obj \
-    $(SLO)$/authinteraction.obj \
-    $(SLO)$/DateTimeHelper.obj 
+    $(SLO)$/NeonPUTFile.obj		\
+    $(SLO)$/NeonSession.obj 	\
+    $(SLO)$/authinteraction.obj 	\
+    $(SLO)$/DateTimeHelper.obj	\
+    $(SLO)$/proxyconfig.obj
+
 
 # NETBSD: somewhere we have to instantiate the static data members.
 # NETBSD-1.2.1 doesn't know about weak symbols so the default mechanism for GCC won't work.
