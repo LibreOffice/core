@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: os $ $Date: 2000-12-09 14:24:09 $
+ *  last change: $Author: os $ $Date: 2000-12-09 15:37:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -593,6 +593,17 @@ void SwUnoPropertyMapProvider::Sort(sal_uInt16 nId)
         { SW_PROP_NAME(UNO_NAME_CONTENT_SECTION), WID_IDX_CONTENT_SECTION,  &::getCppuType((uno::Reference<text::XTextSection>*)0)  , PropertyAttribute::READONLY,     0},\
         { SW_PROP_NAME(UNO_NAME_HEADER_SECTION), WID_IDX_HEADER_SECTION,  &::getCppuType((uno::Reference<text::XTextSection>*)0)  , PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,     0},\
 
+#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__))
+#define ANCHOR_TYPES_PROPERTY   { SW_PROP_NAME(UNO_NAME_ANCHOR_TYPES   ),   FN_UNO_ANCHOR_TYPES, new uno::Type(::getCppuType((uno::Sequence<text::TextContentAnchorType>*)0)),PropertyAttribute::READONLY, 0xff},
+#else
+#define ANCHOR_TYPES_PROPERTY    { SW_PROP_NAME(UNO_NAME_ANCHOR_TYPES   ),  FN_UNO_ANCHOR_TYPES,    &::getCppuType((const uno::Sequence<text::TextContentAnchorType>*)0),PropertyAttribute::READONLY, 0xff},
+#endif
+
+#define COMMON_TEXT_CONTENT_PROPERTIES \
+                    { SW_PROP_NAME(UNO_NAME_ANCHOR_TYPE   ),    FN_UNO_ANCHOR_TYPE, &::getCppuType((const sal_Int16*)0),                PropertyAttribute::READONLY, MID_ANCHOR_ANCHORTYPE},\
+                    ANCHOR_TYPES_PROPERTY\
+                    { SW_PROP_NAME(UNO_NAME_TEXT_WRAP),         FN_UNO_TEXT_WRAP,   &::getCppuType((const sal_Int16*)0),                PropertyAttribute::READONLY, MID_SURROUND_SURROUNDTYPE  },
+
 
 const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nPropertyId)
 {
@@ -631,13 +642,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
 #else
                     { SW_PROP_NAME(UNO_NAME_TABSTOPS),                  RES_PARATR_TABSTOP,     &::getCppuType((const uno::Sequence<style::TabStop>*)0),        PropertyAttribute::MAYBEVOID, CONVERT_TWIPS},
 #endif
-                    { SW_PROP_NAME(UNO_NAME_ANCHOR_TYPE   ),    FN_UNO_ANCHOR_TYPE, &::getCppuType((const sal_Int16*)0),                PropertyAttribute::READONLY, MID_ANCHOR_ANCHORTYPE},
-#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__))
-                    { SW_PROP_NAME(UNO_NAME_ANCHOR_TYPES   ),   FN_UNO_ANCHOR_TYPES, new uno::Type(::getCppuType((uno::Sequence<text::TextContentAnchorType>*)0)),PropertyAttribute::READONLY, 0xff},
-#else
-                    { SW_PROP_NAME(UNO_NAME_ANCHOR_TYPES   ),   FN_UNO_ANCHOR_TYPES,    &::getCppuType((const uno::Sequence<text::TextContentAnchorType>*)0),PropertyAttribute::READONLY, 0xff},
-#endif
-                    { SW_PROP_NAME(UNO_NAME_TEXT_WRAP),         FN_UNO_TEXT_WRAP,   &::getCppuType((const sal_Int16*)0),                PropertyAttribute::READONLY, MID_SURROUND_SURROUNDTYPE  },
+                    COMMON_TEXT_CONTENT_PROPERTIES
                     {0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aParagraphMap_Impl;
@@ -1150,6 +1155,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_ENDNOTE_NUMBERING_PREFIX)      ,RES_END_AT_TXTEND,     &::getCppuType((const OUString*)0)  ,        PROPERTY_NONE,   MID_PREFIX       },
                     { SW_PROP_NAME(UNO_NAME_ENDNOTE_NUMBERING_SUFFIX)      ,RES_END_AT_TXTEND,     &::getCppuType((const OUString*)0)  ,        PROPERTY_NONE,   MID_SUFFIX       },
                     { SW_PROP_NAME(UNO_NAME_DOCUMENT_INDEX), WID_SECT_DOCUMENT_INDEX, &::getCppuType((uno::Reference<text::XDocumentIndex>*)0), PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID, 0 },
+                    COMMON_TEXT_CONTENT_PROPERTIES
                     {0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aSectionPropertyMap_Impl;
