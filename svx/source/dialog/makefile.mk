@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.31 $
+#   $Revision: 1.32 $
 #
-#   last change: $Author: hjs $ $Date: 2004-06-30 13:35:47 $
+#   last change: $Author: obo $ $Date: 2004-07-06 16:37:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -133,7 +133,7 @@ SRC1FILES =  \
         frmdirlbox.src \
         hangulhanjadlg.src \
         commonlingui.src \
-              fontsubs.src				\
+        fontsubs.src				\
         readonlyimage.src           \
         opthtml.src					\
         optgdlg.src					\
@@ -141,7 +141,10 @@ SRC1FILES =  \
         treeopt.src					\
         optfltr.src					\
         connpooloptions.src			\
-        internationaloptions.src	\
+        internationaloptions.src \
+        macropg.src \
+        eventdlg.src \
+        cfg.src \
         optjava.src
 
 SRS2NAME=drawdlgs
@@ -206,6 +209,8 @@ EXCEPTIONSFILES=\
     $(SLO)$/selector.obj \
     $(SLO)$/showcols.obj \
     $(SLO)$/svxbmpnumvalueset.obj \
+    $(SLO)$/macropg.obj \
+    $(SLO)$/cfg.obj \
     $(SLO)$/optjava.obj
 
 SLOFILES=\
@@ -389,7 +394,10 @@ LIB1OBJFILES= \
     $(SLO)$/swframeexample.obj \
     $(SLO)$/swframeposstrings.obj \
     $(SLO)$/svxbmpnumvalueset.obj \
-    $(SLO)$/svxgrahicitem.obj
+    $(SLO)$/svxgrahicitem.obj \
+    $(SLO)$/eventdlg.obj \
+    $(SLO)$/macropg.obj \
+    $(SLO)$/cfg.obj
 
 LIB2TARGET= $(SLB)$/cui.lib
 
