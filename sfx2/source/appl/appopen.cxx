@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-29 08:52:38 $
+ *  last change: $Author: cd $ $Date: 2001-07-02 07:59:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1077,7 +1077,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                                                     ::rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), UNO_QUERY );
             xTrans->parseStrict( aURL );
 
-            aTypeName = xTypeDetection->queryTypeByURL( aURL.Complete );
+            aTypeName = xTypeDetection->queryTypeByURL( aURL.Main );
             SfxFilterMatcher& rMatcher = SFX_APP()->GetFilterMatcher();
             const SfxFilter* pFilter = rMatcher.GetFilter4EA( aTypeName );
             if ( !pFilter || !( pFilter->IsOwnFormat() ))
