@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-03 14:40:09 $
+ *  last change: $Author: mtg $ $Date: 2001-07-19 16:19:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,8 +148,6 @@ public:
     virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
 
     static rtl::OUString GetProgrammaticName(const SwFieldType& rType, SwDoc& rDoc);
-    static rtl::OUString GetSetExpProgrammaticName(const rtl::OUString& rName);
-    static rtl::OUString GetSetExpUIName(const rtl::OUString& rName);
     static rtl::OUString LocalizeFormula(const SwSetExpField& rFld, const rtl::OUString& rFormula, sal_Bool bQuery);
 
     SwFieldType* GetFldType(sal_Bool bDontCreate = sal_False) const;
