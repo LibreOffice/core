@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Marshal.java,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 12:33:00 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:20:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -432,11 +432,8 @@ class Marshal implements IMarshal {
         writeObject(__M_InterfaceReferenceTypeDescription, m_InterfaceReference);
     }
 
-    void writeReference(ITypeDescription iTypeDescription, Object object) {
-        if(DEBUG) System.err.println("##### " + getClass().getName() + ".writeReference:" + iTypeDescription + " " + object);
-
-        // map the object to universe
-        writeOid(object != null ? (String)_iBridge.mapInterfaceTo(object, new Type(iTypeDescription)) : null);
+    void writeReference(ITypeDescription desc, Object object) {
+        writeOid((String) _iBridge.mapInterfaceTo(object, new Type(desc)));
     }
 
     void writeSequence(ITypeDescription iTypeDescription, Object object) {
