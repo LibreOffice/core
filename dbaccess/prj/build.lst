@@ -1,4 +1,4 @@
-ba	dbaccess	:	connectivity offmgr NULL
+ba	dbaccess	:	boost connectivity offmgr NULL
 ba	dbaccess								usr1	-	all	ba_mkout NULL
 ba	dbaccess\source\ui\inc					get		-	all	ba_uiinc NULL
 ba	dbaccess\source\core\api				nmake	-	all	ba_capi NULL
