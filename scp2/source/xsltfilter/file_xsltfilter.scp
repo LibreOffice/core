@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file_xsltfilter.scp,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 13:10:54 $
+ *  last change: $Author: rt $ $Date: 2004-07-05 08:59:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,13 +80,6 @@ File gid_File_Xsl_Docbooktosoffheadings
     Styles = (PACKED);
     Dir = gid_Dir_Share_Xslt_Docbook;
     Name = "docbooktosoffheadings.xsl";
-End
-
-File gid_File_Xsl_Mswordxmlimport
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Xslt_Microsoftwordxml;
-    Name = "MsWordXMLImport.xsl";
 End
 
 File gid_File_Xsl_Sofftodocbookheadings
@@ -166,6 +159,41 @@ File gid_File_Xsl_Export_Common_Table_Table_Rows
     Name = "/xslt/export/common/table/table_rows.xsl";
 End
 
+File gid_File_Xsl_Export_Excelml_Ooo2excelml
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Xslt_Export_Excelml;
+    Name = "/xslt/export/excelml/ooo2excelml.xsl";
+End
+
+File gid_File_Xsl_Export_Excelml_Style_Mapping
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Xslt_Export_Excelml;
+    Name = "/xslt/export/excelml/style_mapping.xsl";
+End
+
+File gid_File_Xsl_Export_Excelml_Styles
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Xslt_Export_Excelml;
+    Name = "/xslt/export/excelml/styles.xsl";
+End
+
+File gid_File_Xsl_Export_Excelml_Table
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Xslt_Export_Excelml;
+    Name = "/xslt/export/excelml/table.xsl";
+End
+
+File gid_File_Xsl_Export_Wordml_Ooo2wordml
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Xslt_Export_Wordml;
+    Name = "/xslt/export/wordml/ooo2wordml.xsl";
+End
+
 File gid_File_Xsl_Export_Xhtml_Body
     TXT_FILE_BODY;
     Styles = (PACKED);
@@ -231,3 +259,16 @@ File gid_File_Xsl_Export_Xhtml_Table
     Name = "/xslt/export/xhtml/table.xsl";
 End
 
+File gid_File_Xsl_Import_Excelml_Excelml2ooo
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Xslt_Import_Excelml;
+    Name = "/xslt/import/excelml/excelml2ooo.xsl";
+End
+
+File gid_File_Xsl_Import_Wordml_Wordml2ooo
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Xslt_Import_Wordml;
+    Name = "/xslt/import/wordml/wordml2ooo.xsl";
+End
