@@ -4,6 +4,16 @@ ODK_RELEASE=1.0
 
 PRODUCT_NAME=OpenOffice.org$(ODK_RELEASE)
 
+.IF "$(BUILD_SOSL)"==""
+# for SUN build without minor
+ODKNAME=odk$(UPD)
+ODKDOCNAME=$(ODKNAME)_doc
+.ELSE
+# for OpenOffice build with minor 
+ODKNAME=odk$(UPD)$(LAST_MINOR)
+ODKDOCNAME=$(ODKNAME)_doc
+.ENDIF
+
 ODKNAME=odk$(UPD)$(LAST_MINOR)
 ODKDOCNAME=$(ODKNAME)_doc
 
