@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cell2.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: er $ $Date: 2001-11-27 15:17:54 $
+ *  last change: $Author: nn $ $Date: 2002-08-15 10:04:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -669,6 +669,7 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
     USHORT nCol = aPos.Col();
     USHORT nRow = aPos.Row();
     USHORT nTab = aPos.Tab();
+    ScAddress aUndoPos( aPos );         // position for undo cell in pUndoDoc
     ScAddress aOldPos( aPos );
 //  BOOL bPosChanged = FALSE;           // ob diese Zelle bewegt wurde
     BOOL bIsInsert = FALSE;
@@ -880,9 +881,14 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
             bNeedDirty = FALSE;
         if (pUndoDoc && (bValChanged || pRangeData || bOnRefMove))
         {
-            ScFormulaCell* pFCell = new ScFormulaCell( pUndoDoc, aPos, pOld, cMatrixFlag );
-            pFCell->nErgValue = MINDOUBLE;      // damit spaeter changed (Cut/Paste!)
-            pUndoDoc->PutCell( nCol, nRow, nTab, pFCell );
+            //  Copy the cell to aUndoPos, which is its current position in the document,
+            //  so this works when UpdateReference is called before moving the cells
+            //  (InsertCells/DeleteCells - aPos is changed above) as well as when UpdateReference
+            //  is called after moving the cells (MoveBlock/PasteFromClip - aOldPos is changed).
+
+            ScFormulaCell* pFCell = new ScFormulaCell( pUndoDoc, aUndoPos, pOld, cMatrixFlag );
+            pFCell->nErgValue = MINDOUBLE;      // to recognize it as changed later (Cut/Paste!)
+            pUndoDoc->PutCell( aUndoPos, pFCell );
         }
         bValChanged = FALSE;
         if (pRangeData)                     // Shared Formula gegen echte Formel
