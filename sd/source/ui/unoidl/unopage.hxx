@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:29:18 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 18:20:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,7 @@ class SdGenericDrawPage : public SvxFmDrawPage,
                           public ::com::sun::star::drawing::XShapeBinder,
                           public ::com::sun::star::container::XNamed,
                           public ::com::sun::star::beans::XPropertySet,
+                          public ::com::sun::star::animations::XAnimationNodeSupplier,
                           public ::com::sun::star::document::XLinkTargetSupplier
 {
 protected:
@@ -190,6 +191,9 @@ public:
 
     // XServiceInfo
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
+
+    // XAnimationNodeSupplier
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > SAL_CALL getAnimationNode(  ) throw (::com::sun::star::uno::RuntimeException);
 };
 
 #endif
@@ -200,7 +204,6 @@ public:
 
 class SdDrawPage : public ::com::sun::star::drawing::XMasterPageTarget,
                    public ::com::sun::star::presentation::XPresentationPage,
-                   public ::com::sun::star::animations::XAnimationNodeSupplier,
                    public SdGenericDrawPage
 {
 private:
@@ -255,9 +258,6 @@ public:
     // XShapes
     virtual void SAL_CALL add( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL remove( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape ) throw(::com::sun::star::uno::RuntimeException);
-
-    // XAnimationNodeSupplier
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > SAL_CALL getAnimationNode(  ) throw (::com::sun::star::uno::RuntimeException);
 };
 
 /***********************************************************************
