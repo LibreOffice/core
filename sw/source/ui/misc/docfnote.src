@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfnote.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:53:27 $
+ *  last change: $Author: kz $ $Date: 2001-04-11 18:37:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -710,7 +710,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ russian ] = "Ñòèëè çíàêîâ";
         Text[ greek ] = "Óôõë ÷áñáêôŞñùí";
         Text[ dutch ] = "Tekenopmaakprofielen";
-        Text[ french ] = "Styles de caractère";
+        Text[ french ] = "Styles de caractères";
         Text[ spanish ] = "Estilos de carácter";
         Text[ italian ] = "Modelli di carattere";
         Text[ danish ] = "Tegntypografi";
@@ -1291,7 +1291,7 @@ TabPage TP_ENDNOTEOPTION
         Text[ russian ] = "Ñòèëè çíàêîâ";
         Text[ greek ] = "Óôõë ÷áñáêôŞñùí";
         Text[ dutch ] = "Tekenopmaakprofielen";
-        Text[ french ] = "Styles de caractère";
+        Text[ french ] = "Styles de caractères";
         Text[ spanish ] = "Estilos de carácter";
         Text[ italian ] = "Modelli di carattere";
         Text[ danish ] = "Tegntypografi";
