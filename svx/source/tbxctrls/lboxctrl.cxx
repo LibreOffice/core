@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lboxctrl.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:19:31 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 16:55:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,6 +332,7 @@ SvxUndoRedoControl::SvxUndoRedoControl( USHORT nSlotId, USHORT nId, ToolBox& rTb
 {
     rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
     rTbx.Invalidate();
+    aDefaultText = MnemonicGenerator::EraseAllMnemonicChars( rTbx.GetItemText( nId ) );
 }
 
 SvxUndoRedoControl::~SvxUndoRedoControl()
@@ -343,7 +344,12 @@ void SvxUndoRedoControl::StateChanged(
 {
     if ( nSID == SID_UNDO || nSID == SID_REDO )
     {
-        if ( pState && pState->ISA( SfxStringItem ))
+        if ( eState == SFX_ITEM_DISABLED )
+        {
+            ToolBox& rBox = GetToolBox();
+            rBox.SetQuickHelpText( GetId(), aDefaultText );
+        }
+        else if ( pState && pState->ISA( SfxStringItem ) )
         {
             SfxStringItem& rItem = *(SfxStringItem *)pState;
             ToolBox& rBox = GetToolBox();
