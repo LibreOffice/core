@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localize.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-05 09:46:42 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 12:41:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,8 @@
 #include <bootstrp/appdef.hxx>
 #include <bootstrp/command.hxx>
 #include <stdio.h>
+#include "tools/errcode.hxx"
+#include "tools/fsys.hxx"
 
 // #define EHAM02_TEST
 
@@ -72,10 +74,13 @@
 //
 
 const char *ExeTable[][5] = {
-    { "src", "transex3", "-UTF8 -e", "negative", "noiso" },
-    { "hrc", "transex3", "-UTF8 -e", "positive", "noiso" },
-    { "lng", "lngex", "-UTF8 -e", "negative", "noiso" },
-    { "ulf", "lngex", "-UTF8 -ULF -e", "negative", "noiso" },
+    { "src", "transex3", "  -UTF8 -e", "negative", "noiso" },
+    { "hrc", "transex3", "  -UTF8 -e", "positive", "noiso" },
+    //{ "src", "transex3", "-UTF8 -e", "negative", "noiso" },
+    //{ "hrc", "transex3", "-UTF8 -e", "positive", "noiso" },
+
+    //{ "lng", "lngex", "-UTF8 -e", "negative", "noiso" },
+    { "ulf", "ulfex", " -e", "negative", "noiso" },
     { "xrb", "xmlex", "-UTF8 -e", "negative", "iso" },
     { "xxl", "xmlex", "-UTF8 -e", "negative", "iso" },
     { "xgf", "xmlex", "-UTF8 -e -t:xgf", "negative", "iso" },
@@ -97,6 +102,13 @@ const char *NegativeList[] = {
 };
 
 const char *PositiveList[] = {
+"svx/inc/globlmn_tmpl.hrc",
+    "sw/source/ui/inc/swmn_tmpl.hrc",
+    "sw/source/ui/inc/swacc_tmpl.hrc",
+    "sw/source/ui/inc/toolbox_tmpl.hrc",
+    "offmgr/inc/offmenu_tmpl.hrc",
+    "offmgr/source/offapp/intro/intro_tmpl.hrc",
+    "dbaccess/source/ui/inc/toolbox_tmpl.hrc",
     "svx/inc/globlmn.hrc",
     "sw/source/ui/inc/swmn.hrc",
     "sw/source/ui/inc/swacc.hrc",
@@ -122,6 +134,7 @@ private:
 
     ByteString sLanguageRestriction;
     ByteString sIsoCode99;
+    ByteString sOutputFile;
 
     const ByteString GetProjectName( BOOL bAbs = FALSE );
     const ByteString GetProjectRootRel();
@@ -153,7 +166,7 @@ private:
     );
 
 public:
-    SourceTreeLocalizer( const ByteString &rRoot, const ByteString &rVersion );
+    SourceTreeLocalizer( const ByteString &rRoot, const ByteString &rVersion , bool bLocal);
     ~SourceTreeLocalizer();
 
     void SetLanguageRestriction( const ByteString& rRestrictions )
@@ -162,16 +175,16 @@ public:
         { sIsoCode99 = rIsoCode; }
 
     BOOL Extract( const ByteString &rDestinationFile );
-    BOOL Merge( const ByteString &rSourceFile );
+    BOOL Merge( const ByteString &rSourceFile , const ByteString &rOutput );
 
     virtual void OnExecuteDirectory( const ByteString &rDirectory );
 };
 
 /*****************************************************************************/
 SourceTreeLocalizer::SourceTreeLocalizer(
-    const ByteString &rRoot, const ByteString &rVersion )
+    const ByteString &rRoot, const ByteString &rVersion, bool bLocal )
 /*****************************************************************************/
-                : SourceTreeIterator( rRoot, rVersion ),
+                : SourceTreeIterator( rRoot, rVersion , bLocal ),
                 nMode( LOCALIZE_NONE )
 {
 }
@@ -252,7 +265,8 @@ void SourceTreeLocalizer::WorkOnFile(
     const ByteString &rParameter, const ByteString &rIso )
 /*****************************************************************************/
 {
-    if (( rIso.Equals("noiso") ) || sIsoCode99.Len()) {
+
+//if (( rIso.Equals("noiso") ) || sIsoCode99.Len()) {
         String sFull( rFileName, RTL_TEXTENCODING_ASCII_US );
         DirEntry aEntry( sFull );
         ByteString sFileName( aEntry.GetName(), RTL_TEXTENCODING_ASCII_US );
@@ -301,6 +315,7 @@ void SourceTreeLocalizer::WorkOnFile(
                 sCommand += sIsoCode99;
             }
 
+            //printf("DBG: %s\n",sCommand.GetBuffer());
             system( sCommand.GetBuffer());
 
             SvFileStream aSDFIn( aTemp.GetFull(), STREAM_READ );
@@ -332,10 +347,10 @@ void SourceTreeLocalizer::WorkOnFile(
         }
         // reset current working directory
         aOldCWD.SetCWD();
-    }
-    else {
-        fprintf( stdout, "ERROR: Iso code required for file %s\n", rFileName.GetBuffer());
-    }
+//  }
+//  else {
+//      fprintf( stdout, "ERROR: Iso code required for file %s\n", rFileName.GetBuffer());
+//  }
 }
 
 /*****************************************************************************/
@@ -496,6 +511,7 @@ BOOL SourceTreeLocalizer::MergeSingleFile(
 )
 /*****************************************************************************/
 {
+//  printf("MergeSingleFile(%s,%s,%s)",rPrj.GetBuffer(),rFile.GetBuffer(),rSDFFile.GetBuffer());
     if ( !rFile.Len())
         return TRUE;
 
@@ -546,8 +562,11 @@ BOOL SourceTreeLocalizer::MergeSingleFile(
         }
 
         DirEntry aOut( Export::GetTempFile() );
-        ByteString sOutput( aOut.GetFull(), RTL_TEXTENCODING_ASCII_US );
-
+        ByteString sOutput;
+        if( sOutputFile.Len() == 0 )
+            sOutput = ByteString ( aOut.GetFull(), RTL_TEXTENCODING_ASCII_US );
+        else
+            sOutput = sOutputFile;
         ByteString sCommand( ExeTable[ nIndex ][ 1 ] );
         sCommand += " -i ";
         sCommand += ByteString( aEntry.GetName(), RTL_TEXTENCODING_ASCII_US );
@@ -570,6 +589,7 @@ BOOL SourceTreeLocalizer::MergeSingleFile(
         DirEntry aOldCWD;
         aPath.SetCWD();
 
+        //printf("DBF: %s\n",sCommand.GetBuffer());
         system( sCommand.GetBuffer());
         SvFileStream aInStream( aOut.GetFull(), STREAM_READ );
         if ( !aInStream.IsOpen()) {
@@ -593,42 +613,40 @@ BOOL SourceTreeLocalizer::MergeSingleFile(
 
             else {
                 ByteString sLine;
-                                aOutStream.SetLineDelimiter( LINEEND_LF );
+                aOutStream.SetLineDelimiter( LINEEND_LF );
 
-                                aInStream.ReadLine( sLine );
-                                while ( !aInStream.IsEof()) {
+                aInStream.ReadLine( sLine );
+                while ( !aInStream.IsEof()) {
                     aOutStream.WriteLine( sLine );
-                                        aInStream.ReadLine( sLine );
+                    aInStream.ReadLine( sLine );
                 }
                 aInStream.Close();
                 aOutStream.Close();
 
-                DirEntry myTempFile(ByteString(myStr2,RTL_TEXTENCODING_ASCII_US));      // xxx_tmp ->
-                DirEntry myFile(ByteString(aEntry.GetFull(),RTL_TEXTENCODING_ASCII_US));// xxx
 
-                DirEntry oldFile(ByteString(aEntry.GetFull(),RTL_TEXTENCODING_ASCII_US));
+                    DirEntry myTempFile(ByteString(myStr2,RTL_TEXTENCODING_ASCII_US));      // xxx_tmp ->
+                    DirEntry myFile(ByteString(aEntry.GetFull(),RTL_TEXTENCODING_ASCII_US));// xxx
 
-                if(oldFile.Kill()==ERRCODE_NONE){
-                    if(myTempFile.MoveTo(myFile)!=ERRCODE_NONE){
-                        fprintf( stderr, "ERROR: Can't rename file %s\n",ByteString(myStr2,RTL_TEXTENCODING_ASCII_US).GetBuffer());
+                    DirEntry oldFile(ByteString(aEntry.GetFull(),RTL_TEXTENCODING_ASCII_US));
+
+                    if(oldFile.Kill()==ERRCODE_NONE){
+                        if(myTempFile.MoveTo(myFile)!=ERRCODE_NONE){
+                            fprintf( stderr, "ERROR: Can't rename file %s\n",ByteString(myStr2,RTL_TEXTENCODING_ASCII_US).GetBuffer());
+                        }
                     }
-                }
-                else{
-                    fprintf( stderr, "ERROR: Can't remove file %s\n",ByteString(aEntry.GetFull(),RTL_TEXTENCODING_ASCII_US).GetBuffer());
-                }
-            } // else
+                    else{
+                        fprintf( stderr, "ERROR: Can't remove file %s\n",ByteString(aEntry.GetFull(),RTL_TEXTENCODING_ASCII_US).GetBuffer());
+                    }
+                } // else
 
-            aOldCWD.SetCWD();
-            aOut.Kill();
-        }   // else
-
-    }       // if ( !sCandidate.Equals( "NULL" ) )
-
+                aOldCWD.SetCWD();
+                aOut.Kill();
+            }   // else
+        }
     return TRUE;
 }
-
 /*****************************************************************************/
-BOOL SourceTreeLocalizer::ExecuteMerge()
+BOOL SourceTreeLocalizer::ExecuteMerge( )
 /*****************************************************************************/
 {
     DirEntry aEntry( Export::GetTempFile());
@@ -676,12 +694,14 @@ BOOL SourceTreeLocalizer::ExecuteMerge()
     aEntry.Kill();
 
     return bReturn;
+
 }
 
 /*****************************************************************************/
-BOOL SourceTreeLocalizer::Merge( const ByteString &rSourceFile )
+BOOL SourceTreeLocalizer::Merge( const ByteString &rSourceFile , const ByteString &rOutput )
 /*****************************************************************************/
 {
+    sOutputFile = rOutput;
     nMode = LOCALIZE_MERGE;
     aSDF.Open( String( rSourceFile, RTL_TEXTENCODING_ASCII_US ),
         STREAM_STD_READ );
@@ -696,12 +716,14 @@ BOOL SourceTreeLocalizer::Merge( const ByteString &rSourceFile )
     return bReturn;
 }
 
+
 #define STATE_NONE      0x0000
 #define STATE_EXPORT    0x0001
 #define STATE_MERGE     0x0002
 #define STATE_ISOCODE   0x0003
 #define STATE_LANGUAGES 0x0004
 #define STATE_FILENAME  0x0005
+#define STATE_OUTPUT    0x0006
 
 /*****************************************************************************/
 void Help()
@@ -725,8 +747,8 @@ void Help()
 
     fprintf( stdout,
         "Valid language codes for l1...ln and f1...fn are:\n" );
-
-    for ( USHORT i = 0; i < LANGUAGES; i++ ) {
+    // Ivo
+/*  for ( USHORT i = 0; i < LANGUAGES; i++ ) {
         ByteString sId;
         if ( Export::LangId[ i ] < 10 ) {
             sId = "0";
@@ -738,7 +760,7 @@ void Help()
             sId.GetBuffer(),
             sLanguage.GetBuffer()
         );
-    }
+    }       */
     fprintf( stdout,
         "\nExample 1:\n"
         "==========\n"
@@ -772,18 +794,11 @@ BOOL CheckLanguages( ByteString &rLanguages )
     ByteString sTmp( rLanguages );
     /* Using gcc-2.95.3 and STLport-4.5 .Equals() must
      * be used.. using == causes a compile error */
-    if ( sTmp.ToUpperAscii().Equals("ALL") ) {
-        rLanguages = "";
-        for ( USHORT i = 0; i < LANGUAGES; i++ ) {
-            if ( LANGUAGE_ALLOWED( i )) {
-                if ( rLanguages.Len())
-                    rLanguages += ",";
-                rLanguages += ByteString::CreateFromInt32( Export::LangId[ i ] );
-            }
-        }
+/*  if ( sTmp.ToUpperAscii().Equals("ALL") ) {
+        rLanguages = "cz,nl";
         fprintf( stdout, "\nExpanded -l all to %s\n", rLanguages.GetBuffer());
-    }
-    for ( USHORT i = 0; i < rLanguages.GetTokenCount( ',' ); i++ ) {
+    }*/
+    /*for ( USHORT i = 0; i < rLanguages.GetTokenCount( ',' ); i++ ) {
         ByteString sCur = rLanguages.GetToken( i, ',' );
         ByteString sLang = sCur.GetToken( 0, '=' );
         USHORT nLang = ( USHORT ) sLang.ToInt32();
@@ -807,12 +822,10 @@ BOOL CheckLanguages( ByteString &rLanguages )
         if ( !rLanguages.Len()) {
             rLanguages = "01,99=01";
         }
-/*      if ( rLanguages.Search( "99" ) == STRING_NOTFOUND ) {
-            rLanguages += ",99=01";
-        } */
     }
 
-    return bReturn;
+    return bReturn;*/
+    return true;
 }
 
 /*****************************************************************************/
@@ -830,10 +843,12 @@ int _cdecl main( int argc, char *argv[] )
 
     BOOL bExport = FALSE;
     BOOL bMerge = FALSE;
+    bool bQuite = false;
 
     ByteString sIsoCode;
     ByteString sLanguages;
     ByteString sFileName;
+    ByteString sOutput;
 
     for( int i = 1; i < argc; i++ ) {
         if ( ByteString( argv[ i ]).ToUpperAscii().Equals( "-E" )) {
@@ -848,12 +863,17 @@ int _cdecl main( int argc, char *argv[] )
                 return Error();
             bMerge = TRUE;
         }
+        else if( ByteString( argv[ i ]).ToUpperAscii().Equals( "-Q" )) {
+            bQuite = true;
+        }
         else if ( ByteString( argv[ i ]).ToUpperAscii().Equals( "-I" ) )
             nState = STATE_ISOCODE;
         else if ( ByteString( argv[ i ]).ToUpperAscii().Equals( "-L" ) )
             nState = STATE_LANGUAGES;
         else if ( ByteString( argv[ i ]).ToUpperAscii().Equals( "-F" ) )
             nState = STATE_FILENAME;
+        else if ( ByteString( argv[ i ]).ToUpperAscii().Equals( "-O" ) )
+            nState = STATE_OUTPUT;
         else {
             switch ( nState ) {
                 case STATE_NONE:
@@ -863,6 +883,12 @@ int _cdecl main( int argc, char *argv[] )
                     if ( sIsoCode.Len())
                         return Error();
                     sIsoCode = ByteString( argv[ i ] );
+                    nState = STATE_NONE;
+                break;
+                case STATE_OUTPUT:
+                    if ( sOutput.Len())
+                        return Error();
+                    sOutput = ByteString( argv[ i ] );
                     nState = STATE_NONE;
                 break;
                 case STATE_LANGUAGES:
@@ -902,11 +928,12 @@ int _cdecl main( int argc, char *argv[] )
     if ( !CheckLanguages( sLanguages ))
         return 2;
 
-    if ( !sIsoCode.Len() && ( sLanguages.Search( "99" ) != STRING_NOTFOUND )) {
+/* Ivo
+   if ( !sIsoCode.Len() && ( sLanguages.Search( "99" ) != STRING_NOTFOUND )) {
         fprintf( stderr, "ERROR: No ISO code given\n" );
         return 3;
     }
-
+*/
     if ( !sFileName.Len()) {
         fprintf( stderr, "ERROR: No filename given\n" );
         return 3;
@@ -919,39 +946,47 @@ int _cdecl main( int argc, char *argv[] )
     ByteString sICode( sIsoCode );
     if ( !sICode.Len())
         sICode = "not given, support for language 99 disabled";
-    fprintf( stdout,
-        "\n"
-        "============================================================\n"
-        "Current settings:\n"
-        "============================================================\n"
-        "Mode:          %s\n"
-        "Workspace:     %s\n"
-        "Source tree:   %s\n"
-        "Languages:     %s\n"
-        "ISO code (99): %s\n"
-        "Filename:      %s\n"
-        "============================================================\n"
-        "\n"
-        ,
-        sMode.GetBuffer(),
-        sVersion.GetBuffer(),
-        sRoot.GetBuffer(),
-        sLanguages.GetBuffer(),
-        sICode.GetBuffer(),
-        sFileName.GetBuffer()
-     );
+    if(!bQuite)
+        fprintf( stdout,
+            "\n"
+            "============================================================\n"
+            "Current settings:\n"
+            "============================================================\n"
+            "Mode:          %s\n"
+            "Workspace:     %s\n"
+            "Source tree:   %s\n"
+            "Languages:     %s\n"
+            "ISO code (99): %s\n"
+            "Filename:      %s\n"
+            "Outputfile     %s\n"
+            "============================================================\n"
+            "\n"
+            ,
+            sMode.GetBuffer(),
+            sVersion.GetBuffer(),
+            sRoot.GetBuffer(),
+            sLanguages.GetBuffer(),
+            sICode.GetBuffer(),
+            sFileName.GetBuffer(),
+            sOutput.GetBuffer()
+        );
 
-    SourceTreeLocalizer aIter( sRoot, sVersion );
+
+    SourceTreeLocalizer aIter( sRoot, sVersion , (sOutput.Len() > 0));
+
     aIter.SetLanguageRestriction( sLanguages );
      aIter.SetIsoCode99( sIsoCode );
 
     if ( bExport )
           aIter.Extract( sFileName );
     else {
+
         DirEntry aEntry( String( sFileName, RTL_TEXTENCODING_ASCII_US ));
         if ( !aEntry.Exists())
             return FALSE;
-        aIter.Merge( sFileName );
+
+        aIter.Merge( sFileName , sOutput );
+
     }
 
     return 0;
