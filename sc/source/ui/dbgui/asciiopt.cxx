@@ -2,9 +2,9 @@
  *
  *  $RCSfile: asciiopt.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2001-03-14 16:16:38 $
+ *  last change: $Author: er $ $Date: 2001-04-19 13:40:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -631,9 +631,19 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
             UINT16 n;
             *pDatStream >> n;
             // Assume that normal ASCII/ANSI/ISO/etc. text doesn't start with
-            // control characters.
+            // control characters except CR,LF,TAB
             if ( (n & 0xff00) < 0x2000 )
-                bPreselectUnicode = TRUE;
+            {
+                switch ( n & 0xff00 )
+                {
+                    case 0x0900 :
+                    case 0x0a00 :
+                    case 0x0d00 :
+                    break;
+                    default:
+                        bPreselectUnicode = TRUE;
+                }
+            }
             pDatStream->Seek( nUniPos );
         }
         for ( j=0; j < SC_ASCIIOPT_PREVIEW_LINES; j++ )
