@@ -106,19 +106,19 @@ Sub SetDialogLanguage ()
 		.optAlign2.Label = GetResText(RID_FORM + 34)
 		.optAlign0.State = 1
 		
-		.cmdArrange1.ImageURL = FormPath &amp; &quot;Arrange_1.bmp&quot;
+		.cmdArrange1.ImageURL = FormPath &amp; &quot;Arrange_1.gif&quot;
 		.cmdArrange1.HelpText = GetResText(RID_FORM + 36)
 	
-		.cmdArrange2.ImageURL = FormPath &amp; &quot;Arrange_2.bmp&quot;
+		.cmdArrange2.ImageURL = FormPath &amp; &quot;Arrange_2.gif&quot;
 		.cmdArrange2.HelpText = GetResText(RID_FORM + 37)
 
-		.cmdArrange3.ImageURL = FormPath &amp; &quot;Arrange_3.bmp&quot;
+		.cmdArrange3.ImageURL = FormPath &amp; &quot;Arrange_3.gif&quot;
 		.cmdArrange3.HelpText = GetResText(RID_FORM + 40)
 
-		.cmdArrange4.ImageURL = FormPath &amp; &quot;Arrange_4.bmp&quot;
+		.cmdArrange4.ImageURL = FormPath &amp; &quot;Arrange_4.gif&quot;
 		.cmdArrange4.HelpText = GetResText(RID_FORM + 38)
 
-		.cmdArrange5.ImageURL = FormPath &amp; &quot;Arrange_5.bmp&quot;
+		.cmdArrange5.ImageURL = FormPath &amp; &quot;Arrange_5.gif&quot;
 		.cmdArrange5.HelpText = GetResText(RID_FORM + 39)
 
 		sWriterFilterName = GetResText(RID_FORM + 70)
