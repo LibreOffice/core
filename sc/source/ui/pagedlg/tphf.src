@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tphf.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:59:48 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 20:04:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,37 +66,9 @@ PushButton RID_SCBTN_HFEDIT
     Hide = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( 50 , 14 ) ;
-    Text = "Bearbei~ten..." ;
-    Text [ ENGLISH ] = "Edi~t..." ;
-    Text [ norwegian ] = "Edi~t..." ;
-    Text [ italian ] = "Modifica..." ;
-    Text [ portuguese_brazilian ] = "Edi~tar..." ;
-    Text [ portuguese ] = "Edi~tar..." ;
-    Text [ finnish ] = "~Muuta..." ;
-    Text [ danish ] = "~Rediger..." ;
-    Text [ french ] = "…~diter..." ;
-    Text [ swedish ] = "Redige~ra..." ;
-    Text [ dutch ] = "Be~werken..." ;
-    Text [ spanish ] = "~Editar..." ;
-    Text [ english_us ] = "~Edit..." ;
-    Text[ chinese_simplified ] = "ÁºñËæë(~E)...";
-    Text[ russian ] = "œ‡‚Í‡...";
-    Text[ polish ] = "~Edytuj...";
-    Text[ japanese ] = "Á∑®ÈõÜ(~E)...";
-    Text[ chinese_traditional ] = "Á∑®ËºØ(~E)...";
-    Text[ arabic ] = " Õ—Ì—...";
-    Text[ greek ] = "≈Â~ÓÂÒ„·Ûﬂ·...";
-    Text[ korean ] = "Ìé∏Ïßë(~E)...";
-    Text[ turkish ] = "~D¸zenle...";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "~Edita...";
-    Text[ thai ] = "‡πÅ~‡∏Å‡πâ‡πÑ‡∏Ç...";
-    Text[ czech ] = "Upravit...";
-    Text[ hebrew ] = "‚ÄÆ◊¢◊®◊ô◊õ◊î...‚Ä¨";
-    Text[ hindi ] = "~‡§∏‡§Ç‡§™‡§æ‡§¶‡§®...";
-    Text[ slovak ] = "~Upravi≈•...";
-    Text[ hungarian ] = "S~zerkeszt√©s...";
-    Text[ slovenian ] = "~Uredi...";
+    Text [ de ] = "Bearbei~ten..." ;
+    Text [ en-US ] = "~Edit..." ;
+    Text [ x-comment ] = " ";
 };
 
 
