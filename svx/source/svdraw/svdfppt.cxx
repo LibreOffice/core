@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sj $ $Date: 2000-10-11 12:09:51 $
+ *  last change: $Author: sj $ $Date: 2000-10-11 13:53:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3205,10 +3205,13 @@ BOOL PPTExtParaProv::SeekToContentOfBinaryData( SvStream& rSt, const DffRecordHe
     rSt >> rContentHd;
     if ( ( rContentHd.nRecType == PPT_PST_CString ) && ( rContentHd.nRecLen == 14 ) )
     {
-        sal_uInt16 nIdx, b = ( (USHORT)rContentHd.nRecLen ) / 2;
-        sal_Unicode* pWStr = new sal_Unicode[ b ];
-        for ( nIdx = 0; nIdx < b; ++nIdx, rSt >> pWStr[ nIdx ] );
-        String aString( pWStr, b );
+        String      aString;
+        sal_Int32   i = 7;
+        sal_Unicode *pTmp = aString.AllocBuffer( i );
+        while ( i-- )
+        {
+            rSt >> *pTmp++;
+        }
         if ( aString == String( RTL_CONSTASCII_USTRINGPARAM( "___PPT9" ) ) )
         {
             rContentHd.SeekToEndOfRecord( rSt );
@@ -3430,7 +3433,7 @@ BOOL PPTNumberFormatCreator::ImplGetExtNumberFormat( SdrPowerPointImport& rManag
         Graphic aGraphic;
         if ( rManager.pExtParaProv->GetGraphic( nBuInstance, aGraphic ) )
         {
-            SvxBrushItem aBrush( aGraphic, GPOS_NONE );
+            SvxBrushItem aBrush( aGraphic, GPOS_MM );
             rNumberFormat.SetGraphicBrush( &aBrush );
             UINT32 nHeight = ( (double)nFontHeight * 7.0    // 10.0
                                         / ( 72.0 / 2.54 ) ) * nBulletHeight;
