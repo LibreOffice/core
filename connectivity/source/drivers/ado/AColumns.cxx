@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AColumns.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-29 12:24:19 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 15:18:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,20 +143,23 @@ void OColumns::appendObject( const Reference< XPropertySet >& descriptor )
         if ( pTypeInfo && static_cast<DataTypeEnum>(pTypeInfo->eType) != eType ) // change column type if necessary
             aColumn.put_Type(static_cast<DataTypeEnum>(pTypeInfo->eType));
 
-        ((ADOColumns*)m_aCollection)->Append(OLEVariant(aColumn.get_Name()),aColumn.get_Type(),aColumn.get_DefinedSize());
-        WpADOColumn aAddedColumn = m_aCollection.GetItem(OLEVariant(aColumn.get_Name()));
+        if ( SUCCEEDED(((ADOColumns*)m_aCollection)->Append(OLEVariant(aColumn.get_Name()),aColumn.get_Type(),aColumn.get_DefinedSize())) )
+        {
+            WpADOColumn aAddedColumn = m_aCollection.GetItem(OLEVariant(aColumn.get_Name()));
+            if ( aAddedColumn.IsValid() )
+            {
+                sal_Bool bAutoIncrement = sal_False;
+                pColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT)) >>= bAutoIncrement;
+                if ( bAutoIncrement )
+                    OTools::putValue( aAddedColumn.get_Properties(), ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Autoincrement")), bAutoIncrement );
 
-        sal_Bool bAutoIncrement = sal_False;
-        pColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT)) >>= bAutoIncrement;
-        if ( bAutoIncrement )
-            OTools::putValue( aAddedColumn.get_Properties(), ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Autoincrement")), bAutoIncrement );
-
-        aAddedColumn.put_Precision(aColumn.get_Precision());
-        aAddedColumn.put_NumericScale(aColumn.get_NumericScale());
-        aAddedColumn.put_Attributes(aColumn.get_Attributes());
-        aAddedColumn.put_SortOrder(aColumn.get_SortOrder());
-        aAddedColumn.put_RelatedColumn(aColumn.get_RelatedColumn());
-
+                aAddedColumn.put_Precision(aColumn.get_Precision());
+                aAddedColumn.put_NumericScale(aColumn.get_NumericScale());
+                aAddedColumn.put_Attributes(aColumn.get_Attributes());
+                aAddedColumn.put_SortOrder(aColumn.get_SortOrder());
+                aAddedColumn.put_RelatedColumn(aColumn.get_RelatedColumn());
+            }
+        }
         ADOS::ThrowException(*m_pConnection->getConnection(),*this);
     }
     else
