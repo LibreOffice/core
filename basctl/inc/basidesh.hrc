@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.hrc,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sb $ $Date: 2002-07-04 09:15:41 $
+ *  last change: $Author: mba $ $Date: 2002-10-07 12:17:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,6 +168,9 @@
 #define RID_STR_SEARCHFROMSTART         ( RID_BASICIDE_START + 2 )
 #define RID_STR_NOMODULE                ( RID_BASICIDE_START + 3 )
 #define RID_STR_FILTER_ALLFILES         ( RID_BASICIDE_START + 4 )
+
+#define RID_BASICMENU                   ( RID_BASICIDE_START + 1 )
+#define RID_BASICPLUGINMENU             ( RID_BASICIDE_START + 2 )
 
 // MacroDlg:        ( RID_BASICIDE_START + 50 )
 // MacroOptionsDlg: ( RID_BASICIDE_START + 55 )

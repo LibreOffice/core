@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basdoc.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tbe $ $Date: 2002-05-08 16:36:47 $
+ *  last change: $Author: mba $ $Date: 2002-10-07 12:18:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,17 +84,6 @@ TYPEINIT1(BasicDocShell, SfxObjectShell);
 DBG_NAME(BasicDocShell);
 
 SFX_IMPL_SIMPLE_OBJECTFACTORY_LOD( BasicDocShell, BasicIDE, BASIC_MOD() )
-//SFX_IMPL_SIMPLE_OBJECTFACTORY( BasicDocShell, SFXOBJECTSHELL_STD_SPECIAL | SFXOBJECTSHELL_DONTREPLACE, sbasic )
-/*
-{
-    Factory().SetExplorerImageId( IMG_MACROLIB );
-    Factory().RegisterHelpFile( String( RTL_CONSTASCII_USTRINGPARAM( "sbasic" ) ) );
-    Factory().SetDocumentServiceName( ::rtl::OUString::createFromAscii( "dummy" ) );
-    Factory().RegisterMenuBar( ResId(RID_DEFAULTMENU) );
-    Factory().RegisterPluginMenuBar( ResId(RID_DEFAULTPLUGINMENU) );
-}
-*/
-
 SFX_IMPL_INTERFACE( BasicDocShell, SfxObjectShell, IDEResId( 0 ) )
 {
     SFX_STATUSBAR_REGISTRATION( SID_BASICIDE_STATUSBAR );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.src,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-17 13:23:02 $
+ *  last change: $Author: mba $ $Date: 2002-10-07 12:18:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 
 #include <baside2.hrc>
 #include <helpid.hrc>
+#ifndef _GLOBLMN_HRC
+#include <svx/globlmn.hrc>
+#endif
 
 #define MASKCOLOR   MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; };
 
@@ -3132,3 +3135,848 @@ String RID_STR_QUERYREPLACEMACRO
     Text[ catalan ] = "Do you want to overwrite the macro XX ?";
     Text[ thai ] = "Do you want to overwrite the macro XX ?";
 };
+
+#define MN_EDIT 20
+#define MN_VIEW 21
+#define MN_EXTRA 22
+#define MN_WIN 30
+#define MN_HELP 31
+#define MN_TEMPLATES 11
+
+Menu RID_BASICMENU
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            ITEM_FILE_PICKLIST
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        ITEM_FILE_NEWDOC
+                    };
+                    MenuItem
+                    {
+                        ITEM_FILE_OPENDOC
+                    };
+                    ITEM_FILE_AUTOPILOT
+                    MenuItem
+                    {
+                        Separator = TRUE ;
+                    };
+                    MenuItem
+                    {
+                        ITEM_FILE_CLOSEDOC
+                    };
+                    MenuItem
+                    {
+                        ITEM_FILE_SAVEDOC
+                    };
+                    MenuItem
+                    {
+                        ITEM_FILE_SAVEASDOC
+                    };
+                    MenuItem
+                    {
+                        ITEM_FILE_SAVEDOCS
+                    };
+                    MenuItem
+                    {
+                        ITEM_FILE_MAIL_SENDDOC
+                    };
+                    MenuItem
+                    {
+                        ITEM_FILE_DOCTEMPLATE
+                    };
+
+                    MenuItem
+                    {
+                        Separator = TRUE ;
+                    };
+                    MenuItem
+                    {
+                        ITEM_FILE_DOCINFO
+                    };
+                    MenuItem
+                    {
+                        Separator = TRUE ;
+                    };
+                    MenuItem
+                    {
+                        ITEM_FILE_PRINTDOC
+                    };
+                    MenuItem
+                    {
+                        ITEM_FILE_SETUPPRINTER
+                    };
+                    MenuItem
+                    {
+                        Separator = TRUE ;
+                    };
+                    MenuItem
+                    {
+                        ITEM_FILE_QUITAPP
+                    };
+                };
+            };
+        };
+        MenuItem
+        {
+            Identifier = MN_EDIT ;
+            Text = "~Bearbeiten" ;
+            Text [ English ] = "~Edit" ;
+            Text [ norwegian ] = "~Rediger" ;
+            Text [ italian ] = "~Modifica" ;
+            Text [ portuguese_brazilian ] = "~Editar" ;
+            Text [ portuguese ] = "~Editar" ;
+            Text [ finnish ] = "~Muokkaa" ;
+            Text [ danish ] = "~Rediger" ;
+            Text [ french ] = "~…dition" ;
+            Text [ swedish ] = "~Redigera" ;
+            Text [ dutch ] = "Be~werken" ;
+            Text [ spanish ] = "~Editar" ;
+            Text [ english_us ] = "~Edit" ;
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        ITEM_EDIT_UNDO
+                    };
+                    MenuItem
+                    {
+                        ITEM_EDIT_REDO
+                    };
+                    MenuItem
+                    {
+                        ITEM_EDIT_REPEAT
+                    };
+                    MenuItem
+                    {
+                        Separator = TRUE ;
+                    };
+                    MenuItem
+                    {
+                        ITEM_EDIT_CUT
+                    };
+                    MenuItem
+                    {
+                        ITEM_EDIT_COPY
+                    };
+                    MenuItem
+                    {
+                        ITEM_EDIT_PASTE
+                    };
+                    MenuItem
+                    {
+                        ITEM_EDIT_SELECTALL
+                    };
+                    MenuItem
+                    {
+                        Separator = TRUE ;
+                    };
+                    MenuItem
+                    {
+                        ITEM_EDIT_SEARCH_DLG
+                    };
+                    MenuItem
+                    {
+                        ITEM_EDIT_BIBLIOGRAPHY
+                    };
+                    MenuItem
+                    {
+                        Separator = TRUE ;
+                    };
+                };
+            };
+            Text[ chinese_simplified ] = "ÁºñËæë(~E)";
+            Text[ russian ] = "~œ‡‚Í‡";
+            Text[ polish ] = "~Edytuj";
+            Text[ japanese ] = "Á∑®ÈõÜ(~E)";
+            Text[ chinese_traditional ] = "Á∑®ËºØ(~E)";
+            Text[ dutch ] = "Be~werken";
+            Text[ chinese_simplified ] = "ÁºñËæë(~E)";
+            Text[ greek ] = "~≈ÂÓÂÒ„·Ûﬂ·";
+            Text[ korean ] = "Ìé∏Ïßë(~E)";
+            Text[ arabic ] = "~ Õ—Ì—";
+            Text[ turkish ] = "D¸~zenle";
+            Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Edita";
+            Text[ thai ] = "‡πÅ~‡∏Å‡πâ‡πÑ‡∏Ç";
+        };
+        MenuItem
+        {
+            Identifier = MN_VIEW ;
+            Text = "~Ansicht" ;
+            Text [ English ] = "~View" ;
+            Text [ norwegian ] = "~Vis" ;
+            Text [ italian ] = "~Visualizza" ;
+            Text [ portuguese_brazilian ] = "~Ver" ;
+            Text [ portuguese ] = "~Ver" ;
+            Text [ finnish ] = "~N‰yt‰" ;
+            Text [ danish ] = "~Vis" ;
+            Text [ french ] = "~Affichage" ;
+            Text [ swedish ] = "Vi~sa" ;
+            Text [ dutch ] = "Beel~d" ;
+            Text [ spanish ] = "~Ver" ;
+            Text [ english_us ] = "~View" ;
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        ITEM_VIEW_EXPLORER
+                    };
+                    MenuItem
+                    {
+                        ITEM_VIEW_BROWSER
+                    };
+                    MenuItem
+                    {
+                        Separator = TRUE ;
+                    };
+                    MenuItem
+                    {
+                        Identifier = 22 ;
+                        Text = "S~ymbolleisten" ;
+                        Text [ English ] = "Toolbars" ;
+                        Text [ english_us ] = "~Toolbars" ;
+                        Text [ swedish ] = "S~ymbollister" ;
+                        Text [ danish ] = "Ikonlin~jer" ;
+                        Text [ italian ] = "Barre dei simboli" ;
+                        Text [ spanish ] = "Barras de ~sÌmbolos" ;
+                        Text [ french ] = "Barres d'~outils" ;
+                        Text [ dutch ] = "~Werkbalken" ;
+                        Text [ portuguese ] = "Barras de ~ferramentas" ;
+                        Text [ portuguese_brazilian ] = "Symbolleisten" ;
+                        SubMenu = Menu
+                        {
+                            ItemList =
+                            {
+                                MenuItem
+                                {
+                                    ITEM_VIEW_TOGGLEFUNCTIONBAR
+                                };
+                                MenuItem
+                                {
+                                    ITEM_VIEW_TOGGLEOBJECTBAR
+                                };
+                                MenuItem
+                                {
+                                    Identifier = SID_TOGGLETOOLBAR ;
+                                    HelpID = SID_TOGGLETOOLBAR ;
+                                    Text = "Werk~zeugleiste" ;
+                                    Text [ English ] = "~Toolbar" ;
+                                    Text [ english_us ] = "Main ~Toolbar" ;
+                                    Text [ swedish ] = "~Verktygslist" ;
+                                    Text [ danish ] = "VÊrkt¯jslinje" ;
+                                    Text [ italian ] = "Barra degli strumenti" ;
+                                    Text [ spanish ] = "Barra de ~herramientas" ;
+                                    Text [ french ] = "Barre d'~instruments" ;
+                                    Text [ dutch ] = "Werk~tuigbalk" ;
+                                    Text [ portuguese_brazilian ] = "Werk~zeugleiste" ;
+                                    Text [ portuguese ] = "~Barra de ferramentas" ;
+                                    Text[ chinese_simplified ] = "‰∏ªÂ∑•ÂÖ∑Ê†è(~T)";
+                                    Text[ russian ] = "œ‡ÌÂÎ¸ ËÌÒÚÛÏÂÌÚÓ‚";
+                                    Text[ polish ] = "Pasek narzÍdziowy";
+                                    Text[ japanese ] = "Ê®ôÊ∫ñ„ÉÑ„Éº„É´„Éê„Éº(~T)";
+                                    Text[ chinese_traditional ] = "‰∏ªÂ∑•ÂÖ∑Âàó(~T)";
+                                    Text[ greek ] = "√Ò·ÏÏﬁ ÂÒ„·ÎÂﬂ~˘Ì";
+                                    Text[ korean ] = "Ï£º ÎèÑÍµ¨ Î™®Ïùå(~T)";
+                                    Text[ arabic ] = "‘—Ìÿ «·√œÊ« ";
+                                    Text[ turkish ] = "Ana araÁ Áubuu";
+                                    Text[ language_user1 ] = " ";
+                                    Text[ catalan ] = "Barra d'~eines principal";
+                                    Text[ finnish ] = "P‰‰~tyˆkalurivi";
+                                    Text[ thai ] = "‡πÅ~‡∏ñ‡∏ö‡πÄ‡∏Ñ‡∏£‡∏∑‡πà‡∏≠‡∏á‡∏°‡∏∑‡∏≠‡∏´‡∏•‡∏±‡∏Å";
+                                };
+                                MenuItem
+                                {
+                                    ITEM_INSERT_HYPERLINK_INSERT
+                                };
+                                MenuItem
+                                {
+                                    Separator = TRUE ;
+                                };
+                                MenuItem
+                                {
+                                    Identifier = SID_CUSTOMIZETOOLBOX ;
+                                    HelpID = SID_CUSTOMIZETOOLBOX ;
+                                    Text = "~Bearbeiten..." ;
+                                    Text [ English ] = "~Customize..." ;
+                                    Text [ english_us ] = "Customi~ze..." ;
+                                    Text [ swedish ] = "~Redigera..." ;
+                                    Text [ danish ] = "Rediger..." ;
+                                    Text [ italian ] = "~Modifica..." ;
+                                    Text [ spanish ] = "~Personalizar..." ;
+                                    Text [ french ] = "~Personnaliser..." ;
+                                    Text [ dutch ] = "~Bewerken..." ;
+                                    Text [ portuguese ] = "~Personalizar..." ;
+                                    Text [ portuguese_brazilian ] = "~Bearbeiten..." ;
+                                    Text[ chinese_simplified ] = "ÁºñËæë(~Z)...";
+                                    Text[ russian ] = "œ‡‚Í‡...";
+                                    Text[ polish ] = "Edytuj...";
+                                    Text[ japanese ] = "„Ç´„Çπ„Çø„Éû„Ç§„Ç∫(~Z)...";
+                                    Text[ chinese_traditional ] = "Á∑®ËºØ(~Z)...";
+                                    Text[ greek ] = "~≈ÂÓÂÒ„·Ûﬂ·...";
+                                    Text[ korean ] = "ÏÇ¨Ïö©Ïûê Ï†ïÏùò(~Z)...";
+                                    Text[ arabic ] = " Œ’Ì’...";
+                                    Text[ turkish ] = "÷~zelle˛tir...";
+                                    Text[ language_user1 ] = " ";
+                                    Text[ catalan ] = "Personalit~za...";
+                                    Text[ finnish ] = "Mukau~ta";
+                                    Text[ thai ] = "‡∏Å‡∏≥‡∏´~‡∏ô‡∏î‡πÄ‡∏≠‡∏á...";
+                                };
+                            };
+                        };
+                        Text[ chinese_simplified ] = "ÂõæÊ†áÊ†è(~T)";
+                        Text[ russian ] = "œ‡ÌÂÎË ÒËÏ‚ÓÎÓ‚";
+                        Text[ polish ] = "Paski symboli";
+                        Text[ japanese ] = "„ÉÑ„Éº„É´„Éê„Éº(~T)";
+                        Text[ chinese_traditional ] = "Â∑•ÂÖ∑Âàó(~T)";
+                        Text[ greek ] = "√Ò·ÏÏ›Ú Û~ıÏ‚¸Î˘Ì";
+                        Text[ korean ] = "ÎèÑÍµ¨ Î™®Ïùå(~T)";
+                        Text[ arabic ] = "√‘—ÿ… «·—„Ê“";
+                        Text[ turkish ] = "AraÁ Á~ubuklar˝";
+                        Text[ language_user1 ] = " ";
+                        Text[ catalan ] = "Barra d'~eines";
+                        Text[ finnish ] = "~Tyˆkalurivit";
+                        Text[ thai ] = "‡πÅ~‡∏ñ‡∏ö‡πÄ‡∏Ñ‡∏£‡∏∑‡πà‡∏≠‡∏á‡∏°‡∏∑‡∏≠";
+                    };
+                    MenuItem
+                    {
+                        ITEM_VIEW_TOGGLESTATUSBAR
+                    };
+                    MenuItem
+                    {
+                        Separator = TRUE ;
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_SOURCEVIEW ;
+                        HelpID = SID_SOURCEVIEW ;
+                        Text = "HTM~L-Quelltext" ;
+                        Text [ ENGLISH ] = "HTML source" ;
+                        Text [ dutch ] = "~HTML-brontekst" ;
+                        Text [ english_us ] = "HT~ML Source" ;
+                        Text [ italian ] = "Testo sorgente HTML" ;
+                        Text [ spanish ] = "Texto fuente ~HTML" ;
+                        Text [ french ] = "Texte source ~HTML" ;
+                        Text [ swedish ] = "HTM~L-k‰lltext" ;
+                        Text [ danish ] = "HTML-kildetekst" ;
+                        Text [ portuguese ] = "Fonte ~HTML" ;
+                        Text [ portuguese_brazilian ] = "HTML-Quelltext" ;
+                        Text[ chinese_simplified ] = "HT~ML Ê∫êÊñáÊú¨";
+                        Text[ russian ] = "»ÒıÓ‰Ì˚È ÚÂÍÒÚ HTM~L";
+                        Text[ polish ] = "Tekst ürÛd≥owy HTML";
+                        Text[ japanese ] = "HT~ML „ÇΩ„Éº„Çπ„ÉÜ„Ç≠„Çπ„Éà";
+                        Text[ chinese_traditional ] = "HT~ML ÂéüÂßãÊ™î";
+                        Text[ dutch ] = "~HTML-brontekst";
+                        Text[ chinese_simplified ] = "HT~ML Ê∫êÊñáÊú¨";
+                        Text[ greek ] = " ÂﬂÏÂÌÔ ÒÔ›ÎÂıÛÁÚ HTM~L";
+                        Text[ korean ] = "HT~ML ÏÜåÏä§ÌÖçÏä§Ìä∏";
+                        Text[ arabic ] = "‰’ „’œ— HTML";
+                        Text[ turkish ] = "HTM~L kaynak kodu";
+                        Text[ language_user1 ] = " ";
+                        Text[ catalan ] = "Font HT~ML";
+                        Text[ finnish ] = "HT~ML-l‰hde";
+                        Text[ thai ] = "‡πÅ‡∏´‡∏•‡πà‡∏á HT~ML ";
+                    };
+                    MenuItem
+                    {
+                        Separator = TRUE ;
+                    };
+                    ITEM_VIEW_SCREENMODE
+                };
+            };
+            Text[ chinese_simplified ] = "ËßÜÂõæ(~V)";
+            Text[ russian ] = "~¬Ë‰";
+            Text[ polish ] = "~Widok";
+            Text[ japanese ] = "Ë°®Á§∫(~V)";
+            Text[ chinese_traditional ] = "Ê™¢Ë¶ñ(~V)";
+            Text[ dutch ] = "Beel~d";
+            Text[ chinese_simplified ] = "ËßÜÂõæ(~V)";
+            Text[ greek ] = "–ÒÔ~‚ÔÎﬁ";
+            Text[ korean ] = "Î≥¥Í∏∞(~V)";
+            Text[ arabic ] = "~⁄—÷";
+            Text[ turkish ] = "~Gˆr¸n¸m";
+            Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Visualitza";
+            Text[ thai ] = "~‡∏°‡∏∏‡∏°‡∏°‡∏≠‡∏á";
+        };
+        MenuItem
+        {
+            Identifier = MN_EXTRA ;
+            Text = "E~xtras" ;
+            Text [ English ] = "T~ools" ;
+            Text [ norwegian ] = "Verk~t¯y" ;
+            Text [ italian ] = "~Strumenti" ;
+            Text [ portuguese_brazilian ] = "F~erramentas" ;
+            Text [ portuguese ] = "Ferra~mentas" ;
+            Text [ finnish ] = "~Tyˆkalut" ;
+            Text [ danish ] = "Fun~ktioner" ;
+            Text [ french ] = "~Outils" ;
+            Text [ swedish ] = "~Verktyg" ;
+            Text [ dutch ] = "E~xtra" ;
+            Text [ spanish ] = "~Herramientas" ;
+            Text [ english_us ] = "~Tools" ;
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        ITEM_TOOLS_BASICCHOOSER
+                    };
+                    MenuItem
+                    {
+                        ITEM_TOOLS_CONFIG
+                    };
+                    ITEM_MN_OPTIONS
+                };
+            };
+            Text[ chinese_simplified ] = "Â∑•ÂÖ∑(~T)";
+            Text[ russian ] = "~—Â‚ËÒ";
+            Text[ polish ] = "~NarzÍdzia";
+            Text[ japanese ] = "„ÉÑ„Éº„É´(~T)";
+            Text[ chinese_traditional ] = "Â∑•ÂÖ∑(~T)";
+            Text[ dutch ] = "E~xtra";
+            Text[ chinese_simplified ] = "Â∑•ÂÖ∑(~T)";
+            Text[ greek ] = "≈~Ò„·ÎÂﬂ·";
+            Text[ korean ] = "ÎèÑÍµ¨(~T)";
+            Text[ arabic ] = "√~œÊ« ";
+            Text[ turkish ] = "~AraÁlar";
+            Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Ei~nes";
+            Text[ thai ] = "‡πÄ~‡∏Ñ‡∏£‡∏∑‡πà‡∏≠‡∏á‡∏°‡∏∑‡∏≠";
+        };
+        ITEM_WINDOW_MENU
+        ITEM_HELP_MENU
+    };
+};
+
+#define MN_PLEDIT       20
+#define MN_PLVIEW       21
+#define MN_PLEXTRA      22
+#define MN_PLWIN        30
+#define MN_PLHELP       31
+#define MN_PLTEMPLATES  11
+
+Menu RID_BASICPLUGINMENU
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            ITEM_FILE_PICKLIST
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        ITEM_FILE_NEWDOC
+                    };
+                    MenuItem
+                    {
+                        ITEM_FILE_OPENDOC
+                    };
+                    MenuItem
+                    {
+                        Separator = TRUE ;
+                    };
+                    MenuItem
+                    {
+                        ITEM_FILE_CLOSEDOC
+                    };
+                    MenuItem
+                    {
+                        ITEM_FILE_SAVEDOC
+                    };
+                    MenuItem
+                    {
+                        ITEM_FILE_SAVEASDOC
+                    };
+                    MenuItem
+                    {
+                        ITEM_FILE_SAVEDOCS
+                    };
+                    MenuItem
+                    {
+                        ITEM_FILE_MAIL_SENDDOC
+                    };
+                    MenuItem
+                    {
+                        ITEM_FILE_DOCTEMPLATE
+                    };
+
+                    MenuItem
+                    {
+                        Separator = TRUE ;
+                    };
+                    MenuItem
+                    {
+                        ITEM_FILE_DOCINFO
+                    };
+                    MenuItem
+                    {
+                        Separator = TRUE ;
+                    };
+                    MenuItem
+                    {
+                        ITEM_FILE_PRINTDOC
+                    };
+                    MenuItem
+                    {
+                        ITEM_FILE_SETUPPRINTER
+                    };
+                    MenuItem
+                    {
+                        Separator = TRUE ;
+                    };
+                    MenuItem
+                    {
+                        ITEM_FILE_BACKTOWEBTOP
+                    };
+                    MenuItem
+                    {
+                        ITEM_FILE_LOGOUT
+                    };
+                };
+            };
+        };
+        MenuItem
+        {
+            Identifier = MN_PLEDIT ;
+            Text = "~Bearbeiten" ;
+            Text [ English ] = "~Edit" ;
+            Text [ norwegian ] = "~Rediger" ;
+            Text [ italian ] = "~Modifica" ;
+            Text [ portuguese_brazilian ] = "~Editar" ;
+            Text [ portuguese ] = "~Editar" ;
+            Text [ finnish ] = "~Muokkaa" ;
+            Text [ danish ] = "~Rediger" ;
+            Text [ french ] = "~…dition" ;
+            Text [ swedish ] = "~Redigera" ;
+            Text [ dutch ] = "Be~werken" ;
+            Text [ spanish ] = "~Editar" ;
+            Text [ english_us ] = "~Edit" ;
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        ITEM_EDIT_UNDO
+                    };
+                    MenuItem
+                    {
+                        ITEM_EDIT_REDO
+                    };
+                    MenuItem
+                    {
+                        ITEM_EDIT_REPEAT
+                    };
+                    MenuItem
+                    {
+                        Separator = TRUE ;
+                    };
+                    MenuItem
+                    {
+                        ITEM_EDIT_CUT
+                    };
+                    MenuItem
+                    {
+                        ITEM_EDIT_COPY
+                    };
+                    MenuItem
+                    {
+                        ITEM_EDIT_PASTE
+                    };
+                    MenuItem
+                    {
+                        ITEM_EDIT_SELECTALL
+                    };
+                    MenuItem
+                    {
+                        Separator = TRUE ;
+                    };
+                    MenuItem
+                    {
+                        ITEM_EDIT_SEARCH_DLG
+                    };
+                    MenuItem
+                    {
+                        Separator = TRUE ;
+                    };
+                };
+            };
+            Text[ chinese_simplified ] = "ÁºñËæë(~E)";
+            Text[ russian ] = "~œ‡‚Í‡";
+            Text[ polish ] = "~Edytuj";
+            Text[ japanese ] = "Á∑®ÈõÜ(~E)";
+            Text[ chinese_traditional ] = "Á∑®ËºØ(~E)";
+            Text[ dutch ] = "Be~werken";
+            Text[ chinese_simplified ] = "ÁºñËæë(~E)";
+            Text[ greek ] = "≈ÂÓÂÒ„·Ûﬂ·";
+            Text[ korean ] = "Ìé∏Ïßë(~E)";
+            Text[ arabic ] = "~ Õ—Ì—";
+            Text[ turkish ] = "D¸~zenle";
+            Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Edita";
+            Text[ thai ] = "‡πÅ~‡∏Å‡πâ‡πÑ‡∏Ç";
+        };
+        MenuItem
+        {
+            Identifier = MN_PLVIEW ;
+            Text = "~Ansicht" ;
+            Text [ English ] = "~View" ;
+            Text [ norwegian ] = "~Vis" ;
+            Text [ italian ] = "~Visualizza" ;
+            Text [ portuguese_brazilian ] = "~Ver" ;
+            Text [ portuguese ] = "~Ver" ;
+            Text [ finnish ] = "~N‰yt‰" ;
+            Text [ danish ] = "~Vis" ;
+            Text [ french ] = "~Affichage" ;
+            Text [ swedish ] = "Vi~sa" ;
+            Text [ dutch ] = "Beel~d" ;
+            Text [ spanish ] = "~Ver" ;
+            Text [ english_us ] = "~View" ;
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        ITEM_VIEW_BROWSER
+                    };
+                    MenuItem
+                    {
+                        Separator = TRUE ;
+                    };
+                    MenuItem
+                    {
+                        Identifier = 22 ;
+                        Text = "S~ymbolleisten" ;
+                        Text [ English ] = "Toolbars" ;
+                        Text [ english_us ] = "~Toolbars" ;
+                        Text [ swedish ] = "S~ymbollister" ;
+                        Text [ danish ] = "Ikonlin~jer" ;
+                        Text [ italian ] = "Barre dei simboli" ;
+                        Text [ spanish ] = "Barras de ~sÌmbolos" ;
+                        Text [ french ] = "Barres d'~outils" ;
+                        Text [ dutch ] = "~Werkbalken" ;
+                        Text [ portuguese ] = "Barras de ~ferramentas" ;
+                        Text [ portuguese_brazilian ] = "Symbolleisten" ;
+                        SubMenu = Menu
+                        {
+                            ItemList =
+                            {
+                                MenuItem
+                                {
+                                    ITEM_VIEW_TOGGLEFUNCTIONBAR
+                                };
+                                MenuItem
+                                {
+                                    ITEM_VIEW_TOGGLEOBJECTBAR
+                                };
+                                MenuItem
+                                {
+                                    Identifier = SID_TOGGLETOOLBAR ;
+                                    HelpID = SID_TOGGLETOOLBAR ;
+                                    Text = "Werk~zeugleiste" ;
+                                    Text [ English ] = "~Toolbar" ;
+                                    Text [ english_us ] = "Main ~Toolbar" ;
+                                    Text [ swedish ] = "~Verktygslist" ;
+                                    Text [ danish ] = "~VÊrkt¯jslinje" ;
+                                    Text [ italian ] = "Barra degli strumenti" ;
+                                    Text [ spanish ] = "Barra de ~herramientas" ;
+                                    Text [ french ] = "Barre d'~instruments" ;
+                                    Text [ dutch ] = "Werk~tuigbalk" ;
+                                    Text [ portuguese_brazilian ] = "Werk~zeugleiste" ;
+                                    Text [ portuguese ] = "~Barra de ferramentas" ;
+                                    Text[ chinese_simplified ] = "‰∏ªÂ∑•ÂÖ∑Ê†è(~T)";
+                                    Text[ russian ] = "œ‡ÌÂÎ¸ ËÌÒÚÛÏÂÌÚÓ‚";
+                                    Text[ polish ] = "Pasek narzÍdziowy";
+                                    Text[ japanese ] = "Ê®ôÊ∫ñ„ÉÑ„Éº„É´„Éê„Éº(~T)";
+                                    Text[ chinese_traditional ] = "‰∏ªÂ∑•ÂÖ∑Âàó(~T)";
+                                    Text[ greek ] = "√Ò·ÏÏﬁ ÂÒ„·ÎÂﬂ~˘Ì";
+                                    Text[ korean ] = "ÎèÑÍµ¨ Î™®Ïùå(~T)";
+                                    Text[ arabic ] = "‘—Ìÿ «·√œÊ« ";
+                                    Text[ turkish ] = "Ana araÁ Áubuu";
+                                    Text[ language_user1 ] = " ";
+                                    Text[ catalan ] = "Barra d'~eines principal";
+                                    Text[ finnish ] = "P‰‰~tyˆkalurivi";
+                                    Text[ thai ] = "‡πÅ‡∏ñ‡∏ö‡πÄ~‡∏Ñ‡∏£‡∏∑‡πà‡∏≠‡∏á‡∏°‡∏∑‡∏≠‡∏´‡∏•‡∏±‡∏Å";
+                                };
+                                MenuItem
+                                {
+                                    ITEM_INSERT_HYPERLINK_INSERT
+                                };
+                                MenuItem
+                                {
+                                    Separator = TRUE ;
+                                };
+                                MenuItem
+                                {
+                                    Identifier = SID_CUSTOMIZETOOLBOX ;
+                                    HelpID = SID_CUSTOMIZETOOLBOX ;
+                                    Text = "~Bearbeiten..." ;
+                                    Text [ English ] = "~Customize..." ;
+                                    Text [ english_us ] = "Customi~ze..." ;
+                                    Text [ swedish ] = "~Redigera..." ;
+                                    Text [ danish ] = "~Rediger..." ;
+                                    Text [ italian ] = "~Modifica..." ;
+                                    Text [ spanish ] = "~Personalizar..." ;
+                                    Text [ french ] = "~Personnaliser..." ;
+                                    Text [ dutch ] = "~Bewerken..." ;
+                                    Text [ portuguese ] = "~Personalizar..." ;
+                                    Text [ portuguese_brazilian ] = "~Bearbeiten..." ;
+                                    Text[ chinese_simplified ] = "ÁºñËæë(~Z)...";
+                                    Text[ russian ] = "œ‡‚Í‡...";
+                                    Text[ polish ] = "Edytuj...";
+                                    Text[ japanese ] = "„Ç´„Çπ„Çø„Éû„Ç§„Ç∫(~Z)...";
+                                    Text[ chinese_traditional ] = "Á∑®ËºØ(~Z)...";
+                                    Text[ greek ] = "≈ÂÓÂÒ„·Ûﬂ·...";
+                                    Text[ korean ] = "ÏÇ¨Ïö©Ïûê Ï†ïÏùò(~Z)...";
+                                    Text[ arabic ] = " Œ’Ì’...";
+                                    Text[ turkish ] = "÷~zelle˛tir...";
+                                    Text[ language_user1 ] = " ";
+                                    Text[ catalan ] = "Personalit~za...";
+                                    Text[ finnish ] = "Mukau~ta";
+                                    Text[ thai ] = "‡∏Å‡∏≥‡∏´‡∏ô‡∏î‡πÄ~‡∏≠‡∏á...";
+                                };
+                            };
+                        };
+                        Text[ chinese_simplified ] = "ÂõæÊ†áÊ†è(~T)";
+                        Text[ russian ] = "œ‡ÌÂÎË ÒËÏ‚ÓÎÓ‚";
+                        Text[ polish ] = "Paski symboli";
+                        Text[ japanese ] = "„ÉÑ„Éº„É´„Éê„Éº(~T)";
+                        Text[ chinese_traditional ] = "Â∑•ÂÖ∑Âàó(~T)";
+                        Text[ greek ] = "√Ò·ÏÏ›Ú Û~ıÏ‚¸Î˘Ì";
+                        Text[ korean ] = "ÎèÑÍµ¨ Î™®Ïùå(~T)";
+                        Text[ arabic ] = "√‘—ÿ… «·—„Ê“";
+                        Text[ turkish ] = "AraÁ Á~ubuklar˝";
+                        Text[ language_user1 ] = " ";
+                        Text[ catalan ] = "Barra d'~eines";
+                        Text[ finnish ] = "~Tyˆkalurivit";
+                        Text[ thai ] = "‡πÅ‡∏ñ‡∏ö‡πÄ~‡∏Ñ‡∏£‡∏∑‡πà‡∏≠‡∏á‡∏°‡∏∑‡∏≠";
+                    };
+                    MenuItem
+                    {
+                        ITEM_VIEW_TOGGLESTATUSBAR
+                    };
+                    MenuItem
+                    {
+                        Separator = TRUE ;
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_SOURCEVIEW ;
+                        HelpID = SID_SOURCEVIEW ;
+                        Text = "HTM~L-Quelltext" ;
+                        Text [ ENGLISH ] = "HTML source" ;
+                        Text [ dutch ] = "~HTML-brontekst" ;
+                        Text [ english_us ] = "HT~ML Source" ;
+                        Text [ italian ] = "Testo sorgente HTML" ;
+                        Text [ spanish ] = "Texto fuente ~HTML" ;
+                        Text [ french ] = "Texte source ~HTML" ;
+                        Text [ swedish ] = "HTM~L-k‰lltext" ;
+                        Text [ danish ] = "HTML-kildetekst" ;
+                        Text [ portuguese ] = "Fonte ~HTML" ;
+                        Text [ portuguese_brazilian ] = "HTML-Quelltext" ;
+                        Text[ chinese_simplified ] = "HT~ML Ê∫êÊñáÊú¨";
+                        Text[ russian ] = "»ÒıÓ‰Ì˚È ÚÂÍÒÚ HTM~L";
+                        Text[ polish ] = "Tekst ürÛd≥owy HTML";
+                        Text[ japanese ] = "HT~ML „ÇΩ„Éº„Çπ„ÉÜ„Ç≠„Çπ„Éà";
+                        Text[ chinese_traditional ] = "HT~ML ÂéüÂßãÊ™î";
+                        Text[ dutch ] = "~HTML-brontekst";
+                        Text[ chinese_simplified ] = "HT~ML Ê∫êÊñáÊú¨";
+                        Text[ greek ] = " ÂﬂÏÂÌÔ ÒÔ›ÎÂıÛÁÚ HTM~L";
+                        Text[ korean ] = "HT~ML ÏÜåÏä§ ÌÖçÏä§Ìä∏(„Ö°)";
+                        Text[ arabic ] = "‰’ „’œ— HTML";
+                        Text[ turkish ] = "HTM~L kaynak kodu";
+                        Text[ language_user1 ] = " ";
+                        Text[ catalan ] = "Font HT~ML";
+                        Text[ finnish ] = "HT~ML-l‰hde";
+                        Text[ thai ] = "‡πÅ‡∏´‡∏•‡πà‡∏á HT~ML ";
+                    };
+                    MenuItem
+                    {
+                        Separator = TRUE ;
+                    };
+                    ITEM_VIEW_SCREENMODE
+                };
+            };
+            Text[ chinese_simplified ] = "ËßÜÂõæ(~V)";
+            Text[ russian ] = "~¬Ë‰";
+            Text[ polish ] = "~Widok";
+            Text[ japanese ] = "Ë°®Á§∫(~V)";
+            Text[ chinese_traditional ] = "Ê™¢Ë¶ñ(~V)";
+            Text[ dutch ] = "Beel~d";
+            Text[ chinese_simplified ] = "ËßÜÂõæ(~V)";
+            Text[ greek ] = "–ÒÔ‚ÔÎﬁ";
+            Text[ korean ] = "Î≥¥Í∏∞(~V)";
+            Text[ arabic ] = "~⁄—÷";
+            Text[ turkish ] = "~Gˆr¸n¸m";
+            Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Visualitza";
+            Text[ thai ] = "~‡∏°‡∏∏‡∏°‡∏°‡∏≠‡∏á";
+        };
+        MenuItem
+        {
+            Identifier = MN_PLEXTRA ;
+            Text = "E~xtras" ;
+            Text [ English ] = "T~ools" ;
+            Text [ norwegian ] = "Verk~t¯y" ;
+            Text [ italian ] = "~Strumenti" ;
+            Text [ portuguese_brazilian ] = "F~erramentas" ;
+            Text [ portuguese ] = "Ferra~mentas" ;
+            Text [ finnish ] = "~Tyˆkalut" ;
+            Text [ danish ] = "Fun~ktioner" ;
+            Text [ french ] = "~Outils" ;
+            Text [ swedish ] = "~Verktyg" ;
+            Text [ dutch ] = "E~xtra" ;
+            Text [ spanish ] = "~Herramientas" ;
+            Text [ english_us ] = "~Tools" ;
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        ITEM_TOOLS_BASICCHOOSER
+                    };
+                    MenuItem
+                    {
+                        ITEM_TOOLS_CONFIG
+                    };
+                    ITEM_MN_OPTIONS
+                };
+            };
+            Text[ chinese_simplified ] = "Â∑•ÂÖ∑(~T)";
+            Text[ russian ] = "~—Â‚ËÒ";
+            Text[ polish ] = "~NarzÍdzia";
+            Text[ japanese ] = "„ÉÑ„Éº„É´(~T)";
+            Text[ chinese_traditional ] = "Â∑•ÂÖ∑(~T)";
+            Text[ dutch ] = "E~xtra";
+            Text[ chinese_simplified ] = "Â∑•ÂÖ∑(~T)";
+            Text[ greek ] = "≈Ò„·ÎÂﬂ·";
+            Text[ korean ] = "ÎèÑÍµ¨(~T)";
+            Text[ arabic ] = "√~œÊ« ";
+            Text[ turkish ] = "~AraÁlar";
+            Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Ei~nes";
+            Text[ thai ] = "‡πÄ~‡∏Ñ‡∏£‡∏∑‡πà‡∏≠‡∏á‡∏°‡∏∑‡∏≠";
+        };
+        ITEM_WINDOW_MENU
+        ITEM_HELP_MENU
+    };
+};
+
+
