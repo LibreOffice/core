@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmui.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: avy $ $Date: 2001-03-09 21:08:04 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:48:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ String STR_TOP
     TEXT[ chinese_traditional ] = "¤W(~T)";
     TEXT[ arabic ] = "ΓΪαμ";
     TEXT[ greek ] = "Πάνω";
-    TEXT[ korean ] = "ΐ§";
+    TEXT[ korean ] = "ΐ§(~T)";
     TEXT[ turkish ] = "~άst";
     TEXT[ language_user1 ] = " ";
 };
@@ -111,7 +111,7 @@ String STR_BOTTOM
     TEXT[ chinese_traditional ] = "¤U(~B)";
     TEXT[ arabic ] = "ΓΣέα";
     TEXT[ greek ] = "Κάτω";
-    TEXT[ korean ] = "ΎΖ·΅";
+    TEXT[ korean ] = "ΎΖ·΅(~B)";
     TEXT[ turkish ] = "A~ltta";
     TEXT[ language_user1 ] = " ";
 };
@@ -137,7 +137,7 @@ String STR_CENTER_HORI
     TEXT[ chinese_traditional ] = "Έm¤¤(~C)";
     TEXT[ arabic ] = "ΚζΣνΨ";
     TEXT[ greek ] = "Κεντραρισμένα";
-    TEXT[ korean ] = "°΅Ώξµ¥";
+    TEXT[ korean ] = "°΅Ώξµ¥(~C)";
     TEXT[ turkish ] = "~Ortala";
     TEXT[ language_user1 ] = " ";
 };
@@ -340,7 +340,7 @@ String STR_CENTER_VERT
     Text[ chinese_traditional ] = "Έm¤¤(~E)";
     Text[ arabic ] = "ΗαζΣΨ";
     Text[ greek ] = "Κέντρο";
-    Text[ korean ] = "°΅Ώξµ¥";
+    Text[ korean ] = "°΅Ώξµ¥(~E)";
     Text[ turkish ] = "O~rta";
     Text[ language_user1 ] = " ";
 };
@@ -1028,7 +1028,7 @@ String STR_BOTTOM_BASE
     Text[ chinese_traditional ] = "°ς½u¤U¤θ(~B)";
     Text[ arabic ] = "ΓΣέα ΗαΞΨ ΗαΓΣΗΣν";
     Text[ greek ] = "Βασική γραμμή - κάτω";
-    Text[ korean ] = "±βΑΨΌ± ΎΖ·΅";
+    Text[ korean ] = "±βΑΨΌ± ΎΖ·΅(~B)";
     Text[ turkish ] = "Alt ~taban ηizgisi";
     Text[ language_user1 ] = " ";
 };
@@ -1052,7 +1052,7 @@ String STR_CENTER_BASE
     Text[ chinese_traditional ] = "°ς½uΈm¤¤(~C)";
     Text[ arabic ] = "ζΣΨ ΗαΞΨ ΗαΓΣΗΣν";
     Text[ greek ] = "Βασική γραμμή - κεντραρισμένα";
-    Text[ korean ] = "±βΑΨΌ± °΅Ώξµ¥";
+    Text[ korean ] = "±βΑΨΌ± °΅Ώξµ¥(~C)";
     Text[ turkish ] = "Taban ηizgisini ~ortala";
     Text[ language_user1 ] = " ";
 };
