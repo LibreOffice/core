@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview3.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-20 16:51:58 $
+ *  last change: $Author: nn $ $Date: 2001-04-20 18:53:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2157,8 +2157,17 @@ void ScTabView::InvertBlockMark(USHORT nBlockStartX, USHORT nBlockStartY,
     PutInOrder( nBlockStartY, nBlockEndY );
 
     ScMarkData& rMark = aViewData.GetMarkData();
-    ScDocument* pDoc = aViewData.GetDocument();
+    ScDocShell* pDocSh = aViewData.GetDocShell();
+    ScDocument* pDoc = pDocSh->GetDocument();
     USHORT nTab = aViewData.GetTabNo();
+
+    if ( pDocSh->GetLockCount() )
+    {
+        //  if paint is locked, avoid repeated inverting
+        //  add repaint areas to paint lock data instead
+        pDocSh->PostPaint( nBlockStartX,nBlockStartY,nTab, nBlockEndX,nBlockEndY,nTab, PAINT_GRID );
+        return;
+    }
 
 #ifdef MAC
     BOOL bSingle = TRUE;
