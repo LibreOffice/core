@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epbm.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-10 11:11:35 $
+ *  last change: $Author: sj $ $Date: 2001-10-08 13:59:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,7 +142,7 @@ BOOL PBMWriter::WritePBM( const Graphic& rGraphic, SvStream& rPBM,
     mpCallerData = pCallerdata;
 
     if ( pConfigItem )
-        mnMode = pConfigItem->ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "FileFPBM-EXPORT-FORMAT" ) ), 0 );
+        mnMode = pConfigItem->ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "FileFormat" ) ), 0 );
 
     BitmapEx    aBmpEx( rGraphic.GetBitmapEx() );
     Bitmap      aBmp = aBmpEx.GetBitmap();
