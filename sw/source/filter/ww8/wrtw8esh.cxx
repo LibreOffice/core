@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-16 15:30:18 $
+ *  last change: $Author: cmc $ $Date: 2002-07-25 17:59:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -399,7 +399,8 @@ bool PlcDrawObj::Append(SwWW8Writer& rWrt, WW8_CP nCp, const SwFrmFmt& rFmt,
     }
 
     if (bRet)
-        maDrawObjs.push_back(DrawObj(rFmt,nCp,rNdTopLeft));
+        maDrawObjs.push_back(
+            DrawObj(rFmt,nCp,rNdTopLeft,rWrt.TrueFrameDirection(rFmt)));
     return bRet;
 }
 
@@ -1070,6 +1071,7 @@ class SwEscherEx : public  EscherEx
 {
 private:
     SvULongs aFollowShpIds;
+    std::vector<short> maDirections;
     SvPtrarr aSortFmts;
     SwWW8Writer& rWrt;
     EscherExHostAppData aHostData;
@@ -1095,8 +1097,9 @@ private:
     INT32 DrawModelToEmu( INT32 nVal ) const
         { return BigMulDiv( nVal, nEmuMul, nEmuDiv ); }
 
-    INT32 WriteFlyFrm(const SwFrmFmt& rFmt,UINT32 &rShapeId);
-    INT32 WriteTxtFlyFrame(const SwFrmFmt& rFmt,UINT32 nShapeId,UINT32 nTxtBox);
+    INT32 WriteFlyFrm(const SwFrmFmt& rFmt,UINT32 &rShapeId, short nDirection);
+    INT32 WriteTxtFlyFrame(const SwFrmFmt& rFmt,UINT32 nShapeId,
+        UINT32 nTxtBox, short nDirection);
     INT32 WriteGrfFlyFrame(const SwFrmFmt& rFmt,UINT32 nShapeId);
     INT32 WriteOLEFlyFrame(const SwFrmFmt& rFmt,UINT32 nShapeId);
     INT32 WriteFlyFrameAttr(const SwFrmFmt& rFmt,MSO_SPT eShapeType,
@@ -1221,9 +1224,9 @@ SwEscherEx::SwEscherEx( SvStream* pStrm, SwWW8Writer& rWW8Wrt )
         for( USHORT n = 0; n < aSortFmts.Count(); ++n )
         {
             INT32 nBorderThick=0;
-            const SwFrmFmt& rFmt = *(SwFrmFmt*)aSortFmts[ n ];
+            const SwFrmFmt& rFmt = *(const SwFrmFmt*)aSortFmts[n];
             if (RES_FLYFRMFMT == rFmt.Which())
-                nBorderThick = WriteFlyFrm( rFmt, nShapeId );
+                nBorderThick = WriteFlyFrm(rFmt, nShapeId, maDirections[n]);
             else if (rFmt.FindRealSdrObject()->GetObjInventor() ==
                      FmFormInventor)
             {
@@ -1852,7 +1855,8 @@ void SwEscherEx::WriteFrmExtraData( const SwFrmFmt& rFmt )
     aWinwordAnchoring.WriteData(*this);
 }
 
-INT32 SwEscherEx::WriteFlyFrm( const SwFrmFmt& rFmt, UINT32 &rShapeId )
+INT32 SwEscherEx::WriteFlyFrm(const SwFrmFmt& rFmt, UINT32 &rShapeId,
+    short nDirection)
 {
     // check for textflyframe and if it is the first in a Chain
     INT32 nBorderThick = 0;
@@ -1869,52 +1873,50 @@ INT32 SwEscherEx::WriteFlyFrm( const SwFrmFmt& rFmt, UINT32 &rShapeId )
             nBorderThick = WriteOLEFlyFrame( rFmt, rShapeId = GetShapeID() );
             break;
         default:
+            if (const SdrObject* pObj = rFmt.FindRealSdrObject())
             {
-                const SdrObject* pObj = rFmt.FindRealSdrObject();
-                if( pObj )
+                // check for the first in a Chain
+                UINT32 nTxtId;
+                USHORT nOff = 0;
+                const SwFrmFmt* pFmt = &rFmt, *pPrev;
+                while( 0 != ( pPrev = pFmt->GetChain().GetPrev() ))
                 {
-                    // check for the first in a Chain
-                    UINT32 nTxtId;
-                    USHORT nOff = 0;
-                    const SwFrmFmt* pFmt = &rFmt, *pPrev;
-                    while( 0 != ( pPrev = pFmt->GetChain().GetPrev() ))
-                    {
-                        ++nOff;
-                        pFmt = pPrev;
-                    }
+                    ++nOff;
+                    pFmt = pPrev;
+                }
 
-                    rShapeId = GetFlyShapeId( rFmt );
-                    if( !nOff )
+                rShapeId = GetFlyShapeId( rFmt );
+                if( !nOff )
+                {
+                    void* p = (void*)pObj;
+                    nTxtId = pTxtBxs->GetPos( p );
+                    if( USHRT_MAX == nTxtId )
                     {
-                        void* p = (void*)pObj;
-                        nTxtId = pTxtBxs->GetPos( p );
-                        if( USHRT_MAX == nTxtId )
-                        {
-                            pTxtBxs->Append( *pObj, rShapeId );
-                            nTxtId = pTxtBxs->Count();
-                        }
-                        else
-                            ++nTxtId;
+                        pTxtBxs->Append( *pObj, rShapeId );
+                        nTxtId = pTxtBxs->Count();
                     }
                     else
-                    {
-                        const SdrObject* pPrevObj = pFmt->FindRealSdrObject();
-                        void* p = (void*)pPrevObj;
-                        nTxtId = pTxtBxs->GetPos( p );
-                        if( USHRT_MAX == nTxtId )
-                        {
-                            UINT32 nPrevShapeId = GetFlyShapeId( *pFmt );
-                            pTxtBxs->Append( *pPrevObj, nPrevShapeId );
-                            nTxtId = pTxtBxs->Count();
-                        }
-                        else
-                            ++nTxtId;
-                    }
-                    nTxtId *= 0x10000;
-                    nTxtId += nOff;
-
-                    nBorderThick = WriteTxtFlyFrame( rFmt, rShapeId, nTxtId );
+                        ++nTxtId;
                 }
+                else
+                {
+                    const SdrObject* pPrevObj = pFmt->FindRealSdrObject();
+                    void* p = (void*)pPrevObj;
+                    nTxtId = pTxtBxs->GetPos( p );
+                    if( USHRT_MAX == nTxtId )
+                    {
+                        UINT32 nPrevShapeId = GetFlyShapeId( *pFmt );
+                        pTxtBxs->Append( *pPrevObj, nPrevShapeId );
+                        nTxtId = pTxtBxs->Count();
+                    }
+                    else
+                        ++nTxtId;
+                }
+                nTxtId *= 0x10000;
+                nTxtId += nOff;
+
+                nBorderThick = WriteTxtFlyFrame(rFmt, rShapeId, nTxtId,
+                    nDirection);
             }
         }
     }
@@ -1922,7 +1924,7 @@ INT32 SwEscherEx::WriteFlyFrm( const SwFrmFmt& rFmt, UINT32 &rShapeId )
 }
 
 INT32 SwEscherEx::WriteTxtFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId,
-    UINT32 nTxtBox)
+    UINT32 nTxtBox, short nDirection)
 {
     INT32 nBorderThick=0;
     OpenContainer( ESCHER_SpContainer );
@@ -1939,20 +1941,10 @@ INT32 SwEscherEx::WriteTxtFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId,
     }
     nBorderThick = WriteFlyFrameAttr( rFmt, mso_sptTextBox, aPropOpt );
 
-    const SvxFrameDirectionItem &rDirection =
-        (const SvxFrameDirectionItem &)rFmt.GetAttr(RES_FRAMEDIR);
-    MSO_TextFlow nFlow=mso_txflHorzN;
-    switch (rDirection.GetValue())
+    MSO_TextFlow nFlow;
+
+    switch (nDirection)
     {
-        case FRMDIR_ENVIRONMENT:
-            if (const SwNodeIndex* pNdIdx = rFmt.GetCntnt().GetCntntIdx())
-            {
-                SwPosition aPos(*pNdIdx);
-                aPos.nNode = pNdIdx->GetIndex() + 1;
-                if (rWrt.pDoc->IsInVerticalText(aPos))
-                    nFlow=mso_txflTtoBA;
-            }
-            break;
         default:
             ASSERT(0,"unknown direction type");
         case FRMDIR_HORI_LEFT_TOP:
@@ -2406,27 +2398,30 @@ INT32 SwEscherEx::WriteFlyFrameAttr( const SwFrmFmt& rFmt, MSO_SPT eShapeType,
 void SwEscherEx::MakeZOrderArrAndFollowIds(
     const ::std::vector<DrawObj>& rSrcArr)
 {
-    if( aSortFmts.Count() )
+    if (aSortFmts.Count())
         aSortFmts.Remove( 0, aSortFmts.Count() );
 
     USHORT n, nPos, nCnt = rSrcArr.size();
     SvULongsSort aSort( 255 < nCnt ? 255 : nCnt, 255 );
+    ASSERT(maDirections.empty(), "Impossible");
+    maDirections.resize(nCnt);
     for( n = 0; n < nCnt; ++n )
     {
         ULONG nOrdNum = rWrt.GetSdrOrdNum(rSrcArr[n].mrCntnt);
         aSort.Insert( nOrdNum, nPos );
         void* p = (void *)(&(rSrcArr[n].mrCntnt));
         aSortFmts.Insert( p, nPos );
+        maDirections[nPos] = rSrcArr[n].mnDirection;
     }
 
-    if( aFollowShpIds.Count() )
-        aFollowShpIds.Remove( 0, aFollowShpIds.Count() );
+    if (aFollowShpIds.Count())
+        aFollowShpIds.Remove(0, aFollowShpIds.Count());
 
     ULONG nShapeId;
     const SwFmtChain* pChain;
     for( n = 0; n < nCnt; ++n )
     {
-        const SwFrmFmt* pFmt = (SwFrmFmt*)aSortFmts[ n ];
+        const SwFrmFmt* pFmt = (const SwFrmFmt*)aSortFmts[ n ];
 
         if( RES_FLYFRMFMT == pFmt->Which() &&
             ( ( pChain = &pFmt->GetChain())->GetPrev() ||

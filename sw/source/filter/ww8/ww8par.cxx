@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-23 12:39:46 $
+ *  last change: $Author: cmc $ $Date: 2002-07-25 18:00:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2272,6 +2272,7 @@ SwWW8ImplReader::SwWW8ImplReader( BYTE nVersionPara, SvStorage* pStorage,
 
     nLFOPosition = USHRT_MAX;
     nListLevel   = nWW8MaxListLevel;
+    mbRTLPgn = false;
     eHardCharSet = RTL_TEXTENCODING_DONTKNOW;
     pPageDesc = 0;
 

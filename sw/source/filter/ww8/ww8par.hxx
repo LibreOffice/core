@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-24 15:06:36 $
+ *  last change: $Author: cmc $ $Date: 2002-07-25 18:00:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -779,6 +779,7 @@ friend class WW8FormulaControl;
     BYTE nListLevel;
 
     BYTE nNfcPgn;               // Formatting of PageNum
+    bool mbRTLPgn;              // Direction of page
     BYTE nPgChpDelim;           // ChapterDelim from PageNum
     BYTE nPgChpLevel;           // ChapterLevel of Heading from PageNum
 

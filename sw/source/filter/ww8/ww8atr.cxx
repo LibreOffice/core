@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-24 15:06:35 $
+ *  last change: $Author: cmc $ $Date: 2002-07-25 18:00:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,6 +250,9 @@
 #ifndef _DOC_HXX
 #include <doc.hxx>          // Doc fuer Fussnoten
 #endif
+#ifndef _PAM_HXX
+#include <pam.hxx>
+#endif
 #ifndef _PARATR_HXX
 #include <paratr.hxx>
 #endif
@@ -476,8 +479,20 @@ void SwWW8Writer::Out_SfxItemSet( const SfxItemSet& rSet, BOOL bPapFmt,
 
         pISet = &rSet;                  // fuer Doppel-Attribute
 
-        // first the NumRule and than the LRSpace, so will W97 understand it
-        // and move away the paragraph from the left side
+        //If frame dir is set, but not adjust, then force adjust as well
+        if (bPapFmt && SFX_ITEM_SET == rSet.GetItemState(RES_FRAMEDIR,
+            FALSE, &pItem ))
+        {
+            //No explicit adjust set ?
+            if (SFX_ITEM_SET != rSet.GetItemState(RES_PARATR_ADJUST, FALSE))
+            {
+                pItem = rSet.GetItem(RES_PARATR_ADJUST);
+                // then set the adjust used by the parent format
+                pOut = aWW8AttrFnTab[ RES_PARATR_ADJUST - RES_CHRATR_BEGIN ];
+                (*pOut)( *this, *pItem );
+            }
+        }
+
         if( bPapFmt && SFX_ITEM_SET == rSet.GetItemState( RES_PARATR_NUMRULE,
                                                             FALSE, &pItem ))
         {
@@ -3862,22 +3877,24 @@ static Writer& OutWW8_SvxAdjust(Writer& rWrt, const SfxPoolItem& rHt)
             bool bBiDiSwap=false;
             if (rWrtWW8.pOutFmtNode)
             {
-                const SvxFrameDirectionItem *pItem = 0;
+                short nDirection = FRMDIR_HORI_LEFT_TOP;
                 if (rWrtWW8.pOutFmtNode->ISA(SwTxtNode))
                 {
-                    const SwCntntNode* pTxtNd =
-                        (const SwCntntNode*)rWrtWW8.pOutFmtNode;
-                    pItem = (const SvxFrameDirectionItem*)
-                        &(pTxtNd->GetAttr(RES_FRAMEDIR));
+                    SwPosition aPos(*(const SwCntntNode*)rWrtWW8.pOutFmtNode);
+                    nDirection = rWrtWW8.pDoc->GetTextDirection(aPos);
                 }
                 else if (rWrtWW8.pOutFmtNode->ISA(SwTxtFmtColl))
                 {
                     const SwTxtFmtColl* pC =
                         (const SwTxtFmtColl*)rWrtWW8.pOutFmtNode;
-                    pItem = (const SvxFrameDirectionItem*)
-                        &(pC->GetAttr(RES_FRAMEDIR));
+                    if (const SvxFrameDirectionItem *pItem =
+                        (const SvxFrameDirectionItem*)
+                        &(pC->GetAttr(RES_FRAMEDIR)))
+                    {
+                        nDirection = pItem->GetValue();
+                    }
                 }
-                if (pItem && pItem->GetValue() == FRMDIR_HORI_RIGHT_TOP)
+                if (nDirection == FRMDIR_HORI_RIGHT_TOP)
                     bBiDiSwap=true;
             }
 
@@ -3904,10 +3921,38 @@ static Writer& OutWW8_SvxFrameDirection( Writer& rWrt, const SfxPoolItem& rHt )
       const SvxFrameDirectionItem& rItem = (const SvxFrameDirectionItem&)rHt;
     UINT16 nTextFlow=0;
     BOOL bBiDi=FALSE;
-    switch (rItem.GetValue())
+    short nDir = rItem.GetValue();
+
+    if (nDir == FRMDIR_ENVIRONMENT)
+    {
+        if (rWrtWW8.bOutPageDescs)
+            nDir = rWrtWW8.GetCurrentPageDirection();
+        else if (rWrtWW8.pOutFmtNode)
+        {
+            if (rWrtWW8.bOutFlyFrmAttrs)  //frame
+            {
+                nDir = rWrtWW8.TrueFrameDirection(
+                    *(const SwFrmFmt*)rWrtWW8.pOutFmtNode);
+            }
+            else if (rWrtWW8.pOutFmtNode->ISA(SwCntntNode))   //pagagraph
+            {
+                const SwCntntNode* pNd =
+                    (const SwCntntNode*)rWrtWW8.pOutFmtNode;
+                SwPosition aPos(*pNd);
+                nDir = rWrt.pDoc->GetTextDirection(aPos);
+            }
+            else if (rWrtWW8.pOutFmtNode->ISA(SwTxtFmtColl))
+                nDir = FRMDIR_HORI_LEFT_TOP;    //what else can we do :-(
+        }
+
+        if (nDir == FRMDIR_ENVIRONMENT)
+            nDir = FRMDIR_HORI_LEFT_TOP;    //Set something
+    }
+
+    switch (nDir)
     {
         default:
-            //Don't know about inheriting direction yet. A ToDo.
+            //Can't get an unknown type here
             ASSERT(0,"Unknown frame direction");
         case FRMDIR_HORI_LEFT_TOP:
             nTextFlow = 0;
@@ -3933,24 +3978,6 @@ static Writer& OutWW8_SvxFrameDirection( Writer& rWrt, const SfxPoolItem& rHt )
     {
         rWrtWW8.InsUInt16(0x2441);
         rWrtWW8.pO->Insert(bBiDi, rWrtWW8.pO->Count() );
-
-        if (rWrtWW8.pOutFmtNode &&
-            rWrtWW8.pOutFmtNode->ISA(SwTxtFmtColl))
-        {
-            const SwTxtFmtColl* pC =
-                (const SwTxtFmtColl*)rWrtWW8.pOutFmtNode;
-
-            /*
-            If we are setting the frame direction but
-            have not or will not set the adjust then we need
-            to force that to happen because the default thing
-            that word does when seeing rtl is to right align
-            those paragraphs, while we retain a default of
-            left align
-            */
-            if (SFX_ITEM_SET != pC->GetItemState(RES_PARATR_ADJUST, TRUE))
-                OutWW8_SvxAdjust(rWrt, pC->GetAttr(RES_PARATR_ADJUST));
-        }
     }
     return rWrt;
 }

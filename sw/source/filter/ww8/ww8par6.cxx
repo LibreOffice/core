@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-24 15:06:37 $
+ *  last change: $Author: cmc $ $Date: 2002-07-25 18:00:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -419,8 +419,6 @@ void SwWW8ImplReader::SetDocumentGrid(SwFrmFmt &rFmt,const WW8PLCFx_SEPX* pSep)
     if (bVer67)
         return;
 
-    //sprmSFBiDi
-    BYTE bIsBiDi = ReadBSprm(pSep, 0x3228, 0);
     SvxFrameDirection eDir=FRMDIR_HORI_LEFT_TOP;
 
     //sprmSTextFlow
@@ -453,7 +451,7 @@ void SwWW8ImplReader::SetDocumentGrid(SwFrmFmt &rFmt,const WW8PLCFx_SEPX* pSep)
                 break;
         }
     }
-    if ((eDir == FRMDIR_HORI_LEFT_TOP) && bIsBiDi)
+    if ((eDir == FRMDIR_HORI_LEFT_TOP) && mbRTLPgn)
         eDir = FRMDIR_HORI_RIGHT_TOP;
 
     rFmt.SetAttr(SvxFrameDirectionItem(eDir));
@@ -1128,6 +1126,9 @@ void SwWW8ImplReader::InsertSectionWithWithoutCols(SwPaM& rMyPaM,
     if( pCol )
         aSet.Put( *pCol );
 
+    aSet.Put(SvxFrameDirectionItem(
+        mbRTLPgn ? FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP));
+
     if( 2 == pWDop->fpc )
         aSet.Put( SwFmtFtnAtTxtEnd( FTNEND_ATTXTEND ));
     if( 0 == pWDop->epc )
@@ -1395,6 +1396,11 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos, BOOL bMustHaveBreak)
     if (nNfcPgn > 4)
         nNfcPgn = 0;
 
+    // sprmSFBiDi
+    bool bLastRTLPgn = mbRTLPgn;
+    if (!bVer67)
+        mbRTLPgn = ReadBSprm(pSep, 0x3228, 0);
+
     /*
         Pruefen, ob wir uns den neuen Abschnitt schenken koennen, da kein
         Umbruch erforderlich ist.
@@ -1427,7 +1433,7 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos, BOOL bMustHaveBreak)
                 bEqual = (bSectionHasATitlePage == bLastSectionHadATitlePage)
                           && (nCorrIhdt == nLastSectionCorrIhdt)
                           && (nCorrIhdt == (nCorrIhdt & nJustCopyHdFt))
-                          && (nNfcPgn   == nLastNfcPgn);
+                          && (nNfcPgn   == nLastNfcPgn) && (mbRTLPgn == bLastRTLPgn);
             }
 
             if (bEqual) //Give continious breaks leniency.
@@ -2744,7 +2750,9 @@ WW8FlySet::WW8FlySet( SwWW8ImplReader& rReader, const SwPaM* pPaM,
     if (rReader.bVerticalEnviron)
         Put(SwFmtVertOrient(0, VERT_CHAR_CENTER,REL_CHAR));
     else
-        Put( SwFmtVertOrient( 0, VERT_TOP, FRAME ));
+        Put(SwFmtVertOrient(0, VERT_TOP, FRAME));
+
+    Put(SvxFrameDirectionItem(FRMDIR_HORI_LEFT_TOP));
 
     short aSizeArray[5]={0};
     /*

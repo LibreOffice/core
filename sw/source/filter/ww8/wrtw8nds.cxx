@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-23 16:47:56 $
+ *  last change: $Author: cmc $ $Date: 2002-07-25 18:00:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,10 @@
 #ifndef _SVX_BRKITEM_HXX //autogen
 #include <svx/brkitem.hxx>
 #endif
+#ifndef _SVX_FRMDIRITEM_HXX
+#include <svx/frmdiritem.hxx>
+#endif
+
 #ifndef _TOOLS_TENCCVT_HXX
 #include <tools/tenccvt.hxx>
 #endif
@@ -256,7 +260,8 @@ private:
     std::vector<Entry> maDirChanges;
     typedef std::vector<Entry>::const_iterator myciter;
     myciter aIter;
-    bool mbIsRTL;
+    bool mbCharIsRTL;
+    bool mbParaIsRTL;
 
     xub_StrLen SearchNext( xub_StrLen nStartPos );
     void SetCharSet( const SwTxtAttr& rTxtAttr, BOOL bStart );
@@ -289,15 +294,21 @@ public:
     rtl_TextEncoding GetNextCharSet() const;
     rtl_TextEncoding GetNodeCharSet() const             { return eNdChrSet; }
 
-    bool IsRTL() const {return mbIsRTL; }
+    bool IsCharRTL() const {return mbCharIsRTL; }
+    bool IsParaRTL() const {return mbParaIsRTL; }
 };
 
 WW8_SwAttrIter::WW8_SwAttrIter( SwWW8Writer& rWr, const SwTxtNode& rTxtNd )
     : WW8_AttrIter( rWr ), rNd( rTxtNd ), nAktSwPos( 0 ), nTmpSwPos( 0 ),
     aTxtAtrArr( 0, 4 ), aChrSetArr( 0, 4 ), nCurRedlinePos( USHRT_MAX ),
-    /*watch mbIsRTL this if we need to have an envionmental rtl in the future*/
-    pCurRedline(0), mbIsRTL(false)
+    pCurRedline(0), mbCharIsRTL(false)
 {
+    SwPosition aPos(rTxtNd);
+    if (FRMDIR_HORI_RIGHT_TOP == rWr.pDoc->GetTextDirection(aPos))
+        mbParaIsRTL = true;
+    else
+        mbParaIsRTL = false;
+
     // Attributwechsel an Pos 0 wird ignoriert, da davon ausgegangen
     // wird, dass am Absatzanfang sowieso die Attribute neu ausgegeben
     // werden.
@@ -314,9 +325,7 @@ WW8_SwAttrIter::WW8_SwAttrIter( SwWW8Writer& rWr, const SwTxtNode& rTxtNd )
 
     if (rTxt.Len())
     {
-        //Watch nDefaultDir later on, when section and table support are in
-        //may need to make this environmental like vertical text.
-        const BYTE nDefaultDir = UBIDI_LTR;
+        const BYTE nDefaultDir = mbParaIsRTL ? UBIDI_RTL : UBIDI_LTR;
         UErrorCode nError = U_ZERO_ERROR;
         UBiDi* pBidi = ubidi_openSized(rTxt.Len(), 0, &nError);
         ubidi_setPara(pBidi, rTxt.GetBuffer(), rTxt.Len(), nDefaultDir, NULL,
@@ -346,10 +355,8 @@ WW8_SwAttrIter::WW8_SwAttrIter( SwWW8Writer& rWr, const SwTxtNode& rTxtNd )
             nStart = nEnd;
         }
         ubidi_close(pBidi);
-
-        aIter = maDirChanges.begin();
-
     }
+    aIter = maDirChanges.begin();
 
     if( rWrt.pDoc->GetRedlineTbl().Count() )
     {
@@ -456,7 +463,7 @@ xub_StrLen WW8_SwAttrIter::SearchNext( xub_StrLen nStartPos )
         if (aIter->first <= nMinPos)
         {
             nMinPos = aIter->first;
-            mbIsRTL = aIter->second;
+            mbCharIsRTL = aIter->second;
             ++aIter;
         }
     }
@@ -512,7 +519,7 @@ void WW8_SwAttrIter::OutAttr( xub_StrLen nSwPos )
     if (rNd.GetpSwAttrSet())
         rWrt.Out_SfxItemSet(*rNd.GetpSwAttrSet(), FALSE, TRUE, nScript);
 
-    if (IsRTL())
+    if (IsCharRTL())
     {
         SwWW8Writer& rWrtWW8 = (SwWW8Writer&)rWrt;
         rWrtWW8.InsUInt16(0x85a);
@@ -1127,6 +1134,55 @@ void WW8_SwAttrIter::OutRedlines( xub_StrLen nPos )
 
 /*  */
 
+short SwWW8Writer::GetCurrentPageDirection() const
+{
+    const SwFrmFmt  &rFmt = pAktPageDesc
+                    ? pAktPageDesc->GetMaster()
+                    : pDoc->GetPageDesc(0).GetMaster();
+    const SvxFrameDirectionItem* pItem = &rFmt.GetFrmDir();
+
+    if (!pItem)
+    {
+        pItem = (const SvxFrameDirectionItem*)
+            &pDoc->GetAttrPool().GetDefaultItem(RES_FRAMEDIR);
+    }
+    return pItem->GetValue();
+}
+
+short SwWW8Writer::TrueFrameDirection(const SwFrmFmt &rFlyFmt) const
+{
+    const SwFrmFmt *pFlyFmt = &rFlyFmt;
+    const SvxFrameDirectionItem* pItem = 0;
+    while (pFlyFmt)
+    {
+        pItem = &pFlyFmt->GetFrmDir();
+        if (FRMDIR_ENVIRONMENT == pItem->GetValue())
+        {
+            pItem = 0;
+            const SwFmtAnchor* pAnchor = &pFlyFmt->GetAnchor();
+            if( FLY_PAGE != pAnchor->GetAnchorId() &&
+                pAnchor->GetCntntAnchor() )
+            {
+                pFlyFmt = pAnchor->GetCntntAnchor()->nNode.
+                                    GetNode().GetFlyFmt();
+            }
+            else
+                pFlyFmt = 0;
+        }
+        else
+            pFlyFmt = 0;
+    }
+
+    short nRet;
+    if (pItem)
+        nRet = pItem->GetValue();
+    else
+        nRet = GetCurrentPageDirection();
+
+    ASSERT(nRet != FRMDIR_ENVIRONMENT, "leaving with environment direction");
+    return nRet;
+}
+
 Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
 {
     SwWW8Writer& rWW8Wrt = (SwWW8Writer&)rWrt;
@@ -1350,10 +1406,28 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
                     }
                 }
                 else
-                    pTmpSet->ClearItem( RES_PARATR_NUMRULE );
+                    pTmpSet->ClearItem(RES_PARATR_NUMRULE);
 
                 pTmpSet->Put( aLR );
                 SwWW8Writer::CorrTabStopInSet( *pTmpSet, pFmt->GetAbsLSpace() );
+            }
+
+            /*
+            If a given para is using the FRMDIR_ENVIRONMENT direction we
+            cannot export that, its its ltr then that's ok as thats word's
+            default. Otherwise we must add a RTL attribute to our export list
+            */
+            const SvxFrameDirectionItem* pItem = (const SvxFrameDirectionItem*)
+                pNd->GetSwAttrSet().GetItem(RES_FRAMEDIR);
+            if (
+                (!pItem || pItem->GetValue() == FRMDIR_ENVIRONMENT) &&
+                aAttrIter.IsParaRTL()
+               )
+            {
+                if (pTmpSet == pNd->GetpSwAttrSet())
+                    pTmpSet = new SfxItemSet(pNd->GetSwAttrSet());
+
+                pTmpSet->Put(SvxFrameDirectionItem(FRMDIR_HORI_RIGHT_TOP));
             }
 
             if( pTmpSet )
@@ -1469,14 +1543,18 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
 {
     SwWW8Writer & rWW8Wrt = (SwWW8Writer&)rWrt;
     SwTable& rTbl = rNode.GetTable();
-    rWW8Wrt.Out_SfxBreakItems( rTbl.GetFrmFmt()->GetAttrSet(), rNode );
+    const SwFrmFmt *pFmt = rTbl.GetFrmFmt();
+    ASSERT(pFmt,"Impossible");
+    if (!pFmt)
+        return rWrt;
+    rWW8Wrt.Out_SfxBreakItems(pFmt->GetAttrSet(), rNode);
 
     SwTwips nPageSize = 0, nTblOffset = 0;
 
     {
         Point aPt;
-        SwRect aRect( rTbl.GetFrmFmt()->FindLayoutRect( FALSE, &aPt ));
-        if( aRect.IsEmpty() )
+        SwRect aRect(pFmt->FindLayoutRect(FALSE, &aPt));
+        if (aRect.IsEmpty())
         {
             // dann besorge mal die Seitenbreite ohne Raender !!
             const SwFrmFmt* pFmt = rWW8Wrt.pFlyFmt ? rWW8Wrt.pFlyFmt :
@@ -1486,8 +1564,8 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
             if( 0 == ( nPageSize = aRect.Width() ))
             {
                 const SvxLRSpaceItem& rLR = pFmt->GetLRSpace();
-                nPageSize = pFmt->GetFrmSize().GetWidth() -
-                                rLR.GetLeft() - rLR.GetRight();
+                nPageSize = pFmt->GetFrmSize().GetWidth() - rLR.GetLeft() -
+                    rLR.GetRight();
             }
         }
         else
@@ -1496,11 +1574,10 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
 
     /*ALWAYS relativ (nPageSize + ( nPageSize / 10 )) < nTblSz*/;
     BOOL bRelBoxSize = TRUE;
-    SwTwips nTblSz = rTbl.GetFrmFmt()->GetFrmSize().GetWidth();
+    SwTwips nTblSz = pFmt->GetFrmSize().GetWidth();
     WW8Bytes aAt( 128, 128 );   // Attribute fuer's Tabellen-Zeilenende
-    USHORT nStdAtLen = rWW8Wrt.StartTableFromFrmFmt(aAt,rTbl.GetFrmFmt(),
-        nTblOffset);
-    static BYTE __READONLY_DATA aNullBytes[] = { 0, 0, 0, 0 };
+    USHORT nStdAtLen = rWW8Wrt.StartTableFromFrmFmt(aAt, pFmt, nTblOffset);
+    static const BYTE aNullBytes[] = { 0, 0, 0, 0 };
 
     SwWriteTable* pTableWrt;
     const SwHTMLTableLayout *pLayout = rTbl.GetHTMLTableLayout();
@@ -1617,6 +1694,16 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
         else
             aAt.Insert( 185, aAt.Count() );
         aAt.Insert( (BYTE)1, aAt.Count() );
+
+
+        if (rWW8Wrt.bWrtWW8)
+        {
+            if (rWW8Wrt.TrueFrameDirection(*pFmt) == FRMDIR_HORI_RIGHT_TOP)
+            {
+                SwWW8Writer::InsUInt16(aAt, 0x560B);
+                SwWW8Writer::InsUInt16(aAt, 1);
+            }
+        }
 
         // Inhalt der Boxen ausgeben
         for( nBox = 0, nRealBox = 0; nBox < nColCnt; ++nBox )

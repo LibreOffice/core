@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-23 17:06:08 $
+ *  last change: $Author: cmc $ $Date: 2002-07-25 18:00:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,11 +176,12 @@ public:
 
 template<class C> const C *wwSortedArray<C>::search(C aSrch) const
 {
-    const C *pIter =
-        ::std::lower_bound(mpWwSprmTab, mpWwSprmTab + mnNoElems, aSrch);
-    if (pIter == mpWwSprmTab + mnNoElems || *pIter < aSrch)
-        pIter=0;
-    return pIter;
+    std::pair<const C *, const C *> aPair =
+        std::equal_range(mpWwSprmTab, mpWwSprmTab + mnNoElems, aSrch);
+    if (aPair.first != aPair.second)
+        return aPair.first;
+    else
+        return 0;
 }
 
 bool operator==(const SprmInfo &rFirst, const SprmInfo &rSecond)
@@ -3348,9 +3349,9 @@ const wwSprmSequence* WW8PLCFx_SEPX::GetWW8IgnoredSprms()
 {
     static sal_uInt16 aSprmIds[] =
     {
-        0x3005, 0x3006, 0x3009, 0x300E, 0x3013, 0x3019, 0x3229,
-        0x500B, 0x5015, 0x501B, 0x5026, 0x703A, 0x900C, 0x9016,
-        0x9023, 0x9024, 0xB017, 0xB018, 0xF203, 0xF204
+        0x3005, 0x3006, 0x3009, 0x300E, 0x3013, 0x3019, 0x3228,
+        0x3229, 0x500B, 0x5015, 0x501B, 0x5026, 0x703A, 0x900C,
+        0x9016, 0x9023, 0x9024, 0xB017, 0xB018, 0xF203, 0xF204
     };
 
     static wwSprmSequence aWWSprmIds(aSprmIds,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-23 17:06:06 $
+ *  last change: $Author: cmc $ $Date: 2002-07-25 18:00:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,9 @@
 #endif
 #ifndef _SVX_HYZNITEM_HXX //autogen
 #include <svx/hyznitem.hxx>
+#endif
+#ifndef _SVX_FRMDIRITEM_HXX
+#include <svx/frmdiritem.hxx>
 #endif
 
 #ifndef _PAM_HXX
@@ -279,6 +282,7 @@ class WW8TabDesc
     BOOL bHeader;
     BOOL bClaimLineFmt;
     SwHoriOrient eOri;
+    bool bIsBiDi;
                                 // 2. allgemeine Verwaltungsinfo
     short nAktRow;
     short nAktBandRow;          // SW: in dieser Zeile des akt. Bandes bin ich
@@ -1545,14 +1549,16 @@ WW8TabDesc::WW8TabDesc( SwWW8ImplReader* pIoClass, WW8_CP nStartCp )
     pTabBox( 0 ), pMergeGroups( 0 ), pAktWWCell( 0 ), nRows( 0 ),
     nDefaultSwCols( 0 ), nBands( 0 ), nMinLeft( 0 ), nConvertedLeft(0),
     nMaxRight( 0 ), nSwWidth( 0 ), bOk( TRUE ), bHeader( FALSE ),
-    bClaimLineFmt( FALSE ), eOri( HORI_NONE ), nAktRow( 0 ),
+    bClaimLineFmt( FALSE ), eOri( HORI_NONE ), bIsBiDi(false), nAktRow( 0 ),
     nAktBandRow( 0 ), nAktCol( 0 ), pParentPos(0), pFlyFmt(0),
     aItemSet(pIo->rDoc.GetAttrPool(),RES_FRMATR_BEGIN,RES_FRMATR_END-1)
 {
     pIo->bAktAND_fNumberAcross = FALSE;
 
-    static SwHoriOrient aOriArr[] = {
-        HORI_LEFT, HORI_CENTER, HORI_RIGHT, HORI_CENTER };
+    static const SwHoriOrient aOriArr[] =
+    {
+        HORI_LEFT, HORI_CENTER, HORI_RIGHT, HORI_CENTER
+    };
 
     BOOL bVer67   = pIo->bVer67;
     BOOL bComplex = pIo->pWwFib->fComplex;
@@ -1628,6 +1634,9 @@ WW8TabDesc::WW8TabDesc( SwWW8ImplReader* pIoClass, WW8_CP nStartCp )
                         // sprmTJc  -  Justification Code
                         eOri = aOriArr[ *pParams & 0x3 ];
                     }
+                    break;
+                case 0x560B:
+                    bIsBiDi = SVBT16ToShort(pParams) ? true : false;
                     break;
                 case 184:
                 case 0x9602:
@@ -2162,6 +2171,10 @@ void WW8TabDesc::CreateSwTable()
         pTable->GetFrmFmt()->SetAttr(SwFmtFrmSize(ATT_FIX_SIZE, nSwWidth));
         aItemSet.Put(SwFmtFrmSize(ATT_FIX_SIZE, nSwWidth));
     }
+
+    SvxFrameDirectionItem aDirection(
+        bIsBiDi ? FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP );
+    aItemSet.Put(aDirection);
 
     if (HORI_LEFT_AND_WIDTH == eOri)
     {
@@ -3754,7 +3767,7 @@ void WW8RStyle::ScanStyles()        // untersucht Style-Abhaengigkeiten
 void WW8RStyle::Import()
 {
     pIo->pDfltTxtFmtColl  = pIo->rDoc.GetDfltTxtFmtColl();
-    pIo->pStandardFmtColl = pIo->rDoc.GetTxtCollFromPool( RES_POOLCOLL_STANDARD );
+    pIo->pStandardFmtColl = pIo->rDoc.GetTxtCollFromPool(RES_POOLCOLL_STANDARD);
 
     if( pIo->nIniFlags & WW8FL_NO_STYLES )
         return;
@@ -3799,18 +3812,31 @@ void WW8RStyle::Import()
 
 
     // set Hyphenation flag on BASIC para-style
-    if(    pIo->mbNewDoc
-        && pIo->pWDop->fAutoHyphen
-        && pIo->pStandardFmtColl
-        && SFX_ITEM_SET != pIo->pStandardFmtColl->GetItemState(
-                                            RES_PARATR_HYPHENZONE, FALSE ) )
+    if (pIo->mbNewDoc && pIo->pStandardFmtColl)
     {
-        SvxHyphenZoneItem aAttr( TRUE );
-        aAttr.GetMinLead()    = 2;
-        aAttr.GetMinTrail()   = 2;
-        aAttr.GetMaxHyphens() = 0;
+        if (pIo->pWDop->fAutoHyphen
+            && SFX_ITEM_SET != pIo->pStandardFmtColl->GetItemState(
+                                            RES_PARATR_HYPHENZONE, FALSE ) )
+        {
+            SvxHyphenZoneItem aAttr( TRUE );
+            aAttr.GetMinLead()    = 2;
+            aAttr.GetMinTrail()   = 2;
+            aAttr.GetMaxHyphens() = 0;
 
-        pIo->pStandardFmtColl->SetAttr( aAttr );
+            pIo->pStandardFmtColl->SetAttr( aAttr );
+        }
+
+        /*
+        Word defaults to ltr not from environment like writer. Regardless of
+        the page/sections rtl setting the standard style lack of rtl still
+        means ltr
+        */
+        if (SFX_ITEM_SET != pIo->pStandardFmtColl->GetItemState(RES_FRAMEDIR,
+            FALSE))
+        {
+           pIo->pStandardFmtColl->SetAttr(
+                SvxFrameDirectionItem(FRMDIR_HORI_LEFT_TOP));
+        }
     }
 
     // wir sind jetzt nicht mehr beim Style einlesen:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8sty.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-01 13:55:11 $
+ *  last change: $Author: cmc $ $Date: 2002-07-25 18:00:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,10 @@
 #ifndef _SVX_FMGLOB_HXX
 #include <svx/fmglob.hxx>
 #endif
+#ifndef _SVX_FRMDIRITEM_HXX
+#include <svx/frmdiritem.hxx>
+#endif
+
 #ifndef _WRTWW8_HXX
 #include <wrtww8.hxx>
 #endif
@@ -450,6 +454,8 @@ void WW8WrtStyle::SkipOdd()     // Ruecke zu gerader Adresse vor
 
 void WW8WrtStyle::Set1StyleDefaults( const SwFmt& rFmt, BOOL bPap )
 {
+    const SwModify* pOldMod = rWrt.pOutFmtNode;
+    rWrt.pOutFmtNode = &rFmt;
     BOOL aFlags[ RES_FRMATR_END - RES_CHRATR_BEGIN ];
     USHORT nStt, nEnd, n;
     if( bPap )
@@ -472,8 +478,6 @@ void WW8WrtStyle::Set1StyleDefaults( const SwFmt& rFmt, BOOL bPap )
     {
            aFlags[ RES_CHRATR_FONTSIZE - RES_CHRATR_BEGIN ] = 1;
         aFlags[ RES_CHRATR_LANGUAGE - RES_CHRATR_BEGIN ] = 1;
-        //Winword default is auto, OOo default is black
-        aFlags[ RES_CHRATR_COLOR - RES_CHRATR_BEGIN] = 1;
     }
 
     const SfxItemSet* pOldI = rWrt.GetCurItemSet();
@@ -487,7 +491,7 @@ void WW8WrtStyle::Set1StyleDefaults( const SwFmt& rFmt, BOOL bPap )
             //If we are a character property then see if it is one of the
             //western/asian ones that must be collapsed together for export to
             //word. If so default to the western varient.
-            if ( !bPap && rWrt.CollapseScriptsforWordOk(
+            if ( bPap || rWrt.CollapseScriptsforWordOk(
                 ::com::sun::star::i18n::ScriptType::LATIN, n) )
             {
                 Out(aWW8AttrFnTab, rFmt.GetAttr(n, TRUE), rWrt);
@@ -496,6 +500,7 @@ void WW8WrtStyle::Set1StyleDefaults( const SwFmt& rFmt, BOOL bPap )
     }
 
     rWrt.SetCurItemSet( pOldI );
+    rWrt.pOutFmtNode = pOldMod;
 }
 
 void WW8WrtStyle::BuildUpx( const SwFmt* pFmt, BOOL bPap, USHORT nPos,
@@ -1288,6 +1293,23 @@ BOOL WW8_WrPlcSepx::WriteKFTxt( SwWW8Writer& rWrt )
                 const SfxItemSet* pOldI = rWrt.pISet;
                 rWrt.pISet = &aSet;
                 Out_SfxItemSet( aWW8AttrFnTab, rWrt, aSet, TRUE );
+
+                //Cannot export as normal page framedir, as continous sections
+                //cannot contain any grid settings like proper sections
+                if (rWrt.bWrtWW8)
+                {
+                    BYTE nDir;
+                    SwWW8Writer::InsUInt16(*pO, 0x3228);
+                    if (FRMDIR_HORI_RIGHT_TOP ==
+                            rWrt.TrueFrameDirection(*rSepInfo.pSectionFmt))
+                    {
+                        nDir = 1;
+                    }
+                    else
+                        nDir = 0;
+                    pO->Insert( nDir, pO->Count() );
+                }
+
                 rWrt.pISet = pOldI;
 
                 bOutPgDscSet = FALSE;

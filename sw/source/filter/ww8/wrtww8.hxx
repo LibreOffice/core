@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-16 15:30:21 $
+ *  last change: $Author: cmc $ $Date: 2002-07-25 18:00:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -341,10 +341,11 @@ public:
     const SwFrmFmt &mrCntnt;    // SwFrmFmt
     Point maParentPos;          // Points
     INT32 mnThick;              // Border Thicknesses
+    short mnDirection;               // If BiDi or not
 
-    DrawObj(const SwFrmFmt &rCntnt, WW8_CP nCp, Point aParentPos)
+    DrawObj(const SwFrmFmt &rCntnt, WW8_CP nCp, Point aParentPos, short nDir)
         : mnCp(nCp), mnShapeId(0), mrCntnt(rCntnt), maParentPos(aParentPos),
-        mnThick(0) {}
+        mnThick(0), mnDirection(nDir) {}
 };
 
 class PlcDrawObj // PC for DrawObjects and Text-/OLE-/GRF-Boxes
@@ -535,6 +536,8 @@ public:
     void WriteKFTxt1( const SwFmtCntnt& rCntnt );
     void WriteFtnBegin( const SwFmtFtn& rFtn, WW8Bytes* pO = 0 );
     void WritePostItBegin( WW8Bytes* pO = 0 );
+    short TrueFrameDirection(const SwFrmFmt &rFlyFmt) const;
+    short GetCurrentPageDirection() const;
     void OutWW8FlyFrmsInCntnt( const SwTxtNode& rNd );
     void OutWW8FlyFrm( const SwFrmFmt& rFlyFrmFmt, const Point& rNdTopLeft );
     void OutFlyFrms( const SwCntntNode& rNode );
