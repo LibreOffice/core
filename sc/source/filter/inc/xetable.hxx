@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xetable.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:46:05 $
+ *  last change: $Author: obo $ $Date: 2004-10-18 15:19:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -383,7 +383,8 @@ protected:
     explicit            XclExpSingleCellBase( const XclExpRoot& rRoot,
                             sal_uInt16 nRecId, sal_uInt32 nContSize,
                             sal_uInt16 nXclCol, sal_uInt16 nXclRow,
-                            const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId );
+                            const ScPatternAttr* pPattern, sal_Int16 nScript,
+                            sal_uInt32 nForcedXFId );
 
     inline void         SetContSize( sal_uInt32 nContSize ) { mnContSize = nContSize; }
     inline sal_uInt32   GetContSize() const { return mnContSize; }
@@ -583,8 +584,8 @@ protected:
     void                AppendXFId( const XclExpMultiXFId& rXFId );
     /** Appends the passed cell format nCount times to the list of XF identifiers. */
     void                AppendXFId( const XclExpRoot& rRoot,
-                            const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId,
-                            sal_uInt16 nCount = 1 );
+                            const ScPatternAttr* pPattern, sal_uInt16 nScript,
+                            sal_uInt32 nForcedXFId, sal_uInt16 nCount = 1 );
 
     /** Tries to merge the XF ID list of the passed cell with the own list. */
     bool                TryMergeXFIds( const XclExpMultiCellBase& rCell );
