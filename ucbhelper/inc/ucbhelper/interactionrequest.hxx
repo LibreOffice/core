@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interactionrequest.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-28 12:58:03 $
+ *  last change: $Author: kso $ $Date: 2001-05-29 07:12:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,8 +138,10 @@ public:
     virtual com::sun::star::uno::Any SAL_CALL
     queryInterface( const com::sun::star::uno::Type & rType )
         throw( com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL acquire();
-    virtual void SAL_CALL release();
+    virtual void SAL_CALL acquire()
+        throw();
+    virtual void SAL_CALL release()
+        throw();
 
     // XTypeProvider
     virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL
@@ -234,8 +236,10 @@ public:
     virtual com::sun::star::uno::Any SAL_CALL
     queryInterface( const com::sun::star::uno::Type & rType )
         throw( com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL acquire();
-    virtual void SAL_CALL release();
+    virtual void SAL_CALL acquire()
+        throw();
+    virtual void SAL_CALL release()
+        throw();
 
     // XTypeProvider
     virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL
@@ -269,8 +273,10 @@ public:
     virtual com::sun::star::uno::Any SAL_CALL
     queryInterface( const com::sun::star::uno::Type & rType )
         throw( com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL acquire();
-    virtual void SAL_CALL release();
+    virtual void SAL_CALL acquire()
+        throw();
+    virtual void SAL_CALL release()
+        throw();
 
     // XTypeProvider
     virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL
@@ -304,8 +310,10 @@ public:
     virtual com::sun::star::uno::Any SAL_CALL
     queryInterface( const com::sun::star::uno::Type & rType )
         throw( com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL acquire();
-    virtual void SAL_CALL release();
+    virtual void SAL_CALL acquire()
+        throw();
+    virtual void SAL_CALL release()
+        throw();
 
     // XTypeProvider
     virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL
@@ -339,8 +347,10 @@ public:
     virtual com::sun::star::uno::Any SAL_CALL
     queryInterface( const com::sun::star::uno::Type & rType )
         throw( com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL acquire();
-    virtual void SAL_CALL release();
+    virtual void SAL_CALL acquire()
+        throw();
+    virtual void SAL_CALL release()
+        throw();
 
     // XTypeProvider
     virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL
@@ -456,8 +466,10 @@ public:
     virtual com::sun::star::uno::Any SAL_CALL
     queryInterface( const com::sun::star::uno::Type & rType )
         throw( com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL acquire();
-    virtual void SAL_CALL release();
+    virtual void SAL_CALL acquire()
+        throw();
+    virtual void SAL_CALL release()
+        throw();
 
     // XTypeProvider
     virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL

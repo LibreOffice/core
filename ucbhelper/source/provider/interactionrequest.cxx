@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interactionrequest.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-28 12:42:46 $
+ *  last change: $Author: kso $ $Date: 2001-05-29 07:12:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,7 +161,7 @@ void InteractionRequest::setSelection(
 
 // virtual
 void SAL_CALL InteractionRequest::acquire()
-    throw( uno::RuntimeException )
+    throw()
 {
     OWeakObject::acquire();
 }
@@ -169,7 +169,7 @@ void SAL_CALL InteractionRequest::acquire()
 //=========================================================================
 // virtual
 void SAL_CALL InteractionRequest::release()
-    throw( uno::RuntimeException )
+    throw()
 {
     OWeakObject::release();
 }
@@ -311,7 +311,7 @@ void InteractionContinuation::recordSelection()
 
 // virtual
 void SAL_CALL InteractionAbort::acquire()
-    throw( uno::RuntimeException )
+    throw()
 {
     OWeakObject::acquire();
 }
@@ -319,7 +319,7 @@ void SAL_CALL InteractionAbort::acquire()
 //=========================================================================
 // virtual
 void SAL_CALL InteractionAbort::release()
-    throw( uno::RuntimeException )
+    throw()
 {
     OWeakObject::release();
 }
@@ -413,7 +413,7 @@ void SAL_CALL InteractionAbort::select()
 
 // virtual
 void SAL_CALL InteractionRetry::acquire()
-    throw( uno::RuntimeException )
+    throw()
 {
     OWeakObject::acquire();
 }
@@ -421,7 +421,7 @@ void SAL_CALL InteractionRetry::acquire()
 //=========================================================================
 // virtual
 void SAL_CALL InteractionRetry::release()
-    throw( uno::RuntimeException )
+    throw()
 {
     OWeakObject::release();
 }
@@ -515,7 +515,7 @@ void SAL_CALL InteractionRetry::select()
 
 // virtual
 void SAL_CALL InteractionApprove::acquire()
-    throw( uno::RuntimeException )
+    throw()
 {
     OWeakObject::acquire();
 }
@@ -523,7 +523,7 @@ void SAL_CALL InteractionApprove::acquire()
 //=========================================================================
 // virtual
 void SAL_CALL InteractionApprove::release()
-    throw( uno::RuntimeException )
+    throw()
 {
     OWeakObject::release();
 }
@@ -617,7 +617,7 @@ void SAL_CALL InteractionApprove::select()
 
 // virtual
 void SAL_CALL InteractionDisapprove::acquire()
-    throw( uno::RuntimeException )
+    throw()
 {
     OWeakObject::acquire();
 }
@@ -625,7 +625,7 @@ void SAL_CALL InteractionDisapprove::acquire()
 //=========================================================================
 // virtual
 void SAL_CALL InteractionDisapprove::release()
-    throw( uno::RuntimeException )
+    throw()
 {
     OWeakObject::release();
 }
@@ -719,7 +719,7 @@ void SAL_CALL InteractionDisapprove::select()
 
 // virtual
 void SAL_CALL InteractionSupplyAuthentication::acquire()
-    throw( uno::RuntimeException )
+    throw()
 {
     OWeakObject::acquire();
 }
@@ -727,7 +727,7 @@ void SAL_CALL InteractionSupplyAuthentication::acquire()
 //=========================================================================
 // virtual
 void SAL_CALL InteractionSupplyAuthentication::release()
-    throw( uno::RuntimeException )
+    throw()
 {
     OWeakObject::release();
 }
