@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docinf.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-13 12:16:18 $
+ *  last change: $Author: mba $ $Date: 2001-12-07 15:00:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,8 +270,13 @@ ULONG SfxPSStringProperty_Impl::Load( SvStream& rStream )
         else
         {
             ByteString aTemp;
-            rStream.Read( aTemp.AllocBuffer( (xub_StrLen)( nLen - 1 ) ), nLen );
-            aString = String( aTemp, nEncoding );
+            if ( nLen>1 )
+            {
+                rStream.Read( aTemp.AllocBuffer( (xub_StrLen)( nLen - 1 ) ), nLen );
+                aString = String( aTemp, nEncoding );
+            }
+            else
+                aString = String();
         }
     }
     else
