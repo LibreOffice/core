@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyperdlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-13 17:03:18 $
+ *  last change: $Author: sj $ $Date: 2001-05-18 17:25:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,9 +85,10 @@
 //#                                                                      #
 //########################################################################
 
-SvxHlinkCtrl::SvxHlinkCtrl( USHORT nId, SfxBindings & rBindings, SvxHpLinkDlg* pDlg)
-: SfxControllerItem (nId, rBindings),
-  aForwarder        ( SID_INTERNET_ONLINE, *this )
+SvxHlinkCtrl::SvxHlinkCtrl( USHORT nId, SfxBindings & rBindings, SvxHpLinkDlg* pDlg )
+: SfxControllerItem ( nId, rBindings ),
+  aRdOnlyForwarder  ( SID_READONLY_MODE, *this ),
+  aOnlineForwarder  ( SID_INTERNET_ONLINE , *this )
 {
     pParent = pDlg;
 }
@@ -95,15 +96,25 @@ SvxHlinkCtrl::SvxHlinkCtrl( USHORT nId, SfxBindings & rBindings, SvxHpLinkDlg* p
 void SvxHlinkCtrl::StateChanged( USHORT nSID, SfxItemState eState,
                                  const SfxPoolItem* pState )
 {
-    if ( nSID == SID_INTERNET_ONLINE && SFX_ITEM_AVAILABLE == eState )
+    if ( eState == SFX_ITEM_AVAILABLE )
     {
-        pParent->EnableInetBrowse( !( (SfxBoolItem*)pState)->GetValue() );
-    }
-    else
-    {
-        if ( nSID == SID_HYPERLINK_GETLINK && SFX_ITEM_AVAILABLE == eState )
+        switch ( nSID )
         {
-            pParent->SetPage ( (SvxHyperlinkItem*)pState);
+            case SID_INTERNET_ONLINE :
+            {
+                pParent->EnableInetBrowse( !( (SfxBoolItem*)pState)->GetValue() );
+            }
+            break;
+            case SID_HYPERLINK_GETLINK :
+            {
+                pParent->SetPage ( (SvxHyperlinkItem*)pState);
+            }
+            break;
+            case SID_READONLY_MODE :
+            {
+                pParent->SetReadOnlyMode( ( (SfxBoolItem*)pState)->GetValue() == TRUE );
+            }
+            break;
         }
     }
 }
@@ -179,7 +190,8 @@ SvxHpLinkDlg::SvxHpLinkDlg (Window* pParent, SfxBindings* pBindings)
 :   IconChoiceDialog( pParent, SVX_RES ( RID_SVXDLG_NEWHYPERLINK ) ),
     maCtrl          ( SID_HYPERLINK_GETLINK, *pBindings, this ),
     mpBindings      ( pBindings ),
-    mbIsHTMLDoc     ( FALSE )
+    mbIsHTMLDoc     ( sal_False ),
+    mbReadOnly      ( sal_False )
 {
     // set background of iconchoicectrl
     const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
@@ -213,6 +225,8 @@ SvxHpLinkDlg::SvxHpLinkDlg (Window* pParent, SfxBindings* pBindings)
 
     // Init Dialog
     Start (FALSE);
+
+    pBindings->Update( SID_READONLY_MODE );
 
     // set OK/Cancel - button
     GetOKButton().SetText ( SVX_RESSTR(RID_SVXSTR_HYPDLG_APPLYBUT) );
@@ -418,10 +432,25 @@ USHORT SvxHpLinkDlg::SetPage ( SvxHyperlinkItem* pItem )
 |*
 |************************************************************************/
 
-void SvxHpLinkDlg::EnableInetBrowse( BOOL bEnable )
+void SvxHpLinkDlg::EnableInetBrowse( sal_Bool bEnable )
 {
     SvxHyperlinkTabPageBase* pCurrentPage = ( SvxHyperlinkTabPageBase* )
                                             GetTabPage ( GetCurPageId() );
     pCurrentPage->SetOnlineMode( bEnable );
+}
+
+/*************************************************************************
+|*
+|* Enable/Disable ReadOnly mode
+|*
+|************************************************************************/
+
+void SvxHpLinkDlg::SetReadOnlyMode( sal_Bool bRdOnly )
+{
+    mbReadOnly = bRdOnly;
+    if ( bRdOnly )
+        GetOKButton().Disable();
+    else
+        GetOKButton().Enable();
 }
 
