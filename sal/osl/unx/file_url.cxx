@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file_url.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2002-11-29 10:37:46 $
+ *  last change: $Author: tra $ $Date: 2002-12-05 11:31:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,16 @@
 #include <unistd.h>
 #endif
 
+#if defined (SOLARIS)
+#   ifndef _ALLOCA_H
+#   include <alloca.h>
+#   endif
+#else
+#   ifndef _STDLIB_H
+#   include <stdlib.h>
+#   endif
+#endif
+
 #ifndef _OSL_FILE_H_
 #include <osl/file.h>
 #endif
@@ -103,6 +113,10 @@
 #include <osl/thread.h>
 #endif
 
+#ifndef _OSL_FILE_HXX_
+#include <osl/file.hxx>
+#endif
+
 #ifndef _FILE_ERROR_TRANSL_H_
 #include "file_error_transl.h"
 #endif
@@ -111,23 +125,47 @@
 #include "file_url.h"
 #endif
 
- #ifndef _OSL_FILE_PATH_HELPER_H_
- #include "file_path_helper.h"
- #endif
+#ifndef _OSL_FILE_PATH_HELPER_HXX_
+#include "file_path_helper.hxx"
+#endif
+
+/***************************************************
+
+ General note
+
+ This file contains the part that handles File URLs.
+
+ File URLs as scheme specific notion of URIs
+ (RFC2396) may be handled platform independend, but
+ will not in osl which is considered wrong.
+ Future version of osl should handle File URLs this
+ way. In rtl/uri there is already an URI parser etc.
+ so this code should be consolidated.
+
+ **************************************************/
+
+
 
 /***************************************************
  * forward
  **************************************************/
 
 extern "C" int UnicodeToText(char *, size_t, const sal_Unicode *, sal_Int32);
+extern "C" int TextToUnicode(const char* text, size_t text_buffer_size, sal_Unicode* unic_text, sal_Int32 unic_text_buffer_size);
+
+/***************************************************
+ * namespace directives
+ **************************************************/
+
+using namespace osl;
 
 /***************************************************
  * constants
  **************************************************/
 
-const sal_Unicode OSL_FILE_CHAR_SLASH = ((sal_Unicode)'/');
-const sal_Unicode OSL_FILE_CHAR_COLON = ((sal_Unicode)':');
-const sal_Unicode OSL_FILE_CHAR_DOT   = ((sal_Unicode)'.');
+const sal_Unicode UNICHAR_SLASH = ((sal_Unicode)'/');
+const sal_Unicode UNICHAR_COLON = ((sal_Unicode)':');
+const sal_Unicode UNICHAR_DOT   = ((sal_Unicode)'.');
 
 /******************************************************************************
  *
@@ -137,14 +175,15 @@ const sal_Unicode OSL_FILE_CHAR_DOT   = ((sal_Unicode)'.');
 
 /* a slightly modified version of Pchar in rtl/source/uri.c */
 const sal_Bool uriCharClass[128] =
-{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, /* Pchar but without encoding slashes */
+{
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, /* Pchar but without encoding slashes */
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  0, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, /* !"#$%&'()*+,-./*/
-  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, /*0123456789:;<=>?*/
-  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, /*@ABCDEFGHIJKLMNO*/
-  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, /*PQRSTUVWXYZ[\]^_*/
-  0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, /*`abcdefghijklmno*/
-  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0  /*pqrstuvwxyz{|}~ */
+  0, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, /* !"#$%&'()*+,-./  */
+  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, /* 0123456789:;<=>? */
+  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, /* @ABCDEFGHIJKLMNO */
+  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, /* PQRSTUVWXYZ[\]^_ */
+  0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, /* `abcdefghijklmno */
+  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0  /* pqrstuvwxyz{|}~  */
 };
 
 
@@ -440,7 +479,7 @@ oslFileError osl_getSystemPathFromFileURL_Ex(
 
     if (osl_File_E_None == osl_error)
     {
-        if (bAllowRelative || (OSL_FILE_CHAR_SLASH == temp->buffer[0]))
+        if (bAllowRelative || (UNICHAR_SLASH == temp->buffer[0]))
         {
             *pustrSystemPath = temp;
         }
@@ -454,192 +493,285 @@ oslFileError osl_getSystemPathFromFileURL_Ex(
     return osl_error;
 }
 
-/******************************************************
- * Helper function, return a pinter to the final '\0'
- * of a string
- ******************************************************/
-
-static char* _strtoend(char* pStr)
+namespace /* private */
 {
-    char* p = pStr;
-    while(*p) p++;
-    return p;
-}
 
-/******************************************************
- * Append one character to a string
- ******************************************************/
+    /******************************************************
+     * Helper function, return a pinter to the final '\0'
+     * of a string
+     ******************************************************/
 
-static char* _strcatchr(char* pStr, char Chr)
-{
-    char* p = _strtoend(pStr);
-    *p++ = Chr;
-    *p = '\0';
-    return pStr;
-}
-
-/******************************************************
- *
- ******************************************************/
-
-static int _islastchr(char* pStr, char Chr)
-{
-   char* p = _strtoend(pStr);
-   if (p > pStr)
-       p--;
-   return (*p == Chr);
-}
-
-/******************************************************
- * Ensure that the given string has the specified last
- * character if necessary append it
- ******************************************************/
-
-static char* _strensurelast(char* pStr, char Chr)
-{
-    if (!_islastchr(pStr, Chr))
-        _strcatchr(pStr, Chr);
-    return pStr;
-}
-
-/******************************************************
- * Remove the last part of a path, a path that has
- * only a '/' or no '/' at all will be returned
- * unmodified
- ******************************************************/
-
-static char* _rmlastpathtoken(char* aPath)
-{
-    /* we always may skip -2 because we
-       may at least stand on a '/' but
-       either there is no other character
-       before this '/' or it's another
-       character than the '/'
-    */
-    char* p = _strtoend(aPath) - 2;
-
-    // move back to the next path separator
-    // or to the start of the string
-    while (p > aPath && *p != '/')
-        p--;
-
-    if (p >= aPath)
+    sal_Unicode* ustrtoend(sal_Unicode* pStr)
     {
-        if ('/' == *p)
-        {
-            p++;
-           *p = '\0';
-        }
-        else
-        {
-           *p = '\0';
-        }
+        return (pStr + rtl_ustr_getLength(pStr));
     }
 
-    return aPath;
-}
+    /*********************************************
 
-/******************************************************
- *
- ******************************************************/
-
-static oslFileError _osl_resolvepath(
-    /*inout*/ char* path,
-    /*inout*/ char* current_pos,
-    char* sentinel,
-    /*inout*/ sal_Bool* failed)
-{
-    oslFileError ferr = osl_File_E_None;
-
-    if (!*failed)
+     ********************************************/
+    sal_Unicode* ustrcpy(const sal_Unicode* s, sal_Unicode* d)
     {
-        char realpath_buffer[PATH_MAX];
+        const sal_Unicode* sc = s;
+        sal_Unicode*       dc = d;
 
-        if (realpath(path, realpath_buffer))
+        while (*dc++ = *sc++)
+            /**/;
+
+        return d;
+    }
+
+    /*********************************************
+
+     ********************************************/
+
+    sal_Unicode* ustrncpy(const sal_Unicode* s, sal_Unicode* d, unsigned int n)
+    {
+        const sal_Unicode* sc = s;
+        sal_Unicode*       dc = d;
+        unsigned int       i  = n;
+
+        while (i--)
+            *dc++ = *sc++;
+
+        if (n)
+            *dc = 0;
+
+        return d;
+    }
+
+    /*********************************************
+
+     ********************************************/
+
+    sal_Unicode* ustrchrcat(const sal_Unicode chr, sal_Unicode* d)
+    {
+        sal_Unicode* p = ustrtoend(d);
+        *p++ = chr;
+        *p   = 0;
+        return d;
+    }
+
+    /*********************************************
+
+     ********************************************/
+
+    sal_Unicode* ustrcat(const sal_Unicode* s, sal_Unicode* d)
+    {
+        sal_Unicode* dc = ustrtoend(d);
+        ustrcpy(s, dc);
+        return d;
+    }
+
+    /******************************************************
+     *
+     ******************************************************/
+
+    bool _islastchr(sal_Unicode* pStr, sal_Unicode Chr)
+    {
+           sal_Unicode* p = ustrtoend(pStr);
+           if (p > pStr)
+               p--;
+           return (*p == Chr);
+    }
+
+    /******************************************************
+     * Ensure that the given string has the specified last
+     * character if necessary append it
+     ******************************************************/
+
+    sal_Unicode* _strensurelast(sal_Unicode* pStr, sal_Unicode Chr)
+    {
+        if (!_islastchr(pStr, Chr))
+            ustrchrcat(Chr, pStr);
+        return pStr;
+    }
+
+    /******************************************************
+     * Remove the last part of a path, a path that has
+     * only a '/' or no '/' at all will be returned
+     * unmodified
+     ******************************************************/
+
+    sal_Unicode* _rmlastpathtoken(sal_Unicode* aPath)
+    {
+        /*  we always may skip -2 because we
+               may at least stand on a '/' but
+               either there is no other character
+               before this '/' or it's another
+               character than the '/'
+        */
+        sal_Unicode* p = ustrtoend(aPath) - 2;
+
+        // move back to the next path separator
+        // or to the start of the string
+        while ((p > aPath) && (*p != UNICHAR_SLASH))
+            p--;
+
+        if (p >= aPath)
         {
-            strcpy(path, realpath_buffer);
-            current_pos = _strtoend(path) - 1;
-        }
-        else
-        {
-            if (EACCES == errno || ENOTDIR == errno || ENOENT == errno)
-                *failed = sal_True;
+            if (UNICHAR_SLASH == *p)
+            {
+                p++;
+               *p = '\0';
+            }
             else
-                ferr = oslTranslateFileError(OSL_FET_ERROR, errno);
+            {
+                   *p = '\0';
+            }
         }
+
+        return aPath;
     }
 
-    return ferr;
-}
+    /******************************************************
+     *
+     ******************************************************/
 
-/******************************************************
- * Works even with non existing paths. The resulting
- * path must not exceed PATH_MAX else
- * osl_File_E_NAMETOOLONG is the result
- ******************************************************/
-
-static oslFileError osl_realpath_impl_(const char *path_unresolved, char* path_resolved)
-{
-    char path_resolved_so_far[PATH_MAX];
-    char realpath_buffer[PATH_MAX];
-
-    char* punresolved = const_cast<char*>(path_unresolved);
-    char* presolvedsf = path_resolved_so_far;
-
-    /* reserve space for leading '/' and trailing '\0'
-       do not exceed this limit */
-    char* sentinel = path_resolved_so_far + PATH_MAX - 2;
-
-    /* if realpath fails with error ENOTDIR, EACCES or ENOENT
-       we will not call it again, because _osl_realpath should also
-       work with non existing directories etc. */
-    sal_Bool realpath_failed = sal_False;
-    oslFileError ferr;
-
-    OSL_PRECOND(punresolved && path_resolved, "_osl_realpath: Invalid parameter");
-    OSL_PRECOND(punresolved[0] == '/', "_osl_realpath: Bad parameter, not absolute path given");
-
-    /* the given unresolved path must not exceed PATH_MAX */
-    if (strlen(punresolved) >= PATH_MAX - 2)
-        return oslTranslateFileError(OSL_FET_ERROR, ENAMETOOLONG);
-
-    path_resolved_so_far[0] = '\0';
-
-    while (*punresolved != '\0')
+    oslFileError _osl_resolvepath(
+        /*inout*/ sal_Unicode* path,
+        /*inout*/ sal_Unicode* current_pos,
+        /*in   */ sal_Unicode* sentinel,
+        /*inout*/ bool* failed)
     {
-        /* ignore '/.' , skip one part back when '/..' */
+        oslFileError ferr = osl_File_E_None;
 
-        if ('.' == *punresolved && *presolvedsf == '/' )
+        if (!*failed)
         {
-            if ('\0' == *(punresolved + 1))
-            {
-                punresolved++;
-                continue;
-            }
-            else if ('/' == *(punresolved + 1))
-            {
-                punresolved += 2;
-                continue;
-            }
-            else if ('.' == *(punresolved + 1) && ('\0' == *(punresolved + 2) || '/' == *(punresolved + 2)))
-            {
-                _rmlastpathtoken(path_resolved_so_far);
+            char unresolved_path[PATH_MAX];
+            if (!UnicodeToText(unresolved_path, sizeof(unresolved_path), path, rtl_ustr_getLength(path)))
+                return oslTranslateFileError(OSL_FET_ERROR, ENAMETOOLONG);
 
-                presolvedsf = _strtoend(path_resolved_so_far) - 1;
-
-                if ('/' == *(punresolved + 2))
-                    punresolved += 3;
-                else
-                    punresolved += 2;
-
-                continue;
-            }
-            else /* a file or directory name may start with '.' */
+            char resolved_path[PATH_MAX];
+            if (realpath(unresolved_path, resolved_path))
             {
-                if ((presolvedsf = _strtoend(path_resolved_so_far)) > sentinel)
+                if (!TextToUnicode(resolved_path, strlen(resolved_path), path, PATH_MAX))
                     return oslTranslateFileError(OSL_FET_ERROR, ENAMETOOLONG);
 
-                _strcatchr(path_resolved_so_far, *punresolved++);
+                current_pos = ustrtoend(path) - 1;
+            }
+            else
+            {
+                if (EACCES == errno || ENOTDIR == errno || ENOENT == errno)
+                    *failed = true;
+                else
+                    ferr = oslTranslateFileError(OSL_FET_ERROR, errno);
+            }
+        }
+
+        return ferr;
+    }
+
+    /******************************************************
+     * Works even with non existing paths. The resulting
+     * path must not exceed PATH_MAX else
+     * osl_File_E_NAMETOOLONG is the result
+     ******************************************************/
+
+    oslFileError osl_getAbsoluteFileURL_impl_(const rtl::OUString& unresolved_path, rtl::OUString& resolved_path)
+    {
+        // the given unresolved path must not exceed PATH_MAX
+        if (unresolved_path.getLength() >= (PATH_MAX - 2))
+            return oslTranslateFileError(OSL_FET_ERROR, ENAMETOOLONG);
+
+        sal_Unicode        path_resolved_so_far[PATH_MAX];
+        sal_Unicode        realpath_buffer[PATH_MAX];
+        const sal_Unicode* punresolved = unresolved_path.getStr();
+        sal_Unicode*       presolvedsf = path_resolved_so_far;
+
+        // reserve space for leading '/' and trailing '\0'
+        // do not exceed this limit
+        sal_Unicode* sentinel = path_resolved_so_far + PATH_MAX - 2;
+
+        // if realpath fails with error ENOTDIR, EACCES or ENOENT
+        // we will not call it again, because _osl_realpath should also
+        // work with non existing directories etc.
+        bool realpath_failed = false;
+        oslFileError ferr;
+
+        path_resolved_so_far[0] = '\0';
+
+        while (*punresolved != '\0')
+        {
+            // ignore '/.' , skip one part back when '/..'
+
+            if ((UNICHAR_DOT == *punresolved) && (UNICHAR_SLASH == *presolvedsf))
+            {
+                if ('\0' == *(punresolved + 1))
+                {
+                    punresolved++;
+                    continue;
+                }
+                else if (UNICHAR_SLASH == *(punresolved + 1))
+                {
+                    punresolved += 2;
+                    continue;
+                }
+                else if ((UNICHAR_DOT == *(punresolved + 1)) && ('\0' == *(punresolved + 2) || (UNICHAR_SLASH == *(punresolved + 2))))
+                {
+                    _rmlastpathtoken(path_resolved_so_far);
+
+                    presolvedsf = ustrtoend(path_resolved_so_far) - 1;
+
+                    if (UNICHAR_SLASH == *(punresolved + 2))
+                        punresolved += 3;
+                    else
+                        punresolved += 2;
+
+                    continue;
+                }
+                else // a file or directory name may start with '.'
+                {
+                    if ((presolvedsf = ustrtoend(path_resolved_so_far)) > sentinel)
+                        return oslTranslateFileError(OSL_FET_ERROR, ENAMETOOLONG);
+
+                    ustrchrcat(*punresolved++, path_resolved_so_far);
+
+                    if ('\0' == *punresolved && !realpath_failed)
+                    {
+                        ferr = _osl_resolvepath(
+                            path_resolved_so_far,
+                            presolvedsf,
+                            sentinel,
+                            &realpath_failed);
+
+                        if (osl_File_E_None != ferr)
+                            return ferr;
+                    }
+                }
+            }
+            else if (UNICHAR_SLASH == *punresolved)
+            {
+                if ((presolvedsf = ustrtoend(path_resolved_so_far)) > sentinel)
+                    return oslTranslateFileError(OSL_FET_ERROR, ENAMETOOLONG);
+
+                ustrchrcat(*punresolved++, path_resolved_so_far);
+
+                if (!realpath_failed)
+                {
+                    ferr = _osl_resolvepath(
+                        path_resolved_so_far,
+                        presolvedsf,
+                        sentinel,
+                        &realpath_failed);
+
+                    if (osl_File_E_None != ferr)
+                        return ferr;
+
+                    if (!_islastchr(path_resolved_so_far, UNICHAR_SLASH))
+                    {
+                        if ((presolvedsf = ustrtoend(path_resolved_so_far)) > sentinel)
+                            return oslTranslateFileError(OSL_FET_ERROR, ENAMETOOLONG);
+
+                        ustrchrcat(UNICHAR_SLASH, path_resolved_so_far);
+                    }
+                }
+            }
+            else // any other character
+            {
+                if ((presolvedsf = ustrtoend(path_resolved_so_far)) > sentinel)
+                    return oslTranslateFileError(OSL_FET_ERROR, ENAMETOOLONG);
+
+                ustrchrcat(*punresolved++, path_resolved_so_far);
 
                 if ('\0' == *punresolved && !realpath_failed)
                 {
@@ -654,288 +786,265 @@ static oslFileError osl_realpath_impl_(const char *path_unresolved, char* path_r
                 }
             }
         }
-        else if ('/' == *punresolved)
+
+        sal_Int32 len = rtl_ustr_getLength(path_resolved_so_far);
+
+        OSL_ASSERT(len < PATH_MAX);
+
+        resolved_path = rtl::OUString(path_resolved_so_far, len);
+
+        return osl_File_E_None;
+    }
+
+} // end namespace private
+
+
+/******************************************************
+ * osl_getAbsoluteFileURL
+ ******************************************************/
+
+oslFileError osl_getAbsoluteFileURL(rtl_uString*  ustrBaseDirURL, rtl_uString* ustrRelativeURL, rtl_uString** pustrAbsoluteURL)
+{
+    FileBase::RC  rc;
+    rtl::OUString unresolved_path;
+
+    rc = FileBase::getSystemPathFromFileURL(rtl::OUString(ustrRelativeURL), unresolved_path);
+
+    if(FileBase::E_None != rc)
+        return oslFileError(rc);
+
+    if (systemPathIsRelativePath(unresolved_path))
+    {
+        rtl::OUString base_path;
+        rc = (FileBase::RC) osl_getSystemPathFromFileURL_Ex(ustrBaseDirURL, &base_path.pData, sal_False);
+
+        if (FileBase::E_None != rc)
+            return oslFileError(rc);
+
+        rtl::OUString abs_path;
+        systemPathMakeAbsolutePath(base_path, unresolved_path, abs_path);
+
+        unresolved_path = abs_path;
+    }
+
+    rtl::OUString resolved_path;
+    rc = (FileBase::RC) osl_getAbsoluteFileURL_impl_(unresolved_path, resolved_path);
+
+    if (FileBase::E_None == rc)
+    {
+        rc = (FileBase::RC) osl_getFileURLFromSystemPath(resolved_path.pData, pustrAbsoluteURL);
+        OSL_ASSERT(FileBase::E_None == rc);
+    }
+
+    return oslFileError(rc);
+}
+
+
+namespace /* private */
+{
+
+    /****************************************************************************
+     *  osl_access_impl_
+     ***************************************************************************/
+
+    int osl_access_impl_(const sal_Unicode* path, int mode)
+    {
+        int nRet = -1;
+        char p[PATH_MAX];
+        if (UnicodeToText(p, sizeof(p), path, rtl_ustr_getLength(path)))
+            nRet = access(p, mode);
+
+        return nRet;
+    }
+
+    /*********************************************
+
+     ********************************************/
+
+    struct Path
+    {
+        const sal_Unicode* begin_;
+        const sal_Unicode* end_;
+
+        Path() : begin_(0), end_(0) {}
+
+        operator void* ()
         {
-            if ((presolvedsf = _strtoend(path_resolved_so_far)) > sentinel)
-                return oslTranslateFileError(OSL_FET_ERROR, ENAMETOOLONG);
+            unsigned int l = get_length();
+            return reinterpret_cast<void*>(l);
+        }
 
-            _strcatchr(path_resolved_so_far, *punresolved++);
+        unsigned int get_length()
+        {
+            OSL_ENSURE(end_ > begin_, "end_ must be greater than begin_");
+            return static_cast<unsigned int>(end_ - begin_);
+        }
+    };
 
-            if (!realpath_failed)
+    /**************************************************
+     Path tokens are under Unix are ':' separated
+     *************************************************/
+
+    Path pathlist_get_next(const sal_Unicode* pathlist)
+    {
+        OSL_ASSERT(pathlist);
+
+        const sal_Unicode* p = pathlist;
+        Path               path;
+
+        if (*p)
+        {
+            path.begin_ = path.end_ = p;
+
+            while (*path.end_ && (*path.end_ != UNICHAR_COLON))
+                ++path.end_;
+        }
+        return path;
+    }
+
+    /****************************************************************************
+         search_path_impl_
+
+         @param path
+               The file or path the should be searched for.
+
+        @param search_paths
+               A list of search paths, ':' separated.
+
+         @param result
+               On success receives the path found, buffer must be at least
+               PATH_MAX long.
+
+     ***************************************************************************/
+
+     bool search_path_impl_(const sal_Unicode* file_path, const sal_Unicode* search_paths, sal_Unicode* result)
+    {
+        bool               bRet = false;
+        const sal_Unicode* sp   = search_paths;
+        sal_Unicode        buff[PATH_MAX];
+        sal_Unicode*       b    = buff;
+
+        while (*sp)
+        {
+            Path path = pathlist_get_next(sp);
+
+            if (path)
             {
-                ferr = _osl_resolvepath(
-                    path_resolved_so_far,
-                    presolvedsf,
-                    sentinel,
-                    &realpath_failed);
+                ustrncpy(path.begin_, b, path.get_length());
 
-                if (osl_File_E_None != ferr)
-                    return ferr;
+                if (b[rtl_ustr_getLength(b) - 1] != UNICHAR_SLASH)
+                    ustrchrcat(UNICHAR_SLASH, b);
 
-                if (!_islastchr(path_resolved_so_far, '/'))
+                ustrcat(file_path, b);
+
+                if (osl_access_impl_(buff, F_OK) > -1)
                 {
-                    if ((presolvedsf = _strtoend(path_resolved_so_far)) > sentinel)
-                    return oslTranslateFileError(OSL_FET_ERROR, ENAMETOOLONG);
-
-                    _strcatchr(path_resolved_so_far, '/');
+                    bRet = true;
+                    break;
                 }
             }
+            sp = path.end_ + 1;
         }
-        else // any other character
-        {
-            if ((presolvedsf = _strtoend(path_resolved_so_far)) > sentinel)
-                return oslTranslateFileError(OSL_FET_ERROR, ENAMETOOLONG);
+        if (bRet)
+            ustrcpy(buff, result);
 
-            _strcatchr(path_resolved_so_far, *punresolved++);
-
-            if ('\0' == *punresolved && !realpath_failed)
-            {
-                ferr = _osl_resolvepath(
-                    path_resolved_so_far,
-                    presolvedsf,
-                    sentinel,
-                    &realpath_failed);
-
-                if (osl_File_E_None != ferr)
-                    return ferr;
-            }
-        }
+        return bRet;
     }
 
-    OSL_ASSERT(strlen(path_resolved_so_far) < PATH_MAX);
+    /*********************************************
+     No separate error code if unicode to text
+     conversion or getenv fails because for the
+     caller there is no difference why a file
+     could not be found in $PATH
+     ********************************************/
 
-    strcpy(path_resolved, path_resolved_so_far);
-
-    return osl_File_E_None;
-}
-
-/******************************************************
- * Helper function, check if the path starts with a '/'
- * then its absolute
- *
- * @precond aPath must not be 0
- ******************************************************/
-
-static int osl_is_relative_path_impl_(const rtl_uString* aPath)
-{
-    OSL_PRECOND(aPath, "Invalid parameter");
-    return ((sal_Unicode)'/' != aPath->buffer[0]);
-}
-
-/******************************************************
- * Helper function, concatenate two paths base + rel
- * -> base/rel
- ******************************************************/
-
-static void _pathcat(
-    const rtl_uString* ustrBasePath, const rtl_uString* ustrRelativePath, rtl_uString** pustrConcatedPath)
-{
-    sal_Int32 needed_capacity = ustrBasePath->length + ustrRelativePath->length + 1;
-
-    OSL_PRECOND(ustrBasePath && ustrRelativePath, "Invalid parameter");
-    OSL_PRECOND(pustrConcatedPath && !*pustrConcatedPath, "Invalid parameter");
-
-    rtl_uString_new_WithLength(pustrConcatedPath, needed_capacity);
-
-    rtl_uStringbuffer_insert(pustrConcatedPath, &needed_capacity, 0, ustrBasePath->buffer, ustrBasePath->length);
-
-    OSL_ASSERT(((rtl_uString*)*pustrConcatedPath)->length);
-
-    if (ustrBasePath->buffer[ustrBasePath->length - 1] != (sal_Unicode)'/')
-        rtl_uStringbuffer_insert_ascii(pustrConcatedPath, &needed_capacity, ((rtl_uString*)*pustrConcatedPath)->length, "/", 1);
-
-    rtl_uStringbuffer_insert(
-        pustrConcatedPath,
-        &needed_capacity,
-        ((rtl_uString*)*pustrConcatedPath)->length,
-        ustrRelativePath->buffer,
-        ustrRelativePath->length);
-}
-
-/******************************************************
- *
- ******************************************************/
-
-oslFileError osl_getAbsoluteFileURL(
-    rtl_uString*  ustrBaseDirURL, rtl_uString* ustrRelativeURL, rtl_uString** pustrAbsoluteURL)
-{
-    oslFileError ferr                 = osl_File_E_INVAL;
-    rtl_uString* ustrPath             = NULL;
-    char         asciiPath[PATH_MAX];
-
-    ferr = osl_getSystemPathFromFileURL(ustrRelativeURL, &ustrPath);
-
-    if(osl_File_E_None != ferr)
-        return ferr;
-
-    if(osl_is_relative_path_impl_(ustrPath))
+    bool find_in_PATH(const rtl::OUString& file_path, sal_Unicode* result)
     {
-        rtl_uString* ustrBasePath     = NULL;
-        rtl_uString* ustrConcatedPath = NULL;
+        bool  bfound = false;
+        char* env_path  = getenv("PATH");
 
-        /* concatinate base and relative path */
-        ferr = osl_getSystemPathFromFileURL(ustrBaseDirURL, &ustrBasePath);
-
-        if (osl_File_E_None != ferr)
+        if (env_path)
         {
-            rtl_uString_release(ustrPath);
-            return ferr;
+            // approximated unicode buffer size may be a little bigger
+            // than necessary if there are 3 byte MBCS character
+
+            int lp = strlen(env_path) + 1; // include final '\0'
+            sal_Unicode* env_path_unic = reinterpret_cast<sal_Unicode*>(
+                alloca(sizeof(sal_Unicode) * lp));
+
+            if (TextToUnicode(env_path, lp, env_path_unic, lp))
+                bfound = search_path_impl_(file_path.pData->buffer, env_path_unic, result);
         }
-
-        _pathcat(ustrBasePath, ustrPath, &ustrConcatedPath);
-
-        rtl_uString_release(ustrBasePath);
-        rtl_uString_release(ustrPath);
-
-        ustrPath = ustrConcatedPath;
+        return bfound;
     }
 
-    /* convert unicode path to text */
-    if (UnicodeToText(asciiPath, PATH_MAX, ustrPath->buffer, ustrPath->length))
+    /*********************************************
+     No separate error code if unicode to text
+     conversion or getcwd fails because for the
+     caller there is no difference why a file
+     could not be found in CDW
+     ********************************************/
+
+    bool find_in_CWD(const rtl::OUString& file_path, sal_Unicode* result)
     {
-        char realPath[PATH_MAX];
+        bool bfound = false;
+        char CWD[PATH_MAX];
 
-        /* use realpath to determine absolute path */
-        ferr = osl_realpath_impl_(asciiPath, realPath);
-
-        if (osl_File_E_None == ferr)
+        if (getcwd(CWD, PATH_MAX))
         {
-            rtl_uString* ustrRealPath = NULL;
-
-            /* convert file name to unicode */
-            rtl_string2UString(
-                &ustrRealPath,
-                realPath,
-                strlen(realPath),
-                osl_getThreadTextEncoding(),
-                OSTRING_TO_OUSTRING_CVTFLAGS);
-
-            /* file urls must be encoded */
-            ferr = osl_getFileURLFromSystemPath(ustrRealPath, pustrAbsoluteURL);
-
-            OSL_ASSERT(osl_File_E_None == ferr);
-
-            rtl_uString_release(ustrRealPath);
+            sal_Unicode CWD_unic[PATH_MAX];
+            if (TextToUnicode(CWD, strlen(CWD) + 1, CWD_unic, PATH_MAX))
+                bfound = search_path_impl_(file_path.pData->buffer, CWD_unic, result);
         }
+        return bfound;
     }
-    else
+
+    /*********************************************
+
+     ********************************************/
+
+    bool find_in_searchPath(const rtl::OUString& file_path, rtl_uString* search_path, sal_Unicode* result)
     {
-       ferr = osl_File_E_INVAL;
+        return (search_path && search_path_impl_(file_path.pData->buffer, search_path->buffer, result));
     }
 
-    rtl_uString_release(ustrPath);
+} // end namespace private
 
-    return ferr;
-}
-
-/****************************************************************************
- *  ImplSearchPath
- ***************************************************************************/
-
-static char * ImplSearchPath( char * buffer, size_t buflen, const char * filePath, const char * searchPath, char separator )
-{
-    char *pPathItem;
-    char *pc;
-    size_t nFilePathLen;
-
-    pPathItem    = const_cast<char*>(searchPath);
-    nFilePathLen = strlen(filePath);
-
-    do
-    {
-        char path[PATH_MAX];
-        size_t len;
-
-        /* extract path item */
-        pc = strchr( pPathItem, separator );
-        len = pc ? pc - pPathItem : strlen( pPathItem );
-
-        /* copy path entry to buffer and append file Path */
-        if( PATH_MAX > len + nFilePathLen + 1 )
-        {
-            strncpy( path, pPathItem, len );
-            path[len++] = '/';
-            strcpy( path + len, filePath );
-
-            if( 0 <= access( path, F_OK ) )
-                return realpath( path, buffer );
-        }
-
-        pPathItem = pc + 1;
-    }
-    while( NULL != pc );
-
-    return NULL;
-}
 
 /****************************************************************************
  *  osl_searchFileURL
  ***************************************************************************/
 
-oslFileError osl_searchFileURL( rtl_uString* ustrFilePath, rtl_uString* ustrSearchPath, rtl_uString** pustrURL )
+oslFileError osl_searchFileURL(rtl_uString* ustrFilePath, rtl_uString* ustrSearchPath, rtl_uString** pustrURL)
 {
-    rtl_uString* ustrPath = NULL;
-    oslFileError eRet;
+    OSL_PRECOND(ustrFilePath && pustrURL, "osl_searchFileURL: invalid parameter");
 
-    char searchPath[PATH_MAX];
-    char filePath[PATH_MAX];
-    char path[PATH_MAX] = "";
+    FileBase::RC  rc;
+    rtl::OUString file_path;
 
-    OSL_ASSERT( ustrFilePath );
-    OSL_ASSERT( ustrSearchPath );
-    OSL_ASSERT( pustrURL );
+    // try to interpret search path as file url else assume it's a system path list
+    rc = FileBase::getSystemPathFromFileURL(rtl::OUString(ustrFilePath), file_path);
+    if ((FileBase::E_None != rc) && (FileBase::E_INVAL == rc))
+        file_path = ustrFilePath;
+    else if (FileBase::E_None != rc)
+        return oslFileError(rc);
 
-    /* file path may also be an URL */
-    eRet = FileURLToPath( filePath, PATH_MAX, ustrFilePath );
+    bool        bfound = false;
+    sal_Unicode result[PATH_MAX];
 
-    if( eRet != osl_File_E_None )
+    if (find_in_searchPath(file_path, ustrSearchPath, result) ||
+        find_in_PATH(file_path, result) ||
+        find_in_CWD(file_path, result))
     {
-        if( eRet == osl_File_E_INVAL )
-        {
-            /* seems not to be an URL, so expect it to be a system patrh */
-            if( ! UnicodeToText( filePath, PATH_MAX, ustrFilePath->buffer, ustrFilePath->length ) )
-                return osl_File_E_INVAL;
-        }
-        else
-            return eRet;
+        rtl::OUString fpf(result, rtl_ustr_getLength(result));
+        oslFileError osl_error = osl_getFileURLFromSystemPath(fpf.pData, pustrURL);
+        OSL_ASSERT(osl_File_E_None == osl_error);
+
+        bfound = true;
     }
-
-    /* if a search path is specified, it is no file URL */
-    if( ustrSearchPath->length && UnicodeToText( searchPath, PATH_MAX, ustrSearchPath->buffer, ustrSearchPath->length )  )
-    {
-        if( NULL == ImplSearchPath( path, PATH_MAX, filePath, searchPath, ';' ) )
-           *path = '\0';
-    }
-
-    /* did we already find something ? */
-    if( '\0' == *path )
-    {
-        char * pEnvPath = getenv("PATH");
-
-        /* fallback to PATH env var */
-        if( ( NULL == pEnvPath ) || ( NULL == ImplSearchPath( path, PATH_MAX, filePath, pEnvPath , ':' ) ) )
-        {
-            char workdir[PATH_MAX];
-
-            /* last try: current working dir */
-            if( ( NULL == getcwd( workdir, PATH_MAX ) ) || ( NULL == ImplSearchPath( path, PATH_MAX, filePath, workdir , ':' ) ) )
-                return osl_File_E_NOENT;
-         }
-    }
-
-    /* did we find something, then convert it */
-    if( *path )
-    {
-        /* convert file name to unicode */
-        rtl_string2UString( &ustrPath, path, strlen( path ), osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS );
-
-        /* file urls must be encoded */
-        osl_getFileURLFromSystemPath( ustrPath, pustrURL );
-        rtl_uString_release( ustrPath );
-    }
-
-    return osl_File_E_None;
+    return bfound ? osl_File_E_None : osl_File_E_NOENT;
 }
+
 
 /****************************************************************************
  * FileURLToPath
