@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configitem.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 12:52:17 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 10:36:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1200,6 +1200,9 @@ sal_Bool ConfigItem::ReplaceSetProperties(
             const OUString* pSubNodeNames = aSubNodeNames.getConstArray();
             const sal_Int32 nSubNodeCount = aSubNodeNames.getLength();
 
+            Reference<XSingleServiceFactory> xFac(xCont, UNO_QUERY);
+            const bool isSimpleValueSet = !xFac.is();
+
             //remove unknown members first
             {
                 const Sequence<OUString> aContainerSubNodes = xCont->getElementNames();
@@ -1217,16 +1220,31 @@ sal_Bool ConfigItem::ReplaceSetProperties(
                         }
                     }
                     if(!bFound)
+                    try
                     {
                         xCont->removeByName(pContainerSubNodes[nContSub]);
+                    }
+                    catch (Exception & )
+                    {
+                        if (isSimpleValueSet)
+                        try
+                        {
+                            // #i37322#: fallback action: replace with <void/>
+                            xCont->replaceByName(pContainerSubNodes[nContSub], Any());
+                            // fallback successfull: continue looping
+                            continue;
+                        }
+                        catch (Exception &)
+                        {} // propagate original exception, if fallback fails
+
+                        throw;
                     }
                 }
                 try { xBatch->commitChanges(); }
                 CATCH_INFO("Exception from commitChanges(): ")
             }
 
-            Reference<XSingleServiceFactory> xFac(xCont, UNO_QUERY);
-            if(xFac.is())
+            if(xFac.is()) // !isSimpleValueSet
             {
                 for(sal_Int32 j = 0; j < nSubNodeCount; j++)
                 {
