@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 21:44:47 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 18:05:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -463,7 +463,7 @@ String STR_SORT_TBL
     TEXT [ portuguese ] = "Ordenar tabela" ;
     TEXT [ finnish ] = "Lajittele taulukko" ;
     TEXT [ danish ] = "Sorter tabel" ;
-    TEXT [ french ] = "Trier tableau" ;
+    TEXT [ french ] = "Trier le tableau" ;
     TEXT [ swedish ] = "Sortera tabell" ;
     TEXT [ dutch ] = "Tabel sorteren" ;
     TEXT [ spanish ] = "Ordenar tabla" ;
@@ -491,7 +491,7 @@ String STR_SORT_TXT
     TEXT [ portuguese ] = "Ordenar texto" ;
     TEXT [ finnish ] = "Lajittele teksti" ;
     TEXT [ danish ] = "Sorter tekst" ;
-    TEXT [ french ] = "Trier texte" ;
+    TEXT [ french ] = "Trier le texte" ;
     TEXT [ swedish ] = "Sortera text" ;
     TEXT [ dutch ] = "Tekst sorteren" ;
     TEXT [ spanish ] = "Ordenar texto" ;
@@ -663,7 +663,7 @@ String STR_INSERT_PAGE_BREAK_UNDO
     TEXT [ swedish ] = "Hård sidbrytning" ;
     TEXT [ dutch ] = "Vast pagina-einde" ;
     TEXT [ spanish ] = "Salto fijo de página" ;
-    TEXT [ english_us ] = "Hard page break" ;
+    TEXT [ english_us ] = "Direct page break" ;
     TEXT[ chinese_simplified ] = "ÊÖ¹¤»»Ò³";
     TEXT[ russian ] = "Æåñòêèé ğàçğûâ ñòğàíèö";
     TEXT[ polish ] = "Twarde ³amanie strony";
@@ -691,7 +691,7 @@ String STR_INSERT_COLUMN_BREAK_UNDO
     TEXT [ swedish ] = "Hård kolumnbrytning" ;
     TEXT [ dutch ] = "Vast kolomeinde" ;
     TEXT [ spanish ] = "Salto de columna fijo" ;
-    TEXT [ english_us ] = "Hard column break" ;
+    TEXT [ english_us ] = "Direct column break" ;
     TEXT[ chinese_simplified ] = "ÊÖ¹¤»»ÁĞ";
     TEXT[ russian ] = "Æåñòêèé ğàçğûâ êîëîíîê";
     TEXT[ polish ] = "Twardy podzia³ kolumny";
@@ -944,7 +944,7 @@ String STR_AUTOFORMAT
     TEXT[ arabic ] = "ÊäÓíŞ ÊáŞÇÆí";
     TEXT[ dutch ] = "AutoOpmaak";
     TEXT[ chinese_simplified ] = "×Ô¶¯¸ñÊ½";
-    TEXT[ greek ] = "ÁõôïÌïñöïğïßçóç";
+    TEXT[ greek ] = "ÁõôïÌïñöŞ";
     TEXT[ korean ] = "ÀÚµ¿ ¼­½Ä";
     TEXT[ turkish ] = "Otomatik formatlama";
     TEXT[ language_user1 ] = " ";
@@ -1882,7 +1882,7 @@ String STR_TABLE_AUTOFMT
     Text[ arabic ] = "ÊäÓíŞ ÊáŞÇÆí ááÌÏæá";
     Text[ dutch ] = "AutoOpmaak tabel";
     Text[ chinese_simplified ] = "×Ô¶¯¸ñÊ½ ±í¸ñ";
-    Text[ greek ] = "ÁõôïÌïñöïğïßçóç ğßíáêá";
+    Text[ greek ] = "ÁõôïÌïñöŞ Ğßíáêáò";
     Text[ korean ] = "ÀÚµ¿ ¼­½Ä Ç¥";
     Text[ turkish ] = "Otomatik formatlama Tablo";
     Text[ language_user1 ] = " ";
@@ -2036,7 +2036,7 @@ String STR_TABLE_NUMFORMAT
     Text [ danish ] = "Formater celler" ;
     Text [ italian ] = "Formatta cella" ;
     Text [ spanish ] = "Formatear celda" ;
-    Text [ french ] = "Format de cellules" ;
+    Text [ french ] = "Formater la cellule" ;
     Text [ dutch ] = "Cel opmaken" ;
     Text[ chinese_simplified ] = "¸ñÊ½»¯µ¥Ôª¸ñ";
     Text[ russian ] = "Ôîğìàò ÿ÷ååê";
