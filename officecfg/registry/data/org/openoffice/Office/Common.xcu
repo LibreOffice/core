@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcu,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 13:32:15 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 10:25:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,47 +72,12 @@
     </node>
     <node oor:name="Localisation">
       <prop oor:name="AutoMnemonic">
-        <value xml:lang="x-no-translate">true</value>
         <value xml:lang="en-US">true</value>
         <value xml:lang="de">true</value>
-        <value xml:lang="ru">true</value>
-        <value xml:lang="nl">true</value>
-        <value xml:lang="fr">true</value>
-        <value xml:lang="es">true</value>
-        <value xml:lang="it">true</value>
-        <value xml:lang="sv">true</value>
-        <value xml:lang="pl">true</value>
-        <value xml:lang="ja">true</value>
-        <value xml:lang="zh-CN">true</value>
-        <value xml:lang="pt">true</value>
-        <value xml:lang="pt-BR">true</value>
-        <value xml:lang="el">true</value>
-        <value xml:lang="da">true</value>
-        <value xml:lang="ko">true</value>
-        <value xml:lang="zh-TW">true</value>
-        <value xml:lang="tr">true</value>
-        <value xml:lang="ar">false</value>
       </prop>
       <prop oor:name="DialogScale">
-        <value xml:lang="x-no-translate">0</value>
         <value xml:lang="en-US">10</value>
         <value xml:lang="de">0</value>
-        <value xml:lang="ru">13</value>
-        <value xml:lang="nl">10</value>
-        <value xml:lang="fr">10</value>
-        <value xml:lang="es">10</value>
-        <value xml:lang="it">10</value>
-        <value xml:lang="sv">10</value>
-        <value xml:lang="pl">13</value>
-        <value xml:lang="ja">13</value>
-        <value xml:lang="zh-CN">13</value>
-        <value xml:lang="pt">10</value>
-        <value xml:lang="el">10</value>
-        <value xml:lang="da">10</value>
-        <value xml:lang="ko">13</value>
-        <value xml:lang="zh-TW">13</value>
-        <value xml:lang="tr">13</value>
-        <value xml:lang="ar">13</value>
       </prop>
     </node>
   </node>
