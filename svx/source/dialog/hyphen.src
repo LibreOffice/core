@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyphen.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 02:22:48 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:46:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,14 +124,14 @@ ModalDialog RID_SVXDLG_HYPHENATE
         TEXT [ dutch ] = "Woord" ;
         TEXT [ spanish ] = "Palabra" ;
         TEXT [ english_us ] = "~Word" ;
-        TEXT[ chinese_simplified ] = "×Ö";
+        TEXT[ chinese_simplified ] = "×Ö(~W)";
         TEXT[ russian ] = "Ñëîâî";
         TEXT[ polish ] = "S³owo";
-        TEXT[ japanese ] = "’PŒê";
-        TEXT[ chinese_traditional ] = "¦r";
+        TEXT[ japanese ] = "’PŒê(~W)";
+        TEXT[ chinese_traditional ] = "¦r(~W)";
         TEXT[ arabic ] = "ÇáßáãÉ";
         TEXT[ greek ] = "ËÝîç";
-        TEXT[ korean ] = "´Ü¾î";
+        TEXT[ korean ] = "´Ü¾î(~W)";
         TEXT[ turkish ] = "Sözcük";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "Palabra";
@@ -251,5 +251,6 @@ ModalDialog RID_SVXDLG_HYPHENATE
     Text[ catalan ] = "Separación silábica";
 };
  // ******************************************************************* EOF
+
 
 
