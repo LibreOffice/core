@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strtmpl.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: th $ $Date: 2001-03-16 16:38:28 $
+ *  last change: $Author: th $ $Date: 2001-03-19 11:05:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -383,12 +383,8 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( lastIndexOfStr_WithLength )( const IMPL_RTL
         pStr += nStrLen;
         nStrLen -= nSubLen;
         pStr -= nSubLen;
-        while ( nStrLen >= nSubLen )
+        while ( nStrLen >= 0 )
         {
-            nStrLen--;
-            pStr--;
-
-            {
             const IMPL_RTL_STRCODE* pTempStr1 = pStr;
             const IMPL_RTL_STRCODE* pTempStr2 = pSubStr;
             sal_Int32               nTempLen = nSubLen;
@@ -404,7 +400,9 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( lastIndexOfStr_WithLength )( const IMPL_RTL
 
             if ( !nTempLen )
                 return nStrLen;
-            }
+
+            nStrLen--;
+            pStr--;
         }
     }
 
