@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpview.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-14 19:07:57 $
+ *  last change: $Author: nn $ $Date: 2001-10-01 09:30:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -560,8 +560,8 @@ BOOL    ScTpLayoutOptions::FillItemSet( SfxItemSet& rCoreSet )
         nSet=LM_NEVER;
     }
 
-    if(aRequestRB.IsChecked() != aNeverRB.GetSavedValue() ||
-            aNeverRB.IsChecked() != aRequestRB.GetSavedValue() )
+    if(aRequestRB.IsChecked() != aRequestRB.GetSavedValue() ||
+            aNeverRB.IsChecked() != aNeverRB.GetSavedValue() )
     {
         if(pDoc)
             pDoc->SetLinkMode(nSet);
