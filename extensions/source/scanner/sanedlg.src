@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sanedlg.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 20:26:16 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 15:19:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -634,7 +634,7 @@ String RID_SANE_SCANERROR_TXT
     Text [ danish ] = "Der opstod en fejl under scanning." ;
     Text [ italian ] = "Durante la scansione si и verificato un errore." ;
     Text [ spanish ] = "Se ha producido un error durante el escaneado." ;
-    Text [ french ] = "Une erreur s'est produite durant la digitalisation." ;
+    Text [ french ] = "Une erreur s'est produite durant la lecture au scanner." ;
     Text [ dutch ] = "Tijdens het scannen is er een fout opgetreden." ;
     Text[ chinese_simplified ] = "ФЪЙЁГиК±·ўЙъґнОуЎЈ";
     Text[ russian ] = "Во время сканирования произошла ошибка.";
