@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.111 $
+ *  $Revision: 1.112 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 13:24:17 $
+ *  last change: $Author: kz $ $Date: 2005-03-03 19:57:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -497,7 +497,10 @@ FreetypeManager::FreetypeManager()
 
 FreetypeManager::~FreetypeManager()
 {
-    FT_Error rcFT = FT_Done_FreeType( aLibFT );
+// This crashes on Solaris 10
+// TODO: check which versions have this problem
+//
+//    FT_Error rcFT = FT_Done_FreeType( aLibFT );
 }
 
 // -----------------------------------------------------------------------
