@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfatr.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2001-02-21 12:45:23 $
+ *  last change: $Author: jp $ $Date: 2001-03-12 16:18:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,6 +195,9 @@
 #endif
 #ifndef _SVX_CHARROTATEITEM_HXX
 #include <svx/charrotateitem.hxx>
+#endif
+#ifndef _SVX_CHARRELIEFITEM_HXX
+#include <svx/charreliefitem.hxx>
 #endif
 #ifndef _XOUTBMP_HXX //autogen
 #include <svx/xoutbmp.hxx>
@@ -1952,6 +1955,26 @@ static Writer& OutRTF_SwCharScaleW( Writer& rWrt, const SfxPoolItem& rHt )
     return rWrt;
 }
 
+static Writer& OutRTF_SwCharRelief( Writer& rWrt, const SfxPoolItem& rHt )
+{
+    SwRTFWriter& rRTFWrt = (SwRTFWriter&)rWrt;
+    const SvxCharReliefItem& rAttr = (SvxCharReliefItem&)rHt;
+    const sal_Char* pStr;
+    switch( ((SvxCharReliefItem&)rHt).GetValue() )
+    {
+    case RELIEF_EMBOSSED:   pStr = sRTF_EMBO;   break;
+    case RELIEF_ENGRAVED:   pStr = sRTF_IMPR;   break;
+    default:                pStr = 0;           break;
+    }
+
+    if( pStr )
+    {
+        rRTFWrt.bOutFmtAttr = TRUE;
+        rWrt.Strm() << pStr;
+    }
+    return rWrt;
+}
+
 
 static Writer& OutRTF_SwShadowed( Writer& rWrt, const SfxPoolItem& rHt )
 {
@@ -3522,7 +3545,7 @@ SwAttrFnTab aRTFAttrFnTab = {
 /* RES_CHRATR_EMPHASIS_MARK */      OutRTF_SwEmphasisMark,
 /* RES_CHRATR_TWO_LINES */          OutRTF_SwTwoInOne,
 /* RES_CHRATR_SCALEW */             OutRTF_SwCharScaleW,
-/* RES_CHRATR_DUMMY5 */             0,
+/* RES_CHRATR_RELIEF */             OutRTF_SwCharRelief,
 /* RES_CHRATR_DUMMY1 */             0, // Dummy:
 
 /* RES_TXTATR_INETFMT   */          OutRTF_SwTxtINetFmt, // Dummy
@@ -3636,11 +3659,14 @@ SwNodeFnTab aRTFNodeFnTab = {
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/rtfatr.cxx,v 1.13 2001-02-21 12:45:23 os Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/rtfatr.cxx,v 1.14 2001-03-12 16:18:29 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.13  2001/02/21 12:45:23  os
+      use database struct instead of a combined string
+
       Revision 1.12  2001/02/16 10:27:59  jp
       im-/export the Rotate-/ScaleWidth-Character attribut
 
