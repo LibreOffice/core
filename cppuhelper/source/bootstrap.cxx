@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 16:27:08 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 12:27:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,7 @@
 #include "rtl/bootstrap.hxx"
 #include "rtl/string.hxx"
 #include "rtl/ustrbuf.hxx"
+#include "rtl/uri.hxx"
 #if OSL_DEBUG_LEVEL > 0
 #include "rtl/strbuf.hxx"
 #endif
@@ -89,6 +90,7 @@
 #include "com/sun/star/registry/XSimpleRegistry.hpp"
 #include "com/sun/star/container/XSet.hpp"
 #include "com/sun/star/beans/PropertyValue.hpp"
+#include "com/sun/star/io/IOException.hpp"
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 
@@ -298,7 +300,8 @@ static Reference< registry::XSimpleRegistry > nestRegistries(
     OUString csl_rdbs,
     const OUString & write_rdb,
     sal_Bool forceWrite_rdb,
-    sal_Bool bFallenBack )
+    sal_Bool bFallenBack,
+    Bootstrap const & bootstrap )
     SAL_THROW((Exception))
 {
     sal_Int32 index;
@@ -341,6 +344,15 @@ static Reference< registry::XSimpleRegistry > nestRegistries(
         bool optional = ('?' == rdb_name[ 0 ]);
         if (optional)
             rdb_name = rdb_name.copy( 1 );
+
+        if (rdb_name.matchIgnoreAsciiCaseAsciiL(
+                RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.expand:") ))
+        {
+            rdb_name = ::rtl::Uri::decode(
+                rdb_name.copy( sizeof ("vnd.sun.star.expand:") -1 ),
+                rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
+            bootstrap.expandMacrosFrom( rdb_name );
+        }
 
         try
         {
@@ -432,7 +444,7 @@ SAL_CALL defaultBootstrap_InitialComponentContext(
     Reference<registry::XSimpleRegistry> types_xRegistry =
         nestRegistries(
             iniDir, xSimRegFac, xNesRegFac, cls_uno_types,
-            OUString(), sal_False, bFallenback_types );
+            OUString(), sal_False, bFallenback_types, bootstrap );
 
     // ==== bootstrap from services registry ====
 
@@ -451,7 +463,7 @@ SAL_CALL defaultBootstrap_InitialComponentContext(
 
     Reference<registry::XSimpleRegistry> services_xRegistry = nestRegistries(
         iniDir, xSimRegFac, xNesRegFac, cls_uno_services, write_rdb,
-        !fallenBackWriteRegistry, bFallenback_services );
+        !fallenBackWriteRegistry, bFallenback_services, bootstrap );
 
     Reference< XComponentContext > xContext(
         bootstrapInitialContext(
@@ -476,6 +488,8 @@ SAL_CALL defaultBootstrap_InitialComponentContext(
     SAL_THROW( (Exception) )
 {
     Bootstrap bootstrap( iniFile );
+    if (bootstrap.getHandle() == 0)
+        throw io::IOException(OUSTR("Cannot open for reading: ") + iniFile, 0);
     return defaultBootstrap_InitialComponentContext( bootstrap );
 }
 
