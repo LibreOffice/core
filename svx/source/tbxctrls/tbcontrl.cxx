@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: cd $ $Date: 2002-09-17 06:57:57 $
+ *  last change: $Author: gt $ $Date: 2002-10-14 12:48:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1178,9 +1178,9 @@ void SvxColorWindow_Impl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
 SvxFrameWindow_Impl::SvxFrameWindow_Impl( USHORT nId, SfxBindings& rBindings, BOOL bParagraphMode ) :
 
-    SfxPopupWindow( nId, WinBits( WB_BORDER | WB_STDFLOATWIN | WB_3DLOOK ), rBindings ),
+    SfxPopupWindow( nId, WinBits( WB_BORDER | WB_STDFLOATWIN | WB_3DLOOK | WB_DIALOGCONTROL ), rBindings ),
 
-    aFrameSet   ( this, WinBits( WB_ITEMBORDER | WB_DOUBLEBORDER | WB_3DLOOK ) )
+    aFrameSet   ( this, WinBits( WB_ITEMBORDER | WB_DOUBLEBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT ) )
 
 {
     aImgList = ImageList( SVX_RES( IsHighContrast()? RID_SVXIL_FRAME_HC : RID_SVXIL_FRAME ) );
@@ -2598,6 +2598,7 @@ SvxFrameToolBoxControl::SvxFrameToolBoxControl( USHORT       nId,
     :   SfxToolBoxControl( nId, rTbx, rBindings ),
         bParagraphMode   ( FALSE )
 {
+    rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
 }
 
 // -----------------------------------------------------------------------
